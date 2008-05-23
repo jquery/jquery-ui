@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>UI Sortable: Layout Demo</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+		
+		<meta name="title" content="UI Sortable: Layout Demo" />
+		<meta name="description" content="A sortable layout created with the jQuery UI suite" />
+		
+		<meta name="author" content="Joan Piedra" />
+		<meta name="author-url" content="http://www.joanpiedra.com/" />
+		<meta name="author-url" content="http://www.justaquit.com/" />
+		<meta name="author-url" content="http://jquery.com/" />
+		
+		<link rel="shortcut icon" href="http://jquery.com/favicon.ico" />
+		<link rel="icon" href="http://jquery.com/favicon.ico" type="image/x-icon" />
+		
+		<link rel="stylesheet" href="demo.css" type="text/css" media="screen" />
+		<!-- saved from url=(0013)about:internet -->
+	</head>
+	
+	<body id="uidemo">
+		<h1>UI Sortable: <em>Layout demo</em></h1>
+		
+		<div id="container">
+			<div id="header" class="ui-sortable">
+				<h2>Header</h2>
+				<dl class="sort">
+					<dt>Pages</dt>
+					<dd>Main Navigation</dd>
+				</dl>
+			</div>
+			
+			<div id="content" class="ui-sortable">
+				<h2>Content</h2>
+				<dl class="sort">
+					<dt>Blog</dt>
+					<dd>Main blog post</dd>
+				</dl>
+			</div>
+			
+			<div id="sidebar" class="ui-sortable">
+				<h2>Sidebar</h2>
+				<dl class="sort">
+					<dt>Pages</dt>
+					<dd>Mini About</dd>
+				</dl>
+				<dl class="sort">
+					<dt>Blog</dt>
+					<dd>Monthly Archives</dd>
+				</dl>
+				<dl class="sort">
+					<dt>Links</dt>
+					<dd>Random Links</dd>
+				</dl>
+			</div>
+			
+			<div class="clear"></div>
+			
+			<div id="footer" class="ui-sortable">
+				<h2>Footer</h2>
+				<dl class="sort">
+					<dt>Pages</dt>
+					<dd>Copyright</dd>
+				</dl>
+			</div>
+		</div>
+		
+		<div id="trashcan" class="ui-sortable">
+			<h2>Trash can</h2>
+			<p>Drag modules here to delete them.</p>
+		</div>
+		
+		<div class="clear"></div>
+		<div id="overlay">
+			<div id="preloader"><img src="loader.gif" alt="" /></div>
+		</div>
+		
+		<!-- jQuery Core -->
+		<script type="text/javascript" src="../../../../jquery/src/core.js"></script>
+		<script type="text/javascript" src="../../../../jquery/src/selector.js"></script>
+		<script type="text/javascript" src="../../../../jquery/src/event.js"></script>
+		<script type="text/javascript" src="../../../../jquery/src/ajax.js"></script>
+		<script type="text/javascript" src="../../../../jquery/src/fx.js"></script>
+		<script type="text/javascript" src="../../../../jquery/src/offset.js"></script>
+		<script type="text/javascript" src="../../../../jquery/src/dimensions.js"></script>		
+		
+		<!-- jQuery UI Base -->
+		<script type="text/javascript" src="../../../ui.core.js"></script>
+		
+		<!-- jQuery UI Plugins -->
+		<script type="text/javascript" src="../../../ui.draggable.js"></script>
+		<script type="text/javascript" src="../../../ui.droppable.js"></script>
+		<script type="text/javascript" src="../../../ui.sortable.js"></script>
+		
+		<!-- jQuery UI Demo -->
+		<script type="text/javascript" src="demo.js"></script>
+	</body>
+</html>
