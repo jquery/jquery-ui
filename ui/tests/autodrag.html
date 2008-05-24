@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Draggable - Automated Test Page</title>
+	<script type="text/javascript" src="../../jquery/jquery-1.2.5.js"></script>
+	<script type="text/javascript" src="../../ui/source/ui.core.js"></script>
+	<script type="text/javascript" src="../../ui/source/ui.draggable.js"></script>
+
+<style type="text/css">
+
+html, body { height: 100%; }
+#realmouse { display: none; position: absolute; z-index: 1000; }
+#fakemouse { display: none; position: absolute; z-index: 2000; }
+.testing, .testing * { cursor: url(images/blank.cur), crosshair; }
+.testing #fakemouse { display: block !important; }
+.testing #realmouse { display: block !important; }
+#main { height: 100%; }
+#drag { width: 200px; height: 200px; background: #eef; }
+
+</style>
+
+<script type="text/javascript">
+$(function() {
+
+	var fakemouse = $('<img src="images/cursor.png" id="fakemouse>').appendTo('body')
+		.css({ opacity: 0.0 })
+		.hide();
+
+	var realmouse = $('<img src="images/cursor.png" id="realmouse>').appendTo('body')
+		.css({ opacity: 0.2 })
+		.hide()
+		.mousedown(function() { return false; });
+	
+	$(document).mousemove(function(e) {
+		if (e.originalEvent && e.originalEvent.isTrusted) {
+			realmouse.css({
+				left: e.pageX,
+				top: e.pageY
+			});
+		}
+	});
+
+});
+</script>
+
+<script type="text/javascript">
+
+function testMouse(type, el, x, y) {
+	var evt = document.createEvent("MouseEvents");
+	evt.initMouseEvent("mouse" + type, true, true, window, 0, 0, 0, x, y, false, false, false, false, 0, null);
+	el.dispatchEvent(evt);
+}
+function testMouseDown(el, x, y) { testMouse("down", el, x, y); }
+function testMouseMove(el, x, y) { testMouse("move", el, x, y); }
+function testMouseUp(el, x, y) { testMouse("up", el, x, y); }
+
+function draggableTest(el, dx, dy) {
+	var realmouse = $("#realmouse");
+	
+	var findCenter = function(el, offset) {
+		var o = el.offset();
+		return {
+			x: (o.left + (offset || [0, 0])[0] || 0) + el.width() / 2,
+			y: (o.top + (offset || [0, 0])[1] || 0) + el.height() / 2
+		};
+	};
+
+	var center = findCenter($(el));
+	var left = center.x;
+	var top = center.y;
+
+	var lastX = null;
+
+	var testStart = function() {
+		$(el).data("_ignoreTrusted.draggable", true);
+		$("body").addClass("testing");
+	}
+	var testStop = function() {
+		$("body").removeClass("testing");
+		$(el).data("_ignoreTrusted.draggable", false);	
+	}
+
+	testStart();
+
+	$('#fakemouse').css({ left: realmouse.css("left"), top: realmouse.css("top") })
+		.animate({ left: left, top: top, opacity: 1.0 }, "slow", function() {
+			testMouseDown(el, left, top);
+		})
+		.animate({ left: left + dx, top: top + dy }, {
+			speed: "slow",
+			easing: "swing",
+			step: function (xory) {
+				if (!lastX) { lastX = xory; }
+				else { testMouseMove(el, lastX, xory); lastX = null; }
+			},
+			complete: function() {
+				testMouseUp(el, 0, 0);
+				$(this).animate({ left: realmouse.css("left"), top: realmouse.css("top"), opacity: 0 }, {
+					speed: "slow",
+					complete: function() {
+						testStop();
+					}
+				})
+			}
+		});
+}
+
+</script>
+
+<script type="text/javascript">
+$(function() {
+
+	$("#drag").draggable();
+
+	$('#begin').click(function(e) {
+		draggableTest($("#drag")[0], 100, 10);
+	});
+
+});
+</script>
+
+</head>
+<body>
+
+<div id="main">
+
+	<h1>jQuery UI Draggable - Automated Test</h1>
+
+	<div style="height: 3em;"><button id="begin">Run Test</button></div>
+
+	<div id="drag">
+		Drag me
+	</div>
+
+</div>
+	
+</body>
+</html>
