@@ -1,13 +1,13 @@
 (function(){
 /*
- * jQuery 1.2.5 - New Wave Javascript
+ * jQuery 1.2.6 - New Wave Javascript
  *
  * Copyright (c) 2008 John Resig (jquery.com)
  * Dual licensed under the MIT (MIT-LICENSE.txt)
  * and GPL (GPL-LICENSE.txt) licenses.
  *
- * $Date: 2008-05-20 23:14:54 -0400 (Tue, 20 May 2008) $
- * $Rev: 5651 $
+ * $Date: 2008-05-24 14:22:17 -0400 (Sat, 24 May 2008) $
+ * $Rev: 5685 $
  */
 
 // Map over jQuery in case of overwrite
@@ -84,7 +84,7 @@ jQuery.fn = jQuery.prototype = {
 	},
 
 	// The current version of jQuery being used
-	jquery: "1.2.5",
+	jquery: "1.2.6",
 
 	// The number of elements contained in the matched element set
 	size: function() {
@@ -402,6 +402,9 @@ jQuery.fn = jQuery.prototype = {
 			return undefined;
 		}
 
+		if( value.constructor == Number )
+			value += '';
+
 		return this.each(function(){
 			if ( this.nodeType != 1 )
 				return;
@@ -428,7 +431,7 @@ jQuery.fn = jQuery.prototype = {
 
 	html: function( value ) {
 		return value == undefined ?
-			(this.length ?
+			(this[0] ?
 				this[0].innerHTML :
 				null) :
 			this.empty().append( value );
@@ -505,9 +508,9 @@ jQuery.fn = jQuery.prototype = {
 					this;
 
 				// execute all scripts after the elements have been injected
-				if ( jQuery.nodeName( elem, "script" ) ) {
+				if ( jQuery.nodeName( elem, "script" ) )
 					scripts = scripts.add( elem );
-				} else {
+				else {
 					// Remove any inner scripts for later evaluation
 					if ( elem.nodeType == 1 )
 						scripts = scripts.add( jQuery( "script", elem ).remove() );
@@ -746,14 +749,14 @@ jQuery.extend({
 	},
 
 	prop: function( elem, value, type, i, name ) {
-			// Handle executable functions
-			if ( jQuery.isFunction( value ) )
-				value = value.call( elem, i );
+		// Handle executable functions
+		if ( jQuery.isFunction( value ) )
+			value = value.call( elem, i );
 
-			// Handle passing in a number to a CSS property
-			return value && value.constructor == Number && type == "curCSS" && !exclude.test( name ) ?
-				value + "px" :
-				value;
+		// Handle passing in a number to a CSS property
+		return value && value.constructor == Number && type == "curCSS" && !exclude.test( name ) ?
+			value + "px" :
+			value;
 	},
 
 	className: {
@@ -1058,7 +1061,7 @@ jQuery.extend({
 				elem.parentNode.selectedIndex;
 
 			// If applicable, access the attribute via the DOM 0 way
-			if ( notxml && !special && name in elem ) {
+			if ( name in elem && notxml && !special ) {
 				if ( set ){
 					// We can't allow the type property to be changed (since it causes problems in IE)
 					if ( name == "type" && jQuery.nodeName( elem, "input" ) && elem.parentNode )
@@ -1081,11 +1084,13 @@ jQuery.extend({
 				// convert the value to a string (all browsers do this but IE) see #1070
 				elem.setAttribute( name, "" + value );
 
-			if ( msie && special && notxml )
-				return elem.getAttribute( name, 2 );
+			var attr = msie && notxml && special
+					// Some attributes require a special call on IE
+					? elem.getAttribute( name, 2 )
+					: elem.getAttribute( name );
 
-			return elem.getAttribute( name );
-
+			// Non-existent attributes return null, we normalize to undefined
+			return attr === null ? undefined : attr;
 		}
 
 		// elem is actually elem.style ... set the style
