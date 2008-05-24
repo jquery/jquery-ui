@@ -20,30 +20,19 @@ html, body { height: 100%; }
 </style>
 
 <script type="text/javascript">
+
+var mouseX = 0, mouseY = 0;
+
 $(function() {
 
-	var fakemouse = $('<img src="images/cursor.png" id="fakemouse>').appendTo('body')
-		.css({ opacity: 0.0 })
-		.hide();
-
-	var realmouse = $('<img src="images/cursor.png" id="realmouse>').appendTo('body')
-		.css({ opacity: 0.2 })
-		.hide()
-		.mousedown(function() { return false; });
-	
-	$(document).mousemove(function(e) {
-		if (e.originalEvent && e.originalEvent.isTrusted) {
-			realmouse.css({
-				left: e.pageX,
-				top: e.pageY
-			});
-		}
-	});
+$(document).mousemove(function(e) {
+	if (e.originalEvent && e.originalEvent.isTrusted) {
+		mouseX = e.pageX;
+		mouseY = e.pageY;
+	}
+});
 
 });
-</script>
-
-<script type="text/javascript">
 
 function testMouse(type, el, x, y) {
 	var evt = document.createEvent("MouseEvents");
@@ -69,25 +58,36 @@ function draggableTest(el, dx, dy) {
 	var left = center.x;
 	var top = center.y;
 
-	var lastX = null;
+	var fakemouse = $('<img src="images/cursor.png" id="fakemouse>');
+	var realmouse = $('<img src="images/cursor.png" id="realmouse>');
+	var mousescreen = $('<div id="mousescreen"/>');
 
 	var testStart = function() {
-		$(el).data("_ignoreTrusted.draggable", true);
+		fakemouse.appendTo('body').css({ left: mouseX, top: mouseY, opacity: 1.0 });
+		realmouse.appendTo('body').css({ left: mouseX, top: mouseY, opacity: 0.2 })
+			.mousedown(function() { return false; });
+		mousescreen.appendTo('body').css({ width: '100%', height: '100%', position: 'absolute', top: 0, left: 0, zIndex: 5000 })
+			.mousemove(function(e) { realmouse.css({ left: e.pageX, top: e.pageY }); return false; })
+			.mousedown(function() { return false; })
+			.mouseup(function() { return false; })
 		$("body").addClass("testing");
 	}
 	var testStop = function() {
 		$("body").removeClass("testing");
-		$(el).data("_ignoreTrusted.draggable", false);	
+		mousescreen.remove();
+		realmouse.remove();
+		fakemouse.remove();
 	}
 
 	testStart();
 
-	$('#fakemouse').css({ left: realmouse.css("left"), top: realmouse.css("top") })
-		.animate({ left: left, top: top, opacity: 1.0 }, "slow", function() {
+	var lastX = null;
+	fakemouse
+		.animate({ left: left, top: top, opacity: 1.0 }, "fast", function() {
 			testMouseDown(el, left, top);
 		})
 		.animate({ left: left + dx, top: top + dy }, {
-			speed: "slow",
+			speed: "fast",
 			easing: "swing",
 			step: function (xory) {
 				if (!lastX) { lastX = xory; }
@@ -95,8 +95,8 @@ function draggableTest(el, dx, dy) {
 			},
 			complete: function() {
 				testMouseUp(el, 0, 0);
-				$(this).animate({ left: realmouse.css("left"), top: realmouse.css("top"), opacity: 0 }, {
-					speed: "slow",
+				$(this).animate({ left: realmouse.css("left"), top: realmouse.css("top"), opacity: 1.0 }, {
+					speed: "fast",
 					complete: function() {
 						testStop();
 					}
