@@ -118,6 +118,7 @@
 			this.helperProportions = { width: this.helper.outerWidth(), height: this.helper.outerHeight() };//Recache the helper size
 			if ($.ui.ddmanager && !o.dropBehaviour) $.ui.ddmanager.prepareOffsets(this, e);
 			
+			this.helper.addClass("ui-draggable-dragging");
 			this.mouseDrag(e); //Execute the drag once - this causes the helper not to be visible before getting its correct position
 			return true;
 		},
@@ -223,6 +224,7 @@
 			return false;
 		},
 		clear: function() {
+			this.helper.removeClass("ui-draggable-dragging");
 			if(this.options.helper != 'original' && !this.cancelHelperRemoval) this.helper.remove();
 			if($.ui.ddmanager) $.ui.ddmanager.current = null;
 			this.helper = null;

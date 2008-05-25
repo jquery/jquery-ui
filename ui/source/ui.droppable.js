@@ -96,7 +96,7 @@
 			if (!draggable || (draggable.currentItem || draggable.element)[0] == this.element[0]) return false; // Bail if draggable and droppable are same element
 			
 			var childrenIntersection = false;
-			this.element.find(".ui-droppable").each(function() {
+			this.element.find(".ui-droppable").not(".ui-draggable-dragging").each(function() {
 				var inst = $.data(this, 'droppable');
 				if(inst.options.greedy && $.ui.intersect(draggable, $.extend(inst, { offset: inst.element.offset() }), inst.options.tolerance)) {
 					childrenIntersection = true; return false;
