@@ -423,89 +423,115 @@
 	
 	$.ui.plugin.add("draggable", "connectToSortable", {
 		start: function(e,ui) {
+			
 			var inst = $(this).data("draggable");
-			inst.sortable = $.data($(ui.options.connectToSortable)[0], 'sortable');
-			inst.sortableOffset = inst.sortable.element.offset();
-			inst.sortableOuterWidth = inst.sortable.element.outerWidth();
-			inst.sortableOuterHeight = inst.sortable.element.outerHeight();
-			if(inst.sortable.options.revert) inst.sortable.shouldRevert = true;
+			inst.sortables = [];
+			$(ui.options.connectToSortable).each(function() {
+				if($.data(this, 'sortable')) inst.sortables.push({
+					instance: $.data(this, 'sortable'),
+					offset: $.data(this, 'sortable').element.offset(),
+					width: $.data(this, 'sortable').element.width(),
+					height: $.data(this, 'sortable').element.height(),
+					shouldRevert: $.data(this, 'sortable').options.revert
+				});
+			});
+
 		},
 		stop: function(e,ui) {
-			//If we are still over the sortable, we fake the stop event of the sortable, but also remove helper
-			var instDraggable = $(this).data("draggable");
-			var inst = instDraggable.sortable;
 			
-			if(inst.isOver) {
-				inst.isOver = 0;
-				instDraggable.cancelHelperRemoval = true; //Don't remove the helper in the draggable instance
-				inst.cancelHelperRemoval = false; //Remove it in the sortable instance (so sortable plugins like revert still work)
-				if(inst.shouldRevert) inst.options.revert = true; //revert here
-				inst.stop(e);
-				inst.options.helper = "original";
-			}
+			//If we are still over the sortable, we fake the stop event of the sortable, but also remove helper
+			var inst = $(this).data("draggable");
+			
+			$.each(inst.sortables, function() {
+				if(this.instance.isOver) {
+					this.instance.isOver = 0;
+					inst.cancelHelperRemoval = true; //Don't remove the helper in the draggable instance
+					this.instance.cancelHelperRemoval = false; //Remove it in the sortable instance (so sortable plugins like revert still work)
+					if(this.shouldRevert) this.instance.options.revert = true; //revert here
+					this.instance.mouseStop(e);
+					this.instance.options.helper = "original";
+				}
+			});
+			
 		},
 		drag: function(e,ui) {
+
 			//This is handy: We reuse the intersectsWith method for checking if the current draggable helper
 			//intersects with the sortable container
-			var instDraggable = $(this).data("draggable");
-			var inst = instDraggable.sortable;
-			instDraggable.position.absolute = ui.absolutePosition; //Sorry, this is an ugly API fix
+			var inst = $(this).data("draggable"), self = this;
+			inst.position.absolute = ui.absolutePosition; //Sorry, this is an ugly API fix
 			
-			if(inst.intersectsWith.call(instDraggable, {
-				left: instDraggable.sortableOffset.left, top: instDraggable.sortableOffset.top,
-				width: instDraggable.sortableOuterWidth, height: instDraggable.sortableOuterHeight
-			})) {
-				//If it intersects, we use a little isOver variable and set it once, so our move-in stuff gets fired only once
-				if(!inst.isOver) {
-					inst.isOver = 1;
+			var checkPos = function(o) {
 					
-					//Cache the width/height of the new helper
-					var height = inst.options.placeholderElement ? $(inst.options.placeholderElement, $(inst.options.items, inst.element)).innerHeight() : $(inst.options.items, inst.element).innerHeight();
-					var width = inst.options.placeholderElement ? $(inst.options.placeholderElement, $(inst.options.items, inst.element)).innerWidth() : $(inst.options.items, inst.element).innerWidth();
+				var l = o.left, r = l + o.width,
+					t = o.top, b = t + o.height;
 					
-					//Now we fake the start of dragging for the sortable instance,
-					//by cloning the list group item, appending it to the sortable and using it as inst.currentItem
-					//We can then fire the start event of the sortable with our passed browser event, and our own helper (so it doesn't create a new one)
-					inst.currentItem = $(this).clone().appendTo(inst.element);
-					inst.options.helper = function() { return ui.helper[0]; };
-					inst.start(e);
-					
-					//Because the browser event is way off the new appended portlet, we modify a couple of variables to reflect the changes
-					inst.clickOffset.top = instDraggable.offset.click.top;
-					inst.clickOffset.left = instDraggable.offset.click.left;
-					inst.offset.left -= ui.absolutePosition.left - inst.position.absolute.left;
-					inst.offset.top -= ui.absolutePosition.top - inst.position.absolute.top;
-					
-					//Do a nifty little helper animation: Animate it to the portlet's size (just takes the first 'li' element in the sortable now)
-					inst.helperProportions = {width: width, height: height}; //We have to reset the helper proportions, because we are doing our animation there
-					ui.helper.animate({height: height, width: width}, 500);
-					instDraggable.propagate("toSortable", e);
-				
-				}
-				
-				//Provided we did all the previous steps, we can fire the drag event of the sortable on every draggable drag, when it intersects with the sortable
-				if(inst.currentItem) inst.drag(e);
-				
-			} else {
-				
-				//If it doesn't intersect with the sortable, and it intersected before,
-				//we fake the drag stop of the sortable, but make sure it doesn't remove the helper by using cancelHelperRemoval
-				if(inst.isOver) {
-					inst.isOver = 0;
-					inst.cancelHelperRemoval = true;
-					inst.options.revert = false; //No revert here
-					inst.stop(e);
-					inst.options.helper = "original";
-					
-					//Now we remove our currentItem, the list group clone again, and the placeholder, and animate the helper back to it's original size
-					inst.currentItem.remove();
-					inst.placeholder.remove();
-					
-					ui.helper.animate({ height: this.innerHeight(), width: this.innerWidth() }, 500);
-					instDraggable.propagate("fromSortable", e);
-				}
-				
+				return (l < (this.position.absolute.left + this.offset.click.left) && (this.position.absolute.left + this.offset.click.left) < r
+						&& t < (this.position.absolute.top + this.offset.click.top) && (this.position.absolute.top + this.offset.click.top) < b);				
 			};
+			
+			$.each(inst.sortables, function() {
+
+				if(checkPos.call(inst, {
+					left: this.offset.left, top: this.offset.top,
+					width: this.width, height: this.height
+				})) {
+					//If it intersects, we use a little isOver variable and set it once, so our move-in stuff gets fired only once
+					if(!this.instance.isOver) {
+						this.instance.isOver = 1;
+
+						//Cache the width/height of the new helper
+						var height = this.instance.options.placeholderElement ? $(this.instance.options.placeholderElement, $(this.instance.options.items, this.instance.element)).innerHeight() : $(this.instance.options.items, this.instance.element).innerHeight();
+						var width = this.instance.options.placeholderElement ? $(this.instance.options.placeholderElement, $(this.instance.options.items, this.instance.element)).innerWidth() : $(this.instance.options.items, this.instance.element).innerWidth();
+					
+						//Now we fake the start of dragging for the sortable instance,
+						//by cloning the list group item, appending it to the sortable and using it as inst.currentItem
+						//We can then fire the start event of the sortable with our passed browser event, and our own helper (so it doesn't create a new one)
+						this.instance.currentItem = $(self).clone().appendTo(this.instance.element).data("sortable-item", true);
+						this.instance.options.helper = function() { return ui.helper[0]; };
+					
+						e.target = this.instance.currentItem[0];
+						this.instance.mouseStart(e, true);
+
+						//Because the browser event is way off the new appended portlet, we modify a couple of variables to reflect the changes
+						this.instance.clickOffset.top = inst.offset.click.top;
+						this.instance.clickOffset.left = inst.offset.click.left;
+						this.instance.offset.left -= ui.absolutePosition.left - this.instance.position.absolute.left;
+						this.instance.offset.top -= ui.absolutePosition.top - this.instance.position.absolute.top;
+						
+						//Do a nifty little helper animation: Animate it to the portlet's size (just takes the first 'li' element in the sortable now)
+						this.instance.helperProportions = {width: width, height: height}; //We have to reset the helper proportions, because we are doing our animation there
+						ui.helper.animate({height: height, width: width}, 500);
+						inst.propagate("toSortable", e);
+					
+					}
+					
+					//Provided we did all the previous steps, we can fire the drag event of the sortable on every draggable drag, when it intersects with the sortable
+					if(this.instance.currentItem) this.instance.mouseDrag(e);
+					
+				} else {
+					
+					//If it doesn't intersect with the sortable, and it intersected before,
+					//we fake the drag stop of the sortable, but make sure it doesn't remove the helper by using cancelHelperRemoval
+					if(this.instance.isOver) {
+						this.instance.isOver = 0;
+						this.instance.cancelHelperRemoval = true;
+						this.instance.options.revert = false; //No revert here
+						this.instance.mouseStop(e);
+						this.instance.options.helper = "original";
+						
+						//Now we remove our currentItem, the list group clone again, and the placeholder, and animate the helper back to it's original size
+						this.instance.currentItem.remove();
+						this.instance.placeholder.remove();
+						
+						ui.helper.animate({ height: self.innerHeight(), width: self.innerWidth() }, 500);
+						inst.propagate("fromSortable", e);
+					}
+					
+				};
+
+			});
+
 		}
 	});
 	

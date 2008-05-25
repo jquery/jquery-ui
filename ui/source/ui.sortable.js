@@ -280,8 +280,8 @@
 				
 			};			
 		},
-		mouseStart: function(e) {
-			
+		mouseStart: function(e, overrideHandle) {
+		
 			var o = this.options;
 			this.currentContainer = this;
 			
@@ -295,9 +295,9 @@
 				}
 			});
 			if($.data(e.target, 'sortable-item')) currentItem = $(e.target);
-			
-			if(!currentItem) return false;	
-			if(this.options.handle) {
+		
+			if(!currentItem) return false;
+			if(this.options.handle && !overrideHandle) {
 				var validHandle = false;
 				$(this.options.handle, currentItem).each(function() { if(this == e.target) validHandle = true; });
 				if(!validHandle) return false;
@@ -330,7 +330,7 @@
 			//The relative click offset
 			this.offsets.parent = this.offsetParent.offset();
 			this.clickOffset = { left: e.pageX - this.offsets.absolute.left, top: e.pageY - this.offsets.absolute.top };
-			
+		
 			this.originalPosition = {
 				left: this.offsets.absolute.left - this.offsets.parent.left - this.margins.left,
 				top: this.offsets.absolute.top - this.offsets.parent.top - this.margins.top
@@ -512,14 +512,14 @@
 
 	$.ui.plugin.add("sortable", "revert", {
 		stop: function(e, ui) {
-			var self = ui.instance;
+			var self = this.data("sortable");
 			self.cancelHelperRemoval = true;
 			var cur = self.currentItem.offset();
 			var op = self.helper.offsetParent().offset();
-			if(ui.instance.options.zIndex) ui.helper.css('zIndex', ui.instance.options.zIndex); //Do the zIndex again because it already was resetted by the plugin above on stop
+			if(self.options.zIndex) ui.helper.css('zIndex', self.options.zIndex); //Do the zIndex again because it already was resetted by the plugin above on stop
 
 			//Also animate the placeholder if we have one
-			if(ui.instance.placeholder) ui.instance.placeholder.animate({ opacity: 'hide' }, parseInt(ui.options.revert, 10) || 500);
+			if(self.placeholder) self.placeholder.animate({ opacity: 'hide' }, parseInt(ui.options.revert, 10) || 500);
 			
 			
 			ui.helper.animate({
@@ -595,35 +595,35 @@
 
 	$.ui.plugin.add("sortable", "axis", {
 		sort: function(e, ui) {
-			var o = ui.options;
+			var o = ui.options, inst = this.data("sortable");
 			if(o.constraint) o.axis = o.constraint; //Legacy check
-			o.axis == 'x' ? ui.instance.position.current.top = ui.instance.originalPosition.top : ui.instance.position.current.left = ui.instance.originalPosition.left;
+			o.axis == 'x' ? inst.position.current.top = inst.originalPosition.top : inst.position.current.left = inst.originalPosition.left;
 		}
 	});
 
 	$.ui.plugin.add("sortable", "scroll", {
 		start: function(e, ui) {
-			var o = ui.options;
+			var o = ui.options, inst = this.data("sortable");
 			o.scrollSensitivity	= o.scrollSensitivity || 20;
 			o.scrollSpeed		= o.scrollSpeed || 20;
 
-			ui.instance.overflowY = function(el) {
+			inst.overflowY = function(el) {
 				do { if((/auto|scroll/).test(el.css('overflow')) || (/auto|scroll/).test(el.css('overflow-y'))) return el; el = el.parent(); } while (el[0].parentNode);
 				return $(document);
 			}(this);
-			ui.instance.overflowX = function(el) {
+			inst.overflowX = function(el) {
 				do { if((/auto|scroll/).test(el.css('overflow')) || (/auto|scroll/).test(el.css('overflow-x'))) return el; el = el.parent(); } while (el[0].parentNode);
 				return $(document);
 			}(this);
 			
-			if(ui.instance.overflowY[0] != document && ui.instance.overflowY[0].tagName != 'HTML') ui.instance.overflowYstart = ui.instance.overflowY[0].scrollTop;
-			if(ui.instance.overflowX[0] != document && ui.instance.overflowX[0].tagName != 'HTML') ui.instance.overflowXstart = ui.instance.overflowX[0].scrollLeft;
+			if(inst.overflowY[0] != document && inst.overflowY[0].tagName != 'HTML') inst.overflowYstart = inst.overflowY[0].scrollTop;
+			if(inst.overflowX[0] != document && inst.overflowX[0].tagName != 'HTML') inst.overflowXstart = inst.overflowX[0].scrollLeft;
 			
 		},
 		sort: function(e, ui) {
 			
 			var o = ui.options;
-			var i = ui.instance;
+			var i = this.data("sortable");
 
 			if(i.overflowY[0] != document && i.overflowY[0].tagName != 'HTML') {
 				if(i.overflowY[0].offsetHeight - (ui.position.top - i.overflowY[0].scrollTop + i.clickOffset.top) < o.scrollSensitivity)
@@ -650,7 +650,6 @@
 					$(document).scrollLeft($(document).scrollLeft() + o.scrollSpeed);
 			}
 			
-			//ui.instance.recallOffset(e);
 			i.offset = {
 				left: i.mouse.start.left - i.originalPosition.left + (i.overflowXstart !== undefined ? i.overflowXstart - i.overflowX[0].scrollLeft : 0),
 				top: i.mouse.start.top - i.originalPosition.top + (i.overflowYstart !== undefined ? i.overflowYstart - i.overflowX[0].scrollTop : 0)
