@@ -544,8 +544,8 @@
 			if((o.containment.left != undefined || o.containment.constructor == Array) && !o._containment) return;
 			if(!o._containment) o._containment = o.containment;
 
-			if(o._containment == 'parent') o._containment = this.element[0].parentNode;
-			if(o._containment == 'sortable') o._containment = this.element[0];
+			if(o._containment == 'parent') o._containment = this[0].parentNode;
+			if(o._containment == 'sortable') o._containment = this[0];
 			if(o._containment == 'document') {
 				o.containment = [
 					0,
