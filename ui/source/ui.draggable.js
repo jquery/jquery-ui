@@ -480,10 +480,6 @@
 					if(!this.instance.isOver) {
 						this.instance.isOver = 1;
 
-						//Cache the width/height of the new helper
-						var height = this.instance.options.placeholderElement ? $(this.instance.options.placeholderElement, $(this.instance.options.items, this.instance.element)).innerHeight() : $(this.instance.options.items, this.instance.element).innerHeight();
-						var width = this.instance.options.placeholderElement ? $(this.instance.options.placeholderElement, $(this.instance.options.items, this.instance.element)).innerWidth() : $(this.instance.options.items, this.instance.element).innerWidth();
-					
 						//Now we fake the start of dragging for the sortable instance,
 						//by cloning the list group item, appending it to the sortable and using it as inst.currentItem
 						//We can then fire the start event of the sortable with our passed browser event, and our own helper (so it doesn't create a new one)
@@ -499,9 +495,6 @@
 						this.instance.offset.left -= ui.absolutePosition.left - this.instance.position.absolute.left;
 						this.instance.offset.top -= ui.absolutePosition.top - this.instance.position.absolute.top;
 						
-						//Do a nifty little helper animation: Animate it to the portlet's size (just takes the first 'li' element in the sortable now)
-						this.instance.helperProportions = {width: width, height: height}; //We have to reset the helper proportions, because we are doing our animation there
-						ui.helper.animate({height: height, width: width}, 500);
 						inst.propagate("toSortable", e);
 					
 					}
@@ -524,7 +517,6 @@
 						this.instance.currentItem.remove();
 						this.instance.placeholder.remove();
 						
-						ui.helper.animate({ height: self.innerHeight(), width: self.innerWidth() }, 500);
 						inst.propagate("fromSortable", e);
 					}
 					
