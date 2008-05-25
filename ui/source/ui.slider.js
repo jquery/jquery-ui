@@ -49,11 +49,11 @@
 		},
 		enable: function() {
 			this.element.removeClass("ui-slider-disabled");
-			this.disabled = false;
+			this.options.disabled = false;
 		},
 		disable: function() {
 			this.element.addClass("ui-slider-disabled");
-			this.disabled = true;
+			this.options.disabled = true;
 		},
 		setData: function(key, value) {
 			this.options[key] = value;
@@ -162,7 +162,7 @@
 				if(this == e.target)
 					clickedHandle = true;
 			});
-			if (clickedHandle || this.disabled || !(this.currentHandle || this.previousHandle))
+			if (clickedHandle || this.options.disabled || !(this.currentHandle || this.previousHandle))
 				return;
 
 			// If a previous handle was focussed, focus it again
@@ -270,10 +270,10 @@
 			
 			this.propagate('start', e);
 			
-			if(!this.disabled) {
+			if(!this.options.disabled) {
 				if(this.currentHandle) this.blur(this.currentHandle);
 				this.focus(handle,1);
-				return !this.disabled;
+				return !this.options.disabled;
 			}
 		},
 		mouseDrag: function(e) {

@@ -251,14 +251,14 @@
 		},
 		enable: function() {
 			this.element.removeClass("ui-resizable-disabled");
-			this.disabled = false;
+			this.options.disabled = false;
 		},
 		disable: function() {
 			this.element.addClass("ui-resizable-disabled");
-			this.disabled = true;
+			this.options.disabled = true;
 		},
 		mouseStart: function(e) {
-			if(this.disabled) return false;
+			if(this.options.disabled) return false;
 			
 			var handle = false;
 			for(var i in this.options.handles) {

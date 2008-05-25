@@ -52,7 +52,7 @@
 			this.helper = $(document.createElement('div')).css({border:'1px dotted black'});
 		},
 		toggle: function() {
-			if(this.disabled){
+			if(this.options.disabled){
 				this.enable();
 			} else {
 				this.disable();
@@ -67,18 +67,18 @@
 		},
 		enable: function() {
 			this.element.removeClass("ui-selectable-disabled");
-			this.disabled = false;
+			this.options.disabled = false;
 		},
 		disable: function() {
 			this.element.addClass("ui-selectable-disabled");
-			this.disabled = true;
+			this.options.disabled = true;
 		},
 		mouseStart: function(e) {
 			var self = this;
 			
 			this.opos = [e.pageX, e.pageY];
 			
-			if (this.disabled)
+			if (this.options.disabled)
 				return;
 
 			var options = this.options;
@@ -133,7 +133,7 @@
 			var self = this;
 			this.dragged = true;
 			
-			if (this.disabled)
+			if (this.options.disabled)
 				return;
 
 			var options = this.options;
