@@ -1,4 +1,4 @@
-/*
+﻿/*
  * jQuery UI @VERSION
  *
  * Copyright (c) 2008 Paul Bakaus (ui.jquery.com)
@@ -7,7 +7,7 @@
  *
  * http://docs.jquery.com/UI
  *
- * $Id: ui.core.js 5634 2008-05-19 20:53:51Z joern.zaefferer $
+ * $Id: ui.core.js 5587 2008-05-13 19:56:42Z scott.gonzalez $
  */
 ;(function($) {
 	
@@ -26,7 +26,7 @@
 				
 				for (var i = 0; i < set.length; i++) {
 					if (instance.options[set[i][0]]) {
-						set[i][1].apply(instance.element, args);
+						set[i][1].apply(instance, args);
 					}
 				}
 			}	
@@ -156,86 +156,123 @@
 	
 	/** Mouse Interaction Plugin **/
 	
-	$.widget("ui.mouse", {
-		init: function() {
+	$.ui.mouse = {
+		mouseInit: function() {
 			var self = this;
 			
-			this.element
-				.bind('mousedown.mouse', function() { return self.click.apply(self, arguments); })
-				.bind('mouseup.mouse', function() { (self.timer && clearTimeout(self.timer)); })
-				.bind('click.mouse', function() { if(self.initialized) { self.initialized = false; return false; } });
-			//Prevent text selection in IE
+			this.element.bind('mousedown.mouse', function(e) {
+				return self.mouseDown(e);
+			});
+			
+			// Prevent text selection in IE
 			if ($.browser.msie) {
-				this.unselectable = this.element.attr('unselectable');
+				this._mouseUnselectable = this.element.attr('unselectable');
 				this.element.attr('unselectable', 'on');
 			}
+			
+			this.started = false;
 		},
-		destroy: function() {
-			this.element.unbind('.mouse').removeData("mouse");
-			($.browser.msie && this.element.attr('unselectable', this.unselectable));
+		
+		mouseDestroy: function() {
+			this.element.unbind('.mouse');
+			
+			// Restore text selection in IE
+			($.browser.msie
+				&& this.element.attr('unselectable', this._mouseUnselectable));
 		},
-		trigger: function() { return this.click.apply(this, arguments); },
-		click: function(e) {
 		
-			if(    e.which != 1 //only left click starts dragging
-				|| $.inArray(e.target.nodeName.toLowerCase(), this.options.dragPrevention || []) != -1 // Prevent execution on defined elements
-				|| (this.options.condition && !this.options.condition.apply(this.options.executor || this, [e, this.element])) //Prevent execution on condition
-			) { return true; }
-		
-			var self = this;
-			this.initialized = false;
-			var initialize = function() {
-				self._MP = { left: e.pageX, top: e.pageY }; // Store the click mouse position
-				$(document).bind('mouseup.mouse', function() { return self.stop.apply(self, arguments); });
-				$(document).bind('mousemove.mouse', function() { return self.drag.apply(self, arguments); });
-		
-				if(!self.initalized && Math.abs(self._MP.left-e.pageX) >= self.options.distance || Math.abs(self._MP.top-e.pageY) >= self.options.distance) {
-					(self.options.start && self.options.start.call(self.options.executor || self, e, self.element));
-					(self.options.drag && self.options.drag.call(self.options.executor || self, e, this.element)); //This is actually not correct, but expected
-					self.initialized = true;
-				}
-			};
-
-			if(this.options.delay) {
-				if(this.timer) { clearTimeout(this.timer); }
-				this.timer = setTimeout(initialize, this.options.delay);
-			} else {
-				initialize();
+		mouseDown: function(e) {
+			
+			// we may have missed mouseup (out of window)
+			(this._mouseStarted
+				&& this.mouseUp(e));
+			
+			this._mouseDownEvent = e;
+			
+			var self = this,
+				btnIsLeft = (e.which == 1),
+				elIsCancel = ($(e.target).is(this.options.cancel));
+			if (!btnIsLeft || elIsCancel) {
+				return true;
 			}
-				
-			return false;
 			
-		},
-		stop: function(e) {
-			
-			if(!this.initialized) {
-				return $(document).unbind('mouseup.mouse').unbind('mousemove.mouse');
+			this._mouseDelayMet = (this.options.delay == 0);
+			if (!this._mouseDelayMet) {
+				this._mouseDelayTimer = setTimeout(function() {
+					self._mouseDelayMet = true;
+				}, this.options.delay);
 			}
-
-			(this.options.stop && this.options.stop.call(this.options.executor || this, e, this.element));
 			
-			$(document).unbind('mouseup.mouse').unbind('mousemove.mouse');
+			// these delegates are required to keep context
+			this._mouseMoveDelegate = function(e) {
+				return self.mouseMove(e);
+			}
+			this._mouseUpDelegate = function(e) {
+				return self.mouseUp(e);
+			}
+			$(document)
+				.bind('mousemove.mouse', this._mouseMoveDelegate)
+				.bind('mouseup.mouse', this._mouseUpDelegate);
+			
 			return false;
-			
 		},
-		drag: function(e) {
-
-			var o = this.options;
+		
+		mouseMove: function(e) {
+			
+			// IE mouseup check - mouseup happened when mouse was out of window
 			if ($.browser.msie && !e.button) {
-				return this.stop.call(this, e); // IE mouseup check
+				return this.mouseUp(e);
 			}
 			
-			if(!this.initialized && (Math.abs(this._MP.left-e.pageX) >= o.distance || Math.abs(this._MP.top-e.pageY) >= o.distance)) {
-				(o.start && o.start.call(o.executor || this, e, this.element));
-				this.initialized = true;
-			} else {
-				if(!this.initialized) { return false; }
+			if (this._mouseStarted) {
+				this.mouseDrag(e);
+				return false;
 			}
-
-			(o.drag && o.drag.call(this.options.executor || this, e, this.element));
+			
+			if (this.mouseDistanceMet(e) && this.mouseDelayMet(e)) {
+				this._mouseStarted =
+					(this.mouseStart(this._mouseDownEvent, e) !== false);
+				(this._mouseStarted || this.mouseUp(e));
+			}
+			
+			return !this._mouseStarted;
+		},
+		
+		mouseUp: function(e) {
+			
+			$(document)
+				.unbind('mousemove.mouse', this._mouseMoveDelegate)
+				.unbind('mouseup.mouse', this._mouseUpDelegate);
+			
+			if (this._mouseStarted) {
+				this._mouseStarted = false;
+				this.mouseStop(e);
+			}
+			
 			return false;
-			
-		}
-	});
+		},
+		
+		mouseDistanceMet: function(e) {
+			return (Math.max(
+					Math.abs(this._mouseDownEvent.pageX - e.pageX),
+					Math.abs(this._mouseDownEvent.pageY - e.pageY)
+				) >= this.options.distance
+			);
+		},
+		
+		mouseDelayMet: function(e) {
+			return this._mouseDelayMet;
+		},
+		
+		// These are placeholder methods, to be overriden by extending plugin
+		mouseStart: function(e) {},
+		mouseDrag: function(e) {},
+		mouseStop: function(e) {}
+	};
 	
+	$.ui.mouse.defaults = {
+		cancel: null,
+		distance: 0,
+		delay: 0
+	};
 })(jQuery);

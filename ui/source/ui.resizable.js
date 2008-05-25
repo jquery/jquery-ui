@@ -10,15 +10,15 @@
  * Depends:
  *	ui.core.js
  *
- * Revision: $Id: ui.resizable.js 5653 2008-05-21 04:09:48Z braeker $
+ * Revision: $Id: ui.resizable.js 5668 2008-05-22 18:17:30Z rdworth $
  */
 ;(function($) {
 	
-	$.widget("ui.resizable", {
+	$.widget("ui.resizable", $.extend($.ui.mouse, {
 		init: function() {
 
 			var self = this, o = this.options;
-			
+
 			var elpos = this.element.css('position');
 			
 			// simulate .ui-resizable { position: relative; }
@@ -29,10 +29,10 @@
 				proxy: o.proxy || o.ghost || o.animate ? o.proxy || 'proxy' : null,
 				knobHandles: o.knobHandles === true ? 'ui-resizable-knob-handle' : o.knobHandles
 			});
-
+			
 			//Default Theme
 			var aBorder = '1px solid #DEDEDE';
-	
+			
 			o.defaultTheme = {
 				'ui-resizable': { display: 'block' },
 				'ui-resizable-handle': { position: 'absolute', background: '#F2F2F2', fontSize: '0.1px' },
@@ -80,17 +80,17 @@
 				);
 				
 				var oel = this.element; this.element = this.element.parent();
-		
+				
 				//Move margins to the wrapper
 				this.element.css({ marginLeft: oel.css("marginLeft"), marginTop: oel.css("marginTop"),
 					marginRight: oel.css("marginRight"), marginBottom: oel.css("marginBottom")
 				});
-		
+				
 				oel.css({ marginLeft: 0, marginTop: 0, marginRight: 0, marginBottom: 0});
-		
+				
 				//Prevent Safari textarea resize
 				if ($.browser.safari && o.preventDefault) oel.css('resize', 'none');
-		
+				
 				o.proportionallyResize = oel.css({ position: 'static', zoom: 1, display: 'block' });
 				
 				// avoid IE jump
@@ -102,11 +102,11 @@
 			
 			if(!o.handles) o.handles = !$('.ui-resizable-handle', this.element).length ? "e,s,se" : { n: '.ui-resizable-n', e: '.ui-resizable-e', s: '.ui-resizable-s', w: '.ui-resizable-w', se: '.ui-resizable-se', sw: '.ui-resizable-sw', ne: '.ui-resizable-ne', nw: '.ui-resizable-nw' };
 			if(o.handles.constructor == String) {
-		
+				
 				o.zIndex = o.zIndex || 1000;
 				
 				if(o.handles == 'all') o.handles = 'n,e,s,w,se,sw,ne,nw';
-		
+				
 				var n = o.handles.split(","); o.handles = {};
 				
 				// insertions are applied when don't have theme loaded
@@ -121,7 +121,7 @@
 					ne: 'top: 0pt; right: 0px;',
 					nw: 'top: 0pt; left: 0px;'
 				};
-		
+				
 				for(var i = 0; i < n.length; i++) {
 					var handle = $.trim(n[i]), dt = o.defaultTheme, hname = 'ui-resizable-'+handle, loadDefault = !$.ui.css(hname) && !o.knobHandles, userKnobClass = $.ui.css('ui-resizable-knob-handle'), 
 								allDefTheme = $.extend(dt[hname], dt['ui-resizable-handle']), allKnobTheme = $.extend(o.knobTheme[hname], !userKnobClass ? o.knobTheme['ui-resizable-handle'] : {});
@@ -143,35 +143,35 @@
 				
 				if (o.knobHandles) this.element.addClass('ui-resizable-knob').css( !$.ui.css('ui-resizable-knob') ? { /*border: '1px #fff dashed'*/ } : {} );
 			}
-
+			
 			this._renderAxis = function(target) {
 				target = target || this.element;
-		
+				
 				for(var i in o.handles) {
 					if(o.handles[i].constructor == String) 
 						o.handles[i] = $(o.handles[i], this.element).show();
-		
+					
 					if (o.transparent)
 						o.handles[i].css({opacity:0});
-		
+					
 					//Apply pad to wrapper element, needed to fix axis position (textarea, inputs, scrolls)
 					if (this.element.is('.ui-wrapper') && 
 						o._nodeName.match(/textarea|input|select|button/i)) {
-		
+						
 						var axis = $(o.handles[i], this.element), padWrapper = 0;
-		
+						
 						//Checking the correct pad and border
 						padWrapper = /sw|ne|nw|se|n|s/.test(i) ? axis.outerHeight() : axis.outerWidth();
-		
+						
 						//The padding type i have to apply...
 						var padPos = [ 'padding', 
 							/ne|nw|n/.test(i) ? 'Top' :
 							/se|sw|s/.test(i) ? 'Bottom' : 
 							/^e$/.test(i) ? 'Right' : 'Left' ].join(""); 
-		
+						
 						if (!o.transparent)
 							target.css(padPos, padWrapper);
-		
+						
 						this._proportionallyResize();
 					}
 					if(!$(o.handles[i]).length) continue;
@@ -193,7 +193,7 @@
 					self.axis = o.axis = axis && axis[1] ? axis[1] : 'se';
 				}
 			});
-					
+			
 			//If we want to auto hide the elements
 			if (o.autohide) {
 				o._handles.hide();
@@ -208,25 +208,8 @@
 					}
 				});
 			}
-		
-			//Initialize mouse events for interaction
-			this.element.mouse({
-				executor: this,
-				delay: 0,
-				distance: 0,
-				dragPrevention: ['input','textarea','button','select','option'],
-				start: this.start,
-				stop: this.stop,
-				drag: this.drag,
-				condition: function(e) {
-					if(this.disabled) return false;
-					for(var i in this.options.handles) {
-						if($(this.options.handles[i])[0] == e.target) return true;
-					}
-					return false;
-				}
-			});
 			
+			this.mouseInit();
 		},
 		plugins: {},
 		ui: function() {
@@ -241,11 +224,13 @@
 			this.element.triggerHandler(n == "resize" ? n : ["resize", n].join(""), [e, this.ui()], this.options[n]);
 		},
 		destroy: function() {
-			var el = this.element, wrapped = el.children(".ui-resizable").get(0),
+			var el = this.element, wrapped = el.children(".ui-resizable").get(0);
 			
-			_destroy = function(exp) {
+			this.mouseDestroy();
+			
+			var _destroy = function(exp) {
 				$(exp).removeClass("ui-resizable ui-resizable-disabled")
-					.mouse("destroy").removeData("resizable").unbind(".resizable").find('.ui-resizable-handle').remove();
+					.removeData("resizable").unbind(".resizable").find('.ui-resizable-handle').remove();
 			};
 			
 			_destroy(el);
@@ -272,12 +257,20 @@
 			this.element.addClass("ui-resizable-disabled");
 			this.disabled = true;
 		},
-		start: function(e) {
+		mouseStart: function(e) {
+			if(this.disabled) return false;
+			
+			var handle = false;
+			for(var i in this.options.handles) {
+				if($(this.options.handles[i])[0] == e.target) handle = true;
+			}
+			if (!handle) return false;
+			
 			var o = this.options, iniPos = this.element.position(), el = this.element, 
 				num = function(v) { return parseInt(v, 10) || 0; }, ie6 = $.browser.msie && $.browser.version < 7;
 			o.resizing = true;
 			o.documentScroll = { top: $(document).scrollTop(), left: $(document).scrollLeft() };
-	
+			
 			// bugfix #1749
 			if (el.is('.ui-draggable') || (/absolute/).test(el.css('position'))) {
 				
@@ -291,9 +284,9 @@
 			//Opera fixing relative position
 			if (/relative/.test(el.css('position')) && $.browser.opera)
 				el.css({ position: 'relative', top: 'auto', left: 'auto' });
-	
+			
 			this._renderProxy();
-	
+			
 			var curleft = num(this.helper.css('left')), curtop = num(this.helper.css('top'));
 			
 			//Store needed variables
@@ -307,44 +300,19 @@
 			
 			//Aspect Ratio
 			o.aspectRatio = (typeof o.aspectRatio == 'number') ? o.aspectRatio : ((this.originalSize.height / this.originalSize.width)||1);
-	
+			
 			if (o.preserveCursor)
 				$('body').css('cursor', this.axis + '-resize');
 				
 			this.propagate("start", e);
-			return false;
+			return true;
 		},
-		stop: function(e) {
-			this.options.resizing = false;
-			var o = this.options, num = function(v) { return parseInt(v, 10) || 0; }, self = this;
-	
-			if(o.proxy) {
-				var pr = o.proportionallyResize, ista = pr && (/textarea/i).test(pr.get(0).nodeName), 
-							soffseth = ista && $.ui.hasScroll(pr.get(0), 'left') /* TODO - jump height */ ? 0 : self.sizeDiff.height,
-								soffsetw = ista ? 0 : self.sizeDiff.width;
+		mouseDrag: function(e) {
 			
-				var s = { width: (self.size.width - soffsetw), height: (self.size.height - soffseth) },
-					left = (parseInt(self.element.css('left'), 10) + (self.position.left - self.originalPosition.left)) || null, 
-					top = (parseInt(self.element.css('top'), 10) + (self.position.top - self.originalPosition.top)) || null;
-				
-				if (!o.animate)
-					this.element.css($.extend(s, { top: top, left: left }));
-				
-				if (o.proxy && !o.animate) this._proportionallyResize();
-				this.helper.remove();
-			}
-
-			if (o.preserveCursor)
-			$('body').css('cursor', 'auto');
-	
-			this.propagate("stop", e);	
-			return false;
-		},
-		drag: function(e) {
 			//Increase performance, avoid regex
 			var el = this.helper, o = this.options, props = {},
 				self = this, smp = this.originalMousePosition, a = this.axis;
-
+			
 			var dx = (e.pageX-smp.left)||0, dy = (e.pageY-smp.top)||0;
 			var trigger = this._change[a];
 			if (!trigger) return false;
@@ -369,6 +337,33 @@
 			
 			this._updateCache(data);
 			
+			return false;
+		},
+		mouseStop: function(e) {
+			
+			this.options.resizing = false;
+			var o = this.options, num = function(v) { return parseInt(v, 10) || 0; }, self = this;
+			
+			if(o.proxy) {
+				var pr = o.proportionallyResize, ista = pr && (/textarea/i).test(pr.get(0).nodeName), 
+							soffseth = ista && $.ui.hasScroll(pr.get(0), 'left') /* TODO - jump height */ ? 0 : self.sizeDiff.height,
+								soffsetw = ista ? 0 : self.sizeDiff.width;
+				
+				var s = { width: (self.size.width - soffsetw), height: (self.size.height - soffseth) },
+					left = (parseInt(self.element.css('left'), 10) + (self.position.left - self.originalPosition.left)) || null, 
+					top = (parseInt(self.element.css('top'), 10) + (self.position.top - self.originalPosition.top)) || null;
+				
+				if (!o.animate)
+					this.element.css($.extend(s, { top: top, left: left }));
+				
+				if (o.proxy && !o.animate) this._proportionallyResize();
+				this.helper.remove();
+			}
+			
+			if (o.preserveCursor)
+			$('body').css('cursor', 'auto');
+			
+			this.propagate("stop", e);	
 			return false;
 		},
 		_updateCache: function(data) {
@@ -444,14 +439,14 @@
 		_renderProxy: function() {
 			var el = this.element, o = this.options;
 			this.elementOffset = el.offset();
-	
+			
 			if(o.proxy) {
 				this.helper = this.helper || $('<div style="overflow:hidden;"></div>');
-	
+				
 				// fix ie6 offset
 				var ie6 = $.browser.msie && $.browser.version < 7, ie6offset = (ie6 ? 1 : 0),
 				pxyoffset = ( ie6 ? 2 : -1 );
-	
+				
 				this.helper.addClass(o.proxy).css({
 					width: el.outerWidth() + pxyoffset,
 					height: el.outerHeight() + pxyoffset,
@@ -462,10 +457,10 @@
 				});
 				
 				this.helper.appendTo("body");
-	
+				
 				if (o.disableSelection)
 					$.ui.disableSelection(this.helper.get(0));
-	
+				
 			} else {
 				this.helper = el; 
 			}
@@ -498,10 +493,13 @@
 				return $.extend(this._change.n.apply(this, arguments), this._change.w.apply(this, [e, dx, dy]));
 			}
 		}
-	});
+	}));
 	
 	$.extend($.ui.resizable, {
 		defaults: {
+			cancel: ":input,button",
+			distance: 0,
+			delay: 0,
 			preventDefault: true,
 			transparent: false,
 			minWidth: 10,
@@ -527,7 +525,7 @@
 			
 			if (/document/.test(oc) || oc == document) {
 				self.containerOffset = { left: 0, top: 0 };
-
+				
 				self.parentData = { 
 					element: $(document), left: 0, top: 0, width: $(document).width(),
 					height: $(document).height() || document.body.parentNode.scrollHeight
@@ -615,7 +613,7 @@
 		
 		stop: function(e, ui) {
 			var o = ui.options, self = ui.instance;
-
+			
 			var pr = o.proportionallyResize, ista = pr && (/textarea/i).test(pr.get(0).nodeName), 
 							soffseth = ista && $.ui.hasScroll(pr.get(0), 'left') /* TODO - jump height */ ? 0 : self.sizeDiff.height,
 								soffsetw = ista ? 0 : self.sizeDiff.width;

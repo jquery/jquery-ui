@@ -26,7 +26,7 @@
 	    return false; 
 	};
 	
-	$.widget("ui.sortable", {
+	$.widget("ui.sortable", $.extend($.ui.mouse, {
 		init: function() {
 
 			var o = this.options;
@@ -44,39 +44,7 @@
 			this.offset = this.element.offset();
 	
 			//Initialize mouse events for interaction
-			this.element.mouse({
-				executor: this,
-				delay: o.delay,
-				distance: o.distance || 1,
-				dragPrevention: o.prevention ? o.prevention.toLowerCase().split(',') : ['input','textarea','button','select','option'],
-				start: this.start,
-				stop: this.stop,
-				drag: this.drag,
-				condition: function(e) {
-	
-					if(this.options.disabled || this.options.type == 'static') return false;
-	
-					//Find out if the clicked node (or one of its parents) is a actual item in this.items
-					var currentItem = null, nodes = $(e.target).parents().each(function() {	
-						if($.data(this, 'sortable-item')) {
-							currentItem = $(this);
-							return false;
-						}
-					});
-					if($.data(e.target, 'sortable-item')) currentItem = $(e.target);
-					
-					if(!currentItem) return false;	
-					if(this.options.handle) {
-						var validHandle = false;
-						$(this.options.handle, currentItem).each(function() { if(this == e.target) validHandle = true; });
-						if(!validHandle) return false;
-					}
-						
-					this.currentItem = currentItem;
-					return true;
-	
-				}
-			});
+			this.mouseInit();
 			
 		},
 		plugins: {},
@@ -86,7 +54,6 @@
 				placeholder: (inst || this)["placeholder"] || $([]),
 				position: (inst || this)["position"].current,
 				absolutePosition: (inst || this)["position"].absolute,
-				instance: this,
 				options: this.options,
 				element: this.element,
 				item: (inst || this)["currentItem"],
@@ -251,8 +218,8 @@
 			this.element
 				.removeClass("ui-sortable ui-sortable-disabled")
 				.removeData("sortable")
-				.unbind(".sortable")
-				.mouse("destroy");
+				.unbind(".sortable");
+			this.mouseDestroy();
 			
 			for ( var i = this.items.length - 1; i >= 0; i-- )
 				this.items[i].item.removeData("sortable-item");
@@ -264,8 +231,7 @@
 				.appendTo('body')
 				.css({ position: 'absolute' })
 				.css((that || this).placeholderElement.offset())
-				.css({ width: (that || this).placeholderElement.outerWidth(), height: (that || this).placeholderElement.outerHeight() })
-				;
+				.css({ width: (that || this).placeholderElement.outerWidth(), height: (that || this).placeholderElement.outerHeight() });
 		},
 		contactContainers: function(e) {
 			for (var i = this.containers.length - 1; i >= 0; i--){
@@ -314,10 +280,31 @@
 				
 			};			
 		},
-		start: function(e,el) {
-		
+		mouseStart: function(e) {
+			
 			var o = this.options;
 			this.currentContainer = this;
+			
+			if(this.options.disabled || this.options.type == 'static') return false;
+
+			//Find out if the clicked node (or one of its parents) is a actual item in this.items
+			var currentItem = null, nodes = $(e.target).parents().each(function() {	
+				if($.data(this, 'sortable-item')) {
+					currentItem = $(this);
+					return false;
+				}
+			});
+			if($.data(e.target, 'sortable-item')) currentItem = $(e.target);
+			
+			if(!currentItem) return false;	
+			if(this.options.handle) {
+				var validHandle = false;
+				$(this.options.handle, currentItem).each(function() { if(this == e.target) validHandle = true; });
+				if(!validHandle) return false;
+			}
+				
+			this.currentItem = currentItem;
+
 			this.refresh();
 
 			//Create and append the visible helper
@@ -391,45 +378,11 @@
 			if ($.ui.ddmanager && !o.dropBehaviour) $.ui.ddmanager.prepareOffsets(this, e);
 
 			this.dragging = true;
-			return false;
 			
-		},
-		stop: function(e) {
+			return true;
 
-			this.propagate("stop", e); //Call plugins and trigger callbacks
-			if(this.position.dom != this.currentItem.prev()[0]) this.propagate("update", e); //Trigger update callback if the DOM position has changed
-			if(!contains(this.element[0], this.currentItem[0])) { //Node was moved out of the current element
-				this.propagate("remove", e);
-				for (var i = this.containers.length - 1; i >= 0; i--){
-					if(contains(this.containers[i].element[0], this.currentItem[0])) {
-						this.containers[i].propagate("update", e, this);
-						this.containers[i].propagate("receive", e, this);
-					}
-				};
-			};
-			
-			//Post events to containers
-			for (var i = this.containers.length - 1; i >= 0; i--){
-				this.containers[i].propagate("deactivate", e, this);
-				if(this.containers[i].containerCache.over) {
-					this.containers[i].propagate("out", e, this);
-					this.containers[i].containerCache.over = 0;
-				}
-			}
-			
-			//If we are using droppables, inform the manager about the drop
-			if ($.ui.ddmanager && !this.options.dropBehaviour) $.ui.ddmanager.drop(this, e);
-			
-			this.dragging = false;
-			if(this.cancelHelperRemoval) return false;
-			$(this.currentItem).css('visibility', '');
-			if(this.placeholder) this.placeholder.remove();
-			this.helper.remove();
-
-			return false;
-			
 		},
-		drag: function(e) {
+		mouseDrag: function(e) {
 
 			//Compute the helpers position
 			this.position.current = { top: e.pageY - this.offset.top, left: e.pageX - this.offset.left };
@@ -464,17 +417,55 @@
 			return false;
 			
 		},
+		mouseStop: function(e) {
+
+			this.propagate("stop", e); //Call plugins and trigger callbacks
+			if(this.position.dom != this.currentItem.prev()[0]) this.propagate("update", e); //Trigger update callback if the DOM position has changed
+			if(!contains(this.element[0], this.currentItem[0])) { //Node was moved out of the current element
+				this.propagate("remove", e);
+				for (var i = this.containers.length - 1; i >= 0; i--){
+					if(contains(this.containers[i].element[0], this.currentItem[0])) {
+						this.containers[i].propagate("update", e, this);
+						this.containers[i].propagate("receive", e, this);
+					}
+				};
+			};
+			
+			//Post events to containers
+			for (var i = this.containers.length - 1; i >= 0; i--){
+				this.containers[i].propagate("deactivate", e, this);
+				if(this.containers[i].containerCache.over) {
+					this.containers[i].propagate("out", e, this);
+					this.containers[i].containerCache.over = 0;
+				}
+			}
+			
+			//If we are using droppables, inform the manager about the drop
+			if ($.ui.ddmanager && !this.options.dropBehaviour) $.ui.ddmanager.drop(this, e);
+			
+			this.dragging = false;
+			if(this.cancelHelperRemoval) return false;
+			$(this.currentItem).css('visibility', '');
+			if(this.placeholder) this.placeholder.remove();
+			this.helper.remove();
+
+			return false;
+			
+		},
 		rearrange: function(e, i, a) {
 			a ? a.append(this.currentItem) : i.item[this.direction == 'down' ? 'before' : 'after'](this.currentItem);
 			this.refreshPositions(true); //Precompute after each DOM insertion, NOT on mousemove
 			if(this.placeholderElement) this.placeholder.css(this.placeholderElement.offset());
 			if(this.placeholderElement && this.placeholderElement.is(":visible")) this.placeholder.css({ width: this.placeholderElement.outerWidth(), height: this.placeholderElement.outerHeight() });
 		}
-	});
+	}));
 	
 	$.extend($.ui.sortable, {
 		getter: "serialize toArray",
 		defaults: {
+			distance: 0,
+			delay: 0,
+			cancel: ":input,button",
 			items: '> *',
 			zIndex: 1000
 		}
@@ -553,8 +544,8 @@
 			if((o.containment.left != undefined || o.containment.constructor == Array) && !o._containment) return;
 			if(!o._containment) o._containment = o.containment;
 
-			if(o._containment == 'parent') o._containment = this[0].parentNode;
-			if(o._containment == 'sortable') o._containment = this[0];
+			if(o._containment == 'parent') o._containment = this.element[0].parentNode;
+			if(o._containment == 'sortable') o._containment = this.element[0];
 			if(o._containment == 'document') {
 				o.containment = [
 					0,
@@ -581,7 +572,7 @@
 			var o = ui.options;
 			var h = ui.helper;
 			var c = o.containment;
-			var self = ui.instance;
+			var self = this;
 			var borderLeft = (parseInt(self.offsetParent.css("borderLeftWidth"), 10) || 0);
 			var borderRight = (parseInt(self.offsetParent.css("borderRightWidth"), 10) || 0);
 			var borderTop = (parseInt(self.offsetParent.css("borderTopWidth"), 10) || 0);
