@@ -28,11 +28,43 @@ $(function() {
 		speed: "fast"
 	});
 
-	$('#begin').click(function(e) {
+	var queue;
+	var start = function() {
+		queue = tests.slice(); // clone
 		$("#status").text("Running...");
-		$(".drag:eq(0)").testMouse("drag", 100, 0, function() {
-			$('#status').text("Ready");
-		});
+		nextTest();
+	}
+	var stop = function() {
+		$("#status").text("Ready");
+	}
+
+	var tests = [];
+	var nextTest = function() {
+		if (queue.length) {
+			queue.pop().apply();
+		} else {
+			stop();
+		}
+	}
+
+	var addTest = function(fn) {
+		tests.unshift(fn);
+	}
+
+	addTest(function() {
+		$("#d1").testMouse("drag", 100, 0, nextTest);
+	});
+	
+	addTest(function() {
+		$("#d2").testMouse("drag", 100, 0, nextTest);
+	});
+
+	addTest(function() {
+		$("#d3").testMouse("drag", 100, 0, nextTest);
+	});
+
+	$('#begin').click(function(e) {
+		start();
 	});
 
 });
@@ -49,15 +81,15 @@ $(function() {
 
 	<div style="height: 3em;"><button id="begin">Run Test</button></div>
 
-	<div class="drag">
+	<div class="drag" id="d1">
 		Drag 1
 	</div>
 
-	<div class="drag">
+	<div class="drag" id="d2">
 		Drag 2
 	</div>
 
-	<div class="drag">
+	<div class="drag" id="d3">
 		Drag 3
 	</div>
 
