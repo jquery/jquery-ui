@@ -5,7 +5,7 @@
  * Dual licensed under the MIT (MIT-LICENSE.txt)
  * and GPL (GPL-LICENSE.txt) licenses.
  * 
- * Revision: $Id:$
+ * Revision: $Id: $
  */
 ;(function($) {
 
@@ -82,47 +82,47 @@
 			}
 			var noneUrl = ['cursors', OS == 'other' ? 'win' : OS, 'none' + ($.browser.safari ? '.png' : '.cur')].join('/');
 		
-			this.fakemouse = $('<img src="' + defaultUrl + '" />');
-			this.realmouse = $('<img src="' + defaultUrl + '" />');
+			var fakemouse = $('<img src="' + defaultUrl + '" />');
+			var realmouse = $('<img src="' + defaultUrl + '" />');
 			if ($.browser.msie && $.browser.version == 6) {
-				this.fakemouse = $('<div style="height:32;width:32;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src=\'' + defaultUrl + '\', sizingMethod=\'scale\');" ></div>');
-				this.realmouse = $('<div><div style="height:32;width:32;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src=\'' + defaultUrl + '\', sizingMethod=\'scale\');" ></div></div>');
+				fakemouse = $('<div style="height:32;width:32;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src=\'' + defaultUrl + '\', sizingMethod=\'scale\');" ></div>');
+				realmouse = $('<div><div style="height:32;width:32;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src=\'' + defaultUrl + '\', sizingMethod=\'scale\');" ></div></div>');
 			}
-			this.mousescreen = $('<div/>');
+			var mousescreen = $('<div/>');
 		
-			this.updateCursor = function() {
+			var updateCursor = function() {
 				if ($.browser.msie && $.browser.version == 6) {
-					self.fakemouse.css('filter', 'progid:DXImageTransform.Microsoft.AlphaImageLoader(src=\'' + cursorUrl() + '\', sizingMethod=\'scale\'');
+					fakemouse.css('filter', 'progid:DXImageTransform.Microsoft.AlphaImageLoader(src=\'' + cursorUrl() + '\', sizingMethod=\'scale\'');
 				} else {
-					self.fakemouse.attr('src', cursorUrl());
+					fakemouse.attr('src', cursorUrl());
 				}
 			}
-			this.resetCursor = function() {
+			var resetCursor = function() {
 				if ($.browser.msie && $.browser.version == 6) {
-					self.fakemouse.css('filter', 'progid:DXImageTransform.Microsoft.AlphaImageLoader(src=\'' + defaultUrl + '\', sizingMethod=\'scale\'');
+					fakemouse.css('filter', 'progid:DXImageTransform.Microsoft.AlphaImageLoader(src=\'' + defaultUrl + '\', sizingMethod=\'scale\'');
 				} else {
-					self.fakemouse.attr('src', defaultUrl);
+					fakemouse.attr('src', defaultUrl);
 				}
 			}
 			
 			var testStart = function() {
-				self.element.bind("mouseover", self.updateCursor).bind("mouseout", self.resetCursor);
-				self.fakemouse.appendTo('body').css({ position: 'absolute', left: self.mouseX, top: self.mouseY, zIndex: 5000 });
-				self.realmouse.appendTo('body').css({ position: 'absolute', left: self.mouseX, top: self.mouseY, zIndex: 5000, opacity: 0.1 });
-				self.mousescreen.appendTo('body').css({ width: '100%', height: '100%', position: 'absolute', top: 0, left: 0, zIndex: 5000 })
-					.mousemove(function(e) { self.realmouse.css({ left: e.pageX, top: e.pageY }); return false; })
+				self.element.bind("mouseover", updateCursor).bind("mouseout", resetCursor);
+				fakemouse.appendTo('body').css({ position: 'absolute', left: self.mouseX, top: self.mouseY, zIndex: 5000 });
+				realmouse.appendTo('body').css({ position: 'absolute', left: self.mouseX, top: self.mouseY, zIndex: 5000, opacity: 0.1 });
+				mousescreen.appendTo('body').css({ width: '100%', height: '100%', position: 'absolute', top: 0, left: 0, zIndex: 5000 })
+					.mousemove(function(e) { realmouse.css({ left: e.pageX, top: e.pageY }); return false; })
 					.mousedown(function() { return false; })
 					.mouseup(function() { return false; });
-				self.mousescreen.css('cursor', 'url(' + noneUrl + '), crosshair');
+				mousescreen.css('cursor', 'url(' + noneUrl + '), crosshair');
 				($.browser.opera && mousescreen.css('cursor', 'crosshair'));
 			}
 			var testStop = function() {
-				self.element.unbind("mouseover", self.updateCursor).unbind("mouseout", self.resetCursor);
-				self.mousescreen.remove();
-				self.mouseX = self.realmouse.css("left");
-				self.mouseY = self.realmouse.css("top");
-				self.realmouse.remove();
-				self.fakemouse.remove();
+				self.element.unbind("mouseover", updateCursor).unbind("mouseout", resetCursor);
+				mousescreen.remove();
+				self.mouseX = realmouse.css("left");
+				self.mouseY = realmouse.css("top");
+				realmouse.remove();
+				fakemouse.remove();
 				($.isFunction(complete) && complete.apply());
 			}
 			
@@ -130,7 +130,7 @@
 		
 			this.lastX = null;
 		
-			this.fakemouse
+			fakemouse
 				.animate({ left: this.left, top: this.top }, this.options.speed, function() {
 					self.element.triggerHandler('mouseover');
 					self.down(self.left, self.top);
@@ -151,7 +151,7 @@
 					complete: function() {
 						self.element.triggerHandler('mouseout');
 						self.up(0, 0);
-						$(this).animate({ left: self.realmouse.css("left"), top: self.realmouse.css("top") }, {
+						$(this).animate({ left: realmouse.css("left"), top: realmouse.css("top") }, {
 							speed: self.options.speed,
 							complete: function() {
 								testStop();
