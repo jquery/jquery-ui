@@ -150,17 +150,6 @@
 			return false;
 			
 		},
-		//This method checks approximately if the item is dragged in a container, but doesn't touch any items
-		inEmptyZone: function(container) {
-
-			if(!$(container.options.items, container.element).length) {
-				return container.options.dropOnEmpty ? true : false;
-			};
-
-			var last = $(container.options.items, container.element).not('.ui-sortable-helper'); last = $(last[last.length-1]);
-			var top = last.offset()[this.floating ? 'left' : 'top'] + last[0][this.floating ? 'offsetWidth' : 'offsetHeight'];
-			return (this.position.absolute[this.floating ? 'left' : 'top'] > top);
-		},
 		refresh: function() {
 			this.refreshItems();
 			this.refreshPositions();
@@ -251,6 +240,9 @@
 									dist = Math.abs(cur - base); itemWithLeastDistance = this.items[j];
 								}
 							}
+							
+							if(!itemWithLeastDistance && !this.options.dropOnEmpty) //Check if dropOnEmpty is enabled
+								continue;
 							
 							//We also need to exchange the placeholder
 							if(this.placeholder) this.placeholder.remove();
@@ -467,7 +459,8 @@
 			delay: 0,
 			cancel: ":input,button",
 			items: '> *',
-			zIndex: 1000
+			zIndex: 1000,
+			dropOnEmpty: true
 		}
 	});
 
