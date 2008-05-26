@@ -31,7 +31,7 @@
 		mouseStart: function(e) {
 			var o = this.options;
 			
-			if (o.disabled || $(e.target).is('.ui-resizable-handle')) return false;
+			if (this.helper || o.disabled || $(e.target).is('.ui-resizable-handle')) return false;
 			
 			var handle = !this.options.handle || !$(this.options.handle, this.element).length ? true : false;
 			if(!handle) $(this.options.handle, this.element).each(function() {
