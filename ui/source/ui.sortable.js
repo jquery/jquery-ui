@@ -118,7 +118,7 @@
 			var l = item.left, r = l + item.width, 
 				t = item.top, b = t + item.height;
 
-			if(this.options.tolerance == "pointer" || (this.options.tolerance == "guess" && this.currentItem[0].offsetHeight > item.item[0].offsetHeight)) {
+			if(this.options.tolerance == "pointer" || (this.options.tolerance == "guess" && this.currentItem[0]['offset'+(this.floating ? 'Width' : 'Height')] > item.item[0]['offset'+(this.floating ? 'Width' : 'Height')])) {
 
 				if(!(y1 + this.offset.click.top > t && y1 + this.offset.click.top < b && x1 + this.offset.click.left > l && x1 + this.offset.click.left < r)) return false;
 				
