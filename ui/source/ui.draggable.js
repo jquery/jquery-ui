@@ -456,18 +456,15 @@
 		},
 		drag: function(e,ui) {
 
-			//This is handy: We reuse the intersectsWith method for checking if the current draggable helper
-			//intersects with the sortable container
 			var inst = $(this).data("draggable"), self = this;
-			inst.position.absolute = ui.absolutePosition; //Sorry, this is an ugly API fix
 			
 			var checkPos = function(o) {
 					
 				var l = o.left, r = l + o.width,
 					t = o.top, b = t + o.height;
 					
-				return (l < (this.position.absolute.left + this.offset.click.left) && (this.position.absolute.left + this.offset.click.left) < r
-						&& t < (this.position.absolute.top + this.offset.click.top) && (this.position.absolute.top + this.offset.click.top) < b);				
+				return (l < (this.positionAbs.left + this.offset.click.left) && (this.positionAbs.left + this.offset.click.left) < r
+						&& t < (this.positionAbs.top + this.offset.click.top) && (this.positionAbs.top + this.offset.click.top) < b);				
 			};
 			
 			$.each(inst.sortables, function() {
@@ -490,10 +487,10 @@
 						this.instance.mouseStart(e, true);
 
 						//Because the browser event is way off the new appended portlet, we modify a couple of variables to reflect the changes
-						this.instance.clickOffset.top = inst.offset.click.top;
-						this.instance.clickOffset.left = inst.offset.click.left;
-						this.instance.offset.left -= ui.absolutePosition.left - this.instance.position.absolute.left;
-						this.instance.offset.top -= ui.absolutePosition.top - this.instance.position.absolute.top;
+						this.instance.offset.click.top = inst.offset.click.top;
+						this.instance.offset.click.left = inst.offset.click.left;
+						this.instance.offset.parent.left -= inst.offset.parent.left - this.instance.offset.parent.left;
+						this.instance.offset.parent.top -= inst.offset.parent.top - this.instance.offset.parent.top;
 						
 						inst.propagate("toSortable", e);
 					
