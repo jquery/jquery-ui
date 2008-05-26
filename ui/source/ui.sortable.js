@@ -118,7 +118,7 @@
 			var l = item.left, r = l + item.width, 
 				t = item.top, b = t + item.height;
 
-			if(this.options.tolerance == "pointer") {
+			if(this.options.tolerance == "pointer" || (this.options.tolerance == "guess" && this.currentItem[0].offsetHeight > item.item[0].offsetHeight)) {
 
 				if(!(y1 + this.offset.click.top > t && y1 + this.offset.click.top < b && x1 + this.offset.click.left > l && x1 + this.offset.click.left < r)) return false;
 				
@@ -555,6 +555,7 @@
 	$.extend($.ui.sortable, {
 		getter: "serialize toArray",
 		defaults: {
+			tolerance: "guess",
 			distance: 0,
 			delay: 0,
 			cancel: ":input,button",
