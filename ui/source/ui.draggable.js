@@ -22,11 +22,18 @@
 			var o = this.options;
 
 			//Position the node
-			if(o.helper == 'original' && !(/(relative|absolute|fixed)/).test(this.element.css('position')))
+			if (o.helper == 'original' && !(/(relative|absolute|fixed)/).test(this.element.css('position')))
 				this.element.css('position', 'relative');
+
+			this.element.addClass('ui-draggable');
+			(o.disabled && this.element.addClass('ui-draggable-disabled'));
 			
 			this.mouseInit();
 			
+		},
+		setData: function(key, value) {
+			(key == 'disabled' && this.element[(value ? 'add' : 'remove') + 'Class']('ui-draggable-disabled'));
+			this.options[key] = value;
 		},
 		mouseStart: function(e) {
 			var o = this.options;
@@ -247,7 +254,7 @@
 		},
 		destroy: function() {
 			if(!this.element.data('draggable')) return;
-			this.element.removeData("draggable").unbind(".draggable");
+			this.element.removeData("draggable").unbind(".draggable").removeClass('ui-draggable');
 			this.mouseDestroy();
 		}
 	}));
