@@ -8,17 +8,18 @@
  * Revision: $Id: $
  */
 ;(function($) {
+	
+	var mouseX = 0;
+	var mouseY = 0;
 
 	$.widget("ui.testMouse", {
-		mouseX: 0,
-		mouseY: 0,
 		trackMouse: function() {},
 		init: function() {
 			var self = this;
 			this.trackMouse = function(e) {
 				if (e.isTrusted !== false) {
-					self.mouseX = e.pageX;
-					self.mouseY = e.pageY;
+					mouseX = e.pageX;
+					mouseY = e.pageY;
 				}
 			}
 			$(document).bind("mousemove", this.trackMouse);
@@ -67,7 +68,7 @@
 		up: function(x, y) {
 			this.dispatch("mouseup", x, y);
 		},
-		drag: function(dx, dy, complete) {
+		drag: function(dx, dy) {
 			var self = this;			
 
 			var center = this.center();
@@ -107,8 +108,8 @@
 			
 			var testStart = function() {
 				self.element.bind("mouseover", updateCursor).bind("mouseout", resetCursor);
-				fakemouse.appendTo('body').css({ position: 'absolute', left: self.mouseX, top: self.mouseY, zIndex: 5000 });
-				realmouse.appendTo('body').css({ position: 'absolute', left: self.mouseX, top: self.mouseY, zIndex: 5000, opacity: 0.1 });
+				fakemouse.appendTo('body').css({ position: 'absolute', left: mouseX, top: mouseY, zIndex: 5000 });
+				realmouse.appendTo('body').css({ position: 'absolute', left: mouseX, top: mouseY, zIndex: 5000, opacity: 0.1 });
 				mousescreen.appendTo('body').css({ width: '100%', height: '100%', position: 'absolute', top: 0, left: 0, zIndex: 5000 })
 					.mousemove(function(e) { realmouse.css({ left: e.pageX, top: e.pageY }); return false; })
 					.mousedown(function() { return false; })
@@ -119,11 +120,11 @@
 			var testStop = function() {
 				self.element.unbind("mouseover", updateCursor).unbind("mouseout", resetCursor);
 				mousescreen.remove();
-				self.mouseX = realmouse.css("left");
-				self.mouseY = realmouse.css("top");
+				mouseX = realmouse.css("left");
+				mouseY = realmouse.css("top");
 				realmouse.remove();
 				fakemouse.remove();
-				($.isFunction(complete) && complete.apply());
+				self.options.complete.apply();
 			}
 			
 			testStart();
