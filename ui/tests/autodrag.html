@@ -6,170 +6,33 @@
 	<script type="text/javascript" src="../../ui/source/ui.core.js"></script>
 	<script type="text/javascript" src="../../ui/source/ui.draggable.js"></script>
 
+	<script type="text/javascript" src="ui.testmouse.js"></script>
+
 <style type="text/css">
 
-html, body { height: 95%; }
+html, body { height: 100%; }
 #main { height: 100%; }
-#drag { cursor: move; width: 200px; height: 200px; background: #eef; }
+.drag { position: relative; margin: 10px; padding: 10px; border: 3px solid black; cursor: move; width: 200px; height: 40px; background: #eef; }
 
 </style>
 
 <script type="text/javascript">
 
-var mouseX = 0, mouseY = 0;
-
-function trackMouse(e) {
-	if (e.isTrusted !== false) {
-		mouseX = e.pageX;
-		mouseY = e.pageY;
-	}
-}
-
-$(function() {
-
-$(document).bind("mousemove", trackMouse);
-
-});
-
-function testMouse(type, el, x, y) {
-	var evt, e = {bubbles: true, cancelable: (type != "mousemove"), view: window, detail: 0,
-		screenX: 0, screenY: 0, clientX: x, clientY: y,
-		ctrlKey: false, altKey: false, shiftKey: false, metaKey: false,
-		button: 0, relatedTarget: null, isTrusted: false};
-	if ($.isFunction(document.createEvent)) {
-		evt = document.createEvent("MouseEvents");
-		if ($.isFunction(evt.initMouseEvent)) {
-			evt.initMouseEvent(type, e.bubbles, e.cancelable, e.view, e.detail,
-				e.screenX, e.screenY, e.clientX, e.clientY,
-				e.ctrlKey, e.altKey, e.shiftKey, e.metaKey,
-				e.button, e.relatedTarget);
-		} else {
-			evt = document.createEvent("UIEvents");
-			evt.initEvent(type, bubbles, cancelable);
-			$.extend(evt, e);
-		}
-		el.dispatchEvent(evt);
-	} else if (document.createEventObject) {
-		evt = document.createEventObject();
-		$.extend(evt, e);
-		evt.button = 1;
-		el.fireEvent('on' + type, evt)  
-	}
-}
-function testMouseDown(el, x, y) { testMouse("mousedown", el, x, y); }
-function testMouseMove(el, x, y) { testMouse("mousemove", el, x, y); }
-function testMouseUp(el, x, y) { testMouse("mouseup", el, x, y); }
-
-function draggableTest(el, dx, dy) {
-
-	var findCenter = function(el, offset) {
-		var o = el.offset();
-		return {
-			x: (o.left + (offset || [0, 0])[0] || 0) + el.width() / 2,
-			y: (o.top + (offset || [0, 0])[1] || 0) + el.height() / 2
-		};
-	};
-
-	var center = findCenter($(el));
-	var left = center.x;
-	var top = center.y;
-
-	var OS = (/(win|mac|linux)/i.exec(navigator.platform) || ['other'])[0].toLowerCase();
-
-	var defaultUrl = ['cursors', OS == 'other' ? 'win' : OS, 'default.png'].join('/');
-	var cursorUrl = function() {
-		return ['cursors', OS == 'other' ? 'win' : OS, $(el).css('cursor') + '.png'].join('/');
-	}
-	var noneUrl = ['cursors', OS == 'other' ? 'win' : OS, 'none.cur'].join('/');
-
-	var fakemouse = $('<img src="' + defaultUrl + '" id="fakemouse" />');
-	var realmouse = $('<img src="' + defaultUrl + '" id="realmouse" />');
-	if ($.browser.msie && $.browser.version == 6) {
-		fakemouse = $('<div id="fakemouse" style="height:32;width:32;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src=\'' + defaultUrl + '\', sizingMethod=\'scale\');" ></div>');
-		realmouse = $('<div><div id="realmouse" style="height:32;width:32;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src=\'' + defaultUrl + '\', sizingMethod=\'scale\');" ></div></div>');
-	}
-	var mousescreen = $('<div id="mousescreen"/>');
-
-	var updateCursor = function() {
-		if ($.browser.msie && $.browser.version == 6) {
-			fakemouse.css('filter', 'progid:DXImageTransform.Microsoft.AlphaImageLoader(src=\'' + cursorUrl() + '\', sizingMethod=\'scale\'');
-		} else {
-			fakemouse.attr('src', cursorUrl());
-		}
-	}
-	var resetCursor = function() {
-		if ($.browser.msie && $.browser.version == 6) {
-			fakemouse.css('filter', 'progid:DXImageTransform.Microsoft.AlphaImageLoader(src=\'' + defaultUrl + '\', sizingMethod=\'scale\'');
-		} else {
-			fakemouse.attr('src', defaultUrl);
-		}
-	}
-	
-	var testStart = function() {
-		$(el).bind("mouseover", updateCursor).bind("mouseout", resetCursor);
-		fakemouse.appendTo('body').css({ position: 'absolute', left: mouseX, top: mouseY, zIndex: 5000 });
-		realmouse.appendTo('body').css({ position: 'absolute', left: mouseX, top: mouseY, zIndex: 5000, opacity: 0.1 });
-		mousescreen.appendTo('body').css({ width: '100%', height: '100%', position: 'absolute', top: 0, left: 0, zIndex: 5000 })
-			.mousemove(function(e) { realmouse.css({ left: e.pageX, top: e.pageY }); return false; })
-			.mousedown(function() { return false; })
-			.mouseup(function() { return false; });
-		mousescreen.css('cursor', 'url(' + noneUrl + '), crosshair');
-		(($.browser.safari || $.browser.opera) && mousescreen.css('cursor', 'crosshair'));
-	}
-	var testStop = function() {
-		$(el).unbind("mouseover", updateCursor).unbind("mouseout", resetCursor);
-		mousescreen.remove();
-		mouseX = realmouse.css("left");
-		mouseY = realmouse.css("top");
-		realmouse.remove();
-		fakemouse.remove();
-	}
-	
-	testStart();
-
-	var lastX = null;
-
-	fakemouse
-		.animate({ left: left, top: top }, "slow", function() {
-			$(el).triggerHandler('mouseover');
-			testMouseDown(el, left, top);
-			testMouseMove(el, left, top);
-		})
-		.animate({ left: left + dx, top: top + dy }, {
-			speed: "slow",
-			easing: "swing",
-			step: function (xory) {
-				if (!lastX) {
-					lastX = xory;
-				} else {
-					var x = lastX, y = xory;
-					testMouseMove(el, x, y);
-					lastX = null;
-				}
-			},
-			complete: function() {
-				$(el).triggerHandler('mouseout');
-				testMouseUp(el, 0, 0);
-				$(this).animate({ left: realmouse.css("left"), top: realmouse.css("top") }, {
-					speed: "slow",
-					complete: function() {
-						testStop();
-					}
-				})
-			}
-		});
-
-}
 
 </script>
 
 <script type="text/javascript">
 $(function() {
 
-	$("#drag").draggable();
+	$(".drag").draggable().testMouse({
+		speed: "fast"
+	});
 
 	$('#begin').click(function(e) {
-		draggableTest($("#drag")[0], 100, 10);
+		$("#status").text("Running...");
+		$(".drag:eq(0)").testMouse("drag", 100, 0, function() {
+			$('#status').text("Ready");
+		});
 	});
 
 });
@@ -182,10 +45,20 @@ $(function() {
 
 	<h1>jQuery UI Draggable - Automated Test</h1>
 
+	Status: <span id="status">Ready</span>
+
 	<div style="height: 3em;"><button id="begin">Run Test</button></div>
 
-	<div id="drag">
-		Drag me
+	<div class="drag">
+		Drag 1
+	</div>
+
+	<div class="drag">
+		Drag 2
+	</div>
+
+	<div class="drag">
+		Drag 3
 	</div>
 
 </div>
