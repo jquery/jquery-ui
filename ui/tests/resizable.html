@@ -53,20 +53,23 @@
 		});*/
 		
 		$('#key').keydown(function() {
-			//alert('keydown')
+			alert('keydown')
 			//console.log('keydown')
 		});
 		
-		/*
+		
 		 // TODO - works in all browsers, but have to fix a bug on opera
 		 $('#key').userAction("keydown", {
 			charCode: 67,
-			keyCOde: 67,
+			keyCode: 67,
 			after: function(e) {
-				//console.log(e)
+				console.log(e)
+			},
+			before: function(e) {
+				console.log(e)
 			}
 		});
-		*/
+		
 		
 		// mouseover on the center of the target
 		$('.ui-resizable-e').userAction("mouseover");

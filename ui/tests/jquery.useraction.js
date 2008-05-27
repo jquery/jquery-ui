@@ -44,9 +44,8 @@ $.userAction = function(el, type, options) {
 	o.x = o.x || xy.x; o.y = o.y || xy.y;
 
 	var EVENT_DEFAULT = {
+		target: this.target,
 		view: window,
-		detail: 0,
-		isTrusted: false,
 		bubbles: o.bubbles || true,
 		cancelable: o.cancelable || false, 
 		ctrlKey: o.ctrlKey || false, 
@@ -62,17 +61,14 @@ $.userAction = function(el, type, options) {
 		$.extend({}, EVENT_DEFAULT, {
 			clientX: o.x, clientY: o.y, 
 			screenX: o.screenX || 0, screenY: o.screenY || 0,
-			relatedTarget: $(o.relatedTarget)[0] || null, 
-			button: o.button || ($.browser.msie ? 1 : 0) 
+			relatedTarget: $(o.relatedTarget)[0] || null, detail: 0,
+			button: o.button || ($.browser.msie ? 1 : 0), isTrusted: false
 		}) :
 		$.extend({}, EVENT_DEFAULT, {
 			keyCode: o.keyCode || 0, charCode: o.charCode || 0
 		});
 		
-	if (o.before) o.before.apply(this.target, [
-		// simulate correct target before the event fire
-		// the browser just set the correct EVT.target after dispatchment
-		$.event.fix(EVT).target = this.target, o.x, o.y, this]);
+	if (o.before) o.before.apply(this.target, [	$.event.fix(EVT), o.x, o.y, this]);
 
 	// check event type for mouse events
 	if (isMouse) {
@@ -86,7 +82,7 @@ $.userAction = function(el, type, options) {
 		EVT = this.keyboardEvent(EVT);
 	}
 	
-	if (o.after) o.after.apply(this.target, [EVT, o.x, o.y, this]);
+	if (o.after) o.after.apply(this.target, [$.event.fix(EVT), o.x, o.y, this]);
 };
 
 $.extend($.userAction.prototype, {
@@ -138,13 +134,13 @@ $.extend($.userAction.prototype, {
 	keyboardEvent: function(EVT) {
 		var evt, type = this.type, o = this.options;
 		
-		//Safari 2.x doesn't implement initMouseEvent()
+		// check for DOM-compliant browsers first
 		if ($.isFunction(document.createEvent)) {
     
 	        try {
 	            // try to create key event
-	            evt = document.createEvent("KeyEvents");
-	            
+	            evt = document.createEvent(StringPool.KEY_EVENTS);
+				
 				evt.initKeyEvent(type, 
 					EVT.bubbles, EVT.cancelable, EVT.view, EVT.ctrlKey, 
 					EVT.altKey,	EVT.shiftKey, EVT.metaKey, EVT.keyCode, EVT.charCode);  
@@ -152,15 +148,19 @@ $.extend($.userAction.prototype, {
 	        } catch (err) {
 				// we need another try-catch for Safari 2.x
 	            try {
-	                // generic event, will fail in Safari 2.x
-	                evt = document.createEvent("Events");
-	            } catch (uierror){
-	                // create a UIEvent for Safari 2.x
-	                evt = document.createEvent("UIEvents");
+	                // generic event for opera and webkit nightlies, will fail in Safari 2.x
+	                evt = document.createEvent(StringPool.EVENTS);
+	            } catch (ierr){
+	                // Safari 2.x - create a UIEvent 
+	                evt = document.createEvent(StringPool.UI_EVENTS);
 	            } finally {
 					evt.initEvent(type, EVT.bubbles, EVT.cancelable);
-					// initialize
-	                $.extend(evt, EVT);
+					
+					// initializing
+					$.each(EVT, function(k, v) {
+						// using try-catch for avoiding Opera NO_MODIFICATION_ALLOWED_ERR
+						try { evt[k] = v; } catch(e) { }
+					});
 	            }          
 	        }
 	        
@@ -178,7 +178,7 @@ $.extend($.userAction.prototype, {
 	        evt.keyCode = (EVT.charCode > 0) ? EVT.charCode : EVT.keyCode;
 	        
 	        // fire the event
-	        this.target.fireEvent("on" + type, evt);  
+	        this.target.fireEvent(StringPool.ON + type, evt);  
 	    }
 		
 		return evt;
@@ -204,8 +204,10 @@ var StringPool = {
 	NUMBER: 'number',
 	MOUSEOVER: 'mouseover',
 	MOUSEOUT: 'mouseout',
-	MOUSE_EVENTS: "MouseEvents",
-	UI_EVENTS: "UIEvents"
+	MOUSE_EVENTS: 'MouseEvents',
+	UI_EVENTS: 'UIEvents',
+	KEY_EVENTS: 'KeyEvents',
+	EVENTS: 'Events'
 };
 
 })(jQuery);
