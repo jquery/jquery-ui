@@ -44,13 +44,13 @@
 	
 	$(function() {
 		
-		/*$('#resizable1').mouseover(function() {
+		$('#resizable1').mouseover(function() {
 			$(this).css('background', 'red');
 		});
 		
 		$('#resizable1').mouseout(function() {
 			$(this).css('background', 'yellow');
-		});*/
+		});
 		
 		$('#key').keydown(function() {
 			console.log('keydown')
@@ -66,10 +66,10 @@
 			charCode: 67,
 			keyCode: 67,
 			after: function(e) {
-				console.log(e)
+				//console.log(e)
 			},
 			before: function(e) {
-				console.log(e)
+				//console.log(e)
 			}
 		});
 		
@@ -104,33 +104,49 @@
 			}
 		});
 		
-		/*$('#main').userAction("mouseout", {
+		$('#main').userAction("mouseout", {
 			
 			target: '.ui-resizable-e',
-			//relatedTarget: '#resizable1',
+			
+			relatedTarget: '#resizable1',
+			
 			//x: $('#resizable1').offset().left,
+			
 			//y:  $('#resizable1').offset().top,
+			
 			//bubbles: true,
+			
 			//cancelable: false, 
+			
 			//view: window,
+			
 			//ctrlKey: false, 
+			
 			//altKey: false, 
+			
 			//shiftKey: false, 
+			
 			//relatedTarget: null, 
+			
 			//screenX: 0, 
+			
 			//screenY: 0,
+			
 			//metaKey: false, 
+			
 			//button: 0,
+			
 			//center: false,
+			
 			//center: [100, 100],
 			
-			before: function(e, o) {
-				//console.log('before')
+			before: function(e, x, y) {
+				console.log(e)
 			},
-			after: function(e, o) {
-				//console.log('after')
+			after: function(e, x, y) {
+				console.log(e)
 			}
-		});*/
+		});
 		
 	});
 	
