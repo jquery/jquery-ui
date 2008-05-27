@@ -3,6 +3,7 @@
  * and GPL (http://www.opensource.org/licenses/gpl-license.php) licenses.
  *
  * Version: 0.1a
+ * Date: May, 2008
  * Requires jQuery 1.2.x+
  * Docs: http://docs.jquery.com/Plugins/userAction
  */

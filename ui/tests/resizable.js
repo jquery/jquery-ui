@@ -1,6 +1,6 @@
 var console = console || {
 	log: function(l) {
-		$('log').append(l + '<br/>');
+		$('#log').append(l + '<br/>');
 	}
 };
 
