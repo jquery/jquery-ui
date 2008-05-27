@@ -205,7 +205,7 @@ var StringPool = {
 	MOUSEOVER: 'mouseover',
 	MOUSEOUT: 'mouseout',
 	MOUSE_EVENTS: "MouseEvents",
-	UIU_EVENTS: "UIEvents"
+	UI_EVENTS: "UIEvents"
 };
 
 })(jQuery);
