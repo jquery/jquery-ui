@@ -247,7 +247,7 @@
 				if (this.currentHandle[0] == this.handle[0] && value >= this.translateValue(this.value(1),axis))
 					value = this.translateValue(this.value(1,axis) - this.oneStep(axis), axis);
 				if (this.currentHandle[0] == this.handle[1] && value <= this.translateValue(this.value(0),axis))
-					value = this.translateValue(this.value(0,axis) + this.oneStep(axis));
+					value = this.translateValue(this.value(0,axis) + this.oneStep(axis), axis);
 			}
 			if (this.options.handles) {
 				var handle = this.options.handles[this.handleIndex()];
