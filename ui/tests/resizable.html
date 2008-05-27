@@ -42,7 +42,7 @@
 					.animate({ width: 80, height: 80, left: co.x-40, top: co.y-40, opacity: 'hide' }, 1000, function() { $(this).remove(); });
 	};
 	
-	$('#btn').click(function() {
+	$(function() {
 		
 		/*$('#resizable1').mouseover(function() {
 			$(this).css('background', 'red');
@@ -56,6 +56,10 @@
 			alert('keydown')
 			//console.log('keydown')
 		});
+		
+	});
+	
+	$('#btn').click(function() {
 		
 		
 		 // TODO - works in all browsers, but have to fix a bug on opera
