@@ -11,21 +11,21 @@
 	
 	var mouseX = 0;
 	var mouseY = 0;
-
+	
+	$(function() {
+		$(document).mousemove(function(e) {
+			if (e.isTrusted !== false) {
+				mouseX = e.pageX;
+				mouseY = e.pageY;
+			}
+		});
+	});
+	
 	$.widget("ui.testMouse", {
 		trackMouse: function() {},
 		init: function() {
-			var self = this;
-			this.trackMouse = function(e) {
-				if (e.isTrusted !== false) {
-					mouseX = e.pageX;
-					mouseY = e.pageY;
-				}
-			}
-			$(document).bind("mousemove", this.trackMouse);
 		},
 		destroy: function() {
-			$(document).unbind("mousemove", this.trackMouse);
 		},
 		center: function(offset) {
 			var o = this.element.offset();

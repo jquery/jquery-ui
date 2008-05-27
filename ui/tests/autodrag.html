@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<title>Draggable - Automated Test Page</title>
+	<title>jQuery UI - Automated Tests</title>
 	<script type="text/javascript" src="../../jquery/jquery-1.2.6.js"></script>
 	<script type="text/javascript" src="../../ui/source/ui.core.js"></script>
 	<script type="text/javascript" src="../../ui/source/ui.draggable.js"></script>
+	<script type="text/javascript" src="../../ui/source/ui.selectable.js"></script>
 
 	<script type="text/javascript" src="ui.testmouse.js"></script>
 
@@ -13,24 +14,28 @@
 html, body { height: 100%; }
 #main { height: 100%; }
 
-#foo { position: relative; margin: 10px; padding: 10px; border: 3px solid gray; cursor: move; width: 200px; height: 100px; background: #eef; text-align: center; }
+#foo { position: relative; margin: 10px; padding: 10px; border: 3px solid gray; width: 200px; height: 200px; background: #eef; text-align: center; }
+#foo * { margin: 4px; }
 .ui-draggable .msg-missing-class { display: none !important; background: red; color: white; font-weight: bold; }
 .ui-draggable .msg-enabled { display: block; }
 .ui-draggable .msg-disabled { display: none; }
 .ui-draggable-disabled .msg-enabled { display: none !important; }
 .ui-draggable-disabled .msg-disabled { display: block !important; }
+.ui-selectable .msg-missing-class { display: none !important; background: red; color: white; font-weight: bold; }
+.ui-selectable .msg-enabled { display: block; }
+.ui-selectable .msg-disabled { display: none; }
+.ui-selectable-disabled .msg-enabled { display: none !important; }
+.ui-selectable-disabled .msg-disabled { display: block !important; }
+//.ui-selectee { border: 1px solid white; }
+.ui-selecting { background: Highlight; color: HighlightText; outline: 1px dotted white; }
+.ui-selected { background: Highlight; color: HighlightText; outline: 1px dotted black; }
 
 </style>
 
 <script type="text/javascript">
-
-
-</script>
-
-<script type="text/javascript">
 $(function() {
 
-	var speed = "slow"
+	var speed = "fast";
 
 	var queue;
 	var start = function() {
@@ -67,11 +72,19 @@ $(function() {
 	
 	var setupAndRun = function(nTest) {
 		$('#testnum').text(nTest.num);
-		$('#sandbox').hide().append('<div id="foo">' + 
-			'<div class="msg-missing-class">THIS TEXT SHOULD NOT BE VISIBLE</div>' +
-			'<div class="msg-enabled">enabled</div>' +
-			'<div class="msg-disabled">disabled</div>' +
-			'</div>');
+		$('#sandbox').hide()
+			.append('<ul id="foo">' + 
+				'<li class="msg-missing-class">THIS TEXT SHOULD NOT BE VISIBLE</li>' +
+				'<li class="msg-enabled">enabled</li>' +
+				'<li class="msg-disabled">disabled</li>' +
+				'<li>Item 2</li>' +
+				'<li>Item 3</li>' +
+				'<li>Item 4</li>' +
+				'<li>Item 5</li>' +
+				'<li>Item 6</li>' +
+				'<li>Item 7</li>' +
+				'<li>Item 8</li>' +
+			'</ul>')
 		$('#foo').testMouse({
 			speed: speed,
 			complete: nextTest
@@ -85,20 +98,27 @@ $(function() {
 		$('#foo').remove();
 		if ($.isFunction(fn)) fn.apply();
 	}
+	var plugin = "draggable";
+	plugin = "selectable"
+	var testFn = "testMouse";
+	var testArgs = ["drag", 40, 50];
 	//1
-	addTest(function() { $("#foo").draggable().testMouse("drag", 100, 100); });
+	addTest(function() { $("#foo")[plugin]()[testFn].apply($("#foo"), testArgs); });
 	//2
-	addTest(function() { $("#foo").draggable({ disabled: true }).testMouse("drag", 100, 100); });
-	addTest(function() { $("#foo").draggable({ disabled: false }).testMouse("drag", 100, 100); });
+	addTest(function() { $("#foo")[plugin]({ disabled: true })[testFn].apply($("#foo"), testArgs); });
+	addTest(function() { $("#foo")[plugin]({ disabled: false })[testFn].apply($("#foo"), testArgs); });
 	//4
-	addTest(function() { $("#foo").draggable().draggable('disable').testMouse("drag", 100, 100); });
-	addTest(function() { $("#foo").draggable().draggable('enable').testMouse("drag", 100, 100); });
+	addTest(function() { $("#foo")[plugin]()[plugin]('disable')[testFn].apply($("#foo"), testArgs); });
+	addTest(function() { $("#foo")[plugin]()[plugin]('enable')[testFn].apply($("#foo"), testArgs); });
 	//6
-	addTest(function() { $("#foo").draggable().draggable('enable').draggable('disable').testMouse("drag", 100, 100); });
-	addTest(function() { $("#foo").draggable().draggable('disable').draggable('enable').testMouse("drag", 100, 100); });
+	addTest(function() { $("#foo")[plugin]()[plugin]('enable')[plugin]('disable')[testFn].apply($("#foo"), testArgs); });
+	addTest(function() { $("#foo")[plugin]()[plugin]('disable')[plugin]('enable')[testFn].apply($("#foo"), testArgs); });
 	//8
-	addTest(function() { $("#foo").draggable({ disabled: false }).draggable('disable').testMouse("drag", 100, 100);	});
-	addTest(function() { $("#foo").draggable({ disabled: true }).draggable('enable').testMouse("drag", 100, 100); });
+	addTest(function() { $("#foo")[plugin]({ disabled: false })[plugin]('disable')[testFn].apply($("#foo"), testArgs); });
+	addTest(function() { $("#foo")[plugin]({ disabled: true })[plugin]('enable')[testFn].apply($("#foo"), testArgs); });
+	//10
+	addTest(function() { $("#foo")[plugin]({ disabled: false }).data('disabled.' + plugin, true)[testFn].apply($("#foo"), testArgs); });
+	addTest(function() { $("#foo")[plugin]({ disabled: true }).data('disabled.' + plugin, false)[testFn].apply($("#foo"), testArgs); });
 
 	$('#begin').click(function() {
 		start();
@@ -112,7 +132,7 @@ $(function() {
 
 <div id="main">
 
-	<h1>jQuery UI Draggable - Automated Test</h1>
+	<h1>jQuery UI - Automated Tests</h1>
 
 	<div>
 		Status: <span id="status">Ready</span>
