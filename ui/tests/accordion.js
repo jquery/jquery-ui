@@ -14,11 +14,11 @@ test("basics", function() {
 });
 
 test("autoheight", function() {
-	$('#navigation').accordion({ header: '.head', autoheight: false });
+	$('#navigation').accordion({ header: '.head', autoHeight: false });
 	equals( 90, $('#navigation ul:first').height() );
 	equals( 126, $('#navigation ul:eq(1)').height() );
 	equals( 54, $('#navigation ul:last').height() );
-	$('#navigation').accordion("destroy").accordion({ header: '.head',autoheight: true });
+	$('#navigation').accordion("destroy").accordion({ header: '.head', autoHeight: true });
 	equals( 126, $('#navigation ul:first').height() );
 	equals( 126, $('#navigation ul:eq(1)').height() );
 	equals( 126, $('#navigation ul:last').height() );
