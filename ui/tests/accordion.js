@@ -42,10 +42,10 @@ test("activate, numeric", function() {
 test("activate, boolean and numeric, alwaysOpen:false", function() {
 	var ac = $('#list1').accordion({alwaysOpen: false}).accordion("activate", 2);
 	state(ac, 0, 0, 1);
-	ok("x", "----")
+	ok("x", "----");
 	ac.accordion("activate", 0);
 	state(ac, 1, 0, 0);
-	ok("x", "----")
+	ok("x", "----");
 	ac.accordion("activate", -1);
 	state(ac, 0, 0, 0);
 });
