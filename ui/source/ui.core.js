@@ -173,6 +173,8 @@
 			this.started = false;
 		},
 		
+		// TODO: make sure destroying one instance of mouse doesn't mess with
+		// other instances of mouse
 		mouseDestroy: function() {
 			this.element.unbind('.mouse');
 			
@@ -182,10 +184,8 @@
 		},
 		
 		mouseDown: function(e) {
-			
 			// we may have missed mouseup (out of window)
-			(this._mouseStarted
-				&& this.mouseUp(e));
+			(this._mouseStarted && this.mouseUp(e));
 			
 			this._mouseDownEvent = e;
 			
@@ -196,7 +196,7 @@
 				return true;
 			}
 			
-			this._mouseDelayMet = (this.options.delay == 0);
+			this._mouseDelayMet = !this.options.delay;
 			if (!this._mouseDelayMet) {
 				this._mouseDelayTimer = setTimeout(function() {
 					self._mouseDelayMet = true;
@@ -206,10 +206,10 @@
 			// these delegates are required to keep context
 			this._mouseMoveDelegate = function(e) {
 				return self.mouseMove(e);
-			}
+			};
 			this._mouseUpDelegate = function(e) {
 				return self.mouseUp(e);
-			}
+			};
 			$(document)
 				.bind('mousemove.mouse', this._mouseMoveDelegate)
 				.bind('mouseup.mouse', this._mouseUpDelegate);
@@ -218,7 +218,6 @@
 		},
 		
 		mouseMove: function(e) {
-			
 			// IE mouseup check - mouseup happened when mouse was out of window
 			if ($.browser.msie && !e.button) {
 				return this.mouseUp(e);
@@ -239,7 +238,6 @@
 		},
 		
 		mouseUp: function(e) {
-			
 			$(document)
 				.unbind('mousemove.mouse', this._mouseMoveDelegate)
 				.unbind('mouseup.mouse', this._mouseUpDelegate);
