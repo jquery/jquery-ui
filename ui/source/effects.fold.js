@@ -28,7 +28,7 @@
       .animate(animation2, o.duration / 2, o.options.easing, function() {
         if(mode == 'hide') el.hide(); // Hide
         $.effects.restore(el, props); $.effects.removeWrapper(el); // Restore
-        if(o.callback) o.callback.apply(this, arguments); // Callback
+        if(o.callback) o.callback.apply(el[0], arguments); // Callback
         el.dequeue();
       });
       

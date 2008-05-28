@@ -10,8 +10,13 @@
 		o.options.mode = o.options.mode == 'toggle' ? ($(this).is(':visible') ? 'hide' : 'show') : o.options.mode;
 		var el = $(this).show().css('visibility', 'hidden');
 		var offset = el.offset();
-		var width = el.outerWidth();
-		var height = el.outerHeight();
+		
+		//Substract the margins - not fixing the problem yet.
+		offset.top -= parseInt(el.css("marginTop")) || 0;
+		offset.left -= parseInt(el.css("marginLeft")) || 0;
+		
+		var width = el.outerWidth(true);
+		var height = el.outerHeight(true);
 
 		for(var i=0;i<rows;i++) { // =
 			for(var j=0;j<cells;j++) { // ||
