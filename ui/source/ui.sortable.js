@@ -214,13 +214,23 @@
 				this.items[i].item.removeData("sortable-item");
 		},
 		createPlaceholder: function(that) {
-			(that || this).placeholderElement = this.options.placeholderElement ? $(this.options.placeholderElement, (that || this).currentItem) : (that || this).currentItem;
-			(that || this).placeholder = $('<div></div>')
-				.addClass(this.options.placeholder)
-				.appendTo('body')
-				.css({ position: 'absolute' })
-				.css((that || this).placeholderElement.offset())
-				.css({ width: (that || this).placeholderElement.outerWidth(), height: (that || this).placeholderElement.outerHeight() });
+			
+			var self = that || this, o = self.options;
+	
+			if(o.placeholder.constructor == String) {
+				var className = o.placeholder;
+				o.placeholder = {
+					element: function() {
+						return $('<div></div>').addClass(className)[0];
+					},
+					update: function(i, p) {
+						p.css(i.offset()).css({ width: i.outerWidth(), height: i.outerHeight() });
+					}
+				};
+			}
+			
+			self.placeholder = $(o.placeholder.element.call(self.element, self.currentItem)).appendTo('body').css({ position: 'absolute' });
+			o.placeholder.update.call(self.element, self.currentItem, self.placeholder);
 		},
 		contactContainers: function(e) {
 			for (var i = this.containers.length - 1; i >= 0; i--){
@@ -249,7 +259,7 @@
 							if(this.containers[i].options.placeholder) {
 								this.containers[i].createPlaceholder(this);
 							} else {
-								this.placeholder = null; this.placeholderElement = null;
+								this.placeholder = null;;
 							}
 							
 							
@@ -547,8 +557,7 @@
 		rearrange: function(e, i, a) {
 			a ? a.append(this.currentItem) : i.item[this.direction == 'down' ? 'before' : 'after'](this.currentItem);
 			this.refreshPositions(true); //Precompute after each DOM insertion, NOT on mousemove
-			if(this.placeholderElement) this.placeholder.css(this.placeholderElement.offset());
-			if(this.placeholderElement && this.placeholderElement.is(":visible")) this.placeholder.css({ width: this.placeholderElement.outerWidth(), height: this.placeholderElement.outerHeight() });
+			this.options.placeholder.update.call(this.element, this.currentItem, this.placeholder);
 		}
 	}));
 	
