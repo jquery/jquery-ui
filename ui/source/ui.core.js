@@ -159,8 +159,8 @@
 	$.ui.mouse = {
 		mouseInit: function() {
 			var self = this;
-			
-			this.element.bind('mousedown.mouse', function(e) {
+		
+			this.element.bind('mousedown.'+this.widgetName, function(e) {
 				return self.mouseDown(e);
 			});
 			
@@ -176,7 +176,7 @@
 		// TODO: make sure destroying one instance of mouse doesn't mess with
 		// other instances of mouse
 		mouseDestroy: function() {
-			this.element.unbind('.mouse');
+			this.element.unbind('.'+this.widgetName);
 			
 			// Restore text selection in IE
 			($.browser.msie
@@ -211,8 +211,8 @@
 				return self.mouseUp(e);
 			};
 			$(document)
-				.bind('mousemove.mouse', this._mouseMoveDelegate)
-				.bind('mouseup.mouse', this._mouseUpDelegate);
+				.bind('mousemove.'+this.widgetName, this._mouseMoveDelegate)
+				.bind('mouseup.'+this.widgetName, this._mouseUpDelegate);
 			
 			return false;
 		},
@@ -239,8 +239,8 @@
 		
 		mouseUp: function(e) {
 			$(document)
-				.unbind('mousemove.mouse', this._mouseMoveDelegate)
-				.unbind('mouseup.mouse', this._mouseUpDelegate);
+				.unbind('mousemove.'+this.widgetName, this._mouseMoveDelegate)
+				.unbind('mouseup.'+this.widgetName, this._mouseUpDelegate);
 			
 			if (this._mouseStarted) {
 				this._mouseStarted = false;
