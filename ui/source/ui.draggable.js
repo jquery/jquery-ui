@@ -456,6 +456,10 @@
 					this.instance.cancelHelperRemoval = false; //Remove it in the sortable instance (so sortable plugins like revert still work)
 					if(this.shouldRevert) this.instance.options.revert = true; //revert here
 					this.instance.mouseStop(e);
+					
+					//Also propagate receive event, since the sortable is actually receiving a element
+					this.instance.element.triggerHandler("sortreceive", [e, $.extend(this.instance.ui(), { sender: inst.element })], this.instance.options["receive"]);
+
 					this.instance.options.helper = "original";
 				}
 			});
@@ -514,7 +518,7 @@
 						this.instance.isOver = 0;
 						this.instance.cancelHelperRemoval = true;
 						this.instance.options.revert = false; //No revert here
-						this.instance.mouseStop(e);
+						this.instance.mouseStop(e, true);
 						this.instance.options.helper = "original";
 						
 						//Now we remove our currentItem, the list group clone again, and the placeholder, and animate the helper back to it's original size

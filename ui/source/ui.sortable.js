@@ -60,13 +60,15 @@
 				sender: inst ? inst.element : null
 			};		
 		},
-		propagate: function(n,e,inst) {
+		propagate: function(n,e,inst, noPropagation) {
 			$.ui.plugin.call(this, n, [e, this.ui(inst)]);
-			this.element.triggerHandler(n == "sort" ? n : "sort"+n, [e, this.ui(inst)], this.options[n]);
+			if(!noPropagation) this.element.triggerHandler(n == "sort" ? n : "sort"+n, [e, this.ui(inst)], this.options[n]);
 		},
 		serialize: function(o) {
 			
-			var items = $(this.options.items, this.element).not('.ui-sortable-helper'); //Only the items of the sortable itself
+			
+			
+			var items = ($.isFunction(this.options.items) ? this.options.items.call(this.element) : $(this.options.items, this.element)).not('.ui-sortable-helper'); //Only the items of the sortable itself
 			var str = []; o = o || {};
 			
 			items.each(function() {
@@ -78,7 +80,7 @@
 			
 		},
 		toArray: function(attr) {
-			var items = $(this.options.items, this.element).not('.ui-sortable-helper'); //Only the items of the sortable itself
+			var items = ($.isFunction(this.options.items) ? this.options.items.call(this.element) : $(this.options.items, this.element)).not('.ui-sortable-helper'); //Only the items of the sortable itself
 			var ret = [];
 
 			items.each(function() { ret.push($(this).attr(attr || 'id')); });
@@ -167,7 +169,7 @@
 					for (var j = cur.length - 1; j >= 0; j--){
 						var inst = $.data(cur[j], 'sortable');
 						if(inst && !inst.options.disabled) {
-							queries.push($.isFunction(inst.options.items) ? inst.options.items.call(this.element) : $(inst.options.items, inst.element));
+							queries.push($.isFunction(inst.options.items) ? inst.options.items.call(inst.element) : $(inst.options.items, inst.element));
 							this.containers.push(inst);
 						}
 					};
@@ -495,7 +497,7 @@
 			return false;
 			
 		},
-		mouseStop: function(e) {
+		mouseStop: function(e, noPropagation) {
 
 			//If we are using droppables, inform the manager about the drop
 			if ($.ui.ddmanager && !this.options.dropBehaviour)
@@ -512,20 +514,20 @@
 					left: cur.left - this.offset.parent.left - self.margins.left + (this.offsetParent[0] == document.body ? 0 : this.offsetParent[0].scrollLeft),
 					top: cur.top - this.offset.parent.top - self.margins.top + (this.offsetParent[0] == document.body ? 0 : this.offsetParent[0].scrollTop)
 				}, parseInt(this.options.revert, 10) || 500, function() {
-					self.propagate("stop", e);
+					self.propagate("stop", e, null, noPropagation);
 					self.clear(e);
 				});
 			} else {
-				this.propagate("stop", e);
-				this.clear(e);
+				this.propagate("stop", e, null, noPropagation);
+				this.clear(e, noPropagation);
 			}
 
 			return false;
 			
 		},
-		clear: function(e) {
+		clear: function(e, noPropagation) {
 			
-			if(this.domPosition != this.currentItem.prev()[0]) this.propagate("update", e); //Trigger update callback if the DOM position has changed
+			if(this.domPosition != this.currentItem.prev()[0]) this.propagate("update", e, null, noPropagation); //Trigger update callback if the DOM position has changed
 			if(!contains(this.element[0], this.currentItem[0])) { //Node was moved out of the current element
 				this.propagate("remove", e);
 				for (var i = this.containers.length - 1; i >= 0; i--){
