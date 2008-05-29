@@ -159,7 +159,7 @@
 			this.items = [];
 			this.containers = [this];
 			var items = this.items;
-			var queries = [$(this.options.items, this.element)];
+			var queries = [$.isFunction(this.options.items) ? this.options.items.call(this.element) : $(this.options.items, this.element)];
 			
 			if(this.options.connectWith) {
 				for (var i = this.options.connectWith.length - 1; i >= 0; i--){
@@ -167,7 +167,7 @@
 					for (var j = cur.length - 1; j >= 0; j--){
 						var inst = $.data(cur[j], 'sortable');
 						if(inst && !inst.options.disabled) {
-							queries.push($(inst.options.items, inst.element));
+							queries.push($.isFunction(inst.options.items) ? inst.options.items.call(this.element) : $(inst.options.items, inst.element));
 							this.containers.push(inst);
 						}
 					};
