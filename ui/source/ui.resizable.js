@@ -282,7 +282,7 @@
 			}
 			
 			//Opera fixing relative position
-			if (/relative/.test(el.css('position')) && $.browser.opera)
+			if ($.browser.opera && /relative/.test(el.css('position')))
 				el.css({ position: 'relative', top: 'auto', left: 'auto' });
 			
 			this._renderProxy();
