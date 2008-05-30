@@ -10,7 +10,7 @@
  */
 
 ;(function($) {
-	
+
 $.fn.extend({
 	userAction: function(type) {
 		var args = arguments, opts = {}, a1 = args[1], a2 = args[2];
@@ -39,9 +39,14 @@ $.userAction = function(el, type, options) {
 	this.options = $.extend({}, $.userAction.defaults, options || {});
 	this.target =  $(this.options.target || el)[0];
 	
-	var self = this, o = this.options, c = o.center, center = this.findCenter(
-		c && c.length ? c : [0, 0]
-	);
+	var self = this, o = this.options, c = o.center;
+	
+	if (!o.x || !o.y) {
+		var center = this.findCenter(
+			c && c.length ? c : [0, 0]
+		)
+	}
+	
 	// if x and y not set, get the center of the element
 	o.x = o.x || center.x; o.y = o.y || center.y;
 	
@@ -61,13 +66,19 @@ $.userAction = function(el, type, options) {
 	
 	// Simulating drag and drop event
 	if (/^drag$/i.test(type)) {
-		var t = this.target, queue = $.data(t, StringPool.DATA_QUEUE),
-			data = [options.dx || options.x, options.dy || options.y];
+		var self = this, t = this.target, queue = $.data(t, StringPool.DATA_QUEUE),
+			data = [options.dx || options.x, options.dy || options.y, this];
+		
+		var fire = function() {
+			self.drag(options.dx || options.x, options.dy || options.y);
+		};
+		
+		if (/^sync$/i.test(o.speed)) {
+			fire(); return;
+		}
 		
 		if (!queue) {
-			 $.data(t, StringPool.DATA_QUEUE, [data]);
-			 this.drag(options.dx || options.x, options.dy || options.y);
-			 return;
+			 $.data(t, StringPool.DATA_QUEUE, [data]); fire(); return;
 		}
 		// queuing drags...
 		if (queue && queue.length) {
@@ -110,6 +121,19 @@ $.userAction = function(el, type, options) {
 
 $.extend($.userAction.prototype, {
 	
+	down: function(target) {
+		$(target).userAction(StringPool.MOUSEOVER).userAction(StringPool.MOUSEDOWN)
+			.userAction(StringPool.MOUSEMOVE);
+	},
+	
+	up: function(target) {
+		$(target).userAction(StringPool.MOUSEUP).userAction(StringPool.MOUSEOUT);
+	},
+	
+	move: function(target, x, y, after) {
+		$(target).userAction(StringPool.MOUSEMOVE, { x: x, y: y, after: after });
+	},
+	
 	drag: function(dx, dy) {
 		// drag helper function, thanks Richard Worth's testmouse api.
 		var self = this, o = this.options, center = this.findCenter(), 
@@ -118,16 +142,34 @@ $.extend($.userAction.prototype, {
 			speed = o.speed || StringPool.SLOW, 
 			easing = o.easing || StringPool.SWING;
 		
+		var complete = function() {
+			// fire complete or after cb
+			if (o.after||o.complete) (o.after||o.complete).apply(self.target, [o, self]);
+		};
+		
+		// drag synchronously
+		if (/^sync$/i.test(o.speed)) {
+			self.down(target);
+			
+			for (var dt = 1; dt <= dx; dt++) {
+				var x = center.x + (dt <= Math.abs(dx) ? dt : 0), 
+						y = center.y + (dt <= Math.abs(dy) ? dt : 0);
+				
+				this.move(target, x, y, o.drag);
+			}
+			self.up(target);
+			complete();
+			return;
+		}
+		
+		// drag asynchronously - animated
 		fake = fake.size() ? fake : 
 			$(StringPool.FAKE_CURSOR_DIV)
 				.css({ position: StringPool.ABSOLUTE }).appendTo(document.body);
 		
 		fake		
-			.animate({ left: center.x, top: center.y }, speed, easing, function() {
-				target
-					.userAction(StringPool.MOUSEOVER)
-					.userAction(StringPool.MOUSEDOWN)
-					.userAction(StringPool.MOUSEMOVE);
+			.animate({ left: center.x, top: center.y }, speed, easing, function(){
+				self.down(target);
 			})
 			.animate({ left: center.x + (dx||0), top: center.y + (dy||0) }, {
 				speed: speed,
@@ -135,21 +177,27 @@ $.extend($.userAction.prototype, {
 				step: function(i, anim) {
 					lastx = anim.prop == StringPool.LEFT ? i : lastx; 
 					lasty = anim.prop == StringPool.TOP ? i : lasty;
-					target.userAction(StringPool.MOUSEMOVE, { x: lastx, y: lasty, after: o.drag || o.after });
+					self.move(target, lastx, lasty, o.drag);
 				},
 				complete: function() {
-					target.userAction(StringPool.MOUSEUP).userAction(StringPool.MOUSEOUT);
+					
+					self.up(target);
 					
 					// remove fake cursor
 					$(this).remove();
 					
+					complete();
+					
 					// trigger drag queue
 					var queue = $.data(self.target, StringPool.DATA_QUEUE); 
-					
 					if (queue) queue.shift();
 					
-					if (queue && queue[0]) self.drag(queue[0][0], queue[0][1]);
-					else $.removeData(self.target, StringPool.DATA_QUEUE); 
+					if (queue && queue[0]) {
+						// trigger drag on correct instance
+						queue[0][2].drag(queue[0][0], queue[0][1]);
+					}
+					else 
+						$.removeData(self.target, StringPool.DATA_QUEUE); 
 				}
 			});
 	},
