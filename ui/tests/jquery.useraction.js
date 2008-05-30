@@ -114,37 +114,42 @@ $.extend($.userAction.prototype, {
 		// drag helper function, thanks Richard Worth's testmouse api.
 		var self = this, o = this.options, center = this.findCenter(), 
 			target = $(this.target), lastx = center.x, lasty = center.y,
-			fake = $(StringPool.FAKE_CURSOR_EXP);
+			fake = $(StringPool.FAKE_CURSOR_EXP), 
+			speed = o.speed || StringPool.SLOW, 
+			easing = o.easing || StringPool.SWING;
 		
 		fake = fake.size() ? fake : 
 			$(StringPool.FAKE_CURSOR_DIV)
 				.css({ position: StringPool.ABSOLUTE }).appendTo(document.body);
 		
 		fake		
-			.animate({ left: center.x, top: center.y }, "fast", function() {
+			.animate({ left: center.x, top: center.y }, speed, easing, function() {
 				target
 					.userAction(StringPool.MOUSEOVER)
 					.userAction(StringPool.MOUSEDOWN)
 					.userAction(StringPool.MOUSEMOVE);
 			})
 			.animate({ left: center.x + (dx||0), top: center.y + (dy||0) }, {
-				speed: "fast",
+				speed: speed,
+				easing: easing,
 				step: function(i, anim) {
 					lastx = anim.prop == StringPool.LEFT ? i : lastx; 
 					lasty = anim.prop == StringPool.TOP ? i : lasty;
-					target.userAction(StringPool.MOUSEMOVE, { x: lastx, y: lasty, after: o.drag });
+					target.userAction(StringPool.MOUSEMOVE, { x: lastx, y: lasty, after: o.drag || o.after });
 				},
 				complete: function() {
 					target.userAction(StringPool.MOUSEUP).userAction(StringPool.MOUSEOUT);
 					
 					// remove fake cursor
-					//$(this).remove();
+					$(this).remove();
 					
 					// trigger drag queue
 					var queue = $.data(self.target, StringPool.DATA_QUEUE); 
 					
 					if (queue) queue.shift();
+					
 					if (queue && queue[0]) self.drag(queue[0][0], queue[0][1]);
+					else $.removeData(self.target, StringPool.DATA_QUEUE); 
 				}
 			});
 	},
@@ -278,7 +283,9 @@ var StringPool = {
 	ABSOLUTE: 'absolute',
 	DATA_QUEUE: 'ua-drag-queue',
 	TOP: 'top',
-	LEFT: 'left'
+	LEFT: 'left',
+	SLOW: 'slow',
+	SWING: 'swing'
 };
 
 })(jQuery);
