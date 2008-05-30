@@ -284,7 +284,7 @@
 				
 			};			
 		},
-		mouseStart: function(e, overrideHandle) {
+		mouseStart: function(e, overrideHandle, noActivation) {
 		
 			var o = this.options;
 			this.currentContainer = this;
@@ -385,7 +385,10 @@
 			this.helperProportions = { width: this.helper.outerWidth(), height: this.helper.outerHeight() };//Recache the helper size
 
 			if(this.options.placeholder != 'clone') this.currentItem.css('visibility', 'hidden'); //Set the original element visibility to hidden to still fill out the white space
-			for (var i = this.containers.length - 1; i >= 0; i--) { this.containers[i].propagate("activate", e, this); } //Post 'activate' events to possible containers
+			
+			if(!noActivation) {
+				 for (var i = this.containers.length - 1; i >= 0; i--) { this.containers[i].propagate("activate", e, this); } //Post 'activate' events to possible containers
+			}
 			
 			//Prepare possible droppables
 			if($.ui.ddmanager) $.ui.ddmanager.current = this;
@@ -529,18 +532,18 @@
 			
 			if(this.domPosition != this.currentItem.prev()[0]) this.propagate("update", e, null, noPropagation); //Trigger update callback if the DOM position has changed
 			if(!contains(this.element[0], this.currentItem[0])) { //Node was moved out of the current element
-				this.propagate("remove", e);
+				this.propagate("remove", e, null, noPropagation);
 				for (var i = this.containers.length - 1; i >= 0; i--){
 					if(contains(this.containers[i].element[0], this.currentItem[0])) {
-						this.containers[i].propagate("update", e, this);
-						this.containers[i].propagate("receive", e, this);
+						this.containers[i].propagate("update", e, this, noPropagation);
+						this.containers[i].propagate("receive", e, this, noPropagation);
 					}
 				};
 			};
 			
 			//Post events to containers
 			for (var i = this.containers.length - 1; i >= 0; i--){
-				this.containers[i].propagate("deactivate", e, this);
+				this.containers[i].propagate("deactivate", e, this, noPropagation);
 				if(this.containers[i].containerCache.over) {
 					this.containers[i].propagate("out", e, this);
 					this.containers[i].containerCache.over = 0;

@@ -430,17 +430,22 @@
 	
 	$.ui.plugin.add("draggable", "connectToSortable", {
 		start: function(e,ui) {
-			
+		
 			var inst = $(this).data("draggable");
 			inst.sortables = [];
 			$(ui.options.connectToSortable).each(function() {
-				if($.data(this, 'sortable')) inst.sortables.push({
-					instance: $.data(this, 'sortable'),
-					offset: $.data(this, 'sortable').element.offset(),
-					width: $.data(this, 'sortable').element.width(),
-					height: $.data(this, 'sortable').element.height(),
-					shouldRevert: $.data(this, 'sortable').options.revert
-				});
+				if($.data(this, 'sortable')) {
+					var sortable = $.data(this, 'sortable');
+					inst.sortables.push({
+						instance: sortable,
+						offset: sortable.element.offset(),
+						width: sortable.element.width(),
+						height: sortable.element.height(),
+						shouldRevert: sortable.options.revert
+					});
+					
+					sortable.propagate("activate", e, inst);
+				}
 			});
 
 		},
@@ -461,7 +466,10 @@
 					this.instance.element.triggerHandler("sortreceive", [e, $.extend(this.instance.ui(), { sender: inst.element })], this.instance.options["receive"]);
 
 					this.instance.options.helper = this.instance.options._helper;
+				} else {
+					this.instance.propagate("deactivate", e, inst);
 				}
+
 			});
 			
 		},
@@ -473,17 +481,19 @@
 					
 				var l = o.left, r = l + o.width,
 					t = o.top, b = t + o.height;
-					
+		
 				return (l < (this.positionAbs.left + this.offset.click.left) && (this.positionAbs.left + this.offset.click.left) < r
 						&& t < (this.positionAbs.top + this.offset.click.top) && (this.positionAbs.top + this.offset.click.top) < b);				
 			};
 			
-			$.each(inst.sortables, function() {
+			$.each(inst.sortables, function(i) {
+
 
 				if(checkPos.call(inst, {
 					left: this.offset.left, top: this.offset.top,
 					width: this.width, height: this.height
 				})) {
+
 					//If it intersects, we use a little isOver variable and set it once, so our move-in stuff gets fired only once
 					if(!this.instance.isOver) {
 						this.instance.isOver = 1;
@@ -496,7 +506,7 @@
 						this.instance.options.helper = function() { return ui.helper[0]; };
 					
 						e.target = this.instance.currentItem[0];
-						this.instance.mouseStart(e, true);
+						this.instance.mouseStart(e, true, true);
 
 						//Because the browser event is way off the new appended portlet, we modify a couple of variables to reflect the changes
 						this.instance.offset.click.top = inst.offset.click.top;
