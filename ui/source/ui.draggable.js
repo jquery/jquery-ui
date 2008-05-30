@@ -438,12 +438,9 @@
 					var sortable = $.data(this, 'sortable');
 					inst.sortables.push({
 						instance: sortable,
-						offset: sortable.element.offset(),
-						width: sortable.element.width(),
-						height: sortable.element.height(),
 						shouldRevert: sortable.options.revert
 					});
-					
+					sortable.refresh();	//Do a one-time refresh at start to refresh the containerCache	
 					sortable.propagate("activate", e, inst);
 				}
 			});
@@ -481,18 +478,14 @@
 					
 				var l = o.left, r = l + o.width,
 					t = o.top, b = t + o.height;
-		
+	
 				return (l < (this.positionAbs.left + this.offset.click.left) && (this.positionAbs.left + this.offset.click.left) < r
 						&& t < (this.positionAbs.top + this.offset.click.top) && (this.positionAbs.top + this.offset.click.top) < b);				
 			};
 			
 			$.each(inst.sortables, function(i) {
 
-
-				if(checkPos.call(inst, {
-					left: this.offset.left, top: this.offset.top,
-					width: this.width, height: this.height
-				})) {
+				if(checkPos.call(inst, this.instance.containerCache)) {
 
 					//If it intersects, we use a little isOver variable and set it once, so our move-in stuff gets fired only once
 					if(!this.instance.isOver) {
