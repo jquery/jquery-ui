@@ -44,7 +44,7 @@
 				.wrap(document.createElement('div'));
 			var uiDialogContainer = uiDialogContent.parent().addClass('ui-dialog-container').css({position: 'relative'});
 			var uiDialog = (this.uiDialog = uiDialogContainer.parent()).hide()
-				.addClass('ui-dialog')
+				.addClass('ui-dialog').addClass(options.dialogClass)
 				.css({position: 'absolute', width: options.width, height: options.height, overflow: 'hidden'}); 
 	
 			var classNames = uiDialogContent.attr('className').split(' ');
