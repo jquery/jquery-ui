@@ -15,50 +15,44 @@ var num = function(i) {
 };
 
 $(document).ready(function() {
-
-
+	
+	var drag = function(el, dx, dy, complete) {
+		
+		// speed = sync -> Drag syncrhonously.
+		// speed = fast|slow -> Drag asyncrhonously - animated.
+		
+		$(el).userAction("drag", {
+			dx: dx, dy: dy, speed: 'sync', complete: complete 
+		});
+	};
+	
 	$('#resizable1').resizable({
 		resize: function() {
-			//console.log('resize')			
+			console.log('resize')			
 		}
 	});
 	
-	$('.ui-resizable-se').userAction("drag", 100);
-	$('.ui-resizable-se').userAction("drag", 200, 50);
-	$('.ui-resizable-se').userAction("drag", 400);
-	$('.ui-resizable-se').userAction("drag", -600, -30);
+	module("Test 1");
 	
-	return;
-
-	module("resizable: simple resize");
-	
-	test("simple resize x", function() {
-
-		$('#resizable1').resizable({
-			resize: function() {
-				console.log('resize')			
-			}
-		});
+	test("simple resize tests", function() {
 		
-		$('.ui-resizable-e').userAction("drag", 100);
-		$('.ui-resizable-e').userAction("drag", 200);
-		$('.ui-resizable-e').userAction("drag", 200);
-		
-		//expect(2);
-		//ok(false, "Resize element on the same position");
-		
+		drag('.ui-resizable-se', 100, 50);
 		
 	});
 	
-	/*test("autoheight", function() {
-		$('#navigation').accordion({ header: '.head', autoheight: false });
-		equals( 90, $('#navigation ul:first').height() );
-		equals( 126, $('#navigation ul:eq(1)').height() );
-		equals( 54, $('#navigation ul:last').height() );
-		$('#navigation').accordion("destroy").accordion({ header: '.head',autoheight: true });
-		equals( 126, $('#navigation ul:first').height() );
-		equals( 126, $('#navigation ul:eq(1)').height() );
-		equals( 126, $('#navigation ul:last').height() );
-	});*/
-
+	
+	test("simple resize tests 2", function() {
+		
+		//drag('.ui-resizable-se', 0, 1000);
+		
+	});
+	
+	module("Test 2");
+	
+	test("simple resize tests", function() {
+		
+		//drag('.ui-resizable-se', 15, 0);
+		
+	});
+	
 });
