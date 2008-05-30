@@ -6,6 +6,7 @@
  * Date: May, 2008
  * Requires jQuery 1.2.x+
  * Docs: http://docs.jquery.com/Plugins/userAction
+ * Greetings: Richard Worth
  */
 
 ;(function($) {
@@ -20,7 +21,7 @@ $.fn.extend({
 		}
 		// set x and y
 		else if (typeof a1 == StringPool.NUMBER) {
-			opts.x = a1; options.y = a2;
+			opts.x = a1; opts.y = a2;
 		}
 		// extend options
 		else {
@@ -38,12 +39,12 @@ $.userAction = function(el, type, options) {
 	this.options = $.extend({}, $.userAction.defaults, options || {});
 	this.target =  $(this.options.target || el)[0];
 	
-	var self = this, o = this.options, c = o.center, xy = this.findCenter(
+	var self = this, o = this.options, c = o.center, center = this.findCenter(
 		c && c.length ? c : [0, 0]
 	);
 	// if x and y not set, get the center of the element
-	o.x = o.x || xy.x; o.y = o.y || xy.y;
-
+	o.x = o.x || center.x; o.y = o.y || center.y;
+	
 	var EVENT_DEFAULT = {
 		target: this.target,
 		view: window,
@@ -58,6 +59,24 @@ $.userAction = function(el, type, options) {
 	isMouse = /^mouse(over|out|down|up|move)|(dbl)?click$/i.test(type),
 	isKeyboard = /^textevent|key(up|down|press)$/i.test(type); 
 	
+	// Simulating drag and drop event
+	if (/^drag$/i.test(type)) {
+		var t = this.target, queue = $.data(t, StringPool.DATA_QUEUE),
+			data = [options.dx || options.x, options.dy || options.y];
+		
+		if (!queue) {
+			 $.data(t, StringPool.DATA_QUEUE, [data]);
+			 this.drag(options.dx || options.x, options.dy || options.y);
+			 return;
+		}
+		// queuing drags...
+		if (queue && queue.length) {
+			queue.push(data);
+		}
+		// if drag, stop here.
+		return;
+	}
+	
 	var EVT = isMouse ? 
 		$.extend({}, EVENT_DEFAULT, {
 			clientX: o.x, clientY: o.y, 
@@ -68,8 +87,11 @@ $.userAction = function(el, type, options) {
 		$.extend({}, EVENT_DEFAULT, {
 			keyCode: o.keyCode || 0, charCode: o.charCode || 0
 		});
-		
-	if (o.before) o.before.apply(this.target, [	$.event.fix(EVT), o.x, o.y, this]);
+	
+	// avoid e.type == undefined before dispatchment
+	EVT.type = type;
+	
+	if (o.before) o.before.apply(this.target, [$.event.fix(EVT), o.x, o.y, this]);
 
 	// check event type for mouse events
 	if (isMouse) {
@@ -87,6 +109,45 @@ $.userAction = function(el, type, options) {
 };
 
 $.extend($.userAction.prototype, {
+	
+	drag: function(dx, dy) {
+		// drag helper function, thanks Richard Worth's testmouse api.
+		var self = this, o = this.options, center = this.findCenter(), 
+			target = $(this.target), lastx = center.x, lasty = center.y,
+			fake = $(StringPool.FAKE_CURSOR_EXP);
+		
+		fake = fake.size() ? fake : 
+			$(StringPool.FAKE_CURSOR_DIV)
+				.css({ position: StringPool.ABSOLUTE }).appendTo(document.body);
+		
+		fake		
+			.animate({ left: center.x, top: center.y }, "fast", function() {
+				target
+					.userAction(StringPool.MOUSEOVER)
+					.userAction(StringPool.MOUSEDOWN)
+					.userAction(StringPool.MOUSEMOVE);
+			})
+			.animate({ left: center.x + (dx||0), top: center.y + (dy||0) }, {
+				speed: "fast",
+				step: function(i, anim) {
+					lastx = anim.prop == StringPool.LEFT ? i : lastx; 
+					lasty = anim.prop == StringPool.TOP ? i : lasty;
+					target.userAction(StringPool.MOUSEMOVE, { x: lastx, y: lasty, after: o.drag });
+				},
+				complete: function() {
+					target.userAction(StringPool.MOUSEUP).userAction(StringPool.MOUSEOUT);
+					
+					// remove fake cursor
+					//$(this).remove();
+					
+					// trigger drag queue
+					var queue = $.data(self.target, StringPool.DATA_QUEUE); 
+					
+					if (queue) queue.shift();
+					if (queue && queue[0]) self.drag(queue[0][0], queue[0][1]);
+				}
+			});
+	},
 	
 	mouseEvent: function(EVT) {
 		var evt, type = this.type, o = this.options;
@@ -205,10 +266,19 @@ var StringPool = {
 	NUMBER: 'number',
 	MOUSEOVER: 'mouseover',
 	MOUSEOUT: 'mouseout',
+	MOUSEDOWN: 'mousedown',
+	MOUSEUP: 'mouseup',
+	MOUSEMOVE: 'mousemove',
 	MOUSE_EVENTS: 'MouseEvents',
 	UI_EVENTS: 'UIEvents',
 	KEY_EVENTS: 'KeyEvents',
-	EVENTS: 'Events'
+	EVENTS: 'Events',
+	FAKE_CURSOR_EXP: 'div.ui-fake-cursor',
+	FAKE_CURSOR_DIV: '<div class="ui-fake-cursor"/>',
+	ABSOLUTE: 'absolute',
+	DATA_QUEUE: 'ua-drag-queue',
+	TOP: 'top',
+	LEFT: 'left'
 };
 
 })(jQuery);
