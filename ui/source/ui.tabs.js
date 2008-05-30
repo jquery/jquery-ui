@@ -321,7 +321,7 @@
 				index = this.$tabs.length; // append by default
 
 			var o = this.options;
-			var $li = $(o.tabTemplate.replace(/#\{href\}/, url).replace(/#\{label\}/, label));
+			var $li = $(o.tabTemplate.replace(/#\{href\}/g, url).replace(/#\{label\}/g, label));
 			$li.data('destroy.tabs', true);
 
 			var id = url.indexOf('#') == 0 ? url.replace('#', '') : this.tabId( $('a:first-child', $li)[0] );
