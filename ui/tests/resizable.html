@@ -14,142 +14,28 @@
 <script type="text/javascript" src="resizable.js"></script>
 <script type="text/javascript" src="jquery.useraction.js"></script>
 </head>
+
+<style>
+	.ui-fake-cursor {
+		position: absolute;
+		background: url(cursors/win/auto.png);
+		height: 32px; width: 32px;
+		top: 270px; left: 0px;
+	}
+</style>
+
 <body>
 
 	<h1 id="header">jQuery Test Suite</h1>
 	<h2 id="banner"></h2>
 	<h2 id="userAgent"></h2>
-	<h2 id="log"></h2>
+	<h2 id="log" style="height: 50px;overflow-y:auto;"></h2>
 	
 	<div id="main" style="border: 1px solid black; padding: 10px; margin: 10px;">
 		<div id='resizable1' style="background: green; width: 200px; height: 100px;">I'm a resizable.</div>
 	</div>
 	
 	<ol id="tests"></ol>
-	
-	<button id="btn">Start user action</button>
-	
-	<input type="text" id="key">
-	
+	<div class="ui-fake-cursor"/>
 </body>
 </html>
-
-<script>
-	
-	var animateClick = function(co) {
-	var img = $("<img src='images/click.png' width='1'>").appendTo("body")
-					.css({ position: "absolute", zIndex: 1000, left: co.x, top: co.y })
-					.animate({ width: 80, height: 80, left: co.x-40, top: co.y-40, opacity: 'hide' }, 1000, function() { $(this).remove(); });
-	};
-	
-	$(function() {
-		
-		$('#resizable1').mouseover(function() {
-			$(this).css('background', 'red');
-		});
-		
-		$('#resizable1').mouseout(function() {
-			$(this).css('background', 'yellow');
-		});
-		
-		$('#key').keydown(function() {
-			console.log('keydown')
-		});
-		
-	});
-	
-	$('#btn').click(function() {
-		
-		
-		 // TODO - works in all browsers, but have to fix a bug on opera
-		 $('#key').userAction("keydown", {
-			charCode: 67,
-			keyCode: 67,
-			after: function(e) {
-				//console.log(e)
-			},
-			before: function(e) {
-				//console.log(e)
-			}
-		});
-		
-		
-		// mouseover on the center of the target
-		$('.ui-resizable-e').userAction("mouseover");
-		
-		$('.ui-resizable-e').userAction("mousedown", {
-			after: function(e, x, y) {
-				animateClick({x:x, y:y})
-			}
-		});
-		
-		for (var x = 0; x < 40; x++) {
-			
-			// offset the center(x,y) in [dx, dy]
-			$('.ui-resizable-e').userAction("mousemove", [x++, 0]);
-			
-			// pre defined x, y
-			//$('.ui-resizable-e').userAction("mousemove", 200, 0);
-			
-			// with extended options
-			/*$('.ui-resizable-e').userAction("mousemove", { 
-				center: [x++, 0]
-			});*/
-			
-		}
-
-		$('.ui-resizable-e').userAction("mouseup", {
-			after: function(e, x, y) {
-				animateClick({x:x, y:y})
-			}
-		});
-		
-		$('#main').userAction("mouseout", {
-			
-			target: '.ui-resizable-e',
-			
-			relatedTarget: '#resizable1',
-			
-			//x: $('#resizable1').offset().left,
-			
-			//y:  $('#resizable1').offset().top,
-			
-			//bubbles: true,
-			
-			//cancelable: false, 
-			
-			//view: window,
-			
-			//ctrlKey: false, 
-			
-			//altKey: false, 
-			
-			//shiftKey: false, 
-			
-			//relatedTarget: null, 
-			
-			//screenX: 0, 
-			
-			//screenY: 0,
-			
-			//metaKey: false, 
-			
-			//button: 0,
-			
-			//center: false,
-			
-			//center: [100, 100],
-			
-			before: function(e, x, y) {
-				console.log(e)
-			},
-			after: function(e, x, y) {
-				console.log(e)
-			}
-		});
-		
-	});
-	
-	
-	
-</script>
