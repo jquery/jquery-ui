@@ -1,7 +1,3 @@
-var num = function(i) {
-	return parseInt(i, 10);
-};
-
 $(document).ready(function() {
 	
 	var drag = function(el, dx, dy, complete) {
@@ -13,7 +9,7 @@ $(document).ready(function() {
 			dx: dx||0, dy: dy||0, speed: 'sync', complete: complete 
 		});
 	};
-	
+
 	module("Simple Resize");
 	
 	test("ui-resizable-e resize x", function() {
