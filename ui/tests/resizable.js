@@ -21,38 +21,148 @@ $(document).ready(function() {
 		// speed = sync -> Drag syncrhonously.
 		// speed = fast|slow -> Drag asyncrhonously - animated.
 		
-		$(el).userAction("drag", {
-			dx: dx, dy: dy, speed: 'sync', complete: complete 
+		return $(el).userAction("drag", {
+			dx: dx||0, dy: dy||0, speed: 'sync', complete: complete 
 		});
 	};
 	
-	$('#resizable1').resizable({
-		resize: function() {
-			console.log('resize')			
-		}
-	});
+	module("simple resize");
 	
-	module("Test 1");
-	
-	test("simple resize tests", function() {
+	test("ui-resizable-e resize x", function() {
 		
-		drag('.ui-resizable-se', 100, 50);
+		var handle = '.ui-resizable-e', target = $('#resizable1').resizable({ handles: 'all' });
 		
-	});
-	
-	
-	test("simple resize tests 2", function() {
+		expect(2);
 		
-		//drag('.ui-resizable-se', 0, 1000);
+		drag(handle, 50);
+		
+		equals( 149, target.width(), "compare width");
+		
+		drag(handle, -50);
+		
+		equals( 100, target.width(), "compare width" );
 		
 	});
 	
-	module("Test 2");
-	
-	test("simple resize tests", function() {
+	test("ui-resizable-w resize x", function() {
 		
-		//drag('.ui-resizable-se', 15, 0);
+		var handle = '.ui-resizable-w', target = $('#resizable1').resizable({ handles: 'all' });
+		
+		expect(2);
+		
+		drag(handle, -50);
+		
+		equals( 149, target.width(), "compare width" );
+		
+		drag(handle, 50);
+		
+		equals( 100, target.width(), "compare width" );
 		
 	});
+	
+	test("ui-resizable-n resize y", function() {
+		
+		var handle = '.ui-resizable-n', target = $('#resizable1').resizable({ handles: 'all' });
+		
+		expect(2);
+		
+		drag(handle, 0, -50);
+		
+		equals( 149, target.height(), "compare height" );
+		
+		drag(handle, 0, 50);
+		
+		equals( 100, target.height(), "compare height" );
+		
+	});
+	
+	test("ui-resizable-s resize y", function() {
+		
+		var handle = '.ui-resizable-s', target = $('#resizable1').resizable({ handles: 'all' });
+		
+		expect(2);
+		
+		drag(handle, 0, 50);
+		
+		equals( 149, target.height(), "compare height" );
+		
+		drag(handle, 0, -50);
+		
+		equals( 100, target.height(), "compare height" );
+		
+	});
+	
+	test("ui-resizable-se resize xy", function() {
+		
+		var handle = '.ui-resizable-se', target = $('#resizable1').resizable({ handles: 'all' });
+		
+		expect(4);
+		
+		drag(handle, 50, 50);
+		
+		equals( 149, target.width(), "compare width" );
+		equals( 149, target.height(), "compare height" );
+		
+		drag(handle, -50, -50);
+		
+		equals( 100, target.width(), "compare width" );
+		equals( 100, target.height(), "compare height" );
+		
+	});
+	
+	test("ui-resizable-sw resize xy", function() {
+		
+		var handle = '.ui-resizable-sw', target = $('#resizable1').resizable({ handles: 'all' });
+		
+		expect(4);
+		
+		drag(handle, -50, -50);
+		
+		equals( 149, target.width(), "compare width" );
+		equals( 51, target.height(), "compare height" );
+		
+		drag(handle, 50, 50);
+		
+		equals( 100, target.width(), "compare width" );
+		equals( 100, target.height(), "compare height" );
+		
+	});
+	
+	test("ui-resizable-ne resize xy", function() {
+		
+		var handle = '.ui-resizable-ne', target = $('#resizable1').resizable({ handles: 'all' });
+		
+		expect(4);
+		
+		drag(handle, -50, -50);
+		
+		equals( 51, target.width(), "compare width" );
+		equals( 149, target.height(), "compare height" );
+		
+		drag(handle, 50, 50);
+		
+		equals( 100, target.width(), "compare width" );
+		equals( 100, target.height(), "compare height" );
+		
+	});
+	
+	test("ui-resizable-nw resize xy", function() {
+		
+		var handle = '.ui-resizable-nw', target = $('#resizable1').resizable({ handles: 'all' });
+		
+		expect(4);
+		
+		drag(handle, -50, -50);
+		
+		equals( 149, target.width(), "compare width" );
+		equals( 149, target.height(), "compare height" );
+		
+		drag(handle, 50, 50);
+		
+		equals( 100, target.width(), "compare width" );
+		equals( 100, target.height(), "compare height" );
+		
+	});
+	
 	
 });

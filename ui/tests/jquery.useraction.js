@@ -151,10 +151,10 @@ $.extend($.userAction.prototype, {
 		if (/^sync$/i.test(o.speed)) {
 			self.down(target);
 			
-			for (var dt = 1; dt <= dx; dt++) {
-				var x = center.x + (dt <= Math.abs(dx) ? dt : 0), 
-						y = center.y + (dt <= Math.abs(dy) ? dt : 0);
-				
+			var mdx = Math.abs(dx)||0, mdy = Math.abs(dy)||0, range = Math.max(mdx, mdy);
+			
+			for (var dt = 1; dt <= range; dt++) {
+				var x = center.x + (dx/mdx)*(dt <= mdx ? dt : 0), y = center.y + (dy/mdy)*(dt <= mdy ? dt : 0);
 				this.move(target, x, y, o.drag);
 			}
 			self.up(target);
