@@ -6,9 +6,9 @@ var console = console || {
 
 var animateClick = function(co) {
 	var img = $("<img src='images/click.png' width='1'>").appendTo("body")
-					.css({ position: "absolute", zIndex: 1000, left: co.x, top: co.y })
-					.animate({ width: 80, height: 80, left: co.x-40, top: co.y-40, opacity: 'hide' }, 1000, function() { $(this).remove(); });
-	};
+				.css({ position: "absolute", zIndex: 1000, left: co.x, top: co.y })
+				.animate({ width: 80, height: 80, left: co.x-40, top: co.y-40, opacity: 'hide' }, 1000, function() { $(this).remove(); });
+};
 
 var num = function(i) {
 	return parseInt(i, 10);
