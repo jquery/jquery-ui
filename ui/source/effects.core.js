@@ -5,7 +5,7 @@
   $.extend($.effects, {
     save: function(el, set) {
       for(var i=0;i<set.length;i++) {
-        if(set[i] !== null) $.data(el[0], "ec.storage."+set[i], el.css(set[i]));
+        if(set[i] !== null) $.data(el[0], "ec.storage."+set[i], el[0].style[set[i]]);
       }
     },
     restore: function(el, set) {

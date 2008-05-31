@@ -10,13 +10,14 @@
       // Set options
       var mode = $.effects.setMode(el, o.options.mode || 'show'); // Set Mode
       var color = o.options.color || "#ffff99"; // Default highlight color
+      var oldColor = el.css("backgroundColor");
       
       // Adjust
       $.effects.save(el, props); el.show(); // Save & Show
       el.css({backgroundImage: 'none', backgroundColor: color}); // Shift
       
       // Animation
-      var animation = {backgroundColor: $.data(this, "ec.storage.backgroundColor")};
+      var animation = {backgroundColor: oldColor };
       if (mode == "hide") animation['opacity'] = 0;
       
       // Animate
