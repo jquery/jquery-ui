@@ -26,7 +26,7 @@ $(document).ready(function() {
 		});
 	};
 	
-	module("simple resize");
+	module("Simple Resize");
 	
 	test("ui-resizable-e resize x", function() {
 		
@@ -164,5 +164,83 @@ $(document).ready(function() {
 		
 	});
 	
+	/**
+	 * Conditional Resize
+	 * min/max Height/Width
+	 */
+	
+	module("Limits condition");
+	
+	test("ui-resizable-se resize xy", function() {
+		
+		var handle = '.ui-resizable-se', target = $('#resizable1').resizable({ handles: 'all', minWidth: 60, minHeight: 60, maxWidth: 100, maxHeight: 100 });
+		
+		expect(4);
+		
+		drag(handle, -50, -50);
+		
+		equals( 60, target.width(), "compare minWidth" );
+		equals( 60, target.height(), "compare minHeight" );
+		
+		drag(handle, 70, 70);
+		
+		equals( 100, target.width(), "compare maxWidth" );
+		equals( 100, target.height(), "compare maxHeight" );
+		
+	});
+	
+	test("ui-resizable-sw resize xy", function() {
+		
+		var handle = '.ui-resizable-sw', target = $('#resizable1').resizable({ handles: 'all', minWidth: 60, minHeight: 60, maxWidth: 100, maxHeight: 100 });
+		
+		expect(4);
+		
+		drag(handle, 50, -50);
+		
+		equals( 60, target.width(), "compare minWidth" );
+		equals( 60, target.height(), "compare minHeight" );
+		
+		drag(handle, -70, 70);
+		
+		equals( 100, target.width(), "compare maxWidth" );
+		equals( 100, target.height(), "compare maxHeight" );
+		
+	});
+	
+	test("ui-resizable-ne resize xy", function() {
+		
+		var handle = '.ui-resizable-ne', target = $('#resizable1').resizable({ handles: 'all', minWidth: 60, minHeight: 60, maxWidth: 100, maxHeight: 100 });
+		
+		expect(4);
+		
+		drag(handle, -50, 50);
+		
+		equals( 60, target.width(), "compare minWidth" );
+		equals( 60, target.height(), "compare minHeight" );
+		
+		drag(handle, 70, -70);
+		
+		equals( 100, target.width(), "compare maxWidth" );
+		equals( 100, target.height(), "compare maxHeight" );
+		
+	});
+	
+	test("ui-resizable-nw resize xy", function() {
+		
+		var handle = '.ui-resizable-nw', target = $('#resizable1').resizable({ handles: 'all', minWidth: 60, minHeight: 60, maxWidth: 100, maxHeight: 100 });
+		
+		expect(4);
+		
+		drag(handle, 70, 70);
+		
+		equals( 60, target.width(), "compare minWidth" );
+		equals( 60, target.height(), "compare minHeight" );
+		
+		drag(handle, -70, -70);
+		
+		equals( 100, target.width(), "compare maxWidth" );
+		equals( 100, target.height(), "compare maxHeight" );
+		
+	});
 	
 });
