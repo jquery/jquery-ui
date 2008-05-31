@@ -39,10 +39,10 @@ $.userAction = function(el, type, options) {
 	this.options = $.extend({}, $.userAction.defaults, options || {});
 	this.target =  $(this.options.target || el)[0];
 	
-	var self = this, o = this.options, c = o.center;
+	var self = this, o = this.options, c = o.center, center = { x: 0, y: 0 };
 	
-	if (!o.x || !o.y) {
-		var center = this.findCenter(
+	if (!o.x && !o.y) {
+		center = this.findCenter(
 			c && c.length ? c : [0, 0]
 		)
 	}
@@ -59,10 +59,7 @@ $.userAction = function(el, type, options) {
 		altKey: o.altKey || false, 
 		shiftKey: o.shiftKey || false, 
 		metaKey: o.metaKey || false
-	},
-	
-	isMouse = /^mouse(over|out|down|up|move)|(dbl)?click$/i.test(type),
-	isKeyboard = /^textevent|key(up|down|press)$/i.test(type); 
+	}; 
 	
 	// Simulating drag and drop event
 	if (/^drag$/i.test(type)) {
@@ -88,7 +85,10 @@ $.userAction = function(el, type, options) {
 		return;
 	}
 	
-	var EVT = isMouse ? 
+	var isMouse = /^mouse(over|out|down|up|move)|(dbl)?click$/i.test(type),
+		isKeyboard = /^textevent|key(up|down|press)$/i.test(type),
+		
+		EVT = isMouse ? 
 		$.extend({}, EVENT_DEFAULT, {
 			clientX: o.x, clientY: o.y, 
 			screenX: o.screenX || 0, screenY: o.screenY || 0,
@@ -151,10 +151,11 @@ $.extend($.userAction.prototype, {
 		if (/^sync$/i.test(o.speed)) {
 			self.down(target);
 			
-			var mdx = Math.abs(dx)||0, mdy = Math.abs(dy)||0, range = Math.max(mdx, mdy);
+			var mdx = Math.abs(dx)||0, mdy = Math.abs(dy)||0, range = Math.max(mdx, mdy),
+				sx = dx/mdx, sy = dy/mdy;
 			
 			for (var dt = 1; dt <= range; dt++) {
-				var x = center.x + (dx/mdx)*(dt <= mdx ? dt : 0), y = center.y + (dy/mdy)*(dt <= mdy ? dt : 0);
+				var x = center.x + sx*(dt <= mdx ? dt : 0), y = center.y + sy*(dt <= mdy ? dt : 0);
 				this.move(target, x, y, o.drag);
 			}
 			self.up(target);
