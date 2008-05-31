@@ -111,7 +111,7 @@
 				.parent()
 					.bind('focus', function(e) { self.focus(this.firstChild); })
 					.bind('blur', function(e) { self.blur(this.firstChild); })
-					.bind('keydown', function(e) { self.keydown(e.keyCode, this.firstChild); })
+					.bind('keydown', function(e) { if(!self.options.noKeyboard) self.keydown(e.keyCode, this.firstChild); })
 			;
 			
 			// Bind the click to the slider itself
@@ -410,7 +410,7 @@
 				x: Math.round(this.convertValue(x, "x")) || 0,
 				y: Math.round(this.convertValue(y, "y")) || 0
 			};
-			
+		
 			if (!noPropagation) {
 				this.propagate('start', null);
 				this.propagate('stop', null);
