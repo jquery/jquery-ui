@@ -214,7 +214,6 @@
 		plugins: {},
 		ui: function() {
 			return {
-				instance: this,
 				axis: this.options.axis,
 				options: this.options
 			};
@@ -519,7 +518,7 @@
 	$.ui.plugin.add("resizable", "containment", {
 		
 		start: function(e, ui) {
-			var o = ui.options, self = ui.instance, el = self.element;
+			var o = ui.options, self = $(this).data("resizable"), el = self.element;
 			var oc = o.containment,	ce = (oc instanceof $) ? oc.get(0) : (/parent/.test(oc)) ? el.parent().get(0) : oc;
 			if (!ce) return;
 			
@@ -547,7 +546,7 @@
 		},
 		
 		resize: function(e, ui) {
-			var o = ui.options, self = ui.instance, ps = self.containerSize, 
+			var o = ui.options, self = $(this).data("resizable"), ps = self.containerSize, 
 						co = self.containerOffset, cs = self.size, cp = self.position,
 							pRatio = o._aspectRatio || e.shiftKey;
 			
@@ -581,7 +580,7 @@
 	$.ui.plugin.add("resizable", "grid", {
 		
 		resize: function(e, ui) {
-			var o = ui.options, self = ui.instance, cs = self.size, os = self.originalSize, op = self.originalPosition, a = self.axis, ratio = o._aspectRatio || e.shiftKey;
+			var o = ui.options, self = $(this).data("resizable"), cs = self.size, os = self.originalSize, op = self.originalPosition, a = self.axis, ratio = o._aspectRatio || e.shiftKey;
 			o.grid = typeof o.grid == "number" ? [o.grid, o.grid] : o.grid;
 			var ox = Math.round((cs.width - os.width) / o.grid[0]) * o.grid[0], oy = Math.round((cs.height - os.height) / o.grid[1]) * o.grid[1];
 			
@@ -612,7 +611,7 @@
 	$.ui.plugin.add("resizable", "animate", {
 		
 		stop: function(e, ui) {
-			var o = ui.options, self = ui.instance;
+			var o = ui.options, self = $(this).data("resizable");
 			
 			var pr = o.proportionallyResize, ista = pr && (/textarea/i).test(pr.get(0).nodeName), 
 							soffseth = ista && $.ui.hasScroll(pr.get(0), 'left') /* TODO - jump height */ ? 0 : self.sizeDiff.height,
@@ -650,7 +649,7 @@
 	$.ui.plugin.add("resizable", "ghost", {
 		
 		start: function(e, ui) {
-			var o = ui.options, self = ui.instance, pr = o.proportionallyResize, cs = self.size;
+			var o = ui.options, self = $(this).data("resizable"), pr = o.proportionallyResize, cs = self.size;
 			
 			if (!pr) self.ghost = self.element.clone();
 			else self.ghost = pr.clone();
@@ -665,14 +664,14 @@
 		},
 		
 		resize: function(e, ui){
-			var o = ui.options, self = ui.instance, pr = o.proportionallyResize;
+			var o = ui.options, self = $(this).data("resizable"), pr = o.proportionallyResize;
 			
 			if (self.ghost) self.ghost.css({ position: 'relative', height: self.size.height, width: self.size.width });
 			
 		},
 		
 		stop: function(e, ui){
-			var o = ui.options, self = ui.instance, pr = o.proportionallyResize;
+			var o = ui.options, self = $(this).data("resizable"), pr = o.proportionallyResize;
 			if (self.ghost && self.helper) self.helper.get(0).removeChild(self.ghost.get(0));
 		}
 		
@@ -681,7 +680,7 @@
 	$.ui.plugin.add("resizable", "alsoResize", {
 		
 		start: function(e, ui) {
-			var o = ui.options, self = ui.instance, 
+			var o = ui.options, self = $(this).data("resizable"), 
 			
 			_store = function(exp) {
 				$(exp).each(function() {
@@ -700,7 +699,7 @@
 		},
 		
 		resize: function(e, ui){
-			var o = ui.options, self = ui.instance, os = self.originalSize, op = self.originalPosition;
+			var o = ui.options, self = $(this).data("resizable"), os = self.originalSize, op = self.originalPosition;
 			
 			var delta = { 
 				height: (self.size.height - os.height) || 0, width: (self.size.width - os.width) || 0,
