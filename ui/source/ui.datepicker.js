@@ -254,6 +254,9 @@ $.extend(Datepicker.prototype, {
 	           Date[2] - the current dates for a range */
 	_getDateDatepicker: function(target) {
 		var inst = this._getInst(target._calId);
+		if (inst) {
+			inst._setDateFromField($(target)); 
+		}
 		return (inst ? inst._getDate() : null);
 	},
 
