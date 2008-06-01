@@ -1,10 +1,13 @@
-/* jQuery UI Date Picker v3.4.3 (previously jQuery Calendar)
-   Written by Marc Grabanski (m@marcgrabanski.com) and Keith Wood (kbwood@virginbroadband.com.au).
-
-   Copyright (c) 2007 Marc Grabanski (http://marcgrabanski.com/code/ui-datepicker)
-   Dual licensed under the MIT (MIT-LICENSE.txt)
-   and GPL (GPL-LICENSE.txt) licenses.
-   Date: 09-03-2007  */
+/*
+ * jQuery UI Datepicker
+ *
+ * Copyright (c) 2006, 2007, 2008 Marc Grabanski
+ * Dual licensed under the MIT (MIT-LICENSE.txt)
+ * and GPL (GPL-LICENSE.txt) licenses.
+ * 
+ * http://docs.jquery.com/UI/Datepicker
+ * Marc Grabanski (m@marcgrabanski.com) and Keith Wood (kbwood@virginbroadband.com.au).
+ */
    
 ;(function($) { // hide the namespace
 
