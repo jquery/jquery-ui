@@ -6,7 +6,7 @@ $(document).ready(function () {
 	$.datepicker.setDefaults($.datepicker.regional['']);
 	// replace script tags with HTML code
 	$(".demojs").each(function () {
-		$(this).before( '<pre style="padding-top:0 !important"><code class="javascript">' +
+		$(this).before( '<pre><code class="javascript">' +
 			$(this).html().replace(/</g, '&lt;') + "</code></pre>" );
 		eval( $(this).html() );
 	});
@@ -32,7 +32,7 @@ function localise() {
 	var input = $('input', this.parentNode.parentNode);
 	var date = $(input).datepicker('getDate');
 	var language = $(this).val();
-	$.localise('i18n/ui.datepicker', {language: language});
+	$.localise('../../../source/i18n/ui.datepicker', {language: language});
 	$(input).datepicker('change', $.datepicker.regional[language]);
 	$.datepicker.setDefaults($.datepicker.regional['']); // Reset for general usage
 	if (date) {

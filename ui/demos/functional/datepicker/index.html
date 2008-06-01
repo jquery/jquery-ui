@@ -17,6 +17,10 @@
 	<body>
 		<div id="wrap">
 			<div id="content">
+				<input type="text" name="testing" value="click" id="testing" />
+<script type="text/jsdemo" charset="utf-8" class="demojs">
+$('#testing').datepicker({ yearRange: '-80:+0' });	
+</script>
 				<ul id="tab_menu1" class="tabs">
 					<li><a href="#default">Defaults</a></li>
 					<li><a href="#invoke">Invocation</a></li>
@@ -65,7 +69,7 @@ $('#defaultFocus').datepicker();
 					<p>You can override the default settings that apply to all date picker instances.</p>
 <script type="text/jsdemo" charset="utf-8" class="demojs">
 $.datepicker.setDefaults({showOn: 'both', buttonImageOnly: true,
-	buttonImage: 'img/calendar.gif', buttonText: 'Calendar'});
+	buttonImage: 'demo/img/calendar.gif', buttonText: 'Calendar'});
 </script>
 				</div>
 				<div id="invoke" class="tab_group1 container">
@@ -90,13 +94,13 @@ $('#invokeButton').datepicker({showOn: 'button', buttonText: '...',
 						<input type="text" size="10" class="invokeBoth"/>
 						<input type="button" id="enableBoth" value="Disable"/></p>
 <script type="text/jsdemo" charset="utf-8" class="demojs">
-$('.invokeBoth').datepicker({showOn: 'both', buttonImage: 'img/calendar.gif', buttonImageOnly: true});
+$('.invokeBoth').datepicker({showOn: 'both', buttonImage: 'demo/img/calendar.gif', buttonImageOnly: true});
 </script>
 					<p>You can embed the trigger image within the input area via CSS.</p>
 					<p style="clear:both"><span class="demoLabel">Embedded button:</span>
 						<input type="text" size="10" id="embedButton"/></p>
 <script type="text/jsdemo" charset="utf-8" class="demojs">
-$('#embedButton').datepicker({showOn: 'button', buttonImage: 'img/calendar.gif', buttonImageOnly: true});
+$('#embedButton').datepicker({showOn: 'button', buttonImage: 'demo/img/calendar.gif', buttonImageOnly: true});
 
 // CSS
 // #embedButton + img { position: relative; left: -21px; top: -1px; }
@@ -839,6 +843,7 @@ $('inputs').<b>datepicker('change',</b> ...);</code></pre>
 	
 &lt;input type="text" id="inlineConfig" <b>date:</b>defaultDate="+7"/&gt;</code></pre>
 				</div>
+		<h4>Localization Packages</h4>
 		<ul style="float:left;width:220px;margin-top:0">
 			<li><a href="../../../source/i18n/ui.datepicker-ca.js" target="_blank">Bulgarian</a></li>
 			<li><a href="../../../source/i18n/ui.datepicker-ca.js" target="_blank">Catalan of Spain</a></li>

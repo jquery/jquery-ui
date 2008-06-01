@@ -14,7 +14,7 @@
 .us_day { color: white !important; background: #eee url(img/us.gif) no-repeat center !important; }
 .za_day { color: green !important; background: #eee url(img/za.gif) no-repeat center !important; }
 code { font-size: 13px; font-family: Verdana, Arial, Helvetica, sans-serif; }
-pre { clear: both; padding-left: 2em; }
+pre { clear: both; padding-left: 2em; background: #eee; }
 #embedButton { width: 7em; }
 #embedButton + img { position: relative; left: -21px; top: -1px; }
 .tabs {
@@ -34,9 +34,11 @@ pre { clear: both; padding-left: 2em; }
 	text-decoration: none;
 	color: #eee;
 	border-top: 1px solid #F9F9F9;
+	background: #78A5CE;
 }
 .tabs li a:hover, .tabs li a.over {
 	border-top: 1px solid #000;
+	background: #333;
 }
 .tab_group1 h3 {
 	font-weight: bold;
