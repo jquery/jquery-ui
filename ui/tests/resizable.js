@@ -155,7 +155,7 @@ $(document).ready(function() {
 	
 	module("Dimensions limit");
 	
-	test("ui-resizable-se resize xy", function() {
+	test("ui-resizable-se { handles: 'all', minWidth: 60, minHeight: 60, maxWidth: 100, maxHeight: 100 }", function() {
 		
 		var handle = '.ui-resizable-se', target = $('#resizable1').resizable({ handles: 'all', minWidth: 60, minHeight: 60, maxWidth: 100, maxHeight: 100 });
 		
@@ -173,7 +173,7 @@ $(document).ready(function() {
 		
 	});
 	
-	test("ui-resizable-sw resize xy", function() {
+	test("ui-resizable-sw { handles: 'all', minWidth: 60, minHeight: 60, maxWidth: 100, maxHeight: 100 }", function() {
 		
 		var handle = '.ui-resizable-sw', target = $('#resizable1').resizable({ handles: 'all', minWidth: 60, minHeight: 60, maxWidth: 100, maxHeight: 100 });
 		
@@ -191,7 +191,7 @@ $(document).ready(function() {
 		
 	});
 	
-	test("ui-resizable-ne resize xy", function() {
+	test("ui-resizable-ne { handles: 'all', minWidth: 60, minHeight: 60, maxWidth: 100, maxHeight: 100 }", function() {
 		
 		var handle = '.ui-resizable-ne', target = $('#resizable1').resizable({ handles: 'all', minWidth: 60, minHeight: 60, maxWidth: 100, maxHeight: 100 });
 		
@@ -209,7 +209,7 @@ $(document).ready(function() {
 		
 	});
 	
-	test("ui-resizable-nw resize xy", function() {
+	test("ui-resizable-nw { handles: 'all', minWidth: 60, minHeight: 60, maxWidth: 100, maxHeight: 100 }", function() {
 		
 		var handle = '.ui-resizable-nw', target = $('#resizable1').resizable({ handles: 'all', minWidth: 60, minHeight: 60, maxWidth: 100, maxHeight: 100 });
 		
@@ -233,7 +233,7 @@ $(document).ready(function() {
 	
 	module("Respecting ratio resize with dimensions limits");
 	
-	test("ui-resizable-e resize x", function() {
+	test("ui-resizable-e { aspectRatio: 'preserve', handles: 'all', minWidth: 70, minHeight: 50, maxWidth: 150, maxHeight: 130 }", function() {
 		
 		var handle = '.ui-resizable-e', target = $('#resizable1').resizable({ aspectRatio: 'preserve', handles: 'all', minWidth: 70, minHeight: 50, maxWidth: 150, maxHeight: 130 });
 		
@@ -251,7 +251,7 @@ $(document).ready(function() {
 		
 	});
 	
-	test("ui-resizable-w resize x", function() {
+	test("ui-resizable-w { aspectRatio: 'preserve', handles: 'all', minWidth: 70, minHeight: 50, maxWidth: 150, maxHeight: 130 }", function() {
 		
 		var handle = '.ui-resizable-w', target = $('#resizable1').resizable({ aspectRatio: 'preserve', handles: 'all', minWidth: 70, minHeight: 50, maxWidth: 150, maxHeight: 130 });
 		
@@ -269,7 +269,7 @@ $(document).ready(function() {
 		
 	});
 	
-	test("ui-resizable-n resize y", function() {
+	test("ui-resizable-n { aspectRatio: 'preserve', handles: 'all', minWidth: 70, minHeight: 50, maxWidth: 150, maxHeight: 130 }", function() {
 		
 		var handle = '.ui-resizable-n', target = $('#resizable1').resizable({ aspectRatio: 'preserve', handles: 'all', minWidth: 70, minHeight: 50, maxWidth: 150, maxHeight: 130 });
 		
@@ -287,7 +287,7 @@ $(document).ready(function() {
 		
 	});
 	
-	test("ui-resizable-s resize y", function() {
+	test("ui-resizable-s { aspectRatio: 'preserve', handles: 'all', minWidth: 70, minHeight: 50, maxWidth: 150, maxHeight: 130 }", function() {
 		
 		var handle = '.ui-resizable-s', target = $('#resizable1').resizable({ aspectRatio: 'preserve', handles: 'all', minWidth: 70, minHeight: 50, maxWidth: 150, maxHeight: 130 });
 		
@@ -305,7 +305,7 @@ $(document).ready(function() {
 		
 	});
 	
-	test("ui-resizable-se resize xy", function() {
+	test("ui-resizable-se { aspectRatio: 'preserve', handles: 'all', minWidth: 70, minHeight: 50, maxWidth: 150, maxHeight: 130 }", function() {
 		
 		var handle = '.ui-resizable-se', target = $('#resizable1').resizable({ aspectRatio: 'preserve', handles: 'all', minWidth: 70, minHeight: 50, maxWidth: 150, maxHeight: 130 });
 		
@@ -323,7 +323,7 @@ $(document).ready(function() {
 		
 	});
 	
-	test("ui-resizable-sw resize xy", function() {
+	test("ui-resizable-sw { aspectRatio: 'preserve', handles: 'all', minWidth: 70, minHeight: 50, maxWidth: 150, maxHeight: 130 }", function() {
 		
 		var handle = '.ui-resizable-sw', target = $('#resizable1').resizable({ aspectRatio: 'preserve', handles: 'all', minWidth: 70, minHeight: 50, maxWidth: 150, maxHeight: 130 });
 		
@@ -341,7 +341,7 @@ $(document).ready(function() {
 		
 	});
 	
-	test("ui-resizable-ne resize xy", function() {
+	test("ui-resizable-ne { aspectRatio: 'preserve', handles: 'all', minWidth: 70, minHeight: 50, maxWidth: 150, maxHeight: 130 }", function() {
 		
 		var handle = '.ui-resizable-ne', target = $('#resizable1').resizable({ aspectRatio: 'preserve', handles: 'all', minWidth: 70, minHeight: 50, maxWidth: 150, maxHeight: 130 });
 		
@@ -359,7 +359,7 @@ $(document).ready(function() {
 		
 	});
 	
-	test("ui-resizable-nw resize xy", function() {
+	test("ui-resizable-nw { aspectRatio: 'preserve', handles: 'all', minWidth: 70, minHeight: 50, maxWidth: 150, maxHeight: 130 }", function() {
 		
 		var handle = '.ui-resizable-nw', target = $('#resizable1').resizable({ aspectRatio: 'preserve', handles: 'all', minWidth: 70, minHeight: 50, maxWidth: 150, maxHeight: 130 });
 		
