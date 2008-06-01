@@ -237,9 +237,16 @@ $.extend($.userAction.prototype, {
 			
 		} else if (document.createEventObject) {
 			evt = document.createEventObject();
+			
+			// assign available properties
 			$.extend(evt, EVT)
+			
 			// IE won't allow assignment to toElement or fromElement
 			evt.relatedTarget = EVT.relatedTarget;
+			
+			// fix for 2 pixels bug from mousecords 
+			evt.pageX = o.x; evt.pageY = o.y;
+			
             // fire the event
             this.target.fireEvent(StringPool.ON + type, evt);
 		}
@@ -303,8 +310,8 @@ $.extend($.userAction.prototype, {
 	findCenter: function(offset) {
 		var el = $(this.target), o = el.offset();
 		return {
-			x: o.left + (((offset||[0, 0])[0]) || 0) + el.width() / 2,
-			y: o.top + (((offset||[0, 0])[1]) || 0) + el.height() / 2
+			x: o.left + (((offset||[0, 0])[0]) || 0) + el.outerWidth() / 2,
+			y: o.top + (((offset||[0, 0])[1]) || 0) + el.outerHeight() / 2
 		};
 	}
 });
