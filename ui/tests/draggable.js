@@ -243,5 +243,80 @@ test("{ cursor: 'move' }", function() {
 
 });
 
+test("{ distance: 10 }", function() {
+
+	expect(2);
+
+	var dragged = false;
+	$("#draggable2").draggable({
+		distance: 10,
+		start: function(e, ui) {
+			dragged = true;
+		}
+	});
+	
+	drag("#draggable2", -9, -9);
+	equals(dragged, false, "The draggable should not have moved when moving -9px");
+	
+	drag("#draggable2", -10, -10);
+	equals(dragged, true, "The draggable should have moved when moving -10px");
+
+});
+
+test("{ opacity: 0.5 }", function() {
+
+	expect(1);
+
+	var opacity = null;
+	$("#draggable2").draggable({
+		opacity: 0.5,
+		start: function(e, ui) {
+			opacity = $(this).css("opacity");
+		}
+	});
+	
+	drag("#draggable2", -1, -1);
+
+	equals(opacity, "0.5", "start callback: opacity is 0.5");
+
+});
+
+test("{ zIndex: 10 }", function() {
+
+	expect(1);
+
+	var zIndex = null;
+	$("#draggable2").draggable({
+		zIndex: 10,
+		start: function(e, ui) {
+			zIndex = $(this).css("zIndex");
+		}
+	});
+	
+	drag("#draggable2", -1, -1);
+
+	equals(zIndex, "10", "start callback: zIndex is 10");
+
+});
+
+test("callbacks occurance count", function() {
+
+	expect(3);
+
+	var start = 0, stop = 0, dragc = 0;
+	$("#draggable2").draggable({
+		start: function() { start++; },
+		drag: function() { dragc++; },
+		stop: function() { stop++; }
+	});
+	
+	drag("#draggable2", 10, 10);
+
+	equals(start, 1, "start callback should happen exactly once");
+	equals(dragc, 11, "drag callback should happen exactly 1+10 times (first simultaneously with start)");
+	equals(stop, 1, "stop callback should happen exactly once");
+
+});
+
 
 
