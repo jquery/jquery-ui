@@ -684,8 +684,8 @@
 			
 			_store = function(exp) {
 				$(exp).each(function() {
-					$(this).data("resizable-alsoresize-start", {
-						width: parseInt($(this).css('width'), 10), height: parseInt($(this).css('height'), 10),
+					$(this).data("resizable-alsoresize", {
+						width: parseInt($(this).width(), 10), height: parseInt($(this).height(), 10),
 						left: parseInt($(this).css('left'), 10), top: parseInt($(this).css('top'), 10)
 					});
 				});
@@ -708,12 +708,13 @@
 			
 			_alsoResize = function(exp, c) {
 				$(exp).each(function() {
-					var start = $(this).data("resizable-alsoresize-start"), style = {}, css = c && c.length ? c : ['width', 'height', 'top', 'left'];
+					var start = $(this).data("resizable-alsoresize"), style = {}, css = c && c.length ? c : ['width', 'height', 'top', 'left'];
 					
 					$.each(css || ['width', 'height', 'top', 'left'], function(i, prop) {
-						style[prop] = (start[prop] + delta[prop]) || null
+						var sum = (start[prop]||0) + (delta[prop]||0);
+						if (sum && sum >= 0)
+							style[prop] = sum || null;
 					});
-					
 					$(this).css(style);
 				});
 			};
