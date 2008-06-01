@@ -152,7 +152,7 @@ $.extend($.userAction.prototype, {
 			self.down(target);
 			
 			var mdx = Math.abs(dx)||0, mdy = Math.abs(dy)||0, range = Math.max(mdx, mdy),
-				sx = dx/mdx, sy = dy/mdy;
+				sx = dx/mdx||1, sy = dy/mdy||1;
 			
 			for (var dt = 1; dt <= range; dt++) {
 				var x = center.x + sx*(dt <= mdx ? dt : 0), y = center.y + sy*(dt <= mdy ? dt : 0);
