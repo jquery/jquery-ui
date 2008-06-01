@@ -1290,8 +1290,8 @@ $.extend(DatepickerInstance.prototype, {
 				year = drawYear - 10;
 				endYear = drawYear + 10;
 			} else if (years[0].charAt(0) == '+' || years[0].charAt(0) == '-') {
-				year = drawYear + parseInt(years[0], 10);
-				endYear = drawYear + parseInt(years[1], 10);
+				year = new Date().getFullYear() + parseInt(years[0], 10);
+				endYear = new Date().getFullYear() + parseInt(years[1], 10);
 			} else {
 				year = parseInt(years[0], 10);
 				endYear = parseInt(years[1], 10);
