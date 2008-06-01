@@ -12,15 +12,26 @@
 
 <script type="text/javascript" src="../../qunit/testrunner.js"></script>
 <script type="text/javascript" src="draggable.js"></script>
+<script type="text/javascript" src="jquery.useraction.js"></script>
+
+<style>
+	#main {
+		position:absolute !important;
+		top: -1000px !important;
+		left: -1000px !important;
+	}
+</style>
+
 </head>
 <body>
 
-	<h1 id="header">jQuery Test Suite</h1>
+	<h1 id="header">Draggable Test Suite</h1>
 	<h2 id="banner"></h2>
 	<h2 id="userAgent"></h2>
 	
 	<div id="main" style="border: 1px solid black; padding: 10px; margin: 10px;">
-		<div id='draggable1' style="background: green; width: 200px; height: 100px;">I'm a draggable.</div>
+		<div id='draggable1' style="background: green; width: 200px; height: 100px;">Static</div>
+		<div id='draggable2' style="background: green; width: 200px; height: 100px; position: absolute; top: 10px; left: 10px;"><span>Absolute</span></div>
 	</div>
 	
 	<ol id="tests"></ol>
