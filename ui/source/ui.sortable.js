@@ -396,7 +396,7 @@
 
 			this.dragging = true;
 
-			//this.mouseDrag(e); //Execute the drag once - this causes the helper not to be visible before getting its correct position
+			this.mouseDrag(e); //Execute the drag once - this causes the helper not to be visible before getting its correct position
 			return true;
 
 
@@ -562,7 +562,7 @@
 		rearrange: function(e, i, a) {
 			a ? a.append(this.currentItem) : i.item[this.direction == 'down' ? 'before' : 'after'](this.currentItem);
 			this.refreshPositions(true); //Precompute after each DOM insertion, NOT on mousemove
-			this.options.placeholder.update.call(this.element, this.currentItem, this.placeholder);
+			if(this.options.placeholder) this.options.placeholder.update.call(this.element, this.currentItem, this.placeholder);
 		}
 	}));
 	
