@@ -1,0 +1,158 @@
+/* Alternate UI date picker styles */
+#datepicker_div, .datepicker_inline {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 14px;
+	padding: 0;
+	margin: 0;
+	background: #d8d8d8 url(../img/dark-bg.gif) repeat;
+	color: #008;
+	width: 220px;
+}
+#datepicker_div {
+	display: none;
+	border: 1px solid #008;
+	z-index: 10; /*must have*/
+}
+.datepicker_inline {
+	float: left;
+	display: block;
+	border: 0;
+}
+.datepicker_dialog {
+	padding: 5px !important;
+	border: 4px ridge #88c !important;
+}
+button.datepicker_trigger {
+	width: 25px;
+}
+img.datepicker_trigger {
+	margin: 2px;
+	vertical-align: middle;
+}
+.datepicker_prompt {
+	float: left;
+	padding: 2px;
+	xbackground: #d8d8d8 url(../img/dark-bg.gif) repeat;
+	background: transparent;
+	color: #008;
+}
+* html .datepicker_prompt {
+	width: 185px;
+}
+.datepicker_control, .datepicker_links, .datepicker_header, .datepicker {
+	clear: both;
+	float: left;
+	width: 100%;
+}
+.datepicker_control, .datepicker_links {
+	font-weight: bold;
+	font-size: 80%;
+	letter-spacing: 1px;
+}
+
+.datepicker_links label { /* disabled links */
+	padding: 2px 5px;
+	color: #88c;
+}
+.datepicker_clear, .datepicker_prev {
+	float: left;
+	width: 34%;
+}
+.datepicker_current {
+	float: left;
+	width: 30%;
+	text-align: center;
+}
+.datepicker_close, .datepicker_next {
+	float: right;
+	width: 34%;
+	text-align: right;
+}
+.datepicker_header {
+	padding: 1px 0 3px;
+
+	text-align: center;
+	font-weight: bold;
+	height: 1.3em;
+}
+.datepicker_header select {
+	background: #d8d8d8 url(../img/dark-bg.gif) repeat;
+	color: #008;
+	border: 0px;
+	font-weight: bold;
+}
+.datepicker {
+	background: #f8f8f8 url(../img/normal-bg.gif) repeat;
+	color: #008;
+	text-align: center;
+	font-size: 100%;
+}
+.datepicker a {
+	display: block;
+	width: 100%;
+}
+.datepicker_titleRow {
+	background: #d8d8d8 url(../img/dark-bg.gif) repeat;
+}
+.datepicker_weekEndCell {
+	background: #d8d8d8 url(../img/dark-bg.gif) repeat;
+}
+.datepicker_daysCellOver {
+	background: #3c75c4 url(../img/active-bg.gif) repeat;
+}
+.datepicker_unselectable {
+	color: #88c;
+}
+.datepicker_today {
+	font-weight: bold;
+}
+.datepicker_currentDay {
+	background: #3c75c4 url(../img/active-bg.gif) repeat;
+}
+
+/* ________ CALENDAR LINKS _______
+
+** Reset link properties and then override them with !important */
+#datepicker_div a, .datepicker_inline a {
+	cursor: pointer;
+	margin: 0;
+	padding: 0;
+	background: none;
+	color: #000;
+}
+.datepicker_control a, .datepicker_links a {
+	padding: 2px 5px !important;
+}
+.datepicker_control a:hover {
+	background: #9dbae1 url(../img/hover-bg.gif) repeat !important;
+}
+.datepicker_links a:hover, .datepicker_titleRow a:hover {
+	background: #9dbae1 url(../img/hover-bg.gif) repeat !important;
+}
+
+/* ___________ MULTIPLE MONTHS _________*/
+
+.datepicker_multi .datepicker {
+	border: 1px solid #008;
+}
+.datepicker_oneMonth {
+	float: left;
+	width: 220px;
+}
+.datepicker_newRow {
+	clear: left;
+}
+
+/* ___________ IE6 IFRAME FIX ________ */
+
+.datepicker_cover {
+    display: none; /*sorry for IE5*/
+    display/**/: block; /*sorry for IE5*/
+    position: absolute; /*must have*/
+    z-index: -1; /*must have*/
+    filter: mask(); /*must have*/
+    top: -4px; /*must have*/
+    left: -4px; /*must have*/
+    width: 200px; /*must have*/
+    height: 200px; /*must have*/
+}
