@@ -19,7 +19,7 @@
 /*************************************/
 /* Real-World CSS                    */
 
-@import "../../css/real-world.css";
+@import "real-world.css";
 
 /*************************************/
 /* Demo CSS                          */
@@ -125,21 +125,23 @@
 		minHeight: 100,
 
 		resize: function(e, ui) {
+			var self = $(this).data("resizable");
+			
+  		  this.style.backgroundPosition = '-' + (self.position.left) + 'px -' + (self.position.top) + 'px';
+			
 
-  		  this.style.backgroundPosition = '-' + (ui.instance.position.left) + 'px -' + (ui.instance.position.top) + 'px';
+		  $("#log-top").html(self.position.top+"px");
 
-		  $("#log-top").html(ui.instance.position.top+"px");
+		  $("#log-left").html(self.position.left+"px");
 
-		  $("#log-left").html(ui.instance.position.left+"px");
+		  $("#log-height").html(self.size.height+"px");
 
-		  $("#log-height").html(ui.instance.size.height+"px");
-
-		  $("#log-width").html(ui.instance.size.width+"px");
+		  $("#log-width").html(self.size.width+"px");
 
   	    },
 		stop: function(e, ui) {
-
-  		  this.style.backgroundPosition = '-' + (ui.instance.position.left) + 'px -' + (ui.instance.position.top) + 'px';
+			var self = $(this).data("resizable");
+  		  this.style.backgroundPosition = '-' + (self.position.left) + 'px -' + (self.position.top) + 'px';
   	    }
 	})
 
@@ -150,12 +152,12 @@
 		containment: $('#resizeme_containment_div_wrapper'),
 
 		drag: function(e, ui) {
+			var self = $(this).data("draggable");
+			this.style.backgroundPosition = '-' + (self.position.left) + 'px -' + (self.position.top) + 'px';
 
-			this.style.backgroundPosition = '-' + (ui.position.left) + 'px -' + (ui.position.top) + 'px';
+		  $("#log-top").html(self.position.top+"px");
 
-		  $("#log-top").html(ui.instance.position.top+"px");
-
-		  $("#log-left").html(ui.instance.position.left+"px");
+		  $("#log-left").html(self.position.left+"px");
 
 		}
 
