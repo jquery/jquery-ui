@@ -1,0 +1,21 @@
+<html>
+	<head>
+		<html>Only core files for easy debug</html>
+		<link rel="stylesheet" href="../../../themes/ui.datepicker.css" type="text/css" media="screen" title="default" charset="utf-8">
+	</head>
+	<body>
+		<input type="text" name="testing" value="click" id="testing" />
+		
+		<!-- Include jQuery -->
+		<script src="../../../../jquery/jquery-1.2.6.js" type="text/javascript" charset="utf-8"></script>
+		
+		<!-- Include UI Datepicker -->
+		<script src="../../../source/ui.datepicker.js" type="text/javascript" charset="utf-8"></script>
+		
+		<script type="text/javascript" charset="utf-8">
+			$(function(){
+				$('#testing').datepicker({ yearRange: '-80:+0' });
+			});
+		</script>
+	</body>
+</html>
