@@ -357,20 +357,23 @@ test("ui-resizable-ne { aspectRatio: 'preserve', handles: 'all', minWidth: 70, m
 	
 });
 
-test("ui-resizable-nw { aspectRatio: 'preserve', handles: 'all', minWidth: 70, minHeight: 50, maxWidth: 150, maxHeight: 130 }", function() {
+module("Options");
+
+test("ui-resizable-se { handles: 'all', gird: [20, 20] }", function() {
 	
-	var handle = '.ui-resizable-nw', target = $('#resizable1').resizable({ aspectRatio: 'preserve', handles: 'all', minWidth: 70, minHeight: 50, maxWidth: 150, maxHeight: 130 });
+	var handle = '.ui-resizable-se', target = $('#resizable1').resizable({ handles: 'all', grid: [20, 20] });
 	
 	expect(4);
 	
-	drag(handle, -80, -80);
+	drag(handle, 10, 10);
 	
-	equals( 130, target.width(), "compare maxWidth");
-	equals( 130, target.height(), "compare maxHeight");
+	equals( 100, target.width(), "compare width");
+	equals( 100, target.height(), "compare height");
 	
-	drag(handle, 130, 130);
+	drag(handle, 30, 30);
 	
-	equals( 70, target.width(), "compare minWidth");
-	equals( 50, target.height(), "compare minHeight");
+	equals( 120, target.width(), "compare width");
+	equals( 120, target.height(), "compare height");
+	
 	
 });
