@@ -45,7 +45,13 @@ $.widget("ui.dialog", {
 		var uiDialogContainer = uiDialogContent.parent().addClass('ui-dialog-container').css({position: 'relative'});
 		var uiDialog = (this.uiDialog = uiDialogContainer.parent()).hide()
 			.addClass('ui-dialog').addClass(options.dialogClass)
-			.css({position: 'absolute', width: options.width, height: options.height, overflow: 'hidden'}); 
+			.css({
+				position: 'absolute',
+				width: options.width,
+				height: options.height,
+				overflow: 'hidden',
+				zIndex: options.zIndex
+			});
 
 		var classNames = uiDialogContent.attr('className').split(' ');
 
@@ -123,7 +129,7 @@ $.widget("ui.dialog", {
 			uiDialog.draggable({
 				handle: '.ui-dialog-titlebar',
 				start: function(e, ui) {
-					self.activate();
+					self.moveToTop();
 					(options.dragStart && options.dragStart.apply(this, arguments));
 				},
 				drag: options.drag,
@@ -136,10 +142,7 @@ $.widget("ui.dialog", {
 		}
 	
 		uiDialog.mousedown(function() {
-			self.activate();
-		});
-		uiDialogTitlebar.click(function() {
-			self.activate();
+			self.moveToTop();
 		});
 		
 		(options.bgiframe && $.fn.bgiframe && uiDialog.bgiframe());
@@ -229,7 +232,6 @@ $.widget("ui.dialog", {
 		this.position(this.options.position);
 		this.uiDialog.show();
 		this.moveToTop();
-		this.activate();
 		
 		// CALLBACK: open
 		var openEV = null;
@@ -239,18 +241,10 @@ $.widget("ui.dialog", {
 		this.uiDialogTitlebarClose.focus();
 		this.element.triggerHandler("dialogopen", [openEV, openUI], this.options.open);
 	},
-
-	activate: function() {
-		// Move modeless dialogs to the top when they're activated. Even
-		// if there is a modal dialog in the window, the modeless dialog
-		// should be on top because it must have been opened after the modal
-		// dialog. Modal dialogs don't get moved to the top because that
-		// would make any modeless dialogs that it spawned unusable until
-		// the modal dialog is closed.
-		(!this.options.modal && this.moveToTop());
-	},
-		
+	
 	moveToTop: function() {
+		if (this.options.modal || !this.options.stack) { return; }
+		
 		var maxZ = this.options.zIndex, options = this.options;
 		$('.ui-dialog:visible').each(function() {
 			maxZ = Math.max(maxZ, parseInt($(this).css('z-index'), 10) || options.zIndex);
@@ -258,7 +252,7 @@ $.widget("ui.dialog", {
 		(this.overlay && this.overlay.$el.css('z-index', ++maxZ));
 		this.uiDialog.css('z-index', ++maxZ);
 	},
-		
+	
 	close: function() {
 		(this.overlay && this.overlay.destroy());
 		this.uiDialog.hide();
@@ -298,6 +292,7 @@ $.extend($.ui.dialog, {
 		overlay: {},
 		position: 'center',
 		resizable: true,
+		stack: true,
 		width: 300,
 		zIndex: 1000
 	},
