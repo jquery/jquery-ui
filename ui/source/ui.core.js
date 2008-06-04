@@ -236,7 +236,7 @@ $.ui.mouse = {
 		if (this.mouseDistanceMet(e) && this.mouseDelayMet(e)) {
 			this._mouseStarted =
 				(this.mouseStart(this._mouseDownEvent, e) !== false);
-			(this._mouseStarted || this.mouseUp(e));
+			(this._mouseStarted ? this.mouseDrag(e) : this.mouseUp(e));
 		}
 		
 		return !this._mouseStarted;
