@@ -286,6 +286,7 @@ $.widget("ui.slider", {
 		this.firstValue = this.value();
 		
 		this.propagate('start', e);
+		this.drag(e, handle);
 		return true;
 					
 	},
