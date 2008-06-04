@@ -49,16 +49,8 @@ $.widget("ui.slider", {
 			.mouse("destroy");
 		this.generated && this.generated.remove();
 	},
-	enable: function() {
-		this.element.removeClass("ui-slider-disabled");
-		this.disabled = false;
-	},
-	disable: function() {
-		this.element.addClass("ui-slider-disabled");
-		this.disabled = true;
-	},
 	setData: function(key, value) {
-		this.options[key] = value;
+		$.widget.prototype.setData.apply(this, arguments);
 		if (/min|max|steps/.test(key)) {
 			this.initBoundaries();
 		}
@@ -184,7 +176,7 @@ $.widget("ui.slider", {
 			if(this == e.target)
 				clickedHandle = true;
 		});
-		if (clickedHandle || this.disabled || !(this.currentHandle || this.previousHandle))
+		if (clickedHandle || this.options.disabled || !(this.currentHandle || this.previousHandle))
 			return;
 
 		// If a previous handle was focussed, focus it again
@@ -277,7 +269,7 @@ $.widget("ui.slider", {
 	start: function(e, handle) {
 	
 		var o = this.options;
-		if(this.disabled) return false;
+		if(o.disabled) return false;
 
 		// Prepare the outer size
 		this.actualSize = { width: this.element.outerWidth() , height: this.element.outerHeight() };
