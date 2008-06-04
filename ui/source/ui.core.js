@@ -77,7 +77,7 @@ $.fn.remove = function() {
 
 // $.widget is a factory to create jQuery plugins
 // taking some boilerplate code out of the plugin code
-// created by Scott González and Jörn Zaefferer
+// created by Scott Gonzï¿½lez and Jï¿½rn Zaefferer
 function getter(namespace, plugin, method) {
 	var methods = $[namespace][plugin].getter || [];
 	methods = (typeof methods == "string" ? methods.split(/,?\s+/) : methods);
@@ -203,6 +203,11 @@ $.ui.mouse = {
 			}, this.options.delay);
 		}
 		
+		if (this.mouseDistanceMet(e) && this.mouseDelayMet(e)) {
+			this._mouseStarted = (this.mouseStart(e) !== false);
+			if (!this._mouseStarted) { return false; }
+		}
+		
 		// these delegates are required to keep context
 		this._mouseMoveDelegate = function(e) {
 			return self.mouseMove(e);
@@ -270,7 +275,7 @@ $.ui.mouse = {
 
 $.ui.mouse.defaults = {
 	cancel: null,
-	distance: 0,
+	distance: 1,
 	delay: 0
 };
 
