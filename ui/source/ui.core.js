@@ -101,10 +101,10 @@ $.widget = function(name, prototype) {
 		
 		return this.each(function() {
 			var instance = $.data(this, name);
-			if (!instance) {
-				$.data(this, name, new $[namespace][name](this, options));
-			} else if (isMethodCall) {
+			if (isMethodCall && instance) {
 				instance[options].apply(instance, args);
+			} else if (!isMethodCall) {
+				$.data(this, name, new $[namespace][name](this, options));
 			}
 		});
 	};
