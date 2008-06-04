@@ -33,6 +33,9 @@ $.widget("ui.dialog", {
 	init: function() {
 		var self = this,
 			options = this.options,
+			resizeHandles = typeof options.resizable == 'string'
+				? options.resizable
+				: 'n,e,s,w,se,sw,ne,nw',
 			
 			uiDialogContent = this.element
 				.addClass('ui-dialog-content')
@@ -125,9 +128,6 @@ $.widget("ui.dialog", {
 		}
 		
 		if ($.fn.resizable) {
-			$.each('n,s,e,w,ne,se,sw,nw'.split(','), function() {
-				uiDialog.append('<div class="ui-resizable-' + this + ' ui-resizable-handle"></div>');
-			});
 			uiDialog.resizable({
 				maxWidth: options.maxWidth,
 				maxHeight: options.maxHeight,
@@ -135,6 +135,7 @@ $.widget("ui.dialog", {
 				minHeight: options.minHeight,
 				start: options.resizeStart,
 				resize: options.resize,
+				handles: resizeHandles,
 				stop: function(e, ui) {
 					(options.resizeStop && options.resizeStop.apply(this, arguments));
 					$.ui.dialog.overlay.resize();
@@ -160,6 +161,7 @@ $.widget("ui.dialog", {
 				this.position(value);
 				break;
 			case "resizable":
+				(typeof value == 'string' && this.uiDialog.data('handles.resizable', value));
 				this.uiDialog.resizable(value ? 'enable' : 'disable');
 				break;
 			case "title":
