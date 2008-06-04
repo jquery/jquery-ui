@@ -84,30 +84,10 @@ function getter(namespace, plugin, method) {
 	return ($.inArray(method, methods) != -1);
 }
 
-var widgetPrototype = {
-	init: function() {},
-	destroy: function() {
-		this.element.removeData(this.widgetName);
-	},
-	
-	getData: function(key) {
-		return this.options[key];
-	},
-	setData: function(key, value) {
-		this.options[key] = value;
-	},
-	
-	enable: function() {
-		this.setData('disabled', false);
-	},
-	disable: function() {
-		this.setData('disabled', true);
-	}
-};
-
 $.widget = function(name, prototype) {
 	var namespace = name.split(".")[0];
 	name = name.split(".")[1];
+	
 	// create plugin method
 	$.fn[name] = function(options) {
 		var isMethodCall = (typeof options == 'string'),
@@ -134,6 +114,7 @@ $.widget = function(name, prototype) {
 		var self = this;
 		
 		this.widgetName = name;
+		this.widgetBaseClass = namespace + '-' + name;
 		
 		this.options = $.extend({}, $[namespace][name].defaults, options);
 		this.element = $(element)
@@ -150,7 +131,33 @@ $.widget = function(name, prototype) {
 	};
 	
 	// add widget prototype
-	$[namespace][name].prototype = $.extend({}, widgetPrototype, prototype);
+	$[namespace][name].prototype = $.extend({}, $.widget.prototype, prototype);
+};
+
+$.widget.prototype = {
+	init: function() {},
+	destroy: function() {
+		this.element.removeData(this.widgetName);
+	},
+	
+	getData: function(key) {
+		return this.options[key];
+	},
+	setData: function(key, value) {
+		this.options[key] = value;
+		
+		if (key == 'disabled') {
+			this.element[value ? 'addClass' : 'removeClass'](
+				this.widgetBaseClass + '-disabled');
+		}
+	},
+	
+	enable: function() {
+		this.setData('disabled', false);
+	},
+	disable: function() {
+		this.setData('disabled', true);
+	}
 };
 
 

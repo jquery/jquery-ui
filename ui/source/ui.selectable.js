@@ -65,14 +65,6 @@ $.widget("ui.selectable", $.extend($.ui.mouse, {
 			.unbind(".selectable");
 		this.mouseDestroy();
 	},
-	enable: function() {
-		this.element.removeClass("ui-selectable-disabled");
-		this.options.disabled = false;
-	},
-	disable: function() {
-		this.element.addClass("ui-selectable-disabled");
-		this.options.disabled = true;
-	},
 	mouseStart: function(e) {
 		var self = this;
 		

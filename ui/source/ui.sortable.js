@@ -86,14 +86,6 @@ $.widget("ui.sortable", $.extend($.ui.mouse, {
 		items.each(function() { ret.push($(this).attr(attr || 'id')); });
 		return ret;
 	},
-	enable: function() {
-		this.element.removeClass("ui-sortable-disabled");
-		this.options.disabled = false;
-	},
-	disable: function() {
-		this.element.addClass("ui-sortable-disabled");
-		this.options.disabled = true;
-	},
 	/* Be careful with the following core functions */
 	intersectsWith: function(item) {
 		

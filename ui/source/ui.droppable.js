@@ -59,14 +59,6 @@ $.widget("ui.droppable", {
 			.removeData("droppable")
 			.unbind(".droppable");
 	},
-	enable: function() {
-		this.element.removeClass("ui-droppable-disabled");
-		this.options.disabled = false;
-	},
-	disable: function() {
-		this.element.addClass("ui-droppable-disabled");
-		this.options.disabled = true;
-	},
 	over: function(e) {
 		
 		var draggable = $.ui.ddmanager.current;

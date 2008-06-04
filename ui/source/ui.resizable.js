@@ -248,14 +248,6 @@ $.widget("ui.resizable", $.extend($.ui.mouse, {
 			_destroy(wrapped);
 		}
 	},
-	enable: function() {
-		this.element.removeClass("ui-resizable-disabled");
-		this.options.disabled = false;
-	},
-	disable: function() {
-		this.element.addClass("ui-resizable-disabled");
-		this.options.disabled = true;
-	},
 	mouseStart: function(e) {
 		if(this.options.disabled) return false;
 		

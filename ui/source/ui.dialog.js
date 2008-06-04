@@ -171,7 +171,8 @@ $.widget("ui.dialog", {
 				this.uiDialog.width(value);
 				break;
 		}
-		this.options[key] = value;
+		
+		$.widget.prototype.setData.apply(this, arguments);
 	},
 	
 	position: function(pos) {

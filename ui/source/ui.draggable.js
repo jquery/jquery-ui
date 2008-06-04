@@ -30,10 +30,6 @@ $.widget("ui.draggable", $.extend($.ui.mouse, {
 		this.mouseInit();
 		
 	},
-	setData: function(key, value) {
-		(key == 'disabled' && this.element[(value ? 'add' : 'remove') + 'Class']('ui-draggable-disabled'));
-		this.options[key] = value;
-	},
 	mouseStart: function(e) {
 		var o = this.options;
 		
