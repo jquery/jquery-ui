@@ -34,40 +34,6 @@
 				y: (o.top + (offset || [0, 0])[1] || 0) + this.element.height() / 2
 			};
 		},
-		dispatch: function(type, x, y, button, relatedTarget) {
-			var evt, e = {bubbles: true, cancelable: (type != "mousemove"), view: window, detail: 0,
-				screenX: 0, screenY: 0, clientX: x, clientY: y,
-				ctrlKey: false, altKey: false, shiftKey: false, metaKey: false,
-				button: button || 0, relatedTarget: relatedTarget, isTrusted: false};
-			if ($.isFunction(document.createEvent)) {
-				evt = document.createEvent("MouseEvents");
-				if ($.isFunction(evt.initMouseEvent)) {
-					evt.initMouseEvent(type, e.bubbles, e.cancelable, e.view, e.detail,
-						e.screenX, e.screenY, e.clientX, e.clientY,
-						e.ctrlKey, e.altKey, e.shiftKey, e.metaKey,
-						e.button, e.relatedTarget);
-				} else {
-					evt = document.createEvent("UIEvents");
-					evt.initEvent(type, bubbles, cancelable);
-					$.extend(evt, e);
-				}
-				this.element[0].dispatchEvent(evt);
-			} else if (document.createEventObject) {
-				evt = document.createEventObject();
-				$.extend(evt, e);
-				evt.button = 1;
-				this.element[0].fireEvent('on' + type, evt)  
-			}
-		},
-		down: function(x, y) {
-			this.dispatch("mousedown", x, y);
-		},
-		move: function(x, y) {
-			this.dispatch("mousemove", x, y);
-		},
-		up: function(x, y) {
-			this.dispatch("mouseup", x, y);
-		},
 		drag: function(dx, dy) {
 			var self = this;			
 
@@ -130,35 +96,40 @@
 			testStart();
 		
 			this.lastX = null;
-		
+
+			var before = function() {
+				self.element.triggerHandler('mouseover');
+				self.element.simulate("mousedown", { clientX: self.left, clientY: self.top });
+				self.element.simulate("mousemove", { clientX: self.left, clientY: self.top });
+			}
+
+			var during = function(xory) {
+				if (!self.lastX) {
+					self.lastX = xory;
+				} else {
+					var x = self.lastX, y = xory;
+					self.element.simulate("mousemove", { clientX: x, clientY: y });
+					self.lastX = null;
+				}				
+			}
+
+			var after = function() {
+				self.element.triggerHandler('mouseout');
+				self.element.simulate("mouseup", { clientX: 0, clientY: 0 });
+				testStop();
+			}
+			
 			fakemouse
-				.animate({ left: this.left, top: this.top }, this.options.speed, function() {
-					self.element.triggerHandler('mouseover');
-					self.down(self.left, self.top);
-					self.move(self.left, self.top);
+				.animate({ left: this.left, top: this.top }, this.options.speed, before)
+				.animate({ left: this.left + dx, top: this.top + dy }, {
+					speed: this.options.speed,
+					easing: "swing",
+					step: during
 				})
 				.animate({ left: this.left + dx, top: this.top + dy }, {
-					speed: self.options.speed,
+					speed: this.options.speed,
 					easing: "swing",
-					step: function (xory) {
-						if (!self.lastX) {
-							self.lastX = xory;
-						} else {
-							var x = self.lastX, y = xory;
-							self.move(x, y);
-							self.lastX = null;
-						}
-					},
-					complete: function() {
-						self.element.triggerHandler('mouseout');
-						self.up(0, 0);
-						$(this).animate({ left: realmouse.css("left"), top: realmouse.css("top") }, {
-							speed: self.options.speed,
-							complete: function() {
-								testStop();
-							}
-						})
-					}
+					complete: after
 				});
 		
 		}
