@@ -359,20 +359,20 @@ test("ui-resizable-ne { aspectRatio: 'preserve', handles: 'all', minWidth: 70, m
 
 module("Options");
 
-test("ui-resizable-se { handles: 'all', gird: [20, 20] }", function() {
+test("ui-resizable-se { handles: 'all', gird: [0, 20] }", function() {
 	
-	var handle = '.ui-resizable-se', target = $('#resizable1').resizable({ handles: 'all', grid: [20, 20] });
+	var handle = '.ui-resizable-se', target = $('#resizable1').resizable({ handles: 'all', grid: [0, 20] });
 	
 	expect(4);
 	
 	drag(handle, 10, 10);
 	
-	equals( 100, target.width(), "compare width");
+	equals( 109, target.width(), "compare width");
 	equals( 100, target.height(), "compare height");
 	
 	drag(handle, 30, 30);
 	
-	equals( 120, target.width(), "compare width");
+	equals( 138, target.width(), "compare width");
 	equals( 120, target.height(), "compare height");
 	
 	
