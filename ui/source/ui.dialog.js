@@ -230,7 +230,7 @@ $.widget("ui.dialog", {
 		this.uiDialog.appendTo('body');
 		this.position(this.options.position);
 		this.uiDialog.show();
-		this.moveToTop();
+		this.moveToTop(true);
 		
 		// CALLBACK: open
 		var openEV = null;
@@ -241,8 +241,10 @@ $.widget("ui.dialog", {
 		this.element.triggerHandler("dialogopen", [openEV, openUI], this.options.open);
 	},
 	
-	moveToTop: function() {
-		if (this.options.modal || !this.options.stack) { return; }
+	// the force parameter allows us to move modal dialogs to their correct
+	// position on open
+	moveToTop: function(force) {
+		if ((this.options.modal && !force) || !this.options.stack) { return; }
 		
 		var maxZ = this.options.zIndex, options = this.options;
 		$('.ui-dialog:visible').each(function() {
