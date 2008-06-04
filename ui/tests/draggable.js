@@ -3,7 +3,7 @@ var drag = function(el, dx, dy, complete) {
 	// speed = sync -> Drag syncrhonously.
 	// speed = fast|slow -> Drag asyncrhonously - animated.
 	
-	return $(el).userAction("drag", {
+	return $(el).simulate("drag", {
 		dx: dx||0, dy: dy||0, speed: 'sync', complete: complete 
 	});
 };
