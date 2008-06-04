@@ -12,19 +12,28 @@
 ;(function($) {
 
 $.fn.extend({
-	simulate: function(type, options) {
+	simulate: function(type, options, complete) {
 		return this.each(function() {
-			new $.simulate(this, type, options);
+			var opt = $.extend({ complete: complete }, options);
+			new $.simulate(this, type, opt);
 		});
 	}
 });
 
 $.simulate = function(el, type, options) {
-	var evt = this.createEvent(type, options);
-	this.dispatchEvent(el, type, evt);
+	this.target = el;
+	if (/^drag$/.test(type)) {
+		this[type].apply(this, [this.target, options]);
+	} else {
+		this.simulateEvent(type, options);
+	}
 }
 
 $.extend($.simulate.prototype, {
+	simulateEvent: function(el, type, options) {
+		var evt = this.createEvent(type, options);
+		this.dispatchEvent(el, type, evt);
+	},
 	createEvent: function(type, options) {
 		if (/^mouse(over|out|down|up|move)|(dbl)?click$/.test(type)) {
 			return this.mouseEvent(type, options);
@@ -89,7 +98,34 @@ $.extend($.simulate.prototype, {
 		} else if (el.fireEvent) {
 			el.fireEvent('on' + type, evt);
 		}
+	},
+	
+	findCenter: function(el) {
+		var el = $(this.target), o = el.offset();
+		return {
+			x: o.left + el.outerWidth() / 2,
+			y: o.top + el.outerHeight() / 2
+		};
+	},
+	drag: function(el, options) {
+		var center = this.findCenter(this.target),
+			x = center.x, y = center.y,
+			dx = options.dx || 0,
+			dy = options.dy || 0;
+		this.simulateEvent(this.target, "mouseover");
+		this.simulateEvent(this.target, "mousedown", { clientX: x, clientY: y });
+		this.simulateEvent(this.target, "mousemove", { clientX: x, clientY: y });
+		this.simulateEvent(this.target, "mousemove", { clientX: x, clientY: y });
+		this.simulateEvent(this.target, "mousemove", { clientX: x, clientY: y });
+		this.simulateEvent(document, "mousemove", { clientX: x + dx, clientY: y + dy });
+		this.simulateEvent(document, "mousemove", { clientX: x + dx, clientY: y + dy });
+		this.simulateEvent(document, "mousemove", { clientX: x + dx, clientY: y + dy });
+		this.simulateEvent(this.target, "mouseup", { clientX: x + dx, clientY: y + dy });
+		this.simulateEvent(this.target, "click", { clientX: x + dx, clientY: y + dy });
+		this.simulateEvent(this.target, "mouseout");
+		(options.complete && options.complete());
 	}
+
 });
 
 })(jQuery);
