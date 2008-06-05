@@ -49,7 +49,7 @@ $.extend($.simulate.prototype, {
 		var evt;
 		var e = $.extend({
 			bubbles: true, cancelable: (type != "mousemove"), view: window, detail: 0,
-			screenX: 0, screenY: 0, clientX: options.x || 0, clientY: options.y || 0,
+			screenX: 0, screenY: 0, clientX: 0, clientY: 0,
 			ctrlKey: false, altKey: false, shiftKey: false, metaKey: false,
 			button: 0, relatedTarget: undefined
 		}, options);
@@ -118,7 +118,7 @@ $.extend($.simulate.prototype, {
 			options = this.options,	x = center.x, y = center.y, 
 			dx = options.dx || 0, dy = options.dy || 0, target = this.target;
 
-		var coord = { x: x, y: y, complete: null }, evt;
+		var coord = { clientX: x, clientX: y, complete: null }, evt;
 		this.simulateEvent(target, "mouseover", coord);
 		this.simulateEvent(target, "mousedown", coord);
 		
