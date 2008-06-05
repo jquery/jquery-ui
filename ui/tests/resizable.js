@@ -18,7 +18,7 @@ test("ui-resizable-e resize x", function() {
 	
 	drag(handle, 50);
 	
-	equals( target.width(), 149, "compare width");
+	equals( target.width(), 150, "compare width");
 	
 	drag(handle, -50);
 	
@@ -34,7 +34,7 @@ test("ui-resizable-w resize x", function() {
 	
 	drag(handle, -50);
 	
-	equals( target.width(), 149, "compare width" );
+	equals( target.width(), 150, "compare width" );
 	
 	drag(handle, 50);
 	
@@ -50,7 +50,7 @@ test("ui-resizable-n resize y", function() {
 	
 	drag(handle, 0, -50);
 	
-	equals( target.height(), 149, "compare height" );
+	equals( target.height(), 150, "compare height" );
 	
 	drag(handle, 0, 50);
 	
@@ -66,7 +66,7 @@ test("ui-resizable-s resize y", function() {
 	
 	drag(handle, 0, 50);
 	
-	equals( target.height(), 149, "compare height" );
+	equals( target.height(), 150, "compare height" );
 	
 	drag(handle, 0, -50);
 	
@@ -82,8 +82,8 @@ test("ui-resizable-se resize xy", function() {
 	
 	drag(handle, 50, 50);
 	
-	equals( target.width(), 149, "compare width" );
-	equals( target.height(), 149, "compare height" );
+	equals( target.width(), 150, "compare width" );
+	equals( target.height(), 150, "compare height" );
 	
 	drag(handle, -50, -50);
 	
@@ -100,8 +100,8 @@ test("ui-resizable-sw resize xy", function() {
 	
 	drag(handle, -50, -50);
 	
-	equals( target.width(), 149, "compare width" );
-	equals( target.height(), 51, "compare height" );
+	equals( target.width(), 150, "compare width" );
+	equals( target.height(), 50, "compare height" );
 	
 	drag(handle, 50, 50);
 	
@@ -118,8 +118,8 @@ test("ui-resizable-ne resize xy", function() {
 	
 	drag(handle, -50, -50);
 	
-	equals( target.width(), 51, "compare width" );
-	equals( target.height(), 149, "compare height" );
+	equals( target.width(), 50, "compare width" );
+	equals( target.height(), 150, "compare height" );
 	
 	drag(handle, 50, 50);
 	
@@ -136,8 +136,8 @@ test("ui-resizable-nw resize xy", function() {
 	
 	drag(handle, -50, -50);
 	
-	equals( target.width(), 149, "compare width" );
-	equals( target.height(), 149, "compare height" );
+	equals( target.width(), 150, "compare width" );
+	equals( target.height(), 150, "compare height" );
 	
 	drag(handle, 50, 50);
 	
@@ -239,7 +239,7 @@ test("ui-resizable-e { aspectRatio: 'preserve', handles: 'all', minWidth: 70, mi
 	
 	drag(handle, 80);
 	
-	equals( target.width(), 150, "compare maxWidth");
+	equals( target.width(), 130, "compare maxWidth");
 	equals( target.height(), 130, "compare maxHeight");
 	
 	drag(handle, -130);
@@ -257,7 +257,7 @@ test("ui-resizable-w { aspectRatio: 'preserve', handles: 'all', minWidth: 70, mi
 	
 	drag(handle, -80);
 	
-	equals( target.width(), 150, "compare maxWidth");
+	equals( target.width(), 130, "compare maxWidth");
 	equals( target.height(), 130, "compare maxHeight");
 	
 	drag(handle, 130);
@@ -278,11 +278,11 @@ test("ui-resizable-n { aspectRatio: 'preserve', handles: 'all', minWidth: 70, mi
 	equals( target.width(), 130, "compare maxWidth");
 	equals( target.height(), 130, "compare maxHeight");
 	
-	drag(handle, 0, 130);
+	drag(handle, 0, 80);
 	
 	equals( target.width(), 70, "compare minWidth");
-	equals( target.height(), 50, "compare minHeight");
-	
+	equals( target.height(), 70, "compare minHeight");
+
 });
 
 test("ui-resizable-s { aspectRatio: 'preserve', handles: 'all', minWidth: 70, minHeight: 50, maxWidth: 150, maxHeight: 130 }", function() {
@@ -296,10 +296,10 @@ test("ui-resizable-s { aspectRatio: 'preserve', handles: 'all', minWidth: 70, mi
 	equals( target.width(), 130, "compare maxWidth");
 	equals( target.height(), 130, "compare maxHeight");
 	
-	drag(handle, 0, -130);
+	drag(handle, 0, -80);
 	
 	equals( target.width(), 70, "compare minWidth");
-	equals( target.height(), 50, "compare minHeight");
+	equals( target.height(), 70, "compare minHeight");
 	
 });
 
@@ -314,10 +314,10 @@ test("ui-resizable-se { aspectRatio: 'preserve', handles: 'all', minWidth: 70, m
 	equals( target.width(), 130, "compare maxWidth");
 	equals( target.height(), 130, "compare maxHeight");
 	
-	drag(handle, -130, -130);
+	drag(handle, -80, -80);
 	
 	equals( target.width(), 70, "compare minWidth");
-	equals( target.height(), 50, "compare minHeight");
+	equals( target.height(), 70, "compare minHeight");
 	
 });
 
@@ -332,10 +332,10 @@ test("ui-resizable-sw { aspectRatio: 'preserve', handles: 'all', minWidth: 70, m
 	equals( target.width(), 130, "compare maxWidth");
 	equals( target.height(), 130, "compare maxHeight");
 	
-	drag(handle, 130, -130);
+	drag(handle, 80, -80);
 	
 	equals( target.width(), 70, "compare minWidth");
-	equals( target.height(), 50, "compare minHeight");
+	equals( target.height(), 70, "compare minHeight");
 	
 });
 
@@ -350,29 +350,29 @@ test("ui-resizable-ne { aspectRatio: 'preserve', handles: 'all', minWidth: 70, m
 	equals( target.width(), 130, "compare maxWidth");
 	equals( target.height(), 130, "compare maxHeight");
 	
-	drag(handle, -130, 130);
+	drag(handle, -80, 80);
 	
 	equals( target.width(), 70, "compare minWidth");
-	equals( target.height(), 50, "compare minHeight");
+	equals( target.height(), 70, "compare minHeight");
 	
 });
 
 module("Options");
 
-test("ui-resizable-se { handles: 'all', grid: [20, 20] }", function() {
+test("ui-resizable-se { handles: 'all', grid: [0, 20] }", function() {
 	
-	var handle = '.ui-resizable-se', target = $('#resizable1').resizable({ handles: 'all', grid: [20, 20] });
+	var handle = '.ui-resizable-se', target = $('#resizable1').resizable({ handles: 'all', grid: [0, 20] });
 	
 	expect(4);
 	
-	drag(handle, 10, 10);
+	drag(handle, 3, 9);
 	
-	equals( target.width(), 100, "compare width");
+	equals( target.width(), 103, "compare width");
 	equals( target.height(), 100, "compare height");
 	
-	drag(handle, 30, 30);
+	drag(handle, 15, 11);
 	
-	equals( target.width(), 120, "compare width");
+	equals( target.width(), 118, "compare width");
 	equals( target.height(), 120, "compare height");
 	
 	
