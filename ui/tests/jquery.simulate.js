@@ -51,7 +51,7 @@ $.extend($.simulate.prototype, {
 			bubbles: true, cancelable: (type != "mousemove"), view: window, detail: 0,
 			screenX: 0, screenY: 0, clientX: options.x || 0, clientY: options.y || 0,
 			ctrlKey: false, altKey: false, shiftKey: false, metaKey: false,
-			button: 0, relatedTarget: null
+			button: 0, relatedTarget: undefined
 		}, options);
 		
 		var relatedTarget = $(e.relatedTarget)[0];
@@ -61,7 +61,7 @@ $.extend($.simulate.prototype, {
 			evt.initMouseEvent(type, e.bubbles, e.cancelable, e.view, e.detail,
 				e.screenX, e.screenY, e.clientX, e.clientY,
 				e.ctrlKey, e.altKey, e.shiftKey, e.metaKey,
-				e.button, relatedTarget);
+				e.button, e.relatedTarget || document.body.parentNode);
 		} else if (document.createEventObject) {
 			evt = document.createEventObject();
 			$.extend(evt, e);
