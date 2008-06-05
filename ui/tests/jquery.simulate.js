@@ -72,6 +72,10 @@ $.extend($.simulate.prototype, {
 		} else if (document.createEventObject) {
 			evt = document.createEventObject();
 			$.extend(evt, e);
+			
+			// IE won't allow assignment to toElement or fromElement
+			evt.relatedTarget = relatedTarget;
+			
 			// fix for 2 pixels bug from mousecords 
 			evt.pageX = options.x; evt.pageY = options.y;
 			
