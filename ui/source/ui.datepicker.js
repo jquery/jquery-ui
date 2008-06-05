@@ -268,7 +268,7 @@ $.extend(Datepicker.prototype, {
 				case 9:  $.datepicker._hideDatepicker(null, '');
 						break; // hide on tab out
 				case 13: $.datepicker._selectDay(inst, inst._selectedMonth, inst._selectedYear,
-							$('td.ui-datepicker-daysCellOver', inst._datepickerDiv)[0]);
+							$('td.ui-datepicker-days-cell-over', inst._datepickerDiv)[0]);
 						return false; // don't submit the form
 						break; // select the value on enter
 				case 27: $.datepicker._hideDatepicker(null, inst._get('speed'));
@@ -632,8 +632,8 @@ $.extend(Datepicker.prototype, {
 		var rangeSelect = inst._get('rangeSelect');
 		if (rangeSelect) {
 			if (!this._stayOpen) {
-				$('.ui-datepicker td').removeClass('ui-datepicker-currentDay');
-				$(td).addClass('ui-datepicker-currentDay');
+				$('.ui-datepicker td').removeClass('ui-datepicker-current-day');
+				$(td).addClass('ui-datepicker-current-day');
 			} 
 			this._stayOpen = !this._stayOpen;
 		}
@@ -1168,11 +1168,11 @@ $.extend(DatepickerInstance.prototype, {
 		for (var row = 0; row < numMonths[0]; row++)
 			for (var col = 0; col < numMonths[1]; col++) {
 				var selectedDate = new Date(drawYear, drawMonth, this._selectedDay);
-				html += '<div class="ui-datepicker-oneMonth' + (col == 0 ? ' ui-datepicker-newRow' : '') + '">' +
+				html += '<div class="ui-datepicker-one-month' + (col == 0 ? ' ui-datepicker-new-row' : '') + '">' +
 					this._generateMonthYearHeader(drawMonth, drawYear, minDate, maxDate,
 					selectedDate, row > 0 || col > 0) + // draw month headers
 					'<table class="ui-datepicker" cellpadding="0" cellspacing="0"><thead>' + 
-					'<tr class="ui-datepicker-titleRow">' +
+					'<tr class="ui-datepicker-title-row">' +
 					(showWeeks ? '<td>' + this._get('weekHeader') + '</td>' : '');
 				var firstDay = this._get('firstDay');
 				var changeFirstDay = this._get('changeFirstDay');
@@ -1184,7 +1184,7 @@ $.extend(DatepickerInstance.prototype, {
 					var status = this._get('dayStatus') || '&#xa0;';
 					status = (status.indexOf('DD') > -1 ? status.replace(/DD/, dayNames[day]) :
 						status.replace(/D/, dayNamesShort[day]));
-					html += '<td' + ((dow + firstDay + 6) % 7 >= 5 ? ' class="ui-datepicker-weekEndCell"' : '') + '>' +
+					html += '<td' + ((dow + firstDay + 6) % 7 >= 5 ? ' class="ui-datepicker-week-end-cell"' : '') + '>' +
 						(!changeFirstDay ? '<span' :
 						'<a onclick="jQuery.datepicker._changeFirstDay(' + this._id + ', ' + day + ');"') + 
 						(showStatus ? this._addStatus(status) : '') + ' title="' + dayNames[day] + '">' +
@@ -1206,29 +1206,29 @@ $.extend(DatepickerInstance.prototype, {
 				var calculateWeek = this._get('calculateWeek') || $.datepicker.iso8601Week;
 				var dateStatus = this._get('statusForDate') || $.datepicker.dateStatus;
 				for (var dRow = 0; dRow < numRows; dRow++) { // create date picker rows
-					html += '<tr class="ui-datepicker-daysRow">' +
-						(showWeeks ? '<td class="ui-datepicker-weekCol">' + calculateWeek(printDate) + '</td>' : '');
+					html += '<tr class="ui-datepicker-days-row">' +
+						(showWeeks ? '<td class="ui-datepicker-week-col">' + calculateWeek(printDate) + '</td>' : '');
 					for (var dow = 0; dow < 7; dow++) { // create date picker days
 						var daySettings = (beforeShowDay ?
 							beforeShowDay.apply((this._input ? this._input[0] : null), [printDate]) : [true, '']);
 						var otherMonth = (printDate.getMonth() != drawMonth);
 						var unselectable = otherMonth || !daySettings[0] ||
 							(minDate && printDate < minDate) || (maxDate && printDate > maxDate);
-						html += '<td class="ui-datepicker-daysCell' +
-							((dow + firstDay + 6) % 7 >= 5 ? ' ui-datepicker-weekEndCell' : '') + // highlight weekends
+						html += '<td class="ui-datepicker-days-cell' +
+							((dow + firstDay + 6) % 7 >= 5 ? ' ui-datepicker-week-end-cell' : '') + // highlight weekends
 							(otherMonth ? ' ui-datepicker-otherMonth' : '') + // highlight days from other months
 							(printDate.getTime() == selectedDate.getTime() && drawMonth == this._selectedMonth ?
-							' ui-datepicker-daysCellOver' : '') + // highlight selected day
+							' ui-datepicker-days-cell-over' : '') + // highlight selected day
 							(unselectable ? ' ui-datepicker-unselectable' : '') +  // highlight unselectable days
 							(otherMonth && !showOtherMonths ? '' : ' ' + daySettings[1] + // highlight custom dates
 							(printDate.getTime() >= currentDate.getTime() && printDate.getTime() <= endDate.getTime() ?  // in current range
-							' ui-datepicker-currentDay' : '') + // highlight selected day
+							' ui-datepicker-current-day' : '') + // highlight selected day
 							(printDate.getTime() == today.getTime() ? ' ui-datepicker-today' : '')) + '"' + // highlight today (if different)
-							(unselectable ? '' : ' onmouseover="jQuery(this).addClass(\'ui-datepicker-daysCellOver\');' +
+							(unselectable ? '' : ' onmouseover="jQuery(this).addClass(\'ui-datepicker-days-cell-over\');' +
 							(!showStatus || (otherMonth && !showOtherMonths) ? '' : 'jQuery(\'#ui-datepicker-status-' +
 							this._id + '\').html(\'' + (dateStatus.apply((this._input ? this._input[0] : null),
 							[printDate, this]) || '&#xa0;') +'\');') + '"' +
-							' onmouseout="jQuery(this).removeClass(\'ui-datepicker-daysCellOver\');' +
+							' onmouseout="jQuery(this).removeClass(\'ui-datepicker-days-cell-over\');' +
 							(!showStatus || (otherMonth && !showOtherMonths) ? '' : 'jQuery(\'#ui-datepicker-status-' +
 							this._id + '\').html(\'&#xa0;\');') + '" onclick="jQuery.datepicker._selectDay(' +
 							this._id + ',' + drawMonth + ',' + drawYear + ', this);"') + '>' + // actions

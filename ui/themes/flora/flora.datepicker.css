@@ -96,29 +96,29 @@ img.ui-datepicker-trigger {
 	display: block;
 	width: 100%;
 }
-.ui-datepicker .ui-datepicker-titleRow {
+.ui-datepicker .ui-datepicker-title-row {
 	background: #B1DB87;
 	color: #000;
 }
-.ui-datepicker .ui-datepicker-daysRow {
+.ui-datepicker .ui-datepicker-days-row {
 	background: #FFF;
 	color: #666;
 }
-.ui-datepicker-weekCol {
+.ui-datepicker-week-col {
 	background: #B1DB87;
 	color: #000;
 }
-.ui-datepicker .ui-datepicker-daysCell {
+.ui-datepicker .ui-datepicker-days-cell {
 	color: #000;
 	border: 1px solid #DDD;
 }
-#ui-datepicker .ui-datepicker-daysCell a {
+#ui-datepicker .ui-datepicker-days-cell a {
 	display: block;
 }
-.ui-datepicker .ui-datepicker-weekEndCell {
+.ui-datepicker .ui-datepicker-week-end-cell {
 	background: #E0F4D7;
 }
-.ui-datepicker .ui-datepicker-daysCellOver {
+.ui-datepicker .ui-datepicker-days-cell-over {
 	background: #FFF;
 	border: 1px solid #777;
 }
@@ -128,7 +128,7 @@ img.ui-datepicker-trigger {
 .ui-datepicker-today {
 	background: #B1DB87 !important;
 }
-.ui-datepicker-currentDay {
+.ui-datepicker-current-day {
 	background: #83C948 !important;
 }
 #ui-datepicker-div a, .ui-datepicker-inline a {
@@ -145,25 +145,25 @@ img.ui-datepicker-trigger {
 	padding: 2px 5px !important;
 	color: #000 !important;
 }
-.ui-datepicker-titleRow a {
+.ui-datepicker-title-row a {
 	color: #000 !important;
 }
 .ui-datepicker-control a:hover {
 	background: #FDD !important;
 	color: #333 !important;
 }
-.ui-datepicker-links a:hover, .ui-datepicker-titleRow a:hover {
+.ui-datepicker-links a:hover, .ui-datepicker-title-row a:hover {
 	background: #FFF !important;
 	color: #333 !important;
 }
 .ui-datepicker-multi .ui-datepicker {
 	border: 1px solid #83C948;
 }
-.ui-datepicker-oneMonth {
+.ui-datepicker-one-month {
 	float: left;
 	width: 185px;
 }
-.ui-datepicker-newRow {
+.ui-datepicker-new-row {
 	clear: left;
 }
 .ui-datepicker-cover {
