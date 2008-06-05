@@ -62,13 +62,6 @@ $.extend($.simulate.prototype, {
 				e.screenX, e.screenY, e.clientX, e.clientY,
 				e.ctrlKey, e.altKey, e.shiftKey, e.metaKey,
 				e.button, relatedTarget);
-			
-			// check to see if relatedTarget has been assigned
-			if (relatedTarget && !evt.relatedTarget) {
-				if (/^mouseout$/.test(type)) evt.toElement = relatedTarget;
-				else if (/^mouseover$/.test(type)) evt.fromElement = relatedTarget;
-			}
-				
 		} else if (document.createEventObject) {
 			evt = document.createEventObject();
 			$.extend(evt, e);
