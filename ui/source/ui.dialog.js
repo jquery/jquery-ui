@@ -197,11 +197,11 @@ $.widget("ui.dialog", {
 					pLeft += 0;
 					break;
 				case 'right':
-					pLeft += (wnd.width()) - (this.uiDialog.width());
+					pLeft += wnd.width() - this.uiDialog.width();
 					break;
 				default:
 				case 'center':
-					pLeft += (wnd.width() / 2) - (this.uiDialog.width() / 2);
+					pLeft += (wnd.width() - this.uiDialog.width()) / 2;
 			}
 		}
 		if (pos[1].constructor == Number) {
@@ -212,11 +212,11 @@ $.widget("ui.dialog", {
 					pTop += 0;
 					break;
 				case 'bottom':
-					pTop += (wnd.height()) - (this.uiDialog.height());
+					pTop += wnd.height() - this.uiDialog.height();
 					break;
 				default:
 				case 'middle':
-					pTop += (wnd.height() / 2) - (this.uiDialog.height() / 2);
+					pTop += (wnd.height() - this.uiDialog.height()) / 2;
 			}
 		}
 		
