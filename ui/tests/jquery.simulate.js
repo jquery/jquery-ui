@@ -24,7 +24,7 @@ $.simulate = function(el, type, options) {
 	this.target = el;
 	this.options = options;
 	
-	if (/^drag$/i.test(type)) {
+	if (/^drag$/.test(type)) {
 		this[type].apply(this, [this.target, options]);
 	} else {
 		this.simulateEvent(el, type, options);
@@ -39,9 +39,9 @@ $.extend($.simulate.prototype, {
 		return this.dispatchEvent(el, type, evt, options);
 	},
 	createEvent: function(type, options) {
-		if (/^mouse(over|out|down|up|move)|(dbl)?click$/i.test(type)) {
+		if (/^mouse(over|out|down|up|move)|(dbl)?click$/.test(type)) {
 			return this.mouseEvent(type, options);
-		} else if (/^key(up|down|press)$/i.test(type)) {
+		} else if (/^key(up|down|press)$/.test(type)) {
 			return this.keyboardEvent(type, options);
 		}
 	},
@@ -65,8 +65,8 @@ $.extend($.simulate.prototype, {
 			
 			// check to see if relatedTarget has been assigned
 			if (relatedTarget && !evt.relatedTarget) {
-				if (/^mouseout$/i.test(type)) evt.toElement = relatedTarget;
-				else if (/^mouseover$/i.test(type)) evt.fromElement = relatedTarget;
+				if (/^mouseout$/.test(type)) evt.toElement = relatedTarget;
+				else if (/^mouseover$/.test(type)) evt.fromElement = relatedTarget;
 			}
 				
 		} else if (document.createEventObject) {
@@ -142,7 +142,7 @@ $.extend($.simulate.prototype, {
 			(self.options.drag && self.options.drag($.event.fix(evt)));
 		};
 		
-		if (/^sync$/i.test(options.speed)) {
+		if (/^sync$/.test(options.speed)) {
 			// trigger synchronous simulation
 			this.triggerSync(center, dx, dy, drag);
 		}
