@@ -33,10 +33,9 @@ $.simulate = function(el, type, options) {
 
 $.extend($.simulate.prototype, {
 	simulateEvent: function(el, type, options) {
-		// creates a individual option for each simulation inside this instance
-		options = $.extend({}, this.options, options);
 		var evt = this.createEvent(type, options);
-		return this.dispatchEvent(el, type, evt, options);
+		this.dispatchEvent(el, type, evt, options);
+		return evt;
 	},
 	createEvent: function(type, options) {
 		if (/^mouse(over|out|down|up|move)|(dbl)?click$/.test(type)) {
@@ -102,14 +101,12 @@ $.extend($.simulate.prototype, {
 		return evt;
 	},
 	
-	dispatchEvent: function(el, type, evt, options) {
+	dispatchEvent: function(el, type, evt) {
 		if (el.dispatchEvent) {
 			el.dispatchEvent(evt);
 		} else if (el.fireEvent) {
 			el.fireEvent('on' + type, evt);
 		}
-		// trigget complete for all events - not drag.
-		this.triggerComplete(evt, options);
 		return evt;
 	},
 	
@@ -117,54 +114,15 @@ $.extend($.simulate.prototype, {
 		var self = this, center = this.findCenter(this.target), 
 			options = this.options,	x = center.x, y = center.y, 
 			dx = options.dx || 0, dy = options.dy || 0, target = this.target;
-
-		var coord = { clientX: x, clientX: y, complete: null }, evt;
-		this.simulateEvent(target, "mouseover", coord);
+		var coord = { clientX: x, clientY: y };
+		this.simulateEvent(target, "mouseover");
 		this.simulateEvent(target, "mousedown", coord);
-		
-		var drag = function(x, y) {
-			evt = self.simulateEvent(target, "mousemove", $.extend(coord, { x: x, y: y }));
-			// triggering drag callback
-			(self.options.drag && self.options.drag($.event.fix(evt)));
-		};
-		
-		if (/^sync$/.test(options.speed)) {
-			// trigger synchronous simulation
-			this.triggerSync(center, dx, dy, drag);
-		}
-		else {
-			// trigger asynchronous simulation - animated
-			this.triggerAsync(center, dx, dy, drag);
-		}
-		
+		coord = { clientX: x + dx, clientY: y + dy };
+		this.simulateEvent(document, "mousemove", coord);
+		this.simulateEvent(document, "mousemove", coord);
 		this.simulateEvent(target, "mouseup", coord);
-		this.simulateEvent(target, "mouseout", coord);
-		this.triggerComplete(evt, options);
+		this.simulateEvent(target, "mouseout");
 	},
-	
-	triggerComplete: function(evt, options) {
-		evt = $.event.fix(evt);
-		(options.complete && options.complete(evt)); return evt;
-	},
-	
-	triggerSync: function(center, dx, dy, fn) {
-		var x = center.x, y = center.y, mdx = Math.abs(dx) || 0, mdy = Math.abs(dy) || 0;
-		var range = Math.max(mdx, mdy), sigx = dx/mdx || 1, sigy = dy/mdy || 1;
-		
-		for (var dt = 1; dt <= range; dt++) {
-			if (dt <= mdx) x = center.x + sigx*dt;
-			if (dt <= mdy) y = center.y + sigy*dt;
-			(fn && fn(x, y));
-		}
-	},
-	
-	triggerAsync: function(center, dx, dy, fn) {
-		/*TODO*/
-		// this method just have to call: (fn && fn(x, y));
-		// return the x, y of the mousemove.
-		// idea: $.animate({ step: function() { var x,y; (fn && fn(x, y)); } });
-	},
-	
 	findCenter: function(el) {
 		var el = $(this.target), o = el.offset();
 		return {
