@@ -168,6 +168,8 @@ $.extend($.simulate.prototype, {
 	
 	triggerAsync: function(center, dx, dy, fn) {
 		/*TODO*/
+		// this method just have to call: (fn && fn(x, y));
+		// return the x, y of the mousemove.
 	},
 	
 	findCenter: function(el) {
