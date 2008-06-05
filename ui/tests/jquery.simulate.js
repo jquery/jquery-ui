@@ -65,10 +65,6 @@ $.extend($.simulate.prototype, {
 		} else if (document.createEventObject) {
 			evt = document.createEventObject();
 			$.extend(evt, e);
-			
-			// IE won't allow assignment to toElement or fromElement
-			evt.relatedTarget = relatedTarget;
-			
 			evt.button = { 0:1, 1:4, 2:2 }[evt.button] || evt.button;
 		}
 		return evt;
