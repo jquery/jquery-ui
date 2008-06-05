@@ -13,7 +13,7 @@
  *
  * Revision: $Id: ui.droppable.js 5568 2008-05-12 15:07:16Z paul.bakaus $
  */
-;(function($) {
+(function($) {
 
 $.widget("ui.droppable", {
 	init: function() {

@@ -12,7 +12,7 @@
  *
  * Revision: $Id: ui.draggable.js 5672 2008-05-23 04:11:30Z braeker $
  */
-;(function($) {
+(function($) {
 
 $.widget("ui.draggable", $.extend($.ui.mouse, {
 	init: function() {

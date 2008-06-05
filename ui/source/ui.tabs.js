@@ -12,7 +12,7 @@
  *
  * Revision: $Id: ui.tabs.js 5641 2008-05-20 02:53:23Z scott.gonzalez $
  */
-;(function($) {
+(function($) {
 
 $.widget("ui.tabs", {
 	init: function() {

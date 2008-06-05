@@ -12,7 +12,7 @@
  *
  * Revision: $Id: ui.resizable.js 5668 2008-05-22 18:17:30Z rdworth $
  */
-;(function($) {
+(function($) {
 
 $.widget("ui.resizable", $.extend($.ui.mouse, {
 	init: function() {

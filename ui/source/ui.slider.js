@@ -12,7 +12,7 @@
  *
  * Revision: $Id: ui.slider.js 5539 2008-05-09 16:48:33Z paul.bakaus $
  */
-;(function($) {
+(function($) {
 
 $.fn.unwrap = $.fn.unwrap || function(expr) {
   return this.each(function(){

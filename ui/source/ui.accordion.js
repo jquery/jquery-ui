@@ -12,7 +12,7 @@
  *
  * Revision: $Id: ui.accordion.js 5656 2008-05-21 19:35:33Z braeker $
  */
-;(function($) {
+(function($) {
 
 $.widget("ui.accordion", {
 	init: function() {

@@ -14,7 +14,7 @@
  *
  * Revision: $Id: ui.dialog.js 5608 2008-05-15 14:41:12Z scott.gonzalez $
  */
-;(function($) {
+(function($) {
 
 var setDataSwitch = {
 	dragStart: "start.draggable",

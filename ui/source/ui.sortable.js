@@ -12,7 +12,7 @@
  *
  * Revision: $Id: ui.sortable.js 5433 2008-05-04 20:07:17Z joern.zaefferer $
  */
-;(function($) {
+(function($) {
 
 function contains(a, b) { 
     var safari2 = $.browser.safari && $.browser.version < 522; 
