@@ -12,9 +12,9 @@
 ;(function($) {
 
 $.fn.extend({
-	simulate: function(type, options, complete) {
+	simulate: function(type, options) {
 		return this.each(function() {
-			var opt = $.extend({ complete: complete }, options);
+			var opt = $.extend({}, $.simulate.defaults, options || {});
 			new $.simulate(this, type, opt);
 		});
 	}
@@ -22,22 +22,26 @@ $.fn.extend({
 
 $.simulate = function(el, type, options) {
 	this.target = el;
-	if (/^drag$/.test(type)) {
+	this.options = options;
+	
+	if (/^drag$/i.test(type)) {
 		this[type].apply(this, [this.target, options]);
 	} else {
-		this.simulateEvent(type, options);
+		this.simulateEvent(el, type, options);
 	}
 }
 
 $.extend($.simulate.prototype, {
 	simulateEvent: function(el, type, options) {
+		// creates a individual option for each simulation inside this instance
+		options = $.extend({}, this.options, options);
 		var evt = this.createEvent(type, options);
-		this.dispatchEvent(el, type, evt);
+		return this.dispatchEvent(el, type, evt, options);
 	},
 	createEvent: function(type, options) {
-		if (/^mouse(over|out|down|up|move)|(dbl)?click$/.test(type)) {
+		if (/^mouse(over|out|down|up|move)|(dbl)?click$/i.test(type)) {
 			return this.mouseEvent(type, options);
-		} else if (/^key(up|down|press)$/.test(type)) {
+		} else if (/^key(up|down|press)$/i.test(type)) {
 			return this.keyboardEvent(type, options);
 		}
 	},
@@ -45,16 +49,26 @@ $.extend($.simulate.prototype, {
 		var evt;
 		var e = $.extend({
 			bubbles: true, cancelable: (type != "mousemove"), view: window, detail: 0,
-			screenX: 0, screenY: 0, clientX: 0, clientY: 0,
+			screenX: 0, screenY: 0, clientX: options.x || 0, clientY: options.y || 0,
 			ctrlKey: false, altKey: false, shiftKey: false, metaKey: false,
 			button: 0, relatedTarget: null
 		}, options);
+		
+		var relatedTarget = $(e.relatedTarget)[0];
+		
 		if ($.isFunction(document.createEvent)) {
 			evt = document.createEvent("MouseEvents");
 			evt.initMouseEvent(type, e.bubbles, e.cancelable, e.view, e.detail,
 				e.screenX, e.screenY, e.clientX, e.clientY,
 				e.ctrlKey, e.altKey, e.shiftKey, e.metaKey,
-				e.button, e.relatedTarget);
+				e.button, relatedTarget);
+			
+			// check to see if relatedTarget has been assigned
+			if (relatedTarget && !evt.relatedTarget) {
+				if (/^mouseout$/i.test(type)) evt.toElement = relatedTarget;
+				else if (/^mouseover$/i.test(type)) evt.fromElement = relatedTarget;
+			}
+				
 		} else if (document.createEventObject) {
 			evt = document.createEventObject();
 			$.extend(evt, e);
@@ -64,10 +78,12 @@ $.extend($.simulate.prototype, {
 	},
 	keyboardEvent: function(type, options) {
 		var evt;
+		
 		var e = $.extend({ bubbles: true, cancelable: true, view: window,
 			ctrlKey: false, altKey: false, shiftKey: false, metaKey: false,
 			keyCode: 0, charCode: 0
 		}, options);
+		
 		if ($.isFunction(document.createEvent)) {
 			try {
 				evt = document.createEvent("KeyEvents");
@@ -92,12 +108,66 @@ $.extend($.simulate.prototype, {
 		}
 		return evt;
 	},
-	dispatchEvent: function(el, type, evt) {
+	
+	dispatchEvent: function(el, type, evt, options) {
 		if (el.dispatchEvent) {
 			el.dispatchEvent(evt);
 		} else if (el.fireEvent) {
 			el.fireEvent('on' + type, evt);
 		}
+		// trigget complete for all events - not drag.
+		this.triggerComplete(evt, options);
+		return evt;
+	},
+	
+	drag: function(el) {
+		var self = this, center = this.findCenter(this.target), 
+			options = this.options,	x = center.x, y = center.y, 
+			dx = options.dx || 0, dy = options.dy || 0, target = this.target;
+
+		var coord = { x: x, y: y, complete: null }, evt;
+		this.simulateEvent(target, "mouseover", coord);
+		this.simulateEvent(target, "mousedown", coord);
+		this.simulateEvent(target, "mousemove", coord);
+		
+		var drag = function(x, y) {
+			evt = self.simulateEvent(target, "mousemove", $.extend(coord, { x: x, y: y }));
+			// triggering drag callback
+			(self.options.drag && self.options.drag($.event.fix(evt)));
+		};
+		
+		if (/^sync$/i.test(options.speed)) {
+			// trigger synchronous simulation
+			this.triggerSync(center, dx, dy, drag);
+		}
+		else {
+			// trigger asynchronous simulation - animated
+			this.triggerAsync(center, dx, dy, drag);
+		}
+		
+		this.simulateEvent(target, "mouseup", coord);
+		this.simulateEvent(target, "mouseout", coord);
+		this.triggerComplete(evt, options);
+	},
+	
+	triggerComplete: function(evt, options) {
+		evt = $.event.fix(evt);
+		(options.complete && options.complete(evt)); return evt;
+	},
+	
+	triggerSync: function(center, dx, dy, fn) {
+		var x = center.x, y = center.y, mdx = Math.abs(dx) || 0, mdy = Math.abs(dy) || 0;
+		var range = Math.max(mdx, mdy), sigx = dx/mdx || 1, sigy = dy/mdy || 1;
+		
+		for (var dt = 1; dt <= range; dt++) {
+			if (dt <= mdx) x = center.x + sigx*dt;
+			if (dt <= mdy) y = center.y + sigy*dt;
+			(fn && fn(x, y));
+		}
+	},
+	
+	triggerAsync: function(center, dx, dy, fn) {
+		/*TODO*/
 	},
 	
 	findCenter: function(el) {
@@ -106,26 +176,13 @@ $.extend($.simulate.prototype, {
 			x: o.left + el.outerWidth() / 2,
 			y: o.top + el.outerHeight() / 2
 		};
-	},
-	drag: function(el, options) {
-		var center = this.findCenter(this.target),
-			x = center.x, y = center.y,
-			dx = options.dx || 0,
-			dy = options.dy || 0;
-		this.simulateEvent(this.target, "mouseover");
-		this.simulateEvent(this.target, "mousedown", { clientX: x, clientY: y });
-		this.simulateEvent(this.target, "mousemove", { clientX: x, clientY: y });
-		this.simulateEvent(this.target, "mousemove", { clientX: x, clientY: y });
-		this.simulateEvent(this.target, "mousemove", { clientX: x, clientY: y });
-		this.simulateEvent(document, "mousemove", { clientX: x + dx, clientY: y + dy });
-		this.simulateEvent(document, "mousemove", { clientX: x + dx, clientY: y + dy });
-		this.simulateEvent(document, "mousemove", { clientX: x + dx, clientY: y + dy });
-		this.simulateEvent(this.target, "mouseup", { clientX: x + dx, clientY: y + dy });
-		this.simulateEvent(this.target, "click", { clientX: x + dx, clientY: y + dy });
-		this.simulateEvent(this.target, "mouseout");
-		(options.complete && options.complete());
 	}
+});
 
+$.extend($.simulate, {
+	defaults: {
+		speed: 'sync'
+	}
 });
 
 })(jQuery);
