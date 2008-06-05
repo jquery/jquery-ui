@@ -161,7 +161,6 @@ $.extend($.simulate.prototype, {
 		for (var dt = 1; dt <= range; dt++) {
 			if (dt <= mdx) x = center.x + sigx*dt;
 			if (dt <= mdy) y = center.y + sigy*dt;
-			console.log(x+':'+y);
 			(fn && fn(x, y));
 		}
 	},
