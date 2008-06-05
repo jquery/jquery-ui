@@ -72,6 +72,9 @@ $.extend($.simulate.prototype, {
 		} else if (document.createEventObject) {
 			evt = document.createEventObject();
 			$.extend(evt, e);
+			// fix for 2 pixels bug from mousecords 
+			evt.pageX = options.x; evt.pageY = options.y;
+			
 			evt.button = { 0:1, 1:4, 2:2 }[evt.button] || evt.button;
 		}
 		return evt;
