@@ -69,9 +69,6 @@ $.extend($.simulate.prototype, {
 			// IE won't allow assignment to toElement or fromElement
 			evt.relatedTarget = relatedTarget;
 			
-			// fix for 2 pixels bug from mousecords 
-			evt.pageX = options.x; evt.pageY = options.y;
-			
 			evt.button = { 0:1, 1:4, 2:2 }[evt.button] || evt.button;
 		}
 		return evt;
