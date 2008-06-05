@@ -128,7 +128,6 @@ $.extend($.simulate.prototype, {
 		var coord = { x: x, y: y, complete: null }, evt;
 		this.simulateEvent(target, "mouseover", coord);
 		this.simulateEvent(target, "mousedown", coord);
-		this.simulateEvent(target, "mousemove", coord);
 		
 		var drag = function(x, y) {
 			evt = self.simulateEvent(target, "mousemove", $.extend(coord, { x: x, y: y }));
@@ -162,6 +161,7 @@ $.extend($.simulate.prototype, {
 		for (var dt = 1; dt <= range; dt++) {
 			if (dt <= mdx) x = center.x + sigx*dt;
 			if (dt <= mdy) y = center.y + sigy*dt;
+			console.log(x+':'+y);
 			(fn && fn(x, y));
 		}
 	},
