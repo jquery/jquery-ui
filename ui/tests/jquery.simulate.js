@@ -170,6 +170,7 @@ $.extend($.simulate.prototype, {
 		/*TODO*/
 		// this method just have to call: (fn && fn(x, y));
 		// return the x, y of the mousemove.
+		// idea: $.animate({ step: function() { var x,y; (fn && fn(x, y)); } });
 	},
 	
 	findCenter: function(el) {
