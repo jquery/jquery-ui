@@ -81,6 +81,9 @@ $.widget("ui.resizable", $.extend($.ui.mouse, {
 			
 			var oel = this.element; this.element = this.element.parent();
 			
+			// store instance on wrapper
+			this.element.data('resizable', this); 
+			
 			//Move margins to the wrapper
 			this.element.css({ marginLeft: oel.css("marginLeft"), marginTop: oel.css("marginTop"),
 				marginRight: oel.css("marginRight"), marginBottom: oel.css("marginBottom")
