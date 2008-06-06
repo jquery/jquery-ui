@@ -1,4 +1,17 @@
-;(function($) {
+/*
+ * jQuery UI Effects Bounce
+ *
+ * Copyright (c) 2008 Aaron Eisenberger (aaronchi@gmail.com)
+ * Dual licensed under the MIT (MIT-LICENSE.txt)
+ * and GPL (GPL-LICENSE.txt) licenses.
+ * 
+ * http://docs.jquery.com/UI/Effects/Bounce
+ *
+ * Depends:
+ *	effects.core.js
+ *
+ */
+(function($) {
 
 $.effects.bounce = function(o) {
 

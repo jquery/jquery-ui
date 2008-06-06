@@ -1,4 +1,17 @@
-;(function($) {
+/*
+ * jQuery UI Effects Explode
+ *
+ * Copyright (c) 2008 Paul Bakaus (ui.jquery.com)
+ * Dual licensed under the MIT (MIT-LICENSE.txt)
+ * and GPL (GPL-LICENSE.txt) licenses.
+ * 
+ * http://docs.jquery.com/UI/Effects/Explode
+ *
+ * Depends:
+ *	effects.core.js
+ *
+ */
+(function($) {
 
 $.effects.explode = function(o) {
 
