@@ -105,7 +105,7 @@ $.widget = function(name, prototype) {
 			if (isMethodCall && instance) {
 				instance[options].apply(instance, args);
 			} else if (!isMethodCall) {
-				var instance = new $[namespace][name](this, options), target = instance.element || this;
+				var instance = new $[namespace][name](this, options), target = instance.element || $(this);
 				
 				if (target.is('.ui-wrapper')) {
 					self = target[0];
