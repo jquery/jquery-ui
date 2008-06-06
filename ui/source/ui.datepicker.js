@@ -6,10 +6,14 @@
  * and GPL (GPL-LICENSE.txt) licenses.
  * 
  * http://docs.jquery.com/UI/Datepicker
+ *
+ * Depends:
+ *	ui.core.js
+ *
  * Marc Grabanski (m@marcgrabanski.com) and Keith Wood (kbwood@virginbroadband.com.au).
  */
    
-;(function($) { // hide the namespace
+(function($) { // hide the namespace
 
 /* Date picker manager.
    Use the singleton instance of this class, $.datepicker, to interact with the date picker.

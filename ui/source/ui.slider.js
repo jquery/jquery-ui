@@ -20,7 +20,6 @@ $.fn.unwrap = $.fn.unwrap || function(expr) {
   });
 };
 
-
 $.widget("ui.slider", {
 	plugins: {},
 	ui: function(e) {
