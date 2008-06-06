@@ -379,5 +379,22 @@ test("ui-resizable-se { handles: 'all', grid: [0, 20] }", function() {
 	equals( target.width(), 118, "compare width");
 	equals( target.height(), 120, "compare height");
 	
+});
+
+test("ui-resizable-se { handles: 'all', grid: [0, 20] } wrapped", function() {
+	
+	var handle = '.ui-resizable-se', target = $('#resizable2').resizable({ handles: 'all', grid: [0, 20] });
+	
+	expect(4);
+	
+	drag(handle, 3, 9);
+	
+	equals( target.width(), 103, "compare width");
+	equals( target.height(), 100, "compare height");
+	
+	drag(handle, 15, 11);
+	
+	equals( target.width(), 118, "compare width");
+	equals( target.height(), 120, "compare height");
 	
 });
