@@ -1,3 +1,7 @@
+/*
+ * resizable tests
+ */
+
 var drag = function(el, dx, dy, complete) {
 	
 	// speed = sync -> Drag syncrhonously.

@@ -12,6 +12,9 @@ var drag = function(el, dx, dy, complete) {
 	});
 };
 
+var border = function(el, side) { return parseInt(el.css('border-' + side + '-width')); }
+var margin = function(el, side) { return parseInt(el.css('margin-' + side)); }
+
 module("Draggable");
 
 test("create and destroy", function() {
@@ -236,8 +239,6 @@ test("{ handle: 'span' }", function() {
 
 test("{ containment: 'parent' }", function() {
 	
-	function border(el, side) { return parseInt(el.css('border-' + side + '-width')); }
-
 	expect(4);
 
 	var dx = -100, dy = -100;
@@ -254,14 +255,21 @@ test("{ containment: 'parent' }", function() {
 
 	var p1 = $("#draggable1").parent(), po1 = p1.offset();
 	var p2 = $("#draggable2").parent(), po2 = p2.offset();
-	var b1 = { left: border(p1, 'left'), top: border(p1, 'top') };
-	var b2 = { left: border(p2, 'left'), top: border(p2, 'top') };
+
+	var expected1 = {
+		left: po1.left + border(p1, 'left') + margin(el1, 'left'),
+		top: po1.top + border(p1, 'top') + margin(el1, 'top')
+	};
+	var expected2 = {
+		left: po2.left + border(p2, 'left') + margin(el2, 'left'),
+		top: po2.top + border(p2, 'top') + margin(el2, 'top')
+	};
 	
-	equals(after1.left, po1.left + b1.left, "Absolute: " + (before1.left - po1.left + b1.left) + "px move (to parent's margin end)");
-	equals(after1.top, po1.top + b1.top, "Absolute: " + (before1.top - po1.top + b1.top) + "px move (to parent's margin end)");
+	equals(after1.left, expected1.left, "Absolute: " + (after1.left - before1.left) + "px move (to parent's margin end)");
+	equals(after1.top, expected1.top, "Absolute: " + (after1.top - before1.top) + "px move (to parent's margin end)");
 	
-	equals(after2.left, po2.left + b2.left, "Relative: " + (before2.left - po2.left + b2.left) + "move (to parent's margin end)");
-	equals(after2.top, po2.top + b2.top, "Relative: " + (before2.top - po2.top + b2.top) + "px move (to parent's margin end)");
+	equals(after2.left, expected1.left, "Relative: " + (after2.left - before2.left) + "px move (to parent's margin end)");
+	equals(after2.top, expected1.top, "Relative: " + (after2.top - before2.top) + "px move (to parent's margin end)");
 	
 });
 
@@ -269,7 +277,7 @@ test("{ cursorAt: { left: -5, top: -5 } }", function() {
 	
 	expect(4);
 	
-	var dx = -1, dy = -1;
+	var dx = -3, dy = -3;
 	var ox = 5, oy = 5;
 	var cax = -5, cay = -5;
 	
@@ -285,11 +293,14 @@ test("{ cursorAt: { left: -5, top: -5 } }", function() {
 	var before = el.offset();
 	var pos = { clientX: before.left + ox, clientY: before.top + oy };
 	$("#draggable2").simulate("mousedown", pos);
-	pos = { clientX: pos.clientX + dx, clientY: pos.clienY + dy };
-	$(document).simulate("mousedown", pos);
-	$(document).simulate("mousedown", pos);
+	pos = { clientX: pos.clientX + dx, clientY: pos.clientY + dy };
+	$(document).simulate("mousemove", pos);
+	$(document).simulate("mousemove", pos);
 	$("#draggable2").simulate("mouseup", pos);
-	var expected = { left: before.left + ox - cax, top: before.top + oy - cay };
+	var expected = {
+		left: before.left + ox - cax + dx,
+		top: before.top + oy - cay + dy
+	};
 	
 	equals(actual.left, expected.left, "Absolute: -1px left");
 	equals(actual.top, expected.top, "Absolute: -1px top");
@@ -306,11 +317,14 @@ test("{ cursorAt: { left: -5, top: -5 } }", function() {
 	var before = el.offset();
 	var pos = { clientX: before.left + ox, clientY: before.top + oy };
 	$("#draggable2").simulate("mousedown", pos);
-	pos = { clientX: pos.clientX + dx, clientY: pos.clienY + dy };
-	$(document).simulate("mousedown", pos);
-	$(document).simulate("mousedown", pos);
+	pos = { clientX: pos.clientX + dx, clientY: pos.clientY + dy };
+	$(document).simulate("mousemove", pos);
+	$(document).simulate("mousemove", pos);
 	$("#draggable2").simulate("mouseup", pos);
-	var expected = { left: before.left + ox - cax, top: before.top + oy - cay };
+	var expected = {
+		left: before.left + ox - cax + dx,
+		top: before.top + oy - cay + dy
+	};
 	
 	equals(actual.left, expected.left, "Relative: -1px left");
 	equals(actual.top, expected.top, "Relative: -1px top");
@@ -421,5 +435,48 @@ test("callbacks occurance count", function() {
 	equals(start, 1, "start callback should happen exactly once");
 	equals(dragc, 11, "drag callback should happen exactly 1+10 times (first simultaneously with start)");
 	equals(stop, 1, "stop callback should happen exactly once");
+	
+});
+
+module("Tickets");
+
+test("#2965 cursorAt with margin", function() {
+	
+	expect(2);
+	
+	var ox = 0, oy = 0;
+
+	var actual, expected;
+	$("#draggable2").draggable({
+		cursorAt: { left: ox, top: oy },
+		drag: function(e, ui) {
+			actual = ui.absolutePosition;
+		}
+	});
+	var el = $("#draggable2").data("draggable").element;
+	
+	$("#draggable2").css('margin', '0px !important');
+
+	var before = el.offset();
+	var pos = { clientX: before.left + ox, clientY: before.top + oy };
+	$("#draggable2").simulate("mousedown", pos);
+	$(document).simulate("mousemove", pos);
+	$(document).simulate("mousemove", pos);
+	$("#draggable2").simulate("mouseup", pos);
+	var expected = actual;
+	actual = undefined;
+
+	var marg = 13;
+
+	$("#draggable2").css('margin', marg + 'px !important');
+	var before = el.offset();
+	var pos = { clientX: before.left + ox - marg, clientY: before.top + oy - marg };
+	$("#draggable2").simulate("mousedown", pos);
+	$(document).simulate("mousemove", pos);
+	$(document).simulate("mousemove", pos);
+	$("#draggable2").simulate("mouseup", pos);
+	
+	equals(actual.left, expected.left, "10px margin. left");
+	equals(actual.top, expected.top, "10px margin. top");
 	
 });
