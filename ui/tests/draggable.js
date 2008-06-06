@@ -277,7 +277,7 @@ test("{ opacity: 0.5 }", function() {
 	
 	drag("#draggable2", -1, -1);
 
-	equals(opacity, "0.5", "start callback: opacity is 0.5");
+	equals(opacity, 0.5, "start callback: opacity is 0.5");
 
 });
 
