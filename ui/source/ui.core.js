@@ -100,18 +100,11 @@ $.widget = function(name, prototype) {
 		}
 		
 		return this.each(function() {
-			var instance = $.data(this, name), self = this;
-			
+			var instance = $.data(this, name);
 			if (isMethodCall && instance) {
 				instance[options].apply(instance, args);
 			} else if (!isMethodCall) {
-				var instance = new $[namespace][name](this, options), target = instance.element || $(this);
-				
-				if (target.is('.ui-wrapper')) {
-					self = target[0];
-				}
-				
-				$.data(self, name, instance);
+				$.data(this, name, new $[namespace][name](this, options));
 			}
 		});
 	};
