@@ -31,7 +31,7 @@ $.effects.explode = function(o) {
 					top: -i*(height/rows)
 				})
 				.parent()
-				.addClass('ec-explode')
+				.addClass('effects-explode')
 				.css({
 					position: 'absolute',
 					overflow: 'hidden',
@@ -55,7 +55,7 @@ $.effects.explode = function(o) {
 				if(o.callback) o.callback.apply(el[0]); // Callback
 				el.dequeue();
 				
-				$('.ec-explode').remove();
+				$('.effects-explode').remove();
 		
 	}, o.duration || 500);
 	

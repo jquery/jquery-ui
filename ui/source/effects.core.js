@@ -1,6 +1,6 @@
 ;(function($) {
 
-$.effects = $.effects || {}; //Add the 'ec' scope
+$.effects = $.effects || {}; //Add the 'effects' scope
 
 $.extend($.effects, {
 	save: function(el, set) {
