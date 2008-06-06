@@ -112,7 +112,7 @@ test("ui-resizable-sw resize xy", function() {
 
 test("ui-resizable-ne resize xy", function() {
 	
-	var handle = '.ui-resizable-ne', target = $('#resizable1').resizable({ handles: 'all' });
+	var handle = '.ui-resizable-ne', target = $('#resizable1').css({ overflow: 'hidden' }).resizable({ handles: 'all' });
 	
 	expect(4);
 	
