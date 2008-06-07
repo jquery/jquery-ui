@@ -6,14 +6,27 @@ body,html {
 	background: #000;
 }
 
+ul.effects {
+	margin: 0;
+	padding: 0;
+}
+
+ul.effects li {
+	margin: 0;
+	padding: 0;
+	width: 120px;
+	height: 100px;
+	float: left;
+	margin-top: 20px;
+	margin-left: 20px;
+}
+
 div.effect {
 	width: 120px;
 	height: 100px;
 	background: #333;
 	border: 5px outset #aaa;
 	float: left;
-	margin-top: 20px;
-	margin-left: 20px;
 	cursor: pointer;
 	cursor: hand;
 }
