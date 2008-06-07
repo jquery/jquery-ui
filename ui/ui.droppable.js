@@ -39,7 +39,6 @@ $.widget("ui.droppable", {
 	plugins: {},
 	ui: function(c) {
 		return {
-			instance: this,
 			draggable: (c.currentItem || c.element),
 			helper: c.helper,
 			position: c.position,

@@ -24,7 +24,6 @@ $.widget("ui.slider", {
 	plugins: {},
 	ui: function(e) {
 		return {
-			instance: this,
 			options: this.options,
 			handle: this.currentHandle,
 			value: this.options.axis != "both" || !this.options.axis ? Math.round(this.value(null,this.options.axis == "vertical" ? "y" : "x")) : {

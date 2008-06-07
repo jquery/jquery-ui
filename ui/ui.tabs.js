@@ -38,7 +38,6 @@ $.widget("ui.tabs", {
 	},
 	ui: function(tab, panel) {
 		return {
-			instance: this,
 			options: this.options,
 			tab: tab,
 			panel: panel
