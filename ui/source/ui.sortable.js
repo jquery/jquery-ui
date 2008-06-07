@@ -277,7 +277,7 @@ $.widget("ui.sortable", $.extend($.ui.mouse, {
 		};			
 	},
 	mouseStart: function(e, overrideHandle, noActivation) {
-	
+
 		var o = this.options;
 		this.currentContainer = this;
 		
@@ -521,9 +521,10 @@ $.widget("ui.sortable", $.extend($.ui.mouse, {
 		
 	},
 	clear: function(e, noPropagation) {
-		
-		if(this.domPosition != this.currentItem.prev()[0]) this.propagate("update", e, null, noPropagation); //Trigger update callback if the DOM position has changed
+
+		if(this.domPosition != this.currentItem.prev().not(".ui-sortable-helper")[0]) this.propagate("update", e, null, noPropagation); //Trigger update callback if the DOM position has changed
 		if(!contains(this.element[0], this.currentItem[0])) { //Node was moved out of the current element
+			if(this.domPosition == this.currentItem.prev().not(".ui-sortable-helper")[0]) this.propagate("update", e, null, noPropagation); //Trigger update callback, if it wasn't triggered before, because that is definitely an update
 			this.propagate("remove", e, null, noPropagation);
 			for (var i = this.containers.length - 1; i >= 0; i--){
 				if(contains(this.containers[i].element[0], this.currentItem[0])) {
