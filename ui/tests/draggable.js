@@ -1,275 +1,226 @@
 /*
- * draggable tests
+ * draggable unit tests
  */
 
-var drag = function(el, dx, dy, complete) {
-	
-	// speed = sync -> Drag syncrhonously.
-	// speed = fast|slow -> Drag asyncrhonously - animated.
-	
-	return $(el).simulate("drag", {
-		dx: dx||0, dy: dy||0, speed: 'sync', complete: complete 
+var el, offsetBefore, offsetAfter, dragged;
+
+var drag = function(handle, dx, dy) {
+	var element = el.data("draggable").element;
+	offsetBefore = el.offset();
+	$(handle).simulate("drag", {
+		dx: dx || 0,
+		dy: dy || 0
 	});
-};
+	dragged = { dx: dx, dy: dy };
+	offsetAfter = el.offset();
+}
+
+var moved = function (dx, dy, msg) {
+	msg = msg ? msg + "." : "";
+	var actual = { left: offsetAfter.left, top: offsetAfter.top };
+	var expected = { left: offsetBefore.left + dx, top: offsetAfter.top };
+	compare2(actual, expected, 'dragged[' + dragged.dx + ', ' + dragged.dy + '] ' + msg);
+}
 
 var border = function(el, side) { return parseInt(el.css('border-' + side + '-width')); }
+
 var margin = function(el, side) { return parseInt(el.css('margin-' + side)); }
 
 module("Draggable");
 
 test("create and destroy", function() {
 	
-	expect(2);
+	expect(3);
 	
-	$("#draggable1").draggable();
-	ok($("#draggable1").data("draggable"), "Accessing draggable instance after creation");
+	el = $("#draggable1").draggable();
+	ok(el.data("draggable"), "Accessing draggable instance after creation");
 	
-	$("#draggable1").draggable("destroy");
-	ok(!$("#draggable1").data("draggable"), "Accessing draggable instance after destroy");
+	el.draggable("destroy");
+	ok(!el.data("draggable"), "Accessing draggable instance after destroy");
+
+	$("<div/>").draggable().draggable("destroy");
+	ok(true, "Create and destroy of disconnected DOMElement");
 	
+});
+
+test("element types", function() {
+	var typeNames = ('p,h1,h2,h3,h4,h5,h6,blockquote,ol,ul,dl,div,form'
+		+ ',table,fieldset,address,ins,del,em,strong,q,cite,dfn,abbr'
+		+ ',acronym,code,samp,kbd,var,img,object,hr'
+		+ ',input,button,label,select,iframe').split(',');
+
+	$.each(typeNames, function(i) {
+		var typeName = typeNames[i];
+		el = $(document.createElement(typeName)).appendTo('body');
+		(typeName == 'table' && el.append("<tr><td>content</td></tr>"));
+		el.draggable({ cancel: '' });
+		drag(el, 50, 50);
+		moved(50, 50, "&lt;" + typeName + "&gt;");
+		el.draggable("destroy");
+		el.remove();
+	});
+});
+
+test("enable and disable", function() {
+	el = $("#draggable2").draggable();
+	drag(el, 50, 50);
+	moved(50, 50, "default is enabled");
+	el.draggable("disable");
+	drag(el, 50, 50);
+	moved(0, 0, "disabled by .draggable('disabled')");
+	el.draggable("enable");
+	drag(el, 50, 50);
+	moved(50, 50, "enabled by .draggable('enable')");
+	el.data("disabled.draggable", true);
+	ok(el.data("disabled.draggable"), ".data('disabled.draggable') getter");
+	drag(el, 50, 50, "disabled by .data('disabled.draggable', true)");
+	moved(0, 0);
+	el.data("disabled.draggable", false);
+	ok(!el.data("disabled.draggable"), ".data('disabled.draggable') getter");
+	drag(el, 50, 50, "enabled by .data('disabled.draggable', false)");
+	moved(50, 50);	
+});
+
+test("defaults", function() {
+	el = $("#draggable1").draggable();
+	equals(el.data("appendTo.draggable"), "parent", "appendTo");
+	equals(el.data("axis.draggable"), false, "axis");
+	equals(el.data("cancel.draggable"), ":input,button", "cancel");
+	equals(el.data("delay.draggable"), 0, "delay");
+	equals(el.data("distance.draggable"), 0, "distance");
+	equals(el.data("helper.draggable"), "original", "helper");
 });
 
 test("No options, relative", function() {
-	
-	expect(2);
-	
-	var dx = 50, dy = 50;
-	
-	$("#draggable1").draggable();
-	var el = $("#draggable1").data("draggable").element;
-	
-	var before = el.offset();
-	drag("#draggable1", dx, dy);
-	var after = el.offset();	
-	
-	equals(after.left, before.left + dx, "Checking new left position");
-	equals(after.top, before.top + dy, "Checking new top position");
-	
+	el = $("#draggable1").draggable();
+	drag(el, 50, 50);
+	moved(50, 50);
 });
 
 test("No options, absolute", function() {
-	
-	expect(2);
-	
-	var dx = 50, dy = 50;
-	
-	$("#draggable2").draggable();
-	var el = $("#draggable2").data("draggable").element;
-	
-	var before = el.offset();
-	drag("#draggable2", dx, dy);
-	var after = el.offset();	
-	
-	equals(after.left, before.left + dx, "Checking new left position");
-	equals(after.top, before.top + dy, "Checking new top position");
-	
+	el = $("#draggable2").draggable();
+	drag(el, 50, 50);
+	moved(50, 50);	
 });
 
-test("{ helper: 'clone' }", function() {
-	
-	expect(4);
-	
-	var dx = 50, dy = 50;
-	
-	$("#draggable1, #draggable2").draggable({ helper: "clone" });
-	var el1 = $("#draggable1").data("draggable").element;
-	var el2 = $("#draggable2").data("draggable").element;
-	
-	var before1 = el1.offset();
-	var before2 = el2.offset();
-	drag("#draggable1, #draggable2", dx, dy);
-	var after1 = el1.offset();
-	var after2 = el2.offset();
-	
-	equals(after1.left, before1.left, "Relative: Original position should be untouched");
-	equals(after1.top, before1.top, "Relative: Original position should be untouched");
-	
-	equals(after2.left, before2.left, "Absolute: Original position should be untouched");
-	equals(after2.top, before2.top, "Absolute: Original position should be untouched");
-	
-});
+module("Draggable Options");
 
-test("{ grid: [50,50] }", function() {
-	
-	expect(4);
-	
-	var gx = 50, gy = 50;
-	var dx = gx / 2 + 1, dy = gy / 2 + 1;
-	
-	$("#draggable1, #draggable2").draggable({ grid: [gx, gy] });
-	var el1 = $("#draggable1").data("draggable").element;
-	var el2 = $("#draggable2").data("draggable").element;
-	
-	var before1 = el1.offset();
-	var before2 = el2.offset();
-	drag("#draggable1, #draggable2", dx, dy);
-	var after1 = el1.offset();
-	var after2 = el2.offset();
-	
-	equals(after1.left, before1.left + gx, "Relative: 50px move in grid");
-	equals(after1.top, before1.top + gy, "Relative: 50px move in grid");
-	
-	equals(after2.left, before2.left + gx, "Absolute: 50px move in grid");
-	equals(after2.top, before2.top + gy, "Absolute: 50px move in grid");
-	
-});
-
-test("{ grid: [50,50] }", function() {
-	
-	expect(4);
-	
-	var gx = 50, gy = 50;
-	var dx = gx / 2 - 1, dy = gy / 2 - 1;
-	
-	$("#draggable1, #draggable2").draggable({ grid: [gx, gy] });
-	var el1 = $("#draggable1").data("draggable").element;
-	var el2 = $("#draggable2").data("draggable").element;
-	
-	var before1 = el1.offset();
-	var before2 = el2.offset();
-	drag("#draggable1, #draggable2", dx, dy);
-	var after1 = el1.offset();
-	var after2 = el2.offset();
-	
-	equals(after1.left, before1.left, "Relative: 50px move in grid");
-	equals(after1.top, before1.top, "Relative: 50px move in grid");
-	
-	equals(after2.left, before2.left, "Absolute: 50px move in grid");
-	equals(after2.top, before2.top, "Absolute: 50px move in grid");
-	
-});
-
-test("{ axis: 'y' }", function() {
-	
-	expect(4);
-	
-	var dx = 50, dy = 50;
-	
-	$("#draggable1, #draggable2").draggable({ axis: "y" });
-	var el1 = $("#draggable1").data("draggable").element;
-	var el2 = $("#draggable2").data("draggable").element;
-	
-	var before1 = el1.offset();
-	var before2 = el2.offset();
-	drag("#draggable1, #draggable2", dx, dy);
-	var after1 = el1.offset();
-	var after2 = el2.offset();
-	
-	equals(after1.left, before1.left, "Relative: 0px move");
-	equals(after1.top, before1.top + dy, "Relative: 50px move");
-	
-	equals(after2.left, before2.left, "Absolute: 0px move");
-	equals(after2.top, before2.top + dy, "Absolute: 50px move");
-	
+test("{ axis: false }, default", function() {
+	el = $("#draggable2").draggable({ axis: false });
+	drag(el, 50, 50);
+	moved(50, 50);
 });
 
 test("{ axis: 'x' }", function() {
-	
-	expect(4);
-	
-	var dx = 50, dy = 50;
-	
-	$("#draggable1, #draggable2").draggable({ axis: "x" });
-	var el1 = $("#draggable1").data("draggable").element;
-	var el2 = $("#draggable2").data("draggable").element;
-	
-	var before1 = el1.offset();
-	var before2 = el2.offset();
-	drag("#draggable1, #draggable2", dx, dy);
-	var after1 = el1.offset();
-	var after2 = el2.offset();
-	
-	equals(after1.left, before1.left + dx, "Relative: 0px move");
-	equals(after1.top, before1.top, "Relative: 50px move");
-	
-	equals(after2.left, before2.left + dy, "Absolute: 0px move");
-	equals(after2.top, before2.top, "Absolute: 50px move");
-	
+	el = $("#draggable2").draggable({ axis: "x" });
+	drag(el, 50, 50);
+	moved(50, 0);
+});
+
+test("{ axis: 'y' }", function() {
+	el = $("#draggable2").draggable({ axis: "y" });
+	drag(el, 50, 50);
+	moved(0, 50);
+});
+
+test("{ axis: ? }, unexpected", function() {
+	var unexpected = {
+		"true": true,
+		"{}": {},
+		"[]": [],
+		"null": null,
+		"undefined": undefined,
+		"function() {}": function() {}
+	};
+	$.each(unexpected, function(key, val) {
+		el = $("#draggable2").draggable({ axis: val });
+		drag(el, 50, 50);
+		moved(50, 50, "axis: " + key);
+		el.draggable("destroy");
+	})
 });
 
 test("{ cancel: 'span' }", function() {
+	el = $("#draggable2").draggable();
+	drag("#draggable2 span", 50, 50);
+	moved(50, 50);
 	
-	expect(4);
-	
-	var dx = 50, dy = 50;
-	
-	$("#draggable2").draggable({ cancel: 'span' });
-	var el = $("#draggable2").data("draggable").element;
-	
-	var before = el.offset();
-	drag("#draggable2 span", dx, dy);
-	var after = el.offset();	
-	
-	equals(after.left, before.left, "Trigger on span: 0px move");
-	equals(after.top, before.top, "Trigger on span: 0px move");
-	
-	var before = el.offset();
-	drag("#draggable2", dx, dy);
-	var after = el.offset();	
-	
-	equals(after.left, before.left + dx, "Trigger on element: 50px move");
-	equals(after.top, before.top + dy, "Trigger on element: 50px move");
-	
+	el.draggable("destroy");
+
+	el = $("#draggable2").draggable({ cancel: 'span' });
+	drag("#draggable2 span", 50, 50);
+	moved(0, 0);
 });
 
-test("{ handle: 'span' }", function() {
-	
-	expect(4);
-	
-	var dx = 50, dy = 50;
-	
-	$("#draggable2").draggable({ handle: 'span' });
-	var el = $("#draggable2").data("draggable").element;
-	
-	var before = el.offset();
-	drag("#draggable2 span", dx, dy);
-	var after = el.offset();	
-	
-	equals(after.left, before.left + dx, "Trigger on span: 50px move");
-	equals(after.top, before.top + dy, "Trigger on span: 50px move");
-	
-	var before = el.offset();
-	drag("#draggable2", dx, dy);
-	var after = el.offset();	
-	
-	equals(after.left, before.left, "Trigger on element: 0px move");
-	equals(after.top, before.top, "Trigger on element: 0px move");
-	
+test("{ cancel: ? }, unexpected", function() {
+	var unexpected = {
+		"true": true,
+		"false": false,
+		"{}": {},
+		"[]": [],
+		"null": null,
+		"undefined": undefined,
+		"function() {return '';}": function() {return '';},
+		"function() {return true;}": function() {return true;},
+		"function() {return false;}": function() {return false;}
+	};
+	$.each(unexpected, function(key, val) {
+		el = $("#draggable2").draggable({ cancel: val });
+		drag(el, 50, 50);
+		var expected = [50, 50];
+		switch(key) {
+			case "true":
+				expected = [0, 0]
+				break; 
+		}
+		moved(expected[0], expected[1], "cancel: " + key);
+		el.draggable("destroy");
+	})
 });
 
-test("{ containment: 'parent' }", function() {
-	
-	expect(4);
+test("{ containment: 'parent' }, relative", function() {
+	el = $("#draggable1").draggable({ containment: 'parent' });
+	var p = el.parent(), po = p.offset();
+	drag(el, -100, -100);
+	var expected = {
+		left: po.left + border(p, 'left') + margin(el, 'left'),
+		top: po.top + border(p, 'top') + margin(el, 'top')
+	}
+	compare2(offsetAfter, expected, 'compare offset to parent');
+});
 
-	var dx = -100, dy = -100;
-	
-	$("#draggable1, #draggable2").draggable({ containment: 'parent' });
-	var el1 = $("#draggable1").data("draggable").element;
-	var el2 = $("#draggable2").data("draggable").element;
-	
-	var before1 = el1.offset();
-	var before2 = el2.offset();
-	drag("#draggable1, #draggable2", dx, dy);
-	var after1 = el1.offset();
-	var after2 = el2.offset();
+test("{ containment: 'parent' }, absolute", function() {
+	el = $("#draggable2").draggable({ containment: 'parent' });
+	var p = el.parent(), po = p.offset();
+	drag(el, -100, -100);
+	var expected = {
+		left: po.left + border(p, 'left') + margin(el, 'left'),
+		top: po.top + border(p, 'top') + margin(el, 'top')
+	}
+	compare2(offsetAfter, expected, 'compare offset to parent');
+});
 
-	var p1 = $("#draggable1").parent(), po1 = p1.offset();
-	var p2 = $("#draggable2").parent(), po2 = p2.offset();
-
-	var expected1 = {
-		left: po1.left + border(p1, 'left') + margin(el1, 'left'),
-		top: po1.top + border(p1, 'top') + margin(el1, 'top')
-	};
-	var expected2 = {
-		left: po2.left + border(p2, 'left') + margin(el2, 'left'),
-		top: po2.top + border(p2, 'top') + margin(el2, 'top')
-	};
+test("{ cursor: 'move' }", function() {
 	
-	equals(after1.left, expected1.left, "Absolute: " + (after1.left - before1.left) + "px move (to parent's margin end)");
-	equals(after1.top, expected1.top, "Absolute: " + (after1.top - before1.top) + "px move (to parent's margin end)");
+	function getCursor() { return $("body").css("cursor"); }
 	
-	equals(after2.left, expected1.left, "Relative: " + (after2.left - before2.left) + "px move (to parent's margin end)");
-	equals(after2.top, expected1.top, "Relative: " + (after2.top - before2.top) + "px move (to parent's margin end)");
+	expect(2);
+	
+	var expected = "move", actual, before, after;
+	
+	el = $("#draggable2").draggable({
+		cursor: expected,
+		start: function(e, ui) {
+			actual = getCursor();
+		}
+	});
+	
+	before = getCursor();
+	drag("#draggable2", -1, -1);
+	after = getCursor();
+	
+	equals(actual, expected, "start callback: cursor '" + expected + "'");
+	equals(after, before, "after drag: cursor restored");
 	
 });
 
@@ -331,54 +282,56 @@ test("{ cursorAt: { left: -5, top: -5 } }", function() {
 	
 });
 
-test("{ cursor: 'move' }", function() {
-	
-	function getCursor() { return $("body").css("cursor"); }
-	
-	expect(2);
-	
-	var expected = "move", actual, before, after;
-	
-	$("#draggable2").draggable({
-		cursor: expected,
-		start: function(e, ui) {
-			actual = getCursor();
-		}
-	});
-	
-	before = getCursor();
-	drag("#draggable2", -1, -1);
-	after = getCursor();
-	
-	equals(actual, expected, "start callback: cursor '" + expected + "'");
-	equals(after, before, "after drag: cursor restored");
+test("{ distance: 10 }", function() {
+
+	el = $("#draggable2").draggable({ distance: 10 });
+	drag(el, -9, -9);
+	moved(0, 0, 'distance not met');
+
+	drag(el, -10, -10);
+	moved(-10, -10, 'distance met');
+
+	drag(el, 9, 9);
+	moved(0, 0, 'distance not met');
 	
 });
 
-test("{ distance: 10 }", function() {
-	
-	expect(3);
-	
-	var dragged;
-	$("#draggable2").draggable({
-		distance: 10,
-		start: function(e, ui) {
-			dragged = true;
-		}
-	});
-	
-	dragged = false;
-	drag("#draggable2", -9, -9);
-	equals(dragged, false, "The draggable should not have moved when moving -9px");
-	
-	dragged = false;
-	drag("#draggable2", -10, -10);
-	equals(dragged, true, "The draggable should have moved when moving -10px");
-	
-	dragged = false;
-	drag("#draggable2", 9, 9);
-	equals(dragged, false, "The draggable should not have moved when moving 9px");
-	
+test("{ grid: [50, 50] }, relative", function() {
+	el = $("#draggable1").draggable({ grid: [50, 50] });
+	drag(el, 24, 24);
+	moved(0, 0);
+	drag(el, 26, 25);
+	moved(50, 50);
+});
+
+test("{ grid: [50, 50] }, absolute", function() {
+	el = $("#draggable2").draggable({ grid: [50, 50] });
+	drag(el, 24, 24);
+	moved(0, 0);
+	drag(el, 26, 25);
+	moved(50, 50);
+});
+
+test("{ handle: 'span' }", function() {
+	el = $("#draggable2").draggable({ handle: 'span' });
+
+	drag("#draggable2 span", 50, 50);
+	moved(50, 50, "drag span");
+
+	drag("#draggable2", 50, 50);
+	moved(0, 0, "drag element");
+});
+
+test("{ helper: 'clone' }, relative", function() {
+	el = $("#draggable1").draggable({ helper: "clone" });
+	drag(el, 50, 50);
+	moved(0, 0);
+});
+
+test("{ helper: 'clone' }, absolute", function() {
+	el = $("#draggable2").draggable({ helper: "clone" });
+	drag(el, 50, 50);
+	moved(0, 0);	
 });
 
 test("{ opacity: 0.5 }", function() {
@@ -386,7 +339,7 @@ test("{ opacity: 0.5 }", function() {
 	expect(1);
 	
 	var opacity = null;
-	$("#draggable2").draggable({
+	el = $("#draggable2").draggable({
 		opacity: 0.5,
 		start: function(e, ui) {
 			opacity = $(this).css("opacity");
@@ -406,7 +359,7 @@ test("{ zIndex: 10 }", function() {
 	var expected = 10, actual;
 	
 	var zIndex = null;
-	$("#draggable2").draggable({
+	el = $("#draggable2").draggable({
 		zIndex: expected,
 		start: function(e, ui) {
 			actual = $(this).css("zIndex");
@@ -419,21 +372,23 @@ test("{ zIndex: 10 }", function() {
 	
 });
 
+module("Draggable Callbacks");
+
 test("callbacks occurance count", function() {
 	
 	expect(3);
 	
 	var start = 0, stop = 0, dragc = 0;
-	$("#draggable2").draggable({
+	el = $("#draggable2").draggable({
 		start: function() { start++; },
 		drag: function() { dragc++; },
 		stop: function() { stop++; }
 	});
 	
-	drag("#draggable2", 10, 10);
+	drag(el, 10, 10);
 	
 	equals(start, 1, "start callback should happen exactly once");
-	equals(dragc, 11, "drag callback should happen exactly 1+10 times (first simultaneously with start)");
+	equals(dragc, 2 + 1, "drag callback should happen exactly once per mousemove + 1");
 	equals(stop, 1, "stop callback should happen exactly once");
 	
 });
