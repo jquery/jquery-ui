@@ -200,8 +200,8 @@ $.widget("ui.draggable", $.extend($.ui.mouse, {
 		//Call plugins and callbacks and use the resulting position if something is returned		
 		this.position = this.propagate("drag", e) || this.position;
 		
-		if(!this.options.axis || this.options.axis == "x") this.helper[0].style.left = this.position.left+'px';
-		if(!this.options.axis || this.options.axis == "y") this.helper[0].style.top = this.position.top+'px';
+		if(!this.options.axis || this.options.axis != "y") this.helper[0].style.left = this.position.left+'px';
+		if(!this.options.axis || this.options.axis != "x") this.helper[0].style.top = this.position.top+'px';
 		if($.ui.ddmanager) $.ui.ddmanager.drag(this, e);
 		
 		return false;
@@ -256,11 +256,12 @@ $.widget("ui.draggable", $.extend($.ui.mouse, {
 
 $.extend($.ui.draggable, {
 	defaults: {
-		distance: 0,
-		delay: 0,
+		appendTo: "parent",
+		axis: false,
 		cancel: ":input,button",
-		helper: "original",
-		appendTo: "parent"
+		delay: 0,
+		distance: 0,
+		helper: "original"
 	}
 });
 
