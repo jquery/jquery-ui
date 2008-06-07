@@ -1,28 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta http-equiv="Content-Language" content="en" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Draggable Test Page</title>
-<link rel="stylesheet" href="../../qunit/testsuite.css" type="text/css" media="screen">
+	<meta http-equiv="Content-Language" content="en" />
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>Draggable Test Page</title>
 
-<script type="text/javascript" src="../../jquery/jquery-1.2.6.js"></script>
-<script type="text/javascript" src="../source/ui.core.js"></script>
-<script type="text/javascript" src="../source/ui.draggable.js"></script>
-
-<script type="text/javascript" src="../../qunit/testrunner.js"></script>
-<script type="text/javascript" src="draggable.js"></script>
-<script type="text/javascript" src="jquery.simulate.js"></script>
-
-<style>
-	html { border: 0; }
-	#main {
-		position:absolute !important;
-		top: -1000px !important;
-		left: -1000px !important;
-	}
-</style>
-
+	<link rel="stylesheet" href="qunit/testsuite.css" type="text/css" media="screen">
+	
+	<script type="text/javascript" src="../jquery-1.2.6.js"></script>
+	<script type="text/javascript" src="../ui/ui.core.js"></script>
+	<script type="text/javascript" src="../ui/ui.draggable.js"></script>
+	
+	<script type="text/javascript" src="qunit/testrunner.js"></script>
+	<script type="text/javascript" src="simulate/jquery.simulate.js"></script>
+	
+	<script type="text/javascript" src="draggable.js"></script>
+	
+	<style>
+		html { border: 0; }
+		#main {
+			position:absolute !important;
+			top: -1000px !important;
+			left: -1000px !important;
+		}
+	</style>
 </head>
 <body>
 
@@ -31,7 +32,7 @@
 	<h2 id="userAgent"></h2>
 	
 	<div id="main" style="border: 1px solid black; padding: 10px; margin: 10px;">
-		<div id='draggable1' style="background: green; width: 200px; height: 100px;">Static</div>
+		<div id='draggable1' style="background: green; width: 200px; height: 100px;">Relative</div>
 		<div id='draggable2' style="background: green; width: 200px; height: 100px; position: absolute; top: 10px; left: 10px;"><span>Absolute</span></div>
 	</div>
 	

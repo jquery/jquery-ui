@@ -40,7 +40,7 @@ var border = function(el, side) { return parseInt(el.css('border-' + side + '-wi
 var margin = function(el, side) { return parseInt(el.css('margin-' + side)); }
 
 // Draggable Tests
-module("Draggable");
+module("draggable");
 
 test("init", function() {
 	expect(6);
@@ -160,7 +160,7 @@ test("No options, absolute", function() {
 	moved(50, 50);	
 });
 
-module("Draggable Options");
+module("draggable: Options");
 
 test("{ axis: false }, default", function() {
 	el = $("#draggable2").draggable({ axis: false });
@@ -429,7 +429,7 @@ test("{ zIndex: 10 }", function() {
 	
 });
 
-module("Draggable Callbacks");
+module("draggable: Callbacks");
 
 test("callbacks occurance count", function() {
 	
@@ -450,7 +450,7 @@ test("callbacks occurance count", function() {
 	
 });
 
-module("Tickets");
+module("draggable: Tickets");
 
 test("#2965 cursorAt with margin", function() {
 	

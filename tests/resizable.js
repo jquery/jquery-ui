@@ -12,7 +12,7 @@ var drag = function(el, dx, dy, complete) {
 	});
 };
 
-module("Simple Resize");
+module("resizable");
 
 test("ui-resizable-e resize x", function() {
 	
@@ -155,7 +155,7 @@ test("ui-resizable-nw resize xy", function() {
  * min/max Height/Width
  */
 
-module("Dimensions limit");
+module("resizable: Dimensions limit");
 
 test("ui-resizable-se { handles: 'all', minWidth: 60, minHeight: 60, maxWidth: 100, maxHeight: 100 }", function() {
 	
@@ -233,7 +233,7 @@ test("ui-resizable-nw { handles: 'all', minWidth: 60, minHeight: 60, maxWidth: 1
  * Respecting ratio resize with dimensions limit
  */
 
-module("Respecting ratio resize with dimensions limits");
+module("resizable: Respecting ratio resize with dimensions limits");
 
 test("ui-resizable-e { aspectRatio: 'preserve', handles: 'all', minWidth: 70, minHeight: 50, maxWidth: 150, maxHeight: 130 }", function() {
 	
@@ -361,7 +361,7 @@ test("ui-resizable-ne { aspectRatio: 'preserve', handles: 'all', minWidth: 70, m
 	
 });
 
-module("Options");
+module("resizable: Options");
 
 test("ui-resizable-se { handles: 'all', grid: [0, 20] }", function() {
 	
