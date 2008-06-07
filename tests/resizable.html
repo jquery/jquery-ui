@@ -1,9 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta http-equiv="Content-Language" content="en" />
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<title>Resizable Test Page</title>
+	<title>jQuery UI Resizable Test Suite</title>
 
 	<link rel="stylesheet" href="qunit/testsuite.css" type="text/css" media="screen">
 	
@@ -15,28 +13,28 @@
 	<script type="text/javascript" src="simulate/jquery.simulate.js"></script>
 		
 	<script type="text/javascript" src="resizable.js"></script>
+
+	<style type="text/css">
+		#main {
+			position: absolute !important;
+			top: -1000px !important;
+			left: -1000px !important;
+		}
+	</style>
+
 </head>
-
-<style>
-	#main {
-		position: absolute !important;
-		top: -1000px !important;
-		left: -1000px !important;
-	}
-</style>
-
 <body>
 
-	<h1 id="header">jQuery Test Suite</h1>
-	<h2 id="banner"></h2>
-	<h2 id="userAgent"></h2>
-	
-	<div id="main" style="border: 1px solid black; padding: 10px; margin: 10px;">
-		<div id='resizable1' style="background: green; width: 100px; height: 100px;">I'm a resizable.</div>
-		<img src="images/test.jpg" id='resizable2' style="width: 100px; height: 100px;"/>
-	</div>
-	
-	<ol id="tests"></ol>
-	<div class="ui-fake-cursor"/>
+<h1 id="header">jQuery UI Resizable Test Suite</h1>
+<h2 id="banner"></h2>
+<h2 id="userAgent"></h2>
+
+<ol id="tests"></ol>
+
+<div id="main" style="border: 1px solid black; padding: 10px; margin: 10px;">
+	<div id='resizable1' style="background: green; width: 100px; height: 100px;">I'm a resizable.</div>
+	<img src="images/test.jpg" id='resizable2' style="width: 100px; height: 100px;"/>
+</div>
+
 </body>
 </html>

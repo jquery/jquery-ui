@@ -10,6 +10,7 @@
 	<script type="text/javascript" src="../ui/ui.accordion.js"></script>
 	
 	<script type="text/javascript" src="qunit/testrunner.js"></script>
+	<script type="text/javascript" src="simulate/jquery.simulate.js"></script>
 
 	<script type="text/javascript" src="accordion.js"></script>
 
@@ -17,13 +18,18 @@
 		.xerror, .error { display: none }
 	</style>
 
-</head>
-<body class="flora">
-	<h1>jQuery UI Accordion Test Suite</h1>
-	<h2 id="banner"></h2>
-	<h2 id="userAgent"></h2>
 
-	<ol id="tests"></ol>
+
+
+
+</head>
+<body>
+
+<h1 id="header">jQuery UI Accordion Test Suite</h1>
+<h2 id="banner"></h2>
+<h2 id="userAgent"></h2>
+
+<ol id="tests"></ol>
 
 <div id="main" style="position:absolute;top:-2000000px;">
 
@@ -59,7 +65,7 @@
 				</p>
 			</div>
 		</div>
-		
+
 	</fieldset>
 	
 	<fieldset>
@@ -100,7 +106,7 @@
 				</ul> 
 			</li>
 		</ul>
-		
+
 	</fieldset>
 
 	<fieldset>
@@ -154,18 +160,19 @@
 		
 	</fieldset>
 		
-		<div id="switch">
-			<select>
-				<option>Switch to...</option>
-				<option value="1">1</option>
-				<option value="2">2</option>
-				<option value="3">3</option>
-			</select>
-			<button id="close">Close all</button>
-			Activate via selector, eg. ':first' or 'a:first': <input id="switch2" />
-		</div>
+	<div id="switch">
+		<select>
+			<option>Switch to...</option>
+			<option value="1">1</option>
+			<option value="2">2</option>
+			<option value="3">3</option>
+		</select>
+		<button id="close">Close all</button>
+		Activate via selector, eg. ':first' or 'a:first': <input id="switch2" />
+	</div>
 
-		<div id="log"><div><strong>Log of the 2nd accordion</strong></div></div>
+	<div id="log"><div><strong>Log of the 2nd accordion</strong></div></div>
 </div>
-	</body>
+
+</body>
 </html>
