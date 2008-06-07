@@ -44,8 +44,10 @@ $.widget("ui.slider", {
 			.removeData("slider")
 			.unbind(".slider");
 		this.handle
-			.unwrap("a")
-			.mouse("destroy");
+			.unwrap("a");
+		this.handle.each(function() {
+			$(this).data("mouse").mouseDestroy();
+		});
 		this.generated && this.generated.remove();
 	},
 	setData: function(key, value) {
