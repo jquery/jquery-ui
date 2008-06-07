@@ -295,7 +295,7 @@ $.widget("ui.sortable", $.extend($.ui.mouse, {
 		if(!currentItem) return false;
 		if(this.options.handle && !overrideHandle) {
 			var validHandle = false;
-			$(this.options.handle, currentItem).each(function() { if(this == e.target) validHandle = true; });
+			$(this.options.handle, currentItem).find("*").andSelf().each(function() { if(this == e.target) validHandle = true; });
 			if(!validHandle) return false;
 		}
 			
