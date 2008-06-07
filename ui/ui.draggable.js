@@ -103,7 +103,13 @@ $.widget("ui.draggable", $.extend($.ui.mouse, {
 		
 		if(o.containment) {
 			if(o.containment == 'parent') o.containment = this.helper[0].parentNode;
-			if(o.containment == 'document') this.containment = [0,0,$(document).width(), ($(document).height() || document.body.parentNode.scrollHeight)];
+			if(o.containment == 'document' || o.containment == 'window') this.containment = [
+				0 - this.offset.relative.left - this.offset.parent.left,
+				0 - this.offset.relative.top - this.offset.parent.top,
+				$(o.containment == 'document' ? document : window).width() - this.offset.relative.left - this.offset.parent.left - this.helperProportions.width - this.margins.left - (parseInt(this.element.css("marginRight"),10) || 0),
+				($(o.containment == 'document' ? document : window).height() || document.body.parentNode.scrollHeight) - this.offset.relative.top - this.offset.parent.top - this.helperProportions.height - this.margins.top - (parseInt(this.element.css("marginBottom"),10) || 0)
+			];
+			
 			if(!(/^(document|window|parent)$/).test(o.containment)) {
 				var ce = $(o.containment)[0];
 				var co = $(o.containment).offset();
