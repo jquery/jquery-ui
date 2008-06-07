@@ -1,6 +1,16 @@
-$.fn.triggerKeydown = function(keyCode) {
-	return this.trigger("keydown", [$.event.fix({event:"keydown", keyCode: keyCode, target: this[0]})]);
-}
+
+var keyCodes = {
+	leftArrow: 37,
+	upArrow: 38,
+	rightArrow: 39,
+	downArrow: 40
+};
+
+$.each(keyCodes, function(key, val) {
+	$.fn[key] = function() {
+		return this.simulate("keydown", { keyCode: val });
+	}
+});
 
 function assertChange(stepping, start, result, action) {
 	return function() {
@@ -21,13 +31,13 @@ function assertChange(stepping, start, result, action) {
 module("slider: single handle")
 
 test("change one step via keydown", assertChange(1, undefined, 1, function() {
-	this.find("a").triggerKeydown("39");
+	this.find("a").rightArrow();
 }))
 test("change - 10 steps via keydown", assertChange(10, 20, 10, function() {
-	this.find("a").triggerKeydown("37");
+	this.find("a").leftArrow();
 }))
 test("change +10 steps via keydown", assertChange(10, 20, 30, function() {
-	this.find("a").triggerKeydown("39");
+	this.find("a").rightArrow();
 }))
 
 test("moveTo, absolute value", assertChange(1, 1, 10, function() {
