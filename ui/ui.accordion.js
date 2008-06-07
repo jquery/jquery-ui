@@ -166,7 +166,6 @@ function clickHandler(event) {
 		options.active.parent().andSelf().toggleClass(options.selectedClass);
 		var toHide = options.active.next(),
 			data = {
-				instance: this,
 				options: options,
 				newHeader: jQuery([]),
 				oldHeader: options.active,
@@ -209,7 +208,6 @@ function clickHandler(event) {
 		toHide = options.active.next(),
 		//data = [clicked, options.active, toShow, toHide],
 		data = {
-			instance: this,
 			options: options,
 			newHeader: clicked,
 			oldHeader: options.active,
