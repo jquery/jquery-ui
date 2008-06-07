@@ -71,6 +71,7 @@ $.widget("ui.draggable", $.extend($.ui.mouse, {
 		};
 		
 		this.offsetParent = this.helper.offsetParent(); var po = this.offsetParent.offset();			//Get the offsetParent and cache its position
+		if(this.offsetParent[0] == document.body && $.browser.mozilla) po = { top: 0, left: 0 };		//Ugly FF3 fix
 		this.offset.parent = {																			//Store its position plus border
 			top: po.top + (parseInt(this.offsetParent.css("borderTopWidth"),10) || 0),
 			left: po.left + (parseInt(this.offsetParent.css("borderLeftWidth"),10) || 0)
@@ -86,10 +87,10 @@ $.widget("ui.draggable", $.extend($.ui.mouse, {
 		this.helperProportions = { width: this.helper.outerWidth(), height: this.helper.outerHeight() };//Cache the helper size
 		
 		if(o.cursorAt) {
-			if(o.cursorAt.left != undefined) this.offset.click.left = o.cursorAt.left;
-			if(o.cursorAt.right != undefined) this.offset.click.left = this.helperProportions.width - o.cursorAt.right;
-			if(o.cursorAt.top != undefined) this.offset.click.top = o.cursorAt.top;
-			if(o.cursorAt.bottom != undefined) this.offset.click.top = this.helperProportions.height - o.cursorAt.bottom;
+			if(o.cursorAt.left != undefined) this.offset.click.left = o.cursorAt.left + this.margins.left;
+			if(o.cursorAt.right != undefined) this.offset.click.left = this.helperProportions.width - o.cursorAt.right + this.margins.left;
+			if(o.cursorAt.top != undefined) this.offset.click.top = o.cursorAt.top + this.margins.top;
+			if(o.cursorAt.bottom != undefined) this.offset.click.top = this.helperProportions.height - o.cursorAt.bottom + this.margins.top;
 		}
 		
 		
