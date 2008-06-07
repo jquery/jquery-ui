@@ -1271,7 +1271,7 @@ $.extend(DatepickerInstance.prototype, {
 		else {
 			var inMinYear = (minDate && minDate.getFullYear() == drawYear);
 			var inMaxYear = (maxDate && maxDate.getFullYear() == drawYear);
-			html += '<select class="ui-datepicker-newMonth" ' +
+			html += '<select class="ui-datepicker-new-month" ' +
 				'onchange="jQuery.datepicker._selectMonthYear(' + this._id + ', this, \'M\');" ' +
 				'onclick="jQuery.datepicker._clickMonthYear(' + this._id + ');"' +
 				(showStatus ? this._addStatus(this._get('monthStatus') || '&#xa0;') : '') + '>';
@@ -1305,7 +1305,7 @@ $.extend(DatepickerInstance.prototype, {
 			}
 			year = (minDate ? Math.max(year, minDate.getFullYear()) : year);
 			endYear = (maxDate ? Math.min(endYear, maxDate.getFullYear()) : endYear);
-			html += '<select class="ui-datepicker-newYear" ' +
+			html += '<select class="ui-datepicker-new-year" ' +
 				'onchange="jQuery.datepicker._selectMonthYear(' + this._id + ', this, \'Y\');" ' +
 				'onclick="jQuery.datepicker._clickMonthYear(' + this._id + ');"' +
 				(showStatus ? this._addStatus(this._get('yearStatus') || '&#xa0;') : '') + '>';
