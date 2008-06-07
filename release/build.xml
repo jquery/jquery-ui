@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!--
+	jQuery UI Release!
+	
+	Call task called 'deploy-release' to build a full release.
+	The release built will be stored on 'dist' dir.
+	
+	@author Eduardo Lundgren (eduardo.lundgren@gmail.com)
+-->
+
+<project name="jquery-ui" default="deploy-release" basedir=".">
+	
+	<target name="deploy-release" depends="load.properties, concatenate, minify, pack, copy" description="Release builder">
+	</target>
+
+	<target name="load.properties">
+		<property file="ant.properties" />
+
+		<property name="dist.dir" value="dist" />
+		<property name="build.dir" value="build" />
+		<property name="ui.dir" value="../" />
+		<property name="src.dir" value="${ui.dir}/ui/" />
+		
+		<property name="min.folder" value="${dist.dir}/ui/minified" />
+		<property name="packed.folder" value="${dist.dir}/ui/packed" />
+		
+		<property name="concatenated" value="jquery-ui-all" />
+		
+		<property name="core.files" value="ui.core.js, ui.draggable.js, ui.droppable.js, ui.resizable.js, ui.selectable.js, ui.sortable.js, effects.core.js" />
+		
+		<property description="YUI Compressor" name="yui-jar" value="${build.dir}/yuicompressor.jar" />
+		<property description="Rhino JS Engine" name="jar" value="${build.dir}/js.jar" />
+	</target>
+
+	<target name="concatenate" depends="load.properties">
+		<echo message="Building concatenated" />
+		<mkdir dir="${dist.dir}/ui/" />
+		<delete file="${dist.dir}/ui/${concatenated}.js" />
+		
+		<concat destfile="${dist.dir}/ui/${concatenated}.js">
+			<filelist dir="${src.dir}/" files="${core.files}" />
+			<fileset dir="${src.dir}/" includes="ui.*.js, effects.*.js" excludes="${core.files}" />
+		</concat>
+		<echo message="Concatenated built." />
+	</target>
+
+	<target name="minify" depends="load.properties, concatenate" description="Remove all comments and whitespace, no compression, great in combination with GZip">
+		<echo message="Building minified" />
+		<delete dir="${min.folder}/" />
+		<mkdir dir="${min.folder}" />
+		
+		<apply executable="java" parallel="false">
+			<filelist dir="${dist.dir}/ui/" files="${concatenated}.js" />
+			<fileset dir="${src.dir}/" includes="ui.*.js, effects.*.js" />
+			<arg line="-jar" />
+			<arg path="${yui-jar}" />
+			<srcfile />
+			<arg line="-o" />
+			<mapper type="glob" from="*.js" to="${min.folder}/*.min.js" />
+			<targetfile />
+		</apply>
+		<echo message="Minified built." />
+	</target>
+	
+	
+	<target name="pack" depends="load.properties, concatenate, minify" description="Remove all comments and whitespace and compress">
+		<!--
+			http://dean.edwards.name/download/#packer
+			http://homepages.nildram.co.uk/~9jack9/download/packer.wsh.zip
+		-->
+		<echo message="Building packed" />
+		<delete dir="${packed.folder}/" />
+		<mkdir dir="${packed.folder}" />
+		
+		<apply executable="cmd" parallel="false">
+			<filelist dir="${min.folder}" files="${concatenated}.min.js" />
+			<fileset dir="${min.folder}" includes="ui.*.min.js, effects.*.min.js" />
+			<arg line="/c CScript /nologo ${build.dir}/js/pack.wsf" />
+			<srcfile />
+			<arg line=">>" />
+			<mapper type="glob" from="*.min.js" to="${packed.folder}/*.packed.js" />
+			<targetfile />
+		</apply>
+		<echo message="Packed built." />
+	</target>
+		
+	
+	<!--
+	TODO - Using Rhino Javascript Engine
+	<target name="pack" depends="load.properties, concatenate" description="Remove all comments and whitespace and compress">
+		<echo message="Building packed" />
+		<delete dir="${packed.folder}/" />
+		<mkdir dir="${packed.folder}" />
+		
+		<apply executable="java" parallel="false">
+			<filelist dir="${min.folder}" files="${concatenated}.min.js" />
+			<fileset dir="${min.folder}" includes="ui.*.min.js, effects.*.min.js" />
+			<arg line="-jar" />
+			<arg path="${jar}" />
+			<arg value="${build.dir}/build/pack.js" />
+			<srcfile />
+			<mapper type="glob" from="*.min.js" to="${packed.folder}/*.packed.js" />
+			<targetfile />
+		</apply>
+		<echo message="Packed built." />
+	</target>
+	-->
+	
+	<target description="Copy needed folders" name="copy" depends="load.properties">
+		<echo message="Copying files" />
+		<mkdir dir="${dist.dir}" />
+		
+		<copy overwrite="true" todir="${dist.dir}/ui/">
+			<fileset dir="${src.dir}/" includes="ui.*.js, effects.*.js" />
+		</copy>
+		
+		<copy overwrite="true" todir="${dist.dir}/ui/i18n/" >
+			<fileset dir="${src.dir}/i18n/" />
+		</copy>
+		
+		<copy overwrite="true" todir="${dist.dir}/">
+			<fileset dir="${ui.dir}/" includes="*.txt" />
+		</copy>
+		
+		<copy overwrite="true" todir="${dist.dir}/demos/" >
+			<fileset dir="${ui.dir}/demos/" />
+		</copy>
+		
+		<copy overwrite="true" todir="${dist.dir}/tests/" >
+			<fileset dir="${ui.dir}/tests/" />
+		</copy>
+		
+		<copy overwrite="true" todir="${dist.dir}/themes/" >
+			<fileset dir="${ui.dir}/themes/" />
+		</copy>
+		<echo message="Files copied." />
+	</target>
+
+	 <target depends="load.properties" name="clean">
+	 	<delete dir="${dist.dir}" />
+    </target>
+	
+</project>
