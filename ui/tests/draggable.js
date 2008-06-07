@@ -2,6 +2,9 @@
  * draggable unit tests
  */
 
+//
+// Draggable Test Helper Functions
+//
 var el, offsetBefore, offsetAfter, dragged;
 
 var drag = function(handle, dx, dy) {
@@ -22,25 +25,98 @@ var moved = function (dx, dy, msg) {
 	compare2(actual, expected, 'dragged[' + dragged.dx + ', ' + dragged.dy + '] ' + msg);
 }
 
+function shouldmove(why) {
+	drag(el, 50, 50);
+	moved(50, 50, why);
+}
+
+function shouldnotmove(why) {
+	drag(el, 50, 50);
+	moved(0, 0, why);
+}
+
 var border = function(el, side) { return parseInt(el.css('border-' + side + '-width')); }
 
 var margin = function(el, side) { return parseInt(el.css('margin-' + side)); }
 
+// Draggable Tests
 module("Draggable");
 
-test("create and destroy", function() {
-	
-	expect(3);
-	
+test("init", function() {
+	expect(6);
+
 	el = $("#draggable1").draggable();
-	ok(el.data("draggable"), "Accessing draggable instance after creation");
-	
-	el.draggable("destroy");
-	ok(!el.data("draggable"), "Accessing draggable instance after destroy");
+	ok(true, '.draggable() called on element');
+
+	$([]).draggable();
+	ok(true, '.draggable() called on empty collection');
+
+	$("<div/>").draggable();
+	ok(true, '.draggable() called on disconnected DOMElement');
+
+	$("<div/>").draggable().draggable("foo");
+	ok(true, 'arbitrary method called after init');
+
+	$("<div/>").draggable().data("foo.draggable");
+	ok(true, 'arbitrary option getter after init');
+
+	$("<div/>").draggable().data("foo.draggable", "bar");
+	ok(true, 'arbitrary option setter after init');
+});
+
+test("destroy", function() {
+	expect(6);
+
+	$("#draggable1").draggable().draggable("destroy");	
+	ok(true, '.draggable("destroy") called on element');
+
+	$([]).draggable().draggable("destroy");
+	ok(true, '.draggable("destroy") called on empty collection');
 
 	$("<div/>").draggable().draggable("destroy");
-	ok(true, "Create and destroy of disconnected DOMElement");
-	
+	ok(true, '.draggable("destroy") called on disconnected DOMElement');
+
+	$("<div/>").draggable().draggable("destroy").draggable("foo");
+	ok(true, 'arbitrary method called after destroy');
+
+	$("<div/>").draggable().draggable("destroy").data("foo.draggable");
+	ok(true, 'arbitrary option getter after destroy');
+
+	$("<div/>").draggable().draggable("destroy").data("foo.draggable", "bar");
+	ok(true, 'arbitrary option setter after destroy');
+});
+
+test("enable", function() {
+	expect(6);
+	el = $("#draggable2").draggable({ disabled: true });
+	shouldnotmove('.draggable({ disabled: true })');
+	el.draggable("enable");
+	shouldmove('.draggable("enable")');
+	equals(el.data("disabled.draggable"), false, "disabled.draggable getter");
+
+	el.draggable("destroy");
+	el.draggable({ disabled: true });
+	shouldnotmove('.draggable({ disabled: true })');
+	el.data("disabled.draggable", false);
+	equals(el.data("disabled.draggable"), false, "disabled.draggable setter");
+	shouldmove('.data("disabled.draggable", false)');
+});
+
+test("disable", function() {
+	expect(6);
+	el = $("#draggable2").draggable({ disabled: false });
+	shouldmove('.draggable({ disabled: false })');
+	el.draggable("disable");
+	shouldnotmove('.draggable("disable")');
+	equals(el.data("disabled.draggable"), true, "disabled.draggable getter");
+
+	el.draggable("destroy");
+
+	el.draggable({ disabled: false });
+	shouldmove('.draggable({ disabled: false })');
+	el.data("disabled.draggable", true);
+	equals(el.data("disabled.draggable"), true, "disabled.draggable setter");
+	shouldnotmove('.data("disabled.draggable", true)');
 });
 
 test("element types", function() {
@@ -61,32 +137,13 @@ test("element types", function() {
 	});
 });
 
-test("enable and disable", function() {
-	el = $("#draggable2").draggable();
-	drag(el, 50, 50);
-	moved(50, 50, "default is enabled");
-	el.draggable("disable");
-	drag(el, 50, 50);
-	moved(0, 0, "disabled by .draggable('disabled')");
-	el.draggable("enable");
-	drag(el, 50, 50);
-	moved(50, 50, "enabled by .draggable('enable')");
-	el.data("disabled.draggable", true);
-	ok(el.data("disabled.draggable"), ".data('disabled.draggable') getter");
-	drag(el, 50, 50, "disabled by .data('disabled.draggable', true)");
-	moved(0, 0);
-	el.data("disabled.draggable", false);
-	ok(!el.data("disabled.draggable"), ".data('disabled.draggable') getter");
-	drag(el, 50, 50, "enabled by .data('disabled.draggable', false)");
-	moved(50, 50);	
-});
-
 test("defaults", function() {
 	el = $("#draggable1").draggable();
 	equals(el.data("appendTo.draggable"), "parent", "appendTo");
 	equals(el.data("axis.draggable"), false, "axis");
 	equals(el.data("cancel.draggable"), ":input,button", "cancel");
 	equals(el.data("delay.draggable"), 0, "delay");
+	equals(el.data("disabled.draggable"), false, "disabled");
 	equals(el.data("distance.draggable"), 0, "distance");
 	equals(el.data("helper.draggable"), "original", "helper");
 });
