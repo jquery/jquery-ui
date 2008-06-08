@@ -101,7 +101,7 @@ $.widget = function(name, prototype) {
 		
 		return this.each(function() {
 			var instance = $.data(this, name);
-			if (isMethodCall && instance) {
+			if (isMethodCall && instance && $.isFunction(instance[options])) {
 				instance[options].apply(instance, args);
 			} else if (!isMethodCall) {
 				$.data(this, name, new $[namespace][name](this, options));
