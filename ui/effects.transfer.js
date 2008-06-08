@@ -25,6 +25,7 @@ $.effects.transfer = function(o) {
 		var target = $(o.options.to); // Find Target
 		var position = el.offset();
 		var transfer = $('<div class="ui-effects-transfer"></div>').appendTo(document.body);
+		if(o.options.className) transfer.addClass(o.options.className);
 		
 		// Set target css
 		transfer.addClass(o.options.className);
