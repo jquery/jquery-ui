@@ -38,13 +38,13 @@ var moved = function (dx, dy, msg) {
 }
 
 function shouldmove(why) {
-	var handle = $(".ui-dialog-titlebar", el.data("dialog").element);
+	var handle = $(".ui-dialog-titlebar", dlg());
 	drag(handle, 50, 50);
 	moved(50, 50, why);
 }
 
 function shouldnotmove(why) {
-	var handle = $(".ui-dialog-titlebar", el.data("dialog").element);
+	var handle = $(".ui-dialog-titlebar", dlg());
 	drag(handle, 50, 50);
 	moved(0, 0, why);
 }
@@ -190,6 +190,14 @@ test("buttons", function() {
 	});
 	equals(btn.parent().attr('className'), 'ui-dialog-buttonpane', "buttons in container");
 	btn.trigger("click");
+});
+
+test("draggable", function() {
+	el = $("<div/>").dialog({ draggable: false });
+	shouldnotmove();
+	el.remove();
+	el = $("<div/>").dialog({ draggable: true });
+	shouldmove();
 });
 
 module("dialog: Methods");
