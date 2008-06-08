@@ -106,7 +106,7 @@ $.widget("ui.dialog", {
 			$.each(options.buttons, function(name, fn) {
 				$('<button/>')
 					.text(name)
-					.click(function() { fn.apply(self.element, arguments); })
+					.click(function() { fn.apply(self.element[0], arguments); })
 					.appendTo(uiDialogButtonPane);
 			});
 		}
