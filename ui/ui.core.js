@@ -198,7 +198,7 @@ $.ui.mouse = {
 		
 		var self = this,
 			btnIsLeft = (e.which == 1),
-			elIsCancel = ($(e.target).is(this.options.cancel));
+			elIsCancel = (typeof this.options.cancel == "string" ? $(e.target).is(this.options.cancel) : false);
 		if (!btnIsLeft || elIsCancel) {
 			return true;
 		}

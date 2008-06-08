@@ -65,9 +65,7 @@ $.widget("ui.sortable", $.extend($.ui.mouse, {
 		if(!noPropagation) this.element.triggerHandler(n == "sort" ? n : "sort"+n, [e, this.ui(inst)], this.options[n]);
 	},
 	serialize: function(o) {
-		
-		
-		
+
 		var items = ($.isFunction(this.options.items) ? this.options.items.call(this.element) : $(this.options.items, this.element)).not('.ui-sortable-helper'); //Only the items of the sortable itself
 		var str = []; o = o || {};
 		
@@ -80,11 +78,13 @@ $.widget("ui.sortable", $.extend($.ui.mouse, {
 		
 	},
 	toArray: function(attr) {
+		
 		var items = ($.isFunction(this.options.items) ? this.options.items.call(this.element) : $(this.options.items, this.element)).not('.ui-sortable-helper'); //Only the items of the sortable itself
 		var ret = [];
 
 		items.each(function() { ret.push($(this).attr(attr || 'id')); });
 		return ret;
+		
 	},
 	/* Be careful with the following core functions */
 	intersectsWith: function(item) {

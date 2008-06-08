@@ -225,11 +225,6 @@ test("{ cancel: ? }, unexpected", function() {
 		el = $("#draggable2").draggable({ cancel: val });
 		drag(el, 50, 50);
 		var expected = [50, 50];
-		switch(key) {
-			case "true":
-				expected = [0, 0]
-				break; 
-		}
 		moved(expected[0], expected[1], "cancel: " + key);
 		el.draggable("destroy");
 	})
