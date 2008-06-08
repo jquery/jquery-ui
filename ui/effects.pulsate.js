@@ -25,12 +25,12 @@ $.effects.pulsate = function(o) {
 		var times = o.options.times || 5; // Default # of times
 		
 		// Adjust
-		if (mode != 'hide') times--;
+		if (mode == 'hide') times--;
 		if (el.is(':hidden')) { // Show fadeIn
 			el.css('opacity', 0);
 			el.show(); // Show
 			el.animate({opacity: 1}, o.duration / 2, o.options.easing);
-			times--;
+			times = times-2;
 		}
 		
 		// Animate
