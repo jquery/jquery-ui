@@ -212,7 +212,7 @@ $.ui.mouse = {
 		
 		if (this.mouseDistanceMet(e) && this.mouseDelayMet(e)) {
 			this._mouseStarted = (this.mouseStart(e) !== false);
-			if (!this._mouseStarted) { return false; }
+			if (!this._mouseStarted) { e.preventDefault(); return true; }
 		}
 		
 		// these delegates are required to keep context
