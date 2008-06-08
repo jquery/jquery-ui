@@ -116,7 +116,7 @@ $.widget = function(name, prototype) {
 		this.widgetName = name;
 		this.widgetBaseClass = namespace + '-' + name;
 		
-		this.options = $.extend({}, $[namespace][name].defaults, options);
+		this.options = $.extend({ disabled: false }, $[namespace][name].defaults, options);
 		this.element = $(element)
 			.bind('setData.' + name, function(e, key, value) {
 				return self.setData(key, value);
