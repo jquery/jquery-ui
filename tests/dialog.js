@@ -167,13 +167,17 @@ test("autoOpen", function() {
 });
 
 test("buttons", function() {
-	expect(6);
+	expect(10);
 	var buttons = {
-		"Ok": function() {
-			ok(true, "button 1 click fires callback");
+		"Ok": function(ev, ui) {
+			ok(true, "button click fires callback");
+			equals(this, el[0], "context of callback");
+			equals(ev.target, btn[0], "event target");
 		},
-		"Cancel": function() {
-			ok(true, "button 2 click fires callback");
+		"Cancel": function(ev, ui) {
+			ok(true, "button click fires callback");
+			equals(this, el[0], "context of callback");
+			equals(ev.target, btn[1], "event target");
 		}
 	}
 	el = $("<div/>").dialog({ buttons: buttons });
@@ -184,8 +188,8 @@ test("buttons", function() {
 		equals(btn.eq(i).text(), key, "text of button " + (i+1));
 		i += 1;
 	});
-	btn.simulate("click");
 	equals(btn.parent().attr('className'), 'ui-dialog-buttonpane', "buttons in container");
+	btn.trigger("click");
 });
 
 module("dialog: Methods");
