@@ -41,7 +41,7 @@ $.effects.transfer = function(o) {
 		position = target.offset();
 		animation = {
 			top: position.top,
-			left: position.top,
+			left: position.left,
 			height: target.outerHeight() - parseInt(transfer.css('borderTopWidth')) - parseInt(transfer.css('borderBottomWidth')),
 			width: target.outerWidth() - parseInt(transfer.css('borderLeftWidth')) - parseInt(transfer.css('borderRightWidth'))
 		};
