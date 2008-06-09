@@ -25,7 +25,7 @@
 		<property name="min.folder" value="${dist.dir}/ui/minified" />
 		<property name="packed.folder" value="${dist.dir}/ui/packed" />
 		
-		<property name="concatenated" value="jquery-ui-all" />
+		<property name="concatenated" value="jquery.ui.all" />
 		
 		<property name="core.files" value="ui.core.js, ui.draggable.js, ui.droppable.js, ui.resizable.js, ui.selectable.js, ui.sortable.js, effects.core.js" />
 		
