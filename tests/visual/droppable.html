@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Simple Droppable</title>
+	<link rel="stylesheet" href="all.css" type="text/css" media="screen">
+	<script type="text/javascript" src="../../jquery-1.2.6.js"></script>
+	<script type="text/javascript" src="../../ui/ui.core.js"></script>
+	<script type="text/javascript" src="../../ui/ui.draggable.js"></script>
+	<script type="text/javascript" src="../../ui/ui.droppable.js"></script>
+	<script type="text/javascript">
+	$(function() {
+		$(".draggable").draggable();
+		$("#droppable").droppable({
+			accept: '.draggable',
+			drop: function(ev, ui) {
+				ui.draggable.css({ position: 'relative', top: 0, left: 0 }).clone().appendTo(this);
+			}
+		});
+	});
+	</script>
+</head>
+<body>
+
+<ul class="plugins">
+<li>
+	Droppable
+	<div class="draggable">D</div>
+	<div class="draggable">R</div>
+	<div class="draggable">A</div>
+	<div class="draggable">G</div>
+	<div id="droppable">
+		DROP
+		<hr>
+	</div>
+</li>
+</ul>
+
+</body>
+</html>

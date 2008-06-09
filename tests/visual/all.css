@@ -5,7 +5,7 @@ ul.plugins li { margin: 0 12px 12px 0;
 	list-style-type: none; width: 210px; height: 220px; float: left;
 	color: white; border: 1px solid gray; text-align: center; font-weight: bold; }
 
-#accordion, #draggable, #droppable,
+#accordion, #draggable,
 #resizable, #selectable, #sortable, #tabs {
 	margin: 10px;
 	width: 190px; height: 180px;
@@ -29,6 +29,10 @@ ul.plugins li { margin: 0 12px 12px 0;
 #sortable .ui-sortable-helper {
 	background: black;
 }
+
+.draggable { margin: 10px; width: 32px; height: 30px; float: left; background: #FF9C08; }
+#droppable { margin: 10px; width: 190px; height: 130px; float: left; border: 1px solid #FF9C08; overflow: hidden; }
+#droppable .draggable { margin: 7px; }
 
 .ui-dialog { background-color: #FF9C08; }
 .ui-dialog .ui-dialog-titlebar { background: black; padding: 0px; height: 28px;	_height: 29px; }
