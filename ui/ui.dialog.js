@@ -54,8 +54,8 @@ $.widget("ui.dialog", {
 				.prependTo(uiDialogContainer),
 			
 			uiDialog = (this.uiDialog = uiDialogContainer.parent())
-				.hide()
 				.appendTo(document.body)
+				.hide()
 				.addClass('ui-dialog')
 				.addClass(options.dialogClass)
 				// add content classes to dialog
