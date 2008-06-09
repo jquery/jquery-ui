@@ -229,7 +229,7 @@ $.widget("ui.dialog", {
 		this.overlay = this.options.modal ? new $.ui.dialog.overlay(this) : null;
 		this.uiDialog.appendTo('body');
 		this.position(this.options.position);
-		this.uiDialog.show();
+		this.uiDialog.show(this.options.show);
 		this.moveToTop(true);
 		
 		// CALLBACK: open
@@ -256,7 +256,7 @@ $.widget("ui.dialog", {
 	
 	close: function() {
 		(this.overlay && this.overlay.destroy());
-		this.uiDialog.hide();
+		this.uiDialog.hide(this.options.hide);
 
 		// CALLBACK: close
 		var closeEV = null;
