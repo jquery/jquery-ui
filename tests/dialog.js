@@ -5,7 +5,11 @@
 //
 // Dialog Test Helper Functions
 //
-var el, offsetBefore, offsetAfter, dragged;
+var el,
+	offsetBefore, offsetAfter,
+	heightBefore, heightAfter,
+	widthBefore, widthAfter,
+	dragged;
 
 var dlg = function() {
 	return el.data("dialog").element.parents(".ui-dialog:first");
@@ -20,14 +24,18 @@ var isNotOpen = function(why) {
 }
 
 var drag = function(handle, dx, dy) {
-	var element = el.data("dialog").element;
-	offsetBefore = el.offset();
-	$(handle).simulate("drag", {
+	var d = dlg();
+	offsetBefore = d.offset();
+	heightBefore = d.height();
+	widthBefore = d.width();
+	$(handle, d).simulate("drag", {
 		dx: dx || 0,
 		dy: dy || 0
 	});
 	dragged = { dx: dx, dy: dy };
-	offsetAfter = el.offset();
+	offsetAfter = d.offset();
+	heightAfter = d.height();
+	widthAfter = d.width();
 }
 
 var moved = function (dx, dy, msg) {
@@ -59,45 +67,48 @@ module("dialog");
 test("init", function() {
 	expect(6);
 
-	el = $("#dialog1").dialog();
+	$("#dialog1").dialog().remove();
 	ok(true, '.dialog() called on element');
 
-	$([]).dialog();
+	$([]).dialog().remove();
 	ok(true, '.dialog() called on empty collection');
 
-	$("<div/>").dialog();
+	$("<div/>").dialog().remove();
 	ok(true, '.dialog() called on disconnected DOMElement');
 
-	$("<div/>").dialog().dialog("foo");
+	$("<div/>").dialog().dialog("foo").remove();
 	ok(true, 'arbitrary method called after init');
 
-	$("<div/>").dialog().data("foo.dialog");
+	el = $("<div/>").dialog()
+	var foo = el.data("foo.dialog");
+	el.remove();
 	ok(true, 'arbitrary option getter after init');
 
-	$("<div/>").dialog().data("foo.dialog", "bar");
+	$("<div/>").dialog().data("foo.dialog", "bar").remove();
 	ok(true, 'arbitrary option setter after init');
-
 });
 
 test("destroy", function() {
 	expect(6);
 
-	$("#dialog1").dialog().dialog("destroy");	
+	$("#dialog1").dialog().dialog("destroy").remove();
 	ok(true, '.dialog("destroy") called on element');
 
-	$([]).dialog().dialog("destroy");
+	$([]).dialog().dialog("destroy").remove();
 	ok(true, '.dialog("destroy") called on empty collection');
 
-	$("<div/>").dialog().dialog("destroy");
+	$("<div/>").dialog().dialog("destroy").remove();
 	ok(true, '.dialog("destroy") called on disconnected DOMElement');
 
-	$("<div/>").dialog().dialog("destroy").dialog("foo");
+	$("<div/>").dialog().dialog("destroy").dialog("foo").remove();
 	ok(true, 'arbitrary method called after destroy');
 
-	$("<div/>").dialog().dialog("destroy").data("foo.dialog");
+	el = $("<div/>").dialog();
+	var foo = el.dialog("destroy").data("foo.dialog");
+	el.remove();
 	ok(true, 'arbitrary option getter after destroy');
 
-	$("<div/>").dialog().dialog("destroy").data("foo.dialog", "bar");
+	$("<div/>").dialog().dialog("destroy").data("foo.dialog", "bar").remove();
 	ok(true, 'arbitrary option setter after destroy');
 });
 
@@ -190,6 +201,7 @@ test("buttons", function() {
 	});
 	equals(btn.parent().attr('className'), 'ui-dialog-buttonpane', "buttons in container");
 	btn.trigger("click");
+	el.remove();
 });
 
 test("draggable", function() {
@@ -198,24 +210,100 @@ test("draggable", function() {
 	el.remove();
 	el = $("<div/>").dialog({ draggable: true });
 	shouldmove();
+	el.remove();
+});
+
+test("height", function() {
+	el = $("<div/>").dialog();
+	equals(dlg().height(), 200, "default height");
+	el.remove();
+	el = $("<div/>").dialog({ height: 437 });
+	equals(dlg().height(), 437, "default height");
+	el.remove();
+});
+
+test("maxHeight", function() {
+	el = $("<div/>").dialog({ maxHeight: 400 });
+	drag('.ui-resizable-s', 1000, 1000);
+	equals(heightAfter, 400, "maxHeight");
+	el.remove();
+	el = $("<div/>").dialog({ maxHeight: 400 });
+	drag('.ui-resizable-n', -1000, -1000);
+	equals(heightAfter, 400, "maxHeight");
+	el.remove();
+});
+
+test("maxWidth", function() {
+	el = $("<div/>").dialog({ maxWidth: 400 });
+	drag('.ui-resizable-e', 1000, 1000);
+	equals(widthAfter, 400, "maxWidth");
+	el.remove();
+	el = $("<div/>").dialog({ maxWidth: 400 });
+	drag('.ui-resizable-w', -1000, -1000);
+	equals(widthAfter, 400, "maxWidth");
+	el.remove();
+});
+
+test("minHeight", function() {
+	el = $("<div/>").dialog({ minHeight: 10 });
+	drag('.ui-resizable-s', -1000, -1000);
+	equals(heightAfter, 10, "minHeight");
+	el.remove();
+	el = $("<div/>").dialog({ minHeight: 10 });
+	drag('.ui-resizable-n', 1000, 1000);
+	equals(heightAfter, 10, "minHeight");
+	el.remove();
+});
+
+test("minWidth", function() {
+	el = $("<div/>").dialog({ minWidth: 10 });
+	drag('.ui-resizable-e', -1000, -1000);
+	equals(widthAfter, 10, "minWidth");
+	el.remove();
+	el = $("<div/>").dialog({ minWidth: 10 });
+	drag('.ui-resizable-w', 1000, 1000);
+	equals(widthAfter, 10, "minWidth");
+	el.remove();
 });
 
 module("dialog: Methods");
 
 module("dialog: Callbacks");
 
+test("open", function() {
+	expect(4);
+	el = $("<span/>");
+	var content = el[0];
+	el.dialog({
+		open: function(ev, ui) {
+			ok(true, 'autoOpen: true fires open callback');
+			equals(this, content, "context of callback");
+		}
+	});
+	el.remove();
+	el = $("<span/>");
+	var content = el[0];
+	el.dialog({
+		autoOpen: false,
+		open: function(ev, ui) {
+			ok(true, '.dialog("open") fires open callback');
+			equals(this, el[0], "context of callback");
+		}
+	});
+	el.dialog("open");
+	el.remove();
+});
+
+test("close", function() {
+	expect(2);
+	el = $("<div/>").dialog({
+		close: function(ev, ui) {
+			ok(true, '.dialog("close") fires close callback');
+			equals(this, el[0], "context of callback");
+		}
+	});
+	el.dialog("close");
+	el.remove();
+});
+
 module("dialog: Tickets");
-
-test("#XXXX title", function() {
-	
-	
-	
-});
-
-module("dialog: Cleanup");
-
-test("cleanup", function() {
-
-	$(".ui-dialog").remove();
-
-});
