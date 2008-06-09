@@ -1,10 +1,11 @@
 /*
  * dialog unit tests
  */
-
+(function($) {
 //
 // Dialog Test Helper Functions
 //
+
 var el,
 	offsetBefore, offsetAfter,
 	heightBefore, heightAfter,
@@ -307,3 +308,5 @@ test("close", function() {
 });
 
 module("dialog: Tickets");
+
+})(jQuery);

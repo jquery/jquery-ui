@@ -1,3 +1,8 @@
+/*
+ * accordion unit tests
+ */
+(function($) {
+
 module("accordion");
 
 jQuery.ui.accordion.defaults.animated = false;
@@ -76,3 +81,5 @@ test("activate, jQuery or DOM element", function() {
 	ac.accordion("activate", $("#list1 a")[1]);
 	state(ac, 0, 1, 0);
 });
+
+})(jQuery);

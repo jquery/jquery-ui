@@ -1,7 +1,7 @@
 /*
  * draggable unit tests
  */
-
+(function($) {
 //
 // Draggable Test Helper Functions
 //
@@ -487,3 +487,5 @@ test("#2965 cursorAt with margin", function() {
 	equals(actual.top, expected.top, "10px margin. top");
 	
 });
+
+})(jQuery);

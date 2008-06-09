@@ -1,6 +1,7 @@
 /*
  * resizable tests
  */
+(function($) {
 
 var drag = function(el, dx, dy, complete) {
 	
@@ -398,3 +399,5 @@ test("ui-resizable-se { handles: 'all', grid: [0, 20] } wrapped", function() {
 	equals( target.height(), 120, "compare height");
 	
 });
+
+})(jQuery);

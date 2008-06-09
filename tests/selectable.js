@@ -1,7 +1,7 @@
 /*
  * selectable unit tests
  */
-
+(function($) {
 //
 // Selectable Test Helper Functions
 //
@@ -203,3 +203,5 @@ test("stop", function() {
 });
 
 module("selectable: Tickets");
+
+})(jQuery);

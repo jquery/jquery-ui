@@ -1,3 +1,7 @@
+/*
+ * slider unit tests
+ */
+(function($) {
 
 var keyCodes = {
 	leftArrow: 37,
@@ -108,3 +112,5 @@ test("handle creation", function() {
 	equals(instance.handle.length, 2);
 	ok(instance.handle.jquery, "handle must be a jquery object")
 })
+
+})(jQuery);
