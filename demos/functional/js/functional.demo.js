@@ -165,7 +165,7 @@ var loadDemo = function(comp) {
 	$('#containerDemo').html("<img src='images/ajax-loader.gif'>");
 	
 	 $("#containerDemo").ajaxError(function(request, settings){ 
-	   $(this).html("Ops, there is no template file for this component."); 
+	   $(this).html("Oops, there is no template file for this component."); 
 	 });
 	
 	$.get('templates/'+comp+'.html', function(data) {
