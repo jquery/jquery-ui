@@ -10,7 +10,6 @@
  * Depends:
  *	ui.core.js
  *
- * Revision: $Id: ui.draggable.js 5672 2008-05-23 04:11:30Z braeker $
  */
 (function($) {
 

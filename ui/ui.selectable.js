@@ -10,7 +10,6 @@
  * Depends:
  *	ui.core.js
  *
- * Revision: $Id: ui.selectable.js 5581 2008-05-13 16:58:03Z scott.gonzalez $
  */
 (function($) {
 

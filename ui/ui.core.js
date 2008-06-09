@@ -7,7 +7,6 @@
  *
  * http://docs.jquery.com/UI
  *
- * $Id: ui.core.js 5587 2008-05-13 19:56:42Z scott.gonzalez $
  */
 ;(function($) {
 
