@@ -162,6 +162,8 @@ var uiRenderDemo = function(model) {
 
 var loadDemo = function(comp) {
 	
+	$("#dialog").dialog().remove();
+	
 	$('#containerDemo').html("<img src='images/ajax-loader.gif'>");
 	
 	 $("#containerDemo").ajaxError(function(request, settings){ 
