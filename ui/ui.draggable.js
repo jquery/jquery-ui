@@ -236,7 +236,7 @@ $.widget("ui.draggable", $.extend($.ui.mouse, {
 	clear: function() {
 		this.helper.removeClass("ui-draggable-dragging");
 		if(this.options.helper != 'original' && !this.cancelHelperRemoval) this.helper.remove();
-		if($.ui.ddmanager) $.ui.ddmanager.current = null;
+		//if($.ui.ddmanager) $.ui.ddmanager.current = null;
 		this.helper = null;
 		this.cancelHelperRemoval = false;
 	},
