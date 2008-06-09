@@ -6,7 +6,7 @@ ul.plugins li { margin: 0 12px 12px 0;
 	color: white; border: 1px solid gray; text-align: center; font-weight: bold; }
 
 #accordion, #draggable, #droppable,
-#resizable, #selectable, #slider, #sortable, #tabs {
+#resizable, #selectable, #sortable, #tabs {
 	margin: 10px;
 	width: 190px; height: 180px;
 	text-align: center;
@@ -71,3 +71,6 @@ ul.plugins li { margin: 0 12px 12px 0;
 .ui-dialog .ui-resizable-sw { cursor: sw-resize; width: 9px; height: 9px; left: 0px; bottom: 0px; background: gray !important; border: none !important; }
 .ui-dialog .ui-resizable-nw { cursor: nw-resize; width: 9px; height: 29px; left: 0px; top: 0px; background: gray !important; border: none !important; }
 .ui-dialog .ui-resizable-ne { cursor: ne-resize; width: 9px; height: 29px; right: 0px; top: 0px; background: gray !important; border: none !important; }
+
+.ui-slider { margin: 10px; background: #FF9C08; height: 15px; }
+.ui-slider-handle { width: 10px; height: 15px; background: white; }
