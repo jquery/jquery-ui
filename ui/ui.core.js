@@ -199,7 +199,7 @@ $.ui.mouse = {
 		var self = this,
 			btnIsLeft = (e.which == 1),
 			elIsCancel = (typeof this.options.cancel == "string" ? $(e.target).is(this.options.cancel) : false);
-		if (!btnIsLeft || elIsCancel) {
+		if (!btnIsLeft || elIsCancel || !this.mouseCapture(e)) {
 			return true;
 		}
 		
@@ -277,7 +277,8 @@ $.ui.mouse = {
 	// These are placeholder methods, to be overriden by extending plugin
 	mouseStart: function(e) {},
 	mouseDrag: function(e) {},
-	mouseStop: function(e) {}
+	mouseStop: function(e) {},
+	mouseCapture: function(e) { return true; }
 };
 
 $.ui.mouse.defaults = {

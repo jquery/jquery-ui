@@ -276,10 +276,7 @@ $.widget("ui.sortable", $.extend($.ui.mouse, {
 			
 		};			
 	},
-	mouseStart: function(e, overrideHandle, noActivation) {
-
-		var o = this.options;
-		this.currentContainer = this;
+	mouseCapture: function(e, overrideHandle) {
 		
 		if(this.options.disabled || this.options.type == 'static') return false;
 
@@ -300,6 +297,13 @@ $.widget("ui.sortable", $.extend($.ui.mouse, {
 		}
 			
 		this.currentItem = currentItem;
+		return true;	
+			
+	},
+	mouseStart: function(e, overrideHandle, noActivation) {
+
+		var o = this.options;
+		this.currentContainer = this;
 
 		this.refresh();
 

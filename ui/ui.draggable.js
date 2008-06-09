@@ -504,6 +504,7 @@ $.ui.plugin.add("draggable", "connectToSortable", {
 					this.instance.options.helper = function() { return ui.helper[0]; };
 				
 					e.target = this.instance.currentItem[0];
+					this.instance.mouseCapture(e, true, true);
 					this.instance.mouseStart(e, true, true);
 
 					//Because the browser event is way off the new appended portlet, we modify a couple of variables to reflect the changes
