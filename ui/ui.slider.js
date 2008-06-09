@@ -90,6 +90,7 @@ $.widget("ui.slider", {
 			mouseStart: function(e) { return self.start.call(self, e, this.element[0]); },
 			mouseStop: function(e) { return self.stop.call(self, e, this.element[0]); },
 			mouseDrag: function(e) { return self.drag.call(self, e, this.element[0]); },
+			mouseCapture: function() { return true; },
 			trigger: function(e) { this.mouseDown(e); }
 		});
 		
