@@ -1,0 +1,98 @@
+/*
+===============================================================================
+Chili is the jQuery code highlighter plugin
+...............................................................................
+                                               Copyright 2007 / Andrea Ercolino
+-------------------------------------------------------------------------------
+LICENSE: http://www.opensource.org/licenses/mit-license.php
+WEBSITE: http://noteslog.com/chili/
+===============================================================================
+*/
+
+/*
+this file shows how to configure a static setup
+it must be linked from the head of a page like: 
+<link rel="stylesheet" type="text/css" href="chili/recipes.css"/>
+*/
+
+.html .php    { color: red; font-weight: bold; }
+.html .tag    { color: navy; font-weight: bold; }
+.html .aname  { color: purple; }
+.html .avalue { color: fuchsia; }
+.html .mlcom  { color: green; }
+.html .entity { color: teal; }
+
+.javascript .mlcom    { color: #4040c2; }
+.javascript .com      { color: green; }
+.javascript .regexp   { color: maroon; }
+.javascript .string   { color: teal; }
+.javascript .keywords { color: navy; font-weight: bold; }
+.javascript .global   { color: blue; }
+.javascript .numbers  { color: red; }
+
+.mysql .function  { color: #e17100; }
+.mysql .keyword   { color: navy; font-weight: bold; }
+.mysql .mlcom     { color: gray; }
+.mysql .com       { color: green; }
+.mysql .number    { color: red; }
+.mysql .hexnum    { color: red; font-weight: bold; }
+.mysql .string    { color: purple; }
+.mysql .quid      { color: fuchsia; }
+.mysql .id        { color: maroon; }
+.mysql .value     { color: gray; font-weight: bold; }
+.mysql .variable  { color: #4040c2; }
+
+.php .com       { color: green; }
+.php .const1    { color: red; }
+.php .const2    { color: red; }
+.php .func      { color: #e17100; }
+.php .global    { color: red; }
+.php .keyword   { color: navy; font-weight: bold; }
+.php .mlcom     { color: gray; }
+.php .name      { color: maroon; }
+.php .number    { color: red; }
+.php .string1   { color: purple; }
+.php .string2   { color: fuchsia; }
+.php .value     { color: gray; font-weight: bold; }
+.php .variable  { color: #4040c2; }
+
+.css .mlcom  { color: #4040c2; }
+.css .color  { color: green; }
+.css .string { color: teal; }
+.css .attrib { color: navy; font-weight: bold; }
+.css .value  { color: blue; }
+.css .number { color: red; }
+
+
+
+/*
+===============================================================================
+Chili is the jQuery code highlighter plugin
+...............................................................................
+                                               Copyright 2007 / Andrea Ercolino
+-------------------------------------------------------------------------------
+LICENSE: http://www.opensource.org/licenses/mit-license.php
+WEBSITE: http://noteslog.com/chili/
+===============================================================================
+*/
+
+.javascript .mlcom    { color: #4040c2; }
+.javascript .com      { color: green; }
+.javascript .regexp   { color: maroon; }
+.javascript .string   { color: teal; }
+.javascript .keywords { color: navy; font-weight: bold; }
+.javascript .global   { color: blue; }
+.javascript .numbers  { color: red; }
+
+.javascript .jquery .object       { color: red; font-weight: bold; }
+.javascript .jquery .private      { background-color: #CCCC99; }
+.javascript .jquery .attributes   { background-color: #CCCC00; }
+.javascript .jquery .traversing   { background-color: #CCCC00; }
+.javascript .jquery .manipulation { background-color: #CCCC00; }
+.javascript .jquery .utilities    { background-color: #CCCCFF; }
+.javascript .jquery .core         { background-color: #7F7FFF; color: white; }
+.javascript .jquery .ajax         { background-color: #7F7FFF; color: #FFD400; }
+.javascript .jquery .css          { background-color: #999900; color: white; }
+.javascript .jquery .effects      { background-color: #FFAA00; }
+.javascript .jquery .events       { background-color: #FFD400; }
+

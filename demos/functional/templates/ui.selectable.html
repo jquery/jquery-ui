@@ -1,0 +1,31 @@
+<script type="text/javascript">
+
+	var model = {
+
+		renderAt: '#containerDemo',
+
+		title: 'Selectable Demos',
+
+		demos: [
+
+			{
+				title: 'Selectable',
+				desc: 'With few lines of code you could have selectable elements. You can try more options on the fly!',
+				html: { url: 'templates/ui.selectable.data.html' },
+				destroy: '$("#selectable-example").selectable("destroy");',
+				options: [
+					{	desc: 'Make a simple selectable list', source: '$("#selectable-example").selectable();' },
+					{	desc: 'Tolerance touch', source: '$("#selectable-example").selectable({ tolerance: "touch" });' }
+				]
+			}
+		]
+
+	};
+
+	$(function(){
+
+		uiRenderDemo(model);
+
+	});
+
+</script>

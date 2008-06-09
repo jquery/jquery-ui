@@ -1,0 +1,164 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<title>jQuery UI - Functional demos</title>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+	
+	<meta name="keywords" content="jquery,user interface,ui,widgets,interaction,javascript" />
+	<meta name="description" content="jQuery UI is jQuery's user interface library that comes with many widgets, interaction modules and themes." />
+	<meta name="author" content="Paul Bakaus" />
+	
+	<link rel="shortcut icon" href="images/favicon.ico" />
+	<link rel="icon" href="images/favicon.ico" type="image/x-icon" />
+
+	
+			<link rel="stylesheet" href="css/base.css" type="text/css" media="screen">
+			<link rel="stylesheet" href="css/functional_demos.css" type="text/css" media="screen">
+			<link rel="stylesheet" href="css/chilli-recipes.css" type="text/css" media="screen">
+			
+			<script type="text/javascript" src="../../jquery-1.2.6.js"></script>
+		
+			<script type="text/javascript" src="../../ui/ui.core.js"></script>
+			<script type="text/javascript" src="../../ui/ui.accordion.js"></script>
+			<script type="text/javascript" src="../../ui/ui.datepicker.js"></script>
+			<script type="text/javascript" src="../../ui/ui.dialog.js"></script>
+			<script type="text/javascript" src="../../ui/ui.draggable.js"></script>
+			<script type="text/javascript" src="../../ui/ui.droppable.js"></script>
+			<script type="text/javascript" src="../../ui/ui.resizable.js"></script>
+			<script type="text/javascript" src="../../ui/ui.selectable.js"></script>
+			<script type="text/javascript" src="../../ui/ui.slider.js"></script>
+			<script type="text/javascript" src="../../ui/ui.sortable.js"></script>
+			<script type="text/javascript" src="../../ui/ui.tabs.js"></script>
+			<script type="text/javascript" src="../../ui/effects.core.js"></script>
+			<script type="text/javascript" src="../../ui/effects.blind.js"></script>
+			<script type="text/javascript" src="../../ui/effects.bounce.js"></script>
+			<script type="text/javascript" src="../../ui/effects.clip.js"></script>
+			<script type="text/javascript" src="../../ui/effects.drop.js"></script>
+			<script type="text/javascript" src="../../ui/effects.explode.js"></script>
+			<script type="text/javascript" src="../../ui/effects.fold.js"></script>
+			<script type="text/javascript" src="../../ui/effects.highlight.js"></script>
+			<script type="text/javascript" src="../../ui/effects.pulsate.js"></script>
+			<script type="text/javascript" src="../../ui/effects.scale.js"></script>
+			<script type="text/javascript" src="../../ui/effects.shake.js"></script>
+			<script type="text/javascript" src="../../ui/effects.slide.js"></script>
+			<script type="text/javascript" src="../../ui/effects.transfer.js"></script>
+					
+			<script src="js/behaviour.js" type="text/javascript"></script>
+			<script src="js/behaviour.functionaldemos.js" type="text/javascript"></script>
+
+			<script src="js/beautify.js" type="text/javascript"></script>
+			<script src="js/functional.demo.js" type="text/javascript"></script>
+			<script src="js/jquery.chili.pack.js" type="text/javascript"></script>
+
+			<script src="js/chili-recipes.js" type="text/javascript"></script>
+	</head>
+
+<body id="functional_demos">
+<!--[if IE 5]><div id="ie5" class="ie"><![endif]-->
+<!--[if IE 6]><div id="ie6" class="ie"><![endif]-->
+<!--[if IE 7]><div id="ie7" class="ie"><![endif]-->
+<div id="wrapper">
+	<div id="banner">
+		<h1 class="logo">
+			<a href="/home" title="jQuery User Interface"><span>jQuery User Interface</span></a>
+
+		</h1>
+		
+	</div>
+	<div id="content-wrapper">
+		<div id="content">
+
+		<div class="content-top"></div>
+		<div class="content"><link rel="stylesheet" href="../../themes/flora/flora.all.css" type="text/css" media="screen" title="Flora (Default)" />
+
+<form id="components-fm" action="/actions/download_builder.php" method="post">
+<div class="content-head">
+	<h2>
+		<span>Functional Demos</span>
+	</h2>
+	<p>
+		Learn how to build Cross-Browser Rich Internet Applications!
+	</p>
+
+</div>
+<div class="content-body">
+	<table cellspacing="0" cellpadding="0" class="layout-grid" id="functional">
+		<tr>
+			<td class="left-nav">
+				<div class="section" style="border:0; width:155px;">
+					<p class="side-menu-title">
+						Interaction
+					</p>
+					<div id="links" class="normal" style="width:100%;">
+
+						  <ul class="component-links">
+								<li><a href="#ui.draggable" title="Goto Draggable's Component Page">Draggable</a></li>
+								<li><a href="#ui.droppable" title="Goto Droppable's Component Page">Droppable</a></li>
+								<li><a href="#ui.resizable" title="Goto Resizable's Component Page">Resizable</a></li>
+								<li><a href="#ui.selectable" title="Goto Selectable's Component Page">Selectable</a></li>
+								<li><a href="#ui.sortable" title="Goto Sortable's Component Page">Sortable</a></li>
+
+							</ul>
+					</div>
+					<br style="clear:both;">
+				</div>
+				<div class="section" style="border:0;">
+					<p class="side-menu-title">
+						Widgets
+					</p>
+					<div id="links" class="normal">
+
+						  <ul class="component-links">
+								<li><a href="#ui.accordion" title="Goto Accordion's Component Page">Accordion</a></li>
+								<li><a href="#ui.tabs" title="Goto Tabs Component Page">Tabs</a></li>
+								<li><a href="#ui.slider" title="Goto Slider Component Page">Slider</a></li>
+								<li><a href="#ui.dialog" title="Goto Dialog's Component Page">Dialog</a></li>
+							</ul>
+					</div>
+
+					<br style="clear:both;">
+				</div>
+			</td>
+			<td class="normal">
+								
+				<div class="normal" id="containerDemo">
+					<h3>
+						Instructions
+					</h3>
+					<p>
+
+						The functional demos are provided to give users an idea of how jQueryUI works. You only need to copy and paste code from the demos. Have fun playing with it.
+					</p>
+					
+					<div id="functional-demo-face" style="margin-left: 10px;">
+						<img src="images/functional-demo-face.png">
+					</div>
+					
+					<br>
+				</div>
+					
+							</td>
+		</tr>
+
+	</table>
+</div>
+</form>		</div>
+		</div>
+	</div>
+	
+	<div id="footer">
+
+		<div class="bg"></div>
+		<div class="inner">
+			<p>
+				<span class="first">Sponsored by: </span><a class="block liferay" href="http://www.liferay.com"><span>Liferay</span></a>
+				<span class="first" style="float: right; padding-right: 12px;">© 2007 Paul Bakaus and the <a href="/about">jQuery UI Team</a>.</span>
+			</p>
+
+		</div>
+	</div>
+</div>
+<!--[if lte IE 7]></div><![endif]-->
+</body>
+
+</html>

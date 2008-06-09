@@ -1,0 +1,61 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+   "http://www.w3.org/TR/html4/strict.dtd">
+   	
+<html>
+	<head>
+		<title>jQuery UI Resizable Containment Bug</title>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+		<style>
+			#container {
+				width: 900px;
+				text-align: center;
+				margin: auto;
+				border: 2px solid black;
+				position: relative;
+			}
+			
+				#resizable {
+					position: absolute;
+					width: 120px;
+					height: 120px;
+					border: 2px solid green;
+					top: 200px;
+					left: 300px;
+					z-index: 100;
+					zoom:1;
+				}
+				.proxy {
+					border:1px solid red;
+				}
+		</style>
+		
+		<script type="text/javascript" src="../jquery-1.2.6.js"></script>
+		<script type="text/javascript" src="../ui/ui.core.js"></script>
+		<script type="text/javascript" src="../ui/ui.draggable.js"></script>
+		<script type="text/javascript" src="../ui/ui.resizable.js"></script>
+		
+		
+		<script type="text/javascript">
+			$(function() {
+				$('#resizable').resizable({
+					handles: 'all',
+					ghost: true,
+					knobHandles: true,
+					proxy: 'proxy',
+					containment: $('#containment')
+				}).
+				parent().draggable({
+					containment: $('#containment')
+				});
+			})
+		</script>
+	</head>
+
+	<body>
+		<div id="container">
+			<img src="http://images.packtpub.com/images/full/1847192505.jpg" id="resizable" width="100px" height="100px">
+			<img src="http://images.packtpub.com/images/full/1847192505.jpg" id="containment">
+		</div>
+	</body>
+</html>

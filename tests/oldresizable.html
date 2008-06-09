@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Language" content="en" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Resizables Test Page</title>
+		<script type="text/javascript" src="../jquery-1.2.6.js"></script>
+		<script type="text/javascript" src="../ui/ui.core.js"></script>
+		<script type="text/javascript" src="../ui/ui.draggable.js"></script>
+		<script type="text/javascript" src="../ui/ui.resizable.js"></script>
+
+<link rel="stylesheet" href="../themes/flora/flora.all.css" type="text/css" media="screen" title="Flora (Default)" />
+<style type="text/css" media="all">
+
+body
+{
+	background: #fff;
+	margin: 0;
+	padding: 0;
+	font-family: Arial;
+	font-size: 12px;
+}
+
+.proxy {
+	border: 1px dashed #000/*#3399ff*/;
+	/*background-color: #b7d3ef;*/
+	/*opacity: 0.3;
+	alpha: 0.3;
+	filter:progid:DXImageTransform.Microsoft.Alpha(opacity=30);*/
+}
+
+
+/*.ui-resizable-handle { position: absolute; background: #D0E3FC; display: none; }
+.ui-resizable .ui-resizable-handle { display: block }
+.ui-resizable-n { cursor: n-resize; height: 8px; left: 8px; right: 8px; }
+.ui-resizable-e { cursor: e-resize; width: 8px; top: 8px; bottom: 8px; }
+.ui-resizable-s { cursor: s-resize; height: 8px; left: 8px; right: 8px; }
+.ui-resizable-w { cursor: w-resize; width: 8px; top: 8px; bottom: 8px; }
+
+.ui-resizable-se { cursor: se-resize; width: 8px; height: 8px; }
+.ui-resizable-sw { cursor: sw-resize; width: 8px; height: 8px; }
+.ui-resizable-ne { cursor: ne-resize; width: 8px; height: 8px; }
+.ui-resizable-nw { cursor: nw-resize; width: 8px; height: 8px; }
+*/
+
+#log {
+	right:0px;
+	top:0px;
+	background-color:#FAFCFE;
+	border:1px solid #DFE8F6;
+	height:400px;
+	width:300px;
+	position:absolute;
+	overflow:auto;
+}
+
+.ui-resizable-knob {
+	border: 1px #fff dashed;
+}
+
+</style>
+</head>
+<body >
+
+<div id="log">log</div>
+
+
+
+<div id='containment_parent' style='width: 400px; height: 300px; margin: 20px; position: relative; background:#F7FFEF;border:20px solid #E6F7D4; overflow:auto;'>
+	<div id='resizeme_containment' style='width: 200px; height: 100px; border: 1px solid black; position: absolute; background:#fff; padding:10px;'>
+		<div style='position: relative;'>Relative position, containment enabled.</div>
+	</div>
+	<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br> 
+</div>
+
+<div style='width: 300px; height: 300px; margin: 20px; position: relative; background:#F7FFEF;border:0px solid #E6F7D4;'>
+	<img id="resizeme_containment_image" src="images/houses.jpg" style='width: 70px; height:70px;border: 0px solid #F0F1F3; margin: 0px;'> 
+</div>
+
+<div id="resizeme_containment_div_wrapper" style='width: 460px; height: 306px; margin: 20px; position: relative; display: block; background:#F7FFEF;'>
+	<div id="resizeme_containment_wrap_image" style='width: 460px; height: 306px;background: transparent url(../../fx/images/very-cute-puppy.jpg) no-repeat scroll 0%;'></div>
+	<div id="resizeme_containment_div" style='top:0px; left:0px; width: 150px; height:150px; position: absolute; background: transparent url(../../fx/images/very-cute-puppy.jpg) no-repeat scroll 0px 0px;'></div>
+</div>
+
+<div style='width: 400px; height: 300px; margin: 20px; position: relative; background:#F7FFEF;border:2px solid #E6F7D4;'>
+	<textarea id='resizeme_containment_prop' style='width: 300px; height: 200px;  margin: 0px; padding:0px; border:0px solid #ccc;'>
+	I was made resizable with this code only: $('#textarea').resizable();
+	
+	Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Sed leo. Proin commodo. Nullam nisl ipsum, sagittis sit amet, mattis id, aliquam ac, purus. Suspendisse dignissim lorem id odio. Duis tortor nisl, imperdiet placerat, accumsan eu, lacinia sit amet, mauris. Mauris tellus erat, ullamcorper in, faucibus ut, consectetuer quis, mi. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Aenean mollis lectus lacinia augue. Nam eget leo. Fusce magna. Etiam eros. Quisque eget dui. Donec fringilla, libero non rhoncus bibendum, nibh turpis varius orci, quis bibendum metus justo quis nibh. Proin blandit. Suspendisse feugiat consequat lectus. Etiam pharetra suscipit velit. Donec imperdiet quam sit amet erat pretium ullamcorper. Donec quis nisl vitae lacus accumsan faucibus. Vivamus velit turpis, tristique sit amet, malesuada id, molestie et, magna.
+	Nullam blandit, odio rutrum sagittis consectetuer, metus nulla malesuada eros, sit amet aliquam sem leo at augue. Quisque gravida. In et augue ac neque ultricies dictum. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos hymenaeos. Ut est ante, egestas eget, dignissim quis, elementum vel, nunc. Suspendisse potenti. Suspendisse mattis feugiat ipsum. Proin at lorem sit amet erat auctor pharetra. Vivamus sit amet augue. Pellentesque consequat ligula in erat. In aliquam porttitor nisl. Donec sed quam. Aliquam accumsan mi nec diam. Etiam imperdiet vehicula nisl. 
+	</textarea>
+</div>
+
+<div style='width: 300px; height: 200px; margin: 20px; position: relative;'>
+	<textarea id='textarea' style='width: 400px; height: 200px;  margin: 0px; padding:0px; border:0px solid #ccc;'>
+	I was made resizable with this code only: $('#textarea').resizable();
+	
+	Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Sed leo. Proin commodo. Nullam nisl ipsum, sagittis sit amet, mattis id, aliquam ac, purus. Suspendisse dignissim lorem id odio. Duis tortor nisl, imperdiet placerat, accumsan eu, lacinia sit amet, mauris. Mauris tellus erat, ullamcorper in, faucibus ut, consectetuer quis, mi. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Aenean mollis lectus lacinia augue. Nam eget leo. Fusce magna. Etiam eros. Quisque eget dui. Donec fringilla, libero non rhoncus bibendum, nibh turpis varius orci, quis bibendum metus justo quis nibh. Proin blandit. Suspendisse feugiat consequat lectus. Etiam pharetra suscipit velit. Donec imperdiet quam sit amet erat pretium ullamcorper. Donec quis nisl vitae lacus accumsan faucibus. Vivamus velit turpis, tristique sit amet, malesuada id, molestie et, magna.
+	Nullam blandit, odio rutrum sagittis consectetuer, metus nulla malesuada eros, sit amet aliquam sem leo at augue. Quisque gravida. In et augue ac neque ultricies dictum. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos hymenaeos. Ut est ante, egestas eget, dignissim quis, elementum vel, nunc. Suspendisse potenti. Suspendisse mattis feugiat ipsum. Proin at lorem sit amet erat auctor pharetra. Vivamus sit amet augue. Pellentesque consequat ligula in erat. In aliquam porttitor nisl. Donec sed quam. Aliquam accumsan mi nec diam. Etiam imperdiet vehicula nisl. 
+	</textarea>
+</div>
+
+<div style='width: 300px; height: 200px; margin: 20px; position: relative; top:100px;'>
+	<img id="image" src="images/houses.jpg" style='width: 100px; height:200px;border: 0px solid #F0F1F3; margin: 0px;'> 
+</div>
+
+<div style='width: 300px; height: 200px; margin: 20px; position: relative;top:30px;'>
+	<img id="image2" src="images/bamboo.jpg" style='width: 300px; height:100px;border: 2px solid #F0F1F3; margin: 0px;'> 
+</div>
+
+
+<div style='width: 300px; height: 200px; margin: 20px; position: relative;top:30px;'>
+	<input id="input" type="text" value="Input text test" style='width:300px; height:50px;'> 
+</div>
+
+
+<div id='resizeme' style='width: 300px; height: 200px; border: 1px solid black; margin: 20px; position: relative;'>
+<div style='position: absolute; top: 20px; left: 20px; bottom: 20px; right: 20px;'>Relative position without proxy (w,nw,n automatically disabled)</div>
+</div>
+
+<div id='resizeme4' style='width: 300px; height: 200px; border: 1px solid black; margin: 20px; position: relative;'>
+<div style='position: absolute; top: 20px; left: 20px; bottom: 20px; right: 20px;'>Relative position with proxy (all directions enabled, manual handlers)</div>
+
+<div class='ui-resizable-n ui-resizable-handle'></div>
+	<div class='ui-resizable-e ui-resizable-handle'></div>	
+	<div class='ui-resizable-s ui-resizable-handle'></div>
+	<div class='ui-resizable-w ui-resizable-handle'></div>
+	
+	<div class='ui-resizable-se ui-resizable-handle'></div>
+	<div class='ui-resizable-sw ui-resizable-handle'></div>
+	<div class='ui-resizable-ne ui-resizable-handle'></div>
+	<div class='ui-resizable-nw ui-resizable-handle'></div>
+
+</div>
+
+<div id='resizeme2' style='width: 300px; height: 200px; border: 1px solid black; position: absolute; top: 100px; right: 400px;'>
+<div style='position: absolute; top: 20px; left: 20px; bottom: 20px; right: 20px;'>Absolute position without proxy (all directions enabled)</div>
+</div>
+
+<div id='resizeme3' style='width: 300px; height: 200px; border: 1px solid black; position: relative; position: absolute; bottom: 20px; right: 20px;'>
+	<div style='position: absolute; top: 20px; left: 20px; bottom: 20px; right: 20px;'><b>Transparent axis</b><br>Absolute position with proxy (all directions enabled), ah, and I'm draggable, too!</div>
+</div>
+
+<div id='resizeme5' style='width: 300px; height: 200px; border: 1px solid black; position: relative; position: absolute; bottom: 20px; right: 550px;'>
+	<div style='position: absolute; top: 20px; left: 20px; bottom: 20px; right: 20px;'><b>Animated Resizing</b><br>Absolute position with proxy (all directions enabled), ah, and I'm draggable, too!<br><br>
+		
+		$('#resizable5').resizable({ <br>animate: { opacity:.5, fontSize: '0.8em' }, <br>duration: 'slow', <br>easing: 'swing' <br>});
+		
+		<br>
+		<button onclick="$('#resizeme5').resizable({ animate: true, animateDuration: 'slow', animateEasing: 'swing' });">Enable</button>
+		<button onclick="$('#resizeme5').resizable('destroy');">Disable</button>
+		
+		</div>
+		
+</div>
+	
+
+<div id='resizeme6' style='position: relative;'>
+	<table border='1'><tr><td><div style="padding:10px;" id="tdResize">Resize-me!</div></td><td>Teste</td></td></tr></table>
+</div>
+
+<br><br><br><br>
+
+<div class="package" id="pkg1" style="margin: 5px; padding: 20px; background-color: #eee; left: 15%; width: 40%;">
+  <div style="float: left; background-color: #ccc; width: 20%;">Package #1</div>
+  <div style="float: left; background-color: #f00; width: 80px;">$250.00</a></div>
+</div>
+
+<br>
+
+<div class="package" id="pkg1" style="margin: 5px; padding: 20px; background-color: #eee; left: 167px; width: 236px;">
+  <div style="float: left; background-color: #ccc; width: 20%;">Package #1</div>
+  <div style="float: left; background-color: #f00; width: 80px;">$250.00</a></div>
+</div>
+
+<script type="text/javascript">
+	
+if(!window.console) {
+ window.console = {
+ 	log: function() {
+ 		$('#log').append(arguments[0]+"<br>");
+		$('#log').scrollTop(999999);	
+ 	}	
+ }	
+}
+
+
+$(document).ready(function(){
+	$(".package").resizable({ handles: 'w, e', autohide: true, minWidth: 10, containment: 'parent'});
+
+
+	$('#tdResize').resizable();
+
+	$('#resizeme_containment_div').resizable({
+		
+		containment: $('#resizeme_containment_div_wrapper'),
+		
+		//proxy: 'proxy',
+		
+		//ghost: true,
+		
+		knobHandles: true,
+		
+		//animate:true,
+		
+		handles: 'all',
+		//transparent: true,
+		aspectRatio: true,
+		//autohide: true,
+		minWidth: 100,
+		minHeight: 100,
+		maxWidth: 250,
+		maxHeight: 250,
+		resize: function(e, ui) {
+  		this.style.backgroundPosition = '-' + (ui.instance.position.left) + 'px -' + (ui.instance.position.top) + 'px';
+  	},
+		stop: function(e, ui) {
+  		this.style.backgroundPosition = '-' + (ui.instance.position.left) + 'px -' + (ui.instance.position.top) + 'px';
+  	}
+	})
+	.draggable({
+		cursor: 'move',
+		containment: $('#resizeme_containment_div_wrapper'),
+		drag: function(e, ui) {
+			this.style.backgroundPosition = '-' + (ui.position.left) + 'px -' + (ui.position.top) + 'px';
+		}
+	});
+	
+	$('#resizeme_containment_wrap_image').css({ opacity: 0.5 });
+	
+	
+	$('#resizeme_containment, #resizeme_containment_prop, #resizeme_containment_image').resizable({
+		proxy: "proxy",
+		handles: 'all',
+		//autohide: true,
+		
+		minWidth: 50,
+		minHeight: 50,
+		
+		//ghost: true,
+		
+		//grid: [40,40],
+		
+		start: function() {
+			//console.log('start')
+		},
+		
+		resize: function() {
+			//console.log('resize')
+		},
+		
+		stop: function() {
+			//console.log('stop')
+		},
+		
+		//containment: 'document',
+		//containment:$('#containment_parent'),
+		containment:'parent',
+		
+		//aspectRatio: 'preserve',
+		preventDefault: true,
+		preserveCursor: true,
+		disableSelection: true
+	});
+
+	$('#textarea').resizable({
+		
+		//proxy: "proxy",
+		
+		handles: 'all',
+		
+		ghost: true,
+		
+		autohide: true,
+		
+		maxHeight: 500,
+		maxWidth: 500,
+		minWidth: 100,
+		minHeight: 50,
+		
+		grid: [50, 50],
+		
+		animate: true,
+		
+		//containment: document,
+		containment: 'document',
+		//aspectRatio: 'preserve',
+		preventDefault: true,
+		preserveCursor: true,
+		disableSelection: true
+	});
+
+	$('#image').resizable({
+		proxy: "proxy",
+		handles: 'all',
+		minWidth: 50,
+		minHeight: 50,
+		
+		//grid: [50, 50],
+		
+		ghost: 'ghost',
+		
+		knobHandles: true,
+		
+		animate: true,
+		
+		maxHeight: 400,
+		maxWidth: 400,
+		//containment: 'parent',
+		aspectRatio: 'preserve',
+		autohide: true
+	});
+	
+	$('#image2').resizable({
+		proxy: "proxy",
+		handles: 'all',
+		//containment: 'parent',
+			minWidth: 50,
+		minHeight: 50,
+		maxHeight: 200,
+		maxWidth: 400,
+		
+		animate: true,
+		animateDuration: 'slow',
+		animateEasing: 'swing',
+		
+		aspectRatio: 'preserve'
+		//aspectRatio: false
+		//aspectRatio: 1.1
+		
+	});
+	
+
+	$('#input').resizable({
+		proxy: "proxy",
+		handles: 'e,se,s',
+		//ghost: true,
+		//containment: 'parent',
+		aspectRatio: 'preserve'
+	});
+	
+	
+	$('#resizeme, #resizeme2').resizable({
+		//proxy: "proxy",
+		minWidth: 200,
+		minHeight: 100,
+		//maxWidth: 500,
+		//maxHeight: 300,
+		
+		start: function(e,ui) {
+			//console.log('start ', ui);	
+		},
+		stop: function(e,ui) {
+			//console.log('stop ', ui);	
+		},
+		resize: function(e,ui) {
+			//console.log(e);	
+		},
+		alsoResize: [ "#resizeme3" ] 		
+	});
+	
+	
+	$('#resizeme3').resizable({
+		//proxy: "proxy",
+		minWidth: 200,
+		minHeight: 100,
+		maxWidth: 500,
+		maxHeight: 300,
+		transparent: true,
+		
+		handles: "s, se, e",
+		
+		preventDefault: true,
+		
+		start: function(e,ui) {
+			//console.log('start ', ui);	
+		},
+		stop: function(e,ui) {
+			//console.log('stop ', ui);	
+		},
+		resize: function(e,ui) {
+			//console.log(e);	
+		}		
+	});
+	
+	
+	
+	$('#resizeme5').resizable({
+		//proxy: "proxy",
+		minWidth: 200,
+		minHeight: 100,
+		maxWidth: 500,
+		maxHeight: 300,
+		
+		ghost: true,
+		
+		handles: "all",
+		
+		preventDefault: true,
+		
+		//animate: true,
+		//animate: false,
+		animate: true,
+		animateDuration: 'slow',
+		animateEasing: 'swing',
+		
+		start: function(e,ui) {
+			//console.log('start ', ui);	
+		},
+		stop: function(e,ui) {
+			//console.log('stop ', ui);	
+		},
+		resize: function(e,ui) {
+			//console.log(e);	
+		}		
+	});
+	
+	$('#resizeme4').resizable({
+		proxy: "proxy",
+		minWidth: 200,
+		minHeight: 100,
+		//maxWidth: 500,
+		//maxHeight: 300,
+		handles: {
+			n: '.ui-resizable-n',
+			e: '.ui-resizable-e',
+			s: '.ui-resizable-s',
+			w: '.ui-resizable-w',
+			se: '.ui-resizable-se',
+			sw: '.ui-resizable-sw',
+			ne: '.ui-resizable-ne',
+			nw: '.ui-resizable-nw'
+		},
+		start: function(e,ui) {
+			//console.log('start ', ui);	
+		},
+		stop: function(e,ui) {
+			//console.log('stop ', ui);	
+		},
+		resize: function(e,ui) {
+			//console.log(e);	
+		}		
+	});
+	
+	$('#resizeme3, #resizeme5, .ui-wrapper:parent').draggable({ handle: "div:not(.ui-resizable-handle)" });
+	
+	//$('#resizeme_containment').draggable({containment: 'parent'});
+	
+	//$("#resizeme3").animate({ height: 500, width: 500, opacity: 'hide' }, "easein");
+
+
+});
+</script>
+</body>
+</html>
