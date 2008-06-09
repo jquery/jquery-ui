@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Simple Dialog</title>
+	<link rel="stylesheet" href="all.css" type="text/css" media="screen">
+	<script type="text/javascript" src="../../jquery-1.2.6.js"></script>
+	<script type="text/javascript" src="../../ui/ui.core.js"></script>
+	<script type="text/javascript" src="../../ui/ui.dialog.js"></script>
+	<script type="text/javascript" src="../../ui/ui.draggable.js"></script>
+	<script type="text/javascript" src="../../ui/ui.resizable.js"></script>
+	<script type="text/javascript">
+	$(function() {
+		var offset = $("#dialog").offset();
+		$("#dialog").click(function() { $("<div/>").dialog(); });
+	});
+	</script>
+</head>
+<body class="flora">
+
+<ul class="plugins">
+<li>
+	Dialog
+	<div id="dialog">
+		<button>Open</button>
+	</div>
+</li>
+</ul>
+
+</body>
+</html>

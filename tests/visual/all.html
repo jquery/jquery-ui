@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Simple All</title>
+	<link rel="stylesheet" href="all.css" type="text/css" media="screen">
+	<link rel="stylesheet" href="../../themes/ui.datepicker.css" type="text/css" media="screen">
+	<script type="text/javascript" src="../../jquery-1.2.6.js"></script>
+	<script type="text/javascript" src="../../ui/ui.core.js"></script>
+	<script type="text/javascript" src="../../ui/ui.accordion.js"></script>
+	<script type="text/javascript" src="../../ui/ui.datepicker.js"></script>
+	<script type="text/javascript" src="../../ui/ui.dialog.js"></script>
+	<script type="text/javascript" src="../../ui/ui.draggable.js"></script>
+	<script type="text/javascript" src="../../ui/ui.droppable.js"></script>
+	<script type="text/javascript" src="../../ui/ui.resizable.js"></script>
+	<script type="text/javascript" src="../../ui/ui.selectable.js"></script>
+	<script type="text/javascript" src="../../ui/ui.slider.js"></script>
+	<script type="text/javascript" src="../../ui/ui.sortable.js"></script>
+	<script type="text/javascript" src="../../ui/ui.tabs.js"></script>
+	<script type="text/javascript">
+	$(function() {
+		$("#datepicker").datepicker();
+		$("#dialog").click(function() { $("<div/>").dialog(); });
+		$("#draggable").draggable();
+		$("#resizable").resizable();
+		$("#selectable").selectable();
+		$("#sortable").sortable();
+	});
+	</script>
+</head>
+<body>
+
+<ul class="plugins">
+<li>
+	Datepicker
+	<div style="text-align:left;margin-left:10px;">
+		<input type="text" id="datepicker">
+	</div>
+</li>
+<li>
+	Dialog
+	<div id="dialog">
+		<button>Open</button>
+	</div>
+</li>
+<li>
+	Draggable
+	<div id="draggable"></div>
+</li>
+<li>
+	Resizable
+	<div id="resizable"></div>
+</li>
+<li>
+	Selectable
+	<div id="selectable">
+		<div>1</div>
+		<div>2</div>
+		<div>3</div>
+		<div>4</div>
+		<div>5</div>
+		<div>6</div>
+		<div>7</div>
+		<div>8</div>
+		<div>9</div>
+	</div>
+</li>
+<li>
+	Sortable
+	<div id="sortable">
+		<div>C</div>
+		<div>I</div>
+		<div>G</div>
+		<div>F</div>
+		<div>D</div>
+		<div>H</div>
+		<div>A</div>
+		<div>E</div>
+		<div>B</div>
+	</div>
+</li>
+</ul>
+
+</body>
+</html>
