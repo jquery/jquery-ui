@@ -77,4 +77,4 @@ ul.plugins li { margin: 0 12px 12px 0;
 .ui-dialog .ui-resizable-ne { cursor: ne-resize; width: 9px; height: 29px; right: 0px; top: 0px; background: gray !important; border: none !important; }
 
 .ui-slider { margin: 10px; background: #FF9C08; height: 15px; }
-.ui-slider-handle { width: 10px; height: 15px; background: white; }
+.ui-slider-handle { width: 10px; height: 15px; background: white; position: relative; }
