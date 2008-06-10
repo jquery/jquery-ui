@@ -9,13 +9,76 @@
 		demos: [
 
 			{
-				title: 'Datepicker',
-				desc: 'A date picker can easily be added to an input field with default settings.',
-				html: '<input type="text" size="30" value="click to show datepicker" id="defaultFocus"/>',
-				destroy: '$("#defaultInput").datepicker("destroy");',
+				title: 'Datepicker Basics',
+				desc: 'A date picker can easily be added to an input field with default settings.<br/>' +
+					'You can also use keystrokes to drive the datepicker:<br/>' +
+					'<ul><li>page up/down - previous/next month</li>' +
+					'<li>ctrl+page up/down - previous/next year</li>' +
+					'<li>ctrl+home - current month or open when closed</li>' +
+					'<li>ctrl+left/right - previous/next day</li>' +
+					'<li>ctrl+up/down - previous/next week</li>' +
+					'<li>enter - accept the selected date</li>' +
+					'<li>ctrl+end - close and erase the date</li>' +
+					'<li>escape - close the date picker without selection</li></ul>',
+				html: '<input type="text" size="30" value="click to show datepicker" id="basics"/>',
+				destroy: '$("#basics").datepicker("destroy");',
 
 				options: [
-					{	desc: 'Default datepicker',	source: '$("#defaultFocus").datepicker();' }
+					{	desc: 'Default datepicker - open on focus',	source: '$("#basics").datepicker();' },
+					{	desc: 'Open on button only',	source: '$("#basics").datepicker({showOn: "button"});' },
+					{	desc: 'Open on image button only',	source: '$("#basics").datepicker({showOn: "button", buttonImage: "images/calendar.gif", buttonImageOnly: true});' },
+					{	desc: 'Open on focus or button',	source: '$("#basics").datepicker({showOn: "both", buttonImage: "images/calendar.gif", buttonImageOnly: true});' },
+					{	desc: 'Disabled datepicker',	source: '$("#basics").datepicker({showOn: "both", buttonImage: "images/calendar.gif", buttonImageOnly: true}).datepicker("disable");' }
+				]
+			},
+
+			{
+				title: 'Restricting Datepicker',
+				desc: 'A date picker can have its basic functionality restricted in various ways.',
+				html: '<input type="text" size="10" value="" id="restricting"/>',
+				destroy: '$("#restricting").datepicker("destroy");',
+
+				options: [
+					{	desc: 'First day of week is Monday and can\'t change it',	source: '$("#restricting").datepicker({firstDay: 1, changeFirstDay: false, showOn: "both", buttonImage: "images/calendar.gif", buttonImageOnly: true});' },
+					{	desc: 'Can\'t change month/year from dropdowns',	source: '$("#restricting").datepicker({changeMonth: false, changeYear: false, showOn: "both", buttonImage: "images/calendar.gif", buttonImageOnly: true});' },
+					{	desc: 'Dates from Jan 26 2005 to Jan 26 2007 only',	source: '$("#restricting").datepicker({minDate: new Date(2005, 1 - 1, 26), maxDate: new Date(2007, 1 - 1, 26), showOn: "both", buttonImage: "images/calendar.gif", buttonImageOnly: true});' },
+					{	desc: 'Dates within the next 365 days only',	source: '$("#restricting").datepicker({minDate: 0, maxDate: 365, showOn: "both", buttonImage: "images/calendar.gif", buttonImageOnly: true});' },
+					{	desc: 'Dates from yesterday to 6 years away only',	source: '$("#restricting").datepicker({minDate: "-1d", maxDate: "6y", showOn: "both", buttonImage: "images/calendar.gif", buttonImageOnly: true});' }
+				]
+			},
+
+			{
+				title: 'Datepicker Formats',
+				desc: 'A date picker can display its value in numerous formats, with the default being "mm/dd/yy".',
+				html: '<input type="text" size="30" value="" id="formatted"/>',
+				destroy: '$("#formatted").datepicker("destroy");',
+
+				options: [
+					{	desc: 'Medium format',	source: '$("#formatted").datepicker({dateFormat: "M d, yy", showOn: "both", buttonImage: "images/calendar.gif", buttonImageOnly: true});' },
+					{	desc: 'Long format',	source: '$("#formatted").datepicker({dateFormat: "MM d, yy", showOn: "both", buttonImage: "images/calendar.gif", buttonImageOnly: true});' },
+					{	desc: 'Full format',	source: '$("#formatted").datepicker({dateFormat: "DD, MM d, yy", showOn: "both", buttonImage: "images/calendar.gif", buttonImageOnly: true});' },
+					{	desc: 'With no century',	source: '$("#formatted").datepicker({dateFormat: "dd/mm/y", showOn: "both", buttonImage: "images/calendar.gif", buttonImageOnly: true});' },
+					{	desc: 'French full format',	source: '$("#formatted").datepicker($.datepicker.regional["fr"]).datepicker("change", {dateFormat: "DD, MM d, yy", showOn: "both", buttonImage: "images/calendar.gif", buttonImageOnly: true});' }
+				]
+			},
+
+			{
+				title: 'International Datepickers',
+				desc: 'Numerous international packs are available for the datepicker.',
+				html: '<input type="text" size="10" value="" id="i18n"/>',
+				destroy: '$("#i18n").datepicker("destroy");',
+
+				options: [
+					{	desc: '&#31616;&#20307;&#20013;&#25991; (Chinese Simplified)',	source: '$("#i18n").datepicker($.datepicker.regional["zh-CN"]).datepicker("change", {showOn: "both", buttonImage: "images/calendar.gif", buttonImageOnly: true});' },
+					{	desc: '&#31777;&#39636;&#20013;&#25991; (Chinese Traditional)',	source: '$("#i18n").datepicker($.datepicker.regional["zh-TW"]).datepicker("change", {showOn: "both", buttonImage: "images/calendar.gif", buttonImageOnly: true});' },
+					{	desc: 'Bahasa Indonesia (Indonesian)',	source: '$("#i18n").datepicker($.datepicker.regional["id"]).datepicker("change", {showOn: "both", buttonImage: "images/calendar.gif", buttonImageOnly: true});' },
+					{	desc: '&#1073;&#1098;&#1083;&#1075;&#1072;&#1088;&#1089;&#1082;&#1080; &#1077;&#1079;&#1080;&#1082; (Bulgarian)',	source: '$("#i18n").datepicker($.datepicker.regional["bg"]).datepicker("change", {showOn: "both", buttonImage: "images/calendar.gif", buttonImageOnly: true});' },
+					{	desc: 'Catal&agrave; (Catalan)',	source: '$("#i18n").datepicker($.datepicker.regional["ca"]).datepicker("change", {showOn: "both", buttonImage: "images/calendar.gif", buttonImageOnly: true});' },
+					{	desc: '&#268;e&#353;tina (Czech)',	source: '$("#i18n").datepicker($.datepicker.regional["cs"]).datepicker("change", {showOn: "both", buttonImage: "images/calendar.gif", buttonImageOnly: true});' },
+					{	desc: 'Dansk (Danish)',	source: '$("#i18n").datepicker($.datepicker.regional["da"]).datepicker("change", {showOn: "both", buttonImage: "images/calendar.gif", buttonImageOnly: true});' },
+					{	desc: 'Deutsch (German)',	source: '$("#i18n").datepicker($.datepicker.regional["de"]).datepicker("change", {showOn: "both", buttonImage: "images/calendar.gif", buttonImageOnly: true});' },
+					{	desc: 'Espa&ntilde;ol (Spanish)',	source: '$("#i18n").datepicker($.datepicker.regional["es"]).datepicker("change", {showOn: "both", buttonImage: "images/calendar.gif", buttonImageOnly: true});' },
+					{	desc: 'Fran&ccedil;ais (French)',	source: '$("#i18n").datepicker($.datepicker.regional["fr"]).datepicker("change", {showOn: "both", buttonImage: "images/calendar.gif", buttonImageOnly: true});' }
 				]
 			}
 
