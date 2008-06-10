@@ -20,6 +20,8 @@ $.widget("ui.resizable", $.extend($.ui.mouse, {
 
 		var elpos = this.element.css('position');
 		
+		this.originalElement = this.element;
+		
 		// simulate .ui-resizable { position: relative; }
 		this.element.addClass("ui-resizable").css({ position: /static/.test(elpos) ? 'relative' : elpos });
 		
@@ -216,8 +218,14 @@ $.widget("ui.resizable", $.extend($.ui.mouse, {
 	plugins: {},
 	ui: function() {
 		return {
-			axis: this.options.axis,
-			options: this.options
+			originalElement: this.originalElement,
+			element: this.element,
+			helper: this.helper,
+			position: this.position,
+			size: this.size,
+			options: this.options,
+			originalSize: this.originalSize,
+			originalPosition: this.originalPosition
 		};
 	},
 	propagate: function(n,e) {
