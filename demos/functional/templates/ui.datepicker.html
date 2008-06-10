@@ -1,0 +1,32 @@
+<script type="text/javascript">
+
+	var model = {
+
+		renderAt: '#containerDemo',
+
+		title: 'Datepicker Demos',
+
+		demos: [
+
+			{
+				title: 'Datepicker',
+				desc: 'A date picker can easily be added to an input field with default settings.',
+				html: '<label>Default datepicker</label> <input type="text" size="30" value="click to show datepicker" id="defaultFocus"/>',
+				destroy: '$("#defaultInput").datepicker("destroy");',
+
+				options: [
+					{	desc: 'Default datepicker',	source: '$("#defaultFocus").datepicker();' }
+				]
+			}
+
+		]
+
+	};
+
+	$(function(){
+
+		uiRenderDemo(model);
+
+	});
+
+</script>
