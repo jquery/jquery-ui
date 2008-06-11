@@ -6,7 +6,6 @@
  * and GPL (GPL-LICENSE.txt) licenses.
  *
  * http://docs.jquery.com/UI
- *
  */
 ;(function($) {
 
@@ -115,7 +114,7 @@ $.widget = function(name, prototype) {
 		this.widgetName = name;
 		this.widgetBaseClass = namespace + '-' + name;
 		
-		this.options = $.extend({ disabled: false }, $[namespace][name].defaults, options);
+		this.options = $.extend({}, $.widget.defaults, $[namespace][name].defaults, options);
 		this.element = $(element)
 			.bind('setData.' + name, function(e, key, value) {
 				return self.setData(key, value);
@@ -157,6 +156,10 @@ $.widget.prototype = {
 	disable: function() {
 		this.setData('disabled', true);
 	}
+};
+
+$.widget.defaults = {
+	disabled: false
 };
 
 
@@ -211,7 +214,10 @@ $.ui.mouse = {
 		
 		if (this.mouseDistanceMet(e) && this.mouseDelayMet(e)) {
 			this._mouseStarted = (this.mouseStart(e) !== false);
-			if (!this._mouseStarted) { e.preventDefault(); return true; }
+			if (!this._mouseStarted) {
+				e.preventDefault();
+				return true;
+			}
 		}
 		
 		// these delegates are required to keep context
