@@ -4,7 +4,7 @@
 	font-size: 14px;
 	padding: 0;
 	margin: 0;
-	background: #DDD;
+	background: #E0F4D7;
 	width: 185px;
 }
 #ui-datepicker-div {
@@ -17,9 +17,12 @@
 	display: block;
 	border: 0;
 }
+.ui-datepicker-rtl {
+	direction: rtl;
+}
 .ui-datepicker-dialog {
 	padding: 5px !important;
-	border: 4px ridge #DDD !important;
+	border: 4px ridge #83C948 !important;
 }
 button.ui-datepicker-trigger {
 	width: 25px;
@@ -31,7 +34,7 @@ img.ui-datepicker-trigger {
 .ui-datepicker-prompt {
 	float: left;
 	padding: 2px;
-	background: #DDD;
+	background: #E0F4D7;
 	color: #000;
 }
 *html .ui-datepicker-prompt {
@@ -64,6 +67,10 @@ img.ui-datepicker-trigger {
 	float: left;
 	width: 34%;
 }
+.ui-datepicker-rtl .ui-datepicker-clear, .ui-datepicker-rtl .ui-datepicker-prev {
+	float: right;
+	text-align: right;
+}
 .ui-datepicker-current {
 	float: left;
 	width: 30%;
@@ -73,6 +80,10 @@ img.ui-datepicker-trigger {
 	float: right;
 	width: 34%;
 	text-align: right;
+}
+.ui-datepicker-rtl .ui-datepicker-close, .ui-datepicker-rtl .ui-datepicker-next {
+	float: left;
+	text-align: left;
 }
 .ui-datepicker-header {
 	padding: 1px 0 3px;
@@ -118,6 +129,9 @@ img.ui-datepicker-trigger {
 .ui-datepicker .ui-datepicker-week-end-cell {
 	background: #E0F4D7;
 }
+.ui-datepicker-title-row .ui-datepicker-week-end-cell {
+	background: #B1DB87;
+}
 .ui-datepicker .ui-datepicker-days-cell-over {
 	background: #FFF;
 	border: 1px solid #777;
@@ -130,6 +144,12 @@ img.ui-datepicker-trigger {
 }
 .ui-datepicker-current-day {
 	background: #83C948 !important;
+}
+.ui-datepicker-status {
+	background: #E0F4D7;
+	width: 100%;
+	font-size: 80%;
+	text-align: center;
 }
 #ui-datepicker-div a, .ui-datepicker-inline a {
 	cursor: pointer;
