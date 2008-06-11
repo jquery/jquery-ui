@@ -9,7 +9,6 @@
  *
  * Depends:
  *	effects.core.js
- *
  */
 ;(function($) {
 

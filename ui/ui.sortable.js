@@ -9,7 +9,6 @@
  *
  * Depends:
  *	ui.core.js
- *
  */
 (function($) {
 

@@ -6,7 +6,6 @@
  * and GPL (GPL-LICENSE.txt) licenses.
  * 
  * http://docs.jquery.com/UI/Effects/
- *
  */
 ;(function($) {
 

@@ -10,7 +10,6 @@
  * Depends:
  *	ui.core.js
  *	ui.draggable.js
- *
  */
 (function($) {
 

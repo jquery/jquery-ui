@@ -11,7 +11,6 @@
  *	ui.core.js
  *	ui.draggable.js
  *	ui.resizable.js
- *
  */
 (function($) {
 
