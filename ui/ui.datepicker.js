@@ -182,7 +182,8 @@ $.extend(Datepicker.prototype, {
 				.unbind('keypress', this._doKeyPress);
 			var wrapper = $target.parents('.ui-datepicker-wrap');
 			if (wrapper)
-				wrapper.replaceWith(wrapper.html());
+				wrapper.siblings('.ui-datepicker-append').replaceWith('').end()
+					.replaceWith(wrapper.html());
 		} else if (nodeName == 'div' || nodeName == 'span')
 			$target.removeClass(this.markerClassName).empty();
 		if ($('input[_calId=' + calId + ']').length == 0)
@@ -258,9 +259,8 @@ $.extend(Datepicker.prototype, {
 	           Date[2] - the current dates for a range */
 	_getDateDatepicker: function(target) {
 		var inst = this._getInst(target._calId);
-		if (inst) {
+		if (inst)
 			inst._setDateFromField($(target)); 
-		}
 		return (inst ? inst._getDate() : null);
 	},
 
@@ -488,10 +488,9 @@ $.extend(Datepicker.prototype, {
 	_afterShow: function(inst) {
 		var numMonths = inst._getNumberOfMonths(); // fix width for dynamic number of date pickers
 		inst._datepickerDiv.width(numMonths[1] * $('.ui-datepicker', inst._datepickerDiv[0])[0].offsetWidth);
-		if ($.browser.msie && parseInt($.browser.version) < 7) { // fix IE < 7 select problems
+		if ($.browser.msie && parseInt($.browser.version) < 7) // fix IE < 7 select problems
 			$('iframe.ui-datepicker-cover').css({width: inst._datepickerDiv.width() + 4,
 				height: inst._datepickerDiv.height() + 4});
-		}
 		// re-position on screen if necessary
 		var isFixed = inst._datepickerDiv.css('position') == 'fixed';
 		var pos = inst._input ? $.datepicker._findPos(inst._input[0]) : null;
@@ -502,19 +501,17 @@ $.extend(Datepicker.prototype, {
 		// reposition date picker horizontally if outside the browser window
 		if ((inst._datepickerDiv.offset().left + inst._datepickerDiv.width() -
 				(isFixed && $.browser.msie ? document.documentElement.scrollLeft : 0)) >
-				(browserWidth + scrollX)) {
+				(browserWidth + scrollX))
 			inst._datepickerDiv.css('left', Math.max(scrollX,
 				pos[0] + (inst._input ? $(inst._input[0]).width() : null) - inst._datepickerDiv.width() -
 				(isFixed && $.browser.opera ? document.documentElement.scrollLeft : 0)) + 'px');
-		}
 		// reposition date picker vertically if outside the browser window
 		if ((inst._datepickerDiv.offset().top + inst._datepickerDiv.height() -
 				(isFixed && $.browser.msie ? document.documentElement.scrollTop : 0)) >
-				(browserHeight + scrollY) ) {
+				(browserHeight + scrollY))
 			inst._datepickerDiv.css('top', Math.max(scrollY,
 				pos[1] - (this._inDialog ? 0 : inst._datepickerDiv.height()) -
 				(isFixed && $.browser.opera ? document.documentElement.scrollTop : 0)) + 'px');
-		}
 	},
 	
 	/* Find an object's position on the screen. */
@@ -534,10 +531,9 @@ $.extend(Datepicker.prototype, {
 		if (!inst)
 			return;
 		var rangeSelect = inst._get('rangeSelect');
-		if (rangeSelect && this._stayOpen) {
+		if (rangeSelect && this._stayOpen)
 			this._selectDate(inst, inst._formatDate(
 				inst._currentDay, inst._currentMonth, inst._currentYear));
-		}
 		this._stayOpen = false;
 		if (this._datepickerShowing) {
 			speed = (speed != null ? speed : inst._get('speed'));
@@ -549,10 +545,9 @@ $.extend(Datepicker.prototype, {
 			if (speed == '')
 				this._tidyDialog(inst);
 			var onClose = inst._get('onClose');
-			if (onClose) {
+			if (onClose)
 				onClose.apply((inst._input ? inst._input[0] : null),
 					[inst._getDate(), inst]);  // trigger custom callback
-			}
 			this._datepickerShowing = false;
 			this._lastInput = null;
 			inst._settings.prompt = null;
@@ -582,9 +577,8 @@ $.extend(Datepicker.prototype, {
 		if (($target.parents("#ui-datepicker-div").length == 0) &&
 				!$target.hasClass('hasDatepicker') &&
 				!$target.hasClass('ui-datepicker-trigger') &&
-				$.datepicker._datepickerShowing && !($.datepicker._inDialog && $.blockUI)) {
+				$.datepicker._datepickerShowing && !($.datepicker._inDialog && $.blockUI))
 			$.datepicker._hideDatepicker(null, '');
-		}
 	},
 
 	/* Adjust one of the date sub-fields. */
@@ -852,14 +846,12 @@ $.extend(Datepicker.prototype, {
 						checkLiteral();
 				}
 		}
-		if (year < 100) {
+		if (year < 100)
 			year += new Date().getFullYear() - new Date().getFullYear() % 100 +
 				(year <= shortYearCutoff ? 0 : -100);
-		}
 		var date = new Date(year, month - 1, day);
-		if (date.getFullYear() != year || date.getMonth() + 1 != month || date.getDate() != day) {
+		if (date.getFullYear() != year || date.getMonth() + 1 != month || date.getDate() != day)
 			throw 'Invalid date'; // E.g. 31/02/*
-		}
 		return date;
 	},
 
@@ -910,7 +902,7 @@ $.extend(Datepicker.prototype, {
 		};
 		var output = '';
 		var literal = false;
-		if (date) {
+		if (date)
 			for (var iFormat = 0; iFormat < format.length; iFormat++) {
 				if (literal)
 					if (format.charAt(iFormat) == "'" && !lookAhead("'"))
@@ -945,7 +937,6 @@ $.extend(Datepicker.prototype, {
 							output += format.charAt(iFormat);
 					}
 			}
-		}
 		return output;
 	},
 
@@ -1196,9 +1187,8 @@ $.extend(DatepickerInstance.prototype, {
 				}
 				html += '</tr></thead><tbody>';
 				var daysInMonth = this._getDaysInMonth(drawYear, drawMonth);
-				if (drawYear == this._selectedYear && drawMonth == this._selectedMonth) {
+				if (drawYear == this._selectedYear && drawMonth == this._selectedMonth)
 					this._selectedDay = Math.min(this._selectedDay, daysInMonth);
-				}
 				var leadDays = (this._getFirstDayOfMonth(drawYear, drawMonth) - firstDay + 7) % 7;
 				var currentDate = (!this._currentDay ? new Date(9999, 9, 9) :
 					new Date(this._currentYear, this._currentMonth, this._currentDay));
@@ -1267,7 +1257,6 @@ $.extend(DatepickerInstance.prototype, {
 		var monthNames = this._get('monthNames');
 		if (secondary || !this._get('changeMonth'))
 			html += monthNames[drawMonth] + '&#xa0;';
-			
 		else {
 			var inMinYear = (minDate && minDate.getFullYear() == drawYear);
 			var inMaxYear = (maxDate && maxDate.getFullYear() == drawYear);
@@ -1277,11 +1266,10 @@ $.extend(DatepickerInstance.prototype, {
 				(showStatus ? this._addStatus(this._get('monthStatus') || '&#xa0;') : '') + '>';
 			for (var month = 0; month < 12; month++) {
 				if ((!inMinYear || month >= minDate.getMonth()) &&
-						(!inMaxYear || month <= maxDate.getMonth())) {
+						(!inMaxYear || month <= maxDate.getMonth()))
 					html += '<option value="' + month + '"' +
 						(month == drawMonth ? ' selected="selected"' : '') +
 						'>' + monthNames[month] + '</option>';
-				}
 			}
 			html += '</select>';
 		}
@@ -1297,8 +1285,9 @@ $.extend(DatepickerInstance.prototype, {
 				year = drawYear - 10;
 				endYear = drawYear + 10;
 			} else if (years[0].charAt(0) == '+' || years[0].charAt(0) == '-') {
-				year = new Date().getFullYear() + parseInt(years[0], 10);
-				endYear = new Date().getFullYear() + parseInt(years[1], 10);
+				year = endYear = new Date().getFullYear();
+				year += parseInt(years[0], 10);
+				endYear += parseInt(years[1], 10);
 			} else {
 				year = parseInt(years[0], 10);
 				endYear = parseInt(years[1], 10);
@@ -1418,8 +1407,8 @@ $.extend(DatepickerInstance.prototype, {
 function extendRemove(target, props) {
 	$.extend(target, props);
 	for (var name in props)
-		if (props[name] == null)
-			target[name] = null;
+		if (props[name] == null || props[name] == undefined)
+			target[name] = props[name];
 	return target;
 };
 
@@ -1429,9 +1418,8 @@ function extendRemove(target, props) {
    @return  jQuery object */
 $.fn.datepicker = function(options){
 	var otherArgs = Array.prototype.slice.call(arguments, 1);
-	if (typeof options == 'string' && (options == 'isDisabled' || options == 'getDate')) {
+	if (typeof options == 'string' && (options == 'isDisabled' || options == 'getDate'))
 		return $.datepicker['_' + options + 'Datepicker'].apply($.datepicker, [this[0]].concat(otherArgs));
-	}
 	return this.each(function() {
 		typeof options == 'string' ?
 			$.datepicker['_' + options + 'Datepicker'].apply($.datepicker, [this].concat(otherArgs)) :
@@ -1443,8 +1431,8 @@ $.datepicker = new Datepicker(); // singleton instance
 	
 /* Initialise the date picker. */
 $(document).ready(function() {
-	$(document.body).append($.datepicker._datepickerDiv)
-		.mousedown($.datepicker._checkExternalClick);
+	$(document.body).append($.datepicker._datepickerDiv).
+		mousedown($.datepicker._checkExternalClick);
 });
 
 })(jQuery);
