@@ -1,31 +1,23 @@
-/* Arabic Translation for jQuery UI date picker plugin. */
+ï»¿/* Arabic Translation for jQuery UI date picker plugin. */
 /* Khaled Al Horani -- koko.dw@gmail.com */
+/* Ø®Ø§Ù„Ø¯ Ø§Ù„Ø­ÙˆØ±Ø§Ù†ÙŠ -- koko.dw@gmail.com */
+/* NOTE: monthNames are the original months names and thez are the Arabic names, not the new months name ÙØ¨Ø±Ø§ÙŠØ± - ÙŠÙ†Ø§ÙŠØ± and there isnÃ¤t any Arabic roots for these months */
 jQuery(function($){
 	$.datepicker.regional['ar'] = {
-		clearText: 'äÙíİ',
-		clearStatus: 'ÇãÓÍ ÇáÊÇÑíÎ ÇáÍÇáí',
-		closeText: 'ÅÛáÇŞ',
-		closeStatus: 'ÅÛáÇŞ ÈÏæä ÍİÙ',
-		prevText: '<ÇáÓÇÈŞ',
-		prevStatus: 'ÚÑÖ ÇáÔåÑ ÇáÓÇÈŞ',
-		nextText: 'ÇáÊÇáí>',
-		nextStatus: 'ÚÑÖ ÇáÔåÑ ÇáŞÇÏã',
-		currentText: 'Çáíæã',
-		currentStatus: 'ÚÑÖ ÇáÔåÑ ÇáÍÇáí',
-		monthNames: ['ßÇäæä ÇáËÇäí', 'ÔÈÇØ', 'ÂĞÇÑ', 'äíÓÇä', 'ÂĞÇÑ', 'ÍÒíÑÇä', 'ÊãæÒ', 'ÂÈ', 'Ãíáæá',	'ÊÔÑíä ÇáÃæá', 'ÊÔÑíä ÇáËÇäí', 'ßÇäæä ÇáÃæá'],
-		monthNamesShort: ['ßÇäæä ÇáËÇäí', 'ÔÈÇØ', 'ÂĞÇÑ', 'äíÓÇä', 'ÂĞÇÑ', 'ÍÒíÑÇä', 'ÊãæÒ', 'ÂÈ', 'Ãíáæá',	'ÊÔÑíä ÇáÃæá', 'ÊÔÑíä ÇáËÇäí', 'ßÇäæä ÇáÃæá'],
-		monthStatus: 'ÚÑÖ ÔåÑ ÂÎÑ',
-		yearStatus: 'ÚÑÖ ÓäÉ ÂÎÑì',
-		weekHeader: 'ÃÓÈæÚ',
-		weekStatus: 'ÃÓÈæÚ ÇáÓäÉ',
-		dayNames: ['ÇáÓÈÊ', 'ÇáÃÍÏ', 'ÇáÇËäíä', 'ÇáËáÇËÇÁ', 'ÇáÃÑÈÚÇÁ', 'ÇáÎãíÓ', 'ÇáÌãÚÉ'],
-		dayNamesShort: ['ÇáÓÈÊ', 'ÇáÃÍÏ', 'ÇáÇËäíä', 'ÇáËáÇËÇÁ', 'ÇáÃÑÈÚÇÁ', 'ÇáÎãíÓ', 'ÇáÌãÚÉ'],
-		dayNamesMin: ['ÇáÓÈÊ', 'ÇáÃÍÏ', 'ÇáÇËäíä', 'ÇáËáÇËÇÁ', 'ÇáÃÑÈÚÇÁ', 'ÇáÎãíÓ', 'ÇáÌãÚÉ'],
-		dayStatus: 'ÇÎÊÑ DD ááíæã ÇáÃæá ãä ÇáÃÓÈæÚ',
-		dateStatus: 'ÇÎÊÑ D, M d',
+		clearText: 'Ù…Ø³Ø­', clearStatus: 'Ø§Ù…Ø³Ø­ Ø§Ù„ØªØ§Ø±ÙŠØ® Ø§Ù„Ø­Ø§Ù„ÙŠ',
+		closeText: 'Ø¥ØºÙ„Ø§Ù‚', closeStatus: 'Ø¥ØºÙ„Ø§Ù‚ Ø¨Ø¯ÙˆÙ† Ø­ÙØ¸',
+		prevText: '<Ø§Ù„Ø³Ø§Ø¨Ù‚', prevStatus: 'Ø¹Ø±Ø¶ Ø§Ù„Ø´Ù‡Ø± Ø§Ù„Ø³Ø§Ø¨Ù‚',
+		nextText: 'Ø§Ù„ØªØ§Ù„ÙŠ>', nextStatus: 'Ø¹Ø±Ø¶ Ø§Ù„Ø´Ù‡Ø± Ø§Ù„Ù‚Ø§Ø¯Ù…',
+		currentText: 'Ø§Ù„ÙŠÙˆÙ…', currentStatus: 'Ø¹Ø±Ø¶ Ø§Ù„Ø´Ù‡Ø± Ø§Ù„Ø­Ø§Ù„ÙŠ',
+		monthNames: ['ÙƒØ§Ù†ÙˆÙ† Ø§Ù„Ø«Ø§Ù†ÙŠ', 'Ø´Ø¨Ø§Ø·', 'Ø¢Ø°Ø§Ø±', 'Ù†ÙŠØ³Ø§Ù†', 'Ø¢Ø°Ø§Ø±', 'Ø­Ø²ÙŠØ±Ø§Ù†', 'ØªÙ…ÙˆØ²', 'Ø¢Ø¨', 'Ø£ÙŠÙ„ÙˆÙ„',	'ØªØ´Ø±ÙŠÙ† Ø§Ù„Ø£ÙˆÙ„', 'ØªØ´Ø±ÙŠÙ† Ø§Ù„Ø«Ø§Ù†ÙŠ', 'ÙƒØ§Ù†ÙˆÙ† Ø§Ù„Ø£ÙˆÙ„'],
+		monthNamesShort: ['1','2','3','4','5','6','7','8','9','10','11','12'],
+		monthStatus: 'Ø¹Ø±Ø¶ Ø´Ù‡Ø± Ø¢Ø®Ø±', yearStatus: 'Ø¹Ø±Ø¶ Ø³Ù†Ø© Ø¢Ø®Ø±Ù‰',
+		weekHeader: 'Ø£Ø³Ø¨ÙˆØ¹', weekStatus: 'Ø£Ø³Ø¨ÙˆØ¹ Ø§Ù„Ø³Ù†Ø©',
+		dayNames: ['Ø§Ù„Ø³Ø¨Øª', 'Ø§Ù„Ø£Ø­Ø¯', 'Ø§Ù„Ø§Ø«Ù†ÙŠÙ†', 'Ø§Ù„Ø«Ù„Ø§Ø«Ø§Ø¡', 'Ø§Ù„Ø£Ø±Ø¨Ø¹Ø§Ø¡', 'Ø§Ù„Ø®Ù…ÙŠØ³', 'Ø§Ù„Ø¬Ù…Ø¹Ø©'],
+		dayNamesShort: ['Ø³Ø¨Øª', 'Ø£Ø­Ø¯', 'Ø§Ø«Ù†ÙŠÙ†', 'Ø«Ù„Ø§Ø«Ø§Ø¡', 'Ø£Ø±Ø¨Ø¹Ø§Ø¡', 'Ø®Ù…ÙŠØ³', 'Ø¬Ù…Ø¹Ø©'],
+		dayNamesMin: ['Ø³Ø¨Øª', 'Ø£Ø­Ø¯', 'Ø§Ø«Ù†ÙŠÙ†', 'Ø«Ù„Ø§Ø«Ø§Ø¡', 'Ø£Ø±Ø¨Ø¹Ø§Ø¡', 'Ø®Ù…ÙŠØ³', 'Ø¬Ù…Ø¹Ø©'],
+		dayStatus: 'Ø§Ø®ØªØ± DD Ù„Ù„ÙŠÙˆÙ… Ø§Ù„Ø£ÙˆÙ„ Ù…Ù† Ø§Ù„Ø£Ø³Ø¨ÙˆØ¹', dateStatus: 'Ø§Ø®ØªØ± D, M d',
 		dateFormat: 'dd/mm/yy', firstDay: 0, 
-		initStatus: 'ÇÎÊÑ íæã',
-		isRTL: true
-	};
+		initStatus: 'Ø§Ø®ØªØ± ÙŠÙˆÙ…', isRTL: true};
 	$.datepicker.setDefaults($.datepicker.regional['ar']);
 });

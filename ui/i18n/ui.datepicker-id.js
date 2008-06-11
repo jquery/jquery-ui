@@ -3,8 +3,8 @@
 jQuery(function($){
 	$.datepicker.regional['id'] = {clearText: 'kosongkan', clearStatus: 'bersihkan tanggal yang sekarang',
 		closeText: 'Tutup', closeStatus: 'Tutup tanpa mengubah',
-		prevText: '<mundur', prevStatus: 'Tampilkan bulan sebelumnya',
-		nextText: 'maju>', nextStatus: 'Tampilkan bulan berikutnya',
+		prevText: '&lt;mundur', prevStatus: 'Tampilkan bulan sebelumnya',
+		nextText: 'maju&gt;', nextStatus: 'Tampilkan bulan berikutnya',
 		currentText: 'hari ini', currentStatus: 'Tampilkan bulan sekarang',
 		monthNames: ['Januari','Februari','Maret','April','Mei','Juni',
 		'Juli','Agustus','September','Oktober','Nopember','Desember'],

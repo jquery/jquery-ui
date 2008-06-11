@@ -1,4 +1,4 @@
-﻿/* German initialisation for the jQuery UI date picker plugin. */
+﻿/* Bulgarian initialisation for the jQuery UI date picker plugin. */
 /* Written by Stoyan Kyosev (http://svest.org). */
 jQuery(function($){
     $.datepicker.regional['bg'] = {clearText: 'изчисти', clearStatus: 'изчисти актуалната дата',
