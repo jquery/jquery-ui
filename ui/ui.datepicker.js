@@ -28,6 +28,12 @@ function Datepicker() {
 	this._disabledInputs = []; // List of date picker inputs that have been disabled
 	this._datepickerShowing = false; // True if the popup picker is showing , false if not
 	this._inDialog = false; // True if showing within a "dialog", false if not
+	this._mainDivId = 'ui-datepicker-div'; // The ID of the main datepicker division
+	this._appendClass = 'ui-datepicker-append'; // The name of the append marker class
+	this._wrapClass = 'ui-datepicker-wrap'; // The name of the wrapper marker class
+	this._triggerClass = 'ui-datepicker-trigger'; // The name of the trigger marker class
+	this._dialogClass = 'ui-datepicker-dialog'; // The name of the dialog marker class
+	this._promptClass = 'ui-datepicker-prompt'; // The name of the dialog prompt marker class
 	this.regional = []; // Available regional settings, indexed by language code
 	this.regional[''] = { // Default regional settings
 		clearText: 'Clear', // Display text for clear link
@@ -103,7 +109,7 @@ function Datepicker() {
 		rangeSeparator: ' - ' // Text between two dates in a range
 	};
 	$.extend(this._defaults, this.regional['']);
-	this._datepickerDiv = $('<div id="ui-datepicker-div"></div>');
+	this._datepickerDiv = $('<div id="' + this._mainDivId + '"></div>');
 }
 
 $.extend(Datepicker.prototype, {
@@ -155,7 +161,7 @@ $.extend(Datepicker.prototype, {
 		}
 		var nodeName = target.nodeName.toLowerCase();
 		var instSettings = (inlineSettings ? 
-			$.extend(settings || {}, inlineSettings || {}) : settings);
+			$.extend(settings || {}, inlineSettings) : settings);
 		if (nodeName == 'input') {
 			var inst = (inst && !inlineSettings ? inst :
 				new DatepickerInstance(instSettings, false));
@@ -174,15 +180,15 @@ $.extend(Datepicker.prototype, {
 		target._calId = null;
 		var $target = $(target);
 		if (nodeName == 'input') {
-			$target.siblings('.ui-datepicker-append').replaceWith('').end()
-				.siblings('.ui-datepicker-trigger').replaceWith('').end()
+			$target.siblings('.' + this._appendClass).replaceWith('').end()
+				.siblings('.' + this._triggerClass).replaceWith('').end()
 				.removeClass(this.markerClassName)
 				.unbind('focus', this._showDatepicker)
 				.unbind('keydown', this._doKeyDown)
 				.unbind('keypress', this._doKeyPress);
-			var wrapper = $target.parents('.ui-datepicker-wrap');
+			var wrapper = $target.parents('.' + this._wrapClass);
 			if (wrapper)
-				wrapper.siblings('.ui-datepicker-append').replaceWith('').end()
+				wrapper.siblings('.' + this._appendClass).replaceWith('').end()
 					.replaceWith(wrapper.html());
 		} else if (nodeName == 'div' || nodeName == 'span')
 			$target.removeClass(this.markerClassName).empty();
@@ -195,8 +201,8 @@ $.extend(Datepicker.prototype, {
 	   @param  target    element - the target input field or division or span */
 	_enableDatepicker: function(target) {
 		target.disabled = false;
-		$(target).siblings('button.ui-datepicker-trigger').each(function() { this.disabled = false; }).end()
-			.siblings('img.ui-datepicker-trigger').css({opacity: '1.0', cursor: ''});
+		$(target).siblings('button.' + this._triggerClass).each(function() { this.disabled = false; }).end()
+			.siblings('img.' + this._triggerClass).css({opacity: '1.0', cursor: ''});
 		this._disabledInputs = $.map(this._disabledInputs,
 			function(value) { return (value == target ? null : value); }); // delete entry
 	},
@@ -205,8 +211,8 @@ $.extend(Datepicker.prototype, {
 	   @param  target    element - the target input field or division or span */
 	_disableDatepicker: function(target) {
 		target.disabled = true;
-		$(target).siblings('button.ui-datepicker-trigger').each(function() { this.disabled = true; }).end()
-			.siblings('img.ui-datepicker-trigger').css({opacity: '0.5', cursor: 'default'});
+		$(target).siblings('button.' + this._triggerClass).each(function() { this.disabled = true; }).end()
+			.siblings('img.' + this._triggerClass).css({opacity: '0.5', cursor: 'default'});
 		this._disabledInputs = $.map($.datepicker._disabledInputs,
 			function(value) { return (value == target ? null : value); }); // delete entry
 		this._disabledInputs[$.datepicker._disabledInputs.length] = target;
@@ -311,31 +317,24 @@ $.extend(Datepicker.prototype, {
 	/* Attach the date picker to an input field. */
 	_connectDatepicker: function(target, inst) {
 		var input = $(target);
-		if (input.is('.' + this.markerClassName))
+		if (input.hasClass(this.markerClassName))
 			return;
 		var appendText = inst._get('appendText');
 		var isRTL = inst._get('isRTL');
-		if (appendText) {
-			if (isRTL)
-				input.before('<span class="ui-datepicker-append">' + appendText);
-			else
-				input.after('<span class="ui-datepicker-append">' + appendText);
-		}
+		if (appendText)
+			input[isRTL ? 'before' : 'after']('<span class="' + this._appendClass + '">' + appendText + '</span>');
 		var showOn = inst._get('showOn');
 		if (showOn == 'focus' || showOn == 'both') // pop-up date picker when in the marked field
 			input.focus(this._showDatepicker);
 		if (showOn == 'button' || showOn == 'both') { // pop-up date picker when button clicked
-			input.wrap('<span class="ui-datepicker-wrap">');
+			input.wrap('<span class="' + this._wrapClass + '">');
 			var buttonText = inst._get('buttonText');
 			var buttonImage = inst._get('buttonImage');
 			var trigger = $(inst._get('buttonImageOnly') ? 
-				$('<img>').addClass('ui-datepicker-trigger').attr({ src: buttonImage, alt: buttonText, title: buttonText }) :
-				$('<button>').addClass('ui-datepicker-trigger').attr({ type: 'button' }).html(buttonImage != '' ? 
-						$('<img>').attr({ src:buttonImage, alt:buttonText, title:buttonText }) : buttonText));
-			if (isRTL)
-				input.before(trigger);
-			else
-				input.after(trigger);
+				$('<img/>').addClass(this._triggerClass).attr({ src: buttonImage, alt: buttonText, title: buttonText }) :
+				$('<button></button>').addClass(this._triggerClass).html(buttonImage != '' ? 
+						$('<img/>').attr({ src:buttonImage, alt:buttonText, title:buttonText }) : buttonText));
+			input[isRTL ? 'before' : 'after'](trigger);
 			trigger.click(function() {
 				if ($.datepicker._datepickerShowing && $.datepicker._lastInput == target)
 					$.datepicker._hideDatepicker();
@@ -355,7 +354,7 @@ $.extend(Datepicker.prototype, {
 	/* Attach an inline date picker to a div. */
 	_inlineDatepicker: function(target, inst) {
 		var input = $(target);
-		if (input.is('.' + this.markerClassName))
+		if (input.hasClass(this.markerClassName))
 			return;
 		input.addClass(this.markerClassName).append(inst._datepickerDiv)
 			.bind("setData.datepicker", function(event, key, value){
@@ -408,7 +407,7 @@ $.extend(Datepicker.prototype, {
 		this._dialogInput.css('left', this._pos[0] + 'px').css('top', this._pos[1] + 'px');
 		inst._settings.onSelect = onSelect;
 		this._inDialog = true;
-		this._datepickerDiv.addClass('ui-datepicker-dialog');
+		this._datepickerDiv.addClass(this._dialogClass);
 		this._showDatepicker(this._dialogInput[0]);
 		if ($.blockUI)
 			$.blockUI(this._datepickerDiv);
@@ -565,8 +564,8 @@ $.extend(Datepicker.prototype, {
 
 	/* Tidy up after a dialog display. */
 	_tidyDialog: function(inst) {
-		inst._datepickerDiv.removeClass('ui-datepicker-dialog').unbind('.ui-datepicker');
-		$('.ui-datepicker-prompt', inst._datepickerDiv).remove();
+		inst._datepickerDiv.removeClass(this._dialogClass).unbind('.ui-datepicker');
+		$('.' + this._promptClass, inst._datepickerDiv).remove();
 	},
 
 	/* Close date picker if clicked elsewhere. */
@@ -574,9 +573,9 @@ $.extend(Datepicker.prototype, {
 		if (!$.datepicker._curInst)
 			return;
 		var $target = $(event.target);
-		if (($target.parents("#ui-datepicker-div").length == 0) &&
-				!$target.hasClass('hasDatepicker') &&
-				!$target.hasClass('ui-datepicker-trigger') &&
+		if (($target.parents('#' + $.datepicker._mainDivId).length == 0) &&
+				!$target.hasClass($.datepicker.markerClassName) &&
+				!$target.hasClass($.datepicker._triggerClass) &&
 				$.datepicker._datepickerShowing && !($.datepicker._inDialog && $.blockUI))
 			$.datepicker._hideDatepicker(null, '');
 	},
@@ -982,7 +981,7 @@ function DatepickerInstance(settings, inline) {
 	this._input = null; // The attached input field
 	this._inline = inline; // True if showing inline, false if used in a popup
 	this._datepickerDiv = (!inline ? $.datepicker._datepickerDiv :
-		$('<div id="ui-datepicker-div-' + this._id + '" class="ui-datepicker-inline">'));
+		$('<div id="' + $.datepicker._mainDivId + '-' + this._id + '" class="ui-datepicker-inline">'));
 	// customise the date picker object - uses manager defaults if not overridden
 	this._settings = extendRemove(settings || {}); // clone
 	if (inline)
@@ -1152,7 +1151,7 @@ $.extend(DatepickerInstance.prototype, {
 			(showStatus ? this._addStatus(this._get('nextStatus') || '&#xa0;') : '') + '>' +
 			this._get('nextText') + '</a>' :
 			(hideIfNoPrevNext ? '>' : '<label>' + this._get('nextText') + '</label>')) + '</div>';
-		var html = (prompt ? '<div class="ui-datepicker-prompt">' + prompt + '</div>' : '') +
+		var html = (prompt ? '<div class="' + $.datepicker._promptClass + '">' + prompt + '</div>' : '') +
 			(closeAtTop && !this._inline ? controls : '') +
 			'<div class="ui-datepicker-links">' + (isRTL ? next : prev) +
 			(this._isInRange(today) ? '<div class="ui-datepicker-current">' +
