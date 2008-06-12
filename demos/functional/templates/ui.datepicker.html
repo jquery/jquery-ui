@@ -24,9 +24,9 @@
 					'<li>Days in other months are not displayed</li>' +
 					'<li>No date restrictions</li>' +
 					'<li>Clicking elsewhere closes the date picker</li></ul>',
-				html: '<input type="text" size="30" value="click to show datepicker" id="basics"/>\n' + 
+				html: '<input type="text" size="10" value="click here" id="basics"/>\n' + 
 					'<style type="text/css">.embed + img { position: relative; left: -21px; top: -1px; }</style>',
-				destroy: '$("#basics").datepicker("destroy").removeClass();',
+				destroy: '$("#basics").removeClass("embed").datepicker("enable").datepicker("destroy");',
 
 				options: [
 					{	desc: 'Default datepicker - open on focus',	source: '$("#basics").datepicker();' },
@@ -113,6 +113,7 @@
 				options: [
 					{	desc: 'Weekends are not selectable',	source: '$("#dayByDay").datepicker({beforeShowDay: $.datepicker.noWeekends, showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' },
 					{	desc: 'Highlight some national days (via CSS)',	source: '$("#dayByDay").datepicker({beforeShowDay: nationalDays, showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' },
+					{	desc: 'Show day of year as cell title',	source: '$("#dayByDay").datepicker({beforeShowDay: showDayOfYear, showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' },
 					{	desc: 'Customise status line for today',	source: '$("#dayByDay").datepicker({showStatus: true, statusForDate: highlightToday, showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' }
 				]
 			},
@@ -126,7 +127,8 @@
 				options: [
 					{	desc: 'Range select with a single month',	source: '$("#ranges").datepicker({rangeSelect: true, showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' },
 					{	desc: 'Range select showing two months',	source: '$("#ranges").datepicker({rangeSelect: true, numberOfMonths: 2, showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' },
-					{	desc: 'Range select showing six months (moving three at a time)',	source: '$("#ranges").datepicker({rangeSelect: true, numberOfMonths: [2, 3], stepMonths: 3, prevText: "<< Previous Months", nextText: "Next Months >>", showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' }
+					{	desc: 'Range select showing six months (moving three at a time)',	source: '$("#ranges").datepicker({rangeSelect: true, numberOfMonths: [2, 3], stepMonths: 3, prevText: "<< Previous Months", nextText: "Next Months >>", showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' },
+					{	desc: 'Range select excluding weekends',	source: '$("#ranges").datepicker({rangeSelect: true, numberOfMonths: 2, beforeShowDay: $.datepicker.noWeekends, showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' },
 				]
 			},
 
@@ -185,7 +187,8 @@
 
 				options: [
 					{	desc: 'On select',	source: '$("#callbacks").datepicker({onSelect: function(date) { alert("The chosen date is " + date); }, showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' },
-					{	desc: 'On close',	source: '$("#callbacks").datepicker({onClose: function(date) { alert("Closed with date " + date); }, showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' }
+					{	desc: 'On close',	source: '$("#callbacks").datepicker({onClose: function(date) { alert("Closed with date " + date); }, showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' },
+					{	desc: 'On change of month/year',	source: '$("#callbacks").datepicker({onChangeMonthYear: function(date) { alert("Moved to month " + $.datepicker.formatDate("MM yy", date)); }, showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' }
 				]
 			},
 
@@ -272,7 +275,7 @@
 					{	desc: 'Magyar (Hungarian)',	source: '$("#i18n").datepicker($.extend({}, $.datepicker.regional["hu"], {showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true}));$("#contrib").html("Istvan Karaszi");' },
 					{	desc: 'Nederlands (Dutch)',	source: '$("#i18n").datepicker($.extend({}, $.datepicker.regional["nl"], {showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true}));$("#contrib").html("???");' },
 					{	desc: '&#26085;&#26412;&#35486; (Japanese)',	source: '$("#i18n").datepicker($.extend({}, $.datepicker.regional["ja"], {showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true}));$("#contrib").html("Milly");' },
-					{	desc: 'Latviešu Valoda (Latvian)',	source: '$("#i18n").datepicker($.extend({}, $.datepicker.regional["lv"], {showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true}));$("#contrib").html("Arturas Paleicikas");' },
+					{	desc: 'Latvie&#353;u Valoda (Latvian)',	source: '$("#i18n").datepicker($.extend({}, $.datepicker.regional["lv"], {showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true}));$("#contrib").html("Arturas Paleicikas");' },
 					{	desc: 'lietuvi&#371; kalba (Lithuanian)',	source: '$("#i18n").datepicker($.extend({}, $.datepicker.regional["lt"], {showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true}));$("#contrib").html("Arturas Paleicikas");' },
 					{	desc: 'Norsk (Norwegian)',	source: '$("#i18n").datepicker($.extend({}, $.datepicker.regional["no"], {showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true}));$("#contrib").html("Naimdjon Takhirov");' },
 					{	desc: 'Phasa thai (Thai)',	source: '$("#i18n").datepicker($.extend({}, $.datepicker.regional["th"], {showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true}));$("#contrib").html("pipo");' },

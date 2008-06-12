@@ -32,4 +32,9 @@ function highlightToday(date, inst) {
     return $.datepicker.dateStatus(date, inst) + 
         (today.getTime() == date.getTime() ? ' (today)' : ''); 
 } 
+
+function showDayOfYear(date) {
+	var lastYearEnd = new Date(date.getFullYear() - 1, 12 - 1, 31, 0, 0, 0, 0);
+	return [true, '', 'Day ' + ((date.getTime() - lastYearEnd.getTime()) / 86400000) + ' of  the year'];
+}
 </script>
