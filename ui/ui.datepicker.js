@@ -98,7 +98,8 @@ function Datepicker() {
 		speed: 'normal', // Speed of display/closure
 		beforeShowDay: null, // Function that takes a date and returns an array with
 			// [0] = true if selectable, false if not,
-			// [1] = custom CSS class name(s) or '', e.g. $.datepicker.noWeekends
+			// [1] = custom CSS class name(s) or '', 
+			// [2] = cell title (optional), e.g. $.datepicker.noWeekends
 		beforeShow: null, // Function that takes an input field and
 			// returns a set of custom settings for the date picker
 		onSelect: null, // Define a callback function when a date is selected
@@ -1217,6 +1218,7 @@ $.extend(DatepickerInstance.prototype, {
 							(printDate.getTime() >= currentDate.getTime() && printDate.getTime() <= endDate.getTime() ?  // in current range
 							' ui-datepicker-current-day' : '') + // highlight selected day
 							(printDate.getTime() == today.getTime() ? ' ui-datepicker-today' : '')) + '"' + // highlight today (if different)
+							((!otherMonth || showOtherMonths) && daySettings[2] ? ' title="' + daySettings[2] + '"' : '') + // cell title
 							(unselectable ? '' : ' onmouseover="jQuery(this).addClass(\'ui-datepicker-days-cell-over\');' +
 							(!showStatus || (otherMonth && !showOtherMonths) ? '' : 'jQuery(\'#ui-datepicker-status-' +
 							this._id + '\').html(\'' + (dateStatus.apply((this._input ? this._input[0] : null),
