@@ -103,6 +103,7 @@ function Datepicker() {
 		beforeShow: null, // Function that takes an input field and
 			// returns a set of custom settings for the date picker
 		onSelect: null, // Define a callback function when a date is selected
+		onChangeMonthYear: null, // Define a callback function when the month or year is changed
 		onClose: null, // Define a callback function when the datepicker is closed
 		numberOfMonths: 1, // Number of months to show at a time
 		stepMonths: 1, // Number of months to step back/forward
@@ -596,6 +597,7 @@ $.extend(Datepicker.prototype, {
 		inst._drawMonth = inst._selectedMonth = date.getMonth();
 		inst._drawYear = inst._selectedYear = date.getFullYear();
 		this._adjustDate(inst);
+		inst._notifyChange();
 	},
 
 	/* Action for selecting a new month/year. */
@@ -605,6 +607,7 @@ $.extend(Datepicker.prototype, {
 		inst[period == 'M' ? '_drawMonth' : '_drawYear'] =
 			select.options[select.selectedIndex].value - 0;
 		this._adjustDate(inst);
+		inst._notifyChange();
 	},
 
 	/* Restore input focus after not changing month/year. */
@@ -1331,6 +1334,16 @@ $.extend(DatepickerInstance.prototype, {
 		this._selectedDay = date.getDate();
 		this._drawMonth = this._selectedMonth = date.getMonth();
 		this._drawYear = this._selectedYear = date.getFullYear();
+		if (period == 'M' || period == 'Y')
+			this._notifyChange();
+	},
+
+	/* Notify change of month/year. */
+	_notifyChange: function() {
+		var onChange = this._get('onChangeMonthYear');
+		if (onChange)
+			onChange.apply((this._input ? this._input[0] : null),
+				[new Date(this._selectedYear, this._selectedMonth, 1), this]);
 	},
 	
 	/* Determine the number of months to show. */
