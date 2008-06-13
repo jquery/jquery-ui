@@ -34,6 +34,8 @@ function Datepicker() {
 	this._triggerClass = 'ui-datepicker-trigger'; // The name of the trigger marker class
 	this._dialogClass = 'ui-datepicker-dialog'; // The name of the dialog marker class
 	this._promptClass = 'ui-datepicker-prompt'; // The name of the dialog prompt marker class
+	this._unselectableClass = 'ui-datepicker-unselectable'; // The name of the unselectable cell marker class
+	this._currentClass = 'ui-datepicker-current-day'; // The name of the current day marker class
 	this.regional = []; // Available regional settings, indexed by language code
 	this.regional[''] = { // Default regional settings
 		clearText: 'Clear', // Display text for clear link
@@ -179,8 +181,8 @@ $.extend(Datepicker.prototype, {
 	_destroyDatepicker: function(target) {
 		var nodeName = target.nodeName.toLowerCase();
 		var calId = target._calId;
-		target._calId = null;
 		var $target = $(target);
+		$target.removeAttr('_calId');
 		if (nodeName == 'input') {
 			$target.siblings('.' + this._appendClass).replaceWith('').end()
 				.siblings('.' + this._triggerClass).replaceWith('').end()
@@ -329,7 +331,7 @@ $.extend(Datepicker.prototype, {
 		if (showOn == 'focus' || showOn == 'both') // pop-up date picker when in the marked field
 			input.focus(this._showDatepicker);
 		if (showOn == 'button' || showOn == 'both') { // pop-up date picker when button clicked
-			input.wrap('<span class="' + this._wrapClass + '">');
+			input.wrap('<span class="' + this._wrapClass + '"></span>');
 			var buttonText = inst._get('buttonText');
 			var buttonImage = inst._get('buttonImage');
 			var trigger = $(inst._get('buttonImageOnly') ? 
@@ -627,31 +629,35 @@ $.extend(Datepicker.prototype, {
 
 	/* Action for selecting a day. */
 	_selectDay: function(id, month, year, td) {
-		if ($(td).is('.ui-datepicker-unselectable'))
+		if ($(td).hasClass(this._unselectableClass))
 			return;
 		var inst = this._getInst(id);
 		var rangeSelect = inst._get('rangeSelect');
 		if (rangeSelect) {
-			if (!this._stayOpen) {
-				$('.ui-datepicker td').removeClass('ui-datepicker-current-day');
-				$(td).addClass('ui-datepicker-current-day');
-			} 
 			this._stayOpen = !this._stayOpen;
+			if (this._stayOpen) {
+				$('.ui-datepicker td').removeClass(this._currentClass);
+				$(td).addClass(this._currentClass);
+			} 
 		}
 		inst._selectedDay = inst._currentDay = $('a', td).html();
 		inst._selectedMonth = inst._currentMonth = month;
 		inst._selectedYear = inst._currentYear = year;
-		this._selectDate(id, inst._formatDate(
-			inst._currentDay, inst._currentMonth, inst._currentYear));
 		if (this._stayOpen) {
 			inst._endDay = inst._endMonth = inst._endYear = null;
-			inst._rangeStart = new Date(inst._currentYear, inst._currentMonth, inst._currentDay);
-			this._updateDatepicker(inst);
 		}
 		else if (rangeSelect) {
 			inst._endDay = inst._currentDay;
 			inst._endMonth = inst._currentMonth;
 			inst._endYear = inst._currentYear;
+		}
+		this._selectDate(id, inst._formatDate(
+			inst._currentDay, inst._currentMonth, inst._currentYear));
+		if (this._stayOpen) {
+			inst._rangeStart = new Date(inst._currentYear, inst._currentMonth, inst._currentDay);
+			this._updateDatepicker(inst);
+		}
+		else if (rangeSelect) {
 			inst._selectedDay = inst._currentDay = inst._rangeStart.getDate();
 			inst._selectedMonth = inst._currentMonth = inst._rangeStart.getMonth();
 			inst._selectedYear = inst._currentYear = inst._rangeStart.getFullYear();
@@ -1101,7 +1107,7 @@ $.extend(DatepickerInstance.prototype, {
 		var startDate = (!this._currentYear || (this._input && this._input.val() == '') ? null :
 			new Date(this._currentYear, this._currentMonth, this._currentDay));
 		if (this._get('rangeSelect')) {
-			return [startDate, (!this._endYear ? null :
+			return [this._rangeStart || startDate, (!this._endYear ? null :
 				new Date(this._endYear, this._endMonth, this._endDay))];
 		} else
 			return startDate;
@@ -1216,10 +1222,10 @@ $.extend(DatepickerInstance.prototype, {
 							(otherMonth ? ' ui-datepicker-otherMonth' : '') + // highlight days from other months
 							(printDate.getTime() == selectedDate.getTime() && drawMonth == this._selectedMonth ?
 							' ui-datepicker-days-cell-over' : '') + // highlight selected day
-							(unselectable ? ' ui-datepicker-unselectable' : '') +  // highlight unselectable days
+							(unselectable ? ' ' + $.datepicker._unselectableClass : '') +  // highlight unselectable days
 							(otherMonth && !showOtherMonths ? '' : ' ' + daySettings[1] + // highlight custom dates
 							(printDate.getTime() >= currentDate.getTime() && printDate.getTime() <= endDate.getTime() ?  // in current range
-							' ui-datepicker-current-day' : '') + // highlight selected day
+							' ' + $.datepicker._currentClass : '') + // highlight selected day
 							(printDate.getTime() == today.getTime() ? ' ui-datepicker-today' : '')) + '"' + // highlight today (if different)
 							((!otherMonth || showOtherMonths) && daySettings[2] ? ' title="' + daySettings[2] + '"' : '') + // cell title
 							(unselectable ? '' : ' onmouseover="jQuery(this).addClass(\'ui-datepicker-days-cell-over\');' +
