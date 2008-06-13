@@ -135,7 +135,18 @@ $.extend($.simulate.prototype, {
 $.extend($.simulate, {
 	defaults: {
 		speed: 'sync'
-	}
+	},
+	VK_TAB: 9,
+	VK_ENTER: 13,
+	VK_ESC: 27,
+	VK_PGUP: 33,
+	VK_PGDN: 34,
+	VK_END: 35,
+	VK_HOME: 36,
+	VK_LEFT: 37,
+	VK_UP: 38,
+	VK_RIGHT: 39,
+	VK_DOWN: 40
 });
 
 })(jQuery);
