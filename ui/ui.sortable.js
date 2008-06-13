@@ -570,6 +570,7 @@ $.widget("ui.sortable", $.extend($.ui.mouse, {
 $.extend($.ui.sortable, {
 	getter: "serialize toArray",
 	defaults: {
+		helper: "clone",
 		tolerance: "guess",
 		distance: 0,
 		delay: 0,
