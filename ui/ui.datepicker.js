@@ -961,10 +961,10 @@ $.extend(Datepicker.prototype, {
 					chars += format.charAt(iFormat);
 			else
 				switch (format.charAt(iFormat)) {
-					case 'd' || 'm' || 'y':
+					case 'd': case 'm': case 'y':
 						chars += '0123456789'; 
 						break;
-					case 'D' || 'M':
+					case 'D': case 'M':
 						return null; // Accept anything
 					case "'":
 						if (lookAhead("'"))
@@ -1161,7 +1161,7 @@ $.extend(DatepickerInstance.prototype, {
 			'<a onclick="jQuery.datepicker._adjustDate(' + this._id + ', +' + stepMonths + ', \'M\');"' +
 			(showStatus ? this._addStatus(this._get('nextStatus') || '&#xa0;') : '') + '>' +
 			this._get('nextText') + '</a>' :
-			(hideIfNoPrevNext ? '>' : '<label>' + this._get('nextText') + '</label>')) + '</div>';
+			(hideIfNoPrevNext ? '' : '<label>' + this._get('nextText') + '</label>')) + '</div>';
 		var html = (prompt ? '<div class="' + $.datepicker._promptClass + '">' + prompt + '</div>' : '') +
 			(closeAtTop && !this._inline ? controls : '') +
 			'<div class="ui-datepicker-links">' + (isRTL ? next : prev) +
@@ -1368,7 +1368,8 @@ $.extend(DatepickerInstance.prototype, {
 			date.setSeconds(0);
 			date.setMilliseconds(0);
 		}
-		return date || (checkRange ? this._rangeStart : null);
+		return (!checkRange || !this._rangeStart ? date :
+			(!date || this._rangeStart > date ? this._rangeStart : date));
 	},
 
 	/* Find the number of days in a given month. */
