@@ -27,9 +27,9 @@ test('setDefaults', function() {
 	dp1.datepicker();
 	ok(dp1.is('.hasDatepicker'), 'Marker class set');
 	ok($($.datepicker._datepickerDiv).html() == '', 'Content empty');
-	dp1.focus();
+	dp1.datepicker('show');
 	ok($($.datepicker._datepickerDiv).html() != '', 'Content present');
-	dp1.blur();
+	dp1.datepicker('hide');
 	equals($.datepicker._defaults.showOn, 'focus', 'Initial showOn');
 	$.datepicker.setDefaults({showOn: 'button'});
 	equals($.datepicker._defaults.showOn, 'button', 'Change default showOn');
@@ -188,6 +188,69 @@ test('keystrokes', function() {
 	equalsDate(dp1.datepicker('getDate'), new Date(2009, 2 - 1, 28), 'Keystroke ctrl+pgdn - Feb');
 });
 
+test('defaultDate', function() {
+	var dp1 = $('#dp1');
+	var date = new Date();
+	dp1.datepicker({speed: ''}).val('').datepicker('show');
+	dp1.simulate('keydown', {keyCode: $.simulate.VK_ENTER});
+	equalsDate(dp1.datepicker('getDate'), date, 'Default date null');
+	dp1.datepicker('change', {defaultDate: '-1d'}).
+		datepicker('hide').val('').datepicker('show');
+	dp1.simulate('keydown', {keyCode: $.simulate.VK_ENTER});
+	date.setDate(date.getDate() - 1);
+	equalsDate(dp1.datepicker('getDate'), date, 'Default date -1d');
+	dp1.datepicker('change', {defaultDate: '+3D'}).
+		datepicker('hide').val('').datepicker('show');
+	dp1.simulate('keydown', {keyCode: $.simulate.VK_ENTER});
+	date.setDate(date.getDate() + 4);
+	equalsDate(dp1.datepicker('getDate'), date, 'Default date +3D');
+	dp1.datepicker('change', {defaultDate: ' -2 w '}).
+		datepicker('hide').val('').datepicker('show');
+	dp1.simulate('keydown', {keyCode: $.simulate.VK_ENTER});
+	date = new Date();
+	date.setDate(date.getDate() - 14);
+	equalsDate(dp1.datepicker('getDate'), date, 'Default date -2 w');
+	dp1.datepicker('change', {defaultDate: '+1 W'}).
+		datepicker('hide').val('').datepicker('show');
+	dp1.simulate('keydown', {keyCode: $.simulate.VK_ENTER});
+	date.setDate(date.getDate() + 21);
+	equalsDate(dp1.datepicker('getDate'), date, 'Default date +1 W');
+	dp1.datepicker('change', {defaultDate: ' -1 m '}).
+		datepicker('hide').val('').datepicker('show');
+	dp1.simulate('keydown', {keyCode: $.simulate.VK_ENTER});
+	date = new Date();
+	date.setMonth(date.getMonth() - 1);
+	equalsDate(dp1.datepicker('getDate'), date, 'Default date -1 m');
+	dp1.datepicker('change', {defaultDate: '+2M'}).
+		datepicker('hide').val('').datepicker('show');
+	dp1.simulate('keydown', {keyCode: $.simulate.VK_ENTER});
+	date.setMonth(date.getMonth() + 3);
+	equalsDate(dp1.datepicker('getDate'), date, 'Default date +2M');
+	dp1.datepicker('change', {defaultDate: '-2y'}).
+		datepicker('hide').val('').datepicker('show');
+	dp1.simulate('keydown', {keyCode: $.simulate.VK_ENTER});
+	date = new Date();
+	date.setFullYear(date.getFullYear() - 2);
+	equalsDate(dp1.datepicker('getDate'), date, 'Default date -2y');
+	dp1.datepicker('change', {defaultDate: '+1 Y '}).
+		datepicker('hide').val('').datepicker('show');
+	dp1.simulate('keydown', {keyCode: $.simulate.VK_ENTER});
+	date.setFullYear(date.getFullYear() + 3);
+	equalsDate(dp1.datepicker('getDate'), date, 'Default date +1 Y');
+	dp1.datepicker('change', {defaultDate: '+10d +1M'}).
+		datepicker('hide').val('').datepicker('show');
+	dp1.simulate('keydown', {keyCode: $.simulate.VK_ENTER});
+	date = new Date();
+	date.setDate(date.getDate() + 10);
+	date.setMonth(date.getMonth() + 1);
+	equalsDate(dp1.datepicker('getDate'), date, 'Default date +10d +1M');
+	date = new Date(2007, 1 - 1, 26);
+	dp1.datepicker('change', {defaultDate: date}).
+		datepicker('hide').val('').datepicker('show');
+	dp1.simulate('keydown', {keyCode: $.simulate.VK_ENTER});
+	equalsDate(dp1.datepicker('getDate'), date, 'Default date 01/26/2007');
+});
+
 test('minMax', function() {
 	var dp1 = $('#dp1');
 	var lastYear = new Date(2007, 6 - 1, 4);
@@ -226,6 +289,20 @@ test('minMax', function() {
 	dp1.simulate('keydown', {ctrlKey: true, keyCode: $.simulate.VK_PGDN}).
 		simulate('keydown', {keyCode: $.simulate.VK_ENTER});
 	equalsDate(dp1.datepicker('getDate'), maxDate, 'Min/max - null, 12/07/2008 - ctrl+pgdn');
+	// relative dates
+	var date = new Date();
+	date.setDate(date.getDate() - 7);
+	dp1.datepicker('change', {minDate: '-1w', maxDate: '+10 D +1 M'}).
+		datepicker('hide').val('').datepicker('show');
+	dp1.simulate('keydown', {ctrlKey: true, keyCode: $.simulate.VK_PGUP}).
+		simulate('keydown', {keyCode: $.simulate.VK_ENTER});
+	equalsDate(dp1.datepicker('getDate'), date, 'Min/max - -1w, +10 D +1 M - ctrl+pgup');
+	date.setDate(date.getDate() + 17);
+	date.setMonth(date.getMonth() + 1);
+	dp1.val('').datepicker('show');
+	dp1.simulate('keydown', {ctrlKey: true, keyCode: $.simulate.VK_PGDN}).
+		simulate('keydown', {keyCode: $.simulate.VK_ENTER});
+	equalsDate(dp1.datepicker('getDate'), date, 'Min/max - -1w, +10 D +1 M - ctrl+pgdn');
 });
 
 test('ranges', function() {
