@@ -1,0 +1,67 @@
+<script type="text/javascript">
+
+	var model = {
+
+		renderAt: '#containerDemo',
+
+		title: 'Easing Effects',
+
+		demos: [
+
+			{
+				title: 'Easings',
+				desc: 'Easing is acceleration, a change in speed. Easings control how an animation progresses over time.<br/>' +
+					'An ease-in starts slow and then speeds up.<br/>' +
+					'An ease-out starts fast and then slows to a stop.<br/>' +
+					'An ease-in-out combines the two so that the first half is an ease-in and the second half is an ease-out.',
+				html: '<button id="doBounce">Bounce</button><br/>\n' +
+					'<div><img id="bounce" src="templates/images/puppy.jpg"/></div>',
+				destroy: '$("#doBounce").unbind();',
+
+				options: [
+					{	desc: 'Linear easing',	source: '$("#doBounce").click(function() { $("#bounce").effect("bounce", {easing: "linear", times: 1}, 2000); });' },
+					{	desc: 'Swing easing',	source: '$("#doBounce").click(function() { $("#bounce").effect("bounce", {easing: "swing", times: 1}, 2000); });' },
+					{	desc: 'Quadratic ease in',	source: '$("#doBounce").click(function() { $("#bounce").effect("bounce", {easing: "easeInQuad", times: 1}, 2000); });' },
+					{	desc: 'Quadratic ease out',	source: '$("#doBounce").click(function() { $("#bounce").effect("bounce", {easing: "easeOutQuad", times: 1}, 2000); });' },
+					{	desc: 'Quadratic ease in out',	source: '$("#doBounce").click(function() { $("#bounce").effect("bounce", {easing: "easeInOutQuad", times: 1}, 2000); });' },
+					{	desc: 'Cubic ease in',	source: '$("#doBounce").click(function() { $("#bounce").effect("bounce", {easing: "easeInCubic", times: 1}, 2000); });' },
+					{	desc: 'Cubic ease out',	source: '$("#doBounce").click(function() { $("#bounce").effect("bounce", {easing: "easeOutCubic", times: 1}, 2000); });' },
+					{	desc: 'Cubic ease in out',	source: '$("#doBounce").click(function() { $("#bounce").effect("bounce", {easing: "easeInOutCubic", times: 1}, 2000); });' },
+					{	desc: 'Quartic ease in',	source: '$("#doBounce").click(function() { $("#bounce").effect("bounce", {easing: "easeInQuart", times: 1}, 2000); });' },
+					{	desc: 'Quartic ease out',	source: '$("#doBounce").click(function() { $("#bounce").effect("bounce", {easing: "easeOutQuart", times: 1}, 2000); });' },
+					{	desc: 'Quartic ease in out',	source: '$("#doBounce").click(function() { $("#bounce").effect("bounce", {easing: "easeInOutQuart", times: 1}, 2000); });' },
+					{	desc: 'Quintic ease in',	source: '$("#doBounce").click(function() { $("#bounce").effect("bounce", {easing: "easeInQuint", times: 1}, 2000); });' },
+					{	desc: 'Quintic ease out',	source: '$("#doBounce").click(function() { $("#bounce").effect("bounce", {easing: "easeOutQuint", times: 1}, 2000); });' },
+					{	desc: 'Quintic ease in out',	source: '$("#doBounce").click(function() { $("#bounce").effect("bounce", {easing: "easeInOutQuint", times: 1}, 2000); });' },
+					{	desc: 'Sinusoidal ease in',	source: '$("#doBounce").click(function() { $("#bounce").effect("bounce", {easing: "easeInSine", times: 1}, 2000); });' },
+					{	desc: 'Sinusoidal ease out',	source: '$("#doBounce").click(function() { $("#bounce").effect("bounce", {easing: "easeOutSine", times: 1}, 2000); });' },
+					{	desc: 'Sinusoidal ease in out',	source: '$("#doBounce").click(function() { $("#bounce").effect("bounce", {easing: "easeInOutSine", times: 1}, 2000); });' },
+					{	desc: 'Exponential ease in',	source: '$("#doBounce").click(function() { $("#bounce").effect("bounce", {easing: "easeInExpo", times: 1}, 2000); });' },
+					{	desc: 'Exponential ease out',	source: '$("#doBounce").click(function() { $("#bounce").effect("bounce", {easing: "easeOutExpo", times: 1}, 2000); });' },
+					{	desc: 'Exponential ease in out',	source: '$("#doBounce").click(function() { $("#bounce").effect("bounce", {easing: "easeInOutExpo", times: 1}, 2000); });' },
+					{	desc: 'Circular ease in',	source: '$("#doBounce").click(function() { $("#bounce").effect("bounce", {easing: "easeInCirc", times: 1}, 2000); });' },
+					{	desc: 'Circular ease out',	source: '$("#doBounce").click(function() { $("#bounce").effect("bounce", {easing: "easeOutCirc", times: 1}, 2000); });' },
+					{	desc: 'Circular ease in out',	source: '$("#doBounce").click(function() { $("#bounce").effect("bounce", {easing: "easeInOutCirc", times: 1}, 2000); });' },
+					{	desc: 'Elastic ease in (decaying sine wave)',	source: '$("#doBounce").click(function() { $("#bounce").effect("bounce", {easing: "easeInElastic", times: 1}, 2000); });' },
+					{	desc: 'Elastic ease out',	source: '$("#doBounce").click(function() { $("#bounce").effect("bounce", {easing: "easeOutElastic", times: 1}, 2000); });' },
+					{	desc: 'Elastic ease in out',	source: '$("#doBounce").click(function() { $("#bounce").effect("bounce", {easing: "easeInOutElastic", times: 1}, 2000); });' },
+					{	desc: 'Back ease in (overshooting cubic)',	source: '$("#doBounce").click(function() { $("#bounce").effect("bounce", {easing: "easeInBack", times: 1}, 2000); });' },
+					{	desc: 'Back ease out',	source: '$("#doBounce").click(function() { $("#bounce").effect("bounce", {easing: "easeOutBack", times: 1}, 2000); });' },
+					{	desc: 'Back ease in out',	source: '$("#doBounce").click(function() { $("#bounce").effect("bounce", {easing: "easeInOutBack", times: 1}, 2000); });' },
+					{	desc: 'Bounce ease in (decaying parabolic)',	source: '$("#doBounce").click(function() { $("#bounce").effect("bounce", {easing: "easeInBounce", times: 1}, 2000); });' },
+					{	desc: 'Bounce ease out',	source: '$("#doBounce").click(function() { $("#bounce").effect("bounce", {easing: "easeOutBounce", times: 1}, 2000); });' },
+					{	desc: 'Bounce ease in out',	source: '$("#doBounce").click(function() { $("#bounce").effect("bounce", {easing: "easeInOutBounce", times: 1}, 2000); });' },
+				]
+			}
+			
+		]
+
+	};
+
+	$(function(){
+
+		uiRenderDemo(model);
+
+	});
+
+</script>
