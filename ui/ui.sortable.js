@@ -152,7 +152,7 @@ $.widget("ui.sortable", $.extend($.ui.mouse, {
 		this.containers = [this];
 		var items = this.items;
 		var queries = [$.isFunction(this.options.items) ? this.options.items.call(this.element) : $(this.options.items, this.element)];
-		
+	
 		if(this.options.connectWith) {
 			for (var i = this.options.connectWith.length - 1; i >= 0; i--){
 				var cur = $(this.options.connectWith[i]);
@@ -339,7 +339,15 @@ $.widget("ui.sortable", $.extend($.ui.mouse, {
 		};
 	
 		this.originalPosition = this.generatePosition(e);												//Generate the original position
+		this.domPosition = this.currentItem.prev()[0];													//Cache the former DOM position
+		
+		//If o.placeholder is used, create a new element at the given position with the class
 		this.helperProportions = { width: this.helper.outerWidth(), height: this.helper.outerHeight() };//Cache the helper size
+		if(o.placeholder) this.createPlaceholder();
+		
+		//Call plugins and callbacks
+		this.propagate("start", e);
+		this.helperProportions = { width: this.helper.outerWidth(), height: this.helper.outerHeight() };//Recache the helper size
 		
 		if(o.cursorAt) {
 			if(o.cursorAt.left != undefined) this.offset.click.left = o.cursorAt.left;
@@ -347,8 +355,6 @@ $.widget("ui.sortable", $.extend($.ui.mouse, {
 			if(o.cursorAt.top != undefined) this.offset.click.top = o.cursorAt.top;
 			if(o.cursorAt.bottom != undefined) this.offset.click.top = this.helperProportions.height - o.cursorAt.bottom;
 		}
-
-		this.domPosition = this.currentItem.prev()[0];													//Cache the former DOM position
 
 		/*
 		 * - Position constraining -
@@ -376,18 +382,14 @@ $.widget("ui.sortable", $.extend($.ui.mouse, {
 				];
 			}
 		}
-		
-		//If o.placeholder is used, create a new element at the given position with the class
-		if(o.placeholder) this.createPlaceholder();
-		
-		//Call plugins and callbacks
-		this.propagate("start", e);
-		this.helperProportions = { width: this.helper.outerWidth(), height: this.helper.outerHeight() };//Recache the helper size
 
-		if(this.options.placeholder != 'clone') this.currentItem.css('visibility', 'hidden'); //Set the original element visibility to hidden to still fill out the white space
+		//Set the original element visibility to hidden to still fill out the white space
+		if(this.options.placeholder != 'clone')
+			this.currentItem.css('visibility', 'hidden');
 		
+		//Post 'activate' events to possible containers
 		if(!noActivation) {
-			 for (var i = this.containers.length - 1; i >= 0; i--) { this.containers[i].propagate("activate", e, this); } //Post 'activate' events to possible containers
+			 for (var i = this.containers.length - 1; i >= 0; i--) { this.containers[i].propagate("activate", e, this); }
 		}
 		
 		//Prepare possible droppables
