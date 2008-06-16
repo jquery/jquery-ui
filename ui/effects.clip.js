@@ -42,7 +42,7 @@ $.effects.clip = function(o) {
 		wrapper.animate(animation, { queue: false, duration: o.duration, easing: o.options.easing, complete: function() {
 			if(mode == 'hide') el.hide(); // Hide
 			$.effects.restore(el, props); $.effects.removeWrapper(el); // Restore
-			if(o.callback) o.callback.apply(this, arguments); // Callback
+			if(o.callback) o.callback.apply(el[0], arguments); // Callback
 			el.dequeue();
 		}}); 
 		
