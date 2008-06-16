@@ -1054,11 +1054,12 @@ $.extend(DatepickerInstance.prototype, {
 		};
 		var offsetString = function(offset, getDaysInMonth) {
 			var date = new Date();
-			var matches = /^([+-]?[0-9]+)\s*(d|D|w|W|m|M|y|Y)?$/.exec(offset);
-			if (matches) {
-				var year = date.getFullYear();
-				var month = date.getMonth();
-				var day = date.getDate();
+			var year = date.getFullYear();
+			var month = date.getMonth();
+			var day = date.getDate();
+			var pattern = /([+-]?[0-9]+)\s*(d|D|w|W|m|M|y|Y)?/g;
+			var matches = pattern.exec(offset);
+			while (matches) {
 				switch (matches[2] || 'd') {
 					case 'd' : case 'D' :
 						day += (matches[1] - 0); break;
@@ -1073,9 +1074,9 @@ $.extend(DatepickerInstance.prototype, {
 						day = Math.min(day, getDaysInMonth(year, month));
 						break;
 				}
-				date = new Date(year, month, day);
+				matches = pattern.exec(offset);
 			}
-			return date;
+			return new Date(year, month, day);
 		};
 		var date = this._get(name);
 		return (date == null ? defaultDate :
