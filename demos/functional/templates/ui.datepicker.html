@@ -129,6 +129,7 @@
 					{	desc: 'Range select showing two months',	source: '$("#ranges").datepicker({rangeSelect: true, numberOfMonths: 2, showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' },
 					{	desc: 'Range select showing six months (moving three at a time)',	source: '$("#ranges").datepicker({rangeSelect: true, numberOfMonths: [2, 3], stepMonths: 3, prevText: "<< Previous Months", nextText: "Next Months >>", showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' },
 					{	desc: 'Range select excluding weekends',	source: '$("#ranges").datepicker({rangeSelect: true, numberOfMonths: 2, beforeShowDay: $.datepicker.noWeekends, showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' },
+					{	desc: 'Range select with min/max settings',	source: '$("#ranges").datepicker({rangeSelect: true, numberOfMonths: 2, minDate: "6w", maxDate: "2y", showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' }
 				]
 			},
 
