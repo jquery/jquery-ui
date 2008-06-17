@@ -1215,6 +1215,7 @@ $.extend(DatepickerInstance.prototype, {
 				var printDate = new Date(drawYear, drawMonth, 1 - leadDays);
 				var numRows = (isMultiMonth ? 6 : Math.ceil((leadDays + daysInMonth) / 7)); // calculate the number of rows to generate
 				var beforeShowDay = this._get('beforeShowDay');
+				var highlightWeek = this._get('highlightWeek');
 				var showOtherMonths = this._get('showOtherMonths');
 				var calculateWeek = this._get('calculateWeek') || $.datepicker.iso8601Week;
 				var dateStatus = this._get('statusForDate') || $.datepicker.dateStatus;
@@ -1238,11 +1239,15 @@ $.extend(DatepickerInstance.prototype, {
 							' ' + $.datepicker._currentClass : '') + // highlight selected day
 							(printDate.getTime() == today.getTime() ? ' ui-datepicker-today' : '')) + '"' + // highlight today (if different)
 							((!otherMonth || showOtherMonths) && daySettings[2] ? ' title="' + daySettings[2] + '"' : '') + // cell title
-							(unselectable ? '' : ' onmouseover="jQuery(this).addClass(\'ui-datepicker-days-cell-over\');' +
+							(unselectable ? (highlightWeek ? ' onmouseover="jQuery(this).parent().addClass(\'ui-datepicker-week-over\');"' + // highlight selection week
+							' onmouseout="jQuery(this).parent().removeClass(\'ui-datepicker-week-over\');"' : '') : // unhighlight selection week
+							' onmouseover="jQuery(this).addClass(\'ui-datepicker-days-cell-over\')' + // highlight selection
+							(highlightWeek ? '.parent().addClass(\'ui-datepicker-week-over\')' : '') + ';' + // highlight selection week
 							(!showStatus || (otherMonth && !showOtherMonths) ? '' : 'jQuery(\'#ui-datepicker-status-' +
 							this._id + '\').html(\'' + (dateStatus.apply((this._input ? this._input[0] : null),
 							[printDate, this]) || '&#xa0;') +'\');') + '"' +
-							' onmouseout="jQuery(this).removeClass(\'ui-datepicker-days-cell-over\');' +
+							' onmouseout="jQuery(this).removeClass(\'ui-datepicker-days-cell-over\')' + // unhighlight selection
+							(highlightWeek ? '.parent().removeClass(\'ui-datepicker-week-over\')' : '') + ';' + // unhighlight selection week
 							(!showStatus || (otherMonth && !showOtherMonths) ? '' : 'jQuery(\'#ui-datepicker-status-' +
 							this._id + '\').html(\'&#xa0;\');') + '" onclick="jQuery.datepicker._selectDay(' +
 							this._id + ',' + drawMonth + ',' + drawYear + ', this);"') + '>' + // actions
