@@ -80,6 +80,7 @@ function Datepicker() {
 		mandatory: false, // True to hide the Clear link, false to include it
 		hideIfNoPrevNext: false, // True to hide next/previous month links
 			// if not applicable, false to just disable them
+		navigationAsDateFormat: false, // True if date formatting applied to prev/today/next links
 		changeMonth: true, // True if month can be selected directly, false if only prev/next
 		changeYear: true, // True if year can be selected directly, false if only prev/next
 		yearRange: '-10:+10', // Range of years to display in drop-down,
@@ -1132,6 +1133,7 @@ $.extend(DatepickerInstance.prototype, {
 		var prompt = this._get('prompt');
 		var closeAtTop = this._get('closeAtTop');
 		var hideIfNoPrevNext = this._get('hideIfNoPrevNext');
+		var navigationAsDateFormat = this._get('navigationAsDateFormat');
 		var numMonths = this._getNumberOfMonths();
 		var stepMonths = this._get('stepMonths');
 		var isMultiMonth = (numMonths[0] != 1 || numMonths[1] != 1);
@@ -1152,23 +1154,30 @@ $.extend(DatepickerInstance.prototype, {
 			}
 		}
 		// controls and links
+		var prevText = this._get('prevText');
+		prevText = (!navigationAsDateFormat ? prevText : $.datepicker.formatDate(
+			prevText, new Date(drawYear, drawMonth - stepMonths, 1), this._getFormatConfig()));
 		var prev = '<div class="ui-datepicker-prev">' + (this._canAdjustMonth(-1, drawYear, drawMonth) ? 
 			'<a onclick="jQuery.datepicker._adjustDate(' + this._id + ', -' + stepMonths + ', \'M\');"' +
-			(showStatus ? this._addStatus(this._get('prevStatus') || '&#xa0;') : '') + '>' +
-			this._get('prevText') + '</a>' :
-			(hideIfNoPrevNext ? '' : '<label>' + this._get('prevText') + '</label>')) + '</div>';
+			(showStatus ? this._addStatus(this._get('prevStatus') || '&#xa0;') : '') + '>' + prevText + '</a>' :
+			(hideIfNoPrevNext ? '' : '<label>' + prevText + '</label>')) + '</div>';
+		var nextText = this._get('nextText');
+		nextText = (!navigationAsDateFormat ? nextText : $.datepicker.formatDate(
+			nextText, new Date(drawYear, drawMonth + stepMonths, 1), this._getFormatConfig()));
 		var next = '<div class="ui-datepicker-next">' + (this._canAdjustMonth(+1, drawYear, drawMonth) ?
 			'<a onclick="jQuery.datepicker._adjustDate(' + this._id + ', +' + stepMonths + ', \'M\');"' +
-			(showStatus ? this._addStatus(this._get('nextStatus') || '&#xa0;') : '') + '>' +
-			this._get('nextText') + '</a>' :
-			(hideIfNoPrevNext ? '' : '<label>' + this._get('nextText') + '</label>')) + '</div>';
+			(showStatus ? this._addStatus(this._get('nextStatus') || '&#xa0;') : '') + '>' + nextText + '</a>' :
+			(hideIfNoPrevNext ? '' : '<label>' + nextText + '</label>')) + '</div>';
+		var currentText = this._get('currentText');
+		currentText = (!navigationAsDateFormat ? currentText: $.datepicker.formatDate(
+			currentText, today, this._getFormatConfig()));
 		var html = (prompt ? '<div class="' + $.datepicker._promptClass + '">' + prompt + '</div>' : '') +
 			(closeAtTop && !this._inline ? controls : '') +
 			'<div class="ui-datepicker-links">' + (isRTL ? next : prev) +
 			(this._isInRange(today) ? '<div class="ui-datepicker-current">' +
 			'<a onclick="jQuery.datepicker._gotoToday(' + this._id + ');"' +
 			(showStatus ? this._addStatus(this._get('currentStatus') || '&#xa0;') : '') + '>' +
-			this._get('currentText') + '</a></div>' : '') + (isRTL ? prev : next) + '</div>';
+			currentText + '</a></div>' : '') + (isRTL ? prev : next) + '</div>';
 		var showWeeks = this._get('showWeeks');
 		for (var row = 0; row < numMonths[0]; row++)
 			for (var col = 0; col < numMonths[1]; col++) {
