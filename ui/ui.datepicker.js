@@ -448,19 +448,29 @@ $.extend(Datepicker.prototype, {
 			$.datepicker._pos[0] -= document.documentElement.scrollLeft;
 			$.datepicker._pos[1] -= document.documentElement.scrollTop;
 		}
-		inst._datepickerDiv.css('position', ($.datepicker._inDialog && $.blockUI ?
-			'static' : (isFixed ? 'fixed' : 'absolute')))
-			.css({ left: $.datepicker._pos[0] + 'px', top: $.datepicker._pos[1] + 'px' });
+		var offset = {left: $.datepicker._pos[0], top: $.datepicker._pos[1]};
 		$.datepicker._pos = null;
 		inst._rangeStart = null;
+		// determine sizing offscreen
+		inst._datepickerDiv.css({position: 'absolute', display: 'block', top: '-1000px'});
 		$.datepicker._updateDatepicker(inst);
+		// fix width for dynamic number of date pickers
+		inst._datepickerDiv.width(inst._getNumberOfMonths()[1] *
+			$('.ui-datepicker', inst._datepickerDiv[0])[0].offsetWidth);
+		// and adjust position before showing
+		offset = $.datepicker._checkOffset(inst, offset);
+		inst._datepickerDiv.css({position: ($.datepicker._inDialog && $.blockUI ?
+			'static' : (isFixed ? 'fixed' : 'absolute')), display: 'none',
+			left: offset.left + 'px', top: offset.top + 'px'});
 		if (!inst._inline) {
+			var showAnim = inst._get('showAnim') || 'show';
 			var speed = inst._get('speed');
 			var postProcess = function() {
 				$.datepicker._datepickerShowing = true;
-				$.datepicker._afterShow(inst);
+				if ($.browser.msie && parseInt($.browser.version) < 7) // fix IE < 7 select problems
+					$('iframe.ui-datepicker-cover').css({width: inst._datepickerDiv.width() + 4,
+						height: inst._datepickerDiv.height() + 4});
 			};
-			var showAnim = inst._get('showAnim') || 'show';
 			inst._datepickerDiv[showAnim](speed, postProcess);
 			if (speed == '')
 				postProcess();
@@ -488,14 +498,8 @@ $.extend(Datepicker.prototype, {
 			$(inst._input[0]).focus();
 	},
 
-	/* Tidy up after displaying the date picker. */
-	_afterShow: function(inst) {
-		var numMonths = inst._getNumberOfMonths(); // fix width for dynamic number of date pickers
-		inst._datepickerDiv.width(numMonths[1] * $('.ui-datepicker', inst._datepickerDiv[0])[0].offsetWidth);
-		if ($.browser.msie && parseInt($.browser.version) < 7) // fix IE < 7 select problems
-			$('iframe.ui-datepicker-cover').css({width: inst._datepickerDiv.width() + 4,
-				height: inst._datepickerDiv.height() + 4});
-		// re-position on screen if necessary
+	/* Check positioning to remain on screen. */
+	_checkOffset: function(inst, offset) {
 		var isFixed = inst._datepickerDiv.css('position') == 'fixed';
 		var pos = inst._input ? $.datepicker._findPos(inst._input[0]) : null;
 		var browserWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
@@ -503,19 +507,20 @@ $.extend(Datepicker.prototype, {
 		var scrollX = (isFixed ? 0 : document.documentElement.scrollLeft || document.body.scrollLeft);
 		var scrollY = (isFixed ? 0 : document.documentElement.scrollTop || document.body.scrollTop);
 		// reposition date picker horizontally if outside the browser window
-		if ((inst._datepickerDiv.offset().left + inst._datepickerDiv.width() -
+		if ((offset.left + inst._datepickerDiv.width() -
 				(isFixed && $.browser.msie ? document.documentElement.scrollLeft : 0)) >
 				(browserWidth + scrollX))
-			inst._datepickerDiv.css('left', Math.max(scrollX,
+			offset.left = Math.max(scrollX,
 				pos[0] + (inst._input ? $(inst._input[0]).width() : null) - inst._datepickerDiv.width() -
-				(isFixed && $.browser.opera ? document.documentElement.scrollLeft : 0)) + 'px');
+				(isFixed && $.browser.opera ? document.documentElement.scrollLeft : 0));
 		// reposition date picker vertically if outside the browser window
-		if ((inst._datepickerDiv.offset().top + inst._datepickerDiv.height() -
+		if ((offset.top + inst._datepickerDiv.height() -
 				(isFixed && $.browser.msie ? document.documentElement.scrollTop : 0)) >
 				(browserHeight + scrollY))
-			inst._datepickerDiv.css('top', Math.max(scrollY,
+			offset.top = Math.max(scrollY,
 				pos[1] - (this._inDialog ? 0 : inst._datepickerDiv.height()) -
-				(isFixed && $.browser.opera ? document.documentElement.scrollTop : 0)) + 'px');
+				(isFixed && $.browser.opera ? document.documentElement.scrollTop : 0));
+		return offset;
 	},
 	
 	/* Find an object's position on the screen. */
