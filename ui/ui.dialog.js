@@ -111,6 +111,7 @@ $.widget("ui.dialog", {
 		
 		if ($.fn.draggable) {
 			uiDialog.draggable({
+				helper: options.dragHelper,
 				handle: '.ui-dialog-titlebar',
 				start: function(e, ui) {
 					self.moveToTop();
