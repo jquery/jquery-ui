@@ -16,7 +16,7 @@
 					'<li>Date format is mm/dd/yyyy</li>' +
 					'<li>Clear/Close controls show at the top</li>' +
 					'<li>Month and year are selectable directly</li>' +
-					'<li>10 years before and after the selected year are shown</li>' +
+					'<li>10 years before and after the current year are shown</li>' +
 					'<li>Show a single month</li>' +
 					'<li>Select a single date</li>' +
 					'<li>Week starts on Sunday</li>' +
@@ -50,11 +50,11 @@
 					'<li>ctrl+end - close and erase the date</li>' +
 					'<li>escape - close the datepicker without selection</li></ul>',
 				html: '<input type="text" size="10" value="" id="keys"/>',
-				destroy: '$("#keys").datepicker("destroy").attr("readonly", "");',
+				destroy: '$("#keys").datepicker("destroy").removeAttr("readonly");',
 
 				options: [
 					{	desc: 'Default datepicker',	source: '$("#keys").datepicker({showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' },
-					{	desc: 'No keystroke entry',	source: '$("#keys").datepicker({showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true}).attr("readonly", "readonly");' }
+					{	desc: 'Readonly input',	source: '$("#keys").datepicker({showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true}).attr("readonly", "readonly");' }
 				]
 			},
 
@@ -148,13 +148,15 @@
 				title: 'Inline Datepicker',
 				desc: 'A datepicker can also be shown inline, rather than popping-up, by targetting a division instead of an input field. ' +
 					'Use the <i>onSelect</i> callback to be notified of date selections.',
-				html: '<div id="inline"></div><p style="clear: both;"></p>',
+				html: '<div id="inline"></div>\n' +
+					'<p style="clear: both;"><!-- See day-by-day example for highlighting days code --></p>',
 				destroy: '$("#inline").datepicker("destroy");',
 
 				options: [
-					{	desc: 'Single month inline',	source: '$("#inline").datepicker();' },
+					{	desc: 'Single month inline',	source: '$("#inline").datepicker({onSelect: function(date) { alert("The chosen date is " + date); }});' },
 					{	desc: 'Range select inline',	source: '$("#inline").datepicker({rangeSelect: true});' },
-					{	desc: 'Range select showing two months inline',	source: '$("#inline").datepicker({rangeSelect: true, numberOfMonths: 2}).children("div").css("width", "370px");' }
+					{	desc: 'Range select showing two months inline',	source: '$("#inline").datepicker({rangeSelect: true, numberOfMonths: 2}).children("div").css("width", "370px");' },
+					{	desc: 'Highlight some national days (via CSS)',	source: '$("#inline").datepicker({beforeShowDay: nationalDays});' }
 				]
 			},
 
@@ -203,10 +205,10 @@
 				destroy: '$("#defaultDate").datepicker("destroy");',
 
 				options: [
-					{	desc: 'January 1, 2007',	source: '$("#defaultDate").datepicker({defaultDate: new Date(2007, 1 - 1, 1), showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' },
-					{	desc: '7 days from today',	source: '$("#defaultDate").datepicker({defaultDate: +7, showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' },
-					{	desc: '2 weeks from today',	source: '$("#defaultDate").datepicker({defaultDate: "+2w", showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' },
-					{	desc: '10 days and 1 month from today',	source: '$("#defaultDate").datepicker({defaultDate: "+10 D +1 M", showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' }
+					{	desc: 'Specific date - January 1, 2007',	source: '$("#defaultDate").datepicker({defaultDate: new Date(2007, 1 - 1, 1), showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' },
+					{	desc: 'Relative date - 7 days from today',	source: '$("#defaultDate").datepicker({defaultDate: +7, showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' },
+					{	desc: 'Relative date - 2 weeks from today',	source: '$("#defaultDate").datepicker({defaultDate: "+2w", showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' },
+					{	desc: 'Relative date - 10 days and 1 month from today',	source: '$("#defaultDate").datepicker({defaultDate: "+10 D +1 M", showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' }
 				]
 			},
 
@@ -218,11 +220,14 @@
 
 				options: [
 					{	desc: 'Append text to the datepicker',	source: '$("#misc").datepicker({appendText: "(format mm/dd/yyyy)", showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' },
-					{	desc: 'Show days from other months',	source: '$("#misc").datepicker({showOtherMonths: true, showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' },
-					{	desc: 'Show week of the year (ISO 8601)',	source: '$("#misc").datepicker({showWeeks: true, firstDay: 1, changeFirstDay: false, showOtherMonths: true, showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' },
 					{	desc: 'Move Clear/Close controls to the bottom',	source: '$("#misc").datepicker({closeAtTop: false, showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' },
 					{	desc: 'Make the datepicker mandatory (no Clear)',	source: '$("#misc").datepicker({mandatory: true, showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' },
 					{	desc: 'Hide Prev/Next links if not applicable',	source: '$("#misc").datepicker({hideIfNoPrevNext: true, minDate: new Date(2008, 1 - 1, 26), maxDate: new Date(2008, 3 - 1, 26), showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' },
+					{	desc: 'Prev/Today/Next links as date formats',	source: '$("#misc").datepicker({navigationAsDateFormat: true, prevText: "&lt;M", currentText: "M y", nextText: "M&gt;", showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' },
+					{	desc: 'Prev/Today/Next links as date formats in French',	source: '$("#misc").datepicker($.extend({}, $.datepicker.regional["fr"], {navigationAsDateFormat: true, prevText: "&lt;MM", currentText: "MM yy", nextText: "MM&gt;", numberOfMonths: 2, stepMonths: 2, showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true}));' },
+					{	desc: 'Highlight the hovered week',	source: '$("#misc").datepicker({highlightWeek: true, showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' },
+					{	desc: 'Show days from other months',	source: '$("#misc").datepicker({showOtherMonths: true, showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' },
+					{	desc: 'Show week of the year (ISO 8601)',	source: '$("#misc").datepicker({showWeeks: true, firstDay: 1, changeFirstDay: false, showOtherMonths: true, showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' },
 					{	desc: 'Show a status bar with more explanation',	source: '$("#misc").datepicker({showStatus: true, showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' }
 				]
 			},
@@ -263,36 +268,36 @@
 				destroy: '$("#i18n").datepicker("destroy");',
 
 				options: [
-					{	desc: '&#31616;&#20307;&#20013;&#25991; (Chinese Simplified)',	source: '$("#i18n").datepicker($.extend({}, $.datepicker.regional["zh-CN"], {showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true}));$("#contrib").html("Cloudream");' },
-					{	desc: '&#31777;&#39636;&#20013;&#25991; (Chinese Traditional)',	source: '$("#i18n").datepicker($.extend({}, $.datepicker.regional["zh-TW"], {showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true}));$("#contrib").html("Ressol");' },
-					{	desc: 'Bahasa Indonesia (Indonesian)',	source: '$("#i18n").datepicker($.extend({}, $.datepicker.regional["id"], {showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true}));$("#contrib").html("Deden Fathurahman");' },
-					{	desc: '&#1073;&#1098;&#1083;&#1075;&#1072;&#1088;&#1089;&#1082;&#1080; &#1077;&#1079;&#1080;&#1082; (Bulgarian)',	source: '$("#i18n").datepicker($.extend({}, $.datepicker.regional["bg"], {showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true}));$("#contrib").html("Stoyan Kyosev");' },
-					{	desc: 'Catal&agrave; (Catalan)',	source: '$("#i18n").datepicker($.extend({}, $.datepicker.regional["ca"], {showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true}));$("#contrib").html("Joan Leon");' },
-					{	desc: '&#268;e&#353;tina (Czech)',	source: '$("#i18n").datepicker($.extend({}, $.datepicker.regional["cs"], {showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true}));$("#contrib").html("Tomas Muller");' },
-					{	desc: 'Dansk (Danish)',	source: '$("#i18n").datepicker($.extend({}, $.datepicker.regional["da"], {showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true}));$("#contrib").html("Jan Christensen");' },
-					{	desc: 'Deutsch (German)',	source: '$("#i18n").datepicker($.extend({}, $.datepicker.regional["de"], {showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true}));$("#contrib").html("Milian Wolff");' },
-					{	desc: 'Espa&ntilde;ol (Spanish)',	source: '$("#i18n").datepicker($.extend({}, $.datepicker.regional["es"], {showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true}));$("#contrib").html("Vester");' },
-					{	desc: 'Fran&ccedil;ais (French)',	source: '$("#i18n").datepicker($.extend({}, $.datepicker.regional["fr"], {showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true}));$("#contrib").html("St&eacute;phane Nahmani");' },
-					{	desc: '&#54620;&#44397;&#50612; (Korean)',	source: '$("#i18n").datepicker($.extend({}, $.datepicker.regional["ko"], {showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true}));$("#contrib").html("DaeKwon Kang");' },
-					{	desc: '&#1344;&#1377;&#1397;&#1381;&#1408;&#1381;&#1398; (Armenian)',	source: '$("#i18n").datepicker($.extend({}, $.datepicker.regional["hy"], {showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true}));$("#contrib").html("Levon Zakaryan");' },
-					{	desc: '&Iacute;slenska (Icelandic)',	source: '$("#i18n").datepicker($.extend({}, $.datepicker.regional["is"], {showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true}));$("#contrib").html("Haukur H. Thorsson");' },
-					{	desc: 'Italiano (Italian)',	source: '$("#i18n").datepicker($.extend({}, $.datepicker.regional["it"], {showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true}));$("#contrib").html("Apaella");' },
-					{	desc: 'Magyar (Hungarian)',	source: '$("#i18n").datepicker($.extend({}, $.datepicker.regional["hu"], {showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true}));$("#contrib").html("Istvan Karaszi");' },
-					{	desc: 'Nederlands (Dutch)',	source: '$("#i18n").datepicker($.extend({}, $.datepicker.regional["nl"], {showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true}));$("#contrib").html("???");' },
-					{	desc: '&#26085;&#26412;&#35486; (Japanese)',	source: '$("#i18n").datepicker($.extend({}, $.datepicker.regional["ja"], {showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true}));$("#contrib").html("Milly");' },
-					{	desc: 'Latvie&#353;u Valoda (Latvian)',	source: '$("#i18n").datepicker($.extend({}, $.datepicker.regional["lv"], {showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true}));$("#contrib").html("Arturas Paleicikas");' },
-					{	desc: 'lietuvi&#371; kalba (Lithuanian)',	source: '$("#i18n").datepicker($.extend({}, $.datepicker.regional["lt"], {showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true}));$("#contrib").html("Arturas Paleicikas");' },
-					{	desc: 'Norsk (Norwegian)',	source: '$("#i18n").datepicker($.extend({}, $.datepicker.regional["no"], {showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true}));$("#contrib").html("Naimdjon Takhirov");' },
-					{	desc: 'Phasa thai (Thai)',	source: '$("#i18n").datepicker($.extend({}, $.datepicker.regional["th"], {showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true}));$("#contrib").html("pipo");' },
-					{	desc: 'Polski (Polish)',	source: '$("#i18n").datepicker($.extend({}, $.datepicker.regional["pl"], {showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true}));$("#contrib").html("Jacek Wysocki");' },
-					{	desc: 'Portugu&ecirc;s (Portuguese/Brazilian)',	source: '$("#i18n").datepicker($.extend({}, $.datepicker.regional["pt-BR"], {showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true}));$("#contrib").html("Leonildo Costa Silva");' },
-					{	desc: 'Rom&acirc;n&#259; (Romanian)',	source: '$("#i18n").datepicker($.extend({}, $.datepicker.regional["ro"], {showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true}));$("#contrib").html("Edmond L.");' },
-					{	desc: '&#1056;&#1091;&#1089;&#1089;&#1082;&#1080;&#1081; (Russian)',	source: '$("#i18n").datepicker($.extend({}, $.datepicker.regional["ru"], {showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true}));$("#contrib").html("Andrew Stromnov");' },
-					{	desc: 'Sloven&#269;ina (Slovak)',	source: '$("#i18n").datepicker($.extend({}, $.datepicker.regional["sk"], {showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true}));$("#contrib").html("Vojtech Rinik");' },
-					{	desc: 'suomi (Finnish)',	source: '$("#i18n").datepicker($.extend({}, $.datepicker.regional["fi"], {showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true}));$("#contrib").html("Harri Kilpi&ouml;");' },
-					{	desc: 'Svenska (Swedish)',	source: '$("#i18n").datepicker($.extend({}, $.datepicker.regional["sv"], {showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true}));$("#contrib").html("Anders Ekdahl");' },
-					{	desc: 'T&uuml;rk&ccedil;e (Turkish)',	source: '$("#i18n").datepicker($.extend({}, $.datepicker.regional["tr"], {showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true}));$("#contrib").html("Izzet Emre Erkan");' },
-					{	desc: '&#1059;&#1082;&#1088;&#1072;&#1111;&#1085;&#1089;&#1100;&#1082;&#1072; (Ukranian)',	source: '$("#i18n").datepicker($.extend({}, $.datepicker.regional["uk"], {showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true}));$("#contrib").html("Maxim Drogobitskiy");' }
+					{	desc: '&#31616;&#20307;&#20013;&#25991; (Chinese Simplified)',	source: '$("#i18n").datepicker($.extend({}, $.datepicker.regional["zh-CN"], {showStatus: true, showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true}));$("#contrib").html("Cloudream");' },
+					{	desc: '&#31777;&#39636;&#20013;&#25991; (Chinese Traditional)',	source: '$("#i18n").datepicker($.extend({}, $.datepicker.regional["zh-TW"], {showStatus: true, showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true}));$("#contrib").html("Ressol");' },
+					{	desc: 'Bahasa Indonesia (Indonesian)',	source: '$("#i18n").datepicker($.extend({}, $.datepicker.regional["id"], {showStatus: true, showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true}));$("#contrib").html("Deden Fathurahman");' },
+					{	desc: '&#1073;&#1098;&#1083;&#1075;&#1072;&#1088;&#1089;&#1082;&#1080; &#1077;&#1079;&#1080;&#1082; (Bulgarian)',	source: '$("#i18n").datepicker($.extend({}, $.datepicker.regional["bg"], {showStatus: true, showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true}));$("#contrib").html("Stoyan Kyosev");' },
+					{	desc: 'Catal&agrave; (Catalan)',	source: '$("#i18n").datepicker($.extend({}, $.datepicker.regional["ca"], {showStatus: true, showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true}));$("#contrib").html("Joan Leon");' },
+					{	desc: '&#268;e&#353;tina (Czech)',	source: '$("#i18n").datepicker($.extend({}, $.datepicker.regional["cs"], {showStatus: true, showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true}));$("#contrib").html("Tomas Muller");' },
+					{	desc: 'Dansk (Danish)',	source: '$("#i18n").datepicker($.extend({}, $.datepicker.regional["da"], {showStatus: true, showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true}));$("#contrib").html("Jan Christensen");' },
+					{	desc: 'Deutsch (German)',	source: '$("#i18n").datepicker($.extend({}, $.datepicker.regional["de"], {showStatus: true, showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true}));$("#contrib").html("Milian Wolff");' },
+					{	desc: 'Espa&ntilde;ol (Spanish)',	source: '$("#i18n").datepicker($.extend({}, $.datepicker.regional["es"], {showStatus: true, showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true}));$("#contrib").html("Vester");' },
+					{	desc: 'Fran&ccedil;ais (French)',	source: '$("#i18n").datepicker($.extend({}, $.datepicker.regional["fr"], {showStatus: true, showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true}));$("#contrib").html("St&eacute;phane Nahmani");' },
+					{	desc: '&#54620;&#44397;&#50612; (Korean)',	source: '$("#i18n").datepicker($.extend({}, $.datepicker.regional["ko"], {showStatus: true, showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true}));$("#contrib").html("DaeKwon Kang");' },
+					{	desc: '&#1344;&#1377;&#1397;&#1381;&#1408;&#1381;&#1398; (Armenian)',	source: '$("#i18n").datepicker($.extend({}, $.datepicker.regional["hy"], {showStatus: true, showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true}));$("#contrib").html("Levon Zakaryan");' },
+					{	desc: '&Iacute;slenska (Icelandic)',	source: '$("#i18n").datepicker($.extend({}, $.datepicker.regional["is"], {showStatus: true, showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true}));$("#contrib").html("Haukur H. Thorsson");' },
+					{	desc: 'Italiano (Italian)',	source: '$("#i18n").datepicker($.extend({}, $.datepicker.regional["it"], {showStatus: true, showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true}));$("#contrib").html("Apaella");' },
+					{	desc: 'Magyar (Hungarian)',	source: '$("#i18n").datepicker($.extend({}, $.datepicker.regional["hu"], {showStatus: true, showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true}));$("#contrib").html("Istvan Karaszi");' },
+					{	desc: 'Nederlands (Dutch)',	source: '$("#i18n").datepicker($.extend({}, $.datepicker.regional["nl"], {showStatus: true, showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true}));$("#contrib").html("???");' },
+					{	desc: '&#26085;&#26412;&#35486; (Japanese)',	source: '$("#i18n").datepicker($.extend({}, $.datepicker.regional["ja"], {showStatus: true, showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true}));$("#contrib").html("Milly");' },
+					{	desc: 'Latvie&#353;u Valoda (Latvian)',	source: '$("#i18n").datepicker($.extend({}, $.datepicker.regional["lv"], {showStatus: true, showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true}));$("#contrib").html("Arturas Paleicikas");' },
+					{	desc: 'lietuvi&#371; kalba (Lithuanian)',	source: '$("#i18n").datepicker($.extend({}, $.datepicker.regional["lt"], {showStatus: true, showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true}));$("#contrib").html("Arturas Paleicikas");' },
+					{	desc: 'Norsk (Norwegian)',	source: '$("#i18n").datepicker($.extend({}, $.datepicker.regional["no"], {showStatus: true, showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true}));$("#contrib").html("Naimdjon Takhirov");' },
+					{	desc: '&#3616;&#3634;&#3625;&#3634;&#3652;&#3607;&#3618; (Thai)',	source: '$("#i18n").datepicker($.extend({}, $.datepicker.regional["th"], {showStatus: true, showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true}));$("#contrib").html("pipo");' },
+					{	desc: 'Polski (Polish)',	source: '$("#i18n").datepicker($.extend({}, $.datepicker.regional["pl"], {showStatus: true, showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true}));$("#contrib").html("Jacek Wysocki");' },
+					{	desc: 'Portugu&ecirc;s (Portuguese/Brazilian)',	source: '$("#i18n").datepicker($.extend({}, $.datepicker.regional["pt-BR"], {showStatus: true, showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true}));$("#contrib").html("Leonildo Costa Silva");' },
+					{	desc: 'Rom&acirc;n&#259; (Romanian)',	source: '$("#i18n").datepicker($.extend({}, $.datepicker.regional["ro"], {showStatus: true, showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true}));$("#contrib").html("Edmond L.");' },
+					{	desc: '&#1056;&#1091;&#1089;&#1089;&#1082;&#1080;&#1081; (Russian)',	source: '$("#i18n").datepicker($.extend({}, $.datepicker.regional["ru"], {showStatus: true, showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true}));$("#contrib").html("Andrew Stromnov");' },
+					{	desc: 'Sloven&#269;ina (Slovak)',	source: '$("#i18n").datepicker($.extend({}, $.datepicker.regional["sk"], {showStatus: true, showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true}));$("#contrib").html("Vojtech Rinik");' },
+					{	desc: 'suomi (Finnish)',	source: '$("#i18n").datepicker($.extend({}, $.datepicker.regional["fi"], {showStatus: true, showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true}));$("#contrib").html("Harri Kilpi&ouml;");' },
+					{	desc: 'Svenska (Swedish)',	source: '$("#i18n").datepicker($.extend({}, $.datepicker.regional["sv"], {showStatus: true, showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true}));$("#contrib").html("Anders Ekdahl");' },
+					{	desc: 'T&uuml;rk&ccedil;e (Turkish)',	source: '$("#i18n").datepicker($.extend({}, $.datepicker.regional["tr"], {showStatus: true, showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true}));$("#contrib").html("Izzet Emre Erkan");' },
+					{	desc: '&#1059;&#1082;&#1088;&#1072;&#1111;&#1085;&#1089;&#1100;&#1082;&#1072; (Ukranian)',	source: '$("#i18n").datepicker($.extend({}, $.datepicker.regional["uk"], {showStatus: true, showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true}));$("#contrib").html("Maxim Drogobitskiy");' }
 				]
 			},
 
@@ -303,8 +308,8 @@
 				destroy: '$("#i18nrtl").datepicker("destroy");',
 
 				options: [
-					{	desc: '&#8235;&#1575;&#1604;&#1593;&#1585;&#1576;&#1610;&#1577; (Arabic)',	source: '$("#i18nrtl").datepicker($.extend({}, $.datepicker.regional["ar"], {showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true}));$("#contrib2").html("Khaled Al Horani");' },
-					{	desc: '&#8235;&#1506;&#1489;&#1512;&#1497;&#1514; (Hebrew)',	source: '$("#i18nrtl").datepicker($.extend({}, $.datepicker.regional["he"], {showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true}));$("#contrib2").html("Amir Hardon");' }
+					{	desc: '&#8235;&#1575;&#1604;&#1593;&#1585;&#1576;&#1610;&#1577; (Arabic)',	source: '$("#i18nrtl").datepicker($.extend({}, $.datepicker.regional["ar"], {showStatus: true, showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true}));$("#contrib2").html("Khaled Al Horani");' },
+					{	desc: '&#8235;&#1506;&#1489;&#1512;&#1497;&#1514; (Hebrew)',	source: '$("#i18nrtl").datepicker($.extend({}, $.datepicker.regional["he"], {showStatus: true, showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true}));$("#contrib2").html("Amir Hardon");' }
 				]
 			}
 
