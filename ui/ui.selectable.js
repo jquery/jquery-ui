@@ -251,7 +251,7 @@ $.widget("ui.selectable", $.extend($.ui.mouse, {
 
 $.extend($.ui.selectable, {
 	defaults: {
-		distance: 0,
+		distance: 1,
 		delay: 0,
 		cancel: ":input,button",
 		appendTo: 'body',
