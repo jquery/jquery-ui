@@ -265,7 +265,7 @@ $.extend($.ui.draggable, {
 	defaults: {
 		appendTo: "parent",
 		axis: false,
-		cancel: ":input,button",
+		cancel: ":input",
 		delay: 0,
 		distance: 1,
 		helper: "original"
