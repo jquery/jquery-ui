@@ -115,11 +115,13 @@ $.widget("ui.dialog", {
 				handle: '.ui-dialog-titlebar',
 				start: function(e, ui) {
 					self.moveToTop();
-					(options.dragStart && options.dragStart.apply(this, arguments));
+					(options.dragStart && options.dragStart.apply(self.element[0], arguments));
 				},
-				drag: options.drag,
+				drag: function(e, ui) {
+					(options.drag && options.drag.apply(self.element[0], arguments));
+				},
 				stop: function(e, ui) {
-					(options.dragStop && options.dragStop.apply(this, arguments));
+					(options.dragStop && options.dragStop.apply(self.element[0], arguments));
 					$.ui.dialog.overlay.resize();
 				}
 			});
@@ -133,11 +135,15 @@ $.widget("ui.dialog", {
 				maxHeight: options.maxHeight,
 				minWidth: options.minWidth,
 				minHeight: options.minHeight,
-				start: options.resizeStart,
-				resize: options.resize,
+				start: function() {
+					(options.resizeStart && options.resizeStart.apply(self.element[0], arguments));
+				},
+				resize: function(e, ui) {
+					(options.resize && options.resize.apply(self.element[0], arguments));
+				},
 				handles: resizeHandles,
 				stop: function(e, ui) {
-					(options.resizeStop && options.resizeStop.apply(this, arguments));
+					(options.resizeStop && options.resizeStop.apply(self.element[0], arguments));
 					$.ui.dialog.overlay.resize();
 				}
 			});
