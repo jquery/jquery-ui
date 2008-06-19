@@ -36,16 +36,22 @@ $.widget("ui.slider", {
 		this.element.triggerHandler(n == "slide" ? n : "slide"+n, [e, this.ui()], this.options[n]);
 	},
 	destroy: function() {
+		
 		this.element
 			.removeClass("ui-slider ui-slider-disabled")
 			.removeData("slider")
 			.unbind(".slider");
-		this.handle
-			.unwrap("a");
-		this.handle.each(function() {
-			$(this).data("mouse").mouseDestroy();
-		});
+		
+		if(this.handle && this.handle.length) {
+			this.handle
+				.unwrap("a");
+			this.handle.each(function() {
+				$(this).data("mouse").mouseDestroy();
+			});
+		}
+		
 		this.generated && this.generated.remove();
+		
 	},
 	setData: function(key, value) {
 		$.widget.prototype.setData.apply(this, arguments);
