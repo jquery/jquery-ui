@@ -142,6 +142,20 @@ img.ui-datepicker-trigger {
 	background: #FFF !important;
 	border: 1px solid #777;
 }
+* html .ui-datepicker-title-row .ui-datepicker-week-end-cell {
+	background: #B1DB87 !important;
+}
+* html .ui-datepicker-week-end-cell {
+	background: #E0F4D7 !important;
+	border: 1px solid #DDD !important;
+}
+* html .ui-datepicker-days-cell-over {
+	background: #FFF !important;
+	border: 1px solid #777 !important;
+}
+* html .ui-datepicker-current-day {
+	background: #83C948 !important;
+}
 .ui-datepicker-today {
 	background: #B1DB87 !important;
 }
