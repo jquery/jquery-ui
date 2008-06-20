@@ -101,8 +101,7 @@ function Datepicker() {
 		maxDate: null, // The latest selectable date, or null for no limit
 		speed: 'normal', // Speed of display/closure
 		beforeShowDay: null, // Function that takes a date and returns an array with
-			// [0] = true if selectable, false if not,
-			// [1] = custom CSS class name(s) or '', 
+			// [0] = true if selectable, false if not, [1] = custom CSS class name(s) or '', 
 			// [2] = cell title (optional), e.g. $.datepicker.noWeekends
 		beforeShow: null, // Function that takes an input field and
 			// returns a set of custom settings for the date picker
@@ -444,6 +443,7 @@ $.extend(Datepicker.prototype, {
 		var isFixed = false;
 		$(input).parents().each(function() {
 			isFixed |= $(this).css('position') == 'fixed';
+			return !isFixed;
 		});
 		if (isFixed && $.browser.opera) { // correction for Opera when fixed and scrolled
 			$.datepicker._pos[0] -= document.documentElement.scrollLeft;
@@ -459,7 +459,7 @@ $.extend(Datepicker.prototype, {
 		inst._datepickerDiv.width(inst._getNumberOfMonths()[1] *
 			$('.ui-datepicker', inst._datepickerDiv[0])[0].offsetWidth);
 		// and adjust position before showing
-		offset = $.datepicker._checkOffset(inst, offset);
+		offset = $.datepicker._checkOffset(inst, offset, isFixed);
 		inst._datepickerDiv.css({position: ($.datepicker._inDialog && $.blockUI ?
 			'static' : (isFixed ? 'fixed' : 'absolute')), display: 'none',
 			left: offset.left + 'px', top: offset.top + 'px'});
@@ -483,7 +483,11 @@ $.extend(Datepicker.prototype, {
 
 	/* Generate the date picker content. */
 	_updateDatepicker: function(inst) {
-		inst._datepickerDiv.empty().append(inst._generateDatepicker());
+		var dims = {width: inst._datepickerDiv.width() + 4,
+			height: inst._datepickerDiv.height() + 4};
+		inst._datepickerDiv.empty().append(inst._generateDatepicker()).
+			find('iframe.ui-datepicker-cover').
+			css({width: dims.width, height: dims.height});
 		var numMonths = inst._getNumberOfMonths();
 		if (numMonths[0] != 1 || numMonths[1] != 1)
 			inst._datepickerDiv.addClass('ui-datepicker-multi');
@@ -500,27 +504,26 @@ $.extend(Datepicker.prototype, {
 	},
 
 	/* Check positioning to remain on screen. */
-	_checkOffset: function(inst, offset) {
-		var isFixed = inst._datepickerDiv.css('position') == 'fixed';
+	_checkOffset: function(inst, offset, isFixed) {
 		var pos = inst._input ? $.datepicker._findPos(inst._input[0]) : null;
-		var browserWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
-		var browserHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
-		var scrollX = (isFixed ? 0 : document.documentElement.scrollLeft || document.body.scrollLeft);
-		var scrollY = (isFixed ? 0 : document.documentElement.scrollTop || document.body.scrollTop);
+		var browserWidth = window.innerWidth || document.documentElement.clientWidth;
+		var browserHeight = window.innerHeight || document.documentElement.clientHeight;
+		var scrollX = document.documentElement.scrollLeft || document.body.scrollLeft;
+		var scrollY = document.documentElement.scrollTop || document.body.scrollTop;
 		// reposition date picker horizontally if outside the browser window
-		if ((offset.left + inst._datepickerDiv.width() -
-				(isFixed && $.browser.msie ? document.documentElement.scrollLeft : 0)) >
-				(browserWidth + scrollX))
-			offset.left = Math.max(scrollX,
-				pos[0] + (inst._input ? $(inst._input[0]).width() : null) - inst._datepickerDiv.width() -
+		if ((offset.left + inst._datepickerDiv.width() - scrollX) > browserWidth)
+			offset.left = Math.max((isFixed ? 0 : scrollX),
+				pos[0] + (inst._input ? inst._input.width() : 0) - (isFixed ? scrollX : 0) - inst._datepickerDiv.width() -
 				(isFixed && $.browser.opera ? document.documentElement.scrollLeft : 0));
+		else
+			offset.left -= (isFixed ? scrollX : 0);
 		// reposition date picker vertically if outside the browser window
-		if ((offset.top + inst._datepickerDiv.height() -
-				(isFixed && $.browser.msie ? document.documentElement.scrollTop : 0)) >
-				(browserHeight + scrollY))
-			offset.top = Math.max(scrollY,
-				pos[1] - (this._inDialog ? 0 : inst._datepickerDiv.height()) -
+		if ((offset.top + inst._datepickerDiv.height() - scrollY) > browserHeight)
+			offset.top = Math.max((isFixed ? 0 : scrollY),
+				pos[1] - (isFixed ? scrollY : 0) - (this._inDialog ? 0 : inst._datepickerDiv.height()) -
 				(isFixed && $.browser.opera ? document.documentElement.scrollTop : 0));
+		else
+			offset.top -= (isFixed ? scrollY : 0);
 		return offset;
 	},
 	
