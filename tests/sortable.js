@@ -76,7 +76,7 @@ test("enable", function() {
 	expect(4);
 	el = $("#sortable").sortable({ disabled: true });
 
-	sort($("li", el)[0], 0, 50, 0, '.sortable({ disabled: true })');
+	sort($("li", el)[0], 0, 40, 0, '.sortable({ disabled: true })');
 	
 	el.sortable("enable");
 	equals(el.data("disabled.sortable"), false, "disabled.sortable getter");
@@ -86,7 +86,7 @@ test("enable", function() {
 	el.data("disabled.sortable", false);
 	equals(el.data("disabled.sortable"), false, "disabled.sortable setter");
 	
-	sort($("li", el)[0], 0, 20, 2, '.data("disabled.sortable", false)');
+	sort($("li", el)[0], 0, 40, 2, '.data("disabled.sortable", false)');
 });
 
 test("disable", function() {
