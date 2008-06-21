@@ -1,3 +1,8 @@
+/*
+ * datepicker unit tests
+ */
+(function($) {
+
 module('datepicker');
 
 function equalsDate(d1, d2, message) {
@@ -590,3 +595,5 @@ test('formatDate', function() {
 	equals($.datepicker.formatDate('\'day\' d of MM (\'\'DD\'\'), yy', new Date(2001, 2 - 1, 3), settings),
 		'day 3 of Mon2 (\'Day7\'), 2001', 'Format date \'day\' d of MM (\'\'DD\'\'), yy with settings');
 });
+
+})(jQuery);
