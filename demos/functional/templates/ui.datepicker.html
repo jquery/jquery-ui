@@ -199,6 +199,22 @@
 			},
 
 			{
+				title: 'Alternate Field and Format',
+				desc: 'Simultaneously update an alternate field using an alternate date format. ' +
+					'This could be used to display selected dates in one format, while submitting ' +
+					'the dates in another format from a hidden field. The alternate field is ' +
+					'displayed here to demonstrate the functionality.',
+				html: '<input type="text" size="24" value="" id="alt1" readonly="readonly"/>\n' +
+					'<input type="text" size="24" value="" id="alt2" readonly="readonly"/>',
+				destroy: '$("#alt1").datepicker("destroy"); $("#alt2").val("");',
+
+				options: [
+					{	desc: 'Single date selection',	source: '$("#alt1").datepicker({altField: "#alt2", altFormat: "yy-mm-dd", showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' },
+					{	desc: 'Range date selection',	source: '$("#alt1").datepicker({altField: "#alt2", altFormat: "yy-mm-dd", rangeSelect: true, numberOfMonths: 2, showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' }
+				]
+			},
+
+			{
 				title: 'Default Date',
 				desc: 'Control which date is shown if the datepicker is opened with no value. The default is today.',
 				html: '<input type="text" size="10" value="" id="defaultDate"/>',

@@ -111,7 +111,9 @@ function Datepicker() {
 		numberOfMonths: 1, // Number of months to show at a time
 		stepMonths: 1, // Number of months to step back/forward
 		rangeSelect: false, // Allows for selecting a date range on one date picker
-		rangeSeparator: ' - ' // Text between two dates in a range
+		rangeSeparator: ' - ', // Text between two dates in a range
+		altField: '', // Selector for an alternate field to store selected dates into
+		altFormat: '' // The date format to use for the alternate field
 	};
 	$.extend(this._defaults, this.regional['']);
 	this._datepickerDiv = $('<div id="' + this._mainDivId + '"></div>');
@@ -691,10 +693,12 @@ $.extend(Datepicker.prototype, {
 	_selectDate: function(id, dateStr) {
 		var inst = this._getInst(id);
 		dateStr = (dateStr != null ? dateStr : inst._formatDate());
-		if (inst._rangeStart)
-			dateStr = inst._formatDate(inst._rangeStart) + inst._get('rangeSeparator') + dateStr;
+		if (inst._get('rangeSelect') && dateStr)
+			dateStr = (inst._rangeStart ? inst._formatDate(inst._rangeStart) :
+				dateStr) + inst._get('rangeSeparator') + dateStr;
 		if (inst._input)
 			inst._input.val(dateStr);
+		this._updateAlternate(inst);
 		var onSelect = inst._get('onSelect');
 		if (onSelect)
 			onSelect.apply((inst._input ? inst._input[0] : null), [dateStr, inst]);  // trigger custom callback
@@ -708,6 +712,21 @@ $.extend(Datepicker.prototype, {
 			if (typeof(inst._input[0]) != 'object')
 				inst._input[0].focus(); // restore focus
 			this._lastInput = null;
+		}
+	},
+	
+	/* Update any alternate field to synchronise with the main field. */
+	_updateAlternate: function(inst) {
+		var altField = inst._get('altField');
+		if (altField) { // update alternate field too
+			var altFormat = inst._get('altFormat');
+			var date = inst._getDate();
+			dateStr = (isArray(date) ? (!date[0] && !date[1] ? '' :
+				$.datepicker.formatDate(altFormat, date[0], inst._getFormatConfig()) +
+				inst._get('rangeSeparator') + $.datepicker.formatDate(
+				altFormat, date[1] || date[0], inst._getFormatConfig())) :
+				$.datepicker.formatDate(altFormat, date, inst._getFormatConfig()));
+			$(altField).each(function() { $(this).val(dateStr); });
 		}
 	},
 
@@ -1455,6 +1474,12 @@ function extendRemove(target, props) {
 		if (props[name] == null || props[name] == undefined)
 			target[name] = props[name];
 	return target;
+};
+
+/* Determine whether an object is an array. */
+function isArray(a) {
+	return (a && (($.browser.safari && typeof a == 'object' && a.length) ||
+		(a.constructor && a.constructor.toString().match(/\Array\(\)/))));
 };
 
 /* Invoke the datepicker functionality.
