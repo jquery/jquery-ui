@@ -115,13 +115,13 @@ $.extend($.simulate.prototype, {
 			options = this.options,	x = Math.floor(center.x), y = Math.floor(center.y), 
 			dx = options.dx || 0, dy = options.dy || 0, target = this.target;
 		var coord = { clientX: x, clientY: y };
-		this.simulateEvent(target, "mouseover");
 		this.simulateEvent(target, "mousedown", coord);
+		coord = { clientX: x + 1, clientY: y + 1 };
+		this.simulateEvent(document, "mousemove", coord);
 		coord = { clientX: x + dx, clientY: y + dy };
 		this.simulateEvent(document, "mousemove", coord);
 		this.simulateEvent(document, "mousemove", coord);
 		this.simulateEvent(target, "mouseup", coord);
-		this.simulateEvent(target, "mouseout");
 	},
 	findCenter: function(el) {
 		var el = $(this.target), o = el.offset();
