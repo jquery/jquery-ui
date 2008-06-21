@@ -21,7 +21,7 @@ var drag = function(handle, dx, dy) {
 var moved = function (dx, dy, msg) {
 	msg = msg ? msg + "." : "";
 	var actual = { left: offsetAfter.left, top: offsetAfter.top };
-	var expected = { left: offsetBefore.left + dx, top: offsetAfter.top };
+	var expected = { left: offsetBefore.left + dx, top: offsetBefore.top + dy };
 	compare2(actual, expected, 'dragged[' + dragged.dx + ', ' + dragged.dy + '] ' + msg);
 }
 
