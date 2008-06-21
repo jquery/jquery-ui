@@ -141,10 +141,10 @@ test("defaults", function() {
 	el = $("#draggable1").draggable();
 	equals(el.data("appendTo.draggable"), "parent", "appendTo");
 	equals(el.data("axis.draggable"), false, "axis");
-	equals(el.data("cancel.draggable"), ":input,button", "cancel");
+	equals(el.data("cancel.draggable"), ":input", "cancel");
 	equals(el.data("delay.draggable"), 0, "delay");
 	equals(el.data("disabled.draggable"), false, "disabled");
-	equals(el.data("distance.draggable"), 0, "distance");
+	equals(el.data("distance.draggable"), 1, "distance");
 	equals(el.data("helper.draggable"), "original", "helper");
 });
 
