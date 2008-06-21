@@ -10,8 +10,12 @@ jQuery.ui.accordion.defaults.animated = false;
 function state(accordion) {
 	var args = $.makeArray(arguments).slice(1);
 	$.each(args, function(i, n) {
-		equals(n, accordion.find("div").eq(i).is(":visible"));
+		equals(accordion.find("div").eq(i).is(":visible"), n);
 	});
+}
+
+$.fn.triggerEvent = function(type, target) {
+	return this.triggerHandler(type, [jQuery.event.fix({ type: type, target: target })]);
 }
 
 test("basics", function() {
@@ -80,6 +84,19 @@ test("activate, jQuery or DOM element", function() {
 	state(ac, 1, 0, 0);
 	ac.accordion("activate", $("#list1 a")[1]);
 	state(ac, 0, 1, 0);
+});
+
+function state2(accordion) {
+	var args = $.makeArray(arguments).slice(1);
+	$.each(args, function(i, n) {
+		equals(accordion.find("ul").eq(i).is(":visible"), n);
+	});
+}
+
+test("handle click on header-descendant", function() {
+	var ac = $('#navigation').accordion({ header: '.head', autoHeight: false })
+	ac.triggerEvent("click", $('#navigation span:contains(Bass)')[0]);
+	state2(ac, 0, 1, 0);
 });
 
 })(jQuery);

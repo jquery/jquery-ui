@@ -64,145 +64,107 @@
 		<div class="ui-slider-handle" style="position: absolute; height: 21px; left: 0px; bottom: 0px; width: 17px; background-image: url(http://developer.yahoo.com/yui/examples/slider/assets/thumb-n.gif);"></div>
 	</div>
 
-	<fieldset>
-		<legend>Standard, container is a div, header is h3 and content p</legend>
-
-		<div id="list1">
-			<a>There is one obvious advantage:</a>
-			<div>
-				<p>
-					You've seen it coming!<br/>
-					Buy now and get nothing for free!<br/>
-					Well, at least no free beer. Perhaps a bear, if you can afford it.
-				</p>
-			</div>
-			<a>Now that you've got...</a>
-			<div>
-				<p>
-					your bear, you have to admit it!<br/>
-					No, we aren't selling bears.
-				</p>
-				<p>
-					We could talk about renting one.
-				</p>
-			</div>
-			<a>Rent one bear, ...</a>
-			<div>
-				<p>
-					get two for three beer.
-				</p>
-				<p>
-					And now, for something completely different.
-				</p>
-			</div>
+	<div id="list1">
+		<a>There is one obvious advantage:</a>
+		<div>
+			<p>
+				You've seen it coming!<br/>
+				Buy now and get nothing for free!<br/>
+				Well, at least no free beer. Perhaps a bear, if you can afford it.
+			</p>
 		</div>
-		
-	</fieldset>
+		<a>Now that you've got...</a>
+		<div>
+			<p>
+				your bear, you have to admit it!<br/>
+				No, we aren't selling bears.
+			</p>
+			<p>
+				We could talk about renting one.
+			</p>
+		</div>
+		<a>Rent one bear, ...</a>
+		<div>
+			<p>
+				get two for three beer.
+			</p>
+			<p>
+				And now, for something completely different.
+			</p>
+		</div>
+	</div>
+
+	<ul id="navigation">
+		<li>
+			<a class="head" href="?p=1.1.1">Guitar</a>
+			<ul>
+				<li><a href="?p=1.1.1.1">Electric</a></li>
+				<li><a href="?p=1.1.1.2">Acoustic</a></li>
+				<li><a href="?p=1.1.1.3">Amps</a></li>
+				<li><a href="?p=1.1.1.4">Effects</a></li>
+				<li><a href="?p=1.1.1.5">Accessories</a></li>
+			</ul> 
+		</li>
+		<li>
+			<a class="head" href="?p=1.1.2"><span>Bass</span></a>
+			<ul>
+				<li><a href="?p=1.1.2.1">Electric</a></li>
+				<li><a href="?p=1.1.2.2">Acoustic</a></li>
+				<li><a href="?p=1.1.2.3">Amps</a></li>
+				<li><a href="?p=1.1.2.4">Effects</a></li>
+				<li><a href="?p=1.1.2.5">Accessories</a></li>
+				<li><a href="?p=1.1.2.5">Accessories</a></li>
+				<li><a href="?p=1.1.2.5">Accessories</a></li>
+			</ul> 
+		</li>
+		<li>
+			<a class="head" href="?p=1.1.3">Drums</a>
+			<ul>
+				<li><a href="?p=1.1.3.2">Acoustic Drums</a></li>
+				<li><a href="?p=1.1.3.3">Electronic Drums</a></li>
+				<li><a href="?p=1.1.3.6">Accessories</a></li>
+			</ul> 
+		</li>
+	</ul>
+	<dl id="list2">
+		<dt class="red">Red</dt>
+		<dd>
+			Fancy stuff about red thingies.
+		</dd>
+		<dt class="green selected">Green</dt>
+		<dd>
+			Green! Green! Green!
+		</dd>
+		<dt class="blue">Blue</dt>
+		<dd>
+			Cool kids are blue.
+		</dd>
+	</dl>
 	
-	<fieldset>
-		<legend>Navigation - Unordered List with anchors and nested lists.</legend>
-		<p>The first item is cloned to allow the user to select it. The
-		active element is choosen based on location.hash: Open Drums and click
-		the first item ('Drums'), then reload the page.</p>
-
-		<ul id="navigation">
-			<li>
-				<a class="head" href="?p=1.1.1">Guitar</a>
-				<ul>
-					<li><a href="?p=1.1.1.1">Electric</a></li>
-					<li><a href="?p=1.1.1.2">Acoustic</a></li>
-					<li><a href="?p=1.1.1.3">Amps</a></li>
-					<li><a href="?p=1.1.1.4">Effects</a></li>
-					<li><a href="?p=1.1.1.5">Accessories</a></li>
-				</ul> 
-			</li>
-			<li>
-				<a class="head" href="?p=1.1.2">Bass</a>
-				<ul>
-					<li><a href="?p=1.1.2.1">Electric</a></li>
-					<li><a href="?p=1.1.2.2">Acoustic</a></li>
-					<li><a href="?p=1.1.2.3">Amps</a></li>
-					<li><a href="?p=1.1.2.4">Effects</a></li>
-					<li><a href="?p=1.1.2.5">Accessories</a></li>
-					<li><a href="?p=1.1.2.5">Accessories</a></li>
-					<li><a href="?p=1.1.2.5">Accessories</a></li>
-				</ul> 
-			</li>
-			<li>
-				<a class="head" href="?p=1.1.3">Drums</a>
-				<ul>
-					<li><a href="?p=1.1.3.2">Acoustic Drums</a></li>
-					<li><a href="?p=1.1.3.3">Electronic Drums</a></li>
-					<li><a href="?p=1.1.3.6">Accessories</a></li>
-				</ul> 
-			</li>
-		</ul>
-		
-	</fieldset>
-
-	<fieldset>
-		<legend>With options, container is a definition list, header dt, content dd</legend>
-		
-		<dl id="list2">
-			<dt class="red">Red</dt>
-			<dd>
-				Fancy stuff about red thingies.
-			</dd>
-			<dt class="green selected">Green</dt>
-			<dd>
-				Green! Green! Green!
-			</dd>
-			<dt class="blue">Blue</dt>
-			<dd>
-				Cool kids are blue.
-			</dd>
-		</dl>
-		
-	</fieldset>
-
-	<fieldset>
-		<legend>Divitus structure, div container, div header (class title), div
-		content, no active on startup and can be completely closed</legend>
-
-		<div id="list3">
+	<div id="list3">
+		<div>
+			<div class="title">Tennis</div>
 			<div>
-				<div class="title">Tennis</div>
-				<div>
-					One ball, two players. Lots of fun.
-				</div>
-			</div>
-			<div>
-				<div class="title">Soccer</div>
-				<div>
-					One ball, 22 players. Lots of fun.
-				</div>
-			</div>
-			<div>
-				<div class="title">Baseball</div>
-				<div>
-					Well, one ball, some guys running around, some guys hitting others with a stick.<br/>
-					Sounds like fun, doesn't it?
-				</div>
-				<div>
-					Well, apart from the running part.
-				</div>
+				One ball, two players. Lots of fun.
 			</div>
 		</div>
-		
-	</fieldset>
-		
-		<div id="switch">
-			<select>
-				<option>Switch to...</option>
-				<option value="1">1</option>
-				<option value="2">2</option>
-				<option value="3">3</option>
-			</select>
-			<button id="close">Close all</button>
-			Activate via selector, eg. ':first' or 'a:first': <input id="switch2" />
+		<div>
+			<div class="title">Soccer</div>
+			<div>
+				One ball, 22 players. Lots of fun.
+			</div>
 		</div>
-
-		<div id="log"><div><strong>Log of the 2nd accordion</strong></div></div>
+		<div>
+			<div class="title">Baseball</div>
+			<div>
+				Well, one ball, some guys running around, some guys hitting others with a stick.<br/>
+				Sounds like fun, doesn't it?
+			</div>
+			<div>
+				Well, apart from the running part.
+			</div>
+		</div>
+	</div>
 
 	<div id="resizable1" style="background: green; width: 100px; height: 100px;">I'm a resizable.</div>
 	<img src="images/test.jpg" id="resizable2" style="width: 100px; height: 100px;"/>

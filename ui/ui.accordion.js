@@ -180,9 +180,7 @@ function clickHandler(event) {
 	// due to the event delegation model, we have to check if one
 	// of the parent elements is our actual header, and find that
 	if ( clicked.parents(options.header).length ) {
-		while ( !clicked.is(options.header) ) {
-			clicked = clicked.parent();
-		}
+		clicked = clicked.parents(options.header + ":first");
 	}
 	
 	var clickedActive = clicked[0] == options.active[0];
