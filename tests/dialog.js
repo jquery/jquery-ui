@@ -402,6 +402,30 @@ test("open", function() {
 	el.remove();
 });
 
+test("dragStart", function() {
+	ok(false, "missing test");
+});
+
+test("drag", function() {
+	ok(false, "missing test");
+});
+
+test("dragStop", function() {
+	ok(false, "missing test");
+});
+
+test("resizeStart", function() {
+	ok(false, "missing test");
+});
+
+test("resize", function() {
+	ok(false, "missing test");
+});
+
+test("resizeStop", function() {
+	ok(false, "missing test");
+});
+
 test("close", function() {
 	expect(2);
 	el = $('<div/>').dialog({
