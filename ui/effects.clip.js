@@ -17,7 +17,7 @@ $.effects.clip = function(o) {
 	return this.queue(function() {
 
 		// Create element
-		var el = $(this), props = ['position','top','left'];
+		var el = $(this), props = ['position','top','left','height','width'];
 		
 		// Set options
 		var mode = $.effects.setMode(el, o.options.mode || 'hide'); // Set Mode
@@ -26,12 +26,13 @@ $.effects.clip = function(o) {
 		// Adjust
 		$.effects.save(el, props); el.show(); // Save & Show
 		var wrapper = $.effects.createWrapper(el).css({overflow:'hidden'}); // Create Wrapper
+		var animate = el[0].tagName == 'IMG' ? wrapper : el;
 		var ref = {
 			size: (direction == 'vertical') ? 'height' : 'width',
 			position: (direction == 'vertical') ? 'top' : 'left'
 		};
 		var distance = (direction == 'vertical') ? wrapper.height() : wrapper.width();
-		if(mode == 'show') { wrapper.css(ref.size, 0); wrapper.css(ref.position, distance / 2); } // Shift
+		if(mode == 'show') { animate.css(ref.size, 0); animate.css(ref.position, distance / 2); } // Shift
 		
 		// Animation
 		var animation = {};
@@ -39,7 +40,7 @@ $.effects.clip = function(o) {
 		animation[ref.position] = mode == 'show' ? 0 : distance / 2;
 			
 		// Animate
-		wrapper.animate(animation, { queue: false, duration: o.duration, easing: o.options.easing, complete: function() {
+		animate.animate(animation, { queue: false, duration: o.duration, easing: o.options.easing, complete: function() {
 			if(mode == 'hide') el.hide(); // Hide
 			$.effects.restore(el, props); $.effects.removeWrapper(el); // Restore
 			if(o.callback) o.callback.apply(el[0], arguments); // Callback
