@@ -593,7 +593,7 @@ $.extend($.ui.sortable, {
 	defaults: {
 		helper: "clone",
 		tolerance: "guess",
-		distance: 0,
+		distance: 1,
 		delay: 0,
 		scroll: true,
 		scrollSensitivity: 20,

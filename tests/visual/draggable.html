@@ -8,7 +8,7 @@
 	<script type="text/javascript" src="../../ui/ui.draggable.js"></script>
 	<script type="text/javascript">
 	$(function() {
-		$("#draggable").draggable();
+		$("#draggable").draggable({ handle: "span", drag: function() { console.log(1); } });
 	});
 	</script>
 </head>
@@ -17,9 +17,11 @@
 <ul class="plugins">
 <li>
 	Draggable
-	<div id="draggable"></div>
+	<div id="draggable"><span>Handle</span></div>
+	<div style="height: 1000px;"></div>
 </li>
 </ul>
 
+<div style="height: 1000px;"></div>
 </body>
 </html>
