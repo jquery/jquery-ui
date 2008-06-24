@@ -111,7 +111,7 @@ test("defaults", function() {
 
 	equals(el.data("helper.sortable"), "clone", "helper");
 	equals(el.data("tolerance.sortable"), "guess", "tolerance");
-	equals(el.data("distance.sortable"), 0, "distance");
+	equals(el.data("distance.sortable"), 1, "distance");
 	equals(el.data("disabled.sortable"), false, "disabled");
 	equals(el.data("delay.sortable"), 0, "delay");
 	equals(el.data("scroll.sortable"), true, "scroll");
