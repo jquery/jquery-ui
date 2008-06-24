@@ -519,11 +519,9 @@ $.widget("ui.sortable", $.extend($.ui.mouse, {
 				left: cur.left - this.offset.parent.left - self.margins.left + (this.offsetParent[0] == document.body ? 0 : this.offsetParent[0].scrollLeft),
 				top: cur.top - this.offset.parent.top - self.margins.top + (this.offsetParent[0] == document.body ? 0 : this.offsetParent[0].scrollTop)
 			}, parseInt(this.options.revert, 10) || 500, function() {
-				self.propagate("stop", e, null, noPropagation);
 				self.clear(e);
 			});
 		} else {
-			this.propagate("stop", e, null, noPropagation);
 			this.clear(e, noPropagation);
 		}
 
@@ -554,10 +552,15 @@ $.widget("ui.sortable", $.extend($.ui.mouse, {
 		}
 		
 		this.dragging = false;
-		if(this.cancelHelperRemoval) return false;
+		if(this.cancelHelperRemoval) {
+			this.propagate("stop", e, null, noPropagation);
+			return false;
+		}
+		
 		$(this.currentItem).css('visibility', '');
 		if(this.placeholder) this.placeholder.remove();
-		this.helper.remove();
+		this.helper.remove(); this.helper = null;
+		this.propagate("stop", e, null, noPropagation);
 		
 		return true;
 		
