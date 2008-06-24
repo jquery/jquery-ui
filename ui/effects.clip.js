@@ -31,7 +31,7 @@ $.effects.clip = function(o) {
 			size: (direction == 'vertical') ? 'height' : 'width',
 			position: (direction == 'vertical') ? 'top' : 'left'
 		};
-		var distance = (direction == 'vertical') ? wrapper.height() : wrapper.width();
+		var distance = (direction == 'vertical') ? animate.height() : animate.width();
 		if(mode == 'show') { animate.css(ref.size, 0); animate.css(ref.position, distance / 2); } // Shift
 		
 		// Animation
