@@ -443,7 +443,7 @@ $.ui.plugin.add("draggable", "connectToSortable", {
 					instance: sortable,
 					shouldRevert: sortable.options.revert
 				});
-				sortable.refresh();	//Do a one-time refresh at start to refresh the containerCache	
+				sortable.refreshItems();	//Do a one-time refresh at start to refresh the containerCache	
 				sortable.propagate("activate", e, inst);
 			}
 		});
@@ -502,8 +502,10 @@ $.ui.plugin.add("draggable", "connectToSortable", {
 					this.instance.options.helper = function() { return ui.helper[0]; };
 				
 					e.target = this.instance.currentItem[0];
-					this.instance.mouseCapture(e, true, true);
+					this.instance.mouseCapture(e, true);
 					this.instance.mouseStart(e, true, true);
+					
+					console.log(this.instance.items);
 
 					//Because the browser event is way off the new appended portlet, we modify a couple of variables to reflect the changes
 					this.instance.offset.click.top = inst.offset.click.top;

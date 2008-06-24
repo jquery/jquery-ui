@@ -172,6 +172,7 @@ $.widget("ui.sortable", $.extend($.ui.mouse, {
 				$.data(this, 'sortable-item', queries[i][1]); // Data for target checking (mouse manager)
 				items.push({
 					item: $(this),
+					instance: queries[i][1],
 					width: 0, height: 0,
 					left: 0, top: 0
 				});
@@ -190,14 +191,23 @@ $.widget("ui.sortable", $.extend($.ui.mouse, {
 			};
 		}
 
-		for (var i = this.items.length - 1; i >= 0; i--){
+		for (var i = this.items.length - 1; i >= 0; i--){		
+			
+			//We ignore calculating positions of all connected containers when we're not over them
+			if(this.items[i].instance != this.currentContainer && this.currentContainer && this.items[i].item[0] != this.currentItem[0])
+				continue;
+				
 			var t = this.items[i].item;
+			
 			if(!fast) this.items[i].width = (this.options.toleranceElement ? $(this.options.toleranceElement, t) : t).outerWidth();
 			if(!fast) this.items[i].height = (this.options.toleranceElement ? $(this.options.toleranceElement, t) : t).outerHeight();
+			
 			var p = (this.options.toleranceElement ? $(this.options.toleranceElement, t) : t).offset();
 			this.items[i].left = p.left;
 			this.items[i].top = p.top;
+			
 		};
+		
 		for (var i = this.containers.length - 1; i >= 0; i--){
 			var p =this.containers[i].element.offset();
 			this.containers[i].containerCache.left = p.left;
@@ -205,6 +215,7 @@ $.widget("ui.sortable", $.extend($.ui.mouse, {
 			this.containers[i].containerCache.width	= this.containers[i].element.outerWidth();
 			this.containers[i].containerCache.height = this.containers[i].element.outerHeight();
 		};
+		
 	},
 	destroy: function() {
 		this.element
@@ -265,11 +276,10 @@ $.widget("ui.sortable", $.extend($.ui.mouse, {
 							this.placeholder = null;;
 						}
 						
-						
-						itemWithLeastDistance ? this.rearrange(e, itemWithLeastDistance) : this.rearrange(e, null, this.containers[i].element);
+						this.currentContainer = this.containers[i];
+						itemWithLeastDistance ? this.rearrange(e, itemWithLeastDistance, null, true) : this.rearrange(e, null, this.containers[i].element, true);
 						this.propagate("change", e); //Call plugins and callbacks
 						this.containers[i].propagate("change", e, this); //Call plugins and callbacks
-						this.currentContainer = this.containers[i];
 
 					}
 					
@@ -518,9 +528,9 @@ $.widget("ui.sortable", $.extend($.ui.mouse, {
 		return false;
 		
 	},
-	rearrange: function(e, i, a) {
+	rearrange: function(e, i, a, hardRefresh) {
 		a ? a.append(this.currentItem) : i.item[this.direction == 'down' ? 'before' : 'after'](this.currentItem);
-		this.refreshPositions(true); //Precompute after each DOM insertion, NOT on mousemove
+		this.refreshPositions(!hardRefresh); //Precompute after each DOM insertion, NOT on mousemove
 		if(this.options.placeholder) this.options.placeholder.update.call(this.element, this.currentItem, this.placeholder);
 	},
 	mouseStop: function(e, noPropagation) {
