@@ -151,7 +151,8 @@ $.widget("ui.sortable", $.extend($.ui.mouse, {
 		this.items = [];
 		this.containers = [this];
 		var items = this.items;
-		var queries = [$.isFunction(this.options.items) ? this.options.items.call(this.element, null, { options: this.options, item: this.currentItem }) : $(this.options.items, this.element)];
+		var self = this;
+		var queries = [[$.isFunction(this.options.items) ? this.options.items.call(this.element, null, { options: this.options, item: this.currentItem }) : $(this.options.items, this.element), this]];
 	
 		if(this.options.connectWith) {
 			for (var i = this.options.connectWith.length - 1; i >= 0; i--){
@@ -159,7 +160,7 @@ $.widget("ui.sortable", $.extend($.ui.mouse, {
 				for (var j = cur.length - 1; j >= 0; j--){
 					var inst = $.data(cur[j], 'sortable');
 					if(inst && !inst.options.disabled) {
-						queries.push($.isFunction(inst.options.items) ? inst.options.items.call(inst.element) : $(inst.options.items, inst.element));
+						queries.push([$.isFunction(inst.options.items) ? inst.options.items.call(inst.element) : $(inst.options.items, inst.element), inst]);
 						this.containers.push(inst);
 					}
 				};
@@ -167,8 +168,8 @@ $.widget("ui.sortable", $.extend($.ui.mouse, {
 		}
 
 		for (var i = queries.length - 1; i >= 0; i--){
-			queries[i].each(function() {
-				$.data(this, 'sortable-item', true); // Data for target checking (mouse manager)
+			queries[i][0].each(function() {
+				$.data(this, 'sortable-item', queries[i][1]); // Data for target checking (mouse manager)
 				items.push({
 					item: $(this),
 					width: 0, height: 0,
@@ -179,6 +180,16 @@ $.widget("ui.sortable", $.extend($.ui.mouse, {
 
 	},
 	refreshPositions: function(fast) {
+
+		//This has to be redone because due to the item being moved out/into the offsetParent, the offsetParent's position will change
+		if(this.offsetParent) {
+			var po = this.offsetParent.offset();
+			this.offset.parent = {
+				top: po.top + (parseInt(this.offsetParent.css("borderTopWidth"),10) || 0),
+				left: po.left + (parseInt(this.offsetParent.css("borderLeftWidth"),10) || 0)
+			};
+		}
+
 		for (var i = this.items.length - 1; i >= 0; i--){
 			var t = this.items[i].item;
 			if(!fast) this.items[i].width = (this.options.toleranceElement ? $(this.options.toleranceElement, t) : t).outerWidth();
@@ -275,21 +286,25 @@ $.widget("ui.sortable", $.extend($.ui.mouse, {
 		};			
 	},
 	mouseCapture: function(e, overrideHandle) {
-		
+	
 		if(this.options.disabled || this.options.type == 'static') return false;
 
+		//We have to refresh the items data once first
+		this.refreshItems();
+
 		//Find out if the clicked node (or one of its parents) is a actual item in this.items
-		var currentItem = null, nodes = $(e.target).parents().each(function() {	
-			if($.data(this, 'sortable-item')) {
+		var currentItem = null, self = this, nodes = $(e.target).parents().each(function() {	
+			if($.data(this, 'sortable-item') == self) {
 				currentItem = $(this);
 				return false;
 			}
 		});
-		if($.data(e.target, 'sortable-item')) currentItem = $(e.target);
-	
+		if($.data(e.target, 'sortable-item') == self) currentItem = $(e.target);
+
 		if(!currentItem) return false;
 		if(this.options.handle && !overrideHandle) {
 			var validHandle = false;
+			
 			$(this.options.handle, currentItem).find("*").andSelf().each(function() { if(this == e.target) validHandle = true; });
 			if(!validHandle) return false;
 		}
@@ -303,7 +318,8 @@ $.widget("ui.sortable", $.extend($.ui.mouse, {
 		var o = this.options;
 		this.currentContainer = this;
 
-		this.refresh();
+		//We only need to call refreshPositions, because the refreshItems call has been moved to mouseCapture
+		this.refreshPositions();
 
 		//Create and append the visible helper			
 		this.helper = typeof o.helper == 'function' ? $(o.helper.apply(this.element[0], [e, this.currentItem])) : this.currentItem.clone();
@@ -502,6 +518,11 @@ $.widget("ui.sortable", $.extend($.ui.mouse, {
 		return false;
 		
 	},
+	rearrange: function(e, i, a) {
+		a ? a.append(this.currentItem) : i.item[this.direction == 'down' ? 'before' : 'after'](this.currentItem);
+		this.refreshPositions(true); //Precompute after each DOM insertion, NOT on mousemove
+		if(this.options.placeholder) this.options.placeholder.update.call(this.element, this.currentItem, this.placeholder);
+	},
 	mouseStop: function(e, noPropagation) {
 
 		//If we are using droppables, inform the manager about the drop
@@ -564,11 +585,6 @@ $.widget("ui.sortable", $.extend($.ui.mouse, {
 		
 		return true;
 		
-	},
-	rearrange: function(e, i, a) {
-		a ? a.append(this.currentItem) : i.item[this.direction == 'down' ? 'before' : 'after'](this.currentItem);
-		this.refreshPositions(true); //Precompute after each DOM insertion, NOT on mousemove
-		if(this.options.placeholder) this.options.placeholder.update.call(this.element, this.currentItem, this.placeholder);
 	}
 }));
 
@@ -579,6 +595,9 @@ $.extend($.ui.sortable, {
 		tolerance: "guess",
 		distance: 0,
 		delay: 0,
+		scroll: true,
+		scrollSensitivity: 20,
+		scrollSpeed: 20,
 		cancel: ":input,button",
 		items: '> *',
 		zIndex: 1000,
@@ -628,8 +647,6 @@ $.ui.plugin.add("sortable", "scroll", {
 	start: function(e, ui) {
 		var o = ui.options;
 		var i = $(this).data("sortable");
-		o.scrollSensitivity	= o.scrollSensitivity || 20;
-		o.scrollSpeed		= o.scrollSpeed || 20;
 	
 		i.overflowY = function(el) {
 			do { if(/auto|scroll/.test(el.css('overflow')) || (/auto|scroll/).test(el.css('overflow-y'))) return el; el = el.parent(); } while (el[0].parentNode);
