@@ -440,7 +440,7 @@ test("callbacks occurance count", function() {
 	drag(el, 10, 10);
 	
 	equals(start, 1, "start callback should happen exactly once");
-	equals(dragc, 2 + 1, "drag callback should happen exactly once per mousemove + 1");
+	equals(dragc, 3 + 1, "drag callback should happen exactly once per mousemove + 1");
 	equals(stop, 1, "stop callback should happen exactly once");
 	
 });
