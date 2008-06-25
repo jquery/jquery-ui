@@ -40,9 +40,9 @@ $.widget("ui.dialog", {
 				.wrap('<div/>')
 				.wrap('<div/>'),
 			
-			uiDialogContainer = uiDialogContent.parent()
+			uiDialogContainer = (this.uiDialogContainer = uiDialogContent.parent()
 				.addClass('ui-dialog-container')
-				.css({position: 'relative'}),
+				.css({position: 'relative', width: '100%', height: '100%'})),
 			
 			title = options.title || uiDialogContent.attr('title') || '',
 			uiDialogTitlebar = (this.uiDialogTitlebar =
@@ -139,10 +139,12 @@ $.widget("ui.dialog", {
 					(options.resizeStart && options.resizeStart.apply(self.element[0], arguments));
 				},
 				resize: function(e, ui) {
+					(options.autoResize && self.size.apply(self));
 					(options.resize && options.resize.apply(self.element[0], arguments));
 				},
 				handles: resizeHandles,
 				stop: function(e, ui) {
+					(options.autoResize && self.size.apply(self));
 					(options.resizeStop && options.resizeStop.apply(self.element[0], arguments));
 					$.ui.dialog.overlay.resize();
 				}
@@ -231,12 +233,23 @@ $.widget("ui.dialog", {
 		pTop = Math.max(pTop, minTop);
 		this.uiDialog.css({top: pTop, left: pLeft});
 	},
+
+	size: function() {
+		var container = this.uiDialogContainer,
+			titlebar = this.uiDialogTitlebar,
+			content = this.element,
+			tbMargin = parseInt(content.css('margin-top')) + parseInt(content.css('margin-bottom')),
+			lrMargin = parseInt(content.css('margin-left')) + parseInt(content.css('margin-right'));
+		content.height(container.height() - titlebar.outerHeight() - tbMargin);
+		content.width(container.width() - lrMargin);
+	},
 	
 	open: function() {
 		this.overlay = this.options.modal ? new $.ui.dialog.overlay(this) : null;
 		this.uiDialog.appendTo('body');
 		this.position(this.options.position);
 		this.uiDialog.show(this.options.show);
+		this.options.autoResize && this.size();
 		this.moveToTop(true);
 		
 		// CALLBACK: open
@@ -289,6 +302,7 @@ $.widget("ui.dialog", {
 $.extend($.ui.dialog, {
 	defaults: {
 		autoOpen: true,
+		autoResize: true,
 		bgiframe: false,
 		buttons: {},
 		closeOnEscape: true,
