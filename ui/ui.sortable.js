@@ -185,10 +185,7 @@ $.widget("ui.sortable", $.extend($.ui.mouse, {
 		//This has to be redone because due to the item being moved out/into the offsetParent, the offsetParent's position will change
 		if(this.offsetParent) {
 			var po = this.offsetParent.offset();
-			this.offset.parent = {
-				top: po.top + (parseInt(this.offsetParent.css("borderTopWidth"),10) || 0),
-				left: po.left + (parseInt(this.offsetParent.css("borderLeftWidth"),10) || 0)
-			};
+			this.offset.parent = { top: po.top + this.offsetParentBorders.top, left: po.left + this.offsetParentBorders.left };
 		}
 
 		for (var i = this.items.length - 1; i >= 0; i--){		
@@ -197,12 +194,14 @@ $.widget("ui.sortable", $.extend($.ui.mouse, {
 			if(this.items[i].instance != this.currentContainer && this.currentContainer && this.items[i].item[0] != this.currentItem[0])
 				continue;
 				
-			var t = this.items[i].item;
+			var t = this.options.toleranceElement ? $(this.options.toleranceElement, this.items[i].item) : this.items[i].item;
 			
-			if(!fast) this.items[i].width = (this.options.toleranceElement ? $(this.options.toleranceElement, t) : t).outerWidth();
-			if(!fast) this.items[i].height = (this.options.toleranceElement ? $(this.options.toleranceElement, t) : t).outerHeight();
+			if(!fast) {
+				this.items[i].width = t.outerWidth();
+				this.items[i].height = t.outerHeight();
+			}
 			
-			var p = (this.options.toleranceElement ? $(this.options.toleranceElement, t) : t).offset();
+			var p = t.offset();
 			this.items[i].left = p.left;
 			this.items[i].top = p.top;
 			
@@ -357,11 +356,16 @@ $.widget("ui.sortable", $.extend($.ui.mouse, {
 			top: e.pageY - this.offset.top
 		};
 		
-		this.offsetParent = this.helper.offsetParent(); var po = this.offsetParent.offset();			//Get the offsetParent and cache its position
+		this.offsetParent = this.helper.offsetParent();													//Get the offsetParent and cache its position
+		var po = this.offsetParent.offset();			
 
+		this.offsetParentBorders = {
+			top: (parseInt(this.offsetParent.css("borderTopWidth"),10) || 0),
+			left: (parseInt(this.offsetParent.css("borderLeftWidth"),10) || 0)
+		};
 		this.offset.parent = {																			//Store its position plus border
-			top: po.top + (parseInt(this.offsetParent.css("borderTopWidth"),10) || 0),
-			left: po.left + (parseInt(this.offsetParent.css("borderLeftWidth"),10) || 0)
+			top: po.top + this.offsetParentBorders.top,
+			left: po.left + this.offsetParentBorders.left
 		};
 	
 		this.originalPosition = this.generatePosition(e);												//Generate the original position
@@ -530,8 +534,21 @@ $.widget("ui.sortable", $.extend($.ui.mouse, {
 	},
 	rearrange: function(e, i, a, hardRefresh) {
 		a ? a.append(this.currentItem) : i.item[this.direction == 'down' ? 'before' : 'after'](this.currentItem);
-		this.refreshPositions(!hardRefresh); //Precompute after each DOM insertion, NOT on mousemove
-		if(this.options.placeholder) this.options.placeholder.update.call(this.element, this.currentItem, this.placeholder);
+		
+		//Various things done here to improve the performance:
+		// 1. we create a setTimeout, that calls refreshPositions
+		// 2. on the instance, we have a counter variable, that get's higher after every append
+		// 3. on the local scope, we copy the counter variable, and check in the timeout, if it's still the same
+		// 4. this lets only the last addition to the timeout stack through
+		this.counter = this.counter ? ++this.counter : 1;
+		var self = this, counter = this.counter;
+
+		window.setTimeout(function() {
+			if(counter == self.counter) self.refreshPositions(!hardRefresh); //Precompute after each DOM insertion, NOT on mousemove
+		},0);
+		
+		if(this.options.placeholder)
+			this.options.placeholder.update.call(this.element, this.currentItem, this.placeholder);
 	},
 	mouseStop: function(e, noPropagation) {
 
