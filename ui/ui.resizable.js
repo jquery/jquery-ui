@@ -229,7 +229,7 @@ $.widget("ui.resizable", $.extend($.ui.mouse, {
 	},
 	propagate: function(n,e) {
 		$.ui.plugin.call(this, n, [e, this.ui()]);
-		this.element.triggerHandler(n == "resize" ? n : ["resize", n].join(""), [e, this.ui()], this.options[n]);
+		if (n != "resize") this.element.triggerHandler(["resize", n].join(""), [e, this.ui()], this.options[n]);
 	},
 	destroy: function() {
 		var el = this.element, wrapped = el.children(".ui-resizable").get(0);
@@ -325,6 +325,9 @@ $.widget("ui.resizable", $.extend($.ui.mouse, {
 		
 		data = this._respectSize(data, e);
 		
+		// plugins callbacks need to be called first
+		this.propagate("resize", e);
+		
 		el.css({
 			top: this.position.top + "px", left: this.position.left + "px", 
 			width: this.size.width + "px", height: this.size.height + "px"
@@ -335,8 +338,9 @@ $.widget("ui.resizable", $.extend($.ui.mouse, {
 		
 		this._updateCache(data);
 		
-		this.propagate("resize", e);
-
+		// calling the user callback at the end
+		this.element.triggerHandler("resize", [e, this.ui()], this.options["resize"]);
+		
 		return false;
 	},
 	mouseStop: function(e) {
