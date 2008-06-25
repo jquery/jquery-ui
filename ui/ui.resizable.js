@@ -325,8 +325,6 @@ $.widget("ui.resizable", $.extend($.ui.mouse, {
 		
 		data = this._respectSize(data, e);
 		
-		this.propagate("resize", e);
-		
 		el.css({
 			top: this.position.top + "px", left: this.position.left + "px", 
 			width: this.size.width + "px", height: this.size.height + "px"
@@ -337,6 +335,8 @@ $.widget("ui.resizable", $.extend($.ui.mouse, {
 		
 		this._updateCache(data);
 		
+		this.propagate("resize", e);
+
 		return false;
 	},
 	mouseStop: function(e) {
