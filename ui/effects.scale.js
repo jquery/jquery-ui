@@ -20,7 +20,7 @@ $.effects.puff = function(o) {
 		var el = $(this);
 	
 		// Set options
-		var options = $.extend(true, {}, o);
+		var options = $.extend(true, {}, o.options);
 		var mode = $.effects.setMode(el, o.options.mode || 'hide'); // Set Mode
 		var percent = parseInt(o.options.percent) || 150; // Set default puff percent
 		options.fade = true; // It's not a puff if it doesn't fade! :)
@@ -50,7 +50,7 @@ $.effects.scale = function(o) {
 		var el = $(this);
 
 		// Set options
-		var options = $.extend(true, {}, o);
+		var options = $.extend(true, {}, o.options);
 		var mode = $.effects.setMode(el, o.options.mode || 'effect'); // Set Mode
 		var percent = parseInt(o.options.percent) || (parseInt(o.options.percent) == 0 ? 0 : (mode == 'hide' ? 0 : 100)); // Set default scaling percent
 		var direction = o.options.direction || 'both'; // Set default axis
