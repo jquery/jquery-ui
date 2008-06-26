@@ -31,8 +31,8 @@ $.effects.transfer = function(o) {
 		transfer.css({
 			top: position.top,
 			left: position.left,
-			height: el.outerHeight(true) - parseInt(transfer.css('borderTopWidth')) - parseInt(transfer.css('borderBottomWidth')),
-			width: el.outerWidth(true) - parseInt(transfer.css('borderLeftWidth')) - parseInt(transfer.css('borderRightWidth')),
+			height: el.outerHeight() - parseInt(transfer.css('borderTopWidth')) - parseInt(transfer.css('borderBottomWidth')),
+			width: el.outerWidth() - parseInt(transfer.css('borderLeftWidth')) - parseInt(transfer.css('borderRightWidth')),
 			position: 'absolute'
 		});
 		
