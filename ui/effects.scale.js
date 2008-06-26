@@ -90,7 +90,7 @@ $.effects.size = function(o) {
 		
 		// Create element
 		var el = $(this), props = ['position','top','left','width','height','overflow','opacity'];
-		var props1 = ['position','overflow','opacity']; // Always restore
+		var props1 = ['position','top','letf','overflow','opacity']; // Always restore
 		var props2 = ['width','height','overflow']; // Copy for children
 		var cProps = ['fontSize'];
 		var vProps = ['borderTopWidth', 'borderBottomWidth', 'paddingTop', 'paddingBottom'];
