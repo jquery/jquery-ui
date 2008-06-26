@@ -198,7 +198,7 @@ $.widget("ui.resizable", $.extend($.ui.mouse, {
 		});
 		
 		//If we want to auto hide the elements
-		if (o.autohide) {
+		if (o.autoHide) {
 			o._handles.hide();
 			$(self.element).addClass("ui-resizable-autohide").hover(function() {
 				$(this).removeClass("ui-resizable-autohide");
@@ -513,7 +513,7 @@ $.extend($.ui.resizable, {
 		aspectRatio: false,
 		disableSelection: true,
 		preserveCursor: true,
-		autohide: false,
+		autoHide: false,
 		knobHandles: false
 	}
 });
