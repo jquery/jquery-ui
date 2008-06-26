@@ -400,17 +400,15 @@ module("dialog: Callbacks");
 
 test("open", function() {
 	expect(4);
-	el = $("<span/>");
-	var content = el[0];
+	el = $("<div/>");
 	el.dialog({
 		open: function(ev, ui) {
 			ok(true, 'autoOpen: true fires open callback');
-			equals(this, content, "context of callback");
+			equals(this, el[0], "context of callback");
 		}
 	});
 	el.remove();
-	el = $("<span/>");
-	var content = el[0];
+	el = $("<div/>");
 	el.dialog({
 		autoOpen: false,
 		open: function(ev, ui) {
@@ -423,27 +421,85 @@ test("open", function() {
 });
 
 test("dragStart", function() {
-	ok(false, "missing test");
+	expect(1);
+	el = $("<div/>");
+	el.dialog({
+		dragStart: function(ev, ui) {
+			equals(this, el[0], "context of callback");
+		}
+	});
+	var handle = $(".ui-dialog-titlebar", dlg());
+	drag(handle, 50, 50);
+	el.remove();
 });
 
 test("drag", function() {
-	ok(false, "missing test");
+	var fired = false;
+	el = $("<div/>");
+	el.dialog({
+		drag: function(ev, ui) {
+			fired = true;
+			equals(this, el[0], "context of callback");
+		}
+	});
+	var handle = $(".ui-dialog-titlebar", dlg());
+	drag(handle, 50, 50);
+	ok(fired, "resize fired");
+	el.remove();
 });
 
 test("dragStop", function() {
-	ok(false, "missing test");
+	expect(1);
+	el = $("<div/>");
+	el.dialog({
+		dragStop: function(ev, ui) {
+			equals(this, el[0], "context of callback");
+		}
+	});
+	var handle = $(".ui-dialog-titlebar", dlg());
+	drag(handle, 50, 50);
+	el.remove();
 });
 
 test("resizeStart", function() {
-	ok(false, "missing test");
+	expect(1);
+	el = $("<div/>");
+	el.dialog({
+		resizeStart: function(ev, ui) {
+			equals(this, el[0], "context of callback");
+		}
+	});
+	var handle = $(".ui-resizable-se", dlg());
+	drag(handle, 50, 50);
+	el.remove();
 });
 
 test("resize", function() {
-	ok(false, "missing test");
+	var fired = false;
+	el = $("<div/>");
+	el.dialog({
+		resize: function(ev, ui) {
+			fired = true;
+			equals(this, el[0], "context of callback");
+		}
+	});
+	var handle = $(".ui-resizable-se", dlg());
+	drag(handle, 50, 50);
+	ok(fired, "resize fired");
+	el.remove();
 });
 
 test("resizeStop", function() {
-	ok(false, "missing test");
+	expect(1);
+	el = $("<div/>");
+	el.dialog({
+		resizeStop: function(ev, ui) {
+			equals(this, el[0], "context of callback");
+		}
+	});
+	var handle = $(".ui-resizable-se", dlg());
+	drag(handle, 50, 50);
+	el.remove();
 });
 
 test("close", function() {
