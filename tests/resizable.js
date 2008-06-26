@@ -2,6 +2,9 @@
  * resizable tests
  */
 (function($) {
+//
+// Resizable Test Helper Functions
+//
 
 var drag = function(el, dx, dy, complete) {
 	
@@ -17,391 +20,387 @@ var drag = function(el, dx, dy, complete) {
 	});
 };
 
+var defaults = {
+	alsoResize: null,
+	aspectRatio: false,
+	autoHide: false,
+	containment: null,
+	grid: null,
+	handles: 'e,s,se',
+	helper: null,
+	disabled: false,
+	maxHeight: null,
+	maxWidth: null,
+	minHeight: 10,
+	minWidth: 10,
+	proportionallyResize: null
+};
+
+// Resizable Tests
 module("resizable");
 
-test("ui-resizable-e resize x", function() {
-	
-	var handle = '.ui-resizable-e', target = $('#resizable1').resizable({ handles: 'all' });
-	
-	expect(2);
-	
-	drag(handle, 50);
-	
-	equals( target.width(), 150, "compare width");
-	
-	drag(handle, -50);
-	
-	equals( target.width(), 100, "compare width" );
-	
+test("init", function() {
+	expect(6);
+
+	$("#resizable1").resizable().remove();
+	ok(true, '.resizable() called on element');
+
+	$([]).resizable().remove();
+	ok(true, '.resizable() called on empty collection');
+
+	$('<div/>').resizable().remove();
+	ok(true, '.resizable() called on disconnected DOMElement');
+
+	$('<div/>').resizable().resizable("foo").remove();
+	ok(true, 'arbitrary method called after init');
+
+	el = $('<div/>').resizable()
+	var foo = el.data("foo.resizable");
+	el.remove();
+	ok(true, 'arbitrary option getter after init');
+
+	$('<div/>').resizable().data("foo.resizable", "bar").remove();
+	ok(true, 'arbitrary option setter after init');
 });
 
-test("ui-resizable-w resize x", function() {
-	
-	var handle = '.ui-resizable-w', target = $('#resizable1').resizable({ handles: 'all' });
-	
-	expect(2);
-	
-	drag(handle, -50);
-	
-	equals( target.width(), 150, "compare width" );
-	
-	drag(handle, 50);
-	
-	equals( target.width(), 100, "compare width" );
-	
+test("destroy", function() {
+	expect(6);
+
+	$("#dialog1").resizable().resizable("destroy").remove();
+	ok(true, '.resizable("destroy") called on element');
+
+	$([]).resizable().resizable("destroy").remove();
+	ok(true, '.resizable("destroy") called on empty collection');
+
+	$('<div/>').resizable().resizable("destroy").remove();
+	ok(true, '.resizable("destroy") called on disconnected DOMElement');
+
+	$('<div/>').resizable().resizable("destroy").resizable("foo").remove();
+	ok(true, 'arbitrary method called after destroy');
+
+	el = $('<div/>').resizable();
+	var foo = el.resizable("destroy").data("foo.resizable");
+	el.remove();
+	ok(true, 'arbitrary option getter after destroy');
+
+	$('<div/>').resizable().resizable("destroy").data("foo.resizable", "bar").remove();
+	ok(true, 'arbitrary option setter after destroy');
 });
 
-test("ui-resizable-n resize y", function() {
+test("element types", function() {
+	var typeNames = ('p,h1,h2,h3,h4,h5,h6,blockquote,ol,ul,dl,div,form'
+		+ ',table,fieldset,address,ins,del,em,strong,q,cite,dfn,abbr'
+		+ ',acronym,code,samp,kbd,var,img,object,hr'
+		+ ',input,button,label,select,iframe').split(',');
+
+	$.each(typeNames, function(i) {
+		var typeName = typeNames[i];
+		el = $(document.createElement(typeName)).appendTo('body');
+		(typeName == 'table' && el.append("<tr><td>content</td></tr>"));
+		el.resizable();
+		ok(true, '$("&lt;' + typeName + '/&gt").resizable()');
+		el.resizable("destroy");
+		el.remove();
+	});
+});
+
+test("defaults", function() {
+	el = $('<div/>').resizable();
+	$.each(defaults, function(key, val) {
+		var actual = el.data(key + ".resizable"), expected = val,
+			method = (expected && expected.constructor == Object) ?
+				compare2 : equals;
+		method(actual, expected, key);
+	});
+	el.remove();
+});
+
+test("n", function() {
+	expect(2);
 	
 	var handle = '.ui-resizable-n', target = $('#resizable1').resizable({ handles: 'all' });
-	
-	expect(2);
-	
+
 	drag(handle, 0, -50);
-	
 	equals( target.height(), 150, "compare height" );
-	
+
 	drag(handle, 0, 50);
-	
 	equals( target.height(), 100, "compare height" );
-	
 });
 
-test("ui-resizable-s resize y", function() {
+test("s", function() {
+	expect(2);
 	
 	var handle = '.ui-resizable-s', target = $('#resizable1').resizable({ handles: 'all' });
-	
+
+	drag(handle, 0, 50);
+	equals( target.height(), 150, "compare height" );
+
+	drag(handle, 0, -50);
+	equals( target.height(), 100, "compare height" );
+});
+
+test("e", function() {
 	expect(2);
 	
-	drag(handle, 0, 50);
-	
-	equals( target.height(), 150, "compare height" );
-	
-	drag(handle, 0, -50);
-	
-	equals( target.height(), 100, "compare height" );
-	
-});
+	var handle = '.ui-resizable-e', target = $('#resizable1').resizable({ handles: 'all' });
 
-test("ui-resizable-se resize xy", function() {
-	
-	var handle = '.ui-resizable-se', target = $('#resizable1').resizable({ handles: 'all' });
-	
-	expect(4);
-	
-	drag(handle, 50, 50);
-	
-	equals( target.width(), 150, "compare width" );
-	equals( target.height(), 150, "compare height" );
-	
-	drag(handle, -50, -50);
-	
+	drag(handle, 50);
+	equals( target.width(), 150, "compare width");
+
+	drag(handle, -50);
 	equals( target.width(), 100, "compare width" );
-	equals( target.height(), 100, "compare height" );
-	
 });
 
-test("ui-resizable-sw resize xy", function() {
+test("w", function() {
+	expect(2);
 	
-	var handle = '.ui-resizable-sw', target = $('#resizable1').resizable({ handles: 'all' });
-	
-	expect(4);
-	
-	drag(handle, -50, -50);
-	
+	var handle = '.ui-resizable-w', target = $('#resizable1').resizable({ handles: 'all' });
+
+	drag(handle, -50);
 	equals( target.width(), 150, "compare width" );
-	equals( target.height(), 50, "compare height" );
-	
-	drag(handle, 50, 50);
-	
+
+	drag(handle, 50);
 	equals( target.width(), 100, "compare width" );
-	equals( target.height(), 100, "compare height" );
-	
 });
 
-test("ui-resizable-ne resize xy", function() {
+test("ne", function() {
+	expect(4);
 	
 	var handle = '.ui-resizable-ne', target = $('#resizable1').css({ overflow: 'hidden' }).resizable({ handles: 'all' });
-	
-	expect(4);
-	
+
 	drag(handle, -50, -50);
-	
 	equals( target.width(), 50, "compare width" );
 	equals( target.height(), 150, "compare height" );
-	
+
 	drag(handle, 50, 50);
-	
 	equals( target.width(), 100, "compare width" );
 	equals( target.height(), 100, "compare height" );
-	
 });
 
-test("ui-resizable-nw resize xy", function() {
-	
-	var handle = '.ui-resizable-nw', target = $('#resizable1').resizable({ handles: 'all' });
-	
+test("se", function() {
 	expect(4);
 	
-	drag(handle, -50, -50);
-	
+	var handle = '.ui-resizable-se', target = $('#resizable1').resizable({ handles: 'all' });
+
+	drag(handle, 50, 50);
 	equals( target.width(), 150, "compare width" );
 	equals( target.height(), 150, "compare height" );
-	
-	drag(handle, 50, 50);
-	
+
+	drag(handle, -50, -50);
 	equals( target.width(), 100, "compare width" );
 	equals( target.height(), 100, "compare height" );
-	
 });
 
-/**
- * Conditional Resize
- * min/max Height/Width
- */
-
-module("resizable: Dimensions limit");
-
-test("ui-resizable-se { handles: 'all', minWidth: 60, minHeight: 60, maxWidth: 100, maxHeight: 100 }", function() {
-	
-	var handle = '.ui-resizable-se', target = $('#resizable1').resizable({ handles: 'all', minWidth: 60, minHeight: 60, maxWidth: 100, maxHeight: 100 });
-	
+test("sw", function() {
 	expect(4);
 	
+	var handle = '.ui-resizable-sw', target = $('#resizable1').resizable({ handles: 'all' });
+
 	drag(handle, -50, -50);
-	
-	equals( target.width(), 60, "compare minWidth" );
-	equals( target.height(), 60, "compare minHeight" );
-	
-	drag(handle, 70, 70);
-	
-	equals( target.width(), 100, "compare maxWidth" );
-	equals( target.height(), 100, "compare maxHeight" );
-	
+	equals( target.width(), 150, "compare width" );
+	equals( target.height(), 50, "compare height" );
+
+	drag(handle, 50, 50);
+	equals( target.width(), 100, "compare width" );
+	equals( target.height(), 100, "compare height" );
 });
 
-test("ui-resizable-sw { handles: 'all', minWidth: 60, minHeight: 60, maxWidth: 100, maxHeight: 100 }", function() {
-	
-	var handle = '.ui-resizable-sw', target = $('#resizable1').resizable({ handles: 'all', minWidth: 60, minHeight: 60, maxWidth: 100, maxHeight: 100 });
-	
+test("nw", function() {
 	expect(4);
 	
-	drag(handle, 50, -50);
-	
-	equals( target.width(), 60, "compare minWidth" );
-	equals( target.height(), 60, "compare minHeight" );
-	
-	drag(handle, -70, 70);
-	
-	equals( target.width(), 100, "compare maxWidth" );
-	equals( target.height(), 100, "compare maxHeight" );
-	
-});
+	var handle = '.ui-resizable-nw', target = $('#resizable1').resizable({ handles: 'all' });
 
-test("ui-resizable-ne { handles: 'all', minWidth: 60, minHeight: 60, maxWidth: 100, maxHeight: 100 }", function() {
-	
-	var handle = '.ui-resizable-ne', target = $('#resizable1').resizable({ handles: 'all', minWidth: 60, minHeight: 60, maxWidth: 100, maxHeight: 100 });
-	
-	expect(4);
-	
-	drag(handle, -50, 50);
-	
-	equals( target.width(), 60, "compare minWidth" );
-	equals( target.height(), 60, "compare minHeight" );
-	
-	drag(handle, 70, -70);
-	
-	equals( target.width(), 100, "compare maxWidth" );
-	equals( target.height(), 100, "compare maxHeight" );
-	
-});
+	drag(handle, -50, -50);
+	equals( target.width(), 150, "compare width" );
+	equals( target.height(), 150, "compare height" );
 
-test("ui-resizable-nw { handles: 'all', minWidth: 60, minHeight: 60, maxWidth: 100, maxHeight: 100 }", function() {
-	
-	var handle = '.ui-resizable-nw', target = $('#resizable1').resizable({ handles: 'all', minWidth: 60, minHeight: 60, maxWidth: 100, maxHeight: 100 });
-	
-	expect(4);
-	
-	drag(handle, 70, 70);
-	
-	equals( target.width(), 60, "compare minWidth" );
-	equals( target.height(), 60, "compare minHeight" );
-	
-	drag(handle, -70, -70);
-	
-	equals( target.width(), 100, "compare maxWidth" );
-	equals( target.height(), 100, "compare maxHeight" );
-	
-});
-
-/**
- * Respecting ratio resize with dimensions limit
- */
-
-module("resizable: Respecting ratio resize with dimensions limits");
-
-test("ui-resizable-e { aspectRatio: 'preserve', handles: 'all', minWidth: 70, minHeight: 50, maxWidth: 150, maxHeight: 130 }", function() {
-	
-	var handle = '.ui-resizable-e', target = $('#resizable1').resizable({ aspectRatio: 'preserve', handles: 'all', minWidth: 70, minHeight: 50, maxWidth: 150, maxHeight: 130 });
-	
-	expect(4);
-	
-	drag(handle, 80);
-	
-	equals( target.width(), 130, "compare maxWidth");
-	equals( target.height(), 130, "compare maxHeight");
-	
-	drag(handle, -130);
-	
-	equals( target.width(), 70, "compare minWidth");
-	equals( target.height(), 70, "compare minHeight");
-	
-});
-
-test("ui-resizable-w { aspectRatio: 'preserve', handles: 'all', minWidth: 70, minHeight: 50, maxWidth: 150, maxHeight: 130 }", function() {
-	
-	var handle = '.ui-resizable-w', target = $('#resizable1').resizable({ aspectRatio: 'preserve', handles: 'all', minWidth: 70, minHeight: 50, maxWidth: 150, maxHeight: 130 });
-	
-	expect(4);
-	
-	drag(handle, -80);
-	
-	equals( target.width(), 130, "compare maxWidth");
-	equals( target.height(), 130, "compare maxHeight");
-	
-	drag(handle, 130);
-	
-	equals( target.width(), 70, "compare minWidth");
-	equals( target.height(), 70, "compare minHeight");
-	
-});
-
-test("ui-resizable-n { aspectRatio: 'preserve', handles: 'all', minWidth: 70, minHeight: 50, maxWidth: 150, maxHeight: 130 }", function() {
-	
-	var handle = '.ui-resizable-n', target = $('#resizable1').resizable({ aspectRatio: 'preserve', handles: 'all', minWidth: 70, minHeight: 50, maxWidth: 150, maxHeight: 130 });
-	
-	expect(4);
-	
-	drag(handle, 0, -80);
-	
-	equals( target.width(), 130, "compare maxWidth");
-	equals( target.height(), 130, "compare maxHeight");
-	
-	drag(handle, 0, 80);
-	
-	equals( target.width(), 70, "compare minWidth");
-	equals( target.height(), 70, "compare minHeight");
-
-});
-
-test("ui-resizable-s { aspectRatio: 'preserve', handles: 'all', minWidth: 70, minHeight: 50, maxWidth: 150, maxHeight: 130 }", function() {
-	
-	var handle = '.ui-resizable-s', target = $('#resizable1').resizable({ aspectRatio: 'preserve', handles: 'all', minWidth: 70, minHeight: 50, maxWidth: 150, maxHeight: 130 });
-	
-	expect(4);
-	
-	drag(handle, 0, 80);
-	
-	equals( target.width(), 130, "compare maxWidth");
-	equals( target.height(), 130, "compare maxHeight");
-	
-	drag(handle, 0, -80);
-	
-	equals( target.width(), 70, "compare minWidth");
-	equals( target.height(), 70, "compare minHeight");
-	
-});
-
-test("ui-resizable-se { aspectRatio: 'preserve', handles: 'all', minWidth: 70, minHeight: 50, maxWidth: 150, maxHeight: 130 }", function() {
-	
-	var handle = '.ui-resizable-se', target = $('#resizable1').resizable({ aspectRatio: 'preserve', handles: 'all', minWidth: 70, minHeight: 50, maxWidth: 150, maxHeight: 130 });
-	
-	expect(4);
-	
-	drag(handle, 80, 80);
-	
-	equals( target.width(), 130, "compare maxWidth");
-	equals( target.height(), 130, "compare maxHeight");
-	
-	drag(handle, -80, -80);
-	
-	equals( target.width(), 70, "compare minWidth");
-	equals( target.height(), 70, "compare minHeight");
-	
-});
-
-test("ui-resizable-sw { aspectRatio: 'preserve', handles: 'all', minWidth: 70, minHeight: 50, maxWidth: 150, maxHeight: 130 }", function() {
-	
-	var handle = '.ui-resizable-sw', target = $('#resizable1').resizable({ aspectRatio: 'preserve', handles: 'all', minWidth: 70, minHeight: 50, maxWidth: 150, maxHeight: 130 });
-	
-	expect(4);
-	
-	drag(handle, -80, 80);
-	
-	equals( target.width(), 130, "compare maxWidth");
-	equals( target.height(), 130, "compare maxHeight");
-	
-	drag(handle, 80, -80);
-	
-	equals( target.width(), 70, "compare minWidth");
-	equals( target.height(), 70, "compare minHeight");
-	
-});
-
-test("ui-resizable-ne { aspectRatio: 'preserve', handles: 'all', minWidth: 70, minHeight: 50, maxWidth: 150, maxHeight: 130 }", function() {
-	
-	var handle = '.ui-resizable-ne', target = $('#resizable1').resizable({ aspectRatio: 'preserve', handles: 'all', minWidth: 70, minHeight: 50, maxWidth: 150, maxHeight: 130 });
-	
-	expect(4);
-	
-	drag(handle, 80, -80);
-	
-	equals( target.width(), 130, "compare maxWidth");
-	equals( target.height(), 130, "compare maxHeight");
-	
-	drag(handle, -80, 80);
-	
-	equals( target.width(), 70, "compare minWidth");
-	equals( target.height(), 70, "compare minHeight");
-	
+	drag(handle, 50, 50);
+	equals( target.width(), 100, "compare width" );
+	equals( target.height(), 100, "compare height" );
 });
 
 module("resizable: Options");
 
-test("ui-resizable-se { handles: 'all', grid: [0, 20] }", function() {
-	
-	var handle = '.ui-resizable-se', target = $('#resizable1').resizable({ handles: 'all', grid: [0, 20] });
-	
+test("aspectRatio: 'preserve' (e)", function() {
 	expect(4);
 	
-	drag(handle, 3, 9);
-	
-	equals( target.width(), 103, "compare width");
-	equals( target.height(), 100, "compare height");
-	
-	drag(handle, 15, 11);
-	
-	equals( target.width(), 118, "compare width");
-	equals( target.height(), 120, "compare height");
-	
+	var handle = '.ui-resizable-e', target = $('#resizable1').resizable({ aspectRatio: 'preserve', handles: 'all', minWidth: 70, minHeight: 50, maxWidth: 150, maxHeight: 130 });
+
+	drag(handle, 80);
+	equals( target.width(), 130, "compare maxWidth");
+	equals( target.height(), 130, "compare maxHeight");
+
+	drag(handle, -130);
+	equals( target.width(), 70, "compare minWidth");
+	equals( target.height(), 70, "compare minHeight");
 });
 
-test("ui-resizable-se { handles: 'all', grid: [0, 20] } wrapped", function() {
-	
-	var handle = '.ui-resizable-se', target = $('#resizable2').resizable({ handles: 'all', grid: [0, 20] });
-	
+test("aspectRatio: 'preserve' (w)", function() {
 	expect(4);
 	
-	drag(handle, 3, 9);
+	var handle = '.ui-resizable-w', target = $('#resizable1').resizable({ aspectRatio: 'preserve', handles: 'all', minWidth: 70, minHeight: 50, maxWidth: 150, maxHeight: 130 });
+
+	drag(handle, -80);
+	equals( target.width(), 130, "compare maxWidth");
+	equals( target.height(), 130, "compare maxHeight");
+
+	drag(handle, 130);
+	equals( target.width(), 70, "compare minWidth");
+	equals( target.height(), 70, "compare minHeight");
+});
+
+test("aspectRatio: 'preserve' (n)", function() {
+	expect(4);
 	
+	var handle = '.ui-resizable-n', target = $('#resizable1').resizable({ aspectRatio: 'preserve', handles: 'all', minWidth: 70, minHeight: 50, maxWidth: 150, maxHeight: 130 });
+
+	drag(handle, 0, -80);
+	equals( target.width(), 130, "compare maxWidth");
+	equals( target.height(), 130, "compare maxHeight");
+
+	drag(handle, 0, 80);
+	equals( target.width(), 70, "compare minWidth");
+	equals( target.height(), 70, "compare minHeight");
+});
+
+test("aspectRatio: 'preserve' (s)", function() {
+	expect(4);
+	
+	var handle = '.ui-resizable-s', target = $('#resizable1').resizable({ aspectRatio: 'preserve', handles: 'all', minWidth: 70, minHeight: 50, maxWidth: 150, maxHeight: 130 });
+
+	drag(handle, 0, 80);
+	equals( target.width(), 130, "compare maxWidth");
+	equals( target.height(), 130, "compare maxHeight");
+
+	drag(handle, 0, -80);
+	equals( target.width(), 70, "compare minWidth");
+	equals( target.height(), 70, "compare minHeight");
+});
+
+test("aspectRatio: 'preserve' (se)", function() {
+	expect(4);
+	
+	var handle = '.ui-resizable-se', target = $('#resizable1').resizable({ aspectRatio: 'preserve', handles: 'all', minWidth: 70, minHeight: 50, maxWidth: 150, maxHeight: 130 });
+
+	drag(handle, 80, 80);
+	equals( target.width(), 130, "compare maxWidth");
+	equals( target.height(), 130, "compare maxHeight");
+
+	drag(handle, -80, -80);
+	equals( target.width(), 70, "compare minWidth");
+	equals( target.height(), 70, "compare minHeight");
+});
+
+test("aspectRatio: 'preserve' (sw)", function() {
+	expect(4);
+	
+	var handle = '.ui-resizable-sw', target = $('#resizable1').resizable({ aspectRatio: 'preserve', handles: 'all', minWidth: 70, minHeight: 50, maxWidth: 150, maxHeight: 130 });
+
+	drag(handle, -80, 80);
+	equals( target.width(), 130, "compare maxWidth");
+	equals( target.height(), 130, "compare maxHeight");
+
+	drag(handle, 80, -80);
+	equals( target.width(), 70, "compare minWidth");
+	equals( target.height(), 70, "compare minHeight");
+});
+
+test("aspectRatio: 'preserve' (ne)", function() {
+	expect(4);
+	
+	var handle = '.ui-resizable-ne', target = $('#resizable1').resizable({ aspectRatio: 'preserve', handles: 'all', minWidth: 70, minHeight: 50, maxWidth: 150, maxHeight: 130 });
+
+	drag(handle, 80, -80);
+	equals( target.width(), 130, "compare maxWidth");
+	equals( target.height(), 130, "compare maxHeight");
+
+	drag(handle, -80, 80);
+	equals( target.width(), 70, "compare minWidth");
+	equals( target.height(), 70, "compare minHeight");
+});
+
+test("grid", function() {
+	expect(4);
+	
+	var handle = '.ui-resizable-se', target = $('#resizable1').resizable({ handles: 'all', grid: [0, 20] });
+
+	drag(handle, 3, 9);
+	equals( target.width(), 103, "compare width");
+	equals( target.height(), 100, "compare height");
+
+	drag(handle, 15, 11);
+	equals( target.width(), 118, "compare width");
+	equals( target.height(), 120, "compare height");
+});
+
+test("grid (wrapped)", function() {
+	expect(4);
+	
+	var handle = '.ui-resizable-se', target = $('#resizable2').resizable({ handles: 'all', grid: [0, 20] });
+
+	drag(handle, 3, 9);
 	equals( target.width(), 103, "compare width");
 	equals( target.height(), 100, "compare height");
 	
 	drag(handle, 15, 11);
-	
 	equals( target.width(), 118, "compare width");
 	equals( target.height(), 120, "compare height");
+});
+
+test("ui-resizable-se { handles: 'all', minWidth: 60, minHeight: 60, maxWidth: 100, maxHeight: 100 }", function() {
+	expect(4);
+
+	var handle = '.ui-resizable-se', target = $('#resizable1').resizable({ handles: 'all', minWidth: 60, minHeight: 60, maxWidth: 100, maxHeight: 100 });
 	
+	drag(handle, -50, -50);
+	equals( target.width(), 60, "compare minWidth" );
+	equals( target.height(), 60, "compare minHeight" );
+	
+	drag(handle, 70, 70);
+	equals( target.width(), 100, "compare maxWidth" );
+	equals( target.height(), 100, "compare maxHeight" );
+});
+
+test("ui-resizable-sw { handles: 'all', minWidth: 60, minHeight: 60, maxWidth: 100, maxHeight: 100 }", function() {
+	expect(4);
+	
+	var handle = '.ui-resizable-sw', target = $('#resizable1').resizable({ handles: 'all', minWidth: 60, minHeight: 60, maxWidth: 100, maxHeight: 100 });
+	
+	drag(handle, 50, -50);
+	equals( target.width(), 60, "compare minWidth" );
+	equals( target.height(), 60, "compare minHeight" );
+	
+	drag(handle, -70, 70);
+	equals( target.width(), 100, "compare maxWidth" );
+	equals( target.height(), 100, "compare maxHeight" );
+});
+
+test("ui-resizable-ne { handles: 'all', minWidth: 60, minHeight: 60, maxWidth: 100, maxHeight: 100 }", function() {
+	expect(4);
+	
+	var handle = '.ui-resizable-ne', target = $('#resizable1').resizable({ handles: 'all', minWidth: 60, minHeight: 60, maxWidth: 100, maxHeight: 100 });
+	
+	drag(handle, -50, 50);
+	equals( target.width(), 60, "compare minWidth" );
+	equals( target.height(), 60, "compare minHeight" );
+	
+	drag(handle, 70, -70);
+	equals( target.width(), 100, "compare maxWidth" );
+	equals( target.height(), 100, "compare maxHeight" );
+});
+
+test("ui-resizable-nw { handles: 'all', minWidth: 60, minHeight: 60, maxWidth: 100, maxHeight: 100 }", function() {
+	expect(4);
+	
+	var handle = '.ui-resizable-nw', target = $('#resizable1').resizable({ handles: 'all', minWidth: 60, minHeight: 60, maxWidth: 100, maxHeight: 100 });
+	
+	drag(handle, 70, 70);
+	equals( target.width(), 60, "compare minWidth" );
+	equals( target.height(), 60, "compare minHeight" );
+	
+	drag(handle, -70, -70);
+	equals( target.width(), 100, "compare maxWidth" );
+	equals( target.height(), 100, "compare maxHeight" );
 });
 
 })(jQuery);
