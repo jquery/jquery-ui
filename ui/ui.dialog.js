@@ -260,7 +260,8 @@ $.widget("ui.dialog", {
 	// the force parameter allows us to move modal dialogs to their correct
 	// position on open
 	moveToTop: function(force) {
-		if ((this.options.modal && !force) || !this.options.stack) { return; }
+		if ((this.options.modal && !force)
+			|| (!this.options.stack && !this.options.modal)) { return; }
 		
 		var maxZ = this.options.zIndex, options = this.options;
 		$('.ui-dialog:visible').each(function() {
