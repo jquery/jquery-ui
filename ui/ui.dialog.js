@@ -144,6 +144,7 @@ $.widget("ui.dialog", {
 		}
 		
 		this.createButtons(options.buttons);
+		this.isOpen = false;
 		
 		(options.bgiframe && $.fn.bgiframe && uiDialog.bgiframe());
 		(options.autoOpen && this.open());
@@ -241,6 +242,8 @@ $.widget("ui.dialog", {
 	},
 	
 	open: function() {
+		if (this.isOpen) { return; }
+		
 		this.overlay = this.options.modal ? new $.ui.dialog.overlay(this) : null;
 		this.uiDialog.appendTo('body');
 		this.position(this.options.position);
@@ -255,6 +258,8 @@ $.widget("ui.dialog", {
 		};
 		this.uiDialogTitlebarClose.focus();
 		this.element.triggerHandler("dialogopen", [openEV, openUI], this.options.open);
+		
+		this.isOpen = true;
 	},
 	
 	// the force parameter allows us to move modal dialogs to their correct
@@ -282,6 +287,8 @@ $.widget("ui.dialog", {
 		};
 		this.element.triggerHandler("dialogclose", [closeEV, closeUI], this.options.close);
 		$.ui.dialog.overlay.resize();
+		
+		this.isOpen = false;
 	},
 	
 	destroy: function() {
