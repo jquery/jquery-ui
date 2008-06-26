@@ -624,7 +624,7 @@ $.extend($.ui.sortable, {
 		scroll: true,
 		scrollSensitivity: 20,
 		scrollSpeed: 20,
-		cancel: ":input,button",
+		cancel: ":input",
 		items: '> *',
 		zIndex: 1000,
 		dropOnEmpty: true,

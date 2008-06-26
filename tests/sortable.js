@@ -117,7 +117,7 @@ test("defaults", function() {
 	equals(el.data("scroll.sortable"), true, "scroll");
 	equals(el.data("scrollSensitivity.sortable"), 20, "scrollSensitivity");
 	equals(el.data("scrollSpeed.sortable"), 20, "scrollSpeed");
-	equals(el.data("cancel.sortable"), ":input,button", "cancel");
+	equals(el.data("cancel.sortable"), ":input", "cancel");
 	equals(el.data("items.sortable"), "> *", "items");
 	equals(el.data("zIndex.sortable"), 1000, "zIndex");	
 	equals(el.data("dropOnEmpty.sortable"), true, "dropOnEmpty");

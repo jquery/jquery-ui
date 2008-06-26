@@ -503,7 +503,7 @@ $.widget("ui.resizable", $.extend($.ui.mouse, {
 
 $.extend($.ui.resizable, {
 	defaults: {
-		cancel: ":input,button",
+		cancel: ":input",
 		distance: 1,
 		delay: 0,
 		preventDefault: true,
