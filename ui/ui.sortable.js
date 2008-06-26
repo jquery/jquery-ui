@@ -578,7 +578,7 @@ $.widget("ui.sortable", $.extend($.ui.mouse, {
 	},
 	clear: function(e, noPropagation) {
 
-		if(this.domPosition[0] != this.currentItem.prev().not(".ui-sortable-helper")[0] || this.domPosition[1] != this.currentItem.parent()[0]) this.propagate("update", e, null, noPropagation); //Trigger update callback if the DOM position has changed
+		if(this.domPosition.prev != this.currentItem.prev().not(".ui-sortable-helper")[0] || this.domPosition.parent != this.currentItem.parent()[0]) this.propagate("update", e, null, noPropagation); //Trigger update callback if the DOM position has changed
 		if(!contains(this.element[0], this.currentItem[0])) { //Node was moved out of the current element
 			this.propagate("remove", e, null, noPropagation);
 			for (var i = this.containers.length - 1; i >= 0; i--){
