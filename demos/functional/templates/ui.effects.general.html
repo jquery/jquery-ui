@@ -59,7 +59,7 @@
 
 			{
 				title: 'Scale',
-				desc: 'Change the size of an element.',
+				desc: 'Scales and element by a percentage.',
 				html: '<button id="doScale">Scale</button> \n' +
 					'<button onclick="$(\'#scale\').css({width: 144, height: 108});">Reset</button><br/>\n' +
 					'<div style="height: 108px;"><img id="scale" src="templates/images/P1010063.JPG"/></div>',
@@ -73,6 +73,22 @@
 					{	desc: 'Scale horizontally only',	source: '$("#doScale").click(function() { $("#scale").effect("scale", {direction: "horizontal", percent: 150}, 2000); });' },
 					{	desc: 'Scale from middle-center',	source: '$("#doScale").click(function() { $("#scale").effect("scale", {origin: ["middle", "center"], percent: 150}, 2000); });' },
 					{	desc: 'Scale from bottom-right',	source: '$("#doScale").click(function() { $("#scale").effect("scale", {origin: ["bottom", "right"], percent: 50}, 2000); });' }
+				]
+			},
+			
+			{
+				title: 'Size',
+				desc: 'Change the size of an element.',
+				html: '<button id="doSize">Size</button> \n' +
+					'<button onclick="$(\'#size\').css({width: 144, height: 108});">Reset</button><br/>\n' +
+					'<div style="height: 108px;"><img id="size" src="templates/images/P1010063.JPG"/></div>',
+				destroy: '$("#doSize").unbind();',
+
+				options: [
+					{	desc: 'Size to 75x200',	source: '$("#doSize").click(function() { $("#size").effect("size", {to: {width:75, height:200}}, 2000); });' },
+					{	desc: 'Size to 200x75',	source: '$("#doSize").click(function() { $("#size").effect("size", {to: {width:200, height:75}}, 2000); });' },
+					{	desc: 'Size (125x210) from middle-center',	source: '$("#doSize").click(function() { $("#size").effect("size", {to: {width:125, height:210}, origin: ["middle", "center"]}, 2000); });' },
+					{	desc: 'Size (210x125) from bottom-right',	source: '$("#doSize").click(function() { $("#size").effect("size", {to: {width:210, height:125}, origin: ["bottom", "right"]}, 2000); });' }
 				]
 			},
 

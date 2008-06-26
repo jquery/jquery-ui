@@ -56,7 +56,7 @@ $.effects.scale = function(o) {
 		var direction = o.options.direction || 'both'; // Set default axis
 		var origin = o.options.origin; // The origin of the scaling
 		if (mode != 'effect') { // Set default origin and restore for show/hide
-			origin = origin || ['middle','center'];
+			options.origin = origin || ['middle','center'];
 			options.restore = true;
 		}
 		var original = {height: el.height(), width: el.width()}; // Save original
@@ -68,13 +68,7 @@ $.effects.scale = function(o) {
 			x: direction != 'vertical' ? (percent / 100) : 1
 		};
 		el.to = {height: original.height * factor.y, width: original.width * factor.x}; // Set to state
-		if (origin) { // Calculate baseline shifts
-			var baseline = $.effects.getBaseline(origin, original);
-			el.from.top = (original.height - el.from.height) * baseline.y;
-			el.from.left = (original.width - el.from.width) * baseline.x;
-			el.to.top = (original.height - el.to.height) * baseline.y;
-			el.to.left = (original.width - el.to.width) * baseline.x;
-		};
+		
 		if (o.options.fade) { // Fade option to support puff
 			if (mode == 'show') {el.from.opacity = 0; el.to.opacity = 1;};
 			if (mode == 'hide') {el.from.opacity = 1; el.to.opacity = 0;};
@@ -106,11 +100,18 @@ $.effects.size = function(o) {
 		var mode = $.effects.setMode(el, o.options.mode || 'effect'); // Set Mode
 		var restore = o.options.restore || false; // Default restore
 		var scale = o.options.scale || 'both'; // Default scale mode
+		var origin = o.options.origin; // The origin of the sizing
 		var original = {height: el.height(), width: el.width()}; // Save original
 		el.from = o.options.from || original; // Default from state
 		el.to = o.options.to || original; // Default to state
-		
 		// Adjust
+		if (origin) { // Calculate baseline shifts
+			var baseline = $.effects.getBaseline(origin, original);
+			el.from.top = (original.height - el.from.height) * baseline.y;
+			el.from.left = (original.width - el.from.width) * baseline.x;
+			el.to.top = (original.height - el.to.height) * baseline.y;
+			el.to.left = (original.width - el.to.width) * baseline.x;
+		};
 		var factor = { // Set scaling factor
 			from: {y: el.from.height / original.height, x: el.from.width / original.width},
 			to: {y: el.to.height / original.height, x: el.to.width / original.width}
