@@ -76,5 +76,5 @@ ul.plugins li { margin: 0 12px 12px 0;
 .ui-dialog .ui-resizable-nw { cursor: nw-resize; width: 9px; height: 29px; left: 0px; top: 0px; background: gray !important; border: none !important; }
 .ui-dialog .ui-resizable-ne { cursor: ne-resize; width: 9px; height: 29px; right: 0px; top: 0px; background: gray !important; border: none !important; }
 
-.ui-slider { margin: 10px; background: #FF9C08; height: 15px; }
-.ui-slider-handle { width: 10px; height: 15px; background: white; position: relative; }
+.ui-slider { margin: 10px; background: #FF9C08; height: 15px; position: relative; }
+.ui-slider-handle { width: 10px; height: 15px; background: white; position: absolute; top: 0px; left: 0px; }
