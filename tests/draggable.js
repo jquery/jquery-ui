@@ -467,7 +467,7 @@ test("#2965 cursorAt with margin", function() {
 	var before = el.offset();
 	var pos = { clientX: before.left + ox, clientY: before.top + oy };
 	$("#draggable2").simulate("mousedown", pos);
-	$(document).simulate("mousemove", pos);
+	$(document).simulate("mousemove", { clientX: pos.clientX + 1, clientY: pos.clientY + 1});
 	$(document).simulate("mousemove", pos);
 	$("#draggable2").simulate("mouseup", pos);
 	var expected = actual;
@@ -479,7 +479,7 @@ test("#2965 cursorAt with margin", function() {
 	var before = el.offset();
 	var pos = { clientX: before.left + ox - marg, clientY: before.top + oy - marg };
 	$("#draggable2").simulate("mousedown", pos);
-	$(document).simulate("mousemove", pos);
+	$(document).simulate("mousemove", { clientX: pos.clientX + 1, clientY: pos.clientY + 1});
 	$(document).simulate("mousemove", pos);
 	$("#draggable2").simulate("mouseup", pos);
 	
