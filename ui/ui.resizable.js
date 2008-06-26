@@ -536,10 +536,11 @@ $.ui.plugin.add("resizable", "containment", {
 			self.containerPosition = { left: 0, top: 0 };
 			
 			self.parentData = { 
-				element: $(document), left: 0, top: 0, width: $(document).width(),
-				height: $(document).height() || document.body.parentNode.scrollHeight
+				element: $(document), left: 0, top: 0, 
+				width: $(document).width(), height: $(document).height() || document.body.parentNode.scrollHeight
 			};
 		}
+		
 				
 		// i'm a node, so compute top, left, right, bottom
 		else{
@@ -561,7 +562,7 @@ $.ui.plugin.add("resizable", "containment", {
 				ps = self.containerSize, co = self.containerOffset, cs = self.size, cp = self.position,
 				pRatio = o._aspectRatio || e.shiftKey, cop = { top:0, left:0 }, ce = self.containerElement;
 		
-		if (/static/.test(ce.css('position')))
+		if (ce[0] != document && /static/.test(ce.css('position')))
 			cop = self.containerPosition;
 		
 		if (cp.left < (o.proxy ? co.left : cop.left)) {
