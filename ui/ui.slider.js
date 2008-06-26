@@ -58,6 +58,11 @@ $.widget("ui.slider", {
 		if (/min|max|steps/.test(key)) {
 			this.initBoundaries();
 		}
+		
+		if(key == "range") {
+			value ? this.handle.length == 2 && this.createRange() : this.removeRange();
+		}
+		
 	},
 
 	init: function() {
@@ -200,11 +205,16 @@ $.widget("ui.slider", {
 
 
 	createRange: function() {
+		if(this.rangeElement) return;
 		this.rangeElement = $('<div></div>')
 			.addClass('ui-slider-range')
 			.css({ position: 'absolute' })
 			.appendTo(this.element);
 		this.updateRange();
+	},
+	removeRange: function() {
+		this.rangeElement.remove();
+		this.rangeElement = null;
 	},
 	updateRange: function() {
 			var prop = this.options.axis == "vertical" ? "top" : "left";
