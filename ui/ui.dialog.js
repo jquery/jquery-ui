@@ -77,7 +77,11 @@ $.widget("ui.dialog", {
 				})
 				.mousedown(function() {
 					self.moveToTop();
-				});
+				}),
+			
+			uiDialogButtonPane = (this.uiDialogButtonPane = $('<div/>'))
+				.addClass('ui-dialog-buttonpane')
+				.appendTo(uiDialog);
 		
 		this.uiDialogTitlebarClose = $('.ui-dialog-titlebar-close', uiDialogTitlebar)
 			.hover(
@@ -95,19 +99,6 @@ $.widget("ui.dialog", {
 				self.close();
 				return false;
 			});
-		
-		var hasButtons = false;
-		$.each(options.buttons, function() { return !(hasButtons = true); });
-		if (hasButtons) {
-			var uiDialogButtonPane = $('<div class="ui-dialog-buttonpane"/>')
-				.appendTo(uiDialog);
-			$.each(options.buttons, function(name, fn) {
-				$('<button/>')
-					.text(name)
-					.click(function() { fn.apply(self.element[0], arguments); })
-					.appendTo(uiDialogButtonPane);
-			});
-		}
 		
 		if ($.fn.draggable) {
 			uiDialog.draggable({
@@ -152,6 +143,8 @@ $.widget("ui.dialog", {
 			(options.resizable || uiDialog.resizable('disable'));
 		}
 		
+		this.createButtons(options.buttons);
+		
 		(options.bgiframe && $.fn.bgiframe && uiDialog.bgiframe());
 		(options.autoOpen && this.open());
 	},
@@ -159,6 +152,9 @@ $.widget("ui.dialog", {
 	setData: function(key, value){
 		(setDataSwitch[key] && this.uiDialog.data(setDataSwitch[key], value));
 		switch (key) {
+			case "buttons":
+				this.createButtons(value);
+				break;
 			case "draggable":
 				this.uiDialog.draggable(value ? 'enable' : 'disable');
 				break;
@@ -296,6 +292,26 @@ $.widget("ui.dialog", {
 			.removeClass('ui-dialog-content')
 			.hide().appendTo('body');
 		this.uiDialog.remove();
+	},
+	
+	createButtons: function(buttons) {
+		var self = this,
+			hasButtons = false,
+			uiDialogButtonPane = this.uiDialogButtonPane;
+		
+		// remove any existing buttons
+		uiDialogButtonPane.empty().hide();
+		
+		$.each(buttons, function() { return !(hasButtons = true); });
+		if (hasButtons) {
+			uiDialogButtonPane.show();
+			$.each(buttons, function(name, fn) {
+				$('<button/>')
+					.text(name)
+					.click(function() { fn.apply(self.element[0], arguments); })
+					.appendTo(uiDialogButtonPane);
+			});
+		}
 	}
 });
 
