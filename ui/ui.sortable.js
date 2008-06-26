@@ -369,7 +369,7 @@ $.widget("ui.sortable", $.extend($.ui.mouse, {
 		};
 	
 		this.originalPosition = this.generatePosition(e);												//Generate the original position
-		this.domPosition = this.currentItem.prev()[0];													//Cache the former DOM position
+		this.domPosition = { prev: this.currentItem.prev()[0], parent: this.currentItem.parent()[0] };  //Cache the former DOM position
 		
 		//If o.placeholder is used, create a new element at the given position with the class
 		this.helperProportions = { width: this.helper.outerWidth(), height: this.helper.outerHeight() };//Cache the helper size
@@ -578,9 +578,8 @@ $.widget("ui.sortable", $.extend($.ui.mouse, {
 	},
 	clear: function(e, noPropagation) {
 
-		if(this.domPosition != this.currentItem.prev().not(".ui-sortable-helper")[0]) this.propagate("update", e, null, noPropagation); //Trigger update callback if the DOM position has changed
+		if(this.domPosition[0] != this.currentItem.prev().not(".ui-sortable-helper")[0] || this.domPosition[1] != this.currentItem.parent()[0]) this.propagate("update", e, null, noPropagation); //Trigger update callback if the DOM position has changed
 		if(!contains(this.element[0], this.currentItem[0])) { //Node was moved out of the current element
-			if(this.domPosition == this.currentItem.prev().not(".ui-sortable-helper")[0]) this.propagate("update", e, null, noPropagation); //Trigger update callback, if it wasn't triggered before, because that is definitely an update
 			this.propagate("remove", e, null, noPropagation);
 			for (var i = this.containers.length - 1; i >= 0; i--){
 				if(contains(this.containers[i].element[0], this.currentItem[0])) {
