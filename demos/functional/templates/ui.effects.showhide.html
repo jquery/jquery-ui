@@ -111,10 +111,12 @@
 					'<ul><li style="float: left; width: 144px; height: 108px;"><img class="scalefx" style="width: 144px; height: 108px;" src="templates/images/P1010058.JPG"/></li>\n' +
 					'<li style="float: left; width: 144px; height: 108px; margin-left: 20px;"><div class="scalefx" style="width: 144px; height: 108px; background-color: #F2F2F2;">Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ...</div></li></ul>\n' +
 					'<div style="clear: both;"></div>',
-				destroy: '$("#doPuff").unbind();',
+				destroy: '$("#doScale").unbind();',
 
 				options: [
-					{	desc: 'Scale defaults',	source: '$("#doScale").click(function() { $(".scalefx").toggle("scale", {}, 2000); });' }
+					{	desc: 'Scale defaults',	source: '$("#doScale").click(function() { $(".scalefx").toggle("scale", {}, 2000); });' },
+					{	desc: 'Scale from/to top-left',	source: '$("#doScale").click(function() { $(".scalefx").toggle("scale", {origin:["top","left"]}, 2000); });' },
+					{	desc: 'Scale from/to bottom-right',	source: '$("#doScale").click(function() { $(".scalefx").toggle("scale", {origin:["bottom","right"]}, 2000); });' },
 				]
 			},
 
