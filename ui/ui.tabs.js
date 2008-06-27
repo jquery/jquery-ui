@@ -134,7 +134,7 @@ $.widget("ui.tabs", {
 				// seems to be expected behavior that the show callback is fired
 				var onShow = function() {
 					$(self.element).triggerHandler('tabsshow',
-						[null, self.ui(self.$tabs[o.selected], self.$panels[o.selected])], o.show);
+						[self.fakeEvent('tabsshow'), self.ui(self.$tabs[o.selected], self.$panels[o.selected])], o.show);
 				}; 
 
 				// load if remote tab
@@ -198,7 +198,7 @@ $.widget("ui.tabs", {
 
 				// callback
 				$(self.element).triggerHandler('tabsshow',
-					[null, self.ui(clicked, $show[0])], o.show);
+					[self.fakeEvent('tabsshow'), self.ui(clicked, $show[0])], o.show);
 
 			});
 		}
@@ -228,7 +228,7 @@ $.widget("ui.tabs", {
 			if (($li.hasClass(o.selectedClass) && !o.unselect)
 				|| $li.hasClass(o.disabledClass) 
 				|| $(this).hasClass(o.loadingClass)
-				|| $(self.element).triggerHandler('tabsselect', [null, self.ui(this, $show[0])], o.select) === false
+				|| $(self.element).triggerHandler('tabsselect', [self.fakeEvent('tabsselect'), self.ui(this, $show[0])], o.select) === false
 				) {
 				this.blur();
 				return false;
@@ -354,7 +354,7 @@ $.widget("ui.tabs", {
 
 		// callback
 		this.element.triggerHandler('tabsadd',
-			[null, this.ui(this.$tabs[index], this.$panels[index])], o.add
+			[this.fakeEvent('tabsadd'), this.ui(this.$tabs[index], this.$panels[index])], o.add
 		);
 	},
 	remove: function(index) {
@@ -373,7 +373,7 @@ $.widget("ui.tabs", {
 
 		// callback
 		this.element.triggerHandler('tabsremove',
-			[null, this.ui($li.find('a')[0], $panel[0])], o.remove
+			[this.fakeEvent('tabsremove'), this.ui($li.find('a')[0], $panel[0])], o.remove
 		);
 	},
 	enable: function(index) {
@@ -393,7 +393,7 @@ $.widget("ui.tabs", {
 
 		// callback
 		this.element.triggerHandler('tabsenable',
-			[null, this.ui(this.$tabs[index], this.$panels[index])], o.enable
+			[this.fakeEvent('tabsenable'), this.ui(this.$tabs[index], this.$panels[index])], o.enable
 		);
 
 	},
@@ -407,7 +407,7 @@ $.widget("ui.tabs", {
 
 			// callback
 			this.element.triggerHandler('tabsdisable',
-				[null, this.ui(this.$tabs[index], this.$panels[index])], o.disable
+				[this.fakeEvent('tabsdisable'), this.ui(this.$tabs[index], this.$panels[index])], o.disable
 			);
 		}
 	},
@@ -461,7 +461,7 @@ $.widget("ui.tabs", {
 
 				// callbacks
 				$(self.element).triggerHandler('tabsload',
-					[null, self.ui(self.$tabs[index], self.$panels[index])], o.load
+					[self.fakeEvent('tabsload'), self.ui(self.$tabs[index], self.$panels[index])], o.load
 				);
 				o.ajaxOptions.success && o.ajaxOptions.success(r, s);
 				
@@ -504,6 +504,12 @@ $.widget("ui.tabs", {
 			else
 				$(this).removeClass([o.selectedClass, o.unselectClass,
 					o.disabledClass, o.panelClass, o.hideClass].join(' '));
+		});
+	},
+	fakeEvent: function(type) {
+		return $.event.fix({
+			type: type,
+			target: this.element[0]
 		});
 	}
 });
