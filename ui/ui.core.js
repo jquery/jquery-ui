@@ -46,15 +46,11 @@ $.ui = {
 		try { $('body').get(0).removeChild(tmp.get(0));	} catch(e){}
 		return $.ui.cssCache[name];
 	},
-	disableSelection: function(e) {
-		e.unselectable = "on";
-		e.onselectstart = function() { return false; };
-		if (e.style) { e.style.MozUserSelect = "none"; }
+	disableSelection: function(el) {
+		$(el).attr('unselectable', 'on').css('MozUserSelect', 'none');
 	},
-	enableSelection: function(e) {
-		e.unselectable = "off";
-		e.onselectstart = function() { return true; };
-		if (e.style) { e.style.MozUserSelect = ""; }
+	enableSelection: function(el) {
+		$(el).attr('unselectable', 'off').css('MozUserSelect', '');
 	},
 	hasScroll: function(e, a) {
 		var scroll = /top/.test(a||"top") ? 'scrollTop' : 'scrollLeft', has = false;
