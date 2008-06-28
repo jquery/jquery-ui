@@ -245,7 +245,7 @@ $.widget("ui.dialog", {
 		if (this.isOpen) { return; }
 		
 		this.overlay = this.options.modal ? new $.ui.dialog.overlay(this) : null;
-		this.uiDialog.appendTo('body');
+		(this.uiDialog.next().length > 0) && this.uiDialog.appendTo('body');
 		this.position(this.options.position);
 		this.uiDialog.show(this.options.show);
 		this.options.autoResize && this.size();
