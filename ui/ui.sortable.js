@@ -332,7 +332,7 @@ $.widget("ui.sortable", $.extend($.ui.mouse, {
 
 		//Create and append the visible helper			
 		this.helper = typeof o.helper == 'function' ? $(o.helper.apply(this.element[0], [e, this.currentItem])) : this.currentItem.clone();
-		if(!this.helper.parents('body').length) this.helper.appendTo((o.appendTo != 'parent' ? o.appendTo : this.currentItem[0].parentNode)); //Add the helper to the DOM if that didn't happen already
+		if (!this.helper.parents('body').length) $(o.appendTo != 'parent' ? o.appendTo : this.currentItem[0].parentNode)[0].appendChild(this.helper[0]); //Add the helper to the DOM if that didn't happen already
 		this.helper.css({ position: 'absolute', clear: 'both' }).addClass('ui-sortable-helper'); //Position it absolutely and add a helper class
 
 		/*
@@ -533,7 +533,7 @@ $.widget("ui.sortable", $.extend($.ui.mouse, {
 		
 	},
 	rearrange: function(e, i, a, hardRefresh) {
-		a ? a.append(this.currentItem) : i.item[this.direction == 'down' ? 'before' : 'after'](this.currentItem);
+		a ? a[0].appendChild(this.currentItem[0]) : i.item[0].parentNode.insertBefore(this.currentItem[0], (this.direction == 'down' ? i.item[0] : i.item[0].nextSibling));
 		
 		//Various things done here to improve the performance:
 		// 1. we create a setTimeout, that calls refreshPositions
