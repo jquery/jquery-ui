@@ -494,10 +494,19 @@ $.widget("ui.sortable", $.extend($.ui.mouse, {
 	},
 	mouseDrag: function(e) {
 
-
 		//Compute the helpers position
 		this.position = this.generatePosition(e);
 		this.positionAbs = this.convertPositionTo("absolute");
+
+		//Call the internal plugins
+		$.ui.plugin.call(this, "sort", [e, this.ui()]);
+		
+		//Regenerate the absolute position used for position checks
+		this.positionAbs = this.convertPositionTo("absolute");
+		
+		//Set the helper's position
+		this.helper[0].style.left = this.position.left+'px';
+		this.helper[0].style.top = this.position.top+'px';
 
 		//Rearrange
 		for (var i = this.items.length - 1; i >= 0; i--) {
@@ -520,14 +529,11 @@ $.widget("ui.sortable", $.extend($.ui.mouse, {
 		//Post events to containers
 		this.contactContainers(e);
 		
-		 //Call plugins and callbacks
-		this.propagate("sort", e);
-
-		if(!this.options.axis || this.options.axis == "x") this.helper[0].style.left = this.position.left+'px';
-		if(!this.options.axis || this.options.axis == "y") this.helper[0].style.top = this.position.top+'px';
-		
 		//Interconnect with droppables
 		if($.ui.ddmanager) $.ui.ddmanager.drag(this, e);
+
+		//Call callbacks
+		this.element.triggerHandler("sort", [e, this.ui()], this.options["sort"]);
 
 		return false;
 		
@@ -715,6 +721,17 @@ $.ui.plugin.add("sortable", "scroll", {
 			if($(window).width() - (e.pageX - $(document).scrollLeft()) < o.scrollSensitivity)
 				$(document).scrollLeft($(document).scrollLeft() + o.scrollSpeed);
 		}
+		
+	}
+});
+
+$.ui.plugin.add("sortable", "axis", {
+	sort: function(e, ui) {
+		
+		var i = $(this).data("sortable");
+		
+		if(ui.options.axis == "y") i.position.left = i.originalPosition.left;
+		if(ui.options.axis == "x") i.position.top = i.originalPosition.top;
 		
 	}
 });
