@@ -121,7 +121,7 @@ $.widget("ui.dialog", {
 		
 		if ($.fn.resizable) {
 			uiDialog.resizable({
-				proxy: options.resizeHelper,
+				helper: options.resizeHelper,
 				maxWidth: options.maxWidth,
 				maxHeight: options.maxHeight,
 				minWidth: options.minWidth,
