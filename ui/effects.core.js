@@ -53,8 +53,8 @@ $.extend($.effects, {
 			wrapper.css({position: 'relative'});
 			el.css({position: 'relative'});
 		} else {
-			var top = parseInt(el.css('top'), 10); if(isNaN(top)) top = 'auto';
-			var left = parseInt(el.css('left'), 10); if(isNaN(left)) left = 'auto';
+			var top = el.css('top'); if(isNaN(parseInt(top))) top = 'auto';
+			var left = el.css('left'); if(isNaN(parseInt(left))) left = 'auto';
 			wrapper.css({ position: el.css('position'), top: top, left: left, zIndex: el.css('z-index') }).show();
 			el.css({position: 'relative', top:0, left:0});
 		}
