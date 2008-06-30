@@ -116,7 +116,7 @@ function Datepicker() {
 		altFormat: '' // The date format to use for the alternate field
 	};
 	$.extend(this._defaults, this.regional['']);
-	this._datepickerDiv = $('<div id="' + this._mainDivId + '"></div>');
+	this._datepickerDiv = $('<div id="' + this._mainDivId + '" style="display: none;"></div>');
 }
 
 $.extend(Datepicker.prototype, {
