@@ -28,7 +28,7 @@ $.widget("ui.droppable", {
 		});
 		
 		//Store the droppable's proportions
-		this.proportions = { width: this.element.outerWidth(), height: this.element.outerHeight() };
+		this.proportions = { width: this.element[0].offsetWidth, height: this.element[0].offsetHeight };
 		
 		// Add the reference and positions to the manager
 		$.ui.ddmanager.droppables.push(this);
@@ -177,11 +177,10 @@ $.ui.ddmanager = {
 		var m = $.ui.ddmanager.droppables;
 		var type = e ? e.type : null; // workaround for #2317
 		for (var i = 0; i < m.length; i++) {
-			
 			if(m[i].options.disabled || (t && !m[i].options.accept.call(m[i].element,(t.currentItem || t.element)))) continue;
 			m[i].visible = m[i].element.is(":visible"); if(!m[i].visible) continue; //If the element is not visible, continue
 			m[i].offset = m[i].element.offset();
-			m[i].proportions = { width: m[i].element.outerWidth(), height: m[i].element.outerHeight() };
+			m[i].proportions = { width: m[i].element[0].offsetWidth, height: m[i].element[0].offsetHeight };
 			
 			if(type == "dragstart" || type == "sortactivate") m[i].activate.call(m[i], e); //Activate the droppable if used directly from draggables
 		}
