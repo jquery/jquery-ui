@@ -109,7 +109,7 @@ $.widget("ui.slider", {
 			.each(function() {
 				new handleclass(this);
 			})
-			.wrap('<a href="javascript:void(0)" style="cursor:default;"></a>')
+			.wrap('<a href="javascript:void(0)" style="cursor:default;outline:none;border:none;"></a>')
 			.parent()
 				.bind('focus', function(e) { self.focus(this.firstChild); })
 				.bind('blur', function(e) { self.blur(this.firstChild); })
