@@ -179,7 +179,7 @@ $.ui.ddmanager = {
 
 		for (var i = 0; i < m.length; i++) {
 			if(m[i].options.disabled || (t && !m[i].options.accept.call(m[i].element,(t.currentItem || t.element)))) continue;
-			m[i].visible = m[i].element.css("display") == "none"; if(!m[i].visible) continue; //If the element is not visible, continue
+			m[i].visible = m[i].element.css("display") != "none"; if(!m[i].visible) continue; //If the element is not visible, continue
 			m[i].offset = m[i].element.offset();
 			m[i].proportions = { width: m[i].element[0].offsetWidth, height: m[i].element[0].offsetHeight };
 			
