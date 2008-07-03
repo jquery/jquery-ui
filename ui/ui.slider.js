@@ -400,7 +400,7 @@ $.widget("ui.slider", {
 			x = this.translateLimits(x, "x");
 			x = this.translateRange(x, "x");
 
-			o.animate ? this.currentHandle.animate({ left: x }, (Math.abs(parseInt(this.currentHandle.css("left")) - x)) * (!isNaN(parseInt(o.animate)) ? o.animate : 5)) : this.currentHandle.css({ left: x });
+			o.animate ? this.currentHandle.stop().animate({ left: x }, (Math.abs(parseInt(this.currentHandle.css("left")) - x)) * (!isNaN(parseInt(o.animate)) ? o.animate : 5)) : this.currentHandle.css({ left: x });
 		}
 
 		if(o.axis != "horizontal" && y !== undefined) {
@@ -408,7 +408,7 @@ $.widget("ui.slider", {
 			y = this.translateValue(y, "y");
 			y = this.translateLimits(y, "y");
 			y = this.translateRange(y, "y");
-			o.animate ? this.currentHandle.animate({ top: y }, (Math.abs(parseInt(this.currentHandle.css("top")) - y)) * (!isNaN(parseInt(o.animate)) ? o.animate : 5)) : this.currentHandle.css({ top: y });
+			o.animate ? this.currentHandle.stop().animate({ top: y }, (Math.abs(parseInt(this.currentHandle.css("top")) - y)) * (!isNaN(parseInt(o.animate)) ? o.animate : 5)) : this.currentHandle.css({ top: y });
 		}
 		
 		if (this.rangeElement)
