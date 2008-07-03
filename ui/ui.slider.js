@@ -399,7 +399,8 @@ $.widget("ui.slider", {
 			x = this.translateValue(x, "x");
 			x = this.translateLimits(x, "x");
 			x = this.translateRange(x, "x");
-			this.currentHandle.css({ left: x });
+
+			o.animate ? this.currentHandle.animate({ left: x }, (Math.abs(parseInt(this.currentHandle.css("left")) - x)) * (!isNaN(parseInt(o.animate)) ? o.animate : 5)) : this.currentHandle.css({ left: x });
 		}
 
 		if(o.axis != "horizontal" && y !== undefined) {
@@ -407,7 +408,7 @@ $.widget("ui.slider", {
 			y = this.translateValue(y, "y");
 			y = this.translateLimits(y, "y");
 			y = this.translateRange(y, "y");
-			this.currentHandle.css({ top: y });
+			o.animate ? this.currentHandle.animate({ top: y }, (Math.abs(parseInt(this.currentHandle.css("top")) - y)) * (!isNaN(parseInt(o.animate)) ? o.animate : 5)) : this.currentHandle.css({ top: y });
 		}
 		
 		if (this.rangeElement)
@@ -432,7 +433,8 @@ $.ui.slider.getter = "value";
 
 $.ui.slider.defaults = {
 	handle: ".ui-slider-handle",
-	distance: 1
+	distance: 1,
+	animate: false
 };
 
 })(jQuery);
