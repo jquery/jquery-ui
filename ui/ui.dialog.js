@@ -99,9 +99,14 @@ $.widget("ui.dialog", {
 				self.close();
 				return false;
 			});
-		
+
+		this.uiDialogTitlebar.find("*").add(this.uiDialogTitlebar).each(function() {
+			$.ui.disableSelection(this);
+		});
+
 		if ($.fn.draggable) {
 			uiDialog.draggable({
+				cancel: '.ui-dialog-content',
 				helper: options.dragHelper,
 				handle: '.ui-dialog-titlebar',
 				start: function(e, ui) {
@@ -121,6 +126,7 @@ $.widget("ui.dialog", {
 		
 		if ($.fn.resizable) {
 			uiDialog.resizable({
+				cancel: '.ui-dialog-content',
 				helper: options.resizeHelper,
 				maxWidth: options.maxWidth,
 				maxHeight: options.maxHeight,

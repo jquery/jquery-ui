@@ -196,7 +196,7 @@ $.ui.mouse = {
 		
 		var self = this,
 			btnIsLeft = (e.which == 1),
-			elIsCancel = (typeof this.options.cancel == "string" ? $(e.target).is(this.options.cancel) : false);
+			elIsCancel = (typeof this.options.cancel == "string" ? $(e.target).parents().add(e.target).filter(this.options.cancel).length : false);
 		if (!btnIsLeft || elIsCancel || !this.mouseCapture(e)) {
 			return true;
 		}
