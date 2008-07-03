@@ -216,10 +216,11 @@ $.widget("ui.draggable", $.extend($.ui.mouse, {
 	mouseStop: function(e) {
 		
 		//If we are using droppables, inform the manager about the drop
+		var dropped = false;
 		if ($.ui.ddmanager && !this.options.dropBehaviour)
-			$.ui.ddmanager.drop(this, e);
-			
-		if(this.options.revert) {
+			var dropped = $.ui.ddmanager.drop(this, e);		
+		
+		if((this.options.revert == "invalid" && !dropped) || (this.options.revert == "valid" && dropped) || this.options.revert === true) {
 			var self = this;
 			$(this.helper).animate(this.originalPosition, parseInt(this.options.revert, 10) || 500, function() {
 				self.propagate("stop", e);
