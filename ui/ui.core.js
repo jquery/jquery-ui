@@ -65,7 +65,7 @@ $.ui = {
 
 var _remove = $.fn.remove;
 $.fn.remove = function() {
-	$("*", this).add(this).trigger("remove");
+	$("*", this).add(this).triggerHandler("remove");
 	return _remove.apply(this, arguments );
 };
 
