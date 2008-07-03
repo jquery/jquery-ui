@@ -80,7 +80,7 @@ $.widget("ui.dialog", {
 				}),
 			
 			uiDialogButtonPane = (this.uiDialogButtonPane = $('<div/>'))
-				.addClass('ui-dialog-buttonpane')
+				.addClass('ui-dialog-buttonpane').css({ position: 'absolute', bottom: 0 })
 				.appendTo(uiDialog);
 		
 		this.uiDialogTitlebarClose = $('.ui-dialog-titlebar-close', uiDialogTitlebar)
