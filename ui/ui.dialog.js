@@ -241,8 +241,8 @@ $.widget("ui.dialog", {
 		var container = this.uiDialogContainer,
 			titlebar = this.uiDialogTitlebar,
 			content = this.element,
-			tbMargin = parseInt(content.css('margin-top')) + parseInt(content.css('margin-bottom')),
-			lrMargin = parseInt(content.css('margin-left')) + parseInt(content.css('margin-right'));
+			tbMargin = parseInt(content.css('margin-top'),10) + parseInt(content.css('margin-bottom'),10),
+			lrMargin = parseInt(content.css('margin-left'),10) + parseInt(content.css('margin-right'),10);
 		content.height(container.height() - titlebar.outerHeight() - tbMargin);
 		content.width(container.width() - lrMargin);
 	},
@@ -272,7 +272,7 @@ $.widget("ui.dialog", {
 	// position on open
 	moveToTop: function(force) {
 		if ((this.options.modal && !force)
-			|| (!this.options.stack && !this.options.modal)) { return; }
+			|| (!this.options.stack && !this.options.modal)) { return this.element.triggerHandler("dialogfocus", [null, { options: this.options }], this.options.focus); }
 		
 		var maxZ = this.options.zIndex, options = this.options;
 		$('.ui-dialog:visible').each(function() {
@@ -280,6 +280,8 @@ $.widget("ui.dialog", {
 		});
 		(this.overlay && this.overlay.$el.css('z-index', ++maxZ));
 		this.uiDialog.css('z-index', ++maxZ);
+		
+		this.element.triggerHandler("dialogfocus", [null, { options: this.options }], this.options.focus);
 	},
 	
 	close: function() {
