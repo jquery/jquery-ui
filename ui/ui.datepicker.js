@@ -347,6 +347,8 @@ $.extend(Datepicker.prototype, {
 					$.datepicker._hideDatepicker();
 				else
 					$.datepicker._showDatepicker(target);
+					
+				return false;
 			});
         }
 		input.addClass(this.markerClassName).keydown(this._doKeyDown).keypress(this._doKeyPress)
