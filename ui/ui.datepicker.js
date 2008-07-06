@@ -80,6 +80,7 @@ function Datepicker() {
 		hideIfNoPrevNext: false, // True to hide next/previous month links
 			// if not applicable, false to just disable them
 		navigationAsDateFormat: false, // True if date formatting applied to prev/today/next links
+		gotoCurrent: false, // True of today link goes back to current selection instead
 		changeMonth: true, // True if month can be selected directly, false if only prev/next
 		changeYear: true, // True if year can be selected directly, false if only prev/next
 		yearRange: '-10:+10', // Range of years to display in drop-down,
@@ -512,7 +513,7 @@ $.extend(Datepicker.prototype, {
 		var scrollX = document.documentElement.scrollLeft || document.body.scrollLeft;
 		var scrollY = document.documentElement.scrollTop || document.body.scrollTop;
 		// reposition date picker horizontally if outside the browser window
-		if ((offset.left + inst.dpDiv.width() - scrollX) > browserWidth)
+		if (this._get(inst, 'isRTL') || (offset.left + inst.dpDiv.width() - scrollX) > browserWidth)
 			offset.left = Math.max((isFixed ? 0 : scrollX),
 				pos[0] + (inst.input ? inst.input.width() : 0) - (isFixed ? scrollX : 0) - inst.dpDiv.width() -
 				(isFixed && $.browser.opera ? document.documentElement.scrollLeft : 0));
@@ -607,10 +608,17 @@ $.extend(Datepicker.prototype, {
 	_gotoToday: function(id) {
 		var target = $(id);
 		var inst = $.data(target[0], PROP_NAME);
+		if (this._get(inst, 'gotoCurrent') && inst.currentDay) {
+			inst.selectedDay = inst.currentDay;
+			inst.drawMonth = inst.selectedMonth = inst.currentMonth;
+			inst.drawYear = inst.selectedYear = inst.currentYear;
+		}
+		else {
 		var date = new Date();
 		inst.selectedDay = date.getDate();
 		inst.drawMonth = inst.selectedMonth = date.getMonth();
 		inst.drawYear = inst.selectedYear = date.getFullYear();
+		}
 		this._adjustDate(target);
 		this._notifyChange(inst);
 	},
@@ -1197,7 +1205,8 @@ $.extend(Datepicker.prototype, {
 		var html = (prompt ? '<div class="' + this._promptClass + '">' + prompt + '</div>' : '') +
 			(closeAtTop && !inst.inline ? controls : '') +
 			'<div class="ui-datepicker-links">' + (isRTL ? next : prev) +
-			(this._isInRange(inst, today) ? '<div class="ui-datepicker-current">' +
+			(this._isInRange(inst, (this._get(inst, 'gotoCurrent') && inst.currentDay ?
+			currentDate : today)) ? '<div class="ui-datepicker-current">' +
 			'<a onclick="jQuery.datepicker._gotoToday(\'#' + inst.id + '\');"' +
 			(showStatus ? this._addStatus(inst, this._get(inst, 'currentStatus') || '&#xa0;') : '') + '>' +
 			currentText + '</a></div>' : '') + (isRTL ? prev : next) + '</div>';
