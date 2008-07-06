@@ -38,7 +38,8 @@ $.widget("ui.tabs", {
 		return {
 			options: this.options,
 			tab: tab,
-			panel: panel
+			panel: panel,
+			index: this.$tabs.index(tab)
 		};
 	},
 	tabify: function(init) {
