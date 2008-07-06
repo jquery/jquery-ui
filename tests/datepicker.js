@@ -34,12 +34,16 @@ function init(id, options) {
 	return inp;
 }
 
+var PROP_NAME = 'datepicker';
+
 test('setDefaults', function() {
 	var inp = init('#inp');
+	var dp = $('#ui-datepicker-div');
+	ok(!dp.is(':visible'), 'Initially invisible');
 	ok(inp.is('.hasDatepicker'), 'Marker class set');
-	ok($($.datepicker._datepickerDiv).html() == '', 'Content empty');
+	ok($($.datepicker.dpDiv).html() == '', 'Content empty');
 	inp.datepicker('show');
-	ok($($.datepicker._datepickerDiv).html() != '', 'Content present');
+	ok($($.datepicker.dpDiv).html() != '', 'Content present');
 	inp.datepicker('hide');
 	equals($.datepicker._defaults.showOn, 'focus', 'Initial showOn');
 	$.datepicker.setDefaults({showOn: 'button'});
@@ -51,39 +55,37 @@ test('setDefaults', function() {
 test('remove', function() {
 	var rem = init('#rem');
 	ok(rem.is('.hasDatepicker'), 'Marker class set');
-	ok(rem[0]._calId, 'Datepicker ID present');
+	ok($.data(rem[0], PROP_NAME), 'Datepicker instance present');
 	rem.datepicker('destroy');
 	rem = $('#rem');
 	ok(!rem.is('.hasDatepicker'), 'Marker class cleared');
-	ok(!rem[0]._calId, 'Datepicker ID absent');
+	ok(!$.data(rem[0], PROP_NAME), 'Datepicker instance absent');
 	rem.datepicker({showOn: 'both', buttonImage: 'img/calendar.gif'});
 	ok(rem.is('.hasDatepicker'), 'Marker class set');
-	ok(rem[0]._calId, 'Datepicker ID present');
-	ok(rem.parent('.ui-datepicker-wrap').length != 0, 'Wrapper present');
+	ok($.data(rem[0], PROP_NAME), 'Datepicker instance present');
 	rem.datepicker('destroy');
 	rem = $('#rem');
 	ok(!rem.is('.hasDatepicker'), 'Marker class cleared');
-	ok(!rem[0]._calId, 'Datepicker ID absent');
-	ok(rem.parent('.ui-datepicker-wrap').length == 0, 'Wrapper absent');
+	ok(!$.data(rem[0], PROP_NAME), 'Datepicker instance absent');
 });
 
 test('change', function() {
 	var inp = init('#inp');
-	var inst = $.datepicker._inst[inp[0]._calId];
-	equals(inst._settings.showOn, null, 'Initial setting showOn');
-	equals(inst._get('showOn'), 'focus', 'Initial instance showOn');
+	var inst = $.data(inp[0], PROP_NAME);
+	equals(inst.settings.showOn, null, 'Initial setting showOn');
+	equals($.datepicker._get(inst, 'showOn'), 'focus', 'Initial instance showOn');
 	equals($.datepicker._defaults.showOn, 'focus', 'Initial default showOn');
 	inp.datepicker('change', 'showOn', 'button');
-	equals(inst._settings.showOn, 'button', 'Change setting showOn');
-	equals(inst._get('showOn'), 'button', 'Change instance showOn');
+	equals(inst.settings.showOn, 'button', 'Change setting showOn');
+	equals($.datepicker._get(inst, 'showOn'), 'button', 'Change instance showOn');
 	equals($.datepicker._defaults.showOn, 'focus', 'Retain default showOn');
 	inp.datepicker('change', {showOn: 'both'});
-	equals(inst._settings.showOn, 'both', 'Change setting showOn');
-	equals(inst._get('showOn'), 'both', 'Change instance showOn');
+	equals(inst.settings.showOn, 'both', 'Change setting showOn');
+	equals($.datepicker._get(inst, 'showOn'), 'both', 'Change instance showOn');
 	equals($.datepicker._defaults.showOn, 'focus', 'Retain default showOn');
 	inp.datepicker('change', 'showOn', undefined);
-	equals(inst._settings.showOn, null, 'Clear setting showOn');
-	equals(inst._get('showOn'), 'focus', 'Restore instance showOn');
+	equals(inst.settings.showOn, null, 'Clear setting showOn');
+	equals($.datepicker._get(inst, 'showOn'), 'focus', 'Restore instance showOn');
 	equals($.datepicker._defaults.showOn, 'focus', 'Retain default showOn');
 });
 
@@ -92,8 +94,6 @@ test('invocation', function() {
 	var dp = $('#ui-datepicker-div');
 	var body = $('body');
 	// On focus
-	ok(!dp.is(':visible'), 'Focus - initially invisible');
-	ok(inp.parent('.ui-datepicker-wrap').length == 0, 'Focus - wrapper absent');
 	var button = inp.siblings('button');
 	ok(button.length == 0, 'Focus - button absent');
 	var image = inp.siblings('img');
@@ -112,7 +112,6 @@ test('invocation', function() {
 	inp.datepicker({speed: '', showOn: 'button', buttonText: 'Popup'});
 	ok(!dp.is(':visible'), 'Button - initially hidden');
 	button = inp.siblings('button');
-	ok(inp.parent('.ui-datepicker-wrap').length != 0, 'Button - wrapper present');
 	image = inp.siblings('img');
 	ok(button.length == 1, 'Button - button present');
 	ok(image.length == 0, 'Button - image absent');
@@ -129,7 +128,6 @@ test('invocation', function() {
 	inp.datepicker({speed: '', showOn: 'button', buttonImageOnly: true,
 		buttonImage: 'img/calendar.gif', buttonText: 'Cal'});
 	ok(!dp.is(':visible'), 'Image button - initially hidden');
-	ok(inp.parent('.ui-datepicker-wrap').length != 0, 'Image button - wrapper present');
 	button = inp.siblings('button');
 	ok(button.length == 0, 'Image button - button absent');
 	image = inp.siblings('img');
@@ -146,7 +144,6 @@ test('invocation', function() {
 	inp = $('#inp');
 	inp.datepicker({speed: '', showOn: 'both', buttonImage: 'img/calendar.gif'});
 	ok(!dp.is(':visible'), 'Both - initially hidden');
-	ok(inp.parent('.ui-datepicker-wrap').length != 0, 'Both - wrapper present');
 	button = inp.siblings('button');
 	ok(button.length == 1, 'Both - button present');
 	image = inp.siblings('img');
@@ -451,6 +448,51 @@ test('minMax', function() {
 	equalsDate(inp.datepicker('getDate'), date, 'Min/max - -1w, +1 M +10 D - ctrl+pgdn');
 });
 
+test('setDate', function() {
+	var inp = init('#inp');
+	var date1 = new Date(2008, 6 - 1, 4);
+	var date2 = new Date();
+	inp.datepicker('setDate', date1);
+	equalsDate(inp.datepicker('getDate'), date1, 'Set date - 2008-06-04');
+	date1 = new Date();
+	date1.setDate(date1.getDate() + 7);
+	inp.datepicker('setDate', +7);
+	equalsDate(inp.datepicker('getDate'), date1, 'Set date - +7');
+	date2.setFullYear(date2.getFullYear() + 2);
+	inp.datepicker('setDate', '+2y');
+	equalsDate(inp.datepicker('getDate'), date2, 'Set date - +2y');
+	inp.datepicker('setDate', date1, date2);
+	equalsDate(inp.datepicker('getDate'), date1, 'Set date - two dates');
+	inp.datepicker('setDate');
+	ok(inp.datepicker('getDate') == null, 'Set date - null');
+	// Ranges
+	date1 = new Date(2008, 6 - 1, 4);
+	date2 = new Date(2009, 7 - 1, 5);
+	inp.datepicker('change', {rangeSelect: true});
+	inp.datepicker('setDate', date1, date2);
+	equalsDateArray(inp.datepicker('getDate'), [date1, date2], 'Set date range - 2008-06-04 - 2009-07-05');
+	inp.datepicker('setDate', date1);
+	equalsDateArray(inp.datepicker('getDate'), [date1, date1], 'Set date range - 2008-06-04');
+	date1 = new Date();
+	date1.setDate(date1.getDate() - 10);
+	date2 = new Date();
+	date2.setDate(date2.getDate() + 10);
+	inp.datepicker('setDate', -10, +10);
+	equalsDateArray(inp.datepicker('getDate'), [date1, date2], 'Set date range - -10 - +10');
+	inp.datepicker('setDate', -10);
+	equalsDateArray(inp.datepicker('getDate'), [date1, date1], 'Set date range - -10');
+	date1 = new Date();
+	date1.setDate(date1.getDate() - 14);
+	date2 = new Date();
+	date2.setFullYear(date2.getFullYear() + 1);
+	inp.datepicker('setDate', '-2w', '+1Y');
+	equalsDateArray(inp.datepicker('getDate'), [date1, date2], 'Set date range - -2w - +1Y');
+	inp.datepicker('setDate', '-2w');
+	equalsDateArray(inp.datepicker('getDate'), [date1, date1], 'Set date range - -2w');
+	inp.datepicker('setDate');
+	isObj(inp.datepicker('getDate'), [null, null], 'Set date range - null');
+});
+
 test('ranges', function() {
 	var inp = init('#inp', {rangeSelect: true});
 	var d1 = new Date();
@@ -597,7 +639,7 @@ test('callbacks', function() {
 	inp.val('').datepicker('show');
 	inp.simulate('keydown', {keyCode: $.simulate.VK_ENTER});
 	equals(selectedThis, inp[0], 'Callback selected this');
-	equals(selectedInst, $.datepicker._getInst(inp[0]._calId), 'Callback selected inst');
+	equals(selectedInst, $.data(inp[0], PROP_NAME), 'Callback selected inst');
 	equals(selectedDate, $.datepicker.formatDate('mm/dd/yy', date), 'Callback selected date');
 	inp.val('').datepicker('show');
 	inp.simulate('keydown', {ctrlKey: true, keyCode: $.simulate.VK_DOWN}).
@@ -615,7 +657,7 @@ test('callbacks', function() {
 	inp.simulate('keydown', {keyCode: $.simulate.VK_PGUP});
 	date.setMonth(date.getMonth() - 1);
 	equals(selectedThis, inp[0], 'Callback change month/year this');
-	equals(selectedInst, $.datepicker._getInst(inp[0]._calId), 'Callback change month/year inst');
+	equals(selectedInst, $.data(inp[0], PROP_NAME), 'Callback change month/year inst');
 	equalsDate(selectedDate, date, 'Callback change month/year date - pgup');
 	inp.simulate('keydown', {keyCode: $.simulate.VK_PGDN});
 	date.setMonth(date.getMonth() + 1);
@@ -648,7 +690,7 @@ test('callbacks', function() {
 		val('').datepicker('show');
 	inp.simulate('keydown', {keyCode: $.simulate.VK_ESC});
 	equals(selectedThis, inp[0], 'Callback close this');
-	equals(selectedInst, $.datepicker._getInst(inp[0]._calId), 'Callback close inst');
+	equals(selectedInst, $.data(inp[0], PROP_NAME), 'Callback close inst');
 	ok(selectedDate == null, 'Callback close date - esc');
 	inp.val('').datepicker('show');
 	inp.simulate('keydown', {keyCode: $.simulate.VK_ENTER});
