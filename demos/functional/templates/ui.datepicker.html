@@ -50,7 +50,7 @@
 					'<li>ctrl+end - close and erase the date</li>' +
 					'<li>escape - close the datepicker without selection</li></ul>',
 				html: '<input type="text" size="10" value="" id="keys"/>',
-				destroy: '$("#keys").datepicker("destroy").removeAttr("readonly");',
+				destroy: '$("#keys").removeAttr("readonly").datepicker("destroy");',
 
 				options: [
 					{	desc: 'Default datepicker',	source: '$("#keys").datepicker({showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' },
@@ -154,7 +154,7 @@
 
 				options: [
 					{	desc: 'Single month inline',	source: '$("#inline").datepicker({onSelect: function(date) { alert("The chosen date is " + date); }});' },
-					{	desc: 'Range select inline',	source: '$("#inline").datepicker({rangeSelect: true});' },
+					{	desc: 'Range select inline',	source: '$("#inline").datepicker({rangeSelect: true, onSelect: function(date) { alert("The chosen dates are " + date); }});' },
 					{	desc: 'Range select showing two months inline',	source: '$("#inline").datepicker({rangeSelect: true, numberOfMonths: 2}).children("div").css("width", "370px");' },
 					{	desc: 'Highlight some national days (via CSS)',	source: '$("#inline").datepicker({beforeShowDay: nationalDays});' }
 				]
@@ -241,6 +241,7 @@
 					{	desc: 'Hide Prev/Next links if not applicable',	source: '$("#misc").datepicker({hideIfNoPrevNext: true, minDate: new Date(2008, 1 - 1, 26), maxDate: new Date(2008, 3 - 1, 26), showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' },
 					{	desc: 'Prev/Today/Next links as date formats',	source: '$("#misc").datepicker({navigationAsDateFormat: true, prevText: "&lt;M", currentText: "M y", nextText: "M&gt;", showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' },
 					{	desc: 'Prev/Today/Next links as date formats in French',	source: '$("#misc").datepicker($.extend({}, $.datepicker.regional["fr"], {navigationAsDateFormat: true, prevText: "&lt;MM", currentText: "MM yy", nextText: "MM&gt;", numberOfMonths: 2, stepMonths: 2, showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true}));' },
+					{	desc: 'Today link goes to current selection',	source: '$("#misc").datepicker({gotoCurrent: true, currentText: "Current", showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' },
 					{	desc: 'Highlight the hovered week',	source: '$("#misc").datepicker({highlightWeek: true, showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' },
 					{	desc: 'Show days from other months',	source: '$("#misc").datepicker({showOtherMonths: true, showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' },
 					{	desc: 'Show week of the year (ISO 8601)',	source: '$("#misc").datepicker({showWeeks: true, firstDay: 1, changeFirstDay: false, showOtherMonths: true, showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' },
@@ -326,6 +327,18 @@
 				options: [
 					{	desc: '&#8235;&#1575;&#1604;&#1593;&#1585;&#1576;&#1610;&#1577; (Arabic)',	source: '$("#i18nrtl").datepicker($.extend({}, $.datepicker.regional["ar"], {showStatus: true, showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true}));$("#contrib2").html("Khaled Al Horani");' },
 					{	desc: '&#8235;&#1506;&#1489;&#1512;&#1497;&#1514; (Hebrew)',	source: '$("#i18nrtl").datepicker($.extend({}, $.datepicker.regional["he"], {showStatus: true, showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true}));$("#contrib2").html("Amir Hardon");' }
+				]
+			},
+
+			{
+				title: 'Alternate Styling',
+				desc: 'Change the look-and-feel of the datepicker with alternative CSS.<br/>(Be sure to change it back again before going to another page.)',
+				html: '<input type="text" size="10" value="" id="styled"/>',
+				destroy: '$("#styled").datepicker("destroy");$("link[title=Flora (Default)]").attr("href", "../../themes/flora/flora.all.css");',
+
+				options: [
+					{	desc: 'Default jQuery UI (Flora)',	source: '$("#styled").datepicker({showStatus: true, showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});$("link[title=Flora (Default)]").attr("href", "../../themes/flora/flora.all.css");' },
+					{	desc: 'Original datepicker styling',	source: '$("#styled").datepicker({showStatus: true, showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});$("link[title=Flora (Default)]").attr("href", "../../themes/ui.datepicker.css");' }
 				]
 			}
 
