@@ -433,7 +433,7 @@ $.widget("ui.tabs", {
 		
 		var inner = function(parent) {
 			var $parent = $(parent), $inner = $parent.find('*:last');
-			return $inner.length && $inner || $parent;
+			return $inner.length && $inner.is(':not(img)') && $inner || $parent;
 		};
 		var cleanup = function() {
 			self.$tabs.filter('.' + o.loadingClass).removeClass(o.loadingClass)
