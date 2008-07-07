@@ -12,7 +12,7 @@
  */
 (function($) {
 
-$.widget("ui.selectable", $.extend($.ui.mouse, {
+$.widget("ui.selectable", $.extend({}, $.ui.mouse, {
 	init: function() {
 		var self = this;
 		

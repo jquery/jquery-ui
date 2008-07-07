@@ -12,7 +12,7 @@
  */
 (function($) {
 
-$.widget("ui.resizable", $.extend($.ui.mouse, {
+$.widget("ui.resizable", $.extend({}, $.ui.mouse, {
 	init: function() {
 
 		var self = this, o = this.options;

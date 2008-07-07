@@ -12,7 +12,7 @@
  */
 (function($) {
 
-$.widget("ui.draggable", $.extend($.ui.mouse, {
+$.widget("ui.draggable", $.extend({}, $.ui.mouse, {
 	init: function() {
 		
 		//Initialize needed constants

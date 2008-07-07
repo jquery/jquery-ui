@@ -24,7 +24,7 @@ function contains(a, b) {
     return false; 
 };
 
-$.widget("ui.sortable", $.extend($.ui.mouse, {
+$.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 	init: function() {
 
 		var o = this.options;
