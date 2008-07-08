@@ -68,6 +68,7 @@ function Datepicker() {
 		showOn: 'focus', // 'focus' for popup on focus,
 			// 'button' for trigger button, or 'both' for either
 		showAnim: 'show', // Name of jQuery animation for popup
+		showOptions: {}, // Options for enhanced animations
 		defaultDate: null, // Used when field is blank: actual date,
 			// +/-number for offset from today, null for today
 		appendText: '', // Display text following the input box, e.g. showing the format
@@ -80,7 +81,7 @@ function Datepicker() {
 		hideIfNoPrevNext: false, // True to hide next/previous month links
 			// if not applicable, false to just disable them
 		navigationAsDateFormat: false, // True if date formatting applied to prev/today/next links
-		gotoCurrent: false, // True of today link goes back to current selection instead
+		gotoCurrent: false, // True if today link goes back to current selection instead
 		changeMonth: true, // True if month can be selected directly, false if only prev/next
 		changeYear: true, // True if year can be selected directly, false if only prev/next
 		yearRange: '-10:+10', // Range of years to display in drop-down,
@@ -99,7 +100,7 @@ function Datepicker() {
 			// takes date and instance as parameters, returns display text
 		minDate: null, // The earliest selectable date, or null for no limit
 		maxDate: null, // The latest selectable date, or null for no limit
-		speed: 'normal', // Speed of display/closure
+		duration: 'normal', // Duration of display/closure
 		beforeShowDay: null, // Function that takes a date and returns an array with
 			// [0] = true if selectable, false if not, [1] = custom CSS class name(s) or '', 
 			// [2] = cell title (optional), e.g. $.datepicker.noWeekends
@@ -387,7 +388,7 @@ $.extend(Datepicker.prototype, {
 							$('td.ui-datepicker-days-cell-over', inst.dpDiv)[0]);
 						return false; // don't submit the form
 						break; // select the value on enter
-				case 27: $.datepicker._hideDatepicker(null, $.datepicker._get(inst, 'speed'));
+				case 27: $.datepicker._hideDatepicker(null, $.datepicker._get(inst, 'duration'));
 						break; // hide on escape
 				case 33: $.datepicker._adjustDate(e.target, (e.ctrlKey ? -1 :
 							-$.datepicker._get(inst, 'stepMonths')), (e.ctrlKey ? 'Y' : 'M'));
@@ -473,15 +474,18 @@ $.extend(Datepicker.prototype, {
 			left: offset.left + 'px', top: offset.top + 'px'});
 		if (!inst.inline) {
 			var showAnim = $.datepicker._get(inst, 'showAnim') || 'show';
-			var speed = $.datepicker._get(inst, 'speed');
+			var duration = $.datepicker._get(inst, 'duration');
 			var postProcess = function() {
 				$.datepicker._datepickerShowing = true;
 				if ($.browser.msie && parseInt($.browser.version) < 7) // fix IE < 7 select problems
 					$('iframe.ui-datepicker-cover').css({width: inst.dpDiv.width() + 4,
 						height: inst.dpDiv.height() + 4});
 			};
-			inst.dpDiv[showAnim](speed, postProcess);
-			if (speed == '')
+			if ($.effects && $.effects[showAnim])
+				inst.dpDiv.show(showAnim, $.datepicker._get(inst, 'showOptions'), duration, postProcess);
+			else
+				inst.dpDiv[showAnim](duration, postProcess);
+			if (duration == '')
 				postProcess();
 			if (inst.input[0].type != 'hidden')
 				inst.input[0].focus();
@@ -540,8 +544,8 @@ $.extend(Datepicker.prototype, {
 
 	/* Hide the date picker from view.
 	   @param  input  element - the input field attached to the date picker
-	   @param  speed  string - the speed at which to close the date picker */
-	_hideDatepicker: function(input, speed) {
+	   @param  duration  string - the duration over which to close the date picker */
+	_hideDatepicker: function(input, duration) {
 		var inst = this._curInst;
 		if (!inst)
 			return;
@@ -551,13 +555,18 @@ $.extend(Datepicker.prototype, {
 				inst.currentDay, inst.currentMonth, inst.currentYear));
 		this._stayOpen = false;
 		if (this._datepickerShowing) {
-			speed = (speed != null ? speed : this._get(inst, 'speed'));
+			duration = (duration != null ? duration : this._get(inst, 'duration'));
 			var showAnim = this._get(inst, 'showAnim');
-			inst.dpDiv[(showAnim == 'slideDown' ? 'slideUp' :
-				(showAnim == 'fadeIn' ? 'fadeOut' : 'hide'))](speed, function() {
+			var postProcess = function() {
 				$.datepicker._tidyDialog(inst);
-			});
-			if (speed == '')
+			};
+			if (duration != '' && $.effects && $.effects[showAnim])
+				inst.dpDiv.hide(showAnim, $.datepicker._get(inst, 'showOptions'),
+					duration, postProcess);
+			else
+				inst.dpDiv[(duration == '' ? 'hide' : (showAnim == 'slideDown' ? 'slideUp' :
+					(showAnim == 'fadeIn' ? 'fadeOut' : 'hide')))](duration, postProcess);
+			if (duration == '')
 				this._tidyDialog(inst);
 			var onClose = this._get(inst, 'onClose');
 			if (onClose)
@@ -722,7 +731,7 @@ $.extend(Datepicker.prototype, {
 		if (inst.inline)
 			this._updateDatepicker(inst);
 		else if (!this._stayOpen) {
-			this._hideDatepicker(null, this._get(inst, 'speed'));
+			this._hideDatepicker(null, this._get(inst, 'duration'));
 			this._lastInput = inst.input[0];
 			if (typeof(inst.input[0]) != 'object')
 				inst.input[0].focus(); // restore focus
@@ -784,28 +793,16 @@ $.extend(Datepicker.prototype, {
 	},
 
 	/* Parse a string value into a date object.
-	   The format can be combinations of the following:
-	   d  - day of month (no leading zero)
-	   dd - day of month (two digit)
-	   D  - day name short
-	   DD - day name long
-	   m  - month of year (no leading zero)
-	   mm - month of year (two digit)
-	   M  - month name short
-	   MM - month name long
-	   y  - year (two digit)
-	   yy - year (four digit)
-	   '...' - literal text
-	   '' - single quote
+	   See formatDate below for the possible formats.
 
-	   @param  format           String - the expected format of the date
-	   @param  value            String - the date in the above format
+	   @param  format    string - the expected format of the date
+	   @param  value     string - the date in the above format
 	   @param  settings  Object - attributes include:
-	                     shortYearCutoff  Number - the cutoff year for determining the century (optional)
-	                     dayNamesShort    String[7] - abbreviated names of the days from Sunday (optional)
-	                     dayNames         String[7] - names of the days from Sunday (optional)
-	                     monthNamesShort  String[12] - abbreviated names of the months (optional)
-	                     monthNames       String[12] - names of the months (optional)
+	                     shortYearCutoff  number - the cutoff year for determining the century (optional)
+	                     dayNamesShort    string[7] - abbreviated names of the days from Sunday (optional)
+	                     dayNames         string[7] - names of the days from Sunday (optional)
+	                     monthNamesShort  string[12] - abbreviated names of the months (optional)
+	                     monthNames       string[12] - names of the months (optional)
 	   @return  Date - the extracted date value or null if value is blank */
 	parseDate: function (format, value, settings) {
 		if (format == null || value == null)
@@ -832,14 +829,15 @@ $.extend(Datepicker.prototype, {
 		// Extract a number from the string value
 		var getNumber = function(match) {
 			lookAhead(match);
-			var size = (match == 'y' ? 4 : 2);
+			var origSize = (match == '@' ? 14 : (match == 'y' ? 4 : 2));
+			var size = origSize;
 			var num = 0;
 			while (size > 0 && iValue < value.length &&
 					value.charAt(iValue) >= '0' && value.charAt(iValue) <= '9') {
 				num = num * 10 + (value.charAt(iValue++) - 0);
 				size--;
 			}
-			if (size == (match == 'y' ? 4 : 2))
+			if (size == origSize)
 				throw 'Missing number at position ' + iValue;
 			return num;
 		};
@@ -890,6 +888,12 @@ $.extend(Datepicker.prototype, {
 					case 'y':
 						year = getNumber('y');
 						break;
+					case '@':
+						var date = new Date(getNumber('@'));
+						year = date.getFullYear();
+						month = date.getMonth() + 1;
+						day = date.getDate();
+						break;
 					case "'":
 						if (lookAhead("'"))
 							checkLiteral();
@@ -909,6 +913,19 @@ $.extend(Datepicker.prototype, {
 		return date;
 	},
 
+	/* Standard date formats. */
+	ATOM: 'yy-mm-dd', // RFC 3339 (ISO 8601)
+	COOKIE: 'D, dd M yy',
+	ISO_8601: 'yy-mm-dd',
+	RFC_822: 'D, d M y',
+	RFC_850: 'DD, dd-M-y',
+	RFC_1036: 'D, d M y',
+	RFC_1123: 'D, d M yy',
+	RFC_2822: 'D, d M yy',
+	RSS: 'D, d M y', // RFC 822
+	TIMESTAMP: '@',
+	W3C: 'yy-mm-dd', // ISO 8601
+
 	/* Format a date object into a string value.
 	   The format can be combinations of the following:
 	   d  - day of month (no leading zero)
@@ -921,17 +938,18 @@ $.extend(Datepicker.prototype, {
 	   MM - month name long
 	   y  - year (two digit)
 	   yy - year (four digit)
+	   @ - Unix timestamp (ms since 01/01/1970)
 	   '...' - literal text
 	   '' - single quote
 
-	   @param  format    String - the desired format of the date
+	   @param  format    string - the desired format of the date
 	   @param  date      Date - the date value to format
 	   @param  settings  Object - attributes include:
-	                     dayNamesShort    String[7] - abbreviated names of the days from Sunday (optional)
-	                     dayNames         String[7] - names of the days from Sunday (optional)
-	                     monthNamesShort  String[12] - abbreviated names of the months (optional)
-	                     monthNames       String[12] - names of the months (optional)
-	   @return  String - the date in the above format */
+	                     dayNamesShort    string[7] - abbreviated names of the days from Sunday (optional)
+	                     dayNames         string[7] - names of the days from Sunday (optional)
+	                     monthNamesShort  string[12] - abbreviated names of the months (optional)
+	                     monthNames       string[12] - names of the months (optional)
+	   @return  string - the date in the above format */
 	formatDate: function (format, date, settings) {
 		if (!date)
 			return '';
@@ -981,6 +999,9 @@ $.extend(Datepicker.prototype, {
 							output += (lookAhead('y') ? date.getFullYear() : 
 								(date.getYear() % 100 < 10 ? '0' : '') + date.getYear() % 100);
 							break;
+						case '@':
+							output += date.getTime(); 
+							break;
 						case "'":
 							if (lookAhead("'"))
 								output += "'";
@@ -1006,7 +1027,7 @@ $.extend(Datepicker.prototype, {
 					chars += format.charAt(iFormat);
 			else
 				switch (format.charAt(iFormat)) {
-					case 'd': case 'm': case 'y':
+					case 'd': case 'm': case 'y': case '@':
 						chars += '0123456789'; 
 						break;
 					case 'D': case 'M':
@@ -1485,7 +1506,7 @@ function isArray(a) {
 };
 
 /* Invoke the datepicker functionality.
-   @param  options  String - a command, optionally followed by additional parameters or
+   @param  options  string - a command, optionally followed by additional parameters or
                     Object - settings for attaching new datepicker functionality
    @return  jQuery object */
 $.fn.datepicker = function(options){

@@ -98,9 +98,19 @@
 					{	desc: 'Medium format',	source: '$("#formatted").datepicker({dateFormat: "M d, yy", showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' },
 					{	desc: 'Long format',	source: '$("#formatted").datepicker({dateFormat: "MM d, yy", showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' },
 					{	desc: 'Full format',	source: '$("#formatted").datepicker({dateFormat: "DD, MM d, yy", showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' },
-					{	desc: 'ISO format',	source: '$("#formatted").datepicker({dateFormat: "yy-mm-dd", showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' },
+					{	desc: 'French full format',	source: '$("#formatted").datepicker($.extend({}, $.datepicker.regional["fr"], {dateFormat: "DD, MM d, yy", showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true}));' },
 					{	desc: 'With no century',	source: '$("#formatted").datepicker({dateFormat: "dd/mm/y", showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' },
-					{	desc: 'French full format',	source: '$("#formatted").datepicker($.extend({}, $.datepicker.regional["fr"], {dateFormat: "DD, MM d, yy", showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true}));' }
+					{	desc: 'ATOM format (ISO 8601)',	source: '$("#formatted").datepicker({dateFormat: $.datepicker.ATOM, showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' },
+					{	desc: 'Cookie format',	source: '$("#formatted").datepicker({dateFormat: $.datepicker.COOKIE, showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' },
+					{	desc: 'ISO 8601 format',	source: '$("#formatted").datepicker({dateFormat: $.datepicker.ISO_8601, showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' },
+					{	desc: 'RFC 822 format',	source: '$("#formatted").datepicker({dateFormat: $.datepicker.RFC_822, showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' },
+					{	desc: 'RFC 850 format',	source: '$("#formatted").datepicker({dateFormat: $.datepicker.RFC_850, showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' },
+					{	desc: 'RFC 1026 format',	source: '$("#formatted").datepicker({dateFormat: $.datepicker.RFC_1036, showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' },
+					{	desc: 'RFC 1123 format',	source: '$("#formatted").datepicker({dateFormat: $.datepicker.RFC_1123, showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' },
+					{	desc: 'RFC 2822 format',	source: '$("#formatted").datepicker({dateFormat: $.datepicker.RFC_2822, showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' },
+					{	desc: 'RSS format (RFC 822)',	source: '$("#formatted").datepicker({dateFormat: $.datepicker.RSS, showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' },
+					{	desc: 'Timestamp format (ms since 01/01/1970)',	source: '$("#formatted").datepicker({dateFormat: $.datepicker.TIMESTAMP, showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' },
+					{	desc: 'W3C format (ISO 8601)',	source: '$("#formatted").datepicker({dateFormat: $.datepicker.W3C, showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' }
 				]
 			},
 
@@ -167,7 +177,7 @@
 				destroy: '',
 
 				options: [
-					{	desc: 'Open in a dialog',	source: '$("#dialogButton").click(function() { $(this).datepicker("dialog", $("#dialog").val(), setDateFromDialog, {prompt: "Choose a date", speed: ""}) });' }
+					{	desc: 'Open in a dialog',	source: '$("#dialogButton").click(function() { $(this).datepicker("dialog", $("#dialog").val(), setDateFromDialog, {prompt: "Choose a date", duration: ""}) });' }
 				]
 			},
 
@@ -264,17 +274,34 @@
 
 			{
 				title: 'Animations',
-				desc: 'You can control how the datepicker appears - both its style and speed. The default is a medium speed animation expanding from the top-left (show).',
+				desc: 'You can control how the datepicker appears - both its style and duration. The default is a medium duration animation expanding from the top-left (show).',
 				html: '<input type="text" size="10" value="" id="anim"/>',
 				destroy: '$("#anim").datepicker("destroy");',
 
 				options: [
-					{	desc: 'Show at slow speed',	source: '$("#anim").datepicker({speed: "slow", showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' },
-					{	desc: 'Show at medium speed (default)',	source: '$("#anim").datepicker({speed: "normal", showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' },
-					{	desc: 'Show at fast speed',	source: '$("#anim").datepicker({speed: "fast", showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' },
-					{	desc: 'Show immediately',	source: '$("#anim").datepicker({speed: "", showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' },
-					{	desc: 'Fade in at medium speed',	source: '$("#anim").datepicker({showAnim: "fadeIn", showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' },
-					{	desc: 'Slide down at medium speed',	source: '$("#anim").datepicker({showAnim: "slideDown", showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' }
+					{	desc: 'Show at slow duration',	source: '$("#anim").datepicker({duration: "slow", showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' },
+					{	desc: 'Show at normal duration (default)',	source: '$("#anim").datepicker({duration: "normal", showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' },
+					{	desc: 'Show at fast duration',	source: '$("#anim").datepicker({duration: "fast", showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' },
+					{	desc: 'Show immediately',	source: '$("#anim").datepicker({duration: "", showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' },
+					{	desc: 'Fade in at normal duration',	source: '$("#anim").datepicker({showAnim: "fadeIn", showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' },
+					{	desc: 'Slide down at slow duration',	source: '$("#anim").datepicker({showAnim: "slideDown", duration: "slow", showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' },
+					{	desc: 'Blind horizontally',	source: '$("#anim").datepicker({showAnim: "blind", showOptions: {direction: "horizontal"}, showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' },
+					{	desc: 'Blind vertically',	source: '$("#anim").datepicker({showAnim: "blind", showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' },
+					{	desc: 'Clip horizontally',	source: '$("#anim").datepicker({showAnim: "clip", showOptions: {direction: "horizontal"}, showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' },
+					{	desc: 'Clip vertically',	source: '$("#anim").datepicker({showAnim: "clip", showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' },
+					{	desc: 'Drop up',	source: '$("#anim").datepicker({showAnim: "drop", showOptions: {direction: "up"}, showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' },
+					{	desc: 'Drop down',	source: '$("#anim").datepicker({showAnim: "drop", showOptions: {direction: "down"}, showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' },
+					{	desc: 'Drop left',	source: '$("#anim").datepicker({showAnim: "drop", showOptions: {direction: "left"}, showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' },
+					{	desc: 'Drop right',	source: '$("#anim").datepicker({showAnim: "drop", showOptions: {direction: "right"}, showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' },
+					{	desc: 'Explode (2 secs duration)',	source: '$("#anim").datepicker({showAnim: "explode", duration: 2000, showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' },
+					{	desc: 'Fold',	source: '$("#anim").datepicker({showAnim: "fold", showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' },
+					{	desc: 'Puff',	source: '$("#anim").datepicker({showAnim: "puff", showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' },
+					{	desc: 'Scale to center',	source: '$("#anim").datepicker({showAnim: "scale", showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' },
+					{	desc: 'Scale to top-left',	source: '$("#anim").datepicker({showAnim: "scale", showOptions: {origin: ["top", "left"]}, showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' },
+					{	desc: 'Slide up',	source: '$("#anim").datepicker({showAnim: "slide", showOptions: {direction: "up"}, showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' },
+					{	desc: 'Slide down',	source: '$("#anim").datepicker({showAnim: "slide", showOptions: {direction: "down"}, showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' },
+					{	desc: 'Slide left',	source: '$("#anim").datepicker({showAnim: "slide", showOptions: {direction: "left"}, showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' },
+					{	desc: 'Slide right',	source: '$("#anim").datepicker({showAnim: "slide", showOptions: {direction: "right"}, showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' }
 				]
 			},
 
