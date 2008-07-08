@@ -16,7 +16,7 @@ jQuery(function($){
 		dayNames: ['Söndag','Måndag','Tisdag','Onsdag','Torsdag','Fredag','Lördag'],
 		dayNamesMin: ['Sö','Må','Ti','On','To','Fr','Lö'],
 		dayStatus: 'DD', dateStatus: 'D, M d',
-        dateFormat: 'yy-mm-dd', firstDay: 0, 
+        dateFormat: 'yy-mm-dd', firstDay: 1, 
 		initStatus: '', isRTL: false};
     $.datepicker.setDefaults($.datepicker.regional['sv']); 
 });
