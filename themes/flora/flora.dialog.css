@@ -14,9 +14,14 @@
 	_height: 29px;
 }
 
-.flora .ui-dialog.ui-draggable .ui-dialog-titlebar,
-.flora.ui-dialog.ui-draggable .ui-dialog-titlebar {
+.flora .ui-draggable .ui-dialog-titlebar,
+.flora.ui-draggable .ui-dialog-titlebar {
 	cursor: move;
+}
+
+.flora .ui-draggable-disabled .ui-dialog-titlebar,
+.flora.ui-draggable-disabled .ui-dialog-titlebar {
+	cursor: default;
 }
 
 .flora .ui-dialog .ui-dialog-titlebar-close,
