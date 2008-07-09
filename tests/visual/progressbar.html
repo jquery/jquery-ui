@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Language" content="en" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>ProgressBar Test Page</title>
+<script type="text/javascript" src="../../jquery-1.2.6.js"></script>
+<script type="text/javascript" src="../../ui/ui.core.js"></script>
+<script type="text/javascript" src="../../ui/ui.resizable.js"></script>
+<script type="text/javascript" src="../../ui/ui.draggable.js"></script>
+<script type="text/javascript" src="../../ui/ui.progressbar.js"></script>
+
+<style type="text/css" media="all">
+
+body
+{
+	background: #fff;
+	font-family: Arial;
+}
+
+#log {
+	right:0px;
+	top:0px;
+	background-color:#FAFCFE;
+	border:1px solid #DFE8F6;
+	height:400px;
+	width:300px;
+	position:absolute;
+	overflow:auto;
+}
+
+/* ProgressBar */
+
+.ui-progressbar {
+	width: 400px; height: 20px;
+	border: 1px #ccc solid;
+	background:#E0E8F3 url(../images/bg.gif) repeat-x scroll 0%;
+	position:relative;
+}
+
+.ui-progressbar-wrap {
+	position: relative;
+	height: auto;
+	width: auto;
+	line-height: 18px;
+	_line-height: 16px;
+}
+
+.ui-progressbar-bar {
+	background:#9CBFEE url(../images/progress-bg.gif) repeat-x scroll left center;
+	border-bottom:1px solid #7FA9E4;
+	border-right:1px solid #7FA9E4;
+	border-top:1px solid #D1E4FD;
+	position: absolute;
+}
+
+.ui-progressbar-text {
+	color:#fff;
+	overflow: hidden;
+	white-space: nowrap;
+	font-size: 11px;
+	font-weight: bold;
+	padding-left: 5px;
+}
+
+.ui-progressbar-text-back {
+	color:#000;
+	padding-top: 1px;
+	padding-bottom: 1px;
+	padding-right: 1px;
+}
+
+.ui-progressbar-disabled {
+	opacity:.5;
+	filter:Alpha(Opacity=50);
+}
+
+
+/* custom */
+.ui-progressbar-text.right-align {
+	text-align: right;
+	padding: 0 5px 0 0;
+}
+.ui-progressbar-inner-custom {
+	background: url(../images/custom-bar.gif) repeat-x scroll left center;
+	border-bottom:1px solid #EFEFEF;
+	border-right:0pt none;
+	border-top:1px solid #BEBEBE;
+	height:15px;
+}
+
+.ui-hidden {
+	left:-10000px;
+	position:absolute;
+	top:-10000px;
+	visibility:hidden;
+}
+
+</style>
+</head>
+<body >
+
+<h1>jQuery - ProgressBar</h1>
+
+<div id="log">log</div>
+
+
+<div id='p1'></div><br>
+
+<button id="p1-create">Create</button>
+<button id="p1-destroy" onclick="$('#p1').progressbar('destroy');">destroy</button>
+<button id="p1-start" onclick="$('#p1').progressbar('start');">Start</button>
+<button id="p1-stop" onclick="$('#p1').progressbar('stop');">Stop</button>
+<button id="p1-pause" onclick="$('#p1').progressbar('reset');">reset</button>
+<button id="p1-enable" onclick="$('#p1').progressbar('enable');">enable</button>
+<button id="p1-disable" onclick="$('#p1').progressbar('disable');">disable</button>
+<button id="p1-progress" onclick="$('#p1').progressbar('progress', 50);">progress to 50</button>
+<button id="p1-progress" onclick="$('#p1').progressbar('text', 'Textchanged!');">Change text</button>
+
+<br><br>
+
+<div id='p2'></div><br>
+
+<button id="p2-create">Create</button>
+<button id="p2-destroy" onclick="$('#p2').progressbar('destroy');">destroy</button>
+<button id="p2-start" onclick="$('#p2').progressbar('start');">Start</button>
+<button id="p2-stop" onclick="$('#p2').progressbar('stop');">Stop</button>
+<button id="p2-pause" onclick="$('#p2').progressbar('reset');">reset</button>
+<button id="p2-enable" onclick="$('#p2').progressbar('enable');">enable</button>
+<button id="p2-disable" onclick="$('#p2').progressbar('disable');">disable</button>
+<button id="p2-progress" onclick="$('#p2').progressbar('progress', 40);">progress to 50</button>
+
+<br><br>
+
+<div id='p3'></div><br>
+
+<button id="p3-create">Create</button>
+<button id="p3-destroy" onclick="$('#p3').progressbar('destroy');">destroy</button>
+<button id="p3-start" onclick="$('#p3').progressbar('start');">Start</button>
+<button id="p3-stop" onclick="$('#p3').progressbar('stop');">Stop</button>
+<button id="p3-pause" onclick="$('#p3').progressbar('reset');">reset</button>
+<button id="p3-enable" onclick="$('#p3').progressbar('enable');">enable</button>
+<button id="p3-disable" onclick="$('#p3').progressbar('disable');">disable</button>
+<button id="p3-progress" onclick="$('#p3').progressbar('progress', $('#p3-value').val());">progress to</button>
+<input type="text" id="p3-value" value="35"/>
+
+<br><br>
+
+<button id="p2-startall" onclick="$('#p2, #p1, #p3').progressbar('start');">Start All</button>
+<button id="p2-stopall" onclick="$('#p2, #p1, #p3').progressbar('stop');">Stop All</button>
+<button id="p2-stopall" onclick="$('#p2, #p1, #p3').progressbar('reset');">Reset All</button>
+
+<script>
+
+$(function() {
+		
+	$('#p1-create').click(function() {
+		
+		$('#p1').progressbar({
+			
+			text: 'jQuery ProgressBar waiting...',
+			
+			//addClass: 'ui-progressbar-inner-custom teste',
+			
+			//textClass: 'right-align',
+			
+			//align: 'right',
+			
+			wait: 'loop',
+			
+      duration: 2000,
+			
+      stepping: 3,
+			
+			progress: function(range, ui) {
+				//console.log(ui.pixelRange);
+				//console.log(range);
+				//ui.instance.text('Waiting...');
+			},
+			
+			stop: function(s, ui) {
+				//console.log('stop:' + ui.instance.inprogress);
+			},
+			
+			start: function() {
+				console.log('user start');
+			}
+			
+		});
+		
+	}).trigger("click");
+	
+	
+	$('#p2-create').click(function() {
+		
+		$('#p2').progressbar({
+			
+			range: true,
+			
+			wait: 2000,
+			
+      duration:1000,
+			
+      stepping: 5,
+			
+			progress: function(range, ui) {
+				//console.log(ui.pixelRange);
+				//console.log(range);
+			},
+			
+			stop: function(s, ui) {
+				//console.log('stop:' + ui.instance.inprogress);
+			},
+			
+			start: function() {
+				//console.log('user start');
+			}
+			
+		});
+		
+	}).trigger("click");
+	
+	
+	$('#p3-create').click(function() { $('#p3').progressbar({
+		
+		duration: 2000,
+		
+		stepping: 30,
+		
+		stop: function(s, ui) {
+				console.log('stop:' + ui.instance.inProgress);
+		},
+		progress: function(range, ui) {
+			//console.log(ui.pixelRange);
+			//console.log(range);
+		},
+		start: function() {
+			console.log('user start');
+		}
+	}); }).trigger('click');
+	
+});
+
+if(!window.console) {
+ window.console = {
+ 	log: function() {
+ 		$('#log').append(arguments[0]+"<br>");
+		$('#log').scrollTop(999999);	
+ 	}	
+ };	
+}
+
+</script>
+</body>
+</html>

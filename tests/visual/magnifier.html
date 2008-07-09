@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Language" content="en" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Magnifier Demo</title>
+
+<style type="text/css">
+
+body,html {
+	margin: 0;
+	padding: 0;
+	font-family: Arial;
+	font-size: 12px;
+}
+
+div.playground {
+	height: 150px;
+}
+
+#example1 img,
+#example2 img,
+#example3 img,
+#example4 img {
+	float:left;
+}
+
+</style>
+<script type="text/javascript" src="../../jquery-1.2.6.js"></script>
+<script type="text/javascript" src="../../ui/ui.core.js"></script>
+<script type="text/javascript" src="../../ui/ui.magnifier.js"></script>
+
+
+</head>
+<body>
+
+<h2>1. Default, no options</h2>
+<div class="playground">
+	<div id='example1' class="ui-wrapper example" style="width: 580px; padding: 20px;">
+		<img src="../images/clock.png" width="48" alt="" />
+		<img src="../images/clock.png" width="48" alt="" />
+		<img src="../images/clock.png" width="48" alt="" />
+		<img src="../images/clock.png" width="48" alt="" />
+		<img src="../images/clock.png" width="48" alt="" />
+		<img src="../images/clock.png" width="48" alt="" />
+	</div>
+</div>
+
+<h2>2. Magnification set to 1.5 (default: 2)</h2>
+<div class="playground">
+	<div id='example2' class="ui-wrapper example" style="width: 580px; padding: 20px;">
+		<img src="../images/clock.png" width="48" alt="" />
+		<img src="../images/clock.png" width="48" alt="" />
+		<img src="../images/clock.png" width="48" alt="" />
+		<img src="../images/clock.png" width="48" alt="" />
+		<img src="../images/clock.png" width="48" alt="" />
+		<img src="../images/clock.png" width="48" alt="" />
+	</div>
+</div>
+
+<h2>3. Advanced example: overlap: true, zIndex: 10, opacity: { min: 0.6, max: 1 }, baseline: -1</h2>
+<div class="playground">
+	<div id='example3' class="ui-wrapper example" style="width: 580px; padding: 20px;">
+		<img src="../images/clock.png" width="48" alt="" />
+		<img src="../images/clock.png" width="48" alt="" />
+		<img src="../images/clock.png" width="48" alt="" />
+		<img src="../images/clock.png" width="48" alt="" />
+		<img src="../images/clock.png" width="48" alt="" />
+		<img src="../images/clock.png" width="48" alt="" />
+	</div>
+</div>
+
+<h2>4. Advanced example: The direction doesn't have to be horizontal!</h2>
+<div class="playground">
+	<div id='example4' class="ui-wrapper example" style="width: 150px; padding: 20px; height: 150px;">
+		<img src="../images/clock.png" width="48" alt="" />
+		<img src="../images/clock.png" width="48" alt="" />
+		<img src="../images/clock.png" width="48" alt="" />
+		<img src="../images/clock.png" width="48" alt="" />
+		<img src="../images/clock.png" width="48" alt="" />
+		<img src="../images/clock.png" width="48" alt="" />
+		<img src="../images/clock.png" width="48" alt="" />
+		<img src="../images/clock.png" width="48" alt="" />
+		<img src="../images/clock.png" width="48" alt="" />
+	</div>
+</div>
+
+<script type="text/javascript">
+if(!window.console) {
+ window.console = {
+ 	log: function() {
+ 		alert(arguments[0]);	
+ 	}	
+ }	
+}
+
+$(window).bind("load",function(){
+
+	$('#example1').magnifier();
+	$('#example2').magnifier({ magnification: 1.5 });
+	$('#example3').magnifier({ magnification: 1.5, overlap: true, zIndex: 10, opacity: { min: 0.6, max: 1 }, baseline: -1  });
+	$('#example4').magnifier({ magnification: 1.5, overlap: true, zIndex: 10, opacity: { min: 0.6, max: 1 }, distance: 30  });
+
+});
+</script>
+</body>
+</html>
