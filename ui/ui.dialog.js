@@ -40,9 +40,13 @@ $.widget("ui.dialog", {
 				.wrap('<div/>')
 				.wrap('<div/>'),
 			
-			uiDialogContainer = (this.uiDialogContainer = uiDialogContent.parent()
+			uiDialogContainer = (this.uiDialogContainer = uiDialogContent.parent())
 				.addClass('ui-dialog-container')
-				.css({position: 'relative', width: '100%', height: '100%'})),
+				.css({
+					position: 'relative',
+					width: '100%',
+					height: '100%'
+				}),
 			
 			title = options.title || uiDialogContent.attr('title') || '',
 			uiDialogTitlebar = (this.uiDialogTitlebar =
@@ -80,7 +84,11 @@ $.widget("ui.dialog", {
 				}),
 			
 			uiDialogButtonPane = (this.uiDialogButtonPane = $('<div/>'))
-				.addClass('ui-dialog-buttonpane').css({ position: 'absolute', bottom: 0 })
+				.addClass('ui-dialog-buttonpane')
+				.css({
+					position: 'absolute',
+					bottom: 0
+				})
 				.appendTo(uiDialog);
 		
 		this.uiDialogTitlebarClose = $('.ui-dialog-titlebar-close', uiDialogTitlebar)
@@ -99,8 +107,8 @@ $.widget("ui.dialog", {
 				self.close();
 				return false;
 			});
-
-		this.uiDialogTitlebar.find("*").add(this.uiDialogTitlebar).each(function() {
+		
+		uiDialogTitlebar.find("*").add(uiDialogTitlebar).each(function() {
 			$.ui.disableSelection(this);
 		});
 
@@ -109,14 +117,14 @@ $.widget("ui.dialog", {
 				cancel: '.ui-dialog-content',
 				helper: options.dragHelper,
 				handle: '.ui-dialog-titlebar',
-				start: function(e, ui) {
+				start: function() {
 					self.moveToTop();
 					(options.dragStart && options.dragStart.apply(self.element[0], arguments));
 				},
-				drag: function(e, ui) {
+				drag: function() {
 					(options.drag && options.drag.apply(self.element[0], arguments));
 				},
-				stop: function(e, ui) {
+				stop: function() {
 					(options.dragStop && options.dragStop.apply(self.element[0], arguments));
 					$.ui.dialog.overlay.resize();
 				}
@@ -135,12 +143,12 @@ $.widget("ui.dialog", {
 				start: function() {
 					(options.resizeStart && options.resizeStart.apply(self.element[0], arguments));
 				},
-				resize: function(e, ui) {
+				resize: function() {
 					(options.autoResize && self.size.apply(self));
 					(options.resize && options.resize.apply(self.element[0], arguments));
 				},
 				handles: resizeHandles,
-				stop: function(e, ui) {
+				stop: function() {
 					(options.autoResize && self.size.apply(self));
 					(options.resizeStop && options.resizeStop.apply(self.element[0], arguments));
 					$.ui.dialog.overlay.resize();
@@ -241,8 +249,10 @@ $.widget("ui.dialog", {
 		var container = this.uiDialogContainer,
 			titlebar = this.uiDialogTitlebar,
 			content = this.element,
-			tbMargin = parseInt(content.css('margin-top'),10) + parseInt(content.css('margin-bottom'),10),
-			lrMargin = parseInt(content.css('margin-left'),10) + parseInt(content.css('margin-right'),10);
+			tbMargin = parseInt(content.css('margin-top'), 10)
+				+ parseInt(content.css('margin-bottom'), 10),
+			lrMargin = parseInt(content.css('margin-left'), 10)
+				+ parseInt(content.css('margin-right'), 10);
 		content.height(container.height() - titlebar.outerHeight() - tbMargin);
 		content.width(container.width() - lrMargin);
 	},
@@ -251,10 +261,10 @@ $.widget("ui.dialog", {
 		if (this.isOpen) { return; }
 		
 		this.overlay = this.options.modal ? new $.ui.dialog.overlay(this) : null;
-		(this.uiDialog.next().length > 0) && this.uiDialog.appendTo('body');
+		(this.uiDialog.next().length && this.uiDialog.appendTo('body'));
 		this.position(this.options.position);
 		this.uiDialog.show(this.options.show);
-		this.options.autoResize && this.size();
+		(this.options.autoResize && this.size());
 		this.moveToTop(true);
 		
 		// CALLBACK: open
@@ -272,7 +282,9 @@ $.widget("ui.dialog", {
 	// position on open
 	moveToTop: function(force) {
 		if ((this.options.modal && !force)
-			|| (!this.options.stack && !this.options.modal)) { return this.element.triggerHandler("dialogfocus", [null, { options: this.options }], this.options.focus); }
+			|| (!this.options.stack && !this.options.modal)) {
+			return this.element.triggerHandler("dialogfocus", [null, { options: this.options }], this.options.focus);
+		}
 		
 		var maxZ = this.options.zIndex, options = this.options;
 		$('.ui-dialog:visible').each(function() {
