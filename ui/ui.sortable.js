@@ -92,7 +92,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 		var l = item.left, r = l + item.width, 
 		t = item.top, b = t + item.height;
 
-		if(this.options.tolerance == "pointer" || (this.options.tolerance == "guess" && this.helperProportions[this.floating ? 'width' : 'height'] > item[this.floating ? 'width' : 'height'])) {
+		if(this.options.tolerance == "pointer" || this.options.forcePointerForContainers || (this.options.tolerance == "guess" && this.helperProportions[this.floating ? 'width' : 'height'] > item[this.floating ? 'width' : 'height'])) {
 			return (y1 + this.offset.click.top > t && y1 + this.offset.click.top < b && x1 + this.offset.click.left > l && x1 + this.offset.click.left < r);
 		} else {
 		
@@ -206,15 +206,19 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 			this.items[i].top = p.top;
 			
 		};
-		
-		for (var i = this.containers.length - 1; i >= 0; i--){
-			var p =this.containers[i].element.offset();
-			this.containers[i].containerCache.left = p.left;
-			this.containers[i].containerCache.top = p.top;
-			this.containers[i].containerCache.width	= this.containers[i].element.outerWidth();
-			this.containers[i].containerCache.height = this.containers[i].element.outerHeight();
-		};
-		
+
+		if(this.options.custom && this.options.custom.refreshContainers) {
+			this.options.custom.refreshContainers.call(this);
+		} else {
+			for (var i = this.containers.length - 1; i >= 0; i--){
+				var p =this.containers[i].element.offset();
+				this.containers[i].containerCache.left = p.left;
+				this.containers[i].containerCache.top = p.top;
+				this.containers[i].containerCache.width	= this.containers[i].element.outerWidth();
+				this.containers[i].containerCache.height = this.containers[i].element.outerHeight();
+			};
+		}
+
 	},
 	destroy: function() {
 		this.element
