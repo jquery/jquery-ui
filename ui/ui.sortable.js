@@ -86,21 +86,18 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 	},
 	/* Be careful with the following core functions */
 	intersectsWith: function(item) {
-		
 		var x1 = this.positionAbs.left, x2 = x1 + this.helperProportions.width,
 		y1 = this.positionAbs.top, y2 = y1 + this.helperProportions.height;
 		var l = item.left, r = l + item.width, 
 		t = item.top, b = t + item.height;
 
-		if(this.options.tolerance == "pointer" || this.options.forcePointerForContainers || (this.options.tolerance == "guess" && this.helperProportions[this.floating ? 'width' : 'height'] > item[this.floating ? 'width' : 'height'])) {
+		if (this.options.tolerance == "pointer" || this.options.forcePointerForContainers || (this.options.tolerance == "guess" && this.helperProportions[this.floating ? 'width' : 'height'] > item[this.floating ? 'width' : 'height'])) {
 			return (y1 + this.offset.click.top > t && y1 + this.offset.click.top < b && x1 + this.offset.click.left > l && x1 + this.offset.click.left < r);
 		} else {
-		
 			return (l < x1 + (this.helperProportions.width / 2) // Right Half
 				&& x2 - (this.helperProportions.width / 2) < r // Left Half
 				&& t < y1 + (this.helperProportions.height / 2) // Bottom Half
 				&& y2 - (this.helperProportions.height / 2) < b ); // Top Half
-		
 		}
 		
 	},
@@ -111,17 +108,17 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 			t = item.top, b = t + item.height;
 
 		if(this.options.tolerance == "pointer" || (this.options.tolerance == "guess" && this.helperProportions[this.floating ? 'width' : 'height'] > item[this.floating ? 'width' : 'height'])) {
-
+			
 			if(!(y1 + this.offset.click.top > t && y1 + this.offset.click.top < b && x1 + this.offset.click.left > l && x1 + this.offset.click.left < r)) return false;
 			
 			if(this.floating) {
 				if(x1 + this.offset.click.left > l && x1 + this.offset.click.left < l + item.width/2) return 2;
 				if(x1 + this.offset.click.left > l+item.width/2 && x1 + this.offset.click.left < r) return 1;
 			} else {
-				if(y1 + this.offset.click.top > t && y1 + this.offset.click.top < t + item.height/2) return 2;
-				if(y1 + this.offset.click.top > t+item.height/2 && y1 + this.offset.click.top < b) return 1;
+				if(y1 + this.offset.click.top > t && y1 + this.offset.click.top < t) return 2;
+				if(y1 + this.offset.click.top > t && y1 + this.offset.click.top < b) return 1;
 			}
-
+			
 		} else {
 		
 			if (!(l < x1 + (this.helperProportions.width / 2) // Right Half
