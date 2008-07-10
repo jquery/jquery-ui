@@ -158,9 +158,10 @@ $.widget("ui.slider", {
 	
 	keydown: function(keyCode, handle) {
 		if(/(37|38|39|40)/.test(keyCode)) {
+			var oper = /(37|40)/.test(keyCode) ? "-=" : "+=";
 			this.moveTo({
-				x: /(37|39)/.test(keyCode) ? (keyCode == 37 ? '-' : '+') + '=' + this.oneStep("x") : 0,
-				y: /(38|40)/.test(keyCode) ? (keyCode == 38 ? '-' : '+') + '=' + this.oneStep("y") : 0
+				x: oper + this.oneStep("x"),
+				y: oper + this.oneStep("y")
 			}, handle);
 		}
 	},
