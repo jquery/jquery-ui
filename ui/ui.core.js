@@ -158,7 +158,7 @@ $.widget.prototype = {
 		var eventName = (type == this.widgetEventPrefix
 			? type : this.widgetEventPrefix + type);
 		e = e  || $.event.fix({ type: eventName, target: this.element[0] });
-		this.element.triggerHandler(eventName, [e, data], this.options[type]);
+		return this.element.triggerHandler(eventName, [e, data], this.options[type]);
 	}
 };
 
