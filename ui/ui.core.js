@@ -108,6 +108,7 @@ $.widget = function(name, prototype) {
 		var self = this;
 		
 		this.widgetName = name;
+		this.widgetEventPrefix = $[namespace][name].eventPrefix || name;
 		this.widgetBaseClass = namespace + '-' + name;
 		
 		this.options = $.extend({}, $.widget.defaults, $[namespace][name].defaults, options);
@@ -151,6 +152,13 @@ $.widget.prototype = {
 	},
 	disable: function() {
 		this.setData('disabled', true);
+	},
+	
+	trigger: function(type, e, data) {
+		var eventName = (type == this.widgetEventPrefix
+			? type : this.widgetEventPrefix + type);
+		e = e  || $.event.fix({ type: eventName, target: this.element[0] });
+		this.element.triggerHandler(eventName, [e, data], this.options[type]);
 	}
 };
 
