@@ -16,11 +16,17 @@ $.widget("ui.draggable", $.extend({}, $.ui.mouse, {
 	init: function() {
 		
 		//Initialize needed constants
-		var o = this.options;
+		var o = this.options, positioned = /^(?:r|a|f)/, element = this.element[0];
+		
+		if (!this.element.length)
+			return false;
 
+		var style = element.style || {}, 
+			position = style.position || "static"; 
+		
 		//Position the node
-		if (o.helper == 'original' && !(/(relative|absolute|fixed)/).test(this.element.css('position')))
-			this.element.css('position', 'relative');
+		if (o.helper == 'original' && !positioned.test(position))
+			style.position = 'relative';
 
 		this.element.addClass('ui-draggable');
 		(o.disabled && this.element.addClass('ui-draggable-disabled'));
