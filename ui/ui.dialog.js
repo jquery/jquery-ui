@@ -267,14 +267,7 @@ $.widget("ui.dialog", {
 		(this.options.autoResize && this.size());
 		this.moveToTop(true);
 		
-		// CALLBACK: open
-		var openEV = this.fakeEvent('dialogopen');
-		var openUI = {
-			options: this.options
-		};
-		this.uiDialogTitlebarClose.focus();
-		this.element.triggerHandler("dialogopen", [openEV, openUI], this.options.open);
-		
+		this.trigger('open', null, { options: this.options });
 		this.isOpen = true;
 	},
 	
@@ -284,9 +277,7 @@ $.widget("ui.dialog", {
 		
 		if ((this.options.modal && !force)
 			|| (!this.options.stack && !this.options.modal)) {
-			return this.element.triggerHandler("dialogfocus",
-				[this.fakeEvent('dialogfocus'), { options: this.options }],
-				this.options.focus);
+			return this.trigger('focus', null, { options: this.options });
 		}
 		
 		var maxZ = this.options.zIndex, options = this.options;
@@ -296,21 +287,14 @@ $.widget("ui.dialog", {
 		(this.overlay && this.overlay.$el.css('z-index', ++maxZ));
 		this.uiDialog.css('z-index', ++maxZ);
 		
-		this.element.triggerHandler("dialogfocus",
-			[this.fakeEvent('dialogfocus'), { options: this.options }],
-			this.options.focus);
+		this.trigger('focus', null, { options: this.options });
 	},
 	
 	close: function() {
 		(this.overlay && this.overlay.destroy());
 		this.uiDialog.hide(this.options.hide);
-
-		// CALLBACK: close
-		var closeEV = this.fakeEvent('dialogclose');
-		var closeUI = {
-			options: this.options
-		};
-		this.element.triggerHandler("dialogclose", [closeEV, closeUI], this.options.close);
+		
+		this.trigger('close', null, { options: this.options });
 		$.ui.dialog.overlay.resize();
 		
 		this.isOpen = false;
