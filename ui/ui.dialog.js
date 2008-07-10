@@ -268,7 +268,7 @@ $.widget("ui.dialog", {
 		this.moveToTop(true);
 		
 		// CALLBACK: open
-		var openEV = null;
+		var openEV = this.fakeEvent('dialogopen');
 		var openUI = {
 			options: this.options
 		};
@@ -281,9 +281,12 @@ $.widget("ui.dialog", {
 	// the force parameter allows us to move modal dialogs to their correct
 	// position on open
 	moveToTop: function(force) {
+		
 		if ((this.options.modal && !force)
 			|| (!this.options.stack && !this.options.modal)) {
-			return this.element.triggerHandler("dialogfocus", [null, { options: this.options }], this.options.focus);
+			return this.element.triggerHandler("dialogfocus",
+				[this.fakeEvent('dialogfocus'), { options: this.options }],
+				this.options.focus);
 		}
 		
 		var maxZ = this.options.zIndex, options = this.options;
@@ -293,7 +296,9 @@ $.widget("ui.dialog", {
 		(this.overlay && this.overlay.$el.css('z-index', ++maxZ));
 		this.uiDialog.css('z-index', ++maxZ);
 		
-		this.element.triggerHandler("dialogfocus", [null, { options: this.options }], this.options.focus);
+		this.element.triggerHandler("dialogfocus",
+			[this.fakeEvent('dialogfocus'), { options: this.options }],
+			this.options.focus);
 	},
 	
 	close: function() {
@@ -301,7 +306,7 @@ $.widget("ui.dialog", {
 		this.uiDialog.hide(this.options.hide);
 
 		// CALLBACK: close
-		var closeEV = null;
+		var closeEV = this.fakeEvent('dialogclose');
 		var closeUI = {
 			options: this.options
 		};
@@ -340,6 +345,13 @@ $.widget("ui.dialog", {
 					.appendTo(uiDialogButtonPane);
 			});
 		}
+	},
+	
+	fakeEvent: function(type) {
+		return $.event.fix({
+			type: type,
+			target: this.element[0]
+		});
 	}
 });
 
