@@ -123,7 +123,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 				if ((x1 + dxClick) > l + item.width/2 && (x1 + dxClick) < r) return 1;
 			} else {
 				var height = item.height, helperHeight = this.helperProportions.height;
-				var direction = y1 - this.originalPosition.top < 0 ? 2 : 1; // 2 = up
+				var direction = y1 - this.updateOriginalPosition.top < 0 ? 2 : 1; // 2 = up
 				
 				if (direction == 1 && (y1 + dyClick) < t + height/2) { return 2; } // up
 				else if (direction == 2 && (y1 + dyClick) > t + height/2) { return 1; } // down
@@ -377,7 +377,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 			left: po.left + this.offsetParentBorders.left
 		};
 	
-		this.originalPosition = this.generatePosition(e);												//Generate the original position
+		this.updateOriginalPosition = this.originalPosition = this.generatePosition(e);				//Generate the original position
 		this.domPosition = { prev: this.currentItem.prev()[0], parent: this.currentItem.parent()[0] };  //Cache the former DOM position
 		
 		//If o.placeholder is used, create a new element at the given position with the class
@@ -531,6 +531,8 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 				&&	!contains(this.placeholder[0], this.items[i].item[0]) //no action if the item moved is the parent of the item checked
 				&& (this.options.type == 'semi-dynamic' ? !contains(this.element[0], this.items[i].item[0]) : true)
 			) {
+				
+				this.updateOriginalPosition = this.generatePosition(e);
 				
 				this.direction = intersection == 1 ? "down" : "up";
 				this.options.sortIndicator.call(this, e, this.items[i]);
