@@ -90,37 +90,46 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 		y1 = this.positionAbs.top, y2 = y1 + this.helperProportions.height;
 		var l = item.left, r = l + item.width, 
 		t = item.top, b = t + item.height;
-
-		if (this.options.tolerance == "pointer" || this.options.forcePointerForContainers || (this.options.tolerance == "guess" && this.helperProportions[this.floating ? 'width' : 'height'] > item[this.floating ? 'width' : 'height'])) {
-			return (y1 + this.offset.click.top > t && y1 + this.offset.click.top < b && x1 + this.offset.click.left > l && x1 + this.offset.click.left < r);
+		
+		var dyClick = this.offset.click.top, dxClick = this.offset.click.left;
+		var isOverElement = (y1 + dyClick) > t && (y1 + dyClick) < b && (x1 + dxClick) > l && (x1 + dxClick) < r;
+		
+		if(this.options.tolerance == "pointer" || this.options.forcePointerForContainers || (this.options.tolerance == "guess" && this.helperProportions[this.floating ? 'width' : 'height'] > item[this.floating ? 'width' : 'height'])) {
+			return isOverElement;
 		} else {
+		
 			return (l < x1 + (this.helperProportions.width / 2) // Right Half
 				&& x2 - (this.helperProportions.width / 2) < r // Left Half
 				&& t < y1 + (this.helperProportions.height / 2) // Bottom Half
 				&& y2 - (this.helperProportions.height / 2) < b ); // Top Half
-		}
 		
+		}
 	},
 	intersectsWithEdge: function(item) {	
 		var x1 = this.positionAbs.left, x2 = x1 + this.helperProportions.width,
 			y1 = this.positionAbs.top, y2 = y1 + this.helperProportions.height;
+		
 		var l = item.left, r = l + item.width, 
 			t = item.top, b = t + item.height;
-
-		if(this.options.tolerance == "pointer" || (this.options.tolerance == "guess" && this.helperProportions[this.floating ? 'width' : 'height'] > item[this.floating ? 'width' : 'height'])) {
-			
-			if(!(y1 + this.offset.click.top > t && y1 + this.offset.click.top < b && x1 + this.offset.click.left > l && x1 + this.offset.click.left < r)) return false;
-			
-			if(this.floating) {
-				if(x1 + this.offset.click.left > l && x1 + this.offset.click.left < l + item.width/2) return 2;
-				if(x1 + this.offset.click.left > l+item.width/2 && x1 + this.offset.click.left < r) return 1;
-			} else {
-				if(y1 + this.offset.click.top > t && y1 + this.offset.click.top < t) return 2;
-				if(y1 + this.offset.click.top > t && y1 + this.offset.click.top < b) return 1;
-			}
-			
-		} else {
 		
+		var dyClick = this.offset.click.top, dxClick = this.offset.click.left;
+		var isOverElement = (y1 + dyClick) > t && (y1 + dyClick) < b && (x1 + dxClick) > l && (x1 + dxClick) < r;
+		
+		if(this.options.tolerance == "pointer" || (this.options.tolerance == "guess" && this.helperProportions[this.floating ? 'width' : 'height'] > item[this.floating ? 'width' : 'height'])) {
+			if(!isOverElement) return false;
+
+			if(this.floating) {
+				if ((x1 + dxClick) > l && (x1 + dxClick) < l + item.width/2) return 2;
+				if ((x1 + dxClick) > l + item.width/2 && (x1 + dxClick) < r) return 1;
+			} else {
+				var height = item.height, helperHeight = this.helperProportions.height;
+				var direction = y1 - this.originalPosition.top < 0 ? 2 : 1; // 2 = up
+				
+				if (direction == 1 && (y1 + dyClick) < t + height/2) { return 2; } // up
+				else if (direction == 2 && (y1 + dyClick) > t + height/2) { return 1; } // down
+			}
+
+		} else {
 			if (!(l < x1 + (this.helperProportions.width / 2) // Right Half
 				&& x2 - (this.helperProportions.width / 2) < r // Left Half
 				&& t < y1 + (this.helperProportions.height / 2) // Bottom Half
@@ -133,7 +142,6 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 				if(y2 > t && y1 < t) return 1; //Crosses top edge
 				if(y1 < b && y2 > b) return 2; //Crosses bottom edge
 			}
-		
 		}
 		
 		return false;
