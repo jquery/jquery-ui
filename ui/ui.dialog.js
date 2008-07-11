@@ -48,7 +48,7 @@ $.widget("ui.dialog", {
 					height: '100%'
 				}),
 			
-			title = options.title || uiDialogContent.attr('title') || '',
+			title = options.title || uiDialogContent.attr('title') || '&nbsp;',
 			uiDialogTitlebar = (this.uiDialogTitlebar =
 				$('<div class="ui-dialog-titlebar"/>'))
 				.append('<span class="ui-dialog-title">' + title + '</span>')
