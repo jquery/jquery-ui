@@ -53,9 +53,17 @@ $.ui = {
 		$(el).attr('unselectable', 'off').css('MozUserSelect', '');
 	},
 	hasScroll: function(e, a) {
-		var scroll = /top/.test(a||"top") ? 'scrollTop' : 'scrollLeft', has = false;
-		if (e[scroll] > 0) return true; e[scroll] = 1;
-		has = e[scroll] > 0 ? true : false; e[scroll] = 0;
+		var scroll = (a && a == 'left') ? 'scrollLeft' : 'scrollTop',
+			has = false;
+		
+		if (e[scroll] > 0) { return true; }
+		
+		// TODO: determine which cases actually cause this to happen
+		// if the element doesn't have the scroll set, see if it's possible to
+		// set the scroll
+		e[scroll] = 1;
+		has = (e[scroll] > 0);
+		e[scroll] = 0;
 		return has;
 	}
 };
