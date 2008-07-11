@@ -244,15 +244,15 @@ $.widget("ui.dialog", {
 		pTop = Math.max(pTop, minTop);
 		this.uiDialog.css({top: pTop, left: pLeft});
 	},
-
+	
 	size: function() {
 		var container = this.uiDialogContainer,
 			titlebar = this.uiDialogTitlebar,
 			content = this.element,
-			tbMargin = parseInt(content.css('margin-top'), 10)
-				+ parseInt(content.css('margin-bottom'), 10),
-			lrMargin = parseInt(content.css('margin-left'), 10)
-				+ parseInt(content.css('margin-right'), 10);
+			tbMargin = (parseInt(content.css('margin-top'), 10) || 0)
+				+ (parseInt(content.css('margin-bottom'), 10) || 0),
+			lrMargin = (parseInt(content.css('margin-left'), 10) || 0)
+				+ (parseInt(content.css('margin-right'), 10) || 0);
 		content.height(container.height() - titlebar.outerHeight() - tbMargin);
 		content.width(container.width() - lrMargin);
 	},
