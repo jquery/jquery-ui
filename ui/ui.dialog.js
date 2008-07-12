@@ -184,7 +184,7 @@ $.widget("ui.dialog", {
 				this.uiDialog.resizable(value ? 'enable' : 'disable');
 				break;
 			case "title":
-				$(".ui-dialog-title", this.uiDialogTitlebar).text(value);
+				$(".ui-dialog-title", this.uiDialogTitlebar).html(value || '&nbsp;');
 				break;
 			case "width":
 				this.uiDialog.width(value);

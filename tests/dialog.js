@@ -376,9 +376,9 @@ test("stack", function() {
 test("title", function() {
 	expect(4);
 	function titleText() {
-		return dlg().find(".ui-dialog-title").text();
+		return dlg().find(".ui-dialog-title").html();
 	}
-	el = $('<div/>').dialog(); equals(titleText(), "", "[default]"); el.remove();
+	el = $('<div/>').dialog(); equals(titleText(), "&nbsp;", "[default]"); el.remove();
 	el = $('<div title="foo"/>').dialog(); equals(titleText(), "foo", "title in element attribute"); el.remove();
 	el = $('<div/>').dialog({ title: 'foo' }); equals(titleText(), "foo", "title in init options"); el.remove();
 	el = $('<div title="foo"/>').dialog({ title: 'bar' }); equals(titleText(), "bar", "title in init options should override title in element attribute"); el.remove();
