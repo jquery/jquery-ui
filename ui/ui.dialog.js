@@ -29,6 +29,8 @@ var setDataSwitch = {
 
 $.widget("ui.dialog", {
 	init: function() {
+		this.options.title = this.options.title || this.element.attr('title');
+		
 		var self = this,
 			options = this.options,
 			resizeHandles = typeof options.resizable == 'string'
@@ -48,7 +50,7 @@ $.widget("ui.dialog", {
 					height: '100%'
 				}),
 			
-			title = options.title || uiDialogContent.attr('title') || '&nbsp;',
+			title = options.title || '&nbsp;',
 			uiDialogTitlebar = (this.uiDialogTitlebar =
 				$('<div class="ui-dialog-titlebar"/>'))
 				.append('<span class="ui-dialog-title">' + title + '</span>')
