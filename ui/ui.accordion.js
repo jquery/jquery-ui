@@ -201,12 +201,11 @@ function clickHandler(event) {
 	// find elements to show and hide
 	var toShow = clicked.next(),
 		toHide = options.active.next(),
-		//data = [clicked, options.active, toShow, toHide],
 		data = {
 			options: options,
-			newHeader: clicked,
+			newHeader: clickedActive && !options.alwaysOpen ? $([]) : clicked,
 			oldHeader: options.active,
-			newContent: toShow,
+			newContent: clickedActive && !options.alwaysOpen ? $([]) : toShow,
 			oldContent: toHide
 		},
 		down = options.headers.index( options.active[0] ) > options.headers.index( clicked[0] );
@@ -218,7 +217,7 @@ function clickHandler(event) {
 };
 
 function findActive(headers, selector) {
-	return selector != undefined
+	return selector
 		? typeof selector == "number"
 			? headers.filter(":eq(" + selector + ")")
 			: headers.not(headers.not(selector))

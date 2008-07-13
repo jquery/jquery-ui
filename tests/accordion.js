@@ -99,4 +99,34 @@ test("handle click on header-descendant", function() {
 	state2(ac, 0, 1, 0);
 });
 
+test("active:false", function() {
+	$("#list1").accordion({
+		active: false,
+		alwaysOpen: false
+	});
+	equals( $("#list1 a.selected").size(), 0, "no headers selected" );
+});
+
+test("accordionchange event, open closed and close again", function() {
+	expect(8);
+	$("#list1").accordion({
+		active: false,
+		alwaysOpen: false
+	})
+	.one("accordionchange", function(event, ui) {
+		equals( ui.oldHeader.size(), 0 )
+		equals( ui.oldContent.size(), 0 )
+		equals( ui.newHeader.size(), 1 )
+		equals( ui.newContent.size(), 1 )
+	})
+	.accordion("activate", 0)
+	.one("accordionchange", function(event, ui) {
+		equals( ui.oldHeader.size(), 1 )
+		equals( ui.oldContent.size(), 1 )
+		equals( ui.newHeader.size(), 0 )
+		equals( ui.newContent.size(), 0 )
+	})
+	.accordion("activate", 0);
+});
+
 })(jQuery);
