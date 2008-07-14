@@ -28,7 +28,6 @@ $.widget("ui.draggable", $.extend({}, $.ui.mouse, {
 		if (o.helper == 'original' && !positioned.test(position))
 			style.position = 'relative';
 
-		this.element.addClass('ui-draggable');
 		(o.disabled && this.element.addClass('ui-draggable-disabled'));
 		
 		this.mouseInit();
@@ -264,7 +263,7 @@ $.widget("ui.draggable", $.extend({}, $.ui.mouse, {
 	},
 	destroy: function() {
 		if(!this.element.data('draggable')) return;
-		this.element.removeData("draggable").unbind(".draggable").removeClass('ui-draggable');
+		this.element.removeData("draggable").unbind(".draggable").removeClass('ui-draggable-dragging ui-draggable-disabled');
 		this.mouseDestroy();
 	}
 }));
@@ -388,7 +387,7 @@ $.ui.plugin.add("draggable", "snap", {
 		
 		var inst = $(this).data("draggable");
 		inst.snapElements = [];
-		$(ui.options.snap === true ? '.ui-draggable' : ui.options.snap).each(function() {
+		$(ui.options.snap === true ? ':data(draggable)' : ui.options.snap).each(function() {
 			var $t = $(this); var $o = $t.offset();
 			if(this != inst.element[0]) inst.snapElements.push({
 				item: this,
