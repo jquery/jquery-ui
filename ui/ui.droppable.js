@@ -15,7 +15,8 @@
 
 $.widget("ui.droppable", {
 	init: function() {
-
+		
+		var o = this.options, accept = o.accept;
 		this.isover = 0; this.isout = 1;
 
 		this.options.accept = this.options.accept && this.options.accept.constructor == Function ? this.options.accept : function(d) {
