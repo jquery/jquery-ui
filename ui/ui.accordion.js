@@ -111,7 +111,7 @@ function completed(cancel) {
 			overflow: ""
 		});
 	}
-	$(this).triggerHandler("accordionchange", [$.event.fix({type: 'accordionchange', target: instance.element[0]}), options.data], options.change);
+	instance.trigger('change', null, options.data);
 }
 
 function toggle(toShow, toHide, data, clickedActive, down) {
