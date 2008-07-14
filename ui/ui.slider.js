@@ -157,11 +157,21 @@ $.widget("ui.slider", {
 
 	
 	keydown: function(keyCode, handle) {
-		if(/(37|38|39|40)/.test(keyCode)) {
-			var oper = /(37|40)/.test(keyCode) ? "-=" : "+=";
+		var k = keyCode;
+		if(/(33|34|35|36|37|38|39|40)/.test(k)) {
+			var o = this.options, xpos, ypos;
+			if (/(35|36)/.test(k)) {
+				xpos = (k == 35) ? o.max.x : o.min.x;
+				ypos = (k == 35) ? o.max.y : o.min.y;
+			} else {
+				var oper = /(34|37|40)/.test(k) ? "-=" : "+=";
+				var step = /(37|38|39|40)/.test(k) ? "oneStep" : "pageStep";
+				xpos = oper + this[step]("x");
+				ypos = oper + this[step]("y");
+			}
 			this.moveTo({
-				x: oper + this.oneStep("x"),
-				y: oper + this.oneStep("y")
+				x: xpos,
+				y: ypos
 			}, handle);
 		}
 	},
@@ -279,6 +289,9 @@ $.widget("ui.slider", {
 	},
 	oneStep: function(axis) {
 		return this.options.stepping[axis] || 1;
+	},
+	pageStep: function(axis) {
+		return /* this.options.paging[axis] ||*/ 10;
 	},
 
 
