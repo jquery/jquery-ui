@@ -113,7 +113,7 @@ $.widget("ui.dialog", {
 		uiDialogTitlebar.find("*").add(uiDialogTitlebar).each(function() {
 			$.ui.disableSelection(this);
 		});
-
+		
 		if ($.fn.draggable) {
 			uiDialog.draggable({
 				cancel: '.ui-dialog-content',
@@ -433,6 +433,7 @@ $.extend($.ui.dialog.overlay, {
 	},
 	
 	height: function() {
+		// handle IE 6
 		if ($.browser.msie && $.browser.version < 7) {
 			var scrollHeight = Math.max(
 				document.documentElement.scrollHeight,
@@ -448,12 +449,20 @@ $.extend($.ui.dialog.overlay, {
 			} else {
 				return scrollHeight + 'px';
 			}
+		// handle Opera
+		} else if ($.browser.opera) {
+			return Math.max(
+				window.innerHeight,
+				$(document).height()
+			) + 'px';
+		// handle "good" browsers
 		} else {
 			return $(document).height() + 'px';
 		}
 	},
 	
 	width: function() {
+		// handle IE 6
 		if ($.browser.msie && $.browser.version < 7) {
 			var scrollWidth = Math.max(
 				document.documentElement.scrollWidth,
@@ -469,6 +478,13 @@ $.extend($.ui.dialog.overlay, {
 			} else {
 				return scrollWidth + 'px';
 			}
+		// handle Opera
+		} else if ($.browser.opera) {
+			return Math.max(
+				window.innerWidth,
+				$(document).width()
+			) + 'px';
+		// handle "good" browsers
 		} else {
 			return $(document).width() + 'px';
 		}
