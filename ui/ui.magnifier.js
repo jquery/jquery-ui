@@ -79,21 +79,20 @@ $.widget("ui.magnifier", {
 	},
 	
 	reset: function(e) {
-		var o = this.options, c;
+		var o = this.options;
 		
-		for (var i=0; i < this.items.length; i++) {
-			c = this.items[i];
-			
-			$(c[0]).css({
-				width: c[2][0],
-				height: c[2][1],
-				top: (c[3] ? c[3].top : 0),
-				left: (c[3] ? c[3].left : 0)
+		$.each(this.items, function() {
+			var item = this;
+			$(item[0]).css({
+				width: item[2][0],
+				height: item[2][1],
+				top: (item[3] ? item[3].top : 0),
+				left: (item[3] ? item[3].left : 0)
 			});
 			
-			(o.opacity && $(c[0]).css('opacity', o.opacity.min));
-			(o.zIndex && $(c[0]).css("z-index", ""));
-		}
+			(o.opacity && $(item[0]).css('opacity', o.opacity.min));
+			(o.zIndex && $(item[0]).css("z-index", ""));
+		});
 	},
 	
 	magnify: function(e) {
