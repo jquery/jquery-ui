@@ -19,12 +19,20 @@ $.widget("ui.magnifier", {
 		var self = this,
 			o = this.options;
 		
-		this.element.addClass("ui-magnifier");
+		this.element
+			.addClass("ui-magnifier")
+			.bind('click.magnifier', function(e) {
+				(!self.disabled && o.click && o.click.apply(this, [e, {
+					options: self.options,
+					current: self.current[0],
+					currentOffset: self.current[1]
+				}]));
+			});
+		
+		// the element must have relative or absolute positioning
 		if (!(/^(r|a)/).test(this.element.css("position"))) {
 			this.element.css("position", "relative");
 		}
-		
-		this.pp = this.element.offset();
 		
 		this.items = [];
 		this.element.find(o.items).each(function() {
@@ -40,33 +48,21 @@ $.widget("ui.magnifier", {
 			(o.opacity && $this.css('opacity', o.opacity.min));
 		});
 		
-		if (o.overlap) {
-			for (var i=0; i<this.items.length; i++) {
-				//Absolutize
-				$(this.items[i][0]).css({
-					position: "absolute",
-					top: this.items[i][3].top,
-					left: this.items[i][3].left
-				});
-			}
-		}
+		// absolutize
+		(o.overlap && $.each(this.items, function() {
+			$(this[0]).css({
+				position: "absolute",
+				top: this[3].top,
+				left: this[3].left
+			});
+		}));
 		
 		this.identifier = ++counter;
 		$(document).bind("mousemove.magnifier"+this.identifier, function(e) {
 			(self.disabled || self.magnify.apply(self, [e]));
 		});
 		
-		if (o.click) {
-			this.element.bind('click.magnifier', function(e) {
-				if (!self.disabled) {
-					o.click.apply(this, [e, {
-						options: self.options,
-						current: self.current[0],
-						currentOffset: self.current[1]
-					}]);
-				}
-			});
-		}
+		this.pp = this.element.offset();
 	},
 	
 	destroy: function() {
