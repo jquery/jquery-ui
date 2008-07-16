@@ -47,7 +47,9 @@ $.widget("ui.selectable", $.extend({}, $.ui.mouse, {
 		
 		this.mouseInit();
 		
-		this.helper = $(document.createElement('div')).css({border:'1px dotted black'});
+		this.helper = $(document.createElement('div'))
+			.css({border:'1px dotted black'})
+			.addClass("ui-selectable-helper");
 	},
 	toggle: function() {
 		if(this.options.disabled){
