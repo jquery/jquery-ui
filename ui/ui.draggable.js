@@ -15,38 +15,30 @@
 $.widget("ui.draggable", $.extend({}, $.ui.mouse, {
 	init: function() {
 		
-		//Initialize needed constants
-		var o = this.options, positioned = /^(?:r|a|f)/, element = this.element[0];
-		
-		if (!this.element.length)
-			return false;
+		if (this.options.helper == 'original' && !(/^(?:r|a|f)/).test(this.element.css("position")))
+			this.element[0].style.position = 'relative';
 
-		var style = element.style || {}, 
-			position = style.position || "static"; 
-		
-		//Position the node
-		if (o.helper == 'original' && !positioned.test(position))
-			style.position = 'relative';
-
-		(o.disabled && this.element.addClass('ui-draggable-disabled'));
+		(this.options.disabled && this.element.addClass('ui-draggable-disabled'));
 		
 		this.mouseInit();
 		
 	},
 	mouseStart: function(e) {
+		
 		var o = this.options;
 		
-		if (this.helper || o.disabled || $(e.target).is('.ui-resizable-handle')) return false;
+		if (this.helper || o.disabled || $(e.target).is('.ui-resizable-handle'))
+			return false;
 		
+		//Check if we have a valid handle
 		var handle = !this.options.handle || !$(this.options.handle, this.element).length ? true : false;
-		
-	
 		$(this.options.handle, this.element).find("*").andSelf().each(function() {
 			if(this == e.target) handle = true;
 		});
 		if (!handle) return false;
 		
-		if($.ui.ddmanager) $.ui.ddmanager.current = this;
+		if($.ui.ddmanager)
+			$.ui.ddmanager.current = this;
 		
 		//Create and append the visible helper
 		this.helper = $.isFunction(o.helper) ? $(o.helper.apply(this.element[0], [e])) : (o.helper == 'clone' ? this.element.clone() : this.element);
