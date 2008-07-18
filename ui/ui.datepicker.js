@@ -373,7 +373,7 @@ $.extend(Datepicker.prototype, {
 	           Date[2] - the current dates for a range */
 	_getDateDatepicker: function(target) {
 		var inst = $.data(target, PROP_NAME);
-		if (inst)
+		if (inst && !inst.inline)
 			this._setDateFromField(inst); 
 		return (inst ? this._getDate(inst) : null);
 	},
@@ -399,16 +399,22 @@ $.extend(Datepicker.prototype, {
 							+$.datepicker._get(inst, 'stepMonths')), (e.ctrlKey ? 'Y' : 'M'));
 						break; // next month/year on page down/+ ctrl
 				case 35: if (e.ctrlKey) $.datepicker._clearDate(e.target);
+						handled = e.ctrlKey;
 						break; // clear on ctrl+end
 				case 36: if (e.ctrlKey) $.datepicker._gotoToday(e.target);
+						handled = e.ctrlKey;
 						break; // current on ctrl+home
 				case 37: if (e.ctrlKey) $.datepicker._adjustDate(e.target, -1, 'D');
+						handled = e.ctrlKey;
 						break; // -1 day on ctrl+left
 				case 38: if (e.ctrlKey) $.datepicker._adjustDate(e.target, -7, 'D');
+						handled = e.ctrlKey;
 						break; // -1 week on ctrl+up
 				case 39: if (e.ctrlKey) $.datepicker._adjustDate(e.target, +1, 'D');
+						handled = e.ctrlKey;
 						break; // +1 day on ctrl+right
 				case 40: if (e.ctrlKey) $.datepicker._adjustDate(e.target, +7, 'D');
+						handled = e.ctrlKey;
 						break; // +1 week on ctrl+down
 				default: handled = false;
 			}
@@ -1188,7 +1194,8 @@ $.extend(Datepicker.prototype, {
 		var startDate = (!inst.currentYear || (inst.input && inst.input.val() == '') ? null :
 			new Date(inst.currentYear, inst.currentMonth, inst.currentDay));
 		if (this._get(inst, 'rangeSelect')) {
-			return [inst.rangeStart || startDate, (!inst.endYear ? null :
+			return [inst.rangeStart || startDate,
+				(!inst.endYear ? inst.rangeStart || startDate :
 				new Date(inst.endYear, inst.endMonth, inst.endDay))];
 		} else
 			return startDate;
@@ -1316,7 +1323,7 @@ $.extend(Datepicker.prototype, {
 							(minDate && printDate < minDate) || (maxDate && printDate > maxDate);
 						html += '<td class="ui-datepicker-days-cell' +
 							((dow + firstDay + 6) % 7 >= 5 ? ' ui-datepicker-week-end-cell' : '') + // highlight weekends
-							(otherMonth ? ' ui-datepicker-otherMonth' : '') + // highlight days from other months
+							(otherMonth ? ' ui-datepicker-other-month' : '') + // highlight days from other months
 							(printDate.getTime() == selectedDate.getTime() && drawMonth == inst.selectedMonth ?
 							' ui-datepicker-days-cell-over' : '') + // highlight selected day
 							(unselectable ? ' ' + this._unselectableClass : '') +  // highlight unselectable days
