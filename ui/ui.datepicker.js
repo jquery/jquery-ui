@@ -84,6 +84,7 @@ function Datepicker() {
 		gotoCurrent: false, // True if today link goes back to current selection instead
 		changeMonth: true, // True if month can be selected directly, false if only prev/next
 		changeYear: true, // True if year can be selected directly, false if only prev/next
+		monthAfterYear: false, // True if the year select precedes month, false for month then year
 		yearRange: '-10:+10', // Range of years to display in drop-down,
 			// either relative to current year (-nn:+nn) or absolute (nnnn:nnnn)
 		changeFirstDay: true, // True to click on day name to change, false to remain as set
@@ -1370,26 +1371,30 @@ $.extend(Datepicker.prototype, {
 	_generateMonthYearHeader: function(inst, drawMonth, drawYear, minDate, maxDate,
 			selectedDate, secondary, showStatus, initStatus, monthNames) {
 		minDate = (inst.rangeStart && minDate && selectedDate < minDate ? selectedDate : minDate);
+		var monthAfterYear = this._get(inst, 'monthAfterYear');
 		var html = '<div class="ui-datepicker-header">';
+		var monthHtml = '';
 		// month selection
 		if (secondary || !this._get(inst, 'changeMonth'))
-			html += monthNames[drawMonth] + '&#xa0;';
+			monthHtml += monthNames[drawMonth] + '&#xa0;';
 		else {
 			var inMinYear = (minDate && minDate.getFullYear() == drawYear);
 			var inMaxYear = (maxDate && maxDate.getFullYear() == drawYear);
-			html += '<select class="ui-datepicker-new-month" ' +
+			monthHtml += '<select class="ui-datepicker-new-month" ' +
 				'onchange="jQuery.datepicker._selectMonthYear(\'#' + inst.id + '\', this, \'M\');" ' +
 				'onclick="jQuery.datepicker._clickMonthYear(\'#' + inst.id + '\');"' +
 				this._addStatus(showStatus, inst.id, this._get(inst, 'monthStatus'), initStatus) + '>';
 			for (var month = 0; month < 12; month++) {
 				if ((!inMinYear || month >= minDate.getMonth()) &&
 						(!inMaxYear || month <= maxDate.getMonth()))
-					html += '<option value="' + month + '"' +
+					monthHtml += '<option value="' + month + '"' +
 						(month == drawMonth ? ' selected="selected"' : '') +
 						'>' + monthNames[month] + '</option>';
 			}
-			html += '</select>';
+			monthHtml += '</select>';
 		}
+		if (!monthAfterYear)
+			html += monthHtml;
 		// year selection
 		if (secondary || !this._get(inst, 'changeYear'))
 			html += drawYear;
@@ -1422,6 +1427,8 @@ $.extend(Datepicker.prototype, {
 			}
 			html += '</select>';
 		}
+		if (monthAfterYear)
+			html += monthHtml;
 		html += '</div>'; // Close datepicker_header
 		return html;
 	},
