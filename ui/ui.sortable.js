@@ -58,32 +58,36 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 			sender: inst ? inst.element : null
 		};		
 	},
+	
 	propagate: function(n,e,inst, noPropagation) {
 		$.ui.plugin.call(this, n, [e, this.ui(inst)]);
 		if(!noPropagation) this.element.triggerHandler(n == "sort" ? n : "sort"+n, [e, this.ui(inst)], this.options[n]);
 	},
+	
 	serialize: function(o) {
 
-		var items = ($.isFunction(this.options.items) ? this.options.items.call(this.element) : $(this.options.items, this.element)).not('.ui-sortable-helper'); //Only the items of the sortable itself
+		var items = this.getItemsAsjQuery(o && o.connected);
 		var str = []; o = o || {};
 		
-		items.each(function() {
-			var res = ($(this).attr(o.attribute || 'id') || '').match(o.expression || (/(.+)[-=_](.+)/));
+		$(items).each(function() {
+			var res = ($(this.item || this).attr(o.attribute || 'id') || '').match(o.expression || (/(.+)[-=_](.+)/));
 			if(res) str.push((o.key || res[1])+'[]='+(o.key && o.expression ? res[1] : res[2]));
 		});
 		
 		return str.join('&');
 		
 	},
+	
 	toArray: function(attr) {
 		
-		var items = ($.isFunction(this.options.items) ? this.options.items.call(this.element) : $(this.options.items, this.element)).not('.ui-sortable-helper'); //Only the items of the sortable itself
+		var items = this.getItemsAsjQuery(o && o.connected);
 		var ret = [];
 
 		items.each(function() { ret.push($(this).attr(attr || 'id')); });
 		return ret;
 		
 	},
+	
 	/* Be careful with the following core functions */
 	intersectsWith: function(item) {
 		var x1 = this.positionAbs.left, x2 = x1 + this.helperProportions.width,
@@ -105,6 +109,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 		
 		}
 	},
+	
 	intersectsWithEdge: function(item) {	
 		var x1 = this.positionAbs.left, x2 = x1 + this.helperProportions.width,
 			y1 = this.positionAbs.top, y2 = y1 + this.helperProportions.height;
@@ -147,10 +152,42 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 		return false;
 		
 	},
+	
 	refresh: function() {
 		this.refreshItems();
 		this.refreshPositions();
 	},
+	
+	getItemsAsjQuery: function(connected) {
+		
+		var self = this;
+		var items = [];
+		var queries = [];
+	
+		if(this.options.connectWith && connected) {
+			for (var i = this.options.connectWith.length - 1; i >= 0; i--){
+				var cur = $(this.options.connectWith[i]);
+				for (var j = cur.length - 1; j >= 0; j--){
+					var inst = $.data(cur[j], 'sortable');
+					if(inst && inst != this && !inst.options.disabled) {
+						queries.push([$.isFunction(inst.options.items) ? inst.options.items.call(inst.element) : $(inst.options.items, inst.element).not(".ui-sortable-helper"), inst]);
+					}
+				};
+			};
+		}
+		
+		queries.push([$.isFunction(this.options.items) ? this.options.items.call(this.element, null, { options: this.options, item: this.currentItem }) : $(this.options.items, this.element).not(".ui-sortable-helper"), this]);
+
+		for (var i = queries.length - 1; i >= 0; i--){
+			queries[i][0].each(function() {
+				items.push(this);
+			});
+		};
+		
+		return $(items);
+		
+	},
+	
 	refreshItems: function() {
 		
 		this.items = [];
@@ -164,7 +201,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 				var cur = $(this.options.connectWith[i]);
 				for (var j = cur.length - 1; j >= 0; j--){
 					var inst = $.data(cur[j], 'sortable');
-					if(inst && !inst.options.disabled) {
+					if(inst && inst != this && !inst.options.disabled) {
 						queries.push([$.isFunction(inst.options.items) ? inst.options.items.call(inst.element) : $(inst.options.items, inst.element), inst]);
 						this.containers.push(inst);
 					}
@@ -185,6 +222,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 		};
 
 	},
+	
 	refreshPositions: function(fast) {
 
 		//This has to be redone because due to the item being moved out/into the offsetParent, the offsetParent's position will change
@@ -225,6 +263,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 		}
 
 	},
+	
 	destroy: function() {
 		this.element
 			.removeClass("ui-sortable ui-sortable-disabled")
@@ -235,6 +274,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 		for ( var i = this.items.length - 1; i >= 0; i-- )
 			this.items[i].item.removeData("sortable-item");
 	},
+	
 	createPlaceholder: function(that) {
 		
 		var self = that || this, o = self.options;
@@ -260,6 +300,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 		o.placeholder.update(self, self.placeholder);
 
 	},
+	
 	contactContainers: function(e) {
 		for (var i = this.containers.length - 1; i >= 0; i--){
 
@@ -304,6 +345,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 			
 		};			
 	},
+	
 	mouseCapture: function(e, overrideHandle) {
 	
 		if(this.options.disabled || this.options.type == 'static') return false;
@@ -332,6 +374,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 		return true;	
 			
 	},
+	
 	mouseStart: function(e, overrideHandle, noActivation) {
 
 		var o = this.options;
@@ -446,6 +489,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 
 
 	},
+	
 	convertPositionTo: function(d, pos) {
 		if(!pos) pos = this.position;
 		var mod = d == "absolute" ? 1 : -1;
@@ -464,6 +508,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 			)
 		};
 	},
+	
 	generatePosition: function(e) {
 		
 		var o = this.options;
@@ -505,6 +550,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 		
 		return position;
 	},
+	
 	mouseDrag: function(e) {
 
 		//Compute the helpers position
@@ -553,6 +599,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 		return false;
 		
 	},
+	
 	rearrange: function(e, i, a, hardRefresh) {
 
 		a ? a[0].appendChild(this.placeholder[0]) : i.item[0].parentNode.insertBefore(this.placeholder[0], (this.direction == 'down' ? i.item[0] : i.item[0].nextSibling));
@@ -570,6 +617,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 		},0);
 
 	},
+	
 	mouseStop: function(e, noPropagation) {
 
 		//If we are using droppables, inform the manager about the drop
@@ -593,6 +641,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 		return false;
 		
 	},
+	
 	clear: function(e, noPropagation) {
 
 		//We first have to update the dom position of the actual currentItem
