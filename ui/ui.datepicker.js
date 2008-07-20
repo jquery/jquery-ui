@@ -1563,11 +1563,9 @@ $.fn.datepicker = function(options){
 	
 	/* Initialise the date picker. */
 	if (!$.datepicker.initialized) {
-		$(function() {
-			$(document.body)
-				.append($.datepicker.dpDiv)
-				.mousedown($.datepicker._checkExternalClick);
-		});
+		$(document.body)
+			.append($.datepicker.dpDiv)
+			.mousedown($.datepicker._checkExternalClick);
 		$.datepicker.initialized = true;
 	}
 	
