@@ -1560,6 +1560,17 @@ function isArray(a) {
                     Object - settings for attaching new datepicker functionality
    @return  jQuery object */
 $.fn.datepicker = function(options){
+	
+	/* Initialise the date picker. */
+	if (!$.datepicker.initialized) {
+		$(function() {
+			$(document.body)
+				.append($.datepicker.dpDiv)
+				.mousedown($.datepicker._checkExternalClick);
+		});
+		$.datepicker.initialized = true;
+	}
+	
 	var otherArgs = Array.prototype.slice.call(arguments, 1);
 	if (typeof options == 'string' && (options == 'isDisabled' || options == 'getDate'))
 		return $.datepicker['_' + options + 'Datepicker'].
@@ -1573,11 +1584,6 @@ $.fn.datepicker = function(options){
 };
 
 $.datepicker = new Datepicker(); // singleton instance
-	
-/* Initialise the date picker. */
-$(document).ready(function() {
-	$(document.body).append($.datepicker.dpDiv).
-		mousedown($.datepicker._checkExternalClick);
-});
+$.datepicker.initialized = false;
 
 })(jQuery);
