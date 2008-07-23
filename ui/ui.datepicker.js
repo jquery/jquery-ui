@@ -1328,7 +1328,9 @@ $.extend(Datepicker.prototype, {
 				if (drawYear == inst.selectedYear && drawMonth == inst.selectedMonth)
 					inst.selectedDay = Math.min(inst.selectedDay, daysInMonth);
 				var leadDays = (this._getFirstDayOfMonth(drawYear, drawMonth) - firstDay + 7) % 7;
-				var printDate = new Date(drawYear, drawMonth, 1 - leadDays);
+				var tzDate = new Date(drawYear, drawMonth, 1 - leadDays);
+				var utcDate = new Date(drawYear, drawMonth, 1 - leadDays);
+				var printDate = utcDate;
 				var numRows = (isMultiMonth ? 6 : Math.ceil((leadDays + daysInMonth) / 7)); // calculate the number of rows to generate
 				for (var dRow = 0; dRow < numRows; dRow++) { // create date picker rows
 					html += '<tr class="ui-datepicker-days-row">' +
@@ -1366,7 +1368,9 @@ $.extend(Datepicker.prototype, {
 							inst.id + '\',' + drawMonth + ',' + drawYear + ', this);"') + '>' + // actions
 							(otherMonth ? (showOtherMonths ? printDate.getDate() : '&#xa0;') : // display for other months
 							(unselectable ? printDate.getDate() : '<a>' + printDate.getDate() + '</a>')) + '</td>'; // display for this month
-						printDate.setUTCDate(printDate.getUTCDate() + 1);
+						tzDate.setDate(tzDate.getDate() + 1);
+						utcDate.setUTCDate(utcDate.getUTCDate() + 1);
+						printDate = (tzDate > utcDate ? tzDate : utcDate);
 					}
 					html += '</tr>';
 				}
