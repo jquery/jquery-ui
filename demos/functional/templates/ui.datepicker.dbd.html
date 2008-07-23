@@ -14,27 +14,27 @@
 .za_day { color: green !important; background: #eee url(templates/images/za.gif) no-repeat center !important; }
 </style>
 <script type="text/javascript">
-var natDays = [[1, 26, 'au'], [2, 6, 'nz'], [3, 17, 'ie'], [4, 27, 'za'], [5, 25, 'ar'], [6, 6, 'se'], 
-    [7, 4, 'us'], [8, 17, 'id'], [9, 7, 'br'], [10, 1, 'cn'], [11, 22, 'lb'], [12, 12, 'ke']]; 
+var natDays = [[1, 26, "au"], [2, 6, "nz"], [3, 17, "ie"], [4, 27, "za"], [5, 25, "ar"], [6, 6, "se"], 
+    [7, 4, "us"], [8, 17, "id"], [9, 7, "br"], [10, 1, "cn"], [11, 22, "lb"], [12, 12, "ke"]]; 
  
 function nationalDays(date) { 
     for (i = 0; i < natDays.length; i++) { 
         if (date.getMonth() == natDays[i][0] - 1 && date.getDate() == natDays[i][1]) { 
-            return [false, natDays[i][2] + '_day']; 
+            return [false, natDays[i][2] + "_day"]; 
         } 
     } 
-    return [true, '']; 
+    return [true, ""]; 
 }
 
 function highlightToday(date, inst) { 
     var today = new Date(); 
     today = new Date(today.getFullYear(), today.getMonth(), today.getDate()); 
     return $.datepicker.dateStatus(date, inst) + 
-        (today.getTime() == date.getTime() ? ' (today)' : ''); 
+        (today.getTime() == date.getTime() ? " (today)" : ""); 
 } 
 
 function showDayOfYear(date) {
 	var lastYearEnd = new Date(date.getFullYear() - 1, 12 - 1, 31, 0, 0, 0, 0);
-	return [true, '', 'Day ' + ((date.getTime() - lastYearEnd.getTime()) / 86400000) + ' of  the year'];
+	return [true, "", "Day " + ((date.getTime() - lastYearEnd.getTime()) / 86400000) + " of  the year"];
 }
 </script>

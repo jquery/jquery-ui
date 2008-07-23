@@ -89,6 +89,7 @@
 					'<li>MM - month name long</li>' +
 					'<li>y - year (two digit)</li>' +
 					'<li>yy - year (four digit)</li>' +
+					'<li>@ - Unix timestamp (ms since 01/01/1970)</li>' +
 					'<li>\'...\' - literal text</li>' +
 					'<li>\'\' - single quote</li></ul>',
 				html: '<input type="text" size="30" value="" id="formatted"/>',
@@ -158,15 +159,16 @@
 				title: 'Inline Datepicker',
 				desc: 'A datepicker can also be shown inline, rather than popping-up, by targetting a division instead of an input field. ' +
 					'Use the <i>onSelect</i> callback to be notified of date selections.',
-				html: '<div id="inline"></div>\n' +
-					'<p style="clear: both;"><!-- See day-by-day example for highlighting days code --></p>',
-				destroy: '$("#inline").datepicker("destroy");',
+				html: { url: 'templates/ui.datepicker.inl.html' },
+				destroy: '$("#inline").datepicker("destroy");$("#altInline").unbind("keyup");',
 
 				options: [
-					{	desc: 'Single month inline',	source: '$("#inline").datepicker({onSelect: function(date) { alert("The chosen date is " + date); }});' },
-					{	desc: 'Range select inline',	source: '$("#inline").datepicker({rangeSelect: true, onSelect: function(date) { alert("The chosen dates are " + date); }});' },
-					{	desc: 'Range select showing two months inline',	source: '$("#inline").datepicker({rangeSelect: true, numberOfMonths: 2}).children("div").css("width", "370px");' },
-					{	desc: 'Highlight some national days (via CSS)',	source: '$("#inline").datepicker({beforeShowDay: nationalDays});' }
+					{	desc: 'Single month inline',	source: '$("#inline").datepicker({onSelect: function(date) { alert("The chosen date is " + date); }});$("#altInline").hide();' },
+					{	desc: 'Range select inline',	source: '$("#inline").datepicker({rangeSelect: true, onSelect: function(date) { alert("The chosen dates are " + date); }});$("#altInline").hide();' },
+					{	desc: 'Range select showing two months inline',	source: '$("#inline").datepicker({rangeSelect: true, numberOfMonths: 2}).children("div").css("width", "370px");$("#altInline").hide();' },
+					{	desc: 'Highlight some national days (via CSS)',	source: '$("#inline").datepicker({beforeShowDay: nationalDays});$("#altInline").hide();' },
+					{	desc: 'Inline linked to an input field',	source: '$("#inline").datepicker({altField: "#altInline", altFormat: "mm/dd/yy"});$("#altInline").show().keyup(setInlineDate);' },
+					{	desc: 'Disabled inline',	source: '$("#inline").datepicker().datepicker("disable");$("#altInline").hide();' }
 				]
 			},
 
@@ -177,7 +179,7 @@
 				destroy: '',
 
 				options: [
-					{	desc: 'Open in a dialog',	source: '$("#dialogButton").click(function() { $(this).datepicker("dialog", $("#dialog").val(), setDateFromDialog, {prompt: "Choose a date", duration: ""}) });' }
+					{	desc: 'Open in a dialog',	source: '$("#dialogButton").click(function() { $(this).datepicker("dialog", $("#dialog").val(), setDateFromDialog, {prompt: "Choose a date", duration: ""}); return false; });' }
 				]
 			},
 
@@ -248,6 +250,8 @@
 					{	desc: 'Append text to the datepicker',	source: '$("#misc").datepicker({appendText: "(format mm/dd/yyyy)", showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' },
 					{	desc: 'Move Clear/Close controls to the bottom',	source: '$("#misc").datepicker({closeAtTop: false, showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' },
 					{	desc: 'Make the datepicker mandatory (no Clear)',	source: '$("#misc").datepicker({mandatory: true, showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' },
+					{	desc: 'Show big Prev/Next links',	source: '$("#misc").datepicker({showBigPrevNext: true, showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' },
+					{	desc: 'Show big Prev/Next links moving 6 months',	source: '$("#misc").datepicker({showBigPrevNext: true, stepBigMonths: 6, prevText: "&lt;", prevBigText: "&lt;6M", nextText: "&gt;", nextBigText: "6M&gt;", showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' },
 					{	desc: 'Hide Prev/Next links if not applicable',	source: '$("#misc").datepicker({hideIfNoPrevNext: true, minDate: new Date(2008, 1 - 1, 26), maxDate: new Date(2008, 3 - 1, 26), showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' },
 					{	desc: 'Prev/Today/Next links as date formats',	source: '$("#misc").datepicker({navigationAsDateFormat: true, prevText: "&lt;M", currentText: "M y", nextText: "M&gt;", showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' },
 					{	desc: 'Prev/Today/Next links as date formats in French',	source: '$("#misc").datepicker($.extend({}, $.datepicker.regional["fr"], {navigationAsDateFormat: true, prevText: "&lt;MM", currentText: "MM yy", nextText: "MM&gt;", numberOfMonths: 2, stepMonths: 2, showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true}));' },
