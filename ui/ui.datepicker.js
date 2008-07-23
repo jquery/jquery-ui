@@ -29,10 +29,12 @@ function Datepicker() {
 	this._datepickerShowing = false; // True if the popup picker is showing , false if not
 	this._inDialog = false; // True if showing within a "dialog", false if not
 	this._mainDivId = 'ui-datepicker-div'; // The ID of the main datepicker division
+	this._inlineClass = 'ui-datepicker-inline'; // The name of the inline marker class
 	this._appendClass = 'ui-datepicker-append'; // The name of the append marker class
 	this._triggerClass = 'ui-datepicker-trigger'; // The name of the trigger marker class
 	this._dialogClass = 'ui-datepicker-dialog'; // The name of the dialog marker class
 	this._promptClass = 'ui-datepicker-prompt'; // The name of the dialog prompt marker class
+	this._disableClass = 'ui-datepicker-disabled'; // The name of the disabled covering marker class
 	this._unselectableClass = 'ui-datepicker-unselectable'; // The name of the unselectable cell marker class
 	this._currentClass = 'ui-datepicker-current-day'; // The name of the current day marker class
 	this.regional = []; // Available regional settings, indexed by language code
@@ -183,7 +185,7 @@ $.extend(Datepicker.prototype, {
 			drawMonth: 0, drawYear: 0, // month being drawn
 			inline: inline, // is datepicker inline or not
 			dpDiv: (!inline ? this.dpDiv : // presentation div
-			$('<div class="ui-datepicker-inline"></div>'))};
+			$('<div class="' + this._inlineClass + '"></div>'))};
 	},
 
 	/* Attach the date picker to an input field. */
@@ -296,8 +298,11 @@ $.extend(Datepicker.prototype, {
 	/* Detach a datepicker from its control.
 	   @param  target    element - the target input field or division or span */
 	_destroyDatepicker: function(target) {
-		var nodeName = target.nodeName.toLowerCase();
 		var $target = $(target);
+		if (!$target.hasClass(this.markerClassName)) {
+			return;
+		}
+		var nodeName = target.nodeName.toLowerCase();
 		$.removeData(target, PROP_NAME);
 		if (nodeName == 'input') {
 			$target.siblings('.' + this._appendClass).remove().end().
@@ -313,10 +318,21 @@ $.extend(Datepicker.prototype, {
 	/* Enable the date picker to a jQuery selection.
 	   @param  target    element - the target input field or division or span */
 	_enableDatepicker: function(target) {
+		var $target = $(target);
+		if (!$target.hasClass(this.markerClassName)) {
+			return;
+		}
+		var nodeName = target.nodeName.toLowerCase();
+		if (nodeName == 'input') {
 		target.disabled = false;
-		$(target).siblings('button.' + this._triggerClass).
+			$target.siblings('button.' + this._triggerClass).
 			each(function() { this.disabled = false; }).end().
-			siblings('img.' + this._triggerClass).css({opacity: '1.0', cursor: ''});
+				siblings('img.' + this._triggerClass).
+				css({opacity: '1.0', cursor: ''});
+		}
+		else if (nodeName == 'div' || nodeName == 'span') {
+			$target.children('.' + this._disableClass).remove();
+		}
 		this._disabledInputs = $.map(this._disabledInputs,
 			function(value) { return (value == target ? null : value); }); // delete entry
 	},
@@ -324,10 +340,34 @@ $.extend(Datepicker.prototype, {
 	/* Disable the date picker to a jQuery selection.
 	   @param  target    element - the target input field or division or span */
 	_disableDatepicker: function(target) {
+		var $target = $(target);
+		if (!$target.hasClass(this.markerClassName)) {
+			return;
+		}
+		var nodeName = target.nodeName.toLowerCase();
+		if (nodeName == 'input') {
 		target.disabled = true;
-		$(target).siblings('button.' + this._triggerClass).
+			$target.siblings('button.' + this._triggerClass).
 			each(function() { this.disabled = true; }).end().
-			siblings('img.' + this._triggerClass).css({opacity: '0.5', cursor: 'default'});
+				siblings('img.' + this._triggerClass).
+				css({opacity: '0.5', cursor: 'default'});
+		}
+		else if (nodeName == 'div' || nodeName == 'span') {
+			var inline = $target.children('.' + this._inlineClass);
+			var offset = inline.offset();
+			var relOffset = {left: 0, top: 0};
+			inline.parents().each(function() {
+				if ($(this).css('position') == 'relative') {
+					relOffset = $(this).offset();
+					return false;
+				}
+			});
+			$target.prepend('<div class="' + this._disableClass + '" style="' +
+				($.browser.msie ? 'background-color: transparent; ' : '') +
+				'width: ' + inline.width() + 'px; height: ' + inline.height() +
+				'px; left: ' + (offset.left - relOffset.left) +
+				'px; top: ' + (offset.top - relOffset.top) + 'px;"></div>');
+		}
 		this._disabledInputs = $.map(this._disabledInputs,
 			function(value) { return (value == target ? null : value); }); // delete entry
 		this._disabledInputs[this._disabledInputs.length] = target;
