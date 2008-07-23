@@ -480,6 +480,23 @@ test('enableDisable', function() {
 	ok(!inp[0].disabled, 'Enable/disable image - field now enabled');
 	ok(inp.next('img').css('opacity') == 1, 'Enable/disable image - image now enabled');
 	inp.datepicker('destroy');
+	// Inline
+	var inl = init('#inl');
+	ok(!inl.datepicker('isDisabled'), 'Enable/disable inline - initially marked as enabled');
+	ok($('.ui-datepicker-disabled', inl).length == 0, 'Enable/disable inline - cover initially absent');
+	inl.datepicker('disable');
+	ok(inl.datepicker('isDisabled'), 'Enable/disable inline - now marked as disabled');
+	var disabled = $('.ui-datepicker-disabled', inl);
+	var dp = $('.ui-datepicker-inline', inl);
+	ok(disabled.length == 1, 'Enable/disable inline - cover now present');
+	ok(disabled.offset().top == dp.offset().top && disabled.offset().left == dp.offset().left,
+		'Enable/disable inline - cover positioning');
+	ok(disabled.width() == dp.width() && disabled.height() == dp.height(),
+		'Enable/disable inline - cover sizing');
+	inl.datepicker('enable');
+	ok(!inl.datepicker('isDisabled'), 'Enable/disable inline - now marked as enabled');
+	ok($('.ui-datepicker-disabled', inl).length == 0, 'Enable/disable inline - cover now absent');
+	inl.datepicker('destroy');
 });
 
 test('keystrokes', function() {
