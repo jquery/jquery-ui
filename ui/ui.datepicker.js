@@ -43,8 +43,12 @@ function Datepicker() {
 		closeStatus: 'Close without change', // Status text for close link
 		prevText: '&#x3c;Prev', // Display text for previous month link
 		prevStatus: 'Show the previous month', // Status text for previous month link
+		prevBigText: '&#x3c;&#x3c;', // Display text for previous year link
+		prevBigStatus: 'Show the previous year', // Status text for previous year link
 		nextText: 'Next&#x3e;', // Display text for next month link
 		nextStatus: 'Show the next month', // Status text for next month link
+		nextBigText: '&#x3e;&#x3e;', // Display text for next year link
+		nextBigStatus: 'Show the next year', // Status text for next year link
 		currentText: 'Today', // Display text for current month link
 		currentStatus: 'Show the current month', // Status text for current month link
 		monthNames: ['January','February','March','April','May','June',
@@ -81,6 +85,7 @@ function Datepicker() {
 		hideIfNoPrevNext: false, // True to hide next/previous month links
 			// if not applicable, false to just disable them
 		navigationAsDateFormat: false, // True if date formatting applied to prev/today/next links
+		showBigPrevNext: false, // True to show big prev/next links
 		gotoCurrent: false, // True if today link goes back to current selection instead
 		changeMonth: true, // True if month can be selected directly, false if only prev/next
 		changeYear: true, // True if year can be selected directly, false if only prev/next
@@ -112,6 +117,7 @@ function Datepicker() {
 		onClose: null, // Define a callback function when the datepicker is closed
 		numberOfMonths: 1, // Number of months to show at a time
 		stepMonths: 1, // Number of months to step back/forward
+		stepBigMonths: 12, // Number of months to step back/forward for the big links
 		rangeSelect: false, // Allows for selecting a date range on one date picker
 		rangeSeparator: ' - ', // Text between two dates in a range
 		altField: '', // Selector for an alternate field to store selected dates into
@@ -1222,8 +1228,10 @@ $.extend(Datepicker.prototype, {
 		var closeAtTop = this._get(inst, 'closeAtTop');
 		var hideIfNoPrevNext = this._get(inst, 'hideIfNoPrevNext');
 		var navigationAsDateFormat = this._get(inst, 'navigationAsDateFormat');
+		var showBigPrevNext = this._get(inst, 'showBigPrevNext');
 		var numMonths = this._getNumberOfMonths(inst);
 		var stepMonths = this._get(inst, 'stepMonths');
+		var stepBigMonths = this._get(inst, 'stepBigMonths');
 		var isMultiMonth = (numMonths[0] != 1 || numMonths[1] != 1);
 		var currentDate = (!inst.currentDay ? new Date(9999, 9, 9) :
 			new Date(inst.currentYear, inst.currentMonth, inst.currentDay));
@@ -1247,17 +1255,27 @@ $.extend(Datepicker.prototype, {
 		var prevText = this._get(inst, 'prevText');
 		prevText = (!navigationAsDateFormat ? prevText : this.formatDate(
 			prevText, new Date(drawYear, drawMonth - stepMonths, 1), this._getFormatConfig(inst)));
+		var prevBigText = (showBigPrevNext ? this._get(inst, 'prevBigText') : '');
+		prevBigText = (!navigationAsDateFormat ? prevBigText : this.formatDate(
+			prevBigText, new Date(drawYear, drawMonth - stepBigMonths, 1), this._getFormatConfig(inst)));
 		var prev = '<div class="ui-datepicker-prev">' + (this._canAdjustMonth(inst, -1, drawYear, drawMonth) ? 
+			(showBigPrevNext ? '<a onclick="jQuery.datepicker._adjustDate(\'#' + inst.id + '\', -' + stepBigMonths + ', \'M\');"' +
+			this._addStatus(showStatus, inst.id, this._get(inst, 'prevBigStatus'), initStatus) + '>' + prevBigText + '</a>' : '') +
 			'<a onclick="jQuery.datepicker._adjustDate(\'#' + inst.id + '\', -' + stepMonths + ', \'M\');"' +
 			this._addStatus(showStatus, inst.id, this._get(inst, 'prevStatus'), initStatus) + '>' + prevText + '</a>' :
-			(hideIfNoPrevNext ? '' : '<label>' + prevText + '</label>')) + '</div>';
+			(hideIfNoPrevNext ? '' : '<label>' + prevBigText + '</label><label>' + prevText + '</label>')) + '</div>';
 		var nextText = this._get(inst, 'nextText');
 		nextText = (!navigationAsDateFormat ? nextText : this.formatDate(
 			nextText, new Date(drawYear, drawMonth + stepMonths, 1), this._getFormatConfig(inst)));
+		var nextBigText = (showBigPrevNext ? this._get(inst, 'nextBigText') : '');
+		nextBigText = (!navigationAsDateFormat ? nextBigText : this.formatDate(
+			nextBigText, new Date(drawYear, drawMonth + stepBigMonths, 1), this._getFormatConfig(inst)));
 		var next = '<div class="ui-datepicker-next">' + (this._canAdjustMonth(inst, +1, drawYear, drawMonth) ?
 			'<a onclick="jQuery.datepicker._adjustDate(\'#' + inst.id + '\', +' + stepMonths + ', \'M\');"' +
-			this._addStatus(showStatus, inst.id, this._get(inst, 'nextStatus'), initStatus) + '>' + nextText + '</a>' :
-			(hideIfNoPrevNext ? '' : '<label>' + nextText + '</label>')) + '</div>';
+			this._addStatus(showStatus, inst.id, this._get(inst, 'nextStatus'), initStatus) + '>' + nextText + '</a>' +
+			(showBigPrevNext ? '<a onclick="jQuery.datepicker._adjustDate(\'#' + inst.id + '\', +' + stepBigMonths + ', \'M\');"' +
+			this._addStatus(showStatus, inst.id, this._get(inst, 'nextBigStatus'), initStatus) + '>' + nextBigText + '</a>' : '') :
+			(hideIfNoPrevNext ? '' : '<label>' + nextText + '</label><label>' + nextBigText + '</label>')) + '</div>';
 		var currentText = this._get(inst, 'currentText');
 		var gotoDate = (this._get(inst, 'gotoCurrent') && inst.currentDay ? currentDate : today); 
 		currentText = (!navigationAsDateFormat ? currentText :
