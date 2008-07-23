@@ -10,7 +10,7 @@
 #ui-datepicker-div {
 	display: none;
 	border: 1px solid #777;
-	z-index: 9999; /*must have*/
+	z-index: 100; /*must have*/
 }
 .ui-datepicker-inline {
 	float: left;
@@ -23,6 +23,12 @@
 .ui-datepicker-dialog {
 	padding: 5px !important;
 	border: 4px ridge #ddd !important;
+}
+.ui-datepicker-disabled {
+	position: absolute;
+	z-index: 100;
+	background-color: white;
+	opacity: 0.5;
 }
 button.ui-datepicker-trigger {
 	width: 25px;
