@@ -118,6 +118,7 @@ function Datepicker() {
 		onChangeMonthYear: null, // Define a callback function when the month or year is changed
 		onClose: null, // Define a callback function when the datepicker is closed
 		numberOfMonths: 1, // Number of months to show at a time
+		showCurrentAtPos: 0, // The position in multipe months at which to show the current month (starting at 0)
 		stepMonths: 1, // Number of months to step back/forward
 		stepBigMonths: 12, // Number of months to step back/forward for the big links
 		rangeSelect: false, // Allows for selecting a date range on one date picker
@@ -1271,6 +1272,7 @@ $.extend(Datepicker.prototype, {
 		var navigationAsDateFormat = this._get(inst, 'navigationAsDateFormat');
 		var showBigPrevNext = this._get(inst, 'showBigPrevNext');
 		var numMonths = this._getNumberOfMonths(inst);
+		var showCurrentAtPos = this._get(inst, 'showCurrentAtPos');
 		var stepMonths = this._get(inst, 'stepMonths');
 		var stepBigMonths = this._get(inst, 'stepBigMonths');
 		var isMultiMonth = (numMonths[0] != 1 || numMonths[1] != 1);
@@ -1278,8 +1280,12 @@ $.extend(Datepicker.prototype, {
 			new Date(inst.currentYear, inst.currentMonth, inst.currentDay));
 		var minDate = this._getMinMaxDate(inst, 'min', true);
 		var maxDate = this._getMinMaxDate(inst, 'max');
-		var drawMonth = inst.drawMonth;
+		var drawMonth = inst.drawMonth - showCurrentAtPos;
 		var drawYear = inst.drawYear;
+		if (drawMonth < 0) {
+			drawMonth += 12;
+			drawYear--;
+		}
 		if (maxDate) {
 			var maxDraw = new Date(maxDate.getFullYear(),
 				maxDate.getMonth() - numMonths[1] + 1, maxDate.getDate());
