@@ -1,9 +1,13 @@
 /* Dutch (UTF-8) initialisation for the jQuery UI date picker plugin. */
+/* Written by ??? */
 jQuery(function($){
-	$.datepicker.regional['nl'] = {clearText: 'Wissen', clearStatus: 'Wis de huidige datum',
+	$.datepicker.regional['nl'] = {
+		clearText: 'Wissen', clearStatus: 'Wis de huidige datum',
 		closeText: 'Sluiten', closeStatus: 'Sluit zonder verandering',
-		prevText: '&lt;Terug', prevStatus: 'Laat de voorgaande maand zien',
-		nextText: 'Volgende&gt;', nextStatus: 'Laat de volgende maand zien',
+		prevText: '&#x3c;Terug', prevStatus: 'Laat de voorgaande maand zien',
+		prevBigText: '&#x3c;&#x3c;', prevBigStatus: '',
+		nextText: 'Volgende&#x3e;', nextStatus: 'Laat de volgende maand zien',
+		nextBigText: '&#x3e;&#x3e;', nextBigStatus: '',
 		currentText: 'Vandaag', currentStatus: 'Laat de huidige maand zien',
 		monthNames: ['Januari','Februari','Maart','April','Mei','Juni',
 		'Juli','Augustus','September','Oktober','November','December'],

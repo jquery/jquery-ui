@@ -1,10 +1,13 @@
 ﻿/* Swedish initialisation for the jQuery UI date picker plugin. */
 /* Written by Anders Ekdahl ( anders@nomadiz.se). */
 jQuery(function($){
-    $.datepicker.regional['sv'] = {clearText: 'Rensa', clearStatus: '',
+    $.datepicker.regional['sv'] = {
+		clearText: 'Rensa', clearStatus: '',
 		closeText: 'Stäng', closeStatus: '',
         prevText: '&laquo;Förra',  prevStatus: '',
+		prevBigText: '&#x3c;&#x3c;', prevBigStatus: '',
 		nextText: 'Nästa&raquo;', nextStatus: '',
+		nextBigText: '&#x3e;&#x3e;', nextBigStatus: '',
 		currentText: 'Idag', currentStatus: '',
         monthNames: ['Januari','Februari','Mars','April','Maj','Juni', 
         'Juli','Augusti','September','Oktober','November','December'],

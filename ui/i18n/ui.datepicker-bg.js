@@ -1,10 +1,13 @@
 ﻿/* Bulgarian initialisation for the jQuery UI date picker plugin. */
 /* Written by Stoyan Kyosev (http://svest.org). */
 jQuery(function($){
-    $.datepicker.regional['bg'] = {clearText: 'изчисти', clearStatus: 'изчисти актуалната дата',
+    $.datepicker.regional['bg'] = {
+		clearText: 'изчисти', clearStatus: 'изчисти актуалната дата',
         closeText: 'затвори', closeStatus: 'затвори без промени',
         prevText: '&#x3c;назад', prevStatus: 'покажи последния месец',
+		prevBigText: '&#x3c;&#x3c;', prevBigStatus: '',
         nextText: 'напред&#x3e;', nextStatus: 'покажи следващия месец',
+		nextBigText: '&#x3e;&#x3e;', nextBigStatus: '',
         currentText: 'днес', currentStatus: '',
         monthNames: ['Януари','Февруари','Март','Април','Май','Юни',
         'Юли','Август','Септември','Октомври','Ноември','Декември'],

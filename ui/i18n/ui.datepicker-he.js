@@ -1,10 +1,13 @@
 ﻿/* Hebrew initialisation for the UI Datepicker extension. */
 /* Written by Amir Hardon (ahardon at gmail dot com). */
-jQuery(document).ready(function(){
-	jQuery.datepicker.regional['he'] = {clearText: 'נקה', clearStatus: '',
+jQuery(function($){
+	$.datepicker.regional['he'] = {
+		clearText: 'נקה', clearStatus: '',
 		closeText: 'סגור', closeStatus: '',
 		prevText: '&#x3c;הקודם', prevStatus: '',
+		prevBigText: '&#x3c;&#x3c;', prevBigStatus: '',
 		nextText: 'הבא&#x3e;', nextStatus: '',
+		nextBigText: '&#x3e;&#x3e;', nextBigStatus: '',
 		currentText: 'היום', currentStatus: '',
 		monthNames: ['ינואר','פברואר','מרץ','אפריל','מאי','יוני',
 		'יולי','אוגוסט','ספטמבר','אוקטובר','נובמבר','דצמבר'],
@@ -18,5 +21,5 @@ jQuery(document).ready(function(){
 		dayStatus: 'DD', dateStatus: 'DD, M d',
 		dateFormat: 'dd/mm/yy', firstDay: 0, 
 		initStatus: '', isRTL: true};
-	jQuery.datepicker.setDefaults($.datepicker.regional['he']);
+	$.datepicker.setDefaults($.datepicker.regional['he']);
 });

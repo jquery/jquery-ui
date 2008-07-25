@@ -1,10 +1,13 @@
 /* Italian initialisation for the jQuery UI date picker plugin. */
 /* Written by Apaella (apaella@gmail.com). */
 jQuery(function($){
-	$.datepicker.regional['it'] = {clearText: 'Svuota', clearStatus: '',
+	$.datepicker.regional['it'] = {
+		clearText: 'Svuota', clearStatus: '',
 		closeText: 'Chiudi', closeStatus: '',
-		prevText: '&lt;Prec', prevStatus: '',
-		nextText: 'Succ&gt;', nextStatus: '',
+		prevText: '&#x3c;Prec', prevStatus: '',
+		prevBigText: '&#x3c;&#x3c;', prevBigStatus: '',
+		nextText: 'Succ&#x3e;', nextStatus: '',
+		nextBigText: '&#x3e;&#x3e;', nextBigStatus: '',
 		currentText: 'Oggi', currentStatus: '',
 		monthNames: ['Gennaio','Febbraio','Marzo','Aprile','Maggio','Giugno',
 		'Luglio','Agosto','Settembre','Ottobre','Novembre','Dicembre'],

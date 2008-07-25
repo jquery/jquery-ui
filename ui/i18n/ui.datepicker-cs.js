@@ -1,10 +1,13 @@
 ﻿/* Czech initialisation for the jQuery UI date picker plugin. */
 /* Written by Tomas Muller (tomas@tomas-muller.net). */
 jQuery(function($){
-	$.datepicker.regional['cs'] = {clearText: 'Vymazat', clearStatus: 'Vymaže zadané datum',
+	$.datepicker.regional['cs'] = {
+		clearText: 'Vymazat', clearStatus: 'Vymaže zadané datum',
 		closeText: 'Zavřít',  closeStatus: 'Zavře kalendář beze změny',
 		prevText: '&#x3c;Dříve', prevStatus: 'Přejít na předchozí měsí',
+		prevBigText: '&#x3c;&#x3c;', prevBigStatus: '',
 		nextText: 'Později&#x3e;', nextStatus: 'Přejít na další měsíc',
+		nextBigText: '&#x3e;&#x3e;', nextBigStatus: '',
 		currentText: 'Nyní', currentStatus: 'Přejde na aktuální měsíc',
 		monthNames: ['leden','únor','březen','duben','květen','červen',
         'červenec','srpen','září','říjen','listopad','prosinec'],

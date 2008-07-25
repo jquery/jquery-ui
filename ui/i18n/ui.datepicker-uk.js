@@ -1,10 +1,13 @@
 /* Ukrainian (UTF-8) initialisation for the jQuery UI date picker plugin. */
 /* Written by Maxim Drogobitskiy (maxdao@gmail.com). */
 jQuery(function($){
-	$.datepicker.regional['uk'] = {clearText: 'Очистити', clearStatus: '',
+	$.datepicker.regional['uk'] = {
+		clearText: 'Очистити', clearStatus: '',
 		closeText: 'Закрити', closeStatus: '',
-		prevText: '&lt;&lt;',  prevStatus: '',
-		nextText: '&gt;&gt;', nextStatus: '',
+		prevText: '&#x3c;',  prevStatus: '',
+		prevBigText: '&#x3c;&#x3c;', prevBigStatus: '',
+		nextText: '&#x3e;', nextStatus: '',
+		nextBigText: '&#x3e;&#x3e;', nextBigStatus: '',
 		currentText: 'Сьогодні', currentStatus: '',
 		monthNames: ['Січень','Лютий','Березень','Квітень','Травень','Червень',
 		'Липень','Серпень','Вересень','Жовтень','Листопад','Грудень'],

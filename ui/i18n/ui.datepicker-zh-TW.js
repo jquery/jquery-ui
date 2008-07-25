@@ -4,8 +4,10 @@ jQuery(function($){
 	$.datepicker.regional['zh-TW'] = {
 		clearText: '清除', clearStatus: '清除已選日期',
 		closeText: '關閉', closeStatus: '不改變目前的選擇',
-		prevText: '&lt;上月', prevStatus: '顯示上月',
-		nextText: '下月&gt;', nextStatus: '顯示下月',
+		prevText: '&#x3c;上月', prevStatus: '顯示上月',
+		prevBigText: '&#x3c;&#x3c;', prevBigStatus: '',
+		nextText: '下月&#x3e;', nextStatus: '顯示下月',
+		nextBigText: '&#x3e;&#x3e;', nextBigStatus: '',
 		currentText: '今天', currentStatus: '顯示本月',
 		monthNames: ['一月','二月','三月','四月','五月','六月',
 		'七月','八月','九月','十月','十一月','十二月'],

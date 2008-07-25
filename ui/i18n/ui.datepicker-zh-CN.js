@@ -1,10 +1,13 @@
 /* Chinese initialisation for the jQuery UI date picker plugin. */
 /* Written by Cloudream (cloudream@gmail.com). */
 jQuery(function($){
-	$.datepicker.regional['zh-CN'] = {clearText: '清除', clearStatus: '清除已选日期',
+	$.datepicker.regional['zh-CN'] = {
+		clearText: '清除', clearStatus: '清除已选日期',
 		closeText: '关闭', closeStatus: '不改变当前选择',
-		prevText: '&lt;上月', prevStatus: '显示上月',
-		nextText: '下月&gt;', nextStatus: '显示下月',
+		prevText: '&#x3c;上月', prevStatus: '显示上月',
+		prevBigText: '&#x3c;&#x3c;', prevBigStatus: '',
+		nextText: '下月&#x3e;', nextStatus: '显示下月',
+		nextBigText: '&#x3e;&#x3e;', nextBigStatus: '',
 		currentText: '今天', currentStatus: '显示本月',
 		monthNames: ['一月','二月','三月','四月','五月','六月',
 		'七月','八月','九月','十月','十一月','十二月'],

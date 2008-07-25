@@ -1,13 +1,13 @@
-/**
- * Latvian (UTF-8) initialisation for the jQuery UI date picker plugin.
- * @author Arturas Paleicikas <arturas.paleicikas@metasite.net>
- */
+/* Latvian (UTF-8) initialisation for the jQuery UI date picker plugin. */
+/* @author Arturas Paleicikas <arturas.paleicikas@metasite.net> */
 jQuery(function($){
 	$.datepicker.regional['lv'] = {
 		clearText: 'Notīrīt', clearStatus: '',
 		closeText: 'Aizvērt', closeStatus: '',
 		prevText: 'Iepr',  prevStatus: '',
+		prevBigText: '&#x3c;&#x3c;', prevBigStatus: '',
 		nextText: 'Nāka', nextStatus: '',
+		nextBigText: '&#x3e;&#x3e;', nextBigStatus: '',
 		currentText: 'Šodien', currentStatus: '',
 		monthNames: ['Janvāris','Februāris','Marts','Aprīlis','Maijs','Jūnijs',
 		'Jūlijs','Augusts','Septembris','Oktobris','Novembris','Decembris'],

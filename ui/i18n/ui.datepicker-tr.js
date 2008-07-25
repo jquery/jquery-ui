@@ -1,10 +1,13 @@
 /* Turkish initialisation for the jQuery UI date picker plugin. */
 /* Written by Izzet Emre Erkan (kara@karalamalar.net). */
 jQuery(function($){
-	$.datepicker.regional['tr'] = {clearText: 'temizle', clearStatus: 'geçerli tarihi temizler',
+	$.datepicker.regional['tr'] = {
+		clearText: 'temizle', clearStatus: 'geçerli tarihi temizler',
 		closeText: 'kapat', closeStatus: 'sadece göstergeyi kapat',
 		prevText: '&#x3c;geri', prevStatus: 'önceki ayı göster',
+		prevBigText: '&#x3c;&#x3c;', prevBigStatus: '',
 		nextText: 'ileri&#x3e', nextStatus: 'sonraki ayı göster',
+		nextBigText: '&#x3e;&#x3e;', nextBigStatus: '',
 		currentText: 'bugün', currentStatus: '',
 		monthNames: ['Ocak','Şubat','Mart','Nisan','Mayıs','Haziran',
 		'Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'],

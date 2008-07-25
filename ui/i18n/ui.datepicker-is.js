@@ -1,10 +1,13 @@
 /* Icelandic initialisation for the jQuery UI date picker plugin. */
 /* Written by Haukur H. Thorsson (haukur@eskill.is). */
 jQuery(function($){
-	$.datepicker.regional['is'] = {clearText: 'Hreinsa', clearStatus: '',
+	$.datepicker.regional['is'] = {
+		clearText: 'Hreinsa', clearStatus: '',
 		closeText: 'Loka', closeStatus: '',
-		prevText: '< Fyrri', prevStatus: '',
-		nextText: 'N&aelig;sti >', nextStatus: '',
+		prevText: '&#x3c; Fyrri', prevStatus: '',
+		prevBigText: '&#x3c;&#x3c;', prevBigStatus: '',
+		nextText: 'N&aelig;sti &#x3e;', nextStatus: '',
+		nextBigText: '&#x3e;&#x3e;', nextBigStatus: '',
 		currentText: '&Iacute; dag', currentStatus: '',
 		monthNames: ['Jan&uacute;ar','Febr&uacute;ar','Mars','Apr&iacute;l','Ma&iacute','J&uacute;n&iacute;',
 		'J&uacute;l&iacute;','&Aacute;g&uacute;st','September','Okt&oacute;ber','N&oacute;vember','Desember'],

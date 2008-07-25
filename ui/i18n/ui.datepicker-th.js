@@ -1,10 +1,13 @@
 ﻿/* Thai initialisation for the jQuery UI date picker plugin. */
 /* Written by pipo (pipo@sixhead.com). */
 jQuery(function($){
-	$.datepicker.regional['th'] = {clearText: 'ลบ', clearStatus: '',
+	$.datepicker.regional['th'] = {
+		clearText: 'ลบ', clearStatus: '',
 		closeText: 'ปิด', closeStatus: '',
 		prevText: '&laquo;&nbsp;ย้อน', prevStatus: '',
+		prevBigText: '&#x3c;&#x3c;', prevBigStatus: '',
 		nextText: 'ถัดไป&nbsp;&raquo;', nextStatus: '',
+		nextBigText: '&#x3e;&#x3e;', nextBigStatus: '',
 		currentText: 'วันนี้', currentStatus: '',
 		monthNames: ['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน',
 		'กรกฏาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'],

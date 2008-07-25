@@ -1,10 +1,13 @@
 /* Polish initialisation for the jQuery UI date picker plugin. */
 /* Written by Jacek Wysocki (jacek.wysocki@gmail.com). */
 jQuery(function($){
-	$.datepicker.regional['pl'] = {clearText: 'Wyczyść', clearStatus: 'Wyczyść obecną datę',
+	$.datepicker.regional['pl'] = {
+		clearText: 'Wyczyść', clearStatus: 'Wyczyść obecną datę',
 		closeText: 'Zamknij', closeStatus: 'Zamknij bez zapisywania',
 		prevText: '&#x3c;Poprzedni', prevStatus: 'Pokaż poprzedni miesiąc',
+		prevBigText: '&#x3c;&#x3c;', prevBigStatus: '',
 		nextText: 'Następny&#x3e;', nextStatus: 'Pokaż następny miesiąc',
+		nextBigText: '&#x3e;&#x3e;', nextBigStatus: '',
 		currentText: 'Dziś', currentStatus: 'Pokaż aktualny miesiąc',
 		monthNames: ['Styczeń','Luty','Marzec','Kwiecień','Maj','Czerwiec',
 		'Lipiec','Sierpień','Wrzesień','Październik','Listopad','Grudzień'],

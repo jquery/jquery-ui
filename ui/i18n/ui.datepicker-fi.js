@@ -1,12 +1,13 @@
 /* Finnish initialisation for the jQuery UI date picker plugin. */
 /* Written by Harri Kilpiö (harrikilpio@gmail.com). */
-
-$(document).ready(function(){
+jQuery(function($){
     $.datepicker.regional['fi'] = {
 		clearText: 'Tyhjenn&auml;', clearStatus: '',
 		closeText: 'Sulje', closeStatus: '',
 		prevText: '&laquo;Edellinen', prevStatus: '',
+		prevBigText: '&#x3c;&#x3c;', prevBigStatus: '',
 		nextText: 'Seuraava&raquo;', nextStatus: '',
+		nextBigText: '&#x3e;&#x3e;', nextBigStatus: '',
 		currentText: 'T&auml;n&auml;&auml;n', currentStatus: '',
         monthNames: ['Tammikuu','Helmikuu','Maaliskuu','Huhtikuu','Toukokuu','Kes&auml;kuu',
         'Hein&auml;kuu','Elokuu','Syyskuu','Lokakuu','Marraskuu','Joulukuu'],

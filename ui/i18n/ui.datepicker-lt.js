@@ -1,13 +1,13 @@
-/**
- * Lithuanian (UTF-8) initialisation for the jQuery UI date picker plugin.
- *
- * @author Arturas Paleicikas <arturas@avalon.lt>
- */
+/* Lithuanian (UTF-8) initialisation for the jQuery UI date picker plugin. */
+/* @author Arturas Paleicikas <arturas@avalon.lt> */
 jQuery(function($){
-	$.datepicker.regional['lt'] = {clearText: 'Išvalyti', clearStatus: '',
+	$.datepicker.regional['lt'] = {
+		clearText: 'Išvalyti', clearStatus: '',
 		closeText: 'Uždaryti', closeStatus: '',
-		prevText: '&lt;Atgal',  prevStatus: '',
-		nextText: 'Pirmyn&gt;', nextStatus: '',
+		prevText: '&#x3c;Atgal',  prevStatus: '',
+		prevBigText: '&#x3c;&#x3c;', prevBigStatus: '',
+		nextText: 'Pirmyn&#x3e;', nextStatus: '',
+		nextBigText: '&#x3e;&#x3e;', nextBigStatus: '',
 		currentText: 'Šiandien', currentStatus: '',
 		monthNames: ['Sausis','Vasaris','Kovas','Balandis','Gegužė','Birželis',
 		'Liepa','Rugpjūtis','Rugsėjis','Spalis','Lapkritis','Gruodis'],

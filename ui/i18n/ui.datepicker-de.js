@@ -1,10 +1,13 @@
 ﻿/* German initialisation for the jQuery UI date picker plugin. */
 /* Written by Milian Wolff (mail@milianw.de). */
 jQuery(function($){
-	$.datepicker.regional['de'] = {clearText: 'löschen', clearStatus: 'aktuelles Datum löschen',
+	$.datepicker.regional['de'] = {
+		clearText: 'löschen', clearStatus: 'aktuelles Datum löschen',
 		closeText: 'schließen', closeStatus: 'ohne Änderungen schließen',
 		prevText: '&#x3c;zurück', prevStatus: 'letzten Monat zeigen',
+		prevBigText: '&#x3c;&#x3c;', prevBigStatus: '',
 		nextText: 'Vor&#x3e;', nextStatus: 'nächsten Monat zeigen',
+		nextBigText: '&#x3e;&#x3e;', nextBigStatus: '',
 		currentText: 'heute', currentStatus: '',
 		monthNames: ['Januar','Februar','März','April','Mai','Juni',
 		'Juli','August','September','Oktober','November','Dezember'],
