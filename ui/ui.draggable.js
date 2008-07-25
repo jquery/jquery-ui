@@ -219,7 +219,7 @@ $.widget("ui.draggable", $.extend({}, $.ui.mouse, {
 		
 		if((this.options.revert == "invalid" && !dropped) || (this.options.revert == "valid" && dropped) || this.options.revert === true) {
 			var self = this;
-			$(this.helper).animate(this.originalPosition, parseInt(this.options.revert, 10) || 500, function() {
+			$(this.helper).animate(this.originalPosition, parseInt(this.options.revertDuration, 10) || 500, function() {
 				self.propagate("stop", e);
 				self.clear();
 			});
