@@ -127,7 +127,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 				if ((x1 + dxClick) > l && (x1 + dxClick) < l + item.width/2) return 2;
 				if ((x1 + dxClick) > l + item.width/2 && (x1 + dxClick) < r) return 1;
 			} else {
-				var height = item.height, helperHeight = this.helperProportions.height;
+				var height = item.height;
 				var direction = y1 - this.updateOriginalPosition.top < 0 ? 2 : 1; // 2 = up
 				
 				if (direction == 1 && (y1 + dyClick) < t + height/2) { return 2; } // up
@@ -185,6 +185,21 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 		};
 		
 		return $(items);
+		
+	},
+	
+	removeCurrentsFromItems: function() {
+			
+		var list = this.currentItem.find(":data(sortable-item)");	
+	
+		for (var i=0; i < this.items.length; i++) {
+			
+			for (var j=0; j < list.length; j++) {
+				if(list[j] == this.items[i].item[0])
+					this.items.splice(i,1);
+			};
+		
+		};
 		
 	},
 	
@@ -371,6 +386,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 		}
 			
 		this.currentItem = currentItem;
+		this.removeCurrentsFromItems();
 		return true;	
 			
 	},
@@ -437,7 +453,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 
 		//Call plugins and callbacks
 		this.propagate("start", e);
-		this.helperProportions = { width: this.helper.outerWidth(), height: this.helper.outerHeight() };//Recache the helper size
+		if(!this._preserveHelperProportions) this.helperProportions = { width: this.helper.outerWidth(), height: this.helper.outerHeight() };//Recache the helper size
 		
 		if(o.cursorAt) {
 			if(o.cursorAt.left != undefined) this.offset.click.left = o.cursorAt.left;
@@ -705,7 +721,8 @@ $.extend($.ui.sortable, {
 		zIndex: 1000,
 		dropOnEmpty: true,
 		appendTo: "parent",
-		sortIndicator: $.ui.sortable.prototype.rearrange
+		sortIndicator: $.ui.sortable.prototype.rearrange,
+		scope: "default"
 	}
 });
 

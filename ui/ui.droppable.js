@@ -27,7 +27,8 @@ $.widget("ui.droppable", {
 		this.proportions = { width: this.element[0].offsetWidth, height: this.element[0].offsetHeight };
 		
 		// Add the reference and positions to the manager
-		$.ui.ddmanager.droppables.push(this);
+		$.ui.ddmanager.droppables[this.options.scope] = $.ui.ddmanager.droppables[this.options.scope] || [];
+		$.ui.ddmanager.droppables[this.options.scope].push(this);
 		
 	},
 	plugins: {},
@@ -42,7 +43,7 @@ $.widget("ui.droppable", {
 		};
 	},
 	destroy: function() {
-		var drop = $.ui.ddmanager.droppables;
+		var drop = $.ui.ddmanager.droppables[this.options.scope];
 		for ( var i = 0; i < drop.length; i++ )
 			if ( drop[i] == this )
 				drop.splice(i, 1);
@@ -116,7 +117,8 @@ $.widget("ui.droppable", {
 $.extend($.ui.droppable, {
 	defaults: {
 		disabled: false,
-		tolerance: 'intersect'
+		tolerance: 'intersect',
+		scope: 'default'
 	}
 });
 
@@ -167,26 +169,31 @@ $.ui.intersect = function(draggable, droppable, toleranceMode) {
 */
 $.ui.ddmanager = {
 	current: null,
-	droppables: [],
+	droppables: { scope: [] },
 	prepareOffsets: function(t, e) {
 		
-		var m = $.ui.ddmanager.droppables;
+		var m = $.ui.ddmanager.droppables[t.options.scope];
 		var type = e ? e.type : null; // workaround for #2317
+		var list = (t.currentItem || t.element).find(":data(droppable)").andSelf();	
 
-		for (var i = 0; i < m.length; i++) {
-			if(m[i].options.disabled || (t && !m[i].options.accept.call(m[i].element,(t.currentItem || t.element)))) continue;
-			m[i].visible = m[i].element.css("display") != "none"; if(!m[i].visible) continue; //If the element is not visible, continue
+		droppablesLoop: for (var i = 0; i < m.length; i++) {
+			
+			if(m[i].options.disabled || (t && !m[i].options.accept.call(m[i].element,(t.currentItem || t.element)))) continue;	//No disabled and non-accepted
+			for (var j=0; j < list.length; j++) { if(list[j] == m[i].element[0]) { m[i].proportions.height = 0; continue droppablesLoop; } }; //Filter out elements in the current dragged item
+			m[i].visible = m[i].element.css("display") != "none"; if(!m[i].visible) continue; 									//If the element is not visible, continue
+			
 			m[i].offset = m[i].element.offset();
 			m[i].proportions = { width: m[i].element[0].offsetWidth, height: m[i].element[0].offsetHeight };
 			
-			if(type == "dragstart" || type == "sortactivate") m[i].activate.call(m[i], e); //Activate the droppable if used directly from draggables
+			if(type == "dragstart" || type == "sortactivate") m[i].activate.call(m[i], e); 										//Activate the droppable if used directly from draggables
+			
 		}
 		
 	},
 	drop: function(draggable, e) {
 		
 		var dropped = false;
-		$.each($.ui.ddmanager.droppables, function() {
+		$.each($.ui.ddmanager.droppables[draggable.options.scope], function() {
 			
 			if(!this.options) return;
 			if (!this.options.disabled && this.visible && $.ui.intersect(draggable, this, this.options.tolerance))
@@ -208,7 +215,7 @@ $.ui.ddmanager = {
 		
 		//Run through all droppables and check their positions based on specific tolerance options
 
-		$.each($.ui.ddmanager.droppables, function() {
+		$.each($.ui.ddmanager.droppables[draggable.options.scope], function() {
 			
 			if(this.options.disabled || this.greedyChild || !this.visible) return;
 			var intersects = $.ui.intersect(draggable, this, this.options.tolerance);

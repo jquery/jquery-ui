@@ -267,7 +267,8 @@ $.extend($.ui.draggable, {
 		cancel: ":input",
 		delay: 0,
 		distance: 1,
-		helper: "original"
+		helper: "original",
+		scope: "default"
 	}
 });
 

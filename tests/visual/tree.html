@@ -10,69 +10,16 @@
 <script type="text/javascript" src="../../ui/ui.droppable.js"></script>
 <script type="text/javascript" src="../../ui/ui.resizable.js"></script>
 <script type="text/javascript" src="../../ui/ui.sortable.js"></script>
+<script type="text/javascript" src="../../../branches/1.8/ui.tree.js"></script>
 
 
 <script>
 $(document).ready(function(){
 
-
-$.widget("ui.tree", {
-	init: function() {
-
-		var self = this;
-
-		this.element.sortable({
-			items: this.options.sortOn,
-			placeholder: "ui-tree-placeholder",
-			start: function() {
-				$(this).data("sortable").placeholder.hide();
-				$(this).data("sortable").refreshPositions(true);	
-			},
-			stop: function() {
-				var self = $(this).data("sortable");
-				$(self.options.items, self.element).css("border-top", "0").css("border-bottom", "0");
-			},
-			sortIndicator: function(e, item, append, hardRefresh) {
-		
-				append ? append[0].appendChild(this.placeholder[0]) : item.item[0].parentNode.insertBefore(this.placeholder[0], (this.direction == 'down' ? item.item[0] : item.item[0].nextSibling));
-				
-				$(this.options.items, this.element).css("border-top", "0").css("border-bottom", "0");
-				item.item.css("border-"+(this.direction == "down" ? "top" : "bottom"), "2px solid black");
-	
-			}
-		});
-		
-		
-		
-		//Make certain nodes droppable
-		$(this.options.dropOn, this.element).droppable({
-			accept: this.options.sortOn,
-			hoverClass: this.options.hoverClass,
-			//tolerance: "pointer",
-			over: function() {
-				$(self.options.sortOn, self.element).css("border-top", "0").css("border-bottom", "0");
-			},
-			drop: function(e, ui) {
-				$(this).parent().find("ul").append(ui.draggable);
-				self.element.data("sortable")._noFinalSort = true;
-			}
-		});
-
-	}
-});
-
-$.extend($.ui.tree, {
-	defaults: {
-		sortOn: "*",
-		dropOn: "div",
-		hoverClass: "ui-tree-hover"
-	}
-});
-
 $("ul.sortable").tree({
 	sortOn: "li",
-	dropOn: "div",
-	hoverClass: "hover"
+	dropOn: ".folder",
+	dropHoverClass: "hover"
 });
 
 
@@ -96,14 +43,31 @@ font-family:"lucida grande", tahoma, verdana, arial, sans-serif;
 .placeholder {
 	display: none;
 }
+
+.hover-up {
+	border-bottom: 2px solid black;
+}
+
+.hover-down {
+	border-top: 2px solid black;
+}
+
+.folder {
+	border: 1px solid black;
+}
+
+li {
+	padding: 3px;
+}
+
 </style>
 </head>
 
 <body>
 
 	<ul class="sortable">
-		<li>Item 1</li>
-		<li><div>Item 2</div>
+		<li><div class="folder">Item 1</div></li>
+		<li><div class="folder">Item 2</div>
 			<ul>
 				<li>Sub Item 1</li>
 				<li>Sub Item 3</li>
@@ -111,9 +75,15 @@ font-family:"lucida grande", tahoma, verdana, arial, sans-serif;
 				<li>Sub Item 5</li>
 			</ul>
 		</li>
-		<li>Item 3</li>
-		<li>Item 4</li>
-		<li><div>Item 2</div>
+		<li><div class="folder">Item 3</div></li>
+		<li><div class="folder">Item 4</div></li>
+		<li><div class="folder">Item 4</div></li>
+		<li><div class="folder">Item 4</div></li>
+		<li><div class="folder">Item 4</div></li>
+		<li><div class="folder">Item 4</div></li>
+		<li><div class="folder">Item 4</div></li>
+		<li><div class="folder">Item 4</div></li>
+		<li><div class="folder">Item 2</div>
 			<ul>
 				<li>Sub Item 1</li>
 				<li>Sub Item 3</li>
