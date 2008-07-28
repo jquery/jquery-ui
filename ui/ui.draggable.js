@@ -17,7 +17,8 @@ $.widget("ui.draggable", $.extend({}, $.ui.mouse, {
 		
 		if (this.options.helper == 'original' && !(/^(?:r|a|f)/).test(this.element.css("position")))
 			this.element[0].style.position = 'relative';
-
+		
+		(this.options.cssNamespace && this.element.addClass(this.options.cssNamespace+"-draggable"));
 		(this.options.disabled && this.element.addClass('ui-draggable-disabled'));
 		
 		this.mouseInit();
@@ -268,7 +269,8 @@ $.extend($.ui.draggable, {
 		delay: 0,
 		distance: 1,
 		helper: "original",
-		scope: "default"
+		scope: "default",
+		cssNamespace: "ui"
 	}
 });
 

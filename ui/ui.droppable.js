@@ -30,6 +30,8 @@ $.widget("ui.droppable", {
 		$.ui.ddmanager.droppables[this.options.scope] = $.ui.ddmanager.droppables[this.options.scope] || [];
 		$.ui.ddmanager.droppables[this.options.scope].push(this);
 		
+		(this.options.cssNamespace && this.element.addClass(this.options.cssNamespace+"-droppable"));
+		
 	},
 	plugins: {},
 	ui: function(c) {
@@ -118,7 +120,8 @@ $.extend($.ui.droppable, {
 	defaults: {
 		disabled: false,
 		tolerance: 'intersect',
-		scope: 'default'
+		scope: 'default',
+		cssNamespace: 'ui'
 	}
 });
 
@@ -169,7 +172,7 @@ $.ui.intersect = function(draggable, droppable, toleranceMode) {
 */
 $.ui.ddmanager = {
 	current: null,
-	droppables: { default: [] },
+	droppables: { 'default': [] },
 	prepareOffsets: function(t, e) {
 		
 		var m = $.ui.ddmanager.droppables[t.options.scope];
