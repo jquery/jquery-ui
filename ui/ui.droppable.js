@@ -169,7 +169,7 @@ $.ui.intersect = function(draggable, droppable, toleranceMode) {
 */
 $.ui.ddmanager = {
 	current: null,
-	droppables: { scope: [] },
+	droppables: { default: [] },
 	prepareOffsets: function(t, e) {
 		
 		var m = $.ui.ddmanager.droppables[t.options.scope];
