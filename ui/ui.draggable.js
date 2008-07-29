@@ -348,31 +348,35 @@ $.ui.plugin.add("draggable", "scroll", {
 		
 		var o = ui.options;
 		var i = $(this).data("draggable");
+		var scrolled = false;
 	
 		if(i.scrollTopParent[0] != document && i.scrollTopParent[0].tagName != 'HTML') {
 			if((i.overflowYOffset.top + i.scrollTopParent[0].offsetHeight) - e.pageY < o.scrollSensitivity)
-				i.scrollTopParent[0].scrollTop = i.scrollTopParent[0].scrollTop + o.scrollSpeed;
+				i.scrollTopParent[0].scrollTop = scrolled = i.scrollTopParent[0].scrollTop + o.scrollSpeed;
 			if(e.pageY - i.overflowYOffset.top < o.scrollSensitivity)
-				i.scrollTopParent[0].scrollTop = i.scrollTopParent[0].scrollTop - o.scrollSpeed;
+				i.scrollTopParent[0].scrollTop = scrolled = i.scrollTopParent[0].scrollTop - o.scrollSpeed;
 							
 		} else {
 			if(e.pageY - $(document).scrollTop() < o.scrollSensitivity)
-				$(document).scrollTop($(document).scrollTop() - o.scrollSpeed);
+				scrolled = $(document).scrollTop($(document).scrollTop() - o.scrollSpeed);
 			if($(window).height() - (e.pageY - $(document).scrollTop()) < o.scrollSensitivity)
-				$(document).scrollTop($(document).scrollTop() + o.scrollSpeed);
+				scrolled = $(document).scrollTop($(document).scrollTop() + o.scrollSpeed);
 		}
 		
 		if(i.scrollLeftParent[0] != document && i.scrollLeftParent[0].tagName != 'HTML') {
 			if((i.overflowXOffset.left + i.scrollLeftParent[0].offsetWidth) - e.pageX < o.scrollSensitivity)
-				i.scrollLeftParent[0].scrollLeft = i.scrollLeftParent[0].scrollLeft + o.scrollSpeed;
+				scrolled = i.scrollLeftParent[0].scrollLeft = i.scrollLeftParent[0].scrollLeft + o.scrollSpeed;
 			if(e.pageX - i.overflowXOffset.left < o.scrollSensitivity)
-				i.scrollLeftParent[0].scrollLeft = i.scrollLeftParent[0].scrollLeft - o.scrollSpeed;
+				scrolled = i.scrollLeftParent[0].scrollLeft = i.scrollLeftParent[0].scrollLeft - o.scrollSpeed;
 		} else {
 			if(e.pageX - $(document).scrollLeft() < o.scrollSensitivity)
-				$(document).scrollLeft($(document).scrollLeft() - o.scrollSpeed);
+				scrolled = $(document).scrollLeft($(document).scrollLeft() - o.scrollSpeed);
 			if($(window).width() - (e.pageX - $(document).scrollLeft()) < o.scrollSensitivity)
-				$(document).scrollLeft($(document).scrollLeft() + o.scrollSpeed);
+				scrolled = $(document).scrollLeft($(document).scrollLeft() + o.scrollSpeed);
 		}
+		
+		if(scrolled !== false)
+			$.ui.ddmanager.prepareOffsets(i, e);
 		
 	}
 });
