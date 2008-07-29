@@ -86,8 +86,8 @@ $.widget("ui.draggable", $.extend({}, $.ui.mouse, {
 		
 		var p = this.element.position();																//This is a relative to absolute position minus the actual position calculation - only used for relative positioned helpers
 		this.offset.relative = this.cssPosition == "relative" ? {
-			top: p.top - (parseInt(this.helper.css("top"),10) || 0) + this.scrollTopParent[0].scrollTop,
-			left: p.left - (parseInt(this.helper.css("left"),10) || 0) + this.scrollLeftParent[0].scrollLeft
+			top: p.top - (parseInt(this.helper.css("top"),10) || 0) + (this.scrollTopParent[0].scrollTop || 0),
+			left: p.left - (parseInt(this.helper.css("left"),10) || 0) + (this.scrollLeftParent[0].scrollLeft || 0)
 		} : { top: 0, left: 0 };
 		
 		this.originalPosition = this.generatePosition(e);												//Generate the original position
@@ -161,7 +161,7 @@ $.widget("ui.draggable", $.extend({}, $.ui.mouse, {
 		};
 	},
 	generatePosition: function(e) {
-		
+
 		var o = this.options;
 		var position = {
 			top: (
@@ -169,7 +169,7 @@ $.widget("ui.draggable", $.extend({}, $.ui.mouse, {
 				- this.offset.click.top													// Click offset (relative to the element)
 				- this.offset.relative.top												// Only for relative positioned nodes: Relative offset from element to offset parent
 				- this.offset.parent.top												// The offsetParent's offset without borders (offset + border)
-				+ (this.cssPosition == "fixed" || (this.cssPosition == "absolute" && this.offsetParent[0] == document.body) ? 0 : this.scrollTopParent[0].scrollTop)	// The offsetParent's scroll position, not if the element is fixed
+				+ (this.cssPosition == "fixed" || (this.cssPosition == "absolute" && this.offsetParent[0] == document.body) ? 0 : (this.scrollTopParent[0].scrollTop || 0))	// The offsetParent's scroll position, not if the element is fixed
 				- (this.cssPosition == "fixed" ? $(document).scrollTop() : 0)
 			),
 			left: (
@@ -177,11 +177,11 @@ $.widget("ui.draggable", $.extend({}, $.ui.mouse, {
 				- this.offset.click.left												// Click offset (relative to the element)
 				- this.offset.relative.left												// Only for relative positioned nodes: Relative offset from element to offset parent
 				- this.offset.parent.left												// The offsetParent's offset without borders (offset + border)
-				+ (this.cssPosition == "fixed" || (this.cssPosition == "absolute" && this.offsetParent[0] == document.body) ? 0 : this.scrollLeftParent[0].scrollLeft)	// The offsetParent's scroll position, not if the element is fixed
+				+ (this.cssPosition == "fixed" || (this.cssPosition == "absolute" && this.offsetParent[0] == document.body) ? 0 : (this.scrollLeftParent[0].scrollLeft || 0))	// The offsetParent's scroll position, not if the element is fixed
 				- (this.cssPosition == "fixed" ? $(document).scrollLeft() : 0)
 			)
 		};
-		
+	
 		if(!this.originalPosition) return position;										//If we are not dragging yet, we won't check for options
 		
 		/*
@@ -206,14 +206,14 @@ $.widget("ui.draggable", $.extend({}, $.ui.mouse, {
 		return position;
 	},
 	mouseDrag: function(e) {
-		
+	
 		//Compute the helpers position
 		this.position = this.generatePosition(e);
 		this.positionAbs = this.convertPositionTo("absolute");
 		
 		//Call plugins and callbacks and use the resulting position if something is returned		
 		this.position = this.propagate("drag", e) || this.position;
-		
+	
 		if(!this.options.axis || this.options.axis != "y") this.helper[0].style.left = this.position.left+'px';
 		if(!this.options.axis || this.options.axis != "x") this.helper[0].style.top = this.position.top+'px';
 		if($.ui.ddmanager) $.ui.ddmanager.drag(this, e);
