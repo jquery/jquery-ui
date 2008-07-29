@@ -71,11 +71,11 @@ $.widget("ui.draggable", $.extend({}, $.ui.mouse, {
 		this.scrollTopParent = function(el) {
 			do { if(/auto|scroll/.test(el.css('overflow')) || (/auto|scroll/).test(el.css('overflow-y'))) return el; el = el.parent(); } while (el[0].parentNode);
 			return $(document);
-		}(this.element);
+		}(this.helper);
 		this.scrollLeftParent = function(el) {
 			do { if(/auto|scroll/.test(el.css('overflow')) || (/auto|scroll/).test(el.css('overflow-x'))) return el; el = el.parent(); } while (el[0].parentNode);
 			return $(document);
-		}(this.element);
+		}(this.helper);
 		
 		this.offsetParent = this.helper.offsetParent(); var po = this.offsetParent.offset();			//Get the offsetParent and cache its position
 		if(this.offsetParent[0] == document.body && $.browser.mozilla) po = { top: 0, left: 0 };		//Ugly FF3 fix
@@ -333,6 +333,8 @@ $.ui.plugin.add("draggable", "iframeFix", {
 	}
 });
 
+
+
 $.ui.plugin.add("draggable", "scroll", {
 	start: function(e, ui) {
 		var o = ui.options;
@@ -340,21 +342,29 @@ $.ui.plugin.add("draggable", "scroll", {
 		o.scrollSensitivity	= o.scrollSensitivity || 20;
 		o.scrollSpeed		= o.scrollSpeed || 20;
 		
-		if(i.scrollTopParent[0] != document && i.scrollTopParent[0].tagName != 'HTML') i.overflowYOffset = i.scrollTopParent.offset();
-		if(i.scrollLeftParent[0] != document && i.scrollLeftParent[0].tagName != 'HTML') i.overflowXOffset = i.scrollLeftParent.offset();
+		i.overflowY = function(el) {
+			do { if(/auto|scroll/.test(el.css('overflow')) || (/auto|scroll/).test(el.css('overflow-y'))) return el; el = el.parent(); } while (el[0].parentNode);
+			return $(document);
+		}(this);
+		i.overflowX = function(el) {
+			do { if(/auto|scroll/.test(el.css('overflow')) || (/auto|scroll/).test(el.css('overflow-x'))) return el; el = el.parent(); } while (el[0].parentNode);
+			return $(document);
+		}(this);
+		
+		if(i.overflowY[0] != document && i.overflowY[0].tagName != 'HTML') i.overflowYOffset = i.overflowY.offset();
+		if(i.overflowX[0] != document && i.overflowX[0].tagName != 'HTML') i.overflowXOffset = i.overflowX.offset();
 		
 	},
 	drag: function(e, ui) {
 		
-		var o = ui.options;
+		var o = ui.options, scrolled = false;
 		var i = $(this).data("draggable");
-		var scrolled = false;
-	
-		if(i.scrollTopParent[0] != document && i.scrollTopParent[0].tagName != 'HTML') {
-			if((i.overflowYOffset.top + i.scrollTopParent[0].offsetHeight) - e.pageY < o.scrollSensitivity)
-				i.scrollTopParent[0].scrollTop = scrolled = i.scrollTopParent[0].scrollTop + o.scrollSpeed;
+		
+		if(i.overflowY[0] != document && i.overflowY[0].tagName != 'HTML') {
+			if((i.overflowYOffset.top + i.overflowY[0].offsetHeight) - e.pageY < o.scrollSensitivity)
+				i.overflowY[0].scrollTop = scrolled = i.overflowY[0].scrollTop + o.scrollSpeed;
 			if(e.pageY - i.overflowYOffset.top < o.scrollSensitivity)
-				i.scrollTopParent[0].scrollTop = scrolled = i.scrollTopParent[0].scrollTop - o.scrollSpeed;
+				i.overflowY[0].scrollTop = scrolled = i.overflowY[0].scrollTop - o.scrollSpeed;
 							
 		} else {
 			if(e.pageY - $(document).scrollTop() < o.scrollSensitivity)
@@ -363,11 +373,11 @@ $.ui.plugin.add("draggable", "scroll", {
 				scrolled = $(document).scrollTop($(document).scrollTop() + o.scrollSpeed);
 		}
 		
-		if(i.scrollLeftParent[0] != document && i.scrollLeftParent[0].tagName != 'HTML') {
-			if((i.overflowXOffset.left + i.scrollLeftParent[0].offsetWidth) - e.pageX < o.scrollSensitivity)
-				scrolled = i.scrollLeftParent[0].scrollLeft = i.scrollLeftParent[0].scrollLeft + o.scrollSpeed;
+		if(i.overflowX[0] != document && i.overflowX[0].tagName != 'HTML') {
+			if((i.overflowXOffset.left + i.overflowX[0].offsetWidth) - e.pageX < o.scrollSensitivity)
+				i.overflowX[0].scrollLeft = scrolled = i.overflowX[0].scrollLeft + o.scrollSpeed;
 			if(e.pageX - i.overflowXOffset.left < o.scrollSensitivity)
-				scrolled = i.scrollLeftParent[0].scrollLeft = i.scrollLeftParent[0].scrollLeft - o.scrollSpeed;
+				i.overflowX[0].scrollLeft = scrolled = i.overflowX[0].scrollLeft - o.scrollSpeed;
 		} else {
 			if(e.pageX - $(document).scrollLeft() < o.scrollSensitivity)
 				scrolled = $(document).scrollLeft($(document).scrollLeft() - o.scrollSpeed);
@@ -380,6 +390,7 @@ $.ui.plugin.add("draggable", "scroll", {
 		
 	}
 });
+
 
 $.ui.plugin.add("draggable", "snap", {
 	start: function(e, ui) {
