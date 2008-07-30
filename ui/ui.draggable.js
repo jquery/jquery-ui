@@ -139,14 +139,16 @@ $.widget("ui.draggable", $.extend({}, $.ui.mouse, {
 		return true;
 	},
 	convertPositionTo: function(d, pos) {
+
 		if(!pos) pos = this.position;
 		var mod = d == "absolute" ? 1 : -1;
+
 		return {
 			top: (
 				pos.top																	// the calculated relative position
 				+ this.offset.relative.top	* mod										// Only for relative positioned nodes: Relative offset from element to offset parent
 				+ this.offset.parent.top * mod											// The offsetParent's offset without borders (offset + border)
-				- (this.cssPosition == "fixed" || (this.cssPosition == "absolute" && this.offsetParent[0] == document.body) ? 0 : this.scrollTopParent[0].scrollTop) * mod	// The offsetParent's scroll position, not if the element is fixed
+				- (this.cssPosition == "fixed" || (this.cssPosition == "absolute" && this.offsetParent[0] == document.body) ? 0 : (this.scrollTopParent[0].scrollTop || 0)) * mod	// The offsetParent's scroll position, not if the element is fixed
 				+ (this.cssPosition == "fixed" ? $(document).scrollTop() : 0) * mod
 				+ this.margins.top * mod												//Add the margin (you don't want the margin counting in intersection methods)
 			),
@@ -154,7 +156,7 @@ $.widget("ui.draggable", $.extend({}, $.ui.mouse, {
 				pos.left																// the calculated relative position
 				+ this.offset.relative.left	* mod										// Only for relative positioned nodes: Relative offset from element to offset parent
 				+ this.offset.parent.left * mod											// The offsetParent's offset without borders (offset + border)
-				- (this.cssPosition == "fixed" || (this.cssPosition == "absolute" && this.offsetParent[0] == document.body) ? 0 : this.scrollLeftParent[0].scrollLeft) * mod	// The offsetParent's scroll position, not if the element is fixed
+				- (this.cssPosition == "fixed" || (this.cssPosition == "absolute" && this.offsetParent[0] == document.body) ? 0 : (this.scrollLeftParent[0].scrollLeft || 0)) * mod	// The offsetParent's scroll position, not if the element is fixed
 				+ (this.cssPosition == "fixed" ? $(document).scrollLeft() : 0) * mod
 				+ this.margins.left * mod												//Add the margin (you don't want the margin counting in intersection methods)
 			)
@@ -412,6 +414,7 @@ $.ui.plugin.add("draggable", "snap", {
 	
 		var inst = $(this).data("draggable");
 		var d = ui.options.snapTolerance || 20;
+
 		var x1 = ui.absolutePosition.left, x2 = x1 + inst.helperProportions.width,
 			y1 = ui.absolutePosition.top, y2 = y1 + inst.helperProportions.height;
 		
@@ -419,14 +422,14 @@ $.ui.plugin.add("draggable", "snap", {
 			
 			var l = inst.snapElements[i].left, r = l + inst.snapElements[i].width, 
 				t = inst.snapElements[i].top, b = t + inst.snapElements[i].height;
-			
+		
 			//Yes, I know, this is insane ;)
 			if(!((l-d < x1 && x1 < r+d && t-d < y1 && y1 < b+d) || (l-d < x1 && x1 < r+d && t-d < y2 && y2 < b+d) || (l-d < x2 && x2 < r+d && t-d < y1 && y1 < b+d) || (l-d < x2 && x2 < r+d && t-d < y2 && y2 < b+d))) {
 				if(inst.snapElements[i].snapping) (inst.options.snap.release && inst.options.snap.release.call(inst.element, null, $.extend(inst.uiHash(), { snapItem: inst.snapElements[i].item })));
 				inst.snapElements[i].snapping = false;
 				continue;
 			}
-			
+		
 			if(ui.options.snapMode != 'inner') {
 				var ts = Math.abs(t - y2) <= 20;
 				var bs = Math.abs(b - y1) <= 20;
