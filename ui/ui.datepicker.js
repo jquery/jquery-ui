@@ -399,7 +399,18 @@ $.extend(Datepicker.prototype, {
 			settings[name] = value;
 		}
 		if (inst = $.data(target, PROP_NAME)) {
+			if (this._curInst == inst) {
+				this._hideDatepicker(null);
+			}
 			extendRemove(inst.settings, settings);
+			var date = new Date();
+			extendRemove(inst, {rangeStart: null, // start of range
+				endDay: null, endMonth: null, endYear: null, // end of range
+				selectedDay: date.getDate(), selectedMonth: date.getMonth(),
+				selectedYear: date.getFullYear(), // starting point
+				currentDay: date.getDate(), currentMonth: date.getMonth(),
+				currentYear: date.getFullYear(), // current selection
+				drawMonth: date.getMonth(), drawYear: date.getFullYear()}); // month being drawn
 			this._updateDatepicker(inst);
 		}
 	},
@@ -606,7 +617,7 @@ $.extend(Datepicker.prototype, {
 	   @param  duration  string - the duration over which to close the date picker */
 	_hideDatepicker: function(input, duration) {
 		var inst = this._curInst;
-		if (!inst)
+		if (!inst || (input && inst != $.data(input, PROP_NAME)))
 			return;
 		var rangeSelect = this._get(inst, 'rangeSelect');
 		if (rangeSelect && inst.stayOpen)
@@ -729,7 +740,7 @@ $.extend(Datepicker.prototype, {
 		if (rangeSelect) {
 			inst.stayOpen = !inst.stayOpen;
 			if (inst.stayOpen) {
-				$('.ui-datepicker td').removeClass(this._currentClass);
+				$('.ui-datepicker td', inst.dpDiv).removeClass(this._currentClass);
 				$(td).addClass(this._currentClass);
 			} 
 		}
