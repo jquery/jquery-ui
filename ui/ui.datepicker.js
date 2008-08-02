@@ -441,11 +441,13 @@ $.extend(Datepicker.prototype, {
 						break; // select the value on enter
 				case 27: $.datepicker._hideDatepicker(null, $.datepicker._get(inst, 'duration'));
 						break; // hide on escape
-				case 33: $.datepicker._adjustDate(e.target, (e.ctrlKey ? -1 :
-							-$.datepicker._get(inst, 'stepMonths')), (e.ctrlKey ? 'Y' : 'M'));
+				case 33: $.datepicker._adjustDate(e.target, (e.ctrlKey ?
+							-$.datepicker._get(inst, 'stepBigMonths') :
+							-$.datepicker._get(inst, 'stepMonths')), 'M');
 						break; // previous month/year on page up/+ ctrl
-				case 34: $.datepicker._adjustDate(e.target, (e.ctrlKey ? +1 :
-							+$.datepicker._get(inst, 'stepMonths')), (e.ctrlKey ? 'Y' : 'M'));
+				case 34: $.datepicker._adjustDate(e.target, (e.ctrlKey ?
+							+$.datepicker._get(inst, 'stepBigMonths') :
+							+$.datepicker._get(inst, 'stepMonths')), 'M');
 						break; // next month/year on page down/+ ctrl
 				case 35: if (e.ctrlKey) $.datepicker._clearDate(e.target);
 						handled = e.ctrlKey;
@@ -607,10 +609,10 @@ $.extend(Datepicker.prototype, {
 		if (!inst)
 			return;
 		var rangeSelect = this._get(inst, 'rangeSelect');
-		if (rangeSelect && this._stayOpen)
+		if (rangeSelect && inst.stayOpen)
 			this._selectDate('#' + inst.id, this._formatDate(inst,
 				inst.currentDay, inst.currentMonth, inst.currentYear));
-		this._stayOpen = false;
+		inst.stayOpen = false;
 		if (this._datepickerShowing) {
 			duration = (duration != null ? duration : this._get(inst, 'duration'));
 			var showAnim = this._get(inst, 'showAnim');
@@ -725,8 +727,8 @@ $.extend(Datepicker.prototype, {
 		var inst = $.data(target[0], PROP_NAME);
 		var rangeSelect = this._get(inst, 'rangeSelect');
 		if (rangeSelect) {
-			this._stayOpen = !this._stayOpen;
-			if (this._stayOpen) {
+			inst.stayOpen = !inst.stayOpen;
+			if (inst.stayOpen) {
 				$('.ui-datepicker td').removeClass(this._currentClass);
 				$(td).addClass(this._currentClass);
 			} 
@@ -734,7 +736,7 @@ $.extend(Datepicker.prototype, {
 		inst.selectedDay = inst.currentDay = $('a', td).html();
 		inst.selectedMonth = inst.currentMonth = month;
 		inst.selectedYear = inst.currentYear = year;
-		if (this._stayOpen) {
+		if (inst.stayOpen) {
 			inst.endDay = inst.endMonth = inst.endYear = null;
 		}
 		else if (rangeSelect) {
@@ -744,7 +746,7 @@ $.extend(Datepicker.prototype, {
 		}
 		this._selectDate(id, this._formatDate(inst,
 			inst.currentDay, inst.currentMonth, inst.currentYear));
-		if (this._stayOpen) {
+		if (inst.stayOpen) {
 			inst.rangeStart = new Date(inst.currentYear, inst.currentMonth, inst.currentDay);
 			this._updateDatepicker(inst);
 		}
@@ -764,7 +766,7 @@ $.extend(Datepicker.prototype, {
 		var inst = $.data(target[0], PROP_NAME);
 		if (this._get(inst, 'mandatory'))
 			return;
-		this._stayOpen = false;
+		inst.stayOpen = false;
 		inst.endDay = inst.endMonth = inst.endYear = inst.rangeStart = null;
 		this._selectDate(target, '');
 	},
@@ -787,7 +789,7 @@ $.extend(Datepicker.prototype, {
 			inst.input.trigger('change'); // fire the change event
 		if (inst.inline)
 			this._updateDatepicker(inst);
-		else if (!this._stayOpen) {
+		else if (!inst.stayOpen) {
 			this._hideDatepicker(null, this._get(inst, 'duration'));
 			this._lastInput = inst.input[0];
 			if (typeof(inst.input[0]) != 'object')
@@ -892,7 +894,7 @@ $.extend(Datepicker.prototype, {
 			var num = 0;
 			while (size > 0 && iValue < value.length &&
 					value.charAt(iValue) >= '0' && value.charAt(iValue) <= '9') {
-				num = num * 10 + (value.charAt(iValue++) - 0);
+				num = num * 10 + parseInt(value.charAt(iValue++));
 				size--;
 			}
 			if (size == origSize)
@@ -1191,15 +1193,15 @@ $.extend(Datepicker.prototype, {
 			while (matches) {
 				switch (matches[2] || 'd') {
 					case 'd' : case 'D' :
-						day += (matches[1] - 0); break;
+						day += parseInt(matches[1]); break;
 					case 'w' : case 'W' :
-						day += (matches[1] * 7); break;
+						day += parseInt(matches[1]) * 7; break;
 					case 'm' : case 'M' :
-						month += (matches[1] - 0); 
+						month += parseInt(matches[1]); 
 						day = Math.min(day, getDaysInMonth(year, month));
 						break;
 					case 'y': case 'Y' :
-						year += (matches[1] - 0);
+						year += parseInt(matches[1]);
 						day = Math.min(day, getDaysInMonth(year, month));
 						break;
 				}
@@ -1632,9 +1634,8 @@ $.fn.datepicker = function(options){
 	
 	/* Initialise the date picker. */
 	if (!$.datepicker.initialized) {
-		$(document.body)
-			.append($.datepicker.dpDiv)
-			.mousedown($.datepicker._checkExternalClick);
+		$(document.body).append($.datepicker.dpDiv).
+			mousedown($.datepicker._checkExternalClick);
 		$.datepicker.initialized = true;
 	}
 	
