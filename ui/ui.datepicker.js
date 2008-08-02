@@ -698,8 +698,8 @@ $.extend(Datepicker.prototype, {
 		inst.drawMonth = inst.selectedMonth = date.getMonth();
 		inst.drawYear = inst.selectedYear = date.getFullYear();
 		}
-		this._adjustDate(target);
 		this._notifyChange(inst);
+		this._adjustDate(target);
 	},
 
 	/* Action for selecting a new month/year. */
@@ -707,10 +707,11 @@ $.extend(Datepicker.prototype, {
 		var target = $(id);
 		var inst = $.data(target[0], PROP_NAME);
 		inst._selectingMonthYear = false;
-		inst[period == 'M' ? 'drawMonth' : 'drawYear'] =
-			select.options[select.selectedIndex].value - 0;
-		this._adjustDate(target);
+		inst['selected' + (period == 'M' ? 'Month' : 'Year')] =
+		inst['draw' + (period == 'M' ? 'Month' : 'Year')] =
+			parseInt(select.options[select.selectedIndex].value);
 		this._notifyChange(inst);
+		this._adjustDate(target);
 	},
 
 	/* Restore input focus after not changing month/year. */
@@ -1228,6 +1229,8 @@ $.extend(Datepicker.prototype, {
 	/* Set the date(s) directly. */
 	_setDate: function(inst, date, endDate) {
 		var clear = !(date);
+		var origMonth = inst.selectedMonth;
+		var origYear = inst.selectedYear;
 		date = this._determineDate(date, new Date());
 		inst.selectedDay = inst.currentDay = date.getDate();
 		inst.drawMonth = inst.selectedMonth = inst.currentMonth = date.getMonth();
@@ -1244,6 +1247,8 @@ $.extend(Datepicker.prototype, {
 				inst.endYear = inst.currentYear;
 			}
 		}
+		if (origMonth != inst.selectedMonth || origYear != inst.selectedYear)
+			this._notifyChange(inst);
 		this._adjustInstDate(inst);
 		if (inst.input)
 			inst.input.val(clear ? '' : this._formatDate(inst) +
