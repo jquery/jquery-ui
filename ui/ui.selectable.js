@@ -101,7 +101,7 @@ $.widget("ui.selectable", $.extend({}, $.ui.mouse, {
 		this.selectees.filter('.ui-selected').each(function() {
 			var selectee = $.data(this, "selectable-item");
 			selectee.startselected = true;
-			if (!e.ctrlKey) {
+			if (!e.metaKey) {
 				selectee.$element.removeClass('ui-selected');
 				selectee.selected = false;
 				selectee.$element.addClass('ui-unselecting');
@@ -170,7 +170,7 @@ $.widget("ui.selectable", $.extend({}, $.ui.mouse, {
 			} else {
 				// UNSELECT
 				if (selectee.selecting) {
-					if (e.ctrlKey && selectee.startselected) {
+					if (e.metaKey && selectee.startselected) {
 						selectee.$element.removeClass('ui-selecting');
 						selectee.selecting = false;
 						selectee.$element.addClass('ui-selected');
@@ -191,7 +191,7 @@ $.widget("ui.selectable", $.extend({}, $.ui.mouse, {
 					}
 				}
 				if (selectee.selected) {
-					if (!e.ctrlKey && !selectee.startselected) {
+					if (!e.metaKey && !selectee.startselected) {
 						selectee.$element.removeClass('ui-selected');
 						selectee.selected = false;
 
