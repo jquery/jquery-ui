@@ -27,14 +27,14 @@ $.widget("ui.progressbar", {
 			rangeValue: 0,
 			threads: {},
 			
-			wrapper: $("<div class='ui-progressbar-wrap'></div>"),
-			bar: $("<div class='ui-progressbar-bar ui-hidden'></div>").css({
+			wrapper: $('<div class="ui-progressbar-wrap"></div>'),
+			bar: $('<div class="ui-progressbar-bar ui-hidden"></div>').css({
 				width: '0px', overflow: 'hidden', zIndex: 100
 			}),
-			textElement: $("<div class='ui-progressbar-text'></div>").html(text).css({
+			textElement: $('<div class="ui-progressbar-text"></div>').html(text).css({
 				width: '0px', overflow: 'hidden'
 			}),
-			textBg: $("<div class='ui-progressbar-text ui-progressbar-text-back'></div>").html(text).css({
+			textBg: $('<div class="ui-progressbar-text ui-progressbar-text-back"></div>').html(text).css({
 					width: this.element.css('width')
 			})
 			
@@ -182,11 +182,11 @@ $.widget("ui.progressbar", {
 });
 
 $.ui.progressbar.defaults = {
+	addClass: '',
 	duration: 3000,
+	range: true,
 	stepping: 1,
 	text: '',
-	range: true,
-	addClass: '',
 	textClass: ''
 };
 
