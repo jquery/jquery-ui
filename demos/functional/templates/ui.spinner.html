@@ -1,0 +1,35 @@
+<script type="text/javascript">
+
+	var model = {
+		
+		renderAt: '#containerDemo',
+
+		title: 'Spinner Demos',
+		
+		demos: [
+
+			{
+				title: 'Simple spinner',
+				desc: 'With few lines of code you could build a spinner. You can try more options on the fly!',
+				html: '<input id="spinner" type="text" />',
+				destroy: '$("#spinner").spinner("destroy");',
+				options: [
+					{ desc: 'Make a spinner', source: '$("#spinner").spinner();' },
+					{ desc: 'A spinner with min and max value', source: '$("#spinner").spinner({min:-100, max:150});' },
+					{ desc: 'Big stepping', source: '$("#spinner").spinner({stepping:100});' },
+					{ desc: 'Disable incremental option', source: '$("#spinner").spinner({incremental:false});' },
+					{ desc: 'Enable the spinner', source: '$("#spinner").attr("disabled","");' },
+					{ desc: 'Disable the spinner', source: '$("#spinner").attr("disabled","disabled");' }
+				]
+			}
+
+		]
+	};
+
+	$(function(){
+
+		uiRenderDemo(model);
+
+	});
+
+</script>
