@@ -128,21 +128,19 @@
 		resize: function(e, ui) {
 			var self = $(this).data("resizable");
 			
-  		  this.style.backgroundPosition = '-' + (self.position.left) + 'px -' + (self.position.top) + 'px';
+  			this.style.backgroundPosition = '-' + (self.position.left) + 'px -' + (self.position.top) + 'px';
 			
 
-		  $("#log-top").html(self.position.top+"px");
+			$("#log-top").html(self.position.top+"px");
+			$("#log-left").html(self.position.left+"px");
 
-		  $("#log-left").html(self.position.left+"px");
-
-		  $("#log-height").html(self.size.height+"px");
-
-		  $("#log-width").html(self.size.width+"px");
+			$("#log-height").html(self.size.height+"px");
+			$("#log-width").html(self.size.width+"px");
 
   	    },
 		stop: function(e, ui) {
 			var self = $(this).data("resizable");
-  		  this.style.backgroundPosition = '-' + (self.position.left) + 'px -' + (self.position.top) + 'px';
+  			this.style.backgroundPosition = (self.position.left * -1) + 'px ' + (self.position.top * -1) + 'px';
   	    }
 	})
 
@@ -154,12 +152,10 @@
 
 		drag: function(e, ui) {
 			var self = $(this).data("draggable");
-			this.style.backgroundPosition = '-' + (self.position.left) + 'px -' + (self.position.top) + 'px';
+			this.style.backgroundPosition = (self.position.left * -1) + 'px ' + (self.position.top * -1) + 'px';
 
-		  $("#log-top").html(self.position.top+"px");
-
-		  $("#log-left").html(self.position.left+"px");
-
+			$("#log-top").html(self.position.top+"px");
+			$("#log-left").html(self.position.left+"px");
 		}
 
 	});
