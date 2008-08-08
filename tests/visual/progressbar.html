@@ -154,80 +154,80 @@ body
 <script>
 
 $(function() {
-		
+
 	$('#p1-create').click(function() {
-		
+
 		$('#p1').progressbar({
-			
+
 			text: 'jQuery ProgressBar waiting...',
-			
+
 			//addClass: 'ui-progressbar-inner-custom teste',
-			
+
 			//textClass: 'right-align',
-			
+
 			//align: 'right',
-			
+
 			wait: 'loop',
-			
-      duration: 2000,
-			
-      stepping: 3,
-			
+
+      duration: 1000,
+
+      stepping: 10,
+
 			progress: function(range, ui) {
 				//console.log(ui.pixelRange);
 				//console.log(range);
 				//ui.instance.text('Waiting...');
 			},
-			
+
 			stop: function(s, ui) {
 				//console.log('stop:' + ui.instance.inprogress);
 			},
-			
+
 			start: function() {
 				console.log('user start');
 			}
-			
+
 		});
-		
+
 	}).trigger("click");
-	
-	
+
+
 	$('#p2-create').click(function() {
-		
+
 		$('#p2').progressbar({
-			
+
 			range: true,
-			
+
 			wait: 2000,
-			
-      duration:1000,
-			
+
+      duration:2000,
+
       stepping: 5,
-			
+
 			progress: function(range, ui) {
 				//console.log(ui.pixelRange);
 				//console.log(range);
 			},
-			
+
 			stop: function(s, ui) {
 				//console.log('stop:' + ui.instance.inprogress);
 			},
-			
+
 			start: function() {
 				//console.log('user start');
 			}
-			
+
 		});
-		
+
 	}).trigger("click");
-	
-	
+
+
 	$('#p3-create').click(function() { $('#p3').progressbar({
-		
+
 		duration: 2000,
-		
+
 		stepping: 30,
-		
+
 		stop: function(s, ui) {
 				console.log('stop:' + ui.instance.inProgress);
 		},
@@ -239,16 +239,16 @@ $(function() {
 			console.log('user start');
 		}
 	}); }).trigger('click');
-	
+
 });
 
 if(!window.console) {
  window.console = {
  	log: function() {
  		$('#log').append(arguments[0]+"<br>");
-		$('#log').scrollTop(999999);	
- 	}	
- };	
+		$('#log').scrollTop(999999);
+ 	}
+ };
 }
 
 </script>
