@@ -52,10 +52,10 @@ $.ui = {
 		return $.ui.cssCache[name];
 	},
 	disableSelection: function(el) {
-		$(el).attr('unselectable', 'on').css('MozUserSelect', 'none');
+		$(el).attr('unselectable', 'on').css('MozUserSelect', 'none').bind('selectstart', function() { return false; });
 	},
 	enableSelection: function(el) {
-		$(el).attr('unselectable', 'off').css('MozUserSelect', '');
+		$(el).attr('unselectable', 'off').css('MozUserSelect', '').unbind('selectstart');
 	},
 	hasScroll: function(e, a) {
 		var scroll = (a && a == 'left') ? 'scrollLeft' : 'scrollTop',
