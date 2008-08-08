@@ -1,0 +1,35 @@
+<script type="text/javascript">
+
+	var model = {
+		
+		renderAt: '#containerDemo',
+
+		title: 'Progressbar Demos',
+		
+		demos: [
+
+			{
+				title: 'Simple Progressbar',
+				desc: 'With few lines of code you could build a progressbar. You can try more options on the fly!',
+				html: '<div id="progressbar"></div>',
+				destroy: '$("#progressbar").progressbar("destroy");',
+				options: [
+					{ desc: 'Attach a progressbar', source: '$("#progressbar").progressbar();' },
+					{ desc: 'Start the progressbar', source: '$("#progressbar").progressbar("start");' },
+					{ desc: 'Loop', source: '$("#progressbar").progressbar({duration:2000,wait:"loop"}).progressbar("start");' },
+					{ desc: 'Callback when finish', source: '$("#progressbar").progressbar({stop:function(){alert("Finished");}}).progressbar("start");' },
+					{ desc: 'Enable the progressbar', source: '$("#progressbar").progressbar("enable");' },
+					{ desc: 'Disable the progressbar', source: '$("#progressbar").progressbar("disable");' }
+				]
+			}
+
+		]
+	};
+
+	$(function(){
+
+		uiRenderDemo(model);
+
+	});
+
+</script>
