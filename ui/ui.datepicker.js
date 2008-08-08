@@ -398,7 +398,8 @@ $.extend(Datepicker.prototype, {
 			settings = {};
 			settings[name] = value;
 		}
-		if (inst = $.data(target, PROP_NAME)) {
+		var inst = $.data(target, PROP_NAME);
+		if (inst) {
 			if (this._curInst == inst) {
 				this._hideDatepicker(null);
 			}
