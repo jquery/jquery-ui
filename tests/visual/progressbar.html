@@ -89,7 +89,9 @@ body
 	border-top:1px solid #BEBEBE;
 	height:15px;
 }
-
+.bold {
+	color: red !important;
+}
 .ui-hidden {
 	left:-10000px;
 	position:absolute;
@@ -167,24 +169,27 @@ $(function() {
 
 			//align: 'right',
 
-			wait: 'loop',
+			width: 500,
 
-      duration: 1000,
+			duration: 5000,
 
-      stepping: 10,
+			interval: 500,
 
-			progress: function(range, ui) {
+     	 	increment: 300,
+
+			progress: function(ui) {
 				//console.log(ui.pixelRange);
-				//console.log(range);
+				//console.log(ui);
 				//ui.instance.text('Waiting...');
 			},
 
-			stop: function(s, ui) {
-				//console.log('stop:' + ui.instance.inprogress);
+			stop: function(ui) {
+				//console.log('user stop', ui);
 			},
 
-			start: function() {
-				console.log('user start');
+			start: function(ui) {
+				//console.log('user start', ui);
+				console.log('p1', ui.identifier);
 			}
 
 		});
@@ -196,25 +201,35 @@ $(function() {
 
 		$('#p2').progressbar({
 
-			range: true,
+			text: 'Testing...',
 
-			wait: 2000,
+			//addClass: 'ui-progressbar-inner-custom teste',
 
-      duration:2000,
+			//textClass: 'right-align',
 
-      stepping: 5,
+			//align: 'right',
 
-			progress: function(range, ui) {
+			width: 500,
+
+			duration: 5000,
+
+			interval: 2000,
+
+     	 	increment: 50,
+
+			progress: function(ui) {
 				//console.log(ui.pixelRange);
-				//console.log(range);
+				//console.log(ui);
+				//ui.instance.text('Waiting...');
 			},
 
-			stop: function(s, ui) {
-				//console.log('stop:' + ui.instance.inprogress);
+			stop: function(ui) {
+				//console.log('user stop', ui);
 			},
 
-			start: function() {
-				//console.log('user start');
+			start: function(ui) {
+				//console.log('user start', ui);
+				console.log('p2', ui.identifier);
 			}
 
 		});
@@ -222,24 +237,43 @@ $(function() {
 	}).trigger("click");
 
 
-	$('#p3-create').click(function() { $('#p3').progressbar({
+	$('#p3-create').click(function() {
 
-		duration: 2000,
+		$('#p3').progressbar({
 
-		stepping: 30,
+			//text: 'Testing again...',
 
-		stop: function(s, ui) {
-				console.log('stop:' + ui.instance.inProgress);
-		},
-		progress: function(range, ui) {
-			//console.log(ui.pixelRange);
-			//console.log(range);
-		},
-		start: function() {
-			console.log('user start');
-		}
-	}); }).trigger('click');
+			//addClass: 'ui-progressbar-inner-custom teste',
 
+			//textClass: 'right-align',
+
+			//align: 'right',
+
+			width: 700,
+
+			duration: 5000,
+
+			interval: 3000,
+
+     	 	increment: 10,
+
+			progress: function(ui) {
+				//console.log(ui.pixelRange);
+				//console.log(ui);
+				//ui.instance.text('Waiting...');
+			},
+
+			stop: function(ui) {
+				//console.log('user stop', ui);
+			},
+
+			start: function(ui) {
+				//console.log('user start', ui);
+				console.log('p3', ui.identifier);
+			}
+
+		});
+	}).trigger('click');
 });
 
 if(!window.console) {

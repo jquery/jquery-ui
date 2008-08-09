@@ -1,7 +1,7 @@
 /*
  * jQuery UI ProgressBar
  *
- * Copyright (c) 2008 Eduardo Lundgren (braeker)
+ * Copyright (c) 2008 Eduardo Lundgren
  * Dual licensed under the MIT (MIT-LICENSE.txt)
  * and GPL (GPL-LICENSE.txt) licenses.
  *
@@ -15,19 +15,22 @@
 $.widget("ui.progressbar", {
 	init: function() {
 
-		var self = this, o = this.options, text = o.text ? o.text : (o.range ? '0%' : '');;
-		this.element.addClass("ui-progressbar");
-
-		$.extend(o, {
-			stepping: o.stepping > 100 ? 100 : o.stepping
+		$.extend(this.options, {
+			_interval: this.options.interval
 		});
 
-		$.extend(this, {
-			_step: 0,
-			rangeValue: 0,
-			threads: {},
+		var self = this,
+			options = this.options,
+			id = (new Date()).getTime()+Math.random(),
+			text = options.text || '0%';
 
-			wrapper: $('<div class="ui-progressbar-wrap"></div>'),
+		this.element.addClass("ui-progressbar").width(options.width);
+
+		$.extend(this, {
+			active: false,
+			pixelState: 0,
+			percentState: 0,
+			identifier: id,
 			bar: $('<div class="ui-progressbar-bar ui-hidden"></div>').css({
 				width: '0px', overflow: 'hidden', zIndex: 100
 			}),
@@ -35,13 +38,13 @@ $.widget("ui.progressbar", {
 				width: '0px', overflow: 'hidden'
 			}),
 			textBg: $('<div class="ui-progressbar-text ui-progressbar-text-back"></div>').html(text).css({
-					width: this.element.css('width')
-			})
-
+					width: this.element.width()
+			}),
+			wrapper: $('<div class="ui-progressbar-wrap"></div>')
 		});
 
 		this.wrapper
-			.append(this.bar.append(this.textElement), this.textBg)
+			.append(this.bar.append(this.textElement.addClass(options.textClass)), this.textBg)
 			.appendTo(this.element);
 
 	},
@@ -50,10 +53,12 @@ $.widget("ui.progressbar", {
 	ui: function(e) {
 		return {
 			instance: this,
+			identifier: this.identifier,
 			options: this.options,
-			step: this._step,
-			rangeValue: this.rangeValue,
-			pixelRange: this.pixelRange
+			element: this.bar,
+			textElement: this.textElement,
+			pixelState: this.pixelState,
+			percentState: this.percentState
 		};
 	},
 	propagate: function(n,e) {
@@ -67,126 +72,92 @@ $.widget("ui.progressbar", {
 			.removeClass("ui-progressbar ui-progressbar-disabled")
 			.removeData("progressbar").unbind(".progressbar")
 			.find('.ui-progressbar-wrap').remove();
+
+		delete jQuery.easing[this.identifier];
 	},
 	enable: function() {
 		this.element.removeClass("ui-progressbar-disabled");
 		this.disabled = false;
-		if(this.inProgress) this.start();
 	},
 	disable: function() {
 		this.element.addClass("ui-progressbar-disabled");
 		this.disabled = true;
-		this.clearThreads();
 	},
 	start: function() {
+		if (this.disabled) return;
 
-		if (this.disabled) return false;
-		this.inProgress = true;
+		var self = this, options = this.options;
 
-		var self = this, o = this.options, el = this.element;
-		this.clearThreads();
+		jQuery.easing[this.identifier] = function (x, t, b, c, d) {
+			var inc = options.increment,
+				width = options.width,
+				step = ((inc > width ? width : inc)/width),
+				state = Math.round(x/step)*step;
+			return state > 1 ? 1 : state;
+		};
 
-		if (typeof o.wait == 'number' && !self.waitThread)
-			self.waitThread = setTimeout(function() {
-				clearInterval(self.waitThread);
-				self.waitThread = null;
-			}, o.wait);
-
-		var frames = Math.ceil(100/o.stepping) || 0, ms = o.duration/frames || 0,
-
-		render = function(step, t) {
-			//clearInterval(t);
-
-			self.progress(o.stepping * step);
-			// on end
-			if (step >= frames) {
-				self.stop();
-
-				if (self.waitThread || o.wait == 'loop') {
-					self._step = 0;
-					self.start();
+		this.bar.animate(
+			{
+				width: options.width
+			},
+			{
+				duration: options.interval,
+				easing: this.identifier,
+				step: function(step, b) {
+					var elapsedTime = ((new Date().getTime()) - b.startTime);
+					options.interval = options._interval - elapsedTime;
+					self.progress((step/options.width)*100);
+				},
+				complete: function() {
+					delete jQuery.easing[self.identifier];
+					self.stop();
 				}
 			}
-		};
-		var from = this._step, _step = (this._step - (from - 1));
+		);
 
-		/*for(var step = from; step <= frames; step++) {
-			var interval = (step - (from - 1)) * ms;
-			this.threads[step] = setTimeout(render(step, this.threads[step]), interval);
-		}*/
-
-		this.threads[0] = setInterval(function() {
-			render(_step++);
-		}, ms);
-
-		this.propagate('start');
+		this.propagate('start', this.ui());
 		return false;
 	},
-	clearThreads: function() {
-		$.each(this.threads, function(s, t) { clearInterval(t); });
-		this.threads = {};
-	},
 	stop: function() {
-
-		if (this.disabled) return false;
-		var o = this.options, self = this;
-
-		this.clearThreads();
-		this.propagate('stop');
-
-		this.inProgress = false;
+		if (this.disabled) return;
+		this.bar.stop();
+		this.propagate('stop', this.ui());
 		return false;
 
 	},
 	reset: function() {
-
-		if (this.disabled) return false;
-		this._step = 0;
-		this.rangeValue = 0;
-		this.inProgress = false;
-		this.clearThreads();
-		this.progress(0);
+		this.bar.stop();
+		this.bar.width(0);
+		this.textElement.width(0);
 		this.bar.addClass('ui-hidden');
-		return false;
-
-	},
-	progress: function(range) {
-
-		var o = this.options, el = this.element, bar = this.bar;
-		if (this.disabled) return false;
-
-		range = parseInt(range, 10);
-		this.rangeValue = this._fixRange(range);
-		this.pixelRange = Math.round( ((this.rangeValue/100)||0) * (el.innerWidth() - (el.outerWidth() - el.innerWidth()) - (bar.outerWidth() - bar.innerWidth())) );
-
-		this.bar.removeClass('ui-hidden');
-
-		var css = { width: this.pixelRange + 'px' };
-		this.bar.css(css);
-		this.textElement.css(css);
-
-		if (!o.text && o.range) this.text(this.rangeValue + '%');
-		this.propagate('progress', this.rangeValue);
+		this.options.interval = this.options._interval;
 		return false;
 	},
-	text: function(text) {
-		this.textElement.html(text);
-	},
-	_fixRange: function(range) {
-		var o = this.options;
-		this._step = Math.ceil(range/o.stepping);
-		this.rangeValue = Math.round(o.stepping * this._step);
-		this.rangeValue = (this.rangeValue) >= 100 ? 100 : this.rangeValue;
-		return this.rangeValue;
+	progress: function(percentState) {
+		if (this.bar.is('.ui-hidden')) {
+			this.bar.removeClass('ui-hidden');
+		}
+
+		this.percentState = percentState > 100 ? 100 : percentState;
+		this.pixelState = (this.percentState/100)*this.options.width;
+		this.bar.width(this.pixelState);
+		this.textElement.width(this.pixelState);
+
+		if (this.options.range && !this.options.text) {
+			this.textElement.html(Math.round(this.percentState) + '%');
+		}
+		this.propagate('progress', this.ui());
 	}
 });
 
 $.ui.progressbar.defaults = {
-	addClass: '',
+	width: 300,
 	duration: 3000,
+	interval: 200,
+	increment: 1,
 	range: true,
-	stepping: 1,
 	text: '',
+	addClass: '',
 	textClass: ''
 };
 
