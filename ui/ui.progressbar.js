@@ -47,6 +47,13 @@ $.widget("ui.progressbar", {
 			.append(this.bar.append(this.textElement.addClass(options.textClass)), this.textBg)
 			.appendTo(this.element);
 
+		jQuery.easing[this.identifier] = function (x, t, b, c, d) {
+			var inc = options.increment,
+				width = options.width,
+				step = ((inc > width ? width : inc)/width),
+				state = Math.round(x/step)*step;
+			return state > 1 ? 1 : state;
+		};
 	},
 
 	plugins: {},
@@ -66,7 +73,7 @@ $.widget("ui.progressbar", {
 		this.element.triggerHandler(n == "progressbar" ? n : ["progressbar", n].join(""), [e, this.ui()], this.options[n]);
 	},
 	destroy: function() {
-		this.reset();
+		this.stop();
 
 		this.element
 			.removeClass("ui-progressbar ui-progressbar-disabled")
@@ -84,54 +91,68 @@ $.widget("ui.progressbar", {
 		this.disabled = true;
 	},
 	start: function() {
-		if (this.disabled) return;
-
 		var self = this, options = this.options;
 
-		jQuery.easing[this.identifier] = function (x, t, b, c, d) {
-			var inc = options.increment,
-				width = options.width,
-				step = ((inc > width ? width : inc)/width),
-				state = Math.round(x/step)*step;
-			return state > 1 ? 1 : state;
+		if (this.disabled) {
+			return;
 		};
+		
+		self.active = true;
+		
+		setTimeout(
+			function() {
+				self.active = false;
+			},
+			options.duration
+		);
+
+		this.animate();
+
+		this.propagate('start', this.ui());
+		return false;
+	},
+	animate: function() {
+		var self = this,
+			options = this.options,
+			interval = options.interval;
 
 		this.bar.animate(
 			{
 				width: options.width
 			},
 			{
-				duration: options.interval,
+				duration: interval,
 				easing: this.identifier,
 				step: function(step, b) {
-					var elapsedTime = ((new Date().getTime()) - b.startTime);
-					options.interval = options._interval - elapsedTime;
 					self.progress((step/options.width)*100);
+					var elapsedTime = ((new Date().getTime()) - b.startTime);
+					options.interval = interval - elapsedTime;
 				},
 				complete: function() {
 					delete jQuery.easing[self.identifier];
-					self.stop();
+					self.pause();
+
+					if (self.active) {
+						/*TODO*/
+						self.stop();
+						self.animate();
+					}
 				}
 			}
 		);
-
-		this.propagate('start', this.ui());
-		return false;
 	},
-	stop: function() {
+	pause: function() {
 		if (this.disabled) return;
 		this.bar.stop();
-		this.propagate('stop', this.ui());
-		return false;
-
+		this.propagate('pause', this.ui());
 	},
-	reset: function() {
+	stop: function() {
 		this.bar.stop();
 		this.bar.width(0);
 		this.textElement.width(0);
 		this.bar.addClass('ui-hidden');
 		this.options.interval = this.options._interval;
-		return false;
+		this.propagate('stop', this.ui());
 	},
 	progress: function(percentState) {
 		if (this.bar.is('.ui-hidden')) {
