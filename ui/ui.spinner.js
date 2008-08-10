@@ -57,6 +57,9 @@ $.widget("ui.spinner", {
 			self.propagate("change", e);
 		})
 		;
+		if ($.fn.mousewheel) {
+			this.element.mousewheel(function(e, delta) { self.mousewheel(e, delta); });
+		}
 
 	},
 	plugins: {},
@@ -97,6 +100,11 @@ $.widget("ui.spinner", {
 		if(e.keyCode == 36) this.element[0].value = this.options.min || this.options.start; //Home key goes to min, if defined, else to start
 		if(e.keyCode == 35 && this.options.max != undefined) this.element[0].value = this.options.max; //End key goes to maximum
 	},
+	mousewheel: function(e, delta) {
+		delta = ($.browser.opera ? -delta / Math.abs(delta) : delta);
+		delta > 0 ? this.up(e) : this.down(e);
+		e.preventDefault();
+	},
 	ui: function(e) {
 		return {
 			instance: this,
@@ -114,6 +122,9 @@ $.widget("ui.spinner", {
 			.removeClass("ui-spinner ui-spinner-disabled")
 			.removeData("spinner")
 			.unbind(".spinner");
+		if ($.fn.mousewheel) {
+			this.element.unmousewheel();
+		}
 	}
 });
 
