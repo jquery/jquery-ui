@@ -63,12 +63,12 @@
 			{
 				title: 'Drag prevention for pre-defined elements',
 				desc: 'You can change elements to not drag the parent.',
-				html: '<div id="draggable-dragPrevention" class="draggable"><a href="#">Drag me</a><br><input type="text" value="select me" style="width: 90px; font-size: 10px;" /></div>',
+				html: '<div id="draggable-dragPrevention" class="draggable"><a href="#">Drag me</a><br><input type="text" value="select me" style="width: 80px; font-size: 10px;" /></div>',
 				destroy: '$("#draggable-dragPrevention").draggable("destroy");',
 
 				options: [
-					{	desc: 'Drag using a handle',	source: '$("#draggable-dragPrevention").draggable({ dragPrevention: "a,input,textarea" });' },
-					{	desc: 'Drag using a handle with a helper',	source: '$("#draggable-dragPrevention").draggable({ helper: "clone", dragPrevention: "a,input,textarea" });' }
+					{	desc: 'Drag using a handle',	source: '$("#draggable-dragPrevention").draggable({ cancel: "a,input,textarea" });' },
+					{	desc: 'Drag using a handle with a helper',	source: '$("#draggable-dragPrevention").draggable({ helper: "clone", cancel: "a,input,textarea" });' }
 				]
 			}
 
