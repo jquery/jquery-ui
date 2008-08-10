@@ -431,10 +431,10 @@ $.ui.plugin.add("draggable", "snap", {
 			}
 		
 			if(ui.options.snapMode != 'inner') {
-				var ts = Math.abs(t - y2) <= 20;
-				var bs = Math.abs(b - y1) <= 20;
-				var ls = Math.abs(l - x2) <= 20;
-				var rs = Math.abs(r - x1) <= 20;
+				var ts = Math.abs(t - y2) <= d;
+				var bs = Math.abs(b - y1) <= d;
+				var ls = Math.abs(l - x2) <= d;
+				var rs = Math.abs(r - x1) <= d;
 				if(ts) ui.position.top = inst.convertPositionTo("relative", { top: t - inst.helperProportions.height, left: 0 }).top;
 				if(bs) ui.position.top = inst.convertPositionTo("relative", { top: b, left: 0 }).top;
 				if(ls) ui.position.left = inst.convertPositionTo("relative", { top: 0, left: l - inst.helperProportions.width }).left;
@@ -444,10 +444,10 @@ $.ui.plugin.add("draggable", "snap", {
 			var first = (ts || bs || ls || rs);
 			
 			if(ui.options.snapMode != 'outer') {
-				var ts = Math.abs(t - y1) <= 20;
-				var bs = Math.abs(b - y2) <= 20;
-				var ls = Math.abs(l - x1) <= 20;
-				var rs = Math.abs(r - x2) <= 20;
+				var ts = Math.abs(t - y1) <= d;
+				var bs = Math.abs(b - y2) <= d;
+				var ls = Math.abs(l - x1) <= d;
+				var rs = Math.abs(r - x2) <= d;
 				if(ts) ui.position.top = inst.convertPositionTo("relative", { top: t, left: 0 }).top;
 				if(bs) ui.position.top = inst.convertPositionTo("relative", { top: b - inst.helperProportions.height, left: 0 }).top;
 				if(ls) ui.position.left = inst.convertPositionTo("relative", { top: 0, left: l }).left;
