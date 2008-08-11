@@ -331,13 +331,6 @@ $.widget("ui.dialog", {
 					.appendTo(uiDialogButtonPane);
 			});
 		}
-	},
-	
-	fakeEvent: function(type) {
-		return $.event.fix({
-			type: type,
-			target: this.element[0]
-		});
 	}
 });
 
