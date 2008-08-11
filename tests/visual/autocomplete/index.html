@@ -1,0 +1,132 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+
+<title>jQuery Autocomplete Plugin</title>
+
+<script type="text/javascript" src="../../../jquery-1.2.6.js"></script>
+<script type="text/javascript" src="../../../ui/ui.core.js"></script>
+<script type="text/javascript" src="../../../ui/ui.autocomplete.js"></script>
+
+<script type='text/javascript' src='localdata.js'></script>
+<link rel="stylesheet" type="text/css" href="main.css" />
+<link rel="stylesheet" href="../../../themes/default/ui.all.css" type="text/css" media="screen" title="no title" charset="utf-8">
+	
+<script type="text/javascript">
+$().ready(function() {
+
+	function findValueCallback(event, data, formatted) {
+		$("<li>").html( !data ? "No match!" : "Selected: " + formatted).appendTo("#result");
+	}
+	
+	function formatItem(row) {
+		return row[0] + " (<strong>id: " + row[1] + "</strong>)";
+	}
+	function formatResult(row) {
+		return row[0].replace(/(<.+?>)/gi, '');
+	}
+	
+	$("#suggest1").autocomplete({ data: cities });
+	$("#month").autocomplete({
+		data: months,
+		minChars: 0,
+		max: 12,
+		autoFill: true,
+		mustMatch: true,
+		matchContains: false,
+		scrollHeight: 220,
+		formatItem: function(data, i, total) {
+			// don't show the current month in the list of values (for whatever reason)
+			if ( data[0] == months[new Date().getMonth()] ) 
+				return false;
+			return data[0];
+		}
+	});
+	$("#suggest13").autocomplete({
+		data: emails,
+		minChars: 0,
+		width: 310,
+		matchContains: "word",
+		autoFill: false,
+		formatItem: function(row, i, max) {
+			return i + "/" + max + ": \"" + row.name + "\" [" + row.to + "]";
+		},
+		formatMatch: function(row, i, max) {
+			return row.name + " " + row.to;
+		},
+		formatResult: function(row) {
+			return row.to;
+		}
+	});
+
+	$("#suggest3").autocomplete({
+		data: cities,
+		multiple: true,
+		mustMatch: true,
+		autoFill: true
+	});
+
+	$("#tags").autocomplete(["c++", "java", "php", "coldfusion", "javascript", "asp", "ruby", "python", "c", "scala", "groovy", "haskell", "pearl"], {
+		width: 320,
+		max: 4,
+		highlight: false,
+		multiple: true,
+		multipleSeparator: " ",
+		scroll: true,
+		scrollHeight: 300
+	});
+	
+
+	
+	$("#clear").click(function() {
+		$(":input").unautocomplete();
+	});
+});
+
+</script>
+	
+</head>
+
+<body>
+
+<div id="content">
+	
+	<form autocomplete="off">
+		<p>
+			<label>Single City (local):</label>
+			<input type="text" id="suggest1" />
+			<input type="button" value="Get Value" />
+		</p>
+		<p>
+			<label>Month (local):</label>
+			<input type="text" id="month" />
+			<input type="button" value="Get Value" />
+			(Current month is excluded from list)
+		</p>
+		<p>
+			<label>E-Mail (local):</label>
+			<input type="text" id="suggest13" />
+			<input type="button" value="Get Value" />
+		</p>
+		<p>
+			<label>Multiple Cities (local):</label>
+			<textarea id='suggest3' cols='40' rows='3'></textarea>
+			<input type="button" value="Get Value" />
+		</p>
+   		<p>
+			<label>Tags (local):</label>
+			<input type="text" id='tags' />
+			<input type="button" value="Get Value" />
+		</p>
+		
+		<input type="submit" value="Submit" />
+	</form>
+
+		
+	<button id="clear">Remove all autocompletes</button>
+	
+	<h3>Result:</h3> <ol id="result"></ol>
+
+</div>
+</body>
+</html>
