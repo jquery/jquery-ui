@@ -38,7 +38,6 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 		this.floating = this.items.length ? (/left|right/).test(this.items[0].item.css('float')) : false;
 		
 		//Let's determine the parent's offset
-		//if(!(/(relative|absolute|fixed)/).test(this.element.css('position'))) this.element.css('position', 'relative');
 		this.offset = this.element.offset();
 
 		//Initialize mouse events for interaction
