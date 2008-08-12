@@ -160,7 +160,7 @@ $.widget("ui.dialog", {
 		}
 		
 		this.createButtons(options.buttons);
-		this.isOpen = false;
+		this._isOpen = false;
 		
 		(options.bgiframe && $.fn.bgiframe && uiDialog.bgiframe());
 		(options.autoOpen && this.open());
@@ -260,7 +260,7 @@ $.widget("ui.dialog", {
 	},
 	
 	open: function() {
-		if (this.isOpen) { return; }
+		if (this._isOpen) { return; }
 		
 		this.overlay = this.options.modal ? new $.ui.dialog.overlay(this) : null;
 		(this.uiDialog.next().length && this.uiDialog.appendTo('body'));
@@ -270,7 +270,7 @@ $.widget("ui.dialog", {
 		this.moveToTop(true);
 		
 		this.trigger('open', null, { options: this.options });
-		this.isOpen = true;
+		this._isOpen = true;
 	},
 	
 	// the force parameter allows us to move modal dialogs to their correct
@@ -299,7 +299,7 @@ $.widget("ui.dialog", {
 		this.trigger('close', null, { options: this.options });
 		$.ui.dialog.overlay.resize();
 		
-		this.isOpen = false;
+		this._isOpen = false;
 	},
 	
 	destroy: function() {
@@ -331,6 +331,10 @@ $.widget("ui.dialog", {
 					.appendTo(uiDialogButtonPane);
 			});
 		}
+	},
+	
+	isOpen: function() {
+		return this._isOpen;
 	}
 });
 
@@ -353,6 +357,8 @@ $.extend($.ui.dialog, {
 		width: 300,
 		zIndex: 1000
 	},
+	
+	getter: 'isOpen',
 	
 	overlay: function(dialog) {
 		this.$el = $.ui.dialog.overlay.create(dialog);
