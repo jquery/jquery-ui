@@ -690,6 +690,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 		
 		this.dragging = false;
 		if(this.cancelHelperRemoval) {
+			this.propagate("beforeStop", e, null, noPropagation);
 			this.propagate("stop", e, null, noPropagation);
 			return false;
 		}
