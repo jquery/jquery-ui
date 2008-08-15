@@ -23,7 +23,7 @@ var defaults = {
 	position: 'center',
 	resizable: true,
 	stack: true,
-	title: null,
+	title: '',
 	width: 300
 };
 
@@ -395,6 +395,21 @@ test("width", function() {
 });
 
 module("dialog: Methods");
+
+test("isOpen", function() {
+	expect(4);
+	el = $('<div/>').dialog();
+	equals(el.dialog('isOpen'), true, "dialog is open after init");
+	el.dialog('close');
+	equals(el.dialog('isOpen'), false, "dialog is closed");
+	el.remove();
+	
+	el = $('<div/>').dialog({autoOpen: false});
+	equals(el.dialog('isOpen'), false, "dialog is closed after init");
+	el.dialog('open');
+	equals(el.dialog('isOpen'), true, "dialog is open");
+	el.remove();
+});
 
 module("dialog: Callbacks");
 
