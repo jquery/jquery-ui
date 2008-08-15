@@ -164,10 +164,16 @@ $.ui = {
 		return $.ui.cssCache[name];
 	},
 	disableSelection: function(el) {
-		$(el).attr('unselectable', 'on').css('MozUserSelect', 'none').bind('selectstart', function() { return false; });
+		$(el)
+			.attr('unselectable', 'on')
+			.css('MozUserSelect', 'none')
+			.bind('selectstart.ui', function() { return false; });
 	},
 	enableSelection: function(el) {
-		$(el).attr('unselectable', 'off').css('MozUserSelect', '').unbind('selectstart');
+		$(el)
+			.attr('unselectable', 'off')
+			.css('MozUserSelect', '')
+			.unbind('selectstart.ui');
 	},
 	hasScroll: function(e, a) {
 		var scroll = (a && a == 'left') ? 'scrollLeft' : 'scrollTop',
