@@ -73,6 +73,7 @@ $.widget("ui.tabs", {
 				o.disabled.push(i + 1);
 		});
 
+		// initialization from scratch
 		if (init) {
 
 			// attach necessary classes for styling if not present
@@ -153,6 +154,9 @@ $.widget("ui.tabs", {
 			});
 
 		}
+		// update selected after add/remove
+		else
+			o.selected = this.$lis.index( this.$lis.filter('.' + o.selectedClass)[0] );
 
 		// disable tabs
 		for (var i = 0, li; li = this.$lis[i]; i++)
