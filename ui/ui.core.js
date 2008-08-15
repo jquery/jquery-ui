@@ -9,11 +9,6 @@
  */
 ;(function($) {
 
-// This adds a selector to check if data exists.
-jQuery.extend(jQuery.expr[':'], { 
-	data: "jQuery.data(a, m[3])"
-});
-
 $.ui = {
 	plugin: {
 		add: function(module, option, set) {
@@ -75,6 +70,9 @@ $.ui = {
 
 
 /** jQuery core modifications and additions **/
+
+// This adds a selector to check if data exists.
+jQuery.expr[':'].data = "jQuery.data(a, m[3])";
 
 var _remove = $.fn.remove;
 $.fn.remove = function() {
