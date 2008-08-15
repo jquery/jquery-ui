@@ -9,66 +9,6 @@
  */
 ;(function($) {
 
-$.ui = {
-	plugin: {
-		add: function(module, option, set) {
-			var proto = $.ui[module].prototype;
-			for(var i in set) {
-				proto.plugins[i] = proto.plugins[i] || [];
-				proto.plugins[i].push([option, set[i]]);
-			}
-		},
-		call: function(instance, name, args) {
-			var set = instance.plugins[name];
-			if(!set) { return; }
-			
-			for (var i = 0; i < set.length; i++) {
-				if (instance.options[set[i][0]]) {
-					set[i][1].apply(instance.element, args);
-				}
-			}
-		}	
-	},
-	cssCache: {},
-	css: function(name) {
-		if ($.ui.cssCache[name]) { return $.ui.cssCache[name]; }
-		var tmp = $('<div class="ui-gen">').addClass(name).css({position:'absolute', top:'-5000px', left:'-5000px', display:'block'}).appendTo('body');
-		
-		//if (!$.browser.safari)
-			//tmp.appendTo('body'); 
-		
-		//Opera and Safari set width and height to 0px instead of auto
-		//Safari returns rgba(0,0,0,0) when bgcolor is not set
-		$.ui.cssCache[name] = !!(
-			(!(/auto|default/).test(tmp.css('cursor')) || (/^[1-9]/).test(tmp.css('height')) || (/^[1-9]/).test(tmp.css('width')) || 
-			!(/none/).test(tmp.css('backgroundImage')) || !(/transparent|rgba\(0, 0, 0, 0\)/).test(tmp.css('backgroundColor')))
-		);
-		try { $('body').get(0).removeChild(tmp.get(0));	} catch(e){}
-		return $.ui.cssCache[name];
-	},
-	disableSelection: function(el) {
-		$(el).attr('unselectable', 'on').css('MozUserSelect', 'none').bind('selectstart', function() { return false; });
-	},
-	enableSelection: function(el) {
-		$(el).attr('unselectable', 'off').css('MozUserSelect', '').unbind('selectstart');
-	},
-	hasScroll: function(e, a) {
-		var scroll = (a && a == 'left') ? 'scrollLeft' : 'scrollTop',
-			has = false;
-		
-		if (e[scroll] > 0) { return true; }
-		
-		// TODO: determine which cases actually cause this to happen
-		// if the element doesn't have the scroll set, see if it's possible to
-		// set the scroll
-		e[scroll] = 1;
-		has = (e[scroll] > 0);
-		e[scroll] = 0;
-		return has;
-	}
-};
-
-
 /** jQuery core modifications and additions **/
 
 // This adds a selector to check if data exists.
@@ -181,6 +121,68 @@ $.widget.prototype = {
 
 $.widget.defaults = {
 	disabled: false
+};
+
+
+/** jQuery UI core **/
+
+$.ui = {
+	plugin: {
+		add: function(module, option, set) {
+			var proto = $.ui[module].prototype;
+			for(var i in set) {
+				proto.plugins[i] = proto.plugins[i] || [];
+				proto.plugins[i].push([option, set[i]]);
+			}
+		},
+		call: function(instance, name, args) {
+			var set = instance.plugins[name];
+			if(!set) { return; }
+			
+			for (var i = 0; i < set.length; i++) {
+				if (instance.options[set[i][0]]) {
+					set[i][1].apply(instance.element, args);
+				}
+			}
+		}	
+	},
+	cssCache: {},
+	css: function(name) {
+		if ($.ui.cssCache[name]) { return $.ui.cssCache[name]; }
+		var tmp = $('<div class="ui-gen">').addClass(name).css({position:'absolute', top:'-5000px', left:'-5000px', display:'block'}).appendTo('body');
+		
+		//if (!$.browser.safari)
+			//tmp.appendTo('body'); 
+		
+		//Opera and Safari set width and height to 0px instead of auto
+		//Safari returns rgba(0,0,0,0) when bgcolor is not set
+		$.ui.cssCache[name] = !!(
+			(!(/auto|default/).test(tmp.css('cursor')) || (/^[1-9]/).test(tmp.css('height')) || (/^[1-9]/).test(tmp.css('width')) || 
+			!(/none/).test(tmp.css('backgroundImage')) || !(/transparent|rgba\(0, 0, 0, 0\)/).test(tmp.css('backgroundColor')))
+		);
+		try { $('body').get(0).removeChild(tmp.get(0));	} catch(e){}
+		return $.ui.cssCache[name];
+	},
+	disableSelection: function(el) {
+		$(el).attr('unselectable', 'on').css('MozUserSelect', 'none').bind('selectstart', function() { return false; });
+	},
+	enableSelection: function(el) {
+		$(el).attr('unselectable', 'off').css('MozUserSelect', '').unbind('selectstart');
+	},
+	hasScroll: function(e, a) {
+		var scroll = (a && a == 'left') ? 'scrollLeft' : 'scrollTop',
+			has = false;
+		
+		if (e[scroll] > 0) { return true; }
+		
+		// TODO: determine which cases actually cause this to happen
+		// if the element doesn't have the scroll set, see if it's possible to
+		// set the scroll
+		e[scroll] = 1;
+		has = (e[scroll] > 0);
+		e[scroll] = 0;
+		return has;
+	}
 };
 
 
