@@ -124,7 +124,12 @@ $.widget = function(name, prototype) {
 		this.widgetEventPrefix = $[namespace][name].eventPrefix || name;
 		this.widgetBaseClass = namespace + '-' + name;
 		
-		this.options = $.extend({}, $.widget.defaults, $[namespace][name].defaults, options);
+		this.options = $.extend({},
+			$.widget.defaults,
+			$[namespace][name].defaults,
+			$.metadata && $.metadata.get(element)[name],
+			options);
+		
 		this.element = $(element)
 			.bind('setData.' + name, function(e, key, value) {
 				return self.setData(key, value);
@@ -135,6 +140,7 @@ $.widget = function(name, prototype) {
 			.bind('remove', function() {
 				return self.destroy();
 			});
+		
 		this.init();
 	};
 	
