@@ -13,13 +13,13 @@
 (function($) {
 
 $.widget("ui.tabs", {
-	init: function() {
+	_init: function() {
 		this.options.event += '.tabs'; // namespace event
 		
 		// create tabs
 		this._tabify(true);
 	},
-	setData: function(key, value) {
+	_setData: function(key, value) {
 		if ((/^selected/).test(key))
 			this.select(value);
 		else {

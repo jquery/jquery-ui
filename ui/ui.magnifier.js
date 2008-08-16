@@ -15,7 +15,7 @@
 var counter = 0;
 
 $.widget("ui.magnifier", {
-	init: function() {
+	_init: function() {
 		var self = this,
 			o = this.options;
 		

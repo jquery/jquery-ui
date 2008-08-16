@@ -13,7 +13,7 @@
 (function($) {
 
 $.widget("ui.progressbar", {
-	init: function() {
+	_init: function() {
 
 		$.extend(this.options, {
 			_interval: this.options.interval

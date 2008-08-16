@@ -13,7 +13,7 @@
 (function($) {
 
 $.widget("ui.spinner", {
-	init: function() {
+	_init: function() {
 
 		//Initialize needed constants
 		var self = this;
