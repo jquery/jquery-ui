@@ -13,7 +13,7 @@
 (function($) {
 
 $.widget("ui.selectable", $.extend({}, $.ui.mouse, {
-	init: function() {
+	_init: function() {
 		var self = this;
 		
 		this.element.addClass("ui-selectable");
