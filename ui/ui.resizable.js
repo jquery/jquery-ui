@@ -13,7 +13,7 @@
 (function($) {
 
 $.widget("ui.resizable", $.extend({}, $.ui.mouse, {
-	init: function() {
+	_init: function() {
 
 		var self = this, o = this.options;
 
@@ -227,7 +227,7 @@ $.widget("ui.resizable", $.extend({}, $.ui.mouse, {
 			originalPosition: this.originalPosition
 		};
 	},
-	propagate: function(n,e) {
+	_propagate: function(n,e) {
 		$.ui.plugin.call(this, n, [e, this.ui()]);
 		if (n != "resize") this.element.triggerHandler(["resize", n].join(""), [e, this.ui()], this.options[n]);
 	},
@@ -309,7 +309,7 @@ $.widget("ui.resizable", $.extend({}, $.ui.mouse, {
 		if (o.preserveCursor)
 			$('body').css('cursor', this.axis + '-resize');
 			
-		this.propagate("start", e);
+		this._propagate("start", e);
 		return true;
 	},
 	mouseDrag: function(e) {
@@ -331,7 +331,7 @@ $.widget("ui.resizable", $.extend({}, $.ui.mouse, {
 		data = this._respectSize(data, e);
 		
 		// plugins callbacks need to be called first
-		this.propagate("resize", e);
+		this._propagate("resize", e);
 		
 		el.css({
 			top: this.position.top + "px", left: this.position.left + "px", 
@@ -371,7 +371,7 @@ $.widget("ui.resizable", $.extend({}, $.ui.mouse, {
 		if (o.preserveCursor)
 			$('body').css('cursor', 'auto');
 		
-		this.propagate("stop", e);
+		this._propagate("stop", e);
 		
 		if (o.helper) this.helper.remove();
 		
@@ -672,7 +672,7 @@ $.ui.plugin.add("resizable", "animate", {
 					
 					// propagating resize, and updating values for each animation step
 					self._updateCache(data);
-					self.propagate("animate", e);
+					self._propagate("animate", e);
 					
 				}
 			}
