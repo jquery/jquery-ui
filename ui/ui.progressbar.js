@@ -68,7 +68,7 @@ $.widget("ui.progressbar", {
 			percentState: this.percentState
 		};
 	},
-	propagate: function(n,e) {
+	_propagate: function(n,e) {
 		$.ui.plugin.call(this, n, [e, this.ui()]);
 		this.element.triggerHandler(n == "progressbar" ? n : ["progressbar", n].join(""), [e, this.ui()], this.options[n]);
 	},
@@ -106,12 +106,12 @@ $.widget("ui.progressbar", {
 			options.duration
 		);
 
-		this.animate();
+		this._animate();
 
-		this.propagate('start', this.ui());
+		this._propagate('start', this.ui());
 		return false;
 	},
-	animate: function() {
+	_animate: function() {
 		var self = this,
 			options = this.options,
 			interval = options.interval;
@@ -135,7 +135,7 @@ $.widget("ui.progressbar", {
 					if (self.active) {
 						/*TODO*/
 						self.stop();
-						self.animate();
+						self._animate();
 					}
 				}
 			}
@@ -144,7 +144,7 @@ $.widget("ui.progressbar", {
 	pause: function() {
 		if (this.disabled) return;
 		this.bar.stop();
-		this.propagate('pause', this.ui());
+		this._propagate('pause', this.ui());
 	},
 	stop: function() {
 		this.bar.stop();
@@ -152,7 +152,7 @@ $.widget("ui.progressbar", {
 		this.textElement.width(0);
 		this.bar.addClass('ui-hidden');
 		this.options.interval = this.options._interval;
-		this.propagate('stop', this.ui());
+		this._propagate('stop', this.ui());
 	},
 	progress: function(percentState) {
 		if (this.bar.is('.ui-hidden')) {
@@ -167,7 +167,7 @@ $.widget("ui.progressbar", {
 		if (this.options.range && !this.options.text) {
 			this.textElement.html(Math.round(this.percentState) + '%');
 		}
-		this.propagate('progress', this.ui());
+		this._propagate('progress', this.ui());
 	}
 });
 
