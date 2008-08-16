@@ -38,12 +38,19 @@ $.widget = function(name, prototype) {
 		var isMethodCall = (typeof options == 'string'),
 			args = Array.prototype.slice.call(arguments, 1);
 		
+		// prevent calls to internal methods
+		if (isMethodCall && options.substring(0, 1) == '_') {
+			return this;
+		}
+		
+		// handle getter methods
 		if (isMethodCall && getter(namespace, name, options)) {
 			var instance = $.data(this[0], name);
 			return (instance ? instance[options].apply(instance, args)
 				: undefined);
 		}
 		
+		// handle initialization and non-getter methods
 		return this.each(function() {
 			var instance = $.data(this, name);
 			if (isMethodCall && instance && $.isFunction(instance[options])) {
