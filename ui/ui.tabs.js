@@ -17,20 +17,20 @@ $.widget("ui.tabs", {
 		this.options.event += '.tabs'; // namespace event
 		
 		// create tabs
-		this.tabify(true);
+		this._tabify(true);
 	},
 	setData: function(key, value) {
 		if ((/^selected/).test(key))
 			this.select(value);
 		else {
 			this.options[key] = value;
-			this.tabify();
+			this._tabify();
 		}
 	},
 	length: function() {
 		return this.$tabs.length;
 	},
-	tabId: function(a) {
+	_tabId: function(a) {
 		return a.title && a.title.replace(/\s/g, '_').replace(/[^A-Za-z0-9\-_:\.]/g, '')
 			|| this.options.idPrefix + $.data(a);
 	},
@@ -42,7 +42,7 @@ $.widget("ui.tabs", {
 			index: this.$tabs.index(tab)
 		};
 	},
-	tabify: function(init) {
+	_tabify: function(init) {
 
 		this.$lis = $('li:has(a[href])', this.element);
 		this.$tabs = this.$lis.map(function() { return $('a', this)[0]; });
@@ -58,7 +58,7 @@ $.widget("ui.tabs", {
 			else if ($(a).attr('href') != '#') { // prevent loading the page itself if href is just "#"
 				$.data(a, 'href.tabs', a.href); // required for restore on destroy
 				$.data(a, 'load.tabs', a.href); // mutable
-				var id = self.tabId(a);
+				var id = self._tabId(a);
 				a.href = '#' + id;
 				var $panel = $('#' + id);
 				if (!$panel.length) {
@@ -323,7 +323,7 @@ $.widget("ui.tabs", {
 		var $li = $(o.tabTemplate.replace(/#\{href\}/g, url).replace(/#\{label\}/g, label));
 		$li.data('destroy.tabs', true);
 
-		var id = url.indexOf('#') == 0 ? url.replace('#', '') : this.tabId( $('a:first-child', $li)[0] );
+		var id = url.indexOf('#') == 0 ? url.replace('#', '') : this._tabId( $('a:first-child', $li)[0] );
 
 		// try to find an existing element before creating a new one
 		var $panel = $('#' + id);
@@ -344,7 +344,7 @@ $.widget("ui.tabs", {
 		o.disabled = $.map(o.disabled,
 			function(n, i) { return n >= index ? ++n : n });
 			
-		this.tabify();
+		this._tabify();
 
 		if (this.$tabs.length == 1) {
 			$li.addClass(o.selectedClass);
@@ -369,7 +369,7 @@ $.widget("ui.tabs", {
 		o.disabled = $.map($.grep(o.disabled, function(n, i) { return n != index; }),
 			function(n, i) { return n >= index ? --n : n });
 
-		this.tabify();
+		this._tabify();
 
 		// callback
 		this.trigger('remove', null, this.ui($li.find('a')[0], $panel[0]));
