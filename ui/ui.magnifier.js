@@ -59,7 +59,7 @@ $.widget("ui.magnifier", {
 		
 		this.identifier = ++counter;
 		$(document).bind("mousemove.magnifier"+this.identifier, function(e) {
-			(self.disabled || self.magnify.apply(self, [e]));
+			(self.disabled || self._magnify.apply(self, [e]));
 		});
 		
 		this.pp = this.element.offset();
@@ -95,7 +95,7 @@ $.widget("ui.magnifier", {
 		});
 	},
 	
-	magnify: function(e) {
+	_magnify: function(e) {
 		var p = [e.pageX,e.pageY], o = this.options, c, distance = 1;
 		this.current = this.items[0];
 		
