@@ -13,7 +13,7 @@
 (function($) {
 
 $.widget("ui.accordion", {
-	init: function() {
+	_init: function() {
 		var options = this.options;
 		
 		if ( options.navigation ) {
@@ -111,7 +111,7 @@ function completed(cancel) {
 			overflow: ""
 		});
 	}
-	instance.trigger('change', null, options.data);
+	instance._trigger('change', null, options.data);
 }
 
 function toggle(toShow, toHide, data, clickedActive, down) {
