@@ -117,6 +117,26 @@ $(window).bind('load', function() {
 			.displayBox();
 		return false;
 	});
+	
+	
+	var sliderChange = function(e, ui){
+		$('.img_content').each(function(index, item){
+			var _new = 1.44	* $('#sliderSize').slider("value");
+			
+			$(this).css("width", _new+'px')
+				.parent().css("width", (_new+16)+'px');
+			
+		});
+	}
+	$('#sliderSize').slider({
+		startValue : 100,
+		min : 50,
+		max : 100,
+		stepping : 5,
+		slide : sliderChange,
+		change : sliderChange
+	});
+	
 });
 
 function createGalleryItem(img) {

@@ -15,9 +15,20 @@
 		<script type="text/javascript" src="../../../ui/ui.core.js"></script>
 		<script type="text/javascript" src="../../../ui/ui.draggable.js"></script>
 		<script type="text/javascript" src="../../../ui/ui.droppable.js"></script>
+		<script type="text/javascript" src="../../../ui/ui.slider.js"></script>
 
 		<script type="text/javascript" src="./js/demo.js"></script>
+		<style type="text/css" media="all">
+			.ui-slider { width: 200px; height: 23px; position: relative; background-repeat: no-repeat; background-position: center center; }
+			.ui-slider-handle { position: absolute; z-index: 1; height: 23px; width: 12px; top: 0px; left: 0px; background-image: url(img/slider-handle.gif); }
+			.ui-slider-handle-active { border: 1px dotted black; }
+			.ui-slider-disabled .ui-slider-handle { opacity: 0.5; filter: alpha(opacity=50); }
+			.ui-slider-range { position: absolute; background: #50A029; opacity: 0.3; filter: alpha(opacity=30); width: 100%; height: 100%; }
 
+			.ui-slider, .ui-slider-1 { background-image: url(img/slider-bg-1.png); }
+			.ui-slider-2 { background-image: url(img/slider-bg-2.png); clear:both}
+			.nominheight{min-height:20px;}
+		</style>
 		<link rel="stylesheet" type="text/css" href="./theme/css/screen.css" media="screen, projection" />
 	</head>
 	<body>
@@ -109,6 +120,14 @@
 				</ul>
 			</div>
 			<div id="sidebar">
+				<div class="box2" id="resize">
+					<h2>Resize images</h2>
+					<div style="margin: 5px; padding: 5px;min-height:20px" class="ui-slider-2 ui-slider" id="sliderSize">
+						<a style="cursor: default;" href="javascript:void(0)">
+							<div class="ui-slider-handle" style="left: 150px;min-height:20px"></div>
+						</a>	
+					</div>	
+				</div>
 				<div class="box" id="trash">
 					<h2>Trash (drag me back)</h2>
 					<div></div>

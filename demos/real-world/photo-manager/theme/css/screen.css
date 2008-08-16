@@ -116,12 +116,12 @@ h1 {
 ----------------
 =SIDEBAR
 ---------------- */
-.box {
+.box, .box2 {
 	margin: 18px;
 	border: 1px solid #ccc;
 	background: #fff;
 }
-.box h2 {
+.box h2, .box2 h2 {
 	padding: 0 8px;
 	margin: 0;
 	font-size: 1.5em;
