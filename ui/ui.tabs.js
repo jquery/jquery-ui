@@ -135,7 +135,7 @@ $.widget("ui.tabs", {
 				
 				// seems to be expected behavior that the show callback is fired
 				var onShow = function() {
-					self.trigger('show', null,
+					self._trigger('show', null,
 						self.ui(self.$tabs[o.selected], self.$panels[o.selected]));
 				};
 
@@ -201,7 +201,7 @@ $.widget("ui.tabs", {
 					$show[0].style.filter = '';
 
 				// callback
-				self.trigger('show', null, self.ui(clicked, $show[0]));
+				self._trigger('show', null, self.ui(clicked, $show[0]));
 			});
 		}
 
@@ -230,7 +230,7 @@ $.widget("ui.tabs", {
 			if (($li.hasClass(o.selectedClass) && !o.unselect)
 				|| $li.hasClass(o.disabledClass) 
 				|| $(this).hasClass(o.loadingClass)
-				|| self.trigger('select', null, self.ui(this, $show[0])) === false
+				|| self._trigger('select', null, self.ui(this, $show[0])) === false
 				) {
 				this.blur();
 				return false;
@@ -355,7 +355,7 @@ $.widget("ui.tabs", {
 		}
 
 		// callback
-		this.trigger('add', null, this.ui(this.$tabs[index], this.$panels[index]));
+		this._trigger('add', null, this.ui(this.$tabs[index], this.$panels[index]));
 	},
 	remove: function(index) {
 		var o = this.options, $li = this.$lis.eq(index).remove(),
@@ -372,7 +372,7 @@ $.widget("ui.tabs", {
 		this._tabify();
 
 		// callback
-		this.trigger('remove', null, this.ui($li.find('a')[0], $panel[0]));
+		this._trigger('remove', null, this.ui($li.find('a')[0], $panel[0]));
 	},
 	enable: function(index) {
 		var o = this.options;
@@ -390,7 +390,7 @@ $.widget("ui.tabs", {
 		o.disabled = $.grep(o.disabled, function(n, i) { return n != index; });
 
 		// callback
-		this.trigger('enable', null, this.ui(this.$tabs[index], this.$panels[index]));
+		this._trigger('enable', null, this.ui(this.$tabs[index], this.$panels[index]));
 	},
 	disable: function(index) {
 		var self = this, o = this.options;
@@ -401,7 +401,7 @@ $.widget("ui.tabs", {
 			o.disabled.sort();
 
 			// callback
-			this.trigger('disable', null, this.ui(this.$tabs[index], this.$panels[index]));
+			this._trigger('disable', null, this.ui(this.$tabs[index], this.$panels[index]));
 		}
 	},
 	select: function(index) {
@@ -453,7 +453,7 @@ $.widget("ui.tabs", {
 					$.data(a, 'cache.tabs', true); // if loaded once do not load them again
 
 				// callbacks
-				self.trigger('load', null, self.ui(self.$tabs[index], self.$panels[index]));
+				self._trigger('load', null, self.ui(self.$tabs[index], self.$panels[index]));
 				o.ajaxOptions.success && o.ajaxOptions.success(r, s);
 				
 				// This callback is required because the switch has to take
