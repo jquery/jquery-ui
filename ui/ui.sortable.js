@@ -65,7 +65,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 	
 	serialize: function(o) {
 
-		var items = this.getItemsAsjQuery(o && o.connected);
+		var items = this._getItemsAsjQuery(o && o.connected);
 		var str = []; o = o || {};
 		
 		$(items).each(function() {
@@ -79,7 +79,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 	
 	toArray: function(attr) {
 		
-		var items = this.getItemsAsjQuery(o && o.connected);
+		var items = this._getItemsAsjQuery(o && o.connected);
 		var ret = [];
 
 		items.each(function() { ret.push($(this).attr(attr || 'id')); });
@@ -88,7 +88,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 	},
 	
 	/* Be careful with the following core functions */
-	intersectsWith: function(item) {
+	_intersectsWith: function(item) {
 		var x1 = this.positionAbs.left, x2 = x1 + this.helperProportions.width,
 		y1 = this.positionAbs.top, y2 = y1 + this.helperProportions.height;
 		var l = item.left, r = l + item.width, 
@@ -109,7 +109,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 		}
 	},
 	
-	intersectsWithEdge: function(item) {	
+	_intersectsWithEdge: function(item) {	
 		var x1 = this.positionAbs.left, x2 = x1 + this.helperProportions.width,
 			y1 = this.positionAbs.top, y2 = y1 + this.helperProportions.height;
 		
@@ -153,11 +153,11 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 	},
 	
 	refresh: function() {
-		this.refreshItems();
+		this._refreshItems();
 		this.refreshPositions();
 	},
 	
-	getItemsAsjQuery: function(connected) {
+	_getItemsAsjQuery: function(connected) {
 		
 		var self = this;
 		var items = [];
@@ -187,7 +187,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 		
 	},
 	
-	removeCurrentsFromItems: function() {
+	_removeCurrentsFromItems: function() {
 			
 		var list = this.currentItem.find(":data(sortable-item)");	
 	
@@ -202,7 +202,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 		
 	},
 	
-	refreshItems: function() {
+	_refreshItems: function() {
 		
 		this.items = [];
 		this.containers = [this];
@@ -289,7 +289,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 			this.items[i].item.removeData("sortable-item");
 	},
 	
-	createPlaceholder: function(that) {
+	_createPlaceholder: function(that) {
 		
 		var self = that || this, o = self.options;
 
@@ -315,10 +315,10 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 
 	},
 	
-	contactContainers: function(e) {
+	_contactContainers: function(e) {
 		for (var i = this.containers.length - 1; i >= 0; i--){
 
-			if(this.intersectsWith(this.containers[i].containerCache)) {
+			if(this._intersectsWith(this.containers[i].containerCache)) {
 				if(!this.containers[i].containerCache.over) {
 					
 
@@ -365,7 +365,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 		if(this.options.disabled || this.options.type == 'static') return false;
 
 		//We have to refresh the items data once first
-		this.refreshItems();
+		this._refreshItems();
 
 		//Find out if the clicked node (or one of its parents) is a actual item in this.items
 		var currentItem = null, self = this, nodes = $(e.target).parents().each(function() {	
@@ -385,7 +385,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 		}
 			
 		this.currentItem = currentItem;
-		this.removeCurrentsFromItems();
+		this._removeCurrentsFromItems();
 		return true;	
 			
 	},
@@ -448,7 +448,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 		
 		if(o.helper != "original") this.currentItem.hide(); //Hide the original, won't cause anything bad this way
 		this.helper.css({ position: 'absolute', clear: 'both' }).addClass('ui-sortable-helper'); //Position it absolutely and add a helper class
-		this.createPlaceholder();
+		this._createPlaceholder();
 
 		//Call plugins and callbacks
 		this._propagate("start", e);
@@ -584,7 +584,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 
 		//Rearrange
 		for (var i = this.items.length - 1; i >= 0; i--) {
-			var intersection = this.intersectsWithEdge(this.items[i]);
+			var intersection = this._intersectsWithEdge(this.items[i]);
 			if(!intersection) continue;
 			
 			if(this.items[i].item[0] != this.currentItem[0] //cannot intersect with itself
@@ -603,7 +603,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 		}
 		
 		//Post events to containers
-		this.contactContainers(e);
+		this._contactContainers(e);
 		
 		//Interconnect with droppables
 		if($.ui.ddmanager) $.ui.ddmanager.drag(this, e);
@@ -615,7 +615,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 		
 	},
 	
-	rearrange: function(e, i, a, hardRefresh) {
+	_rearrange: function(e, i, a, hardRefresh) {
 
 		a ? a[0].appendChild(this.placeholder[0]) : i.item[0].parentNode.insertBefore(this.placeholder[0], (this.direction == 'down' ? i.item[0] : i.item[0].nextSibling));
 		
@@ -721,7 +721,7 @@ $.extend($.ui.sortable, {
 		zIndex: 1000,
 		dropOnEmpty: true,
 		appendTo: "parent",
-		sortIndicator: $.ui.sortable.prototype.rearrange,
+		sortIndicator: $.ui.sortable.prototype._rearrange,
 		scope: "default"
 	}
 });
