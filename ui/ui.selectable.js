@@ -45,7 +45,7 @@ $.widget("ui.selectable", $.extend({}, $.ui.mouse, {
 
 		this.selectees = selectees.addClass("ui-selectee");
 		
-		this.mouseInit();
+		this._mouseInit();
 		
 		this.helper = $(document.createElement('div'))
 			.css({border:'1px dotted black'})
@@ -63,9 +63,9 @@ $.widget("ui.selectable", $.extend({}, $.ui.mouse, {
 			.removeClass("ui-selectable ui-selectable-disabled")
 			.removeData("selectable")
 			.unbind(".selectable");
-		this.mouseDestroy();
+		this._mouseDestroy();
 	},
-	mouseStart: function(e) {
+	_mouseStart: function(e) {
 		var self = this;
 		
 		this.opos = [e.pageX, e.pageY];
@@ -121,7 +121,7 @@ $.widget("ui.selectable", $.extend({}, $.ui.mouse, {
 		});
 		return this.options.keyboard ? !isSelectee : true;
 	},
-	mouseDrag: function(e) {
+	_mouseDrag: function(e) {
 		var self = this;
 		this.dragged = true;
 		
@@ -210,7 +210,7 @@ $.widget("ui.selectable", $.extend({}, $.ui.mouse, {
 		
 		return false;
 	},
-	mouseStop: function(e) {
+	_mouseStop: function(e) {
 		var self = this;
 		
 		this.dragged = false;

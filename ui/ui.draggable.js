@@ -21,10 +21,10 @@ $.widget("ui.draggable", $.extend({}, $.ui.mouse, {
 		(this.options.cssNamespace && this.element.addClass(this.options.cssNamespace+"-draggable"));
 		(this.options.disabled && this.element.addClass('ui-draggable-disabled'));
 		
-		this.mouseInit();
+		this._mouseInit();
 		
 	},
-	mouseStart: function(e) {
+	_mouseStart: function(e) {
 		
 		var o = this.options;
 		
@@ -135,7 +135,7 @@ $.widget("ui.draggable", $.extend({}, $.ui.mouse, {
 		if ($.ui.ddmanager && !o.dropBehaviour) $.ui.ddmanager.prepareOffsets(this, e);
 		
 		this.helper.addClass("ui-draggable-dragging");
-		this.mouseDrag(e); //Execute the drag once - this causes the helper not to be visible before getting its correct position
+		this._mouseDrag(e); //Execute the drag once - this causes the helper not to be visible before getting its correct position
 		return true;
 	},
 	_convertPositionTo: function(d, pos) {
@@ -207,7 +207,7 @@ $.widget("ui.draggable", $.extend({}, $.ui.mouse, {
 		
 		return position;
 	},
-	mouseDrag: function(e) {
+	_mouseDrag: function(e) {
 	
 		//Compute the helpers position
 		this.position = this._generatePosition(e);
@@ -222,7 +222,7 @@ $.widget("ui.draggable", $.extend({}, $.ui.mouse, {
 		
 		return false;
 	},
-	mouseStop: function(e) {
+	_mouseStop: function(e) {
 		
 		//If we are using droppables, inform the manager about the drop
 		var dropped = false;
@@ -268,7 +268,7 @@ $.widget("ui.draggable", $.extend({}, $.ui.mouse, {
 	destroy: function() {
 		if(!this.element.data('draggable')) return;
 		this.element.removeData("draggable").unbind(".draggable").removeClass('ui-draggable-dragging ui-draggable-disabled');
-		this.mouseDestroy();
+		this._mouseDestroy();
 	}
 }));
 
@@ -492,7 +492,7 @@ $.ui.plugin.add("draggable", "connectToSortable", {
 				inst.cancelHelperRemoval = true; //Don't remove the helper in the draggable instance
 				this.instance.cancelHelperRemoval = false; //Remove it in the sortable instance (so sortable plugins like revert still work)
 				if(this.shouldRevert) this.instance.options.revert = true; //revert here
-				this.instance.mouseStop(e);
+				this.instance._mouseStop(e);
 				
 				//Also propagate receive event, since the sortable is actually receiving a element
 				this.instance.element.triggerHandler("sortreceive", [e, $.extend(this.instance.ui(), { sender: inst.element })], this.instance.options["receive"]);
@@ -534,8 +534,8 @@ $.ui.plugin.add("draggable", "connectToSortable", {
 					this.instance.options.helper = function() { return ui.helper[0]; };
 				
 					e.target = this.instance.currentItem[0];
-					this.instance.mouseCapture(e, true);
-					this.instance.mouseStart(e, true, true);
+					this.instance._mouseCapture(e, true);
+					this.instance._mouseStart(e, true, true);
 
 					//Because the browser event is way off the new appended portlet, we modify a couple of variables to reflect the changes
 					this.instance.offset.click.top = inst.offset.click.top;
@@ -548,7 +548,7 @@ $.ui.plugin.add("draggable", "connectToSortable", {
 				}
 				
 				//Provided we did all the previous steps, we can fire the drag event of the sortable on every draggable drag, when it intersects with the sortable
-				if(this.instance.currentItem) this.instance.mouseDrag(e);
+				if(this.instance.currentItem) this.instance._mouseDrag(e);
 				
 			} else {
 				
@@ -558,7 +558,7 @@ $.ui.plugin.add("draggable", "connectToSortable", {
 					this.instance.isOver = 0;
 					this.instance.cancelHelperRemoval = true;
 					this.instance.options.revert = false; //No revert here
-					this.instance.mouseStop(e, true);
+					this.instance._mouseStop(e, true);
 					this.instance.options.helper = this.instance.options._helper;
 					
 					//Now we remove our currentItem, the list group clone again, and the placeholder, and animate the helper back to it's original size

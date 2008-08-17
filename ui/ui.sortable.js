@@ -41,7 +41,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 		this.offset = this.element.offset();
 
 		//Initialize mouse events for interaction
-		this.mouseInit();
+		this._mouseInit();
 		
 	},
 	plugins: {},
@@ -283,7 +283,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 			.removeClass("ui-sortable ui-sortable-disabled")
 			.removeData("sortable")
 			.unbind(".sortable");
-		this.mouseDestroy();
+		this._mouseDestroy();
 		
 		for ( var i = this.items.length - 1; i >= 0; i-- )
 			this.items[i].item.removeData("sortable-item");
@@ -360,7 +360,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 		};			
 	},
 	
-	mouseCapture: function(e, overrideHandle) {
+	_mouseCapture: function(e, overrideHandle) {
 	
 		if(this.options.disabled || this.options.type == 'static') return false;
 
@@ -390,7 +390,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 			
 	},
 	
-	mouseStart: function(e, overrideHandle, noActivation) {
+	_mouseStart: function(e, overrideHandle, noActivation) {
 
 		var o = this.options;
 		this.currentContainer = this;
@@ -499,7 +499,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 
 		this.dragging = true;
 
-		this.mouseDrag(e); //Execute the drag once - this causes the helper not to be visible before getting its correct position
+		this._mouseDrag(e); //Execute the drag once - this causes the helper not to be visible before getting its correct position
 		return true;
 
 
@@ -566,7 +566,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 		return position;
 	},
 	
-	mouseDrag: function(e) {
+	_mouseDrag: function(e) {
 
 		//Compute the helpers position
 		this.position = this._generatePosition(e);
@@ -633,7 +633,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 
 	},
 	
-	mouseStop: function(e, noPropagation) {
+	_mouseStop: function(e, noPropagation) {
 
 		//If we are using droppables, inform the manager about the drop
 		if ($.ui.ddmanager && !this.options.dropBehaviour)

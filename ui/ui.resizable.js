@@ -212,7 +212,7 @@ $.widget("ui.resizable", $.extend({}, $.ui.mouse, {
 			});
 		}
 		
-		this.mouseInit();
+		this._mouseInit();
 	},
 	plugins: {},
 	ui: function() {
@@ -234,7 +234,7 @@ $.widget("ui.resizable", $.extend({}, $.ui.mouse, {
 	destroy: function() {
 		var el = this.element, wrapped = el.children(".ui-resizable").get(0);
 		
-		this.mouseDestroy();
+		this._mouseDestroy();
 		
 		var _destroy = function(exp) {
 			$(exp).removeClass("ui-resizable ui-resizable-disabled")
@@ -257,7 +257,7 @@ $.widget("ui.resizable", $.extend({}, $.ui.mouse, {
 			_destroy(wrapped);
 		}
 	},
-	mouseStart: function(e) {
+	_mouseStart: function(e) {
 		if(this.options.disabled) return false;
 		
 		var handle = false;
@@ -312,7 +312,7 @@ $.widget("ui.resizable", $.extend({}, $.ui.mouse, {
 		this._propagate("start", e);
 		return true;
 	},
-	mouseDrag: function(e) {
+	_mouseDrag: function(e) {
 		
 		//Increase performance, avoid regex
 		var el = this.helper, o = this.options, props = {},
@@ -348,7 +348,7 @@ $.widget("ui.resizable", $.extend({}, $.ui.mouse, {
 		
 		return false;
 	},
-	mouseStop: function(e) {
+	_mouseStop: function(e) {
 		
 		this.options.resizing = false;
 		var o = this.options, num = function(v) { return parseInt(v, 10) || 0; }, self = this;
