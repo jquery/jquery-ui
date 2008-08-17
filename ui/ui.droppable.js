@@ -14,7 +14,7 @@
 (function($) {
 
 $.widget("ui.droppable", {
-	init: function() {
+	_init: function() {
 		
 		var o = this.options, accept = o.accept;
 		this.isover = 0; this.isout = 1;
@@ -55,7 +55,7 @@ $.widget("ui.droppable", {
 			.removeData("droppable")
 			.unbind(".droppable");
 	},
-	over: function(e) {
+	_over: function(e) {
 		
 		var draggable = $.ui.ddmanager.current;
 		if (!draggable || (draggable.currentItem || draggable.element)[0] == this.element[0]) return; // Bail if draggable and droppable are same element
@@ -66,7 +66,7 @@ $.widget("ui.droppable", {
 		}
 		
 	},
-	out: function(e) {
+	_out: function(e) {
 		
 		var draggable = $.ui.ddmanager.current;
 		if (!draggable || (draggable.currentItem || draggable.element)[0] == this.element[0]) return; // Bail if draggable and droppable are same element
@@ -77,7 +77,7 @@ $.widget("ui.droppable", {
 		}
 		
 	},
-	drop: function(e,custom) {
+	_drop: function(e,custom) {
 		
 		var draggable = custom || $.ui.ddmanager.current;
 		if (!draggable || (draggable.currentItem || draggable.element)[0] == this.element[0]) return false; // Bail if draggable and droppable are same element
@@ -100,14 +100,14 @@ $.widget("ui.droppable", {
 		return false;
 		
 	},
-	activate: function(e) {
+	_activate: function(e) {
 		
 		var draggable = $.ui.ddmanager.current;
 		$.ui.plugin.call(this, 'activate', [e, this.ui(draggable)]);
 		if(draggable) this.element.triggerHandler("dropactivate", [e, this.ui(draggable)], this.options.activate);
 		
 	},
-	deactivate: function(e) {
+	_deactivate: function(e) {
 		
 		var draggable = $.ui.ddmanager.current;
 		$.ui.plugin.call(this, 'deactivate', [e, this.ui(draggable)]);
@@ -188,7 +188,7 @@ $.ui.ddmanager = {
 			m[i].offset = m[i].element.offset();
 			m[i].proportions = { width: m[i].element[0].offsetWidth, height: m[i].element[0].offsetHeight };
 			
-			if(type == "dragstart" || type == "sortactivate") m[i].activate.call(m[i], e); 										//Activate the droppable if used directly from draggables
+			if(type == "dragstart" || type == "sortactivate") m[i]._activate.call(m[i], e); 										//Activate the droppable if used directly from draggables
 			
 		}
 		
@@ -200,11 +200,11 @@ $.ui.ddmanager = {
 			
 			if(!this.options) return;
 			if (!this.options.disabled && this.visible && $.ui.intersect(draggable, this, this.options.tolerance))
-				dropped = this.drop.call(this, e);
+				dropped = this._drop.call(this, e);
 			
 			if (!this.options.disabled && this.visible && this.options.accept.call(this.element,(draggable.currentItem || draggable.element))) {
 				this.isout = 1; this.isover = 0;
-				this.deactivate.call(this, e);
+				this._deactivate.call(this, e);
 			}
 			
 		});
@@ -239,17 +239,17 @@ $.ui.ddmanager = {
 			if (parentInstance && c == 'isover') {
 				parentInstance['isover'] = 0;
 				parentInstance['isout'] = 1;
-				parentInstance.out.call(parentInstance, e);
+				parentInstance._out.call(parentInstance, e);
 			}
 			
 			this[c] = 1; this[c == 'isout' ? 'isover' : 'isout'] = 0;
-			this[c == "isover" ? "over" : "out"].call(this, e);
+			this[c == "isover" ? "_over" : "_out"].call(this, e);
 			
 			// we just moved out of a greedy child
 			if (parentInstance && c == 'isout') {
 				parentInstance['isout'] = 0;
 				parentInstance['isover'] = 1;
-				parentInstance.over.call(parentInstance, e);
+				parentInstance._over.call(parentInstance, e);
 			}
 		});
 		

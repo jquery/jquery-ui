@@ -14,7 +14,7 @@
 
 $.widget("ui.autocomplete", {
 	
-	init: function() {
+	_init: function() {
 
 		$.extend(this.options, {
 			delay: this.options.url ? $.Autocompleter.defaults.delay : 10,

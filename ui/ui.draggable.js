@@ -13,7 +13,7 @@
 (function($) {
 
 $.widget("ui.draggable", $.extend({}, $.ui.mouse, {
-	init: function() {
+	_init: function() {
 		
 		if (this.options.helper == 'original' && !(/^(?:r|a|f)/).test(this.element.css("position")))
 			this.element[0].style.position = 'relative';
@@ -90,7 +90,7 @@ $.widget("ui.draggable", $.extend({}, $.ui.mouse, {
 			left: p.left - (parseInt(this.helper.css("left"),10) || 0) + (this.scrollLeftParent[0].scrollLeft || 0)
 		} : { top: 0, left: 0 };
 		
-		this.originalPosition = this.generatePosition(e);												//Generate the original position
+		this.originalPosition = this._generatePosition(e);												//Generate the original position
 		this.helperProportions = { width: this.helper.outerWidth(), height: this.helper.outerHeight() };//Cache the helper size
 		
 		if(o.cursorAt) {
@@ -129,7 +129,7 @@ $.widget("ui.draggable", $.extend({}, $.ui.mouse, {
 		}
 		
 		//Call plugins and callbacks
-		this.propagate("start", e);
+		this._propagate("start", e);
 		
 		this.helperProportions = { width: this.helper.outerWidth(), height: this.helper.outerHeight() };//Recache the helper size
 		if ($.ui.ddmanager && !o.dropBehaviour) $.ui.ddmanager.prepareOffsets(this, e);
@@ -138,7 +138,7 @@ $.widget("ui.draggable", $.extend({}, $.ui.mouse, {
 		this.mouseDrag(e); //Execute the drag once - this causes the helper not to be visible before getting its correct position
 		return true;
 	},
-	convertPositionTo: function(d, pos) {
+	_convertPositionTo: function(d, pos) {
 
 		if(!pos) pos = this.position;
 		var mod = d == "absolute" ? 1 : -1;
@@ -162,7 +162,7 @@ $.widget("ui.draggable", $.extend({}, $.ui.mouse, {
 			)
 		};
 	},
-	generatePosition: function(e) {
+	_generatePosition: function(e) {
 
 		var o = this.options;
 		var position = {
@@ -210,11 +210,11 @@ $.widget("ui.draggable", $.extend({}, $.ui.mouse, {
 	mouseDrag: function(e) {
 	
 		//Compute the helpers position
-		this.position = this.generatePosition(e);
-		this.positionAbs = this.convertPositionTo("absolute");
+		this.position = this._generatePosition(e);
+		this.positionAbs = this._convertPositionTo("absolute");
 		
 		//Call plugins and callbacks and use the resulting position if something is returned		
-		this.position = this.propagate("drag", e) || this.position;
+		this.position = this._propagate("drag", e) || this.position;
 	
 		if(!this.options.axis || this.options.axis != "y") this.helper[0].style.left = this.position.left+'px';
 		if(!this.options.axis || this.options.axis != "x") this.helper[0].style.top = this.position.top+'px';
@@ -232,17 +232,17 @@ $.widget("ui.draggable", $.extend({}, $.ui.mouse, {
 		if((this.options.revert == "invalid" && !dropped) || (this.options.revert == "valid" && dropped) || this.options.revert === true) {
 			var self = this;
 			$(this.helper).animate(this.originalPosition, parseInt(this.options.revertDuration, 10) || 500, function() {
-				self.propagate("stop", e);
-				self.clear();
+				self._propagate("stop", e);
+				self._clear();
 			});
 		} else {
-			this.propagate("stop", e);
-			this.clear();
+			this._propagate("stop", e);
+			this._clear();
 		}
 		
 		return false;
 	},
-	clear: function() {
+	_clear: function() {
 		this.helper.removeClass("ui-draggable-dragging");
 		if(this.options.helper != 'original' && !this.cancelHelperRemoval) this.helper.remove();
 		//if($.ui.ddmanager) $.ui.ddmanager.current = null;
@@ -260,9 +260,9 @@ $.widget("ui.draggable", $.extend({}, $.ui.mouse, {
 			options: this.options			
 		};
 	},
-	propagate: function(n,e) {
+	_propagate: function(n,e) {
 		$.ui.plugin.call(this, n, [e, this.uiHash()]);
-		if(n == "drag") this.positionAbs = this.convertPositionTo("absolute"); //The absolute position has to be recalculated after plugins
+		if(n == "drag") this.positionAbs = this._convertPositionTo("absolute"); //The absolute position has to be recalculated after plugins
 		return this.element.triggerHandler(n == "drag" ? n : "drag"+n, [e, this.uiHash()], this.options[n]);
 	},
 	destroy: function() {
@@ -435,10 +435,10 @@ $.ui.plugin.add("draggable", "snap", {
 				var bs = Math.abs(b - y1) <= d;
 				var ls = Math.abs(l - x2) <= d;
 				var rs = Math.abs(r - x1) <= d;
-				if(ts) ui.position.top = inst.convertPositionTo("relative", { top: t - inst.helperProportions.height, left: 0 }).top;
-				if(bs) ui.position.top = inst.convertPositionTo("relative", { top: b, left: 0 }).top;
-				if(ls) ui.position.left = inst.convertPositionTo("relative", { top: 0, left: l - inst.helperProportions.width }).left;
-				if(rs) ui.position.left = inst.convertPositionTo("relative", { top: 0, left: r }).left;
+				if(ts) ui.position.top = inst._convertPositionTo("relative", { top: t - inst.helperProportions.height, left: 0 }).top;
+				if(bs) ui.position.top = inst._convertPositionTo("relative", { top: b, left: 0 }).top;
+				if(ls) ui.position.left = inst._convertPositionTo("relative", { top: 0, left: l - inst.helperProportions.width }).left;
+				if(rs) ui.position.left = inst._convertPositionTo("relative", { top: 0, left: r }).left;
 			}
 			
 			var first = (ts || bs || ls || rs);
@@ -448,10 +448,10 @@ $.ui.plugin.add("draggable", "snap", {
 				var bs = Math.abs(b - y2) <= d;
 				var ls = Math.abs(l - x1) <= d;
 				var rs = Math.abs(r - x2) <= d;
-				if(ts) ui.position.top = inst.convertPositionTo("relative", { top: t, left: 0 }).top;
-				if(bs) ui.position.top = inst.convertPositionTo("relative", { top: b - inst.helperProportions.height, left: 0 }).top;
-				if(ls) ui.position.left = inst.convertPositionTo("relative", { top: 0, left: l }).left;
-				if(rs) ui.position.left = inst.convertPositionTo("relative", { top: 0, left: r - inst.helperProportions.width }).left;
+				if(ts) ui.position.top = inst._convertPositionTo("relative", { top: t, left: 0 }).top;
+				if(bs) ui.position.top = inst._convertPositionTo("relative", { top: b - inst.helperProportions.height, left: 0 }).top;
+				if(ls) ui.position.left = inst._convertPositionTo("relative", { top: 0, left: l }).left;
+				if(rs) ui.position.left = inst._convertPositionTo("relative", { top: 0, left: r - inst.helperProportions.width }).left;
 			}
 			
 			if(!inst.snapElements[i].snapping && (ts || bs || ls || rs || first))
@@ -476,7 +476,7 @@ $.ui.plugin.add("draggable", "connectToSortable", {
 					shouldRevert: sortable.options.revert
 				});
 				sortable.refreshItems();	//Do a one-time refresh at start to refresh the containerCache	
-				sortable.propagate("activate", e, inst);
+				sortable._propagate("activate", e, inst);
 			}
 		});
 
@@ -499,7 +499,7 @@ $.ui.plugin.add("draggable", "connectToSortable", {
 
 				this.instance.options.helper = this.instance.options._helper;
 			} else {
-				this.instance.propagate("deactivate", e, inst);
+				this.instance._propagate("deactivate", e, inst);
 			}
 
 		});
@@ -543,7 +543,7 @@ $.ui.plugin.add("draggable", "connectToSortable", {
 					this.instance.offset.parent.left -= inst.offset.parent.left - this.instance.offset.parent.left;
 					this.instance.offset.parent.top -= inst.offset.parent.top - this.instance.offset.parent.top;
 					
-					inst.propagate("toSortable", e);
+					inst._propagate("toSortable", e);
 				
 				}
 				
@@ -565,7 +565,7 @@ $.ui.plugin.add("draggable", "connectToSortable", {
 					this.instance.currentItem.remove();
 					if(this.instance.placeholder) this.instance.placeholder.remove();
 					
-					inst.propagate("fromSortable", e);
+					inst._propagate("fromSortable", e);
 				}
 				
 			};
