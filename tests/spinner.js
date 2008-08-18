@@ -47,7 +47,7 @@ test("set defaults on init", function() {
 });
 
 test("keydown on input", function() {
-	expect(5);
+	expect(6);
 	el = $("#spin").spinner();
 
 	equals(el.val(), 0, "start number");
@@ -62,15 +62,20 @@ test("keydown on input", function() {
 
 	equals(el.val(), 2, "Right key");
 
+	el.simulate("keydown",{keyCode:$.simulate.VK_HOME})
+		.simulate("keyup",{keyCode:$.simulate.VK_HOME});
+
+	equals(el.val(), 0, "Home key to start");
+
 	el.simulate("keydown",{keyCode:$.simulate.VK_DOWN})
 		.simulate("keyup",{keyCode:$.simulate.VK_DOWN});
 
-	equals(el.val(), 1, "Down Key");
+	equals(el.val(), -1, "Down Key");
 
 	el.simulate("keydown",{keyCode:$.simulate.VK_LEFT})
 		.simulate("keyup",{keyCode:$.simulate.VK_LEFT});
 
-	equals(el.val(), 0, "Left Key");
+	equals(el.val(), -2, "Left Key");
 
 });
 
