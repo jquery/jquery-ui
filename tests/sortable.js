@@ -1,5 +1,5 @@
 /*
- * draggable unit tests
+ * sortable unit tests
  */
 (function($) {
 //
