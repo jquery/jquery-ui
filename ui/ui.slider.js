@@ -46,7 +46,7 @@ $.widget("ui.slider", {
 			this.handle
 				.unwrap("a");
 			this.handle.each(function() {
-				$(this).data("mouse").mouseDestroy();
+				$(this).data("mouse")._mouseDestroy();
 			});
 		}
 		
@@ -93,15 +93,15 @@ $.widget("ui.slider", {
 				self._focus(this, true);
 			});
 			
-			this.mouseInit();
+			this._mouseInit();
 		};
 		
 		$.extend(handleclass.prototype, $.ui.mouse, {
-			mouseStart: function(e) { return self.start.call(self, e, this.element[0]); },
-			mouseStop: function(e) { return self.stop.call(self, e, this.element[0]); },
-			mouseDrag: function(e) { return self.drag.call(self, e, this.element[0]); },
-			mouseCapture: function() { return true; },
-			trigger: function(e) { this.mouseDown(e); }
+			_mouseStart: function(e) { return self.start.call(self, e, this.element[0]); },
+			_mouseStop: function(e) { return self.stop.call(self, e, this.element[0]); },
+			_mouseDrag: function(e) { return self.drag.call(self, e, this.element[0]); },
+			_mouseCapture: function() { return true; },
+			trigger: function(e) { this._mouseDown(e); }
 		});
 		
 		
