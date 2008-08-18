@@ -97,9 +97,9 @@ $.widget("ui.slider", {
 		};
 		
 		$.extend(handleclass.prototype, $.ui.mouse, {
-			_mouseStart: function(e) { return self.start.call(self, e, this.element[0]); },
-			_mouseStop: function(e) { return self.stop.call(self, e, this.element[0]); },
-			_mouseDrag: function(e) { return self.drag.call(self, e, this.element[0]); },
+			_mouseStart: function(e) { return self._start.call(self, e, this.element[0]); },
+			_mouseStop: function(e) { return self._stop.call(self, e, this.element[0]); },
+			_mouseDrag: function(e) { return self._drag.call(self, e, this.element[0]); },
 			_mouseCapture: function() { return true; },
 			trigger: function(e) { this._mouseDown(e); }
 		});
@@ -295,7 +295,7 @@ $.widget("ui.slider", {
 	},
 
 
-	start: function(e, handle) {
+	_start: function(e, handle) {
 	
 		var o = this.options;
 		if(o.disabled) return false;
@@ -315,11 +315,11 @@ $.widget("ui.slider", {
 		this.firstValue = this.value();
 		
 		this._propagate('start', e);
-		this.drag(e, handle);
+		this._drag(e, handle);
 		return true;
 					
 	},
-	stop: function(e) {
+	_stop: function(e) {
 		this._propagate('stop', e);
 		if (this.firstValue != this.value())
 			this._propagate('change', e);
@@ -327,7 +327,7 @@ $.widget("ui.slider", {
 		this._focus(this.currentHandle, true);
 		return false;
 	},
-	drag: function(e, handle) {
+	_drag: function(e, handle) {
 
 		var o = this.options;
 		var position = { top: e.pageY - this.offset.top - this.clickOffset.top, left: e.pageX - this.offset.left - this.clickOffset.left};
