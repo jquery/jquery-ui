@@ -60,7 +60,7 @@ test("keydown on input", function() {
 	el.simulate("keydown",{keyCode:$.simulate.VK_RIGHT})
 		.simulate("keyup",{keyCode:$.simulate.VK_RIGHT});
 
-	equals(el.val(), 2, "Right key");
+	equals(el.val(), 1, "Right key");
 
 	el.simulate("keydown",{keyCode:$.simulate.VK_HOME})
 		.simulate("keyup",{keyCode:$.simulate.VK_HOME});
@@ -75,7 +75,7 @@ test("keydown on input", function() {
 	el.simulate("keydown",{keyCode:$.simulate.VK_LEFT})
 		.simulate("keyup",{keyCode:$.simulate.VK_LEFT});
 
-	equals(el.val(), -2, "Left Key");
+	equals(el.val(), -1, "Left Key");
 
 });
 
@@ -154,19 +154,19 @@ test("mouse click on buttons", function() {
 	expect(4);
 	el = $("#spin").spinner();
 
-	$("div.ui-spinner-up").trigger("mousedown").trigger("mouseup");
+	$(".ui-spinner-up").trigger("mousedown").trigger("mouseup");
 
 	equals(el.val(), 1, "Mouse click to up");
 
-	$("div.ui-spinner-up").trigger("dblclick");
+	$(".ui-spinner-up").trigger("dblclick");
 
 	equals(el.val(), 2, "Mouse double click to up");
 
-	$("div.ui-spinner-down").trigger("mousedown").trigger("mouseup");
+	$(".ui-spinner-down").trigger("mousedown").trigger("mouseup");
 
 	equals(el.val(), 1, "Mouse click to down");
 
-	$("div.ui-spinner-down").trigger("dblclick");
+	$(".ui-spinner-down").trigger("dblclick");
 
 	equals(el.val(), 0, "Mouse double click to down");
 
