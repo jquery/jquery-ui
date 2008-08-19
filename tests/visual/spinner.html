@@ -1,37 +1,97 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-<title>Untitled Document</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>jQuery UI Spinner Test page</title>
 <script type="text/javascript" src="../../jquery-1.2.6.js"></script>
 <script type="text/javascript" src="../../ui/ui.core.js"></script>
 <script type="text/javascript" src="../../ui/ui.spinner.js"></script>
 
 
-<script>
-$(document).ready(function(){
+<script type="text/javascript">
+$(function(){
 
-	$("input").spinner();
-
+	var opts = {
+		's1': {},
+		's2': {stepping: 0.25},
+		's3': {currency: '$'}
+	};
+	
+	for (var n in opts)
+		$("#"+n).spinner(opts[n]);
+	
+	$("button").click(function(e){
+		var ns = $(this).attr('id').match(/(s\d)\-(\w+)$/);
+		if (ns != null)
+			$('#'+ns[1]).spinner( (ns[2] == 'create') ? opts[ns[1]] : ns[2]);
+	});
 	
 });
 </script>
 
 <style type="text/css">
-body {
-background:#fff;
-color:#333;
-font-size:11px;
-font-family:"lucida grande", tahoma, verdana, arial, sans-serif;
+body
+{
+	background: #fff;
+	font-family: Arial;
 }
 
-.ui-spinner-down, .ui-spinner-up {
-	background: #999;
-	width: 100%;
+label {
+	float: left;
+	margin-right: .5em;
+	padding: .15em 0;
+	font-weight: bold;
 }
 
 .ui-spinner {
-	border: 1px solid black;
+	width: 15em;
+	display: block;
+	position: relative;
+	overflow: hidden;
+	border: 1px solid #999;
+	background: #FEFEFE url(../images/spinner-bg.gif) repeat-x left bottom;
+	padding: 0 5px;
+}
+
+.ui-spinner-disabled {
+	background: #F4F4F4;
+}
+
+.ui-spinner-box {
+	width: 90%;
+	height: 100%;
+	float: left;
+	font-size: 125%;
+	border: none;
+	background: none;
+	padding: 0;
+}
+
+.ui-spinner-up,
+.ui-spinner-down {
+	width: 10%;
+	height: 50%;
+	font-size: 0.5em;
+	padding: 0;
+	margin: 0;
+	z-index: 100;
+	text-align: center;
+	vertical-align: middle;
+	position: absolute;
+	right: 0;
+	cursor: default;
+	border: 1px solid #999;
+	border-right: none;
+	border-top: none;
+}
+
+.ui-spinner-down {
+	bottom: 0;
+	border-bottom: 0;
+}
+
+.ui-spinner-pressed {
+	background: #FEFEFE;
 }
 
 </style>
@@ -39,7 +99,45 @@ font-family:"lucida grande", tahoma, verdana, arial, sans-serif;
 
 <body>
 
-<input type="text" id="input" />
+<h1>jQuery UI Spinner Test Page</h1>
+
+<p>This is a visual test page for developers and demonstrates some of the features included in ui.spinner. Mousewheel support is provided by the <a href="http://plugins.jquery.com/project/mousewheel">mousewheel plugin</a>.</p>
+
+<p><label for="s1">Basic: </label>
+<input type="text" id="s1" value="10" /></p>
+
+<p>
+<button id="s1-disable">disable</button>
+<button id="s1-enable">enable</button>
+<button id="s1-destroy">destroy</button>
+<button id="s1-create">create</button>
+</p>
+
+<hr />
+
+<p><label for="s2">Decimal: </label>
+<input type="text" id="s2" value="10.25" /></p>
+
+<p>
+<button id="s2-disable">disable</button>
+<button id="s2-enable">enable</button>
+<button id="s2-destroy">destroy</button>
+<button id="s2-create">create</button>
+</p>
+
+<hr />
+
+<p><label for="s3">Currency: </label>
+<input type="text" id="s3" /></p>
+
+<p>
+<button id="s3-disable">disable</button>
+<button id="s3-enable">enable</button>
+<button id="s3-destroy">destroy</button>
+<button id="s3-create">create</button>
+</p>
+
+<hr />
 
 </body>
 </html>
