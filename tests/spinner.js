@@ -265,10 +265,9 @@ test("mouse click on buttons", function() {
 });
 
 test("callback", function() {
-	expect(2);
+	expect(4);
 
-	var s = 0,
-		c = 0;
+	var s = c = d = u = 0;
 
 	el = $("#spin").spinner({
 		spin: function(){
@@ -276,20 +275,30 @@ test("callback", function() {
 		},
 		change: function(){
 			c++;
+		},
+		up: function(){
+			u++;
+		},
+		down: function(){
+			d++;
 		}
 	});
 
-	for ( var i = 1 ; i<=5 ; i++ ) {
-		el.simulate("keydown",{keyCode:$.simulate.VK_UP});
-	}
+	el.simulate("keydown",{keyCode:$.simulate.VK_UP}).simulate("keyup",{keyCode:$.simulate.VK_UP});
 
-	el.simulate("keyup",{keyCode:$.simulate.VK_UP});
+	equals(u, 1, "Up 1 time");
 
-	equals(s, 5, "Spin 5 times");
+	el.simulate("keydown",{keyCode:$.simulate.VK_DOWN}).simulate("keyup",{keyCode:$.simulate.VK_DOWN});
+
+	equals(d, 1, "Down 1 time");
 
 	el.simulate("keydown",{keyCode:$.simulate.VK_UP}).simulate("keyup",{keyCode:$.simulate.VK_UP});
 
-	equals(c, 2, "Change 2 times");
+	equals(s, 3, "Spin 3 times");
+
+	el.simulate("keydown",{keyCode:$.simulate.VK_UP}).simulate("keyup",{keyCode:$.simulate.VK_UP});
+
+	equals(c, 4, "Change 4 times");
 
 });
 
