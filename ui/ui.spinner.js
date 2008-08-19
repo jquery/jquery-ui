@@ -14,17 +14,13 @@
 
 $.widget('ui.spinner', {
 	_init: function() {
-		if($.data(this.element[0], 'spinner')) return;
 		
 		// check for decimals in steppinng and set _decimals as internal (needs cleaning up)
 		var decimals = 0;
 		if (this.options.stepping.toString().indexOf('.') != -1) {
 			var s = this.options.stepping.toString();
-			decimals = s.slice(s.indexOf('.')+1, s.length).length;
+			this._decimals = s.slice(s.indexOf('.')+1, s.length).length;
 		}
-		$.extend(this.options, {
-			_decimals: decimals
-		});
 		
 		//Initialize needed constants
 		var self = this;
@@ -200,7 +196,7 @@ $.widget('ui.spinner', {
 		this.element[0].value = (
 			this.options.currency ? 
 				$.ui.spinner.format.currency(newVal, this.options.currency) : 
-				$.ui.spinner.format.number(newVal, this.options._decimals)
+				$.ui.spinner.format.number(newVal, this._decimals)
 		);
 	},
 	

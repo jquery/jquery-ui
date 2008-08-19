@@ -135,7 +135,7 @@ test("keydown on input with options", function() {
 	el.simulate("keydown",{keyCode:$.simulate.VK_UP})
 		.simulate("keyup",{keyCode:$.simulate.VK_UP});
 
-	equals(el.val(), 60, "Stepping 10 on 50");
+	equals(el.val(), 60, "stepping 10 on 50");
 
 	el.simulate("keydown",{keyCode:$.simulate.VK_END})
 		.simulate("keyup",{keyCode:$.simulate.VK_END});
@@ -160,7 +160,7 @@ test("currency and decimal options", function() {
 	el.simulate("keydown",{keyCode:$.simulate.VK_UP})
 		.simulate("keyup",{keyCode:$.simulate.VK_UP});
 
-	equals(el.val(), "$0.30", "Stepping 0.30");
+	equals(el.val(), "$0.30", "stepping 0.30");
 
 	el.simulate("keydown",{keyCode:$.simulate.VK_END})
 		.simulate("keyup",{keyCode:$.simulate.VK_END});
@@ -180,6 +180,27 @@ test("currency and decimal options", function() {
 
 	equals(el.val(), "-$14.00", "keydown 120 times");
 
+});
+
+test("decimal options", function() {
+	expect(3);
+
+	el = $("#spin").spinner({ currency:false, incremental:false, stepping:0.7 });
+
+	equals(el.val(), "0.0", "start number");
+
+	el.simulate("keydown",{keyCode:$.simulate.VK_DOWN})
+		.simulate("keyup",{keyCode:$.simulate.VK_DOWN});
+
+	equals(el.val(), "-0.7", "stepping 0.7");
+
+	for ( var i = 1 ; i<=11 ; i++ ) {
+		el.simulate("keydown",{keyCode:$.simulate.VK_UP});
+	}
+
+	el.simulate("keyup",{keyCode:$.simulate.VK_UP});
+
+	equals(el.val(), "7.0", "keydown 11 times");
 
 });
 
@@ -235,19 +256,19 @@ test("mouse click on buttons", function() {
 
 	$(".ui-spinner-up").trigger("mousedown").trigger("mouseup");
 
-	equals(el.val(), 1, "Mouse click to up");
+	equals(el.val(), 1, "mouse click to up");
 
 	$(".ui-spinner-up").trigger("dblclick");
 
-	equals(el.val(), 2, "Mouse double click to up");
+	equals(el.val(), 2, "mouse double click to up");
 
 	$(".ui-spinner-down").trigger("mousedown").trigger("mouseup");
 
-	equals(el.val(), 1, "Mouse click to down");
+	equals(el.val(), 1, "mouse click to down");
 
 	$(".ui-spinner-down").trigger("dblclick");
 
-	equals(el.val(), 0, "Mouse double click to down");
+	equals(el.val(), 0, "mouse double click to down");
 
 
 });
