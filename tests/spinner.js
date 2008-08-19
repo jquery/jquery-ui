@@ -115,15 +115,15 @@ test("spin with auto-incremental stepping", function() {
 
 	el.simulate("keyup",{keyCode:$.simulate.VK_UP});
 
-	equals(el.val(), 300, "keydown 120 times");
+	equals(el.val(), 300, "keydown 120 times (100+20*10)");
 
-	for ( var i = 1 ; i<=130 ; i++ ) {
+	for ( var i = 1 ; i<=210 ; i++ ) {
 		el.simulate("keydown",{keyCode:$.simulate.VK_DOWN});
 	}
 
 	el.simulate("keyup",{keyCode:$.simulate.VK_DOWN});
 
-	equals(el.val(), -100, "keydown 130 times");
+	equals(el.val(), -1800, "keydown 210 times (300-100-100*10-10*100)");
 
 });
 
@@ -147,6 +147,35 @@ test("mouse click on buttons", function() {
 
 	equals(el.val(), 0, "Mouse double click to down");
 
+
+});
+
+test("callback", function() {
+	expect(2);
+
+	var s = 0,
+		c = 0;
+
+	el = $("#spin").spinner({
+		spin: function(){
+			s++;
+		},
+		change: function(){
+			c++;
+		}
+	});
+
+	for ( var i = 1 ; i<=10 ; i++ ) {
+		el.simulate("keydown",{keyCode:$.simulate.VK_UP});
+	}
+
+	el.simulate("keyup",{keyCode:$.simulate.VK_UP});
+
+	equals(s, 10, "Spin 10 times");
+
+	el.simulate("keydown",{keyCode:$.simulate.VK_UP}).simulate("keyup",{keyCode:$.simulate.VK_UP});
+
+	equals(c, 2, "Change 2 times");
 
 });
 
