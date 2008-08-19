@@ -204,7 +204,6 @@ $.widget('ui.spinner', {
 	plugins: {},
 	ui: function(e) {
 		return {
-			instance: this,
 			options: this.options,
 			element: this.element,
 			value: this._getValue()
@@ -216,7 +215,9 @@ $.widget('ui.spinner', {
 	},
 	destroy: function() {
 		if(!$.data(this.element[0], 'spinner')) return;
-		
+		if ($.fn.mousewheel) {
+			this.element.unmousewheel();
+		}
 		this.element
 			.removeClass('ui-spinner-box')
 			.removeAttr('disabled')
@@ -230,10 +231,6 @@ $.widget('ui.spinner', {
 				.before(this.element.clone())
 				.remove()
 			.end();
-			
-		if ($.fn.mousewheel) {
-			this.element.unmousewheel();
-		}
 	},
 	enable: function() {
 		this.element

@@ -7,13 +7,10 @@
 module("spinner");
 
 test("init", function() {
-	expect(3);
+	expect(2);
 
 	$("#spin").spinner();
 	ok(true, '.spinner() called on element');
-
-	$([]).spinner().remove();
-	ok(true, '.spinner() called on empty collection');
 
 	$('<input id="spinner_dis">').spinner().remove();
 	ok(true, '.spinner() called on disconnected element');
@@ -21,13 +18,10 @@ test("init", function() {
 });
 
 test("destroy", function() {
-	expect(3);
+	expect(2);
 
 	$("#spin").spinner().spinner("destroy");
 	ok(true, '.spinner("destroy") called on element');
-
-	$([]).spinner().spinner("destroy").remove();
-	ok(true, '.spinner().spinner("destroy") called on empty collection');
 
 	$('<input id="spinner_dis">').spinner().spinner("destroy").remove();
 	ok(true, '.spinner().spinner("destroy") called on disconnected element');
@@ -35,13 +29,10 @@ test("destroy", function() {
 });
 
 test("re-attach", function() {
-	expect(3);
+	expect(2);
 
 	el = $("#spin").spinner().spinner("destroy").spinner();
 	ok(true, '.spinner().spinner("destroy").spinner() called on element');
-
-	$([]).spinner().spinner("destroy").spinner().remove();
-	ok(true, '.spinner().spinner("destroy").spinner() called on empty collection');
 
 	$('<input id="spinner_dis">').spinner().spinner("destroy").spinner().remove();
 	ok(true, '.spinner().spinner("destroy").spinner() called on disconnected element');
