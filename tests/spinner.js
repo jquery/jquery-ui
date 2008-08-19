@@ -71,9 +71,9 @@ test("defaults", function() {
 
 test("set defaults on init", function() {
 	expect(7);
-	el = $("#spin").spinner({ currency:true, disabled:true, incremental:false, max:200, min:-100, start:50, stepping:2 });
+	el = $("#spin").spinner({ currency:"гд", disabled:true, incremental:false, max:200, min:-100, start:50, stepping:2 });
 
-	equals(el.data("currency.spinner"), true, "currency");
+	equals(el.data("currency.spinner"), "гд", "currency");
 	equals(el.data("disabled.spinner"), true, "disabled");
 	equals(el.data("incremental.spinner"), false, "incremental");
 	equals(el.data("max.spinner"), 200, "max");
