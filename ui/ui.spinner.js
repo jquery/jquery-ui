@@ -16,7 +16,7 @@ $.widget('ui.spinner', {
 	_init: function() {
 		
 		// check for decimals in steppinng and set _decimals as internal (needs cleaning up)
-		var decimals = 0;
+		this._decimals = 0;
 		if (this.options.stepping.toString().indexOf('.') != -1) {
 			var s = this.options.stepping.toString();
 			this._decimals = s.slice(s.indexOf('.')+1, s.length).length;
@@ -267,11 +267,12 @@ $.extend($.ui.spinner, {
 			return (num !== Math.abs(num) ? '-' : '') + sym + this.round(Math.abs(num), 2);
 		},
 		round: function(num, dec) {
+			var s = Math.round(parseFloat(num)*Math.pow(10, dec)) / Math.pow(10, dec); // round off weird decimals
 			if (dec > 0) {
-				var s = num + ((num.toString().indexOf('.') == -1) ? '.' : '') + '0000000001';
+				s = s + ((s.toString().indexOf('.') == -1) ? '.' : '') + '0000000001';
 				s = s.substr(0, s.indexOf('.')+1+dec);
 			} else {
-				var s = Math.round(num);
+				var s = Math.round(s);
 			}
 			return s;
 		}
