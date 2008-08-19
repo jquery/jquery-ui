@@ -104,6 +104,29 @@ test("keydown on input with options", function() {
 
 });
 
+test("spin without auto-incremental stepping", function() {
+	expect(2);
+
+	el = $("#spin").spinner({ incremental:false });
+
+	for ( var i = 1 ; i<=120 ; i++ ) {
+		el.simulate("keydown",{keyCode:$.simulate.VK_UP});
+	}
+
+	el.simulate("keyup",{keyCode:$.simulate.VK_UP});
+
+	equals(el.val(), 120, "keydown 120 times");
+
+	for ( var i = 1 ; i<=210 ; i++ ) {
+		el.simulate("keydown",{keyCode:$.simulate.VK_DOWN});
+	}
+
+	el.simulate("keyup",{keyCode:$.simulate.VK_DOWN});
+
+	equals(el.val(), -90, "keydown 210 times");
+
+});
+
 test("spin with auto-incremental stepping", function() {
 	expect(2);
 
