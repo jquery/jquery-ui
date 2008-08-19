@@ -7,34 +7,44 @@
 module("spinner");
 
 test("init", function() {
-	expect(1);
+	expect(3);
 
-	el = $("#spin").spinner();
+	$("#spin").spinner();
 	ok(true, '.spinner() called on element');
+
+	$([]).spinner().remove();
+	ok(true, '.spinner() called on empty collection');
+
+	$('<input id="spinner_dis">').spinner().remove();
+	ok(true, '.spinner() called on disconnected element');
 
 });
 
 test("destroy", function() {
-	expect(1);
+	expect(3);
 
 	$("#spin").spinner().spinner("destroy");
 	ok(true, '.spinner("destroy") called on element');
 
+	$([]).spinner().spinner("destroy").remove();
+	ok(true, '.spinner().spinner("destroy") called on empty collection');
+
+	$('<input id="spinner_dis">').spinner().spinner("destroy").remove();
+	ok(true, '.spinner().spinner("destroy") called on disconnected element');
+
 });
 
 test("re-attach", function() {
-	expect(1);
+	expect(3);
 
 	el = $("#spin").spinner().spinner("destroy").spinner();
 	ok(true, '.spinner().spinner("destroy").spinner() called on element');
 
-});
+	$([]).spinner().spinner("destroy").spinner().remove();
+	ok(true, '.spinner().spinner("destroy").spinner() called on empty collection');
 
-test("disabled on init", function() {
-	expect(1);
-
-	$("#spin").spinner({disabled:true});
-	ok(true, '.spinner({disabled:true}) called on element');
+	$('<input id="spinner_dis">').spinner().spinner("destroy").spinner().remove();
+	ok(true, '.spinner().spinner("destroy").spinner() called on disconnected element');
 
 });
 
@@ -49,16 +59,17 @@ test("disable", function() {
 test("enable", function() {
 	expect(1);
 
-	$("#spin").spinner().spinner("destroy").spinner("enable");
+	$("#spin").spinner().spinner("disable").spinner("enable");
 	ok(true, '.spinner("enable") called on element');
 
 });
 
 test("defaults", function() {
-	expect(6);
+	expect(7);
 	el = $("#spin").spinner();
 
 	equals(el.data("currency.spinner"), false, "currency");
+	equals(el.data("disabled.spinner"), false, "disabled");
 	equals(el.data("incremental.spinner"), true, "incremental");
 	equals(el.data("max.spinner"), undefined, "max");
 	equals(el.data("min.spinner"), undefined, "min");
@@ -68,10 +79,11 @@ test("defaults", function() {
 });
 
 test("set defaults on init", function() {
-	expect(6);
-	el = $("#spin").spinner({ currency:true, incremental:false, max:200, min:-100, start:50, stepping:2 });
+	expect(7);
+	el = $("#spin").spinner({ currency:true, disabled:true, incremental:false, max:200, min:-100, start:50, stepping:2 });
 
 	equals(el.data("currency.spinner"), true, "currency");
+	equals(el.data("disabled.spinner"), true, "disabled");
 	equals(el.data("incremental.spinner"), false, "incremental");
 	equals(el.data("max.spinner"), 200, "max");
 	equals(el.data("min.spinner"), -100, "min");
