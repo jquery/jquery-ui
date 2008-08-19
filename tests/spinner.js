@@ -17,15 +17,48 @@ test("init", function() {
 test("destroy", function() {
 	expect(1);
 
-	$("#spin").spinner().spinner("destroy");	
+	$("#spin").spinner().spinner("destroy");
 	ok(true, '.spinner("destroy") called on element');
 
 });
 
+test("re-attach", function() {
+	expect(1);
+
+	el = $("#spin").spinner().spinner("destroy").spinner();
+	ok(true, '.spinner().spinner("destroy").spinner() called on element');
+
+});
+
+test("disabled on init", function() {
+	expect(1);
+
+	$("#spin").spinner({disabled:true});
+	ok(true, '.spinner({disabled:true}) called on element');
+
+});
+
+test("disable", function() {
+	expect(1);
+
+	$("#spin").spinner().spinner("disable");
+	ok(true, '.spinner("disable") called on element');
+
+});
+
+test("enable", function() {
+	expect(1);
+
+	$("#spin").spinner().spinner("destroy").spinner("enable");
+	ok(true, '.spinner("enable") called on element');
+
+});
+
 test("defaults", function() {
-	expect(5);
+	expect(6);
 	el = $("#spin").spinner();
 
+	equals(el.data("currency.spinner"), false, "currency");
 	equals(el.data("incremental.spinner"), true, "incremental");
 	equals(el.data("max.spinner"), undefined, "max");
 	equals(el.data("min.spinner"), undefined, "min");
@@ -35,9 +68,10 @@ test("defaults", function() {
 });
 
 test("set defaults on init", function() {
-	expect(5);
-	el = $("#spin").spinner({ incremental:false, max:200, min:-100, start:50, stepping:2 });
+	expect(6);
+	el = $("#spin").spinner({ currency:true, incremental:false, max:200, min:-100, start:50, stepping:2 });
 
+	equals(el.data("currency.spinner"), true, "currency");
 	equals(el.data("incremental.spinner"), false, "incremental");
 	equals(el.data("max.spinner"), 200, "max");
 	equals(el.data("min.spinner"), -100, "min");
@@ -100,6 +134,31 @@ test("keydown on input with options", function() {
 		.simulate("keyup",{keyCode:$.simulate.VK_HOME});
 
 	equals(el.val(), -100, "Home key to min");
+
+
+});
+
+test("currency and decimal options", function() {
+	expect(4);
+
+	el = $("#spin").spinner({ currency:"$", incremental:false, max:120, min:-50, stepping:0.15 });
+
+	equals(el.val(), "$0.00", "start number");
+
+	el.simulate("keydown",{keyCode:$.simulate.VK_UP})
+		.simulate("keyup",{keyCode:$.simulate.VK_UP});
+
+	equals(el.val(), "$0.15", "Stepping 0.15");
+
+	el.simulate("keydown",{keyCode:$.simulate.VK_END})
+		.simulate("keyup",{keyCode:$.simulate.VK_END});
+
+	equals(el.val(), "$120.00", "End key to max");
+
+	el.simulate("keydown",{keyCode:$.simulate.VK_HOME})
+		.simulate("keyup",{keyCode:$.simulate.VK_HOME});
+
+	equals(el.val(), "-$50.00", "Home key to min");
 
 
 });
@@ -188,13 +247,13 @@ test("callback", function() {
 		}
 	});
 
-	for ( var i = 1 ; i<=10 ; i++ ) {
+	for ( var i = 1 ; i<=5 ; i++ ) {
 		el.simulate("keydown",{keyCode:$.simulate.VK_UP});
 	}
 
 	el.simulate("keyup",{keyCode:$.simulate.VK_UP});
 
-	equals(s, 10, "Spin 10 times");
+	equals(s, 5, "Spin 5 times");
 
 	el.simulate("keydown",{keyCode:$.simulate.VK_UP}).simulate("keyup",{keyCode:$.simulate.VK_UP});
 
