@@ -139,16 +139,16 @@ test("keydown on input with options", function() {
 });
 
 test("currency and decimal options", function() {
-	expect(4);
+	expect(5);
 
-	el = $("#spin").spinner({ currency:"$", incremental:false, max:120, min:-50, stepping:0.15 });
+	el = $("#spin").spinner({ currency:"$", incremental:false, max:120, min:-50, stepping:0.3 });
 
 	equals(el.val(), "$0.00", "start number");
 
 	el.simulate("keydown",{keyCode:$.simulate.VK_UP})
 		.simulate("keyup",{keyCode:$.simulate.VK_UP});
 
-	equals(el.val(), "$0.15", "Stepping 0.15");
+	equals(el.val(), "$0.30", "Stepping 0.30");
 
 	el.simulate("keydown",{keyCode:$.simulate.VK_END})
 		.simulate("keyup",{keyCode:$.simulate.VK_END});
@@ -159,6 +159,14 @@ test("currency and decimal options", function() {
 		.simulate("keyup",{keyCode:$.simulate.VK_HOME});
 
 	equals(el.val(), "-$50.00", "Home key to min");
+
+	for ( var i = 1 ; i<=120 ; i++ ) {
+		el.simulate("keydown",{keyCode:$.simulate.VK_UP});
+	}
+
+	el.simulate("keyup",{keyCode:$.simulate.VK_UP});
+
+	equals(el.val(), "-$14.00", "keydown 120 times");
 
 
 });
