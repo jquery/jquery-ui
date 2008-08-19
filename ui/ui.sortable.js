@@ -70,7 +70,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 		
 		$(items).each(function() {
 			var res = ($(this.item || this).attr(o.attribute || 'id') || '').match(o.expression || (/(.+)[-=_](.+)/));
-			if(res) str.push((o.key || res[1])+'[]='+(o.key && o.expression ? res[1] : res[2]));
+			if(res) str.push((o.key || res[1]+'[]')+'='+(o.key && o.expression ? res[1] : res[2]));
 		});
 		
 		return str.join('&');
