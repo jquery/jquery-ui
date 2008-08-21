@@ -387,6 +387,19 @@ $.extend(Datepicker.prototype, {
 		return false;
 	},
 
+	/* Retrieve the instance data for the target control.
+	   @param  target  element - the target input field or division or span
+	   @return  object - the associated instance data
+	   @throws  error if a jQuery problem getting data */
+	_getInst: function(target) {
+		try {
+			return $.data(target, PROP_NAME);
+		}
+		catch (err) {
+			throw 'Missing instance data for this datepicker';
+		}
+	},
+
 	/* Update the settings for a date picker attached to an input field or division.
 	   @param  target  element - the target input field or division or span
 	   @param  name    object - the new settings to update or
@@ -398,7 +411,7 @@ $.extend(Datepicker.prototype, {
 			settings = {};
 			settings[name] = value;
 		}
-		var inst = $.data(target, PROP_NAME);
+		var inst = this._getInst(target);
 		if (inst) {
 			if (this._curInst == inst) {
 				this._hideDatepicker(null);
@@ -419,7 +432,7 @@ $.extend(Datepicker.prototype, {
 	/* Redraw the date picker attached to an input field or division.
 	   @param  target  element - the target input field or division or span */
 	_refreshDatepicker: function(target) {
-		var inst = $.data(target, PROP_NAME);
+		var inst = this._getInst(target);
 		if (inst) {
 			this._updateDatepicker(inst);
 		}
@@ -430,7 +443,7 @@ $.extend(Datepicker.prototype, {
 	   @param  date     Date - the new date
 	   @param  endDate  Date - the new end date for a range (optional) */
 	_setDateDatepicker: function(target, date, endDate) {
-		var inst = $.data(target, PROP_NAME);
+		var inst = this._getInst(target);
 		if (inst) {
 			this._setDate(inst, date, endDate);
 			this._updateDatepicker(inst);
@@ -442,7 +455,7 @@ $.extend(Datepicker.prototype, {
 	   @return Date - the current date or
 	           Date[2] - the current dates for a range */
 	_getDateDatepicker: function(target) {
-		var inst = $.data(target, PROP_NAME);
+		var inst = this._getInst(target);
 		if (inst && !inst.inline)
 			this._setDateFromField(inst); 
 		return (inst ? this._getDate(inst) : null);
@@ -450,7 +463,7 @@ $.extend(Datepicker.prototype, {
 
 	/* Handle keystrokes. */
 	_doKeyDown: function(e) {
-		var inst = $.data(e.target, PROP_NAME);
+		var inst = $.datepicker._getInst(e.target);
 		var handled = true;
 		if ($.datepicker._datepickerShowing)
 			switch (e.keyCode) {
@@ -502,7 +515,7 @@ $.extend(Datepicker.prototype, {
 
 	/* Filter entered characters - based on date format. */
 	_doKeyPress: function(e) {
-		var inst = $.data(e.target, PROP_NAME);
+		var inst = $.datepicker._getInst(e.target);
 		var chars = $.datepicker._possibleChars($.datepicker._get(inst, 'dateFormat'));
 		var chr = String.fromCharCode(e.charCode == undefined ? e.keyCode : e.charCode);
 		return e.ctrlKey || (chr < ' ' || !chars || chars.indexOf(chr) > -1);
@@ -517,7 +530,7 @@ $.extend(Datepicker.prototype, {
 			input = $('input', input.parentNode)[0];
 		if ($.datepicker._isDisabledDatepicker(input) || $.datepicker._lastInput == input) // already here
 			return;
-		var inst = $.data(input, PROP_NAME);
+		var inst = $.datepicker._getInst(input);
 		var beforeShow = $.datepicker._get(inst, 'beforeShow');
 		extendRemove(inst.settings, (beforeShow ? beforeShow.apply(input, [input, inst]) : {}));
 		$.datepicker._hideDatepicker(null, '');
@@ -688,7 +701,7 @@ $.extend(Datepicker.prototype, {
 	/* Adjust one of the date sub-fields. */
 	_adjustDate: function(id, offset, period) {
 		var target = $(id);
-		var inst = $.data(target[0], PROP_NAME);
+		var inst = this._getInst(target[0]);
 		this._adjustInstDate(inst, offset, period);
 		this._updateDatepicker(inst);
 	},
@@ -696,7 +709,7 @@ $.extend(Datepicker.prototype, {
 	/* Action for current link. */
 	_gotoToday: function(id) {
 		var target = $(id);
-		var inst = $.data(target[0], PROP_NAME);
+		var inst = this._getInst(target[0]);
 		if (this._get(inst, 'gotoCurrent') && inst.currentDay) {
 			inst.selectedDay = inst.currentDay;
 			inst.drawMonth = inst.selectedMonth = inst.currentMonth;
@@ -715,7 +728,7 @@ $.extend(Datepicker.prototype, {
 	/* Action for selecting a new month/year. */
 	_selectMonthYear: function(id, select, period) {
 		var target = $(id);
-		var inst = $.data(target[0], PROP_NAME);
+		var inst = this._getInst(target[0]);
 		inst._selectingMonthYear = false;
 		inst['selected' + (period == 'M' ? 'Month' : 'Year')] =
 		inst['draw' + (period == 'M' ? 'Month' : 'Year')] =
@@ -727,7 +740,7 @@ $.extend(Datepicker.prototype, {
 	/* Restore input focus after not changing month/year. */
 	_clickMonthYear: function(id) {
 		var target = $(id);
-		var inst = $.data(target[0], PROP_NAME);
+		var inst = this._getInst(target[0]);
 		if (inst.input && inst._selectingMonthYear && !$.browser.msie)
 			inst.input[0].focus();
 		inst._selectingMonthYear = !inst._selectingMonthYear;
@@ -736,7 +749,7 @@ $.extend(Datepicker.prototype, {
 	/* Action for changing the first week day. */
 	_changeFirstDay: function(id, day) {
 		var target = $(id);
-		var inst = $.data(target[0], PROP_NAME);
+		var inst = this._getInst(target[0]);
 		inst.settings.firstDay = day;
 		this._updateDatepicker(inst);
 	},
@@ -746,7 +759,7 @@ $.extend(Datepicker.prototype, {
 		if ($(td).hasClass(this._unselectableClass))
 			return;
 		var target = $(id);
-		var inst = $.data(target[0], PROP_NAME);
+		var inst = this._getInst(target[0]);
 		var rangeSelect = this._get(inst, 'rangeSelect');
 		if (rangeSelect) {
 			inst.stayOpen = !inst.stayOpen;
@@ -785,7 +798,7 @@ $.extend(Datepicker.prototype, {
 	/* Erase the input field and hide the date picker. */
 	_clearDate: function(id) {
 		var target = $(id);
-		var inst = $.data(target[0], PROP_NAME);
+		var inst = this._getInst(target[0]);
 		if (this._get(inst, 'mandatory'))
 			return;
 		inst.stayOpen = false;
@@ -796,7 +809,7 @@ $.extend(Datepicker.prototype, {
 	/* Update the input field with the selected date. */
 	_selectDate: function(id, dateStr) {
 		var target = $(id);
-		var inst = $.data(target[0], PROP_NAME);
+		var inst = this._getInst(target[0]);
 		dateStr = (dateStr != null ? dateStr : this._formatDate(inst));
 		if (this._get(inst, 'rangeSelect') && dateStr)
 			dateStr = (inst.rangeStart ? this._formatDate(inst, inst.rangeStart) :
