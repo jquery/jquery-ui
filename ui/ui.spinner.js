@@ -181,6 +181,8 @@ $.widget('ui.spinner', {
 		if(e.keyCode == KEYS.END && this.options.max != undefined) this._setValue(this.options.max); //End key goes to maximum
 		return (e.keyCode == KEYS.TAB || e.keyCode == KEYS.BACKSPACE ||
 			e.keyCode == KEYS.LEFT || e.keyCode == KEYS.RIGHT || e.keyCode == KEYS.PERIOD || 
+			e.keyCode == KEYS.NUMPAD_DECIMAL || e.keyCode == KEYS.NUMPAD_SUBTRACT || 
+			(e.keyCode >= 96 && e.keyCode <= 105) || // add support for numeric keypad 0-9
 			(/[0-9\-\.]/).test(String.fromCharCode(e.keyCode))) ? true : false;
 	},
 	_mousewheel: function(e, delta) {
@@ -293,7 +295,9 @@ $.extend($.ui.spinner, {
 		DOWN: 40,
 		DEL: 46,
 		COMMA: 188,
-		PERIOD: 190
+		PERIOD: 190,
+		NUMPAD_DECIMAL: 110,
+		NUMPAD_SUBTRACT: 109
 	}
 });
 
