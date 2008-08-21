@@ -1244,9 +1244,10 @@ $.extend(Datepicker.prototype, {
 			}
 			return new Date(year, month, day);
 		};
-		return (date == null ? defaultDate :
+		date = (date == null ? defaultDate :
 			(typeof date == 'string' ? offsetString(date, this._getDaysInMonth) :
-			(typeof date == 'number' ? offsetNumeric(date) : date)));
+			(typeof date == 'number' ? (isNaN(date) ? defaultDate : offsetNumeric(date)) : date)));
+		return (date && date.toString() == 'Invalid Date' ? defaultDate : date);
 	},
 
 	/* Set the date(s) directly. */
