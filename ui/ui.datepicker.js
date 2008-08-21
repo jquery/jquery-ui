@@ -230,10 +230,10 @@ $.extend(Datepicker.prototype, {
 
 	/* Attach an inline date picker to a div. */
 	_inlineDatepicker: function(target, inst) {
-		var input = $(target);
-		if (input.hasClass(this.markerClassName))
+		var divSpan = $(target);
+		if (divSpan.hasClass(this.markerClassName))
 			return;
-		input.addClass(this.markerClassName).append(inst.dpDiv).
+		divSpan.addClass(this.markerClassName).append(inst.dpDiv).
 			bind("setData.datepicker", function(event, key, value){
 				inst.settings[key] = value;
 			}).bind("getData.datepicker", function(event, key){
@@ -412,6 +412,15 @@ $.extend(Datepicker.prototype, {
 				currentDay: date.getDate(), currentMonth: date.getMonth(),
 				currentYear: date.getFullYear(), // current selection
 				drawMonth: date.getMonth(), drawYear: date.getFullYear()}); // month being drawn
+			this._updateDatepicker(inst);
+		}
+	},
+
+	/* Redraw the date picker attached to an input field or division.
+	   @param  target  element - the target input field or division or span */
+	_refreshDatepicker: function(target) {
+		var inst = $.data(target, PROP_NAME);
+		if (inst) {
 			this._updateDatepicker(inst);
 		}
 	},
@@ -838,7 +847,8 @@ $.extend(Datepicker.prototype, {
 	   @param  date  Date - the date to get the week for
 	   @return  number - the number of the week within the year that contains this date */
 	iso8601Week: function(date) {
-		var checkDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(), (date.getTimezoneOffset() / -60));
+		var checkDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(),
+			(date.getTimezoneOffset() / -60));
 		var firstMon = new Date(checkDate.getFullYear(), 1 - 1, 4); // First week always contains 4 Jan
 		var firstDay = firstMon.getDay() || 7; // Day of week: Mon = 1, ..., Sun = 7
 		firstMon.setDate(firstMon.getDate() + 1 - firstDay); // Preceding Monday
@@ -848,8 +858,7 @@ $.extend(Datepicker.prototype, {
 		} else if (checkDate > new Date(checkDate.getFullYear(), 12 - 1, 28)) { // Check last three days in year
 			firstDay = new Date(checkDate.getFullYear() + 1, 1 - 1, 4).getDay() || 7;
 			if (firstDay > 4 && (checkDate.getDay() || 7) < firstDay - 3) { // Adjust if necessary
-				checkDate.setDate(checkDate.getDate() + 3); // Generate for next year
-				return $.datepicker.iso8601Week(checkDate);
+				return 1;
 			}
 		}
 		return Math.floor(((checkDate - firstMon) / 86400000) / 7) + 1; // Weeks to given date
