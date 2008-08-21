@@ -168,7 +168,7 @@ $.extend(Datepicker.prototype, {
 		var nodeName = target.nodeName.toLowerCase();
 		var inline = (nodeName == 'div' || nodeName == 'span');
 		if (!target.id)
-			target.id = 'dp' + new Date().getTime();
+			target.id = 'dp' + ++this.uuid;
 		var inst = this._newInst($(target), inline);
 		inst.settings = $.extend({}, settings || {}, inlineSettings || {}); 
 		if (nodeName == 'input') {
@@ -262,7 +262,7 @@ $.extend(Datepicker.prototype, {
 	_dialogDatepicker: function(input, dateText, onSelect, settings, pos) {
 		var inst = this._dialogInst; // internal instance
 		if (!inst) {
-			var id = 'dp' + new Date().getTime();
+			var id = 'dp' + ++this.uuid;
 			this._dialogInput = $('<input type="text" id="' + id +
 				'" size="1" style="position: absolute; top: -100px;"/>');
 			this._dialogInput.keydown(this._doKeyDown);
@@ -1679,5 +1679,6 @@ $.fn.datepicker = function(options){
 
 $.datepicker = new Datepicker(); // singleton instance
 $.datepicker.initialized = false;
+$.datepicker.uuid = new Date().getTime();
 
 })(jQuery);
