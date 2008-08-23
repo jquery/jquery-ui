@@ -18,7 +18,7 @@ $.fn.remove = function() {
 };
 
 // This adds a selector to check if data exists.
-jQuery.expr[':'].data = "jQuery.data(a, m[3])";
+$.expr[':'].data = "jQuery.data(a, m[3])";
 
 $.keyCode = {
 	BACKSPACE: 8,
