@@ -11,13 +11,42 @@
 
 /** jQuery core modifications and additions **/
 
-// This adds a selector to check if data exists.
-jQuery.expr[':'].data = "jQuery.data(a, m[3])";
-
 var _remove = $.fn.remove;
 $.fn.remove = function() {
 	$("*", this).add(this).triggerHandler("remove");
 	return _remove.apply(this, arguments );
+};
+
+// This adds a selector to check if data exists.
+jQuery.expr[':'].data = "jQuery.data(a, m[3])";
+
+$.keyCode = {
+	BACKSPACE: 8,
+	CAPS_LOCK: 20,
+	COMMA: 188,
+	CONTROL: 17,
+	DELETE: 46,
+	DOWN: 40,
+	END: 35,
+	ENTER: 13,
+	ESCAPE: 27,
+	HOME: 36,
+	INSERT: 45,
+	LEFT: 37,
+	NUMPAD_ADD: 107,
+	NUMPAD_DECIMAL: 110,
+	NUMPAD_DIVIDE: 111,
+	NUMPAD_ENTER: 108,
+	NUMPAD_MULTIPLY: 106,
+	NUMPAD_SUBTRACT: 109,
+	PAGE_DOWN: 34,
+	PAGE_UP: 33,
+	PERIOD: 190,
+	RIGHT: 39,
+	SHIFT: 16,
+	SPACE: 32,
+	TAB: 9,
+	UP: 38
 };
 
 // $.widget is a factory to create jQuery plugins
