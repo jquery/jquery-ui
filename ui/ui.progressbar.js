@@ -95,7 +95,7 @@ $.widget("ui.progressbar", {
 
 		if (this.disabled) {
 			return;
-		};
+		}
 		
 		self.active = true;
 		

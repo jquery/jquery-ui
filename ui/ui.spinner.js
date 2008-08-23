@@ -121,7 +121,7 @@ $.widget('ui.spinner', {
 			self._propagate('change', e);
 		})
 		.bind('blur.spinner', function(e) {
-			self._cleanUp() 
+			self._cleanUp();
 		});
 		
 		if ($.fn.mousewheel) {
@@ -274,7 +274,7 @@ $.extend($.ui.spinner, {
 				s = s + ((s.toString().indexOf('.') == -1) ? '.' : '') + '0000000001';
 				s = s.substr(0, s.indexOf('.')+1+dec);
 			} else {
-				var s = Math.round(s);
+				s = Math.round(s);
 			}
 			return s;
 		}
