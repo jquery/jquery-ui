@@ -1,13 +1,12 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-	<link rel="stylesheet" href="css/colorpicker.css" type="text/css" />
-    <link rel="stylesheet" media="screen" type="text/css" href="css/layout.css" />
+
     <title>ColorPicker</title>
 
 <style type="text/css" media="screen">
 
-body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,textarea,p,blockquote,th,td { 
+body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,textarea,p,blockquote,th,td {
 	margin:0;
 	padding:0;
 }
@@ -15,7 +14,7 @@ table {
 	border-collapse:collapse;
 	border-spacing:0;
 }
-fieldset,img { 
+fieldset,img {
 	border:0;
 }
 address,caption,cite,code,dfn,em,strong,th,var {
@@ -229,16 +228,16 @@ h1 {
 
 </style>
 
-<link rel="stylesheet" href="../../themes/default/ui.colorpicker.css" type="text/css" media="screen" title="no title" charset="utf-8">    
-  
+<link rel="stylesheet" href="../../themes/default/ui.all.css" type="text/css" media="screen" title="no title" charset="utf-8">
+
 <script type="text/javascript" src="../../jquery-1.2.6.js"></script>
 <script type="text/javascript" src="../../ui/ui.core.js"></script>
 <script type="text/javascript" src="../../ui/ui.colorpicker.js"></script>
 
 <script type="text/javascript">
-	
+
 $(document).ready(function() {
-	
+
 	$('#colorpickerHolder').colorpicker({ flat: true });
 	$('#colorpickerHolder2').colorpicker({
 		flat: true,
@@ -277,8 +276,8 @@ $(document).ready(function() {
 		change: function (e, ui) {
 			$('#colorSelector div').css('backgroundColor', '#' + ui.hex);
 		}
-	});	
-	
+	});
+
 });
 
 </script>
