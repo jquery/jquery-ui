@@ -1,4 +1,35 @@
 <script type="text/javascript">
+// Prepare to show a date picker linked to three select controls
+function readLinked() {
+	$("#linkedDates").val($("#selectMonth").val() + "/" +
+		$("#selectDay").val() + "/" + $("#selectYear").val());
+	return {};
+}
+
+// Update three select controls to match a date picker selection
+function updateLinked(date) {
+	$("#selectMonth").val(date.substring(0, 2));
+	$("#selectDay").val(date.substring(3, 5));
+	$("#selectYear").val(date.substring(6, 10));
+}
+
+// Prevent selection of invalid dates through the select controls
+function checkLinkedDays() {
+	var daysInMonth = 32 - new Date($("#selectYear").val(),
+		$("#selectMonth").val() - 1, 32).getDate();
+	$("#selectDay option").attr("disabled", "");
+	$("#selectDay option:gt(" + (daysInMonth - 1) +")").attr("disabled", "disabled");
+	if ($("#selectDay").val() > daysInMonth) {
+		$("#selectDay").val(daysInMonth);
+	}
+}
+function customRange(input) {
+	return {minDate: (input.id == "endDate" ? $("#startDate").datepicker("getDate") : null),
+		maxDate: (input.id == "startDate" ? $("#endDate").datepicker("getDate") : null)};
+}
+</script>
+
+<script type="text/javascript">
 
 	var model = {
 
@@ -372,10 +403,10 @@
 				title: 'Alternate Styling',
 				desc: 'Change the look-and-feel of the datepicker with alternative CSS.<br/>(Be sure to change it back again before going to another page.)',
 				html: '<input type="text" size="10" value="" id="styled"/>',
-				destroy: '$("#styled").datepicker("destroy");$("link[title=Flora (Default)]").attr("href", "../../themes/flora/flora.all.css");',
+				destroy: '',
 
 				options: [
-					{	desc: 'Default jQuery UI (Flora)',	source: '$("#styled").datepicker({showStatus: true, showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});$("link[title=Flora (Default)]").attr("href", "../../themes/flora/flora.all.css");' },
+					{	desc: 'Default jQuery UI (Flora)',	source: '$("#styled").datepicker({showStatus: true, showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' },
 					{	desc: 'Original datepicker styling',	source: '$("#styled").datepicker({showStatus: true, showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});$("link[title=Flora (Default)]").attr("href", "../../themes/default/ui.datepicker.css");' }
 				]
 			}

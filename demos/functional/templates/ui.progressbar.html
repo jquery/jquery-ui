@@ -14,10 +14,11 @@
 				html: '<div id="progressbar"></div>',
 				destroy: '$("#progressbar").progressbar("destroy");',
 				options: [
-					{ desc: 'Attach a progressbar', source: '$("#progressbar").progressbar();' },
-					{ desc: 'Start the progressbar', source: '$("#progressbar").progressbar("start");' },
-					{ desc: 'Loop', source: '$("#progressbar").progressbar({duration:2000,wait:"loop"}).progressbar("start");' },
-					{ desc: 'Callback when finish', source: '$("#progressbar").progressbar({stop:function(){alert("Finished");}}).progressbar("start");' },
+					{ desc: 'Start a progressbar', source: '$("#progressbar").progressbar({interval:2000}); $("#progressbar").progressbar("start");' },
+					{ desc: 'With different increment', source: '$("#progressbar").progressbar({interval:2000, increment:100}); $("#progressbar").progressbar("start");' },
+					{ desc: 'Set progress to 50%', source: '$("#progressbar").progressbar("progress", 50);' },
+					{ desc: 'Loop', source: '$("#progressbar").progressbar({interval:2000}).progressbar("start");' },
+					{ desc: 'Callback when finish', source: '$("#progressbar").progressbar({interval: 1000, stop:function(){alert("Finished");}}).progressbar("start");' },
 					{ desc: 'Enable the progressbar', source: '$("#progressbar").progressbar("enable");' },
 					{ desc: 'Disable the progressbar', source: '$("#progressbar").progressbar("disable");' }
 				]

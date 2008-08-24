@@ -15,10 +15,10 @@
 			<link rel="stylesheet" href="css/base.css" type="text/css" media="screen">
 			<link rel="stylesheet" href="css/functional_demos.css" type="text/css" media="screen">
 			<link rel="stylesheet" href="css/chilli-recipes.css" type="text/css" media="screen">
-			<link rel="stylesheet" href="../../themes/flora/flora.all.css" type="text/css" media="screen" title="Flora (Default)" />
-			<link rel="stylesheet" href="../../themes/default/ui.autocomplete.css" type="text/css" media="screen" title="Autocomplete (Default)" />
-			<link rel="stylesheet" href="../../themes/default/ui.colorpicker.css" type="text/css" media="screen" title="Colorpicker (Default)" />
-			
+			<link rel="stylesheet" href="../../themes/default/ui.all.css" type="text/css" media="screen" title="Flora (Default)" />
+			<link rel="stylesheet" href="../../themes/flora/flora.accordion.css" type="text/css" media="screen" title="Flora (Default)" />
+			<link rel="stylesheet" href="../../themes/flora/flora.tabs.css" type="text/css" media="screen" title="Flora (Default)" />
+						
 			<script type="text/javascript" src="../../jquery-1.2.6.js"></script>
 		
 			<script type="text/javascript" src="../../ui/ui.core.js"></script>
@@ -112,9 +112,67 @@
 	<div id="banner">
 		<h1 class="logo">
 			<a href="http://ui.jquery.com/" title="jQuery User Interface"><span>jQuery User Interface</span></a>
-
 		</h1>
 		
+		<div id="dock">
+			<div class="left"></div>
+
+			<ul>
+				<li>
+					<a href="http://jquery.com">jQuery</a>
+				</li>
+				<li style="padding-right: 12px;">
+					<a href="http://plugins.jquery.com/">Plugins</a>
+				</li>
+				<li class="selected" style="padding-right: 12px;">
+
+					<a href="http://ui.jquery.com/home">UI</a>
+				</li>
+				<li style="padding-left: 12px;">
+					<div style="background: #555; width: 1px; height: 24px; position: absolute; left: 0px;"></div>
+					<a href="http://jquery.com/blog">Blog</a>
+				</li>
+				<li>
+					<a href="http://ui.jquery.com/about">About</a>
+
+				</li>
+				<li>
+					<a href="http://docs.jquery.com/Donate">Donate</a>
+				</li>
+			</ul>
+			<div class="right"></div>
+		</div>
+		<div id="navigation">
+			<div class="left"></div>
+			<ul>
+				<li >
+					<a href="http://ui.jquery.com/download">Download</a>
+				</li>
+				<li >
+					<a href="http://docs.jquery.com/UI">Documentation</a>
+				</li>
+
+				<li class="selected">
+					<a href="http://ui.jquery.com/demos">Demos</a>
+				</li>
+				<li >
+					<a href="http://ui.jquery.com/themeroller">Themes</a>
+				</li>
+				<li >
+					<a href="#" style="color: #333; cursor: default;" onclick="return false;">Tutorials</a>
+
+				</li>
+				<li >
+					<a href="http://ui.jquery.com/bugs">Development</a>
+				</li>
+				<li class="last">
+					<a href="http://ui.jquery.com/support">Support</a>
+				</li>
+			</ul>
+
+			<div class="right"></div>
+		</div>
+
 	</div>
 	<div id="content-wrapper">
 		<div id="content">
@@ -165,8 +223,8 @@
 								<li><a href="#ui.colorpicker" title="Goto Colorpicker's Component Page">Colorpicker</a></li>
 								<li><a href="#ui.datepicker" title="Goto Datepicker's Component Page">Datepicker</a></li>
 								<li><a href="#ui.dialog" title="Goto Dialog's Component Page">Dialog</a></li>
-								<li><a href="#ui.magnifier" title="Goto Spinner Component Page">Magnifier</a></li>
-								<li><a href="#ui.progressbar" title="Goto Spinner Component Page">Progressbar</a></li>
+								<li><a href="#ui.magnifier" title="Goto Magnifier Component Page">Magnifier</a></li>
+								<li><a href="#ui.progressbar" title="Goto ProgressBar Component Page">Progressbar</a></li>
 								<li><a href="#ui.slider" title="Goto Slider Component Page">Slider</a></li>
 								<li><a href="#ui.spinner" title="Goto Spinner Component Page">Spinner</a></li>
 								<li><a href="#ui.tabs" title="Goto Tabs Component Page">Tabs</a></li>

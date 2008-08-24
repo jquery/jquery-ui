@@ -75,6 +75,75 @@ h1.logo a span {
 	display: none;
 }
 
+/* Navigation
+   -------------------------------- */
+
+#navigation {
+	height: 41px;
+	float: left;
+	position: absolute;
+	top: 62px;
+	right: 0px;
+}
+
+#navigation .left {
+	float: left;
+	width: 5px;
+	height: 41px;
+	/* background: url('/images/navigation.png') no-repeat left top; */
+	background: url('/images/navigation_l.png') no-repeat left top;
+}
+
+#ie6 #navigation .left {
+	background: transparent none;
+	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/images/navigation_l.png', sizingMethod='scale');
+	zoom: 1;
+}
+
+#navigation .right {
+	float: left;
+	width: 3px;
+	height: 41px;
+	background: url('/images/navigation.png') no-repeat right top;
+}
+
+#navigation ul,
+#navigation ul li {
+	float: left;
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	font-size: 13px;
+	line-height: 38px;
+}
+
+#navigation ul {
+	height: 41px;
+	background: url('/images/navigation.png') repeat-x 0 -41px;
+}
+
+#navigation ul li a {
+	float: left;
+	display: block;
+	height: 41px;
+	padding: 0 18px;
+	color: #ccc;
+	text-decoration: none;
+	background: url('/images/navigation_s.png') no-repeat right top;
+}
+
+#navigation ul li.selected a {
+	color: #fff;
+}
+
+#navigation ul li.last a{
+	background-image: none;
+}
+
+#navigation ul li a:hover {
+	color: #fff;
+}
+
 
 /* Dock
    -------------------------------- */
