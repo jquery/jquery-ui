@@ -57,7 +57,7 @@ $.widget('ui.spinner', {
 				})
 				.bind('keydown.spinner', function(e) {
 					var KEYS = $.keyCode;
-					if (e.keyCode == KEYS.SPACE || e.keyCode == KEYS.RETURN) {
+					if (e.keyCode == KEYS.SPACE || e.keyCode == KEYS.ENTER) {
 						$(this).addClass('ui-spinner-pressed');
 						if(!self.counter) self.counter = 1;
 						self._up.call(self, e);
@@ -96,7 +96,7 @@ $.widget('ui.spinner', {
 				})
 				.bind('keydown.spinner', function(e) {
 					var KEYS = $.keyCode;
-					if (e.keyCode == KEYS.SPACE || e.keyCode == KEYS.RETURN) {
+					if (e.keyCode == KEYS.SPACE || e.keyCode == KEYS.ENTER) {
 						$(this).addClass('ui-spinner-pressed');
 						if(!self.counter) self.counter = 1;
 						self._down.call(self, e);
