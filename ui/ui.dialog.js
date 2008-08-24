@@ -77,8 +77,7 @@ $.widget("ui.dialog", {
 				// setting outline to 0 prevents a border on focus in Mozilla
 				.attr('tabIndex', -1).css('outline', 0).keydown(function(ev) {
 					if (options.closeOnEscape) {
-						var ESC = 27;
-						(ev.keyCode && ev.keyCode == ESC && self.close());
+						(ev.keyCode && ev.keyCode == $.keyCode.ESCAPE && self.close());
 					}
 				})
 				.mousedown(function() {
@@ -399,8 +398,7 @@ $.extend($.ui.dialog.overlay, {
 			
 			// allow closing by pressing the escape key
 			$(document).bind('keydown.dialog-overlay', function(e) {
-				var ESC = 27;
-				(e.keyCode && e.keyCode == ESC && dialog.close()); 
+				(e.keyCode && e.keyCode == $.keyCode.ESCAPE && dialog.close()); 
 			});
 			
 			// handle window resize
