@@ -324,7 +324,7 @@ $.widget("ui.dialog", {
 		if (hasButtons) {
 			uiDialogButtonPane.show();
 			$.each(buttons, function(name, fn) {
-				$('<button/>')
+				$('<button type="button"></button>')
 					.text(name)
 					.click(function() { fn.apply(self.element[0], arguments); })
 					.appendTo(uiDialogButtonPane);
