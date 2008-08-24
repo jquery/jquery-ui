@@ -56,7 +56,7 @@ $.widget('ui.spinner', {
 					self._up(e);
 				})
 				.bind('keydown.spinner', function(e) {
-					var KEYS = $.ui.spinner.keys;
+					var KEYS = $.keyCode;
 					if (e.keyCode == KEYS.SPACE || e.keyCode == KEYS.RETURN) {
 						$(this).addClass('ui-spinner-pressed');
 						if(!self.counter) self.counter = 1;
@@ -95,7 +95,7 @@ $.widget('ui.spinner', {
 					self._down(e);
 				})
 				.bind('keydown.spinner', function(e) {
-					var KEYS = $.ui.spinner.keys;
+					var KEYS = $.keyCode;
 					if (e.keyCode == KEYS.SPACE || e.keyCode == KEYS.RETURN) {
 						$(this).addClass('ui-spinner-pressed');
 						if(!self.counter) self.counter = 1;
@@ -173,7 +173,7 @@ $.widget('ui.spinner', {
 		this._propagate('change', e);
 	},
 	_keydown: function(e) {
-		var KEYS = $.ui.spinner.keys;
+		var KEYS = $.keyCode;
 		
 		if(e.keyCode == KEYS.UP) this._up(e);
 		if(e.keyCode == KEYS.DOWN) this._down(e);
@@ -278,26 +278,6 @@ $.extend($.ui.spinner, {
 			}
 			return s;
 		}
-	},
-	keys: {
-		BACKSPACE: 8,
-		TAB: 9,
-		RETURN: 13,
-		ESC: 27,
-		SPACE: 32,
-		PAGEUP: 33,
-		PAGEDOWN: 34,
-		END: 35,
-		HOME: 36,
-		LEFT: 37,
-		UP: 38,
-		RIGHT: 39,
-		DOWN: 40,
-		DEL: 46,
-		COMMA: 188,
-		PERIOD: 190,
-		NUMPAD_DECIMAL: 110,
-		NUMPAD_SUBTRACT: 109
 	}
 });
 
