@@ -34,7 +34,7 @@ $.widget('ui.spinner', {
 		.wrap('<div>')
 		.parent()
 			.addClass('ui-spinner')
-			.append('<button class="ui-spinner-up">&#9650;</button>')
+			.append('<button class="ui-spinner-up" type="button">&#9650;</button>')
 			.find('.ui-spinner-up')
 				.bind('mousedown', function(e) {
 					$(this).addClass('ui-spinner-pressed');
@@ -73,7 +73,7 @@ $.widget('ui.spinner', {
 					self._propagate('change', e);
 				})
 			.end()
-			.append('<button class="ui-spinner-down">&#9660;</button>')
+			.append('<button class="ui-spinner-down" type="button">&#9660;</button>')
 			.find('.ui-spinner-down')
 				.bind('mousedown', function(e) {
 					$(this).addClass('ui-spinner-pressed');
