@@ -15,9 +15,7 @@
 $.widget("ui.progressbar", {
 	_init: function() {
 
-		$.extend(this.options, {
-			_interval: this.options.interval
-		});
+		this._interval = this.options.interval;
 
 		var self = this,
 			options = this.options,
@@ -59,7 +57,6 @@ $.widget("ui.progressbar", {
 	plugins: {},
 	ui: function(e) {
 		return {
-			instance: this,
 			identifier: this.identifier,
 			options: this.options,
 			element: this.bar,
@@ -151,7 +148,7 @@ $.widget("ui.progressbar", {
 		this.bar.width(0);
 		this.textElement.width(0);
 		this.bar.addClass('ui-hidden');
-		this.options.interval = this.options._interval;
+		this.options.interval = this._interval;
 		this._propagate('stop', this.ui());
 	},
 	progress: function(percentState) {
