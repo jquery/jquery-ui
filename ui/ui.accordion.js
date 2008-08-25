@@ -39,8 +39,8 @@ $.widget("ui.accordion", {
 		
 		if (!this.element.hasClass("ui-accordion")) {
 			this.element.addClass("ui-accordion");
-			$("<span class='ui-accordion-left'/>").insertBefore(options.headers);
-			$("<span class='ui-accordion-right'/>").appendTo(options.headers);
+			$('<span class="ui-accordion-left"/>').insertBefore(options.headers);
+			$('<span class="ui-accordion-right"/>').appendTo(options.headers);
 			options.headers.addClass("ui-accordion-header").attr("tabindex", "0");
 		}
 		
