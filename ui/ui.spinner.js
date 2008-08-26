@@ -14,6 +14,8 @@
 
 $.widget('ui.spinner', {
 	_init: function() {
+		// terminate initialization if spinner already applied to current element
+		if($.data(this.element[0], 'spinner')) return;
 		
 		// check for decimals in steppinng and set _decimals as internal (needs cleaning up)
 		this._decimals = 0;
@@ -22,6 +24,13 @@ $.widget('ui.spinner', {
 			this._decimals = s.slice(s.indexOf('.')+1, s.length).length;
 		}
 		
+		// data list: set contraints to object length and step size
+		if (this.element.is('ul')) {
+			this.options.stepping = 1;
+			this.options.min = 0;
+			this.options.max = $('li', this.element).length-1;
+		}
+
 		//Initialize needed constants
 		var self = this;
 		this.element
@@ -111,6 +120,11 @@ $.widget('ui.spinner', {
 				})
 			.end();
 		
+		// data list: fix height of data list spinner
+		if (this.element.is('ul')) {
+			this.element.parent().css('height', this.element.outerHeight());
+		}
+		
 		this.element
 		.bind('keydown.spinner', function(e) {
 			if(!self.counter) self.counter = 1;
@@ -144,10 +158,10 @@ $.widget('ui.spinner', {
 		
 		if(isNaN(this._getValue())) this._setValue(this.options.start);
 		this._setValue(this._getValue() + (d == 'up' ? 1:-1) * (this.options.incremental && this.counter > 100 ? (this.counter > 200 ? 100 : 10) : 1) * this.options.stepping);
+		this._animate(d);
 		this._constrain();
 		if(this.counter) this.counter++;
 		this._propagate('spin', e);
-
 	},
 	_down: function(e) {
 		this._spin('down', e);
@@ -191,15 +205,23 @@ $.widget('ui.spinner', {
 		e.preventDefault();
 	},
 	_getValue: function() {
-		return parseFloat(this.element[0].value.replace(/[^0-9\-\.]/g, ''));
+		return parseFloat(this.element.val().replace(/[^0-9\-\.]/g, ''));
 	},
 	_setValue: function(newVal) {
 		if(isNaN(newVal)) newVal = this.options.start;
-		this.element[0].value = (
+		this.element.val(
 			this.options.currency ? 
 				$.ui.spinner.format.currency(newVal, this.options.currency) : 
 				$.ui.spinner.format.number(newVal, this._decimals)
 		);
+	},
+	_animate: function(d) {
+		if (this.element.is('ul') && ((d == 'up' && this._getValue() <= this.options.max) || (d == 'down' && this._getValue() >= this.options.min)) ) {
+			this.element.animate({marginTop: '-' + this._getValue() * this.element.outerHeight() }, {
+				duration: 'fast', 
+				queue: false
+			});
+		}
 	},
 	
 	
@@ -223,6 +245,7 @@ $.widget('ui.spinner', {
 		this.element
 			.removeClass('ui-spinner-box')
 			.removeAttr('disabled')
+			.removeAttr('autocomplete')
 			.removeData('spinner')
 			.unbind('.spinner')
 			.siblings()

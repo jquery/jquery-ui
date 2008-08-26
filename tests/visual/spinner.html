@@ -14,18 +14,19 @@ $(function(){
 	var opts = {
 		's1': {},
 		's2': {stepping: 0.25},
-		's3': {currency: '$'}
+		's3': {currency: '$'},
+		's4': {}
 	};
-	
+
 	for (var n in opts)
 		$("#"+n).spinner(opts[n]);
-	
+
 	$("button").click(function(e){
 		var ns = $(this).attr('id').match(/(s\d)\-(\w+)$/);
 		if (ns != null)
 			$('#'+ns[1]).spinner( (ns[2] == 'create') ? opts[ns[1]] : ns[2]);
 	});
-	
+
 });
 </script>
 
@@ -55,6 +56,7 @@ label {
 
 .ui-spinner-disabled {
 	background: #F4F4F4;
+	color: #CCC;
 }
 
 .ui-spinner-box {
@@ -65,6 +67,12 @@ label {
 	border: none;
 	background: none;
 	padding: 0;
+}
+
+ul.ui-spinner-box {
+	height: 1.2em;
+	margin-top: 0;
+	margin-bottom: 0;
 }
 
 .ui-spinner-up,
@@ -138,6 +146,40 @@ label {
 </p>
 
 <hr />
+
+<p><label for="s4">Data List: </label>
+<ul id="s4">
+	<li>item 1</li>
+	<li>item 2</li>
+	<li>item 3</li>
+	<li>item 4</li>
+	<li>item 5</li>
+	<li>item 6</li>
+	<li>item 7</li>
+	<li>item 8</li>
+	<li>item 9</li>
+	<li>item 10</li>
+	<li>item 11</li>
+	<li>item 12</li>
+	<li>item 13</li>
+	<li>item 14</li>
+	<li>item 15</li>
+	<li>item 16</li>
+	<li>item 17</li>
+	<li>item 18</li>
+	<li>item 19</li>
+	<li>item 20</li>
+</ul>
+
+<p>
+<button id="s4-disable">disable</button>
+<button id="s4-enable">enable</button>
+<button id="s4-destroy">destroy</button>
+<button id="s4-create">create</button>
+</p>
+
+<hr />
+
 
 </body>
 </html>
