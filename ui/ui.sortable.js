@@ -77,7 +77,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 		
 	},
 	
-	toArray: function(attr) {
+	toArray: function(o) {
 		
 		var items = this._getItemsAsjQuery(o && o.connected);
 		var ret = [];
