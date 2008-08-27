@@ -76,9 +76,8 @@ $.widget("ui.dialog", {
 				// setting tabIndex makes the div focusable
 				// setting outline to 0 prevents a border on focus in Mozilla
 				.attr('tabIndex', -1).css('outline', 0).keydown(function(ev) {
-					if (options.closeOnEscape) {
-						(ev.keyCode && ev.keyCode == $.keyCode.ESCAPE && self.close());
-					}
+					(options.closeOnEscape && ev.keyCode
+						&& ev.keyCode == $.keyCode.ESCAPE && self.close());
 				})
 				.mousedown(function() {
 					self._moveToTop();
@@ -398,7 +397,8 @@ $.extend($.ui.dialog.overlay, {
 			
 			// allow closing by pressing the escape key
 			$(document).bind('keydown.dialog-overlay', function(e) {
-				(e.keyCode && e.keyCode == $.keyCode.ESCAPE && dialog.close()); 
+				(dialog.options.closeOnEscape && e.keyCode
+						&& e.keyCode == $.keyCode.ESCAPE && dialog.close());
 			});
 			
 			// handle window resize
