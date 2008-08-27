@@ -52,9 +52,16 @@ $.keyCode = {
 // $.widget is a factory to create jQuery plugins
 // taking some boilerplate code out of the plugin code
 // created by Scott González and Jörn Zaefferer
-function getter(namespace, plugin, method) {
-	var methods = $[namespace][plugin].getter || [];
-	methods = (typeof methods == "string" ? methods.split(/,?\s+/) : methods);
+function getter(namespace, plugin, method, args) {
+	function getMethods(type) {
+		var methods = $[namespace][plugin][type] || [];
+		return (typeof methods == 'string' ? methods.split(/,?\s+/) : methods);
+	}
+	
+	var methods = getMethods('getter');
+	if (args.length == 1 && typeof args[0] == 'string') {
+		methods = methods.concat(getMethods('getterSetter'));
+	}
 	return ($.inArray(method, methods) != -1);
 }
 
@@ -73,7 +80,7 @@ $.widget = function(name, prototype) {
 		}
 		
 		// handle getter methods
-		if (isMethodCall && getter(namespace, name, options)) {
+		if (isMethodCall && getter(namespace, name, options, args)) {
 			var instance = $.data(this[0], name);
 			return (instance ? instance[options].apply(instance, args)
 				: undefined);
@@ -120,6 +127,10 @@ $.widget = function(name, prototype) {
 	
 	// add widget prototype
 	$[namespace][name].prototype = $.extend({}, $.widget.prototype, prototype);
+	
+	// TODO: merge getter and getterSetter properties from widget prototype
+	// and plugin prototype
+	$[namespace][name].getterSetter = 'option';
 };
 
 $.widget.prototype = {
@@ -128,6 +139,22 @@ $.widget.prototype = {
 		this.element.removeData(this.widgetName);
 	},
 	
+	option: function(key, value) {
+		var options = key,
+			self = this;
+		
+		if (typeof key == "string") {
+			if (value === undefined) {
+				return this._getData(key);
+			}
+			options = {};
+			options[key] = value;
+		}
+		
+		$.each(options, function(key, value) {
+			self._setData(key, value);
+		});
+	},
 	_getData: function(key) {
 		return this.options[key];
 	},
