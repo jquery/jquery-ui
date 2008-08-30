@@ -25,10 +25,12 @@ $.widget('ui.spinner', {
 		}
 		
 		// data list: set contraints to object length and step size
-		if (this.element.is('ul')) {
+		if (this.element.children().length > 1) {
+			this.element.addClass('ui-spinner-list');
+			$('>*', this.element).addClass('ui-spinner-listitem');
 			this.options.stepping = 1;
 			this.options.min = 0;
-			this.options.max = $('li', this.element).length-1;
+			this.options.max = $('>*', this.element).length-1;
 		}
 
 		//Initialize needed constants
@@ -121,7 +123,7 @@ $.widget('ui.spinner', {
 			.end();
 		
 		// data list: fix height of data list spinner
-		if (this.element.is('ul')) {
+		if (this.element.hasClass('ui-spinner-list')) {
 			this.element.parent().css('height', this.element.outerHeight());
 		}
 		
@@ -216,7 +218,7 @@ $.widget('ui.spinner', {
 		);
 	},
 	_animate: function(d) {
-		if (this.element.is('ul') && ((d == 'up' && this._getValue() <= this.options.max) || (d == 'down' && this._getValue() >= this.options.min)) ) {
+		if (this.element.hasClass('ui-spinner-list') && ((d == 'up' && this._getValue() <= this.options.max) || (d == 'down' && this._getValue() >= this.options.min)) ) {
 			this.element.animate({marginTop: '-' + this._getValue() * this.element.outerHeight() }, {
 				duration: 'fast', 
 				queue: false
@@ -243,13 +245,16 @@ $.widget('ui.spinner', {
 			this.element.unmousewheel();
 		}
 		this.element
-			.removeClass('ui-spinner-box')
+			.removeClass('ui-spinner-box ui-spinner-list')
 			.removeAttr('disabled')
 			.removeAttr('autocomplete')
 			.removeData('spinner')
 			.unbind('.spinner')
 			.siblings()
 				.remove()
+			.end()
+			.children()
+				.removeClass('ui-spinner-listitem')
 			.end()
 			.parent()
 				.removeClass('ui-spinner ui-spinner-disabled')
