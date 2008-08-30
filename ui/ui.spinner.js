@@ -24,15 +24,6 @@ $.widget('ui.spinner', {
 			this._decimals = s.slice(s.indexOf('.')+1, s.length).length;
 		}
 		
-		// data list: set contraints to object length and step size
-		if (this.element.children().length > 1) {
-			this.element.addClass('ui-spinner-list');
-			$('>*', this.element).addClass('ui-spinner-listitem');
-			this.options.stepping = 1;
-			this.options.min = 0;
-			this.options.max = $('>*', this.element).length-1;
-		}
-
 		//Initialize needed constants
 		var self = this;
 		this.element
@@ -122,9 +113,22 @@ $.widget('ui.spinner', {
 				})
 			.end();
 		
-		// data list: fix height of data list spinner
-		if (this.element.hasClass('ui-spinner-list')) {
-			this.element.parent().css('height', this.element.outerHeight());
+		// DataList: Set contraints for object length and step size. 
+		// Manipulate height of spinner.
+		this._items = this.element.children().length;
+		if (this._items > 1) {
+			this.element
+			.addClass('ui-spinner-list')
+			.css('height', this.element.outerHeight()/this._items)
+			.children()
+				.addClass('ui-spinner-listitem')
+			.end()
+			.parent()
+				.css('height', this.element.outerHeight())
+			.end();
+			this.options.stepping = 1;
+			this.options.min = 0;
+			this.options.max = this._items-1;
 		}
 		
 		this.element
