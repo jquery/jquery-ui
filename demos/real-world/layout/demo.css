@@ -23,14 +23,16 @@ dl.sort dd { background-color:#FFF; margin:0; padding:3px 6px; }
 
 span.options { cursor:default; font-size:1px; line-height:1px; position:absolute; }
 span.options a { background-color:#FFF; cursor:pointer; display:block; float:left; text-indent:-9000px; }
+span.options a.add { background: url(add.png) no-repeat; }
 
 .ui-sortable h2 span.options { right:10px; top:8px; width:30px; }
 .ui-sortable h2 span.options a { height:12px; width:30px; }
 
 dl.sort dt span.options { right:5px; top:5px; width:27px; }
 dl.sort dt span.options a { height:12px; width:12px; }
-dl.sort dt span.options a.up { margin-right:3px; }
-dl.sort dt span.options a.disabled { background-color:#555; cursor:default; }
+dl.sort dt span.options a.down { background: url(down.png) no-repeat; }
+dl.sort dt span.options a.up { margin-right:3px; background: url(up.png) no-repeat; }
+dl.sort dt span.options a.disabled { background:#555 !important; cursor:default; }
 
 #container { float:left; }
 #header { width:638px; }
