@@ -331,7 +331,7 @@ $.ui.plugin.add("draggable", "iframeFix", {
 		});
 	},
 	stop: function(e, ui) {
-		$("div.DragDropIframeFix").each(function() { this.parentNode.removeChild(this); }); //Remove frame helpers	
+		$("div.ui-draggable-iframeFix").each(function() { this.parentNode.removeChild(this); }); //Remove frame helpers	
 	}
 });
 
