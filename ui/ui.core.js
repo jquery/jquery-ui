@@ -89,11 +89,14 @@ $.widget = function(name, prototype) {
 		// handle initialization and non-getter methods
 		return this.each(function() {
 			var instance = $.data(this, name);
-			if (isMethodCall && instance && $.isFunction(instance[options])) {
-				instance[options].apply(instance, args);
-			} else if (!isMethodCall) {
-				$.data(this, name, new $[namespace][name](this, options));
-			}
+			
+			// constructor
+			(!instance && !isMethodCall &&
+				$.data(this, name, new $[namespace][name](this, options)));
+			
+			// method call
+			(instance && isMethodCall &&
+				instance[options].apply(instance, args));
 		});
 	};
 	
