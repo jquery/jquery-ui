@@ -82,7 +82,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 		var items = this._getItemsAsjQuery(o && o.connected);
 		var ret = [];
 
-		items.each(function() { ret.push($(this).attr(attr || 'id')); });
+		items.each(function() { ret.push($(this).attr(o.attr || 'id')); });
 		return ret;
 		
 	},
