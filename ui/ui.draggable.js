@@ -469,13 +469,14 @@ $.ui.plugin.add("draggable", "connectToSortable", {
 		var inst = $(this).data("draggable");
 		inst.sortables = [];
 		$(ui.options.connectToSortable).each(function() {
+			console.log($.data(this, 'sortable'));
 			if($.data(this, 'sortable')) {
 				var sortable = $.data(this, 'sortable');
 				inst.sortables.push({
 					instance: sortable,
 					shouldRevert: sortable.options.revert
 				});
-				sortable.refreshItems();	//Do a one-time refresh at start to refresh the containerCache	
+				sortable._refreshItems();	//Do a one-time refresh at start to refresh the containerCache	
 				sortable._propagate("activate", e, inst);
 			}
 		});
