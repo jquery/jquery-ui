@@ -22,12 +22,13 @@
 		updateUpDown(dl.parent());
 	};
 	
+	var counter = 1;
 	function addItem(){
 		var sortable = $(this).parents('.ui-sortable');
 		var options = '<span class="options"><a class="up">up</a><a class="down">down</a></span>';
 		var tpl = '<dl class="sort"><dt>{name}' + options + '</dt><dd>{desc}</dd></dl>';
-		var html = tpl.replace(/{name}/g, 'Dynamic name :D').replace(/{desc}/g, 'Description');
-	
+		var html = tpl.replace(/{name}/g, 'Dynamic name ' + counter).replace(/{desc}/g, 'Description');
+		counter += 1;
 		sortable.append(html).sortable('refresh').find('a.up, a.down').bind('click', moveUpDown);
 		updateUpDown(sortable);
 	};
