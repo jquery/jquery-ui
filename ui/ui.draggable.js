@@ -469,7 +469,6 @@ $.ui.plugin.add("draggable", "connectToSortable", {
 		var inst = $(this).data("draggable");
 		inst.sortables = [];
 		$(ui.options.connectToSortable).each(function() {
-			console.log($.data(this, 'sortable'));
 			if($.data(this, 'sortable')) {
 				var sortable = $.data(this, 'sortable');
 				inst.sortables.push({
