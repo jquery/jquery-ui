@@ -1,5 +1,5 @@
 (function($){
-	var updateUpDown = function(sortable){
+	function updateUpDown(sortable){
 		$('dl:not(.ui-sortable-helper)', sortable)
 			.removeClass('first').removeClass('last')
 			.find('.up, .down').removeClass('disabled').end()
@@ -7,7 +7,7 @@
 			.filter(':last').addClass('last').find('.down').addClass('disabled').end().end();
 	};
 	
-	var moveUpDown = function(){
+	function moveUpDown(){
 		var link = $(this),
 			dl = link.parents('dl'),
 			prev = dl.prev('dl'),
@@ -22,7 +22,7 @@
 		updateUpDown(dl.parent());
 	};
 	
-	var addItem = function(){
+	function addItem(){
 		var sortable = $(this).parents('.ui-sortable');
 		var options = '<span class="options"><a class="up">up</a><a class="down">down</a></span>';
 		var tpl = '<dl class="sort"><dt>{name}' + options + '</dt><dd>{desc}</dd></dl>';
@@ -32,11 +32,11 @@
 		updateUpDown(sortable);
 	};
 	
-	var emptyTrashCan = function(item){
+	function emptyTrashCan(item){
 		item.remove();
 	};
 	
-	var sortableChange = function(e, ui){
+	function sortableChange(e, ui){
 		if(ui.sender){
 			var w = ui.element.width();
 			ui.placeholder.width(w);
@@ -44,7 +44,7 @@
 		}
 	};
 	
-	var sortableUpdate = function(e, ui){
+	function sortableUpdate(e, ui){
 		if(ui.element[0].id == 'trashcan'){
 			emptyTrashCan(ui.item);
 		} else {
@@ -92,6 +92,6 @@
 			$('#overlay').fadeOut(function(){
 				$('body').css('overflow', 'auto');
 			});
-		}, 750);
+		}, 500);
 	});
 })(jQuery);

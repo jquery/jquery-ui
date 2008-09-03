@@ -1,3 +1,5 @@
+html, body { height: 100% }
+
 body { background-color:#666; color:#FFF; font:11px/1.5 Arial, sans-serif; margin:0; overflow:hidden; padding:30px 0 0 30px; }
 h1 { font-size:18px; margin:0 0 20px; }
 a { color:#FFF; }
@@ -6,7 +8,7 @@ a { color:#FFF; }
 
 #overlay { background:#666; height:100%; left:0; position:absolute; top:0; width:100%; z-index:2000; }
 #overlay #preloader { background:url(loader_bg.gif) no-repeat; height:50px; left:50%; line-height:50px; margin:-25px 0 0 -25px; position:absolute; text-align:center; top:50%; width:50px; }
-#overlay #preloader img { margin:11px 0 0 0; vertical-align:middle; }
+#overlay #preloader img { margin:0; vertical-align:middle; }
 
 .ui-sortable { background-color:#FFF; border:1px solid #555; color:#222; margin:0 15px 15px 0; padding:0 10px 10px; width:175px; }
 .ui-sortable h2 { background-color:#555; border-top:3px solid #666; color:#FFF; font-size:11px; margin:0 -10px 10px; line-height:2; padding:0 10px; }
