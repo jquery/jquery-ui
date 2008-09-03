@@ -1,6 +1,4 @@
-html, body { height: 100% }
-
-body { background-color:#666; color:#FFF; font:11px/1.5 Arial, sans-serif; margin:0; overflow:hidden; padding:30px 0 0 30px; }
+body { background-color:#666; color:#FFF; font:11px/1.5 Arial, sans-serif; margin:0; padding:30px 0 0 30px; }
 h1 { font-size:18px; margin:0 0 20px; }
 a { color:#FFF; }
 

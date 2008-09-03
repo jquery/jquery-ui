@@ -1,6 +1,5 @@
 (function($){
 	function updateUpDown(sortable) {
-		console.log(this, sortable)
 		$('dl:not(.ui-sortable-helper)', sortable)
 			.removeClass('first').removeClass('last')
 			.find('.up, .down').removeClass('disabled').end()
@@ -98,14 +97,17 @@
 		});
 		$('#components > dl').draggable({
 			connectToSortable: $els.not("#trashcan"),
-			helper: 'clone'
+			helper: 'clone',
+			handle: 'dt'
 		})
 	});
 	
 	$(window).bind('load',function(){
 		setTimeout(function(){
+			// fixes the weird scrolling in IE while killing the fade
+			$(document.body).css("height", "auto")
 			$('#overlay').fadeOut(function(){
-				$('body').css('overflow', 'auto');
+				$(this).remove();
 			});
 		}, 500);
 	});
