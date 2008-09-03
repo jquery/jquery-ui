@@ -81,11 +81,15 @@
 			//placeholder: 'placeholder',
 			connectWith: els,
 			start: function(e,ui) {
-				ui.helper.css("width", ui.item.width());
+				ui.helper.css("width", ui.item.parent().width());
 			},
 			change: sortableChange,
 			update: sortableUpdate
 		});
+		$('#components > dl').draggable({
+			connectToSortable: $els,
+			helper: 'clone'
+		})
 	});
 	
 	$(window).bind('load',function(){

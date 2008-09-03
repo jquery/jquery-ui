@@ -41,6 +41,6 @@ dl.sort dt span.options a.disabled { background:#555 !important; cursor:default;
 #content { float:left; width:400px; }
 #sidebar { float:left; width:200px; }
 #footer { width:638px; }
-#trashcan { float:left; }
+#meta { float:left; }
 
 #trashcan p { margin:0; }
