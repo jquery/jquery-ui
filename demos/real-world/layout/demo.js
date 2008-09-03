@@ -1,5 +1,6 @@
 (function($){
-	function updateUpDown(sortable){
+	function updateUpDown(sortable) {
+		console.log(this, sortable)
 		$('dl:not(.ui-sortable-helper)', sortable)
 			.removeClass('first').removeClass('last')
 			.find('.up, .down').removeClass('disabled').end()
@@ -7,7 +8,7 @@
 			.filter(':last').addClass('last').find('.down').addClass('disabled').end().end();
 	};
 	
-	function moveUpDown(){
+	function moveUpDown() {
 		var link = $(this),
 			dl = link.parents('dl'),
 			prev = dl.prev('dl'),
@@ -22,9 +23,15 @@
 		updateUpDown(dl.parent());
 	};
 	
+	function addControls() {
+		$(this).append('<span class="options"><a class="up">up</a><a class="down">down</a></span>')
+			.find('a.up, a.down').bind('click', moveUpDown);
+		updateUpDown($(this).parents(".ui-sortable:first"));
+	}
+	
 	var counter = 1;
-	function addItem(){
-		var sortable = $(this).parents('.ui-sortable');
+	function addItem() {
+		var sortable = $(this).parents('.ui-sortable:first');
 		var options = '<span class="options"><a class="up">up</a><a class="down">down</a></span>';
 		var tpl = '<dl class="sort"><dt>{name}' + options + '</dt><dd>{desc}</dd></dl>';
 		var html = tpl.replace(/{name}/g, 'Dynamic name ' + counter).replace(/{desc}/g, 'Description');
@@ -33,11 +40,11 @@
 		updateUpDown(sortable);
 	};
 	
-	function emptyTrashCan(item){
+	function emptyTrashCan(item) {
 		item.remove();
 	};
 	
-	function sortableChange(e, ui){
+	function sortableChange(e, ui) {
 		if(ui.sender){
 			var w = ui.element.width();
 			ui.placeholder.width(w);
@@ -45,7 +52,7 @@
 		}
 	};
 	
-	function sortableUpdate(e, ui){
+	function sortableUpdate(e, ui) {
 		if(ui.element[0].id == 'trashcan'){
 			emptyTrashCan(ui.item);
 		} else {
@@ -60,10 +67,11 @@
 		var $els = $(els.toString());
 		
 		$('h2', $els.slice(0,-1)).append('<span class="options"><a class="add">add</a></span>');
-		$('dt', $els).append('<span class="options"><a class="up">up</a><a class="down">down</a></span>');
+		$('dt', $els).each(addControls);
+		//$('dt', $els).append('<span class="options"><a class="up">up</a><a class="down">down</a></span>');
 		
 		$('a.add').bind('click', addItem);
-		$('a.up, a.down').bind('click', moveUpDown);
+		//$('a.up, a.down').bind('click', moveUpDown);
 		
 		$els.each(function(){
 			updateUpDown(this);
@@ -85,6 +93,8 @@
 			},
 			change: sortableChange,
 			update: sortableUpdate
+		}).bind("sortreceive", function(e, ui) {
+			$(ui.item).removeClass('ui-draggable').find('dt').each(addControls);
 		});
 		$('#components > dl').draggable({
 			connectToSortable: $els.not("#trashcan"),
