@@ -87,7 +87,7 @@
 			update: sortableUpdate
 		});
 		$('#components > dl').draggable({
-			connectToSortable: $els,
+			connectToSortable: $els.not("#trashcan"),
 			helper: 'clone'
 		})
 	});
