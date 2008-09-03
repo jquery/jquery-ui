@@ -29,7 +29,8 @@ var setDataSwitch = {
 
 $.widget("ui.dialog", {
 	_init: function() {
-		this.options.title = this.options.title || this.element.attr('title');
+		this.originalTitle = this.element.attr('title');
+		this.options.title = this.options.title || this.originalTitle;
 		
 		var self = this,
 			options = this.options,
@@ -38,6 +39,7 @@ $.widget("ui.dialog", {
 				: 'n,e,s,w,se,sw,ne,nw',
 			
 			uiDialogContent = this.element
+				.removeAttr('title')
 				.addClass('ui-dialog-content')
 				.wrap('<div/>')
 				.wrap('<div/>'),
@@ -309,6 +311,8 @@ $.widget("ui.dialog", {
 			.removeClass('ui-dialog-content')
 			.hide().appendTo('body');
 		this.uiDialog.remove();
+		
+		(this.originalTitle && this.element.attr('title', this.originalTitle));
 	},
 	
 	_createButtons: function(buttons) {
