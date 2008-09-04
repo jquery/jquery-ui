@@ -1,5 +1,5 @@
 /*
- * jQuery UI Effects Explode
+ * jQuery UI Effects Explode @VERSION
  *
  * Copyright (c) 2008 Paul Bakaus (ui.jquery.com)
  * Dual licensed under the MIT (MIT-LICENSE.txt)

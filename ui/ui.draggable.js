@@ -1,5 +1,5 @@
 /*
- * jQuery UI Draggable
+ * jQuery UI Draggable @VERSION
  *
  * Copyright (c) 2008 Paul Bakaus
  * Dual licensed under the MIT (MIT-LICENSE.txt)

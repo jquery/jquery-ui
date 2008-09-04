@@ -1,5 +1,5 @@
 /*
- * jQuery UI Effects Pulsate
+ * jQuery UI Effects Pulsate @VERSION
  *
  * Copyright (c) 2008 Aaron Eisenberger (aaronchi@gmail.com)
  * Dual licensed under the MIT (MIT-LICENSE.txt)

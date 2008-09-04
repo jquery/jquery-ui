@@ -1,5 +1,5 @@
 /*
- * jQuery UI Slider
+ * jQuery UI Slider @VERSION
  *
  * Copyright (c) 2008 Paul Bakaus
  * Dual licensed under the MIT (MIT-LICENSE.txt)

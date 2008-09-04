@@ -1,5 +1,5 @@
 /*
- * jQuery UI Color Picker
+ * jQuery UI Color Picker @VERSION
  *
  * Copyright (c) 2008 Stefan Petre, Paul Bakaus
  * Dual licensed under the MIT (MIT-LICENSE.txt)

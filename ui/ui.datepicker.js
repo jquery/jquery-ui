@@ -1,5 +1,5 @@
 /*
- * jQuery UI Datepicker
+ * jQuery UI Datepicker @VERSION
  *
  * Copyright (c) 2006, 2007, 2008 Marc Grabanski
  * Dual licensed under the MIT (MIT-LICENSE.txt)

@@ -1,5 +1,5 @@
 /*
- * jQuery UI Accordion
+ * jQuery UI Accordion @VERSION
  * 
  * Copyright (c) 2007, 2008 Jörn Zaefferer
  * Dual licensed under the MIT (MIT-LICENSE.txt)

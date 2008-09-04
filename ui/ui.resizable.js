@@ -1,5 +1,5 @@
 /*
- * jQuery UI Resizable
+ * jQuery UI Resizable @VERSION
  *
  * Copyright (c) 2008 Paul Bakaus
  * Dual licensed under the MIT (MIT-LICENSE.txt)

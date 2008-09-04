@@ -1,5 +1,5 @@
 /*
- * jQuery UI Dialog
+ * jQuery UI Dialog @VERSION
  *
  * Copyright (c) 2008 Richard D. Worth (rdworth.org)
  * Dual licensed under the MIT (MIT-LICENSE.txt)

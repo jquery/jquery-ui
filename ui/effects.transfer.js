@@ -1,5 +1,5 @@
 /*
- * jQuery UI Effects Transfer
+ * jQuery UI Effects Transfer @VERSION
  *
  * Copyright (c) 2008 Aaron Eisenberger (aaronchi@gmail.com)
  * Dual licensed under the MIT (MIT-LICENSE.txt)

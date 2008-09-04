@@ -1,5 +1,5 @@
 /*
- * jQuery UI Selectable
+ * jQuery UI Selectable @VERSION
  *
  * Copyright (c) 2008 Richard D. Worth (rdworth.org)
  * Dual licensed under the MIT (MIT-LICENSE.txt)

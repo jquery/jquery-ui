@@ -1,5 +1,5 @@
 /*
- * jQuery UI Autocomplete
+ * jQuery UI Autocomplete @VERSION
  *
  * Copyright (c) 2007, 2008 Dylan Verheul, Dan G. Switzer, Anjesh Tuladhar, Jörn Zaefferer
  * Dual licensed under the MIT (MIT-LICENSE.txt)

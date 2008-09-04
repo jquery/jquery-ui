@@ -1,5 +1,5 @@
 /*
- * jQuery UI ProgressBar
+ * jQuery UI ProgressBar @VERSION
  *
  * Copyright (c) 2008 Eduardo Lundgren
  * Dual licensed under the MIT (MIT-LICENSE.txt)

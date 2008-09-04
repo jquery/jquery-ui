@@ -1,5 +1,5 @@
 /*
- * jQuery UI Spinner
+ * jQuery UI Spinner @VERSION
  *
  * Copyright (c) 2008 jQuery
  * Dual licensed under the MIT (MIT-LICENSE.txt)
