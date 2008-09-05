@@ -17,10 +17,29 @@ $.fn.remove = function() {
 	return _remove.apply(this, arguments );
 };
 
-// This adds a selector to check if data exists.
-$.expr[':'].data = function(a, i, m) {
-	return $.data(a, m[3]);
-};
+$.extend($.expr[':'], {
+	data: function(a, i, m) {
+		return $.data(a, m[3]);
+	},
+	
+	// TODO: add support for object, area
+	tabbable: function(a, i, m) {
+		var nodeName = a.nodeName.toLowerCase();
+		
+		return (
+			// in tab order
+			a.tabIndex != -1 &&
+			
+			( // node type participates in tab order
+				// anchor tag
+				('a' == nodeName) ||
+				
+				// enabled form element
+				(/input|select|textarea|button/.test(nodeName) && !a.disabled)
+			)
+		);
+	}
+});
 
 $.keyCode = {
 	BACKSPACE: 8,
