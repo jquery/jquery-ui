@@ -269,6 +269,27 @@ $.widget("ui.dialog", {
 		(this.options.autoResize && this._size());
 		this._moveToTop(true);
 		
+		// prevent tabbing out of modal dialogs
+		(this.options.modal && this.uiDialog.bind('keypress.ui-dialog', function(e) {
+			if (e.keyCode != $.keyCode.TAB) {
+				return;
+			}
+			
+			var tabbables = $(':tabbable', this),
+				first = tabbables.filter(':first')[0],
+				last  = tabbables.filter(':last')[0];
+			
+			if (e.target == last && !e.shiftKey) {
+				setTimeout(function() {
+					first.focus();
+				}, 1);
+			} else if (e.target == first && e.shiftKey) {
+				setTimeout(function() {
+					last.focus();
+				}, 1);
+			}
+		}));
+		
 		this._trigger('open', null, { options: this.options });
 		this._isOpen = true;
 	},
@@ -294,7 +315,9 @@ $.widget("ui.dialog", {
 	
 	close: function() {
 		(this.overlay && this.overlay.destroy());
-		this.uiDialog.hide(this.options.hide);
+		this.uiDialog
+			.hide(this.options.hide)
+			.unbind('keypress.ui-dialog');
 		
 		this._trigger('close', null, { options: this.options });
 		$.ui.dialog.overlay.resize();
