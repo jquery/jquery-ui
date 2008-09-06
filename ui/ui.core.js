@@ -17,6 +17,21 @@ $.fn.remove = function() {
 	return _remove.apply(this, arguments );
 };
 
+function isVisible(element) {
+	function checkStyles(element) {
+		var style = element.style;
+		return (style.display != 'none' && style.visibility != 'hidden');
+	}
+	
+	var visible = checkStyles(element);
+	
+	(visible && $.each($.dir(element, 'parentNode'), function() {
+		return (visible = checkStyles(this));
+	}));
+	
+	return visible;
+}
+
 $.extend($.expr[':'], {
 	data: function(a, i, m) {
 		return $.data(a, m[3]);
@@ -28,15 +43,20 @@ $.extend($.expr[':'], {
 		
 		return (
 			// in tab order
-			a.tabIndex != -1 &&
+			a.tabIndex >= 0 &&
 			
-			( // node type participates in tab order
+			( // filter node types that participate in the tab order
+				
 				// anchor tag
-				('a' == nodeName) ||
+				('a' == nodeName && a.href) ||
 				
 				// enabled form element
-				(/input|select|textarea|button/.test(nodeName) && !a.disabled)
-			)
+				(/input|select|textarea|button/.test(nodeName) &&
+					'hidden' != a.type && !a.disabled)
+			) &&
+			
+			// visible on page
+			isVisible(a)
 		);
 	}
 });

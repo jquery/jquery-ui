@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>jQuery UI Core Test Suite</title>
+	
+	<link rel="stylesheet" href="qunit/testsuite.css" type="text/css" media="screen">
+	<!--link rel="stylesheet" href="../themes/flora/flora.dialog.css" type="text/css" media="screen"-->
+	
+	<script type="text/javascript" src="../jquery-1.2.6.js"></script>
+	<script type="text/javascript" src="../ui/ui.core.js"></script>
+	
+	<script type="text/javascript" src="qunit/testrunner.js"></script>
+	<script type="text/javascript" src="core.js"></script>
+	
+	<style type="text/css">
+		html { border: 0; }
+	</style>
+</head>
+<body class="flora">
+
+<h1 id="header">jQuery UI Core Test Suite</h1>
+<h2 id="banner"></h2>
+<h2 id="userAgent"></h2>
+
+<ol id="tests"></ol>
+
+<div id="main" style="position: absolute; top: -10000px; border: 1px solid black; padding: 10px; margin: 10px;">
+	<div id="wrap1">
+		<input id="input1-1" />
+		<input type="text" id="input1-2" />
+		<input type="checkbox" id="input1-3" />
+		<input type="radio" id="input1-4" />
+		<input type="button" id="input1-5" />
+		<input type="hidden" id="input1-6" />
+		<select id="input1-7"></select>
+		<textarea id="input1-8"></textarea>
+		<a href="#" id="anchor1-1">anchor</a>
+		<a id="anchor1-2">anchor</a>
+	</div>
+	<div id="wrap2">
+		<input id="input2-1" disabled="disabled" />
+		<input type="text" id="input2-2" disabled="disabled" />
+		<input type="checkbox" id="input2-3" disabled="disabled" />
+		<input type="radio" id="input2-4" disabled="disabled" />
+		<input type="button" id="input2-5" disabled="disabled" />
+		<input type="hidden" id="input2-6" disabled="disabled" />
+		<select id="input2-7" disabled="disabled"></select>
+		<textarea id="input2-8" disabled="disabled"></textarea>
+	</div>
+	<div id="wrap3">
+		<div id="wrap3-1" style="display: none;">
+			<input id="input3-1" />
+			<a href="#" id="anchor3-1">anchor</a>
+		</div>
+		<div id="wrap3-2" style="visibility: hidden;">
+			<input id="input3-2" />
+			<a href="#" id="anchor3-2">anchor</a>
+		</div>
+		<input id="input3-3" style="display: none;">
+		<input id="input3-4" style="visibility: hidden;">
+	</div>
+	<div id="wrap4">
+		<input id="input4-1" tabindex="0" />
+		<input id="input4-2" tabindex="10" />
+		<input id="input4-3" tabindex="-1" />
+		<input id="input4-4" tabindex="-50" />
+	</div>
+</div>
+
+</body>
+</html>
