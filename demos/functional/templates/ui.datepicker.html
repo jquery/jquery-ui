@@ -234,10 +234,10 @@ function customRange(input) {
 				options: [
 					{	desc: 'On select',	source: '$("#callbacks").datepicker({onSelect: function(date) { alert("The chosen date is " + date); }, showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' },
 					{	desc: 'On close',	source: '$("#callbacks").datepicker({onClose: function(date) { alert("Closed with date " + date); }, showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' },
-					{	desc: 'On change of month/year',	source: '$("#callbacks").datepicker({onChangeMonthYear: function(date) { alert("Moved to month " + $.datepicker.formatDate("MM yy", date)); }, showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' },
+					{	desc: 'On change of month/year',	source: '$("#callbacks").datepicker({onChangeMonthYear: function(year, month) { alert("Moved to month " + month + "/" + year); }, showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' },
 					{	desc: 'On select for range',	source: '$("#callbacks").datepicker({onSelect: function(date) { alert("The chosen dates are " + date); }, rangeSelect: true, numberOfMonths: 2, showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' },
 					{	desc: 'On close for range',	source: '$("#callbacks").datepicker({onClose: function(date) { alert("Closed with dates " + date); }, rangeSelect: true, numberOfMonths: 2, showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' },
-					{	desc: 'On change of month/year for range',	source: '$("#callbacks").datepicker({onChangeMonthYear: function(date) { alert("Moved to month " + $.datepicker.formatDate("MM yy", date)); }, rangeSelect: true, numberOfMonths: 2, showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' }
+					{	desc: 'On change of month/year for range',	source: '$("#callbacks").datepicker({onChangeMonthYear: function(year, month) { alert("Moved to month " + month + "/" + year); }, rangeSelect: true, numberOfMonths: 2, showOn: "both", buttonImage: "templates/images/calendar.gif", buttonImageOnly: true});' }
 				]
 			},
 

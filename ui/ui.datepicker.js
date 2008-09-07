@@ -665,7 +665,7 @@ $.extend(Datepicker.prototype, {
 			var onClose = this._get(inst, 'onClose');
 			if (onClose)
 				onClose.apply((inst.input ? inst.input[0] : null),
-					[this._getDate(inst), inst]);  // trigger custom callback
+					[(inst.input ? inst.input.val() : ''), inst]);  // trigger custom callback
 			this._datepickerShowing = false;
 			this._lastInput = null;
 			inst.settings.prompt = null;
@@ -1577,7 +1577,7 @@ $.extend(Datepicker.prototype, {
 		var onChange = this._get(inst, 'onChangeMonthYear');
 		if (onChange)
 			onChange.apply((inst.input ? inst.input[0] : null),
-				[new Date(inst.selectedYear, inst.selectedMonth, 1), inst]);
+				[inst.selectedYear, inst.selectedMonth + 1, inst]);
 	},
 	
 	/* Determine the number of months to show. */
