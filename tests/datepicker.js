@@ -995,8 +995,8 @@ test('setDate', function() {
 	isObj(inp.datepicker('getDate'), [null, null], 'Set date range - null');
 	// Inline
 	var inl = init('#inl');
-	var date1 = new Date(2008, 6 - 1, 4);
-	var date2 = new Date();
+	date1 = new Date(2008, 6 - 1, 4);
+	date2 = new Date();
 	equalsDate(inl.datepicker('getDate'), date2, 'Set date inline - default');
 	inl.datepicker('setDate', date1);
 	equalsDate(inl.datepicker('getDate'), date1, 'Set date inline - 2008-06-04');
@@ -1011,6 +1011,19 @@ test('setDate', function() {
 	equalsDate(inl.datepicker('getDate'), date1, 'Set date inline - two dates');
 	inl.datepicker('setDate');
 	ok(inl.datepicker('getDate') == null, 'Set date inline - null');
+	// Alternate field
+	var alt = $('#alt');
+	inp.datepicker('change', {altField: '#alt', altFormat: 'yy-mm-dd'});
+	date1 = new Date(2008, 6 - 1, 4);
+	date2 = new Date(2009, 7 - 1, 5);
+	inp.datepicker('setDate', date1, date2);
+	equals(inp.val(), '06/04/2008 - 07/05/2009',
+		'Set date alternate - 06/04/2008 - 07/05/2009');
+	equals(alt.val(), '2008-06-04 - 2009-07-05',
+		'Set date alternate - 2008-06-04 - 2009-07-05');
+	inp.datepicker('change', {rangeSelect: false}).datepicker('setDate', date1);
+	equals(inp.val(), '06/04/2008', 'Set date alternate - 06/04/2008');
+	equals(alt.val(), '2008-06-04', 'Set date alternate - 2008-06-04');
 });
 
 test('ranges', function() {

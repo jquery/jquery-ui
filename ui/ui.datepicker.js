@@ -447,6 +447,7 @@ $.extend(Datepicker.prototype, {
 		if (inst) {
 			this._setDate(inst, date, endDate);
 			this._updateDatepicker(inst);
+			this._updateAlternate(inst);
 		}
 	},
 
