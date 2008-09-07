@@ -136,7 +136,7 @@ $.widget = function(name, prototype) {
 				$.data(this, name, new $[namespace][name](this, options)));
 			
 			// method call
-			(instance && isMethodCall &&
+			(instance && isMethodCall && $.isFunction(instance[options]) &&
 				instance[options].apply(instance, args));
 		});
 	};
