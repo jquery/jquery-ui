@@ -10,12 +10,34 @@
 
 <script type="text/javascript">
 $(function(){
+	var itemList = [
+		{url: "http://ejohn.org", title: "John Resig"},
+		{url: "http://bassistance.de/", title: "J&ouml;rn Zaefferer"},
+		{url: "http://snook.ca/jonathan/", title: "Jonathan Snook"},
+		{url: "http://rdworth.org/", title: "Richard Worth"},
+		{url: "http://www.paulbakaus.com/", title: "Paul Bakaus"},
+		{url: "http://www.yehudakatz.com/", title: "Yehuda Katz"},
+		{url: "http://www.azarask.in/", title: "Aza Raskin"},
+		{url: "http://www.karlswedberg.com/", title: "Karl Swedberg"},
+		{url: "http://scottjehl.com/", title: "Scott Jehl"},
+		{url: "http://jdsharp.us/", title: "Jonathan Sharp"},
+		{url: "http://www.kevinhoyt.org/", title: "Kevin Hoyt"},
+		{url: "http://www.codylindley.com/", title: "Cody Lindley"},
+		{url: "http://malsup.com/jquery/", title: "Mike Alsup"}
+	];
 	
 	var opts = {
 		's1': {},
 		's2': {stepping: 0.25},
 		's3': {currency: '$'},
-		's4': {}
+		's4': {},
+		's5': {
+			init: function(ui) {
+				for (var i=0; i<itemList.length; i++) {
+					ui.add(itemList[i].title +' <a href="'+ itemList[i].url +'" target="_blank">&raquo;</a>');
+				}
+			}
+		}
 	};
 
 	for (var n in opts)
@@ -180,6 +202,19 @@ label {
 </p>
 
 <hr />
+
+<p><label for="s5">Presenters: </label>
+<div id="s5"></div>
+
+<p>
+<button id="s5-disable">disable</button>
+<button id="s5-enable">enable</button>
+<button id="s5-destroy">destroy</button>
+<button id="s5-create">create</button>
+</p>
+
+<hr />
+
 
 </body>
 </html>

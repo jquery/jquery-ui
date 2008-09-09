@@ -17,6 +17,11 @@ $.widget('ui.spinner', {
 		// terminate initialization if spinner already applied to current element
 		if($.data(this.element[0], 'spinner')) return;
 		
+		// check for onInit callback
+		if (this.options.init) {
+			this.options.init(this.ui(null));
+		}
+		
 		// check for decimals in steppinng and set _decimals as internal (needs cleaning up)
 		this._decimals = 0;
 		if (this.options.stepping.toString().indexOf('.') != -1) {
@@ -113,6 +118,7 @@ $.widget('ui.spinner', {
 				})
 			.end();
 		
+		
 		// DataList: Set contraints for object length and step size. 
 		// Manipulate height of spinner.
 		this._items = this.element.children().length;
@@ -150,7 +156,8 @@ $.widget('ui.spinner', {
 			});
 		}
 	},
-
+	
+	
 	_constrain: function() {
 		if(this.options.min != undefined && this._getValue() < this.options.min) this._setValue(this.options.min);
 		if(this.options.max != undefined && this._getValue() > this.options.max) this._setValue(this.options.max);
@@ -229,6 +236,15 @@ $.widget('ui.spinner', {
 			});
 		}
 	},
+	_addItem: function(html) {
+		if (!this.element.is('input')) {
+			var wrapper = 'div';
+			if (this.element.is('ol') || this.element.is('ul')) {
+				wrapper = 'li';
+			}
+			this.element.append('<'+ wrapper +' class="ui-spinner-dyn">'+ html + '</'+ wrapper +'>');
+		}
+	},
 	
 	
 	plugins: {},
@@ -236,7 +252,8 @@ $.widget('ui.spinner', {
 		return {
 			options: this.options,
 			element: this.element,
-			value: this._getValue()
+			value: this._getValue(),
+			add: this._addItem
 		};
 	},
 	_propagate: function(n,e) {
@@ -259,6 +276,7 @@ $.widget('ui.spinner', {
 			.end()
 			.children()
 				.removeClass('ui-spinner-listitem')
+				.remove('.ui-spinner-dyn')
 			.end()
 			.parent()
 				.removeClass('ui-spinner ui-spinner-disabled')
