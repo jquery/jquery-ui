@@ -107,7 +107,7 @@ $.widget("ui.tabs", {
 					});
 				}
 				else if (o.cookie) {
-					var index = parseInt($.cookie('ui-tabs' + $.data(self.element)),10);
+					var index = parseInt($.cookie('ui-tabs-' + $.data(self.element[0])), 10);
 					if (index && self.$tabs[index])
 						o.selected = index;
 				}
@@ -158,6 +158,10 @@ $.widget("ui.tabs", {
 		else
 			o.selected = this.$lis.index( this.$lis.filter('.' + o.selectedClass)[0] );
 
+		// set or update cookie after init and add/remove respectively
+		if (o.cookie)
+			$.cookie('ui-tabs-' + $.data(self.element[0]), o.selected, o.cookie);
+		
 		// disable tabs
 		for (var i = 0, li; li = this.$lis[i]; i++)
 			$(li)[$.inArray(i, o.disabled) != -1 && !$(li).hasClass(o.selectedClass) ? 'addClass' : 'removeClass'](o.disabledClass);
@@ -260,7 +264,7 @@ $.widget("ui.tabs", {
 			}
 
 			if (o.cookie)
-				$.cookie('ui-tabs' + $.data(self.element), self.options.selected, o.cookie);
+				$.cookie('ui-tabs-' + $.data(self.element[0]), self.options.selected, o.cookie);
 
 			// stop possibly running animations
 			self.$panels.stop();
