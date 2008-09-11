@@ -290,6 +290,7 @@ $.widget("ui.dialog", {
 			}
 		}));
 		
+		this.uiDialog.find(':tabbable:first').focus();
 		this._trigger('open', null, { options: this.options });
 		this._isOpen = true;
 	},
