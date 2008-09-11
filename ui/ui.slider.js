@@ -113,7 +113,7 @@ $.widget("ui.slider", {
 			.parent()
 				.bind('focus', function(e) { self._focus(this.firstChild); })
 				.bind('blur', function(e) { self._blur(this.firstChild); })
-				.bind('keydown', function(e) { if(!self.options.noKeyboard) self._keydown(e.keyCode, this.firstChild); })
+				.bind('keydown', function(e) { if(!self.options.noKeyboard) return self._keydown(e.keyCode, this.firstChild); })
 		;
 		
 		// Bind the click to the slider itself
@@ -173,7 +173,9 @@ $.widget("ui.slider", {
 				x: xpos,
 				y: ypos
 			}, handle);
+			return false;
 		}
+		return true;
 	},
 	_focus: function(handle,hard) {
 		this.currentHandle = $(handle).addClass('ui-slider-handle-active');
