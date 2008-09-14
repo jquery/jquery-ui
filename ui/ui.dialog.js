@@ -34,9 +34,6 @@ $.widget("ui.dialog", {
 		
 		var self = this,
 			options = this.options,
-			resizeHandles = typeof options.resizable == 'string'
-				? options.resizable
-				: 'n,e,s,w,se,sw,ne,nw',
 			
 			uiDialogContent = this.element
 				.removeAttr('title')
@@ -134,36 +131,44 @@ $.widget("ui.dialog", {
 			(options.draggable || uiDialog.draggable('disable'));
 		}
 		
-		if ($.fn.resizable) {
-			uiDialog.resizable({
-				cancel: '.ui-dialog-content',
-				helper: options.resizeHelper,
-				maxWidth: options.maxWidth,
-				maxHeight: options.maxHeight,
-				minWidth: options.minWidth,
-				minHeight: options.minHeight,
-				start: function() {
-					(options.resizeStart && options.resizeStart.apply(self.element[0], arguments));
-				},
-				resize: function() {
-					(options.autoResize && self._size.apply(self));
-					(options.resize && options.resize.apply(self.element[0], arguments));
-				},
-				handles: resizeHandles,
-				stop: function() {
-					(options.autoResize && self._size.apply(self));
-					(options.resizeStop && options.resizeStop.apply(self.element[0], arguments));
-					$.ui.dialog.overlay.resize();
-				}
-			});
-			(options.resizable || uiDialog.resizable('disable'));
-		}
+		(options.resizable && $.fn.resizable && this._makeResizable());
 		
 		this._createButtons(options.buttons);
 		this._isOpen = false;
 		
 		(options.bgiframe && $.fn.bgiframe && uiDialog.bgiframe());
 		(options.autoOpen && this.open());
+	},
+	
+	_makeResizable: function(handles) {
+		handles = (handles === undefined ? this.options.resizable : handles);
+		var self = this,
+			options = this.options,
+			resizeHandles = typeof handles == 'string'
+				? handles
+				: 'n,e,s,w,se,sw,ne,nw';
+		
+		this.uiDialog.resizable({
+			cancel: '.ui-dialog-content',
+			helper: options.resizeHelper,
+			maxWidth: options.maxWidth,
+			maxHeight: options.maxHeight,
+			minWidth: options.minWidth,
+			minHeight: options.minHeight,
+			start: function() {
+				(options.resizeStart && options.resizeStart.apply(self.element[0], arguments));
+			},
+			resize: function() {
+				(options.autoResize && self._size.apply(self));
+				(options.resize && options.resize.apply(self.element[0], arguments));
+			},
+			handles: resizeHandles,
+			stop: function() {
+				(options.autoResize && self._size.apply(self));
+				(options.resizeStop && options.resizeStop.apply(self.element[0], arguments));
+				$.ui.dialog.overlay.resize();
+			}
+		});
 	},
 	
 	_setData: function(key, value){
@@ -182,8 +187,19 @@ $.widget("ui.dialog", {
 				this._position(value);
 				break;
 			case "resizable":
-				(typeof value == 'string' && this.uiDialog.data('handles.resizable', value));
-				this.uiDialog.resizable(value ? 'enable' : 'disable');
+				var uiDialog = this.uiDialog,
+					isResizable = this.uiDialog.is(':data(resizable)');
+				
+				// currently resizable, becoming non-resizable
+				(isResizable && !value && uiDialog.resizable('destroy'));
+				
+				// currently resizable, changing handles
+				(isResizable && typeof value == 'string' &&
+					uiDialog.resizable('option', 'handles', value));
+				
+				// currently non-resizable, becoming resizable
+				(isResizable || this._makeResizable(value));
+				
 				break;
 			case "title":
 				$(".ui-dialog-title", this.uiDialogTitlebar).html(value || '&nbsp;');
