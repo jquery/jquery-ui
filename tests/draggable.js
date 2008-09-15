@@ -445,7 +445,165 @@ test("callbacks occurance count", function() {
 	
 });
 
+module("draggable: Scroll offsets");
+
+test("{ helper: 'original' }, relative, with scroll offset on parent", function() {
+	el = $("#draggable1").draggable({ helper: "original" });
+	$("#main")[0].scrollTop = 100;
+	drag(el, 50, 50);
+	moved(50, 50);
+	$("#main")[0].scrollTop = 0;
+});
+
+test("{ helper: 'original' }, relative, with scroll offset on root", function() {
+	el = $("#draggable1").draggable({ helper: "original" });
+	$(document).scrollTop(100);
+	drag(el, 50, 50);
+	moved(50, 50);
+	$(document).scrollTop(0);
+});
+
+test("{ helper: 'original' }, relative, with scroll offset on root and parent", function() {
+	el = $("#draggable1").draggable({ helper: "original" });
+	$(document).scrollTop(100);
+	$("#main")[0].scrollTop = 100;
+	drag(el, 50, 50);
+	moved(50, 50);
+	$(document).scrollTop(0);
+	$("#main")[0].scrollTop = 0;
+});
+
+test("{ helper: 'original' }, absolute, with scroll offset on parent", function() {
+	el = $("#draggable1").css({ position: 'absolute', top: 0, left: 0 }).draggable({ helper: "original" });
+	$("#main")[0].scrollTop = 100;
+	drag(el, 50, 50);
+	moved(50, 50);
+	$("#main")[0].scrollTop = 0;
+});
+
+test("{ helper: 'original' }, absolute, with scroll offset on root", function() {
+	el = $("#draggable1").css({ position: 'absolute', top: 0, left: 0 }).draggable({ helper: "original" });
+	$(document).scrollTop(100);
+	drag(el, 50, 50);
+	moved(50, 50);
+	$(document).scrollTop(0);
+});
+
+test("{ helper: 'original' }, absolute, with scroll offset on root and parent", function() {
+	el = $("#draggable1").css({ position: 'absolute', top: 0, left: 0 }).draggable({ helper: "original" });
+	$(document).scrollTop(100);
+	$("#main")[0].scrollTop = 100;
+	drag(el, 50, 50);
+	moved(50, 50);
+	$(document).scrollTop(0);
+	$("#main")[0].scrollTop = 0;
+});
+
+//Fixed not for IE < 7
+if(!($.browser.msie && $.browser.version < 7)) {
+
+	test("{ helper: 'original' }, fixed, with scroll offset on parent", function() {
+		el = $("#draggable1").css({ position: 'fixed', top: 0, left: 0 }).draggable({ helper: "original" });
+		$("#main")[0].scrollTop = 100;
+		drag(el, 50, 50);
+		moved(50, 50);
+		$("#main")[0].scrollTop = 0;
+	});
+	
+	test("{ helper: 'original' }, fixed, with scroll offset on root", function() {
+		el = $("#draggable1").css({ position: 'fixed', top: 0, left: 0 }).draggable({ helper: "original" });
+		$(document).scrollTop(100);
+		drag(el, 50, 50);
+		moved(50, 50);
+		$(document).scrollTop(0);
+	});
+	
+	test("{ helper: 'original' }, fixed, with scroll offset on root and parent", function() {
+		el = $("#draggable1").css({ position: 'fixed', top: 0, left: 0 }).draggable({ helper: "original" });
+		$(document).scrollTop(100);
+		$("#main")[0].scrollTop = 100;
+		drag(el, 50, 50);
+		moved(50, 50);
+		$(document).scrollTop(0);
+		$("#main")[0].scrollTop = 0;
+	});
+
+}
+
+
+
+test("{ helper: 'clone' }, absolute", function() {
+	
+	var helperOffset = null;
+	var origOffset = $("#draggable1").offset();
+	
+	el = $("#draggable1").draggable({ helper: "clone", drag: function(e, ui) {
+		helperOffset = ui.helper.offset();
+	} });
+
+	drag(el, 1, 1);
+	
+	compare2({ top: helperOffset.top-1, left: helperOffset.left-1 }, origOffset, 'dragged[' + dragged.dx + ', ' + dragged.dy + '] ');
+
+});
+
+test("{ helper: 'clone' }, absolute with scroll offset on parent", function() {
+	
+	$("#main")[0].scrollTop = 100;
+	var helperOffset = null;
+	var origOffset = $("#draggable1").offset();
+	
+	el = $("#draggable1").draggable({ helper: "clone", drag: function(e, ui) {
+		helperOffset = ui.helper.offset();
+	} });
+
+	drag(el, 1, 1);
+	
+	compare2({ top: helperOffset.top-1, left: helperOffset.left-1 }, origOffset, 'dragged[' + dragged.dx + ', ' + dragged.dy + '] ');
+	$("#main")[0].scrollTop = 0;
+
+});
+
+test("{ helper: 'clone' }, absolute with scroll offset on root", function() {
+	
+	$(document).scrollTop(100);
+	var helperOffset = null;
+	var origOffset = $("#draggable1").offset();
+	
+	el = $("#draggable1").draggable({ helper: "clone", drag: function(e, ui) {
+		helperOffset = ui.helper.offset();
+	} });
+
+	drag(el, 1, 1);
+	
+	compare2({ top: helperOffset.top-1, left: helperOffset.left-1 }, origOffset, 'dragged[' + dragged.dx + ', ' + dragged.dy + '] ');
+	$(document).scrollTop(0);
+
+});
+
+test("{ helper: 'clone' }, absolute with scroll offset on root and parent", function() {
+	
+	$(document).scrollTop(100);
+	$("#main")[0].scrollTop = 100;
+	var helperOffset = null;
+	var origOffset = $("#draggable1").offset();
+	
+	el = $("#draggable1").draggable({ helper: "clone", drag: function(e, ui) {
+		helperOffset = ui.helper.offset();
+	} });
+
+	drag(el, 1, 1);
+	
+	compare2({ top: helperOffset.top-1, left: helperOffset.left-1 }, origOffset, 'dragged[' + dragged.dx + ', ' + dragged.dy + '] ');
+	$(document).scrollTop(0);
+	$("#main")[0].scrollTop = 0;
+
+});
+
+
 module("draggable: Tickets");
+
+/* This needs to be rewritten
 
 test("#2965 cursorAt with margin", function() {
 	
@@ -487,5 +645,6 @@ test("#2965 cursorAt with margin", function() {
 	equals(actual.top, expected.top, "10px margin. top");
 	
 });
+*/
 
 })(jQuery);
