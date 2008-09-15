@@ -14,6 +14,19 @@
 (function($) {
 
 $.widget("ui.droppable", {
+	
+	_setData: function(key, value) {
+
+		if(key == 'accept') {
+			this.options.accept = value && value.constructor == Function ? value : function(d) {
+				return d.is(accept);
+			};
+		} else {
+			$.widget.prototype._setData.apply(this, arguments);
+		}
+
+	},
+	
 	_init: function() {
 		
 		var o = this.options, accept = o.accept;
