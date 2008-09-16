@@ -338,7 +338,7 @@ $.widget("ui.draggable", $.extend({}, $.ui.mouse, {
 	},
 	destroy: function() {
 		if(!this.element.data('draggable')) return;
-		this.element.removeData("draggable").unbind(".draggable").removeClass('ui-draggable-dragging ui-draggable-disabled');
+		this.element.removeData("draggable").unbind(".draggable").removeClass('ui-draggable ui-draggable-dragging ui-draggable-disabled');
 		this._mouseDestroy();
 	}
 }));
