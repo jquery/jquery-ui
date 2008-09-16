@@ -361,7 +361,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 	},
 	
 	_mouseCapture: function(e, overrideHandle) {
-	
+
 		if(this.options.disabled || this.options.type == 'static') return false;
 
 		//We have to refresh the items data once first

@@ -257,7 +257,9 @@ $.widget("ui.resizable", $.extend({}, $.ui.mouse, {
 			_destroy(wrapped);
 		}
 	},
-	_mouseStart: function(e) {
+	
+	_mouseCapture: function(e) {
+		
 		if(this.options.disabled) return false;
 		
 		var handle = false;
@@ -265,6 +267,12 @@ $.widget("ui.resizable", $.extend({}, $.ui.mouse, {
 			if($(this.options.handles[i])[0] == e.target) handle = true;
 		}
 		if (!handle) return false;
+		
+		return true;
+		
+	},
+	
+	_mouseStart: function(e) {
 		
 		var o = this.options, iniPos = this.element.position(), el = this.element, 
 			num = function(v) { return parseInt(v, 10) || 0; }, ie6 = $.browser.msie && $.browser.version < 7;

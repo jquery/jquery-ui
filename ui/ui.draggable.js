@@ -55,17 +55,26 @@ $.widget("ui.draggable", $.extend({}, $.ui.mouse, {
 		this._mouseInit();
 		
 	},
-	_mouseStart: function(e) {
-		
+
+	_mouseCapture: function(e) {
+
 		var o = this.options;
 		
 		if (this.helper || o.disabled || $(e.target).is('.ui-resizable-handle'))
 			return false;
-		
+			
 		//Quit if we're not on a valid handle
-		var handle = this.getHandle(e);
-		if (!handle)
+		this.handle = this.getHandle(e);
+		if (!this.handle)
 			return false;
+		
+		return true;
+
+	},
+
+	_mouseStart: function(e) {
+		
+		var o = this.options;
 		
 		//Create and append the visible helper
 		this.helper = this.createHelper();
