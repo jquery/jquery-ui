@@ -747,7 +747,8 @@ $.extend($.ui.sortable, {
 		dropOnEmpty: true,
 		appendTo: "parent",
 		sortIndicator: $.ui.sortable.prototype._rearrange,
-		scope: "default"
+		scope: "default",
+		forcePlaceholderSize: false
 	}
 });
 
