@@ -18,7 +18,7 @@ $.widget("ui.droppable", {
 	_setData: function(key, value) {
 
 		if(key == 'accept') {
-			this.options.accept = value && value.constructor == Function ? value : function(d) {
+			this.options.accept = value && $.isFunction(value) ? value : function(d) {
 				return d.is(accept);
 			};
 		} else {
@@ -32,7 +32,7 @@ $.widget("ui.droppable", {
 		var o = this.options, accept = o.accept;
 		this.isover = 0; this.isout = 1;
 
-		this.options.accept = this.options.accept && this.options.accept.constructor == Function ? this.options.accept : function(d) {
+		this.options.accept = this.options.accept && $.isFunction(this.options.accept) ? this.options.accept : function(d) {
 			return d.is(accept);
 		};
 
