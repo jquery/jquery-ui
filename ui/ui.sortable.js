@@ -303,8 +303,8 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 				},
 				update: function(container, p) {
 					if(className && !o.forcePlaceholderSize) return;
-					if(!p.height()) { p.height(self.currentItem.innerHeight() - parseInt(self.currentItem.css('paddingTop')||0) - parseInt(self.currentItem.css('paddingBottom')||0)); };
-					if(!p.width()) { p.width(self.currentItem.innerWidth() - parseInt(self.currentItem.css('paddingLeft')||0) - parseInt(self.currentItem.css('paddingRight')||0)); };
+					if(!p.height()) { p.height(self.currentItem.innerHeight() - parseInt(self.currentItem.css('paddingTop')||0, 10) - parseInt(self.currentItem.css('paddingBottom')||0, 10)); };
+					if(!p.width()) { p.width(self.currentItem.innerWidth() - parseInt(self.currentItem.css('paddingLeft')||0, 10) - parseInt(self.currentItem.css('paddingRight')||0, 10)); };
 				}
 			};
 		}
@@ -390,6 +390,18 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 			
 	},
 	
+	createHelper: function() {
+		
+		var o = this.options;
+		var helper = typeof o.helper == 'function' ? $(o.helper.apply(this.element[0], [e, this.currentItem])) : (o.helper == "original" ? this.currentItem :  this.currentItem.clone());
+		
+		if (!helper.parents('body').length)
+			$(o.appendTo != 'parent' ? o.appendTo : this.currentItem[0].parentNode)[0].appendChild(helper[0]); //Add the helper to the DOM if that didn't happen already
+			
+		return helper;
+
+	},
+	
 	_mouseStart: function(e, overrideHandle, noActivation) {
 
 		var o = this.options;
@@ -398,9 +410,8 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 		//We only need to call refreshPositions, because the refreshItems call has been moved to mouseCapture
 		this.refreshPositions();
 
-		//Create and append the visible helper			
-		this.helper = typeof o.helper == 'function' ? $(o.helper.apply(this.element[0], [e, this.currentItem])) : (o.helper == "original" ? this.currentItem :  this.currentItem.clone());
-		if (!this.helper.parents('body').length) $(o.appendTo != 'parent' ? o.appendTo : this.currentItem[0].parentNode)[0].appendChild(this.helper[0]); //Add the helper to the DOM if that didn't happen already
+		//Create and append the visible helper	
+		this.helper = this.createHelper();		
 
 		/*
 		 * - Position generation -
@@ -430,6 +441,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 			top: (parseInt(this.offsetParent.css("borderTopWidth"),10) || 0),
 			left: (parseInt(this.offsetParent.css("borderLeftWidth"),10) || 0)
 		};
+		
 		this.offset.parent = {																			//Store its position plus border
 			top: po.top + this.offsetParentBorders.top,
 			left: po.left + this.offsetParentBorders.left
@@ -444,15 +456,24 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 
 		if(o.helper == "original") {
 			this._storedCSS = { position: this.currentItem.css("position"), top: this.currentItem.css("top"), left: this.currentItem.css("left"), clear: this.currentItem.css("clear") };
+		} else {
+			this.currentItem.hide(); //Hide the original, won't cause anything bad this way
 		}
+
+		//Position it absolutely and add a helper class
+		this.helper
+			.css({ position: 'absolute', clear: 'both' })
+			.addClass('ui-sortable-helper');
 		
-		if(o.helper != "original") this.currentItem.hide(); //Hide the original, won't cause anything bad this way
-		this.helper.css({ position: 'absolute', clear: 'both' }).addClass('ui-sortable-helper'); //Position it absolutely and add a helper class
+		//Create the placeholder	
 		this._createPlaceholder();
 
 		//Call plugins and callbacks
 		this._propagate("start", e);
-		if(!this._preserveHelperProportions) this.helperProportions = { width: this.helper.outerWidth(), height: this.helper.outerHeight() };//Recache the helper size
+		
+		//Recache the helper size
+		if(!this._preserveHelperProportions)
+			this.helperProportions = { width: this.helper.outerWidth(), height: this.helper.outerHeight() };
 		
 		if(o.cursorAt) {
 			if(o.cursorAt.left != undefined) this.offset.click.left = o.cursorAt.left;
@@ -478,12 +499,13 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 			if(!(/^(document|window|parent)$/).test(o.containment)) {
 				var ce = $(o.containment)[0];
 				var co = $(o.containment).offset();
+				var over = ($(ce).css("overflow") != 'hidden');
 				
 				this.containment = [
 					co.left + (parseInt($(ce).css("borderLeftWidth"),10) || 0) - this.offset.parent.left,
 					co.top + (parseInt($(ce).css("borderTopWidth"),10) || 0) - this.offset.parent.top,
-					co.left+Math.max(ce.scrollWidth,ce.offsetWidth) - (parseInt($(ce).css("borderLeftWidth"),10) || 0) - this.offset.parent.left - this.helperProportions.width - this.margins.left - (parseInt(this.currentItem.css("marginRight"),10) || 0),
-					co.top+Math.max(ce.scrollHeight,ce.offsetHeight) - (parseInt($(ce).css("borderTopWidth"),10) || 0) - this.offset.parent.top - this.helperProportions.height - this.margins.top - (parseInt(this.currentItem.css("marginBottom"),10) || 0)
+					co.left+(over ? Math.max(ce.scrollWidth,ce.offsetWidth) : ce.offsetWidth) - (parseInt($(ce).css("borderLeftWidth"),10) || 0) - this.offset.parent.left - this.helperProportions.width - this.margins.left - (parseInt(this.currentItem.css("marginRight"),10) || 0),
+					co.top+(over ? Math.max(ce.scrollHeight,ce.offsetHeight) : ce.offsetHeight) - (parseInt($(ce).css("borderTopWidth"),10) || 0) - this.offset.parent.top - this.helperProportions.height - this.margins.top - (parseInt(this.currentItem.css("marginBottom"),10) || 0)
 				];
 			}
 		}
@@ -494,8 +516,11 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 		}
 		
 		//Prepare possible droppables
-		if($.ui.ddmanager) $.ui.ddmanager.current = this;
-		if ($.ui.ddmanager && !o.dropBehaviour) $.ui.ddmanager.prepareOffsets(this, e);
+		if($.ui.ddmanager)
+			$.ui.ddmanager.current = this;
+		
+		if ($.ui.ddmanager && !o.dropBehaviour)
+			$.ui.ddmanager.prepareOffsets(this, e);
 
 		this.dragging = true;
 
