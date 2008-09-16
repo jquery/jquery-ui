@@ -283,6 +283,10 @@ $.ui = {
 			.unbind('selectstart.ui');
 	},
 	hasScroll: function(e, a) {
+		
+		//If overflow is hidden, the element might have extra content, but the user wants to hide it
+		if ($(e).css('overflow') == 'hidden') { return false; }
+		
 		var scroll = (a && a == 'left') ? 'scrollLeft' : 'scrollTop',
 			has = false;
 		
