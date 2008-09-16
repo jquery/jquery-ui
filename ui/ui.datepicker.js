@@ -168,7 +168,7 @@ $.extend(Datepicker.prototype, {
 		var nodeName = target.nodeName.toLowerCase();
 		var inline = (nodeName == 'div' || nodeName == 'span');
 		if (!target.id)
-			target.id = 'dp' + ++this.uuid;
+			target.id = 'dp' + (++this.uuid);
 		var inst = this._newInst($(target), inline);
 		inst.settings = $.extend({}, settings || {}, inlineSettings || {}); 
 		if (nodeName == 'input') {
@@ -262,7 +262,7 @@ $.extend(Datepicker.prototype, {
 	_dialogDatepicker: function(input, dateText, onSelect, settings, pos) {
 		var inst = this._dialogInst; // internal instance
 		if (!inst) {
-			var id = 'dp' + ++this.uuid;
+			var id = 'dp' + (++this.uuid);
 			this._dialogInput = $('<input type="text" id="' + id +
 				'" size="1" style="position: absolute; top: -100px;"/>');
 			this._dialogInput.keydown(this._doKeyDown);
@@ -571,7 +571,7 @@ $.extend(Datepicker.prototype, {
 			var duration = $.datepicker._get(inst, 'duration');
 			var postProcess = function() {
 				$.datepicker._datepickerShowing = true;
-				if ($.browser.msie && parseInt($.browser.version) < 7) // fix IE < 7 select problems
+				if ($.browser.msie && parseInt($.browser.version,10) < 7) // fix IE < 7 select problems
 					$('iframe.ui-datepicker-cover').css({width: inst.dpDiv.width() + 4,
 						height: inst.dpDiv.height() + 4});
 			};
@@ -733,7 +733,7 @@ $.extend(Datepicker.prototype, {
 		inst._selectingMonthYear = false;
 		inst['selected' + (period == 'M' ? 'Month' : 'Year')] =
 		inst['draw' + (period == 'M' ? 'Month' : 'Year')] =
-			parseInt(select.options[select.selectedIndex].value);
+			parseInt(select.options[select.selectedIndex].value,10);
 		this._notifyChange(inst);
 		this._adjustDate(target);
 	},
@@ -930,7 +930,7 @@ $.extend(Datepicker.prototype, {
 			var num = 0;
 			while (size > 0 && iValue < value.length &&
 					value.charAt(iValue) >= '0' && value.charAt(iValue) <= '9') {
-				num = num * 10 + parseInt(value.charAt(iValue++));
+				num = num * 10 + parseInt(value.charAt(iValue++),10);
 				size--;
 			}
 			if (size == origSize)
@@ -1229,15 +1229,15 @@ $.extend(Datepicker.prototype, {
 			while (matches) {
 				switch (matches[2] || 'd') {
 					case 'd' : case 'D' :
-						day += parseInt(matches[1]); break;
+						day += parseInt(matches[1],10); break;
 					case 'w' : case 'W' :
-						day += parseInt(matches[1]) * 7; break;
+						day += parseInt(matches[1],10) * 7; break;
 					case 'm' : case 'M' :
-						month += parseInt(matches[1]); 
+						month += parseInt(matches[1],10); 
 						day = Math.min(day, getDaysInMonth(year, month));
 						break;
 					case 'y': case 'Y' :
-						year += parseInt(matches[1]);
+						year += parseInt(matches[1],10);
 						day = Math.min(day, getDaysInMonth(year, month));
 						break;
 				}
@@ -1474,7 +1474,7 @@ $.extend(Datepicker.prototype, {
 			'" class="ui-datepicker-status">' + initStatus + '</div>' : '') +
 			(!closeAtTop && !inst.inline ? controls : '') +
 			'<div style="clear: both;"></div>' + 
-			($.browser.msie && parseInt($.browser.version) < 7 && !inst.inline ? 
+			($.browser.msie && parseInt($.browser.version,10) < 7 && !inst.inline ? 
 			'<iframe src="javascript:false;" class="ui-datepicker-cover"></iframe>' : '');
 		return html;
 	},
