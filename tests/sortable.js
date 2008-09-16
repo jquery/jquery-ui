@@ -109,7 +109,7 @@ test("disable", function() {
 test("defaults", function() {
 	el = $("#sortable").sortable();
 
-	equals(el.data("helper.sortable"), "clone", "helper");
+	equals(el.data("helper.sortable"), "original", "helper");
 	equals(el.data("tolerance.sortable"), "guess", "tolerance");
 	equals(el.data("distance.sortable"), 1, "distance");
 	equals(el.data("disabled.sortable"), false, "disabled");

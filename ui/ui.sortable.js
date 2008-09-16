@@ -302,9 +302,9 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 					return el;
 				},
 				update: function(container, p) {
-					if(className) return;
-					if(!p.height()) { p.height(self.currentItem.innerHeight()); };
-					if(!p.width()) { p.width(self.currentItem.innerWidth()); };
+					if(className && !o.forcePlaceholderSize) return;
+					if(!p.height()) { p.height(self.currentItem.innerHeight() - parseInt(self.currentItem.css('paddingTop')||0) - parseInt(self.currentItem.css('paddingBottom')||0)); };
+					if(!p.width()) { p.width(self.currentItem.innerWidth() - parseInt(self.currentItem.css('paddingLeft')||0) - parseInt(self.currentItem.css('paddingRight')||0)); };
 				}
 			};
 		}
