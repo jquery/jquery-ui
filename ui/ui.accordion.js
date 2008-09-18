@@ -286,9 +286,4 @@ $.extend($.ui.accordion, {
 	}
 });
 
-// deprecated, use accordion("activate", index) instead
-$.fn.activate = function(index) {
-	return this.accordion("activate", index);
-};
-
 })(jQuery);
