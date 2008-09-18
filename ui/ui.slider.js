@@ -109,8 +109,9 @@ $.widget("ui.slider", {
 			.each(function() {
 				new handleclass(this);
 			})
-			.wrap('<a href="javascript:void(0)" style="outline:none;border:none;"></a>')
+			.wrap('<a href="#" style="outline:none;border:none;"></a>')
 			.parent()
+				.bind('click', function() { return false; })
 				.bind('focus', function(e) { self._focus(this.firstChild); })
 				.bind('blur', function(e) { self._blur(this.firstChild); })
 				.bind('keydown', function(e) { if(!self.options.noKeyboard) return self._keydown(e.keyCode, this.firstChild); })
