@@ -309,7 +309,7 @@ $.widget("ui.draggable", $.extend({}, $.ui.mouse, {
 		if ($.ui.ddmanager && !this.options.dropBehaviour)
 			var dropped = $.ui.ddmanager.drop(this, e);		
 		
-		if((this.options.revert == "invalid" && !dropped) || (this.options.revert == "valid" && dropped) || this.options.revert === true) {
+		if((this.options.revert == "invalid" && !dropped) || (this.options.revert == "valid" && dropped) || this.options.revert === true || ($.isFunction(this.options.revert) && this.options.revert.call(this.element, dropped))) {
 			var self = this;
 			$(this.helper).animate(this.originalPosition, parseInt(this.options.revertDuration, 10) || 500, function() {
 				self._propagate("stop", e);

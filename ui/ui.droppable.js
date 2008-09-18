@@ -107,7 +107,7 @@ $.widget("ui.droppable", {
 		if(this.options.accept.call(this.element,(draggable.currentItem || draggable.element))) {
 			$.ui.plugin.call(this, 'drop', [e, this.ui(draggable)]);
 			this.element.triggerHandler("drop", [e, this.ui(draggable)], this.options.drop);
-			return true;
+			return this.element;
 		}
 		
 		return false;
