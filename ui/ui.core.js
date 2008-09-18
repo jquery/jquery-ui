@@ -271,13 +271,13 @@ $.ui = {
 		return $.ui.cssCache[name];
 	},
 	disableSelection: function(el) {
-		$(el)
+		return $(el)
 			.attr('unselectable', 'on')
 			.css('MozUserSelect', 'none')
 			.bind('selectstart.ui', function() { return false; });
 	},
 	enableSelection: function(el) {
-		$(el)
+		return $(el)
 			.attr('unselectable', 'off')
 			.css('MozUserSelect', '')
 			.unbind('selectstart.ui');
