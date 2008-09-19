@@ -44,19 +44,12 @@ $.widget("ui.progressbar", {
 		this.wrapper
 			.append(this.bar.append(this.textElement.addClass(options.textClass)), this.textBg)
 			.appendTo(this.element);
-
-		jQuery.easing[this.identifier] = function (x, t, b, c, d) {
-			var inc = options.increment,
-				width = options.width,
-				step = ((inc > width ? width : inc)/width),
-				state = Math.round(x/step)*step;
-			return state > 1 ? 1 : state;
-		};
 	},
 
 	plugins: {},
 	ui: function(e) {
 		return {
+			instance: this,
 			identifier: this.identifier,
 			options: this.options,
 			element: this.bar,
@@ -65,10 +58,12 @@ $.widget("ui.progressbar", {
 			percentState: this.percentState
 		};
 	},
+
 	_propagate: function(n,e) {
 		$.ui.plugin.call(this, n, [e, this.ui()]);
 		this.element.triggerHandler(n == "progressbar" ? n : ["progressbar", n].join(""), [e, this.ui()], this.options[n]);
 	},
+
 	destroy: function() {
 		this.stop();
 
@@ -79,23 +74,34 @@ $.widget("ui.progressbar", {
 
 		delete jQuery.easing[this.identifier];
 	},
+
 	enable: function() {
 		this.element.removeClass("ui-progressbar-disabled");
 		this.disabled = false;
 	},
+
 	disable: function() {
 		this.element.addClass("ui-progressbar-disabled");
 		this.disabled = true;
 	},
+
 	start: function() {
 		var self = this, options = this.options;
 
 		if (this.disabled) {
 			return;
 		}
-		
+
+		jQuery.easing[this.identifier] = function (x, t, b, c, d) {
+			var inc = options.increment,
+				width = options.width,
+				step = ((inc > width ? width : inc)/width),
+				state = Math.round(x/step)*step;
+			return state > 1 ? 1 : state;
+		};
+
 		self.active = true;
-		
+
 		setTimeout(
 			function() {
 				self.active = false;
@@ -108,6 +114,7 @@ $.widget("ui.progressbar", {
 		this._propagate('start', this.ui());
 		return false;
 	},
+
 	_animate: function() {
 		var self = this,
 			options = this.options,
@@ -122,7 +129,7 @@ $.widget("ui.progressbar", {
 				easing: this.identifier,
 				step: function(step, b) {
 					self.progress((step/options.width)*100);
-					var elapsedTime = ((new Date().getTime()) - b.startTime);
+					var timestamp = new Date().getTime(), elapsedTime  = (timestamp - b.startTime);
 					options.interval = interval - elapsedTime;
 				},
 				complete: function() {
@@ -131,18 +138,18 @@ $.widget("ui.progressbar", {
 
 					if (self.active) {
 						/*TODO*/
-						self.stop();
-						self._animate();
 					}
 				}
 			}
 		);
 	},
+
 	pause: function() {
 		if (this.disabled) return;
 		this.bar.stop();
 		this._propagate('pause', this.ui());
 	},
+
 	stop: function() {
 		this.bar.stop();
 		this.bar.width(0);
@@ -151,6 +158,12 @@ $.widget("ui.progressbar", {
 		this.options.interval = this._interval;
 		this._propagate('stop', this.ui());
 	},
+
+	text: function(text){
+		this.textElement.html(text);
+		this.textBg.html(text);
+	},
+
 	progress: function(percentState) {
 		if (this.bar.is('.ui-hidden')) {
 			this.bar.removeClass('ui-hidden');
