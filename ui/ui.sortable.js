@@ -390,7 +390,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 			
 	},
 	
-	createHelper: function() {
+	createHelper: function(e) {
 		
 		var o = this.options;
 		var helper = typeof o.helper == 'function' ? $(o.helper.apply(this.element[0], [e, this.currentItem])) : (o.helper == "original" ? this.currentItem :  this.currentItem.clone());
@@ -411,7 +411,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 		this.refreshPositions();
 
 		//Create and append the visible helper	
-		this.helper = this.createHelper();		
+		this.helper = this.createHelper(e);		
 
 		/*
 		 * - Position generation -
