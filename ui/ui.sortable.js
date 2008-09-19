@@ -298,7 +298,14 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 			o.placeholder = {
 				element: function() {
 					var el = $(document.createElement(self.currentItem[0].nodeName)).addClass(className || "ui-sortable-placeholder")[0];
-					if(!className) { el.style.visibility = "hidden"; el.innerHTML = self.currentItem[0].innerHTML; };
+
+					if(!className) {
+						el.style.visibility = "hidden";
+						document.body.appendChild(el);
+						el.innerHTML = self.currentItem[0].innerHTML;
+						document.body.removeChild(el);
+					};
+
 					return el;
 				},
 				update: function(container, p) {
@@ -309,10 +316,10 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 			};
 		}
 		
-		self.placeholder = $(o.placeholder.element.call(self.element, self.currentItem)).appendTo(self.currentItem.parent());
-		self.currentItem.before(self.placeholder);
+		self.placeholder = $(o.placeholder.element.call(self.element, self.currentItem))
+		self.currentItem.parent()[0].appendChild(self.placeholder[0]);
+		self.placeholder[0].parentNode.insertBefore(self.placeholder[0], self.currentItem[0]);
 		o.placeholder.update(self, self.placeholder);
-
 	},
 	
 	_contactContainers: function(e) {
