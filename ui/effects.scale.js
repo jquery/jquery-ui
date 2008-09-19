@@ -4,7 +4,7 @@
  * Copyright (c) 2008 Aaron Eisenberger (aaronchi@gmail.com)
  * Dual licensed under the MIT (MIT-LICENSE.txt)
  * and GPL (GPL-LICENSE.txt) licenses.
- * 
+ *
  * http://docs.jquery.com/UI/Effects/Scale
  *
  * Depends:
@@ -18,34 +18,34 @@ $.effects.puff = function(o) {
 
 		// Create element
 		var el = $(this);
-	
+
 		// Set options
 		var options = $.extend(true, {}, o.options);
 		var mode = $.effects.setMode(el, o.options.mode || 'hide'); // Set Mode
 		var percent = parseInt(o.options.percent) || 150; // Set default puff percent
 		options.fade = true; // It's not a puff if it doesn't fade! :)
 		var original = {height: el.height(), width: el.width()}; // Save original
-	
+
 		// Adjust
 		var factor = percent / 100;
 		el.from = (mode == 'hide') ? original : {height: original.height * factor, width: original.width * factor};
-	
+
 		// Animation
 		options.from = el.from;
 		options.percent = (mode == 'hide') ? percent : 100;
 		options.mode = mode;
-	
+
 		// Animate
 		el.effect('scale', options, o.duration, o.callback);
 		el.dequeue();
 	});
-	
+
 };
 
 $.effects.scale = function(o) {
-	
+
 	return this.queue(function() {
-	
+
 		// Create element
 		var el = $(this);
 
@@ -61,33 +61,33 @@ $.effects.scale = function(o) {
 		}
 		var original = {height: el.height(), width: el.width()}; // Save original
 		el.from = o.options.from || (mode == 'show' ? {height: 0, width: 0} : original); // Default from state
-	
+
 		// Adjust
 		var factor = { // Set scaling factor
 			y: direction != 'horizontal' ? (percent / 100) : 1,
 			x: direction != 'vertical' ? (percent / 100) : 1
 		};
 		el.to = {height: original.height * factor.y, width: original.width * factor.x}; // Set to state
-		
+
 		if (o.options.fade) { // Fade option to support puff
 			if (mode == 'show') {el.from.opacity = 0; el.to.opacity = 1;};
 			if (mode == 'hide') {el.from.opacity = 1; el.to.opacity = 0;};
 		};
-	
+
 		// Animation
 		options.from = el.from; options.to = el.to; options.mode = mode;
-	
+
 		// Animate
 		el.effect('size', options, o.duration, o.callback);
 		el.dequeue();
 	});
-	
+
 };
 
 $.effects.size = function(o) {
 
 	return this.queue(function() {
-		
+
 		// Create element
 		var el = $(this), props = ['position','top','left','width','height','overflow','opacity'];
 		var props1 = ['position','top','left','overflow','opacity']; // Always restore
@@ -95,7 +95,7 @@ $.effects.size = function(o) {
 		var cProps = ['fontSize'];
 		var vProps = ['borderTopWidth', 'borderBottomWidth', 'paddingTop', 'paddingBottom'];
 		var hProps = ['borderLeftWidth', 'borderRightWidth', 'paddingLeft', 'paddingRight'];
-		
+
 		// Set options
 		var mode = $.effects.setMode(el, o.options.mode || 'effect'); // Set Mode
 		var restore = o.options.restore || false; // Default restore
@@ -138,7 +138,7 @@ $.effects.size = function(o) {
 		$.effects.save(el, restore ? props : props1); el.show(); // Save & Show
 		$.effects.createWrapper(el); // Create Wrapper
 		el.css('overflow','hidden').css(el.from); // Shift
-		
+
 		// Animate
 		if (scale == 'content' || scale == 'both') { // Scale the children
 			vProps = vProps.concat(['marginTop','marginBottom']).concat(cProps); // Add margins/font-size
@@ -164,15 +164,15 @@ $.effects.size = function(o) {
 				}); // Animate children
 			});
 		};
-		
+
 		// Animate
 		el.animate(el.to, { queue: false, duration: o.duration, easing: o.options.easing, complete: function() {
 			if(mode == 'hide') el.hide(); // Hide
 			$.effects.restore(el, restore ? props : props1); $.effects.removeWrapper(el); // Restore
 			if(o.callback) o.callback.apply(this, arguments); // Callback
 			el.dequeue();
-		}}); 
-		
+		}});
+
 	});
 
 };

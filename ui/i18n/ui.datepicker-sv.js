@@ -9,9 +9,9 @@ jQuery(function($){
 		nextText: 'Nästa&raquo;', nextStatus: '',
 		nextBigText: '&#x3e;&#x3e;', nextBigStatus: '',
 		currentText: 'Idag', currentStatus: '',
-        monthNames: ['Januari','Februari','Mars','April','Maj','Juni', 
+        monthNames: ['Januari','Februari','Mars','April','Maj','Juni',
         'Juli','Augusti','September','Oktober','November','December'],
-        monthNamesShort: ['Jan','Feb','Mar','Apr','Maj','Jun', 
+        monthNamesShort: ['Jan','Feb','Mar','Apr','Maj','Jun',
         'Jul','Aug','Sep','Okt','Nov','Dec'],
 		monthStatus: '', yearStatus: '',
 		weekHeader: 'Ve', weekStatus: '',
@@ -19,7 +19,7 @@ jQuery(function($){
 		dayNames: ['Söndag','Måndag','Tisdag','Onsdag','Torsdag','Fredag','Lördag'],
 		dayNamesMin: ['Sö','Må','Ti','On','To','Fr','Lö'],
 		dayStatus: 'DD', dateStatus: 'D, M d',
-        dateFormat: 'yy-mm-dd', firstDay: 1, 
+        dateFormat: 'yy-mm-dd', firstDay: 1,
 		initStatus: '', isRTL: false};
-    $.datepicker.setDefaults($.datepicker.regional['sv']); 
+    $.datepicker.setDefaults($.datepicker.regional['sv']);
 });

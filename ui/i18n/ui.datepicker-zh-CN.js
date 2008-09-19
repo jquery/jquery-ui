@@ -19,7 +19,7 @@ jQuery(function($){
 		dayNamesShort: ['周日','周一','周二','周三','周四','周五','周六'],
 		dayNamesMin: ['日','一','二','三','四','五','六'],
 		dayStatus: '设置 DD 为一周起始', dateStatus: '选择 m月 d日, DD',
-		dateFormat: 'yy-mm-dd', firstDay: 1, 
+		dateFormat: 'yy-mm-dd', firstDay: 1,
 		initStatus: '请选择日期', isRTL: false};
 	$.datepicker.setDefaults($.datepicker.regional['zh-CN']);
 });

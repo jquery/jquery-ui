@@ -15,7 +15,7 @@
 $.widget("ui.tabs", {
 	_init: function() {
 		this.options.event += '.tabs'; // namespace event
-		
+
 		// create tabs
 		this._tabify(true);
 	},
@@ -125,14 +125,14 @@ $.widget("ui.tabs", {
 			)).sort();
 			if ($.inArray(o.selected, o.disabled) != -1)
 				o.disabled.splice($.inArray(o.selected, o.disabled), 1);
-			
+
 			// highlight selected tab
 			this.$panels.addClass(o.hideClass);
 			this.$lis.removeClass(o.selectedClass);
 			if (o.selected !== null) {
 				this.$panels.eq(o.selected).show().removeClass(o.hideClass); // use show and remove class to show in any case no matter how it has been hidden before
 				this.$lis.eq(o.selected).addClass(o.selectedClass);
-				
+
 				// seems to be expected behavior that the show callback is fired
 				var onShow = function() {
 					self._trigger('show', null,
@@ -146,7 +146,7 @@ $.widget("ui.tabs", {
 				else
 					onShow();
 			}
-			
+
 			// clean up to avoid memory leaks in certain versions of IE 6
 			$(window).bind('unload', function() {
 				self.$tabs.unbind('.tabs');
@@ -161,7 +161,7 @@ $.widget("ui.tabs", {
 		// set or update cookie after init and add/remove respectively
 		if (o.cookie)
 			$.cookie('ui-tabs-' + $.data(self.element[0]), o.selected, o.cookie);
-		
+
 		// disable tabs
 		for (var i = 0, li; li = this.$lis[i]; i++)
 			$(li)[$.inArray(i, o.disabled) != -1 && !$(li).hasClass(o.selectedClass) ? 'addClass' : 'removeClass'](o.disabledClass);
@@ -169,7 +169,7 @@ $.widget("ui.tabs", {
 		// reset cache if switching from cached to not cached
 		if (o.cache === false)
 			this.$tabs.removeData('cache.tabs');
-		
+
 		// set up animations
 		var hideFx, showFx, baseFx = { 'min-width': 0, duration: 1 }, baseDuration = 'normal';
 		if (o.fx && o.fx.constructor == Array)
@@ -227,12 +227,12 @@ $.widget("ui.tabs", {
 				$hide = self.$panels.filter(':visible'),
 				$show = $(this.hash);
 
-			// If tab is already selected and not unselectable or tab disabled or 
+			// If tab is already selected and not unselectable or tab disabled or
 			// or is already loading or click callback returns false stop here.
 			// Check if click handler returns false last so that it is not executed
 			// for a disabled or loading tab!
 			if (($li.hasClass(o.selectedClass) && !o.unselect)
-				|| $li.hasClass(o.disabledClass) 
+				|| $li.hasClass(o.disabledClass)
 				|| $(this).hasClass(o.loadingClass)
 				|| self._trigger('select', null, self.ui(this, $show[0])) === false
 				) {
@@ -282,7 +282,7 @@ $.widget("ui.tabs", {
 				}*/
 
 				var a = this;
-				self.load(self.$tabs.index(this), $hide.length ? 
+				self.load(self.$tabs.index(this), $hide.length ?
 					function() {
 						switchTab(a, $li, $hide, $show);
 					} :
@@ -320,7 +320,7 @@ $.widget("ui.tabs", {
 
 	},
 	add: function(url, label, index) {
-		if (index == undefined) 
+		if (index == undefined)
 			index = this.$tabs.length; // append by default
 
 		var o = this.options;
@@ -344,10 +344,10 @@ $.widget("ui.tabs", {
 			$li.insertBefore(this.$lis[index]);
 			$panel.insertBefore(this.$panels[index]);
 		}
-		
+
 		o.disabled = $.map(o.disabled,
 			function(n, i) { return n >= index ? ++n : n });
-			
+
 		this._tabify();
 
 		if (this.$tabs.length == 1) {
@@ -382,7 +382,7 @@ $.widget("ui.tabs", {
 		var o = this.options;
 		if ($.inArray(index, o.disabled) == -1)
 			return;
-			
+
 		var $li = this.$lis.eq(index).removeClass(o.disabledClass);
 		if ($.browser.safari) { // fix disappearing tab (that used opacity indicating disabling) after enabling in Safari 2...
 			$li.css('display', 'inline-block');
@@ -414,12 +414,12 @@ $.widget("ui.tabs", {
 		this.$tabs.eq(index).trigger(this.options.event);
 	},
 	load: function(index, callback) { // callback is for internal usage only
-		
+
 		var self = this, o = this.options, $a = this.$tabs.eq(index), a = $a[0],
 				bypassCache = callback == undefined || callback === false, url = $a.data('load.tabs');
 
 		callback = callback || function() {};
-		
+
 		// no remote or from cache - just finish with callback
 		if (!url || !bypassCache && $.data(a, 'cache.tabs')) {
 			callback();
@@ -427,7 +427,7 @@ $.widget("ui.tabs", {
 		}
 
 		// load remote from here on
-		
+
 		var inner = function(parent) {
 			var $parent = $(parent), $inner = $parent.find('*:last');
 			return $inner.length && $inner.is(':not(img)') && $inner || $parent;
@@ -440,7 +440,7 @@ $.widget("ui.tabs", {
 						});
 			self.xhr = null;
 		};
-		
+
 		if (o.spinner) {
 			var label = inner(a).html();
 			inner(a).wrapInner('<em></em>')
@@ -452,16 +452,16 @@ $.widget("ui.tabs", {
 			success: function(r, s) {
 				$(a.hash).html(r);
 				cleanup();
-				
+
 				if (o.cache)
 					$.data(a, 'cache.tabs', true); // if loaded once do not load them again
 
 				// callbacks
 				self._trigger('load', null, self.ui(self.$tabs[index], self.$panels[index]));
 				o.ajaxOptions.success && o.ajaxOptions.success(r, s);
-				
+
 				// This callback is required because the switch has to take
-				// place after loading has completed. Call last in order to 
+				// place after loading has completed. Call last in order to
 				// fire load before show callback...
 				callback();
 			}
@@ -546,24 +546,24 @@ $.ui.tabs.getter = "length";
 $.extend($.ui.tabs.prototype, {
 	rotation: null,
 	rotate: function(ms, continuing) {
-		
+
 		continuing = continuing || false;
-		
+
 		var self = this, t = this.options.selected;
-		
+
 		function start() {
 			self.rotation = setInterval(function() {
 				t = ++t < self.$tabs.length ? t : 0;
 				self.select(t);
-			}, ms); 
+			}, ms);
 		}
-		
+
 		function stop(e) {
 			if (!e || e.clientX) { // only in case of a true click
 				clearInterval(self.rotation);
 			}
 		}
-		
+
 		// start interval
 		if (ms) {
 			start();

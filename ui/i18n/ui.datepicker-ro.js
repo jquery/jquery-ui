@@ -19,7 +19,7 @@ jQuery(function($){
 		dayNamesShort: ['Dum', 'Lun', 'Mar', 'Mie', 'Joi', 'Vin', 'Sam'],
 		dayNamesMin: ['Du','Lu','Ma','Mi','Jo','Vi','Sa'],
 		dayStatus: 'Seteaza DD ca prima saptamana zi', dateStatus: 'Selecteaza D, M d',
-		dateFormat: 'mm/dd/yy', firstDay: 0, 
+		dateFormat: 'mm/dd/yy', firstDay: 0,
 		initStatus: 'Selecteaza o data', isRTL: false};
 	$.datepicker.setDefaults($.datepicker.regional['ro']);
 });
