@@ -193,6 +193,30 @@ test("defaults", function() {
 	el.remove();
 });
 
+test("title id", function() {
+	expect(3);
+	
+	var titleId;
+	
+	// reset the uuid so we know what values to expect
+	$.ui.dialog.uuid = 0;
+	
+	el = $('<div/>').dialog();
+	titleId = dlg().find('.ui-dialog-title').attr('id');
+	equals(titleId, 'ui-dialog-title-1', 'auto-numbered title id');
+	el.remove();
+	
+	el = $('<div/>').dialog();
+	titleId = dlg().find('.ui-dialog-title').attr('id');
+	equals(titleId, 'ui-dialog-title-2', 'auto-numbered title id');
+	el.remove();
+	
+	el = $('<div id="foo"/>').dialog();
+	titleId = dlg().find('.ui-dialog-title').attr('id');
+	equals(titleId, 'ui-dialog-title-foo', 'carried over title id');
+	el.remove();
+});
+
 module("dialog: Options");
 
 test("autoOpen", function() {

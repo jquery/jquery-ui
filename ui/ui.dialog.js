@@ -49,12 +49,18 @@ $.widget("ui.dialog", {
 					height: '100%'
 				}),
 			
-			title = options.title || '&nbsp;',
-			uiDialogTitlebar = (this.uiDialogTitlebar =
-				$('<div class="ui-dialog-titlebar"/>'))
-				.append('<span class="ui-dialog-title">' + title + '</span>')
+			uiDialogTitlebar = (this.uiDialogTitlebar = $('<div/>'))
+				.addClass('ui-dialog-titlebar')
 				.append('<a href="#" class="ui-dialog-titlebar-close"><span>X</span></a>')
 				.prependTo(uiDialogContainer),
+			
+			title = options.title || '&nbsp;',
+			titleId = $.ui.dialog.getTitleId(this.element),
+			uiDialogTitle = $('<span/>')
+				.addClass('ui-dialog-title')
+				.attr('id', titleId)
+				.html(title)
+				.prependTo(uiDialogTitlebar),
 			
 			uiDialog = (this.uiDialog = uiDialogContainer.parent())
 				.appendTo(document.body)
@@ -410,6 +416,11 @@ $.extend($.ui.dialog, {
 	},
 	
 	getter: 'isOpen',
+	
+	uuid: 0,
+	getTitleId: function($el) {
+		return 'ui-dialog-title-' + ($el.attr('id') || ++this.uuid);
+	},
 	
 	overlay: function(dialog) {
 		this.$el = $.ui.dialog.overlay.create(dialog);
