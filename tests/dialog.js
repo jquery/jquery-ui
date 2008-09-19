@@ -622,6 +622,30 @@ test("close", function() {
 	el.remove();
 });
 
+test("beforeclose", function() {
+	expect(6);
+	
+	el = $('<div/>').dialog({
+		beforeclose: function(ev, ui) {
+			ok(true, '.dialog("close") fires beforeclose callback');
+			equals(this, el[0], "context of callback");
+			return false;
+		}
+	});
+	el.dialog('close');
+	isOpen('beforeclose callback should prevent dialog from closing');
+	el.remove();
+	
+	el = $('<div/>').dialog().bind('dialogbeforeclose', function(ev, ui) {
+		ok(true, '.dialog("close") triggers dialogbeforeclose event');
+		equals(this, el[0], "context of event");
+		return false;
+	});
+	el.dialog('close');
+	isOpen('dialogbeforeclose event should prevent dialog from closing');
+	el.remove();
+});
+
 module("dialog: Tickets");
 
 })(jQuery);

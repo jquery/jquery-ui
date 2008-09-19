@@ -135,6 +135,10 @@ $.widget("ui.dialog", {
 	},
 	
 	close: function() {
+		if (false === this._trigger('beforeclose', null, { options: this.options })) {
+			return;
+		}
+		
 		(this.overlay && this.overlay.destroy());
 		this.uiDialog
 			.hide(this.options.hide)
