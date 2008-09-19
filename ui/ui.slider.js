@@ -111,7 +111,7 @@ $.widget("ui.slider", {
 			})
 			.wrap('<a href="#" style="outline:none;border:none;"></a>')
 			.parent()
-				.bind('click', function() { return false; })
+				.bind('click', function(e) { e.preventDefault(); })
 				.bind('focus', function(e) { self._focus(this.firstChild); })
 				.bind('blur', function(e) { self._blur(this.firstChild); })
 				.bind('keydown', function(e) { if(!self.options.noKeyboard) return self._keydown(e.keyCode, this.firstChild); })
