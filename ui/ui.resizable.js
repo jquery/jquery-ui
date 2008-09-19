@@ -312,7 +312,7 @@ $.widget("ui.resizable", $.extend({}, $.ui.mouse, {
 		this.originalMousePosition = { left: e.pageX, top: e.pageY };
 		
 		//Aspect Ratio
-		o.aspectRatio = (typeof o.aspectRatio == 'number') ? o.aspectRatio : ((this.originalSize.height / this.originalSize.width)||1);
+		o.aspectRatio = (typeof o.aspectRatio == 'number') ? o.aspectRatio : ((this.originalSize.width / this.originalSize.height)||1);
 		
 		if (o.preserveCursor)
 			$('body').css('cursor', this.axis + '-resize');
@@ -394,10 +394,11 @@ $.widget("ui.resizable", $.extend({}, $.ui.mouse, {
 		if (data.width) this.size.width = data.width;
 	},
 	_updateRatio: function(data, e) {
+		
 		var o = this.options, cpos = this.position, csize = this.size, a = this.axis;
 		
-		if (data.height) data.width = (csize.height / o.aspectRatio);
-		else if (data.width) data.height = (csize.width * o.aspectRatio);
+		if (data.height) data.width = (csize.height * o.aspectRatio);
+		else if (data.width) data.height = (csize.width / o.aspectRatio);
 		
 		if (a == 'sw') {
 			data.left = cpos.left + (csize.width - data.width);
@@ -580,13 +581,13 @@ $.ui.plugin.add("resizable", "containment", {
 		
 		if (cp.left < (o.helper ? co.left : cop.left)) {
 			self.size.width = self.size.width + (o.helper ? (self.position.left - co.left) : (self.position.left - cop.left));
-			if (pRatio) self.size.height = self.size.width * o.aspectRatio;
+			if (pRatio) self.size.height = self.size.width / o.aspectRatio;
 			self.position.left = o.helper ? co.left : cop.left;
 		}
 		
 		if (cp.top < (o.helper ? co.top : 0)) {
 			self.size.height = self.size.height + (o.helper ? (self.position.top - co.top) : self.position.top);
-			if (pRatio) self.size.width = self.size.height / o.aspectRatio;
+			if (pRatio) self.size.width = self.size.height * o.aspectRatio;
 			self.position.top = o.helper ? co.top : 0;
 		}
 		
@@ -595,12 +596,12 @@ $.ui.plugin.add("resizable", "containment", {
 		
 		if (woset + self.size.width >= self.parentData.width) {
 			self.size.width = self.parentData.width - woset;
-			if (pRatio) self.size.height = self.size.width * o.aspectRatio;
+			if (pRatio) self.size.height = self.size.width / o.aspectRatio;
 		}
 		
 		if (hoset + self.size.height >= self.parentData.height) {
 			self.size.height = self.parentData.height - hoset;
-			if (pRatio) self.size.width = self.size.height / o.aspectRatio;
+			if (pRatio) self.size.width = self.size.height * o.aspectRatio;
 		}
 	},
 	
