@@ -16,27 +16,27 @@ $.widget('ui.spinner', {
 	_init: function() {
 		// terminate initialization if spinner already applied to current element
 		if($.data(this.element[0], 'spinner')) return;
-
+		
 		// check for onInit callback
 		if (this.options.init) {
 			this.options.init(this.ui(null));
 		}
-
+		
 		// check for decimals in steppinng and set _decimals as internal (needs cleaning up)
 		this._decimals = 0;
 		if (this.options.stepping.toString().indexOf('.') != -1) {
 			var s = this.options.stepping.toString();
 			this._decimals = s.slice(s.indexOf('.')+1, s.length).length;
 		}
-
+		
 		//Initialize needed constants
 		var self = this;
 		this.element
 			.addClass('ui-spinner-box')
 			.attr('autocomplete', 'off'); // switch off autocomplete in opera
-
+		
 		this._setValue( isNaN(this._getValue()) ? this.options.start : this._getValue() );
-
+		
 		this.element
 		.wrap('<div>')
 		.parent()
@@ -117,9 +117,9 @@ $.widget('ui.spinner', {
 					self._propagate('change', e);
 				})
 			.end();
-
-
-		// DataList: Set contraints for object length and step size.
+		
+		
+		// DataList: Set contraints for object length and step size. 
 		// Manipulate height of spinner.
 		this._items = this.element.children().length;
 		if (this._items > 1) {
@@ -136,7 +136,7 @@ $.widget('ui.spinner', {
 			this.options.min = 0;
 			this.options.max = this._items-1;
 		}
-
+		
 		this.element
 		.bind('keydown.spinner', function(e) {
 			if(!self.counter) self.counter = 1;
@@ -149,15 +149,15 @@ $.widget('ui.spinner', {
 		.bind('blur.spinner', function(e) {
 			self._cleanUp();
 		});
-
+		
 		if ($.fn.mousewheel) {
 			this.element.mousewheel(function(e, delta) {
 				self._mousewheel(e, delta);
 			});
 		}
 	},
-
-
+	
+	
 	_constrain: function() {
 		if(this.options.min != undefined && this._getValue() < this.options.min) this._setValue(this.options.min);
 		if(this.options.max != undefined && this._getValue() > this.options.max) this._setValue(this.options.max);
@@ -168,7 +168,7 @@ $.widget('ui.spinner', {
 	},
 	_spin: function(d, e) {
 		if (this.disabled) return;
-
+		
 		if(isNaN(this._getValue())) this._setValue(this.options.start);
 		this._setValue(this._getValue() + (d == 'up' ? 1:-1) * (this.options.incremental && this.counter > 100 ? (this.counter > 200 ? 100 : 10) : 1) * this.options.stepping);
 		this._animate(d);
@@ -201,14 +201,14 @@ $.widget('ui.spinner', {
 	},
 	_keydown: function(e) {
 		var KEYS = $.keyCode;
-
+		
 		if(e.keyCode == KEYS.UP) this._up(e);
 		if(e.keyCode == KEYS.DOWN) this._down(e);
 		if(e.keyCode == KEYS.HOME) this._setValue(this.options.min || this.options.start); //Home key goes to min, if defined, else to start
 		if(e.keyCode == KEYS.END && this.options.max != undefined) this._setValue(this.options.max); //End key goes to maximum
 		return (e.keyCode == KEYS.TAB || e.keyCode == KEYS.BACKSPACE ||
-			e.keyCode == KEYS.LEFT || e.keyCode == KEYS.RIGHT || e.keyCode == KEYS.PERIOD ||
-			e.keyCode == KEYS.NUMPAD_DECIMAL || e.keyCode == KEYS.NUMPAD_SUBTRACT ||
+			e.keyCode == KEYS.LEFT || e.keyCode == KEYS.RIGHT || e.keyCode == KEYS.PERIOD || 
+			e.keyCode == KEYS.NUMPAD_DECIMAL || e.keyCode == KEYS.NUMPAD_SUBTRACT || 
 			(e.keyCode >= 96 && e.keyCode <= 105) || // add support for numeric keypad 0-9
 			(/[0-9\-\.]/).test(String.fromCharCode(e.keyCode))) ? true : false;
 	},
@@ -223,15 +223,15 @@ $.widget('ui.spinner', {
 	_setValue: function(newVal) {
 		if(isNaN(newVal)) newVal = this.options.start;
 		this.element.val(
-			this.options.currency ?
-				$.ui.spinner.format.currency(newVal, this.options.currency) :
+			this.options.currency ? 
+				$.ui.spinner.format.currency(newVal, this.options.currency) : 
 				$.ui.spinner.format.number(newVal, this._decimals)
 		);
 	},
 	_animate: function(d) {
 		if (this.element.hasClass('ui-spinner-list') && ((d == 'up' && this._getValue() <= this.options.max) || (d == 'down' && this._getValue() >= this.options.min)) ) {
 			this.element.animate({marginTop: '-' + this._getValue() * this.element.outerHeight() }, {
-				duration: 'fast',
+				duration: 'fast', 
 				queue: false
 			});
 		}
@@ -245,8 +245,8 @@ $.widget('ui.spinner', {
 			this.element.append('<'+ wrapper +' class="ui-spinner-dyn">'+ html + '</'+ wrapper +'>');
 		}
 	},
-
-
+	
+	
 	plugins: {},
 	ui: function(e) {
 		return {

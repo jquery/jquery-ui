@@ -17,7 +17,7 @@ jQuery(function($){
 		dayNamesShort: ['Ned','Pon','Tor','Sre','&#x10C;et','Pet','Sob'],
 		dayNamesMin: ['Ne','Po','To','Sr','&#x10C;e','Pe','So'],
 		dayStatus: 'Nastavi DD za prvi dan v tednu', dateStatus: 'Izberi DD, d MM yy',
-		dateFormat: 'dd.mm.yy', firstDay: 1,
+		dateFormat: 'dd.mm.yy', firstDay: 1, 
 		initStatus: 'Izbira datuma', isRTL: false};
 	$.datepicker.setDefaults($.datepicker.regional['sl']);
 });

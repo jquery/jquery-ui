@@ -4,7 +4,7 @@
  * Copyright (c) 2008 Richard D. Worth (rdworth.org)
  * Dual licensed under the MIT (MIT-LICENSE.txt)
  * and GPL (GPL-LICENSE.txt) licenses.
- *
+ * 
  * http://docs.jquery.com/UI/Selectables
  *
  * Depends:
@@ -15,9 +15,9 @@
 $.widget("ui.selectable", $.extend({}, $.ui.mouse, {
 	_init: function() {
 		var self = this;
-
+		
 		this.element.addClass("ui-selectable");
-
+		
 		this.dragged = false;
 
 		// cache selectee children based on filter
@@ -44,9 +44,9 @@ $.widget("ui.selectable", $.extend({}, $.ui.mouse, {
 		this.refresh();
 
 		this.selectees = selectees.addClass("ui-selectee");
-
+		
 		this._mouseInit();
-
+		
 		this.helper = $(document.createElement('div'))
 			.css({border:'1px dotted black'})
 			.addClass("ui-selectable-helper");
@@ -67,9 +67,9 @@ $.widget("ui.selectable", $.extend({}, $.ui.mouse, {
 	},
 	_mouseStart: function(e) {
 		var self = this;
-
+		
 		this.opos = [e.pageX, e.pageY];
-
+		
 		if (this.options.disabled)
 			return;
 
@@ -114,7 +114,7 @@ $.widget("ui.selectable", $.extend({}, $.ui.mouse, {
 				}], options.unselecting);
 			}
 		});
-
+		
 		var isSelectee = false;
 		$(e.target).parents().andSelf().each(function() {
 			if($.data(this, "selectable-item")) isSelectee = true;
@@ -124,7 +124,7 @@ $.widget("ui.selectable", $.extend({}, $.ui.mouse, {
 	_mouseDrag: function(e) {
 		var self = this;
 		this.dragged = true;
-
+		
 		if (this.options.disabled)
 			return;
 
@@ -207,14 +207,14 @@ $.widget("ui.selectable", $.extend({}, $.ui.mouse, {
 				}
 			}
 		});
-
+		
 		return false;
 	},
 	_mouseStop: function(e) {
 		var self = this;
-
+		
 		this.dragged = false;
-
+		
 		var options = this.options;
 
 		$('.ui-unselecting', this.element[0]).each(function() {
@@ -244,9 +244,9 @@ $.widget("ui.selectable", $.extend({}, $.ui.mouse, {
 			selectable: self.element[0],
 			options: this.options
 		}], this.options.stop);
-
+		
 		this.helper.remove();
-
+		
 		return false;
 	}
 }));

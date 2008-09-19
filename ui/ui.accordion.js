@@ -1,6 +1,6 @@
 /*
  * jQuery UI Accordion @VERSION
- *
+ * 
  * Copyright (c) 2007, 2008 Jörn Zaefferer
  * Dual licensed under the MIT (MIT-LICENSE.txt)
  * and GPL (GPL-LICENSE.txt) licenses.
@@ -15,7 +15,7 @@
 $.widget("ui.accordion", {
 	_init: function() {
 		var options = this.options;
-
+		
 		if ( options.navigation ) {
 			var current = this.element.find("a").filter(options.navigationFilter);
 			if ( current.length ) {
@@ -27,23 +27,23 @@ $.widget("ui.accordion", {
 				}
 			}
 		}
-
+		
 		// calculate active if not specified, using the first header
 		options.headers = this.element.find(options.header);
 		options.active = findActive(options.headers, options.active);
-
+		
 		// IE7-/Win - Extra vertical space in Lists fixed
 		if ($.browser.msie) {
 			this.element.find('a').css('zoom', '1');
 		}
-
+		
 		if (!this.element.hasClass("ui-accordion")) {
 			this.element.addClass("ui-accordion");
 			$('<span class="ui-accordion-left"/>').insertBefore(options.headers);
 			$('<span class="ui-accordion-right"/>').appendTo(options.headers);
 			options.headers.addClass("ui-accordion-header").attr("tabindex", "0");
 		}
-
+		
 		var maxHeight;
 		if ( options.fillSpace ) {
 			maxHeight = this.element.parent().height();
@@ -60,13 +60,13 @@ $.widget("ui.accordion", {
 				maxHeight = Math.max(maxHeight, $(this).outerHeight());
 			}).height(maxHeight);
 		}
-
+	
 		options.headers
 			.not(options.active || "")
 			.next()
 			.hide();
 		options.active.parent().andSelf().addClass(options.selectedClass);
-
+		
 		if (options.event) {
 			this.element.bind((options.event) + ".accordion", clickHandler);
 		}
@@ -98,7 +98,7 @@ function completed(cancel) {
 	if (!$.data(this, "accordion")) {
 		return;
 	}
-
+	
 	var instance = $.data(this, "accordion");
 	var options = instance.options;
 	options.running = cancel ? 0 : --options.running;
@@ -120,12 +120,12 @@ function toggle(toShow, toHide, data, clickedActive, down) {
 	options.toHide = toHide;
 	options.data = data;
 	var complete = scopeCallback(completed, this);
-
-	$.data(this, "accordion")._trigger("changestart", null, options.data);
-
+	
+	$.data(this, "accordion")._trigger("changestart", null, options.data); 
+	
 	// count elements to animate
 	options.running = toHide.size() === 0 ? toShow.size() : toHide.size();
-
+	
 	if ( options.animated ) {
 		if ( !options.alwaysOpen && clickedActive ) {
 			$.ui.accordion.animations[options.animated]({
@@ -160,7 +160,7 @@ function clickHandler(event) {
 	if (options.disabled) {
 		return false;
 	}
-
+	
 	// called only when using activate(false) to close all parts programmatically
 	if ( !event.target && !options.alwaysOpen ) {
 		options.active.parent().andSelf().toggleClass(options.selectedClass);
@@ -178,14 +178,14 @@ function clickHandler(event) {
 	}
 	// get the click target
 	var clicked = $(event.target);
-
+	
 	// due to the event delegation model, we have to check if one
 	// of the parent elements is our actual header, and find that
 	// otherwise stick with the initial target
 	clicked = $( clicked.parents(options.header)[0] || clicked );
-
+	
 	var clickedActive = clicked[0] == options.active[0];
-
+	
 	// if animations are still active, or the active header is the target, ignore click
 	if (options.running || (options.alwaysOpen && clickedActive)) {
 		return false;
@@ -193,13 +193,13 @@ function clickHandler(event) {
 	if (!clicked.is(options.header)) {
 		return;
 	}
-
+	
 	// switch classes
 	options.active.parent().andSelf().toggleClass(options.selectedClass);
 	if ( !clickedActive ) {
 		clicked.parent().andSelf().addClass(options.selectedClass);
 	}
-
+	
 	// find elements to show and hide
 	var toShow = clicked.next(),
 		toHide = options.active.next(),
@@ -211,7 +211,7 @@ function clickHandler(event) {
 			oldContent: toHide
 		},
 		down = options.headers.index( options.active[0] ) > options.headers.index( clicked[0] );
-
+	
 	options.active = clickedActive ? $([]) : clicked;
 	toggle.call(this, toShow, toHide, data, clickedActive, down );
 
