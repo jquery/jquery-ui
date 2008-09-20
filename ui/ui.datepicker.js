@@ -606,8 +606,10 @@ $.extend(Datepicker.prototype, {
 	/* Check positioning to remain on screen. */
 	_checkOffset: function(inst, offset, isFixed) {
 		var pos = inst.input ? this._findPos(inst.input[0]) : null;
-		var browserWidth = window.innerWidth || document.documentElement.clientWidth;
-		var browserHeight = window.innerHeight || document.documentElement.clientHeight;
+		var browserWidth = window.innerWidth || (document.documentElement ?
+			document.documentElement.clientWidth : document.body.clientWidth); 
+		var browserHeight = window.innerHeight || (document.documentElement ?
+			document.documentElement.clientHeight : document.body.clientHeight);
 		var scrollX = document.documentElement.scrollLeft || document.body.scrollLeft;
 		var scrollY = document.documentElement.scrollTop || document.body.scrollTop;
 		// reposition date picker horizontally if outside the browser window
