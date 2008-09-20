@@ -13,7 +13,10 @@
 
 var _remove = $.fn.remove;
 $.fn.remove = function() {
-	$("*", this).add(this).triggerHandler("remove");
+	// TODO: add comment about why we can't use .trigger()
+	$("*", this).add(this).each(function() {
+		$(this).triggerHandler("remove");
+	});
 	return _remove.apply(this, arguments );
 };
 
