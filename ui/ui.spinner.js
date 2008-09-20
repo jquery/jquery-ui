@@ -17,13 +17,13 @@ $.widget('ui.spinner', {
 		// terminate initialization if spinner already applied to current element
 		if($.data(this.element[0], 'spinner')) return;
 		
-		// check for onInit callback
+		// check for Init callback
 		if (this.options.init) {
 			this.options.init(this.ui(null));
 		}
 		
-		// check for decimals in steppinng and set _decimals as internal (needs cleaning up)
-		this._decimals = 0;
+		// check for decimals in steppinng and set _decimals as internal
+		this._decimals = parseInt(this.options.decimals);
 		if (this.options.stepping.toString().indexOf('.') != -1) {
 			var s = this.options.stepping.toString();
 			this._decimals = s.slice(s.indexOf('.')+1, s.length).length;
@@ -303,6 +303,7 @@ $.widget('ui.spinner', {
 
 $.extend($.ui.spinner, {
 	defaults: {
+		decimals: 0,
 		stepping: 1,
 		start: 0,
 		incremental: true,
