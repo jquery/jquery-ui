@@ -102,6 +102,10 @@ $.widget("ui.progressbar", {
 		
 		self.active = true;
 		
+		if (options.duration < options.interval) {
+			options.duration = options.interval;
+		}
+		
 		setTimeout(
 			function() {
 				self.active = false;
@@ -133,11 +137,14 @@ $.widget("ui.progressbar", {
 					options.interval = interval - elapsedTime;
 				},
 				complete: function() {
-					delete jQuery.easing[self.identifier];
-					self.pause();
-
 					if (self.active) {
-						/*TODO*/
+						options.interval = self._interval;
+						self.bar.width(0);
+						self.textElement.width(0);
+						self._animate();
+					}
+					else {
+						delete jQuery.easing[self.identifier];
 					}
 				}
 			}
@@ -183,8 +190,8 @@ $.widget("ui.progressbar", {
 
 $.ui.progressbar.defaults = {
 	width: 300,
-	duration: 3000,
-	interval: 200,
+	duration: 1000,
+	interval: 1000,
 	increment: 1,
 	range: true,
 	text: '',
