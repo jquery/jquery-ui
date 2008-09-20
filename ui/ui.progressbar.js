@@ -176,7 +176,6 @@ $.widget("ui.progressbar", {
 	
 	ui: function(e) {
 		return {
-			instance: this,
 			identifier: this.identifier,
 			options: this.options,
 			element: this.bar,
