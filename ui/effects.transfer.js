@@ -50,7 +50,7 @@ $.effects.transfer = function(o) {
 			transfer.remove(); // Remove div
 			if(o.callback) o.callback.apply(el[0], arguments); // Callback
 			el.dequeue();
-		}); 
+		});
 		
 	});
 	

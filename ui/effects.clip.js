@@ -45,7 +45,7 @@ $.effects.clip = function(o) {
 			$.effects.restore(el, props); $.effects.removeWrapper(el); // Restore
 			if(o.callback) o.callback.apply(el[0], arguments); // Callback
 			el.dequeue();
-		}}); 
+		}});
 		
 	});
 	

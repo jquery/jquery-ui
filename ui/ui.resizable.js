@@ -151,7 +151,7 @@ $.widget("ui.resizable", $.extend({}, $.ui.mouse, {
 			target = target || this.element;
 			
 			for(var i in o.handles) {
-				if(o.handles[i].constructor == String) 
+				if(o.handles[i].constructor == String)
 					o.handles[i] = $(o.handles[i], this.element).show();
 				
 				if (o.transparent)
@@ -190,7 +190,7 @@ $.widget("ui.resizable", $.extend({}, $.ui.mouse, {
 		//Matching axis name
 		o._handles.mouseover(function() {
 			if (!o.resizing) {
-				if (this.className) 
+				if (this.className)
 					var axis = this.className.match(/ui-resizable-(se|sw|ne|nw|n|e|s|w)/i);
 				//Axis, default = se
 				self.axis = o.axis = axis && axis[1] ? axis[1] : 'se';

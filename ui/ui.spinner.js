@@ -229,7 +229,7 @@ $.widget('ui.spinner', {
 	_animate: function(d) {
 		if (this.element.hasClass('ui-spinner-list') && ((d == 'up' && this._getValue() <= this.options.max) || (d == 'down' && this._getValue() >= this.options.min)) ) {
 			this.element.animate({marginTop: '-' + this._getValue() * this.element.outerHeight() }, {
-				duration: 'fast', 
+				duration: 'fast',
 				queue: false
 			});
 		}

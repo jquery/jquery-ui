@@ -121,7 +121,7 @@ function toggle(toShow, toHide, data, clickedActive, down) {
 	options.data = data;
 	var complete = scopeCallback(completed, this);
 	
-	$.data(this, "accordion")._trigger("changestart", null, options.data); 
+	$.data(this, "accordion")._trigger("changestart", null, options.data);
 	
 	// count elements to animate
 	options.running = toHide.size() === 0 ? toShow.size() : toHide.size();

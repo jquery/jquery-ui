@@ -171,7 +171,7 @@ $.effects.size = function(o) {
 			$.effects.restore(el, restore ? props : props1); $.effects.removeWrapper(el); // Restore
 			if(o.callback) o.callback.apply(this, arguments); // Callback
 			el.dequeue();
-		}}); 
+		}});
 		
 	});
 

@@ -493,7 +493,7 @@ $.ui.plugin.add("draggable", "snap", {
 		
 		for (var i = inst.snapElements.length - 1; i >= 0; i--){
 			
-			var l = inst.snapElements[i].left, r = l + inst.snapElements[i].width, 
+			var l = inst.snapElements[i].left, r = l + inst.snapElements[i].width,
 				t = inst.snapElements[i].top, b = t + inst.snapElements[i].height;
 			
 			//Yes, I know, this is insane ;)

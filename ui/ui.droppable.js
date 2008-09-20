@@ -190,7 +190,7 @@ $.ui.ddmanager = {
 		
 		var m = $.ui.ddmanager.droppables[t.options.scope];
 		var type = e ? e.type : null; // workaround for #2317
-		var list = (t.currentItem || t.element).find(":data(droppable)").andSelf();	
+		var list = (t.currentItem || t.element).find(":data(droppable)").andSelf();
 		
 		droppablesLoop: for (var i = 0; i < m.length; i++) {
 			

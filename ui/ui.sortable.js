@@ -17,9 +17,9 @@ function contains(a, b) {
     if (a.contains && !safari2) { 
         return a.contains(b); 
     } 
-    if (a.compareDocumentPosition) 
+    if (a.compareDocumentPosition)
         return !!(a.compareDocumentPosition(b) & 16); 
-    while (b = b.parentNode) 
+    while (b = b.parentNode)
           if (b == a) return true; 
     return false; 
 };

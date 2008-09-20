@@ -232,7 +232,7 @@ $.widget("ui.tabs", {
 			// Check if click handler returns false last so that it is not executed
 			// for a disabled or loading tab!
 			if (($li.hasClass(o.selectedClass) && !o.unselect)
-				|| $li.hasClass(o.disabledClass) 
+				|| $li.hasClass(o.disabledClass)
 				|| $(this).hasClass(o.loadingClass)
 				|| self._trigger('select', null, self.ui(this, $show[0])) === false
 				) {
@@ -320,7 +320,7 @@ $.widget("ui.tabs", {
 		
 	},
 	add: function(url, label, index) {
-		if (index == undefined) 
+		if (index == undefined)
 			index = this.$tabs.length; // append by default
 		
 		var o = this.options;
@@ -555,7 +555,7 @@ $.extend($.ui.tabs.prototype, {
 			self.rotation = setInterval(function() {
 				t = ++t < self.$tabs.length ? t : 0;
 				self.select(t);
-			}, ms); 
+			}, ms);
 		}
 		
 		function stop(e) {

@@ -135,7 +135,7 @@ $.widget("ui.slider", {
 	_initBoundaries: function() {
 		
 		var element = this.element[0], o = this.options;
-		this.actualSize = { width: this.element.outerWidth() , height: this.element.outerHeight() };			
+		this.actualSize = { width: this.element.outerWidth() , height: this.element.outerHeight() };
 		
 		$.extend(o, {
 			axis: o.axis || (element.offsetWidth < element.offsetHeight ? 'vertical' : 'horizontal'),
@@ -283,7 +283,7 @@ $.widget("ui.slider", {
 		return value;
 	},
 	_handleSize: function(handle,axis) {
-		return $(handle != undefined && handle !== null ? this.handle[handle] : this.currentHandle)[0]["offset"+(axis == "x" ? "Width" : "Height")];	
+		return $(handle != undefined && handle !== null ? this.handle[handle] : this.currentHandle)[0]["offset"+(axis == "x" ? "Width" : "Height")];
 	},
 	_oneStep: function(axis) {
 		return this.options.stepping[axis] || 1;
@@ -302,7 +302,7 @@ $.widget("ui.slider", {
 		
 		// This is a especially ugly fix for strange blur events happening on mousemove events
 		if (!this.currentHandle)
-			this._focus(this.previousHandle, true); 
+			this._focus(this.previousHandle, true);
 		
 		this.offset = this.element.offset();
 		
@@ -336,12 +336,12 @@ $.widget("ui.slider", {
 		if (o.stepping.x) {
 			var value = this._convertValue(position.left, "x");
 			value = Math.round(value / o.stepping.x) * o.stepping.x;
-			position.left = this._translateValue(value, "x");	
+			position.left = this._translateValue(value, "x");
 		}
 		if (o.stepping.y) {
 			var value = this._convertValue(position.top, "y");
 			value = Math.round(value / o.stepping.y) * o.stepping.y;
-			position.top = this._translateValue(value, "y");	
+			position.top = this._translateValue(value, "y");
 		}
 		
 		position.left = this._translateRange(position.left, "x");
@@ -371,7 +371,7 @@ $.widget("ui.slider", {
 		
 		//If no handle has been passed, no current handle is available and we have multiple handles, return false
 		if (handle == undefined && !this.currentHandle && this.handle.length != 1)
-			return false; 
+			return false;
 		
 		//If only one handle is available, use it
 		if (handle == undefined && !this.currentHandle)

@@ -259,7 +259,7 @@ $.ui = {
 		var tmp = $('<div class="ui-gen">').addClass(name).css({position:'absolute', top:'-5000px', left:'-5000px', display:'block'}).appendTo('body');
 		
 		//if (!$.browser.safari)
-			//tmp.appendTo('body'); 
+			//tmp.appendTo('body');
 		
 		//Opera and Safari set width and height to 0px instead of auto
 		//Safari returns rgba(0,0,0,0) when bgcolor is not set
