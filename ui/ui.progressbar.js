@@ -19,7 +19,7 @@ $.widget("ui.progressbar", {
 		
 		var self = this,
 			options = this.options,
-			id = (new Date()).getTime()+Math.random(),
+			id = ((new Date()).getTime() + Math.random()),
 			text = options.text || '0%';
 		
 		this.element.addClass("ui-progressbar").width(options.width);
@@ -132,8 +132,8 @@ $.widget("ui.progressbar", {
 				duration: interval,
 				easing: options.equation || this.identifier,
 				step: function(step, b) {
-					self.progress((step/options.width)*100);
 					var timestamp = new Date().getTime(), elapsedTime  = (timestamp - b.startTime);
+					self.progress( (step/options.width) * 100 );
 					options.interval = interval - elapsedTime;
 				},
 				complete: function() {
@@ -177,7 +177,7 @@ $.widget("ui.progressbar", {
 		}
 		
 		this.percentState = percentState > 100 ? 100 : percentState;
-		this.pixelState = (this.percentState/100)*this.options.width;
+		this.pixelState = (this.percentState/100) * this.options.width;
 		this.bar.width(this.pixelState);
 		this.textElement.width(this.pixelState);
 		
