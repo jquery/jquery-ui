@@ -32,11 +32,19 @@ $(function(){
 		's3': {currency: '$'},
 		's4': {},
 		's5': {
+			//
+			// Two methods of adding external items to the spinner
+			//
+			// method 1: on initalisation call the add method directly and format html manually
 			init: function(ui) {
 				for (var i=0; i<itemList.length; i++) {
-					ui.add(itemList[i].title +' <a href="'+ itemList[i].url +'" target="_blank">&raquo;</a>');
+					ui.add('<a href="'+ itemList[i].url +'" target="_blank">'+ itemList[i].title +'</a>');
 				}
-			}
+			},
+			
+			// method 2: use the format and items options in combination
+			format: '%(title) <a href="%(url)" target="_blank">&raquo;</a>',
+			items: itemList
 		}
 	};
 

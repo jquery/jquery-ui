@@ -22,6 +22,14 @@ $.widget('ui.spinner', {
 			this.options.init(this.ui(null));
 		}
 		
+		// perform data bind on generic objects
+		if (typeof this.options.items[0] == 'object' && !this.element.is('input')) {
+			var data = this.options.items;
+			for (var i=0; i<data.length; i++) {
+				this._addItem(data[i]);
+			}
+		}
+		
 		// check for decimals in steppinng and set _decimals as internal
 		this._decimals = parseInt(this.options.decimals);
 		if (this.options.stepping.toString().indexOf('.') != -1) {
@@ -127,6 +135,8 @@ $.widget('ui.spinner', {
 			.css('height', this.element.outerHeight()/this._items)
 			.children()
 				.addClass('ui-spinner-listitem')
+				.css('height', this.element.outerHeight())
+				.css('overflow', 'hidden')
 			.end()
 			.parent()
 				.css('height', this.element.outerHeight())
@@ -234,11 +244,30 @@ $.widget('ui.spinner', {
 			});
 		}
 	},
-	_addItem: function(html) {
+	_addItem: function(obj, fmt) {
 		if (!this.element.is('input')) {
 			var wrapper = 'div';
 			if (this.element.is('ol') || this.element.is('ul')) {
 				wrapper = 'li';
+			}
+			var html = obj; // string or object set it to html first
+			
+			if (typeof obj == 'object') {
+				var format = (fmt != undefined) ? fmt : this.options.format;
+				
+				html = format.replace(/%(\(([^)]+)\))?/g, 
+					(function(data){
+						return function(match, a, lbl) { 
+							if (!lbl) {
+								for (var itm in data) {
+									return data[itm]; // return the first item only
+								}
+							} else {
+								return data[lbl];
+							}
+						}
+					})(obj)
+				);
 			}
 			this.element.append('<'+ wrapper +' class="ui-spinner-dyn">'+ html + '</'+ wrapper +'>');
 		}
@@ -307,7 +336,9 @@ $.extend($.ui.spinner, {
 		stepping: 1,
 		start: 0,
 		incremental: true,
-		currency: false
+		currency: false,
+		format: '%',
+		items: []
 	},
 	format: {
 		number: function(num, dec) {
@@ -328,5 +359,6 @@ $.extend($.ui.spinner, {
 		}
 	}
 });
+
 
 })(jQuery);
