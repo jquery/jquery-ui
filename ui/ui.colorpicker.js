@@ -10,7 +10,7 @@
  * Depends:
  *	ui.core.js
  */
-(function ($) {
+(function($) {
 
 $.widget("ui.colorpicker", {
 
