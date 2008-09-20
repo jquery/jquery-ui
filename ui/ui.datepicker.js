@@ -133,7 +133,7 @@ function Datepicker() {
 $.extend(Datepicker.prototype, {
 	/* Class name added to elements to indicate already configured with a date picker. */
 	markerClassName: 'hasDatepicker',
-
+	
 	/* Debug logging (if enabled). */
 	log: function () {
 		if (this.debug)
@@ -147,7 +147,7 @@ $.extend(Datepicker.prototype, {
 		extendRemove(this._defaults, settings || {});
 		return this;
 	},
-
+	
 	/* Attach the date picker to a jQuery selection.
 	   @param  target    element - the target input field or division or span
 	   @param  settings  object - the new settings to use for this date picker instance (anonymous) */
@@ -177,7 +177,7 @@ $.extend(Datepicker.prototype, {
 			this._inlineDatepicker(target, inst);
 		}
 	},
-
+	
 	/* Create a new instance object. */
 	_newInst: function(target, inline) {
 		var id = target[0].id.replace(/([:\[\]\.])/g, '\\\\$1'); // escape jQuery meta chars
@@ -188,7 +188,7 @@ $.extend(Datepicker.prototype, {
 			dpDiv: (!inline ? this.dpDiv : // presentation div
 			$('<div class="' + this._inlineClass + '"></div>'))};
 	},
-
+	
 	/* Attach the date picker to an input field. */
 	_connectDatepicker: function(target, inst) {
 		var input = $(target);
@@ -227,7 +227,7 @@ $.extend(Datepicker.prototype, {
 			});
 		$.data(target, PROP_NAME, inst);
 	},
-
+	
 	/* Attach an inline date picker to a div. */
 	_inlineDatepicker: function(target, inst) {
 		var divSpan = $(target);
@@ -243,13 +243,13 @@ $.extend(Datepicker.prototype, {
 		this._setDate(inst, this._getDefaultDate(inst));
 		this._updateDatepicker(inst);
 	},
-
+	
 	/* Tidy up after displaying the date picker. */
 	_inlineShow: function(inst) {
 		var numMonths = this._getNumberOfMonths(inst); // fix width for dynamic number of date pickers
 		inst.dpDiv.width(numMonths[1] * $('.ui-datepicker', inst.dpDiv[0]).width());
 	}, 
-
+	
 	/* Pop-up the date picker in a "dialog" box.
 	   @param  input     element - ignored
 	   @param  dateText  string - the initial date to display (in the current format)
@@ -273,7 +273,7 @@ $.extend(Datepicker.prototype, {
 		}
 		extendRemove(inst.settings, settings || {});
 		this._dialogInput.val(dateText);
-
+		
 		this._pos = (pos ? (pos.length ? pos : [pos.pageX, pos.pageY]) : null);
 		if (!this._pos) {
 			var browserWidth = window.innerWidth || document.documentElement.clientWidth ||	document.body.clientWidth;
@@ -283,7 +283,7 @@ $.extend(Datepicker.prototype, {
 			this._pos = // should use actual width/height below
 				[(browserWidth / 2) - 100 + scrollX, (browserHeight / 2) - 150 + scrollY];
 		}
-
+		
 		// move input on screen for focus, but hidden behind dialog
 		this._dialogInput.css('left', this._pos[0] + 'px').css('top', this._pos[1] + 'px');
 		inst.settings.onSelect = onSelect;
@@ -295,7 +295,7 @@ $.extend(Datepicker.prototype, {
 		$.data(this._dialogInput[0], PROP_NAME, inst);
 		return this;
 	},
-
+	
 	/* Detach a datepicker from its control.
 	   @param  target    element - the target input field or division or span */
 	_destroyDatepicker: function(target) {
@@ -315,7 +315,7 @@ $.extend(Datepicker.prototype, {
 		} else if (nodeName == 'div' || nodeName == 'span')
 			$target.removeClass(this.markerClassName).empty();
 	},
-
+	
 	/* Enable the date picker to a jQuery selection.
 	   @param  target    element - the target input field or division or span */
 	_enableDatepicker: function(target) {
@@ -337,7 +337,7 @@ $.extend(Datepicker.prototype, {
 		this._disabledInputs = $.map(this._disabledInputs,
 			function(value) { return (value == target ? null : value); }); // delete entry
 	},
-
+	
 	/* Disable the date picker to a jQuery selection.
 	   @param  target    element - the target input field or division or span */
 	_disableDatepicker: function(target) {
@@ -373,7 +373,7 @@ $.extend(Datepicker.prototype, {
 			function(value) { return (value == target ? null : value); }); // delete entry
 		this._disabledInputs[this._disabledInputs.length] = target;
 	},
-
+	
 	/* Is the first field in a jQuery collection disabled as a datepicker?
 	   @param  target    element - the target input field or division or span
 	   @return boolean - true if disabled, false if enabled */
@@ -386,7 +386,7 @@ $.extend(Datepicker.prototype, {
 		}
 		return false;
 	},
-
+	
 	/* Retrieve the instance data for the target control.
 	   @param  target  element - the target input field or division or span
 	   @return  object - the associated instance data
@@ -399,7 +399,7 @@ $.extend(Datepicker.prototype, {
 			throw 'Missing instance data for this datepicker';
 		}
 	},
-
+	
 	/* Update the settings for a date picker attached to an input field or division.
 	   @param  target  element - the target input field or division or span
 	   @param  name    object - the new settings to update or
@@ -428,7 +428,7 @@ $.extend(Datepicker.prototype, {
 			this._updateDatepicker(inst);
 		}
 	},
-
+	
 	/* Redraw the date picker attached to an input field or division.
 	   @param  target  element - the target input field or division or span */
 	_refreshDatepicker: function(target) {
@@ -437,7 +437,7 @@ $.extend(Datepicker.prototype, {
 			this._updateDatepicker(inst);
 		}
 	},
-
+	
 	/* Set the dates for a jQuery selection.
 	   @param  target   element - the target input field or division or span
 	   @param  date     Date - the new date
@@ -450,7 +450,7 @@ $.extend(Datepicker.prototype, {
 			this._updateAlternate(inst);
 		}
 	},
-
+	
 	/* Get the date(s) for the first entry in a jQuery selection.
 	   @param  target  element - the target input field or division or span
 	   @return Date - the current date or
@@ -461,7 +461,7 @@ $.extend(Datepicker.prototype, {
 			this._setDateFromField(inst); 
 		return (inst ? this._getDate(inst) : null);
 	},
-
+	
 	/* Handle keystrokes. */
 	_doKeyDown: function(e) {
 		var inst = $.datepicker._getInst(e.target);
@@ -513,7 +513,7 @@ $.extend(Datepicker.prototype, {
 			e.stopPropagation();
 		}
 	},
-
+	
 	/* Filter entered characters - based on date format. */
 	_doKeyPress: function(e) {
 		var inst = $.datepicker._getInst(e.target);
@@ -521,7 +521,7 @@ $.extend(Datepicker.prototype, {
 		var chr = String.fromCharCode(e.charCode == undefined ? e.keyCode : e.charCode);
 		return e.ctrlKey || (chr < ' ' || !chars || chars.indexOf(chr) > -1);
 	},
-
+	
 	/* Pop-up the date picker for a given input field.
 	   @param  input  element - the input field attached to the date picker or
 	                  event - if triggered by focus */
@@ -586,7 +586,7 @@ $.extend(Datepicker.prototype, {
 			$.datepicker._curInst = inst;
 		}
 	},
-
+	
 	/* Generate the date picker content. */
 	_updateDatepicker: function(inst) {
 		var dims = {width: inst.dpDiv.width() + 4,
@@ -602,7 +602,7 @@ $.extend(Datepicker.prototype, {
 		if (inst.input && inst.input[0].type != 'hidden')
 			$(inst.input[0]).focus();
 	},
-
+	
 	/* Check positioning to remain on screen. */
 	_checkOffset: function(inst, offset, isFixed) {
 		var pos = inst.input ? this._findPos(inst.input[0]) : null;
@@ -635,7 +635,7 @@ $.extend(Datepicker.prototype, {
         var position = $(obj).offset();
 	    return [position.left, position.top];
 	},
-
+	
 	/* Hide the date picker from view.
 	   @param  input  element - the input field attached to the date picker
 	   @param  duration  string - the duration over which to close the date picker */
@@ -680,13 +680,13 @@ $.extend(Datepicker.prototype, {
 		}
 		this._curInst = null;
 	},
-
+	
 	/* Tidy up after a dialog display. */
 	_tidyDialog: function(inst) {
 		inst.dpDiv.removeClass(this._dialogClass).unbind('.ui-datepicker');
 		$('.' + this._promptClass, inst.dpDiv).remove();
 	},
-
+	
 	/* Close date picker if clicked elsewhere. */
 	_checkExternalClick: function(event) {
 		if (!$.datepicker._curInst)
@@ -698,7 +698,7 @@ $.extend(Datepicker.prototype, {
 				$.datepicker._datepickerShowing && !($.datepicker._inDialog && $.blockUI))
 			$.datepicker._hideDatepicker(null, '');
 	},
-
+	
 	/* Adjust one of the date sub-fields. */
 	_adjustDate: function(id, offset, period) {
 		var target = $(id);
@@ -706,7 +706,7 @@ $.extend(Datepicker.prototype, {
 		this._adjustInstDate(inst, offset, period);
 		this._updateDatepicker(inst);
 	},
-
+	
 	/* Action for current link. */
 	_gotoToday: function(id) {
 		var target = $(id);
@@ -725,7 +725,7 @@ $.extend(Datepicker.prototype, {
 		this._notifyChange(inst);
 		this._adjustDate(target);
 	},
-
+	
 	/* Action for selecting a new month/year. */
 	_selectMonthYear: function(id, select, period) {
 		var target = $(id);
@@ -737,7 +737,7 @@ $.extend(Datepicker.prototype, {
 		this._notifyChange(inst);
 		this._adjustDate(target);
 	},
-
+	
 	/* Restore input focus after not changing month/year. */
 	_clickMonthYear: function(id) {
 		var target = $(id);
@@ -746,7 +746,7 @@ $.extend(Datepicker.prototype, {
 			inst.input[0].focus();
 		inst._selectingMonthYear = !inst._selectingMonthYear;
 	},
-
+	
 	/* Action for changing the first week day. */
 	_changeFirstDay: function(id, day) {
 		var target = $(id);
@@ -754,7 +754,7 @@ $.extend(Datepicker.prototype, {
 		inst.settings.firstDay = day;
 		this._updateDatepicker(inst);
 	},
-
+	
 	/* Action for selecting a day. */
 	_selectDay: function(id, month, year, td) {
 		if ($(td).hasClass(this._unselectableClass))
@@ -795,7 +795,7 @@ $.extend(Datepicker.prototype, {
 				this._updateDatepicker(inst);
 		}
 	},
-
+	
 	/* Erase the input field and hide the date picker. */
 	_clearDate: function(id) {
 		var target = $(id);
@@ -806,7 +806,7 @@ $.extend(Datepicker.prototype, {
 		inst.endDay = inst.endMonth = inst.endYear = inst.rangeStart = null;
 		this._selectDate(target, '');
 	},
-
+	
 	/* Update the input field with the selected date. */
 	_selectDate: function(id, dateStr) {
 		var target = $(id);
@@ -848,7 +848,7 @@ $.extend(Datepicker.prototype, {
 			$(altField).each(function() { $(this).val(dateStr); });
 		}
 	},
-
+	
 	/* Set as beforeShowDay function to prevent selection of weekends.
 	   @param  date  Date - the date to customise
 	   @return [boolean, string] - is this date selectable?, what is its CSS class? */
@@ -886,7 +886,7 @@ $.extend(Datepicker.prototype, {
 		return $.datepicker.formatDate($.datepicker._get(inst, 'dateStatus'),
 			date, $.datepicker._getFormatConfig(inst));
 	},
-
+	
 	/* Parse a string value into a date object.
 	   See formatDate below for the possible formats.
 
@@ -1022,7 +1022,7 @@ $.extend(Datepicker.prototype, {
 			throw 'Invalid date'; // E.g. 31/02/*
 		return date;
 	},
-
+	
 	/* Standard date formats. */
 	ATOM: 'yy-mm-dd', // RFC 3339 (ISO 8601)
 	COOKIE: 'D, dd M yy',
@@ -1035,7 +1035,7 @@ $.extend(Datepicker.prototype, {
 	RSS: 'D, d M y', // RFC 822
 	TIMESTAMP: '@',
 	W3C: 'yy-mm-dd', // ISO 8601
-
+	
 	/* Format a date object into a string value.
 	   The format can be combinations of the following:
 	   d  - day of month (no leading zero)
@@ -1053,7 +1053,7 @@ $.extend(Datepicker.prototype, {
 	   @ - Unix timestamp (ms since 01/01/1970)
 	   '...' - literal text
 	   '' - single quote
-
+	
 	   @param  format    string - the desired format of the date
 	   @param  date      Date - the date value to format
 	   @param  settings  Object - attributes include:
@@ -1136,7 +1136,7 @@ $.extend(Datepicker.prototype, {
 			}
 		return output;
 	},
-
+	
 	/* Extract all possible characters from the date format. */
 	_possibleChars: function (format) {
 		var chars = '';
@@ -1165,13 +1165,13 @@ $.extend(Datepicker.prototype, {
 				}
 		return chars;
 	},
-
+	
 	/* Get a setting value, defaulting if necessary. */
 	_get: function(inst, name) {
 		return inst.settings[name] !== undefined ?
 			inst.settings[name] : this._defaults[name];
 	},
-
+	
 	/* Parse existing date and initialise date picker. */
 	_setDateFromField: function(inst) {
 		var dateFormat = this._get(inst, 'dateFormat');
@@ -1211,7 +1211,7 @@ $.extend(Datepicker.prototype, {
 		date = (maxDate && date > maxDate ? maxDate : date);
 		return date;
 	},
-
+	
 	/* A date may be specified as an exact value or a relative one. */
 	_determineDate: function(date, defaultDate) {
 		var offsetNumeric = function(offset) {
@@ -1250,7 +1250,7 @@ $.extend(Datepicker.prototype, {
 			(typeof date == 'number' ? (isNaN(date) ? defaultDate : offsetNumeric(date)) : date)));
 		return (date && date.toString() == 'Invalid Date' ? defaultDate : date);
 	},
-
+	
 	/* Set the date(s) directly. */
 	_setDate: function(inst, date, endDate) {
 		var clear = !(date);
@@ -1280,7 +1280,7 @@ $.extend(Datepicker.prototype, {
 				(!this._get(inst, 'rangeSelect') ? '' : this._get(inst, 'rangeSeparator') +
 				this._formatDate(inst, inst.endDay, inst.endMonth, inst.endYear)));
 	},
-
+	
 	/* Retrieve the date(s) directly. */
 	_getDate: function(inst) {
 		var startDate = (!inst.currentYear || (inst.input && inst.input.val() == '') ? null :
@@ -1292,7 +1292,7 @@ $.extend(Datepicker.prototype, {
 		} else
 			return startDate;
 	},
-
+	
 	/* Generate the HTML for the current state of the date picker. */
 	_generateHTML: function(inst) {
 		var today = new Date();
@@ -1544,7 +1544,7 @@ $.extend(Datepicker.prototype, {
 		html += '</div>'; // Close datepicker_header
 		return html;
 	},
-
+	
 	/* Provide code to set and clear the status panel. */
 	_addStatus: function(showStatus, id, text, initStatus) {
 		return (showStatus ? ' onmouseover="jQuery(\'#ui-datepicker-status-' + id +
@@ -1552,7 +1552,7 @@ $.extend(Datepicker.prototype, {
 			'onmouseout="jQuery(\'#ui-datepicker-status-' + id +
 			'\').html(\'' + initStatus + '\');"' : '');
 	},
-
+	
 	/* Adjust one of the date sub-fields. */
 	_adjustInstDate: function(inst, offset, period) {
 		var year = inst.drawYear + (period == 'Y' ? offset : 0);
@@ -1571,7 +1571,7 @@ $.extend(Datepicker.prototype, {
 		if (period == 'M' || period == 'Y')
 			this._notifyChange(inst);
 	},
-
+	
 	/* Notify change of month/year. */
 	_notifyChange: function(inst) {
 		var onChange = this._get(inst, 'onChangeMonthYear');
@@ -1585,7 +1585,7 @@ $.extend(Datepicker.prototype, {
 		var numMonths = this._get(inst, 'numberOfMonths');
 		return (numMonths == null ? [1, 1] : (typeof numMonths == 'number' ? [1, numMonths] : numMonths));
 	},
-
+	
 	/* Determine the current maximum date - ensure no time components are set - may be overridden for a range. */
 	_getMinMaxDate: function(inst, minMax, checkRange) {
 		var date = this._determineDate(this._get(inst, minMax + 'Date'), null);
@@ -1598,17 +1598,17 @@ $.extend(Datepicker.prototype, {
 		return (!checkRange || !inst.rangeStart ? date :
 			(!date || inst.rangeStart > date ? inst.rangeStart : date));
 	},
-
+	
 	/* Find the number of days in a given month. */
 	_getDaysInMonth: function(year, month) {
 		return 32 - new Date(year, month, 32).getDate();
 	},
-
+	
 	/* Find the day of the week of the first of a month. */
 	_getFirstDayOfMonth: function(year, month) {
 		return new Date(year, month, 1).getDay();
 	},
-
+	
 	/* Determines if we should allow a "next/prev" month display change. */
 	_canAdjustMonth: function(inst, offset, curYear, curMonth) {
 		var numMonths = this._getNumberOfMonths(inst);
@@ -1617,7 +1617,7 @@ $.extend(Datepicker.prototype, {
 			date.setDate(this._getDaysInMonth(date.getFullYear(), date.getMonth()));
 		return this._isInRange(inst, date);
 	},
-
+	
 	/* Is the given date in the accepted range? */
 	_isInRange: function(inst, date) {
 		// during range selection, use minimum of selected date and range start
@@ -1638,7 +1638,7 @@ $.extend(Datepicker.prototype, {
 			dayNamesShort: this._get(inst, 'dayNamesShort'), dayNames: this._get(inst, 'dayNames'),
 			monthNamesShort: this._get(inst, 'monthNamesShort'), monthNames: this._get(inst, 'monthNames')};
 	},
-
+	
 	/* Format the given date for display. */
 	_formatDate: function(inst, day, month, year) {
 		if (!day) {

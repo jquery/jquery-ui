@@ -13,13 +13,13 @@
 (function($) {
 
 $.widget("ui.colorpicker", {
-
+	
 	_init: function() {
-
+		
 		this.charMin = 65;
 		var o = this.options, self = this,
 		tpl = '<div class="ui-colorpicker clearfix"><div class="ui-colorpicker-color"><div><div></div></div></div><div class="ui-colorpicker-hue"><div></div></div><div class="ui-colorpicker-new-color"></div><div class="ui-colorpicker-current-color"></div><div class="ui-colorpicker-hex"><label for="ui-colorpicker-hex" title="hex"></label><input type="text" maxlength="6" size="6" /></div><div class="ui-colorpicker-rgb-r ui-colorpicker-field"><label for="ui-colorpicker-rgb-r"></label><input type="text" maxlength="3" size="2" /><span></span></div><div class="ui-colorpicker-rgb-g ui-colorpicker-field"><label for="ui-colorpicker-rgb-g"></label><input type="text" maxlength="3" size="2" /><span></span></div><div class="ui-colorpicker-rgb-b ui-colorpicker-field"><label for="ui-colorpicker-rgb-b"</label><input type="text" maxlength="3" size="2" /><span></span></div><div class="ui-colorpicker-hsb-h ui-colorpicker-field"><label for="ui-colorpicker-hsb-h"></label><input type="text" maxlength="3" size="2" /><span></span></div><div class="ui-colorpicker-hsb-s ui-colorpicker-field"><label for="ui-colorpicker-hsb-s"></label><input type="text" maxlength="3" size="2" /><span></span></div><div class="ui-colorpicker-hsb-b ui-colorpicker-field"><label for="ui-colorpicker-hsb-b"></label><input type="text" maxlength="3" size="2" /><span></span></div><button class="ui-colorpicker-submit ui-default-state" name="submit" type="button">Done</button></div>';
-
+		
 		if (typeof o.color == 'string') {
 			this.color = this._HexToHSB(o.color);
 		} else if (o.color.r != undefined && o.color.g != undefined && o.color.b != undefined) {
@@ -29,37 +29,37 @@ $.widget("ui.colorpicker", {
 		} else {
 			return this;
 		}
-
+		
 		this.origColor = this.color;
 		this.picker = $(tpl);
-
+		
 		if (o.flat) {
 			this.picker.appendTo(this.element).show();
 		} else {
 			this.picker.appendTo(document.body);
 		}
-
+		
 		this.fields = this.picker.find('input')
 						.bind('keydown', function(e) { return self._keyDown.call(self, e); })
 						.bind('change', function(e) { return self._change.call(self, e); })
 						.bind('blur', function(e) { return self._blur.call(self, e); })
 						.bind('focus', function(e) { return self._focus.call(self, e); });
-
+		
 		this.picker.find('span').bind('mousedown', function(e) { return self._downIncrement.call(self, e); });
-
+		
 		this.selector = this.picker.find('div.ui-colorpicker-color').bind('mousedown', function(e) { return self._downSelector.call(self, e); });
 		this.selectorIndic = this.selector.find('div div');
 		this.hue = this.picker.find('div.ui-colorpicker-hue div');
 		this.picker.find('div.ui-colorpicker-hue').bind('mousedown', function(e) { return self._downHue.call(self, e); });
-
+		
 		this.newColor = this.picker.find('div.ui-colorpicker-new-color');
 		this.currentColor = this.picker.find('div.ui-colorpicker-current-color');
-
+		
 		this.picker.find('.ui-colorpicker-submit')
 			.bind('mouseenter', function(e) { return self._enterSubmit.call(self, e); })
 			.bind('mouseleave', function(e) { return self._leaveSubmit.call(self, e); })
 			.bind('click', function(e) { return self._clickSubmit.call(self, e); });
-
+		
 		this._fillRGBFields(this.color);
 		this._fillHSBFields(this.color);
 		this._fillHexFields(this.color);
@@ -67,7 +67,7 @@ $.widget("ui.colorpicker", {
 		this._setSelector(this.color);
 		this._setCurrentColor(this.color);
 		this._setNewColor(this.color);
-
+		
 		if (o.flat) {
 			this.picker.css({
 				position: 'relative',
@@ -76,16 +76,16 @@ $.widget("ui.colorpicker", {
 		} else {
 			$(this.element).bind(o.eventName+".colorpicker", function(e) { return self._show.call(self, e); });
 		}
-
+		
 	},
-
+	
 	destroy: function() {
-
+		
 		this.picker.remove();
 		this.element.removeData("colorpicker").unbind(".colorpicker");
-
+		
 	},
-
+	
 	_fillRGBFields: function(hsb) {
 		var rgb = this._HSBToRGB(hsb);
 		this.fields
@@ -126,7 +126,7 @@ $.widget("ui.colorpicker", {
 		}
 	},
 	_change: function(e, target) {
-
+		
 		var col;
 		target = target || e.target;
 		if (target.parentNode.className.indexOf('-hex') > 0) {
@@ -153,11 +153,11 @@ $.widget("ui.colorpicker", {
 		this._setSelector(col);
 		this._setHue(col);
 		this._setNewColor(col);
-
+		
 		this._trigger('change', e, { options: this.options, hsb: col, hex: this._HSBToHex(col), rgb: this._HSBToRGB(col) });
 	},
 	_blur: function(e) {
-
+		
 		var col = this.color;
 		this._fillRGBFields(col);
 		this._fillHSBFields(col);
@@ -166,17 +166,17 @@ $.widget("ui.colorpicker", {
 		this._setSelector(col);
 		this._setNewColor(col);
 		this.fields.parent().removeClass('ui-colorpicker-focus');
-
+		
 	},
 	_focus: function(e) {
-
+		
 		this.charMin = e.target.parentNode.className.indexOf('-hex') > 0 ? 70 : 65;
 		this.fields.parent().removeClass('ui-colorpicker-focus');
 		$(e.target.parentNode).addClass('ui-colorpicker-focus');
-
+		
 	},
 	_downIncrement: function(e) {
-
+		
 		var field = $(e.target).parent().find('input').focus(), self = this;
 		this.currentIncrement = {
 			el: $(e.target).parent().addClass('ui-colorpicker-slider'),
@@ -188,7 +188,7 @@ $.widget("ui.colorpicker", {
 		$(document).bind('mouseup.cpSlider', function(e) { return self._upIncrement.call(self, e); });
 		$(document).bind('mousemove.cpSlider', function(e) { return self._moveIncrement.call(self, e); });
 		return false;
-
+		
 	},
 	_moveIncrement: function(e) {
 		this.currentIncrement.field.val(Math.max(0, Math.min(this.currentIncrement.max, parseInt(this.currentIncrement.val + e.pageY - this.currentIncrement.y, 10))));
@@ -203,25 +203,25 @@ $.widget("ui.colorpicker", {
 		return false;
 	},
 	_downHue: function(e) {
-
+		
 		this.currentHue = {
 			y: this.picker.find('div.ui-colorpicker-hue').offset().top
 		};
-
+		
 		this._change.apply(this, [e, this
 				.fields
 				.eq(4)
 				.val(parseInt(360*(150 - Math.max(0,Math.min(150,(e.pageY - this.currentHue.y))))/150, 10))
 				.get(0)]);
-
+		
 		var self = this;
 		$(document).bind('mouseup.cpSlider', function(e) { return self._upHue.call(self, e); });
 		$(document).bind('mousemove.cpSlider', function(e) { return self._moveHue.call(self, e); });
 		return false;
-
+		
 	},
 	_moveHue: function(e) {
-
+		
 		this._change.apply(this, [e, this
 				.fields
 				.eq(4)
@@ -229,7 +229,7 @@ $.widget("ui.colorpicker", {
 				.get(0)]);
 
 		return false;
-
+		
 	},
 	_upHue: function(e) {
 		$(document).unbind('mouseup.cpSlider');
@@ -237,12 +237,12 @@ $.widget("ui.colorpicker", {
 		return false;
 	},
 	_downSelector: function(e) {
-
+		
 		var self = this;
 		this.currentSelector = {
 			pos: this.picker.find('div.ui-colorpicker-color').offset()
 		};
-
+		
 		this._change.apply(this, [e, this
 				.fields
 				.eq(6)
@@ -255,10 +255,10 @@ $.widget("ui.colorpicker", {
 		$(document).bind('mouseup.cpSlider', function(e) { return self._upSelector.call(self, e); });
 		$(document).bind('mousemove.cpSlider', function(e) { return self._moveSelector.call(self, e); });
 		return false;
-
+		
 	},
 	_moveSelector: function(e) {
-
+		
 		this._change.apply(this, [e, this
 				.fields
 				.eq(6)
@@ -269,7 +269,7 @@ $.widget("ui.colorpicker", {
 				.get(0)
 		]);
 		return false;
-
+		
 	},
 	_upSelector: function(e) {
 		$(document).unbind('mouseup.cpSlider');
@@ -283,19 +283,19 @@ $.widget("ui.colorpicker", {
 		this.picker.find('.ui-colorpicker-submit').removeClass('ui-colorpicker-focus');
 	},
 	_clickSubmit: function(e) {
-
+		
 		var col = this.color;
 		this.origColor = col;
 		this._setCurrentColor(col);
-
+		
 		this._trigger("submit", e, { options: this.options, hsb: col, hex: this._HSBToHex(col), rgb: this._HSBToRGB(col) });
 		return false;
-
+		
 	},
 	_show: function(e) {
-
+		
 		this._trigger("beforeShow", e, { options: this.options, hsb: this.color, hex: this._HSBToHex(this.color), rgb: this._HSBToRGB(this.color) });
-
+		
 		var pos = this.element.offset();
 		var viewPort = this._getScroll();
 		var top = pos.top + this.element[0].offsetHeight;
@@ -310,21 +310,21 @@ $.widget("ui.colorpicker", {
 		if (this._trigger("show", e, { options: this.options, hsb: this.color, hex: this._HSBToHex(this.color), rgb: this._HSBToRGB(this.color) }) != false) {
 			this.picker.show();
 		}
-
+		
 		var self = this;
 		$(document).bind('mousedown.colorpicker', function(e) { return self._hide.call(self, e); });
 		return false;
-
+		
 	},
 	_hide: function(e) {
-
+		
 		if (!this._isChildOf(this.picker[0], e.target, this.picker[0])) {
 			if (this._trigger("hide", e, { options: this.options, hsb: this.color, hex: this._HSBToHex(this.color), rgb: this._HSBToRGB(this.color) }) != false) {
 				this.picker.hide();
 			}
 			$(document).unbind('mousedown.colorpicker');
 		}
-
+		
 	},
 	_isChildOf: function(parentEl, el, container) {
 		if (parentEl == el) {
@@ -446,7 +446,7 @@ $.widget("ui.colorpicker", {
 		} else {
 			return this;
 		}
-
+		
 		this.color = col;
 		this.origColor = col;
 		this._fillRGBFields(col);
@@ -456,9 +456,9 @@ $.widget("ui.colorpicker", {
 		this._setSelector(col);
 		this._setCurrentColor(col);
 		this._setNewColor(col);
-
+		
 	}
-
+	
 });
 
 $.extend($.ui.colorpicker, {

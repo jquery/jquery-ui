@@ -60,7 +60,7 @@ $.widget("ui.accordion", {
 				maxHeight = Math.max(maxHeight, $(this).outerHeight());
 			}).height(maxHeight);
 		}
-	
+		
 		options.headers
 			.not(options.active || "")
 			.next()
@@ -214,7 +214,7 @@ function clickHandler(event) {
 	
 	options.active = clickedActive ? $([]) : clicked;
 	toggle.call(this, toShow, toHide, data, clickedActive, down );
-
+	
 	return false;
 };
 

@@ -118,7 +118,6 @@ $.widget('ui.spinner', {
 				})
 			.end();
 		
-		
 		// DataList: Set contraints for object length and step size. 
 		// Manipulate height of spinner.
 		this._items = this.element.children().length;
@@ -156,7 +155,6 @@ $.widget('ui.spinner', {
 			});
 		}
 	},
-	
 	
 	_constrain: function() {
 		if(this.options.min != undefined && this._getValue() < this.options.min) this._setValue(this.options.min);
@@ -245,7 +243,6 @@ $.widget('ui.spinner', {
 			this.element.append('<'+ wrapper +' class="ui-spinner-dyn">'+ html + '</'+ wrapper +'>');
 		}
 	},
-	
 	
 	plugins: {},
 	ui: function(e) {

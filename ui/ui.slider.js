@@ -64,7 +64,7 @@ $.widget("ui.slider", {
 		}
 		
 	},
-
+	
 	_init: function() {
 		
 		var self = this;
@@ -81,7 +81,6 @@ $.widget("ui.slider", {
 				return handle[0];
 			});
 		}
-		
 		
 		var handleclass = function(el) {
 			this.element = $(el);
@@ -103,7 +102,6 @@ $.widget("ui.slider", {
 			_mouseCapture: function() { return true; },
 			trigger: function(e) { this._mouseDown(e); }
 		});
-		
 		
 		$(this.handle)
 			.each(function() {
@@ -130,7 +128,7 @@ $.widget("ui.slider", {
 		});
 		if (!isNaN(this.options.startValue))
 			this.moveTo(this.options.startValue, 0, true);
-
+		
 		this.previousHandle = $(this.handle[0]); //set the previous handle to the first to allow clicking before selecting the handle
 		if(this.handle.length == 2 && this.options.range) this._createRange();
 	},
@@ -155,7 +153,6 @@ $.widget("ui.slider", {
 			y: o.stepping && o.stepping.y || parseInt(o.stepping, 10) || (o.steps ? o.realMax.y/(o.steps.y || parseInt(o.steps, 10) || o.realMax.y) : 0)
 		};
 	},
-
 	
 	_keydown: function(keyCode, handle) {
 		var k = keyCode;
@@ -202,22 +199,20 @@ $.widget("ui.slider", {
 		});
 		if (clickedHandle || this.options.disabled || !(this.currentHandle || this.previousHandle))
 			return;
-
+		
 		// If a previous handle was focussed, focus it again
 		if (!this.currentHandle && this.previousHandle)
 			this._focus(this.previousHandle, true);
 		
 		// propagate only for distance > 0, otherwise propagation is done my drag
 		this.offset = this.element.offset();
-
+		
 		this.moveTo({
 			y: this._convertValue(e.pageY - this.offset.top - this.currentHandle[0].offsetHeight/2, "y"),
 			x: this._convertValue(e.pageX - this.offset.left - this.currentHandle[0].offsetWidth/2, "x")
 		}, null, !this.options.distance);
 	},
 	
-
-
 	_createRange: function() {
 		if(this.rangeElement) return;
 		this.rangeElement = $('<div></div>')
@@ -239,7 +234,7 @@ $.widget("ui.slider", {
 	_getRange: function() {
 		return this.rangeElement ? this._convertValue(parseInt(this.rangeElement.css(this.options.axis == "vertical" ? "height" : "width"),10), this.options.axis == "vertical" ? "y" : "x") : null;
 	},
-
+	
 	_handleIndex: function() {
 		return this.handle.index(this.currentHandle[0]);
 	},
@@ -297,19 +292,18 @@ $.widget("ui.slider", {
 		return /* this.options.paging[axis] ||*/ 10;
 	},
 
-
 	_start: function(e, handle) {
-	
+		
 		var o = this.options;
 		if(o.disabled) return false;
-
+		
 		// Prepare the outer size
 		this.actualSize = { width: this.element.outerWidth() , height: this.element.outerHeight() };
-	
+		
 		// This is a especially ugly fix for strange blur events happening on mousemove events
 		if (!this.currentHandle)
 			this._focus(this.previousHandle, true); 
-
+		
 		this.offset = this.element.offset();
 		
 		this.handleOffset = this.currentHandle.offset();
@@ -320,7 +314,7 @@ $.widget("ui.slider", {
 		this._propagate('start', e);
 		this._drag(e, handle);
 		return true;
-					
+		
 	},
 	_stop: function(e) {
 		this._propagate('stop', e);
@@ -331,11 +325,11 @@ $.widget("ui.slider", {
 		return false;
 	},
 	_drag: function(e, handle) {
-
+		
 		var o = this.options;
 		var position = { top: e.pageY - this.offset.top - this.clickOffset.top, left: e.pageX - this.offset.left - this.clickOffset.left};
 		if(!this.currentHandle) this._focus(this.previousHandle, true); //This is a especially ugly fix for strange blur events happening on mousemove events
-
+		
 		position.left = this._translateLimits(position.left, "x");
 		position.top = this._translateLimits(position.top, "y");
 		
@@ -352,7 +346,7 @@ $.widget("ui.slider", {
 		
 		position.left = this._translateRange(position.left, "x");
 		position.top = this._translateRange(position.top, "y");
-
+		
 		if(o.axis != "vertical") this.currentHandle.css({ left: position.left });
 		if(o.axis != "horizontal") this.currentHandle.css({ top: position.top });
 		
@@ -369,12 +363,12 @@ $.widget("ui.slider", {
 	},
 	
 	moveTo: function(value, handle, noPropagation) {
-
+		
 		var o = this.options;
-
+		
 		// Prepare the outer size
 		this.actualSize = { width: this.element.outerWidth() , height: this.element.outerHeight() };
-
+		
 		//If no handle has been passed, no current handle is available and we have multiple handles, return false
 		if (handle == undefined && !this.currentHandle && this.handle.length != 1)
 			return false; 
@@ -385,14 +379,13 @@ $.widget("ui.slider", {
 		
 		if (handle != undefined)
 			this.currentHandle = this.previousHandle = $(this.handle[handle] || handle);
-
-
+		
 		if(value.x !== undefined && value.y !== undefined) {
 			var x = value.x, y = value.y;
 		} else {
 			var x = value, y = value;
 		}
-
+		
 		if(x !== undefined && x.constructor != Number) {
 			var me = /^\-\=/.test(x), pe = /^\+\=/.test(x);
 			if(me || pe) {
@@ -410,7 +403,7 @@ $.widget("ui.slider", {
 				y = isNaN(parseInt(y, 10)) ? undefined : parseInt(y, 10);
 			}
 		}
-
+		
 		if(o.axis != "vertical" && x !== undefined) {
 			if(o.stepping.x) x = Math.round(x / o.stepping.x) * o.stepping.x;
 			x = this._translateValue(x, "x");
@@ -419,7 +412,7 @@ $.widget("ui.slider", {
 
 			o.animate ? this.currentHandle.stop().animate({ left: x }, (Math.abs(parseInt(this.currentHandle.css("left")) - x)) * (!isNaN(parseInt(o.animate)) ? o.animate : 5)) : this.currentHandle.css({ left: x });
 		}
-
+		
 		if(o.axis != "horizontal" && y !== undefined) {
 			if(o.stepping.y) y = Math.round(y / o.stepping.y) * o.stepping.y;
 			y = this._translateValue(y, "y");
@@ -430,13 +423,13 @@ $.widget("ui.slider", {
 		
 		if (this.rangeElement)
 			this._updateRange();
-			
+		
 		//Store the slider's value
 		this.currentHandle.data("mouse").sliderValue = {
 			x: Math.round(this._convertValue(x, "x")) || 0,
 			y: Math.round(this._convertValue(y, "y")) || 0
 		};
-	
+		
 		if (!noPropagation) {
 			this._propagate('start', null);
 			this._propagate('stop', null);

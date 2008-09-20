@@ -43,13 +43,13 @@ $.widget("ui.tabs", {
 		};
 	},
 	_tabify: function(init) {
-
+		
 		this.$lis = $('li:has(a[href])', this.element);
 		this.$tabs = this.$lis.map(function() { return $('a', this)[0]; });
 		this.$panels = $([]);
-
+		
 		var self = this, o = this.options;
-
+		
 		this.$tabs.each(function(i, a) {
 			// inline tab
 			if (a.hash && a.hash.replace('#', '')) // Safari 2 reports '#' for an empty hash
@@ -72,17 +72,17 @@ $.widget("ui.tabs", {
 			else
 				o.disabled.push(i + 1);
 		});
-
+		
 		// initialization from scratch
 		if (init) {
-
+			
 			// attach necessary classes for styling if not present
 			this.element.addClass(o.navClass);
 			this.$panels.each(function() {
 				var $this = $(this);
 				$this.addClass(o.panelClass);
 			});
-
+			
 			// Selected tab
 			// use "selected" option or try to retrieve:
 			// 1. from fragment identifier in url
@@ -115,7 +115,7 @@ $.widget("ui.tabs", {
 					o.selected = self.$lis.index( self.$lis.filter('.' + o.selectedClass)[0] );
 			}
 			o.selected = o.selected === null || o.selected !== undefined ? o.selected : 0; // first tab selected by default
-
+			
 			// Take disabling tabs via class attribute from HTML
 			// into account and update option properly.
 			// A selected tab cannot become disabled.
@@ -138,7 +138,7 @@ $.widget("ui.tabs", {
 					self._trigger('show', null,
 						self.ui(self.$tabs[o.selected], self.$panels[o.selected]));
 				};
-
+				
 				// load if remote tab
 				if ($.data(this.$tabs[o.selected], 'load.tabs'))
 					this.load(o.selected, onShow);
@@ -152,12 +152,12 @@ $.widget("ui.tabs", {
 				self.$tabs.unbind('.tabs');
 				self.$lis = self.$tabs = self.$panels = null;
 			});
-
+			
 		}
 		// update selected after add/remove
 		else
 			o.selected = this.$lis.index( this.$lis.filter('.' + o.selectedClass)[0] );
-
+		
 		// set or update cookie after init and add/remove respectively
 		if (o.cookie)
 			$.cookie('ui-tabs-' + $.data(self.element[0]), o.selected, o.cookie);
@@ -165,7 +165,7 @@ $.widget("ui.tabs", {
 		// disable tabs
 		for (var i = 0, li; li = this.$lis[i]; i++)
 			$(li)[$.inArray(i, o.disabled) != -1 && !$(li).hasClass(o.selectedClass) ? 'addClass' : 'removeClass'](o.disabledClass);
-
+		
 		// reset cache if switching from cached to not cached
 		if (o.cache === false)
 			this.$tabs.removeData('cache.tabs');
@@ -176,12 +176,12 @@ $.widget("ui.tabs", {
 			hideFx = o.fx[0] || baseFx, showFx = o.fx[1] || baseFx;
 		else
 			hideFx = showFx = o.fx || baseFx;
-
+		
 		// reset some styles to maintain print style sheets etc.
 		var resetCSS = { display: '', overflow: '', height: '' };
 		if (!$.browser.msie) // not in IE to prevent ClearType font issue
 			resetCSS.opacity = '';
-
+		
 		// Hide a tab, animation prevents browser scrolling to fragment,
 		// $show is optional.
 		function hideTab(clicked, $hide, $show) {
@@ -193,7 +193,7 @@ $.widget("ui.tabs", {
 					showTab(clicked, $show, $hide);
 			});
 		}
-
+		
 		// Show a tab, animation prevents browser scrolling to fragment,
 		// $hide is optional.
 		function showTab(clicked, $show, $hide) {
@@ -203,12 +203,12 @@ $.widget("ui.tabs", {
 				$show.removeClass(o.hideClass).css(resetCSS); // maintain flexible height and accessibility in print etc.
 				if ($.browser.msie && showFx.opacity)
 					$show[0].style.filter = '';
-
+				
 				// callback
 				self._trigger('show', null, self.ui(clicked, $show[0]));
 			});
 		}
-
+		
 		// switch a tab
 		function switchTab(clicked, $li, $hide, $show) {
 			/*if (o.bookmarkable && trueClick) { // add to history only if true click occured, not a triggered click
@@ -218,15 +218,15 @@ $.widget("ui.tabs", {
 				.siblings().removeClass(o.selectedClass);
 			hideTab(clicked, $hide, $show);
 		}
-
+		
 		// attach tab event handler, unbind to avoid duplicates from former tabifying...
 		this.$tabs.unbind('.tabs').bind(o.event, function() {
-
+			
 			//var trueClick = e.clientX; // add to history only if true click occured, not a triggered click
 			var $li = $(this).parents('li:eq(0)'),
 				$hide = self.$panels.filter(':visible'),
 				$show = $(this.hash);
-
+			
 			// If tab is already selected and not unselectable or tab disabled or 
 			// or is already loading or click callback returns false stop here.
 			// Check if click handler returns false last so that it is not executed
@@ -239,9 +239,9 @@ $.widget("ui.tabs", {
 				this.blur();
 				return false;
 			}
-
+			
 			self.options.selected = self.$tabs.index(this);
-
+			
 			// if tab may be closed
 			if (o.unselect) {
 				if ($li.hasClass(o.selectedClass)) {
@@ -262,16 +262,16 @@ $.widget("ui.tabs", {
 					return false;
 				}
 			}
-
+			
 			if (o.cookie)
 				$.cookie('ui-tabs-' + $.data(self.element[0]), self.options.selected, o.cookie);
-
+			
 			// stop possibly running animations
 			self.$panels.stop();
-
+			
 			// show new tab
 			if ($show.length) {
-
+				
 				// prevent scrollbar scrolling to 0 and than back in IE7, happens only if bookmarking/history is enabled
 				/*if ($.browser.msie && o.bookmarkable) {
 					var showId = this.hash.replace('#', '');
@@ -280,7 +280,7 @@ $.widget("ui.tabs", {
 						$show.attr('id', showId); // restore id
 					}, 0);
 				}*/
-
+				
 				var a = this;
 				self.load(self.$tabs.index(this), $hide.length ? 
 					function() {
@@ -291,44 +291,44 @@ $.widget("ui.tabs", {
 						showTab(a, $show);
 					}
 				);
-
+				
 				// Set scrollbar to saved position - need to use timeout with 0 to prevent browser scroll to target of hash
 				/*var scrollX = window.pageXOffset || document.documentElement && document.documentElement.scrollLeft || document.body.scrollLeft || 0;
 				var scrollY = window.pageYOffset || document.documentElement && document.documentElement.scrollTop || document.body.scrollTop || 0;
 				setTimeout(function() {
 					scrollTo(scrollX, scrollY);
 				}, 0);*/
-
+				
 			} else
 				throw 'jQuery UI Tabs: Mismatching fragment identifier.';
-
+				
 			// Prevent IE from keeping other link focussed when using the back button
 			// and remove dotted border from clicked link. This is controlled in modern
 			// browsers via CSS, also blur removes focus from address bar in Firefox
 			// which can become a usability and annoying problem with tabsRotate.
 			if ($.browser.msie)
 				this.blur();
-
+			
 			//return o.bookmarkable && !!trueClick; // convert trueClick == undefined to Boolean required in IE
 			return false;
-
+			
 		});
-
+		
 		// disable click if event is configured to something else
 		if (!(/^click/).test(o.event))
 			this.$tabs.bind('click.tabs', function() { return false; });
-
+		
 	},
 	add: function(url, label, index) {
 		if (index == undefined) 
 			index = this.$tabs.length; // append by default
-
+		
 		var o = this.options;
 		var $li = $(o.tabTemplate.replace(/#\{href\}/g, url).replace(/#\{label\}/g, label));
 		$li.data('destroy.tabs', true);
-
+		
 		var id = url.indexOf('#') == 0 ? url.replace('#', '') : this._tabId( $('a:first-child', $li)[0] );
-
+		
 		// try to find an existing element before creating a new one
 		var $panel = $('#' + id);
 		if (!$panel.length) {
@@ -347,9 +347,9 @@ $.widget("ui.tabs", {
 		
 		o.disabled = $.map(o.disabled,
 			function(n, i) { return n >= index ? ++n : n });
-			
+		
 		this._tabify();
-
+		
 		if (this.$tabs.length == 1) {
 			$li.addClass(o.selectedClass);
 			$panel.removeClass(o.hideClass);
@@ -357,24 +357,24 @@ $.widget("ui.tabs", {
 			if (href)
 				this.load(index, href);
 		}
-
+		
 		// callback
 		this._trigger('add', null, this.ui(this.$tabs[index], this.$panels[index]));
 	},
 	remove: function(index) {
 		var o = this.options, $li = this.$lis.eq(index).remove(),
 			$panel = this.$panels.eq(index).remove();
-
+		
 		// If selected tab was removed focus tab to the right or
 		// in case the last tab was removed the tab to the left.
 		if ($li.hasClass(o.selectedClass) && this.$tabs.length > 1)
 			this.select(index + (index + 1 < this.$tabs.length ? 1 : -1));
-
+		
 		o.disabled = $.map($.grep(o.disabled, function(n, i) { return n != index; }),
 			function(n, i) { return n >= index ? --n : n });
-
+		
 		this._tabify();
-
+		
 		// callback
 		this._trigger('remove', null, this.ui($li.find('a')[0], $panel[0]));
 	},
@@ -382,7 +382,7 @@ $.widget("ui.tabs", {
 		var o = this.options;
 		if ($.inArray(index, o.disabled) == -1)
 			return;
-			
+		
 		var $li = this.$lis.eq(index).removeClass(o.disabledClass);
 		if ($.browser.safari) { // fix disappearing tab (that used opacity indicating disabling) after enabling in Safari 2...
 			$li.css('display', 'inline-block');
@@ -390,9 +390,9 @@ $.widget("ui.tabs", {
 				$li.css('display', 'block');
 			}, 0);
 		}
-
+		
 		o.disabled = $.grep(o.disabled, function(n, i) { return n != index; });
-
+		
 		// callback
 		this._trigger('enable', null, this.ui(this.$tabs[index], this.$panels[index]));
 	},
@@ -400,10 +400,10 @@ $.widget("ui.tabs", {
 		var self = this, o = this.options;
 		if (index != o.selected) { // cannot disable already selected tab
 			this.$lis.eq(index).addClass(o.disabledClass);
-
+			
 			o.disabled.push(index);
 			o.disabled.sort();
-
+			
 			// callback
 			this._trigger('disable', null, this.ui(this.$tabs[index], this.$panels[index]));
 		}
@@ -417,7 +417,7 @@ $.widget("ui.tabs", {
 		
 		var self = this, o = this.options, $a = this.$tabs.eq(index), a = $a[0],
 				bypassCache = callback == undefined || callback === false, url = $a.data('load.tabs');
-
+		
 		callback = callback || function() {};
 		
 		// no remote or from cache - just finish with callback
@@ -425,7 +425,7 @@ $.widget("ui.tabs", {
 			callback();
 			return;
 		}
-
+		
 		// load remote from here on
 		
 		var inner = function(parent) {
@@ -446,7 +446,7 @@ $.widget("ui.tabs", {
 			inner(a).wrapInner('<em></em>')
 				.find('em').data('label.tabs', label).html(o.spinner);
 		}
-
+		
 		var ajaxOptions = $.extend({}, o.ajaxOptions, {
 			url: url,
 			success: function(r, s) {
@@ -455,7 +455,7 @@ $.widget("ui.tabs", {
 				
 				if (o.cache)
 					$.data(a, 'cache.tabs', true); // if loaded once do not load them again
-
+				
 				// callbacks
 				self._trigger('load', null, self.ui(self.$tabs[index], self.$panels[index]));
 				o.ajaxOptions.success && o.ajaxOptions.success(r, s);
@@ -510,20 +510,20 @@ $.ui.tabs.defaults = {
 	disabled: [],
 	cookie: null, // e.g. { expires: 7, path: '/', domain: 'jquery.com', secure: true }
 	// TODO history: false,
-
+	
 	// Ajax
 	spinner: 'Loading&#8230;',
 	cache: false,
 	idPrefix: 'ui-tabs-',
 	ajaxOptions: {},
-
+	
 	// animations
 	fx: null, // e.g. { height: 'toggle', opacity: 'toggle', duration: 200 }
-
+	
 	// templates
 	tabTemplate: '<li><a href="#{href}"><span>#{label}</span></a></li>',
 	panelTemplate: '<div></div>',
-
+	
 	// CSS classes
 	navClass: 'ui-tabs-nav',
 	selectedClass: 'ui-tabs-selected',

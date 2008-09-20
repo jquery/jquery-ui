@@ -16,7 +16,7 @@
 $.widget("ui.droppable", {
 	
 	_setData: function(key, value) {
-
+		
 		if(key == 'accept') {
 			this.options.accept = value && $.isFunction(value) ? value : function(d) {
 				return d.is(accept);
@@ -24,18 +24,18 @@ $.widget("ui.droppable", {
 		} else {
 			$.widget.prototype._setData.apply(this, arguments);
 		}
-
+		
 	},
 	
 	_init: function() {
 		
 		var o = this.options, accept = o.accept;
 		this.isover = 0; this.isout = 1;
-
+		
 		this.options.accept = this.options.accept && $.isFunction(this.options.accept) ? this.options.accept : function(d) {
 			return d.is(accept);
 		};
-
+		
 		//Store the droppable's proportions
 		this.proportions = { width: this.element[0].offsetWidth, height: this.element[0].offsetHeight };
 		
@@ -191,7 +191,7 @@ $.ui.ddmanager = {
 		var m = $.ui.ddmanager.droppables[t.options.scope];
 		var type = e ? e.type : null; // workaround for #2317
 		var list = (t.currentItem || t.element).find(":data(droppable)").andSelf();	
-
+		
 		droppablesLoop: for (var i = 0; i < m.length; i++) {
 			
 			if(m[i].options.disabled || (t && !m[i].options.accept.call(m[i].element,(t.currentItem || t.element)))) continue;	//No disabled and non-accepted
@@ -230,7 +230,7 @@ $.ui.ddmanager = {
 		if(draggable.options.refreshPositions) $.ui.ddmanager.prepareOffsets(draggable, e);
 		
 		//Run through all droppables and check their positions based on specific tolerance options
-
+		
 		$.each($.ui.ddmanager.droppables[draggable.options.scope], function() {
 			
 			if(this.options.disabled || this.greedyChild || !this.visible) return;

@@ -14,9 +14,9 @@
 
 $.widget("ui.resizable", $.extend({}, $.ui.mouse, {
 	_init: function() {
-
+		
 		var self = this, o = this.options;
-
+		
 		var elpos = this.element.css('position');
 		
 		this.originalElement = this.element;
@@ -316,7 +316,7 @@ $.widget("ui.resizable", $.extend({}, $.ui.mouse, {
 		
 		if (o.preserveCursor)
 			$('body').css('cursor', this.axis + '-resize');
-			
+		
 		this._propagate("start", e);
 		return true;
 	},
@@ -555,16 +555,15 @@ $.ui.plugin.add("resizable", "containment", {
 			};
 		}
 		
-				
 		// i'm a node, so compute top, left, right, bottom
 		else{
 			self.containerOffset = $(ce).offset();
 			self.containerPosition = $(ce).position();
 			self.containerSize = { height: $(ce).innerHeight(), width: $(ce).innerWidth() };
-		
+			
 			var co = self.containerOffset, ch = self.containerSize.height,	cw = self.containerSize.width, 
 						width = ($.ui.hasScroll(ce, "left") ? ce.scrollWidth : cw ), height = ($.ui.hasScroll(ce) ? ce.scrollHeight : ch);
-		
+			
 			self.parentData = { 
 				element: ce, left: co.left, top: co.top, width: width, height: height
 			};
@@ -610,7 +609,6 @@ $.ui.plugin.add("resizable", "containment", {
 				co = self.containerOffset, cop = self.containerPosition, ce = self.containerElement;
 		
 		var helper = $(self.helper), ho = helper.offset(), w = helper.innerWidth(), h = helper.innerHeight();
-		
 		
 		if (o.helper && !o.animate && /relative/.test(ce.css('position')))
 			$(this).css({ left: (ho.left - co.left), top: (ho.top - co.top), width: w, height: h });

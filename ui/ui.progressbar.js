@@ -14,16 +14,16 @@
 
 $.widget("ui.progressbar", {
 	_init: function() {
-
+		
 		this._interval = this.options.interval;
-
+		
 		var self = this,
 			options = this.options,
 			id = (new Date()).getTime()+Math.random(),
 			text = options.text || '0%';
-
+		
 		this.element.addClass("ui-progressbar").width(options.width);
-
+		
 		$.extend(this, {
 			active: false,
 			pixelState: 0,
@@ -40,12 +40,12 @@ $.widget("ui.progressbar", {
 			}),
 			wrapper: $('<div class="ui-progressbar-wrap"></div>')
 		});
-
+		
 		this.wrapper
 			.append(this.bar.append(this.textElement.addClass(options.textClass)), this.textBg)
 			.appendTo(this.element);
 	},
-
+	
 	plugins: {},
 	ui: function(e) {
 		return {
@@ -58,40 +58,40 @@ $.widget("ui.progressbar", {
 			percentState: this.percentState
 		};
 	},
-
+	
 	_propagate: function(n,e) {
 		$.ui.plugin.call(this, n, [e, this.ui()]);
 		this.element.triggerHandler(n == "progressbar" ? n : ["progressbar", n].join(""), [e, this.ui()], this.options[n]);
 	},
-
+	
 	destroy: function() {
 		this.stop();
-
+		
 		this.element
 			.removeClass("ui-progressbar ui-progressbar-disabled")
 			.removeData("progressbar").unbind(".progressbar")
 			.find('.ui-progressbar-wrap').remove();
-
+		
 		delete jQuery.easing[this.identifier];
 	},
-
+	
 	enable: function() {
 		this.element.removeClass("ui-progressbar-disabled");
 		this.disabled = false;
 	},
-
+	
 	disable: function() {
 		this.element.addClass("ui-progressbar-disabled");
 		this.disabled = true;
 	},
-
+	
 	start: function() {
 		var self = this, options = this.options;
-
+		
 		if (this.disabled) {
 			return;
 		}
-
+		
 		jQuery.easing[this.identifier] = function (x, t, b, c, d) {
 			var inc = options.increment,
 				width = options.width,
@@ -99,27 +99,27 @@ $.widget("ui.progressbar", {
 				state = Math.round(x/step)*step;
 			return state > 1 ? 1 : state;
 		};
-
+		
 		self.active = true;
-
+		
 		setTimeout(
 			function() {
 				self.active = false;
 			},
 			options.duration
 		);
-
+		
 		this._animate();
-
+		
 		this._propagate('start', this.ui());
 		return false;
 	},
-
+	
 	_animate: function() {
 		var self = this,
 			options = this.options,
 			interval = options.interval;
-
+		
 		this.bar.animate(
 			{
 				width: options.width
@@ -143,13 +143,13 @@ $.widget("ui.progressbar", {
 			}
 		);
 	},
-
+	
 	pause: function() {
 		if (this.disabled) return;
 		this.bar.stop();
 		this._propagate('pause', this.ui());
 	},
-
+	
 	stop: function() {
 		this.bar.stop();
 		this.bar.width(0);
@@ -158,22 +158,22 @@ $.widget("ui.progressbar", {
 		this.options.interval = this._interval;
 		this._propagate('stop', this.ui());
 	},
-
+	
 	text: function(text){
 		this.textElement.html(text);
 		this.textBg.html(text);
 	},
-
+	
 	progress: function(percentState) {
 		if (this.bar.is('.ui-hidden')) {
 			this.bar.removeClass('ui-hidden');
 		}
-
+		
 		this.percentState = percentState > 100 ? 100 : percentState;
 		this.pixelState = (this.percentState/100)*this.options.width;
 		this.bar.width(this.pixelState);
 		this.textElement.width(this.pixelState);
-
+		
 		if (this.options.range && !this.options.text) {
 			this.textElement.html(Math.round(this.percentState) + '%');
 		}
