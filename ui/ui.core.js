@@ -13,7 +13,8 @@
 
 var _remove = $.fn.remove;
 $.fn.remove = function() {
-	// TODO: add comment about why we can't use .trigger()
+	// Safari has a native remove event which actually removes DOM elements,
+	// so we have to use triggerHandler instead of trigger (#3037).
 	$("*", this).add(this).each(function() {
 		$(this).triggerHandler("remove");
 	});
