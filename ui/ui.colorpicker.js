@@ -1,11 +1,11 @@
 /*
- * jQuery UI Color Picker @VERSION
+ * jQuery UI Colorpicker @VERSION
  *
  * Copyright (c) 2008 Stefan Petre, Paul Bakaus
  * Dual licensed under the MIT (MIT-LICENSE.txt)
  * and GPL (GPL-LICENSE.txt) licenses.
  *
- * http://docs.jquery.com/UI/ColorPicker
+ * http://docs.jquery.com/UI/Colorpicker
  *
  * Depends:
  *	ui.core.js

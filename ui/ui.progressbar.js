@@ -1,11 +1,11 @@
 /*
- * jQuery UI ProgressBar @VERSION
+ * jQuery UI Progressbar @VERSION
  *
  * Copyright (c) 2008 Eduardo Lundgren
  * Dual licensed under the MIT (MIT-LICENSE.txt)
  * and GPL (GPL-LICENSE.txt) licenses.
  *
- * http://docs.jquery.com/UI/ProgressBar
+ * http://docs.jquery.com/UI/Progressbar
  *
  * Depends:
  *   ui.core.js
