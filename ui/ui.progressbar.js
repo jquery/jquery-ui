@@ -45,18 +45,37 @@ $.widget("ui.progressbar", {
 			.append(this.bar.append(this.textElement.addClass(options.textClass)), this.textBg)
 			.appendTo(this.element);
 	},
-	
-	plugins: {},
-	ui: function(e) {
-		return {
-			instance: this,
-			identifier: this.identifier,
-			options: this.options,
-			element: this.bar,
-			textElement: this.textElement,
-			pixelState: this.pixelState,
-			percentState: this.percentState
-		};
+
+	_animate: function() {
+		var self = this,
+			options = this.options,
+			interval = options.interval;
+		
+		this.bar.animate(
+			{
+				width: options.width
+			},
+			{
+				duration: interval,
+				easing: options.equation || this.identifier,
+				step: function(step, b) {
+					var timestamp = new Date().getTime(), elapsedTime  = (timestamp - b.startTime);
+					self.progress( (step/options.width) * 100 );
+					options.interval = interval - elapsedTime;
+				},
+				complete: function() {
+					if (self.active) {
+						options.interval = self._interval;
+						self.bar.width(0);
+						self.textElement.width(0);
+						self._animate();
+					}
+					else {
+						delete jQuery.easing[self.identifier];
+					}
+				}
+			}
+		);
 	},
 	
 	_propagate: function(n,e) {
@@ -74,15 +93,37 @@ $.widget("ui.progressbar", {
 		
 		delete jQuery.easing[this.identifier];
 	},
+
+	disable: function() {
+		this.element.addClass("ui-progressbar-disabled");
+		this.disabled = true;
+	},
 	
 	enable: function() {
 		this.element.removeClass("ui-progressbar-disabled");
 		this.disabled = false;
 	},
 	
-	disable: function() {
-		this.element.addClass("ui-progressbar-disabled");
-		this.disabled = true;
+	pause: function() {
+		if (this.disabled) return;
+		this.bar.stop();
+		this._propagate('pause', this.ui());
+	},
+	
+	progress: function(percentState) {
+		if (this.bar.is('.ui-hidden')) {
+			this.bar.removeClass('ui-hidden');
+		}
+		
+		this.percentState = percentState > 100 ? 100 : percentState;
+		this.pixelState = (this.percentState/100) * this.options.width;
+		this.bar.width(this.pixelState);
+		this.textElement.width(this.pixelState);
+		
+		if (this.options.range && !this.options.text) {
+			this.textElement.html(Math.round(this.percentState) + '%');
+		}
+		this._propagate('progress', this.ui());
 	},
 	
 	start: function() {
@@ -119,44 +160,6 @@ $.widget("ui.progressbar", {
 		return false;
 	},
 	
-	_animate: function() {
-		var self = this,
-			options = this.options,
-			interval = options.interval;
-		
-		this.bar.animate(
-			{
-				width: options.width
-			},
-			{
-				duration: interval,
-				easing: options.equation || this.identifier,
-				step: function(step, b) {
-					var timestamp = new Date().getTime(), elapsedTime  = (timestamp - b.startTime);
-					self.progress( (step/options.width) * 100 );
-					options.interval = interval - elapsedTime;
-				},
-				complete: function() {
-					if (self.active) {
-						options.interval = self._interval;
-						self.bar.width(0);
-						self.textElement.width(0);
-						self._animate();
-					}
-					else {
-						delete jQuery.easing[self.identifier];
-					}
-				}
-			}
-		);
-	},
-	
-	pause: function() {
-		if (this.disabled) return;
-		this.bar.stop();
-		this._propagate('pause', this.ui());
-	},
-	
 	stop: function() {
 		this.bar.stop();
 		this.bar.width(0);
@@ -171,21 +174,19 @@ $.widget("ui.progressbar", {
 		this.textBg.html(text);
 	},
 	
-	progress: function(percentState) {
-		if (this.bar.is('.ui-hidden')) {
-			this.bar.removeClass('ui-hidden');
-		}
-		
-		this.percentState = percentState > 100 ? 100 : percentState;
-		this.pixelState = (this.percentState/100) * this.options.width;
-		this.bar.width(this.pixelState);
-		this.textElement.width(this.pixelState);
-		
-		if (this.options.range && !this.options.text) {
-			this.textElement.html(Math.round(this.percentState) + '%');
-		}
-		this._propagate('progress', this.ui());
-	}
+	ui: function(e) {
+		return {
+			instance: this,
+			identifier: this.identifier,
+			options: this.options,
+			element: this.bar,
+			textElement: this.textElement,
+			pixelState: this.pixelState,
+			percentState: this.percentState
+		};
+	},
+	
+	plugins: {}
 });
 
 $.ui.progressbar.defaults = {
