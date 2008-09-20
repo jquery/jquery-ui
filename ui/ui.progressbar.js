@@ -130,7 +130,7 @@ $.widget("ui.progressbar", {
 			},
 			{
 				duration: interval,
-				easing: this.identifier,
+				easing: options.equation || this.identifier,
 				step: function(step, b) {
 					self.progress((step/options.width)*100);
 					var timestamp = new Date().getTime(), elapsedTime  = (timestamp - b.startTime);

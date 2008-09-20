@@ -10,6 +10,7 @@
 <script type="text/javascript" src="../../ui/ui.resizable.js"></script>
 <script type="text/javascript" src="../../ui/ui.draggable.js"></script>
 <script type="text/javascript" src="../../ui/ui.progressbar.js"></script>
+<script type="text/javascript" src="../../ui/effects.core.js"></script>
 
 <style type="text/css" media="all">
 
@@ -169,11 +170,13 @@ $(function() {
 
 			//align: 'right',
 
+			equation: 'easeOutBounce',
+
 			width: 500,
 
-			duration: 1000,
+			duration: 3000,
 
-			interval: 1000,
+			interval: 800,
 
      	 	increment: 1,
 
@@ -212,6 +215,8 @@ $(function() {
 			width: 500,
 
 			duration: 5000,
+
+			equation: 'easeInOutQuint',
 
 			interval: 2000,
 
