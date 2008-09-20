@@ -10,7 +10,7 @@
  * Depends:
  *	effects.core.js
  */
-;(function($) {
+(function($) {
 
 $.effects.highlight = function(o) {
 
