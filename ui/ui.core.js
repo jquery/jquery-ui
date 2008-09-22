@@ -94,6 +94,32 @@ $.keyCode = {
 	UP: 38
 };
 
+// WAI-ARIA Semantics
+var isFF2 = $.browser.mozilla && (parseFloat($.browser.version) < 1.9);
+$.fn.extend({
+	ariaRole : function(role) {
+		// setter?
+		if (role) {
+			return this.each(function(i, el) {
+				$(el).attr("role", isFF2 ? "wairole:" + role : role);
+			});
+		}
+		// getter just returns first jquery member's role string
+		return (this.eq(0).attr("role") || "").replace(/^wairole:/, "");
+	},
+	
+	ariaState : function(state, value) {
+		// setter?
+		if (value !== undefined) 
+			return this.each(function(i, el) {
+				isFF2? el.setAttributeNS("http://www.w3.org/2005/07/aaa", "aaa:" + state, value) :
+					$(el).attr("aria-" + state, value);
+			});
+		// getter
+		return this.attr(isFF2? "aaa:"+state : "aria-" + state);
+	}
+});
+
 // $.widget is a factory to create jQuery plugins
 // taking some boilerplate code out of the plugin code
 // created by Scott González and Jörn Zaefferer
@@ -436,32 +462,5 @@ $.ui.mouse.defaults = {
 	distance: 1,
 	delay: 0
 };
-
-
-// WAI-ARIA Semantics
-var isFF2 = $.browser.mozilla && (parseFloat($.browser.version) < 1.9);
-$.fn.extend({
-	ariaRole : function(role) {
-		// setter?
-		if (role) {
-			return this.each(function(i, el) {
-				$(el).attr("role", isFF2 ? "wairole:" + role : role);
-			});
-		}
-		// getter just returns first jquery member's role string
-		return (this.eq(0).attr("role") || "").replace(/^wairole:/, "");
-	},
-	
-	ariaState : function(state, value) {
-		// setter?
-		if (value !== undefined) 
-			return this.each(function(i, el) {
-				isFF2? el.setAttributeNS("http://www.w3.org/2005/07/aaa", "aaa:" + state, value) :
-					$(el).attr("aria-" + state, value);
-			});
-		// getter
-		return this.attr(isFF2? "aaa:"+state : "aria-" + state);
-	}
-});
 
 })(jQuery);
