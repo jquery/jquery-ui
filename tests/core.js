@@ -53,4 +53,19 @@ test("tabbable - tabindex", function() {
 	ok(!$('#input4-4').is(':tabbable'), 'input, tabindex -50');
 });
 
+test("aria", function() {
+	expect(10);
+	
+	ok(!$('#aria').attr('role'), 'role is empty via attr');
+	ok(!$('#aria').ariaRole(), 'role is empty via ariaRole');
+	equals($('#aria').ariaRole('dialog').attr('role').replace(/^wairole:/, ""), 'dialog', 'role is dialog');
+	equals($('#aria').ariaRole(), 'dialog', 'role is dialog');
+	equals($('#aria').ariaRole('tablist').attr('role').replace(/^wairole:/, ""), 'tablist', 'role is tablist via attr');
+	equals($('#aria').ariaRole(), 'tablist', 'role is tablist via ariaRole');
+	ok(!$('#aria').attr('expanded'), 'state expanded absent via attr');
+	ok(!$('#aria').ariaState('expanded'), 'state expanded absent via ariaState');
+	equals($('#aria').ariaState('expanded', 'true').ariaState('expanded'), 'true', 'aria expanded is true');
+	equals($('#aria').ariaState('expanded', 'false').ariaState('expanded'), 'false', 'aria expanded is false');
+});
+
 })(jQuery);
