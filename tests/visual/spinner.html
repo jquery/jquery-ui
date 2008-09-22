@@ -36,7 +36,7 @@ $(function(){
 			// Two methods of adding external items to the spinner
 			//
 			// method 1: on initalisation call the add method directly and format html manually
-			init: function(ui) {
+			init: function(e, ui) {
 				for (var i=0; i<itemList.length; i++) {
 					ui.add('<a href="'+ itemList[i].url +'" target="_blank">'+ itemList[i].title +'</a>');
 				}

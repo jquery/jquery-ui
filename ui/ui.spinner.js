@@ -18,9 +18,7 @@ $.widget('ui.spinner', {
 		if($.data(this.element[0], 'spinner')) return;
 		
 		// check for Init callback
-		if (this.options.init) {
-			this.options.init(this.ui(null));
-		}
+		this._trigger('init', null, this.ui(null));
 		
 		// perform data bind on generic objects
 		if (typeof this.options.items[0] == 'object' && !this.element.is('input')) {
