@@ -64,8 +64,8 @@ test("aria", function() {
 	equals($('#aria').ariaRole(), 'tablist', 'role is tablist via ariaRole');
 	ok(!$('#aria').attr('expanded'), 'state expanded absent via attr');
 	ok(!$('#aria').ariaState('expanded'), 'state expanded absent via ariaState');
-	equals($('#aria').ariaState('expanded', 'true').ariaState('expanded'), 'true', 'aria expanded is true');
-	equals($('#aria').ariaState('expanded', 'false').ariaState('expanded'), 'false', 'aria expanded is false');
+	equals($('#aria').ariaState('expanded', true).ariaState('expanded'), 'true', 'aria expanded is true');
+	equals($('#aria').ariaState('expanded', false).ariaState('expanded'), 'false', 'aria expanded is false');
 });
 
 })(jQuery);

@@ -454,7 +454,7 @@ $.fn.extend({
 	
 	ariaState : function(state, value) {
 		// setter?
-		if (value) 
+		if (value !== undefined) 
 			return this.each(function(i, el) {
 				isFF2? el.setAttributeNS("http://www.w3.org/2005/07/aaa", "aaa:" + state, value) :
 					$(el).attr("aria-" + state, value);
