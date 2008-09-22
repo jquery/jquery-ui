@@ -238,6 +238,7 @@ $.widget.defaults = {
 /** jQuery UI core **/
 
 $.ui = {
+	// $.ui.plugin is deprecated.  Use the proxy pattern instead.
 	plugin: {
 		add: function(module, option, set) {
 			var proto = $.ui[module].prototype;
