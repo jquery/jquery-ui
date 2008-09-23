@@ -61,12 +61,15 @@ $.widget('ui.spinner', {
 				})
 				.bind('mouseout', function(e) {
 					$(this).removeClass('ui-spinner-pressed');
-					self._mouseup(e);
+					if (self.timer) {
+						self._mouseup(e);
+					}
 				})
 				// mousedown/mouseup capture first click, now handle second click
 				.bind('dblclick', function(e) {
 					$(this).removeClass('ui-spinner-pressed');
 					self._up(e);
+					self._mouseup(e);
 				})
 				.bind('keydown.spinner', function(e) {
 					var KEYS = $.keyCode;
@@ -106,12 +109,15 @@ $.widget('ui.spinner', {
 				})
 				.bind('mouseout', function(e) {
 					$(this).removeClass('ui-spinner-pressed');
-					self._mouseup(e);
+					if (self.timer) {
+						self._mouseup(e);
+					}
 				})
 				// mousedown/mouseup capture first click, now handle second click
 				.bind('dblclick', function(e) {
 					$(this).removeClass('ui-spinner-pressed');
 					self._down(e);
+					self._mouseup(e);
 				})
 				.bind('keydown.spinner', function(e) {
 					var KEYS = $.keyCode;
@@ -215,6 +221,7 @@ $.widget('ui.spinner', {
 		i = i || 100;
 		if (this.timer) {
 			window.clearInterval(this.timer);
+			this.timer = 0;
 		}
 		this.timer = window.setInterval(function() {
 			self[d](e);
@@ -227,6 +234,7 @@ $.widget('ui.spinner', {
 		this.counter = 0;
 		if (this.timer) {
 			window.clearInterval(this.timer);
+			this.timer = 0;
 		}
 		this.element[0].focus();
 		this._propagate('change', e);

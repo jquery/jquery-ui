@@ -10,6 +10,17 @@
 
 <script type="text/javascript">
 $(function(){
+
+	if(!window.console) {
+		$('#log').css({overflow:'auto',width:'300px',height:'100px',fontSize:'10px',border:'2px inset #ccc',backgroundColor:'#f4f4f4'});
+		window.console = {
+			log: function() {
+				$('#log').append(arguments[0]+"<br>");
+				$('#log').scrollTop(999999);
+			}
+		};
+	}
+	
 	var itemList = [
 		{url: "http://ejohn.org", title: "John Resig"},
 		{url: "http://bassistance.de/", title: "J&ouml;rn Zaefferer"},
@@ -45,6 +56,24 @@ $(function(){
 			// method 2: use the format and items options in combination
 			format: '%(title) <a href="%(url)" target="_blank">&raquo;</a>',
 			items: itemList
+		},
+		// callbacks
+		's6': {
+			init: function(e, ui) {
+				console.log('init: '+ ui.value);
+			},
+			up: function(e, ui) {
+				console.log('up: '+ ui.value);
+			},
+			down: function(e, ui) {
+				console.log('down: '+ ui.value);
+			},
+			spin: function(e, ui) {
+				console.log('spin: '+ ui.value);
+			},
+			change: function(e, ui) {
+				console.log('change: '+ ui.value);
+			}
 		}
 	};
 
@@ -58,6 +87,7 @@ $(function(){
 	});
 
 });
+
 </script>
 
 <style type="text/css">
@@ -178,6 +208,7 @@ label {
 
 <hr />
 
+
 <p><label for="s4">Data List: </label>
 <ul id="s4">
 	<li>item 1</li>
@@ -200,7 +231,7 @@ label {
 	<li>item 18</li>
 	<li>item 19</li>
 	<li>item 20</li>
-</ul>
+</ul></p>
 
 <p>
 <button id="s4-disable">disable</button>
@@ -211,8 +242,8 @@ label {
 
 <hr />
 
-<p><label for="s5">Presenters: </label>
-<div id="s5"></div>
+<div><label for="s5">Presenters: </label>
+<div id="s5"></div></div>
 
 <p>
 <button id="s5-disable">disable</button>
@@ -223,6 +254,19 @@ label {
 
 <hr />
 
+<p><label for="s6">Callbacks: </label>
+<input type="text" id="s6" /></p>
+
+<p>
+<button id="s6-disable">disable</button>
+<button id="s6-enable">enable</button>
+<button id="s6-destroy">destroy</button>
+<button id="s6-create">create</button>
+</p>
+
+<div id="log"></div>
+
+<hr />
 
 </body>
 </html>
