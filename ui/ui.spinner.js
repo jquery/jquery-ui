@@ -14,10 +14,6 @@
 
 $.widget('ui.spinner', {
 	_init: function() {
-		// terminate initialization if spinner already applied to current element
-		if($.data(this.element[0], 'spinner')) return;
-		
-		// check for Init callback
 		this._trigger('init', null, this.ui(null));
 		
 		// perform data bind on generic objects
@@ -29,7 +25,7 @@ $.widget('ui.spinner', {
 		}
 		
 		// check for decimals in steppinng and set _decimals as internal
-		this._decimals = parseInt(this.options.decimals);
+		this._decimals = parseInt(this.options.decimals, 10);
 		if (this.options.stepping.toString().indexOf('.') != -1) {
 			var s = this.options.stepping.toString();
 			this._decimals = s.slice(s.indexOf('.')+1, s.length).length;
@@ -51,12 +47,16 @@ $.widget('ui.spinner', {
 			.find('.ui-spinner-up')
 				.bind('mousedown', function(e) {
 					$(this).addClass('ui-spinner-pressed');
-					if(!self.counter) self.counter = 1;
+					if (!self.counter) {
+						self.counter = 1;
+					}
 					self._mousedown(100, '_up', e);
 				})
 				.bind('mouseup', function(e) {
 					$(this).removeClass('ui-spinner-pressed');
-					if(self.counter == 1) self._up(e);
+					if (self.counter == 1) {
+						self._up(e);
+					}
 					self._mouseup(e);
 				})
 				.bind('mouseout', function(e) {
@@ -72,7 +72,9 @@ $.widget('ui.spinner', {
 					var KEYS = $.keyCode;
 					if (e.keyCode == KEYS.SPACE || e.keyCode == KEYS.ENTER) {
 						$(this).addClass('ui-spinner-pressed');
-						if(!self.counter) self.counter = 1;
+						if (!self.counter) {
+							self.counter = 1;
+						}
 						self._up.call(self, e);
 					} else if (e.keyCode == KEYS.DOWN || e.keyCode == KEYS.RIGHT) {
 						self.element.siblings('.ui-spinner-down').focus();
@@ -90,12 +92,16 @@ $.widget('ui.spinner', {
 			.find('.ui-spinner-down')
 				.bind('mousedown', function(e) {
 					$(this).addClass('ui-spinner-pressed');
-					if(!self.counter) self.counter = 1;
+					if (!self.counter) {
+						self.counter = 1;
+					}
 					self._mousedown(100, '_down', e);
 				})
 				.bind('mouseup', function(e) {
 					$(this).removeClass('ui-spinner-pressed');
-					if(self.counter == 1) self._down();
+					if (self.counter == 1) {
+						self._down();
+					}
 					self._mouseup(e);
 				})
 				.bind('mouseout', function(e) {
@@ -111,7 +117,9 @@ $.widget('ui.spinner', {
 					var KEYS = $.keyCode;
 					if (e.keyCode == KEYS.SPACE || e.keyCode == KEYS.ENTER) {
 						$(this).addClass('ui-spinner-pressed');
-						if(!self.counter) self.counter = 1;
+						if (!self.counter) {
+							self.counter = 1;
+						}
 						self._down.call(self, e);
 					} else if (e.keyCode == KEYS.UP || e.keyCode == KEYS.LEFT) {
 						self.element.siblings('.ui-spinner-up').focus();
@@ -146,7 +154,9 @@ $.widget('ui.spinner', {
 		
 		this.element
 		.bind('keydown.spinner', function(e) {
-			if(!self.counter) self.counter = 1;
+			if (!self.counter) {
+				self.counter = 1;
+			}
 			return self._keydown.call(self, e);
 		})
 		.bind('keyup.spinner', function(e) {
@@ -165,21 +175,31 @@ $.widget('ui.spinner', {
 	},
 	
 	_constrain: function() {
-		if(this.options.min != undefined && this._getValue() < this.options.min) this._setValue(this.options.min);
-		if(this.options.max != undefined && this._getValue() > this.options.max) this._setValue(this.options.max);
+		if (this.options.min != undefined && this._getValue() < this.options.min) {
+			this._setValue(this.options.min);
+		}
+		if (this.options.max != undefined && this._getValue() > this.options.max) {
+			this._setValue(this.options.max);
+		}
 	},
 	_cleanUp: function() {
 		this._setValue(this._getValue());
 		this._constrain();
 	},
 	_spin: function(d, e) {
-		if (this.disabled) return;
+		if (this.disabled) {
+			return;
+		}
 		
-		if(isNaN(this._getValue())) this._setValue(this.options.start);
+		if (isNaN(this._getValue())) {
+			this._setValue(this.options.start);
+		}
 		this._setValue(this._getValue() + (d == 'up' ? 1:-1) * (this.options.incremental && this.counter > 100 ? (this.counter > 200 ? 100 : 10) : 1) * this.options.stepping);
 		this._animate(d);
 		this._constrain();
-		if(this.counter) this.counter++;
+		if (this.counter) {
+			this.counter++;
+		}
 		this._propagate('spin', e);
 	},
 	_down: function(e) {
@@ -193,25 +213,41 @@ $.widget('ui.spinner', {
 	_mousedown: function(i, d, e) {
 		var self = this;
 		i = i || 100;
-		if(this.timer) window.clearInterval(this.timer);
+		if (this.timer) {
+			window.clearInterval(this.timer);
+		}
 		this.timer = window.setInterval(function() {
 			self[d](e);
-			if(self.counter > 20) self._mousedown(20, d, e);
+			if (self.counter > 20) {
+				self._mousedown(20, d, e);
+			}
 		}, i);
 	},
 	_mouseup: function(e) {
 		this.counter = 0;
-		if(this.timer) window.clearInterval(this.timer);
+		if (this.timer) {
+			window.clearInterval(this.timer);
+		}
 		this.element[0].focus();
 		this._propagate('change', e);
 	},
 	_keydown: function(e) {
 		var KEYS = $.keyCode;
 		
-		if(e.keyCode == KEYS.UP) this._up(e);
-		if(e.keyCode == KEYS.DOWN) this._down(e);
-		if(e.keyCode == KEYS.HOME) this._setValue(this.options.min || this.options.start); //Home key goes to min, if defined, else to start
-		if(e.keyCode == KEYS.END && this.options.max != undefined) this._setValue(this.options.max); //End key goes to maximum
+		if (e.keyCode == KEYS.UP) {
+			this._up(e);
+		}
+		if (e.keyCode == KEYS.DOWN) {
+			this._down(e);
+		}
+		if (e.keyCode == KEYS.HOME) {
+			//Home key goes to min, if defined, else to start
+			this._setValue(this.options.min || this.options.start);
+		}
+		if (e.keyCode == KEYS.END && this.options.max != undefined) {
+			//End key goes to maximum
+			this._setValue(this.options.max);
+		}
 		return (e.keyCode == KEYS.TAB || e.keyCode == KEYS.BACKSPACE ||
 			e.keyCode == KEYS.LEFT || e.keyCode == KEYS.RIGHT || e.keyCode == KEYS.PERIOD || 
 			e.keyCode == KEYS.NUMPAD_DECIMAL || e.keyCode == KEYS.NUMPAD_SUBTRACT || 
@@ -220,14 +256,16 @@ $.widget('ui.spinner', {
 	},
 	_mousewheel: function(e, delta) {
 		delta = ($.browser.opera ? -delta / Math.abs(delta) : delta);
-		delta > 0 ? this._up(e) : this._down(e);
+		(delta > 0 ? this._up(e) : this._down(e));
 		e.preventDefault();
 	},
 	_getValue: function() {
 		return parseFloat(this.element.val().replace(/[^0-9\-\.]/g, ''));
 	},
 	_setValue: function(newVal) {
-		if(isNaN(newVal)) newVal = this.options.start;
+		if (isNaN(newVal)) {
+			newVal = this.options.start;
+		}
 		this.element.val(
 			this.options.currency ? 
 				$.ui.spinner.format.currency(newVal, this.options.currency) : 
@@ -251,7 +289,7 @@ $.widget('ui.spinner', {
 			var html = obj; // string or object set it to html first
 			
 			if (typeof obj == 'object') {
-				var format = (fmt != undefined) ? fmt : this.options.format;
+				var format = (fmt !== undefined ? fmt : this.options.format);
 				
 				html = format.replace(/%(\(([^)]+)\))?/g, 
 					(function(data){
@@ -263,7 +301,7 @@ $.widget('ui.spinner', {
 							} else {
 								return data[lbl];
 							}
-						}
+						};
 					})(obj)
 				);
 			}
@@ -285,7 +323,9 @@ $.widget('ui.spinner', {
 		return this.element.triggerHandler(n == 'spin' ? n : 'spin'+n, [e, this.ui()], this.options[n]);
 	},
 	destroy: function() {
-		if(!$.data(this.element[0], 'spinner')) return;
+		if (!$.data(this.element[0], 'spinner')) {
+			return;
+		}
 		if ($.fn.mousewheel) {
 			this.element.unmousewheel();
 		}
@@ -357,6 +397,5 @@ $.extend($.ui.spinner, {
 		}
 	}
 });
-
 
 })(jQuery);
