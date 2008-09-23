@@ -97,26 +97,29 @@ $.keyCode = {
 // WAI-ARIA Semantics
 var isFF2 = $.browser.mozilla && (parseFloat($.browser.version) < 1.9);
 $.fn.extend({
-	ariaRole : function(role) {
-		// setter?
-		if (role) {
-			return this.each(function(i, el) {
-				$(el).attr("role", isFF2 ? "wairole:" + role : role);
-			});
-		}
-		// getter just returns first jquery member's role string
-		return (this.eq(0).attr("role") || "").replace(/^wairole:/, "");
+	ariaRole: function(role) {
+		return (role !== undefined
+			
+			// setter
+			? this.attr("role", isFF2 ? "wairole:" + role : role)
+			
+			// getter
+			: (this.attr("role") || "").replace(/^wairole:/, ""));
 	},
 	
-	ariaState : function(state, value) {
-		// setter?
-		if (value !== undefined) 
-			return this.each(function(i, el) {
-				isFF2? el.setAttributeNS("http://www.w3.org/2005/07/aaa", "aaa:" + state, value) :
-					$(el).attr("aria-" + state, value);
-			});
-		// getter
-		return this.attr(isFF2? "aaa:"+state : "aria-" + state);
+	ariaState: function(state, value) {
+		return (value !== undefined
+			
+			// setter
+			? this.each(function(i, el) {
+				(isFF2
+					? el.setAttributeNS("http://www.w3.org/2005/07/aaa",
+						"aaa:" + state, value)
+					: $(el).attr("aria-" + state, value));
+			})
+			
+			// getter
+			: this.attr(isFF2 ? "aaa:" + state : "aria-" + state));
 	}
 });
 
