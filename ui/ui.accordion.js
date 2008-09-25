@@ -253,8 +253,9 @@ $.extend($.ui.accordion, {
 			}
 			var hideHeight = options.toHide.height(),
 				showHeight = options.toShow.height(),
-				difference = showHeight / hideHeight;
-			options.toShow.css({ height: 0, overflow: 'hidden' }).show();
+				difference = showHeight / hideHeight,
+				padding = options.toShow.outerHeight() - options.toShow.height();
+			options.toShow.css({ height: 0, overflow: 'hidden', marginBottom: -padding }).show();
 			options.toHide.filter(":hidden").each(options.complete).end().filter(":visible").animate({height:"hide"},{
 				step: function(now) {
 					var current = (hideHeight - now) * difference;
@@ -269,6 +270,7 @@ $.extend($.ui.accordion, {
 					if ( !options.autoHeight ) {
 						options.toShow.css("height", "auto");
 					}
+					options.toShow.css("marginBottom", 0);
 					options.complete();
 				}
 			});
