@@ -254,8 +254,10 @@ $.extend($.ui.accordion, {
 			var hideHeight = options.toHide.height(),
 				showHeight = options.toShow.height(),
 				difference = showHeight / hideHeight,
-				padding = options.toShow.outerHeight() - options.toShow.height();
-			options.toShow.css({ height: 0, overflow: 'hidden', marginBottom: -padding }).show();
+				padding = options.toShow.outerHeight() - options.toShow.height(),
+				margin = options.toShow.css('marginBottom'),
+				tmargin = options.toShow.css('marginTop');
+			options.toShow.css({ height: 0, overflow: 'hidden', marginTop: 0, marginBottom: -padding }).show();
 			options.toHide.filter(":hidden").each(options.complete).end().filter(":visible").animate({height:"hide"},{
 				step: function(now) {
 					var current = (hideHeight - now) * difference;
@@ -270,7 +272,7 @@ $.extend($.ui.accordion, {
 					if ( !options.autoHeight ) {
 						options.toShow.css("height", "auto");
 					}
-					options.toShow.css("marginBottom", 0);
+					options.toShow.css({marginTop: tmargin, marginBottom: margin});
 					options.complete();
 				}
 			});
