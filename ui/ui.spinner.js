@@ -263,8 +263,14 @@ $.widget('ui.spinner', {
 			(/[0-9\-\.]/).test(String.fromCharCode(e.keyCode))) ? true : false;
 	},
 	_mousewheel: function(e, delta) {
+		var self = this;
 		delta = ($.browser.opera ? -delta / Math.abs(delta) : delta);
-		(delta > 0 ? this._up(e) : this._down(e));
+		(delta > 0 ? self._up(e) : self._down(e));
+		if (self.timeout) {
+			window.clearTimeout(self.timeout);
+			self.timeout = 0;
+		}
+		self.timeout = window.setTimeout(function(){self._propagate('change', e)}, 500);
 		e.preventDefault();
 	},
 	_getValue: function() {

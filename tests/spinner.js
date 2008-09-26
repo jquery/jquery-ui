@@ -56,7 +56,7 @@ test("enable", function() {
 });
 
 test("defaults", function() {
-	expect(7);
+	expect(10);
 	el = $("#spin").spinner();
 
 	equals(el.data("currency.spinner"), false, "currency");
@@ -66,6 +66,9 @@ test("defaults", function() {
 	equals(el.data("min.spinner"), undefined, "min");
 	equals(el.data("start.spinner"), 0, "start");
 	equals(el.data("stepping.spinner"), 1, "stepping");
+	equals(el.data("decimals.spinner"), 0, "decimals");
+	equals(el.data("format.spinner"), '%', "format");
+	equals(el.data("items.spinner"), false, "items");
 
 });
 
@@ -260,7 +263,6 @@ test("mouse click on buttons", function() {
 	$(".ui-spinner-down").trigger("dblclick");
 
 	equals(el.val(), 0, "mouse double click to down");
-
 
 });
 
