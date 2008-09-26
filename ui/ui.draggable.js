@@ -572,6 +572,7 @@ $.ui.plugin.add("draggable", "connectToSortable", {
 				
 				this.instance.options.helper = this.instance.options._helper;
 			} else {
+				this.instance.cancelHelperRemoval = false; //Remove the helper in the sortable instance
 				this.instance._propagate("deactivate", e, inst);
 			}
 			
