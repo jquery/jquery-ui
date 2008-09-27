@@ -24,6 +24,9 @@
     margin: 0;
     padding: 0 0 0 3px;
 }
+.ui-dialog-content .ui-tabs-nav {
+	position: relative; /* fixes first tab being positioned top left in the title bar of a dialog */
+}
 .ui-tabs-nav:after { /* clearing without presentational markup, IE gets extra treatment */
     display: block;
     clear: both;
