@@ -138,14 +138,42 @@ test("element types", function() {
 });
 
 test("defaults", function() {
+
+	var expected = {
+		appendTo: "parent",
+		axis: false,
+		cancel: ":input",
+		connectToSortable: false,
+		containment: "??? - TODO",
+		cursor: "default",
+		cursorAt: null,
+		delay: 0,
+		disabled: false,
+		distance: 1,
+		grid: false,
+		handle: "??? - TODO",
+		helper: "original",
+		iframeFix: false,
+		opacity: 1.0,
+		revert: false,
+		revertDuration: 500,
+		scroll: true,
+		scrollSensitivity: 20,
+		scrollSpeed: 20,
+		scope: "default",
+		snap: false,
+		snapMode: "both",
+		snapTolerance: 20,
+		stack: "??? - TODO",
+		refreshPositions: false,
+		zIndex: null
+	};
+
 	el = $("#draggable1").draggable();
-	equals(el.data("appendTo.draggable"), "parent", "appendTo");
-	equals(el.data("axis.draggable"), false, "axis");
-	equals(el.data("cancel.draggable"), ":input", "cancel");
-	equals(el.data("delay.draggable"), 0, "delay");
-	equals(el.data("disabled.draggable"), false, "disabled");
-	equals(el.data("distance.draggable"), 1, "distance");
-	equals(el.data("helper.draggable"), "original", "helper");
+
+	for (var optionName in expected)
+		equals(el.data(optionName + ".draggable"), expected[optionName], optionName);
+	
 });
 
 test("No options, relative", function() {
