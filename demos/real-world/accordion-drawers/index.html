@@ -98,7 +98,9 @@ blockquote, q {
                 color:#76797C;
                 font-size:11px;
                 line-height:1.3em;
+                height: 1%; /* for IE6 & 7 */
             }
+
                 .drawer-handle {
                     background:#939393 url(images/slider_handlebg.png) no-repeat scroll 0pt;
                     color:#333333;
@@ -123,6 +125,13 @@ blockquote, q {
                     padding: 0 12px;
                     padding-bottom:0pt;
                 }
+
+                /* for IE6 - to override the colour set by .drawer-handle.open (IE6 cannot handle class concatinations) */
+                * html .drawer ul {
+                    background-color: #FFFFFF;
+                    margin: 0 1px;
+                }
+
                 .drawer li {
                     border-bottom:1px solid #E5E5E5;
                     line-height:16px;
@@ -178,10 +187,10 @@ blockquote, q {
         </p>
     </div>
     <div class="drawers-wrapper">
+        <div class="capt"></div>
         <ul class="drawers">
             <li class="drawer">
                 <h2 class="drawer-handle open">
-                    <div class="capt"></div>
                     <span>Downloads</span>
                 </h2>
                 <ul class="alldownloads">
