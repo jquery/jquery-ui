@@ -175,6 +175,7 @@ $.widget = function(name, prototype) {
 	};
 	
 	// create widget constructor
+	$[namespace] = $[namespace] || {};
 	$[namespace][name] = function(element, options) {
 		var self = this;
 		
