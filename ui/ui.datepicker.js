@@ -124,7 +124,8 @@ function Datepicker() {
 		rangeSelect: false, // Allows for selecting a date range on one date picker
 		rangeSeparator: ' - ', // Text between two dates in a range
 		altField: '', // Selector for an alternate field to store selected dates into
-		altFormat: '' // The date format to use for the alternate field
+		altFormat: '', // The date format to use for the alternate field
+		constrainInput: true // The input is constrained by the current date format
 	};
 	$.extend(this._defaults, this.regional['']);
 	this.dpDiv = $('<div id="' + this._mainDivId + '" style="display: none;"></div>');
@@ -520,9 +521,11 @@ $.extend(Datepicker.prototype, {
 	/* Filter entered characters - based on date format. */
 	_doKeyPress: function(e) {
 		var inst = $.datepicker._getInst(e.target);
-		var chars = $.datepicker._possibleChars($.datepicker._get(inst, 'dateFormat'));
-		var chr = String.fromCharCode(e.charCode == undefined ? e.keyCode : e.charCode);
-		return e.ctrlKey || (chr < ' ' || !chars || chars.indexOf(chr) > -1);
+		if ($.datepicker._get(inst, 'constrainInput')) {
+			var chars = $.datepicker._possibleChars($.datepicker._get(inst, 'dateFormat'));
+			var chr = String.fromCharCode(e.charCode == undefined ? e.keyCode : e.charCode);
+			return e.ctrlKey || (chr < ' ' || !chars || chars.indexOf(chr) > -1);
+		}
 	},
 	
 	/* Pop-up the date picker for a given input field.
