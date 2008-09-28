@@ -67,10 +67,6 @@ $.widget("ui.dialog", {
 				.hide()
 				.addClass('ui-dialog')
 				.addClass(options.dialogClass)
-				// add content classes to dialog
-				// to inherit theme at top level of element
-				.addClass(uiDialogContent.attr('className'))
-					.removeClass('ui-dialog-content')
 				.css({
 					position: 'absolute',
 					width: options.width,
