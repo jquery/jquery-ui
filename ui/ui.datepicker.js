@@ -405,7 +405,7 @@ $.extend(Datepicker.prototype, {
 	   @param  name    object - the new settings to update or
 	                   string - the name of the setting to change or
 	   @param  value   any - the new value for the setting (omit if above is an object) */
-	_changeDatepicker: function(target, name, value) {
+	_optionDatepicker: function(target, name, value) {
 		var settings = name || {};
 		if (typeof name == 'string') {
 			settings = {};
@@ -428,6 +428,9 @@ $.extend(Datepicker.prototype, {
 			this._updateDatepicker(inst);
 		}
 	},
+	
+	// change method deprecated
+	_changeDatepicker: this._optionDatepicker,
 	
 	/* Redraw the date picker attached to an input field or division.
 	   @param  target  element - the target input field or division or span */
