@@ -531,7 +531,8 @@ test("isOpen", function() {
 module("dialog: Callbacks");
 
 test("open", function() {
-	expect(4);
+	expect(6);
+	
 	el = $("<div/>");
 	el.dialog({
 		open: function(ev, ui) {
@@ -540,6 +541,7 @@ test("open", function() {
 		}
 	});
 	el.remove();
+	
 	el = $("<div/>");
 	el.dialog({
 		autoOpen: false,
@@ -550,13 +552,25 @@ test("open", function() {
 	});
 	el.dialog("open");
 	el.remove();
+	
+	el = $('<div/>').dialog({
+		autoOpen: false
+	});
+	el.bind('dialogopen', function(ev, ui) {
+		ok(true, 'dialog("open") fires open event');
+		equals(this, el[0], 'context of event');
+	});
+	el.dialog('open');
+	el.remove();
 });
 
 test("dragStart", function() {
-	expect(1);
+	expect(2);
+	
 	el = $("<div/>");
 	el.dialog({
 		dragStart: function(ev, ui) {
+			ok(true, 'dragging fires dragStart callback');
 			equals(this, el[0], "context of callback");
 		}
 	});
@@ -567,6 +581,7 @@ test("dragStart", function() {
 
 test("drag", function() {
 	var fired = false;
+	
 	el = $("<div/>");
 	el.dialog({
 		drag: function(ev, ui) {
@@ -576,15 +591,17 @@ test("drag", function() {
 	});
 	var handle = $(".ui-dialog-titlebar", dlg());
 	drag(handle, 50, 50);
-	ok(fired, "resize fired");
+	ok(fired, "drag fired");
 	el.remove();
 });
 
 test("dragStop", function() {
-	expect(1);
+	expect(2);
+	
 	el = $("<div/>");
 	el.dialog({
 		dragStop: function(ev, ui) {
+			ok(true, 'dragging fires dragStop callback');
 			equals(this, el[0], "context of callback");
 		}
 	});
@@ -594,10 +611,12 @@ test("dragStop", function() {
 });
 
 test("resizeStart", function() {
-	expect(1);
+	expect(2);
+	
 	el = $("<div/>");
 	el.dialog({
 		resizeStart: function(ev, ui) {
+			ok(true, 'resizing fires resizeStart callback');
 			equals(this, el[0], "context of callback");
 		}
 	});
@@ -608,6 +627,7 @@ test("resizeStart", function() {
 
 test("resize", function() {
 	var fired = false;
+	
 	el = $("<div/>");
 	el.dialog({
 		resize: function(ev, ui) {
@@ -622,10 +642,12 @@ test("resize", function() {
 });
 
 test("resizeStop", function() {
-	expect(1);
+	expect(2);
+	
 	el = $("<div/>");
 	el.dialog({
 		resizeStop: function(ev, ui) {
+			ok(true, 'resizing fires resizeStop callback');
 			equals(this, el[0], "context of callback");
 		}
 	});
@@ -635,7 +657,8 @@ test("resizeStop", function() {
 });
 
 test("close", function() {
-	expect(2);
+	expect(4);
+	
 	el = $('<div/>').dialog({
 		close: function(ev, ui) {
 			ok(true, '.dialog("close") fires close callback');
@@ -643,6 +666,13 @@ test("close", function() {
 		}
 	});
 	el.dialog("close");
+	el.remove();
+	
+	el = $('<div/>').dialog().bind('dialogclose', function(ev, ui) {
+		ok(true, '.dialog("close") firse dialogclose event');
+		equals(this, el[0], 'context of event');
+	});
+	el.dialog('close');
 	el.remove();
 });
 
