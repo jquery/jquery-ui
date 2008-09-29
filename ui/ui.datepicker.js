@@ -25,6 +25,7 @@ var PROP_NAME = 'datepicker';
 function Datepicker() {
 	this.debug = false; // Change this to true to start debugging
 	this._curInst = null; // The current instance in use
+	this._keyEvent = false; // If the last event was a key event
 	this._disabledInputs = []; // List of date picker inputs that have been disabled
 	this._datepickerShowing = false; // True if the popup picker is showing , false if not
 	this._inDialog = false; // True if showing within a "dialog", false if not
@@ -470,13 +471,17 @@ $.extend(Datepicker.prototype, {
 	_doKeyDown: function(e) {
 		var inst = $.datepicker._getInst(e.target);
 		var handled = true;
+		inst._keyEvent = true;
 		if ($.datepicker._datepickerShowing)
 			switch (e.keyCode) {
 				case 9:  $.datepicker._hideDatepicker(null, '');
 						break; // hide on tab out
-				case 13: if ($('td.ui-datepicker-days-cell-over', inst.dpDiv)[0])
+				case 13: if ($('td.ui-datepicker-days-cell-over, td.ui-datepicker-current-day', inst.dpDiv)[0]) {
 							$.datepicker._selectDay(e.target, inst.selectedMonth, inst.selectedYear,
-								$('td.ui-datepicker-days-cell-over', inst.dpDiv)[0]);
+								$('td.ui-datepicker-days-cell-over, td.ui-datepicker-current-day', inst.dpDiv)[0]);
+						} else {
+							$.datepicker._hideDatepicker(null, $.datepicker._get(inst, 'duration'));
+						}
 						return false; // don't submit the form
 						break; // select the value on enter
 				case 27: $.datepicker._hideDatepicker(null, $.datepicker._get(inst, 'duration'));
@@ -521,8 +526,9 @@ $.extend(Datepicker.prototype, {
 			}
 		else if (e.keyCode == 36 && e.ctrlKey) // display the date picker on ctrl+home
 			$.datepicker._showDatepicker(this);
-		else
+		else {
 			handled = false;
+		}
 		if (handled) {
 			e.preventDefault();
 			e.stopPropagation();
@@ -1454,11 +1460,13 @@ $.extend(Datepicker.prototype, {
 						html += '<td class="ui-datepicker-days-cell' +
 							((dow + firstDay + 6) % 7 >= 5 ? ' ui-datepicker-week-end-cell' : '') + // highlight weekends
 							(otherMonth ? ' ui-datepicker-other-month' : '') + // highlight days from other months
-							(printDate.getTime() == selectedDate.getTime() && drawMonth == inst.selectedMonth ?
+							((printDate.getTime() == selectedDate.getTime() && drawMonth == inst.selectedMonth && inst._keyEvent) // user pressed key
+							 || (this._getDefaultDate(inst).getTime() == printDate.getTime() && this._getDefaultDate(inst).getTime() == selectedDate.getTime()) ?
+							 // or defaultDate is current printedDate and defaultDate is selectedDate
 							' ui-datepicker-days-cell-over' : '') + // highlight selected day
 							(unselectable ? ' ' + this._unselectableClass : '') +  // highlight unselectable days
 							(otherMonth && !showOtherMonths ? '' : ' ' + daySettings[1] + // highlight custom dates
-							(printDate.getTime() >= currentDate.getTime() && printDate.getTime() <= endDate.getTime() ?  // in current range
+							(printDate.getTime() >= currentDate.getTime() && printDate.getTime() <= endDate.getTime() ? // in current range
 							' ' + this._currentClass : '') + // highlight selected day
 							(printDate.getTime() == today.getTime() ? ' ui-datepicker-today' : '')) + '"' + // highlight today (if different)
 							((!otherMonth || showOtherMonths) && daySettings[2] ? ' title="' + daySettings[2] + '"' : '') + // cell title
@@ -1495,6 +1503,7 @@ $.extend(Datepicker.prototype, {
 			'<div style="clear: both;"></div>' + 
 			($.browser.msie && parseInt($.browser.version,10) < 7 && !inst.inline ? 
 			'<iframe src="javascript:false;" class="ui-datepicker-cover"></iframe>' : '');
+		inst._keyEvent = false;
 		return html;
 	},
 	
