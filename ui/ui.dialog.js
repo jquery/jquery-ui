@@ -83,7 +83,7 @@ $.widget("ui.dialog", {
 				.ariaRole("dialog")
 				.ariaState("labelledby", titleId)
 				.mousedown(function() {
-					self._moveToTop();
+					self.moveToTop();
 				}),
 			
 			uiDialogButtonPane = (this.uiDialogButtonPane = $('<div/>'))
@@ -158,6 +158,25 @@ $.widget("ui.dialog", {
 		return this._isOpen;
 	},
 	
+	// the force parameter allows us to move modal dialogs to their correct
+	// position on open
+	moveToTop: function(force) {
+		
+		if ((this.options.modal && !force)
+			|| (!this.options.stack && !this.options.modal)) {
+			return this._trigger('focus', null, { options: this.options });
+		}
+		
+		var maxZ = this.options.zIndex, options = this.options;
+		$('.ui-dialog:visible').each(function() {
+			maxZ = Math.max(maxZ, parseInt($(this).css('z-index'), 10) || options.zIndex);
+		});
+		(this.overlay && this.overlay.$el.css('z-index', ++maxZ));
+		this.uiDialog.css('z-index', ++maxZ);
+		
+		this._trigger('focus', null, { options: this.options });
+	},
+	
 	open: function() {
 		if (this._isOpen) { return; }
 		
@@ -166,7 +185,7 @@ $.widget("ui.dialog", {
 		this._position(this.options.position);
 		this.uiDialog.show(this.options.show);
 		(this.options.autoResize && this._size());
-		this._moveToTop(true);
+		this.moveToTop(true);
 		
 		// prevent tabbing out of modal dialogs
 		(this.options.modal && this.uiDialog.bind('keypress.ui-dialog', function(e) {
@@ -223,7 +242,7 @@ $.widget("ui.dialog", {
 			helper: options.dragHelper,
 			handle: '.ui-dialog-titlebar',
 			start: function() {
-				self._moveToTop();
+				self.moveToTop();
 				(options.dragStart && options.dragStart.apply(self.element[0], arguments));
 			},
 			drag: function() {
@@ -265,25 +284,6 @@ $.widget("ui.dialog", {
 				$.ui.dialog.overlay.resize();
 			}
 		});
-	},
-	
-	// the force parameter allows us to move modal dialogs to their correct
-	// position on open
-	_moveToTop: function(force) {
-		
-		if ((this.options.modal && !force)
-			|| (!this.options.stack && !this.options.modal)) {
-			return this._trigger('focus', null, { options: this.options });
-		}
-		
-		var maxZ = this.options.zIndex, options = this.options;
-		$('.ui-dialog:visible').each(function() {
-			maxZ = Math.max(maxZ, parseInt($(this).css('z-index'), 10) || options.zIndex);
-		});
-		(this.overlay && this.overlay.$el.css('z-index', ++maxZ));
-		this.uiDialog.css('z-index', ++maxZ);
-		
-		this._trigger('focus', null, { options: this.options });
 	},
 	
 	_position: function(pos) {
