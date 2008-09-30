@@ -127,23 +127,55 @@ function toggle(toShow, toHide, data, clickedActive, down) {
 	options.running = toHide.size() === 0 ? toShow.size() : toHide.size();
 	
 	if ( options.animated ) {
+		var animOptions = {};
+		
 		if ( !options.alwaysOpen && clickedActive ) {
-			$.ui.accordion.animations[options.animated]({
+			animOptions = {
 				toShow: jQuery([]),
 				toHide: toHide,
 				complete: complete,
 				down: down,
 				autoHeight: options.autoHeight
-			});
+			};
 		} else {
-			$.ui.accordion.animations[options.animated]({
+			animOptions = {
 				toShow: toShow,
 				toHide: toHide,
 				complete: complete,
 				down: down,
 				autoHeight: options.autoHeight
-			});
+			};
 		}
+		
+		if (!options.proxied) {
+			options.proxied = options.animated;
+		}
+		
+		if (!options.proxiedDuration) {
+			options.proxiedDuration = options.duration;
+		}
+		
+		options.animated = $.isFunction(options.proxied) ?
+			options.proxied(animOptions) : options.proxied;
+		
+		options.duration = $.isFunction(options.proxiedDuration) ?
+			options.proxiedDuration(animOptions) : options.proxiedDuration;
+
+		var animations = $.ui.accordion.animations,
+			duration = options.duration,
+			easing = options.animated;
+		
+		if (!animations[easing]) {
+			animations[easing] = function(options) {
+				this.slide(options, {
+					easing: easing,
+					duration: duration || 700
+				});
+			};
+		}
+		
+		animations[easing](animOptions);
+		
 	} else {
 		if ( !options.alwaysOpen && clickedActive ) {
 			toShow.toggle();
@@ -279,7 +311,7 @@ $.extend($.ui.accordion, {
 		},
 		bounceslide: function(options) {
 			this.slide(options, {
-				easing: options.down ? "bounceout" : "swing",
+				easing: options.down ? "easeOutBounce" : "swing",
 				duration: options.down ? 1000 : 200
 			});
 		},

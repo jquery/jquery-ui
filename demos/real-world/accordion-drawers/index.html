@@ -162,6 +162,7 @@ blockquote, q {
 
 	<script type="text/javascript" src="../../../ui/ui.core.js"></script>
 	<script type="text/javascript" src="../../../ui/ui.accordion.js"></script>
+	<script type="text/javascript" src="../../../ui/effects.core.js"></script>
 
 
     <script type="text/javascript">
@@ -170,6 +171,16 @@ blockquote, q {
         $('ul.drawers').accordion({
             header: 'h2.drawer-handle',
             selectedClass: 'open',
+			//animated: 'easeOutBounce',
+			//animated: 'bounceslide',
+			//animated: 'easeslide',
+			animated: function(options) {
+				return options.down ? "easeOutBounce" : "easeInOutCubic";
+			},
+			//duration: 500,
+			duration: function(options) {
+				return options.down ? 700 : 400;
+			},
             event: 'mouseover'
         });
     });
