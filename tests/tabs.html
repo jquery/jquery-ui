@@ -11,13 +11,14 @@
 
 	<script type="text/javascript" src="qunit/testrunner.js"></script>
 	<script type="text/javascript" src="simulate/jquery.simulate.js"></script>
+	<script type="text/javascript" src="plugins/cookie/jquery.cookie.js"></script>
 
 	<script type="text/javascript" src="tabs.js"></script>
 
 	<style type="text/css">
-
-
-
+        .ui-tabs-hide {
+            display: none !important;
+        }
 	</style>
 
 
@@ -32,6 +33,7 @@
 <ol id="tests"></ol>
 
 	<div id="main" style="position:absolute;top:-20000px">
+		
 		<div id="tabs1">
 			<ul>
 				<li><a href="#fragment-1"><span>One</span></a></li>
@@ -51,6 +53,20 @@
 				Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
 			</div>
 		</div>
+		
+		<div id="tabs2">
+			<ul>
+				<li><a href="#colon:test"><span>One</span></a></li>
+				<li><a href="#inline-style"><span>Two</span></a></li>
+			</ul>
+			<div id="colon:test">
+				Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+			</div>
+			<div style="height: 300px;" id="inline-style">
+				Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+			</div>
+		</div>
+		
 	</div>
 
 </body>

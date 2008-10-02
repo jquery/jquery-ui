@@ -14,8 +14,6 @@
 
 $.widget("ui.tabs", {
 	_init: function() {
-		this.options.event += '.tabs'; // namespace event
-		
 		// create tabs
 		this._tabify(true);
 	},
@@ -42,6 +40,13 @@ $.widget("ui.tabs", {
 			index: this.$tabs.index(tab)
 		};
 	},
+	_sanitizeSelector: function(hash) {
+		return hash.replace(/:/g, '\\:'); // we need this because an id may contain a ":"
+	},
+	_cookie: function() {
+		var cookie = this.cookie || (this.cookie = 'ui-tabs-' + $.data(this.element[0]));
+		return $.cookie.apply(null, [cookie].concat($.makeArray(arguments)));
+	},
 	_tabify: function(init) {
 		
 		this.$lis = $('li:has(a[href])', this.element);
@@ -53,7 +58,7 @@ $.widget("ui.tabs", {
 		this.$tabs.each(function(i, a) {
 			// inline tab
 			if (a.hash && a.hash.replace('#', '')) // Safari 2 reports '#' for an empty hash
-				self.$panels = self.$panels.add(a.hash);
+				self.$panels = self.$panels.add(self._sanitizeSelector(a.hash));
 			// remote tab
 			else if ($(a).attr('href') != '#') { // prevent loading the page itself if href is just "#"
 				$.data(a, 'href.tabs', a.href); // required for restore on destroy
@@ -94,8 +99,8 @@ $.widget("ui.tabs", {
 						if (a.hash == location.hash) {
 							o.selected = i;
 							// prevent page scroll to fragment
-							if ($.browser.msie || $.browser.opera) { // && !o.remote
-								var $toShow = $(location.hash), toShowId = $toShow.attr('id');
+							if ($.browser.msie || $.browser.opera) {
+								var $toShow = $(this._sanitizeSelector(location.hash)), toShowId = $toShow.attr('id');
 								$toShow.attr('id', '');
 								setTimeout(function() {
 									$toShow.attr('id', toShowId); // restore id
@@ -107,7 +112,7 @@ $.widget("ui.tabs", {
 					});
 				}
 				else if (o.cookie) {
-					var index = parseInt($.cookie('ui-tabs-' + $.data(self.element[0])), 10);
+					var index = parseInt(self._cookie(), 10);
 					if (index && self.$tabs[index])
 						o.selected = index;
 				}
@@ -160,7 +165,7 @@ $.widget("ui.tabs", {
 		
 		// set or update cookie after init and add/remove respectively
 		if (o.cookie)
-			$.cookie('ui-tabs-' + $.data(self.element[0]), o.selected, o.cookie);
+			this._cookie(o.selected, o.cookie);
 		
 		// disable tabs
 		for (var i = 0, li; li = this.$lis[i]; i++)
@@ -220,12 +225,12 @@ $.widget("ui.tabs", {
 		}
 		
 		// attach tab event handler, unbind to avoid duplicates from former tabifying...
-		this.$tabs.unbind('.tabs').bind(o.event, function() {
+		this.$tabs.unbind('.tabs').bind(o.event + '.tabs', function() {
 			
 			//var trueClick = e.clientX; // add to history only if true click occured, not a triggered click
 			var $li = $(this).parents('li:eq(0)'),
 				$hide = self.$panels.filter(':visible'),
-				$show = $(this.hash);
+				$show = $(self._sanitizeSelector(this.hash));
 			
 			// If tab is already selected and not unselectable or tab disabled or 
 			// or is already loading or click callback returns false stop here.
@@ -240,7 +245,7 @@ $.widget("ui.tabs", {
 				return false;
 			}
 			
-			self.options.selected = self.$tabs.index(this);
+			o.selected = self.$tabs.index(this);
 			
 			// if tab may be closed
 			if (o.unselect) {
@@ -264,7 +269,7 @@ $.widget("ui.tabs", {
 			}
 			
 			if (o.cookie)
-				$.cookie('ui-tabs-' + $.data(self.element[0]), self.options.selected, o.cookie);
+				self._cookie(o.selected, o.cookie);
 			
 			// stop possibly running animations
 			self.$panels.stop();
@@ -315,7 +320,7 @@ $.widget("ui.tabs", {
 		});
 		
 		// disable click if event is configured to something else
-		if (!(/^click/).test(o.event))
+		if (o.event != 'click')
 			this.$tabs.bind('click.tabs', function() { return false; });
 		
 	},
@@ -409,9 +414,10 @@ $.widget("ui.tabs", {
 		}
 	},
 	select: function(index) {
+		// TODO make null as argument work
 		if (typeof index == 'string')
 			index = this.$tabs.index( this.$tabs.filter('[href$=' + index + ']')[0] );
-		this.$tabs.eq(index).trigger(this.options.event);
+		this.$tabs.eq(index).trigger(this.options.event + '.tabs');
 	},
 	load: function(index, callback) { // callback is for internal usage only
 		
@@ -450,7 +456,7 @@ $.widget("ui.tabs", {
 		var ajaxOptions = $.extend({}, o.ajaxOptions, {
 			url: url,
 			success: function(r, s) {
-				$(a.hash).html(r);
+				$(self._sanitizeSelector(a.hash)).html(r);
 				cleanup();
 				
 				if (o.cache)
@@ -458,7 +464,10 @@ $.widget("ui.tabs", {
 				
 				// callbacks
 				self._trigger('load', null, self.ui(self.$tabs[index], self.$panels[index]));
-				o.ajaxOptions.success && o.ajaxOptions.success(r, s);
+				try {
+					o.ajaxOptions.success(r, s);
+				}
+				catch (e) {}
 				
 				// This callback is required because the switch has to take
 				// place after loading has completed. Call last in order to 
@@ -500,6 +509,8 @@ $.widget("ui.tabs", {
 				$(this).removeClass([o.selectedClass, o.unselectClass,
 					o.disabledClass, o.panelClass, o.hideClass].join(' '));
 		});
+		if (o.cookie)
+			this._cookie(null, o.cookie);
 	}
 });
 
@@ -515,7 +526,7 @@ $.ui.tabs.defaults = {
 	spinner: 'Loading&#8230;',
 	cache: false,
 	idPrefix: 'ui-tabs-',
-	ajaxOptions: {},
+	ajaxOptions: null,
 	
 	// animations
 	fx: null, // e.g. { height: 'toggle', opacity: 'toggle', duration: 200 }
@@ -568,9 +579,9 @@ $.extend($.ui.tabs.prototype, {
 		if (ms) {
 			start();
 			if (!continuing)
-				this.$tabs.bind(this.options.event, stop);
+				this.$tabs.bind(this.options.event + '.tabs', stop);
 			else
-				this.$tabs.bind(this.options.event, function() {
+				this.$tabs.bind(this.options.event + '.tabs', function() {
 					stop();
 					t = self.options.selected;
 					start();
@@ -579,7 +590,7 @@ $.extend($.ui.tabs.prototype, {
 		// stop interval
 		else {
 			stop();
-			this.$tabs.unbind(this.options.event, stop);
+			this.$tabs.unbind(this.options.event + '.tabs', stop);
 		}
 	}
 });
