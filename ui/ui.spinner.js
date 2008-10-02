@@ -393,21 +393,23 @@ $.extend($.ui.spinner, {
 		items: []
 	},
 	format: {
-		number: function(num, dec) {
-			return this.round(num, dec);
-		},
 		currency: function(num, sym) {
-			return (num !== Math.abs(num) ? '-' : '') + sym + this.round(Math.abs(num), 2);
+			num = isNaN(num) ? 0 : num;
+			return (num !== Math.abs(num) ? '-' : '') + sym + this.number(Math.abs(num), 2);
 		},
-		round: function(num, dec) {
-			var s = Math.round(parseFloat(num)*Math.pow(10, dec)) / Math.pow(10, dec); // round off weird decimals
-			if (dec > 0) {
-				s = s + ((s.toString().indexOf('.') == -1) ? '.' : '') + '0000000001';
-				s = s.substr(0, s.indexOf('.')+1+dec);
-			} else {
-				s = Math.round(s);
+		number: function(num, dec) {
+			num = isNaN(num) ? 0 : parseFloat(num,10).toFixed(dec);
+			
+			var regex = /(\d+)(\d{3})/,
+				n = num.toString().split('.'),
+				n1 = n[0],
+				n2 = n.length > 1 ? '.' + n[1] : '';
+
+			while (regex.test(n1)) {
+				n1 = n1.replace(regex, '$1,$2');
 			}
-			return s;
+			
+			return (n1 + n2);
 		}
 	}
 });

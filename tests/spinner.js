@@ -240,7 +240,7 @@ test("spin with auto-incremental stepping", function() {
 
 	el.simulate("keyup",{keyCode:$.simulate.VK_DOWN});
 
-	equals(el.val(), -1800, "keydown 210 times (300-100-100*10-10*100)");
+	equals(el.val(), '-1,800', "keydown 210 times (300-100-100*10-10*100)");
 
 });
 
