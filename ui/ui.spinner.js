@@ -142,16 +142,17 @@ $.widget('ui.spinner', {
 		// Manipulate height of spinner.
 		this._items = this.element.children().length;
 		if (this._items > 1) {
+			var height = this.element.outerHeight()/this._items;
 			this.element
 			.addClass('ui-spinner-list')
-			.css('height', this.element.outerHeight()/this._items)
+			.height(height)
 			.children()
 				.addClass('ui-spinner-listitem')
-				.css('height', this.element.outerHeight())
+				.height(height)
 				.css('overflow', 'hidden')
 			.end()
 			.parent()
-				.css('height', this.element.outerHeight())
+				.height(height)
 			.end();
 			this.options.stepping = 1;
 			this.options.min = 0;
@@ -288,7 +289,7 @@ $.widget('ui.spinner', {
 	},
 	_animate: function(d) {
 		if (this.element.hasClass('ui-spinner-list') && ((d == 'up' && this._getValue() <= this.options.max) || (d == 'down' && this._getValue() >= this.options.min)) ) {
-			this.element.animate({marginTop: '-' + this._getValue() * this.element.outerHeight() }, {
+			this.element.animate({marginTop: '-' + this._getValue() * this.element.parent().height() }, {
 				duration: 'fast',
 				queue: false
 			});
