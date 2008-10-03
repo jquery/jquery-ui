@@ -399,18 +399,9 @@ $.extend($.ui.spinner, {
 			return (num !== Math.abs(num) ? '-' : '') + sym + this.number(Math.abs(num), 2);
 		},
 		number: function(num, dec) {
-			num = isNaN(num) ? 0 : parseFloat(num,10).toFixed(dec);
-			
-			var regex = /(\d+)(\d{3})/,
-				n = num.toString().split('.'),
-				n1 = n[0],
-				n2 = n.length > 1 ? '.' + n[1] : '';
-
-			while (regex.test(n1)) {
-				n1 = n1.replace(regex, '$1,$2');
-			}
-			
-			return (n1 + n2);
+			var regex = /(\d+)(\d{3})/;
+			for (num = isNaN(num) ? 0 : parseFloat(num,10).toFixed(dec); regex.test(num); num=num.replace(regex, '$1,$2'));
+			return num;
 		}
 	}
 });
