@@ -2,12 +2,8 @@
  * tabs unit tests
  */
 (function($) {
-//
-// Tabs Test Helper Functions
-//
 
 
-// Tabs Tests
 module('tabs');
 
 test('init', function() {
@@ -17,7 +13,7 @@ test('init', function() {
 	ok(true, '.tabs() called on element');
 	
 	el.tabs('destroy').tabs({ selected: 1 });
-	equals( el.data('selected.tabs'), 1 );
+	equals( el.data('selected.tabs'), 1, 'selected.tabs set' );
 	equals( $('li', el).index( $('li.ui-tabs-selected', el) ), 1, 'second tab active');
 	equals( $('div', '#tabs1').index( $('div.ui-tabs-hide', '#tabs1') ), 0, 'first panel should be hidden' );
 	
@@ -100,6 +96,49 @@ test('url', function() {
 	
 });
 
+
+module('options');
+
+test('select: null', function() {
+	expect(3);
+	
+	var el = $('#tabs1 > ul');
+	
+	el.tabs({ selected: null });
+	equals( el.data('selected.tabs'), null, 'option set' );
+	equals( $('li.ui-tabs-selected', el).length, 0, 'all tabs should be unselected' );
+	equals( $('div.ui-tabs-hide', '#tabs1').length, 3, 'all panels should be hidden' );
+	
+	// TODO select == null with cookie
+	// TODO select == null with select method
+	
+});
+
+test('unselect: true', function() {
+	expect(7);
+	
+	var el = $('#tabs1 > ul');
+	
+	el.tabs({ unselect: true });
+	equals( el.data('unselect.tabs'), true, 'option set' );
+	equals( $('li.ui-tabs-unselect', el).length, 1, 'class "ui-tabs-unselect" attached once');
+	equals( $('li', el).index( $('li.ui-tabs-unselect', el) ), 0, 'class "ui-tabs-unselect" attached to first tab');
+	
+	el.tabs('select', 1);
+	equals( $('li.ui-tabs-unselect', el).length, 1, 'class "ui-tabs-unselect" attached once');
+	equals( $('li', el).index( $('li.ui-tabs-unselect', el) ), 1, 'class "ui-tabs-unselect" attached to second tab');
+	
+	el.tabs('select', 1);
+	equals( $('li.ui-tabs-unselect', el).length, 0, 'class "ui-tabs-unselect" not attached');
+	// wait a bit for the fake animation...
+	stop();
+	setTimeout(function() {
+		equals( $('div.ui-tabs-hide', '#tabs1').length, 3, 'all panels should be hidden' );
+		start();
+	}, 100);
+
+});
+
 test('cookie', function() {
 	expect(5);
 	
@@ -130,8 +169,10 @@ test('cookie', function() {
 	
 });
 
-// #???
-test('id containing colon', function() {
+
+module('tickets');
+
+test('id containing colon #???', function() {
 	expect(4);
 
 	var el = $('#tabs2 > ul').tabs();

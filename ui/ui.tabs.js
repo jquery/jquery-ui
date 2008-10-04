@@ -68,10 +68,10 @@ $.widget("ui.tabs", {
 				var $panel = $('#' + id);
 				if (!$panel.length) {
 					$panel = $(o.panelTemplate).attr('id', id).addClass(o.panelClass)
-						.insertAfter( self.$panels[i - 1] || self.element );
+						.insertAfter(self.$panels[i - 1] || self.element);
 					$panel.data('destroy.tabs', true);
 				}
-				self.$panels = self.$panels.add( $panel );
+				self.$panels = self.$panels.add($panel);
 			}
 			// invalid tab href
 			else
@@ -83,10 +83,7 @@ $.widget("ui.tabs", {
 			
 			// attach necessary classes for styling if not present
 			this.element.addClass(o.navClass);
-			this.$panels.each(function() {
-				var $this = $(this);
-				$this.addClass(o.panelClass);
-			});
+			this.$panels.addClass(o.panelClass);
 			
 			// Selected tab
 			// use "selected" option or try to retrieve:
@@ -136,7 +133,9 @@ $.widget("ui.tabs", {
 			this.$lis.removeClass(o.selectedClass);
 			if (o.selected !== null) {
 				this.$panels.eq(o.selected).show().removeClass(o.hideClass); // use show and remove class to show in any case no matter how it has been hidden before
-				this.$lis.eq(o.selected).addClass(o.selectedClass);
+				var classes = [o.selectedClass];
+				if (o.unselect) classes.push(o.unselectClass);
+				this.$lis.eq(o.selected).addClass(classes.join(' '));
 				
 				// seems to be expected behavior that the show callback is fired
 				var onShow = function() {
@@ -219,8 +218,9 @@ $.widget("ui.tabs", {
 			/*if (o.bookmarkable && trueClick) { // add to history only if true click occured, not a triggered click
 				$.ajaxHistory.update(clicked.hash);
 			}*/
-			$li.addClass(o.selectedClass)
-				.siblings().removeClass(o.selectedClass);
+			var classes = [o.selectedClass];
+			if (o.unselect) classes.push(o.unselectClass);
+			$li.addClass(classes.join(' ')).siblings().removeClass(classes.join(' '));
 			hideTab(clicked, $hide, $show);
 		}
 		
@@ -251,7 +251,7 @@ $.widget("ui.tabs", {
 			if (o.unselect) {
 				if ($li.hasClass(o.selectedClass)) {
 					self.options.selected = null;
-					$li.removeClass(o.selectedClass);
+					$li.removeClass([o.selectedClass, o.unselectClass].join(' '));
 					self.$panels.stop();
 					hideTab(this, $hide);
 					this.blur();
@@ -260,7 +260,7 @@ $.widget("ui.tabs", {
 					self.$panels.stop();
 					var a = this;
 					self.load(self.$tabs.index(this), function() {
-						$li.addClass(o.selectedClass).addClass(o.unselectClass);
+						$li.addClass([o.selectedClass, o.unselectClass].join(' '));
 						showTab(a, $show);
 					});
 					this.blur();
