@@ -499,13 +499,13 @@ $.extend(Datepicker.prototype, {
 							+$.datepicker._get(inst, 'stepMonths')), 'M');
 						break; // next month/year on page down/+ ctrl
 				case 35: if (e.ctrlKey || e.metaKey) $.datepicker._clearDate(e.target);
-						handled = e.ctrlKey;
+						handled = e.ctrlKey || e.metaKey;
 						break; // clear on ctrl or command +end 
 				case 36: if (e.ctrlKey || e.metaKey) $.datepicker._gotoToday(e.target);
-						handled = e.ctrlKey;
+						handled = e.ctrlKey || e.metaKey;
 						break; // current on ctrl or command +home
 				case 37: if (e.ctrlKey || e.metaKey) $.datepicker._adjustDate(e.target, -1, 'D');
-						handled = e.ctrlKey;
+						handled = e.ctrlKey || e.metaKey;
 						// -1 day on ctrl or command +left
 						if (e.originalEvent.altKey) $.datepicker._adjustDate(e.target, (e.ctrlKey ?
 									-$.datepicker._get(inst, 'stepBigMonths') :
@@ -513,10 +513,10 @@ $.extend(Datepicker.prototype, {
 						// next month/year on alt +left on Mac
 						break; 
 				case 38: if (e.ctrlKey || e.metaKey) $.datepicker._adjustDate(e.target, -7, 'D');
-						handled = e.ctrlKey;
+						handled = e.ctrlKey || e.metaKey;
 						break; // -1 week on ctrl or command +up
 				case 39: if (e.ctrlKey || e.metaKey) $.datepicker._adjustDate(e.target, +1, 'D');
-						handled = e.ctrlKey;
+						handled = e.ctrlKey || e.metaKey;
 						// +1 day on ctrl or command +right
 						if (e.originalEvent.altKey) $.datepicker._adjustDate(e.target, (e.ctrlKey ?
 									+$.datepicker._get(inst, 'stepBigMonths') :
@@ -524,7 +524,7 @@ $.extend(Datepicker.prototype, {
 						// next month/year on alt +right
 						break; 
 				case 40: if (e.ctrlKey || e.metaKey) $.datepicker._adjustDate(e.target, +7, 'D');
-						handled = e.ctrlKey;
+						handled = e.ctrlKey || e.metaKey;
 						break; // +1 week on ctrl or command +down
 				default: handled = false;
 			}
@@ -1277,7 +1277,14 @@ $.extend(Datepicker.prototype, {
 		date = (date == null ? defaultDate :
 			(typeof date == 'string' ? offsetString(date, this._getDaysInMonth) :
 			(typeof date == 'number' ? (isNaN(date) ? defaultDate : offsetNumeric(date)) : date)));
-		return (date && date.toString() == 'Invalid Date' ? defaultDate : date);
+		date = (date && date.toString() == 'Invalid Date' ? defaultDate : date);
+		if (date) {
+			date.setHours(0);
+			date.setMinutes(0);
+			date.setSeconds(0);
+			date.setMilliseconds(0);
+		}
+		return date;
 	},
 	
 	/* Set the date(s) directly. */
