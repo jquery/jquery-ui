@@ -138,6 +138,14 @@ $.widget('ui.spinner', {
 				})
 			.end();
 		
+		// Give the spinner casing a unique id only if one exists in original input 
+		// - this should aid targetted customisations if a page contains multiple instances
+		this.element.attr('id', function(){
+			if (this.id) {
+				$(this).parent().attr('id', this.id+'-ui-spinner');
+			}
+		});
+		
 		// DataList: Set contraints for object length and step size. 
 		// Manipulate height of spinner.
 		this._items = this.element.children().length;
