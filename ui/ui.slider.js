@@ -439,12 +439,14 @@ $.widget("ui.slider", {
 	}
 });
 
-$.ui.slider.getter = "value";
-
-$.ui.slider.defaults = {
-	handle: ".ui-slider-handle",
-	distance: 1,
-	animate: false
-};
+$.extend($.ui.slider, {
+	getter: "value",
+	version: "@VERSION",
+	defaults: {
+		handle: ".ui-slider-handle",
+		distance: 1,
+		animate: false
+	}
+});
 
 })(jQuery);
