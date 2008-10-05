@@ -78,11 +78,15 @@ $.widget("ui.accordion", {
 		});
 	},
 	destroy: function() {
+		this.options.headers.parent().andSelf().removeClass(this.options.selectedClass);
+		this.options.headers.prev(".ui-accordion-left").remove();
+		this.options.headers.children(".ui-accordion-right").remove();
 		this.options.headers.next().css("display", "");
 		if ( this.options.fillSpace || this.options.autoHeight ) {
 			this.options.headers.next().css("height", "");
 		}
 		$.removeData(this.element[0], "accordion");
+		
 		this.element.removeClass("ui-accordion").unbind(".accordion");
 	}
 });
