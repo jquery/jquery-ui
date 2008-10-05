@@ -2,10 +2,13 @@
 /* Written by Jaka Jancar (jaka@kubje.org). */
 /* c = &#x10D;, s = &#x161; z = &#x17E; C = &#x10C; S = &#x160; Z = &#x17D; */
 jQuery(function($){
-	$.datepicker.regional['sl'] = {clearText: 'Izbri&#x161;i', clearStatus: 'Izbri&#x161;i trenutni datum',
+	$.datepicker.regional['sl'] = {
+		clearText: 'Izbri&#x161;i', clearStatus: 'Izbri&#x161;i trenutni datum',
 		closeText: 'Zapri', closeStatus: 'Zapri brez spreminjanja',
 		prevText: '&lt;Prej&#x161;nji', prevStatus: 'Prika&#x17E;i prej&#x161;nji mesec',
+		prevBigText: '&#x3c;&#x3c;', prevBigStatus: '',
 		nextText: 'Naslednji&gt;', nextStatus: 'Prika&#x17E;i naslednji mesec',
+		nextBigText: '&#x3e;&#x3e;', nextBigStatus: '',
 		currentText: 'Trenutni', currentStatus: 'Prika&#x17E;i trenutni mesec',
 		monthNames: ['Januar','Februar','Marec','April','Maj','Junij',
 		'Julij','Avgust','September','Oktober','November','December'],
