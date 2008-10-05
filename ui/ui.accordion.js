@@ -265,6 +265,7 @@ function findActive(headers, selector) {
 }
 
 $.extend($.ui.accordion, {
+	version: "@VERSION",
 	defaults: {
 		selectedClass: "selected",
 		alwaysOpen: true,

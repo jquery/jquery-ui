@@ -737,6 +737,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 
 $.extend($.ui.sortable, {
 	getter: "serialize toArray",
+	version: "@VERSION",
 	defaults: {
 		helper: "original",
 		tolerance: "guess",

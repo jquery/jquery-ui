@@ -514,6 +514,7 @@ $.widget("ui.tabs", {
 	}
 });
 
+$.ui.tabs.version = "@VERSION";
 $.ui.tabs.defaults = {
 	// basic setup
 	unselect: false,

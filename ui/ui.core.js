@@ -268,6 +268,7 @@ $.widget.defaults = {
 /** jQuery UI core **/
 
 $.ui = {
+	version: "@VERSION",
 	// $.ui.plugin is deprecated.  Use the proxy pattern instead.
 	plugin: {
 		add: function(module, option, set) {

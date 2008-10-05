@@ -163,6 +163,7 @@ $.widget("ui.magnifier", {
 });
 
 $.extend($.ui.magnifier, {
+	version: "@VERSION",
 	defaults: {
 		distance: 150,
 		magnification: 2,

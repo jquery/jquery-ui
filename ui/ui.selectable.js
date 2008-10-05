@@ -252,6 +252,7 @@ $.widget("ui.selectable", $.extend({}, $.ui.mouse, {
 }));
 
 $.extend($.ui.selectable, {
+	version: "@VERSION",
 	defaults: {
 		distance: 1,
 		delay: 0,

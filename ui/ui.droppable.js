@@ -130,6 +130,7 @@ $.widget("ui.droppable", {
 });
 
 $.extend($.ui.droppable, {
+	version: "@VERSION",
 	defaults: {
 		disabled: false,
 		tolerance: 'intersect',

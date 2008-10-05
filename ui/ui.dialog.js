@@ -394,6 +394,7 @@ $.widget("ui.dialog", {
 });
 
 $.extend($.ui.dialog, {
+	version: "@VERSION",
 	defaults: {
 		autoOpen: true,
 		autoResize: true,

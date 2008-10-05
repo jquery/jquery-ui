@@ -392,6 +392,7 @@ $.widget('ui.spinner', {
 });
 
 $.extend($.ui.spinner, {
+	version: "@VERSION",
 	defaults: {
 		decimals: 0,
 		stepping: 1,

@@ -462,6 +462,7 @@ $.widget("ui.colorpicker", {
 });
 
 $.extend($.ui.colorpicker, {
+	version: "@VERSION",
 	defaults: {
 		eventName: 'click',
 		color: 'ff0000',

@@ -1735,5 +1735,6 @@ $.fn.datepicker = function(options){
 $.datepicker = new Datepicker(); // singleton instance
 $.datepicker.initialized = false;
 $.datepicker.uuid = new Date().getTime();
+$.datepicker.version = "@VERSION";
 
 })(jQuery);

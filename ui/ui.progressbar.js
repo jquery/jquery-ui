@@ -188,6 +188,7 @@ $.widget("ui.progressbar", {
 	plugins: {}
 });
 
+$.ui.progressbar.version = "@VERSION";
 $.ui.progressbar.defaults = {
 	width: 300,
 	duration: 1000,

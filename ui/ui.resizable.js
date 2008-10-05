@@ -516,6 +516,7 @@ $.widget("ui.resizable", $.extend({}, $.ui.mouse, {
 }));
 
 $.extend($.ui.resizable, {
+	version: "@VERSION",
 	defaults: {
 		cancel: ":input",
 		distance: 1,
