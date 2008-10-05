@@ -38,6 +38,8 @@ function Datepicker() {
 	this._disableClass = 'ui-datepicker-disabled'; // The name of the disabled covering marker class
 	this._unselectableClass = 'ui-datepicker-unselectable'; // The name of the unselectable cell marker class
 	this._currentClass = 'ui-datepicker-current-day'; // The name of the current day marker class
+	this._dayOverClass = 'ui-datepicker-days-cell-over'; // The name of the day hover marker class
+	this._weekOverClass = 'ui-datepicker-week-over'; // The name of the week hover marker class
 	this.regional = []; // Available regional settings, indexed by language code
 	this.regional[''] = { // Default regional settings
 		clearText: 'Clear', // Display text for clear link
@@ -432,7 +434,9 @@ $.extend(Datepicker.prototype, {
 	},
 	
 	// change method deprecated
-	_changeDatepicker: this._optionDatepicker,
+	_changeDatepicker: function(target, name, value) {
+		this._optionDatepicker(target, name, value);
+	},
 	
 	/* Redraw the date picker attached to an input field or division.
 	   @param  target  element - the target input field or division or span */
@@ -476,12 +480,12 @@ $.extend(Datepicker.prototype, {
 			switch (e.keyCode) {
 				case 9:  $.datepicker._hideDatepicker(null, '');
 						break; // hide on tab out
-				case 13: if ($('td.ui-datepicker-days-cell-over, td.ui-datepicker-current-day', inst.dpDiv)[0]) {
-							$.datepicker._selectDay(e.target, inst.selectedMonth, inst.selectedYear,
-								$('td.ui-datepicker-days-cell-over, td.ui-datepicker-current-day', inst.dpDiv)[0]);
-						} else {
+				case 13: var sel = $('td.' + $.datepicker._dayOverClass +
+							', td.' + $.datepicker._currentClass, inst.dpDiv);
+						if (sel[0])
+							$.datepicker._selectDay(e.target, inst.selectedMonth, inst.selectedYear, sel[0]);
+						else
 							$.datepicker._hideDatepicker(null, $.datepicker._get(inst, 'duration'));
-						}
 						return false; // don't submit the form
 						break; // select the value on enter
 				case 27: $.datepicker._hideDatepicker(null, $.datepicker._get(inst, 'duration'));
@@ -1417,6 +1421,7 @@ $.extend(Datepicker.prototype, {
 		var status = (showStatus ? this._get(inst, 'dayStatus') || initStatus : '');
 		var dateStatus = this._get(inst, 'statusForDate') || this.dateStatus;
 		var endDate = inst.endDay ? new Date(inst.endYear, inst.endMonth, inst.endDay) : currentDate;
+		var defaultDate = this._getDefaultDate(inst);
 		for (var row = 0; row < numMonths[0]; row++)
 			for (var col = 0; col < numMonths[1]; col++) {
 				var selectedDate = new Date(drawYear, drawMonth, inst.selectedDay);
@@ -1461,24 +1466,24 @@ $.extend(Datepicker.prototype, {
 							((dow + firstDay + 6) % 7 >= 5 ? ' ui-datepicker-week-end-cell' : '') + // highlight weekends
 							(otherMonth ? ' ui-datepicker-other-month' : '') + // highlight days from other months
 							((printDate.getTime() == selectedDate.getTime() && drawMonth == inst.selectedMonth && inst._keyEvent) // user pressed key
-							 || (this._getDefaultDate(inst).getTime() == printDate.getTime() && this._getDefaultDate(inst).getTime() == selectedDate.getTime()) ?
+							 || (defaultDate.getTime() == printDate.getTime() && defaultDate.getTime() == selectedDate.getTime()) ?
 							 // or defaultDate is current printedDate and defaultDate is selectedDate
-							' ui-datepicker-days-cell-over' : '') + // highlight selected day
+							' ' + $.datepicker._dayOverClass : '') + // highlight selected day
 							(unselectable ? ' ' + this._unselectableClass : '') +  // highlight unselectable days
 							(otherMonth && !showOtherMonths ? '' : ' ' + daySettings[1] + // highlight custom dates
 							(printDate.getTime() >= currentDate.getTime() && printDate.getTime() <= endDate.getTime() ? // in current range
 							' ' + this._currentClass : '') + // highlight selected day
 							(printDate.getTime() == today.getTime() ? ' ui-datepicker-today' : '')) + '"' + // highlight today (if different)
 							((!otherMonth || showOtherMonths) && daySettings[2] ? ' title="' + daySettings[2] + '"' : '') + // cell title
-							(unselectable ? (highlightWeek ? ' onmouseover="jQuery(this).parent().addClass(\'ui-datepicker-week-over\');"' + // highlight selection week
-							' onmouseout="jQuery(this).parent().removeClass(\'ui-datepicker-week-over\');"' : '') : // unhighlight selection week
-							' onmouseover="jQuery(this).addClass(\'ui-datepicker-days-cell-over\')' + // highlight selection
-							(highlightWeek ? '.parent().addClass(\'ui-datepicker-week-over\')' : '') + ';' + // highlight selection week
+							(unselectable ? (highlightWeek ? ' onmouseover="jQuery(this).parent().addClass(\'' + this._weekOverClass + '\');"' + // highlight selection week
+							' onmouseout="jQuery(this).parent().removeClass(\'' + this._weekOverClass + '\');"' : '') : // unhighlight selection week
+							' onmouseover="jQuery(this).addClass(\'' + this._dayOverClass + '\')' + // highlight selection
+							(highlightWeek ? '.parent().addClass(\'' + this._weekOverClass + '\')' : '') + ';' + // highlight selection week
 							(!showStatus || (otherMonth && !showOtherMonths) ? '' : 'jQuery(\'#ui-datepicker-status-' +
 							inst.id + '\').html(\'' + (dateStatus.apply((inst.input ? inst.input[0] : null),
 							[printDate, inst]) || initStatus) +'\');') + '"' +
-							' onmouseout="jQuery(this).removeClass(\'ui-datepicker-days-cell-over\')' + // unhighlight selection
-							(highlightWeek ? '.parent().removeClass(\'ui-datepicker-week-over\')' : '') + ';' + // unhighlight selection week
+							' onmouseout="jQuery(this).removeClass(\'' + this._dayOverClass + '\')' + // unhighlight selection
+							(highlightWeek ? '.parent().removeClass(\'' + this._weekOverClass + '\')' : '') + ';' + // unhighlight selection week
 							(!showStatus || (otherMonth && !showOtherMonths) ? '' : 'jQuery(\'#ui-datepicker-status-' +
 							inst.id + '\').html(\'' + initStatus + '\');') + '" onclick="jQuery.datepicker._selectDay(\'#' +
 							inst.id + '\',' + drawMonth + ',' + drawYear + ', this);"') + '>' + // actions
