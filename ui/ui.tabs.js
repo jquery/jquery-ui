@@ -181,34 +181,32 @@ $.widget("ui.tabs", {
 		else
 			hideFx = showFx = o.fx || baseFx;
 		
-		// reset some styles to maintain print style sheets etc.
-		var resetCSS = { display: '', overflow: '', height: '' };
-		if (!$.browser.msie) // not in IE to prevent ClearType font issue
-			resetCSS.opacity = '';
+		// Reset certain styles left over from animation to
+		// maintain print style sheets and prevent IE's
+		// ClearType bug...
+		function resetStyle($el, fx) {
+			$el.css({ display: '' });
+			if ($.browser.msie && fx.opacity)
+				$el[0].style.filter = '';
+		}
 		
 		// Hide a tab, animation prevents browser scrolling to fragment,
 		// $show is optional.
 		function hideTab(clicked, $hide, $show) {
 			$hide.animate(hideFx, hideFx.duration || baseDuration, function() { //
-				$hide.addClass(o.hideClass).css(resetCSS); // maintain flexible height and accessibility in print etc.
-				if ($.browser.msie && hideFx.opacity)
-					$hide[0].style.filter = '';
-				if ($show)
-					showTab(clicked, $show, $hide);
+				$hide.addClass(o.hideClass);
+				resetStyle($hide, hideFx);
+				if ($show) showTab(clicked, $show, $hide);
 			});
 		}
 		
 		// Show a tab, animation prevents browser scrolling to fragment,
 		// $hide is optional.
 		function showTab(clicked, $show, $hide) {
-			if (showFx === baseFx)
-				$show.css('display', 'block'); // prevent occasionally occuring flicker in Firefox cause by gap between showing and hiding the tab panels
+			if (showFx === baseFx) $show.css('display', 'block'); // prevent occasionally occuring flicker in Firefox caused by gap between showing and hiding the tab panels
 			$show.animate(showFx, showFx.duration || baseDuration, function() {
-				$show.removeClass(o.hideClass).css(resetCSS); // maintain flexible height and accessibility in print etc.
-				if ($.browser.msie && showFx.opacity)
-					$show[0].style.filter = '';
-				
-				// callback
+				$show.removeClass(o.hideClass);
+				resetStyle($show, showFx);
 				self._trigger('show', null, self.ui(clicked, $show[0]));
 			});
 		}
