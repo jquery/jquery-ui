@@ -3,12 +3,14 @@
  */
 (function($) {
 
+// need to wait a bit for the pseudo animation...
 function defer(defered, ms) {
-	// wait a bit for the pseudo animation...
-	stop();
+	var queue = defer.queue || (defer.queue = []);
+	if (!queue.length) stop();
+	queue.push(defered);
 	setTimeout(function() {
-		defered();
-		start();
+		queue.shift()();
+		if (!queue.length) start();
 	}, ms || 100);	
 }
 
@@ -193,27 +195,29 @@ module('tabs: Tickets');
 	});
 	
 	test('panel containing inline style, #????', function() {
-		expect(2);
+		expect(3);
 		
 		var inlineStyle = function(property) {
-			return document.getElementById('inline-style').style[property];
+			return $('#inline-style')[0].style[property];
 		};
 		var expected = inlineStyle('height');
 		
 		var el = $('#tabs2 > ul').tabs();
-		equals(inlineStyle('height'), expected, 'should not remove inline style after init');
+		equals(inlineStyle('height'), expected, 'init should not remove inline style');
 		
 		el.tabs('select', 1);
 		defer(function() {
-			equals(inlineStyle('height'), expected, 'should not remove inline style after tabs select');
+			equals(inlineStyle('height'), expected, 'show tab should not remove inline style');
+			
 			el.tabs('select', 0);
 			defer(function() {
-				equals(inlineStyle('height'), expected, 'should not remove inline style after tabs select');
+				equals(inlineStyle('height'), expected, 'hide tab should not remove inline style');
 			});
+			
 		});
 		
 	});
-
+	
 // test('', function() {
 // 	expect(0);
 // 	
