@@ -56,7 +56,7 @@ test("enable", function() {
 });
 
 test("defaults", function() {
-	expect(10);
+	expect(12);
 	el = $("#spin").spinner();
 
 	equals(el.data("currency.spinner"), false, "currency");
@@ -69,6 +69,8 @@ test("defaults", function() {
 	equals(el.data("decimals.spinner"), 0, "decimals");
 	equals(el.data("format.spinner"), '%', "format");
 	equals(el.data("items.spinner"), false, "items");
+	equals(el.data("group.spinner"), '', "group");
+	equals(el.data("point.spinner"), '.', "point");
 
 });
 
@@ -195,7 +197,7 @@ test("decimal options", function() {
 	el.simulate("keyup",{keyCode:$.simulate.VK_UP});
 
 	equals(el.val(), "7.0", "keydown 11 times");
-
+	
 });
 
 test("spin without auto-incremental stepping", function() {
@@ -240,7 +242,7 @@ test("spin with auto-incremental stepping", function() {
 
 	el.simulate("keyup",{keyCode:$.simulate.VK_DOWN});
 
-	equals(el.val(), '-1,800', "keydown 210 times (300-100-100*10-10*100)");
+	equals(el.val(), -1800, "keydown 210 times (300-100-100*10-10*100)");
 
 });
 
@@ -307,6 +309,55 @@ test("callback", function() {
 test("mouse wheel on input", function() {
 	expect(0);
 
+});
+
+test("currency formats", function() {
+	expect(8);
+
+	// default
+	
+	el = $("#spin").spinner({ currency: 'HK$', stepping: 1500.50, start: 1000 });
+
+	equals(el.val(), "HK$1,000.00", "Hong Kong Dollar");
+
+	el.simulate("keydown",{keyCode:$.simulate.VK_UP})
+		.simulate("keyup",{keyCode:$.simulate.VK_UP});
+
+	equals(el.val(), "HK$2,500.50", "Hong Kong Dollar step-up once");
+
+	// space and comma
+	
+	el.spinner('destroy').val('').spinner({ currency: '$', group: ' ', point: '.', stepping: 1500.50, start: 1000 });
+
+	equals(el.val(), "$1 000.00", "Australian Dollar");
+
+	el.simulate("keydown",{keyCode:$.simulate.VK_UP})
+		.simulate("keyup",{keyCode:$.simulate.VK_UP});
+
+	equals(el.val(), "$2 500.50", "Australian Dollar step-up once");
+
+	// apos and point
+	
+	el.spinner('destroy').val('').spinner({ currency: 'Fr ', group: "'", point: '.', stepping: 1500.50, start: 1000 });
+
+	equals(el.val(), "Fr 1'000.00", "Swiss Franc");
+
+	el.simulate("keydown",{keyCode:$.simulate.VK_UP})
+		.simulate("keyup",{keyCode:$.simulate.VK_UP});
+
+	equals(el.val(), "Fr 2'500.50", "Swiss Franc step-up once");
+	
+	// point and comma
+	
+	el.spinner('destroy').val('').spinner({ currency: 'RUB', group: ".", point: ',', stepping: 1.5, start: 1000 });
+
+	equals(el.val(), "RUB1.000,00", "Russian Ruble");
+
+	el.simulate("keydown",{keyCode:$.simulate.VK_UP})
+		.simulate("keyup",{keyCode:$.simulate.VK_UP});
+
+	equals(el.val(), "RUB1.001,50", "Russian Ruble step-up once");
+	
 
 });
 

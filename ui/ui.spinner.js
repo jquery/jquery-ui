@@ -26,7 +26,7 @@ $.widget('ui.spinner', {
 		
 		// check for decimals in steppinng and set _decimals as internal
 		this._decimals = parseInt(this.options.decimals, 10);
-		if (this.options.stepping.toString().indexOf('.') != -1) {
+		if (this.options.stepping.toString().indexOf('.') != -1 && this._decimals == 0) {
 			var s = this.options.stepping.toString();
 			this._decimals = s.slice(s.indexOf('.')+1, s.length).length;
 		}
@@ -283,7 +283,11 @@ $.widget('ui.spinner', {
 		e.preventDefault();
 	},
 	_getValue: function() {
-		return parseFloat(this.element.val().replace(/[^0-9\-\.]/g, ''));
+		var val = this.element.val().replace(this.options.point, '.');
+		if (this.options.group === '.') {
+			val = val.replace('.','');
+		}
+		return parseFloat(val.replace(/[^0-9\-\.]/g, ''));
 	},
 	_setValue: function(newVal) {
 		if (isNaN(newVal)) {
@@ -291,8 +295,8 @@ $.widget('ui.spinner', {
 		}
 		this.element.val(
 			this.options.currency ? 
-				$.ui.spinner.format.currency(newVal, this.options.currency) : 
-				$.ui.spinner.format.number(newVal, this._decimals)
+				$.ui.spinner.format.currency(newVal, this.options.currency, this.options.group, this.options.point) : 
+				$.ui.spinner.format.number(newVal, this._decimals, this.options.group, this.options.point)
 		);
 	},
 	_animate: function(d) {
@@ -400,16 +404,18 @@ $.extend($.ui.spinner, {
 		incremental: true,
 		currency: false,
 		format: '%',
-		items: []
+		items: [],
+		group: '',
+		point: '.'
 	},
 	format: {
-		currency: function(num, sym) {
+		currency: function(num, sym, group, pt) {
 			num = isNaN(num) ? 0 : num;
-			return (num !== Math.abs(num) ? '-' : '') + sym + this.number(Math.abs(num), 2);
+			return (num !== Math.abs(num) ? '-' : '') + sym + this.number(Math.abs(num), 2, group || ',', pt);
 		},
-		number: function(num, dec) {
+		number: function(num, dec, group, pt) {
 			var regex = /(\d+)(\d{3})/;
-			for (num = isNaN(num) ? 0 : parseFloat(num,10).toFixed(dec); regex.test(num); num=num.replace(regex, '$1,$2'));
+			for (num = isNaN(num) ? 0 : parseFloat(num,10).toFixed(dec), num = num.replace('.', pt); regex.test(num) && group; num=num.replace(regex, '$1'+group+'$2'));
 			return num;
 		}
 	}
