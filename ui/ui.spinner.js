@@ -209,7 +209,7 @@ $.widget('ui.spinner', {
 		if (isNaN(this._getValue())) {
 			this._setValue(this.options.start);
 		}
-		this._setValue(this._getValue() + (d == 'up' ? 1:-1) * (this.options.incremental && this.counter > 100 ? (this.counter > 200 ? 100 : 10) : 1) * this.options.stepping);
+		this._setValue(this._getValue() + (d == 'up' ? 1:-1) *(this.options.incremental && this.counter > 100 ? (this.counter > 200 ? 100 : 10) : 1) * this.options.stepping);
 		this._animate(d);
 		this._constrain();
 		if (this.counter) {
@@ -234,7 +234,7 @@ $.widget('ui.spinner', {
 		}
 		this.timer = window.setInterval(function() {
 			self[d](e);
-			if (self.counter > 20) {
+			if (self.options.incremental && self.counter > 20) {
 				self._mousedown(20, d, e);
 			}
 		}, i);
