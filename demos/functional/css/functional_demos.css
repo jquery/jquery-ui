@@ -199,6 +199,9 @@ div.drag-handle
 	position: relative;
 	font-size: 12px;
 }
+#accordionDemo h3 {
+	padding: 0;
+}
 
 .ui-accordion-data {
 	padding: 10px;
