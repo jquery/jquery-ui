@@ -144,7 +144,7 @@ test("defaults", function() {
 		axis: false,
 		cancel: ":input",
 		connectToSortable: false,
-		containment: "??? - TODO",
+		containment: false,
 		cursor: "default",
 		cursorAt: null,
 		delay: 0,
@@ -155,9 +155,10 @@ test("defaults", function() {
 		helper: "original",
 		iframeFix: false,
 		opacity: 1.0,
+		refreshPositions: false,
 		revert: false,
 		revertDuration: 500,
-		scroll: true,
+		scroll: false,
 		scrollSensitivity: 20,
 		scrollSpeed: 20,
 		scope: "default",
@@ -165,7 +166,6 @@ test("defaults", function() {
 		snapMode: "both",
 		snapTolerance: 20,
 		stack: "??? - TODO",
-		refreshPositions: false,
 		zIndex: null
 	};
 

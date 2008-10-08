@@ -308,7 +308,7 @@ $.widget("ui.draggable", $.extend({}, $.ui.mouse, {
 		
 		if((this.options.revert == "invalid" && !dropped) || (this.options.revert == "valid" && dropped) || this.options.revert === true || ($.isFunction(this.options.revert) && this.options.revert.call(this.element, dropped))) {
 			var self = this;
-			$(this.helper).animate(this.originalPosition, parseInt(this.options.revertDuration, 10) || 500, function() {
+			$(this.helper).animate(this.originalPosition, parseInt(this.options.revertDuration, 10), function() {
 				self._propagate("stop", e);
 				self._clear();
 			});
@@ -355,10 +355,25 @@ $.extend($.ui.draggable, {
 		appendTo: "parent",
 		axis: false,
 		cancel: ":input",
+		connectToSortable: false,
+		containment: false,
+		cursor: "default",
 		delay: 0,
 		distance: 1,
+		grid: false,
 		helper: "original",
+		iframeFix: false,
+		opacity: 1,
+		refreshPositions: false,
+		revert: false,
+		revertDuration: 500,
 		scope: "default",
+		scroll: false,
+		scrollSensitivity: 20,
+		scrollSpeed: 20,
+		snap: false,
+		snapMode: "both",
+		snapTolerance: 20,
 		cssNamespace: "ui"
 	}
 });
@@ -417,8 +432,6 @@ $.ui.plugin.add("draggable", "scroll", {
 	start: function(e, ui) {
 		var o = ui.options;
 		var i = $(this).data("draggable");
-		o.scrollSensitivity	= o.scrollSensitivity || 20;
-		o.scrollSpeed		= o.scrollSpeed || 20;
 		
 		i.overflowY = function(el) {
 			do { if(/auto|scroll/.test(el.css('overflow')) || (/auto|scroll/).test(el.css('overflow-y'))) return el; el = el.parent(); } while (el[0].parentNode);
@@ -487,7 +500,7 @@ $.ui.plugin.add("draggable", "snap", {
 	drag: function(e, ui) {
 		
 		var inst = $(this).data("draggable");
-		var d = ui.options.snapTolerance || 20;
+		var d = ui.options.snapTolerance;
 		
 		var x1 = ui.absolutePosition.left, x2 = x1 + inst.helperProportions.width,
 			y1 = ui.absolutePosition.top, y2 = y1 + inst.helperProportions.height;
