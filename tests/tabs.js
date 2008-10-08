@@ -37,7 +37,7 @@ module('tabs');
 	test("defaults", function() {
 	
 		var expected = {
-			unselect: false,
+			deselectable: false,
 			event: 'click',
 			disabled: [],
 			cookie: null,
@@ -50,7 +50,7 @@ module('tabs');
 			panelTemplate: '<div></div>',
 			navClass: 'ui-tabs-nav',
 			selectedClass: 'ui-tabs-selected',
-			unselectClass: 'ui-tabs-unselect',
+			deselectableClass: 'ui-tabs-deselectable',
 			disabledClass: 'ui-tabs-disabled',
 			panelClass: 'ui-tabs-panel',
 			hideClass: 'ui-tabs-hide',
@@ -116,7 +116,7 @@ module('tabs: Options');
 	
 		el.tabs({ selected: null });
 		equals( el.data('selected.tabs'), null, 'option set' );
-		equals( $('li.ui-tabs-selected', el).length, 0, 'all tabs should be unselected' );
+		equals( $('li.ui-tabs-selected', el).length, 0, 'all tabs should be deselected' );
 		equals( $('div.ui-tabs-hide', '#tabs1').length, 3, 'all panels should be hidden' );
 	
 		// TODO select == null with cookie
@@ -124,22 +124,22 @@ module('tabs: Options');
 	
 	});
 
-	test('unselect: true', function() {
+	test('deselectable: true', function() {
 		expect(7);
 	
 		var el = $('#tabs1 > ul');
 	
-		el.tabs({ unselect: true });
-		equals( el.data('unselect.tabs'), true, 'option set' );
-		equals( $('li.ui-tabs-unselect', el).length, 1, 'class "ui-tabs-unselect" attached once');
-		equals( $('li', el).index( $('li.ui-tabs-unselect', el) ), 0, 'class "ui-tabs-unselect" attached to first tab');
+		el.tabs({ deselectable: true });
+		equals( el.data('deselectable.tabs'), true, 'option set' );
+		equals( $('li.ui-tabs-deselectable', el).length, 1, 'class "ui-tabs-deselectable" attached once');
+		equals( $('li', el).index( $('li.ui-tabs-deselectable', el) ), 0, 'class "ui-tabs-deselectable" attached to first tab');
 	
 		el.tabs('select', 1);
-		equals( $('li.ui-tabs-unselect', el).length, 1, 'class "ui-tabs-unselect" attached once');
-		equals( $('li', el).index( $('li.ui-tabs-unselect', el) ), 1, 'class "ui-tabs-unselect" attached to second tab');
+		equals( $('li.ui-tabs-deselectable', el).length, 1, 'class "ui-tabs-deselectable" attached once');
+		equals( $('li', el).index( $('li.ui-tabs-deselectable', el) ), 1, 'class "ui-tabs-deselectable" attached to second tab');
 	
 		el.tabs('select', 1);
-		equals( $('li.ui-tabs-unselect', el).length, 0, 'class "ui-tabs-unselect" not attached');
+		equals( $('li.ui-tabs-deselectable', el).length, 0, 'class "ui-tabs-deselectable" not attached');
 		defer(function() {
 			equals( $('div.ui-tabs-hide', '#tabs1').length, 3, 'all panels should be hidden' );
 		});

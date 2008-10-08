@@ -134,7 +134,7 @@ $.widget("ui.tabs", {
 			if (o.selected !== null) {
 				this.$panels.eq(o.selected).show().removeClass(o.hideClass); // use show and remove class to show in any case no matter how it has been hidden before
 				var classes = [o.selectedClass];
-				if (o.unselect) classes.push(o.unselectClass);
+				if (o.deselectable) classes.push(o.deselectableClass);
 				this.$lis.eq(o.selected).addClass(classes.join(' '));
 				
 				// seems to be expected behavior that the show callback is fired
@@ -217,7 +217,7 @@ $.widget("ui.tabs", {
 				$.ajaxHistory.update(clicked.hash);
 			}*/
 			var classes = [o.selectedClass];
-			if (o.unselect) classes.push(o.unselectClass);
+			if (o.deselectable) classes.push(o.deselectableClass);
 			$li.addClass(classes.join(' ')).siblings().removeClass(classes.join(' '));
 			hideTab(clicked, $hide, $show);
 		}
@@ -230,11 +230,11 @@ $.widget("ui.tabs", {
 				$hide = self.$panels.filter(':visible'),
 				$show = $(self._sanitizeSelector(this.hash));
 			
-			// If tab is already selected and not unselectable or tab disabled or 
+			// If tab is already selected and not deselectable or tab disabled or 
 			// or is already loading or click callback returns false stop here.
 			// Check if click handler returns false last so that it is not executed
 			// for a disabled or loading tab!
-			if (($li.hasClass(o.selectedClass) && !o.unselect)
+			if (($li.hasClass(o.selectedClass) && !o.deselectable)
 				|| $li.hasClass(o.disabledClass)
 				|| $(this).hasClass(o.loadingClass)
 				|| self._trigger('select', null, self.ui(this, $show[0])) === false
@@ -246,10 +246,10 @@ $.widget("ui.tabs", {
 			o.selected = self.$tabs.index(this);
 			
 			// if tab may be closed
-			if (o.unselect) {
+			if (o.deselectable) {
 				if ($li.hasClass(o.selectedClass)) {
 					self.options.selected = null;
-					$li.removeClass([o.selectedClass, o.unselectClass].join(' '));
+					$li.removeClass([o.selectedClass, o.deselectableClass].join(' '));
 					self.$panels.stop();
 					hideTab(this, $hide);
 					this.blur();
@@ -258,7 +258,7 @@ $.widget("ui.tabs", {
 					self.$panels.stop();
 					var a = this;
 					self.load(self.$tabs.index(this), function() {
-						$li.addClass([o.selectedClass, o.unselectClass].join(' '));
+						$li.addClass([o.selectedClass, o.deselectableClass].join(' '));
 						showTab(a, $show);
 					});
 					this.blur();
@@ -504,7 +504,7 @@ $.widget("ui.tabs", {
 			if ($.data(this, 'destroy.tabs'))
 				$(this).remove();
 			else
-				$(this).removeClass([o.selectedClass, o.unselectClass,
+				$(this).removeClass([o.selectedClass, o.deselectableClass,
 					o.disabledClass, o.panelClass, o.hideClass].join(' '));
 		});
 		if (o.cookie)
@@ -512,39 +512,35 @@ $.widget("ui.tabs", {
 	}
 });
 
-$.ui.tabs.version = "@VERSION";
-$.ui.tabs.defaults = {
-	// basic setup
-	unselect: false,
-	event: 'click',
-	disabled: [],
-	cookie: null, // e.g. { expires: 7, path: '/', domain: 'jquery.com', secure: true }
-	// TODO history: false,
-	
-	// Ajax
-	spinner: 'Loading&#8230;',
-	cache: false,
-	idPrefix: 'ui-tabs-',
-	ajaxOptions: null,
-	
-	// animations
-	fx: null, // e.g. { height: 'toggle', opacity: 'toggle', duration: 200 }
-	
-	// templates
-	tabTemplate: '<li><a href="#{href}"><span>#{label}</span></a></li>',
-	panelTemplate: '<div></div>',
-	
-	// CSS classes
-	navClass: 'ui-tabs-nav',
-	selectedClass: 'ui-tabs-selected',
-	unselectClass: 'ui-tabs-unselect',
-	disabledClass: 'ui-tabs-disabled',
-	panelClass: 'ui-tabs-panel',
-	hideClass: 'ui-tabs-hide',
-	loadingClass: 'ui-tabs-loading'
-};
-
-$.ui.tabs.getter = "length";
+$.extend($.ui.tabs, {
+	version: '@VERSION',
+	getter: 'length',
+	defaults: {
+		// basic setup
+		deselectable: false,
+		event: 'click',
+		disabled: [],
+		cookie: null, // e.g. { expires: 7, path: '/', domain: 'jquery.com', secure: true }
+		// Ajax
+		spinner: 'Loading&#8230;',
+		cache: false,
+		idPrefix: 'ui-tabs-',
+		ajaxOptions: null,
+		// animations
+		fx: null, // e.g. { height: 'toggle', opacity: 'toggle', duration: 200 }
+		// templates
+		tabTemplate: '<li><a href="#{href}"><span>#{label}</span></a></li>',
+		panelTemplate: '<div></div>',
+		// CSS class names
+		navClass: 'ui-tabs-nav',
+		selectedClass: 'ui-tabs-selected',
+		deselectableClass: 'ui-tabs-deselectable',
+		disabledClass: 'ui-tabs-disabled',
+		panelClass: 'ui-tabs-panel',
+		hideClass: 'ui-tabs-hide',
+		loadingClass: 'ui-tabs-loading'
+	}
+});
 
 /*
  * Tabs Extensions
