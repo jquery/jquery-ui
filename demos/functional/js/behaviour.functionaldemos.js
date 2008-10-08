@@ -10,4 +10,6 @@ $(document).ready(function() {
 		loadDemo(location.hash.replace(/^#/, ""));
 	}
 	
+	$.ajaxHistory.initialize();
+	
 });
