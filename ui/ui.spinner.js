@@ -279,7 +279,7 @@ $.widget('ui.spinner', {
 			window.clearTimeout(self.timeout);
 			self.timeout = 0;
 		}
-		self.timeout = window.setTimeout(function(){self._propagate('change', e)}, 400);
+		self.timeout = window.setTimeout(function(){self._propagate('change', e);}, 400);
 		e.preventDefault();
 	},
 	_getValue: function() {
