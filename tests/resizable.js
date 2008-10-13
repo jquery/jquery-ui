@@ -21,19 +21,19 @@ var drag = function(el, dx, dy, complete) {
 };
 
 var defaults = {
-	alsoResize: null,
+	alsoResize: undefined,
 	aspectRatio: false,
 	autoHide: false,
-	containment: null,
-	grid: null,
+	containment: undefined,
+	grid: undefined,
 	handles: 'e,s,se',
 	helper: null,
 	disabled: false,
-	maxHeight: null,
-	maxWidth: null,
+	maxHeight: undefined,
+	maxWidth: undefined,
 	minHeight: 10,
 	minWidth: 10,
-	proportionallyResize: null
+	proportionallyResize: undefined
 };
 
 // Resizable Tests
@@ -107,10 +107,8 @@ test("element types", function() {
 test("defaults", function() {
 	el = $('<div/>').resizable();
 	$.each(defaults, function(key, val) {
-		var actual = el.data(key + ".resizable"), expected = val,
-			method = (expected && expected.constructor == Object) ?
-				compare2 : equals;
-		method(actual, expected, key);
+		var actual = el.data(key + ".resizable"), expected = val;
+		same(actual, expected, key);
 	});
 	el.remove();
 });

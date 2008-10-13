@@ -22,7 +22,7 @@ var moved = function (dx, dy, msg) {
 	msg = msg ? msg + "." : "";
 	var actual = { left: offsetAfter.left, top: offsetAfter.top };
 	var expected = { left: offsetBefore.left + dx, top: offsetBefore.top + dy };
-	compare2(actual, expected, 'dragged[' + dragged.dx + ', ' + dragged.dy + '] ' + msg);
+	same(actual, expected, 'dragged[' + dragged.dx + ', ' + dragged.dy + '] ' + msg);
 }
 
 function shouldmove(why) {
@@ -266,7 +266,7 @@ test("{ containment: 'parent' }, relative", function() {
 		left: po.left + border(p, 'left') + margin(el, 'left'),
 		top: po.top + border(p, 'top') + margin(el, 'top')
 	}
-	compare2(offsetAfter, expected, 'compare offset to parent');
+	same(offsetAfter, expected, 'compare offset to parent');
 });
 
 test("{ containment: 'parent' }, absolute", function() {
@@ -277,7 +277,7 @@ test("{ containment: 'parent' }, absolute", function() {
 		left: po.left + border(p, 'left') + margin(el, 'left'),
 		top: po.top + border(p, 'top') + margin(el, 'top')
 	}
-	compare2(offsetAfter, expected, 'compare offset to parent');
+	same(offsetAfter, expected, 'compare offset to parent');
 });
 
 test("{ cursor: 'move' }", function() {
@@ -571,7 +571,7 @@ test("{ helper: 'clone' }, absolute", function() {
 
 	drag(el, 1, 1);
 	
-	compare2({ top: helperOffset.top-1, left: helperOffset.left-1 }, origOffset, 'dragged[' + dragged.dx + ', ' + dragged.dy + '] ');
+	same({ top: helperOffset.top-1, left: helperOffset.left-1 }, origOffset, 'dragged[' + dragged.dx + ', ' + dragged.dy + '] ');
 
 });
 
@@ -587,7 +587,7 @@ test("{ helper: 'clone' }, absolute with scroll offset on parent", function() {
 
 	drag(el, 1, 1);
 	
-	compare2({ top: helperOffset.top-1, left: helperOffset.left-1 }, origOffset, 'dragged[' + dragged.dx + ', ' + dragged.dy + '] ');
+	same({ top: helperOffset.top-1, left: helperOffset.left-1 }, origOffset, 'dragged[' + dragged.dx + ', ' + dragged.dy + '] ');
 	$("#main")[0].scrollTop = 0;
 
 });
@@ -604,7 +604,7 @@ test("{ helper: 'clone' }, absolute with scroll offset on root", function() {
 
 	drag(el, 1, 1);
 	
-	compare2({ top: helperOffset.top-1, left: helperOffset.left-1 }, origOffset, 'dragged[' + dragged.dx + ', ' + dragged.dy + '] ');
+	same({ top: helperOffset.top-1, left: helperOffset.left-1 }, origOffset, 'dragged[' + dragged.dx + ', ' + dragged.dy + '] ');
 	$(document).scrollTop(0);
 
 });
@@ -622,7 +622,7 @@ test("{ helper: 'clone' }, absolute with scroll offset on root and parent", func
 
 	drag(el, 1, 1);
 	
-	compare2({ top: helperOffset.top-1, left: helperOffset.left-1 }, origOffset, 'dragged[' + dragged.dx + ', ' + dragged.dy + '] ');
+	same({ top: helperOffset.top-1, left: helperOffset.left-1 }, origOffset, 'dragged[' + dragged.dx + ', ' + dragged.dy + '] ');
 	$(document).scrollTop(0);
 	$("#main")[0].scrollTop = 0;
 

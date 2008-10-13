@@ -11,11 +11,11 @@ var defaults = {
 	autoResize: true,
 	buttons: {},
 	disabled: false,
-	dialogClass: null,
+	dialogClass: undefined,
 	draggable: true,
 	height: 200,
-	maxHeight: null,
-	maxWidth: null,
+	maxHeight: undefined,
+	maxWidth: undefined,
 	minHeight: 100,
 	minWidth: 150,
 	modal: false,
@@ -67,7 +67,7 @@ function moved(dx, dy, msg) {
 	msg = msg ? msg + "." : "";
 	var actual = { left: offsetAfter.left, top: offsetAfter.top };
 	var expected = { left: offsetBefore.left + dx, top: offsetBefore.top + dy };
-	compare2(actual, expected, 'dragged[' + dragged.dx + ', ' + dragged.dy + '] ' + msg);
+	same(actual, expected, 'dragged[' + dragged.dx + ', ' + dragged.dy + '] ' + msg);
 }
 
 function shouldmove(why) {
@@ -86,7 +86,7 @@ function resized(dw, dh, msg) {
 	msg = msg ? msg + "." : "";
 	var actual = { width: widthAfter, height: heightAfter };
 	var expected = { width: widthBefore + dw, height: heightBefore + dh };
-	compare2(actual, expected, 'resized[' + dragged.dx + ', ' + dragged.dy + '] ' + msg);
+	same(actual, expected, 'resized[' + dragged.dx + ', ' + dragged.dy + '] ' + msg);
 }
 
 function shouldresize(why) {
@@ -185,10 +185,8 @@ test("element types", function() {
 test("defaults", function() {
 	el = $('<div/>').dialog();
 	$.each(defaults, function(key, val) {
-		var actual = el.data(key + ".dialog"), expected = val,
-			method = (expected && expected.constructor == Object) ?
-				compare2 : equals;
-		method(actual, expected, key);
+		var actual = el.data(key + ".dialog"), expected = val;
+		same(actual, expected, key);
 	});
 	el.remove();
 });
@@ -244,7 +242,7 @@ test("autoResize", function() {
 		handle = $(".ui-resizable-se", dlg());
 		drag(handle, 50, 50);
 		actual = { height: el.height() };
-		compare2(actual, expected, '.dialog({ autoResize: false })');
+		same(actual, expected, '.dialog({ autoResize: false })');
 	el.remove();
 	el = $('<div>content<br>content<br>content<br>content<br>content</div>').dialog({ autoResize: true });
 		before = { width: el.width(), height: el.height() };
@@ -252,7 +250,7 @@ test("autoResize", function() {
 		drag(handle, 50, 50);
 		expected = { width: before.width + 50, height: before.height + 50 };
 		actual = { width: el.width(), height: el.height() };
-		compare2(actual, expected, '.dialog({ autoResize: true })');
+		same(actual, expected, '.dialog({ autoResize: true })');
 	el.remove();
 });
 

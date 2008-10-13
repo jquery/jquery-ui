@@ -61,12 +61,7 @@ module('tabs');
 
 		for (var optionName in expected) {
 			var actual = el.data(optionName + '.tabs'), expects = expected[optionName];
-
-			if (optionName == 'disabled')
-				compare(actual, expects, optionName);
-			else
-				equals(actual, expects, optionName);
-			
+			same(actual, expects, optionName);
 		}
 	
 	});

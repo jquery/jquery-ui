@@ -79,10 +79,8 @@ test("defaults", function() {
 		filter: '*'
 	};
 	$.each(defaults, function(key, val) {
-		var actual = el.data(key + ".selectable"), expected = val,
-			method = (expected && expected.constructor == Object) ?
-				compare2 : equals;
-		method(actual, expected, key);
+		var actual = el.data(key + ".selectable"), expected = val;
+		same(actual, expected, key);
 	});
 	el.remove();
 });
