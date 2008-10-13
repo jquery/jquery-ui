@@ -24,7 +24,7 @@ function equalsDateArray(a1, a2, message) {
 	a1[1] = (a1[1] ? new Date(a1[1].getFullYear(), a1[1].getMonth(), a1[1].getDate()) : '');
 	a2[0] = (a2[0] ? new Date(a2[0].getFullYear(), a2[0].getMonth(), a2[0].getDate()) : '');
 	a2[1] = (a2[1] ? new Date(a2[1].getFullYear(), a2[1].getMonth(), a2[1].getDate()) : '');
-	equals(serialArray(a1), serialArray(a2), message);
+	same(a1, a2, message);
 }
 
 function init(id, options) {
