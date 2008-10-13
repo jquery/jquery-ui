@@ -1,15 +1,9 @@
 $(document).ready(function() {
 	
-	$('.component-links a').click(function() {
-		var comp = $(this).attr('href').replace(/^#/, "");
-		loadDemo(comp);
+	$('.component-links a').history(function() {
+		loadDemo( $(this).attr('href').replace(/^#/, "") );
 	});
 
-	// hash listener
-	if (location.hash) {
-		loadDemo(location.hash.replace(/^#/, ""));
-	}
-	
 	$.ajaxHistory.initialize();
 	
 });
