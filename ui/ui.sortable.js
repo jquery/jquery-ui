@@ -69,7 +69,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 		var str = []; o = o || {};
 		
 		$(items).each(function() {
-			var res = ($(this.item || this).attr(o.attribute || 'id') || '').match(o.expression || (/(.+)[-=_](.+)/));
+			var res = ($(o.item || this).attr(o.attribute || 'id') || '').match(o.expression || (/(.+)[-=_](.+)/));
 			if(res) str.push((o.key || res[1]+'[]')+'='+(o.key && o.expression ? res[1] : res[2]));
 		});
 		
@@ -80,9 +80,9 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 	toArray: function(o) {
 		
 		var items = this._getItemsAsjQuery(o && o.connected);
-		var ret = [];
+		var ret = []; o = o || {};
 		
-		items.each(function() { ret.push($(this).attr(o.attr || 'id')); });
+		items.each(function() { ret.push($(o.item || this).attr(o.attribute || 'id') || ''); });
 		return ret;
 		
 	},
