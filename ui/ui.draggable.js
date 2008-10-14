@@ -28,7 +28,7 @@ $.widget("ui.draggable", $.extend({}, $.ui.mouse, {
 		
 	},
 	
-	createHelper: function() {
+	createHelper: function(e) {
 		
 		var o = this.options;
 		var helper = $.isFunction(o.helper) ? $(o.helper.apply(this.element[0], [e])) : (o.helper == 'clone' ? this.element.clone() : this.element);
@@ -76,7 +76,7 @@ $.widget("ui.draggable", $.extend({}, $.ui.mouse, {
 		var o = this.options;
 		
 		//Create and append the visible helper
-		this.helper = this.createHelper();
+		this.helper = this.createHelper(e);
 		
 		//If ddmanager is used for droppables, set the global draggable
 		if($.ui.ddmanager)
