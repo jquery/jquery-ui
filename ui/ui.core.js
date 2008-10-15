@@ -9,33 +9,6 @@
  */
 ;(function($) {
 
-
-/** Lazy loading stub functions **/
-var uiPath;
-$("script").each(function() {
-	if((/ui/i).test(this.src)) {
-		var splitted = this.src.split('/'); splitted.pop();
-		uiPath = splitted.join('/') + ( splitted.join('/') == '' ? '' : '/' );
-	}
-});
-
-$.each( ("accordion,colorpicker,datepicker,dialog,draggable,droppable,magnifier,progressbar," +
-	"resizable,selectable,slider,sortable,spinner,tabs").split(","), function(i, name){
-
-	// Handle event binding
-	$.fn[name] = function(){
-
-		var selector = this, args = arguments;
-		$.getScript(uiPath+'ui.'+name+'.js', function() {
-			selector[name].apply(selector, args);
-		});
-		
-		return this;
-	
-	};
-});
-
-
 /** jQuery core modifications and additions **/
 
 var _remove = $.fn.remove;
