@@ -29,6 +29,8 @@ $.each( ("accordion,colorpicker,datepicker,dialog,draggable,droppable,magnifier,
 		$.getScript(uiPath+'ui.'+name+'.js', function() {
 			selector[name].apply(selector, args);
 		});
+		
+		return this;
 	
 	};
 });
