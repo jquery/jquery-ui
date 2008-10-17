@@ -297,7 +297,10 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 			var className = o.placeholder;
 			o.placeholder = {
 				element: function() {
-					var el = $(document.createElement(self.currentItem[0].nodeName)).addClass(className || "ui-sortable-placeholder")[0];
+					
+					var el = $(document.createElement(self.currentItem[0].nodeName))
+						.addClass(className || self.currentItem[0].className+" ui-sortable-placeholder")
+						.removeClass('ui-sortable-helper')[0];
 					
 					if(!className) {
 						el.style.visibility = "hidden";
@@ -316,10 +319,15 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 			};
 		}
 		
-		self.placeholder = $(o.placeholder.element.call(self.element, self.currentItem))
-		self.currentItem.parent()[0].appendChild(self.placeholder[0]);
-		self.placeholder[0].parentNode.insertBefore(self.placeholder[0], self.currentItem[0]);
+		//Create the placeholder
+		self.placeholder = $(o.placeholder.element.call(self.element, self.currentItem));
+		
+		//Append it after the actual current item
+		self.currentItem.after(self.placeholder);
+		
+		//Update the size of the placeholder (TODO: Logic to fuzzy, see line 316/317)
 		o.placeholder.update(self, self.placeholder);
+		
 	},
 	
 	_contactContainers: function(e) {
@@ -442,7 +450,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 		
 		this.offsetParent = this.helper.offsetParent();													//Get the offsetParent and cache its position
 		var po = this.offsetParent.offset();			
-		
+	
 		this.offsetParentBorders = {
 			top: (parseInt(this.offsetParent.css("borderTopWidth"),10) || 0),
 			left: (parseInt(this.offsetParent.css("borderLeftWidth"),10) || 0)
