@@ -155,6 +155,9 @@ $.widget("ui.slider", {
 	},
 	
 	_keydown: function(keyCode, handle) {
+		if (this.options.disabled)
+			return;
+
 		var k = keyCode;
 		if(/(33|34|35|36|37|38|39|40)/.test(k)) {
 			var o = this.options, xpos, ypos;
