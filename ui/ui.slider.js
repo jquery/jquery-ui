@@ -435,9 +435,9 @@ $.widget("ui.slider", {
 		
 		if (!noPropagation) {
 			this._propagate('start', null);
+			this._propagate("slide", null);
 			this._propagate('stop', null);
 			this._propagate('change', null);
-			this._propagate("slide", null);
 		}
 	}
 });
