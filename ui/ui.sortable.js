@@ -128,12 +128,24 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 
 		if (this.floating) {
 			if (isOverElement) {
-				return horizontalDirection == "right" ? 2 : 1;
+
+				if (horizontalDirection == false) {
+					return false;
+				}
+
+				var direction = horizontalDirection == "right" ? 2 : 1;
+				return direction;
 			}
 		}
 		else {
 			if (isOverElement) {
-				return verticalDirection == "down" ? 2 : 1;
+
+				if (verticalDirection == false) {
+					return false;
+				}
+
+				var direction = verticalDirection == "down" ? 2 : 1;
+				return direction;
 			}
 		}
 
@@ -143,14 +155,26 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 	_getDragVerticalDirection: function() {
 		var helperTop = this.positionAbs.top;
 		var lastTop = this.lastPositionAbs.top;
-		var direction = helperTop - lastTop > 0 ? "down" : "up";
+		var delta = helperTop - lastTop;
+
+		if (delta == 0) {
+			return false;
+		}
+
+		var direction = delta > 0 ? "down" : "up";
 		return direction;
 	},
 
 	_getDragHorizontalDirection: function() {
 		var helperLeft = this.positionAbs.left;
 		var lastLeft = this.lastPositionAbs.left;
-		var direction = helperLeft - lastLeft > 0 ? "right" : "left";
+		var delta = helperLeft - lastLeft;
+
+		if (delta == 0) {
+			return false;
+		}
+
+		var direction = delta > 0 ? "right" : "left";
 		return direction;
 	},
 
