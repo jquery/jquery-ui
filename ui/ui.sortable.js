@@ -127,7 +127,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 		var horizontalDirection = this._getDragHorizontalDirection();
 
 		if (this.floating) {
-			if (isOverElementWidth) {
+			if (isOverElement) {
 				return horizontalDirection == "right" ? 2 : 1;
 			}
 		}
