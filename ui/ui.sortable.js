@@ -384,6 +384,10 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 
 	_mouseCapture: function(e, overrideHandle) {
 
+		if (this.reverting) {
+			return false;
+		}
+
 		if(this.options.disabled || this.options.type == 'static') return false;
 
 		//We have to refresh the items data once first
@@ -697,6 +701,8 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 			var self = this;
 			var cur = self.placeholder.offset();
 
+			self.reverting = true;
+
 			$(this.helper).animate({
 				left: cur.left - this.offset.parent.left - self.margins.left + (this.offsetParent[0] == document.body ? 0 : this.offsetParent[0].scrollLeft),
 				top: cur.top - this.offset.parent.top - self.margins.top + (this.offsetParent[0] == document.body ? 0 : this.offsetParent[0].scrollTop)
@@ -712,6 +718,8 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 	},
 
 	_clear: function(e, noPropagation) {
+
+		this.reverting = false;
 
 		//We first have to update the dom position of the actual currentItem
 		if(!this._noFinalSort) this.placeholder.before(this.currentItem);
