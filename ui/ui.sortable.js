@@ -628,9 +628,10 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 		this.positionAbs = this._convertPositionTo("absolute");
 
 		//Set the helper's position
-		this.helper[0].style.left = this.position.left+'px';
-		this.helper[0].style.top = this.position.top+'px';
-
+		if (this.helper) {
+			this.helper[0].style.left = this.position.left+'px';
+			this.helper[0].style.top = this.position.top+'px';
+		}
 		//Rearrange
 		for (var i = this.items.length - 1; i >= 0; i--) {
 
