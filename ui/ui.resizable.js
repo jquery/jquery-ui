@@ -1,7 +1,7 @@
 /*
  * jQuery UI Resizable @VERSION
  *
- * Copyright (c) 2008 Paul Bakaus
+ * Copyright (c) 2008 Eduardo Lundgren
  * Dual licensed under the MIT (MIT-LICENSE.txt)
  * and GPL (GPL-LICENSE.txt) licenses.
  * 
