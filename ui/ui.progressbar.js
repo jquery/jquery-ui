@@ -22,8 +22,14 @@ $.widget("ui.progressbar", {
 			id = ((new Date()).getTime() + Math.random()),
 			text = options.text || '0%';
 		
-		this.element.addClass("ui-progressbar").width(options.width);
-		
+		this.element
+			.addClass("ui-progressbar")
+			.width(options.width)
+			.ariaRole("progressbar")
+			.ariaState("valuemin","0")
+			.ariaState("valuemax","100")
+			.ariaState("valuenow","0");
+			
 		$.extend(this, {
 			active: false,
 			pixelState: 0,
@@ -97,11 +103,13 @@ $.widget("ui.progressbar", {
 	disable: function() {
 		this.element.addClass("ui-progressbar-disabled");
 		this.disabled = true;
+		this.element.ariaState("disabled", true);
 	},
 	
 	enable: function() {
 		this.element.removeClass("ui-progressbar-disabled");
 		this.disabled = false;
+		this.element.ariaState("disabled", false);
 	},
 	
 	pause: function() {
@@ -120,9 +128,11 @@ $.widget("ui.progressbar", {
 		this.bar.width(this.pixelState);
 		this.textElement.width(this.pixelState);
 		
+		var percent = Math.round(this.percentState);
 		if (this.options.range && !this.options.text) {
-			this.textElement.html(Math.round(this.percentState) + '%');
+			this.textElement.html(percent + '%');
 		}
+		this.element.ariaState("valuenow", percent);
 		this._propagate('progress', this.ui());
 	},
 	

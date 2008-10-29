@@ -52,5 +52,20 @@ test("set defaults on init", function() {
 
 });
 
+test("accessibility", function() {
+	expect(7);
+	el = $("#progressbar").progressbar();
+
+	equals(el.ariaRole(), "progressbar", "aria role");
+	equals(el.ariaState("valuemin"), 0, "aria-valuemin");
+	equals(el.ariaState("valuemax"), 100, "aria-valuemax");
+	equals(el.ariaState("valuenow"), 0, "aria-valuenow initially");
+	el.progressbar("progress", 77);
+	equals(el.ariaState("valuenow"), 77, "aria-valuenow");
+	el.progressbar("disable");
+	equals(el.ariaState("disabled"), "true", "aria-disabled");
+	el.progressbar("enable");
+	equals(el.ariaState("disabled"), "false", "enabled");
+});
 
 })(jQuery);
