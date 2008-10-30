@@ -116,11 +116,13 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 		var itemHeight = item.height, itemWidth = item.width;
 		var itemTop = item.top, itemLeft = item.left;
 
-		var isOverElementHeight = ((helperTop + dyClick) > itemTop) &&
-								((helperTop + dyClick) < (itemTop + itemHeight));
+		var isOverElementHeight =
+			((helperTop + dyClick) > itemTop) &&
+			((helperTop + dyClick) < (itemTop + itemHeight));
 
-		var isOverElementWidth = ((helperLeft + dxClick) > itemLeft) &&
-								((helperLeft + dxClick) < (itemLeft + itemWidth));
+		var isOverElementWidth =
+			((helperLeft + dxClick) > itemLeft) &&
+			((helperLeft + dxClick) < (itemLeft + itemWidth));
 
 		var isOverElement = isOverElementHeight && isOverElementWidth;
 		var verticalDirection = this._getDragVerticalDirection();
@@ -129,7 +131,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 		if (this.floating) {
 			if (isOverElement) {
 
-				if (horizontalDirection == false) {
+				if (!horizontalDirection) {
 					return false;
 				}
 
@@ -140,7 +142,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 		else {
 			if (isOverElement) {
 
-				if (verticalDirection == false) {
+				if (!verticalDirection) {
 					return false;
 				}
 
@@ -287,8 +289,14 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 			var t = this.options.toleranceElement ? $(this.options.toleranceElement, item.item) : item.item;
 
 			if (!fast) {
-				item.width = t[0].offsetWidth;
-				item.height = t[0].offsetHeight;
+				if (this.options.accurate) {
+					item.width = t.width();
+					item.height = t.height();
+				}
+				else {
+					item.width = t[0].offsetWidth;
+					item.height = t[0].offsetHeight;
+				}
 			}
 
 			var p = t.offset();
@@ -300,7 +308,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 			this.options.custom.refreshContainers.call(this);
 		} else {
 			for (var i = this.containers.length - 1; i >= 0; i--){
-				var p =this.containers[i].element.offset();
+				var p = this.containers[i].element.offset();
 				this.containers[i].containerCache.left = p.left;
 				this.containers[i].containerCache.top = p.top;
 				this.containers[i].containerCache.width	= this.containers[i].element.outerWidth();
@@ -497,7 +505,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 			left: po.left + this.offsetParentBorders.left
 		};
 
-		this.updateOriginalPosition = this.originalPosition = this._generatePosition(e);				//Generate the original position
+		this.originalPosition = this._generatePosition(e);				//Generate the original position
 		this.domPosition = { prev: this.currentItem.prev()[0], parent: this.currentItem.parent()[0] };  //Cache the former DOM position
 
 		//If o.placeholder is used, create a new element at the given position with the class
@@ -641,7 +649,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 
 	_mouseDrag: function(e) {
 
-		//Compute the helpers position
+	//Compute the helpers position
 		this.position = this._generatePosition(e);
 		this.positionAbs = this._convertPositionTo("absolute");
 
@@ -667,13 +675,13 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 
 			if(!intersection) continue;
 
-			if(this.items[i].item[0] != this.currentItem[0] //cannot intersect with itself
-				&&	this.placeholder[intersection == 1 ? "next" : "prev"]()[0] != this.items[i].item[0] //no useless actions that have been done before
-				&&	!contains(this.placeholder[0], this.items[i].item[0]) //no action if the item moved is the parent of the item checked
-				&& (this.options.type == 'semi-dynamic' ? !contains(this.element[0], this.items[i].item[0]) : true)
-			) {
+			var item = this.items[i].item[0];
 
-				this.updateOriginalPosition = this._generatePosition(e);
+			if(item != this.currentItem[0] //cannot intersect with itself
+				&&	this.placeholder[intersection == 1 ? "next" : "prev"]()[0] != item //no useless actions that have been done before
+				&&	!contains(this.placeholder[0], item) //no action if the item moved is the parent of the item checked
+				&& (this.options.type == 'semi-dynamic' ? !contains(this.element[0], item) : true)
+			) {
 
 				this.direction = intersection == 1 ? "down" : "up";
 				this.options.sortIndicator.call(this, e, this.items[i]);
@@ -810,7 +818,8 @@ $.extend($.ui.sortable, {
 		appendTo: "parent",
 		sortIndicator: $.ui.sortable.prototype._rearrange,
 		scope: "default",
-		forcePlaceholderSize: false
+		forcePlaceholderSize: false,
+		accurate: false
 	}
 });
 
