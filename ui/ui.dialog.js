@@ -52,6 +52,9 @@ $.widget("ui.dialog", {
 			uiDialogTitlebar = (this.uiDialogTitlebar = $('<div/>'))
 				.addClass('ui-dialog-titlebar')
 				.append('<a href="#" class="ui-dialog-titlebar-close"><span>X</span></a>')
+				.mousedown(function() {
+					self.moveToTop();
+				})
 				.prependTo(uiDialogContainer),
 			
 			title = options.title || '&nbsp;',
@@ -82,7 +85,7 @@ $.widget("ui.dialog", {
 				})
 				.ariaRole("dialog")
 				.ariaState("labelledby", titleId)
-				.mousedown(function() {
+				.mouseup(function() {
 					self.moveToTop();
 				}),
 			
@@ -92,24 +95,24 @@ $.widget("ui.dialog", {
 					position: 'absolute',
 					bottom: 0
 				})
-				.appendTo(uiDialog);
-		
-		this.uiDialogTitlebarClose = $('.ui-dialog-titlebar-close', uiDialogTitlebar)
-			.hover(
-				function() {
-					$(this).addClass('ui-dialog-titlebar-close-hover');
-				},
-				function() {
-					$(this).removeClass('ui-dialog-titlebar-close-hover');
-				}
-			)
-			.mousedown(function(ev) {
-				ev.stopPropagation();
-			})
-			.click(function() {
-				self.close();
-				return false;
-			});
+				.appendTo(uiDialog),
+			
+			uiDialogTitlebarClose = $('.ui-dialog-titlebar-close', uiDialogTitlebar)
+				.hover(
+					function() {
+						$(this).addClass('ui-dialog-titlebar-close-hover');
+					},
+					function() {
+						$(this).removeClass('ui-dialog-titlebar-close-hover');
+					}
+				)
+				.mousedown(function(ev) {
+					ev.stopPropagation();
+				})
+				.click(function() {
+					self.close();
+					return false;
+				});
 		
 		uiDialogTitlebar.find("*").add(uiDialogTitlebar).each(function() {
 			$.ui.disableSelection(this);
@@ -172,8 +175,12 @@ $.widget("ui.dialog", {
 			maxZ = Math.max(maxZ, parseInt($(this).css('z-index'), 10) || options.zIndex);
 		});
 		(this.overlay && this.overlay.$el.css('z-index', ++maxZ));
-		this.uiDialog.css('z-index', ++maxZ);
 		
+		//Save and then restore scroll since Opera 9.5+ resets when parent z-Index is changed.
+		//  http://ui.jquery.com/bugs/ticket/3193
+		var saveScroll = { scrollTop: this.element.attr('scrollTop'), scrollLeft: this.element.attr('scrollLeft') };
+		this.uiDialog.css('z-index', ++maxZ);
+		this.element.attr(saveScroll);
 		this._trigger('focus', null, { options: this.options });
 	},
 	
