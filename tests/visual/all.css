@@ -1,5 +1,5 @@
 
-body { margin: 0; padding: 20px; background: black; }
+body { margin: 0; padding: 20px; background: #191919; }
 ul.plugins { margin: 0; padding: 0; }
 ul.plugins li { margin: 0 12px 12px 0;
 	list-style-type: none; width: 210px; height: 220px; float: left;
@@ -10,7 +10,7 @@ ul.plugins li { margin: 0 12px 12px 0;
 	margin: 10px;
 	width: 190px; height: 180px;
 	text-align: center;
-	background: #FF9C08; color: white; font-weight: bold;
+	background: #FEA620; color: white; font-weight: bold;
 }
 #selectable div {
 	width: 45px; height: 45px; float: left; margin: 6px;
@@ -30,11 +30,11 @@ ul.plugins li { margin: 0 12px 12px 0;
 	background: black;
 }
 
-.draggable { margin: 10px; width: 32px; height: 30px; float: left; background: #FF9C08; }
-#droppable { margin: 10px; width: 190px; height: 130px; float: left; border: 1px solid #FF9C08; overflow: hidden; }
+.draggable { margin: 10px; width: 32px; height: 30px; float: left; background: #FEA620; }
+#droppable { margin: 10px; width: 190px; height: 130px; float: left; border: 1px solid #FEA620; overflow: hidden; }
 #droppable .draggable { margin: 7px; }
 
-.ui-dialog { background-color: #FF9C08; }
+.ui-dialog { background-color: #FEA620; }
 .ui-dialog .ui-dialog-titlebar { background: black; padding: 0px; height: 28px;	_height: 29px; }
 .ui-dialog.ui-draggable .ui-dialog-titlebar { cursor: move; }
 
@@ -43,7 +43,7 @@ ul.plugins li { margin: 0 12px 12px 0;
 	cursor: default; color: white;
 }
 
-.ui-dialog .ui-dialog-titlebar-close-hover { color: #FF9C08; }
+.ui-dialog .ui-dialog-titlebar-close-hover { color: #FEA620; }
 
 .ui-dialog .ui-dialog-title {
 	margin-left: 5px; color: white; font-weight: bold;
@@ -76,5 +76,5 @@ ul.plugins li { margin: 0 12px 12px 0;
 .ui-dialog .ui-resizable-nw { cursor: nw-resize; width: 9px; height: 29px; left: 0px; top: 0px; background: gray !important; border: none !important; }
 .ui-dialog .ui-resizable-ne { cursor: ne-resize; width: 9px; height: 29px; right: 0px; top: 0px; background: gray !important; border: none !important; }
 
-.ui-slider { margin: 10px; background: #FF9C08; height: 15px; position: relative; }
+.ui-slider { margin: 10px; background: #FEA620; height: 15px; position: relative; }
 .ui-slider-handle { width: 10px; height: 15px; background: white; position: absolute; top: 0px; left: 0px; }
