@@ -21,19 +21,31 @@ var drag = function(el, dx, dy, complete) {
 };
 
 var defaults = {
-	alsoResize: undefined,
+	animate: false,
+	animateDuration: 'slow',
+	animateEasing: 'swing',
+	alsoResize: false,
 	aspectRatio: false,
 	autoHide: false,
-	containment: undefined,
-	grid: undefined,
-	handles: 'e,s,se',
-	helper: null,
+	cancel: ':input',
+	containment: false,
+	delay: 0,
 	disabled: false,
-	maxHeight: undefined,
-	maxWidth: undefined,
+	disableSelection: true,
+	distance: 1,
+	ghost: false,
+	grid: false,
+	handles: '???',
+	helper: null,
+	knobHandles: false,
+	maxHeight: null,
+	maxWidth: null,
 	minHeight: 10,
 	minWidth: 10,
-	proportionallyResize: undefined
+	preserveCursor: true,
+	preventDefault: true,
+	proportionallyResize: false,
+	transparent: false
 };
 
 // Resizable Tests
