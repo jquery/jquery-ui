@@ -518,18 +518,28 @@ $.widget("ui.resizable", $.extend({}, $.ui.mouse, {
 $.extend($.ui.resizable, {
 	version: "@VERSION",
 	defaults: {
+		alsoResize: false,
+		animate: false,
+		animateDuration: "slow",
+		animateEasing: "swing",
+		aspectRatio: false,
+		autoHide: false,
 		cancel: ":input",
+		containment: false,
+		disableSelection: true,
 		distance: 1,
 		delay: 0,
-		preventDefault: true,
-		transparent: false,
-		minWidth: 10,
+		ghost: false,
+		grid: false,
+		knobHandles: false,
+		maxHeight: null,
+		maxWidth: null,
 		minHeight: 10,
-		aspectRatio: false,
-		disableSelection: true,
+		minWidth: 10,
 		preserveCursor: true,
-		autoHide: false,
-		knobHandles: false
+		preventDefault: true,
+		proportionallyResize: false,
+		transparent: false
 	}
 });
 
@@ -666,7 +676,8 @@ $.ui.plugin.add("resizable", "animate", {
 		
 		self.element.animate(
 			$.extend(style, top && left ? { top: top, left: left } : {}), { 
-				duration: o.animateDuration || "slow", easing: o.animateEasing || "swing", 
+				duration: o.animateDuration,
+				easing: o.animateEasing, 
 				step: function() {
 					
 					var data = {
