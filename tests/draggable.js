@@ -628,6 +628,12 @@ test("{ helper: 'clone' }, absolute with scroll offset on root and parent", func
 
 });
 
+module("draggable: behaviour");
+
+test("Events should not be executed on the element if drag is initiated", function() {
+	//TODO: Implement missing test
+});
+
 
 module("draggable: Tickets");
 

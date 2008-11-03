@@ -345,9 +345,16 @@ $.ui.mouse = {
 	_mouseInit: function() {
 		var self = this;
 	
-		this.element.bind('mousedown.'+this.widgetName, function(e) {
-			return self._mouseDown(e);
-		});
+		this.element
+			.bind('mousedown.'+this.widgetName, function(e) {
+				return self._mouseDown(e);
+			})
+			.bind('click.'+this.widgetName, function(e) {
+				if(self._preventClickEvent) {
+					self._preventClickEvent = false;
+					return false;
+				}
+			});
 		
 		// Prevent text selection in IE
 		if ($.browser.msie) {
@@ -437,6 +444,7 @@ $.ui.mouse = {
 		
 		if (this._mouseStarted) {
 			this._mouseStarted = false;
+			this._preventClickEvent = true;
 			this._mouseStop(e);
 		}
 		
