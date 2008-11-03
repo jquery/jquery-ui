@@ -46,16 +46,57 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 	},
 	plugins: {},
 	ui: function(inst) {
+		var self = inst || this;
 		return {
-			helper: (inst || this)["helper"],
-			placeholder: (inst || this)["placeholder"] || $([]),
-			position: (inst || this)["position"],
-			absolutePosition: (inst || this)["positionAbs"],
+			helper: self.helper,
+			placeholder: self.placeholder || $([]),
+			position: self.position,
+			absolutePosition: self.positionAbs,
 			options: this.options,
 			element: this.element,
-			item: (inst || this)["currentItem"],
-			sender: inst ? inst.element : null
+			item: self.currentItem,
+			sender: inst ? inst.element : null,
+			cancel: function() { self.cancel(); }
 		};
+	},
+	
+	cancel: function() {
+
+		if(this.dragging) {
+			if(this.options.helper == "original")
+				this.currentItem.css(this._storedCSS).removeClass("ui-sortable-helper");
+			else
+				this.currentItem.show();
+	
+			//Post deactivating events to containers
+			for (var i = this.containers.length - 1; i >= 0; i--){
+				this.containers[i]._propagate("deactivate", null, this);
+				if(this.containers[i].containerCache.over) {
+					this.containers[i]._propagate("out", null, this);
+					this.containers[i].containerCache.over = 0;
+				}
+			}
+		}
+
+		//$(this.placeholder[0]).remove(); would have been the jQuery way - unfortunately, it unbinds ALL events from the original node!
+		if(this.placeholder[0].parentNode) this.placeholder[0].parentNode.removeChild(this.placeholder[0]);
+		if(this.options.helper != "original" && this.helper && this.helper[0].parentNode) this.helper.remove();
+		
+		$.extend(this, {
+			helper: null,
+			dragging: false,
+			reverting: false,
+			_noFinalSort: null
+		});
+		
+		if(this.domPosition.prev) {
+			$(this.domPosition.prev).after(this.currentItem);
+		} else {
+			$(this.domPosition.parent).prepend(this.currentItem);
+		}
+
+		return true;		
+		
 	},
 
 	_propagate: function(n,e,inst, noPropagation) {
