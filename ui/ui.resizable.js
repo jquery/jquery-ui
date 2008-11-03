@@ -185,7 +185,7 @@ $.widget("ui.resizable", $.extend({}, $.ui.mouse, {
 		o._handles = $('.ui-resizable-handle', self.element);
 		
 		if (o.disableSelection)
-			o._handles.each(function(i, e) { $.ui.disableSelection(e); });
+			o._handles.disableSelection();
 		
 		//Matching axis name
 		o._handles.mouseover(function() {
@@ -290,7 +290,7 @@ $.widget("ui.resizable", $.extend({}, $.ui.mouse, {
 		}
 		
 		//Opera fixing relative position
-		if ($.browser.opera && /relative/.test(el.css('position')))
+		if ($.browser.opera && (/relative/).test(el.css('position')))
 			el.css({ position: 'relative', top: 'auto', left: 'auto' });
 		
 		this._renderProxy();
@@ -586,7 +586,7 @@ $.ui.plugin.add("resizable", "containment", {
 				ps = self.containerSize, co = self.containerOffset, cs = self.size, cp = self.position,
 				pRatio = o._aspectRatio || e.shiftKey, cop = { top:0, left:0 }, ce = self.containerElement;
 		
-		if (ce[0] != document && /static/.test(ce.css('position')))
+		if (ce[0] != document && (/static/).test(ce.css('position')))
 			cop = self.containerPosition;
 		
 		if (cp.left < (o.helper ? co.left : cop.left)) {
@@ -621,10 +621,10 @@ $.ui.plugin.add("resizable", "containment", {
 		
 		var helper = $(self.helper), ho = helper.offset(), w = helper.innerWidth(), h = helper.innerHeight();
 		
-		if (o.helper && !o.animate && /relative/.test(ce.css('position')))
+		if (o.helper && !o.animate && (/relative/).test(ce.css('position')))
 			$(this).css({ left: (ho.left - co.left), top: (ho.top - co.top), width: w, height: h });
 		
-		if (o.helper && !o.animate && /static/.test(ce.css('position')))
+		if (o.helper && !o.animate && (/static/).test(ce.css('position')))
 			$(this).css({ left: cop.left + (ho.left - co.left), top: cop.top + (ho.top - co.top), width: w, height: h });
 		
 	}

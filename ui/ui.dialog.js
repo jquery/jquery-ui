@@ -114,9 +114,7 @@ $.widget("ui.dialog", {
 					return false;
 				});
 		
-		uiDialogTitlebar.find("*").add(uiDialogTitlebar).each(function() {
-			$.ui.disableSelection(this);
-		});
+		uiDialogTitlebar.find("*").add(uiDialogTitlebar).disableSelection();
 		
 		(options.draggable && $.fn.draggable && this._makeDraggable());
 		(options.resizable && $.fn.resizable && this._makeResizable());

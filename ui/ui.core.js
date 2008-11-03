@@ -10,61 +10,6 @@
 ;(function($) {
 
 /** jQuery core modifications and additions **/
-
-var _remove = $.fn.remove;
-$.fn.remove = function() {
-	// Safari has a native remove event which actually removes DOM elements,
-	// so we have to use triggerHandler instead of trigger (#3037).
-	$("*", this).add(this).each(function() {
-		$(this).triggerHandler("remove");
-	});
-	return _remove.apply(this, arguments );
-};
-
-function isVisible(element) {
-	function checkStyles(element) {
-		var style = element.style;
-		return (style.display != 'none' && style.visibility != 'hidden');
-	}
-	
-	var visible = checkStyles(element);
-	
-	(visible && $.each($.dir(element, 'parentNode'), function() {
-		return (visible = checkStyles(this));
-	}));
-	
-	return visible;
-}
-
-$.extend($.expr[':'], {
-	data: function(a, i, m) {
-		return $.data(a, m[3]);
-	},
-	
-	// TODO: add support for object, area
-	tabbable: function(a, i, m) {
-		var nodeName = a.nodeName.toLowerCase();
-		
-		return (
-			// in tab order
-			a.tabIndex >= 0 &&
-			
-			( // filter node types that participate in the tab order
-				
-				// anchor tag
-				('a' == nodeName && a.href) ||
-				
-				// enabled form element
-				(/input|select|textarea|button/.test(nodeName) &&
-					'hidden' != a.type && !a.disabled)
-			) &&
-			
-			// visible on page
-			isVisible(a)
-		);
-	}
-});
-
 $.keyCode = {
 	BACKSPACE: 8,
 	CAPS_LOCK: 20,
@@ -94,9 +39,103 @@ $.keyCode = {
 	UP: 38
 };
 
-// WAI-ARIA Semantics
+//Temporary mappings
+var _remove = $.fn.remove;
 var isFF2 = $.browser.mozilla && (parseFloat($.browser.version) < 1.9);
+
+
+//Helper functions and ui object
+$.ui = {
+	
+	version: "@VERSION",
+	
+	// $.ui.plugin is deprecated.  Use the proxy pattern instead.
+	plugin: {
+		add: function(module, option, set) {
+			var proto = $.ui[module].prototype;
+			for(var i in set) {
+				proto.plugins[i] = proto.plugins[i] || [];
+				proto.plugins[i].push([option, set[i]]);
+			}
+		},
+		call: function(instance, name, args) {
+			var set = instance.plugins[name];
+			if(!set) { return; }
+			
+			for (var i = 0; i < set.length; i++) {
+				if (instance.options[set[i][0]]) {
+					set[i][1].apply(instance.element, args);
+				}
+			}
+		}	
+	},
+	
+	cssCache: {},
+	css: function(name) {
+		if ($.ui.cssCache[name]) { return $.ui.cssCache[name]; }
+		var tmp = $('<div class="ui-gen">').addClass(name).css({position:'absolute', top:'-5000px', left:'-5000px', display:'block'}).appendTo('body');
+		
+		//if (!$.browser.safari)
+			//tmp.appendTo('body');
+		
+		//Opera and Safari set width and height to 0px instead of auto
+		//Safari returns rgba(0,0,0,0) when bgcolor is not set
+		$.ui.cssCache[name] = !!(
+			(!(/auto|default/).test(tmp.css('cursor')) || (/^[1-9]/).test(tmp.css('height')) || (/^[1-9]/).test(tmp.css('width')) || 
+			!(/none/).test(tmp.css('backgroundImage')) || !(/transparent|rgba\(0, 0, 0, 0\)/).test(tmp.css('backgroundColor')))
+		);
+		try { $('body').get(0).removeChild(tmp.get(0));	} catch(e){}
+		return $.ui.cssCache[name];
+	},
+
+	hasScroll: function(e, a) {
+		
+		//If overflow is hidden, the element might have extra content, but the user wants to hide it
+		if ($(e).css('overflow') == 'hidden') { return false; }
+		
+		var scroll = (a && a == 'left') ? 'scrollLeft' : 'scrollTop',
+			has = false;
+		
+		if (e[scroll] > 0) { return true; }
+		
+		// TODO: determine which cases actually cause this to happen
+		// if the element doesn't have the scroll set, see if it's possible to
+		// set the scroll
+		e[scroll] = 1;
+		has = (e[scroll] > 0);
+		e[scroll] = 0;
+		return has;
+	}
+};
+
+
+//jQuery plugins
 $.fn.extend({
+	
+	remove: function() {
+		// Safari has a native remove event which actually removes DOM elements,
+		// so we have to use triggerHandler instead of trigger (#3037).
+		$("*", this).add(this).each(function() {
+			$(this).triggerHandler("remove");
+		});
+		return _remove.apply(this, arguments );
+	},
+	
+	enableSelection: function() {
+		return this
+			.attr('unselectable', 'off')
+			.css('MozUserSelect', '')
+			.unbind('selectstart.ui');
+	},
+	
+	disableSelection: function() {
+		return this
+			.attr('unselectable', 'on')
+			.css('MozUserSelect', 'none')
+			.bind('selectstart.ui', function() { return false; });
+	},
+	
+	// WAI-ARIA Semantics
 	ariaRole: function(role) {
 		return (role !== undefined
 			
@@ -121,7 +160,58 @@ $.fn.extend({
 			// getter
 			: this.attr(isFF2 ? "aaa:" + state : "aria-" + state));
 	}
+	
 });
+
+
+//Additional selectors
+$.extend($.expr[':'], {
+	
+	data: function(a, i, m) {
+		return $.data(a, m[3]);
+	},
+	
+	// TODO: add support for object, area
+	tabbable: function(a, i, m) {
+
+		var nodeName = a.nodeName.toLowerCase();
+		var isVisible = function(element) {
+			function checkStyles(element) {
+				var style = element.style;
+				return (style.display != 'none' && style.visibility != 'hidden');
+			}
+			
+			var visible = checkStyles(element);
+			
+			(visible && $.each($.dir(element, 'parentNode'), function() {
+				return (visible = checkStyles(this));
+			}));
+			
+			return visible;
+		};
+		
+		return (
+			// in tab order
+			a.tabIndex >= 0 &&
+			
+			( // filter node types that participate in the tab order
+				
+				// anchor tag
+				('a' == nodeName && a.href) ||
+				
+				// enabled form element
+				(/input|select|textarea|button/.test(nodeName) &&
+					'hidden' != a.type && !a.disabled)
+			) &&
+			
+			// visible on page
+			isVisible(a)
+		);
+		
+	}
+	
+});
+
 
 // $.widget is a factory to create jQuery plugins
 // taking some boilerplate code out of the plugin code
@@ -262,80 +352,6 @@ $.widget.prototype = {
 
 $.widget.defaults = {
 	disabled: false
-};
-
-
-/** jQuery UI core **/
-
-$.ui = {
-	version: "@VERSION",
-	// $.ui.plugin is deprecated.  Use the proxy pattern instead.
-	plugin: {
-		add: function(module, option, set) {
-			var proto = $.ui[module].prototype;
-			for(var i in set) {
-				proto.plugins[i] = proto.plugins[i] || [];
-				proto.plugins[i].push([option, set[i]]);
-			}
-		},
-		call: function(instance, name, args) {
-			var set = instance.plugins[name];
-			if(!set) { return; }
-			
-			for (var i = 0; i < set.length; i++) {
-				if (instance.options[set[i][0]]) {
-					set[i][1].apply(instance.element, args);
-				}
-			}
-		}	
-	},
-	cssCache: {},
-	css: function(name) {
-		if ($.ui.cssCache[name]) { return $.ui.cssCache[name]; }
-		var tmp = $('<div class="ui-gen">').addClass(name).css({position:'absolute', top:'-5000px', left:'-5000px', display:'block'}).appendTo('body');
-		
-		//if (!$.browser.safari)
-			//tmp.appendTo('body');
-		
-		//Opera and Safari set width and height to 0px instead of auto
-		//Safari returns rgba(0,0,0,0) when bgcolor is not set
-		$.ui.cssCache[name] = !!(
-			(!(/auto|default/).test(tmp.css('cursor')) || (/^[1-9]/).test(tmp.css('height')) || (/^[1-9]/).test(tmp.css('width')) || 
-			!(/none/).test(tmp.css('backgroundImage')) || !(/transparent|rgba\(0, 0, 0, 0\)/).test(tmp.css('backgroundColor')))
-		);
-		try { $('body').get(0).removeChild(tmp.get(0));	} catch(e){}
-		return $.ui.cssCache[name];
-	},
-	disableSelection: function(el) {
-		return $(el)
-			.attr('unselectable', 'on')
-			.css('MozUserSelect', 'none')
-			.bind('selectstart.ui', function() { return false; });
-	},
-	enableSelection: function(el) {
-		return $(el)
-			.attr('unselectable', 'off')
-			.css('MozUserSelect', '')
-			.unbind('selectstart.ui');
-	},
-	hasScroll: function(e, a) {
-		
-		//If overflow is hidden, the element might have extra content, but the user wants to hide it
-		if ($(e).css('overflow') == 'hidden') { return false; }
-		
-		var scroll = (a && a == 'left') ? 'scrollLeft' : 'scrollTop',
-			has = false;
-		
-		if (e[scroll] > 0) { return true; }
-		
-		// TODO: determine which cases actually cause this to happen
-		// if the element doesn't have the scroll set, see if it's possible to
-		// set the scroll
-		e[scroll] = 1;
-		has = (e[scroll] > 0);
-		e[scroll] = 0;
-		return has;
-	}
 };
 
 
