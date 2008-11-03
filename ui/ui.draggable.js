@@ -321,7 +321,7 @@ $.widget("ui.draggable", $.extend({}, $.ui.mouse, {
 	},
 	_clear: function() {
 		this.helper.removeClass("ui-draggable-dragging");
-		if(this.options.helper != 'original' && !this.cancelHelperRemoval) this.helper.remove();
+		if(this.helper[0] != this.element[0] && !this.cancelHelperRemoval) this.helper.remove();
 		//if($.ui.ddmanager) $.ui.ddmanager.current = null;
 		this.helper = null;
 		this.cancelHelperRemoval = false;
@@ -354,6 +354,7 @@ $.extend($.ui.draggable, {
 	defaults: {
 		appendTo: "parent",
 		axis: false,
+		handle: false,
 		cancel: ":input",
 		connectToSortable: false,
 		containment: false,
@@ -374,6 +375,7 @@ $.extend($.ui.draggable, {
 		snap: false,
 		snapMode: "both",
 		snapTolerance: 20,
+		stack: false,
 		cssNamespace: "ui"
 	}
 });

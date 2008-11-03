@@ -151,7 +151,7 @@ test("defaults", function() {
 		disabled: false,
 		distance: 1,
 		grid: false,
-		handle: "??? - TODO",
+		handle: false,
 		helper: "original",
 		iframeFix: false,
 		opacity: 1.0,
@@ -165,7 +165,7 @@ test("defaults", function() {
 		snap: false,
 		snapMode: "both",
 		snapTolerance: 20,
-		stack: "??? - TODO",
+		stack: false,
 		zIndex: null
 	};
 
