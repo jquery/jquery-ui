@@ -45,7 +45,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 
 	},
 	plugins: {},
-	ui: function(inst) {
+	_ui: function(inst) {
 		var self = inst || this;
 		return {
 			helper: self.helper,
@@ -55,14 +55,16 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 			options: this.options,
 			element: this.element,
 			item: self.currentItem,
-			sender: inst ? inst.element : null,
-			cancel: function() { self.cancel(); }
+			sender: inst ? inst.element : null
 		};
 	},
 	
 	cancel: function() {
 
 		if(this.dragging) {
+			
+			this._mouseUp();
+			
 			if(this.options.helper == "original")
 				this.currentItem.css(this._storedCSS).removeClass("ui-sortable-helper");
 			else
@@ -76,6 +78,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 					this.containers[i].containerCache.over = 0;
 				}
 			}
+			
 		}
 
 		//$(this.placeholder[0]).remove(); would have been the jQuery way - unfortunately, it unbinds ALL events from the original node!
@@ -100,8 +103,8 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 	},
 
 	_propagate: function(n,e,inst, noPropagation) {
-		$.ui.plugin.call(this, n, [e, this.ui(inst)]);
-		if(!noPropagation) this.element.triggerHandler(n == "sort" ? n : "sort"+n, [e, this.ui(inst)], this.options[n]);
+		$.ui.plugin.call(this, n, [e, this._ui(inst)]);
+		if(!noPropagation) this.element.triggerHandler(n == "sort" ? n : "sort"+n, [e, this._ui(inst)], this.options[n]);
 	},
 
 	serialize: function(o) {
@@ -699,7 +702,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 		}
 
 		//Call the internal plugins
-		$.ui.plugin.call(this, "sort", [e, this.ui()]);
+		$.ui.plugin.call(this, "sort", [e, this._ui()]);
 
 		//Regenerate the absolute position used for position checks
 		this.positionAbs = this._convertPositionTo("absolute");
@@ -738,7 +741,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 		if($.ui.ddmanager) $.ui.ddmanager.drag(this, e);
 
 		//Call callbacks
-		this.element.triggerHandler("sort", [e, this.ui()], this.options["sort"]);
+		this.element.triggerHandler("sort", [e, this._ui()], this.options["sort"]);
 
 		this.lastPositionAbs = this.positionAbs;
 
@@ -765,6 +768,8 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 	},
 
 	_mouseStop: function(e, noPropagation) {
+
+		if(!e) return;
 
 		//If we are using droppables, inform the manager about the drop
 		if ($.ui.ddmanager && !this.options.dropBehaviour)
