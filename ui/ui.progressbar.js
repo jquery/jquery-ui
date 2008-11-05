@@ -25,10 +25,10 @@ $.widget("ui.progressbar", {
 		this.element
 			.addClass("ui-progressbar")
 			.width(options.width)
-			.ariaRole("progressbar")
-			.ariaState("valuemin","0")
-			.ariaState("valuemax","100")
-			.ariaState("valuenow","0");
+			.attr("role","progressbar")
+			.attr("aria-valuemin","0")
+			.attr("aria-valuemax","100")
+			.attr("aria-valuenow","0");
 			
 		$.extend(this, {
 			active: false,
@@ -103,13 +103,13 @@ $.widget("ui.progressbar", {
 	disable: function() {
 		this.element.addClass("ui-progressbar-disabled");
 		this.disabled = true;
-		this.element.ariaState("disabled", true);
+		this.element.attr("aria-disabled", true);
 	},
 	
 	enable: function() {
 		this.element.removeClass("ui-progressbar-disabled");
 		this.disabled = false;
-		this.element.ariaState("disabled", false);
+		this.element.attr("aria-disabled", false);
 	},
 	
 	pause: function() {
@@ -132,7 +132,7 @@ $.widget("ui.progressbar", {
 		if (this.options.range && !this.options.text) {
 			this.textElement.html(percent + '%');
 		}
-		this.element.ariaState("valuenow", percent);
+		this.element.attr("aria-valuenow", percent);
 		this._propagate('progress', this.ui());
 	},
 	

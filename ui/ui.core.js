@@ -108,6 +108,27 @@ $.ui = {
 	}
 };
 
+// WAI-ARIA normalization
+// tweak $.attr for FF2 implementation
+if (isFF2){
+
+var attr = $.attr;
+$.attr = function(elem, name, value) {
+	var set = value !== undefined,
+		state = /^aria-/;
+	
+	return (name == 'role'
+		? (set
+			? attr.call(this, elem, name, "wairole:" + value)
+			: (attr.apply(this, arguments) || "").replace(/^wairole:/, ""))
+		: (state.test(name)
+			? (set
+				? elem.setAttributeNS("http://www.w3.org/2005/07/aaa", name.replace(state, "aaa:"), value)
+				: attr.call(this, elem, name.replace(state, "aaa:")))
+			: attr.apply(this,arguments)));
+};
+
+}
 
 //jQuery plugins
 $.fn.extend({
@@ -133,32 +154,6 @@ $.fn.extend({
 			.attr('unselectable', 'on')
 			.css('MozUserSelect', 'none')
 			.bind('selectstart.ui', function() { return false; });
-	},
-	
-	// WAI-ARIA Semantics
-	ariaRole: function(role) {
-		return (role !== undefined
-			
-			// setter
-			? this.attr("role", isFF2 ? "wairole:" + role : role)
-			
-			// getter
-			: (this.attr("role") || "").replace(/^wairole:/, ""));
-	},
-	
-	ariaState: function(state, value) {
-		return (value !== undefined
-			
-			// setter
-			? this.each(function(i, el) {
-				(isFF2
-					? el.setAttributeNS("http://www.w3.org/2005/07/aaa",
-						"aaa:" + state, value)
-					: $(el).attr("aria-" + state, value));
-			})
-			
-			// getter
-			: this.attr(isFF2 ? "aaa:" + state : "aria-" + state));
 	}
 	
 });
