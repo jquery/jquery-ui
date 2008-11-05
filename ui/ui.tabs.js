@@ -95,23 +95,13 @@ $.widget("ui.tabs", {
 					this.$tabs.each(function(i, a) {
 						if (a.hash == location.hash) {
 							o.selected = i;
-							// prevent page scroll to fragment
-							if ($.browser.msie || $.browser.opera) {
-								var $toShow = $(this._sanitizeSelector(location.hash)), toShowId = $toShow.attr('id');
-								$toShow.attr('id', '');
-								setTimeout(function() {
-									$toShow.attr('id', toShowId); // restore id
-								}, 500);
-							}
-							scrollTo(0, 0);
 							return false; // break
 						}
 					});
 				}
 				else if (o.cookie) {
 					var index = parseInt(self._cookie(), 10);
-					if (index && self.$tabs[index])
-						o.selected = index;
+					if (index && self.$tabs[index]) o.selected = index;
 				}
 				else if (self.$lis.filter('.' + o.selectedClass).length)
 					o.selected = self.$lis.index( self.$lis.filter('.' + o.selectedClass)[0] );
@@ -132,7 +122,7 @@ $.widget("ui.tabs", {
 			this.$panels.addClass(o.hideClass);
 			this.$lis.removeClass(o.selectedClass);
 			if (o.selected !== null) {
-				this.$panels.eq(o.selected).show().removeClass(o.hideClass); // use show and remove class to show in any case no matter how it has been hidden before
+				this.$panels.eq(o.selected).removeClass(o.hideClass);
 				var classes = [o.selectedClass];
 				if (o.deselectable) classes.push(o.deselectableClass);
 				this.$lis.eq(o.selected).addClass(classes.join(' '));
@@ -147,8 +137,7 @@ $.widget("ui.tabs", {
 				if ($.data(this.$tabs[o.selected], 'load.tabs'))
 					this.load(o.selected, onShow);
 				// just trigger show event
-				else
-					onShow();
+				else onShow();
 			}
 			
 			// clean up to avoid memory leaks in certain versions of IE 6
@@ -163,59 +152,62 @@ $.widget("ui.tabs", {
 			o.selected = this.$lis.index( this.$lis.filter('.' + o.selectedClass)[0] );
 		
 		// set or update cookie after init and add/remove respectively
-		if (o.cookie)
-			this._cookie(o.selected, o.cookie);
+		if (o.cookie) this._cookie(o.selected, o.cookie);
 		
 		// disable tabs
 		for (var i = 0, li; li = this.$lis[i]; i++)
 			$(li)[$.inArray(i, o.disabled) != -1 && !$(li).hasClass(o.selectedClass) ? 'addClass' : 'removeClass'](o.disabledClass);
 		
 		// reset cache if switching from cached to not cached
-		if (o.cache === false)
-			this.$tabs.removeData('cache.tabs');
+		if (o.cache === false) this.$tabs.removeData('cache.tabs');
 		
 		// set up animations
-		var hideFx, showFx, baseFx = { 'min-width': 0, duration: 1 }, baseDuration = 'normal';
-		if (o.fx && o.fx.constructor == Array)
-			hideFx = o.fx[0] || baseFx, showFx = o.fx[1] || baseFx;
-		else
-			hideFx = showFx = o.fx || baseFx;
+		var hideFx, showFx;
+		if (o.fx) {
+			if (o.fx.constructor == Array) {
+				hideFx = o.fx[0];
+				showFx = o.fx[1];
+			}
+			else hideFx = showFx = o.fx;
+		}
 		
-		// Reset certain styles left over from animation to
-		// maintain print style sheets and prevent IE's
-		// ClearType bug...
+		// Reset certain styles left over from animation
+		// and prevent IE's ClearType bug...
 		function resetStyle($el, fx) {
 			$el.css({ display: '' });
-			if ($.browser.msie && fx.opacity)
-				$el[0].style.filter = '';
+			if ($.browser.msie && fx.opacity) $el[0].style.removeAttribute('filter');
 		}
-		
-		// Hide a tab, animation prevents browser scrolling to fragment,
-		// $show is optional.
-		function hideTab(clicked, $hide, $show) {
-			$hide.animate(hideFx, hideFx.duration || baseDuration, function() { //
-				$hide.addClass(o.hideClass);
-				resetStyle($hide, hideFx);
-				if ($show) showTab(clicked, $show, $hide);
-			});
-		}
-		
-		// Show a tab, animation prevents browser scrolling to fragment,
-		// $hide is optional.
-		function showTab(clicked, $show, $hide) {
-			if (showFx === baseFx) $show.css('display', 'block'); // prevent occasionally occuring flicker in Firefox caused by gap between showing and hiding the tab panels
-			$show.animate(showFx, showFx.duration || baseDuration, function() {
+
+		// Show a tab...
+		var showTab = showFx ?
+			function(clicked, $show) {
+				$show.animate(showFx, showFx.duration || 'normal', function() {
+					$show.removeClass(o.hideClass);
+					resetStyle($show, showFx);
+					self._trigger('show', null, self.ui(clicked, $show[0]));
+				});
+			} :
+			function(clicked, $show) {
 				$show.removeClass(o.hideClass);
-				resetStyle($show, showFx);
 				self._trigger('show', null, self.ui(clicked, $show[0]));
-			});
-		}
+			};
 		
-		// switch a tab
+		// Hide a tab, $show is optional...
+		var hideTab = hideFx ? 
+			function(clicked, $hide, $show) {
+				$hide.animate(hideFx, hideFx.duration || 'normal', function() {
+					$hide.addClass(o.hideClass);
+					resetStyle($hide, hideFx);
+					if ($show) showTab(clicked, $show, $hide);
+				});
+			} :
+			function(clicked, $hide, $show) {
+				$hide.addClass(o.hideClass);
+				if ($show) showTab(clicked, $show);
+			};
+		
+		// Switch a tab...
 		function switchTab(clicked, $li, $hide, $show) {
-			/*if (o.bookmarkable && trueClick) { // add to history only if true click occured, not a triggered click
-				$.ajaxHistory.update(clicked.hash);
-			}*/
 			var classes = [o.selectedClass];
 			if (o.deselectable) classes.push(o.deselectableClass);
 			$li.addClass(classes.join(' ')).siblings().removeClass(classes.join(' '));
@@ -266,24 +258,13 @@ $.widget("ui.tabs", {
 				}
 			}
 			
-			if (o.cookie)
-				self._cookie(o.selected, o.cookie);
+			if (o.cookie) self._cookie(o.selected, o.cookie);
 			
 			// stop possibly running animations
 			self.$panels.stop();
 			
 			// show new tab
 			if ($show.length) {
-				
-				// prevent scrollbar scrolling to 0 and than back in IE7, happens only if bookmarking/history is enabled
-				/*if ($.browser.msie && o.bookmarkable) {
-					var showId = this.hash.replace('#', '');
-					$show.attr('id', '');
-					setTimeout(function() {
-						$show.attr('id', showId); // restore id
-					}, 0);
-				}*/
-				
 				var a = this;
 				self.load(self.$tabs.index(this), $hide.length ? 
 					function() {
@@ -294,32 +275,21 @@ $.widget("ui.tabs", {
 						showTab(a, $show);
 					}
 				);
-				
-				// Set scrollbar to saved position - need to use timeout with 0 to prevent browser scroll to target of hash
-				/*var scrollX = window.pageXOffset || document.documentElement && document.documentElement.scrollLeft || document.body.scrollLeft || 0;
-				var scrollY = window.pageYOffset || document.documentElement && document.documentElement.scrollTop || document.body.scrollTop || 0;
-				setTimeout(function() {
-					scrollTo(scrollX, scrollY);
-				}, 0);*/
-				
 			} else
 				throw 'jQuery UI Tabs: Mismatching fragment identifier.';
 				
 			// Prevent IE from keeping other link focussed when using the back button
-			// and remove dotted border from clicked link. This is controlled in modern
-			// browsers via CSS, also blur removes focus from address bar in Firefox
-			// which can become a usability and annoying problem with tabsRotate.
-			if ($.browser.msie)
-				this.blur();
+			// and remove dotted border from clicked link. This is controlled via CSS
+			// in modern browsers; blur() removes focus from address bar in Firefox
+			// which can become a usability and annoying problem with tabs('rotate').
+			if ($.browser.msie) this.blur();
 			
-			//return o.bookmarkable && !!trueClick; // convert trueClick == undefined to Boolean required in IE
 			return false;
 			
 		});
 		
 		// disable click if event is configured to something else
-		if (o.event != 'click')
-			this.$tabs.bind('click.tabs', function() { return false; });
+		if (o.event != 'click') this.$tabs.bind('click.tabs', function(){return false;});
 		
 	},
 	add: function(url, label, index) {
@@ -438,10 +408,10 @@ $.widget("ui.tabs", {
 		};
 		var cleanup = function() {
 			self.$tabs.filter('.' + o.loadingClass).removeClass(o.loadingClass)
-						.each(function() {
-							if (o.spinner)
-								inner(this).parent().html(inner(this).data('label.tabs'));
-						});
+					.each(function() {
+						if (o.spinner)
+							inner(this).parent().html(inner(this).data('label.tabs'));
+					});
 			self.xhr = null;
 		};
 		
@@ -479,10 +449,7 @@ $.widget("ui.tabs", {
 			cleanup();
 		}
 		$a.addClass(o.loadingClass);
-		setTimeout(function() { // timeout is again required in IE, "wait" for id being restored
-			self.xhr = $.ajax(ajaxOptions);
-		}, 0);
-
+		self.xhr = $.ajax(ajaxOptions);
 	},
 	url: function(index, url) {
 		this.$tabs.eq(index).removeData('cache.tabs').data('load.tabs', url);
@@ -587,6 +554,20 @@ $.extend($.ui.tabs.prototype, {
 			stop();
 			this.$tabs.unbind(this.options.event + '.tabs', stop);
 		}
+	}
+});
+
+$.extend($.ui.tabs.prototype, {
+	equalize: function() {
+		var heights = this.$panels.map(function() {
+			return $(this).height();
+		})
+		.get()
+		.sort(function(a, b) {
+			return b - a;
+		});
+		// set all panels to highest height
+		this.$panels.css('height', heights[0]);
 	}
 });
 
