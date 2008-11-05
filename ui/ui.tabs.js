@@ -557,18 +557,4 @@ $.extend($.ui.tabs.prototype, {
 	}
 });
 
-$.extend($.ui.tabs.prototype, {
-	equalize: function() {
-		var heights = this.$panels.map(function() {
-			return $(this).height();
-		})
-		.get()
-		.sort(function(a, b) {
-			return b - a;
-		});
-		// set all panels to highest height
-		this.$panels.css('height', heights[0]);
-	}
-});
-
 })(jQuery);
