@@ -104,7 +104,8 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 
 	_propagate: function(n,e,inst, noPropagation) {
 		$.ui.plugin.call(this, n, [e, this._ui(inst)]);
-		if(!noPropagation) this.element.triggerHandler(n == "sort" ? n : "sort"+n, [e, this._ui(inst)], this.options[n]);
+		var dontCancel = !noPropagation ? this.element.triggerHandler(n == "sort" ? n : "sort"+n, [e, this._ui(inst)], this.options[n]) : true;
+		if(dontCancel === false) this.cancel();
 	},
 
 	serialize: function(o) {
