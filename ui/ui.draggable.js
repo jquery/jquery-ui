@@ -109,7 +109,8 @@ $.widget("ui.draggable", $.extend({}, $.ui.mouse, {
 		
 		
 		this.offsetParent = this.helper.offsetParent(); var po = this.offsetParent.offset();			//Get the offsetParent and cache its position
-		if(this.offsetParent[0] == document.body && $.browser.mozilla) po = { top: 0, left: 0 };		//Ugly FF3 fix
+		if(this.offsetParent[0] == document.body && $.browser.mozilla) po = { top: 0, left: 0 };													//Ugly FF3 fix
+		if(this.offsetParent[0].tagName && this.offsetParent[0].tagName.toLowerCase() == 'html' && $.browser.msie) po = { top: 0, left: 0 };		//Ugly IE fix
 		this.offset.parent = {																			//Store its position plus border
 			top: po.top + (parseInt(this.offsetParent.css("borderTopWidth"),10) || 0),
 			left: po.left + (parseInt(this.offsetParent.css("borderLeftWidth"),10) || 0)
@@ -240,7 +241,7 @@ $.widget("ui.draggable", $.extend({}, $.ui.mouse, {
 		};
 	},
 	_generatePosition: function(e) {
-		
+	
 		var o = this.options;
 		var position = {
 			top: (
