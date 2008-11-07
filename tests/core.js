@@ -54,18 +54,12 @@ test("tabbable - tabindex", function() {
 });
 
 test("aria", function() {
-	expect(10);
+	expect(4);
 	
 	ok(!$('#aria').attr('role'), 'role is empty via attr');
-	ok(!$('#aria').ariaRole(), 'role is empty via ariaRole');
-	equals($('#aria').ariaRole('dialog').attr('role').replace(/^wairole:/, ""), 'dialog', 'role is dialog');
-	equals($('#aria').ariaRole(), 'dialog', 'role is dialog');
-	equals($('#aria').ariaRole('tablist').attr('role').replace(/^wairole:/, ""), 'tablist', 'role is tablist via attr');
-	equals($('#aria').ariaRole(), 'tablist', 'role is tablist via ariaRole');
-	ok(!$('#aria').attr('expanded'), 'state expanded absent via attr');
-	ok(!$('#aria').ariaState('expanded'), 'state expanded absent via ariaState');
-	equals($('#aria').ariaState('expanded', true).ariaState('expanded'), 'true', 'aria expanded is true');
-	equals($('#aria').ariaState('expanded', false).ariaState('expanded'), 'false', 'aria expanded is false');
+	equals($('#aria').attr('role', 'tablist').attr('role'), 'tablist', 'role is tablist');
+	equals($('#aria').attr('aria-expanded', true).attr('aria-expanded'), 'true', 'aria expanded is true');
+	equals($('#aria').attr('aria-expanded', false).attr('aria-expanded'), 'false', 'aria expanded is false');
 });
 
 })(jQuery);
