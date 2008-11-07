@@ -168,21 +168,10 @@ $.extend($.expr[':'], {
 	
 	// TODO: add support for object, area
 	tabbable: function(a, i, m) {
-
+		
 		var nodeName = a.nodeName.toLowerCase();
 		function isVisible(element) {
-			function checkStyles(element) {
-				var style = element.style;
-				return (style.display != 'none' && style.visibility != 'hidden');
-			}
-			
-			var visible = checkStyles(element);
-			
-			(visible && $.each($.dir(element, 'parentNode'), function() {
-				return (visible = checkStyles(this));
-			}));
-			
-			return visible;
+			return !$(element).parents().andSelf().filter(':hidden').length;
 		}
 		
 		return (
