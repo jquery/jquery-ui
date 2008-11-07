@@ -1032,7 +1032,9 @@ $.extend(Datepicker.prototype, {
 						checkLiteral();
 				}
 		}
-		if (year < 100)
+		if (year == -1)
+			year = new Date().getFullYear();
+		else if (year < 100)
 			year += new Date().getFullYear() - new Date().getFullYear() % 100 +
 				(year <= shortYearCutoff ? 0 : -100);
 		if (doy > -1) {
