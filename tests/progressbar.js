@@ -27,8 +27,8 @@ test("defaults", function() {
 	el = $("#progressbar").progressbar();
 
 	equals(el.data("width.progressbar"), 300, "width");
-	equals(el.data("duration.progressbar"), 3000, "duration");
-	equals(el.data("interval.progressbar"), 200, "interval");
+	equals(el.data("duration.progressbar"), 1000, "duration");
+	equals(el.data("interval.progressbar"), 1000, "interval");
 	equals(el.data("increment.progressbar"), 1, "increment");
 	equals(el.data("range.progressbar"), true, "range");
 
