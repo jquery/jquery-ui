@@ -53,7 +53,9 @@ test("tabbable - tabindex", function() {
 	ok(!$('#input4-4').is(':tabbable'), 'input, tabindex -50');
 });
 
-test("aria", function() {
+module('jQuery extensions');
+
+test("attr - aria", function() {
 	expect(4);
 	
 	ok(!$('#aria').attr('role'), 'role is empty via attr');
