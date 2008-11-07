@@ -25,10 +25,12 @@ $.widget("ui.progressbar", {
 		this.element
 			.addClass("ui-progressbar")
 			.width(options.width)
-			.attr("role","progressbar")
-			.attr("aria-valuemin","0")
-			.attr("aria-valuemax","100")
-			.attr("aria-valuenow","0");
+			.attr({
+				role: "progressbar",
+				"aria-valuemin": 0,
+				"aria-valuemax": 100,
+				"aria-valuenow": 0
+			});
 			
 		$.extend(this, {
 			active: false,

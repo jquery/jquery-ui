@@ -83,8 +83,10 @@ $.widget("ui.dialog", {
 					(options.closeOnEscape && ev.keyCode
 						&& ev.keyCode == $.keyCode.ESCAPE && self.close());
 				})
-				.attr("role","dialog")
-				.attr("aria-labelledby", titleId)
+				.attr({
+					role: 'dialog',
+					'aria-labelledby': titleId
+				})
 				.mouseup(function() {
 					self.moveToTop();
 				}),
