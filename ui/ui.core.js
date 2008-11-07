@@ -39,9 +39,8 @@ $.keyCode = {
 	UP: 38
 };
 
-//Temporary mappings
-var _remove = $.fn.remove;
-var isFF2 = $.browser.mozilla && (parseFloat($.browser.version) < 1.9);
+var _remove = $.fn.remove,
+	isFF2 = $.browser.mozilla && (parseFloat($.browser.version) < 1.9);
 
 
 //Helper functions and ui object
@@ -110,24 +109,25 @@ $.ui = {
 
 // WAI-ARIA normalization
 // tweak $.attr for FF2 implementation
-if (isFF2){
-
-var attr = $.attr;
-$.attr = function(elem, name, value) {
-	var set = value !== undefined,
-		state = /^aria-/;
+if (isFF2) {
+	var attr = $.attr,
+		ariaState = /^aria-/,
+		ariaRole = /^wairole:/;
 	
-	return (name == 'role'
-		? (set
-			? attr.call(this, elem, name, "wairole:" + value)
-			: (attr.apply(this, arguments) || "").replace(/^wairole:/, ""))
-		: (state.test(name)
+	$.attr = function(elem, name, value) {
+		var set = value !== undefined;
+		
+		return (name == 'role'
 			? (set
-				? elem.setAttributeNS("http://www.w3.org/2005/07/aaa", name.replace(state, "aaa:"), value)
-				: attr.call(this, elem, name.replace(state, "aaa:")))
-			: attr.apply(this,arguments)));
-};
-
+				? attr.call(this, elem, name, "wairole:" + value)
+				: (attr.apply(this, arguments) || "").replace(ariaRole, ""))
+			: (ariaState.test(name)
+				? (set
+					? elem.setAttributeNS("http://www.w3.org/2005/07/aaa",
+						name.replace(ariaState, "aaa:"), value)
+					: attr.call(this, elem, name.replace(ariaState, "aaa:")))
+				: attr.apply(this, arguments)));
+	};
 }
 
 //jQuery plugins
@@ -170,7 +170,7 @@ $.extend($.expr[':'], {
 	tabbable: function(a, i, m) {
 
 		var nodeName = a.nodeName.toLowerCase();
-		var isVisible = function(element) {
+		function isVisible(element) {
 			function checkStyles(element) {
 				var style = element.style;
 				return (style.display != 'none' && style.visibility != 'hidden');
@@ -183,7 +183,7 @@ $.extend($.expr[':'], {
 			}));
 			
 			return visible;
-		};
+		}
 		
 		return (
 			// in tab order
