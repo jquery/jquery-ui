@@ -1391,7 +1391,8 @@ $.extend(Datepicker.prototype, {
 			this._addStatus(showStatus, inst.id, this._get(inst, 'prevBigStatus'), initStatus) + '>' + prevBigText + '</a>' : '') +
 			'<a onclick="jQuery.datepicker._adjustDate(\'#' + inst.id + '\', -' + stepMonths + ', \'M\');"' +
 			this._addStatus(showStatus, inst.id, this._get(inst, 'prevStatus'), initStatus) + '>' + prevText + '</a>' :
-			(hideIfNoPrevNext ? '' : '<label>' + prevBigText + '</label><label>' + prevText + '</label>')) + '</div>';
+			(hideIfNoPrevNext ? '' : (showBigPrevNext ? '<label>' + prevBigText + '</label>' : '') +
+			'<label>' + prevText + '</label>')) + '</div>';
 		var nextText = this._get(inst, 'nextText');
 		nextText = (!navigationAsDateFormat ? nextText : this.formatDate(
 			nextText, new Date(drawYear, drawMonth + stepMonths, 1), this._getFormatConfig(inst)));
@@ -1403,7 +1404,8 @@ $.extend(Datepicker.prototype, {
 			this._addStatus(showStatus, inst.id, this._get(inst, 'nextStatus'), initStatus) + '>' + nextText + '</a>' +
 			(showBigPrevNext ? '<a onclick="jQuery.datepicker._adjustDate(\'#' + inst.id + '\', +' + stepBigMonths + ', \'M\');"' +
 			this._addStatus(showStatus, inst.id, this._get(inst, 'nextBigStatus'), initStatus) + '>' + nextBigText + '</a>' : '') :
-			(hideIfNoPrevNext ? '' : '<label>' + nextText + '</label><label>' + nextBigText + '</label>')) + '</div>';
+			(hideIfNoPrevNext ? '' : '<label>' + nextText + '</label>' +
+			(showBigPrevNext ? '<label>' + nextBigText + '</label>' : ''))) + '</div>';
 		var currentText = this._get(inst, 'currentText');
 		var gotoDate = (this._get(inst, 'gotoCurrent') && inst.currentDay ? currentDate : today); 
 		currentText = (!navigationAsDateFormat ? currentText :
@@ -1525,12 +1527,14 @@ $.extend(Datepicker.prototype, {
 	_generateMonthYearHeader: function(inst, drawMonth, drawYear, minDate, maxDate,
 			selectedDate, secondary, showStatus, initStatus, monthNames) {
 		minDate = (inst.rangeStart && minDate && selectedDate < minDate ? selectedDate : minDate);
+		var changeMonth = this._get(inst, 'changeMonth');
+		var changeYear = this._get(inst, 'changeYear');
 		var showMonthAfterYear = this._get(inst, 'showMonthAfterYear');
 		var html = '<div class="ui-datepicker-header">';
 		var monthHtml = '';
 		// month selection
-		if (secondary || !this._get(inst, 'changeMonth'))
-			monthHtml += monthNames[drawMonth] + '&#xa0;';
+		if (secondary || !changeMonth)
+			monthHtml += monthNames[drawMonth];
 		else {
 			var inMinYear = (minDate && minDate.getFullYear() == drawYear);
 			var inMaxYear = (maxDate && maxDate.getFullYear() == drawYear);
@@ -1548,9 +1552,9 @@ $.extend(Datepicker.prototype, {
 			monthHtml += '</select>';
 		}
 		if (!showMonthAfterYear)
-			html += monthHtml;
+			html += monthHtml + (changeMonth && changeYear ? '' : '&#xa0;');
 		// year selection
-		if (secondary || !this._get(inst, 'changeYear'))
+		if (secondary || !changeYear)
 			html += drawYear;
 		else {
 			// determine range of years to display
@@ -1582,7 +1586,7 @@ $.extend(Datepicker.prototype, {
 			html += '</select>';
 		}
 		if (showMonthAfterYear)
-			html += monthHtml;
+			html += (changeMonth && changeYear ? '' : '&#xa0;') + monthHtml;
 		html += '</div>'; // Close datepicker_header
 		return html;
 	},
