@@ -132,10 +132,13 @@ $.widget("ui.droppable", {
 $.extend($.ui.droppable, {
 	version: "@VERSION",
 	defaults: {
+		activeClass: null,
+		cssNamespace: 'ui',
 		disabled: false,
-		tolerance: 'intersect',
+		greedy: false,
+		hoverClass: null,
 		scope: 'default',
-		cssNamespace: 'ui'
+		tolerance: 'intersect'
 	}
 });
 
