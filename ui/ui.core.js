@@ -171,7 +171,7 @@ $.extend($.expr[':'], {
 		
 		var nodeName = a.nodeName.toLowerCase();
 		function isVisible(element) {
-			return !$(element).parents().andSelf().filter(':hidden').length;
+			return !($(element).is(':hidden') || $(element).parents(':hidden').length);
 		}
 		
 		return (
