@@ -246,6 +246,7 @@ $.extend(Datepicker.prototype, {
 		$.data(target, PROP_NAME, inst);
 		this._setDate(inst, this._getDefaultDate(inst));
 		this._updateDatepicker(inst);
+		this._updateAlternate(inst); 
 	},
 	
 	/* Tidy up after displaying the date picker. */
@@ -867,7 +868,7 @@ $.extend(Datepicker.prototype, {
 	_updateAlternate: function(inst) {
 		var altField = this._get(inst, 'altField');
 		if (altField) { // update alternate field too
-			var altFormat = this._get(inst, 'altFormat');
+			var altFormat = this._get(inst, 'altFormat') || this._get(inst, 'dateFormat');
 			var date = this._getDate(inst);
 			dateStr = (isArray(date) ? (!date[0] && !date[1] ? '' :
 				this.formatDate(altFormat, date[0], this._getFormatConfig(inst)) +
