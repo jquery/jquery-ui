@@ -160,8 +160,8 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 		var itemHeight = item.height, itemWidth = item.width;
 		var itemTop = item.top, itemLeft = item.left;
 
-		var isOverElementHeight = $.ui.intersectHeight(helperTop + dyClick, itemTop, itemHeight);
-		var isOverElementWidth = $.ui.intersectWidth(helperLeft + dxClick, itemLeft, itemWidth);
+		var isOverElementHeight = $.ui.isOverHeight(helperTop + dyClick, itemTop, itemHeight);
+		var isOverElementWidth = $.ui.isOverWidth(helperLeft + dxClick, itemLeft, itemWidth);
 		var isOverElement = isOverElementHeight && isOverElementWidth;
 		var verticalDirection = this._getDragVerticalDirection();
 		var horizontalDirection = this._getDragHorizontalDirection();

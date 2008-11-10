@@ -106,19 +106,19 @@ $.ui = {
 		return has;
 	},
 	
-	intersectHeight: function(aTop, bTop, bHeight) {
-		//Determines when "aTop" element coordinate intersects with b element height
-		return (aTop > bTop) &&	(aTop < (bTop + bHeight));
+	isOverHeight: function(y, bTop, bHeight) {
+		//Determines when "y" coordinate intersects with b element height
+		return (y > bTop) && (y < (bTop + bHeight));
 	},
 	
-	intersectWidth: function(aLeft, bLeft, bWidth) {
-		//Determines when "aLeft" element coordinate intersects with b element width
-		return (aLeft > bLeft) && (aLeft < (bLeft + bWidth));
+	isOverWidth: function(x, bLeft, bWidth) {
+		//Determines when "x" coordinate intersects with b element width
+		return (x > bLeft) && (x < (bLeft + bWidth));
 	},
 	
-	intersects: function(aTop, aLeft, bTop, bLeft, bHeight, bWidth) {
+	isOver: function(y, x, bTop, bLeft, bHeight, bWidth) {
 		//Determines when element "a" coordinates intersects with element "b"
-		return $.ui.intersectHeight(aTop, bTop, bHeight) && $.ui.intersectWidth(aLeft, bLeft, bWidth);
+		return $.ui.isOverHeight(y, bTop, bHeight) && $.ui.isOverWidth(x, bLeft, bWidth);
 	}
 };
 
