@@ -106,19 +106,19 @@ $.ui = {
 		return has;
 	},
 	
-	isOverHeight: function(y, bTop, bHeight) {
+	isOverHeight: function(y, top, height) {
 		//Determines when y coordinate is over "b" element height
-		return (y > bTop) && (y < (bTop + bHeight));
+		return (y > top) && (y < (top + height));
 	},
 	
-	isOverWidth: function(x, bLeft, bWidth) {
+	isOverWidth: function(x, left, width) {
 		//Determines when x coordinate is over "b" element width
-		return (x > bLeft) && (x < (bLeft + bWidth));
+		return (x > left) && (x < (left + width));
 	},
 	
-	isOver: function(y, x, bTop, bLeft, bHeight, bWidth) {
+	isOver: function(y, x, top, left, height, width) {
 		//Determines when x, y coordinates is over "b" element
-		return $.ui.isOverHeight(y, bTop, bHeight) && $.ui.isOverWidth(x, bLeft, bWidth);
+		return $.ui.isOverHeight(y, top, height) && $.ui.isOverWidth(x, left, width);
 	}
 };
 
