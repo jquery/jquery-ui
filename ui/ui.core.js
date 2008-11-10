@@ -116,7 +116,7 @@ $.ui = {
 		return (aLeft > bLeft) && (aLeft < (bLeft + bWidth));
 	},
 	
-	intersect: function(aTop, aLeft, bTop, bLeft, bHeight, bWidth) {
+	intersects: function(aTop, aLeft, bTop, bLeft, bHeight, bWidth) {
 		//Determines when element "a" coordinates intersects with element "b"
 		return $.ui.intersectHeight(aTop, bTop, bHeight) && $.ui.intersectWidth(aLeft, bLeft, bWidth);
 	}
