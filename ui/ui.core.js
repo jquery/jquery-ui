@@ -169,6 +169,12 @@ $.fn.extend({
 			.attr('unselectable', 'on')
 			.css('MozUserSelect', 'none')
 			.bind('selectstart.ui', function() { return false; });
+	},
+	
+	scrollParent: function() {
+		return $(this).parents().filter(function() {
+			return (/(auto|scroll)/).test($.curCSS(this,'overflow',1)+$.curCSS(this,'overflow-y',1)+$.curCSS(this,'overflow-x',1));
+		}).eq(0);
 	}
 	
 });
