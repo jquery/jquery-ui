@@ -107,17 +107,17 @@ $.ui = {
 	},
 	
 	isOverHeight: function(y, bTop, bHeight) {
-		//Determines when "y" coordinate intersects with b element height
+		//Determines when y coordinate is over "b" element height
 		return (y > bTop) && (y < (bTop + bHeight));
 	},
 	
 	isOverWidth: function(x, bLeft, bWidth) {
-		//Determines when "x" coordinate intersects with b element width
+		//Determines when x coordinate is over "b" element width
 		return (x > bLeft) && (x < (bLeft + bWidth));
 	},
 	
 	isOver: function(y, x, bTop, bLeft, bHeight, bWidth) {
-		//Determines when element "a" coordinates intersects with element "b"
+		//Determines when x, y coordinates is over "b" element
 		return $.ui.isOverHeight(y, bTop, bHeight) && $.ui.isOverWidth(x, bLeft, bWidth);
 	}
 };
