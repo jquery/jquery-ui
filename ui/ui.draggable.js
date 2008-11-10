@@ -585,7 +585,7 @@ $.ui.plugin.add("draggable", "connectToSortable", {
 				this.instance._mouseStop(e);
 				
 				//Also propagate receive event, since the sortable is actually receiving a element
-				this.instance.element.triggerHandler("sortreceive", [e, $.extend(this.instance.ui(), { sender: inst.element })], this.instance.options["receive"]);
+				this.instance.element.triggerHandler("sortreceive", [e, $.extend(this.instance._ui(), { sender: inst.element })], this.instance.options["receive"]);
 				
 				this.instance.options.helper = this.instance.options._helper;
 			} else {
