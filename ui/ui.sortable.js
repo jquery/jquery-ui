@@ -58,18 +58,18 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 			sender: inst ? inst.element : null
 		};
 	},
-	
+
 	cancel: function() {
 
 		if(this.dragging) {
-			
+
 			this._mouseUp();
-			
+
 			if(this.options.helper == "original")
 				this.currentItem.css(this._storedCSS).removeClass("ui-sortable-helper");
 			else
 				this.currentItem.show();
-	
+
 			//Post deactivating events to containers
 			for (var i = this.containers.length - 1; i >= 0; i--){
 				this.containers[i]._propagate("deactivate", null, this);
@@ -78,28 +78,28 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 					this.containers[i].containerCache.over = 0;
 				}
 			}
-			
+
 		}
 
 		//$(this.placeholder[0]).remove(); would have been the jQuery way - unfortunately, it unbinds ALL events from the original node!
 		if(this.placeholder[0].parentNode) this.placeholder[0].parentNode.removeChild(this.placeholder[0]);
 		if(this.options.helper != "original" && this.helper && this.helper[0].parentNode) this.helper.remove();
-		
+
 		$.extend(this, {
 			helper: null,
 			dragging: false,
 			reverting: false,
 			_noFinalSort: null
 		});
-		
+
 		if(this.domPosition.prev) {
 			$(this.domPosition.prev).after(this.currentItem);
 		} else {
 			$(this.domPosition.parent).prepend(this.currentItem);
 		}
 
-		return true;		
-		
+		return true;
+
 	},
 
 	_propagate: function(n,e,inst, noPropagation) {
@@ -156,19 +156,12 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 
 	_intersectsWithEdge: function(item) {
 		var dyClick = this.offset.click.top, dxClick = this.offset.click.left;
-		var helperHeight = this.helperProportions.height, helperWidth = this.helperProportions.width;
 		var helperTop = this.positionAbs.top, helperLeft = this.positionAbs.left;
 		var itemHeight = item.height, itemWidth = item.width;
 		var itemTop = item.top, itemLeft = item.left;
 
-		var isOverElementHeight =
-			((helperTop + dyClick) > itemTop) &&
-			((helperTop + dyClick) < (itemTop + itemHeight));
-
-		var isOverElementWidth =
-			((helperLeft + dxClick) > itemLeft) &&
-			((helperLeft + dxClick) < (itemLeft + itemWidth));
-
+		var isOverElementHeight = $.ui.intersectHeight(helperTop + dyClick, itemTop, itemHeight);
+		var isOverElementWidth = $.ui.intersectWidth(helperLeft + dxClick, itemLeft, itemWidth);
 		var isOverElement = isOverElementHeight && isOverElementWidth;
 		var verticalDirection = this._getDragVerticalDirection();
 		var horizontalDirection = this._getDragHorizontalDirection();
@@ -837,10 +830,10 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 		}
 
 		this._propagate("beforeStop", e, null, noPropagation);
-	
+
 		//$(this.placeholder[0]).remove(); would have been the jQuery way - unfortunately, it unbinds ALL events from the original node!
 		this.placeholder[0].parentNode.removeChild(this.placeholder[0]);
-		
+
 		if(this.options.helper != "original") this.helper.remove(); this.helper = null;
 		this._propagate("stop", e, null, noPropagation);
 
