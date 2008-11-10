@@ -606,7 +606,7 @@ $.ui.plugin.add("draggable", "connectToSortable", {
 			var itemHeight = o.height, itemWidth = o.width;
 			var itemTop = o.top, itemLeft = o.left;
 
-			return $.ui.intersect(helperTop + dyClick, helperLeft + dxClick, itemTop, itemLeft, itemHeight, itemWidth);
+			return $.ui.intersects(helperTop + dyClick, helperLeft + dxClick, itemTop, itemLeft, itemHeight, itemWidth);
 		};
 
 		$.each(inst.sortables, function(i) {
