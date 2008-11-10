@@ -104,6 +104,21 @@ $.ui = {
 		has = (e[scroll] > 0);
 		e[scroll] = 0;
 		return has;
+	},
+	
+	intersectHeight: function(aTop, bTop, bHeight) {
+		//Determines when "aTop" element coordinate intersects with b element height
+		return (aTop > bTop) &&	(aTop < (bTop + bHeight));
+	},
+	
+	intersectWidth: function(aLeft, bLeft, bWidth) {
+		//Determines when "aLeft" element coordinate intersects with b element width
+		return (aLeft > bLeft) && (aLeft < (bLeft + bWidth));
+	},
+	
+	intersect: function(aTop, aLeft, bTop, bLeft, bHeight, bWidth) {
+		//Determines when element "a" coordinates intersects with element "b"
+		return $.ui.intersectHeight(aTop, bTop, bHeight) && $.ui.intersectWidth(aLeft, bLeft, bWidth);
 	}
 };
 
