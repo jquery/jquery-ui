@@ -1,5 +1,5 @@
 /*
- * core unit tests
+ * common UI unit tests
  */
 (function($) {
 
