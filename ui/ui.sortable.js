@@ -158,27 +158,23 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 		var verticalDirection = this._getDragVerticalDirection();
 		var horizontalDirection = this._getDragHorizontalDirection();
 
+		if (!isOverElement) return false;
+
 		if (this.floating) {
-			if (isOverElement) {
 
-				if (!horizontalDirection) {
-					return false;
-				}
-
-				var direction = horizontalDirection == "right" ? 2 : 1;
-				return direction;
+			if (!horizontalDirection) {
+				return verticalDirection == "down" ? 2 : 1;
 			}
+
+			return horizontalDirection == "right" ? 2 : 1;
 		}
 		else {
-			if (isOverElement) {
 
-				if (!verticalDirection) {
-					return false;
-				}
-
-				var direction = verticalDirection == "down" ? 2 : 1;
-				return direction;
+			if (!verticalDirection) {
+				return false;
 			}
+
+			return verticalDirection == "down" ? 2 : 1;
 		}
 
 		return false;
@@ -948,7 +944,7 @@ $.ui.plugin.add("sortable", "axis", {
 	sort: function(e, ui) {
 
 		var i = $(this).data("sortable");
-
+console.log(i.position.left, i.originalPosition.left);
 		if(ui.options.axis == "y") i.position.left = i.originalPosition.left;
 		if(ui.options.axis == "x") i.position.top = i.originalPosition.top;
 
