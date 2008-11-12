@@ -6,9 +6,7 @@
 */
 
 
-
-
-/*UI accordion*/
+/* Accordion */
 .ui-accordion {
 	/*resets*/margin: 0; padding: 0; border: 0; outline: 0; line-height: 1.3; text-decoration: none; font-size: 100%; list-style: none;
 	font-family: Verdana, Arial, sans-serif;
@@ -57,7 +55,7 @@
 }
 
 
-/*slider*/
+/* Slider */
 .ui-slider {
 	/*resets*/margin: 0; padding: 0; border: 0; outline: 0; line-height: 1.3; text-decoration: none; font-size: 100%; list-style: none;
 	font-family: Verdana, Arial, sans-serif;
@@ -97,11 +95,7 @@
 }
 
 
-
-
-
-
-/*dialog*/
+/* Dialog */
 .ui-dialog {
 	/*resets*/margin: 0; padding: 0; border: 0; outline: 0; line-height: 1.3; text-decoration: none; font-size: 100%; list-style: none;
 	font-family: Verdana, Arial, sans-serif;
@@ -248,19 +242,13 @@ body .ui-resizable-autohide .ui-resizable-handle { display: none; } /* use 'body
 	background: #ffffff url(images/ffffff_40x100_textures_02_glass_65.png) 0 50% repeat-x;
 	border: 1px solid #dddddd;
 }
-/* This file skins dialog */
 .ui-dialog.ui-draggable .ui-dialog-titlebar,
 .ui-dialog.ui-draggable .ui-dialog-titlebar {
 	cursor: move;
 }
 
 
-
-
-
-
-
-/*datepicker*/
+/* Datepicker */
 /* Main Style Sheet for jQuery UI date picker */
 .ui-datepicker-div, #ui-datepicker-div, .ui-datepicker-inline {
 	/*resets*/margin: 0; padding: 0; border: 0; outline: 0; line-height: 1.3; text-decoration: none; font-size: 100%; list-style: none;
@@ -373,21 +361,18 @@ table.ui-datepicker .ui-datepicker-title-row td {
 	text-transform: uppercase;
 	/*border-bottom: 1px solid #d3d3d3;*/
 }
-
 table.ui-datepicker .ui-datepicker-title-row td a {
 	color: #222222;
 }
 
 
-/* ProgressBar */
-
+/* Progressbar */
 .ui-progressbar {
 	width: 400px; height: 20px;
 	border: 1px #ccc solid;
 	background:#E0E8F3 url(images/bg.gif) repeat-x scroll 0%;
 	position:relative;
 }
-
 .ui-progressbar-wrap {
 	position: relative;
 	height: auto;
@@ -395,7 +380,6 @@ table.ui-datepicker .ui-datepicker-title-row td a {
 	line-height: 18px;
 	_line-height: 16px;
 }
-
 .ui-progressbar-bar {
 	background:#9CBFEE url(images/progress-bg.gif) repeat-x scroll left center;
 	border-bottom:1px solid #7FA9E4;
@@ -403,7 +387,6 @@ table.ui-datepicker .ui-datepicker-title-row td a {
 	border-top:1px solid #D1E4FD;
 	position: absolute;
 }
-
 .ui-progressbar-text {
 	color:#fff;
 	overflow: hidden;
@@ -412,21 +395,16 @@ table.ui-datepicker .ui-datepicker-title-row td a {
 	font-weight: bold;
 	padding-left: 5px;
 }
-
 .ui-progressbar-text-back {
 	color:#000;
 	padding-top: 1px;
 	padding-bottom: 1px;
 	padding-right: 1px;
 }
-
 .ui-progressbar-disabled {
 	opacity:.5;
 	filter:Alpha(Opacity=50);
 }
-
-
-/* custom */
 .ui-progressbar-text.right-align {
 	text-align: right;
 	padding: 0 5px 0 0;
@@ -566,9 +544,7 @@ Generic ThemeRoller Classes
 /* Note: for resizable styles, use the styles listed above in the dialog section */
 
 
-
-
-/* UI Spinner */
+/* Spinner */
 .ui-spinner {
 	width: 15em;
 	display: block;
@@ -578,12 +554,10 @@ Generic ThemeRoller Classes
 	background: #FEFEFE url(./images/spinner-bg.gif) repeat-x left bottom;
 	padding: 0 5px;
 }
-
 .ui-spinner-disabled {
 	background: #F4F4F4;
 	color: #CCC;
 }
-
 .ui-spinner-box {
 	width: 90%;
 	height: 100%;
@@ -593,7 +567,6 @@ Generic ThemeRoller Classes
 	background: none;
 	padding: 0;
 }
-
 .ui-spinner-up,
 .ui-spinner-down {
 	width: 10%;
@@ -611,16 +584,13 @@ Generic ThemeRoller Classes
 	border-right: none;
 	border-top: none;
 }
-
 .ui-spinner-down {
 	bottom: 0;
 	border-bottom: 0;
 }
-
 .ui-spinner-pressed {
 	background: #FEFEFE;
 }
-
 .ui-spinner-list,
 .ui-spinner-listitem {
 	margin: 0;
