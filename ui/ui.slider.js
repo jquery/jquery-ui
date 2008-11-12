@@ -46,7 +46,8 @@ $.widget("ui.slider", {
 			this.handle
 				.unwrap("a");
 			this.handle.each(function() {
-				$(this).data("mouse")._mouseDestroy();
+				var mouse = $(this).data("mouse");
+				mouse && mouse._mouseDestroy();
 			});
 		}
 		
