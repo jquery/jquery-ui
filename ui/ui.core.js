@@ -66,7 +66,19 @@ $.ui = {
 					set[i][1].apply(instance.element, args);
 				}
 			}
-		}	
+		}
+	},
+	
+	contains: function(a, b) {
+		var safari2 = $.browser.safari && $.browser.version < 522;
+	    if (a.contains && !safari2) {
+	        return a.contains(b);
+	    }
+	    if (a.compareDocumentPosition)
+	        return !!(a.compareDocumentPosition(b) & 16);
+	    while (b = b.parentNode)
+	          if (b == a) return true;
+	    return false;
 	},
 	
 	cssCache: {},
@@ -80,7 +92,7 @@ $.ui = {
 		//Opera and Safari set width and height to 0px instead of auto
 		//Safari returns rgba(0,0,0,0) when bgcolor is not set
 		$.ui.cssCache[name] = !!(
-			(!(/auto|default/).test(tmp.css('cursor')) || (/^[1-9]/).test(tmp.css('height')) || (/^[1-9]/).test(tmp.css('width')) || 
+			(!(/auto|default/).test(tmp.css('cursor')) || (/^[1-9]/).test(tmp.css('height')) || (/^[1-9]/).test(tmp.css('width')) ||
 			!(/none/).test(tmp.css('backgroundImage')) || !(/transparent|rgba\(0, 0, 0, 0\)/).test(tmp.css('backgroundColor')))
 		);
 		try { $('body').get(0).removeChild(tmp.get(0));	} catch(e){}

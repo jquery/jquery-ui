@@ -12,18 +12,6 @@
  */
 (function($) {
 
-function contains(a, b) {
-    var safari2 = $.browser.safari && $.browser.version < 522;
-    if (a.contains && !safari2) {
-        return a.contains(b);
-    }
-    if (a.compareDocumentPosition)
-        return !!(a.compareDocumentPosition(b) & 16);
-    while (b = b.parentNode)
-          if (b == a) return true;
-    return false;
-};
-
 $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 	_init: function() {
 
@@ -159,6 +147,10 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 		var helperTop = this.positionAbs.top, helperLeft = this.positionAbs.left;
 		var itemHeight = item.height, itemWidth = item.width;
 		var itemTop = item.top, itemLeft = item.left;
+
+		if (this.cancelIntersection) {
+			return false;
+		}
 
 		var isOverElementHeight = $.ui.isOverHeight(helperTop + dyClick, itemTop, itemHeight);
 		var isOverElementWidth = $.ui.isOverWidth(helperLeft + dxClick, itemLeft, itemWidth);
@@ -419,7 +411,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 						//When entering a new container, we will find the item with the least distance and append our item near it
 						var dist = 10000; var itemWithLeastDistance = null; var base = this.positionAbs[this.containers[i].floating ? 'left' : 'top'];
 						for (var j = this.items.length - 1; j >= 0; j--) {
-							if(!contains(this.containers[i].element[0], this.items[j].item[0])) continue;
+							if(!$.ui.contains(this.containers[i].element[0], this.items[j].item[0])) continue;
 							var cur = this.items[j][this.containers[i].floating ? 'left' : 'top'];
 							if(Math.abs(cur - base) < dist) {
 								dist = Math.abs(cur - base); itemWithLeastDistance = this.items[j];
@@ -711,14 +703,14 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 
 			var intersection = this._intersectsWithEdge(this.items[i]);
 
-			if(!intersection) continue;
+			if (!intersection) continue;
 
 			var item = this.items[i].item[0];
 
 			if(item != this.currentItem[0] //cannot intersect with itself
 				&&	this.placeholder[intersection == 1 ? "next" : "prev"]()[0] != item //no useless actions that have been done before
-				&&	!contains(this.placeholder[0], item) //no action if the item moved is the parent of the item checked
-				&& (this.options.type == 'semi-dynamic' ? !contains(this.element[0], item) : true)
+				&&	!$.ui.contains(this.placeholder[0], item) //no action if the item moved is the parent of the item checked
+				&& (this.options.type == 'semi-dynamic' ? !$.ui.contains(this.element[0], item) : true)
 			) {
 
 				this.direction = intersection == 1 ? "down" : "up";
@@ -803,10 +795,10 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 			this.currentItem.show();
 
 		if(this.domPosition.prev != this.currentItem.prev().not(".ui-sortable-helper")[0] || this.domPosition.parent != this.currentItem.parent()[0]) this._propagate("update", e, null, noPropagation); //Trigger update callback if the DOM position has changed
-		if(!contains(this.element[0], this.currentItem[0])) { //Node was moved out of the current element
+		if(!$.ui.contains(this.element[0], this.currentItem[0])) { //Node was moved out of the current element
 			this._propagate("remove", e, null, noPropagation);
 			for (var i = this.containers.length - 1; i >= 0; i--){
-				if(contains(this.containers[i].element[0], this.currentItem[0])) {
+				if($.ui.contains(this.containers[i].element[0], this.currentItem[0])) {
 					this.containers[i]._propagate("update", e, this, noPropagation);
 					this.containers[i]._propagate("receive", e, this, noPropagation);
 				}
