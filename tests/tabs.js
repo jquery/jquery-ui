@@ -2,6 +2,32 @@
  * tabs unit tests
  */
 (function($) {
+//
+// Tabs Test Helper Functions
+//
+
+var defaults = {
+	ajaxOptions: null,
+	cache: false,
+	cookie: null,
+	deselectable: false,
+	deselectableClass: 'ui-tabs-deselectable',
+	disabled: [],
+	disabledClass: 'ui-tabs-disabled',
+	event: 'click',
+	fx: null,
+	hideClass: 'ui-tabs-hide',
+	idPrefix: 'ui-tabs-',
+	loadingClass: 'ui-tabs-loading',
+	navClass: 'ui-tabs-nav',
+	panelClass: 'ui-tabs-panel',
+	panelTemplate: '<div></div>',
+	selectedClass: 'ui-tabs-selected',
+	spinner: 'Loading&#8230;',
+	tabTemplate: '<li><a href="#{href}"><span>#{label}</span></a></li>'
+};
+
+var el;
 
 // need to wait a bit for the pseudo animation...
 function defer(defered, ms) {
@@ -35,35 +61,12 @@ module('tabs');
 	});
 
 	test("defaults", function() {
-	
-		var expected = {
-			deselectable: false,
-			event: 'click',
-			disabled: [],
-			cookie: null,
-			spinner: 'Loading&#8230;',
-			cache: false,
-			idPrefix: 'ui-tabs-',
-			ajaxOptions: null,
-			fx: null,
-			tabTemplate: '<li><a href="#{href}"><span>#{label}</span></a></li>',
-			panelTemplate: '<div></div>',
-			navClass: 'ui-tabs-nav',
-			selectedClass: 'ui-tabs-selected',
-			deselectableClass: 'ui-tabs-deselectable',
-			disabledClass: 'ui-tabs-disabled',
-			panelClass: 'ui-tabs-panel',
-			hideClass: 'ui-tabs-hide',
-			loadingClass: 'ui-tabs-loading'
-		};
-
-		var el = $("#tabs1").tabs();
-
-		for (var optionName in expected) {
-			var actual = el.data(optionName + '.tabs'), expects = expected[optionName];
-			same(actual, expects, optionName);
-		}
-	
+		el = $('#tabs1').tabs();
+		$.each(defaults, function(key, val) {
+			var actual = el.data(key + ".tabs"), expected = val;
+			same(actual, expected, key);
+		});
+		el.tabs("destroy");
 	});
 
 	test('add', function() {

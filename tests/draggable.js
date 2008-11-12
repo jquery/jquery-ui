@@ -5,6 +5,37 @@
 //
 // Draggable Test Helper Functions
 //
+
+var defaults = {
+	appendTo: "parent",
+	axis: false,
+	cancel: ":input",
+	connectToSortable: false,
+	containment: false,
+	cursor: "default",
+	cursorAt: null,
+	delay: 0,
+	disabled: false,
+	distance: 1,
+	grid: false,
+	handle: false,
+	helper: "original",
+	iframeFix: false,
+	opacity: 1.0,
+	refreshPositions: false,
+	revert: false,
+	revertDuration: 500,
+	scroll: false,
+	scrollSensitivity: 20,
+	scrollSpeed: 20,
+	scope: "default",
+	snap: false,
+	snapMode: "both",
+	snapTolerance: 20,
+	stack: false,
+	zIndex: null
+};
+
 var el, offsetBefore, offsetAfter, dragged;
 
 var drag = function(handle, dx, dy) {
@@ -45,44 +76,44 @@ module("draggable");
 test("init", function() {
 	expect(6);
 
-	el = $("#draggable1").draggable();
+	$("<div></div>").appendTo('body').draggable().remove();
 	ok(true, '.draggable() called on element');
 
 	$([]).draggable();
 	ok(true, '.draggable() called on empty collection');
 
-	$("<div/>").draggable();
+	$("<div></div>").draggable();
 	ok(true, '.draggable() called on disconnected DOMElement');
 
-	$("<div/>").draggable().draggable("foo");
+	$("<div></div>").draggable().draggable("foo");
 	ok(true, 'arbitrary method called after init');
 
-	$("<div/>").draggable().data("foo.draggable");
+	$("<div></div>").draggable().data("foo.draggable");
 	ok(true, 'arbitrary option getter after init');
 
-	$("<div/>").draggable().data("foo.draggable", "bar");
+	$("<div></div>").draggable().data("foo.draggable", "bar");
 	ok(true, 'arbitrary option setter after init');
 });
 
 test("destroy", function() {
 	expect(6);
 
-	$("#draggable1").draggable().draggable("destroy");	
+	$("<div></div>").appendTo('body').draggable().draggable("destroy").remove();	
 	ok(true, '.draggable("destroy") called on element');
 
 	$([]).draggable().draggable("destroy");
 	ok(true, '.draggable("destroy") called on empty collection');
 
-	$("<div/>").draggable().draggable("destroy");
+	$("<div></div>").draggable().draggable("destroy");
 	ok(true, '.draggable("destroy") called on disconnected DOMElement');
 
-	$("<div/>").draggable().draggable("destroy").draggable("foo");
+	$("<div></div>").draggable().draggable("destroy").draggable("foo");
 	ok(true, 'arbitrary method called after destroy');
 
-	$("<div/>").draggable().draggable("destroy").data("foo.draggable");
+	$("<div></div>").draggable().draggable("destroy").data("foo.draggable");
 	ok(true, 'arbitrary option getter after destroy');
 
-	$("<div/>").draggable().draggable("destroy").data("foo.draggable", "bar");
+	$("<div></div>").draggable().draggable("destroy").data("foo.draggable", "bar");
 	ok(true, 'arbitrary option setter after destroy');
 });
 
@@ -138,42 +169,12 @@ test("element types", function() {
 });
 
 test("defaults", function() {
-
-	var expected = {
-		appendTo: "parent",
-		axis: false,
-		cancel: ":input",
-		connectToSortable: false,
-		containment: false,
-		cursor: "default",
-		cursorAt: null,
-		delay: 0,
-		disabled: false,
-		distance: 1,
-		grid: false,
-		handle: false,
-		helper: "original",
-		iframeFix: false,
-		opacity: 1.0,
-		refreshPositions: false,
-		revert: false,
-		revertDuration: 500,
-		scroll: false,
-		scrollSensitivity: 20,
-		scrollSpeed: 20,
-		scope: "default",
-		snap: false,
-		snapMode: "both",
-		snapTolerance: 20,
-		stack: false,
-		zIndex: null
-	};
-
-	el = $("#draggable1").draggable();
-
-	for (var optionName in expected)
-		equals(el.data(optionName + ".draggable"), expected[optionName], optionName);
-	
+	el = $('<div></div>').draggable();
+	$.each(defaults, function(key, val) {
+		var actual = el.data(key + ".draggable"), expected = val;
+		same(actual, expected, key);
+	});
+	el.remove();
 });
 
 test("No options, relative", function() {

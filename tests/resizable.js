@@ -6,20 +6,6 @@
 // Resizable Test Helper Functions
 //
 
-var drag = function(el, dx, dy, complete) {
-	
-	// speed = sync -> Drag syncrhonously.
-	// speed = fast|slow -> Drag asyncrhonously - animated.
-	
-	//this mouseover is to work around a limitation in resizable
-	//TODO: fix resizable so handle doesn't require mouseover in order to be used
-	$(el).simulate("mouseover");
-
-	return $(el).simulate("drag", {
-		dx: dx||0, dy: dy||0, speed: 'sync', complete: complete 
-	});
-};
-
 var defaults = {
 	animate: false,
 	animateDuration: 'slow',
@@ -48,54 +34,68 @@ var defaults = {
 	transparent: false
 };
 
+var drag = function(el, dx, dy, complete) {
+	
+	// speed = sync -> Drag syncrhonously.
+	// speed = fast|slow -> Drag asyncrhonously - animated.
+	
+	//this mouseover is to work around a limitation in resizable
+	//TODO: fix resizable so handle doesn't require mouseover in order to be used
+	$(el).simulate("mouseover");
+
+	return $(el).simulate("drag", {
+		dx: dx||0, dy: dy||0, speed: 'sync', complete: complete 
+	});
+};
+
 // Resizable Tests
 module("resizable");
 
 test("init", function() {
 	expect(6);
 
-	$("#resizable1").resizable().remove();
+	$("<div></div>").appendTo('body').resizable().remove();
 	ok(true, '.resizable() called on element');
 
 	$([]).resizable().remove();
 	ok(true, '.resizable() called on empty collection');
 
-	$('<div/>').resizable().remove();
+	$('<div></div>').resizable().remove();
 	ok(true, '.resizable() called on disconnected DOMElement');
 
-	$('<div/>').resizable().resizable("foo").remove();
+	$('<div></div>').resizable().resizable("foo").remove();
 	ok(true, 'arbitrary method called after init');
 
-	el = $('<div/>').resizable()
+	el = $('<div></div>').resizable()
 	var foo = el.data("foo.resizable");
 	el.remove();
 	ok(true, 'arbitrary option getter after init');
 
-	$('<div/>').resizable().data("foo.resizable", "bar").remove();
+	$('<div></div>').resizable().data("foo.resizable", "bar").remove();
 	ok(true, 'arbitrary option setter after init');
 });
 
 test("destroy", function() {
 	expect(6);
 
-	$("#dialog1").resizable().resizable("destroy").remove();
+	$("<div></div>").appendTo('body').resizable().resizable("destroy").remove();
 	ok(true, '.resizable("destroy") called on element');
 
 	$([]).resizable().resizable("destroy").remove();
 	ok(true, '.resizable("destroy") called on empty collection');
 
-	$('<div/>').resizable().resizable("destroy").remove();
+	$('<div></div>').resizable().resizable("destroy").remove();
 	ok(true, '.resizable("destroy") called on disconnected DOMElement');
 
-	$('<div/>').resizable().resizable("destroy").resizable("foo").remove();
+	$('<div></div>').resizable().resizable("destroy").resizable("foo").remove();
 	ok(true, 'arbitrary method called after destroy');
 
-	el = $('<div/>').resizable();
+	el = $('<div></div>').resizable();
 	var foo = el.resizable("destroy").data("foo.resizable");
 	el.remove();
 	ok(true, 'arbitrary option getter after destroy');
 
-	$('<div/>').resizable().resizable("destroy").data("foo.resizable", "bar").remove();
+	$('<div></div>').resizable().resizable("destroy").data("foo.resizable", "bar").remove();
 	ok(true, 'arbitrary option setter after destroy');
 });
 
@@ -117,7 +117,7 @@ test("element types", function() {
 });
 
 test("defaults", function() {
-	el = $('<div/>').resizable();
+	el = $('<div></div>').resizable();
 	$.each(defaults, function(key, val) {
 		var actual = el.data(key + ".resizable"), expected = val;
 		same(actual, expected, key);

@@ -33,44 +33,44 @@ module("droppable");
 test("init", function() {
 	expect(6);
 
-	el = $("#droppable1").droppable();
+	$("<div></div>").appendTo('body').droppable().remove();
 	ok(true, '.droppable() called on element');
 
 	$([]).droppable();
 	ok(true, '.droppable() called on empty collection');
 
-	$("<div/>").droppable();
+	$("<div></div>").droppable();
 	ok(true, '.droppable() called on disconnected DOMElement');
 
-	$("<div/>").droppable().droppable("foo");
+	$("<div></div>").droppable().droppable("foo");
 	ok(true, 'arbitrary method called after init');
 
-	$("<div/>").droppable().data("foo.droppable");
+	$("<div></div>").droppable().data("foo.droppable");
 	ok(true, 'arbitrary option getter after init');
 
-	$("<div/>").droppable().data("foo.droppable", "bar");
+	$("<div></div>").droppable().data("foo.droppable", "bar");
 	ok(true, 'arbitrary option setter after init');
 });
 
 test("destroy", function() {
 	expect(6);
 
-	$("#droppable1").droppable().droppable("destroy");	
+	$("<div></div>").appendTo('body').droppable().droppable("destroy").remove();	
 	ok(true, '.droppable("destroy") called on element');
 
 	$([]).droppable().droppable("destroy");
 	ok(true, '.droppable("destroy") called on empty collection');
 
-	$("<div/>").droppable().droppable("destroy");
+	$("<div></div>").droppable().droppable("destroy");
 	ok(true, '.droppable("destroy") called on disconnected DOMElement');
 
-	$("<div/>").droppable().droppable("destroy").droppable("foo");
+	$("<div></div>").droppable().droppable("destroy").droppable("foo");
 	ok(true, 'arbitrary method called after destroy');
 
-	$("<div/>").droppable().droppable("destroy").data("foo.droppable");
+	$("<div></div>").droppable().droppable("destroy").data("foo.droppable");
 	ok(true, 'arbitrary option getter after destroy');
 
-	$("<div/>").droppable().droppable("destroy").data("foo.droppable", "bar");
+	$("<div></div>").droppable().droppable("destroy").data("foo.droppable", "bar");
 	ok(true, 'arbitrary option setter after destroy');
 });
 

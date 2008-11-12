@@ -2,6 +2,26 @@
  * spinner unit tests
  */
 (function($) {
+//
+// Spinner Test Helper Functions
+//
+
+var defaults = {
+	currency: false,
+	decimals: 0,
+	disabled: false,
+	format: "%",
+	group: "",
+	incremental: true,
+	items: null,
+	max: null,
+	min: null,
+	point: ".",
+	start: 0,
+	stepping: 1
+};
+
+var el;
 
 // Spinner Tests
 module("spinner");
@@ -9,7 +29,7 @@ module("spinner");
 test("init", function() {
 	expect(2);
 
-	$("#spin").spinner();
+	$("<div></div>").appendTo('body').spinner().remove();
 	ok(true, '.spinner() called on element');
 
 	$('<input id="spinner_dis">').spinner().remove();
@@ -20,12 +40,21 @@ test("init", function() {
 test("destroy", function() {
 	expect(2);
 
-	$("#spin").spinner().spinner("destroy");
+	$("<div></div>").appendTo('body').spinner().spinner("destroy").remove();
 	ok(true, '.spinner("destroy") called on element');
 
 	$('<input id="spinner_dis">').spinner().spinner("destroy").remove();
 	ok(true, '.spinner().spinner("destroy") called on disconnected element');
 
+});
+
+test("defaults", function() {
+	el = $('<div></div>').spinner();
+	$.each(defaults, function(key, val) {
+		var actual = el.data(key + ".spinner"), expected = val;
+		same(actual, expected, key);
+	});
+	el.remove();
 });
 
 test("re-attach", function() {

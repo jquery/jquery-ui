@@ -5,6 +5,23 @@
 //
 // Sortable Test Helper Functions
 //
+
+var defaults = {
+	appendTo: "parent",
+	cancel: ":input",
+	delay: 0,
+	disabled: false,
+	distance: 1,
+	dropOnEmpty: true,
+	helper: "original",
+	items: "> *",
+	scroll: true,
+	scrollSensitivity: 20,
+	scrollSpeed: 20,
+	tolerance: "guess",
+	zIndex: 1000
+};
+
 var el, offsetBefore, offsetAfter, dragged;
 
 var drag = function(handle, dx, dy) {
@@ -31,44 +48,44 @@ module("sortable");
 test("init", function() {
 	expect(6);
 
-	el = $("#sortable").sortable();
+	$("<div></div>").appendTo('body').sortable().remove();
 	ok(true, '.sortable() called on element');
 
 	$([]).sortable();
 	ok(true, '.sortable() called on empty collection');
 
-	$("<div/>").sortable();
+	$("<div></div>").sortable();
 	ok(true, '.sortable() called on disconnected DOMElement');
 
-	$("<div/>").sortable().sortable("foo");
+	$("<div></div>").sortable().sortable("foo");
 	ok(true, 'arbitrary method called after init');
 
-	$("<div/>").sortable().data("foo.sortable");
+	$("<div></div>").sortable().data("foo.sortable");
 	ok(true, 'arbitrary option getter after init');
 
-	$("<div/>").sortable().data("foo.sortable", "bar");
+	$("<div></div>").sortable().data("foo.sortable", "bar");
 	ok(true, 'arbitrary option setter after init');
 });
 
 test("destroy", function() {
 	expect(6);
 
-	$("#sortable").sortable().sortable("destroy");	
+	$("<div></div>").appendTo('body').sortable().sortable("destroy").remove();
 	ok(true, '.sortable("destroy") called on element');
 
 	$([]).sortable().sortable("destroy");
 	ok(true, '.sortable("destroy") called on empty collection');
 
-	$("<div/>").sortable().sortable("destroy");
+	$("<div></div>").sortable().sortable("destroy");
 	ok(true, '.sortable("destroy") called on disconnected DOMElement');
 
-	$("<div/>").sortable().sortable("destroy").sortable("foo");
+	$("<div></div>").sortable().sortable("destroy").sortable("foo");
 	ok(true, 'arbitrary method called after destroy');
 
-	$("<div/>").sortable().sortable("destroy").data("foo.sortable");
+	$("<div></div>").sortable().sortable("destroy").data("foo.sortable");
 	ok(true, 'arbitrary option getter after destroy');
 
-	$("<div/>").sortable().sortable("destroy").data("foo.sortable", "bar");
+	$("<div></div>").sortable().sortable("destroy").data("foo.sortable", "bar");
 	ok(true, 'arbitrary option setter after destroy');
 });
 
@@ -107,22 +124,12 @@ test("disable", function() {
 });
 
 test("defaults", function() {
-	el = $("#sortable").sortable();
-
-	equals(el.data("helper.sortable"), "original", "helper");
-	equals(el.data("tolerance.sortable"), "guess", "tolerance");
-	equals(el.data("distance.sortable"), 1, "distance");
-	equals(el.data("disabled.sortable"), false, "disabled");
-	equals(el.data("delay.sortable"), 0, "delay");
-	equals(el.data("scroll.sortable"), true, "scroll");
-	equals(el.data("scrollSensitivity.sortable"), 20, "scrollSensitivity");
-	equals(el.data("scrollSpeed.sortable"), 20, "scrollSpeed");
-	equals(el.data("cancel.sortable"), ":input", "cancel");
-	equals(el.data("items.sortable"), "> *", "items");
-	equals(el.data("zIndex.sortable"), 1000, "zIndex");	
-	equals(el.data("dropOnEmpty.sortable"), true, "dropOnEmpty");
-	equals(el.data("appendTo.sortable"), "parent", "appendTo");
-
+	el = $('<div></div>').sortable();
+	$.each(defaults, function(key, val) {
+		var actual = el.data(key + ".sortable"), expected = val;
+		same(actual, expected, key);
+	});
+	el.remove();
 });
 
 test("#3019: Stop fires too early", function() {

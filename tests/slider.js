@@ -2,6 +2,23 @@
  * slider unit tests
  */
 (function($) {
+//
+// Selectable Test Helper Functions
+//
+
+var defaults = {
+	animate: false,
+	axis: "???",
+	handle: ".ui-slider-handle",
+	handles: "???",
+	disabled: false,
+	max: 100,
+	min: 0,
+	range: false,
+	startValue: "???",
+	stepping: "???",
+	steps: 0
+};
 
 var keyCodes = {
 	leftArrow: 37,
@@ -32,7 +49,67 @@ function assertChange(stepping, start, result, action) {
 	}
 }
 
-module("slider: single handle")
+// Slider Tests
+module("slider");
+
+test("init", function() {
+	expect(6);
+	
+	$("<div></div>").appendTo('body').slider().remove();
+	ok(true, '.slider() called on element');
+	
+	$([]).slider().remove();
+	ok(true, '.slider() called on empty collection');
+	
+	$('<div></div>').slider().remove();
+	ok(true, '.slider() called on disconnected DOMElement');
+	
+	$('<div></div>').slider().slider("foo").remove();
+	ok(true, 'arbitrary method called after init');
+	
+	el = $('<div></div>').slider();
+	var foo = el.data("foo.slider");
+	el.remove();
+	ok(true, 'arbitrary option getter after init');
+	
+	$('<div></div>').slider().data("foo.slider", "bar").remove();
+	ok(true, 'arbitrary option setter after init');
+});
+
+test("destroy", function() {
+	expect(6);
+
+	$("<div></div>").appendTo('body').slider().slider("destroy").remove();
+	ok(true, '.slider("destroy") called on element');
+
+	$([]).slider().slider("destroy").remove();
+	ok(true, '.slider("destroy") called on empty collection');
+
+	$('<div></div>').slider().slider("destroy").remove();
+	ok(true, '.slider("destroy") called on disconnected DOMElement');
+
+	$('<div></div>').slider().slider("destroy").slider("foo").remove();
+	ok(true, 'arbitrary method called after destroy');
+
+	el = $('<div></div>').slider();
+	var foo = el.slider("destroy").data("foo.slider");
+	el.remove();
+	ok(true, 'arbitrary option getter after destroy');
+
+	$('<div></div>').slider().slider("destroy").data("foo.slider", "bar").remove();
+	ok(true, 'arbitrary option setter after destroy');
+});
+
+test("defaults", function() {
+	el = $('<div></div>').slider();
+	$.each(defaults, function(key, val) {
+		var actual = el.data(key + ".slider"), expected = val;
+		same(actual, expected, key);
+	});
+	el.remove();
+});
+
+module("slider: single handle");
 
 test("change one step via keydown", assertChange(1, undefined, 1, function() {
 	this.find("a").rightArrow();

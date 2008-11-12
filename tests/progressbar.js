@@ -2,14 +2,28 @@
  * progressbar unit tests
  */
 (function($) {
+//
+// Progressbar Test Helper Functions
+//
 
-// Spinner Tests
+var defaults = {
+	disabled: false,
+	duration: 1000,
+	increment: 1,
+	interval: 1000,
+	range: true,
+	width: 300
+};
+
+var el;
+
+// Progressbar Tests
 module("progressbar");
 
 test("init", function() {
 	expect(1);
 
-	el = $("#progressbar").progressbar();
+	$("<div></div>").appendTo('body').progressbar().remove();
 	ok(true, '.progressbar() called on element');
 
 });
@@ -17,21 +31,18 @@ test("init", function() {
 test("destroy", function() {
 	expect(1);
 
-	$("#progressbar").progressbar().progressbar("destroy");	
+	$("<div></div>").appendTo('body').progressbar().progressbar("destroy").remove();	
 	ok(true, '.progressbar("destroy") called on element');
 
 });
 
 test("defaults", function() {
-	expect(5);
-	el = $("#progressbar").progressbar();
-
-	equals(el.data("width.progressbar"), 300, "width");
-	equals(el.data("duration.progressbar"), 1000, "duration");
-	equals(el.data("interval.progressbar"), 1000, "interval");
-	equals(el.data("increment.progressbar"), 1, "increment");
-	equals(el.data("range.progressbar"), true, "range");
-
+	el = $('<div></div>').progressbar();
+	$.each(defaults, function(key, val) {
+		var actual = el.data(key + ".progressbar"), expected = val;
+		same(actual, expected, key);
+	});
+	el.remove();
 });
 
 test("set defaults on init", function() {
