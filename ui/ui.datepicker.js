@@ -15,6 +15,8 @@
    
 (function($) { // hide the namespace
 
+$.extend($.ui, { datepicker: { version: "@VERSION" } });
+
 var PROP_NAME = 'datepicker';
 
 /* Date picker manager.
