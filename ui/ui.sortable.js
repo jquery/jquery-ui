@@ -944,7 +944,6 @@ $.ui.plugin.add("sortable", "axis", {
 	sort: function(e, ui) {
 
 		var i = $(this).data("sortable");
-console.log(i.position.left, i.originalPosition.left);
 		if(ui.options.axis == "y") i.position.left = i.originalPosition.left;
 		if(ui.options.axis == "x") i.position.top = i.originalPosition.top;
 
