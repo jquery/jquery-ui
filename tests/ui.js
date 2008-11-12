@@ -5,7 +5,6 @@
 
 var plugins = [
 	"accordion",
-	"colorpicker",
 	"datepicker",
 	"dialog",
 	"draggable",
