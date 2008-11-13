@@ -106,18 +106,18 @@ $.widget("ui.accordion", {
 		var currentIndex = this.options.headers.index(e.target);
 		var toFocus = false;
 		
-		if (e.keyCode == keyCode.RIGHT || e.keyCode == keyCode.DOWN){
-		
-			toFocus = this.options.headers[(currentIndex + 1) % length];
-			
-		} else if (e.keyCode == keyCode.LEFT || e.keyCode == keyCode.UP) {
-			
-			toFocus = this.options.headers[(currentIndex - 1 + length) % length];
-			
-		} else if (e.keyCode == keyCode.SPACE || e.keyCode == keyCode.ENTER) {
-			
-			return clickHandler.call(this.element[0], { target: e.target });
-			
+		switch(e.keyCode) {
+			case keyCode.RIGHT:
+			case keyCode.DOWN:
+				toFocus = this.options.headers[(currentIndex + 1) % length];
+				break;
+			case keyCode.LEFT:
+			case keyCode.UP:
+				toFocus = this.options.headers[(currentIndex - 1 + length) % length];
+				break;
+			case keyCode.SPACE:
+			case keyCode.ENTER:
+				return clickHandler.call(this.element[0], { target: e.target });
 		}
 		
 		if (toFocus) {
