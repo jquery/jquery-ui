@@ -41,7 +41,7 @@ $.widget("ui.accordion", {
 			this.element.addClass("ui-accordion");
 			$('<span class="ui-accordion-left"/>').insertBefore(options.headers);
 			$('<span class="ui-accordion-right"/>').appendTo(options.headers);
-			options.headers.addClass("ui-accordion-header").attr("tabindex", "0");
+			options.headers.addClass("ui-accordion-header");
 		}
 		
 		var maxHeight;
@@ -60,23 +60,83 @@ $.widget("ui.accordion", {
 				maxHeight = Math.max(maxHeight, $(this).outerHeight());
 			}).height(maxHeight);
 		}
+				
+		this.element.attr('role','tablist');
+
+		var self=this;
+		options.headers
+			.attr('role','tab')
+			.bind('keydown', function(e) { return self._keydown(e); })
+			.next()
+			.attr('role','tabpanel');
 		
 		options.headers
 			.not(options.active || "")
+			.attr('aria-expanded','false')
+			.attr("tabIndex", "-1")
 			.next()
 			.hide();
-		options.active.parent().andSelf().addClass(options.selectedClass);
+			
+		// make sure at least one header is in the tab order
+		if (!options.active.length) {
+			options.headers.eq(0).attr('tabIndex','0');
+		} else {
+			options.active
+				.attr('aria-expanded','true')
+				.attr("tabIndex", "0")
+				.parent().andSelf().addClass(options.selectedClass);
+		}
+		
+		// only need links in taborder for Safari
+		if (!$.browser.safari)
+			options.headers.find('a').attr('tabIndex','-1');
 		
 		if (options.event) {
 			this.element.bind((options.event) + ".accordion", clickHandler);
 		}
 	},
+	
+	_keydown: function(e) {
+		if (this.options.disabled || e.altKey || e.ctrlKey)
+			return;
+
+		var keyCode = $.keyCode;
+		
+		var length = this.options.headers.length;
+		var currentIndex = this.options.headers.index(e.target);
+		var toFocus = false;
+		
+		if (e.keyCode == keyCode.RIGHT || e.keyCode == keyCode.DOWN){
+		
+			toFocus = this.options.headers[(currentIndex + 1) % length];
+			
+		} else if (e.keyCode == keyCode.LEFT || e.keyCode == keyCode.UP) {
+			
+			toFocus = this.options.headers[(currentIndex - 1 + length) % length];
+			
+		} else if (e.keyCode == keyCode.SPACE || e.keyCode == keyCode.ENTER) {
+			
+			return clickHandler.call(this.element[0], { target: e.target });
+			
+		}
+		
+		if (toFocus) {
+			$(e.target).attr('tabIndex','-1');
+			$(toFocus).attr('tabIndex','0');
+			toFocus.focus();
+			return false;
+		}
+
+		return true;
+	},
+	
 	activate: function(index) {
 		// call clickHandler with custom event
 		clickHandler.call(this.element[0], {
 			target: findActive( this.options.headers, index )[0]
 		});
 	},
+	
 	destroy: function() {
 		this.options.headers.parent().andSelf().removeClass(this.options.selectedClass);
 		this.options.headers.prev(".ui-accordion-left").remove();
@@ -189,6 +249,8 @@ function toggle(toShow, toHide, data, clickedActive, down) {
 		}
 		complete(true);
 	}
+	toHide.prev().attr('aria-expanded','false').attr("tabIndex", "-1");
+	toShow.prev().attr('aria-expanded','true').attr("tabIndex", "0").focus();;
 }
 
 function clickHandler(event) {
