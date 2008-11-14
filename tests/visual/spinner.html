@@ -47,7 +47,7 @@ $(function(){
 			// Two methods of adding external items to the spinner
 			//
 			// method 1: on initalisation call the add method directly and format html manually
-			init: function(e, ui) {
+			init: function(event, ui) {
 				for (var i=0; i<itemList.length; i++) {
 					ui.add('<a href="'+ itemList[i].url +'" target="_blank">'+ itemList[i].title +'</a>');
 				}
@@ -59,19 +59,19 @@ $(function(){
 		},
 		// callbacks
 		's6': {
-			init: function(e, ui) {
+			init: function(event, ui) {
 				console.log('init: '+ ui.value);
 			},
-			up: function(e, ui) {
+			up: function(event, ui) {
 				console.log('up: '+ ui.value);
 			},
-			down: function(e, ui) {
+			down: function(event, ui) {
 				console.log('down: '+ ui.value);
 			},
-			spin: function(e, ui) {
+			spin: function(event, ui) {
 				console.log('spin: '+ ui.value);
 			},
-			change: function(e, ui) {
+			change: function(event, ui) {
 				console.log('change: '+ ui.value);
 			}
 		}
@@ -80,7 +80,7 @@ $(function(){
 	for (var n in opts)
 		$("#"+n).spinner(opts[n]);
 
-	$("button").click(function(e){
+	$("button").click(function(event){
 		var ns = $(this).attr('id').match(/(s\d)\-(\w+)$/);
 		if (ns != null)
 			$('#'+ns[1]).spinner( (ns[2] == 'create') ? opts[ns[1]] : ns[2]);

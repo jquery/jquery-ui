@@ -20,7 +20,7 @@ $.fn.unwrap = $.fn.unwrap || function(expr) {
 
 $.widget("ui.slider", {
 	plugins: {},
-	ui: function(e) {
+	ui: function(event) {
 		return {
 			options: this.options,
 			handle: this.currentHandle,
@@ -31,9 +31,9 @@ $.widget("ui.slider", {
 			range: this._getRange()
 		};
 	},
-	_propagate: function(n,e) {
-		$.ui.plugin.call(this, n, [e, this.ui()]);
-		this.element.triggerHandler(n == "slide" ? n : "slide"+n, [e, this.ui()], this.options[n]);
+	_propagate: function(n, event) {
+		$.ui.plugin.call(this, n, [event, this.ui()]);
+		this.element.triggerHandler(n == "slide" ? n : "slide"+n, [event, this.ui()], this.options[n]);
 	},
 	destroy: function() {
 		
@@ -97,11 +97,11 @@ $.widget("ui.slider", {
 		};
 		
 		$.extend(handleclass.prototype, $.ui.mouse, {
-			_mouseStart: function(e) { return self._start.call(self, e, this.element[0]); },
-			_mouseStop: function(e) { return self._stop.call(self, e, this.element[0]); },
-			_mouseDrag: function(e) { return self._drag.call(self, e, this.element[0]); },
+			_mouseStart: function(event) { return self._start.call(self, event, this.element[0]); },
+			_mouseStop: function(event) { return self._stop.call(self, event, this.element[0]); },
+			_mouseDrag: function(event) { return self._drag.call(self, event, this.element[0]); },
 			_mouseCapture: function() { return true; },
-			trigger: function(e) { this._mouseDown(e); }
+			trigger: function(event) { this._mouseDown(event); }
 		});
 		
 		$(this.handle)
@@ -111,15 +111,15 @@ $.widget("ui.slider", {
 			.wrap('<a href="#" style="outline:none;border:none;"></a>')
 			.parent()
 				.bind('click', function() { return false; })
-				.bind('focus', function(e) { self._focus(this.firstChild); })
-				.bind('blur', function(e) { self._blur(this.firstChild); })
-				.bind('keydown', function(e) { if(!self.options.noKeyboard) return self._keydown(e.keyCode, this.firstChild); })
+				.bind('focus', function(event) { self._focus(this.firstChild); })
+				.bind('blur', function(event) { self._blur(this.firstChild); })
+				.bind('keydown', function(event) { if(!self.options.noKeyboard) return self._keydown(event.keyCode, this.firstChild); })
 		;
 		
 		// Bind the click to the slider itself
-		this.element.bind('mousedown.slider', function(e) {
-			self._click.apply(self, [e]);
-			self.currentHandle.data("mouse").trigger(e);
+		this.element.bind('mousedown.slider', function(event) {
+			self._click.apply(self, [event]);
+			self.currentHandle.data("mouse").trigger(event);
 			self.firstValue = self.firstValue + 1; //This is for always triggering the change event
 		});
 		
@@ -188,17 +188,17 @@ $.widget("ui.slider", {
 		$(handle).removeClass('ui-slider-handle-active');
 		if(this.currentHandle && this.currentHandle[0] == handle) { this.previousHandle = this.currentHandle; this.currentHandle = null; };
 	},
-	_click: function(e) {
+	_click: function(event) {
 		// This method is only used if:
 		// - The user didn't click a handle
 		// - The Slider is not disabled
 		// - There is a current, or previous selected handle (otherwise we wouldn't know which one to move)
 		
-		var pointer = [e.pageX,e.pageY];
+		var pointer = [event.pageX, event.pageY];
 		
 		var clickedHandle = false;
 		this.handle.each(function() {
-			if(this == e.target)
+			if(this == event.target)
 				clickedHandle = true;
 		});
 		if (clickedHandle || this.options.disabled || !(this.currentHandle || this.previousHandle))
@@ -212,8 +212,8 @@ $.widget("ui.slider", {
 		this.offset = this.element.offset();
 		
 		this.moveTo({
-			y: this._convertValue(e.pageY - this.offset.top - this.currentHandle[0].offsetHeight/2, "y"),
-			x: this._convertValue(e.pageX - this.offset.left - this.currentHandle[0].offsetWidth/2, "x")
+			y: this._convertValue(event.pageY - this.offset.top - this.currentHandle[0].offsetHeight/2, "y"),
+			x: this._convertValue(event.pageX - this.offset.left - this.currentHandle[0].offsetWidth/2, "x")
 		}, null, !this.options.distance);
 	},
 	
@@ -296,7 +296,7 @@ $.widget("ui.slider", {
 		return /* this.options.paging[axis] ||*/ 10;
 	},
 
-	_start: function(e, handle) {
+	_start: function(event, handle) {
 		
 		var o = this.options;
 		if(o.disabled) return false;
@@ -311,27 +311,27 @@ $.widget("ui.slider", {
 		this.offset = this.element.offset();
 		
 		this.handleOffset = this.currentHandle.offset();
-		this.clickOffset = { top: e.pageY - this.handleOffset.top, left: e.pageX - this.handleOffset.left };
+		this.clickOffset = { top: event.pageY - this.handleOffset.top, left: event.pageX - this.handleOffset.left };
 		
 		this.firstValue = this.value();
 		
-		this._propagate('start', e);
-		this._drag(e, handle);
+		this._propagate('start', event);
+		this._drag(event, handle);
 		return true;
 		
 	},
-	_stop: function(e) {
-		this._propagate('stop', e);
+	_stop: function(event) {
+		this._propagate('stop', event);
 		if (this.firstValue != this.value())
-			this._propagate('change', e);
+			this._propagate('change', event);
 		// This is a especially ugly fix for strange blur events happening on mousemove events
 		this._focus(this.currentHandle, true);
 		return false;
 	},
-	_drag: function(e, handle) {
+	_drag: function(event, handle) {
 		
 		var o = this.options;
-		var position = { top: e.pageY - this.offset.top - this.clickOffset.top, left: e.pageX - this.offset.left - this.clickOffset.left};
+		var position = { top: event.pageY - this.offset.top - this.clickOffset.top, left: event.pageX - this.offset.left - this.clickOffset.left};
 		if(!this.currentHandle) this._focus(this.previousHandle, true); //This is a especially ugly fix for strange blur events happening on mousemove events
 		
 		position.left = this._translateLimits(position.left, "x");
@@ -362,7 +362,7 @@ $.widget("ui.slider", {
 		
 		if (this.rangeElement)
 			this._updateRange();
-		this._propagate('slide', e);
+		this._propagate('slide', event);
 		return false;
 	},
 	

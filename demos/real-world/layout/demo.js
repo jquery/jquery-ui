@@ -43,7 +43,7 @@
 		item.remove();
 	};
 	
-	function sortableChange(e, ui) {
+	function sortableChange(event, ui) {
 		if(ui.sender){
 			var w = ui.element.width();
 			ui.placeholder.width(w);
@@ -51,7 +51,7 @@
 		}
 	};
 	
-	function sortableUpdate(e, ui) {
+	function sortableUpdate(event, ui) {
 		if(ui.element[0].id == 'trashcan'){
 			emptyTrashCan(ui.item);
 		} else {
@@ -87,12 +87,12 @@
 			//placeholder: 'clone',
 			//placeholder: 'placeholder',
 			connectWith: els,
-			start: function(e,ui) {
+			start: function(event,ui) {
 				ui.helper.css("width", ui.item.parent().width());
 			},
 			change: sortableChange,
 			update: sortableUpdate
-		}).bind("sortreceive", function(e, ui) {
+		}).bind("sortreceive", function(event, ui) {
 			$(ui.item).removeClass('ui-draggable').find('dt').each(addControls);
 		});
 		$('#components > dl').draggable({

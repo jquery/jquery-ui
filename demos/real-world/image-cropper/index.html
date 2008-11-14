@@ -125,7 +125,7 @@
 
 		minHeight: 100,
 
-		resize: function(e, ui) {
+		resize: function(event, ui) {
 			var self = $(this).data("resizable");
 			
   			this.style.backgroundPosition = '-' + (self.position.left) + 'px -' + (self.position.top) + 'px';
@@ -138,7 +138,7 @@
 			$("#log-width").html(self.size.width+"px");
 
   	    },
-		stop: function(e, ui) {
+		stop: function(event, ui) {
 			var self = $(this).data("resizable");
   			this.style.backgroundPosition = (self.position.left * -1) + 'px ' + (self.position.top * -1) + 'px';
   	    }
@@ -150,7 +150,7 @@
 
 		containment: $('#resizeme_containment_div_wrapper'),
 
-		drag: function(e, ui) {
+		drag: function(event, ui) {
 			var self = $(this).data("draggable");
 			this.style.backgroundPosition = (self.position.left * -1) + 'px ' + (self.position.top * -1) + 'px';
 
@@ -160,7 +160,7 @@
 
 	});
 
-    	$('.thumbs').find("li a").click(function(e){
+    	$('.thumbs').find("li a").click(function(event){
     
     	  $('#resizeme_containment_div').css('top', '0');
 

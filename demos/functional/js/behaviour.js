@@ -73,7 +73,7 @@ $(document).ready(function() {
 		this.rotate();
 		this.rotate("right");
 		
-		this.element.parent().bind("mousewheel", function(e,delta) {
+		this.element.parent().bind("mousewheel", function(event ,delta) {
 			if(self.autoRotator) window.clearInterval(self.autoRotator);
 			self.rotate(delta < 0 ? "right" : "left");
 			return false;

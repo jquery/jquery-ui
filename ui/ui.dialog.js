@@ -195,8 +195,8 @@ $.widget("ui.dialog", {
 		this.moveToTop(true);
 		
 		// prevent tabbing out of modal dialogs
-		(this.options.modal && this.uiDialog.bind('keypress.ui-dialog', function(e) {
-			if (e.keyCode != $.keyCode.TAB) {
+		(this.options.modal && this.uiDialog.bind('keypress.ui-dialog', function(event) {
+			if (event.keyCode != $.keyCode.TAB) {
 				return;
 			}
 			
@@ -204,11 +204,11 @@ $.widget("ui.dialog", {
 				first = tabbables.filter(':first')[0],
 				last  = tabbables.filter(':last')[0];
 			
-			if (e.target == last && !e.shiftKey) {
+			if (event.target == last && !event.shiftKey) {
 				setTimeout(function() {
 					first.focus();
 				}, 1);
-			} else if (e.target == first && e.shiftKey) {
+			} else if (event.target == first && event.shiftKey) {
 				setTimeout(function() {
 					last.focus();
 				}, 1);
@@ -436,7 +436,7 @@ $.extend($.ui.dialog, {
 $.extend($.ui.dialog.overlay, {
 	instances: [],
 	events: $.map('focus,mousedown,mouseup,keydown,keypress,click'.split(','),
-		function(e) { return e + '.dialog-overlay'; }).join(' '),
+		function(event) { return event + '.dialog-overlay'; }).join(' '),
 	create: function(dialog) {
 		if (this.instances.length === 0) {
 			// prevent use of anchors and inputs
@@ -466,9 +466,9 @@ $.extend($.ui.dialog.overlay, {
 			}, 1);
 			
 			// allow closing by pressing the escape key
-			$(document).bind('keydown.dialog-overlay', function(e) {
-				(dialog.options.closeOnEscape && e.keyCode
-						&& e.keyCode == $.keyCode.ESCAPE && dialog.close());
+			$(document).bind('keydown.dialog-overlay', function(event) {
+				(dialog.options.closeOnEscape && event.keyCode
+						&& event.keyCode == $.keyCode.ESCAPE && dialog.close());
 			});
 			
 			// handle window resize

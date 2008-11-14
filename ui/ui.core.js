@@ -99,22 +99,22 @@ $.ui = {
 		return $.ui.cssCache[name];
 	},
 
-	hasScroll: function(e, a) {
+	hasScroll: function(el, a) {
 		
 		//If overflow is hidden, the element might have extra content, but the user wants to hide it
-		if ($(e).css('overflow') == 'hidden') { return false; }
+		if ($(el).css('overflow') == 'hidden') { return false; }
 		
 		var scroll = (a && a == 'left') ? 'scrollLeft' : 'scrollTop',
 			has = false;
 		
-		if (e[scroll] > 0) { return true; }
+		if (el[scroll] > 0) { return true; }
 		
 		// TODO: determine which cases actually cause this to happen
 		// if the element doesn't have the scroll set, see if it's possible to
 		// set the scroll
-		e[scroll] = 1;
-		has = (e[scroll] > 0);
-		e[scroll] = 0;
+		el[scroll] = 1;
+		has = (el[scroll] > 0);
+		el[scroll] = 0;
 		return has;
 	},
 	
@@ -297,10 +297,10 @@ $.widget = function(name, prototype) {
 			options);
 		
 		this.element = $(element)
-			.bind('setData.' + name, function(e, key, value) {
+			.bind('setData.' + name, function(event, key, value) {
 				return self._setData(key, value);
 			})
-			.bind('getData.' + name, function(e, key) {
+			.bind('getData.' + name, function(event, key) {
 				return self._getData(key);
 			})
 			.bind('remove', function() {
@@ -359,11 +359,11 @@ $.widget.prototype = {
 		this._setData('disabled', true);
 	},
 	
-	_trigger: function(type, e, data) {
+	_trigger: function(type, event, data) {
 		var eventName = (type == this.widgetEventPrefix
 			? type : this.widgetEventPrefix + type);
-		e = e  || $.event.fix({ type: eventName, target: this.element[0] });
-		return this.element.triggerHandler(eventName, [e, data], this.options[type]);
+		event = event || $.event.fix({ type: eventName, target: this.element[0] });
+		return this.element.triggerHandler(eventName, [event, data], this.options[type]);
 	}
 };
 
@@ -379,10 +379,10 @@ $.ui.mouse = {
 		var self = this;
 	
 		this.element
-			.bind('mousedown.'+this.widgetName, function(e) {
-				return self._mouseDown(e);
+			.bind('mousedown.'+this.widgetName, function(event) {
+				return self._mouseDown(event);
 			})
-			.bind('click.'+this.widgetName, function(e) {
+			.bind('click.'+this.widgetName, function(event) {
 				if(self._preventClickEvent) {
 					self._preventClickEvent = false;
 					return false;
@@ -408,16 +408,16 @@ $.ui.mouse = {
 			&& this.element.attr('unselectable', this._mouseUnselectable));
 	},
 	
-	_mouseDown: function(e) {
+	_mouseDown: function(event) {
 		// we may have missed mouseup (out of window)
-		(this._mouseStarted && this._mouseUp(e));
+		(this._mouseStarted && this._mouseUp(event));
 		
-		this._mouseDownEvent = e;
+		this._mouseDownEvent = event;
 		
 		var self = this,
-			btnIsLeft = (e.which == 1),
-			elIsCancel = (typeof this.options.cancel == "string" ? $(e.target).parents().add(e.target).filter(this.options.cancel).length : false);
-		if (!btnIsLeft || elIsCancel || !this._mouseCapture(e)) {
+			btnIsLeft = (event.which == 1),
+			elIsCancel = (typeof this.options.cancel == "string" ? $(event.target).parents().add(event.target).filter(this.options.cancel).length : false);
+		if (!btnIsLeft || elIsCancel || !this._mouseCapture(event)) {
 			return true;
 		}
 		
@@ -428,20 +428,20 @@ $.ui.mouse = {
 			}, this.options.delay);
 		}
 		
-		if (this._mouseDistanceMet(e) && this._mouseDelayMet(e)) {
-			this._mouseStarted = (this._mouseStart(e) !== false);
+		if (this._mouseDistanceMet(event) && this._mouseDelayMet(event)) {
+			this._mouseStarted = (this._mouseStart(event) !== false);
 			if (!this._mouseStarted) {
-				e.preventDefault();
+				event.preventDefault();
 				return true;
 			}
 		}
 		
 		// these delegates are required to keep context
-		this._mouseMoveDelegate = function(e) {
-			return self._mouseMove(e);
+		this._mouseMoveDelegate = function(event) {
+			return self._mouseMove(event);
 		};
-		this._mouseUpDelegate = function(e) {
-			return self._mouseUp(e);
+		this._mouseUpDelegate = function(event) {
+			return self._mouseUp(event);
 		};
 		$(document)
 			.bind('mousemove.'+this.widgetName, this._mouseMoveDelegate)
@@ -450,27 +450,27 @@ $.ui.mouse = {
 		return false;
 	},
 	
-	_mouseMove: function(e) {
+	_mouseMove: function(event) {
 		// IE mouseup check - mouseup happened when mouse was out of window
-		if ($.browser.msie && !e.button) {
-			return this._mouseUp(e);
+		if ($.browser.msie && !event.button) {
+			return this._mouseUp(event);
 		}
 		
 		if (this._mouseStarted) {
-			this._mouseDrag(e);
+			this._mouseDrag(event);
 			return false;
 		}
 		
-		if (this._mouseDistanceMet(e) && this._mouseDelayMet(e)) {
+		if (this._mouseDistanceMet(event) && this._mouseDelayMet(event)) {
 			this._mouseStarted =
-				(this._mouseStart(this._mouseDownEvent, e) !== false);
-			(this._mouseStarted ? this._mouseDrag(e) : this._mouseUp(e));
+				(this._mouseStart(this._mouseDownEvent, event) !== false);
+			(this._mouseStarted ? this._mouseDrag(event) : this._mouseUp(event));
 		}
 		
 		return !this._mouseStarted;
 	},
 	
-	_mouseUp: function(e) {
+	_mouseUp: function(event) {
 		$(document)
 			.unbind('mousemove.'+this.widgetName, this._mouseMoveDelegate)
 			.unbind('mouseup.'+this.widgetName, this._mouseUpDelegate);
@@ -478,29 +478,29 @@ $.ui.mouse = {
 		if (this._mouseStarted) {
 			this._mouseStarted = false;
 			this._preventClickEvent = true;
-			this._mouseStop(e);
+			this._mouseStop(event);
 		}
 		
 		return false;
 	},
 	
-	_mouseDistanceMet: function(e) {
+	_mouseDistanceMet: function(event) {
 		return (Math.max(
-				Math.abs(this._mouseDownEvent.pageX - e.pageX),
-				Math.abs(this._mouseDownEvent.pageY - e.pageY)
+				Math.abs(this._mouseDownEvent.pageX - event.pageX),
+				Math.abs(this._mouseDownEvent.pageY - event.pageY)
 			) >= this.options.distance
 		);
 	},
 	
-	_mouseDelayMet: function(e) {
+	_mouseDelayMet: function(event) {
 		return this.mouseDelayMet;
 	},
 	
 	// These are placeholder methods, to be overriden by extending plugin
-	_mouseStart: function(e) {},
-	_mouseDrag: function(e) {},
-	_mouseStop: function(e) {},
-	_mouseCapture: function(e) { return true; }
+	_mouseStart: function(event) {},
+	_mouseDrag: function(event) {},
+	_mouseStop: function(event) {},
+	_mouseCapture: function(event) { return true; }
 };
 
 $.ui.mouse.defaults = {

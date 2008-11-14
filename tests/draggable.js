@@ -291,7 +291,7 @@ test("{ cursor: 'move' }", function() {
 	
 	el = $("#draggable2").draggable({
 		cursor: expected,
-		start: function(e, ui) {
+		start: function(event, ui) {
 			actual = getCursor();
 		}
 	});
@@ -316,7 +316,7 @@ test("{ cursorAt: { left: -5, top: -5 } }", function() {
 	var actual = null;
 	$("#draggable2").draggable({
 		cursorAt: { left: cax, top: cay },
-		drag: function(e, ui) {
+		drag: function(event, ui) {
 			actual = ui.absolutePosition;
 		}
 	});
@@ -340,7 +340,7 @@ test("{ cursorAt: { left: -5, top: -5 } }", function() {
 	var actual = null;
 	$("#draggable1").draggable({
 		cursorAt: { left: cax, top: cay },
-		drag: function(e, ui) {
+		drag: function(event, ui) {
 			actual = ui.absolutePosition;
 		}
 	});
@@ -422,7 +422,7 @@ test("{ opacity: 0.5 }", function() {
 	var opacity = null;
 	el = $("#draggable2").draggable({
 		opacity: 0.5,
-		start: function(e, ui) {
+		start: function(event, ui) {
 			opacity = $(this).css("opacity");
 		}
 	});
@@ -442,7 +442,7 @@ test("{ zIndex: 10 }", function() {
 	var zIndex = null;
 	el = $("#draggable2").draggable({
 		zIndex: expected,
-		start: function(e, ui) {
+		start: function(event, ui) {
 			actual = $(this).css("zIndex");
 		}
 	});
@@ -566,7 +566,7 @@ test("{ helper: 'clone' }, absolute", function() {
 	var helperOffset = null;
 	var origOffset = $("#draggable1").offset();
 	
-	el = $("#draggable1").draggable({ helper: "clone", drag: function(e, ui) {
+	el = $("#draggable1").draggable({ helper: "clone", drag: function(event, ui) {
 		helperOffset = ui.helper.offset();
 	} });
 
@@ -582,7 +582,7 @@ test("{ helper: 'clone' }, absolute with scroll offset on parent", function() {
 	var helperOffset = null;
 	var origOffset = $("#draggable1").offset();
 	
-	el = $("#draggable1").draggable({ helper: "clone", drag: function(e, ui) {
+	el = $("#draggable1").draggable({ helper: "clone", drag: function(event, ui) {
 		helperOffset = ui.helper.offset();
 	} });
 
@@ -599,7 +599,7 @@ test("{ helper: 'clone' }, absolute with scroll offset on root", function() {
 	var helperOffset = null;
 	var origOffset = $("#draggable1").offset();
 	
-	el = $("#draggable1").draggable({ helper: "clone", drag: function(e, ui) {
+	el = $("#draggable1").draggable({ helper: "clone", drag: function(event, ui) {
 		helperOffset = ui.helper.offset();
 	} });
 
@@ -617,7 +617,7 @@ test("{ helper: 'clone' }, absolute with scroll offset on root and parent", func
 	var helperOffset = null;
 	var origOffset = $("#draggable1").offset();
 	
-	el = $("#draggable1").draggable({ helper: "clone", drag: function(e, ui) {
+	el = $("#draggable1").draggable({ helper: "clone", drag: function(event, ui) {
 		helperOffset = ui.helper.offset();
 	} });
 
@@ -649,7 +649,7 @@ test("#2965 cursorAt with margin", function() {
 	var actual, expected;
 	$("#draggable2").draggable({
 		cursorAt: { left: ox, top: oy },
-		drag: function(e, ui) {
+		drag: function(event, ui) {
 			actual = ui.absolutePosition;
 		}
 	});

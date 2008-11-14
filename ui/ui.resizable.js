@@ -227,9 +227,9 @@ $.widget("ui.resizable", $.extend({}, $.ui.mouse, {
 			originalPosition: this.originalPosition
 		};
 	},
-	_propagate: function(n,e) {
-		$.ui.plugin.call(this, n, [e, this.ui()]);
-		if (n != "resize") this.element.triggerHandler(["resize", n].join(""), [e, this.ui()], this.options[n]);
+	_propagate: function(n, event) {
+		$.ui.plugin.call(this, n, [event, this.ui()]);
+		if (n != "resize") this.element.triggerHandler(["resize", n].join(""), [event, this.ui()], this.options[n]);
 	},
 	destroy: function() {
 		var el = this.element, wrapped = el.children(".ui-resizable").get(0);
@@ -258,13 +258,13 @@ $.widget("ui.resizable", $.extend({}, $.ui.mouse, {
 		}
 	},
 	
-	_mouseCapture: function(e) {
+	_mouseCapture: function(event) {
 		
 		if(this.options.disabled) return false;
 		
 		var handle = false;
 		for(var i in this.options.handles) {
-			if($(this.options.handles[i])[0] == e.target) handle = true;
+			if($(this.options.handles[i])[0] == event.target) handle = true;
 		}
 		if (!handle) return false;
 		
@@ -272,7 +272,7 @@ $.widget("ui.resizable", $.extend({}, $.ui.mouse, {
 		
 	},
 	
-	_mouseStart: function(e) {
+	_mouseStart: function(event) {
 		
 		var o = this.options, iniPos = this.element.position(), el = this.element, 
 			num = function(v) { return parseInt(v, 10) || 0; }, ie6 = $.browser.msie && $.browser.version < 7;
@@ -309,7 +309,7 @@ $.widget("ui.resizable", $.extend({}, $.ui.mouse, {
 		this.originalSize = o.helper || ie6 ? { width: el.outerWidth(), height: el.outerHeight() } : { width: el.width(), height: el.height() };
 		this.originalPosition = { left: curleft, top: curtop };
 		this.sizeDiff = { width: el.outerWidth() - el.width(), height: el.outerHeight() - el.height() };
-		this.originalMousePosition = { left: e.pageX, top: e.pageY };
+		this.originalMousePosition = { left: event.pageX, top: event.pageY };
 		
 		//Aspect Ratio
 		o.aspectRatio = (typeof o.aspectRatio == 'number') ? o.aspectRatio : ((this.originalSize.width / this.originalSize.height)||1);
@@ -317,29 +317,29 @@ $.widget("ui.resizable", $.extend({}, $.ui.mouse, {
 		if (o.preserveCursor)
 			$('body').css('cursor', this.axis + '-resize');
 		
-		this._propagate("start", e);
+		this._propagate("start", event);
 		return true;
 	},
-	_mouseDrag: function(e) {
+	_mouseDrag: function(event) {
 		
 		//Increase performance, avoid regex
 		var el = this.helper, o = this.options, props = {},
 			self = this, smp = this.originalMousePosition, a = this.axis;
 		
-		var dx = (e.pageX-smp.left)||0, dy = (e.pageY-smp.top)||0;
+		var dx = (event.pageX-smp.left)||0, dy = (event.pageY-smp.top)||0;
 		var trigger = this._change[a];
 		if (!trigger) return false;
 		
 		// Calculate the attrs that will be change
-		var data = trigger.apply(this, [e, dx, dy]), ie6 = $.browser.msie && $.browser.version < 7, csdif = this.sizeDiff;
+		var data = trigger.apply(this, [event, dx, dy]), ie6 = $.browser.msie && $.browser.version < 7, csdif = this.sizeDiff;
 		
-		if (o._aspectRatio || e.shiftKey)
-			data = this._updateRatio(data, e);
+		if (o._aspectRatio || event.shiftKey)
+			data = this._updateRatio(data, event);
 		
-		data = this._respectSize(data, e);
+		data = this._respectSize(data, event);
 		
 		// plugins callbacks need to be called first
-		this._propagate("resize", e);
+		this._propagate("resize", event);
 		
 		el.css({
 			top: this.position.top + "px", left: this.position.left + "px", 
@@ -352,11 +352,11 @@ $.widget("ui.resizable", $.extend({}, $.ui.mouse, {
 		this._updateCache(data);
 		
 		// calling the user callback at the end
-		this.element.triggerHandler("resize", [e, this.ui()], this.options["resize"]);
+		this.element.triggerHandler("resize", [event, this.ui()], this.options["resize"]);
 		
 		return false;
 	},
-	_mouseStop: function(e) {
+	_mouseStop: function(event) {
 		
 		this.options.resizing = false;
 		var o = this.options, num = function(v) { return parseInt(v, 10) || 0; }, self = this;
@@ -379,7 +379,7 @@ $.widget("ui.resizable", $.extend({}, $.ui.mouse, {
 		if (o.preserveCursor)
 			$('body').css('cursor', 'auto');
 		
-		this._propagate("stop", e);
+		this._propagate("stop", event);
 		
 		if (o.helper) this.helper.remove();
 		
@@ -393,7 +393,7 @@ $.widget("ui.resizable", $.extend({}, $.ui.mouse, {
 		if (data.height) this.size.height = data.height;
 		if (data.width) this.size.width = data.width;
 	},
-	_updateRatio: function(data, e) {
+	_updateRatio: function(data, event) {
 		
 		var o = this.options, cpos = this.position, csize = this.size, a = this.axis;
 		
@@ -411,9 +411,9 @@ $.widget("ui.resizable", $.extend({}, $.ui.mouse, {
 		
 		return data;
 	},
-	_respectSize: function(data, e) {
+	_respectSize: function(data, event) {
 		
-		var el = this.helper, o = this.options, pRatio = o._aspectRatio || e.shiftKey, a = this.axis, 
+		var el = this.helper, o = this.options, pRatio = o._aspectRatio || event.shiftKey, a = this.axis, 
 				ismaxw = data.width && o.maxWidth && o.maxWidth < data.width, ismaxh = data.height && o.maxHeight && o.maxHeight < data.height,
 					isminw = data.width && o.minWidth && o.minWidth > data.width, isminh = data.height && o.minHeight && o.minHeight > data.height;
 		
@@ -486,31 +486,31 @@ $.widget("ui.resizable", $.extend({}, $.ui.mouse, {
 		}
 	},
 	_change: {
-		e: function(e, dx, dy) {
+		e: function(event, dx, dy) {
 			return { width: this.originalSize.width + dx };
 		},
-		w: function(e, dx, dy) {
+		w: function(event, dx, dy) {
 			var o = this.options, cs = this.originalSize, sp = this.originalPosition;
 			return { left: sp.left + dx, width: cs.width - dx };
 		},
-		n: function(e, dx, dy) {
+		n: function(event, dx, dy) {
 			var o = this.options, cs = this.originalSize, sp = this.originalPosition;
 			return { top: sp.top + dy, height: cs.height - dy };
 		},
-		s: function(e, dx, dy) {
+		s: function(event, dx, dy) {
 			return { height: this.originalSize.height + dy };
 		},
-		se: function(e, dx, dy) {
-			return $.extend(this._change.s.apply(this, arguments), this._change.e.apply(this, [e, dx, dy]));
+		se: function(event, dx, dy) {
+			return $.extend(this._change.s.apply(this, arguments), this._change.e.apply(this, [event, dx, dy]));
 		},
-		sw: function(e, dx, dy) {
-			return $.extend(this._change.s.apply(this, arguments), this._change.w.apply(this, [e, dx, dy]));
+		sw: function(event, dx, dy) {
+			return $.extend(this._change.s.apply(this, arguments), this._change.w.apply(this, [event, dx, dy]));
 		},
-		ne: function(e, dx, dy) {
-			return $.extend(this._change.n.apply(this, arguments), this._change.e.apply(this, [e, dx, dy]));
+		ne: function(event, dx, dy) {
+			return $.extend(this._change.n.apply(this, arguments), this._change.e.apply(this, [event, dx, dy]));
 		},
-		nw: function(e, dx, dy) {
-			return $.extend(this._change.n.apply(this, arguments), this._change.w.apply(this, [e, dx, dy]));
+		nw: function(event, dx, dy) {
+			return $.extend(this._change.n.apply(this, arguments), this._change.w.apply(this, [event, dx, dy]));
 		}
 	}
 }));
@@ -549,7 +549,7 @@ $.extend($.ui.resizable, {
 
 $.ui.plugin.add("resizable", "containment", {
 	
-	start: function(e, ui) {
+	start: function(event, ui) {
 		var o = ui.options, self = $(this).data("resizable"), el = self.element;
 		var oc = o.containment,	ce = (oc instanceof $) ? oc.get(0) : (/parent/.test(oc)) ? el.parent().get(0) : oc;
 		if (!ce) return;
@@ -581,10 +581,10 @@ $.ui.plugin.add("resizable", "containment", {
 		}
 	},
 	
-	resize: function(e, ui) {
+	resize: function(event, ui) {
 		var o = ui.options, self = $(this).data("resizable"), 
 				ps = self.containerSize, co = self.containerOffset, cs = self.size, cp = self.position,
-				pRatio = o._aspectRatio || e.shiftKey, cop = { top:0, left:0 }, ce = self.containerElement;
+				pRatio = o._aspectRatio || event.shiftKey, cop = { top:0, left:0 }, ce = self.containerElement;
 		
 		if (ce[0] != document && (/static/).test(ce.css('position')))
 			cop = self.containerPosition;
@@ -615,7 +615,7 @@ $.ui.plugin.add("resizable", "containment", {
 		}
 	},
 	
-	stop: function(e, ui){
+	stop: function(event, ui){
 		var o = ui.options, self = $(this).data("resizable"), cp = self.position,
 				co = self.containerOffset, cop = self.containerPosition, ce = self.containerElement;
 		
@@ -632,8 +632,8 @@ $.ui.plugin.add("resizable", "containment", {
 
 $.ui.plugin.add("resizable", "grid", {
 	
-	resize: function(e, ui) {
-		var o = ui.options, self = $(this).data("resizable"), cs = self.size, os = self.originalSize, op = self.originalPosition, a = self.axis, ratio = o._aspectRatio || e.shiftKey;
+	resize: function(event, ui) {
+		var o = ui.options, self = $(this).data("resizable"), cs = self.size, os = self.originalSize, op = self.originalPosition, a = self.axis, ratio = o._aspectRatio || event.shiftKey;
 		o.grid = typeof o.grid == "number" ? [o.grid, o.grid] : o.grid;
 		var ox = Math.round((cs.width - os.width) / (o.grid[0]||1)) * (o.grid[0]||1), oy = Math.round((cs.height - os.height) / (o.grid[1]||1)) * (o.grid[1]||1);
 		
@@ -663,7 +663,7 @@ $.ui.plugin.add("resizable", "grid", {
 
 $.ui.plugin.add("resizable", "animate", {
 	
-	stop: function(e, ui) {
+	stop: function(event, ui) {
 		var o = ui.options, self = $(this).data("resizable");
 		
 		var pr = o.proportionallyResize, ista = pr && (/textarea/i).test(pr.get(0).nodeName), 
@@ -691,7 +691,7 @@ $.ui.plugin.add("resizable", "animate", {
 					
 					// propagating resize, and updating values for each animation step
 					self._updateCache(data);
-					self._propagate("animate", e);
+					self._propagate("animate", event);
 					
 				}
 			}
@@ -702,7 +702,7 @@ $.ui.plugin.add("resizable", "animate", {
 
 $.ui.plugin.add("resizable", "ghost", {
 	
-	start: function(e, ui) {
+	start: function(event, ui) {
 		var o = ui.options, self = $(this).data("resizable"), pr = o.proportionallyResize, cs = self.size;
 		
 		if (!pr) self.ghost = self.element.clone();
@@ -717,14 +717,14 @@ $.ui.plugin.add("resizable", "ghost", {
 		
 	},
 	
-	resize: function(e, ui){
+	resize: function(event, ui){
 		var o = ui.options, self = $(this).data("resizable"), pr = o.proportionallyResize;
 		
 		if (self.ghost) self.ghost.css({ position: 'relative', height: self.size.height, width: self.size.width });
 		
 	},
 	
-	stop: function(e, ui){
+	stop: function(event, ui){
 		var o = ui.options, self = $(this).data("resizable"), pr = o.proportionallyResize;
 		if (self.ghost && self.helper) self.helper.get(0).removeChild(self.ghost.get(0));
 	}
@@ -733,7 +733,7 @@ $.ui.plugin.add("resizable", "ghost", {
 
 $.ui.plugin.add("resizable", "alsoResize", {
 	
-	start: function(e, ui) {
+	start: function(event, ui) {
 		var o = ui.options, self = $(this).data("resizable"), 
 		
 		_store = function(exp) {
@@ -753,7 +753,7 @@ $.ui.plugin.add("resizable", "alsoResize", {
 		} 
 	},
 	
-	resize: function(e, ui){
+	resize: function(event, ui){
 		var o = ui.options, self = $(this).data("resizable"), os = self.originalSize, op = self.originalPosition;
 		
 		var delta = { 
@@ -781,7 +781,7 @@ $.ui.plugin.add("resizable", "alsoResize", {
 		}
 	},
 	
-	stop: function(e, ui){
+	stop: function(event, ui){
 		$(this).removeData("resizable-alsoresize-start");
 	}
 });

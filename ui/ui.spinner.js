@@ -45,96 +45,96 @@ $.widget('ui.spinner', {
 			.addClass('ui-spinner')
 			.append('<button class="ui-spinner-up" type="button">&#9650;</button>')
 			.find('.ui-spinner-up')
-				.bind('mousedown', function(e) {
+				.bind('mousedown', function(event) {
 					$(this).addClass('ui-spinner-pressed');
 					if (!self.counter) {
 						self.counter = 1;
 					}
-					self._mousedown(100, '_up', e);
+					self._mousedown(100, '_up', event);
 				})
-				.bind('mouseup', function(e) {
+				.bind('mouseup', function(event) {
 					$(this).removeClass('ui-spinner-pressed');
 					if (self.counter == 1) {
-						self._up(e);
+						self._up(event);
 					}
-					self._mouseup(e);
+					self._mouseup(event);
 				})
-				.bind('mouseout', function(e) {
+				.bind('mouseout', function(event) {
 					$(this).removeClass('ui-spinner-pressed');
 					if (self.timer) {
-						self._mouseup(e);
+						self._mouseup(event);
 					}
 				})
 				// mousedown/mouseup capture first click, now handle second click
-				.bind('dblclick', function(e) {
+				.bind('dblclick', function(event) {
 					$(this).removeClass('ui-spinner-pressed');
-					self._up(e);
-					self._mouseup(e);
+					self._up(event);
+					self._mouseup(event);
 				})
-				.bind('keydown.spinner', function(e) {
+				.bind('keydown.spinner', function(event) {
 					var KEYS = $.keyCode;
-					if (e.keyCode == KEYS.SPACE || e.keyCode == KEYS.ENTER) {
+					if (event.keyCode == KEYS.SPACE || event.keyCode == KEYS.ENTER) {
 						$(this).addClass('ui-spinner-pressed');
 						if (!self.counter) {
 							self.counter = 1;
 						}
-						self._up.call(self, e);
-					} else if (e.keyCode == KEYS.DOWN || e.keyCode == KEYS.RIGHT) {
+						self._up.call(self, event);
+					} else if (event.keyCode == KEYS.DOWN || event.keyCode == KEYS.RIGHT) {
 						self.element.siblings('.ui-spinner-down').focus();
-					} else if (e.keyCode == KEYS.LEFT) {
+					} else if (event.keyCode == KEYS.LEFT) {
 						self.element.focus();
 					}
 				})
-				.bind('keyup.spinner', function(e) {
+				.bind('keyup.spinner', function(event) {
 					$(this).removeClass('ui-spinner-pressed');
 					self.counter = 0;
-					self._propagate('change', e);
+					self._propagate('change', event);
 				})
 			.end()
 			.append('<button class="ui-spinner-down" type="button">&#9660;</button>')
 			.find('.ui-spinner-down')
-				.bind('mousedown', function(e) {
+				.bind('mousedown', function(event) {
 					$(this).addClass('ui-spinner-pressed');
 					if (!self.counter) {
 						self.counter = 1;
 					}
-					self._mousedown(100, '_down', e);
+					self._mousedown(100, '_down', event);
 				})
-				.bind('mouseup', function(e) {
+				.bind('mouseup', function(event) {
 					$(this).removeClass('ui-spinner-pressed');
 					if (self.counter == 1) {
 						self._down();
 					}
-					self._mouseup(e);
+					self._mouseup(event);
 				})
-				.bind('mouseout', function(e) {
+				.bind('mouseout', function(event) {
 					$(this).removeClass('ui-spinner-pressed');
 					if (self.timer) {
-						self._mouseup(e);
+						self._mouseup(event);
 					}
 				})
 				// mousedown/mouseup capture first click, now handle second click
-				.bind('dblclick', function(e) {
+				.bind('dblclick', function(event) {
 					$(this).removeClass('ui-spinner-pressed');
-					self._down(e);
-					self._mouseup(e);
+					self._down(event);
+					self._mouseup(event);
 				})
-				.bind('keydown.spinner', function(e) {
+				.bind('keydown.spinner', function(event) {
 					var KEYS = $.keyCode;
-					if (e.keyCode == KEYS.SPACE || e.keyCode == KEYS.ENTER) {
+					if (event.keyCode == KEYS.SPACE || event.keyCode == KEYS.ENTER) {
 						$(this).addClass('ui-spinner-pressed');
 						if (!self.counter) {
 							self.counter = 1;
 						}
-						self._down.call(self, e);
-					} else if (e.keyCode == KEYS.UP || e.keyCode == KEYS.LEFT) {
+						self._down.call(self, event);
+					} else if (event.keyCode == KEYS.UP || event.keyCode == KEYS.LEFT) {
 						self.element.siblings('.ui-spinner-up').focus();
 					}
 				})
-				.bind('keyup.spinner', function(e) {
+				.bind('keyup.spinner', function(event) {
 					$(this).removeClass('ui-spinner-pressed');
 					self.counter = 0;
-					self._propagate('change', e);
+					self._propagate('change', event);
 				})
 			.end();
 		
@@ -168,23 +168,23 @@ $.widget('ui.spinner', {
 		}
 		
 		this.element
-		.bind('keydown.spinner', function(e) {
+		.bind('keydown.spinner', function(event) {
 			if (!self.counter) {
 				self.counter = 1;
 			}
-			return self._keydown.call(self, e);
+			return self._keydown.call(self, event);
 		})
-		.bind('keyup.spinner', function(e) {
+		.bind('keyup.spinner', function(event) {
 			self.counter = 0;
-			self._propagate('change', e);
+			self._propagate('change', event);
 		})
-		.bind('blur.spinner', function(e) {
+		.bind('blur.spinner', function(event) {
 			self._cleanUp();
 		});
 		
 		if ($.fn.mousewheel) {
-			this.element.mousewheel(function(e, delta) {
-				self._mousewheel(e, delta);
+			this.element.mousewheel(function(event, delta) {
+				self._mousewheel(event, delta);
 			});
 		}
 	},
@@ -201,7 +201,7 @@ $.widget('ui.spinner', {
 		this._setValue(this._getValue());
 		this._constrain();
 	},
-	_spin: function(d, e) {
+	_spin: function(d, event) {
 		if (this.disabled) {
 			return;
 		}
@@ -215,17 +215,17 @@ $.widget('ui.spinner', {
 		if (this.counter) {
 			this.counter++;
 		}
-		this._propagate('spin', e);
+		this._propagate('spin', event);
 	},
-	_down: function(e) {
-		this._spin('down', e);
-		this._propagate('down', e);
+	_down: function(event) {
+		this._spin('down', event);
+		this._propagate('down', event);
 	},
-	_up: function(e) {
-		this._spin('up', e);
-		this._propagate('up', e);
+	_up: function(event) {
+		this._spin('up', event);
+		this._propagate('up', event);
 	},
-	_mousedown: function(i, d, e) {
+	_mousedown: function(i, d, event) {
 		var self = this;
 		i = i || 100;
 		if (this.timer) {
@@ -233,54 +233,54 @@ $.widget('ui.spinner', {
 			this.timer = 0;
 		}
 		this.timer = window.setInterval(function() {
-			self[d](e);
+			self[d](event);
 			if (self.options.incremental && self.counter > 20) {
-				self._mousedown(20, d, e);
+				self._mousedown(20, d, event);
 			}
 		}, i);
 	},
-	_mouseup: function(e) {
+	_mouseup: function(event) {
 		this.counter = 0;
 		if (this.timer) {
 			window.clearInterval(this.timer);
 			this.timer = 0;
 		}
 		this.element[0].focus();
-		this._propagate('change', e);
+		this._propagate('change', event);
 	},
-	_keydown: function(e) {
+	_keydown: function(event) {
 		var KEYS = $.keyCode;
 		
-		if (e.keyCode == KEYS.UP) {
-			this._up(e);
+		if (event.keyCode == KEYS.UP) {
+			this._up(event);
 		}
-		if (e.keyCode == KEYS.DOWN) {
-			this._down(e);
+		if (event.keyCode == KEYS.DOWN) {
+			this._down(event);
 		}
-		if (e.keyCode == KEYS.HOME) {
+		if (event.keyCode == KEYS.HOME) {
 			//Home key goes to min, if defined, else to start
 			this._setValue(this.options.min || this.options.start);
 		}
-		if (e.keyCode == KEYS.END && this.options.max != undefined) {
+		if (event.keyCode == KEYS.END && this.options.max != undefined) {
 			//End key goes to maximum
 			this._setValue(this.options.max);
 		}
-		return (e.keyCode == KEYS.TAB || e.keyCode == KEYS.BACKSPACE ||
-			e.keyCode == KEYS.LEFT || e.keyCode == KEYS.RIGHT || e.keyCode == KEYS.PERIOD || 
-			e.keyCode == KEYS.NUMPAD_DECIMAL || e.keyCode == KEYS.NUMPAD_SUBTRACT || 
-			(e.keyCode >= 96 && e.keyCode <= 105) || // add support for numeric keypad 0-9
-			(/[0-9\-\.]/).test(String.fromCharCode(e.keyCode))) ? true : false;
+		return (event.keyCode == KEYS.TAB || event.keyCode == KEYS.BACKSPACE ||
+			event.keyCode == KEYS.LEFT || event.keyCode == KEYS.RIGHT || event.keyCode == KEYS.PERIOD || 
+			event.keyCode == KEYS.NUMPAD_DECIMAL || event.keyCode == KEYS.NUMPAD_SUBTRACT || 
+			(event.keyCode >= 96 && event.keyCode <= 105) || // add support for numeric keypad 0-9
+			(/[0-9\-\.]/).test(String.fromCharCode(event.keyCode))) ? true : false;
 	},
-	_mousewheel: function(e, delta) {
+	_mousewheel: function(event, delta) {
 		var self = this;
 		delta = ($.browser.opera ? -delta / Math.abs(delta) : delta);
-		(delta > 0 ? self._up(e) : self._down(e));
+		(delta > 0 ? self._up(event) : self._down(event));
 		if (self.timeout) {
 			window.clearTimeout(self.timeout);
 			self.timeout = 0;
 		}
-		self.timeout = window.setTimeout(function(){self._propagate('change', e);}, 400);
-		e.preventDefault();
+		self.timeout = window.setTimeout(function(){self._propagate('change', event);}, 400);
+		event.preventDefault();
 	},
 	_getValue: function() {
 		var val = this.element.val().replace(this.options.point, '.');
@@ -337,7 +337,7 @@ $.widget('ui.spinner', {
 	},
 	
 	plugins: {},
-	ui: function(e) {
+	ui: function(event) {
 		return {
 			options: this.options,
 			element: this.element,
@@ -345,9 +345,9 @@ $.widget('ui.spinner', {
 			add: this._addItem
 		};
 	},
-	_propagate: function(n,e) {
-		$.ui.plugin.call(this, n, [e, this.ui()]);
-		return this.element.triggerHandler(n == 'spin' ? n : 'spin'+n, [e, this.ui()], this.options[n]);
+	_propagate: function(n,event) {
+		$.ui.plugin.call(this, n, [event, this.ui()]);
+		return this.element.triggerHandler(n == 'spin' ? n : 'spin'+n, [event, this.ui()], this.options[n]);
 	},
 	destroy: function() {
 		if (!$.data(this.element[0], 'spinner')) {

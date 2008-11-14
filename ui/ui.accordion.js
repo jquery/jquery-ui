@@ -66,7 +66,7 @@ $.widget("ui.accordion", {
 		var self=this;
 		options.headers
 			.attr('role','tab')
-			.bind('keydown', function(e) { return self._keydown(e); })
+			.bind('keydown', function(event) { return self._keydown(event); })
 			.next()
 			.attr('role','tabpanel');
 		
@@ -96,17 +96,17 @@ $.widget("ui.accordion", {
 		}
 	},
 	
-	_keydown: function(e) {
-		if (this.options.disabled || e.altKey || e.ctrlKey)
+	_keydown: function(event) {
+		if (this.options.disabled || event.altKey || event.ctrlKey)
 			return;
 
 		var keyCode = $.keyCode;
 		
 		var length = this.options.headers.length;
-		var currentIndex = this.options.headers.index(e.target);
+		var currentIndex = this.options.headers.index(event.target);
 		var toFocus = false;
 		
-		switch(e.keyCode) {
+		switch(event.keyCode) {
 			case keyCode.RIGHT:
 			case keyCode.DOWN:
 				toFocus = this.options.headers[(currentIndex + 1) % length];
@@ -117,11 +117,11 @@ $.widget("ui.accordion", {
 				break;
 			case keyCode.SPACE:
 			case keyCode.ENTER:
-				return clickHandler.call(this.element[0], { target: e.target });
+				return clickHandler.call(this.element[0], { target: event.target });
 		}
 		
 		if (toFocus) {
-			$(e.target).attr('tabIndex','-1');
+			$(event.target).attr('tabIndex','-1');
 			$(toFocus).attr('tabIndex','0');
 			toFocus.focus();
 			return false;

@@ -119,7 +119,7 @@ $(window).bind('load', function() {
 	});
 	
 	
-	var sliderChange = function(e, ui){
+	var sliderChange = function(event, ui){
 		$('.img_content').each(function(index, item){
 			var _new = 1.44	* $('#sliderSize').slider("value");
 			

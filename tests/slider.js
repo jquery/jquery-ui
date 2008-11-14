@@ -41,7 +41,7 @@ function assertChange(stepping, start, result, action) {
 			startValue: start,
 			min: 0,
 			max: 1000,
-			change: function(e, ui) {
+			change: function(event, ui) {
 				equals(ui.value, result, "changed to " + ui.value);
 			}
 		});

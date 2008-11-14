@@ -86,9 +86,9 @@ $.widget("ui.progressbar", {
 		);
 	},
 	
-	_propagate: function(n,e) {
-		$.ui.plugin.call(this, n, [e, this.ui()]);
-		this.element.triggerHandler(n == "progressbar" ? n : ["progressbar", n].join(""), [e, this.ui()], this.options[n]);
+	_propagate: function(n, event) {
+		$.ui.plugin.call(this, n, [event, this.ui()]);
+		this.element.triggerHandler(n == "progressbar" ? n : ["progressbar", n].join(""), [event, this.ui()], this.options[n]);
 	},
 	
 	destroy: function() {
@@ -186,7 +186,7 @@ $.widget("ui.progressbar", {
 		this.textBg.html(text);
 	},
 	
-	ui: function(e) {
+	ui: function(event) {
 		return {
 			identifier: this.identifier,
 			options: this.options,

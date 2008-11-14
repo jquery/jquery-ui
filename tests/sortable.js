@@ -135,7 +135,7 @@ test("defaults", function() {
 test("#3019: Stop fires too early", function() {
 	
 	var helper = null;
-	el = $("#sortable").sortable({ stop: function(e, ui) {
+	el = $("#sortable").sortable({ stop: function(event, ui) {
 		helper = ui.helper;
 	}});
 	

@@ -217,7 +217,7 @@ $.widget("ui.tabs", {
 		// attach tab event handler, unbind to avoid duplicates from former tabifying...
 		this.$tabs.unbind('.tabs').bind(o.event + '.tabs', function() {
 			
-			//var trueClick = e.clientX; // add to history only if true click occured, not a triggered click
+			//var trueClick = event.clientX; // add to history only if true click occured, not a triggered click
 			var $li = $(this).parents('li:eq(0)'),
 				$hide = self.$panels.filter(':visible'),
 				$show = $(self._sanitizeSelector(this.hash));
@@ -435,7 +435,7 @@ $.widget("ui.tabs", {
 				try {
 					o.ajaxOptions.success(r, s);
 				}
-				catch (e) {}
+				catch (event) {}
 				
 				// This callback is required because the switch has to take
 				// place after loading has completed. Call last in order to 
@@ -531,8 +531,8 @@ $.extend($.ui.tabs.prototype, {
 			}, ms);
 		}
 		
-		function stop(e) {
-			if (!e || e.clientX) { // only in case of a true click
+		function stop(event) {
+			if (!event || event.clientX) { // only in case of a true click
 				clearInterval(self.rotation);
 			}
 		}
