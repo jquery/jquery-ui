@@ -1240,6 +1240,88 @@ test('altField', function() {
 	equals(alt.val(), '', 'Alt field range - alt - enter/pgdn/ctrl+end');
 });
 
+test('daylightSaving', function() {
+	var inp = init('#inp');
+	var dp = $('#ui-datepicker-div');
+	ok(true, 'Daylight saving - ' + new Date());
+	// Australia, Sydney - AM change, southern hemisphere
+	inp.val('04/01/2008').datepicker('show');
+	$('.ui-datepicker td:eq(13)', dp).simulate('click', {});
+	equals(inp.val(), '04/05/2008', 'Daylight saving - Australia 04/05/2008');
+	inp.val('04/01/2008').datepicker('show');
+	$('.ui-datepicker td:eq(14)', dp).simulate('click', {});
+	equals(inp.val(), '04/06/2008', 'Daylight saving - Australia 04/06/2008');
+	inp.val('04/01/2008').datepicker('show');
+	$('.ui-datepicker td:eq(15)', dp).simulate('click', {});
+	equals(inp.val(), '04/07/2008', 'Daylight saving - Australia 04/07/2008');
+	inp.val('10/01/2008').datepicker('show');
+	$('.ui-datepicker td:eq(13)', dp).simulate('click', {});
+	equals(inp.val(), '10/04/2008', 'Daylight saving - Australia 10/04/2008');
+	inp.val('10/01/2008').datepicker('show');
+	$('.ui-datepicker td:eq(14)', dp).simulate('click', {});
+	equals(inp.val(), '10/05/2008', 'Daylight saving - Australia 10/05/2008');
+	inp.val('10/01/2008').datepicker('show');
+	$('.ui-datepicker td:eq(15)', dp).simulate('click', {});
+	equals(inp.val(), '10/06/2008', 'Daylight saving - Australia 10/06/2008');
+	// Brasil, Brasilia - midnight change, southern hemisphere
+	inp.val('02/01/2008').datepicker('show');
+	$('.ui-datepicker td:eq(27)', dp).simulate('click', {});
+	equals(inp.val(), '02/16/2008', 'Daylight saving - Brasil 02/16/2008');
+	inp.val('02/01/2008').datepicker('show');
+	$('.ui-datepicker td:eq(28)', dp).simulate('click', {});
+	equals(inp.val(), '02/17/2008', 'Daylight saving - Brasil 02/17/2008');
+	inp.val('02/01/2008').datepicker('show');
+	$('.ui-datepicker td:eq(29)', dp).simulate('click', {});
+	equals(inp.val(), '02/18/2008', 'Daylight saving - Brasil 02/18/2008');
+	inp.val('10/01/2008').datepicker('show');
+	$('.ui-datepicker td:eq(20)', dp).simulate('click', {});
+	equals(inp.val(), '10/11/2008', 'Daylight saving - Brasil 10/11/2008');
+	inp.val('10/01/2008').datepicker('show');
+	$('.ui-datepicker td:eq(21)', dp).simulate('click', {});
+	equals(inp.val(), '10/12/2008', 'Daylight saving - Brasil 10/12/2008');
+	inp.val('10/01/2008').datepicker('show');
+	$('.ui-datepicker td:eq(22)', dp).simulate('click', {});
+	equals(inp.val(), '10/13/2008', 'Daylight saving - Brasil 10/13/2008');
+	// Lebanon, Beirut - midnight change, northern hemisphere
+	inp.val('03/01/2008').datepicker('show');
+	$('.ui-datepicker td:eq(41)', dp).simulate('click', {});
+	equals(inp.val(), '03/29/2008', 'Daylight saving - Lebanon 03/29/2008');
+	inp.val('03/01/2008').datepicker('show');
+	$('.ui-datepicker td:eq(42)', dp).simulate('click', {});
+	equals(inp.val(), '03/30/2008', 'Daylight saving - Lebanon 03/30/2008');
+	inp.val('03/01/2008').datepicker('show');
+	$('.ui-datepicker td:eq(43)', dp).simulate('click', {});
+	equals(inp.val(), '03/31/2008', 'Daylight saving - Lebanon 03/31/2008');
+	inp.val('10/01/2008').datepicker('show');
+	$('.ui-datepicker td:eq(34)', dp).simulate('click', {});
+	equals(inp.val(), '10/25/2008', 'Daylight saving - Lebanon 10/25/2008');
+	inp.val('10/01/2008').datepicker('show');
+	$('.ui-datepicker td:eq(35)', dp).simulate('click', {});
+	equals(inp.val(), '10/26/2008', 'Daylight saving - Lebanon 10/26/2008');
+	inp.val('10/01/2008').datepicker('show');
+	$('.ui-datepicker td:eq(36)', dp).simulate('click', {});
+	equals(inp.val(), '10/27/2008', 'Daylight saving - Lebanon 10/27/2008');
+	// US, Eastern - AM change, northern hemisphere
+	inp.val('03/01/2008').datepicker('show');
+	$('.ui-datepicker td:eq(20)', dp).simulate('click', {});
+	equals(inp.val(), '03/08/2008', 'Daylight saving - US 03/08/2008');
+	inp.val('03/01/2008').datepicker('show');
+	$('.ui-datepicker td:eq(21)', dp).simulate('click', {});
+	equals(inp.val(), '03/09/2008', 'Daylight saving - US 03/09/2008');
+	inp.val('03/01/2008').datepicker('show');
+	$('.ui-datepicker td:eq(22)', dp).simulate('click', {});
+	equals(inp.val(), '03/10/2008', 'Daylight saving - US 03/10/2008');
+	inp.val('11/01/2008').datepicker('show');
+	$('.ui-datepicker td:eq(13)', dp).simulate('click', {});
+	equals(inp.val(), '11/01/2008', 'Daylight saving - US 11/01/2008');
+	inp.val('11/01/2008').datepicker('show');
+	$('.ui-datepicker td:eq(14)', dp).simulate('click', {});
+	equals(inp.val(), '11/02/2008', 'Daylight saving - US 11/02/2008');
+	inp.val('11/01/2008').datepicker('show');
+	$('.ui-datepicker td:eq(15)', dp).simulate('click', {});
+	equals(inp.val(), '11/03/2008', 'Daylight saving - US 11/03/2008');
+});
+
 var beforeShowThis = null;
 var beforeShowInput = null;
 var beforeShowInst = null;
