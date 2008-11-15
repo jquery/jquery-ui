@@ -135,9 +135,10 @@ $.ui = {
 };
 
 // WAI-ARIA normalization
-// tweak $.attr for FF2 implementation
 if (isFF2) {
 	var attr = $.attr,
+		removeAttr = $.fn.removeAttr,
+		ariaNS = "http://www.w3.org/2005/07/aaa",
 		ariaState = /^aria-/,
 		ariaRole = /^wairole:/;
 	
@@ -150,10 +151,17 @@ if (isFF2) {
 				: (attr.apply(this, arguments) || "").replace(ariaRole, ""))
 			: (ariaState.test(name)
 				? (set
-					? elem.setAttributeNS("http://www.w3.org/2005/07/aaa",
+					? elem.setAttributeNS(ariaNS,
 						name.replace(ariaState, "aaa:"), value)
 					: attr.call(this, elem, name.replace(ariaState, "aaa:")))
 				: attr.apply(this, arguments)));
+	};
+	
+	$.fn.removeAttr = function(name) {
+		return (ariaState.test(name)
+			? this.each(function() {
+				this.removeAttributeNS(ariaNS, name.replace(ariaState, ""));
+			}) : removeAttr.call(this, name));
 	};
 }
 
