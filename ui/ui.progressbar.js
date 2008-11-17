@@ -192,10 +192,7 @@ $.widget("ui.progressbar", {
 	
 	ui: function() {
 		return {
-			identifier: this.identifier,
 			options: this.options,
-			element: this.bar,
-			textElement: this.textElement,
 			pixelState: this.pixelState,
 			percentState: this.percentState
 		};
@@ -210,7 +207,7 @@ $.extend($.ui.progressbar, {
 		interval: 1000,
 		increment: 1,
 		range: true,
-		text: '',
+		text: ''
 	},
 	
 	uuid: 0
