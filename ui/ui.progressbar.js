@@ -56,7 +56,6 @@ $.widget("ui.progressbar", {
 				width: 0,
 				overflow: 'hidden'
 			})
-			.addClass(options.textClass)
 			.appendTo(this.bar);
 		
 		this.textBg = $('<div class="ui-progressbar-text ui-progressbar-text-back"></div>')
@@ -212,7 +211,6 @@ $.extend($.ui.progressbar, {
 		increment: 1,
 		range: true,
 		text: '',
-		textClass: ''
 	},
 	
 	uuid: 0
