@@ -19,7 +19,7 @@ $.widget("ui.progressbar", {
 		
 		var self = this,
 			options = this.options,
-			id = ((new Date()).getTime() + Math.random()),
+			identifier = 'progressbar' + (++$.ui.progressbar.uuid),
 			text = options.text || '0%';
 		
 		this.element
@@ -31,27 +31,40 @@ $.widget("ui.progressbar", {
 				"aria-valuemax": 100,
 				"aria-valuenow": 0
 			});
-			
+		
 		$.extend(this, {
 			active: false,
 			pixelState: 0,
 			percentState: 0,
-			identifier: id,
-			bar: $('<div class="ui-progressbar-bar ui-hidden"></div>').css({
-				width: '0px', overflow: 'hidden', zIndex: 100
-			}),
-			textElement: $('<div class="ui-progressbar-text"></div>').html(text).css({
-				width: '0px', overflow: 'hidden'
-			}),
-			textBg: $('<div class="ui-progressbar-text ui-progressbar-text-back"></div>').html(text).css({
-					width: this.element.width()
-			}),
-			wrapper: $('<div class="ui-progressbar-wrap"></div>')
+			identifier: identifier
 		});
 		
-		this.wrapper
-			.append(this.bar.append(this.textElement.addClass(options.textClass)), this.textBg)
+		this.wrapper = $('<div class="ui-progressbar-wrap"></div>')
 			.appendTo(this.element);
+		
+		this.bar = $('<div class="ui-progressbar-bar ui-hidden"></div>')
+			.css({
+				width: 0,
+				overflow: 'hidden',
+				zIndex: 100
+			})
+			.appendTo(this.wrapper);
+		
+		this.textElement = $('<div class="ui-progressbar-text"></div>')
+			.html(text)
+			.css({
+				width: 0,
+				overflow: 'hidden'
+			})
+			.addClass(options.textClass)
+			.appendTo(this.bar);
+		
+		this.textBg = $('<div class="ui-progressbar-text ui-progressbar-text-back"></div>')
+			.html(text)
+			.css({
+				width: this.element.width()
+			})
+			.appendTo(this.bar);
 	},
 
 	_animate: function() {
@@ -86,11 +99,6 @@ $.widget("ui.progressbar", {
 		);
 	},
 	
-	_propagate: function(n, event) {
-		$.ui.plugin.call(this, n, [event, this.ui()]);
-		this.element.triggerHandler(n == "progressbar" ? n : ["progressbar", n].join(""), [event, this.ui()], this.options[n]);
-	},
-	
 	destroy: function() {
 		this.stop();
 		
@@ -117,13 +125,11 @@ $.widget("ui.progressbar", {
 	pause: function() {
 		if (this.disabled) return;
 		this.bar.stop();
-		this._propagate('pause', this.ui());
+		this._trigger('pause', null, this.ui());
 	},
 	
 	progress: function(percentState) {
-		if (this.bar.is('.ui-hidden')) {
-			this.bar.removeClass('ui-hidden');
-		}
+		this.bar.removeClass('ui-hidden');
 		
 		this.percentState = percentState > 100 ? 100 : percentState;
 		this.pixelState = (this.percentState/100) * this.options.width;
@@ -132,10 +138,10 @@ $.widget("ui.progressbar", {
 		
 		var percent = Math.round(this.percentState);
 		if (this.options.range && !this.options.text) {
-			this.textElement.html(percent + '%');
+			this.text(percent + '%');
 		}
 		this.element.attr("aria-valuenow", percent);
-		this._propagate('progress', this.ui());
+		this._trigger('progress', null, this.ui());
 	},
 	
 	start: function() {
@@ -168,7 +174,7 @@ $.widget("ui.progressbar", {
 		
 		this._animate();
 		
-		this._propagate('start', this.ui());
+		this._trigger('start', null, this.ui());
 		return false;
 	},
 	
@@ -178,12 +184,11 @@ $.widget("ui.progressbar", {
 		this.textElement.width(0);
 		this.bar.addClass('ui-hidden');
 		this.options.interval = this._interval;
-		this._propagate('stop', this.ui());
+		this._trigger('stop', null, this.ui());
 	},
 	
 	text: function(text){
-		this.textElement.html(text);
-		this.textBg.html(text);
+		this.textElement.add(this.textBg).html(text);
 	},
 	
 	ui: function(event) {
@@ -195,21 +200,22 @@ $.widget("ui.progressbar", {
 			pixelState: this.pixelState,
 			percentState: this.percentState
 		};
-	},
-	
-	plugins: {}
+	}
 });
 
-$.ui.progressbar.version = "@VERSION";
-$.ui.progressbar.defaults = {
-	width: 300,
-	duration: 1000,
-	interval: 1000,
-	increment: 1,
-	range: true,
-	text: '',
-	addClass: '',
-	textClass: ''
-};
+$.extend($.ui.progressbar, {
+	version: "@VERSION",
+	defaults: {
+		width: 300,
+		duration: 1000,
+		interval: 1000,
+		increment: 1,
+		range: true,
+		text: '',
+		textClass: ''
+	},
+	
+	uuid: 0
+});
 
 })(jQuery);
