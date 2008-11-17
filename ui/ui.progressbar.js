@@ -92,7 +92,7 @@ $.widget("ui.progressbar", {
 						self._animate();
 					}
 					else {
-						delete jQuery.easing[self.identifier];
+						delete $.easing[self.identifier];
 					}
 				}
 			}
@@ -107,7 +107,7 @@ $.widget("ui.progressbar", {
 			.removeData("progressbar").unbind(".progressbar")
 			.find('.ui-progressbar-wrap').remove();
 		
-		delete jQuery.easing[this.identifier];
+		delete $.easing[this.identifier];
 	},
 
 	disable: function() {
@@ -151,7 +151,7 @@ $.widget("ui.progressbar", {
 			return;
 		}
 		
-		jQuery.easing[this.identifier] = function (x, t, b, c, d) {
+		$.easing[this.identifier] = function (x, t, b, c, d) {
 			var inc = options.increment,
 				width = options.width,
 				step = ((inc > width ? width : inc)/width),
@@ -191,7 +191,7 @@ $.widget("ui.progressbar", {
 		this.textElement.add(this.textBg).html(text);
 	},
 	
-	ui: function(event) {
+	ui: function() {
 		return {
 			identifier: this.identifier,
 			options: this.options,
