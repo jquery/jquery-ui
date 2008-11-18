@@ -183,8 +183,8 @@ $.fn.extend({
  */
 
 // We override the animation for all of these color styles
-jQuery.each(['backgroundColor', 'borderBottomColor', 'borderLeftColor', 'borderRightColor', 'borderTopColor', 'color', 'outlineColor'], function(i,attr){
-		jQuery.fx.step[attr] = function(fx){
+$.each(['backgroundColor', 'borderBottomColor', 'borderLeftColor', 'borderRightColor', 'borderTopColor', 'color', 'outlineColor'], function(i,attr){
+		$.fx.step[attr] = function(fx){
 				if ( fx.state == 0 ) {
 						fx.start = getColor( fx.elem, attr );
 						fx.end = getRGB( fx.end );
@@ -231,17 +231,17 @@ function getRGB(color) {
 				return colors['transparent'];
 
 		// Otherwise, we're most likely dealing with a named color
-		return colors[jQuery.trim(color).toLowerCase()];
+		return colors[$.trim(color).toLowerCase()];
 }
 
 function getColor(elem, attr) {
 		var color;
 
 		do {
-				color = jQuery.curCSS(elem, attr);
+				color = $.curCSS(elem, attr);
 
 				// Keep going until we find an element that has color, or we hit the body
-				if ( color != '' && color != 'transparent' || jQuery.nodeName(elem, "body") )
+				if ( color != '' && color != 'transparent' || $.nodeName(elem, "body") )
 						break;
 
 				attr = "backgroundColor";
@@ -339,14 +339,14 @@ var colors = {
 */
 
 // t: current time, b: begInnIng value, c: change In value, d: duration
-jQuery.easing['jswing'] = jQuery.easing['swing'];
+$.easing.jswing = $.easing.swing;
 
-jQuery.extend( jQuery.easing,
+$.extend($.easing,
 {
 	def: 'easeOutQuad',
 	swing: function (x, t, b, c, d) {
-		//alert(jQuery.easing.default);
-		return jQuery.easing[jQuery.easing.def](x, t, b, c, d);
+		//alert($.easing.default);
+		return $.easing[$.easing.def](x, t, b, c, d);
 	},
 	easeInQuad: function (x, t, b, c, d) {
 		return c*(t/=d)*t + b;
@@ -455,7 +455,7 @@ jQuery.extend( jQuery.easing,
 		return c/2*((t-=2)*t*(((s*=(1.525))+1)*t + s) + 2) + b;
 	},
 	easeInBounce: function (x, t, b, c, d) {
-		return c - jQuery.easing.easeOutBounce (x, d-t, 0, c, d) + b;
+		return c - $.easing.easeOutBounce (x, d-t, 0, c, d) + b;
 	},
 	easeOutBounce: function (x, t, b, c, d) {
 		if ((t/=d) < (1/2.75)) {
@@ -469,8 +469,8 @@ jQuery.extend( jQuery.easing,
 		}
 	},
 	easeInOutBounce: function (x, t, b, c, d) {
-		if (t < d/2) return jQuery.easing.easeInBounce (x, t*2, 0, c, d) * .5 + b;
-		return jQuery.easing.easeOutBounce (x, t*2-d, 0, c, d) * .5 + c*.5 + b;
+		if (t < d/2) return $.easing.easeInBounce (x, t*2, 0, c, d) * .5 + b;
+		return $.easing.easeOutBounce (x, t*2-d, 0, c, d) * .5 + c*.5 + b;
 	}
 });
 

@@ -195,7 +195,7 @@ function toggle(toShow, toHide, data, clickedActive, down) {
 		
 		if ( !options.alwaysOpen && clickedActive ) {
 			animOptions = {
-				toShow: jQuery([]),
+				toShow: $([]),
 				toHide: toHide,
 				complete: complete,
 				down: down,
@@ -265,9 +265,9 @@ function clickHandler(event) {
 		var toHide = options.active.next(),
 			data = {
 				options: options,
-				newHeader: jQuery([]),
+				newHeader: $([]),
 				oldHeader: options.active,
-				newContent: jQuery([]),
+				newContent: $([]),
 				oldContent: toHide
 			},
 			toShow = (options.active = $([]));
