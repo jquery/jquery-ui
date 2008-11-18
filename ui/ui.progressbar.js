@@ -137,7 +137,7 @@ $.widget("ui.progressbar", {
 		
 		var percent = Math.round(this.percentState);
 		if (this.options.range && !this.options.text) {
-			this.text(percent + '%');
+			this._setText(percent + '%');
 		}
 		this.element.attr("aria-valuenow", percent);
 		this._trigger('progress', null, this.ui());
@@ -186,16 +186,26 @@ $.widget("ui.progressbar", {
 		this._trigger('stop', null, this.ui());
 	},
 	
-	text: function(text){
-		this.textElement.add(this.textBg).html(text);
-	},
-	
 	ui: function() {
 		return {
 			options: this.options,
 			pixelState: this.pixelState,
 			percentState: this.percentState
 		};
+	},
+	
+	_setData: function(key, value){
+		switch (key) {
+			case 'text':
+				this._setText(value);
+				break;
+		}
+		
+		$.widget.prototype._setData.apply(this, arguments);
+	},
+	
+	_setText: function(text){
+		this.textElement.add(this.textBg).html(text);
 	}
 });
 
