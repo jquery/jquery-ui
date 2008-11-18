@@ -98,7 +98,7 @@ test("init", function() {
 test("destroy", function() {
 	expect(6);
 
-	$("<div></div>").appendTo('body').draggable().draggable("destroy").remove();	
+	$("<div></div>").appendTo('body').draggable().draggable("destroy").remove();
 	ok(true, '.draggable("destroy") called on element');
 
 	$([]).draggable().draggable("destroy");
@@ -186,7 +186,7 @@ test("No options, relative", function() {
 test("No options, absolute", function() {
 	el = $("#draggable2").draggable();
 	drag(el, 50, 50);
-	moved(50, 50);	
+	moved(50, 50);
 });
 
 module("draggable: Options");
@@ -230,7 +230,7 @@ test("{ cancel: 'span' }", function() {
 	el = $("#draggable2").draggable();
 	drag("#draggable2 span", 50, 50);
 	moved(50, 50);
-	
+
 	el.draggable("destroy");
 
 	el = $("#draggable2").draggable({ cancel: 'span' });
@@ -282,37 +282,37 @@ test("{ containment: 'parent' }, absolute", function() {
 });
 
 test("{ cursor: 'move' }", function() {
-	
+
 	function getCursor() { return $("body").css("cursor"); }
-	
+
 	expect(2);
-	
+
 	var expected = "move", actual, before, after;
-	
+
 	el = $("#draggable2").draggable({
 		cursor: expected,
 		start: function(event, ui) {
 			actual = getCursor();
 		}
 	});
-	
+
 	before = getCursor();
 	drag("#draggable2", -1, -1);
 	after = getCursor();
-	
+
 	equals(actual, expected, "start callback: cursor '" + expected + "'");
 	equals(after, before, "after drag: cursor restored");
-	
+
 });
 
 test("{ cursorAt: { left: -5, top: -5 } }", function() {
-	
+
 	expect(4);
-	
+
 	var dx = -3, dy = -3;
 	var ox = 5, oy = 5;
 	var cax = -5, cay = -5;
-	
+
 	var actual = null;
 	$("#draggable2").draggable({
 		cursorAt: { left: cax, top: cay },
@@ -321,7 +321,7 @@ test("{ cursorAt: { left: -5, top: -5 } }", function() {
 		}
 	});
 	var el = $("#draggable2").data("draggable").element;
-	
+
 	var before = el.offset();
 	var pos = { clientX: before.left + ox, clientY: before.top + oy };
 	$("#draggable2").simulate("mousedown", pos);
@@ -333,10 +333,10 @@ test("{ cursorAt: { left: -5, top: -5 } }", function() {
 		left: before.left + ox - cax + dx,
 		top: before.top + oy - cay + dy
 	};
-	
+
 	equals(actual.left, expected.left, "Absolute: -1px left");
 	equals(actual.top, expected.top, "Absolute: -1px top");
-	
+
 	var actual = null;
 	$("#draggable1").draggable({
 		cursorAt: { left: cax, top: cay },
@@ -345,7 +345,7 @@ test("{ cursorAt: { left: -5, top: -5 } }", function() {
 		}
 	});
 	var el = $("#draggable2").data("draggable").element;
-	
+
 	var before = el.offset();
 	var pos = { clientX: before.left + ox, clientY: before.top + oy };
 	$("#draggable2").simulate("mousedown", pos);
@@ -357,10 +357,10 @@ test("{ cursorAt: { left: -5, top: -5 } }", function() {
 		left: before.left + ox - cax + dx,
 		top: before.top + oy - cay + dy
 	};
-	
+
 	equals(actual.left, expected.left, "Relative: -1px left");
 	equals(actual.top, expected.top, "Relative: -1px top");
-	
+
 });
 
 test("{ distance: 10 }", function() {
@@ -374,7 +374,7 @@ test("{ distance: 10 }", function() {
 
 	drag(el, 9, 9);
 	moved(0, 0, 'distance not met');
-	
+
 });
 
 test("{ grid: [50, 50] }, relative", function() {
@@ -412,13 +412,13 @@ test("{ helper: 'clone' }, relative", function() {
 test("{ helper: 'clone' }, absolute", function() {
 	el = $("#draggable2").draggable({ helper: "clone" });
 	drag(el, 50, 50);
-	moved(0, 0);	
+	moved(0, 0);
 });
 
 test("{ opacity: 0.5 }", function() {
-	
+
 	expect(1);
-	
+
 	var opacity = null;
 	el = $("#draggable2").draggable({
 		opacity: 0.5,
@@ -426,19 +426,19 @@ test("{ opacity: 0.5 }", function() {
 			opacity = $(this).css("opacity");
 		}
 	});
-	
+
 	drag("#draggable2", -1, -1);
-	
+
 	equals(opacity, 0.5, "start callback: opacity is");
-	
+
 });
 
 test("{ zIndex: 10 }", function() {
-	
+
 	expect(1);
 
 	var expected = 10, actual;
-	
+
 	var zIndex = null;
 	el = $("#draggable2").draggable({
 		zIndex: expected,
@@ -446,32 +446,32 @@ test("{ zIndex: 10 }", function() {
 			actual = $(this).css("zIndex");
 		}
 	});
-	
+
 	drag("#draggable2", -1, -1);
-	
+
 	equals(actual, expected, "start callback: zIndex is");
-	
+
 });
 
 module("draggable: Callbacks");
 
 test("callbacks occurance count", function() {
-	
+
 	expect(3);
-	
+
 	var start = 0, stop = 0, dragc = 0;
 	el = $("#draggable2").draggable({
 		start: function() { start++; },
 		drag: function() { dragc++; },
 		stop: function() { stop++; }
 	});
-	
+
 	drag(el, 10, 10);
-	
+
 	equals(start, 1, "start callback should happen exactly once");
 	equals(dragc, 3 + 1, "drag callback should happen exactly once per mousemove + 1");
 	equals(stop, 1, "stop callback should happen exactly once");
-	
+
 });
 
 module("draggable: Scroll offsets");
@@ -538,7 +538,7 @@ if(!($.browser.msie && $.browser.version < 7)) {
 		moved(50, 50);
 		$("#main")[0].scrollTop = 0;
 	});
-	
+
 	test("{ helper: 'original' }, fixed, with scroll offset on root", function() {
 		el = $("#draggable1").css({ position: 'fixed', top: 0, left: 0 }).draggable({ helper: "original" });
 		$(document).scrollTop(100);
@@ -546,7 +546,7 @@ if(!($.browser.msie && $.browser.version < 7)) {
 		moved(50, 50);
 		$(document).scrollTop(0);
 	});
-	
+
 	test("{ helper: 'original' }, fixed, with scroll offset on root and parent", function() {
 		el = $("#draggable1").css({ position: 'fixed', top: 0, left: 0 }).draggable({ helper: "original" });
 		$(document).scrollTop(100);
@@ -562,67 +562,67 @@ if(!($.browser.msie && $.browser.version < 7)) {
 
 
 test("{ helper: 'clone' }, absolute", function() {
-	
+
 	var helperOffset = null;
 	var origOffset = $("#draggable1").offset();
-	
+
 	el = $("#draggable1").draggable({ helper: "clone", drag: function(event, ui) {
 		helperOffset = ui.helper.offset();
 	} });
 
 	drag(el, 1, 1);
-	
+
 	same({ top: helperOffset.top-1, left: helperOffset.left-1 }, origOffset, 'dragged[' + dragged.dx + ', ' + dragged.dy + '] ');
 
 });
 
 test("{ helper: 'clone' }, absolute with scroll offset on parent", function() {
-	
+
 	$("#main")[0].scrollTop = 100;
 	var helperOffset = null;
 	var origOffset = $("#draggable1").offset();
-	
+
 	el = $("#draggable1").draggable({ helper: "clone", drag: function(event, ui) {
 		helperOffset = ui.helper.offset();
 	} });
 
 	drag(el, 1, 1);
-	
+
 	same({ top: helperOffset.top-1, left: helperOffset.left-1 }, origOffset, 'dragged[' + dragged.dx + ', ' + dragged.dy + '] ');
 	$("#main")[0].scrollTop = 0;
 
 });
 
 test("{ helper: 'clone' }, absolute with scroll offset on root", function() {
-	
+
 	$(document).scrollTop(100);
 	var helperOffset = null;
 	var origOffset = $("#draggable1").offset();
-	
+
 	el = $("#draggable1").draggable({ helper: "clone", drag: function(event, ui) {
 		helperOffset = ui.helper.offset();
 	} });
 
 	drag(el, 1, 1);
-	
+
 	same({ top: helperOffset.top-1, left: helperOffset.left-1 }, origOffset, 'dragged[' + dragged.dx + ', ' + dragged.dy + '] ');
 	$(document).scrollTop(0);
 
 });
 
 test("{ helper: 'clone' }, absolute with scroll offset on root and parent", function() {
-	
+
 	$(document).scrollTop(100);
 	$("#main")[0].scrollTop = 100;
 	var helperOffset = null;
 	var origOffset = $("#draggable1").offset();
-	
+
 	el = $("#draggable1").draggable({ helper: "clone", drag: function(event, ui) {
 		helperOffset = ui.helper.offset();
 	} });
 
 	drag(el, 1, 1);
-	
+
 	same({ top: helperOffset.top-1, left: helperOffset.left-1 }, origOffset, 'dragged[' + dragged.dx + ', ' + dragged.dy + '] ');
 	$(document).scrollTop(0);
 	$("#main")[0].scrollTop = 0;
@@ -641,9 +641,9 @@ module("draggable: Tickets");
 /* This needs to be rewritten
 
 test("#2965 cursorAt with margin", function() {
-	
+
 	expect(2);
-	
+
 	var ox = 0, oy = 0;
 
 	var actual, expected;
@@ -654,7 +654,7 @@ test("#2965 cursorAt with margin", function() {
 		}
 	});
 	var el = $("#draggable2").data("draggable").element;
-	
+
 	$("#draggable2").css('margin', '0px !important');
 
 	var before = el.offset();
@@ -675,10 +675,10 @@ test("#2965 cursorAt with margin", function() {
 	$(document).simulate("mousemove", { clientX: pos.clientX + 1, clientY: pos.clientY + 1});
 	$(document).simulate("mousemove", pos);
 	$("#draggable2").simulate("mouseup", pos);
-	
+
 	equals(actual.left, expected.left, "10px margin. left");
 	equals(actual.top, expected.top, "10px margin. top");
-	
+
 });
 */
 

@@ -18,15 +18,15 @@ $.effects.explode = function(o) {
 
 	var rows = o.options.pieces ? Math.round(Math.sqrt(o.options.pieces)) : 3;
 	var cells = o.options.pieces ? Math.round(Math.sqrt(o.options.pieces)) : 3;
-	
+
 	o.options.mode = o.options.mode == 'toggle' ? ($(this).is(':visible') ? 'hide' : 'show') : o.options.mode;
 	var el = $(this).show().css('visibility', 'hidden');
 	var offset = el.offset();
-	
+
 	//Substract the margins - not fixing the problem yet.
 	offset.top -= parseInt(el.css("marginTop")) || 0;
 	offset.left -= parseInt(el.css("marginLeft")) || 0;
-	
+
 	var width = el.outerWidth(true);
 	var height = el.outerHeight(true);
 
@@ -62,18 +62,18 @@ $.effects.explode = function(o) {
 
 	// Set a timeout, to call the callback approx. when the other animations have finished
 	setTimeout(function() {
-		
+
 		o.options.mode == 'show' ? el.css({ visibility: 'visible' }) : el.css({ visibility: 'visible' }).hide();
 				if(o.callback) o.callback.apply(el[0]); // Callback
 				el.dequeue();
-				
+
 				$('.effects-explode').remove();
-		
+
 	}, o.duration || 500);
-	
-		
+
+
 	});
-	
+
 };
 
 })(jQuery);

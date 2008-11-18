@@ -31,7 +31,7 @@ test("init", function() {
 test("destroy", function() {
 	expect(1);
 
-	$("<div></div>").appendTo('body').progressbar().progressbar("destroy").remove();	
+	$("<div></div>").appendTo('body').progressbar().progressbar("destroy").remove();
 	ok(true, '.progressbar("destroy") called on element');
 
 });

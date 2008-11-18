@@ -14,9 +14,9 @@
 (function($) {
 
 $.widget("ui.droppable", {
-	
+
 	_setData: function(key, value) {
-		
+
 		if(key == 'accept') {
 			this.options.accept = value && $.isFunction(value) ? value : function(d) {
 				return d.is(accept);
@@ -24,27 +24,27 @@ $.widget("ui.droppable", {
 		} else {
 			$.widget.prototype._setData.apply(this, arguments);
 		}
-		
+
 	},
-	
+
 	_init: function() {
-		
+
 		var o = this.options, accept = o.accept;
 		this.isover = 0; this.isout = 1;
-		
+
 		this.options.accept = this.options.accept && $.isFunction(this.options.accept) ? this.options.accept : function(d) {
 			return d.is(accept);
 		};
-		
+
 		//Store the droppable's proportions
 		this.proportions = { width: this.element[0].offsetWidth, height: this.element[0].offsetHeight };
-		
+
 		// Add the reference and positions to the manager
 		$.ui.ddmanager.droppables[this.options.scope] = $.ui.ddmanager.droppables[this.options.scope] || [];
 		$.ui.ddmanager.droppables[this.options.scope].push(this);
-		
+
 		(this.options.cssNamespace && this.element.addClass(this.options.cssNamespace+"-droppable"));
-		
+
 	},
 	plugins: {},
 	ui: function(c) {
@@ -62,39 +62,39 @@ $.widget("ui.droppable", {
 		for ( var i = 0; i < drop.length; i++ )
 			if ( drop[i] == this )
 				drop.splice(i, 1);
-		
+
 		this.element
 			.removeClass("ui-droppable-disabled")
 			.removeData("droppable")
 			.unbind(".droppable");
 	},
 	_over: function(event) {
-		
+
 		var draggable = $.ui.ddmanager.current;
 		if (!draggable || (draggable.currentItem || draggable.element)[0] == this.element[0]) return; // Bail if draggable and droppable are same element
-		
+
 		if (this.options.accept.call(this.element,(draggable.currentItem || draggable.element))) {
 			$.ui.plugin.call(this, 'over', [event, this.ui(draggable)]);
 			this.element.triggerHandler("dropover", [event, this.ui(draggable)], this.options.over);
 		}
-		
+
 	},
 	_out: function(event) {
-		
+
 		var draggable = $.ui.ddmanager.current;
 		if (!draggable || (draggable.currentItem || draggable.element)[0] == this.element[0]) return; // Bail if draggable and droppable are same element
-		
+
 		if (this.options.accept.call(this.element,(draggable.currentItem || draggable.element))) {
 			$.ui.plugin.call(this, 'out', [event, this.ui(draggable)]);
 			this.element.triggerHandler("dropout", [event, this.ui(draggable)], this.options.out);
 		}
-		
+
 	},
 	_drop: function(event,custom) {
-		
+
 		var draggable = custom || $.ui.ddmanager.current;
 		if (!draggable || (draggable.currentItem || draggable.element)[0] == this.element[0]) return false; // Bail if draggable and droppable are same element
-		
+
 		var childrenIntersection = false;
 		this.element.find(":data(droppable)").not(".ui-draggable-dragging").each(function() {
 			var inst = $.data(this, 'droppable');
@@ -103,29 +103,29 @@ $.widget("ui.droppable", {
 			}
 		});
 		if(childrenIntersection) return false;
-		
+
 		if(this.options.accept.call(this.element,(draggable.currentItem || draggable.element))) {
 			$.ui.plugin.call(this, 'drop', [event, this.ui(draggable)]);
 			this.element.triggerHandler("drop", [event, this.ui(draggable)], this.options.drop);
 			return this.element;
 		}
-		
+
 		return false;
-		
+
 	},
 	_activate: function(event) {
-		
+
 		var draggable = $.ui.ddmanager.current;
 		$.ui.plugin.call(this, 'activate', [event, this.ui(draggable)]);
 		if(draggable) this.element.triggerHandler("dropactivate", [event, this.ui(draggable)], this.options.activate);
-		
+
 	},
 	_deactivate: function(event) {
-		
+
 		var draggable = $.ui.ddmanager.current;
 		$.ui.plugin.call(this, 'deactivate', [event, this.ui(draggable)]);
 		if(draggable) this.element.triggerHandler("dropdeactivate", [event, this.ui(draggable)], this.options.deactivate);
-		
+
 	}
 });
 
@@ -143,14 +143,14 @@ $.extend($.ui.droppable, {
 });
 
 $.ui.intersect = function(draggable, droppable, toleranceMode) {
-	
+
 	if (!droppable.offset) return false;
-	
+
 	var x1 = (draggable.positionAbs || draggable.position.absolute).left, x2 = x1 + draggable.helperProportions.width,
 		y1 = (draggable.positionAbs || draggable.position.absolute).top, y2 = y1 + draggable.helperProportions.height;
 	var l = droppable.offset.left, r = l + droppable.proportions.width,
 		t = droppable.offset.top, b = t + droppable.proportions.height;
-	
+
 	switch (toleranceMode) {
 		case 'fit':
 			return (l < x1 && x2 < r
@@ -183,7 +183,7 @@ $.ui.intersect = function(draggable, droppable, toleranceMode) {
 			return false;
 			break;
 		}
-	
+
 };
 
 /*
@@ -193,58 +193,58 @@ $.ui.ddmanager = {
 	current: null,
 	droppables: { 'default': [] },
 	prepareOffsets: function(t, event) {
-		
+
 		var m = $.ui.ddmanager.droppables[t.options.scope];
 		var type = event ? event.type : null; // workaround for #2317
 		var list = (t.currentItem || t.element).find(":data(droppable)").andSelf();
-		
+
 		droppablesLoop: for (var i = 0; i < m.length; i++) {
-			
+
 			if(m[i].options.disabled || (t && !m[i].options.accept.call(m[i].element,(t.currentItem || t.element)))) continue;	//No disabled and non-accepted
 			for (var j=0; j < list.length; j++) { if(list[j] == m[i].element[0]) { m[i].proportions.height = 0; continue droppablesLoop; } }; //Filter out elements in the current dragged item
 			m[i].visible = m[i].element.css("display") != "none"; if(!m[i].visible) continue; 									//If the element is not visible, continue
-			
+
 			m[i].offset = m[i].element.offset();
 			m[i].proportions = { width: m[i].element[0].offsetWidth, height: m[i].element[0].offsetHeight };
-			
+
 			if(type == "dragstart" || type == "sortactivate") m[i]._activate.call(m[i], event); 										//Activate the droppable if used directly from draggables
-			
+
 		}
-		
+
 	},
 	drop: function(draggable, event) {
-		
+
 		var dropped = false;
 		$.each($.ui.ddmanager.droppables[draggable.options.scope], function() {
-			
+
 			if(!this.options) return;
 			if (!this.options.disabled && this.visible && $.ui.intersect(draggable, this, this.options.tolerance))
 				dropped = this._drop.call(this, event);
-			
+
 			if (!this.options.disabled && this.visible && this.options.accept.call(this.element,(draggable.currentItem || draggable.element))) {
 				this.isout = 1; this.isover = 0;
 				this._deactivate.call(this, event);
 			}
-			
+
 		});
 		return dropped;
-		
+
 	},
 	drag: function(draggable, event) {
-		
+
 		//If you have a highly dynamic page, you might try this option. It renders positions every time you move the mouse.
 		if(draggable.options.refreshPositions) $.ui.ddmanager.prepareOffsets(draggable, event);
-		
+
 		//Run through all droppables and check their positions based on specific tolerance options
-		
+
 		$.each($.ui.ddmanager.droppables[draggable.options.scope], function() {
-			
+
 			if(this.options.disabled || this.greedyChild || !this.visible) return;
 			var intersects = $.ui.intersect(draggable, this, this.options.tolerance);
-			
+
 			var c = !intersects && this.isover == 1 ? 'isout' : (intersects && this.isover == 0 ? 'isover' : null);
 			if(!c) return;
-			
+
 			var parentInstance;
 			if (this.options.greedy) {
 				var parent = this.element.parents(':data(droppable):eq(0)');
@@ -253,17 +253,17 @@ $.ui.ddmanager = {
 					parentInstance.greedyChild = (c == 'isover' ? 1 : 0);
 				}
 			}
-			
+
 			// we just moved into a greedy child
 			if (parentInstance && c == 'isover') {
 				parentInstance['isover'] = 0;
 				parentInstance['isout'] = 1;
 				parentInstance._out.call(parentInstance, event);
 			}
-			
+
 			this[c] = 1; this[c == 'isout' ? 'isover' : 'isout'] = 0;
 			this[c == "isover" ? "_over" : "_out"].call(this, event);
-			
+
 			// we just moved out of a greedy child
 			if (parentInstance && c == 'isout') {
 				parentInstance['isout'] = 0;
@@ -271,7 +271,7 @@ $.ui.ddmanager = {
 				parentInstance._over.call(parentInstance, event);
 			}
 		});
-		
+
 	}
 };
 

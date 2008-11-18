@@ -14,14 +14,14 @@
 
 $.widget("ui.progressbar", {
 	_init: function() {
-		
+
 		this._interval = this.options.interval;
-		
+
 		var self = this,
 			options = this.options,
 			identifier = 'progressbar' + (++$.ui.progressbar.uuid),
 			text = options.text || '0%';
-		
+
 		this.element
 			.addClass("ui-progressbar")
 			.width(options.width)
@@ -31,17 +31,17 @@ $.widget("ui.progressbar", {
 				"aria-valuemax": 100,
 				"aria-valuenow": 0
 			});
-		
+
 		$.extend(this, {
 			active: false,
 			pixelState: 0,
 			percentState: 0,
 			identifier: identifier
 		});
-		
+
 		this.wrapper = $('<div class="ui-progressbar-wrap"></div>')
 			.appendTo(this.element);
-		
+
 		this.bar = $('<div class="ui-progressbar-bar ui-hidden"></div>')
 			.css({
 				width: 0,
@@ -49,7 +49,7 @@ $.widget("ui.progressbar", {
 				zIndex: 100
 			})
 			.appendTo(this.wrapper);
-		
+
 		this.textElement = $('<div class="ui-progressbar-text"></div>')
 			.html(text)
 			.css({
@@ -57,7 +57,7 @@ $.widget("ui.progressbar", {
 				overflow: 'hidden'
 			})
 			.appendTo(this.bar);
-		
+
 		this.textBg = $('<div class="ui-progressbar-text ui-progressbar-text-back"></div>')
 			.html(text)
 			.css({
@@ -70,7 +70,7 @@ $.widget("ui.progressbar", {
 		var self = this,
 			options = this.options,
 			interval = options.interval;
-		
+
 		this.bar.animate(
 			{
 				width: options.width
@@ -97,15 +97,15 @@ $.widget("ui.progressbar", {
 			}
 		);
 	},
-	
+
 	destroy: function() {
 		this.stop();
-		
+
 		this.element
 			.removeClass("ui-progressbar ui-progressbar-disabled")
 			.removeData("progressbar").unbind(".progressbar")
 			.find('.ui-progressbar-wrap').remove();
-		
+
 		delete $.easing[this.identifier];
 	},
 
@@ -114,27 +114,27 @@ $.widget("ui.progressbar", {
 		this.disabled = true;
 		this.element.attr("aria-disabled", true);
 	},
-	
+
 	enable: function() {
 		this.element.removeClass("ui-progressbar-disabled");
 		this.disabled = false;
 		this.element.attr("aria-disabled", false);
 	},
-	
+
 	pause: function() {
 		if (this.disabled) return;
 		this.bar.stop();
 		this._trigger('pause', null, this.ui());
 	},
-	
+
 	progress: function(percentState) {
 		this.bar.removeClass('ui-hidden');
-		
+
 		this.percentState = percentState > 100 ? 100 : percentState;
 		this.pixelState = (this.percentState/100) * this.options.width;
 		this.bar.width(this.pixelState);
 		this.textElement.width(this.pixelState);
-		
+
 		var percent = Math.round(this.percentState);
 		if (this.options.range && !this.options.text) {
 			this._setText(percent + '%');
@@ -142,14 +142,14 @@ $.widget("ui.progressbar", {
 		this.element.attr("aria-valuenow", percent);
 		this._trigger('progress', null, this.ui());
 	},
-	
+
 	start: function() {
 		var self = this, options = this.options;
-		
+
 		if (this.disabled) {
 			return;
 		}
-		
+
 		$.easing[this.identifier] = function (x, t, b, c, d) {
 			var inc = options.increment,
 				width = options.width,
@@ -157,26 +157,26 @@ $.widget("ui.progressbar", {
 				state = Math.round(x/step)*step;
 			return state > 1 ? 1 : state;
 		};
-		
+
 		self.active = true;
-		
+
 		if (options.duration < options.interval) {
 			options.duration = options.interval;
 		}
-		
+
 		setTimeout(
 			function() {
 				self.active = false;
 			},
 			options.duration
 		);
-		
+
 		this._animate();
-		
+
 		this._trigger('start', null, this.ui());
 		return false;
 	},
-	
+
 	stop: function() {
 		this.bar.stop();
 		this.bar.width(0);
@@ -185,7 +185,7 @@ $.widget("ui.progressbar", {
 		this.options.interval = this._interval;
 		this._trigger('stop', null, this.ui());
 	},
-	
+
 	ui: function() {
 		return {
 			options: this.options,
@@ -193,17 +193,17 @@ $.widget("ui.progressbar", {
 			percentState: this.percentState
 		};
 	},
-	
+
 	_setData: function(key, value){
 		switch (key) {
 			case 'text':
 				this._setText(value);
 				break;
 		}
-		
+
 		$.widget.prototype._setData.apply(this, arguments);
 	},
-	
+
 	_setText: function(text){
 		this.textElement.add(this.textBg).html(text);
 	}
@@ -219,7 +219,7 @@ $.extend($.ui.progressbar, {
 		range: true,
 		text: ''
 	},
-	
+
 	uuid: 0
 });
 

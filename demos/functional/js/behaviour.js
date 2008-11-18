@@ -1,21 +1,21 @@
 $(document).ready(function() {
-	
+
 	// link demos
-	
+
 	$(".demoflow div.wrapper").click(function() {
-		
+
 		var demo = $(this).children('img').attr('_demo');
-		
+
 		if (demo) {
 			location.href = '/repository/real-world/' + demo;
 		}else {
 			//alert('Under construction!');
 		}
-		
+
 	});
-	
+
 	if ($("div.demoflow").size()) {
-		
+
 		var inst = new $.ui.carousel($("div.demoflow")[0], { height: 200, width: 310 });
 
 		$("div.demoflow-button-left, div.demoflow-button-right").bind("mousedown", function() {
@@ -26,14 +26,14 @@ $(document).ready(function() {
 		.bind("mouseup", function() {
 			window.clearInterval(inst.timer);
 		});
-		
+
 		$('.demoflow div.shadow').hover(function() {
 			this._lastopacity = $(this).css('opacity');
 			$(this).stop().animate({opacity: 0 }, 300); 
 		}, function() {
 			$(this).stop().animate({opacity: this._lastopacity }, 300);
 		});
-		
+
 
 		window.setTimeout(function() {
 			inst.element.animate({ opacity: 1 },2000); inst.rotate(0,2000,0.45);
@@ -47,13 +47,13 @@ $(document).ready(function() {
 	$('a').click(function(){
 		this.blur();
 	});
-	
+
 	// smooth hover effects by DragonInteractive
 	var hover = hoverEffects();
 	hover.init();
 
 });
-	
+
 	$.ui.carousel = function(element, options) {
 
 		this.element = $(element);
@@ -68,41 +68,41 @@ $(document).ready(function() {
 			paddingX: this.element.outerWidth() / 2,
 			paddingY: this.element.outerHeight() / 2
 		});
-		
+
 		$("> *", this.element).css({ position: "absolute", top: 0, left: 0, zIndex: 1 });
 		this.rotate();
 		this.rotate("right");
-		
+
 		this.element.parent().bind("mousewheel", function(event ,delta) {
 			if(self.autoRotator) window.clearInterval(self.autoRotator);
 			self.rotate(delta < 0 ? "right" : "left");
 			return false;
 		});
-		
+
 	};
-	
+
 	$.ui.carousel.prototype.rotate = function(d,ani,speed) {
 
 		this.start = this.start + (d == "right" ? -(speed || 0.03) : (speed || 0.03));
 		var o = this.options;
 		var self = this;
-		
+
 		setTimeout(function(){
 			$("> *", self.element).each(function(i) {
 				var angle = self.start + i * self.step;
 				var x = self.radiusX * Math.cos(angle);
 				var y = self.radiusY * Math.sin(angle);
 				var _self = this;
-				
+
 				var width = o.width * ((self.radiusY+y) / (2 * self.radiusY));
 				width = (width * width * width) / (o.width * o.width); //This makes the pieces smaller
 				var height = parseInt(width * o.height / o.width);
-	
+
 				//This is highly custom - it will hide the elements at the back
 				$(_self).css({ visibility: height < 30 ? "hidden" : "visible" });
 				if(height < 30 && !ani) return; //This imrpoves the speed, but cannot be used with animation
-				
-				
+
+
 				if(ani) {
 					$(_self).animate({
 						top: Math.round(self.paddingY + y - height/2) + "px",
@@ -122,7 +122,7 @@ $(document).ready(function() {
 				}
 
 				$("div.shadow",_self).css({ opacity: 1 - (width / o.width) });
-				
+
 			});
 		}, 0);
 	}
@@ -200,6 +200,6 @@ var hoverEffects = function() {
 			})
 		}
 	};
-	
+
 	return self;
 };

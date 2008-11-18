@@ -300,7 +300,7 @@ var colors = {
 	yellow:[255,255,0],
 	transparent: [255,255,255]
 };
-	
+
 /*
  * jQuery Easing v1.3 - http://gsgd.co.uk/sandbox/jquery/easing/
  *

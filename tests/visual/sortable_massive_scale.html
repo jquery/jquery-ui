@@ -6,11 +6,11 @@
 	<script type="text/javascript" src="../../ui/ui.core.js"></script>
 	<script type="text/javascript" src="../../ui/ui.sortable.js"></script>
 	<script type="text/javascript" src="../../ui/ui.draggable.js"></script>
-	
+
 	<script type="text/javascript">
 
 
-		
+
 		$(document).ready( function() {
 			$('ul').not(".draggable").sortable({  items: "li" });
 			$("ul.draggable li").draggable({ helper: "clone", connectToSortable: "ul" });

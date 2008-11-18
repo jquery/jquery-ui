@@ -226,7 +226,7 @@ test("decimal options", function() {
 	el.simulate("keyup",{keyCode:$.simulate.VK_UP});
 
 	equals(el.val(), "7.0", "keydown 11 times");
-	
+
 });
 
 test("spin without auto-incremental stepping", function() {
@@ -344,7 +344,7 @@ test("currency formats", function() {
 	expect(8);
 
 	// default
-	
+
 	el = $("#spin").spinner({ currency: 'HK$', stepping: 1500.50, start: 1000 });
 
 	equals(el.val(), "HK$1,000.00", "Hong Kong Dollar");
@@ -355,7 +355,7 @@ test("currency formats", function() {
 	equals(el.val(), "HK$2,500.50", "Hong Kong Dollar step-up once");
 
 	// space and comma
-	
+
 	el.spinner('destroy').val('').spinner({ currency: '$', group: ' ', point: '.', stepping: 1500.50, start: 1000 });
 
 	equals(el.val(), "$1 000.00", "Australian Dollar");
@@ -366,7 +366,7 @@ test("currency formats", function() {
 	equals(el.val(), "$2 500.50", "Australian Dollar step-up once");
 
 	// apos and point
-	
+
 	el.spinner('destroy').val('').spinner({ currency: 'Fr ', group: "'", point: '.', stepping: 1500.50, start: 1000 });
 
 	equals(el.val(), "Fr 1'000.00", "Swiss Franc");
@@ -375,9 +375,9 @@ test("currency formats", function() {
 		.simulate("keyup",{keyCode:$.simulate.VK_UP});
 
 	equals(el.val(), "Fr 2'500.50", "Swiss Franc step-up once");
-	
+
 	// point and comma
-	
+
 	el.spinner('destroy').val('').spinner({ currency: 'RUB', group: ".", point: ',', stepping: 1.5, start: 1000 });
 
 	equals(el.val(), "RUB1.000,00", "Russian Ruble");
@@ -386,7 +386,7 @@ test("currency formats", function() {
 		.simulate("keyup",{keyCode:$.simulate.VK_UP});
 
 	equals(el.val(), "RUB1.001,50", "Russian Ruble step-up once");
-	
+
 
 });
 

@@ -36,7 +36,7 @@ $.effects.bounce = function(o) {
 		if (mode == 'show') el.css('opacity', 0).css(ref, motion == 'pos' ? -distance : distance); // Shift
 		if (mode == 'hide') distance = distance / (times * 2);
 		if (mode != 'hide') times--;
-		
+
 		// Animate
 		if (mode == 'show') { // Show Bounce
 			var animation = {opacity: 1};
@@ -72,7 +72,7 @@ $.effects.bounce = function(o) {
 		el.queue('fx', function() { el.dequeue(); });
 		el.dequeue();
 	});
-	
+
 };
 
 })(jQuery);

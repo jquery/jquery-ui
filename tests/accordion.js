@@ -133,7 +133,7 @@ test("accessibility", function () {
 	expect(9);
 	var ac = $('#list1').accordion().accordion("activate", 1);
 	var headers = $(".ui-accordion-header");
-		
+
 	equals( headers.eq(1).attr("tabindex"), "0", "active header should have tabindex=0");
 	equals( headers.eq(0).attr("tabindex"), "-1", "inactive header should have tabindex=-1");
 	equals( ac.attr("role"), "tablist", "main role");

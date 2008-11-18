@@ -55,7 +55,7 @@ test("init", function() {
 test("destroy", function() {
 	expect(6);
 
-	$("<div></div>").appendTo('body').droppable().droppable("destroy").remove();	
+	$("<div></div>").appendTo('body').droppable().droppable("destroy").remove();
 	ok(true, '.droppable("destroy") called on element');
 
 	$([]).droppable().droppable("destroy");

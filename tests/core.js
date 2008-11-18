@@ -7,7 +7,7 @@ module("selectors");
 
 test("tabbable - enabled elements", function() {
 	expect(10);
-	
+
 	ok( $('#input1-1').is(':tabbable'), 'input, no type');
 	ok( $('#input1-2').is(':tabbable'), 'input, type text');
 	ok( $('#input1-3').is(':tabbable'), 'input, type checkbox');
@@ -22,7 +22,7 @@ test("tabbable - enabled elements", function() {
 
 test("tabbable - disabled elements", function() {
 	expect(8);
-	
+
 	ok(!$('#input2-1').is(':tabbable'), 'input, no type');
 	ok(!$('#input2-2').is(':tabbable'), 'input, type text');
 	ok(!$('#input2-3').is(':tabbable'), 'input, type checkbox');
@@ -35,7 +35,7 @@ test("tabbable - disabled elements", function() {
 
 test("tabbable - hidden styles", function() {
 	expect(6);
-	
+
 	ok(!$('#input3-1').is(':tabbable'), 'input, hidden wrapper - display: none');
 	ok(!$('#anchor3-1').is(':tabbable'), 'anchor, hidden wrapper - display: none');
 	ok(!$('#input3-2').is(':tabbable'), 'input, hidden wrapper - visibility: hidden');
@@ -46,7 +46,7 @@ test("tabbable - hidden styles", function() {
 
 test("tabbable - tabindex", function() {
 	expect(4);
-	
+
 	ok( $('#input4-1').is(':tabbable'), 'input, tabindex 0');
 	ok( $('#input4-2').is(':tabbable'), 'input, tabindex 10');
 	ok(!$('#input4-3').is(':tabbable'), 'input, tabindex -1');
@@ -57,20 +57,20 @@ module('jQuery extensions');
 
 test("attr - aria", function() {
 	expect(6);
-	
+
 	var el = $('#aria');
-	
+
 	ok(!el.attr('role'), 'role is empty via attr');
 	equals(el.attr('role', 'tablist').attr('role'), 'tablist', 'role is tablist');
-	
+
 	equals(el.attr('aria-expanded'), undefined, 'aria expanded is undefined');
-	
+
 	el.attr('aria-expanded', true);
 	equals(el.attr('aria-expanded'), 'true', 'aria expanded is true');
-	
+
 	el.removeAttr('aria-expanded');
 	equals(el.attr('aria-expanded'), undefined, 'aria expanded is undefined after removing');
-	
+
 	el.attr('aria-expanded', false);
 	equals(el.attr('aria-expanded'), 'false', 'aria expanded is false');
 });

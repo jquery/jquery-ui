@@ -15,11 +15,11 @@
 $.widget("ui.selectable", $.extend({}, $.ui.mouse, {
 	_init: function() {
 		var self = this;
-		
+
 		this.element.addClass("ui-selectable");
-		
+
 		this.dragged = false;
-		
+
 		// cache selectee children based on filter
 		var selectees;
 		this.refresh = function() {
@@ -42,11 +42,11 @@ $.widget("ui.selectable", $.extend({}, $.ui.mouse, {
 			});
 		};
 		this.refresh();
-		
+
 		this.selectees = selectees.addClass("ui-selectee");
-		
+
 		this._mouseInit();
-		
+
 		this.helper = $(document.createElement('div'))
 			.css({border:'1px dotted black'})
 			.addClass("ui-selectable-helper");
@@ -67,22 +67,22 @@ $.widget("ui.selectable", $.extend({}, $.ui.mouse, {
 	},
 	_mouseStart: function(event) {
 		var self = this;
-		
+
 		this.opos = [event.pageX, event.pageY];
-		
+
 		if (this.options.disabled)
 			return;
-		
+
 		var options = this.options;
-		
+
 		this.selectees = $(options.filter, this.element[0]);
-		
+
 		// selectable START callback
 		this.element.triggerHandler("selectablestart", [event, {
 			"selectable": this.element[0],
 			"options": options
 		}], options.start);
-		
+
 		$('body').append(this.helper);
 		// position helper (lasso)
 		this.helper.css({
@@ -93,11 +93,11 @@ $.widget("ui.selectable", $.extend({}, $.ui.mouse, {
 			"width": 0,
 			"height": 0
 		});
-		
+
 		if (options.autoRefresh) {
 			this.refresh();
 		}
-		
+
 		this.selectees.filter('.ui-selected').each(function() {
 			var selectee = $.data(this, "selectable-item");
 			selectee.startselected = true;
@@ -114,7 +114,7 @@ $.widget("ui.selectable", $.extend({}, $.ui.mouse, {
 				}], options.unselecting);
 			}
 		});
-		
+
 		var isSelectee = false;
 		$(event.target).parents().andSelf().each(function() {
 			if($.data(this, "selectable-item")) isSelectee = true;
@@ -124,17 +124,17 @@ $.widget("ui.selectable", $.extend({}, $.ui.mouse, {
 	_mouseDrag: function(event) {
 		var self = this;
 		this.dragged = true;
-		
+
 		if (this.options.disabled)
 			return;
-		
+
 		var options = this.options;
-		
+
 		var x1 = this.opos[0], y1 = this.opos[1], x2 = event.pageX, y2 = event.pageY;
 		if (x1 > x2) { var tmp = x2; x2 = x1; x1 = tmp; }
 		if (y1 > y2) { var tmp = y2; y2 = y1; y1 = tmp; }
 		this.helper.css({left: x1, top: y1, width: x2-x1, height: y2-y1});
-		
+
 		this.selectees.each(function() {
 			var selectee = $.data(this, "selectable-item");
 			//prevent helper from being selected if appendTo: selectable
@@ -146,7 +146,7 @@ $.widget("ui.selectable", $.extend({}, $.ui.mouse, {
 			} else if (options.tolerance == 'fit') {
 				hit = (selectee.left > x1 && selectee.right < x2 && selectee.top > y1 && selectee.bottom < y2);
 			}
-			
+
 			if (hit) {
 				// SELECT
 				if (selectee.selected) {
@@ -207,16 +207,16 @@ $.widget("ui.selectable", $.extend({}, $.ui.mouse, {
 				}
 			}
 		});
-		
+
 		return false;
 	},
 	_mouseStop: function(event) {
 		var self = this;
-		
+
 		this.dragged = false;
-		
+
 		var options = this.options;
-		
+
 		$('.ui-unselecting', this.element[0]).each(function() {
 			var selectee = $.data(this, "selectable-item");
 			selectee.$element.removeClass('ui-unselecting');
@@ -244,9 +244,9 @@ $.widget("ui.selectable", $.extend({}, $.ui.mouse, {
 			selectable: self.element[0],
 			options: this.options
 		}], this.options.stop);
-		
+
 		this.helper.remove();
-		
+
 		return false;
 	}
 }));

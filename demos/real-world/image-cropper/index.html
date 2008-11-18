@@ -9,7 +9,7 @@
 	<script type="text/javascript" src="../../../ui/ui.core.js"></script>
 	<script type="text/javascript" src="../../../ui/ui.resizable.js"></script>
 	<script type="text/javascript" src="../../../ui/ui.draggable.js"></script>
-	
+
 	<script type="text/javascript" src="../../../ui/effects.core.js"></script>
 	<script type="text/javascript" src="../../../ui/effects.bounce.js"></script>
 	<script type="text/javascript" src="../../../ui/effects.scale.js"></script>
@@ -112,7 +112,7 @@
 		//animate:true,
 
 		handles: 'all',
-		
+
 		knobHandles: true,
 
 		//transparent: true,
@@ -127,9 +127,9 @@
 
 		resize: function(event, ui) {
 			var self = $(this).data("resizable");
-			
+
   			this.style.backgroundPosition = '-' + (self.position.left) + 'px -' + (self.position.top) + 'px';
-			
+
 
 			$("#log-top").html(self.position.top+"px");
 			$("#log-left").html(self.position.left+"px");

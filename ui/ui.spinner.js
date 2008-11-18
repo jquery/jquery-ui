@@ -15,7 +15,7 @@
 $.widget('ui.spinner', {
 	_init: function() {
 		this._trigger('init', null, this.ui(null));
-		
+
 		// perform data bind on generic objects
 		if (typeof this.options.items[0] == 'object' && !this.element.is('input')) {
 			var data = this.options.items;
@@ -23,22 +23,22 @@ $.widget('ui.spinner', {
 				this._addItem(data[i]);
 			}
 		}
-		
+
 		// check for decimals in steppinng and set _decimals as internal
 		this._decimals = parseInt(this.options.decimals, 10);
 		if (this.options.stepping.toString().indexOf('.') != -1 && this._decimals == 0) {
 			var s = this.options.stepping.toString();
 			this._decimals = s.slice(s.indexOf('.')+1, s.length).length;
 		}
-		
+
 		//Initialize needed constants
 		var self = this;
 		this.element
 			.addClass('ui-spinner-box')
 			.attr('autocomplete', 'off'); // switch off autocomplete in opera
-		
+
 		this._setValue( isNaN(this._getValue()) ? this.options.start : this._getValue() );
-		
+
 		this.element
 		.wrap('<div>')
 		.parent()
@@ -137,7 +137,7 @@ $.widget('ui.spinner', {
 					self._propagate('change', event);
 				})
 			.end();
-		
+
 		// Give the spinner casing a unique id only if one exists in original input 
 		// - this should aid targetted customisations if a page contains multiple instances
 		this.element.attr('id', function(){
@@ -145,7 +145,7 @@ $.widget('ui.spinner', {
 				$(this).parent().attr('id', this.id+'-ui-spinner');
 			}
 		});
-		
+
 		// DataList: Set contraints for object length and step size. 
 		// Manipulate height of spinner.
 		this._items = this.element.children().length;
@@ -166,7 +166,7 @@ $.widget('ui.spinner', {
 			this.options.min = 0;
 			this.options.max = this._items-1;
 		}
-		
+
 		this.element
 		.bind('keydown.spinner', function(event) {
 			if (!self.counter) {
@@ -181,14 +181,14 @@ $.widget('ui.spinner', {
 		.bind('blur.spinner', function(event) {
 			self._cleanUp();
 		});
-		
+
 		if ($.fn.mousewheel) {
 			this.element.mousewheel(function(event, delta) {
 				self._mousewheel(event, delta);
 			});
 		}
 	},
-	
+
 	_constrain: function() {
 		if (this.options.min != undefined && this._getValue() < this.options.min) {
 			this._setValue(this.options.min);
@@ -205,7 +205,7 @@ $.widget('ui.spinner', {
 		if (this.disabled) {
 			return;
 		}
-		
+
 		if (isNaN(this._getValue())) {
 			this._setValue(this.options.start);
 		}
@@ -250,7 +250,7 @@ $.widget('ui.spinner', {
 	},
 	_keydown: function(event) {
 		var KEYS = $.keyCode;
-		
+
 		if (event.keyCode == KEYS.UP) {
 			this._up(event);
 		}
@@ -314,10 +314,10 @@ $.widget('ui.spinner', {
 				wrapper = 'li';
 			}
 			var html = obj; // string or object set it to html first
-			
+
 			if (typeof obj == 'object') {
 				var format = (fmt !== undefined ? fmt : this.options.format);
-				
+
 				html = format.replace(/%(\(([^)]+)\))?/g, 
 					(function(data){
 						return function(match, a, lbl) { 
@@ -335,7 +335,7 @@ $.widget('ui.spinner', {
 			this.element.append('<'+ wrapper +' class="ui-spinner-dyn">'+ html + '</'+ wrapper +'>');
 		}
 	},
-	
+
 	plugins: {},
 	ui: function(event) {
 		return {

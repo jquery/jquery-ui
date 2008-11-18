@@ -117,15 +117,15 @@ $(window).bind('load', function() {
 			.displayBox();
 		return false;
 	});
-	
-	
+
+
 	var sliderChange = function(event, ui){
 		$('.img_content').each(function(index, item){
 			var _new = 1.44	* $('#sliderSize').slider("value");
-			
+
 			$(this).css("width", _new+'px')
 				.parent().css("width", (_new+16)+'px');
-			
+
 		});
 	}
 	$('#sliderSize').slider({
@@ -136,7 +136,7 @@ $(window).bind('load', function() {
 		slide : sliderChange,
 		change : sliderChange
 	});
-	
+
 });
 
 function createGalleryItem(img) {

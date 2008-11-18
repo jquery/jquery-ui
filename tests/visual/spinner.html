@@ -20,7 +20,7 @@ $(function(){
 			}
 		};
 	}
-	
+
 	var itemList = [
 		{url: "http://ejohn.org", title: "John Resig"},
 		{url: "http://bassistance.de/", title: "J&ouml;rn Zaefferer"},
@@ -36,7 +36,7 @@ $(function(){
 		{url: "http://www.codylindley.com/", title: "Cody Lindley"},
 		{url: "http://malsup.com/jquery/", title: "Mike Alsup"}
 	];
-	
+
 	var opts = {
 		's1': {},
 		's2': {stepping: 0.25},
@@ -52,7 +52,7 @@ $(function(){
 					ui.add('<a href="'+ itemList[i].url +'" target="_blank">'+ itemList[i].title +'</a>');
 				}
 			},
-			
+
 			// method 2: use the format and items options in combination
 			format: '%(title) <a href="%(url)" target="_blank">&raquo;</a>',
 			items: itemList

@@ -114,24 +114,24 @@ module("dialog");
 
 test("init", function() {
 	expect(6);
-	
+
 	$("<div></div>").appendTo('body').dialog().remove();
 	ok(true, '.dialog() called on element');
-	
+
 	$([]).dialog().remove();
 	ok(true, '.dialog() called on empty collection');
-	
+
 	$('<div></div>').dialog().remove();
 	ok(true, '.dialog() called on disconnected DOMElement');
-	
+
 	$('<div></div>').dialog().dialog("foo").remove();
 	ok(true, 'arbitrary method called after init');
-	
+
 	el = $('<div></div>').dialog();
 	var foo = el.data("foo.dialog");
 	el.remove();
 	ok(true, 'arbitrary option getter after init');
-	
+
 	$('<div></div>').dialog().data("foo.dialog", "bar").remove();
 	ok(true, 'arbitrary option setter after init');
 });
@@ -193,22 +193,22 @@ test("defaults", function() {
 
 test("title id", function() {
 	expect(3);
-	
+
 	var titleId;
-	
+
 	// reset the uuid so we know what values to expect
 	$.ui.dialog.uuid = 0;
-	
+
 	el = $('<div></div>').dialog();
 	titleId = dlg().find('.ui-dialog-title').attr('id');
 	equals(titleId, 'ui-dialog-title-1', 'auto-numbered title id');
 	el.remove();
-	
+
 	el = $('<div></div>').dialog();
 	titleId = dlg().find('.ui-dialog-title').attr('id');
 	equals(titleId, 'ui-dialog-title-2', 'auto-numbered title id');
 	el.remove();
-	
+
 	el = $('<div id="foo"/>').dialog();
 	titleId = dlg().find('.ui-dialog-title').attr('id');
 	equals(titleId, 'ui-dialog-title-foo', 'carried over title id');
@@ -219,11 +219,11 @@ module("dialog: Options");
 
 test("autoOpen", function() {
 	expect(2);
-	
+
 	el = $('<div></div>').dialog({ autoOpen: false });
 		isNotOpen('.dialog({ autoOpen: false })');
 	el.remove();
-	
+
 	el = $('<div></div>').dialog({ autoOpen: true });
 		isOpen('.dialog({ autoOpen: true })');
 	el.remove();
@@ -231,12 +231,12 @@ test("autoOpen", function() {
 
 test("autoResize", function() {
 	expect(2);
-	
+
 	var actual,
 		before,
 		expected,
 		handle;
-	
+
 	el = $('<div>content<br>content<br>content<br>content<br>content</div>').dialog({ autoResize: false });
 		expected = { height: el.height() };
 		handle = $(".ui-resizable-se", dlg());
@@ -256,7 +256,7 @@ test("autoResize", function() {
 
 test("buttons", function() {
 	expect(17);
-	
+
 	var buttons = {
 		"Ok": function(ev, ui) {
 			ok(true, "button click fires callback");
@@ -269,20 +269,20 @@ test("buttons", function() {
 			equals(ev.target, btn[1], "event target");
 		}
 	};
-	
+
 	el = $('<div></div>').dialog({ buttons: buttons });
 	var btn = $("button", dlg());
 	equals(btn.length, 2, "number of buttons");
-	
+
 	var i = 0;
 	$.each(buttons, function(key, val) {
 		equals(btn.eq(i).text(), key, "text of button " + (i+1));
 		i++;
 	});
-	
+
 	equals(btn.parent().attr('className'), 'ui-dialog-buttonpane', "buttons in container");
 	btn.trigger("click");
-	
+
 	var newButtons = {
 		"Close": function(ev, ui) {
 			ok(true, "button click fires callback");
@@ -290,35 +290,35 @@ test("buttons", function() {
 			equals(ev.target, btn[0], "event target");
 		}
 	};
-	
+
 	equals(el.data("buttons.dialog"), buttons, '.data("buttons.dialog") getter');
 	el.data("buttons.dialog", newButtons);
 	equals(el.data("buttons.dialog"), newButtons, '.data("buttons.dialog", ...) setter');
-	
+
 	btn = $("button", dlg());
 	equals(btn.length, 1, "number of buttons after setter");
 	btn.trigger('click');
-	
+
 	i = 0;
 	$.each(newButtons, function(key, val) {
 		equals(btn.eq(i).text(), key, "text of button " + (i+1));
 		i += 1;
 	});
-	
+
 	el.remove();
 });
 
 test("dialogClass", function() {
 	expect(4);
-	
+
 	el = $('<div></div>').dialog();
 		equals(dlg().is(".foo"), false, 'dialogClass not specified. foo class added');
 	el.remove();
-	
+
 	el = $('<div></div>').dialog({ dialogClass: "foo" });
 		equals(dlg().is(".foo"), true, 'dialogClass in init. foo class added');
 	el.remove();
-	
+
 	el = $('<div></div>').dialog({ dialogClass: "foo bar" });
 		equals(dlg().is(".foo"), true, 'dialogClass in init, two classes. foo class added');
 		equals(dlg().is(".bar"), true, 'dialogClass in init, two classes. bar class added');
@@ -327,13 +327,13 @@ test("dialogClass", function() {
 
 test("draggable", function() {
 	expect(4);
-	
+
 	el = $('<div></div>').dialog({ draggable: false });
 		shouldnotmove();
 		el.data('draggable.dialog', true);
 		shouldmove();
 	el.remove();
-	
+
 	el = $('<div></div>').dialog({ draggable: true });
 		shouldmove();
 		el.data('draggable.dialog', false);
@@ -343,15 +343,15 @@ test("draggable", function() {
 
 test("height", function() {
 	expect(3);
-	
+
 	el = $('<div></div>').dialog();
 		equals(dlg().height(), defaults.height, "default height");
 	el.remove();
-	
+
 	el = $('<div></div>').dialog({ height: 437 });
 		equals(dlg().height(), 437, "explicit height");
 	el.remove();
-	
+
 	el = $('<div></div>').dialog();
 		el.data('height.dialog', 438);
 		equals(dlg().height(), 438, "explicit height set after init");
@@ -360,17 +360,17 @@ test("height", function() {
 
 test("maxHeight", function() {
 	expect(3);
-	
+
 	el = $('<div></div>').dialog({ maxHeight: 400 });
 		drag('.ui-resizable-s', 1000, 1000);
 		equals(heightAfter, 400, "maxHeight");
 	el.remove();
-	
+
 	el = $('<div></div>').dialog({ maxHeight: 400 });
 		drag('.ui-resizable-n', -1000, -1000);
 		equals(heightAfter, 400, "maxHeight");
 	el.remove();
-	
+
 	el = $('<div></div>').dialog({ maxHeight: 400 }).data('maxHeight.dialog', 600);
 		drag('.ui-resizable-n', -1000, -1000);
 		equals(heightAfter, 600, "maxHeight");
@@ -379,17 +379,17 @@ test("maxHeight", function() {
 
 test("maxWidth", function() {
 	expect(3);
-	
+
 	el = $('<div></div>').dialog({ maxWidth: 400 });
 		drag('.ui-resizable-e', 1000, 1000);
 		equals(widthAfter, 400, "maxWidth");
 	el.remove();
-	
+
 	el = $('<div></div>').dialog({ maxWidth: 400 });
 		drag('.ui-resizable-w', -1000, -1000);
 		equals(widthAfter, 400, "maxWidth");
 	el.remove();
-	
+
 	el = $('<div></div>').dialog({ maxWidth: 400 }).data('maxWidth.dialog', 600);
 		drag('.ui-resizable-w', -1000, -1000);
 		equals(widthAfter, 600, "maxWidth");
@@ -398,17 +398,17 @@ test("maxWidth", function() {
 
 test("minHeight", function() {
 	expect(3);
-	
+
 	el = $('<div></div>').dialog({ minHeight: 10 });
 		drag('.ui-resizable-s', -1000, -1000);
 		equals(heightAfter, 10, "minHeight");
 	el.remove();
-	
+
 	el = $('<div></div>').dialog({ minHeight: 10 });
 		drag('.ui-resizable-n', 1000, 1000);
 		equals(heightAfter, 10, "minHeight");
 	el.remove();
-	
+
 	el = $('<div></div>').dialog({ minHeight: 10 }).data('minHeight.dialog', 30);
 		drag('.ui-resizable-n', 1000, 1000);
 		equals(heightAfter, 30, "minHeight");
@@ -417,17 +417,17 @@ test("minHeight", function() {
 
 test("minWidth", function() {
 	expect(3);
-	
+
 	el = $('<div></div>').dialog({ minWidth: 10 });
 		drag('.ui-resizable-e', -1000, -1000);
 		equals(widthAfter, 10, "minWidth");
 	el.remove();
-	
+
 	el = $('<div></div>').dialog({ minWidth: 10 });
 		drag('.ui-resizable-w', 1000, 1000);
 		equals(widthAfter, 10, "minWidth");
 	el.remove();
-	
+
 	el = $('<div></div>').dialog({ minWidth: 30 }).data('minWidth.dialog', 30);
 		drag('.ui-resizable-w', 1000, 1000);
 		equals(widthAfter, 30, "minWidth");
@@ -448,13 +448,13 @@ test("position", function() {
 
 test("resizable", function() {
 	expect(4);
-	
+
 	el = $('<div></div>').dialog();
 		shouldresize("[default]");
 		el.data('resizable.dialog', false);
 		shouldnotresize('disabled after init');
 	el.remove();
-	
+
 	el = $('<div></div>').dialog({ resizable: false });
 		shouldnotresize("disabled in init options");
 		el.data('resizable.dialog', true);
@@ -468,27 +468,27 @@ test("stack", function() {
 
 test("title", function() {
 	expect(5);
-	
+
 	function titleText() {
 		return dlg().find(".ui-dialog-title").html();
 	}
-	
+
 	el = $('<div></div>').dialog();
 		equals(titleText(), "&nbsp;", "[default]");
 	el.remove();
-	
+
 	el = $('<div title="foo"/>').dialog();
 		equals(titleText(), "foo", "title in element attribute");
 	el.remove();
-	
+
 	el = $('<div></div>').dialog({ title: 'foo' });
 		equals(titleText(), "foo", "title in init options");
 	el.remove();
-	
+
 	el = $('<div title="foo"/>').dialog({ title: 'bar' });
 		equals(titleText(), "bar", "title in init options should override title in element attribute");
 	el.remove();
-	
+
 	el = $('<div></div>').dialog().data('title.dialog', 'foo');
 		equals(titleText(), 'foo', 'title after init');
 	el.remove();
@@ -496,11 +496,11 @@ test("title", function() {
 
 test("width", function() {
 	expect(3);
-	
+
 	el = $('<div></div>').dialog();
 		equals(dlg().width(), defaults.width, "default width");
 	el.remove();
-	
+
 	el = $('<div></div>').dialog({width: 437 });
 		equals(dlg().width(), 437, "explicit width");
 		el.data('width.dialog', 438);
@@ -512,13 +512,13 @@ module("dialog: Methods");
 
 test("isOpen", function() {
 	expect(4);
-	
+
 	el = $('<div></div>').dialog();
 	equals(el.dialog('isOpen'), true, "dialog is open after init");
 	el.dialog('close');
 	equals(el.dialog('isOpen'), false, "dialog is closed");
 	el.remove();
-	
+
 	el = $('<div></div>').dialog({autoOpen: false});
 	equals(el.dialog('isOpen'), false, "dialog is closed after init");
 	el.dialog('open');
@@ -530,7 +530,7 @@ module("dialog: Callbacks");
 
 test("open", function() {
 	expect(6);
-	
+
 	el = $("<div></div>");
 	el.dialog({
 		open: function(ev, ui) {
@@ -539,7 +539,7 @@ test("open", function() {
 		}
 	});
 	el.remove();
-	
+
 	el = $("<div></div>");
 	el.dialog({
 		autoOpen: false,
@@ -550,7 +550,7 @@ test("open", function() {
 	});
 	el.dialog("open");
 	el.remove();
-	
+
 	el = $('<div></div>').dialog({
 		autoOpen: false
 	});
@@ -564,7 +564,7 @@ test("open", function() {
 
 test("dragStart", function() {
 	expect(2);
-	
+
 	el = $("<div></div>");
 	el.dialog({
 		dragStart: function(ev, ui) {
@@ -579,7 +579,7 @@ test("dragStart", function() {
 
 test("drag", function() {
 	var fired = false;
-	
+
 	el = $("<div></div>");
 	el.dialog({
 		drag: function(ev, ui) {
@@ -595,7 +595,7 @@ test("drag", function() {
 
 test("dragStop", function() {
 	expect(2);
-	
+
 	el = $("<div></div>");
 	el.dialog({
 		dragStop: function(ev, ui) {
@@ -610,7 +610,7 @@ test("dragStop", function() {
 
 test("resizeStart", function() {
 	expect(2);
-	
+
 	el = $("<div></div>");
 	el.dialog({
 		resizeStart: function(ev, ui) {
@@ -625,7 +625,7 @@ test("resizeStart", function() {
 
 test("resize", function() {
 	var fired = false;
-	
+
 	el = $("<div></div>");
 	el.dialog({
 		resize: function(ev, ui) {
@@ -641,7 +641,7 @@ test("resize", function() {
 
 test("resizeStop", function() {
 	expect(2);
-	
+
 	el = $("<div></div>");
 	el.dialog({
 		resizeStop: function(ev, ui) {
@@ -656,7 +656,7 @@ test("resizeStop", function() {
 
 test("close", function() {
 	expect(4);
-	
+
 	el = $('<div></div>').dialog({
 		close: function(ev, ui) {
 			ok(true, '.dialog("close") fires close callback');
@@ -665,7 +665,7 @@ test("close", function() {
 	});
 	el.dialog("close");
 	el.remove();
-	
+
 	el = $('<div></div>').dialog().bind('dialogclose', function(ev, ui) {
 		ok(true, '.dialog("close") firse dialogclose event');
 		equals(this, el[0], 'context of event');
@@ -676,7 +676,7 @@ test("close", function() {
 
 test("beforeclose", function() {
 	expect(6);
-	
+
 	el = $('<div></div>').dialog({
 		beforeclose: function(ev, ui) {
 			ok(true, '.dialog("close") fires beforeclose callback');
@@ -687,7 +687,7 @@ test("beforeclose", function() {
 	el.dialog('close');
 	isOpen('beforeclose callback should prevent dialog from closing');
 	el.remove();
-	
+
 	el = $('<div></div>').dialog().bind('dialogbeforeclose', function(ev, ui) {
 		ok(true, '.dialog("close") triggers dialogbeforeclose event');
 		equals(this, el[0], "context of event");

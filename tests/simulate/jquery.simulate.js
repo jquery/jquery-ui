@@ -23,7 +23,7 @@ $.fn.extend({
 $.simulate = function(el, type, options) {
 	this.target = el;
 	this.options = options;
-	
+
 	if (/^drag$/.test(type)) {
 		this[type].apply(this, [this.target, options]);
 	} else {
@@ -52,9 +52,9 @@ $.extend($.simulate.prototype, {
 			ctrlKey: false, altKey: false, shiftKey: false, metaKey: false,
 			button: 0, relatedTarget: undefined
 		}, options);
-		
+
 		var relatedTarget = $(e.relatedTarget)[0];
-		
+
 		if ($.isFunction(document.createEvent)) {
 			evt = document.createEvent("MouseEvents");
 			evt.initMouseEvent(type, e.bubbles, e.cancelable, e.view, e.detail,
@@ -70,12 +70,12 @@ $.extend($.simulate.prototype, {
 	},
 	keyboardEvent: function(type, options) {
 		var evt;
-		
+
 		var e = $.extend({ bubbles: true, cancelable: true, view: window,
 			ctrlKey: false, altKey: false, shiftKey: false, metaKey: false,
 			keyCode: 0, charCode: 0
 		}, options);
-		
+
 		if ($.isFunction(document.createEvent)) {
 			try {
 				evt = document.createEvent("KeyEvents");
@@ -100,7 +100,7 @@ $.extend($.simulate.prototype, {
 		}
 		return evt;
 	},
-	
+
 	dispatchEvent: function(el, type, evt) {
 		if (el.dispatchEvent) {
 			el.dispatchEvent(evt);
@@ -109,7 +109,7 @@ $.extend($.simulate.prototype, {
 		}
 		return evt;
 	},
-	
+
 	drag: function(el) {
 		var self = this, center = this.findCenter(this.target), 
 			options = this.options,	x = Math.floor(center.x), y = Math.floor(center.y), 

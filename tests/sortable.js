@@ -94,7 +94,7 @@ test("enable", function() {
 	el = $("#sortable").sortable({ disabled: true });
 
 	sort($("li", el)[0], 0, 40, 0, '.sortable({ disabled: true })');
-	
+
 	el.sortable("enable");
 	equals(el.data("disabled.sortable"), false, "disabled.sortable getter");
 
@@ -102,7 +102,7 @@ test("enable", function() {
 	el.sortable({ disabled: true });
 	el.data("disabled.sortable", false);
 	equals(el.data("disabled.sortable"), false, "disabled.sortable setter");
-	
+
 	sort($("li", el)[0], 0, 40, 2, '.data("disabled.sortable", false)');
 });
 
@@ -133,12 +133,12 @@ test("defaults", function() {
 });
 
 test("#3019: Stop fires too early", function() {
-	
+
 	var helper = null;
 	el = $("#sortable").sortable({ stop: function(event, ui) {
 		helper = ui.helper;
 	}});
-	
+
 	sort($("li", el)[0], 0, 40, 2, 'Dragging the sortable');
 	equals(helper, null, "helper should be false");
 

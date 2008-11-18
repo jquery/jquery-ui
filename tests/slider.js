@@ -54,24 +54,24 @@ module("slider");
 
 test("init", function() {
 	expect(6);
-	
+
 	$("<div></div>").appendTo('body').slider().remove();
 	ok(true, '.slider() called on element');
-	
+
 	$([]).slider().remove();
 	ok(true, '.slider() called on empty collection');
-	
+
 	$('<div></div>').slider().remove();
 	ok(true, '.slider() called on disconnected DOMElement');
-	
+
 	$('<div></div>').slider().slider("foo").remove();
 	ok(true, 'arbitrary method called after init');
-	
+
 	el = $('<div></div>').slider();
 	var foo = el.data("foo.slider");
 	el.remove();
 	ok(true, 'arbitrary option getter after init');
-	
+
 	$('<div></div>').slider().data("foo.slider", "bar").remove();
 	ok(true, 'arbitrary option setter after init');
 });
@@ -166,12 +166,12 @@ test("destroy and recreate", function() {
 	slider.slider("moveTo", "+=20");
 	equals(slider.slider("value"), 20);
 	slider.slider("destroy");
-	
+
 	slider.slider("moveTo", "+=30");
 	ok(true, "nothing happens after slider is destroyed");
-	
+
 	slider.slider().slider("moveTo", "30");
-	
+
 	equals(Math.round(slider.slider("value")), 30);
 })
 

@@ -15,7 +15,7 @@
 $.widget("ui.accordion", {
 	_init: function() {
 		var options = this.options;
-		
+
 		if ( options.navigation ) {
 			var current = this.element.find("a").filter(options.navigationFilter);
 			if ( current.length ) {
@@ -27,23 +27,23 @@ $.widget("ui.accordion", {
 				}
 			}
 		}
-		
+
 		// calculate active if not specified, using the first header
 		options.headers = this.element.find(options.header);
 		options.active = findActive(options.headers, options.active);
-		
+
 		// IE7-/Win - Extra vertical space in Lists fixed
 		if ($.browser.msie) {
 			this.element.find('a').css('zoom', '1');
 		}
-		
+
 		if (!this.element.hasClass("ui-accordion")) {
 			this.element.addClass("ui-accordion");
 			$('<span class="ui-accordion-left"/>').insertBefore(options.headers);
 			$('<span class="ui-accordion-right"/>').appendTo(options.headers);
 			options.headers.addClass("ui-accordion-header");
 		}
-		
+
 		var maxHeight;
 		if ( options.fillSpace ) {
 			maxHeight = this.element.parent().height();
@@ -60,7 +60,7 @@ $.widget("ui.accordion", {
 				maxHeight = Math.max(maxHeight, $(this).outerHeight());
 			}).height(maxHeight);
 		}
-				
+
 		this.element.attr('role','tablist');
 
 		var self=this;
@@ -69,14 +69,14 @@ $.widget("ui.accordion", {
 			.bind('keydown', function(event) { return self._keydown(event); })
 			.next()
 			.attr('role','tabpanel');
-		
+
 		options.headers
 			.not(options.active || "")
 			.attr('aria-expanded','false')
 			.attr("tabIndex", "-1")
 			.next()
 			.hide();
-			
+
 		// make sure at least one header is in the tab order
 		if (!options.active.length) {
 			options.headers.eq(0).attr('tabIndex','0');
@@ -86,26 +86,26 @@ $.widget("ui.accordion", {
 				.attr("tabIndex", "0")
 				.parent().andSelf().addClass(options.selectedClass);
 		}
-		
+
 		// only need links in taborder for Safari
 		if (!$.browser.safari)
 			options.headers.find('a').attr('tabIndex','-1');
-		
+
 		if (options.event) {
 			this.element.bind((options.event) + ".accordion", clickHandler);
 		}
 	},
-	
+
 	_keydown: function(event) {
 		if (this.options.disabled || event.altKey || event.ctrlKey)
 			return;
 
 		var keyCode = $.keyCode;
-		
+
 		var length = this.options.headers.length;
 		var currentIndex = this.options.headers.index(event.target);
 		var toFocus = false;
-		
+
 		switch(event.keyCode) {
 			case keyCode.RIGHT:
 			case keyCode.DOWN:
@@ -119,7 +119,7 @@ $.widget("ui.accordion", {
 			case keyCode.ENTER:
 				return clickHandler.call(this.element[0], { target: event.target });
 		}
-		
+
 		if (toFocus) {
 			$(event.target).attr('tabIndex','-1');
 			$(toFocus).attr('tabIndex','0');
@@ -129,14 +129,14 @@ $.widget("ui.accordion", {
 
 		return true;
 	},
-	
+
 	activate: function(index) {
 		// call clickHandler with custom event
 		clickHandler.call(this.element[0], {
 			target: findActive( this.options.headers, index )[0]
 		});
 	},
-	
+
 	destroy: function() {
 		this.options.headers.parent().andSelf().removeClass(this.options.selectedClass);
 		this.options.headers.prev(".ui-accordion-left").remove();
@@ -146,7 +146,7 @@ $.widget("ui.accordion", {
 			this.options.headers.next().css("height", "");
 		}
 		$.removeData(this.element[0], "accordion");
-		
+
 		this.element.removeClass("ui-accordion").unbind(".accordion");
 	}
 });
@@ -162,7 +162,7 @@ function completed(cancel) {
 	if (!$.data(this, "accordion")) {
 		return;
 	}
-	
+
 	var instance = $.data(this, "accordion");
 	var options = instance.options;
 	options.running = cancel ? 0 : --options.running;
@@ -184,15 +184,15 @@ function toggle(toShow, toHide, data, clickedActive, down) {
 	options.toHide = toHide;
 	options.data = data;
 	var complete = scopeCallback(completed, this);
-	
+
 	$.data(this, "accordion")._trigger("changestart", null, options.data);
-	
+
 	// count elements to animate
 	options.running = toHide.size() === 0 ? toShow.size() : toHide.size();
-	
+
 	if ( options.animated ) {
 		var animOptions = {};
-		
+
 		if ( !options.alwaysOpen && clickedActive ) {
 			animOptions = {
 				toShow: $([]),
@@ -210,25 +210,25 @@ function toggle(toShow, toHide, data, clickedActive, down) {
 				autoHeight: options.autoHeight
 			};
 		}
-		
+
 		if (!options.proxied) {
 			options.proxied = options.animated;
 		}
-		
+
 		if (!options.proxiedDuration) {
 			options.proxiedDuration = options.duration;
 		}
-		
+
 		options.animated = $.isFunction(options.proxied) ?
 			options.proxied(animOptions) : options.proxied;
-		
+
 		options.duration = $.isFunction(options.proxiedDuration) ?
 			options.proxiedDuration(animOptions) : options.proxiedDuration;
 
 		var animations = $.ui.accordion.animations,
 			duration = options.duration,
 			easing = options.animated;
-		
+
 		if (!animations[easing]) {
 			animations[easing] = function(options) {
 				this.slide(options, {
@@ -237,9 +237,9 @@ function toggle(toShow, toHide, data, clickedActive, down) {
 				});
 			};
 		}
-		
+
 		animations[easing](animOptions);
-		
+
 	} else {
 		if ( !options.alwaysOpen && clickedActive ) {
 			toShow.toggle();
@@ -258,7 +258,7 @@ function clickHandler(event) {
 	if (options.disabled) {
 		return false;
 	}
-	
+
 	// called only when using activate(false) to close all parts programmatically
 	if ( !event.target && !options.alwaysOpen ) {
 		options.active.parent().andSelf().toggleClass(options.selectedClass);
@@ -276,14 +276,14 @@ function clickHandler(event) {
 	}
 	// get the click target
 	var clicked = $(event.target);
-	
+
 	// due to the event delegation model, we have to check if one
 	// of the parent elements is our actual header, and find that
 	// otherwise stick with the initial target
 	clicked = $( clicked.parents(options.header)[0] || clicked );
-	
+
 	var clickedActive = clicked[0] == options.active[0];
-	
+
 	// if animations are still active, or the active header is the target, ignore click
 	if (options.running || (options.alwaysOpen && clickedActive)) {
 		return false;
@@ -291,13 +291,13 @@ function clickHandler(event) {
 	if (!clicked.is(options.header)) {
 		return;
 	}
-	
+
 	// switch classes
 	options.active.parent().andSelf().toggleClass(options.selectedClass);
 	if ( !clickedActive ) {
 		clicked.parent().andSelf().addClass(options.selectedClass);
 	}
-	
+
 	// find elements to show and hide
 	var toShow = clicked.next(),
 		toHide = options.active.next(),
@@ -309,10 +309,10 @@ function clickHandler(event) {
 			oldContent: toHide
 		},
 		down = options.headers.index( options.active[0] ) > options.headers.index( clicked[0] );
-	
+
 	options.active = clickedActive ? $([]) : clicked;
 	toggle.call(this, toShow, toHide, data, clickedActive, down );
-	
+
 	return false;
 };
 
