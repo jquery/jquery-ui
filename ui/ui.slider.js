@@ -20,13 +20,16 @@ $.fn.unwrap = $.fn.unwrap || function(expr) {
 
 $.widget("ui.slider", {
 	plugins: {},
+	_round: function(value) {
+		return this.options.round ? parseInt(value,10) : parseFloat(value);
+	},
 	ui: function(event) {
 		return {
 			options: this.options,
 			handle: this.currentHandle,
-			value: this.options.axis != "both" || !this.options.axis ? Math.round(this.value(null,this.options.axis == "vertical" ? "y" : "x")) : {
-				x: Math.round(this.value(null,"x")),
-				y: Math.round(this.value(null,"y"))
+			value: this.options.axis != "both" || !this.options.axis ? this._round(this.value(null,this.options.axis == "vertical" ? "y" : "x")) : {
+				x: this._round(this.value(null,"x")),
+				y: this._round(this.value(null,"y"))
 			},
 			range: this._getRange()
 		};
@@ -232,11 +235,11 @@ $.widget("ui.slider", {
 	_updateRange: function() {
 		var prop = this.options.axis == "vertical" ? "top" : "left";
 		var size = this.options.axis == "vertical" ? "height" : "width";
-		this.rangeElement.css(prop, (parseInt($(this.handle[0]).css(prop),10) || 0) + this._handleSize(0, this.options.axis == "vertical" ? "y" : "x")/2);
-		this.rangeElement.css(size, (parseInt($(this.handle[1]).css(prop),10) || 0) - (parseInt($(this.handle[0]).css(prop),10) || 0));
+		this.rangeElement.css(prop, (this._round($(this.handle[0]).css(prop)) || 0) + this._handleSize(0, this.options.axis == "vertical" ? "y" : "x")/2);
+		this.rangeElement.css(size, (this._round($(this.handle[1]).css(prop)) || 0) - (this._round($(this.handle[0]).css(prop)) || 0));
 	},
 	_getRange: function() {
-		return this.rangeElement ? this._convertValue(parseInt(this.rangeElement.css(this.options.axis == "vertical" ? "height" : "width"),10), this.options.axis == "vertical" ? "y" : "x") : null;
+		return this.rangeElement ? this._convertValue(this._round(this.rangeElement.css(this.options.axis == "vertical" ? "height" : "width")), this.options.axis == "vertical" ? "y" : "x") : null;
 	},
 
 	_handleIndex: function() {
@@ -249,9 +252,9 @@ $.widget("ui.slider", {
 		var curHandle = $(handle != undefined && handle !== null ? this.handle[handle] || handle : this.currentHandle);
 
 		if(curHandle.data("mouse").sliderValue) {
-			return parseInt(curHandle.data("mouse").sliderValue[axis],10);
+			return this._round(curHandle.data("mouse").sliderValue[axis]);
 		} else {
-			return parseInt(((parseInt(curHandle.css(axis == "x" ? "left" : "top"),10) / (this.actualSize[axis == "x" ? "width" : "height"] - this._handleSize(handle,axis))) * this.options.realMax[axis]) + this.options.min[axis],10);
+			return this._round(((this._round(curHandle.css(axis == "x" ? "left" : "top")) / (this.actualSize[axis == "x" ? "width" : "height"] - this._handleSize(handle,axis))) * this.options.realMax[axis]) + this.options.min[axis]);
 		}
 
 	},
@@ -339,12 +342,12 @@ $.widget("ui.slider", {
 
 		if (o.stepping.x) {
 			var value = this._convertValue(position.left, "x");
-			value = Math.round(value / o.stepping.x) * o.stepping.x;
+			value = this._round(value / o.stepping.x) * o.stepping.x;
 			position.left = this._translateValue(value, "x");
 		}
 		if (o.stepping.y) {
 			var value = this._convertValue(position.top, "y");
-			value = Math.round(value / o.stepping.y) * o.stepping.y;
+			value = this._round(value / o.stepping.y) * o.stepping.y;
 			position.top = this._translateValue(value, "y");
 		}
 
@@ -356,8 +359,8 @@ $.widget("ui.slider", {
 
 		//Store the slider's value
 		this.currentHandle.data("mouse").sliderValue = {
-			x: Math.round(this._convertValue(position.left, "x")) || 0,
-			y: Math.round(this._convertValue(position.top, "y")) || 0
+			x: this._round(this._convertValue(position.left, "x")) || 0,
+			y: this._round(this._convertValue(position.top, "y")) || 0
 		};
 
 		if (this.rangeElement)
@@ -393,36 +396,36 @@ $.widget("ui.slider", {
 		if(x !== undefined && x.constructor != Number) {
 			var me = /^\-\=/.test(x), pe = /^\+\=/.test(x);
 			if(me || pe) {
-				x = this.value(null, "x") + parseInt(x.replace(me ? '=' : '+=', ''), 10);
+				x = this.value(null, "x") + this._round(x.replace(me ? '=' : '+=', ''));
 			} else {
-				x = isNaN(parseInt(x, 10)) ? undefined : parseInt(x, 10);
+				x = isNaN(this._round(x)) ? undefined : this._round(x);
 			}
 		}
 
 		if(y !== undefined && y.constructor != Number) {
 			var me = /^\-\=/.test(y), pe = /^\+\=/.test(y);
 			if(me || pe) {
-				y = this.value(null, "y") + parseInt(y.replace(me ? '=' : '+=', ''), 10);
+				y = this.value(null, "y") + this._round(y.replace(me ? '=' : '+=', ''));
 			} else {
-				y = isNaN(parseInt(y, 10)) ? undefined : parseInt(y, 10);
+				y = isNaN(this._round(y)) ? undefined : this._round(y);
 			}
 		}
 
 		if(o.axis != "vertical" && x !== undefined) {
-			if(o.stepping.x) x = Math.round(x / o.stepping.x) * o.stepping.x;
+			if(o.stepping.x) x = this._round(x / o.stepping.x) * o.stepping.x;
 			x = this._translateValue(x, "x");
 			x = this._translateLimits(x, "x");
 			x = this._translateRange(x, "x");
 
-			o.animate ? this.currentHandle.stop().animate({ left: x }, (Math.abs(parseInt(this.currentHandle.css("left")) - x)) * (!isNaN(parseInt(o.animate)) ? o.animate : 5)) : this.currentHandle.css({ left: x });
+			o.animate ? this.currentHandle.stop().animate({ left: x }, (Math.abs(parseInt(this.currentHandle.css("left"),10) - x)) * (!isNaN(parseInt(o.animate,10)) ? o.animate : 5)) : this.currentHandle.css({ left: x });
 		}
 
 		if(o.axis != "horizontal" && y !== undefined) {
-			if(o.stepping.y) y = Math.round(y / o.stepping.y) * o.stepping.y;
+			if(o.stepping.y) y = this._round(y / o.stepping.y) * o.stepping.y;
 			y = this._translateValue(y, "y");
 			y = this._translateLimits(y, "y");
 			y = this._translateRange(y, "y");
-			o.animate ? this.currentHandle.stop().animate({ top: y }, (Math.abs(parseInt(this.currentHandle.css("top")) - y)) * (!isNaN(parseInt(o.animate)) ? o.animate : 5)) : this.currentHandle.css({ top: y });
+			o.animate ? this.currentHandle.stop().animate({ top: y }, (Math.abs(parseInt(this.currentHandle.css("top"),10) - y)) * (!isNaN(parseInt(o.animate,10)) ? o.animate : 5)) : this.currentHandle.css({ top: y });
 		}
 
 		if (this.rangeElement)
@@ -430,8 +433,8 @@ $.widget("ui.slider", {
 
 		//Store the slider's value
 		this.currentHandle.data("mouse").sliderValue = {
-			x: Math.round(this._convertValue(x, "x")) || 0,
-			y: Math.round(this._convertValue(y, "y")) || 0
+			x: this._round(this._convertValue(x, "x")) || 0,
+			y: this._round(this._convertValue(y, "y")) || 0
 		};
 
 		if (!noPropagation) {
@@ -449,7 +452,8 @@ $.extend($.ui.slider, {
 	defaults: {
 		handle: ".ui-slider-handle",
 		distance: 1,
-		animate: false
+		animate: false,
+		round: true
 	}
 });
 
