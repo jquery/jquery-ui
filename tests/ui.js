@@ -14,7 +14,6 @@ var plugins = [
 	"selectable",
 	"slider",
 	"sortable",
-	"spinner",
 	"tabs"
 ];
 

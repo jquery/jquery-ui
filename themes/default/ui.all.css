@@ -432,60 +432,6 @@ body .ui-resizable-autohide .ui-resizable-handle { display: none; } /* use 'body
 }
 
 
-/* Spinner */
-.ui-spinner {
-	width: 15em;
-	display: block;
-	position: relative;
-	overflow: hidden;
-	border: 1px solid #999;
-	background: #FEFEFE url(./images/spinner-bg.gif) repeat-x left bottom;
-	padding: 0 5px;
-}
-.ui-spinner-disabled {
-	background: #F4F4F4;
-	color: #CCC;
-}
-.ui-spinner-box {
-	width: 90%;
-	height: 100%;
-	float: left;
-	font-size: 125%;
-	border: none;
-	background: none;
-	padding: 0;
-}
-.ui-spinner-up,
-.ui-spinner-down {
-	width: 10%;
-	height: 50%;
-	font-size: 0.5em;
-	padding: 0;
-	margin: 0;
-	z-index: 100;
-	text-align: center;
-	vertical-align: middle;
-	position: absolute;
-	right: 0;
-	cursor: default;
-	border: 1px solid #999;
-	border-right: none;
-	border-top: none;
-}
-.ui-spinner-down {
-	bottom: 0;
-	border-bottom: 0;
-}
-.ui-spinner-pressed {
-	background: #FEFEFE;
-}
-.ui-spinner-list,
-.ui-spinner-listitem {
-	margin: 0;
-	padding: 0;
-}
-
-
 /*
 Generic ThemeRoller Classes
 >> Make your jQuery Components ThemeRoller-Compatible!
