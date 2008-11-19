@@ -455,7 +455,7 @@ $.ui.mouse = {
 			.bind('mousemove.'+this.widgetName, this._mouseMoveDelegate)
 			.bind('mouseup.'+this.widgetName, this._mouseUpDelegate);
 
-		return false;
+		return $.browser.safari; //Fix for safari to allow selecting select options
 	},
 
 	_mouseMove: function(event) {
