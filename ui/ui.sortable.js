@@ -40,8 +40,6 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 			placeholder: self.placeholder || $([]),
 			position: self.position,
 			absolutePosition: self.positionAbs,
-			options: this.options,
-			element: this.element,
 			item: self.currentItem,
 			sender: inst ? inst.element : null
 		};
@@ -206,8 +204,8 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 		return direction;
 	},
 
-	refresh: function() {
-		this._refreshItems();
+	refresh: function(event) {
+		this._refreshItems(event);
 		this.refreshPositions();
 	},
 
@@ -256,13 +254,13 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 
 	},
 
-	_refreshItems: function() {
+	_refreshItems: function(event) {
 
 		this.items = [];
 		this.containers = [this];
 		var items = this.items;
 		var self = this;
-		var queries = [[$.isFunction(this.options.items) ? this.options.items.call(this.element, null, { options: this.options, item: this.currentItem }) : $(this.options.items, this.element), this]];
+		var queries = [[$.isFunction(this.options.items) ? this.options.items.call(this.element[0], event, { item: this.currentItem }) : $(this.options.items, this.element), this]];
 
 		if(this.options.connectWith) {
 			for (var i = this.options.connectWith.length - 1; i >= 0; i--){
@@ -270,7 +268,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 				for (var j = cur.length - 1; j >= 0; j--){
 					var inst = $.data(cur[j], 'sortable');
 					if(inst && inst != this && !inst.options.disabled) {
-						queries.push([$.isFunction(inst.options.items) ? inst.options.items.call(inst.element) : $(inst.options.items, inst.element), inst]);
+						queries.push([$.isFunction(inst.options.items) ? inst.options.items.call(inst.element[0], event, { item: this.currentItem }) : $(inst.options.items, inst.element), inst]);
 						this.containers.push(inst);
 					}
 				};
@@ -449,7 +447,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 		if(this.options.disabled || this.options.type == 'static') return false;
 
 		//We have to refresh the items data once first
-		this._refreshItems();
+		this._refreshItems(event);
 
 		//Find out if the clicked node (or one of its parents) is a actual item in this.items
 		var currentItem = null, self = this, nodes = $(event.target).parents().each(function() {
