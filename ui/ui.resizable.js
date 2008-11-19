@@ -314,8 +314,10 @@ $.widget("ui.resizable", $.extend({}, $.ui.mouse, {
 		//Aspect Ratio
 		o.aspectRatio = (typeof o.aspectRatio == 'number') ? o.aspectRatio : ((this.originalSize.width / this.originalSize.height)||1);
 
-		if (o.preserveCursor)
-			$('body').css('cursor', this.axis + '-resize');
+		if (o.preserveCursor) {
+		    var cursor = $('.ui-resizable-' + this.axis).css('cursor');
+		    $('body').css('cursor', cursor == 'auto' ? this.axis + '-resize' : cursor);
+		}
 
 		this._propagate("start", event);
 		return true;
