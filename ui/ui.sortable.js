@@ -857,41 +857,43 @@ $.extend($.ui.sortable, {
 
 $.ui.plugin.add("sortable", "cursor", {
 	start: function(event, ui) {
-		var t = $('body');
-		if (t.css("cursor")) ui.options._cursor = t.css("cursor");
-		t.css("cursor", ui.options.cursor);
+		var t = $('body'), i = $(this).data('sortable');
+		if (t.css("cursor")) i.options._cursor = t.css("cursor");
+		t.css("cursor", i.options.cursor);
 	},
 	beforeStop: function(event, ui) {
-		if (ui.options._cursor) $('body').css("cursor", ui.options._cursor);
+		var i = $(this).data('sortable');
+		if (i.options._cursor) $('body').css("cursor", i.options._cursor);
 	}
 });
 
 $.ui.plugin.add("sortable", "zIndex", {
 	start: function(event, ui) {
-		var t = ui.helper;
-		if(t.css("zIndex")) ui.options._zIndex = t.css("zIndex");
-		t.css('zIndex', ui.options.zIndex);
+		var t = ui.helper, i = $(this).data('sortable');
+		if(t.css("zIndex")) i.options._zIndex = t.css("zIndex");
+		t.css('zIndex', i.options.zIndex);
 	},
 	beforeStop: function(event, ui) {
-		if(ui.options._zIndex) $(ui.helper).css('zIndex', ui.options._zIndex);
+		var i = $(this).data('sortable');
+		if(i.options._zIndex) $(ui.helper).css('zIndex', i.options._zIndex);
 	}
 });
 
 $.ui.plugin.add("sortable", "opacity", {
 	start: function(event, ui) {
-		var t = ui.helper;
-		if(t.css("opacity")) ui.options._opacity = t.css("opacity");
-		t.css('opacity', ui.options.opacity);
+		var t = ui.helper, i = $(this).data('sortable');
+		if(t.css("opacity")) i.options._opacity = t.css("opacity");
+		t.css('opacity', i.options.opacity);
 	},
 	beforeStop: function(event, ui) {
-		if(ui.options._opacity) $(ui.helper).css('opacity', ui.options._opacity);
+		var i = $(this).data('sortable');
+		if(i.options._opacity) $(ui.helper).css('opacity', i.options._opacity);
 	}
 });
 
 $.ui.plugin.add("sortable", "scroll", {
 	start: function(event, ui) {
-		var o = ui.options;
-		var i = $(this).data("sortable");
+		var i = $(this).data('sortable'), o = i.options;
 
 		i.overflowY = function(el) {
 			do { if(/auto|scroll/.test(el.css('overflow')) || (/auto|scroll/).test(el.css('overflow-y'))) return el; el = el.parent(); } while (el[0].parentNode);
@@ -908,8 +910,7 @@ $.ui.plugin.add("sortable", "scroll", {
 	},
 	sort: function(event, ui) {
 
-		var o = ui.options;
-		var i = $(this).data("sortable");
+		var i = $(this).data('sortable'), o = i.options;
 
 		if(i.overflowY[0] != document && i.overflowY[0].tagName != 'HTML') {
 			if((i.overflowYOffset.top + i.overflowY[0].offsetHeight) - event.pageY < o.scrollSensitivity)
@@ -940,11 +941,9 @@ $.ui.plugin.add("sortable", "scroll", {
 
 $.ui.plugin.add("sortable", "axis", {
 	sort: function(event, ui) {
-
-		var i = $(this).data("sortable");
-		if(ui.options.axis == "y") i.position.left = i.originalPosition.left;
-		if(ui.options.axis == "x") i.position.top = i.originalPosition.top;
-
+		var i = $(this).data('sortable'), o = i.options;
+		if(o.axis == "y") i.position.left = i.originalPosition.left;
+		if(o.axis == "x") i.position.top = i.originalPosition.top;
 	}
 });
 
