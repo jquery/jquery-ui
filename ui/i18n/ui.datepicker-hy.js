@@ -19,7 +19,7 @@ jQuery(function($){
 		dayNamesShort: ['կիր','երկ','երք','չրք','հնգ','ուրբ','շբթ'],
 		dayNamesMin: ['կիր','երկ','երք','չրք','հնգ','ուրբ','շբթ'],
 		dayStatus: 'DD', dateStatus: 'D, M d',
-		dateFormat: 'dd.mm.yy', firstDay: 1, 
+		dateFormat: 'dd.mm.yy', firstDay: 1,
 		initStatus: '', isRTL: false};
 	$.datepicker.setDefaults($.datepicker.regional['hy']);
 });

@@ -19,7 +19,7 @@ jQuery(function($){
 		dayNamesShort: ['Dug','Dln','Dmt','Dmc','Djs','Dvn','Dsb'],
 		dayNamesMin: ['Dg','Dl','Dt','Dc','Dj','Dv','Ds'],
 		dayStatus: 'DD', dateStatus: 'D, M d',
-		dateFormat: 'mm/dd/yy', firstDay: 0, 
+		dateFormat: 'mm/dd/yy', firstDay: 0,
 		initStatus: '', isRTL: false};
 	$.datepicker.setDefaults($.datepicker.regional['ca']);
 });

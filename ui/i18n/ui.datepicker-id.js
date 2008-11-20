@@ -19,7 +19,7 @@ jQuery(function($){
 		dayNamesShort: ['Min','Sen','Sel','Rab','kam','Jum','Sab'],
 		dayNamesMin: ['Mg','Sn','Sl','Rb','Km','jm','Sb'],
 		dayStatus: 'gunakan DD sebagai awal hari dalam minggu', dateStatus: 'pilih le DD, MM d',
-		dateFormat: 'dd/mm/yy', firstDay: 0, 
+		dateFormat: 'dd/mm/yy', firstDay: 0,
 		initStatus: 'Pilih Tanggal', isRTL: false};
 	$.datepicker.setDefaults($.datepicker.regional['id']);
 });

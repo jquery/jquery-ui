@@ -4,7 +4,7 @@
  * Copyright (c) 2008 Eduardo Lundgren
  * Dual licensed under the MIT (MIT-LICENSE.txt)
  * and GPL (GPL-LICENSE.txt) licenses.
- * 
+ *
  * http://docs.jquery.com/UI/Resizables
  *
  * Depends:
@@ -82,7 +82,7 @@ $.widget("ui.resizable", $.extend({}, $.ui.mouse, {
 			var oel = this.element; this.element = this.element.parent();
 
 			// store instance on wrapper
-			this.element.data('resizable', this); 
+			this.element.data('resizable', this);
 
 			//Move margins to the wrapper
 			this.element.css({ marginLeft: oel.css("marginLeft"), marginTop: oel.css("marginTop"),
@@ -126,13 +126,13 @@ $.widget("ui.resizable", $.extend({}, $.ui.mouse, {
 			};
 
 			for(var i = 0; i < n.length; i++) {
-				var handle = $.trim(n[i]), dt = o.defaultTheme, hname = 'ui-resizable-'+handle, loadDefault = !$.ui.css(hname) && !o.knobHandles, userKnobClass = $.ui.css('ui-resizable-knob-handle'), 
+				var handle = $.trim(n[i]), dt = o.defaultTheme, hname = 'ui-resizable-'+handle, loadDefault = !$.ui.css(hname) && !o.knobHandles, userKnobClass = $.ui.css('ui-resizable-knob-handle'),
 							allDefTheme = $.extend(dt[hname], dt['ui-resizable-handle']), allKnobTheme = $.extend(o.knobTheme[hname], !userKnobClass ? o.knobTheme['ui-resizable-handle'] : {});
 
 				// increase zIndex of sw, se, ne, nw axis
 				var applyZIndex = /sw|se|ne|nw/.test(handle) ? { zIndex: ++o.zIndex } : {};
 
-				var defCss = (loadDefault ? insertionsDefault[handle] : ''), 
+				var defCss = (loadDefault ? insertionsDefault[handle] : ''),
 					axis = $(['<div class="ui-resizable-handle ', hname, '" style="', defCss, insertionsDefault.handle, '"></div>'].join('')).css( applyZIndex );
 				o.handles[handle] = '.ui-resizable-'+handle;
 
@@ -158,7 +158,7 @@ $.widget("ui.resizable", $.extend({}, $.ui.mouse, {
 					o.handles[i].css({opacity:0});
 
 				//Apply pad to wrapper element, needed to fix axis position (textarea, inputs, scrolls)
-				if (this.element.is('.ui-wrapper') && 
+				if (this.element.is('.ui-wrapper') &&
 					o._nodeName.match(/textarea|input|select|button/i)) {
 
 					var axis = $(o.handles[i], this.element), padWrapper = 0;
@@ -167,10 +167,10 @@ $.widget("ui.resizable", $.extend({}, $.ui.mouse, {
 					padWrapper = /sw|ne|nw|se|n|s/.test(i) ? axis.outerHeight() : axis.outerWidth();
 
 					//The padding type i have to apply...
-					var padPos = [ 'padding', 
+					var padPos = [ 'padding',
 						/ne|nw|n/.test(i) ? 'Top' :
-						/se|sw|s/.test(i) ? 'Bottom' : 
-						/^e$/.test(i) ? 'Right' : 'Left' ].join(""); 
+						/se|sw|s/.test(i) ? 'Bottom' :
+						/^e$/.test(i) ? 'Right' : 'Left' ].join("");
 
 					if (!o.transparent)
 						target.css(padPos, padWrapper);
@@ -274,7 +274,7 @@ $.widget("ui.resizable", $.extend({}, $.ui.mouse, {
 
 	_mouseStart: function(event) {
 
-		var o = this.options, iniPos = this.element.position(), el = this.element, 
+		var o = this.options, iniPos = this.element.position(), el = this.element,
 			num = function(v) { return parseInt(v, 10) || 0; }, ie6 = $.browser.msie && $.browser.version < 7;
 		o.resizing = true;
 		o.documentScroll = { top: $(document).scrollTop(), left: $(document).scrollLeft() };
@@ -344,7 +344,7 @@ $.widget("ui.resizable", $.extend({}, $.ui.mouse, {
 		this._propagate("resize", event);
 
 		el.css({
-			top: this.position.top + "px", left: this.position.left + "px", 
+			top: this.position.top + "px", left: this.position.left + "px",
 			width: this.size.width + "px", height: this.size.height + "px"
 		});
 
@@ -364,12 +364,12 @@ $.widget("ui.resizable", $.extend({}, $.ui.mouse, {
 		var o = this.options, num = function(v) { return parseInt(v, 10) || 0; }, self = this;
 
 		if(o.helper) {
-			var pr = o.proportionallyResize, ista = pr && (/textarea/i).test(pr.get(0).nodeName), 
+			var pr = o.proportionallyResize, ista = pr && (/textarea/i).test(pr.get(0).nodeName),
 						soffseth = ista && $.ui.hasScroll(pr.get(0), 'left') /* TODO - jump height */ ? 0 : self.sizeDiff.height,
 							soffsetw = ista ? 0 : self.sizeDiff.width;
 
 			var s = { width: (self.size.width - soffsetw), height: (self.size.height - soffseth) },
-				left = (parseInt(self.element.css('left'), 10) + (self.position.left - self.originalPosition.left)) || null, 
+				left = (parseInt(self.element.css('left'), 10) + (self.position.left - self.originalPosition.left)) || null,
 				top = (parseInt(self.element.css('top'), 10) + (self.position.top - self.originalPosition.top)) || null;
 
 			if (!o.animate)
@@ -406,7 +406,7 @@ $.widget("ui.resizable", $.extend({}, $.ui.mouse, {
 			data.left = cpos.left + (csize.width - data.width);
 			data.top = null;
 		}
-		if (a == 'nw') { 
+		if (a == 'nw') {
 			data.top = cpos.top + (csize.height - data.height);
 			data.left = cpos.left + (csize.width - data.width);
 		}
@@ -415,7 +415,7 @@ $.widget("ui.resizable", $.extend({}, $.ui.mouse, {
 	},
 	_respectSize: function(data, event) {
 
-		var el = this.helper, o = this.options, pRatio = o._aspectRatio || event.shiftKey, a = this.axis, 
+		var el = this.helper, o = this.options, pRatio = o._aspectRatio || event.shiftKey, a = this.axis,
 				ismaxw = data.width && o.maxWidth && o.maxWidth < data.width, ismaxh = data.height && o.maxHeight && o.maxHeight < data.height,
 					isminw = data.width && o.minWidth && o.minWidth > data.width, isminh = data.height && o.minHeight && o.minHeight > data.height;
 
@@ -450,7 +450,7 @@ $.widget("ui.resizable", $.extend({}, $.ui.mouse, {
 
 			o.borderDif = $.map(b, function(v, i) {
 				var border = parseInt(v,10)||0, padding = parseInt(p[i],10)||0;
-				return border + padding; 
+				return border + padding;
 			});
 		}
 		prel.css({
@@ -484,7 +484,7 @@ $.widget("ui.resizable", $.extend({}, $.ui.mouse, {
 				$.ui.disableSelection(this.helper.get(0));
 
 		} else {
-			this.helper = el; 
+			this.helper = el;
 		}
 	},
 	_change: {
@@ -562,8 +562,8 @@ $.ui.plugin.add("resizable", "containment", {
 			self.containerOffset = { left: 0, top: 0 };
 			self.containerPosition = { left: 0, top: 0 };
 
-			self.parentData = { 
-				element: $(document), left: 0, top: 0, 
+			self.parentData = {
+				element: $(document), left: 0, top: 0,
 				width: $(document).width(), height: $(document).height() || document.body.parentNode.scrollHeight
 			};
 		}
@@ -574,17 +574,17 @@ $.ui.plugin.add("resizable", "containment", {
 			self.containerPosition = $(ce).position();
 			self.containerSize = { height: $(ce).innerHeight(), width: $(ce).innerWidth() };
 
-			var co = self.containerOffset, ch = self.containerSize.height,	cw = self.containerSize.width, 
+			var co = self.containerOffset, ch = self.containerSize.height,	cw = self.containerSize.width,
 						width = ($.ui.hasScroll(ce, "left") ? ce.scrollWidth : cw ), height = ($.ui.hasScroll(ce) ? ce.scrollHeight : ch);
 
-			self.parentData = { 
+			self.parentData = {
 				element: ce, left: co.left, top: co.top, width: width, height: height
 			};
 		}
 	},
 
 	resize: function(event, ui) {
-		var o = ui.options, self = $(this).data("resizable"), 
+		var o = ui.options, self = $(this).data("resizable"),
 				ps = self.containerSize, co = self.containerOffset, cs = self.size, cp = self.position,
 				pRatio = o._aspectRatio || event.shiftKey, cop = { top:0, left:0 }, ce = self.containerElement;
 
@@ -603,7 +603,7 @@ $.ui.plugin.add("resizable", "containment", {
 			self.position.top = o.helper ? co.top : 0;
 		}
 
-		var woset = (o.helper ? self.offset.left - co.left : (self.position.left - cop.left)) + self.sizeDiff.width, 
+		var woset = (o.helper ? self.offset.left - co.left : (self.position.left - cop.left)) + self.sizeDiff.width,
 					hoset = (o.helper ? self.offset.top - co.top : self.position.top) + self.sizeDiff.height;
 
 		if (woset + self.size.width >= self.parentData.width) {
@@ -668,18 +668,18 @@ $.ui.plugin.add("resizable", "animate", {
 	stop: function(event, ui) {
 		var o = ui.options, self = $(this).data("resizable");
 
-		var pr = o.proportionallyResize, ista = pr && (/textarea/i).test(pr.get(0).nodeName), 
+		var pr = o.proportionallyResize, ista = pr && (/textarea/i).test(pr.get(0).nodeName),
 						soffseth = ista && $.ui.hasScroll(pr.get(0), 'left') /* TODO - jump height */ ? 0 : self.sizeDiff.height,
 							soffsetw = ista ? 0 : self.sizeDiff.width;
 
 		var style = { width: (self.size.width - soffsetw), height: (self.size.height - soffseth) },
-					left = (parseInt(self.element.css('left'), 10) + (self.position.left - self.originalPosition.left)) || null, 
-						top = (parseInt(self.element.css('top'), 10) + (self.position.top - self.originalPosition.top)) || null; 
+					left = (parseInt(self.element.css('left'), 10) + (self.position.left - self.originalPosition.left)) || null,
+						top = (parseInt(self.element.css('top'), 10) + (self.position.top - self.originalPosition.top)) || null;
 
 		self.element.animate(
-			$.extend(style, top && left ? { top: top, left: left } : {}), { 
+			$.extend(style, top && left ? { top: top, left: left } : {}), {
 				duration: o.animateDuration,
-				easing: o.animateEasing, 
+				easing: o.animateEasing,
 				step: function() {
 
 					var data = {
@@ -736,7 +736,7 @@ $.ui.plugin.add("resizable", "ghost", {
 $.ui.plugin.add("resizable", "alsoResize", {
 
 	start: function(event, ui) {
-		var o = ui.options, self = $(this).data("resizable"), 
+		var o = ui.options, self = $(this).data("resizable"),
 
 		_store = function(exp) {
 			$(exp).each(function() {
@@ -752,13 +752,13 @@ $.ui.plugin.add("resizable", "alsoResize", {
 			else { $.each(o.alsoResize, function(exp, c) { _store(exp); }); }
 		}else{
 			_store(o.alsoResize);
-		} 
+		}
 	},
 
 	resize: function(event, ui){
 		var o = ui.options, self = $(this).data("resizable"), os = self.originalSize, op = self.originalPosition;
 
-		var delta = { 
+		var delta = {
 			height: (self.size.height - os.height) || 0, width: (self.size.width - os.width) || 0,
 			top: (self.position.top - op.top) || 0, left: (self.position.left - op.left) || 0
 		},

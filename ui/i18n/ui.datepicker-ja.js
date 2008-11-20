@@ -19,7 +19,7 @@ jQuery(function($){
 		dayNamesShort: ['&#26085;','&#26376;','&#28779;','&#27700;','&#26408;','&#37329;','&#22303;'],
 		dayNamesMin: ['&#26085;','&#26376;','&#28779;','&#27700;','&#26408;','&#37329;','&#22303;'],
 		dayStatus: 'DD', dateStatus: 'D, M d',
-		dateFormat: 'yy/mm/dd', firstDay: 0, 
+		dateFormat: 'yy/mm/dd', firstDay: 0,
 		initStatus: '', isRTL: false};
 	$.datepicker.setDefaults($.datepicker.regional['ja']);
 });

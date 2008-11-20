@@ -19,7 +19,7 @@ jQuery(function($){
 		dayNamesShort: ['Dom','Lun','Mar','Mer','Gio','Ven','Sab'],
 		dayNamesMin: ['Do','Lu','Ma','Me','Gio','Ve','Sa'],
 		dayStatus: 'Usa DD come primo giorno della settimana', dateStatus: 'Seleziona D, M d',
-		dateFormat: 'dd/mm/yy', firstDay: 1, 
+		dateFormat: 'dd/mm/yy', firstDay: 1,
 		initStatus: 'Scegliere una data', isRTL: false};
 	$.datepicker.setDefaults($.datepicker.regional['it']);
 });

@@ -19,7 +19,7 @@ jQuery(function($){
 		dayNamesShort: ['Ned','Pon','Uto','Str','Štv','Pia','Sob'],
 		dayNamesMin: ['Ne','Po','Ut','St','Št','Pia','So'],
 		dayStatus: 'DD', dateStatus: 'D, M d',
-		dateFormat: 'dd.mm.yy', firstDay: 0, 
+		dateFormat: 'dd.mm.yy', firstDay: 0,
 		initStatus: '', isRTL: false};
 	$.datepicker.setDefaults($.datepicker.regional['sk']);
 });

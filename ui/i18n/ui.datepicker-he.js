@@ -19,7 +19,7 @@ jQuery(function($){
 		dayNamesShort: ['א\'','ב\'','ג\'','ד\'','ה\'','ו\'','שבת'],
 		dayNamesMin: ['א\'','ב\'','ג\'','ד\'','ה\'','ו\'','שבת'],
 		dayStatus: 'DD', dateStatus: 'DD, M d',
-		dateFormat: 'dd/mm/yy', firstDay: 0, 
+		dateFormat: 'dd/mm/yy', firstDay: 0,
 		initStatus: '', isRTL: true};
 	$.datepicker.setDefaults($.datepicker.regional['he']);
 });

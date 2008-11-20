@@ -20,7 +20,7 @@ jQuery(function($){
 		dayNamesShort: ['سبت', 'أحد', 'اثنين', 'ثلاثاء', 'أربعاء', 'خميس', 'جمعة'],
 		dayNamesMin: ['سبت', 'أحد', 'اثنين', 'ثلاثاء', 'أربعاء', 'خميس', 'جمعة'],
 		dayStatus: 'اختر DD لليوم الأول من الأسبوع', dateStatus: 'اختر D, M d',
-		dateFormat: 'dd/mm/yy', firstDay: 0, 
+		dateFormat: 'dd/mm/yy', firstDay: 0,
 		initStatus: 'اختر يوم', isRTL: true};
 	$.datepicker.setDefaults($.datepicker.regional['ar']);
 });

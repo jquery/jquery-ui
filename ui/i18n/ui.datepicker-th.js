@@ -19,7 +19,7 @@ jQuery(function($){
 		dayNamesShort: ['อา.','จ.','อ.','พ.','พฤ.','ศ.','ส.'],
 		dayNamesMin: ['อา.','จ.','อ.','พ.','พฤ.','ศ.','ส.'],
 		dayStatus: 'DD', dateStatus: 'D, M d',
-		dateFormat: 'dd/mm/yy', firstDay: 0, 
+		dateFormat: 'dd/mm/yy', firstDay: 0,
 		initStatus: '', isRTL: false};
 	$.datepicker.setDefaults($.datepicker.regional['th']);
 });

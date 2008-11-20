@@ -19,7 +19,7 @@ jQuery(function($){
 		dayNamesShort: ['ne', 'po', 'út', 'st', 'čt', 'pá', 'so'],
 		dayNamesMin: ['ne','po','út','st','čt','pá','so'],
 		dayStatus: 'Nastavit DD jako první den v týdnu', dateStatus: '\'Vyber\' DD, M d',
-		dateFormat: 'dd.mm.yy', firstDay: 1, 
+		dateFormat: 'dd.mm.yy', firstDay: 1,
 		initStatus: 'Vyberte datum', isRTL: false};
 	$.datepicker.setDefaults($.datepicker.regional['cs']);
 });

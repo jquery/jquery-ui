@@ -193,7 +193,7 @@ $.widget("ui.tabs", {
 			};
 
 		// Hide a tab, $show is optional...
-		var hideTab = hideFx ? 
+		var hideTab = hideFx ?
 			function(clicked, $hide, $show) {
 				$hide.animate(hideFx, hideFx.duration || 'normal', function() {
 					$hide.addClass(o.hideClass);
@@ -222,7 +222,7 @@ $.widget("ui.tabs", {
 				$hide = self.$panels.filter(':visible'),
 				$show = $(self._sanitizeSelector(this.hash));
 
-			// If tab is already selected and not deselectable or tab disabled or 
+			// If tab is already selected and not deselectable or tab disabled or
 			// or is already loading or click callback returns false stop here.
 			// Check if click handler returns false last so that it is not executed
 			// for a disabled or loading tab!
@@ -266,7 +266,7 @@ $.widget("ui.tabs", {
 			// show new tab
 			if ($show.length) {
 				var a = this;
-				self.load(self.$tabs.index(this), $hide.length ? 
+				self.load(self.$tabs.index(this), $hide.length ?
 					function() {
 						switchTab(a, $li, $hide, $show);
 					} :
@@ -438,7 +438,7 @@ $.widget("ui.tabs", {
 				catch (event) {}
 
 				// This callback is required because the switch has to take
-				// place after loading has completed. Call last in order to 
+				// place after loading has completed. Call last in order to
 				// fire load before show callback...
 				callback();
 			}

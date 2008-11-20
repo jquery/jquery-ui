@@ -19,7 +19,7 @@ jQuery(function($){
 		dayNamesShort: ['Pz','Pt','Sa','Ça','Pe','Cu','Ct'],
 		dayNamesMin: ['Pz','Pt','Sa','Ça','Pe','Cu','Ct'],
 		dayStatus: 'Haftanın ilk gününü belirleyin', dateStatus: 'D, M d seçiniz',
-		dateFormat: 'dd.mm.yy', firstDay: 1, 
+		dateFormat: 'dd.mm.yy', firstDay: 1,
 		initStatus: 'Bir tarih seçiniz', isRTL: false};
 	$.datepicker.setDefaults($.datepicker.regional['tr']);
 });
