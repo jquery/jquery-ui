@@ -9,7 +9,6 @@
 
 	<target name="load.properties">
 		<property file="ant.properties" />
-		<property name="version" value="1.6" />
 		<property name="ui.dir" value="." />
 		<property name="src.dir" value="${ui.dir}/" />
 	</target>
