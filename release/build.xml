@@ -11,15 +11,18 @@
 
 <project name="jquery-ui" default="deploy-release" basedir=".">
 
-	<target name="deploy-release" depends="load.properties, concatenate, minify, pack, copy, replace-version" description="Release builder">
+	<target name="deploy-release" depends="load.properties, concatenate, minify, pack, copy, replace-version, zip" description="Release builder">
 	</target>
 
 	<target name="load.properties">
 		<property file="ant.properties" />
 
-		<property name="version" value="1.6" />
+		<property name="current.version" value="1.6pre" />
+		<property name="release.version" value="1.6" />
+		<property name="release.filename" value="jquery.ui-${release.version}" />
+		
 
-		<property name="dist.dir" value="dist" />
+		<property name="dist.dir" value="dist/${release.filename}/" />
 		<property name="build.dir" value="build" />
 		<property name="ui.dir" value="../" />
 		<property name="src.dir" value="${ui.dir}/ui/" />
@@ -37,10 +40,21 @@
 	</target>
 
 	<target name="replace-version" depends="load.properties">
-		<replaceregexp match="@VERSION" replace="${version}" flags="g" byline="true">
+		<replaceregexp match="@VERSION" replace="${release.version}" flags="g" byline="true">
 		    <fileset dir="${dist.dir}/ui/" includes="*.js"/>
 		</replaceregexp>
-		<echo message="Replaced all @VERSION to ${version}." />
+		<echo message="Replaced all @VERSION to ${release.version}." />
+
+		<replaceregexp match="${current.version}" replace="${release.version}" flags="g" byline="true">
+		    <fileset dir="${dist.dir}/" includes="version.txt"/>
+		</replaceregexp>
+		<echo message="Update version to ${release.version} into version.txt." />
+	</target>
+
+	<target description="Zip the package" name="zip">
+		<zip destfile="${dist.dir}/../${release.filename}.zip">
+			<zipfileset dir="${dist.dir}/" />
+		</zip>
 	</target>
 
 	<target name="concatenate" depends="load.properties">
@@ -157,7 +171,7 @@
 		</copy>
 		<echo message="Files copied." />
 	</target>
-
+	
 	 <target depends="load.properties" name="clean">
 	 	<delete dir="${dist.dir}" />
     </target>
