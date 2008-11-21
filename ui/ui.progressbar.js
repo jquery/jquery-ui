@@ -13,6 +13,7 @@
 (function($) {
 
 $.widget("ui.progressbar", {
+
 	_init: function() {
 
 		this._interval = this.options.interval;
@@ -66,6 +67,17 @@ $.widget("ui.progressbar", {
 			.appendTo(this.bar);
 	},
 
+	destroy: function() {
+		this.stop();
+
+		this.element
+			.removeClass("ui-progressbar ui-progressbar-disabled")
+			.removeData("progressbar").unbind(".progressbar")
+			.find('.ui-progressbar-wrap').remove();
+
+		delete $.easing[this.identifier];
+	},
+
 	_animate: function() {
 		var self = this,
 			options = this.options,
@@ -80,7 +92,7 @@ $.widget("ui.progressbar", {
 				easing: options.equation || this.identifier,
 				step: function(step, b) {
 					var timestamp = new Date().getTime(), elapsedTime  = (timestamp - b.startTime);
-					self.progress( (step/options.width) * 100 );
+					self.progress( (step / options.width) * 100 );
 					options.interval = interval - elapsedTime;
 				},
 				complete: function() {
@@ -96,17 +108,6 @@ $.widget("ui.progressbar", {
 				}
 			}
 		);
-	},
-
-	destroy: function() {
-		this.stop();
-
-		this.element
-			.removeClass("ui-progressbar ui-progressbar-disabled")
-			.removeData("progressbar").unbind(".progressbar")
-			.find('.ui-progressbar-wrap').remove();
-
-		delete $.easing[this.identifier];
 	},
 
 	disable: function() {
@@ -131,7 +132,7 @@ $.widget("ui.progressbar", {
 		this.bar.removeClass('ui-hidden');
 
 		this.percentState = percentState > 100 ? 100 : percentState;
-		this.pixelState = (this.percentState/100) * this.options.width;
+		this.pixelState = (this.percentState / 100) * this.options.width;
 		this.bar.width(this.pixelState);
 		this.textElement.width(this.pixelState);
 
@@ -153,8 +154,8 @@ $.widget("ui.progressbar", {
 		$.easing[this.identifier] = function (x, t, b, c, d) {
 			var inc = options.increment,
 				width = options.width,
-				step = ((inc > width ? width : inc)/width),
-				state = Math.round(x/step)*step;
+				step = ((inc > width ? width : inc) / width),
+				state = Math.round(x / step) * step;
 			return state > 1 ? 1 : state;
 		};
 
@@ -186,14 +187,6 @@ $.widget("ui.progressbar", {
 		this._trigger('stop', null, this.ui());
 	},
 
-	ui: function() {
-		return {
-			options: this.options,
-			pixelState: this.pixelState,
-			percentState: this.percentState
-		};
-	},
-
 	_setData: function(key, value){
 		switch (key) {
 			case 'text':
@@ -206,18 +199,27 @@ $.widget("ui.progressbar", {
 
 	_setText: function(text){
 		this.textElement.add(this.textBg).html(text);
+	},
+
+	ui: function() {
+		return {
+			options: this.options,
+			pixelState: this.pixelState,
+			percentState: this.percentState
+		};
 	}
+
 });
 
 $.extend($.ui.progressbar, {
 	version: "@VERSION",
 	defaults: {
-		width: 300,
 		duration: 1000,
-		interval: 1000,
 		increment: 1,
+		interval: 1000,
 		range: true,
-		text: ''
+		text: '',
+		width: 300
 	},
 
 	uuid: 0
