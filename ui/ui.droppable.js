@@ -143,7 +143,6 @@ $.extend($.ui.droppable, {
 	defaults: {
 		activeClass: null,
 		cssNamespace: 'ui',
-		disabled: false,
 		greedy: false,
 		hoverClass: null,
 		scope: 'default',
