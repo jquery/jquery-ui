@@ -395,8 +395,8 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 			return false;
 		}
 
-		var isOverElementHeight = $.ui.isOverHeight(helperTop + dyClick, itemTop, itemHeight);
-		var isOverElementWidth = $.ui.isOverWidth(helperLeft + dxClick, itemLeft, itemWidth);
+		var isOverElementHeight = $.ui.isOverAxis(helperTop + dyClick, itemTop, itemHeight);
+		var isOverElementWidth = $.ui.isOverAxis(helperLeft + dxClick, itemLeft, itemWidth);
 		var isOverElement = isOverElementHeight && isOverElementWidth;
 		var verticalDirection = this._getDragVerticalDirection();
 		var horizontalDirection = this._getDragHorizontalDirection();
@@ -429,9 +429,9 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 		var itemHeight = item.height, itemWidth = item.width;
 		var itemTop = item.top, itemLeft = item.left;
 
-		var isOverBottomHalf = $.ui.isOverHeight(helperTop + dyClick, itemTop + (itemHeight/2), itemHeight);
+		var isOverBottomHalf = $.ui.isOverAxis(helperTop + dyClick, itemTop + (itemHeight/2), itemHeight);
 		var isOverTopHalf = !isOverBottomHalf;
-		var isOverRightHalf = $.ui.isOverWidth(helperLeft + dxClick, itemLeft + (itemWidth/2), itemWidth);
+		var isOverRightHalf = $.ui.isOverAxis(helperLeft + dxClick, itemLeft + (itemWidth/2), itemWidth);
 		var isOverLeftHalf = !isOverRightHalf;
 		var verticalDirection = this._getDragVerticalDirection();
 		var horizontalDirection = this._getDragHorizontalDirection();
