@@ -246,14 +246,6 @@ $.widget("ui.selectable", $.extend({}, $.ui.mouse, {
 		this.helper.remove();
 
 		return false;
-	},
-
-	toggle: function() {
-		if(this.options.disabled){
-			this.enable();
-		} else {
-			this.disable();
-		}
 	}
 
 }));

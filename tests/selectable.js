@@ -165,18 +165,6 @@ test("enable", function() {
 	el.selectable("destroy");
 });
 
-test("toggle", function() {
-	expect(2);
-
-	el = $("#selectable1").selectable({ disabled: true }).selectable("toggle");
-	equals(el.data("disabled.selectable"), false, "disabled -> enabled");
-	el.selectable("destroy");
-
-	el = $("#selectable1").selectable({ disabled: false }).selectable("toggle");
-	equals(el.data("disabled.selectable"), true, "enabled -> disabled");
-	el.selectable("destroy");
-});
-
 module("selectable: Callbacks");
 
 test("start", function() {
