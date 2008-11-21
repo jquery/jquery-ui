@@ -369,6 +369,7 @@ $.extend($.ui.draggable, {
 		containment: false,
 		cssNamespace: "ui",
 		cursor: "default",
+		cursorAt: null,
 		delay: 0,
 		distance: 1,
 		grid: false,
@@ -386,7 +387,8 @@ $.extend($.ui.draggable, {
 		snap: false,
 		snapMode: "both",
 		snapTolerance: 20,
-		stack: false
+		stack: false,
+		zIndex: null
 	}
 });
 

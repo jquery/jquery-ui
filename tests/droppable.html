@@ -18,9 +18,8 @@
 	<style type="text/css">
 		html { border: 0; }
 		#main {
-			position:absolute !important;
-			top: -1000px !important;
-			left: -1000px !important;
+			top: -1000px;
+			left: -1000px;
 		}
 	</style>
 </head>
@@ -32,9 +31,10 @@
 
 <ol id="tests"></ol>
 
-<div id="main">
+<div id="main" style='position: absolute; width: 300px; height: 300px; overflow: auto;'>
 	<div id="draggable1" style="width: 25px; height: 25px;">Draggable</div>
 	<div id="droppable1" style="width: 100px; height: 100px;">Droppable</div>
+	<div style='width:1000px;height:1000px;'>&nbsp;</div>
 </div>
 
 </body>
