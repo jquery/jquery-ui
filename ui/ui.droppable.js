@@ -1,7 +1,7 @@
 /*
  * jQuery UI Droppable @VERSION
  *
- * Copyright (c) 2008 Paul Bakaus
+ * Copyright (c) 2008 AUTHORS.txt (http://ui.jquery.com/about)
  * Dual licensed under the MIT (MIT-LICENSE.txt)
  * and GPL (GPL-LICENSE.txt) licenses.
  *

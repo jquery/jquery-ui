@@ -1,0 +1,26 @@
+jQuery UI Authors (http://ui.jquery.com/about)
+
+This software consists of voluntary contributions made by many
+individuals. For exact contribution history, see the revision history
+and logs, available at http://jquery-ui.googlecode.com/svn/
+
+Brandon Aaron
+Paul Bakaus (paulbakaus.com)
+David Bolter
+Chi Cheng (cloudream@gmail.com)
+Maggie Costello
+Aaron Eisenberger (aaronchi@gmail.com)
+Ariel Flesler
+Scott González
+Marc Grabanski (m@marcgrabanski.com)
+Klaus Hartl (stilbuero.de)
+Scott Jehl
+Cody Lindley
+Eduardo Lundgren
+Todd Parker
+John Resig
+Patty Toland
+Ca-Phun Ung (pazu2k@gmail.com)
+Keith Wood (kbwood@virginbroadband.com.au)
+Richard D. Worth (rdworth.org)
+Jörn Zaefferer

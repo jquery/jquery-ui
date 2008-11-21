@@ -1,7 +1,7 @@
 /*
  * jQuery UI Tabs @VERSION
  *
- * Copyright (c) 2007, 2008 Klaus Hartl (stilbuero.de)
+ * Copyright (c) 2008 AUTHORS.txt (http://ui.jquery.com/about)
  * Dual licensed under the MIT (MIT-LICENSE.txt)
  * and GPL (GPL-LICENSE.txt) licenses.
  *

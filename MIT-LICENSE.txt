@@ -1,5 +1,10 @@
 Copyright (c) 2007 John Resig, http://jquery.com/
 
+This software consists of voluntary contributions made by many
+individuals (AUTHORS.txt, http://ui.jquery.com/about) For exact
+contribution history, see the revision history and logs, available
+at http://jquery-ui.googlecode.com/svn/
+
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
 "Software"), to deal in the Software without restriction, including

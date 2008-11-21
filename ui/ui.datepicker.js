@@ -1,7 +1,7 @@
 /*
  * jQuery UI Datepicker @VERSION
  *
- * Copyright (c) 2006, 2007, 2008 Marc Grabanski
+ * Copyright (c) 2008 AUTHORS.txt (http://ui.jquery.com/about)
  * Dual licensed under the MIT (MIT-LICENSE.txt)
  * and GPL (GPL-LICENSE.txt) licenses.
  *
@@ -9,8 +9,6 @@
  *
  * Depends:
  *	ui.core.js
- *
- * Marc Grabanski (m@marcgrabanski.com) and Keith Wood (kbwood@virginbroadband.com.au).
  */
 
 (function($) { // hide the namespace
