@@ -28,6 +28,7 @@ var setDataSwitch = {
 };
 
 $.widget("ui.dialog", {
+
 	_init: function() {
 		this.originalTitle = this.element.attr('title');
 		this.options.title = this.options.title || this.originalTitle;
@@ -398,6 +399,7 @@ $.widget("ui.dialog", {
 		content.height(container.height() - titlebar.outerHeight() - tbMargin);
 		content.width(container.width() - lrMargin);
 	}
+
 });
 
 $.extend($.ui.dialog, {
@@ -424,6 +426,7 @@ $.extend($.ui.dialog, {
 	getter: 'isOpen',
 
 	uuid: 0,
+
 	getTitleId: function($el) {
 		return 'ui-dialog-title-' + ($el.attr('id') || ++this.uuid);
 	},
