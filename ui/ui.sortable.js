@@ -13,7 +13,6 @@
 (function($) {
 
 $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
-
 	_init: function() {
 
 		var o = this.options;
@@ -206,8 +205,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 	},
 
 	_mouseDrag: function(event) {
-
-	//Compute the helpers position
+		//Compute the helpers position
 		this.position = this._generatePosition(event);
 		this.positionAbs = this._convertPositionTo("absolute");
 
@@ -229,20 +227,27 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 		//Rearrange
 		for (var i = this.items.length - 1; i >= 0; i--) {
 
-			var intersection = this._intersectsWithEdge(this.items[i]);
+			var item = this.items[i], intersection = this._intersectsWithPointer(item);
 
 			if (!intersection) continue;
 
-			var item = this.items[i].item[0];
+			var itemChecked = this.items[i].item[0];
 
-			if(item != this.currentItem[0] //cannot intersect with itself
-				&&	this.placeholder[intersection == 1 ? "next" : "prev"]()[0] != item //no useless actions that have been done before
-				&&	!$.ui.contains(this.placeholder[0], item) //no action if the item moved is the parent of the item checked
-				&& (this.options.type == 'semi-dynamic' ? !$.ui.contains(this.element[0], item) : true)
+			if(itemChecked != this.currentItem[0] //cannot intersect with itself
+				&&	this.placeholder[intersection == 1 ? "next" : "prev"]()[0] != itemChecked //no useless actions that have been done before
+				&&	!$.ui.contains(this.placeholder[0], itemChecked) //no action if the item moved is the parent of the item checked
+				&& (this.options.type == 'semi-dynamic' ? !$.ui.contains(this.element[0], itemChecked) : true)
 			) {
 
 				this.direction = intersection == 1 ? "down" : "up";
-				this.options.sortIndicator.call(this, event, this.items[i]);
+
+				if (this.options.tolerance == "pointer") {
+					this.options.sortIndicator.call(this, event, item);
+				}
+				else if (this.options.tolerance == "guess" && this._intersectsGuess(item)) {
+					this.options.sortIndicator.call(this, event, item);
+				}
+
 				this._propagate("change", event); //Call plugins and callbacks
 				break;
 			}
@@ -380,7 +385,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 		}
 	},
 
-	_intersectsWithEdge: function(item) {
+	_intersectsWithPointer: function(item) {
 		var dyClick = this.offset.click.top, dxClick = this.offset.click.left;
 		var helperTop = this.positionAbs.top, helperLeft = this.positionAbs.left;
 		var itemHeight = item.height, itemWidth = item.width;
@@ -413,6 +418,49 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 			}
 
 			return verticalDirection == "down" ? 2 : 1;
+		}
+
+		return false;
+	},
+
+	_intersectsGuess: function(item) {
+		var dyClick = this.offset.click.top, dxClick = this.offset.click.left;
+		var helperTop = this.positionAbs.top, helperLeft = this.positionAbs.left;
+		var itemHeight = item.height, itemWidth = item.width;
+		var itemTop = item.top, itemLeft = item.left;
+
+		var isOverBottomHalf = $.ui.isOverHeight(helperTop + dyClick, itemTop + (itemHeight/2), itemHeight);
+		var isOverTopHalf = !isOverBottomHalf;
+		var isOverRightHalf = $.ui.isOverWidth(helperLeft + dxClick, itemLeft + (itemWidth/2), itemWidth);
+		var isOverLeftHalf = !isOverRightHalf;
+		var verticalDirection = this._getDragVerticalDirection();
+		var horizontalDirection = this._getDragHorizontalDirection();
+
+		var verticalIntersection = function() {
+			if (!verticalDirection) {
+				return false;
+			}
+			if (verticalDirection == "down" && isOverBottomHalf ||
+				verticalDirection == "up" && isOverTopHalf) {
+				return true;
+			}
+		};
+
+		var horizontalIntersection = function() {
+			if (!horizontalDirection) {
+				return verticalIntersection();
+			}
+			if (horizontalDirection == "left" && isOverLeftHalf ||
+				horizontalDirection == "right" && isOverRightHalf) {
+				return true;
+			}
+		};
+
+		if (this.floating) {
+			return horizontalIntersection();
+		}
+		else {
+			return verticalIntersection();
 		}
 
 		return false;
@@ -678,7 +726,6 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 		return helper;
 
 	},
-
 
 	_convertPositionTo: function(d, pos) {
 		if(!pos) pos = this.position;
