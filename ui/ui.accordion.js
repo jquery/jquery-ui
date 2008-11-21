@@ -13,6 +13,7 @@
 (function($) {
 
 $.widget("ui.accordion", {
+
 	_init: function() {
 		var options = this.options;
 
@@ -96,6 +97,19 @@ $.widget("ui.accordion", {
 		}
 	},
 
+	destroy: function() {
+		this.options.headers.parent().andSelf().removeClass(this.options.selectedClass);
+		this.options.headers.prev(".ui-accordion-left").remove();
+		this.options.headers.children(".ui-accordion-right").remove();
+		this.options.headers.next().css("display", "");
+		if ( this.options.fillSpace || this.options.autoHeight ) {
+			this.options.headers.next().css("height", "");
+		}
+		$.removeData(this.element[0], "accordion");
+
+		this.element.removeClass("ui-accordion").unbind(".accordion");
+	},
+
 	_keydown: function(event) {
 		if (this.options.disabled || event.altKey || event.ctrlKey)
 			return;
@@ -135,20 +149,8 @@ $.widget("ui.accordion", {
 		clickHandler.call(this.element[0], {
 			target: findActive( this.options.headers, index )[0]
 		});
-	},
-
-	destroy: function() {
-		this.options.headers.parent().andSelf().removeClass(this.options.selectedClass);
-		this.options.headers.prev(".ui-accordion-left").remove();
-		this.options.headers.children(".ui-accordion-right").remove();
-		this.options.headers.next().css("display", "");
-		if ( this.options.fillSpace || this.options.autoHeight ) {
-			this.options.headers.next().css("height", "");
-		}
-		$.removeData(this.element[0], "accordion");
-
-		this.element.removeClass("ui-accordion").unbind(".accordion");
 	}
+
 });
 
 function scopeCallback(callback, scope) {
@@ -329,16 +331,16 @@ function findActive(headers, selector) {
 $.extend($.ui.accordion, {
 	version: "@VERSION",
 	defaults: {
-		selectedClass: "selected",
+		autoHeight: true,
 		alwaysOpen: true,
 		animated: 'slide',
 		event: "click",
 		header: "a",
-		autoHeight: true,
-		running: 0,
 		navigationFilter: function() {
 			return this.href.toLowerCase() == location.href.toLowerCase();
-		}
+		},
+		running: 0,
+		selectedClass: "selected"
 	},
 	animations: {
 		slide: function(options, additions) {
