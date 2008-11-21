@@ -625,7 +625,7 @@ $.ui.plugin.add("draggable", "snap", {
 
 			//Yes, I know, this is insane ;)
 			if(!((l-d < x1 && x1 < r+d && t-d < y1 && y1 < b+d) || (l-d < x1 && x1 < r+d && t-d < y2 && y2 < b+d) || (l-d < x2 && x2 < r+d && t-d < y1 && y1 < b+d) || (l-d < x2 && x2 < r+d && t-d < y2 && y2 < b+d))) {
-				if(inst.snapElements[i].snapping) (inst.options.snap.release && inst.options.snap.release.call(inst.element, null, $.extend(inst.uiHash(), { snapItem: inst.snapElements[i].item })));
+				if(inst.snapElements[i].snapping) (inst.options.snap.release && inst.options.snap.release.call(inst.element, event, $.extend(inst.uiHash(), { snapItem: inst.snapElements[i].item })));
 				inst.snapElements[i].snapping = false;
 				continue;
 			}
@@ -655,7 +655,7 @@ $.ui.plugin.add("draggable", "snap", {
 			}
 
 			if(!inst.snapElements[i].snapping && (ts || bs || ls || rs || first))
-				(inst.options.snap.snap && inst.options.snap.snap.call(inst.element, null, $.extend(inst.uiHash(), { snapItem: inst.snapElements[i].item })));
+				(inst.options.snap.snap && inst.options.snap.snap.call(inst.element, event, $.extend(inst.uiHash(), { snapItem: inst.snapElements[i].item })));
 			inst.snapElements[i].snapping = (ts || bs || ls || rs || first);
 
 		};
