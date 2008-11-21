@@ -14,35 +14,6 @@
 
 $.widget("ui.draggable", $.extend({}, $.ui.mouse, {
 
-	getHandle: function(event) {
-
-		var handle = !this.options.handle || !$(this.options.handle, this.element).length ? true : false;
-		$(this.options.handle, this.element)
-			.find("*")
-			.andSelf()
-			.each(function() {
-				if(this == event.target) handle = true;
-			});
-
-		return handle;
-
-	},
-
-	createHelper: function(event) {
-
-		var o = this.options;
-		var helper = $.isFunction(o.helper) ? $(o.helper.apply(this.element[0], [event])) : (o.helper == 'clone' ? this.element.clone() : this.element);
-
-		if(!helper.parents('body').length)
-			helper.appendTo((o.appendTo == 'parent' ? this.element[0].parentNode : o.appendTo));
-
-		if(helper[0] != this.element[0] && !(/(fixed|absolute)/).test(helper.css("position")))
-			helper.css("position", "absolute");
-
-		return helper;
-
-	},
-
 	_init: function() {
 
 		if (this.options.helper == 'original' && !(/^(?:r|a|f)/).test(this.element.css("position")))
@@ -53,6 +24,12 @@ $.widget("ui.draggable", $.extend({}, $.ui.mouse, {
 
 		this._mouseInit();
 
+	},
+
+	destroy: function() {
+		if(!this.element.data('draggable')) return;
+		this.element.removeData("draggable").unbind(".draggable").removeClass('ui-draggable ui-draggable-dragging ui-draggable-disabled');
+		this._mouseDestroy();
 	},
 
 	_mouseCapture: function(event) {
@@ -163,6 +140,72 @@ $.widget("ui.draggable", $.extend({}, $.ui.mouse, {
 		return true;
 	},
 
+	_mouseDrag: function(event) {
+
+		//Compute the helpers position
+		this.position = this._generatePosition(event);
+		this.positionAbs = this._convertPositionTo("absolute");
+
+		//Call plugins and callbacks and use the resulting position if something is returned
+		this.position = this._propagate("drag", event) || this.position;
+
+		if(!this.options.axis || this.options.axis != "y") this.helper[0].style.left = this.position.left+'px';
+		if(!this.options.axis || this.options.axis != "x") this.helper[0].style.top = this.position.top+'px';
+		if($.ui.ddmanager) $.ui.ddmanager.drag(this, event);
+
+		return false;
+	},
+
+	_mouseStop: function(event) {
+
+		//If we are using droppables, inform the manager about the drop
+		var dropped = false;
+		if ($.ui.ddmanager && !this.options.dropBehaviour)
+			var dropped = $.ui.ddmanager.drop(this, event);
+
+		if((this.options.revert == "invalid" && !dropped) || (this.options.revert == "valid" && dropped) || this.options.revert === true || ($.isFunction(this.options.revert) && this.options.revert.call(this.element, dropped))) {
+			var self = this;
+			$(this.helper).animate(this.originalPosition, parseInt(this.options.revertDuration, 10), function() {
+				self._propagate("stop", event);
+				self._clear();
+			});
+		} else {
+			this._propagate("stop", event);
+			this._clear();
+		}
+
+		return false;
+	},
+
+	getHandle: function(event) {
+
+		var handle = !this.options.handle || !$(this.options.handle, this.element).length ? true : false;
+		$(this.options.handle, this.element)
+			.find("*")
+			.andSelf()
+			.each(function() {
+				if(this == event.target) handle = true;
+			});
+
+		return handle;
+
+	},
+
+	createHelper: function(event) {
+
+		var o = this.options;
+		var helper = $.isFunction(o.helper) ? $(o.helper.apply(this.element[0], [event])) : (o.helper == 'clone' ? this.element.clone() : this.element);
+
+		if(!helper.parents('body').length)
+			helper.appendTo((o.appendTo == 'parent' ? this.element[0].parentNode : o.appendTo));
+
+		if(helper[0] != this.element[0] && !(/(fixed|absolute)/).test(helper.css("position")))
+			helper.css("position", "absolute");
+
+		return helper;
+
+	},
+
 	cacheScrollParents: function() {
 
 		this.scrollTopParent = function(el) {
@@ -240,6 +283,7 @@ $.widget("ui.draggable", $.extend({}, $.ui.mouse, {
 			)
 		};
 	},
+
 	_generatePosition: function(event) {
 
 		var o = this.options;
@@ -285,41 +329,7 @@ $.widget("ui.draggable", $.extend({}, $.ui.mouse, {
 
 		return position;
 	},
-	_mouseDrag: function(event) {
 
-		//Compute the helpers position
-		this.position = this._generatePosition(event);
-		this.positionAbs = this._convertPositionTo("absolute");
-
-		//Call plugins and callbacks and use the resulting position if something is returned
-		this.position = this._propagate("drag", event) || this.position;
-
-		if(!this.options.axis || this.options.axis != "y") this.helper[0].style.left = this.position.left+'px';
-		if(!this.options.axis || this.options.axis != "x") this.helper[0].style.top = this.position.top+'px';
-		if($.ui.ddmanager) $.ui.ddmanager.drag(this, event);
-
-		return false;
-	},
-	_mouseStop: function(event) {
-
-		//If we are using droppables, inform the manager about the drop
-		var dropped = false;
-		if ($.ui.ddmanager && !this.options.dropBehaviour)
-			var dropped = $.ui.ddmanager.drop(this, event);
-
-		if((this.options.revert == "invalid" && !dropped) || (this.options.revert == "valid" && dropped) || this.options.revert === true || ($.isFunction(this.options.revert) && this.options.revert.call(this.element, dropped))) {
-			var self = this;
-			$(this.helper).animate(this.originalPosition, parseInt(this.options.revertDuration, 10), function() {
-				self._propagate("stop", event);
-				self._clear();
-			});
-		} else {
-			this._propagate("stop", event);
-			this._clear();
-		}
-
-		return false;
-	},
 	_clear: function() {
 		this.helper.removeClass("ui-draggable-dragging");
 		if(this.helper[0] != this.element[0] && !this.cancelHelperRemoval) this.helper.remove();
@@ -329,7 +339,15 @@ $.widget("ui.draggable", $.extend({}, $.ui.mouse, {
 	},
 
 	// From now on bulk stuff - mainly helpers
+
+	_propagate: function(n, event) {
+		$.ui.plugin.call(this, n, [event, this.uiHash()]);
+		if(n == "drag") this.positionAbs = this._convertPositionTo("absolute"); //The absolute position has to be recalculated after plugins
+		return this.element.triggerHandler(n == "drag" ? n : "drag"+n, [event, this.uiHash()], this.options[n]);
+	},
+
 	plugins: {},
+
 	uiHash: function(event) {
 		return {
 			helper: this.helper,
@@ -337,17 +355,8 @@ $.widget("ui.draggable", $.extend({}, $.ui.mouse, {
 			absolutePosition: this.positionAbs,
 			options: this.options
 		};
-	},
-	_propagate: function(n, event) {
-		$.ui.plugin.call(this, n, [event, this.uiHash()]);
-		if(n == "drag") this.positionAbs = this._convertPositionTo("absolute"); //The absolute position has to be recalculated after plugins
-		return this.element.triggerHandler(n == "drag" ? n : "drag"+n, [event, this.uiHash()], this.options[n]);
-	},
-	destroy: function() {
-		if(!this.element.data('draggable')) return;
-		this.element.removeData("draggable").unbind(".draggable").removeClass('ui-draggable ui-draggable-dragging ui-draggable-disabled');
-		this._mouseDestroy();
 	}
+
 }));
 
 $.extend($.ui.draggable, {
@@ -355,14 +364,15 @@ $.extend($.ui.draggable, {
 	defaults: {
 		appendTo: "parent",
 		axis: false,
-		handle: false,
 		cancel: ":input",
 		connectToSortable: false,
 		containment: false,
+		cssNamespace: "ui",
 		cursor: "default",
 		delay: 0,
 		distance: 1,
 		grid: false,
+		handle: false,
 		helper: "original",
 		iframeFix: false,
 		opacity: 1,
@@ -376,8 +386,119 @@ $.extend($.ui.draggable, {
 		snap: false,
 		snapMode: "both",
 		snapTolerance: 20,
-		stack: false,
-		cssNamespace: "ui"
+		stack: false
+	}
+});
+
+$.ui.plugin.add("draggable", "connectToSortable", {
+	start: function(event, ui) {
+
+		var inst = $(this).data("draggable");
+		inst.sortables = [];
+		$(ui.options.connectToSortable).each(function() {
+			if($.data(this, 'sortable')) {
+				var sortable = $.data(this, 'sortable');
+				inst.sortables.push({
+					instance: sortable,
+					shouldRevert: sortable.options.revert
+				});
+				sortable._refreshItems();	//Do a one-time refresh at start to refresh the containerCache
+				sortable._propagate("activate", event, inst);
+			}
+		});
+
+	},
+	stop: function(event, ui) {
+
+		//If we are still over the sortable, we fake the stop event of the sortable, but also remove helper
+		var inst = $(this).data("draggable");
+
+		$.each(inst.sortables, function() {
+			if(this.instance.isOver) {
+				this.instance.isOver = 0;
+				inst.cancelHelperRemoval = true; //Don't remove the helper in the draggable instance
+				this.instance.cancelHelperRemoval = false; //Remove it in the sortable instance (so sortable plugins like revert still work)
+				if(this.shouldRevert) this.instance.options.revert = true; //revert here
+				this.instance._mouseStop(event);
+
+				//Also propagate receive event, since the sortable is actually receiving a element
+				this.instance.element.triggerHandler("sortreceive", [event, $.extend(this.instance._ui(), { sender: inst.element })], this.instance.options["receive"]);
+
+				this.instance.options.helper = this.instance.options._helper;
+			} else {
+				this.instance.cancelHelperRemoval = false; //Remove the helper in the sortable instance
+				this.instance._propagate("deactivate", event, inst);
+			}
+
+		});
+
+	},
+	drag: function(event, ui) {
+
+		var inst = $(this).data("draggable"), self = this;
+
+		var checkPos = function(o) {
+			var dyClick = this.offset.click.top, dxClick = this.offset.click.left;
+			var helperTop = this.positionAbs.top, helperLeft = this.positionAbs.left;
+			var itemHeight = o.height, itemWidth = o.width;
+			var itemTop = o.top, itemLeft = o.left;
+
+			return $.ui.isOver(helperTop + dyClick, helperLeft + dxClick, itemTop, itemLeft, itemHeight, itemWidth);
+		};
+
+		$.each(inst.sortables, function(i) {
+
+			if(checkPos.call(inst, this.instance.containerCache)) {
+
+				//If it intersects, we use a little isOver variable and set it once, so our move-in stuff gets fired only once
+				if(!this.instance.isOver) {
+					this.instance.isOver = 1;
+					//Now we fake the start of dragging for the sortable instance,
+					//by cloning the list group item, appending it to the sortable and using it as inst.currentItem
+					//We can then fire the start event of the sortable with our passed browser event, and our own helper (so it doesn't create a new one)
+					this.instance.currentItem = $(self).clone().appendTo(this.instance.element).data("sortable-item", true);
+					this.instance.options._helper = this.instance.options.helper; //Store helper option to later restore it
+					this.instance.options.helper = function() { return ui.helper[0]; };
+
+					event.target = this.instance.currentItem[0];
+					this.instance._mouseCapture(event, true);
+					this.instance._mouseStart(event, true, true);
+
+					//Because the browser event is way off the new appended portlet, we modify a couple of variables to reflect the changes
+					this.instance.offset.click.top = inst.offset.click.top;
+					this.instance.offset.click.left = inst.offset.click.left;
+					this.instance.offset.parent.left -= inst.offset.parent.left - this.instance.offset.parent.left;
+					this.instance.offset.parent.top -= inst.offset.parent.top - this.instance.offset.parent.top;
+
+					inst._propagate("toSortable", event);
+
+				}
+
+				//Provided we did all the previous steps, we can fire the drag event of the sortable on every draggable drag, when it intersects with the sortable
+				if(this.instance.currentItem) this.instance._mouseDrag(event);
+
+			} else {
+
+				//If it doesn't intersect with the sortable, and it intersected before,
+				//we fake the drag stop of the sortable, but make sure it doesn't remove the helper by using cancelHelperRemoval
+				if(this.instance.isOver) {
+					this.instance.isOver = 0;
+					this.instance.cancelHelperRemoval = true;
+					this.instance.options.revert = false; //No revert here
+					this.instance._mouseStop(event, true);
+					this.instance.options.helper = this.instance.options._helper;
+
+					//Now we remove our currentItem, the list group clone again, and the placeholder, and animate the helper back to it's original size
+					this.instance.currentItem.remove();
+					if(this.instance.placeholder) this.instance.placeholder.remove();
+
+					inst._propagate("fromSortable", event);
+				}
+
+			};
+
+		});
+
 	}
 });
 
@@ -389,28 +510,6 @@ $.ui.plugin.add("draggable", "cursor", {
 	},
 	stop: function(event, ui) {
 		if (ui.options._cursor) $('body').css("cursor", ui.options._cursor);
-	}
-});
-
-$.ui.plugin.add("draggable", "zIndex", {
-	start: function(event, ui) {
-		var t = $(ui.helper);
-		if(t.css("zIndex")) ui.options._zIndex = t.css("zIndex");
-		t.css('zIndex', ui.options.zIndex);
-	},
-	stop: function(event, ui) {
-		if(ui.options._zIndex) $(ui.helper).css('zIndex', ui.options._zIndex);
-	}
-});
-
-$.ui.plugin.add("draggable", "opacity", {
-	start: function(event, ui) {
-		var t = $(ui.helper);
-		if(t.css("opacity")) ui.options._opacity = t.css("opacity");
-		t.css('opacity', ui.options.opacity);
-	},
-	stop: function(event, ui) {
-		if(ui.options._opacity) $(ui.helper).css('opacity', ui.options._opacity);
 	}
 });
 
@@ -428,6 +527,17 @@ $.ui.plugin.add("draggable", "iframeFix", {
 	},
 	stop: function(event, ui) {
 		$("div.ui-draggable-iframeFix").each(function() { this.parentNode.removeChild(this); }); //Remove frame helpers
+	}
+});
+
+$.ui.plugin.add("draggable", "opacity", {
+	start: function(event, ui) {
+		var t = $(ui.helper);
+		if(t.css("opacity")) ui.options._opacity = t.css("opacity");
+		t.css('opacity', ui.options.opacity);
+	},
+	stop: function(event, ui) {
+		if(ui.options._opacity) $(ui.helper).css('opacity', ui.options._opacity);
 	}
 });
 
@@ -553,120 +663,8 @@ $.ui.plugin.add("draggable", "snap", {
 	}
 });
 
-$.ui.plugin.add("draggable", "connectToSortable", {
-	start: function(event,ui) {
-
-		var inst = $(this).data("draggable");
-		inst.sortables = [];
-		$(ui.options.connectToSortable).each(function() {
-			if($.data(this, 'sortable')) {
-				var sortable = $.data(this, 'sortable');
-				inst.sortables.push({
-					instance: sortable,
-					shouldRevert: sortable.options.revert
-				});
-				sortable._refreshItems();	//Do a one-time refresh at start to refresh the containerCache
-				sortable._propagate("activate", event, inst);
-			}
-		});
-
-	},
-	stop: function(event,ui) {
-
-		//If we are still over the sortable, we fake the stop event of the sortable, but also remove helper
-		var inst = $(this).data("draggable");
-
-		$.each(inst.sortables, function() {
-			if(this.instance.isOver) {
-				this.instance.isOver = 0;
-				inst.cancelHelperRemoval = true; //Don't remove the helper in the draggable instance
-				this.instance.cancelHelperRemoval = false; //Remove it in the sortable instance (so sortable plugins like revert still work)
-				if(this.shouldRevert) this.instance.options.revert = true; //revert here
-				this.instance._mouseStop(event);
-
-				//Also propagate receive event, since the sortable is actually receiving a element
-				this.instance.element.triggerHandler("sortreceive", [event, $.extend(this.instance._ui(), { sender: inst.element })], this.instance.options["receive"]);
-
-				this.instance.options.helper = this.instance.options._helper;
-			} else {
-				this.instance.cancelHelperRemoval = false; //Remove the helper in the sortable instance
-				this.instance._propagate("deactivate", event, inst);
-			}
-
-		});
-
-	},
-	drag: function(event, ui) {
-
-		var inst = $(this).data("draggable"), self = this;
-
-		var checkPos = function(o) {
-			var dyClick = this.offset.click.top, dxClick = this.offset.click.left;
-			var helperTop = this.positionAbs.top, helperLeft = this.positionAbs.left;
-			var itemHeight = o.height, itemWidth = o.width;
-			var itemTop = o.top, itemLeft = o.left;
-
-			return $.ui.isOver(helperTop + dyClick, helperLeft + dxClick, itemTop, itemLeft, itemHeight, itemWidth);
-		};
-
-		$.each(inst.sortables, function(i) {
-
-			if(checkPos.call(inst, this.instance.containerCache)) {
-
-				//If it intersects, we use a little isOver variable and set it once, so our move-in stuff gets fired only once
-				if(!this.instance.isOver) {
-					this.instance.isOver = 1;
-					//Now we fake the start of dragging for the sortable instance,
-					//by cloning the list group item, appending it to the sortable and using it as inst.currentItem
-					//We can then fire the start event of the sortable with our passed browser event, and our own helper (so it doesn't create a new one)
-					this.instance.currentItem = $(self).clone().appendTo(this.instance.element).data("sortable-item", true);
-					this.instance.options._helper = this.instance.options.helper; //Store helper option to later restore it
-					this.instance.options.helper = function() { return ui.helper[0]; };
-
-					event.target = this.instance.currentItem[0];
-					this.instance._mouseCapture(event, true);
-					this.instance._mouseStart(event, true, true);
-
-					//Because the browser event is way off the new appended portlet, we modify a couple of variables to reflect the changes
-					this.instance.offset.click.top = inst.offset.click.top;
-					this.instance.offset.click.left = inst.offset.click.left;
-					this.instance.offset.parent.left -= inst.offset.parent.left - this.instance.offset.parent.left;
-					this.instance.offset.parent.top -= inst.offset.parent.top - this.instance.offset.parent.top;
-
-					inst._propagate("toSortable", event);
-
-				}
-
-				//Provided we did all the previous steps, we can fire the drag event of the sortable on every draggable drag, when it intersects with the sortable
-				if(this.instance.currentItem) this.instance._mouseDrag(event);
-
-			} else {
-
-				//If it doesn't intersect with the sortable, and it intersected before,
-				//we fake the drag stop of the sortable, but make sure it doesn't remove the helper by using cancelHelperRemoval
-				if(this.instance.isOver) {
-					this.instance.isOver = 0;
-					this.instance.cancelHelperRemoval = true;
-					this.instance.options.revert = false; //No revert here
-					this.instance._mouseStop(event, true);
-					this.instance.options.helper = this.instance.options._helper;
-
-					//Now we remove our currentItem, the list group clone again, and the placeholder, and animate the helper back to it's original size
-					this.instance.currentItem.remove();
-					if(this.instance.placeholder) this.instance.placeholder.remove();
-
-					inst._propagate("fromSortable", event);
-				}
-
-			};
-
-		});
-
-	}
-});
-
 $.ui.plugin.add("draggable", "stack", {
-	start: function(event,ui) {
+	start: function(event, ui) {
 		var group = $.makeArray($(ui.options.stack.group)).sort(function(a,b) {
 			return (parseInt($(a).css("zIndex"),10) || ui.options.stack.min) - (parseInt($(b).css("zIndex"),10) || ui.options.stack.min);
 		});
@@ -676,6 +674,17 @@ $.ui.plugin.add("draggable", "stack", {
 		});
 
 		this[0].style.zIndex = ui.options.stack.min + group.length;
+	}
+});
+
+$.ui.plugin.add("draggable", "zIndex", {
+	start: function(event, ui) {
+		var t = $(ui.helper);
+		if(t.css("zIndex")) ui.options._zIndex = t.css("zIndex");
+		t.css('zIndex', ui.options.zIndex);
+	},
+	stop: function(event, ui) {
+		if(ui.options._zIndex) $(ui.helper).css('zIndex', ui.options._zIndex);
 	}
 });
 

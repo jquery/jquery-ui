@@ -13,6 +13,7 @@
 (function($) {
 
 $.widget("ui.selectable", $.extend({}, $.ui.mouse, {
+
 	_init: function() {
 		var self = this;
 
@@ -51,13 +52,7 @@ $.widget("ui.selectable", $.extend({}, $.ui.mouse, {
 			.css({border:'1px dotted black'})
 			.addClass("ui-selectable-helper");
 	},
-	toggle: function() {
-		if(this.options.disabled){
-			this.enable();
-		} else {
-			this.disable();
-		}
-	},
+
 	destroy: function() {
 		this.element
 			.removeClass("ui-selectable ui-selectable-disabled")
@@ -65,6 +60,7 @@ $.widget("ui.selectable", $.extend({}, $.ui.mouse, {
 			.unbind(".selectable");
 		this._mouseDestroy();
 	},
+
 	_mouseStart: function(event) {
 		var self = this;
 
@@ -121,6 +117,7 @@ $.widget("ui.selectable", $.extend({}, $.ui.mouse, {
 		});
 		return this.options.keyboard ? !isSelectee : true;
 	},
+
 	_mouseDrag: function(event) {
 		var self = this;
 		this.dragged = true;
@@ -210,6 +207,7 @@ $.widget("ui.selectable", $.extend({}, $.ui.mouse, {
 
 		return false;
 	},
+
 	_mouseStop: function(event) {
 		var self = this;
 
@@ -248,17 +246,26 @@ $.widget("ui.selectable", $.extend({}, $.ui.mouse, {
 		this.helper.remove();
 
 		return false;
+	},
+
+	toggle: function() {
+		if(this.options.disabled){
+			this.enable();
+		} else {
+			this.disable();
+		}
 	}
+
 }));
 
 $.extend($.ui.selectable, {
 	version: "@VERSION",
 	defaults: {
-		distance: 1,
-		delay: 0,
-		cancel: ":input",
 		appendTo: 'body',
 		autoRefresh: true,
+		cancel: ":input",
+		delay: 0,
+		distance: 1,
 		filter: '*',
 		tolerance: 'touch'
 	}

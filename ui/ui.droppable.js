@@ -15,18 +15,6 @@
 
 $.widget("ui.droppable", {
 
-	_setData: function(key, value) {
-
-		if(key == 'accept') {
-			this.options.accept = value && $.isFunction(value) ? value : function(d) {
-				return d.is(accept);
-			};
-		} else {
-			$.widget.prototype._setData.apply(this, arguments);
-		}
-
-	},
-
 	_init: function() {
 
 		var o = this.options, accept = o.accept;
@@ -46,17 +34,7 @@ $.widget("ui.droppable", {
 		(this.options.cssNamespace && this.element.addClass(this.options.cssNamespace+"-droppable"));
 
 	},
-	plugins: {},
-	ui: function(c) {
-		return {
-			draggable: (c.currentItem || c.element),
-			helper: c.helper,
-			position: c.position,
-			absolutePosition: c.positionAbs,
-			options: this.options,
-			element: this.element
-		};
-	},
+
 	destroy: function() {
 		var drop = $.ui.ddmanager.droppables[this.options.scope];
 		for ( var i = 0; i < drop.length; i++ )
@@ -68,6 +46,35 @@ $.widget("ui.droppable", {
 			.removeData("droppable")
 			.unbind(".droppable");
 	},
+
+	_setData: function(key, value) {
+
+		if(key == 'accept') {
+			this.options.accept = value && $.isFunction(value) ? value : function(d) {
+				return d.is(accept);
+			};
+		} else {
+			$.widget.prototype._setData.apply(this, arguments);
+		}
+
+	},
+
+	_activate: function(event) {
+
+		var draggable = $.ui.ddmanager.current;
+		$.ui.plugin.call(this, 'activate', [event, this.ui(draggable)]);
+		if(draggable) this.element.triggerHandler("dropactivate", [event, this.ui(draggable)], this.options.activate);
+
+	},
+
+	_deactivate: function(event) {
+
+		var draggable = $.ui.ddmanager.current;
+		$.ui.plugin.call(this, 'deactivate', [event, this.ui(draggable)]);
+		if(draggable) this.element.triggerHandler("dropdeactivate", [event, this.ui(draggable)], this.options.deactivate);
+
+	},
+
 	_over: function(event) {
 
 		var draggable = $.ui.ddmanager.current;
@@ -79,6 +86,7 @@ $.widget("ui.droppable", {
 		}
 
 	},
+
 	_out: function(event) {
 
 		var draggable = $.ui.ddmanager.current;
@@ -90,6 +98,7 @@ $.widget("ui.droppable", {
 		}
 
 	},
+
 	_drop: function(event,custom) {
 
 		var draggable = custom || $.ui.ddmanager.current;
@@ -113,20 +122,20 @@ $.widget("ui.droppable", {
 		return false;
 
 	},
-	_activate: function(event) {
 
-		var draggable = $.ui.ddmanager.current;
-		$.ui.plugin.call(this, 'activate', [event, this.ui(draggable)]);
-		if(draggable) this.element.triggerHandler("dropactivate", [event, this.ui(draggable)], this.options.activate);
+	plugins: {},
 
-	},
-	_deactivate: function(event) {
-
-		var draggable = $.ui.ddmanager.current;
-		$.ui.plugin.call(this, 'deactivate', [event, this.ui(draggable)]);
-		if(draggable) this.element.triggerHandler("dropdeactivate", [event, this.ui(draggable)], this.options.deactivate);
-
+	ui: function(c) {
+		return {
+			draggable: (c.currentItem || c.element),
+			helper: c.helper,
+			position: c.position,
+			absolutePosition: c.positionAbs,
+			options: this.options,
+			element: this.element
+		};
 	}
+
 });
 
 $.extend($.ui.droppable, {

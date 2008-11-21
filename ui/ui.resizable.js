@@ -13,6 +13,7 @@
 (function($) {
 
 $.widget("ui.resizable", $.extend({}, $.ui.mouse, {
+
 	_init: function() {
 
 		var self = this, o = this.options;
@@ -214,23 +215,7 @@ $.widget("ui.resizable", $.extend({}, $.ui.mouse, {
 
 		this._mouseInit();
 	},
-	plugins: {},
-	ui: function() {
-		return {
-			originalElement: this.originalElement,
-			element: this.element,
-			helper: this.helper,
-			position: this.position,
-			size: this.size,
-			options: this.options,
-			originalSize: this.originalSize,
-			originalPosition: this.originalPosition
-		};
-	},
-	_propagate: function(n, event) {
-		$.ui.plugin.call(this, n, [event, this.ui()]);
-		if (n != "resize") this.element.triggerHandler(["resize", n].join(""), [event, this.ui()], this.options[n]);
-	},
+
 	destroy: function() {
 		var el = this.element, wrapped = el.children(".ui-resizable").get(0);
 
@@ -322,6 +307,7 @@ $.widget("ui.resizable", $.extend({}, $.ui.mouse, {
 		this._propagate("start", event);
 		return true;
 	},
+
 	_mouseDrag: function(event) {
 
 		//Increase performance, avoid regex
@@ -358,6 +344,7 @@ $.widget("ui.resizable", $.extend({}, $.ui.mouse, {
 
 		return false;
 	},
+
 	_mouseStop: function(event) {
 
 		this.options.resizing = false;
@@ -387,6 +374,7 @@ $.widget("ui.resizable", $.extend({}, $.ui.mouse, {
 
 		return false;
 	},
+
 	_updateCache: function(data) {
 		var o = this.options;
 		this.offset = this.helper.offset();
@@ -395,6 +383,7 @@ $.widget("ui.resizable", $.extend({}, $.ui.mouse, {
 		if (data.height) this.size.height = data.height;
 		if (data.width) this.size.width = data.width;
 	},
+
 	_updateRatio: function(data, event) {
 
 		var o = this.options, cpos = this.position, csize = this.size, a = this.axis;
@@ -413,6 +402,7 @@ $.widget("ui.resizable", $.extend({}, $.ui.mouse, {
 
 		return data;
 	},
+
 	_respectSize: function(data, event) {
 
 		var el = this.helper, o = this.options, pRatio = o._aspectRatio || event.shiftKey, a = this.axis,
@@ -439,6 +429,7 @@ $.widget("ui.resizable", $.extend({}, $.ui.mouse, {
 
 		return data;
 	},
+
 	_proportionallyResize: function() {
 		var o = this.options;
 		if (!o.proportionallyResize) return;
@@ -458,6 +449,7 @@ $.widget("ui.resizable", $.extend({}, $.ui.mouse, {
 			width: (el.width() - o.borderDif[1] - o.borderDif[3]) + "px"
 		});
 	},
+
 	_renderProxy: function() {
 		var el = this.element, o = this.options;
 		this.elementOffset = el.offset();
@@ -487,6 +479,7 @@ $.widget("ui.resizable", $.extend({}, $.ui.mouse, {
 			this.helper = el;
 		}
 	},
+
 	_change: {
 		e: function(event, dx, dy) {
 			return { width: this.originalSize.width + dx };
@@ -514,7 +507,28 @@ $.widget("ui.resizable", $.extend({}, $.ui.mouse, {
 		nw: function(event, dx, dy) {
 			return $.extend(this._change.n.apply(this, arguments), this._change.w.apply(this, [event, dx, dy]));
 		}
+	},
+
+	_propagate: function(n, event) {
+		$.ui.plugin.call(this, n, [event, this.ui()]);
+		if (n != "resize") this.element.triggerHandler(["resize", n].join(""), [event, this.ui()], this.options[n]);
+	},
+
+	plugins: {},
+
+	ui: function() {
+		return {
+			originalElement: this.originalElement,
+			element: this.element,
+			helper: this.helper,
+			position: this.position,
+			size: this.size,
+			options: this.options,
+			originalSize: this.originalSize,
+			originalPosition: this.originalPosition
+		};
 	}
+
 }));
 
 $.extend($.ui.resizable, {
@@ -548,6 +562,100 @@ $.extend($.ui.resizable, {
 /*
  * Resizable Extensions
  */
+
+$.ui.plugin.add("resizable", "alsoResize", {
+
+	start: function(event, ui) {
+		var o = ui.options, self = $(this).data("resizable"),
+
+		_store = function(exp) {
+			$(exp).each(function() {
+				$(this).data("resizable-alsoresize", {
+					width: parseInt($(this).width(), 10), height: parseInt($(this).height(), 10),
+					left: parseInt($(this).css('left'), 10), top: parseInt($(this).css('top'), 10)
+				});
+			});
+		};
+
+		if (typeof(o.alsoResize) == 'object') {
+			if (o.alsoResize.length) { o.alsoResize = o.alsoResize[0];	_store(o.alsoResize); }
+			else { $.each(o.alsoResize, function(exp, c) { _store(exp); }); }
+		}else{
+			_store(o.alsoResize);
+		}
+	},
+
+	resize: function(event, ui){
+		var o = ui.options, self = $(this).data("resizable"), os = self.originalSize, op = self.originalPosition;
+
+		var delta = {
+			height: (self.size.height - os.height) || 0, width: (self.size.width - os.width) || 0,
+			top: (self.position.top - op.top) || 0, left: (self.position.left - op.left) || 0
+		},
+
+		_alsoResize = function(exp, c) {
+			$(exp).each(function() {
+				var start = $(this).data("resizable-alsoresize"), style = {}, css = c && c.length ? c : ['width', 'height', 'top', 'left'];
+
+				$.each(css || ['width', 'height', 'top', 'left'], function(i, prop) {
+					var sum = (start[prop]||0) + (delta[prop]||0);
+					if (sum && sum >= 0)
+						style[prop] = sum || null;
+				});
+				$(this).css(style);
+			});
+		};
+
+		if (typeof(o.alsoResize) == 'object') {
+			$.each(o.alsoResize, function(exp, c) { _alsoResize(exp, c); });
+		}else{
+			_alsoResize(o.alsoResize);
+		}
+	},
+
+	stop: function(event, ui){
+		$(this).removeData("resizable-alsoresize-start");
+	}
+});
+
+$.ui.plugin.add("resizable", "animate", {
+
+	stop: function(event, ui) {
+		var o = ui.options, self = $(this).data("resizable");
+
+		var pr = o.proportionallyResize, ista = pr && (/textarea/i).test(pr.get(0).nodeName),
+						soffseth = ista && $.ui.hasScroll(pr.get(0), 'left') /* TODO - jump height */ ? 0 : self.sizeDiff.height,
+							soffsetw = ista ? 0 : self.sizeDiff.width;
+
+		var style = { width: (self.size.width - soffsetw), height: (self.size.height - soffseth) },
+					left = (parseInt(self.element.css('left'), 10) + (self.position.left - self.originalPosition.left)) || null,
+						top = (parseInt(self.element.css('top'), 10) + (self.position.top - self.originalPosition.top)) || null;
+
+		self.element.animate(
+			$.extend(style, top && left ? { top: top, left: left } : {}), {
+				duration: o.animateDuration,
+				easing: o.animateEasing,
+				step: function() {
+
+					var data = {
+						width: parseInt(self.element.css('width'), 10),
+						height: parseInt(self.element.css('height'), 10),
+						top: parseInt(self.element.css('top'), 10),
+						left: parseInt(self.element.css('left'), 10)
+					};
+
+					if (pr) pr.css({ width: data.width, height: data.height });
+
+					// propagating resize, and updating values for each animation step
+					self._updateCache(data);
+					self._propagate("animate", event);
+
+				}
+			}
+		);
+	}
+
+});
 
 $.ui.plugin.add("resizable", "containment", {
 
@@ -632,76 +740,6 @@ $.ui.plugin.add("resizable", "containment", {
 	}
 });
 
-$.ui.plugin.add("resizable", "grid", {
-
-	resize: function(event, ui) {
-		var o = ui.options, self = $(this).data("resizable"), cs = self.size, os = self.originalSize, op = self.originalPosition, a = self.axis, ratio = o._aspectRatio || event.shiftKey;
-		o.grid = typeof o.grid == "number" ? [o.grid, o.grid] : o.grid;
-		var ox = Math.round((cs.width - os.width) / (o.grid[0]||1)) * (o.grid[0]||1), oy = Math.round((cs.height - os.height) / (o.grid[1]||1)) * (o.grid[1]||1);
-
-		if (/^(se|s|e)$/.test(a)) {
-			self.size.width = os.width + ox;
-			self.size.height = os.height + oy;
-		}
-		else if (/^(ne)$/.test(a)) {
-			self.size.width = os.width + ox;
-			self.size.height = os.height + oy;
-			self.position.top = op.top - oy;
-		}
-		else if (/^(sw)$/.test(a)) {
-			self.size.width = os.width + ox;
-			self.size.height = os.height + oy;
-			self.position.left = op.left - ox;
-		}
-		else {
-			self.size.width = os.width + ox;
-			self.size.height = os.height + oy;
-			self.position.top = op.top - oy;
-			self.position.left = op.left - ox;
-		}
-	}
-
-});
-
-$.ui.plugin.add("resizable", "animate", {
-
-	stop: function(event, ui) {
-		var o = ui.options, self = $(this).data("resizable");
-
-		var pr = o.proportionallyResize, ista = pr && (/textarea/i).test(pr.get(0).nodeName),
-						soffseth = ista && $.ui.hasScroll(pr.get(0), 'left') /* TODO - jump height */ ? 0 : self.sizeDiff.height,
-							soffsetw = ista ? 0 : self.sizeDiff.width;
-
-		var style = { width: (self.size.width - soffsetw), height: (self.size.height - soffseth) },
-					left = (parseInt(self.element.css('left'), 10) + (self.position.left - self.originalPosition.left)) || null,
-						top = (parseInt(self.element.css('top'), 10) + (self.position.top - self.originalPosition.top)) || null;
-
-		self.element.animate(
-			$.extend(style, top && left ? { top: top, left: left } : {}), {
-				duration: o.animateDuration,
-				easing: o.animateEasing,
-				step: function() {
-
-					var data = {
-						width: parseInt(self.element.css('width'), 10),
-						height: parseInt(self.element.css('height'), 10),
-						top: parseInt(self.element.css('top'), 10),
-						left: parseInt(self.element.css('left'), 10)
-					};
-
-					if (pr) pr.css({ width: data.width, height: data.height });
-
-					// propagating resize, and updating values for each animation step
-					self._updateCache(data);
-					self._propagate("animate", event);
-
-				}
-			}
-		);
-	}
-
-});
-
 $.ui.plugin.add("resizable", "ghost", {
 
 	start: function(event, ui) {
@@ -733,59 +771,35 @@ $.ui.plugin.add("resizable", "ghost", {
 
 });
 
-$.ui.plugin.add("resizable", "alsoResize", {
+$.ui.plugin.add("resizable", "grid", {
 
-	start: function(event, ui) {
-		var o = ui.options, self = $(this).data("resizable"),
+	resize: function(event, ui) {
+		var o = ui.options, self = $(this).data("resizable"), cs = self.size, os = self.originalSize, op = self.originalPosition, a = self.axis, ratio = o._aspectRatio || event.shiftKey;
+		o.grid = typeof o.grid == "number" ? [o.grid, o.grid] : o.grid;
+		var ox = Math.round((cs.width - os.width) / (o.grid[0]||1)) * (o.grid[0]||1), oy = Math.round((cs.height - os.height) / (o.grid[1]||1)) * (o.grid[1]||1);
 
-		_store = function(exp) {
-			$(exp).each(function() {
-				$(this).data("resizable-alsoresize", {
-					width: parseInt($(this).width(), 10), height: parseInt($(this).height(), 10),
-					left: parseInt($(this).css('left'), 10), top: parseInt($(this).css('top'), 10)
-				});
-			});
-		};
-
-		if (typeof(o.alsoResize) == 'object') {
-			if (o.alsoResize.length) { o.alsoResize = o.alsoResize[0];	_store(o.alsoResize); }
-			else { $.each(o.alsoResize, function(exp, c) { _store(exp); }); }
-		}else{
-			_store(o.alsoResize);
+		if (/^(se|s|e)$/.test(a)) {
+			self.size.width = os.width + ox;
+			self.size.height = os.height + oy;
 		}
-	},
-
-	resize: function(event, ui){
-		var o = ui.options, self = $(this).data("resizable"), os = self.originalSize, op = self.originalPosition;
-
-		var delta = {
-			height: (self.size.height - os.height) || 0, width: (self.size.width - os.width) || 0,
-			top: (self.position.top - op.top) || 0, left: (self.position.left - op.left) || 0
-		},
-
-		_alsoResize = function(exp, c) {
-			$(exp).each(function() {
-				var start = $(this).data("resizable-alsoresize"), style = {}, css = c && c.length ? c : ['width', 'height', 'top', 'left'];
-
-				$.each(css || ['width', 'height', 'top', 'left'], function(i, prop) {
-					var sum = (start[prop]||0) + (delta[prop]||0);
-					if (sum && sum >= 0)
-						style[prop] = sum || null;
-				});
-				$(this).css(style);
-			});
-		};
-
-		if (typeof(o.alsoResize) == 'object') {
-			$.each(o.alsoResize, function(exp, c) { _alsoResize(exp, c); });
-		}else{
-			_alsoResize(o.alsoResize);
+		else if (/^(ne)$/.test(a)) {
+			self.size.width = os.width + ox;
+			self.size.height = os.height + oy;
+			self.position.top = op.top - oy;
 		}
-	},
-
-	stop: function(event, ui){
-		$(this).removeData("resizable-alsoresize-start");
+		else if (/^(sw)$/.test(a)) {
+			self.size.width = os.width + ox;
+			self.size.height = os.height + oy;
+			self.position.left = op.left - ox;
+		}
+		else {
+			self.size.width = os.width + ox;
+			self.size.height = os.height + oy;
+			self.position.top = op.top - oy;
+			self.position.left = op.left - ox;
+		}
 	}
+
 });
 
 })(jQuery);
