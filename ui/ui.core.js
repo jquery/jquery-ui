@@ -118,19 +118,14 @@ $.ui = {
 		return has;
 	},
 
-	isOverHeight: function(y, top, height) {
-		//Determines when y coordinate is over "b" element height
-		return (y > top) && (y < (top + height));
-	},
-
-	isOverWidth: function(x, left, width) {
-		//Determines when x coordinate is over "b" element width
-		return (x > left) && (x < (left + width));
+	isOverAxis: function(x, reference, size) {
+		//Determines when x coordinate is over "b" element axis
+		return (x > reference) && (x < (reference + size));
 	},
 
 	isOver: function(y, x, top, left, height, width) {
 		//Determines when x, y coordinates is over "b" element
-		return $.ui.isOverHeight(y, top, height) && $.ui.isOverWidth(x, left, width);
+		return $.ui.isOverAxis(y, top, height) && $.ui.isOverAxis(x, left, width);
 	}
 };
 
