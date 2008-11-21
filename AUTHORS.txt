@@ -20,7 +20,7 @@ Eduardo Lundgren
 Todd Parker
 John Resig
 Patty Toland
-Ca-Phun Ung (pazu2k@gmail.com)
+Ca-Phun Ung (yelotofu.com)
 Keith Wood (kbwood@virginbroadband.com.au)
 Richard D. Worth (rdworth.org)
 Jörn Zaefferer
