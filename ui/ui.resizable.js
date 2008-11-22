@@ -473,7 +473,7 @@ $.widget("ui.resizable", $.extend({}, $.ui.mouse, {
 			this.helper.appendTo("body");
 
 			if (o.disableSelection)
-				$.ui.disableSelection(this.helper.get(0));
+				this.helper.disableSelection();
 
 		} else {
 			this.helper = el;
