@@ -20,7 +20,7 @@
 
 			{
 				title: 'Simple Tabs',
-				html: ['<div><ul id="divTabs" class="flora">',
+				html: ['<div><ul id="divTabs">',
 							'<li><a href="#tabs-fragment-1"><span>One</span></a></li>',
                 			'<li><a href="#tabs-fragment-2"><span>Two</span></a></li>',
                 			'<li><a href="#tabs-fragment-3"><span>Three</span></a></li>',
@@ -51,7 +51,7 @@
 			},
 			{
 				title: 'Add A Tab',
-				html: ['<div><ul id="divAddTabs" class="flora">',
+				html: ['<div><ul id="divAddTabs">',
 							'<li><a href="#addtabs-fragment-1"><span>One</span></a></li>',
                 			'<li><a href="#addtabs-fragment-2"><span>Two</span></a></li>',
                 			'<li><a href="#addtabs-fragment-3"><span>Three</span></a></li>',
