@@ -3,33 +3,26 @@
 <head>
 	<title>jQuery UI Datepicker Test Suite</title>
 
-	<link rel="stylesheet" href="qunit/testsuite.css" type="text/css" media="screen">
-
 	<script type="text/javascript" src="../jquery-1.2.6.js"></script>
 	<script type="text/javascript" src="../ui/ui.core.js"></script>
 	<script type="text/javascript" src="../ui/ui.datepicker.js"></script>
 	<script type="text/javascript" src="../ui/i18n/ui.datepicker-fr.js"></script>
 	<script type="text/javascript" src="../ui/i18n/ui.datepicker-he.js"></script>
 
+	<link   type="text/css"       href="testsuite.css" rel="stylesheet" />
+	<script type="text/javascript" src="testsuite.js"></script>
 	<script type="text/javascript" src="qunit/testrunner.js"></script>
 	<script type="text/javascript" src="simulate/jquery.simulate.js"></script>
 
-	<script type="text/javascript" src="datepicker.js"></script>
-
 	<style type="text/css">
 		@import "../themes/default/ui.datepicker.css";
-		.xerror, .error { display: none }
 	</style>
+
+	<script type="text/javascript" src="datepicker.js"></script>
 </head>
 <body>
 
-<h1 id="header">jQuery UI Datepicker Test Suite</h1>
-<h2 id="banner"></h2>
-<h2 id="userAgent"></h2>
-
-<ol id="tests"></ol>
-
-<div id="main" style="position:absolute;top:-2000000px;">
+<div id="main">
 	<p><input type="text" id="inp"/><input type="text" id="alt"/><div id="inl"></div></p>
 </div>
 

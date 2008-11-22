@@ -1,0 +1,4 @@
+@import url("qunit/testsuite.css");
+html { border: 0; }
+.xerror, .error, .ui-tabs-hide { display: none }
+#main { position: absolute; top: -10000px; left: -10000px; }
