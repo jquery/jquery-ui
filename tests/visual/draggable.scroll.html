@@ -1,0 +1,158 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<script src="../../jquery-1.2.6.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../ui/ui.core.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../ui/ui.draggable.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../ui/ui.sortable.js" type="text/javascript" charset="utf-8"></script>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>jQuery UI Draggable Visual Test</title>
+</head>
+
+<body>
+ 
+<style>
+	
+	.draggable {
+		width:100px;
+		height:100px;
+		background-color:green;
+		color: #fff;
+		padding: 5px;
+		margin: 5px;
+		border: 5px solid red;
+	}
+	
+	.container {
+		width: 500px;
+		height: 200px;
+		border: 5px solid black;
+		padding: 5px;
+		margin: 5px;
+		float: left;
+		background: #fff;
+	}
+	
+	.enlarge {
+		width: 1000px;
+		height: 1000px;
+	}
+
+
+</style>
+
+
+
+<script language="JavaScript">
+<!--
+	$(function(){
+		$(".draggable").draggable({
+			//helper: 'clone',
+			drag: function(e, ui) {
+				//console.log(ui.helper.offset());
+			},
+			scroll:true
+			//containment:"parent"
+		});
+	});
+//-->
+</script>
+
+
+
+<div class='container' style="overflow:scroll;">
+	<div class='draggable'>(Broken in IE)</div>
+	<div class='enlarge'></div>
+</div>
+
+<div class='container' style="overflow:scroll; position: relative;">
+	<div class='draggable'></div>
+	<div class='enlarge'></div>
+</div>
+
+<div class='container' style="overflow:scroll;">
+	<div class='draggable' style='position: absolute;top:0px;left:1000px;'>Absolute</div>
+	<div class='enlarge'></div>
+</div>
+
+<div class='container' style="overflow:scroll; position: relative;">
+	<div class='draggable' style='position: absolute;'>Absolute</div>
+	<div class='enlarge'></div>
+</div>
+
+<div class='container' style="overflow:scroll;">
+	<div class='draggable' style='position: fixed;'>Fixed</div>
+	<div class='enlarge'></div>
+</div>
+
+<div class='container' style="overflow:scroll; position: relative;">
+	<div class='draggable' style='position: fixed;'>Fixed</div>
+	<div class='enlarge'></div>
+</div>
+
+<!-- Relative draggable with two containers -->
+
+<div class='container' style="overflow:scroll; position: relative;">
+	<div class='container'>
+		<div class='draggable'>Relative</div>
+		<div class='enlarge'></div>
+	</div>
+
+</div>
+
+<div class='container' style="overflow:scroll; position: relative;">
+	<div class='container' style='position: relative;'>
+		<div class='draggable'>Relative</div>
+		<div class='enlarge'></div>
+	</div>
+</div>
+
+<div class='container' style="position: relative;">
+	<div class='container' style='overflow: scroll;'>
+		<div class='draggable'>Relative (Broken in IE)</div>
+		<div class='enlarge'></div>
+	</div>
+
+</div>
+
+<div class='container' style="position: relative;">
+	<div class='container' style='position: relative; overflow: scroll;'>
+		<div class='draggable'>Relative</div>
+		<div class='enlarge'></div>
+	</div>
+</div>
+
+<!-- Absolute draggable with two containers -->
+
+<div class='container' style="overflow:scroll; position: relative;">
+	<div class='container'>
+		<div class='draggable' style='position: absolute;'>Absolute</div>
+		<div class='enlarge'></div>
+	</div>
+
+</div>
+
+<div class='container' style="overflow:scroll; position: relative;">
+	<div class='container' style='position: relative;'>
+		<div class='draggable' style='position: absolute;'>Absolute</div>
+		<div class='enlarge'></div>
+	</div>
+</div>
+
+<div class='container' style="position: relative;">
+	<div class='container' style='overflow: scroll;'>
+		<div class='draggable' style='position: absolute;top:0px;left:0px;'>Absolute</div>
+		<div class='enlarge'></div>
+	</div>
+
+</div>
+
+<div class='container' style="position: relative;">
+	<div class='container' style='position: relative; overflow: scroll;'>
+		<div class='draggable' style='position: absolute;'>Absolute</div>
+		<div class='enlarge'></div>
+	</div>
+</div>
+	
+</body>
+</html>
