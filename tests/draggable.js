@@ -469,7 +469,7 @@ test("callbacks occurance count", function() {
 	drag(el, 10, 10);
 
 	equals(start, 1, "start callback should happen exactly once");
-	equals(dragc, 3 + 1, "drag callback should happen exactly once per mousemove + 1");
+	equals(dragc, 3, "drag callback should happen exactly once per mousemove");
 	equals(stop, 1, "stop callback should happen exactly once");
 
 });
@@ -690,21 +690,24 @@ test("{ helper: 'clone' }, absolute with scroll offset on parent", function() {
 
 	setScroll();
 	var helperOffset = null;
-	var origOffset = $("#draggable1").offset();
+	var origOffset = null;
 
 	el = $("#draggable1").draggable({ helper: "clone", drag: function(event, ui) {
 		helperOffset = ui.helper.offset();
 	} });
 
 	$("#main").css('position', 'relative');
+	origOffset = $("#draggable1").offset();
 	drag(el, 1, 1);
 	same({ top: helperOffset.top-1, left: helperOffset.left-1 }, origOffset, 'dragged[' + dragged.dx + ', ' + dragged.dy + '] ');
 
 	$("#main").css('position', 'static');
+	origOffset = $("#draggable1").offset();
 	drag(el, 1, 1);
 	same({ top: helperOffset.top-1, left: helperOffset.left-1 }, origOffset, 'dragged[' + dragged.dx + ', ' + dragged.dy + '] ');
 	
 	$("#main").css('position', 'absolute');
+	origOffset = $("#draggable1").offset();
 	drag(el, 1, 1);
 	same({ top: helperOffset.top-1, left: helperOffset.left-1 }, origOffset, 'dragged[' + dragged.dx + ', ' + dragged.dy + '] ');
 	
@@ -716,21 +719,24 @@ test("{ helper: 'clone' }, absolute with scroll offset on root", function() {
 
 	setScroll('root');
 	var helperOffset = null;
-	var origOffset = $("#draggable1").offset();
+	var origOffset = null;
 
 	el = $("#draggable1").draggable({ helper: "clone", drag: function(event, ui) {
 		helperOffset = ui.helper.offset();
 	} });
 	
 	$("#main").css('position', 'relative');
+	origOffset = $("#draggable1").offset();
 	drag(el, 1, 1);
 	same({ top: helperOffset.top-1, left: helperOffset.left-1 }, origOffset, 'dragged[' + dragged.dx + ', ' + dragged.dy + '] ');
 
 	$("#main").css('position', 'static');
+	origOffset = $("#draggable1").offset();
 	drag(el, 1, 1);
 	same({ top: helperOffset.top-1, left: helperOffset.left-1 }, origOffset, 'dragged[' + dragged.dx + ', ' + dragged.dy + '] ');
 	
 	$("#main").css('position', 'absolute');
+	origOffset = $("#draggable1").offset();
 	drag(el, 1, 1);
 	same({ top: helperOffset.top-1, left: helperOffset.left-1 }, origOffset, 'dragged[' + dragged.dx + ', ' + dragged.dy + '] ');	
 	
@@ -743,21 +749,24 @@ test("{ helper: 'clone' }, absolute with scroll offset on root and parent", func
 	setScroll('root');
 	setScroll();
 	var helperOffset = null;
-	var origOffset = $("#draggable1").offset();
+	var origOffset = null;
 
 	el = $("#draggable1").draggable({ helper: "clone", drag: function(event, ui) {
 		helperOffset = ui.helper.offset();
 	} });
 
 	$("#main").css('position', 'relative');
+	origOffset = $("#draggable1").offset()
 	drag(el, 1, 1);
 	same({ top: helperOffset.top-1, left: helperOffset.left-1 }, origOffset, 'dragged[' + dragged.dx + ', ' + dragged.dy + '] ');
 
 	$("#main").css('position', 'static');
+	origOffset = $("#draggable1").offset()
 	drag(el, 1, 1);
 	same({ top: helperOffset.top-1, left: helperOffset.left-1 }, origOffset, 'dragged[' + dragged.dx + ', ' + dragged.dy + '] ');
 	
 	$("#main").css('position', 'absolute');
+	origOffset = $("#draggable1").offset()
 	drag(el, 1, 1);
 	same({ top: helperOffset.top-1, left: helperOffset.left-1 }, origOffset, 'dragged[' + dragged.dx + ', ' + dragged.dy + '] ');
 	
@@ -774,49 +783,5 @@ test("Events should not be executed on the element if drag is initiated", functi
 
 
 module("draggable: Tickets");
-
-/* This needs to be rewritten
-
-test("#2965 cursorAt with margin", function() {
-
-	expect(2);
-
-	var ox = 0, oy = 0;
-
-	var actual, expected;
-	$("#draggable2").draggable({
-		cursorAt: { left: ox, top: oy },
-		drag: function(event, ui) {
-			actual = ui.absolutePosition;
-		}
-	});
-	var el = $("#draggable2").data("draggable").element;
-
-	$("#draggable2").css('margin', '0px !important');
-
-	var before = el.offset();
-	var pos = { clientX: before.left + ox, clientY: before.top + oy };
-	$("#draggable2").simulate("mousedown", pos);
-	$(document).simulate("mousemove", { clientX: pos.clientX + 1, clientY: pos.clientY + 1});
-	$(document).simulate("mousemove", pos);
-	$("#draggable2").simulate("mouseup", pos);
-	var expected = actual;
-	actual = undefined;
-
-	var marg = 13;
-
-	$("#draggable2").css('margin', marg + 'px !important');
-	var before = el.offset();
-	var pos = { clientX: before.left + ox - marg, clientY: before.top + oy - marg };
-	$("#draggable2").simulate("mousedown", pos);
-	$(document).simulate("mousemove", { clientX: pos.clientX + 1, clientY: pos.clientY + 1});
-	$(document).simulate("mousemove", pos);
-	$("#draggable2").simulate("mouseup", pos);
-
-	equals(actual.left, expected.left, "10px margin. left");
-	equals(actual.top, expected.top, "10px margin. top");
-
-});
-*/
 
 })(jQuery);
