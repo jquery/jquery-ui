@@ -646,7 +646,9 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 					if(!className) {
 						el.style.visibility = "hidden";
 						document.body.appendChild(el);
-						el.innerHTML = self.currentItem[0].innerHTML.replace(/name\=\"[^\"\']+\"/g, ''); //Name attributes are removed, otherwice causes elements to be unchecked
+						// Name attributes are removed, otherwice causes elements to be unchecked
+						// Expando attributes also have to be removed because of stupid IE (no condition, doesn't hurt in other browsers)
+						el.innerHTML = self.currentItem[0].innerHTML.replace(/name\=\"[^\"\']+\"/g, '').replace(/jQuery[0-9]+\=\"[^\"\']+\"/g, '');
 						document.body.removeChild(el);
 					};
 
