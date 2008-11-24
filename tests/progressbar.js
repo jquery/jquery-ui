@@ -8,10 +8,10 @@
 
 var defaults = {
 	disabled: false,
-	duration: 1000,
-	increment: 1,
-	interval: 1000,
-	range: true,
+	height: 20,
+	label: true,
+	labelAlign: 'left',
+	value: 0,
 	width: 300
 };
 
@@ -46,20 +46,19 @@ test("defaults", function() {
 });
 
 test("set defaults on init", function() {
-	expect(5);
 	el = $("#progressbar").progressbar({ 
-		width: 500,
-		duration: 5000,
-		interval: 500,
-		increment: 5,
-		range: false
+		height: 30,
+		label: false,
+		labelAlign: 'right',
+		value: 50,
+		width: 200
 	});
 
-	equals(el.data("width.progressbar"), 500, "width");
-	equals(el.data("duration.progressbar"), 5000, "duration");
-	equals(el.data("interval.progressbar"), 500, "interval");
-	equals(el.data("increment.progressbar"), 5, "increment");
-	equals(el.data("range.progressbar"), false, "range");
+	equals(el.progressbar("option", "height"), 30, "height");
+	equals(el.progressbar("option", "label"), false, "label");
+	equals(el.progressbar("option", "labelAlign"), "right", "labelAlign");
+	equals(el.progressbar("option", "value"), 50, "value");
+	equals(el.progressbar("option", "width"), 200, "width");
 
 });
 
@@ -71,7 +70,7 @@ test("accessibility", function() {
 	equals(el.attr("aria-valuemin"), 0, "aria-valuemin");
 	equals(el.attr("aria-valuemax"), 100, "aria-valuemax");
 	equals(el.attr("aria-valuenow"), 0, "aria-valuenow initially");
-	el.progressbar("progress", 77);
+	el.progressbar("value", 77);
 	equals(el.attr("aria-valuenow"), 77, "aria-valuenow");
 	el.progressbar("disable");
 	equals(el.attr("aria-disabled"), "true", "aria-disabled");
