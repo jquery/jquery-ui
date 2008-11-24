@@ -72,9 +72,18 @@ $.widget("ui.slider", {
 
 		// Bind the click to the slider itself
 		this.element.bind('mousedown.slider', function(event) {
+			
+			if($(event.target).is('.ui-slider-handle')) return;
+			
+			//Go to the actual clicked posiion, apply a click
 			self._click.apply(self, [event]);
-			self.currentHandle.data("mouse").trigger(event);
-			self.firstValue = self.firstValue + 1; //This is for always triggering the change event
+			
+			//initiate a handle drag, so we can click+drag somewhere
+			 self.currentHandle.data("mouse").trigger(event);
+			
+			 //This is for always triggering the change event
+			self.firstValue = self.firstValue + 1;
+			
 		});
 
 		// Move the first handle to the startValue
