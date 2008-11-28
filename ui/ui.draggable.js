@@ -54,7 +54,7 @@ $.widget("ui.draggable", $.extend({}, $.ui.mouse, {
 
 		//Create and append the visible helper
 		this.helper = this._createHelper(event);
-		
+
 		//Cache the helper size
 		this._cacheHelperProportions();
 
@@ -73,9 +73,9 @@ $.widget("ui.draggable", $.extend({}, $.ui.mouse, {
 		//Store the helper's css position
 		this.cssPosition = this.helper.css("position");
 		this.scrollParent = this.helper.scrollParent();
-		
+
 		//The element's absolute position on the page minus margins
-		this.offset = this.element.offset();															
+		this.offset = this.element.offset();
 		this.offset = {
 			top: this.offset.top - this.margins.top,
 			left: this.offset.left - this.margins.left
@@ -89,7 +89,7 @@ $.widget("ui.draggable", $.extend({}, $.ui.mouse, {
 			parent: this._getParentOffset(),
 			relative: this._getRelativeOffset() //This is a relative to absolute position minus the actual position calculation - only used for relative positioned helper
 		});
-		
+
 		//Adjust the mouse offset relative to the helper if 'cursorAt' is supplied
 		if(o.cursorAt)
 			this._adjustOffsetFromHelper(o.cursorAt);
@@ -188,14 +188,14 @@ $.widget("ui.draggable", $.extend({}, $.ui.mouse, {
 		if(obj.top != undefined) this.offset.click.top = obj.top + this.margins.top;
 		if(obj.bottom != undefined) this.offset.click.top = this.helperProportions.height - obj.bottom + this.margins.top;
 	},
-	
+
 	_getParentOffset: function() {
 
 		this.offsetParent = this.helper.offsetParent(); var po = this.offsetParent.offset();			//Get the offsetParent and cache its position
 
 		if((this.offsetParent[0] == document.body && $.browser.mozilla)	//Ugly FF3 fix
 		|| (this.offsetParent[0].tagName && this.offsetParent[0].tagName.toLowerCase() == 'html' && $.browser.msie)) //Ugly IE fix
-			po = { top: 0, left: 0 };													
+			po = { top: 0, left: 0 };
 
 		return {
 			top: po.top + (parseInt(this.offsetParent.css("borderTopWidth"),10) || 0),
@@ -203,7 +203,7 @@ $.widget("ui.draggable", $.extend({}, $.ui.mouse, {
 		};
 
 	},
-	
+
 	_getRelativeOffset: function() {
 
 		if(this.cssPosition == "relative") {
@@ -215,9 +215,9 @@ $.widget("ui.draggable", $.extend({}, $.ui.mouse, {
 		} else {
 			return { top: 0, left: 0 };
 		}
-		
+
 	},
-	
+
 	_cacheMargins: function() {
 		this.margins = {
 			left: (parseInt(this.element.css("marginLeft"),10) || 0),
@@ -283,7 +283,7 @@ $.widget("ui.draggable", $.extend({}, $.ui.mouse, {
 
 	_generatePosition: function(event) {
 
-		var o = this.options, scroll = this[(this.cssPosition == 'absolute' ? 'offset' : 'scroll')+'Parent'], scrollIsRootNode = (/(html|body)/i).test(scroll[0].tagName);	
+		var o = this.options, scroll = this[(this.cssPosition == 'absolute' ? 'offset' : 'scroll')+'Parent'], scrollIsRootNode = (/(html|body)/i).test(scroll[0].tagName);
 
 		var position = {
 			top: (
@@ -558,14 +558,14 @@ $.ui.plugin.add("draggable", "scroll", {
 				i.scrollParent[0].scrollTop = scrolled = i.scrollParent[0].scrollTop + o.scrollSpeed;
 			else if(event.pageY - i.overflowOffset.top < o.scrollSensitivity)
 				i.scrollParent[0].scrollTop = scrolled = i.scrollParent[0].scrollTop - o.scrollSpeed;
-				
+
 			if((i.overflowOffset.left + i.scrollParent[0].offsetWidth) - event.pageX < o.scrollSensitivity)
 				i.scrollParent[0].scrollLeft = scrolled = i.scrollParent[0].scrollLeft + o.scrollSpeed;
 			else if(event.pageX - i.overflowOffset.left < o.scrollSensitivity)
-				i.scrollParent[0].scrollLeft = scrolled = i.scrollParent[0].scrollLeft - o.scrollSpeed;				
-				
+				i.scrollParent[0].scrollLeft = scrolled = i.scrollParent[0].scrollLeft - o.scrollSpeed;
+
 		} else {
-						
+
 			if(event.pageY - $(document).scrollTop() < o.scrollSensitivity)
 				scrolled = $(document).scrollTop($(document).scrollTop() - o.scrollSpeed);
 			else if($(window).height() - (event.pageY - $(document).scrollTop()) < o.scrollSensitivity)

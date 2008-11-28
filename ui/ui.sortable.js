@@ -88,7 +88,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 
 		//Create and append the visible helper
 		this.helper = this._createHelper(event);
-		
+
 		//Cache the helper size
 		this._cacheHelperProportions();
 
@@ -99,18 +99,18 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 
 		//Cache the margins of the original element
 		this._cacheMargins();
-		
+
 		//Store the helper's css position
 		this.cssPosition = this.helper.css("position");
 		this.scrollParent = this.helper.scrollParent();
-		
+
 		//The element's absolute position on the page minus margins
-		this.offset = this.currentItem.offset();														
+		this.offset = this.currentItem.offset();
 		this.offset = {
 			top: this.offset.top - this.margins.top,
 			left: this.offset.left - this.margins.left
 		};
-		
+
 		$.extend(this.offset, {
 			click: { //Where the click happened, relative to the element
 				left: event.pageX - this.offset.left,
@@ -122,14 +122,14 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 
 		//Adjust the mouse offset relative to the helper if 'cursorAt' is supplied
 		if(o.cursorAt)
-			this._adjustOffsetFromHelper(o.cursorAt);	
+			this._adjustOffsetFromHelper(o.cursorAt);
 
 		//Generate the original position
 		this.originalPosition = this._generatePosition(event);
 
 		//Cache the former DOM position
 		this.domPosition = { prev: this.currentItem.prev()[0], parent: this.currentItem.parent()[0] };
-		
+
 		//Set a containment if given in the options
 		if(o.containment)
 			this._setContainment();
@@ -171,7 +171,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 	},
 
 	_mouseDrag: function(event) {
-		
+
 		//Compute the helpers position
 		this.position = this._generatePosition(event);
 		this.positionAbs = this._convertPositionTo("absolute");
@@ -189,7 +189,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 		//Set the helper position
 		if(!this.options.axis || this.options.axis != "y") this.helper[0].style.left = this.position.left+'px';
 		if(!this.options.axis || this.options.axis != "x") this.helper[0].style.top = this.position.top+'px';
-		
+
 		//Rearrange
 		for (var i = this.items.length - 1; i >= 0; i--) {
 
@@ -325,12 +325,12 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 
 	/* Be careful with the following core functions */
 	_intersectsWith: function(item) {
-		
+
 		var x1 = this.positionAbs.left,
 			x2 = x1 + this.helperProportions.width,
 			y1 = this.positionAbs.top,
 			y2 = y1 + this.helperProportions.height;
-			
+
 		var l = item.left,
 			r = l + item.width,
 			t = item.top,
@@ -338,7 +338,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 
 		var dyClick = this.offset.click.top,
 			dxClick = this.offset.click.left;
-		
+
 		var isOverElement = (y1 + dyClick) > t && (y1 + dyClick) < b && (x1 + dxClick) > l && (x1 + dxClick) < r;
 
 		if(	   this.options.tolerance == "pointer"
@@ -374,7 +374,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 	},
 
 	_intersectsGuess: function(item) {
-		
+
 		var isOverBottomHalf = $.ui.isOverAxis(this.positionAbs.top + this.offset.click.top, item.top + (item.height/2), item.height),
 			isOverRightHalf = $.ui.isOverAxis(this.positionAbs.left + this.offset.click.left, item.left + (item.width/2), item.width),
 			verticalDirection = this._getDragVerticalDirection(),
@@ -626,7 +626,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 
 		var o = this.options;
 		var helper = $.isFunction(o.helper) ? $(o.helper.apply(this.element[0], [event, this.currentItem])) : (o.helper == 'clone' ? this.currentItem.clone() : this.currentItem);
-		
+
 		if(!helper.parents('body').length) //Add the helper to the DOM if that didn't happen already
 			$(o.appendTo != 'parent' ? o.appendTo : this.currentItem[0].parentNode)[0].appendChild(helper[0]);
 
@@ -638,18 +638,18 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 
 		//TODO: Still need to figure out a way to make relative sorting possible
 		helper.css("position", "absolute");
-		
+
 		return helper;
 
 	},
-	
+
 	_adjustOffsetFromHelper: function(obj) {
 		if(obj.left != undefined) this.offset.click.left = obj.left + this.margins.left;
 		if(obj.right != undefined) this.offset.click.left = this.helperProportions.width - obj.right + this.margins.left;
 		if(obj.top != undefined) this.offset.click.top = obj.top + this.margins.top;
 		if(obj.bottom != undefined) this.offset.click.top = this.helperProportions.height - obj.bottom + this.margins.top;
 	},
-	
+
 	_getParentOffset: function() {
 
 		//Get the offsetParent and cache its position
@@ -657,7 +657,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 
 		if((this.offsetParent[0] == document.body && $.browser.mozilla)	//Ugly FF3 fix
 		|| (this.offsetParent[0].tagName && this.offsetParent[0].tagName.toLowerCase() == 'html' && $.browser.msie)) //Ugly IE fix
-			po = { top: 0, left: 0 };													
+			po = { top: 0, left: 0 };
 
 		return {
 			top: po.top + (parseInt(this.offsetParent.css("borderTopWidth"),10) || 0),
@@ -665,7 +665,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 		};
 
 	},
-	
+
 	_getRelativeOffset: function() {
 
 		if(this.cssPosition == "relative") {
@@ -677,9 +677,9 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 		} else {
 			return { top: 0, left: 0 };
 		}
-		
+
 	},
-	
+
 	_cacheMargins: function() {
 		this.margins = {
 			left: (parseInt(this.currentItem.css("marginLeft"),10) || 0),
@@ -742,10 +742,10 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 			)
 		};
 	},
-	
+
 	_generatePosition: function(event) {
 
-		var o = this.options, scroll = this[(this.cssPosition == 'absolute' ? 'offset' : 'scroll')+'Parent'], scrollIsRootNode = (/(html|body)/i).test(scroll[0].tagName);	
+		var o = this.options, scroll = this[(this.cssPosition == 'absolute' ? 'offset' : 'scroll')+'Parent'], scrollIsRootNode = (/(html|body)/i).test(scroll[0].tagName);
 
 		var position = {
 			top: (
@@ -955,14 +955,14 @@ $.ui.plugin.add("sortable", "scroll", {
 				i.scrollParent[0].scrollTop = scrolled = i.scrollParent[0].scrollTop + o.scrollSpeed;
 			else if(event.pageY - i.overflowOffset.top < o.scrollSensitivity)
 				i.scrollParent[0].scrollTop = scrolled = i.scrollParent[0].scrollTop - o.scrollSpeed;
-				
+
 			if((i.overflowOffset.left + i.scrollParent[0].offsetWidth) - event.pageX < o.scrollSensitivity)
 				i.scrollParent[0].scrollLeft = scrolled = i.scrollParent[0].scrollLeft + o.scrollSpeed;
 			else if(event.pageX - i.overflowOffset.left < o.scrollSensitivity)
-				i.scrollParent[0].scrollLeft = scrolled = i.scrollParent[0].scrollLeft - o.scrollSpeed;				
-				
+				i.scrollParent[0].scrollLeft = scrolled = i.scrollParent[0].scrollLeft - o.scrollSpeed;
+
 		} else {
-						
+
 			if(event.pageY - $(document).scrollTop() < o.scrollSensitivity)
 				scrolled = $(document).scrollTop($(document).scrollTop() - o.scrollSpeed);
 			else if($(window).height() - (event.pageY - $(document).scrollTop()) < o.scrollSensitivity)

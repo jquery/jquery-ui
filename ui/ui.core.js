@@ -187,7 +187,7 @@ $.fn.extend({
 	},
 
 	scrollParent: function() {
-		
+
 		var scrollParent;
 		if(($.browser.msie && (/(static|relative)/).test(this.css('position'))) || (/absolute/).test(this.css('position'))) {
 			scrollParent = this.parents().filter(function() {
@@ -198,9 +198,9 @@ $.fn.extend({
 				return (/(auto|scroll)/).test($.curCSS(this,'overflow',1)+$.curCSS(this,'overflow-y',1)+$.curCSS(this,'overflow-x',1));
 			}).eq(0);
 		}
-		
+
 		return (/fixed/).test(this.css('position')) || !scrollParent.length ? $(document) : scrollParent;
-		
+
 
 	}
 
@@ -464,7 +464,7 @@ $.ui.mouse = {
 
 		// preventDefault() is used to prevent the selection of text here -
 		// however, in Safari, this causes select boxes not to be selectable
-		// anymore, so this fix is needed 
+		// anymore, so this fix is needed
 		if(!$.browser.safari) event.preventDefault();
 		return true;
 	},
