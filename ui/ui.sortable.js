@@ -99,9 +99,8 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 
 		//Cache the margins of the original element
 		this._cacheMargins();
-
-		//Store the helper's css position
-		this.cssPosition = this.helper.css("position");
+		
+		//Get the next scrolling parent
 		this.scrollParent = this.helper.scrollParent();
 
 		//The element's absolute position on the page minus margins
@@ -110,6 +109,11 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 			top: this.offset.top - this.margins.top,
 			left: this.offset.left - this.margins.left
 		};
+		
+		// Only after we got the offset, we can change the helper's position to absolute
+		// TODO: Still need to figure out a way to make relative sorting possible
+		this.helper.css("position", "absolute");
+		this.cssPosition = this.helper.css("position");
 
 		$.extend(this.offset, {
 			click: { //Where the click happened, relative to the element
@@ -635,9 +639,6 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 
 		if(helper[0].style.width == '' || o.forceHelperSize) helper.width(this.currentItem.width());
 		if(helper[0].style.height == '' || o.forceHelperSize) helper.height(this.currentItem.height());
-
-		//TODO: Still need to figure out a way to make relative sorting possible
-		helper.css("position", "absolute");
 
 		return helper;
 
