@@ -16,197 +16,170 @@ $.widget("ui.progressbar", {
 
 	_init: function() {
 
-		this._interval = this.options.interval;
-
 		var self = this,
-			options = this.options,
-			identifier = 'progressbar' + (++$.ui.progressbar.uuid),
-			text = options.text || '0%';
+			options = this.options;
 
 		this.element
 			.addClass("ui-progressbar")
+			.addClass("ui-progressbar-labelalign-" + this._labelAlign())
+			.addClass("ui-widget-content")
+			.addClass("ui-corner-all")
 			.width(options.width)
+			.height(options.height)
 			.attr({
 				role: "progressbar",
 				"aria-valuemin": 0,
 				"aria-valuemax": 100,
-				"aria-valuenow": 0
+				"aria-valuenow": this.options.value
 			});
 
-		$.extend(this, {
-			active: false,
-			pixelState: 0,
-			percentState: 0,
-			identifier: identifier
-		});
+		this.element
+			.append('<div class="ui-progressbar-label"></div>')
+			.append('<div class="ui-progressbar-value ui-state-default ui-corner-left">'
+				+ '<div class="ui-progressbar-label"></div>'
+			+ '</div>'
+			);
 
-		this.wrapper = $('<div class="ui-progressbar-wrap"></div>')
-			.appendTo(this.element);
+		this.valueDiv = this.element.find(".ui-progressbar-value");
+		this.valueLabel = this.valueDiv.find(".ui-progressbar-label");
+		this.labels = this.element.find(".ui-progressbar-label");
 
-		this.bar = $('<div class="ui-progressbar-bar ui-hidden"></div>')
-			.css({
-				width: 0,
-				overflow: 'hidden',
-				zIndex: 100
-			})
-			.appendTo(this.wrapper);
+		this._refreshLabel();
+		this._refreshValue();
 
-		this.textElement = $('<div class="ui-progressbar-text"></div>')
-			.html(text)
-			.css({
-				width: 0,
-				overflow: 'hidden'
-			})
-			.appendTo(this.bar);
-
-		this.textBg = $('<div class="ui-progressbar-text ui-progressbar-text-back"></div>')
-			.html(text)
-			.css({
-				width: this.element.width()
-			})
-			.appendTo(this.bar);
 	},
 
 	destroy: function() {
-		this.stop();
 
 		this.element
-			.removeClass("ui-progressbar ui-progressbar-disabled")
-			.removeData("progressbar").unbind(".progressbar")
-			.find('.ui-progressbar-wrap').remove();
+			.removeClass("ui-progressbar")
+			.removeClass("ui-progressbar-disabled")
+			.removeClass("ui-progressbar-labelalign-left")
+			.removeClass("ui-progressbar-labelalign-center")
+			.removeClass("ui-progressbar-labelalign-right")
+			.removeClass("ui-widget-content")
+			.removeClass("ui-corner-all")
+			.removeData("progressbar")
+			.unbind(".progressbar");
 
-		delete $.easing[this.identifier];
-	},
+		this.labels.remove();
+		this.valueDiv.remove();
 
-	_animate: function() {
-		var self = this,
-			options = this.options,
-			interval = options.interval;
-
-		this.bar.animate(
-			{
-				width: options.width
-			},
-			{
-				duration: interval,
-				easing: options.equation || this.identifier,
-				step: function(step, b) {
-					var timestamp = new Date().getTime(), elapsedTime  = (timestamp - b.startTime);
-					self.progress( (step / options.width) * 100 );
-					options.interval = interval - elapsedTime;
-				},
-				complete: function() {
-					if (self.active) {
-						options.interval = self._interval;
-						self.bar.width(0);
-						self.textElement.width(0);
-						self._animate();
-					}
-					else {
-						delete $.easing[self.identifier];
-					}
-				}
-			}
-		);
 	},
 
 	disable: function() {
-		this.element.addClass("ui-progressbar-disabled");
-		this.disabled = true;
 		this.element.attr("aria-disabled", true);
 	},
 
 	enable: function() {
-		this.element.removeClass("ui-progressbar-disabled");
-		this.disabled = false;
 		this.element.attr("aria-disabled", false);
 	},
 
-	pause: function() {
-		if (this.disabled) return;
-		this.bar.stop();
-		this._trigger('pause', null, this.ui());
-	},
-
-	progress: function(percentState) {
-		this.bar.removeClass('ui-hidden');
-
-		this.percentState = percentState > 100 ? 100 : percentState;
-		this.pixelState = (this.percentState / 100) * this.options.width;
-		this.bar.width(this.pixelState);
-		this.textElement.width(this.pixelState);
-
-		var percent = Math.round(this.percentState);
-		if (this.options.range && !this.options.text) {
-			this._setText(percent + '%');
-		}
-		this.element.attr("aria-valuenow", percent);
-		this._trigger('progress', null, this.ui());
-	},
-
-	start: function() {
-		var self = this, options = this.options;
-
-		if (this.disabled) {
-			return;
+	value: function(newValue) {
+		if (arguments.length) {
+			this.options.value = newValue;
+			this._updateValue(newValue);
 		}
 
-		$.easing[this.identifier] = function (x, t, b, c, d) {
-			var inc = options.increment,
-				width = options.width,
-				step = ((inc > width ? width : inc) / width),
-				state = Math.round(x / step) * step;
-			return state > 1 ? 1 : state;
-		};
+		var val = this.options.value;
+		if (val < 0) val = 0;
+		if (val > 100) val = 100;
 
-		self.active = true;
-
-		if (options.duration < options.interval) {
-			options.duration = options.interval;
-		}
-
-		setTimeout(
-			function() {
-				self.active = false;
-			},
-			options.duration
-		);
-
-		this._animate();
-
-		this._trigger('start', null, this.ui());
-		return false;
-	},
-
-	stop: function() {
-		this.bar.stop();
-		this.bar.width(0);
-		this.textElement.width(0);
-		this.bar.addClass('ui-hidden');
-		this.options.interval = this._interval;
-		this._trigger('stop', null, this.ui());
+		return val;
 	},
 
 	_setData: function(key, value){
 		switch (key) {
-			case 'text':
-				this._setText(value);
+			case 'height':
+				this.element.height(value);
+				break;
+			case 'label':
+				this._updateLabel(value);
+				break;
+			case 'labelAlign':
+				this._updateLabelAlign(value);
+				break;
+			case 'label':
+				this._updateValue(value);
+				break;
+			case 'value':
+				this.value(value);
+				break;
+			case 'width':
+				this.element.add(this.valueLabel).width(this.options.width);
 				break;
 		}
 
 		$.widget.prototype._setData.apply(this, arguments);
 	},
 
-	_setText: function(text){
-		this.textElement.add(this.textBg).html(text);
+	//Setters
+	_updateLabel: function(newLabel) {
+		this.options.label = newLabel;
+		this._refreshLabel();
 	},
 
-	ui: function() {
-		return {
-			options: this.options,
-			pixelState: this.pixelState,
-			percentState: this.percentState
-		};
+	_updateLabelAlign: function(newLabelAlign) {
+		this.options.labelAlign = newLabelAlign;
+		this._refreshLabelAlign();
+	},
+
+	_updateValue: function(newValue) {
+		this._refreshLabel();
+		this._refreshValue();
+		this._trigger('change', null, {});
+	},
+
+	//Getters
+	_labelText: function() {
+		var labelText;
+
+		if (this.options.label === true) {
+			labelText = this.value() + '%';
+		} else {
+			labelText = this.options.label;
+		}
+
+		return labelText;
+	},
+
+	_labelAlign: function() {
+		var labelAlign;
+
+		switch (this.options.labelAlign.toLowerCase()) {
+			case 'left':
+			case 'center':
+			case 'right':
+				labelAlign = this.options.labelAlign;
+				break;
+			default:
+				labelAlign = 'left';
+		}
+
+		return labelAlign.toLowerCase();
+	},
+
+	//Methods
+	_refreshLabel: function() {
+		var labelText = this._labelText();
+
+		// this extra wrapper div is required for padding to work with labelAlign: left and labelAlign: right
+		this.labels.html("<div>" + labelText + "</div>");
+	},
+
+	_refreshLabelAlign: function() {
+		var labelAlign = this._labelAlign();
+		this.element
+			.removeClass("ui-progressbar-labelalign-left")
+			.removeClass("ui-progressbar-labelalign-center")
+			.removeClass("ui-progressbar-labelalign-right")			
+			.addClass("ui-progressbar-labelalign-" + labelAlign);
+	},
+
+	_refreshValue: function() {
+		var val = this.value();
+		this.valueDiv.width(val + '%');
+		this.element.attr("aria-valuenow", val);
 	}
 
 });
@@ -214,15 +187,12 @@ $.widget("ui.progressbar", {
 $.extend($.ui.progressbar, {
 	version: "@VERSION",
 	defaults: {
-		duration: 1000,
-		increment: 1,
-		interval: 1000,
-		range: true,
-		text: '',
+		height: 20,
+		label: true,
+		labelAlign: 'left',
+		value: 0,
 		width: 300
-	},
-
-	uuid: 0
+	}
 });
 
 })(jQuery);
