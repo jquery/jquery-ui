@@ -3,14 +3,43 @@
 <head>
 	<title>jQuery UI Progressbar Static Markup Test Page</title>
 	<link rel="stylesheet" href="../../themes/base/ui.all.css" type="text/css">
+	<style type="text/css">
+	h2 { margin:1.5em 0 .5em; }
+	</style>
 </head>
 <body>
 
 <h1>jQuery UI Progressbar Static Markup Test Page</h1>
 
+<h2>Flexible width:</h2>
+
 <div class="ui-progressbar ui-widget ui-widget-content ui-corner-all" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="13">
 	<div class="ui-progressbar-label">13% Completed</div>
-	<div class="ui-progressbar-value ui-state-default ui-corner-left" style="width: 13%;"><span class="ui-progressbar-label">13% Completed</span></div>
+	<div class="ui-progressbar-value ui-state-default ui-corner-left" style="width:13%;"><div class="ui-progressbar-label">13% Completed</div></div>
+</div>
+
+<br /><br/>
+
+<!-- users can set a left offset in px, %, ems, whatever to move the label along the axis -->
+
+<div class="ui-progressbar ui-widget ui-widget-content ui-corner-all" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="55">
+	<div class="ui-progressbar-label" style="left:350px;">55% Completed</div>
+	<div class="ui-progressbar-value ui-state-default ui-corner-left" style="width:55%"><div class="ui-progressbar-label" style="left:350px;">55% Completed</div></div>
+</div>
+
+<br /><br/>
+
+<div class="ui-progressbar ui-widget ui-widget-content ui-corner-all" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="55">
+	<div class="ui-progressbar-label" style="left:600px;">55% Completed</div>
+	<div class="ui-progressbar-value ui-state-default ui-corner-left" style="width:55%"><div class="ui-progressbar-label" style="left:600px;">55% Completed</div></div>
+</div>
+
+
+<h2>Fixed width (px):</h2>
+
+<div style="width:500px" class="ui-progressbar ui-progressbar-fixed ui-widget ui-widget-content ui-corner-all" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="78">
+	<div class="ui-progressbar-label">78% Completed</div>
+	<div class="ui-progressbar-value ui-state-default ui-corner-left" style="width:78%"><div class="ui-progressbar-label">78% Completed</div></div>
 </div>
 
 </body>

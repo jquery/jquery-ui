@@ -1,6 +1,6 @@
 /* Progressbar
 ----------------------------------*/
-.ui-progressbar { position: relative; }
-.ui-progressbar-label {position: absolute; top: 0; left: 0; padding: .4em .5em; border: 0; background: none; }
-.ui-progressbar-value { position: relative; margin: -1px; padding: .4em .5em; overflow: hidden; font-weight: normal !important; white-space: nowrap; }
-.ui-progressbar-value .ui-progressbar-label { position: static; padding: 0; top: auto; left: auto; }
+.ui-progressbar { position: relative; overflow:hidden; }
+.ui-progressbar, .ui-progressbar-value { height:1em; padding:.4em 0 .5em;  }
+.ui-progressbar-label { position: absolute; left:0; top: .3em; text-indent: .5em; border: 0; background: none; white-space: nowrap; }
+.ui-progressbar-value { position: absolute; top:0; width:100%; margin: -1px; overflow: hidden; font-weight: normal !important; white-space: nowrap; }
