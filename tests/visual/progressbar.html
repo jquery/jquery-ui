@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Language" content="en" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>ProgressBar Test Page</title>
+<title>jQuery UI Progressbar Visual Tests</title>
 <script type="text/javascript" src="../../jquery-1.2.6.js"></script>
 <script type="text/javascript" src="../../ui/ui.core.js"></script>
 <script type="text/javascript" src="../../ui/ui.progressbar.js"></script>
@@ -23,23 +23,28 @@
 <script type="text/javascript">
 	$(function() {
 		$("#progressbar1").progressbar({ value: 6 });
-		$("#progressbar2").progressbar({ labelAlign: 'center', label: 'center' });
-		$("#progressbar3").progressbar().progressbar("option", "labelAlign", "right").progressbar("value", 90).data("label.progressbar", "right");
+		$("#progressbar2").progressbar({ labelAlign: 'center', label: 'center' }).progressbar("option", "value", 50);
+		$("#progressbar3").progressbar().progressbar("option", "labelAlign", "right").progressbar("value", 90.73).data("label.progressbar", "right").progressbar("option", "label", true);
+		$("#progressbar4").progressbar().progressbar("destroy");
+		$("#progressbar5").progressbar({ value: -10 });
+		$("#progressbar6").progressbar().progressbar("value", 200);
 	});
 	</script>
 </head>
 <body>
 
-<ul class="plugins">
-<li>
-	Progressbar
+<h1>jQuery UI Progressbar Visual Tests</h1>
 	<div id="progressbar1"></div>
-	<hr>
+	<br>
 	<div id="progressbar2"></div>
-	<hr>
+	<br>
 	<div id="progressbar3"></div>
-</li>
-</ul>
+	<br>
+	<div id="progressbar4"></div>
+	<br>
+	<div id="progressbar5"></div>
+	<br>
+	<div id="progressbar6"></div>
 
 </body>
 </html>

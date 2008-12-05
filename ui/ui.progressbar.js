@@ -20,17 +20,15 @@ $.widget("ui.progressbar", {
 			options = this.options;
 
 		this.element
-			.addClass("ui-progressbar")
-			.addClass("ui-progressbar-labelalign-" + this._labelAlign())
-			.addClass("ui-widget-content")
-			.addClass("ui-corner-all")
-			.width(options.width)
-			.height(options.height)
+			.addClass("ui-progressbar"
+				+ " ui-progressbar-labelalign-" + this._labelAlign()
+				+ " ui-widget-content"
+				+ " ui-corner-all")
 			.attr({
 				role: "progressbar",
-				"aria-valuemin": 0,
-				"aria-valuemax": 100,
-				"aria-valuenow": this.options.value
+				"aria-valuemin": this._valueMin(),
+				"aria-valuemax": this._valueMax(),
+				"aria-valuenow": this._value()
 			});
 
 		this.element
@@ -46,19 +44,25 @@ $.widget("ui.progressbar", {
 
 		this._refreshLabel();
 		this._refreshValue();
+		this._refreshWidth();
+		this._refreshHeight();
 
 	},
 
 	destroy: function() {
 
 		this.element
-			.removeClass("ui-progressbar")
-			.removeClass("ui-progressbar-disabled")
-			.removeClass("ui-progressbar-labelalign-left")
-			.removeClass("ui-progressbar-labelalign-center")
-			.removeClass("ui-progressbar-labelalign-right")
-			.removeClass("ui-widget-content")
-			.removeClass("ui-corner-all")
+			.removeClass("ui-progressbar"
+				+ " ui-progressbar-disabled"
+				+ " ui-progressbar-labelalign-left"
+				+ " ui-progressbar-labelalign-center"
+				+ " ui-progressbar-labelalign-right"
+				+ " ui-widget-content"
+				+ " ui-corner-all")
+			.removeAttr("role")
+			.removeAttr("aria-valuemin")
+			.removeAttr("aria-valuemax")
+			.removeAttr("aria-valuenow")
 			.removeData("progressbar")
 			.unbind(".progressbar");
 
@@ -76,61 +80,39 @@ $.widget("ui.progressbar", {
 	},
 
 	value: function(newValue) {
-		if (arguments.length) {
-			this.options.value = newValue;
-			this._updateValue(newValue);
-		}
-
-		var val = this.options.value;
-		if (val < 0) val = 0;
-		if (val > 100) val = 100;
-
-		return val;
+		arguments.length && this._setData("value", newValue);
+		return this._value();
 	},
 
 	_setData: function(key, value){
 		switch (key) {
 			case 'height':
-				this.element.height(value);
+				this.options.height = value;
+				this._refreshHeight();
 				break;
 			case 'label':
-				this._updateLabel(value);
+				this.options.label = value;
+				this._refreshLabel();
 				break;
 			case 'labelAlign':
-				this._updateLabelAlign(value);
-				break;
-			case 'label':
-				this._updateValue(value);
+				this.options.labelAlign = value;
+				this._refreshLabelAlign();
 				break;
 			case 'value':
-				this.value(value);
+				this.options.value = value;
+				this._refreshLabel();
+				this._refreshValue();
+				this._trigger('change', null, {});
 				break;
 			case 'width':
-				this.element.add(this.valueLabel).width(this.options.width);
+				this.options.width = value;
 				break;
 		}
 
 		$.widget.prototype._setData.apply(this, arguments);
 	},
 
-	//Setters
-	_updateLabel: function(newLabel) {
-		this.options.label = newLabel;
-		this._refreshLabel();
-	},
-
-	_updateLabelAlign: function(newLabelAlign) {
-		this.options.labelAlign = newLabelAlign;
-		this._refreshLabelAlign();
-	},
-
-	_updateValue: function(newValue) {
-		this._refreshLabel();
-		this._refreshValue();
-		this._trigger('change', null, {});
-	},
-
-	//Getters
+	//Property Getters - these return valid property values without modifying options
 	_labelText: function() {
 		var labelText;
 
@@ -159,7 +141,31 @@ $.widget("ui.progressbar", {
 		return labelAlign.toLowerCase();
 	},
 
-	//Methods
+	_value: function() {
+		var val = this.options.value;
+		if (val < this._valueMin()) val = this._valueMin();
+		if (val > this._valueMax()) val = this._valueMax();
+
+		return val;
+	},
+
+	_valueMin: function() {
+		var valueMin = 0;
+
+		return valueMin;
+	},
+
+	_valueMax: function() {
+		var valueMax = 100;
+
+		return valueMax;
+	},
+
+	//Refresh Methods - these refresh parts of the widget to match its current state
+	_refreshHeight: function() {
+		this.element.height(this.options.height);
+	},
+
 	_refreshLabel: function() {
 		var labelText = this._labelText();
 
@@ -170,16 +176,20 @@ $.widget("ui.progressbar", {
 	_refreshLabelAlign: function() {
 		var labelAlign = this._labelAlign();
 		this.element
-			.removeClass("ui-progressbar-labelalign-left")
-			.removeClass("ui-progressbar-labelalign-center")
-			.removeClass("ui-progressbar-labelalign-right")			
+			.removeClass("ui-progressbar-labelalign-left"
+				+ " ui-progressbar-labelalign-center"
+				+ " ui-progressbar-labelalign-right")			
 			.addClass("ui-progressbar-labelalign-" + labelAlign);
 	},
 
 	_refreshValue: function() {
-		var val = this.value();
-		this.valueDiv.width(val + '%');
-		this.element.attr("aria-valuenow", val);
+		var value = this.value();
+		this.valueDiv.width(value + '%');
+		this.element.attr("aria-valuenow", value);
+	},
+	
+	_refreshWidth: function() {
+		this.element.add(this.valueLabel).width(this.options.width);
 	}
 
 });
