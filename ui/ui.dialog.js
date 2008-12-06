@@ -52,11 +52,19 @@ $.widget("ui.dialog", {
 
 			uiDialogTitlebar = (this.uiDialogTitlebar = $('<div/>'))
 				.addClass('ui-dialog-titlebar')
-				.append('<a href="#" class="ui-dialog-titlebar-close"><span>X</span></a>')
 				.mousedown(function() {
 					self.moveToTop();
 				})
 				.prependTo(uiDialogContainer),
+
+			uiDialogTitlebarClose = $('<a href="#"/>')
+				.addClass('ui-dialog-titlebar-close')
+				.attr('role', 'button')
+				.appendTo(uiDialogTitlebar),
+
+			uiDialogTitlebarCloseText = (this.uiDialogTitlebarCloseText = $('<span/>'))
+				.html('X')
+				.appendTo(uiDialogTitlebarClose),
 
 			title = options.title || '&nbsp;',
 			titleId = $.ui.dialog.getTitleId(this.element),

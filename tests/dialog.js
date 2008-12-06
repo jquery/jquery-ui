@@ -215,6 +215,24 @@ test("title id", function() {
 	el.remove();
 });
 
+test("ARIA", function() {
+	expect(4);
+
+	el = $('<div></div>').dialog();
+
+	equals(dlg().attr('role'), 'dialog', 'dialog role');
+
+	var labelledBy = dlg().attr('aria-labelledby');
+	ok(labelledBy.length > 0, 'has aria-labelledby attribute');
+	equals(dlg().find('.ui-dialog-title').attr('id'), labelledBy,
+		'proper aria-labelledby attribute');
+
+	equals(dlg().find('.ui-dialog-titlebar-close').attr('role'), 'button',
+		'close link role');
+
+	el.remove();
+});
+
 module("dialog: Options");
 
 test("autoOpen", function() {
