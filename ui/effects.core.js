@@ -1,4 +1,4 @@
-﻿/*
+/*
  * jQuery UI Effects @VERSION
  *
  * Copyright (c) 2008 AUTHORS.txt (http://ui.jquery.com/about)
