@@ -1,7 +1,7 @@
-@import "ui.accordion.css";
-@import "ui.datepicker.css";
-@import "ui.dialog.css";
-@import "ui.progressbar.css";
-@import "ui.resizable.css";
-@import "ui.slider.css";
-@import "ui.tabs.css";
+@import url("ui.accordion.css");
+@import url("ui.datepicker.css");
+@import url("ui.dialog.css");
+@import url("ui.progressbar.css");
+@import url("ui.resizable.css");
+@import url("ui.slider.css");
+@import url("ui.tabs.css");
