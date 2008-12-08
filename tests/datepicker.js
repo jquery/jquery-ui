@@ -1572,11 +1572,11 @@ test('localisation', function() {
 	});
 	equals($('.ui-datepicker-title-row td:first', dp).text(),
 		$.datepicker.regional['fr'].weekHeader, 'Localisation - week header');
-	var day = 0;
+	var day = 1;
 	$('.ui-datepicker-title-row a', dp).each(function() {
 		equals($(this).text(), $.datepicker.regional['fr'].dayNamesMin[day],
 			'Localisation - day ' + day);
-		day++;
+		day = (day + 1) % 7;
 	});
 	inp.simulate('keydown', {keyCode: $.simulate.VK_ENTER});
 	var date = new Date();
