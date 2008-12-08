@@ -2,7 +2,7 @@
 /* Written by Keith Wood (kbwood@virginbroadband.com.au) and Stéphane Nahmani (sholby@sholby.net). */
 jQuery(function($){
 	$.datepicker.regional['fr'] = {
-		clearText: 'Effacer', clearStatus: '',
+		clearText: 'Effacer', clearStatus: 'Effacer la date sélectionnée',
 		closeText: 'Fermer', closeStatus: 'Fermer sans modifier',
 		prevText: '&#x3c;Préc', prevStatus: 'Voir le mois précédent',
 		prevBigText: '&#x3c;&#x3c;', prevBigStatus: '',
@@ -13,13 +13,13 @@ jQuery(function($){
 		'Juillet','Août','Septembre','Octobre','Novembre','Décembre'],
 		monthNamesShort: ['Jan','Fév','Mar','Avr','Mai','Jun',
 		'Jul','Aoû','Sep','Oct','Nov','Déc'],
-		monthStatus: 'Voir un autre mois', yearStatus: 'Voir un autre année',
+		monthStatus: 'Voir un autre mois', yearStatus: 'Voir une autre année',
 		weekHeader: 'Sm', weekStatus: '',
 		dayNames: ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'],
 		dayNamesShort: ['Dim','Lun','Mar','Mer','Jeu','Ven','Sam'],
 		dayNamesMin: ['Di','Lu','Ma','Me','Je','Ve','Sa'],
-		dayStatus: 'Utiliser DD comme premier jour de la semaine', dateStatus: 'Choisir le DD, MM d',
-		dateFormat: 'dd/mm/yy', firstDay: 0,
+		dayStatus: 'Utiliser DD comme premier jour de la semaine', dateStatus: '\'Choisir\' le DD d MM',
+		dateFormat: 'dd/mm/yy', firstDay: 1,
 		initStatus: 'Choisir la date', isRTL: false};
 	$.datepicker.setDefaults($.datepicker.regional['fr']);
 });
