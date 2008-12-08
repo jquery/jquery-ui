@@ -1430,7 +1430,8 @@ $.extend(Datepicker.prototype, {
 			this._addStatus(showStatus, inst.id, this._get(inst, 'currentStatus'), initStatus) + '>' +
 			currentText + '</a></div>' : '') + (isRTL ? prev : next) + '</div>' +
 			(prompt ? '<div class="' + this._promptClass + '"><span>' + prompt + '</span></div>' : '');
-		var firstDay = this._get(inst, 'firstDay');
+		var firstDay = parseInt(this._get(inst, 'firstDay'));
+		firstDay = (isNaN(firstDay) ? 0 : firstDay);
 		var changeFirstDay = this._get(inst, 'changeFirstDay');
 		var dayNames = this._get(inst, 'dayNames');
 		var dayNamesShort = this._get(inst, 'dayNamesShort');
