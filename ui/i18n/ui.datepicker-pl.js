@@ -18,7 +18,7 @@ jQuery(function($){
 		dayNames: ['Niedziela','Poniedzialek','Wtorek','Środa','Czwartek','Piątek','Sobota'],
 		dayNamesShort: ['Nie','Pn','Wt','Śr','Czw','Pt','So'],
 		dayNamesMin: ['N','Pn','Wt','Śr','Cz','Pt','So'],
-		dayStatus: 'Ustaw DD jako pierwszy dzień tygodnia', dateStatus: 'Wybierz D, M d',
+		dayStatus: 'Ustaw DD jako pierwszy dzień tygodnia', dateStatus: '\'Wybierz\' D, M d',
 		dateFormat: 'yy-mm-dd', firstDay: 1,
 		initStatus: 'Wybierz datę', isRTL: false};
 	$.datepicker.setDefaults($.datepicker.regional['pl']);
