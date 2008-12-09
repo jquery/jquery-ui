@@ -1,7 +1,7 @@
 /* Dialog
 ----------------------------------*/
 .ui-dialog {position: relative; padding: .2em; }
-.ui-dialog-titlebar { padding: .5em .3em .3em 1em; border-top: 0; border-left: 0; border-right: 0;  }
+.ui-dialog-titlebar { padding: .5em .3em .3em 1em;  }
 .ui-dialog-title { float: left; margin: 2px 0; } 
 .ui-dialog-titlebar-close { float: right; width: 19px; margin: -.2em 0 0 0; padding: 1px; height: 18px; }
 .ui-dialog-titlebar-close span { display: block; margin: 1px; }
