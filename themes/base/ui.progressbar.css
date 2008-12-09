@@ -1,3 +1,4 @@
 /* Progressbar
 ----------------------------------*/
-.ui-progressbar-value {margin: -1px; height:2em; }
+.ui-progressbar { height:2em; }
+.ui-progressbar-value {margin: -1px; height:100%; }
