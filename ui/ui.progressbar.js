@@ -21,7 +21,6 @@ $.widget("ui.progressbar", {
 
 		this.element
 			.addClass("ui-progressbar"
-				+ " ui-progressbar-labelalign-" + this._labelAlign()
 				+ " ui-widget-content"
 				+ " ui-corner-all")
 			.attr({
@@ -31,21 +30,9 @@ $.widget("ui.progressbar", {
 				"aria-valuenow": this._value()
 			});
 
-		this.element
-			.append('<div class="ui-progressbar-label"></div>')
-			.append('<div class="ui-progressbar-value ui-state-default ui-corner-left">'
-				+ '<div class="ui-progressbar-label"></div>'
-			+ '</div>'
-			);
+		this.valueDiv = $('<div class="ui-progressbar-value ui-state-default ui-corner-left"></div>').appendTo(this.element);
 
-		this.valueDiv = this.element.find(".ui-progressbar-value");
-		this.valueLabel = this.valueDiv.find(".ui-progressbar-label");
-		this.labels = this.element.find(".ui-progressbar-label");
-
-		this._refreshLabel();
 		this._refreshValue();
-		this._refreshWidth();
-		this._refreshHeight();
 
 	},
 
@@ -53,10 +40,6 @@ $.widget("ui.progressbar", {
 
 		this.element
 			.removeClass("ui-progressbar"
-				+ " ui-progressbar-disabled"
-				+ " ui-progressbar-labelalign-left"
-				+ " ui-progressbar-labelalign-center"
-				+ " ui-progressbar-labelalign-right"
 				+ " ui-widget-content"
 				+ " ui-corner-all")
 			.removeAttr("role")
@@ -66,79 +49,28 @@ $.widget("ui.progressbar", {
 			.removeData("progressbar")
 			.unbind(".progressbar");
 
-		this.labels.remove();
 		this.valueDiv.remove();
 
-	},
+		$.widget.prototype.destroy.apply(this, arguments);
 
-	disable: function() {
-		this.element.attr("aria-disabled", true);
-	},
-
-	enable: function() {
-		this.element.attr("aria-disabled", false);
 	},
 
 	value: function(newValue) {
 		arguments.length && this._setData("value", newValue);
+
 		return this._value();
 	},
 
 	_setData: function(key, value){
 		switch (key) {
-			case 'height':
-				this.options.height = value;
-				this._refreshHeight();
-				break;
-			case 'label':
-				this.options.label = value;
-				this._refreshLabel();
-				break;
-			case 'labelAlign':
-				this.options.labelAlign = value;
-				this._refreshLabelAlign();
-				break;
 			case 'value':
 				this.options.value = value;
-				this._refreshLabel();
 				this._refreshValue();
 				this._trigger('change', null, {});
-				break;
-			case 'width':
-				this.options.width = value;
 				break;
 		}
 
 		$.widget.prototype._setData.apply(this, arguments);
-	},
-
-	//Property Getters - these return valid property values without modifying options
-	_labelText: function() {
-		var labelText;
-
-		if (this.options.label === true) {
-			labelText = this.value() + '%';
-		} else {
-			labelText = this.options.label;
-		}
-
-		return labelText;
-	},
-
-	_labelAlign: function() {
-		var labelAlign;
-
-		switch (this.options.labelAlign.toLowerCase()) {
-			case 'left':
-			case 'center':
-			case 'right':
-				labelAlign = this.options.labelAlign;
-				break;
-			default:
-				labelAlign = 'left';
-		}
-
-		return labelAlign.toLowerCase();
 	},
 
 	_value: function() {
@@ -161,47 +93,19 @@ $.widget("ui.progressbar", {
 		return valueMax;
 	},
 
-	//Refresh Methods - these refresh parts of the widget to match its current state
-	_refreshHeight: function() {
-		this.element.height(this.options.height);
-	},
-
-	_refreshLabel: function() {
-		var labelText = this._labelText();
-
-		// this extra wrapper div is required for padding to work with labelAlign: left and labelAlign: right
-		this.labels.html("<div>" + labelText + "</div>");
-	},
-
-	_refreshLabelAlign: function() {
-		var labelAlign = this._labelAlign();
-		this.element
-			.removeClass("ui-progressbar-labelalign-left"
-				+ " ui-progressbar-labelalign-center"
-				+ " ui-progressbar-labelalign-right")			
-			.addClass("ui-progressbar-labelalign-" + labelAlign);
-	},
-
 	_refreshValue: function() {
 		var value = this.value();
+		this.valueDiv[value == this._valueMax() ? 'addClass' : 'removeClass']("ui-corner-right");
 		this.valueDiv.width(value + '%');
 		this.element.attr("aria-valuenow", value);
-	},
-	
-	_refreshWidth: function() {
-		this.element.add(this.valueLabel).width(this.options.width);
 	}
-
+	
 });
 
 $.extend($.ui.progressbar, {
 	version: "@VERSION",
 	defaults: {
-		height: 20,
-		label: true,
-		labelAlign: 'left',
-		value: 0,
-		width: 300
+		value: 0
 	}
 });
 
