@@ -1,4 +1,4 @@
-ï»¿/*
+/*
  * jQuery UI @VERSION
  *
  * Copyright (c) 2008 AUTHORS.txt (http://ui.jquery.com/about)
@@ -247,7 +247,7 @@ $.extend($.expr[':'], {
 
 // $.widget is a factory to create jQuery plugins
 // taking some boilerplate code out of the plugin code
-// created by Scott GonzÃ¡lez and JÃ¶rn Zaefferer
+// created by Scott González and Jörn Zaefferer
 function getter(namespace, plugin, method, args) {
 	function getMethods(type) {
 		var methods = $[namespace][plugin][type] || [];
