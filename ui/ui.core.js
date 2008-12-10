@@ -247,7 +247,6 @@ $.extend($.expr[':'], {
 
 // $.widget is a factory to create jQuery plugins
 // taking some boilerplate code out of the plugin code
-// created by Scott González and Jörn Zaefferer
 function getter(namespace, plugin, method, args) {
 	function getMethods(type) {
 		var methods = $[namespace][plugin][type] || [];
