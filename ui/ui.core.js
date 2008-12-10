@@ -1,4 +1,4 @@
-/*
+﻿/*
  * jQuery UI @VERSION
  *
  * Copyright (c) 2008 AUTHORS.txt (http://ui.jquery.com/about)
@@ -301,6 +301,7 @@ $.widget = function(name, prototype) {
 	$[namespace][name] = function(element, options) {
 		var self = this;
 
+		this.namespace = namespace;
 		this.widgetName = name;
 		this.widgetEventPrefix = $[namespace][name].eventPrefix || name;
 		this.widgetBaseClass = namespace + '-' + name;
@@ -336,7 +337,9 @@ $.widget = function(name, prototype) {
 $.widget.prototype = {
 	_init: function() {},
 	destroy: function() {
-		this.element.removeData(this.widgetName);
+		this.element.removeData(this.widgetName)
+			.removeClass(this.widgetBaseClass + '-disabled' + ' ' + this.namespace + '-state-disabled')
+			.removeAttr('aria-disabled');
 	},
 
 	option: function(key, value) {
@@ -363,7 +366,8 @@ $.widget.prototype = {
 
 		if (key == 'disabled') {
 			this.element[value ? 'addClass' : 'removeClass'](
-				this.widgetBaseClass + '-disabled');
+				this.widgetBaseClass + '-disabled' + ' ' + this.namespace + '-state-disabled')
+				.attr("aria-disabled", value);
 		}
 	},
 
