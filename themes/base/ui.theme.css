@@ -37,7 +37,7 @@
 ----------------------------------*/
 
 /* states and images */
-.ui-icon { width: 16px; height: 16px; display: inline-block; text-indent: -99999px; overflow: hidden; background-image: url(images/222222_256x240_icons_icons.png)/*{iconsContent}*/; background-repeat: no-repeat; }
+.ui-icon { width: 16px; height: 16px; display: block; text-indent: -99999px; overflow: hidden; background-image: url(images/222222_256x240_icons_icons.png)/*{iconsContent}*/; background-repeat: no-repeat; }
 .ui-widget-content .ui-icon {background-image: url(images/222222_256x240_icons_icons.png)/*{iconsContent}*/; }
 .ui-widget-header .ui-icon {background-image: url(images/222222_256x240_icons_icons.png)/*{iconsHeader}*/; }
 .ui-state-default .ui-icon { background-image: url(images/888888_256x240_icons_icons.png)/*{iconsDefault}*/; }

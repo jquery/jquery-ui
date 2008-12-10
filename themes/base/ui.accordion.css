@@ -1,7 +1,7 @@
 /* Accordion
 ----------------------------------*/
 .ui-accordion-group {margin-bottom: 1px;}
-.ui-accordion-header { cursor: pointer; position: relative; }
+.ui-accordion-header { cursor: pointer; position: relative; height:2em; }
 .selected .ui-accordion-header { border-bottom: 0; }
 .ui-accordion .ui-icon { position: absolute; left: .5em; top: 50%; margin-top: -8px; }
 .ui-accordion-header a { display: block; font-size: 1em; padding: .5em .5em .5em 2.2em; }
