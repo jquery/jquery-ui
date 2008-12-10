@@ -26,17 +26,18 @@
 					function(){ $(this).removeClass('ui-state-hover'); }
 				);
 				$('.ui-state-default').click(function(){ $(this).toggleClass('ui-state-active'); });
-
-				$('.icons').append(' <a href="#">Toggle text</a>').find('a').click(function(){ $('.icon-collection li span.text').toggle(); });
-				
+				$('.icons').append(' <a href="#">Toggle text</a>').find('a').click(function(){ $('.icon-collection li span.text').toggle(); }).trigger('click');
 				$.preloadCssImages();
 			});
 		</script>
 	</head>
 	<body>
 
+<p class="icons"></p>
 
-<ul class="ui-widget icon-collection"><li class="ui-state-default ui-corner-all" title=".ui-icon-carat-1-n"><span class="ui-icon ui-icon-carat-1-n"></span><span class="text">.ui-icon-carat-1-n</span></li>
+<ul class="ui-widget icon-collection">
+
+<li class="ui-state-default ui-corner-all" title=".ui-icon-carat-1-n"><span class="ui-icon ui-icon-carat-1-n"></span><span class="text">.ui-icon-carat-1-n</span></li>
 <li class="ui-state-default ui-corner-all" title=".ui-icon-carat-1-ne"><span class="ui-icon ui-icon-carat-1-ne"></span><span class="text">.ui-icon-carat-1-ne</span></li>
 <li class="ui-state-default ui-corner-all" title=".ui-icon-carat-1-e"><span class="ui-icon ui-icon-carat-1-e"></span><span class="text">.ui-icon-carat-1-e</span></li>
 
