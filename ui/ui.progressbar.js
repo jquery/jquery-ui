@@ -21,6 +21,7 @@ $.widget("ui.progressbar", {
 
 		this.element
 			.addClass("ui-progressbar"
+				+ " ui-widget"
 				+ " ui-widget-content"
 				+ " ui-corner-all")
 			.attr({
@@ -40,6 +41,7 @@ $.widget("ui.progressbar", {
 
 		this.element
 			.removeClass("ui-progressbar"
+				+ " ui-widget"
 				+ " ui-widget-content"
 				+ " ui-corner-all")
 			.removeAttr("role")

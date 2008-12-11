@@ -8,11 +8,7 @@
 
 var defaults = {
 	disabled: false,
-	height: 20,
-	label: true,
-	labelAlign: 'left',
-	value: 0,
-	width: 300
+	value: 0
 };
 
 var el;
@@ -47,19 +43,10 @@ test("defaults", function() {
 
 test("set defaults on init", function() {
 	el = $("#progressbar").progressbar({ 
-		height: 30,
-		label: false,
-		labelAlign: 'right',
-		value: 50,
-		width: 200
+		value: 50
 	});
 
-	equals(el.progressbar("option", "height"), 30, "height");
-	equals(el.progressbar("option", "label"), false, "label");
-	equals(el.progressbar("option", "labelAlign"), "right", "labelAlign");
 	equals(el.progressbar("option", "value"), 50, "value");
-	equals(el.progressbar("option", "width"), 200, "width");
-
 });
 
 test("accessibility", function() {
