@@ -134,10 +134,6 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 		//Cache the former DOM position
 		this.domPosition = { prev: this.currentItem.prev()[0], parent: this.currentItem.parent()[0] };
 
-		//Set a containment if given in the options
-		if(o.containment)
-			this._setContainment();
-
 		//If the helper is not the original, hide the original so it's not playing any role during the drag, won't cause anything bad this way
 		if(this.helper[0] != this.currentItem[0]) {
 			this.currentItem.hide();
@@ -145,6 +141,10 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 
 		//Create the placeholder
 		this._createPlaceholder();
+		
+		//Set a containment if given in the options
+		if(o.containment)
+			this._setContainment();
 
 		//Call plugins and callbacks
 		this._propagate("start", event);
@@ -702,8 +702,8 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 		if(o.containment == 'document' || o.containment == 'window') this.containment = [
 			0 - this.offset.relative.left - this.offset.parent.left,
 			0 - this.offset.relative.top - this.offset.parent.top,
-			$(o.containment == 'document' ? document : window).width() - this.offset.relative.left - this.offset.parent.left - this.helperProportions.width - this.margins.left - (parseInt(this.currentItem.css("marginRight"),10) || 0),
-			($(o.containment == 'document' ? document : window).height() || document.body.parentNode.scrollHeight) - this.offset.relative.top - this.offset.parent.top - this.helperProportions.height - this.margins.top - (parseInt(this.currentItem.css("marginBottom"),10) || 0)
+			$(o.containment == 'document' ? document : window).width() - this.offset.relative.left - this.offset.parent.left - this.margins.left - (parseInt(this.currentItem.css("marginRight"),10) || 0),
+			($(o.containment == 'document' ? document : window).height() || document.body.parentNode.scrollHeight) - this.offset.relative.top - this.offset.parent.top - this.margins.top - (parseInt(this.currentItem.css("marginBottom"),10) || 0)
 		];
 
 		if(!(/^(document|window|parent)$/).test(o.containment)) {
@@ -714,8 +714,8 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 			this.containment = [
 				co.left + (parseInt($(ce).css("borderLeftWidth"),10) || 0) - this.offset.relative.left - this.offset.parent.left,
 				co.top + (parseInt($(ce).css("borderTopWidth"),10) || 0) - this.offset.relative.top - this.offset.parent.top,
-				co.left+(over ? Math.max(ce.scrollWidth,ce.offsetWidth) : ce.offsetWidth) - (parseInt($(ce).css("borderLeftWidth"),10) || 0) - this.offset.relative.left - this.offset.parent.left - this.helperProportions.width - this.margins.left - (parseInt(this.currentItem.css("marginRight"),10) || 0),
-				co.top+(over ? Math.max(ce.scrollHeight,ce.offsetHeight) : ce.offsetHeight) - (parseInt($(ce).css("borderTopWidth"),10) || 0) - this.offset.relative.top - this.offset.parent.top - this.helperProportions.height - this.margins.top - (parseInt(this.currentItem.css("marginBottom"),10) || 0)
+				co.left + (over ? Math.max(ce.scrollWidth,ce.offsetWidth) : ce.offsetWidth) - (parseInt($(ce).css("borderLeftWidth"),10) || 0) - this.offset.relative.left - this.offset.parent.left - this.margins.left - (parseInt(this.currentItem.css("marginRight"),10) || 0),
+				co.top + (over ? Math.max(ce.scrollHeight,ce.offsetHeight) : ce.offsetHeight) - (parseInt($(ce).css("borderTopWidth"),10) || 0) - this.offset.relative.top - this.offset.parent.top - this.margins.top - (parseInt(this.currentItem.css("marginBottom"),10) || 0)
 			];
 		}
 
@@ -774,8 +774,8 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 		if(this.containment) {
 			if(position.left < this.containment[0]) position.left = this.containment[0];
 			if(position.top < this.containment[1]) position.top = this.containment[1];
-			if(position.left > this.containment[2]) position.left = this.containment[2];
-			if(position.top > this.containment[3]) position.top = this.containment[3];
+			if(position.left + this.helperProportions.width > this.containment[2]) position.left = this.containment[2] - this.helperProportions.width;
+			if(position.top + this.helperProportions.height > this.containment[3]) position.top = this.containment[3] - this.helperProportions.height;
 		}
 
 		if(o.grid) {
