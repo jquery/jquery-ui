@@ -395,15 +395,19 @@ $.ui.plugin.add("draggable", "connectToSortable", {
 		var inst = $(this).data("draggable");
 		inst.sortables = [];
 		$(ui.options.connectToSortable).each(function() {
-			if($.data(this, 'sortable')) {
-				var sortable = $.data(this, 'sortable');
-				inst.sortables.push({
-					instance: sortable,
-					shouldRevert: sortable.options.revert
-				});
-				sortable._refreshItems();	//Do a one-time refresh at start to refresh the containerCache
-				sortable._propagate("activate", event, inst);
-			}
+			// 'this' points to a string, and should therefore resolved as query, but instead, if the string is assigned to a variable, it loops through the strings properties,
+			// so we have to append '' to make it anonymous again
+			$(this+'').each(function() {
+				if($.data(this, 'sortable')) {
+					var sortable = $.data(this, 'sortable');
+					inst.sortables.push({
+						instance: sortable,
+						shouldRevert: sortable.options.revert
+					});
+					sortable._refreshItems();	//Do a one-time refresh at start to refresh the containerCache
+					sortable._propagate("activate", event, inst);
+				}
+			});
 		});
 
 	},
