@@ -70,6 +70,21 @@ $.widget("ui.dialog", {
 					'ui-corner-all'
 				)
 				.attr('role', 'button')
+				.hover(
+					function() {
+						$(this).addClass('ui-dialog-titlebar-close-hover');
+					},
+					function() {
+						$(this).removeClass('ui-dialog-titlebar-close-hover');
+					}
+				)
+				.mousedown(function(ev) {
+					ev.stopPropagation();
+				})
+				.click(function() {
+					self.close();
+					return false;
+				})
 				.appendTo(uiDialogTitlebar),
 
 			uiDialogTitlebarCloseText = (this.uiDialogTitlebarCloseText = $('<span/>'))
@@ -129,24 +144,7 @@ $.widget("ui.dialog", {
 					position: 'absolute',
 					bottom: 0
 				})
-				.appendTo(uiDialog),
-
-			uiDialogTitlebarClose = $('.ui-dialog-titlebar-close', uiDialogTitlebar)
-				.hover(
-					function() {
-						$(this).addClass('ui-dialog-titlebar-close-hover');
-					},
-					function() {
-						$(this).removeClass('ui-dialog-titlebar-close-hover');
-					}
-				)
-				.mousedown(function(ev) {
-					ev.stopPropagation();
-				})
-				.click(function() {
-					self.close();
-					return false;
-				});
+				.appendTo(uiDialog);
 
 		uiDialogTitlebar.find("*").add(uiDialogTitlebar).disableSelection();
 
