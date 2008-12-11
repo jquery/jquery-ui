@@ -63,7 +63,7 @@ $.widget("ui.dialog", {
 				.appendTo(uiDialogTitlebar),
 
 			uiDialogTitlebarCloseText = (this.uiDialogTitlebarCloseText = $('<span/>'))
-				.html('X')
+				.text(options.closeText)
 				.appendTo(uiDialogTitlebarClose),
 
 			title = options.title || '&nbsp;',
@@ -359,6 +359,9 @@ $.widget("ui.dialog", {
 			case "buttons":
 				this._createButtons(value);
 				break;
+			case "closeText":
+				this.uiDialogTitlebarCloseText.text(value);
+				break;
 			case "draggable":
 				(value
 					? this._makeDraggable()
@@ -418,6 +421,7 @@ $.extend($.ui.dialog, {
 		bgiframe: false,
 		buttons: {},
 		closeOnEscape: true,
+		closeText: 'close',
 		draggable: true,
 		height: 200,
 		minHeight: 100,

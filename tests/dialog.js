@@ -10,6 +10,8 @@ var defaults = {
 	autoOpen: true,
 	autoResize: true,
 	buttons: {},
+	closeOnEscape: true,
+	closeText: 'close',
 	disabled: false,
 	dialogClass: undefined,
 	draggable: true,
@@ -323,6 +325,29 @@ test("buttons", function() {
 		i += 1;
 	});
 
+	el.remove();
+});
+
+test("closeOnEscape", function() {
+	ok(false, 'missing test');
+});
+
+test("closeText", function() {
+	expect(3);
+
+	el = $('<div></div>').dialog();
+		equals(dlg().find('.ui-dialog-titlebar-close span').text(), 'close',
+			'default close text');
+	el.remove();
+
+	el = $('<div></div>').dialog({ closeText: "foo" });
+		equals(dlg().find('.ui-dialog-titlebar-close span').text(), 'foo',
+			'closeText on init');
+	el.remove();
+
+	el = $('<div></div>').dialog().dialog('option', 'closeText', 'bar');
+		equals(dlg().find('.ui-dialog-titlebar-close span').text(), 'bar',
+			'closeText via option method');
 	el.remove();
 });
 
