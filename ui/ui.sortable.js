@@ -725,20 +725,21 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 
 		if(!pos) pos = this.position;
 		var mod = d == "absolute" ? 1 : -1;
+		var scroll = this[(this.cssPosition == 'absolute' ? 'offset' : 'scroll')+'Parent'], scrollIsRootNode = (/(html|body)/i).test(scroll[0].tagName);
 
 		return {
 			top: (
 				pos.top																	// the calculated relative position
 				+ this.offset.relative.top	* mod										// Only for relative positioned nodes: Relative offset from element to offset parent
 				+ this.offset.parent.top * mod											// The offsetParent's offset without borders (offset + border)
-				+ ( this.cssPosition == 'fixed' ? -this.scrollParent.scrollTop() : this[(this.cssPosition == 'absolute' ? 'offset' : 'scroll')+'Parent'].scrollTop() ) * mod
+				+ ( this.cssPosition == 'fixed' ? -this.scrollParent.scrollTop() : ( scrollIsRootNode ? 0 : scroll.scrollTop() ) ) * mod
 				+ this.margins.top * mod												//Add the margin (you don't want the margin counting in intersection methods)
 			),
 			left: (
 				pos.left																// the calculated relative position
 				+ this.offset.relative.left	* mod										// Only for relative positioned nodes: Relative offset from element to offset parent
 				+ this.offset.parent.left * mod											// The offsetParent's offset without borders (offset + border)
-				+ ( this.cssPosition == 'fixed' ? -this.scrollParent.scrollLeft() : this[(this.cssPosition == 'absolute' ? 'offset' : 'scroll')+'Parent'].scrollLeft() ) * mod
+				+ ( this.cssPosition == 'fixed' ? -this.scrollParent.scrollLeft() : ( scrollIsRootNode ? 0 : scroll.scrollLeft() ) ) * mod
 				+ this.margins.left * mod												//Add the margin (you don't want the margin counting in intersection methods)
 			)
 		};
@@ -761,7 +762,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 				- this.offset.click.left												// Click offset (relative to the element)
 				- this.offset.relative.left												// Only for relative positioned nodes: Relative offset from element to offset parent
 				- this.offset.parent.left												// The offsetParent's offset without borders (offset + border)
-				+ ( this.cssPosition == 'fixed' ? -this.scrollParent.scrollLeft() : scrollIsRootNode ? 0 : scroll.scrollLeft() )
+				+ ( this.cssPosition == 'fixed' ? -this.scrollParent.scrollLeft() : ( scrollIsRootNode ? 0 : scroll.scrollLeft() ) )
 			)
 		};
 
@@ -939,16 +940,12 @@ $.ui.plugin.add("sortable", "opacity", {
 
 $.ui.plugin.add("sortable", "scroll", {
 	start: function(event, ui) {
-		var o = ui.options;
-		var i = $(this).data("sortable");
-
+		var i = $(this).data("sortable"), o = i.options;
 		if(i.scrollParent[0] != document && i.scrollParent[0].tagName != 'HTML') i.overflowOffset = i.scrollParent.offset();
-
 	},
-	drag: function(event, ui) {
-
-		var o = ui.options, scrolled = false;
-		var i = $(this).data("sortable");
+	sort: function(event, ui) {
+	
+		var i = $(this).data("sortable"), o = i.options, scrolled = false;
 
 		if(i.scrollParent[0] != document && i.scrollParent[0].tagName != 'HTML') {
 
@@ -976,7 +973,7 @@ $.ui.plugin.add("sortable", "scroll", {
 
 		}
 
-		if(scrolled !== false && $.ui.ddmanager)
+		if(scrolled !== false && $.ui.ddmanager && !o.dropBehaviour)
 			$.ui.ddmanager.prepareOffsets(i, event);
 
 
