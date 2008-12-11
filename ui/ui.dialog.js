@@ -164,7 +164,7 @@ $.widget("ui.dialog", {
 		this.element
 			.unbind('.dialog')
 			.removeData('dialog')
-			.removeClass('ui-dialog-content')
+			.removeClass('ui-dialog-content ui-widget-content')
 			.hide().appendTo('body');
 		this.uiDialog.remove();
 
