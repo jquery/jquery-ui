@@ -38,7 +38,9 @@ $.widget("ui.dialog", {
 
 			uiDialogContent = this.element
 				.removeAttr('title')
-				.addClass('ui-dialog-content')
+				.addClass(
+					'ui-dialog-content ' +
+					'ui-widget-content')
 				.wrap('<div/>')
 				.wrap('<div/>'),
 
@@ -51,18 +53,30 @@ $.widget("ui.dialog", {
 				}),
 
 			uiDialogTitlebar = (this.uiDialogTitlebar = $('<div/>'))
-				.addClass('ui-dialog-titlebar')
+				.addClass(
+					'ui-dialog-titlebar ' +
+					'ui-widget-header ' +
+					'ui-corner-all ' +
+					'ui-helper-clearfix'
+				)
 				.mousedown(function() {
 					self.moveToTop();
 				})
 				.prependTo(uiDialogContainer),
 
 			uiDialogTitlebarClose = $('<a href="#"/>')
-				.addClass('ui-dialog-titlebar-close')
+				.addClass(
+					'ui-dialog-titlebar-close ' +
+					'ui-corner-all'
+				)
 				.attr('role', 'button')
 				.appendTo(uiDialogTitlebar),
 
 			uiDialogTitlebarCloseText = (this.uiDialogTitlebarCloseText = $('<span/>'))
+				.addClass(
+					'ui-icon ' +
+					'ui-icon-closethick'
+				)
 				.text(options.closeText)
 				.appendTo(uiDialogTitlebarClose),
 
@@ -77,7 +91,12 @@ $.widget("ui.dialog", {
 			uiDialog = (this.uiDialog = uiDialogContainer.parent())
 				.appendTo(document.body)
 				.hide()
-				.addClass('ui-dialog')
+				.addClass(
+					'ui-dialog ' +
+					'ui-widget ' +
+					'ui-widget-content ' +
+					'ui-corner-all'
+				)
 				.addClass(options.dialogClass)
 				.css({
 					position: 'absolute',
@@ -101,7 +120,11 @@ $.widget("ui.dialog", {
 				}),
 
 			uiDialogButtonPane = (this.uiDialogButtonPane = $('<div/>'))
-				.addClass('ui-dialog-buttonpane')
+				.addClass(
+					'ui-dialog-buttonpane ' +
+					'ui-widget-content ' +
+					'ui-helper-clearfix'
+				)
 				.css({
 					position: 'absolute',
 					bottom: 0
@@ -242,6 +265,10 @@ $.widget("ui.dialog", {
 			uiDialogButtonPane.show();
 			$.each(buttons, function(name, fn) {
 				$('<button type="button"></button>')
+					.addClass(
+						'ui-state-default ' +
+						'ui-corner-all'
+					)
 					.text(name)
 					.click(function() { fn.apply(self.element[0], arguments); })
 					.appendTo(uiDialogButtonPane);

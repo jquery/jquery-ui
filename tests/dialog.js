@@ -300,7 +300,7 @@ test("buttons", function() {
 		i++;
 	});
 
-	equals(btn.parent().attr('className'), 'ui-dialog-buttonpane', "buttons in container");
+	ok(btn.parent().hasClass('ui-dialog-buttonpane'), "buttons in container");
 	btn.trigger("click");
 
 	var newButtons = {
