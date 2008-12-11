@@ -13,7 +13,6 @@
 .ui-widget-header a { color: #222222/*{fcHeader}*/; }
 .ui-widget-content { border: 1px solid #aaaaaa/*{borderColorContent}*/; background: #ffffff/*{bgColorContent}*/ url(images/ffffff_40x100_textures_02_glass_75.png)/*{bgImgUrlContent}*/ 0 0/*{bgContentYPos}*/ repeat-x/*{bgContentRepeat}*/; color: #222222/*{fcContent}*/; }
 .ui-widget-content a { color: #222222/*{fcContent}*/; }
-.ui-widget-overlay { background: #aaaaaa/*{borderColorContent}*/; opacity: .3; filter:Alpha(Opacity=30); }
 
 /* Interaction states
 ----------------------------------*/
@@ -221,6 +220,8 @@
 
 /* Misc visuals
 ----------------------------------*/
+
+/* Corner radius */
 .ui-corner-tl { -moz-border-radius-topleft: 4px/*{cornerRadius}*/; -webkit-border-top-left-radius: 4px/*{cornerRadius}*/; border-top-left-radius: 4px/*{cornerRadius}*/; }
 .ui-corner-tr { -moz-border-radius-topright: 4px/*{cornerRadius}*/; -webkit-border-top-right-radius: 4px/*{cornerRadius}*/; border-top-right-radius: 4px/*{cornerRadius}*/; }
 .ui-corner-bl { -moz-border-radius-bottomleft: 4px/*{cornerRadius}*/; -webkit-border-bottom-left-radius: 4px/*{cornerRadius}*/; border-bottom-left-radius: 4px/*{cornerRadius}*/; }
@@ -230,3 +231,7 @@
 .ui-corner-right {  -moz-border-radius-topright: 4px/*{cornerRadius}*/; -webkit-border-top-right-radius: 4px/*{cornerRadius}*/; border-top-right-radius: 4px/*{cornerRadius}*/; -moz-border-radius-bottomright: 4px/*{cornerRadius}*/; -webkit-border-bottom-right-radius: 4px/*{cornerRadius}*/; border-bottom-right-radius: 4px/*{cornerRadius}*/; }
 .ui-corner-left { -moz-border-radius-topleft: 4px/*{cornerRadius}*/; -webkit-border-top-left-radius: 4px/*{cornerRadius}*/; border-top-left-radius: 4px/*{cornerRadius}*/; -moz-border-radius-bottomleft: 4px/*{cornerRadius}*/; -webkit-border-bottom-left-radius: 4px/*{cornerRadius}*/; border-bottom-left-radius: 4px/*{cornerRadius}*/; }
 .ui-corner-all { -moz-border-radius: 4px/*{cornerRadius}*/; -webkit-border-radius: 4px/*{cornerRadius}*/; border-radius: 4px/*{cornerRadius}*/;}
+
+/* Overlays */
+.ui-widget-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #aaaaaa/*tbd overlayColor*/; opacity: .3;filter:Alpha(Opacity=30)/*tbd overlayOpacity*/; }
+.ui-widget-shadow { margin: -4px/*tbd shadowOffset*/ 0 0 -4px/*tbd shadowOffset*/; padding: 4px/*tbd shadowWidth*/; background: #aaaaaa/*tbd shadowColor*/; opacity:.1;filter:Alpha(Opacity=15);/*tbd shadowOpacity*/ }
