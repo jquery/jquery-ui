@@ -1,37 +1,38 @@
 <!doctype html>
 <html>
-	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-		<title>Themeroller CSS Framework Demo</title>
-		<script src="http://ui.jquery.com/js/jquery.js"></script>
-		<script src="http://www.filamentgroup.com/examples/preloadImages/scripts/preloadCssImages.jQuery_v5.js"></script>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+	<title>Themeroller CSS Framework Demo</title>
+	<script src="http://ui.jquery.com/js/jquery.js"></script>
+	<script src="http://www.filamentgroup.com/examples/preloadImages/scripts/preloadCssImages.jQuery_v5.js"></script>
 
-		<link rel="stylesheet" href="http://jquery-ui.googlecode.com/svn/trunk/themes/base/ui.core.css" type="text/css" media="screen" />
+	<link rel="stylesheet" href="http://jquery-ui.googlecode.com/svn/trunk/themes/base/ui.core.css" type="text/css" media="screen" />
 
-		<style type="text/css">
-			body {font-size: 62.5%; margin: 20px; font-family: Verdana, sans-serif; color: #444;}
-			h1 {font-size: 1.5em; margin: 1em 0;}
-			h2 {font-size: 1.3em; margin: 2em 0 .5em;}
-			h2 a {font-size: .8em;}
-			p {font-size: 1.2em; }
-			ul {margin: 0; padding: 0;}
-			li {margin: 2px; position: relative; padding: 4px 0; cursor: pointer; float: left;  list-style: none;}
-			span.ui-icon {float: left; margin: 0 4px;}
-			span.text {float: left; width: 180px;}
-		</style>
-		<script type="text/javascript">
-			$(function(){
-				$('.ui-state-default').hover(
-					function(){ $(this).addClass('ui-state-hover'); }, 
-					function(){ $(this).removeClass('ui-state-hover'); }
-				);
-				$('.ui-state-default').click(function(){ $(this).toggleClass('ui-state-active'); });
-				$('.icons').append(' <a href="#">Toggle text</a>').find('a').click(function(){ $('.icon-collection li span.text').toggle(); }).trigger('click');
-				$.preloadCssImages();
-			});
-		</script>
-	</head>
-	<body>
+	<style type="text/css">
+		body {font-size: 62.5%; margin: 20px; font-family: Verdana, sans-serif; color: #444;}
+		h1 {font-size: 1.5em; margin: 1em 0;}
+		h2 {font-size: 1.3em; margin: 2em 0 .5em;}
+		h2 a {font-size: .8em;}
+		p {font-size: 1.2em; }
+		ul {margin: 0; padding: 0;}
+		li {margin: 2px; position: relative; padding: 4px 0; cursor: pointer; float: left;  list-style: none;}
+		span.ui-icon {float: left; margin: 0 4px;}
+		span.text {float: left; width: 180px;}
+	</style>
+
+	<script type="text/javascript">
+		$(function(){
+			$('.ui-state-default').hover(
+				function(){ $(this).addClass('ui-state-hover'); }, 
+				function(){ $(this).removeClass('ui-state-hover'); }
+			);
+			$('.ui-state-default').click(function(){ $(this).toggleClass('ui-state-active'); });
+			$('.icons').append(' <a href="#">Toggle text</a>').find('a').click(function(){ $('.icon-collection li span.text').toggle(); }).trigger('click');
+			$.preloadCssImages();
+		});
+	</script>
+</head>
+<body>
 
 <p class="icons"></p>
 
@@ -228,7 +229,5 @@
 <li class="ui-state-default ui-corner-all" title=".ui-icon-grip-diagonal-se"><span class="ui-icon ui-icon-grip-diagonal-se"></span><span class="text">.ui-icon-grip-diagonal-se</span></li>
 </ul>
 
-
-	</body>
+</body>
 </html>
-
