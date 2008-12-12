@@ -28,21 +28,20 @@ $.widget("ui.accordion", {
 				}
 			}
 		}
-
-		// calculate active if not specified, using the first header
-		options.headers = this.element.find(options.header);
-		options.active = findActive(options.headers, options.active);
+		
+		this.element.addClass("ui-accordion ui-widget ui-helper-reset");
+		var groups = this.element.children().addClass("ui-accordion-group");
+		var headers = options.headers = groups.find("> :first-child").addClass("ui-accordion-header ui-helper-reset ui-state-default ui-corner-all");
+		headers.next().addClass("ui-accordion-content ui-helper-reset ui-widget-content ui-corner-bottom");
+		
+		var active = options.active = findActive(headers, options.active).toggleClass("ui-state-default").toggleClass("ui-state-active").toggleClass("ui-corner-all").toggleClass("ui-corner-top");
+		active.parent().addClass("selected");
+		$("<span/>").addClass("ui-icon ui-icon-circle-plus").prependTo(headers);
+		active.find(".ui-icon").toggleClass("ui-icon-circle-plus").toggleClass("ui-icon-circle-minus");
 
 		// IE7-/Win - Extra vertical space in Lists fixed
 		if ($.browser.msie) {
 			this.element.find('a').css('zoom', '1');
-		}
-
-		if (!this.element.hasClass("ui-accordion")) {
-			this.element.addClass("ui-accordion");
-			$('<span class="ui-accordion-left"/>').insertBefore(options.headers);
-			$('<span class="ui-accordion-right"/>').appendTo(options.headers);
-			options.headers.addClass("ui-accordion-header");
 		}
 
 		var maxHeight;
@@ -84,8 +83,7 @@ $.widget("ui.accordion", {
 		} else {
 			options.active
 				.attr('aria-expanded','true')
-				.attr("tabIndex", "0")
-				.parent().andSelf().addClass(options.selectedClass);
+				.attr("tabIndex", "0");
 		}
 
 		// only need links in taborder for Safari
@@ -98,16 +96,15 @@ $.widget("ui.accordion", {
 	},
 
 	destroy: function() {
-		this.options.headers.parent().andSelf().removeClass(this.options.selectedClass);
-		this.options.headers.prev(".ui-accordion-left").remove();
-		this.options.headers.children(".ui-accordion-right").remove();
-		this.options.headers.next().css("display", "");
-		if ( this.options.fillSpace || this.options.autoHeight ) {
-			this.options.headers.next().css("height", "");
-		}
+		this.element.removeClass("ui-accordion ui-widget ui-helper-reset").removeAttr("role").unbind(".accordion");
 		$.removeData(this.element[0], "accordion");
-
-		this.element.removeClass("ui-accordion").unbind(".accordion");
+		var groups = this.element.children().removeClass("ui-accordion-group selected");
+		var headers = this.options.headers.removeClass("ui-accordion-header ui-helper-reset ui-state-default ui-corner-all ui-state-active ui-corner-top")
+			.removeAttr("role").removeAttr("aria-expanded").removeAttr("tabindex");
+		headers.find("a").removeAttr("tabindex");
+		headers.next().removeClass("ui-accordion-content ui-helper-reset ui-widget-content ui-corner-bottom")
+			.removeAttr("role").css({display: "", height: "", overflow: "", marginTop:"", marginBottom:""});
+		headers.children(".ui-icon").remove();
 	},
 
 	_keydown: function(event) {
@@ -260,10 +257,9 @@ function clickHandler(event) {
 	if (options.disabled) {
 		return false;
 	}
-
 	// called only when using activate(false) to close all parts programmatically
 	if ( !event.target && !options.alwaysOpen ) {
-		options.active.parent().andSelf().toggleClass(options.selectedClass);
+		options.active.parent().toggleClass(options.selectedClass);
 		var toHide = options.active.next(),
 			data = {
 				options: options,
@@ -295,9 +291,13 @@ function clickHandler(event) {
 	}
 
 	// switch classes
-	options.active.parent().andSelf().toggleClass(options.selectedClass);
+	options.active.parent().toggleClass(options.selectedClass);
+	options.active.removeClass("ui-state-active ui-corner-top").addClass("ui-state-default ui-corner-all")
+		.find(".ui-icon").removeClass("ui-icon-circle-minus").addClass("ui-icon-circle-plus");
 	if ( !clickedActive ) {
-		clicked.parent().andSelf().addClass(options.selectedClass);
+		clicked.parent().addClass(options.selectedClass);
+		clicked.removeClass("ui-state-default ui-corner-all").addClass("ui-state-active ui-corner-top")
+			.find(".ui-icon").removeClass("ui-icon-circle-plus").addClass("ui-icon-circle-minus");
 	}
 
 	// find elements to show and hide

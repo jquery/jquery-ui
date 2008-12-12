@@ -10,7 +10,7 @@ jQuery.ui.accordion.defaults.animated = false;
 function state(accordion) {
 	var args = $.makeArray(arguments).slice(1);
 	$.each(args, function(i, n) {
-		equals(accordion.find("div").eq(i).is(":visible"), n);
+		equals(accordion.find(".ui-accordion-content").eq(i).is(":visible"), n);
 	});
 }
 
@@ -23,11 +23,11 @@ test("basics", function() {
 });
 
 test("autoheight", function() {
-	$('#navigation').accordion({ header: '.head', autoHeight: false });
+	$('#navigation').accordion({ autoHeight: false });
 	equals( 90, $('#navigation ul:first').height() );
 	equals( 126, $('#navigation ul:eq(1)').height() );
 	equals( 54, $('#navigation ul:last').height() );
-	$('#navigation').accordion("destroy").accordion({ header: '.head', autoHeight: true });
+	$('#navigation').accordion("destroy").accordion({ autoHeight: true });
 	equals( 126, $('#navigation ul:first').height() );
 	equals( 126, $('#navigation ul:eq(1)').height() );
 	equals( 126, $('#navigation ul:last').height() );
@@ -67,7 +67,7 @@ test("activate, boolean, alwaysOpen:true", function() {
 });
 
 test("activate, string expression", function() {
-	var ac = $('#list1').accordion({ active: ":last" });
+	var ac = $('#list1').accordion({ active: "a:last" });
 	state(ac, 0, 0, 1);
 	ac.accordion("activate", ":first");
 	state(ac, 1, 0, 0);
@@ -94,7 +94,7 @@ function state2(accordion) {
 }
 
 test("handle click on header-descendant", function() {
-	var ac = $('#navigation').accordion({ header: '.head', autoHeight: false })
+	var ac = $('#navigation').accordion({ autoHeight: false })
 	ac.triggerEvent("click", $('#navigation span:contains(Bass)')[0]);
 	state2(ac, 0, 1, 0);
 });
