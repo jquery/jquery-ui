@@ -1,12 +1,9 @@
 <!doctype html>
 <html>
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-	<title>Themeroller CSS Framework Demo</title>
-	<script src="http://ui.jquery.com/js/jquery.js"></script>
-	<script src="http://www.filamentgroup.com/examples/preloadImages/scripts/preloadCssImages.jQuery_v5.js"></script>
-
-	<link rel="stylesheet" href="http://jquery-ui.googlecode.com/svn/trunk/themes/base/ui.core.css" type="text/css" media="screen" />
+	<title>jQuery UI CSS Framework Icons Test Page</title>
+	<link rel="stylesheet" href="../../themes/base/ui.all.css" type="text/css" />
+	<script type="text/javascript" src="../../jquery-1.2.6.js"></script>
 
 	<style type="text/css">
 		body {font-size: 62.5%; margin: 20px; font-family: Verdana, sans-serif; color: #444;}
@@ -28,7 +25,6 @@
 			);
 			$('.ui-state-default').click(function(){ $(this).toggleClass('ui-state-active'); });
 			$('.icons').append(' <a href="#">Toggle text</a>').find('a').click(function(){ $('.icon-collection li span.text').toggle(); }).trigger('click');
-			$.preloadCssImages();
 		});
 	</script>
 </head>
