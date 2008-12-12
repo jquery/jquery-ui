@@ -32,7 +32,8 @@ $.widget("ui.accordion", {
 		this.element.addClass("ui-accordion ui-widget ui-helper-reset");
 		var groups = this.element.children().addClass("ui-accordion-group");
 		var headers = options.headers = groups.find("> :first-child").addClass("ui-accordion-header ui-helper-reset ui-state-default ui-corner-all");
-		headers.next().addClass("ui-accordion-content ui-helper-reset ui-widget-content ui-corner-bottom");
+		// wrap content elements in div against animation issues
+		headers.next().wrap("<div/>").addClass("ui-accordion-content ui-helper-reset ui-widget-content ui-corner-bottom");
 		
 		var active = options.active = findActive(headers, options.active).toggleClass("ui-state-default").toggleClass("ui-state-active").toggleClass("ui-corner-all").toggleClass("ui-corner-top");
 		active.parent().addClass("selected");
@@ -102,9 +103,10 @@ $.widget("ui.accordion", {
 		var headers = this.options.headers.removeClass("ui-accordion-header ui-helper-reset ui-state-default ui-corner-all ui-state-active ui-corner-top")
 			.removeAttr("role").removeAttr("aria-expanded").removeAttr("tabindex");
 		headers.find("a").removeAttr("tabindex");
-		headers.next().removeClass("ui-accordion-content ui-helper-reset ui-widget-content ui-corner-bottom")
-			.removeAttr("role").css({display: "", height: "", overflow: "", marginTop:"", marginBottom:""});
 		headers.children(".ui-icon").remove();
+		headers.next().children().removeClass("ui-accordion-content ui-helper-reset ui-widget-content ui-corner-bottom").each(function(){
+			$(this).parent().replaceWith(this);
+		})
 	},
 
 	_keydown: function(event) {
@@ -355,11 +357,8 @@ $.extend($.ui.accordion, {
 			var hideHeight = options.toHide.height(),
 				showHeight = options.toShow.height(),
 				difference = showHeight / hideHeight,
-				padding = options.toShow.outerHeight() - options.toShow.height(),
-				margin = options.toShow.css('marginBottom'),
-				overflow = options.toShow.css('overflow')
-				tmargin = options.toShow.css('marginTop');
-			options.toShow.css({ height: 0, overflow: 'hidden', marginTop: 0, marginBottom: -padding }).show();
+				overflow = options.toShow.css('overflow');
+			options.toShow.css({ height: 0, overflow: 'hidden' }).show();
 			options.toHide.filter(":hidden").each(options.complete).end().filter(":visible").animate({height:"hide"},{
 				step: function(now) {
 					var current = (hideHeight - now) * difference;
@@ -374,7 +373,7 @@ $.extend($.ui.accordion, {
 					if ( !options.autoHeight ) {
 						options.toShow.css("height", "auto");
 					}
-					options.toShow.css({marginTop: tmargin, marginBottom: margin, overflow: overflow});
+					options.toShow.css({overflow: overflow});
 					options.complete();
 				}
 			});

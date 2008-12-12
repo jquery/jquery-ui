@@ -10,7 +10,7 @@ jQuery.ui.accordion.defaults.animated = false;
 function state(accordion) {
 	var args = $.makeArray(arguments).slice(1);
 	$.each(args, function(i, n) {
-		equals(accordion.find(".ui-accordion-content").eq(i).is(":visible"), n);
+		equals(accordion.find(".ui-accordion-content").parent().eq(i).is(":visible"), n);
 	});
 }
 
@@ -24,13 +24,13 @@ test("basics", function() {
 
 test("autoheight", function() {
 	$('#navigation').accordion({ autoHeight: false });
-	equals( 90, $('#navigation ul:first').height() );
-	equals( 126, $('#navigation ul:eq(1)').height() );
-	equals( 54, $('#navigation ul:last').height() );
+	equals( 90, $('#navigation div:first').height() );
+	equals( 126, $('#navigation div:eq(1)').height() );
+	equals( 54, $('#navigation div:last').height() );
 	$('#navigation').accordion("destroy").accordion({ autoHeight: true });
-	equals( 126, $('#navigation ul:first').height() );
-	equals( 126, $('#navigation ul:eq(1)').height() );
-	equals( 126, $('#navigation ul:last').height() );
+	equals( 126, $('#navigation div:first').height() );
+	equals( 126, $('#navigation div:eq(1)').height() );
+	equals( 126, $('#navigation div:last').height() );
 });
 
 test("activate, numeric", function() {
@@ -89,7 +89,7 @@ test("activate, jQuery or DOM element", function() {
 function state2(accordion) {
 	var args = $.makeArray(arguments).slice(1);
 	$.each(args, function(i, n) {
-		equals(accordion.find("ul").eq(i).is(":visible"), n);
+		equals(accordion.find("div").eq(i).is(":visible"), n);
 	});
 }
 
