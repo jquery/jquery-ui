@@ -5,5 +5,4 @@
 .selected .ui-accordion-header { border-bottom: 0; }
 .ui-accordion .ui-icon { position: absolute; left: .5em; top: 50%; margin-top: -8px; }
 .ui-accordion-header a { display: block; font-size: 1em; padding: .4em .5em .5em 2.2em; }
-.ui-accordion-header .ui { border-bottom: 0; }
 .ui-accordion-content { padding: 1.5em 2.2em; border-top: 0; }
