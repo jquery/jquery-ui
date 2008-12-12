@@ -21,7 +21,6 @@
 <body>
 
 <h2>Error State</h2>
-
 <div class="ui-state-error ui-corner-all" style="width: 420px;"> 
 	<p><span class="ui-icon ui-icon-alert"></span> 
 	<strong>Error:</strong> There is a problem in your form submission!</p>
@@ -32,52 +31,48 @@
 	<p><span class="ui-icon ui-icon-info"></span> <strong>Quick Tip!</strong> Hold ctrl while clicking to get contextual helpers.</p>
 </div>
 
-
 <form>
 <fieldset>
-<div>
-<label>Text</label>
-<input type="text" value="dafs"  />
-</div>
+	<div>
+		<label>Text</label>
+		<input type="text" value="dafs"  />
+	</div>
+	
+	<div>
+		<label>Text</label>
+		<input type="text" value="dafs" class="ui-state-error" />
+	</div>
+	
+	<div>
+		<input type="radio"  />
+		<label>Text</label>
+	</div>
+	
+	<div class="ui-state-error-text">
+		<input type="radio"  />
+		<label>Text</label>
+	</div>
 
-<div>
-<label>Text</label>
-<input type="text" value="dafs" class="ui-state-error" />
-</div>
+	<div>
+		<input type="checkbox" class="ui-state-error" />
+		<label>Text</label>
+	</div>
+	
+	<div>
+		<label>Text</label>
+		<select class="ui-state-error">
+		<option val="dasf">dsaf</option>
+		<option val="dasf">dsaf</option>
+		<option val="dasf">dsaf</option>
+		<option val="dasf">dsaf</option>
+		</select>
+	</div>
+	
+	<button class="ui-state-default ui-priority-primary ui-corner-all">Primary</button>
+	<button class="ui-state-default ui-priority-secondary ui-corner-all">Secondary</button>
+	<button class="ui-state-default ui-state-disabled ui-corner-all">Disabled</button>
 
-<div>
-<input type="radio"  />
-<label>Text</label>
-</div>
-
-<div class="ui-state-error-text">
-<input type="radio"  />
-<label>Text</label>
-
-</div>
-<div>
-<input type="checkbox" class="ui-state-error" />
-<label>Text</label>
-
-</div>
-
-<div>
-<label>Text</label>
-<select class="ui-state-error">
-<option val="dasf">dsaf</option>
-<option val="dasf">dsaf</option>
-<option val="dasf">dsaf</option>
-<option val="dasf">dsaf</option>
-</select>
-
-
-</div>
-
-<button class="ui-state-default ui-priority-primary ui-corner-all">Primary</button>
-		<button class="ui-state-default ui-priority-secondary ui-corner-all">Secondary</button>
-		<button class="ui-state-default ui-state-disabled ui-corner-all">Disabled</button>
 </fieldset>
-
 </form>
 
 </body>
