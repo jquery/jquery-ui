@@ -1,9 +1,9 @@
 /* Slider
 ----------------------------------*/
 .ui-slider { height: .8em; position: relative; }
-.ui-slider-handle { position: absolute; z-index: 2; top: -.3em; width: 1.2em; height: 1.2em; }
+.ui-slider-handle { position: absolute; z-index: 2; top: -.3em; width: 1.2em; height: 1.2em; margin-left:-.6em; }
 .ui-slider-range { position: relative; z-index: 1; top: 0; height: 100%; font-size:1%; display:block; border:0; opacity:.7; filter:Alpha(Opacity=70); }
 
 .ui-slider-vertical { height: auto; width: .8em; }
-.ui-slider-vertical .ui-slider-handle { top: auto; left: -.3em; }
+.ui-slider-vertical .ui-slider-handle { top: auto; left: -.3em; margin-left:0; margin-top:-.6em; }
 .ui-slider-vertical .ui-slider-range { top: auto; left: 0; height: auto; width:100%; }
