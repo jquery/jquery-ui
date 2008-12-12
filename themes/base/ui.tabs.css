@@ -4,7 +4,7 @@
 .ui-tabs-nav { padding: .2em .2em 0 .2em;  position: relative; }
 .ui-tabs-nav li { float: left; border-bottom: 0; margin-right: .1em; margin-bottom: 0; padding: 0; }
 .ui-tabs-nav li.ui-tabs-selected { position: relative; z-index: 10; }
-.ui-tabs-nav li a { float: left; text-decoration: none; padding: .5em 1em; position: relative; }
+.ui-tabs-nav li a { display:block; text-decoration: none; padding: .5em 1em; margin:0; position: relative; }
 .ui-tabs-nav li.ui-tabs-selected { padding-bottom: 1px; margin-bottom: -1px; }
 .ui-tabs-panel { clear:left; padding: 1em 1.4em;  display: block; border: 0; }
 .ui-tabs-hide { display: none !important; }
