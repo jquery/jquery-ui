@@ -19,7 +19,7 @@
 	<script type="text/javascript" src="../../ui/ui.tabs.js"></script>
 	<script type="text/javascript">
 	$(function() {
-		$("#accordion").accordion();
+		$("#accordion").accordion({ header: "h3" });
 		$("#datepicker").datepicker();
 		var dlg = $("#dlg").remove();
 		$("#dialog").click(function() {
@@ -49,21 +49,21 @@
 	Accordion
 	<div id="accordion">
 		<div>
-			<h3><a href="#">Test 1</a></h3>
+			<h3><a href="#">First</a></h3>
 			<div>
-				Lorem ipsum dolor sit amet, consectetur adipisicing elit
+				Lorem ipsum dolor sit amet.
 			</div>
 		</div>
 		<div>
-			<h3><a href="#">Test 2</a></h3>
+			<h3><a href="#">Second</a></h3>
 			<div>
-				Lorem ipsum dolor sit amet, consectetur adipisicing elit
+				Phasellus mattis tincidunt nibh.
 			</div>
 		</div>
 		<div>
-			<h3><a href="#">Test 3</a></h3>
+			<h3><a href="#">Third</a></h3>
 			<div>
-				Lorem ipsum dolor sit amet, consectetur adipisicing elit
+				Nam dui erat, auctor a, dignissim quis.
 			</div>
 		</div>
 	</div>
