@@ -23,14 +23,14 @@ $.widget("ui.slider", {
 	_init: function() {
 
 		var self = this;
-		this.element.addClass("ui-slider");
+		this.element.addClass("ui-slider ui-widget ui-widget-content ui-corner-all");
 		this._initBoundaries();
 
 		// Initialize mouse and key events for interaction
 		this.handle = $(this.options.handle, this.element);
 		if (!this.handle.length) {
 			self.handle = self.generated = $(self.options.handles || [0]).map(function() {
-				var handle = $("<div/>").addClass("ui-slider-handle").appendTo(self.element);
+				var handle = $('<a href="#"></a>').addClass("ui-slider-handle ui-state-default ui-corner-all").appendTo(self.element);
 				if (this.id)
 					handle.attr("id", this.id);
 				return handle[0];
@@ -62,7 +62,6 @@ $.widget("ui.slider", {
 			.each(function() {
 				new handleclass(this);
 			})
-			.wrap('<a href="#" style="outline:none;border:none;"></a>')
 			.parent()
 				.bind('click', function() { return false; })
 				.bind('focus', function(event) { self._focus(this.firstChild); })
@@ -101,7 +100,7 @@ $.widget("ui.slider", {
 	destroy: function() {
 
 		this.element
-			.removeClass("ui-slider ui-slider-disabled")
+			.removeClass("ui-slider ui-slider-disabled ui-widget ui-widget-content ui-corner-all")
 			.removeData("slider")
 			.unbind(".slider");
 
