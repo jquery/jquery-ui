@@ -1,13 +1,9 @@
-$(document).ready(function() {
+
+$(function() {
 
 	$("div.effect")
-		.hover(function() {
-			$(this).addClass("hover");
-		}, function() {
-			$(this).removeClass("hover");
-		})
-		;
-
+		.hover(function() { $(this).addClass("hover"); },
+			function() { $(this).removeClass("hover"); });
 
 	var effect = function(el, n, o) {
 
@@ -27,7 +23,6 @@ $(document).ready(function() {
 
 	};
 
-
 	effect("#blindHorizontally", "blind", { direction: "horizontal" });
 	effect("#blindVertically", "blind", { direction: "vertical" });
 
@@ -41,17 +36,17 @@ $(document).ready(function() {
 	effect("#dropLeft", "drop", { direction: "left" });
 	effect("#dropRight", "drop", { direction: "right" });
 
-	effect("#explode9", "explode", {  });
+	effect("#explode9", "explode", {});
 	effect("#explode36", "explode", { pieces: 36 });
 
 	effect("#fold", "fold", { size: 50 });
 
-	effect("#highlight", "highlight", {  });
+	effect("#highlight", "highlight", {});
 
 	effect("#pulsate", "pulsate", { times: 2 });
 
 	effect("#puff", "puff", { times: 2 });
-	effect("#scale", "scale", {  });
+	effect("#scale", "scale", {});
 
 	$("#shake").bind("click", function() { $(this).addClass("current").effect("shake", {}, 100, function() { $(this).removeClass("current"); }); });
 

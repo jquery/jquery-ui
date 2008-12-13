@@ -2,54 +2,53 @@
 <html lang="en">
 <head>
 	<title>jQuery UI Accordion Visual Test</title>
-
-	<link rel="stylesheet" href="../../themes/base/ui.core.css" type="text/css">
-	<link rel="stylesheet" href="../../themes/base/ui.theme.css" type="text/css">
-	<link rel="stylesheet" href="../../themes/base/ui.accordion.css" type="text/css">
-
+	<link rel="stylesheet" href="all.css" type="text/css">
+	<link rel="stylesheet" href="../../themes/base/ui.all.css" type="text/css">
 	<script type="text/javascript" src="../../jquery-1.2.6.js"></script>
 	<script type="text/javascript" src="../../ui/ui.core.js"></script>
 	<script type="text/javascript" src="../../ui/ui.accordion.js"></script>
-
 	<script type="text/javascript">
 		$(function() {
-			function enable() {
-				$("#myAccordion").accordion({
+			function on() {
+				$("#accordion").accordion({
 					header: "h3"
 				});
 			}
-			function disable() {
-				$("#myAccordion").accordion("destroy");
+			function off() {
+				$("#accordion").accordion("destroy");
 			}
-			$("#toggle").toggle(enable, disable);
-			//enable();
+			$("#toggle").toggle(on, off).click();
 		})
 	</script>
 </head>
-<body style="font-size: 62.5%;">
+<body>
 
- 	<div id="myAccordion">
-        <div>
-            <h3><a href="#">Test 1</a></h3>
-            <div>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit
-            </div>
-        </div>
-        <div>
-            <h3><a href="#">Test 2</a></h3>
-            <div>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit
-            </div>
-        </div>
-        <div>
-            <h3><a href="#">Test 3</a></h3>
-            <div>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit
-            </div>
-        </div>
-    </div>
-
+<ul class="plugins">
+<li>
+	Accordion
+	<div id="accordion">
+		<div>
+			<h3><a href="#">Test 1</a></h3>
+			<div>
+				Lorem ipsum dolor sit amet, consectetur adipisicing elit
+			</div>
+		</div>
+		<div>
+			<h3><a href="#">Test 2</a></h3>
+			<div>
+				Lorem ipsum dolor sit amet, consectetur adipisicing elit
+			</div>
+		</div>
+		<div>
+			<h3><a href="#">Test 3</a></h3>
+			<div>
+				Lorem ipsum dolor sit amet, consectetur adipisicing elit
+			</div>
+		</div>
+	</div>
 	<button id="toggle">Toggle</button>
+</li>
+</ul>
 
 </body>
 </html>

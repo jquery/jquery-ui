@@ -3,7 +3,7 @@
 <head>
 	<title>Simple All</title>
 	<link rel="stylesheet" href="all.css" type="text/css">
-	<link rel="stylesheet" href="../../themes/ui.datepicker.css" type="text/css">
+	<link rel="stylesheet" href="../../themes/base/ui.all.css" type="text/css">
 	<script type="text/javascript" src="../../jquery-1.2.6.js"></script>
 	<script type="text/javascript" src="../../ui/ui.core.js"></script>
 	<script type="text/javascript" src="../../ui/ui.accordion.js"></script>
@@ -11,6 +11,7 @@
 	<script type="text/javascript" src="../../ui/ui.dialog.js"></script>
 	<script type="text/javascript" src="../../ui/ui.draggable.js"></script>
 	<script type="text/javascript" src="../../ui/ui.droppable.js"></script>
+	<script type="text/javascript" src="../../ui/ui.progressbar.js"></script>
 	<script type="text/javascript" src="../../ui/ui.resizable.js"></script>
 	<script type="text/javascript" src="../../ui/ui.selectable.js"></script>
 	<script type="text/javascript" src="../../ui/ui.slider.js"></script>
@@ -18,8 +19,9 @@
 	<script type="text/javascript" src="../../ui/ui.tabs.js"></script>
 	<script type="text/javascript">
 	$(function() {
+		$("#accordion").accordion();
 		$("#datepicker").datepicker();
-		$("#dialog").click(function() { $("<div/>").dialog(); });
+		$("#dialog").click(function() { $("<div></div>").dialog(); });
 		$("#draggable").draggable();
 		$(".draggable").draggable();
 		$("#droppable").droppable({
@@ -28,6 +30,7 @@
 				ui.draggable.css({ position: 'relative', top: 0, left: 0 }).clone().appendTo(this);
 			}
 		});
+		$("#progressbar").progressbar({ value: 37 });
 		$("#resizable").resizable();
 		$("#selectable").selectable();
 		$("#slider").slider();
@@ -38,6 +41,29 @@
 <body>
 
 <ul class="plugins">
+<li>
+	Accordion
+	<div id="accordion">
+		<div>
+			<h3><a href="#">Test 1</a></h3>
+			<div>
+				Lorem ipsum dolor sit amet, consectetur adipisicing elit
+			</div>
+		</div>
+		<div>
+			<h3><a href="#">Test 2</a></h3>
+			<div>
+				Lorem ipsum dolor sit amet, consectetur adipisicing elit
+			</div>
+		</div>
+		<div>
+			<h3><a href="#">Test 3</a></h3>
+			<div>
+				Lorem ipsum dolor sit amet, consectetur adipisicing elit
+			</div>
+		</div>
+	</div>
+</li>
 <li>
 	Datepicker
 	<div style="text-align:left;margin-left:10px;">
@@ -64,6 +90,10 @@
 		DROP
 		<hr>
 	</div>
+</li>
+<li>
+	Progressbar
+	<div id="progressbar"></div>
 </li>
 <li>
 	Resizable

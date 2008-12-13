@@ -1,21 +1,12 @@
 <!doctype html>
 <html lang="en">
 <head>
-	<title>Sortable Visual Test</title>
+	<title>Sortable Massive Scale Test</title>
+	<link rel="stylesheet" href="../../themes/base/ui.all.css" type="text/css" />
 	<script type="text/javascript" src="../../jquery-1.2.6.js"></script>
 	<script type="text/javascript" src="../../ui/ui.core.js"></script>
 	<script type="text/javascript" src="../../ui/ui.sortable.js"></script>
 	<script type="text/javascript" src="../../ui/ui.draggable.js"></script>
-
-	<script type="text/javascript">
-
-
-
-		$(document).ready( function() {
-			$('ul').not(".draggable").sortable({  items: "li" });
-			$("ul.draggable li").draggable({ helper: "clone", connectToSortable: "ul" });
-		});
-	</script>
 	<style>
 		ul {
 			list-style: none;
@@ -31,6 +22,12 @@
 			margin: 5px;
 		}
 	</style>
+	<script type="text/javascript">
+		$(function() {
+			$('ul').not(".draggable").sortable({  items: "li" });
+			$("ul.draggable li").draggable({ helper: "clone", connectToSortable: "ul" });
+		});
+	</script>
 </head>
 <body>
 
@@ -752,5 +749,6 @@
 	<li>Item 19</li>
 	<li>Item 20</li>
 </ul>
+
 </body>
 </html>

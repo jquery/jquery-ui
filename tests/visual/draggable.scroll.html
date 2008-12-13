@@ -1,50 +1,38 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html>
+<!doctype html>
+<html lang="en">
 <head>
-<script src="../../jquery-1.2.6.js" type="text/javascript" charset="utf-8"></script>
-<script src="../../ui/ui.core.js" type="text/javascript" charset="utf-8"></script>
-<script src="../../ui/ui.draggable.js" type="text/javascript" charset="utf-8"></script>
-<script src="../../ui/ui.sortable.js" type="text/javascript" charset="utf-8"></script>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-<title>jQuery UI Draggable Visual Test</title>
-</head>
-
-<body>
- 
-<style>
-	
-	.draggable {
-		width:100px;
-		height:100px;
-		background-color:green;
-		color: #fff;
-		padding: 5px;
-		margin: 5px;
-		border: 5px solid red;
-	}
-	
-	.container {
-		width: 500px;
-		height: 200px;
-		border: 5px solid black;
-		padding: 5px;
-		margin: 5px;
-		float: left;
-		background: #fff;
-	}
-	
-	.enlarge {
-		width: 1000px;
-		height: 1000px;
-	}
-
-
-</style>
-
-
-
-<script language="JavaScript">
-<!--
+	<title>Draggable Scroll Tests</title>
+	<link rel="stylesheet" href="all.css" type="text/css">
+	<link rel="stylesheet" href="../../themes/base/ui.all.css" type="text/css">
+	<script type="text/javascript" src="../../jquery-1.2.6.js"></script>
+	<script type="text/javascript" src="../../ui/ui.core.js"></script>
+	<script type="text/javascript" src="../../ui/ui.draggable.js"></script>
+	<script type="text/javascript" src="../../ui/ui.sortable.js"></script>
+	<style type="text/css">
+		.draggable {
+			width:100px;
+			height:100px;
+			background-color:green;
+			color: #fff;
+			padding: 5px;
+			margin: 5px;
+			border: 5px solid red;
+		}
+		.container {
+			width: 500px;
+			height: 200px;
+			border: 5px solid black;
+			padding: 5px;
+			margin: 5px;
+			float: left;
+			background: #fff;
+		}
+		.enlarge {
+			width: 1000px;
+			height: 1000px;
+		}
+	</style>
+	<script type="text/javascript">
 	$(function(){
 		$(".draggable").draggable({
 			//helper: 'clone',
@@ -55,10 +43,9 @@
 			//containment:"parent"
 		});
 	});
-//-->
-</script>
-
-
+	</script>
+</head>
+<body>
 
 <div class='container' style="overflow:scroll;">
 	<div class='draggable'>(Broken in IE)</div>

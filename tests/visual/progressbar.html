@@ -1,40 +1,26 @@
 <!doctype html>
 <html lang="en">
 <head>
-<title>jQuery UI Progressbar Visual Tests</title>
-<link rel="stylesheet" href="../../themes/base/ui.all.css" type="text/css" />
-<script type="text/javascript" src="../../jquery-1.2.6.js"></script>
-<script type="text/javascript" src="../../ui/ui.core.js"></script>
-<script type="text/javascript" src="../../ui/ui.progressbar.js"></script>
-
-<script type="text/javascript">
-	$(function() {
-		$("#progressbar1").progressbar({ value: 6 });
-		$("#progressbar2").progressbar({ labelAlign: 'center', label: 'center' }).progressbar("option", "value", 50);
-		$("#progressbar3").progressbar().progressbar("option", "labelAlign", "right").progressbar("value", 90.73).data("label.progressbar", "right").progressbar("option", "label", true);
-		$("#progressbar4").progressbar().progressbar("disable");
-		$("#progressbar5").progressbar().progressbar("disable").progressbar("destroy");
-		$("#progressbar6").progressbar({ value: -10 });
-		$("#progressbar7").progressbar().progressbar("value", 200);
-	});
+	<title>Simple Progressbar</title>
+	<link rel="stylesheet" href="all.css" type="text/css" />
+	<link rel="stylesheet" href="../../themes/base/ui.all.css" type="text/css" />
+	<script type="text/javascript" src="../../jquery-1.2.6.js"></script>
+	<script type="text/javascript" src="../../ui/ui.core.js"></script>
+	<script type="text/javascript" src="../../ui/ui.progressbar.js"></script>
+	<script type="text/javascript">
+		$(function() {
+			$("#progressbar").progressbar({ value: 37 });
+		});
 	</script>
 </head>
 <body>
 
-<h1>jQuery UI Progressbar Visual Tests</h1>
-	<div id="progressbar1"></div>
-	<br>
-	<div id="progressbar2"></div>
-	<br>
-	<div id="progressbar3"></div>
-	<br>
-	<div id="progressbar4"></div>
-	<br>
-	<div id="progressbar5"></div>
-	<br>
-	<div id="progressbar6"></div>
-	<br>
-	<div id="progressbar7"></div>
+<ul class="plugins">
+<li>
+	Progressbar
+	<div id="progressbar"></div>
+</li>
+</ul>
 
 </body>
 </html>

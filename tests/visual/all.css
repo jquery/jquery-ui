@@ -1,5 +1,5 @@
 
-body { margin: 0; padding: 20px; background: #191919; }
+body { font-size: 62.5%; margin: 0; padding: 20px; background: #191919; }
 ul.plugins { margin: 0; padding: 0; }
 ul.plugins li { margin: 0 12px 12px 0;
 	list-style-type: none; width: 210px; height: 220px; float: left;
@@ -10,7 +10,13 @@ ul.plugins li { margin: 0 12px 12px 0;
 	margin: 10px;
 	width: 190px; height: 180px;
 	text-align: center;
-	background: #FEA620; color: white; font-weight: bold;
+	background: #FF9C08; color: white; font-weight: bold;
+}
+#accordion {
+	background: none;
+}
+#progressbar {
+	margin: 10px;
 }
 #selectable div {
 	width: 45px; height: 45px; float: left; margin: 6px;
@@ -30,51 +36,6 @@ ul.plugins li { margin: 0 12px 12px 0;
 	background: black;
 }
 
-.draggable { margin: 10px; width: 32px; height: 30px; float: left; background: #FEA620; }
-#droppable { margin: 10px; width: 190px; height: 130px; float: left; border: 1px solid #FEA620; overflow: hidden; }
+.draggable { margin: 10px; width: 32px; height: 30px; float: left; background: #FF9C08; }
+#droppable { margin: 10px; width: 190px; height: 130px; float: left; border: 1px solid #FF9C08; overflow: hidden; }
 #droppable .draggable { margin: 7px; }
-
-.ui-dialog { background-color: #FEA620; }
-.ui-dialog .ui-dialog-titlebar { background: black; padding: 0px; height: 28px;	_height: 29px; }
-.ui-dialog.ui-draggable .ui-dialog-titlebar { cursor: move; }
-
-.ui-dialog .ui-dialog-titlebar-close {
-	width: 16px; height: 16px; position: absolute; top: 6px; right: 7px;
-	cursor: default; color: white;
-}
-
-.ui-dialog .ui-dialog-titlebar-close-hover { color: #FEA620; }
-
-.ui-dialog .ui-dialog-title {
-	margin-left: 5px; color: white; font-weight: bold;
-	position: relative; top: 7px; left: 4px;
-}
-
-.ui-dialog .ui-dialog-content {
-	margin: 1.2em;
-}
-
-.ui-dialog .ui-dialog-buttonpane {
-	position: absolute;
-	bottom: 8px;
-	right: 12px;
-	width: 100%;
-	text-align: right;
-}
-
-.ui-dialog .ui-dialog-buttonpane button {
-	margin: 6px;
-}
-
-/* Dialog handle styles */
-.ui-dialog .ui-resizable-n { cursor: n-resize; height: 6px; width: 100%; top: 0px; left: 0px; background: gray !important; border: none !important; }
-.ui-dialog .ui-resizable-s { cursor: s-resize; height: 8px; width: 100%; bottom: 0px; left: 0px; background: gray !important; border: none !important; }
-.ui-dialog .ui-resizable-e { cursor: e-resize; width: 7px; right: 0px; top: 0px; height: 100%; background: gray !important; border: none !important; }
-.ui-dialog .ui-resizable-w { cursor: w-resize; width: 7px; left: 0px; top: 0px; height: 100%; background: gray !important; border: none !important; }
-.ui-dialog .ui-resizable-se { cursor: se-resize; width: 9px; height: 9px; right: 0px; bottom: 0px; background: gray !important; border: none !important; }
-.ui-dialog .ui-resizable-sw { cursor: sw-resize; width: 9px; height: 9px; left: 0px; bottom: 0px; background: gray !important; border: none !important; }
-.ui-dialog .ui-resizable-nw { cursor: nw-resize; width: 9px; height: 29px; left: 0px; top: 0px; background: gray !important; border: none !important; }
-.ui-dialog .ui-resizable-ne { cursor: ne-resize; width: 9px; height: 29px; right: 0px; top: 0px; background: gray !important; border: none !important; }
-
-.ui-slider { margin: 10px; background: #FEA620; height: 15px; position: relative; }
-.ui-slider-handle { width: 10px; height: 15px; background: white; position: absolute; top: 0px; left: 0px; }
