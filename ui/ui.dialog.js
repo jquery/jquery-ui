@@ -37,6 +37,7 @@ $.widget("ui.dialog", {
 			options = this.options,
 
 			uiDialogContent = this.element
+				.appendTo(document.body)
 				.removeAttr('title')
 				.addClass(
 					'ui-dialog-content ' +
@@ -104,7 +105,6 @@ $.widget("ui.dialog", {
 				.prependTo(uiDialogTitlebar),
 
 			uiDialog = (this.uiDialog = uiDialogContainer.parent())
-				.appendTo(document.body)
 				.hide()
 				.addClass(
 					'ui-dialog ' +
