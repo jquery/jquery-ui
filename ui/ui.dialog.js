@@ -41,8 +41,8 @@ $.widget("ui.dialog", {
 				.addClass(
 					'ui-dialog-content ' +
 					'ui-widget-content')
-				.wrap('<div/>')
-				.wrap('<div/>'),
+				.wrap('<div></div>')
+				.wrap('<div></div>'),
 
 			uiDialogContainer = (this.uiDialogContainer = uiDialogContent.parent())
 				.addClass('ui-dialog-container')
@@ -52,7 +52,7 @@ $.widget("ui.dialog", {
 					height: '100%'
 				}),
 
-			uiDialogTitlebar = (this.uiDialogTitlebar = $('<div/>'))
+			uiDialogTitlebar = (this.uiDialogTitlebar = $('<div></div>'))
 				.addClass(
 					'ui-dialog-titlebar ' +
 					'ui-widget-header ' +
@@ -134,7 +134,7 @@ $.widget("ui.dialog", {
 					self.moveToTop();
 				}),
 
-			uiDialogButtonPane = (this.uiDialogButtonPane = $('<div/>'))
+			uiDialogButtonPane = (this.uiDialogButtonPane = $('<div></div>'))
 				.addClass(
 					'ui-dialog-buttonpane ' +
 					'ui-widget-content ' +
@@ -515,7 +515,7 @@ $.extend($.ui.dialog.overlay, {
 			$(window).bind('resize.dialog-overlay', $.ui.dialog.overlay.resize);
 		}
 
-		var $el = $('<div/>').appendTo(document.body)
+		var $el = $('<div></div>').appendTo(document.body)
 			.addClass('ui-dialog-overlay').css($.extend({
 				borderWidth: 0, margin: 0, padding: 0,
 				position: 'absolute', top: 0, left: 0,

@@ -46,7 +46,7 @@
 					{	desc: 'Simple Tabs',	source: '$("#divTabs").tabs();' },
 					{	desc: 'Simple Cloned Tabs',	source: '$("#divTabs").clone().tabs();' },
                     {	desc: 'Simple Empty Tabs',	source: '$("#divTabs").tabs();' },
-                    {	desc: 'Simple Detached Tabs',	source: '$("<div/>").tabs();' }
+                    {	desc: 'Simple Detached Tabs',	source: '$("<div></div>").tabs();' }
 				]
 			},
 			{
