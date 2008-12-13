@@ -14,6 +14,7 @@ ul.plugins li.plugin { margin: 0 12px 12px 0;
 }
 #accordion {
 	background: none;
+	text-align: left;
 }
 #progressbar {
 	margin: 10px;
@@ -34,6 +35,9 @@ ul.plugins li.plugin { margin: 0 12px 12px 0;
 }
 #sortable .ui-sortable-helper {
 	background: black;
+}
+#tabs {
+	text-align: left;
 }
 
 .draggable { margin: 10px; width: 32px; height: 30px; float: left; background: #FF9C08; }
