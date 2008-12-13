@@ -11,8 +11,9 @@
 	<script type="text/javascript" src="../../ui/ui.resizable.js"></script>
 	<script type="text/javascript">
 	$(function() {
+		var dlg = $("#dlg").remove();
 		$("#dialog").click(function() {
-			$("<div></div>").dialog();
+			dlg.appendTo('body').dialog();
 		});
 	});
 	</script>
@@ -24,6 +25,9 @@
 	Dialog
 	<div id="dialog">
 		<button>Open</button>
+		<div id="dlg" title="Dialog Title">
+			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+		</div>
 	</div>
 </li>
 </ul>
