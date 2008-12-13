@@ -24,7 +24,7 @@
 				function(){ $(this).removeClass('ui-state-hover'); }
 			);
 			$('.ui-state-default').click(function(){ $(this).toggleClass('ui-state-active'); });
-			$('.icons').append(' <a href="#">Toggle text</a>').find('a').click(function(){ $('.icon-collection li span.text').toggle(); }).trigger('click');
+			$('.icons').append(' <a href="#">Toggle text</a>').find('a').click(function(){ $('.icon-collection li span.text').toggle(); return false; }).trigger('click');
 		});
 	</script>
 </head>
