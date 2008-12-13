@@ -4,15 +4,17 @@ body,html {
 	padding: 0;
 	font-size: 12px;
 	font-family: Arial;
-	background: #000;
+	background: #191919;
 }
 
 ul.effects {
+	list-style-type: none;
 	margin: 0;
 	padding: 0;
 }
 
 ul.effects li {
+	list-style-type: none;
 	margin: 0;
 	padding: 0;
 	width: 120px;
@@ -25,7 +27,7 @@ ul.effects li {
 div.effect {
 	width: 120px;
 	height: 100px;
-	background: #333;
+	background: #ccc;
 	border: 5px outset #aaa;
 	float: left;
 	cursor: pointer;
@@ -38,7 +40,8 @@ div.current {
 }
 
 div.effect p {
-	color: #eee;
+	color: #191919;
+	font-weight: bold;
 	margin: 0px;
 	padding: 10px;
 }

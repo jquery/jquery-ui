@@ -1,12 +1,12 @@
 
 body { font-size: 62.5%; margin: 0; padding: 20px; background: #191919; }
 ul.plugins { margin: 0; padding: 0; }
-ul.plugins li { margin: 0 12px 12px 0;
+ul.plugins li.plugin { margin: 0 12px 12px 0;
 	list-style-type: none; width: 210px; height: 220px; float: left;
 	color: white; border: 1px solid gray; text-align: center; font-weight: bold; }
 
 #accordion, #draggable,
-#resizable, #selectable, #sortable, #tabs {
+#resizable, #selectable, #sortable {
 	margin: 10px;
 	width: 190px; height: 180px;
 	text-align: center;

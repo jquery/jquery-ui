@@ -35,13 +35,14 @@
 		$("#selectable").selectable();
 		$("#slider").slider();
 		$("#sortable").sortable();
+		$("#tabs").tabs();
 	});
 	</script>
 </head>
 <body>
 
 <ul class="plugins">
-<li>
+<li class="plugin">
 	Accordion
 	<div id="accordion">
 		<div>
@@ -64,23 +65,23 @@
 		</div>
 	</div>
 </li>
-<li>
+<li class="plugin">
 	Datepicker
 	<div style="text-align:left;margin-left:10px;">
 		<input type="text" id="datepicker">
 	</div>
 </li>
-<li>
+<li class="plugin">
 	Dialog
 	<div id="dialog">
 		<button>Open</button>
 	</div>
 </li>
-<li>
+<li class="plugin">
 	Draggable
 	<div id="draggable"></div>
 </li>
-<li>
+<li class="plugin">
 	Droppable
 	<div class="draggable">D</div>
 	<div class="draggable">R</div>
@@ -91,15 +92,15 @@
 		<hr>
 	</div>
 </li>
-<li>
+<li class="plugin">
 	Progressbar
 	<div id="progressbar"></div>
 </li>
-<li>
+<li class="plugin">
 	Resizable
 	<div id="resizable"></div>
 </li>
-<li>
+<li class="plugin">
 	Selectable
 	<div id="selectable">
 		<div>1</div>
@@ -113,11 +114,11 @@
 		<div>9</div>
 	</div>
 </li>
-<li>
+<li class="plugin">
 	Slider
 	<div id="slider"></div>
 </li>
-<li>
+<li class="plugin">
 	Sortable
 	<div id="sortable">
 		<div>C</div>
@@ -129,6 +130,19 @@
 		<div>A</div>
 		<div>E</div>
 		<div>B</div>
+	</div>
+</li>
+<li class="plugin">
+	Tabs
+	<div id="tabs">
+		<ul>
+			<li><a href="#tabs-1">First</a></li>
+			<li><a href="#tabs-2">Second</a></li>
+			<li><a href="#tabs-3>Third</a></li>
+		</ul>
+		<div id="tabs-1">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</div>
+		<div id="tabs-2">Phasellus mattis tincidunt nibh. Cras orci urna, blandit id, pretium vel, aliquet ornare, felis. Maecenas scelerisque sem non nisl. Fusce sed lorem in enim dictum bibendum.</div>
+		<div id="tabs-3">Nam dui erat, auctor a, dignissim quis, sollicitudin eu, felis. Pellentesque nisi urna, interdum eget, sagittis et, consequat vestibulum, lacus. Mauris porttitor ullamcorper augue.</div>
 	</div>
 </li>
 </ul>
