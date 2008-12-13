@@ -115,7 +115,7 @@ function margin(el, side) {
 module("dialog");
 
 test("init", function() {
-	expect(6);
+	expect(7);
 
 	$("<div></div>").appendTo('body').dialog().remove();
 	ok(true, '.dialog() called on element');
@@ -124,7 +124,10 @@ test("init", function() {
 	ok(true, '.dialog() called on empty collection');
 
 	$('<div></div>').dialog().remove();
-	ok(true, '.dialog() called on disconnected DOMElement');
+	ok(true, '.dialog() called on disconnected DOMElement - never connected');
+
+	$('<div></div>').appendTo('body').remove().dialog().remove();
+	ok(true, '.dialog() called on disconnected DOMElement - removed');
 
 	$('<div></div>').dialog().dialog("foo").remove();
 	ok(true, 'arbitrary method called after init');
