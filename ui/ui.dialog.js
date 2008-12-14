@@ -124,7 +124,7 @@ $.widget("ui.dialog", {
 				// setting outline to 0 prevents a border on focus in Mozilla
 				.attr('tabIndex', -1).css('outline', 0).keydown(function(ev) {
 					(options.closeOnEscape && ev.keyCode
-						&& ev.keyCode == $.keyCode.ESCAPE && self.close());
+						&& ev.keyCode == $.ui.keyCode.ESCAPE && self.close());
 				})
 				.attr({
 					role: 'dialog',
@@ -226,7 +226,7 @@ $.widget("ui.dialog", {
 
 		// prevent tabbing out of modal dialogs
 		(this.options.modal && this.uiDialog.bind('keypress.ui-dialog', function(event) {
-			if (event.keyCode != $.keyCode.TAB) {
+			if (event.keyCode != $.ui.keyCode.TAB) {
 				return;
 			}
 
@@ -508,7 +508,7 @@ $.extend($.ui.dialog.overlay, {
 			// allow closing by pressing the escape key
 			$(document).bind('keydown.dialog-overlay', function(event) {
 				(dialog.options.closeOnEscape && event.keyCode
-						&& event.keyCode == $.keyCode.ESCAPE && dialog.close());
+						&& event.keyCode == $.ui.keyCode.ESCAPE && dialog.close());
 			});
 
 			// handle window resize

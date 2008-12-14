@@ -115,7 +115,7 @@ $.widget("ui.accordion", {
 		if (this.options.disabled || event.altKey || event.ctrlKey)
 			return;
 
-		var keyCode = $.keyCode;
+		var keyCode = $.ui.keyCode;
 
 		var length = this.options.headers.length;
 		var currentIndex = this.options.headers.index(event.target);
