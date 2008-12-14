@@ -16,7 +16,7 @@ var defaults = {
 	max: 100,
 	min: 0,
 	noKeyboard: false,
-	paging: "???,
+	paging: "???",
 	range: false,
 	realMax: "???",
 	round: true,
