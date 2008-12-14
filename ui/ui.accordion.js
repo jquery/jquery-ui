@@ -39,8 +39,8 @@ $.widget("ui.accordion", {
 		
 		var active = options.active = findActive(headers, options.active).toggleClass("ui-state-default").toggleClass("ui-state-active").toggleClass("ui-corner-all").toggleClass("ui-corner-top");
 		active.parent().addClass("selected");
-		$("<span/>").addClass("ui-icon ui-icon-triangle-1-e").prependTo(headers);
-		active.find(".ui-icon").toggleClass("ui-icon-triangle-1-e").toggleClass("ui-icon-triangle-1-s");
+		$("<span/>").addClass("ui-icon " + this.options.headerIcon).prependTo(headers);
+		active.find(".ui-icon").toggleClass(this.options.headerIcon).toggleClass(this.options.headerIconSelected);
 
 		// IE7-/Win - Extra vertical space in Lists fixed
 		if ($.browser.msie) {
@@ -297,11 +297,11 @@ function clickHandler(event) {
 	// switch classes
 	options.active.parent().toggleClass(options.selectedClass);
 	options.active.removeClass("ui-state-active ui-corner-top").addClass("ui-state-default ui-corner-all")
-		.find(".ui-icon").removeClass("ui-icon-triangle-1-s").addClass("ui-icon-triangle-1-e");
+		.find(".ui-icon").removeClass(options.headerIconSelected).addClass(options.headerIcon);
 	if ( !clickedActive ) {
 		clicked.parent().addClass(options.selectedClass);
 		clicked.removeClass("ui-state-default ui-corner-all").addClass("ui-state-active ui-corner-top")
-			.find(".ui-icon").removeClass("ui-icon-triangle-1-e").addClass("ui-icon-triangle-1-s");
+			.find(".ui-icon").removeClass(options.headerIcon).addClass(options.headerIconSelected);
 	}
 
 	// find elements to show and hide
@@ -340,6 +340,8 @@ $.extend($.ui.accordion, {
 		animated: 'slide',
 		event: "click",
 		header: "a",
+		headerIcon: "ui-icon-triangle-1-e",
+		headerIconSelected: "ui-icon-triangle-1-s",
 		navigationFilter: function() {
 			return this.href.toLowerCase() == location.href.toLowerCase();
 		},
