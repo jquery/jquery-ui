@@ -10,6 +10,7 @@
 ----------------------------------*/
 .ui-widget { font-family: Verdana,Arial,sans-serif/*{ffDefault}*/; font-size: 1.1em/*{fsDefault}*/; }
 .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button { font-family: Verdana,Arial,sans-serif/*{ffDefault}*/; font-size: 1em; }
+.ui-widget a:active { outline: 0 !important; }
 .ui-widget-header { border: 1px solid #aaaaaa/*{borderColorHeader}*/; background: #cccccc/*{bgColorHeader}*/ url(images/cccccc_40x100_textures_03_highlight_soft_75.png)/*{bgImgUrlHeader}*/ 0 50% repeat-x; color: #222222/*{fcHeader}*/; font-weight: bold; }
 .ui-widget-header a { color: #222222/*{fcHeader}*/; }
 .ui-widget-content { border: 1px solid #aaaaaa/*{borderColorContent}*/; background: #ffffff/*{bgColorContent}*/ url(images/ffffff_40x100_textures_02_glass_75.png)/*{bgImgUrlContent}*/ 0 0/*{bgContentYPos}*/ repeat-x/*{bgContentRepeat}*/; color: #222222/*{fcContent}*/; }
@@ -19,8 +20,8 @@
 ----------------------------------*/
 .ui-state-default { border: 1px solid #d3d3d3/*{borderColorDefault}*/; background: #e6e6e6/*{bgColorDefault}*/ url(images/e6e6e6_40x100_textures_02_glass_75.png)/*{bgImgUrlDefault}*/ 0 50% repeat-x; font-weight: normal/*{fwDefault}*/; color: #555555/*{fcDefault}*/ !important; }
 .ui-state-default a { color: #555555/*{fcDefault}*/; text-decoration: none; }
-.ui-state-hover { border: 1px solid #999999/*{borderColorHover}*/; background: #dadada/*{bgColorHover}*/ url(images/dadada_40x100_textures_02_glass_75.png)/*{bgImgUrlHover}*/ 0  50% repeat-x; font-weight: normal/*{fwDefault}*/; color: #212121/*{fcHover}*/ !important; }
-.ui-state-hover a { color: #212121/*{fcHover}*/; text-decoration: none; }
+.ui-state-hover, .ui-state-default:focus, .ui-state-hover:focus { border: 1px solid #999999/*{borderColorHover}*/; background: #dadada/*{bgColorHover}*/ url(images/dadada_40x100_textures_02_glass_75.png)/*{bgImgUrlHover}*/ 0  50% repeat-x; font-weight: normal/*{fwDefault}*/; color: #212121/*{fcHover}*/ !important; }
+.ui-state-hover a, .ui-state-default:focus a, .ui-state-hover:focus a { color: #212121/*{fcHover}*/; text-decoration: none; }
 .ui-state-active { border: 1px solid #aaaaaa/*{borderColorActive}*/; background: #ffffff/*{bgColorActive}*/ url(images/ffffff_40x100_textures_02_glass_65.png)/*{bgImgUrlActive}*/ 0 50% repeat-x; font-weight: normal/*{fwDefault}*/; color: #212121/*{fcActive}*/ !important; outline: none; }
 .ui-state-active a { color: #212121/*{fcActive}*/; outline: none; text-decoration: none; }
 
