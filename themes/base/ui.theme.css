@@ -17,18 +17,18 @@
 
 /* Interaction states
 ----------------------------------*/
-.ui-state-default { border: 1px solid #d3d3d3/*{borderColorDefault}*/; background: #e6e6e6/*{bgColorDefault}*/ url(images/e6e6e6_40x100_textures_02_glass_75.png)/*{bgImgUrlDefault}*/ 0 50% repeat-x; font-weight: normal/*{fwDefault}*/; color: #555555/*{fcDefault}*/; }
-.ui-state-default a { color: #555555/*{fcDefault}*/; text-decoration: none; }
-.ui-state-hover, .ui-state-default:focus, .ui-state-hover:focus { border: 1px solid #999999/*{borderColorHover}*/; background: #dadada/*{bgColorHover}*/ url(images/dadada_40x100_textures_02_glass_75.png)/*{bgImgUrlHover}*/ 0  50% repeat-x; font-weight: normal/*{fwDefault}*/; color: #212121/*{fcHover}*/; }
-.ui-state-hover a, .ui-state-default a:focus, .ui-state-hover a:focus { color: #212121/*{fcHover}*/; text-decoration: none; }
+.ui-state-default { border: 1px solid #d3d3d3/*{borderColorDefault}*/; background: #e6e6e6/*{bgColorDefault}*/ url(images/e6e6e6_40x100_textures_02_glass_75.png)/*{bgImgUrlDefault}*/ 0 50% repeat-x; font-weight: normal/*{fwDefault}*/; color: #555555/*{fcDefault}*/ !important; outline: none; }
+.ui-state-default a { color: #555555/*{fcDefault}*/ !important; text-decoration: none; outline: none; }
+.ui-state-hover { border: 1px solid #999999/*{borderColorHover}*/; background: #dadada/*{bgColorHover}*/ url(images/dadada_40x100_textures_02_glass_75.png)/*{bgImgUrlHover}*/ 0  50% repeat-x; font-weight: normal/*{fwDefault}*/; color: #212121/*{fcHover}*/ !important; outline: none; }
+.ui-state-hover a { color: #212121/*{fcHover}*/ !important; text-decoration: none; outline: none; }
 .ui-state-active { border: 1px solid #aaaaaa/*{borderColorActive}*/; background: #ffffff/*{bgColorActive}*/ url(images/ffffff_40x100_textures_02_glass_65.png)/*{bgImgUrlActive}*/ 0 50% repeat-x !important; font-weight: normal/*{fwDefault}*/; color: #212121/*{fcActive}*/ !important; outline: none; }
 .ui-state-active a { color: #212121/*{fcActive}*/ !important; outline: none; text-decoration: none; }
 
 /* Interaction Cues
 ----------------------------------*/
-.ui-state-highlight {border: 1px solid #fcefa1/*{borderColorHighlight}*/; background: #fbf9ee/*{bgColorHighlight}*/ url(images/fbf9ee_40x100_textures_02_glass_55.png)/*{bgImgUrlHighlight}*/ 0 50% repeat-x; color: #363636/*{fcHighlight}*/; }
-.ui-state-error {border: 1px solid #cd0a0a/*{borderColorError}*/; background: #fef1ec/*{bgColorError}*/ url(images/fef1ec_40x100_textures_05_inset_soft_95.png)/*{bgImgUrlError}*/ 0 50% repeat-x; color: #cd0a0a/*{fcError}*/; }
-.ui-state-error-text { color: #cd0a0a/*{fcError}*/; }
+.ui-state-highlight {border: 1px solid #fcefa1/*{borderColorHighlight}*/; background: #fbf9ee/*{bgColorHighlight}*/ url(images/fbf9ee_40x100_textures_02_glass_55.png)/*{bgImgUrlHighlight}*/ 0 50% repeat-x; color: #363636/*{fcHighlight}*/ !important; }
+.ui-state-error {border: 1px solid #cd0a0a/*{borderColorError}*/; background: #fef1ec/*{bgColorError}*/ url(images/fef1ec_40x100_textures_05_inset_soft_95.png)/*{bgImgUrlError}*/ 0 50% repeat-x; color: #cd0a0a/*{fcError}*/ !important; }
+.ui-state-error-text { color: #cd0a0a/*{fcError}*/ !important; }
 .ui-state-disabled { opacity: .35; filter:Alpha(Opacity=35); background-image: none !important; }
 .ui-priority-primary { font-weight: bold; }
 .ui-priority-secondary { opacity: .7; filter:Alpha(Opacity=70); font-weight: normal; }
