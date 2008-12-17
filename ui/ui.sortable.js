@@ -99,17 +99,18 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 
 		//Cache the margins of the original element
 		this._cacheMargins();
-		
+
 		//Get the next scrolling parent
 		this.scrollParent = this.helper.scrollParent();
 
 		//The element's absolute position on the page minus margins
 		this.offset = this.currentItem.offset();
+
 		this.offset = {
 			top: this.offset.top - this.margins.top,
 			left: this.offset.left - this.margins.left
 		};
-		
+
 		// Only after we got the offset, we can change the helper's position to absolute
 		// TODO: Still need to figure out a way to make relative sorting possible
 		this.helper.css("position", "absolute");
@@ -141,7 +142,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 
 		//Create the placeholder
 		this._createPlaceholder();
-		
+
 		//Set a containment if given in the options
 		if(o.containment)
 			this._setContainment();
@@ -511,8 +512,8 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 
 			if (!fast) {
 				if (this.options.accurateIntersection) {
-					item.width = t.width();
-					item.height = t.height();
+					item.width = t.outerWidth();
+					item.height = t.outerHeight();
 				}
 				else {
 					item.width = t[0].offsetWidth;
@@ -944,7 +945,7 @@ $.ui.plugin.add("sortable", "scroll", {
 		if(i.scrollParent[0] != document && i.scrollParent[0].tagName != 'HTML') i.overflowOffset = i.scrollParent.offset();
 	},
 	sort: function(event, ui) {
-	
+
 		var i = $(this).data("sortable"), o = i.options, scrolled = false;
 
 		if(i.scrollParent[0] != document && i.scrollParent[0].tagName != 'HTML') {
