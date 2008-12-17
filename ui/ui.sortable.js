@@ -210,8 +210,10 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 
 				this.direction = intersection == 1 ? "down" : "up";
 
-				if (this.options.tolerance == "pointer" || (this.options.tolerance == "guess" && this._intersectsGuess(item))) {
+				if (this.options.tolerance == "pointer" || this._intersectsWithSides(item)) {
 					this.options.sortIndicator.call(this, event, item);
+				} else {
+					break;
 				}
 
 				this._propagate("change", event); //Call plugins and callbacks
@@ -348,7 +350,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 
 		if(	   this.options.tolerance == "pointer"
 			|| this.options.forcePointerForContainers
-			|| (this.options.tolerance == "guess" && this.helperProportions[this.floating ? 'width' : 'height'] > item[this.floating ? 'width' : 'height'])
+			|| (this.options.tolerance != "pointer" && this.helperProportions[this.floating ? 'width' : 'height'] > item[this.floating ? 'width' : 'height'])
 		) {
 			return isOverElement;
 		} else {
@@ -378,7 +380,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 
 	},
 
-	_intersectsGuess: function(item) {
+	_intersectsWithSides: function(item) {
 
 		var isOverBottomHalf = $.ui.isOverAxis(this.positionAbs.top + this.offset.click.top, item.top + (item.height/2), item.height),
 			isOverRightHalf = $.ui.isOverAxis(this.positionAbs.left + this.offset.click.left, item.left + (item.width/2), item.width),
@@ -906,7 +908,7 @@ $.extend($.ui.sortable, {
 		scrollSensitivity: 20,
 		scrollSpeed: 20,
 		sortIndicator: $.ui.sortable.prototype._rearrange,
-		tolerance: "guess",
+		tolerance: "default",
 		zIndex: 1000
 	}
 });
