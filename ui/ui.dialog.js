@@ -73,10 +73,10 @@ $.widget("ui.dialog", {
 				.attr('role', 'button')
 				.hover(
 					function() {
-						$(this).addClass('ui-dialog-titlebar-close-hover');
+						$(this).addClass('ui-state-hover');
 					},
 					function() {
-						$(this).removeClass('ui-dialog-titlebar-close-hover');
+						$(this).removeClass('ui-state-hover');
 					}
 				)
 				.mousedown(function(ev) {
