@@ -17,10 +17,8 @@
 	<target name="load.properties">
 		<property file="ant.properties" />
 
-		<property name="current.version" value="1.6pre" />
-		<property name="release.version" value="1.6" />
+		<loadfile srcFile="../version.txt" property="release.version" />
 		<property name="release.filename" value="jquery.ui-${release.version}" />
-		
 
 		<property name="dist.dir" value="dist/${release.filename}/" />
 		<property name="build.dir" value="build" />
@@ -42,13 +40,10 @@
 	<target name="replace-version" depends="load.properties">
 		<replaceregexp match="@VERSION" replace="${release.version}" flags="g" byline="true">
 		    <fileset dir="${dist.dir}/ui/" includes="*.js"/>
+			<fileset dir="${dist.dir}/ui/packed/" includes="*.js"/>
+			<fileset dir="${dist.dir}/ui/minified/" includes="*.js"/>
 		</replaceregexp>
 		<echo message="Replaced all @VERSION to ${release.version}." />
-
-		<replaceregexp match="${current.version}" replace="${release.version}" flags="g" byline="true">
-		    <fileset dir="${dist.dir}/" includes="version.txt"/>
-		</replaceregexp>
-		<echo message="Update version to ${release.version} into version.txt." />
 	</target>
 
 	<target description="Zip the package" name="zip">
@@ -89,6 +84,8 @@
 			<fileset dir="${src.dir}/" includes="ui.*.js, effects.*.js" />
 			<arg line="-jar" />
 			<arg path="${yui-jar}" />
+			<arg value="--charset" />  
+			<arg value="UTF-8" />  
 			<srcfile />
 			<arg line="-o" />
 			<mapper type="glob" from="*.js" to="${min.folder}/*.min.js" />
@@ -101,6 +98,8 @@
 			<fileset dir="${src.dir}/i18n/" includes="ui.*.js" />
 			<arg line="-jar" />
 			<arg path="${yui-jar}" />
+			<arg value="--charset" />  
+			<arg value="UTF-8" />  
 			<srcfile />
 			<arg line="-o" />
 			<mapper type="glob" from="*.js" to="${min.folder}/i18n/*.min.js" />
