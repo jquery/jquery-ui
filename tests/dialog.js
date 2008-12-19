@@ -8,7 +8,6 @@
 
 var defaults = {
 	autoOpen: true,
-	autoResize: true,
 	buttons: {},
 	closeOnEscape: true,
 	closeText: 'close',
@@ -249,31 +248,6 @@ test("autoOpen", function() {
 
 	el = $('<div></div>').dialog({ autoOpen: true });
 		isOpen('.dialog({ autoOpen: true })');
-	el.remove();
-});
-
-test("autoResize", function() {
-	expect(2);
-
-	var actual,
-		before,
-		expected,
-		handle;
-
-	el = $('<div>content<br>content<br>content<br>content<br>content</div>').dialog({ autoResize: false });
-		expected = { height: el.height() };
-		handle = $(".ui-resizable-se", dlg());
-		drag(handle, 50, 50);
-		actual = { height: el.height() };
-		same(actual, expected, '.dialog({ autoResize: false })');
-	el.remove();
-	el = $('<div>content<br>content<br>content<br>content<br>content</div>').dialog({ autoResize: true });
-		before = { width: el.width(), height: el.height() };
-		handle = $(".ui-resizable-se", dlg());
-		drag(handle, 50, 50);
-		expected = { width: before.width + 50, height: before.height + 50 };
-		actual = { width: el.width(), height: el.height() };
-		same(actual, expected, '.dialog({ autoResize: true })');
 	el.remove();
 });
 
