@@ -324,7 +324,8 @@ $.widget("ui.dialog", {
 				(options.resizeStop && options.resizeStop.apply(self.element[0], arguments));
 				$.ui.dialog.overlay.resize();
 			}
-		});
+		})
+		.find('.ui-resizable-se').addClass('ui-icon ui-icon-grip-diagonal-se');
 	},
 
 	_position: function(pos) {
