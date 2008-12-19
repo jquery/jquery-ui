@@ -11,9 +11,16 @@
 	<script type="text/javascript" src="../../ui/ui.resizable.js"></script>
 	<script type="text/javascript">
 	$(function() {
-		var dlg = $("#dlg").remove();
+		var dlg = $("#dlg").dialog({
+			autoOpen: false,
+			width: 600,
+			buttons: {
+				Ok: function() {},
+				Cancel: function() {}
+			}
+		});
 		$("#dialog").click(function() {
-			dlg.appendTo('body').dialog({width: 600});
+			dlg.dialog('open');
 		});
 	});
 	</script>
