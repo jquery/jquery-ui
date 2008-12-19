@@ -350,11 +350,13 @@ $.widget("ui.dialog", {
 					pTop += 0;
 					break;
 				case 'bottom':
-					pTop += wnd.height() - this.uiDialog.height();
+					// Opera check fixes #3564, can go away with jQuery 1.3
+					pTop += ($.browser.opera ? window.innerHeight : wnd.height()) - this.uiDialog.height();
 					break;
 				default:
 				case 'middle':
-					pTop += (wnd.height() - this.uiDialog.height()) / 2;
+					// Opera check fixes #3564, can go away with jQuery 1.3
+					pTop += (($.browser.opera ? window.innerHeight : wnd.height()) - this.uiDialog.height()) / 2;
 			}
 		}
 
