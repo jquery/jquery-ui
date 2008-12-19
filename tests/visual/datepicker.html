@@ -9,19 +9,31 @@
 	<script type="text/javascript" src="../../ui/ui.datepicker.js"></script>
 	<script type="text/javascript">
 	$(function() {
-		$("#datepicker").datepicker();
+		$('#d1').datepicker();
+		$('#d2').datepicker({numberOfMonths: 3, showButtonPanel: true});
+		$('#inl').datepicker({changeFirstDay: true});
 	});
 	</script>
 </head>
 <body>
 
 <ul class="plugins">
-<li class="plugin">
-	Datepicker
-	<div>
-		<input type="text" id="datepicker">
-	</div>
-</li>
+	<li class="plugin">
+		Datepicker Simple
+		<div>
+			<input type="text" id="d1">
+		</div>
+	</li>
+	<li class="plugin">
+		Datepicker Multi
+		<div>
+			<input type="text" id="d2">
+		</div>
+	</li>
+	<li class="plugin">
+		Datepicker Inline
+		<div id="inl"></div>
+	</li>
 </ul>
 
 </body>

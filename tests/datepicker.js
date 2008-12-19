@@ -226,125 +226,102 @@ test('baseStructure', function() {
 	ok(dp.is(':visible'), 'Structure - datepicker visible');
 	ok(!dp.is('.ui-datepicker-rtl'), 'Structure - not right-to-left');
 	ok(!dp.is('.ui-datepicker-multi'), 'Structure - not multi-month');
-	equals(dp.children().length, 4 + (iframe ? 1 : 0), 'Structure - child count');
-	var control = dp.children(':first');
-	ok(control.is('div.ui-datepicker-control'), 'Structure - control division');
-	equals(control.children().length, 2, 'Structure - control child count');
-	ok(control.children(':first').is('div.ui-datepicker-clear'),
-		'Structure - clear division');
-	ok(control.children(':last').is('div.ui-datepicker-close'),
-		'Structure - close division');
-	var links = dp.children(':eq(1)');
-	ok(links.is('div.ui-datepicker-links'), 'Structure - links division');
-	equals(links.children().length, 3, 'Structure - links child count');
-	ok(links.children(':first').is('div.ui-datepicker-prev') &&
-		links.children(':first').html() != '',
-		'Structure - prev division');
-	ok(links.children(':eq(1)').is('div.ui-datepicker-current') &&
-		links.children(':eq(1)').html() != '',
-		'Structure - current division');
-	ok(links.children(':last').is('div.ui-datepicker-next') &&
-		links.children(':last').html() != '',
-		'Structure - next division');
-	var month = dp.children(':eq(2)');
-	ok(month.is('div.ui-datepicker-one-month') && month.is('div.ui-datepicker-new-row'),
-		'Structure - month division');
-	var header = month.children(':first');
-	ok(header.is('div.ui-datepicker-header'), 'Structure - month header division');
-	equals(header.children().length, 2, 'Structure - month header child count');
-	ok(header.children(':first').is('select.ui-datepicker-new-month'),
-		'Structure - new month select');
-	ok(header.children(':last').is('select.ui-datepicker-new-year'),
-		'Structure - new year select');
-	var table = month.children(':eq(1)');
-	ok(table.is('table.ui-datepicker'), 'Structure - month table');
+	equals(dp.children().length, 2 + (iframe ? 1 : 0), 'Structure - child count');
+	
+	var header = dp.children(':first');
+	ok(header.is('div.ui-datepicker-header'), 'Structure - header division');
+	equals(header.children().length, 3, 'Structure - header child count');
+	ok(header.children(':first').is('a.ui-datepicker-prev') && header.children(':first').html() != '', 'Structure - prev link');
+	ok(header.children(':eq(1)').is('a.ui-datepicker-next') && header.children(':eq(1)').html() != '', 'Structure - next link');
+	
+	var title = header.children(':last');
+	ok(title.is('div.ui-datepicker-title') && title.html() != '','Structure - title division');
+	equals(title.children().length, 2, 'Structure - title child count');
+	ok(title.children(':first').is('span.ui-datepicker-month') && title.children(':first').text() != '', 'Structure - month text')
+	ok(title.children(':last').is('span.ui-datepicker-year') && title.children(':last').text() != '', 'Structure - year text')
+	
+	var table = dp.children(':eq(1)');
+	ok(table.is('table.ui-datepicker-calendar'), 'Structure - month table');
 	ok(table.children(':first').is('thead'), 'Structure - month table thead');
-	var titles = table.children(':first').children(':first');
-	ok(titles.is('tr.ui-datepicker-title-row'), 'Structure - month table title row');
-	equals(titles.find('a').length, 7, 'Structure - month table title links');
+	var thead = table.children(':first').children(':first');
+	ok(thead.is('tr'), 'Structure - month table title row');
+	equals(thead.find('th').length, 7, 'Structure - month table title cells');
 	ok(table.children(':eq(1)').is('tbody'), 'Structure - month table body');
-	ok(table.children(':eq(1)').children('tr').length >= 4,
-		'Structure - month table week count');
+	ok(table.children(':eq(1)').children('tr').length >= 4, 'Structure - month table week count');
 	var week = table.children(':eq(1)').children(':first');
-	ok(week.is('tr.ui-datepicker-days-row'), 'Structure - month table week row');
+	ok(week.is('tr'), 'Structure - month table week row');
 	equals(week.children().length, 7, 'Structure - week child count');
-	ok(week.children(':first').is('td.ui-datepicker-days-cell') &&
-		week.children(':first').is('.ui-datepicker-week-end-cell') &&
-		!week.children(':first').is('.ui-datepicker-week-col'),
-		'Structure - month table first day cell');
-	ok(week.children(':eq(1)').is('td.ui-datepicker-days-cell') &&
-		!week.children(':eq(1)').is('.ui-datepicker-week-end-cell'),
-		'Structure - month table second day cell');
-	ok(dp.children('.ui-datepicker-status').length == 0, 'Structure - status');
+	ok(week.children(':first').is('td.ui-datepicker-week-end'), 'Structure - month table first day cell');
+	ok(week.children(':last').is('td.ui-datepicker-week-end'), 'Structure - month table second day cell');
 	ok(dp.children('iframe').length == (iframe ? 1 : 0), 'Structure - iframe');
 	inp.datepicker('hide').datepicker('destroy');
+	
+	// Editable month/year and button panel
+	inp = init('#inp', {changeMonth: true, changeYear: true, showButtonPanel: true});
+	inp.focus();
+
+	var title = dp.find('div.ui-datepicker-title');
+	ok(title.children(':first').is('select.ui-datepicker-month'), 'Structure - month selector');
+	ok(title.children(':last').is('select.ui-datepicker-year'), 'Structure - year selector');
+		
+	var panel = dp.children(':last');
+	ok(panel.is('div.ui-datepicker-buttonpane'), 'Structure - button panel division');
+	equals(panel.children().length, 2, 'Structure - button panel child count');
+	ok(panel.children(':first').is('button.ui-datepicker-current'), 'Structure - today button');
+	ok(panel.children(':last').is('button.ui-datepicker-close'), 'Structure - close button');
+	inp.datepicker('hide').datepicker('destroy');
+	
 	// Multi-month 2
 	inp = init('#inp', {numberOfMonths: 2});
 	inp.focus();
-	ok(dp.is('.ui-datepicker-multi'), 'Structure multi - multi-month');
-	equals(dp.children().length, 5 + (iframe ? 1 : 0), 'Structure multi - child count');
-	month = dp.children(':eq(2)');
-	ok(month.is('div.ui-datepicker-one-month') && month.is('div.ui-datepicker-new-row'),
-		'Structure multi - first month division');
-	month = dp.children(':eq(3)');
-	ok(month.is('div.ui-datepicker-one-month') && !month.is('div.ui-datepicker-new-row'),
-		'Structure multi - second month division');
+	ok(dp.is('.ui-datepicker-multi'), 'Structure multi [2] - multi-month');
+	equals(dp.children().length, 2 + (iframe ? 1 : 0), 'Structure multi [2] - child count');
+	month = dp.children(':first');
+	ok(month.is('div.ui-datepicker-group') && month.is('div.ui-datepicker-group-first'), 'Structure multi [2] - first month division');
+	month = dp.children(':eq(1)');
+	ok(month.is('div.ui-datepicker-group') && month.is('div.ui-datepicker-group-last'), 'Structure multi [2] - second month division');
 	inp.datepicker('hide').datepicker('destroy');
+	
 	// Multi-month [2, 2]
 	inp = init('#inp', {numberOfMonths: [2, 2]});
 	inp.focus();
 	ok(dp.is('.ui-datepicker-multi'), 'Structure multi - multi-month');
-	equals(dp.children().length, 7 + (iframe ? 1 : 0), 'Structure multi - child count');
+	equals(dp.children().length, 4 + (iframe ? 1 : 0), 'Structure multi [2,2] - child count');
+	month = dp.children(':first');
+	ok(month.is('div.ui-datepicker-group') && month.is('div.ui-datepicker-group-first'), 'Structure multi [2,2] - first month division');
+	month = dp.children(':eq(1)');
+	ok(month.is('div.ui-datepicker-group') && month.is('div.ui-datepicker-group-last'), 'Structure multi [2,2] - second month division');
 	month = dp.children(':eq(2)');
-	ok(month.is('div.ui-datepicker-one-month') && month.is('div.ui-datepicker-new-row'),
-		'Structure multi - first month division');
+	ok(month.is('div.ui-datepicker-group') && month.is('div.ui-datepicker-group-first'), 'Structure multi [2,2] - third month division');
 	month = dp.children(':eq(3)');
-	ok(month.is('div.ui-datepicker-one-month') && !month.is('div.ui-datepicker-new-row'),
-		'Structure multi - second month division');
-	month = dp.children(':eq(4)');
-	ok(month.is('div.ui-datepicker-one-month') && month.is('div.ui-datepicker-new-row'),
-		'Structure multi - third month division');
-	month = dp.children(':eq(5)');
-	ok(month.is('div.ui-datepicker-one-month') && !month.is('div.ui-datepicker-new-row'),
-		'Structure multi - fourth month division');
+	ok(month.is('div.ui-datepicker-group') && month.is('div.ui-datepicker-group-last'), 'Structure multi [2,2] - fourth month division');
 	inp.datepicker('hide').datepicker('destroy');
+	
 	// Inline
 	var inl = init('#inl');
 	dp = inl.children();
 	ok(dp.is('.ui-datepicker-inline'), 'Structure inline - main div');
 	ok(!dp.is('.ui-datepicker-rtl'), 'Structure inline - not right-to-left');
 	ok(!dp.is('.ui-datepicker-multi'), 'Structure inline - not multi-month');
-	equals(dp.children().length, 3, 'Structure inline - child count');
-	var links = dp.children(':first');
-	ok(links.is('div.ui-datepicker-links'), 'Structure inline - links division');
-	equals(links.children().length, 3, 'Structure inline - links child count');
-	var month = dp.children(':eq(1)');
-	ok(month.is('div.ui-datepicker-one-month') && month.is('div.ui-datepicker-new-row'),
-		'Structure inline - month division');
-	var header = month.children(':first');
-	ok(header.is('div.ui-datepicker-header'), 'Structure inline - month header division');
-	equals(header.children().length, 2, 'Structure inline - month header child count');
+	equals(dp.children().length, 2, 'Structure inline - child count');
+	var header = dp.children(':first');
+	ok(header.is('div.ui-datepicker-header'), 'Structure inline - header division');
+	equals(header.children().length, 3, 'Structure inline - header child count');
 	var table = month.children(':eq(1)');
-	ok(table.is('table.ui-datepicker'), 'Structure inline - month table');
+	ok(table.is('table.ui-datepicker-calendar'), 'Structure inline - month table');
 	ok(table.children(':first').is('thead'), 'Structure inline - month table thead');
 	ok(table.children(':eq(1)').is('tbody'), 'Structure inline - month table body');
-	ok(dp.children('.ui-datepicker-status').length == 0, 'Structure inline - status');
 	inl.datepicker('destroy');
+	
 	// Inline multi-month
 	inl = init('#inl', {numberOfMonths: 2});
 	dp = inl.children();
-	ok(dp.is('.ui-datepicker-inline'), 'Structure inline multi - main div');
-	ok(dp.is('.ui-datepicker-multi'), 'Structure inline multi - not multi-month');
-	equals(dp.children().length, 4, 'Structure inline multi - child count');
-	var links = dp.children(':first');
-	ok(links.is('div.ui-datepicker-links'), 'Structure inline multi - links division');
-	equals(links.children().length, 3, 'Structure inline multi - links child count');
-	var month = dp.children(':eq(1)');
-	ok(month.is('div.ui-datepicker-one-month') && month.is('div.ui-datepicker-new-row'),
-		'Structure inline multi - first month division');
-	month = dp.children(':eq(2)');
-	ok(month.is('div.ui-datepicker-one-month') && !month.is('div.ui-datepicker-new-row'),
-		'Structure inline multi - second month division');
+	ok(dp.is('.ui-datepicker-inline') && dp.is('.ui-datepicker-multi'), 'Structure inline multi - main div');	
+	equals(dp.children().length, 2 + (iframe ? 1 : 0), 'Structure multi - child count');
+	month = dp.children(':first');
+	ok(month.is('div.ui-datepicker-group') && month.is('div.ui-datepicker-group-first'), 'Structure multi - first month division');
+	month = dp.children(':eq(1)');
+	ok(month.is('div.ui-datepicker-group') && month.is('div.ui-datepicker-group-last'), 'Structure multi - second month division');
 	inl.datepicker('destroy');
 });
 
@@ -352,112 +329,56 @@ test('customStructure', function() {
 	var dp = $('#ui-datepicker-div');
 	// Check right-to-left localisation
 	var inp = init('#inp', $.datepicker.regional['he']);
+	inp.data('showButtonPanel.datepicker',true);
 	inp.focus();
 	var iframe = ($.browser.msie && parseInt($.browser.version) < 7);
 	ok(dp.is('.ui-datepicker-rtl'), 'Structure RTL - right-to-left');
-	var links = dp.children(':eq(1)');
-	ok(links.is('div.ui-datepicker-links'), 'Structure - links division');
-	equals(links.children().length, 3, 'Structure - links child count');
-	ok(links.children(':first').is('div.ui-datepicker-next'),
-		'Structure - next division');
-	ok(links.children(':eq(1)').is('div.ui-datepicker-current'),
-		'Structure - current division');
-	ok(links.children(':last').is('div.ui-datepicker-prev'),
-		'Structure - prev division');
+	var header = dp.children(':first');
+	ok(header.is('div.ui-datepicker-header'), 'Structure RTL - header division');
+	equals(header.children().length, 3, 'Structure RTL - header child count');
+	ok(header.children(':first').is('a.ui-datepicker-next'), 'Structure RTL - prev link');
+	ok(header.children(':eq(1)').is('a.ui-datepicker-prev'), 'Structure RTL - next link');	
+	var panel = dp.children(':last');
+	ok(panel.is('div.ui-datepicker-buttonpane'), 'Structure RTL - button division');
+	equals(panel.children().length, 2, 'Structure RTL - button panel child count');
+	ok(panel.children(':first').is('button.ui-datepicker-close'), 'Structure RTL - close button');
+	ok(panel.children(':last').is('button.ui-datepicker-current'), 'Structure RTL - today button');
 	inp.datepicker('hide').datepicker('destroy');
-	// Close at bottom
-	inp = init('#inp', {closeAtTop: false});
-	inp.focus();
-	equals(dp.children().length, 4 + (iframe ? 1 : 0),
-		'Structure close at bottom - child count');
-	ok(dp.children(':first').is('div.ui-datepicker-links'),
-		'Structure close at bottom - links division');
-	ok(dp.children(':last').prev().is('div.ui-datepicker-control'),
-		'Structure close at bottom - control division');
-	inp.datepicker('hide').datepicker('destroy');
-	// Mandatory
-	inp = init('#inp', {mandatory: true});
-	inp.focus();
-	var control = dp.children(':first');
-	ok(control.is('div.ui-datepicker-control'),
-		'Structure mandatory - control division');
-	equals(control.children().length, 1, 'Structure mandatory - control child count');
-	ok(control.children(':first').is('div.ui-datepicker-close'),
-		'Structure mandatory - close division');
-	inp.datepicker('hide').datepicker('destroy');
+
 	// Hide prev/next
-	inp = init('#inp', {hideIfNoPrevNext: true,
-		minDate: new Date(2008, 2 - 1, 4), maxDate: new Date(2008, 2 - 1, 14)});
+	inp = init('#inp', {hideIfNoPrevNext: true, minDate: new Date(2008, 2 - 1, 4), maxDate: new Date(2008, 2 - 1, 14)});
 	inp.val('02/10/2008').focus();
-	var links = dp.children(':eq(1)');
-	ok(links.is('div.ui-datepicker-links'),
-		'Structure hide prev/next - links division');
-	equals(links.children().length, 2, 'Structure hide prev/next - links child count');
-	ok(links.children(':first').is('div.ui-datepicker-prev') &&
-		links.children(':first').html() == '',
-		'Structure hide prev/next - prev division');
-	ok(links.children(':last').is('div.ui-datepicker-next') &&
-		links.children(':last').html() == '',
-		'Structure hide prev/next - next division');
+	var header = dp.children(':first');
+	ok(header.is('div.ui-datepicker-header'), 'Structure hide prev/next - header division');
+	equals(header.children().length, 1, 'Structure hide prev/next - links child count');
+	ok(header.children(':first').is('div.ui-datepicker-title'), 'Structure hide prev/next - title division');
 	inp.datepicker('hide').datepicker('destroy');
-	// Can't change month
-	inp = init('#inp', {changeMonth: false});
+	
+	// Changeable Month with read-only year
+	inp = init('#inp', {changeMonth: true});
 	inp.focus();
-	var header = dp.children(':eq(2)').children(':first');
-	equals(header.children().length, 1, 'Structure change month - header child count');
-	ok(header.children(':last').is('select.ui-datepicker-new-year'),
-		'Structure change month - new year select');
+	var title = dp.children(':first').children(':last');
+	equals(title.children().length, 2, 'Structure changeable month - title child count');
+	ok(title.children(':first').is('select.ui-datepicker-month'), 'Structure changeable month - month selector');
+	ok(title.children(':last').is('span.ui-datepicker-year'), 'Structure changeable month - read-only year');
 	inp.datepicker('hide').datepicker('destroy');
-	// Can't change year
-	inp = init('#inp', {changeYear: false});
+	
+	// Changeable year with read-only month
+	inp = init('#inp', {changeYear: true});
 	inp.focus();
-	var header = dp.children(':eq(2)').children(':first');
-	equals(header.children().length, 1, 'Structure change year - header child count');
-	ok(header.children(':first').is('select.ui-datepicker-new-month'),
-		'Structure change year - new month select');
+	var title = dp.children(':first').children(':last');
+	equals(title.children().length, 2, 'Structure changeable year - title child count');
+	ok(title.children(':first').is('span.ui-datepicker-month'), 'Structure changeable year - read-only month');
+	ok(title.children(':last').is('select.ui-datepicker-year'), 'Structure changeable year - year selector');
 	inp.datepicker('hide').datepicker('destroy');
-	// Can't change first day of week
+
+	// Read-only first day of week
 	inp = init('#inp', {changeFirstDay: false});
 	inp.focus();
-	var titles = dp.find('.ui-datepicker-title-row');
-	equals(titles.children().length, 7, 'Structure change first day - titles child count');
-	equals(titles.find('a').length, 0, 'Structure change first day - titles links count');
+	var thead = dp.find('.ui-datepicker-calendar thead tr');
+	equals(thead.children().length, 7, 'Structure read-only first day - thead child count');
+	equals(thead.find('a').length, 0, 'Structure read-only first day - thead links count');
 	inp.datepicker('hide').datepicker('destroy');
-	// Show weeks
-	inp = init('#inp', {showWeeks: true});
-	inp.focus();
-	titles = dp.find('.ui-datepicker-title-row');
-	equals(titles.children().length, 8, 'Structure show weeks - titles child count');
-	var week = dp.find('.ui-datepicker-days-row:first');
-	equals(week.children().length, 8, 'Structure show weeks - week child count');
-	ok(week.children(':first').is('td.ui-datepicker-week-col'),
-		'Structure show weeks - week column');
-	inp.datepicker('hide').datepicker('destroy');
-	// Show status
-	inp = init('#inp', {showStatus: true});
-	inp.focus();
-	equals(dp.children().length, 6 + (iframe ? 1 : 0),
-		'Structure show status - datepicker child count');
-	ok(dp.children(':last').prev().is('div.ui-datepicker-status'),
-		'Structure show status - status division');
-	inp.datepicker('hide').datepicker('destroy');
-	// Inline
-	var inl = init('#inl', {showStatus: true, hideIfNoPrevNext: true,
-		minDate: new Date(2008, 2 - 1, 4), maxDate: new Date(2008, 2 - 1, 14)});
-	dp = inl.children();
-	ok(dp.is('.ui-datepicker-inline'), 'Structure inline - main div');
-	ok(!dp.is('.ui-datepicker-rtl'), 'Structure inline - not right-to-left');
-	ok(!dp.is('.ui-datepicker-multi'), 'Structure inline - not multi-month');
-	equals(dp.children().length, 5, 'Structure inline - child count');
-	var links = dp.children(':first');
-	ok(links.is('div.ui-datepicker-links'), 'Structure inline - links division');
-	equals(links.children().children().length, 0, 'Structure inline - links child count');
-	var month = dp.children(':eq(1)');
-	ok(month.is('div.ui-datepicker-one-month') && month.is('div.ui-datepicker-new-row'),
-		'Structure inline - month division');
-	ok(dp.children(':last').prev().is('div.ui-datepicker-status'),
-		'Structure inline - status');
-	inl.datepicker('destroy');
 });
 
 test('enableDisable', function() {
@@ -640,7 +561,7 @@ test('keystrokes', function() {
 	equalsDate(inp.datepicker('getDate'), new Date(2008, 2 - 1, 4),
 		'Keystroke ctrl+home');
 	// Change steps
-	inp.datepicker('option', {stepMonths: 2, stepBigMonths: 6, gotoCurrent: false}).
+	inp.datepicker('option', {stepMonths: 2, gotoCurrent: false}).
 		datepicker('hide').val('02/04/2008').datepicker('show').
 		simulate('keydown', {keyCode: $.simulate.VK_PGUP}).
 		simulate('keydown', {keyCode: $.simulate.VK_ENTER});
@@ -651,16 +572,6 @@ test('keystrokes', function() {
 		simulate('keydown', {keyCode: $.simulate.VK_ENTER});
 	equalsDate(inp.datepicker('getDate'), new Date(2008, 4 - 1, 4),
 		'Keystroke pgdn step 2');
-	inp.val('02/04/2008').datepicker('show').
-		simulate('keydown', {ctrlKey: true, keyCode: $.simulate.VK_PGUP}).
-		simulate('keydown', {keyCode: $.simulate.VK_ENTER});
-	equalsDate(inp.datepicker('getDate'), new Date(2007, 8 - 1, 4),
-		'Keystroke ctrl+pgup step 6');
-	inp.val('02/04/2008').datepicker('show').
-		simulate('keydown', {ctrlKey: true, keyCode: $.simulate.VK_PGDN}).
-		simulate('keydown', {keyCode: $.simulate.VK_ENTER});
-	equalsDate(inp.datepicker('getDate'), new Date(2008, 8 - 1, 4),
-		'Keystroke ctrl+pgdn step 6');
 });
 
 test('mouse', function() {
@@ -668,95 +579,85 @@ test('mouse', function() {
 	var dp = $('#ui-datepicker-div');
 	var date = new Date();
 	inp.val('').datepicker('show');
-	$('.ui-datepicker tbody a:contains(10)', dp).simulate('click', {});
+	$('.ui-datepicker-calendar tbody a:contains(10)', dp).simulate('click', {});
 	date.setDate(10);
 	equalsDate(inp.datepicker('getDate'), date, 'Mouse click');
 	inp.val('02/04/2008').datepicker('show');
-	$('.ui-datepicker tbody a:contains(12)', dp).simulate('click', {});
+	$('.ui-datepicker-calendar tbody a:contains(12)', dp).simulate('click', {});
 	equalsDate(inp.datepicker('getDate'), new Date(2008, 2 - 1, 12),
 		'Mouse click - preset');
 	inp.val('02/04/2008').datepicker('show');
-	$('.ui-datepicker-clear a', dp).simulate('click', {});
-	ok(inp.datepicker('getDate') == null, 'Mouse click - clear');
 	inp.val('').datepicker('show');
-	$('.ui-datepicker-close a', dp).simulate('click', {});
+	$('button.ui-datepicker-close', dp).simulate('click', {});
 	ok(inp.datepicker('getDate') == null, 'Mouse click - close');
 	inp.val('02/04/2008').datepicker('show');
-	$('.ui-datepicker-close a', dp).simulate('click', {});
+	$('button.ui-datepicker-close', dp).simulate('click', {});
 	equalsDate(inp.datepicker('getDate'), new Date(2008, 2 - 1, 4),
 		'Mouse click - close + preset');
 	inp.val('02/04/2008').datepicker('show');
-	$('.ui-datepicker-prev a', dp).simulate('click', {});
-	$('.ui-datepicker-close a', dp).simulate('click', {});
+	$('a.ui-datepicker-prev', dp).simulate('click', {});
+	$('button.ui-datepicker-close', dp).simulate('click', {});
 	equalsDate(inp.datepicker('getDate'), new Date(2008, 2 - 1, 4),
 		'Mouse click - abandoned');
 	// Current/previous/next
-	inp.val('02/04/2008').datepicker('show');
-	$('.ui-datepicker-current a', dp).simulate('click', {});
-	$('.ui-datepicker tbody a:contains(14)', dp).simulate('click', {});
+	inp.val('02/04/2008').datepicker('option', {showButtonPanel: true}).datepicker('show');
+	$('.ui-datepicker-current', dp).simulate('click', {});
+	$('.ui-datepicker-calendar tbody a:contains(14)', dp).simulate('click', {});
 	date.setDate(14);
 	equalsDate(inp.datepicker('getDate'), date, 'Mouse click - current');
 	inp.val('02/04/2008').datepicker('show');
-	$('.ui-datepicker-prev a', dp).simulate('click', {});
-	$('.ui-datepicker tbody a:contains(16)', dp).simulate('click', {});
+	$('.ui-datepicker-prev', dp).simulate('click');
+	$('.ui-datepicker-calendar tbody a:contains(16)', dp).simulate('click');
 	equalsDate(inp.datepicker('getDate'), new Date(2008, 1 - 1, 16),
 		'Mouse click - previous');
 	inp.val('02/04/2008').datepicker('show');
-	$('.ui-datepicker-next a', dp).simulate('click', {});
-	$('.ui-datepicker tbody a:contains(18)', dp).simulate('click', {});
+	$('.ui-datepicker-next', dp).simulate('click');
+	$('.ui-datepicker-calendar tbody a:contains(18)', dp).simulate('click');
 	equalsDate(inp.datepicker('getDate'), new Date(2008, 3 - 1, 18),
 		'Mouse click - next');
 	// Previous/next with minimum/maximum
 	inp.datepicker('option', {minDate: new Date(2008, 2 - 1, 2),
 		maxDate: new Date(2008, 2 - 1, 26)}).val('02/04/2008').datepicker('show');
-	$('.ui-datepicker-prev a', dp).simulate('click', {});
-	$('.ui-datepicker tbody a:contains(16)', dp).simulate('click', {});
+	$('.ui-datepicker-prev', dp).simulate('click');
+	$('.ui-datepicker-calendar tbody a:contains(16)', dp).simulate('click');
 	equalsDate(inp.datepicker('getDate'), new Date(2008, 2 - 1, 16),
 		'Mouse click - previous + min/max');
 	inp.val('02/04/2008').datepicker('show');
-	$('.ui-datepicker-next a', dp).simulate('click', {});
-	$('.ui-datepicker tbody a:contains(18)', dp).simulate('click', {});
+	$('.ui-datepicker-next', dp).simulate('click');
+	$('.ui-datepicker-calendar tbody a:contains(18)', dp).simulate('click');
 	equalsDate(inp.datepicker('getDate'), new Date(2008, 2 - 1, 18),
 		'Mouse click - next + min/max');
 	// Change day of week
-	inp.val('02/04/2008').datepicker('show');
-	equals($('.ui-datepicker-title-row td:first', dp).text(), 'Su',
+	inp.val('02/04/2008').datepicker('option', {changeFirstDay: true}).datepicker('show');
+	equals($('.ui-datepicker-calendar th:first a', dp).text(), 'Su',
 		'Mouse click - initial day of week');
-	$('.ui-datepicker-title-row td:last a', dp).simulate('click', {});
-	equals($('.ui-datepicker-title-row td:first', dp).text(), 'Sa',
+	$('.ui-datepicker-calendar th:last a', dp).simulate('click');
+	equals($('.ui-datepicker-calendar th:first a', dp).text(), 'Sa',
 		'Mouse click - day of week');
-	// Highlight week
-	inp.datepicker('option', {highlightWeek: true}).
-		datepicker('hide').val('02/04/2008').datepicker('show');
-	ok(!$('.ui-datepicker tr:eq(2)', dp).is('.ui-datepicker-week-over'),
-		'Mouse over - no week highlight');
-	$('.ui-datepicker tr:eq(2) td:first', dp).simulate('mouseover', {});
-	ok($('.ui-datepicker tr:eq(2)', dp).is('.ui-datepicker-week-over'),
-		'Mouse over - week highlight');
 	// Inline
 	var inl = init('#inl');
 	var dp = $('.ui-datepicker-inline', inl);
 	var date = new Date();
 	inl.datepicker('setDate', date);
-	$('.ui-datepicker tbody a:contains(10)', dp).simulate('click', {});
+	$('.ui-datepicker-calendar tbody a:contains(10)', dp).simulate('click', {});
 	date.setDate(10);
 	equalsDate(inl.datepicker('getDate'), date, 'Mouse click inline');
-	inl.datepicker('setDate', new Date(2008, 2 - 1, 4));
-	$('.ui-datepicker tbody a:contains(12)', dp).simulate('click', {});
-	equalsDate(inl.datepicker('getDate'), new Date(2008, 2 - 1, 12),
-		'Mouse click inline - preset');
-	$('.ui-datepicker-current a', dp).simulate('click', {});
-	$('.ui-datepicker tbody a:contains(14)', dp).simulate('click', {});
+	inl.datepicker('option', {showButtonPanel: true}).datepicker('setDate', new Date(2008, 2 - 1, 4));
+	$('.ui-datepicker-calendar tbody a:contains(12)', dp).simulate('click', {});
+	equalsDate(inl.datepicker('getDate'), new Date(2008, 2 - 1, 12), 'Mouse click inline - preset');
+	inl.datepicker('option', {showButtonPanel: true});
+	$('.ui-datepicker-current', dp).simulate('click', {});
+	$('.ui-datepicker-calendar tbody a:contains(14)', dp).simulate('click', {});
 	date.setDate(14);
 	equalsDate(inl.datepicker('getDate'), date, 'Mouse click inline - current');
 	inl.datepicker('setDate', new Date(2008, 2 - 1, 4));
-	$('.ui-datepicker-prev a', dp).simulate('click', {});
-	$('.ui-datepicker tbody a:contains(16)', dp).simulate('click', {});
+	$('.ui-datepicker-prev', dp).simulate('click');
+	$('.ui-datepicker-calendar tbody a:contains(16)', dp).simulate('click');
 	equalsDate(inl.datepicker('getDate'), new Date(2008, 1 - 1, 16),
 		'Mouse click inline - previous');
 	inl.datepicker('setDate', new Date(2008, 2 - 1, 4));
-	$('.ui-datepicker-next a', dp).simulate('click', {});
-	$('.ui-datepicker tbody a:contains(18)', dp).simulate('click', {});
+	$('.ui-datepicker-next', dp).simulate('click');
+	$('.ui-datepicker-calendar tbody a:contains(18)', dp).simulate('click');
 	equalsDate(inl.datepicker('getDate'), new Date(2008, 3 - 1, 18),
 		'Mouse click inline - next');
 });
@@ -850,30 +751,24 @@ test('miscellaneous', function() {
 	var inp = init('#inp');
 	// Year range
 	inp.val('02/04/2008').datepicker('show');
-	equals(dp.find('.ui-datepicker-new-year').text(),
-		'199819992000200120022003200420052006200720082009201020112012201320142015201620172018',
-		'Year range - default');
-	inp.datepicker('hide').datepicker('option', {yearRange: '-6:+2'}).datepicker('show');
-	equals(dp.find('.ui-datepicker-new-year').text(),
-		'200220032004200520062007200820092010', 'Year range - -6:+2');
-	inp.datepicker('hide').datepicker('option', {yearRange: '2000:2010'}).datepicker('show');
-	equals(dp.find('.ui-datepicker-new-year').text(),
-		'20002001200220032004200520062007200820092010', 'Year range - 2000:2010');
+	equals(dp.find('.ui-datepicker-year').text(), '2008', 'Year range - read-only default');
+	inp.datepicker('hide').datepicker('option', {changeYear: true}).datepicker('show');		
+	equals(dp.find('.ui-datepicker-year').text(), '199819992000200120022003200420052006200720082009201020112012201320142015201620172018', 'Year range - changeable default');
+	inp.datepicker('hide').datepicker('option', {yearRange: '-6:+2', changeYear: true}).datepicker('show');
+	equals(dp.find('.ui-datepicker-year').text(), '200220032004200520062007200820092010', 'Year range - -6:+2');
+	inp.datepicker('hide').datepicker('option', {yearRange: '2000:2010', changeYear: true}).datepicker('show');
+	equals(dp.find('.ui-datepicker-year').text(), '20002001200220032004200520062007200820092010', 'Year range - 2000:2010');
+
 	// Navigation as date format
-	equals(dp.find('.ui-datepicker-prev').text(),
-		'<Prev', 'Navigation prev - default');
-	equals(dp.find('.ui-datepicker-current').text(),
-		'Today', 'Navigation current - default');
-	equals(dp.find('.ui-datepicker-next').text(),
-		'Next>', 'Navigation next - default');
-	inp.datepicker('hide').datepicker('option', {navigationAsDateFormat: true,
-		prevText: '< M', currentText: 'MM', nextText: 'M >'}).
-		val('02/04/2008').datepicker('show');
+	inp.datepicker('option', {showButtonPanel: true});
+	equals(dp.find('.ui-datepicker-prev').text(), 'Prev', 'Navigation prev - default');
+	equals(dp.find('.ui-datepicker-current').text(), 'Today', 'Navigation current - default');
+	equals(dp.find('.ui-datepicker-next').text(), 'Next', 'Navigation next - default');
+	inp.datepicker('hide').datepicker('option', {navigationAsDateFormat: true, prevText: '< M', currentText: 'MM', nextText: 'M >'}).val('02/04/2008').datepicker('show');
 	var longNames = $.datepicker.regional[''].monthNames;
 	var shortNames = $.datepicker.regional[''].monthNamesShort;
 	var date = new Date();
-	equals(dp.find('.ui-datepicker-prev').text(),
-		'< ' + shortNames[0], 'Navigation prev - as date format');
+	equals(dp.find('.ui-datepicker-prev').text(), '< ' + shortNames[0], 'Navigation prev - as date format');
 	equals(dp.find('.ui-datepicker-current').text(),
 		longNames[date.getMonth()], 'Navigation current - as date format');
 	equals(dp.find('.ui-datepicker-next').text(),
@@ -1246,79 +1141,79 @@ test('daylightSaving', function() {
 	ok(true, 'Daylight saving - ' + new Date());
 	// Australia, Sydney - AM change, southern hemisphere
 	inp.val('04/01/2008').datepicker('show');
-	$('.ui-datepicker td:eq(13)', dp).simulate('click', {});
+	$('.ui-datepicker-calendar td:eq(6) a', dp).simulate('click');
 	equals(inp.val(), '04/05/2008', 'Daylight saving - Australia 04/05/2008');
 	inp.val('04/01/2008').datepicker('show');
-	$('.ui-datepicker td:eq(14)', dp).simulate('click', {});
+	$('.ui-datepicker-calendar td:eq(7) a', dp).simulate('click');
 	equals(inp.val(), '04/06/2008', 'Daylight saving - Australia 04/06/2008');
 	inp.val('04/01/2008').datepicker('show');
-	$('.ui-datepicker td:eq(15)', dp).simulate('click', {});
+	$('.ui-datepicker-calendar td:eq(8) a', dp).simulate('click');
 	equals(inp.val(), '04/07/2008', 'Daylight saving - Australia 04/07/2008');
 	inp.val('10/01/2008').datepicker('show');
-	$('.ui-datepicker td:eq(13)', dp).simulate('click', {});
+	$('.ui-datepicker-calendar td:eq(6) a', dp).simulate('click');
 	equals(inp.val(), '10/04/2008', 'Daylight saving - Australia 10/04/2008');
 	inp.val('10/01/2008').datepicker('show');
-	$('.ui-datepicker td:eq(14)', dp).simulate('click', {});
+	$('.ui-datepicker-calendar td:eq(7) a', dp).simulate('click');
 	equals(inp.val(), '10/05/2008', 'Daylight saving - Australia 10/05/2008');
 	inp.val('10/01/2008').datepicker('show');
-	$('.ui-datepicker td:eq(15)', dp).simulate('click', {});
+	$('.ui-datepicker-calendar td:eq(8) a', dp).simulate('click');
 	equals(inp.val(), '10/06/2008', 'Daylight saving - Australia 10/06/2008');
 	// Brasil, Brasilia - midnight change, southern hemisphere
 	inp.val('02/01/2008').datepicker('show');
-	$('.ui-datepicker td:eq(27)', dp).simulate('click', {});
+	$('.ui-datepicker-calendar td:eq(20) a', dp).simulate('click');
 	equals(inp.val(), '02/16/2008', 'Daylight saving - Brasil 02/16/2008');
 	inp.val('02/01/2008').datepicker('show');
-	$('.ui-datepicker td:eq(28)', dp).simulate('click', {});
+	$('.ui-datepicker-calendar td:eq(21) a', dp).simulate('click');
 	equals(inp.val(), '02/17/2008', 'Daylight saving - Brasil 02/17/2008');
 	inp.val('02/01/2008').datepicker('show');
-	$('.ui-datepicker td:eq(29)', dp).simulate('click', {});
+	$('.ui-datepicker-calendar td:eq(22) a', dp).simulate('click');
 	equals(inp.val(), '02/18/2008', 'Daylight saving - Brasil 02/18/2008');
 	inp.val('10/01/2008').datepicker('show');
-	$('.ui-datepicker td:eq(20)', dp).simulate('click', {});
+	$('.ui-datepicker-calendar td:eq(13) a', dp).simulate('click');
 	equals(inp.val(), '10/11/2008', 'Daylight saving - Brasil 10/11/2008');
 	inp.val('10/01/2008').datepicker('show');
-	$('.ui-datepicker td:eq(21)', dp).simulate('click', {});
+	$('.ui-datepicker-calendar td:eq(14) a', dp).simulate('click');
 	equals(inp.val(), '10/12/2008', 'Daylight saving - Brasil 10/12/2008');
 	inp.val('10/01/2008').datepicker('show');
-	$('.ui-datepicker td:eq(22)', dp).simulate('click', {});
+	$('.ui-datepicker-calendar td:eq(15) a', dp).simulate('click');
 	equals(inp.val(), '10/13/2008', 'Daylight saving - Brasil 10/13/2008');
 	// Lebanon, Beirut - midnight change, northern hemisphere
 	inp.val('03/01/2008').datepicker('show');
-	$('.ui-datepicker td:eq(41)', dp).simulate('click', {});
+	$('.ui-datepicker-calendar td:eq(34) a', dp).simulate('click');
 	equals(inp.val(), '03/29/2008', 'Daylight saving - Lebanon 03/29/2008');
 	inp.val('03/01/2008').datepicker('show');
-	$('.ui-datepicker td:eq(42)', dp).simulate('click', {});
+	$('.ui-datepicker-calendar td:eq(35) a', dp).simulate('click');
 	equals(inp.val(), '03/30/2008', 'Daylight saving - Lebanon 03/30/2008');
 	inp.val('03/01/2008').datepicker('show');
-	$('.ui-datepicker td:eq(43)', dp).simulate('click', {});
+	$('.ui-datepicker-calendar td:eq(36) a', dp).simulate('click');
 	equals(inp.val(), '03/31/2008', 'Daylight saving - Lebanon 03/31/2008');
 	inp.val('10/01/2008').datepicker('show');
-	$('.ui-datepicker td:eq(34)', dp).simulate('click', {});
+	$('.ui-datepicker-calendar td:eq(27) a', dp).simulate('click');
 	equals(inp.val(), '10/25/2008', 'Daylight saving - Lebanon 10/25/2008');
 	inp.val('10/01/2008').datepicker('show');
-	$('.ui-datepicker td:eq(35)', dp).simulate('click', {});
+	$('.ui-datepicker-calendar td:eq(28) a', dp).simulate('click');
 	equals(inp.val(), '10/26/2008', 'Daylight saving - Lebanon 10/26/2008');
 	inp.val('10/01/2008').datepicker('show');
-	$('.ui-datepicker td:eq(36)', dp).simulate('click', {});
+	$('.ui-datepicker-calendar td:eq(29) a', dp).simulate('click');
 	equals(inp.val(), '10/27/2008', 'Daylight saving - Lebanon 10/27/2008');
 	// US, Eastern - AM change, northern hemisphere
 	inp.val('03/01/2008').datepicker('show');
-	$('.ui-datepicker td:eq(20)', dp).simulate('click', {});
+	$('.ui-datepicker-calendar td:eq(13) a', dp).simulate('click');
 	equals(inp.val(), '03/08/2008', 'Daylight saving - US 03/08/2008');
 	inp.val('03/01/2008').datepicker('show');
-	$('.ui-datepicker td:eq(21)', dp).simulate('click', {});
+	$('.ui-datepicker-calendar td:eq(14) a', dp).simulate('click');
 	equals(inp.val(), '03/09/2008', 'Daylight saving - US 03/09/2008');
 	inp.val('03/01/2008').datepicker('show');
-	$('.ui-datepicker td:eq(22)', dp).simulate('click', {});
+	$('.ui-datepicker-calendar td:eq(15) a', dp).simulate('click');
 	equals(inp.val(), '03/10/2008', 'Daylight saving - US 03/10/2008');
 	inp.val('11/01/2008').datepicker('show');
-	$('.ui-datepicker td:eq(13)', dp).simulate('click', {});
+	$('.ui-datepicker-calendar td:eq(6) a', dp).simulate('click');
 	equals(inp.val(), '11/01/2008', 'Daylight saving - US 11/01/2008');
 	inp.val('11/01/2008').datepicker('show');
-	$('.ui-datepicker td:eq(14)', dp).simulate('click', {});
+	$('.ui-datepicker-calendar td:eq(7) a', dp).simulate('click');
 	equals(inp.val(), '11/02/2008', 'Daylight saving - US 11/02/2008');
 	inp.val('11/01/2008').datepicker('show');
-	$('.ui-datepicker td:eq(15)', dp).simulate('click', {});
+	$('.ui-datepicker-calendar td:eq(8) a', dp).simulate('click');
 	equals(inp.val(), '11/03/2008', 'Daylight saving - US 11/03/2008');
 });
 
@@ -1369,24 +1264,14 @@ test('callbacks', function() {
 	inp.val('02/04/2008').datepicker('show');
 	ok(beforeShowDayThis.id == inp[0].id, 'Before show day - this OK');
 	ok(beforeShowDayOK, 'Before show day - dates OK');
-	var day20 = dp.find('.ui-datepicker td:contains("20")');
-	var day21 = dp.find('.ui-datepicker td:contains("21")');
+	var day20 = dp.find('.ui-datepicker-calendar td:contains("20")');
+	var day21 = dp.find('.ui-datepicker-calendar td:contains("21")');
 	ok(!day20.is('.ui-datepicker-unselectable'), 'Before show day - unselectable 20');
 	ok(day21.is('.ui-datepicker-unselectable'), 'Before show day - unselectable 21');
 	ok(day20.is('.day10'), 'Before show day - CSS 20');
 	ok(!day21.is('.day10'), 'Before show day - CSS 21');
 	ok(day20.attr('title') == '', 'Before show day - title 20');
 	ok(day21.attr('title') == 'Divisble by 3', 'Before show day - title 21');
-	inp.datepicker('hide').datepicker('destroy');
-	// Calculate week
-	inp = init('#inp', {showWeeks: true, calculateWeek: calcWeek});
-	inp.val('02/04/2008').datepicker('show');
-	equals($('.ui-datepicker-week-col:first').text(), 4, 'Calculate week');
-	equals($('.ui-datepicker-week-col:last').text(), 8, 'Calculate week');
-	// Make Tuesday first
-	$('.ui-datepicker-title-row a:contains("Tu")', dp).simulate('click', {});
-	equals($('.ui-datepicker-week-col:first').text(), 5, 'Calculate week');
-	equals($('.ui-datepicker-week-col:last').text(), 9, 'Calculate week');
 	inp.datepicker('hide').datepicker('destroy');
 });
 
@@ -1499,67 +1384,12 @@ test('events', function() {
 	equals(selectedDate, '', 'Callback close date - ctrl+end');
 });
 
-function highlight20(date, inst) {
-	return (date.getDate() == 20 ? '*** 20 ***' : $.datepicker.dateStatus(date, inst));
-}
-
-test('status', function() {
-	var dp = $('#ui-datepicker-div');
-	var inp = init('#inp', {showStatus: true, statusForDate: highlight20, showWeeks: true});
-	inp.val('').datepicker('show');
-	var status = $('.ui-datepicker-status', dp);
-	ok(status.length == 1, 'Status - present');
-	equals(status.text(), 'Select a date', 'Status - default');
-	$('.ui-datepicker-clear a', dp).simulate('mouseover');
-	equals(status.text(), 'Erase the current date', 'Status - clear');
-	$('.ui-datepicker-close a', dp).simulate('mouseover');
-	equals(status.text(), 'Close without change', 'Status - close');
-	$('.ui-datepicker-prev a', dp).simulate('mouseover');
-	equals(status.text(), 'Show the previous month', 'Status - previous');
-	$('.ui-datepicker-current a', dp).simulate('mouseover');
-	equals(status.text(), 'Show the current month', 'Status - current');
-	$('.ui-datepicker-next a', dp).simulate('mouseover');
-	equals(status.text(), 'Show the next month', 'Status - next');
-	$('.ui-datepicker-new-month', dp).simulate('mouseover');
-	equals(status.text(), 'Show a different month', 'Status - new month');
-	$('.ui-datepicker-new-year', dp).simulate('mouseover');
-	equals(status.text(), 'Show a different year', 'Status - new year');
-	$('.ui-datepicker-title-row td:first', dp).simulate('mouseover');
-	equals(status.text(), 'Week of the year', 'Status - week header');
-	var day = 0;
-	$('.ui-datepicker-title-row a', dp).each(function() {
-		$(this).simulate('mouseover');
-		equals(status.text(), 'Set ' + $.datepicker.regional[''].dayNames[day] +
-			' as first week day', 'Status - day ' + day);
-		day++;
-	});
-	$('.ui-datepicker-days-row:eq(1) td:first', dp).simulate('mouseover');
-	equals(status.text(), 'Week of the year', 'Status - week column');
-	day = 0;
-	var month = $.datepicker.regional[''].monthNamesShort[new Date().getMonth()];
-	$('.ui-datepicker-days-row:eq(1) a', dp).each(function() {
-		$(this).simulate('mouseover');
-		equals(status.text(), 'Select ' + $.datepicker.regional[''].dayNames[day] +
-			', ' + month + ' ' + $(this).text(), 'Status - dates');
-		day++;
-	});
-	$('.ui-datepicker-days-row a:contains("20")', dp).each(function() {
-		$(this).simulate('mouseover');
-		equals(status.text(), '*** 20 ***', 'Status - dates');
-	});
-	inp.datepicker('hide').datepicker('destroy');
-});
-
 test('localisation', function() {
 	var inp = init('#inp', $.datepicker.regional['fr']);
-	inp.datepicker('option', {dateFormat: 'DD, d MM yy', showStatus: true, showWeeks: true}).
-		val('').datepicker('show');
+	inp.datepicker('option', {dateFormat: 'DD, d MM yy', showButtonPanel:true}).val('').datepicker('show');
 	var dp = $('#ui-datepicker-div');
-	var status = $('.ui-datepicker-status', dp);
-	equals($('.ui-datepicker-clear', dp).text(), 'Effacer', 'Localisation - clear');
 	equals($('.ui-datepicker-close', dp).text(), 'Fermer', 'Localisation - close');
-	$('.ui-datepicker-close a', dp).simulate('mouseover');
-	equals(status.text(), 'Fermer sans modifier', 'Localisation - status');
+	$('.ui-datepicker-close', dp).simulate('mouseover');
 	equals($('.ui-datepicker-prev', dp).text(), '<Préc', 'Localisation - previous');
 	equals($('.ui-datepicker-current', dp).text(), 'Courant', 'Localisation - current');
 	equals($('.ui-datepicker-next', dp).text(), 'Suiv>', 'Localisation - next');
@@ -1570,10 +1400,10 @@ test('localisation', function() {
 			'Localisation - month ' + month);
 		month++;
 	});
-	equals($('.ui-datepicker-title-row td:first', dp).text(),
+	equals($('.ui-datepicker-calendar th:first', dp).text(),
 		$.datepicker.regional['fr'].weekHeader, 'Localisation - week header');
 	var day = 1;
-	$('.ui-datepicker-title-row a', dp).each(function() {
+	$('.ui-datepicker-calendar th a', dp).each(function() {
 		equals($(this).text(), $.datepicker.regional['fr'].dayNamesMin[day],
 			'Localisation - day ' + day);
 		day = (day + 1) % 7;
