@@ -44,13 +44,13 @@ function Datepicker() {
 	this.regional[''] = { // Default regional settings
 		clearText: 'Clear', // Display text for clear link
 		clearStatus: 'Erase the current date', // Status text for clear link
-		closeText: 'Close', // Display text for close link
+		closeText: 'Done', // Display text for close link
 		closeStatus: 'Close without change', // Status text for close link
-		prevText: '&#x3c;Prev', // Display text for previous month link
+		prevText: 'Prev', // Display text for previous month link
 		prevStatus: 'Show the previous month', // Status text for previous month link
 		prevBigText: '&#x3c;&#x3c;', // Display text for previous year link
 		prevBigStatus: 'Show the previous year', // Status text for previous year link
-		nextText: 'Next&#x3e;', // Display text for next month link
+		nextText: 'Next', // Display text for next month link
 		nextStatus: 'Show the next month', // Status text for next month link
 		nextBigText: '&#x3e;&#x3e;', // Display text for next year link
 		nextBigStatus: 'Show the next year', // Status text for next year link
@@ -84,29 +84,23 @@ function Datepicker() {
 		buttonText: '...', // Text for trigger button
 		buttonImage: '', // URL for trigger button image
 		buttonImageOnly: false, // True if the image appears alone, false if it appears on a button
-		closeAtTop: true, // True to have the clear/close at the top,
-			// false to have them at the bottom
-		mandatory: false, // True to hide the Clear link, false to include it
 		hideIfNoPrevNext: false, // True to hide next/previous month links
 			// if not applicable, false to just disable them
 		navigationAsDateFormat: false, // True if date formatting applied to prev/today/next links
-		showBigPrevNext: false, // True to show big prev/next links
 		gotoCurrent: false, // True if today link goes back to current selection instead
-		changeMonth: true, // True if month can be selected directly, false if only prev/next
-		changeYear: true, // True if year can be selected directly, false if only prev/next
+		changeMonth: false, // True if month can be selected directly, false if only prev/next
+		changeYear: false, // True if year can be selected directly, false if only prev/next
 		showMonthAfterYear: false, // True if the year select precedes month, false for month then year
 		yearRange: '-10:+10', // Range of years to display in drop-down,
 			// either relative to current year (-nn:+nn) or absolute (nnnn:nnnn)
-		changeFirstDay: true, // True to click on day name to change, false to remain as set
+		changeFirstDay: false, // True to click on day name to change, false to remain as set
 		highlightWeek: false, // True to highlight the selected week
 		showOtherMonths: false, // True to show dates in other months, false to leave blank
-		showWeeks: false, // True to show week of the year, false to omit
 		calculateWeek: this.iso8601Week, // How to calculate the week of the year,
 			// takes a Date and returns the number of the week for it
 		shortYearCutoff: '+10', // Short year values < this are in the current century,
 			// > this are in the previous century,
 			// string value starting with '+' for current year + value
-		showStatus: false, // True to show status bar at bottom, false to not show it
 		statusForDate: this.dateStatus, // Function to provide status text for a date -
 			// takes date and instance as parameters, returns display text
 		minDate: null, // The earliest selectable date, or null for no limit
@@ -128,10 +122,11 @@ function Datepicker() {
 		rangeSeparator: ' - ', // Text between two dates in a range
 		altField: '', // Selector for an alternate field to store selected dates into
 		altFormat: '', // The date format to use for the alternate field
-		constrainInput: true // The input is constrained by the current date format
+		constrainInput: true, // The input is constrained by the current date format
+		showButtonPanel: false // True to show button panel, false to not show it
 	};
 	$.extend(this._defaults, this.regional['']);
-	this.dpDiv = $('<div id="' + this._mainDivId + '" style="display: none;"></div>');
+	this.dpDiv = $('<div id="' + this._mainDivId + '" class="ui-datepicker ui-widget ui-widget-content ui-helper-clearfix ui-corner-all ui-helper-hidden-accessible"></div>');
 }
 
 $.extend(Datepicker.prototype, {
@@ -190,7 +185,7 @@ $.extend(Datepicker.prototype, {
 			drawMonth: 0, drawYear: 0, // month being drawn
 			inline: inline, // is datepicker inline or not
 			dpDiv: (!inline ? this.dpDiv : // presentation div
-			$('<div class="' + this._inlineClass + '"></div>'))};
+			$('<div class="' + this._inlineClass + ' ui-datepicker ui-widget ui-widget-content ui-helper-clearfix ui-corner-all"></div>'))};
 	},
 
 	/* Attach the date picker to an input field. */
@@ -581,8 +576,6 @@ $.extend(Datepicker.prototype, {
 		inst.dpDiv.css({position: 'absolute', display: 'block', top: '-1000px'});
 		$.datepicker._updateDatepicker(inst);
 		// fix width for dynamic number of date pickers
-		inst.dpDiv.width($.datepicker._getNumberOfMonths(inst)[1] *
-			$('.ui-datepicker', inst.dpDiv[0])[0].offsetWidth);
 		// and adjust position before showing
 		offset = $.datepicker._checkOffset(inst, offset, isFixed);
 		inst.dpDiv.css({position: ($.datepicker._inDialog && $.blockUI ?
@@ -615,7 +608,16 @@ $.extend(Datepicker.prototype, {
 			height: inst.dpDiv.height() + 4};
 		inst.dpDiv.empty().append(this._generateHTML(inst)).
 			find('iframe.ui-datepicker-cover').
-			css({width: dims.width, height: dims.height});
+				css({width: dims.width, height: dims.height})
+			.end()
+			.find('button, .ui-datepicker-prev, .ui-datepicker-next, .ui-datepicker-calendar td a')
+				.bind('mouseover', function(){
+					$(this).addClass('ui-state-hover');
+				})
+				.bind('mouseout', function(){
+					$(this).removeClass('ui-state-hover');
+				})
+			.end();
 		var numMonths = this._getNumberOfMonths(inst);
 		inst.dpDiv[(numMonths[0] != 1 || numMonths[1] != 1 ? 'add' : 'remove') +
 			'Class']('ui-datepicker-multi');
@@ -707,7 +709,7 @@ $.extend(Datepicker.prototype, {
 
 	/* Tidy up after a dialog display. */
 	_tidyDialog: function(inst) {
-		inst.dpDiv.removeClass(this._dialogClass).unbind('.ui-datepicker');
+		inst.dpDiv.removeClass(this._dialogClass).unbind('.ui-datepicker-calendar');
 		$('.' + this._promptClass, inst.dpDiv).remove();
 	},
 
@@ -825,8 +827,6 @@ $.extend(Datepicker.prototype, {
 	_clearDate: function(id) {
 		var target = $(id);
 		var inst = this._getInst(target[0]);
-		if (this._get(inst, 'mandatory'))
-			return;
 		inst.stayOpen = false;
 		inst.endDay = inst.endMonth = inst.endYear = inst.rangeStart = null;
 		this._selectDate(target, '');
@@ -1344,23 +1344,12 @@ $.extend(Datepicker.prototype, {
 		var today = new Date();
 		today = this._daylightSavingAdjust(
 			new Date(today.getFullYear(), today.getMonth(), today.getDate())); // clear time
-		var showStatus = this._get(inst, 'showStatus');
 		var initStatus = this._get(inst, 'initStatus') || '&#xa0;';
 		var isRTL = this._get(inst, 'isRTL');
-		// build the date picker HTML
-		var clear = (this._get(inst, 'mandatory') ? '' :
-			'<div class="ui-datepicker-clear"><a onclick="jQuery.datepicker._clearDate(\'#' + inst.id + '\');"' +
-			this._addStatus(showStatus, inst.id, this._get(inst, 'clearStatus'), initStatus) + '>' +
-			this._get(inst, 'clearText') + '</a></div>');
-		var controls = '<div class="ui-datepicker-control">' + (isRTL ? '' : clear) +
-			'<div class="ui-datepicker-close"><a onclick="jQuery.datepicker._hideDatepicker();"' +
-			this._addStatus(showStatus, inst.id, this._get(inst, 'closeStatus'), initStatus) + '>' +
-			this._get(inst, 'closeText') + '</a></div>' + (isRTL ? clear : '')  + '</div>';
+		var showButtonPanel = this._get(inst, 'showButtonPanel');			
 		var prompt = this._get(inst, 'prompt');
-		var closeAtTop = this._get(inst, 'closeAtTop');
 		var hideIfNoPrevNext = this._get(inst, 'hideIfNoPrevNext');
 		var navigationAsDateFormat = this._get(inst, 'navigationAsDateFormat');
-		var showBigPrevNext = this._get(inst, 'showBigPrevNext');
 		var numMonths = this._getNumberOfMonths(inst);
 		var showCurrentAtPos = this._get(inst, 'showCurrentAtPos');
 		var stepMonths = this._get(inst, 'stepMonths');
@@ -1393,43 +1382,26 @@ $.extend(Datepicker.prototype, {
 		prevText = (!navigationAsDateFormat ? prevText : this.formatDate(prevText,
 			this._daylightSavingAdjust(new Date(drawYear, drawMonth - stepMonths, 1)),
 			this._getFormatConfig(inst)));
-		var prevBigText = (showBigPrevNext ? this._get(inst, 'prevBigText') : '');
-		prevBigText = (!navigationAsDateFormat ? prevBigText : this.formatDate(prevBigText,
-			this._daylightSavingAdjust(new Date(drawYear, drawMonth - stepBigMonths, 1)),
-			this._getFormatConfig(inst)));
-		var prev = '<div class="ui-datepicker-prev">' + (this._canAdjustMonth(inst, -1, drawYear, drawMonth) ?
-			(showBigPrevNext ? '<a onclick="jQuery.datepicker._adjustDate(\'#' + inst.id + '\', -' + stepBigMonths + ', \'M\');"' +
-			this._addStatus(showStatus, inst.id, this._get(inst, 'prevBigStatus'), initStatus) + '>' + prevBigText + '</a>' : '') +
-			'<a onclick="jQuery.datepicker._adjustDate(\'#' + inst.id + '\', -' + stepMonths + ', \'M\');"' +
-			this._addStatus(showStatus, inst.id, this._get(inst, 'prevStatus'), initStatus) + '>' + prevText + '</a>' :
-			(hideIfNoPrevNext ? '' : (showBigPrevNext ? '<label>' + prevBigText + '</label>' : '') +
-			'<label>' + prevText + '</label>')) + '</div>';
+		var prev = (this._canAdjustMonth(inst, -1, drawYear, drawMonth) ?
+			'<a class="ui-datepicker-prev ui-corner-all" onclick="jQuery.datepicker._adjustDate(\'#' + inst.id + '\', -' + stepMonths + ', \'M\');"' +
+			' title="' + prevText + '"><span class="ui-icon ui-icon-circle-triangle-w">' + prevText + '</span></a>' :
+			(hideIfNoPrevNext ? '' : '<label>' + prevText + '</label>'));
 		var nextText = this._get(inst, 'nextText');
 		nextText = (!navigationAsDateFormat ? nextText : this.formatDate(nextText,
 			this._daylightSavingAdjust(new Date(drawYear, drawMonth + stepMonths, 1)),
 			this._getFormatConfig(inst)));
-		var nextBigText = (showBigPrevNext ? this._get(inst, 'nextBigText') : '');
-		nextBigText = (!navigationAsDateFormat ? nextBigText : this.formatDate(nextBigText,
-			this._daylightSavingAdjust(new Date(drawYear, drawMonth + stepBigMonths, 1)),
-			this._getFormatConfig(inst)));
-		var next = '<div class="ui-datepicker-next">' + (this._canAdjustMonth(inst, +1, drawYear, drawMonth) ?
-			'<a onclick="jQuery.datepicker._adjustDate(\'#' + inst.id + '\', +' + stepMonths + ', \'M\');"' +
-			this._addStatus(showStatus, inst.id, this._get(inst, 'nextStatus'), initStatus) + '>' + nextText + '</a>' +
-			(showBigPrevNext ? '<a onclick="jQuery.datepicker._adjustDate(\'#' + inst.id + '\', +' + stepBigMonths + ', \'M\');"' +
-			this._addStatus(showStatus, inst.id, this._get(inst, 'nextBigStatus'), initStatus) + '>' + nextBigText + '</a>' : '') :
-			(hideIfNoPrevNext ? '' : '<label>' + nextText + '</label>' +
-			(showBigPrevNext ? '<label>' + nextBigText + '</label>' : ''))) + '</div>';
+		var next = (this._canAdjustMonth(inst, +1, drawYear, drawMonth) ?
+			'<a class="ui-datepicker-next ui-corner-all" onclick="jQuery.datepicker._adjustDate(\'#' + inst.id + '\', +' + stepMonths + ', \'M\');"' +
+			' title="' + nextText + '"><span class="ui-icon ui-icon-circle-triangle-e">' + nextText + '</span></a>' :
+			(hideIfNoPrevNext ? '' : '<label>' + nextText + '</label>'));
 		var currentText = this._get(inst, 'currentText');
 		var gotoDate = (this._get(inst, 'gotoCurrent') && inst.currentDay ? currentDate : today);
 		currentText = (!navigationAsDateFormat ? currentText :
 			this.formatDate(currentText, gotoDate, this._getFormatConfig(inst)));
-		var html = (closeAtTop && !inst.inline ? controls : '') +
-			'<div class="ui-datepicker-links">' + (isRTL ? next : prev) +
-			(this._isInRange(inst, gotoDate) ? '<div class="ui-datepicker-current">' +
-			'<a onclick="jQuery.datepicker._gotoToday(\'#' + inst.id + '\');"' +
-			this._addStatus(showStatus, inst.id, this._get(inst, 'currentStatus'), initStatus) + '>' +
-			currentText + '</a></div>' : '') + (isRTL ? prev : next) + '</div>' +
-			(prompt ? '<div class="' + this._promptClass + '"><span>' + prompt + '</span></div>' : '');
+		var controls = '<button type="button" class="ui-datepicker-close ui-state-default ui-priority-primary ui-corner-all" onclick="jQuery.datepicker._hideDatepicker();">' + this._get(inst, 'closeText') + '</button>';
+		var buttonPanel = (showButtonPanel) ? '<div class="ui-datepicker-buttonpane ui-widget-content">' + (isRTL ? controls : '') + 
+			(this._isInRange(inst, gotoDate) ? '<button type="button" class="ui-datepicker-current ui-state-default ui-priority-secondary ui-corner-all" onclick="jQuery.datepicker._gotoToday(\'#' + inst.id + '\');"' +
+			'>' + currentText + '</button>' : '') + (isRTL ? '' : controls) + '</div>' : '';
 		var firstDay = parseInt(this._get(inst, 'firstDay'));
 		firstDay = (isNaN(firstDay) ? 0 : firstDay);
 		var changeFirstDay = this._get(inst, 'changeFirstDay');
@@ -1440,33 +1412,43 @@ $.extend(Datepicker.prototype, {
 		var beforeShowDay = this._get(inst, 'beforeShowDay');
 		var highlightWeek = this._get(inst, 'highlightWeek');
 		var showOtherMonths = this._get(inst, 'showOtherMonths');
-		var showWeeks = this._get(inst, 'showWeeks');
 		var calculateWeek = this._get(inst, 'calculateWeek') || this.iso8601Week;
 		var weekStatus = this._get(inst, 'weekStatus');
-		var status = (showStatus ? this._get(inst, 'dayStatus') || initStatus : '');
 		var dateStatus = this._get(inst, 'statusForDate') || this.dateStatus;
 		var endDate = inst.endDay ? this._daylightSavingAdjust(
 			new Date(inst.endYear, inst.endMonth, inst.endDay)) : currentDate;
 		var defaultDate = this._getDefaultDate(inst);
-		for (var row = 0; row < numMonths[0]; row++)
+		var html = '';
+		for (var row = 0; row < numMonths[0]; row++) {
 			for (var col = 0; col < numMonths[1]; col++) {
 				var selectedDate = this._daylightSavingAdjust(new Date(drawYear, drawMonth, inst.selectedDay));
-				html += '<div class="ui-datepicker-one-month' + (col == 0 ? ' ui-datepicker-new-row' : '') + '">' +
+				var cornerClass = ' ui-corner-all';
+				if (isMultiMonth) {
+					html += '<div class="ui-datepicker-group ui-datepicker-group-';
+					switch (col) {
+						case 0: html += 'first'; cornerClass = ' ui-corner-left'; break;
+						case numMonths[1]-1: html += 'last'; cornerClass = ' ui-corner-right'; break;
+						default: html += 'middle'; cornerClass = ''; break;
+					}
+					html += '">';
+				}
+				html += '<div class="ui-datepicker-header ui-widget-header ui-helper-clearfix' + cornerClass + '">' + 
+					(/all|left/.test(cornerClass) ? (isRTL ? next : prev) : '') + 
+					(/all|right/.test(cornerClass) ? (isRTL ? prev : next) : '') +
+					(prompt ? '<div class="' + this._promptClass + '"><span>' + prompt + '</span></div>' : '') + 
 					this._generateMonthYearHeader(inst, drawMonth, drawYear, minDate, maxDate,
-					selectedDate, row > 0 || col > 0, showStatus, initStatus, monthNames) + // draw month headers
-					'<table class="ui-datepicker" cellpadding="0" cellspacing="0"><thead>' +
-					'<tr class="ui-datepicker-title-row">' +
-					(showWeeks ? '<td' + this._addStatus(showStatus, inst.id, weekStatus, initStatus) + '>' +
-					this._get(inst, 'weekHeader') + '</td>' : '');
+					selectedDate, row > 0 || col > 0, initStatus, monthNames) + // draw month headers
+					'</div><table class="ui-datepicker-calendar"><thead>' +
+					'<tr>';
 				for (var dow = 0; dow < 7; dow++) { // days of the week
 					var day = (dow + firstDay) % 7;
 					var dayStatus = (status.indexOf('DD') > -1 ? status.replace(/DD/, dayNames[day]) :
 						status.replace(/D/, dayNamesShort[day]));
-					html += '<td' + ((dow + firstDay + 6) % 7 >= 5 ? ' class="ui-datepicker-week-end-cell"' : '') + '>' +
+					html += '<th' + ((dow + firstDay + 6) % 7 >= 5 ? ' class="ui-datepicker-week-end"' : '') + '>' +
 						(!changeFirstDay ? '<span' :
 						'<a onclick="jQuery.datepicker._changeFirstDay(\'#' + inst.id + '\', ' + day + ');"') +
-						this._addStatus(showStatus, inst.id, dayStatus, initStatus) + ' title="' + dayNames[day] + '">' +
-						dayNamesMin[day] + (changeFirstDay ? '</a>' : '</span>') + '</td>';
+						' title="' + dayNames[day] + '">' +
+						dayNamesMin[day] + (changeFirstDay ? '</a>' : '</span>') + '</th>';
 				}
 				html += '</tr></thead><tbody>';
 				var daysInMonth = this._getDaysInMonth(drawYear, drawMonth);
@@ -1476,43 +1458,34 @@ $.extend(Datepicker.prototype, {
 				var numRows = (isMultiMonth ? 6 : Math.ceil((leadDays + daysInMonth) / 7)); // calculate the number of rows to generate
 				var printDate = this._daylightSavingAdjust(new Date(drawYear, drawMonth, 1 - leadDays));
 				for (var dRow = 0; dRow < numRows; dRow++) { // create date picker rows
-					html += '<tr class="ui-datepicker-days-row">' +
-						(showWeeks ? '<td class="ui-datepicker-week-col"' +
-						this._addStatus(showStatus, inst.id, weekStatus, initStatus) + '>' +
-						calculateWeek(printDate) + '</td>' : '');
+					html += '<tr>';
 					for (var dow = 0; dow < 7; dow++) { // create date picker days
 						var daySettings = (beforeShowDay ?
 							beforeShowDay.apply((inst.input ? inst.input[0] : null), [printDate]) : [true, '']);
 						var otherMonth = (printDate.getMonth() != drawMonth);
 						var unselectable = otherMonth || !daySettings[0] ||
 							(minDate && printDate < minDate) || (maxDate && printDate > maxDate);
-						html += '<td class="ui-datepicker-days-cell' +
-							((dow + firstDay + 6) % 7 >= 5 ? ' ui-datepicker-week-end-cell' : '') + // highlight weekends
+						html += '<td class="' +
+							((dow + firstDay + 6) % 7 >= 5 ? ' ui-datepicker-week-end' : '') + // highlight weekends
 							(otherMonth ? ' ui-datepicker-other-month' : '') + // highlight days from other months
 							((printDate.getTime() == selectedDate.getTime() && drawMonth == inst.selectedMonth && inst._keyEvent) || // user pressed key
 							(defaultDate.getTime() == printDate.getTime() && defaultDate.getTime() == selectedDate.getTime()) ?
 							// or defaultDate is current printedDate and defaultDate is selectedDate
-							' ' + $.datepicker._dayOverClass : '') + // highlight selected day
+							' ' + this._dayOverClass : '') + // highlight selected day
 							(unselectable ? ' ' + this._unselectableClass : '') +  // highlight unselectable days
 							(otherMonth && !showOtherMonths ? '' : ' ' + daySettings[1] + // highlight custom dates
 							(printDate.getTime() >= currentDate.getTime() && printDate.getTime() <= endDate.getTime() ? // in current range
 							' ' + this._currentClass : '') + // highlight selected day
 							(printDate.getTime() == today.getTime() ? ' ui-datepicker-today' : '')) + '"' + // highlight today (if different)
 							((!otherMonth || showOtherMonths) && daySettings[2] ? ' title="' + daySettings[2] + '"' : '') + // cell title
-							(unselectable ? (highlightWeek ? ' onmouseover="jQuery(this).parent().addClass(\'' + this._weekOverClass + '\');"' + // highlight selection week
-							' onmouseout="jQuery(this).parent().removeClass(\'' + this._weekOverClass + '\');"' : '') : // unhighlight selection week
-							' onmouseover="jQuery(this).addClass(\'' + this._dayOverClass + '\')' + // highlight selection
-							(highlightWeek ? '.parent().addClass(\'' + this._weekOverClass + '\')' : '') + ';' + // highlight selection week
-							(!showStatus || (otherMonth && !showOtherMonths) ? '' : 'jQuery(\'#ui-datepicker-status-' +
-							inst.id + '\').html(\'' + (dateStatus.apply((inst.input ? inst.input[0] : null),
-							[printDate, inst]) || initStatus) +'\');') + '"' +
-							' onmouseout="jQuery(this).removeClass(\'' + this._dayOverClass + '\')' + // unhighlight selection
-							(highlightWeek ? '.parent().removeClass(\'' + this._weekOverClass + '\')' : '') + ';' + // unhighlight selection week
-							(!showStatus || (otherMonth && !showOtherMonths) ? '' : 'jQuery(\'#ui-datepicker-status-' +
-							inst.id + '\').html(\'' + initStatus + '\');') + '" onclick="jQuery.datepicker._selectDay(\'#' +
+							(unselectable ? '' : ' onclick="jQuery.datepicker._selectDay(\'#' +
 							inst.id + '\',' + drawMonth + ',' + drawYear + ', this);"') + '>' + // actions
 							(otherMonth ? (showOtherMonths ? printDate.getDate() : '&#xa0;') : // display for other months
-							(unselectable ? printDate.getDate() : '<a>' + printDate.getDate() + '</a>')) + '</td>'; // display for this month
+							(unselectable ? printDate.getDate() : '<a class="ui-state-default' + 
+							(printDate.getTime() == today.getTime() ? ' ui-state-highlight' : '') + 
+							(printDate.getTime() >= currentDate.getTime() && printDate.getTime() <= endDate.getTime() ? // in current range
+							' ' + this._currentClass : '') + // highlight selected day							
+							'" href="#">' + printDate.getDate() + '</a>')) + '</td>'; // display for this month
 						printDate.setDate(printDate.getDate() + 1);
 						printDate = this._daylightSavingAdjust(printDate);
 					}
@@ -1523,12 +1496,10 @@ $.extend(Datepicker.prototype, {
 					drawMonth = 0;
 					drawYear++;
 				}
-				html += '</tbody></table></div>';
+				html += '</tbody></table>' + (isMultiMonth ? '</div>' : '');
 			}
-		html += (showStatus ? '<div style="clear: both;"></div><div id="ui-datepicker-status-' + inst.id +
-			'" class="ui-datepicker-status">' + initStatus + '</div>' : '') +
-			(!closeAtTop && !inst.inline ? controls : '') +
-			'<div style="clear: both;"></div>' +
+		}
+		html += (!inst.inline ? buttonPanel : '') +
 			($.browser.msie && parseInt($.browser.version,10) < 7 && !inst.inline ?
 			'<iframe src="javascript:false;" class="ui-datepicker-cover"></iframe>' : '');
 		inst._keyEvent = false;
@@ -1537,23 +1508,23 @@ $.extend(Datepicker.prototype, {
 
 	/* Generate the month and year header. */
 	_generateMonthYearHeader: function(inst, drawMonth, drawYear, minDate, maxDate,
-			selectedDate, secondary, showStatus, initStatus, monthNames) {
+			selectedDate, secondary, initStatus, monthNames) {
 		minDate = (inst.rangeStart && minDate && selectedDate < minDate ? selectedDate : minDate);
 		var changeMonth = this._get(inst, 'changeMonth');
 		var changeYear = this._get(inst, 'changeYear');
 		var showMonthAfterYear = this._get(inst, 'showMonthAfterYear');
-		var html = '<div class="ui-datepicker-header">';
+		var html = '<div class="ui-datepicker-title">';
 		var monthHtml = '';
 		// month selection
 		if (secondary || !changeMonth)
-			monthHtml += monthNames[drawMonth];
+			monthHtml += '<span class="ui-datepicker-month">' + monthNames[drawMonth] + '</span> ';
 		else {
 			var inMinYear = (minDate && minDate.getFullYear() == drawYear);
 			var inMaxYear = (maxDate && maxDate.getFullYear() == drawYear);
-			monthHtml += '<select class="ui-datepicker-new-month" ' +
+			monthHtml += '<select class="ui-datepicker-month" ' +
 				'onchange="jQuery.datepicker._selectMonthYear(\'#' + inst.id + '\', this, \'M\');" ' +
 				'onclick="jQuery.datepicker._clickMonthYear(\'#' + inst.id + '\');"' +
-				this._addStatus(showStatus, inst.id, this._get(inst, 'monthStatus'), initStatus) + '>';
+			 	'>';
 			for (var month = 0; month < 12; month++) {
 				if ((!inMinYear || month >= minDate.getMonth()) &&
 						(!inMaxYear || month <= maxDate.getMonth()))
@@ -1567,7 +1538,7 @@ $.extend(Datepicker.prototype, {
 			html += monthHtml + (secondary || changeMonth || changeYear ? '&#xa0;' : '');
 		// year selection
 		if (secondary || !changeYear)
-			html += drawYear;
+			html += '<span class="ui-datepicker-year">' + drawYear + '</span>';
 		else {
 			// determine range of years to display
 			var years = this._get(inst, 'yearRange').split(':');
@@ -1586,10 +1557,10 @@ $.extend(Datepicker.prototype, {
 			}
 			year = (minDate ? Math.max(year, minDate.getFullYear()) : year);
 			endYear = (maxDate ? Math.min(endYear, maxDate.getFullYear()) : endYear);
-			html += '<select class="ui-datepicker-new-year" ' +
+			html += '<select class="ui-datepicker-year" ' +
 				'onchange="jQuery.datepicker._selectMonthYear(\'#' + inst.id + '\', this, \'Y\');" ' +
 				'onclick="jQuery.datepicker._clickMonthYear(\'#' + inst.id + '\');"' +
-				this._addStatus(showStatus, inst.id, this._get(inst, 'yearStatus'), initStatus) + '>';
+				'>';
 			for (; year <= endYear; year++) {
 				html += '<option value="' + year + '"' +
 					(year == drawYear ? ' selected="selected"' : '') +
@@ -1605,10 +1576,7 @@ $.extend(Datepicker.prototype, {
 
 	/* Provide code to set and clear the status panel. */
 	_addStatus: function(showStatus, id, text, initStatus) {
-		return (showStatus ? ' onmouseover="jQuery(\'#ui-datepicker-status-' + id +
-			'\').html(\'' + (text || initStatus) + '\');" ' +
-			'onmouseout="jQuery(\'#ui-datepicker-status-' + id +
-			'\').html(\'' + initStatus + '\');"' : '');
+		return '';
 	},
 
 	/* Adjust one of the date sub-fields. */
