@@ -335,11 +335,11 @@ $.widget("ui.dialog", {
 					pLeft += 0;
 					break;
 				case 'right':
-					pLeft += wnd.width() - this.uiDialog.width();
+					pLeft += wnd.width() - this.uiDialog.outerWidth();
 					break;
 				default:
 				case 'center':
-					pLeft += (wnd.width() - this.uiDialog.width()) / 2;
+					pLeft += (wnd.width() - this.uiDialog.outerWidth()) / 2;
 			}
 		}
 		if (pos[1].constructor == Number) {
@@ -351,12 +351,12 @@ $.widget("ui.dialog", {
 					break;
 				case 'bottom':
 					// Opera check fixes #3564, can go away with jQuery 1.3
-					pTop += ($.browser.opera ? window.innerHeight : wnd.height()) - this.uiDialog.height();
+					pTop += ($.browser.opera ? window.innerHeight : wnd.height()) - this.uiDialog.outerHeight();
 					break;
 				default:
 				case 'middle':
 					// Opera check fixes #3564, can go away with jQuery 1.3
-					pTop += (($.browser.opera ? window.innerHeight : wnd.height()) - this.uiDialog.height()) / 2;
+					pTop += (($.browser.opera ? window.innerHeight : wnd.height()) - this.uiDialog.outerHeight()) / 2;
 			}
 		}
 
