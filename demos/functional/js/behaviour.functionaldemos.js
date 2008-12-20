@@ -4,6 +4,9 @@ $(document).ready(function() {
 		loadDemo( $(this).attr('href').replace(/^#/, "") );
 	});
 
-	$.ajaxHistory.initialize();
+	var instructions = $("#containerDemo").html();
+	$.ajaxHistory.initialize(function() {
+		$("#containerDemo").html(instructions);
+	});
 
 });
