@@ -77,7 +77,6 @@ function Datepicker() {
 		showMonthAfterYear: false, // True if the year select precedes month, false for month then year
 		yearRange: '-10:+10', // Range of years to display in drop-down,
 			// either relative to current year (-nn:+nn) or absolute (nnnn:nnnn)
-		changeFirstDay: false, // True to click on day name to change, false to remain as set
 		showOtherMonths: false, // True to show dates in other months, false to leave blank
 		calculateWeek: this.iso8601Week, // How to calculate the week of the year,
 			// takes a Date and returns the number of the week for it
@@ -752,14 +751,6 @@ $.extend(Datepicker.prototype, {
 		inst._selectingMonthYear = !inst._selectingMonthYear;
 	},
 
-	/* Action for changing the first week day. */
-	_changeFirstDay: function(id, day) {
-		var target = $(id);
-		var inst = this._getInst(target[0]);
-		inst.settings.firstDay = day;
-		this._updateDatepicker(inst);
-	},
-
 	/* Action for selecting a day. */
 	_selectDay: function(id, month, year, td) {
 		if ($(td).hasClass(this._unselectableClass))
@@ -1372,7 +1363,6 @@ $.extend(Datepicker.prototype, {
 			'>' + currentText + '</button>' : '') + (isRTL ? '' : controls) + '</div>' : '';
 		var firstDay = parseInt(this._get(inst, 'firstDay'));
 		firstDay = (isNaN(firstDay) ? 0 : firstDay);
-		var changeFirstDay = this._get(inst, 'changeFirstDay');
 		var dayNames = this._get(inst, 'dayNames');
 		var dayNamesShort = this._get(inst, 'dayNamesShort');
 		var dayNamesMin = this._get(inst, 'dayNamesMin');
@@ -1407,10 +1397,7 @@ $.extend(Datepicker.prototype, {
 				for (var dow = 0; dow < 7; dow++) { // days of the week
 					var day = (dow + firstDay) % 7;
 					html += '<th' + ((dow + firstDay + 6) % 7 >= 5 ? ' class="ui-datepicker-week-end"' : '') + '>' +
-						(!changeFirstDay ? '<span' :
-						'<a onclick="jQuery.datepicker._changeFirstDay(\'#' + inst.id + '\', ' + day + ');"') +
-						' title="' + dayNames[day] + '">' +
-						dayNamesMin[day] + (changeFirstDay ? '</a>' : '</span>') + '</th>';
+						'<span title="' + dayNames[day] + '">' + dayNamesMin[day] + '</span></th>';
 				}
 				html += '</tr></thead><tbody>';
 				var daysInMonth = this._getDaysInMonth(drawYear, drawMonth);

@@ -627,13 +627,6 @@ test('mouse', function() {
 	$('.ui-datepicker-calendar tbody a:contains(18)', dp).simulate('click');
 	equalsDate(inp.datepicker('getDate'), new Date(2008, 2 - 1, 18),
 		'Mouse click - next + min/max');
-	// Change day of week
-	inp.val('02/04/2008').datepicker('option', {changeFirstDay: true}).datepicker('show');
-	equals($('.ui-datepicker-calendar th:first a', dp).text(), 'Su',
-		'Mouse click - initial day of week');
-	$('.ui-datepicker-calendar th:last a', dp).simulate('click');
-	equals($('.ui-datepicker-calendar th:first a', dp).text(), 'Sa',
-		'Mouse click - day of week');
 	// Inline
 	var inl = init('#inl');
 	var dp = $('.ui-datepicker-inline', inl);
