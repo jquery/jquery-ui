@@ -34,43 +34,27 @@ function Datepicker() {
 	this._appendClass = 'ui-datepicker-append'; // The name of the append marker class
 	this._triggerClass = 'ui-datepicker-trigger'; // The name of the trigger marker class
 	this._dialogClass = 'ui-datepicker-dialog'; // The name of the dialog marker class
-	this._promptClass = 'ui-datepicker-prompt'; // The name of the dialog prompt marker class
 	this._disableClass = 'ui-datepicker-disabled'; // The name of the disabled covering marker class
 	this._unselectableClass = 'ui-datepicker-unselectable'; // The name of the unselectable cell marker class
 	this._currentClass = 'ui-datepicker-current-day'; // The name of the current day marker class
 	this._dayOverClass = 'ui-datepicker-days-cell-over'; // The name of the day hover marker class
-	this._weekOverClass = 'ui-datepicker-week-over'; // The name of the week hover marker class
 	this.regional = []; // Available regional settings, indexed by language code
 	this.regional[''] = { // Default regional settings
 		clearText: 'Clear', // Display text for clear link
-		clearStatus: 'Erase the current date', // Status text for clear link
 		closeText: 'Done', // Display text for close link
-		closeStatus: 'Close without change', // Status text for close link
 		prevText: 'Prev', // Display text for previous month link
-		prevStatus: 'Show the previous month', // Status text for previous month link
 		prevBigText: '&#x3c;&#x3c;', // Display text for previous year link
-		prevBigStatus: 'Show the previous year', // Status text for previous year link
 		nextText: 'Next', // Display text for next month link
-		nextStatus: 'Show the next month', // Status text for next month link
 		nextBigText: '&#x3e;&#x3e;', // Display text for next year link
-		nextBigStatus: 'Show the next year', // Status text for next year link
 		currentText: 'Today', // Display text for current month link
-		currentStatus: 'Show the current month', // Status text for current month link
 		monthNames: ['January','February','March','April','May','June',
 			'July','August','September','October','November','December'], // Names of months for drop-down and formatting
 		monthNamesShort: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'], // For formatting
-		monthStatus: 'Show a different month', // Status text for selecting a month
-		yearStatus: 'Show a different year', // Status text for selecting a year
-		weekHeader: 'Wk', // Header for the week of the year column
-		weekStatus: 'Week of the year', // Status text for the week of the year column
 		dayNames: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'], // For formatting
 		dayNamesShort: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'], // For formatting
 		dayNamesMin: ['Su','Mo','Tu','We','Th','Fr','Sa'], // Column headings for days starting at Sunday
-		dayStatus: 'Set DD as first week day', // Status text for the day of the week selection
-		dateStatus: 'Select DD, M d', // Status text for the date selection
 		dateFormat: 'mm/dd/yy', // See format options on parseDate
 		firstDay: 0, // The first day of the week, Sun = 0, Mon = 1, ...
-		initStatus: 'Select a date', // Initial Status text on opening
 		isRTL: false // True if right-to-left language, false if left-to-right
 	};
 	this._defaults = { // Global defaults for all the date picker instances
@@ -94,15 +78,12 @@ function Datepicker() {
 		yearRange: '-10:+10', // Range of years to display in drop-down,
 			// either relative to current year (-nn:+nn) or absolute (nnnn:nnnn)
 		changeFirstDay: false, // True to click on day name to change, false to remain as set
-		highlightWeek: false, // True to highlight the selected week
 		showOtherMonths: false, // True to show dates in other months, false to leave blank
 		calculateWeek: this.iso8601Week, // How to calculate the week of the year,
 			// takes a Date and returns the number of the week for it
 		shortYearCutoff: '+10', // Short year values < this are in the current century,
 			// > this are in the previous century,
 			// string value starting with '+' for current year + value
-		statusForDate: this.dateStatus, // Function to provide status text for a date -
-			// takes date and instance as parameters, returns display text
 		minDate: null, // The earliest selectable date, or null for no limit
 		maxDate: null, // The latest selectable date, or null for no limit
 		duration: 'normal', // Duration of display/closure
@@ -694,7 +675,6 @@ $.extend(Datepicker.prototype, {
 					[(inst.input ? inst.input.val() : ''), inst]);  // trigger custom callback
 			this._datepickerShowing = false;
 			this._lastInput = null;
-			inst.settings.prompt = null;
 			if (this._inDialog) {
 				this._dialogInput.css({ position: 'absolute', left: '0', top: '-100px' });
 				if ($.blockUI) {
@@ -710,7 +690,6 @@ $.extend(Datepicker.prototype, {
 	/* Tidy up after a dialog display. */
 	_tidyDialog: function(inst) {
 		inst.dpDiv.removeClass(this._dialogClass).unbind('.ui-datepicker-calendar');
-		$('.' + this._promptClass, inst.dpDiv).remove();
 	},
 
 	/* Close date picker if clicked elsewhere. */
@@ -900,15 +879,6 @@ $.extend(Datepicker.prototype, {
 			}
 		}
 		return Math.floor(((checkDate - firstMon) / 86400000) / 7) + 1; // Weeks to given date
-	},
-
-	/* Provide status text for a particular date.
-	   @param  date  the date to get the status for
-	   @param  inst  the current datepicker instance
-	   @return  the status display text for this date */
-	dateStatus: function(date, inst) {
-		return $.datepicker.formatDate($.datepicker._get(inst, 'dateStatus'),
-			date, $.datepicker._getFormatConfig(inst));
 	},
 
 	/* Parse a string value into a date object.
@@ -1344,10 +1314,8 @@ $.extend(Datepicker.prototype, {
 		var today = new Date();
 		today = this._daylightSavingAdjust(
 			new Date(today.getFullYear(), today.getMonth(), today.getDate())); // clear time
-		var initStatus = this._get(inst, 'initStatus') || '&#xa0;';
 		var isRTL = this._get(inst, 'isRTL');
 		var showButtonPanel = this._get(inst, 'showButtonPanel');			
-		var prompt = this._get(inst, 'prompt');
 		var hideIfNoPrevNext = this._get(inst, 'hideIfNoPrevNext');
 		var navigationAsDateFormat = this._get(inst, 'navigationAsDateFormat');
 		var numMonths = this._getNumberOfMonths(inst);
@@ -1410,11 +1378,8 @@ $.extend(Datepicker.prototype, {
 		var dayNamesMin = this._get(inst, 'dayNamesMin');
 		var monthNames = this._get(inst, 'monthNames');
 		var beforeShowDay = this._get(inst, 'beforeShowDay');
-		var highlightWeek = this._get(inst, 'highlightWeek');
 		var showOtherMonths = this._get(inst, 'showOtherMonths');
 		var calculateWeek = this._get(inst, 'calculateWeek') || this.iso8601Week;
-		var weekStatus = this._get(inst, 'weekStatus');
-		var dateStatus = this._get(inst, 'statusForDate') || this.dateStatus;
 		var endDate = inst.endDay ? this._daylightSavingAdjust(
 			new Date(inst.endYear, inst.endMonth, inst.endDay)) : currentDate;
 		var defaultDate = this._getDefaultDate(inst);
@@ -1435,15 +1400,12 @@ $.extend(Datepicker.prototype, {
 				html += '<div class="ui-datepicker-header ui-widget-header ui-helper-clearfix' + cornerClass + '">' + 
 					(/all|left/.test(cornerClass) ? (isRTL ? next : prev) : '') + 
 					(/all|right/.test(cornerClass) ? (isRTL ? prev : next) : '') +
-					(prompt ? '<div class="' + this._promptClass + '"><span>' + prompt + '</span></div>' : '') + 
 					this._generateMonthYearHeader(inst, drawMonth, drawYear, minDate, maxDate,
-					selectedDate, row > 0 || col > 0, initStatus, monthNames) + // draw month headers
+					selectedDate, row > 0 || col > 0, monthNames) + // draw month headers
 					'</div><table class="ui-datepicker-calendar"><thead>' +
 					'<tr>';
 				for (var dow = 0; dow < 7; dow++) { // days of the week
 					var day = (dow + firstDay) % 7;
-					var dayStatus = (status.indexOf('DD') > -1 ? status.replace(/DD/, dayNames[day]) :
-						status.replace(/D/, dayNamesShort[day]));
 					html += '<th' + ((dow + firstDay + 6) % 7 >= 5 ? ' class="ui-datepicker-week-end"' : '') + '>' +
 						(!changeFirstDay ? '<span' :
 						'<a onclick="jQuery.datepicker._changeFirstDay(\'#' + inst.id + '\', ' + day + ');"') +
@@ -1508,7 +1470,7 @@ $.extend(Datepicker.prototype, {
 
 	/* Generate the month and year header. */
 	_generateMonthYearHeader: function(inst, drawMonth, drawYear, minDate, maxDate,
-			selectedDate, secondary, initStatus, monthNames) {
+			selectedDate, secondary, monthNames) {
 		minDate = (inst.rangeStart && minDate && selectedDate < minDate ? selectedDate : minDate);
 		var changeMonth = this._get(inst, 'changeMonth');
 		var changeYear = this._get(inst, 'changeYear');
@@ -1572,11 +1534,6 @@ $.extend(Datepicker.prototype, {
 			html += (secondary || changeMonth || changeYear ? '&#xa0;' : '') + monthHtml;
 		html += '</div>'; // Close datepicker_header
 		return html;
-	},
-
-	/* Provide code to set and clear the status panel. */
-	_addStatus: function(showStatus, id, text, initStatus) {
-		return '';
 	},
 
 	/* Adjust one of the date sub-fields. */
