@@ -1484,7 +1484,7 @@ $.extend(Datepicker.prototype, {
 							(unselectable ? printDate.getDate() : '<a class="ui-state-default' + 
 							(printDate.getTime() == today.getTime() ? ' ui-state-highlight' : '') + 
 							(printDate.getTime() >= currentDate.getTime() && printDate.getTime() <= endDate.getTime() ? // in current range
-							' ' + this._currentClass : '') + // highlight selected day							
+							' ui-state-active' : '') + // highlight selected day							
 							'" href="#">' + printDate.getDate() + '</a>')) + '</td>'; // display for this month
 						printDate.setDate(printDate.getDate() + 1);
 						printDate = this._daylightSavingAdjust(printDate);
