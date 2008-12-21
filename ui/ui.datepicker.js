@@ -98,8 +98,6 @@ function Datepicker() {
 		showCurrentAtPos: 0, // The position in multipe months at which to show the current month (starting at 0)
 		stepMonths: 1, // Number of months to step back/forward
 		stepBigMonths: 12, // Number of months to step back/forward for the big links
-		rangeSelect: false, // Allows for selecting a date range on one date picker
-		rangeSeparator: ' - ', // Text between two dates in a range
 		altField: '', // Selector for an alternate field to store selected dates into
 		altFormat: '', // The date format to use for the alternate field
 		constrainInput: true, // The input is constrained by the current date format
@@ -586,8 +584,8 @@ $.extend(Datepicker.prototype, {
 	_updateDatepicker: function(inst) {
 		var dims = {width: inst.dpDiv.width() + 4,
 			height: inst.dpDiv.height() + 4};
-		inst.dpDiv.empty().append(this._generateHTML(inst)).
-			find('iframe.ui-datepicker-cover').
+		inst.dpDiv.empty().append(this._generateHTML(inst))
+			.find('iframe.ui-datepicker-cover').
 				css({width: dims.width, height: dims.height})
 			.end()
 			.find('button, .ui-datepicker-prev, .ui-datepicker-next, .ui-datepicker-calendar td a')
@@ -649,8 +647,7 @@ $.extend(Datepicker.prototype, {
 		var inst = this._curInst;
 		if (!inst || (input && inst != $.data(input, PROP_NAME)))
 			return;
-		var rangeSelect = this._get(inst, 'rangeSelect');
-		if (rangeSelect && inst.stayOpen)
+		if (inst.stayOpen)
 			this._selectDate('#' + inst.id, this._formatDate(inst,
 				inst.currentDay, inst.currentMonth, inst.currentYear));
 		inst.stayOpen = false;
@@ -757,24 +754,11 @@ $.extend(Datepicker.prototype, {
 			return;
 		var target = $(id);
 		var inst = this._getInst(target[0]);
-		var rangeSelect = this._get(inst, 'rangeSelect');
-		if (rangeSelect) {
-			inst.stayOpen = !inst.stayOpen;
-			if (inst.stayOpen) {
-				$('.ui-datepicker td', inst.dpDiv).removeClass(this._currentClass);
-				$(td).addClass(this._currentClass);
-			}
-		}
 		inst.selectedDay = inst.currentDay = $('a', td).html();
 		inst.selectedMonth = inst.currentMonth = month;
 		inst.selectedYear = inst.currentYear = year;
 		if (inst.stayOpen) {
 			inst.endDay = inst.endMonth = inst.endYear = null;
-		}
-		else if (rangeSelect) {
-			inst.endDay = inst.currentDay;
-			inst.endMonth = inst.currentMonth;
-			inst.endYear = inst.currentYear;
 		}
 		this._selectDate(id, this._formatDate(inst,
 			inst.currentDay, inst.currentMonth, inst.currentYear));
@@ -782,14 +766,6 @@ $.extend(Datepicker.prototype, {
 			inst.rangeStart = this._daylightSavingAdjust(
 				new Date(inst.currentYear, inst.currentMonth, inst.currentDay));
 			this._updateDatepicker(inst);
-		}
-		else if (rangeSelect) {
-			inst.selectedDay = inst.currentDay = inst.rangeStart.getDate();
-			inst.selectedMonth = inst.currentMonth = inst.rangeStart.getMonth();
-			inst.selectedYear = inst.currentYear = inst.rangeStart.getFullYear();
-			inst.rangeStart = null;
-			if (inst.inline)
-				this._updateDatepicker(inst);
 		}
 	},
 
@@ -807,9 +783,6 @@ $.extend(Datepicker.prototype, {
 		var target = $(id);
 		var inst = this._getInst(target[0]);
 		dateStr = (dateStr != null ? dateStr : this._formatDate(inst));
-		if (this._get(inst, 'rangeSelect') && dateStr)
-			dateStr = (inst.rangeStart ? this._formatDate(inst, inst.rangeStart) :
-				dateStr) + this._get(inst, 'rangeSeparator') + dateStr;
 		if (inst.input)
 			inst.input.val(dateStr);
 		this._updateAlternate(inst);
@@ -835,11 +808,7 @@ $.extend(Datepicker.prototype, {
 		if (altField) { // update alternate field too
 			var altFormat = this._get(inst, 'altFormat') || this._get(inst, 'dateFormat');
 			var date = this._getDate(inst);
-			dateStr = (isArray(date) ? (!date[0] && !date[1] ? '' :
-				this.formatDate(altFormat, date[0], this._getFormatConfig(inst)) +
-				this._get(inst, 'rangeSeparator') + this.formatDate(
-				altFormat, date[1] || date[0], this._getFormatConfig(inst))) :
-				this.formatDate(altFormat, date, this._getFormatConfig(inst)));
+			dateStr = this.formatDate(altFormat, date, this._getFormatConfig(inst));
 			$(altField).each(function() { $(this).val(dateStr); });
 		}
 	},
@@ -1162,30 +1131,22 @@ $.extend(Datepicker.prototype, {
 	/* Parse existing date and initialise date picker. */
 	_setDateFromField: function(inst) {
 		var dateFormat = this._get(inst, 'dateFormat');
-		var dates = inst.input ? inst.input.val().split(this._get(inst, 'rangeSeparator')) : null;
+		var dates = inst.input ? inst.input.val() : null;
 		inst.endDay = inst.endMonth = inst.endYear = null;
 		var date = defaultDate = this._getDefaultDate(inst);
-		if (dates.length > 0) {
-			var settings = this._getFormatConfig(inst);
-			if (dates.length > 1) {
-				date = this.parseDate(dateFormat, dates[1], settings) || defaultDate;
-				inst.endDay = date.getDate();
-				inst.endMonth = date.getMonth();
-				inst.endYear = date.getFullYear();
-			}
-			try {
-				date = this.parseDate(dateFormat, dates[0], settings) || defaultDate;
-			} catch (event) {
-				this.log(event);
-				date = defaultDate;
-			}
-		}
+		var settings = this._getFormatConfig(inst);
+		try {
+			date = this.parseDate(dateFormat, dates, settings) || defaultDate;
+		} catch (event) {
+			this.log(event);
+			date = defaultDate;
+		}		
 		inst.selectedDay = date.getDate();
 		inst.drawMonth = inst.selectedMonth = date.getMonth();
 		inst.drawYear = inst.selectedYear = date.getFullYear();
-		inst.currentDay = (dates[0] ? date.getDate() : 0);
-		inst.currentMonth = (dates[0] ? date.getMonth() : 0);
-		inst.currentYear = (dates[0] ? date.getFullYear() : 0);
+		inst.currentDay = (dates ? date.getDate() : 0);
+		inst.currentMonth = (dates ? date.getMonth() : 0);
+		inst.currentYear = (dates ? date.getFullYear() : 0);
 		this._adjustInstDate(inst);
 	},
 
@@ -1266,25 +1227,12 @@ $.extend(Datepicker.prototype, {
 		inst.selectedDay = inst.currentDay = date.getDate();
 		inst.drawMonth = inst.selectedMonth = inst.currentMonth = date.getMonth();
 		inst.drawYear = inst.selectedYear = inst.currentYear = date.getFullYear();
-		if (this._get(inst, 'rangeSelect')) {
-			if (endDate) {
-				endDate = this._determineDate(endDate, null);
-				inst.endDay = endDate.getDate();
-				inst.endMonth = endDate.getMonth();
-				inst.endYear = endDate.getFullYear();
-			} else {
-				inst.endDay = inst.currentDay;
-				inst.endMonth = inst.currentMonth;
-				inst.endYear = inst.currentYear;
-			}
-		}
 		if (origMonth != inst.selectedMonth || origYear != inst.selectedYear)
 			this._notifyChange(inst);
 		this._adjustInstDate(inst);
-		if (inst.input)
-			inst.input.val(clear ? '' : this._formatDate(inst) +
-				(!this._get(inst, 'rangeSelect') ? '' : this._get(inst, 'rangeSeparator') +
-				this._formatDate(inst, inst.endDay, inst.endMonth, inst.endYear)));
+		if (inst.input) {
+			inst.input.val(clear ? '' : this._formatDate(inst));			
+		}
 	},
 
 	/* Retrieve the date(s) directly. */
@@ -1292,11 +1240,6 @@ $.extend(Datepicker.prototype, {
 		var startDate = (!inst.currentYear || (inst.input && inst.input.val() == '') ? null :
 			this._daylightSavingAdjust(new Date(
 			inst.currentYear, inst.currentMonth, inst.currentDay)));
-		if (this._get(inst, 'rangeSelect')) {
-			return [inst.rangeStart || startDate,
-				(!inst.endYear ? inst.rangeStart || startDate :
-				this._daylightSavingAdjust(new Date(inst.endYear, inst.endMonth, inst.endDay)))];
-		} else
 			return startDate;
 	},
 
@@ -1341,10 +1284,10 @@ $.extend(Datepicker.prototype, {
 		prevText = (!navigationAsDateFormat ? prevText : this.formatDate(prevText,
 			this._daylightSavingAdjust(new Date(drawYear, drawMonth - stepMonths, 1)),
 			this._getFormatConfig(inst)));
-		var prev = (this._canAdjustMonth(inst, -1, drawYear, drawMonth) ?
+		var prev = (this._canAdjustMonth(inst, -1, drawYear, drawMonth) ?	
 			'<a class="ui-datepicker-prev ui-corner-all" onclick="jQuery.datepicker._adjustDate(\'#' + inst.id + '\', -' + stepMonths + ', \'M\');"' +
 			' title="' + prevText + '"><span class="ui-icon ui-icon-circle-triangle-' + ( isRTL ? 'e' : 'w') + '">' + prevText + '</span></a>' :
-			(hideIfNoPrevNext ? '' : '<label>' + prevText + '</label>'));
+			(hideIfNoPrevNext ? '' : '<a class="ui-datepicker-prev ui-corner-all ui-state-disabled" title="'+ prevText +'"><span class="ui-icon ui-icon-circle-triangle-' + ( isRTL ? 'e' : 'w') + '">' + prevText + '</span></a>'));
 		var nextText = this._get(inst, 'nextText');
 		nextText = (!navigationAsDateFormat ? nextText : this.formatDate(nextText,
 			this._daylightSavingAdjust(new Date(drawYear, drawMonth + stepMonths, 1)),
@@ -1352,7 +1295,7 @@ $.extend(Datepicker.prototype, {
 		var next = (this._canAdjustMonth(inst, +1, drawYear, drawMonth) ?
 			'<a class="ui-datepicker-next ui-corner-all" onclick="jQuery.datepicker._adjustDate(\'#' + inst.id + '\', +' + stepMonths + ', \'M\');"' +
 			' title="' + nextText + '"><span class="ui-icon ui-icon-circle-triangle-' + ( isRTL ? 'w' : 'e') + '">' + nextText + '</span></a>' :
-			(hideIfNoPrevNext ? '' : '<label>' + nextText + '</label>'));
+			(hideIfNoPrevNext ? '' : '<a class="ui-datepicker-next ui-corner-all ui-state-disabled" title="'+ nextText + '"><span class="ui-icon ui-icon-circle-triangle-' + ( isRTL ? 'w' : 'e') + '">' + nextText + '</span></a>'));
 		var currentText = this._get(inst, 'currentText');
 		var gotoDate = (this._get(inst, 'gotoCurrent') && inst.currentDay ? currentDate : today);
 		currentText = (!navigationAsDateFormat ? currentText :
@@ -1425,7 +1368,7 @@ $.extend(Datepicker.prototype, {
 							(defaultDate.getTime() == printDate.getTime() && defaultDate.getTime() == selectedDate.getTime()) ?
 							// or defaultDate is current printedDate and defaultDate is selectedDate
 							' ' + this._dayOverClass : '') + // highlight selected day
-							(unselectable ? ' ' + this._unselectableClass : '') +  // highlight unselectable days
+							(unselectable ? ' ' + this._unselectableClass + ' ui-state-disabled': '') +  // highlight unselectable days
 							(otherMonth && !showOtherMonths ? '' : ' ' + daySettings[1] + // highlight custom dates
 							(printDate.getTime() >= currentDate.getTime() && printDate.getTime() <= endDate.getTime() ? // in current range
 							' ' + this._currentClass : '') + // highlight selected day

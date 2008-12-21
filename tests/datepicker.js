@@ -869,38 +869,6 @@ test('setDate', function() {
 	equalsDate(inp.datepicker('getDate'), date1, 'Set date - two dates');
 	inp.datepicker('setDate');
 	ok(inp.datepicker('getDate') == null, 'Set date - null');
-	// Ranges
-	date1 = new Date(2008, 6 - 1, 4);
-	date2 = new Date(2009, 7 - 1, 5);
-	inp.datepicker('option', {rangeSelect: true});
-	inp.datepicker('setDate', date1, date2);
-	equalsDateArray(inp.datepicker('getDate'), [date1, date2],
-		'Set date range - 2008-06-04 - 2009-07-05');
-	inp.datepicker('setDate', date1);
-	equalsDateArray(inp.datepicker('getDate'), [date1, date1],
-		'Set date range - 2008-06-04');
-	date1 = new Date();
-	date1.setDate(date1.getDate() - 10);
-	date2 = new Date();
-	date2.setDate(date2.getDate() + 10);
-	inp.datepicker('setDate', -10, +10);
-	equalsDateArray(inp.datepicker('getDate'), [date1, date2],
-		'Set date range - -10 - +10');
-	inp.datepicker('setDate', -10);
-	equalsDateArray(inp.datepicker('getDate'), [date1, date1],
-		'Set date range - -10');
-	date1 = new Date();
-	date1.setDate(date1.getDate() - 14);
-	date2 = new Date();
-	date2.setFullYear(date2.getFullYear() + 1);
-	inp.datepicker('setDate', '-2w', '+1Y');
-	equalsDateArray(inp.datepicker('getDate'), [date1, date2],
-		'Set date range - -2w - +1Y');
-	inp.datepicker('setDate', '-2w');
-	equalsDateArray(inp.datepicker('getDate'), [date1, date1],
-		'Set date range - -2w');
-	inp.datepicker('setDate');
-	isObj(inp.datepicker('getDate'), [null, null], 'Set date range - null');
 	// Inline
 	var inl = init('#inl');
 	date1 = new Date(2008, 6 - 1, 4);
@@ -923,127 +891,9 @@ test('setDate', function() {
 	var alt = $('#alt');
 	inp.datepicker('option', {altField: '#alt', altFormat: 'yy-mm-dd'});
 	date1 = new Date(2008, 6 - 1, 4);
-	date2 = new Date(2009, 7 - 1, 5);
-	inp.datepicker('setDate', date1, date2);
-	equals(inp.val(), '06/04/2008 - 07/05/2009',
-		'Set date alternate - 06/04/2008 - 07/05/2009');
-	equals(alt.val(), '2008-06-04 - 2009-07-05',
-		'Set date alternate - 2008-06-04 - 2009-07-05');
-	inp.datepicker('option', {rangeSelect: false}).datepicker('setDate', date1);
+	inp.datepicker('setDate', date1);
 	equals(inp.val(), '06/04/2008', 'Set date alternate - 06/04/2008');
 	equals(alt.val(), '2008-06-04', 'Set date alternate - 2008-06-04');
-});
-
-test('ranges', function() {
-	var inp = init('#inp', {rangeSelect: true});
-	var date1 = new Date();
-	var date2 = new Date();
-	// Select today - today
-	inp.val('').datepicker('show').
-		simulate('keydown', {keyCode: $.simulate.VK_ENTER}).
-		simulate('keydown', {keyCode: $.simulate.VK_ENTER});
-	equalsDateArray(inp.datepicker('getDate'), [date1, date1],
-		'Range - enter/enter');
-	// Can't select prior to start date
-	inp.val('').datepicker('show').
-		simulate('keydown', {keyCode: $.simulate.VK_ENTER}).
-		simulate('keydown', {ctrlKey: true, keyCode: $.simulate.VK_UP}).
-		simulate('keydown', {keyCode: $.simulate.VK_ENTER});
-	equalsDateArray(inp.datepicker('getDate'), [date1, date1],
-		'Range - enter/ctrl+up/enter');
-	// Can select after start date
-	inp.val('').datepicker('show').
-		simulate('keydown', {keyCode: $.simulate.VK_ENTER}).
-		simulate('keydown', {ctrlKey: true, keyCode: $.simulate.VK_DOWN}).
-		simulate('keydown', {keyCode: $.simulate.VK_ENTER});
-	date2.setDate(date2.getDate() + 7);
-	equalsDateArray(inp.datepicker('getDate'), [date1, date2],
-		'Range - enter/ctrl+down/enter');
-	equals(inp.val(), $.datepicker.formatDate('mm/dd/yy', date1) + ' - ' +
-		$.datepicker.formatDate('mm/dd/yy', date2), 'Range - value');
-	// Select then cancel defaults to first date
-	inp.val('').datepicker('show').
-		simulate('keydown', {keyCode: $.simulate.VK_ENTER}).
-		simulate('keydown', {ctrlKey: true, keyCode: $.simulate.VK_DOWN}).
-		simulate('keydown', {keyCode: $.simulate.VK_ESC});
-	equalsDateArray(inp.datepicker('getDate'), [date1, date1],
-		'Range - enter/ctrl+down/esc');
-	// Separator
-	inp.datepicker('option', {rangeSeparator: ' to '}).
-		datepicker('hide').val('06/04/2008').datepicker('show').
-		simulate('keydown', {keyCode: $.simulate.VK_ENTER}).
-		simulate('keydown', {ctrlKey: true, keyCode: $.simulate.VK_DOWN}).
-		simulate('keydown', {keyCode: $.simulate.VK_ENTER});
-	equalsDateArray(inp.datepicker('getDate'),
-		[new Date(2008, 6 - 1, 4), new Date(2008, 6 - 1, 11)],
-		'Range separator - enter/ctrl+down/enter');
-	equals(inp.val(), '06/04/2008 to 06/11/2008',
-		'Range separator - value');
-	// Callbacks
-	inp.datepicker('option', {onSelect: callback, rangeSeparator: ' - '}).
-		datepicker('hide').val('06/04/2008').datepicker('show').
-		simulate('keydown', {keyCode: $.simulate.VK_ENTER}).
-		simulate('keydown', {ctrlKey: true, keyCode: $.simulate.VK_DOWN}).
-		simulate('keydown', {keyCode: $.simulate.VK_ENTER});
-	equals(selectedDate, '06/04/2008 - 06/11/2008',
-		'Range onSelect - enter/ctrl+down/enter');
-	inp.datepicker('option', {onChangeMonthYear: callback2, onSelect: null}).
-		datepicker('hide').val('05/04/2008').datepicker('show').
-		simulate('keydown', {keyCode: $.simulate.VK_PGUP}).
-		simulate('keydown', {keyCode: $.simulate.VK_ENTER}).
-		simulate('keydown', {ctrlKey: true, keyCode: $.simulate.VK_DOWN}).
-		simulate('keydown', {keyCode: $.simulate.VK_ENTER});
-	equals(selectedDate, '2008/4',
-		'Range onChangeMonthYear - enter/ctrl+down/enter');
-	inp.datepicker('option', {onClose: callback, onChangeMonthYear: null}).
-		datepicker('hide').val('03/04/2008').datepicker('show').
-		simulate('keydown', {keyCode: $.simulate.VK_ENTER}).
-		simulate('keydown', {ctrlKey: true, keyCode: $.simulate.VK_DOWN}).
-		simulate('keydown', {keyCode: $.simulate.VK_ENTER});
-	equals(selectedDate, '03/04/2008 - 03/11/2008',
-		'Range onClose - enter/ctrl+down/enter');
-	// Minimum/maximum
-	date1 = new Date(2008, 5 - 1, 20);
-	date2 = new Date(2008, 7 - 1, 2);
-	inp.datepicker('option', {minDate: date1, maxDate: date2, onClose: null}).
-		datepicker('hide').val('06/04/2008').datepicker('show').
-		simulate('keydown', {keyCode: $.simulate.VK_PGUP}).
-		simulate('keydown', {keyCode: $.simulate.VK_ENTER}).
-		simulate('keydown', {keyCode: $.simulate.VK_PGDN}).
-		simulate('keydown', {keyCode: $.simulate.VK_PGDN}).
-		simulate('keydown', {keyCode: $.simulate.VK_ENTER});
-	equalsDateArray(inp.datepicker('getDate'), [date1, date2],
-		'Range min/max - pgup/enter/pgdn/pgdn/enter');
-	inp.val('06/04/2008').datepicker('show').
-		simulate('keydown', {ctrlKey: true, keyCode: $.simulate.VK_UP}).
-		simulate('keydown', {keyCode: $.simulate.VK_ENTER}).
-		simulate('keydown', {ctrlKey: true, keyCode: $.simulate.VK_DOWN}).
-		simulate('keydown', {ctrlKey: true, keyCode: $.simulate.VK_DOWN}).
-		simulate('keydown', {keyCode: $.simulate.VK_ENTER});
-	equalsDateArray(inp.datepicker('getDate'),
-		[new Date(2008, 5 - 1, 28), new Date(2008, 6 - 1, 11)],
-		'Range min/max - ctrl+up/enter/ctrl+down/ctrl+down/enter');
-	// Inline
-	var inl = init('#inl', {rangeSelect: true});
-	var dp = $('.ui-datepicker-inline', inl);
-	date1 = new Date();
-	date1.setDate(12);
-	date2 = new Date();
-	date2.setDate(19);
-	$('.ui-datepicker tbody a:contains(12)', dp).simulate('click', {});
-	$('.ui-datepicker tbody a:contains(12)', dp).simulate('click', {});
-	equalsDateArray(inl.datepicker('getDate'), [date1, date1],
-		'Range inline - same day');
-	$('.ui-datepicker tbody a:contains(12)', dp).simulate('click', {});
-	$('.ui-datepicker tbody a:contains(10)', dp).simulate('click', {}); // Doesn't select
-	equalsDateArray(inl.datepicker('getDate'), [date1, date1],
-		'Range inline - prev');
-	$('.ui-datepicker tbody a:contains(12)', dp).simulate('click', {}); // Selects
-	inl.datepicker('setDate', date1);
-	$('.ui-datepicker tbody a:contains(12)', dp).simulate('click', {});
-	$('.ui-datepicker tbody a:contains(19)', dp).simulate('click', {});
-	equalsDateArray(inl.datepicker('getDate'), [date1, date2],
-		'Range inline - next');
 });
 
 test('altField', function() {
@@ -1082,50 +932,6 @@ test('altField', function() {
 	inp.simulate('keydown', {ctrlKey: true, keyCode: $.simulate.VK_END});
 	equals(inp.val(), '', 'Alt field - dp - ctrl+end');
 	equals(alt.val(), '', 'Alt field - alt - ctrl+end');
-	// Range select no alternate field set
-	alt.val('');
-	inp.datepicker('option', {rangeSelect: true, altField: '', altFormat: ''}).
-		datepicker('hide').val('06/04/2008 - 07/14/2008').datepicker('show');
-	inp.simulate('keydown', {keyCode: $.simulate.VK_ENTER}).
-		simulate('keydown', {keyCode: $.simulate.VK_ENTER});
-	equals(inp.val(), '06/04/2008 - 06/04/2008', 'Alt field range - dp - enter');
-	equals(alt.val(), '', 'Alt field range - alt not set');
-	// Range select no movement
-	alt.val('');
-	inp.datepicker('option', {altField: '#alt', altFormat: 'yy-mm-dd'}).
-		datepicker('hide').val('06/04/2008 - 07/14/2008').datepicker('show');
-	inp.simulate('keydown', {keyCode: $.simulate.VK_ENTER}).
-		simulate('keydown', {keyCode: $.simulate.VK_ENTER});
-	equals(inp.val(), '06/04/2008 - 06/04/2008', 'Alt field range - dp - enter');
-	equals(alt.val(), '2008-06-04 - 2008-06-04', 'Alt field range - alt - enter');
-	// Range select next month
-	alt.val('');
-	inp.val('06/04/2008 - 07/14/2008').datepicker('show');
-	inp.simulate('keydown', {keyCode: $.simulate.VK_ENTER}).
-		simulate('keydown', {keyCode: $.simulate.VK_PGDN}).
-		simulate('keydown', {keyCode: $.simulate.VK_ENTER});
-	equals(inp.val(), '06/04/2008 - 07/04/2008',
-		'Alt field range - dp - enter/pgdn/enter');
-	equals(alt.val(), '2008-06-04 - 2008-07-04',
-		'Alt field range - alt - enter/pgdn/enter');
-	// Range select escape
-	alt.val('');
-	inp.val('06/04/2008 - 07/14/2008').datepicker('show');
-	inp.simulate('keydown', {keyCode: $.simulate.VK_ENTER}).
-		simulate('keydown', {keyCode: $.simulate.VK_PGDN}).
-		simulate('keydown', {keyCode: $.simulate.VK_ESC});
-	equals(inp.val(), '06/04/2008 - 06/04/2008',
-		'Alt field range - dp - enter/pgdn/esc');
-	equals(alt.val(), '2008-06-04 - 2008-06-04',
-		'Alt field range - alt - enter/pgdn/esc');
-	// Range select clear
-	alt.val('');
-	inp.val('06/04/2008 - 07/14/2008').datepicker('show');
-	inp.simulate('keydown', {keyCode: $.simulate.VK_ENTER}).
-		simulate('keydown', {keyCode: $.simulate.VK_PGDN}).
-		simulate('keydown', {ctrlKey: true, keyCode: $.simulate.VK_END});
-	equals(inp.val(), '', 'Alt field range - dp - enter/pgdn/ctrl+end');
-	equals(alt.val(), '', 'Alt field range - alt - enter/pgdn/ctrl+end');
 });
 
 test('daylightSaving', function() {
