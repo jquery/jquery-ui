@@ -95,12 +95,18 @@ $.widget("ui.dialog", {
 				.attr('role', 'button')
 				.hover(
 					function() {
-						$(this).addClass('ui-state-hover');
+						uiDialogTitlebarClose.addClass('ui-state-hover');
 					},
 					function() {
-						$(this).removeClass('ui-state-hover');
+						uiDialogTitlebarClose.removeClass('ui-state-hover');
 					}
 				)
+				.focus(function() {
+					uiDialogTitlebarClose.addClass('ui-state-focus');
+				})
+				.blur(function() {
+					uiDialogTitlebarClose.removeClass('ui-state-focus');
+				})
 				.mousedown(function(ev) {
 					ev.stopPropagation();
 				})
@@ -255,6 +261,20 @@ $.widget("ui.dialog", {
 					)
 					.text(name)
 					.click(function() { fn.apply(self.element[0], arguments); })
+					.hover(
+						function() {
+							$(this).addClass('ui-state-hover');
+						},
+						function() {
+							$(this).removeClass('ui-state-hover');
+						}
+					)
+					.focus(function() {
+						$(this).addClass('ui-state-focus');
+					})
+					.blur(function() {
+						$(this).removeClass('ui-state-focus');
+					})
 					.appendTo(uiDialogButtonPane);
 			});
 		}
