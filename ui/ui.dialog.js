@@ -411,27 +411,31 @@ $.widget("ui.dialog", {
 
 		$.widget.prototype._setData.apply(this, arguments);
 	},
-	
+
 	_size: function() {
 		/* If the user has resized the dialog, the .ui-dialog and .ui-dialog-content
-		 * divs will both have width and height set
+		 * divs will both have width and height set, so we need to reset them
 		 */
+		var options = this.options;
 
 		// reset content sizing
 		this.element.css({
 			height: 0,
 			width: 'auto'
 		});
-		
-		// reset the wrapper sizing and determine the height of all of the
-		// non-content elements
+
+		// reset wrapper sizing
+		// determine the height of all the non-content elements
 		var nonContentHeight = this.uiDialog.css({
 				height: 'auto',
-				width: this.options.width
+				width: options.width
 			})
 			.height();
-		
-		this.element.height(this.options.height - nonContentHeight);
+
+		this.element.height(
+			options.height == 'auto'
+				? 'auto'
+				: options.height - nonContentHeight);
 	}
 });
 
