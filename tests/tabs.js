@@ -81,7 +81,20 @@ module('tabs');
 	});
 
 	test('remove', function() {
-		expect(0);
+		expect(4);
+
+		var el = $('#tabs1 > ul').tabs();
+		el.tabs('remove', 0);
+		equals(el.tabs('length'), 2, 'remove tab');
+		equals($('li a[href$="fragment-1"]', el).length, 0, 'remove associated list item');
+		equals($('#fragment-1').length, 0, 'remove associated panel');
+		
+		// TODO delete tab -> focus tab to right
+		// TODO delete last tab -> focus tab to left
+		
+		el = $('#tabs2 > ul').tabs({ selected: 1 });
+		el.tabs('remove', 1);
+		equals(el.data('selected.tabs'), 0, 'update selected property');
 		
 	});
 
