@@ -47,22 +47,7 @@ $.widget("ui.accordion", {
 			this.element.find('a').css('zoom', '1');
 		}
 
-		var maxHeight;
-		if ( options.fillSpace ) {
-			maxHeight = this.element.parent().height();
-			options.headers.each(function() {
-				maxHeight -= $(this).outerHeight();
-			});
-			var maxPadding = 0;
-			options.headers.next().each(function() {
-				maxPadding = Math.max(maxPadding, $(this).innerHeight() - $(this).height());
-			}).height(maxHeight - maxPadding);
-		} else if ( options.autoHeight ) {
-			maxHeight = 0;
-			options.headers.next().each(function() {
-				maxHeight = Math.max(maxHeight, $(this).outerHeight());
-			}).height(maxHeight);
-		}
+		this.resize();
 
 		this.element.attr('role','tablist');
 
@@ -143,6 +128,26 @@ $.widget("ui.accordion", {
 		}
 
 		return true;
+	},
+	
+	resize: function() {
+		var options = this.options,
+			maxHeight;
+		if ( options.fillSpace ) {
+			maxHeight = this.element.parent().height();
+			options.headers.each(function() {
+				maxHeight -= $(this).outerHeight();
+			});
+			var maxPadding = 0;
+			options.headers.next().each(function() {
+				maxPadding = Math.max(maxPadding, $(this).innerHeight() - $(this).height());
+			}).height(maxHeight - maxPadding);
+		} else if ( options.autoHeight ) {
+			maxHeight = 0;
+			options.headers.next().each(function() {
+				maxHeight = Math.max(maxHeight, $(this).outerHeight());
+			}).height(maxHeight);
+		}
 	},
 
 	activate: function(index) {
