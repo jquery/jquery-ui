@@ -10,8 +10,14 @@
 -->
 
 <project name="jquery-ui" default="deploy-release" basedir=".">
+	
+	<taskdef resource="net/sf/antcontrib/antcontrib.properties">
+		<classpath>
+			<pathelement location="build/ant-contrib-0.6.jar"/>
+		</classpath>
+	</taskdef>
 
-	<target name="deploy-release" depends="load.properties, concatenate, minify, pack, copy, replace-version, zip" description="Release builder">
+	<target name="deploy-release" depends="load.properties, concatenate, minify, pack, copy, replace-version, prepend-header, zip" description="Release builder">
 	</target>
 
 	<target name="load.properties">
@@ -40,10 +46,48 @@
 	<target name="replace-version" depends="load.properties">
 		<replaceregexp match="@VERSION" replace="${release.version}" flags="g" byline="true">
 		    <fileset dir="${dist.dir}/ui/" includes="*.js"/>
-			<fileset dir="${dist.dir}/ui/packed/" includes="*.js"/>
 			<fileset dir="${dist.dir}/ui/minified/" includes="*.js"/>
 		</replaceregexp>
 		<echo message="Replaced all @VERSION to ${release.version}." />
+	</target>
+	
+	<target name="prepend-header" depends="load.properties">
+		<!-- TODO: refactor this ugly mess -->
+		<copy todir="${dist.dir}/headers/">
+			<fileset dir="${dist.dir}/ui/" includes="*.js" />
+		</copy>
+		<replaceregexp match="^(\/\*.*?\*\/\s).+" replace="\1" flags="s">
+		    <fileset dir="${dist.dir}/headers/" includes="*.js"/>
+		</replaceregexp>
+		<for param="file">
+			<path><fileset dir="${dist.dir}/ui/minified/" includes="*.js" /></path>
+			<sequential>
+				<propertyregex override="yes" property="target" input="@{file}" regexp=".+\\(.+)\.min\.js$" replace="\1"/>
+				<concat destfile="${dist.dir}/ui-headered/${target}.min.js">
+					<header file="${dist.dir}/headers/${target}.js" />
+					<fileset file="@{file}" />
+				</concat>
+			</sequential>
+		</for>
+		<copy todir="${dist.dir}/ui/minified">
+			<fileset dir="${dist.dir}/ui-headered/" includes="*.js" />
+		</copy>
+		<delete dir="${dist.dir}/ui-headered/" />
+		<for param="file">
+			<path><fileset dir="${dist.dir}/ui/packed/" includes="*.js" /></path>
+			<sequential>
+				<propertyregex override="yes" property="target" input="@{file}" regexp=".+\\(.+)\.packed\.js$" replace="\1"/>
+				<concat destfile="${dist.dir}/ui-headered/${target}.packed.js">
+					<header file="${dist.dir}/headers/${target}.js" />
+					<fileset file="@{file}" />
+				</concat>
+			</sequential>
+		</for>
+		<copy todir="${dist.dir}/ui/packed">
+			<fileset dir="${dist.dir}/ui-headered/" includes="*.js" />
+		</copy>
+		<delete dir="${dist.dir}/ui-headered/" />
+		<delete dir="${dist.dir}/headers/" />
 	</target>
 
 	<target description="Zip the package" name="zip">
