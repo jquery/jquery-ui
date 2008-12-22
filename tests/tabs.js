@@ -13,16 +13,16 @@ var defaults = {
 	deselectable: false,
 	deselectableClass: 'ui-tabs-deselectable',
 	disabled: [],
-	disabledClass: 'ui-tabs-disabled',
+	disabledClass: 'ui-state-disabled',
 	event: 'click',
 	fx: null,
 	hideClass: 'ui-tabs-hide',
 	idPrefix: 'ui-tabs-',
 	loadingClass: 'ui-tabs-loading',
-	navClass: 'ui-tabs-nav',
-	panelClass: 'ui-tabs-panel',
+	navClass: 'ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all',
+	panelClass: 'ui-tabs-panel ui-widget-content ui-corner-bottom',
 	panelTemplate: '<div></div>',
-	selectedClass: 'ui-tabs-selected',
+	selectedClass: 'ui-tabs-selected ui-state-active',
 	spinner: 'Loading&#8230;',
 	tabTemplate: '<li><a href="#{href}"><span>#{label}</span></a></li>'
 };
@@ -43,15 +43,21 @@ function defer(defered, ms) {
 module('tabs');
 
 	test('init', function() {
-		expect(4);
+		expect(9);
 
-		var el = $('#tabs1 > ul').tabs();
+		var el = $('#tabs1').tabs(); // new markup requires to tabify wrapper again...
 		ok(true, '.tabs() called on element');
 
 		el.tabs('destroy').tabs({ selected: 1 });
+		
+		ok( el.is('.ui-tabs.ui-widget.ui-widget-content.ui-corner-all'), 'attach classes to container');
+		ok( $('ul', el).is('.ui-tabs-nav.ui-helper-reset.ui-helper-clearfix.ui-widget-header.ui-corner-all'), 'attach classes to list' );
+		ok( $('div:eq(0)', el).is('.ui-tabs-panel.ui-widget-content.ui-corner-bottom'), 'attach classes to panel' );
+		ok( $('li:eq(0)', el).is('.ui-state-default.ui-corner-top'), 'attach classes to inactive li');
+		ok( $('li:eq(1)', el).is('.ui-tabs-selected.ui-state-active.ui-corner-top'), 'attach classes to active li');
 		equals( el.data('selected.tabs'), 1, 'selected.tabs set' );
 		equals( $('li', el).index( $('li.ui-tabs-selected', el) ), 1, 'second tab active');
-		equals( $('div', '#tabs1').index( $('div.ui-tabs-hide', '#tabs1') ), 0, 'first panel should be hidden' );
+		equals( $('div', el).index( $('div.ui-tabs-hide', '#tabs1') ), 0, 'first panel should be hidden' );
 
 	});
 
@@ -61,12 +67,12 @@ module('tabs');
 	});
 
 	test("defaults", function() {
-		el = $('#tabs1').tabs();
+		el = $('#tabs1 > ul').tabs();
 		$.each(defaults, function(key, val) {
-			var actual = el.data(key + ".tabs"), expected = val;
+			var actual = el.data(key + '.tabs'), expected = val;
 			same(actual, expected, key);
 		});
-		el.tabs("destroy");
+		el.tabs('destroy');
 	});
 
 	test('add', function() {
@@ -76,7 +82,7 @@ module('tabs');
 
 	test('remove', function() {
 		expect(0);
-
+		
 	});
 
 	test('enable', function() {
