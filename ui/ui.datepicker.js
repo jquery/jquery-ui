@@ -1343,8 +1343,8 @@ $.extend(Datepicker.prototype, {
 				var thead = '';
 				for (var dow = 0; dow < 7; dow++) { // days of the week
 					var day = (dow + firstDay) % 7;
-					thead = (isRTL ? '' : thead) + '<th' + ((dow + firstDay + 6) % 7 >= 5 ? ' class="ui-datepicker-week-end"' : '') + '>' +
-						'<span title="' + dayNames[day] + '">' + dayNamesMin[day] + '</span></th>' + (isRTL ? thead : '');
+					thead += '<th' + ((dow + firstDay + 6) % 7 >= 5 ? ' class="ui-datepicker-week-end"' : '') + '>' +
+						'<span title="' + dayNames[day] + '">' + dayNamesMin[day] + '</span></th>';
 				}
 				calender += thead + '</tr></thead><tbody>';
 				var daysInMonth = this._getDaysInMonth(drawYear, drawMonth);
@@ -1362,7 +1362,7 @@ $.extend(Datepicker.prototype, {
 						var otherMonth = (printDate.getMonth() != drawMonth);
 						var unselectable = otherMonth || !daySettings[0] ||
 							(minDate && printDate < minDate) || (maxDate && printDate > maxDate);
-						tbody = (isRTL ? '' : tbody) + '<td class="' +
+						tbody += '<td class="' +
 							((dow + firstDay + 6) % 7 >= 5 ? ' ui-datepicker-week-end' : '') + // highlight weekends
 							(otherMonth ? ' ui-datepicker-other-month' : '') + // highlight days from other months
 							((printDate.getTime() == selectedDate.getTime() && drawMonth == inst.selectedMonth && inst._keyEvent) || // user pressed key
@@ -1382,8 +1382,7 @@ $.extend(Datepicker.prototype, {
 							(printDate.getTime() == today.getTime() ? ' ui-state-highlight' : '') + 
 							(printDate.getTime() >= currentDate.getTime() && printDate.getTime() <= endDate.getTime() ? // in current range
 							' ui-state-active' : '') + // highlight selected day							
-							'" href="#">' + printDate.getDate() + '</a>')) + '</td>' + // display for this month
-							(isRTL ? tbody : '');
+							'" href="#">' + printDate.getDate() + '</a>')) + '</td>'; // display for this month
 						printDate.setDate(printDate.getDate() + 1);
 						printDate = this._daylightSavingAdjust(printDate);
 					}
@@ -1395,7 +1394,7 @@ $.extend(Datepicker.prototype, {
 					drawYear++;
 				}
 				calender += '</tbody></table>' + (isMultiMonth ? '</div>' : '');
-				group = (isRTL ? calender + group : group + calender );
+				group += calender;
 			}
 			html += group;
 		}
