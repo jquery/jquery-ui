@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-	<title>Simple Dialog</title>
+	<title>Dialog Visual Tests Page</title>
 	<link rel="stylesheet" href="all.css" type="text/css">
 	<link rel="stylesheet" href="../../themes/base/ui.all.css" type="text/css">
 	<script type="text/javascript" src="../../jquery-1.2.6.js"></script>
@@ -11,7 +11,13 @@
 	<script type="text/javascript" src="../../ui/ui.resizable.js"></script>
 	<script type="text/javascript">
 	$(function() {
-		var dlg = $("#dlg").dialog({
+		// Simple Dialog
+		$("#dialog button").click(function() {
+			$("#dlg").clone().dialog();
+		});
+
+		// Dialog with Buttons
+		var dlgbuttons = $("#dlgbuttons").dialog({
 			autoOpen: false,
 			width: 600,
 			buttons: {
@@ -19,9 +25,10 @@
 				Cancel: function() {}
 			}
 		});
-		$("#dialog").click(function() {
-			dlg.dialog('open');
+		$("#dialogbuttons").click(function() {
+			dlgbuttons.dialog('open');
 		});
+
 	});
 	</script>
 </head>
@@ -33,6 +40,15 @@
 	<div id="dialog">
 		<button>Open</button>
 		<div id="dlg" title="Dialog Title">
+			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+		</div>
+	</div>
+</li>
+<li class="plugin">
+	Dialog with buttons
+	<div id="dialogbuttons">
+		<button>Open</button>
+		<div id="dlgbuttons" title="Dialog Title">
 			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
 		</div>
 	</div>

@@ -21,9 +21,8 @@
 	$(function() {
 		$("#accordion").accordion({ header: "h3" });
 		$("#datepicker").datepicker();
-		var dlg = $("#dlg").remove();
-		$("#dialog").click(function() {
-			dlg.appendTo('body').dialog();
+		$("#dialog button").click(function() {
+			$("#dlg").clone().dialog();
 		});
 		$("#draggable").draggable();
 		$(".draggable").draggable();
