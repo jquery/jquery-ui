@@ -304,7 +304,8 @@ $.extend(Datepicker.prototype, {
 				css({opacity: '1.0', cursor: ''});
 		}
 		else if (nodeName == 'div' || nodeName == 'span') {
-			$target.children('.' + this._disableClass).remove();
+			var inline = $target.children('.' + this._inlineClass);			
+			inline.children().removeClass('ui-state-disabled');
 		}
 		this._disabledInputs = $.map(this._disabledInputs,
 			function(value) { return (value == target ? null : value); }); // delete entry
@@ -327,20 +328,7 @@ $.extend(Datepicker.prototype, {
 		}
 		else if (nodeName == 'div' || nodeName == 'span') {
 			var inline = $target.children('.' + this._inlineClass);
-			var offset = inline.offset();
-			var relOffset = {left: 0, top: 0};
-			inline.parents().each(function() {
-				if ($(this).css('position') == 'relative') {
-					relOffset = $(this).offset();
-					return false;
-				}
-			});
-			$target.prepend('<div class="' + this._disableClass + '" style="' +
-				($.browser.msie ? 'background-color: transparent; ' : '') +
-				'position: absolute;' +
-				'width: ' + inline.width() + 'px; height: ' + inline.height() +
-				'px; left: ' + (offset.left - relOffset.left) +
-				'px; top: ' + (offset.top - relOffset.top) + 'px;"></div>');
+			inline.children().addClass('ui-state-disabled');
 		}
 		this._disabledInputs = $.map(this._disabledInputs,
 			function(value) { return (value == target ? null : value); }); // delete entry
@@ -351,9 +339,10 @@ $.extend(Datepicker.prototype, {
 	   @param  target    element - the target input field or division or span
 	   @return boolean - true if disabled, false if enabled */
 	_isDisabledDatepicker: function(target) {
-		if (!target)
-			return false;
-		for (var i = 0; i < this._disabledInputs.length; i++) {
+		if (!target) {
+			return false;			
+		}
+		for (var i = 0; i < this._disabledInputs.length; i++) {			
 			if (this._disabledInputs[i] == target)
 				return true;
 		}
@@ -586,6 +575,7 @@ $.extend(Datepicker.prototype, {
 	_updateDatepicker: function(inst) {
 		var dims = {width: inst.dpDiv.width() + 4,
 			height: inst.dpDiv.height() + 4};
+		var self = this;
 		inst.dpDiv.empty().append(this._generateHTML(inst))
 			.find('iframe.ui-datepicker-cover').
 				css({width: dims.width, height: dims.height})
@@ -595,8 +585,10 @@ $.extend(Datepicker.prototype, {
 					$(this).removeClass('ui-state-hover');
 				})
 				.bind('mouseover', function(){
-					$(this).parents('.ui-datepicker-calendar').find('a').removeClass('ui-state-hover');
-					$(this).addClass('ui-state-hover');
+					if (!self._isDisabledDatepicker( inst.inline ? inst.dpDiv.parent()[0] : inst.input[0])) {
+						$(this).parents('.ui-datepicker-calendar').find('a').removeClass('ui-state-hover');
+						$(this).addClass('ui-state-hover');
+					}
 				})
 			.end()
 			.find('.' + this._dayOverClass + ' a')
@@ -710,6 +702,9 @@ $.extend(Datepicker.prototype, {
 	_adjustDate: function(id, offset, period) {
 		var target = $(id);
 		var inst = this._getInst(target[0]);
+		if (this._isDisabledDatepicker(target[0])) {
+			return;
+		}
 		this._adjustInstDate(inst, offset, period);
 		this._updateDatepicker(inst);
 	},
@@ -756,9 +751,10 @@ $.extend(Datepicker.prototype, {
 
 	/* Action for selecting a day. */
 	_selectDay: function(id, month, year, td) {
-		if ($(td).hasClass(this._unselectableClass))
-			return;
 		var target = $(id);
+		if ($(td).hasClass(this._unselectableClass) || this._isDisabledDatepicker(target[0])) {
+			return;			
+		}
 		var inst = this._getInst(target[0]);
 		inst.selectedDay = inst.currentDay = $('a', td).html();
 		inst.selectedMonth = inst.currentMonth = month;

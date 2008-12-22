@@ -425,19 +425,13 @@ test('enableDisable', function() {
 	var inl = init('#inl');
 	var dp = $('.ui-datepicker-inline', inl);
 	ok(!inl.datepicker('isDisabled'), 'Enable/disable inline - initially marked as enabled');
-	ok($('.ui-datepicker-disabled', inl).length == 0, 'Enable/disable inline - cover initially absent');
+	ok(!dp.children().is('.ui-state-disabled'), 'Enable/disable inline - not visually disabled initially');
 	inl.datepicker('disable');
 	ok(inl.datepicker('isDisabled'), 'Enable/disable inline - now marked as disabled');
-	var disabled = $('.ui-datepicker-disabled', inl);
-	var dp = $('.ui-datepicker-inline', inl);
-	ok(disabled.length == 1, 'Enable/disable inline - cover now present');
-	ok(disabled.offset().top == dp.offset().top && disabled.offset().left == dp.offset().left,
-		'Enable/disable inline - cover positioning');
-	ok(disabled.width() == dp.width() && disabled.height() == dp.height(),
-		'Enable/disable inline - cover sizing');
+	ok(dp.children().is('.ui-state-disabled'), 'Enable/disable inline - visually disabled');
 	inl.datepicker('enable');
 	ok(!inl.datepicker('isDisabled'), 'Enable/disable inline - now marked as enabled');
-	ok($('.ui-datepicker-disabled', inl).length == 0, 'Enable/disable inline - cover now absent');
+	ok(!dp.children().is('.ui-state-disabled'), 'Enable/disable inline - not visiually disabled');
 	inl.datepicker('destroy');
 });
 
