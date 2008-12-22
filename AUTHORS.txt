@@ -11,7 +11,7 @@ Chi Cheng (cloudream@gmail.com)
 Maggie Costello
 Aaron Eisenberger (aaronchi@gmail.com)
 Ariel Flesler
-Scott González
+Scott GonzÃ¡lez
 Marc Grabanski (m@marcgrabanski.com)
 Klaus Hartl (stilbuero.de)
 Scott Jehl
@@ -23,4 +23,4 @@ Patty Toland
 Ca-Phun Ung (yelotofu.com)
 Keith Wood (kbwood@virginbroadband.com.au)
 Richard D. Worth (rdworth.org)
-Jörn Zaefferer
+JÃ¶rn Zaefferer
