@@ -35,7 +35,7 @@ $.widget("ui.accordion", {
 		.bind("mouseenter.accordion", function(){ $(this).addClass('ui-state-hover'); })
 		.bind("mouseleave.accordion", function(){ $(this).removeClass('ui-state-hover'); });
 		// wrap content elements in div against animation issues
-		headers.next().wrap("<div></div>").addClass("ui-accordion-content ui-helper-reset ui-widget-content ui-corner-bottom");
+		headers.next().wrap("<div></div>").addClass("ui-accordion-content").parent().addClass("ui-accordion-content-wrap ui-helper-reset ui-widget-content ui-corner-bottom");
 		
 		var active = options.active = findActive(headers, options.active).toggleClass("ui-state-default").toggleClass("ui-state-active").toggleClass("ui-corner-all").toggleClass("ui-corner-top");
 		active.parent().addClass("selected");
@@ -91,7 +91,7 @@ $.widget("ui.accordion", {
 			.removeAttr("role").removeAttr("aria-expanded").removeAttr("tabindex");
 		headers.find("a").removeAttr("tabindex");
 		headers.children(".ui-icon").remove();
-		headers.next().children().removeClass("ui-accordion-content ui-helper-reset ui-widget-content ui-corner-bottom").each(function(){
+		headers.next().children().removeClass("ui-accordion-content").each(function(){
 			$(this).parent().replaceWith(this);
 		})
 	},
