@@ -337,6 +337,7 @@ $.extend(Datepicker.prototype, {
 			});
 			$target.prepend('<div class="' + this._disableClass + '" style="' +
 				($.browser.msie ? 'background-color: transparent; ' : '') +
+				'position: absolute;' +
 				'width: ' + inline.width() + 'px; height: ' + inline.height() +
 				'px; left: ' + (offset.left - relOffset.left) +
 				'px; top: ' + (offset.top - relOffset.top) + 'px;"></div>');
@@ -443,6 +444,7 @@ $.extend(Datepicker.prototype, {
 	_doKeyDown: function(event) {
 		var inst = $.datepicker._getInst(event.target);
 		var handled = true;
+		var isRTL = inst.dpDiv.is('.ui-datepicker-rtl');	
 		inst._keyEvent = true;
 		if ($.datepicker._datepickerShowing)
 			switch (event.keyCode) {
@@ -472,7 +474,7 @@ $.extend(Datepicker.prototype, {
 				case 36: if (event.ctrlKey || event.metaKey) $.datepicker._gotoToday(event.target);
 						handled = event.ctrlKey || event.metaKey;
 						break; // current on ctrl or command +home
-				case 37: if (event.ctrlKey || event.metaKey) $.datepicker._adjustDate(event.target, -1, 'D');
+				case 37: if (event.ctrlKey || event.metaKey) $.datepicker._adjustDate(event.target, (isRTL ? +1 : -1), 'D');
 						handled = event.ctrlKey || event.metaKey;
 						// -1 day on ctrl or command +left
 						if (event.originalEvent.altKey) $.datepicker._adjustDate(event.target, (event.ctrlKey ?
@@ -483,7 +485,7 @@ $.extend(Datepicker.prototype, {
 				case 38: if (event.ctrlKey || event.metaKey) $.datepicker._adjustDate(event.target, -7, 'D');
 						handled = event.ctrlKey || event.metaKey;
 						break; // -1 week on ctrl or command +up
-				case 39: if (event.ctrlKey || event.metaKey) $.datepicker._adjustDate(event.target, +1, 'D');
+				case 39: if (event.ctrlKey || event.metaKey) $.datepicker._adjustDate(event.target, (isRTL ? -1 : +1), 'D');
 						handled = event.ctrlKey || event.metaKey;
 						// +1 day on ctrl or command +right
 						if (event.originalEvent.altKey) $.datepicker._adjustDate(event.target, (event.ctrlKey ?
@@ -589,12 +591,16 @@ $.extend(Datepicker.prototype, {
 				css({width: dims.width, height: dims.height})
 			.end()
 			.find('button, .ui-datepicker-prev, .ui-datepicker-next, .ui-datepicker-calendar td a')
-				.bind('mouseover', function(){
-					$(this).addClass('ui-state-hover');
-				})
 				.bind('mouseout', function(){
 					$(this).removeClass('ui-state-hover');
 				})
+				.bind('mouseover', function(){
+					$(this).parents('.ui-datepicker-calendar').find('a').removeClass('ui-state-hover');
+					$(this).addClass('ui-state-hover');
+				})
+			.end()
+			.find('.' + this._dayOverClass + ' a')
+				.trigger('mouseover')
 			.end();
 		var numMonths = this._getNumberOfMonths(inst);
 		inst.dpDiv[(numMonths[0] != 1 || numMonths[1] != 1 ? 'add' : 'remove') +
@@ -1279,7 +1285,6 @@ $.extend(Datepicker.prototype, {
 				}
 			}
 		}
-		// controls and links
 		var prevText = this._get(inst, 'prevText');
 		prevText = (!navigationAsDateFormat ? prevText : this.formatDate(prevText,
 			this._daylightSavingAdjust(new Date(drawYear, drawMonth - stepMonths, 1)),

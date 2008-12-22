@@ -423,6 +423,7 @@ test('enableDisable', function() {
 	inp.datepicker('destroy');
 	// Inline
 	var inl = init('#inl');
+	var dp = $('.ui-datepicker-inline', inl);
 	ok(!inl.datepicker('isDisabled'), 'Enable/disable inline - initially marked as enabled');
 	ok($('.ui-datepicker-disabled', inl).length == 0, 'Enable/disable inline - cover initially absent');
 	inl.datepicker('disable');
@@ -1185,24 +1186,21 @@ test('events', function() {
 
 test('localisation', function() {
 	var inp = init('#inp', $.datepicker.regional['fr']);
-	inp.datepicker('option', {dateFormat: 'DD, d MM yy', showButtonPanel:true}).val('').datepicker('show');
+	inp.datepicker('option', {dateFormat: 'DD, d MM yy', showButtonPanel:true, changeMonth:true, changeYear:true}).val('').datepicker('show');
 	var dp = $('#ui-datepicker-div');
 	equals($('.ui-datepicker-close', dp).text(), 'Fermer', 'Localisation - close');
 	$('.ui-datepicker-close', dp).simulate('mouseover');
 	equals($('.ui-datepicker-prev', dp).text(), '<Préc', 'Localisation - previous');
 	equals($('.ui-datepicker-current', dp).text(), 'Courant', 'Localisation - current');
 	equals($('.ui-datepicker-next', dp).text(), 'Suiv>', 'Localisation - next');
-	equals($('.ui-datepicker-current', dp).text(), 'Courant', 'Localisation - current');
 	var month = 0;
-	$('.ui-datepicker-new-month option', dp).each(function() {
+	$('.ui-datepicker-month option', dp).each(function() {
 		equals($(this).text(), $.datepicker.regional['fr'].monthNames[month],
 			'Localisation - month ' + month);
 		month++;
 	});
-	equals($('.ui-datepicker-calendar th:first', dp).text(),
-		$.datepicker.regional['fr'].weekHeader, 'Localisation - week header');
 	var day = 1;
-	$('.ui-datepicker-calendar th a', dp).each(function() {
+	$('.ui-datepicker-calendar th', dp).each(function() {
 		equals($(this).text(), $.datepicker.regional['fr'].dayNamesMin[day],
 			'Localisation - day ' + day);
 		day = (day + 1) % 7;

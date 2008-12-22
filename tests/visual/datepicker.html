@@ -9,9 +9,50 @@
 	<script type="text/javascript" src="../../ui/ui.datepicker.js"></script>
 	<script type="text/javascript">
 	$(function() {
+		// simple datepicker
 		$('#d1').datepicker();
+		$('button.disable-d1').click(function(event){
+			$('#d1').datepicker('disable');
+			event.preventDefault();
+		});
+		$('button.enable-d1').click(function(event){
+			$('#d1').datepicker('enable');
+			event.preventDefault();
+		});
+		$('button.destroy-d1').click(function(event){
+			$('#d1').datepicker('destroy');
+			event.preventDefault();
+		});
+		
+		// multi datepicker
 		$('#d2').datepicker({numberOfMonths: 3, showButtonPanel: true});
+		$('button.disable-d2').click(function(event){
+			$('#d2').datepicker('disable');
+			event.preventDefault();
+		});
+		$('button.enable-d2').click(function(event){
+			$('#d2').datepicker('enable');
+			event.preventDefault();
+		});
+		$('button.destroy-d2').click(function(event){
+			$('#d2').datepicker('destroy');
+			event.preventDefault();
+		});
+		
+		// inline datepicker
 		$('#inl').datepicker();
+		$('button.disable-inl').click(function(event){
+			$('#inl').datepicker('disable');
+			event.preventDefault();
+		});
+		$('button.enable-inl').click(function(event){
+			$('#inl').datepicker('enable');
+			event.preventDefault();
+		});
+		$('button.destroy-inl').click(function(event){
+			$('#inl').datepicker('destroy');
+			event.preventDefault();
+		});
 	});
 	</script>
 </head>
@@ -19,18 +60,30 @@
 
 <ul class="plugins">
 	<li class="plugin">
+		<button class="disable-d1">Disable</button>
+		<button class="enable-d1">Enable</button>
+		<button class="destroy-d1">Destroy</button>
+
 		Datepicker Simple
 		<div>
 			<input type="text" id="d1">
 		</div>
 	</li>
 	<li class="plugin">
+		<button class="disable-d2">Disable</button>
+		<button class="enable-d2">Enable</button>
+		<button class="destroy-d2">Destroy</button>
+
 		Datepicker Multi
 		<div>
 			<input type="text" id="d2">
 		</div>
 	</li>
 	<li class="plugin">
+		<button class="disable-inl">Disable</button>
+		<button class="enable-inl">Enable</button>
+		<button class="destroy-inl">Destroy</button>
+
 		Datepicker Inline
 		<div id="inl"></div>
 	</li>
