@@ -41,7 +41,7 @@
 .ui-widget-content .ui-icon {background-image: url(images/222222_256x240_icons_icons.png)/*{iconsContent}*/; }
 .ui-widget-header .ui-icon {background-image: url(images/222222_256x240_icons_icons.png)/*{iconsHeader}*/; }
 .ui-state-default .ui-icon { background-image: url(images/888888_256x240_icons_icons.png)/*{iconsDefault}*/; }
-.ui-state-hover .ui-icon {background-image: url(images/454545_256x240_icons_icons.png)/*{iconsHover}*/; }
+.ui-state-hover .ui-icon, .ui-state-focus .ui-icon {background-image: url(images/454545_256x240_icons_icons.png)/*{iconsHover}*/; }
 .ui-state-active .ui-icon {background-image: url(images/454545_256x240_icons_icons.png)/*{iconsActive}*/; }
 .ui-state-highlight .ui-icon {background-image: url(images/2e83ff_256x240_icons_icons.png)/*{iconsHighlight}*/; }
 .ui-state-error .ui-icon, .ui-state-error-text .ui-icon {background-image: url(images/cd0a0a_256x240_icons_icons.png)/*{iconsError}*/; }

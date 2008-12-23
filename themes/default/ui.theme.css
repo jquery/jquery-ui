@@ -39,7 +39,7 @@
 /* states and images */
 .ui-icon { width: 16px; height: 16px; background-image: url(images/222222_256x240_icons_icons.png); }
 .ui-widget-content .ui-icon {background-image: url(images/222222_256x240_icons_icons.png); }
-.ui-widget-header .ui-icon {background-image: url(images/ffffff_256x240_icons_icons.png); }
+.ui-widget-header .ui-icon, .ui-state-focus .ui-icon {background-image: url(images/ffffff_256x240_icons_icons.png); }
 .ui-state-default .ui-icon { background-image: url(images/ef8c08_256x240_icons_icons.png); }
 .ui-state-hover .ui-icon {background-image: url(images/ef8c08_256x240_icons_icons.png); }
 .ui-state-active .ui-icon {background-image: url(images/ef8c08_256x240_icons_icons.png); }
