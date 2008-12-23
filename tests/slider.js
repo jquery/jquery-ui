@@ -3,54 +3,21 @@
  */
 (function($) {
 //
-// Selectable Test Helper Functions
+// Slider Test Helper Functions
 //
 
 var defaults = {
-	animate: false,
-	axis: "???",
-	disabled: false,
-	distance: 1,
-	handle: ".ui-slider-handle",
-	handles: null,
 	max: 100,
 	min: 0,
-	noKeyboard: false,
-	range: false,
-	realMax: "???",
-	round: true,
-	startValue: "???",
-	stepping: "???",
-	steps: 0
+	orientation: 'horizontal',
+	step: 1,
+	value: 0
 };
 
-var keyCodes = {
-	leftArrow: 37,
-	upArrow: 38,
-	rightArrow: 39,
-	downArrow: 40
-};
+var el, options;
 
-$.each(keyCodes, function(key, val) {
-	$.fn[key] = function() {
-		return this.simulate("keydown", { keyCode: val });
-	}
-});
-
-function assertChange(stepping, start, result, action) {
-	return function() {
-		expect(1);
-		var slider = $("#slider3").slider({
-			stepping: stepping,
-			startValue: start,
-			min: 0,
-			max: 1000,
-			change: function(event, ui) {
-				equals(ui.value, result, "changed to " + ui.value);
-			}
-		});
-		action.apply(slider);
-	}
+function handle() {
+	return el.find(".ui-slider-handle");
 }
 
 // Slider Tests
@@ -81,7 +48,7 @@ test("init", function() {
 });
 
 test("destroy", function() {
-	expect(6);
+	expect(8);
 
 	$("<div></div>").appendTo('body').slider().slider("destroy").remove();
 	ok(true, '.slider("destroy") called on element');
@@ -89,7 +56,7 @@ test("destroy", function() {
 	$([]).slider().slider("destroy").remove();
 	ok(true, '.slider("destroy") called on empty collection');
 
-	$('<div></div>').slider().slider("destroy").remove();
+	$('<div></div>').appendTo('body').remove().slider().slider("destroy").remove();
 	ok(true, '.slider("destroy") called on disconnected DOMElement');
 
 	$('<div></div>').slider().slider("destroy").slider("foo").remove();
@@ -98,10 +65,18 @@ test("destroy", function() {
 	el = $('<div></div>').slider();
 	var foo = el.slider("destroy").data("foo.slider");
 	el.remove();
-	ok(true, 'arbitrary option getter after destroy');
+	ok(true, 'arbitrary option getter (.data) after destroy');
+
+	el = $('<div></div>').slider();
+	var foo = el.slider("destroy").slider("option", "foo");
+	el.remove();
+	ok(true, 'arbitrary option getter (.slider option method) after destroy');
 
 	$('<div></div>').slider().slider("destroy").data("foo.slider", "bar").remove();
-	ok(true, 'arbitrary option setter after destroy');
+	ok(true, 'arbitrary option setter (.data) after destroy');
+
+	$('<div></div>').slider().slider("destroy").slider("options", "foo", "bar").remove();
+	ok(true, 'arbitrary option setter (.slider option method) after destroy');
 });
 
 test("defaults", function() {
@@ -113,85 +88,309 @@ test("defaults", function() {
 	el.remove();
 });
 
-module("slider: single handle");
+module("slider");
 
-test("change one step via keydown", assertChange(1, undefined, 1, function() {
-	this.find("a").rightArrow();
-}))
-test("change - 10 steps via keydown", assertChange(10, 20, 10, function() {
-	this.find("a").leftArrow();
-}))
-test("change +10 steps via keydown", assertChange(10, 20, 30, function() {
-	this.find("a").rightArrow();
-}))
+test("keydown HOME on handle sets value to min", function() {
+	el = $('<div></div>');
+	options = {
+		max: 5,
+		min: -5,
+		orientation: 'horizontal',
+		step: 1
+	};
+	el.slider(options);
 
-test("moveTo, absolute value", assertChange(1, 1, 10, function() {
-	this.slider("moveTo", 10);
-}))
+	el.slider("value", 0);
 
-test("moveTo, absolute value as string", assertChange(1, 1, 10, function() {
-	this.slider("moveTo", "10");
-}))
+	handle().simulate("keydown", { keyCode: $.ui.keyCode.HOME });
+	equals(el.slider("value"), options.min);
 
-test("moveTo, absolute value, below min", assertChange(1, 1, 0, function() {
-	this.slider("moveTo", -10);
-}))
+	el.slider('destroy');	
 
-test("moveTo, relative positive value", assertChange(1, 1, 11, function() {
-	this.slider("moveTo", "+=10");
-}))
+	el = $('<div></div>');
+	options = {
+		max: 5,
+		min: -5,
+		orientation: 'vertical',
+		step: 1
+	};
+	el.slider(options);
 
-test("moveTo, relative positive value, above max", assertChange(1, 10, 1000, function() {
-	this.slider("moveTo", "+=2000");
-}))
+	el.slider("value", 0);
 
-test("moveTo, relative negative value", assertChange(1, 20, 10, function() {
-	this.slider("moveTo", "-=10");
-}))
+	handle().simulate("keydown", { keyCode: $.ui.keyCode.HOME });
+	equals(el.slider("value"), options.min);
 
-test("options update min/max", function() {
-	expect(2);
-	var slider = $("#slider3").slider({
-		stepping: 1,
-		startValue: 1
-	});
-	slider.slider("moveTo", "-=10");
-	equals(slider.slider("value"), 0);
-	slider.data("min.slider", -10);
-	slider.slider("moveTo", "-=20");
-	equals(slider.slider("value"), -10);
-})
+	el.slider('destroy');
+});
 
-module("slider: setup and teardown");
+test("keydown END on handle sets value to max", function() {
+	el = $('<div></div>');
+	options = {
+		max: 5,
+		min: -5,
+		orientation: 'horizontal',
+		step: 1
+	};
+	el.slider(options);
 
-test("destroy and recreate", function() {
-	expect(3)
-	var slider = $("#slider3").slider();
-	slider.slider("moveTo", "+=20");
-	equals(slider.slider("value"), 20);
-	slider.slider("destroy");
+	el.slider("value", 0);
 
-	slider.slider("moveTo", "+=30");
-	ok(true, "nothing happens after slider is destroyed");
+	handle().simulate("keydown", { keyCode: $.ui.keyCode.END });
+	equals(el.slider("value"), options.max);
 
-	slider.slider().slider("moveTo", "30");
+	el.slider('destroy');	
 
-	equals(Math.round(slider.slider("value")), 30);
-})
+	el = $('<div></div>');
+	options = {
+		max: 5,
+		min: -5,
+		orientation: 'vertical',
+		step: 1
+	};
+	el.slider(options);
 
-test("handle creation", function() {
-	var slider = $("#slider1");
-	equals(slider.children().size(), 0);
-	slider.slider({
-		handles: [
-			{ start: 0 },
-			{ start: 10 }
-		]
-	});
-	equals(slider.children().size(), 2);
-	var instance = $.data(slider[0], "slider")
-	equals(instance.handle.length, 2);
-	ok(instance.handle.jquery, "handle must be a jquery object")
-})
+	el.slider("value", 0);
+
+	handle().simulate("keydown", { keyCode: $.ui.keyCode.END });
+	equals(el.slider("value"), options.max);
+
+	el.slider('destroy');
+});
+
+test("keydown UP on handle increases value by step, not greater than max", function() {
+	el = $('<div></div>');
+	options = {
+		max: 5,
+		min: -5,
+		orientation: 'horizontal',
+		step: 1
+	};
+	el.slider(options);
+
+	el.slider("value", options.max - options.step);
+
+	handle().simulate("keydown", { keyCode: $.ui.keyCode.UP });
+	equals(el.slider("value"), options.max);
+
+	handle().simulate("keydown", { keyCode: $.ui.keyCode.UP });
+	equals(el.slider("value"), options.max);
+
+	el.slider("destroy");	
+
+	el = $('<div></div>');
+	options = {
+		max: 5,
+		min: -5,
+		orientation: 'vertical',
+		step: 1
+	};
+	el.slider(options);
+
+	el.slider("value", options.max - options.step);
+
+	handle().simulate("keydown", { keyCode: $.ui.keyCode.UP });
+	equals(el.slider("value"), options.max);
+
+	handle().simulate("keydown", { keyCode: $.ui.keyCode.UP });
+	equals(el.slider("value"), options.max);
+
+	el.slider("destroy");	
+});
+
+test("keydown RIGHT on handle increases value by step, not greater than max", function() {
+	el = $('<div></div>');
+	options = {
+		max: 5,
+		min: -5,
+		orientation: 'horizontal',
+		step: 1
+	};
+	el.slider(options);
+
+	el.slider("value", options.max - options.step);
+
+	handle().simulate("keydown", { keyCode: $.ui.keyCode.RIGHT });
+	equals(el.slider("value"), options.max);
+
+	handle().simulate("keydown", { keyCode: $.ui.keyCode.RIGHT });
+	equals(el.slider("value"), options.max);
+
+	el.slider("destroy");	
+
+	el = $('<div></div>');
+	options = {
+		max: 5,
+		min: -5,
+		orientation: 'vertical',
+		step: 1
+	};
+	el.slider(options);
+
+	el.slider("value", options.max - options.step);
+
+	handle().simulate("keydown", { keyCode: $.ui.keyCode.RIGHT });
+	equals(el.slider("value"), options.max);
+
+	handle().simulate("keydown", { keyCode: $.ui.keyCode.RIGHT });
+	equals(el.slider("value"), options.max);
+
+	el.slider("destroy");	
+});
+
+test("keydown DOWN on handle decreases value by step, not less than min", function() {
+	el = $('<div></div>');
+	options = {
+		max: 5,
+		min: -5,
+		orientation: 'horizontal',
+		step: 1
+	};
+	el.slider(options);
+
+	el.slider("value", options.min + options.step);
+
+	handle().simulate("keydown", { keyCode: $.ui.keyCode.DOWN });
+	equals(el.slider("value"), options.min);
+
+	handle().simulate("keydown", { keyCode: $.ui.keyCode.DOWN });
+	equals(el.slider("value"), options.min);
+
+	el.slider("destroy");	
+
+	el = $('<div></div>');
+	options = {
+		max: 5,
+		min: -5,
+		orientation: 'vertical',
+		step: 1
+	};
+	el.slider(options);
+
+	el.slider("value", options.min + options.step);
+
+	handle().simulate("keydown", { keyCode: $.ui.keyCode.DOWN });
+	equals(el.slider("value"), options.min);
+
+	handle().simulate("keydown", { keyCode: $.ui.keyCode.DOWN });
+	equals(el.slider("value"), options.min);
+
+	el.slider("destroy");	
+});
+
+test("keydown LEFT on handle decreases value by step, not less than min", function() {
+	el = $('<div></div>');
+	options = {
+		max: 5,
+		min: -5,
+		orientation: 'horizontal',
+		step: 1
+	};
+	el.slider(options);
+
+	el.slider("value", options.min + options.step);
+
+	handle().simulate("keydown", { keyCode: $.ui.keyCode.LEFT });
+	equals(el.slider("value"), options.min);
+
+	handle().simulate("keydown", { keyCode: $.ui.keyCode.LEFT });
+	equals(el.slider("value"), options.min);
+
+	el.slider("destroy");	
+
+	el = $('<div></div>');
+	options = {
+		max: 5,
+		min: -5,
+		orientation: 'vertical',
+		step: 1
+	};
+	el.slider(options);
+
+	el.slider("value", options.min + options.step);
+
+	handle().simulate("keydown", { keyCode: $.ui.keyCode.LEFT });
+	equals(el.slider("value"), options.min);
+
+	handle().simulate("keydown", { keyCode: $.ui.keyCode.LEFT });
+	equals(el.slider("value"), options.min);
+
+	el.slider("destroy");	
+});
+
+module("slider: Options");
+
+test("orientation", function() {
+	el = $('<div></div>');
+
+	options = {
+		max: 2,
+		min: -2,
+		orientation: 'vertical',
+		value: 1
+	};
+
+	var percentVal = (options.value - options.min) / (options.max - options.min) * 100;
+
+	el.slider(options).slider("option", "orientation", "horizontal");
+	ok(el.is('.ui-slider-horizontal'), "horizontal slider has class .ui-slider-horizontal");
+	ok(!el.is('.ui-slider-vertical'), "horizontal slider does not have class .ui-slider-vertical");
+	equals(handle().css('left'), percentVal + '%', "horizontal slider handle is positioned with left: %");
+
+	el.slider('destroy');
+
+	options = {
+		max: 2,
+		min: -2,
+		orientation: 'horizontal',
+		value: -1
+	};
+
+	var percentVal = (options.value - options.min) / (options.max - options.min) * 100;
+
+	el.slider(options).slider("option", "orientation", "vertical");
+	ok(el.is('.ui-slider-vertical'), "vertical slider has class .ui-slider-vertical");
+	ok(!el.is('.ui-slider-horizontal'), "vertical slider does not have class .ui-slider-horizontal");
+	equals(handle().css('bottom'), percentVal + '%', "vertical slider handle is positioned with bottom: %");
+
+	el.slider('destroy');
+
+});
+
+test("max", function() {
+	el = $('<div></div>');
+	
+	options = {
+		max: 37,
+		min: 6,
+		orientation: 'horizontal',
+		step: 1,
+		value: 50
+	};
+
+	el.slider(options);
+	ok(el.slider("option", "value") == options.value, "value option is not contained by max");
+	ok(el.slider("value") == options.max, "value method is contained by max");
+	el.slider('destroy');
+
+});
+
+test("min", function() {
+	el = $('<div></div>');
+	
+	options = {
+		max: 37,
+		min: 6,
+		orientation: 'vertical',
+		step: 1,
+		value: 2
+	};
+
+	el.slider(options);
+	ok(el.slider("option", "value") == options.value, "value option is not contained by min");
+	ok(el.slider("value") == options.min, "value method is contained by min");
+	el.slider('destroy');
+
+});
 
 })(jQuery);
