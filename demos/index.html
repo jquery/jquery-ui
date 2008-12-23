@@ -17,13 +17,6 @@
 	<script type="text/javascript" src="../ui/ui.slider.js"></script>
 	<script type="text/javascript" src="../ui/ui.sortable.js"></script>
 	<script type="text/javascript" src="../ui/ui.tabs.js"></script>
-	<script type="text/javascript">
-		$(function() {
-
-
-
-		})
-	</script>
 </head>
 <body>
 <?php } ?>
@@ -73,11 +66,22 @@
 		</td>
 		<td class="normal">
 							
-			<div class="normal" id="containerDemo">
+			<div class="normal">
+				<?php
+				
+					if(isset($_GET['load'])) {
+						
+						//Preload the demo page here
+						echo "<h1>".$_GET['load']."</h1>";
+						
+					} else {
+				
+				?>
 				<h3>Instructions</h3>
 				<p>
 					The functional demos are provided to give users an idea of how jQuery UI works. You only need to copy and paste code from the demos. Have fun playing with it.
 				</p>
+				<?php  } ?>
 			</div>
 				
 		</td>
