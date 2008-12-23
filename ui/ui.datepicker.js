@@ -595,6 +595,24 @@ $.extend(Datepicker.prototype, {
 				.trigger('mouseover')
 			.end();
 		var numMonths = this._getNumberOfMonths(inst);
+		var months = this._get(inst, 'numberOfMonths');
+		var multi = '';
+		if (months > 1) {
+			if (months % 4 == 0) {
+				multi = 'ui-datepicker-multi-4';
+				inst.dpDiv.css('width','60em');
+			} else if (months % 3 == 0) {
+				multi = 'ui-datepicker-multi-3';
+				inst.dpDiv.css('width','51em');
+			} else if (months % 2 == 0) {
+				multi = 'ui-datepicker-multi-2';
+				inst.dpDiv.css('width','34em');
+			}
+			inst.dpDiv.addClass(multi);
+		} else {
+			inst.dpDiv.removeClass('ui-datepicker-multi-2 ui-datepicker-multi-3 ui-datepicker-multi-4');
+			inst.dpDiv.width('');
+		}
 		inst.dpDiv[(numMonths[0] != 1 || numMonths[1] != 1 ? 'add' : 'remove') +
 			'Class']('ui-datepicker-multi');
 		inst.dpDiv[(this._get(inst, 'isRTL') ? 'add' : 'remove') +
