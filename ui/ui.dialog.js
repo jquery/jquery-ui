@@ -64,7 +64,7 @@ $.widget("ui.dialog", {
 					role: 'dialog',
 					'aria-labelledby': titleId
 				})
-				.mouseup(function() {
+				.mousedown(function() {
 					self.moveToTop();
 				}),
 
@@ -82,9 +82,6 @@ $.widget("ui.dialog", {
 					'ui-corner-all ' +
 					'ui-helper-clearfix'
 				)
-				.mousedown(function() {
-					self.moveToTop();
-				})
 				.prependTo(uiDialog),
 
 			uiDialogTitlebarClose = $('<a href="#"/>')
