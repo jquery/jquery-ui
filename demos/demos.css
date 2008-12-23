@@ -1,1 +1,29 @@
 body { font-size: 62.5%; }
+.nav {
+	font-family: Verdana,Arial,sans-serif;
+	width: 200px;
+}
+.nav dt {
+	color: #E87B10;
+	font-size: 1.8em;
+	font-weight: bold;
+	margin-top: 1em;
+	margin-bottom: 0.5em;
+}
+.nav dd {
+	margin-left: 0.5em;
+}
+.nav dd a {
+	border-bottom:1px solid #F4F4F4;
+	color:#000000;
+	display:block;
+	font-size: 1.6em;
+	font-weight: bold;
+	height:1.4em;
+	padding:7px 3px 3px 12px;
+	text-decoration:none;
+}
+.nav dd a:hover {
+	background: #eaeaea;
+	border-bottom: 1px solid #bbb;
+}
