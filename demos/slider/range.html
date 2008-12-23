@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<title>jQuery UI Slider - Range Demo</title>
+	<link type="text/css" href="../demos.css" rel="stylesheet" />
+	<link type="text/css" href="../../themes/default/ui.all.css" rel="stylesheet" />
+	<script type="text/javascript" src="../../jquery-1.2.6.js"></script>
+	<script type="text/javascript" src="../../ui/ui.core.js"></script>
+	<script type="text/javascript" src="../../ui/ui.slider.js"></script>
+	<script type="text/javascript">
+	$(function() {
+		$("#slider-range").slider({
+			range: true,
+			values: [17, 67]
+		});
+	})
+	</script>
+</head>
+<body>
+
+<div id="slider-range"></div>
+
+</body>
+</html>
