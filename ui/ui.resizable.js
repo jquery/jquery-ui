@@ -606,7 +606,7 @@ $.ui.plugin.add("resizable", "alsoResize", {
 			});
 		};
 
-		if (typeof(o.alsoResize) == 'object' && !o.alsoResize.parentNode) {
+		if (typeof(o.alsoResize) == 'object' && !o.alsoResize.nodeType) {
 			$.each(o.alsoResize, function(exp, c) { _alsoResize(exp, c); });
 		}else{
 			_alsoResize(o.alsoResize);

@@ -308,7 +308,7 @@ $.widget("ui.dialog", {
 
 		this.uiDialog.resizable({
 			cancel: '.ui-dialog-content',
-			alsoResize: this.element[0],
+			alsoResize: this.element,
 			helper: options.resizeHelper,
 			maxWidth: options.maxWidth,
 			maxHeight: options.maxHeight,
