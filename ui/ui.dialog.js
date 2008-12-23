@@ -286,7 +286,6 @@ $.widget("ui.dialog", {
 			helper: options.dragHelper,
 			handle: '.ui-dialog-titlebar',
 			start: function() {
-				self.moveToTop();
 				(options.dragStart && options.dragStart.apply(self.element[0], arguments));
 			},
 			drag: function() {
