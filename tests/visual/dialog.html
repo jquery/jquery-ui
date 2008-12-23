@@ -13,7 +13,7 @@
 	$(function() {
 		// Simple Dialog
 		$("#dialog button").click(function() {
-			$("#dlg").clone().dialog();
+			$("#dlg").clone().removeAttr('id').dialog();
 		});
 
 		// Dialog with Buttons
