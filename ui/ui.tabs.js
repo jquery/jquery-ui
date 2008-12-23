@@ -78,6 +78,24 @@ $.widget("ui.tabs", {
 
 		var self = this, o = this.options;
 
+		this.$lis
+			.hover(
+				function() {
+					$(this).addClass('ui-state-hover');
+				},
+				function() {
+					$(this).removeClass('ui-state-hover');
+				}
+			);
+
+		this.$tabs
+			.focus(function() {
+				$(this).parent().addClass('ui-state-focus');
+			})
+			.blur(function() {
+				$(this).parent().removeClass('ui-state-focus');
+			})
+
 		this.$tabs.each(function(i, a) {
 			// inline tab
 			if (a.hash && a.hash.replace('#', '')) // Safari 2 reports '#' for an empty hash
