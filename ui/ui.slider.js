@@ -34,7 +34,8 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 
 		if (this.options.range) {
 			if (this.options.range === true) {
-				this.range = $('<a href="#"></a>');
+				//this.range = $('<a href="#"></a>');
+				this.range = $('<div></div>');
 				if (!this.options.values) this.options.values = [this._valueMin(), this._valueMin()];
 				if (this.options.values.length && this.options.values.length != 2) {
 					this.options.values = [this.options.values[0], this.options.values[0]];
