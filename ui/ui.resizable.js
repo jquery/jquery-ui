@@ -577,7 +577,7 @@ $.ui.plugin.add("resizable", "alsoResize", {
 			});
 		};
 
-		if (typeof(o.alsoResize) == 'object') {
+		if (typeof(o.alsoResize) == 'object' && !o.alsoResize.parentNode) {
 			if (o.alsoResize.length) { o.alsoResize = o.alsoResize[0];	_store(o.alsoResize); }
 			else { $.each(o.alsoResize, function(exp, c) { _store(exp); }); }
 		}else{
