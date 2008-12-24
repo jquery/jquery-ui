@@ -595,23 +595,12 @@ $.extend(Datepicker.prototype, {
 				.trigger('mouseover')
 			.end();
 		var numMonths = this._getNumberOfMonths(inst);
-		var months = this._get(inst, 'numberOfMonths');
-		var multi = '';
-		if (months > 1) {
-			if (months % 4 == 0) {
-				multi = 'ui-datepicker-multi-4';
-				inst.dpDiv.css('width','60em');
-			} else if (months % 3 == 0) {
-				multi = 'ui-datepicker-multi-3';
-				inst.dpDiv.css('width','51em');
-			} else if (months % 2 == 0) {
-				multi = 'ui-datepicker-multi-2';
-				inst.dpDiv.css('width','34em');
-			}
-			inst.dpDiv.addClass(multi);
+		var cols = numMonths[1];
+		var width = 17;
+		if (cols > 1) {
+			inst.dpDiv.addClass('ui-datepicker-multi-' + cols).css('width', (width * cols) + 'em');
 		} else {
-			inst.dpDiv.removeClass('ui-datepicker-multi-2 ui-datepicker-multi-3 ui-datepicker-multi-4');
-			inst.dpDiv.width('');
+			inst.dpDiv.removeClass('ui-datepicker-multi-2 ui-datepicker-multi-3 ui-datepicker-multi-4').width('');
 		}
 		inst.dpDiv[(numMonths[0] != 1 || numMonths[1] != 1 ? 'add' : 'remove') +
 			'Class']('ui-datepicker-multi');
@@ -1352,8 +1341,8 @@ $.extend(Datepicker.prototype, {
 					calender += '">';
 				}
 				calender += '<div class="ui-datepicker-header ui-widget-header ui-helper-clearfix' + cornerClass + '">' + 
-					(/all|left/.test(cornerClass) ? (isRTL ? next : prev) : '') + 
-					(/all|right/.test(cornerClass) ? (isRTL ? prev : next) : '') +
+					(/all|left/.test(cornerClass) && row == 0 ? (isRTL ? next : prev) : '') + 
+					(/all|right/.test(cornerClass) && row == 0 ? (isRTL ? prev : next) : '') +
 					this._generateMonthYearHeader(inst, drawMonth, drawYear, minDate, maxDate,
 					selectedDate, row > 0 || col > 0, monthNames) + // draw month headers
 					'</div><table class="ui-datepicker-calendar"><thead>' +
