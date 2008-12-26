@@ -141,7 +141,8 @@ $.widget("ui.accordion", {
 			var maxPadding = 0;
 			options.headers.next().each(function() {
 				maxPadding = Math.max(maxPadding, $(this).innerHeight() - $(this).height());
-			}).height(maxHeight - maxPadding);
+			}).height(maxHeight - maxPadding)
+			.css('overflow', 'auto');
 		} else if ( options.autoHeight ) {
 			maxHeight = 0;
 			options.headers.next().each(function() {
@@ -207,7 +208,7 @@ function toggle(toShow, toHide, data, clickedActive, down) {
 				toHide: toHide,
 				complete: complete,
 				down: down,
-				autoHeight: options.autoHeight
+				autoHeight: options.autoHeight || options.fillSpace
 			};
 		} else {
 			animOptions = {
@@ -215,7 +216,7 @@ function toggle(toShow, toHide, data, clickedActive, down) {
 				toHide: toHide,
 				complete: complete,
 				down: down,
-				autoHeight: options.autoHeight
+				autoHeight: options.autoHeight || options.fillSpace
 			};
 		}
 
