@@ -16,7 +16,7 @@ Marc Grabanski (m@marcgrabanski.com)
 Klaus Hartl (stilbuero.de)
 Scott Jehl
 Cody Lindley
-Eduardo Lundgren
+Eduardo Lundgren (eduardolundgren@gmail.com)
 Todd Parker
 John Resig
 Patty Toland
