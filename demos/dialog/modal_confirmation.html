@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-	<title>jQuery UI Dialog - Modal Demo</title>
+	<title>jQuery UI Dialog - Buttons Demo</title>
 	<link type="text/css" href="../demos.css" rel="stylesheet" />
 	<link type="text/css" href="../../themes/default/ui.all.css" rel="stylesheet" />
 	<script type="text/javascript" src="../../jquery-1.2.6.js"></script>
@@ -16,6 +16,15 @@
 			overlay: {
 				backgroundColor: '#000',
 				opacity: 0.5
+			},
+			buttons: {
+				'Delete this file': function() {
+					alert('The user was deleted forever!');
+				},
+				Cancel: function() {
+					alert('You clicked Cancel. The dialog will now close.');
+					$(this).dialog('close');
+				}
 			}
 		});
 	});
@@ -23,9 +32,9 @@
 </head>
 <body>
 
-<div id="dialog" title="Basic modal dialog">
-	<p>This is identical to the default dialog except a semi-transparent overlay layer is added as an option to make this look modal to the page content.</p><p>The dialog window can be moved, resized and closed with the 'x' icon.</p>
-</div>
+<div id="dialog" title="Modal confirmation dialog">
+	<p>This type of dialog adds a button bar and is useful for confirming an action that may be destructive or important. These are typically displayed as modal dialogs to get the user's attention and force a decision before continuing.</p></div>
+
 
 <!-- Sample page content to illustrate the semi-transparent overlay screen -->
 <div style="padding:20px;">

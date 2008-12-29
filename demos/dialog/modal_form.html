@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-	<title>jQuery UI Dialog - Modal Demo</title>
+	<title>jQuery UI Dialog - Buttons Demo</title>
 	<link type="text/css" href="../demos.css" rel="stylesheet" />
 	<link type="text/css" href="../../themes/default/ui.all.css" rel="stylesheet" />
 	<script type="text/javascript" src="../../jquery-1.2.6.js"></script>
@@ -12,20 +12,51 @@
 	<script type="text/javascript">
 	$(function() {
 		$("#dialog").dialog({
+			height: '300',
 			modal: true,
 			overlay: {
 				backgroundColor: '#000',
 				opacity: 0.5
+			},
+			buttons: {
+				'Create user account': function() {
+					alert('The user was created!');
+				},
+				Cancel: function() {
+					alert('You clicked Cancel. The dialog will now close.');
+					$(this).dialog('close');
+				}
 			}
 		});
 	});
 	</script>
+	
+	<!-- Styles for this demo page -->
+	<style type="text/css" media="screen">
+		label, input { display:block; }
+		input.text { margin-bottom:12px; width:95%; }
+		fieldset { padding:0; border:0; margin-top:25px; } 
+	</style>
+
 </head>
 <body>
 
-<div id="dialog" title="Basic modal dialog">
-	<p>This is identical to the default dialog except a semi-transparent overlay layer is added as an option to make this look modal to the page content.</p><p>The dialog window can be moved, resized and closed with the 'x' icon.</p>
+<div id="dialog" title="Modal confirmation dialog">
+	<p>Example of a form placed inside a dialog.</p>
+	
+	<form>
+	<fieldset>
+		<label for="name">Name</label>
+		<input type="text" name="name" id="name" class="text" />
+		<label for="email">Email</label>
+		<input type="text" name="email" id="birthday" value="" class="text" />
+		<label for="password">Password</label>
+		<input type="password" name="password" id="birthday" value="" class="text" />
+	</fieldset>
+	</form>
 </div>
+
+
 
 <!-- Sample page content to illustrate the semi-transparent overlay screen -->
 <div style="padding:20px;">
@@ -42,6 +73,5 @@
 	<textarea>textarea</textarea><br />
 </form>
 </div>
-
 </body>
 </html>

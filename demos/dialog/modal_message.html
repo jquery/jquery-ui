@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-	<title>jQuery UI Dialog - Modal Demo</title>
+	<title>jQuery UI Dialog - Buttons Demo</title>
 	<link type="text/css" href="../demos.css" rel="stylesheet" />
 	<link type="text/css" href="../../themes/default/ui.all.css" rel="stylesheet" />
 	<script type="text/javascript" src="../../jquery-1.2.6.js"></script>
@@ -16,6 +16,11 @@
 			overlay: {
 				backgroundColor: '#000',
 				opacity: 0.5
+			},
+			buttons: {
+				Ok: function() {
+					alert('You clicked Ok!');
+				}
 			}
 		});
 	});
@@ -23,9 +28,11 @@
 </head>
 <body>
 
-<div id="dialog" title="Basic modal dialog">
-	<p>This is identical to the default dialog except a semi-transparent overlay layer is added as an option to make this look modal to the page content.</p><p>The dialog window can be moved, resized and closed with the 'x' icon.</p>
+<div id="dialog" title="Modal message dialog">
+	<p>A modal message dialog like this is useful for providing information to the user that requires them to explicitly acknowledge before continuing with their work. </p><p>This example adds a button bar with a single 'ok' button to dismiss the dialog.</p>
 </div>
+
+
 
 <!-- Sample page content to illustrate the semi-transparent overlay screen -->
 <div style="padding:20px;">
