@@ -9,7 +9,7 @@
 	<script type="text/javascript" src="../../ui/ui.accordion.js"></script>
 	<script type="text/javascript">
 	$(function() {
-		$("#accordion-mouseover").accordion({
+		$("#accordion").accordion({
 			event: "mouseover",
 			header: "h3"
 		});
@@ -18,26 +18,38 @@
 </head>
 <body>
 
-<div id="accordion-mouseover">
+<div id="accordion">
 	<div>
-		<h3><a href="#">Nullam blandit</a></h3>
+		<h3><a href="#">Section 1</a></h3>
 		<div>
-			Duis pretium. Nullam venenatis. Donec ornare. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit amet magna ac lorem elementum euismod. Nulla eu leo. Phasellus purus arcu, semper sed, scelerisque eget, molestie vitae, ante. Nam et purus. Vivamus nec lacus. Mauris pulvinar vehicula orci. Nunc quam metus, iaculis ut, viverra at, tempor vel, arcu. Aliquam dictum massa non diam. Pellentesque vel odio. Integer volutpat placerat velit. Phasellus rhoncus, diam ac fermentum suscipit, velit est eleifend dolor, et cursus massa pede et diam. Cras eu tortor. Quisque vitae ante nec erat venenatis luctus. Donec commodo suscipit nulla. Nunc nec ligula id nulla dictum dictum. 
+			<p>In this example, we've customized the event to have sections open on mouseover instead of on click. This is done by simply adding this option to the accordion:</p>
+<pre>event: "mouseover"</pre>
 		</div>
 	</div>
 	<div>
-		<h3><a href="#">Aliquam nulla</a></h3>
+		<h3><a href="#">Section 2</a></h3>
 		<div>
-			Ut varius. Cras gravida, ante vel porttitor porttitor, sapien magna eleifend dolor, sit amet eleifend justo neque sit amet neque. Donec a nisl sed orci pharetra sodales. Proin ullamcorper, mi sit amet tempor blandit, dolor diam vestibulum nibh, eu sollicitudin lorem risus quis tellus. Ut scelerisque consequat ipsum. Vivamus tellus velit, faucibus eu, venenatis sit amet, varius eu, turpis. In molestie nisi id purus. Pellentesque et dolor. Proin metus nisl, sollicitudin at, aliquet eu, porta eget, est. Donec ut libero. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae;
+			<p>Sed non urna. Donec et ante. Phasellus eu ligula. Vestibulum sit amet purus. Vivamus hendrerit, dolor at aliquet laoreet, mauris turpis porttitor velit, faucibus interdum tellus libero ac justo. Vivamus non quam. In suscipit faucibus urna. Mauris mauris ante, blandit et, ultrices a, suscipit eget, quam. Integer ut neque. Vivamus nisi metus, molestie vel, gravida in, condimentum sit amet, nunc. Nam a nibh. Donec suscipit eros. Nam mi. Proin viverra leo ut odio. Curabitur malesuada. Vestibulum a velit eu ante scelerisque vulputate.</p>
 		</div>
 	</div>
 	<div>
-		<h3><a href="#">Proin tincidunt</a></h3>
+		<h3><a href="#">Section 3</a></h3>
 		<div>
-			Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Ut quam massa, scelerisque sit amet, lacinia sit amet, facilisis ullamcorper, nunc. Nulla vehicula auctor felis. Nullam lobortis erat quis metus. Maecenas molestie, quam lobortis tincidunt ultricies, dolor ante rutrum nisl, in vestibulum nisi odio consectetur enim. Nam tellus felis, ultrices nec, elementum malesuada, congue quis, lacus. Aliquam hendrerit interdum eros. Etiam egestas iaculis urna. Cras venenatis pharetra nunc. Etiam scelerisque mauris eget massa. Nam nec lectus eu purus tempus feugiat. Nunc quam. In facilisis venenatis nisl. Nullam id sapien. Nullam lacinia quam facilisis sem. Nullam facilisis convallis justo. Praesent dictum facilisis purus. Integer cursus ligula at nibh. Mauris in felis id nisl porttitor auctor. Quisque erat. 
+			<p>Nam enim risus, molestie et, porta ac, aliquam ac, risus. Quisque lobortis. Phasellus pellentesque purus in massa. Aenean in pede. Phasellus ac libero ac tellus pellentesque semper. Sed ac felis. Sed commodo, magna quis lacinia ornare, quam ante aliquam nisi, eu iaculis leo purus venenatis dui. </p>
+			<ul>
+				<li>List item one</li>
+				<li>List item two</li>
+				<li>List item three</li>
+			</ul>
+			<p>Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Maecenas faucibus, magna vel condimentum venenatis, magna urna pretium erat, vel suscipit orci dui non sapien. Nullam tincidunt viverra eros. Pellentesque rhoncus. Phasellus ac enim. Integer ut lacus eget elit rutrum varius. Duis mattis urna eu nisi. </p>
+		</div>
+	</div>
+	<div>
+		<h3><a href="#">Section 4</a></h3>
+		<div>
+			<p>Cras dictum. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Aenean lacinia mauris vel est. Morbi vestibulum est non libero. Quisque dolor mauris, sollicitudin eget, vehicula et, tincidunt sed, turpis. Etiam laoreet urna eget tellus. Proin id ligula in ipsum vulputate ullamcorper. </p><p>Suspendisse eu nisl. Nullam ut libero. Integer dignissim consequat lectus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Cras lectus neque, vehicula at, imperdiet et, imperdiet vitae, urna. In ut metus varius diam tincidunt feugiat. Sed dictum, nunc et placerat consequat, felis dolor pulvinar neque, non pellentesque ipsum arcu non ante. Vivamus erat mi, faucibus in, tincidunt ac, feugiat at, justo. Curabitur nibh. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae.</p>
 		</div>
 	</div>
 </div>
-
 </body>
 </html>
