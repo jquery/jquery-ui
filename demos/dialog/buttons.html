@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<title>jQuery UI Dialog - Buttons Demo</title>
+	<link type="text/css" href="../demos.css" rel="stylesheet" />
+	<link type="text/css" href="../../themes/default/ui.all.css" rel="stylesheet" />
+	<script type="text/javascript" src="../../jquery-1.2.6.js"></script>
+	<script type="text/javascript" src="../../ui/ui.core.js"></script>
+	<script type="text/javascript" src="../../ui/ui.draggable.js"></script>
+	<script type="text/javascript" src="../../ui/ui.resizable.js"></script>
+	<script type="text/javascript" src="../../ui/ui.dialog.js"></script>
+	<script type="text/javascript">
+	$(function() {
+		$("#dialog").dialog({
+			buttons: {
+				Ok: function() {
+					alert('You clicked Ok!');
+				},
+				Cancel: function() {
+					alert('You clicked Cancel.  The dialog will now close.');
+					$(this).dialog('close');
+				}
+			}
+		});
+	});
+	</script>
+</head>
+<body>
+
+<div id="dialog" title="Curabitur augue">
+	<p>Sed vel diam id libero rutrum convallis. Donec aliquet leo vel magna. Phasellus rhoncus faucibus ante. Etiam bibendum, enim faucibus aliquet rhoncus, arcu felis ultricies neque, sit amet auctor elit eros a lectus.</p>
+</div>
+
+</body>
+</html>
