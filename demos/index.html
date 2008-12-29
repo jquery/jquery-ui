@@ -17,9 +17,25 @@
 	<script type="text/javascript" src="../ui/ui.slider.js"></script>
 	<script type="text/javascript" src="../ui/ui.sortable.js"></script>
 	<script type="text/javascript" src="../ui/ui.tabs.js"></script>
+	
 </head>
 <body>
+<?php } else {
+	$base = 'repository/trunk/demos/';
+	$section = $base . $_GET['load'];
+
+	?>
+	<script type="text/javascript">
+	<?php printf ('var section = "%s";', $section); ?>
+	jQuery(function($){
+		$('dl.nav a').each(function(){
+			this.setAttribute('href', '/' + section + '/' + this.getAttribute('href'));
+			$(this).attr('target', 'preview');
+		});
+	});
+	</script>
 <?php } ?>
+
 <table cellspacing="0" cellpadding="0" class="layout-grid" id="functional">
 	<tr>
 		<td class="left-nav">
@@ -67,16 +83,13 @@
 		<td class="normal">
 							
 			<div class="normal">
-				<?php
 				
-					if(isset($_GET['load'])) {
-						
-						//Preload the demo page here
-						echo $_GET['load'];
-						
-					} else {
+				<?php if(isset($plain) && isset($_GET['load'])) { 
+					echo html_entity_decode('&lt;h1&gt;'. $_GET['load'] .'&lt;/h1&gt;'); 
+					include($section .'/index.html'); 
+					echo html_entity_decode('&lt;iframe id="preview" name="preview" src="/'. $section .'/default.html" width="500" height="300" border="0" frameborder="0" style="overflow:auto"&gt;&lt;/iframe&gt;'); 
+				} else { ?>
 				
-				?>
 				<h3>Instructions</h3>
 				<p>
 					The functional demos are provided to give users an idea of how jQuery UI works. You only need to copy and paste code from the demos. Have fun playing with it.
