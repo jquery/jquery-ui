@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<title>jQuery UI Resizable - Distance Demo</title>
+	<link type="text/css" href="../demos.css" rel="stylesheet" />
+	<link type="text/css" href="../../themes/default/ui.all.css" rel="stylesheet" />
+	<script type="text/javascript" src="../../jquery-1.2.6.js"></script>
+	<script type="text/javascript" src="../../ui/ui.core.js"></script>
+	<script type="text/javascript" src="../../ui/ui.resizable.js"></script>
+	<script type="text/javascript">
+	$(function() {
+		$("#resizable").resizable({
+			distance: 40
+		});
+	});
+	</script>
+</head>
+<body>
+
+<p>You must drag the div at least 40 pixels before it will resize.</p>
+
+<div id="resizable" style="width: 200px; height: 200px; background-color: #f00;">
+	<p>Resize me</p>
+</div>
+
+</body>
+</html>

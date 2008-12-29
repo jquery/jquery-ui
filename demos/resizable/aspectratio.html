@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<title>jQuery UI Resizable - Aspect Ratio Demo</title>
+	<link type="text/css" href="../demos.css" rel="stylesheet" />
+	<link type="text/css" href="../../themes/default/ui.all.css" rel="stylesheet" />
+	<script type="text/javascript" src="../../jquery-1.2.6.js"></script>
+	<script type="text/javascript" src="../../ui/ui.core.js"></script>
+	<script type="text/javascript" src="../../ui/ui.resizable.js"></script>
+	<script type="text/javascript">
+	$(function() {
+		$("#resizable").resizable({
+			aspectRatio: 2
+		});
+	});
+	</script>
+</head>
+<body>
+
+<div id="resizable" style="width: 400px; height: 200px; background-color: #f00;">
+	<p>Resize me</p>
+</div>
+
+</body>
+</html>
