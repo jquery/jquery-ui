@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<title>jQuery UI Slider - Range Min Demo</title>
+	<link type="text/css" href="../demos.css" rel="stylesheet" />
+	<link type="text/css" href="../../themes/default/ui.all.css" rel="stylesheet" />
+	<script type="text/javascript" src="../../jquery-1.2.6.js"></script>
+	<script type="text/javascript" src="../../ui/ui.core.js"></script>
+	<script type="text/javascript" src="../../ui/ui.slider.js"></script>
+	<script type="text/javascript">
+	$(function() {
+		$("#slider-vertical").slider({
+			orientation: "vertical",
+			min: 0, max: 500, value: 140
+		});
+	});
+	</script>
+</head>
+<body>
+
+<div id="slider-vertical" style="height:300px;"></div>
+
+</body>
+</html>
