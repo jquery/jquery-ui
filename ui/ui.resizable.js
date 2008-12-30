@@ -27,7 +27,7 @@ $.widget("ui.resizable", $.extend({}, $.ui.mouse, {
 
 		$.extend(o, {
 			_aspectRatio: !!(o.aspectRatio),
-			helper: o.helper || o.ghost || o.animate ? o.helper || 'proxy' : null,
+			helper: o.helper || o.ghost || o.animate ? o.helper || 'ui-resizable-helper' : null,
 			knobHandles: o.knobHandles === true ? 'ui-resizable-knob-handle' : o.knobHandles
 		});
 
