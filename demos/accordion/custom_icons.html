@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-	<title>jQuery UI Accordion - Mouseover Demo</title>
+	<title>jQuery UI Accordion - Custom Icon Demo</title>
 	<link type="text/css" href="../demos.css" rel="stylesheet" />
 	<link type="text/css" href="../../themes/default/ui.all.css" rel="stylesheet" />
 	<script type="text/javascript" src="../../jquery-1.2.6.js"></script>
@@ -10,8 +10,10 @@
 	<script type="text/javascript">
 	$(function() {
 		$("#accordion").accordion({
-			event: "mouseover",
-			header: "h3"
+			header: "h3",
+			icons: {
+    		 header: "ui-icon-circle-arrow-e",
+   			 headerSelected: "ui-icon-circle-arrow-s"}
 		});
 	});
 	</script>
@@ -58,7 +60,13 @@
 
 <div class="demo-description">
 
-	<p>In this example, we've customized the event to have sections open on mouseover instead of on click. This is done by simply adding this option event: "mouseover" to the accordion:</p>
+<p>The icons used for the open and closed accordions can be any of the standard icons in the css framework or even a custom css class you create with an icon background image. For this example, we're using the arrow in a circle icons:
+
+<pre>	
+icons: {
+header: "ui-icon-circle-arrow-e",
+headerSelected: "ui-icon-circle-arrow-s"}
+</pre>
 
 </div><!-- End demo-description -->
 

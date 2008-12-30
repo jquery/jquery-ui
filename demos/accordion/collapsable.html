@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-	<title>jQuery UI Accordion - Mouseover Demo</title>
+	<title>jQuery UI Accordion - Collapsable Demo</title>
 	<link type="text/css" href="../demos.css" rel="stylesheet" />
 	<link type="text/css" href="../../themes/default/ui.all.css" rel="stylesheet" />
 	<script type="text/javascript" src="../../jquery-1.2.6.js"></script>
@@ -10,8 +10,8 @@
 	<script type="text/javascript">
 	$(function() {
 		$("#accordion").accordion({
-			event: "mouseover",
-			header: "h3"
+			header: "h3",
+			alwaysOpen: false
 		});
 	});
 	</script>
@@ -58,7 +58,8 @@
 
 <div class="demo-description">
 
-	<p>In this example, we've customized the event to have sections open on mouseover instead of on click. This is done by simply adding this option event: "mouseover" to the accordion:</p>
+<p>By default, accordions always keep one section open. To allow for all sections to be be collapsable, set the alwaysOpen option to false. Click on the currently open section to collapse the section in the example above.</p>
+
 
 </div><!-- End demo-description -->
 
