@@ -21,9 +21,11 @@
 	jQuery(function($){
 		$('.left-nav a').click(function(ev){
 			var section = this.href.replace('/index.html','');
+			var header = section.replace(/.+\/([^\/]+)/,'$1');
 			$('td.normal div.normal')
 				.empty()
-				.append('<h4 class="demo-subheader">Functional demo:</div>')
+				.append('<h4 class="demo-subheader">Functional demo:</h4>')
+				.append('<h3 class="demo-header">'+ header +'</h3>')
 				.append('<div id="demo-config"></div>')
 				.find('#demo-config')
 					.append('<iframe id="demo-frame" name="demo-frame" width="520" height="314" scrolling="auto" frameborder="0" src="'+ section +'/default.html"></iframe><div id="demo-config-menu"></div>')
