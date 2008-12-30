@@ -47,9 +47,13 @@
 								if ($('#demo-notes').length == 0) {
 									$('<div id="demo-notes"></div>').insertAfter('#demo-config');
 								}						
-								$('#demo-notes').hide().empty().html(notes.html()).fadeIn();
+								$('#demo-notes').hide().empty().html(notes.html());
+								$('#demo-notes').fadeIn();
 								notes.hide();
-							});							
+							});
+							
+							if ($('#demo-frame .demo-description:visible'))
+								$('#demo-frame').trigger('load');
 						})
 					.end()
 				.end()
