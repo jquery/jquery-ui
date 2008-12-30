@@ -141,6 +141,7 @@ $.widget("ui.droppable", {
 $.extend($.ui.droppable, {
 	version: "@VERSION",
 	defaults: {
+		accept: '*',
 		activeClass: null,
 		cssNamespace: 'ui',
 		greedy: false,
