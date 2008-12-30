@@ -17,10 +17,38 @@
 </head>
 <body>
 
-<div id="dialog" title="Basic dialog">
-	<p>This is the default dialog which is useful for displaying information. It is created by simply calling .dialog on the ID of the content like this: <pre>$("#dialog").dialog();</pre></p>
-	<p>If the content exceeds the size of the window, a scrollbar will automatically appear. The dialog window can be moved, resized and closed with the 'x' icon by default. </p>
-</div>
+<div class="demo">
+
+	<div id="dialog" title="Basic dialog">
+		<p>This is the default dialog which is useful for displaying information. The dialog window can be moved, resized and closed with the 'x' icon. </p>
+	</div>
+	
+	<!-- Sample page content to illustrate the layering of the dialog -->
+	<div class="hiddenInViewSource" style="padding:20px;">
+	<p>Sed vel diam id libero <a href="http://example.com">rutrum convallis</a>. Donec aliquet leo vel magna. Phasellus rhoncus faucibus ante. Etiam bibendum, enim faucibus aliquet rhoncus, arcu felis ultricies neque, sit amet auctor elit eros a lectus.</p>
+	<form>
+		<input value="text input" /><br />
+		<input type="checkbox" />checkbox<br />
+		<input type="radio" />radio<br />
+		<select>
+			<option>select</option>
+		</select><br /><br />
+		<textarea>textarea</textarea><br />
+	</form>
+	<p>Sed vel diam id libero <a href="http://example.com">rutrum convallis</a>. Donec aliquet leo vel magna. Phasellus rhoncus faucibus ante. Etiam bibendum, enim faucibus aliquet rhoncus, arcu felis ultricies neque, sit amet auctor elit eros a lectus.</p>
+</div><!-- End sample page content -->
+
+</div><!-- End demo -->
+
+
+
+<div class="demo-description">
+
+<p>This is a default dialog which opens in a floating layer above the page content protected with an iframe. It is created by simply calling .dialog on the ID of the content like this: <pre>$("#dialog").dialog();</pre></p>
+<p>A basic dialog window has a title bar and a content area. If the content length exceeds the size of the window, a scrollbar will automatically appear. The dialog window can be moved, resized and closed with the 'x' icon by default. </p>
+
+</div><!-- End demo-description -->
+
 
 </body>
 </html>

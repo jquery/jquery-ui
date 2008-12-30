@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-	<title>jQuery UI Dialog - Buttons Demo</title>
+	<title>jQuery UI Dialog - Modal Message Demo</title>
 	<link type="text/css" href="../demos.css" rel="stylesheet" />
 	<link type="text/css" href="../../themes/default/ui.all.css" rel="stylesheet" />
 	<script type="text/javascript" src="../../jquery-1.2.6.js"></script>
@@ -28,27 +28,42 @@
 </head>
 <body>
 
-<div id="dialog" title="Modal message dialog">
-	<p>A modal message dialog like this is useful for providing information to the user that requires them to explicitly acknowledge before continuing with their work. </p><p>This example adds a button bar with a single 'ok' button to dismiss the dialog.</p>
+<div id="dialog" title="Download complete">
+	<p><span class="ui-icon ui-icon-circle-check" style="float:left; margin:0 7px 50px 0;"></span>Your files have downloaded successfully into the My Downloads folder.</p>
+	<p>Currently using <b>36% of your storage space</b>.</p>
 </div>
 
 
+<div class="demo">
 
-<!-- Sample page content to illustrate the semi-transparent overlay screen -->
-<div style="padding:20px;">
-<p>Sed vel diam id libero <a href="http://example.com">rutrum convallis</a>. Donec aliquet leo vel magna. Phasellus rhoncus faucibus ante. Etiam bibendum, enim faucibus aliquet rhoncus, arcu felis ultricies neque, sit amet auctor elit eros a lectus.</p>
-<p>Sed vel diam id libero <a href="http://example.com">rutrum convallis</a>. Donec aliquet leo vel magna. Phasellus rhoncus faucibus ante. Etiam bibendum, enim faucibus aliquet rhoncus, arcu felis ultricies neque, sit amet auctor elit eros a lectus.</p>
-<p>Sed vel diam id libero <a href="http://example.com">rutrum convallis</a>. Donec aliquet leo vel magna. Phasellus rhoncus faucibus ante. Etiam bibendum, enim faucibus aliquet rhoncus, arcu felis ultricies neque, sit amet auctor elit eros a lectus.</p>
-<form>
-	<input value="text input" /><br />
-	<input type="checkbox" />checkbox<br />
-	<input type="radio" />radio<br />
-	<select>
-		<option>select</option>
-	</select><br /><br />
-	<textarea>textarea</textarea><br />
-</form>
-</div>
+	<div id="dialog" title="Basic dialog">
+		<p>This is the default dialog which is useful for displaying information. The dialog window can be moved, resized and closed with the 'x' icon. </p>
+	</div>
+	
+	<!-- Sample page content to illustrate the layering of the dialog -->
+	<div class="hiddenInViewSource" style="padding:20px;">
+	<p>Sed vel diam id libero <a href="http://example.com">rutrum convallis</a>. Donec aliquet leo vel magna. Phasellus rhoncus faucibus ante. Etiam bibendum, enim faucibus aliquet rhoncus, arcu felis ultricies neque, sit amet auctor elit eros a lectus.</p>
+	<form>
+		<input value="text input" /><br />
+		<input type="checkbox" />checkbox<br />
+		<input type="radio" />radio<br />
+		<select>
+			<option>select</option>
+		</select><br /><br />
+		<textarea>textarea</textarea><br />
+	</form>
+	<p>Sed vel diam id libero <a href="http://example.com">rutrum convallis</a>. Donec aliquet leo vel magna. Phasellus rhoncus faucibus ante. Etiam bibendum, enim faucibus aliquet rhoncus, arcu felis ultricies neque, sit amet auctor elit eros a lectus.</p>
+</div><!-- End sample page content -->
+
+</div><!-- End demo -->
+
+
+
+<div class="demo-description">
+
+<p>A modal message dialog like this is useful for providing information to the user that requires them to explicitly acknowledge before continuing with their work. </p><p>This example adds a button bar with a single 'Ok' button to dismiss the dialog.</p>
+
+</div><!-- End demo-description -->
 
 </body>
 </html>

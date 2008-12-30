@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-	<title>jQuery UI Dialog - Buttons Demo</title>
+	<title>jQuery UI Dialog - Modal Confirmation Demo</title>
 	<link type="text/css" href="../demos.css" rel="stylesheet" />
 	<link type="text/css" href="../../themes/default/ui.all.css" rel="stylesheet" />
 	<script type="text/javascript" src="../../jquery-1.2.6.js"></script>
@@ -12,14 +12,16 @@
 	<script type="text/javascript">
 	$(function() {
 		$("#dialog").dialog({
+			resizable:false,
+			height:140,
 			modal: true,
 			overlay: {
 				backgroundColor: '#000',
 				opacity: 0.5
 			},
 			buttons: {
-				'Delete this file': function() {
-					alert('The user was deleted forever!');
+				'Delete all items in recycle bin': function() {
+					alert('The items were deleted forever!');
 				},
 				Cancel: function() {
 					alert('You clicked Cancel. The dialog will now close.');
@@ -32,25 +34,37 @@
 </head>
 <body>
 
-<div id="dialog" title="Modal confirmation dialog">
-	<p>This type of dialog adds a button bar and is useful for confirming an action that may be destructive or important. These are typically displayed as modal dialogs to get the user's attention and force a decision before continuing.</p></div>
+<div class="demo">
+
+	<div id="dialog" title="Empty the recycle bin?">
+		<p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>These items will be permanently deleted and cannot be recovered. Are you sure?</p>
+	</div>
+	
+	<!-- Sample page content to illustrate the layering of the dialog -->
+	<div class="hiddenInViewSource" style="padding:20px;">
+	<p>Sed vel diam id libero <a href="http://example.com">rutrum convallis</a>. Donec aliquet leo vel magna. Phasellus rhoncus faucibus ante. Etiam bibendum, enim faucibus aliquet rhoncus, arcu felis ultricies neque, sit amet auctor elit eros a lectus.</p>
+	<form>
+		<input value="text input" /><br />
+		<input type="checkbox" />checkbox<br />
+		<input type="radio" />radio<br />
+		<select>
+			<option>select</option>
+		</select><br /><br />
+		<textarea>textarea</textarea><br />
+	</form>
+	<p>Sed vel diam id libero <a href="http://example.com">rutrum convallis</a>. Donec aliquet leo vel magna. Phasellus rhoncus faucibus ante. Etiam bibendum, enim faucibus aliquet rhoncus, arcu felis ultricies neque, sit amet auctor elit eros a lectus.</p>
+</div><!-- End sample page content -->
+
+</div><!-- End demo -->
 
 
-<!-- Sample page content to illustrate the semi-transparent overlay screen -->
-<div style="padding:20px;">
-<p>Sed vel diam id libero <a href="http://example.com">rutrum convallis</a>. Donec aliquet leo vel magna. Phasellus rhoncus faucibus ante. Etiam bibendum, enim faucibus aliquet rhoncus, arcu felis ultricies neque, sit amet auctor elit eros a lectus.</p>
-<p>Sed vel diam id libero <a href="http://example.com">rutrum convallis</a>. Donec aliquet leo vel magna. Phasellus rhoncus faucibus ante. Etiam bibendum, enim faucibus aliquet rhoncus, arcu felis ultricies neque, sit amet auctor elit eros a lectus.</p>
-<p>Sed vel diam id libero <a href="http://example.com">rutrum convallis</a>. Donec aliquet leo vel magna. Phasellus rhoncus faucibus ante. Etiam bibendum, enim faucibus aliquet rhoncus, arcu felis ultricies neque, sit amet auctor elit eros a lectus.</p>
-<form>
-	<input value="text input" /><br />
-	<input type="checkbox" />checkbox<br />
-	<input type="radio" />radio<br />
-	<select>
-		<option>select</option>
-	</select><br /><br />
-	<textarea>textarea</textarea><br />
-</form>
-</div>
+
+<div class="demo-description">
+
+<p>This type of dialog adds a button bar and is useful for confirming an action that may be destructive or important. These are typically displayed as modal dialogs to get the user's attention and force a decision before continuing. This example uses the an icon from the css sprite set and is set to be not resizable by setting this option to false.</p>
+
+</div><!-- End demo-description -->
+
 
 </body>
 </html>

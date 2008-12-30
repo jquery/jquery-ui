@@ -12,6 +12,7 @@
 	<script type="text/javascript">
 	$(function() {
 		$("#dialog").dialog({
+			height:140,
 			modal: true,
 			overlay: {
 				backgroundColor: '#000',
@@ -23,25 +24,38 @@
 </head>
 <body>
 
-<div id="dialog" title="Basic modal dialog">
-	<p>This is identical to the default dialog except a semi-transparent overlay layer is added as an option to make this look modal to the page content.</p><p>The dialog window can be moved, resized and closed with the 'x' icon.</p>
-</div>
 
-<!-- Sample page content to illustrate the semi-transparent overlay screen -->
-<div style="padding:20px;">
-<p>Sed vel diam id libero <a href="http://example.com">rutrum convallis</a>. Donec aliquet leo vel magna. Phasellus rhoncus faucibus ante. Etiam bibendum, enim faucibus aliquet rhoncus, arcu felis ultricies neque, sit amet auctor elit eros a lectus.</p>
-<p>Sed vel diam id libero <a href="http://example.com">rutrum convallis</a>. Donec aliquet leo vel magna. Phasellus rhoncus faucibus ante. Etiam bibendum, enim faucibus aliquet rhoncus, arcu felis ultricies neque, sit amet auctor elit eros a lectus.</p>
-<p>Sed vel diam id libero <a href="http://example.com">rutrum convallis</a>. Donec aliquet leo vel magna. Phasellus rhoncus faucibus ante. Etiam bibendum, enim faucibus aliquet rhoncus, arcu felis ultricies neque, sit amet auctor elit eros a lectus.</p>
-<form>
-	<input value="text input" /><br />
-	<input type="checkbox" />checkbox<br />
-	<input type="radio" />radio<br />
-	<select>
-		<option>select</option>
-	</select><br /><br />
-	<textarea>textarea</textarea><br />
-</form>
-</div>
+<div class="demo">
+
+	<div id="dialog" title="Basic modal dialog">
+		<p>Adding the modal overlay screen makes the dialog look more prominent because it dims out the page content.</p>
+	</div>
+	
+	<!-- Sample page content to illustrate the layering of the dialog -->
+	<div class="hiddenInViewSource" style="padding:20px;">
+	<p>Sed vel diam id libero <a href="http://example.com">rutrum convallis</a>. Donec aliquet leo vel magna. Phasellus rhoncus faucibus ante. Etiam bibendum, enim faucibus aliquet rhoncus, arcu felis ultricies neque, sit amet auctor elit eros a lectus.</p>
+	<form>
+		<input value="text input" /><br />
+		<input type="checkbox" />checkbox<br />
+		<input type="radio" />radio<br />
+		<select>
+			<option>select</option>
+		</select><br /><br />
+		<textarea>textarea</textarea><br />
+	</form>
+	<p>Sed vel diam id libero <a href="http://example.com">rutrum convallis</a>. Donec aliquet leo vel magna. Phasellus rhoncus faucibus ante. Etiam bibendum, enim faucibus aliquet rhoncus, arcu felis ultricies neque, sit amet auctor elit eros a lectus.</p>
+</div><!-- End sample page content -->
+
+</div><!-- End demo -->
+
+
+
+<div class="demo-description">
+
+<p>This is identical to the default dialog except a semi-transparent overlay layer is added as an option to make this look more modal and dim out the page content behind it to bring the user's attention to the dialog.</p><p>The dialog window can be moved, resized and closed with the 'x' icon.</p>
+
+</div><!-- End demo-description -->
+
 
 </body>
 </html>

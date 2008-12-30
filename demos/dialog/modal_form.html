@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-	<title>jQuery UI Dialog - Buttons Demo</title>
+	<title>jQuery UI Dialog - Modal Form Demo</title>
 	<link type="text/css" href="../demos.css" rel="stylesheet" />
 	<link type="text/css" href="../../themes/default/ui.all.css" rel="stylesheet" />
 	<script type="text/javascript" src="../../jquery-1.2.6.js"></script>
@@ -41,8 +41,13 @@
 </head>
 <body>
 
-<div id="dialog" title="Modal confirmation dialog">
-	<p>Example of a form placed inside a dialog.</p>
+
+
+
+<div class="demo">
+
+<div id="dialog" title="Create new user">
+	<p>All form fields are required.</p>
 	
 	<form>
 	<fieldset>
@@ -55,23 +60,31 @@
 	</fieldset>
 	</form>
 </div>
+	
+	<!-- Sample page content to illustrate the layering of the dialog -->
+	<div class="hiddenInViewSource" style="padding:20px;">
+	<p>Sed vel diam id libero <a href="http://example.com">rutrum convallis</a>. Donec aliquet leo vel magna. Phasellus rhoncus faucibus ante. Etiam bibendum, enim faucibus aliquet rhoncus, arcu felis ultricies neque, sit amet auctor elit eros a lectus.</p>
+	<form>
+		<input value="text input" /><br />
+		<input type="checkbox" />checkbox<br />
+		<input type="radio" />radio<br />
+		<select>
+			<option>select</option>
+		</select><br /><br />
+		<textarea>textarea</textarea><br />
+	</form>
+	<p>Sed vel diam id libero <a href="http://example.com">rutrum convallis</a>. Donec aliquet leo vel magna. Phasellus rhoncus faucibus ante. Etiam bibendum, enim faucibus aliquet rhoncus, arcu felis ultricies neque, sit amet auctor elit eros a lectus.</p>
+</div><!-- End sample page content -->
+
+</div><!-- End demo -->
 
 
 
-<!-- Sample page content to illustrate the semi-transparent overlay screen -->
-<div style="padding:20px;">
-<p>Sed vel diam id libero <a href="http://example.com">rutrum convallis</a>. Donec aliquet leo vel magna. Phasellus rhoncus faucibus ante. Etiam bibendum, enim faucibus aliquet rhoncus, arcu felis ultricies neque, sit amet auctor elit eros a lectus.</p>
-<p>Sed vel diam id libero <a href="http://example.com">rutrum convallis</a>. Donec aliquet leo vel magna. Phasellus rhoncus faucibus ante. Etiam bibendum, enim faucibus aliquet rhoncus, arcu felis ultricies neque, sit amet auctor elit eros a lectus.</p>
-<p>Sed vel diam id libero <a href="http://example.com">rutrum convallis</a>. Donec aliquet leo vel magna. Phasellus rhoncus faucibus ante. Etiam bibendum, enim faucibus aliquet rhoncus, arcu felis ultricies neque, sit amet auctor elit eros a lectus.</p>
-<form>
-	<input value="text input" /><br />
-	<input type="checkbox" />checkbox<br />
-	<input type="radio" />radio<br />
-	<select>
-		<option>select</option>
-	</select><br /><br />
-	<textarea>textarea</textarea><br />
-</form>
-</div>
+<div class="demo-description">
+
+<p>This is an example of how a dialog can be used for data entry by making it larger and embedding a form into the content area. A multi-step wizard could be created by extending this with a step navigation and forward and back buttons.</p>
+
+</div><!-- End demo-description -->
+
 </body>
 </html>
