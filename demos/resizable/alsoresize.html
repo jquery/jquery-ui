@@ -7,22 +7,27 @@
 	<script type="text/javascript" src="../../jquery-1.2.6.js"></script>
 	<script type="text/javascript" src="../../ui/ui.core.js"></script>
 	<script type="text/javascript" src="../../ui/ui.resizable.js"></script>
+	<style type="text/css">
+	#resizable, #also { width: 150px; height: 150px; padding: 0.5em; background-position: top left; }
+	#also { margin-top: 1em; }
+	</style>
 	<script type="text/javascript">
 	$(function() {
 		$("#resizable").resizable({
 			alsoResize: '#also'
 		});
+		$("#also").resizable();
 	});
 	</script>
 </head>
 <body>
 
-<div id="resizable" style="width: 200px; height: 200px; background-color: #f00;">
+<div id="resizable" class="ui-widget-header">
 	<p>Resize me</p>
 </div>
 
-<div id="also" style="width: 100px; height: 100px; background-color: #0f0; position: absolute, top: 300px;">
-	<p>I will resize with the other div!</p>
+<div id="also" class="ui-widget-content">
+	<p>I will resize with the other div. I can also be resized independently.</p>
 </div>
 
 </body>
