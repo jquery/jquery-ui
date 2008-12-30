@@ -9,15 +9,25 @@
 	<script type="text/javascript" src="../../ui/ui.datepicker.js"></script>
 	<script type="text/javascript">
 	$(function() {
-		$('#date123').datepicker({numberOfMonths: 3, showButtonPanel: true});
+		$('#date123').datepicker({numberOfMonths: 2, showButtonPanel: true});
 	});
 	</script>
 </head>
 <body>
 
+<div class="demo">
 
 <p>Date: <input type="text" id="date123"></p>
 
+</div><!-- End demo -->
+
+
+
+<div class="demo-description">
+
+<p>This datepicker shows two months at a time by setting the numberOfMonths option to 2. This can be set to any number that will fit within your layout. The multiple calendars are used to make it easier to visually scan across months and make a selection. This is not a date range picker. In a future release, a custom date range plugin will be added. For users that want to use the old date range picker built into the datepicker, they must use the previous version of this plug.</p>
+
+</div><!-- End demo-description -->
 
 
 </body>
