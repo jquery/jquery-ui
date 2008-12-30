@@ -16,7 +16,11 @@
 		});
 	});
 	$(function() {
-		$("#accordionResizer").resizable();
+		$("#accordionResizer").resizable({
+			resize: function() {
+				$("#accordion").accordion("resize");
+			}
+		});
 	});
 	</script>
 </head>
