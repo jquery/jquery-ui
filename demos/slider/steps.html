@@ -10,6 +10,7 @@
 	<script type="text/javascript">
 	$(function() {
 		$("#slider").slider({
+			value:100,
 			min: 0,
 			max: 500,
 			step: 50,
@@ -24,7 +25,7 @@
 
 <div class="demo">
 
-<p>Donation amount ($50 increments): <input type="text" id="amount" /></p>
+<p>Donation amount ($50 increments): <input type="text" id="amount" style="border:0; color:#f6931f; font-weight:bold;"/></p>
 <div id="slider"></div>
 
 </div><!-- End demo -->
@@ -37,7 +38,7 @@
 <pre>			
 min: 0, max: 500, step: 50
 </pre>
-
+<p>This demo also shows how the current slider value can be used to populate a standard form input that can also be used for user feedback.</p>
 </div><!-- End demo-description -->
 
 </body>

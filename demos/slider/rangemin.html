@@ -11,16 +11,21 @@
 	$(function() {
 		$("#slider-range-min").slider({
 			range: "min",
-			value: 37
+			value: 37,
+			min:1,
+			max:700,
+			slide: function(event, ui) {
+				$("#amount").val('$' + ui.value);
+			}
 		});
-	});
+		$("#amount").val('$' + $("#slider-range-min").slider("value"));	});
 	</script>
 </head>
 <body>
 
 <div class="demo">
 
-<p>Maximum price:</p>
+<p>Maximum price: <input type="text" id="amount" style="border:0; color:#f6931f; font-weight:bold;"/></p>
 <div id="slider-range-min"></div>
 
 </div><!-- End demo -->
@@ -33,6 +38,7 @@
 <pre>
 range: "min",
 </pre> 
+<p>This demo also shows how the current slider value can be used to populate a standard form input that can also be used for user feedback.</p>
 
 </div><!-- End demo-description -->
 
