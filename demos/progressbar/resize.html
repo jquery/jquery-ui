@@ -1,16 +1,22 @@
 <!doctype html>
 <html lang="en">
 <head>
-	<title>jQuery UI Progressbar - Default Demo</title>
+	<title>jQuery UI Progressbar - Resize Demo</title>
 	<link type="text/css" href="../demos.css" rel="stylesheet" />
 	<link type="text/css" href="../../themes/default/ui.all.css" rel="stylesheet" />
 	<script type="text/javascript" src="../../jquery-1.2.6.js"></script>
 	<script type="text/javascript" src="../../ui/ui.core.js"></script>
 	<script type="text/javascript" src="../../ui/ui.progressbar.js"></script>
+	<script type="text/javascript" src="../../ui/ui.resizable.js"></script>
+
 	<script type="text/javascript">
 	$(function() {
 		$("#progressbar").progressbar({
 			value: 37
+		});
+	});
+	$(function() {
+		$("#progressbarWrapper").resizable({
 		});
 	});
 	</script>
@@ -18,18 +24,18 @@
 <body>
 
 <div class="demo">
-
-	<div id="progressbar"></div>
 	
+	<div id="progressbarWrapper" style="height:10px; padding:2px;" class="ui-widget-default">
+		<div id="progressbar" style="height:100%;"></div>
+	</div>
+
 </div><!-- End demo -->
 
 
 
 <div class="demo-description">
 
-<p>This is the default determinate progress bar that is used to provide the current % complete status of a process. If the actual percent complete status cannot be calculated, an indeterminate progress bar (coming soon) or spinner animation is a better way to provide user feedback.</p>
-
-<p>The progressbar plugin accepts a single option of Value which can be updated programmatically to animate the bar.</p>
+<p>Since the progress bar is coded in percentages for flexible sizing, it will resize to fit whatever block it's placed inside. Try resizing the height and width of this bar to see how it maintains the correct proportions.</p>
 
 </div><!-- End demo-description -->
 
