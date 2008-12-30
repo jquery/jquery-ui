@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<title>jQuery UI Sortable - Default Demo</title>
+	<link type="text/css" href="../demos.css" rel="stylesheet" />
+	<link type="text/css" href="../../themes/default/ui.all.css" rel="stylesheet" />
+	<script type="text/javascript" src="../../jquery-1.2.6.js"></script>
+	<script type="text/javascript" src="../../ui/ui.core.js"></script>
+	<script type="text/javascript" src="../../ui/ui.droppable.js"></script>
+	<script type="text/javascript" src="../../ui/ui.sortable.js"></script>
+	<style type="text/css">
+	ul { list-style-type: none; margin: 0; padding: 0; }
+	li { margin: 3px; padding: 2px; width: 150px; }
+	.ui-widget-header { height: 60px; margin-bottom: 10px; float: right; width: 200px; }
+	</style>
+	<script type="text/javascript">
+	$(function() {
+		$("ul").sortable();
+		$("div").droppable({
+			activeClass: 'ui-state-hover',
+			hoverClass: 'ui-state-active',
+			drop: function(event, ui) {
+				$(this).addClass('ui-state-highlight').find('p').html('Dropped!');
+			}
+		});
+	});
+	</script>
+</head>
+<body>
+
+<div class="ui-widget-header">
+	<p>Drop a list item on me - sortable items are automatically connected to droppables.</p>
+</div>
+
+<ul>
+	<li class="ui-state-default">Item 1</li>
+	<li class="ui-state-default">Item 2</li>
+	<li class="ui-state-default">Item 3</li>
+	<li class="ui-state-default">Item 4</li>
+	<li class="ui-state-default">Item 5</li>
+</ul>
+
+</body>
+</html>
