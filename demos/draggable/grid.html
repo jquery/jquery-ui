@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<title>jQuery UI Draggable - Grid</title>
+	<link type="text/css" href="../demos.css" rel="stylesheet" />
+	<link type="text/css" href="../../themes/default/ui.all.css" rel="stylesheet" />
+	<script type="text/javascript" src="../../jquery-1.2.6.js"></script>
+	<script type="text/javascript" src="../../ui/ui.core.js"></script>
+	<script type="text/javascript" src="../../ui/ui.draggable.js"></script>
+	<style type="text/css">
+	.ui-widget-content { width: 100px; height: 100px; padding: 0.5em; float: left; margin: 5px; }
+	</style>
+	<script type="text/javascript">
+	$(function() {
+		$("#draggable").draggable({ grid: [20,20] });
+		$("#draggable2").draggable({ grid: [1,50] });
+	});
+	</script>
+</head>
+<body>
+
+<div id="draggable" class="ui-widget-content">
+	<p>I can be dragged in a 20x20 grid system</p>
+</div>
+
+<div id="draggable2" class="ui-widget-content">
+	<p>I only follow a vertical 50 pixel grid</p>
+</div>
+
+</body>
+</html>

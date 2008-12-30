@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<title>jQuery UI Draggable - Constrained to one axis</title>
+	<link type="text/css" href="../demos.css" rel="stylesheet" />
+	<link type="text/css" href="../../themes/default/ui.all.css" rel="stylesheet" />
+	<script type="text/javascript" src="../../jquery-1.2.6.js"></script>
+	<script type="text/javascript" src="../../ui/ui.core.js"></script>
+	<script type="text/javascript" src="../../ui/ui.draggable.js"></script>
+	<style type="text/css">
+	.ui-widget-content { width: 100px; height: 100px; padding: 0.5em; float: left; margin: 5px; }
+	#draggable { cursor: n-resize; }
+	#draggable2 { cursor: e-resize; }
+	</style>
+	<script type="text/javascript">
+	$(function() {
+		$("#draggable").draggable({ axis: 'y' });
+		$("#draggable2").draggable({ axis: 'x' });
+	});
+	</script>
+</head>
+<body>
+
+<div id="draggable" class="ui-widget-content">
+	<p>I can be dragged only vertically</p>
+</div>
+
+<div id="draggable2" class="ui-widget-content">
+	<p>I can be dragged only horizontally</p>
+</div>
+
+</body>
+</html>
