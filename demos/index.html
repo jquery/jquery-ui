@@ -49,23 +49,6 @@
 	</script>	
 </head>
 <body>
-<?php } else {
-	$base = 'repository/trunk/demos/';
-	$section = $base . $_GET['load'];
-
-	?>
-	<script type="text/javascript">
-		var section;
-
-		<?php printf ('section = "%s";', $section); ?>
-
-		section && jQuery(function($){
-			$('dl.nav a').each(function(){
-				this.setAttribute('href', '/' + section + '/' + this.getAttribute('href'));
-				$(this).attr('target', 'preview');
-			});
-		});
-	</script>
 <?php } ?>
 
 <table class="layout-grid" cellspacing="0" cellpadding="0">
@@ -94,16 +77,7 @@
 		<td class="normal">
 							
 			<div class="normal">
-					<?php if(isset($plain) && isset($_GET['load'])) { 
-						echo html_entity_decode('&lt;h4 class="demo-subheader"&gt;Functional demo:&lt;/h4&gt;');
-						echo html_entity_decode('&lt;h3&gt;'. $_GET['load'] .'&lt;/h3&gt;'); 
-						echo html_entity_decode('&lt;div class="demo-config"&gt;');
-						echo html_entity_decode('&lt;iframe id="preview" name="preview" src="/'. $section .'/default.html" width="520" height="314" border="0" frameborder="0" style="overflow:auto"&gt;&lt;/iframe&gt;'); 
-						echo html_entity_decode('&lt;div class="demo-config-menu"&gt;');
-						include($section .'/index.html'); 
-						echo html_entity_decode('&lt;/div&gt;');						
-						echo html_entity_decode('&lt;/div&gt;');
-					} else { ?>
+					<?php if(isset($plain) && $content) { echo $content; } else { ?>
 				
 					<h3>Instructions</h3>
 					<p>
