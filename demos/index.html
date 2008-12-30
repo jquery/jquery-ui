@@ -30,10 +30,14 @@
 				.find('#demo-config')
 					.append('<iframe id="demo-frame" name="demo-frame" width="520" height="314" scrolling="auto" frameborder="0" src="'+ section +'/default.html"></iframe><div id="demo-config-menu"></div>')
 					.find('#demo-config-menu')
-						.load(this.href, function(){
+						.load(this.href + ' #container', function(){
 							$('#demo-config-menu a').each(function(){
 								this.setAttribute('href', section + '/' + this.getAttribute('href'));
 								$(this).attr('target', 'demo-frame');
+								$(this).click(function(){
+									$(this).parents('ul').find('li').removeClass('demo-config-on');
+									$(this).parent().addClass('demo-config-on');
+								});
 							});
 						})
 					.end()

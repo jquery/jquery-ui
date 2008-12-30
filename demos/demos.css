@@ -64,10 +64,6 @@ body {
 
 /* Demos */
 
-.normal h3.demo-header { font-size:32px; padding:0 0 5px; border-bottom:1px solid #eee; text-transform: capitalize; }
-
-.normal h4.demo-subheader { font-size:10px; text-transform: uppercase; color:#999; padding:8px 0 3px; border:0; margin:0; }
-
 .demos-nav, .demos-nav dt, .demos-nav dd {
 	margin: 0;
 	padding: 0
@@ -113,6 +109,8 @@ body {
 eventually we should convert the font sizes to ems -- using px for now to minimize style conflicts
 */
 
+.normal h3.demo-header { font-size:32px; padding:0 0 5px; border-bottom:1px solid #eee; text-transform: capitalize; }
+.normal h4.demo-subheader { font-size:10px; text-transform: uppercase; color:#999; padding:8px 0 3px; border:0; margin:0; }
 .normal a:link,
 .normal a:visited { color:#1b75bb; text-decoration:none; }
 .normal a:hover,
@@ -124,6 +122,8 @@ eventually we should convert the font sizes to ems -- using px for now to minimi
 
 #demo-config-menu { float:right; width:150px; }
 #demo-config-menu h4 { font-size:13px; color:#666; font-weight:normal; border:0; padding-left:18px; }
+
+#demo-config-menu ul { list-style: none; padding: 0; margin: 0; }
 
 #demo-config-menu li { font-size:11px; padding:0 0 0 10px; margin:3px 0; zoom: 1; }
 
