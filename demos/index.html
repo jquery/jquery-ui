@@ -38,19 +38,17 @@
 									$(this).parents('ul').find('li').removeClass('demo-config-on');
 									$(this).parent().addClass('demo-config-on');
 									$('#demo-notes').hide();
-									$('#demo-frame').fadeOut();									
 								});
 							});
 							
-							$('#demo-frame').load(function(){
-								var notes = $('.demo-description *', $(this).contents()[0]);
+							$('#demo-frame').load(function() {
+								var content = $(this)[0].contentWindow.document || $(this).contents()[0];
+								var notes = $('.demo-description', content);
 								if ($('#demo-notes').length == 0) {
-									$('<div id="demo-notes" />').insertAfter('#demo-config');				
-								}
-								$('#demo-notes').hide().empty().html(notes);
-								$('#demo-frame').fadeIn({complete: function() {
-									$('#demo-notes').fadeIn();
-								}});
+									$('<div id="demo-notes"></div>').insertAfter('#demo-config');
+								}						
+								$('#demo-notes').hide().empty().html(notes.html()).fadeIn();
+								notes.hide();
 							});							
 						})
 					.end()
