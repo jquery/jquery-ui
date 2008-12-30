@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<title>jQuery UI Draggable - Helper</title>
+	<link type="text/css" href="../demos.css" rel="stylesheet" />
+	<link type="text/css" href="../../themes/default/ui.all.css" rel="stylesheet" />
+	<script type="text/javascript" src="../../jquery-1.2.6.js"></script>
+	<script type="text/javascript" src="../../ui/ui.core.js"></script>
+	<script type="text/javascript" src="../../ui/ui.draggable.js"></script>
+	<style type="text/css">
+	.ui-widget-content { width: 100px; height: 100px; padding: 0.5em; float: left; margin: 5px; }
+	</style>
+	<script type="text/javascript">
+	$(function() {
+		$("#draggable").draggable({ helper: 'original' });
+		$("#draggable2").draggable({ helper: 'clone' });
+		$("#draggable3").draggable({
+			cursorAt: { top: -5, left: -5 },
+			helper: function(event) {
+				return $('<div class="ui-widget-header">I\'m a custom helper</div>');
+			}
+		});
+	});
+	</script>
+</head>
+<body>
+
+<div id="draggable" class="ui-widget-content">
+	<p>Original</p>
+</div>
+
+<div id="draggable2" class="ui-widget-content">
+	<p>Clone</p>
+</div>
+
+<div id="draggable3" class="ui-widget-content">
+	<p>Custom helper (in combination with cursorAt)</p>
+</div>
+
+</body>
+</html>
