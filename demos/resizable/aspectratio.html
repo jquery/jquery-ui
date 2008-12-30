@@ -7,17 +7,20 @@
 	<script type="text/javascript" src="../../jquery-1.2.6.js"></script>
 	<script type="text/javascript" src="../../ui/ui.core.js"></script>
 	<script type="text/javascript" src="../../ui/ui.resizable.js"></script>
+	<style type="text/css">
+	#resizable { width: 160px; height: 90px; padding: 0.5em; background-position: top left; }
+	</style>
 	<script type="text/javascript">
 	$(function() {
 		$("#resizable").resizable({
-			aspectRatio: 2
+			aspectRatio: 16/9
 		});
 	});
 	</script>
 </head>
 <body>
 
-<div id="resizable" style="width: 400px; height: 200px; background-color: #f00;">
+<div id="resizable" class="ui-widget-content">
 	<p>Resize me</p>
 </div>
 
