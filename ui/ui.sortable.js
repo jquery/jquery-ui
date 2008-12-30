@@ -715,10 +715,10 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 			var over = ($(ce).css("overflow") != 'hidden');
 
 			this.containment = [
-				co.left + (parseInt($(ce).css("borderLeftWidth"),10) || 0) - this.offset.relative.left - this.offset.parent.left,
-				co.top + (parseInt($(ce).css("borderTopWidth"),10) || 0) - this.offset.relative.top - this.offset.parent.top,
-				co.left + (over ? Math.max(ce.scrollWidth,ce.offsetWidth) : ce.offsetWidth) - (parseInt($(ce).css("borderLeftWidth"),10) || 0) - this.offset.relative.left - this.offset.parent.left - this.margins.left - (parseInt(this.currentItem.css("marginRight"),10) || 0),
-				co.top + (over ? Math.max(ce.scrollHeight,ce.offsetHeight) : ce.offsetHeight) - (parseInt($(ce).css("borderTopWidth"),10) || 0) - this.offset.relative.top - this.offset.parent.top - this.margins.top - (parseInt(this.currentItem.css("marginBottom"),10) || 0)
+				co.left + (parseInt($(ce).css("borderLeftWidth"),10) || 0) - this.offset.relative.left - this.offset.parent.left - this.margins.left,
+				co.top + (parseInt($(ce).css("borderTopWidth"),10) || 0) - this.offset.relative.top - this.offset.parent.top - this.margins.top,
+				co.left + (over ? Math.max(ce.scrollWidth,ce.offsetWidth) : ce.offsetWidth) - (parseInt($(ce).css("borderLeftWidth"),10) || 0) - this.offset.relative.left - this.offset.parent.left - this.margins.left,
+				co.top + (over ? Math.max(ce.scrollHeight,ce.offsetHeight) : ce.offsetHeight) - (parseInt($(ce).css("borderTopWidth"),10) || 0) - this.offset.relative.top - this.offset.parent.top - this.margins.top
 			];
 		}
 
@@ -987,6 +987,14 @@ $.ui.plugin.add("sortable", "scroll", {
 		//    the scroll is included in the initial calculation of the offset of the parent, and never recalculated upon drag
 		if(scrolled !== false && i.cssPosition == 'absolute' && i.scrollParent[0] != document && $.ui.contains(i.scrollParent[0], i.offsetParent[0])) {
 			i.offset.parent = i._getParentOffset();
+		}
+		
+		// This is another very weird special case that only happens for relative elements:
+		// 1. If the css position is relative
+		// 2. and the scroll parent is the document or similar to the offset parent
+		// we have to refresh the relative offset during the scroll so there are no jumps
+		if(scrolled !== false && i.cssPosition == 'relative' && !(i.scrollParent[0] != document && i.scrollParent[0] != i.offsetParent[0])) {
+			i.offset.relative = i._getRelativeOffset();
 		}
 
 	}
