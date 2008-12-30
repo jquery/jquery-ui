@@ -14,7 +14,7 @@ body {
    -------------------------------- */
 
 .layout-grid {
-	width: 100%;
+	width: 960px;
 }
 
 .layout-grid td {
@@ -22,7 +22,7 @@ body {
 }
 
 .layout-grid td.left-nav {
-	width: 200px;
+	width: 150px;
 }
 
 .layout-grid td.normal {
@@ -71,7 +71,7 @@ body {
 
 .demos-nav {
 	float: left;
-	width: 155px;
+	width: 150px;
 	font-size: 1.3em;
 }
 
@@ -123,7 +123,7 @@ eventually we should convert the font sizes to ems -- using px for now to minimi
 
 #demo-config { padding:20px 0 0; }
 
-#demo-frame { float:left; width:520px; height:300px; border:1px solid #ddd; }
+#demo-frame { float:left; width:540px; height:380px; border:1px solid #ddd; }
 
 #demo-config-menu { float:right; width:200px; }
 #demo-config-menu h4 { font-size:13px; color:#666; font-weight:normal; border:0; padding-left:18px; }
