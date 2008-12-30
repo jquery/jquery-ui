@@ -428,6 +428,11 @@ $.ui.plugin.add("draggable", "connectToSortable", {
 				this.instance.element.triggerHandler("sortreceive", [event, $.extend(this.instance._ui(), { sender: inst.element })], this.instance.options["receive"]);
 
 				this.instance.options.helper = this.instance.options._helper;
+				
+				if(inst.options.helper == 'original') {
+					this.instance.currentItem.css({ top: 'auto', left: 'auto' });
+				}
+
 			} else {
 				this.instance.cancelHelperRemoval = false; //Remove the helper in the sortable instance
 				this.instance._propagate("deactivate", event, inst);
