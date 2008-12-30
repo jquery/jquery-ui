@@ -25,7 +25,7 @@ var defaults = {
 	refreshPositions: false,
 	revert: false,
 	revertDuration: 500,
-	scroll: false,
+	scroll: true,
 	scrollSensitivity: 20,
 	scrollSpeed: 20,
 	scope: "default",

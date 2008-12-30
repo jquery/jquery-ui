@@ -378,7 +378,7 @@ $.extend($.ui.draggable, {
 		revert: false,
 		revertDuration: 500,
 		scope: "default",
-		scroll: false,
+		scroll: true,
 		scrollSensitivity: 20,
 		scrollSpeed: 20,
 		snap: false,
