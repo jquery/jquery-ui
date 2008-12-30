@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<title>jQuery UI Draggable - Snap</title>
+	<link type="text/css" href="../demos.css" rel="stylesheet" />
+	<link type="text/css" href="../../themes/default/ui.all.css" rel="stylesheet" />
+	<script type="text/javascript" src="../../jquery-1.2.6.js"></script>
+	<script type="text/javascript" src="../../ui/ui.core.js"></script>
+	<script type="text/javascript" src="../../ui/ui.draggable.js"></script>
+	<style type="text/css">
+	.ui-widget-content { width: 100px; height: 100px; padding: 0.5em; float: left; margin: 5px; }
+	.ui-widget-header { height: 200px; }
+	</style>
+	<script type="text/javascript">
+	$(function() {
+		$("#draggable").draggable({ snap: true });
+		$("#draggable2").draggable({ snap: '.ui-widget-header' });
+		$("#draggable3").draggable({ snap: '.ui-widget-header', snapMode: 'outer' });
+		$("#draggable4").draggable({ snap: '.ui-widget-header', snapMode: 'inner' });
+		$("#draggable5").draggable({ snap: '.ui-widget-header', snapTolerance: 50 });
+	});
+	</script>
+</head>
+<body>
+
+<div class="ui-widget-header">
+	<p>I'm a snap target</p>
+</div>
+
+<br clear="both" />
+
+<div id="draggable" class="ui-widget-content">
+	<p>Default (snap: true), snaps to all other draggable elements</p>
+</div>
+
+<div id="draggable2" class="ui-widget-content">
+	<p>I only snap to the orange box</p>
+</div>
+
+<div id="draggable3" class="ui-widget-content">
+	<p>I only snap to the outer edges of the orange box</p>
+</div>
+
+<div id="draggable4" class="ui-widget-content">
+	<p>I only snap to the inner edges of the orange box</p>
+</div>
+
+<div id="draggable5" class="ui-widget-content">
+	<p>I also snap to the orange box but I'm very sticky because I have a high snapTolerance</p>
+</div>
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<title>jQuery UI Draggable - Z-Index / Stack</title>
+	<link type="text/css" href="../demos.css" rel="stylesheet" />
+	<link type="text/css" href="../../themes/default/ui.all.css" rel="stylesheet" />
+	<script type="text/javascript" src="../../jquery-1.2.6.js"></script>
+	<script type="text/javascript" src="../../ui/ui.core.js"></script>
+	<script type="text/javascript" src="../../ui/ui.draggable.js"></script>
+	<style type="text/css">
+	.ui-widget-content { width: 100px; height: 100px; padding: 0.5em; float: left; margin: 5px; }
+	#set { width: 368px; height: 120px; }
+	</style>
+	<script type="text/javascript">
+	$(function() {
+		$("#draggable").draggable({ zIndex: 1000 });
+		$("#set div").draggable({ stack: { group: '#set div', min: 1 } });
+	});
+	</script>
+</head>
+<body>
+
+<div id="draggable" class="ui-widget-content">
+	<p>I always have a higher z-index than my siblings during drag</p>
+</div>
+
+<div id="set" class="ui-widget-content">
+	<div class="ui-widget-content">
+		<p>We are draggables..</p>
+	</div>
+	
+	<div class="ui-widget-content">
+		<p>..whose z-indexes are controlled automatically..</p>
+	</div>
+	
+	<div class="ui-widget-content">
+		<p>..with the stack option.</p>
+	</div>
+</div>
+
+</body>
+</html>
