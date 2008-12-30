@@ -11,14 +11,33 @@
 	$(function() {
 		$("#slider-range").slider({
 			range: true,
-			values: [17, 67]
+			min: 0,
+			max: 500,
+			values: [75, 300]
 		});
 	});
 	</script>
 </head>
 <body>
 
+
+
+
+<p>Price range:</p>
 <div id="slider-range"></div>
+
+</div><!-- End demo -->
+
+
+
+<div class="demo-description">
+
+<p>Example of a range slider that had two drag handles and a filled bar that connects the two handles to indicate that the values between them are selected. THis is created by setting the range option:</p> 
+<pre>
+range: true,
+</pre> 
+
+</div><!-- End demo-description -->
 
 </body>
 </html>
