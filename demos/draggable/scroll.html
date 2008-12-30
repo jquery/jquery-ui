@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<title>jQuery UI Draggable - Scroll</title>
+	<link type="text/css" href="../demos.css" rel="stylesheet" />
+	<link type="text/css" href="../../themes/default/ui.all.css" rel="stylesheet" />
+	<script type="text/javascript" src="../../jquery-1.2.6.js"></script>
+	<script type="text/javascript" src="../../ui/ui.core.js"></script>
+	<script type="text/javascript" src="../../ui/ui.draggable.js"></script>
+	<style type="text/css">
+	.ui-widget-content { width: 100px; height: 100px; padding: 0.5em; float: left; margin: 5px; }
+	</style>
+	<script type="text/javascript">
+	$(function() {
+		$("#draggable").draggable({ scroll: true });
+		$("#draggable2").draggable({ scroll: true, scrollSensitivity: 100 });
+		$("#draggable3").draggable({ scroll: true, scrollSpeed: 100 });
+	});
+	</script>
+</head>
+<body>
+
+<div id="draggable" class="ui-widget-content">
+	<p>Scroll set to true, default settings</p>
+</div>
+
+<div id="draggable2" class="ui-widget-content">
+	<p>scrollSensitivity set to 100</p>
+</div>
+
+<div id="draggable3" class="ui-widget-content">
+	<p>scrollSpeed set to 100</p>
+</div>
+
+<div style='height: 5000px; width: 1px;'></div>
+
+</body>
+</html>
