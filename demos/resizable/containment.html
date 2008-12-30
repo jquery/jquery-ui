@@ -7,6 +7,11 @@
 	<script type="text/javascript" src="../../jquery-1.2.6.js"></script>
 	<script type="text/javascript" src="../../ui/ui.core.js"></script>
 	<script type="text/javascript" src="../../ui/ui.resizable.js"></script>
+	<style type="text/css">
+	#resizable { background-position: top left; width: 150px; height: 150px; }
+	#resizable, #container { padding: 0.5em; }
+	#container { width: 300px; height: 300px; }
+	</style>
 	<script type="text/javascript">
 	$(function() {
 		$("#resizable").resizable({
@@ -17,8 +22,9 @@
 </head>
 <body>
 
-<div id="container" style="width: 600px; height: 600px; background-color: #0f0;">
-	<div id="resizable" style="width: 200px; height: 200px; background-color: #f00;">
+<div id="container" class="ui-widget-content">
+	<p>Container</p>
+	<div id="resizable" class="ui-widget-header">
 		<p>Resize me</p>
 	</div>
 </div>
