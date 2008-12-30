@@ -30,7 +30,7 @@
 				.find('#demo-config')
 					.append('<iframe id="demo-frame" name="demo-frame" width="520" height="314" scrolling="auto" frameborder="0" src="'+ section +'/default.html"></iframe><div id="demo-config-menu"></div>')
 					.find('#demo-config-menu')
-						.load(this.href + ' #container', function(){
+						.load(this.href + ' .demos-nav', function(){
 							$('#demo-config-menu a').each(function(){
 								this.setAttribute('href', section + '/' + this.getAttribute('href'));
 								$(this).attr('target', 'demo-frame');
