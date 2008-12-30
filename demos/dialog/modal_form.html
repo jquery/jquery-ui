@@ -20,10 +20,9 @@
 			},
 			buttons: {
 				'Create user account': function() {
-					alert('The user was created!');
+					$(this).dialog('close');
 				},
 				Cancel: function() {
-					alert('You clicked Cancel. The dialog will now close.');
 					$(this).dialog('close');
 				}
 			}

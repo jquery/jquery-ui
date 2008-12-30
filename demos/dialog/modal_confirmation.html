@@ -21,10 +21,9 @@
 			},
 			buttons: {
 				'Delete all items in recycle bin': function() {
-					alert('The items were deleted forever!');
+					$(this).dialog('close');
 				},
 				Cancel: function() {
-					alert('You clicked Cancel. The dialog will now close.');
 					$(this).dialog('close');
 				}
 			}
