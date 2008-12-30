@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-	<title>jQuery UI Draggable - Containment</title>
+	<title>jQuery UI Draggable - Distance and Delay</title>
 	<link type="text/css" href="../demos.css" rel="stylesheet" />
 	<link type="text/css" href="../../themes/default/ui.all.css" rel="stylesheet" />
 	<script type="text/javascript" src="../../jquery-1.2.6.js"></script>
@@ -12,27 +12,20 @@
 	</style>
 	<script type="text/javascript">
 	$(function() {
-		$("#draggable").draggable({ containment: 'window' });
-		$("#draggable2").draggable({ containment: 'document' });
-		$("#draggable3").draggable({ containment: 'parent' });
+		$("#draggable").draggable({ distance: 20 });
+		$("#draggable2").draggable({ delay: 1000 });
 	});
 	</script>
 </head>
 <body>
 
 <div id="draggable" class="ui-widget-content">
-	<p>I'm contained within the window</p>
+	<p>Only if you drag me by 20 pixels, the dragging will start</p>
 </div>
 
 <div id="draggable2" class="ui-widget-content">
-	<p>I'm contained within the document</p>
+	<p>Regardless of the distance, you have to drag and wait for 1000ms before dragging starts</p>
 </div>
-
-<div class="ui-widget-content">
-	<p id="draggable3" class='ui-widget-header'>I'm contained within my parent</p>
-</div>
-
-<div style='width: 1px; height: 500px;'></div>
 
 </body>
 </html>

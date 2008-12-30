@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-	<title>jQuery UI Draggable - Containment</title>
+	<title>jQuery UI Draggable - Cursor at a certain position</title>
 	<link type="text/css" href="../demos.css" rel="stylesheet" />
 	<link type="text/css" href="../../themes/default/ui.all.css" rel="stylesheet" />
 	<script type="text/javascript" src="../../jquery-1.2.6.js"></script>
@@ -12,27 +12,25 @@
 	</style>
 	<script type="text/javascript">
 	$(function() {
-		$("#draggable").draggable({ containment: 'window' });
-		$("#draggable2").draggable({ containment: 'document' });
-		$("#draggable3").draggable({ containment: 'parent' });
+		$("#draggable").draggable({ cursorAt: { top: 56, left: 56 } });
+		$("#draggable2").draggable({ cursorAt: { top: -5, left: -5 } });
+		$("#draggable3").draggable({ cursorAt: { bottom: 0 } });
 	});
 	</script>
 </head>
 <body>
 
 <div id="draggable" class="ui-widget-content">
-	<p>I'm contained within the window</p>
+	<p>I will always stick to the center (relative to the mouse)</p>
 </div>
 
 <div id="draggable2" class="ui-widget-content">
-	<p>I'm contained within the document</p>
+	<p>My cursor is at left -5 and top -5</p>
 </div>
 
-<div class="ui-widget-content">
-	<p id="draggable3" class='ui-widget-header'>I'm contained within my parent</p>
+<div id="draggable3" class="ui-widget-content">
+	<p>My cursor position is only controlled for the 'bottom' value</p>
 </div>
-
-<div style='width: 1px; height: 500px;'></div>
 
 </body>
 </html>
