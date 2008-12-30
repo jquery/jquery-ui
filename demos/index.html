@@ -17,7 +17,30 @@
 	<script type="text/javascript" src="../ui/ui.slider.js"></script>
 	<script type="text/javascript" src="../ui/ui.sortable.js"></script>
 	<script type="text/javascript" src="../ui/ui.tabs.js"></script>
-	
+	<script type="text/javascript">
+	jQuery(function($){
+		$('.left-nav a').click(function(ev){
+			var section = this.href.replace('/index.html','');
+			$('td.normal div.normal')
+				.empty()
+				.append('<h4 class="demo-subheader">Functional demo:</div>')
+				.append('<div id="demo-config"></div>')
+				.find('#demo-config')
+					.append('<iframe id="demo-frame" name="demo-frame" width="520" height="314" scrolling="auto" frameborder="0" src="'+ section +'/default.html"></iframe><div id="demo-config-menu"></div>')
+					.find('#demo-config-menu')
+						.load(this.href, function(){
+							$('#demo-config-menu a').each(function(){
+								this.setAttribute('href', section + '/' + this.getAttribute('href'));
+								$(this).attr('target', 'demo-frame');
+							});
+						})
+					.end()
+				.end()
+			;
+			ev.preventDefault();
+		});
+	});
+	</script>	
 </head>
 <body>
 <?php } else {
@@ -65,18 +88,22 @@
 		<td class="normal">
 							
 			<div class="normal">
+					<?php if(isset($plain) && isset($_GET['load'])) { 
+						echo html_entity_decode('&lt;h4 class="demo-subheader"&gt;Functional demo:&lt;/h4&gt;');
+						echo html_entity_decode('&lt;h3&gt;'. $_GET['load'] .'&lt;/h3&gt;'); 
+						echo html_entity_decode('&lt;div class="demo-config"&gt;');
+						echo html_entity_decode('&lt;iframe id="preview" name="preview" src="/'. $section .'/default.html" width="520" height="314" border="0" frameborder="0" style="overflow:auto"&gt;&lt;/iframe&gt;'); 
+						echo html_entity_decode('&lt;div class="demo-config-menu"&gt;');
+						include($section .'/index.html'); 
+						echo html_entity_decode('&lt;/div&gt;');						
+						echo html_entity_decode('&lt;/div&gt;');
+					} else { ?>
 				
-				<?php if(isset($plain) && isset($_GET['load'])) { 
-					echo html_entity_decode('&lt;h3&gt;'. $_GET['load'] .'&lt;/h3&gt;'); 
-					include($section .'/index.html'); 
-					echo html_entity_decode('&lt;iframe id="preview" name="preview" src="/'. $section .'/default.html" width="520" height="314" border="0" frameborder="0" style="overflow:auto"&gt;&lt;/iframe&gt;'); 
-				} else { ?>
-				
-				<h3>Instructions</h3>
-				<p>
-					These demos showcase some common uses of each jQuery UI plugin. Simply copy and paste code from the demos to get started. Have fun playing with them.
-				</p>
-				<?php  } ?>
+					<h3>Instructions</h3>
+					<p>
+						These demos showcase some common uses of each jQuery UI plugin. Simply copy and paste code from the demos to get started. Have fun playing with them.
+					</p>
+					<?php  } ?>
 			</div>
 				
 		</td>
