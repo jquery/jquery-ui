@@ -64,6 +64,10 @@ body {
 
 /* Demos */
 
+.normal h3.demo-header { font-size:32px; padding:0 0 5px; border-bottom:1px solid #eee; text-transform: capitalize; }
+
+.normal h4.demo-subheader { font-size:10px; text-transform: uppercase; color:#999; padding:8px 0 3px; border:0; margin:0; }
+
 .demos-nav, .demos-nav dt, .demos-nav dd {
 	margin: 0;
 	padding: 0
@@ -104,3 +108,53 @@ body {
 	background: #EAEAEA;
 	border-color: #BBBBBB;
 }
+
+/* new styles for demo pages, added by Filament 12.29.08 
+eventually we should convert the font sizes to ems -- using px for now to minimize style conflicts
+*/
+
+.normal a:link,
+.normal a:visited { color:#1b75bb; text-decoration:none; }
+.normal a:hover,
+.normal a:active { color:#0b559b; }
+
+#demo-config { padding:20px 0 0; }
+
+#demo-frame { float:left; width:520px; height:300px; border:1px solid #ddd; }
+
+#demo-config-menu { float:right; width:150px; }
+#demo-config-menu h4 { font-size:13px; color:#666; font-weight:normal; border:0; padding-left:18px; }
+
+#demo-config-menu li { font-size:11px; padding:0 0 0 10px; margin:3px 0; zoom: 1; }
+
+#demo-config-menu li a:link, 
+#demo-config-menu li a:visited { display:block; padding:2px 8px 3px; border-bottom:1px dotted #b3b3b3; }
+#demo-config-menu li a:hover, 
+#demo-config-menu li a:active { background-color:#f6f6f6; }
+
+#demo-config-menu li.demo-config-on { background: url(images/demo-config-on-tile.gif) repeat-x left center; }
+
+#demo-config-menu li.demo-config-on a:link, 
+#demo-config-menu li.demo-config-on a:visited, 
+#demo-config-menu li.demo-config-on a:hover, 
+#demo-config-menu li.demo-config-on a:active { background: url(images/demo-config-on.gif) no-repeat left; padding-left:18px; color:#fff; border:0; margin-left:-10px; }
+
+#demo-source, #demo-notes { clear:both; padding:20px 0 0; }
+
+#demo-notes { width:520px; color:#333; }
+#demo-notes code { padding-left:20px; }
+
+#demo-source a:link,
+#demo-source a:visited,
+#demo-source a:hover,
+#demo-source a:active { font-size:12px; padding-left:13px; background-position: left center; background-repeat: no-repeat; }
+
+#demo-source a.source-open:link,
+#demo-source a.source-open:visited,
+#demo-source a.source-open:hover,
+#demo-source a.source-open:active { background-image: url(images/demo-spindown-open.gif); }
+
+#demo-source a.source-closed:link,
+#demo-source a.source-closed:visited,
+#demo-source a.source-closed:hover,
+#demo-source a.source-closed:active { background-image: url(images/demo-spindown-closed.gif); }
