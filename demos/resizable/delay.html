@@ -7,6 +7,9 @@
 	<script type="text/javascript" src="../../jquery-1.2.6.js"></script>
 	<script type="text/javascript" src="../../ui/ui.core.js"></script>
 	<script type="text/javascript" src="../../ui/ui.resizable.js"></script>
+	<style type="text/css">
+	#resizable { width: 150px; height: 150px; padding: 0.5em; }
+	</style>
 	<script type="text/javascript">
 	$(function() {
 		$("#resizable").resizable({
@@ -17,9 +20,7 @@
 </head>
 <body>
 
-<p>You must drag the div for at least 1 second before it will resize.</p>
-
-<div id="resizable" style="width: 200px; height: 200px; background-color: #f00;">
+<div id="resizable" class="ui-widget-content">
 	<p>Resize me</p>
 </div>
 
