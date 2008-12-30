@@ -18,8 +18,8 @@
 	<script type="text/javascript" src="../ui/ui.sortable.js"></script>
 	<script type="text/javascript" src="../ui/ui.tabs.js"></script>
 	<script type="text/javascript">
-	jQuery(function($){
-		$('.left-nav a').click(function(ev){
+	jQuery(function($) {
+		$('.left-nav a').click(function(ev) {
 			var section = this.href.replace('/index.html','');
 			var header = section.replace(/.+\/([^\/]+)/,'$1');
 			$('td.normal div.normal')
@@ -32,7 +32,7 @@
 					.find('#demo-config-menu')
 						.load(this.href + ' .demos-nav', function() {
 							$('#demo-config-menu a').each(function() {
-								this.setAttribute('href', section + '/' + this.getAttribute('href'));
+								this.setAttribute('href', section + '/' + this.getAttribute('href').replace(/.+\/([^\/]+)/,'$1'));
 								$(this).attr('target', 'demo-frame');
 								$(this).click(function() {
 									$(this).parents('ul').find('li').removeClass('demo-config-on');
