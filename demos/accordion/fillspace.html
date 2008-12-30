@@ -6,27 +6,31 @@
 	<link type="text/css" href="../../themes/default/ui.all.css" rel="stylesheet" />
 	<script type="text/javascript" src="../../jquery-1.2.6.js"></script>
 	<script type="text/javascript" src="../../ui/ui.core.js"></script>
+	<script type="text/javascript" src="../../ui/ui.resizable.js"></script>
 	<script type="text/javascript" src="../../ui/ui.accordion.js"></script>
 	<script type="text/javascript">
 	$(function() {
 		$("#accordion").accordion({
 			header: "h3",
 			fillSpace: true,
+			autoHeight: false
 		});
+	});
+	$(function() {
+		$("#accordionResizer").resizable();
 	});
 	</script>
 </head>
 <body>
 
+<div class="demo">
 
-<div id="accordion" style="width: 250px; height: 280px">
+<div id="accordionResizer" style="padding:5px;" class="ui-widget-content">
+<div id="accordion">
 	<div>
 		<h3><a href="#">Section 1</a></h3>
 		<div>
-			<p>In this example, the fillSpace option is used to make the accordion fit within a specific height and/or width. The script will automatically set the dimensions of the accordion sections and add scrollbars as needed.</p>
-
-<pre>fillSpace: true</pre>
-
+			<p>Mauris mauris ante, blandit et, ultrices a, suscipit eget, quam. Integer ut neque. Vivamus nisi metus, molestie vel, gravida in, condimentum sit amet, nunc. Nam a nibh. Donec suscipit eros. Nam mi. Proin viverra leo ut odio. Curabitur malesuada. Vestibulum a velit eu ante scelerisque vulputate.</p>
 		</div>
 	</div>
 	<div>
@@ -38,22 +42,34 @@
 	<div>
 		<h3><a href="#">Section 3</a></h3>
 		<div>
-			<p>Nam enim risus, molestie et, porta ac, aliquam ac, risus. </p>
+			<p>Nam enim risus, molestie et, porta ac, aliquam ac, risus. Quisque lobortis. Phasellus pellentesque purus in massa. Aenean in pede. Phasellus ac libero ac tellus pellentesque semper. Sed ac felis. Sed commodo, magna quis lacinia ornare, quam ante aliquam nisi, eu iaculis leo purus venenatis dui. </p>
 			<ul>
 				<li>List item one</li>
 				<li>List item two</li>
 				<li>List item three</li>
 			</ul>
-			<p>Maecenas faucibus, magna vel condimentum venenatis, magna urna pretium erat, vel suscipit orci dui non sapien.</p>
 		</div>
 	</div>
 	<div>
 		<h3><a href="#">Section 4</a></h3>
 		<div>
-			<p>Cras dictum. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Aenean lacinia mauris vel est. Morbi vestibulum est non libero.</p>
+			<p>Cras dictum. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Aenean lacinia mauris vel est. </p><p>Suspendisse eu nisl. Nullam ut libero. Integer dignissim consequat lectus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. </p>
 		</div>
 	</div>
 </div>
+</div><!-- End accordianResizer -->
+
+</div><!-- End demo -->
+
+
+
+<div class="demo-description">
+
+<p>In this example, the fillSpace option is used to make the accordion fit within a specific height and/or width. The script will automatically set the dimensions of the accordion sections and add scrollbars as needed.</p>
+<pre>fillSpace: true</pre>
+
+</div><!-- End demo-description -->
+
 
 </body>
 </html>
