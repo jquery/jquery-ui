@@ -367,8 +367,10 @@ $.widget.prototype = {
 		this.options[key] = value;
 
 		if (key == 'disabled') {
-			this.element[value ? 'addClass' : 'removeClass'](
-				this.widgetBaseClass + '-disabled' + ' ' + this.namespace + '-state-disabled')
+			this.element
+				[value ? 'addClass' : 'removeClass'](
+					this.widgetBaseClass + '-disabled' + ' ' +
+					this.namespace + '-state-disabled')
 				.attr("aria-disabled", value);
 		}
 	},
