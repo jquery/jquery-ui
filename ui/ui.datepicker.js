@@ -1383,7 +1383,7 @@ $.extend(Datepicker.prototype, {
 							' ' + this._currentClass : '') + // highlight selected day
 							(printDate.getTime() == today.getTime() ? ' ui-datepicker-today' : '')) + '"' + // highlight today (if different)
 							((!otherMonth || showOtherMonths) && daySettings[2] ? ' title="' + daySettings[2] + '"' : '') + // cell title
-							(unselectable ? '' : ' onclick="jQuery.datepicker._selectDay(\'#' +
+							(unselectable ? '' : ' onclick="event.preventDefault();jQuery.datepicker._selectDay(\'#' +
 							inst.id + '\',' + drawMonth + ',' + drawYear + ', this);"') + '>' + // actions
 							(otherMonth ? (showOtherMonths ? printDate.getDate() : '&#xa0;') : // display for other months
 							(unselectable ? printDate.getDate() : '<a class="ui-state-default' +
