@@ -94,7 +94,7 @@ $.widget("ui.tabs", {
 			})
 			.blur(function() {
 				$(this).parent().removeClass('ui-state-focus');
-			})
+			});
 
 		this.$tabs.each(function(i, a) {
 			// inline tab
