@@ -2,22 +2,18 @@
 <html lang="en">
 <head>
 	<title>jQuery UI Progressbar - Resize Demo</title>
-	<link type="text/css" href="../demos.css" rel="stylesheet" />
 	<link type="text/css" href="../../themes/default/ui.all.css" rel="stylesheet" />
 	<script type="text/javascript" src="../../jquery-1.2.6.js"></script>
 	<script type="text/javascript" src="../../ui/ui.core.js"></script>
 	<script type="text/javascript" src="../../ui/ui.progressbar.js"></script>
 	<script type="text/javascript" src="../../ui/ui.resizable.js"></script>
-
+	<link type="text/css" href="../demos.css" rel="stylesheet" />
 	<script type="text/javascript">
 	$(function() {
 		$("#progressbar").progressbar({
 			value: 37
 		});
-	});
-	$(function() {
-		$("#progressbarWrapper").resizable({
-		});
+		$("#progressbarWrapper").resizable();
 	});
 	</script>
 </head>
@@ -31,15 +27,11 @@
 
 </div><!-- End demo -->
 
-
-
 <div class="demo-description">
 
 <p>Since the progress bar is coded in percentages for flexible sizing, it will resize to fit whatever block it's placed inside. Try resizing the height and width of this bar to see how it maintains the correct proportions. This is not a real-world example, but it's a good illustration of how flexibly all the plugins are coded.</p>
 
 </div><!-- End demo-description -->
-
-
 
 </body>
 </html>

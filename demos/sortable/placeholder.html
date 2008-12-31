@@ -2,18 +2,18 @@
 <html lang="en">
 <head>
 	<title>jQuery UI Sortable - Placeholder</title>
-	<link type="text/css" href="../demos.css" rel="stylesheet" />
 	<link type="text/css" href="../../themes/default/ui.all.css" rel="stylesheet" />
 	<script type="text/javascript" src="../../jquery-1.2.6.js"></script>
 	<script type="text/javascript" src="../../ui/ui.core.js"></script>
 	<script type="text/javascript" src="../../ui/ui.sortable.js"></script>
+	<link type="text/css" href="../demos.css" rel="stylesheet" />
 	<style type="text/css">
-	ul { list-style-type: none; margin: 0; padding: 0; }
-	li { margin: 3px; padding: 2px; }
+	#sortable { list-style-type: none; margin: 0; padding: 0; }
+	#sortable li { margin: 3px; padding: 2px; }
 	</style>
 	<script type="text/javascript">
 	$(function() {
-		$("ul").sortable({
+		$("#sortable").sortable({
 			placeholder: 'ui-state-highlight'
 		});
 	});
@@ -21,7 +21,7 @@
 </head>
 <body>
 
-<ul>
+<ul id="sortable">
 	<li class="ui-state-default">Item 1</li>
 	<li class="ui-state-default">Item 2</li>
 	<li class="ui-state-default">Item 3</li>

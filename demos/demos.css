@@ -179,3 +179,7 @@ div.demo-description {
 	font-size: 1.3em;
 	line-height: 1.4em;
 }
+
+.ui-draggable, .ui-droppable {
+	background-position: top left;
+}

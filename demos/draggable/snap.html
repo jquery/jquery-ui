@@ -2,14 +2,14 @@
 <html lang="en">
 <head>
 	<title>jQuery UI Draggable - Snap</title>
-	<link type="text/css" href="../demos.css" rel="stylesheet" />
 	<link type="text/css" href="../../themes/default/ui.all.css" rel="stylesheet" />
 	<script type="text/javascript" src="../../jquery-1.2.6.js"></script>
 	<script type="text/javascript" src="../../ui/ui.core.js"></script>
 	<script type="text/javascript" src="../../ui/ui.draggable.js"></script>
+	<link type="text/css" href="../demos.css" rel="stylesheet" />
 	<style type="text/css">
-	.ui-widget-content { width: 75px; height: 80px; padding: 0.5em; float: left; margin: 5px; }
-	.ui-widget-header { height: 130px; }
+	#draggable, #draggable2, #draggable3, #draggable4, #draggable5 { width: 75px; height: 80px; padding: 0.5em; float: left; margin: 5px; }
+	#snaptarget { height: 130px; }
 	</style>
 	<script type="text/javascript">
 	$(function() {
@@ -23,7 +23,7 @@
 </head>
 <body>
 
-<div class="ui-widget-header">
+<div id="snaptarget" class="ui-widget-header">
 	<p>I'm a snap target</p>
 </div>
 
