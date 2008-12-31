@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-	<title>jQuery UI Selectable - Default Demo</title>
+	<title>jQuery UI Selectable - Serializing Demo</title>
 	<link type="text/css" href="../../themes/default/ui.all.css" rel="stylesheet" />
 	<script type="text/javascript" src="../../jquery-1.2.6.js"></script>
 	<script type="text/javascript" src="../../ui/ui.core.js"></script>
@@ -17,12 +17,24 @@
 	</style>
 	<script type="text/javascript">
 	$(function() {
-		$("#selectable").selectable();
+		$("#selectable").selectable({
+			stop: function(){
+				var result = $("#select-result").empty();
+				$(".ui-selected", this).each(function(){
+					var index = $("#selectable li").index(this);
+					result.append(" #" + (index + 1));
+				});
+			}
+		});
 	});
 	</script>
 </head>
 <body>
 <div class="demo">
+
+<p id="feedback">
+You've selected: <span id="select-result">none</span>.
+</p>
 
 <ol id="selectable">
 	<li class="ui-widget-content">Item 1</li>
