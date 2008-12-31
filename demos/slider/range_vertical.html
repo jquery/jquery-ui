@@ -12,8 +12,12 @@
 		$("#slider-range").slider({
 			orientation: "vertical",
 			range: true,
-			values: [45, 67]
+			values: [17, 67],
+			slide: function(event, ui) {
+				$("#amount").val('$' + ui.values[0] + ' - $' + ui.values[1]);
+			}
 		});
+		$("#amount").val('$' + $("#slider-range").slider("values", 0) + ' - $' + $("#slider-range").slider("values", 1));
 	});
 	</script>
 </head>
@@ -21,22 +25,34 @@
 
 <div class="demo">
 
-<p>Target sales goal (Millions):</p>
+<p>
+<label for="amount">Target sales goal (Millions):</label>
+<input type="text" id="amount" style="border:0; color:#f6931f; font-weight:bold;" />
+</p>
+
 <div id="slider-range" style="height:250px;"></div>
 
 </div><!-- End demo -->
 
-
-
 <div class="demo-description">
 
-<p>This is an example of a vertical range slider created by setting the orientation to vertical:</p>
-<pre>
-orientation: "vertical",
+<p>
+This is an example of a vertical range slider created by setting the orientation to vertical:
+</p>
+
+<pre><code>orientation: "vertical",
 range: true,
 values: [17, 67]
-</pre>
-<p>It's important to note that a vertical slider needs a height set. You can do this via .height() or by setting the height through CSS. </p>
+</code></pre>
+
+<p>
+It's important to note that a vertical slider needs a height set.
+You can do this via <code>.height()</code> or by setting the height through CSS.
+</p>
+
+<p>
+This demo also shows how the current slider value can be used to populate a standard form input that can also be used for user feedback.
+</p>
 
 </div><!-- End demo-description -->
 

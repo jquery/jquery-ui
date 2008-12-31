@@ -11,8 +11,8 @@
 	$(function() {
 		$("#slider-range-max").slider({
 			range: "max",
-			min:1,
-			max:10,
+			min: 1,
+			max: 10,
 			value: 2,
 			slide: function(event, ui) {
 				$("#amount").val(ui.value);
@@ -26,20 +26,28 @@
 
 <div class="demo">
 
-<p>Minimum number of bedrooms: <input type="text" id="amount" style="border:0; color:#f6931f; font-weight:bold;"/></p>
+<p>
+<labe for="amount">Minimum number of bedrooms:</label>
+<input type="text" id="amount" style="border:0; color:#f6931f; font-weight:bold;" />
+</p>
 <div id="slider-range-max"></div>
 
 </div><!-- End demo -->
 
-
-
 <div class="demo-description">
 
-<p>An example of a range slider that has the filled bar hard-coded to the maximum value plus a single slider. This makes it clear that selecting a value will also include all values above the selection. This is a range option type:</p>
-<pre>
-range: "max",
-</pre>
-<p>This demo also shows how the current slider value can be used to populate a standard form input that can also be used for user feedback.</p>
+<p>
+An example of a range slider that has the filled bar hard-coded to the maximum value plus a single slider.
+This makes it clear that selecting a value will also include all values above the selection.
+This is a range option type:
+</p>
+
+<pre><code>range: "max"
+</code></pre>
+
+<p>
+This demo also shows how the current slider value can be used to populate a standard form input that can also be used for user feedback.
+</p>
 
 </div><!-- End demo-description -->
 

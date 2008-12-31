@@ -25,22 +25,34 @@
 </head>
 <body>
 
-
 <div class="demo">
 
-<p>Volume: <input type="text" id="amount" style="border:0; color:#f6931f; font-weight:bold;"/></p>
+<p>
+<label for="amount">Volume:</label>
+<input type="text" id="amount" style="border:0; color:#f6931f; font-weight:bold;"/>
+</p>
+
 <div id="slider-vertical" style="height:200px;"></div>
 
 </div><!-- End demo -->
 
-
-
 <div class="demo-description">
 
-<p>This is an example of a minimum range vertical slider created by setting the orientation to vertical:</p> <pre>orientation: "vertical",</pre>
-<p>It's important to note that a vertical slider needs a height set. You can do this via the script options or by adding a height through CSS. </p>
-<p>This demo also shows how the current slider value can be used to populate a standard form input that can also be used for user feedback.</p>
+<p>
+This is an example of a minimum range vertical slider created by setting the orientation to vertical:
+</p>
 
+<pre><code>orientation: "vertical"
+</code></pre>
+
+<p>
+It's important to note that a vertical slider needs a height set.
+You can do this via <code>.height()</code> or by setting the height through CSS.
+</p>
+
+<p>
+This demo also shows how the current slider value can be used to populate a standard form input that can also be used for user feedback.
+</p>
 
 </div><!-- End demo-description -->
 
