@@ -21,6 +21,8 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 
 		this._keySliding = false;
 
+		this._handleIndex = null;
+
 		this._mouseInit();
 
 		this.element
@@ -128,7 +130,7 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 					break;
 			}
 
-			self._slide(event, newVal);
+			self._slide(event, index, newVal);
 		}).keyup(function(event) {
 			if (self._keySliding) {
 				self._stop(event);
@@ -180,20 +182,23 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 		var normValue = this._normValueFromMouse(position);
 
 		var distance = this._valueMax(), closestHandle;
-		var self = this;
+		var self = this, index;
 		this.handles.each(function(i) {
 			var thisDistance = Math.abs(normValue - self.values(i));
 			if (distance > thisDistance) {
 				distance = thisDistance;
 				closestHandle = $(this);
+				index = i;
 			}
 		});
+
+		self._handleIndex = index;
 
 		closestHandle
 			.addClass("ui-state-active")
 			.focus();
 
-		this._slide(event, normValue);
+		this._slide(event, index, normValue);
 
 		return true;
 
@@ -207,7 +212,7 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 		var position = { x: event.pageX, y: event.pageY };
 		var normValue = this._normValueFromMouse(position);
 
-		this._slide(event, normValue);
+		this._slide(event, this._handleIndex, normValue);
 
 		return false;
 	},
@@ -216,6 +221,7 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 		this.handles.removeClass("ui-state-active");
 		this._stop(event);
 		this._change(event);
+		this._handleIndex = null;
 
 		return false;
 	},
@@ -257,10 +263,12 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 		});
 	},
 
-	_slide: function(event, newVal) {
+	_slide: function(event, index, newVal) {
 		if (this.options.values && this.options.values.length) {
-			var handle = this.handles.filter(".ui-state-active");
-			var index = handle.data("index.ui-slider-handle");
+			var handle = this.handles[index];
+			var otherVal = this.values(index ? 0 : 1);
+			if ((index == 0 && newVal >= otherVal) || (index == 1 && newVal <= otherVal))
+				newVal = otherVal;
 			if (newVal != this.values(index)) {
 				var newValues = this.values();
 				newValues[index] = newVal;
@@ -270,8 +278,10 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 					value: newVal,
 					values: newValues
 				});
-				if (allowed !== false)
+				var otherVal = this.values(index ? 0 : 1);
+				if (allowed !== false) {
 					this.values(index, newVal);
+				}
 			}
 		} else {
 			if (newVal != this.value()) {
