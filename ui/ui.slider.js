@@ -262,10 +262,13 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 			var handle = this.handles.filter(".ui-state-active");
 			var index = handle.data("index.ui-slider-handle");
 			if (newVal != this.values(index)) {
+				var newValues = this.values();
+				newValues[index] = newVal;
 				// A slide can be canceled by returning false from the slide callback
 				var allowed = this._trigger("slide", event, {
 					handle: handle,
-					value: newVal
+					value: newVal,
+					values: newValues
 				});
 				if (allowed !== false)
 					this.values(index, newVal);
