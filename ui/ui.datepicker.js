@@ -1318,6 +1318,7 @@ $.extend(Datepicker.prototype, {
 		var dayNamesShort = this._get(inst, 'dayNamesShort');
 		var dayNamesMin = this._get(inst, 'dayNamesMin');
 		var monthNames = this._get(inst, 'monthNames');
+		var monthNamesShort = this._get(inst, 'monthNamesShort');
 		var beforeShowDay = this._get(inst, 'beforeShowDay');
 		var showOtherMonths = this._get(inst, 'showOtherMonths');
 		var calculateWeek = this._get(inst, 'calculateWeek') || this.iso8601Week;
@@ -1344,7 +1345,7 @@ $.extend(Datepicker.prototype, {
 					(/all|left/.test(cornerClass) && row == 0 ? (isRTL ? next : prev) : '') +
 					(/all|right/.test(cornerClass) && row == 0 ? (isRTL ? prev : next) : '') +
 					this._generateMonthYearHeader(inst, drawMonth, drawYear, minDate, maxDate,
-					selectedDate, row > 0 || col > 0, monthNames) + // draw month headers
+					selectedDate, row > 0 || col > 0, monthNames, monthNamesShort) + // draw month headers
 					'</div><table class="ui-datepicker-calendar"><thead>' +
 					'<tr>';
 				var thead = '';
@@ -1414,7 +1415,7 @@ $.extend(Datepicker.prototype, {
 
 	/* Generate the month and year header. */
 	_generateMonthYearHeader: function(inst, drawMonth, drawYear, minDate, maxDate,
-			selectedDate, secondary, monthNames) {
+			selectedDate, secondary, monthNames, monthNamesShort) {
 		minDate = (inst.rangeStart && minDate && selectedDate < minDate ? selectedDate : minDate);
 		var changeMonth = this._get(inst, 'changeMonth');
 		var changeYear = this._get(inst, 'changeYear');
@@ -1436,12 +1437,12 @@ $.extend(Datepicker.prototype, {
 						(!inMaxYear || month <= maxDate.getMonth()))
 					monthHtml += '<option value="' + month + '"' +
 						(month == drawMonth ? ' selected="selected"' : '') +
-						'>' + monthNames[month] + '</option>';
+						'>' + monthNamesShort[month] + '</option>';
 			}
 			monthHtml += '</select>';
 		}
 		if (!showMonthAfterYear)
-			html += monthHtml + (secondary || changeMonth || changeYear ? '&#xa0;' : '');
+			html += monthHtml + ((secondary || changeMonth || changeYear) && (!(changeMonth && changeYear)) ? '&#xa0;' : '');
 		// year selection
 		if (secondary || !changeYear)
 			html += '<span class="ui-datepicker-year">' + drawYear + '</span>';
