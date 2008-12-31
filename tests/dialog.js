@@ -687,7 +687,7 @@ test("close", function() {
 	el.remove();
 
 	el = $('<div></div>').dialog().bind('dialogclose', function(ev, ui) {
-		ok(true, '.dialog("close") firse dialogclose event');
+		ok(true, '.dialog("close") fires dialogclose event');
 		equals(this, el[0], 'context of event');
 	});
 	el.dialog('close');
