@@ -9,6 +9,11 @@
 	<script type="text/javascript" src="../../ui/ui.resizable.js"></script>
 	<script type="text/javascript" src="../../ui/ui.dialog.js"></script>
 	<link type="text/css" href="../demos.css" rel="stylesheet" />
+	<style type="text/css">
+		label, input { display:block; }
+		input.text { margin-bottom:12px; width:95%; }
+		fieldset { padding:0; border:0; margin-top:25px; }
+	</style>
 	<script type="text/javascript">
 	$(function() {
 		$("#dialog").dialog({
@@ -29,19 +34,8 @@
 		});
 	});
 	</script>
-
-	<!-- Styles for this demo page -->
-	<style type="text/css" media="screen">
-		label, input { display:block; }
-		input.text { margin-bottom:12px; width:95%; }
-		fieldset { padding:0; border:0; margin-top:25px; }
-	</style>
-
 </head>
 <body>
-
-
-
 
 <div class="demo">
 
@@ -60,8 +54,8 @@
 	</form>
 </div>
 
-	<!-- Sample page content to illustrate the layering of the dialog -->
-	<div class="hiddenInViewSource" style="padding:20px;">
+<!-- Sample page content to illustrate the layering of the dialog -->
+<div class="hiddenInViewSource" style="padding:20px;">
 	<p>Sed vel diam id libero <a href="http://example.com">rutrum convallis</a>. Donec aliquet leo vel magna. Phasellus rhoncus faucibus ante. Etiam bibendum, enim faucibus aliquet rhoncus, arcu felis ultricies neque, sit amet auctor elit eros a lectus.</p>
 	<form>
 		<input value="text input" /><br />
@@ -77,11 +71,12 @@
 
 </div><!-- End demo -->
 
-
-
 <div class="demo-description">
 
-<p>This is an example of how a dialog can be used for data entry by making it larger and embedding a form into the content area. A multi-step wizard could be created by extending this with a step navigation and forward and back buttons.</p>
+<p>
+This is an example of how a dialog can be used for data entry by making it larger and embedding a form into the content area.
+A multi-step wizard could be created by extending this with a step navigation and forward and back buttons.
+</p>
 
 </div><!-- End demo-description -->
 
