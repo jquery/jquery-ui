@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<title>jQuery UI Effects - Scale Demo</title>
+	<link type="text/css" href="../../themes/default/ui.all.css" rel="stylesheet" />
+	<script type="text/javascript" src="../../jquery-1.2.6.js"></script>
+	<script type="text/javascript" src="../../ui/effects.core.js"></script>
+	<script type="text/javascript" src="../../ui/effects.scale.js"></script>
+	<link type="text/css" href="../demos.css" rel="stylesheet" />
+	<style type="text/css">
+		#scale { width: 240px; height: 135px; padding: 0.4em; }
+		#scale h3 { margin: 0; padding: 0.4em; text-align: center; }
+	</style>
+	<script type="text/javascript">
+	$(function() {
+		$("#scale").toggle(function() {
+			$(this).effect("scale", { percent: 50 });
+		}, function() {
+			$(this).effect("scale", { percent: 200 });
+		});
+	});
+	</script>
+</head>
+<body>
+
+<div class="demo">
+
+<div id="scale" class="ui-widget-content ui-corner-all">
+	<h3 class="ui-widget-header ui-corner-all">Scale</h3>
+	<p>
+		Etiam libero neque, luctus a, eleifend nec, semper at, lorem. Sed pede. Nulla lorem metus, adipiscing ut, luctus sed, hendrerit vitae, mi.
+	</p>
+</div>
+
+</div><!-- End demo -->
+
+<div class="demo-description">
+
+<p>
+Click above to preview the <code>.effect("scale")</code> effect.
+</p>
+
+</div><!-- End demo-description -->
+
+</body>
+</html>
