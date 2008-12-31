@@ -448,10 +448,13 @@ $.widget("ui.dialog", {
 			})
 			.height();
 
-		this.element.height(
-			options.height == 'auto'
-				? 'auto'
-				: options.height - nonContentHeight);
+		this.element
+			.css({
+				minHeight: options.minHeight - nonContentHeight,
+				height: options.height == 'auto'
+					? 'auto'
+					: options.height - nonContentHeight
+			});
 	}
 });
 
@@ -464,8 +467,8 @@ $.extend($.ui.dialog, {
 		closeOnEscape: true,
 		closeText: 'close',
 		draggable: true,
-		height: 200,
-		minHeight: 100,
+		height: 'auto',
+		minHeight: 150,
 		minWidth: 150,
 		modal: false,
 		overlay: {},

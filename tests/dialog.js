@@ -14,10 +14,10 @@ var defaults = {
 	disabled: false,
 	dialogClass: undefined,
 	draggable: true,
-	height: 200,
+	height: 'auto',
 	maxHeight: undefined,
 	maxWidth: undefined,
-	minHeight: 100,
+	minHeight: 150,
 	minWidth: 150,
 	modal: false,
 	overlay: {},
@@ -365,7 +365,7 @@ test("height", function() {
 	expect(3);
 
 	el = $('<div></div>').dialog();
-		equals(dlg().height(), defaults.height, "default height");
+		equals(dlg().height(), defaults.minHeight, "default height");
 	el.remove();
 
 	el = $('<div></div>').dialog({ height: 437 });
