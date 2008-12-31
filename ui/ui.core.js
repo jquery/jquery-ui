@@ -312,10 +312,14 @@ $.widget = function(name, prototype) {
 
 		this.element = $(element)
 			.bind('setData.' + name, function(event, key, value) {
-				return self._setData(key, value);
+				if (event.target == element) {
+					return self._setData(key, value);
+				}
 			})
 			.bind('getData.' + name, function(event, key) {
-				return self._getData(key);
+				if (event.target == element) {
+					return self._getData(key);
+				}
 			})
 			.bind('remove', function() {
 				return self.destroy();
