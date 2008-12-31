@@ -210,7 +210,7 @@ $.fn.extend({
 $.extend($.expr[':'], {
 
 	data: function(a, i, m) {
-		return $.data(a, m[3]);
+		return !!$.data(a, m[3]);
 	},
 
 	// TODO: add support for object, area
