@@ -699,10 +699,10 @@ $.ui.plugin.add("resizable", "containment", {
 		if (ce[0] != document && (/static/).test(ce.css('position')))
 			cop = self.containerPosition;
 
-		if (cp.left < (o.helper ? co.left : cop.left)) {
+		if (cp.left < (o.helper ? co.left : 0)) {
 			self.size.width = self.size.width + (o.helper ? (self.position.left - co.left) : (self.position.left - cop.left));
 			if (pRatio) self.size.height = self.size.width / o.aspectRatio;
-			self.position.left = o.helper ? co.left : cop.left;
+			self.position.left = o.helper ? co.left : 0;
 		}
 
 		if (cp.top < (o.helper ? co.top : 0)) {
@@ -711,8 +711,8 @@ $.ui.plugin.add("resizable", "containment", {
 			self.position.top = o.helper ? co.top : 0;
 		}
 
-		var woset = (o.helper ? self.offset.left - co.left : (self.position.left - cop.left)) + self.sizeDiff.width,
-					hoset = (o.helper ? self.offset.top - co.top : self.position.top) + self.sizeDiff.height;
+		var woset = Math.abs( (o.helper ? self.offset.left - cop.left : (self.offset.left - cop.left)) + self.sizeDiff.width ),
+					hoset = Math.abs( (o.helper ? self.offset.top - cop.top : (self.offset.top - co.top)) + self.sizeDiff.height );
 
 		if (woset + self.size.width >= self.parentData.width) {
 			self.size.width = self.parentData.width - woset;
@@ -729,13 +729,13 @@ $.ui.plugin.add("resizable", "containment", {
 		var o = ui.options, self = $(this).data("resizable"), cp = self.position,
 				co = self.containerOffset, cop = self.containerPosition, ce = self.containerElement;
 
-		var helper = $(self.helper), ho = helper.offset(), w = helper.innerWidth(), h = helper.innerHeight();
+		var helper = $(self.helper), ho = helper.offset(), w = helper.outerWidth() - self.sizeDiff.width, h = helper.outerHeight() - self.sizeDiff.height;
 
 		if (o.helper && !o.animate && (/relative/).test(ce.css('position')))
-			$(this).css({ left: (ho.left - co.left), top: (ho.top - co.top), width: w, height: h });
+			$(this).css({ left: ho.left - cop.left - co.left, width: w, height: h });
 
 		if (o.helper && !o.animate && (/static/).test(ce.css('position')))
-			$(this).css({ left: cop.left + (ho.left - co.left), top: cop.top + (ho.top - co.top), width: w, height: h });
+			$(this).css({ left: ho.left - cop.left - co.left, width: w, height: h });
 
 	}
 });
