@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<title>jQuery UI Effects - Puff Demo</title>
+	<link type="text/css" href="../../themes/default/ui.all.css" rel="stylesheet" />
+	<script type="text/javascript" src="../../jquery-1.2.6.js"></script>
+	<script type="text/javascript" src="../../ui/effects.core.js"></script>
+	<script type="text/javascript" src="../../ui/effects.scale.js"></script>
+	<link type="text/css" href="../demos.css" rel="stylesheet" />
+	<style type="text/css">
+		.toggler { width: 500px; height: 300px; }
+		#puff { width: 240px; height: 135px; padding: 0.4em; }
+		#puff h3 { margin: 0; padding: 0.4em; text-align: center; }
+	</style>
+	<script type="text/javascript">
+	$(function() {
+		$(".toggler").click(function() {
+			$("> :eq(0)", this).toggle("puff");
+		});
+	});
+	</script>
+</head>
+<body>
+
+<div class="demo">
+
+<div class="toggler">
+	<div id="puff" class="ui-widget-content ui-corner-all">
+		<h3 class="ui-widget-header ui-corner-all">Puff</h3>
+		<p>
+			Etiam libero neque, luctus a, eleifend nec, semper at, lorem. Sed pede. Nulla lorem metus, adipiscing ut, luctus sed, hendrerit vitae, mi.
+		</p>
+	</div>
+</div>
+
+</div><!-- End demo -->
+
+<div class="demo-description">
+
+<p>
+Click above to preview the <code>.hide("puff")</code> effect. You can click again to see the <code>.show("puff")</code> effect.
+</p>
+
+</div><!-- End demo-description -->
+
+</body>
+</html>
