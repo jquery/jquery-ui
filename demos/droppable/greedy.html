@@ -15,9 +15,9 @@
 	</style>
 	<script type="text/javascript">
 	$(function() {
-		
+
 		$("#draggable").draggable();
-		
+
 		$("#droppable, #droppable-inner").droppable({
 			activeClass: 'ui-state-hover',
 			hoverClass: 'ui-state-active',
@@ -25,7 +25,7 @@
 				$(this).addClass('ui-state-highlight').find('p').html('Dropped!');
 			}
 		});
-		
+
 		$("#droppable2, #droppable2-inner").droppable({
 			greedy: true,
 			activeClass: 'ui-state-hover',
@@ -34,7 +34,7 @@
 				$(this).addClass('ui-state-highlight').find('p').html('Dropped!');
 			}
 		});
-		
+
 	});
 	</script>
 </head>

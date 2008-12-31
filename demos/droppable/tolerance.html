@@ -14,9 +14,9 @@
 	</style>
 	<script type="text/javascript">
 	$(function() {
-		
+
 		$("#draggable").draggable();
-		
+
 		$("#droppable").droppable({
 			activeClass: 'ui-state-hover',
 			hoverClass: 'ui-state-active',
@@ -24,7 +24,7 @@
 				$(this).addClass('ui-state-highlight').find('p').html('Dropped!');
 			}
 		});
-		
+
 		$("#droppable-fit").droppable({
 			activeClass: 'ui-state-hover',
 			hoverClass: 'ui-state-active',
@@ -33,7 +33,7 @@
 				$(this).addClass('ui-state-highlight').find('p').html('Dropped!');
 			}
 		});
-		
+
 		$("#droppable-pointer").droppable({
 			activeClass: 'ui-state-hover',
 			hoverClass: 'ui-state-active',
@@ -42,7 +42,7 @@
 				$(this).addClass('ui-state-highlight').find('p').html('Dropped!');
 			}
 		});
-		
+
 		$("#droppable-touch").droppable({
 			activeClass: 'ui-state-hover',
 			hoverClass: 'ui-state-active',
@@ -51,7 +51,7 @@
 				$(this).addClass('ui-state-highlight').find('p').html('Dropped!');
 			}
 		});
-		
+
 	});
 	</script>
 </head>

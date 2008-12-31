@@ -41,18 +41,18 @@
 									$('#demo-notes').hide();
 								});
 							});
-							
+
 							$('#demo-frame').load(function() {
 								var content = $(this)[0].contentWindow.document || $(this).contents()[0];
 								var notes = $('.demo-description', content);
 								if ($('#demo-notes').length == 0) {
 									$('<div id="demo-notes"></div>').insertAfter('#demo-config');
-								}						
+								}
 								$('#demo-notes').hide().empty().html(notes.html());
 								$('#demo-notes').fadeIn();
 								notes.hide();
 							});
-							
+
 							if ($('#demo-frame .demo-description:visible'))
 								$('#demo-frame').trigger('load');
 						})
@@ -62,7 +62,7 @@
 			ev.preventDefault();
 		});
 	});
-	</script>	
+	</script>
 </head>
 <body>
 <?php } ?>
@@ -76,7 +76,7 @@
 					<dd><a href="droppable/index.html">Droppable</a></dd>
 					<dd><a href="resizable/index.html">Resizable</a></dd>
 					<dd><a href="selectable/index.html">Selectable</a></dd>
-					<dd><a href="sortable/index.html">Sortable</a></dd>	
+					<dd><a href="sortable/index.html">Sortable</a></dd>
 				<dt>Widgets</dt>
 					<dd><a href="accordion/index.html">Accordion</a></dd>
 					<dd><a href="datepicker/index.html">Datepicker</a></dd>
@@ -91,17 +91,17 @@
 			</dl>
 		</td>
 		<td class="normal">
-							
+
 			<div class="normal">
 					<?php if(isset($plain) && $content) { echo $content; } else { ?>
-				
+
 					<h3>Instructions</h3>
 					<p>
 						These demos showcase some common uses of each jQuery UI plugin. Simply copy and paste code from the demos to get started. Have fun playing with them.
 					</p>
 					<?php  } ?>
 			</div>
-				
+
 		</td>
 	</tr>
 </table>

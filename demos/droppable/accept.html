@@ -14,9 +14,9 @@
 	</style>
 	<script type="text/javascript">
 	$(function() {
-		
+
 		$("#draggable,#draggable-nonvalid").draggable();
-		
+
 		$("#droppable").droppable({
 			accept: '#draggable',
 			activeClass: 'ui-state-hover',
@@ -25,7 +25,7 @@
 				$(this).addClass('ui-state-highlight').find('p').html('Dropped!');
 			}
 		});
-		
+
 	});
 	</script>
 </head>

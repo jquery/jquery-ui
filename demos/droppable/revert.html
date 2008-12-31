@@ -14,10 +14,10 @@
 	</style>
 	<script type="text/javascript">
 	$(function() {
-		
+
 		$("#draggable").draggable({ revert: 'valid' });
 		$("#draggable2").draggable({ revert: 'invalid' });
-		
+
 		$("#droppable").droppable({
 			activeClass: 'ui-state-hover',
 			hoverClass: 'ui-state-active',
@@ -25,7 +25,7 @@
 				$(this).addClass('ui-state-highlight').find('p').html('Dropped!');
 			}
 		});
-		
+
 	});
 	</script>
 </head>
