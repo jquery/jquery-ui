@@ -304,7 +304,7 @@ $.extend(Datepicker.prototype, {
 				css({opacity: '1.0', cursor: ''});
 		}
 		else if (nodeName == 'div' || nodeName == 'span') {
-			var inline = $target.children('.' + this._inlineClass);			
+			var inline = $target.children('.' + this._inlineClass);
 			inline.children().removeClass('ui-state-disabled');
 		}
 		this._disabledInputs = $.map(this._disabledInputs,
@@ -340,9 +340,9 @@ $.extend(Datepicker.prototype, {
 	   @return boolean - true if disabled, false if enabled */
 	_isDisabledDatepicker: function(target) {
 		if (!target) {
-			return false;			
+			return false;
 		}
-		for (var i = 0; i < this._disabledInputs.length; i++) {			
+		for (var i = 0; i < this._disabledInputs.length; i++) {
 			if (this._disabledInputs[i] == target)
 				return true;
 		}
@@ -433,7 +433,7 @@ $.extend(Datepicker.prototype, {
 	_doKeyDown: function(event) {
 		var inst = $.datepicker._getInst(event.target);
 		var handled = true;
-		var isRTL = inst.dpDiv.is('.ui-datepicker-rtl');	
+		var isRTL = inst.dpDiv.is('.ui-datepicker-rtl');
 		inst._keyEvent = true;
 		if ($.datepicker._datepickerShowing)
 			switch (event.keyCode) {
@@ -760,7 +760,7 @@ $.extend(Datepicker.prototype, {
 	_selectDay: function(id, month, year, td) {
 		var target = $(id);
 		if ($(td).hasClass(this._unselectableClass) || this._isDisabledDatepicker(target[0])) {
-			return;			
+			return;
 		}
 		var inst = this._getInst(target[0]);
 		inst.selectedDay = inst.currentDay = $('a', td).html();
@@ -1149,7 +1149,7 @@ $.extend(Datepicker.prototype, {
 		} catch (event) {
 			this.log(event);
 			date = defaultDate;
-		}		
+		}
 		inst.selectedDay = date.getDate();
 		inst.drawMonth = inst.selectedMonth = date.getMonth();
 		inst.drawYear = inst.selectedYear = date.getFullYear();
@@ -1240,7 +1240,7 @@ $.extend(Datepicker.prototype, {
 			this._notifyChange(inst);
 		this._adjustInstDate(inst);
 		if (inst.input) {
-			inst.input.val(clear ? '' : this._formatDate(inst));			
+			inst.input.val(clear ? '' : this._formatDate(inst));
 		}
 	},
 
@@ -1258,7 +1258,7 @@ $.extend(Datepicker.prototype, {
 		today = this._daylightSavingAdjust(
 			new Date(today.getFullYear(), today.getMonth(), today.getDate())); // clear time
 		var isRTL = this._get(inst, 'isRTL');
-		var showButtonPanel = this._get(inst, 'showButtonPanel');			
+		var showButtonPanel = this._get(inst, 'showButtonPanel');
 		var hideIfNoPrevNext = this._get(inst, 'hideIfNoPrevNext');
 		var navigationAsDateFormat = this._get(inst, 'navigationAsDateFormat');
 		var numMonths = this._getNumberOfMonths(inst);
@@ -1292,7 +1292,7 @@ $.extend(Datepicker.prototype, {
 		prevText = (!navigationAsDateFormat ? prevText : this.formatDate(prevText,
 			this._daylightSavingAdjust(new Date(drawYear, drawMonth - stepMonths, 1)),
 			this._getFormatConfig(inst)));
-		var prev = (this._canAdjustMonth(inst, -1, drawYear, drawMonth) ?	
+		var prev = (this._canAdjustMonth(inst, -1, drawYear, drawMonth) ?
 			'<a class="ui-datepicker-prev ui-corner-all" onclick="jQuery.datepicker._adjustDate(\'#' + inst.id + '\', -' + stepMonths + ', \'M\');"' +
 			' title="' + prevText + '"><span class="ui-icon ui-icon-circle-triangle-' + ( isRTL ? 'e' : 'w') + '">' + prevText + '</span></a>' :
 			(hideIfNoPrevNext ? '' : '<a class="ui-datepicker-prev ui-corner-all ui-state-disabled" title="'+ prevText +'"><span class="ui-icon ui-icon-circle-triangle-' + ( isRTL ? 'e' : 'w') + '">' + prevText + '</span></a>'));
@@ -1309,7 +1309,7 @@ $.extend(Datepicker.prototype, {
 		currentText = (!navigationAsDateFormat ? currentText :
 			this.formatDate(currentText, gotoDate, this._getFormatConfig(inst)));
 		var controls = '<button type="button" class="ui-datepicker-close ui-state-default ui-priority-primary ui-corner-all" onclick="jQuery.datepicker._hideDatepicker();">' + this._get(inst, 'closeText') + '</button>';
-		var buttonPanel = (showButtonPanel) ? '<div class="ui-datepicker-buttonpane ui-widget-content">' + (isRTL ? controls : '') + 
+		var buttonPanel = (showButtonPanel) ? '<div class="ui-datepicker-buttonpane ui-widget-content">' + (isRTL ? controls : '') +
 			(this._isInRange(inst, gotoDate) ? '<button type="button" class="ui-datepicker-current ui-state-default ui-priority-secondary ui-corner-all" onclick="jQuery.datepicker._gotoToday(\'#' + inst.id + '\');"' +
 			'>' + currentText + '</button>' : '') + (isRTL ? '' : controls) + '</div>' : '';
 		var firstDay = parseInt(this._get(inst, 'firstDay'));
@@ -1330,7 +1330,7 @@ $.extend(Datepicker.prototype, {
 			for (var col = 0; col < numMonths[1]; col++) {
 				var selectedDate = this._daylightSavingAdjust(new Date(drawYear, drawMonth, inst.selectedDay));
 				var cornerClass = ' ui-corner-all';
-				var calender = ''; 
+				var calender = '';
 				if (isMultiMonth) {
 					calender += '<div class="ui-datepicker-group ui-datepicker-group-';
 					switch (col) {
@@ -1340,8 +1340,8 @@ $.extend(Datepicker.prototype, {
 					}
 					calender += '">';
 				}
-				calender += '<div class="ui-datepicker-header ui-widget-header ui-helper-clearfix' + cornerClass + '">' + 
-					(/all|left/.test(cornerClass) && row == 0 ? (isRTL ? next : prev) : '') + 
+				calender += '<div class="ui-datepicker-header ui-widget-header ui-helper-clearfix' + cornerClass + '">' +
+					(/all|left/.test(cornerClass) && row == 0 ? (isRTL ? next : prev) : '') +
 					(/all|right/.test(cornerClass) && row == 0 ? (isRTL ? prev : next) : '') +
 					this._generateMonthYearHeader(inst, drawMonth, drawYear, minDate, maxDate,
 					selectedDate, row > 0 || col > 0, monthNames) + // draw month headers
@@ -1385,10 +1385,10 @@ $.extend(Datepicker.prototype, {
 							(unselectable ? '' : ' onclick="jQuery.datepicker._selectDay(\'#' +
 							inst.id + '\',' + drawMonth + ',' + drawYear + ', this);"') + '>' + // actions
 							(otherMonth ? (showOtherMonths ? printDate.getDate() : '&#xa0;') : // display for other months
-							(unselectable ? printDate.getDate() : '<a class="ui-state-default' + 
-							(printDate.getTime() == today.getTime() ? ' ui-state-highlight' : '') + 
+							(unselectable ? printDate.getDate() : '<a class="ui-state-default' +
+							(printDate.getTime() == today.getTime() ? ' ui-state-highlight' : '') +
 							(printDate.getTime() >= currentDate.getTime() && printDate.getTime() <= endDate.getTime() ? // in current range
-							' ui-state-active' : '') + // highlight selected day							
+							' ui-state-active' : '') + // highlight selected day
 							'" href="#">' + printDate.getDate() + '</a>')) + '</td>'; // display for this month
 						printDate.setDate(printDate.getDate() + 1);
 						printDate = this._daylightSavingAdjust(printDate);

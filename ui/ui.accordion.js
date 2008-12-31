@@ -28,7 +28,7 @@ $.widget("ui.accordion", {
 				}
 			}
 		}
-		
+
 		this.element.addClass("ui-accordion ui-widget ui-helper-reset");
 		var groups = this.element.children().addClass("ui-accordion-group");
 		var headers = options.headers = groups.find("> :first-child").addClass("ui-accordion-header ui-helper-reset ui-state-default ui-corner-all")
@@ -36,7 +36,7 @@ $.widget("ui.accordion", {
 		.bind("mouseleave.accordion", function(){ $(this).removeClass('ui-state-hover'); });
 		// wrap content elements in div against animation issues
 		headers.next().wrap("<div></div>").addClass("ui-accordion-content").parent().addClass("ui-accordion-content-wrap ui-helper-reset ui-widget-content ui-corner-bottom");
-		
+
 		var active = options.active = findActive(headers, options.active).toggleClass("ui-state-default").toggleClass("ui-state-active").toggleClass("ui-corner-all").toggleClass("ui-corner-top");
 		active.parent().addClass("selected");
 		$("<span/>").addClass("ui-icon " + this.options.icons.header).prependTo(headers);
@@ -129,7 +129,7 @@ $.widget("ui.accordion", {
 
 		return true;
 	},
-	
+
 	resize: function() {
 		var options = this.options,
 			maxHeight;

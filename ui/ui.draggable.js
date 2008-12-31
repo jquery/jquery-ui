@@ -428,7 +428,7 @@ $.ui.plugin.add("draggable", "connectToSortable", {
 				this.instance.element.triggerHandler("sortreceive", [event, $.extend(this.instance._ui(), { sender: inst.element })], this.instance.options["receive"]);
 
 				this.instance.options.helper = this.instance.options._helper;
-				
+
 				if(inst.options.helper == 'original') {
 					this.instance.currentItem.css({ top: 'auto', left: 'auto' });
 				}
@@ -599,9 +599,9 @@ $.ui.plugin.add("draggable", "scroll", {
 		//    the scroll is included in the initial calculation of the offset of the parent, and never recalculated upon drag
 		if(scrolled !== false && i.cssPosition == 'absolute' && i.scrollParent[0] != document && $.ui.contains(i.scrollParent[0], i.offsetParent[0])) {
 			i.offset.parent = i._getParentOffset();
-			
+
 		}
-		
+
 		// This is another very weird special case that only happens for relative elements:
 		// 1. If the css position is relative
 		// 2. and the scroll parent is the document or similar to the offset parent
@@ -609,7 +609,7 @@ $.ui.plugin.add("draggable", "scroll", {
 		if(scrolled !== false && i.cssPosition == 'relative' && !(i.scrollParent[0] != document && i.scrollParent[0] != i.offsetParent[0])) {
 			i.offset.relative = i._getRelativeOffset();
 		}
-		
+
 
 	}
 });

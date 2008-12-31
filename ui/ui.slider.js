@@ -344,7 +344,7 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 		var orientation = this.options.orientation;
 		if (orientation != 'horizontal' && orientation != 'vertical')
 			orientation = 'horizontal';
-		
+
 		return orientation;
 	},
 
@@ -367,7 +367,7 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 			var val = this.options.values[index];
 			if (val < this._valueMin()) val = this._valueMin();
 			if (val > this._valueMax()) val = this._valueMax();
-	
+
 			return val;
 		} else {
 			return this.options.values;

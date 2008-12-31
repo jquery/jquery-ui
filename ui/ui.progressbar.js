@@ -101,7 +101,7 @@ $.widget("ui.progressbar", {
 		this.valueDiv.width(value + '%');
 		this.element.attr("aria-valuenow", value);
 	}
-	
+
 });
 
 $.extend($.ui.progressbar, {
