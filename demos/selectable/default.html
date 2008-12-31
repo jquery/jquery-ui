@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<title>jQuery UI Selectable - Default Demo</title>
+	<link type="text/css" href="../../themes/default/ui.all.css" rel="stylesheet" />
+	<script type="text/javascript" src="../../jquery-1.2.6.js"></script>
+	<script type="text/javascript" src="../../ui/ui.core.js"></script>
+	<script type="text/javascript" src="../../ui/ui.selectable.js"></script>
+	<link type="text/css" href="../demos.css" rel="stylesheet" />
+	
+	<style type="text/css">
+	#selectable .ui-selecting {
+		background: #FECA40;
+	}
+	#selectable .ui-selected {
+		background: #F39814;
+	}
+	</style>
+	<script type="text/javascript">
+	$(function() {
+		$("#selectable").selectable({
+			stop:function(){
+				var result = $("#select-result");
+				result.text("");
+				$("#selectable > .ui-selected").each(function(){
+					result.text( result.text() + " #" + ($("#selectable li").index(this)+1) );
+				});
+			}
+		});
+	});
+	</script>
+</head>
+<body>
+<div class="demo">
+
+<ol id="selectable">
+	<li>Draw a box with your mouse to select items.</li>
+	<li>Draw a box with your mouse to select items.</li>
+	<li>Draw a box with your mouse to select items.</li>
+	<li>Draw a box with your mouse to select items.</li>
+	<li>Draw a box with your mouse to select items.</li>
+</ol>
+
+You've selected: <span id="select-result">none</span>.
+</div><!-- End demo -->
+
+<div class="demo-description">
+
+<p>
+<!-- Add description here -->
+</p>
+
+</div><!-- End demo-description -->
+</body>
+</html>
