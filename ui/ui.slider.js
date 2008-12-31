@@ -431,6 +431,7 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 $.extend($.ui.slider, {
 	getter: "value values",
 	version: "@VERSION",
+	eventPrefix: "slide",
 	defaults: {
 		delay: 0,
 		distance: 0,
