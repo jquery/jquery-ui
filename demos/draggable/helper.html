@@ -15,7 +15,8 @@
 		$("#draggable").draggable({ helper: 'original' });
 		$("#draggable2").draggable({ helper: 'clone' });
 		$("#draggable3").draggable({
-			cursorAt: { top: -5, left: -5 },
+			cursor: 'move',
+			cursorAt: { top: -12, left: -20 },
 			helper: function(event) {
 				return $('<div class="ui-widget-header">I\'m a custom helper</div>');
 			}
