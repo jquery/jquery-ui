@@ -14,7 +14,6 @@ var _remove = $.fn.remove,
 
 //Helper functions and ui object
 $.ui = {
-
 	version: "@VERSION",
 
 	// $.ui.plugin is deprecated.  Use the proxy pattern instead.
@@ -125,7 +124,6 @@ $.ui = {
 		TAB: 9,
 		UP: 38
 	}
-
 };
 
 // WAI-ARIA normalization
@@ -161,7 +159,6 @@ if (isFF2) {
 
 //jQuery plugins
 $.fn.extend({
-
 	remove: function() {
 		// Safari has a native remove event which actually removes DOM elements,
 		// so we have to use triggerHandler instead of trigger (#3037).
@@ -186,7 +183,6 @@ $.fn.extend({
 	},
 
 	scrollParent: function() {
-
 		var scrollParent;
 		if(($.browser.msie && (/(static|relative)/).test(this.css('position'))) || (/absolute/).test(this.css('position'))) {
 			scrollParent = this.parents().filter(function() {
@@ -199,23 +195,18 @@ $.fn.extend({
 		}
 
 		return (/fixed/).test(this.css('position')) || !scrollParent.length ? $(document) : scrollParent;
-
-
 	}
-
 });
 
 
 //Additional selectors
 $.extend($.expr[':'], {
-
 	data: function(elem, i, match) {
 		return !!$.data(elem, match[3]);
 	},
 
 	// TODO: add support for object, area
 	tabbable: function(elem) {
-
 		var nodeName = elem.nodeName.toLowerCase();
 		function isVisible(element) {
 			return !($(element).is(':hidden') || $(element).parents(':hidden').length);
@@ -238,9 +229,7 @@ $.extend($.expr[':'], {
 			// visible on page
 			isVisible(elem)
 		);
-
 	}
-
 });
 
 
