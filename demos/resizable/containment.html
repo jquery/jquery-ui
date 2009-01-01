@@ -8,9 +8,10 @@
 	<script type="text/javascript" src="../../ui/ui.resizable.js"></script>
 	<link type="text/css" href="../demos.css" rel="stylesheet" />
 	<style type="text/css">
+	#container { width: 300px; height: 300px; }
+	#container h3 { text-align: center; margin: 0; margin-bottom: 10px; }
 	#resizable { background-position: top left; width: 150px; height: 150px; }
 	#resizable, #container { padding: 0.5em; }
-	#container { width: 300px; height: 300px; }
 	</style>
 	<script type="text/javascript">
 	$(function() {
@@ -24,9 +25,9 @@
 <div class="demo">
 	
 <div id="container" class="ui-widget-content">
-	<p>Container</p>
-	<div id="resizable" class="ui-widget-header">
-		<p>Resize me</p>
+	<h3 class="ui-widget-header">Containment</h3>
+	<div id="resizable" class="ui-state-active">
+		<h3 class="ui-widget-header">Resizable</h3>
 	</div>
 </div>
 

@@ -9,9 +9,9 @@
 	<script type="text/javascript" src="../../ui/ui.droppable.js"></script>
 	<link type="text/css" href="../demos.css" rel="stylesheet" />
 	<style type="text/css">
-	#draggable { width: 100px; height: 100px; padding: 0.5em; float: left; margin: 10px; }
-	#droppable, #droppable2 { width: 200px; height: 160px; padding: 0.5em; float: left; margin: 10px; }
-	#droppable-inner, #droppable2-inner { width: 140px; height: 100px; padding: 0.5em; float: left; margin: 10px; }
+	#draggable { width: 100px; height: 40px; padding: 0.5em; float: left; margin: 10px; }
+	#droppable, #droppable2 { width: 230px; height: 120px; padding: 0.5em; float: left; margin: 10px; }
+	#droppable-inner, #droppable2-inner { width: 170px; height: 60px; padding: 0.5em; float: left; margin: 10px; }
 	</style>
 	<script type="text/javascript">
 	$(function() {
@@ -46,16 +46,16 @@
 </div>
 
 <div id="droppable" class="ui-widget-header">
-	<p>Outer droppable (greedy deactivated)</p>
+	<p>Outer droppable</p>
 	<div id="droppable-inner" class="ui-widget-header">
-		<p>Inner droppable (greedy deactivated)</p>
+		<p>Inner droppable (not greedy)</p>
 	</div>
 </div>
 
 <div id="droppable2" class="ui-widget-header">
-	<p>Outer droppable (greedy deactivated)</p>
+	<p>Outer droppable</p>
 	<div id="droppable2-inner" class="ui-widget-header">
-		<p>Inner droppable (greedy deactivated)</p>
+		<p>Inner droppable (greedy)</p>
 	</div>
 </div>
 

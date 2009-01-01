@@ -9,7 +9,7 @@
 	<link type="text/css" href="../demos.css" rel="stylesheet" />
 	<script type="text/javascript">
 	$(function() {
-		$('#date123').datepicker({
+		$('#datepicker').datepicker({
 			numberOfMonths: 3,
 			showButtonPanel: true
 		});
@@ -20,18 +20,29 @@
 
 <div class="demo">
 
-<p>Date: <input type="text" id="date123"></p>
+<p>Date: <input type="text" id="datepicker"></p>
 
 </div><!-- End demo -->
 
-
-
 <div class="demo-description">
 
-<p>This datepicker shows two months at a time by setting the numberOfMonths option to 3. This can be set to any number that will fit within your layout. The multiple calendars are used to make it easier to visually scan across months and make a selection. This is not a date range picker. In a future release, a custom date range plugin will be added. For users that want to use the old date range picker built into the datepicker, they must use the previous version of this plugin.</p>
+<p>
+This datepicker shows three months at a time by setting the <code>numberOfMonths</code> option to 3.
+This can be set to any number that will fit within your layout.
+The multiple calendars are used to make it easier to visually scan across months and make a selection.
+</p>
+
+<div style="padding: 0pt 0.7em; margin-top: 20px;" class="ui-state-highlight ui-corner-all">
+<p>
+<span style="float: left; margin-right: 0.3em;" class="ui-icon ui-icon-info"></span>
+<strong>Note:</strong>
+This is not a date range picker.
+In a future release, a custom date range plugin will be added.
+For users that want to use the old date range picker built into the datepicker, they must use the previous version of this plugin (v1.5.3).
+</p>
+</div>
 
 </div><!-- End demo-description -->
-
 
 </body>
 </html>
