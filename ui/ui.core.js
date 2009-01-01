@@ -209,34 +209,34 @@ $.fn.extend({
 //Additional selectors
 $.extend($.expr[':'], {
 
-	data: function(a, i, m) {
-		return !!$.data(a, m[3]);
+	data: function(elem, i, match) {
+		return !!$.data(elem, match[3]);
 	},
 
 	// TODO: add support for object, area
-	tabbable: function(a, i, m) {
+	tabbable: function(elem) {
 
-		var nodeName = a.nodeName.toLowerCase();
+		var nodeName = elem.nodeName.toLowerCase();
 		function isVisible(element) {
 			return !($(element).is(':hidden') || $(element).parents(':hidden').length);
 		}
 
 		return (
 			// in tab order
-			a.tabIndex >= 0 &&
+			elem.tabIndex >= 0 &&
 
 			( // filter node types that participate in the tab order
 
 				// anchor tag
-				('a' == nodeName && a.href) ||
+				('a' == nodeName && elem.href) ||
 
 				// enabled form element
 				(/input|select|textarea|button/.test(nodeName) &&
-					'hidden' != a.type && !a.disabled)
+					'hidden' != elem.type && !elem.disabled)
 			) &&
 
 			// visible on page
-			isVisible(a)
+			isVisible(elem)
 		);
 
 	}
