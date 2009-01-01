@@ -375,7 +375,10 @@ $.widget.prototype = {
 		var eventName = (type == this.widgetEventPrefix
 			? type : this.widgetEventPrefix + type);
 		event = event || $.event.fix({ type: eventName, target: this.element[0] });
-		return this.element.triggerHandler(eventName, [event, data], this.options[type]);
+
+		this.element.trigger(event, data);
+		var ret = (this.options[type] && this.options[type].call(this.element[0], event, data));
+		return !event.isDefaultPrevented() && ret !== false;
 	}
 };
 
