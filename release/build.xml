@@ -93,7 +93,7 @@
 
 	<target description="Zip the package" name="zip">
 		<zip destfile="${dist.dir}/../${release.filename}.zip">
-			<zipfileset dir="${dist.dir}/" />
+			<zipfileset dir="dist/" />
 		</zip>
 	</target>
 
