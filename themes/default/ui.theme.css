@@ -41,7 +41,7 @@
 .ui-widget-content .ui-icon {background-image: url(images/222222_256x240_icons_icons.png); }
 .ui-widget-header .ui-icon {background-image: url(images/ffffff_256x240_icons_icons.png); }
 .ui-state-default .ui-icon { background-image: url(images/ef8c08_256x240_icons_icons.png); }
-.ui-state-hover .ui-icon, .ui-state-focus .ui-icon {background-image: url(images/ef8c08_256x240_icons_icons.png); }
+.ui-state-hover .ui-icon {background-image: url(images/ef8c08_256x240_icons_icons.png); }
 .ui-state-active .ui-icon {background-image: url(images/ef8c08_256x240_icons_icons.png); }
 .ui-state-highlight .ui-icon {background-image: url(images/228ef1_256x240_icons_icons.png); }
 .ui-state-error .ui-icon, .ui-state-error-text .ui-icon {background-image: url(images/ffd27a_256x240_icons_icons.png); }
@@ -137,12 +137,12 @@
 .ui-icon-tag { background-position: -240px -96px; }
 .ui-icon-home { background-position: 0 -112px; }
 .ui-icon-flag { background-position: -16px -112px; }
-.ui-icon-calendar { background-position: -32px -112px; }
+.ui-icon-calculator { background-position: -32px -112px; }
 .ui-icon-cart { background-position: -48px -112px; }
 .ui-icon-pencil { background-position: -64px -112px; }
 .ui-icon-clock { background-position: -80px -112px; }
 .ui-icon-disk { background-position: -96px -112px; }
-.ui-icon-calculator { background-position: -112px -112px; }
+.ui-icon-calendar { background-position: -112px -112px; }
 .ui-icon-zoomin { background-position: -128px -112px; }
 .ui-icon-zoomout { background-position: -144px -112px; }
 .ui-icon-search { background-position: -160px -112px; }
