@@ -80,6 +80,9 @@
 		});
 		
 		if (window.location.hash) {
+			if (window.location.hash.indexOf('|') === -1) {
+				window.location.hash += '|default';	
+			}			
 			var path = window.location.href.replace('#','');
 			path = path.replace('\|','/') + '.html'; 
 			loadPage(path);
