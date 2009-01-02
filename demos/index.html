@@ -108,7 +108,7 @@
 									
 									$(this).parents('ul').find('li').removeClass('demo-config-on');
 									$(this).parent().addClass('demo-config-on');
-									$('#demo-notes').hide();
+									$('#demo-notes').fadeOut();
 
 									//Set the hash to the actual page without ".html"
 									window.location.hash = header + '|' + this.getAttribute('href').match((/\/([^\/\\]+)\.html/))[1];
@@ -160,7 +160,7 @@
 				$('<div id="demo-notes"></div>').insertAfter('#demo-config');
 			}						
 			$('#demo-notes').hide().empty().html(notes.html());
-			$('#demo-notes').show();
+			$('#demo-notes').fadeIn();
 			notes.hide();
 		}
 		
