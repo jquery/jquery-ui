@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<title>jQuery UI Datepicker - Date Formats</title>
+	<link type="text/css" href="../../themes/default/ui.all.css" rel="stylesheet" />
+	<script type="text/javascript" src="../../jquery-1.2.6.js"></script>
+	<script type="text/javascript" src="../../ui/ui.core.js"></script>
+	<script type="text/javascript" src="../../ui/ui.datepicker.js"></script>
+	<link type="text/css" href="../demos.css" rel="stylesheet" />
+	<script type="text/javascript">
+	$(function() {
+		$("#datepicker").datepicker();
+		$("#format").change(function() { $('#datepicker').datepicker('option', {dateFormat: $(this).val()}); });
+	});
+	</script>
+</head>
+<body>
+
+<div class="demo">
+
+<p>Date: <input type="text" id="datepicker" size="30"/>&nbsp;
+	<select id="format">
+		<option value="mm/dd/yy">Default - mm/dd/yy</option>
+		<option value="yy-mm-dd">ISO 8601 - yy-mm-dd</option>
+		<option value="d M, y">Short - d M, yy</option>
+		<option value="d MM, y">Medium - d MM, yy</option>
+		<option value="DD, d MM, yy">Full - DD, d MM, yy</option>
+		<option value="'day' d 'of' MM 'in the year' yy">With text - 'day' d 'of' MM 'in the year' yy</option>
+	</select></p>
+
+</div><!-- End demo -->
+
+<div class="demo-description">
+
+<p>The datepicker may present the selected date in a variety of formats.</p>
+
+</div><!-- End demo-description -->
+
+</body>
+</html>

@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<title>jQuery UI Datepicker - Localisation</title>
+	<link type="text/css" href="../../themes/default/ui.all.css" rel="stylesheet" />
+	<script type="text/javascript" src="../../jquery-1.2.6.js"></script>
+	<script type="text/javascript" src="../../ui/ui.core.js"></script>
+	<script type="text/javascript" src="../../ui/ui.datepicker.js"></script>
+	<script type="text/javascript" src="../../ui/i18n/ui.datepicker-ar.js"></script>
+	<script type="text/javascript" src="../../ui/i18n/ui.datepicker-bg.js"></script>
+	<script type="text/javascript" src="../../ui/i18n/ui.datepicker-ca.js"></script>
+	<script type="text/javascript" src="../../ui/i18n/ui.datepicker-cs.js"></script>
+	<script type="text/javascript" src="../../ui/i18n/ui.datepicker-da.js"></script>
+	<script type="text/javascript" src="../../ui/i18n/ui.datepicker-de.js"></script>
+	<script type="text/javascript" src="../../ui/i18n/ui.datepicker-eo.js"></script>
+	<script type="text/javascript" src="../../ui/i18n/ui.datepicker-es.js"></script>
+	<script type="text/javascript" src="../../ui/i18n/ui.datepicker-fa.js"></script>
+	<script type="text/javascript" src="../../ui/i18n/ui.datepicker-fi.js"></script>
+	<script type="text/javascript" src="../../ui/i18n/ui.datepicker-fr.js"></script>
+	<script type="text/javascript" src="../../ui/i18n/ui.datepicker-he.js"></script>
+	<script type="text/javascript" src="../../ui/i18n/ui.datepicker-hr.js"></script>
+	<script type="text/javascript" src="../../ui/i18n/ui.datepicker-hu.js"></script>
+	<script type="text/javascript" src="../../ui/i18n/ui.datepicker-hy.js"></script>
+	<script type="text/javascript" src="../../ui/i18n/ui.datepicker-id.js"></script>
+	<script type="text/javascript" src="../../ui/i18n/ui.datepicker-is.js"></script>
+	<script type="text/javascript" src="../../ui/i18n/ui.datepicker-it.js"></script>
+	<script type="text/javascript" src="../../ui/i18n/ui.datepicker-ja.js"></script>
+	<script type="text/javascript" src="../../ui/i18n/ui.datepicker-ko.js"></script>
+	<script type="text/javascript" src="../../ui/i18n/ui.datepicker-lt.js"></script>
+	<script type="text/javascript" src="../../ui/i18n/ui.datepicker-lv.js"></script>
+	<script type="text/javascript" src="../../ui/i18n/ui.datepicker-nl.js"></script>
+	<script type="text/javascript" src="../../ui/i18n/ui.datepicker-no.js"></script>
+	<script type="text/javascript" src="../../ui/i18n/ui.datepicker-pl.js"></script>
+	<script type="text/javascript" src="../../ui/i18n/ui.datepicker-pt-BR.js"></script>
+	<script type="text/javascript" src="../../ui/i18n/ui.datepicker-ro.js"></script>
+	<script type="text/javascript" src="../../ui/i18n/ui.datepicker-ru.js"></script>
+	<script type="text/javascript" src="../../ui/i18n/ui.datepicker-sk.js"></script>
+	<script type="text/javascript" src="../../ui/i18n/ui.datepicker-sl.js"></script>
+	<script type="text/javascript" src="../../ui/i18n/ui.datepicker-sq.js"></script>
+	<script type="text/javascript" src="../../ui/i18n/ui.datepicker-sv.js"></script>
+	<script type="text/javascript" src="../../ui/i18n/ui.datepicker-th.js"></script>
+	<script type="text/javascript" src="../../ui/i18n/ui.datepicker-tr.js"></script>
+	<script type="text/javascript" src="../../ui/i18n/ui.datepicker-uk.js"></script>
+	<script type="text/javascript" src="../../ui/i18n/ui.datepicker-zh-CN.js"></script>
+	<script type="text/javascript" src="../../ui/i18n/ui.datepicker-zh-TW.js"></script>
+	<link type="text/css" href="../demos.css" rel="stylesheet" />
+	<script type="text/javascript">
+	$(function() {
+		$.datepicker.setDefaults($.extend({showMonthAfterYear: false}, $.datepicker.regional['']));
+		$("#datepicker").datepicker($.datepicker.regional['fr']);
+		$("#locale").change(function() {
+			$('#datepicker').datepicker('option', $.extend({showMonthAfterYear: false},
+				$.datepicker.regional[$(this).val()]));
+		});
+	});
+	</script>
+</head>
+<body>
+
+<div class="demo">
+
+<p>Date: <input type="text" id="datepicker"/>&nbsp;
+	<select id="locale">
+		<option value="sq">Albanian (Gjuha shqipe)</option>
+		<option value="ar">Arabic (&#8235;&#1604;&#1593;&#1585;&#1576;&#1610;)</option>
+		<option value="hy">Armenian (&#1344;&#1377;&#1397;&#1381;&#1408;&#1381;&#1398;)</option>
+		<option value="bg">Bulgarian (&#1073;&#1098;&#1083;&#1075;&#1072;&#1088;&#1089;&#1082;&#1080; &#1077;&#1079;&#1080;&#1082;)</option>
+		<option value="ca">Catalan (Català)</option>
+		<option value="zh-CN">Chinese Simplified (&#31616;&#20307;&#20013;&#25991;)</option>
+		<option value="zh-TW">Chinese Traditional (&#32321;&#39636;&#20013;&#25991;)</option>
+		<option value="hr">Croatian (Hrvatski jezik)</option>
+		<option value="cs">Czech (Ceština)</option>
+		<option value="da">Danish (Dansk)</option>
+		<option value="nl">Dutch (Nederlands)</option>
+		<option value="eo">Esperanto</option>
+		<option value="fa">Farsi/Persian (&#8235;&#1601;&#1575;&#1585;&#1587;&#1740;)</option>
+		<option value="fi">Finnish (suomi)</option>
+		<option value="fr" selected="selected">French (Français)</option>
+		<option value="de">German (Deutsch)</option>
+		<option value="he">Hebrew (&#8235;&#1506;&#1489;&#1512;&#1497;&#1514;)</option>
+		<option value="hu">Hungarian (Magyar)</option>
+		<option value="is">Icelandic (Íslenska)</option>
+		<option value="id">Indonesian (Bahasa Indonesia)</option>
+		<option value="it">Italian (Italiano)</option>
+		<option value="ja">Japanese (&#26085;&#26412;&#35486;)</option>
+		<option value="ko">Korean (&#54620;&#44397;&#50612;)</option>
+		<option value="lv">Latvian (Latviešu Valoda)</option>
+		<option value="lt">Lithuanian (lietuviu kalba)</option>
+		<option value="no">Norwegian (Norsk)</option>
+		<option value="pl">Polish (Polski)</option>
+		<option value="pt-BR">Portuguese/Brazilian (Português)</option>
+		<option value="ro">Romanian (Româna)</option>
+		<option value="ru">Russian (&#1056;&#1091;&#1089;&#1089;&#1082;&#1080;&#1081;)</option>
+		<option value="sk">Slovak (Slovencina)</option>
+		<option value="sl">Slovenian (Slovenski Jezik)</option>
+		<option value="es">Spanish (Español)</option>
+		<option value="sv">Swedish (Svenska)</option>
+		<option value="th">Thai (&#3616;&#3634;&#3625;&#3634;&#3652;&#3607;&#3618;)</option>
+		<option value="tr">Turkish (Türkçe)</option>
+		<option value="uk">Ukranian (&#1059;&#1082;&#1088;&#1072;&#1111;&#1085;&#1089;&#1100;&#1082;&#1072;)</option>
+	</select></p>
+
+</div><!-- End demo -->
+
+<div class="demo-description">
+
+<p>The datepicker may be localised for other languages and date preferences.
+	There is built-in support for languages that read right-to-left, such as Arabic and Hebrew.</p>
+
+</div><!-- End demo-description -->
+
+</body>
+</html>
