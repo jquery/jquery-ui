@@ -2,7 +2,6 @@ body {
 	font-size: 62.5%;
 }
 
-
 /* Site
    -------------------------------- */
 
@@ -123,7 +122,8 @@ eventually we should convert the font sizes to ems -- using px for now to minimi
 
 #demo-config { padding:20px 0 0; }
 
-#demo-frame { float:left; width:540px; height:380px; border:1px solid #ddd; }
+#demo-frame { float:left; width:540px; height:380px; border:1px solid #ddd; overflow: auto; position: relative; }
+#demo-frame h3, #demo-frame h4 { padding: 0; font-weight: bold; font-size: 1em; }
 
 #demo-config-menu { float:right; width:200px; }
 #demo-config-menu h4 { font-size:13px; color:#666; font-weight:normal; border:0; padding-left:18px; }
@@ -150,7 +150,7 @@ eventually we should convert the font sizes to ems -- using px for now to minimi
 	font-size: 1.3em;
 }
 
-#demo-notes { width:520px; color:#333; }
+#demo-notes { width:520px; color:#333; font-size: 1em; }
 #demo-notes code { padding-left:20px; }
 
 #demo-source a:link,

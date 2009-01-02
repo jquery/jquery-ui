@@ -31,10 +31,62 @@
 	<script type="text/javascript" src="../ui/effects.shake.js"></script>
 	<script type="text/javascript" src="../ui/effects.slide.js"></script>
 	<script type="text/javascript" src="../ui/effects.transfer.js"></script>
+	<script type="text/javascript" src="../ui/i18n/ui.datepicker-ar.js"></script>
+	<script type="text/javascript" src="../ui/i18n/ui.datepicker-bg.js"></script>
+	<script type="text/javascript" src="../ui/i18n/ui.datepicker-ca.js"></script>
+	<script type="text/javascript" src="../ui/i18n/ui.datepicker-cs.js"></script>
+	<script type="text/javascript" src="../ui/i18n/ui.datepicker-da.js"></script>
+	<script type="text/javascript" src="../ui/i18n/ui.datepicker-de.js"></script>
+	<script type="text/javascript" src="../ui/i18n/ui.datepicker-eo.js"></script>
+	<script type="text/javascript" src="../ui/i18n/ui.datepicker-es.js"></script>
+	<script type="text/javascript" src="../ui/i18n/ui.datepicker-fa.js"></script>
+	<script type="text/javascript" src="../ui/i18n/ui.datepicker-fi.js"></script>
+	<script type="text/javascript" src="../ui/i18n/ui.datepicker-fr.js"></script>
+	<script type="text/javascript" src="../ui/i18n/ui.datepicker-he.js"></script>
+	<script type="text/javascript" src="../ui/i18n/ui.datepicker-hr.js"></script>
+	<script type="text/javascript" src="../ui/i18n/ui.datepicker-hu.js"></script>
+	<script type="text/javascript" src="../ui/i18n/ui.datepicker-hy.js"></script>
+	<script type="text/javascript" src="../ui/i18n/ui.datepicker-id.js"></script>
+	<script type="text/javascript" src="../ui/i18n/ui.datepicker-is.js"></script>
+	<script type="text/javascript" src="../ui/i18n/ui.datepicker-it.js"></script>
+	<script type="text/javascript" src="../ui/i18n/ui.datepicker-ja.js"></script>
+	<script type="text/javascript" src="../ui/i18n/ui.datepicker-ko.js"></script>
+	<script type="text/javascript" src="../ui/i18n/ui.datepicker-lt.js"></script>
+	<script type="text/javascript" src="../ui/i18n/ui.datepicker-lv.js"></script>
+	<script type="text/javascript" src="../ui/i18n/ui.datepicker-nl.js"></script>
+	<script type="text/javascript" src="../ui/i18n/ui.datepicker-no.js"></script>
+	<script type="text/javascript" src="../ui/i18n/ui.datepicker-pl.js"></script>
+	<script type="text/javascript" src="../ui/i18n/ui.datepicker-pt-BR.js"></script>
+	<script type="text/javascript" src="../ui/i18n/ui.datepicker-ro.js"></script>
+	<script type="text/javascript" src="../ui/i18n/ui.datepicker-ru.js"></script>
+	<script type="text/javascript" src="../ui/i18n/ui.datepicker-sk.js"></script>
+	<script type="text/javascript" src="../ui/i18n/ui.datepicker-sl.js"></script>
+	<script type="text/javascript" src="../ui/i18n/ui.datepicker-sq.js"></script>
+	<script type="text/javascript" src="../ui/i18n/ui.datepicker-sv.js"></script>
+	<script type="text/javascript" src="../ui/i18n/ui.datepicker-th.js"></script>
+	<script type="text/javascript" src="../ui/i18n/ui.datepicker-tr.js"></script>
+	<script type="text/javascript" src="../ui/i18n/ui.datepicker-uk.js"></script>
+	<script type="text/javascript" src="../ui/i18n/ui.datepicker-zh-CN.js"></script>
+	<script type="text/javascript" src="../ui/i18n/ui.datepicker-zh-TW.js"></script>
 	<script type="text/javascript">
 	jQuery(function($) {
+		
 		$('.left-nav a').click(function(ev) {
-			var section = this.href.replace('/index.html','');
+			// reset dialog
+			$(".ui-dialog-content").remove();
+			window.location.hash = this.href.replace(/.+\/([^\/]+)\/index\.html/,'$1') + '|default';
+			loadPage(this.href);
+			ev.preventDefault();
+		});
+		
+		if (window.location.hash) {
+			var path = window.location.href.replace('#','');
+			path = path.replace('\|','/') + '.html'; 
+			loadPage(path);
+		}		
+
+		function loadPage(path) {
+			var section = path.replace(/\/[^\/]+\.html/,'');
 			var header = section.replace(/.+\/([^\/]+)/,'$1');
 			$('td.normal div.normal')
 				.empty()
@@ -42,38 +94,71 @@
 				.append('<h3 class="demo-header">'+ header +'</h3>')
 				.append('<div id="demo-config"></div>')
 				.find('#demo-config')
-					.append('<iframe id="demo-frame" name="demo-frame" width="520" height="314" scrolling="auto" frameborder="0" src="'+ section +'/default.html"></iframe><div id="demo-config-menu"></div>')
+					.append('<div id="demo-frame"></div><div id="demo-config-menu"></div>')
 					.find('#demo-config-menu')
-						.load(this.href + ' .demos-nav', function() {
+						.load(section + '/index.html .demos-nav', function() {
 							$('#demo-config-menu a').each(function() {
 								this.setAttribute('href', section + '/' + this.getAttribute('href').replace(/.+\/([^\/]+)/,'$1'));
 								$(this).attr('target', 'demo-frame');
 								$(this).click(function() {
+
+									$(".ui-dialog-content").remove();
 									$(this).parents('ul').find('li').removeClass('demo-config-on');
 									$(this).parent().addClass('demo-config-on');
 									$('#demo-notes').hide();
+
+									//Set the hash to the actual page without ".html"
+									window.location.hash = header + '|' + this.getAttribute('href').match((/\/([^\/\\]+)\.html/))[1];
+
+									loadDemo(this.getAttribute('href'));
+
+									return false;
 								});
 							});
 
-							$('#demo-frame').load(function() {
-								var content = $(this)[0].contentWindow.document || $(this).contents()[0];
-								var notes = $('.demo-description', content);
-								if ($('#demo-notes').length == 0) {
-									$('<div id="demo-notes"></div>').insertAfter('#demo-config');
-								}
-								$('#demo-notes').hide().empty().html(notes.html());
-								$('#demo-notes').fadeIn();
-								notes.hide();
-							});
+							if (window.location.hash) {
+								var demo = window.location.hash.split('|')[1];
+								$('#demo-config-menu a[href$="'+ demo +'.html"]').each(function(){
+									$(this).parents('ul').find('li').removeClass('demo-config-on');
+									$(this).parent().addClass('demo-config-on');									
+									loadDemo(this.href);
+								});
+							}
 
-							if ($('#demo-frame .demo-description:visible'))
-								$('#demo-frame').trigger('load');
+							updateDemoNotes();
 						})
 					.end()
 				.end()
-			;
-			ev.preventDefault();
-		});
+			;	
+		}
+				
+		function loadDemo(path) {
+			$.get(path, function(data) {
+
+				data = data.replace(/<script.*>.*<\/script>/ig,""); // Remove script tags
+				data = data.replace(/<\/?link.*>/ig,""); //Remove link tags
+				data = data.replace(/<\/?html.*>/ig,""); //Remove html tag
+				data = data.replace(/<\/?body.*>/ig,""); //Remove body tag
+				data = data.replace(/<\/?head.*>/ig,""); //Remove head tag
+				data = data.replace(/<\/?!doctype.*>/ig,""); //Remove doctype
+				data = data.replace(/<title.*>.*<\/title>/ig,""); // Remove title tags
+
+				$('#demo-frame').empty().html(data);
+				updateDemoNotes();
+
+			});
+		}
+
+		function updateDemoNotes() {
+			var notes = $('#demo-frame .demo-description');
+			if ($('#demo-notes').length == 0) {
+				$('<div id="demo-notes"></div>').insertAfter('#demo-config');
+			}						
+			$('#demo-notes').hide().empty().html(notes.html());
+			$('#demo-notes').show();
+			notes.hide();
+		}
+				
 	});
 	</script>
 </head>
