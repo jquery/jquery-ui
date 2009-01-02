@@ -72,8 +72,6 @@
 	jQuery(function($) {
 		
 		$('.left-nav a').click(function(ev) {
-			// reset dialog
-			$(".ui-dialog-content").remove();
 			window.location.hash = this.href.replace(/.+\/([^\/]+)\/index\.html/,'$1') + '|default';
 			loadPage(this.href);
 			ev.preventDefault();
@@ -83,14 +81,15 @@
 			if (window.location.hash.indexOf('|') === -1) {
 				window.location.hash += '|default';	
 			}			
-			var path = window.location.href.replace('#','');
-			path = path.replace('\|','/') + '.html'; 
+			var path = window.location.href.replace(/(index\.html)?#/,'');
+			path = path.replace('\|','/') + '.html';
 			loadPage(path);
 		}		
 
-		function loadPage(path) {
+		function loadPage(path) {			
 			var section = path.replace(/\/[^\/]+\.html/,'');
 			var header = section.replace(/.+\/([^\/]+)/,'$1');
+			
 			$('td.normal div.normal')
 				.empty()
 				.append('<h4 class="demo-subheader">Functional demo:</h4>')
@@ -105,7 +104,8 @@
 								$(this).attr('target', 'demo-frame');
 								$(this).click(function() {
 
-									$(".ui-dialog-content").remove();
+									resetDemos();
+									
 									$(this).parents('ul').find('li').removeClass('demo-config-on');
 									$(this).parent().addClass('demo-config-on');
 									$('#demo-notes').hide();
@@ -132,7 +132,9 @@
 						})
 					.end()
 				.end()
-			;	
+			;
+			
+			resetDemos();
 		}
 				
 		function loadDemo(path) {
@@ -160,6 +162,11 @@
 			$('#demo-notes').hide().empty().html(notes.html());
 			$('#demo-notes').show();
 			notes.hide();
+		}
+		
+		function resetDemos() {
+			$.datepicker.setDefaults($.datepicker.regional['']);
+			$(".ui-dialog-content").remove();
 		}
 				
 	});
