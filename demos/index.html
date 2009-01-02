@@ -165,8 +165,8 @@
 		}
 		
 		function resetDemos() {
-			$.datepicker.setDefaults($.datepicker.regional['']);
-			$(".ui-dialog-content").remove();
+			$.datepicker.setDefaults($.extend({showMonthAfterYear: false}, $.datepicker.regional['']));
+			$(".ui-dialog-content").remove();			
 		}
 				
 	});
