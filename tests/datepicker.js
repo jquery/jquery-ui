@@ -738,14 +738,21 @@ test('miscellaneous', function() {
 	var dp = $('#ui-datepicker-div');
 	var inp = init('#inp');
 	// Year range
+	var genRange = function(start, offset) {
+		var range = '';
+		for (var i = start; i < start + offset; i++) {
+			range += i;
+		}
+		return range;
+	};
 	inp.val('02/04/2008').datepicker('show');
 	equals(dp.find('.ui-datepicker-year').text(), '2008', 'Year range - read-only default');
 	inp.datepicker('hide').datepicker('option', {changeYear: true}).datepicker('show');		
-	equals(dp.find('.ui-datepicker-year').text(), '199819992000200120022003200420052006200720082009201020112012201320142015201620172018', 'Year range - changeable default');
+	equals(dp.find('.ui-datepicker-year').text(), genRange(new Date().getFullYear() - 10, 21), 'Year range - changeable default');
 	inp.datepicker('hide').datepicker('option', {yearRange: '-6:+2', changeYear: true}).datepicker('show');
-	equals(dp.find('.ui-datepicker-year').text(), '200220032004200520062007200820092010', 'Year range - -6:+2');
+	equals(dp.find('.ui-datepicker-year').text(), genRange(new Date().getFullYear() - 6, 9), 'Year range - -6:+2');
 	inp.datepicker('hide').datepicker('option', {yearRange: '2000:2010', changeYear: true}).datepicker('show');
-	equals(dp.find('.ui-datepicker-year').text(), '20002001200220032004200520062007200820092010', 'Year range - 2000:2010');
+	equals(dp.find('.ui-datepicker-year').text(), genRange(2000, 11), 'Year range - 2000:2010');
 
 	// Navigation as date format
 	inp.datepicker('option', {showButtonPanel: true});
@@ -1189,7 +1196,7 @@ test('localisation', function() {
 	equals($('.ui-datepicker-next', dp).text(), 'Suiv>', 'Localisation - next');
 	var month = 0;
 	$('.ui-datepicker-month option', dp).each(function() {
-		equals($(this).text(), $.datepicker.regional['fr'].monthNames[month],
+		equals($(this).text(), $.datepicker.regional['fr'].monthNamesShort[month],
 			'Localisation - month ' + month);
 		month++;
 	});
