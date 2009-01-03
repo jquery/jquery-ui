@@ -438,6 +438,7 @@ $.widget("ui.dialog", {
 		// reset content sizing
 		this.element.css({
 			height: 0,
+			minHeight: 0,
 			width: 'auto'
 		});
 
