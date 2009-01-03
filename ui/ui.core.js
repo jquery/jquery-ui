@@ -372,10 +372,17 @@ $.widget.prototype = {
 	},
 
 	_trigger: function(type, event, data) {
-		var eventName = (type == this.widgetEventPrefix
-			? type : this.widgetEventPrefix + type);
-		event = event || $.event.fix({ type: eventName, target: this.element[0] });
-		return this.element.triggerHandler(eventName, [event, data], this.options[type]);
+		var callback = this.options[type],
+			eventName = (type == this.widgetEventPrefix
+				? type : this.widgetEventPrefix + type);
+
+		event = event ? $.event.fix(event) : $.Event();
+		event.type = eventName;
+
+		this.element.trigger(event, data);
+
+		return !(callback && callback.call(this.element[0], event, data) === false
+			|| event.isDefaultPrevented());
 	}
 };
 
