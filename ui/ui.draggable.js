@@ -359,6 +359,7 @@ $.widget("ui.draggable", $.extend({}, $.ui.mouse, {
 
 $.extend($.ui.draggable, {
 	version: "@VERSION",
+	eventPrefix: "drag",
 	defaults: {
 		appendTo: "parent",
 		axis: false,
