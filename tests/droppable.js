@@ -7,7 +7,7 @@
 //
 
 var defaults = {
-	accept: null,
+	accept: '*',
 	activeClass: null,
 	cssNamespace: "ui",
 	disabled: false,
