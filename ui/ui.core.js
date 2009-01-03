@@ -46,7 +46,7 @@ $.ui = {
 	cssCache: {},
 	css: function(name) {
 		if ($.ui.cssCache[name]) { return $.ui.cssCache[name]; }
-		var tmp = $('<div class="ui-gen">').addClass(name).css({position:'absolute', top:'-5000px', left:'-5000px', display:'block'}).appendTo('body');
+		var tmp = $('<div class="ui-gen"></div>').addClass(name).css({position:'absolute', top:'-5000px', left:'-5000px', display:'block'}).appendTo('body');
 
 		//if (!$.browser.safari)
 			//tmp.appendTo('body');
