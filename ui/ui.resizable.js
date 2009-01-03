@@ -340,7 +340,7 @@ $.widget("ui.resizable", $.extend({}, $.ui.mouse, {
 		this._updateCache(data);
 
 		// calling the user callback at the end
-		this.element.triggerHandler("resize", [event, this.ui()], this.options["resize"]);
+		this._trigger('resize', event, this.ui());
 
 		return false;
 	},
@@ -511,7 +511,8 @@ $.widget("ui.resizable", $.extend({}, $.ui.mouse, {
 
 	_propagate: function(n, event) {
 		$.ui.plugin.call(this, n, [event, this.ui()]);
-		if (n != "resize") this.element.triggerHandler(["resize", n].join(""), [event, this.ui()], this.options[n]);
+		
+		(n != "resize" && this._trigger(n, event, this.ui()));
 	},
 
 	plugins: {},
@@ -533,6 +534,7 @@ $.widget("ui.resizable", $.extend({}, $.ui.mouse, {
 
 $.extend($.ui.resizable, {
 	version: "@VERSION",
+	eventPrefix: "resize",
 	defaults: {
 		alsoResize: false,
 		animate: false,
