@@ -217,7 +217,7 @@
 	</target>
 	
 	 <target depends="load.properties" name="clean">
-	 	<delete dir="${dist.dir}" />
+	 	<delete dir="dist" />
     </target>
 
 </project>
