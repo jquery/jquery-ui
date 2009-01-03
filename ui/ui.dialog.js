@@ -285,6 +285,7 @@ $.widget("ui.dialog", {
 			cancel: '.ui-dialog-content',
 			helper: options.dragHelper,
 			handle: '.ui-dialog-titlebar',
+			containment: 'document',
 			start: function() {
 				(options.dragStart && options.dragStart.apply(self.element[0], arguments));
 			},
