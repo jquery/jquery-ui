@@ -122,10 +122,12 @@
 
 							if (window.location.hash) {
 								var demo = window.location.hash.split('|')[1];
-								$('#demo-config-menu a[href$="'+ demo +'.html"]').each(function(){
-									$(this).parents('ul').find('li').removeClass('demo-config-on');
-									$(this).parent().addClass('demo-config-on');									
-									loadDemo(this.href);
+								$('#demo-config-menu a').each(function(){
+									if (this.href.indexOf(demo + '.html') !== -1) {
+										$(this).parents('ul').find('li').removeClass('demo-config-on');
+										$(this).parent().addClass('demo-config-on');									
+										loadDemo(this.href);										
+									}
 								});
 							}
 
