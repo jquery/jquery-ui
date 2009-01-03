@@ -6,8 +6,8 @@
  * Dual licensed under the MIT (MIT-LICENSE.txt)
  * and GPL (GPL-LICENSE.txt) licenses.
  *
- * $Date: 2008-12-31 14:21:24 -0500 (Wed, 31 Dec 2008) $
- * $Rev: 6018 $
+ * $Date: 2009-01-02 19:51:07 -0500 (Fri, 02 Jan 2009) $
+ * $Rev: 6026 $
  */
 
 // Map over jQuery in case of overwrite
@@ -820,6 +820,14 @@ jQuery.extend({
 		if ( typeof context.createElement === "undefined" )
 			context = context.ownerDocument || context[0] && context[0].ownerDocument || document;
 
+		// If a single string is passed in and it's a single tag
+		// just do a createElement and skip the rest
+		if ( !fragment && elems.length === 1 && typeof elems[0] === "string" ) {
+			var match = /^<(\w+)\/?>$/.exec(elems[0]);
+			if ( match )
+				return [ context.createElement( match[1] ) ];
+		}
+
 		var ret = [], scripts = [], div = context.createElement("div");
 
 		jQuery.each(elems, function(i, elem){
@@ -916,9 +924,6 @@ jQuery.extend({
 
 		});
 
-		// Clean up
-		div.innerHTML = "";
-		
 		if ( fragment ) {
 			for ( var i = 0; ret[i]; i++ ) {
 				var node = ret[i];
@@ -2496,99 +2501,81 @@ jQuery.event = {
 		}
 	},
 
-	trigger: function( event, data, elem, extra) {
+	trigger: function( event, data, elem, bubbling /* internal */ ) {
 		// Event object or event type
 		var type = event.type || event;
 
-		event = typeof event === "object" ?
-			// jQuery.Event object
-			event[expando] ? event :
-			// Object literal
-			jQuery.extend( jQuery.Event(type), event ) :
-			// Just the event type (string)
-			jQuery.Event(type);
+		if( !bubbling ){
+			event = typeof event === "object" ?
+				// jQuery.Event object
+				event[expando] ? event :
+				// Object literal
+				jQuery.extend( jQuery.Event(type), event ) :
+				// Just the event type (string)
+				jQuery.Event(type);
 
-		if ( type.indexOf("!") >= 0 ) {
-			event.type = type = type.slice(0, -1);
-			event.exclusive = true;
-		}
-			
-		// Handle a global trigger
-		if ( !elem ) {
-			// Don't bubble custom events when global (to avoid too much overhead)
-			event.stopPropagation();
-			// Only trigger if we've ever bound an event for it
-			if ( this.global[type] )
-				jQuery.each( jQuery.cache, function(){
-					if ( this.events && this.events[type] )
-						jQuery.event.trigger( event, data, this.handle.elem );
-				});
+			if ( type.indexOf("!") >= 0 ) {
+				event.type = type = type.slice(0, -1);
+				event.exclusive = true;
+			}
 
-		// Handle triggering a single element
-		} else {
+			// Handle a global trigger
+			if ( !elem ) {
+				// Don't bubble custom events when global (to avoid too much overhead)
+				event.stopPropagation();
+				// Only trigger if we've ever bound an event for it
+				if ( this.global[type] )
+					jQuery.each( jQuery.cache, function(){
+						if ( this.events && this.events[type] )
+							jQuery.event.trigger( event, data, this.handle.elem );
+					});
+			}
+
+			// Handle triggering a single element
 
 			// don't do events on text and comment nodes
-			if ( elem.nodeType == 3 || elem.nodeType == 8 )
+			if ( !elem || elem.nodeType == 3 || elem.nodeType == 8 )
 				return undefined;
-
-			// Clone the incoming data, if any
-			data = jQuery.makeArray(data);
-
+			
 			// AT_TARGET phase (not bubbling)
-			if( !event.target ){
+			if( !bubbling ){
 				// Clean up in case it is reused
 				event.result = undefined;
 				event.target = elem;
+				
+				// Clone the incoming data, if any
+				data = jQuery.makeArray(data);
+				data.unshift( event );
 			}
-
-			// Fix for custom events
-			event.currentTarget = elem;
-
-			data.unshift( event );
-
-			var fn = jQuery.isFunction( elem[ type ] );
-
-			// Trigger the event, it is assumed that "handle" is a function
-			var handle = jQuery.data(elem, "handle");
-			if ( handle )
-				handle.apply( elem, data );
-
-			// Handle triggering native .onfoo handlers (and on links since we don't call .click() for links)
-			if ( (!fn || (jQuery.nodeName(elem, 'a') && type == "click")) && elem["on"+type] && elem["on"+type].apply( elem, data ) === false )
-				event.result = false;
-
-			// Extra functions don't get the custom event object
-			data.shift();
-
-			// Handle triggering of extra function
-			if ( extra && jQuery.isFunction( extra ) ) {
-				// call the extra function and tack the current return value on the end for possible inspection
-				var ret = extra.apply( elem, event.result == null ? data : data.concat( event.result ) );
-				// if anything is returned, give it precedence and have it overwrite the previous value
-				if ( ret !== undefined )
-					event.result = ret;
-			}
-
-			// Trigger the native events (except for clicks on links)
-			if ( event.target === elem && fn && !event.isDefaultPrevented() && !(jQuery.nodeName(elem, 'a') && type == "click") ) {
-				this.triggered = true;
-				try {
-					elem[ type ]();
-				// prevent IE from throwing an error for some hidden elements
-				} catch (e) {}
-			}
-
-			if ( !event.isPropagationStopped() ) {
-				var parent = elem.parentNode || elem.ownerDocument;
-				if ( parent )
-					jQuery.event.trigger(event, data, parent);
-			}
-
-			// Clean up, in case the event object is reused
-			event.target = null;
-
-			this.triggered = false;
 		}
+
+		event.currentTarget = elem;
+
+		// Trigger the event, it is assumed that "handle" is a function
+		var handle = jQuery.data(elem, "handle");
+		if ( handle )
+			handle.apply( elem, data );
+
+		// Handle triggering native .onfoo handlers (and on links since we don't call .click() for links)
+		if ( (!elem[type] || (jQuery.nodeName(elem, 'a') && type == "click")) && elem["on"+type] && elem["on"+type].apply( elem, data ) === false )
+			event.result = false;
+
+		// Trigger the native events (except for clicks on links)
+		if ( !bubbling && elem[type] && !event.isDefaultPrevented() && !(jQuery.nodeName(elem, 'a') && type == "click") ) {
+			this.triggered = true;
+			try {
+				elem[ type ]();
+			// prevent IE from throwing an error for some hidden elements
+			} catch (e) {}
+		}
+
+		if ( !event.isPropagationStopped() ) {
+			var parent = elem.parentNode || elem.ownerDocument;
+			if ( parent )
+				jQuery.event.trigger(event, data, parent, true);
+		}
+
+		this.triggered = false;
 	},
 
 	handle: function(event) {
@@ -2841,18 +2828,18 @@ jQuery.fn.extend({
 		});
 	},
 
-	trigger: function( type, data, fn ) {
+	trigger: function( type, data ) {
 		return this.each(function(){
-			jQuery.event.trigger( type, data, this, fn );
+			jQuery.event.trigger( type, data, this );
 		});
 	},
 
-	triggerHandler: function( type, data, fn ) {
+	triggerHandler: function( type, data ) {
 		if( this[0] ){
 			var event = jQuery.Event(type);
 			event.preventDefault();
 			event.stopPropagation();
-			jQuery.event.trigger( event, data, this[0], fn );
+			jQuery.event.trigger( event, data, this[0] );
 			return event.result;
 		}		
 	},
@@ -3850,12 +3837,9 @@ jQuery.fx.prototype = {
 		this.options.show = true;
 
 		// Begin the animation
-		this.custom(0, this.cur());
-
 		// Make sure that we start at a small width/height to avoid any
 		// flash of content
-		if ( this.prop == "width" || this.prop == "height" )
-			this.elem.style[this.prop] = "1px";
+		this.custom(this.prop == "width" || this.prop == "height" ? 1 : 0, this.cur());
 
 		// Start by showing the element
 		jQuery(this.elem).show();
@@ -3900,7 +3884,7 @@ jQuery.fx.prototype = {
 
 				// Hide the element if the "hide" operation was done
 				if ( this.options.hide )
-					this.elem.style.display = "none";
+					jQuery(this.elem).hide();
 
 				// Reset the properties, if the item has been hidden or shown
 				if ( this.options.hide || this.options.show )
@@ -3944,10 +3928,10 @@ jQuery.extend( jQuery.fx, {
 		},
 
 		_default: function(fx){
-			if( fx.prop in fx.elem ) 
-				fx.elem[ fx.prop ] = fx.now;
-			else if( fx.elem.style )
+			if ( fx.elem.style && fx.elem.style[ fx.prop ] != null )
 				fx.elem.style[ fx.prop ] = fx.now + fx.unit;
+			else
+				fx.elem[ fx.prop ] = fx.now;
 		}
 	}
 });
