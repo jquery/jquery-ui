@@ -161,7 +161,7 @@ $.widget("ui.dialog", {
 	},
 
 	close: function() {
-		if (false === this._trigger('beforeclose', null, { options: this.options })) {
+		if (false === this._trigger('beforeclose')) {
 			return;
 		}
 
@@ -170,7 +170,7 @@ $.widget("ui.dialog", {
 			.hide(this.options.hide)
 			.unbind('keypress.ui-dialog');
 
-		this._trigger('close', null, { options: this.options });
+		this._trigger('close');
 		$.ui.dialog.overlay.resize();
 
 		this._isOpen = false;
@@ -186,7 +186,7 @@ $.widget("ui.dialog", {
 
 		if ((this.options.modal && !force)
 			|| (!this.options.stack && !this.options.modal)) {
-			return this._trigger('focus', null, { options: this.options });
+			return this._trigger('focus');
 		}
 
 		var maxZ = this.options.zIndex, options = this.options;
@@ -200,7 +200,7 @@ $.widget("ui.dialog", {
 		var saveScroll = { scrollTop: this.element.attr('scrollTop'), scrollLeft: this.element.attr('scrollLeft') };
 		this.uiDialog.css('z-index', ++maxZ);
 		this.element.attr(saveScroll);
-		this._trigger('focus', null, { options: this.options });
+		this._trigger('focus');
 	},
 
 	open: function() {
@@ -235,7 +235,7 @@ $.widget("ui.dialog", {
 		}));
 
 		this.uiDialog.find(':tabbable:first').focus();
-		this._trigger('open', null, { options: this.options });
+		this._trigger('open');
 		this._isOpen = true;
 	},
 
