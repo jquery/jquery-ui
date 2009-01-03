@@ -74,10 +74,10 @@ $.widget("ui.selectable", $.extend({}, $.ui.mouse, {
 		this.selectees = $(options.filter, this.element[0]);
 
 		// selectable START callback
-		this.element.triggerHandler("selectablestart", [event, {
+		this._trigger("start", event, {
 			"selectable": this.element[0],
 			"options": options
-		}], options.start);
+		});
 
 		$('body').append(this.helper);
 		// position helper (lasso)
@@ -103,11 +103,11 @@ $.widget("ui.selectable", $.extend({}, $.ui.mouse, {
 				selectee.$element.addClass('ui-unselecting');
 				selectee.unselecting = true;
 				// selectable UNSELECTING callback
-				self.element.triggerHandler("selectableunselecting", [event, {
+				self._trigger("unselecting", event, {
 					selectable: self.element[0],
 					unselecting: selectee.element,
 					options: options
-				}], options.unselecting);
+				});
 			}
 		});
 
@@ -158,11 +158,11 @@ $.widget("ui.selectable", $.extend({}, $.ui.mouse, {
 					selectee.$element.addClass('ui-selecting');
 					selectee.selecting = true;
 					// selectable SELECTING callback
-					self.element.triggerHandler("selectableselecting", [event, {
+					self._trigger("selecting", event, {
 						selectable: self.element[0],
 						selecting: selectee.element,
 						options: options
-					}], options.selecting);
+					});
 				}
 			} else {
 				// UNSELECT
@@ -180,11 +180,11 @@ $.widget("ui.selectable", $.extend({}, $.ui.mouse, {
 							selectee.unselecting = true;
 						}
 						// selectable UNSELECTING callback
-						self.element.triggerHandler("selectableunselecting", [event, {
+						self._trigger("unselecting", event, {
 							selectable: self.element[0],
 							unselecting: selectee.element,
 							options: options
-						}], options.unselecting);
+						});
 					}
 				}
 				if (selectee.selected) {
@@ -195,11 +195,11 @@ $.widget("ui.selectable", $.extend({}, $.ui.mouse, {
 						selectee.$element.addClass('ui-unselecting');
 						selectee.unselecting = true;
 						// selectable UNSELECTING callback
-						self.element.triggerHandler("selectableunselecting", [event, {
+						self._trigger("unselecting", event, {
 							selectable: self.element[0],
 							unselecting: selectee.element,
 							options: options
-						}], options.unselecting);
+						});
 					}
 				}
 			}
@@ -220,11 +220,11 @@ $.widget("ui.selectable", $.extend({}, $.ui.mouse, {
 			selectee.$element.removeClass('ui-unselecting');
 			selectee.unselecting = false;
 			selectee.startselected = false;
-			self.element.triggerHandler("selectableunselected", [event, {
+			self._trigger("unselected", event, {
 				selectable: self.element[0],
 				unselected: selectee.element,
 				options: options
-			}], options.unselected);
+			});
 		});
 		$('.ui-selecting', this.element[0]).each(function() {
 			var selectee = $.data(this, "selectable-item");
@@ -232,16 +232,16 @@ $.widget("ui.selectable", $.extend({}, $.ui.mouse, {
 			selectee.selecting = false;
 			selectee.selected = true;
 			selectee.startselected = true;
-			self.element.triggerHandler("selectableselected", [event, {
+			self._trigger("selected", event, {
 				selectable: self.element[0],
 				selected: selectee.element,
 				options: options
-			}], options.selected);
+			});
 		});
-		this.element.triggerHandler("selectablestop", [event, {
+		this._trigger("stop", event, {
 			selectable: self.element[0],
 			options: this.options
-		}], this.options.stop);
+		});
 
 		this.helper.remove();
 
