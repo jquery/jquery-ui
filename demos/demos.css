@@ -2,6 +2,10 @@ body {
 	font-size: 62.5%;
 }
 
+table {
+	font-size: 1em;
+}
+
 /* Site
    -------------------------------- */
 
@@ -182,4 +186,8 @@ div.demo-description {
 
 .ui-draggable, .ui-droppable {
 	background-position: top left;
+}
+
+.left-nav .demos-nav {
+	padding-right: 10px;
 }
