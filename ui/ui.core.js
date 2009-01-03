@@ -38,15 +38,9 @@ $.ui = {
 	},
 
 	contains: function(a, b) {
-		var safari2 = $.browser.safari && $.browser.version < 522;
-	    if (a.contains && !safari2) {
-	        return a.contains(b);
-	    }
-	    if (a.compareDocumentPosition)
-	        return !!(a.compareDocumentPosition(b) & 16);
-	    while (b = b.parentNode)
-	          if (b == a) return true;
-	    return false;
+		return document.compareDocumentPosition
+			? a.compareDocumentPosition(b) & 16
+			: a !== b && a.contains(b);
 	},
 
 	cssCache: {},
