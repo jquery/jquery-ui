@@ -7,8 +7,10 @@ and logs, available at http://jquery-ui.googlecode.com/svn/
 Brandon Aaron
 Paul Bakaus (paulbakaus.com)
 David Bolter
+Rich Caloggero
 Chi Cheng (cloudream@gmail.com)
-Maggie Costello
+Colin Clark (http://colin.atrc.utoronto.ca/)
+Michelle D'Souza
 Aaron Eisenberger (aaronchi@gmail.com)
 Ariel Flesler
 Scott González
@@ -22,5 +24,6 @@ John Resig
 Patty Toland
 Ca-Phun Ung (yelotofu.com)
 Keith Wood (kbwood@virginbroadband.com.au)
+Maggie Costello Wachs
 Richard D. Worth (rdworth.org)
 Jörn Zaefferer
