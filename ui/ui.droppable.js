@@ -63,7 +63,7 @@ $.widget("ui.droppable", {
 
 		var draggable = $.ui.ddmanager.current;
 		$.ui.plugin.call(this, 'activate', [event, this.ui(draggable)]);
-		if(draggable) this.element.triggerHandler("dropactivate", [event, this.ui(draggable)], this.options.activate);
+		(draggable && this._trigger('activate', event, this.ui(draggable)));
 
 	},
 
@@ -71,7 +71,7 @@ $.widget("ui.droppable", {
 
 		var draggable = $.ui.ddmanager.current;
 		$.ui.plugin.call(this, 'deactivate', [event, this.ui(draggable)]);
-		if(draggable) this.element.triggerHandler("dropdeactivate", [event, this.ui(draggable)], this.options.deactivate);
+		(draggable && this._trigger('deactivate', event, this.ui(draggable)));
 
 	},
 
@@ -82,7 +82,7 @@ $.widget("ui.droppable", {
 
 		if (this.options.accept.call(this.element,(draggable.currentItem || draggable.element))) {
 			$.ui.plugin.call(this, 'over', [event, this.ui(draggable)]);
-			this.element.triggerHandler("dropover", [event, this.ui(draggable)], this.options.over);
+			this._trigger('over', event, this.ui(draggable));
 		}
 
 	},
@@ -94,7 +94,7 @@ $.widget("ui.droppable", {
 
 		if (this.options.accept.call(this.element,(draggable.currentItem || draggable.element))) {
 			$.ui.plugin.call(this, 'out', [event, this.ui(draggable)]);
-			this.element.triggerHandler("dropout", [event, this.ui(draggable)], this.options.out);
+			this._trigger('out', event, this.ui(draggable));
 		}
 
 	},
@@ -115,7 +115,7 @@ $.widget("ui.droppable", {
 
 		if(this.options.accept.call(this.element,(draggable.currentItem || draggable.element))) {
 			$.ui.plugin.call(this, 'drop', [event, this.ui(draggable)]);
-			this.element.triggerHandler("drop", [event, this.ui(draggable)], this.options.drop);
+			this._trigger('drop', event, this.ui(draggable));
 			return this.element;
 		}
 
@@ -140,6 +140,7 @@ $.widget("ui.droppable", {
 
 $.extend($.ui.droppable, {
 	version: "@VERSION",
+	eventPrefix: 'drop',
 	defaults: {
 		accept: '*',
 		activeClass: null,
