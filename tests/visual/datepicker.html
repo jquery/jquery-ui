@@ -56,7 +56,9 @@
 		
 		// disabled input datepicker
 		$('#d3').datepicker();		
-		
+
+		// bottom-right datepicker
+		$('#d4').datepicker({numberOfMonths: 3});		
 	});
 	</script>
 </head>
@@ -95,6 +97,12 @@
 		Datepicker disabled input
 		<div>
 			<input type="text" id="d3" disabled="disabled" />
+		</div>
+	</li>
+	<li class="plugin" style="position: absolute; right: 0; bottom: 0; height: 40px">
+		Datepicker - positioned bottom-right
+		<div>
+			<input type="text" id="d4">
 		</div>
 	</li>	
 </ul>
