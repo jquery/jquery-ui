@@ -39,7 +39,7 @@
 
 		<property name="core.files" value="ui.core.js, ui.draggable.js, ui.droppable.js, ui.resizable.js, ui.selectable.js, ui.sortable.js, effects.core.js" />
 
-		<property description="YUI Compressor" name="yui-jar" value="${build.dir}/yuicompressor.jar" />
+		<property description="YUI Compressor" name="yui-jar" value="${build.dir}/yuicompressor-2.4.2.jar" />
 		<property description="Dean Edwards Packer" name="pack.php" value="${build.dir}/pack.php" />
 	</target>
 
