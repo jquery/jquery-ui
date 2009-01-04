@@ -1,24 +1,19 @@
-/* Inicialització en català per a l'extenció 'calendar' per jQuery. */
+/* Inicialitzaciï¿½ en catalï¿½ per a l'extenciï¿½ 'calendar' per jQuery. */
 /* Writers: (joan.leon@gmail.com). */
 jQuery(function($){
 	$.datepicker.regional['ca'] = {
-		closeText: 'Tancar', closeStatus: '',
-		prevText: '&#x3c;Ant', prevStatus: '',
-		prevBigText: '&#x3c;&#x3c;', prevBigStatus: '',
-		nextText: 'Seg&#x3e;', nextStatus: '',
-		nextBigText: '&#x3e;&#x3e;', nextBigStatus: '',
-		currentText: 'Avui', currentStatus: '',
+		closeText: 'Tancar',
+		prevText: '&#x3c;Ant',
+		nextText: 'Seg&#x3e;',
+		currentText: 'Avui',
 		monthNames: ['Gener','Febrer','Mar&ccedil;','Abril','Maig','Juny',
 		'Juliol','Agost','Setembre','Octubre','Novembre','Desembre'],
 		monthNamesShort: ['Gen','Feb','Mar','Abr','Mai','Jun',
 		'Jul','Ago','Set','Oct','Nov','Des'],
-		monthStatus: '', yearStatus: '',
-		weekHeader: 'Sm', weekStatus: '',
 		dayNames: ['Diumenge','Dilluns','Dimarts','Dimecres','Dijous','Divendres','Dissabte'],
 		dayNamesShort: ['Dug','Dln','Dmt','Dmc','Djs','Dvn','Dsb'],
 		dayNamesMin: ['Dg','Dl','Dt','Dc','Dj','Dv','Ds'],
-		dayStatus: 'DD', dateStatus: 'D, M d',
 		dateFormat: 'mm/dd/yy', firstDay: 0,
-		initStatus: '', isRTL: false};
+		isRTL: false};
 	$.datepicker.setDefaults($.datepicker.regional['ca']);
 });

@@ -2,23 +2,18 @@
 /* Written by Anders Ekdahl ( anders@nomadiz.se). */
 jQuery(function($){
     $.datepicker.regional['sv'] = {
-		closeText: 'Stäng', closeStatus: '',
-        prevText: '&laquo;Förra',  prevStatus: '',
-		prevBigText: '&#x3c;&#x3c;', prevBigStatus: '',
-		nextText: 'Nästa&raquo;', nextStatus: '',
-		nextBigText: '&#x3e;&#x3e;', nextBigStatus: '',
-		currentText: 'Idag', currentStatus: '',
+		closeText: 'Stäng',
+        prevText: '&laquo;Förra',
+		nextText: 'Nästa&raquo;',
+		currentText: 'Idag',
         monthNames: ['Januari','Februari','Mars','April','Maj','Juni',
         'Juli','Augusti','September','Oktober','November','December'],
         monthNamesShort: ['Jan','Feb','Mar','Apr','Maj','Jun',
         'Jul','Aug','Sep','Okt','Nov','Dec'],
-		monthStatus: '', yearStatus: '',
-		weekHeader: 'Ve', weekStatus: '',
 		dayNamesShort: ['Sön','Mån','Tis','Ons','Tor','Fre','Lör'],
 		dayNames: ['Söndag','Måndag','Tisdag','Onsdag','Torsdag','Fredag','Lördag'],
 		dayNamesMin: ['Sö','Må','Ti','On','To','Fr','Lö'],
-		dayStatus: 'DD', dateStatus: 'D, M d',
         dateFormat: 'yy-mm-dd', firstDay: 1,
-		initStatus: '', isRTL: false};
+		isRTL: false};
     $.datepicker.setDefaults($.datepicker.regional['sv']);
 });
