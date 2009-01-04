@@ -609,32 +609,14 @@ $.extend(Datepicker.prototype, {
 		if (inst.input && inst.input[0].type != 'hidden' && inst == $.datepicker._curInst)
 			$(inst.input[0]).focus();
 	},
-
+	
 	/* Check positioning to remain on screen. */
 	_checkOffset: function(inst, offset, isFixed) {
-		var pos = inst.input ? this._findPos(inst.input[0]) : null;
-		var browserWidth = window.innerWidth || (document.documentElement ?
-			document.documentElement.clientWidth : document.body.clientWidth);
-		var browserHeight = window.innerHeight || (document.documentElement ?
-			document.documentElement.clientHeight : document.body.clientHeight);
-		var scrollX = document.documentElement.scrollLeft || document.body.scrollLeft;
-		var scrollY = document.documentElement.scrollTop || document.body.scrollTop;
-		// reposition date picker horizontally if outside the browser window
-		if (this._get(inst, 'isRTL') || (offset.left + inst.dpDiv.width() - scrollX) > browserWidth)
-			offset.left = Math.max((isFixed ? 0 : scrollX),
-				pos[0] + (inst.input ? inst.input.width() : 0) - (isFixed ? scrollX : 0) - inst.dpDiv.width() -
-				(isFixed && $.browser.opera ? document.documentElement.scrollLeft : 0));
-		else
-			offset.left -= (isFixed ? scrollX : 0);
-		// reposition date picker vertically if outside the browser window
-		if ((offset.top + inst.dpDiv.height() - scrollY) > browserHeight)
-			offset.top = Math.max((isFixed ? 0 : scrollY),
-				pos[1] - (isFixed ? scrollY : 0) - (this._inDialog ? 0 : inst.dpDiv.height()) -
-				(isFixed && $.browser.opera ? document.documentElement.scrollTop : 0));
-		else
-			offset.top -= (isFixed ? scrollY : 0);
+		offset.left -= (this._get(inst, 'isRTL') ? (inst.dpDiv.outerWidth() - inst.input.outerWidth()) : 0);
+		offset.left -= (isFixed && offset.left == inst.input.offset().left) ? $(document).scrollLeft() : 0;
+		offset.top -= (isFixed && offset.top == (inst.input.offset().top + inst.input.outerHeight())) ? $(document).scrollTop() : 0;			
 		return offset;
-	},
+	},	
 
 	/* Find an object's position on the screen. */
 	_findPos: function(obj) {
