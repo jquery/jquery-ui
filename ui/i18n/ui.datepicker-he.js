@@ -2,7 +2,6 @@
 /* Written by Amir Hardon (ahardon at gmail dot com). */
 jQuery(function($){
 	$.datepicker.regional['he'] = {
-		clearText: 'נקה', clearStatus: '',
 		closeText: 'סגור', closeStatus: '',
 		prevText: '&#x3c;הקודם', prevStatus: '',
 		prevBigText: '&#x3c;&#x3c;', prevBigStatus: '',

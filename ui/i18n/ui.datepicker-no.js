@@ -2,7 +2,6 @@
 /* Written by Naimdjon Takhirov (naimdjon@gmail.com). */
 jQuery(function($){
     $.datepicker.regional['no'] = {
-		clearText: 'Tøm', clearStatus: '',
 		closeText: 'Lukk', closeStatus: '',
         prevText: '&laquo;Forrige',  prevStatus: '',
 		prevBigText: '&#x3c;&#x3c;', prevBigStatus: '',

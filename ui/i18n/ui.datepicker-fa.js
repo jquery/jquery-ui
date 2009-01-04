@@ -3,7 +3,6 @@
 /* Jalali calendar should supported soon! (Its implemented but I have to test it) */
 jQuery(function($) {
 	$.datepicker.regional['fa'] = {
-		clearText: 'حذف تاريخ', clearStatus: 'پاک کردن تاريخ جاري',
 		closeText: 'بستن', closeStatus: 'بستن بدون اعمال تغييرات',
 		prevText: '&#x3c;قبلي', prevStatus: 'نمايش ماه قبل',
 		prevBigText: '&#x3c;&#x3c;', prevBigStatus: '',

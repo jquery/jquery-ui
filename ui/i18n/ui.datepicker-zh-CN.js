@@ -2,7 +2,6 @@
 /* Written by Cloudream (cloudream@gmail.com). */
 jQuery(function($){
 	$.datepicker.regional['zh-CN'] = {
-		clearText: '清除', clearStatus: '清除已选日期',
 		closeText: '关闭', closeStatus: '不改变当前选择',
 		prevText: '&#x3c;上月', prevStatus: '显示上月',
 		prevBigText: '&#x3c;&#x3c;', prevBigStatus: '显示上一年',

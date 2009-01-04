@@ -2,7 +2,6 @@
 /* Written by Andrew Stromnov (stromnov@gmail.com). */
 jQuery(function($){
 	$.datepicker.regional['ru'] = {
-		clearText: 'Очистить', clearStatus: '',
 		closeText: 'Закрыть', closeStatus: '',
 		prevText: '&#x3c;Пред',  prevStatus: '',
 		prevBigText: '&#x3c;&#x3c;', prevBigStatus: '',

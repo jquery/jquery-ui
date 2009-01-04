@@ -2,7 +2,6 @@
 /* Written by Haukur H. Thorsson (haukur@eskill.is). */
 jQuery(function($){
 	$.datepicker.regional['is'] = {
-		clearText: 'Hreinsa', clearStatus: '',
 		closeText: 'Loka', closeStatus: '',
 		prevText: '&#x3c; Fyrri', prevStatus: '',
 		prevBigText: '&#x3c;&#x3c;', prevBigStatus: '',

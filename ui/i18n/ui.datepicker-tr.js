@@ -2,7 +2,6 @@
 /* Written by Izzet Emre Erkan (kara@karalamalar.net). */
 jQuery(function($){
 	$.datepicker.regional['tr'] = {
-		clearText: 'temizle', clearStatus: 'geçerli tarihi temizler',
 		closeText: 'kapat', closeStatus: 'sadece göstergeyi kapat',
 		prevText: '&#x3c;geri', prevStatus: 'önceki ayı göster',
 		prevBigText: '&#x3c;&#x3c;', prevBigStatus: '',

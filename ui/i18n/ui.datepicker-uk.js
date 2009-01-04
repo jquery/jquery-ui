@@ -2,7 +2,6 @@
 /* Written by Maxim Drogobitskiy (maxdao@gmail.com). */
 jQuery(function($){
 	$.datepicker.regional['uk'] = {
-		clearText: 'Очистити', clearStatus: '',
 		closeText: 'Закрити', closeStatus: '',
 		prevText: '&#x3c;',  prevStatus: '',
 		prevBigText: '&#x3c;&#x3c;', prevBigStatus: '',

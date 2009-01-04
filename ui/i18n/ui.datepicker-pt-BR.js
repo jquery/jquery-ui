@@ -2,7 +2,6 @@
 /* Written by Leonildo Costa Silva (leocsilva@gmail.com). */
 jQuery(function($){
 	$.datepicker.regional['pt-BR'] = {
-		clearText: 'Limpar', clearStatus: '',
 		closeText: 'Fechar', closeStatus: '',
 		prevText: '&#x3c;Anterior', prevStatus: '',
 		prevBigText: '&#x3c;&#x3c;', prevBigStatus: '',

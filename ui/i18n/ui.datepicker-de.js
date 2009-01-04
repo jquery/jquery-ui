@@ -2,7 +2,6 @@
 /* Written by Milian Wolff (mail@milianw.de). */
 jQuery(function($){
 	$.datepicker.regional['de'] = {
-		clearText: 'löschen', clearStatus: 'aktuelles Datum löschen',
 		closeText: 'schließen', closeStatus: 'ohne Änderungen schließen',
 		prevText: '&#x3c;zurück', prevStatus: 'letzten Monat zeigen',
 		prevBigText: '&#x3c;&#x3c;', prevBigStatus: '',

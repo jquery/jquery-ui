@@ -2,7 +2,6 @@
 /* Written by Istvan Karaszi (jquerycalendar@spam.raszi.hu). */
 jQuery(function($){
 	$.datepicker.regional['hu'] = {
-		clearText: 'törlés', clearStatus: '',
 		closeText: 'bezárás', closeStatus: '',
 		prevText: '&laquo;&nbsp;vissza', prevStatus: '',
 		prevBigText: '&#x3c;&#x3c;', prevBigStatus: '',

@@ -2,7 +2,6 @@
 /* Written by Harri Kilpiö (harrikilpio@gmail.com). */
 jQuery(function($){
     $.datepicker.regional['fi'] = {
-		clearText: 'Tyhjenn&auml;', clearStatus: '',
 		closeText: 'Sulje', closeStatus: '',
 		prevText: '&laquo;Edellinen', prevStatus: '',
 		prevBigText: '&#x3c;&#x3c;', prevBigStatus: '',

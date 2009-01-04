@@ -2,7 +2,6 @@
 /* Written by Flakron Bytyqi (flakron@gmail.com). */
 jQuery(function($){
 	$.datepicker.regional['sq'] = {
-		clearText: 'fshije', clearStatus: 'fshije datën aktuale',
 		closeText: 'mbylle', closeStatus: 'mbylle pa ndryshime',
 		prevText: '&#x3c;mbrapa', prevStatus: 'trego muajin e fundit',
 		prevBigText: '&#x3c;&#x3c;', prevBigStatus: '',

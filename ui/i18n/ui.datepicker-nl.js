@@ -2,7 +2,6 @@
 /* Written by Mathias Bynens <http://mathiasbynens.be/> */
 jQuery(function($){
 	$.datepicker.regional.nl = {
-		clearText: 'Wissen', clearStatus: 'Wis de huidige datum',
 		closeText: 'Sluiten', closeStatus: 'Sluit zonder verandering',
 		prevText: '←', prevStatus: 'Bekijk de vorige maand',
 		prevBigText: '«', nextBigStatus: 'Bekijk het vorige jaar',

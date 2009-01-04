@@ -2,7 +2,6 @@
 /* Written by Tomas Muller (tomas@tomas-muller.net). */
 jQuery(function($){
 	$.datepicker.regional['cs'] = {
-		clearText: 'Vymazat', clearStatus: 'Vymaže zadané datum',
 		closeText: 'Zavřít',  closeStatus: 'Zavře kalendář beze změny',
 		prevText: '&#x3c;Dříve', prevStatus: 'Přejít na předchozí měsí',
 		prevBigText: '&#x3c;&#x3c;', prevBigStatus: '',

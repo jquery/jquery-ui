@@ -2,7 +2,6 @@
 /* Written by Deden Fathurahman (dedenf@gmail.com). */
 jQuery(function($){
 	$.datepicker.regional['id'] = {
-		clearText: 'kosongkan', clearStatus: 'bersihkan tanggal yang sekarang',
 		closeText: 'Tutup', closeStatus: 'Tutup tanpa mengubah',
 		prevText: '&#x3c;mundur', prevStatus: 'Tampilkan bulan sebelumnya',
 		prevBigText: '&#x3c;&#x3c;', prevBigStatus: '',

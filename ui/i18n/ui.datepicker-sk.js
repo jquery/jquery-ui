@@ -2,7 +2,6 @@
 /* Written by Vojtech Rinik (vojto@hmm.sk). */
 jQuery(function($){
 	$.datepicker.regional['sk'] = {
-		clearText: 'Zmazať', clearStatus: '',
 		closeText: 'Zavrieť', closeStatus: '',
 		prevText: '&#x3c;Predchádzajúci',  prevStatus: '',
 		prevBigText: '&#x3c;&#x3c;', prevBigStatus: '',

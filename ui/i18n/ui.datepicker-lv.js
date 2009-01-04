@@ -2,7 +2,6 @@
 /* @author Arturas Paleicikas <arturas.paleicikas@metasite.net> */
 jQuery(function($){
 	$.datepicker.regional['lv'] = {
-		clearText: 'Notīrīt', clearStatus: '',
 		closeText: 'Aizvērt', closeStatus: '',
 		prevText: 'Iepr',  prevStatus: '',
 		prevBigText: '&#x3c;&#x3c;', prevBigStatus: '',

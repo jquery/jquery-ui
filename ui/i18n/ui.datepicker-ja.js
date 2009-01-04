@@ -2,7 +2,6 @@
 /* Written by Kentaro SATO (kentaro@ranvis.com). */
 jQuery(function($){
 	$.datepicker.regional['ja'] = {
-		clearText: 'クリア', clearStatus: '日付をクリアします',
 		closeText: '閉じる', closeStatus: '変更せずに閉じます',
 		prevText: '&#x3c;前', prevStatus: '前月を表示します',
 		prevBigText: '&#x3c;&#x3c;', prevBigStatus: '前年を表示します',

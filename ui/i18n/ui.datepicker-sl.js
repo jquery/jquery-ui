@@ -3,7 +3,6 @@
 /* c = &#x10D;, s = &#x161; z = &#x17E; C = &#x10C; S = &#x160; Z = &#x17D; */
 jQuery(function($){
 	$.datepicker.regional['sl'] = {
-		clearText: 'Izbri&#x161;i', clearStatus: 'Izbri&#x161;i trenutni datum',
 		closeText: 'Zapri', closeStatus: 'Zapri brez spreminjanja',
 		prevText: '&lt;Prej&#x161;nji', prevStatus: 'Prika&#x17E;i prej&#x161;nji mesec',
 		prevBigText: '&#x3c;&#x3c;', prevBigStatus: '',

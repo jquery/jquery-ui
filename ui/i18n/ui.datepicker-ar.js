@@ -4,7 +4,6 @@
 /* NOTE: monthNames are the original months names and they are the Arabic names, not the new months name فبراير - يناير and there isn't any Arabic roots for these months */
 jQuery(function($){
 	$.datepicker.regional['ar'] = {
-		clearText: 'مسح', clearStatus: 'امسح التاريخ الحالي',
 		closeText: 'إغلاق', closeStatus: 'إغلاق بدون حفظ',
 		prevText: '&#x3c;السابق', prevStatus: 'عرض الشهر السابق',
 		prevBigText: '&#x3c;&#x3c;', prevBigStatus: '',

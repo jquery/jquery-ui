@@ -2,7 +2,6 @@
 /* Written by Keith Wood (kbwood@virginbroadband.com.au) and Stéphane Nahmani (sholby@sholby.net). */
 jQuery(function($){
 	$.datepicker.regional['fr'] = {
-		clearText: 'Effacer', clearStatus: 'Effacer la date sélectionnée',
 		closeText: 'Fermer', closeStatus: 'Fermer sans modifier',
 		prevText: '&#x3c;Préc', prevStatus: 'Voir le mois précédent',
 		prevBigText: '&#x3c;&#x3c;', prevBigStatus: '',

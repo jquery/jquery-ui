@@ -2,7 +2,6 @@
 /* Written by Anders Ekdahl ( anders@nomadiz.se). */
 jQuery(function($){
     $.datepicker.regional['sv'] = {
-		clearText: 'Rensa', clearStatus: '',
 		closeText: 'Stäng', closeStatus: '',
         prevText: '&laquo;Förra',  prevStatus: '',
 		prevBigText: '&#x3c;&#x3c;', prevBigStatus: '',

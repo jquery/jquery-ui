@@ -2,7 +2,6 @@
 /* Written by Jacek Wysocki (jacek.wysocki@gmail.com). */
 jQuery(function($){
 	$.datepicker.regional['pl'] = {
-		clearText: 'Wyczyść', clearStatus: 'Wyczyść obecną datę',
 		closeText: 'Zamknij', closeStatus: 'Zamknij bez zapisywania',
 		prevText: '&#x3c;Poprzedni', prevStatus: 'Pokaż poprzedni miesiąc',
 		prevBigText: '&#x3c;&#x3c;', prevBigStatus: '',

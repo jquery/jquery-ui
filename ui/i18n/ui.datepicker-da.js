@@ -2,7 +2,6 @@
 /* Written by Jan Christensen ( deletestuff@gmail.com). */
 jQuery(function($){
     $.datepicker.regional['da'] = {
-		clearText: 'Nulstil', clearStatus: 'Nulstil den aktuelle dato',
 		closeText: 'Luk', closeStatus: 'Luk uden ændringer',
         prevText: '&#x3c;Forrige', prevStatus: 'Vis forrige måned',
 		prevBigText: '&#x3c;&#x3c;', prevBigStatus: '',

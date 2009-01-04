@@ -2,7 +2,6 @@
 /* Traducido por Vester (xvester@gmail.com). */
 jQuery(function($){
 	$.datepicker.regional['es'] = {
-		clearText: 'Limpiar', clearStatus: '',
 		closeText: 'Cerrar', closeStatus: '',
 		prevText: '&#x3c;Ant', prevStatus: '',
 		prevBigText: '&#x3c;&#x3c;', prevBigStatus: '',

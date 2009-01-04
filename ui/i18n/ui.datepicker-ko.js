@@ -2,7 +2,6 @@
 /* Written by DaeKwon Kang (ncrash.dk@gmail.com). */
 jQuery(function($){
 	$.datepicker.regional['ko'] = {
-		clearText: '지우기', clearStatus: '',
 		closeText: '닫기', closeStatus: '',
 		prevText: '이전달', prevStatus: '',
 		prevBigText: '&#x3c;&#x3c;', prevBigStatus: '',

@@ -2,7 +2,6 @@
 /* Written by Apaella (apaella@gmail.com). */
 jQuery(function($){
 	$.datepicker.regional['it'] = {
-		clearText: 'Svuota', clearStatus: 'Annulla',
 		closeText: 'Chiudi', closeStatus: 'Chiudere senza modificare',
 		prevText: '&#x3c;Prec', prevStatus: 'Mese precedente',
 		prevBigText: '&#x3c;&#x3c;', prevBigStatus: 'Mostra l\'anno precedente',

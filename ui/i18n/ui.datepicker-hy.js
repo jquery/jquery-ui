@@ -2,7 +2,6 @@
 /* Written by Levon Zakaryan (levon.zakaryan@gmail.com)*/
 jQuery(function($){
 	$.datepicker.regional['hy'] = {
-		clearText: 'Մաքրել', clearStatus: '',
 		closeText: 'Փակել', closeStatus: '',
 		prevText: '&#x3c;Նախ.',  prevStatus: '',
 		prevBigText: '&#x3c;&#x3c;', prevBigStatus: '',

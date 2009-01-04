@@ -2,7 +2,6 @@
 /* Written by Ressol (ressol@gmail.com). */
 jQuery(function($){
 	$.datepicker.regional['zh-TW'] = {
-		clearText: '清除', clearStatus: '清除已選日期',
 		closeText: '關閉', closeStatus: '不改變目前的選擇',
 		prevText: '&#x3c;上月', prevStatus: '顯示上月',
 		prevBigText: '&#x3c;&#x3c;', prevBigStatus: '顯示上一年',

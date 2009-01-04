@@ -2,7 +2,6 @@
 /* Writers: (joan.leon@gmail.com). */
 jQuery(function($){
 	$.datepicker.regional['ca'] = {
-		clearText: 'Netejar', clearStatus: '',
 		closeText: 'Tancar', closeStatus: '',
 		prevText: '&#x3c;Ant', prevStatus: '',
 		prevBigText: '&#x3c;&#x3c;', prevBigStatus: '',

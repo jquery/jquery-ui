@@ -2,7 +2,6 @@
 /* Written by Olivier M. (olivierweb@ifrance.com). */
 jQuery(function($){
 	$.datepicker.regional['eo'] = {
-		clearText: 'Vakigi', clearStatus: '',
 		closeText: 'Fermi', closeStatus: 'Fermi sen modifi',
 		prevText: '&lt;Anta', prevStatus: 'Vidi la antaŭan monaton',
 		prevBigText: '&#x3c;&#x3c;', prevBigStatus: '',

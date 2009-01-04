@@ -2,7 +2,6 @@
 /* Written by Vjekoslav Nesek. */
 jQuery(function($){
 	$.datepicker.regional['hr'] = {
-		clearText: 'izbriši', clearStatus: 'Izbriši trenutni datum',
 		closeText: 'Zatvori', closeStatus: 'Zatvori kalendar',
 		prevText: '&#x3c;', prevStatus: 'Prikaži prethodni mjesec',
 		prevBigText: '&#x3c;&#x3c;', prevBigStatus: '',

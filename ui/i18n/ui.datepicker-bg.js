@@ -2,7 +2,6 @@
 /* Written by Stoyan Kyosev (http://svest.org). */
 jQuery(function($){
     $.datepicker.regional['bg'] = {
-		clearText: 'изчисти', clearStatus: 'изчисти актуалната дата',
         closeText: 'затвори', closeStatus: 'затвори без промени',
         prevText: '&#x3c;назад', prevStatus: 'покажи последния месец',
 		prevBigText: '&#x3c;&#x3c;', prevBigStatus: '',

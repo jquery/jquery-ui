@@ -2,7 +2,6 @@
 /* Written by pipo (pipo@sixhead.com). */
 jQuery(function($){
 	$.datepicker.regional['th'] = {
-		clearText: 'ลบ', clearStatus: '',
 		closeText: 'ปิด', closeStatus: '',
 		prevText: '&laquo;&nbsp;ย้อน', prevStatus: '',
 		prevBigText: '&#x3c;&#x3c;', prevBigStatus: '',
