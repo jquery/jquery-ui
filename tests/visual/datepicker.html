@@ -53,6 +53,10 @@
 			$('#inl').datepicker('destroy');
 			event.preventDefault();
 		});
+		
+		// disabled input datepicker
+		$('#d3').datepicker();		
+		
 	});
 	</script>
 </head>
@@ -87,6 +91,12 @@
 		Datepicker Inline
 		<div id="inl"></div>
 	</li>
+	<li class="plugin">
+		Datepicker disabled input
+		<div>
+			<input type="text" id="d3" disabled="true">
+		</div>
+	</li>	
 </ul>
 
 </body>
