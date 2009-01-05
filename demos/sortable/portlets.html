@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<title>jQuery UI Sortable - Default Demo</title>
+	<link type="text/css" href="../../themes/default/ui.all.css" rel="stylesheet" />
+	<script type="text/javascript" src="../../jquery-1.3pre.js"></script>
+	<script type="text/javascript" src="../../ui/ui.core.js"></script>
+	<script type="text/javascript" src="../../ui/ui.sortable.js"></script>
+	<link type="text/css" href="../demos.css" rel="stylesheet" />
+	<style type="text/css">
+	.column { width: 170px; float: left; }
+	.portlet { margin: 1em; }
+	.portlet-header { margin: 0.3em; padding-left: 0.2em; }
+	.portlet-header .ui-icon { float: right; }
+	.portlet-content { padding: 0.4em; }
+	.ui-sortable-placeholder { border: 1px dotted black; visibility: visible !important; }
+	.ui-sortable-placeholder * { visibility: hidden; }
+	</style>
+	<script type="text/javascript">
+	$(function() {
+		$(".column").sortable({
+			connectWith: ['.column']
+		});
+
+		$(".portlet").addClass("ui-widget ui-widget-content ui-helper-clearfix ui-corner-all")
+			.find(".portlet-header")
+				.addClass("ui-widget-header ui-corner-all")
+				.prepend('<span class="ui-icon ui-icon-plusthick"></span>')
+				.end()
+			.find(".portlet-content");
+
+		$(".portlet-header .ui-icon").click(function() {
+			$(this).toggleClass("ui-icon-minusthick");
+			$(this).parents(".portlet:first").find(".portlet-content").toggle();
+		});
+	});
+	</script>
+</head>
+<body>
+<div class="demo">
+
+<div class="column">
+
+<div class="portlet">
+ <div class="portlet-header">Feeds</div>
+ <div class="portlet-content">Lorem ipsum dolor sit amet, consectetuer adipiscing elit</div>
+</div>
+
+<div class="portlet">
+ <div class="portlet-header">News</div>
+ <div class="portlet-content">Lorem ipsum dolor sit amet, consectetuer adipiscing elit</div>
+</div>
+
+</div>
+
+<div class="column">
+
+<div class="portlet">
+ <div class="portlet-header">Shopping</div>
+ <div class="portlet-content">Lorem ipsum dolor sit amet, consectetuer adipiscing elit</div>
+</div>
+
+</div>
+
+<div class="column">
+
+<div class="portlet">
+ <div class="portlet-header">Links</div>
+ <div class="portlet-content">Lorem ipsum dolor sit amet, consectetuer adipiscing elit</div>
+</div>
+
+<div class="portlet">
+ <div class="portlet-header">Images</div>
+ <div class="portlet-content">Lorem ipsum dolor sit amet, consectetuer adipiscing elit</div>
+</div>
+
+</div>
+
+</div><!-- End demo -->
+
+<div class="demo-description">
+
+<p>
+
+</p>
+
+</div><!-- End demo-description -->
+
+</body>
+</html>
