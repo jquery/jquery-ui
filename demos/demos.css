@@ -10,7 +10,7 @@ table {
    -------------------------------- */
 
 body {
-	font-family: "Arial", "Helvetica", "Verdana", "sans-serif";
+	font-family: "Trebuchet MS", "Helvetica", "Arial",  "Verdana", "sans-serif";
 }
 
 /* Layout
@@ -31,7 +31,7 @@ body {
 .layout-grid td.normal {
 	border-left: 1px solid #ccc;
 	padding: 20px 24px;
-	font-family:  "Lucida Grande", "Arial", "Helvetica", "Verdana", "sans-serif";
+	font-family: "Trebuchet MS", "Helvetica", "Arial",  "Verdana", "sans-serif";
 }
 
 .layout-grid td.demos {
@@ -83,7 +83,7 @@ body {
 	margin: 0;
 	padding: 0;
 	letter-spacing: 0.75pt;
-	font: bold 1.2em 'Arial', 'Helvetica', sans-serif;
+	font: bold 1.2em "Trebuchet MS", "Helvetica", "Arial",  "Verdana", "sans-serif";
 	color: #e87b10;
 }
 
@@ -98,7 +98,7 @@ body {
 .demos-nav li a {
 	border-bottom: 1px solid #F4F4F4;
 	display:block;
-	padding: 3px 3px 3px 12px;
+	padding: 3px 3px 3px 3px;
 	font-size: 95%;
 	text-decoration: none;
 	color: #000;
@@ -134,10 +134,10 @@ eventually we should convert the font sizes to ems -- using px for now to minimi
 
 #demo-config-menu ul { list-style: none; padding: 0; margin: 0; }
 
-#demo-config-menu li { font-size:11px; padding:0 0 0 10px; margin:3px 0; zoom: 1; }
+#demo-config-menu li { font-size:12px; padding:0 0 0 10px; margin:3px 0; zoom: 1; }
 
 #demo-config-menu li a:link,
-#demo-config-menu li a:visited { display:block; padding:2px 8px 3px; border-bottom:1px dotted #b3b3b3; }
+#demo-config-menu li a:visited { display:block; padding:3px 8px 2px; border-bottom:1px dotted #b3b3b3; }
 #demo-config-menu li a:hover,
 #demo-config-menu li a:active { background-color:#f6f6f6; }
 
@@ -191,3 +191,6 @@ div.demo-description {
 .left-nav .demos-nav {
 	padding-right: 10px;
 }
+
+#demo-link { font-size:11px;  margin:6px 0 20px 0; }
+#demo-link a span.ui-icon { float:left; margin-right:3px; }

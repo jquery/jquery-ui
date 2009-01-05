@@ -160,7 +160,7 @@
 		function updateDemoNotes() {
 			var notes = $('#demo-frame .demo-description');
 			if ($('#demo-notes').length == 0) {
-				$('<div id="demo-notes"></div>').insertAfter('#demo-config');
+				$('<div id="demo-notes"></div>sdfdffd').insertAfter('#demo-config');
 			}						
 			$('#demo-notes').hide().empty().html(notes.html());
 			$('#demo-notes').fadeIn();
@@ -209,6 +209,21 @@
 					<p>
 						These demos showcase some common uses of each jQuery UI plugin. Simply copy and paste code from the demos to get started. Have fun playing with them.
 					</p>
+					
+				
+				<iframe></iframe>
+				
+				<div id="demo-link">
+					<a href="foo" class="demoWindowLink"><span class="ui-icon ui-icon-newwin"></span>Open demo in a new window</a>
+				</div>
+				
+				<p>The description for the demo goes here, below the link to open the demo in a new window. The description for the demo goes here, below the link to open the demo in a new window. The description for the demo goes here, below the link to open the demo in a new window.</p>
+				
+				<div id="demo-source">
+					<a href="#" class="source-closed">View source</a><!-- change the class to "source-open" when code is visible -->
+				</div>
+				
+				
 					<?php  } ?>
 			</div>
 
