@@ -13,7 +13,7 @@
 	</style>
 	<script type="text/javascript">
 	$(function() {
-		$(".demo ul:eq(0)").sortable({
+		$("#sortable").sortable({
 			delay: 1000
 		});
 	});
@@ -24,7 +24,7 @@
 
 <p>Delay of 1000ms</p>
 
-<ul>
+<ul id="sortable">
 	<li class="ui-state-default">Item 1</li>
 	<li class="ui-state-default">Item 2</li>
 	<li class="ui-state-default">Item 3</li>
