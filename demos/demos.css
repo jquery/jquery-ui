@@ -25,11 +25,11 @@ body {
 }
 
 .layout-grid td.left-nav {
-	width: 150px;
+	width: 140px;
 }
 
 .layout-grid td.normal {
-	border-left: 1px solid #ccc;
+	border-left: 1px solid #eee;
 	padding: 20px 24px;
 	font-family: "Trebuchet MS", "Helvetica", "Arial",  "Verdana", "sans-serif";
 }
@@ -74,7 +74,7 @@ body {
 
 .demos-nav {
 	float: left;
-	width: 150px;
+	width: 170px;
 	font-size: 1.3em;
 }
 
@@ -83,35 +83,46 @@ body {
 	margin: 0;
 	padding: 0;
 	letter-spacing: 0.75pt;
-	font: bold 1.2em "Trebuchet MS", "Helvetica", "Arial",  "Verdana", "sans-serif";
+	font: normal 1.1em "Trebuchet MS", "Helvetica", "Arial",  "Verdana", "sans-serif";
 	color: #e87b10;
 }
 
 .demos-nav dt,
 .demos-nav h4 {
 	margin-top: 1.5em;
-	margin-bottom: 0.7em;
+	margin-bottom: 0;
+	padding-left: 8px;
+	padding-bottom:5px;
 	line-height: 1.2em;
+	border-bottom: 1px solid #F4F4F4;
 }
 
 .demos-nav dd a,
 .demos-nav li a {
 	border-bottom: 1px solid #F4F4F4;
 	display:block;
-	padding: 3px 3px 3px 3px;
-	font-size: 95%;
+	padding: 4px 3px 4px 8px;
+	font-size: 90%;
 	text-decoration: none;
-	color: #000;
-	height: 15px;
+	color: #555 ;
+	margin:2px 0;
+	height:13px;
 }
 
 .demos-nav dd a:hover,
 .demos-nav dd a:focus,
-.demos-nav li a:hover,
-.demos-nav li a:focus {
-	background: #EAEAEA;
-	border-color: #BBBBBB;
+.demos-nav dd a:hover,
+.demos-nav dd a:focus {
+	background: #f3f3f3;
+	color:#000;
+	-moz-border-radius: 5px; -webkit-border-radius: 5px;
 }
+ .demos-nav dd a.selected {
+	background: #555;
+	color:#ffffff;
+	-moz-border-radius: 5px; -webkit-border-radius: 5px;
+}
+
 
 /* new styles for demo pages, added by Filament 12.29.08
 eventually we should convert the font sizes to ems -- using px for now to minimize style conflicts
@@ -129,7 +140,7 @@ eventually we should convert the font sizes to ems -- using px for now to minimi
 #demo-frame { float:left; width:540px; height:380px; border:1px solid #ddd; overflow: auto; position: relative; }
 #demo-frame h3, #demo-frame h4 { padding: 0; font-weight: bold; font-size: 1em; }
 
-#demo-config-menu { float:right; width:200px; }
+#demo-config-menu { float:right; width:180px;  }
 #demo-config-menu h4 { font-size:13px; color:#666; font-weight:normal; border:0; padding-left:18px; }
 
 #demo-config-menu ul { list-style: none; padding: 0; margin: 0; }
@@ -137,7 +148,7 @@ eventually we should convert the font sizes to ems -- using px for now to minimi
 #demo-config-menu li { font-size:12px; padding:0 0 0 10px; margin:3px 0; zoom: 1; }
 
 #demo-config-menu li a:link,
-#demo-config-menu li a:visited { display:block; padding:3px 8px 2px; border-bottom:1px dotted #b3b3b3; }
+#demo-config-menu li a:visited { display:block; padding:3px 8px 4px; border-bottom:1px dotted #b3b3b3; }
 #demo-config-menu li a:hover,
 #demo-config-menu li a:active { background-color:#f6f6f6; }
 
@@ -155,7 +166,7 @@ eventually we should convert the font sizes to ems -- using px for now to minimi
 }
 
 #demo-notes { width:520px; color:#333; font-size: 1em; }
-#demo-notes code { padding-left:20px; }
+code, pre { padding:8px 0 8px 20px ; font-size: 1.2em; line-height:130%;  }
 
 #demo-source a:link,
 #demo-source a:visited,

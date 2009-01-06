@@ -75,6 +75,8 @@
 		$('.left-nav a').click(function(ev) {
 			window.location.hash = this.href.replace(/.+\/([^\/]+)\/index\.html/,'$1') + '|default';
 			loadPage(this.href);
+			$('.left-nav a.selected').removeClass('selected');
+			$(this).addClass('selected');
 			ev.preventDefault();
 		});
 		
