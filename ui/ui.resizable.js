@@ -135,6 +135,11 @@ $.widget("ui.resizable", $.extend({}, $.ui.mouse, {
 
 				var defCss = (loadDefault ? insertionsDefault[handle] : ''),
 					axis = $(['<div class="ui-resizable-handle ', hname, '" style="', defCss, insertionsDefault.handle, '"></div>'].join('')).css( applyZIndex );
+
+				if ('se' == handle) {
+					axis.addClass('ui-icon ui-icon-gripsmall-diagonal-se');
+				};
+
 				o.handles[handle] = '.ui-resizable-'+handle;
 
 				this.element.append(
