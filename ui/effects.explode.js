@@ -43,7 +43,7 @@ $.effects.explode = function(o) {
 					top: -i*(height/rows)
 				})
 				.parent()
-				.addClass('effects-explode')
+				.addClass('ui-effects-explode')
 				.css({
 					position: 'absolute',
 					overflow: 'hidden',
@@ -67,7 +67,7 @@ $.effects.explode = function(o) {
 				if(o.callback) o.callback.apply(el[0]); // Callback
 				el.dequeue();
 
-				$('.effects-explode').remove();
+				$('div.ui-effects-explode').remove();
 
 	}, o.duration || 500);
 
