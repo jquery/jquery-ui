@@ -9,7 +9,7 @@
 var defaults = {
 	appendTo: "parent",
 	axis: false,
-	cancel: ":input",
+	cancel: ":input,option",
 	connectToSortable: false,
 	containment: false,
 	cursor: "default",

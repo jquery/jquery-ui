@@ -13,7 +13,7 @@ var defaults = {
 	alsoResize: false,
 	aspectRatio: false,
 	autoHide: false,
-	cancel: ':input',
+	cancel: ':input,option',
 	containment: false,
 	delay: 0,
 	disabled: false,

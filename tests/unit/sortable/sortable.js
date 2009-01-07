@@ -8,7 +8,7 @@
 
 var defaults = {
 	appendTo: "parent",
-	cancel: ":input",
+	cancel: ":input,option",
 	delay: 0,
 	disabled: false,
 	distance: 1,
