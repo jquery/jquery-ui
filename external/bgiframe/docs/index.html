@@ -1,0 +1,113 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+	"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+		<title>bgiframe 2.1.1 docs</title>
+		<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.2.2/build/reset/reset-min.css">
+		<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.2.2/build/fonts/fonts-min.css">
+		<style type="text/css" media="screen">
+			body { margin: 25px; }
+			h1 { margin: 1.0em 0; font-size: 167%; font-weight: bold; }
+			#toc { margin: 0 0 3.0em; }
+				#toc li { margin: 0.4em 0; font-size: 100%; }
+			#qa { margin: 0 0 3.0em; }
+				#qa dt.question { margin: 2.0em 0 1.0em; font-size: 122%; font-weight: bold; }
+				#qa dd.answer { margin: 0 2.0em; }
+					#qa dd.answer p { margin: 0 0 1.5em; }
+					#qa dd.answer code { font-size: 92%; }
+					
+					#qa dd.answer #options dt { margin: 2.0em 0 1.0em;  }
+					#qa dd.answer #options dd { margin: 0 2.0em; }
+					
+		</style>
+	</head>
+	<body>
+		<div id="wrapper">
+			<div id="container">
+				<h1>bgiframe 2.1.1</h1>
+				<ul id="toc">
+					<li><a href="#what_does_it_do">What does it do</a></li>
+					<li><a href="#when_should_i_use_it">When should I use it</a></li>
+					<li><a href="#how_do_i_use_it">How do I use it</a></li>
+					<li><a href="#how_does_it_work">How does it work</a></li>
+					<li><a href="#where_can_i_get_it">Where can I get it</a></li>
+					<li><a href="#what_has_changed">What has changed</a></li>
+					<li><a href="#suggestions_bugs_patches">Suggestions? Bugs? Patches?</a></li>
+				</ul>
+				<dl id="qa">
+					<dt id="what_does_it_do" class="question">What does it do?</dt>
+					<dd class="answer">
+						<p>Have you ever experienced the select form element z-index issue in Internet Explorer 6? Most likely you have if you've implemented some sort of drop down menu navigation that shows up over a select form element.</p>
+						<p>The background iframe (bgiframe) plugin provides a very small, quick and easy way to fix that problem so you don't have to worry about it. No matter the size, borders or position the bgiframe plugin can fix it.</p>
+					</dd>
+					
+					<dt id="when_should_i_use_it" class="question">When should I use it?</dt>
+					<dd class="answer">
+						<p>The bgiframe plugin should be used when you are trying to show elements above a select form control in Internet Explorer 6.</p>
+					</dd>
+					
+					<dt id="how_do_i_use_it" class="question">How do I use it?</dt>
+					<dd class="answer">
+						<p>The usage is simple. Just call <code>bgiframe</code> on a jQuery collection of elements.</p>
+						<p><code>$('.fix-z-index').bgiframe();</code></p>
+						<p>The plugin tries its best to handle most situations but sometimes some configuration is necessary. For example if your borders are defined in a unit other than pixels, you will need to manually set the <code>top</code> and <code>left</code> properties to the negative width of the border. Here are the options/settings available to configure the output.</p>
+						<dl id="options">
+							<dt><code>top</code></dt>
+							<dd>
+								<p>The iframe must be offset to the top by the width of the top border. This should be a negative number representing the border-top-width. If a number is is used here, pixels will be assumed. Otherwise, be sure to specify a unit. An expression could also be used. By default the value is "auto" which will use an expression to get the border-top-width if it is in pixels.</p>
+								<p><code>$('.fix-z-index').bgiframe({ top: '-1em' });</code></p>
+							</dd>
+							<dt><code>left</code></dt>
+							<dd>
+								<p>The iframe must be offset to the left by the width of the left border. This should be a negative number representing the border-left-width. If a number is used here, pixels will be assumed. Otherwise, be sure to specify a unit. An expression could also be used. By default the value is "auto" which will use an expression to get the border-left-width if it is in pixels.</p>
+								<p><code>$('.fix-z-index').bgiframe({ left: '-1em' });</code></p>
+							</dd>
+							<dt><code>width</code></dt>
+							<dd>
+								<p>This is the width of the iframe. If a number is used here, pixels will be assume. Otherwise, be sure to specify a unit. An expression could also be used. By default the value is "auto" which will use an expression to get the offsetWidth.</p>
+								<p><code>$('.fix-z-index').bgiframe({ width: 100 });</code></p>
+							</dd>
+							<dt><code>height</code></dt>
+							<dd>
+								<p>This is the height of the iframe. If a number is used here, pixels will be assume. Otherwise, be sure to specify a unit. An expression could also be used. By default the value is "auto" which will use an expression to get the offsetHeight.</p>
+								<p><code>$('.fix-z-index').bgiframe({ height: 100 });</code></p>
+							</dd>
+							<dt><code>opacity</code></dt>
+							<dd>
+								<p>This is a boolean representing whether or not to use opacity. If set to true, the opacity of 0 is applied. If set to false, the opacity filter is not applied. Default: true.</p>
+								<p><code>$('.fix-z-index').bgiframe({ opacity: false });</code></p>
+							</dd>
+							<dt><code>src</code></dt>
+							<dd>
+								<p>This setting is provided so that one could change the src of the iframe to whatever they need. Default: "javascript:false;"</p>
+								<p><code>$('.fix-z-index').bgiframe({ src: '#' });</code></p>
+							</dd>
+						</dl>
+					</dd>
+
+					<dt id="how_does_it_work" class="question">How does it work?</dt>
+					<dd class="answer">
+						<p>The bgiframe plugin works by prepending an iframe to the element. The iframe is given a class of bgiframe and positioned below all the other children of the element. In the default configuration it automatically adjusts to the width and height of the element (including the borders) and the opacity is set to 0. The element needs to have position (relative or absolute) and should have a background (color or image).</p>
+						<p>Check out the <a href="http://brandonaaron.net/jquery/plugins/bgiframe/test/">test page</a> to see the plugin in action.</p>
+					</dd>
+
+					<dt id="where_can_i_get_it" class="question">Where can I get it?</dt>
+					<dd class="answer">
+						<ul>
+							<li><a href="http://jquery.com/plugins/files/bgiframe-2.1.zip">2.1 zip</a> from the bgiframe <a href="http://jquery.com/plugins/project/bgiframe">project page</a>.</li>
+							<li>Latest SVN: http://jqueryjs.googlecode.com/svn/trunk/plugins/bgiframe/</li>
+							<li>Tagged Versions in SVN: Latest SVN: http://jqueryjs.googlecode.com/svn/tags/plugins/bgiframe/</li>
+						</ul>
+					</dd>
+					
+					<dt id="suggestions_bugs_patches" class="question">Suggestions? Bugs? Patches?</dt>
+					<dd class="answer">
+						<p>Feel free to make any suggestions, bug reports or add any patches via the <a href="http://jquery.com/plugins/project/bgiframe">project page</a>.</p>
+					</dd>
+				</dl>
+				<p>The bgiframe plugin is authored by <a href="http://blog.brandonaaron.net/">Brandon Aaron (http://brandonaaron.net/)</a></p>
+			</div>
+		</div>
+	</body>
+</html>

@@ -1,0 +1,32 @@
+{
+	"name": "jQuery-bgiframe",
+	"version": 2.1,
+	"author": [
+		"Brandon Aaron <brandon.aaron@gmail.com>"
+	],
+	"abstract": "jQuery plugin for fixing z-index issues in IE6",
+	"license": "mit, gpl",
+	"distribution_type": "plugin",
+	"requires": {
+		"jQuery": ">=1.0.3"
+	},
+	"provides": {
+		"jQuery.bgiframe": {
+			"version": 2.1,
+			"file": "jquery.bgiframe.js"
+		}
+	},
+	"keywords": [
+		"iframe",
+		"hack",
+		"zIndex",
+		"z-index",
+		"ie6"
+	],
+	"stability": "Official",
+	"meta-spec": {
+		"version": 1.3,
+		"url": "http://module-build.sourceforge.net/META-spec-v1.3.html"
+	},
+	"generated_by": "Brandon Aaron"
+}
