@@ -13,20 +13,26 @@ $.effects = $.effects || {}; //Add the 'effects' scope
 
 $.extend($.effects, {
 	version: "@VERSION",
-	save: function(el, set) {
-		for(var i=0;i<set.length;i++) {
-			if(set[i] !== null) $.data(el[0], "ec.storage."+set[i], el[0].style[set[i]]);
+	
+	// Saves a set of properties in a data storage
+	save: function(element, set) {
+		for(var i=0; i < set.length; i++) {
+			if(set[i] !== null) element.data("ec.storage."+set[i], element[0].style[set[i]]);
 		}
 	},
-	restore: function(el, set) {
-		for(var i=0;i<set.length;i++) {
-			if(set[i] !== null) el.css(set[i], $.data(el[0], "ec.storage."+set[i]));
+	
+	// Restores a set of previously saved properties from a data storage
+	restore: function(element, set) {
+		for(var i=0; i < set.length; i++) {
+			if(set[i] !== null) element.css(set[i], element.data("ec.storage."+set[i]));
 		}
 	},
+	
 	setMode: function(el, mode) {
 		if (mode == 'toggle') mode = el.is(':hidden') ? 'show' : 'hide'; // Set for toggle
 		return mode;
 	},
+	
 	getBaseline: function(origin, original) { // Translates a [top,left] array into a baseline value
 		// this should be a little more flexible in the future to handle a string & hash
 		var y, x;
@@ -44,41 +50,54 @@ $.extend($.effects, {
 		};
 		return {x: x, y: y};
 	},
-	createWrapper: function(el) {
-		if (el.parent().attr('id') == 'fxWrapper')
-			return el;
-		var props = {width: el.outerWidth({margin:true}), height: el.outerHeight({margin:true}), 'float': el.css('float')};
-		el.wrap('<div id="fxWrapper" style="font-size:100%;background:transparent;border:none;margin:0;padding:0"></div>');
-		var wrapper = el.parent();
-		if (el.css('position') == 'static'){
-			wrapper.css({position: 'relative'});
-			el.css({position: 'relative'});
+	
+	// Wraps the element around a wrapper that copies position properties
+	createWrapper: function(element) {
+
+		//if the element is already wrapped, return it
+		if (element.parent().is('.ui-effects-wrapper'))
+			return element.parent();
+
+		//Cache width,height and float properties of the element, and create a wrapper around it
+		var props = { width: element.outerWidth(true), height: element.outerHeight(true), 'float': element.css('float') };
+		element.wrap('<div class="ui-effects-wrapper" style="font-size:100%;background:transparent;border:none;margin:0;padding:0"></div>');
+		var wrapper = element.parent();
+
+		//Transfer the positioning of the element to the wrapper
+		if (element.css('position') == 'static') {
+			wrapper.css({ position: 'relative' });
+			element.css({ position: 'relative'} );
 		} else {
-			var top = el.css('top'); if(isNaN(parseInt(top))) top = 'auto';
-			var left = el.css('left'); if(isNaN(parseInt(left))) left = 'auto';
-			wrapper.css({ position: el.css('position'), top: top, left: left, zIndex: el.css('z-index') }).show();
-			el.css({position: 'relative', top:0, left:0});
+			var top = element.css('top'); if(isNaN(parseInt(top,10))) top = 'auto';
+			var left = element.css('left'); if(isNaN(parseInt(left,10))) left = 'auto';
+			wrapper.css({ position: element.css('position'), top: top, left: left, zIndex: element.css('z-index') }).show();
+			element.css({position: 'relative', top: 0, left: 0 });
 		}
+
 		wrapper.css(props);
 		return wrapper;
 	},
-	removeWrapper: function(el) {
-		if (el.parent().attr('id') == 'fxWrapper')
-			return el.parent().replaceWith(el);
-		return el;
+
+	removeWrapper: function(element) {
+		if (element.parent().is('.ui-effects-wrapper'))
+			return element.parent().replaceWith(element);
+		return element;
 	},
-	setTransition: function(el, list, factor, val) {
-		val = val || {};
-		$.each(list,function(i, x){
-			unit = el.cssUnit(x);
-			if (unit[0] > 0) val[x] = unit[0] * factor + unit[1];
+
+	setTransition: function(element, list, factor, value) {
+		value = value || {};
+		$.each(list, function(i, x){
+			unit = element.cssUnit(x);
+			if (unit[0] > 0) value[x] = unit[0] * factor + unit[1];
 		});
-		return val;
+		return value;
 	},
+
+	//Base function to animate from one class to another in a seamless transition
 	animateClass: function(value, duration, easing, callback) {
 
 		var cb = (typeof easing == "function" ? easing : (callback ? callback : null));
-		var ea = (typeof easing == "object" ? easing : null);
+		var ea = (typeof easing == "string" ? easing : null);
 
 		return this.each(function() {
 
@@ -115,6 +134,7 @@ $.extend($.effects, {
 
 //Extend the methods of jQuery
 $.fn.extend({
+	
 	//Save old methods
 	_show: $.fn.show,
 	_hide: $.fn.hide,
@@ -122,35 +142,40 @@ $.fn.extend({
 	_addClass: $.fn.addClass,
 	_removeClass: $.fn.removeClass,
 	_toggleClass: $.fn.toggleClass,
-	// New ec methods
-	effect: function(fx,o,speed,callback) {
-		return $.effects[fx] ? $.effects[fx].call(this, {method: fx, options: o || {}, duration: speed, callback: callback }) : null;
+	
+	// New effect methods
+	effect: function(fx, options, speed, callback) {
+		return $.effects[fx] ? $.effects[fx].call(this, {method: fx, options: options || {}, duration: speed, callback: callback }) : null;
 	},
+	
 	show: function() {
-		if(!arguments[0] || (arguments[0].constructor == Number || /(slow|normal|fast)/.test(arguments[0])))
+		if(!arguments[0] || (arguments[0].constructor == Number || (/(slow|normal|fast)/).test(arguments[0])))
 			return this._show.apply(this, arguments);
 		else {
 			var o = arguments[1] || {}; o['mode'] = 'show';
 			return this.effect.apply(this, [arguments[0], o, arguments[2] || o.duration, arguments[3] || o.callback]);
 		}
 	},
+	
 	hide: function() {
-		if(!arguments[0] || (arguments[0].constructor == Number || /(slow|normal|fast)/.test(arguments[0])))
+		if(!arguments[0] || (arguments[0].constructor == Number || (/(slow|normal|fast)/).test(arguments[0])))
 			return this._hide.apply(this, arguments);
 		else {
 			var o = arguments[1] || {}; o['mode'] = 'hide';
 			return this.effect.apply(this, [arguments[0], o, arguments[2] || o.duration, arguments[3] || o.callback]);
 		}
 	},
+	
 	toggle: function(){
-		if(!arguments[0] || (arguments[0].constructor == Number || /(slow|normal|fast)/.test(arguments[0])) || (arguments[0].constructor == Function))
+		if(!arguments[0] || (arguments[0].constructor == Number || (/(slow|normal|fast)/).test(arguments[0])) || (arguments[0].constructor == Function))
 			return this.__toggle.apply(this, arguments);
 		else {
 			var o = arguments[1] || {}; o['mode'] = 'toggle';
 			return this.effect.apply(this, [arguments[0], o, arguments[2] || o.duration, arguments[3] || o.callback]);
 		}
 	},
-	addClass: function(classNames,speed,easing,callback) {
+	
+	addClass: function(classNames, speed, easing, callback) {
 		return speed ? $.effects.animateClass.apply(this, [{ add: classNames },speed,easing,callback]) : this._addClass(classNames);
 	},
 	removeClass: function(classNames,speed,easing,callback) {
@@ -165,6 +190,7 @@ $.fn.extend({
 	switchClass: function() {
 		return this.morph.apply(this, arguments);
 	},
+	
 	// helper functions
 	cssUnit: function(key) {
 		var style = this.css(key), val = [];
@@ -184,18 +210,18 @@ $.fn.extend({
 
 // We override the animation for all of these color styles
 $.each(['backgroundColor', 'borderBottomColor', 'borderLeftColor', 'borderRightColor', 'borderTopColor', 'color', 'outlineColor'], function(i,attr){
-		$.fx.step[attr] = function(fx){
+		$.fx.step[attr] = function(fx) {
 				if ( fx.state == 0 ) {
 						fx.start = getColor( fx.elem, attr );
 						fx.end = getRGB( fx.end );
 				}
 
 				fx.elem.style[attr] = "rgb(" + [
-						Math.max(Math.min( parseInt((fx.pos * (fx.end[0] - fx.start[0])) + fx.start[0]), 255), 0),
-						Math.max(Math.min( parseInt((fx.pos * (fx.end[1] - fx.start[1])) + fx.start[1]), 255), 0),
-						Math.max(Math.min( parseInt((fx.pos * (fx.end[2] - fx.start[2])) + fx.start[2]), 255), 0)
+						Math.max(Math.min( parseInt((fx.pos * (fx.end[0] - fx.start[0])) + fx.start[0],10), 255), 0),
+						Math.max(Math.min( parseInt((fx.pos * (fx.end[1] - fx.start[1])) + fx.start[1],10), 255), 0),
+						Math.max(Math.min( parseInt((fx.pos * (fx.end[2] - fx.start[2])) + fx.start[2],10), 255), 0)
 				].join(",") + ")";
-		}
+			};
 });
 
 // Color Conversion functions from highlightFade
@@ -212,7 +238,7 @@ function getRGB(color) {
 
 		// Look for rgb(num,num,num)
 		if (result = /rgb\(\s*([0-9]{1,3})\s*,\s*([0-9]{1,3})\s*,\s*([0-9]{1,3})\s*\)/.exec(color))
-				return [parseInt(result[1]), parseInt(result[2]), parseInt(result[3])];
+				return [parseInt(result[1],10), parseInt(result[2],10), parseInt(result[3],10)];
 
 		// Look for rgb(num%,num%,num%)
 		if (result = /rgb\(\s*([0-9]+(?:\.[0-9]+)?)\%\s*,\s*([0-9]+(?:\.[0-9]+)?)\%\s*,\s*([0-9]+(?:\.[0-9]+)?)\%\s*\)/.exec(color))
