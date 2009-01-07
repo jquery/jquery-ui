@@ -8,6 +8,7 @@
 	<script type="text/javascript" src="../../ui/ui.draggable.js"></script>
 	<script type="text/javascript" src="../../ui/ui.resizable.js"></script>
 	<script type="text/javascript" src="../../ui/ui.dialog.js"></script>
+	<script type="text/javascript" src="../../external/bgiframe/jquery.bgiframe.js"></script>
 	<link type="text/css" href="../demos.css" rel="stylesheet" />
 	<style type="text/css">
 		label, input { display:block; }
@@ -17,7 +18,8 @@
 	<script type="text/javascript">
 	$(function() {
 		$("#dialog").dialog({
-			height: '300',
+			bgiframe: true,
+			height: 300,
 			modal: true,
 			overlay: {
 				backgroundColor: '#000',

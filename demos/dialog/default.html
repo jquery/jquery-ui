@@ -8,8 +8,10 @@
 	<script type="text/javascript" src="../../ui/ui.draggable.js"></script>
 	<script type="text/javascript" src="../../ui/ui.resizable.js"></script>
 	<script type="text/javascript" src="../../ui/ui.dialog.js"></script>
+	<script type="text/javascript" src="../../external/bgiframe/jquery.bgiframe.js"></script>
 	<link type="text/css" href="../demos.css" rel="stylesheet" />
 	<script type="text/javascript">
+	$.ui.dialog.defaults.bgiframe = true;
 	$(function() {
 		$("#dialog").dialog();
 	});
