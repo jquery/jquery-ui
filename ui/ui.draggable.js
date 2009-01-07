@@ -20,7 +20,7 @@ $.widget("ui.draggable", $.extend({}, $.ui.mouse, {
 			this.element[0].style.position = 'relative';
 
 		(this.options.cssNamespace && this.element.addClass(this.options.cssNamespace+"-draggable"));
-		(this.options.disabled && this.element.addClass('ui-draggable-disabled'));
+		(this.options.disabled && this.element.addClass(this.options.cssNamespace+'-draggable-disabled'));
 
 		this._mouseInit();
 
@@ -28,7 +28,7 @@ $.widget("ui.draggable", $.extend({}, $.ui.mouse, {
 
 	destroy: function() {
 		if(!this.element.data('draggable')) return;
-		this.element.removeData("draggable").unbind(".draggable").removeClass('ui-draggable ui-draggable-dragging ui-draggable-disabled');
+		this.element.removeData("draggable").unbind(".draggable").removeClass(this.options.cssNamespace+'-draggable '+this.options.cssNamespace+'-draggable-dragging '+this.options.cssNamespace+'-draggable-disabled');
 		this._mouseDestroy();
 	},
 
@@ -36,7 +36,7 @@ $.widget("ui.draggable", $.extend({}, $.ui.mouse, {
 
 		var o = this.options;
 
-		if (this.helper || o.disabled || $(event.target).is('.ui-resizable-handle'))
+		if (this.helper || o.disabled || $(event.target).is('.'+this.options.cssNamespace+'-resizable-handle'))
 			return false;
 
 		//Quit if we're not on a valid handle
@@ -111,7 +111,7 @@ $.widget("ui.draggable", $.extend({}, $.ui.mouse, {
 		if ($.ui.ddmanager && !o.dropBehaviour)
 			$.ui.ddmanager.prepareOffsets(this, event);
 
-		this.helper.addClass("ui-draggable-dragging");
+		this.helper.addClass(o.cssNamespace+"-draggable-dragging");
 		this._mouseDrag(event, true); //Execute the drag once - this causes the helper not to be visible before getting its correct position
 		return true;
 	},
@@ -328,7 +328,7 @@ $.widget("ui.draggable", $.extend({}, $.ui.mouse, {
 	},
 
 	_clear: function() {
-		this.helper.removeClass("ui-draggable-dragging");
+		this.helper.removeClass(this.options.cssNamespace+"-draggable-dragging");
 		if(this.helper[0] != this.element[0] && !this.cancelHelperRemoval) this.helper.remove();
 		//if($.ui.ddmanager) $.ui.ddmanager.current = null;
 		this.helper = null;
