@@ -895,7 +895,7 @@ $.extend($.ui.sortable, {
 	defaults: {
 		accurateIntersection: true,
 		appendTo: "parent",
-		cancel: ":input",
+		cancel: ":input,option",
 		delay: 0,
 		distance: 1,
 		dropOnEmpty: true,

@@ -547,7 +547,7 @@ $.extend($.ui.resizable, {
 		animateEasing: "swing",
 		aspectRatio: false,
 		autoHide: false,
-		cancel: ":input",
+		cancel: ":input,option",
 		containment: false,
 		delay: 0,
 		disableSelection: true,

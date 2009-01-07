@@ -236,7 +236,7 @@ $.extend($.ui.selectable, {
 	defaults: {
 		appendTo: 'body',
 		autoRefresh: true,
-		cancel: ":input",
+		cancel: ":input,option",
 		delay: 0,
 		distance: 1,
 		filter: '*',
