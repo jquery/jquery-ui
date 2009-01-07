@@ -24,7 +24,7 @@ $.widget("ui.accordion", {
 					options.active = current;
 				} else {
 					options.active = current.parent().parent().prev();
-					current.addClass("current");
+					current.addClass("ui-accordion-current");
 				}
 			}
 		}
@@ -38,7 +38,7 @@ $.widget("ui.accordion", {
 		headers.next().wrap("<div></div>").addClass("ui-accordion-content").parent().addClass("ui-accordion-content-wrap ui-helper-reset ui-widget-content ui-corner-bottom");
 
 		var active = options.active = findActive(headers, options.active).toggleClass("ui-state-default").toggleClass("ui-state-active").toggleClass("ui-corner-all").toggleClass("ui-corner-top");
-		active.parent().addClass("selected");
+		active.parent().addClass(options.selectedClass);
 		$("<span/>").addClass("ui-icon " + this.options.icons.header).prependTo(headers);
 		active.find(".ui-icon").toggleClass(this.options.icons.header).toggleClass(this.options.icons.headerSelected);
 
@@ -86,7 +86,7 @@ $.widget("ui.accordion", {
 	destroy: function() {
 		this.element.removeClass("ui-accordion ui-widget ui-helper-reset").removeAttr("role").unbind(".accordion");
 		$.removeData(this.element[0], "accordion");
-		var groups = this.element.children().removeClass("ui-accordion-group selected");
+		var groups = this.element.children().removeClass("ui-accordion-group "+this.options.selectedClass);
 		var headers = this.options.headers.unbind(".accordion").removeClass("ui-accordion-header ui-helper-reset ui-state-default ui-corner-all ui-state-active ui-corner-top")
 			.removeAttr("role").removeAttr("aria-expanded").removeAttr("tabindex");
 		headers.find("a").removeAttr("tabindex");
@@ -354,7 +354,7 @@ $.extend($.ui.accordion, {
 			return this.href.toLowerCase() == location.href.toLowerCase();
 		},
 		running: 0,
-		selectedClass: "selected"
+		selectedClass: "ui-accordion-selected"
 	},
 	animations: {
 		slide: function(options, additions) {
