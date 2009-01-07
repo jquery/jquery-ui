@@ -3,11 +3,11 @@
 .ui-datepicker { width: 17em; padding: .2em .2em 0; }
 .ui-datepicker-header { position:relative; padding:.2em 0; }
 .ui-datepicker-prev, .ui-datepicker-next { position:absolute; top: 2px; width: 1.8em; height: 1.8em; }
-.ui-datepicker-prev:hover, .ui-datepicker-next:hover { top: 1px;}
+.ui-datepicker-prev-hover, .ui-datepicker-next-hover { top: 1px; }
 .ui-datepicker-prev { left:2px; }
 .ui-datepicker-next { right:2px; }
-.ui-datepicker-prev:hover { left:1px; }
-.ui-datepicker-next:hover { right:1px; }
+.ui-datepicker-prev-hover { left:1px; }
+.ui-datepicker-next-hover { right:1px; }
 .ui-datepicker .ui-datepicker-prev span, .ui-datepicker .ui-datepicker-next span { display: block; position: absolute; left: 50%; margin-left: -8px; top: 50%; margin-top: -8px;  }
 .ui-datepicker-title { margin: 0 2.3em; line-height: 1.8em; text-align: center; }
 .ui-datepicker-title select { float:left; font-size:1em; margin:1px 0; }
