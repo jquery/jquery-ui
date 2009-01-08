@@ -16,34 +16,32 @@
 			<pathelement location="build/ant-contrib-0.6.jar"/>
 		</classpath>
 	</taskdef>
+	
+	<property file="ant.properties" />
 
-	<target name="deploy-release" depends="load.properties, concatenate, minify, pack, copy, replace-version, prepend-header, zip" description="Release builder">
+	<loadfile srcFile="../version.txt" property="release.version" />
+	<property name="release.filename" value="jquery.ui-${release.version}" />
+
+	<property name="dist.dir" value="dist/${release.filename}/" />
+	<property name="build.dir" value="build" />
+	<property name="ui.dir" value="../" />
+	<property name="src.dir" value="${ui.dir}/ui/" />
+
+	<property name="min.folder" value="${dist.dir}/ui/minified" />
+	<property name="packed.folder" value="${dist.dir}/ui/packed" />
+
+	<property name="concatenated" value="jquery.ui.all" />
+	<property name="concatenated.i18n" value="jquery.ui.i18n.all" />
+
+	<property name="core.files" value="ui.core.js, ui.draggable.js, ui.droppable.js, ui.resizable.js, ui.selectable.js, ui.sortable.js, effects.core.js" />
+
+	<property description="YUI Compressor" name="yui-jar" value="${build.dir}/yuicompressor-2.4.2.jar" />
+	<property description="Dean Edwards Packer" name="pack.php" value="${build.dir}/pack.php" />
+	
+	<target name="deploy-release" depends="concatenate, minify, pack, copy, replace-version, prepend-header, zip" description="Release builder">
 	</target>
 
-	<target name="load.properties">
-		<property file="ant.properties" />
-
-		<loadfile srcFile="../version.txt" property="release.version" />
-		<property name="release.filename" value="jquery.ui-${release.version}" />
-
-		<property name="dist.dir" value="dist/${release.filename}/" />
-		<property name="build.dir" value="build" />
-		<property name="ui.dir" value="../" />
-		<property name="src.dir" value="${ui.dir}/ui/" />
-
-		<property name="min.folder" value="${dist.dir}/ui/minified" />
-		<property name="packed.folder" value="${dist.dir}/ui/packed" />
-
-		<property name="concatenated" value="jquery.ui.all" />
-		<property name="concatenated.i18n" value="jquery.ui.i18n.all" />
-
-		<property name="core.files" value="ui.core.js, ui.draggable.js, ui.droppable.js, ui.resizable.js, ui.selectable.js, ui.sortable.js, effects.core.js" />
-
-		<property description="YUI Compressor" name="yui-jar" value="${build.dir}/yuicompressor-2.4.2.jar" />
-		<property description="Dean Edwards Packer" name="pack.php" value="${build.dir}/pack.php" />
-	</target>
-
-	<target name="replace-version" depends="load.properties">
+	<target name="replace-version">
 		<replaceregexp match="@VERSION" replace="${release.version}" flags="g" byline="true">
 		    <fileset dir="${dist.dir}/ui/" includes="*.js"/>
 			<fileset dir="${dist.dir}/ui/minified/" includes="*.js"/>
@@ -52,7 +50,7 @@
 		<echo message="Replaced all @VERSION to ${release.version}." />
 	</target>
 	
-	<target name="prepend-header" depends="load.properties">
+	<target name="prepend-header">
 		<!-- TODO: refactor this ugly mess -->
 		<copy todir="${dist.dir}/headers/">
 			<fileset dir="${dist.dir}/ui/" includes="*.js" />
@@ -97,7 +95,7 @@
 		</zip>
 	</target>
 
-	<target name="concatenate" depends="load.properties">
+	<target name="concatenate">
 		<echo message="Building concatenated" />
 		<mkdir dir="${dist.dir}/ui/" />
 		<delete file="${dist.dir}/ui/${concatenated}.js" />
@@ -117,7 +115,7 @@
 		<echo message="Concatenated i18n built." />
 	</target>
 
-	<target name="minify" depends="load.properties, concatenate" description="Remove all comments and whitespace, no compression, great in combination with GZip">
+	<target name="minify" depends="concatenate" description="Remove all comments and whitespace, no compression, great in combination with GZip">
 		<echo message="Building minified" />
 		<delete dir="${min.folder}/" />
 		<mkdir dir="${min.folder}" />
@@ -154,7 +152,7 @@
 	</target>
 
 	<!-- Using PHP Dean Edwards Packer -->
-	<target name="pack" depends="load.properties, concatenate" description="Remove all comments and whitespace and compress">
+	<target name="pack" depends="concatenate" description="Remove all comments and whitespace and compress">
 		<echo message="Building packed" />
 		<delete dir="${packed.folder}/" />
 		<mkdir dir="${packed.folder}" />
@@ -182,7 +180,7 @@
 		<echo message="Packed i18n built." />
 	</target>
 
-	<target description="Copy needed folders" name="copy" depends="load.properties">
+	<target description="Copy needed folders" name="copy">
 		<echo message="Copying files" />
 		<mkdir dir="${dist.dir}" />
 
@@ -216,8 +214,8 @@
 		<echo message="Files copied." />
 	</target>
 	
-	 <target depends="load.properties" name="clean">
+	 <target name="clean">
 	 	<delete dir="dist" />
     </target>
-
+	
 </project>
