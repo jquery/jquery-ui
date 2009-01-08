@@ -233,8 +233,7 @@
 		<get src="${url}Tabs" dest="tabs.xml" />
 	</target>
 			
-	<!--depends="download-docs"-->
-	<target name="docs-process" >
+	<target name="docs-process" depends="docs-download">
 		<property name="docs.dir" value="${ui.dir}/documentation" />
 		<delete dir="${docs.dir}" />
 		<mkdir dir="${docs.dir}" />
@@ -242,7 +241,9 @@
 	</target>
 	
 	<target name="docs-clean">
-		<delete file="*.xml" exclude="build.xml" />
+		<delete>
+			<fileset file="*.xml" excludes="build.xml" />
+		</delete>
 	</target>
 	
 </project>
