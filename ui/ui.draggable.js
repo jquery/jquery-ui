@@ -284,20 +284,19 @@ $.widget("ui.draggable", $.extend({}, $.ui.mouse, {
 
 		return {
 			top: (
-				pos.top																	// the calculated relative position
-				+ this.offset.relative.top	* mod										// Only for relative positioned nodes: Relative offset from element to offset parent
+				pos.top																	// The absolute mouse position
+				+ this.offset.relative.top * mod										// Only for relative positioned nodes: Relative offset from element to offset parent
 				+ this.offset.parent.top * mod											// The offsetParent's offset without borders (offset + border)
-				+ ( this.cssPosition == 'fixed' ? -this.scrollParent.scrollTop() : ( scrollIsRootNode ? 0 : scroll.scrollTop() ) ) * mod
-				+ this.margins.top * mod												//Add the margin (you don't want the margin counting in intersection methods)
+				- ( this.cssPosition == 'fixed' ? -this.scrollParent.scrollTop() : ( scrollIsRootNode ? 0 : scroll.scrollTop() ) ) * mod
 			),
 			left: (
-				pos.left																// the calculated relative position
-				+ this.offset.relative.left	* mod										// Only for relative positioned nodes: Relative offset from element to offset parent
+				pos.left																// The absolute mouse position
+				+ this.offset.relative.left * mod										// Only for relative positioned nodes: Relative offset from element to offset parent
 				+ this.offset.parent.left * mod											// The offsetParent's offset without borders (offset + border)
-				+ ( this.cssPosition == 'fixed' ? -this.scrollParent.scrollLeft() : ( scrollIsRootNode ? 0 : scroll.scrollLeft() ) ) * mod
-				+ this.margins.left * mod												//Add the margin (you don't want the margin counting in intersection methods)
+				- ( this.cssPosition == 'fixed' ? -this.scrollParent.scrollLeft() : scrollIsRootNode ? 0 : scroll.scrollLeft() ) * mod
 			)
 		};
+		
 	},
 
 	_generatePosition: function(event) {
@@ -339,9 +338,7 @@ $.widget("ui.draggable", $.extend({}, $.ui.mouse, {
 
 		}
 
-
-
-		var position = {
+		return {
 			top: (
 				pageY																// The absolute mouse position
 				- this.offset.click.top													// Click offset (relative to the element)
@@ -358,7 +355,6 @@ $.widget("ui.draggable", $.extend({}, $.ui.mouse, {
 			)
 		};
 
-		return position;
 	},
 
 	_clear: function() {
