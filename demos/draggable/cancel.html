@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<title>jQuery UI Draggable - Cancel Demo</title>
+	<link type="text/css" href="../../themes/base/ui.all.css" rel="stylesheet" />
+	<script type="text/javascript" src="../../jquery-1.3pre.js"></script>
+	<script type="text/javascript" src="../../ui/ui.core.js"></script>
+	<script type="text/javascript" src="../../ui/ui.draggable.js"></script>
+	<link type="text/css" href="../demos.css" rel="stylesheet" />
+	<style type="text/css">
+	#draggable { width: 150px; height: 150px; padding: 0.5em; cursor: move; }
+	#draggable p.ui-widget-header { cursor: default; }
+	</style>
+	<script type="text/javascript">
+	$(function() {
+		$("#draggable").draggable({ cancel: "p.ui-widget-header" });
+	});
+	</script>
+</head>
+<body>
+
+<div class="demo">
+
+<div id="draggable" class="ui-widget-content">
+	<p>You can drag me around&hellip;</p>
+	<p class="ui-widget-header">&hellip;but you can't drag me by this handle.</p>
+</div>
+
+</div><!-- End demo -->
+
+<div class="demo-description">
+
+<p>
+<!-- Add description here -->
+</p>
+
+</div><!-- End demo-description -->
+
+</body>
+</html>
