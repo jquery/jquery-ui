@@ -40,7 +40,7 @@
 		});
 		
 		// inline datepicker
-		$('#inl').datepicker();
+		$('#inl').datepicker({minDate: -20, maxDate: '+1M +10D'});
 		$('button.disable-inl').click(function(event){
 			$('#inl').datepicker('disable');
 			event.preventDefault();

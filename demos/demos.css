@@ -203,5 +203,5 @@ div.demo-description {
 	padding-right: 10px;
 }
 
-#demo-link { font-size:11px;  margin:6px 0 20px 0; }
+#demo-link { font-size:11px;  padding-top: 6px; clear: both; overflow: hidden; }
 #demo-link a span.ui-icon { float:left; margin-right:3px; }
