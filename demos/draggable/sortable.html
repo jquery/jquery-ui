@@ -14,10 +14,13 @@
 	</style>
 	<script type="text/javascript">
 	$(function() {
-		$("#sortable").sortable();
+		$("#sortable").sortable({
+			revert: true
+		});
 		$("#draggable").draggable({
 			connectToSortable: ['#sortable'],
-			helper: 'clone'
+			helper: 'clone',
+			revert: 'invalid'
 		});
 	});
 	</script>

@@ -90,8 +90,6 @@ $.widget("ui.draggable", $.extend({}, $.ui.mouse, {
 			relative: this._getRelativeOffset() //This is a relative to absolute position minus the actual position calculation - only used for relative positioned helper
 		});
 
-
-
 		//Generate the original position
 		this.originalPosition = this._generatePosition(event);
 		this.originalPageX = event.pageX;
@@ -146,7 +144,13 @@ $.widget("ui.draggable", $.extend({}, $.ui.mouse, {
 		//If we are using droppables, inform the manager about the drop
 		var dropped = false;
 		if ($.ui.ddmanager && !this.options.dropBehaviour)
-			var dropped = $.ui.ddmanager.drop(this, event);
+			dropped = $.ui.ddmanager.drop(this, event);
+		
+		//if a drop comes from outside (a sortable)
+		if(this.dropped) {
+			dropped = this.dropped;
+			this.dropped = false;
+		}
 
 		if((this.options.revert == "invalid" && !dropped) || (this.options.revert == "valid" && dropped) || this.options.revert === true || ($.isFunction(this.options.revert) && this.options.revert.call(this.element, dropped))) {
 			var self = this;
@@ -452,10 +456,16 @@ $.ui.plugin.add("draggable", "connectToSortable", {
 
 		$.each(inst.sortables, function() {
 			if(this.instance.isOver) {
+				
 				this.instance.isOver = 0;
+				
 				inst.cancelHelperRemoval = true; //Don't remove the helper in the draggable instance
 				this.instance.cancelHelperRemoval = false; //Remove it in the sortable instance (so sortable plugins like revert still work)
-				if(this.shouldRevert) this.instance.options.revert = true; //revert here
+				
+				//The sortable revert is supported, and we have to set a temporary dropped variable on the draggable to support revert: 'valid/invalid'
+				if(this.shouldRevert) this.instance.options.revert = true;
+				
+				//Trigger the stop of the sortable
 				this.instance._mouseStop(event);
 
 				//Also propagate receive event, since the sortable is actually receiving a element
@@ -463,9 +473,9 @@ $.ui.plugin.add("draggable", "connectToSortable", {
 
 				this.instance.options.helper = this.instance.options._helper;
 
-				if(inst.options.helper == 'original') {
+				//If the helper has been the original item, restore properties in the sortable
+				if(inst.options.helper == 'original')
 					this.instance.currentItem.css({ top: 'auto', left: 'auto' });
-				}
 
 			} else {
 				this.instance.cancelHelperRemoval = false; //Remove the helper in the sortable instance
@@ -513,6 +523,7 @@ $.ui.plugin.add("draggable", "connectToSortable", {
 					this.instance.offset.parent.top -= inst.offset.parent.top - this.instance.offset.parent.top;
 
 					inst._propagate("toSortable", event);
+					inst.dropped = this.instance.element; //draggable revert needs that
 
 				}
 
@@ -535,6 +546,7 @@ $.ui.plugin.add("draggable", "connectToSortable", {
 					if(this.instance.placeholder) this.instance.placeholder.remove();
 
 					inst._propagate("fromSortable", event);
+					inst.dropped = false; //draggable revert needs that
 				}
 
 			};
