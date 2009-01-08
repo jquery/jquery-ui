@@ -1,4 +1,4 @@
-jQuery UI Authors (http://ui.jquery.com/about)
+﻿jQuery UI Authors (http://ui.jquery.com/about)
 
 This software consists of voluntary contributions made by many
 individuals. For exact contribution history, see the revision history
@@ -13,6 +13,7 @@ Colin Clark (http://colin.atrc.utoronto.ca/)
 Michelle D'Souza
 Aaron Eisenberger (aaronchi@gmail.com)
 Ariel Flesler
+Bohdan Ganicky
 Scott González
 Marc Grabanski (m@marcgrabanski.com)
 Klaus Hartl (stilbuero.de)
