@@ -90,14 +90,16 @@ $.widget("ui.draggable", $.extend({}, $.ui.mouse, {
 			relative: this._getRelativeOffset() //This is a relative to absolute position minus the actual position calculation - only used for relative positioned helper
 		});
 
-		//Adjust the mouse offset relative to the helper if 'cursorAt' is supplied
-		if(o.cursorAt)
-			this._adjustOffsetFromHelper(o.cursorAt);
+
 
 		//Generate the original position
 		this.originalPosition = this._generatePosition(event);
 		this.originalPageX = event.pageX;
 		this.originalPageY = event.pageY;
+
+		//Adjust the mouse offset relative to the helper if 'cursorAt' is supplied
+		if(o.cursorAt)
+			this._adjustOffsetFromHelper(o.cursorAt);
 
 		//Set a containment if given in the options
 		if(o.containment)
