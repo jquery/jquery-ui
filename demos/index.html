@@ -162,8 +162,28 @@
 				$('#demo-frame').empty().html(data);
 				$('#demo-link a').attr('href', path);
 				updateDemoNotes();
-
 			});
+			if (/default.html$/.test(path)) {
+				$.get("../documentation/" + path.match(/demos\/(.+)\//)[1] + ".html", function(html) {
+					$("#demo-notes").after(html);
+					$("#widget-docs").tabs();
+					$(".param-header").click(function() {
+						$(this).parent().toggleClass("param-open").end().next().toggle();
+					});
+					$(".docs-list-header").each(function() {
+						var header = $(this);
+						var details = header.next().find(".param-details").hide();
+						$("a:first", header).click(function() {
+							details.show().parent().addClass("param-open");
+							return false;
+						});
+						$("a:last", header).click(function() {
+							details.hide().parent().removeClass("param-open");
+							return false;
+						});
+					});
+				});
+			}
 		}
 
 		function updateDemoNotes() {

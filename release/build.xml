@@ -218,4 +218,31 @@
 	 	<delete dir="dist" />
     </target>
 	
+	<target name="docs-download">
+		<property name="url" value="http://www.exfer.net/jquery/createjQueryXMLDocs.py?start=UI/" />
+		<get src="${url}Accordion" dest="accordion.xml" />
+		<get src="${url}Datepicker" dest="datepicker.xml" />
+		<get src="${url}Dialog" dest="dialog.xml" />
+		<get src="${url}Draggable" dest="draggable.xml" />
+		<get src="${url}Droppable" dest="droppable.xml" />
+		<get src="${url}Progressbar" dest="progressbar.xml" />
+		<get src="${url}Resizable" dest="resizable.xml" />
+		<get src="${url}Selectable" dest="selectable.xml" />
+		<get src="${url}Slider" dest="slider.xml" />
+		<get src="${url}Sortable" dest="sortable.xml" />
+		<get src="${url}Tabs" dest="tabs.xml" />
+	</target>
+			
+	<!--depends="download-docs"-->
+	<target name="docs-process" >
+		<property name="docs.dir" value="${ui.dir}/documentation" />
+		<delete dir="${docs.dir}" />
+		<mkdir dir="${docs.dir}" />
+		<xslt includes="*.xml,accordion.xml" excludes="build.xml" destdir="${docs.dir}" style="build/style.xsl" />
+	</target>
+	
+	<target name="docs-clean">
+		<delete file="*.xml" exclude="build.xml" />
+	</target>
+	
 </project>
