@@ -148,7 +148,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 			this._setContainment();
 
 		//Call plugins and callbacks
-		this._propagate("start", event);
+		this._trigger("start", event);
 
 		//Recache the helper size
 		if(!this._preserveHelperProportions)
@@ -157,7 +157,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 
 		//Post 'activate' events to possible containers
 		if(!noActivation) {
-			 for (var i = this.containers.length - 1; i >= 0; i--) { this.containers[i]._propagate("activate", event, this); }
+			 for (var i = this.containers.length - 1; i >= 0; i--) { this.containers[i]._trigger("activate", event, this); }
 		}
 
 		//Prepare possible droppables
@@ -216,7 +216,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 					break;
 				}
 
-				this._propagate("change", event); //Call plugins and callbacks
+				this._trigger("change", event); //Call plugins and callbacks
 				break;
 			}
 		}
@@ -276,9 +276,9 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 
 			//Post deactivating events to containers
 			for (var i = this.containers.length - 1; i >= 0; i--){
-				this.containers[i]._propagate("deactivate", null, this);
+				this.containers[i]._trigger("deactivate", null, this);
 				if(this.containers[i].containerCache.over) {
-					this.containers[i]._propagate("out", null, this);
+					this.containers[i]._trigger("out", null, this);
 					this.containers[i].containerCache.over = 0;
 				}
 			}
@@ -608,20 +608,20 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 
 						this.currentContainer = this.containers[i];
 						itemWithLeastDistance ? this.options.sortIndicator.call(this, event, itemWithLeastDistance, null, true) : this.options.sortIndicator.call(this, event, null, this.containers[i].element, true);
-						this._propagate("change", event); //Call plugins and callbacks
-						this.containers[i]._propagate("change", event, this); //Call plugins and callbacks
+						this._trigger("change", event); //Call plugins and callbacks
+						this.containers[i]._trigger("change", event, this); //Call plugins and callbacks
 
 						//Update the placeholder
 						this.options.placeholder.update(this.currentContainer, this.placeholder);
 
 					}
 
-					this.containers[i]._propagate("over", event, this);
+					this.containers[i]._trigger("over", event, this);
 					this.containers[i].containerCache.over = 1;
 				}
 			} else {
 				if(this.containers[i].containerCache.over) {
-					this.containers[i]._propagate("out", event, this);
+					this.containers[i]._trigger("out", event, this);
 					this.containers[i].containerCache.over = 0;
 				}
 			}
@@ -828,49 +828,51 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 			this.currentItem.show();
 		}
 
-		if(this.domPosition.prev != this.currentItem.prev().not("."+this.options.cssNamespace+"-sortable-helper")[0] || this.domPosition.parent != this.currentItem.parent()[0]) this._propagate("update", event, null, noPropagation); //Trigger update callback if the DOM position has changed
+		if(this.fromOutside) this._trigger("receive", event, this, noPropagation);
+		if(this.fromOutside || this.domPosition.prev != this.currentItem.prev().not("."+this.options.cssNamespace+"-sortable-helper")[0] || this.domPosition.parent != this.currentItem.parent()[0]) this._trigger("update", event, null, noPropagation); //Trigger update callback if the DOM position has changed
 		if(!$.ui.contains(this.element[0], this.currentItem[0])) { //Node was moved out of the current element
-			this._propagate("remove", event, null, noPropagation);
+			this._trigger("remove", event, null, noPropagation);
 			for (var i = this.containers.length - 1; i >= 0; i--){
 				if($.ui.contains(this.containers[i].element[0], this.currentItem[0])) {
-					this.containers[i]._propagate("update", event, this, noPropagation);
-					this.containers[i]._propagate("receive", event, this, noPropagation);
+					this.containers[i]._trigger("receive", event, this, noPropagation);
+					this.containers[i]._trigger("update", event, this, noPropagation);
 				}
 			};
 		};
 
 		//Post events to containers
 		for (var i = this.containers.length - 1; i >= 0; i--){
-			this.containers[i]._propagate("deactivate", event, this, noPropagation);
+			this.containers[i]._trigger("deactivate", event, this, noPropagation);
 			if(this.containers[i].containerCache.over) {
-				this.containers[i]._propagate("out", event, this);
+				this.containers[i]._trigger("out", event, this);
 				this.containers[i].containerCache.over = 0;
 			}
 		}
 
 		this.dragging = false;
 		if(this.cancelHelperRemoval) {
-			this._propagate("beforeStop", event, null, noPropagation);
-			this._propagate("stop", event, null, noPropagation);
+			this._trigger("beforeStop", event, null, noPropagation);
+			this._trigger("stop", event, null, noPropagation);
 			return false;
 		}
 
-		this._propagate("beforeStop", event, null, noPropagation);
+		this._trigger("beforeStop", event, null, noPropagation);
 
 		//$(this.placeholder[0]).remove(); would have been the jQuery way - unfortunately, it unbinds ALL events from the original node!
 		this.placeholder[0].parentNode.removeChild(this.placeholder[0]);
 
-		if(this.options.helper != "original") this.helper.remove(); this.helper = null;
-		this._propagate("stop", event, null, noPropagation);
+		if(this.helper[0] != this.currentItem[0]) this.helper.remove(); this.helper = null;
+		this._trigger("stop", event, null, noPropagation);
 
+		this.fromOutside = false;
 		return true;
 
 	},
 
-	_propagate: function(n, event, inst, noPropagation) {
-		$.ui.plugin.call(this, n, [event, this._ui(inst)]);
-		var dontCancel = !noPropagation ? this.element.triggerHandler(n == "sort" ? n : "sort"+n, [event, this._ui(inst)], this.options[n]) : true;
-		if(dontCancel === false) this.cancel();
+	_trigger: function(type, event, inst, noPropagation) {
+		$.ui.plugin.call(this, type, [event, this._ui(inst)]);
+		if(!noPropagation) $.widget.prototype._trigger.call(this, type, event, this._ui(inst));
+		if(event.returnValue === false) this.cancel();
 	},
 
 	plugins: {},

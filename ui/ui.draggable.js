@@ -104,7 +104,7 @@ $.widget("ui.draggable", $.extend({}, $.ui.mouse, {
 			this._setContainment();
 
 		//Call plugins and callbacks
-		this._propagate("start", event);
+		this._trigger("start", event);
 
 		//Recache the helper size
 		this._cacheHelperProportions();
@@ -130,7 +130,7 @@ $.widget("ui.draggable", $.extend({}, $.ui.mouse, {
 		 */
 
 		//Call plugins and callbacks and use the resulting position if something is returned
-		if(!noPropagation) this.position = this._propagate("drag", event) || this.position;
+		if(!noPropagation) this.position = this._trigger("drag", event) || this.position;
 
 		if(!this.options.axis || this.options.axis != "y") this.helper[0].style.left = this.position.left+'px';
 		if(!this.options.axis || this.options.axis != "x") this.helper[0].style.top = this.position.top+'px';
@@ -155,11 +155,11 @@ $.widget("ui.draggable", $.extend({}, $.ui.mouse, {
 		if((this.options.revert == "invalid" && !dropped) || (this.options.revert == "valid" && dropped) || this.options.revert === true || ($.isFunction(this.options.revert) && this.options.revert.call(this.element, dropped))) {
 			var self = this;
 			$(this.helper).animate(this.originalPosition, parseInt(this.options.revertDuration, 10), function() {
-				self._propagate("stop", event);
+				self._trigger("stop", event);
 				self._clear();
 			});
 		} else {
-			this._propagate("stop", event);
+			this._trigger("stop", event);
 			this._clear();
 		}
 
@@ -373,10 +373,10 @@ $.widget("ui.draggable", $.extend({}, $.ui.mouse, {
 
 	// From now on bulk stuff - mainly helpers
 
-	_propagate: function(n, event) {
-		$.ui.plugin.call(this, n, [event, this._uiHash()]);
-		if(n == "drag") this.positionAbs = this._convertPositionTo("absolute"); //The absolute position has to be recalculated after plugins
-		this._trigger(n, event, this._uiHash());
+	_trigger: function(type, event) {
+		$.ui.plugin.call(this, type, [event, this._uiHash()]);
+		if(type == "drag") this.positionAbs = this._convertPositionTo("absolute"); //The absolute position has to be recalculated after plugins
+		$.widget.prototype._trigger.call(this, type, event, this._uiHash());
 		return event.returnValue;
 	},
 
@@ -443,7 +443,7 @@ $.ui.plugin.add("draggable", "connectToSortable", {
 						shouldRevert: sortable.options.revert
 					});
 					sortable._refreshItems();	//Do a one-time refresh at start to refresh the containerCache
-					sortable._propagate("activate", event, inst);
+					sortable._trigger("activate", event, inst);
 				}
 			});
 		});
@@ -479,7 +479,7 @@ $.ui.plugin.add("draggable", "connectToSortable", {
 
 			} else {
 				this.instance.cancelHelperRemoval = false; //Remove the helper in the sortable instance
-				this.instance._propagate("deactivate", event, inst);
+				this.instance._trigger("deactivate", event, inst);
 			}
 
 		});
@@ -522,8 +522,9 @@ $.ui.plugin.add("draggable", "connectToSortable", {
 					this.instance.offset.parent.left -= inst.offset.parent.left - this.instance.offset.parent.left;
 					this.instance.offset.parent.top -= inst.offset.parent.top - this.instance.offset.parent.top;
 
-					inst._propagate("toSortable", event);
+					inst._trigger("toSortable", event);
 					inst.dropped = this.instance.element; //draggable revert needs that
+					this.instance.fromOutside = true; //Little hack so receive/update callbacks work
 
 				}
 
@@ -545,7 +546,7 @@ $.ui.plugin.add("draggable", "connectToSortable", {
 					this.instance.currentItem.remove();
 					if(this.instance.placeholder) this.instance.placeholder.remove();
 
-					inst._propagate("fromSortable", event);
+					inst._trigger("fromSortable", event);
 					inst.dropped = false; //draggable revert needs that
 				}
 
