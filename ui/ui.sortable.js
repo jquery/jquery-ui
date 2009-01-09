@@ -895,7 +895,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 	_trigger: function(type, event, inst, noPropagation) {
 		$.ui.plugin.call(this, type, [event, this._uiHash(inst)]);
 		if(!noPropagation) $.widget.prototype._trigger.call(this, type, event, this._uiHash(inst));
-		if(event && event.returnValue === false) this.cancel();
+		if(event && event.result === false) this.cancel();
 	},
 
 	plugins: {},

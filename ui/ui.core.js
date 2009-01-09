@@ -371,7 +371,7 @@ $.widget.prototype = {
 				? type : this.widgetEventPrefix + type);
 
 		// event can be null, a hash, a native event, a fixed event
-		event = $.Event(event);
+		event = event ? $.extend(event, $.Event()) : $.Event();
 		event.type = eventName;
 
 		this.element.trigger(event, data);
