@@ -370,13 +370,20 @@ $.widget.prototype = {
 			eventName = (type == this.widgetEventPrefix
 				? type : this.widgetEventPrefix + type);
 
-		event = event ? $.event.fix(event) : $.Event();
+		// event can be null, a hash, a native event, a fixed event
+		event = $.Event(event);
 		event.type = eventName;
 
 		this.element.trigger(event, data);
-
-		return !(callback && callback.call(this.element[0], event, data) === false
-			|| event.isDefaultPrevented());
+		var callbackResult = callback
+			? callback.call(this.element[0], event, data)
+			: undefined;
+		
+		event.result = callbackResult !== undefined
+			? callbackResult
+			: event.result;
+		
+		return event.result !== false;
 	}
 };
 
