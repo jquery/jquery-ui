@@ -556,19 +556,18 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 						.addClass(className || self.currentItem[0].className+" "+self.options.cssNamespace+"-sortable-placeholder")
 						.removeClass(self.options.cssNamespace+'-sortable-helper')[0];
 
-					if(!className) {
+					if(!className)
 						el.style.visibility = "hidden";
-						document.body.appendChild(el);
-						// Name attributes are removed, otherwice causes elements to be unchecked
-						// Expando attributes also have to be removed because of stupid IE (no condition, doesn't hurt in other browsers)
-						el.innerHTML = self.currentItem[0].innerHTML.replace(/name\=\"[^\"\']+\"/g, '').replace(/jQuery[0-9]+\=\"[^\"\']+\"/g, '');
-						document.body.removeChild(el);
-					};
 
 					return el;
 				},
 				update: function(container, p) {
+					
+					// 1. If a className is set as 'placeholder option, we don't force sizes - the class is responsible for that
+					// 2. The option 'forcePlaceholderSize can be enabled to force it even if a class name is specified
 					if(className && !o.forcePlaceholderSize) return;
+					
+					//If the element doesn't have a actual height by itself (without styles coming from a stylesheet), it receives the inline height from the dragged item
 					if(!p.height()) { p.height(self.currentItem.innerHeight() - parseInt(self.currentItem.css('paddingTop')||0, 10) - parseInt(self.currentItem.css('paddingBottom')||0, 10)); };
 					if(!p.width()) { p.width(self.currentItem.innerWidth() - parseInt(self.currentItem.css('paddingLeft')||0, 10) - parseInt(self.currentItem.css('paddingRight')||0, 10)); };
 				}
@@ -896,7 +895,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 	_trigger: function(type, event, inst, noPropagation) {
 		$.ui.plugin.call(this, type, [event, this._uiHash(inst)]);
 		if(!noPropagation) $.widget.prototype._trigger.call(this, type, event, this._uiHash(inst));
-		if(event.returnValue === false) this.cancel();
+		if(event && event.returnValue === false) this.cancel();
 	},
 
 	plugins: {},
