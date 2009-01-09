@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<title>jQuery UI Sortable - Tolerance Demo</title>
+	<link type="text/css" href="../../themes/base/ui.all.css" rel="stylesheet" />
+	<script type="text/javascript" src="../../jquery-1.3pre.js"></script>
+	<script type="text/javascript" src="../../ui/ui.core.js"></script>
+	<script type="text/javascript" src="../../ui/ui.sortable.js"></script>
+	<link type="text/css" href="../demos.css" rel="stylesheet" />
+	<style type="text/css">
+	#sortable-tolerance-default, #sortable-tolerance-pointer { list-style-type: none; margin: 0; padding: 0; float: left; }
+	#sortable-tolerance-default li, #sortable-tolerance-pointer li { margin: 3px; padding: 1px; float: left; width: 100px; height: 90px; font-size: 1.3em; text-align: center; }
+	</style>
+	<script type="text/javascript">
+	$(function() {
+		$("#sortable-tolerance-default").sortable({
+			tolerance: 'default'
+		});
+		$("#sortable-tolerance-pointer").sortable({
+			tolerance: 'pointer'
+		});
+	});
+	</script>
+</head>
+<body>
+<div class="demo">
+
+<ul id="sortable-tolerance-default">
+	<li class="ui-state-default"><div class="ui-icon ui-icon-arrow-4"></div>Default tolerance</li>
+	<li class="ui-state-default"><div class="ui-icon ui-icon-arrow-4"></div>2</li>
+	<li class="ui-state-default"><div class="ui-icon ui-icon-arrow-4"></div>3</li>
+</ul>
+
+<br style="clear:both;" />
+<br style="clear:both;" />
+
+<ul id="sortable-tolerance-pointer">
+	<li class="ui-state-default"><div class="ui-icon ui-icon-arrowthick-1-ne"></div>Pointer tolerance</li>
+	<li class="ui-state-default"><div class="ui-icon ui-icon-arrowthick-1-ne"></div>2</li>
+	<li class="ui-state-default"><div class="ui-icon ui-icon-arrowthick-1-ne"></div>3</li>
+</ul>
+
+</div><!-- End demo -->
+
+<div class="demo-description">
+
+<p>
+
+</p>
+
+</div><!-- End demo-description -->
+
+</body>
+</html>
