@@ -105,7 +105,6 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 
 		//The element's absolute position on the page minus margins
 		this.offset = this.currentItem.offset();
-
 		this.offset = {
 			top: this.offset.top - this.margins.top,
 			left: this.offset.left - this.margins.left
@@ -125,12 +124,14 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 			relative: this._getRelativeOffset() //This is a relative to absolute position minus the actual position calculation - only used for relative positioned helper
 		});
 
+		//Generate the original position
+		this.originalPosition = this._generatePosition(event);
+		this.originalPageX = event.pageX;
+		this.originalPageY = event.pageY;
+
 		//Adjust the mouse offset relative to the helper if 'cursorAt' is supplied
 		if(o.cursorAt)
 			this._adjustOffsetFromHelper(o.cursorAt);
-
-		//Generate the original position
-		this.originalPosition = this._generatePosition(event);
 
 		//Cache the former DOM position
 		this.domPosition = { prev: this.currentItem.prev()[0], parent: this.currentItem.parent()[0] };
@@ -186,7 +187,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 		}
 
 		//Call the internal plugins
-		$.ui.plugin.call(this, "sort", [event, this._ui()]);
+		$.ui.plugin.call(this, "sort", [event, this._uiHash()]);
 
 		//Regenerate the absolute position used for position checks
 		this.positionAbs = this._convertPositionTo("absolute");
@@ -228,7 +229,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 		if($.ui.ddmanager) $.ui.ddmanager.drag(this, event);
 
 		//Call callbacks
-		this._trigger('sort', event, this._ui());
+		this._trigger('sort', event);
 
 		this.lastPositionAbs = this.positionAbs;
 		return false;
@@ -656,8 +657,19 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 
 	_getParentOffset: function() {
 
+
 		//Get the offsetParent and cache its position
-		this.offsetParent = this.helper.offsetParent(); var po = this.offsetParent.offset();
+		this.offsetParent = this.helper.offsetParent();
+		var po = this.offsetParent.offset();
+		
+		// This is a special case where we need to modify a offset calculated on start, since the following happened:
+		// 1. The position of the helper is absolute, so it's position is calculated based on the next positioned parent
+		// 2. The actual offset parent is a child of the scroll parent, and the scroll parent isn't the document, which means that
+		//    the scroll is included in the initial calculation of the offset of the parent, and never recalculated upon drag
+		if(this.cssPosition == 'absolute' && this.scrollParent[0] != document && $.ui.contains(this.scrollParent[0], this.offsetParent[0])) {
+			po.left += this.scrollParent.scrollLeft();
+			po.top += this.scrollParent.scrollTop();
+		}
 
 		if((this.offsetParent[0] == document.body && $.browser.mozilla)	//Ugly FF3 fix
 		|| (this.offsetParent[0].tagName && this.offsetParent[0].tagName.toLowerCase() == 'html' && $.browser.msie)) //Ugly IE fix
@@ -705,8 +717,8 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 		if(o.containment == 'document' || o.containment == 'window') this.containment = [
 			0 - this.offset.relative.left - this.offset.parent.left,
 			0 - this.offset.relative.top - this.offset.parent.top,
-			$(o.containment == 'document' ? document : window).width() - this.offset.relative.left - this.offset.parent.left - this.margins.left - (parseInt(this.currentItem.css("marginRight"),10) || 0),
-			($(o.containment == 'document' ? document : window).height() || document.body.parentNode.scrollHeight) - this.offset.relative.top - this.offset.parent.top - this.margins.top - (parseInt(this.currentItem.css("marginBottom"),10) || 0)
+			$(o.containment == 'document' ? document : window).width() - this.helperProportions.width - this.margins.left,
+			($(o.containment == 'document' ? document : window).height() || document.body.parentNode.scrollHeight) - this.helperProportions.height - this.margins.top
 		];
 
 		if(!(/^(document|window|parent)$/).test(o.containment)) {
@@ -715,10 +727,10 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 			var over = ($(ce).css("overflow") != 'hidden');
 
 			this.containment = [
-				co.left + (parseInt($(ce).css("borderLeftWidth"),10) || 0) - this.offset.relative.left - this.offset.parent.left - this.margins.left,
-				co.top + (parseInt($(ce).css("borderTopWidth"),10) || 0) - this.offset.relative.top - this.offset.parent.top - this.margins.top,
-				co.left + (over ? Math.max(ce.scrollWidth,ce.offsetWidth) : ce.offsetWidth) - (parseInt($(ce).css("borderLeftWidth"),10) || 0) - this.offset.relative.left - this.offset.parent.left - this.margins.left,
-				co.top + (over ? Math.max(ce.scrollHeight,ce.offsetHeight) : ce.offsetHeight) - (parseInt($(ce).css("borderTopWidth"),10) || 0) - this.offset.relative.top - this.offset.parent.top - this.margins.top
+				co.left + (parseInt($(ce).css("borderLeftWidth"),10) || 0) - this.margins.left,
+				co.top + (parseInt($(ce).css("borderTopWidth"),10) || 0) - this.margins.top,
+				co.left+(over ? Math.max(ce.scrollWidth,ce.offsetWidth) : ce.offsetWidth) - (parseInt($(ce).css("borderLeftWidth"),10) || 0) - this.helperProportions.width - this.margins.left,
+				co.top+(over ? Math.max(ce.scrollHeight,ce.offsetHeight) : ce.offsetHeight) - (parseInt($(ce).css("borderTopWidth"),10) || 0) - this.helperProportions.height - this.margins.top
 			];
 		}
 
@@ -728,69 +740,81 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 
 		if(!pos) pos = this.position;
 		var mod = d == "absolute" ? 1 : -1;
-		var scroll = this[(this.cssPosition == 'absolute' ? 'offset' : 'scroll')+'Parent'], scrollIsRootNode = (/(html|body)/i).test(scroll[0].tagName);
+		var o = this.options, scroll = this.cssPosition == 'absolute' && !(this.scrollParent[0] != document && $.ui.contains(this.scrollParent[0], this.offsetParent[0])) ? this.offsetParent : this.scrollParent, scrollIsRootNode = (/(html|body)/i).test(scroll[0].tagName);
 
 		return {
 			top: (
-				pos.top																	// the calculated relative position
-				+ this.offset.relative.top	* mod										// Only for relative positioned nodes: Relative offset from element to offset parent
+				pos.top																	// The absolute mouse position
+				+ this.offset.relative.top * mod										// Only for relative positioned nodes: Relative offset from element to offset parent
 				+ this.offset.parent.top * mod											// The offsetParent's offset without borders (offset + border)
-				+ ( this.cssPosition == 'fixed' ? -this.scrollParent.scrollTop() : ( scrollIsRootNode ? 0 : scroll.scrollTop() ) ) * mod
-				+ this.margins.top * mod												//Add the margin (you don't want the margin counting in intersection methods)
+				- ( this.cssPosition == 'fixed' ? -this.scrollParent.scrollTop() : ( scrollIsRootNode ? 0 : scroll.scrollTop() ) ) * mod
 			),
 			left: (
-				pos.left																// the calculated relative position
-				+ this.offset.relative.left	* mod										// Only for relative positioned nodes: Relative offset from element to offset parent
+				pos.left																// The absolute mouse position
+				+ this.offset.relative.left * mod										// Only for relative positioned nodes: Relative offset from element to offset parent
 				+ this.offset.parent.left * mod											// The offsetParent's offset without borders (offset + border)
-				+ ( this.cssPosition == 'fixed' ? -this.scrollParent.scrollLeft() : ( scrollIsRootNode ? 0 : scroll.scrollLeft() ) ) * mod
-				+ this.margins.left * mod												//Add the margin (you don't want the margin counting in intersection methods)
+				- ( this.cssPosition == 'fixed' ? -this.scrollParent.scrollLeft() : scrollIsRootNode ? 0 : scroll.scrollLeft() ) * mod
 			)
 		};
+		
 	},
 
 	_generatePosition: function(event) {
 
-		var o = this.options, scroll = this[(this.cssPosition == 'absolute' ? 'offset' : 'scroll')+'Parent'], scrollIsRootNode = (/(html|body)/i).test(scroll[0].tagName);
+		var o = this.options, scroll = this.cssPosition == 'absolute' && !(this.scrollParent[0] != document && $.ui.contains(this.scrollParent[0], this.offsetParent[0])) ? this.offsetParent : this.scrollParent, scrollIsRootNode = (/(html|body)/i).test(scroll[0].tagName);
 
-		var position = {
+		// This is another very weird special case that only happens for relative elements:
+		// 1. If the css position is relative
+		// 2. and the scroll parent is the document or similar to the offset parent
+		// we have to refresh the relative offset during the scroll so there are no jumps
+		if(this.cssPosition == 'relative' && !(this.scrollParent[0] != document && this.scrollParent[0] != this.offsetParent[0])) {
+			this.offset.relative = this._getRelativeOffset();
+		}
+		
+		var pageX = event.pageX;
+		var pageY = event.pageY;
+
+		/*
+		 * - Position constraining -
+		 * Constrain the position to a mix of grid, containment.
+		 */
+		 
+		if(this.originalPosition) { //If we are not dragging yet, we won't check for options
+
+			if(this.containment) {
+				if(event.pageX - this.offset.click.left < this.containment[0]) pageX = this.containment[0] + this.offset.click.left;
+				if(event.pageY - this.offset.click.top < this.containment[1]) pageY = this.containment[1] + this.offset.click.top;
+				if(event.pageX - this.offset.click.left > this.containment[2]) pageX = this.containment[2] + this.offset.click.left;
+				if(event.pageY - this.offset.click.top > this.containment[3]) pageY = this.containment[3] + this.offset.click.top;
+			}
+			
+			if(o.grid) {
+				var top = this.originalPageY + Math.round((pageY - this.originalPageY) / o.grid[1]) * o.grid[1];
+				pageY = this.containment ? (!(top - this.offset.click.top < this.containment[1] || top - this.offset.click.top > this.containment[3]) ? top : (!(top - this.offset.click.top < this.containment[1]) ? top - o.grid[1] : top + o.grid[1])) : top;
+
+				var left = this.originalPageX + Math.round((pageX - this.originalPageX) / o.grid[0]) * o.grid[0];
+				pageX = this.containment ? (!(left - this.offset.click.left < this.containment[0] || left - this.offset.click.left > this.containment[2]) ? left : (!(left - this.offset.click.left < this.containment[0]) ? left - o.grid[0] : left + o.grid[0])) : left;
+			}
+
+		}
+
+		return {
 			top: (
-				event.pageY																// The absolute mouse position
+				pageY																// The absolute mouse position
 				- this.offset.click.top													// Click offset (relative to the element)
 				- this.offset.relative.top												// Only for relative positioned nodes: Relative offset from element to offset parent
 				- this.offset.parent.top												// The offsetParent's offset without borders (offset + border)
 				+ ( this.cssPosition == 'fixed' ? -this.scrollParent.scrollTop() : ( scrollIsRootNode ? 0 : scroll.scrollTop() ) )
 			),
 			left: (
-				event.pageX																// The absolute mouse position
+				pageX																// The absolute mouse position
 				- this.offset.click.left												// Click offset (relative to the element)
 				- this.offset.relative.left												// Only for relative positioned nodes: Relative offset from element to offset parent
 				- this.offset.parent.left												// The offsetParent's offset without borders (offset + border)
-				+ ( this.cssPosition == 'fixed' ? -this.scrollParent.scrollLeft() : ( scrollIsRootNode ? 0 : scroll.scrollLeft() ) )
+				+ ( this.cssPosition == 'fixed' ? -this.scrollParent.scrollLeft() : scrollIsRootNode ? 0 : scroll.scrollLeft() )
 			)
 		};
-
-		if(!this.originalPosition) return position;										//If we are not dragging yet, we won't check for options
-
-		/*
-		 * - Position constraining -
-		 * Constrain the position to a mix of grid, containment.
-		 */
-		if(this.containment) {
-			if(position.left < this.containment[0]) position.left = this.containment[0];
-			if(position.top < this.containment[1]) position.top = this.containment[1];
-			if(position.left + this.helperProportions.width > this.containment[2]) position.left = this.containment[2] - this.helperProportions.width;
-			if(position.top + this.helperProportions.height > this.containment[3]) position.top = this.containment[3] - this.helperProportions.height;
-		}
-
-		if(o.grid) {
-			var top = this.originalPosition.top + Math.round((position.top - this.originalPosition.top) / o.grid[1]) * o.grid[1];
-			position.top = this.containment ? (!(top < this.containment[1] || top > this.containment[3]) ? top : (!(top < this.containment[1]) ? top - o.grid[1] : top + o.grid[1])) : top;
-
-			var left = this.originalPosition.left + Math.round((position.left - this.originalPosition.left) / o.grid[0]) * o.grid[0];
-			position.left = this.containment ? (!(left < this.containment[0] || left > this.containment[2]) ? left : (!(left < this.containment[0]) ? left - o.grid[0] : left + o.grid[0])) : left;
-		}
-
-		return position;
+		
 	},
 
 	_rearrange: function(event, i, a, hardRefresh) {
@@ -870,14 +894,14 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 	},
 
 	_trigger: function(type, event, inst, noPropagation) {
-		$.ui.plugin.call(this, type, [event, this._ui(inst)]);
-		if(!noPropagation) $.widget.prototype._trigger.call(this, type, event, this._ui(inst));
+		$.ui.plugin.call(this, type, [event, this._uiHash(inst)]);
+		if(!noPropagation) $.widget.prototype._trigger.call(this, type, event, this._uiHash(inst));
 		if(event.returnValue === false) this.cancel();
 	},
 
 	plugins: {},
 
-	_ui: function(inst) {
+	_uiHash: function(inst) {
 		var self = inst || this;
 		return {
 			helper: self.helper,
@@ -981,24 +1005,6 @@ $.ui.plugin.add("sortable", "scroll", {
 
 		if(scrolled !== false && $.ui.ddmanager && !o.dropBehaviour)
 			$.ui.ddmanager.prepareOffsets(i, event);
-
-
-
-		//This is a special case where we need to modify a offset calculated on start, since the following happened:
-		// 1. The position of the helper is absolute, so it's position is calculated based on the next positioned parent
-		// 2. The actual offset parent is a child of the scroll parent, and the scroll parent isn't the document, which means that
-		//    the scroll is included in the initial calculation of the offset of the parent, and never recalculated upon drag
-		if(scrolled !== false && i.cssPosition == 'absolute' && i.scrollParent[0] != document && $.ui.contains(i.scrollParent[0], i.offsetParent[0])) {
-			i.offset.parent = i._getParentOffset();
-		}
-		
-		// This is another very weird special case that only happens for relative elements:
-		// 1. If the css position is relative
-		// 2. and the scroll parent is the document or similar to the offset parent
-		// we have to refresh the relative offset during the scroll so there are no jumps
-		if(scrolled !== false && i.cssPosition == 'relative' && !(i.scrollParent[0] != document && i.scrollParent[0] != i.offsetParent[0])) {
-			i.offset.relative = i._getRelativeOffset();
-		}
 
 	}
 });

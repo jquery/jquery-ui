@@ -123,11 +123,6 @@ $.widget("ui.draggable", $.extend({}, $.ui.mouse, {
 		//Compute the helpers position
 		this.position = this._generatePosition(event);
 		this.positionAbs = this._convertPositionTo("absolute");
-		
-		/*
-		 * - Position constraining -
-		 * Constrain the position to a mix of grid, containment.
-		 */
 
 		//Call plugins and callbacks and use the resulting position if something is returned
 		if(!noPropagation) this.position = this._trigger("drag", event) || this.position;
