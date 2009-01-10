@@ -150,7 +150,7 @@ $.widget("ui.tabs", {
 			// highlight selected tab
 			this.$panels.addClass(o.hideClass);
 			this.$lis.removeClass(o.selectedClass);
-			if (o.selected !== null) {
+			if (o.selected !== null && this.$tabs.length) { // check for length avoids error when initializing empty list
 				this.$panels.eq(o.selected).removeClass(o.hideClass);
 				var classes = [o.selectedClass];
 				if (o.deselectable) classes.push(o.deselectableClass);
