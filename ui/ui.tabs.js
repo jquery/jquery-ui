@@ -32,7 +32,7 @@ $.widget("ui.tabs", {
 				$this.removeData(prefix + '.tabs');
 			});
 		});
-		this.$lis.add(this.$panels).each(function() {
+		this.$lis.unbind('.tabs').add(this.$panels).each(function() {
 			if ($.data(this, 'destroy.tabs'))
 				$(this).remove();
 			else
@@ -77,24 +77,6 @@ $.widget("ui.tabs", {
 		this.$panels = $([]);
 
 		var self = this, o = this.options;
-
-		this.$lis
-			.hover(
-				function() {
-					$(this).addClass('ui-state-hover');
-				},
-				function() {
-					$(this).removeClass('ui-state-hover');
-				}
-			);
-
-		this.$tabs
-			.focus(function() {
-				$(this).parent().addClass('ui-state-focus');
-			})
-			.blur(function() {
-				$(this).parent().removeClass('ui-state-focus');
-			});
 
 		this.$tabs.each(function(i, a) {
 			// inline tab
@@ -188,10 +170,21 @@ $.widget("ui.tabs", {
 				// just trigger show event
 				else onShow();
 			}
+			
+			// states
+			var handleState = function(state, el) {
+			    if (el.is(':not(.' + o.disabledClass + ')')) el.toggleClass('ui-state-' + state);
+			};		
+			this.$lis.bind('mouseover.tabs mouseout.tabs', function() {
+			    handleState('hover', $(this));
+			});
+    		this.$tabs.bind('focus.tabs blur.tabs', function() {
+    		    handleState('focus', $(this).parents('li:first'));
+    		});
 
 			// clean up to avoid memory leaks in certain versions of IE 6
 			$(window).bind('unload', function() {
-				self.$tabs.unbind('.tabs');
+				self.$lis.add(self.$tabs).unbind('.tabs');
 				self.$lis = self.$tabs = self.$panels = null;
 			});
 
@@ -342,7 +335,7 @@ $.widget("ui.tabs", {
 			return false;
 
 		});
-
+		
 		// disable click if event is configured to something else
 		if (o.event != 'click') this.$tabs.bind('click.tabs', function(){return false;});
 
