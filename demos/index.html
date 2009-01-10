@@ -164,7 +164,7 @@
 				updateDemoNotes();
 			});
 			if (/default.html$/.test(path)) {
-				$.get("../documentation/docs-" + path.match(/demos\/(.+)\//)[1] + ".html", function(html) {
+				$.get("documentation/docs-" + path.match(/demos\/(.+)\//)[1] + ".html", function(html) {
 					$("#demo-notes").after(html);
 					$("#widget-docs").tabs();
 					$(".param-header").click(function() {

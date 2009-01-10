@@ -234,7 +234,7 @@
 	</target>
 			
 	<target name="docs-process" depends="docs-download">
-		<property name="docs.dir" value="${ui.dir}/documentation" />
+		<property name="docs.dir" value="${ui.dir}/demos/documentation" />
 		<delete dir="${docs.dir}" />
 		<mkdir dir="${docs.dir}" />
 		<xslt includes="docs-*.xml" destdir="${docs.dir}" style="build/style.xsl" />
