@@ -487,7 +487,7 @@ $.widget("ui.tabs", {
 				try {
 					o.ajaxOptions.success(r, s);
 				}
-				catch (event) {}
+				catch (er) {}
 
 				// This callback is required because the switch has to take
 				// place after loading has completed. Call last in order to
