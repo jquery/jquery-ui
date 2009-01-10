@@ -38,7 +38,7 @@
 	<property description="YUI Compressor" name="yui-jar" value="${build.dir}/yuicompressor-2.4.2.jar" />
 	<property description="Dean Edwards Packer" name="pack.php" value="${build.dir}/pack.php" />
 	
-	<target name="deploy-release" depends="concatenate, minify, pack, copy, replace-version, prepend-header, zip" description="Release builder">
+	<target name="deploy-release" depends="docs-process, concatenate, minify, pack, copy, replace-version, prepend-header, zip" description="Release builder">
 	</target>
 
 	<target name="replace-version">

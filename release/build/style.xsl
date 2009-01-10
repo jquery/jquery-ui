@@ -209,7 +209,7 @@
 								
 								<h4>Code sample:</h4>
 								<xsl:for-each select="example">
-									<p><xsl:value-of select="desc"/></p>
+									<h5><xsl:value-of select="desc"/></h5>
 									<code>
 										<xsl:value-of select="code"/>
 									</code>

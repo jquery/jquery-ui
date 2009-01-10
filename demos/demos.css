@@ -206,7 +206,7 @@ div.demo-description {
 #demo-link { font-size:11px;  padding-top: 6px; clear: both; overflow: hidden; }
 #demo-link a span.ui-icon { float:left; margin-right:3px; }
 
-#widget-docs { margin:20px 0 0; }
+#widget-docs { margin:20px 0 0; border: none; }
 
 #widget-docs h2, #widget-docs h3, #widget-docs h4, #widget-docs p, #widget-docs ul, #widget-docs code { margin:0; padding:0; }
 #widget-docs code { display:block; color:#444; font-size:.9em; margin:0 0 1em; }
