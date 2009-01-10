@@ -21,7 +21,7 @@ $.widget("ui.tabs", {
 
 	destroy: function() {
 		var o = this.options;
-		this.element.unbind('.tabs')
+		this.list.unbind('.tabs')
 			.removeClass(o.navClass).removeData('tabs');
 		this.$tabs.each(function() {
 			var href = $.data(this, 'href.tabs');
@@ -66,13 +66,14 @@ $.widget("ui.tabs", {
 	},
 
 	_cookie: function() {
-		var cookie = this.cookie || (this.cookie = 'ui-tabs-' + $.data(this.element[0]));
+		var cookie = this.cookie || (this.cookie = 'ui-tabs-' + $.data(this.list[0]));
 		return $.cookie.apply(null, [cookie].concat($.makeArray(arguments)));
 	},
 
 	_tabify: function(init) {
 
-		this.$lis = $('li:has(a[href])', this.element.is('div') ? $('> ul:first', this.element) : this.element);
+		this.list = this.element.is('div') ? this.element.children('ul:first, ol:first').eq(0) : this.element;
+		this.$lis = $('li:has(a[href])', this.list);
 		this.$tabs = this.$lis.map(function() { return $('a', this)[0]; });
 		this.$panels = $([]);
 
@@ -91,7 +92,7 @@ $.widget("ui.tabs", {
 				var $panel = $('#' + id);
 				if (!$panel.length) {
 					$panel = $(o.panelTemplate).attr('id', id).addClass(o.panelClass)
-						.insertAfter(self.$panels[i - 1] || self.element);
+						.insertAfter(self.$panels[i - 1] || self.list);
 					$panel.data('destroy.tabs', true);
 				}
 				self.$panels = self.$panels.add($panel);
@@ -108,11 +109,8 @@ $.widget("ui.tabs", {
 			if (this.element.is('div')) {
 			    // TODO replace hardcoded class names
 			    this.element.addClass('ui-tabs ui-widget ui-widget-content ui-corner-all');
-			    $('> ul:first', this.element).addClass(o.navClass);
 			}
-			else {
-			    this.element.addClass(o.navClass);
-			}
+			this.list.addClass(o.navClass);
 			this.$lis.addClass(o.tabClass);
 			this.$panels.addClass(o.panelClass);
 
@@ -360,8 +358,8 @@ $.widget("ui.tabs", {
 		}
 		$panel.addClass(o.panelClass);
 		if (index >= this.$lis.length) {
-			$li.appendTo(this.element);
-			$panel.appendTo(this.element[0].parentNode);
+			$li.appendTo(this.list);
+			$panel.appendTo(this.list[0].parentNode);
 		}
 		else {
 			$li.insertBefore(this.$lis[index]);
