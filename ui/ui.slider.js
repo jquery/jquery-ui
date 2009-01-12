@@ -18,9 +18,7 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 	_init: function() {
 
 		var self = this;
-
 		this._keySliding = false;
-
 		this._handleIndex = null;
 
 		this._mouseInit();
@@ -35,8 +33,8 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 		this.range = $([]);
 
 		if (this.options.range) {
+			
 			if (this.options.range === true) {
-				//this.range = $('<a href="#"></a>');
 				this.range = $('<div></div>');
 				if (!this.options.values) this.options.values = [this._valueMin(), this._valueMin()];
 				if (this.options.values.length && this.options.values.length != 2) {
@@ -45,6 +43,7 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 			} else {
 				this.range = $('<div></div>');
 			}
+
 			this.range
 				.appendTo(this.element)
 				.addClass("ui-slider-range"
@@ -55,6 +54,7 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 			(oRange == "max") && (oOrientation == "horizontal") && this.range.css({ right : 0 });
 			(oRange == "min") && (oOrientation == "vertical") && this.range.css({ bottom : 0 });
 			(oRange == "max") && (oOrientation == "vertical") && this.range.css({ top : 0 });
+			
 		}
 
 		if ($(".ui-slider-handle", this.element).length == 0)
@@ -83,9 +83,10 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 
 		this.handles.each(function(i) {
 			$(this).data("index.ui-slider-handle", i);
-		})
+		});
 
 		this.handles.keydown(function(event) {
+
 			var index = $(this).data("index.ui-slider-handle");
 
 			if (self.options.disabled)
@@ -131,13 +132,16 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 			}
 
 			self._slide(event, index, newVal);
+
 		}).keyup(function(event) {
+
 			if (self._keySliding) {
 				self._stop(event);
 				self._change(event);
 				self._keySliding = false;
 				$(this).removeClass("ui-state-active");
 			}
+
 		});
 
 		this._refreshValue();
@@ -209,21 +213,25 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 	},
 
 	_mouseDrag: function(event) {
+		
 		var position = { x: event.pageX, y: event.pageY };
 		var normValue = this._normValueFromMouse(position);
 
 		this._slide(event, this._handleIndex, normValue);
 
 		return false;
+		
 	},
 
 	_mouseStop: function(event) {
+		
 		this.handles.removeClass("ui-state-active");
 		this._stop(event);
 		this._change(event);
 		this._handleIndex = null;
 
 		return false;
+		
 	},
 
 	_normValueFromMouse: function(position) {
@@ -243,18 +251,16 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 		if ('vertical' == this._orientation())
 			percentMouse = 1 - percentMouse;
 
-		var valueTotal = this._valueMax() - this._valueMin();
-
-		var valueMouse = percentMouse * valueTotal;
-
-		var valueMouseModStep = valueMouse % this.options.step;
-
-		var normValue = this._valueMin() + valueMouse - valueMouseModStep;
+		var valueTotal = this._valueMax() - this._valueMin(),
+			valueMouse = percentMouse * valueTotal,
+			valueMouseModStep = valueMouse % this.options.step,
+			normValue = this._valueMin() + valueMouse - valueMouseModStep;
 
 		if (valueMouseModStep > (this.options.step / 2))
 			normValue += this.options.step;
 
 		return normValue;
+		
 	},
 
 	_start: function(event) {
@@ -264,11 +270,15 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 	},
 
 	_slide: function(event, index, newVal) {
+		
 		if (this.options.values && this.options.values.length) {
+
 			var handle = this.handles[index];
 			var otherVal = this.values(index ? 0 : 1);
+
 			if ((index == 0 && newVal >= otherVal) || (index == 1 && newVal <= otherVal))
 				newVal = otherVal;
+
 			if (newVal != this.values(index)) {
 				var newValues = this.values();
 				newValues[index] = newVal;
@@ -283,7 +293,9 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 					this.values(index, newVal);
 				}
 			}
+
 		} else {
+
 			if (newVal != this.value()) {
 				// A slide can be canceled by returning false from the slide callback
 				var allowed = this._trigger("slide", event, {
@@ -292,7 +304,9 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 				if (allowed !== false)
 					this._setData('value', newVal);
 			}
+
 		}
+
 	},
 
 	_stop: function(event) {
@@ -308,15 +322,18 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 	},
 
 	value: function(newValue) {
+
 		if (arguments.length) {
 			this._setData("value", newValue);
 			this._change();
 		}
 
 		return this._value();
+
 	},
 
 	values: function(index, newValue) {
+
 		if (arguments.length > 1) {
 			this.options.values[index] = newValue;
 			this._refreshValue();
@@ -332,9 +349,11 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 		} else {
 			return this._values();
 		}
+
 	},
 
 	_setData: function(key, value) {
+
 		$.widget.prototype._setData.apply(this, arguments);
 
 		switch (key) {
@@ -348,6 +367,7 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 				this._refreshValue();
 				break;
 		}
+
 	},
 
 	_orientation: function() {
@@ -360,19 +380,21 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 
 	_step: function() {
 		var step = this.options.step;
-
 		return step;
 	},
 
 	_value: function() {
+
 		var val = this.options.value;
 		if (val < this._valueMin()) val = this._valueMin();
 		if (val > this._valueMax()) val = this._valueMax();
 
 		return val;
+
 	},
 
 	_values: function(index) {
+
 		if (arguments.length) {
 			var val = this.options.values[index];
 			if (val < this._valueMin()) val = this._valueMin();
@@ -382,21 +404,21 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 		} else {
 			return this.options.values;
 		}
+
 	},
 
 	_valueMin: function() {
 		var valueMin = this.options.min;
-
 		return valueMin;
 	},
 
 	_valueMax: function() {
 		var valueMax = this.options.max;
-
 		return valueMax;
 	},
 
 	_refreshValue: function() {
+
 		var oRange = this.options.range, oOrientation = this._orientation();
 
 		if (this.options.values && this.options.values.length) {
@@ -424,6 +446,7 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 			(oRange == "min") && (oOrientation == "vertical") && this.range.css({ top: (100 - valPercent) + '%', height: valPercent + '%' });
 			(oRange == "max") && (oOrientation == "vertical") && this.range.css({ bottom: valPercent + '%', height: (100 - valPercent) + '%' });
 		}
+
 	}
 
 }));
