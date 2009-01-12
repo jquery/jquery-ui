@@ -59,12 +59,21 @@
 			var percentage = Math.round(leftVal / remainder * 100);
 			scrollbar.slider("value", percentage);
 		}
+		//if the slider is 100% and window gets larger, reveal content
+		function reflowContent(){
+				var showing = scrollContent.width() + parseInt( scrollContent.css('margin-left') );
+				var gap = scrollPane.width() - showing;
+				if(gap > 0){
+					scrollContent.css('margin-left', parseInt( scrollContent.css('margin-left') ) + gap);
+				}
+		}
 		
 		//change handle position on window resize
 		$(window)
 		.resize(function(){
 				resetValue();
 				sizeScrollbar();
+				reflowContent();
 		});
 		//init scrollbar size
 		setTimeout(sizeScrollbar,10);//safari wants a timeout
