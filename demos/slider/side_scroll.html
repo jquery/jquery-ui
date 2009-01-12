@@ -13,7 +13,8 @@
 		.scroll-content { width: 2440px;  }
 		.scroll-content-item { width: 100px; height: 75px; float: left; margin: 10px; font-size: 3em; padding-top: 25px; text-align: center; }
 		.scroll-bar-wrap { clear: left; padding: 0 4px 0 2px; margin: 0 -1px -1px -1px; }
-		.scroll-bar-wrap .ui-slider { background: none; border:0; margin: 0 auto; height: 2em;   }
+		.scroll-bar-wrap .ui-slider { background: none; border:0; height: 2em;   }
+		.scroll-bar-wrap .ui-handle-helper-parent { position: relative; width: 100%; height: 100%; margin: 0 auto; }
 		.scroll-bar-wrap .ui-slider-handle { top:.2em; height: 1.5em; }
 		.scroll-bar-wrap .ui-slider-handle .ui-icon { margin: -8px auto 0; position: relative; top: 50%; }
 	</style>
@@ -32,7 +33,9 @@
 		});
 		
 		//append icon to handle
-		scrollbar.find('.ui-slider-handle').append('<span class="ui-icon ui-icon-grip-dotted-vertical"/>');
+		var handleHelper = scrollbar.find('.ui-slider-handle')
+		.append('<span class="ui-icon ui-icon-grip-dotted-vertical"/>')
+		.wrap('<div class="ui-handle-helper-parent" /></div>').parent();
 		
 		//change overflow to hidden now that slider handles the scrolling
 		scrollPane.css('overflow','hidden');
@@ -46,7 +49,7 @@
 				width: handleSize,
 				'margin-left': -handleSize/2
 			});
-			scrollbar.width('').width( scrollbar.width() - handleSize);
+			handleHelper.width('').width( scrollbar.width() - handleSize);
 		}
 		
 		//reset slider value based on scroll content position
