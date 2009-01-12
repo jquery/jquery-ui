@@ -17,28 +17,29 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 
 	_init: function() {
 
-		var self = this;
+		var self = this, o = this.options;
 		this._keySliding = false;
 		this._handleIndex = null;
+		this.orientation = o.orientation == 'auto' ? (this.element[0].offsetWidth/this.element[0].offsetHeight > 1 ? 'horizontal' : 'vertical') : o.orientation;
 
 		this._mouseInit();
 
 		this.element
 			.addClass("ui-slider"
-				+ " ui-slider-" + this._orientation()
+				+ " ui-slider-" + this.orientation
 				+ " ui-widget"
 				+ " ui-widget-content"
 				+ " ui-corner-all");
 
 		this.range = $([]);
 
-		if (this.options.range) {
+		if (o.range) {
 			
-			if (this.options.range === true) {
+			if (o.range === true) {
 				this.range = $('<div></div>');
-				if (!this.options.values) this.options.values = [this._valueMin(), this._valueMin()];
-				if (this.options.values.length && this.options.values.length != 2) {
-					this.options.values = [this.options.values[0], this.options.values[0]];
+				if (!o.values) o.values = [this._valueMin(), this._valueMin()];
+				if (o.values.length && o.values.length != 2) {
+					o.values = [o.values[0], o.values[0]];
 				}
 			} else {
 				this.range = $('<div></div>');
@@ -49,11 +50,10 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 				.addClass("ui-slider-range"
 					+ " ui-widget-header");
 
-			var oRange = this.options.range, oOrientation = this._orientation();
-			(oRange == "min") && (oOrientation == "horizontal") && this.range.css({ left : 0 });
-			(oRange == "max") && (oOrientation == "horizontal") && this.range.css({ right : 0 });
-			(oRange == "min") && (oOrientation == "vertical") && this.range.css({ bottom : 0 });
-			(oRange == "max") && (oOrientation == "vertical") && this.range.css({ top : 0 });
+			(o.range == "min") && (this.orientation == "horizontal") && this.range.css({ left : 0 });
+			(o.range == "max") && (this.orientation == "horizontal") && this.range.css({ right : 0 });
+			(o.range == "min") && (this.orientation == "vertical") && this.range.css({ bottom : 0 });
+			(o.range == "max") && (this.orientation == "vertical") && this.range.css({ top : 0 });
 			
 		}
 
@@ -62,8 +62,8 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 				.appendTo(this.element)
 				.addClass("ui-slider-handle");
 
-		if (this.options.values && this.options.values.length) {
-			while ($(".ui-slider-handle", this.element).length < this.options.values.length)
+		if (o.values && o.values.length) {
+			while ($(".ui-slider-handle", this.element).length < o.values.length)
 				$('<a href="#"></a>')
 					.appendTo(this.element)
 					.addClass("ui-slider-handle");
@@ -237,7 +237,7 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 	_normValueFromMouse: function(position) {
 
 		var pixelTotal, pixelMouse;
-		if ('horizontal' == this._orientation()) {
+		if ('horizontal' == this.orientation) {
 			pixelTotal = this.elementSize.width;
 			pixelMouse = position.x - this.elementOffset.left;
 		} else {
@@ -248,7 +248,7 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 		var percentMouse = (pixelMouse / pixelTotal);
 		if (percentMouse > 1) percentMouse = 1;
 		if (percentMouse < 0) percentMouse = 0;
-		if ('vertical' == this._orientation())
+		if ('vertical' == this.orientation)
 			percentMouse = 1 - percentMouse;
 
 		var valueTotal = this._valueMax() - this._valueMin(),
@@ -358,6 +358,9 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 
 		switch (key) {
 			case 'orientation':
+
+				this.orientation = this.options.orientation == 'auto' ? (this.element[0].offsetWidth/this.element[0].offsetHeight > 1 ? 'horizontal' : 'vertical') : this.options.orientation;
+
 				this.element
 					.removeClass("ui-slider-horizontal ui-slider-vertical")
 					.addClass("ui-slider-" + this._orientation());
@@ -368,14 +371,6 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 				break;
 		}
 
-	},
-
-	_orientation: function() {
-		var orientation = this.options.orientation;
-		if (orientation != 'horizontal' && orientation != 'vertical')
-			orientation = 'horizontal';
-
-		return orientation;
 	},
 
 	_step: function() {
@@ -419,15 +414,15 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 
 	_refreshValue: function() {
 
-		var oRange = this.options.range, oOrientation = this._orientation();
+		var oRange = this.options.range;
 
 		if (this.options.values && this.options.values.length) {
 			var self = this, vp0, vp1;
 			this.handles.each(function(i, j) {
 				var valPercent = (self.values(i) - self._valueMin()) / (self._valueMax() - self._valueMin()) * 100;
-				$(this).css(oOrientation == 'horizontal' ? 'left' : 'bottom', valPercent + '%');
+				$(this).css(self.orientation == 'horizontal' ? 'left' : 'bottom', valPercent + '%');
 				if (self.options.range === true) {
-					if (oOrientation == 'horizontal') {
+					if (self.orientation == 'horizontal') {
 						(i == 0) && self.range.css('left', valPercent + '%');
 						(i == 1) && self.range.css('width', (valPercent - lastValPercent) + '%');
 					} else {
@@ -439,12 +434,12 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 			});
 		} else {
 			var valPercent = (this.value() - this._valueMin()) / (this._valueMax() - this._valueMin()) * 100;
-			this.handle.css(oOrientation == 'horizontal' ? 'left' : 'bottom', valPercent + '%');
+			this.handle.css(this.orientation == 'horizontal' ? 'left' : 'bottom', valPercent + '%');
 
-			(oRange == "min") && (oOrientation == "horizontal") && this.range.css({ left: 0, width: valPercent + '%' });
-			(oRange == "max") && (oOrientation == "horizontal") && this.range.css({ left: valPercent + '%', width: (100 - valPercent) + '%' });
-			(oRange == "min") && (oOrientation == "vertical") && this.range.css({ top: (100 - valPercent) + '%', height: valPercent + '%' });
-			(oRange == "max") && (oOrientation == "vertical") && this.range.css({ bottom: valPercent + '%', height: (100 - valPercent) + '%' });
+			(oRange == "min") && (this.orientation == "horizontal") && this.range.css({ left: 0, width: valPercent + '%' });
+			(oRange == "max") && (this.orientation == "horizontal") && this.range.css({ left: valPercent + '%', width: (100 - valPercent) + '%' });
+			(oRange == "min") && (this.orientation == "vertical") && this.range.css({ top: (100 - valPercent) + '%', height: valPercent + '%' });
+			(oRange == "max") && (this.orientation == "vertical") && this.range.css({ bottom: valPercent + '%', height: (100 - valPercent) + '%' });
 		}
 
 	}
@@ -460,7 +455,7 @@ $.extend($.ui.slider, {
 		distance: 0,
 		max: 100,
 		min: 0,
-		orientation: 'horizontal',
+		orientation: 'auto',
 		range: false,
 		step: 1,
 		value: 0,
