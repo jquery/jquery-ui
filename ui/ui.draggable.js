@@ -370,7 +370,6 @@ $.widget("ui.draggable", $.extend({}, $.ui.mouse, {
 
 	_trigger: function(type, event) {
 		$.ui.plugin.call(this, type, [event, this._uiHash()]);
-		if(type == "drag") this.positionAbs = this._convertPositionTo("absolute"); //The absolute position has to be recalculated after plugins
 		$.widget.prototype._trigger.call(this, type, event, this._uiHash());
 		return event.returnValue;
 	},
