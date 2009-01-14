@@ -1,13 +1,13 @@
 /*!
- * jQuery JavaScript Library v1.3rc2
+ * jQuery JavaScript Library v1.3
  * http://jquery.com/
  *
  * Copyright (c) 2009 John Resig
  * Dual licensed under the MIT and GPL licenses.
  * http://docs.jquery.com/License
  *
- * Date: 2009-01-12 19:11:21 -0500 (Mon, 12 Jan 2009)
- * Revision: 6100
+ * Date: 2009-01-13 12:50:31 -0500 (Tue, 13 Jan 2009)
+ * Revision: 6104
  */
 (function(){
 
@@ -99,7 +99,7 @@ jQuery.fn = jQuery.prototype = {
 	selector: "",
 
 	// The current version of jQuery being used
-	jquery: "1.3rc2",
+	jquery: "1.3",
 
 	// The number of elements contained in the matched element set
 	size: function() {
@@ -1443,7 +1443,7 @@ var Sizzle = function(selector, context, results, seed) {
 				selector = selector.replace( Expr.match.POS, "" );
 			}
 
-			set = Sizzle.filter( later, Sizzle( selector, context ) );
+			set = Sizzle.filter( later, Sizzle( /\s$/.test(selector) ? selector + "*" : selector, context ) );
 		} else {
 			set = Expr.relative[ parts[0] ] ?
 				[ context ] :
@@ -1657,7 +1657,7 @@ var Expr = Sizzle.selectors = {
 		ID: /#((?:[\w\u00c0-\uFFFF_-]|\\.)+)/,
 		CLASS: /\.((?:[\w\u00c0-\uFFFF_-]|\\.)+)/,
 		NAME: /\[name=['"]*((?:[\w\u00c0-\uFFFF_-]|\\.)+)['"]*\]/,
-		ATTR: /\[((?:[\w\u00c0-\uFFFF_-]|\\.)+)\s*(?:(\S?=)\s*(['"]*)(.*?)\3|)\]/,
+		ATTR: /\[\s*((?:[\w\u00c0-\uFFFF_-]|\\.)+)\s*(?:(\S?=)\s*(['"]*)(.*?)\3|)\s*\]/,
 		TAG: /^((?:[\w\u00c0-\uFFFF\*_-]|\\.)+)/,
 		CHILD: /:(only|nth|last|first)-child(?:\((even|odd|[\dn+-]*)\))?/,
 		POS: /:(nth|eq|gt|lt|first|last|even|odd)(?:\((\d*)\))?(?=[^-]|$)/,
@@ -1666,6 +1666,11 @@ var Expr = Sizzle.selectors = {
 	attrMap: {
 		"class": "className",
 		"for": "htmlFor"
+	},
+	attrHandle: {
+		href: function(elem){
+			return elem.getAttribute("href");
+		}
 	},
 	relative: {
 		"+": function(checkSet, part){
@@ -1720,7 +1725,7 @@ var Expr = Sizzle.selectors = {
 				checkFn = dirNodeCheck;
 			}
 
-			checkFn("parentNode", part, doneName, checkSet, nodeCheck);
+			checkFn("parentNode", part, doneName, checkSet, nodeCheck, isXML);
 		},
 		"~": function(checkSet, part, isXML){
 			var doneName = "done" + (done++), checkFn = dirCheck;
@@ -1730,7 +1735,7 @@ var Expr = Sizzle.selectors = {
 				checkFn = dirNodeCheck;
 			}
 
-			checkFn("previousSibling", part, doneName, checkSet, nodeCheck);
+			checkFn("previousSibling", part, doneName, checkSet, nodeCheck, isXML);
 		}
 	},
 	find: {
@@ -1978,7 +1983,7 @@ var Expr = Sizzle.selectors = {
 			return match.test( elem.className );
 		},
 		ATTR: function(elem, match){
-			var result = elem[ match[1] ] || elem.getAttribute( match[1] ), value = result + "", type = match[2], check = match[4];
+			var result = Expr.attrHandle[ match[1] ] ? Expr.attrHandle[ match[1] ]( elem ) : elem[ match[1] ] || elem.getAttribute( match[1] ), value = result + "", type = match[2], check = match[4];
 			return result == null ?
 				false :
 				type === "=" ?
@@ -2083,9 +2088,10 @@ try {
 	root.removeChild( form );
 })();
 
-// Check to see if the browser returns only elements
-// when doing getElementsByTagName("*")
 (function(){
+	// Check to see if the browser returns only elements
+	// when doing getElementsByTagName("*")
+
 	// Create a fake element
 	var div = document.createElement("div");
 	div.appendChild( document.createComment("") );
@@ -2109,6 +2115,14 @@ try {
 			}
 
 			return results;
+		};
+	}
+
+	// Check to see if an attribute returns normalized href attributes
+	div.innerHTML = "<a href='#'></a>";
+	if ( div.firstChild.getAttribute("href") !== "#" ) {
+		Expr.attrHandle.href = function(elem){
+			return elem.getAttribute("href", 2);
 		};
 	}
 })();
@@ -2141,7 +2155,7 @@ if ( document.documentElement.getElementsByClassName ) {
 	};
 }
 
-function dirNodeCheck( dir, cur, doneName, checkSet, nodeCheck ) {
+function dirNodeCheck( dir, cur, doneName, checkSet, nodeCheck, isXML ) {
 	for ( var i = 0, l = checkSet.length; i < l; i++ ) {
 		var elem = checkSet[i];
 		if ( elem ) {
@@ -2155,7 +2169,7 @@ function dirNodeCheck( dir, cur, doneName, checkSet, nodeCheck ) {
 					break;
 				}
 
-				if ( elem.nodeType === 1 )
+				if ( elem.nodeType === 1 && !isXML )
 					elem[doneName] = i;
 
 				if ( elem.nodeName === cur ) {
@@ -2171,7 +2185,7 @@ function dirNodeCheck( dir, cur, doneName, checkSet, nodeCheck ) {
 	}
 }
 
-function dirCheck( dir, cur, doneName, checkSet, nodeCheck ) {
+function dirCheck( dir, cur, doneName, checkSet, nodeCheck, isXML ) {
 	for ( var i = 0, l = checkSet.length; i < l; i++ ) {
 		var elem = checkSet[i];
 		if ( elem ) {
@@ -2185,7 +2199,8 @@ function dirCheck( dir, cur, doneName, checkSet, nodeCheck ) {
 				}
 
 				if ( elem.nodeType === 1 ) {
-					elem[doneName] = i;
+					if ( !isXML )
+						elem[doneName] = i;
 
 					if ( typeof cur !== "string" ) {
 						if ( elem === cur ) {
@@ -2977,7 +2992,7 @@ jQuery( window ).bind( 'unload', function(){
 		id = "script" + (new Date).getTime();
 
 	div.style.display = "none";
-	div.innerHTML = '   <link/><table></table><a href="/a" style="color:red;float:left;opacity:.5;">a</a><select><option>text</option></select><object><param></object>';
+	div.innerHTML = '   <link/><table></table><a href="/a" style="color:red;float:left;opacity:.5;">a</a><select><option>text</option></select><object><param/></object>';
 
 	var all = div.getElementsByTagName("*"),
 		a = div.getElementsByTagName("a")[0];
