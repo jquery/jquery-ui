@@ -69,6 +69,7 @@ $.widget("ui.dialog", {
 				}),
 
 			uiDialogContent = this.element
+				.show()
 				.removeAttr('title')
 				.addClass(
 					'ui-dialog-content ' +
