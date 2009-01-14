@@ -368,13 +368,11 @@ $.widget("ui.dialog", {
 					pTop += 0;
 					break;
 				case 'bottom':
-					// Opera check fixes #3564, can go away with jQuery 1.3
-					pTop += ($.browser.opera ? window.innerHeight : wnd.height()) - this.uiDialog.outerHeight();
+					pTop += wnd.height() - this.uiDialog.outerHeight();
 					break;
 				default:
 				case 'middle':
-					// Opera check fixes #3564, can go away with jQuery 1.3
-					pTop += (($.browser.opera ? window.innerHeight : wnd.height()) - this.uiDialog.outerHeight()) / 2;
+					pTop += (wnd.height() - this.uiDialog.outerHeight()) / 2;
 			}
 		}
 
@@ -578,12 +576,6 @@ $.extend($.ui.dialog.overlay, {
 			} else {
 				return scrollHeight + 'px';
 			}
-		// handle Opera
-		} else if ($.browser.opera) {
-			return Math.max(
-				window.innerHeight,
-				$(document).height()
-			) + 'px';
 		// handle "good" browsers
 		} else {
 			return $(document).height() + 'px';
@@ -607,12 +599,6 @@ $.extend($.ui.dialog.overlay, {
 			} else {
 				return scrollWidth + 'px';
 			}
-		// handle Opera
-		} else if ($.browser.opera) {
-			return Math.max(
-				window.innerWidth,
-				$(document).width()
-			) + 'px';
 		// handle "good" browsers
 		} else {
 			return $(document).width() + 'px';
