@@ -23,6 +23,7 @@ $.effects.fold = function(o) {
 		var mode = $.effects.setMode(el, o.options.mode || 'hide'); // Set Mode
 		var size = o.options.size || 15; // Default fold size
 		var horizFirst = !(!o.options.horizFirst); // Ensure a boolean value
+		var duration = o.duration ? o.duration / 2 : $.fx.speeds._default / 2;
 
 		// Adjust
 		$.effects.save(el, props); el.show(); // Save & Show
@@ -40,8 +41,8 @@ $.effects.fold = function(o) {
 		animation2[ref[1]] = mode == 'show' ? distance[1] : 0;
 
 		// Animate
-		wrapper.animate(animation1, o.duration / 2, o.options.easing)
-		.animate(animation2, o.duration / 2, o.options.easing, function() {
+		wrapper.animate(animation1, duration, o.options.easing)
+		.animate(animation2, duration, o.options.easing, function() {
 			if(mode == 'hide') el.hide(); // Hide
 			$.effects.restore(el, props); $.effects.removeWrapper(el); // Restore
 			if(o.callback) o.callback.apply(el[0], arguments); // Callback
