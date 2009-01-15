@@ -188,7 +188,10 @@ div.demo {
 	font-family: "Trebuchet MS", "Arial", "Helvetica", "Verdana", "sans-serif";
 }
 
+#demo-frame div.demo h3 { clear:left; font-size:12px; font-weight:normal; padding:0 0 1em; margin:0; }
+
 div.demo-description {
+	clear:both;
 	padding:12px;
 	font-family: "Trebuchet MS", "Arial", "Helvetica", "Verdana", "sans-serif";
 	font-size: 1.3em;

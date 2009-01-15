@@ -1,43 +1,65 @@
 <!doctype html>
 <html lang="en">
 <head>
-	<title>jQuery UI Draggable - Axis Demo</title>
+	<title>jQuery UI Draggable - Constrain movement</title>
 	<link type="text/css" href="../../themes/base/ui.all.css" rel="stylesheet" />
 	<script type="text/javascript" src="../../jquery-1.3.js"></script>
 	<script type="text/javascript" src="../../ui/ui.core.js"></script>
 	<script type="text/javascript" src="../../ui/ui.draggable.js"></script>
 	<link type="text/css" href="../demos.css" rel="stylesheet" />
 	<style type="text/css">
-	#draggable, #draggable2 { width: 100px; height: 100px; padding: 0.5em; float: left; margin: 5px; }
+	.draggable { width: 90px; height: 90px; padding: 0.5em; float: left; margin: 5px; }
+	#draggable, #draggable2 { margin-bottom:20px; }
 	#draggable { cursor: n-resize; }
 	#draggable2 { cursor: e-resize; }
+	#containment-wrapper { width:100%; height:150px; border:2px solid #ccc; }
 	</style>
 	<script type="text/javascript">
 	$(function() {
 		$("#draggable").draggable({ axis: 'y' });
 		$("#draggable2").draggable({ axis: 'x' });
+		
+		$("#draggable3").draggable({ containment: '#containment-wrapper', scroll: false });
+		$("#draggable4").draggable({ containment: '#demo-frame' });
+		$("#draggable5").draggable({ containment: 'parent' });
+
 	});
 	</script>
 </head>
 <body>
 <div class="demo">
+
+<h3>Constrain movement along an axis:</h3>
 	
-<div id="draggable" class="ui-widget-content">
+<div id="draggable" class="draggable ui-widget-content">
 	<p>I can be dragged only vertically</p>
 </div>
 
-<div id="draggable2" class="ui-widget-content">
+<div id="draggable2" class="draggable ui-widget-content">
 	<p>I can be dragged only horizontally</p>
 </div>
 
-<!-- ADD CONTAINMENT EXAMPLE -->
+<h3>or to within another DOM element:</h3>
+<div id="containment-wrapper">
+<div id="draggable3" class="draggable ui-widget-content">
+	<p>I'm contained within the box</p>
+</div>
+
+<div id="draggable4" class="draggable ui-widget-content">
+	<p>I'm contained within the box's parent</p>
+</div>
+
+<div class="draggable ui-widget-content">
+	<p id="draggable5" class="ui-widget-header">I'm contained within my parent</p>
+</div>
+</div>
 
 </div><!-- End demo -->
 
 <div class="demo-description">
 
 <p>
-Define the boundaries of the draggable area. Set the <strong>axis</strong> option to limit the draggable's path to the x- or y-axis. Or use the <strong>containment</strong> option to specify a parent DOM element or a jQuery selector, like 'document.'
+Constrain the movement of each draggable by defining the boundaries of the draggable area. Set the <strong>axis</strong> option to limit the draggable's path to the x- or y-axis, or use the <strong>containment</strong> option to specify a parent DOM element or a jQuery selector, like 'document.'
 </p>
 
 </div><!-- End demo-description -->

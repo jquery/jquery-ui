@@ -1,19 +1,20 @@
 <!doctype html>
 <html lang="en">
 <head>
-	<title>jQuery UI Draggable - Handle Demo</title>
+	<title>jQuery UI Draggable - Handles</title>
 	<link type="text/css" href="../../themes/base/ui.all.css" rel="stylesheet" />
 	<script type="text/javascript" src="../../jquery-1.3.js"></script>
 	<script type="text/javascript" src="../../ui/ui.core.js"></script>
 	<script type="text/javascript" src="../../ui/ui.draggable.js"></script>
 	<link type="text/css" href="../demos.css" rel="stylesheet" />
 	<style type="text/css">
-	#draggable { width: 100px; height: 100px; padding: 0.5em; float: left; margin: 5px; }
+	#draggable, #draggable2 { width: 100px; height: 100px; padding: 0.5em; float: left; margin: 5px; }
 	#draggable p { cursor: move; }
 	</style>
 	<script type="text/javascript">
 	$(function() {
 		$("#draggable").draggable({ handle: 'p' });
+		$("#draggable2").draggable({ cancel: "p.ui-widget-header" });
 	});
 	</script>
 </head>
@@ -24,15 +25,19 @@
 	<p class="ui-widget-header">I can be dragged only by this handle</p>
 </div>
 
+<div id="draggable2" class="ui-widget-content">
+	<p>You can drag me around&hellip;</p>
+	<p class="ui-widget-header">&hellip;but you can't drag me by this handle.</p>
+</div>
+
 <!-- ADD CANCEL DEMO -->
 
 </div><!-- End demo -->
 
 <div class="demo-description">
 
-<p>
-<!-- Add description here -->
-</p>
+<p>Allow dragging only when the cursor is over a specific part of the draggable.  Use the <strong>handle</strong> option to specify the jQuery selector of an element (or group of elements) used to drag the object.</p>
+<p>Or prevent dragging when the cursor is over a specific element (or group of elements) within the draggable.  Use the <strong>cancel</strong> option to specify a jQuery selector over which to "cancel" draggable functionality.</p>
 
 </div><!-- End demo-description -->
 </body>

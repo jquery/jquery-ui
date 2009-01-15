@@ -1,19 +1,22 @@
 <!doctype html>
 <html lang="en">
 <head>
-	<title>jQuery UI Draggable - Helper Demo</title>
+	<title>jQuery UI Draggable - Visual feedback</title>
 	<link type="text/css" href="../../themes/base/ui.all.css" rel="stylesheet" />
 	<script type="text/javascript" src="../../jquery-1.3.js"></script>
 	<script type="text/javascript" src="../../ui/ui.core.js"></script>
 	<script type="text/javascript" src="../../ui/ui.draggable.js"></script>
 	<link type="text/css" href="../demos.css" rel="stylesheet" />
 	<style type="text/css">
-	#draggable, #draggable2, #draggable3 { width: 100px; height: 100px; padding: 0.5em; float: left; margin: 5px; }
+	#draggable, #draggable2, #draggable3, #set div { width: 90px; height: 90px; padding: 0.5em; float: left; margin: 5px; }
+	#draggable, #draggable2, #draggable3 { margin-bottom:20px; }
+	#set { clear:both; float:left; width: 368px; height: 120px; }
+	p { clear:both; margin:0; padding:1em 0; }
 	</style>
 	<script type="text/javascript">
 	$(function() {
 		$("#draggable").draggable({ helper: 'original' });
-		$("#draggable2").draggable({ helper: 'clone' });
+		$("#draggable2").draggable({ opacity: 0.7, helper: 'clone' });
 		$("#draggable3").draggable({
 			cursor: 'move',
 			cursorAt: { top: -12, left: -20 },
@@ -21,33 +24,49 @@
 				return $('<div class="ui-widget-header">I\'m a custom helper</div>');
 			}
 		});
+		$("#set div").draggable({ stack: { group: '#set div', min: 1 } });
 	});
 	</script>
 </head>
 <body>
 <div class="demo">
 
+<h3>With helpers:</h3>
+
 <div id="draggable" class="ui-widget-content">
 	<p>Original</p>
 </div>
 
 <div id="draggable2" class="ui-widget-content">
-	<p>Clone</p>
+	<p>Semi-transparent clone</p>
 </div>
 
 <div id="draggable3" class="ui-widget-content">
 	<p>Custom helper (in combination with cursorAt)</p>
 </div>
 
-<!-- ADD EXAMPLES FOR OPACITY + ZINDEX/STACK -->
+<h3>Stacked:</h3>
+<div id="set">
+	<div class="ui-widget-content">
+		<p>We are draggables..</p>
+	</div>
+
+	<div class="ui-widget-content">
+		<p>..whose z-indexes are controlled automatically..</p>
+	</div>
+
+	<div class="ui-widget-content">
+		<p>..with the stack option.</p>
+	</div>
+</div>
 
 </div><!-- End demo -->
 
 <div class="demo-description">
 
-<p>
-<!-- Add description here -->
-</p>
+<p>Provide feedback to users as they drag an object in the form of a helper. The <strong>helper</strong> option accepts the values 'original' (the draggable object moves with the cursor), 'clone' (a duplicate of the draggable moves with the cursor), or a function that returns a DOM element (that element is shown near the cursor during drag). Control the helper's transparency with the <strong>opacity</strong> option.</p>
+
+<p>To clarify which draggable is in play, bring the draggable in motion to front. Use the <strong>zindex</strong> option to set a higher z-index for the helper, if in play, or use the <strong>stack</strong> option to ensure that the last item dragged will appear on top of others in the same group on drag stop.</p>
 
 </div><!-- End demo-description -->
 </body>
