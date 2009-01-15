@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<title>jQuery UI Draggable - Snap Demo</title>
+	<link type="text/css" href="../../themes/base/ui.all.css" rel="stylesheet" />
+	<script type="text/javascript" src="../../jquery-1.3.js"></script>
+	<script type="text/javascript" src="../../ui/ui.core.js"></script>
+	<script type="text/javascript" src="../../ui/ui.draggable.js"></script>
+	<link type="text/css" href="../demos.css" rel="stylesheet" />
+	<style type="text/css">
+	#draggable, #draggable2, #draggable3, #draggable4, #draggable5 { width: 100px; height: 80px; padding: 5px; float: left; margin: 5px; font-size: .9em; }
+	.ui-widget-header p, .ui-widget-content p { margin: 0; }
+	#snaptarget { height: 140px; }
+	</style>
+	<script type="text/javascript">
+	$(function() {
+		$("#draggable").draggable({ snap: true });
+		$("#draggable2").draggable({ snap: '.ui-widget-header' });
+		$("#draggable3").draggable({ snap: '.ui-widget-header', snapMode: 'outer' });
+		$("#draggable4").draggable({ snap: '.ui-widget-header', snapMode: 'inner' });
+		$("#draggable5").draggable({ snap: '.ui-widget-header', snapTolerance: 50 });
+	});
+	</script>
+</head>
+<body>
+<div class="demo">
+	
+<div id="snaptarget" class="ui-widget-header">
+	<p>I'm a snap target</p>
+</div>
+
+<br clear="both" />
+
+<div id="draggable" class="ui-widget-content">
+	<p>Default (snap: true), snaps to all other draggable elements</p>
+</div>
+
+<div id="draggable2" class="ui-widget-content">
+	<p>I only snap to the big box</p>
+</div>
+
+<div id="draggable3" class="ui-widget-content">
+	<p>I only snap to the outer edges of the bix box</p>
+</div>
+
+<div id="draggable4" class="ui-widget-content">
+	<p>I only snap to the inner edges of the big box</p>
+</div>
+
+<div id="draggable5" class="ui-widget-content">
+	<p>I also snap to the big box but I'm very sticky because I have a high tolerance</p>
+</div>
+
+
+<!-- ADD GRID EXAMPLE -->
+
+</div><!-- End demo -->
+
+<div class="demo-description">
+
+<p>
+<!-- Add description here -->
+</p>
+
+</div><!-- End demo-description -->
+
+
+
+</body>
+</html>

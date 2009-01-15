@@ -1,30 +1,45 @@
 <!doctype html>
 <html lang="en">
 <head>
-	<title>jQuery UI Draggable - Handle Demo</title>
+	<title>jQuery UI Draggable - Helper Demo</title>
 	<link type="text/css" href="../../themes/base/ui.all.css" rel="stylesheet" />
 	<script type="text/javascript" src="../../jquery-1.3.js"></script>
 	<script type="text/javascript" src="../../ui/ui.core.js"></script>
 	<script type="text/javascript" src="../../ui/ui.draggable.js"></script>
 	<link type="text/css" href="../demos.css" rel="stylesheet" />
 	<style type="text/css">
-	#draggable { width: 100px; height: 100px; padding: 0.5em; float: left; margin: 5px; }
-	#draggable p { cursor: move; }
+	#draggable, #draggable2, #draggable3 { width: 100px; height: 100px; padding: 0.5em; float: left; margin: 5px; }
 	</style>
 	<script type="text/javascript">
 	$(function() {
-		$("#draggable").draggable({ handle: 'p' });
+		$("#draggable").draggable({ helper: 'original' });
+		$("#draggable2").draggable({ helper: 'clone' });
+		$("#draggable3").draggable({
+			cursor: 'move',
+			cursorAt: { top: -12, left: -20 },
+			helper: function(event) {
+				return $('<div class="ui-widget-header">I\'m a custom helper</div>');
+			}
+		});
 	});
 	</script>
 </head>
 <body>
 <div class="demo">
-	
+
 <div id="draggable" class="ui-widget-content">
-	<p class="ui-widget-header">I can be dragged only by this handle</p>
+	<p>Original</p>
 </div>
 
-<!-- ADD CANCEL DEMO -->
+<div id="draggable2" class="ui-widget-content">
+	<p>Clone</p>
+</div>
+
+<div id="draggable3" class="ui-widget-content">
+	<p>Custom helper (in combination with cursorAt)</p>
+</div>
+
+<!-- ADD EXAMPLES FOR OPACITY + ZINDEX/STACK -->
 
 </div><!-- End demo -->
 
