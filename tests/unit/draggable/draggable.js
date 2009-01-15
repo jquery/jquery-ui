@@ -21,7 +21,7 @@ var defaults = {
 	handle: false,
 	helper: "original",
 	iframeFix: false,
-	opacity: 1.0,
+	opacity: null,
 	refreshPositions: false,
 	revert: false,
 	revertDuration: 500,

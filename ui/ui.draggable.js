@@ -410,7 +410,7 @@ $.extend($.ui.draggable, {
 		handle: false,
 		helper: "original",
 		iframeFix: false,
-		opacity: 1,
+		opacity: null,
 		refreshPositions: false,
 		revert: false,
 		revertDuration: 500,
