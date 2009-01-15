@@ -125,7 +125,11 @@ $.widget("ui.draggable", $.extend({}, $.ui.mouse, {
 		this.positionAbs = this._convertPositionTo("absolute");
 
 		//Call plugins and callbacks and use the resulting position if something is returned
-		if(!noPropagation) this.position = this._trigger("drag", event) || this.position;
+		if (!noPropagation) {
+			var ui = this._uiHash();
+			this._trigger('drag', event, ui);
+			this.position = ui.position;
+		}
 
 		if(!this.options.axis || this.options.axis != "y") this.helper[0].style.left = this.position.left+'px';
 		if(!this.options.axis || this.options.axis != "x") this.helper[0].style.top = this.position.top+'px';
@@ -368,11 +372,11 @@ $.widget("ui.draggable", $.extend({}, $.ui.mouse, {
 
 	// From now on bulk stuff - mainly helpers
 
-	_trigger: function(type, event) {
-		$.ui.plugin.call(this, type, [event, this._uiHash()]);
+	_trigger: function(type, event, ui) {
+		ui = ui || this._uiHash();
+		$.ui.plugin.call(this, type, [event, ui]);
 		if(type == "drag") this.positionAbs = this._convertPositionTo("absolute"); //The absolute position has to be recalculated after plugins
-		$.widget.prototype._trigger.call(this, type, event, this._uiHash());
-		return event.returnValue;
+		return $.widget.prototype._trigger.call(this, type, event, ui);
 	},
 
 	plugins: {},
