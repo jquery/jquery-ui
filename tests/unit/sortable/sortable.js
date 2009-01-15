@@ -18,7 +18,7 @@ var defaults = {
 	scroll: true,
 	scrollSensitivity: 20,
 	scrollSpeed: 20,
-	tolerance: "guess",
+	tolerance: "default",
 	zIndex: 1000
 };
 
