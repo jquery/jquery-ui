@@ -670,7 +670,7 @@ $.ui.plugin.add("resizable", "animate", {
 
 					// propagating resize, and updating values for each animation step
 					self._updateCache(data);
-					self._propagate("animate", event);
+					self._propagate("resize", event);
 
 				}
 			}
