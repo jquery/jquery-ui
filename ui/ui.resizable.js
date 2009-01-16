@@ -449,9 +449,13 @@ $.widget("ui.resizable", $.extend({}, $.ui.mouse, {
 				return border + padding;
 			});
 		}
+
+		if ($.browser.msie && !isVisible(el))
+			return;
+
 		prel.css({
-			height: (el.height() - o.borderDif[0] - o.borderDif[2]) + "px",
-			width: (el.width() - o.borderDif[1] - o.borderDif[3]) + "px"
+			height: (el.height() - o.borderDif[0] - o.borderDif[2]) || 0,
+			width: (el.width() - o.borderDif[1] - o.borderDif[3]) || 0
 		});
 	},
 
@@ -823,5 +827,9 @@ $.ui.plugin.add("resizable", "grid", {
 	}
 
 });
+
+function isVisible(element) {
+	return !($(element).is(':hidden') || $(element).parents(':hidden').length);
+}
 
 })(jQuery);
