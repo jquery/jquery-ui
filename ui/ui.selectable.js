@@ -33,8 +33,8 @@ $.widget("ui.selectable", $.extend({}, $.ui.mouse, {
 					$element: $this,
 					left: pos.left,
 					top: pos.top,
-					right: pos.left + $this.width(),
-					bottom: pos.top + $this.height(),
+					right: pos.left + $this.outerWidth(),
+					bottom: pos.top + $this.outerHeight(),
 					startselected: false,
 					selected: $this.hasClass('ui-selected'),
 					selecting: $this.hasClass('ui-selecting'),
@@ -105,11 +105,21 @@ $.widget("ui.selectable", $.extend({}, $.ui.mouse, {
 			}
 		});
 
-		var isSelectee = false;
 		$(event.target).parents().andSelf().each(function() {
-			if($.data(this, "selectable-item")) isSelectee = true;
+			var selectee = $.data(this, "selectable-item");
+			if (selectee) {
+				selectee.$element.removeClass("ui-unselecting").addClass('ui-selecting');
+				selectee.unselecting = false;
+				selectee.selecting = true;
+				selectee.selected = true;
+				// selectable SELECTING callback
+				self._trigger("selecting", event, {
+					selecting: selectee.element
+				});
+				return false;
+			}
 		});
-		return this.options.keyboard ? !isSelectee : true;
+
 	},
 
 	_mouseDrag: function(event) {
@@ -238,7 +248,7 @@ $.extend($.ui.selectable, {
 		autoRefresh: true,
 		cancel: ":input,option",
 		delay: 0,
-		distance: 1,
+		distance: 0,
 		filter: '*',
 		tolerance: 'touch'
 	}
