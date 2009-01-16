@@ -67,19 +67,7 @@
 	</xsl:template>
 	
 	<xsl:template name="break">
-		<xsl:param name="text" select="." />
-		<xsl:choose>
-			<xsl:when test="contains($text, '&#xa;&#xa;')">
-				<xsl:value-of select="substring-before($text, '&#xa;&#xa;')" />
-				<br /><br />
-				<xsl:call-template name="break">
-					<xsl:with-param name="text"	select="substring-after($text, '&#xa;&#xa;')" />
-				</xsl:call-template>
-			</xsl:when>
-			<xsl:otherwise>
-				<xsl:value-of select="$text" />
-			</xsl:otherwise>
-		</xsl:choose>
+		<xsl:value-of select="." disable-output-escaping="yes" />
 	</xsl:template>
 	
 	<xsl:template name="option">
@@ -91,22 +79,14 @@
 			</div>
 			<div class="param-details">
 				<p><xsl:value-of select="desc"/></p>
-				<!--
-				<h4>Code sample:</h4>
-				<code>
-				Here be code samples once added to the exporter script.<br />
-				$("#dialog").dialog({<br />
-				&#160;&#160;buttons: {<br />
-				&#160;&#160;&#160;&#160;'Delete all items in recycle bin': function() {<br />
-				&#160;&#160;&#160;&#160;&#160;&#160;$(this).dialog('close');<br />
-				&#160;&#160;&#160;&#160;},<br />
-				&#160;&#160;&#160;&#160;Cancel: function() {<br />
-				&#160;&#160;&#160;&#160;&#160;&#160;$(this).dialog('close');<br />
-				&#160;&#160;&#160;&#160;}<br />
-				&#160;&#160;}<br />
-				});
-				</code>
-				-->
+				<!-- TODO select all examples -->
+				<xsl:for-each select="following-sibling::example[1]">
+					<h4>Code sample:</h4>
+					<p><xsl:value-of select="desc" disable-output-escaping="yes"/></p>
+					<code>
+						<xsl:value-of select="code"/>
+					</code>
+				</xsl:for-each>
 			</div>
 		</div>
 	</xsl:template>
