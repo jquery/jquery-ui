@@ -80,7 +80,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 
 	_mouseStart: function(event, overrideHandle, noActivation) {
 
-		var o = this.options;
+		var o = this.options, self = this;
 		this.currentContainer = this;
 
 		//We only need to call refreshPositions, because the refreshItems call has been moved to mouseCapture
@@ -148,8 +148,27 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 		if(o.containment)
 			this._setContainment();
 
-		//Call plugins and callbacks
-		this._trigger("start", event);
+		if(o.cursor) { // cursor option
+			if ($('body').css("cursor")) this._storedCursor = $('body').css("cursor");
+			$('body').css("cursor", o.cursor);
+		}
+		
+		if(o.opacity) { // opacity option
+			if (this.helper.css("opacity")) this._storedOpacity = this.helper.css("opacity");
+			this.helper.css("opacity", o.opacity);
+		}
+		
+		if(o.zIndex) { // zIndex option
+			if (this.helper.css("zIndex")) this._storedZIndex = this.helper.css("zIndex");
+			this.helper.css("zIndex", o.zIndex);
+		}
+		
+		//Prepare scrolling
+		if(this.scrollParent[0] != document && this.scrollParent[0].tagName != 'HTML')
+			this.overflowOffset = this.scrollParent.offset();
+
+		//Call callbacks
+		this._trigger("start", event, this._uiHash());
 
 		//Recache the helper size
 		if(!this._preserveHelperProportions)
@@ -158,7 +177,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 
 		//Post 'activate' events to possible containers
 		if(!noActivation) {
-			 for (var i = this.containers.length - 1; i >= 0; i--) { this.containers[i]._trigger("activate", event, this); }
+			 for (var i = this.containers.length - 1; i >= 0; i--) { this.containers[i]._trigger("activate", event, self._uiHash(this)); }
 		}
 
 		//Prepare possible droppables
@@ -186,8 +205,38 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 			this.lastPositionAbs = this.positionAbs;
 		}
 
-		//Call the internal plugins
-		$.ui.plugin.call(this, "sort", [event, this._uiHash()]);
+		//Do scrolling
+		if(this.options.scroll) {
+			var o = this.options, scrolled = false;
+			if(this.scrollParent[0] != document && this.scrollParent[0].tagName != 'HTML') {
+	
+				if((this.overflowOffset.top + this.scrollParent[0].offsetHeight) - event.pageY < o.scrollSensitivity)
+					this.scrollParent[0].scrollTop = scrolled = this.scrollParent[0].scrollTop + o.scrollSpeed;
+				else if(event.pageY - this.overflowOffset.top < o.scrollSensitivity)
+					this.scrollParent[0].scrollTop = scrolled = this.scrollParent[0].scrollTop - o.scrollSpeed;
+	
+				if((this.overflowOffset.left + this.scrollParent[0].offsetWidth) - event.pageX < o.scrollSensitivity)
+					this.scrollParent[0].scrollLeft = scrolled = this.scrollParent[0].scrollLeft + o.scrollSpeed;
+				else if(event.pageX - this.overflowOffset.left < o.scrollSensitivity)
+					this.scrollParent[0].scrollLeft = scrolled = this.scrollParent[0].scrollLeft - o.scrollSpeed;
+	
+			} else {
+	
+				if(event.pageY - $(document).scrollTop() < o.scrollSensitivity)
+					scrolled = $(document).scrollTop($(document).scrollTop() - o.scrollSpeed);
+				else if($(window).height() - (event.pageY - $(document).scrollTop()) < o.scrollSensitivity)
+					scrolled = $(document).scrollTop($(document).scrollTop() + o.scrollSpeed);
+	
+				if(event.pageX - $(document).scrollLeft() < o.scrollSensitivity)
+					scrolled = $(document).scrollLeft($(document).scrollLeft() - o.scrollSpeed);
+				else if($(window).width() - (event.pageX - $(document).scrollLeft()) < o.scrollSensitivity)
+					scrolled = $(document).scrollLeft($(document).scrollLeft() + o.scrollSpeed);
+	
+			}
+	
+			if(scrolled !== false && $.ui.ddmanager && !o.dropBehaviour)
+				$.ui.ddmanager.prepareOffsets(this, event);
+		}
 
 		//Regenerate the absolute position used for position checks
 		this.positionAbs = this._convertPositionTo("absolute");
@@ -217,7 +266,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 					break;
 				}
 
-				this._trigger("change", event); //Call plugins and callbacks
+				this._trigger("change", event, this._uiHash());
 				break;
 			}
 		}
@@ -229,7 +278,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 		if($.ui.ddmanager) $.ui.ddmanager.drag(this, event);
 
 		//Call callbacks
-		this._trigger('sort', event);
+		this._trigger('sort', event, this._uiHash());
 
 		this.lastPositionAbs = this.positionAbs;
 		return false;
@@ -266,6 +315,8 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 
 	cancel: function() {
 
+		var self = this;
+		
 		if(this.dragging) {
 
 			this._mouseUp();
@@ -277,9 +328,9 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 
 			//Post deactivating events to containers
 			for (var i = this.containers.length - 1; i >= 0; i--){
-				this.containers[i]._trigger("deactivate", null, this);
+				this.containers[i]._trigger("deactivate", null, self._uiHash(this));
 				if(this.containers[i].containerCache.over) {
-					this.containers[i]._trigger("out", null, this);
+					this.containers[i]._trigger("out", null, self._uiHash(this));
 					this.containers[i].containerCache.over = 0;
 				}
 			}
@@ -608,20 +659,20 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 
 						this.currentContainer = this.containers[i];
 						itemWithLeastDistance ? this.options.sortIndicator.call(this, event, itemWithLeastDistance, null, true) : this.options.sortIndicator.call(this, event, null, this.containers[i].element, true);
-						this._trigger("change", event); //Call plugins and callbacks
-						this.containers[i]._trigger("change", event, this); //Call plugins and callbacks
+						this._trigger("change", event, this._uiHash());
+						this.containers[i]._trigger("change", event, this._uiHash(this));
 
 						//Update the placeholder
 						this.options.placeholder.update(this.currentContainer, this.placeholder);
 
 					}
 
-					this.containers[i]._trigger("over", event, this);
+					this.containers[i]._trigger("over", event, this._uiHash(this));
 					this.containers[i].containerCache.over = 1;
 				}
 			} else {
 				if(this.containers[i].containerCache.over) {
-					this.containers[i]._trigger("out", event, this);
+					this.containers[i]._trigger("out", event, this._uiHash(this));
 					this.containers[i].containerCache.over = 0;
 				}
 			}
@@ -851,57 +902,59 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 			this.currentItem.show();
 		}
 
-		if(this.fromOutside) this._trigger("receive", event, this, noPropagation);
-		if(this.fromOutside || this.domPosition.prev != this.currentItem.prev().not("."+this.options.cssNamespace+"-sortable-helper")[0] || this.domPosition.parent != this.currentItem.parent()[0]) this._trigger("update", event, null, noPropagation); //Trigger update callback if the DOM position has changed
+		if(this.fromOutside && !noPropagation) this._trigger("receive", event, this._uiHash(this));
+		if((this.fromOutside || this.domPosition.prev != this.currentItem.prev().not("."+this.options.cssNamespace+"-sortable-helper")[0] || this.domPosition.parent != this.currentItem.parent()[0]) && !noPropagation) this._trigger("update", event, this._uiHash()); //Trigger update callback if the DOM position has changed
 		if(!$.ui.contains(this.element[0], this.currentItem[0])) { //Node was moved out of the current element
-			this._trigger("remove", event, null, noPropagation);
+			if(!noPropagation) this._trigger("remove", event, this._uiHash());
 			for (var i = this.containers.length - 1; i >= 0; i--){
-				if($.ui.contains(this.containers[i].element[0], this.currentItem[0])) {
-					this.containers[i]._trigger("receive", event, this, noPropagation);
-					this.containers[i]._trigger("update", event, this, noPropagation);
+				if($.ui.contains(this.containers[i].element[0], this.currentItem[0]) && !noPropagation) {
+					this.containers[i]._trigger("receive", event, this._uiHash(this));
+					this.containers[i]._trigger("update", event, this._uiHash(this));
 				}
 			};
 		};
 
 		//Post events to containers
 		for (var i = this.containers.length - 1; i >= 0; i--){
-			this.containers[i]._trigger("deactivate", event, this, noPropagation);
+			if(!noPropagation) this.containers[i]._trigger("deactivate", event, this._uiHash(this));
 			if(this.containers[i].containerCache.over) {
-				this.containers[i]._trigger("out", event, this);
+				this.containers[i]._trigger("out", event, this._uiHash(this));
 				this.containers[i].containerCache.over = 0;
 			}
 		}
 
+		//Do what was originally in plugins
+		if(this._storedCursor) $('body').css("cursor", this._storedCursor); //Reset cursor
+		if(this._storedOpacity) this.helper.css("opacity", this._storedCursor); //Reset cursor
+		if(this._storedZIndex) this.helper.css("zIndex", this._storedZIndex == 'auto' ? '' : this._storedZIndex); //Reset z-index
+
 		this.dragging = false;
 		if(this.cancelHelperRemoval) {
-			this._trigger("beforeStop", event, null, noPropagation);
-			this._trigger("stop", event, null, noPropagation);
+			if(!noPropagation) {
+				this._trigger("beforeStop", event, this._uiHash());
+				this._trigger("stop", event, this._uiHash());
+			}
 			return false;
 		}
 
-		this._trigger("beforeStop", event, null, noPropagation);
+		if(!noPropagation) this._trigger("beforeStop", event, this._uiHash());
 
 		//$(this.placeholder[0]).remove(); would have been the jQuery way - unfortunately, it unbinds ALL events from the original node!
 		this.placeholder[0].parentNode.removeChild(this.placeholder[0]);
 
 		if(this.helper[0] != this.currentItem[0]) this.helper.remove(); this.helper = null;
-		this._trigger("stop", event, null, noPropagation);
+		if(!noPropagation) this._trigger("stop", event, this._uiHash());
 
 		this.fromOutside = false;
 		return true;
 
 	},
 
-	_trigger: function(type, event, inst, noPropagation) {
-		$.ui.plugin.call(this, type, [event, this._uiHash(inst)]);
-		if(!noPropagation) {
-			if ($.widget.prototype._trigger.call(this, type, event, this._uiHash(inst)) === false) {
-				this.cancel();
-			}
+	_trigger: function() {
+		if ($.widget.prototype._trigger.apply(this, arguments) === false) {
+			this.cancel();
 		}
 	},
-
-	plugins: {},
 
 	_uiHash: function(inst) {
 		var self = inst || this;
@@ -939,87 +992,6 @@ $.extend($.ui.sortable, {
 		sortIndicator: $.ui.sortable.prototype._rearrange,
 		tolerance: "default",
 		zIndex: 1000
-	}
-});
-
-/*
- * Sortable Extensions
- */
-
-$.ui.plugin.add("sortable", "cursor", {
-	start: function(event, ui) {
-		var t = $('body'), i = $(this).data('sortable');
-		if (t.css("cursor")) i.options._cursor = t.css("cursor");
-		t.css("cursor", i.options.cursor);
-	},
-	beforeStop: function(event, ui) {
-		var i = $(this).data('sortable');
-		if (i.options._cursor) $('body').css("cursor", i.options._cursor);
-	}
-});
-
-$.ui.plugin.add("sortable", "opacity", {
-	start: function(event, ui) {
-		var t = ui.helper, i = $(this).data('sortable');
-		if(t.css("opacity")) i.options._opacity = t.css("opacity");
-		t.css('opacity', i.options.opacity);
-	},
-	beforeStop: function(event, ui) {
-		var i = $(this).data('sortable');
-		if(i.options._opacity) $(ui.helper).css('opacity', i.options._opacity);
-	}
-});
-
-$.ui.plugin.add("sortable", "scroll", {
-	start: function(event, ui) {
-		var i = $(this).data("sortable"), o = i.options;
-		if(i.scrollParent[0] != document && i.scrollParent[0].tagName != 'HTML') i.overflowOffset = i.scrollParent.offset();
-	},
-	sort: function(event, ui) {
-
-		var i = $(this).data("sortable"), o = i.options, scrolled = false;
-
-		if(i.scrollParent[0] != document && i.scrollParent[0].tagName != 'HTML') {
-
-			if((i.overflowOffset.top + i.scrollParent[0].offsetHeight) - event.pageY < o.scrollSensitivity)
-				i.scrollParent[0].scrollTop = scrolled = i.scrollParent[0].scrollTop + o.scrollSpeed;
-			else if(event.pageY - i.overflowOffset.top < o.scrollSensitivity)
-				i.scrollParent[0].scrollTop = scrolled = i.scrollParent[0].scrollTop - o.scrollSpeed;
-
-			if((i.overflowOffset.left + i.scrollParent[0].offsetWidth) - event.pageX < o.scrollSensitivity)
-				i.scrollParent[0].scrollLeft = scrolled = i.scrollParent[0].scrollLeft + o.scrollSpeed;
-			else if(event.pageX - i.overflowOffset.left < o.scrollSensitivity)
-				i.scrollParent[0].scrollLeft = scrolled = i.scrollParent[0].scrollLeft - o.scrollSpeed;
-
-		} else {
-
-			if(event.pageY - $(document).scrollTop() < o.scrollSensitivity)
-				scrolled = $(document).scrollTop($(document).scrollTop() - o.scrollSpeed);
-			else if($(window).height() - (event.pageY - $(document).scrollTop()) < o.scrollSensitivity)
-				scrolled = $(document).scrollTop($(document).scrollTop() + o.scrollSpeed);
-
-			if(event.pageX - $(document).scrollLeft() < o.scrollSensitivity)
-				scrolled = $(document).scrollLeft($(document).scrollLeft() - o.scrollSpeed);
-			else if($(window).width() - (event.pageX - $(document).scrollLeft()) < o.scrollSensitivity)
-				scrolled = $(document).scrollLeft($(document).scrollLeft() + o.scrollSpeed);
-
-		}
-
-		if(scrolled !== false && $.ui.ddmanager && !o.dropBehaviour)
-			$.ui.ddmanager.prepareOffsets(i, event);
-
-	}
-});
-
-$.ui.plugin.add("sortable", "zIndex", {
-	start: function(event, ui) {
-		var t = ui.helper, i = $(this).data('sortable');
-		if(t.css("zIndex")) i.options._zIndex = t.css("zIndex");
-		t.css('zIndex', i.options.zIndex);
-	},
-	beforeStop: function(event, ui) {
-		var i = $(this).data('sortable');
-		if(i.options._zIndex) $(ui.helper).css('zIndex', i.options._zIndex == 'auto' ? '' : i.options._zIndex);
 	}
 });
 

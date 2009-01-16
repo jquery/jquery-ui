@@ -127,9 +127,7 @@ $.widget("ui.droppable", {
 			draggable: (c.currentItem || c.element),
 			helper: c.helper,
 			position: c.position,
-			absolutePosition: c.positionAbs,
-			options: this.options,
-			element: this.element
+			absolutePosition: c.positionAbs
 		};
 	}
 
@@ -214,7 +212,7 @@ $.ui.ddmanager = {
 			m[i].offset = m[i].element.offset();
 			m[i].proportions = { width: m[i].element[0].offsetWidth, height: m[i].element[0].offsetHeight };
 
-			if(type == "dragstart" || type == "sortactivate") m[i]._activate.call(m[i], event); 										//Activate the droppable if used directly from draggables
+			if(type == "mousedown") m[i]._activate.call(m[i], event); //Activate the droppable if used directly from draggables
 
 		}
 
