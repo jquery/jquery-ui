@@ -12,15 +12,9 @@
  */
 (function($) {
 
-var widgetName = "progressbar";
-var classWidgetName = ".progressbar";
-
 $.widget("ui.progressbar", {
 
 	_init: function() {
-		// update widgetName with the name given by the widget factory
-		widgetName = this.widgetName;
-		classWidgetName = '.' + widgetName;
 
 		var self = this,
 			options = this.options;
@@ -31,7 +25,7 @@ $.widget("ui.progressbar", {
 				+ " ui-widget-content"
 				+ " ui-corner-all")
 			.attr({
-				role: widgetName,
+				role: "progressbar",
 				"aria-valuemin": this._valueMin(),
 				"aria-valuemax": this._valueMax(),
 				"aria-valuenow": this._value()
@@ -54,8 +48,8 @@ $.widget("ui.progressbar", {
 			.removeAttr("aria-valuemin")
 			.removeAttr("aria-valuemax")
 			.removeAttr("aria-valuenow")
-			.removeData(widgetName)
-			.unbind(classWidgetName);
+			.removeData("progressbar")
+			.unbind(".progressbar");
 
 		this.valueDiv.remove();
 

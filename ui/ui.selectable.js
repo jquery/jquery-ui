@@ -12,16 +12,9 @@
  */
 (function($) {
 
-var widgetName = "selectable";
-var classWidgetName = ".selectable";
-
 $.widget("ui.selectable", $.extend({}, $.ui.mouse, {
 
 	_init: function() {
-		// update widgetName with the name given by the widget factory
-		widgetName = this.widgetName;
-		classWidgetName = '.' + widgetName;
-
 		var self = this;
 
 		this.element.addClass("ui-selectable");
@@ -63,8 +56,8 @@ $.widget("ui.selectable", $.extend({}, $.ui.mouse, {
 	destroy: function() {
 		this.element
 			.removeClass("ui-selectable ui-selectable-disabled")
-			.removeData(widgetName)
-			.unbind(classWidgetName);
+			.removeData("selectable")
+			.unbind(".selectable");
 		this._mouseDestroy();
 	},
 

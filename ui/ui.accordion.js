@@ -12,17 +12,10 @@
  */
 (function($) {
 
-var widgetName = "accordion";
-var classWidgetName = ".accordion";
-
 $.widget("ui.accordion", {
 
 	_init: function() {
 		var options = this.options;
-
-		// update widgetName with the name given by the widget factory
-		widgetName = this.widgetName;
-		classWidgetName = '.' + widgetName;
 
 		if ( options.navigation ) {
 			var current = this.element.find("a").filter(options.navigationFilter);
@@ -39,8 +32,8 @@ $.widget("ui.accordion", {
 		this.element.addClass("ui-accordion ui-widget ui-helper-reset");
 		var groups = this.element.children().addClass("ui-accordion-group");
 		var headers = options.headers = groups.find("> :first-child").addClass("ui-accordion-header ui-helper-reset ui-state-default ui-corner-all")
-		.bind("mouseenter." + widgetName, function(){ $(this).addClass('ui-state-hover'); })
-		.bind("mouseleave." + widgetName, function(){ $(this).removeClass('ui-state-hover'); });
+		.bind("mouseenter.accordion", function(){ $(this).addClass('ui-state-hover'); })
+		.bind("mouseleave.accordion", function(){ $(this).removeClass('ui-state-hover'); });
 		// wrap content elements in div against animation issues
 		headers.next().wrap("<div></div>").addClass("ui-accordion-content").parent().addClass("ui-accordion-content-wrap ui-helper-reset ui-widget-content ui-corner-bottom");
 
@@ -86,15 +79,15 @@ $.widget("ui.accordion", {
 			options.headers.find('a').attr('tabIndex','-1');
 
 		if (options.event) {
-			this.element.bind((options.event) + classWidgetName, clickHandler);
+			this.element.bind((options.event) + ".accordion", clickHandler);
 		}
 	},
 
 	destroy: function() {
-		this.element.removeClass("ui-accordion ui-widget ui-helper-reset").removeAttr("role").unbind(classWidgetName);
-		$.removeData(this.element[0], widgetName);
+		this.element.removeClass("ui-accordion ui-widget ui-helper-reset").removeAttr("role").unbind(".accordion");
+		$.removeData(this.element[0], "accordion");
 		var groups = this.element.children().removeClass("ui-accordion-group "+this.options.selectedClass);
-		var headers = this.options.headers.unbind(classWidgetName).removeClass("ui-accordion-header ui-helper-reset ui-state-default ui-corner-all ui-state-active ui-corner-top")
+		var headers = this.options.headers.unbind(".accordion").removeClass("ui-accordion-header ui-helper-reset ui-state-default ui-corner-all ui-state-active ui-corner-top")
 			.removeAttr("role").removeAttr("aria-expanded").removeAttr("tabindex");
 		headers.find("a").removeAttr("tabindex");
 		headers.children(".ui-icon").remove();
@@ -175,11 +168,11 @@ function scopeCallback(callback, scope) {
 
 function completed(cancel) {
 	// if removed while animated data can be empty
-	if (!$.data(this, widgetName)) {
+	if (!$.data(this, "accordion")) {
 		return;
 	}
 
-	var instance = $.data(this, widgetName);
+	var instance = $.data(this, "accordion");
 	var options = instance.options;
 	options.running = cancel ? 0 : --options.running;
 	if ( options.running ) {
@@ -195,13 +188,13 @@ function completed(cancel) {
 }
 
 function toggle(toShow, toHide, data, clickedActive, down) {
-	var options = $.data(this, widgetName).options;
+	var options = $.data(this, "accordion").options;
 	options.toShow = toShow;
 	options.toHide = toHide;
 	options.data = data;
 	var complete = scopeCallback(completed, this);
 
-	$.data(this, widgetName)._trigger("changestart", null, options.data);
+	$.data(this, "accordion")._trigger("changestart", null, options.data);
 
 	// count elements to animate
 	options.running = toHide.size() === 0 ? toShow.size() : toHide.size();
@@ -270,7 +263,7 @@ function toggle(toShow, toHide, data, clickedActive, down) {
 }
 
 function clickHandler(event) {
-	var options = $.data(this, widgetName).options;
+	var options = $.data(this, "accordion").options;
 	if (options.disabled) {
 		return false;
 	}
