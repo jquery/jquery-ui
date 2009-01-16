@@ -60,19 +60,15 @@ $.widget("ui.droppable", {
 	},
 
 	_activate: function(event) {
-
 		var draggable = $.ui.ddmanager.current;
-		$.ui.plugin.call(this, 'activate', [event, this.ui(draggable)]);
+		if(this.options.activeClass) this.element.addClass(ui.options.activeClass);
 		(draggable && this._trigger('activate', event, this.ui(draggable)));
-
 	},
 
 	_deactivate: function(event) {
-
 		var draggable = $.ui.ddmanager.current;
-		$.ui.plugin.call(this, 'deactivate', [event, this.ui(draggable)]);
+		if(this.options.activeClass) this.element.removeClass(ui.options.activeClass);
 		(draggable && this._trigger('deactivate', event, this.ui(draggable)));
-
 	},
 
 	_over: function(event) {
@@ -81,7 +77,7 @@ $.widget("ui.droppable", {
 		if (!draggable || (draggable.currentItem || draggable.element)[0] == this.element[0]) return; // Bail if draggable and droppable are same element
 
 		if (this.options.accept.call(this.element,(draggable.currentItem || draggable.element))) {
-			$.ui.plugin.call(this, 'over', [event, this.ui(draggable)]);
+			if(this.options.hoverClass) this.element.addClass(ui.options.hoverClass);
 			this._trigger('over', event, this.ui(draggable));
 		}
 
@@ -93,7 +89,7 @@ $.widget("ui.droppable", {
 		if (!draggable || (draggable.currentItem || draggable.element)[0] == this.element[0]) return; // Bail if draggable and droppable are same element
 
 		if (this.options.accept.call(this.element,(draggable.currentItem || draggable.element))) {
-			$.ui.plugin.call(this, 'out', [event, this.ui(draggable)]);
+			if(this.options.hoverClass) this.element.removeClass(ui.options.hoverClass);
 			this._trigger('out', event, this.ui(draggable));
 		}
 
@@ -114,7 +110,8 @@ $.widget("ui.droppable", {
 		if(childrenIntersection) return false;
 
 		if(this.options.accept.call(this.element,(draggable.currentItem || draggable.element))) {
-			$.ui.plugin.call(this, 'drop', [event, this.ui(draggable)]);
+			if(this.options.activeClass) this.element.removeClass(ui.options.activeClass);
+			if(this.options.hoverClass) this.element.removeClass(ui.options.hoverClass);
 			this._trigger('drop', event, this.ui(draggable));
 			return this.element;
 		}
@@ -284,33 +281,5 @@ $.ui.ddmanager = {
 
 	}
 };
-
-/*
- * Droppable Extensions
- */
-
-$.ui.plugin.add("droppable", "activeClass", {
-	activate: function(event, ui) {
-		$(this).addClass(ui.options.activeClass);
-	},
-	deactivate: function(event, ui) {
-		$(this).removeClass(ui.options.activeClass);
-	},
-	drop: function(event, ui) {
-		$(this).removeClass(ui.options.activeClass);
-	}
-});
-
-$.ui.plugin.add("droppable", "hoverClass", {
-	over: function(event, ui) {
-		$(this).addClass(ui.options.hoverClass);
-	},
-	out: function(event, ui) {
-		$(this).removeClass(ui.options.hoverClass);
-	},
-	drop: function(event, ui) {
-		$(this).removeClass(ui.options.hoverClass);
-	}
-});
 
 })(jQuery);
