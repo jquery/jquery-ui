@@ -602,14 +602,21 @@ $.ui.plugin.add("resizable", "alsoResize", {
 
 		_alsoResize = function(exp, c) {
 			$(exp).each(function() {
-				var start = $(this).data("resizable-alsoresize"), style = {}, css = c && c.length ? c : ['width', 'height', 'top', 'left'];
+				var el = $(this), start = $(this).data("resizable-alsoresize"), style = {}, css = c && c.length ? c : ['width', 'height', 'top', 'left'];
 
 				$.each(css || ['width', 'height', 'top', 'left'], function(i, prop) {
 					var sum = (start[prop]||0) + (delta[prop]||0);
 					if (sum && sum >= 0)
 						style[prop] = sum || null;
 				});
-				$(this).css(style);
+
+				//Opera fixing relative position
+				if (/relative/.test(el.css('position')) && $.browser.opera) {
+					self._revertToRelativePosition = true;
+					el.css({ position: 'absolute', top: 'auto', left: 'auto' });
+				}
+
+				el.css(style);
 			});
 		};
 
@@ -621,6 +628,14 @@ $.ui.plugin.add("resizable", "alsoResize", {
 	},
 
 	stop: function(event, ui){
+		var self = $(this).data("resizable");
+
+		//Opera fixing relative position
+		if (self._revertToRelativePosition && $.browser.opera) {
+			self._revertToRelativePosition = false;
+			el.css({ position: 'relative' });
+		}
+
 		$(this).removeData("resizable-alsoresize-start");
 	}
 });
