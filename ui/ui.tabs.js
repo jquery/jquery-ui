@@ -343,7 +343,7 @@ $.widget("ui.tabs", {
 		if (index == undefined)
 			index = this.$tabs.length; // append by default
 
-		var o = this.options;
+		var self = this, o = this.options;
 		var $li = $(o.tabTemplate.replace(/#\{href\}/g, url).replace(/#\{label\}/g, label));
 		$li.addClass(o.tabClass).data('destroy.tabs', true);
 
@@ -371,11 +371,14 @@ $.widget("ui.tabs", {
 
 		this._tabify();
 
-		if (this.$tabs.length == 1) {
+		if (this.$tabs.length == 1) { // after tabify
 			$li.addClass(o.selectedClass);
 			$panel.removeClass(o.hideClass);
 			var href = $.data(this.$tabs[0], 'load.tabs');
-			if (href) this.load(index, href);
+			if (href) this.load(0, function() {
+			    self._trigger('show', null,
+					self.ui(self.$tabs[0], self.$panels[0]));
+			});
 		}
 
 		// callback
