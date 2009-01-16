@@ -10,4 +10,4 @@
 
 .ui-slider-vertical { width: .8em; height: 100%; }
 .ui-slider-vertical .ui-slider-handle { left: -.3em; margin-left: 0; margin-bottom: -.6em; }
-.ui-slider-vertical .ui-slider-range { position: relative; left: 0; height: auto; width: 100%; }
+.ui-slider-vertical .ui-slider-range { left: 0; height: auto; width: 100%; }
