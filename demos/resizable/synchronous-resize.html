@@ -1,37 +1,43 @@
 <!doctype html>
 <html lang="en">
 <head>
-	<title>jQuery UI Resizable - Animate</title>
+	<title>jQuery UI Resizable - Synchronous resize</title>
 	<link type="text/css" href="../../themes/base/ui.all.css" rel="stylesheet" />
 	<script type="text/javascript" src="../../jquery-1.3.js"></script>
 	<script type="text/javascript" src="../../ui/ui.core.js"></script>
 	<script type="text/javascript" src="../../ui/ui.resizable.js"></script>
 	<link type="text/css" href="../demos.css" rel="stylesheet" />
 	<style type="text/css">
-	#resizable { width: 150px; height: 150px; padding: 0.5em; }
-	#resizable h3 { text-align: center; margin: 0; }
-	.ui-resizable-helper { border: 1px dotted gray; }
+	#resizable { background-position: top left; }
+	#resizable, #also { width: 150px; height: 120px; padding: 0.5em; }
+	#resizable h3, #also h3 { text-align: center; margin: 0; }
+	#also { margin-top: 1em; }
 	</style>
 	<script type="text/javascript">
 	$(function() {
 		$("#resizable").resizable({
-			animate: true
+			alsoResize: '#also'
 		});
+		$("#also").resizable();
 	});
 	</script>
 </head>
 <body>
 <div class="demo">
 	
-<div id="resizable" class="ui-widget-content">
-	<h3 class="ui-widget-header">Animate</h3>
+<div id="resizable" class="ui-widget-header">
+	<h3 class="ui-state-active">Resize</h3>
+</div>
+
+<div id="also" class="ui-widget-content">
+	<h3 class="ui-widget-header">will also resize</h3>
 </div>
 
 </div><!-- End demo -->
 
 <div class="demo-description">
 
-<p>Animate the resize action using the <strong>animate</strong> option (boolean). When this option is set to true, drag the outline to the desired location; the element animates to that size on drag stop.</p>
+<p>Resize multiple elements simultaneously by clicking and dragging the sides of one.  Pass a shared selector into the <strong>alsoResize</strong> option.</p>
 
 </div><!-- End demo-description -->
 </body>

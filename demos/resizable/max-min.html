@@ -1,19 +1,24 @@
 <!doctype html>
 <html lang="en">
 <head>
-	<title>jQuery UI Resizable - Default functionality</title>
+	<title>jQuery UI Resizable - Maximum / minimum size</title>
 	<link type="text/css" href="../../themes/base/ui.all.css" rel="stylesheet" />
 	<script type="text/javascript" src="../../jquery-1.3.js"></script>
 	<script type="text/javascript" src="../../ui/ui.core.js"></script>
 	<script type="text/javascript" src="../../ui/ui.resizable.js"></script>
 	<link type="text/css" href="../demos.css" rel="stylesheet" />
 	<style type="text/css">
-	#resizable { width: 150px; height: 150px; padding: 0.5em; }
+	#resizable { width: 200px; height: 150px; padding: 5px; }
 	#resizable h3 { text-align: center; margin: 0; }
 	</style>
 	<script type="text/javascript">
 	$(function() {
-		$("#resizable").resizable();
+		$("#resizable").resizable({
+			maxHeight: 250,
+			maxWidth: 350,
+			minHeight: 150,
+			minWidth: 200
+		});
 	});
 	</script>
 </head>
@@ -21,14 +26,14 @@
 <div class="demo">
 	
 <div id="resizable" class="ui-widget-content">
-	<h3 class="ui-widget-header">Resizable</h3>
+	<h3 class="ui-widget-header">Resize larger / smaller</h3>
 </div>
 
 </div><!-- End demo -->
 
 <div class="demo-description">
 
-<p>Enable any DOM element to be resizable.  With the cursor grab the right or bottom border and drag to the desired width or height.</p>
+<p>Limit the resizable element to a maximum or minimum height or width using the <strong>maxHeight</strong>, <strong>maxWidth</strong>, <strong>minHeight</strong>, and <strong>minWidth</strong> options.</p>
 
 </div><!-- End demo-description -->
 </body>

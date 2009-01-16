@@ -1,19 +1,21 @@
 <!doctype html>
 <html lang="en">
 <head>
-	<title>jQuery UI Resizable - Default functionality</title>
+	<title>jQuery UI Resizable - Preserve aspect ratio</title>
 	<link type="text/css" href="../../themes/base/ui.all.css" rel="stylesheet" />
 	<script type="text/javascript" src="../../jquery-1.3.js"></script>
 	<script type="text/javascript" src="../../ui/ui.core.js"></script>
 	<script type="text/javascript" src="../../ui/ui.resizable.js"></script>
 	<link type="text/css" href="../demos.css" rel="stylesheet" />
 	<style type="text/css">
-	#resizable { width: 150px; height: 150px; padding: 0.5em; }
+	#resizable { width: 160px; height: 90px; padding: 0.5em; }
 	#resizable h3 { text-align: center; margin: 0; }
 	</style>
 	<script type="text/javascript">
 	$(function() {
-		$("#resizable").resizable();
+		$("#resizable").resizable({
+			aspectRatio: 16/9
+		});
 	});
 	</script>
 </head>
@@ -21,14 +23,14 @@
 <div class="demo">
 	
 <div id="resizable" class="ui-widget-content">
-	<h3 class="ui-widget-header">Resizable</h3>
+	<h3 class="ui-widget-header">Preserve aspect ratio</h3>
 </div>
 
 </div><!-- End demo -->
 
 <div class="demo-description">
 
-<p>Enable any DOM element to be resizable.  With the cursor grab the right or bottom border and drag to the desired width or height.</p>
+<p>Maintain the existing aspect ratio or set a new one to constrain the proportions on resize. Set the <strong>aspectRatio</strong> option to true, and optionally pass in a new ratio (i.e., 4/3)</p>
 
 </div><!-- End demo-description -->
 </body>
