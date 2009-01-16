@@ -13,9 +13,15 @@
  */
 (function($) {
 
+var widgetName = "droppable";
+var classWidgetName = ".droppable";
+
 $.widget("ui.droppable", {
 
 	_init: function() {
+		// update widgetName with the name given by the widget factory
+		widgetName = this.widgetName;
+		classWidgetName = '.' + widgetName;
 
 		var o = this.options, accept = o.accept;
 		this.isover = 0; this.isout = 1;
@@ -43,8 +49,8 @@ $.widget("ui.droppable", {
 
 		this.element
 			.removeClass(this.options.cssNamespace+"-droppable "+this.options.cssNamespace+"-droppable-disabled")
-			.removeData("droppable")
-			.unbind(".droppable");
+			.removeData(widgetName)
+			.unbind(classWidgetName);
 	},
 
 	_setData: function(key, value) {
@@ -105,8 +111,8 @@ $.widget("ui.droppable", {
 		if (!draggable || (draggable.currentItem || draggable.element)[0] == this.element[0]) return false; // Bail if draggable and droppable are same element
 
 		var childrenIntersection = false;
-		this.element.find(":data(droppable)").not("."+draggable.options.cssNamespace+"-draggable-dragging").each(function() {
-			var inst = $.data(this, 'droppable');
+		this.element.find(":data(" + widgetName + ")").not("."+draggable.options.cssNamespace+"-draggable-dragging").each(function() {
+			var inst = $.data(this, widgetName);
 			if(inst.options.greedy && $.ui.intersect(draggable, $.extend(inst, { offset: inst.element.offset() }), inst.options.tolerance)) {
 				childrenIntersection = true; return false;
 			}
@@ -203,10 +209,9 @@ $.ui.ddmanager = {
 	current: null,
 	droppables: { 'default': [] },
 	prepareOffsets: function(t, event) {
-
 		var m = $.ui.ddmanager.droppables[t.options.scope];
 		var type = event ? event.type : null; // workaround for #2317
-		var list = (t.currentItem || t.element).find(":data(droppable)").andSelf();
+		var list = (t.currentItem || t.element).find(":data(" + widgetName + ")").andSelf();
 
 		droppablesLoop: for (var i = 0; i < m.length; i++) {
 
@@ -257,9 +262,9 @@ $.ui.ddmanager = {
 
 			var parentInstance;
 			if (this.options.greedy) {
-				var parent = this.element.parents(':data(droppable):eq(0)');
+				var parent = this.element.parents(':data(' + widgetName + '):eq(0)');
 				if (parent.length) {
-					parentInstance = $.data(parent[0], 'droppable');
+					parentInstance = $.data(parent[0], widgetName);
 					parentInstance.greedyChild = (c == 'isover' ? 1 : 0);
 				}
 			}
@@ -289,7 +294,7 @@ $.ui.ddmanager = {
  * Droppable Extensions
  */
 
-$.ui.plugin.add("droppable", "activeClass", {
+$.ui.plugin.add(widgetName, "activeClass", {
 	activate: function(event, ui) {
 		$(this).addClass(ui.options.activeClass);
 	},
@@ -301,7 +306,7 @@ $.ui.plugin.add("droppable", "activeClass", {
 	}
 });
 
-$.ui.plugin.add("droppable", "hoverClass", {
+$.ui.plugin.add(widgetName, "hoverClass", {
 	over: function(event, ui) {
 		$(this).addClass(ui.options.hoverClass);
 	},

@@ -12,28 +12,33 @@
  */
 (function($) {
 
+var widgetName = "tabs";
+var classWidgetName = ".tabs";
+
 $.widget("ui.tabs", {
 
 	_init: function() {
+		widgetName = this.widgetName;
+		classWidgetName = '.' + widgetName;
 		// create tabs
 		this._tabify(true);
 	},
 
 	destroy: function() {
 		var o = this.options;
-		this.list.unbind('.tabs')
-			.removeClass(o.navClass).removeData('tabs');
+		this.list.unbind(classWidgetName)
+			.removeClass(o.navClass).removeData(widgetName);
 		this.$tabs.each(function() {
-			var href = $.data(this, 'href.tabs');
+			var href = $.data(this, 'href.' + widgetName);
 			if (href)
 				this.href = href;
-			var $this = $(this).unbind('.tabs');
+			var $this = $(this).unbind(classWidgetName);
 			$.each(['href', 'load', 'cache'], function(i, prefix) {
-				$this.removeData(prefix + '.tabs');
+				$this.removeData(prefix + classWidgetName);
 			});
 		});
-		this.$lis.unbind('.tabs').add(this.$panels).each(function() {
-			if ($.data(this, 'destroy.tabs'))
+		this.$lis.unbind(classWidgetName).add(this.$panels).each(function() {
+			if ($.data(this, 'destroy.' + widgetName))
 				$(this).remove();
 			else
 				$(this).removeClass([o.tabClass, o.selectedClass, o.deselectableClass,
@@ -85,15 +90,15 @@ $.widget("ui.tabs", {
 				self.$panels = self.$panels.add(self._sanitizeSelector(a.hash));
 			// remote tab
 			else if ($(a).attr('href') != '#') { // prevent loading the page itself if href is just "#"
-				$.data(a, 'href.tabs', a.href); // required for restore on destroy
-				$.data(a, 'load.tabs', a.href); // mutable
+				$.data(a, 'href.' + widgetName, a.href); // required for restore on destroy
+				$.data(a, 'load.' + widgetName, a.href); // mutable
 				var id = self._tabId(a);
 				a.href = '#' + id;
 				var $panel = $('#' + id);
 				if (!$panel.length) {
 					$panel = $(o.panelTemplate).attr('id', id).addClass(o.panelClass)
 						.insertAfter(self.$panels[i - 1] || self.list);
-					$panel.data('destroy.tabs', true);
+					$panel.data('destroy.' + widgetName, true);
 				}
 				self.$panels = self.$panels.add($panel);
 			}
@@ -163,7 +168,7 @@ $.widget("ui.tabs", {
 				};
 
 				// load if remote tab
-				if ($.data(this.$tabs[o.selected], 'load.tabs'))
+				if ($.data(this.$tabs[o.selected], 'load.' + widgetName))
 					this.load(o.selected, onShow);
 				// just trigger show event
 				else onShow();
@@ -173,16 +178,16 @@ $.widget("ui.tabs", {
 			var handleState = function(state, el) {
 			    if (el.is(':not(.' + o.disabledClass + ')')) el.toggleClass('ui-state-' + state);
 			};		
-			this.$lis.bind('mouseover.tabs mouseout.tabs', function() {
+			this.$lis.bind(['mouseover.', widgetName, ' mouseout.', widgetName].join(''), function() {
 			    handleState('hover', $(this));
 			});
-    		this.$tabs.bind('focus.tabs blur.tabs', function() {
+    		this.$tabs.bind(['focus.', widgetName, ' blur.', widgetName].join(''), function() {
     		    handleState('focus', $(this).parents('li:first'));
     		});
 
 			// clean up to avoid memory leaks in certain versions of IE 6
 			$(window).bind('unload', function() {
-				self.$lis.add(self.$tabs).unbind('.tabs');
+				self.$lis.add(self.$tabs).unbind(classWidgetName);
 				self.$lis = self.$tabs = self.$panels = null;
 			});
 
@@ -199,7 +204,7 @@ $.widget("ui.tabs", {
 			$(li)[$.inArray(i, o.disabled) != -1 && !$(li).hasClass(o.selectedClass) ? 'addClass' : 'removeClass'](o.disabledClass);
 
 		// reset cache if switching from cached to not cached
-		if (o.cache === false) this.$tabs.removeData('cache.tabs');
+		if (o.cache === false) this.$tabs.removeData('cache.' + widgetName);
 
 		// set up animations
 		var hideFx, showFx;
@@ -257,7 +262,7 @@ $.widget("ui.tabs", {
 		}
 
 		// attach tab event handler, unbind to avoid duplicates from former tabifying...
-		this.$tabs.unbind('.tabs').bind(o.event + '.tabs', function() {
+		this.$tabs.unbind(classWidgetName).bind(o.event + classWidgetName, function() {
 
 			//var trueClick = event.clientX; // add to history only if true click occured, not a triggered click
 			var $li = $(this).parents('li:eq(0)'),
@@ -335,7 +340,7 @@ $.widget("ui.tabs", {
 		});
 		
 		// disable click if event is configured to something else
-		if (o.event != 'click') this.$tabs.bind('click.tabs', function(){return false;});
+		if (o.event != 'click') this.$tabs.bind('click.' + widgetName, function(){return false;});
 
 	},
 
@@ -345,7 +350,7 @@ $.widget("ui.tabs", {
 
 		var o = this.options;
 		var $li = $(o.tabTemplate.replace(/#\{href\}/g, url).replace(/#\{label\}/g, label));
-		$li.addClass(o.tabClass).data('destroy.tabs', true);
+		$li.addClass(o.tabClass).data('destroy.' + widgetName, true);
 
 		var id = url.indexOf('#') == 0 ? url.replace('#', '') : this._tabId( $('a:first-child', $li)[0] );
 
@@ -354,7 +359,7 @@ $.widget("ui.tabs", {
 		if (!$panel.length) {
 			$panel = $(o.panelTemplate).attr('id', id)
 				.addClass(o.hideClass)
-				.data('destroy.tabs', true);
+				.data('destroy.' + widgetName, true);
 		}
 		$panel.addClass(o.panelClass);
 		if (index >= this.$lis.length) {
@@ -374,7 +379,7 @@ $.widget("ui.tabs", {
 		if (this.$tabs.length == 1) {
 			$li.addClass(o.selectedClass);
 			$panel.removeClass(o.hideClass);
-			var href = $.data(this.$tabs[0], 'load.tabs');
+			var href = $.data(this.$tabs[0], 'load.' + widgetName);
 			if (href) this.load(index, href);
 		}
 
@@ -436,18 +441,18 @@ $.widget("ui.tabs", {
 		// TODO make null as argument work
 		if (typeof index == 'string')
 			index = this.$tabs.index( this.$tabs.filter('[href$=' + index + ']')[0] );
-		this.$tabs.eq(index).trigger(this.options.event + '.tabs');
+		this.$tabs.eq(index).trigger(this.options.event + classWidgetName);
 	},
 
 	load: function(index, callback) { // callback is for internal usage only
 
 		var self = this, o = this.options, $a = this.$tabs.eq(index), a = $a[0],
-				bypassCache = callback == undefined || callback === false, url = $a.data('load.tabs');
+				bypassCache = callback == undefined || callback === false, url = $a.data('load.' + widgetName);
 
 		callback = callback || function() {};
 
 		// no remote or from cache - just finish with callback
-		if (!url || !bypassCache && $.data(a, 'cache.tabs')) {
+		if (!url || !bypassCache && $.data(a, 'cache.' + widgetName)) {
 			callback();
 			return;
 		}
@@ -462,7 +467,7 @@ $.widget("ui.tabs", {
 			self.$tabs.filter('.' + o.loadingClass).removeClass(o.loadingClass)
 					.each(function() {
 						if (o.spinner)
-							inner(this).parent().html(inner(this).data('label.tabs'));
+							inner(this).parent().html(inner(this).data('label.' + widgetName));
 					});
 			self.xhr = null;
 		};
@@ -470,7 +475,7 @@ $.widget("ui.tabs", {
 		if (o.spinner) {
 			var label = inner(a).html();
 			inner(a).wrapInner('<em></em>')
-				.find('em').data('label.tabs', label).html(o.spinner);
+				.find('em').data('label.' + widgetName, label).html(o.spinner);
 		}
 
 		var ajaxOptions = $.extend({}, o.ajaxOptions, {
@@ -480,7 +485,7 @@ $.widget("ui.tabs", {
 				cleanup();
 
 				if (o.cache)
-					$.data(a, 'cache.tabs', true); // if loaded once do not load them again
+					$.data(a, 'cache.' + widgetName, true); // if loaded once do not load them again
 
 				// callbacks
 				self._trigger('load', null, self.ui(self.$tabs[index], self.$panels[index]));
@@ -505,7 +510,7 @@ $.widget("ui.tabs", {
 	},
 
 	url: function(index, url) {
-		this.$tabs.eq(index).removeData('cache.tabs').data('load.tabs', url);
+		this.$tabs.eq(index).removeData('cache.' + widgetName).data('load.' + widgetName, url);
 	},
 
 	ui: function(tab, panel) {
@@ -577,9 +582,9 @@ $.extend($.ui.tabs.prototype, {
 		if (ms) {
 			start();
 			if (!continuing)
-				this.$tabs.bind(this.options.event + '.tabs', stop);
+				this.$tabs.bind(this.options.event + classWidgetName, stop);
 			else
-				this.$tabs.bind(this.options.event + '.tabs', function() {
+				this.$tabs.bind(this.options.event + classWidgetName, function() {
 					stop();
 					t = self.options.selected;
 					start();
@@ -588,7 +593,7 @@ $.extend($.ui.tabs.prototype, {
 		// stop interval
 		else {
 			stop();
-			this.$tabs.unbind(this.options.event + '.tabs', stop);
+			this.$tabs.unbind(this.options.event + classWidgetName, stop);
 		}
 	}
 });

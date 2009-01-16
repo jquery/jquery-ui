@@ -12,9 +12,15 @@
  */
 (function($) {
 
+var widgetName = "draggable";
+var classWidgetName = ".draggable";
+
 $.widget("ui.draggable", $.extend({}, $.ui.mouse, {
 
 	_init: function() {
+		// update widgetName with the name given by the widget factory
+		widgetName = this.widgetName;
+		classWidgetName = '.' + widgetName;
 
 		if (this.options.helper == 'original' && !(/^(?:r|a|f)/).test(this.element.css("position")))
 			this.element[0].style.position = 'relative';
@@ -27,8 +33,8 @@ $.widget("ui.draggable", $.extend({}, $.ui.mouse, {
 	},
 
 	destroy: function() {
-		if(!this.element.data('draggable')) return;
-		this.element.removeData("draggable").unbind(".draggable").removeClass(this.options.cssNamespace+'-draggable '+this.options.cssNamespace+'-draggable-dragging '+this.options.cssNamespace+'-draggable-disabled');
+		if(!this.element.data(widgetName)) return;
+		this.element.removeData(widgetName).unbind(classWidgetName).removeClass(this.options.cssNamespace+'-draggable '+this.options.cssNamespace+'-draggable-dragging '+this.options.cssNamespace+'-draggable-disabled');
 		this._mouseDestroy();
 	},
 
@@ -426,10 +432,10 @@ $.extend($.ui.draggable, {
 	}
 });
 
-$.ui.plugin.add("draggable", "connectToSortable", {
+$.ui.plugin.add(widgetName, "connectToSortable", {
 	start: function(event, ui) {
 
-		var inst = $(this).data("draggable");
+		var inst = $(this).data(widgetName);
 		inst.sortables = [];
 		$(ui.options.connectToSortable).each(function() {
 			// 'this' points to a string, and should therefore resolved as query, but instead, if the string is assigned to a variable, it loops through the strings properties,
@@ -451,7 +457,7 @@ $.ui.plugin.add("draggable", "connectToSortable", {
 	stop: function(event, ui) {
 
 		//If we are still over the sortable, we fake the stop event of the sortable, but also remove helper
-		var inst = $(this).data("draggable");
+		var inst = $(this).data(widgetName);
 
 		$.each(inst.sortables, function() {
 			if(this.instance.isOver) {
@@ -486,7 +492,7 @@ $.ui.plugin.add("draggable", "connectToSortable", {
 	},
 	drag: function(event, ui) {
 
-		var inst = $(this).data("draggable"), self = this;
+		var inst = $(this).data(widgetName), self = this;
 
 		var checkPos = function(o) {
 			var dyClick = this.offset.click.top, dxClick = this.offset.click.left;
@@ -556,7 +562,7 @@ $.ui.plugin.add("draggable", "connectToSortable", {
 	}
 });
 
-$.ui.plugin.add("draggable", "cursor", {
+$.ui.plugin.add(widgetName, "cursor", {
 	start: function(event, ui) {
 		var t = $('body');
 		if (t.css("cursor")) ui.options._cursor = t.css("cursor");
@@ -567,7 +573,7 @@ $.ui.plugin.add("draggable", "cursor", {
 	}
 });
 
-$.ui.plugin.add("draggable", "iframeFix", {
+$.ui.plugin.add(widgetName, "iframeFix", {
 	start: function(event, ui) {
 		$(ui.options.iframeFix === true ? "iframe" : ui.options.iframeFix).each(function() {
 			$('<div class="ui-draggable-iframeFix" style="background: #fff;"></div>')
@@ -584,7 +590,7 @@ $.ui.plugin.add("draggable", "iframeFix", {
 	}
 });
 
-$.ui.plugin.add("draggable", "opacity", {
+$.ui.plugin.add(widgetName, "opacity", {
 	start: function(event, ui) {
 		var t = $(ui.helper);
 		if(t.css("opacity")) ui.options._opacity = t.css("opacity");
@@ -595,10 +601,10 @@ $.ui.plugin.add("draggable", "opacity", {
 	}
 });
 
-$.ui.plugin.add("draggable", "scroll", {
+$.ui.plugin.add(widgetName, "scroll", {
 	start: function(event, ui) {
 		var o = ui.options;
-		var i = $(this).data("draggable");
+		var i = $(this).data(widgetName);
 
 		if(i.scrollParent[0] != document && i.scrollParent[0].tagName != 'HTML') i.overflowOffset = i.scrollParent.offset();
 
@@ -606,7 +612,7 @@ $.ui.plugin.add("draggable", "scroll", {
 	drag: function(event, ui) {
 
 		var o = ui.options, scrolled = false;
-		var i = $(this).data("draggable");
+		var i = $(this).data(widgetName);
 
 		if(i.scrollParent[0] != document && i.scrollParent[0].tagName != 'HTML') {
 
@@ -640,10 +646,10 @@ $.ui.plugin.add("draggable", "scroll", {
 	}
 });
 
-$.ui.plugin.add("draggable", "snap", {
+$.ui.plugin.add(widgetName, "snap", {
 	start: function(event, ui) {
 
-		var inst = $(this).data("draggable");
+		var inst = $(this).data(widgetName);
 		inst.snapElements = [];
 
 		$(ui.options.snap.constructor != String ? ( ui.options.snap.items || ':data(draggable)' ) : ui.options.snap).each(function() {
@@ -658,7 +664,7 @@ $.ui.plugin.add("draggable", "snap", {
 	},
 	drag: function(event, ui) {
 
-		var inst = $(this).data("draggable");
+		var inst = $(this).data(widgetName);
 		var d = ui.options.snapTolerance;
 
 		var x1 = ui.absolutePosition.left, x2 = x1 + inst.helperProportions.width,
@@ -709,7 +715,7 @@ $.ui.plugin.add("draggable", "snap", {
 	}
 });
 
-$.ui.plugin.add("draggable", "stack", {
+$.ui.plugin.add(widgetName, "stack", {
 	start: function(event, ui) {
 		var group = $.makeArray($(ui.options.stack.group)).sort(function(a,b) {
 			return (parseInt($(a).css("zIndex"),10) || ui.options.stack.min) - (parseInt($(b).css("zIndex"),10) || ui.options.stack.min);
@@ -723,7 +729,7 @@ $.ui.plugin.add("draggable", "stack", {
 	}
 });
 
-$.ui.plugin.add("draggable", "zIndex", {
+$.ui.plugin.add(widgetName, "zIndex", {
 	start: function(event, ui) {
 		var t = $(ui.helper);
 		if(t.css("zIndex")) ui.options._zIndex = t.css("zIndex");

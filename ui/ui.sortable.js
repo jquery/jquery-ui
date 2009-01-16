@@ -12,8 +12,14 @@
  */
 (function($) {
 
+var widgetName = "sortable";
+var classWidgetName = ".sortable";
+
 $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 	_init: function() {
+		// update widgetName with the name given by the widget factory
+		widgetName = this.widgetName;
+		classWidgetName = '.' + widgetName;
 
 		var o = this.options;
 		this.containerCache = {};
@@ -36,8 +42,8 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 	destroy: function() {
 		this.element
 			.removeClass(this.options.cssNamespace+"-sortable "+this.options.cssNamespace+"-sortable-disabled")
-			.removeData("sortable")
-			.unbind(".sortable");
+			.removeData(widgetName)
+			.unbind(classWidgetName);
 		this._mouseDestroy();
 
 		for ( var i = this.items.length - 1; i >= 0; i-- )
@@ -421,7 +427,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 			for (var i = this.options.connectWith.length - 1; i >= 0; i--){
 				var cur = $(this.options.connectWith[i]);
 				for (var j = cur.length - 1; j >= 0; j--){
-					var inst = $.data(cur[j], 'sortable');
+					var inst = $.data(cur[j], widgetName);
 					if(inst && inst != this && !inst.options.disabled) {
 						queries.push([$.isFunction(inst.options.items) ? inst.options.items.call(inst.element) : $(inst.options.items, inst.element).not("."+inst.options.cssNamespace+"-sortable-helper"), inst]);
 					}
@@ -468,7 +474,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 			for (var i = this.options.connectWith.length - 1; i >= 0; i--){
 				var cur = $(this.options.connectWith[i]);
 				for (var j = cur.length - 1; j >= 0; j--){
-					var inst = $.data(cur[j], 'sortable');
+					var inst = $.data(cur[j], widgetName);
 					if(inst && inst != this && !inst.options.disabled) {
 						queries.push([$.isFunction(inst.options.items) ? inst.options.items.call(inst.element[0], event, { item: this.currentItem }) : $(inst.options.items, inst.element), inst]);
 						this.containers.push(inst);
@@ -943,38 +949,38 @@ $.extend($.ui.sortable, {
  * Sortable Extensions
  */
 
-$.ui.plugin.add("sortable", "cursor", {
+$.ui.plugin.add(widgetName, "cursor", {
 	start: function(event, ui) {
-		var t = $('body'), i = $(this).data('sortable');
+		var t = $('body'), i = $(this).data(widgetName);
 		if (t.css("cursor")) i.options._cursor = t.css("cursor");
 		t.css("cursor", i.options.cursor);
 	},
 	beforeStop: function(event, ui) {
-		var i = $(this).data('sortable');
+		var i = $(this).data(widgetName);
 		if (i.options._cursor) $('body').css("cursor", i.options._cursor);
 	}
 });
 
-$.ui.plugin.add("sortable", "opacity", {
+$.ui.plugin.add(widgetName, "opacity", {
 	start: function(event, ui) {
-		var t = ui.helper, i = $(this).data('sortable');
+		var t = ui.helper, i = $(this).data(widgetName);
 		if(t.css("opacity")) i.options._opacity = t.css("opacity");
 		t.css('opacity', i.options.opacity);
 	},
 	beforeStop: function(event, ui) {
-		var i = $(this).data('sortable');
+		var i = $(this).data(widgetName);
 		if(i.options._opacity) $(ui.helper).css('opacity', i.options._opacity);
 	}
 });
 
-$.ui.plugin.add("sortable", "scroll", {
+$.ui.plugin.add(widgetName, "scroll", {
 	start: function(event, ui) {
-		var i = $(this).data("sortable"), o = i.options;
+		var i = $(this).data(widgetName), o = i.options;
 		if(i.scrollParent[0] != document && i.scrollParent[0].tagName != 'HTML') i.overflowOffset = i.scrollParent.offset();
 	},
 	sort: function(event, ui) {
 
-		var i = $(this).data("sortable"), o = i.options, scrolled = false;
+		var i = $(this).data(widgetName), o = i.options, scrolled = false;
 
 		if(i.scrollParent[0] != document && i.scrollParent[0].tagName != 'HTML') {
 
@@ -1008,14 +1014,14 @@ $.ui.plugin.add("sortable", "scroll", {
 	}
 });
 
-$.ui.plugin.add("sortable", "zIndex", {
+$.ui.plugin.add(widgetName, "zIndex", {
 	start: function(event, ui) {
-		var t = ui.helper, i = $(this).data('sortable');
+		var t = ui.helper, i = $(this).data(widgetName);
 		if(t.css("zIndex")) i.options._zIndex = t.css("zIndex");
 		t.css('zIndex', i.options.zIndex);
 	},
 	beforeStop: function(event, ui) {
-		var i = $(this).data('sortable');
+		var i = $(this).data(widgetName);
 		if(i.options._zIndex) $(ui.helper).css('zIndex', i.options._zIndex == 'auto' ? '' : i.options._zIndex);
 	}
 });

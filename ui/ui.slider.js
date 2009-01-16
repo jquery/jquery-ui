@@ -13,9 +13,15 @@
 
 (function($) {
 
+var widgetName = "slider";
+var classWidgetName = ".slider";
+
 $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 
 	_init: function() {
+		// update widgetName with the name given by the widget factory
+		widgetName = this.widgetName;
+		classWidgetName = '.' + widgetName;
 
 		var self = this, o = this.options;
 		this._keySliding = false;
@@ -160,8 +166,8 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 				+ " ui-widget"
 				+ " ui-widget-content"
 				+ " ui-corner-all")
-			.removeData("slider")
-			.unbind(".slider");
+			.removeData(widgetName)
+			.unbind(classWidgetName);
 
 		this._mouseDestroy();
 

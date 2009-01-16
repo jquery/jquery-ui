@@ -14,6 +14,9 @@
  */
 (function($) {
 
+var widgetName = "dialog";
+var classWidgetName = ".dialog";
+
 var setDataSwitch = {
 	dragStart: "start.draggable",
 	drag: "drag.draggable",
@@ -30,6 +33,10 @@ var setDataSwitch = {
 $.widget("ui.dialog", {
 
 	_init: function() {
+		// update widgetName with the name given by the widget factory
+		widgetName = this.widgetName;
+		classWidgetName = '.' + widgetName;
+
 		this.originalTitle = this.element.attr('title');
 		this.options.title = this.options.title || this.originalTitle;
 
@@ -61,7 +68,7 @@ $.widget("ui.dialog", {
 						&& ev.keyCode == $.ui.keyCode.ESCAPE && self.close());
 				})
 				.attr({
-					role: 'dialog',
+					role: widgetName,
 					'aria-labelledby': titleId
 				})
 				.mousedown(function() {
@@ -152,8 +159,8 @@ $.widget("ui.dialog", {
 		(this.overlay && this.overlay.destroy());
 		this.uiDialog.hide();
 		this.element
-			.unbind('.dialog')
-			.removeData('dialog')
+			.unbind(classWidgetName)
+			.removeData(widgetName)
 			.removeClass('ui-dialog-content ui-widget-content')
 			.hide().appendTo('body');
 		this.uiDialog.remove();
