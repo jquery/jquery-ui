@@ -375,7 +375,7 @@ $.widget.prototype = {
 
 		this.element.trigger(event, data);
 
-		return !(callback && callback.call(this.element[0], event, data) === false
+		return !($.isFunction(callback) && callback.call(this.element[0], event, data) === false
 			|| event.isDefaultPrevented());
 	}
 };
