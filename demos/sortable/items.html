@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-	<title>jQuery UI Sortable - Excluding Items Demo</title>
+	<title>jQuery UI Sortable - Include / exclude items</title>
 	<link type="text/css" href="../../themes/base/ui.all.css" rel="stylesheet" />
 	<script type="text/javascript" src="../../jquery-1.3.js"></script>
 	<script type="text/javascript" src="../../ui/ui.core.js"></script>
@@ -25,16 +25,16 @@
 <body>
 <div class="demo">
 
-<p>Completely exclude items from the sorting logic using the 'items' option</p>
+<h3>Specify which items are sortable:</h3>
 
 <ul id="sortable">
 	<li class="ui-state-default">Item 1</li>
-	<li class="ui-state-default ui-state-disabled">(I'm not sortable)</li>
-	<li class="ui-state-default ui-state-disabled">(I'm not sortable)</li>
+	<li class="ui-state-default ui-state-disabled">(I'm not sortable or a drop target)</li>
+	<li class="ui-state-default ui-state-disabled">(I'm not sortable or a drop target)</li>
 	<li class="ui-state-default">Item 4</li>
 </ul>
 
-<p>Keep the items as valid targets, but non-draggable, using the 'cancel' option</p>
+<h3>Cancel sorting (but keep as drop targets):</h3>
 
 <ul id="sortable2">
 	<li class="ui-state-default">Item 1</li>
@@ -47,9 +47,8 @@
 
 <div class="demo-description">
 
-<p>
-
-</p>
+<p>Specify which items are eligible to sort by passing a jQuery selector into the <strong>items</strong> option. Items excluded from this option are not sortable, nor are they valid targets for sortable items. </p>
+<p>To only prevent sorting on certain items, pass a jQuery selector into the <strong>cancel</strong> option.  Cancelled items remain valid sort targets for others.</p>
 
 </div><!-- End demo-description -->
 
