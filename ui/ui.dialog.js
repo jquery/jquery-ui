@@ -126,15 +126,7 @@ $.widget("ui.dialog", {
 				.addClass('ui-dialog-title')
 				.attr('id', titleId)
 				.html(title)
-				.prependTo(uiDialogTitlebar),
-
-			uiDialogButtonPane = (this.uiDialogButtonPane = $('<div></div>'))
-				.addClass(
-					'ui-dialog-buttonpane ' +
-					'ui-widget-content ' +
-					'ui-helper-clearfix'
-				)
-				.appendTo(uiDialog);
+				.prependTo(uiDialogTitlebar);
 
 		uiDialogTitlebar.find("*").add(uiDialogTitlebar).disableSelection();
 
@@ -256,14 +248,19 @@ $.widget("ui.dialog", {
 	_createButtons: function(buttons) {
 		var self = this,
 			hasButtons = false,
-			uiDialogButtonPane = this.uiDialogButtonPane;
+			uiDialogButtonPane = $('<div></div>')
+				.addClass(
+					'ui-dialog-buttonpane ' +
+					'ui-widget-content ' +
+					'ui-helper-clearfix'
+				);
 
-		// remove any existing buttons
-		uiDialogButtonPane.empty().hide();
+		// if we already have a button pane, remove it
+		this.uiDialog.find('.ui-dialog-buttonpane').remove();
 
-		$.each(buttons, function() { return !(hasButtons = true); });
+		(typeof buttons == 'object' && buttons !== null &&
+			$.each(buttons, function() { return !(hasButtons = true); }));
 		if (hasButtons) {
-			uiDialogButtonPane.show();
 			$.each(buttons, function(name, fn) {
 				$('<button type="button"></button>')
 					.addClass(
@@ -288,6 +285,7 @@ $.widget("ui.dialog", {
 					})
 					.appendTo(uiDialogButtonPane);
 			});
+			uiDialogButtonPane.appendTo(this.uiDialog);
 		}
 	},
 
