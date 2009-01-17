@@ -207,15 +207,18 @@ $.widget("ui.dialog", {
 	open: function() {
 		if (this._isOpen) { return; }
 
-		this.overlay = this.options.modal ? new $.ui.dialog.overlay(this) : null;
-		(this.uiDialog.next().length && this.uiDialog.appendTo('body'));
+		var options = this.options,
+			uiDialog = this.uiDialog;
+
+		this.overlay = options.modal ? new $.ui.dialog.overlay(this) : null;
+		(uiDialog.next().length && uiDialog.appendTo('body'));
 		this._size();
-		this._position(this.options.position);
-		this.uiDialog.show(this.options.show);
+		this._position(options.position);
+		uiDialog.show(options.show);
 		this.moveToTop(true);
 
 		// prevent tabbing out of modal dialogs
-		(this.options.modal && this.uiDialog.bind('keypress.ui-dialog', function(event) {
+		(options.modal && uiDialog.bind('keypress.ui-dialog', function(event) {
 			if (event.keyCode != $.ui.keyCode.TAB) {
 				return;
 			}
@@ -235,7 +238,17 @@ $.widget("ui.dialog", {
 			}
 		}));
 
-		this.uiDialog.find(':tabbable:first').focus();
+		// set focus to the first tabbable element in:
+		// - content area
+		// - button pane
+		// - title bar
+		$([])
+			.add(uiDialog.find('.ui-dialog-content :tabbable:first'))
+			.add(uiDialog.find('.ui-dialog-buttonpane :tabbable:first'))
+			.add(uiDialog.find('.ui-dialog-titlebar :tabbable:first'))
+			.filter(':first')
+			.focus();
+
 		this._trigger('open');
 		this._isOpen = true;
 	},
