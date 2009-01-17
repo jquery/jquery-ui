@@ -11,18 +11,11 @@ var defaults = {
 	cache: false,
 	cookie: null,
 	deselectable: false,
-	deselectableClass: 'ui-tabs-deselectable',
 	disabled: [],
-	disabledClass: 'ui-state-disabled',
 	event: 'click',
 	fx: null,
-	hideClass: 'ui-tabs-hide',
 	idPrefix: 'ui-tabs-',
-	loadingClass: 'ui-tabs-loading',
-	navClass: 'ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all',
-	panelClass: 'ui-tabs-panel ui-widget-content ui-corner-bottom',
 	panelTemplate: '<div></div>',
-	selectedClass: 'ui-tabs-selected ui-state-active',
 	spinner: 'Loading&#8230;',
 	tabTemplate: '<li><a href="#{href}"><span>#{label}</span></a></li>'
 };
