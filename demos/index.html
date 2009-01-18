@@ -150,6 +150,7 @@
 		}
 				
 		function loadDemo(path) {
+			var directory = path.match(/([^\/]+)\/[^\/\.]+\.html$/)[1];
 			$.get(path, function(data) {
 
 				data = data.replace(/<script.*>.*<\/script>/ig,""); // Remove script tags
@@ -159,6 +160,7 @@
 				data = data.replace(/<\/?head.*>/ig,""); //Remove head tag
 				data = data.replace(/<\/?!doctype.*>/ig,""); //Remove doctype
 				data = data.replace(/<title.*>.*<\/title>/ig,""); // Remove title tags
+				data = data.replace(/((href|src)=["'])(?!(http|#))/ig, "$1" + directory + "/");
 
 				$('#demo-frame').empty().html(data);
 				$('#demo-link a').attr('href', path);
