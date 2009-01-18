@@ -24,8 +24,8 @@
 		
 		$("#draggable2").draggable();
 		$("#droppable2").droppable({
+			accept: "#draggable2",
 			activeClass: 'ui-state-hover',
-			hoverClass: 'ui-state-active',
 			drop: function(event, ui) {
 				$(this).addClass('ui-state-highlight').find('p').html('Dropped!');
 			}
@@ -37,7 +37,7 @@
 <body>
 <div class="demo">
 
-<h3 class="docs">Feedback on hover only:</h3>
+<h3 class="docs">Feedback on hover:</h3>
 	
 <div id="draggable" class="ui-widget-content">
 	<p>Drag me to my target</p>
@@ -47,7 +47,7 @@
 	<p>Drop here</p>
 </div>
 
-<h3 class="docs">Feedback on hover and when dropped:</h3>
+<h3 class="docs">Feedback on activating draggable:</h3>
 
 <div id="draggable2" class="ui-widget-content">
 	<p>Drag me to my target</p>
