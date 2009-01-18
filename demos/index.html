@@ -39,6 +39,7 @@
 	<script type="text/javascript" src="../ui/i18n/ui.datepicker-cs.js"></script>
 	<script type="text/javascript" src="../ui/i18n/ui.datepicker-da.js"></script>
 	<script type="text/javascript" src="../ui/i18n/ui.datepicker-de.js"></script>
+	<script type="text/javascript" src="../ui/i18n/ui.datepicker-el.js"></script>
 	<script type="text/javascript" src="../ui/i18n/ui.datepicker-eo.js"></script>
 	<script type="text/javascript" src="../ui/i18n/ui.datepicker-es.js"></script>
 	<script type="text/javascript" src="../ui/i18n/ui.datepicker-fa.js"></script>
@@ -55,6 +56,7 @@
 	<script type="text/javascript" src="../ui/i18n/ui.datepicker-ko.js"></script>
 	<script type="text/javascript" src="../ui/i18n/ui.datepicker-lt.js"></script>
 	<script type="text/javascript" src="../ui/i18n/ui.datepicker-lv.js"></script>
+	<script type="text/javascript" src="../ui/i18n/ui.datepicker-ms.js"></script>
 	<script type="text/javascript" src="../ui/i18n/ui.datepicker-nl.js"></script>
 	<script type="text/javascript" src="../ui/i18n/ui.datepicker-no.js"></script>
 	<script type="text/javascript" src="../ui/i18n/ui.datepicker-pl.js"></script>
@@ -92,7 +94,7 @@
 
 		function loadPage(path) {			
 			var section = path.replace(/\/[^\/]+\.html/,'');
-			var header = section.replace(/.+\/([^\/]+)/,'$1');
+			var header = section.replace(/.+\/([^\/]+)/,'$1').replace(/_/, ' ');
 			
 			$('td.normal div.normal')
 				.empty()
@@ -231,6 +233,7 @@
 					<dd><a href="effects_movement/index.html">Movement</a></dd>
 					<dd><a href="effects_feedback/index.html">Feedback</a></dd>
 					<dd><a href="effects_showhide/index.html">Show/Hide</a></dd>
+					<dd><a href="effects_easings/index.html">Easings</a></dd>
 			</dl>
 		</td>
 		<td class="normal">
