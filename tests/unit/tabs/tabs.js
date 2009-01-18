@@ -38,42 +38,31 @@ module('tabs');
 	test('init', function() {
 		expect(9);
 
-		var el = $('#tabs1').tabs(); // new markup requires to tabify wrapper again...
-		ok(true, '.tabs() called on element');
-
-		el.tabs('destroy').tabs({ selected: 1 });
+		var el = $('#tabs1').tabs();
 		
+		ok(true, '.tabs() called on element');
 		ok( el.is('.ui-tabs.ui-widget.ui-widget-content.ui-corner-all'), 'attach classes to container');
 		ok( $('ul', el).is('.ui-tabs-nav.ui-helper-reset.ui-helper-clearfix.ui-widget-header.ui-corner-all'), 'attach classes to list' );
 		ok( $('div:eq(0)', el).is('.ui-tabs-panel.ui-widget-content.ui-corner-bottom'), 'attach classes to panel' );
-		ok( $('li:eq(0)', el).is('.ui-state-default.ui-corner-top'), 'attach classes to inactive li');
-		ok( $('li:eq(1)', el).is('.ui-tabs-selected.ui-state-active.ui-corner-top'), 'attach classes to active li');
-		equals( el.data('selected.tabs'), 1, 'selected.tabs set' );
-		equals( $('li', el).index( $('li.ui-tabs-selected', el) ), 1, 'second tab active');
-		equals( $('div', el).index( $('div.ui-tabs-hide', '#tabs1') ), 0, 'first panel should be hidden' );
+		ok( $('li:eq(0)', el).is('.ui-tabs-selected.ui-state-active.ui-corner-top'), 'attach classes to active li');
+		ok( $('li:eq(1)', el).is('.ui-state-default.ui-corner-top'), 'attach classes to inactive li');
+		equals( el.data('selected.tabs'), 0, 'selected.tabs set' );
+		equals( $('li', el).index( $('li.ui-tabs-selected', el) ), 0, 'second tab active');
+		equals( $('div', el).index( $('div.ui-tabs-hide', '#tabs1') ), 1, 'second panel should be hidden' );
 
 	});
 
 	test('destroy', function() {
-		expect(14);
+		expect(5);
 		
-		var el = $('#tabs1').tabs(); // new markup requires to tabify wrapper again...
+		var el = $('#tabs1').tabs();
 		el.tabs('destroy');
 		
-		ok( el.is(':not(.ui-tabs)'), 'remove classes from container');
-		ok( el.is(':not(.ui-widget)'), 'remove classes from container');
-		ok( el.is(':not(.ui-widget-content)'), 'remove classes from container');
-		ok( el.is(':not(.ui-corner-all)'), 'remove classes from container');
-		ok( $('ul', el).is(':not(.ui-tabs-nav)'), 'remove classes from list' );
-		ok( $('ul', el).is(':not(.ui-helper-reset)'), 'remove classes from list' );
-		ok( $('ul', el).is(':not(.ui-helper-clearfix)'), 'remove classes from list' );
-		ok( $('ul', el).is(':not(.ui-widget-header)'), 'remove classes from list' );
-		ok( $('ul', el).is(':not(.ui-corner-all)'), 'remove classes from list' );
-		ok( $('li:eq(0)', el).is(':not(.ui-tabs-selected)'), 'remove classes from active li');
-		ok( $('li:eq(0)', el).is(':not(.ui-state-active)'), 'remove classes from active li');
-		ok( $('li:eq(0)', el).is(':not(.ui-corner-top)'), 'remove classes from active li');		
-		ok( $('li:eq(1)', el).is(':not(.ui-state-default)'), 'remove classes from inactive li');
-		ok( $('li:eq(1)', el).is(':not(.ui-corner-top)'), 'remove classes from inactive li');
+		ok( el.is(':not(.ui-tabs, .ui-widget, .ui-widget-content, .ui-corner-all)'), 'remove classes from container');
+		ok( $('ul', el).is(':not(.ui-tabs-nav, .ui-helper-reset, .ui-helper-clearfix, .ui-widget-header, .ui-corner-all)'), 'remove classes from list' );
+		ok( $('div:eq(1)', el).is(':not(.ui-tabs-panel, .ui-widget-content, .ui-corner-bottom, .ui-tabs-hide)'), 'remove classes to panel' );
+		ok( $('li:eq(0)', el).is(':not(.ui-tabs-selected, .ui-state-active, .ui-corner-top)'), 'remove classes from active li');	
+		ok( $('li:eq(1)', el).is(':not(.ui-state-default, .ui-corner-top)'), 'remove classes from inactive li');
 
 	});
 
