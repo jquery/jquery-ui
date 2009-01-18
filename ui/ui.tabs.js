@@ -21,8 +21,14 @@ $.widget("ui.tabs", {
 
 	destroy: function() {
 		var o = this.options;
+		
+		this.element
+		    .removeClass('ui-tabs ui-widget ui-widget-content ui-corner-all');
+		
 		this.list.unbind('.tabs')
-			.removeClass('ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all').removeData('tabs');
+			.removeClass('ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all')
+			.removeData('tabs');
+		
 		this.$tabs.each(function() {
 			var href = $.data(this, 'href.tabs');
 			if (href)
@@ -32,6 +38,7 @@ $.widget("ui.tabs", {
 				$this.removeData(prefix + '.tabs');
 			});
 		});
+		
 		this.$lis.unbind('.tabs').add(this.$panels).each(function() {
 			if ($.data(this, 'destroy.tabs'))
 				$(this).remove();
@@ -48,6 +55,7 @@ $.widget("ui.tabs", {
 					'ui-corner-bottom ' +
 					'ui-tabs-hide');
 		});
+		
 		if (o.cookie)
 			this._cookie(null, o.cookie);
 	},

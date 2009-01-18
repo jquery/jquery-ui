@@ -55,7 +55,25 @@ module('tabs');
 	});
 
 	test('destroy', function() {
-		expect(0);
+		expect(14);
+		
+		var el = $('#tabs1').tabs(); // new markup requires to tabify wrapper again...
+		el.tabs('destroy');
+		
+		ok( el.is(':not(.ui-tabs)'), 'remove classes from container');
+		ok( el.is(':not(.ui-widget)'), 'remove classes from container');
+		ok( el.is(':not(.ui-widget-content)'), 'remove classes from container');
+		ok( el.is(':not(.ui-corner-all)'), 'remove classes from container');
+		ok( $('ul', el).is(':not(.ui-tabs-nav)'), 'remove classes from list' );
+		ok( $('ul', el).is(':not(.ui-helper-reset)'), 'remove classes from list' );
+		ok( $('ul', el).is(':not(.ui-helper-clearfix)'), 'remove classes from list' );
+		ok( $('ul', el).is(':not(.ui-widget-header)'), 'remove classes from list' );
+		ok( $('ul', el).is(':not(.ui-corner-all)'), 'remove classes from list' );
+		ok( $('li:eq(0)', el).is(':not(.ui-tabs-selected)'), 'remove classes from active li');
+		ok( $('li:eq(0)', el).is(':not(.ui-state-active)'), 'remove classes from active li');
+		ok( $('li:eq(0)', el).is(':not(.ui-corner-top)'), 'remove classes from active li');		
+		ok( $('li:eq(1)', el).is(':not(.ui-state-default)'), 'remove classes from inactive li');
+		ok( $('li:eq(1)', el).is(':not(.ui-corner-top)'), 'remove classes from inactive li');
 
 	});
 
@@ -189,7 +207,7 @@ module('tabs: Options');
 
 module('tabs: Tickets');
 
-	test('id containing colon, #????', function() {
+	test('id containing colon, #2715', function() { // http://ui.jquery.com/bugs/ticket/2715
 		expect(4);
 
 		var el = $('#tabs2 > ul').tabs();
