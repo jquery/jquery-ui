@@ -466,10 +466,7 @@ $.ui.plugin.add("draggable", "connectToSortable", {
 				
 				//Trigger the stop of the sortable
 				this.instance._mouseStop(event);
-
-				//Also propagate receive event, since the sortable is actually receiving a element
-				this.instance.element.triggerHandler("sortreceive", [event, $.extend(this.instance._uiHash(), { sender: inst.element })], this.instance.options["receive"]);
-
+				
 				this.instance.options.helper = this.instance.options._helper;
 
 				//If the helper has been the original item, restore properties in the sortable
@@ -523,7 +520,7 @@ $.ui.plugin.add("draggable", "connectToSortable", {
 
 					inst._trigger("toSortable", event);
 					inst.dropped = this.instance.element; //draggable revert needs that
-					this.instance.fromOutside = true; //Little hack so receive/update callbacks work
+					this.instance.fromOutside = inst; //Little hack so receive/update callbacks work
 
 				}
 
