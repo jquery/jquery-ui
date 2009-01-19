@@ -748,9 +748,9 @@ test('miscellaneous', function() {
 	inp.val('02/04/2008').datepicker('show');
 	equals(dp.find('.ui-datepicker-year').text(), '2008', 'Year range - read-only default');
 	inp.datepicker('hide').datepicker('option', {changeYear: true}).datepicker('show');		
-	equals(dp.find('.ui-datepicker-year').text(), genRange(new Date().getFullYear() - 10, 21), 'Year range - changeable default');
+	equals(dp.find('.ui-datepicker-year').text(), genRange(2008 - 10, 21), 'Year range - changeable default');
 	inp.datepicker('hide').datepicker('option', {yearRange: '-6:+2', changeYear: true}).datepicker('show');
-	equals(dp.find('.ui-datepicker-year').text(), genRange(new Date().getFullYear() - 6, 9), 'Year range - -6:+2');
+	equals(dp.find('.ui-datepicker-year').text(), genRange(2008 - 6, 9), 'Year range - -6:+2');
 	inp.datepicker('hide').datepicker('option', {yearRange: '2000:2010', changeYear: true}).datepicker('show');
 	equals(dp.find('.ui-datepicker-year').text(), genRange(2000, 11), 'Year range - 2000:2010');
 
