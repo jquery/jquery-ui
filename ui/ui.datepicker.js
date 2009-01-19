@@ -707,7 +707,9 @@ $.extend(Datepicker.prototype, {
 		if (this._isDisabledDatepicker(target[0])) {
 			return;
 		}
-		this._adjustInstDate(inst, offset, period);
+		this._adjustInstDate(inst, offset +
+			(period == 'M' ? this._get(inst, 'showCurrentAtPos') : 0), // undo positioning
+			period);
 		this._updateDatepicker(inst);
 	},
 
@@ -1283,6 +1285,8 @@ $.extend(Datepicker.prototype, {
 				}
 			}
 		}
+		inst.drawMonth = drawMonth;
+		inst.drawYear = drawYear;
 		var prevText = this._get(inst, 'prevText');
 		prevText = (!navigationAsDateFormat ? prevText : this.formatDate(prevText,
 			this._daylightSavingAdjust(new Date(drawYear, drawMonth - stepMonths, 1)),
