@@ -83,7 +83,8 @@ module('tabs');
 	test('remove', function() {
 		expect(4);
 
-		var el = $('#tabs1 > ul').tabs();
+		var el = $('#tabs1').tabs();
+		
 		el.tabs('remove', 0);
 		equals(el.tabs('length'), 2, 'remove tab');
 		equals($('li a[href$="fragment-1"]', el).length, 0, 'remove associated list item');
@@ -92,10 +93,9 @@ module('tabs');
 		// TODO delete tab -> focus tab to right
 		// TODO delete last tab -> focus tab to left
 		
-		el = $('#tabs2 > ul').tabs({ selected: 1 });
+		el.tabs('select', 1);
 		el.tabs('remove', 1);
-		equals(el.data('selected.tabs'), 0, 'update selected property');
-		
+		equals(el.data('selected.tabs'), 0, 'update selected property');		
 	});
 
 	test('enable', function() {
@@ -219,7 +219,7 @@ module('tabs: Tickets');
 		};
 		var expected = inlineStyle('height');
 
-		var el = $('#tabs2 > ul').tabs();
+		var el = $('#tabs2').tabs();
 		equals(inlineStyle('height'), expected, 'init should not remove inline style');
 
 		el.tabs('select', 1);
@@ -232,6 +232,15 @@ module('tabs: Tickets');
 			});
 
 		});
+
+	});
+	
+	test('Ajax tab with url containing a fragment identifier fails to load, #3627', function() { // http://ui.jquery.com/bugs/ticket/3627
+		expect(1);
+
+		var el = $('#tabs2').tabs();
+		
+		equals( $('a:eq(2)', el).data('load.tabs'), 'test.html', 'should ignore fragment identifier' );
 
 	});
 

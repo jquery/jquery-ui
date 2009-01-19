@@ -93,17 +93,21 @@ $.widget("ui.tabs", {
 		this.$lis = $('li:has(a[href])', this.list);
 		this.$tabs = this.$lis.map(function() { return $('a', this)[0]; });
 		this.$panels = $([]);
-
+		
 		var self = this, o = this.options;
 
+		var fragmentId = /^#.+/; // Safari 2 reports '#' for an empty hash
 		this.$tabs.each(function(i, a) {
+			var href = $(a).attr('href');
+
 			// inline tab
-			if (a.hash && a.hash.replace('#', '')) // Safari 2 reports '#' for an empty hash
-				self.$panels = self.$panels.add(self._sanitizeSelector(a.hash));
+			if (fragmentId.test(href))
+				self.$panels = self.$panels.add(self._sanitizeSelector(href));
+				
 			// remote tab
-			else if ($(a).attr('href') != '#') { // prevent loading the page itself if href is just "#"
-				$.data(a, 'href.tabs', a.href); // required for restore on destroy
-				$.data(a, 'load.tabs', a.href); // mutable
+			else if (href != '#') { // prevent loading the page itself if href is just "#"
+				$.data(a, 'href.tabs', href); // required for restore on destroy
+				$.data(a, 'load.tabs', href.replace(/#.*$/, '')); // mutable data, NOTE IE fails to load if url contains fragment identifier - TODO jQuery Ajax bug?
 				var id = self._tabId(a);
 				a.href = '#' + id;
 				var $panel = $('#' + id);
@@ -114,6 +118,7 @@ $.widget("ui.tabs", {
 				}
 				self.$panels = self.$panels.add($panel);
 			}
+			
 			// invalid tab href
 			else
 				o.disabled.push(i + 1);
