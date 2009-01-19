@@ -38,13 +38,6 @@ var PROP_NAME = 'datepicker';
 
 test('setDefaults', function() {
 	var inp = init('#inp');
-	var dp = $('#ui-datepicker-div');
-	ok(!dp.is(':visible'), 'Initially invisible');
-	ok(inp.is('.hasDatepicker'), 'Marker class set');
-	ok($($.datepicker.dpDiv).html() == '', 'Content empty');
-	inp.datepicker('show');
-	ok($($.datepicker.dpDiv).html() != '', 'Content present');
-	inp.datepicker('hide');
 	equals($.datepicker._defaults.showOn, 'focus', 'Initial showOn');
 	$.datepicker.setDefaults({showOn: 'button'});
 	equals($.datepicker._defaults.showOn, 'button', 'Change default showOn');
