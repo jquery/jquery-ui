@@ -202,6 +202,8 @@ $.widget("ui.accordion", {
 		// called only when using activate(false) to close all parts programmatically
 		if (!event.target && !o.alwaysOpen) {
 			this.active.parent().toggleClass(o.selectedClass);
+			this.active.removeClass("ui-state-active ui-corner-top").addClass("ui-state-default ui-corner-all")
+				.find(".ui-icon").removeClass(o.icons.headerSelected).addClass(o.icons.header);
 			var toHide = this.active.next(),
 				data = {
 					options: o,
