@@ -46,8 +46,7 @@ $.widget("ui.accordion", {
 				.parent()
 					.addClass("ui-accordion-content-wrap ui-helper-reset ui-widget-content ui-corner-bottom");
 
-		//TODO: Resolve findActive
-		this.active = this._findActive(this.active).toggleClass("ui-state-default").toggleClass("ui-state-active").toggleClass("ui-corner-all").toggleClass("ui-corner-top");
+		this.active = this._findActive(this.active || o.active).toggleClass("ui-state-default").toggleClass("ui-state-active").toggleClass("ui-corner-all").toggleClass("ui-corner-top");
 		this.active.parent().addClass(o.selectedClass);
 		
 		//Append icon elements
@@ -189,7 +188,7 @@ $.widget("ui.accordion", {
 		return selector
 			? typeof selector == "number"
 				? this.headers.filter(":eq(" + selector + ")")
-				: this.headers.not(headers.not(selector))
+				: this.headers.not(this.headers.not(selector))
 			: selector === false
 				? $([])
 				: this.headers.filter(":eq(0)");
