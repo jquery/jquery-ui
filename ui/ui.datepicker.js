@@ -1594,8 +1594,8 @@ $.fn.datepicker = function(options){
 
 	/* Initialise the date picker. */
 	if (!$.datepicker.initialized) {
-		$(document.body).append($.datepicker.dpDiv).
-			mousedown($.datepicker._checkExternalClick);
+		$(document).mousedown($.datepicker._checkExternalClick).
+			find('body').append($.datepicker.dpDiv);
 		$.datepicker.initialized = true;
 	}
 
