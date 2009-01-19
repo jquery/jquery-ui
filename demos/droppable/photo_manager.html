@@ -80,11 +80,11 @@
 
 				// image preview function, demonstrating the ui.dialog used as a modal window
 				function viewLargerImage($link) {
-					var src = $link[0].href;
+					var src = $link.attr('href');
 					var title = $link.siblings('img').attr('alt');
-					var $modal = $('img[src="'+src+'"]');
+					var $modal = $('img[src$="'+src+'"]');
 
-					$modal.length ? $modal.dialog('open') : $('<img src="'+src+'" alt="'+title+'" width="384" height="288" style="padding: 8px;" />').appendTo('body').dialog({
+					$modal.length ? $modal.dialog('open') : $('<img alt="'+title+'" width="384" height="288" style="padding: 8px;" />').attr('src',src).appendTo('body').dialog({
 						title: title,
 						width: '400px',
 						modal: 'true',
@@ -131,7 +131,7 @@
 				</li>
 				<li class="ui-widget-content ui-corner-tr">
 					<h5 class="ui-widget-header">High Tatras 3</h5>
-					<img src="images/high_tatras3_min.jpg" alt="Planning the ascend" width="96" height="72" />
+					<img src="images/high_tatras3_min.jpg" alt="Planning the ascent" width="96" height="72" />
 					<a href="images/high_tatras3.jpg" title="View larger image" class="ui-icon ui-icon-zoomin">View larger</a>
 					<a href="link/to/trash/script/when/we/have/js/off" title="Delete this image" class="ui-icon ui-icon-trash">Delete image</a>
 				</li>
