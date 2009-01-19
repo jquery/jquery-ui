@@ -21,14 +21,14 @@ $.widget("ui.tabs", {
 
 	destroy: function() {
 		var o = this.options;
-		
+
 		this.element
-		    .removeClass('ui-tabs ui-widget ui-widget-content ui-corner-all');
-		
+			.removeClass('ui-tabs ui-widget ui-widget-content ui-corner-all');
+
 		this.list.unbind('.tabs')
 			.removeClass('ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all')
 			.removeData('tabs');
-		
+
 		this.$tabs.each(function() {
 			var href = $.data(this, 'href.tabs');
 			if (href)
@@ -38,7 +38,7 @@ $.widget("ui.tabs", {
 				$this.removeData(prefix + '.tabs');
 			});
 		});
-		
+
 		this.$lis.unbind('.tabs').add(this.$panels).each(function() {
 			if ($.data(this, 'destroy.tabs'))
 				$(this).remove();
@@ -55,7 +55,7 @@ $.widget("ui.tabs", {
 					'ui-corner-bottom ' +
 					'ui-tabs-hide');
 		});
-		
+
 		if (o.cookie)
 			this._cookie(null, o.cookie);
 	},
@@ -124,8 +124,8 @@ $.widget("ui.tabs", {
 
 			// attach necessary classes for styling
 			if (this.element.is('div')) {
-			    // TODO replace hardcoded class names
-			    this.element.addClass('ui-tabs ui-widget ui-widget-content ui-corner-all');
+				// TODO replace hardcoded class names
+				this.element.addClass('ui-tabs ui-widget ui-widget-content ui-corner-all');
 			}
 			this.list.addClass('ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all');
 			this.$lis.addClass('ui-state-default ui-corner-top');
@@ -185,17 +185,20 @@ $.widget("ui.tabs", {
 				// just trigger show event
 				else onShow();
 			}
-			
+
 			// states
-			var handleState = function(state, el) {
-			    if (el.is(':not(.ui-state-disabled)')) el.toggleClass('ui-state-' + state);
-			};		
-			this.$lis.bind('mouseover.tabs mouseout.tabs', function() {
-			    handleState('hover', $(this));
-			});
-    		this.$tabs.bind('focus.tabs blur.tabs', function() {
-    		    handleState('focus', $(this).parents('li:first'));
-    		});
+			if (o.event != 'mouseover') {
+				var handleState = function(state, el) {
+					if (el.is(':not(.ui-state-disabled)')) el.toggleClass('ui-state-' + state);
+				};
+				this.$lis.bind('mouseover.tabs mouseout.tabs', function() {
+					handleState('hover', $(this));
+				});
+				// TODO focus/blur don't seem to work with namespace
+				this.$tabs.bind('focus.tabs blur.tabs', function() {
+					handleState('focus', $(this).parents('li:first'));
+				});
+			}
 
 			// clean up to avoid memory leaks in certain versions of IE 6
 			$(window).bind('unload', function() {
@@ -269,7 +272,7 @@ $.widget("ui.tabs", {
 			if (o.deselectable) classes.push('ui-tabs-deselectable');
 			// TODO replace hardcoded class names
 			$li.removeClass('ui-state-default').addClass(classes.join(' '))
-			    .siblings().removeClass(classes.join(' ')).addClass('ui-state-default');
+				.siblings().removeClass(classes.join(' ')).addClass('ui-state-default');
 			hideTab(clicked, $hide, $show);
 		}
 
@@ -303,7 +306,7 @@ $.widget("ui.tabs", {
 				if ($li.hasClass('ui-state-active')) {
 					self.options.selected = null;
 					$li.removeClass('ui-tabs-selected ui-state-active ui-tabs-deselectable')
-					    .addClass('ui-state-default');
+						.addClass('ui-state-default');
 					self.$panels.stop();
 					hideTab(this, $hide);
 					this.blur();
@@ -313,7 +316,7 @@ $.widget("ui.tabs", {
 					var a = this;
 					self.load(self.$tabs.index(this), function() {
 						$li.addClass('ui-tabs-selected ui-state-active ui-tabs-deselectable')
-						    .removeClass('ui-state-default');
+							.removeClass('ui-state-default');
 						showTab(a, $show);
 					});
 					this.blur();
@@ -350,7 +353,7 @@ $.widget("ui.tabs", {
 			return false;
 
 		});
-		
+
 		// disable click if event is configured to something else
 		if (o.event != 'click') this.$tabs.bind('click.tabs', function(){return false;});
 
@@ -393,7 +396,7 @@ $.widget("ui.tabs", {
 			$panel.removeClass('ui-tabs-hide');
 			var href = $.data(this.$tabs[0], 'load.tabs');
 			if (href) this.load(0, function() {
-			    self._trigger('show', null,
+				self._trigger('show', null,
 					self.ui(self.$tabs[0], self.$panels[0]));
 			});
 		}
