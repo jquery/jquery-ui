@@ -28,7 +28,6 @@
 	<property name="src.dir" value="${ui.dir}/ui/" />
 
 	<property name="min.folder" value="${dist.dir}/ui/minified" />
-	<property name="packed.folder" value="${dist.dir}/ui/packed" />
 
 	<property name="concatenated" value="jquery.ui.all" />
 	<property name="concatenated.i18n" value="jquery.ui.i18n.all" />
@@ -36,16 +35,14 @@
 	<property name="core.files" value="ui.core.js, ui.draggable.js, ui.droppable.js, ui.resizable.js, ui.selectable.js, ui.sortable.js, effects.core.js" />
 
 	<property description="YUI Compressor" name="yui-jar" value="${build.dir}/yuicompressor-2.4.2.jar" />
-	<property description="Dean Edwards Packer" name="pack.php" value="${build.dir}/pack.php" />
 	
-	<target name="deploy-release" depends="docs-process, concatenate, minify, pack, copy, replace-version, prepend-header, zip" description="Release builder">
+	<target name="deploy-release" depends="docs-process, concatenate, minify, copy, replace-version, prepend-header, zip" description="Release builder">
 	</target>
 
 	<target name="replace-version">
 		<replaceregexp match="@VERSION" replace="${release.version}" flags="g" byline="true">
 		    <fileset dir="${dist.dir}/ui/" includes="*.js"/>
 			<fileset dir="${dist.dir}/ui/minified/" includes="*.js"/>
-			<fileset dir="${dist.dir}/ui/packed/" includes="*.js"/>
 		</replaceregexp>
 		<echo message="Replaced all @VERSION to ${release.version}." />
 	</target>
@@ -72,21 +69,6 @@
 			<fileset dir="${dist.dir}/ui-headered/" includes="*.js" />
 		</copy>
 		<delete dir="${dist.dir}/ui-headered/" />
-		<for param="file">
-			<path><fileset dir="${dist.dir}/ui/packed/" includes="*.js" /></path>
-			<sequential>
-				<propertyregex override="yes" property="target" input="@{file}" regexp=".+\\(.+)\.packed\.js$" replace="\1"/>
-				<concat destfile="${dist.dir}/ui-headered/${target}.packed.js">
-					<header file="${dist.dir}/headers/${target}.js" />
-					<fileset file="@{file}" />
-				</concat>
-			</sequential>
-		</for>
-		<copy todir="${dist.dir}/ui/packed">
-			<fileset dir="${dist.dir}/ui-headered/" includes="*.js" />
-		</copy>
-		<delete dir="${dist.dir}/ui-headered/" />
-		<delete dir="${dist.dir}/headers/" />
 	</target>
 
 	<target description="Zip the package" name="zip">
@@ -151,35 +133,6 @@
 		<echo message="Minified i18n built." />
 	</target>
 
-	<!-- Using PHP Dean Edwards Packer -->
-	<target name="pack" depends="concatenate" description="Remove all comments and whitespace and compress">
-		<echo message="Building packed" />
-		<delete dir="${packed.folder}/" />
-		<mkdir dir="${packed.folder}" />
-		<delete dir="${packed.folder}/i18n/" />
-		<mkdir dir="${packed.folder}/i18n/" />
-
-		<apply executable="php" parallel="false">
-			<filelist dir="${min.folder}" files="${concatenated}.min.js" />
-			<fileset dir="${min.folder}" includes="ui.*.min.js, effects.*.min.js" />
-			<arg path="${pack.php}" />
-			<srcfile />
-			<mapper type="glob" from="*.min.js" to="${packed.folder}/*.packed.js" />
-			<targetfile />
-		</apply>
-		<echo message="Packed built." />
-
-		<apply executable="php" parallel="false">
-			<filelist dir="${min.folder}/i18n/" files="${concatenated.i18n}.min.js" />
-			<fileset dir="${min.folder}/i18n/" includes="ui.*.min.js" />
-			<arg path="${pack.php}" />
-			<srcfile />
-			<mapper type="glob" from="*.min.js" to="${packed.folder}/i18n/*.packed.js" />
-			<targetfile />
-		</apply>
-		<echo message="Packed i18n built." />
-	</target>
-
 	<target description="Copy needed folders" name="copy">
 		<echo message="Copying files" />
 		<mkdir dir="${dist.dir}" />
@@ -234,7 +187,7 @@
 	</target>
 			
 	<target name="docs-process" depends="docs-download">
-		<property name="docs.dir" value="${ui.dir}/documentation" />
+		<property name="docs.dir" value="${ui.dir}/demos/documentation" />
 		<delete dir="${docs.dir}" />
 		<mkdir dir="${docs.dir}" />
 		<xslt includes="docs-*.xml" destdir="${docs.dir}" style="build/style.xsl" />
