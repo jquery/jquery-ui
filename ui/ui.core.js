@@ -269,7 +269,7 @@ $.widget = function(name, prototype) {
 
 			// constructor
 			(!instance && !isMethodCall &&
-				$.data(this, name, new $[namespace][name](this, options)));
+				$.data(this, name, new $[namespace][name](this, options))._init());
 
 			// method call
 			(instance && isMethodCall && $.isFunction(instance[options]) &&
@@ -307,8 +307,6 @@ $.widget = function(name, prototype) {
 			.bind('remove', function() {
 				return self.destroy();
 			});
-
-		this._init();
 	};
 
 	// add widget prototype
