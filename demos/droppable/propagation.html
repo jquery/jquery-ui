@@ -22,7 +22,8 @@
 			activeClass: 'ui-state-hover',
 			hoverClass: 'ui-state-active',
 			drop: function(event, ui) {
-				$(this).addClass('ui-state-highlight').find('p').html('Dropped!');
+				$(this).addClass('ui-state-highlight').find('> p').html('Dropped!');
+				return false;
 			}
 		});
 
@@ -31,7 +32,7 @@
 			activeClass: 'ui-state-hover',
 			hoverClass: 'ui-state-active',
 			drop: function(event, ui) {
-				$(this).addClass('ui-state-highlight').find('p').html('Dropped!');
+				$(this).addClass('ui-state-highlight').find('> p').html('Dropped!');
 			}
 		});
 
