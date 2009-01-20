@@ -405,14 +405,14 @@ $.extend($.ui.draggable, {
 		containment: false,
 		cssNamespace: "ui",
 		cursor: "default",
-		cursorAt: null,
+		cursorAt: false,
 		delay: 0,
 		distance: 1,
 		grid: false,
 		handle: false,
 		helper: "original",
 		iframeFix: false,
-		opacity: null,
+		opacity: false,
 		refreshPositions: false,
 		revert: false,
 		revertDuration: 500,
@@ -424,7 +424,7 @@ $.extend($.ui.draggable, {
 		snapMode: "both",
 		snapTolerance: 20,
 		stack: false,
-		zIndex: null
+		zIndex: false
 	}
 });
 
