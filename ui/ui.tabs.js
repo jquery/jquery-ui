@@ -107,7 +107,11 @@ $.widget("ui.tabs", {
 			// remote tab
 			else if (href != '#') { // prevent loading the page itself if href is just "#"
 				$.data(a, 'href.tabs', href); // required for restore on destroy
-				$.data(a, 'load.tabs', href.replace(/#.*$/, '')); // mutable data, NOTE IE fails to load if url contains fragment identifier - TODO jQuery Ajax bug?
+				
+				// TODO until #3808 is fixed strip fragment identifier from url
+				// (IE fails to load from such url)
+				$.data(a, 'load.tabs', href.replace(/#.*$/, '')); // mutable data
+				
 				var id = self._tabId(a);
 				a.href = '#' + id;
 				var $panel = $('#' + id);
