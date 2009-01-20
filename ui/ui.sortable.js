@@ -469,8 +469,9 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 		var queries = [];
 
 		if(this.options.connectWith && connected) {
-			for (var i = this.options.connectWith.length - 1; i >= 0; i--){
-				var cur = $(this.options.connectWith[i]);
+			var connectWith = this.options.connectWith.constructor == String ? [this.options.connectWith] : this.options.connectWith;
+			for (var i = connectWith.length - 1; i >= 0; i--){
+				var cur = $(connectWith[i]);
 				for (var j = cur.length - 1; j >= 0; j--){
 					var inst = $.data(cur[j], 'sortable');
 					if(inst && inst != this && !inst.options.disabled) {
