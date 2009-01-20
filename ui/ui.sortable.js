@@ -985,6 +985,7 @@ $.extend($.ui.sortable, {
 		accurateIntersection: true,
 		appendTo: "parent",
 		cancel: ":input,option",
+		connectWith: false,
 		cssNamespace: 'ui',
 		delay: 0,
 		distance: 1,
