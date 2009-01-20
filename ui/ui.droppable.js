@@ -120,8 +120,6 @@ $.widget("ui.droppable", {
 
 	},
 
-	plugins: {},
-
 	ui: function(c) {
 		return {
 			draggable: (c.currentItem || c.element),
@@ -138,10 +136,10 @@ $.extend($.ui.droppable, {
 	eventPrefix: 'drop',
 	defaults: {
 		accept: '*',
-		activeClass: null,
+		activeClass: false,
 		cssNamespace: 'ui',
 		greedy: false,
-		hoverClass: null,
+		hoverClass: false,
 		scope: 'default',
 		tolerance: 'intersect'
 	}
