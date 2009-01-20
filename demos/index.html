@@ -164,7 +164,9 @@
 				data = data.replace(/<title.*>.*<\/title>/ig,""); // Remove title tags
 				data = data.replace(/((href|src)=["'])(?!(http|#))/ig, "$1" + directory + "/");
 
+				$('#demo-style').remove();
 				$('#demo-frame').empty().html(data);
+				$('#demo-frame style').clone().appendTo('head').attr('id','demo-style');
 				$('#demo-link a').attr('href', path);
 				updateDemoNotes();
 			});
