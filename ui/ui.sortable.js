@@ -998,7 +998,7 @@ $.extend($.ui.sortable, {
 		scrollSensitivity: 20,
 		scrollSpeed: 20,
 		sortIndicator: $.ui.sortable.prototype._rearrange,
-		tolerance: "default",
+		tolerance: "intersect",
 		zIndex: 1000
 	}
 });
