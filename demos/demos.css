@@ -166,6 +166,7 @@ eventually we should convert the font sizes to ems -- using px for now to minimi
 }
 
 #demo-notes { width:520px; color:#333; font-size: 1em; }
+.demo-description p code { padding: 0; font-weight: bold; }
 code, pre { padding:8px 0 8px 20px ; font-size: 1.2em; line-height:130%;  }
 
 #demo-source a:link,
