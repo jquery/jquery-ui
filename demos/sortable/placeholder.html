@@ -9,7 +9,9 @@
 	<link type="text/css" href="../demos.css" rel="stylesheet" />
 	<style type="text/css">
 	#sortable { list-style-type: none; margin: 0; padding: 0; width: 60%; }
-	#sortable li { margin: 5px; padding: 5px; font-size: 1.2em; }
+	#sortable li { margin: 0 5px 5px 5px; padding: 5px; font-size: 1.2em; }
+	html>body #sortable li { height: 1.5em; line-height: 1.2em; }
+	.ui-state-highlight { height: 1.5em; line-height: 1.2em; }
 	</style>
 	<script type="text/javascript">
 	$(function() {
@@ -36,7 +38,13 @@
 
 <div class="demo-description">
 
-<p>When dragging a sortable item to a new location, other items will make room for the that item by shifting to allow white space between them. Pass a class into the <strong>placeholder</strong> option to style that space to be visible.  Use the boolean <strong>forcePlaceholderSize</strong> option to set dimensions on the placeholder.</p>
+<p>
+	When dragging a sortable item to a new location, other items will make room
+	for the that item by shifting to allow white space between them. Pass a
+	class into the <code>placeholder</code> option to style that space to
+	be visible.  Use the boolean <code>forcePlaceholderSize</code> option
+	to set dimensions on the placeholder.
+</p>
 
 </div><!-- End demo-description -->
 

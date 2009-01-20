@@ -8,8 +8,8 @@
 	<script type="text/javascript" src="../../ui/ui.sortable.js"></script>
 	<link type="text/css" href="../demos.css" rel="stylesheet" />
 	<style type="text/css">
-	.demo ul { list-style-type: none; margin: 0; padding: 0; float: left; margin-right: 10px; }
-	.demo li { margin: 5px; padding: 5px; font-size: 1.2em; width: 120px; }
+	#sortable1, #sortable2 { list-style-type: none; margin: 0; padding: 0; float: left; margin-right: 10px; }
+	#sortable1 li, #sortable2 li { margin: 0 5px 5px 5px; padding: 5px; font-size: 1.2em; width: 120px; }
 	</style>
 	<script type="text/javascript">
 	$(function() {
@@ -42,7 +42,12 @@
 
 <div class="demo-description">
 
-<p>Sort items from one list into another and vice versa passing an array into the <strong>connectWith</strong> option. The simplest way to do this is to group all related lists with a CSS class, and then pass that class into the sortable function using array notation (i.e., connectWith: ['.myclass']).</p>
+<p>
+	Sort items from one list into another and vice versa, by passing an array into
+	the <code>connectWith</code> option. The simplest way to do this is to
+	group all related lists with a CSS class, and then pass that class into the
+	sortable function using array notation (i.e., <code>connectWith: ['.myclass']</code>).
+</p>
 
 </div><!-- End demo-description -->
 

@@ -8,34 +8,36 @@
 	<script type="text/javascript" src="../../ui/ui.sortable.js"></script>
 	<link type="text/css" href="../demos.css" rel="stylesheet" />
 	<style type="text/css">
-	.demo ul { list-style-type: none; margin: 0; padding: 0; margin-bottom: 15px; }
-	.demo li { margin: 5px; padding: 5px; font-size: 1.2em; }
+	#sortable1, #sortable2 { list-style-type: none; margin: 0; padding: 0; margin-bottom: 15px; }
+	#sortable1 li, #sortable2 li { margin: 0 5px 5px 5px; padding: 5px; font-size: 1.2em; }
 	</style>
 	<script type="text/javascript">
 	$(function() {
-		$("#sortable").sortable({
-			delay: 1000
+		$("#sortable1").sortable({
+			delay: 300
 		});
 		
 		$("#sortable2").sortable({
-			distance: 50
+			distance: 15
 		});
+
+		$("li").disableSelection();
 	});
 	</script>
 </head>
 <body>
 <div class="demo">
 
-<h3 class="docs">Time delay of 1000ms:</h3>
+<h3 class="docs">Time delay of 300ms:</h3>
 
-<ul id="sortable">
+<ul id="sortable1">
 	<li class="ui-state-default">Item 1</li>
 	<li class="ui-state-default">Item 2</li>
 	<li class="ui-state-default">Item 3</li>
 	<li class="ui-state-default">Item 4</li>
 </ul>
 
-<h3>Distance delay of 50px:</h3>
+<h3 class="docs">Distance delay of 15px:</h3>
 
 <ul id="sortable2">
 	<li class="ui-state-default">Item 1</li>
@@ -48,7 +50,13 @@
 
 <div class="demo-description">
 
-<p>Delay the start of sorting for a number of milliseconds with the <strong>delay</strong> option; prevent sorting until the cursor is held down and dragged a specifed number of pixels with the <strong>distance</strong> option. </p>
+<p>
+	Prevent accidental sorting either by delay (time) or distance. Set a number of
+	milliseconds the element needs to be dragged before sorting starts
+	with the <code>delay</code> option. Set a distance in pixels the element
+	needs to be dragged before sorting starts with the <code>distance</code>
+	option.
+</p>
 
 </div><!-- End demo-description -->
 

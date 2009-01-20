@@ -8,8 +8,8 @@
 	<script type="text/javascript" src="../../ui/ui.sortable.js"></script>
 	<link type="text/css" href="../demos.css" rel="stylesheet" />
 	<style type="text/css">
-	.demo ul { list-style-type: none; margin: 0; padding: 0; float: left; margin-right: 10px; background: #eee; padding: 5px; width: 143px;}
-	.demo li { margin: 5px; padding: 5px; font-size: 1.2em; width: 120px; }
+	#sortable1, #sortable2, #sortable3 { list-style-type: none; margin: 0; padding: 0; float: left; margin-right: 10px; background: #eee; padding: 5px; width: 143px;}
+	#sortable1 li, #sortable2 li, #sortable3 li { margin: 5px; padding: 5px; font-size: 1.2em; width: 120px; }
 	</style>
 	<script type="text/javascript">
 	$(function() {
@@ -27,7 +27,7 @@
 <body>
 <div class="demo">
 
-<ul class='droptrue'>
+<ul id="sortable1" class='droptrue'>
 	<li class="ui-state-default">Can be dropped..</li>
 	<li class="ui-state-default">..on an empty list</li>
 	<li class="ui-state-default">Item 3</li>
@@ -35,7 +35,7 @@
 	<li class="ui-state-default">Item 5</li>
 </ul>
 
-<ul class='dropfalse'>
+<ul id="sortable2" class='dropfalse'>
 	<li class="ui-state-highlight">Cannot be dropped..</li>
 	<li class="ui-state-highlight">..on an empty list</li>
 	<li class="ui-state-highlight">Item 3</li>
@@ -43,7 +43,7 @@
 	<li class="ui-state-highlight">Item 5</li>
 </ul>
 
-<ul class='droptrue'>
+<ul id="sortable3" class='droptrue'>
 </ul>
 
 <br clear="both" />
@@ -52,7 +52,11 @@
 
 <div class="demo-description">
 
-<p>Prevent all items in a list from being dropped into a separate, empty list using the <strong>dropOnEmpty</strong> option set to false.  By default, sortable items can be dropped on empty lists.</p>
+<p>
+	Prevent all items in a list from being dropped into a separate, empty list
+	using the <code>dropOnEmpty</code> option set to <code>false</code>.  By default,
+	sortable items can be dropped on empty lists.
+</p>
 
 </div><!-- End demo-description -->
 
