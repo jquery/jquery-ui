@@ -31,12 +31,11 @@ $.widget("ui.dialog", {
 
 	_init: function() {
 		this.originalTitle = this.element.attr('title');
-		this.options.title = this.options.title || this.originalTitle;
 
 		var self = this,
 			options = this.options,
 
-			title = options.title || '&nbsp;',
+			title = options.title || this.originalTitle || '&nbsp;',
 			titleId = $.ui.dialog.getTitleId(this.element),
 
 			uiDialog = (this.uiDialog = $('<div/>'))
@@ -487,6 +486,7 @@ $.extend($.ui.dialog, {
 		position: 'center',
 		resizable: true,
 		stack: true,
+		title: '',
 		width: 300,
 		zIndex: 1000
 	},
