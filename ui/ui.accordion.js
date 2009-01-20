@@ -47,7 +47,7 @@ $.widget("ui.accordion", {
 					.addClass("ui-accordion-content-wrap ui-helper-reset ui-widget-content ui-corner-bottom");
 
 		this.active = this._findActive(this.active || o.active).toggleClass("ui-state-default").toggleClass("ui-state-active").toggleClass("ui-corner-all").toggleClass("ui-corner-top");
-		this.active.parent().addClass(o.selectedClass);
+		this.active.parent().addClass('ui-accordion-selected');
 		
 		//Append icon elements
 		$("<span/>").addClass("ui-icon " + o.icons.header).prependTo(this.headers);
@@ -103,7 +103,7 @@ $.widget("ui.accordion", {
 			.unbind('.accordion')
 			.removeData('accordion');
 
-		this.element.children().removeClass("ui-accordion-group "+this.options.selectedClass);
+		this.element.children().removeClass("ui-accordion-group ui-accordion-selected");
 		this.headers
 			.unbind(".accordion")
 			.removeClass("ui-accordion-header ui-helper-reset ui-state-default ui-corner-all ui-state-active ui-corner-top")
@@ -201,7 +201,7 @@ $.widget("ui.accordion", {
 			
 		// called only when using activate(false) to close all parts programmatically
 		if (!event.target && !o.alwaysOpen) {
-			this.active.parent().toggleClass(o.selectedClass);
+			this.active.parent().toggleClass('ui-accordion-selected');
 			this.active.removeClass("ui-state-active ui-corner-top").addClass("ui-state-default ui-corner-all")
 				.find(".ui-icon").removeClass(o.icons.headerSelected).addClass(o.icons.header);
 			var toHide = this.active.next(),
@@ -235,11 +235,11 @@ $.widget("ui.accordion", {
 		}
 		
 		// switch classes
-		this.active.parent().toggleClass(o.selectedClass);
+		this.active.parent().toggleClass('ui-accordion-selected');
 		this.active.removeClass("ui-state-active ui-corner-top").addClass("ui-state-default ui-corner-all")
 			.find(".ui-icon").removeClass(o.icons.headerSelected).addClass(o.icons.header);
 		if (!clickedIsActive) {
-			clicked.parent().addClass(o.selectedClass);
+			clicked.parent().addClass('ui-accordion-selected');
 			clicked.removeClass("ui-state-default ui-corner-all").addClass("ui-state-active ui-corner-top")
 				.find(".ui-icon").removeClass(o.icons.header).addClass(o.icons.headerSelected);
 		}
@@ -387,8 +387,7 @@ $.extend($.ui.accordion, {
 		navigation: false,
 		navigationFilter: function() {
 			return this.href.toLowerCase() == location.href.toLowerCase();
-		},
-		selectedClass: "ui-accordion-selected"
+		}
 	},
 	animations: {
 		slide: function(options, additions) {
