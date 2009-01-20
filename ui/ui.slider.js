@@ -271,9 +271,10 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 
 	_slide: function(event, index, newVal) {
 		
+		var handle = this.handles[index];
+
 		if (this.options.values && this.options.values.length) {
 
-			var handle = this.handles[index];
 			var otherVal = this.values(index ? 0 : 1);
 
 			if ((index == 0 && newVal >= otherVal) || (index == 1 && newVal <= otherVal))
@@ -299,6 +300,7 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 			if (newVal != this.value()) {
 				// A slide can be canceled by returning false from the slide callback
 				var allowed = this._trigger("slide", event, {
+					handle: handle,
 					value: newVal
 				});
 				if (allowed !== false)
