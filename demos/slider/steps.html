@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-	<title>jQuery UI Slider - Steps Demo</title>
+	<title>jQuery UI Slider - Snap to increments</title>
 	<link type="text/css" href="../../themes/base/ui.all.css" rel="stylesheet" />
 	<script type="text/javascript" src="../../jquery-1.3.js"></script>
 	<script type="text/javascript" src="../../ui/ui.core.js"></script>
@@ -40,21 +40,7 @@
 
 <div class="demo-description">
 
-<p>
-This slider has a step value set that will only allow for increments of 50 to be selected.
-The default step increment is 1.
-The drag handle will snap to drop points every 50 units.
-This is set in an option called step:
-</p>
-
-<pre><code>min: 0,
-max: 500,
-step: 50
-</code></pre>
-
-<p>
-This demo also shows how the current slider value can be used to populate a standard form input that can also be used for user feedback.
-</p>
+<p>Increment slider values with the <strong>step</strong> option set to an integer, commonly a dividend of the slider's maximum value.  The default increment is 1.</p>
 
 </div><!-- End demo-description -->
 
