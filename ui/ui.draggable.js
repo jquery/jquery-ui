@@ -266,8 +266,8 @@ $.widget("ui.draggable", $.extend({}, $.ui.mouse, {
 			($(o.containment == 'document' ? document : window).height() || document.body.parentNode.scrollHeight) - this.helperProportions.height - this.margins.top
 		];
 
-		if(!(/^(document|window|parent)$/).test(o.containment)) {
-			var ce = $(o.containment)[0];
+		if(!(/^(document|window|parent)$/).test(o.containment) && o.containment.constructor != Array) {
+			var ce = $(o.containment)[0]; if(!ce) return;
 			var co = $(o.containment).offset();
 			var over = ($(ce).css("overflow") != 'hidden');
 
@@ -277,6 +277,8 @@ $.widget("ui.draggable", $.extend({}, $.ui.mouse, {
 				co.left+(over ? Math.max(ce.scrollWidth,ce.offsetWidth) : ce.offsetWidth) - (parseInt($(ce).css("borderLeftWidth"),10) || 0) - this.helperProportions.width - this.margins.left,
 				co.top+(over ? Math.max(ce.scrollHeight,ce.offsetHeight) : ce.offsetHeight) - (parseInt($(ce).css("borderTopWidth"),10) || 0) - this.helperProportions.height - this.margins.top
 			];
+		} else if(o.containment.constructor == Array) {
+			this.containment = o.containment;
 		}
 
 	},
