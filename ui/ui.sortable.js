@@ -992,6 +992,7 @@ $.extend($.ui.sortable, {
 		dropOnEmpty: true,
 		forcePlaceholderSize: false,
 		forceHelperSize: false,
+		handle: false,
 		helper: "original",
 		items: '> *',
 		scope: "default",
