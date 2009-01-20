@@ -995,6 +995,7 @@ $.extend($.ui.sortable, {
 		handle: false,
 		helper: "original",
 		items: '> *',
+		placeholder: false,
 		scope: "default",
 		scroll: true,
 		scrollSensitivity: 20,
