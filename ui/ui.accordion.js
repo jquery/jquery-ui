@@ -372,15 +372,19 @@ $.widget("ui.accordion", {
 $.extend($.ui.accordion, {
 	version: "@VERSION",
 	defaults: {
+		active: false,
 		autoHeight: true,
 		alwaysOpen: true,
 		animated: 'slide',
+		clearStyle: false,
 		event: "click",
+		fillSpace: false,
 		header: "a",
 		icons: {
 			header: "ui-icon-triangle-1-e",
 			headerSelected: "ui-icon-triangle-1-s"
 		},
+		navigation: false,
 		navigationFilter: function() {
 			return this.href.toLowerCase() == location.href.toLowerCase();
 		},
