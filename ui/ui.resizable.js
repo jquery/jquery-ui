@@ -722,8 +722,7 @@ $.ui.plugin.add("resizable", "containment", {
 				ps = self.containerSize, co = self.containerOffset, cs = self.size, cp = self.position,
 				pRatio = o._aspectRatio || event.shiftKey, cop = { top:0, left:0 }, ce = self.containerElement;
 
-		if (ce[0] != document && (/static/).test(ce.css('position')))
-			cop = self.containerPosition;
+		if (ce[0] != document && (/static/).test(ce.css('position'))) cop = co;
 
 		if (cp.left < (o.helper ? co.left : 0)) {
 			self.size.width = self.size.width + (o.helper ? (self.position.left - co.left) : (self.position.left - cop.left));
