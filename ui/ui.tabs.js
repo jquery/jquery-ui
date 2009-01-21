@@ -233,7 +233,7 @@ $.widget("ui.tabs", {
 		// set up animations
 		var hideFx, showFx;
 		if (o.fx) {
-			if (o.fx.constructor == Array) {
+			if ($.isArray(o.fx)) {
 				hideFx = o.fx[0];
 				showFx = o.fx[1];
 			}
@@ -250,11 +250,11 @@ $.widget("ui.tabs", {
 		// Show a tab...
 		var showTab = showFx ?
 			function(clicked, $show) {
-				$show.animate(showFx, showFx.duration || 'normal', function() {
-					$show.removeClass('ui-tabs-hide');
-					resetStyle($show, showFx);
-					self._trigger('show', null, self.ui(clicked, $show[0]));
-				});
+				$show.hide().removeClass('ui-tabs-hide') // avoid flicker that way
+					.animate(showFx, 500, function() {
+						resetStyle($show, showFx);
+						self._trigger('show', null, self.ui(clicked, $show[0]));
+					});
 			} :
 			function(clicked, $show) {
 				$show.removeClass('ui-tabs-hide');
@@ -267,7 +267,7 @@ $.widget("ui.tabs", {
 				$hide.animate(hideFx, hideFx.duration || 'normal', function() {
 					$hide.addClass('ui-tabs-hide');
 					resetStyle($hide, hideFx);
-					if ($show) showTab(clicked, $show, $hide);
+					if ($show) showTab(clicked, $show);
 				});
 			} :
 			function(clicked, $hide, $show) {
