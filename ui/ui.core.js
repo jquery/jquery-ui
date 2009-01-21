@@ -199,30 +199,22 @@ $.extend($.expr[':'], {
 		return !!$.data(elem, match[3]);
 	},
 
-	// TODO: add support for object, area
-	tabbable: function(elem) {
-		var nodeName = elem.nodeName.toLowerCase();
-		function isVisible(element) {
-			return !($(element).is(':hidden') || $(element).parents(':hidden').length);
-		}
+	focusable: function(element) {
+		var nodeName = element.nodeName.toLowerCase(),
+			tabIndex = $.attr(element, 'tabindex');
+		return (/input|select|textarea|button|object/.test(nodeName)
+			? !element.disabled
+			: 'a' == nodeName || 'area' == nodeName
+				? element.href || !isNaN(tabIndex)
+				: !isNaN(tabIndex))
+			// the element and all of its ancestors must be visible
+			// the browser may report that the area is hidden
+			&& !$(element)['area' == nodeName ? 'parents' : 'closest'](':hidden').length;
+	},
 
-		return (
-			// in tab order
-			elem.tabIndex >= 0 &&
-
-			( // filter node types that participate in the tab order
-
-				// anchor tag
-				('a' == nodeName && elem.href) ||
-
-				// enabled form element
-				(/input|select|textarea|button/.test(nodeName) &&
-					'hidden' != elem.type && !elem.disabled)
-			) &&
-
-			// visible on page
-			isVisible(elem)
-		);
+	tabbable: function(element) {
+		var tabIndex = $.attr(element, 'tabindex');
+		return (isNaN(tabIndex) || tabIndex >= 0) && $(element).is(':focusable');
 	}
 });
 

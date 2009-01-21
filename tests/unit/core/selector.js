@@ -1,0 +1,184 @@
+/*
+ * core unit tests
+ */
+(function($) {
+
+module("selectors");
+
+function isFocusable(selector, msg) {
+	ok($(selector).is(':focusable'), msg);
+}
+
+function isNotFocusable(selector, msg) {
+	ok($(selector).length && !$(selector).is(':focusable'), msg);
+}
+
+function isTabbable(selector, msg) {
+	ok($(selector).is(':tabbable'), msg);
+}
+
+function isNotTabbable(selector, msg) {
+	ok($(selector).length && !$(selector).is(':tabbable'), msg);
+}
+
+test("focusable - visible, enabled elements", function() {
+	expect(18);
+	
+	isFocusable('#visibleAncestor-inputTypeNone', 'input, no type');
+	isFocusable('#visibleAncestor-inputTypeText', 'input, type text');
+	isFocusable('#visibleAncestor-inputTypeCheckbox', 'input, type checkbox');
+	isFocusable('#visibleAncestor-inputTypeRadio', 'input, type radio');
+	isFocusable('#visibleAncestor-inputTypeButton', 'input, type button');
+	isNotFocusable('#visibleAncestor-inputTypeHidden', 'input, type hidden');
+	isFocusable('#visibleAncestor-button', 'button');
+	isFocusable('#visibleAncestor-select', 'select');
+	isFocusable('#visibleAncestor-textarea', 'textarea');
+	isFocusable('#visibleAncestor-object', 'object');
+	isFocusable('#visibleAncestor-anchorWithHref', 'anchor with href');
+	isNotFocusable('#visibleAncestor-anchorWithoutHref', 'anchor without href');
+	isFocusable('#visibleAncestor-areaWithHref', 'area with href');
+	isNotFocusable('#visibleAncestor-areaWithoutHref', 'area without href');
+	isNotFocusable('#visibleAncestor-span', 'span');
+	isNotFocusable('#visibleAncestor-div', 'div');
+	isFocusable("#visibleAncestor-spanWithTabindex", 'span with tabindex');
+	isFocusable("#visibleAncestor-divWithNegativeTabindex", 'div with tabindex');
+});
+
+test("focusable - disabled elements", function() {
+	expect(9);
+	
+	isNotFocusable('#disabledElement-inputTypeNone', 'input, no type');
+	isNotFocusable('#disabledElement-inputTypeText', 'input, type text');
+	isNotFocusable('#disabledElement-inputTypeCheckbox', 'input, type checkbox');
+	isNotFocusable('#disabledElement-inputTypeRadio', 'input, type radio');
+	isNotFocusable('#disabledElement-inputTypeButton', 'input, type button');
+	isNotFocusable('#disabledElement-inputTypeHidden', 'input, type hidden');
+	isNotFocusable('#disabledElement-button', 'button');
+	isNotFocusable('#disabledElement-select', 'select');
+	isNotFocusable('#disabledElement-textarea', 'textarea');
+});
+
+test("focusable - hidden styles", function() {
+	expect(8);
+	
+	isNotFocusable('#displayNoneAncestor-input', 'input, display: none parent');
+	isNotFocusable('#displayNoneAncestor-span', 'span with tabindex, display: none parent');
+	
+	isNotFocusable('#visibilityHiddenAncestor-input', 'input, visibility: hidden parent');
+	isNotFocusable('#visibilityHiddenAncestor-span', 'span with tabindex, visibility: hidden parent');
+	
+	isNotFocusable('#displayNone-input', 'input, display: none');
+	isNotFocusable('#visibilityHidden-input', 'input, visibility: hidden');
+	
+	isNotFocusable('#displayNone-span', 'span with tabindex, display: none');
+	isNotFocusable('#visibilityHidden-span', 'span with tabindex, visibility: hidden');
+});
+
+test("focusable -  natively tabbable with various tabindex", function() {
+	expect(4);
+	
+	isFocusable('#inputTabindex0', 'input, tabindex 0');
+	isFocusable('#inputTabindex10', 'input, tabindex 10');
+	isFocusable('#inputTabindex-1', 'input, tabindex -1');
+	isFocusable('#inputTabindex-50', 'input, tabindex -50');
+});
+
+test("focusable -  not natively tabbable with various tabindex", function() {
+	expect(4);
+	
+	isFocusable('#spanTabindex0', 'span, tabindex 0');
+	isFocusable('#spanTabindex10', 'span, tabindex 10');
+	isFocusable('#spanTabindex-1', 'span, tabindex -1');
+	isFocusable('#spanTabindex-50', 'span, tabindex -50');
+});
+
+test("focusable - invalid tabindex", function() {
+	expect(4);
+	
+	isFocusable('#inputTabindexfoo', 'input, tabindex foo');
+	isFocusable('#inputTabindex3foo', 'input, tabindex 3foo');
+	isNotFocusable('#spanTabindexfoo', 'span tabindex foo');
+	isNotFocusable('#spanTabindex3foo', 'span, tabindex 3foo');
+});
+
+test("tabbable - visible, enabled elements", function() {
+	expect(18);
+	
+	isTabbable('#visibleAncestor-inputTypeNone', 'input, no type');
+	isTabbable('#visibleAncestor-inputTypeText', 'input, type text');
+	isTabbable('#visibleAncestor-inputTypeCheckbox', 'input, type checkbox');
+	isTabbable('#visibleAncestor-inputTypeRadio', 'input, type radio');
+	isTabbable('#visibleAncestor-inputTypeButton', 'input, type button');
+	isNotTabbable('#visibleAncestor-inputTypeHidden', 'input, type hidden');
+	isTabbable('#visibleAncestor-button', 'button');
+	isTabbable('#visibleAncestor-select', 'select');
+	isTabbable('#visibleAncestor-textarea', 'textarea');
+	isTabbable('#visibleAncestor-object', 'object');
+	isTabbable('#visibleAncestor-anchorWithHref', 'anchor with href');
+	isNotTabbable('#visibleAncestor-anchorWithoutHref', 'anchor without href');
+	isTabbable('#visibleAncestor-areaWithHref', 'area with href');
+	isNotTabbable('#visibleAncestor-areaWithoutHref', 'area without href');
+	isNotTabbable('#visibleAncestor-span', 'span');
+	isNotTabbable('#visibleAncestor-div', 'div');
+	isTabbable("#visibleAncestor-spanWithTabindex", 'span with tabindex');
+	isNotTabbable("#visibleAncestor-divWithNegativeTabindex", 'div with tabindex');
+});
+
+test("Tabbable - disabled elements", function() {
+	expect(9);
+	
+	isNotTabbable('#disabledElement-inputTypeNone', 'input, no type');
+	isNotTabbable('#disabledElement-inputTypeText', 'input, type text');
+	isNotTabbable('#disabledElement-inputTypeCheckbox', 'input, type checkbox');
+	isNotTabbable('#disabledElement-inputTypeRadio', 'input, type radio');
+	isNotTabbable('#disabledElement-inputTypeButton', 'input, type button');
+	isNotTabbable('#disabledElement-inputTypeHidden', 'input, type hidden');
+	isNotTabbable('#disabledElement-button', 'button');
+	isNotTabbable('#disabledElement-select', 'select');
+	isNotTabbable('#disabledElement-textarea', 'textarea');
+});
+
+test("Tabbable - hidden styles", function() {
+	expect(8);
+	
+	isNotTabbable('#displayNoneAncestor-input', 'input, display: none parent');
+	isNotTabbable('#displayNoneAncestor-span', 'span with tabindex, display: none parent');
+	
+	isNotTabbable('#visibilityHiddenAncestor-input', 'input, visibility: hidden parent');
+	isNotTabbable('#visibilityHiddenAncestor-span', 'span with tabindex, visibility: hidden parent');
+	
+	isNotTabbable('#displayNone-input', 'input, display: none');
+	isNotTabbable('#visibilityHidden-input', 'input, visibility: hidden');
+	
+	isNotTabbable('#displayNone-span', 'span with tabindex, display: none');
+	isNotTabbable('#visibilityHidden-span', 'span with tabindex, visibility: hidden');
+});
+
+test("Tabbable -  natively tabbable with various tabindex", function() {
+	expect(4);
+	
+	isTabbable('#inputTabindex0', 'input, tabindex 0');
+	isTabbable('#inputTabindex10', 'input, tabindex 10');
+	isNotTabbable('#inputTabindex-1', 'input, tabindex -1');
+	isNotTabbable('#inputTabindex-50', 'input, tabindex -50');
+});
+
+test("Tabbable -  not natively tabbable with various tabindex", function() {
+	expect(4);
+	
+	isTabbable('#spanTabindex0', 'span, tabindex 0');
+	isTabbable('#spanTabindex10', 'span, tabindex 10');
+	isNotTabbable('#spanTabindex-1', 'span, tabindex -1');
+	isNotTabbable('#spanTabindex-50', 'span, tabindex -50');
+});
+
+test("Tabbable - invalid tabindex", function() {
+	expect(4);
+	
+	isTabbable('#inputTabindexfoo', 'input, tabindex foo');
+	isTabbable('#inputTabindex3foo', 'input, tabindex 3foo');
+	isNotTabbable('#spanTabindexfoo', 'span tabindex foo');
+	isNotTabbable('#spanTabindex3foo', 'span, tabindex 3foo');
+});
+
+})(jQuery);
