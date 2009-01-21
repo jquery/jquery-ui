@@ -356,7 +356,7 @@ $.widget("ui.accordion", {
 		if (this.running) return;
 		
 		if (o.clearStyle) {
-			o.toShow.add(o.toHide).css({
+			this.toShow.add(this.toHide).css({
 				height: "",
 				overflow: ""
 			});
