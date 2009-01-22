@@ -381,11 +381,9 @@ $.widget("ui.tabs", {
 		// try to find an existing element before creating a new one
 		var $panel = $('#' + id);
 		if (!$panel.length) {
-			$panel = $(o.panelTemplate).attr('id', id)
-				.addClass('ui-tabs-hide')
-				.data('destroy.tabs', true);
+			$panel = $(o.panelTemplate).attr('id', id).data('destroy.tabs', true);
 		}
-		$panel.addClass('ui-tabs-panel ui-widget-content ui-corner-bottom');
+		$panel.addClass('ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs-hide');
 		if (index >= this.$lis.length) {
 			$li.appendTo(this.list);
 			$panel.appendTo(this.list[0].parentNode);
