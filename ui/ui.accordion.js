@@ -372,7 +372,7 @@ $.widget("ui.accordion", {
 $.extend($.ui.accordion, {
 	version: "@VERSION",
 	defaults: {
-		active: false,
+		active: null,
 		autoHeight: true,
 		alwaysOpen: true,
 		animated: 'slide',
