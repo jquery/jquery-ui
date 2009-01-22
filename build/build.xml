@@ -198,4 +198,12 @@
 		</delete>
 	</target>
 	
+	<target name="whitespace">
+		<replaceregexp match="[\t ]+$" replace="" flags="g" byline="true">
+		    <fileset dir="${src.dir}" includes="*.js"/>
+		    <fileset dir="${src.dir}/i18n/" includes="*.js"/>
+		</replaceregexp>
+		<echo message="All trailing spaces removed." />
+	</target>
+
 </project>
