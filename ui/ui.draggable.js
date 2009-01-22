@@ -144,7 +144,7 @@ $.widget("ui.draggable", $.extend({}, $.ui.mouse, {
 		var dropped = false;
 		if ($.ui.ddmanager && !this.options.dropBehaviour)
 			dropped = $.ui.ddmanager.drop(this, event);
-		
+
 		//if a drop comes from outside (a sortable)
 		if(this.dropped) {
 			dropped = this.dropped;
@@ -206,7 +206,7 @@ $.widget("ui.draggable", $.extend({}, $.ui.mouse, {
 		//Get the offsetParent and cache its position
 		this.offsetParent = this.helper.offsetParent();
 		var po = this.offsetParent.offset();
-		
+
 		// This is a special case where we need to modify a offset calculated on start, since the following happened:
 		// 1. The position of the helper is absolute, so it's position is calculated based on the next positioned parent
 		// 2. The actual offset parent is a child of the scroll parent, and the scroll parent isn't the document, which means that
@@ -303,7 +303,7 @@ $.widget("ui.draggable", $.extend({}, $.ui.mouse, {
 				- ( this.cssPosition == 'fixed' ? -this.scrollParent.scrollLeft() : scrollIsRootNode ? 0 : scroll.scrollLeft() ) * mod
 			)
 		};
-		
+
 	},
 
 	_generatePosition: function(event) {
@@ -317,7 +317,7 @@ $.widget("ui.draggable", $.extend({}, $.ui.mouse, {
 		if(this.cssPosition == 'relative' && !(this.scrollParent[0] != document && this.scrollParent[0] != this.offsetParent[0])) {
 			this.offset.relative = this._getRelativeOffset();
 		}
-		
+
 		var pageX = event.pageX;
 		var pageY = event.pageY;
 
@@ -325,7 +325,7 @@ $.widget("ui.draggable", $.extend({}, $.ui.mouse, {
 		 * - Position constraining -
 		 * Constrain the position to a mix of grid, containment.
 		 */
-		 
+
 		if(this.originalPosition) { //If we are not dragging yet, we won't check for options
 
 			if(this.containment) {
@@ -334,7 +334,7 @@ $.widget("ui.draggable", $.extend({}, $.ui.mouse, {
 				if(event.pageX - this.offset.click.left > this.containment[2]) pageX = this.containment[2] + this.offset.click.left;
 				if(event.pageY - this.offset.click.top > this.containment[3]) pageY = this.containment[3] + this.offset.click.top;
 			}
-			
+
 			if(o.grid) {
 				var top = this.originalPageY + Math.round((pageY - this.originalPageY) / o.grid[1]) * o.grid[1];
 				pageY = this.containment ? (!(top - this.offset.click.top < this.containment[1] || top - this.offset.click.top > this.containment[3]) ? top : (!(top - this.offset.click.top < this.containment[1]) ? top - o.grid[1] : top + o.grid[1])) : top;
@@ -457,18 +457,18 @@ $.ui.plugin.add("draggable", "connectToSortable", {
 
 		$.each(inst.sortables, function() {
 			if(this.instance.isOver) {
-				
+
 				this.instance.isOver = 0;
-				
+
 				inst.cancelHelperRemoval = true; //Don't remove the helper in the draggable instance
 				this.instance.cancelHelperRemoval = false; //Remove it in the sortable instance (so sortable plugins like revert still work)
-				
+
 				//The sortable revert is supported, and we have to set a temporary dropped variable on the draggable to support revert: 'valid/invalid'
 				if(this.shouldRevert) this.instance.options.revert = true;
-				
+
 				//Trigger the stop of the sortable
 				this.instance._mouseStop(event);
-				
+
 				this.instance.options.helper = this.instance.options._helper;
 
 				//If the helper has been the original item, restore properties in the sortable

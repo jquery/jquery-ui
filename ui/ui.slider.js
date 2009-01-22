@@ -34,7 +34,7 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 		this.range = $([]);
 
 		if (o.range) {
-			
+
 			if (o.range === true) {
 				this.range = $('<div></div>');
 				if (!o.values) o.values = [this._valueMin(), this._valueMin()];
@@ -54,7 +54,7 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 			(o.range == "max") && (this.orientation == "horizontal") && this.range.css({ right : 0 });
 			(o.range == "min") && (this.orientation == "vertical") && this.range.css({ bottom : 0 });
 			(o.range == "max") && (this.orientation == "vertical") && this.range.css({ top : 0 });
-			
+
 		}
 
 		if ($(".ui-slider-handle", this.element).length == 0)
@@ -213,25 +213,25 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 	},
 
 	_mouseDrag: function(event) {
-		
+
 		var position = { x: event.pageX, y: event.pageY };
 		var normValue = this._normValueFromMouse(position);
 
 		this._slide(event, this._handleIndex, normValue);
 
 		return false;
-		
+
 	},
 
 	_mouseStop: function(event) {
-		
+
 		this.handles.removeClass("ui-state-active");
 		this._stop(event);
 		this._change(event);
 		this._handleIndex = null;
 
 		return false;
-		
+
 	},
 
 	_normValueFromMouse: function(position) {
@@ -260,7 +260,7 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 			normValue += this.options.step;
 
 		return normValue;
-		
+
 	},
 
 	_start: function(event) {
@@ -270,7 +270,7 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 	},
 
 	_slide: function(event, index, newVal) {
-		
+
 		var handle = this.handles[index];
 
 		if (this.options.values && this.options.values.length) {

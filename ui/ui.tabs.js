@@ -93,7 +93,7 @@ $.widget("ui.tabs", {
 		this.$lis = $('li:has(a[href])', this.list);
 		this.$tabs = this.$lis.map(function() { return $('a', this)[0]; });
 		this.$panels = $([]);
-		
+
 		var self = this, o = this.options;
 
 		var fragmentId = /^#.+/; // Safari 2 reports '#' for an empty hash
@@ -103,15 +103,15 @@ $.widget("ui.tabs", {
 			// inline tab
 			if (fragmentId.test(href))
 				self.$panels = self.$panels.add(self._sanitizeSelector(href));
-				
+
 			// remote tab
 			else if (href != '#') { // prevent loading the page itself if href is just "#"
 				$.data(a, 'href.tabs', href); // required for restore on destroy
-				
+
 				// TODO until #3808 is fixed strip fragment identifier from url
 				// (IE fails to load from such url)
 				$.data(a, 'load.tabs', href.replace(/#.*$/, '')); // mutable data
-				
+
 				var id = self._tabId(a);
 				a.href = '#' + id;
 				var $panel = $('#' + id);
@@ -122,7 +122,7 @@ $.widget("ui.tabs", {
 				}
 				self.$panels = self.$panels.add($panel);
 			}
-			
+
 			// invalid tab href
 			else
 				o.disabled.push(i + 1);

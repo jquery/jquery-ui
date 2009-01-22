@@ -610,26 +610,26 @@ $.extend(Datepicker.prototype, {
 		if (inst.input && inst.input[0].type != 'hidden' && inst == $.datepicker._curInst)
 			$(inst.input[0]).focus();
 	},
-	
+
 	/* Check positioning to remain on screen. */
-	_checkOffset: function(inst, offset, isFixed) {		
+	_checkOffset: function(inst, offset, isFixed) {
 		var dpWidth = inst.dpDiv.outerWidth();
 		var dpHeight = inst.dpDiv.outerHeight();
 		var inputWidth = inst.input ? inst.input.outerWidth() : 0;
 		var inputHeight = inst.input ? inst.input.outerHeight() : 0;
 		var viewWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
 		var viewHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
-		
+
 		offset.left -= (this._get(inst, 'isRTL') ? (dpWidth - inputWidth) : 0);
 		offset.left -= (isFixed && offset.left == inst.input.offset().left) ? $(document).scrollLeft() : 0;
 		offset.top -= (isFixed && offset.top == (inst.input.offset().top + inputHeight)) ? $(document).scrollTop() : 0;
-		
+
 		// now check if datepicker is showing outside window viewpoint - move to a better place if so.
 		offset.left -= (offset.left + dpWidth > viewWidth && viewWidth > dpWidth) ? Math.abs(offset.left + dpWidth - viewWidth) : 0;
 		offset.top -= (offset.top + dpHeight > viewHeight && viewHeight > dpHeight) ? Math.abs(offset.top + dpHeight + inputHeight*2 - viewHeight) : 0;
-				
+
 		return offset;
-	},	
+	},
 
 	/* Find an object's position on the screen. */
 	_findPos: function(obj) {

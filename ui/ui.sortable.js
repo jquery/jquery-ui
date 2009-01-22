@@ -152,17 +152,17 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 			if ($('body').css("cursor")) this._storedCursor = $('body').css("cursor");
 			$('body').css("cursor", o.cursor);
 		}
-		
+
 		if(o.opacity) { // opacity option
 			if (this.helper.css("opacity")) this._storedOpacity = this.helper.css("opacity");
 			this.helper.css("opacity", o.opacity);
 		}
-		
+
 		if(o.zIndex) { // zIndex option
 			if (this.helper.css("zIndex")) this._storedZIndex = this.helper.css("zIndex");
 			this.helper.css("zIndex", o.zIndex);
 		}
-		
+
 		//Prepare scrolling
 		if(this.scrollParent[0] != document && this.scrollParent[0].tagName != 'HTML')
 			this.overflowOffset = this.scrollParent.offset();
@@ -209,31 +209,31 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 		if(this.options.scroll) {
 			var o = this.options, scrolled = false;
 			if(this.scrollParent[0] != document && this.scrollParent[0].tagName != 'HTML') {
-	
+
 				if((this.overflowOffset.top + this.scrollParent[0].offsetHeight) - event.pageY < o.scrollSensitivity)
 					this.scrollParent[0].scrollTop = scrolled = this.scrollParent[0].scrollTop + o.scrollSpeed;
 				else if(event.pageY - this.overflowOffset.top < o.scrollSensitivity)
 					this.scrollParent[0].scrollTop = scrolled = this.scrollParent[0].scrollTop - o.scrollSpeed;
-	
+
 				if((this.overflowOffset.left + this.scrollParent[0].offsetWidth) - event.pageX < o.scrollSensitivity)
 					this.scrollParent[0].scrollLeft = scrolled = this.scrollParent[0].scrollLeft + o.scrollSpeed;
 				else if(event.pageX - this.overflowOffset.left < o.scrollSensitivity)
 					this.scrollParent[0].scrollLeft = scrolled = this.scrollParent[0].scrollLeft - o.scrollSpeed;
-	
+
 			} else {
-	
+
 				if(event.pageY - $(document).scrollTop() < o.scrollSensitivity)
 					scrolled = $(document).scrollTop($(document).scrollTop() - o.scrollSpeed);
 				else if($(window).height() - (event.pageY - $(document).scrollTop()) < o.scrollSensitivity)
 					scrolled = $(document).scrollTop($(document).scrollTop() + o.scrollSpeed);
-	
+
 				if(event.pageX - $(document).scrollLeft() < o.scrollSensitivity)
 					scrolled = $(document).scrollLeft($(document).scrollLeft() - o.scrollSpeed);
 				else if($(window).width() - (event.pageX - $(document).scrollLeft()) < o.scrollSensitivity)
 					scrolled = $(document).scrollLeft($(document).scrollLeft() + o.scrollSpeed);
-	
+
 			}
-	
+
 			if(scrolled !== false && $.ui.ddmanager && !o.dropBehaviour)
 				$.ui.ddmanager.prepareOffsets(this, event);
 		}
@@ -316,7 +316,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 	cancel: function() {
 
 		var self = this;
-		
+
 		if(this.dragging) {
 
 			this._mouseUp();
@@ -614,11 +614,11 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 					return el;
 				},
 				update: function(container, p) {
-					
+
 					// 1. If a className is set as 'placeholder option, we don't force sizes - the class is responsible for that
 					// 2. The option 'forcePlaceholderSize can be enabled to force it even if a class name is specified
 					if(className && !o.forcePlaceholderSize) return;
-					
+
 					//If the element doesn't have a actual height by itself (without styles coming from a stylesheet), it receives the inline height from the dragged item
 					if(!p.height()) { p.height(self.currentItem.innerHeight() - parseInt(self.currentItem.css('paddingTop')||0, 10) - parseInt(self.currentItem.css('paddingBottom')||0, 10)); };
 					if(!p.width()) { p.width(self.currentItem.innerWidth() - parseInt(self.currentItem.css('paddingLeft')||0, 10) - parseInt(self.currentItem.css('paddingRight')||0, 10)); };
@@ -712,7 +712,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 		//Get the offsetParent and cache its position
 		this.offsetParent = this.helper.offsetParent();
 		var po = this.offsetParent.offset();
-		
+
 		// This is a special case where we need to modify a offset calculated on start, since the following happened:
 		// 1. The position of the helper is absolute, so it's position is calculated based on the next positioned parent
 		// 2. The actual offset parent is a child of the scroll parent, and the scroll parent isn't the document, which means that
@@ -807,7 +807,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 				- ( this.cssPosition == 'fixed' ? -this.scrollParent.scrollLeft() : scrollIsRootNode ? 0 : scroll.scrollLeft() ) * mod
 			)
 		};
-		
+
 	},
 
 	_generatePosition: function(event) {
@@ -821,7 +821,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 		if(this.cssPosition == 'relative' && !(this.scrollParent[0] != document && this.scrollParent[0] != this.offsetParent[0])) {
 			this.offset.relative = this._getRelativeOffset();
 		}
-		
+
 		var pageX = event.pageX;
 		var pageY = event.pageY;
 
@@ -829,7 +829,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 		 * - Position constraining -
 		 * Constrain the position to a mix of grid, containment.
 		 */
-		 
+
 		if(this.originalPosition) { //If we are not dragging yet, we won't check for options
 
 			if(this.containment) {
@@ -838,7 +838,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 				if(event.pageX - this.offset.click.left > this.containment[2]) pageX = this.containment[2] + this.offset.click.left;
 				if(event.pageY - this.offset.click.top > this.containment[3]) pageY = this.containment[3] + this.offset.click.top;
 			}
-			
+
 			if(o.grid) {
 				var top = this.originalPageY + Math.round((pageY - this.originalPageY) / o.grid[1]) * o.grid[1];
 				pageY = this.containment ? (!(top - this.offset.click.top < this.containment[1] || top - this.offset.click.top > this.containment[3]) ? top : (!(top - this.offset.click.top < this.containment[1]) ? top - o.grid[1] : top + o.grid[1])) : top;
@@ -865,7 +865,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 				+ ( this.cssPosition == 'fixed' ? -this.scrollParent.scrollLeft() : scrollIsRootNode ? 0 : scroll.scrollLeft() )
 			)
 		};
-		
+
 	},
 
 	_rearrange: function(event, i, a, hardRefresh) {
@@ -948,7 +948,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 		this.placeholder[0].parentNode.removeChild(this.placeholder[0]);
 
 		if(this.helper[0] != this.currentItem[0]) this.helper.remove(); this.helper = null;
-		
+
 		if(!noPropagation) {
 			for (var i=0; i < delayedTriggers.length; i++) { delayedTriggers[i].call(this, event); }; //Trigger all delayed events
 			this._trigger("stop", event, this._uiHash());

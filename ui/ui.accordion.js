@@ -15,7 +15,7 @@
 $.widget("ui.accordion", {
 
 	_init: function() {
-		
+
 		var o = this.options, self = this;
 		this.running = 0;
 
@@ -32,12 +32,12 @@ $.widget("ui.accordion", {
 		}
 
 		this.element.addClass("ui-accordion ui-widget ui-helper-reset");
-		
+
 		this.groups = this.element.children().addClass("ui-accordion-group");
 		this.headers = this.groups.find("> :first-child").addClass("ui-accordion-header ui-helper-reset ui-state-default ui-corner-all")
 			.bind("mouseenter.accordion", function(){ $(this).addClass('ui-state-hover'); })
 			.bind("mouseleave.accordion", function(){ $(this).removeClass('ui-state-hover'); });
-			
+
 		// wrap content elements in div against animation issues
 		this.headers
 			.next()
@@ -48,7 +48,7 @@ $.widget("ui.accordion", {
 
 		this.active = this._findActive(this.active || o.active).toggleClass("ui-state-default").toggleClass("ui-state-active").toggleClass("ui-corner-all").toggleClass("ui-corner-top");
 		this.active.parent().addClass('ui-accordion-selected');
-		
+
 		//Append icon elements
 		$("<span/>").addClass("ui-icon " + o.icons.header).prependTo(this.headers);
 		this.active.find(".ui-icon").toggleClass(o.icons.header).toggleClass(o.icons.headerSelected);
@@ -92,11 +92,11 @@ $.widget("ui.accordion", {
 		if (o.event) {
 			this.element.bind((o.event) + ".accordion", function(event) { return self._clickHandler.call(self, event); });
 		}
-		
+
 	},
 
 	destroy: function() {
-		
+
 		this.element
 			.removeClass("ui-accordion ui-widget ui-helper-reset")
 			.removeAttr("role")
@@ -108,19 +108,19 @@ $.widget("ui.accordion", {
 			.unbind(".accordion")
 			.removeClass("ui-accordion-header ui-helper-reset ui-state-default ui-corner-all ui-state-active ui-corner-top")
 			.removeAttr("role").removeAttr("aria-expanded").removeAttr("tabindex");
-		
+
 		this.headers.find("a").removeAttr("tabindex");
 		this.headers.children(".ui-icon").remove();
 		this.headers.next().children().removeClass("ui-accordion-content").each(function() {
 			$(this).parent().replaceWith(this);
 		});
-		
+
 	},
 
 	_keydown: function(event) {
-		
+
 		var o = this.options, keyCode = $.ui.keyCode;
-		
+
 		if (o.disabled || event.altKey || event.ctrlKey)
 			return;
 
@@ -154,36 +154,36 @@ $.widget("ui.accordion", {
 	},
 
 	resize: function() {
-		
+
 		var o = this.options, maxHeight;
 
 		if (o.fillSpace) {
-			
+
 			maxHeight = this.element.parent().height();
 			this.headers.each(function() {
 				maxHeight -= $(this).outerHeight();
 			});
-			
+
 			var maxPadding = 0;
 			this.headers.next().each(function() {
 				maxPadding = Math.max(maxPadding, $(this).innerHeight() - $(this).height());
 			}).height(maxHeight - maxPadding)
 			.css('overflow', 'auto');
-			
+
 		} else if ( o.autoHeight ) {
 			maxHeight = 0;
 			this.headers.next().each(function() {
 				maxHeight = Math.max(maxHeight, $(this).outerHeight());
 			}).height(maxHeight);
 		}
-		
+
 	},
 
 	activate: function(index) {
 		// call clickHandler with custom event
 		this._clickHandler({ target: this._findActive(index)[0] });
 	},
-	
+
 	_findActive: function(selector) {
 		return selector
 			? typeof selector == "number"
@@ -193,12 +193,12 @@ $.widget("ui.accordion", {
 				? $([])
 				: this.headers.filter(":eq(0)");
 	},
-	
+
 	_clickHandler: function(event) {
-		
+
 		var o = this.options;
 		if (o.disabled) return false;
-			
+
 		// called only when using activate(false) to close all parts programmatically
 		if (!event.target && !o.alwaysOpen) {
 			this.active.parent().toggleClass('ui-accordion-selected');
@@ -216,16 +216,16 @@ $.widget("ui.accordion", {
 			this._toggle(toShow, toHide, data);
 			return false;
 		}
-		
+
 		// get the click target
 		var clicked = $(event.target);
-		
+
 		// due to the event delegation model, we have to check if one
 		// of the parent elements is our actual header, and find that
 		// otherwise stick with the initial target
 		clicked = $( clicked.parents(o.header)[0] || clicked );
 		var clickedIsActive = clicked[0] == this.active[0];
-		
+
 		// if animations are still active, or the active header is the target, ignore click
 		if (this.running || (o.alwaysOpen && clickedIsActive)) {
 			return false;
@@ -233,7 +233,7 @@ $.widget("ui.accordion", {
 		if (!clicked.is(o.header)) {
 			return;
 		}
-		
+
 		// switch classes
 		this.active.parent().toggleClass('ui-accordion-selected');
 		this.active.removeClass("ui-state-active ui-corner-top").addClass("ui-state-default ui-corner-all")
@@ -243,7 +243,7 @@ $.widget("ui.accordion", {
 			clicked.removeClass("ui-state-default ui-corner-all").addClass("ui-state-active ui-corner-top")
 				.find(".ui-icon").removeClass(o.icons.header).addClass(o.icons.headerSelected);
 		}
-		
+
 		// find elements to show and hide
 		var toShow = clicked.next(),
 			toHide = this.active.next(),
@@ -255,22 +255,22 @@ $.widget("ui.accordion", {
 				oldContent: toHide
 			},
 			down = this.headers.index( this.active[0] ) > this.headers.index( clicked[0] );
-	
+
 		this.active = clickedIsActive ? $([]) : clicked;
 		this._toggle(toShow, toHide, data, clickedIsActive, down);
-	
+
 		return false;
-		
+
 	},
-	
+
 	_toggle: function(toShow, toHide, data, clickedIsActive, down) {
 
 		var o = this.options, self = this;
-		
+
 		this.toShow = toShow;
 		this.toHide = toHide;
 		this.data = data;
-	
+
 		var complete = function() { if(!self) return; return self._completed.apply(self, arguments); };
 
 		// trigger changestart event
@@ -280,9 +280,9 @@ $.widget("ui.accordion", {
 		this.running = toHide.size() === 0 ? toShow.size() : toHide.size();
 
 		if (o.animated) {
-			
+
 			var animOptions = {};
-	
+
 			if ( !o.alwaysOpen && clickedIsActive ) {
 				animOptions = {
 					toShow: $([]),
@@ -300,25 +300,25 @@ $.widget("ui.accordion", {
 					autoHeight: o.autoHeight || o.fillSpace
 				};
 			}
-	
+
 			if (!o.proxied) {
 				o.proxied = o.animated;
 			}
-	
+
 			if (!o.proxiedDuration) {
 				o.proxiedDuration = o.duration;
 			}
-	
+
 			o.animated = $.isFunction(o.proxied) ?
 				o.proxied(animOptions) : o.proxied;
-	
+
 			o.duration = $.isFunction(o.proxiedDuration) ?
 				o.proxiedDuration(animOptions) : o.proxiedDuration;
-	
+
 			var animations = $.ui.accordion.animations,
 				duration = o.duration,
 				easing = o.animated;
-	
+
 			if (!animations[easing]) {
 				animations[easing] = function(options) {
 					this.slide(options, {
@@ -327,43 +327,43 @@ $.widget("ui.accordion", {
 					});
 				};
 			}
-	
+
 			animations[easing](animOptions);
-	
+
 		} else {
-			
+
 			if (!o.alwaysOpen && clickedIsActive) {
 				toShow.toggle();
 			} else {
 				toHide.hide();
 				toShow.show();
 			}
-			
+
 			complete(true);
-			
+
 		}
-		
+
 		toHide.prev().attr('aria-expanded','false').attr("tabIndex", "-1");
 		toShow.prev().attr('aria-expanded','true').attr("tabIndex", "0").focus();
 
 	},
-	
+
 	_completed: function(cancel) {
 
 		var o = this.options;
-		
+
 		this.running = cancel ? 0 : --this.running;
 		if (this.running) return;
-		
+
 		if (o.clearStyle) {
 			this.toShow.add(this.toHide).css({
 				height: "",
 				overflow: ""
 			});
 		}
-		
+
 		this._trigger('change', null, this.data);
-		
+
 	}
 
 });

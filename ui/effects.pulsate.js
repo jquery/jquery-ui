@@ -23,7 +23,7 @@ $.effects.pulsate = function(o) {
 		var mode = $.effects.setMode(el, o.options.mode || 'show'); // Set Mode
 		var times = o.options.times || 5; // Default # of times
 		var duration = o.duration ? o.duration / 2 : $.fx.speeds._default / 2;
-		
+
 		// Adjust
 		if (mode == 'hide') times--;
 		if (el.is(':hidden')) { // Show fadeIn
