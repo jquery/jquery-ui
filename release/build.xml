@@ -6,7 +6,6 @@
 	Call task called 'deploy-release' to build a full release.
 	The release built will be stored on 'dist' dir.
 
-	@author Eduardo Lundgren (eduardo.lundgren@gmail.com)
 -->
 
 <project name="jquery-ui" default="deploy-release" basedir=".">
