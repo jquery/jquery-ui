@@ -83,7 +83,7 @@ $.widget("ui.tabs", {
 	},
 
 	_cookie: function() {
-		var cookie = this.cookie || (this.cookie = 'ui-tabs-' + $.data(this.list[0]));
+		var cookie = this.cookie || (this.cookie = this.options.cookie.name || 'ui-tabs-' + $.data(this.list[0]));
 		return $.cookie.apply(null, [cookie].concat($.makeArray(arguments)));
 	},
 
