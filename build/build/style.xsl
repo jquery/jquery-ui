@@ -203,50 +203,7 @@
 			
 		<!-- TAB 4 -->
 			<div id="docs-theming">
-				<p class="intro">ui.dialog uses the jQuery UI CSS styles framework for all major components, e.g. for the titlebar, the resize handle, etc., some of which are borrowed from ui.resizable.</p>
-				
-				<h3>Sample code with CSS classes</h3>
-				
-				<p>Use the classes highlighted in bold to customize the dialog:</p>
-				
-				<!-- Remove all framework classes (those from ui.core.css and ui.theme.css) from the markup sample, and highlight all remaining widget classes in bold (<strong>).  
-				We decided to omit framework classes to avoid confusion and focus the user on the classes that are necessary for customizing the widget.  I've bolded a few for illustration, 
-				but in the working code ALL of them should be bolded. -->
-				
-				<code>
-				&lt;div class="<strong>ui-dialog</strong>" role="dialog" aria-labelledby="ui-dialog-title-1"><br />
-				&#160;&#160;&lt;div class="<strong>ui-dialog-titlebar</strong>"><br />
-				&#160;&#160;&#160;&#160;&lt;span class="<strong>ui-dialog-title</strong>" id="ui-dialog-title-1">Dialog Title&lt;/span><br />
-				&#160;&#160;&#160;&#160;&lt;a href="#" class="<strong>ui-dialog-titlebar-close</strong>" role="button" title="Close"><br />
-				&#160;&#160;&#160;&#160;&lt;span class="<strong>ui-icon ui-icon-closethick</strong>">Close&lt;/span>&lt;/a><br />
-				&#160;&#160;&lt;/div><br />
-				&#160;&#160;&lt;div class="<strong>ui-dialog-content</strong>" style="height: 13em;"><br />
-				&#160;&#160;&#160;&#160;&lt;p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt&lt;/p><br />
-				&#160;&#160;&lt;/div><br />
-				&#160;&#160;&lt;div class="<strong>ui-dialog-buttonpane</strong>"><br />
-				&#160;&#160;&#160;&#160;&lt;button class="ui-state-default ui-priority-primary ui-corner-all">Primary&lt;/button><br />
-				&#160;&#160;&#160;&#160;&lt;button class="ui-state-default ui-priority-secondary ui-corner-all">Secondary&lt;/button><br />
-				&#160;&#160;&#160;&#160;&lt;button class="ui-state-default ui-state-disabled ui-corner-all">Disabled&lt;/button><br />
-				&#160;&#160;&lt;/div><br />
-				&#160;&#160;&lt;div class="ui-resizable-n ui-resizable-handle">&lt;/div><br />
-				&#160;&#160;&lt;div class="ui-resizable-s ui-resizable-handle">&lt;/div><br />
-				&#160;&#160;&lt;div class="ui-resizable-e ui-resizable-handle">&lt;/div><br />
-				&#160;&#160;&lt;div class="ui-resizable-w ui-resizable-handle">&lt;/div><br />
-				&#160;&#160;&lt;div class="ui-resizable-ne ui-resizable-handle">&lt;/div><br />
-				&#160;&#160;&lt;div class="ui-resizable-se ui-resizable-handle ui-icon ui-icon-grip-diagonal-se">&lt;/div><br />
-				&#160;&#160;&lt;div class="ui-resizable-sw ui-resizable-handle">&lt;/div><br />
-				&#160;&#160;&lt;div class="ui-resizable-nw ui-resizable-handle">&lt;/div><br />
-				&lt;/div>
-				</code>
-				
-				<h3>See also</h3>
-				<ul>
-					<li><a href="#">UI/Resizables plugin documentation</a></li>
-					<li><a href="#">How to create a custom theme</a></li>
-					<li><a href="#">jQuery UI CSS Framework documentation</a></li>
-					<li><a href="#">ThemeRoller: Create your own custom theme</a></li>
-				</ul>
-				
+				%%THEMING%%
 			</div>				
 		</div>
 	</xsl:template>
