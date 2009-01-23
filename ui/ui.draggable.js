@@ -387,8 +387,7 @@ $.widget("ui.draggable", $.extend({}, $.ui.mouse, {
 		return {
 			helper: this.helper,
 			position: this.position,
-			absolutePosition: this.positionAbs,
-			options: this.options
+			absolutePosition: this.positionAbs
 		};
 	}
 
@@ -431,9 +430,9 @@ $.extend($.ui.draggable, {
 $.ui.plugin.add("draggable", "connectToSortable", {
 	start: function(event, ui) {
 
-		var inst = $(this).data("draggable");
+		var inst = $(this).data("draggable"), o = inst.options;
 		inst.sortables = [];
-		$(ui.options.connectToSortable).each(function() {
+		$(o.connectToSortable).each(function() {
 			// 'this' points to a string, and should therefore resolved as query, but instead, if the string is assigned to a variable, it loops through the strings properties,
 			// so we have to append '' to make it anonymous again
 			$(this+'').each(function() {
@@ -557,18 +556,20 @@ $.ui.plugin.add("draggable", "connectToSortable", {
 
 $.ui.plugin.add("draggable", "cursor", {
 	start: function(event, ui) {
-		var t = $('body');
-		if (t.css("cursor")) ui.options._cursor = t.css("cursor");
-		t.css("cursor", ui.options.cursor);
+		var t = $('body'), o = $(this).data('draggable').options;
+		if (t.css("cursor")) o._cursor = t.css("cursor");
+		t.css("cursor", o.cursor);
 	},
 	stop: function(event, ui) {
-		if (ui.options._cursor) $('body').css("cursor", ui.options._cursor);
+		var o = $(this).data('draggable').options;
+		if (o._cursor) $('body').css("cursor", o._cursor);
 	}
 });
 
 $.ui.plugin.add("draggable", "iframeFix", {
 	start: function(event, ui) {
-		$(ui.options.iframeFix === true ? "iframe" : ui.options.iframeFix).each(function() {
+		var o = $(this).data('draggable').options;
+		$(o.iframeFix === true ? "iframe" : o.iframeFix).each(function() {
 			$('<div class="ui-draggable-iframeFix" style="background: #fff;"></div>')
 			.css({
 				width: this.offsetWidth+"px", height: this.offsetHeight+"px",
@@ -585,27 +586,23 @@ $.ui.plugin.add("draggable", "iframeFix", {
 
 $.ui.plugin.add("draggable", "opacity", {
 	start: function(event, ui) {
-		var t = $(ui.helper);
-		if(t.css("opacity")) ui.options._opacity = t.css("opacity");
-		t.css('opacity', ui.options.opacity);
+		var t = $(ui.helper), o = $(this).data('draggable').options;
+		if(t.css("opacity")) o._opacity = t.css("opacity");
+		t.css('opacity', o.opacity);
 	},
 	stop: function(event, ui) {
-		if(ui.options._opacity) $(ui.helper).css('opacity', ui.options._opacity);
+		if(o._opacity) $(ui.helper).css('opacity', o._opacity);
 	}
 });
 
 $.ui.plugin.add("draggable", "scroll", {
 	start: function(event, ui) {
-		var o = ui.options;
 		var i = $(this).data("draggable");
-
 		if(i.scrollParent[0] != document && i.scrollParent[0].tagName != 'HTML') i.overflowOffset = i.scrollParent.offset();
-
 	},
 	drag: function(event, ui) {
 
-		var o = ui.options, scrolled = false;
-		var i = $(this).data("draggable");
+		var i = $(this).data("draggable"), o = i.options, scrolled = false;
 
 		if(i.scrollParent[0] != document && i.scrollParent[0].tagName != 'HTML') {
 
@@ -642,12 +639,12 @@ $.ui.plugin.add("draggable", "scroll", {
 $.ui.plugin.add("draggable", "snap", {
 	start: function(event, ui) {
 
-		var inst = $(this).data("draggable");
-		inst.snapElements = [];
+		var i = $(this).data("draggable"), o = i.options;
+		i.snapElements = [];
 
-		$(ui.options.snap.constructor != String ? ( ui.options.snap.items || ':data(draggable)' ) : ui.options.snap).each(function() {
+		$(o.snap.constructor != String ? ( o.snap.items || ':data(draggable)' ) : o.snap).each(function() {
 			var $t = $(this); var $o = $t.offset();
-			if(this != inst.element[0]) inst.snapElements.push({
+			if(this != i.element[0]) i.snapElements.push({
 				item: this,
 				width: $t.outerWidth(), height: $t.outerHeight(),
 				top: $o.top, left: $o.left
@@ -657,8 +654,8 @@ $.ui.plugin.add("draggable", "snap", {
 	},
 	drag: function(event, ui) {
 
-		var inst = $(this).data("draggable");
-		var d = ui.options.snapTolerance;
+		var inst = $(this).data("draggable"), o = i.options;
+		var d = i.options.snapTolerance;
 
 		var x1 = ui.absolutePosition.left, x2 = x1 + inst.helperProportions.width,
 			y1 = ui.absolutePosition.top, y2 = y1 + inst.helperProportions.height;
@@ -675,7 +672,7 @@ $.ui.plugin.add("draggable", "snap", {
 				continue;
 			}
 
-			if(ui.options.snapMode != 'inner') {
+			if(o.snapMode != 'inner') {
 				var ts = Math.abs(t - y2) <= d;
 				var bs = Math.abs(b - y1) <= d;
 				var ls = Math.abs(l - x2) <= d;
@@ -688,7 +685,7 @@ $.ui.plugin.add("draggable", "snap", {
 
 			var first = (ts || bs || ls || rs);
 
-			if(ui.options.snapMode != 'outer') {
+			if(o.snapMode != 'outer') {
 				var ts = Math.abs(t - y1) <= d;
 				var bs = Math.abs(b - y2) <= d;
 				var ls = Math.abs(l - x1) <= d;
@@ -710,26 +707,31 @@ $.ui.plugin.add("draggable", "snap", {
 
 $.ui.plugin.add("draggable", "stack", {
 	start: function(event, ui) {
-		var group = $.makeArray($(ui.options.stack.group)).sort(function(a,b) {
-			return (parseInt($(a).css("zIndex"),10) || ui.options.stack.min) - (parseInt($(b).css("zIndex"),10) || ui.options.stack.min);
+		
+		var o = $(this).data("draggable").options;
+		
+		var group = $.makeArray($(o.stack.group)).sort(function(a,b) {
+			return (parseInt($(a).css("zIndex"),10) || o.stack.min) - (parseInt($(b).css("zIndex"),10) || o.stack.min);
 		});
 
 		$(group).each(function(i) {
-			this.style.zIndex = ui.options.stack.min + i;
+			this.style.zIndex = o.stack.min + i;
 		});
 
-		this[0].style.zIndex = ui.options.stack.min + group.length;
+		this[0].style.zIndex = o.stack.min + group.length;
+		
 	}
 });
 
 $.ui.plugin.add("draggable", "zIndex", {
 	start: function(event, ui) {
-		var t = $(ui.helper);
-		if(t.css("zIndex")) ui.options._zIndex = t.css("zIndex");
-		t.css('zIndex', ui.options.zIndex);
+		var t = $(ui.helper), o = $(this).data("draggable").options;
+		if(t.css("zIndex")) o._zIndex = t.css("zIndex");
+		t.css('zIndex', o.zIndex);
 	},
 	stop: function(event, ui) {
-		if(ui.options._zIndex) $(ui.helper).css('zIndex', ui.options._zIndex);
+		var o = $(this).data("draggable").options;
+		if(o._zIndex) $(ui.helper).css('zIndex', o._zIndex);
 	}
 });
 
