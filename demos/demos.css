@@ -147,7 +147,9 @@ eventually we should convert the font sizes to ems -- using px for now to minimi
 #demo-config-menu li { font-size:12px; padding:0 0 0 10px; margin:3px 0; zoom: 1; }
 
 #demo-config-menu li a:link,
-#demo-config-menu li a:visited { display:block; padding:3px 8px 4px; border-bottom:1px dotted #b3b3b3; }
+#demo-config-menu li a:visited { display:block; padding:1px 8px 4px; border-bottom:1px dotted #b3b3b3; }
+* html #demo-config-menu li a:link,
+* html #demo-config-menu li a:visited { padding:1px 8px 2px; }
 #demo-config-menu li a:hover,
 #demo-config-menu li a:active { background-color:#f6f6f6; }
 
@@ -156,7 +158,7 @@ eventually we should convert the font sizes to ems -- using px for now to minimi
 #demo-config-menu li.demo-config-on a:link,
 #demo-config-menu li.demo-config-on a:visited,
 #demo-config-menu li.demo-config-on a:hover,
-#demo-config-menu li.demo-config-on a:active { background: url(images/demo-config-on.gif) no-repeat left; padding-left:18px; color:#fff; border:0; margin-left:-10px; }
+#demo-config-menu li.demo-config-on a:active { background: url(images/demo-config-on.gif) no-repeat left; padding-left:18px; color:#fff; border:0; margin-left:-10px; margin-top: 0px; margin-bottom: 0px; }
 
 #demo-source, #demo-notes {
 	clear: both;
