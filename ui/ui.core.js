@@ -455,6 +455,11 @@ $.ui.mouse = {
 		// anymore, so this fix is needed
 		($.browser.safari || event.preventDefault());
 
+		// was changed to return true in rev 1000 because that allows the
+		// event to bubble - however, exactly that causes much pain for
+		// nested widgets, so we call stopPropagation(). Building a work-
+		// around for the above is much easier.
+		event.stopPropagation();
 		return true;
 	},
 
