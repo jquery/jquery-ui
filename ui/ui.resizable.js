@@ -786,8 +786,4 @@ $.ui.plugin.add("resizable", "grid", {
 
 });
 
-function isVisible(element) {
-	return !($(element).is(':hidden') || $(element).parents(':hidden').length);
-}
-
 })(jQuery);
