@@ -153,7 +153,7 @@
 		function loadDemo(path) {
 			var directory = path.match(/([^\/]+)\/[^\/\.]+\.html$/)[1];
 			$.get(path, function(data) {
-
+				var source = data.match(/<script.*>.*<\/script>/ig)[1];
 				data = data.replace(/<script.*>.*<\/script>/ig,""); // Remove script tags
 				data = data.replace(/<\/?link.*>/ig,""); //Remove link tags
 				data = data.replace(/<\/?html.*>/ig,""); //Remove html tag
@@ -168,10 +168,11 @@
 				$('#demo-frame style').clone().appendTo('head').attr('id','demo-style');
 				$('#demo-link a').attr('href', path);
 				updateDemoNotes();
+				updateDemoSource(source);
 			});
 			if (/default.html$/.test(path)) {
 				$.get("documentation/docs-" + path.match(/demos\/(.+)\//)[1] + ".html", function(html) {
-					$("#demo-notes").after(html);
+					$("#demo-source").after(html);
 					$("#widget-docs").tabs();
 					$(".param-header").click(function() {
 						$(this).parent().toggleClass("param-open").end().next().toggle();
@@ -196,10 +197,21 @@
 			var notes = $('#demo-frame .demo-description');
 			if ($('#demo-notes').length == 0) {
 				$('<div id="demo-notes"></div>').insertAfter('#demo-config');
-			}						
+			}
 			$('#demo-notes').hide().empty().html(notes.html());
 			$('#demo-notes').fadeIn();
 			notes.hide();
+		}
+		
+		function updateDemoSource(source) {
+			if ($('#demo-source').length == 0) {
+				$('<div id="demo-source"><a href="#" class="source-closed">View Source</a><div><pre><code></code></pre></div></div>').insertAfter('#demo-notes');
+				$('#demo-source').find(">a").click(function() {
+					$(this).toggleClass("source-closed").toggleClass("source-open").next().toggle();
+					return false;
+				}).end().find(">div").hide();
+			}
+			$('#demo-source code').empty().text(source);
 		}
 		
 		function resetDemos() {
@@ -256,12 +268,6 @@
 					<p>
 						These demos showcase some common uses of each jQuery UI plugin. Simply copy and paste code from the demos to get started. Have fun playing with them.
 					</p>
-				
-				<!-- change the class to class="source-open" when code is visible
-				<div id="demo-source">
-					<a href="#" class="source-closed">View source</a>
-				</div>
-				-->
 				
 					<?php  } ?>
 			</div>
