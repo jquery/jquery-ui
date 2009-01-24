@@ -473,6 +473,7 @@ $.widget("ui.tabs", {
 
 		var self = this, o = this.options, $a = this.$tabs.eq(index), a = $a[0],
 				bypassCache = callback == undefined || callback === false, url = $a.data('load.tabs');
+				// TODO bypassCache == false should work
 
 		callback = callback || function() {};
 
@@ -578,38 +579,37 @@ $.extend($.ui.tabs.prototype, {
 	rotation: null,
 	rotate: function(ms, continuing) {
 
-		continuing = continuing || false;
-
 		var self = this, t = this.options.selected;
 
-		function start() {
-			self.rotation = setInterval(function() {
+		function rotate() {
+			clearTimeout(self.rotation);
+			self.rotation = setTimeout(function() {
 				t = ++t < self.$tabs.length ? t : 0;
 				self.select(t);
 			}, ms);
 		}
 
-		function stop(event) {
-			if (!event || event.clientX) { // only in case of a true click
-				clearInterval(self.rotation);
-			}
-		}
-
-		// start interval
+		// start rotation
 		if (ms) {
-			start();
-			if (!continuing)
-				this.$tabs.bind(this.options.event + '.tabs', stop);
-			else
-				this.$tabs.bind(this.options.event + '.tabs', function() {
-					stop();
+			this.element.bind('tabsshow', rotate); // will not be attached twice
+			this.$tabs.bind(this.options.event + '.tabs', !continuing ?
+				function(e) {
+					if (e.clientX) { // in case of a true click	
+						clearTimeout(self.rotation);
+						self.element.unbind('tabsshow', rotate);
+					}
+				} :
+				function(e) {
 					t = self.options.selected;
-					start();
-				});
+					rotate();
+				}
+			);
+			rotate();
 		}
-		// stop interval
+		// stop rotation
 		else {
-			stop();
+			clearTimeout(self.rotation);
+			this.element.unbind('tabsshow', rotate);
 			this.$tabs.unbind(this.options.event + '.tabs', stop);
 		}
 	}
