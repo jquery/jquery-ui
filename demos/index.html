@@ -211,7 +211,12 @@
 					return false;
 				}).end().find(">div").hide();
 			}
-			$('#demo-source code').empty().text(source);
+			var cleanedSource = source
+				.replace('themes/base/ui.all.css', 'theme/ui.all.css')
+				.replace(/\s*\x3Clink.*demos\x2Ecss.*\x3E\s*/, '\r\n\t')
+				.replace(/\x2E\x2E\x2F\x2E\x2E\x2F/g, '');
+
+			$('#demo-source code').empty().text(cleanedSource);
 		}
 		
 		function resetDemos() {
