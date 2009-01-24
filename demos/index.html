@@ -153,7 +153,7 @@
 		function loadDemo(path) {
 			var directory = path.match(/([^\/]+)\/[^\/\.]+\.html$/)[1];
 			$.get(path, function(data) {
-				var source = data.match(/<script.*>.*<\/script>/ig)[1];
+				var source = data;
 				data = data.replace(/<script.*>.*<\/script>/ig,""); // Remove script tags
 				data = data.replace(/<\/?link.*>/ig,""); //Remove link tags
 				data = data.replace(/<\/?html.*>/ig,""); //Remove html tag
