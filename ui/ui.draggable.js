@@ -612,7 +612,7 @@ $.ui.plugin.add("draggable", "scroll", {
 				else if(event.pageY - i.overflowOffset.top < o.scrollSensitivity)
 					i.scrollParent[0].scrollTop = scrolled = i.scrollParent[0].scrollTop - o.scrollSpeed;
 			}
-			
+
 			if(!o.axis || o.axis != 'y') {
 				if((i.overflowOffset.left + i.scrollParent[0].offsetWidth) - event.pageX < o.scrollSensitivity)
 					i.scrollParent[0].scrollLeft = scrolled = i.scrollParent[0].scrollLeft + o.scrollSpeed;
@@ -621,21 +621,21 @@ $.ui.plugin.add("draggable", "scroll", {
 			}
 
 		} else {
-			
+
 			if(!o.axis || o.axis != 'x') {
 				if(event.pageY - $(document).scrollTop() < o.scrollSensitivity)
 					scrolled = $(document).scrollTop($(document).scrollTop() - o.scrollSpeed);
 				else if($(window).height() - (event.pageY - $(document).scrollTop()) < o.scrollSensitivity)
 					scrolled = $(document).scrollTop($(document).scrollTop() + o.scrollSpeed);
 			}
-			
+
 			if(!o.axis || o.axis != 'y') {
 				if(event.pageX - $(document).scrollLeft() < o.scrollSensitivity)
 					scrolled = $(document).scrollLeft($(document).scrollLeft() - o.scrollSpeed);
 				else if($(window).width() - (event.pageX - $(document).scrollLeft()) < o.scrollSensitivity)
 					scrolled = $(document).scrollLeft($(document).scrollLeft() + o.scrollSpeed);
 			}
-			
+
 		}
 
 		if(scrolled !== false && $.ui.ddmanager && !o.dropBehaviour)
@@ -715,9 +715,9 @@ $.ui.plugin.add("draggable", "snap", {
 
 $.ui.plugin.add("draggable", "stack", {
 	start: function(event, ui) {
-		
+
 		var o = $(this).data("draggable").options;
-		
+
 		var group = $.makeArray($(o.stack.group)).sort(function(a,b) {
 			return (parseInt($(a).css("zIndex"),10) || o.stack.min) - (parseInt($(b).css("zIndex"),10) || o.stack.min);
 		});
@@ -727,7 +727,7 @@ $.ui.plugin.add("draggable", "stack", {
 		});
 
 		this[0].style.zIndex = o.stack.min + group.length;
-		
+
 	}
 });
 

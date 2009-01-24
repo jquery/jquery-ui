@@ -16,9 +16,9 @@ $.widget("ui.resizable", $.extend({}, $.ui.mouse, {
 
 	_init: function() {
 
-		var self = this, o = this.options;	
+		var self = this, o = this.options;
 		this.element.addClass("ui-resizable");
-			
+
 		$.extend(this, {
 			_aspectRatio: !!(o.aspectRatio),
 			aspectRatio: o.aspectRatio,
@@ -64,7 +64,7 @@ $.widget("ui.resizable", $.extend({}, $.ui.mouse, {
 
 			// fix handlers offset
 			this._proportionallyResize();
-			
+
 		}
 
 		this.handles = o.handles || (!$('.ui-resizable-handle', this.element).length ? "e,s,se" : { n: '.ui-resizable-n', e: '.ui-resizable-e', s: '.ui-resizable-s', w: '.ui-resizable-w', se: '.ui-resizable-se', sw: '.ui-resizable-sw', ne: '.ui-resizable-ne', nw: '.ui-resizable-nw' });
@@ -74,10 +74,10 @@ $.widget("ui.resizable", $.extend({}, $.ui.mouse, {
 			var n = this.handles.split(","); this.handles = {};
 
 			for(var i = 0; i < n.length; i++) {
-				
+
 				var handle = $.trim(n[i]), hname = 'ui-resizable-'+handle;
 				var axis = $('<div class="ui-resizable-handle ' + hname + '"></div>');
-				
+
 				// increase zIndex of sw, se, ne, nw axis
 				//TODO : this modifies original option
 				if(/sw|se|ne|nw/.test(handle)) axis.css({ zIndex: ++o.zIndex });
@@ -95,11 +95,11 @@ $.widget("ui.resizable", $.extend({}, $.ui.mouse, {
 		}
 
 		this._renderAxis = function(target) {
-			
+
 			target = target || this.element;
 
 			for(var i in this.handles) {
-				
+
 				if(this.handles[i].constructor == String)
 					this.handles[i] = $(this.handles[i], this.element).show();
 
@@ -124,19 +124,19 @@ $.widget("ui.resizable", $.extend({}, $.ui.mouse, {
 						target.css(padPos, padWrapper);
 
 					this._proportionallyResize();
-					
+
 				}
-				
+
 				//TODO: What's that good for? There's not anything to be executed left
 				if(!$(this.handles[i]).length)
 					continue;
-				
+
 			}
 		};
 
 		//TODO: make renderAxis a prototype function
 		this._renderAxis(this.element);
-		
+
 		this._handles = $('.ui-resizable-handle', this.element);
 
 		if (o.disableSelection)
@@ -171,11 +171,11 @@ $.widget("ui.resizable", $.extend({}, $.ui.mouse, {
 
 		//Initialize the mouse interaction
 		this._mouseInit();
-		
+
 	},
 
 	destroy: function() {
-		
+
 		this._mouseDestroy();
 
 		var _destroy = function(exp) {
@@ -196,9 +196,9 @@ $.widget("ui.resizable", $.extend({}, $.ui.mouse, {
 				})
 			).end().remove();
 		}
-		
+
 		_destroy(this.originalElement);
-		
+
 	},
 
 	_mouseCapture: function(event) {
@@ -216,7 +216,7 @@ $.widget("ui.resizable", $.extend({}, $.ui.mouse, {
 
 		var o = this.options, iniPos = this.element.position(), el = this.element,
 			num = function(v) { return parseInt(v, 10) || 0; }, ie6 = $.browser.msie && $.browser.version < 7;
-			
+
 		this.resizing = true;
 		this.documentScroll = { top: $(document).scrollTop(), left: $(document).scrollLeft() };
 
@@ -327,7 +327,7 @@ $.widget("ui.resizable", $.extend({}, $.ui.mouse, {
 
 		if (this._helper) this.helper.remove();
 		return false;
-		
+
 	},
 
 	_updateCache: function(data) {
@@ -386,44 +386,44 @@ $.widget("ui.resizable", $.extend({}, $.ui.mouse, {
 	},
 
 	_proportionallyResize: function() {
-		
+
 		var o = this.options;
 		if (!this.proportionallyResize.length) return;
 		var element = this.helper || this.element;
-		
+
 		for (var i=0; i < this.proportionallyResize.length; i++) {
-			
+
 			var prel = this.proportionallyResize[i];
-			
+
 			if (!this.borderDif) {
 				var b = [prel.css('borderTopWidth'), prel.css('borderRightWidth'), prel.css('borderBottomWidth'), prel.css('borderLeftWidth')],
 					p = [prel.css('paddingTop'), prel.css('paddingRight'), prel.css('paddingBottom'), prel.css('paddingLeft')];
-	
+
 				this.borderDif = $.map(b, function(v, i) {
 					var border = parseInt(v,10)||0, padding = parseInt(p[i],10)||0;
 					return border + padding;
 				});
 			}
-	
+
 			if ($.browser.msie && !(!($(element).is(':hidden') || $(element).parents(':hidden').length)))
 				continue;
-	
+
 			prel.css({
 				height: (element.height() - this.borderDif[0] - this.borderDif[2]) || 0,
 				width: (element.width() - this.borderDif[1] - this.borderDif[3]) || 0
 			});
-			
+
 		};
 
 	},
 
 	_renderProxy: function() {
-		
+
 		var el = this.element, o = this.options;
 		this.elementOffset = el.offset();
 
 		if(this._helper) {
-			
+
 			this.helper = this.helper || $('<div style="overflow:hidden;"></div>');
 
 			// fix ie6 offset TODO: This seems broken
@@ -447,7 +447,7 @@ $.widget("ui.resizable", $.extend({}, $.ui.mouse, {
 		} else {
 			this.helper = this.element;
 		}
-		
+
 	},
 
 	_change: {
@@ -538,7 +538,7 @@ $.extend($.ui.resizable, {
 $.ui.plugin.add("resizable", "alsoResize", {
 
 	start: function(event, ui) {
-	
+
 		var o = ui.options, self = $(this).data("resizable"),
 
 		_store = function(exp) {
@@ -730,7 +730,7 @@ $.ui.plugin.add("resizable", "containment", {
 $.ui.plugin.add("resizable", "ghost", {
 
 	start: function(event, ui) {
-		
+
 		var o = ui.options, self = $(this).data("resizable"), pr = o.proportionallyResize, cs = self.size;
 
 		self.ghost = self.originalElement.clone();
