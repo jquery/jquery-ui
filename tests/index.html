@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<title>jQuery UI Tests</title>
+	<link rel="stylesheet" href="../themes/base/ui.all.css" type="text/css" />
+	<script type="text/javascript" src="../jquery-1.3.1.js"></script>
+	<script type="text/javascript" src="../ui/ui.core.js"></script>
+	<script type="text/javascript" src="../ui/ui.draggable.js"></script>
+	<style type="text/css">
+		body { font-size: 62.5%; }
+		dd.plugin { margin-top: 0.3em; margin-bottom: 1em; }
+		iframe { border: 0; width: 200px; 150px; }
+		td { border: 1px solid silver; padding: 10px; }
+	</style>
+</head>
+
+<body>
+
+<table id="matrix">
+<thead>
+	<tr>
+		<th>Interaction</th>
+		<th style="width:220px;">Static</th>
+		<th style="width:220px;">Visual</th>
+	</tr>
+</thead>
+<tbody>
+	<tr class="test-draggable-default"><th>Draggable</th><td></td><td></td></tr>
+	<tr class="test-droppable-default"><th>Droppable</th><td></td><td></td></tr>
+	<tr class="test-resizable-default"><th>Resizable</th><td></td><td></td></tr>
+	<tr class="test-selectabe-default"><th>Selectable</th><td></td><td></td></tr>
+	<tr class="test-sortable-default"><th>Sortable</th><td></td><td></td></tr>
+</tbody>
+<thead>
+	<tr>
+		<th>Widget</th>
+		<th style="width:220px;">Static</th>
+		<th style="width:220px;">Visual</th>
+	</tr>
+</thead>
+<tbody>
+	<tr class="test-accordion-default"><th>Accordion</th><td></td><td></td></tr>
+	<tr class="test-datepicker-default"><th>Datepicker</th><td></td><td></td></tr>
+	<tr class="test-dialog-default"><th>Dialog</th><td></td><td></td></tr>
+	<tr class="test-progressbar-default"><th>Progressbar</th><td></td><td></td></tr>
+	<tr class="test-slider-default"><th>slider</th><td></td><td></td></tr>
+	<tr class="test-tabs-default"><th>Tabs</th><td></td><td></td></tr>
+</tbody>
+</table>
+
+<dl id="plugins">
+
+</dl>
+
+<script type="text/javascript">
+
+var matrix = $("#matrix");
+
+matrix.children("tbody").children("tr").each(function() {
+
+	var tr = $(this), th = tr.find("th"), pluginName = th.text().toLowerCase(), staticTd = th.next(), visualTd = staticTd.next();
+
+	var staticUrl = 'static/' + pluginName + '/default.html';
+	var visualUrl = 'visual/' + pluginName + '/default.html';
+
+	$.get(staticUrl, function(data) {
+		data = data.replace(/<script.*>.*<\/script>/ig,""); // Remove script tags
+		data = data.replace(/<\/?link.*>/ig,""); //Remove link tags
+		data = data.replace(/<\/?html.*>/ig,""); //Remove html tag
+		data = data.replace(/<\/?body.*>/ig,""); //Remove body tag
+		data = data.replace(/<\/?head.*>/ig,""); //Remove head tag
+		data = data.replace(/<title.*>.*<\/title>/ig,""); // Remove title tags
+		data = data.replace(/\s*<\/?!doctype.*>\s*/ig,""); //Remove doctype
+		var staticHtml = $("<div></div>").html(data).html();
+		staticTd.html(staticHtml);
+	});
+
+	visualTd.append('<iframe src="' + visualUrl + '"></iframe>');
+
+	var iframe = visualTd.find("iframe");
+
+	iframe.load(function() {
+		//alert($("body", this.contentDocument).html());
+		$(this).after($("body", this.contentDocument).html()).remove();
+		(pluginName == 'dialog') && $("#dialog").parents(".ui-dialog").css({
+			position: "relative",
+			top: null, left: null
+		});
+	});
+
+});
+
+</script>
+
+</body>
+</html>
