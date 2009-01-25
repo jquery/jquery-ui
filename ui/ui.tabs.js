@@ -439,14 +439,7 @@ $.widget("ui.tabs", {
 		if ($.inArray(index, o.disabled) == -1)
 			return;
 
-		var $li = this.$lis.eq(index).removeClass('ui-state-disabled');
-		if ($.browser.safari) { // fix disappearing tab (that used opacity indicating disabling) after enabling in Safari 2...
-			$li.css('display', 'inline-block');
-			setTimeout(function() {
-				$li.css('display', 'block');
-			}, 0);
-		}
-
+		this.$lis.eq(index).removeClass('ui-state-disabled');
 		o.disabled = $.grep(o.disabled, function(n, i) { return n != index; });
 
 		// callback
