@@ -224,7 +224,7 @@ $.widget("ui.tabs", {
 		}
 		// update selected after add/remove
 		else
-			o.selected = this.$lis.index(this.$lis.filter('.ui-tabs-selected')); // TODO check adding with all unselected
+			o.selected = this.$lis.index(this.$lis.filter('.ui-tabs-selected'));
 
 		// set or update cookie after init and add/remove respectively
 		if (o.cookie) this._cookie(o.selected, o.cookie);
