@@ -541,7 +541,6 @@ $.widget("ui.tabs", {
 
 	ui: function(tab, panel) {
 		return {
-			options: this.options,
 			tab: tab,
 			panel: panel,
 			index: this.$tabs.index(tab)
