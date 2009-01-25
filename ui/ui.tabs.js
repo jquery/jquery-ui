@@ -153,14 +153,21 @@ $.widget("ui.tabs", {
 						}
 					});
 				}
-				else if (o.cookie) {
-					var index = parseInt(self._cookie(), 10);
-					if (index && self.$tabs[index]) o.selected = index;
-				}
-				else if (self.$lis.filter('.ui-tabs-selected').length)
-					o.selected = self.$lis.index( self.$lis.filter('.ui-tabs-selected')[0] );
+				else if (o.cookie)
+					o.selected = parseInt(self._cookie(), 10);
+
+				else if (this.$lis.filter('.ui-tabs-selected').length)
+					o.selected = this.$lis.index(this.$lis.filter('.ui-tabs-selected'));
+
+				else
+				 	o.selected = 0;
+
 			}
-			o.selected = o.selected === null || o.selected !== undefined ? o.selected : 0; // first tab selected by default
+			else if (o.selected === null)
+				o.selected = -1;
+
+			// sanity check
+			o.selected = ((o.selected >= 0 && this.$tabs[o.selected]) || o.selected < 0) ? o.selected : 0; // default to first tab
 
 			// Take disabling tabs via class attribute from HTML
 			// into account and update option properly.
@@ -175,7 +182,7 @@ $.widget("ui.tabs", {
 			// highlight selected tab
 			this.$panels.addClass('ui-tabs-hide');
 			this.$lis.removeClass('ui-tabs-selected ui-state-active');
-			if (o.selected !== null && this.$tabs.length) { // check for length avoids error when initializing empty list
+			if (o.selected >= 0 && this.$tabs.length) { // check for length avoids error when initializing empty list
 				this.$panels.eq(o.selected).removeClass('ui-tabs-hide');
 				var classes = ['ui-tabs-selected ui-state-active'];
 				if (o.deselectable) classes.push('ui-tabs-deselectable');
@@ -217,7 +224,7 @@ $.widget("ui.tabs", {
 		}
 		// update selected after add/remove
 		else
-			o.selected = this.$lis.index( this.$lis.filter('.ui-tabs-selected')[0] );
+			o.selected = this.$lis.index(this.$lis.filter('.ui-tabs-selected')); // TODO check adding with all unselected
 
 		// set or update cookie after init and add/remove respectively
 		if (o.cookie) this._cookie(o.selected, o.cookie);
@@ -305,10 +312,11 @@ $.widget("ui.tabs", {
 
 			o.selected = self.$tabs.index(this);
 
-			// if tab may be closed
+			// if tab may be closed TODO avoid redundant code in this block
 			if (o.deselectable) {
 				if ($li.hasClass('ui-state-active')) {
-					self.options.selected = null;
+					o.selected = -1;
+					if (o.cookie) self._cookie(o.selected, o.cookie);
 					$li.removeClass('ui-tabs-selected ui-state-active ui-tabs-deselectable')
 						.addClass('ui-state-default');
 					self.$panels.stop();
@@ -316,6 +324,7 @@ $.widget("ui.tabs", {
 					this.blur();
 					return false;
 				} else if (!$hide.length) {
+					if (o.cookie) self._cookie(o.selected, o.cookie);
 					self.$panels.stop();
 					var a = this;
 					self.load(self.$tabs.index(this), function() {
@@ -459,7 +468,7 @@ $.widget("ui.tabs", {
 
 	select: function(index) {
 		if (typeof index == 'string')
-			index = this.$tabs.index( this.$tabs.filter('[href$=' + index + ']')[0] );
+			index = this.$tabs.index(this.$tabs.filter('[href$=' + index + ']'));
 		this.$tabs.eq(index).trigger(this.options.event + '.tabs');
 	},
 
@@ -587,7 +596,7 @@ $.extend($.ui.tabs.prototype, {
 			this.element.bind('tabsshow', rotate); // will not be attached twice
 			this.$tabs.bind(this.options.event + '.tabs', !continuing ?
 				function(e) {
-					if (e.clientX) { // in case of a true click	
+					if (e.clientX) { // in case of a true click
 						clearTimeout(self.rotation);
 						self.element.unbind('tabsshow', rotate);
 					}

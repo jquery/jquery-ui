@@ -123,21 +123,40 @@ module('tabs');
 
 	});
 
-
+	test('selected property', function() {
+		expect(5);
+		
+		$('#tabs1').tabs();
+		equals($('#tabs1').data('selected.tabs'), 0, 'selected should be 0 by default');
+		
+		reset();
+		$('#tabs1').tabs({ selected: null });
+		equals($('#tabs1').data('selected.tabs'), -1, 'selected should be -1 for all tabs unselected');
+		
+		reset();
+		$('#tabs1').tabs({ selected: -1 });
+		equals($('#tabs1').data('selected.tabs'), -1, 'selected should be -1 for all tabs unselected');
+		
+		reset();
+		$('#tabs1').tabs({ selected: 1 });
+		equals($('#tabs1').data('selected.tabs'), 1, 'selected should be specified tab');
+		
+		reset();
+		$('#tabs1').tabs({ selected: 8 });
+		equals($('#tabs1').data('selected.tabs'), 0, 'selected should default to zero if given value is out of index');
+		
+	});
+	
 module('tabs: Options');
 
-	test('select: null', function() {
-		expect(3);
+	test('selected: null', function() {
+		expect(2);
 
-		var el = $('#tabs1 > ul');
+		var el = $('#tabs1');
 
 		el.tabs({ selected: null });
-		equals( el.data('selected.tabs'), null, 'option set' );
-		equals( $('li.ui-tabs-selected', el).length, 0, 'all tabs should be deselected' );
+		equals( $('li.ui-tabs-selected', el).length, 0, 'no tab should be selected' );
 		equals( $('div.ui-tabs-hide', '#tabs1').length, 3, 'all panels should be hidden' );
-
-		// TODO select == null with cookie
-		// TODO select == null with select method
 
 	});
 
@@ -164,7 +183,7 @@ module('tabs: Options');
 	});
 
 	test('cookie', function() {
-		expect(5);
+		expect(6);
 
 		var el = $('#tabs1 > ul');
 		var cookieName = 'ui-tabs-' + $.data(el[0]);
@@ -188,6 +207,11 @@ module('tabs: Options');
 		el.tabs({ cookie: {} });
 		equals(cookie(), 1, 'initial cookie value, from existing cookie');
 
+		el.tabs('destroy');
+		el.tabs({ cookie: {}, deselectable: true });
+		el.tabs('select', 0);
+		equals(cookie(), -1, 'cookie value for all unselected tabs');
+		
 		el.tabs('destroy');
 		ok($.cookie(cookieName) === null, 'erase cookie after destroy');
 
