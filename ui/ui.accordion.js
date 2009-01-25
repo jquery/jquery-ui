@@ -251,8 +251,8 @@ $.widget("ui.accordion", {
 				options: o,
 				newHeader: clickedIsActive && !o.alwaysOpen ? $([]) : clicked,
 				oldHeader: this.active,
-				newContent: clickedIsActive && !o.alwaysOpen ? $([]) : toShow,
-				oldContent: toHide
+				newContent: clickedIsActive && !o.alwaysOpen ? $([]) : toShow.find('> *'),
+				oldContent: toHide.find('> *')
 			},
 			down = this.headers.index( this.active[0] ) > this.headers.index( clicked[0] );
 
