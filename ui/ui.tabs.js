@@ -133,7 +133,6 @@ $.widget("ui.tabs", {
 
 			// attach necessary classes for styling
 			if (this.element.is('div')) {
-				// TODO replace hardcoded class names
 				this.element.addClass('ui-tabs ui-widget ui-widget-content ui-corner-all');
 			}
 			this.list.addClass('ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all');
@@ -279,7 +278,6 @@ $.widget("ui.tabs", {
 		function switchTab(clicked, $li, $hide, $show) {
 			var classes = ['ui-tabs-selected ui-state-active'];
 			if (o.deselectable) classes.push('ui-tabs-deselectable');
-			// TODO replace hardcoded class names
 			$li.removeClass('ui-state-default').addClass(classes.join(' '))
 				.siblings().removeClass(classes.join(' ')).addClass('ui-state-default');
 			hideTab(clicked, $hide, $show);
@@ -288,7 +286,6 @@ $.widget("ui.tabs", {
 		// attach tab event handler, unbind to avoid duplicates from former tabifying...
 		this.$tabs.unbind('.tabs').bind(o.event + '.tabs', function() {
 
-			//var trueClick = event.clientX; // add to history only if true click occured, not a triggered click
 			var $li = $(this).parents('li:eq(0)'),
 				$hide = self.$panels.filter(':visible'),
 				$show = $(self._sanitizeSelector(this.hash));
@@ -297,7 +294,6 @@ $.widget("ui.tabs", {
 			// or is already loading or click callback returns false stop here.
 			// Check if click handler returns false last so that it is not executed
 			// for a disabled or loading tab!
-			// TODO replace hardcoded class names
 			if (($li.hasClass('ui-state-active') && !o.deselectable)
 				|| $li.hasClass('ui-state-disabled')
 				|| $(this).hasClass('ui-tabs-loading')
@@ -310,7 +306,6 @@ $.widget("ui.tabs", {
 			o.selected = self.$tabs.index(this);
 
 			// if tab may be closed
-			// TODO replace hardcoded class names
 			if (o.deselectable) {
 				if ($li.hasClass('ui-state-active')) {
 					self.options.selected = null;
@@ -463,7 +458,6 @@ $.widget("ui.tabs", {
 	},
 
 	select: function(index) {
-		// TODO make null as argument work
 		if (typeof index == 'string')
 			index = this.$tabs.index( this.$tabs.filter('[href$=' + index + ']')[0] );
 		this.$tabs.eq(index).trigger(this.options.event + '.tabs');
