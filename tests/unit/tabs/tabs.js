@@ -123,6 +123,21 @@ module('tabs');
 
 	});
 
+	test('callback ui object', function() {
+		expect(3);
+
+		var uiObj;
+		$('#tabs1').tabs({
+			show: function(event, ui) {
+				uiObj = ui;
+			}
+		});
+		equals(uiObj.tab, $('#tabs1 a')[0], 'should have tab as DOM anchor element');
+		equals(uiObj.panel, $('#tabs1 div')[0], 'should have panel as DOM div element');
+		equals(uiObj.index, 0, ' should have index');
+		
+	});
+	
 	test('selected property', function() {
 		expect(5);
 		

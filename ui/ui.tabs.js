@@ -19,47 +19,6 @@ $.widget("ui.tabs", {
 		this._tabify(true);
 	},
 
-	destroy: function() {
-		var o = this.options;
-
-		this.element
-			.removeClass('ui-tabs ui-widget ui-widget-content ui-corner-all');
-
-		this.list.unbind('.tabs')
-			.removeClass('ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all')
-			.removeData('tabs');
-
-		this.$tabs.each(function() {
-			var href = $.data(this, 'href.tabs');
-			if (href)
-				this.href = href;
-			var $this = $(this).unbind('.tabs');
-			$.each(['href', 'load', 'cache'], function(i, prefix) {
-				$this.removeData(prefix + '.tabs');
-			});
-		});
-
-		this.$lis.unbind('.tabs').add(this.$panels).each(function() {
-			if ($.data(this, 'destroy.tabs'))
-				$(this).remove();
-			else
-				$(this).removeClass(
-					'ui-state-default ' +
-					'ui-corner-top ' +
-					'ui-tabs-selected ' +
-					'ui-state-active ' +
-					'ui-tabs-deselectable ' +
-					'ui-state-disabled ' +
-					'ui-tabs-panel ' +
-					'ui-widget-content ' +
-					'ui-corner-bottom ' +
-					'ui-tabs-hide');
-		});
-
-		if (o.cookie)
-			this._cookie(null, o.cookie);
-	},
-
 	_setData: function(key, value) {
 		if ((/^selected/).test(key))
 			this.select(value);
@@ -67,10 +26,6 @@ $.widget("ui.tabs", {
 			this.options[key] = value;
 			this._tabify();
 		}
-	},
-
-	length: function() {
-		return this.$tabs.length;
 	},
 
 	_tabId: function(a) {
@@ -85,6 +40,14 @@ $.widget("ui.tabs", {
 	_cookie: function() {
 		var cookie = this.cookie || (this.cookie = this.options.cookie.name || 'ui-tabs-' + $.data(this.list[0]));
 		return $.cookie.apply(null, [cookie].concat($.makeArray(arguments)));
+	},
+	
+	_ui: function(tab, panel) {
+		return {
+			tab: tab,
+			panel: panel,
+			index: this.$tabs.index(tab)
+		};
 	},
 
 	_tabify: function(init) {
@@ -191,7 +154,7 @@ $.widget("ui.tabs", {
 				// seems to be expected behavior that the show callback is fired
 				var onShow = function() {
 					self._trigger('show', null,
-						self.ui(self.$tabs[o.selected], self.$panels[o.selected]));
+						self._ui(self.$tabs[o.selected], self.$panels[o.selected]));
 				};
 
 				// load if remote tab
@@ -259,12 +222,12 @@ $.widget("ui.tabs", {
 				$show.hide().removeClass('ui-tabs-hide') // avoid flicker that way
 					.animate(showFx, 500, function() {
 						resetStyle($show, showFx);
-						self._trigger('show', null, self.ui(clicked, $show[0]));
+						self._trigger('show', null, self._ui(clicked, $show[0]));
 					});
 			} :
 			function(clicked, $show) {
 				$show.removeClass('ui-tabs-hide');
-				self._trigger('show', null, self.ui(clicked, $show[0]));
+				self._trigger('show', null, self._ui(clicked, $show[0]));
 			};
 
 		// Hide a tab, $show is optional...
@@ -304,7 +267,7 @@ $.widget("ui.tabs", {
 			if (($li.hasClass('ui-state-active') && !o.deselectable)
 				|| $li.hasClass('ui-state-disabled')
 				|| $(this).hasClass('ui-tabs-loading')
-				|| self._trigger('select', null, self.ui(this, $show[0])) === false
+				|| self._trigger('select', null, self._ui(this, $show[0])) === false
 				) {
 				this.blur();
 				return false;
@@ -371,6 +334,47 @@ $.widget("ui.tabs", {
 		if (o.event != 'click') this.$tabs.bind('click.tabs', function(){return false;});
 
 	},
+	
+	destroy: function() {
+		var o = this.options;
+
+		this.element
+			.removeClass('ui-tabs ui-widget ui-widget-content ui-corner-all');
+
+		this.list.unbind('.tabs')
+			.removeClass('ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all')
+			.removeData('tabs');
+
+		this.$tabs.each(function() {
+			var href = $.data(this, 'href.tabs');
+			if (href)
+				this.href = href;
+			var $this = $(this).unbind('.tabs');
+			$.each(['href', 'load', 'cache'], function(i, prefix) {
+				$this.removeData(prefix + '.tabs');
+			});
+		});
+
+		this.$lis.unbind('.tabs').add(this.$panels).each(function() {
+			if ($.data(this, 'destroy.tabs'))
+				$(this).remove();
+			else
+				$(this).removeClass(
+					'ui-state-default ' +
+					'ui-corner-top ' +
+					'ui-tabs-selected ' +
+					'ui-state-active ' +
+					'ui-tabs-deselectable ' +
+					'ui-state-disabled ' +
+					'ui-tabs-panel ' +
+					'ui-widget-content ' +
+					'ui-corner-bottom ' +
+					'ui-tabs-hide');
+		});
+
+		if (o.cookie)
+			this._cookie(null, o.cookie);
+	},
 
 	add: function(url, label, index) {
 		if (index == undefined)
@@ -408,12 +412,12 @@ $.widget("ui.tabs", {
 			var href = $.data(this.$tabs[0], 'load.tabs');
 			if (href) this.load(0, function() {
 				self._trigger('show', null,
-					self.ui(self.$tabs[0], self.$panels[0]));
+					self._ui(self.$tabs[0], self.$panels[0]));
 			});
 		}
 
 		// callback
-		this._trigger('add', null, this.ui(this.$tabs[index], this.$panels[index]));
+		this._trigger('add', null, this._ui(this.$tabs[index], this.$panels[index]));
 	},
 
 	remove: function(index) {
@@ -431,7 +435,7 @@ $.widget("ui.tabs", {
 		this._tabify();
 
 		// callback
-		this._trigger('remove', null, this.ui($li.find('a')[0], $panel[0]));
+		this._trigger('remove', null, this._ui($li.find('a')[0], $panel[0]));
 	},
 
 	enable: function(index) {
@@ -443,7 +447,7 @@ $.widget("ui.tabs", {
 		o.disabled = $.grep(o.disabled, function(n, i) { return n != index; });
 
 		// callback
-		this._trigger('enable', null, this.ui(this.$tabs[index], this.$panels[index]));
+		this._trigger('enable', null, this._ui(this.$tabs[index], this.$panels[index]));
 	},
 
 	disable: function(index) {
@@ -455,7 +459,7 @@ $.widget("ui.tabs", {
 			o.disabled.sort();
 
 			// callback
-			this._trigger('disable', null, this.ui(this.$tabs[index], this.$panels[index]));
+			this._trigger('disable', null, this._ui(this.$tabs[index], this.$panels[index]));
 		}
 	},
 
@@ -474,6 +478,8 @@ $.widget("ui.tabs", {
 		callback = callback || function() {};
 
 		// no remote or from cache - just finish with callback
+		// TODO in any case: insert cancel running load here..!
+		
 		if (!url || !bypassCache && $.data(a, 'cache.tabs')) {
 			callback();
 			return;
@@ -510,7 +516,7 @@ $.widget("ui.tabs", {
 					$.data(a, 'cache.tabs', true); // if loaded once do not load them again
 
 				// callbacks
-				self._trigger('load', null, self.ui(self.$tabs[index], self.$panels[index]));
+				self._trigger('load', null, self._ui(self.$tabs[index], self.$panels[index]));
 				try {
 					o.ajaxOptions.success(r, s);
 				}
@@ -534,13 +540,9 @@ $.widget("ui.tabs", {
 	url: function(index, url) {
 		this.$tabs.eq(index).removeData('cache.tabs').data('load.tabs', url);
 	},
-
-	ui: function(tab, panel) {
-		return {
-			tab: tab,
-			panel: panel,
-			index: this.$tabs.index(tab)
-		};
+	
+	length: function() {
+		return this.$tabs.length;
 	}
 
 });
