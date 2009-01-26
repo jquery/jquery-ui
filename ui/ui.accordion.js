@@ -22,7 +22,7 @@ $.widget("ui.accordion", {
 		if ( o.navigation ) {
 			var current = this.element.find("a").filter(o.navigationFilter);
 			if ( current.length ) {
-				if ( current.filter(options.header).length ) {
+				if ( current.filter(o.header).length ) {
 					this.active = current;
 				} else {
 					this.active = current.parent().parent().prev();
