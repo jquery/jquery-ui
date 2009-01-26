@@ -1,4 +1,3 @@
-<?php if(!isset($plain)) { ?>
 <!doctype html>
 <html lang="en">
 <head>
@@ -228,7 +227,6 @@
 	</script>
 </head>
 <body>
-<?php } ?>
 
 <table class="layout-grid" cellspacing="0" cellpadding="0">
 	<tr>
@@ -257,20 +255,16 @@
 		<td class="normal">
 
 			<div class="normal">
-					<?php if(isset($plain) && $content) { echo $content; } else { ?>
 
 					<h3>Instructions</h3>
 					<p>
 						These demos showcase some common uses of each jQuery UI plugin. Simply copy and paste code from the demos to get started. Have fun playing with them.
 					</p>
 				
-					<?php  } ?>
 			</div>
 
 		</td>
 	</tr>
 </table>
-<?php if(!isset($plain)) { ?>
 </body>
 </html>
-<?php } ?>
