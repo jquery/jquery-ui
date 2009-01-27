@@ -137,10 +137,12 @@ $.widget("ui.dialog", {
 
 		(options.bgiframe && $.fn.bgiframe && uiDialog.bgiframe());
 		(options.autoOpen && this.open());
+		
 	},
 
 	destroy: function() {
 		(this.overlay && this.overlay.destroy());
+		(this.shadow && this._destroyShadow());
 		this.uiDialog.hide();
 		this.element
 			.unbind('.dialog')
@@ -158,6 +160,7 @@ $.widget("ui.dialog", {
 		}
 
 		(this.overlay && this.overlay.destroy());
+		(this.shadow && this._destroyShadow());
 		this.uiDialog
 			.hide(this.options.hide)
 			.unbind('keypress.ui-dialog');
@@ -186,6 +189,7 @@ $.widget("ui.dialog", {
 			maxZ = Math.max(maxZ, parseInt($(this).css('z-index'), 10) || options.zIndex);
 		});
 		(this.overlay && this.overlay.$el.css('z-index', ++maxZ));
+		(this.shadow && this.shadow.css('z-index', ++maxZ));
 
 		//Save and then restore scroll since Opera 9.5+ resets when parent z-Index is changed.
 		//  http://ui.jquery.com/bugs/ticket/3193
@@ -239,6 +243,9 @@ $.widget("ui.dialog", {
 			.add(uiDialog.find('.ui-dialog-titlebar :tabbable:first'))
 			.filter(':first')
 			.focus();
+
+		if(options.shadow)
+			this._createShadow();
 
 		this._trigger('open');
 		this._isOpen = true;
@@ -302,10 +309,12 @@ $.widget("ui.dialog", {
 			},
 			drag: function() {
 				(options.drag && options.drag.apply(self.element[0], arguments));
+				self._refreshShadow();
 			},
 			stop: function() {
 				(options.dragStop && options.dragStop.apply(self.element[0], arguments));
 				$.ui.dialog.overlay.resize();
+				self._refreshShadow();
 			}
 		});
 	},
@@ -331,11 +340,13 @@ $.widget("ui.dialog", {
 			},
 			resize: function() {
 				(options.resize && options.resize.apply(self.element[0], arguments));
+				self._refreshShadow();
 			},
 			handles: resizeHandles,
 			stop: function() {
 				(options.resizeStop && options.resizeStop.apply(self.element[0], arguments));
 				$.ui.dialog.overlay.resize();
+				self._refreshShadow();
 			}
 		})
 		.find('.ui-resizable-se').addClass('ui-icon ui-icon-grip-diagonal-se');
@@ -466,7 +477,29 @@ $.widget("ui.dialog", {
 					? 'auto'
 					: options.height - nonContentHeight
 			});
+	},
+	
+	_createShadow: function() {
+		this.shadow = $('<div class="ui-widget-shadow"></div>').css('position', 'absolute').appendTo(document.body);
+		this._refreshShadow();
+		return this.shadow;
+	},
+	
+	_refreshShadow: function() {
+		var offset = this.uiDialog.offset();
+		this.shadow.css({
+			left: offset.left,
+			top: offset.top,
+			width: this.uiDialog.outerWidth(),
+			height: this.uiDialog.outerHeight()
+		});
+	},
+	
+	_destroyShadow: function() {
+		this.shadow.remove();
+		this.shadow = null;
 	}
+	
 });
 
 $.extend($.ui.dialog, {
@@ -482,9 +515,9 @@ $.extend($.ui.dialog, {
 		minHeight: 150,
 		minWidth: 150,
 		modal: false,
-		overlay: {},
 		position: 'center',
 		resizable: true,
+		shadow: true,
 		stack: true,
 		title: '',
 		width: 300,
@@ -547,12 +580,10 @@ $.extend($.ui.dialog.overlay, {
 		}
 
 		var $el = $('<div></div>').appendTo(document.body)
-			.addClass('ui-dialog-overlay').css($.extend({
-				borderWidth: 0, margin: 0, padding: 0,
-				position: 'absolute', top: 0, left: 0,
+			.addClass('ui-widget-overlay').css({
 				width: this.width(),
 				height: this.height()
-			}, dialog.options.overlay));
+			});
 
 		(dialog.options.bgiframe && $.fn.bgiframe && $el.bgiframe());
 
