@@ -356,9 +356,13 @@ $.widget("ui.resizable", $.extend({}, $.ui.mouse, {
 
 	_respectSize: function(data, event) {
 
+		var isNumber = function(value) {
+			return !isNaN(parseInt(value, 10))
+		};
+
 		var el = this.helper, o = this.options, pRatio = this._aspectRatio || event.shiftKey, a = this.axis,
-				ismaxw = data.width && o.maxWidth && o.maxWidth < data.width, ismaxh = data.height && o.maxHeight && o.maxHeight < data.height,
-					isminw = data.width && o.minWidth && o.minWidth > data.width, isminh = data.height && o.minHeight && o.minHeight > data.height;
+				ismaxw = isNumber(data.width) && o.maxWidth && (o.maxWidth < data.width), ismaxh = isNumber(data.height) && o.maxHeight && (o.maxHeight < data.height),
+					isminw = !isNaN(parseInt(data.width, 10)) && o.minWidth && (o.minWidth > data.width), isminh = isNumber(data.height) && o.minHeight && (o.minHeight > data.height);
 
 		if (isminw) data.width = o.minWidth;
 		if (isminh) data.height = o.minHeight;
