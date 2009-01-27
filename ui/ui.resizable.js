@@ -220,13 +220,9 @@ $.widget("ui.resizable", $.extend({}, $.ui.mouse, {
 		this.resizing = true;
 		this.documentScroll = { top: $(document).scrollTop(), left: $(document).scrollLeft() };
 
-		// bugfix #1749
+		// bugfix for http://dev.jquery.com/ticket/1749
 		if (el.is('.ui-draggable') || (/absolute/).test(el.css('position'))) {
-			// sOffset decides if document scrollOffset will be added to the top/left of the resizable element
-			var sOffset = $.browser.msie && !o.containment && (/absolute/).test(el.css('position')) && !(/relative/).test(el.parent().css('position'));
-			var dscrollt = sOffset ? this.documentScroll.top : 0, dscrolll = sOffset ? this.documentScroll.left : 0;
-
-			el.css({ position: 'absolute', top: (iniPos.top + dscrollt), left: (iniPos.left + dscrolll) });
+			el.css({ position: 'absolute', top: iniPos.top, left: iniPos.left });
 		}
 
 		//Opera fixing relative position
