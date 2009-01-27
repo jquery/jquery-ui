@@ -224,7 +224,7 @@ $.widget("ui.resizable", $.extend({}, $.ui.mouse, {
 		if (el.is('.ui-draggable') || (/absolute/).test(el.css('position'))) {
 			// sOffset decides if document scrollOffset will be added to the top/left of the resizable element
 			var sOffset = $.browser.msie && !o.containment && (/absolute/).test(el.css('position')) && !(/relative/).test(el.parent().css('position'));
-			var dscrollt = sOffset ? o.documentScroll.top : 0, dscrolll = sOffset ? o.documentScroll.left : 0;
+			var dscrollt = sOffset ? this.documentScroll.top : 0, dscrolll = sOffset ? this.documentScroll.left : 0;
 
 			el.css({ position: 'absolute', top: (iniPos.top + dscrollt), left: (iniPos.left + dscrolll) });
 		}
