@@ -158,8 +158,11 @@ $.widget("ui.accordion", {
 		var o = this.options, maxHeight;
 
 		if (o.fillSpace) {
-
+			
+			if($.browser.msie) { var defOverflow = this.element.parent().css('overflow'); this.element.parent().css('overflow', 'hidden'); }
 			maxHeight = this.element.parent().height();
+			if($.browser.msie) { this.element.parent().css('overflow', defOverflow); }
+	
 			this.headers.each(function() {
 				maxHeight -= $(this).outerHeight();
 			});
