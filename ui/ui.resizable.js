@@ -214,8 +214,7 @@ $.widget("ui.resizable", $.extend({}, $.ui.mouse, {
 
 	_mouseStart: function(event) {
 
-		var o = this.options, iniPos = this.element.position(), el = this.element,
-			num = function(v) { return parseInt(v, 10) || 0; };
+		var o = this.options, iniPos = this.element.position(), el = this.element;
 
 		this.resizing = true;
 		this.documentScroll = { top: $(document).scrollTop(), left: $(document).scrollLeft() };
@@ -299,7 +298,7 @@ $.widget("ui.resizable", $.extend({}, $.ui.mouse, {
 	_mouseStop: function(event) {
 
 		this.resizing = false;
-		var o = this.options, num = function(v) { return parseInt(v, 10) || 0; }, self = this;
+		var o = this.options, self = this;
 
 		if(this._helper) {
 			var pr = this.proportionallyResize, ista = pr.length && (/textarea/i).test(pr[0].nodeName),
@@ -665,10 +664,13 @@ $.ui.plugin.add("resizable", "containment", {
 		}
 
 		// i'm a node, so compute top, left, right, bottom
-		else{
-			self.containerOffset = $(ce).offset();
-			self.containerPosition = $(ce).position();
-			self.containerSize = { height: $(ce).innerHeight(), width: $(ce).innerWidth() };
+		else {
+			var element = $(ce), p = [];
+			$([ "Top", "Right", "Left", "Bottom" ]).each(function(i, name) { p[i] = num(element.css("padding" + name)); });
+
+			self.containerOffset = element.offset();
+			self.containerPosition = element.position();
+			self.containerSize = { height: (element.innerHeight() - p[3]), width: (element.innerWidth() - p[1]) };
 
 			var co = self.containerOffset, ch = self.containerSize.height,	cw = self.containerSize.width,
 						width = ($.ui.hasScroll(ce, "left") ? ce.scrollWidth : cw ), height = ($.ui.hasScroll(ce) ? ce.scrollHeight : ch);
@@ -785,5 +787,9 @@ $.ui.plugin.add("resizable", "grid", {
 	}
 
 });
+
+var num = function(v) {
+	return parseInt(v, 10) || 0;
+};
 
 })(jQuery);
