@@ -218,7 +218,6 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 
 		normValue = this._normValueFromMouse(position);
 		this._slide(event, index, normValue);
-
 		return true;
 
 	},
