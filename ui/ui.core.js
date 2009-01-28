@@ -366,9 +366,11 @@ $.widget.prototype = {
 		// copy original event properties over to the new event
 		// this would happen if we could call $.event.fix instead of $.Event
 		// but we don't have a way to force an event to be fixed multiple times
-		for (var i = $.event.props.length, prop; i;) {
-			prop = $.event.props[--i];
-			event[prop] = event.originalEvent[prop];
+		if (event.originalEvent) {
+			for (var i = $.event.props.length, prop; i;) {
+				prop = $.event.props[--i];
+				event[prop] = event.originalEvent[prop];
+			}
 		}
 
 		this.element.trigger(event, data);
