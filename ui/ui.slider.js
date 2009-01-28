@@ -354,6 +354,8 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 
 	values: function(index, newValue, noAnimation) {
 
+		if(!this.options.animate) noAnimation = true;
+
 		if (arguments.length > 1) {
 			this.options.values[index] = newValue;
 			this._refreshValue(!noAnimation);
