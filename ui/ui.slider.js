@@ -195,13 +195,26 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 				index = i;
 			}
 		});
+		
+		//workaround for bug #3736
+		if(o.range && (this.values(0) + this.values(1)) == 0) {
+			closestHandle = $(this.handles[++index]);
+		}
 
 		self._handleIndex = index;
 
 		closestHandle
 			.addClass("ui-state-active")
 			.focus();
+		
+		var offset = closestHandle.offset();
+		var mouseOverHandle = !$(event.target).parents().andSelf().is('.ui-slider-handle');
+		this.clickOffset = mouseOverHandle ? { left: 0, top: 0 } : {
+			left: event.pageX - offset.left + (parseInt(closestHandle.css('marginLeft')) || 0),
+			top: event.pageY - offset.top + (parseInt(closestHandle.css('marginTop')) || 0)
+		}
 
+		normValue = this._normValueFromMouse(position);
 		this._slide(event, index, normValue);
 
 		return true;
@@ -229,6 +242,7 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 		this._stop(event);
 		this._change(event);
 		this._handleIndex = null;
+		this.clickOffset = null;
 
 		return false;
 
@@ -239,10 +253,10 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 		var pixelTotal, pixelMouse;
 		if ('horizontal' == this.orientation) {
 			pixelTotal = this.elementSize.width;
-			pixelMouse = position.x - this.elementOffset.left;
+			pixelMouse = position.x - this.elementOffset.left - (this.clickOffset ? this.clickOffset.left : 0);
 		} else {
 			pixelTotal = this.elementSize.height;
-			pixelMouse = position.y - this.elementOffset.top;
+			pixelMouse = position.y - this.elementOffset.top - (this.clickOffset ? this.clickOffset.top : 0);
 		}
 
 		var percentMouse = (pixelMouse / pixelTotal);
@@ -303,8 +317,10 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 					handle: handle,
 					value: newVal
 				});
-				if (allowed !== false)
+				if (allowed !== false) {
 					this._setData('value', newVal);
+				}
+					
 			}
 
 		}
