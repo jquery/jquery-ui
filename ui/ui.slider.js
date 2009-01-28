@@ -473,7 +473,7 @@ $.extend($.ui.slider, {
 	version: "@VERSION",
 	eventPrefix: "slide",
 	defaults: {
-		animate: 1000,
+		animate: false,
 		delay: 0,
 		distance: 0,
 		max: 100,
