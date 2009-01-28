@@ -123,10 +123,12 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 					break;
 				case $.ui.keyCode.UP:
 				case $.ui.keyCode.RIGHT:
+					if(curVal == self._valueMax()) return;
 					newVal = curVal + step;
 					break;
 				case $.ui.keyCode.DOWN:
 				case $.ui.keyCode.LEFT:
+					if(curVal == self._valueMin()) return;
 					newVal = curVal - step;
 					break;
 			}
@@ -209,10 +211,10 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 		
 		var offset = closestHandle.offset();
 		var mouseOverHandle = !$(event.target).parents().andSelf().is('.ui-slider-handle');
-		this.clickOffset = mouseOverHandle ? { left: 0, top: 0 } : {
-			left: event.pageX - offset.left + (parseInt(closestHandle.css('marginLeft')) || 0),
-			top: event.pageY - offset.top + (parseInt(closestHandle.css('marginTop')) || 0)
-		}
+		this._clickOffset = mouseOverHandle ? { left: 0, top: 0 } : {
+			left: event.pageX - offset.left + (parseInt(closestHandle.css('marginLeft'),10) || 0),
+			top: event.pageY - offset.top + (parseInt(closestHandle.css('marginTop'),10) || 0)
+		};
 
 		normValue = this._normValueFromMouse(position);
 		this._slide(event, index, normValue);
@@ -229,7 +231,7 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 
 		var position = { x: event.pageX, y: event.pageY };
 		var normValue = this._normValueFromMouse(position);
-
+		
 		this._slide(event, this._handleIndex, normValue);
 
 		return false;
@@ -242,7 +244,7 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 		this._stop(event);
 		this._change(event);
 		this._handleIndex = null;
-		this.clickOffset = null;
+		this._clickOffset = null;
 
 		return false;
 
@@ -253,10 +255,10 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 		var pixelTotal, pixelMouse;
 		if ('horizontal' == this.orientation) {
 			pixelTotal = this.elementSize.width;
-			pixelMouse = position.x - this.elementOffset.left - (this.clickOffset ? this.clickOffset.left : 0);
+			pixelMouse = position.x - this.elementOffset.left - (this._clickOffset ? this._clickOffset.left : 0);
 		} else {
 			pixelTotal = this.elementSize.height;
-			pixelMouse = position.y - this.elementOffset.top - (this.clickOffset ? this.clickOffset.top : 0);
+			pixelMouse = position.y - this.elementOffset.top - (this._clickOffset ? this._clickOffset.top : 0);
 		}
 
 		var percentMouse = (pixelMouse / pixelTotal);
@@ -305,7 +307,7 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 				});
 				var otherVal = this.values(index ? 0 : 1);
 				if (allowed !== false) {
-					this.values(index, newVal);
+					this.values(index, newVal, !( event.type == 'mousedown' && this.options.animate ));
 				}
 			}
 
@@ -318,7 +320,7 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 					value: newVal
 				});
 				if (allowed !== false) {
-					this._setData('value', newVal);
+					this._setData('value', newVal, ( event.type == 'mousedown' && this.options.animate ));
 				}
 					
 			}
@@ -350,11 +352,11 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 
 	},
 
-	values: function(index, newValue) {
+	values: function(index, newValue, noAnimation) {
 
 		if (arguments.length > 1) {
 			this.options.values[index] = newValue;
-			this._refreshValue();
+			this._refreshValue(!noAnimation);
 			this._change();
 		}
 
@@ -430,34 +432,36 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 		return valueMax;
 	},
 
-	_refreshValue: function() {
+	_refreshValue: function(animate) {
 
-		var oRange = this.options.range;
+		var oRange = this.options.range, o = this.options, self = this;
 
 		if (this.options.values && this.options.values.length) {
-			var self = this, vp0, vp1;
+			var vp0, vp1;
 			this.handles.each(function(i, j) {
 				var valPercent = (self.values(i) - self._valueMin()) / (self._valueMax() - self._valueMin()) * 100;
-				$(this).css(self.orientation == 'horizontal' ? 'left' : 'bottom', valPercent + '%');
+				var _set = {}; _set[self.orientation == 'horizontal' ? 'left' : 'bottom'] = valPercent + '%';
+				$(this).stop(1,1)[animate ? 'animate' : 'css'](_set, o.animate);
 				if (self.options.range === true) {
 					if (self.orientation == 'horizontal') {
-						(i == 0) && self.range.css('left', valPercent + '%');
-						(i == 1) && self.range.css('width', (valPercent - lastValPercent) + '%');
+						(i == 0) && self.range.stop(1,1)[animate ? 'animate' : 'css']({ left: valPercent + '%' }, o.animate);
+						(i == 1) && self.range[animate ? 'animate' : 'css']({ width: (valPercent - lastValPercent) + '%' }, { queue: false, duration: o.animate });
 					} else {
-						(i == 0) && self.range.css('bottom', (valPercent) + '%');
-						(i == 1) && self.range.css('height', (valPercent - lastValPercent) + '%');
+						(i == 0) && self.range.stop(1,1)[animate ? 'animate' : 'css']({ bottom: (valPercent) + '%' }, o.animate);
+						(i == 1) && self.range[animate ? 'animate' : 'css']({ height: (valPercent - lastValPercent) + '%' }, { queue: false, duration: o.animate });
 					}
 				}
 				lastValPercent = valPercent;
 			});
 		} else {
 			var valPercent = (this.value() - this._valueMin()) / (this._valueMax() - this._valueMin()) * 100;
-			this.handle.css(this.orientation == 'horizontal' ? 'left' : 'bottom', valPercent + '%');
+			var _set = {}; _set[self.orientation == 'horizontal' ? 'left' : 'bottom'] = valPercent + '%';
+			this.handle.stop(1,1)[animate ? 'animate' : 'css'](_set, o.animate);
 
-			(oRange == "min") && (this.orientation == "horizontal") && this.range.css({ left: 0, width: valPercent + '%' });
-			(oRange == "max") && (this.orientation == "horizontal") && this.range.css({ left: valPercent + '%', width: (100 - valPercent) + '%' });
-			(oRange == "min") && (this.orientation == "vertical") && this.range.css({ top: (100 - valPercent) + '%', height: valPercent + '%' });
-			(oRange == "max") && (this.orientation == "vertical") && this.range.css({ bottom: valPercent + '%', height: (100 - valPercent) + '%' });
+			(oRange == "min") && (this.orientation == "horizontal") && this.range.stop(1,1)[animate ? 'animate' : 'css']({ left: 0, width: valPercent + '%' }, o.animate);
+			(oRange == "max") && (this.orientation == "horizontal") && this.range[animate ? 'animate' : 'css']({ left: valPercent + '%', width: (100 - valPercent) + '%' }, { queue: false, duration: o.animate });
+			(oRange == "min") && (this.orientation == "vertical") && this.range.stop(1,1)[animate ? 'animate' : 'css']({ top: (100 - valPercent) + '%', height: valPercent + '%' }, o.animate);
+			(oRange == "max") && (this.orientation == "vertical") && this.range[animate ? 'animate' : 'css']({ bottom: valPercent + '%', height: (100 - valPercent) + '%' }, { queue: false, duration: o.animate });
 		}
 
 	}
@@ -469,6 +473,7 @@ $.extend($.ui.slider, {
 	version: "@VERSION",
 	eventPrefix: "slide",
 	defaults: {
+		animate: 1000,
 		delay: 0,
 		distance: 0,
 		max: 100,
