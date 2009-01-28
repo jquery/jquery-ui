@@ -198,7 +198,8 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 			}
 		});
 		
-		//workaround for bug #3736
+		// workaround for bug #3736 (if both handles of a range are at 0, the first is always used as the one with least distance,
+		// and moving it is obviously prevented by preventing negative ranges)
 		if(o.range && (this.values(0) + this.values(1)) == 0) {
 			closestHandle = $(this.handles[++index]);
 		}
