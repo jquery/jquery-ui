@@ -9,7 +9,7 @@
 var defaults = {
 	max: 100,
 	min: 0,
-	orientation: 'horizontal',
+	orientation: 'auto',
 	step: 1,
 	value: 0
 };
