@@ -54,7 +54,6 @@
 		}
 		
 		$("#dialog").dialog({
-			autoOpen: false,
 			bgiframe: true,
 			height: 300,
 			modal: true,
@@ -93,6 +92,7 @@
 		$('#create-user').click(function() {
 			$('#dialog').dialog('open');
 		});
+
 	});
 	</script>
 </head>
@@ -115,7 +115,7 @@
 	</form>
 </div>
 
-<a id="create-user" href="#">create new user</a>
+<button id="create-user">create new user</button>
 
 <table id="users">
 	<thead>
