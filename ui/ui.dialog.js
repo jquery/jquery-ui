@@ -306,14 +306,16 @@ $.widget("ui.dialog", {
 			containment: 'document',
 			start: function() {
 				(options.dragStart && options.dragStart.apply(self.element[0], arguments));
+				if($.browser.msie && $.browser.version < 7 && self.shadow) self.shadow.hide();
 			},
 			drag: function() {
 				(options.drag && options.drag.apply(self.element[0], arguments));
-				self._refreshShadow();
+				self._refreshShadow(1);
 			},
 			stop: function() {
 				(options.dragStop && options.dragStop.apply(self.element[0], arguments));
 				$.ui.dialog.overlay.resize();
+				if($.browser.msie && $.browser.version < 7 && self.shadow) self.shadow.show();
 				self._refreshShadow();
 			}
 		});
@@ -337,15 +339,17 @@ $.widget("ui.dialog", {
 			minHeight: options.minHeight,
 			start: function() {
 				(options.resizeStart && options.resizeStart.apply(self.element[0], arguments));
+				if($.browser.msie && $.browser.version < 7 && self.shadow) self.shadow.hide();
 			},
 			resize: function() {
 				(options.resize && options.resize.apply(self.element[0], arguments));
-				self._refreshShadow();
+				self._refreshShadow(1);
 			},
 			handles: resizeHandles,
 			stop: function() {
 				(options.resizeStop && options.resizeStop.apply(self.element[0], arguments));
 				$.ui.dialog.overlay.resize();
+				if($.browser.msie && $.browser.version < 7 && self.shadow) self.shadow.show();
 				self._refreshShadow();
 			}
 		})
@@ -485,7 +489,11 @@ $.widget("ui.dialog", {
 		return this.shadow;
 	},
 	
-	_refreshShadow: function() {
+	_refreshShadow: function(dragging) {
+		// IE6 is simply to slow to handle the reflow in a good way, so
+		// resizing only happens on stop, and the shadow is hidden during drag/resize
+		if(dragging && $.browser.msie && $.browser.version < 7) return;
+		
 		var offset = this.uiDialog.offset();
 		this.shadow.css({
 			left: offset.left,
