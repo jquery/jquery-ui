@@ -132,6 +132,18 @@ $.extend($.effects, {
 	}
 });
 
+
+function _normalizeArguments(a, m) {
+
+	var o = a[1] && a[1].constructor == Object ? a[1] : {}; if(m) o.mode = m;
+	var speed = a[1] && a[1].constructor != Object ? a[1] : o.duration; //either comes from options.duration or the second argument
+		speed = $.fx.off ? 0 : typeof speed === "number" ? speed : $.fx.speeds[speed] || $.fx.speeds._default;
+	var callback = o.callback || ( $.isFunction(a[2]) && a[2] ) || ( $.isFunction(a[3]) && a[3] );
+
+	return [a[0], o, speed, callback];
+	
+}
+
 //Extend the methods of jQuery
 $.fn.extend({
 
@@ -145,15 +157,14 @@ $.fn.extend({
 
 	// New effect methods
 	effect: function(fx, options, speed, callback) {
-		return $.effects[fx] ? $.effects[fx].call(this, {method: fx, options: options || {}, duration: speed, callback: callback }) : null;
+		return $.effects[fx] ? $.effects[fx].call(this, {method: fx, options: options, duration: speed, callback: callback }) : null;
 	},
 
 	show: function() {
 		if(!arguments[0] || (arguments[0].constructor == Number || (/(slow|normal|fast)/).test(arguments[0])))
 			return this._show.apply(this, arguments);
 		else {
-			var o = arguments[1] || {}; o['mode'] = 'show';
-			return this.effect.apply(this, [arguments[0], o, arguments[2] || o.duration, arguments[3] || o.callback]);
+			return this.effect.apply(this, _normalizeArguments(arguments, 'show'));
 		}
 	},
 
@@ -161,8 +172,7 @@ $.fn.extend({
 		if(!arguments[0] || (arguments[0].constructor == Number || (/(slow|normal|fast)/).test(arguments[0])))
 			return this._hide.apply(this, arguments);
 		else {
-			var o = arguments[1] || {}; o['mode'] = 'hide';
-			return this.effect.apply(this, [arguments[0], o, arguments[2] || o.duration, arguments[3] || o.callback]);
+			return this.effect.apply(this, _normalizeArguments(arguments, 'hide'));
 		}
 	},
 
@@ -170,8 +180,7 @@ $.fn.extend({
 		if(!arguments[0] || (arguments[0].constructor == Number || (/(slow|normal|fast)/).test(arguments[0])) || (arguments[0].constructor == Function))
 			return this.__toggle.apply(this, arguments);
 		else {
-			var o = arguments[1] || {}; o['mode'] = 'toggle';
-			return this.effect.apply(this, [arguments[0], o, arguments[2] || o.duration, arguments[3] || o.callback]);
+			return this.effect.apply(this, _normalizeArguments(arguments, 'toggle'));
 		}
 	},
 
