@@ -55,16 +55,16 @@ $.widget("ui.dialog", {
 				})
 				// setting tabIndex makes the div focusable
 				// setting outline to 0 prevents a border on focus in Mozilla
-				.attr('tabIndex', -1).css('outline', 0).keydown(function(ev) {
-					(options.closeOnEscape && ev.keyCode
-						&& ev.keyCode == $.ui.keyCode.ESCAPE && self.close());
+				.attr('tabIndex', -1).css('outline', 0).keydown(function(event) {
+					(options.closeOnEscape && event.keyCode
+						&& event.keyCode == $.ui.keyCode.ESCAPE && self.close(event));
 				})
 				.attr({
 					role: 'dialog',
 					'aria-labelledby': titleId
 				})
-				.mousedown(function() {
-					self.moveToTop();
+				.mousedown(function(event) {
+					self.moveToTop(event);
 				}),
 
 			uiDialogContent = this.element
@@ -107,8 +107,8 @@ $.widget("ui.dialog", {
 				.mousedown(function(ev) {
 					ev.stopPropagation();
 				})
-				.click(function() {
-					self.close();
+				.click(function(event) {
+					self.close(event);
 					return false;
 				})
 				.appendTo(uiDialogTitlebar),
@@ -154,8 +154,8 @@ $.widget("ui.dialog", {
 		(this.originalTitle && this.element.attr('title', this.originalTitle));
 	},
 
-	close: function() {
-		if (false === this._trigger('beforeclose')) {
+	close: function(event) {
+		if (false === this._trigger('beforeclose', event)) {
 			return;
 		}
 
@@ -165,7 +165,7 @@ $.widget("ui.dialog", {
 			.hide(this.options.hide)
 			.unbind('keypress.ui-dialog');
 
-		this._trigger('close');
+		this._trigger('close', event);
 		$.ui.dialog.overlay.resize();
 
 		this._isOpen = false;
@@ -177,11 +177,11 @@ $.widget("ui.dialog", {
 
 	// the force parameter allows us to move modal dialogs to their correct
 	// position on open
-	moveToTop: function(force) {
+	moveToTop: function(force, event) {
 
 		if ((this.options.modal && !force)
 			|| (!this.options.stack && !this.options.modal)) {
-			return this._trigger('focus');
+			return this._trigger('focus', event);
 		}
 
 		var maxZ = this.options.zIndex, options = this.options;
@@ -196,10 +196,10 @@ $.widget("ui.dialog", {
 		var saveScroll = { scrollTop: this.element.attr('scrollTop'), scrollLeft: this.element.attr('scrollLeft') };
 		this.uiDialog.css('z-index', ++maxZ);
 		this.element.attr(saveScroll);
-		this._trigger('focus');
+		this._trigger('focus', event);
 	},
 
-	open: function() {
+	open: function(event) {
 		if (this._isOpen) { return; }
 
 		var options = this.options,
@@ -210,7 +210,7 @@ $.widget("ui.dialog", {
 		this._size();
 		this._position(options.position);
 		uiDialog.show(options.show);
-		this.moveToTop(true);
+		this.moveToTop(true, event);
 
 		// prevent tabbing out of modal dialogs
 		(options.modal && uiDialog.bind('keypress.ui-dialog', function(event) {
@@ -247,7 +247,7 @@ $.widget("ui.dialog", {
 		if(options.shadow)
 			this._createShadow();
 
-		this._trigger('open');
+		this._trigger('open', event);
 		this._isOpen = true;
 	},
 
@@ -580,7 +580,7 @@ $.extend($.ui.dialog.overlay, {
 			// allow closing by pressing the escape key
 			$(document).bind('keydown.dialog-overlay', function(event) {
 				(dialog.options.closeOnEscape && event.keyCode
-						&& event.keyCode == $.ui.keyCode.ESCAPE && dialog.close());
+						&& event.keyCode == $.ui.keyCode.ESCAPE && dialog.close(event));
 			});
 
 			// handle window resize
