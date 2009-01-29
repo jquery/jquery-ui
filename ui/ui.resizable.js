@@ -492,7 +492,6 @@ $.widget("ui.resizable", $.extend({}, $.ui.mouse, {
 			helper: this.helper,
 			position: this.position,
 			size: this.size,
-			options: this.options,
 			originalSize: this.originalSize,
 			originalPosition: this.originalPosition
 		};
@@ -538,7 +537,7 @@ $.ui.plugin.add("resizable", "alsoResize", {
 
 	start: function(event, ui) {
 
-		var o = ui.options, self = $(this).data("resizable"),
+		var self = $(this).data("resizable"), o = self.options;
 
 		_store = function(exp) {
 			$(exp).each(function() {
@@ -558,7 +557,7 @@ $.ui.plugin.add("resizable", "alsoResize", {
 	},
 
 	resize: function(event, ui){
-		var o = ui.options, self = $(this).data("resizable"), os = self.originalSize, op = self.originalPosition;
+		var self = $(this).data("resizable"), o = self.options, os = self.originalSize, op = self.originalPosition;
 
 		var delta = {
 			height: (self.size.height - os.height) || 0, width: (self.size.width - os.width) || 0,
@@ -608,7 +607,7 @@ $.ui.plugin.add("resizable", "alsoResize", {
 $.ui.plugin.add("resizable", "animate", {
 
 	stop: function(event, ui) {
-		var o = ui.options, self = $(this).data("resizable");
+		var self = $(this).data("resizable"), o = self.options;
 
 		var pr = o.proportionallyResize, ista = pr && (/textarea/i).test(pr.get(0).nodeName),
 						soffseth = ista && $.ui.hasScroll(pr.get(0), 'left') /* TODO - jump height */ ? 0 : self.sizeDiff.height,
@@ -647,7 +646,7 @@ $.ui.plugin.add("resizable", "animate", {
 $.ui.plugin.add("resizable", "containment", {
 
 	start: function(event, ui) {
-		var o = ui.options, self = $(this).data("resizable"), el = self.element;
+		var self = $(this).data("resizable"), o = self.options, el = self.element;
 		var oc = o.containment,	ce = (oc instanceof $) ? oc.get(0) : (/parent/.test(oc)) ? el.parent().get(0) : oc;
 		if (!ce) return;
 
@@ -682,7 +681,7 @@ $.ui.plugin.add("resizable", "containment", {
 	},
 
 	resize: function(event, ui) {
-		var o = ui.options, self = $(this).data("resizable"),
+		var self = $(this).data("resizable"), o = self.options,
 				ps = self.containerSize, co = self.containerOffset, cs = self.size, cp = self.position,
 				pRatio = o._aspectRatio || event.shiftKey, cop = { top:0, left:0 }, ce = self.containerElement;
 
@@ -715,7 +714,7 @@ $.ui.plugin.add("resizable", "containment", {
 	},
 
 	stop: function(event, ui){
-		var o = ui.options, self = $(this).data("resizable"), cp = self.position,
+		var self = $(this).data("resizable"), o = self.options, cp = self.position,
 				co = self.containerOffset, cop = self.containerPosition, ce = self.containerElement;
 
 		var helper = $(self.helper), ho = helper.offset(), w = helper.outerWidth() - self.sizeDiff.width, h = helper.outerHeight() - self.sizeDiff.height;
@@ -733,7 +732,7 @@ $.ui.plugin.add("resizable", "ghost", {
 
 	start: function(event, ui) {
 
-		var o = ui.options, self = $(this).data("resizable"), pr = o.proportionallyResize, cs = self.size;
+		var self = $(this).data("resizable"), o = self.options, pr = o.proportionallyResize, cs = self.size;
 
 		self.ghost = self.originalElement.clone();
 		self.ghost
@@ -746,12 +745,12 @@ $.ui.plugin.add("resizable", "ghost", {
 	},
 
 	resize: function(event, ui){
-		var o = ui.options, self = $(this).data("resizable");
+		var self = $(this).data("resizable"), o = self.options;
 		if (self.ghost) self.ghost.css({ position: 'relative', height: self.size.height, width: self.size.width });
 	},
 
 	stop: function(event, ui){
-		var o = ui.options, self = $(this).data("resizable");
+		var self = $(this).data("resizable"), o = self.options;
 		if (self.ghost && self.helper) self.helper.get(0).removeChild(self.ghost.get(0));
 	}
 
@@ -760,7 +759,7 @@ $.ui.plugin.add("resizable", "ghost", {
 $.ui.plugin.add("resizable", "grid", {
 
 	resize: function(event, ui) {
-		var o = ui.options, self = $(this).data("resizable"), cs = self.size, os = self.originalSize, op = self.originalPosition, a = self.axis, ratio = o._aspectRatio || event.shiftKey;
+		var self = $(this).data("resizable"), o = self.options, cs = self.size, os = self.originalSize, op = self.originalPosition, a = self.axis, ratio = o._aspectRatio || event.shiftKey;
 		o.grid = typeof o.grid == "number" ? [o.grid, o.grid] : o.grid;
 		var ox = Math.round((cs.width - os.width) / (o.grid[0]||1)) * (o.grid[0]||1), oy = Math.round((cs.height - os.height) / (o.grid[1]||1)) * (o.grid[1]||1);
 
