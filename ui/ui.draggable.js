@@ -436,7 +436,7 @@ $.ui.plugin.add("draggable", "connectToSortable", {
 		$(o.connectToSortable).each(function() {
 			// 'this' points to a string, and should therefore resolved as query, but instead, if the string is assigned to a variable, it loops through the strings properties,
 			// so we have to append '' to make it anonymous again
-			$(this+'').each(function() {
+			$(typeof this == 'string' ? this+'': this).each(function() {
 				if($.data(this, 'sortable')) {
 					var sortable = $.data(this, 'sortable');
 					inst.sortables.push({
