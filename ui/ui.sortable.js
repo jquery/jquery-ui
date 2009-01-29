@@ -971,7 +971,8 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 			helper: self.helper,
 			placeholder: self.placeholder || $([]),
 			position: self.position,
-			absolutePosition: self.positionAbs,
+			absolutePosition: self.positionAbs, //deprecated
+			offset: self.positionAbs,
 			item: self.currentItem,
 			sender: inst ? inst.element : null
 		};

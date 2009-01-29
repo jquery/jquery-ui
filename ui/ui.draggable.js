@@ -387,7 +387,8 @@ $.widget("ui.draggable", $.extend({}, $.ui.mouse, {
 		return {
 			helper: this.helper,
 			position: this.position,
-			absolutePosition: this.positionAbs
+			absolutePosition: this.positionAbs, //deprecated
+			offset: this.positionAbs
 		};
 	}
 
