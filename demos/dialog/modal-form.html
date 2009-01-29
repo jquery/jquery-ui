@@ -13,12 +13,22 @@
 	<script type="text/javascript" src="../../external/bgiframe/jquery.bgiframe.js"></script>
 	<link type="text/css" href="../demos.css" rel="stylesheet" />
 	<style type="text/css">
+		body { font-size: 62.5%; }
 		label, input { display:block; }
-		input.text { margin-bottom:12px; width:95%; }
+		input.text { margin-bottom:12px; width:95%; padding: .4em; }
 		fieldset { padding:0; border:0; margin-top:25px; }
+		h1 { font-size: 1.2em; margin: .6em 0; }
+		div#users-contain {  width: 350px; margin: 20px 0; }
+		div#users-contain table { margin: 1em 0; border-collapse: collapse; width: 100%; }
+		div#users-contain table td, div#users-contain table th { border: 1px solid #eee; padding: .6em 10px; text-align: left; }
+		.ui-button { outline: 0; margin:0; padding: .4em 1em .5em; text-decoration:none;  !important; cursor:pointer; position: relative; text-align: center; }
+		.ui-dialog .ui-state-highlight, .ui-dialog .ui-state-error { padding: .3em;  }
+		
+		
 	</style>
 	<script type="text/javascript">
 	$(function() {
+		
 		var name = $("#name"),
 			email = $("#email"),
 			password = $("#password"),
@@ -55,6 +65,7 @@
 		
 		$("#dialog").dialog({
 			bgiframe: true,
+			autoOpen: false,
 			height: 300,
 			modal: true,
 			buttons: {
@@ -89,8 +100,23 @@
 			}
 		});
 		
+		
+		
 		$('#create-user').click(function() {
 			$('#dialog').dialog('open');
+		})
+		.hover(
+			function(){ 
+				$(this).addClass("ui-state-hover"); 
+			},
+			function(){ 
+				$(this).removeClass("ui-state-hover"); 
+			}
+		).mousedown(function(){
+			$(this).addClass("ui-state-active"); 
+		})
+		.mouseup(function(){
+				$(this).removeClass("ui-state-active");
 		});
 
 	});
@@ -106,33 +132,39 @@
 	<form>
 	<fieldset>
 		<label for="name">Name</label>
-		<input type="text" name="name" id="name" class="text" />
+		<input type="text" name="name" id="name" class="text ui-widget-content ui-corner-all" />
 		<label for="email">Email</label>
-		<input type="text" name="email" id="email" value="" class="text" />
+		<input type="text" name="email" id="email" value="" class="text ui-widget-content ui-corner-all" />
 		<label for="password">Password</label>
-		<input type="password" name="password" id="password" value="" class="text" />
+		<input type="password" name="password" id="password" value="" class="text ui-widget-content ui-corner-all" />
 	</fieldset>
 	</form>
 </div>
 
-<button id="create-user">create new user</button>
 
-<table id="users">
-	<thead>
-		<tr>
-			<th>Name</th>
-			<th>Email</th>
-			<th>Password</th>
-		</tr>
-	</thead>
-	<tbody>
-		<tr>
-			<td>John Doe</td>
-			<td>john.doe@example.com</td>
-			<td>johndoe1</td>
-		</tr>
-	</tbody>
-</table>
+<div id="users-contain" class="ui-widget">
+
+		<h1>Existing Users:</h1>
+
+
+	<table id="users" class="ui-widget ui-widget-content">
+		<thead>
+			<tr class="ui-widget-header ">
+				<th>Name</th>
+				<th>Email</th>
+				<th>Password</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>John Doe</td>
+				<td>john.doe@example.com</td>
+				<td>johndoe1</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+<button id="create-user" class="ui-button ui-state-default ui-corner-all">Create new user</button>
 
 </div><!-- End demo -->
 
