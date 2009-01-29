@@ -20,8 +20,7 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 		var self = this, o = this.options;
 		this._keySliding = false;
 		this._handleIndex = null;
-		this.orientation = o.orientation == 'auto' ? (this.element[0].offsetWidth/this.element[0].offsetHeight > 1 ? 'horizontal' : 'vertical') : o.orientation;
-
+		this._detectOrientation();
 		this._mouseInit();
 
 		this.element
@@ -249,6 +248,10 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 		return false;
 
 	},
+	
+	_detectOrientation: function() {
+		this.orientation = this.options.orientation == 'auto' ? (this.element[0].offsetWidth/this.element[0].offsetHeight > 1 ? 'horizontal' : 'vertical') : this.options.orientation;
+	},
 
 	_normValueFromMouse: function(position) {
 
@@ -381,11 +384,11 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 		switch (key) {
 			case 'orientation':
 
-				this.orientation = this.options.orientation == 'auto' ? (this.element[0].offsetWidth/this.element[0].offsetHeight > 1 ? 'horizontal' : 'vertical') : this.options.orientation;
-
+				this._detectOrientation();
+				
 				this.element
 					.removeClass("ui-slider-horizontal ui-slider-vertical")
-					.addClass("ui-slider-" + this._orientation());
+					.addClass("ui-slider-" + this.orientation);
 				this._refreshValue();
 				break;
 			case 'value':
