@@ -516,6 +516,7 @@ $.extend($.ui.resizable, {
 		distance: 1,
 		ghost: false,
 		grid: false,
+		handles: "e,s,se",
 		helper: false,
 		maxHeight: null,
 		maxWidth: null,
