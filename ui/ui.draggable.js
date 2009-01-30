@@ -592,6 +592,7 @@ $.ui.plugin.add("draggable", "opacity", {
 		t.css('opacity', o.opacity);
 	},
 	stop: function(event, ui) {
+		var o = $(this).data('draggable').options;
 		if(o._opacity) $(ui.helper).css('opacity', o._opacity);
 	}
 });
