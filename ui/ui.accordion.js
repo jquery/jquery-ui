@@ -85,12 +85,13 @@ $.widget("ui.accordion", {
 			this.headers.find('a').attr('tabIndex','-1');
 
 		if (o.event) {
-			this.element.bind((o.event) + ".accordion", function(event) { return self._clickHandler.call(self, event); });
+			this.headers.bind((o.event) + ".accordion", function(event) { return self._clickHandler.call(self, event, this); });
 		}
 
 	},
 
 	destroy: function() {
+		var o = this.options;
 
 		this.element
 			.removeClass("ui-accordion ui-widget ui-helper-reset")
@@ -105,8 +106,10 @@ $.widget("ui.accordion", {
 
 		this.headers.find("a").removeAttr("tabindex");
 		this.headers.children(".ui-icon").remove();
-		this.headers.next().removeClass("ui-accordion-content ui-accordion-content-active");
-
+		var contents = this.headers.next().css("display", "").removeAttr("role").removeClass("ui-helper-reset ui-widget-content ui-corner-bottom ui-accordion-content ui-accordion-content-active");
+		if (o.autoHeight || o.fillHeight) {
+			contents.css("height", "");
+		}
 	},
 
 	_keydown: function(event) {
@@ -131,7 +134,7 @@ $.widget("ui.accordion", {
 				break;
 			case keyCode.SPACE:
 			case keyCode.ENTER:
-				return this._clickHandler({ target: event.target });
+				return this._clickHandler({ target: event.target }, event.target);
 		}
 
 		if (toFocus) {
@@ -176,7 +179,8 @@ $.widget("ui.accordion", {
 
 	activate: function(index) {
 		// call clickHandler with custom event
-		this._clickHandler({ target: this._findActive(index)[0] });
+		var active = this._findActive(index)[0];
+		this._clickHandler({ target: active }, active);
 	},
 
 	_findActive: function(selector) {
@@ -189,7 +193,7 @@ $.widget("ui.accordion", {
 				: this.headers.filter(":eq(0)");
 	},
 
-	_clickHandler: function(event) {
+	_clickHandler: function(event, target) {
 
 		var o = this.options;
 		if (o.disabled) return false;
@@ -213,20 +217,12 @@ $.widget("ui.accordion", {
 		}
 
 		// get the click target
-		var clicked = $(event.target);
-
-		// due to the event delegation model, we have to check if one
-		// of the parent elements is our actual header, and find that
-		// otherwise stick with the initial target
-		clicked = $( clicked.parents(o.header)[0] || clicked );
+		var clicked = $(event.currentTarget || target);
 		var clickedIsActive = clicked[0] == this.active[0];
 
 		// if animations are still active, or the active header is the target, ignore click
 		if (this.running || (o.alwaysOpen && clickedIsActive)) {
 			return false;
-		}
-		if (!clicked.is(o.header)) {
-			return;
 		}
 
 		// switch classes
@@ -373,7 +369,7 @@ $.extend($.ui.accordion, {
 		clearStyle: false,
 		event: "click",
 		fillSpace: false,
-		header: "> li :first,> :not(li):odd",
+		header: "> li :first,> :not(li):even",
 		icons: {
 			header: "ui-icon-triangle-1-e",
 			headerSelected: "ui-icon-triangle-1-s"
