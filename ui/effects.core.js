@@ -157,7 +157,7 @@ $.fn.extend({
 
 	// New effect methods
 	effect: function(fx, options, speed, callback) {
-		return $.effects[fx] ? $.effects[fx].call(this, {method: fx, options: options, duration: speed, callback: callback }) : null;
+		return $.effects[fx] ? $.effects[fx].call(this, {method: fx, options: options || {}, duration: speed, callback: callback }) : null;
 	},
 
 	show: function() {
