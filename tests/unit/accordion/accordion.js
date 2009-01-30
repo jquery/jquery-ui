@@ -10,13 +10,13 @@ jQuery.ui.accordion.defaults.animated = false;
 function state(accordion) {
 	var args = $.makeArray(arguments).slice(1);
 	$.each(args, function(i, n) {
-		equals(accordion.find(".ui-accordion-content").parent().eq(i).is(":visible"), n);
+		equals(accordion.find(".ui-accordion-content").eq(i).is(":visible"), n);
 	});
 }
 
 $.fn.triggerEvent = function(type, target) {
 	return this.triggerHandler(type, [jQuery.event.fix({ type: type, target: target })]);
-}
+};
 
 test("basics", function() {
 	state($('#list1').accordion(), 1, 0, 0);

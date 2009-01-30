@@ -16,7 +16,7 @@
 				$("#accordion").accordion("destroy");
 			}
 			$("#toggle").toggle(on, off).click();
-		})
+		});
 	</script>
 </head>
 <body>
@@ -25,23 +25,17 @@
 <li class="plugin">
 	Accordion
 	<div id="accordion">
+		<h3><a href="#">First</a></h3>
 		<div>
-			<h3><a href="#">First</a></h3>
-			<div>
-				Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. 
-			</div>
+			Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. 
 		</div>
+		<h3><a href="#">Second</a></h3>
 		<div>
-			<h3><a href="#">Second</a></h3>
-			<div>
-				Phasellus mattis tincidunt nibh.
-			</div>
+			Phasellus mattis tincidunt nibh.
 		</div>
+		<h3><a href="#">Third</a></h3>
 		<div>
-			<h3><a href="#">Third</a></h3>
-			<div>
-				Nam dui erat, auctor a, dignissim quis.
-			</div>
+			Nam dui erat, auctor a, dignissim quis.
 		</div>
 	</div>
 	<button id="toggle">Toggle</button>

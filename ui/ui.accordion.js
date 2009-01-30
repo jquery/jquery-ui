@@ -26,28 +26,23 @@ $.widget("ui.accordion", {
 					this.active = current;
 				} else {
 					this.active = current.parent().parent().prev();
-					current.addClass("ui-accordion-current");
+					current.addClass("ui-accordion-content-active");
 				}
 			}
 		}
 
 		this.element.addClass("ui-accordion ui-widget ui-helper-reset");
 
-		this.groups = this.element.children().addClass("ui-accordion-group");
-		this.headers = this.groups.find("> :first-child").addClass("ui-accordion-header ui-helper-reset ui-state-default ui-corner-all")
+		this.headers = this.element.find(o.header).addClass("ui-accordion-header ui-helper-reset ui-state-default ui-corner-all")
 			.bind("mouseenter.accordion", function(){ $(this).addClass('ui-state-hover'); })
 			.bind("mouseleave.accordion", function(){ $(this).removeClass('ui-state-hover'); });
 
-		// wrap content elements in div against animation issues
 		this.headers
 			.next()
-				.wrap("<div></div>")
-				.addClass("ui-accordion-content")
-				.parent()
-					.addClass("ui-accordion-content-wrap ui-helper-reset ui-widget-content ui-corner-bottom");
+				.addClass("ui-accordion-content ui-helper-reset ui-widget-content ui-corner-bottom");
 
 		this.active = this._findActive(this.active || o.active).toggleClass("ui-state-default").toggleClass("ui-state-active").toggleClass("ui-corner-all").toggleClass("ui-corner-top");
-		this.active.parent().addClass('ui-accordion-selected');
+		this.active.next().addClass('ui-accordion-content-active');
 
 		//Append icon elements
 		$("<span/>").addClass("ui-icon " + o.icons.header).prependTo(this.headers);
@@ -103,7 +98,6 @@ $.widget("ui.accordion", {
 			.unbind('.accordion')
 			.removeData('accordion');
 
-		this.element.children().removeClass("ui-accordion-group ui-accordion-selected");
 		this.headers
 			.unbind(".accordion")
 			.removeClass("ui-accordion-header ui-helper-reset ui-state-default ui-corner-all ui-state-active ui-corner-top")
@@ -111,7 +105,7 @@ $.widget("ui.accordion", {
 
 		this.headers.find("a").removeAttr("tabindex");
 		this.headers.children(".ui-icon").remove();
-		this.headers.next().children().removeClass("ui-accordion-content").each(function() {
+		this.headers.next().removeClass("ui-accordion-content ui-accordion-content-active").each(function() {
 			$(this).parent().replaceWith(this);
 		});
 
@@ -204,9 +198,9 @@ $.widget("ui.accordion", {
 
 		// called only when using activate(false) to close all parts programmatically
 		if (!event.target && !o.alwaysOpen) {
-			this.active.parent().toggleClass('ui-accordion-selected');
 			this.active.removeClass("ui-state-active ui-corner-top").addClass("ui-state-default ui-corner-all")
 				.find(".ui-icon").removeClass(o.icons.headerSelected).addClass(o.icons.header);
+			this.active.next().addClass('ui-accordion-content-active');
 			var toHide = this.active.next(),
 				data = {
 					options: o,
@@ -238,13 +232,13 @@ $.widget("ui.accordion", {
 		}
 
 		// switch classes
-		this.active.parent().toggleClass('ui-accordion-selected');
 		this.active.removeClass("ui-state-active ui-corner-top").addClass("ui-state-default ui-corner-all")
 			.find(".ui-icon").removeClass(o.icons.headerSelected).addClass(o.icons.header);
+		this.active.next().addClass('ui-accordion-content-active');
 		if (!clickedIsActive) {
-			clicked.parent().addClass('ui-accordion-selected');
 			clicked.removeClass("ui-state-default ui-corner-all").addClass("ui-state-active ui-corner-top")
 				.find(".ui-icon").removeClass(o.icons.header).addClass(o.icons.headerSelected);
+			clicked.next().addClass('ui-accordion-content-active');
 		}
 
 		// find elements to show and hide
@@ -366,7 +360,6 @@ $.widget("ui.accordion", {
 		}
 
 		this._trigger('change', null, this.data);
-
 	}
 
 });
@@ -405,15 +398,31 @@ $.extend($.ui.accordion, {
 			var hideHeight = options.toHide.height(),
 				showHeight = options.toShow.height(),
 				difference = showHeight / hideHeight,
-				overflow = options.toShow.css('overflow');
+				overflow = options.toShow.css('overflow'),
+				showProps = {},
+				hideProps = {},
+				fxAttrs = [ "height", "marginTop", "marginBottom", "paddingTop", "paddingBottom", "borderTop", "borderBottom" ];
+			// border animations break IE (only tested in IE6)
+			($.browser.msie && fxAttrs.pop() && fxAttrs.pop());
+			$.each(fxAttrs, function(i, prop) {
+				hideProps[prop] = 'hide';
+				showProps[prop] = parseFloat(options.toShow.css(prop));
+			});
 			options.toShow.css({ height: 0, overflow: 'hidden' }).show();
-			options.toHide.filter(":hidden").each(options.complete).end().filter(":visible").animate({height:"hide"},{
-				step: function(now) {
-					var current = (hideHeight - now) * difference;
+			options.toHide.filter(":hidden").each(options.complete).end().filter(":visible").animate(hideProps,{
+				step: function(now, settings) {
+					// if the alwaysOpen option is set to false, we may not have
+					// a content pane to show
+					if (!options.toShow[0]) { return; }
+					
+					var percentDone = settings.start != settings.end
+						? (settings.now - settings.start) / (settings.end - settings.start)
+						: 0,
+						current = percentDone * showProps[settings.prop];
 					if ($.browser.msie || $.browser.opera) {
 						current = Math.ceil(current);
 					}
-					options.toShow.height( current );
+					options.toShow[0].style[settings.prop] = current + 'px';
 				},
 				duration: options.duration,
 				easing: options.easing,
