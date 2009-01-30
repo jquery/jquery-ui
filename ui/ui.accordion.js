@@ -401,9 +401,7 @@ $.extend($.ui.accordion, {
 				overflow = options.toShow.css('overflow'),
 				showProps = {},
 				hideProps = {},
-				fxAttrs = [ "height", "marginTop", "marginBottom", "paddingTop", "paddingBottom", "borderTop", "borderBottom" ];
-			// border animations break IE (only tested in IE6)
-			($.browser.msie && fxAttrs.pop() && fxAttrs.pop());
+				fxAttrs = [ "height", "paddingTop", "paddingBottom" ];
 			$.each(fxAttrs, function(i, prop) {
 				hideProps[prop] = 'hide';
 				showProps[prop] = parseFloat(options.toShow.css(prop));
