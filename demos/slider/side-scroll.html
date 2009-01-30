@@ -9,9 +9,10 @@
 	<link type="text/css" href="../demos.css" rel="stylesheet" />
 	<style type="text/css">
 		#demo-frame > div.demo { padding: 10px !important; }
-		.scroll-pane { overflow: auto; }
-		.scroll-content { width: 2440px;  }
-		.scroll-content-item { width: 100px; height: 75px; float: left; margin: 10px; font-size: 3em; padding-top: 25px; text-align: center; }
+		.scroll-pane { overflow: auto; width: 99%; }
+		.scroll-content { width: 2440px; }
+		.scroll-content-item { width: 100px; height: 100px; float: left; margin: 10px; font-size: 3em; line-height: 96px; text-align: center; }
+		* html .scroll-content-item { display: inline; } /* IE6 float double margin bug */
 		.scroll-bar-wrap { clear: left; padding: 0 4px 0 2px; margin: 0 -1px -1px -1px; }
 		.scroll-bar-wrap .ui-slider { background: none; border:0; height: 2em; margin: 0 auto;  }
 		.scroll-bar-wrap .ui-handle-helper-parent { position: relative; width: 100%; height: 100%; margin: 0 auto; }
@@ -61,7 +62,7 @@
 		//reset slider value based on scroll content position
 		function resetValue(){
 			var remainder = scrollPane.width() - scrollContent.width();
-			var leftVal = parseInt( scrollContent.css('margin-left') );
+			var leftVal = scrollContent.css('margin-left') == 'auto' ? 0 : parseInt(scrollContent.css('margin-left'));
 			var percentage = Math.round(leftVal / remainder * 100);
 			scrollbar.slider("value", percentage);
 		}
