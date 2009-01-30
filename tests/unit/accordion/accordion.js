@@ -22,7 +22,7 @@ test("basics", function() {
 	state($('#list1').accordion(), 1, 0, 0);
 });
 
-test("autoheight", function() {
+test("autoHeight", function() {
 	$('#navigation').accordion({ autoHeight: false });
 	equals( 90, $('#navigation div:first').height() );
 	equals( 126, $('#navigation div:eq(1)').height() );
