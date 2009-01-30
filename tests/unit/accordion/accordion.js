@@ -24,13 +24,13 @@ test("basics", function() {
 
 test("autoHeight", function() {
 	$('#navigation').accordion({ autoHeight: false });
-	equals( $('#navigation > li:eq(1)').height(), 90 );
-	equals( $('#navigation > li:eq(3)').height(), 126 );
-	equals( $('#navigation > li:eq(5)').height(), 54 );
+	equals( $('#navigation > li:eq(0) > ul').height(), 80 );
+	equals( $('#navigation > li:eq(1) > ul').height(), 112 );
+	equals( $('#navigation > li:eq(2) > ul').height(), 48 );
 	$('#navigation').accordion("destroy").accordion({ autoHeight: true });
-	equals( $('#navigation > li:eq(1)').height(), 126 );
-	equals( $('#navigation > li:eq(3)').height(), 126 );
-	equals( $('#navigation > li:eq(5)').height(), 126 );
+	equals( $('#navigation > li:eq(0) > ul').height(), 112 );
+	equals( $('#navigation > li:eq(1) > ul').height(), 112 );
+	equals( $('#navigation > li:eq(2) > ul').height(), 112 );
 });
 
 test("activate, numeric", function() {
