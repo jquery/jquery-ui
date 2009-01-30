@@ -105,9 +105,7 @@ $.widget("ui.accordion", {
 
 		this.headers.find("a").removeAttr("tabindex");
 		this.headers.children(".ui-icon").remove();
-		this.headers.next().removeClass("ui-accordion-content ui-accordion-content-active").each(function() {
-			$(this).parent().replaceWith(this);
-		});
+		this.headers.next().removeClass("ui-accordion-content ui-accordion-content-active");
 
 	},
 

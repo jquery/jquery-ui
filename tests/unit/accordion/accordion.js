@@ -24,13 +24,13 @@ test("basics", function() {
 
 test("autoHeight", function() {
 	$('#navigation').accordion({ autoHeight: false });
-	equals( 90, $('#navigation div:first').height() );
-	equals( 126, $('#navigation div:eq(1)').height() );
-	equals( 54, $('#navigation div:last').height() );
+	equals( $('#navigation > li:eq(1)').height(), 90 );
+	equals( $('#navigation > li:eq(3)').height(), 126 );
+	equals( $('#navigation > li:eq(5)').height(), 54 );
 	$('#navigation').accordion("destroy").accordion({ autoHeight: true });
-	equals( 126, $('#navigation div:first').height() );
-	equals( 126, $('#navigation div:eq(1)').height() );
-	equals( 126, $('#navigation div:last').height() );
+	equals( $('#navigation > li:eq(1)').height(), 126 );
+	equals( $('#navigation > li:eq(3)').height(), 126 );
+	equals( $('#navigation > li:eq(5)').height(), 126 );
 });
 
 test("activate, numeric", function() {
@@ -94,7 +94,7 @@ function state2(accordion) {
 }
 
 test("handle click on header-descendant", function() {
-	var ac = $('#navigation').accordion({ autoHeight: false })
+	var ac = $('#navigation').accordion({ autoHeight: false });
 	ac.triggerEvent("click", $('#navigation span:contains(Bass)')[0]);
 	state2(ac, 0, 1, 0);
 });
@@ -114,17 +114,17 @@ test("accordionchange event, open closed and close again", function() {
 		alwaysOpen: false
 	})
 	.one("accordionchange", function(event, ui) {
-		equals( ui.oldHeader.size(), 0 )
-		equals( ui.oldContent.size(), 0 )
-		equals( ui.newHeader.size(), 1 )
-		equals( ui.newContent.size(), 1 )
+		equals( ui.oldHeader.size(), 0 );
+		equals( ui.oldContent.size(), 0 );
+		equals( ui.newHeader.size(), 1 );
+		equals( ui.newContent.size(), 1 );
 	})
 	.accordion("activate", 0)
 	.one("accordionchange", function(event, ui) {
-		equals( ui.oldHeader.size(), 1 )
-		equals( ui.oldContent.size(), 1 )
-		equals( ui.newHeader.size(), 0 )
-		equals( ui.newContent.size(), 0 )
+		equals( ui.oldHeader.size(), 1 );
+		equals( ui.oldContent.size(), 1 );
+		equals( ui.newHeader.size(), 0 );
+		equals( ui.newContent.size(), 0 );
 	})
 	.accordion("activate", 0);
 });
