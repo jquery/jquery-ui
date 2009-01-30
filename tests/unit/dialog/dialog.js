@@ -20,7 +20,6 @@ var defaults = {
 	minHeight: 150,
 	minWidth: 150,
 	modal: false,
-	overlay: {},
 	position: 'center',
 	resizable: true,
 	stack: true,
