@@ -67,6 +67,7 @@
 		<copy todir="${dist.dir}/ui/minified">
 			<fileset dir="${dist.dir}/ui-headered/" includes="*.js" />
 		</copy>
+		<delete dir="${dist.dir}/headers/" />
 		<delete dir="${dist.dir}/ui-headered/" />
 	</target>
 
@@ -154,6 +155,10 @@
 
 		<copy overwrite="true" todir="${dist.dir}/demos/" >
 			<fileset dir="${ui.dir}/demos/" />
+		</copy>
+
+		<copy overwrite="true" todir="${dist.dir}/external/" >
+			<fileset dir="${ui.dir}/external/" />
 		</copy>
 
 		<copy overwrite="true" todir="${dist.dir}/tests/" >
