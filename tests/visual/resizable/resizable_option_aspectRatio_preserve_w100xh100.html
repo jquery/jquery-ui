@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<title>Resizable Visual Test : Default</title>
+	<link rel="stylesheet" href="../visual.css" type="text/css" />
+	<link rel="stylesheet" href="../../../themes/base/ui.all.css" type="text/css" />
+	<script type="text/javascript" src="../../../jquery-1.3.1.js"></script>
+	<script type="text/javascript" src="../../../ui/ui.core.js"></script>
+	<script type="text/javascript" src="../../../ui/ui.resizable.js"></script>
+	<script type="text/javascript">
+	$(function() {
+		$("#resizable").resizable({
+			aspectRatio: 'preserve'
+		});
+	});
+	</script>
+	<style type="text/css">
+	#resizable { width: 100px; height: 100px; background: silver; }
+	</style>
+</head>
+<body>
+
+<div id="resizable">Resizable</div>
+
+</body>
+</html>
