@@ -32,6 +32,11 @@ $.widget("ui.accordion", {
 		}
 
 		this.element.addClass("ui-accordion ui-widget ui-helper-reset");
+		
+		// in lack of child-selectors in CSS we need to mark top-LIs in a UL-accordion for some IE-fix
+		if (this.element[0].nodeName == "UL") {
+			this.element.children("li").addClass("ui-accordion-li-fix");
+		}
 
 		this.headers = this.element.find(o.header).addClass("ui-accordion-header ui-helper-reset ui-state-default ui-corner-all")
 			.bind("mouseenter.accordion", function(){ $(this).addClass('ui-state-hover'); })
@@ -369,7 +374,7 @@ $.extend($.ui.accordion, {
 		clearStyle: false,
 		event: "click",
 		fillSpace: false,
-		header: "> li :first,> :not(li):even",
+		header: "> li > :first-child,> :not(li):even",
 		icons: {
 			header: "ui-icon-triangle-1-e",
 			headerSelected: "ui-icon-triangle-1-s"
