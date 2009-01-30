@@ -457,10 +457,6 @@ test("modal", function() {
 	ok(false, "missing test");
 });
 
-test("overlay", function() {
-	ok(false, "missing test");
-});
-
 test("position", function() {
 	ok(false, "missing test");
 });
