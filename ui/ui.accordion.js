@@ -394,10 +394,7 @@ $.extend($.ui.accordion, {
 				options.toShow.animate({height: "show"}, options);
 				return;
 			}
-			var hideHeight = options.toHide.height(),
-				showHeight = options.toShow.height(),
-				difference = showHeight / hideHeight,
-				overflow = options.toShow.css('overflow'),
+			var overflow = options.toShow.css('overflow'),
 				showProps = {},
 				hideProps = {},
 				fxAttrs = [ "height", "paddingTop", "paddingBottom" ];
@@ -405,6 +402,7 @@ $.extend($.ui.accordion, {
 				hideProps[prop] = 'hide';
 				showProps[prop] = parseFloat(options.toShow.css(prop));
 			});
+			showProps.height = options.toShow.height();
 			options.toShow.css({ height: 0, overflow: 'hidden' }).show();
 			options.toHide.filter(":hidden").each(options.complete).end().filter(":visible").animate(hideProps,{
 				step: function(now, settings) {
