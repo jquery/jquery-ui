@@ -373,7 +373,7 @@ $.extend($.ui.accordion, {
 		clearStyle: false,
 		event: "click",
 		fillSpace: false,
-		header: "a",
+		header: "> li :first,> :not(li):odd",
 		icons: {
 			header: "ui-icon-triangle-1-e",
 			headerSelected: "ui-icon-triangle-1-s"
