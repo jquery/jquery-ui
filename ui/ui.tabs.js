@@ -325,12 +325,10 @@ $.widget("ui.tabs", {
 			// which can become a usability and annoying problem with tabs('rotate').
 			if ($.browser.msie) this.blur();
 
-			return false;
-
 		});
 
-		// disable click if event is configured to something else
-		if (o.event != 'click') this.$tabs.bind('click.tabs', function(){return false;});
+		// disable click in any case
+		this.$tabs.bind('click.tabs', function(){return false;});
 
 	},
 
@@ -473,8 +471,7 @@ $.widget("ui.tabs", {
 	load: function(index, callback) { // callback is for internal usage only
 
 		var self = this, o = this.options, $a = this.$tabs.eq(index), a = $a[0],
-				bypassCache = callback == undefined || callback === false, url = $a.data('load.tabs');
-				// TODO bypassCache == false should work
+				bypassCache = callback == undefined, url = $a.data('load.tabs');
 
 		callback = callback || function() {};
 
@@ -577,7 +574,7 @@ $.extend($.ui.tabs.prototype, {
 	rotation: null,
 	rotate: function(ms, continuing) {
 
-		var self = this, t = this.options.selected;
+		var self = this, o = this.options, t = o.selected;
 
 		function rotate() {
 			clearTimeout(self.rotation);
@@ -590,7 +587,7 @@ $.extend($.ui.tabs.prototype, {
 		// start rotation
 		if (ms) {
 			this.element.bind('tabsshow', rotate); // will not be attached twice
-			this.$tabs.bind(this.options.event + '.tabs', !continuing ?
+			this.$tabs.bind(o.event + '.tabs', !continuing ?
 				function(e) {
 					if (e.clientX) { // in case of a true click
 						clearTimeout(self.rotation);
@@ -598,7 +595,7 @@ $.extend($.ui.tabs.prototype, {
 					}
 				} :
 				function(e) {
-					t = self.options.selected;
+					t = o.selected;
 					rotate();
 				}
 			);
@@ -608,7 +605,7 @@ $.extend($.ui.tabs.prototype, {
 		else {
 			clearTimeout(self.rotation);
 			this.element.unbind('tabsshow', rotate);
-			this.$tabs.unbind(this.options.event + '.tabs', stop);
+			this.$tabs.unbind(o.event + '.tabs', stop);
 		}
 	}
 });
