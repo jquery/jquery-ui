@@ -398,7 +398,14 @@ $.extend($.ui.accordion, {
 				percentDone,
 				showProps = {},
 				hideProps = {},
-				fxAttrs = [ "height", "paddingTop", "paddingBottom" ];
+				fxAttrs = [ "height", "paddingTop", "paddingBottom" ],
+				originalWidth;
+			// fix width before calculating height of hidden element
+			if (options.toShow[0]) {
+				var s = options.toShow;
+				originalWidth = s[0].style.width;
+				s.width( parseInt(s.parent().width()) - parseInt(s.css("paddingLeft")) - parseInt(s.css("paddingRight")) - parseInt(s.css("borderLeftWidth")) - parseInt(s.css("borderRightWidth")) );
+			}
 			$.each(fxAttrs, function(i, prop) {
 				hideProps[prop] = 'hide';
 				
@@ -431,8 +438,9 @@ $.extend($.ui.accordion, {
 				easing: options.easing,
 				complete: function() {
 					if ( !options.autoHeight ) {
-						options.toShow.css("height", "auto");
+						options.toShow.css("height", "");
 					}
+					options.toShow.css("width", originalWidth);
 					options.toShow.css({overflow: overflow});
 					options.complete();
 				}
