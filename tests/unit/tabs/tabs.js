@@ -22,23 +22,12 @@ var defaults = {
 
 var el;
 
-// need to wait a bit for the pseudo animation...
-function defer(defered, ms) {
-	var queue = defer.queue || (defer.queue = []);
-	if (!queue.length) stop();
-	queue.push(defered);
-	setTimeout(function() {
-		queue.shift()();
-		if (!queue.length) start();
-	}, ms || 100);
-}
-
 module('tabs');
 
 	test('init', function() {
 		expect(9);
 
-		var el = $('#tabs1').tabs();
+		el = $('#tabs1').tabs();
 		
 		ok(true, '.tabs() called on element');
 		ok( el.is('.ui-tabs.ui-widget.ui-widget-content.ui-corner-all'), 'attach classes to container');
@@ -55,7 +44,7 @@ module('tabs');
 	test('destroy', function() {
 		expect(5);
 		
-		var el = $('#tabs1').tabs();
+		el = $('#tabs1').tabs();
 		el.tabs('destroy');
 		
 		ok( el.is(':not(.ui-tabs, .ui-widget, .ui-widget-content, .ui-corner-all)'), 'remove classes from container');
@@ -67,7 +56,7 @@ module('tabs');
 	});
 
 	test("defaults", function() {
-		el = $('#tabs1 > ul').tabs();
+		el = $('#tabs1').tabs();
 		$.each(defaults, function(key, val) {
 			var actual = el.data(key + '.tabs'), expected = val;
 			same(actual, expected, key);
@@ -83,7 +72,7 @@ module('tabs');
 	test('remove', function() {
 		expect(4);
 
-		var el = $('#tabs1').tabs();
+		el = $('#tabs1').tabs();
 		
 		el.tabs('remove', 0);
 		equals(el.tabs('length'), 2, 'remove tab');
@@ -167,7 +156,7 @@ module('tabs: Options');
 	test('selected: null', function() {
 		expect(2);
 
-		var el = $('#tabs1');
+		el = $('#tabs1');
 
 		el.tabs({ selected: null });
 		equals( $('li.ui-tabs-selected', el).length, 0, 'no tab should be selected' );
@@ -178,7 +167,7 @@ module('tabs: Options');
 	test('deselectable: true', function() {
 		expect(7);
 
-		var el = $('#tabs1 > ul');
+		el = $('#tabs1');
 
 		el.tabs({ deselectable: true });
 		equals( el.data('deselectable.tabs'), true, 'option set' );
@@ -191,41 +180,39 @@ module('tabs: Options');
 
 		el.tabs('select', 1);
 		equals( $('li.ui-tabs-deselectable', el).length, 0, 'class "ui-tabs-deselectable" not attached');
-		defer(function() {
-			equals( $('div.ui-tabs-hide', '#tabs1').length, 3, 'all panels should be hidden' );
-		});
+		equals( $('div.ui-tabs-hide', '#tabs1').length, 3, 'all panels should be hidden' );
 
 	});
 
 	test('cookie', function() {
 		expect(6);
 
-		var el = $('#tabs1 > ul');
-		var cookieName = 'ui-tabs-' + $.data(el[0]);
+		el = $('#tabs1');
+		var cookieName = 'tabs_test', cookieObj = { name: cookieName };
 		$.cookie(cookieName, null); // blank state
 		var cookie = function() {
 			return parseInt($.cookie(cookieName), 10);
 		};
 
-		el.tabs({ cookie: {} });
-		equals(cookie(), 0, 'initial cookie value, no cookie given');
+		el.tabs({ cookie: cookieObj });
+		equals(cookie(), 0, 'initial cookie value');
 
 		el.tabs('destroy');
-		el.tabs({ selected: 1, cookie: {} });
-		equals(cookie(), 1, 'initial cookie value, given selected');
+		el.tabs({ selected: 1, cookie: cookieObj });
+		equals(cookie(), 1, 'initial cookie value, from selected property');
 
 		el.tabs('select', 2);
-		equals(cookie(), 2, 'cookie value after tabs select');
-
+		equals(cookie(), 2, 'cookie value updated after select');
+		
 		el.tabs('destroy');
 		$.cookie(cookieName, 1);
-		el.tabs({ cookie: {} });
+		el.tabs({ cookie: cookieObj });
 		equals(cookie(), 1, 'initial cookie value, from existing cookie');
-
+		
 		el.tabs('destroy');
-		el.tabs({ cookie: {}, deselectable: true });
+		el.tabs({ cookie: cookieObj, deselectable: true });
 		el.tabs('select', 0);
-		equals(cookie(), -1, 'cookie value for all unselected tabs');
+		equals(cookie(), -1, 'cookie value for all tabs unselected');
 		
 		el.tabs('destroy');
 		ok($.cookie(cookieName) === null, 'erase cookie after destroy');
@@ -238,15 +225,13 @@ module('tabs: Tickets');
 	test('id containing colon, #2715', function() { // http://ui.jquery.com/bugs/ticket/2715
 		expect(4);
 
-		var el = $('#tabs2 > ul').tabs();
+		el = $('#tabs2').tabs();
 		ok( $('div.ui-tabs-panel:eq(0)', '#tabs2').is(':visible'), 'first panel should be visible' );
 		ok( $('div.ui-tabs-panel:eq(1)', '#tabs2').is(':hidden'), 'second panel should be hidden' );
 
 		el.tabs('select', 1).tabs('select', 0);
-		defer(function() {
-			ok( $('div.ui-tabs-panel:eq(0)', '#tabs2').is(':visible'), 'first panel should be visible' );
-			ok( $('div.ui-tabs-panel:eq(1)', '#tabs2').is(':hidden'), 'second panel should be hidden' );
-		});
+		ok( $('div.ui-tabs-panel:eq(0)', '#tabs2').is(':visible'), 'first panel should be visible' );
+		ok( $('div.ui-tabs-panel:eq(1)', '#tabs2').is(':hidden'), 'second panel should be hidden' );
 
 	});
 
@@ -258,26 +243,21 @@ module('tabs: Tickets');
 		};
 		var expected = inlineStyle('height');
 
-		var el = $('#tabs2').tabs();
+		el = $('#tabs2').tabs();
 		equals(inlineStyle('height'), expected, 'init should not remove inline style');
 
 		el.tabs('select', 1);
-		defer(function() {
-			equals(inlineStyle('height'), expected, 'show tab should not remove inline style');
+		equals(inlineStyle('height'), expected, 'show tab should not remove inline style');
 
-			el.tabs('select', 0);
-			defer(function() {
-				equals(inlineStyle('height'), expected, 'hide tab should not remove inline style');
-			});
-
-		});
+		el.tabs('select', 0);
+		equals(inlineStyle('height'), expected, 'hide tab should not remove inline style');
 
 	});
 	
 	test('Ajax tab with url containing a fragment identifier fails to load, #3627', function() { // http://ui.jquery.com/bugs/ticket/3627
 		expect(1);
 
-		var el = $('#tabs2').tabs();
+		el = $('#tabs2').tabs();
 		
 		equals( $('a:eq(2)', el).data('load.tabs'), 'test.html', 'should ignore fragment identifier' );
 

@@ -41,7 +41,7 @@ $.widget("ui.tabs", {
 		var cookie = this.cookie || (this.cookie = this.options.cookie.name || 'ui-tabs-' + $.data(this.list[0]));
 		return $.cookie.apply(null, [cookie].concat($.makeArray(arguments)));
 	},
-	
+
 	_ui: function(tab, panel) {
 		return {
 			tab: tab,
@@ -88,7 +88,7 @@ $.widget("ui.tabs", {
 
 			// invalid tab href
 			else
-				o.disabled.push(i + 1);
+				o.disabled.push(i);
 		});
 
 		// initialization from scratch
@@ -255,7 +255,6 @@ $.widget("ui.tabs", {
 
 		// attach tab event handler, unbind to avoid duplicates from former tabifying...
 		this.$tabs.unbind('.tabs').bind(o.event + '.tabs', function() {
-
 			var $li = $(this).parents('li:eq(0)'),
 				$hide = self.$panels.filter(':visible'),
 				$show = $(self._sanitizeSelector(this.hash));
@@ -334,12 +333,13 @@ $.widget("ui.tabs", {
 		if (o.event != 'click') this.$tabs.bind('click.tabs', function(){return false;});
 
 	},
-	
+
 	destroy: function() {
 		var o = this.options;
 
-		this.element
-			.removeClass('ui-tabs ui-widget ui-widget-content ui-corner-all');
+		this.element.unbind('.tabs')
+			.removeClass('ui-tabs ui-widget ui-widget-content ui-corner-all')
+			.removeData('tabs');
 
 		this.list.unbind('.tabs')
 			.removeClass('ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all')
@@ -364,6 +364,7 @@ $.widget("ui.tabs", {
 					'ui-corner-top ' +
 					'ui-tabs-selected ' +
 					'ui-state-active ' +
+					'ui-state-hover ' +
 					'ui-tabs-deselectable ' +
 					'ui-state-disabled ' +
 					'ui-tabs-panel ' +
@@ -479,7 +480,7 @@ $.widget("ui.tabs", {
 
 		// no remote or from cache - just finish with callback
 		// TODO in any case: insert cancel running load here..!
-		
+
 		if (!url || !bypassCache && $.data(a, 'cache.tabs')) {
 			callback();
 			return;
@@ -540,7 +541,7 @@ $.widget("ui.tabs", {
 	url: function(index, url) {
 		this.$tabs.eq(index).removeData('cache.tabs').data('load.tabs', url);
 	},
-	
+
 	length: function() {
 		return this.$tabs.length;
 	}
