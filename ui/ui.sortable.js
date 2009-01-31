@@ -983,6 +983,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 $.extend($.ui.sortable, {
 	getter: "serialize toArray",
 	version: "@VERSION",
+	eventPrefix: "sort",
 	defaults: {
 		accurateIntersection: true,
 		appendTo: "parent",
