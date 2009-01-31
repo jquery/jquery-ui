@@ -522,7 +522,7 @@ $.extend($.ui.dialog, {
 		modal: false,
 		position: 'center',
 		resizable: true,
-		shadow: true,
+		shadow: false,
 		stack: true,
 		title: '',
 		width: 300,
