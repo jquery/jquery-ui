@@ -395,14 +395,21 @@ $.extend($.ui.accordion, {
 				return;
 			}
 			var overflow = options.toShow.css('overflow'),
+				percentDone,
 				showProps = {},
 				hideProps = {},
 				fxAttrs = [ "height", "paddingTop", "paddingBottom" ];
 			$.each(fxAttrs, function(i, prop) {
 				hideProps[prop] = 'hide';
-				showProps[prop] = parseFloat(options.toShow.css(prop));
+				
+				if (options.toShow[0]) {
+					var parts = ('' + $.css(options.toShow[0], prop)).match(/^([\d+-.]+)(.*)$/);
+					showProps[prop] = {
+						value: parts[1],
+						unit: parts[2] || 'px'
+					};
+				}
 			});
-			showProps.height = options.toShow.height();
 			options.toShow.css({ height: 0, overflow: 'hidden' }).show();
 			options.toHide.filter(":hidden").each(options.complete).end().filter(":visible").animate(hideProps,{
 				step: function(now, settings) {
@@ -410,14 +417,15 @@ $.extend($.ui.accordion, {
 					// a content pane to show
 					if (!options.toShow[0]) { return; }
 					
-					var percentDone = settings.start != settings.end
-						? (settings.now - settings.start) / (settings.end - settings.start)
-						: 0,
-						current = percentDone * showProps[settings.prop];
-					if ($.browser.msie || $.browser.opera) {
-						current = Math.ceil(current);
+					// only calculate the percent when animating height
+					// IE gets very inconsistent results when animating elements
+					// with small values, which is common for padding
+					if (settings.prop == 'height') {
+						percentDone = (settings.now - settings.start) / (settings.end - settings.start);
 					}
-					options.toShow[0].style[settings.prop] = current + 'px';
+					
+					options.toShow[0].style[settings.prop] =
+						(percentDone * showProps[settings.prop].value) + showProps[settings.prop].unit;
 				},
 				duration: options.duration,
 				easing: options.easing,
