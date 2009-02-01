@@ -404,7 +404,7 @@ $.extend($.ui.draggable, {
 		connectToSortable: false,
 		containment: false,
 		cssNamespace: "ui",
-		cursor: "default",
+		cursor: "auto",
 		cursorAt: false,
 		delay: 0,
 		distance: 1,
