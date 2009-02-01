@@ -33,7 +33,7 @@
 .ui-datepicker-multi .ui-datepicker-group-last .ui-datepicker-header { border-left-width:0; }
 .ui-datepicker-multi .ui-datepicker-group-middle .ui-datepicker-header { border-left-width:0; }
 .ui-datepicker-multi .ui-datepicker-buttonpane { clear:left; }
-.ui-datepicker-row-break { clear:left; width:100%; }
+.ui-datepicker-row-break { clear:both; width:100%; }
 
 /* RTL support */
 .ui-datepicker-rtl { direction: rtl; }
