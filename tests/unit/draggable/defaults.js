@@ -14,7 +14,7 @@ var draggable_defaults = {
 
 	containment: false,
 
-	cursor: "default",
+	cursor: "auto",
 
 	cursorAt: false,
 

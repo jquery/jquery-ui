@@ -23,7 +23,23 @@ var margin = function(el, side) { return parseInt(el.css('margin-' + side)); }
 
 module("draggable: options");
 
+test("{ appendTo: 'parent' }, default", function() {
+	equals(draggable_defaults.appendTo, "parent");
+
+	ok(false, 'missing test - untested code is broken code');
+});
+
+test("{ appendTo: Element }", function() {
+	ok(false, 'missing test - untested code is broken code');
+});
+
+test("{ appendTo: Selector }", function() {
+	ok(false, 'missing test - untested code is broken code');
+});
+
 test("{ axis: false }, default", function() {
+	equals(draggable_defaults.axis, false);
+
 	el = $("#draggable2").draggable({ axis: false });
 	drag(el, 50, 50);
 	moved(50, 50);
@@ -56,6 +72,22 @@ test("{ axis: ? }, unexpected", function() {
 		moved(50, 50, "axis: " + key);
 		el.draggable("destroy");
 	})
+});
+
+test("{ cancel: ':input,option' }, default", function() {
+	equals(draggable_defaults.cancel, ":input,option");
+
+	$('<div id="draggable-option-cancel-default"><input type="text"></div>').appendTo('body');
+
+	el = $("#draggable-option-cancel-default").draggable({ cancel: ":input,option" });
+	drag("#draggable-option-cancel-default", 50, 50);
+	moved(50, 50);
+
+	el = $("#draggable-option-cancel-default").draggable({ cancel: ":input,option" });
+	drag("#draggable-option-cancel-default :input", 50, 50);
+	moved(0, 0);
+
+	el.draggable("destroy");
 });
 
 test("{ cancel: 'span' }", function() {
@@ -91,6 +123,16 @@ test("{ cancel: ? }, unexpected", function() {
 	})
 });
 
+test("{ containment: false }, default", function() {
+	equals(draggable_defaults.containment, false);
+
+	ok(false, 'missing test - untested code is broken code');
+});
+
+test("{ containment: Element }", function() {
+	ok(false, 'missing test - untested code is broken code');
+});
+
 test("{ containment: 'parent' }, relative", function() {
 	el = $("#draggable1").draggable({ containment: 'parent' });
 	var p = el.parent(), po = p.offset();
@@ -111,6 +153,43 @@ test("{ containment: 'parent' }, absolute", function() {
 		top: po.top + border(p, 'top') + margin(el, 'top')
 	}
 	same(offsetAfter, expected, 'compare offset to parent');
+});
+
+test("{ containment: 'document' }", function() {
+	ok(false, 'missing test - untested code is broken code');
+});
+
+test("{ containment: 'window' }", function() {
+	ok(false, 'missing test - untested code is broken code');
+});
+
+test("{ containment: Selector }", function() {
+	ok(false, 'missing test - untested code is broken code');
+});
+
+test("{ cursor: 'auto' }, default", function() {
+	equals(draggable_defaults.cursor, 'auto');
+
+	function getCursor() { return $("#draggable2").css("cursor"); }
+
+	expect(3);
+
+	var expected = "auto", actual, before, after;
+
+	el = $("#draggable2").draggable({
+		cursor: expected,
+		start: function(event, ui) {
+			actual = getCursor();
+		}
+	});
+
+	before = getCursor();
+	drag("#draggable2", -1, -1);
+	after = getCursor();
+
+	equals(actual, expected, "start callback: cursor '" + expected + "'");
+	equals(after, before, "after drag: cursor restored");
+
 });
 
 test("{ cursor: 'move' }", function() {
@@ -135,6 +214,12 @@ test("{ cursor: 'move' }", function() {
 	equals(actual, expected, "start callback: cursor '" + expected + "'");
 	equals(after, before, "after drag: cursor restored");
 
+});
+
+test("{ cursorAt: false}, default", function() {
+	equals(draggable_defaults.cursorAt, false);
+
+	ok(false, 'missing test - untested code is broken code');
 });
 
 test("{ cursorAt: { left: -5, top: -5 } }", function() {
