@@ -439,6 +439,7 @@ $.ui.plugin.add("draggable", "connectToSortable", {
 			$(typeof this == 'string' ? this+'': this).each(function() {
 				if($.data(this, 'sortable')) {
 					var sortable = $.data(this, 'sortable');
+					if (sortable.options.disabled) { return; }
 					inst.sortables.push({
 						instance: sortable,
 						shouldRevert: sortable.options.revert
