@@ -62,6 +62,10 @@ $.widget("ui.tabs", {
 		var fragmentId = /^#.+/; // Safari 2 reports '#' for an empty hash
 		this.$tabs.each(function(i, a) {
 			var href = $(a).attr('href');
+			
+			// For dynamically created HTML that contains a hash as href IE expands
+			// such href to the full page url with hash and then misinterprets tab as ajax...
+			if (href.split('#')[0] == location.toString().split('#')[0]) href = a.hash;
 
 			// inline tab
 			if (fragmentId.test(href))

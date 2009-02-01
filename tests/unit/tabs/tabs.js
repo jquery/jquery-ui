@@ -262,6 +262,17 @@ module('tabs: Tickets');
 		equals( $('a:eq(2)', el).data('load.tabs'), 'test.html', 'should ignore fragment identifier' );
 
 	});
+	
+	test('IE expands hash to full url and misinterprets tab as ajax, #4033', function() { // http://ui.jquery.com/bugs/ticket/4033
+		expect(1);
+		
+		el = $('<div><ul><li><a href="#tab">Tab</a></li></ul><div id="tab"></div></div>')
+				.appendTo('#main').tabs();
+        
+		equals($('a', el).data('load.tabs'), undefined, 'should not create ajax tab');
+		
+	});
+		
 
 // test('', function() {
 // 	expect(0);
