@@ -210,6 +210,7 @@ $.widget("ui.dialog", {
 		this._size();
 		this._position(options.position);
 		uiDialog.show(options.show);
+		(options.shadow && this._createShadow());
 		this.moveToTop(true, event);
 
 		// prevent tabbing out of modal dialogs
@@ -243,8 +244,6 @@ $.widget("ui.dialog", {
 			.add(uiDialog.find('.ui-dialog-titlebar :tabbable:first'))
 			.filter(':first')
 			.focus();
-
-		(options.shadow && this._createShadow());
 
 		this._trigger('open', event);
 		this._isOpen = true;
