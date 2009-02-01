@@ -20,11 +20,11 @@ var defaults = {
 var el, drg;
 
 function shouldBeDroppable() {
-	ok(false, "missing test - should be droppable");
+	ok(false, 'missing test - untested code is broken code');
 }
 
 function shouldNotBeDroppable() {
-	ok(false, "missing test - should not be droppable");
+	ok(false, 'missing test - untested code is broken code');
 }
 
 // Droppable Tests
@@ -144,15 +144,15 @@ test("option setting", function() {
 module("droppable: Options");
 
 test("accept, selector", function() {
-	ok(false, "missing test");
+	ok(false, 'missing test - untested code is broken code');
 });
 
 test("accept, fn", function() {
-	ok(false, "missing test");
+	ok(false, 'missing test - untested code is broken code');
 });
 
 test("activeClass", function() {
-	ok(false, "missing test");
+	ok(false, 'missing test - untested code is broken code');
 });
 
 test("cssNamespace", function() {
@@ -168,53 +168,53 @@ test("cssNamespace", function() {
 });
 
 test("greedy", function() {
-	ok(false, "missing test");
+	ok(false, 'missing test - untested code is broken code');
 });
 
 test("hoverClass", function() {
-	ok(false, "missing test");
+	ok(false, 'missing test - untested code is broken code');
 });
 
 test("scope", function() {
-	ok(false, "missing test");
+	ok(false, 'missing test - untested code is broken code');
 });
 
 test("tolerance, fit", function() {
-	ok(false, "missing test");
+	ok(false, 'missing test - untested code is broken code');
 });
 
 test("tolerance, intersect", function() {
-	ok(false, "missing test");
+	ok(false, 'missing test - untested code is broken code');
 });
 
 test("tolerance, pointer", function() {
-	ok(false, "missing test");
+	ok(false, 'missing test - untested code is broken code');
 });
 
 test("tolerance, touch", function() {
-	ok(false, "missing test");
+	ok(false, 'missing test - untested code is broken code');
 });
 
 module("droppable: Callbacks");
 
 test("activate", function() {
-	ok(false, "missing test");
+	ok(false, 'missing test - untested code is broken code');
 });
 
 test("deactivate", function() {
-	ok(false, "missing test");
+	ok(false, 'missing test - untested code is broken code');
 });
 
 test("over", function() {
-	ok(false, "missing test");
+	ok(false, 'missing test - untested code is broken code');
 });
 
 test("out", function() {
-	ok(false, "missing test");
+	ok(false, 'missing test - untested code is broken code');
 });
 
 test("drop", function() {
-	ok(false, "missing test");
+	ok(false, 'missing test - untested code is broken code');
 });
 
 module("droppable: Tickets");

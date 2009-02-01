@@ -306,7 +306,7 @@ test("buttons", function() {
 });
 
 test("closeOnEscape", function() {
-	ok(false, 'missing test');
+	ok(false, 'missing test - untested code is broken code');
 });
 
 test("closeText", function() {
@@ -455,11 +455,11 @@ test("minWidth", function() {
 });
 
 test("modal", function() {
-	ok(false, "missing test");
+	ok(false, 'missing test - untested code is broken code');
 });
 
 test("position", function() {
-	ok(false, "missing test");
+	ok(false, 'missing test - untested code is broken code');
 });
 
 test("resizable", function() {
@@ -479,7 +479,7 @@ test("resizable", function() {
 });
 
 test("stack", function() {
-	ok(false, "missing test");
+	ok(false, 'missing test - untested code is broken code');
 });
 
 test("title", function() {
