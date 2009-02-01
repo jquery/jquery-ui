@@ -111,12 +111,20 @@ module('tabs');
 		expect(0);
 
 	});
+	
+	test('length', function() {
+		expect(1);
+		
+		el = $('#tabs1').tabs();
+		equals(el.tabs('length'), $('ul a', el).length, ' should return length');
+		
+	});
 
 	test('callback ui object', function() {
 		expect(3);
 
 		var uiObj;
-		$('#tabs1').tabs({
+		el = $('#tabs1').tabs({
 			show: function(event, ui) {
 				uiObj = ui;
 			}
