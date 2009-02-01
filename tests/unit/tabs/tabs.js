@@ -267,7 +267,7 @@ module('tabs: Tickets');
 
 		el = $('#tabs2').tabs();
 		
-		equals( $('a:eq(2)', el).data('load.tabs'), 'test.html', 'should ignore fragment identifier' );
+		ok(/test.html$/.test( $('a:eq(2)', el).data('load.tabs') ), 'should ignore fragment identifier');
 
 	});
 	
