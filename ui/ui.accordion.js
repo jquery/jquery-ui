@@ -118,6 +118,11 @@ $.widget("ui.accordion", {
 			contents.css("height", "");
 		}
 	},
+	
+	_setData: function(key, value) {
+		if(key == 'alwaysOpen') { key = 'collapsible'; value = !value; }
+		$.widget.prototype._setData.apply(this, arguments);	
+	},
 
 	_keydown: function(event) {
 
@@ -206,7 +211,7 @@ $.widget("ui.accordion", {
 		if (o.disabled) return false;
 
 		// called only when using activate(false) to close all parts programmatically
-		if (!event.target && !o.alwaysOpen) {
+		if (!event.target && o.collapsible) {
 			this.active.removeClass("ui-state-active ui-corner-top").addClass("ui-state-default ui-corner-all")
 				.find(".ui-icon").removeClass(o.icons.headerSelected).addClass(o.icons.header);
 			this.active.next().addClass('ui-accordion-content-active');
@@ -228,7 +233,7 @@ $.widget("ui.accordion", {
 		var clickedIsActive = clicked[0] == this.active[0];
 
 		// if animations are still active, or the active header is the target, ignore click
-		if (this.running || (o.alwaysOpen && clickedIsActive)) {
+		if (this.running || (!o.collapsible && clickedIsActive)) {
 			return false;
 		}
 
@@ -247,9 +252,9 @@ $.widget("ui.accordion", {
 			toHide = this.active.next(),
 			data = {
 				options: o,
-				newHeader: clickedIsActive && !o.alwaysOpen ? $([]) : clicked,
+				newHeader: clickedIsActive && o.collapsible ? $([]) : clicked,
 				oldHeader: this.active,
-				newContent: clickedIsActive && !o.alwaysOpen ? $([]) : toShow.find('> *'),
+				newContent: clickedIsActive && o.collapsible ? $([]) : toShow.find('> *'),
 				oldContent: toHide.find('> *')
 			},
 			down = this.headers.index( this.active[0] ) > this.headers.index( clicked[0] );
@@ -281,7 +286,7 @@ $.widget("ui.accordion", {
 
 			var animOptions = {};
 
-			if ( !o.alwaysOpen && clickedIsActive ) {
+			if ( o.collapsible && clickedIsActive ) {
 				animOptions = {
 					toShow: $([]),
 					toHide: toHide,
@@ -330,7 +335,7 @@ $.widget("ui.accordion", {
 
 		} else {
 
-			if (!o.alwaysOpen && clickedIsActive) {
+			if (o.collapsible && clickedIsActive) {
 				toShow.toggle();
 			} else {
 				toHide.hide();
@@ -371,7 +376,8 @@ $.extend($.ui.accordion, {
 	defaults: {
 		active: null,
 		autoHeight: true,
-		alwaysOpen: true,
+		alwaysOpen: true, //deprecated, use collapsible
+		collapsible: false,
 		animated: 'slide',
 		clearStyle: false,
 		event: "click",
@@ -422,7 +428,7 @@ $.extend($.ui.accordion, {
 			options.toShow.css({ height: 0, overflow: 'hidden' }).show();
 			options.toHide.filter(":hidden").each(options.complete).end().filter(":visible").animate(hideProps,{
 				step: function(now, settings) {
-					// if the alwaysOpen option is set to false, we may not have
+					// if the collapsible option is set to true, we may not have
 					// a content pane to show
 					if (!options.toShow[0]) { return; }
 					
