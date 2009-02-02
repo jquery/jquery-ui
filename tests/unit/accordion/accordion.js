@@ -48,8 +48,8 @@ test("activate, numeric", function() {
 	state(ac, 0, 0, 1);
 });
 
-test("activate, boolean and numeric, alwaysOpen:false", function() {
-	var ac = $('#list1').accordion({alwaysOpen: false}).accordion("activate", 2);
+test("activate, boolean and numeric, collapsible:true", function() {
+	var ac = $('#list1').accordion({collapsible: true}).accordion("activate", 2);
 	state(ac, 0, 0, 1);
 	ok("x", "----");
 	ac.accordion("activate", 0);
@@ -59,7 +59,7 @@ test("activate, boolean and numeric, alwaysOpen:false", function() {
 	state(ac, 0, 0, 0);
 });
 
-test("activate, boolean, alwaysOpen:true", function() {
+test("activate, boolean, collapsible:false", function() {
 	var ac = $('#list1').accordion().accordion("activate", 2);
 	state(ac, 0, 0, 1);
 	ac.accordion("activate", -1);
@@ -102,7 +102,7 @@ test("handle click on header-descendant", function() {
 test("active:false", function() {
 	$("#list1").accordion({
 		active: false,
-		alwaysOpen: false
+		collapsible: true
 	});
 	equals( $("#list1 a.selected").size(), 0, "no headers selected" );
 });
@@ -111,7 +111,7 @@ test("accordionchange event, open closed and close again", function() {
 	expect(8);
 	$("#list1").accordion({
 		active: false,
-		alwaysOpen: false
+		collapsible: true
 	})
 	.one("accordionchange", function(event, ui) {
 		equals( ui.oldHeader.size(), 0 );

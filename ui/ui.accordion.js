@@ -19,6 +19,14 @@ $.widget("ui.accordion", {
 		var o = this.options, self = this;
 		this.running = 0;
 
+		// if the user set the alwaysOpen option on init
+		// then we need to set the collapsible option
+		// if they set both on init, collapsible will take priority
+		if (o.collapsible == $.ui.accordion.defaults.collapsible &&
+			o.alwaysOpen != $.ui.accordion.defaults.alwaysOpen) {
+			o.collapsible = !o.alwaysOpen;
+		}
+
 		if ( o.navigation ) {
 			var current = this.element.find("a").filter(o.navigationFilter);
 			if ( current.length ) {
@@ -377,9 +385,9 @@ $.extend($.ui.accordion, {
 		active: null,
 		autoHeight: true,
 		alwaysOpen: true, //deprecated, use collapsible
-		collapsible: false,
 		animated: 'slide',
 		clearStyle: false,
+		collapsible: false,
 		event: "click",
 		fillSpace: false,
 		header: "> li > :first-child,> :not(li):even",
