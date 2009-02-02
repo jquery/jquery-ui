@@ -15,7 +15,8 @@
 $.widget("ui.tabs", {
 
 	_init: function() {
-		// create tabs
+		if (this.options.deselectable !== undefined)
+			this.options.collapsible = this.options.deselectable;
 		this._tabify(true);
 	},
 
@@ -24,6 +25,9 @@ $.widget("ui.tabs", {
 			this.select(value);
 		else {
 			this.options[key] = value;
+			if (key == 'deselectable')
+				this.options.collapsible = value;
+			
 			this._tabify();
 		}
 	},
@@ -152,7 +156,6 @@ $.widget("ui.tabs", {
 			if (o.selected >= 0 && this.$tabs.length) { // check for length avoids error when initializing empty list
 				this.$panels.eq(o.selected).removeClass('ui-tabs-hide');
 				var classes = ['ui-tabs-selected ui-state-active'];
-				if (o.deselectable) classes.push('ui-tabs-deselectable');
 				this.$lis.eq(o.selected).addClass(classes.join(' '));
 
 				// seems to be expected behavior that the show callback is fired
@@ -193,6 +196,9 @@ $.widget("ui.tabs", {
 		else
 			o.selected = this.$lis.index(this.$lis.filter('.ui-tabs-selected'));
 
+		// update collapsible
+		this.element[o.collapsible ? 'addClass' : 'removeClass']('ui-tabs-collapsible');
+		
 		// set or update cookie after init and add/remove respectively
 		if (o.cookie) this._cookie(o.selected, o.cookie);
 
@@ -251,7 +257,6 @@ $.widget("ui.tabs", {
 		// Switch a tab...
 		function switchTab(clicked, $li, $hide, $show) {
 			var classes = ['ui-tabs-selected ui-state-active'];
-			if (o.deselectable) classes.push('ui-tabs-deselectable');
 			$li.removeClass('ui-state-default').addClass(classes.join(' '))
 				.siblings().removeClass(classes.join(' ')).addClass('ui-state-default');
 			hideTab(clicked, $hide, $show);
@@ -263,11 +268,11 @@ $.widget("ui.tabs", {
 				$hide = self.$panels.filter(':visible'),
 				$show = $(self._sanitizeSelector(this.hash));
 
-			// If tab is already selected and not deselectable or tab disabled or
+			// If tab is already selected and not collapsible or tab disabled or
 			// or is already loading or click callback returns false stop here.
 			// Check if click handler returns false last so that it is not executed
 			// for a disabled or loading tab!
-			if (($li.hasClass('ui-state-active') && !o.deselectable)
+			if (($li.hasClass('ui-state-active') && !o.collapsible)
 				|| $li.hasClass('ui-state-disabled')
 				|| $(this).hasClass('ui-tabs-loading')
 				|| self._trigger('select', null, self._ui(this, $show[0])) === false
@@ -279,11 +284,11 @@ $.widget("ui.tabs", {
 			o.selected = self.$tabs.index(this);
 
 			// if tab may be closed TODO avoid redundant code in this block
-			if (o.deselectable) {
+			if (o.collapsible) {
 				if ($li.hasClass('ui-state-active')) {
 					o.selected = -1;
 					if (o.cookie) self._cookie(o.selected, o.cookie);
-					$li.removeClass('ui-tabs-selected ui-state-active ui-tabs-deselectable')
+					$li.removeClass('ui-tabs-selected ui-state-active')
 						.addClass('ui-state-default');
 					self.$panels.stop();
 					hideTab(this, $hide);
@@ -294,7 +299,7 @@ $.widget("ui.tabs", {
 					self.$panels.stop();
 					var a = this;
 					self.load(self.$tabs.index(this), function() {
-						$li.addClass('ui-tabs-selected ui-state-active ui-tabs-deselectable')
+						$li.addClass('ui-tabs-selected ui-state-active')
 							.removeClass('ui-state-default');
 						showTab(a, $show);
 					});
@@ -367,7 +372,7 @@ $.widget("ui.tabs", {
 					'ui-tabs-selected ' +
 					'ui-state-active ' +
 					'ui-state-hover ' +
-					'ui-tabs-deselectable ' +
+					'ui-tabs-collapsible ' +
 					'ui-state-disabled ' +
 					'ui-tabs-panel ' +
 					'ui-widget-content ' +
@@ -556,7 +561,7 @@ $.extend($.ui.tabs, {
 		ajaxOptions: null,
 		cache: false,
 		cookie: null, // e.g. { expires: 7, path: '/', domain: 'jquery.com', secure: true }
-		deselectable: false,
+		collapsible: false,
 		disabled: [],
 		event: 'click',
 		fx: null, // e.g. { height: 'toggle', opacity: 'toggle', duration: 200 }

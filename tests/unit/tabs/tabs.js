@@ -10,7 +10,7 @@ var defaults = {
 	ajaxOptions: null,
 	cache: false,
 	cookie: null,
-	deselectable: false,
+	collapsible: false,
 	disabled: [],
 	event: 'click',
 	fx: null,
@@ -172,24 +172,35 @@ module('tabs: Options');
 
 	});
 
-	test('deselectable: true', function() {
-		expect(7);
+	test('collapsible', function() {
+		expect(4);
 
 		el = $('#tabs1');
 
+		el.tabs({ collapsible: true });
+		equals(el.data('collapsible.tabs'), true, 'option set');
+		ok(el.is('.ui-tabs-collapsible'), 'extra class "ui-tabs-collapsible" attached');
+		el.tabs('select', 0);
+		equals($('div.ui-tabs-hide', '#tabs1').length, 3, 'all panels should be hidden');
+		el.data('collapsible.tabs', false);
+		ok(el.is(':not(.ui-tabs-collapsible)'), 'extra class "ui-tabs-collapsible" not attached');
+		
+	});
+	
+	// deprecated... shadows collapsible
+	test('deselectable (deprecated)', function() {
+		expect(4);
+
+		el = $('#tabs1');
+		
 		el.tabs({ deselectable: true });
-		equals( el.data('deselectable.tabs'), true, 'option set' );
-		equals( $('li.ui-tabs-deselectable', el).length, 1, 'class "ui-tabs-deselectable" attached once');
-		equals( $('li', el).index( $('li.ui-tabs-deselectable', el) ), 0, 'class "ui-tabs-deselectable" attached to first tab');
-
-		el.tabs('select', 1);
-		equals( $('li.ui-tabs-deselectable', el).length, 1, 'class "ui-tabs-deselectable" attached once');
-		equals( $('li', el).index( $('li.ui-tabs-deselectable', el) ), 1, 'class "ui-tabs-deselectable" attached to second tab');
-
-		el.tabs('select', 1);
-		equals( $('li.ui-tabs-deselectable', el).length, 0, 'class "ui-tabs-deselectable" not attached');
-		equals( $('div.ui-tabs-hide', '#tabs1').length, 3, 'all panels should be hidden' );
-
+		equals(el.data('collapsible.tabs'), true, 'option set');
+		ok(el.is('.ui-tabs-collapsible'), 'extra class "ui-tabs-collapsible" attached');
+		el.tabs('select', 0);
+		equals($('div.ui-tabs-hide', '#tabs1').length, 3, 'all panels should be hidden');
+		el.data('deselectable.tabs', false);
+		ok(el.is(':not(.ui-tabs-collapsible)'), 'extra class "ui-tabs-collapsible" not attached');
+		
 	});
 
 	test('cookie', function() {
@@ -218,7 +229,7 @@ module('tabs: Options');
 		equals(cookie(), 1, 'initial cookie value, from existing cookie');
 		
 		el.tabs('destroy');
-		el.tabs({ cookie: cookieObj, deselectable: true });
+		el.tabs({ cookie: cookieObj, collapsible: true });
 		el.tabs('select', 0);
 		equals(cookie(), -1, 'cookie value for all tabs unselected');
 		
