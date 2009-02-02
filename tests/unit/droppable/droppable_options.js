@@ -1,15 +1,21 @@
 /*
- * droppable_optinos.js
+ * droppable_options.js
  */
 (function($) {
 
 module("droppable: options");
 
-test("accept, selector", function() {
+test("{ accept '*' }, default ", function() {
+	equals(droppable_defaults.accept, '*');
+
 	ok(false, 'missing test - untested code is broken code');
 });
 
-test("accept, fn", function() {
+test("{ accept: Selector }", function() {
+	ok(false, 'missing test - untested code is broken code');
+});
+
+test("{ accept: function(draggable) }", function() {
 	ok(false, 'missing test - untested code is broken code');
 });
 

@@ -28,11 +28,15 @@ test("{ addClasses: true }, default", function() {
 
 	el = $("<div></div>").draggable({ addClasses: true });
 	ok(el.is(".ui-draggable"), "'ui-draggable' class added");
+
+	el.draggable("destroy");
 });
 
 test("{ addClasses: false }", function() {
 	el = $("<div></div>").draggable({ addClasses: false });
 	ok(!el.is(".ui-draggable"), "'ui-draggable' class not added");
+
+	el.draggable("destroy");
 });
 
 test("{ appendTo: 'parent' }, default", function() {

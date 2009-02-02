@@ -88,6 +88,6 @@ function commonWidgetTests(widget, settings) {
 	module(widget + ": common widget");
 
     testWidgetDefaults(widget, settings.defaults);
-//    testSettingOptions(widget, options);
+    testSettingOptions(widget, options);
     testWidgetOverrides(widget);
 }
