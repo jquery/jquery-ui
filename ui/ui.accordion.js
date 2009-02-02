@@ -410,6 +410,10 @@ $.extend($.ui.accordion, {
 				options.toShow.animate({height: "show"}, options);
 				return;
 			}
+			if ( !options.toShow.size() ) {
+				options.toHide.animate({height: "hide"}, options);
+				return;
+			}
 			var overflow = options.toShow.css('overflow'),
 				percentDone,
 				showProps = {},
@@ -417,29 +421,22 @@ $.extend($.ui.accordion, {
 				fxAttrs = [ "height", "paddingTop", "paddingBottom" ],
 				originalWidth;
 			// fix width before calculating height of hidden element
-			if (options.toShow[0]) {
-				var s = options.toShow;
-				originalWidth = s[0].style.width;
-				s.width( parseInt(s.parent().width()) - parseInt(s.css("paddingLeft")) - parseInt(s.css("paddingRight")) - parseInt(s.css("borderLeftWidth")) - parseInt(s.css("borderRightWidth")) );
-			}
+			var s = options.toShow;
+			originalWidth = s[0].style.width;
+			s.width( parseInt(s.parent().width()) - parseInt(s.css("paddingLeft")) - parseInt(s.css("paddingRight")) - parseInt(s.css("borderLeftWidth")) - parseInt(s.css("borderRightWidth")) );
+			
 			$.each(fxAttrs, function(i, prop) {
 				hideProps[prop] = 'hide';
 				
-				if (options.toShow[0]) {
-					var parts = ('' + $.css(options.toShow[0], prop)).match(/^([\d+-.]+)(.*)$/);
-					showProps[prop] = {
-						value: parts[1],
-						unit: parts[2] || 'px'
-					};
-				}
+				var parts = ('' + $.css(options.toShow[0], prop)).match(/^([\d+-.]+)(.*)$/);
+				showProps[prop] = {
+					value: parts[1],
+					unit: parts[2] || 'px'
+				};
 			});
 			options.toShow.css({ height: 0, overflow: 'hidden' }).show();
 			options.toHide.filter(":hidden").each(options.complete).end().filter(":visible").animate(hideProps,{
 				step: function(now, settings) {
-					// if the collapsible option is set to true, we may not have
-					// a content pane to show
-					if (!options.toShow[0]) { return; }
-					
 					// only calculate the percent when animating height
 					// IE gets very inconsistent results when animating elements
 					// with small values, which is common for padding
