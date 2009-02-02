@@ -17,6 +17,18 @@ test("activeClass", function() {
 	ok(false, 'missing test - untested code is broken code');
 });
 
+test("{ addClasses: true }, default", function() {
+	equals(droppable_defaults.addClasses, true);
+
+	el = $("<div></div>").droppable({ addClasses: true });
+	ok(el.is(".ui-droppable"), "'ui-droppable' class added");
+});
+
+test("{ addClasses: false }", function() {
+	el = $("<div></div>").droppable({ addClasses: false });
+	ok(!el.is(".ui-droppable"), "'ui-droppable' class not added");
+});
+
 test("cssNamespace", function() {
 	//cssNamespace should be appended with '-droppable' and added as className
 	el = $("<div></div>").droppable({ cssNamespace: "ui" });

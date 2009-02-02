@@ -3,9 +3,9 @@
  */
 
 var droppable_defaults = {
+	addClasses: true,
 	accept: '*',
 	activeClass: false,
-	cssNamespace: "ui",
 	disabled: false,
 	greedy: false,
 	hoverClass: false,
