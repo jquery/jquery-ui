@@ -31,7 +31,7 @@ $.widget("ui.droppable", {
 		$.ui.ddmanager.droppables[this.options.scope] = $.ui.ddmanager.droppables[this.options.scope] || [];
 		$.ui.ddmanager.droppables[this.options.scope].push(this);
 
-		(this.options.cssNamespace && this.element.addClass(this.options.cssNamespace+"-droppable"));
+		(this.options.addClasses && this.element.addClass("ui-droppable"));
 
 	},
 
@@ -42,7 +42,7 @@ $.widget("ui.droppable", {
 				drop.splice(i, 1);
 
 		this.element
-			.removeClass(this.options.cssNamespace+"-droppable "+this.options.cssNamespace+"-droppable-disabled")
+			.removeClass("ui-droppable ui-droppable-disabled")
 			.removeData("droppable")
 			.unbind(".droppable");
 	},
@@ -101,7 +101,7 @@ $.widget("ui.droppable", {
 		if (!draggable || (draggable.currentItem || draggable.element)[0] == this.element[0]) return false; // Bail if draggable and droppable are same element
 
 		var childrenIntersection = false;
-		this.element.find(":data(droppable)").not("."+draggable.options.cssNamespace+"-draggable-dragging").each(function() {
+		this.element.find(":data(droppable)").not(".ui-draggable-dragging").each(function() {
 			var inst = $.data(this, 'droppable');
 			if(inst.options.greedy && $.ui.intersect(draggable, $.extend(inst, { offset: inst.element.offset() }), inst.options.tolerance)) {
 				childrenIntersection = true; return false;
@@ -136,9 +136,9 @@ $.extend($.ui.droppable, {
 	version: "@VERSION",
 	eventPrefix: 'drop',
 	defaults: {
+		addClasses: true,
 		accept: '*',
 		activeClass: false,
-		cssNamespace: 'ui',
 		greedy: false,
 		hoverClass: false,
 		scope: 'default',
