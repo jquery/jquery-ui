@@ -23,6 +23,18 @@ var margin = function(el, side) { return parseInt(el.css('margin-' + side)); }
 
 module("draggable: options");
 
+test("{ addClasses: true }, default", function() {
+	equals(draggable_defaults.addClasses, true);
+
+	el = $("<div></div>").draggable({ addClasses: true });
+	ok(el.is(".ui-draggable"), "'ui-draggable' class added");
+});
+
+test("{ addClasses: false }", function() {
+	el = $("<div></div>").draggable({ addClasses: false });
+	ok(!el.is(".ui.draggable"), "'ui-draggable' class not added");
+});
+
 test("{ appendTo: 'parent' }, default", function() {
 	equals(draggable_defaults.appendTo, "parent");
 

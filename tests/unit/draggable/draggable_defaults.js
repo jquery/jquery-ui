@@ -3,6 +3,7 @@
  */
 
 var draggable_defaults = {
+	addClasses: true,
 	appendTo: "parent",
 	axis: false,
 	cancel: ":input,option",
