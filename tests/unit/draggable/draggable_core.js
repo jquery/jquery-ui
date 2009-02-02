@@ -1,10 +1,6 @@
 /*
- * draggable unit tests
+ * draggable_core.js
  */
-
-//
-// Draggable Test Helper Functions
-//
 
 var el, offsetBefore, offsetAfter, dragged;
 

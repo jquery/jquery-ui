@@ -32,7 +32,7 @@ test("{ addClasses: true }, default", function() {
 
 test("{ addClasses: false }", function() {
 	el = $("<div></div>").draggable({ addClasses: false });
-	ok(!el.is(".ui.draggable"), "'ui-draggable' class not added");
+	ok(!el.is(".ui-draggable"), "'ui-draggable' class not added");
 });
 
 test("{ appendTo: 'parent' }, default", function() {
