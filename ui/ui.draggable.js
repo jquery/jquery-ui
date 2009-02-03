@@ -673,8 +673,8 @@ $.ui.plugin.add("draggable", "snap", {
 		var inst = $(this).data("draggable"), o = inst.options;
 		var d = o.snapTolerance;
 
-		var x1 = ui.absolutePosition.left, x2 = x1 + inst.helperProportions.width,
-			y1 = ui.absolutePosition.top, y2 = y1 + inst.helperProportions.height;
+		var x1 = ui.offset.left, x2 = x1 + inst.helperProportions.width,
+			y1 = ui.offset.top, y2 = y1 + inst.helperProportions.height;
 
 		for (var i = inst.snapElements.length - 1; i >= 0; i--){
 
