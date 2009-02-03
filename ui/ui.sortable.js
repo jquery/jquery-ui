@@ -1013,10 +1013,10 @@ $.extend($.ui.sortable, {
 		opacity: false,
 		placeholder: false,
 		revert: false,
-		scope: "default",
 		scroll: true,
 		scrollSensitivity: 20,
 		scrollSpeed: 20,
+		scope: "default",
 		sortIndicator: $.ui.sortable.prototype._rearrange,
 		tolerance: "intersect",
 		zIndex: 1000
