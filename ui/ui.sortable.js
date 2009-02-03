@@ -17,7 +17,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 
 		var o = this.options;
 		this.containerCache = {};
-		(this.options.cssNamespace && this.element.addClass(this.options.cssNamespace+"-sortable"));
+		this.element.addClass("ui-sortable");
 
 		//Get the items
 		this.refresh();
@@ -35,7 +35,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 
 	destroy: function() {
 		this.element
-			.removeClass(this.options.cssNamespace+"-sortable "+this.options.cssNamespace+"-sortable-disabled")
+			.removeClass("ui-sortable ui-sortable-disabled")
 			.removeData("sortable")
 			.unbind(".sortable");
 		this._mouseDestroy();
@@ -189,7 +189,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 
 		this.dragging = true;
 
-		this.helper.addClass(o.cssNamespace+'-sortable-helper');
+		this.helper.addClass("ui-sortable-helper");
 		this._mouseDrag(event); //Execute the drag once - this causes the helper not to be visible before getting its correct position
 		return true;
 
@@ -322,7 +322,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 			this._mouseUp();
 
 			if(this.options.helper == "original")
-				this.currentItem.css(this._storedCSS).removeClass(this.options.cssNamespace+"-sortable-helper");
+				this.currentItem.css(this._storedCSS).removeClass("ui-sortable-helper");
 			else
 				this.currentItem.show();
 
@@ -482,13 +482,13 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 				for (var j = cur.length - 1; j >= 0; j--){
 					var inst = $.data(cur[j], 'sortable');
 					if(inst && inst != this && !inst.options.disabled) {
-						queries.push([$.isFunction(inst.options.items) ? inst.options.items.call(inst.element) : $(inst.options.items, inst.element).not("."+inst.options.cssNamespace+"-sortable-helper"), inst]);
+						queries.push([$.isFunction(inst.options.items) ? inst.options.items.call(inst.element) : $(inst.options.items, inst.element).not(".ui-sortable-helper"), inst]);
 					}
 				};
 			};
 		}
 
-		queries.push([$.isFunction(this.options.items) ? this.options.items.call(this.element, null, { options: this.options, item: this.currentItem }) : $(this.options.items, this.element).not("."+this.options.cssNamespace+"-sortable-helper"), this]);
+		queries.push([$.isFunction(this.options.items) ? this.options.items.call(this.element, null, { options: this.options, item: this.currentItem }) : $(this.options.items, this.element).not(".ui-sortable-helper"), this]);
 
 		for (var i = queries.length - 1; i >= 0; i--){
 			queries[i][0].each(function() {
@@ -613,8 +613,8 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 				element: function() {
 
 					var el = $(document.createElement(self.currentItem[0].nodeName))
-						.addClass(className || self.currentItem[0].className+" "+self.options.cssNamespace+"-sortable-placeholder")
-						.removeClass(self.options.cssNamespace+'-sortable-helper')[0];
+						.addClass(className || self.currentItem[0].className+" ui-sortable-placeholder")
+						.removeClass("ui-sortable-helper")[0];
 
 					if(!className)
 						el.style.visibility = "hidden";
@@ -909,13 +909,13 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 			for(var i in this._storedCSS) {
 				if(this._storedCSS[i] == 'auto' || this._storedCSS[i] == 'static') this._storedCSS[i] = '';
 			}
-			this.currentItem.css(this._storedCSS).removeClass(this.options.cssNamespace+"-sortable-helper");
+			this.currentItem.css(this._storedCSS).removeClass("ui-sortable-helper");
 		} else {
 			this.currentItem.show();
 		}
 
 		if(this.fromOutside && !noPropagation) delayedTriggers.push(function(event) { this._trigger("receive", event, this._uiHash(this.fromOutside)); });
-		if((this.fromOutside || this.domPosition.prev != this.currentItem.prev().not("."+this.options.cssNamespace+"-sortable-helper")[0] || this.domPosition.parent != this.currentItem.parent()[0]) && !noPropagation) delayedTriggers.push(function(event) { this._trigger("update", event, this._uiHash()); }); //Trigger update callback if the DOM position has changed
+		if((this.fromOutside || this.domPosition.prev != this.currentItem.prev().not(".ui-sortable-helper")[0] || this.domPosition.parent != this.currentItem.parent()[0]) && !noPropagation) delayedTriggers.push(function(event) { this._trigger("update", event, this._uiHash()); }); //Trigger update callback if the DOM position has changed
 		if(!$.ui.contains(this.element[0], this.currentItem[0])) { //Node was moved out of the current element
 			if(!noPropagation) delayedTriggers.push(function(event) { this._trigger("remove", event, this._uiHash()); });
 			for (var i = this.containers.length - 1; i >= 0; i--){
@@ -999,7 +999,6 @@ $.extend($.ui.sortable, {
 		cancel: ":input,option",
 		connectWith: false,
 		containment: false,
-		cssNamespace: 'ui',
 		cursor: 'auto',
 		cursorAt: false,
 		delay: 0,

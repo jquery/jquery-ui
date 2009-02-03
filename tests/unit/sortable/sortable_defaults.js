@@ -9,7 +9,6 @@ var sortable_defaults = {
 	cancel: ":input,option",
 	connectWith: false,
 	containment: false,
-	cssNamespace: "ui",
 	cursor: 'auto',
 	cursorAt: false,
 	delay: 0,
