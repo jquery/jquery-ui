@@ -514,6 +514,7 @@ $.extend($.ui.dialog, {
 		buttons: {},
 		closeOnEscape: true,
 		closeText: 'close',
+		dialogClass: '',
 		draggable: true,
 		height: 'auto',
 		minHeight: 150,
