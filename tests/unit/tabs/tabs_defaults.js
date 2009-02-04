@@ -5,8 +5,8 @@
 var tabs_defaults = {
 	ajaxOptions: null,
 	cache: false,
-	cookie: null,
 	collapsible: false,
+	cookie: null,
 	disabled: [],
 	event: 'click',
 	fx: null,

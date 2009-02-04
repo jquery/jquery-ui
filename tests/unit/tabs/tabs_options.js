@@ -83,7 +83,7 @@ test('disabled', function() {
 	ok(false, "missing test - untested code is broken code.");
 });
 
-test('events', function() {
+test('event', function() {
 	ok(false, "missing test - untested code is broken code.");
 });
 
@@ -99,7 +99,7 @@ test('panelTemplate', function() {
 	ok(false, "missing test - untested code is broken code.");
 });
 
-test('selected: null', function() {
+test('selected: null', function() { // TODO move to selected
 	expect(2);
 
 	el = $('#tabs1');
@@ -110,7 +110,7 @@ test('selected: null', function() {
 
 });
 
-test('selected property', function() {
+test('selected', function() {
 	expect(5);
 	
 	$('#tabs1').tabs();
