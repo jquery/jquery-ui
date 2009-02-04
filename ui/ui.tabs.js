@@ -230,7 +230,7 @@ $.widget("ui.tabs", {
 		var showTab = showFx ?
 			function(clicked, $show) {
 				$show.hide().removeClass('ui-tabs-hide') // avoid flicker that way
-					.animate(showFx, 500, function() {
+					.animate(showFx, showFx.duration || 'normal', function() {
 						resetStyle($show, showFx);
 						self._trigger('show', null, self._ui(clicked, $show[0]));
 					});
