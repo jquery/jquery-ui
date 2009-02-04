@@ -5,7 +5,7 @@
 
 module("progressbar: events");
 
-test("testname", function() {
+test("change", function() {
 	ok(false, "missing test - untested code is broken code.");
 });
 

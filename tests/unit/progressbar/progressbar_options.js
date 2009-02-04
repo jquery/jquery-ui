@@ -5,7 +5,7 @@
 
 module("progressbar: options");
 
-test("testname", function() {
+test("{ value : 0 }, default", function() {
 	ok(false, "missing test - untested code is broken code.");
 });
 
