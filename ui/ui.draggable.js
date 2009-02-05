@@ -523,7 +523,9 @@ $.ui.plugin.add("draggable", "connectToSortable", {
 
 					inst._trigger("toSortable", event);
 					inst.dropped = this.instance.element; //draggable revert needs that
-					this.instance.fromOutside = inst; //Little hack so receive/update callbacks work
+					//hack so receive/update callbacks work (mostly)
+					inst.currentItem = inst.element;
+					this.instance.fromOutside = inst;
 
 				}
 
