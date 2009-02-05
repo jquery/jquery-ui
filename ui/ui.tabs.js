@@ -21,9 +21,12 @@ $.widget("ui.tabs", {
 	},
 
 	_setData: function(key, value) {
-		if (key == 'selected')
+		if (key == 'selected') {
+			if (this.options.collapsible
+				&& value == this.options.selected) return;
+			
 			this.select(value);
-		
+		}
 		else {
 			this.options[key] = value;
 			if (key == 'deselectable')
