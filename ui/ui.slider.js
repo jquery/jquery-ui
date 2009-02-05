@@ -77,7 +77,7 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 		this.handles.add(this.range).filter("a")
 			.click(function(event) { event.preventDefault(); })
 			.hover(function() { $(this).addClass('ui-state-hover'); }, function() { $(this).removeClass('ui-state-hover'); })
-			.focus(function() { self.handles.removeClass('ui-state-focus'); $(this).addClass('ui-state-focus'); })
+			.focus(function() { $(".ui-slider .ui-state-focus").removeClass('ui-state-focus'); $(this).addClass('ui-state-focus'); })
 			.blur(function() { $(this).removeClass('ui-state-focus'); });
 
 		this.handles.each(function(i) {
