@@ -156,8 +156,7 @@ $.widget("ui.tabs", {
 			this.$lis.removeClass('ui-tabs-selected ui-state-active');
 			if (o.selected >= 0 && this.$tabs.length) { // check for length avoids error when initializing empty list
 				this.$panels.eq(o.selected).removeClass('ui-tabs-hide');
-				var classes = ['ui-tabs-selected ui-state-active'];
-				this.$lis.eq(o.selected).addClass(classes.join(' '));
+				this.$lis.eq(o.selected).addClass('ui-tabs-selected ui-state-active');
 
 				// seems to be expected behavior that the show callback is fired
 				var onShow = function() {
@@ -257,9 +256,9 @@ $.widget("ui.tabs", {
 
 		// Switch a tab...
 		function switchTab(clicked, $li, $hide, $show) {
-			var classes = ['ui-tabs-selected ui-state-active'];
-			$li.removeClass('ui-state-default').addClass(classes.join(' '))
-				.siblings().removeClass(classes.join(' ')).addClass('ui-state-default');
+			var classes = 'ui-tabs-selected ui-state-active';
+			$li.removeClass('ui-state-default').addClass(classes)
+				.siblings().removeClass(classes).addClass('ui-state-default');
 			hideTab(clicked, $hide, $show);
 		}
 
@@ -273,7 +272,7 @@ $.widget("ui.tabs", {
 			// or is already loading or click callback returns false stop here.
 			// Check if click handler returns false last so that it is not executed
 			// for a disabled or loading tab!
-			if (($li.hasClass('ui-state-active') && !o.collapsible)
+			if (($li.hasClass('ui-tabs-selected') && !o.collapsible)
 				|| $li.hasClass('ui-state-disabled')
 				|| $(this).hasClass('ui-tabs-loading')
 				|| self._trigger('select', null, self._ui(this, $show[0])) === false
@@ -286,7 +285,7 @@ $.widget("ui.tabs", {
 
 			// if tab may be closed TODO avoid redundant code in this block
 			if (o.collapsible) {
-				if ($li.hasClass('ui-state-active')) {
+				if ($li.hasClass('ui-tabs-selected')) {
 					o.selected = -1;
 					if (o.cookie) self._cookie(o.selected, o.cookie);
 					$li.removeClass('ui-tabs-selected ui-state-active')
