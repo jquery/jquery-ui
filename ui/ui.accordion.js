@@ -383,9 +383,9 @@ $.extend($.ui.accordion, {
 	version: "@VERSION",
 	defaults: {
 		active: null,
-		autoHeight: true,
 		alwaysOpen: true, //deprecated, use collapsible
 		animated: 'slide',
+		autoHeight: true,
 		clearStyle: false,
 		collapsible: false,
 		event: "click",
