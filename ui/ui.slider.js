@@ -214,7 +214,11 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 		var mouseOverHandle = !$(event.target).parents().andSelf().is('.ui-slider-handle');
 		this._clickOffset = mouseOverHandle ? { left: 0, top: 0 } : {
 			left: event.pageX - offset.left + (parseInt(closestHandle.css('marginLeft'),10) || 0),
-			top: event.pageY - offset.top + (parseInt(closestHandle.css('marginTop'),10) || 0)
+			top: event.pageY - offset.top
+				- (closestHandle.height() / 2)
+				- (parseInt(closestHandle.css('borderTopWidth'),10) || 0)
+				- (parseInt(closestHandle.css('borderBottomWidth'),10) || 0)
+				+ (parseInt(closestHandle.css('marginTop'),10) || 0)
 		};
 
 		normValue = this._normValueFromMouse(position);
