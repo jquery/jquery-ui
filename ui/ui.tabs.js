@@ -60,7 +60,7 @@ $.widget("ui.tabs", {
 
 	_tabify: function(init) {
 
-		this.list = this.element.is('div') ? this.element.children('ul:first, ol:first').eq(0) : this.element;
+		this.list = this.element.children('ul:first, ol:first').eq(0);
 		this.$lis = $('li:has(a[href])', this.list);
 		this.$tabs = this.$lis.map(function() { return $('a', this)[0]; });
 		this.$panels = $([]);
@@ -107,9 +107,7 @@ $.widget("ui.tabs", {
 		if (init) {
 
 			// attach necessary classes for styling
-			if (this.element.is('div')) {
-				this.element.addClass('ui-tabs ui-widget ui-widget-content ui-corner-all');
-			}
+			this.element.addClass('ui-tabs ui-widget ui-widget-content ui-corner-all');
 			this.list.addClass('ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all');
 			this.$lis.addClass('ui-state-default ui-corner-top');
 			this.$panels.addClass('ui-tabs-panel ui-widget-content ui-corner-bottom');
@@ -351,9 +349,7 @@ $.widget("ui.tabs", {
 			.removeClass('ui-tabs ui-widget ui-widget-content ui-corner-all')
 			.removeData('tabs');
 
-		this.list.unbind('.tabs')
-			.removeClass('ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all')
-			.removeData('tabs');
+		this.list.removeClass('ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all');
 
 		this.$tabs.each(function() {
 			var href = $.data(this, 'href.tabs');
