@@ -21,8 +21,9 @@ $.widget("ui.tabs", {
 	},
 
 	_setData: function(key, value) {
-		if ((/^selected/).test(key))
+		if (key == 'selected')
 			this.select(value);
+		
 		else {
 			this.options[key] = value;
 			if (key == 'deselectable')
@@ -311,7 +312,7 @@ $.widget("ui.tabs", {
 			if (o.cookie) self._cookie(o.selected, o.cookie);
 
 			// stop possibly running animations
-			self.$panels.stop();
+			self.$panels.stop(false, true);
 
 			// show new tab
 			if ($show.length) {
@@ -474,19 +475,23 @@ $.widget("ui.tabs", {
 	select: function(index) {
 		if (typeof index == 'string')
 			index = this.$tabs.index(this.$tabs.filter('[href$=' + index + ']'));
+			
+		else if (index === null)
+			index = -1;
+
+		if (index == -1 && this.options.collapsible)
+			index = this.options.selected;
+			
 		this.$tabs.eq(index).trigger(this.options.event + '.tabs');
 	},
 
 	load: function(index, callback) { // callback is for internal usage only
-
+		callback = callback || function() {};
+		
 		var self = this, o = this.options, $a = this.$tabs.eq(index), a = $a[0],
 				bypassCache = callback == undefined, url = $a.data('load.tabs');
 
-		callback = callback || function() {};
-
-		// no remote or from cache - just finish with callback
-		// TODO in any case: insert cancel running load here..!
-
+		// not remote or from cache - just finish with callback
 		if (!url || !bypassCache && $.data(a, 'cache.tabs')) {
 			callback();
 			return;

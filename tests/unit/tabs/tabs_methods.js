@@ -19,7 +19,6 @@ test('init', function() {
 	equals( el.data('selected.tabs'), 0, 'selected.tabs set' );
 	equals( $('li', el).index( $('li.ui-tabs-selected', el) ), 0, 'second tab active');
 	equals( $('div', el).index( $('div.ui-tabs-hide', '#tabs1') ), 1, 'second panel should be hidden' );
-
 });
 
 test('destroy', function() {
@@ -33,7 +32,6 @@ test('destroy', function() {
 	ok( $('div:eq(1)', el).is(':not(.ui-tabs-panel, .ui-widget-content, .ui-corner-bottom, .ui-tabs-hide)'), 'remove classes to panel' );
 	ok( $('li:eq(0)', el).is(':not(.ui-tabs-selected, .ui-state-active, .ui-corner-top)'), 'remove classes from active li');	
 	ok( $('li:eq(1)', el).is(':not(.ui-state-default, .ui-corner-top)'), 'remove classes from inactive li');
-
 });
 
 test('enable', function() {
@@ -67,7 +65,41 @@ test('remove', function() {
 });
 
 test('select', function() {
-	ok(false, "missing test - untested code is broken code.");
+	expect(9);
+	
+	el = $('#tabs1').tabs();
+	
+	el.tabs('select', 1);
+	equals(el.data('selected.tabs'), 1, 'should select tab');
+
+	el.tabs('destroy');
+	el.tabs({ collapsible: true });
+	el.tabs('select', 0);
+	equals(el.data('selected.tabs'), -1, 'should collapse tab passing in the already selected tab');
+
+	el.tabs('destroy');
+	el.tabs({ collapsible: true });
+	el.tabs('select', -1);
+	equals(el.data('selected.tabs'), -1, 'should collapse tab passing in -1');
+	
+	el.tabs('destroy');
+	el.tabs({ collapsible: true });
+	el.tabs('select', null);
+	equals(el.data('selected.tabs'), -1, 'should collapse tab passing in null (deprecated)');	
+	el.tabs('select', null);
+	equals(el.data('selected.tabs'), -1, 'should not select tab passing in null a second time (deprecated)');
+
+	el.tabs('destroy');
+	el.tabs();
+	el.tabs('select', 0);
+	equals(el.data('selected.tabs'), 0, 'should not collapse tab if collapsible is not set to true');
+	el.tabs('select', -1);
+	equals(el.data('selected.tabs'), 0, 'should not collapse tab if collapsible is not set to true');
+	el.tabs('select', null);
+	equals(el.data('selected.tabs'), 0, 'should not collapse tab if collapsible is not set to true');
+	
+	el.tabs('select', '#fragment-2');
+	equals(el.data('selected.tabs'), 1, 'should select tab by id');
 });
 
 test('load', function() {
@@ -83,7 +115,6 @@ test('length', function() {
 	
 	el = $('#tabs1').tabs();
 	equals(el.tabs('length'), $('ul a', el).length, ' should return length');
-	
 });
 
 test('rotate', function() {
