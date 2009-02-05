@@ -142,7 +142,6 @@ $.widget("ui.dialog", {
 
 	destroy: function() {
 		(this.overlay && this.overlay.destroy());
-		(this.shadow && this._destroyShadow());
 		this.uiDialog.hide();
 		this.element
 			.unbind('.dialog')
@@ -160,7 +159,6 @@ $.widget("ui.dialog", {
 		}
 
 		(this.overlay && this.overlay.destroy());
-		(this.shadow && this._destroyShadow());
 		this.uiDialog
 			.hide(this.options.hide)
 			.unbind('keypress.ui-dialog');
@@ -189,7 +187,6 @@ $.widget("ui.dialog", {
 			maxZ = Math.max(maxZ, parseInt($(this).css('z-index'), 10) || options.zIndex);
 		});
 		(this.overlay && this.overlay.$el.css('z-index', ++maxZ));
-		(this.shadow && this.shadow.css('z-index', ++maxZ));
 
 		//Save and then restore scroll since Opera 9.5+ resets when parent z-Index is changed.
 		//  http://ui.jquery.com/bugs/ticket/3193
@@ -210,7 +207,6 @@ $.widget("ui.dialog", {
 		this._size();
 		this._position(options.position);
 		uiDialog.show(options.show);
-		(options.shadow && this._createShadow());
 		this.moveToTop(true, event);
 
 		// prevent tabbing out of modal dialogs
@@ -307,12 +303,10 @@ $.widget("ui.dialog", {
 			},
 			drag: function() {
 				(options.drag && options.drag.apply(self.element[0], arguments));
-				self._refreshShadow();
 			},
 			stop: function() {
 				(options.dragStop && options.dragStop.apply(self.element[0], arguments));
 				$.ui.dialog.overlay.resize();
-				self._refreshShadow();
 			}
 		});
 	},
@@ -338,13 +332,11 @@ $.widget("ui.dialog", {
 			},
 			resize: function() {
 				(options.resize && options.resize.apply(self.element[0], arguments));
-				self._refreshShadow();
 			},
 			handles: resizeHandles,
 			stop: function() {
 				(options.resizeStop && options.resizeStop.apply(self.element[0], arguments));
 				$.ui.dialog.overlay.resize();
-				self._refreshShadow();
 			}
 		})
 		.find('.ui-resizable-se').addClass('ui-icon ui-icon-grip-diagonal-se');
@@ -435,11 +427,6 @@ $.widget("ui.dialog", {
 				// currently non-resizable, becoming resizable
 				(isResizable || this._makeResizable(value));
 				break;
-			case "shadow":
-				(value
-					? this.shadow || this._createShadow()
-					: this.shadow && this._destroyShadow());
-				break;
 			case "title":
 				$(".ui-dialog-title", this.uiDialogTitlebar).html(value || '&nbsp;');
 				break;
@@ -479,30 +466,6 @@ $.widget("ui.dialog", {
 					? 'auto'
 					: options.height - nonContentHeight
 			});
-	},
-	
-	_createShadow: function() {
-		this.shadow = $('<div class="ui-widget-shadow"></div>').css('position', 'absolute').appendTo(document.body);
-		this._refreshShadow();
-		return this.shadow;
-	},
-	
-	_refreshShadow: function() {
-		if (!this.options.shadow) { return; }
-		
-		var uiDialog = this.uiDialog,
-			offset = uiDialog.offset();
-		this.shadow.css({
-			left: offset.left,
-			top: offset.top,
-			width: uiDialog.outerWidth(),
-			height: uiDialog.outerHeight()
-		});
-	},
-	
-	_destroyShadow: function() {
-		this.shadow.remove();
-		this.shadow = null;
 	}
 });
 
@@ -522,7 +485,6 @@ $.extend($.ui.dialog, {
 		modal: false,
 		position: 'center',
 		resizable: true,
-		shadow: false,
 		stack: true,
 		title: '',
 		width: 300,

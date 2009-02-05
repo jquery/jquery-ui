@@ -19,7 +19,6 @@ var dialog_defaults = {
 	modal: false,
 	position: 'center',
 	resizable: true,
-	shadow: false,
 	stack: true,
 	title: '',
 	width: 300,
