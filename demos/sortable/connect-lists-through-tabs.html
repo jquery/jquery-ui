@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<title>jQuery UI Sortable - Connect lists with Tabs</title>
+	<link type="text/css" href="../../themes/base/ui.all.css" rel="stylesheet" />
+	<script type="text/javascript" src="../../jquery-1.3.1.js"></script>
+	<script type="text/javascript" src="../../ui/ui.core.js"></script>
+	<script type="text/javascript" src="../../ui/ui.sortable.js"></script>
+	<script type="text/javascript" src="../../ui/ui.droppable.js"></script>
+	<script type="text/javascript" src="../../ui/ui.tabs.js"></script>
+	<link type="text/css" href="../demos.css" rel="stylesheet" />
+	<style type="text/css">
+	#sortable1 li, #sortable2 li { margin: 0 5px 5px 5px; padding: 5px; font-size: 1.2em; width: 120px; }
+	</style>
+	<script type="text/javascript">
+	$(function() {
+		$("#sortable1, #sortable2").sortable({
+		}).disableSelection();
+
+		$("#tabs").tabs();
+
+		$("#tabs a").droppable({
+			accept: ".connectedSortable li",
+			drop: function(ev, ui) {
+				var $target = $($(this).attr('href')).find('.connectedSortable');
+				ui.draggable.hide('slow', function() {
+					$(this).prependTo($target).show();
+				});
+			}
+		});
+	});
+	</script>
+</head>
+<body>
+<div class="demo">
+
+<div id="tabs">
+	<ul>
+		<li><a href="#tabs-1">Nunc tincidunt</a></li>
+		<li><a href="#tabs-2">Proin dolor</a></li>
+	</ul>
+	<div id="tabs-1">
+		<ul id="sortable1" class="connectedSortable ui-helper-reset">
+			<li class="ui-state-default">Item 1</li>
+			<li class="ui-state-default">Item 2</li>
+			<li class="ui-state-default">Item 3</li>
+			<li class="ui-state-default">Item 4</li>
+			<li class="ui-state-default">Item 5</li>
+		</ul>
+	</div>
+	<div id="tabs-2">
+		<ul id="sortable2" class="connectedSortable ui-helper-reset">
+			<li class="ui-state-highlight">Item 1</li>
+			<li class="ui-state-highlight">Item 2</li>
+			<li class="ui-state-highlight">Item 3</li>
+			<li class="ui-state-highlight">Item 4</li>
+			<li class="ui-state-highlight">Item 5</li>
+		</ul>
+	</div>
+</div>
+
+</div><!-- End demo -->
+
+<div class="demo-description">
+
+<p>
+	Sort items from one list into another and vice versa, by passing a selector into
+	the <code>connectWith</code> option. The simplest way to do this is to
+	group all related lists with a CSS class, and then pass that class into the
+	sortable function (i.e., <code>connectWith: '.myclass'</code>).
+</p>
+
+</div><!-- End demo-description -->
+
+</body>
+</html>
