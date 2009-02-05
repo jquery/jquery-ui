@@ -14,17 +14,19 @@
 	</style>
 	<script type="text/javascript">
 	$(function() {
-		$("#sortable1, #sortable2").sortable({
-		}).disableSelection();
+		$("#sortable1, #sortable2").sortable().disableSelection();
 
-		$("#tabs").tabs();
+		var $tabs = $("#tabs").tabs();
 
-		$("#tabs a").droppable({
+		var $tab_links = $("a",$tabs).droppable({
 			accept: ".connectedSortable li",
 			drop: function(ev, ui) {
-				var $target = $($(this).attr('href')).find('.connectedSortable');
+				var $link = $(this);
+				var $list = $($link.attr('href')).find('.connectedSortable');
+
 				ui.draggable.hide('slow', function() {
-					$(this).prependTo($target).show();
+					$tabs.tabs('select', $tab_links.index($link));
+					$(this).appendTo($list).show('slow');
 				});
 			}
 		});
