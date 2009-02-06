@@ -25,6 +25,7 @@
 	<property name="build.dir" value="build" />
 	<property name="ui.dir" value="../" />
 	<property name="src.dir" value="${ui.dir}/ui/" />
+	<property name="docs.dir" value="${ui.dir}/docs/" />
 
 	<property name="min.folder" value="${dist.dir}/ui/minified" />
 
@@ -35,7 +36,7 @@
 
 	<property description="YUI Compressor" name="yui-jar" value="${build.dir}/yuicompressor-2.4.2.jar" />
 	
-	<target name="deploy-release" depends="docs-process, concatenate, minify, copy, replace-version, prepend-header, zip" description="Release builder">
+	<target name="deploy-release" depends="docs-download, concatenate, minify, copy, replace-version, prepend-header, zip" description="Release builder">
 	</target>
 
 	<target name="replace-version">
@@ -176,31 +177,23 @@
     </target>
 	
 	<target name="docs-download">
-		<property name="url" value="http://www.exfer.net/jquery/createjQueryXMLDocs.py?start=UI/" />
-		<get src="${url}Accordion" dest="docs-accordion.xml" />
-		<get src="${url}Datepicker" dest="docs-datepicker.xml" />
-		<get src="${url}Dialog" dest="docs-dialog.xml" />
-		<get src="${url}Draggable" dest="docs-draggable.xml" />
-		<get src="${url}Droppable" dest="docs-droppable.xml" />
-		<get src="${url}Progressbar" dest="docs-progressbar.xml" />
-		<get src="${url}Resizable" dest="docs-resizable.xml" />
-		<get src="${url}Selectable" dest="docs-selectable.xml" />
-		<get src="${url}Slider" dest="docs-slider.xml" />
-		<get src="${url}Sortable" dest="docs-sortable.xml" />
-		<get src="${url}Tabs" dest="docs-tabs.xml" />
+		<mkdir dir="${docs.dir}" />
+		<property name="url" value="http://docs.jquery.com/action/render/UI/" />
+		<get src="${url}Accordion/accordion" dest="${docs.dir}accordion.html" />
+		<get src="${url}Datepicker/datepicker" dest="${docs.dir}datepicker.html" />
+		<get src="${url}Dialog/dialog" dest="${docs.dir}dialog.html" />
+		<get src="${url}Draggable/draggable" dest="${docs.dir}draggable.html" />
+		<get src="${url}Droppable/droppable" dest="${docs.dir}droppable.html" />
+		<get src="${url}Progressbar/progressbar" dest="${docs.dir}progressbar.html" />
+		<get src="${url}Resizable/resizable" dest="${docs.dir}resizable.html" />
+		<get src="${url}Selectable/selectable" dest="${docs.dir}selectable.html" />
+		<get src="${url}Slider/slider" dest="${docs.dir}slider.html" />
+		<get src="${url}Sortable/sortable" dest="${docs.dir}sortable.html" />
+		<get src="${url}Tabs/tabs" dest="${docs.dir}tabs.html" />
 	</target>
 			
-	<target name="docs-process" depends="docs-download">
-		<property name="docs.dir" value="${ui.dir}/demos/documentation" />
-		<delete dir="${docs.dir}" />
-		<mkdir dir="${docs.dir}" />
-		<xslt includes="docs-*.xml" destdir="${docs.dir}" style="build/style.xsl" />
-	</target>
-	
 	<target name="docs-clean">
-		<delete>
-			<fileset file="*.xml" excludes="build.xml" />
-		</delete>
+		<delete dir="${docs.dir}" />
 	</target>
 	
 	<target name="whitespace">
