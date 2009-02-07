@@ -136,9 +136,9 @@ $.extend($.ui.droppable, {
 	version: "@VERSION",
 	eventPrefix: 'drop',
 	defaults: {
-		addClasses: true,
 		accept: '*',
 		activeClass: false,
+		addClasses: true,
 		greedy: false,
 		hoverClass: false,
 		scope: 'default',
