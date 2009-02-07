@@ -15,17 +15,23 @@
 (function($) {
 
 var setDataSwitch = {
-	dragStart: "start.draggable",
-	drag: "drag.draggable",
-	dragStop: "stop.draggable",
-	maxHeight: "maxHeight.resizable",
-	minHeight: "minHeight.resizable",
-	maxWidth: "maxWidth.resizable",
-	minWidth: "minWidth.resizable",
-	resizeStart: "start.resizable",
-	resize: "drag.resizable",
-	resizeStop: "stop.resizable"
-};
+		dragStart: "start.draggable",
+		drag: "drag.draggable",
+		dragStop: "stop.draggable",
+		maxHeight: "maxHeight.resizable",
+		minHeight: "minHeight.resizable",
+		maxWidth: "maxWidth.resizable",
+		minWidth: "minWidth.resizable",
+		resizeStart: "start.resizable",
+		resize: "drag.resizable",
+		resizeStop: "stop.resizable"
+	},
+	
+	uiDialogClasses =
+		'ui-dialog ' +
+		'ui-widget ' +
+		'ui-widget-content ' +
+		'ui-corner-all ';
 
 $.widget("ui.dialog", {
 
@@ -41,13 +47,7 @@ $.widget("ui.dialog", {
 			uiDialog = (this.uiDialog = $('<div/>'))
 				.appendTo(document.body)
 				.hide()
-				.addClass(
-					'ui-dialog ' +
-					'ui-widget ' +
-					'ui-widget-content ' +
-					'ui-corner-all ' +
-					options.dialogClass
-				)
+				.addClass(uiDialogClasses + options.dialogClass)
 				.css({
 					position: 'absolute',
 					overflow: 'hidden',
@@ -401,6 +401,11 @@ $.widget("ui.dialog", {
 				break;
 			case "closeText":
 				this.uiDialogTitlebarCloseText.text(value);
+				break;
+			case "dialogClass":
+				this.uiDialog
+					.removeClass(this.options.dialogClass)
+					.addClass(uiDialogClasses + value);
 				break;
 			case "draggable":
 				(value
