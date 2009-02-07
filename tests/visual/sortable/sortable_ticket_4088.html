@@ -1,12 +1,12 @@
 <!doctype html>
 <html lang="en">
 <head>
-	<title>jQuery UI Sortable - Connected With Droppable</title>
-	<link type="text/css" href="../../themes/base/ui.all.css" rel="stylesheet" />
-	<script type="text/javascript" src="../../jquery-1.3.1.js"></script>
-	<script type="text/javascript" src="../../ui/ui.core.js"></script>
-	<script type="text/javascript" src="../../ui/ui.sortable.js"></script>
-	<script type="text/javascript" src="../../ui/ui.droppable.js"></script>
+	<title>jQuery UI Sortable - Sortable ticket 4088</title>
+	<link type="text/css" href="../../../themes/base/ui.all.css" rel="stylesheet" />
+	<script type="text/javascript" src="../../../jquery-1.3.1.js"></script>
+	<script type="text/javascript" src="../../../ui/ui.core.js"></script>
+	<script type="text/javascript" src="../../../ui/ui.sortable.js"></script>
+	<script type="text/javascript" src="../../../ui/ui.droppable.js"></script>
 	<link type="text/css" href="../demos.css" rel="stylesheet" />
 	<style type="text/css">
 	#sortable { list-style-type: none; margin: 0; padding: 0; width: 60%; }
@@ -36,29 +36,31 @@
 	</script>
 </head>
 <body>
-<div class="demo">
+
+<h1>
+Ticket <a href="http://dev.jqueryui.com/ticket/4088">#4088</a> - Unable to remove() ui.draggable (sortable item) immediately after the drop callback.
+</h2>
+<h2>
+TEST: Drag 'Special Item' to the div labelled 'Drop here'
+</h2>
+<h2>
+TEST: Drag a 'Normal Item' to the div labelled 'Drop here'
+</h2>
 
 <ul id="sortable">
-	<li class="ui-state-default" id="special"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span>Item 1 - I am special! I will be removed when I'm dropped.</li>
-	<li class="ui-state-default"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span>Item 2</li>
-	<li class="ui-state-default"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span>Item 3</li>
-	<li class="ui-state-default"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span>Item 4</li>
-	<li class="ui-state-default"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span>Item 5</li>
-	<li class="ui-state-default"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span>Item 6</li>
-	<li class="ui-state-default"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span>Item 7</li>
+	<li class="ui-state-default" id="special"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span>Special Item</li>
+	<li class="ui-state-default"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span>Normal Item 1</li>
+	<li class="ui-state-default"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span>Normal Item 2</li>
+	<li class="ui-state-default"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span>Normal Item 3</li>
 </ul>
 
 <div id="trash" class="ui-widget-content ui-state-default">
-	<h4 class="ui-widget-header"><span class="ui-icon ui-icon-trash">Trash</span> Drop us here</h4>
+	<h4 class="ui-widget-header"><span class="ui-icon ui-icon-trash">Trash</span> Drop here</h4>
 </div>
 
-</div><!-- End demo -->
-
-<div class="demo-description">
-
-<p>This is a testcase for <a href="http://dev.jqueryui.com/ticket/4088">#4088</a>. Burn after resolving.</p>
-
-</div><!-- End demo-description -->
+<h3>
+ASSERT: The dropped item is removed from the original list and the following text does not appear: "<strong>I was dropped and removed, but still here I am!</strong>"
+</h3>
 
 </body>
 </html>
