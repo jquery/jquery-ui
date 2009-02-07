@@ -3,10 +3,10 @@
  */
 
 var resizable_defaults = {
+	alsoResize: false,
 	animate: false,
 	animateDuration: 'slow',
 	animateEasing: 'swing',
-	alsoResize: false,
 	aspectRatio: false,
 	autoHide: false,
 	cancel: ':input,option',
