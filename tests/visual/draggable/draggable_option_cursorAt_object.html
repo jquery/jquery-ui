@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<title>Draggable Visual Test : Draggable option cursorAt object</title>
+	<link rel="stylesheet" href="../visual.css" type="text/css" />
+	<link rel="stylesheet" href="../../../themes/base/ui.all.css" type="text/css">
+	<script type="text/javascript" src="../../../jquery-1.3.1.js"></script>
+	<script type="text/javascript" src="../../../ui/ui.core.js"></script>
+	<script type="text/javascript" src="../../../ui/ui.draggable.js"></script>
+	<script type="text/javascript">
+	$(function() {
+		$("#draggable").css({ width: 100, height: 100, background: '#abc' });
+		$("#draggable").draggable({
+			cursorAt: { top: -15, right: 15 }
+		});
+	});
+	</script>
+</head>
+<body>
+<div id="draggable">
+	<p> Draggable </p>
+</div>
+</body>
+</html>

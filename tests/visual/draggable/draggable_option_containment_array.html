@@ -1,30 +1,24 @@
 <!doctype html>
 <html lang="en">
 <head>
-	<title>Simple Draggable with Handle</title>
-	<link rel="stylesheet" href="../all.css" type="text/css">
+	<title>Draggable Visual Test : Draggable option containment array</title>
+	<link rel="stylesheet" href="../visual.css" type="text/css" />
 	<link rel="stylesheet" href="../../../themes/base/ui.all.css" type="text/css">
 	<script type="text/javascript" src="../../../jquery-1.3.1.js"></script>
 	<script type="text/javascript" src="../../../ui/ui.core.js"></script>
 	<script type="text/javascript" src="../../../ui/ui.draggable.js"></script>
 	<script type="text/javascript">
 	$(function() {
+		$("#draggable").css({ width: 100, height: 100, background: '#abc' });
 		$("#draggable").draggable({
-			handle: "span"
+			containment: [50, 100, 400, 350]
 		});
 	});
 	</script>
 </head>
 <body>
-
-<ul class="plugins">
-<li class="plugin">
-	Draggable
-	<div id="draggable">
-		<span>Handle</span>
-	</div>
-</li>
-</ul>
-
+<div id="draggable">
+	<p> Draggable </p>
+</div>
 </body>
 </html>
