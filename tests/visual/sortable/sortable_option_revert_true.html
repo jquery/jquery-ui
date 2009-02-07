@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<title>Sortable Visual Test : Sortable option revert true</title>
+	<link rel="stylesheet" href="../visual.css" type="text/css" />
+	<link rel="stylesheet" href="../../../themes/base/ui.all.css" type="text/css" />
+	<script type="text/javascript" src="../../../jquery-1.3.1.js"></script>
+	<script type="text/javascript" src="../../../ui/ui.core.js"></script>
+	<script type="text/javascript" src="../../../ui/ui.sortable.js"></script>
+	<script type="text/javascript">
+	$(function() {
+		$("#sortable").sortable({
+			revert: true
+		});
+	});
+	</script>
+</head>
+
+<body>
+
+<div id="sortable">
+	<div>Sortable 1</div>
+	<div>Sortable 2</div>
+	<div>Sortable 3</div>
+</div>
+
+</body>
+</html>
