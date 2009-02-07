@@ -27,7 +27,7 @@ var resizable_defaults = {
 	preventDefault: true,
 	proportionallyResize: false,
 	transparent: false,
-	zIndex: 1001
+	zIndex: 1000
 };
 
 commonWidgetTests('resizable', { defaults: resizable_defaults });
