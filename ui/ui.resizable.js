@@ -243,10 +243,8 @@ $.widget("ui.resizable", $.extend({}, $.ui.mouse, {
 		//Aspect Ratio
 		this.aspectRatio = (typeof o.aspectRatio == 'number') ? o.aspectRatio : ((this.originalSize.width / this.originalSize.height) || 1);
 
-		if (o.preserveCursor) {
-		    var cursor = $('.ui-resizable-' + this.axis).css('cursor');
-		    $('body').css('cursor', cursor == 'auto' ? this.axis + '-resize' : cursor);
-		}
+	    var cursor = $('.ui-resizable-' + this.axis).css('cursor');
+	    $('body').css('cursor', cursor == 'auto' ? this.axis + '-resize' : cursor);
 
 		this._propagate("start", event);
 		return true;
@@ -309,8 +307,7 @@ $.widget("ui.resizable", $.extend({}, $.ui.mouse, {
 			if (this._helper && !o.animate) this._proportionallyResize();
 		}
 
-		if (o.preserveCursor)
-			$('body').css('cursor', 'auto');
+		$('body').css('cursor', 'auto');
 
 		this._propagate("stop", event);
 
@@ -514,7 +511,6 @@ $.extend($.ui.resizable, {
 		maxWidth: null,
 		minHeight: 10,
 		minWidth: 10,
-		preserveCursor: true,
 		preventDefault: true,
 		proportionallyResize: false,
 		zIndex: 1000
