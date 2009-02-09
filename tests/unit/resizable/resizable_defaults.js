@@ -25,7 +25,6 @@ var resizable_defaults = {
 	preserveCursor: true,
 	preventDefault: true,
 	proportionallyResize: false,
-	transparent: false,
 	zIndex: 1000
 };
 
