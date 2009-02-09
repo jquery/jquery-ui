@@ -18,14 +18,15 @@
 
 		var $tabs = $("#tabs").tabs();
 
-		var $tab_links = $("a",$tabs).droppable({
+		var $tab_items = $("li",$tabs).droppable({
 			accept: ".connectedSortable li",
+			hoverClass: "ui-state-hover",
 			drop: function(ev, ui) {
-				var $link = $(this);
-				var $list = $($link.attr('href')).find('.connectedSortable');
+				var $item = $(this);
+				var $list = $($item.find('a').attr('href')).find('.connectedSortable');
 
 				ui.draggable.hide('slow', function() {
-					$tabs.tabs('select', $tab_links.index($link));
+					$tabs.tabs('select', $tab_items.index($item));
 					$(this).appendTo($list).show('slow');
 				});
 			}
