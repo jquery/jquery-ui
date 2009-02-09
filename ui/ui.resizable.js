@@ -103,9 +103,6 @@ $.widget("ui.resizable", $.extend({}, $.ui.mouse, {
 				if(this.handles[i].constructor == String)
 					this.handles[i] = $(this.handles[i], this.element).show();
 
-				if (o.transparent)
-					this.handles[i].css({ opacity: 0 });
-
 				//Apply pad to wrapper element, needed to fix axis position (textarea, inputs, scrolls)
 				if (this.elementIsWrapper && this.originalElement[0].nodeName.match(/textarea|input|select|button/i)) {
 
@@ -120,8 +117,7 @@ $.widget("ui.resizable", $.extend({}, $.ui.mouse, {
 						/se|sw|s/.test(i) ? 'Bottom' :
 						/^e$/.test(i) ? 'Right' : 'Left' ].join("");
 
-					if (!o.transparent)
-						target.css(padPos, padWrapper);
+					target.css(padPos, padWrapper);
 
 					this._proportionallyResize();
 
@@ -521,7 +517,6 @@ $.extend($.ui.resizable, {
 		preserveCursor: true,
 		preventDefault: true,
 		proportionallyResize: false,
-		transparent: false,
 		zIndex: 1000
 	}
 });
