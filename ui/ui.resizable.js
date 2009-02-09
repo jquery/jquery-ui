@@ -23,7 +23,7 @@ $.widget("ui.resizable", $.extend({}, $.ui.mouse, {
 			_aspectRatio: !!(o.aspectRatio),
 			aspectRatio: o.aspectRatio,
 			originalElement: this.element,
-			proportionallyResize: o.proportionallyResize  ? [o.proportionallyResize] : [],
+			_proportionallyResizeElements: [],
 			_helper: o.helper || o.ghost || o.animate ? o.helper || 'ui-resizable-helper' : null
 		});
 
@@ -57,7 +57,7 @@ $.widget("ui.resizable", $.extend({}, $.ui.mouse, {
 			if ($.browser.safari && o.preventDefault) this.originalElement.css('resize', 'none');
 
 			//Push the actual element to our proportionallyResize internal array
-			this.proportionallyResize.push(this.originalElement.css({ position: 'static', zoom: 1, display: 'block' }));
+			this._proportionallyResizeElements.push(this.originalElement.css({ position: 'static', zoom: 1, display: 'block' }));
 
 			// avoid IE jump (hard set the margin)
 			this.originalElement.css({ margin: this.originalElement.css('margin') });
@@ -276,7 +276,7 @@ $.widget("ui.resizable", $.extend({}, $.ui.mouse, {
 			width: this.size.width + "px", height: this.size.height + "px"
 		});
 
-		if (!this._helper && this.proportionallyResize.length)
+		if (!this._helper && this._proportionallyResizeElements.length)
 			this._proportionallyResize();
 
 		this._updateCache(data);
@@ -293,7 +293,7 @@ $.widget("ui.resizable", $.extend({}, $.ui.mouse, {
 		var o = this.options, self = this;
 
 		if(this._helper) {
-			var pr = this.proportionallyResize, ista = pr.length && (/textarea/i).test(pr[0].nodeName),
+			var pr = this._proportionallyResizeElements, ista = pr.length && (/textarea/i).test(pr[0].nodeName),
 						soffseth = ista && $.ui.hasScroll(pr[0], 'left') /* TODO - jump height */ ? 0 : self.sizeDiff.height,
 							soffsetw = ista ? 0 : self.sizeDiff.width;
 
@@ -378,12 +378,12 @@ $.widget("ui.resizable", $.extend({}, $.ui.mouse, {
 	_proportionallyResize: function() {
 
 		var o = this.options;
-		if (!this.proportionallyResize.length) return;
+		if (!this._proportionallyResizeElements.length) return;
 		var element = this.helper || this.element;
 
-		for (var i=0; i < this.proportionallyResize.length; i++) {
+		for (var i=0; i < this._proportionallyResizeElements.length; i++) {
 
-			var prel = this.proportionallyResize[i];
+			var prel = this._proportionallyResizeElements[i];
 
 			if (!this.borderDif) {
 				var b = [prel.css('borderTopWidth'), prel.css('borderRightWidth'), prel.css('borderBottomWidth'), prel.css('borderLeftWidth')],
@@ -512,7 +512,6 @@ $.extend($.ui.resizable, {
 		minHeight: 10,
 		minWidth: 10,
 		preventDefault: true,
-		proportionallyResize: false,
 		zIndex: 1000
 	}
 });
@@ -597,9 +596,9 @@ $.ui.plugin.add("resizable", "animate", {
 	stop: function(event, ui) {
 		var self = $(this).data("resizable"), o = self.options;
 
-		var pr = o.proportionallyResize, ista = pr && (/textarea/i).test(pr.get(0).nodeName),
-						soffseth = ista && $.ui.hasScroll(pr.get(0), 'left') /* TODO - jump height */ ? 0 : self.sizeDiff.height,
-							soffsetw = ista ? 0 : self.sizeDiff.width;
+		var pr = self._proportionallyResizeElements, ista = pr.length && (/textarea/i).test(pr[0].nodeName),
+					soffseth = ista && $.ui.hasScroll(pr[0], 'left') /* TODO - jump height */ ? 0 : self.sizeDiff.height,
+						soffsetw = ista ? 0 : self.sizeDiff.width;
 
 		var style = { width: (self.size.width - soffsetw), height: (self.size.height - soffseth) },
 					left = (parseInt(self.element.css('left'), 10) + (self.position.left - self.originalPosition.left)) || null,
@@ -618,7 +617,7 @@ $.ui.plugin.add("resizable", "animate", {
 						left: parseInt(self.element.css('left'), 10)
 					};
 
-					if (pr) pr.css({ width: data.width, height: data.height });
+					if (pr && pr.length) $(pr[0]).css({ width: data.width, height: data.height });
 
 					// propagating resize, and updating values for each animation step
 					self._updateCache(data);
@@ -720,7 +719,7 @@ $.ui.plugin.add("resizable", "ghost", {
 
 	start: function(event, ui) {
 
-		var self = $(this).data("resizable"), o = self.options, pr = o.proportionallyResize, cs = self.size;
+		var self = $(this).data("resizable"), o = self.options, cs = self.size;
 
 		self.ghost = self.originalElement.clone();
 		self.ghost
