@@ -469,7 +469,7 @@ $.widget("ui.dialog", {
 				minHeight: Math.max(options.minHeight - nonContentHeight, 0),
 				height: options.height == 'auto'
 					? 'auto'
-					: options.height - nonContentHeight
+					: Math.max(options.height - nonContentHeight, 0)
 			});
 	}
 });
