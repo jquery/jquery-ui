@@ -18,7 +18,7 @@
 
 		var $tabs = $("#tabs").tabs();
 
-		var $tab_items = $("li",$tabs).droppable({
+		var $tab_items = $("ul:first li",$tabs).droppable({
 			accept: ".connectedSortable li",
 			hoverClass: "ui-state-hover",
 			drop: function(ev, ui) {
