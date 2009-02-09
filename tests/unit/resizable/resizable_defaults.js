@@ -13,7 +13,6 @@ var resizable_defaults = {
 	containment: false,
 	delay: 0,
 	disabled: false,
-	disableSelection: true,
 	distance: 1,
 	ghost: false,
 	grid: false,

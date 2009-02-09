@@ -137,10 +137,8 @@ $.widget("ui.resizable", $.extend({}, $.ui.mouse, {
 		//TODO: make renderAxis a prototype function
 		this._renderAxis(this.element);
 
-		this._handles = $('.ui-resizable-handle', this.element);
-
-		if (o.disableSelection)
-			this._handles.disableSelection();
+		this._handles = $('.ui-resizable-handle', this.element)
+			.disableSelection();
 
 		//Matching axis name
 		this._handles.mouseover(function() {
@@ -438,10 +436,9 @@ $.widget("ui.resizable", $.extend({}, $.ui.mouse, {
 				zIndex: ++o.zIndex //TODO: Don't modify option
 			});
 
-			this.helper.appendTo("body");
-
-			if (o.disableSelection)
-				this.helper.disableSelection();
+			this.helper
+				.appendTo("body")
+				.disableSelection();
 
 		} else {
 			this.helper = this.element;
@@ -512,7 +509,6 @@ $.extend($.ui.resizable, {
 		cancel: ":input,option",
 		containment: false,
 		delay: 0,
-		disableSelection: true,
 		distance: 1,
 		ghost: false,
 		grid: false,
