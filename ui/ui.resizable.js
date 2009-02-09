@@ -46,7 +46,10 @@ $.widget("ui.resizable", $.extend({}, $.ui.mouse, {
 			);
 
 			//Overwrite the original this.element
-			this.element = this.element.parent();
+			this.element = this.element.parent().data(
+				"resizable", this.element.data('resizable')
+			);
+
 			this.elementIsWrapper = true;
 
 			//Move margins to the wrapper
