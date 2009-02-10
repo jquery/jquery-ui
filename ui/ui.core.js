@@ -27,7 +27,7 @@ $.ui = {
 		},
 		call: function(instance, name, args) {
 			var set = instance.plugins[name];
-			if(!set) { return; }
+			if(!set || !instance.element[0].parentNode) { return; }
 
 			for (var i = 0; i < set.length; i++) {
 				if (instance.options[set[i][0]]) {
