@@ -409,7 +409,7 @@ $.widget("ui.tabs", {
 		}
 
 		o.disabled = $.map(o.disabled,
-			function(n, i) { return n >= index ? ++n : n });
+			function(n, i) { return n >= index ? ++n : n; });
 
 		this._tabify();
 
@@ -437,7 +437,7 @@ $.widget("ui.tabs", {
 			this.select(index + (index + 1 < this.$tabs.length ? 1 : -1));
 
 		o.disabled = $.map($.grep(o.disabled, function(n, i) { return n != index; }),
-			function(n, i) { return n >= index ? --n : n });
+			function(n, i) { return n >= index ? --n : n; });
 
 		this._tabify();
 

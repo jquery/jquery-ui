@@ -423,7 +423,7 @@ $.extend($.ui.accordion, {
 			// fix width before calculating height of hidden element
 			var s = options.toShow;
 			originalWidth = s[0].style.width;
-			s.width( parseInt(s.parent().width()) - parseInt(s.css("paddingLeft")) - parseInt(s.css("paddingRight")) - parseInt(s.css("borderLeftWidth")) - parseInt(s.css("borderRightWidth")) );
+			s.width( parseInt(s.parent().width(),10) - parseInt(s.css("paddingLeft"),10) - parseInt(s.css("paddingRight"),10) - parseInt(s.css("borderLeftWidth"),10) - parseInt(s.css("borderRightWidth"),10) );
 			
 			$.each(fxAttrs, function(i, prop) {
 				hideProps[prop] = 'hide';

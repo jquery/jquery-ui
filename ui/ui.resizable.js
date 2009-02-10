@@ -350,7 +350,7 @@ $.widget("ui.resizable", $.extend({}, $.ui.mouse, {
 	_respectSize: function(data, event) {
 
 		var isNumber = function(value) {
-			return !isNaN(parseInt(value, 10))
+			return !isNaN(parseInt(value, 10));
 		};
 
 		var el = this.helper, o = this.options, pRatio = this._aspectRatio || event.shiftKey, a = this.axis,

@@ -24,8 +24,8 @@ $.effects.explode = function(o) {
 	var offset = el.offset();
 
 	//Substract the margins - not fixing the problem yet.
-	offset.top -= parseInt(el.css("marginTop")) || 0;
-	offset.left -= parseInt(el.css("marginLeft")) || 0;
+	offset.top -= parseInt(el.css("marginTop"),10) || 0;
+	offset.left -= parseInt(el.css("marginLeft"),10) || 0;
 
 	var width = el.outerWidth(true);
 	var height = el.outerHeight(true);
