@@ -185,7 +185,7 @@ $.widget("ui.accordion", {
 			var maxPadding = 0;
 			this.headers.next().each(function() {
 				maxPadding = Math.max(maxPadding, $(this).innerHeight() - $(this).height());
-			}).height(maxHeight - maxPadding)
+			}).height(Math.max(0, maxHeight - maxPadding))
 			.css('overflow', 'auto');
 
 		} else if ( o.autoHeight ) {
