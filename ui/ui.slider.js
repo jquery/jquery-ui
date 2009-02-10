@@ -134,6 +134,8 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 
 			self._slide(event, index, newVal);
 
+			return false;
+
 		}).keyup(function(event) {
 
 			if (self._keySliding) {
