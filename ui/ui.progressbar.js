@@ -16,9 +16,6 @@ $.widget("ui.progressbar", {
 
 	_init: function() {
 
-		var self = this,
-			options = this.options;
-
 		this.element
 			.addClass("ui-progressbar"
 				+ " ui-widget"
@@ -59,11 +56,11 @@ $.widget("ui.progressbar", {
 
 	value: function(newValue) {
 		arguments.length && this._setData("value", newValue);
-
 		return this._value();
 	},
 
-	_setData: function(key, value){
+	_setData: function(key, value) {
+
 		switch (key) {
 			case 'value':
 				this.options.value = value;
@@ -73,25 +70,26 @@ $.widget("ui.progressbar", {
 		}
 
 		$.widget.prototype._setData.apply(this, arguments);
+
 	},
 
 	_value: function() {
+
 		var val = this.options.value;
 		if (val < this._valueMin()) val = this._valueMin();
 		if (val > this._valueMax()) val = this._valueMax();
 
 		return val;
+
 	},
 
 	_valueMin: function() {
 		var valueMin = 0;
-
 		return valueMin;
 	},
 
 	_valueMax: function() {
 		var valueMax = 100;
-
 		return valueMax;
 	},
 
