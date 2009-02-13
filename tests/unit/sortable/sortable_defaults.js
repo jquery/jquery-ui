@@ -28,7 +28,6 @@ var sortable_defaults = {
 	scrollSensitivity: 20,
 	scrollSpeed: 20,
 	scope: "default",
-	sortIndicator: "???",
 	tolerance: "intersect",
 	zIndex: 1000
 };

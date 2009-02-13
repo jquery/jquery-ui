@@ -261,7 +261,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 				this.direction = intersection == 1 ? "down" : "up";
 
 				if (this.options.tolerance == "pointer" || this._intersectsWithSides(item)) {
-					this.options.sortIndicator.call(this, event, item);
+					this._rearrange(event, item);
 				} else {
 					break;
 				}
@@ -667,7 +667,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 							continue;
 
 						this.currentContainer = this.containers[i];
-						itemWithLeastDistance ? this.options.sortIndicator.call(this, event, itemWithLeastDistance, null, true) : this.options.sortIndicator.call(this, event, null, this.containers[i].element, true);
+						itemWithLeastDistance ? this._rearrange(event, itemWithLeastDistance, null, true) : this._rearrange(event, null, this.containers[i].element, true);
 						this._trigger("change", event, this._uiHash());
 						this.containers[i]._trigger("change", event, this._uiHash(this));
 
@@ -1018,7 +1018,6 @@ $.extend($.ui.sortable, {
 		scrollSensitivity: 20,
 		scrollSpeed: 20,
 		scope: "default",
-		sortIndicator: $.ui.sortable.prototype._rearrange,
 		tolerance: "intersect",
 		zIndex: 1000
 	}
