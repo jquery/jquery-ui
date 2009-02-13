@@ -22,7 +22,6 @@ var resizable_defaults = {
 	maxWidth: null,
 	minHeight: 10,
 	minWidth: 10,
-	preventDefault: true,
 	zIndex: 1000
 };
 

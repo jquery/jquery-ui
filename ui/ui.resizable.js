@@ -57,7 +57,8 @@ $.widget("ui.resizable", $.extend({}, $.ui.mouse, {
 			this.originalElement.css({ marginLeft: 0, marginTop: 0, marginRight: 0, marginBottom: 0});
 
 			//Prevent Safari textarea resize
-			if ($.browser.safari && o.preventDefault) this.originalElement.css('resize', 'none');
+			this.originalResizeStyle = this.originalElement.css('resize');
+			this.originalElement.css('resize', 'none');
 
 			//Push the actual element to our proportionallyResize internal array
 			this._proportionallyResizeElements.push(this.originalElement.css({ position: 'static', zoom: 1, display: 'block' }));
@@ -183,17 +184,19 @@ $.widget("ui.resizable", $.extend({}, $.ui.mouse, {
 		//TODO: Unwrap at same DOM position
 		if (this.elementIsWrapper) {
 			_destroy(this.element);
-			this.wrapper.parent().append(
+			var wrapper = this.element;
+			wrapper.parent().append(
 				this.originalElement.css({
-					position: this.wrapper.css('position'),
-					width: this.wrapper.outerWidth(),
-					height: this.wrapper.outerHeight(),
-					top: this.wrapper.css('top'),
-					left: this.wrapper.css('left')
+					position: wrapper.css('position'),
+					width: wrapper.outerWidth(),
+					height: wrapper.outerHeight(),
+					top: wrapper.css('top'),
+					left: wrapper.css('left')
 				})
 			).end().remove();
 		}
 
+		this.originalElement.css('resize', this.originalResizeStyle);
 		_destroy(this.originalElement);
 
 	},
@@ -514,7 +517,6 @@ $.extend($.ui.resizable, {
 		maxWidth: null,
 		minHeight: 10,
 		minWidth: 10,
-		preventDefault: true,
 		zIndex: 1000
 	}
 });
