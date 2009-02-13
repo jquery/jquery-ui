@@ -7,11 +7,9 @@
  *
  * http://docs.jquery.com/UI/Effects/
  */
-;(function($) {
+;jQuery.effects || (function($) {
 
-$.effects = $.effects || {}; //Add the 'effects' scope
-
-$.extend($.effects, {
+$.effects = {
 	version: "@VERSION",
 
 	// Saves a set of properties in a data storage
@@ -130,7 +128,7 @@ $.extend($.effects, {
 
 		});
 	}
-});
+};
 
 
 function _normalizeArguments(a, m) {

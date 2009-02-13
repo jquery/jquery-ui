@@ -7,7 +7,7 @@
  *
  * http://docs.jquery.com/UI
  */
-;(function($) {
+;jQuery.ui || (function($) {
 
 var _remove = $.fn.remove,
 	isFF2 = $.browser.mozilla && (parseFloat($.browser.version) < 1.9);
