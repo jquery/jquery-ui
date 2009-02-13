@@ -43,6 +43,18 @@ test('disable', function() {
 });
 
 test('add', function() {
+	expect(3);
+	
+	el = $('#tabs1').tabs();
+	el.tabs('add', "#new", 'New');
+
+	var added = $('li:last', el).simulate('mouseover');
+	ok(added.is('.ui-state-hover'), 'should add mouseover handler to added tab');
+	added.simulate('mouseout');
+	var other = $('li:first', el).simulate('mouseover');
+	ok(other.is('.ui-state-hover'), 'should not remove mouseover handler from existing tab');
+	other.simulate('mouseout');
+	
 	ok(false, "missing test - untested code is broken code.");
 });
 
