@@ -380,6 +380,7 @@ $.ui.mouse = {
 			.bind('click.'+this.widgetName, function(event) {
 				if(self._preventClickEvent) {
 					self._preventClickEvent = false;
+					event.stopImmediatePropagation();
 					return false;
 				}
 			});
