@@ -208,7 +208,7 @@ $.widget("ui.tabs", {
 				handleState('hover', $(this));
 			});
 			this.$tabs.bind('focus.tabs blur.tabs', function() {
-				handleState('focus', $(this).parents('li:first'));
+				handleState('focus', $(this).closest('li'));
 			});
 		}
 		
@@ -267,9 +267,8 @@ $.widget("ui.tabs", {
 
 		// attach tab event handler, unbind to avoid duplicates from former tabifying...
 		this.$tabs.bind(o.event + '.tabs', function() {
-			var $li = $(this).parents('li:eq(0)'),
-				$hide = self.$panels.filter(':visible'),
-				$show = $(self._sanitizeSelector(this.hash));
+			var $li = $(this).closest('li'), $hide = self.$panels.filter(':visible'),
+					$show = $(self._sanitizeSelector(this.hash));
 
 			// If tab is already selected and not collapsible or tab disabled or
 			// or is already loading or click callback returns false stop here.
