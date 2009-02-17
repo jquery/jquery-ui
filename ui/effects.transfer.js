@@ -13,47 +13,33 @@
 (function($) {
 
 $.effects.transfer = function(o) {
-
 	return this.queue(function() {
-
-		// Create element
-		var el = $(this);
-
-		// Set options
-		var mode = $.effects.setMode(el, o.options.mode || 'effect'); // Set Mode
-		var target = $(o.options.to); // Find Target
-		var position = el.offset();
-		var transfer = $('<div class="ui-effects-transfer"></div>').appendTo(document.body);
-		if(o.options.className) transfer.addClass(o.options.className);
-
-		// Set target css
-		transfer.addClass(o.options.className);
-		transfer.css({
-			top: position.top,
-			left: position.left,
-			height: el.innerHeight(),
-			width: el.innerWidth(),
-			position: 'absolute'
-		});
-
-		// Animation
-		position = target.offset();
-		animation = {
-			top: position.top,
-			left: position.left,
-			height: target.innerHeight(),
-			width: target.innerWidth()
-		};
-
-		// Animate
-		transfer.animate(animation, o.duration, o.options.easing, function() {
-			transfer.remove(); // Remove div
-			if(o.callback) o.callback.apply(el[0], arguments); // Callback
-			el.dequeue();
-		});
-
+		var elem = $(this),
+			target = $(o.options.to),
+			endPosition = target.offset(),
+			animation = {
+				top: endPosition.top,
+				left: endPosition.left,
+				height: target.innerHeight(),
+				width: target.innerWidth()
+			},
+			startPosition = elem.offset(),
+			transfer = $('<div class="ui-effects-transfer"></div>')
+				.appendTo(document.body)
+				.addClass(o.options.className)
+				.css({
+					top: startPosition.top,
+					left: startPosition.left,
+					height: elem.innerHeight(),
+					width: elem.innerWidth(),
+					position: 'absolute'
+				})
+				.animate(animation, o.duration, o.options.easing, function() {
+					transfer.remove();
+					(o.callback && o.callback.apply(elem[0], arguments));
+					elem.dequeue();
+				});
 	});
-
 };
 
 })(jQuery);
