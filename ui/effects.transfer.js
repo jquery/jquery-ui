@@ -31,8 +31,8 @@ $.effects.transfer = function(o) {
 		transfer.css({
 			top: position.top,
 			left: position.left,
-			height: el.outerHeight() - parseInt(transfer.css('borderTopWidth'),10) - parseInt(transfer.css('borderBottomWidth'),10),
-			width: el.outerWidth() - parseInt(transfer.css('borderLeftWidth'),10) - parseInt(transfer.css('borderRightWidth'),10),
+			height: el.innerHeight(),
+			width: el.innerWidth(),
 			position: 'absolute'
 		});
 
@@ -41,8 +41,8 @@ $.effects.transfer = function(o) {
 		animation = {
 			top: position.top,
 			left: position.left,
-			height: target.outerHeight() - parseInt(transfer.css('borderTopWidth'),10) - parseInt(transfer.css('borderBottomWidth'),10),
-			width: target.outerWidth() - parseInt(transfer.css('borderLeftWidth'),10) - parseInt(transfer.css('borderRightWidth'),10)
+			height: target.innerHeight(),
+			width: target.innerWidth()
 		};
 
 		// Animate
