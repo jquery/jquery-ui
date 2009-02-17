@@ -466,7 +466,12 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 				lastValPercent = valPercent;
 			});
 		} else {
-			var valPercent = (this.value() - this._valueMin()) / (this._valueMax() - this._valueMin()) * 100;
+			var value = this.value(),
+				valueMin = this._valueMin(),
+				valueMax = this._valueMax(),
+				valPercent = valueMax != valueMin
+					? (value - valueMin) / (valueMax - valueMin) * 100
+					: 0;
 			var _set = {}; _set[self.orientation == 'horizontal' ? 'left' : 'bottom'] = valPercent + '%';
 			this.handle.stop(1,1)[animate ? 'animate' : 'css'](_set, o.animate);
 
