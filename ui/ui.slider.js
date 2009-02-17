@@ -287,7 +287,9 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 		if (valueMouseModStep > (this.options.step / 2))
 			normValue += this.options.step;
 
-		return normValue;
+		// Since JavaScript has problems with large floats, round
+		// the final value to 5 digits after the decimal point (see #4124)
+		return parseFloat(normValue.toFixed(5));
 
 	},
 
