@@ -101,7 +101,7 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 					if (!self._keySliding) {
 						self._keySliding = true;
 						$(this).addClass("ui-state-active");
-						self._start(event);
+						self._start(event, index);
 					}
 					break;
 			}
@@ -138,9 +138,11 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 
 		}).keyup(function(event) {
 
+			var index = $(this).data("index.ui-slider-handle");
+
 			if (self._keySliding) {
-				self._stop(event);
-				self._change(event);
+				self._stop(event, index);
+				self._change(event, index);
 				self._keySliding = false;
 				$(this).removeClass("ui-state-active");
 			}
@@ -177,8 +179,6 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 		if (o.disabled)
 			return false;
 
-		this._start(event);
-
 		this.elementSize = {
 			width: this.element.outerWidth(),
 			height: this.element.outerHeight()
@@ -205,6 +205,8 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 		if(o.range == true && this.values(1) == o.min) {
 			closestHandle = $(this.handles[++index]);
 		}
+
+		this._start(event, index);
 
 		self._handleIndex = index;
 
@@ -247,8 +249,8 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 	_mouseStop: function(event) {
 
 		this.handles.removeClass("ui-state-active");
-		this._stop(event);
-		this._change(event);
+		this._stop(event, this._handleIndex);
+		this._change(event, this._handleIndex);
 		this._handleIndex = null;
 		this._clickOffset = null;
 
@@ -289,10 +291,8 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 
 	},
 
-	_start: function(event) {
-		this._trigger("start", event, {
-			value: this.value()
-		});
+	_start: function(event, index) {
+		this._trigger("start", event, this._uiHash(index));
 	},
 
 	_slide: function(event, index, newVal) {
@@ -310,14 +310,10 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 				var newValues = this.values();
 				newValues[index] = newVal;
 				// A slide can be canceled by returning false from the slide callback
-				var allowed = this._trigger("slide", event, {
-					handle: handle,
-					value: newVal,
-					values: newValues
-				});
+				var allowed = this._trigger("slide", event, this._uiHash(index, newVal, newValues));
 				var otherVal = this.values(index ? 0 : 1);
 				if (allowed !== false) {
-					this.values(index, newVal, ( event.type == 'mousedown' && this.options.animate ));
+					this.values(index, newVal, ( event.type == 'mousedown' && this.options.animate ), true);
 				}
 			}
 
@@ -325,10 +321,7 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 
 			if (newVal != this.value()) {
 				// A slide can be canceled by returning false from the slide callback
-				var allowed = this._trigger("slide", event, {
-					handle: handle,
-					value: newVal
-				});
+				var allowed = this._trigger("slide", event, this._uiHash(index, newVal));
 				if (allowed !== false) {
 					this._setData('value', newVal, ( event.type == 'mousedown' && this.options.animate ));
 				}
@@ -339,35 +332,31 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 
 	},
 
-	_stop: function(event) {
-		this._trigger("stop", event, {
-			value: this.value()
-		});
+	_stop: function(event, index) {
+		this._trigger("stop", event, this._uiHash(index));
 	},
 
-	_change: function(event) {
-		this._trigger("change", event, {
-			value: this.value()
-		});
+	_change: function(event, index) {
+		this._trigger("change", event, this._uiHash(index));
 	},
 
 	value: function(newValue) {
 
 		if (arguments.length) {
 			this._setData("value", newValue);
-			this._change();
+			this._change(null, 0);
 		}
 
 		return this._value();
 
 	},
 
-	values: function(index, newValue, animated) {
+	values: function(index, newValue, animated, noPropagation) {
 
 		if (arguments.length > 1) {
 			this.options.values[index] = newValue;
 			this._refreshValue(animated);
-			this._change();
+			if(!noPropagation) this._change(null, index);
 		}
 
 		if (arguments.length) {
@@ -478,6 +467,17 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 			(oRange == "min") && (this.orientation == "vertical") && this.range.stop(1,1)[animate ? 'animate' : 'css']({ top: (100 - valPercent) + '%', height: valPercent + '%' }, o.animate);
 			(oRange == "max") && (this.orientation == "vertical") && this.range[animate ? 'animate' : 'css']({ bottom: valPercent + '%', height: (100 - valPercent) + '%' }, { queue: false, duration: o.animate });
 		}
+
+	},
+	
+	_uiHash: function(index, value, values) {
+		
+		var multiple = this.options.values && this.options.values.length;
+		return {
+			handle: this.handles[index],
+			value: value || (multiple ? this.values(index) : this.value()),
+			values: values || (multiple && this.values())
+		};
 
 	}
 
