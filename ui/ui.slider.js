@@ -317,7 +317,7 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 				});
 				var otherVal = this.values(index ? 0 : 1);
 				if (allowed !== false) {
-					this.values(index, newVal, !( event.type == 'mousedown' && this.options.animate ));
+					this.values(index, newVal, ( event.type == 'mousedown' && this.options.animate ));
 				}
 			}
 
@@ -362,13 +362,11 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 
 	},
 
-	values: function(index, newValue, noAnimation) {
-
-		if(!this.options.animate) noAnimation = true;
+	values: function(index, newValue, animated) {
 
 		if (arguments.length > 1) {
 			this.options.values[index] = newValue;
-			this._refreshValue(!noAnimation);
+			this._refreshValue(animated);
 			this._change();
 		}
 
@@ -384,7 +382,7 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 
 	},
 
-	_setData: function(key, value) {
+	_setData: function(key, value, animated) {
 
 		$.widget.prototype._setData.apply(this, arguments);
 
@@ -396,10 +394,10 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 				this.element
 					.removeClass("ui-slider-horizontal ui-slider-vertical")
 					.addClass("ui-slider-" + this.orientation);
-				this._refreshValue();
+				this._refreshValue(animated);
 				break;
 			case 'value':
-				this._refreshValue();
+				this._refreshValue(animated);
 				break;
 		}
 
