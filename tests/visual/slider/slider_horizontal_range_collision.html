@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<title>Slider Visual Test : Slider horizontal range with collision</title>
+	<link rel="stylesheet" href="../visual.css" type="text/css" />
+	<link rel="stylesheet" href="../../../themes/base/ui.all.css" type="text/css">
+	<script type="text/javascript" src="../../../jquery-1.3.1.js"></script>
+	<script type="text/javascript" src="../../../ui/ui.core.js"></script>
+	<script type="text/javascript" src="../../../ui/ui.slider.js"></script>
+	<script type="text/javascript">
+	$(function() {
+		//this function checks the slider handles and applies classes to make them visually split a value if they're equal
+		$.fn.checkCollision = function(){
+			if( $(this).slider('values', 0) == $(this).slider('values', 1) ){
+					if( $(this).is('.ui-slider-horizontal') ){
+						$(this).addClass('ui-slider-horizontal-collision');
+						$('.ui-slider-handle:eq(0)',this).removeClass('ui-corner-all').addClass('ui-corner-left');
+						$('.ui-slider-handle:eq(1)',this).removeClass('ui-corner-all').addClass('ui-corner-right');
+					}
+					else {
+						$(this).addClass('ui-slider-vertical-collision');
+						$('.ui-slider-handle:eq(0)',this).removeClass('ui-corner-all').addClass('ui-corner-bottom');
+						$('.ui-slider-handle:eq(1)',this).removeClass('ui-corner-all').addClass('ui-corner-top');
+					}
+				}
+				else if( $(this).is('.ui-slider-horizontal-collision, .ui-slider-vertical-collision') ) {
+					if( $(this).is('.ui-slider-horizontal') ){
+						$(this).removeClass('ui-slider-horizontal-collision');
+						$('.ui-slider-handle:eq(0)',this).addClass('ui-corner-all').removeClass('ui-corner-left');
+						$('.ui-slider-handle:eq(1)',this).addClass('ui-corner-all').removeClass('ui-corner-right');
+					}
+					else {
+						$(this).removeClass('ui-slider-vertical-collision');
+						$('.ui-slider-handle:eq(0)',this).addClass('ui-corner-all').removeClass('ui-corner-bottom');
+						$('.ui-slider-handle:eq(1)',this).addClass('ui-corner-all').removeClass('ui-corner-top');
+					}
+				}
+		};
+	
+	
+		$("#slider-horizontal-range").slider({
+			orientation: 'horizontal',
+			range: true,
+			values: [25, 75],
+			slide: $(this).checkCollision
+		})
+		.checkCollision();
+		
+	});
+	</script>
+</head>
+<body>
+
+<div id="slider-horizontal-range"></div>
+
+</body>
+</html>
