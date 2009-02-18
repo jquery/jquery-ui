@@ -24,14 +24,14 @@ $.widget("ui.tabs", {
 		if (key == 'selected') {
 			if (this.options.collapsible
 				&& value == this.options.selected) return;
-			
+
 			this.select(value);
 		}
 		else {
 			this.options[key] = value;
 			if (key == 'deselectable')
 				this.options.collapsible = value;
-			
+
 			this._tabify();
 		}
 	},
@@ -58,6 +58,16 @@ $.widget("ui.tabs", {
 		};
 	},
 
+	_cleanup: function() {
+		// restore all former loading tabs labels
+		this.$lis.filter('.ui-state-processing').removeClass('ui-state-processing')
+				.find('span:data(label.tabs)')
+				.each(function() {
+					var el = $(this);
+					el.html(el.data('label.tabs'));
+				});
+	},
+
 	_tabify: function(init) {
 
 		this.list = this.element.children('ul:first, ol:first').eq(0);
@@ -70,7 +80,7 @@ $.widget("ui.tabs", {
 		var fragmentId = /^#.+/; // Safari 2 reports '#' for an empty hash
 		this.$tabs.each(function(i, a) {
 			var href = $(a).attr('href');
-			
+
 			// For dynamically created HTML that contains a hash as href IE expands
 			// such href to the full page url with hash and then misinterprets tab as ajax...
 			if (href.split('#')[0] == location.toString().split('#')[0]) href = a.hash;
@@ -183,10 +193,10 @@ $.widget("ui.tabs", {
 		else {
 			o.selected = this.$lis.index(this.$lis.filter('.ui-tabs-selected'));
 		}
-		
+
 		// update collapsible
 		this.element[o.collapsible ? 'addClass' : 'removeClass']('ui-tabs-collapsible');
-		
+
 		// set or update cookie after init and add/remove respectively
 		if (o.cookie) this._cookie(o.selected, o.cookie);
 
@@ -199,7 +209,7 @@ $.widget("ui.tabs", {
 
 		// remove all handlers before, tabify may run on existing tabs after add or option change
 		this.$lis.add(this.$tabs).unbind('.tabs');
-		
+
 		if (o.event != 'mouseover') {
 			var handleState = function(state, el) {
 				if (el.is(':not(.ui-state-disabled)')) el.toggleClass('ui-state-' + state);
@@ -211,7 +221,7 @@ $.widget("ui.tabs", {
 				handleState('focus', $(this).closest('li'));
 			});
 		}
-		
+
 		// set up animations
 		var hideFx, showFx;
 		if (o.fx) {
@@ -276,7 +286,7 @@ $.widget("ui.tabs", {
 			// for a disabled or loading tab!
 			if (($li.hasClass('ui-tabs-selected') && !o.collapsible)
 				|| $li.hasClass('ui-state-disabled')
-				|| $(this).hasClass('ui-tabs-loading')
+				|| $li.hasClass('ui-state-processing')
 				|| self._trigger('select', null, self._ui(this, $show[0])) === false
 				) {
 				this.blur();
@@ -285,6 +295,8 @@ $.widget("ui.tabs", {
 
 			o.selected = self.$tabs.index(this);
 
+			self.abort();
+
 			// if tab may be closed TODO avoid redundant code in this block
 			if (o.collapsible) {
 				if ($li.hasClass('ui-tabs-selected')) {
@@ -292,13 +304,11 @@ $.widget("ui.tabs", {
 					if (o.cookie) self._cookie(o.selected, o.cookie);
 					$li.removeClass('ui-tabs-selected ui-state-active')
 						.addClass('ui-state-default');
-					self.$panels.stop();
 					hideTab(this, $hide);
 					this.blur();
 					return false;
 				} else if (!$hide.length) {
 					if (o.cookie) self._cookie(o.selected, o.cookie);
-					self.$panels.stop();
 					var a = this;
 					self.load(self.$tabs.index(this), function() {
 						$li.addClass('ui-tabs-selected ui-state-active')
@@ -312,9 +322,6 @@ $.widget("ui.tabs", {
 
 			if (o.cookie) self._cookie(o.selected, o.cookie);
 
-			// stop possibly running animations
-			self.$panels.stop(false, true);
-
 			// show new tab
 			if ($show.length) {
 				var a = this;
@@ -327,8 +334,10 @@ $.widget("ui.tabs", {
 						showTab(a, $show);
 					}
 				);
-			} else
+			}
+			else {
 				throw 'jQuery UI Tabs: Mismatching fragment identifier.';
+			}
 
 			// Prevent IE from keeping other link focussed when using the back button
 			// and remove dotted border from clicked link. This is controlled via CSS
@@ -474,21 +483,23 @@ $.widget("ui.tabs", {
 	select: function(index) {
 		if (typeof index == 'string')
 			index = this.$tabs.index(this.$tabs.filter('[href$=' + index + ']'));
-			
+
 		else if (index === null)
 			index = -1;
 
 		if (index == -1 && this.options.collapsible)
 			index = this.options.selected;
-			
+
 		this.$tabs.eq(index).trigger(this.options.event + '.tabs');
 	},
 
 	load: function(index, callback) { // callback is for internal usage only
 		callback = callback || function() {};
-		
-		var self = this, o = this.options, $a = this.$tabs.eq(index), a = $a[0],
-				bypassCache = callback == undefined, url = $a.data('load.tabs');
+
+		var self = this, o = this.options, a = this.$tabs.eq(index)[0],
+				bypassCache = callback == undefined, url = $.data(a, 'load.tabs');
+
+		this.abort();
 
 		// not remote or from cache - just finish with callback
 		if (!url || !bypassCache && $.data(a, 'cache.tabs')) {
@@ -497,55 +508,53 @@ $.widget("ui.tabs", {
 		}
 
 		// load remote from here on
-
-		var inner = function(parent) {
-			var $parent = $(parent), $inner = $parent.find('*:last');
-			return $inner.length && $inner.is(':not(img)') && $inner || $parent;
-		};
-		var cleanup = function() {
-			self.$tabs.filter('.ui-tabs-loading').removeClass('ui-tabs-loading')
-					.each(function() {
-						if (o.spinner)
-							inner(this).parent().html(inner(this).data('label.tabs'));
-					});
-			self.xhr = null;
-		};
+		this.$lis.eq(index).addClass('ui-state-processing');
 
 		if (o.spinner) {
-			var label = inner(a).html();
-			inner(a).wrapInner('<em></em>')
-				.find('em').data('label.tabs', label).html(o.spinner);
+			var span = $('span', a);
+			span.data('label.tabs', span.html()).html(o.spinner);
 		}
 
-		var ajaxOptions = $.extend({}, o.ajaxOptions, {
+		this.xhr = $.ajax($.extend({}, o.ajaxOptions, {
 			url: url,
 			success: function(r, s) {
 				$(self._sanitizeSelector(a.hash)).html(r);
-				cleanup();
 
-				if (o.cache)
+				// take care of tab labels
+				self._cleanup();
+
+				if (o.cache) {
 					$.data(a, 'cache.tabs', true); // if loaded once do not load them again
+				}
 
 				// callbacks
 				self._trigger('load', null, self._ui(self.$tabs[index], self.$panels[index]));
 				try {
 					o.ajaxOptions.success(r, s);
 				}
-				catch (er) {}
+				catch (e) {}
 
 				// This callback is required because the switch has to take
 				// place after loading has completed. Call last in order to
 				// fire load before show callback...
 				callback();
 			}
-		});
+		}));
+	},
+
+	abort: function() {
+		// stop possibly running animations
+		this.$panels.stop(false, true);
+
+		// terminate pending requests from other tabs
 		if (this.xhr) {
-			// terminate pending requests from other tabs and restore tab label
 			this.xhr.abort();
-			cleanup();
+			delete this.xhr;
 		}
-		$a.addClass('ui-tabs-loading');
-		self.xhr = $.ajax(ajaxOptions);
+
+		// take care of tab labels
+		this._cleanup();
+
 	},
 
 	url: function(index, url) {
@@ -571,7 +580,7 @@ $.extend($.ui.tabs, {
 		fx: null, // e.g. { height: 'toggle', opacity: 'toggle', duration: 200 }
 		idPrefix: 'ui-tabs-',
 		panelTemplate: '<div></div>',
-		spinner: 'Loading&#8230;',
+		spinner: '<em>Loading&#8230;</em>',
 		tabTemplate: '<li><a href="#{href}"><span>#{label}</span></a></li>'
 	}
 });

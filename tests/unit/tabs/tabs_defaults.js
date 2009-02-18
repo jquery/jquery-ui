@@ -12,7 +12,7 @@ var tabs_defaults = {
 	fx: null,
 	idPrefix: 'ui-tabs-',
 	panelTemplate: '<div></div>',
-	spinner: 'Loading&#8230;',
+	spinner: '<em>Loading&#8230;</em>',
 	tabTemplate: '<li><a href="#{href}"><span>#{label}</span></a></li>'
 };
 
