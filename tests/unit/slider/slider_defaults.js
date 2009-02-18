@@ -9,7 +9,7 @@ var slider_defaults = {
 	distance: 0,
 	max: 100,
 	min: 0,
-	orientation: 'auto',
+	orientation: 'horizontal',
 	range: false,
 	step: 1,
 	value: 0,

@@ -259,7 +259,7 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 	},
 	
 	_detectOrientation: function() {
-		this.orientation = this.options.orientation == 'auto' ? (this.element[0].offsetWidth/this.element[0].offsetHeight > 1 ? 'horizontal' : 'vertical') : this.options.orientation;
+		this.orientation = this.options.orientation == 'vertical' ? 'vertical' : 'horizontal';
 	},
 
 	_normValueFromMouse: function(position) {
@@ -495,7 +495,7 @@ $.extend($.ui.slider, {
 		distance: 0,
 		max: 100,
 		min: 0,
-		orientation: 'auto',
+		orientation: 'horizontal',
 		range: false,
 		step: 1,
 		value: 0,
