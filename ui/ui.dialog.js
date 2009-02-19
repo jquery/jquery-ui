@@ -177,8 +177,7 @@ $.widget("ui.dialog", {
 	// position on open
 	moveToTop: function(force, event) {
 
-		if ($.ui.dialog.topMostDialog == this
-			|| (this.options.modal && !force)
+		if ((this.options.modal && !force)
 			|| (!this.options.stack && !this.options.modal)) {
 			return this._trigger('focus', event);
 		}
@@ -186,7 +185,6 @@ $.widget("ui.dialog", {
 		if (this.options.zIndex > $.ui.dialog.maxZ) {
 			$.ui.dialog.maxZ = this.options.zIndex;
 		}
-		$.ui.dialog.topMostDialog = this;
 		(this.overlay && this.overlay.$el.css('z-index', $.ui.dialog.overlay.maxZ = ++$.ui.dialog.maxZ));
 
 		//Save and then restore scroll since Opera 9.5+ resets when parent z-Index is changed.
@@ -503,7 +501,6 @@ $.extend($.ui.dialog, {
 
 	uuid: 0,
 	maxZ: 0,
-	topMostDialog: null,
 
 	getTitleId: function($el) {
 		return 'ui-dialog-title-' + ($el.attr('id') || ++this.uuid);
