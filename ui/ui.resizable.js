@@ -690,6 +690,11 @@ $.ui.plugin.add("resizable", "containment", {
 		var woset = Math.abs( (self._helper ? self.offset.left - cop.left : (self.offset.left - cop.left)) + self.sizeDiff.width ),
 					hoset = Math.abs( (self._helper ? self.offset.top - cop.top : (self.offset.top - co.top)) + self.sizeDiff.height );
 
+		var isParent = self.containerElement.get(0) == self.element.parent().get(0),
+		    isOffsetRelative = /relative|absolute/.test(self.containerElement.css('position'));
+
+		if(isParent && isOffsetRelative) woset -= self.parentData.left;
+
 		if (woset + self.size.width >= self.parentData.width) {
 			self.size.width = self.parentData.width - woset;
 			if (pRatio) self.size.height = self.size.width / o.aspectRatio;
