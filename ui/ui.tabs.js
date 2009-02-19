@@ -81,13 +81,20 @@ $.widget("ui.tabs", {
 		this.$tabs.each(function(i, a) {
 			var href = $(a).attr('href');
 
-			// For dynamically created HTML that contains a hash as href IE expands
-			// such href to the full page url with hash and then misinterprets tab as ajax...
-			if (href.split('#')[0] == location.toString().split('#')[0]) href = a.hash;
-
+			// For dynamically created HTML that contains a hash as href IE < 8 expands
+			// such href to the full page url with hash and then misinterprets tab as ajax.
+			// Same consideration applies for an added tab with a fragment identifier
+			// since a[href=#fragment-identifier] does unexpectedly not match.
+			// Thus normalize href attribute...
+			if (href.split('#')[0] == location.toString().split('#')[0]) {
+				href = a.hash;
+				a.href = href;
+			}
+			
 			// inline tab
-			if (fragmentId.test(href))
+			if (fragmentId.test(href)) {
 				self.$panels = self.$panels.add(self._sanitizeSelector(href));
+			}
 
 			// remote tab
 			else if (href != '#') { // prevent loading the page itself if href is just "#"
@@ -109,8 +116,9 @@ $.widget("ui.tabs", {
 			}
 
 			// invalid tab href
-			else
+			else {
 				o.disabled.push(i);
+			}
 		});
 
 		// initialization from scratch

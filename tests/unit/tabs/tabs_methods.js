@@ -43,7 +43,7 @@ test('disable', function() {
 });
 
 test('add', function() {
-	expect(3);
+	expect(4);
 	
 	el = $('#tabs1').tabs();
 	el.tabs('add', "#new", 'New');
@@ -54,6 +54,8 @@ test('add', function() {
 	var other = $('li:first', el).simulate('mouseover');
 	ok(other.is('.ui-state-hover'), 'should not remove mouseover handler from existing tab');
 	other.simulate('mouseout');
+	
+	equals($('a', added).attr('href'), '#new', 'should not expand href to full url of current page');
 	
 	ok(false, "missing test - untested code is broken code.");
 });
