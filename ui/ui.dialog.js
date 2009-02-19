@@ -177,21 +177,22 @@ $.widget("ui.dialog", {
 	// position on open
 	moveToTop: function(force, event) {
 
-		if ((this.options.modal && !force)
+		if ($.ui.dialog.topMostDialog == this
+			|| (this.options.modal && !force)
 			|| (!this.options.stack && !this.options.modal)) {
 			return this._trigger('focus', event);
 		}
-
-		var maxZ = this.options.zIndex, options = this.options;
-		$('.ui-dialog:visible').each(function() {
-			maxZ = Math.max(maxZ, parseInt($(this).css('z-index'), 10) || options.zIndex);
-		});
-		(this.overlay && this.overlay.$el.css('z-index', ++maxZ));
+		
+		if (this.options.zIndex > $.ui.dialog.maxZ) {
+			$.ui.dialog.maxZ = this.options.zIndex;
+		}
+		$.ui.dialog.topMostDialog = this;
+		(this.overlay && this.overlay.$el.css('z-index', ++$.ui.dialog.maxZ));
 
 		//Save and then restore scroll since Opera 9.5+ resets when parent z-Index is changed.
 		//  http://ui.jquery.com/bugs/ticket/3193
 		var saveScroll = { scrollTop: this.element.attr('scrollTop'), scrollLeft: this.element.attr('scrollLeft') };
-		this.uiDialog.css('z-index', ++maxZ);
+		this.uiDialog.css('z-index', ++$.ui.dialog.maxZ);
 		this.element.attr(saveScroll);
 		this._trigger('focus', event);
 	},
@@ -501,6 +502,8 @@ $.extend($.ui.dialog, {
 	getter: 'isOpen',
 
 	uuid: 0,
+	maxZ: 0,
+	topMostDialog: null,
 
 	getTitleId: function($el) {
 		return 'ui-dialog-title-' + ($el.attr('id') || ++this.uuid);
