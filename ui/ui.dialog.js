@@ -187,7 +187,7 @@ $.widget("ui.dialog", {
 			$.ui.dialog.maxZ = this.options.zIndex;
 		}
 		$.ui.dialog.topMostDialog = this;
-		(this.overlay && this.overlay.$el.css('z-index', ++$.ui.dialog.maxZ));
+		(this.overlay && this.overlay.$el.css('z-index', $.ui.dialog.overlay.maxZ = ++$.ui.dialog.maxZ));
 
 		//Save and then restore scroll since Opera 9.5+ resets when parent z-Index is changed.
 		//  http://ui.jquery.com/bugs/ticket/3193
@@ -516,6 +516,7 @@ $.extend($.ui.dialog, {
 
 $.extend($.ui.dialog.overlay, {
 	instances: [],
+	maxZ: 0,
 	events: $.map('focus,mousedown,mouseup,keydown,keypress,click'.split(','),
 		function(event) { return event + '.dialog-overlay'; }).join(' '),
 	create: function(dialog) {
@@ -524,25 +525,9 @@ $.extend($.ui.dialog.overlay, {
 			// we use a setTimeout in case the overlay is created from an
 			// event that we're going to be cancelling (see #2804)
 			setTimeout(function() {
-				$(document).bind($.ui.dialog.overlay.events, function() {
-					// allow use of the element if inside a dialog and
-					// - there are no modal dialogs
-					// - there are modal dialogs, but we are in front of the topmost modal
-					var allow = false;
-					var $dialog = $(this).parents('.ui-dialog');
-					if ($dialog.length) {
-						var $overlays = $('.ui-dialog-overlay');
-						if ($overlays.length) {
-							var maxZ = parseInt($overlays.css('z-index'), 10);
-							$overlays.each(function() {
-								maxZ = Math.max(maxZ, parseInt($(this).css('z-index'), 10));
-							});
-							allow = parseInt($dialog.css('z-index'), 10) > maxZ;
-						} else {
-							allow = true;
-						}
-					}
-					return allow;
+				$(document).bind($.ui.dialog.overlay.events, function(event) {
+					var dialogZ = $(event.target).parents('.ui-dialog').css('zIndex') || 0;
+					return (dialogZ > $.ui.dialog.overlay.maxZ);
 				});
 			}, 1);
 
