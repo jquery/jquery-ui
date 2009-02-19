@@ -524,7 +524,7 @@ $.extend($.ui.dialog.overlay, {
 			// we use a setTimeout in case the overlay is created from an
 			// event that we're going to be cancelling (see #2804)
 			setTimeout(function() {
-				$('a, :input').bind($.ui.dialog.overlay.events, function() {
+				$(document).bind($.ui.dialog.overlay.events, function() {
 					// allow use of the element if inside a dialog and
 					// - there are no modal dialogs
 					// - there are modal dialogs, but we are in front of the topmost modal
@@ -572,7 +572,7 @@ $.extend($.ui.dialog.overlay, {
 		this.instances.splice($.inArray(this.instances, $el), 1);
 
 		if (this.instances.length === 0) {
-			$('a, :input').add([document, window]).unbind('.dialog-overlay');
+			$([document, window]).unbind('.dialog-overlay');
 		}
 
 		$el.remove();
