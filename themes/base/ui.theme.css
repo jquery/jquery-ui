@@ -27,7 +27,9 @@
 /* Interaction Cues
 ----------------------------------*/
 .ui-state-highlight, .ui-widget-content .ui-state-highlight {border: 1px solid #fcefa1/*{borderColorHighlight}*/; background: #fbf9ee/*{bgColorHighlight}*/ url(images/ui-bg_glass_55_fbf9ee_1x400.png)/*{bgImgUrlHighlight}*/ 0/*{bgHighlightXPos}*/ 50%/*{bgHighlightYPos}*/ repeat-x/*{bgHighlightRepeat}*/; color: #363636/*{fcHighlight}*/; }
+.ui-state-highlight a, .ui-widget-content .ui-state-highlight a { color: #363636/*{fcHighlight}*/; }
 .ui-state-error, .ui-widget-content .ui-state-error {border: 1px solid #cd0a0a/*{borderColorError}*/; background: #fef1ec/*{bgColorError}*/ url(images/ui-bg_inset-soft_95_fef1ec_1x100.png)/*{bgImgUrlError}*/ 0/*{bgErrorXPos}*/ 50%/*{bgErrorYPos}*/ repeat-x/*{bgErrorRepeat}*/; color: #cd0a0a/*{fcError}*/; }
+.ui-state-error a, .ui-widget-content .ui-state-error a { color: #363636/*{fcError}*/; }
 .ui-state-error-text, .ui-widget-content .ui-state-error-text { color: #cd0a0a/*{fcError}*/; }
 .ui-state-disabled, .ui-widget-content .ui-state-disabled { opacity: .35; filter:Alpha(Opacity=35); background-image: none; }
 .ui-priority-primary, .ui-widget-content .ui-priority-primary { font-weight: bold; }
