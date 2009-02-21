@@ -154,19 +154,24 @@ $.widget("ui.dialog", {
 	},
 
 	close: function(event) {
-		if (false === this._trigger('beforeclose', event)) {
+		var self = this;
+		
+		if (false === self._trigger('beforeclose', event)) {
 			return;
 		}
 
-		(this.overlay && this.overlay.destroy());
-		this.uiDialog
-			.hide(this.options.hide)
-			.unbind('keypress.ui-dialog');
+		(self.overlay && self.overlay.destroy());
+		self.uiDialog.unbind('keypress.ui-dialog');
 
-		this._trigger('close', event);
+		(self.options.hide
+			? self.uiDialog.hide(self.options.hide, function() {
+				self._trigger('close', event);
+			})
+			: self._trigger('close', event));
+
 		$.ui.dialog.overlay.resize();
 
-		this._isOpen = false;
+		self._isOpen = false;
 	},
 
 	isOpen: function() {
