@@ -167,8 +167,10 @@ $.widget("ui.tabs", {
 				$.map(this.$lis.filter('.ui-state-disabled'),
 					function(n, i) { return self.$lis.index(n); } )
 			)).sort();
-			if ($.inArray(o.selected, o.disabled) != -1)
+			
+			if ($.inArray(o.selected, o.disabled) != -1) {
 				o.disabled.splice($.inArray(o.selected, o.disabled), 1);
+			}
 
 			// highlight selected tab
 			this.$panels.addClass('ui-tabs-hide');
@@ -183,7 +185,7 @@ $.widget("ui.tabs", {
 				};
 
 				// load if remote tab else just trigger show event
-				$.data(this.$tabs[o.selected], 'load.tabs') ? this.load(o.selected, onShow) : onShow();
+				($.data(this.$tabs[o.selected], 'load.tabs') ? this.load(o.selected, onShow) : onShow());
 
 			}
 
@@ -203,21 +205,29 @@ $.widget("ui.tabs", {
 		this.element[o.collapsible ? 'addClass' : 'removeClass']('ui-tabs-collapsible');
 
 		// set or update cookie after init and add/remove respectively
-		if (o.cookie) this._cookie(o.selected, o.cookie);
+		if (o.cookie) {
+			this._cookie(o.selected, o.cookie);
+		}
 
 		// disable tabs
-		for (var i = 0, li; li = this.$lis[i]; i++)
-			$(li)[$.inArray(i, o.disabled) != -1 && !$(li).hasClass('ui-tabs-selected') ? 'addClass' : 'removeClass']('ui-state-disabled');
+		for (var i = 0, li; (li = this.$lis[i]); i++) {
+			$(li)[$.inArray(i, o.disabled) != -1 &&
+				!$(li).hasClass('ui-tabs-selected') ? 'addClass' : 'removeClass']('ui-state-disabled');
+		}
 
 		// reset cache if switching from cached to not cached
-		if (o.cache === false) this.$tabs.removeData('cache.tabs');
+		if (o.cache === false) {
+			this.$tabs.removeData('cache.tabs');
+		}
 
 		// remove all handlers before, tabify may run on existing tabs after add or option change
 		this.$lis.add(this.$tabs).unbind('.tabs');
 
 		if (o.event != 'mouseover') {
 			var handleState = function(state, el) {
-				if (el.is(':not(.ui-state-disabled)')) el.toggleClass('ui-state-' + state);
+				if (el.is(':not(.ui-state-disabled)')) {
+					el.toggleClass('ui-state-' + state);
+				}
 			};
 			this.$lis.bind('mouseover.tabs mouseout.tabs', function() {
 				handleState('hover', $(this));
@@ -234,14 +244,18 @@ $.widget("ui.tabs", {
 				hideFx = o.fx[0];
 				showFx = o.fx[1];
 			}
-			else hideFx = showFx = o.fx;
+			else {
+				hideFx = showFx = o.fx;
+			}
 		}
 
 		// Reset certain styles left over from animation
 		// and prevent IE's ClearType bug...
 		function resetStyle($el, fx) {
 			$el.css({ display: '' });
-			if ($.browser.msie && fx.opacity) $el[0].style.removeAttribute('filter');
+			if ($.browser.msie && fx.opacity) {
+				$el[0].style.removeAttribute('filter');
+			}
 		}
 
 		// Show a tab...
@@ -264,12 +278,16 @@ $.widget("ui.tabs", {
 				$hide.animate(hideFx, hideFx.duration || 'normal', function() {
 					$hide.addClass('ui-tabs-hide');
 					resetStyle($hide, hideFx);
-					if ($show) showTab(clicked, $show);
+					if ($show) {
+						showTab(clicked, $show);
+					}
 				});
 			} :
 			function(clicked, $hide, $show) {
 				$hide.addClass('ui-tabs-hide');
-				if ($show) showTab(clicked, $show);
+				if ($show) {
+					showTab(clicked, $show);
+				}
 			};
 
 		// Switch a tab...
@@ -289,11 +307,10 @@ $.widget("ui.tabs", {
 			// or is already loading or click callback returns false stop here.
 			// Check if click handler returns false last so that it is not executed
 			// for a disabled or loading tab!
-			if (($li.hasClass('ui-tabs-selected') && !o.collapsible)
-				|| $li.hasClass('ui-state-disabled')
-				|| $li.hasClass('ui-state-processing')
-				|| self._trigger('select', null, self._ui(this, $show[0])) === false
-				) {
+			if (($li.hasClass('ui-tabs-selected') && !o.collapsible) ||
+				$li.hasClass('ui-state-disabled') ||
+				$li.hasClass('ui-state-processing') ||
+				self._trigger('select', null, self._ui(this, $show[0])) === false) {
 				this.blur();
 				return false;
 			}
@@ -307,7 +324,9 @@ $.widget("ui.tabs", {
 			if (o.collapsible) {
 				if ($li.hasClass('ui-tabs-selected')) {
 					o.selected = -1;
-					if (o.cookie) self._cookie(o.selected, o.cookie);
+					if (o.cookie) {
+						self._cookie(o.selected, o.cookie);
+					}
 					$li.removeClass('ui-tabs-selected ui-state-active')
 						.addClass('ui-state-default');
 					hideTab(this, $hide);
@@ -315,7 +334,9 @@ $.widget("ui.tabs", {
 					return false;
 				}
 				else if (!$hide.length) {
-					if (o.cookie) self._cookie(o.selected, o.cookie);
+					if (o.cookie) {
+						self._cookie(o.selected, o.cookie);
+					}
 					var a = this;
 					self.load(self.$tabs.index(this), function() {
 						$li.addClass('ui-tabs-selected ui-state-active')
@@ -327,18 +348,20 @@ $.widget("ui.tabs", {
 				}
 			}
 
-			if (o.cookie) self._cookie(o.selected, o.cookie);
+			if (o.cookie) {
+				self._cookie(o.selected, o.cookie);
+			}
 
 			// show new tab
 			if ($show.length) {
-				var a = this;
+				var el = this;
 				self.load(self.$tabs.index(this), $hide.length ?
 					function() {
-						switchTab(a, $li, $hide, $show);
+						switchTab(el, $li, $hide, $show);
 					} :
 					function() {
 						$li.addClass('ui-tabs-selected ui-state-active').removeClass('ui-state-default');
-						showTab(a, $show);
+						showTab(el, $show);
 					}
 				);
 			}
@@ -350,7 +373,9 @@ $.widget("ui.tabs", {
 			// and remove dotted border from clicked link. This is controlled via CSS
 			// in modern browsers; blur() removes focus from address bar in Firefox
 			// which can become a usability and annoying problem with tabs('rotate').
-			if ($.browser.msie) this.blur();
+			if ($.browser.msie) {
+				this.blur();
+			}
 
 		});
 
@@ -370,8 +395,9 @@ $.widget("ui.tabs", {
 
 		this.$tabs.each(function() {
 			var href = $.data(this, 'href.tabs');
-			if (href)
+			if (href) {
 				this.href = href;
+			}
 			var $this = $(this).unbind('.tabs');
 			$.each(['href', 'load', 'cache'], function(i, prefix) {
 				$this.removeData(prefix + '.tabs');
@@ -379,9 +405,10 @@ $.widget("ui.tabs", {
 		});
 
 		this.$lis.unbind('.tabs').add(this.$panels).each(function() {
-			if ($.data(this, 'destroy.tabs'))
+			if ($.data(this, 'destroy.tabs')) {
 				$(this).remove();
-			else
+			}
+			else {
 				$(this).removeClass(
 					'ui-state-default ' +
 					'ui-corner-top ' +
@@ -394,21 +421,24 @@ $.widget("ui.tabs", {
 					'ui-widget-content ' +
 					'ui-corner-bottom ' +
 					'ui-tabs-hide');
+			}
 		});
 
-		if (o.cookie)
+		if (o.cookie) {
 			this._cookie(null, o.cookie);
+		}
 	},
 
 	add: function(url, label, index) {
-		if (index == undefined)
+		if (index === undefined) {
 			index = this.$tabs.length; // append by default
+		}
 
-		var self = this, o = this.options;
-		var $li = $(o.tabTemplate.replace(/#\{href\}/g, url).replace(/#\{label\}/g, label));
+		var self = this, o = this.options,
+			$li = $(o.tabTemplate.replace(/#\{href\}/g, url).replace(/#\{label\}/g, label)),
+			id = !url.indexOf('#') ? url.replace('#', '') : this._tabId($('a', $li)[0]);
+		
 		$li.addClass('ui-state-default ui-corner-top').data('destroy.tabs', true);
-
-		var id = url.indexOf('#') == 0 ? url.replace('#', '') : this._tabId( $('a:first-child', $li)[0] );
 
 		// try to find an existing element before creating a new one
 		var $panel = $('#' + id);
@@ -416,6 +446,7 @@ $.widget("ui.tabs", {
 			$panel = $(o.panelTemplate).attr('id', id).data('destroy.tabs', true);
 		}
 		$panel.addClass('ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs-hide');
+		
 		if (index >= this.$lis.length) {
 			$li.appendTo(this.list);
 			$panel.appendTo(this.list[0].parentNode);
@@ -433,10 +464,11 @@ $.widget("ui.tabs", {
 		if (this.$tabs.length == 1) { // after tabify
 			$li.addClass('ui-tabs-selected ui-state-active');
 			$panel.removeClass('ui-tabs-hide');
-			var href = $.data(this.$tabs[0], 'load.tabs');
-			if (href) this.load(0, function() {
-				self._trigger('show', null, self._ui(self.$tabs[0], self.$panels[0]));
-			});
+			if ($.data(this.$tabs[0], 'load.tabs')) {
+				this.load(0, function() {
+					self._trigger('show', null, self._ui(self.$tabs[0], self.$panels[0]));
+				});
+			}
 		}
 
 		// callback
@@ -449,8 +481,9 @@ $.widget("ui.tabs", {
 
 		// If selected tab was removed focus tab to the right or
 		// in case the last tab was removed the tab to the left.
-		if ($li.hasClass('ui-tabs-selected') && this.$tabs.length > 1)
+		if ($li.hasClass('ui-tabs-selected') && this.$tabs.length > 1) {
 			this.select(index + (index + 1 < this.$tabs.length ? 1 : -1));
+		}
 
 		o.disabled = $.map($.grep(o.disabled, function(n, i) { return n != index; }),
 			function(n, i) { return n >= index ? --n : n; });
@@ -463,8 +496,9 @@ $.widget("ui.tabs", {
 
 	enable: function(index) {
 		var o = this.options;
-		if ($.inArray(index, o.disabled) == -1)
+		if ($.inArray(index, o.disabled) == -1) {
 			return;
+		}
 
 		this.$lis.eq(index).removeClass('ui-state-disabled');
 		o.disabled = $.grep(o.disabled, function(n, i) { return n != index; });
@@ -504,7 +538,7 @@ $.widget("ui.tabs", {
 		callback = callback || function() {};
 
 		var self = this, o = this.options, a = this.$tabs.eq(index)[0],
-				bypassCache = callback == undefined, url = $.data(a, 'load.tabs');
+				bypassCache = callback === undefined, url = $.data(a, 'load.tabs');
 
 		this.abort();
 
