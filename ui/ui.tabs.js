@@ -151,14 +151,14 @@ $.widget("ui.tabs", {
 				if (!o.selected && this.$lis.filter('.ui-tabs-selected').length) {
 					o.selected = this.$lis.index(this.$lis.filter('.ui-tabs-selected'));
 				}
-				o.selected = o.selected || 0;
+				o.selected = o.selected || 0;
 			}
 			else if (o.selected === null) { // usage of null is deprecated, TODO remove in next release
 				o.selected = -1;
 			}
 
 			// sanity check - default to first tab...
-			o.selected = ((o.selected >= 0 && this.$tabs[o.selected]) || o.selected < 0) ? o.selected : 0
+			o.selected = ((o.selected >= 0 && this.$tabs[o.selected]) || o.selected < 0) ? o.selected : 0;
 
 			// Take disabling tabs via class attribute from HTML
 			// into account and update option properly.
@@ -183,7 +183,7 @@ $.widget("ui.tabs", {
 				};
 
 				// load if remote tab else just trigger show event
-				$.data(this.$tabs[o.selected], 'load.tabs') ? this.load(o.selected, onShow): onShow();
+				$.data(this.$tabs[o.selected], 'load.tabs') ? this.load(o.selected, onShow) : onShow();
 
 			}
 
