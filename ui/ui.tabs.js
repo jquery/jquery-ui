@@ -91,7 +91,7 @@ $.widget("ui.tabs", {
 				href = a.hash;
 				a.href = href;
 			}
-			
+
 			// inline tab
 			if (fragmentId.test(href)) {
 				self.$panels = self.$panels.add(self._sanitizeSelector(href));
@@ -167,7 +167,7 @@ $.widget("ui.tabs", {
 				$.map(this.$lis.filter('.ui-state-disabled'),
 					function(n, i) { return self.$lis.index(n); } )
 			)).sort();
-			
+
 			if ($.inArray(o.selected, o.disabled) != -1) {
 				o.disabled.splice($.inArray(o.selected, o.disabled), 1);
 			}
@@ -261,6 +261,7 @@ $.widget("ui.tabs", {
 		// Show a tab...
 		var showTab = showFx ?
 			function(clicked, $show) {
+				$(clicked).closest('li').removeClass('ui-state-default').addClass('ui-tabs-selected ui-state-active');
 				$show.hide().removeClass('ui-tabs-hide') // avoid flicker that way
 					.animate(showFx, showFx.duration || 'normal', function() {
 						resetStyle($show, showFx);
@@ -268,6 +269,7 @@ $.widget("ui.tabs", {
 					});
 			} :
 			function(clicked, $show) {
+				$(clicked).closest('li').removeClass('ui-state-default').addClass('ui-tabs-selected ui-state-active');
 				$show.removeClass('ui-tabs-hide');
 				self._trigger('show', null, self._ui(clicked, $show[0]));
 			};
@@ -275,32 +277,33 @@ $.widget("ui.tabs", {
 		// Hide a tab, $show is optional...
 		var hideTab = hideFx ?
 			function(clicked, $hide, $show) {
+				var collapse = o.collapsible && $(clicked).closest('li').is('.ui-tabs-selected');
+
 				$hide.animate(hideFx, hideFx.duration || 'normal', function() {
+					self.$lis.removeClass('ui-tabs-selected ui-state-active').addClass('ui-state-default');
 					$hide.addClass('ui-tabs-hide');
+
 					resetStyle($hide, hideFx);
-					if ($show) {
+
+					if (!collapse) {
 						showTab(clicked, $show);
 					}
 				});
 			} :
 			function(clicked, $hide, $show) {
+				var collapse = o.collapsible && $(clicked).closest('li').is('.ui-tabs-selected');
+
+				self.$lis.removeClass('ui-tabs-selected ui-state-active').addClass('ui-state-default');
 				$hide.addClass('ui-tabs-hide');
-				if ($show) {
+
+				if (!collapse) {
 					showTab(clicked, $show);
 				}
 			};
 
-		// Switch a tab...
-		function switchTab(clicked, $li, $hide, $show) {
-			var classes = 'ui-tabs-selected ui-state-active';
-			$li.removeClass('ui-state-default').addClass(classes)
-				.siblings().removeClass(classes).addClass('ui-state-default');
-			hideTab(clicked, $hide, $show);
-		}
-
 		// attach tab event handler, unbind to avoid duplicates from former tabifying...
 		this.$tabs.bind(o.event + '.tabs', function() {
-			var $li = $(this).closest('li'), $hide = self.$panels.filter(':not(.ui-tabs-hide)'),
+			var el = this, $li = $(this).closest('li'), $hide = self.$panels.filter(':not(.ui-tabs-hide)'),
 					$show = $(self._sanitizeSelector(this.hash));
 
 			// If tab is already selected and not collapsible or tab disabled or
@@ -320,16 +323,15 @@ $.widget("ui.tabs", {
 			self.abort();
 
 			// if tab may be closed
-			// TODO avoid redundant code in this block
 			if (o.collapsible) {
 				if ($li.hasClass('ui-tabs-selected')) {
 					o.selected = -1;
+
 					if (o.cookie) {
 						self._cookie(o.selected, o.cookie);
 					}
-					$li.removeClass('ui-tabs-selected ui-state-active')
-						.addClass('ui-state-default');
-					hideTab(this, $hide);
+
+					hideTab(el, $hide);
 					this.blur();
 					return false;
 				}
@@ -337,11 +339,9 @@ $.widget("ui.tabs", {
 					if (o.cookie) {
 						self._cookie(o.selected, o.cookie);
 					}
-					var a = this;
+
 					self.load(self.$tabs.index(this), function() {
-						$li.addClass('ui-tabs-selected ui-state-active')
-							.removeClass('ui-state-default');
-						showTab(a, $show);
+						showTab(el, $show);
 					});
 					this.blur();
 					return false;
@@ -354,13 +354,11 @@ $.widget("ui.tabs", {
 
 			// show new tab
 			if ($show.length) {
-				var el = this;
 				self.load(self.$tabs.index(this), $hide.length ?
 					function() {
-						switchTab(el, $li, $hide, $show);
+						hideTab(el, $hide, $show);
 					} :
 					function() {
-						$li.addClass('ui-tabs-selected ui-state-active').removeClass('ui-state-default');
 						showTab(el, $show);
 					}
 				);
@@ -437,7 +435,7 @@ $.widget("ui.tabs", {
 		var self = this, o = this.options,
 			$li = $(o.tabTemplate.replace(/#\{href\}/g, url).replace(/#\{label\}/g, label)),
 			id = !url.indexOf('#') ? url.replace('#', '') : this._tabId($('a', $li)[0]);
-		
+
 		$li.addClass('ui-state-default ui-corner-top').data('destroy.tabs', true);
 
 		// try to find an existing element before creating a new one
@@ -446,7 +444,7 @@ $.widget("ui.tabs", {
 			$panel = $(o.panelTemplate).attr('id', id).data('destroy.tabs', true);
 		}
 		$panel.addClass('ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs-hide');
-		
+
 		if (index >= this.$lis.length) {
 			$li.appendTo(this.list);
 			$panel.appendTo(this.list[0].parentNode);
@@ -530,7 +528,7 @@ $.widget("ui.tabs", {
 		if (index == -1 && this.options.collapsible) {
 			index = this.options.selected;
 		}
-		
+
 		this.$tabs.eq(index).trigger(this.options.event + '.tabs');
 	},
 
