@@ -224,16 +224,25 @@ $.widget("ui.tabs", {
 		this.$lis.add(this.$tabs).unbind('.tabs');
 
 		if (o.event != 'mouseover') {
-			var handleState = function(state, el) {
+			var addState = function(state, el) {
 				if (el.is(':not(.ui-state-disabled)')) {
-					el.toggleClass('ui-state-' + state);
+					el.addClass('ui-state-' + state);
 				}
 			};
-			this.$lis.bind('mouseover.tabs mouseout.tabs', function() {
-				handleState('hover', $(this));
+			var removeState = function(state, el) {
+				el.removeClass('ui-state-' + state);
+			};
+			this.$lis.bind('mouseover.tabs', function() {
+				addState('hover', $(this));
 			});
-			this.$tabs.bind('focus.tabs blur.tabs', function() {
-				handleState('focus', $(this).closest('li'));
+			this.$lis.bind('mouseout.tabs', function() {
+				removeState('hover', $(this));
+			});
+			this.$tabs.bind('focus.tabs', function() {
+				addState('focus', $(this).closest('li'));
+			});
+			this.$tabs.bind('blur.tabs', function() {
+				removeState('focus', $(this).closest('li'));
 			});
 		}
 
