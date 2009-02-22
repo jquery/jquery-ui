@@ -145,10 +145,10 @@ $.widget("ui.tabs", {
 						}
 					});
 				}
-				if (!o.selected && o.cookie) {
+				if (typeof o.selected != 'number' && o.cookie) {
 					o.selected = parseInt(self._cookie(), 10);
 				}
-				if (!o.selected && this.$lis.filter('.ui-tabs-selected').length) {
+				if (typeof o.selected != 'number' && this.$lis.filter('.ui-tabs-selected').length) {
 					o.selected = this.$lis.index(this.$lis.filter('.ui-tabs-selected'));
 				}
 				o.selected = o.selected || 0;
