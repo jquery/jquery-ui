@@ -88,6 +88,8 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 
 		this.handles.keydown(function(event) {
 
+			var ret = true;
+
 			var index = $(this).data("index.ui-slider-handle");
 
 			if (self.options.disabled)
@@ -100,6 +102,7 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 				case $.ui.keyCode.RIGHT:
 				case $.ui.keyCode.DOWN:
 				case $.ui.keyCode.LEFT:
+					ret = false;
 					if (!self._keySliding) {
 						self._keySliding = true;
 						$(this).addClass("ui-state-active");
@@ -136,7 +139,7 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 
 			self._slide(event, index, newVal);
 
-			return false;
+			return ret;
 
 		}).keyup(function(event) {
 
