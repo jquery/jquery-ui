@@ -574,14 +574,8 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 			var t = this.options.toleranceElement ? $(this.options.toleranceElement, item.item) : item.item;
 
 			if (!fast) {
-				if (this.options.accurateIntersection) {
-					item.width = t.outerWidth();
-					item.height = t.outerHeight();
-				}
-				else {
-					item.width = t[0].offsetWidth;
-					item.height = t[0].offsetHeight;
-				}
+				item.width = t.outerWidth();
+				item.height = t.outerHeight();
 			}
 
 			var p = t.offset();
@@ -994,7 +988,6 @@ $.extend($.ui.sortable, {
 	version: "@VERSION",
 	eventPrefix: "sort",
 	defaults: {
-		accurateIntersection: true,
 		appendTo: "parent",
 		axis: false,
 		cancel: ":input,option",

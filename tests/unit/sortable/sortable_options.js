@@ -5,14 +5,6 @@
 
 module("sortable: options");
 
-test("{ accurateIntersection: true }, default", function() {
-	ok(false, "missing test - untested code is broken code.");
-});
-
-test("{ accurateIntersection: false }", function() {
-	ok(false, "missing test - untested code is broken code.");
-});
-
 test("{ appendTo: 'parent' }, default", function() {
 	ok(false, "missing test - untested code is broken code.");
 });

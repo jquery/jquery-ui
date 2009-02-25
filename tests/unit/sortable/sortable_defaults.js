@@ -3,7 +3,6 @@
  */
 
 var sortable_defaults = {
-	accurateIntersection: true,
 	appendTo: "parent",
 	axis: false,
 	cancel: ":input,option",
