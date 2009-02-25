@@ -72,8 +72,11 @@ $.widget("ui.tabs", {
 	_tabify: function(init) {
 
 		this.list = this.element.children('ul:first, ol:first').eq(0);
+		// TODO refactor - rename to this.lis
 		this.$lis = $('li:has(a[href])', this.list);
+		// TODO refactor - rename to this.anchors
 		this.$tabs = this.$lis.map(function() { return $('a', this)[0]; });
+		// TODO refactor - rename to this.panels
 		this.$panels = $([]);
 
 		var self = this, o = this.options;
@@ -182,13 +185,11 @@ $.widget("ui.tabs", {
 				this.$lis.eq(o.selected).addClass('ui-tabs-selected ui-state-active');
 
 				// seems to be expected behavior that the show callback is fired
-				var onShow = function() {
+				self.element.queue("tabs", function() {
 					self._trigger('show', null, self._ui(self.$tabs[o.selected], self.$panels[o.selected]));
-				};
-
-				// load if remote tab else just trigger show event
-				($.data(this.$tabs[o.selected], 'load.tabs') ? this.load(o.selected, onShow) : onShow());
-
+				});
+				
+				this.load(o.selected);
 			}
 
 			// clean up to avoid memory leaks in certain versions of IE 6
@@ -287,29 +288,18 @@ $.widget("ui.tabs", {
 
 		// Hide a tab, $show is optional...
 		var hideTab = hideFx ?
-			function(clicked, $hide, $show) {
-				var collapse = o.collapsible && $(clicked).closest('li').is('.ui-tabs-selected');
-
+			function(clicked, $hide) {
 				$hide.animate(hideFx, hideFx.duration || 'normal', function() {
 					self.$lis.removeClass('ui-tabs-selected ui-state-active').addClass('ui-state-default');
 					$hide.addClass('ui-tabs-hide');
-
 					resetStyle($hide, hideFx);
-
-					if (!collapse) {
-						showTab(clicked, $show);
-					}
+					self.element.dequeue("tabs");
 				});
 			} :
 			function(clicked, $hide, $show) {
-				var collapse = o.collapsible && $(clicked).closest('li').is('.ui-tabs-selected');
-
 				self.$lis.removeClass('ui-tabs-selected ui-state-active').addClass('ui-state-default');
 				$hide.addClass('ui-tabs-hide');
-
-				if (!collapse) {
-					showTab(clicked, $show);
-				}
+				self.element.dequeue("tabs");
 			};
 
 		// attach tab event handler, unbind to avoid duplicates from former tabifying...
@@ -342,7 +332,10 @@ $.widget("ui.tabs", {
 						self._cookie(o.selected, o.cookie);
 					}
 
-					hideTab(el, $hide);
+					self.element.queue("tabs", function() {
+						hideTab(el, $hide);
+					}).dequeue("tabs");
+					
 					this.blur();
 					return false;
 				}
@@ -350,10 +343,13 @@ $.widget("ui.tabs", {
 					if (o.cookie) {
 						self._cookie(o.selected, o.cookie);
 					}
-
-					self.load(self.$tabs.index(this), function() {
+					
+					self.element.queue("tabs", function() {
 						showTab(el, $show);
 					});
+
+					self.load(self.$tabs.index(this)); // TODO make passing in node possible
+					
 					this.blur();
 					return false;
 				}
@@ -365,14 +361,16 @@ $.widget("ui.tabs", {
 
 			// show new tab
 			if ($show.length) {
-				self.load(self.$tabs.index(this), $hide.length ?
-					function() {
-						hideTab(el, $hide, $show);
-					} :
-					function() {
-						showTab(el, $show);
-					}
-				);
+				if ($hide.length) {
+					self.element.queue("tabs", function() {
+						hideTab(el, $hide);
+					});
+				}
+				self.element.queue("tabs", function() {
+					showTab(el, $show);
+				});
+				
+				self.load(self.$tabs.index(this));
 			}
 			else {
 				throw 'jQuery UI Tabs: Mismatching fragment identifier.';
@@ -473,11 +471,11 @@ $.widget("ui.tabs", {
 		if (this.$tabs.length == 1) { // after tabify
 			$li.addClass('ui-tabs-selected ui-state-active');
 			$panel.removeClass('ui-tabs-hide');
-			if ($.data(this.$tabs[0], 'load.tabs')) {
-				this.load(0, function() {
-					self._trigger('show', null, self._ui(self.$tabs[0], self.$panels[0]));
-				});
-			}
+			this.element.queue("tabs", function() {
+				self._trigger('show', null, self._ui(self.$tabs[0], self.$panels[0]));
+			});
+				
+			this.load(0);
 		}
 
 		// callback
@@ -543,17 +541,14 @@ $.widget("ui.tabs", {
 		this.$tabs.eq(index).trigger(this.options.event + '.tabs');
 	},
 
-	load: function(index, callback) { // callback is for internal usage only
-		callback = callback || function() {};
-
-		var self = this, o = this.options, a = this.$tabs.eq(index)[0],
-				bypassCache = callback === undefined, url = $.data(a, 'load.tabs');
+	load: function(index) {
+		var self = this, o = this.options, a = this.$tabs.eq(index)[0], url = $.data(a, 'load.tabs');
 
 		this.abort();
 
-		// not remote or from cache - just finish with callback
-		if (!url || !bypassCache && $.data(a, 'cache.tabs')) {
-			callback();
+		// not remote or from cache
+		if (!url || this.element.queue("tabs").length !== 0 && $.data(a, 'cache.tabs')) {
+			this.element.dequeue("tabs");
 			return;
 		}
 
@@ -584,16 +579,15 @@ $.widget("ui.tabs", {
 				}
 				catch (e) {}
 
-				// This callback is required because the switch has to take
-				// place after loading has completed. Call last in order to
-				// fire load before show callback...
-				callback();
+				// last, so that load event is fired before show...
+				self.element.dequeue("tabs");
 			}
 		}));
 	},
 
 	abort: function() {
 		// stop possibly running animations
+		this.element.queue([]);
 		this.$panels.stop(false, true);
 
 		// terminate pending requests from other tabs

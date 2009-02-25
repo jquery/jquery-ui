@@ -14,7 +14,7 @@ test('load', function() {
 });
 
 test('show', function() {
-	expect(3);
+	expect(4);
 
 	var uiObj;
 	el = $('#tabs1').tabs({
@@ -22,9 +22,10 @@ test('show', function() {
 			uiObj = ui;
 		}
 	});
+	ok(uiObj !== undefined, 'should fire show after init');
 	equals(uiObj.tab, $('#tabs1 a')[0], 'should have tab as DOM anchor element');
 	equals(uiObj.panel, $('#tabs1 div')[0], 'should have panel as DOM div element');
-	equals(uiObj.index, 0, ' should have index');
+	equals(uiObj.index, 0, 'should have index');
 	
 });
 
