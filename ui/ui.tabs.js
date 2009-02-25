@@ -55,13 +55,13 @@ $.widget("ui.tabs", {
 		return {
 			tab: tab,
 			panel: panel,
-			index: this.$tabs.index(tab)
+			index: this.anchors.index(tab)
 		};
 	},
 
 	_cleanup: function() {
 		// restore all former loading tabs labels
-		this.$lis.filter('.ui-state-processing').removeClass('ui-state-processing')
+		this.lis.filter('.ui-state-processing').removeClass('ui-state-processing')
 				.find('span:data(label.tabs)')
 				.each(function() {
 					var el = $(this);
@@ -72,17 +72,14 @@ $.widget("ui.tabs", {
 	_tabify: function(init) {
 
 		this.list = this.element.children('ul:first, ol:first').eq(0);
-		// TODO refactor - rename to this.lis
-		this.$lis = $('li:has(a[href])', this.list);
-		// TODO refactor - rename to this.anchors
-		this.$tabs = this.$lis.map(function() { return $('a', this)[0]; });
-		// TODO refactor - rename to this.panels
-		this.$panels = $([]);
+		this.lis = $('li:has(a[href])', this.list);
+		this.anchors = this.lis.map(function() { return $('a', this)[0]; });
+		this.panels = $([]);
 
 		var self = this, o = this.options;
 
 		var fragmentId = /^#.+/; // Safari 2 reports '#' for an empty hash
-		this.$tabs.each(function(i, a) {
+		this.anchors.each(function(i, a) {
 			var href = $(a).attr('href');
 
 			// For dynamically created HTML that contains a hash as href IE < 8 expands
@@ -99,7 +96,7 @@ $.widget("ui.tabs", {
 
 			// inline tab
 			if (fragmentId.test(href)) {
-				self.$panels = self.$panels.add(self._sanitizeSelector(href));
+				self.panels = self.panels.add(self._sanitizeSelector(href));
 			}
 
 			// remote tab
@@ -115,10 +112,10 @@ $.widget("ui.tabs", {
 				var $panel = $('#' + id);
 				if (!$panel.length) {
 					$panel = $(o.panelTemplate).attr('id', id).addClass('ui-tabs-panel ui-widget-content ui-corner-bottom')
-						.insertAfter(self.$panels[i - 1] || self.list);
+						.insertAfter(self.panels[i - 1] || self.list);
 					$panel.data('destroy.tabs', true);
 				}
-				self.$panels = self.$panels.add($panel);
+				self.panels = self.panels.add($panel);
 			}
 
 			// invalid tab href
@@ -133,8 +130,8 @@ $.widget("ui.tabs", {
 			// attach necessary classes for styling
 			this.element.addClass('ui-tabs ui-widget ui-widget-content ui-corner-all');
 			this.list.addClass('ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all');
-			this.$lis.addClass('ui-state-default ui-corner-top');
-			this.$panels.addClass('ui-tabs-panel ui-widget-content ui-corner-bottom');
+			this.lis.addClass('ui-state-default ui-corner-top');
+			this.panels.addClass('ui-tabs-panel ui-widget-content ui-corner-bottom');
 
 			// Selected tab
 			// use "selected" option or try to retrieve:
@@ -143,7 +140,7 @@ $.widget("ui.tabs", {
 			// 3. from selected class attribute on <li>
 			if (o.selected === undefined) {
 				if (location.hash) {
-					this.$tabs.each(function(i, a) {
+					this.anchors.each(function(i, a) {
 						if (a.hash == location.hash) {
 							o.selected = i;
 							return false; // break
@@ -153,8 +150,8 @@ $.widget("ui.tabs", {
 				if (typeof o.selected != 'number' && o.cookie) {
 					o.selected = parseInt(self._cookie(), 10);
 				}
-				if (typeof o.selected != 'number' && this.$lis.filter('.ui-tabs-selected').length) {
-					o.selected = this.$lis.index(this.$lis.filter('.ui-tabs-selected'));
+				if (typeof o.selected != 'number' && this.lis.filter('.ui-tabs-selected').length) {
+					o.selected = this.lis.index(this.lis.filter('.ui-tabs-selected'));
 				}
 				o.selected = o.selected || 0;
 			}
@@ -163,14 +160,14 @@ $.widget("ui.tabs", {
 			}
 
 			// sanity check - default to first tab...
-			o.selected = ((o.selected >= 0 && this.$tabs[o.selected]) || o.selected < 0) ? o.selected : 0;
+			o.selected = ((o.selected >= 0 && this.anchors[o.selected]) || o.selected < 0) ? o.selected : 0;
 
 			// Take disabling tabs via class attribute from HTML
 			// into account and update option properly.
 			// A selected tab cannot become disabled.
 			o.disabled = $.unique(o.disabled.concat(
-				$.map(this.$lis.filter('.ui-state-disabled'),
-					function(n, i) { return self.$lis.index(n); } )
+				$.map(this.lis.filter('.ui-state-disabled'),
+					function(n, i) { return self.lis.index(n); } )
 			)).sort();
 
 			if ($.inArray(o.selected, o.disabled) != -1) {
@@ -178,15 +175,15 @@ $.widget("ui.tabs", {
 			}
 
 			// highlight selected tab
-			this.$panels.addClass('ui-tabs-hide');
-			this.$lis.removeClass('ui-tabs-selected ui-state-active');
-			if (o.selected >= 0 && this.$tabs.length) { // check for length avoids error when initializing empty list
-				this.$panels.eq(o.selected).removeClass('ui-tabs-hide');
-				this.$lis.eq(o.selected).addClass('ui-tabs-selected ui-state-active');
+			this.panels.addClass('ui-tabs-hide');
+			this.lis.removeClass('ui-tabs-selected ui-state-active');
+			if (o.selected >= 0 && this.anchors.length) { // check for length avoids error when initializing empty list
+				this.panels.eq(o.selected).removeClass('ui-tabs-hide');
+				this.lis.eq(o.selected).addClass('ui-tabs-selected ui-state-active');
 
 				// seems to be expected behavior that the show callback is fired
 				self.element.queue("tabs", function() {
-					self._trigger('show', null, self._ui(self.$tabs[o.selected], self.$panels[o.selected]));
+					self._trigger('show', null, self._ui(self.anchors[o.selected], self.panels[o.selected]));
 				});
 				
 				this.load(o.selected);
@@ -194,14 +191,14 @@ $.widget("ui.tabs", {
 
 			// clean up to avoid memory leaks in certain versions of IE 6
 			$(window).bind('unload', function() {
-				self.$lis.add(self.$tabs).unbind('.tabs');
-				self.$lis = self.$tabs = self.$panels = null;
+				self.lis.add(self.anchors).unbind('.tabs');
+				self.lis = self.anchors = self.panels = null;
 			});
 
 		}
 		// update selected after add/remove
 		else {
-			o.selected = this.$lis.index(this.$lis.filter('.ui-tabs-selected'));
+			o.selected = this.lis.index(this.lis.filter('.ui-tabs-selected'));
 		}
 
 		// update collapsible
@@ -213,18 +210,18 @@ $.widget("ui.tabs", {
 		}
 
 		// disable tabs
-		for (var i = 0, li; (li = this.$lis[i]); i++) {
+		for (var i = 0, li; (li = this.lis[i]); i++) {
 			$(li)[$.inArray(i, o.disabled) != -1 &&
 				!$(li).hasClass('ui-tabs-selected') ? 'addClass' : 'removeClass']('ui-state-disabled');
 		}
 
 		// reset cache if switching from cached to not cached
 		if (o.cache === false) {
-			this.$tabs.removeData('cache.tabs');
+			this.anchors.removeData('cache.tabs');
 		}
 
 		// remove all handlers before, tabify may run on existing tabs after add or option change
-		this.$lis.add(this.$tabs).unbind('.tabs');
+		this.lis.add(this.anchors).unbind('.tabs');
 
 		if (o.event != 'mouseover') {
 			var addState = function(state, el) {
@@ -235,16 +232,16 @@ $.widget("ui.tabs", {
 			var removeState = function(state, el) {
 				el.removeClass('ui-state-' + state);
 			};
-			this.$lis.bind('mouseover.tabs', function() {
+			this.lis.bind('mouseover.tabs', function() {
 				addState('hover', $(this));
 			});
-			this.$lis.bind('mouseout.tabs', function() {
+			this.lis.bind('mouseout.tabs', function() {
 				removeState('hover', $(this));
 			});
-			this.$tabs.bind('focus.tabs', function() {
+			this.anchors.bind('focus.tabs', function() {
 				addState('focus', $(this).closest('li'));
 			});
-			this.$tabs.bind('blur.tabs', function() {
+			this.anchors.bind('blur.tabs', function() {
 				removeState('focus', $(this).closest('li'));
 			});
 		}
@@ -290,21 +287,21 @@ $.widget("ui.tabs", {
 		var hideTab = hideFx ?
 			function(clicked, $hide) {
 				$hide.animate(hideFx, hideFx.duration || 'normal', function() {
-					self.$lis.removeClass('ui-tabs-selected ui-state-active').addClass('ui-state-default');
+					self.lis.removeClass('ui-tabs-selected ui-state-active').addClass('ui-state-default');
 					$hide.addClass('ui-tabs-hide');
 					resetStyle($hide, hideFx);
 					self.element.dequeue("tabs");
 				});
 			} :
 			function(clicked, $hide, $show) {
-				self.$lis.removeClass('ui-tabs-selected ui-state-active').addClass('ui-state-default');
+				self.lis.removeClass('ui-tabs-selected ui-state-active').addClass('ui-state-default');
 				$hide.addClass('ui-tabs-hide');
 				self.element.dequeue("tabs");
 			};
 
 		// attach tab event handler, unbind to avoid duplicates from former tabifying...
-		this.$tabs.bind(o.event + '.tabs', function() {
-			var el = this, $li = $(this).closest('li'), $hide = self.$panels.filter(':not(.ui-tabs-hide)'),
+		this.anchors.bind(o.event + '.tabs', function() {
+			var el = this, $li = $(this).closest('li'), $hide = self.panels.filter(':not(.ui-tabs-hide)'),
 					$show = $(self._sanitizeSelector(this.hash));
 
 			// If tab is already selected and not collapsible or tab disabled or
@@ -319,7 +316,7 @@ $.widget("ui.tabs", {
 				return false;
 			}
 
-			o.selected = self.$tabs.index(this);
+			o.selected = self.anchors.index(this);
 
 			self.abort();
 
@@ -348,7 +345,7 @@ $.widget("ui.tabs", {
 						showTab(el, $show);
 					});
 
-					self.load(self.$tabs.index(this)); // TODO make passing in node possible
+					self.load(self.anchors.index(this)); // TODO make passing in node possible, see also http://dev.jqueryui.com/ticket/3171
 					
 					this.blur();
 					return false;
@@ -370,7 +367,7 @@ $.widget("ui.tabs", {
 					showTab(el, $show);
 				});
 				
-				self.load(self.$tabs.index(this));
+				self.load(self.anchors.index(this));
 			}
 			else {
 				throw 'jQuery UI Tabs: Mismatching fragment identifier.';
@@ -387,7 +384,7 @@ $.widget("ui.tabs", {
 		});
 
 		// disable click in any case
-		this.$tabs.bind('click.tabs', function(){return false;});
+		this.anchors.bind('click.tabs', function(){return false;});
 
 	},
 
@@ -400,7 +397,7 @@ $.widget("ui.tabs", {
 
 		this.list.removeClass('ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all');
 
-		this.$tabs.each(function() {
+		this.anchors.each(function() {
 			var href = $.data(this, 'href.tabs');
 			if (href) {
 				this.href = href;
@@ -411,7 +408,7 @@ $.widget("ui.tabs", {
 			});
 		});
 
-		this.$lis.unbind('.tabs').add(this.$panels).each(function() {
+		this.lis.unbind('.tabs').add(this.panels).each(function() {
 			if ($.data(this, 'destroy.tabs')) {
 				$(this).remove();
 			}
@@ -438,7 +435,7 @@ $.widget("ui.tabs", {
 
 	add: function(url, label, index) {
 		if (index === undefined) {
-			index = this.$tabs.length; // append by default
+			index = this.anchors.length; // append by default
 		}
 
 		var self = this, o = this.options,
@@ -454,13 +451,13 @@ $.widget("ui.tabs", {
 		}
 		$panel.addClass('ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs-hide');
 
-		if (index >= this.$lis.length) {
+		if (index >= this.lis.length) {
 			$li.appendTo(this.list);
 			$panel.appendTo(this.list[0].parentNode);
 		}
 		else {
-			$li.insertBefore(this.$lis[index]);
-			$panel.insertBefore(this.$panels[index]);
+			$li.insertBefore(this.lis[index]);
+			$panel.insertBefore(this.panels[index]);
 		}
 
 		o.disabled = $.map(o.disabled,
@@ -468,28 +465,28 @@ $.widget("ui.tabs", {
 
 		this._tabify();
 
-		if (this.$tabs.length == 1) { // after tabify
+		if (this.anchors.length == 1) { // after tabify
 			$li.addClass('ui-tabs-selected ui-state-active');
 			$panel.removeClass('ui-tabs-hide');
 			this.element.queue("tabs", function() {
-				self._trigger('show', null, self._ui(self.$tabs[0], self.$panels[0]));
+				self._trigger('show', null, self._ui(self.anchors[0], self.panels[0]));
 			});
 				
 			this.load(0);
 		}
 
 		// callback
-		this._trigger('add', null, this._ui(this.$tabs[index], this.$panels[index]));
+		this._trigger('add', null, this._ui(this.anchors[index], this.panels[index]));
 	},
 
 	remove: function(index) {
-		var o = this.options, $li = this.$lis.eq(index).remove(),
-			$panel = this.$panels.eq(index).remove();
+		var o = this.options, $li = this.lis.eq(index).remove(),
+			$panel = this.panels.eq(index).remove();
 
 		// If selected tab was removed focus tab to the right or
 		// in case the last tab was removed the tab to the left.
-		if ($li.hasClass('ui-tabs-selected') && this.$tabs.length > 1) {
-			this.select(index + (index + 1 < this.$tabs.length ? 1 : -1));
+		if ($li.hasClass('ui-tabs-selected') && this.anchors.length > 1) {
+			this.select(index + (index + 1 < this.anchors.length ? 1 : -1));
 		}
 
 		o.disabled = $.map($.grep(o.disabled, function(n, i) { return n != index; }),
@@ -507,29 +504,29 @@ $.widget("ui.tabs", {
 			return;
 		}
 
-		this.$lis.eq(index).removeClass('ui-state-disabled');
+		this.lis.eq(index).removeClass('ui-state-disabled');
 		o.disabled = $.grep(o.disabled, function(n, i) { return n != index; });
 
 		// callback
-		this._trigger('enable', null, this._ui(this.$tabs[index], this.$panels[index]));
+		this._trigger('enable', null, this._ui(this.anchors[index], this.panels[index]));
 	},
 
 	disable: function(index) {
 		var self = this, o = this.options;
 		if (index != o.selected) { // cannot disable already selected tab
-			this.$lis.eq(index).addClass('ui-state-disabled');
+			this.lis.eq(index).addClass('ui-state-disabled');
 
 			o.disabled.push(index);
 			o.disabled.sort();
 
 			// callback
-			this._trigger('disable', null, this._ui(this.$tabs[index], this.$panels[index]));
+			this._trigger('disable', null, this._ui(this.anchors[index], this.panels[index]));
 		}
 	},
 
 	select: function(index) {
 		if (typeof index == 'string') {
-			index = this.$tabs.index(this.$tabs.filter('[href$=' + index + ']'));
+			index = this.anchors.index(this.anchors.filter('[href$=' + index + ']'));
 		}
 		else if (index === null) { // usage of null is deprecated, TODO remove in next release
 			index = -1;
@@ -538,11 +535,11 @@ $.widget("ui.tabs", {
 			index = this.options.selected;
 		}
 
-		this.$tabs.eq(index).trigger(this.options.event + '.tabs');
+		this.anchors.eq(index).trigger(this.options.event + '.tabs');
 	},
 
 	load: function(index) {
-		var self = this, o = this.options, a = this.$tabs.eq(index)[0], url = $.data(a, 'load.tabs');
+		var self = this, o = this.options, a = this.anchors.eq(index)[0], url = $.data(a, 'load.tabs');
 
 		this.abort();
 
@@ -553,7 +550,7 @@ $.widget("ui.tabs", {
 		}
 
 		// load remote from here on
-		this.$lis.eq(index).addClass('ui-state-processing');
+		this.lis.eq(index).addClass('ui-state-processing');
 
 		if (o.spinner) {
 			var span = $('span', a);
@@ -573,7 +570,7 @@ $.widget("ui.tabs", {
 				}
 
 				// callbacks
-				self._trigger('load', null, self._ui(self.$tabs[index], self.$panels[index]));
+				self._trigger('load', null, self._ui(self.anchors[index], self.panels[index]));
 				try {
 					o.ajaxOptions.success(r, s);
 				}
@@ -588,7 +585,7 @@ $.widget("ui.tabs", {
 	abort: function() {
 		// stop possibly running animations
 		this.element.queue([]);
-		this.$panels.stop(false, true);
+		this.panels.stop(false, true);
 
 		// terminate pending requests from other tabs
 		if (this.xhr) {
@@ -602,11 +599,11 @@ $.widget("ui.tabs", {
 	},
 
 	url: function(index, url) {
-		this.$tabs.eq(index).removeData('cache.tabs').data('load.tabs', url);
+		this.anchors.eq(index).removeData('cache.tabs').data('load.tabs', url);
 	},
 
 	length: function() {
-		return this.$tabs.length;
+		return this.anchors.length;
 	}
 
 });
@@ -645,7 +642,7 @@ $.extend($.ui.tabs.prototype, {
 		function rotate() {
 			clearTimeout(self.rotation);
 			self.rotation = setTimeout(function() {
-				t = ++t < self.$tabs.length ? t : 0;
+				t = ++t < self.anchors.length ? t : 0;
 				self.select(t);
 			}, ms);
 		}
@@ -653,7 +650,7 @@ $.extend($.ui.tabs.prototype, {
 		// start rotation
 		if (ms) {
 			this.element.bind('tabsshow', rotate); // will not be attached twice
-			this.$tabs.bind(o.event + '.tabs', !continuing ?
+			this.anchors.bind(o.event + '.tabs', !continuing ?
 				function(e) {
 					if (e.clientX) { // in case of a true click
 						clearTimeout(self.rotation);
@@ -671,7 +668,7 @@ $.extend($.ui.tabs.prototype, {
 		else {
 			clearTimeout(self.rotation);
 			this.element.unbind('tabsshow', rotate);
-			this.$tabs.unbind(o.event + '.tabs', stop);
+			this.anchors.unbind(o.event + '.tabs', stop);
 		}
 	}
 });
