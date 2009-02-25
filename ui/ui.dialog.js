@@ -64,7 +64,7 @@ $.widget("ui.dialog", {
 					'aria-labelledby': titleId
 				})
 				.mousedown(function(event) {
-					self.moveToTop(event);
+					self.moveToTop(false, event);
 				}),
 
 			uiDialogContent = this.element
@@ -200,7 +200,7 @@ $.widget("ui.dialog", {
 		this._trigger('focus', event);
 	},
 
-	open: function(event) {
+	open: function() {
 		if (this._isOpen) { return; }
 
 		var options = this.options,
@@ -211,7 +211,7 @@ $.widget("ui.dialog", {
 		this._size();
 		this._position(options.position);
 		uiDialog.show(options.show);
-		this.moveToTop(true, event);
+		this.moveToTop(true);
 
 		// prevent tabbing out of modal dialogs
 		(options.modal && uiDialog.bind('keypress.ui-dialog', function(event) {
@@ -243,7 +243,7 @@ $.widget("ui.dialog", {
 			.filter(':first')
 			.focus();
 
-		this._trigger('open', event);
+		this._trigger('open');
 		this._isOpen = true;
 	},
 
