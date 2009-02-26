@@ -167,7 +167,7 @@ $.widget("ui.dialog", {
 			? self.uiDialog.hide(self.options.hide, function() {
 				self._trigger('close', event);
 			})
-			: self._trigger('close', event));
+			: self.uiDialog.hide() && self._trigger('close', event));
 
 		$.ui.dialog.overlay.resize();
 
