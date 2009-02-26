@@ -87,9 +87,9 @@ $.widget("ui.tabs", {
 			// Same consideration applies for an added tab with a fragment identifier
 			// since a[href=#fragment-identifier] does unexpectedly not match.
 			// Thus normalize href attribute...
-			
-			if (href.split('#')[0] == location.toString().split('#')[0] ||
-					$('base').length && href.split('#')[0] == $('base')[0].href) {
+			var hrefBase = href.split('#')[0], baseEl;
+			if (hrefBase && (hrefBase === location.toString().split('#')[0] ||
+					(baseEl = $('base')[0]) && hrefBase === baseEl.href)) {
 				href = a.hash;
 				a.href = href;
 			}
