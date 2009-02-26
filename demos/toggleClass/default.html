@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<title>jQuery UI Effect Methods - Add Class Demo</title>
+	<link type="text/css" href="http://jquery-ui.googlecode.com/svn/trunk/themes/base/ui.all.css" rel="stylesheet" />
+	<script type="text/javascript" src="http://jquery-ui.googlecode.com/svn/trunk/jquery-1.3.2.js"></script>
+	<script type="text/javascript" src="http://jquery-ui.googlecode.com/svn/trunk/ui/effects.core.js"></script>
+	<link type="text/css" href="http://jquery-ui.googlecode.com/svn/trunk/demos/demos.css" rel="stylesheet" />
+	<style type="text/css">
+		.toggler { width: 500px; height: 200px; }
+		#button { padding: .5em 1em; text-decoration: none; }
+		#animate { width: 240px; padding: 0.4em; }
+		#animate h3 { margin: 0; padding: 0.4em; text-align: center; }
+		.class { font-size: 1.6em; }
+	</style>
+	<script type="text/javascript">
+	$(function() {
+		$("#button").click(function() {
+			$('#animate').toggleClass('class', 1000);
+		});
+	});
+	</script>
+</head>
+<body>
+
+<div class="demo">
+
+<div class="toggler">
+	<div id="animate" class="ui-widget-content ui-corner-all">
+		<h3 class="ui-widget-header ui-corner-all">Animate</h3>
+		<p>
+			Etiam libero neque, luctus a, eleifend nec, semper at, lorem. Sed pede. Nulla lorem metus, adipiscing ut, luctus sed, hendrerit vitae, mi.
+		</p>
+	</div>
+</div>
+
+<a href="#" id="button" class="ui-state-default ui-corner-all">Show Effect</a>
+
+</div><!-- End demo -->
+
+<div class="demo-description">
+
+<p>Click the button above to preview the effect.</p>
+
+</div><!-- End demo-description -->
+
+</body>
+</html>
