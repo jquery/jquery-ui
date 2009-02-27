@@ -1,7 +1,7 @@
-Copyright (c) 2009 Paul Bakaus, http://ui.jquery.com/
+Copyright (c) 2009 Paul Bakaus, http://jqueryui.com/
 
 This software consists of voluntary contributions made by many
-individuals (AUTHORS.txt, http://ui.jquery.com/about) For exact
+individuals (AUTHORS.txt, http://jqueryui.com/about) For exact
 contribution history, see the revision history and logs, available
 at http://jquery-ui.googlecode.com/svn/
 
