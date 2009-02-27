@@ -1,22 +1,24 @@
 <!doctype html>
 <html lang="en">
 <head>
-	<title>jQuery UI Effect Methods - Add Class Demo</title>
+	<title>jQuery UI Effects - toggleClass Demo</title>
 	<link type="text/css" href="http://jquery-ui.googlecode.com/svn/trunk/themes/base/ui.all.css" rel="stylesheet" />
 	<script type="text/javascript" src="http://jquery-ui.googlecode.com/svn/trunk/jquery-1.3.2.js"></script>
 	<script type="text/javascript" src="http://jquery-ui.googlecode.com/svn/trunk/ui/effects.core.js"></script>
 	<link type="text/css" href="http://jquery-ui.googlecode.com/svn/trunk/demos/demos.css" rel="stylesheet" />
 	<style type="text/css">
-		.toggler { width: 500px; height: 200px; }
+		.toggler { width: 500px; height: 200px; position: relative;}
 		#button { padding: .5em 1em; text-decoration: none; }
-		#animate { width: 240px; padding: 0.4em; }
-		#animate h3 { margin: 0; padding: 0.4em; text-align: center; }
-		.class { font-size: 1.6em; }
+		#effect {  position: relative; }
+		#effect h3 { margin: 0; padding: 0.4em; text-align: center; }
+		.ui-effects-transfer { border: 2px dotted gray; } 
+		.first { width: 240px; height: 135px; padding: 0.4em;  font-size: 1.2em; border-width: 1px; }
+		.second { width: 480px; height: 135px; padding: 0.8em; font-size: 1.6em; border-width: 5px; }
 	</style>
 	<script type="text/javascript">
 	$(function() {
 		$("#button").click(function() {
-			$('#animate').toggleClass('class', 1000);
+			$('#effect').toggleClass('second', 1000);
 		});
 	});
 	</script>
@@ -26,15 +28,15 @@
 <div class="demo">
 
 <div class="toggler">
-	<div id="animate" class="ui-widget-content ui-corner-all">
-		<h3 class="ui-widget-header ui-corner-all">Animate</h3>
+	<div id="effect" class="first ui-widget-content ui-corner-all">
+		<h3 class="ui-widget-header ui-corner-all">Toggle Class</h3>
 		<p>
 			Etiam libero neque, luctus a, eleifend nec, semper at, lorem. Sed pede. Nulla lorem metus, adipiscing ut, luctus sed, hendrerit vitae, mi.
 		</p>
 	</div>
 </div>
 
-<a href="#" id="button" class="ui-state-default ui-corner-all">Show Effect</a>
+<a href="#" id="button" class="ui-state-default ui-corner-all">Run Effect</a>
 
 </div><!-- End demo -->
 

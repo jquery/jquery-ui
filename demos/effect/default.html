@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-	<title>jQuery UI Effect Methods - Effect Demo</title>
+	<title>jQuery UI Effects - Effect Demo</title>
 	<link type="text/css" href="../../themes/base/ui.all.css" rel="stylesheet" />
 	<script type="text/javascript" src="../../jquery-1.3.2.js"></script>
 		<script type="text/javascript" src="../../ui/effects.core.js"></script>
@@ -23,7 +23,6 @@
 		#button { padding: .5em 1em; text-decoration: none; }
 		#effect { width: 240px; height: 135px; padding: 0.4em; position: relative; }
 		#effect h3 { margin: 0; padding: 0.4em; text-align: center; }
-		.resetLink { position: absolute; top: 50px; left: 40px; color: #ddd; font-size: 24px;  }
 		.ui-effects-transfer { border: 2px dotted gray; } 
 	</style>
 	<script type="text/javascript">
@@ -37,10 +36,8 @@
 			//most effect types need no options passed by default
 			var options = {};
 			//check if it's scale, transfer, or size - they need options explicitly set
-			if(selectedEffect == 'scale'){ 
-				options = {percent: 0}; 
-			}
-			else if(selectedEffect == 'transfer'){ options = { to: "#button" }; }
+			if(selectedEffect == 'scale'){ options = {percent: 0}; }
+			else if(selectedEffect == 'transfer'){ options = { to: "#button", className: 'ui-effects-transfer' }; }
 			else if(selectedEffect == 'size'){ options = { to: {width: 200,height: 60} }; }
 			
 			//run the effect
@@ -91,7 +88,7 @@
 	<option value="transfer">Transfer</option>
 </select>
 
-<a href="#" id="button" class="ui-state-default ui-corner-all">Show Effect</a>
+<a href="#" id="button" class="ui-state-default ui-corner-all">Run Effect</a>
 
 
 </div><!-- End demo -->
