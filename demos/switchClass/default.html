@@ -9,17 +9,16 @@
 	<style type="text/css">
 		.toggler { width: 500px; height: 200px; position: relative;}
 		#button { padding: .5em 1em; text-decoration: none; }
-		#effect { position: relative; }
-		#effect h3 { margin: 0; padding: 0.4em; text-align: center; }
-		.ui-effects-transfer { border: 2px dotted gray; } 
-		.first { width: 240px; height: 135px; padding: 0.4em;  font-size: 1.2em; border: 1px solid #000; background: #fff; color: #333; }
-		.second { width: 480px; height: 135px; padding: 0.8em; font-size: 1.6em; border: 5px solid #4f5b8c; background: #ddebf4; color: #2c4359; } 
+		#effect {position: relative;   }
+		#effect.newClass { width: 240px;  padding: 1em; letter-spacing: 0; font-size: 1.2em; border: 1px solid #000; background: #eee; color: #333; }
+		#effect.anotherNewClass { line-height: 2; text-indent: 40px; opacity: .8; letter-spacing: .4em; width: 410px; height: 100px; padding: 30px; margin: 10px; font-size: 1.6em; border: 5px solid orange; background: #2c4359; color: #fff; } 
+
 	</style>
 	<script type="text/javascript">
 	$(function() {
 		$("#button").click(function(){
-				$(".first").switchClass('first', 'second', 1000);
-				$(".second").switchClass('second', 'first', 1000);
+				$(".newClass").switchClass('newClass', 'anotherNewClass', 1000);
+				$(".anotherNewClass").switchClass('anotherNewClass', 'newClass', 1000);
 		});
 	});
 	</script>
@@ -28,15 +27,12 @@
 
 <div class="demo">
 
+
 <div class="toggler">
-	<div id="effect" class="first ui-widget-content ui-corner-all">
-		<h3 class="ui-widget-header ui-corner-all">Switch Class</h3>
-		<p>
-			Etiam libero neque, luctus a, eleifend nec, semper at, lorem. Sed pede. Nulla lorem metus, adipiscing ut, luctus sed, hendrerit vitae, mi.
-		</p>
+	<div id="effect" class="newClass ui-corner-all">
+			Etiam libero neque, luctus a, eleifend nec, semper at, lorem. Sed pede. 
 	</div>
 </div>
-
 <a href="#" id="button" class="ui-state-default ui-corner-all">Run Effect</a>
 
 </div><!-- End demo -->
