@@ -177,7 +177,7 @@ $.widget("ui.resizable", $.extend({}, $.ui.mouse, {
 		this._mouseDestroy();
 
 		var _destroy = function(exp) {
-			$(exp).removeClass("ui-resizable ui-resizable-disabled")
+			$(exp).removeClass("ui-resizable ui-resizable-disabled ui-resizable-resizing")
 				.removeData("resizable").unbind(".resizable").find('.ui-resizable-handle').remove();
 		};
 
@@ -252,6 +252,7 @@ $.widget("ui.resizable", $.extend({}, $.ui.mouse, {
 	    var cursor = $('.ui-resizable-' + this.axis).css('cursor');
 	    $('body').css('cursor', cursor == 'auto' ? this.axis + '-resize' : cursor);
 
+		el.addClass("ui-resizable-resizing");
 		this._propagate("start", event);
 		return true;
 	},
@@ -314,6 +315,8 @@ $.widget("ui.resizable", $.extend({}, $.ui.mouse, {
 		}
 
 		$('body').css('cursor', 'auto');
+
+		this.element.removeClass("ui-resizable-resizing");
 
 		this._propagate("stop", event);
 
