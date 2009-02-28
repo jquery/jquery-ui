@@ -639,29 +639,30 @@ $.extend($.ui.tabs.prototype, {
 
 		var self = this, o = this.options, t = o.selected;
 
-		function rotate() {
+		var rotate = function() {
 			clearTimeout(self.rotation);
 			self.rotation = setTimeout(function() {
 				t = ++t < self.anchors.length ? t : 0;
 				self.select(t);
 			}, ms);
-		}
+		};
+		
+		var stop = !continuing ?
+			function(e) {
+				if (e.clientX) { // in case of a true click
+					clearTimeout(self.rotation);
+					self.element.unbind('tabsshow', rotate);
+				}
+			} :
+			function(e) {
+				t = o.selected;
+				rotate();
+			};
 
 		// start rotation
 		if (ms) {
 			this.element.bind('tabsshow', rotate); // will not be attached twice
-			this.anchors.bind(o.event + '.tabs', !continuing ?
-				function(e) {
-					if (e.clientX) { // in case of a true click
-						clearTimeout(self.rotation);
-						self.element.unbind('tabsshow', rotate);
-					}
-				} :
-				function(e) {
-					t = o.selected;
-					rotate();
-				}
-			);
+			this.anchors.bind(o.event + '.tabs', stop);
 			rotate();
 		}
 		// stop rotation
