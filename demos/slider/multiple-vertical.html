@@ -9,47 +9,31 @@
 	<link type="text/css" href="../demos.css" rel="stylesheet" />
 	<style type="text/css">
 		#demo-frame > div.demo { padding: 10px !important; }
+		#eq span {
+			height:120px; float:left; margin:15px
+		}
 	</style>
 	<script type="text/javascript">
 	$(function() {
-		$("#slider0").slider({
+		// change defaults for range, animate and orientation
+		$.extend($.ui.slider.defaults, {
 			range: "min",
-			value: 60
+			animate: true,
+			orientation: "vertical"
 		});
-		$("#slider1").slider({
-			orientation: "vertical",
-			range: "min",
-			value: 88
+		// setup master volume
+		$("#master").slider({
+			value: 60,
+			orientation: "horizontal"
 		});
-		$("#slider2").slider({
-			orientation: "vertical",
-			range: "min",
-			value: 77
-		});
-		$("#slider3").slider({
-			orientation: "vertical",
-			range: "min",
-			value: 55
-		});
-		$("#slider4").slider({
-			orientation: "vertical",
-			range: "min",
-			value: 33
-		});
-		$("#slider5").slider({
-			orientation: "vertical",
-			range: "min",
-			value: 40
-		});
-		$("#slider6").slider({
-			orientation: "vertical",
-			range: "min",
-			value: 45
-		});
-		$("#slider7").slider({
-			orientation: "vertical",
-			range: "min",
-			value: 70
+		// setup graphic EQ
+		$("#eq > span").each(function() {
+			// read initial values from markup and remove that
+			var value = parseInt($(this).text());
+			$(this).empty();
+			$(this).slider({
+				value: value
+			})
 		});
 	});
 	</script>
@@ -63,20 +47,22 @@
 Master volume
 </p>
 
-<div id="slider0" style="width:260px; margin:15px;"></div>
+<div id="master" style="width:260px; margin:15px;"></div>
 
 <p class="ui-state-default ui-corner-all" style="padding:4px;margin-top:4em;">
 <span class="ui-icon ui-icon-signal" style="float:left; margin:-2px 5px 0 0;"></span>
 Graphic EQ
 </p>
 
-<div id="slider1" style="height:120px; float:left; margin:15px"></div>
-<div id="slider2" style="height:120px; float:left; margin:15px"></div>
-<div id="slider3" style="height:120px; float:left; margin:15px"></div>
-<div id="slider4" style="height:120px; float:left; margin:15px"></div>
-<div id="slider5" style="height:120px; float:left; margin:15px"></div>
-<div id="slider6" style="height:120px; float:left; margin:15px"></div>
-<div id="slider7" style="height:120px; float:left; margin:15px"></div>
+<div id="eq">
+	<span>88</span>
+	<span>77</span>
+	<span>55</span>
+	<span>33</span>
+	<span>40</span>
+	<span>45</span>
+	<span>70</span>
+</div>
 
 </div><!-- End demo -->
 
