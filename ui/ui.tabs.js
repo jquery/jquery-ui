@@ -65,13 +65,13 @@ $.widget("ui.tabs", {
 				.find('span:data(label.tabs)')
 				.each(function() {
 					var el = $(this);
-					el.html(el.data('label.tabs'));
+					el.html(el.data('label.tabs')).removeData('label.tabs');
 				});
 	},
 
 	_tabify: function(init) {
 
-		this.list = this.element.children('ul:first, ol:first').eq(0);
+		this.list = this.element.children('ul:first');
 		this.lis = $('li:has(a[href])', this.list);
 		this.anchors = this.lis.map(function() { return $('a', this)[0]; });
 		this.panels = $([]);
@@ -391,8 +391,10 @@ $.widget("ui.tabs", {
 	destroy: function() {
 		var o = this.options;
 
+		this.abort();
+		
 		this.element.unbind('.tabs')
-			.removeClass('ui-tabs ui-widget ui-widget-content ui-corner-all')
+			.removeClass('ui-tabs ui-widget ui-widget-content ui-corner-all ui-tabs-collapsible')
 			.removeData('tabs');
 
 		this.list.removeClass('ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all');
@@ -413,18 +415,19 @@ $.widget("ui.tabs", {
 				$(this).remove();
 			}
 			else {
-				$(this).removeClass(
-					'ui-state-default ' +
-					'ui-corner-top ' +
-					'ui-tabs-selected ' +
-					'ui-state-active ' +
-					'ui-state-hover ' +
-					'ui-tabs-collapsible ' +
-					'ui-state-disabled ' +
-					'ui-tabs-panel ' +
-					'ui-widget-content ' +
-					'ui-corner-bottom ' +
-					'ui-tabs-hide');
+				$(this).removeClass([
+					'ui-state-default',
+					'ui-corner-top',
+					'ui-tabs-selected',
+					'ui-state-active',
+					'ui-state-hover',
+					'ui-state-focus',
+					'ui-state-disabled',
+					'ui-tabs-panel',
+					'ui-widget-content',
+					'ui-corner-bottom',
+					'ui-tabs-hide'
+				].join(' '));
 			}
 		});
 
