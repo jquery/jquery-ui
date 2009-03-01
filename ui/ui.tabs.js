@@ -640,31 +640,34 @@ $.extend($.ui.tabs.prototype, {
 	rotation: null,
 	rotate: function(ms, continuing) {
 
-		var self = this, o = this.options, t = o.selected;
-
-		var rotate = function() {
+		var self = this, o = this.options;
+		
+		var rotate = self._rotate || (self._rotate = function(e) {
 			clearTimeout(self.rotation);
 			self.rotation = setTimeout(function() {
-				t = ++t < self.anchors.length ? t : 0;
-				self.select(t);
+				var t = o.selected;
+				self.select( ++t < self.anchors.length ? t : 0 );
 			}, ms);
-		};
+			
+			if (e) {
+				e.stopPropagation();
+			}
+		});
 		
-		var stop = !continuing ?
+		var stop = self._unrotate || (self._unrotate = !continuing ?
 			function(e) {
 				if (e.clientX) { // in case of a true click
-					clearTimeout(self.rotation);
-					self.element.unbind('tabsshow', rotate);
+					self.rotate(null);
 				}
 			} :
 			function(e) {
 				t = o.selected;
 				rotate();
-			};
+			});
 
 		// start rotation
 		if (ms) {
-			this.element.bind('tabsshow', rotate); // will not be attached twice
+			this.element.bind('tabsshow', rotate);
 			this.anchors.bind(o.event + '.tabs', stop);
 			rotate();
 		}
@@ -673,6 +676,8 @@ $.extend($.ui.tabs.prototype, {
 			clearTimeout(self.rotation);
 			this.element.unbind('tabsshow', rotate);
 			this.anchors.unbind(o.event + '.tabs', stop);
+			delete this._rotate;
+			delete this._unrotate;
 		}
 	}
 });
