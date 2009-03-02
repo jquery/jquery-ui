@@ -354,7 +354,7 @@ $.widget("ui.accordion", {
 
 		}
 
-		toHide.prev().attr('aria-expanded','false').attr("tabIndex", "-1");
+		toHide.prev().attr('aria-expanded','false').attr("tabIndex", "-1").blur();
 		toShow.prev().attr('aria-expanded','true').attr("tabIndex", "0").focus();
 
 	},
