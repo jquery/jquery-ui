@@ -84,15 +84,19 @@
 					var title = $link.siblings('img').attr('alt');
 					var $modal = $('img[src$="'+src+'"]');
 
-					$modal.length ? $modal.dialog('open') : $('<img alt="'+title+'" width="384" height="288" style="padding: 8px;" />').attr('src',src).appendTo('body').dialog({
-						title: title,
-						width: '400px',
-						modal: 'true',
-						overlay: {
-							backgroundColor: '#000',
-							opacity: 0.5
-						}
-					});
+					if ($modal.length) {
+						$modal.dialog('open')
+					} else {
+						var img = $('<img alt="'+title+'" width="384" height="288" style="display:none;padding: 8px;" />')
+							.attr('src',src).appendTo('body');
+						setTimeout(function() {
+							img.dialog({
+									title: title,
+									width: 400,
+									modal: true
+								});
+						}, 1);
+					}
 				}
 
 				// resolve the icons behavior with event delegation
