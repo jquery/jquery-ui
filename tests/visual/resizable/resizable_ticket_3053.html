@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<title>Resizable Visual Test : Resizable ticket #3053</title>
+	<link rel="stylesheet" href="../visual.css" type="text/css" />
+	<link rel="stylesheet" href="../../../themes/base/ui.all.css" type="text/css" />
+	<script type="text/javascript" src="../../../jquery-1.3.2.js"></script>
+	<script type="text/javascript" src="../../../ui/ui.core.js"></script>
+	<script type="text/javascript" src="../../../ui/ui.resizable.js"></script>
+	<script type="text/javascript">
+	$(function() {
+		$("#resizable").resizable({
+			handles: 'all',
+			aspectRatio: true,
+			transparent: true,
+			ghost: true
+		});
+	});
+	</script>
+	<style type="text/css">
+		.ui-resizable-handle { width: 8px; height: 8px; border: 1px solid rgb(128, 128, 128); background: rgb(242, 242, 242); }
+		.ui-resizable-n, .ui-resizable-s { left: 45%; }
+		.ui-resizable-e, .ui-resizable-w { top: 45%; }
+		.ui-resizable-se { bottom: -5px; right: -5px; }
+	</style>
+</head>
+<body>
+
+<h1 class="ui-widget-header"><a href="http://dev.jqueryui.com/ticket/3053">#3053 - when resizing a image a row of pixels can disappear</a></h1>
+
+<img id="resizable" src="images/test.png">
+
+</body>
+</html>
