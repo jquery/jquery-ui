@@ -17,8 +17,9 @@
 	<script type="text/javascript">
 	$(function() {
 		$("#button").click(function(){
-				$(".newClass").switchClass('newClass', 'anotherNewClass', 1000);
-				$(".anotherNewClass").switchClass('anotherNewClass', 'newClass', 1000);
+			$(".newClass").switchClass('newClass', 'anotherNewClass', 1000);
+			$(".anotherNewClass").switchClass('anotherNewClass', 'newClass', 1000);
+			return false;	
 		});
 	});
 	</script>
