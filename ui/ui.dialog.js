@@ -341,6 +341,8 @@ $.widget("ui.dialog", {
 			handles: resizeHandles,
 			stop: function() {
 				$(this).removeClass("ui-dialog-resizing");
+				options.height = $(this).height();
+				options.width = $(this).width();
 				(options.resizeStop && options.resizeStop.apply(self.element[0], arguments));
 				$.ui.dialog.overlay.resize();
 			}
