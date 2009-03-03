@@ -19,7 +19,7 @@
 	<property file="ant.properties" />
 
 	<loadfile failonerror="no" srcFile="../version.txt" property="release.version" />
-	<property name="release.filename" value="jquery.ui-${release.version}" />
+	<property name="release.filename" value="jquery-ui-${release.version}" />
 
 	<property name="dist.dir" value="dist/${release.filename}/" />
 	<property name="build.dir" value="build" />
@@ -29,8 +29,8 @@
 
 	<property name="min.folder" value="${dist.dir}/ui/minified" />
 
-	<property name="concatenated" value="jquery.ui.all" />
-	<property name="concatenated.i18n" value="jquery.ui.i18n.all" />
+	<property name="concatenated" value="jquery-ui" />
+	<property name="concatenated.i18n" value="jquery-ui-i18n" />
 
 	<property name="core.files" value="ui.core.js, ui.draggable.js, ui.droppable.js, ui.resizable.js, ui.selectable.js, ui.sortable.js, effects.core.js" />
 
@@ -166,6 +166,10 @@
 			<fileset dir="${ui.dir}/tests/" />
 		</copy>
 
+		<copy overwrite="true" todir="${dist.dir}/docs/" >
+			<fileset dir="${ui.dir}/docs/" />
+		</copy>
+
 		<copy overwrite="true" todir="${dist.dir}/themes/" >
 			<fileset dir="${ui.dir}/themes/" />
 		</copy>
@@ -178,20 +182,32 @@
 	
 	<target name="docs-download">
 		<mkdir dir="${docs.dir}" />
-		<property name="url" value="http://docs.jquery.com/action/render/UI/" />
-		<get src="${url}Accordion/accordion" dest="${docs.dir}accordion.html" />
-		<get src="${url}Datepicker/datepicker" dest="${docs.dir}datepicker.html" />
-		<get src="${url}Dialog/dialog" dest="${docs.dir}dialog.html" />
-		<get src="${url}Draggable/draggable" dest="${docs.dir}draggable.html" />
-		<get src="${url}Droppable/droppable" dest="${docs.dir}droppable.html" />
-		<get src="${url}Progressbar/progressbar" dest="${docs.dir}progressbar.html" />
-		<get src="${url}Resizable/resizable" dest="${docs.dir}resizable.html" />
-		<get src="${url}Selectable/selectable" dest="${docs.dir}selectable.html" />
-		<get src="${url}Slider/slider" dest="${docs.dir}slider.html" />
-		<get src="${url}Sortable/sortable" dest="${docs.dir}sortable.html" />
-		<get src="${url}Tabs/tabs" dest="${docs.dir}tabs.html" />
+		<property name="url" value="http://docs.jquery.com/action/render/UI/API/${release.version}/" />
+
+		<get src="${url}Draggable" dest="${docs.dir}draggable.html" />
+		<get src="${url}Droppable" dest="${docs.dir}droppable.html" />
+		<get src="${url}Resizable" dest="${docs.dir}resizable.html" />
+		<get src="${url}Selectable" dest="${docs.dir}selectable.html" />
+		<get src="${url}Sortable" dest="${docs.dir}sortable.html" />
+
+		<get src="${url}Accordion" dest="${docs.dir}accordion.html" />
+		<get src="${url}Datepicker" dest="${docs.dir}datepicker.html" />
+		<get src="${url}Dialog" dest="${docs.dir}dialog.html" />
+		<get src="${url}Progressbar" dest="${docs.dir}progressbar.html" />
+		<get src="${url}Slider" dest="${docs.dir}slider.html" />
+		<get src="${url}Tabs" dest="${docs.dir}tabs.html" />
+
+		<get src="http://docs.jquery.com/action/render/UI/Effects/animate" dest="${docs.dir}animate.html" />
+		<get src="http://docs.jquery.com/action/render/UI/Effects/addClass" dest="${docs.dir}addClass.html" />
+		<get src="http://docs.jquery.com/action/render/UI/Effects/effect" dest="${docs.dir}effect.html" />
+		<get src="http://docs.jquery.com/action/render/UI/Effects/hide" dest="${docs.dir}hide.html" />
+		<get src="http://docs.jquery.com/action/render/UI/Effects/removeClass" dest="${docs.dir}removeClass.html" />
+		<get src="http://docs.jquery.com/action/render/UI/Effects/show" dest="${docs.dir}show.html" />
+		<get src="http://docs.jquery.com/action/render/UI/Effects/switchClass" dest="${docs.dir}switchClass.html" />
+		<get src="http://docs.jquery.com/action/render/UI/Effects/toggle" dest="${docs.dir}toggle.html" />
+		<get src="http://docs.jquery.com/action/render/UI/Effects/toggleClass" dest="${docs.dir}toggleClass.html" />
 	</target>
-			
+
 	<target name="docs-clean">
 		<delete dir="${docs.dir}" />
 	</target>
