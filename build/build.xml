@@ -25,6 +25,7 @@
 	<property name="build.dir" value="build" />
 	<property name="ui.dir" value="../" />
 	<property name="src.dir" value="${ui.dir}/ui/" />
+	<property name="theme.dir" value="${ui.dir}/themes/base/" />
 	<property name="docs.dir" value="${ui.dir}/docs/" />
 
 	<property name="min.folder" value="${dist.dir}/ui/minified" />
@@ -88,6 +89,13 @@
 			<fileset dir="${src.dir}/" includes="ui.*.js, effects.*.js" excludes="${core.files}" />
 		</concat>
 		<echo message="Concatenated built." />
+
+		<concat destfile="${dist.dir}/themes/base/${concatenated}.css">
+			<fileset dir="${theme.dir}/" includes="ui.core.css" />
+			<fileset dir="${theme.dir}/" includes="ui.*.css" excludes="ui.all.css, ui.core.css, ui.base.cs, ui.theme.css" />
+			<fileset dir="${theme.dir}/" includes="ui.theme.css" />
+		</concat>
+		<echo message="Concatenated theme." />
 
 		<mkdir dir="${dist.dir}/ui/i18n/" />
 		<delete file="${dist.dir}/ui/i18n/${concatenated.i18n}.js" />
