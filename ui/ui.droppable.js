@@ -20,7 +20,7 @@ $.widget("ui.droppable", {
 		var o = this.options, accept = o.accept;
 		this.isover = 0; this.isout = 1;
 
-		this.options.accept = this.options.accept && $.isFunction(this.options.accept) ? this.options.accept : function(d) {
+		this.options.accept = accept && $.isFunction(accept) ? accept : function(d) {
 			return d.is(accept);
 		};
 
@@ -28,10 +28,10 @@ $.widget("ui.droppable", {
 		this.proportions = { width: this.element[0].offsetWidth, height: this.element[0].offsetHeight };
 
 		// Add the reference and positions to the manager
-		$.ui.ddmanager.droppables[this.options.scope] = $.ui.ddmanager.droppables[this.options.scope] || [];
-		$.ui.ddmanager.droppables[this.options.scope].push(this);
+		$.ui.ddmanager.droppables[o.scope] = $.ui.ddmanager.droppables[o.scope] || [];
+		$.ui.ddmanager.droppables[o.scope].push(this);
 
-		(this.options.addClasses && this.element.addClass("ui-droppable"));
+		(o.addClasses && this.element.addClass("ui-droppable"));
 
 	},
 
