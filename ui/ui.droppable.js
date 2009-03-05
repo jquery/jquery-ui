@@ -51,7 +51,7 @@ $.widget("ui.droppable", {
 
 		if(key == 'accept') {
 			this.options.accept = value && $.isFunction(value) ? value : function(d) {
-				return d.is(accept);
+				return d.is(value);
 			};
 		} else {
 			$.widget.prototype._setData.apply(this, arguments);
