@@ -299,11 +299,15 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 	},
 
 	_start: function(event, index) {
-		this._trigger("start", event, {
+		var uiHash = {
 			handle: this.handles[index],
-			value: this.value(),
-			values: this.values()
-		});
+			value: this.value()
+		};
+		if (this.options.values && this.options.values.length) {
+			uiHash.value = this.values(index)
+			uiHash.values = this.values()
+		}
+		this._trigger("start", event, uiHash);
 	},
 
 	_slide: function(event, index, newVal) {
