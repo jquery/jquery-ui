@@ -6,7 +6,7 @@ jQuery(function($){
 		prevText: '&#x3c;mbrapa',
 		nextText: 'Përpara&#x3e;',
 		currentText: 'sot',
-		monthNames: ['Janar','Shkurt','Mars','Pril','Maj','Qershor',
+		monthNames: ['Janar','Shkurt','Mars','Prill','Maj','Qershor',
 		'Korrik','Gusht','Shtator','Tetor','Nëntor','Dhjetor'],
 		monthNamesShort: ['Jan','Shk','Mar','Pri','Maj','Qer',
 		'Kor','Gus','Sht','Tet','Nën','Dhj'],
