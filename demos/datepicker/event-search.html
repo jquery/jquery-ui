@@ -15,7 +15,9 @@
 			numberOfMonths: 3,
 			onSelect: function(selectedDate) {
 				var option = this.id == "from" ? "minDate" : "maxDate";
-				dates.not(this).datepicker("option", option, new Date(selectedDate));
+				var instance = $(this).data("datepicker");
+				var date = $.datepicker.parseDate(instance.settings.dateFormat || $.datepicker._defaults.dateFormat, selectedDate, instance.settings);
+				dates.not(this).datepicker("option", option, date);
 			}
 		});
 	});
