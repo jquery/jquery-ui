@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<title>Dialog Visual Test : Dialog ticket #4335</title>
+	<link rel="stylesheet" href="../visual.css" type="text/css" />
+	<link rel="stylesheet" href="../../../themes/base/ui.all.css" type="text/css">
+	<script type="text/javascript" src="../../../jquery-1.3.2.js"></script>
+	<script type="text/javascript" src="../../../ui/ui.core.js"></script>
+	<script type="text/javascript" src="../../../ui/ui.dialog.js"></script>
+	<script type="text/javascript" src="../../../ui/effects.core.js"></script>
+	<script type="text/javascript">
+	$(function() {
+		$("#dialog").dialog({
+			hide: "fadeOut"
+		});
+	});
+	</script>
+</head>
+<body>
+
+<h1 class="ui-widget-header"><a href="http://dev.jqueryui.com/ticket/4355">#4355 - Dialog: hide option doesn't work when effects.core.js included</a></h1>
+
+<div id="dialog" title="Dialog Title">
+	<p>
+		Dialog Content
+	</p>
+</div>
+
+</body>
+</html>
