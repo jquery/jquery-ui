@@ -161,6 +161,7 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 	destroy: function() {
 
 		this.handles.remove();
+		this.range.remove();
 
 		this.element
 			.removeClass("ui-slider"
