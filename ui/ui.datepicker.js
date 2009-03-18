@@ -166,6 +166,7 @@ $.extend(Datepicker.prototype, {
 	/* Attach the date picker to an input field. */
 	_connectDatepicker: function(target, inst) {
 		var input = $(target);
+		inst.trigger = $([]);
 		if (input.hasClass(this.markerClassName))
 			return;
 		var appendText = this._get(inst, 'appendText');
@@ -178,14 +179,14 @@ $.extend(Datepicker.prototype, {
 		if (showOn == 'button' || showOn == 'both') { // pop-up date picker when button clicked
 			var buttonText = this._get(inst, 'buttonText');
 			var buttonImage = this._get(inst, 'buttonImage');
-			var trigger = $(this._get(inst, 'buttonImageOnly') ?
+			inst.trigger = $(this._get(inst, 'buttonImageOnly') ?
 				$('<img/>').addClass(this._triggerClass).
 					attr({ src: buttonImage, alt: buttonText, title: buttonText }) :
 				$('<button type="button"></button>').addClass(this._triggerClass).
 					html(buttonImage == '' ? buttonText : $('<img/>').attr(
 					{ src:buttonImage, alt:buttonText, title:buttonText })));
-			input[isRTL ? 'before' : 'after'](trigger);
-			trigger.click(function() {
+			input[isRTL ? 'before' : 'after'](inst.trigger);
+			inst.trigger.click(function() {
 				if ($.datepicker._datepickerShowing && $.datepicker._lastInput == target)
 					$.datepicker._hideDatepicker();
 				else
@@ -269,14 +270,15 @@ $.extend(Datepicker.prototype, {
 	   @param  target    element - the target input field or division or span */
 	_destroyDatepicker: function(target) {
 		var $target = $(target);
+		var inst = $.data(target, PROP_NAME);
 		if (!$target.hasClass(this.markerClassName)) {
 			return;
 		}
 		var nodeName = target.nodeName.toLowerCase();
 		$.removeData(target, PROP_NAME);
 		if (nodeName == 'input') {
+			inst.trigger.remove();
 			$target.siblings('.' + this._appendClass).remove().end().
-				siblings('.' + this._triggerClass).remove().end().
 				removeClass(this.markerClassName).
 				unbind('focus', this._showDatepicker).
 				unbind('keydown', this._doKeyDown).
@@ -289,15 +291,16 @@ $.extend(Datepicker.prototype, {
 	   @param  target    element - the target input field or division or span */
 	_enableDatepicker: function(target) {
 		var $target = $(target);
+		var inst = $.data(target, PROP_NAME);
 		if (!$target.hasClass(this.markerClassName)) {
 			return;
 		}
 		var nodeName = target.nodeName.toLowerCase();
 		if (nodeName == 'input') {
 		target.disabled = false;
-			$target.siblings('button.' + this._triggerClass).
+			inst.trigger.filter("button").
 			each(function() { this.disabled = false; }).end().
-				siblings('img.' + this._triggerClass).
+				filter("img").
 				css({opacity: '1.0', cursor: ''});
 		}
 		else if (nodeName == 'div' || nodeName == 'span') {
@@ -312,15 +315,16 @@ $.extend(Datepicker.prototype, {
 	   @param  target    element - the target input field or division or span */
 	_disableDatepicker: function(target) {
 		var $target = $(target);
+		var inst = $.data(target, PROP_NAME);
 		if (!$target.hasClass(this.markerClassName)) {
 			return;
 		}
 		var nodeName = target.nodeName.toLowerCase();
 		if (nodeName == 'input') {
 		target.disabled = true;
-			$target.siblings('button.' + this._triggerClass).
+			inst.trigger.filter("button").
 			each(function() { this.disabled = true; }).end().
-				siblings('img.' + this._triggerClass).
+				filter("img").
 				css({opacity: '0.5', cursor: 'default'});
 		}
 		else if (nodeName == 'div' || nodeName == 'span') {
