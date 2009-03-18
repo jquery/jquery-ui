@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<title>Datepicker Visual Test : Datepicker ticket #4240</title>
+	<link rel="stylesheet" href="../visual.css" type="text/css" />
+	<link rel="stylesheet" href="../../../themes/base/ui.all.css" type="text/css">
+	<script type="text/javascript" src="../../../jquery-1.3.2.js"></script>
+	<script type="text/javascript" src="../../../ui/ui.core.js"></script>
+	<script type="text/javascript" src="../../../ui/ui.datepicker.js"></script>
+	<script type="text/javascript">
+	$(function() {
+		$("#destroystart").click(function() {
+			$("#startdate").datepicker('destroy');
+		});
+		$("#destroyend").click(function() {
+			$("#enddate").datepicker('destroy');
+		});
+		$("#disablestart").click(function() {
+			$("#startdate").datepicker('disable');
+		});
+		$("#disableend").click(function() {
+			$("#enddate").datepicker('disable');
+		});
+		$("#enablestart").click(function() {
+			$("#startdate").datepicker('enable');
+		});
+		$("#enableend").click(function() {
+			$("#enddate").datepicker('enable');
+		});
+	});
+	</script>
+</head>
+<body>
+
+<h1 class="ui-widget-header"><a href="http://dev.jqueryui.com/ticket/4240">#4240 - Datepicker destroy affects other datepickers</a></h1>
+
+    <input type="text" id="startdate" />
+    <input type="text" id="enddate" />
+    <br /> <br />
+    <input type="button" value="Init Startdate" onclick="$('#startdate').datepicker({showOn: 'both', buttonImage:'calendar.gif', buttonImageOnly:'true'});" />
+    <input type="button" value="Init Enddate" onclick="$('#enddate').datepicker({showOn: 'both', buttonImage:'calendar.gif', buttonImageOnly:'true'});" />
+    <br /> <br />
+    <input type="button" id="destroystart" value="Destroy Startdate" />
+    <input type="button" id="destroyend" value="Destroy Enddate" />
+    <br /> <br />
+    <input type="button" id="enablestart" value="Enable Startdate" />
+    <input type="button" id="enableend" value="Enable Enddate" />
+    <br /> <br />
+    <input type="button" id="disablestart" value="Disable Startdate" />
+    <input type="button" id="disableend" value="Disable Enddate" />
+
+</body>
+</html>
