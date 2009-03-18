@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<title>Animate Visual Test : Animate color hex</title>
+	<link rel="stylesheet" href="../visual.css" type="text/css" />
+	<link rel="stylesheet" href="../../../themes/base/ui.all.css" type="text/css">
+	<script type="text/javascript" src="../../../jquery-1.3.2.js"></script>
+	<script type="text/javascript" src="../../../ui/effects.core.js"></script>
+	<script type="text/javascript">
+	function hexFromRGB (r, g, b) {
+		var hex = [
+			r.toString(16),
+			g.toString(16),
+			b.toString(16)
+		];
+		$.each(hex, function (nr, val) {
+			if (val.length == 1) {
+				hex[nr] = '0' + val;
+			}
+		});
+		return hex.join('').toUpperCase();
+	}
+	function randomColorHex() {
+		return '#' + hexFromRGB(Math.floor(Math.random()*256), Math.floor(Math.random()*256), Math.floor(Math.random()*256));
+	}
+	$(function() {
+		$("#go").click(function() {
+			$("#animate-color").stop().animate({ color: randomColorHex() }, "fast");
+		});
+	})
+	</script>
+	<style type="text/css">
+	#animate-color { width: 250px; height: 100px; color: gray; }
+	</style>
+</head>
+<body>
+
+<div id="animate-color">Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.</div>
+
+<button id="go">Go</button>
+
+</body>
+</html>

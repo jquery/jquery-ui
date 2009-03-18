@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<title>Animate Visual Test : Animate backgroundColor hex</title>
+	<link rel="stylesheet" href="../visual.css" type="text/css" />
+	<link rel="stylesheet" href="../../../themes/base/ui.all.css" type="text/css">
+	<script type="text/javascript" src="../../../jquery-1.3.2.js"></script>
+	<script type="text/javascript" src="../../../ui/effects.core.js"></script>
+	<script type="text/javascript">
+	function hexFromRGB (r, g, b) {
+		var hex = [
+			r.toString(16),
+			g.toString(16),
+			b.toString(16)
+		];
+		$.each(hex, function (nr, val) {
+			if (val.length == 1) {
+				hex[nr] = '0' + val;
+			}
+		});
+		return hex.join('').toUpperCase();
+	}
+	function randomColorHex() {
+		return '#' + hexFromRGB(Math.floor(Math.random()*256), Math.floor(Math.random()*256), Math.floor(Math.random()*256));
+	}
+	$(function() {
+		$("#go").click(function() {
+			$("#animate-backgroundColor").stop().animate({ backgroundColor: randomColorHex() }, "fast");
+		});
+	})
+	</script>
+	<style type="text/css">
+	#animate-backgroundColor { width: 100px; height: 100px; background-color: gray; }
+	</style>
+</head>
+<body>
+
+<div id="animate-backgroundColor"></div>
+
+<button id="go">Go</button>
+
+</body>
+</html>
