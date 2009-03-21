@@ -15,8 +15,9 @@
 			max: 500,
 			values: [75, 300],
 			slide: function(event, ui) {
-				$("#rangevalue").text(ui.values[0] + ' - ' + ui.values[1]);
-				return ((ui.values[1] - ui.values[0]) > 50);
+				var minMet = ((ui.values[1] - ui.values[0]) > 50);
+				minMet && $("#rangevalue").text(ui.values[0] + ' - ' + ui.values[1]);
+				return minMet;
 			}
 		});
 		$("#rangevalue").text($("#slider").slider("values", 0) + ' - ' + $("#slider").slider("values", 1));
