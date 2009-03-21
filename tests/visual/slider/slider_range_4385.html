@@ -1,0 +1,49 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+	<title>jQuery UI Slider - Range slider</title>
+	<link type="text/css" href="../../../themes/base/ui.all.css" rel="stylesheet" />
+	<script type="text/javascript" src="../../../jquery-1.3.2.js"></script>
+	<script type="text/javascript" src="../../../ui/ui.core.js"></script>
+	<script type="text/javascript" src="../../../ui/ui.slider.js"></script>
+	<link type="text/css" href="../../../demos/demos.css" rel="stylesheet" />
+	<style type="text/css">
+		#demo-frame > div.demo { padding: 10px !important; };
+	</style>
+	<script type="text/javascript">
+	$(function() {
+		$("#slider-range").slider({
+			range: true,
+			min: 0,
+			max: 500,
+			values: [75, 300],
+			slide: function(event, ui) {
+				$("#amount").val('$' + ui.values[0] + ' - $' + ui.values[1]);
+				return ((ui.values[1] - ui.values[0]) > 50);
+			}
+		});
+		$("#amount").val('$' + $("#slider-range").slider("values", 0) + ' - $' + $("#slider-range").slider("values", 1));
+	});
+	</script>
+</head>
+<body>
+
+<div class="demo">
+
+<p>
+<label for="amount">Price range:</label>
+<input type="text" id="amount" style="border:0; color:#f6931f; font-weight:bold;" />
+</p>
+
+<div id="slider-range"></div>
+
+</div><!-- End demo -->
+
+<div class="demo-description">
+
+<p>Set the <code>range</code> option to true to capture a range of values with two drag handles.  The space between the handles is filled with a different background color to indicate those values are selected.</p>
+
+</div><!-- End demo-description -->
+
+</body>
+</html>
