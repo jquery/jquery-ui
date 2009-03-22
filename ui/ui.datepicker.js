@@ -166,13 +166,16 @@ $.extend(Datepicker.prototype, {
 	/* Attach the date picker to an input field. */
 	_connectDatepicker: function(target, inst) {
 		var input = $(target);
+		inst.append = $([]);
 		inst.trigger = $([]);
 		if (input.hasClass(this.markerClassName))
 			return;
 		var appendText = this._get(inst, 'appendText');
 		var isRTL = this._get(inst, 'isRTL');
-		if (appendText)
-			input[isRTL ? 'before' : 'after']('<span class="' + this._appendClass + '">' + appendText + '</span>');
+		if (appendText) {
+			inst.append = $('<span class="' + this._appendClass + '">' + appendText + '</span>');
+			input[isRTL ? 'before' : 'after'](inst.append);
+		}
 		var showOn = this._get(inst, 'showOn');
 		if (showOn == 'focus' || showOn == 'both') // pop-up date picker when in the marked field
 			input.focus(this._showDatepicker);
@@ -277,9 +280,9 @@ $.extend(Datepicker.prototype, {
 		var nodeName = target.nodeName.toLowerCase();
 		$.removeData(target, PROP_NAME);
 		if (nodeName == 'input') {
+			inst.append.remove();
 			inst.trigger.remove();
-			$target.siblings('.' + this._appendClass).remove().end().
-				removeClass(this.markerClassName).
+			$target.removeClass(this.markerClassName).
 				unbind('focus', this._showDatepicker).
 				unbind('keydown', this._doKeyDown).
 				unbind('keypress', this._doKeyPress);
@@ -297,11 +300,10 @@ $.extend(Datepicker.prototype, {
 		}
 		var nodeName = target.nodeName.toLowerCase();
 		if (nodeName == 'input') {
-		target.disabled = false;
-			inst.trigger.filter("button").
-			each(function() { this.disabled = false; }).end().
-				filter("img").
-				css({opacity: '1.0', cursor: ''});
+			target.disabled = false;
+			inst.trigger.filter('button').
+				each(function() { this.disabled = false; }).end().
+				filter('img').css({opacity: '1.0', cursor: ''});
 		}
 		else if (nodeName == 'div' || nodeName == 'span') {
 			var inline = $target.children('.' + this._inlineClass);
@@ -321,11 +323,10 @@ $.extend(Datepicker.prototype, {
 		}
 		var nodeName = target.nodeName.toLowerCase();
 		if (nodeName == 'input') {
-		target.disabled = true;
-			inst.trigger.filter("button").
-			each(function() { this.disabled = true; }).end().
-				filter("img").
-				css({opacity: '0.5', cursor: 'default'});
+			target.disabled = true;
+			inst.trigger.filter('button').
+				each(function() { this.disabled = true; }).end().
+				filter('img').css({opacity: '0.5', cursor: 'default'});
 		}
 		else if (nodeName == 'div' || nodeName == 'span') {
 			var inline = $target.children('.' + this._inlineClass);
