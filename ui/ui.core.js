@@ -217,9 +217,16 @@ function getter(namespace, plugin, method, args) {
 }
 
 $.widget = function(name, prototype) {
-	var namespace = name.split(".")[0];
+	var namespace = name.split(".")[0],
+		fullName;
 	name = name.split(".")[1];
+	fullName = namespace + '-' + name;
 
+	// create selector for plugin
+	$.expr[':'][fullName] = function(elem) {
+		return !!$.data(elem, name);
+	};
+	
 	// create plugin method
 	$.fn[name] = function(options) {
 		var isMethodCall = (typeof options == 'string'),
@@ -259,7 +266,7 @@ $.widget = function(name, prototype) {
 		this.namespace = namespace;
 		this.widgetName = name;
 		this.widgetEventPrefix = $[namespace][name].eventPrefix || name;
-		this.widgetBaseClass = namespace + '-' + name;
+		this.widgetBaseClass = fullName;
 
 		this.options = $.extend(true, {},
 			$.widget.defaults,
