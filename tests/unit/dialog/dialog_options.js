@@ -54,9 +54,9 @@ test("buttons", function() {
 		}
 	};
 
-	equals(el.data("buttons.dialog"), buttons, '.data("buttons.dialog") getter');
+	same(el.data("buttons.dialog"), buttons, '.data("buttons.dialog") getter');
 	el.data("buttons.dialog", newButtons);
-	equals(el.data("buttons.dialog"), newButtons, '.data("buttons.dialog", ...) setter');
+	same(el.data("buttons.dialog"), newButtons, '.data("buttons.dialog", ...) setter');
 
 	btn = $("button", dlg());
 	equals(btn.length, 1, "number of buttons after setter");
