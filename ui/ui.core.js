@@ -261,7 +261,7 @@ $.widget = function(name, prototype) {
 		this.widgetEventPrefix = $[namespace][name].eventPrefix || name;
 		this.widgetBaseClass = namespace + '-' + name;
 
-		this.options = $.extend({},
+		this.options = $.extend(true, {},
 			$.widget.defaults,
 			$[namespace][name].defaults,
 			$.metadata && $.metadata.get(element)[name],
