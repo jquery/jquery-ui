@@ -533,10 +533,13 @@ $.extend($.ui.dialog.overlay, {
 			// we use a setTimeout in case the overlay is created from an
 			// event that we're going to be cancelling (see #2804)
 			setTimeout(function() {
-				$(document).bind($.ui.dialog.overlay.events, function(event) {
-					var dialogZ = $(event.target).parents('.ui-dialog').css('zIndex') || 0;
-					return (dialogZ > $.ui.dialog.overlay.maxZ);
-				});
+				// handle $(el).dialog().dialog('close') (see #4065)
+				if ($.ui.dialog.overlay.instances.length) {
+					$(document).bind($.ui.dialog.overlay.events, function(event) {
+						var dialogZ = $(event.target).parents('.ui-dialog').css('zIndex') || 0;
+						return (dialogZ > $.ui.dialog.overlay.maxZ);
+					});
+				}
 			}, 1);
 
 			// allow closing by pressing the escape key
