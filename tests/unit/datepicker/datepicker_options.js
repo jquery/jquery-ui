@@ -18,6 +18,7 @@ test('setDefaults', function() {
 test('option', function() {
 	var inp = init('#inp');
 	var inst = $.data(inp[0], PROP_NAME);
+	// Set option
 	equals(inst.settings.showOn, null, 'Initial setting showOn');
 	equals($.datepicker._get(inst, 'showOn'), 'focus', 'Initial instance showOn');
 	equals($.datepicker._defaults.showOn, 'focus', 'Initial default showOn');
@@ -33,6 +34,16 @@ test('option', function() {
 	equals(inst.settings.showOn, null, 'Clear setting showOn');
 	equals($.datepicker._get(inst, 'showOn'), 'focus', 'Restore instance showOn');
 	equals($.datepicker._defaults.showOn, 'focus', 'Retain default showOn');
+	// Get option
+	inp = init('#inp');
+	equals(inp.datepicker('option', 'showOn'), 'focus', 'Initial setting showOn');
+	inp.datepicker('option', 'showOn', 'button');
+	equals(inp.datepicker('option', 'showOn'), 'button', 'Change instance showOn');
+	inp.datepicker('option', 'showOn', undefined);
+	equals(inp.datepicker('option', 'showOn'), 'focus', 'Reset instance showOn');
+	same(inp.datepicker('option', 'all'), {duration: ''}, 'Get instance settings');
+	same(inp.datepicker('option', 'defaults'), $.datepicker._defaults,
+		'Get default settings');
 });
 
 test('change', function() {
