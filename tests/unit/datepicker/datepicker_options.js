@@ -657,6 +657,10 @@ test('parseDate', function() {
 		new Date(2051, 2 - 1, 3), 'Parse date y-m-d - cutoff 80');
 	equalsDate($.datepicker.parseDate('y-m-d', '51-02-03', {shortYearCutoff: '+60'}),
 		new Date(2051, 2 - 1, 3), 'Parse date y-m-d - cutoff +60');
+	var gmtDate = new Date(2001, 2 - 1, 3);
+	gmtDate.setMinutes(gmtDate.getMinutes() - gmtDate.getTimezoneOffset());
+	equalsDate($.datepicker.parseDate('@', '981158400000'), gmtDate, 'Parse date @');
+	equalsDate($.datepicker.parseDate('!', '631167552000000000'), gmtDate, 'Parse date !');
 	var fr = $.datepicker.regional['fr'];
 	var settings = {dayNamesShort: fr.dayNamesShort, dayNames: fr.dayNames,
 		monthNamesShort: fr.monthNamesShort, monthNames: fr.monthNames};
@@ -745,6 +749,10 @@ test('formatDate', function() {
 	equals($.datepicker.formatDate('\'day\' d \'of\' MM (\'\'DD\'\'), yy',
 		new Date(2001, 2 - 1, 3)), 'day 3 of February (\'Saturday\'), 2001',
 		'Format date \'day\' d \'of\' MM (\'\'DD\'\'), yy');
+	var gmtDate = new Date(2001, 2 - 1, 3);
+	gmtDate.setMinutes(gmtDate.getMinutes() - gmtDate.getTimezoneOffset());
+	equals($.datepicker.formatDate('@', gmtDate), '981158400000', 'Format date @');
+	equals($.datepicker.formatDate('!', gmtDate), '631167552000000000', 'Format date !');
 	var fr = $.datepicker.regional['fr'];
 	var settings = {dayNamesShort: fr.dayNamesShort, dayNames: fr.dayNames,
 		monthNamesShort: fr.monthNamesShort, monthNames: fr.monthNames};

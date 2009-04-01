@@ -868,34 +868,25 @@ $.extend(Datepicker.prototype, {
 		// Extract a number from the string value
 		var getNumber = function(match) {
 			lookAhead(match);
-			var origSize = (match == '@' ? 14 : (match == 'y' ? 4 : (match == 'o' ? 3 : 2)));
-			var size = origSize;
-			var num = 0;
-			while (size > 0 && iValue < value.length &&
-					value.charAt(iValue) >= '0' && value.charAt(iValue) <= '9') {
-				num = num * 10 + parseInt(value.charAt(iValue++),10);
-				size--;
-			}
-			if (size == origSize)
+			var size = (match == '@' ? 14 : (match == '!' ? 20 :
+				(match == 'y' ? 4 : (match == 'o' ? 3 : 2))));
+			var digits = new RegExp('^\\d{1,' + size + '}');
+			var num = value.substring(iValue).match(digits);
+			if (!num)
 				throw 'Missing number at position ' + iValue;
-			return num;
+			iValue += num[0].length;
+			return parseInt(num[0], 10);
 		};
 		// Extract a name from the string value and convert to an index
 		var getName = function(match, shortNames, longNames) {
 			var names = (lookAhead(match) ? longNames : shortNames);
-			var size = 0;
-			for (var j = 0; j < names.length; j++)
-				size = Math.max(size, names[j].length);
-			var name = '';
-			var iInit = iValue;
-			while (size > 0 && iValue < value.length) {
-				name += value.charAt(iValue++);
-				for (var i = 0; i < names.length; i++)
-					if (name == names[i])
-						return i + 1;
-				size--;
+			for (var i = 0; i < names.length; i++) {
+				if (value.substr(iValue, names[i].length) == names[i]) {
+					iValue += names[i].length;
+					return i + 1;
+				}
 			}
-			throw 'Unknown name at position ' + iInit;
+			throw 'Unknown name at position ' + iValue;
 		};
 		// Confirm that a literal character matches the string value
 		var checkLiteral = function() {
@@ -932,6 +923,12 @@ $.extend(Datepicker.prototype, {
 						break;
 					case '@':
 						var date = new Date(getNumber('@'));
+						year = date.getFullYear();
+						month = date.getMonth() + 1;
+						day = date.getDate();
+						break;
+					case '!':
+						var date = new Date((getNumber('!') - this._ticksTo1970) / 10000);
 						year = date.getFullYear();
 						month = date.getMonth() + 1;
 						day = date.getDate();
@@ -978,8 +975,12 @@ $.extend(Datepicker.prototype, {
 	RFC_1123: 'D, d M yy',
 	RFC_2822: 'D, d M yy',
 	RSS: 'D, d M y', // RFC 822
+	TICKS: '!',
 	TIMESTAMP: '@',
 	W3C: 'yy-mm-dd', // ISO 8601
+
+	_ticksTo1970: (((1970 - 1) * 365 + Math.floor(1970 / 4) - Math.floor(1970 / 100) +
+		Math.floor(1970 / 400)) * 24 * 60 * 60 * 10000000),
 
 	/* Format a date object into a string value.
 	   The format can be combinations of the following:
@@ -996,6 +997,7 @@ $.extend(Datepicker.prototype, {
 	   y  - year (two digit)
 	   yy - year (four digit)
 	   @ - Unix timestamp (ms since 01/01/1970)
+	   ! - Windows ticks (100ns since 01/01/0001)
 	   '...' - literal text
 	   '' - single quote
 
@@ -1051,10 +1053,8 @@ $.extend(Datepicker.prototype, {
 							output += formatName('D', date.getDay(), dayNamesShort, dayNames);
 							break;
 						case 'o':
-							var doy = date.getDate();
-							for (var m = date.getMonth() - 1; m >= 0; m--)
-								doy += this._getDaysInMonth(date.getFullYear(), m);
-							output += formatNumber('o', doy, 3);
+							output += formatNumber('o',
+								(date.getTime() - new Date(date.getFullYear(), 0, 0).getTime()) / 86400000, 3);
 							break;
 						case 'm':
 							output += formatNumber('m', date.getMonth() + 1, 2);
@@ -1068,6 +1068,9 @@ $.extend(Datepicker.prototype, {
 							break;
 						case '@':
 							output += date.getTime();
+							break;
+						case '!':
+							output += date.getTime() * 10000 + this._ticksTo1970;
 							break;
 						case "'":
 							if (lookAhead("'"))
