@@ -13,7 +13,10 @@ jQuery(function($){
 		dayNames: ['E Diel','E Hënë','E Martë','E Mërkurë','E Enjte','E Premte','E Shtune'],
 		dayNamesShort: ['Di','Hë','Ma','Më','En','Pr','Sh'],
 		dayNamesMin: ['Di','Hë','Ma','Më','En','Pr','Sh'],
-		dateFormat: 'dd.mm.yy', firstDay: 1,
-		isRTL: false};
+		dateFormat: 'dd.mm.yy',
+		firstDay: 1,
+		isRTL: false,
+		showMonthAfterYear: false,
+		yearSuffix: ''};
 	$.datepicker.setDefaults($.datepicker.regional['sq']);
 });

@@ -13,7 +13,10 @@ jQuery(function($){
 		dayNames: ['ראשון','שני','שלישי','רביעי','חמישי','שישי','שבת'],
 		dayNamesShort: ['א\'','ב\'','ג\'','ד\'','ה\'','ו\'','שבת'],
 		dayNamesMin: ['א\'','ב\'','ג\'','ד\'','ה\'','ו\'','שבת'],
-		dateFormat: 'dd/mm/yy', firstDay: 0,
-		isRTL: true};
+		dateFormat: 'dd/mm/yy',
+		firstDay: 0,
+		isRTL: true,
+		showMonthAfterYear: false,
+		yearSuffix: ''};
 	$.datepicker.setDefaults($.datepicker.regional['he']);
 });

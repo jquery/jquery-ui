@@ -13,7 +13,10 @@ jQuery(function($){
 		dayNames: ['Nedjelja','Ponedjeljak','Utorak','Srijeda','Četvrtak','Petak','Subota'],
 		dayNamesShort: ['Ned','Pon','Uto','Sri','Čet','Pet','Sub'],
 		dayNamesMin: ['Ne','Po','Ut','Sr','Če','Pe','Su'],
-		dateFormat: 'dd.mm.yy.', firstDay: 1,
-		isRTL: false};
+		dateFormat: 'dd.mm.yy.',
+		firstDay: 1,
+		isRTL: false,
+		showMonthAfterYear: false,
+		yearSuffix: ''};
 	$.datepicker.setDefaults($.datepicker.regional['hr']);
 });

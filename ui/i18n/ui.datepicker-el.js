@@ -13,7 +13,10 @@ jQuery(function($){
 		dayNames: ['Κυριακή','Δευτέρα','Τρίτη','Τετάρτη','Πέμπτη','Παρασκευή','Σάββατο'],
 		dayNamesShort: ['Κυρ','Δευ','Τρι','Τετ','Πεμ','Παρ','Σαβ'],
 		dayNamesMin: ['Κυ','Δε','Τρ','Τε','Πε','Πα','Σα'],
-		dateFormat: 'dd/mm/yy', firstDay: 1,
-		isRTL: false};
+		dateFormat: 'dd/mm/yy',
+		firstDay: 1,
+		isRTL: false,
+		showMonthAfterYear: false,
+		yearSuffix: ''};
 	$.datepicker.setDefaults($.datepicker.regional['el']);
 });

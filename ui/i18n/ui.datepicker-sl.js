@@ -14,7 +14,10 @@ jQuery(function($){
 		dayNames: ['Nedelja','Ponedeljek','Torek','Sreda','&#x10C;etrtek','Petek','Sobota'],
 		dayNamesShort: ['Ned','Pon','Tor','Sre','&#x10C;et','Pet','Sob'],
 		dayNamesMin: ['Ne','Po','To','Sr','&#x10C;e','Pe','So'],
-		dateFormat: 'dd.mm.yy', firstDay: 1,
-		isRTL: false};
+		dateFormat: 'dd.mm.yy',
+		firstDay: 1,
+		isRTL: false,
+		showMonthAfterYear: false,
+		yearSuffix: ''};
 	$.datepicker.setDefaults($.datepicker.regional['sl']);
 });

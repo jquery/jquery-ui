@@ -13,7 +13,10 @@ jQuery(function($){
 		dayNames: ['Dimanĉo','Lundo','Mardo','Merkredo','Ĵaŭdo','Vendredo','Sabato'],
 		dayNamesShort: ['Dim','Lun','Mar','Mer','Ĵaŭ','Ven','Sab'],
 		dayNamesMin: ['Di','Lu','Ma','Me','Ĵa','Ve','Sa'],
-		dateFormat: 'dd/mm/yy', firstDay: 0,
-		isRTL: false};
+		dateFormat: 'dd/mm/yy',
+		firstDay: 0,
+		isRTL: false,
+		showMonthAfterYear: false,
+		yearSuffix: ''};
 	$.datepicker.setDefaults($.datepicker.regional['eo']);
 });
