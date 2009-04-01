@@ -24,11 +24,16 @@ function equalsDateArray(a1, a2, message) {
 	same(a1, a2, message);
 }
 
+function addMonths(date, offset) {
+	var maxDay = 32 - new Date(date.getFullYear(), date.getMonth() + offset, 32).getDate();
+	date.setDate(Math.min(date.getDate(), maxDay));
+	date.setMonth(date.getMonth() + offset);
+	return date;
+}
+
 function init(id, options) {
 	$.datepicker.setDefaults($.datepicker.regional['']);
-	var inp = $(id);
-	inp.datepicker($.extend({duration: ''}, options || {}));
-	return inp;
+	return $(id).datepicker($.extend({duration: ''}, options || {}));
 }
 
 var PROP_NAME = 'datepicker';
@@ -38,9 +43,9 @@ var PROP_NAME = 'datepicker';
 module("datepicker: core");
 
 test('baseStructure', function() {
-	var dp = $('#ui-datepicker-div');
 	var inp = init('#inp');
 	inp.focus();
+	var dp = $('#ui-datepicker-div');
 	var iframe = ($.browser.msie && parseInt($.browser.version) < 7);
 	ok(dp.is(':visible'), 'Structure - datepicker visible');
 	ok(!dp.is('.ui-datepicker-rtl'), 'Structure - not right-to-left');
@@ -94,26 +99,32 @@ test('baseStructure', function() {
 	inp = init('#inp', {numberOfMonths: 2});
 	inp.focus();
 	ok(dp.is('.ui-datepicker-multi'), 'Structure multi [2] - multi-month');
-	equals(dp.children().length, 2 + (iframe ? 1 : 0), 'Structure multi [2] - child count');
-	month = dp.children(':first');
-	ok(month.is('div.ui-datepicker-group') && month.is('div.ui-datepicker-group-first'), 'Structure multi [2] - first month division');
-	month = dp.children(':eq(1)');
-	ok(month.is('div.ui-datepicker-group') && month.is('div.ui-datepicker-group-last'), 'Structure multi [2] - second month division');
+	equals(dp.children().length, 3 + (iframe ? 1 : 0), 'Structure multi [2] - child count');
+	var child = dp.children(':first');
+	ok(child.is('div.ui-datepicker-group') && child.is('div.ui-datepicker-group-first'), 'Structure multi [2] - first month division');
+	child = dp.children(':eq(1)');
+	ok(child.is('div.ui-datepicker-group') && child.is('div.ui-datepicker-group-last'), 'Structure multi [2] - second month division');
+	child = dp.children(':eq(2)');
+	ok(child.is('div.ui-datepicker-row-break'), 'Structure multi [2] - row break');
 	inp.datepicker('hide').datepicker('destroy');
 	
 	// Multi-month [2, 2]
 	inp = init('#inp', {numberOfMonths: [2, 2]});
 	inp.focus();
 	ok(dp.is('.ui-datepicker-multi'), 'Structure multi - multi-month');
-	equals(dp.children().length, 4 + (iframe ? 1 : 0), 'Structure multi [2,2] - child count');
-	month = dp.children(':first');
-	ok(month.is('div.ui-datepicker-group') && month.is('div.ui-datepicker-group-first'), 'Structure multi [2,2] - first month division');
-	month = dp.children(':eq(1)');
-	ok(month.is('div.ui-datepicker-group') && month.is('div.ui-datepicker-group-last'), 'Structure multi [2,2] - second month division');
-	month = dp.children(':eq(2)');
-	ok(month.is('div.ui-datepicker-group') && month.is('div.ui-datepicker-group-first'), 'Structure multi [2,2] - third month division');
-	month = dp.children(':eq(3)');
-	ok(month.is('div.ui-datepicker-group') && month.is('div.ui-datepicker-group-last'), 'Structure multi [2,2] - fourth month division');
+	equals(dp.children().length, 6 + (iframe ? 1 : 0), 'Structure multi [2,2] - child count');
+	child = dp.children(':first');
+	ok(child.is('div.ui-datepicker-group') && child.is('div.ui-datepicker-group-first'), 'Structure multi [2,2] - first month division');
+	child = dp.children(':eq(1)');
+	ok(child.is('div.ui-datepicker-group') && child.is('div.ui-datepicker-group-last'), 'Structure multi [2,2] - second month division');
+	child = dp.children(':eq(2)');
+	ok(child.is('div.ui-datepicker-row-break'), 'Structure multi [2,2] - row break');
+	child = dp.children(':eq(3)');
+	ok(child.is('div.ui-datepicker-group') && child.is('div.ui-datepicker-group-first'), 'Structure multi [2,2] - third month division');
+	child = dp.children(':eq(4)');
+	ok(child.is('div.ui-datepicker-group') && child.is('div.ui-datepicker-group-last'), 'Structure multi [2,2] - fourth month division');
+	child = dp.children(':eq(5)');
+	ok(child.is('div.ui-datepicker-row-break'), 'Structure multi [2,2] - row break');
 	inp.datepicker('hide').datepicker('destroy');
 	
 	// Inline
@@ -126,7 +137,7 @@ test('baseStructure', function() {
 	var header = dp.children(':first');
 	ok(header.is('div.ui-datepicker-header'), 'Structure inline - header division');
 	equals(header.children().length, 3, 'Structure inline - header child count');
-	var table = month.children(':eq(1)');
+	var table = dp.children(':eq(1)');
 	ok(table.is('table.ui-datepicker-calendar'), 'Structure inline - month table');
 	ok(table.children(':first').is('thead'), 'Structure inline - month table thead');
 	ok(table.children(':eq(1)').is('tbody'), 'Structure inline - month table body');
@@ -136,11 +147,13 @@ test('baseStructure', function() {
 	inl = init('#inl', {numberOfMonths: 2});
 	dp = inl.children();
 	ok(dp.is('.ui-datepicker-inline') && dp.is('.ui-datepicker-multi'), 'Structure inline multi - main div');	
-	equals(dp.children().length, 2 + (iframe ? 1 : 0), 'Structure multi - child count');
-	month = dp.children(':first');
-	ok(month.is('div.ui-datepicker-group') && month.is('div.ui-datepicker-group-first'), 'Structure multi - first month division');
-	month = dp.children(':eq(1)');
-	ok(month.is('div.ui-datepicker-group') && month.is('div.ui-datepicker-group-last'), 'Structure multi - second month division');
+	equals(dp.children().length, 3 + (iframe ? 1 : 0), 'Structure inline multi - child count');
+	child = dp.children(':first');
+	ok(child.is('div.ui-datepicker-group') && child.is('div.ui-datepicker-group-first'), 'Structure inline multi - first month division');
+	child = dp.children(':eq(1)');
+	ok(child.is('div.ui-datepicker-group') && child.is('div.ui-datepicker-group-last'), 'Structure inline multi - second month division');
+	child = dp.children(':eq(2)');
+	ok(child.is('div.ui-datepicker-row-break'), 'Structure inline multi - row break');
 	inl.datepicker('destroy');
 });
 
