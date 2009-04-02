@@ -77,10 +77,26 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 		this.handle = this.handles.eq(0);
 
 		this.handles.add(this.range).filter("a")
-			.click(function(event) { event.preventDefault(); })
-			.hover(function() { $(this).addClass('ui-state-hover'); }, function() { $(this).removeClass('ui-state-hover'); })
-			.focus(function() { $(".ui-slider .ui-state-focus").removeClass('ui-state-focus'); $(this).addClass('ui-state-focus'); })
-			.blur(function() { $(this).removeClass('ui-state-focus'); });
+			.click(function(event) {
+				event.preventDefault();
+			})
+			.hover(function() {
+				if (!o.disabled) {
+					$(this).addClass('ui-state-hover');
+				}
+			}, function() {
+				$(this).removeClass('ui-state-hover');
+			})
+			.focus(function() {
+				if (!o.disabled) {
+					$(".ui-slider .ui-state-focus").removeClass('ui-state-focus'); $(this).addClass('ui-state-focus');
+				} else {
+					$(this).blur();
+				}
+			})
+			.blur(function() {
+				$(this).removeClass('ui-state-focus');
+			});
 
 		this.handles.each(function(i) {
 			$(this).data("index.ui-slider-handle", i);
@@ -415,6 +431,14 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 		$.widget.prototype._setData.apply(this, arguments);
 
 		switch (key) {
+			case 'disabled':
+				if (value) {
+					this.handles.filter(".ui-state-focus").blur();
+					this.handles.removeClass("ui-state-hover");
+					this.handles.attr("disabled", "disabled");
+				} else {
+					this.handles.removeAttr("disabled");
+				}
 			case 'orientation':
 
 				this._detectOrientation();
