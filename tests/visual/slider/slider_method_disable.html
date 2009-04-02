@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<title>Slider Visual Test : Slider method disable</title>
+	<link rel="stylesheet" href="../visual.css" type="text/css" />
+	<link rel="stylesheet" href="../../../themes/base/ui.all.css" type="text/css">
+	<script type="text/javascript" src="../../../jquery-1.3.2.js"></script>
+	<script type="text/javascript" src="../../../ui/ui.core.js"></script>
+	<script type="text/javascript" src="../../../ui/ui.slider.js"></script>
+	<script type="text/javascript">
+	$(function() {
+		$("#slider").slider({
+			range: true,
+			values: [25, 75]
+		});
+		$("#slider").slider("disable");
+		$(".hover").disableSelection().addClass("ui-corner-all");
+		$("#hover-enable").mouseover(function() {
+			$("#slider").slider("enable");
+		});
+		$("#hover-disable").mouseover(function() {
+			$("#slider").slider("disable");
+		});
+	});
+	</script>
+	<style type="text/css">
+	.hover { width: 250px; height: 75px; color: white; font-size: 3em; text-align: center; line-height: 2.5em; cursor: default; margin: 1em 1em 0 0; float: left; }
+	#hover-enable { background: #4e9a06; }
+	#hover-disable { background: #cc0000; }
+	</style>
+</head>
+<body>
+
+<a href="#">tab before</a>
+<div id="slider"></div>
+<a href="#">tab after</a>
+
+<hr style="margin-top:100px;"/>
+
+<div id="hover-enable" class="hover">hover to enable</div>
+<div id="hover-disable" class="hover">hover to disable</div>
+
+</body>
+</html>
