@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<title>jQuery UI Dialog - Animation</title>
+	<link type="text/css" href="../../themes/base/ui.all.css" rel="stylesheet" />
+	<script type="text/javascript" src="../../jquery-1.3.2.js"></script>
+	<script type="text/javascript" src="../../ui/ui.core.js"></script>
+	<script type="text/javascript" src="../../ui/ui.draggable.js"></script>
+	<script type="text/javascript" src="../../ui/ui.resizable.js"></script>
+	<script type="text/javascript" src="../../ui/ui.dialog.js"></script>
+	<script type="text/javascript" src="../../ui/effects.core.js"></script>
+	<script type="text/javascript" src="../../ui/effects.blind.js"></script>
+	<script type="text/javascript" src="../../ui/effects.explode.js"></script>
+	<script type="text/javascript" src="../../external/bgiframe/jquery.bgiframe.js"></script>
+	<link type="text/css" href="../demos.css" rel="stylesheet" />
+	<script type="text/javascript">
+	$.ui.dialog.defaults.bgiframe = true;
+	// increase the default animation speed to exaggerate the effect
+	$.fx.speeds._default = 1000;
+	$(function() {
+		$('#dialog').dialog({
+			autoOpen: false,
+			show: 'blind',
+			hide: 'explode'
+		});
+		
+		$('#opener').click(function() {
+			$('#dialog').dialog('open');
+			return false;
+		});
+	});
+	</script>
+</head>
+<body>
+
+<div class="demo">
+
+<div id="dialog" title="Basic dialog">
+	<p>This is an animated dialog which is useful for displaying information. The dialog window can be moved, resized and closed with the 'x' icon.</p>
+</div>
+
+<button id="opener">Open Dialog</button>
+
+</div><!-- End demo -->
+
+<div class="demo-description">
+
+<p>Dialogs may be animated by specifying an effect for the show and/or hide properties.  You must include the individual effects file for any effects you would like to use.</p>
+
+</div><!-- End demo-description -->
+
+</body>
+</html>
