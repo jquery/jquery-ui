@@ -335,6 +335,22 @@ test('minMax', function() {
 		simulate('keydown', {keyCode: $.simulate.VK_ENTER});
 	equalsDate(inp.datepicker('getDate'), date,
 		'Min/max - -1w, +1 M +10 D - ctrl+pgdn');
+	// With existing date
+	inp = init('#inp');
+	inp.val('06/04/2008').datepicker('option', {minDate: minDate});
+	equalsDate(inp.datepicker('getDate'), new Date(2008, 6 - 1, 4), 'Min/max - setDate > min');
+	inp.datepicker('option', {minDate: null}).val('01/04/2008').datepicker('option', {minDate: minDate});
+	equalsDate(inp.datepicker('getDate'), minDate, 'Min/max - setDate < min');
+	inp.datepicker('option', {minDate: null}).val('06/04/2008').datepicker('option', {maxDate: maxDate});
+	equalsDate(inp.datepicker('getDate'), new Date(2008, 6 - 1, 4), 'Min/max - setDate < max');
+	inp.datepicker('option', {maxDate: null}).val('01/04/2009').datepicker('option', {maxDate: maxDate});
+	equalsDate(inp.datepicker('getDate'), maxDate, 'Min/max - setDate > max');
+	inp.datepicker('option', {maxDate: null}).val('01/04/2008').datepicker('option', {minDate: minDate, maxDate: maxDate});
+	equalsDate(inp.datepicker('getDate'), minDate, 'Min/max - setDate < min');
+	inp.datepicker('option', {maxDate: null}).val('06/04/2008').datepicker('option', {minDate: minDate, maxDate: maxDate});
+	equalsDate(inp.datepicker('getDate'), new Date(2008, 6 - 1, 4), 'Min/max - setDate > min, < max');
+	inp.datepicker('option', {maxDate: null}).val('01/04/2009').datepicker('option', {minDate: minDate, maxDate: maxDate});
+	equalsDate(inp.datepicker('getDate'), maxDate, 'Min/max - setDate > max');
 });
 
 test('setDate', function() {
@@ -380,6 +396,24 @@ test('setDate', function() {
 	inp.datepicker('setDate', date1);
 	equals(inp.val(), '06/04/2008', 'Set date alternate - 06/04/2008');
 	equals(alt.val(), '2008-06-04', 'Set date alternate - 2008-06-04');
+	// With minimum/maximum
+	inp = init('#inp');
+	date1 = new Date(2008, 1 - 1, 4);
+	date2 = new Date(2008, 6 - 1, 4);
+	var minDate = new Date(2008, 2 - 1, 29);
+	var maxDate = new Date(2008, 3 - 1, 28);
+	inp.val('').datepicker('option', {minDate: minDate}).datepicker('setDate', date2);
+	equalsDate(inp.datepicker('getDate'), date2, 'Set date min/max - setDate > min');
+	inp.datepicker('setDate', date1);
+	equalsDate(inp.datepicker('getDate'), minDate, 'Set date min/max - setDate < min');
+	inp.val('').datepicker('option', {maxDate: maxDate, minDate: null}).datepicker('setDate', date1);
+	equalsDate(inp.datepicker('getDate'), date1, 'Set date min/max - setDate < max');
+	inp.datepicker('setDate', date2);
+	equalsDate(inp.datepicker('getDate'), maxDate, 'Set date min/max - setDate > max');
+	inp.val('').datepicker('option', {minDate: minDate}).datepicker('setDate', date1);
+	equalsDate(inp.datepicker('getDate'), minDate, 'Set date min/max - setDate < min');
+	inp.datepicker('setDate', date2);
+	equalsDate(inp.datepicker('getDate'), maxDate, 'Set date min/max - setDate > max');
 });
 
 test('altField', function() {
