@@ -95,7 +95,6 @@ function Datepicker() {
 		numberOfMonths: 1, // Number of months to show at a time
 		showCurrentAtPos: 0, // The position in multipe months at which to show the current month (starting at 0)
 		stepMonths: 1, // Number of months to step back/forward
-		stepBigMonths: 12, // Number of months to step back/forward for the big links
 		altField: '', // Selector for an alternate field to store selected dates into
 		altFormat: '', // The date format to use for the alternate field
 		constrainInput: true, // The input is constrained by the current date format
@@ -452,14 +451,10 @@ $.extend(Datepicker.prototype, {
 						break; // select the value on enter
 				case 27: $.datepicker._hideDatepicker(null, $.datepicker._get(inst, 'duration'));
 						break; // hide on escape
-				case 33: $.datepicker._adjustDate(event.target, (event.ctrlKey ?
-							-$.datepicker._get(inst, 'stepBigMonths') :
-							-$.datepicker._get(inst, 'stepMonths')), 'M');
-						break; // previous month/year on page up/+ ctrl
-				case 34: $.datepicker._adjustDate(event.target, (event.ctrlKey ?
-							+$.datepicker._get(inst, 'stepBigMonths') :
-							+$.datepicker._get(inst, 'stepMonths')), 'M');
-						break; // next month/year on page down/+ ctrl
+				case 33: $.datepicker._adjustDate(event.target, -$.datepicker._get(inst, 'stepMonths'), 'M');
+						break; // previous month(s) on page up
+				case 34: $.datepicker._adjustDate(event.target, +$.datepicker._get(inst, 'stepMonths'), 'M');
+						break; // next month(s) on page down
 				case 35: if (event.ctrlKey || event.metaKey) $.datepicker._clearDate(event.target);
 						handled = event.ctrlKey || event.metaKey;
 						break; // clear on ctrl or command +end
@@ -469,10 +464,9 @@ $.extend(Datepicker.prototype, {
 				case 37: if (event.ctrlKey || event.metaKey) $.datepicker._adjustDate(event.target, (isRTL ? +1 : -1), 'D');
 						handled = event.ctrlKey || event.metaKey;
 						// -1 day on ctrl or command +left
-						if (event.originalEvent.altKey) $.datepicker._adjustDate(event.target, (event.ctrlKey ?
-									-$.datepicker._get(inst, 'stepBigMonths') :
-									-$.datepicker._get(inst, 'stepMonths')), 'M');
-						// next month/year on alt +left on Mac
+						if (event.originalEvent.altKey)
+							$.datepicker._adjustDate(event.target, -$.datepicker._get(inst, 'stepMonths'), 'M');
+						// next month(s) on alt +left on Mac
 						break;
 				case 38: if (event.ctrlKey || event.metaKey) $.datepicker._adjustDate(event.target, -7, 'D');
 						handled = event.ctrlKey || event.metaKey;
@@ -480,10 +474,9 @@ $.extend(Datepicker.prototype, {
 				case 39: if (event.ctrlKey || event.metaKey) $.datepicker._adjustDate(event.target, (isRTL ? -1 : +1), 'D');
 						handled = event.ctrlKey || event.metaKey;
 						// +1 day on ctrl or command +right
-						if (event.originalEvent.altKey) $.datepicker._adjustDate(event.target, (event.ctrlKey ?
-									+$.datepicker._get(inst, 'stepBigMonths') :
-									+$.datepicker._get(inst, 'stepMonths')), 'M');
-						// next month/year on alt +right
+						if (event.originalEvent.altKey)
+							$.datepicker._adjustDate(event.target, +$.datepicker._get(inst, 'stepMonths'), 'M');
+						// next month(s) on alt +right
 						break;
 				case 40: if (event.ctrlKey || event.metaKey) $.datepicker._adjustDate(event.target, +7, 'D');
 						handled = event.ctrlKey || event.metaKey;
@@ -1246,7 +1239,6 @@ $.extend(Datepicker.prototype, {
 		var numMonths = this._getNumberOfMonths(inst);
 		var showCurrentAtPos = this._get(inst, 'showCurrentAtPos');
 		var stepMonths = this._get(inst, 'stepMonths');
-		var stepBigMonths = this._get(inst, 'stepBigMonths');
 		var isMultiMonth = (numMonths[0] != 1 || numMonths[1] != 1);
 		var currentDate = this._daylightSavingAdjust((!inst.currentDay ? new Date(9999, 9, 9) :
 			new Date(inst.currentYear, inst.currentMonth, inst.currentDay)));
