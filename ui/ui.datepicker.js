@@ -550,9 +550,10 @@ $.extend(Datepicker.prototype, {
 			var duration = $.datepicker._get(inst, 'duration');
 			var postProcess = function() {
 				$.datepicker._datepickerShowing = true;
-				if ($.browser.msie && parseInt($.browser.version,10) < 7) // fix IE < 7 select problems
-					$('iframe.ui-datepicker-cover').css({width: inst.dpDiv.width() + 4,
-						height: inst.dpDiv.height() + 4});
+				var borders = $.datepicker._getBorders(inst.dpDiv);
+				inst.dpDiv.find('iframe.ui-datepicker-cover'). // IE6- only
+					css({left: -borders[0], top: -borders[1],
+						width: inst.dpDiv.outerWidth(), height: inst.dpDiv.outerHeight()});
 			};
 			if ($.effects && $.effects[showAnim])
 				inst.dpDiv.show(showAnim, $.datepicker._get(inst, 'showOptions'), duration, postProcess);
@@ -568,12 +569,12 @@ $.extend(Datepicker.prototype, {
 
 	/* Generate the date picker content. */
 	_updateDatepicker: function(inst) {
-		var dims = {width: inst.dpDiv.width() + 4,
-			height: inst.dpDiv.height() + 4};
 		var self = this;
+		var borders = $.datepicker._getBorders(inst.dpDiv);
 		inst.dpDiv.empty().append(this._generateHTML(inst))
-			.find('iframe.ui-datepicker-cover').
-				css({width: dims.width, height: dims.height})
+			.find('iframe.ui-datepicker-cover') // IE6- only
+				.css({left: -borders[0], top: -borders[1],
+					width: inst.dpDiv.outerWidth(), height: inst.dpDiv.outerHeight()})
 			.end()
 			.find('button, .ui-datepicker-prev, .ui-datepicker-next, .ui-datepicker-calendar td a')
 				.bind('mouseout', function(){
@@ -606,6 +607,17 @@ $.extend(Datepicker.prototype, {
 			'Class']('ui-datepicker-rtl');
 		if (inst.input && inst.input[0].type != 'hidden' && inst == $.datepicker._curInst)
 			$(inst.input[0]).focus();
+	},
+
+	/* Retrieve the size of left and top borders for an element.
+	   @param  elem  (jQuery object) the element of interest
+	   @return  (number[2]) the left and top borders */
+	_getBorders: function(elem) {
+		var convert = function(value) {
+			return {thin: 1, medium: 2, thick: 3}[value] || value;
+		};
+		return [parseFloat(convert(elem.css('border-left-width'))),
+			parseFloat(convert(elem.css('border-top-width')))];
 	},
 
 	/* Check positioning to remain on screen. */
