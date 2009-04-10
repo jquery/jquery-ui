@@ -50,11 +50,10 @@
 	<link type="text/css" href="../demos.css" rel="stylesheet" />
 	<script type="text/javascript">
 	$(function() {
-		$.datepicker.setDefaults($.extend({showMonthAfterYear: false}, $.datepicker.regional['']));
+		$.datepicker.setDefaults($.datepicker.regional['']);
 		$("#datepicker").datepicker($.datepicker.regional['fr']);
 		$("#locale").change(function() {
-			$('#datepicker').datepicker('option', $.extend({showMonthAfterYear: false},
-				$.datepicker.regional[$(this).val()]));
+			$('#datepicker').datepicker('option', $.datepicker.regional[$(this).val()]);
 		});
 	});
 	</script>
