@@ -1148,12 +1148,8 @@ $.extend(Datepicker.prototype, {
 
 	/* Retrieve the default date shown on opening. */
 	_getDefaultDate: function(inst) {
-		var date = this._determineDate(this._get(inst, 'defaultDate'), new Date());
-		var minDate = this._getMinMaxDate(inst, 'min', true);
-		var maxDate = this._getMinMaxDate(inst, 'max');
-		date = (minDate && date < minDate ? minDate : date);
-		date = (maxDate && date > maxDate ? maxDate : date);
-		return date;
+		return this._restrictMinMax(inst,
+			this._determineDate(this._get(inst, 'defaultDate'), new Date()));
 	},
 
 	/* A date may be specified as an exact value or a relative one. */
@@ -1219,7 +1215,7 @@ $.extend(Datepicker.prototype, {
 		var clear = !(date);
 		var origMonth = inst.selectedMonth;
 		var origYear = inst.selectedYear;
-		date = this._determineDate(date, new Date());
+		date = this._restrictMinMax(inst, this._determineDate(date, new Date()));
 		inst.selectedDay = inst.currentDay = date.getDate();
 		inst.drawMonth = inst.selectedMonth = inst.currentMonth = date.getMonth();
 		inst.drawYear = inst.selectedYear = inst.currentYear = date.getFullYear();
@@ -1470,17 +1466,22 @@ $.extend(Datepicker.prototype, {
 		var month = inst.drawMonth + (period == 'M' ? offset : 0);
 		var day = Math.min(inst.selectedDay, this._getDaysInMonth(year, month)) +
 			(period == 'D' ? offset : 0);
-		var date = this._daylightSavingAdjust(new Date(year, month, day));
-		// ensure it is within the bounds set
-		var minDate = this._getMinMaxDate(inst, 'min', true);
-		var maxDate = this._getMinMaxDate(inst, 'max');
-		date = (minDate && date < minDate ? minDate : date);
-		date = (maxDate && date > maxDate ? maxDate : date);
+		var date = this._restrictMinMax(inst,
+			this._daylightSavingAdjust(new Date(year, month, day)));
 		inst.selectedDay = date.getDate();
 		inst.drawMonth = inst.selectedMonth = date.getMonth();
 		inst.drawYear = inst.selectedYear = date.getFullYear();
 		if (period == 'M' || period == 'Y')
 			this._notifyChange(inst);
+	},
+
+	/* Ensure a date is within any min/max bounds. */
+	_restrictMinMax: function(inst, date) {
+		var minDate = this._getMinMaxDate(inst, 'min');
+		var maxDate = this._getMinMaxDate(inst, 'max');
+		date = (minDate && date < minDate ? minDate : date);
+		date = (maxDate && date > maxDate ? maxDate : date);
+		return date;
 	},
 
 	/* Notify change of month/year. */
