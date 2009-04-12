@@ -106,7 +106,8 @@ $.extend($.ui.progressbar, {
 	version: "@VERSION",
 	defaults: {
 		value: 0
-	}
+	},
+	getter: "value"
 });
 
 })(jQuery);
