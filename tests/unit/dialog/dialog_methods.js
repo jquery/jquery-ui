@@ -33,7 +33,7 @@ test("init", function() {
 });
 
 test("destroy", function() {
-	expect(6);
+	expect(7);
 
 	$("<div></div>").appendTo('body').dialog().dialog("destroy").remove();
 	ok(true, '.dialog("destroy") called on element');
@@ -54,6 +54,31 @@ test("destroy", function() {
 
 	$('<div></div>').dialog().dialog("destroy").data("foo.dialog", "bar").remove();
 	ok(true, 'arbitrary option setter after destroy');
+
+	var expected = $('<div></div>').dialog(),
+		actual = expected.dialog('destroy');
+	equals(actual, expected, 'destroy is chainable');
+});
+
+test("enable", function() {
+	var expected = $('<div></div>').dialog(),
+		actual = expected.dialog('enable');
+	equals(actual, expected, 'enable is chainable');
+	ok(false, 'missing test - untested code is broken code');
+});
+
+test("disable", function() {
+	var expected = $('<div></div>').dialog(),
+		actual = expected.dialog('disable');
+	equals(actual, expected, 'disable is chainable');
+	ok(false, 'missing test - untested code is broken code');
+});
+
+test("close", function() {
+	var expected = $('<div></div>').dialog(),
+		actual = expected.dialog('close');
+	equals(actual, expected, 'close is chainable');
+	ok(false, 'missing test - untested code is broken code');
 });
 
 test("isOpen", function() {
@@ -70,6 +95,20 @@ test("isOpen", function() {
 	el.dialog('open');
 	equals(el.dialog('isOpen'), true, "dialog is open");
 	el.remove();
+});
+
+test("moveToTop", function() {
+	var expected = $('<div></div>').dialog(),
+		actual = expected.dialog('moveToTop');
+	equals(actual, expected, 'moveToTop is chainable');
+	ok(false, 'missing test - untested code is broken code');
+});
+
+test("open", function() {
+	var expected = $('<div></div>').dialog(),
+		actual = expected.dialog('open');
+	equals(actual, expected, 'open is chainable');
+	ok(false, 'missing test - untested code is broken code');
 });
 
 })(jQuery);

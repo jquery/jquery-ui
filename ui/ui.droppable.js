@@ -45,6 +45,8 @@ $.widget("ui.droppable", {
 			.removeClass("ui-droppable ui-droppable-disabled")
 			.removeData("droppable")
 			.unbind(".droppable");
+
+		return this;
 	},
 
 	_setData: function(key, value) {

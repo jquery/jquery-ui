@@ -38,7 +38,7 @@ test("init", function() {
 });
 
 test("destroy", function() {
-	expect(6);
+	expect(7);
 
 	$("<div></div>").appendTo('body').draggable().draggable("destroy").remove();
 	ok(true, '.draggable("destroy") called on element');
@@ -57,10 +57,14 @@ test("destroy", function() {
 
 	$("<div></div>").draggable().draggable("destroy").data("foo.draggable", "bar");
 	ok(true, 'arbitrary option setter after destroy');
+	
+	var expected = $('<div></div>').draggable(),
+		actual = expected.draggable('destroy');
+	equals(actual, expected, 'destroy is chainable');
 });
 
 test("enable", function() {
-	expect(6);
+	expect(7);
 	el = $("#draggable2").draggable({ disabled: true });
 	shouldnotmove('.draggable({ disabled: true })');
 	el.draggable("enable");
@@ -73,10 +77,14 @@ test("enable", function() {
 	el.data("disabled.draggable", false);
 	equals(el.data("disabled.draggable"), false, "disabled.draggable setter");
 	shouldmove('.data("disabled.draggable", false)');
+	
+	var expected = $('<div></div>').draggable(),
+		actual = expected.draggable('enable');
+	equals(actual, expected, 'enable is chainable');
 });
 
 test("disable", function() {
-	expect(6);
+	expect(7);
 	el = $("#draggable2").draggable({ disabled: false });
 	shouldmove('.draggable({ disabled: false })');
 	el.draggable("disable");
@@ -90,6 +98,10 @@ test("disable", function() {
 	el.data("disabled.draggable", true);
 	equals(el.data("disabled.draggable"), true, "disabled.draggable setter");
 	shouldnotmove('.data("disabled.draggable", true)');
+	
+	var expected = $('<div></div>').draggable(),
+		actual = expected.draggable('disable');
+	equals(actual, expected, 'disable is chainable');
 });
 
 })(jQuery);

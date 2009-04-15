@@ -30,7 +30,7 @@ test("init", function() {
 });
 
 test("destroy", function() {
-	expect(6);
+	expect(7);
 
 	$("<div></div>").appendTo('body').selectable().selectable("destroy").remove();
 	ok(true, '.selectable("destroy") called on element');
@@ -51,10 +51,14 @@ test("destroy", function() {
 
 	$("<div></div>").selectable().selectable("destroy").data("foo.selectable", "bar").remove();
 	ok(true, 'arbitrary option setter after destroy');
+	
+	var expected = $('<div></div>').selectable(),
+		actual = expected.selectable('destroy');
+	equals(actual, expected, 'destroy is chainable');
 });
 
 test("enable", function() {
-	expect(2);
+	expect(3);
 	var fired = false;
 
 	el = $("#selectable1");
@@ -68,10 +72,14 @@ test("enable", function() {
 	el.simulate("drag", 20, 20);
 	equals(fired, true, "start fired");
 	el.selectable("destroy");
+	
+	var expected = $('<div></div>').selectable(),
+		actual = expected.selectable('enable');
+	equals(actual, expected, 'enable is chainable');
 });
 
 test("disable", function() {
-	expect(2);
+	expect(3);
 	var fired = false;
 
 	el = $("#selectable1");
@@ -86,6 +94,10 @@ test("disable", function() {
 	el.simulate("drag", 20, 20);
 	equals(fired, false, "start fired");
 	el.selectable("destroy");
+	
+	var expected = $('<div></div>').selectable(),
+		actual = expected.selectable('disable');
+	equals(actual, expected, 'disable is chainable');
 });
 
 })(jQuery);

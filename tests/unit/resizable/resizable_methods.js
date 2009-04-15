@@ -30,7 +30,7 @@ test("init", function() {
 });
 
 test("destroy", function() {
-	expect(6);
+	expect(7);
 
 	$("<div></div>").appendTo('body').resizable().resizable("destroy").remove();
 	ok(true, '.resizable("destroy") called on element');
@@ -51,13 +51,23 @@ test("destroy", function() {
 
 	$('<div></div>').resizable().resizable("destroy").data("foo.resizable", "bar").remove();
 	ok(true, 'arbitrary option setter after destroy');
+	
+	var expected = $('<div></div>').resizable(),
+		actual = expected.resizable('destroy');
+	equals(actual, expected, 'destroy is chainable');
 });
 
 test("enable", function() {
+	var expected = $('<div></div>').resizable(),
+		actual = expected.resizable('enable');
+	equals(actual, expected, 'enable is chainable');
 	ok(false, "missing test - untested code is broken code.");
 });
 
 test("disable", function() {
+	var expected = $('<div></div>').resizable(),
+		actual = expected.resizable('disable');
+	equals(actual, expected, 'disable is chainable');
 	ok(false, "missing test - untested code is broken code.");
 });
 

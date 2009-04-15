@@ -45,7 +45,7 @@ test("init", function() {
 });
 
 test("destroy", function() {
-	expect(6);
+	expect(7);
 
 	$("<div></div>").appendTo('body').sortable().sortable("destroy").remove();
 	ok(true, '.sortable("destroy") called on element');
@@ -64,10 +64,14 @@ test("destroy", function() {
 
 	$("<div></div>").sortable().sortable("destroy").data("foo.sortable", "bar");
 	ok(true, 'arbitrary option setter after destroy');
+	
+	var expected = $('<div></div>').sortable(),
+		actual = expected.sortable('destroy');
+	equals(actual, expected, 'destroy is chainable');
 });
 
 test("enable", function() {
-	expect(4);
+	expect(5);
 	el = $("#sortable").sortable({ disabled: true });
 
 	sort($("li", el)[0], 0, 40, 0, '.sortable({ disabled: true })');
@@ -81,10 +85,14 @@ test("enable", function() {
 	equals(el.data("disabled.sortable"), false, "disabled.sortable setter");
 
 	sort($("li", el)[0], 0, 40, 2, '.data("disabled.sortable", false)');
+	
+	var expected = $('<div></div>').sortable(),
+		actual = expected.sortable('enable');
+	equals(actual, expected, 'enable is chainable');
 });
 
 test("disable", function() {
-	expect(5);
+	expect(6);
 	el = $("#sortable").sortable({ disabled: false });
 	sort($("li", el)[0], 0, 40, 2, '.sortable({ disabled: false })');
 
@@ -98,6 +106,10 @@ test("disable", function() {
 	el.data("disabled.sortable", true);
 	equals(el.data("disabled.sortable"), true, "disabled.sortable setter");
 	sort($("li", el)[0], 0, 40, 0, '.data("disabled.sortable", true)');
+	
+	var expected = $('<div></div>').sortable(),
+		actual = expected.sortable('disable');
+	equals(actual, expected, 'disable is chainable');
 });
 
 })(jQuery);

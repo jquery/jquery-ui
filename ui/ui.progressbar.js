@@ -52,6 +52,7 @@ $.widget("ui.progressbar", {
 
 		$.widget.prototype.destroy.apply(this, arguments);
 
+		return this;
 	},
 
 	value: function(newValue) {

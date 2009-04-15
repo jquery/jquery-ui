@@ -35,6 +35,8 @@ $.widget("ui.draggable", $.extend({}, $.ui.mouse, {
 				+ " ui-draggable-dragging"
 				+ " ui-draggable-disabled");
 		this._mouseDestroy();
+
+		return this;
 	},
 
 	_mouseCapture: function(event) {

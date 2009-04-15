@@ -42,6 +42,8 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 
 		for ( var i = this.items.length - 1; i >= 0; i-- )
 			this.items[i].item.removeData("sortable-item");
+
+		return this;
 	},
 
 	_mouseCapture: function(event, overrideHandle) {
@@ -354,7 +356,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 			$(this.domPosition.parent).prepend(this.currentItem);
 		}
 
-		return true;
+		return this;
 
 	},
 
@@ -460,6 +462,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 	refresh: function(event) {
 		this._refreshItems(event);
 		this.refreshPositions();
+		return this;
 	},
 
 	_connectWith: function() {
@@ -595,6 +598,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 			};
 		}
 
+		return this;
 	},
 
 	_createPlaceholder: function(that) {
@@ -984,7 +988,6 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 }));
 
 $.extend($.ui.sortable, {
-	getter: "serialize toArray",
 	version: "@VERSION",
 	eventPrefix: "sort",
 	defaults: {

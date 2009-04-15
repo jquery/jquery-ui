@@ -199,6 +199,7 @@ $.widget("ui.resizable", $.extend({}, $.ui.mouse, {
 		this.originalElement.css('resize', this.originalResizeStyle);
 		_destroy(this.originalElement);
 
+		return this;
 	},
 
 	_mouseCapture: function(event) {

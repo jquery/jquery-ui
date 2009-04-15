@@ -10,15 +10,30 @@ test("init", function() {
 });
 
 test("destroy", function() {
+	var expected = $('#list1').accordion(),
+		actual = expected.accordion('destroy');
+	equals(actual, expected, 'destroy is chainable');
 	ok(false, 'missing test - untested code is broken code');
 });
 
 test("enable", function() {
+	var expected = $('#list1').accordion(),
+		actual = expected.accordion('enable');
+	equals(actual, expected, 'enable is chainable');
 	ok(false, 'missing test - untested code is broken code');
 });
 
 test("disable", function() {
+	var expected = $('#list1').accordion(),
+		actual = expected.accordion('disable');
+	equals(actual, expected, 'disable is chainable');
 	ok(false, 'missing test - untested code is broken code');
+});
+
+test("activate", function() {
+	var expected = $('#list1').accordion(),
+		actual = expected.accordion('activate', 2);
+	equals(actual, expected, 'activate is chainable');
 });
 
 test("activate, numeric", function() {
@@ -72,6 +87,13 @@ test("activate, jQuery or DOM element", function() {
 	state(ac, 1, 0, 0);
 	ac.accordion("activate", $("#list1 a")[1]);
 	state(ac, 0, 1, 0);
+});
+
+test("resize", function() {
+	var expected = $('#list1').accordion(),
+		actual = expected.accordion('resize');
+	equals(actual, expected, 'resize is chainable');
+	ok(false, 'missing test - untested code is broken code');
 });
 
 })(jQuery);

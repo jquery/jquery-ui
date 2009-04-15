@@ -203,19 +203,6 @@ $.extend($.expr[':'], {
 
 // $.widget is a factory to create jQuery plugins
 // taking some boilerplate code out of the plugin code
-function getter(namespace, plugin, method, args) {
-	function getMethods(type) {
-		var methods = $[namespace][plugin][type] || [];
-		return (typeof methods == 'string' ? methods.split(/,?\s+/) : methods);
-	}
-
-	var methods = getMethods('getter');
-	if (args.length == 1 && typeof args[0] == 'string') {
-		methods = methods.concat(getMethods('getterSetter'));
-	}
-	return ($.inArray(method, methods) != -1);
-}
-
 $.widget = function(name, prototype) {
 	var namespace = name.split(".")[0],
 		fullName;
@@ -230,32 +217,31 @@ $.widget = function(name, prototype) {
 	// create plugin method
 	$.fn[name] = function(options) {
 		var isMethodCall = (typeof options == 'string'),
-			args = Array.prototype.slice.call(arguments, 1);
+			args = Array.prototype.slice.call(arguments, 1),
+			returnValue = this;
 
 		// prevent calls to internal methods
 		if (isMethodCall && options.substring(0, 1) == '_') {
-			return this;
+			return returnValue;
 		}
 
-		// handle getter methods
-		if (isMethodCall && getter(namespace, name, options, args)) {
-			var instance = $.data(this[0], name);
-			return (instance ? instance[options].apply(instance, args)
-				: undefined);
-		}
+		(isMethodCall
+			? this.each(function() {
+				var instance = $.data(this, name),
+					methodValue = (instance && $.isFunction(instance[options])
+						? instance[options].apply(instance, args)
+						: instance);
+				if (methodValue !== instance) {
+					returnValue = methodValue;
+					return false;
+				}
+			})
+			: this.each(function() {
+				($.data(this, name) ||
+					$.data(this, name, new $[namespace][name](this, options))._init());
+			}));
 
-		// handle initialization and non-getter methods
-		return this.each(function() {
-			var instance = $.data(this, name);
-
-			// constructor
-			(!instance && !isMethodCall &&
-				$.data(this, name, new $[namespace][name](this, options))._init());
-
-			// method call
-			(instance && isMethodCall && $.isFunction(instance[options]) &&
-				instance[options].apply(instance, args));
-		});
+		return returnValue;
 	};
 
 	// create widget constructor
@@ -292,10 +278,6 @@ $.widget = function(name, prototype) {
 
 	// add widget prototype
 	$[namespace][name].prototype = $.extend({}, $.widget.prototype, prototype);
-
-	// TODO: merge getter and getterSetter properties from widget prototype
-	// and plugin prototype
-	$[namespace][name].getterSetter = 'option';
 };
 
 $.widget.prototype = {
@@ -304,6 +286,8 @@ $.widget.prototype = {
 		this.element.removeData(this.widgetName)
 			.removeClass(this.widgetBaseClass + '-disabled' + ' ' + this.namespace + '-state-disabled')
 			.removeAttr('aria-disabled');
+
+		return this;
 	},
 
 	option: function(key, value) {
@@ -321,6 +305,8 @@ $.widget.prototype = {
 		$.each(options, function(key, value) {
 			self._setData(key, value);
 		});
+
+		return self;
 	},
 	_getData: function(key) {
 		return this.options[key];
@@ -339,9 +325,11 @@ $.widget.prototype = {
 
 	enable: function() {
 		this._setData('disabled', false);
+		return this;
 	},
 	disable: function() {
 		this._setData('disabled', true);
+		return this;
 	},
 
 	_trigger: function(type, event, data) {

@@ -28,7 +28,7 @@ test("init", function() {
 });
 
 test("destroy", function() {
-	expect(6);
+	expect(7);
 
 	$("<div></div>").appendTo('body').droppable().droppable("destroy").remove();
 	ok(true, '.droppable("destroy") called on element');
@@ -47,10 +47,14 @@ test("destroy", function() {
 
 	$("<div></div>").droppable().droppable("destroy").data("foo.droppable", "bar");
 	ok(true, 'arbitrary option setter after destroy');
+	
+	var expected = $('<div></div>').droppable(),
+		actual = expected.droppable('destroy');
+	equals(actual, expected, 'destroy is chainable');
 });
 
 test("enable", function() {
-	expect(6);
+	expect(7);
 	el = $("#droppable1").droppable({ disabled: true });
 	shouldNotBeDroppable();
 	el.droppable("enable");
@@ -62,10 +66,14 @@ test("enable", function() {
 	el.data("disabled.droppable", false);
 	equals(el.data("disabled.droppable"), false, "disabled.droppable setter");
 	shouldBeDroppable();
+	
+	var expected = $('<div></div>').droppable(),
+		actual = expected.droppable('enable');
+	equals(actual, expected, 'enable is chainable');
 });
 
 test("disable", function() {
-	expect(6);
+	expect(7);
 	el = $("#droppable1").droppable({ disabled: false });
 	shouldBeDroppable();
 	el.droppable("disable");
@@ -77,6 +85,10 @@ test("disable", function() {
 	el.data("disabled.droppable", true);
 	equals(el.data("disabled.droppable"), true, "disabled.droppable setter");
 	shouldNotBeDroppable();
+	
+	var expected = $('<div></div>').droppable(),
+		actual = expected.droppable('disable');
+	equals(actual, expected, 'disable is chainable');
 });
 
 })(jQuery);

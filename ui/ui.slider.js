@@ -192,6 +192,7 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 
 		this._mouseDestroy();
 
+		return this;
 	},
 
 	_mouseCapture: function(event) {
@@ -536,7 +537,6 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 }));
 
 $.extend($.ui.slider, {
-	getter: "value values",
 	version: "@VERSION",
 	eventPrefix: "slide",
 	defaults: {

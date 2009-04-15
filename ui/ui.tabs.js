@@ -434,6 +434,8 @@ $.widget("ui.tabs", {
 		if (o.cookie) {
 			this._cookie(null, o.cookie);
 		}
+
+		return this;
 	},
 
 	add: function(url, label, index) {
@@ -480,6 +482,7 @@ $.widget("ui.tabs", {
 
 		// callback
 		this._trigger('add', null, this._ui(this.anchors[index], this.panels[index]));
+		return this;
 	},
 
 	remove: function(index) {
@@ -499,6 +502,7 @@ $.widget("ui.tabs", {
 
 		// callback
 		this._trigger('remove', null, this._ui($li.find('a')[0], $panel[0]));
+		return this;
 	},
 
 	enable: function(index) {
@@ -512,6 +516,7 @@ $.widget("ui.tabs", {
 
 		// callback
 		this._trigger('enable', null, this._ui(this.anchors[index], this.panels[index]));
+		return this;
 	},
 
 	disable: function(index) {
@@ -525,6 +530,8 @@ $.widget("ui.tabs", {
 			// callback
 			this._trigger('disable', null, this._ui(this.anchors[index], this.panels[index]));
 		}
+
+		return this;
 	},
 
 	select: function(index) {
@@ -539,6 +546,7 @@ $.widget("ui.tabs", {
 		}
 
 		this.anchors.eq(index).trigger(this.options.event + '.tabs');
+		return this;
 	},
 
 	load: function(index) {
@@ -583,6 +591,8 @@ $.widget("ui.tabs", {
 				self.element.dequeue("tabs");
 			}
 		}));
+
+		return this;
 	},
 
 	abort: function() {
@@ -598,11 +608,12 @@ $.widget("ui.tabs", {
 
 		// take care of tab labels
 		this._cleanup();
-
+		return this;
 	},
 
 	url: function(index, url) {
 		this.anchors.eq(index).removeData('cache.tabs').data('load.tabs', url);
+		return this;
 	},
 
 	length: function() {
@@ -613,7 +624,6 @@ $.widget("ui.tabs", {
 
 $.extend($.ui.tabs, {
 	version: '@VERSION',
-	getter: 'length',
 	defaults: {
 		ajaxOptions: null,
 		cache: false,
@@ -679,6 +689,8 @@ $.extend($.ui.tabs.prototype, {
 			delete this._rotate;
 			delete this._unrotate;
 		}
+
+		return this;
 	}
 });
 

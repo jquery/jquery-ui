@@ -137,7 +137,6 @@ $.widget("ui.dialog", {
 
 		(options.bgiframe && $.fn.bgiframe && uiDialog.bgiframe());
 		(options.autoOpen && this.open());
-		
 	},
 
 	destroy: function() {
@@ -151,6 +150,8 @@ $.widget("ui.dialog", {
 		this.uiDialog.remove();
 
 		(this.originalTitle && this.element.attr('title', this.originalTitle));
+
+		return this;
 	},
 
 	close: function(event) {
@@ -172,7 +173,7 @@ $.widget("ui.dialog", {
 		$.ui.dialog.overlay.resize();
 
 		self._isOpen = false;
-		
+
 		// adjust the maxZ to allow other modal dialogs to continue to work (see #4309)
 		if (self.options.modal) {
 			var maxZ = 0;
@@ -183,6 +184,8 @@ $.widget("ui.dialog", {
 			});
 			$.ui.dialog.maxZ = maxZ;
 		}
+
+		return self;
 	},
 
 	isOpen: function() {
@@ -192,7 +195,6 @@ $.widget("ui.dialog", {
 	// the force parameter allows us to move modal dialogs to their correct
 	// position on open
 	moveToTop: function(force, event) {
-
 		if ((this.options.modal && !force)
 			|| (!this.options.stack && !this.options.modal)) {
 			return this._trigger('focus', event);
@@ -209,6 +211,8 @@ $.widget("ui.dialog", {
 		this.uiDialog.css('z-index', ++$.ui.dialog.maxZ);
 		this.element.attr(saveScroll);
 		this._trigger('focus', event);
+
+		return this;
 	},
 
 	open: function() {
@@ -256,6 +260,8 @@ $.widget("ui.dialog", {
 
 		this._trigger('open');
 		this._isOpen = true;
+
+		return this;
 	},
 
 	_createButtons: function(buttons) {
@@ -518,8 +524,6 @@ $.extend($.ui.dialog, {
 		width: 300,
 		zIndex: 1000
 	},
-
-	getter: 'isOpen',
 
 	uuid: 0,
 	maxZ: 0,

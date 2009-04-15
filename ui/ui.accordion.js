@@ -125,6 +125,8 @@ $.widget("ui.accordion", {
 		if (o.autoHeight || o.fillHeight) {
 			contents.css("height", "");
 		}
+
+		return this;
 	},
 	
 	_setData: function(key, value) {
@@ -195,12 +197,15 @@ $.widget("ui.accordion", {
 			}).height(maxHeight);
 		}
 
+		return this;
 	},
 
 	activate: function(index) {
 		// call clickHandler with custom event
 		var active = this._findActive(index)[0];
 		this._clickHandler({ target: active }, active);
+
+		return this;
 	},
 
 	_findActive: function(selector) {

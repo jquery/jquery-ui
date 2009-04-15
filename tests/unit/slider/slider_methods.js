@@ -30,7 +30,7 @@ test("init", function() {
 });
 
 test("destroy", function() {
-	expect(8);
+	expect(9);
 
 	$("<div></div>").appendTo('body').slider().slider("destroy").remove();
 	ok(true, '.slider("destroy") called on element');
@@ -59,13 +59,23 @@ test("destroy", function() {
 
 	$('<div></div>').slider().slider("destroy").slider("options", "foo", "bar").remove();
 	ok(true, 'arbitrary option setter (.slider option method) after destroy');
+	
+	var expected = $('<div></div>').slider(),
+		actual = expected.slider('destroy');
+	equals(actual, expected, 'destroy is chainable');
 });
 
 test("enable", function() {
+	var expected = $('<div></div>').slider(),
+		actual = expected.slider('enable');
+	equals(actual, expected, 'enable is chainable');
 	ok(false, "missing test - untested code is broken code.");
 });
 
 test("disable", function() {
+	var expected = $('<div></div>').slider(),
+		actual = expected.slider('disable');
+	equals(actual, expected, 'disable is chainable');
 	ok(false, "missing test - untested code is broken code.");
 });
 

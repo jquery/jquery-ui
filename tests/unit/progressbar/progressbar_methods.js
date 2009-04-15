@@ -14,11 +14,14 @@ test("init", function() {
 });
 
 test("destroy", function() {
-	expect(1);
+	expect(2);
 
 	$("<div></div>").appendTo('body').progressbar().progressbar("destroy").remove();
 	ok(true, '.progressbar("destroy") called on element');
 
+	var expected = $('<div></div>').progressbar(),
+		actual = expected.progressbar('destroy');
+	equals(actual, expected, 'destroy is chainable');
 });
 
 })(jQuery);

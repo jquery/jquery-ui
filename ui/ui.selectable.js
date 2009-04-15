@@ -59,6 +59,8 @@ $.widget("ui.selectable", $.extend({}, $.ui.mouse, {
 			.removeData("selectable")
 			.unbind(".selectable");
 		this._mouseDestroy();
+
+		return this;
 	},
 
 	_mouseStart: function(event) {
