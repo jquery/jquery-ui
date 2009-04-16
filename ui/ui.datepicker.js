@@ -198,7 +198,8 @@ $.extend(Datepicker.prototype, {
 				return false;
 			});
 		}
-		input.addClass(this.markerClassName).keydown(this._doKeyDown).keypress(this._doKeyPress).
+		input.addClass(this.markerClassName).keydown(this._doKeyDown).
+			keypress(this._doKeyPress).keyup(this._doKeyUp).
 			bind("setData.datepicker", function(event, key, value) {
 				inst.settings[key] = value;
 			}).bind("getData.datepicker", function(event, key) {
@@ -286,7 +287,8 @@ $.extend(Datepicker.prototype, {
 			$target.removeClass(this.markerClassName).
 				unbind('focus', this._showDatepicker).
 				unbind('keydown', this._doKeyDown).
-				unbind('keypress', this._doKeyPress);
+				unbind('keypress', this._doKeyPress).
+				unbind('keyup', this._doKeyUp);
 		} else if (nodeName == 'div' || nodeName == 'span')
 			$target.removeClass(this.markerClassName).empty();
 	},
@@ -509,6 +511,27 @@ $.extend(Datepicker.prototype, {
 			var chr = String.fromCharCode(event.charCode == undefined ? event.keyCode : event.charCode);
 			return event.ctrlKey || (chr < ' ' || !chars || chars.indexOf(chr) > -1);
 		}
+	},
+
+	/* Synchronise manual entry and alternate field. */
+	_doKeyUp: function(event) {
+		var inst = $.datepicker._getInst(event.target);
+		if (!$.datepicker._get(inst, 'altField'))
+			return true;
+		try {
+			var date = $.datepicker.parseDate($.datepicker._get(inst, 'dateFormat'),
+				(inst.input ? inst.input.val() : null),
+				$.datepicker._getFormatConfig(inst));
+			if (date) { // only if valid
+				$.datepicker._setDateFromField(inst);
+				$.datepicker._updateAlternate(inst);
+				$.datepicker._updateDatepicker(inst);
+			}
+		}
+		catch (event) {
+			$.datepicker.log(event);
+		}
+		return true;
 	},
 
 	/* Pop-up the date picker for a given input field.

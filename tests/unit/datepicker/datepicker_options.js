@@ -452,6 +452,17 @@ test('altField', function() {
 	inp.simulate('keydown', {ctrlKey: true, keyCode: $.simulate.VK_END});
 	equals(inp.val(), '', 'Alt field - dp - ctrl+end');
 	equals(alt.val(), '', 'Alt field - alt - ctrl+end');
+	// Verify alt field is updated on keyup
+	alt.val('');
+	inp.val('06/04/2008').datepicker('show');
+	inp.simulate('keyup', {keyCode: $.simulate.VK_ENTER});
+	equals(inp.val(), '06/04/2008', 'Alt field - dp - manual entry');
+	equals(alt.val(), '2008-06-04', 'Alt field - manual entry');
+	// Verify alt field is not updated on keyup if date is invalid
+	inp.val('12/04/');
+	inp.simulate('keyup', {keyCode: $.simulate.VK_ENTER});
+	equals(inp.val(), '12/04/', 'Alt field - dp - manual entry incomplete');
+	equals(alt.val(), '2008-06-04', 'Alt field - manual entry - not updated');
 });
 
 test('daylightSaving', function() {
