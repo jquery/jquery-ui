@@ -56,8 +56,12 @@ $.widget("ui.progressbar", {
 	},
 
 	value: function(newValue) {
-		arguments.length && this._setData("value", newValue);
-		return this._value();
+		if (newValue === undefined) {
+			return this._value();
+		}
+		
+		this._setData('value', newValue);
+		return this;
 	},
 
 	_setData: function(key, value) {
