@@ -335,6 +335,9 @@ $.widget("ui.accordion", {
 				duration = o.duration,
 				easing = o.animated;
 
+			if (easing && !$.ui.accordion.animations[easing] && !$.easing[easing]) {
+				easing = 'slide';
+			}
 			if (!animations[easing]) {
 				animations[easing] = function(options) {
 					this.slide(options, {
