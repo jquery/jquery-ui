@@ -1,0 +1,27 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+	<title>Slider Visual Test : Slider ticket #3762</title>
+	<link rel="stylesheet" href="../visual.css" type="text/css" />
+	<link rel="stylesheet" href="../../../themes/base/ui.all.css" type="text/css">
+	<script type="text/javascript" src="../../../jquery-1.3.2.js"></script>
+	<script type="text/javascript" src="../../../ui/ui.core.js"></script>
+	<script type="text/javascript" src="../../../ui/ui.slider.js"></script>
+	<script type="text/javascript">
+	$(function() {
+		$("#slider").slider({
+			values: [5,0],
+			range: true
+		});
+		$("#rangevalue").text($("#slider").slider("values", 0) + ' - ' + $("#slider").slider("values", 1));
+	});
+	</script>
+</head>
+<body>
+
+<h1 class="ui-widget-header"><a href="http://dev.jqueryui.com/ticket/3762">#3762 - slider handles not restricted properly when set programmatically</a></h1>
+
+<div id="slider"></div>
+
+</body>
+</html>
