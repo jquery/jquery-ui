@@ -135,6 +135,19 @@ if (isFF2) {
 
 //jQuery plugins
 $.fn.extend({
+	_focus: $.fn.focus,
+	focus: function(delay, fn) {
+		return typeof delay === 'number'
+			? this.each(function() {
+				var elem = this;
+				setTimeout(function() {
+					$(elem).focus();
+					(fn && fn.call(elem));
+				}, delay);
+			})
+			: this._focus.apply(this, arguments);
+	},
+	
 	remove: function() {
 		// Safari has a native remove event which actually removes DOM elements,
 		// so we have to use triggerHandler instead of trigger (#3037).
