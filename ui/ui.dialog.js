@@ -241,17 +241,15 @@ $.widget("ui.dialog", {
 			}
 
 			var tabbables = $(':tabbable', this),
-				first = tabbables.filter(':first')[0],
-				last  = tabbables.filter(':last')[0];
+				first = tabbables.filter(':first'),
+				last  = tabbables.filter(':last');
 
-			if (event.target == last && !event.shiftKey) {
-				setTimeout(function() {
-					first.focus();
-				}, 1);
-			} else if (event.target == first && event.shiftKey) {
-				setTimeout(function() {
-					last.focus();
-				}, 1);
+			if (event.target == last[0] && !event.shiftKey) {
+				first.focus(1);
+				return false;
+			} else if (event.target == first[0] && event.shiftKey) {
+				last.focus(1);
+				return false;
 			}
 		}));
 
