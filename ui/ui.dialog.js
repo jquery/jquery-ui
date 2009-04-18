@@ -44,7 +44,7 @@ $.widget("ui.dialog", {
 			title = options.title || self.originalTitle || '&nbsp;',
 			titleId = $.ui.dialog.getTitleId(self.element),
 
-			uiDialog = (self.uiDialog = $('<div/>'))
+			uiDialog = (self.uiDialog = $('<div></div>'))
 				.appendTo(document.body)
 				.hide()
 				.addClass(uiDialogClasses + options.dialogClass)
@@ -84,7 +84,7 @@ $.widget("ui.dialog", {
 				)
 				.prependTo(uiDialog),
 
-			uiDialogTitlebarClose = $('<a href="#"/>')
+			uiDialogTitlebarClose = $('<a href="#"></a>')
 				.addClass(
 					'ui-dialog-titlebar-close ' +
 					'ui-corner-all'
@@ -113,7 +113,7 @@ $.widget("ui.dialog", {
 				})
 				.appendTo(uiDialogTitlebar),
 
-			uiDialogTitlebarCloseText = (self.uiDialogTitlebarCloseText = $('<span/>'))
+			uiDialogTitlebarCloseText = (self.uiDialogTitlebarCloseText = $('<span></span>'))
 				.addClass(
 					'ui-icon ' +
 					'ui-icon-closethick'
@@ -121,7 +121,7 @@ $.widget("ui.dialog", {
 				.text(options.closeText)
 				.appendTo(uiDialogTitlebarClose),
 
-			uiDialogTitle = $('<span/>')
+			uiDialogTitle = $('<span></span>')
 				.addClass('ui-dialog-title')
 				.attr('id', titleId)
 				.html(title)
