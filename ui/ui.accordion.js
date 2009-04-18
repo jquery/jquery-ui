@@ -335,7 +335,7 @@ $.widget("ui.accordion", {
 				duration = o.duration,
 				easing = o.animated;
 
-			if (easing && !$.ui.accordion.animations[easing] && !$.easing[easing]) {
+			if (easing && !animations[easing] && !$.easing[easing]) {
 				easing = 'slide';
 			}
 			if (!animations[easing]) {
@@ -471,12 +471,6 @@ $.extend($.ui.accordion, {
 			this.slide(options, {
 				easing: options.down ? "easeOutBounce" : "swing",
 				duration: options.down ? 1000 : 200
-			});
-		},
-		easeslide: function(options) {
-			this.slide(options, {
-				easing: "easeinout",
-				duration: 700
 			});
 		}
 	}
