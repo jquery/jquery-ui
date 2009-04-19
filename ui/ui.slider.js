@@ -336,8 +336,10 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 
 			var otherVal = this.values(index ? 0 : 1);
 
-			if ((index == 0 && newVal >= otherVal) || (index == 1 && newVal <= otherVal))
-				newVal = otherVal;
+			if ((this.options.values.length == 2 && this.options.range === true) && 
+				((index == 0 && newVal > otherVal) || (index == 1 && newVal < otherVal))){
+ 				newVal = otherVal;
+			}
 
 			if (newVal != this.values(index)) {
 				var newValues = this.values();
