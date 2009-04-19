@@ -175,9 +175,11 @@ $.fn.extend({
 	},
 
 	toggle: function(){
-		if(!arguments[0] || (arguments[0].constructor == Number || (/(slow|normal|fast)/).test(arguments[0])) || (arguments[0].constructor == Function))
+		if(!arguments[0] ||
+			(arguments[0].constructor == Number || (/(slow|normal|fast)/).test(arguments[0])) ||
+			($.isFunction(arguments[0]) || typeof arguments[0] == 'boolean')) {
 			return this.__toggle.apply(this, arguments);
-		else {
+		} else {
 			return this.effect.apply(this, _normalizeArguments(arguments, 'toggle'));
 		}
 	},
