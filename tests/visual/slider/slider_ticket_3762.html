@@ -9,10 +9,11 @@
 	<script type="text/javascript" src="../../../ui/ui.slider.js"></script>
 	<script type="text/javascript">
 	$(function() {
-		$("#slider").slider({
-			values: [5,0],
-			range: true
-		});
+		$("#slider").slider({ values: [5,0], range: true});
+		$("#slider1").slider({ values: [-1,5], range: true});
+		$("#slider2").slider({ values: [5,200], range: true});
+		$("#slider3").slider({ values: [5,0], range: true});
+		$("#slider4").slider({range: true});
 	});
 	</script>
 </head>
@@ -21,6 +22,20 @@
 <h1 class="ui-widget-header"><a href="http://dev.jqueryui.com/ticket/3762">#3762 - slider handles not restricted properly when set programmatically</a></h1>
 
 <div id="slider"></div>
+
+<div>- if less than min, set to min</div>
+<div id="slider1"></div>
+
+<div>- if greater than max, set to max</div>
+<div id="slider2"></div>
+
+<div>- if less than previous handle value, set to previous handle value</div>
+<div id="slider3"></div>
+
+<div>no values set</div>
+<div id="slider4"></div>
+
+
 
 </body>
 </html>
