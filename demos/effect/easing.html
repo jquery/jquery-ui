@@ -33,7 +33,6 @@
 			canvas.height = 135;
 			var ctx = canvas.getContext("2d");
 			ctx.fillStyle = "black";
-			ctx.strokeStyle = "white";
 			
 			ctx.beginPath();
 			ctx.moveTo(10, 0);
@@ -46,11 +45,13 @@
 			ctx.lineTo(10, 0);
 			ctx.fill();
 			
+			ctx.strokeStyle = "#555";
 			ctx.beginPath();
 			ctx.moveTo(0, 100.5);
 			ctx.lineTo(100, 100.5);
 			ctx.stroke();
 			
+			ctx.strokeStyle = "white";
 			ctx.lineWidth = 1.5;
 			ctx.beginPath();
 			$.each(new Array(100), function(position) {
