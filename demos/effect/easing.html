@@ -61,13 +61,14 @@
 			});
 			
 			// needs higher precision for better graphs
-			$.each(new Array(100), function(position) {
-				var mod = impl(0, position, 0, 1, 100);
-				ctx.beginPath();
-				ctx.moveTo(position, 100 - position * mod);
-				ctx.lineTo(position + 1, 99 - position * mod);
-				ctx.stroke();
+			var mod = 2;
+			ctx.beginPath();
+			$.each(new Array(100 * mod), function(position) {
+				var ease = impl(0, position, 0, 1, 100 * mod);
+				ctx.moveTo(position / mod, 100 - position / mod * ease);
+				ctx.lineTo(position / mod + 1, 99 - position / mod * ease);
 			});
+			ctx.stroke();
 			graph.click(function() {
 				$(canvas).animate({height: "hide"}, "slow", name).animate({height: "show"}, "slow", name);
 			});
@@ -88,7 +89,7 @@
 
 <div class="demo-description">
 
-<p>All easings provided by jQuery UI are drawn above. Click a diagram to see the easing in action.</p>
+<p><strong>All easings provided by jQuery UI are drawn above, using a HTLM canvas element</strong>. Click a diagram to see the easing in action.</p>
 
 </div><!-- End demo-description -->
 
