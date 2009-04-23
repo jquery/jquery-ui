@@ -21,13 +21,9 @@
 	<style type="text/css">
 		.graph {
 			float: left;
-			margin-left: 5px;
+			margin-left: 10px;
 			width: 100px;
-			height: 120px;
-		}
-		.graph canvas {
-			border: 1px solid black;
-			border-top: none; border-right: none;
+			height: 160px;
 		}
 	</style>
 	<script type="text/javascript">
@@ -46,21 +42,26 @@
 			
 			var canvas = $("<canvas/>").appendTo(graph)[0]
 			canvas.width = 100;
-			canvas.height = 100;
+			canvas.height = 135;
 			var ctx = canvas.getContext("2d");
-			ctx.fillStyle = "rgb(255, 232, 198)";
-			ctx.fillRect(0, 0, 100, 100);
-			ctx.lineWidth = 1;
-			$.each(new Array(10), function(index) {
-				ctx.beginPath();
-				ctx.moveTo(0, index * 10 + 10.5);
-				ctx.lineTo(4, index * 10 + 10.5);
-				ctx.moveTo(index * 10 + 10.5, 96);
-				ctx.lineTo(index * 10 + 10.5, 100);
-				ctx.stroke();
-			});
+			ctx.fillStyle = "black";
+			ctx.beginPath();
+			ctx.moveTo(10, 0);
+			ctx.quadraticCurveTo(0, 0, 0, 10);
+			ctx.lineTo(0, 125);
+			ctx.quadraticCurveTo(0, 135, 10, 135);
+			ctx.lineTo(90, 135);
+			ctx.quadraticCurveTo(100, 135, 100, 125);
+			ctx.lineTo(100, 0);
+			ctx.lineTo(10, 0);
+			ctx.fill();
 			
-			// needs higher precision for better graphs
+			ctx.strokeStyle = "white";
+			ctx.beginPath();
+			ctx.moveTo(0, 100.5);
+			ctx.lineTo(100, 100.5);
+			ctx.stroke();
+			
 			var mod = 2;
 			ctx.beginPath();
 			$.each(new Array(100 * mod), function(position) {
@@ -70,7 +71,7 @@
 			});
 			ctx.stroke();
 			graph.click(function() {
-				$(canvas).animate({height: "hide"}, "slow", name).animate({height: "show"}, "slow", name);
+				$(canvas).animate({height: "hide"}, "slow", name).animate({"left": "0"}, 800).animate({height: "show"}, "slow", name);
 			});
 			//return false;
 		});
@@ -95,3 +96,4 @@
 
 </body>
 </html>
+
