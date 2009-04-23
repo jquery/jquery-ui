@@ -38,10 +38,12 @@
 		}
 		var i = 0;
 		$.each($.easing, function(name, impl) {
-			if (!$.isFunction(impl))
+			// skip linera/jswing and any non functioning implementation
+			if (!$.isFunction(impl) || /linear|jswing/.test(name))
 				return;
 			var graph = $("<div/>").addClass("graph").appendTo("#graphs");
 			$("<div/>").text(++i + ". " + name).appendTo(graph);
+			
 			var canvas = $("<canvas/>").appendTo(graph)[0]
 			canvas.width = 100;
 			canvas.height = 100;
@@ -56,7 +58,9 @@
 				ctx.moveTo(index * 10 + 10.5, 96);
 				ctx.lineTo(index * 10 + 10.5, 100);
 				ctx.stroke();
-			})
+			});
+			
+			// needs higher precision for better graphs
 			$.each(new Array(100), function(position) {
 				var mod = impl(0, position, 0, 1, 100);
 				ctx.beginPath();
@@ -84,7 +88,7 @@
 
 <div class="demo-description">
 
-<p>All easings provided by jQuery UI are drawn above. Click a diagram to see the easing in action. "linear" and "jswing" aren't rendered properly, but work, too.</p>
+<p>All easings provided by jQuery UI are drawn above. Click a diagram to see the easing in action.</p>
 
 </div><!-- End demo-description -->
 
