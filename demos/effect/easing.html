@@ -10,8 +10,6 @@
 		.graph {
 			float: left;
 			margin-left: 10px;
-			width: 100px;
-			height: 120px;
 		}
 	</style>
 	<script type="text/javascript">
@@ -21,46 +19,52 @@
 			return;
 		}
 		var i = 0;
+		var width = 100,
+			height = 100;
 		$.each($.easing, function(name, impl) {
 			// skip linera/jswing and any non functioning implementation
 			if (!$.isFunction(impl) || /linear|jswing/.test(name))
 				return;
 			var graph = $("<div/>").addClass("graph").appendTo("#graphs");
-			$("<div/>").text(++i + ". " + name).appendTo(graph);
+			var text = $("<div/>").text(++i + ". " + name).appendTo(graph);
 			
-			var canvas = $("<canvas/>").width(100).height(100).appendTo(graph)[0]
-			canvas.width = 100;
-			canvas.height = 135;
+			var canvas = $("<canvas/>").appendTo(graph)[0]
+			canvas.width = width;
+			canvas.height = height;
+			var drawHeight = height * 0.75;
+			var cradius = 10;
 			var ctx = canvas.getContext("2d");
 			ctx.fillStyle = "black";
 			
 			ctx.beginPath();
-			ctx.moveTo(10, 0);
-			ctx.quadraticCurveTo(0, 0, 0, 10);
-			ctx.lineTo(0, 125);
-			ctx.quadraticCurveTo(0, 135, 10, 135);
-			ctx.lineTo(90, 135);
-			ctx.quadraticCurveTo(100, 135, 100, 125);
-			ctx.lineTo(100, 0);
-			ctx.lineTo(10, 0);
+			ctx.moveTo(cradius, 0);
+			ctx.quadraticCurveTo(0, 0, 0, cradius);
+			ctx.lineTo(0, height - cradius);
+			ctx.quadraticCurveTo(0, height, cradius, height);
+			ctx.lineTo(width - cradius, height);
+			ctx.quadraticCurveTo(width, height, width, height - cradius);
+			ctx.lineTo(width, 0);
+			ctx.lineTo(cradius, 0);
 			ctx.fill();
 			
 			ctx.strokeStyle = "#555";
 			ctx.beginPath();
-			ctx.moveTo(0, 100.5);
-			ctx.lineTo(100, 100.5);
+			ctx.moveTo(0, drawHeight + .5);
+			ctx.lineTo(width, drawHeight + .5);
 			ctx.stroke();
 			
 			ctx.strokeStyle = "white";
 			ctx.lineWidth = 2;
 			ctx.beginPath();
-			$.each(new Array(100), function(position) {
-				ctx.lineTo(position, 100 - position * impl(0, position, 0, 1, 100));
+			$.each(new Array(width), function(position) {
+				ctx.lineTo(position, drawHeight - position * impl(0, position, 0, 1, height) * 0.75);
 			});
 			ctx.stroke();
 			graph.click(function() {
 				$(canvas).animate({height: "hide"}, "slow", name).animate({"left": "0"}, 800).animate({height: "show"}, "slow", name);
 			});
+			
+			graph.width(width).height(height + text.height() + 10);
 			//return false;
 		});
 	});
