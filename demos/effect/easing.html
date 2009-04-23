@@ -33,6 +33,8 @@
 			canvas.height = 135;
 			var ctx = canvas.getContext("2d");
 			ctx.fillStyle = "black";
+			ctx.strokeStyle = "white";
+			
 			ctx.beginPath();
 			ctx.moveTo(10, 0);
 			ctx.quadraticCurveTo(0, 0, 0, 10);
@@ -44,18 +46,15 @@
 			ctx.lineTo(10, 0);
 			ctx.fill();
 			
-			ctx.strokeStyle = "white";
 			ctx.beginPath();
 			ctx.moveTo(0, 100.5);
 			ctx.lineTo(100, 100.5);
 			ctx.stroke();
 			
-			var mod = 2;
+			ctx.lineWidth = 1.5;
 			ctx.beginPath();
-			$.each(new Array(100 * mod), function(position) {
-				var ease = impl(0, position, 0, 1, 100 * mod);
-				ctx.moveTo(position / mod, 100 - position / mod * ease);
-				ctx.lineTo(position / mod + 1, 99 - position / mod * ease);
+			$.each(new Array(100), function(position) {
+				ctx.lineTo(position, 100 - position * impl(0, position, 0, 1, 100));
 			});
 			ctx.stroke();
 			graph.click(function() {
