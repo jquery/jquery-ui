@@ -513,11 +513,9 @@ $.extend(Datepicker.prototype, {
 		}
 	},
 
-	/* Synchronise manual entry and alternate field. */
+	/* Synchronise manual entry and field/alternate field. */
 	_doKeyUp: function(event) {
 		var inst = $.datepicker._getInst(event.target);
-		if (!$.datepicker._get(inst, 'altField'))
-			return true;
 		try {
 			var date = $.datepicker.parseDate($.datepicker._get(inst, 'dateFormat'),
 				(inst.input ? inst.input.val() : null),
