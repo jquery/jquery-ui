@@ -322,8 +322,8 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 			value: this.value()
 		};
 		if (this.options.values && this.options.values.length) {
-			uiHash.value = this.values(index)
-			uiHash.values = this.values()
+			uiHash.value = this.values(index);
+			uiHash.values = this.values();
 		}
 		this._trigger("start", event, uiHash);
 	},
@@ -380,8 +380,8 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 			value: this.value()
 		};
 		if (this.options.values && this.options.values.length) {
-			uiHash.value = this.values(index)
-			uiHash.values = this.values()
+			uiHash.value = this.values(index);
+			uiHash.values = this.values();
 		}
 		this._trigger("stop", event, uiHash);
 	},
@@ -392,8 +392,8 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 			value: this.value()
 		};
 		if (this.options.values && this.options.values.length) {
-			uiHash.value = this.values(index)
-			uiHash.values = this.values()
+			uiHash.value = this.values(index);
+			uiHash.values = this.values();
 		}
 		this._trigger("change", event, uiHash);
 	},
