@@ -9,11 +9,17 @@
 	<link type="text/css" href="../demos.css" rel="stylesheet" />
 	<script type="text/javascript">
 	$(function() {
+		var icons = {
+			header: "ui-icon-circle-arrow-e",
+			headerSelected: "ui-icon-circle-arrow-s"
+		};
 		$("#accordion").accordion({
-			icons: {
-    			header: "ui-icon-circle-arrow-e",
-   				headerSelected: "ui-icon-circle-arrow-s"
-			}
+			icons: icons
+		});
+		$("#toggle").toggle(function() {
+			$("#accordion").accordion("option", "icons", false);
+		}, function() {
+			$("#accordion").accordion("option", "icons", icons);
 		});
 	});
 	</script>
@@ -45,6 +51,8 @@
 		<p>Cras dictum. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Aenean lacinia mauris vel est. </p><p>Suspendisse eu nisl. Nullam ut libero. Integer dignissim consequat lectus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. </p>
 	</div>
 </div>
+
+<button id="toggle">Toggle icons</button>
 
 </div><!-- End demo -->
 

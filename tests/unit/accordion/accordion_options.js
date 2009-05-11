@@ -119,6 +119,23 @@ test("{ icons: { 'header': 'ui-icon-foo', 'headerSelected': 'ui-icon-bar' } }", 
 	ok(false, 'missing test - untested code is broken code');
 });
 
+test("{ icons: false }", function() {
+	function icons(on) {
+		same($("#list1 span.ui-icon:visible").length, on ? 3 : 0);
+		same( $("#list1").hasClass("ui-accordion-icons"), on );
+	}
+	$("#list1").accordion();
+	icons(true);
+	$("#list1").accordion("destroy").accordion({
+		icons: false
+	});
+	icons(false);
+	$("#list1").accordion("option", "icons", $.ui.accordion.defaults.icons);
+	icons(true);
+	$("#list1").accordion("option", "icons", false);
+	icons(false);
+});
+
 test("{ navigation: false }, default", function() {
 	ok(false, 'missing test - untested code is broken code');
 });

@@ -60,8 +60,7 @@ $.widget("ui.accordion", {
 		this.active.next().addClass('ui-accordion-content-active');
 
 		//Append icon elements
-		$("<span/>").addClass("ui-icon " + o.icons.header).prependTo(this.headers);
-		this.active.find(".ui-icon").toggleClass(o.icons.header).toggleClass(o.icons.headerSelected);
+		this._createIcons();
 
 		// IE7-/Win - Extra vertical space in lists fixed
 		if ($.browser.msie) {
@@ -104,6 +103,20 @@ $.widget("ui.accordion", {
 		}
 
 	},
+	
+	_createIcons: function() {
+		var o = this.options;
+		if (o.icons) {
+			$("<span/>").addClass("ui-icon " + o.icons.header).prependTo(this.headers);
+			this.active.find(".ui-icon").toggleClass(o.icons.header).toggleClass(o.icons.headerSelected);
+			this.element.addClass("ui-accordion-icons");
+		}
+	},
+	
+	_destroyIcons: function() {
+		this.headers.children(".ui-icon").remove();
+		this.element.removeClass("ui-accordion-icons");
+	},
 
 	destroy: function() {
 		var o = this.options;
@@ -120,7 +133,7 @@ $.widget("ui.accordion", {
 			.removeAttr("role").removeAttr("aria-expanded").removeAttr("tabindex");
 
 		this.headers.find("a").removeAttr("tabindex");
-		this.headers.children(".ui-icon").remove();
+		this._destroyIcons();
 		var contents = this.headers.next().css("display", "").removeAttr("role").removeClass("ui-helper-reset ui-widget-content ui-corner-bottom ui-accordion-content ui-accordion-content-active");
 		if (o.autoHeight || o.fillHeight) {
 			contents.css("height", "");
@@ -130,8 +143,18 @@ $.widget("ui.accordion", {
 	},
 	
 	_setData: function(key, value) {
-		if(key == 'alwaysOpen') { key = 'collapsible'; value = !value; }
-		$.widget.prototype._setData.apply(this, arguments);	
+		// alwaysOpen is deprecated
+		if(key == 'alwaysOpen'){ key = 'collapsible'; value = !value; }
+		
+		$.widget.prototype._setData.apply(this, arguments);
+			
+		if (key == "icons") {
+			this._destroyIcons();
+			if (value) {
+				this._createIcons();
+			}
+		}
+		
 	},
 
 	_keydown: function(event) {
