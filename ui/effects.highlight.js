@@ -36,7 +36,7 @@ $.effects.highlight = function(o) {
 		el.animate(animation, { queue: false, duration: o.duration, easing: o.options.easing, complete: function() {
 			if(mode == "hide") el.hide();
 			$.effects.restore(el, props);
-		if (mode == "show" && $.browser.msie) this.style.removeAttribute('filter');
+			if (mode == "show" && !$.support.opacity) this.style.removeAttribute('filter');
 			if(o.callback) o.callback.apply(this, arguments);
 			el.dequeue();
 		}});

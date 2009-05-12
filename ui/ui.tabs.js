@@ -262,7 +262,7 @@ $.widget("ui.tabs", {
 		// and prevent IE's ClearType bug...
 		function resetStyle($el, fx) {
 			$el.css({ display: '' });
-			if ($.browser.msie && fx.opacity) {
+			if (!$.support.opacity && fx.opacity) {
 				$el[0].style.removeAttribute('filter');
 			}
 		}
