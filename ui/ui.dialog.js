@@ -19,7 +19,6 @@ var setDataSwitch = {
 		drag: "drag.draggable",
 		dragStop: "stop.draggable",
 		maxHeight: "maxHeight.resizable",
-		minHeight: "minHeight.resizable",
 		maxWidth: "maxWidth.resizable",
 		minWidth: "minWidth.resizable",
 		resizeStart: "start.resizable",
@@ -351,7 +350,7 @@ $.widget("ui.dialog", {
 			maxWidth: options.maxWidth,
 			maxHeight: options.maxHeight,
 			minWidth: options.minWidth,
-			minHeight: options.minHeight,
+			minHeight: self._minHeight(),
 			start: function() {
 				$(this).addClass("ui-dialog-resizing");
 				(options.resizeStart && options.resizeStart.apply(self.element[0], arguments));
@@ -369,6 +368,14 @@ $.widget("ui.dialog", {
 			}
 		})
 		.find('.ui-resizable-se').addClass('ui-icon ui-icon-grip-diagonal-se');
+	},
+
+	_minHeight: function() {
+		var options = this.options;
+
+		return (options.height == 'auto'
+			? options.minHeight
+			: Math.min(options.minHeight, options.height));
 	},
 
 	_position: function(pos) {
@@ -425,7 +432,8 @@ $.widget("ui.dialog", {
 
 	_setData: function(key, value){
 		var self = this,
-			uiDialog = self.uiDialog;
+			uiDialog = self.uiDialog,
+			resize = false;
 		
 		(setDataSwitch[key] && uiDialog.data(setDataSwitch[key], value));
 		switch (key) {
@@ -446,13 +454,16 @@ $.widget("ui.dialog", {
 					: uiDialog.draggable('destroy'));
 				break;
 			case "height":
-				uiDialog.height(value);
+				resize = true;
+				break;
+			case "minHeight":
+				resize = true;
 				break;
 			case "position":
 				self._position(value);
 				break;
 			case "resizable":
-				var isResizable = uiDialog.is(':data(resizable)');
+				var isResizable = uiDialog.is(':ui-resizable');
 
 				// currently resizable, becoming non-resizable
 				(isResizable && !value && uiDialog.resizable('destroy'));
@@ -468,11 +479,12 @@ $.widget("ui.dialog", {
 				$(".ui-dialog-title", self.uiDialogTitlebar).html(value || '&nbsp;');
 				break;
 			case "width":
-				uiDialog.width(value);
+				resize = true;
 				break;
 		}
 
 		$.widget.prototype._setData.apply(self, arguments);
+		(resize && self._size());
 	},
 
 	_size: function() {
@@ -496,13 +508,17 @@ $.widget("ui.dialog", {
 			})
 			.height();
 
-		this.element
-			.css({
+		this.element.css(options.height == 'auto'
+			? {
 				minHeight: Math.max(options.minHeight - nonContentHeight, 0),
-				height: options.height == 'auto'
-					? 'auto'
-					: Math.max(options.height - nonContentHeight, 0)
+				height: 'auto'
+			}
+			: {
+				height: Math.max(options.height - nonContentHeight, 0)
 			});
+
+		(this.uiDialog.is(':ui-resizable') &&
+			this.uiDialog.resizable('option', 'minHeight', this._minHeight()));
 	}
 });
 
