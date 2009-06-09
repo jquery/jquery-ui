@@ -1,5 +1,5 @@
 /* Hungarian initialisation for the jQuery UI date picker plugin. */
-/* Written by Istvan Karaszi (jquerycalendar@spam.raszi.hu). */
+/* Written by Istvan Karaszi (jquery@spam.raszi.hu). */
 jQuery(function($){
 	$.datepicker.regional['hu'] = {
 		closeText: 'bezárás',
@@ -10,7 +10,7 @@ jQuery(function($){
 		'Július', 'Augusztus', 'Szeptember', 'Október', 'November', 'December'],
 		monthNamesShort: ['Jan', 'Feb', 'Már', 'Ápr', 'Máj', 'Jún',
 		'Júl', 'Aug', 'Szep', 'Okt', 'Nov', 'Dec'],
-		dayNames: ['Vasámap', 'Hétfö', 'Kedd', 'Szerda', 'Csütörtök', 'Péntek', 'Szombat'],
+		dayNames: ['Vasárnap', 'Hétfö', 'Kedd', 'Szerda', 'Csütörtök', 'Péntek', 'Szombat'],
 		dayNamesShort: ['Vas', 'Hét', 'Ked', 'Sze', 'Csü', 'Pén', 'Szo'],
 		dayNamesMin: ['V', 'H', 'K', 'Sze', 'Cs', 'P', 'Szo'],
 		dateFormat: 'yy-mm-dd',
