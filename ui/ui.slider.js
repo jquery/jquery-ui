@@ -541,9 +541,8 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 $.extend($.ui.slider, {
 	version: "@VERSION",
 	eventPrefix: "slide",
-	defaults: {
+	defaults: $.extend({}, $.ui.mouse.defaults, {
 		animate: false,
-		delay: 0,
 		distance: 0,
 		max: 100,
 		min: 0,
@@ -552,7 +551,7 @@ $.extend($.ui.slider, {
 		step: 1,
 		value: 0,
 		values: null
-	}
+	})
 });
 
 })(jQuery);

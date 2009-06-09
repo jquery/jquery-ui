@@ -404,17 +404,14 @@ $.widget("ui.draggable", $.extend({}, $.ui.mouse, {
 $.extend($.ui.draggable, {
 	version: "@VERSION",
 	eventPrefix: "drag",
-	defaults: {
+	defaults: $.extend({}, $.ui.mouse.defaults, {
 		addClasses: true,
 		appendTo: "parent",
 		axis: false,
-		cancel: ":input,option",
 		connectToSortable: false,
 		containment: false,
 		cursor: "auto",
 		cursorAt: false,
-		delay: 0,
-		distance: 1,
 		grid: false,
 		handle: false,
 		helper: "original",
@@ -432,7 +429,7 @@ $.extend($.ui.draggable, {
 		snapTolerance: 20,
 		stack: false,
 		zIndex: false
-	}
+	})
 });
 
 $.ui.plugin.add("draggable", "connectToSortable", {

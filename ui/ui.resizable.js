@@ -501,17 +501,14 @@ $.widget("ui.resizable", $.extend({}, $.ui.mouse, {
 $.extend($.ui.resizable, {
 	version: "@VERSION",
 	eventPrefix: "resize",
-	defaults: {
+	defaults: $.extend({}, $.ui.mouse.defaults, {
 		alsoResize: false,
 		animate: false,
 		animateDuration: "slow",
 		animateEasing: "swing",
 		aspectRatio: false,
 		autoHide: false,
-		cancel: ":input,option",
 		containment: false,
-		delay: 0,
-		distance: 1,
 		ghost: false,
 		grid: false,
 		handles: "e,s,se",
@@ -521,7 +518,7 @@ $.extend($.ui.resizable, {
 		minHeight: 10,
 		minWidth: 10,
 		zIndex: 1000
-	}
+	})
 });
 
 /*

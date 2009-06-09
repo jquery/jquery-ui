@@ -990,16 +990,13 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 $.extend($.ui.sortable, {
 	version: "@VERSION",
 	eventPrefix: "sort",
-	defaults: {
+	defaults: $.extend({}, $.ui.mouse.defaults, {
 		appendTo: "parent",
 		axis: false,
-		cancel: ":input,option",
 		connectWith: false,
 		containment: false,
 		cursor: 'auto',
 		cursorAt: false,
-		delay: 0,
-		distance: 1,
 		dropOnEmpty: true,
 		forcePlaceholderSize: false,
 		forceHelperSize: false,
@@ -1016,7 +1013,7 @@ $.extend($.ui.sortable, {
 		scope: "default",
 		tolerance: "intersect",
 		zIndex: 1000
-	}
+	})
 });
 
 })(jQuery);

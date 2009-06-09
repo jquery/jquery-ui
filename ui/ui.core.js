@@ -519,7 +519,7 @@ $.ui.mouse = {
 };
 
 $.ui.mouse.defaults = {
-	cancel: null,
+	cancel: ':input,option',
 	distance: 1,
 	delay: 0
 };
