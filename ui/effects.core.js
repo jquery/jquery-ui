@@ -150,7 +150,7 @@ function _normalizeArguments(effect, options, speed, callback) {
 	speed = $.fx.off ? 0 : typeof speed == 'number'
 		? speed : $.fx.speeds[speed] || $.fx.speeds._default;
 
-	callback = callback || options.callback;
+	callback = callback || options.complete;
 
 	return [effect, options, speed, callback];
 }
