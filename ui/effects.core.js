@@ -131,15 +131,28 @@ $.effects = {
 };
 
 
-function _normalizeArguments(a, m) {
+function _normalizeArguments(effect, options, speed, callback) {
+	// shift params for method overloading
+	if ($.isFunction(options)) {
+		callback = options;
+		speed = null;
+		options = {};
+	}
+	if (typeof options == 'number') {
+		callback = speed;
+		speed = options;
+		options = {};
+	}
 
-	var o = a[1] && a[1].constructor == Object ? a[1] : {}; if(m) o.mode = m;
-	var speed = a[1] && a[1].constructor != Object ? a[1] : (o.duration ? o.duration : a[2]); //either comes from options.duration or the secon/third argument
-		speed = $.fx.off ? 0 : typeof speed === "number" ? speed : $.fx.speeds[speed] || $.fx.speeds._default;
-	var callback = o.callback || ( $.isFunction(a[1]) && a[1] ) || ( $.isFunction(a[2]) && a[2] ) || ( $.isFunction(a[3]) && a[3] );
+	options = options || {};
 
-	return [a[0], o, speed, callback];
-	
+	speed = speed || options.duration;
+	speed = $.fx.off ? 0 : typeof speed == 'number'
+		? speed : $.fx.speeds[speed] || $.fx.speeds._default;
+
+	callback = callback || options.callback;
+
+	return [effect, options, speed, callback];
 }
 
 //Extend the methods of jQuery
@@ -158,29 +171,34 @@ $.fn.extend({
 		return $.effects[fx] ? $.effects[fx].call(this, {method: fx, options: options || {}, duration: speed, callback: callback }) : null;
 	},
 
-	show: function() {
-		if(!arguments[0] || (arguments[0].constructor == Number || (/(slow|normal|fast)/).test(arguments[0])))
+	show: function(speed) {
+		if (!speed || typeof speed == 'number' || $.fx.speeds[speed]) {
 			return this._show.apply(this, arguments);
-		else {
-			return this.effect.apply(this, _normalizeArguments(arguments, 'show'));
+		} else {
+			var args = _normalizeArguments.apply(this, arguments);
+			args[1].mode = 'show';
+			return this.effect.apply(this, args);
 		}
 	},
 
-	hide: function() {
-		if(!arguments[0] || (arguments[0].constructor == Number || (/(slow|normal|fast)/).test(arguments[0])))
+	hide: function(speed) {
+		if (!speed || typeof speed == 'number' || $.fx.speeds[speed]) {
 			return this._hide.apply(this, arguments);
-		else {
-			return this.effect.apply(this, _normalizeArguments(arguments, 'hide'));
+		} else {
+			var args = _normalizeArguments.apply(this, arguments);
+			args[1].mode = 'hide';
+			return this.effect.apply(this, args);
 		}
 	},
 
-	toggle: function(){
-		if(!arguments[0] ||
-			(arguments[0].constructor == Number || (/(slow|normal|fast)/).test(arguments[0])) ||
-			($.isFunction(arguments[0]) || typeof arguments[0] == 'boolean')) {
+	toggle: function(speed) {
+		if (!speed || typeof speed == 'number' || $.fx.speeds[speed] ||
+			typeof speed == 'boolean' || $.isFunction(speed)) {
 			return this.__toggle.apply(this, arguments);
 		} else {
-			return this.effect.apply(this, _normalizeArguments(arguments, 'toggle'));
+			var args = _normalizeArguments.apply(this, arguments);
+			args[1].mode = 'toggle';
+			return this.effect.apply(this, args);
 		}
 	},
 
