@@ -227,19 +227,19 @@ $.extend(Datepicker.prototype, {
 
 	/* Pop-up the date picker in a "dialog" box.
 	   @param  input     element - ignored
-	   @param  dateText  string - the initial date to display (in the current format)
-	   @param  onSelect  function - the function(dateText) to call when a date is selected
+	   @param  date      string or Date - the initial date to display
+	   @param  onSelect  function - the function to call when a date is selected
 	   @param  settings  object - update the dialog date picker instance's settings (anonymous object)
 	   @param  pos       int[2] - coordinates for the dialog's position within the screen or
 	                     event - with x/y coordinates or
 	                     leave empty for default (screen centre)
 	   @return the manager object */
-	_dialogDatepicker: function(input, dateText, onSelect, settings, pos) {
+	_dialogDatepicker: function(input, date, onSelect, settings, pos) {
 		var inst = this._dialogInst; // internal instance
 		if (!inst) {
 			var id = 'dp' + (++this.uuid);
 			this._dialogInput = $('<input type="text" id="' + id +
-				'" size="1" style="position: absolute; top: -100px;"/>');
+				'" style="position: absolute; top: -100px; width: 0px; z-index: -10;"/>');
 			this._dialogInput.keydown(this._doKeyDown);
 			$('body').append(this._dialogInput);
 			inst = this._dialogInst = this._newInst(this._dialogInput, false);
@@ -247,7 +247,8 @@ $.extend(Datepicker.prototype, {
 			$.data(this._dialogInput[0], PROP_NAME, inst);
 		}
 		extendRemove(inst.settings, settings || {});
-		this._dialogInput.val(dateText);
+		date = (date && date.constructor == Date ? this._formatDate(inst, date) : date);
+		this._dialogInput.val(date);
 
 		this._pos = (pos ? (pos.length ? pos : [pos.pageX, pos.pageY]) : null);
 		if (!this._pos) {
@@ -260,7 +261,7 @@ $.extend(Datepicker.prototype, {
 		}
 
 		// move input on screen for focus, but hidden behind dialog
-		this._dialogInput.css('left', this._pos[0] + 'px').css('top', this._pos[1] + 'px');
+		this._dialogInput.css('left', (this._pos[0] + 20) + 'px').css('top', this._pos[1] + 'px');
 		inst.settings.onSelect = onSelect;
 		this._inDialog = true;
 		this.dpDiv.addClass(this._dialogClass);
