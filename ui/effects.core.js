@@ -167,8 +167,17 @@ $.fn.extend({
 	_toggleClass: $.fn.toggleClass,
 
 	// New effect methods
-	effect: function(fx, options, speed, callback) {
-		return $.effects[fx] ? $.effects[fx].call(this, {method: fx, options: options || {}, duration: speed, callback: callback }) : null;
+	effect: function(effect, options, speed, callback) {
+		var args = _normalizeArguments.apply(this, arguments),
+			// TODO: make effects takes actual parameters instead of a hash
+			args2 = {
+				options: args[1],
+				duration: args[2],
+				callback: args[3]
+			},
+			effectMethod = $.effects[effect];
+		
+		return effectMethod && !$.fx.off ? effectMethod.call(this, args2) : this;
 	},
 
 	show: function(speed) {
