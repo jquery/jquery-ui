@@ -155,18 +155,7 @@ function _normalizeArguments(effect, options, speed, callback) {
 	return [effect, options, speed, callback];
 }
 
-//Extend the methods of jQuery
 $.fn.extend({
-
-	//Save old methods
-	_show: $.fn.show,
-	_hide: $.fn.hide,
-	__toggle: $.fn.toggle,
-	_addClass: $.fn.addClass,
-	_removeClass: $.fn.removeClass,
-	_toggleClass: $.fn.toggleClass,
-
-	// New effect methods
 	effect: function(effect, options, speed, callback) {
 		var args = _normalizeArguments.apply(this, arguments),
 			// TODO: make effects takes actual parameters instead of a hash
@@ -180,6 +169,7 @@ $.fn.extend({
 		return effectMethod && !$.fx.off ? effectMethod.call(this, args2) : this;
 	},
 
+	_show: $.fn.show,
 	show: function(speed) {
 		if (!speed || typeof speed == 'number' || $.fx.speeds[speed]) {
 			return this._show.apply(this, arguments);
@@ -190,6 +180,7 @@ $.fn.extend({
 		}
 	},
 
+	_hide: $.fn.hide,
 	hide: function(speed) {
 		if (!speed || typeof speed == 'number' || $.fx.speeds[speed]) {
 			return this._hide.apply(this, arguments);
@@ -200,6 +191,8 @@ $.fn.extend({
 		}
 	},
 
+	// jQuery core overloads toggle and create _toggle
+	__toggle: $.fn.toggle,
 	toggle: function(speed) {
 		if (!speed || typeof speed == 'number' || $.fx.speeds[speed] ||
 			typeof speed == 'boolean' || $.isFunction(speed)) {
@@ -211,15 +204,21 @@ $.fn.extend({
 		}
 	},
 
+	_addClass: $.fn.addClass,
 	addClass: function(classNames, speed, easing, callback) {
 		return speed ? $.effects.animateClass.apply(this, [{ add: classNames },speed,easing,callback]) : this._addClass(classNames);
 	},
+
+	_removeClass: $.fn.removeClass,
 	removeClass: function(classNames,speed,easing,callback) {
 		return speed ? $.effects.animateClass.apply(this, [{ remove: classNames },speed,easing,callback]) : this._removeClass(classNames);
 	},
+
+	_toggleClass: $.fn.toggleClass,
 	toggleClass: function(classNames,speed,easing,callback) {
 		return ( (typeof speed !== "boolean") && speed ) ? $.effects.animateClass.apply(this, [{ toggle: classNames },speed,easing,callback]) : this._toggleClass(classNames, speed);
 	},
+
 	morph: function(remove,add,speed,easing,callback) {
 		return $.effects.animateClass.apply(this, [{ add: add, remove: remove },speed,easing,callback]);
 	},
