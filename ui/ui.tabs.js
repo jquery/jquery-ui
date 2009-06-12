@@ -600,6 +600,10 @@ $.widget("ui.tabs", {
 		this.element.queue([]);
 		this.panels.stop(false, true);
 
+		// "tabs" queue must not contain more than two elements,
+		// which are the callbacks for the latest clicked tab...
+		this.element.queue("tabs", this.element.queue("tabs").splice(-2, 2));
+
 		// terminate pending requests from other tabs
 		if (this.xhr) {
 			this.xhr.abort();
