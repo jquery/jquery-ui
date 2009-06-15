@@ -241,18 +241,17 @@ $.fn.extend({
 // override the animation for color styles
 $.each(['backgroundColor', 'borderBottomColor', 'borderLeftColor',
 	'borderRightColor', 'borderTopColor', 'color', 'outlineColor'],
-	function(i,attr){
+function(i, attr) {
 	$.fx.step[attr] = function(fx) {
-		if (fx.state == 0) {
-			fx.start = getColor( fx.elem, attr );
-			fx.end = getRGB( fx.end );
+		if (fx.state === 0) {
+			fx.start = getColor(fx.elem, attr);
+			fx.end = getRGB(fx.end);
 		}
 
-		fx.elem.style[attr] = "rgb(" + [
-			Math.max(Math.min( parseInt((fx.pos * (fx.end[0] - fx.start[0])) + fx.start[0],10), 255), 0),
-			Math.max(Math.min( parseInt((fx.pos * (fx.end[1] - fx.start[1])) + fx.start[1],10), 255), 0),
-			Math.max(Math.min( parseInt((fx.pos * (fx.end[2] - fx.start[2])) + fx.start[2],10), 255), 0)
-		].join(",") + ")";
+		fx.elem.style[attr] = 'rgb(' +
+			Math.max(Math.min(parseInt((fx.pos * (fx.end[0] - fx.start[0])) + fx.start[0], 10), 255), 0) + ',' +
+			Math.max(Math.min(parseInt((fx.pos * (fx.end[1] - fx.start[1])) + fx.start[1], 10), 255), 0) + ',' +
+			Math.max(Math.min(parseInt((fx.pos * (fx.end[2] - fx.start[2])) + fx.start[2], 10), 255), 0) + ')';
 	};
 });
 
