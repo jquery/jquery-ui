@@ -13,33 +13,28 @@
 (function($) {
 
 $.effects.puff = function(o) {
-
 	return this.queue(function() {
+		var elem = $(this),
+			mode = $.effects.setMode(elem, o.options.mode || 'hide'),
+			percent = parseInt(o.options.percent, 10) || 150,
+			factor = percent / 100,
+			original = { height: elem.height(), width: elem.width() };
 
-		// Create element
-		var el = $(this);
+		$.extend(o.options, {
+			fade: true,
+			mode: mode,
+			percent: mode == 'hide' ? percent : 100,
+			from: mode == 'hide'
+				? original
+				: {
+					height: original.height * factor,
+					width: original.width * factor
+				}
+		});
 
-		// Set options
-		var options = $.extend(true, {}, o.options);
-		var mode = $.effects.setMode(el, o.options.mode || 'hide'); // Set Mode
-		var percent = parseInt(o.options.percent,10) || 150; // Set default puff percent
-		options.fade = true; // It's not a puff if it doesn't fade! :)
-		var original = {height: el.height(), width: el.width()}; // Save original
-
-		// Adjust
-		var factor = percent / 100;
-		el.from = (mode == 'hide') ? original : {height: original.height * factor, width: original.width * factor};
-
-		// Animation
-		options.from = el.from;
-		options.percent = (mode == 'hide') ? percent : 100;
-		options.mode = mode;
-
-		// Animate
-		el.effect('scale', options, o.duration, o.callback);
-		el.dequeue();
+		elem.effect('scale', o.options, o.duration, o.callback);
+		elem.dequeue();
 	});
-
 };
 
 $.effects.scale = function(o) {
