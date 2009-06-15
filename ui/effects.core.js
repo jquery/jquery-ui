@@ -219,11 +219,8 @@ $.fn.extend({
 		return ( (typeof speed !== "boolean") && speed ) ? $.effects.animateClass.apply(this, [{ toggle: classNames },speed,easing,callback]) : this._toggleClass(classNames, speed);
 	},
 
-	morph: function(remove,add,speed,easing,callback) {
+	switchClass: function(remove,add,speed,easing,callback) {
 		return $.effects.animateClass.apply(this, [{ add: add, remove: remove },speed,easing,callback]);
-	},
-	switchClass: function() {
-		return this.morph.apply(this, arguments);
 	},
 
 	// helper functions
