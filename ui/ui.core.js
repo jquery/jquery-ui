@@ -244,7 +244,7 @@ $.widget = function(name, prototype) {
 					methodValue = (instance && $.isFunction(instance[options])
 						? instance[options].apply(instance, args)
 						: instance);
-				if (methodValue !== instance) {
+				if (methodValue !== instance && methodValue !== undefined) {
 					returnValue = methodValue;
 					return false;
 				}
