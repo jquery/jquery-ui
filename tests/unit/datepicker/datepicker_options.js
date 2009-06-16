@@ -142,7 +142,7 @@ test('defaultDate', function() {
 	inp.val('').datepicker('show').
 		simulate('keydown', {keyCode: $.simulate.VK_ENTER});
 	equalsDate(inp.datepicker('getDate'), date, 'Default date null');
-	// numeric values
+	// Numeric values
 	inp.datepicker('option', {defaultDate: -2}).
 		datepicker('hide').val('').datepicker('show').
 		simulate('keydown', {keyCode: $.simulate.VK_ENTER});
@@ -162,7 +162,7 @@ test('defaultDate', function() {
 		datepicker('hide').val('').datepicker('show').
 		simulate('keydown', {keyCode: $.simulate.VK_ENTER});
 	equalsDate(inp.datepicker('getDate'), date, 'Default date NaN');
-	// string values
+	// String offset values
 	inp.datepicker('option', {defaultDate: '-1d'}).
 		datepicker('hide').val('').datepicker('show').
 		simulate('keydown', {keyCode: $.simulate.VK_ENTER});
@@ -211,8 +211,20 @@ test('defaultDate', function() {
 	date = addMonths(new Date(), 1);
 	date.setDate(date.getDate() + 10);
 	equalsDate(inp.datepicker('getDate'), date, 'Default date +1M +10d');
+	// String date values
+	inp.datepicker('option', {defaultDate: '07/04/2007'}).
+		datepicker('hide').val('').datepicker('show').
+		simulate('keydown', {keyCode: $.simulate.VK_ENTER});
+	date = new Date(2007, 7 - 1, 4);
+	equalsDate(inp.datepicker('getDate'), date, 'Default date 07/04/2007');
+	inp.datepicker('option', {dateFormat: 'yy-mm-dd', defaultDate: '2007-04-02'}).
+		datepicker('hide').val('').datepicker('show').
+		simulate('keydown', {keyCode: $.simulate.VK_ENTER});
+	date = new Date(2007, 4 - 1, 2);
+	equalsDate(inp.datepicker('getDate'), date, 'Default date 2007-04-02');
+	// Date value
 	date = new Date(2007, 1 - 1, 26);
-	inp.datepicker('option', {defaultDate: date}).
+	inp.datepicker('option', {dateFormat: 'mm/dd/yy', defaultDate: date}).
 		datepicker('hide').val('').datepicker('show').
 		simulate('keydown', {keyCode: $.simulate.VK_ENTER});
 	equalsDate(inp.datepicker('getDate'), date, 'Default date 01/26/2007');

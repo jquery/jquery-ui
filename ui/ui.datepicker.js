@@ -1178,17 +1178,24 @@ $.extend(Datepicker.prototype, {
 	/* Retrieve the default date shown on opening. */
 	_getDefaultDate: function(inst) {
 		return this._restrictMinMax(inst,
-			this._determineDate(this._get(inst, 'defaultDate'), new Date()));
+			this._determineDate(inst, this._get(inst, 'defaultDate'), new Date()));
 	},
 
 	/* A date may be specified as an exact value or a relative one. */
-	_determineDate: function(date, defaultDate) {
+	_determineDate: function(inst, date, defaultDate) {
 		var offsetNumeric = function(offset) {
 			var date = new Date();
 			date.setDate(date.getDate() + offset);
 			return date;
 		};
-		var offsetString = function(offset, getDaysInMonth) {
+		var offsetString = function(offset) {
+			try {
+				return $.datepicker.parseDate($.datepicker._get(inst, 'dateFormat'),
+					offset, $.datepicker._getFormatConfig(inst));
+			}
+			catch (e) {
+				// Ignore
+			}
 			var date = new Date();
 			var year = date.getFullYear();
 			var month = date.getMonth();
@@ -1203,19 +1210,18 @@ $.extend(Datepicker.prototype, {
 						day += parseInt(matches[1],10) * 7; break;
 					case 'm' : case 'M' :
 						month += parseInt(matches[1],10);
-						day = Math.min(day, getDaysInMonth(year, month));
+						day = Math.min(day, $.datepicker._getDaysInMonth(year, month));
 						break;
 					case 'y': case 'Y' :
 						year += parseInt(matches[1],10);
-						day = Math.min(day, getDaysInMonth(year, month));
+						day = Math.min(day, $.datepicker._getDaysInMonth(year, month));
 						break;
 				}
 				matches = pattern.exec(offset);
 			}
 			return new Date(year, month, day);
 		};
-		date = (date == null ? defaultDate :
-			(typeof date == 'string' ? offsetString(date, this._getDaysInMonth) :
+		date = (date == null ? defaultDate : (typeof date == 'string' ? offsetString(date) :
 			(typeof date == 'number' ? (isNaN(date) ? defaultDate : offsetNumeric(date)) : date)));
 		date = (date && date.toString() == 'Invalid Date' ? defaultDate : date);
 		if (date) {
@@ -1244,7 +1250,7 @@ $.extend(Datepicker.prototype, {
 		var clear = !(date);
 		var origMonth = inst.selectedMonth;
 		var origYear = inst.selectedYear;
-		date = this._restrictMinMax(inst, this._determineDate(date, new Date()));
+		date = this._restrictMinMax(inst, this._determineDate(inst, date, new Date()));
 		inst.selectedDay = inst.currentDay = date.getDate();
 		inst.drawMonth = inst.selectedMonth = inst.currentMonth = date.getMonth();
 		inst.drawYear = inst.selectedYear = inst.currentYear = date.getFullYear();
@@ -1529,7 +1535,7 @@ $.extend(Datepicker.prototype, {
 
 	/* Determine the current maximum date - ensure no time components are set. */
 	_getMinMaxDate: function(inst, minMax) {
-		return this._determineDate(this._get(inst, minMax + 'Date'), null);
+		return this._determineDate(inst, this._get(inst, minMax + 'Date'), null);
 	},
 
 	/* Find the number of days in a given month. */
