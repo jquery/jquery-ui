@@ -1,4 +1,4 @@
-@import url("../../external/qunit/testsuite.css");
+@import url("../../external/testsuite-r6164.css");
 html { border: 0; }
 .xerror, .error, .ui-tabs-hide { display: none }
 #main { position: absolute; top: -10000px; left: -10000px; }
