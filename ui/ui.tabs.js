@@ -629,15 +629,22 @@ $.widget("ui.tabs", {
 $.extend($.ui.tabs, {
 	version: '@VERSION',
 	defaults: {
+		add: null,
 		ajaxOptions: null,
 		cache: false,
 		cookie: null, // e.g. { expires: 7, path: '/', domain: 'jquery.com', secure: true }
 		collapsible: false,
+		disable: null,
 		disabled: [],
+		enable: null,
 		event: 'click',
 		fx: null, // e.g. { height: 'toggle', opacity: 'toggle', duration: 200 }
 		idPrefix: 'ui-tabs-',
+		load: null,
 		panelTemplate: '<div></div>',
+		remove: null,
+		select: null,
+		show: null,
 		spinner: '<em>Loading&#8230;</em>',
 		tabTemplate: '<li><a href="#{href}"><span>#{label}</span></a></li>'
 	}
