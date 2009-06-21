@@ -136,6 +136,27 @@ test('invocation', function() {
 	inp.datepicker('hide').datepicker('destroy');
 });
 
+test('otherMonths', function() {
+	var inp = init('#inp');
+	var pop = $('#ui-datepicker-div');
+	inp.val('06/01/2009').datepicker('show');
+	equals(pop.find('tbody').text(), '\u00a0123456789101112131415161718192021222324252627282930\u00a0\u00a0\u00a0\u00a0',
+		'Other months - none');
+	ok(pop.find('td:last *').length == 0, 'Other months - no content');
+	inp.datepicker('hide').datepicker('option', 'showOtherMonths', true).datepicker('show');
+	equals(pop.find('tbody').text(), '311234567891011121314151617181920212223242526272829301234',
+		'Other months - show');
+	ok(pop.find('td:last span').length == 1, 'Other months - span content');
+	inp.datepicker('hide').datepicker('option', 'selectOtherMonths', true).datepicker('show');
+	equals(pop.find('tbody').text(), '311234567891011121314151617181920212223242526272829301234',
+		'Other months - select');
+	ok(pop.find('td:last a').length == 1, 'Other months - link content');
+	inp.datepicker('hide').datepicker('option', 'showOtherMonths', false).datepicker('show');
+	equals(pop.find('tbody').text(), '\u00a0123456789101112131415161718192021222324252627282930\u00a0\u00a0\u00a0\u00a0',
+		'Other months - none');
+	ok(pop.find('td:last *').length == 0, 'Other months - no content');
+});
+
 test('defaultDate', function() {
 	var inp = init('#inp');
 	var date = new Date();
