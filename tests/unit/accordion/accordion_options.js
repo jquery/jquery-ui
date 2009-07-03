@@ -136,16 +136,24 @@ test("{ icons: false }", function() {
 	icons(false);
 });
 
-test("{ navigation: false }, default", function() {
-	ok(false, 'missing test - untested code is broken code');
+test("{ navigation: true, navigationFilter: header }", function() {
+	$("#navigation").accordion({
+		navigation: true,
+		navigationFilter: function() {
+			return /\?p=1\.1\.3$/.test(this.href);
+		}
+	});
+	equals( $("#navigation .ui-accordion-content:eq(2)").size(), 1, "third content active" );
 });
 
-test("{ navigation: true }", function() {
-	ok(false, 'missing test - untested code is broken code');
-});
-
-test("{ navigationFilter: Function }, default", function() {
-	ok(false, 'missing test - untested code is broken code');
+test("{ navigation: true, navigationFilter: content }", function() {
+	$("#navigation").accordion({
+		navigation: true,
+		navigationFilter: function() {
+			return /\?p=1\.1\.3\.2$/.test(this.href);
+		}
+	});
+	equals( $("#navigation .ui-accordion-content:eq(2)").size(), 1, "third content active" );
 });
 
 })(jQuery);
