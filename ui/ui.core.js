@@ -352,6 +352,7 @@ $.widget.prototype = {
 
 		event = $.Event(event);
 		event.type = eventName;
+		data = data || {};
 
 		// copy original event properties over to the new event
 		// this would happen if we could call $.event.fix instead of $.Event

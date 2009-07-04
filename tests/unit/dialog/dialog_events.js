@@ -6,13 +6,15 @@
 module("dialog: events");
 
 test("open", function() {
-	expect(6);
+	expect(11);
 
 	el = $("<div></div>");
 	el.dialog({
 		open: function(ev, ui) {
 			ok(true, 'autoOpen: true fires open callback');
 			equals(this, el[0], "context of callback");
+			equals(ev.type, 'dialogopen', 'event type in callback');
+			same(ui, {}, 'ui hash in callback');
 		}
 	});
 	el.remove();
@@ -23,19 +25,15 @@ test("open", function() {
 		open: function(ev, ui) {
 			ok(true, '.dialog("open") fires open callback');
 			equals(this, el[0], "context of callback");
+			equals(ev.type, 'dialogopen', 'event type in callback');
+			same(ui, {}, 'ui hash in callback');
 		}
-	});
-	el.dialog("open");
-	el.remove();
-
-	el = $('<div></div>').dialog({
-		autoOpen: false
-	});
-	el.bind('dialogopen', function(ev, ui) {
+	}).bind('dialogopen', function(ev, ui) {
 		ok(true, 'dialog("open") fires open event');
 		equals(this, el[0], 'context of event');
+		same(ui, {}, 'ui hash in event');
 	});
-	el.dialog('open');
+	el.dialog("open");
 	el.remove();
 });
 
@@ -132,32 +130,33 @@ test("resizeStop", function() {
 });
 
 test("close", function() {
-	expect(4);
+	expect(7);
 
 	el = $('<div></div>').dialog({
 		close: function(ev, ui) {
 			ok(true, '.dialog("close") fires close callback');
 			equals(this, el[0], "context of callback");
+			equals(ev.type, 'dialogclose', 'event type in callback');
+			same(ui, {}, 'ui hash in callback');
 		}
-	});
-	el.dialog("close");
-	el.remove();
-
-	el = $('<div></div>').dialog().bind('dialogclose', function(ev, ui) {
+	}).bind('dialogclose', function(ev, ui) {
 		ok(true, '.dialog("close") fires dialogclose event');
 		equals(this, el[0], 'context of event');
+		same(ui, {}, 'ui hash in event');
 	});
 	el.dialog('close');
 	el.remove();
 });
 
 test("beforeclose", function() {
-	expect(6);
+	expect(9);
 
 	el = $('<div></div>').dialog({
 		beforeclose: function(ev, ui) {
 			ok(true, '.dialog("close") fires beforeclose callback');
 			equals(this, el[0], "context of callback");
+			equals(ev.type, 'dialogbeforeclose', 'event type in callback');
+			same(ui, {}, 'ui hash in callback');
 			return false;
 		}
 	});
@@ -168,6 +167,7 @@ test("beforeclose", function() {
 	el = $('<div></div>').dialog().bind('dialogbeforeclose', function(ev, ui) {
 		ok(true, '.dialog("close") triggers dialogbeforeclose event');
 		equals(this, el[0], "context of event");
+		same(ui, {}, 'ui hash in event');
 		return false;
 	});
 	el.dialog('close');
