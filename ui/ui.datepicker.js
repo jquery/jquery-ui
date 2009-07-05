@@ -1402,7 +1402,7 @@ $.extend(Datepicker.prototype, {
 							(printDate.getTime() == today.getTime() ? ' ui-datepicker-today' : '')) + '"' + // highlight today (if different)
 							((!otherMonth || showOtherMonths) && daySettings[2] ? ' title="' + daySettings[2] + '"' : '') + // cell title
 							(unselectable ? '' : ' onclick="DP_jQuery.datepicker._selectDay(\'#' +
-							inst.id + '\',' + drawMonth + ',' + drawYear + ', this);return false;"') + '>' + // actions
+							inst.id + '\',' + printDate.getMonth() + ',' + printDate.getFullYear() + ', this);return false;"') + '>' + // actions
 							(otherMonth && !showOtherMonths ? '&#xa0;' : // display for other months
 							(unselectable ? '<span class="ui-state-default">' + printDate.getDate() + '</span>' : '<a class="ui-state-default' +
 							(printDate.getTime() == today.getTime() ? ' ui-state-highlight' : '') +
