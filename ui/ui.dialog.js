@@ -134,7 +134,7 @@ $.widget("ui.dialog", {
 		self._createButtons(options.buttons);
 		self._isOpen = false;
 
-		(options.bgiframe && $.fn.bgiframe && uiDialog.bgiframe());
+		(options.stackfix && $.fn.stackfix && uiDialog.stackfix());
 		(options.autoOpen && self.open());
 	},
 
@@ -526,7 +526,7 @@ $.extend($.ui.dialog, {
 	version: "@VERSION",
 	defaults: {
 		autoOpen: true,
-		bgiframe: false,
+		stackfix: false,
 		buttons: {},
 		closeOnEscape: true,
 		closeText: 'close',
@@ -596,7 +596,7 @@ $.extend($.ui.dialog.overlay, {
 				height: this.height()
 			});
 
-		(dialog.options.bgiframe && $.fn.bgiframe && $el.bgiframe());
+		(dialog.options.stackfix && $.fn.stackfix && $el.stackfix());
 
 		this.instances.push($el);
 		return $el;
