@@ -125,7 +125,6 @@ $.widget("ui.droppable", {
 			draggable: (c.currentItem || c.element),
 			helper: c.helper,
 			position: c.position,
-			absolutePosition: c.positionAbs, //deprecated
 			offset: c.positionAbs
 		};
 	}
