@@ -1,17 +1,11 @@
 /*
  * jQuery UI Stackfix @VERSION
  *
- * Copyright (c) 2008 Brandon Aaron (http://brandonaaron.net)
- * to be replaced with...?
  * Copyright (c) 2009 AUTHORS.txt (http://jqueryui.com/about)
- * 
  * Dual licensed under the MIT (MIT-LICENSE.txt)
  * and GPL (GPL-LICENSE.txt) licenses.
  *
- * http://docs.jquery.com/Plugins/bgiframe
- * to be moved to...?
  * http://docs.jquery.com/UI/Stackfix
- *
  */
 
 (function($){
