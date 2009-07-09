@@ -250,7 +250,7 @@ test("{ cursorAt: { left: -5, top: -5 } }", function() {
 	$("#draggable2").draggable({
 		cursorAt: { left: cax, top: cay },
 		drag: function(event, ui) {
-			actual = ui.absolutePosition;
+			actual = ui.offset;
 		}
 	});
 	var el = $("#draggable2").data("draggable").element;
@@ -274,7 +274,7 @@ test("{ cursorAt: { left: -5, top: -5 } }", function() {
 	$("#draggable1").draggable({
 		cursorAt: { left: cax, top: cay },
 		drag: function(event, ui) {
-			actual = ui.absolutePosition;
+			actual = ui.offset;
 		}
 	});
 	var el = $("#draggable2").data("draggable").element;
