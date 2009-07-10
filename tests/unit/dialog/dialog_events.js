@@ -38,14 +38,19 @@ test("open", function() {
 });
 
 test("dragStart", function() {
-	expect(2);
+	expect(7);
 
-	el = $("<div></div>");
-	el.dialog({
+	el = $('<div></div>').dialog({
 		dragStart: function(ev, ui) {
 			ok(true, 'dragging fires dragStart callback');
 			equals(this, el[0], "context of callback");
+			equals(ev.type, 'dialogdragStart', 'event type in callback');
+			same(ui, {}, 'ui hash in callback');
 		}
+	}).bind('dialogdragStart', function(ev, ui) {
+		ok(true, 'dragging fires dialogdragStart event');
+		equals(this, el[0], 'context of event');
+		same(ui, {}, 'ui hash in event');
 	});
 	var handle = $(".ui-dialog-titlebar", dlg());
 	drag(handle, 50, 50);
@@ -53,30 +58,44 @@ test("dragStart", function() {
 });
 
 test("drag", function() {
-	var fired = false;
-
-	el = $("<div></div>");
-	el.dialog({
+	expect(7);
+	var hasDragged = false;
+	
+	el = $('<div></div>').dialog({
 		drag: function(ev, ui) {
-			fired = true;
-			equals(this, el[0], "context of callback");
+			if (!hasDragged) {
+				ok(true, 'dragging fires drag callback');
+				equals(this, el[0], "context of callback");
+				equals(ev.type, 'dialogdrag', 'event type in callback');
+				same(ui, {}, 'ui hash in callback');
+				
+				hasDragged = true;
+			}
 		}
+	}).one('dialogdrag', function(ev, ui) {
+		ok(true, 'dragging fires dialogdrag event');
+		equals(this, el[0], 'context of event');
+		same(ui, {}, 'ui hash in event');
 	});
 	var handle = $(".ui-dialog-titlebar", dlg());
 	drag(handle, 50, 50);
-	ok(fired, "drag fired");
 	el.remove();
 });
 
 test("dragStop", function() {
-	expect(2);
+	expect(7);
 
-	el = $("<div></div>");
-	el.dialog({
-		dragStop: function(ev, ui) {
+	el = $('<div></div>').dialog({
+		dragStart: function(ev, ui) {
 			ok(true, 'dragging fires dragStop callback');
 			equals(this, el[0], "context of callback");
+			equals(ev.type, 'dialogdragStop', 'event type in callback');
+			same(ui, {}, 'ui hash in callback');
 		}
+	}).bind('dialogdragStop', function(ev, ui) {
+		ok(true, 'dragging fires dialogdragStop event');
+		equals(this, el[0], 'context of event');
+		same(ui, {}, 'ui hash in event');
 	});
 	var handle = $(".ui-dialog-titlebar", dlg());
 	drag(handle, 50, 50);
@@ -84,14 +103,19 @@ test("dragStop", function() {
 });
 
 test("resizeStart", function() {
-	expect(2);
+	expect(7);
 
-	el = $("<div></div>");
-	el.dialog({
+	el = $('<div></div>').dialog({
 		resizeStart: function(ev, ui) {
 			ok(true, 'resizing fires resizeStart callback');
 			equals(this, el[0], "context of callback");
+			equals(ev.type, 'dialogresizeStart', 'event type in callback');
+			same(ui, {}, 'ui hash in callback');
 		}
+	}).bind('dialogresizeStart', function(ev, ui) {
+		ok(true, 'resizing fires dialogresizeStart event');
+		equals(this, el[0], 'context of event');
+		same(ui, {}, 'ui hash in event');
 	});
 	var handle = $(".ui-resizable-se", dlg());
 	drag(handle, 50, 50);
@@ -99,30 +123,44 @@ test("resizeStart", function() {
 });
 
 test("resize", function() {
-	var fired = false;
+	expect(7);
+	var hasResized = false;
 
-	el = $("<div></div>");
-	el.dialog({
+	el = $('<div></div>').dialog({
 		resize: function(ev, ui) {
-			fired = true;
-			equals(this, el[0], "context of callback");
+			if (!hasResized) {
+				ok(true, 'resizing fires resize callback');
+				equals(this, el[0], "context of callback");
+				equals(ev.type, 'dialogresize', 'event type in callback');
+				same(ui, {}, 'ui hash in callback');
+				
+				hasResized = true;
+			}
 		}
+	}).one('dialogresize', function(ev, ui) {
+		ok(true, 'resizing fires dialogresize event');
+		equals(this, el[0], 'context of event');
+		same(ui, {}, 'ui hash in event');
 	});
 	var handle = $(".ui-resizable-se", dlg());
 	drag(handle, 50, 50);
-	ok(fired, "resize fired");
 	el.remove();
 });
 
 test("resizeStop", function() {
-	expect(2);
+	expect(7);
 
-	el = $("<div></div>");
-	el.dialog({
+	el = $('<div></div>').dialog({
 		resizeStop: function(ev, ui) {
 			ok(true, 'resizing fires resizeStop callback');
 			equals(this, el[0], "context of callback");
+			equals(ev.type, 'dialogresizeStop', 'event type in callback');
+			same(ui, {}, 'ui hash in callback');
 		}
+	}).bind('dialogresizeStop', function(ev, ui) {
+		ok(true, 'resizing fires dialogresizeStop event');
+		equals(this, el[0], 'context of event');
+		same(ui, {}, 'ui hash in event');
 	});
 	var handle = $(".ui-resizable-se", dlg());
 	drag(handle, 50, 50);
