@@ -12,7 +12,10 @@
 	<link type="text/css" href="../demos.css" rel="stylesheet" />
 	<script type="text/javascript">
 	$(function() {
-		$("#dialog").dialog({
+		// a workaround for a flaw in the demo system (http://dev.jqueryui.com/ticket/4375), ignore!
+		$("#dialog").dialog("destroy");
+	
+		$("#dialog-message").dialog({
 			stackfix: true,
 			modal: true,
 			buttons: {
@@ -28,7 +31,7 @@
 
 <div class="demo">
 
-<div id="dialog" title="Download complete">
+<div id="dialog-message" title="Download complete">
 	<p>
 		<span class="ui-icon ui-icon-circle-check" style="float:left; margin:0 7px 50px 0;"></span>
 		Your files have downloaded successfully into the My Downloads folder.

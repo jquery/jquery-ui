@@ -28,6 +28,8 @@
 	</style>
 	<script type="text/javascript">
 	$(function() {
+		// a workaround for a flaw in the demo system (http://dev.jqueryui.com/ticket/4375), ignore!
+		$("#dialog").dialog("destroy");
 		
 		var name = $("#name"),
 			email = $("#email"),
@@ -63,7 +65,7 @@
 
 		}
 		
-		$("#dialog").dialog({
+		$("#dialog-form").dialog({
 			stackfix: true,
 			autoOpen: false,
 			height: 300,
@@ -103,7 +105,7 @@
 		
 		
 		$('#create-user').click(function() {
-			$('#dialog').dialog('open');
+			$('#dialog-form').dialog('open');
 		})
 		.hover(
 			function() {
@@ -133,7 +135,7 @@
 
 <div class="demo">
 
-<div id="dialog" title="Create new user">
+<div id="dialog-form" title="Create new user">
 	<p id="validateTips">All form fields are required.</p>
 
 	<form>

@@ -12,7 +12,10 @@
 	<link type="text/css" href="../demos.css" rel="stylesheet" />
 	<script type="text/javascript">
 	$(function() {
-		$("#dialog").dialog({
+		// a workaround for a flaw in the demo system (http://dev.jqueryui.com/ticket/4375), ignore!
+		$("#dialog").dialog("destroy");
+	
+		$("#dialog-confirm").dialog({
 			stackfix: true,
 			resizable: false,
 			height:140,
@@ -37,7 +40,7 @@
 
 <div class="demo">
 
-<div id="dialog" title="Empty the recycle bin?">
+<div id="dialog-confirm" title="Empty the recycle bin?">
 	<p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>These items will be permanently deleted and cannot be recovered. Are you sure?</p>
 </div>
 
