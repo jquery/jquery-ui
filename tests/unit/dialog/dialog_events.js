@@ -44,11 +44,11 @@ test("dragStart", function() {
 		dragStart: function(ev, ui) {
 			ok(true, 'dragging fires dragStart callback');
 			equals(this, el[0], "context of callback");
-			equals(ev.type, 'dialogdragStart', 'event type in callback');
+			equals(ev.type, 'dialogdragstart', 'event type in callback');
 			same(ui, {}, 'ui hash in callback');
 		}
-	}).bind('dialogdragStart', function(ev, ui) {
-		ok(true, 'dragging fires dialogdragStart event');
+	}).bind('dialogdragstart', function(ev, ui) {
+		ok(true, 'dragging fires dialogdragstart event');
 		equals(this, el[0], 'context of event');
 		same(ui, {}, 'ui hash in event');
 	});
@@ -89,11 +89,11 @@ test("dragStop", function() {
 		dragStart: function(ev, ui) {
 			ok(true, 'dragging fires dragStop callback');
 			equals(this, el[0], "context of callback");
-			equals(ev.type, 'dialogdragStop', 'event type in callback');
+			equals(ev.type, 'dialogdragstop', 'event type in callback');
 			same(ui, {}, 'ui hash in callback');
 		}
-	}).bind('dialogdragStop', function(ev, ui) {
-		ok(true, 'dragging fires dialogdragStop event');
+	}).bind('dialogdragstop', function(ev, ui) {
+		ok(true, 'dragging fires dialogdragstop event');
 		equals(this, el[0], 'context of event');
 		same(ui, {}, 'ui hash in event');
 	});
@@ -109,11 +109,11 @@ test("resizeStart", function() {
 		resizeStart: function(ev, ui) {
 			ok(true, 'resizing fires resizeStart callback');
 			equals(this, el[0], "context of callback");
-			equals(ev.type, 'dialogresizeStart', 'event type in callback');
+			equals(ev.type, 'dialogresizestart', 'event type in callback');
 			same(ui, {}, 'ui hash in callback');
 		}
-	}).bind('dialogresizeStart', function(ev, ui) {
-		ok(true, 'resizing fires dialogresizeStart event');
+	}).bind('dialogresizestart', function(ev, ui) {
+		ok(true, 'resizing fires dialogresizestart event');
 		equals(this, el[0], 'context of event');
 		same(ui, {}, 'ui hash in event');
 	});
@@ -154,11 +154,11 @@ test("resizeStop", function() {
 		resizeStop: function(ev, ui) {
 			ok(true, 'resizing fires resizeStop callback');
 			equals(this, el[0], "context of callback");
-			equals(ev.type, 'dialogresizeStop', 'event type in callback');
+			equals(ev.type, 'dialogresizestop', 'event type in callback');
 			same(ui, {}, 'ui hash in callback');
 		}
-	}).bind('dialogresizeStop', function(ev, ui) {
-		ok(true, 'resizing fires dialogresizeStop event');
+	}).bind('dialogresizestop', function(ev, ui) {
+		ok(true, 'resizing fires dialogresizestop event');
 		equals(this, el[0], 'context of event');
 		same(ui, {}, 'ui hash in event');
 	});

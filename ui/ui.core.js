@@ -346,12 +346,11 @@ $.widget.prototype = {
 	},
 
 	_trigger: function(type, event, data) {
-		var callback = this.options[type],
-			eventName = (type == this.widgetEventPrefix
-				? type : this.widgetEventPrefix + type);
+		var callback = this.options[type];
 
 		event = $.Event(event);
-		event.type = eventName;
+		event.type = (type == this.widgetEventPrefix
+				? type : this.widgetEventPrefix + type).toLowerCase();
 		data = data || {};
 
 		// copy original event properties over to the new event
