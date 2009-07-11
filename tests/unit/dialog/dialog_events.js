@@ -186,12 +186,12 @@ test("close", function() {
 	el.remove();
 });
 
-test("beforeclose", function() {
+test("beforeClose", function() {
 	expect(9);
 
 	el = $('<div></div>').dialog({
-		beforeclose: function(ev, ui) {
-			ok(true, '.dialog("close") fires beforeclose callback');
+		beforeClose: function(ev, ui) {
+			ok(true, '.dialog("close") fires beforeClose callback');
 			equals(this, el[0], "context of callback");
 			equals(ev.type, 'dialogbeforeclose', 'event type in callback');
 			same(ui, {}, 'ui hash in callback');
@@ -199,7 +199,7 @@ test("beforeclose", function() {
 		}
 	});
 	el.dialog('close');
-	isOpen('beforeclose callback should prevent dialog from closing');
+	isOpen('beforeClose callback should prevent dialog from closing');
 	el.remove();
 
 	el = $('<div></div>').dialog().bind('dialogbeforeclose', function(ev, ui) {

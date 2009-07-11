@@ -158,7 +158,7 @@ $.widget("ui.dialog", {
 	close: function(event) {
 		var self = this;
 		
-		if (false === self._trigger('beforeclose', event)) {
+		if (false === self._trigger('beforeClose', event)) {
 			return;
 		}
 
