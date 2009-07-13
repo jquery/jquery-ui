@@ -113,6 +113,7 @@ $.effects = {
 			for(var n in newStyle) {
 				if( typeof newStyle[n] != "function" && newStyle[n] /* No functions and null properties */
 				&& n.indexOf("Moz") == -1 && n.indexOf("length") == -1 /* No mozilla spezific render properties. */
+				&& n.indexOf("scrollbar") == -1 /* No scrollbar properties - causes problems in IE */
 				&& newStyle[n] != oldStyle[n] /* Only values that have changed are used for the animation */
 				&& (n.match(/color/i) || (!n.match(/color/i) && !isNaN(parseInt(newStyle[n],10)))) /* Only things that can be parsed to integers or colors */
 				&& (oldStyle.position != "static" || (oldStyle.position == "static" && !n.match(/left|top|bottom|right/))) /* No need for positions when dealing with static positions */
@@ -133,6 +134,12 @@ $.effects = {
 
 function _normalizeArguments(effect, options, speed, callback) {
 	// shift params for method overloading
+	if (typeof effect == 'object') {
+		callback = options;
+		speed = null;
+		options = effect;
+		effect = options.effect;
+	}
 	if ($.isFunction(options)) {
 		callback = options;
 		speed = null;
