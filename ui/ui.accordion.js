@@ -278,7 +278,6 @@ $.widget("ui.accordion", {
 		// switch classes
 		this.active.removeClass("ui-state-active ui-corner-top").addClass("ui-state-default ui-corner-all")
 			.find(".ui-icon").removeClass(o.icons.headerSelected).addClass(o.icons.header);
-		this.active.next().removeClass('ui-accordion-content-active');
 		if (!clickedIsActive) {
 			clicked.removeClass("ui-state-default ui-corner-all").addClass("ui-state-active ui-corner-top")
 				.find(".ui-icon").removeClass(o.icons.header).addClass(o.icons.headerSelected);
@@ -405,6 +404,9 @@ $.widget("ui.accordion", {
 				overflow: ""
 			});
 		}
+		
+		// other classes are removed before the animation; this one needs to stay until completed
+		this.toHide.removeClass("ui-accordion-content-active");
 
 		this._trigger('change', null, this.data);
 	}
