@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<title>Compound Visual Test : Accordion in Tabs</title>
+	<link rel="stylesheet" href="../visual.css" type="text/css" />
+	<link rel="stylesheet" href="../../../themes/base/ui.all.css" type="text/css">
+	<script type="text/javascript" src="../../../jquery-1.3.2.js"></script>
+	<script type="text/javascript" src="../../../ui/ui.core.js"></script>
+	<script type="text/javascript" src="../../../ui/ui.accordion.js"></script>
+	<script type="text/javascript" src="../../../ui/ui.tabs.js"></script>
+	<script type="text/javascript">
+	$(function() {
+		$('#tabs').tabs();
+		$('#accordion-1, #accordion-2').accordion();
+	});
+	</script>
+</head>
+<body>
+
+<div id="tabs">
+	<ul>
+		<li><a href="#tabs-1">First</a></li>
+		<li><a href="#tabs-2">Second</a></li>
+	</ul>
+	<div id="tabs-1">
+		<div id="accordion-1">
+			<h3><a href="#">Accordion Header 1</a></h3>
+			<div>
+				<p>Accordion Content 1</p>
+				<p>Accordion Content 1</p>
+				<p>Accordion Content 1</p>
+				<p>Accordion Content 1</p>
+				<p>Accordion Content 1</p>
+			</div>
+			<h3><a href="#">Accordion Header 2</a></h3>
+			<div>
+				<p>Accordion Content 2</p>
+				<p>Accordion Content 2</p>
+				<p>Accordion Content 2</p>
+				<p>Accordion Content 2</p>
+				<p>Accordion Content 2</p>
+			</div>
+			<h3><a href="#">Accordion Header 3</a></h3>
+			<div>
+				<p>Accordion Content 3</p>
+				<p>Accordion Content 3</p>
+				<p>Accordion Content 3</p>
+				<p>Accordion Content 3</p>
+				<p>Accordion Content 3</p>
+			</div>
+		</div>
+	</div>
+	<div id="tabs-2">
+		<div id="accordion-2">
+			<h3><a href="#">Accordion Header 1</a></h3>
+			<div>
+				<p>Accordion Content 1</p>
+				<p>Accordion Content 1</p>
+				<p>Accordion Content 1</p>
+				<p>Accordion Content 1</p>
+				<p>Accordion Content 1</p>
+			</div>
+			<h3><a href="#">Accordion Header 2</a></h3>
+			<div>
+				<p>Accordion Content 2</p>
+				<p>Accordion Content 2</p>
+				<p>Accordion Content 2</p>
+				<p>Accordion Content 2</p>
+				<p>Accordion Content 2</p>
+			</div>
+			<h3><a href="#">Accordion Header 3</a></h3>
+			<div>
+				<p>Accordion Content 3</p>
+				<p>Accordion Content 3</p>
+				<p>Accordion Content 3</p>
+				<p>Accordion Content 3</p>
+				<p>Accordion Content 3</p>
+			</div>
+		</div>
+	</div>
+</div>
+
+</body>
+</html>
