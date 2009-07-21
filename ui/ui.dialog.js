@@ -340,6 +340,7 @@ $.widget("ui.dialog", {
 
 		self.uiDialog.resizable({
 			cancel: '.ui-dialog-content',
+			containment: 'document',
 			alsoResize: self.element,
 			maxWidth: options.maxWidth,
 			maxHeight: options.maxHeight,
