@@ -100,7 +100,8 @@ function Datepicker() {
 		altField: '', // Selector for an alternate field to store selected dates into
 		altFormat: '', // The date format to use for the alternate field
 		constrainInput: true, // The input is constrained by the current date format
-		showButtonPanel: false // True to show button panel, false to not show it
+		showButtonPanel: false, // True to show button panel, false to not show it
+		autoSize: false // True to size the input for the date format, false to leave as is
 	};
 	$.extend(this._defaults, this.regional['']);
 	this.dpDiv = $('<div id="' + this._mainDivId + '" class="ui-datepicker ui-widget ui-widget-content ui-helper-clearfix ui-corner-all ui-helper-hidden-accessible"></div>');
@@ -206,7 +207,34 @@ $.extend(Datepicker.prototype, {
 			}).bind("getData.datepicker", function(event, key) {
 				return this._get(inst, key);
 			});
+		this._autoSize(inst);
 		$.data(target, PROP_NAME, inst);
+	},
+
+	/* Apply the maximum length for the date format. */
+	_autoSize: function(inst) {
+		if (this._get(inst, 'autoSize') && !inst.inline) {
+			var date = new Date(2009, 12 - 1, 20); // Ensure double digits
+			var dateFormat = this._get(inst, 'dateFormat');
+			if (dateFormat.match(/[DM]/)) {
+				var findMax = function(names) {
+					var max = 0;
+					var maxI = 0;
+					for (var i = 0; i < names.length; i++) {
+						if (names[i].length > max) {
+							max = names[i].length;
+							maxI = i;
+						}
+					}
+					return maxI;
+				};
+				date.setMonth(findMax(this._get(inst, (dateFormat.match(/MM/) ?
+					'monthNames' : 'monthNamesShort'))));
+				date.setDate(findMax(this._get(inst, (dateFormat.match(/DD/) ?
+					'dayNames' : 'dayNamesShort'))) + 20 - date.getDay());
+			}
+			inst.input.attr('size', this._formatDate(inst, date).length);
+		}
 	},
 
 	/* Attach an inline date picker to a div. */
@@ -395,6 +423,7 @@ $.extend(Datepicker.prototype, {
 			}
 			var date = this._getDateDatepicker(target);
 			extendRemove(inst.settings, settings);
+			this._autoSize(inst);
 			this._setDateDatepicker(target, date);
 			this._updateDatepicker(inst);
 		}

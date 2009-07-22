@@ -509,6 +509,44 @@ test('altField', function() {
 	equals(alt.val(), '2008-06-04', 'Alt field - manual entry - not updated');
 });
 
+test('autoSize', function() {
+	var inp = init('#inp');
+	equals(inp.attr('size'), 0, 'Auto size - default');
+	inp.datepicker('option', 'autoSize', true);
+	equals(inp.attr('size'), 10, 'Auto size - mm/dd/yy');
+	inp.datepicker('option', 'dateFormat', 'm/d/yy');
+	equals(inp.attr('size'), 10, 'Auto size - m/d/yy');
+	inp.datepicker('option', 'dateFormat', 'D M d yy');
+	equals(inp.attr('size'), 15, 'Auto size - D M d yy');
+	inp.datepicker('option', 'dateFormat', 'DD, MM dd, yy');
+	equals(inp.attr('size'), 29, 'Auto size - DD, MM dd, yy');
+	inp.removeAttr('size');
+	// French
+	inp.datepicker('option', $.extend({autoSize: false}, $.datepicker.regional['fr']));
+	equals(inp.attr('size'), 0, 'Auto size - fr - default');
+	inp.datepicker('option', 'autoSize', true);
+	equals(inp.attr('size'), 10, 'Auto size - fr - dd/mm/yy');
+	inp.datepicker('option', 'dateFormat', 'm/d/yy');
+	equals(inp.attr('size'), 10, 'Auto size - fr - m/d/yy');
+	inp.datepicker('option', 'dateFormat', 'D M d yy');
+	equals(inp.attr('size'), 15, 'Auto size - fr - D M d yy');
+	inp.datepicker('option', 'dateFormat', 'DD, MM dd, yy');
+	equals(inp.attr('size'), 28, 'Auto size - fr - DD, MM dd, yy');
+	inp.removeAttr('size');
+	// Hebrew
+	inp.datepicker('option', $.extend({autoSize: false}, $.datepicker.regional['he']));
+	equals(inp.attr('size'), 0, 'Auto size - he - default');
+	inp.datepicker('option', 'autoSize', true);
+	equals(inp.attr('size'), 10, 'Auto size - he - dd/mm/yy');
+	inp.datepicker('option', 'dateFormat', 'm/d/yy');
+	equals(inp.attr('size'), 10, 'Auto size - he - m/d/yy');
+	inp.datepicker('option', 'dateFormat', 'D M d yy');
+	equals(inp.attr('size'), 14, 'Auto size - he - D M d yy');
+	inp.datepicker('option', 'dateFormat', 'DD, MM dd, yy');
+	equals(inp.attr('size'), 23, 'Auto size - he - DD, MM dd, yy');
+	inp.removeAttr('size');
+});
+
 test('daylightSaving', function() {
 	var inp = init('#inp');
 	var dp = $('#ui-datepicker-div');
