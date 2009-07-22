@@ -404,6 +404,17 @@ test('setDate', function() {
 	equalsDate(inp.datepicker('getDate'), date1, 'Set date - two dates');
 	inp.datepicker('setDate');
 	ok(inp.datepicker('getDate') == null, 'Set date - null');
+	// Relative to current date
+	date1 = new Date();
+	date1.setDate(date1.getDate() + 7);
+	inp.datepicker('setDate', 'c +7');
+	equalsDate(inp.datepicker('getDate'), date1, 'Set date - c +7');
+	date1.setDate(date1.getDate() + 7);
+	inp.datepicker('setDate', 'c+7');
+	equalsDate(inp.datepicker('getDate'), date1, 'Set date - c+7');
+	date1.setDate(date1.getDate() - 21);
+	inp.datepicker('setDate', 'c -3 w');
+	equalsDate(inp.datepicker('getDate'), date1, 'Set date - c -3 w');
 	// Inline
 	var inl = init('#inl');
 	date1 = new Date(2008, 6 - 1, 4);

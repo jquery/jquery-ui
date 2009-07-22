@@ -1197,7 +1197,8 @@ $.extend(Datepicker.prototype, {
 			catch (e) {
 				// Ignore
 			}
-			var date = new Date();
+			var date = (offset.toLowerCase().match(/^c/) ?
+				$.datepicker._getDate(inst) : null) || new Date();
 			var year = date.getFullYear();
 			var month = date.getMonth();
 			var day = date.getDate();
