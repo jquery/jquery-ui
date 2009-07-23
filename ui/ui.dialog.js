@@ -308,6 +308,7 @@ $.widget("ui.dialog", {
 	_makeDraggable: function() {
 		var self = this,
 			options = self.options,
+			doc = $(document),
 			heightBeforeDrag;
 
 		self.uiDialog.draggable({
@@ -322,7 +323,9 @@ $.widget("ui.dialog", {
 			drag: function(event) {
 				self._trigger('drag', event);
 			},
-			stop: function(event) {
+			stop: function(event, ui) {
+				options.position = [ui.position.left - doc.scrollLeft(),
+					ui.position.top - doc.scrollTop()];
 				$(this).removeClass("ui-dialog-dragging").height(heightBeforeDrag);
 				self._trigger('dragStop', event);
 				$.ui.dialog.overlay.resize();
