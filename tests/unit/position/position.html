@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<title>jQuery UI Position Test Suite</title>
+
+	<script type="text/javascript" src="../../../jquery-1.3.2.js"></script>
+	<script type="text/javascript" src="../../../ui/ui.core.js"></script>
+	<script type="text/javascript" src="../../../ui/ui.position.js"></script>
+
+	<link   type="text/css"       href="../testsuite.css" rel="stylesheet" />
+	<script type="text/javascript" src="../testsuite.js"></script>
+	<script type="text/javascript" src="../../../external/testrunner-r6343.js"></script>
+
+	<script type="text/javascript" src="position_core.js"></script>
+</head>
+<body>
+
+<div id="main" style="top: 0; left: 0;">
+	<div id="el1" style="position: absolute; width: 6px; height: 6px;"></div>
+	<div id="el2" style="position: absolute; width: 6px; height: 6px;"></div>
+	<div id="parent" style="position: absolute; width: 6px; height: 6px; top: 4px; left: 4px;"></div>
+</div>
+
+<div style="position: absolute; top: 0px; left: 0px">
+	<div id="elx" style="position: absolute; width: 10px; height: 10px;"></div>
+	<div id="parentx" style="position: absolute; width: 20px; height: 20px; top: 40px; left: 40px;"></div>
+</div>
+
+<div style="position: absolute; top: 200px; left: 100px;">
+	<div id="el-offset-100-200" style="position: absolute; width: 10px; height: 10px;"></div>
+	<div style="position: absolute; top: 100px; left: 50px;">
+		<div id="el-two-offset-150-300" style="position: absolute; width: 10px; height: 10px;"></div>
+		<div id="el-fixed" style="position: fixed; top: 200px; left: 200px;"></div>
+	</div>
+</div>
+
+<div style="position: absolute; height: 5000px; width: 5000px;"></div>
+
+</body>
+</html>
