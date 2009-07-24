@@ -461,7 +461,7 @@ $.widget("ui.dialog", {
 				self._position(value);
 				break;
 			case "resizable":
-				var isResizable = uiDialog.is(':ui-resizable');
+				var isResizable = uiDialog.is(':data(resizable)');
 
 				// currently resizable, becoming non-resizable
 				(isResizable && !value && uiDialog.resizable('destroy'));
@@ -515,7 +515,7 @@ $.widget("ui.dialog", {
 				height: Math.max(options.height - nonContentHeight, 0)
 			});
 
-		(this.uiDialog.is(':ui-resizable') &&
+		(this.uiDialog.is(':data(resizable)') &&
 			this.uiDialog.resizable('option', 'minHeight', this._minHeight()));
 	}
 });
