@@ -9,6 +9,8 @@
  */
 (function($) {
 
+$.ui = $.ui || {};
+
 var horizontalPositions = /left|center|right/,
 	horizontalDefault = 'center',
 	verticalPositions = /top|center|bottom/,
@@ -20,9 +22,7 @@ $.fn.position = function(options) {
 		return _position.apply(this, arguments);
 	}
 
-	options = $.extend({
-		stackFix: true
-	}, options);
+	options = $.extend({}, $.ui.position.defaults, options);
 
 	var target = $(options.of),
 		collision = (options.collision || 'flip').split(' '),
@@ -146,6 +146,9 @@ $.fn.position = function(options) {
 };
 
 $.ui.position = {
+	defaults:{
+		stackFix: true
+	},
 	fit: {
 		left: function(position, data) {
 			var over = position.left + data.elemWidth - $(window).width() - $(window).scrollLeft();
