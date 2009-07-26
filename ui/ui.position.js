@@ -5,7 +5,7 @@
  * Dual licensed under the MIT (MIT-LICENSE.txt)
  * and GPL (GPL-LICENSE.txt) licenses.
  *
- * TODO: create document page for position and add link here
+ * http://docs.jquery.com/UI/Position
  */
 (function($) {
 
@@ -80,7 +80,7 @@ $.fn.position = function(options) {
 		case 'right':
 			basePosition.left += targetWidth;
 			break;
-		case horizontalDefault:
+		case 'center':
 			basePosition.left += targetWidth / 2;
 			break;
 	}
@@ -89,7 +89,7 @@ $.fn.position = function(options) {
 		case 'bottom':
 			basePosition.top += targetHeight;
 			break;
-		case verticalDefault:
+		case 'center':
 			basePosition.top += targetHeight / 2;
 			break;
 	}
@@ -110,7 +110,7 @@ $.fn.position = function(options) {
 			case 'right':
 				position.left -= elemWidth;
 				break;
-			case horizontalDefault:
+			case 'center':
 				position.left -= elemWidth / 2;
 				break;
 		}
@@ -119,7 +119,7 @@ $.fn.position = function(options) {
 			case 'bottom':
 				position.top -= elemHeight;
 				break;
-			case verticalDefault:
+			case 'center':
 				position.top -= elemHeight / 2;
 				break;
 		}
