@@ -80,7 +80,7 @@ $.fn.position = function(options) {
 		case 'right':
 			basePosition.left += targetWidth;
 			break;
-		case 'center':
+		case horizontalDefault:
 			basePosition.left += targetWidth / 2;
 			break;
 	}
@@ -89,7 +89,7 @@ $.fn.position = function(options) {
 		case 'bottom':
 			basePosition.top += targetHeight;
 			break;
-		case 'center':
+		case verticalDefault:
 			basePosition.top += targetHeight / 2;
 			break;
 	}
@@ -110,7 +110,7 @@ $.fn.position = function(options) {
 			case 'right':
 				position.left -= elemWidth;
 				break;
-			case 'center':
+			case horizontalDefault:
 				position.left -= elemWidth / 2;
 				break;
 		}
@@ -119,7 +119,7 @@ $.fn.position = function(options) {
 			case 'bottom':
 				position.top -= elemHeight;
 				break;
-			case 'center':
+			case verticalDefault:
 				position.top -= elemHeight / 2;
 				break;
 		}
