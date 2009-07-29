@@ -13,6 +13,7 @@ jQuery(function($){
 		dayNamesShort: ['Sön','Mån','Tis','Ons','Tor','Fre','Lör'],
 		dayNames: ['Söndag','Måndag','Tisdag','Onsdag','Torsdag','Fredag','Lördag'],
 		dayNamesMin: ['Sö','Må','Ti','On','To','Fr','Lö'],
+		weekHeader: 'Ve',
         dateFormat: 'yy-mm-dd',
 		firstDay: 1,
 		isRTL: false,

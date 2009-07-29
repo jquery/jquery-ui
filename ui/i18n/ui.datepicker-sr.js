@@ -13,6 +13,7 @@ jQuery(function($){
 		dayNames: ['Недеља','Понедељак','Уторак','Среда','Четвртак','Петак','Субота'],
 		dayNamesShort: ['Нед','Пон','Уто','Сре','Чет','Пет','Суб'],
 		dayNamesMin: ['Не','По','Ут','Ср','Че','Пе','Су'],
+		weekHeader: 'Сед',
 		dateFormat: 'dd/mm/yy',
 		firstDay: 1,
 		isRTL: false,

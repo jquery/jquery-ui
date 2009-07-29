@@ -13,6 +13,7 @@ jQuery(function($) {
 		dayNames: ['يکشنبه','دوشنبه','سه‌شنبه','چهارشنبه','پنجشنبه','جمعه','شنبه'],
 		dayNamesShort: ['ي','د','س','چ','پ','ج', 'ش'],
 		dayNamesMin: ['ي','د','س','چ','پ','ج', 'ش'],
+		weekHeader: 'هف',
 		dateFormat: 'yy/mm/dd',
 		firstDay: 6,
 		isRTL: true,

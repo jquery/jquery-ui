@@ -13,6 +13,7 @@ jQuery(function($){
 		dayNames: ['อาทิตย์','จันทร์','อังคาร','พุธ','พฤหัสบดี','ศุกร์','เสาร์'],
 		dayNamesShort: ['อา.','จ.','อ.','พ.','พฤ.','ศ.','ส.'],
 		dayNamesMin: ['อา.','จ.','อ.','พ.','พฤ.','ศ.','ส.'],
+		weekHeader: 'Wk',
 		dateFormat: 'dd/mm/yy',
 		firstDay: 0,
 		isRTL: false,

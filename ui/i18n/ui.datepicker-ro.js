@@ -16,6 +16,7 @@ jQuery(function($){
 		dayNames: ['Duminică', 'Luni', 'Marţi', 'Miercuri', 'Joi', 'Vineri', 'Sâmbătă'],
 		dayNamesShort: ['Dum', 'Lun', 'Mar', 'Mie', 'Joi', 'Vin', 'Sâm'],
 		dayNamesMin: ['Du','Lu','Ma','Mi','Jo','Vi','Sâ'],
+		weekHeader: 'Sapt',
 		dateFormat: 'dd MM yy',
 		firstDay: 1,
 		isRTL: false,

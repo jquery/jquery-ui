@@ -13,6 +13,7 @@ jQuery(function($) {
 		dayNames: ['Bazar','Bazar ertəsi','Çərşənbə axşamı','Çərşənbə','Cümə axşamı','Cümə','Şənbə'],
 		dayNamesShort: ['B','Be','Ça','Ç','Ca','C','Ş'],
 		dayNamesMin: ['B','B','Ç','С','Ç','C','Ş'],
+		weekHeader: 'Hf',
 		dateFormat: 'dd.mm.yy',
 		firstDay: 1,
 		isRTL: false,

@@ -13,6 +13,7 @@ jQuery(function($){
 		dayNames: ['svētdiena','pirmdiena','otrdiena','trešdiena','ceturtdiena','piektdiena','sestdiena'],
 		dayNamesShort: ['svt','prm','otr','tre','ctr','pkt','sst'],
 		dayNamesMin: ['Sv','Pr','Ot','Tr','Ct','Pk','Ss'],
+		weekHeader: 'Nav',
 		dateFormat: 'dd-mm-yy',
 		firstDay: 1,
 		isRTL: false,

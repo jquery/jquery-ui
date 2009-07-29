@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<title>jQuery UI Datepicker - Show week of the year</title>
+	<link type="text/css" href="../../themes/base/ui.all.css" rel="stylesheet" />
+	<script type="text/javascript" src="../../jquery-1.3.2.js"></script>
+	<script type="text/javascript" src="../../ui/ui.core.js"></script>
+	<script type="text/javascript" src="../../ui/ui.datepicker.js"></script>
+	<link type="text/css" href="../demos.css" rel="stylesheet" />
+	<script type="text/javascript">
+	$(function() {
+		$("#datepicker").datepicker({showWeek: true, firstDay: 1});
+	});
+	</script>
+</head>
+<body>
+
+<div class="demo">
+
+<p>Date: <input type="text" id="datepicker"></p>
+
+</div><!-- End demo -->
+
+<div class="demo-description">
+
+<p>The datepicker can show the week of the year. The default calculation follows
+	the ISO 8601 definition: the week starts on Monday, the first week of the year
+	contains the first Thursday of the year. This means that some days from one
+	year may be placed into weeks 'belonging' to another year.</p>
+
+</div><!-- End demo-description -->
+
+</body>
+</html>

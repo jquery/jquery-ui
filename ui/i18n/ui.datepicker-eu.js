@@ -13,6 +13,7 @@ jQuery(function($){
 		dayNames: ['Igandea','Astelehena','Asteartea','Asteazkena','Osteguna','Ostirala','Larunbata'],
 		dayNamesShort: ['Iga','Ast','Ast','Ast','Ost','Ost','Lar'],
 		dayNamesMin: ['Ig','As','As','As','Os','Os','La'],
+		weekHeader: 'Wk',
 		dateFormat: 'yy/mm/dd',
 		firstDay: 1,
 		isRTL: false,

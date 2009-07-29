@@ -14,6 +14,7 @@ jQuery(function($){
         dayNames: ['Неделя','Понеделник','Вторник','Сряда','Четвъртък','Петък','Събота'],
         dayNamesShort: ['Нед','Пон','Вто','Сря','Чет','Пет','Съб'],
         dayNamesMin: ['Не','По','Вт','Ср','Че','Пе','Съ'],
+		weekHeader: 'Wk',
         dateFormat: 'dd.mm.yy',
 		firstDay: 1,
         isRTL: false,

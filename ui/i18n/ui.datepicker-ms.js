@@ -13,6 +13,7 @@ jQuery(function($){
 		dayNames: ['Ahad','Isnin','Selasa','Rabu','Khamis','Jumaat','Sabtu'],
 		dayNamesShort: ['Aha','Isn','Sel','Rab','kha','Jum','Sab'],
 		dayNamesMin: ['Ah','Is','Se','Ra','Kh','Ju','Sa'],
+		weekHeader: 'Mg',
 		dateFormat: 'dd/mm/yy',
 		firstDay: 0,
 		isRTL: false,

@@ -13,6 +13,7 @@ jQuery(function($){
 		dayNames: ['Domingo','Segunda-feira','Ter&ccedil;a-feira','Quarta-feira','Quinta-feira','Sexta-feira','Sabado'],
 		dayNamesShort: ['Dom','Seg','Ter','Qua','Qui','Sex','Sab'],
 		dayNamesMin: ['Dom','Seg','Ter','Qua','Qui','Sex','Sab'],
+		weekHeader: 'Sm',
 		dateFormat: 'dd/mm/yy',
 		firstDay: 0,
 		isRTL: false,

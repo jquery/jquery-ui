@@ -13,6 +13,7 @@ jQuery(function($){
 		dayNames: ['Niedziela','Poniedzialek','Wtorek','Środa','Czwartek','Piątek','Sobota'],
 		dayNamesShort: ['Nie','Pn','Wt','Śr','Czw','Pt','So'],
 		dayNamesMin: ['N','Pn','Wt','Śr','Cz','Pt','So'],
+		weekHeader: 'Tydz',
 		dateFormat: 'yy-mm-dd',
 		firstDay: 1,
 		isRTL: false,
