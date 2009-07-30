@@ -51,7 +51,7 @@ $.fn.position = function(options) {
 	// force my and at to have valid horizontal and veritcal positions
 	// if a value is missing or invalid, it will be converted to center 
 	$.each(['my', 'at'], function() {
-		var pos = options[this].split(' ');
+		var pos = ( options[this] || horizontalDefault ).split(' ');
 		pos = pos.length == 1
 			? horizontalPositions.test(pos[0])
 				? pos.concat([verticalDefault])
