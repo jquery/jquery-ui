@@ -101,7 +101,10 @@ $.widget("ui.accordion", {
 			this.headers.find('a').attr('tabIndex','-1');
 
 		if (o.event) {
-			this.headers.bind((o.event) + ".accordion", function(event) { return self._clickHandler.call(self, event, this); });
+			this.headers.bind((o.event) + ".accordion", function(event) {
+				self._clickHandler.call(self, event, this);
+				event.preventDefault();
+			});
 		}
 
 	},
@@ -181,7 +184,8 @@ $.widget("ui.accordion", {
 				break;
 			case keyCode.SPACE:
 			case keyCode.ENTER:
-				return this._clickHandler({ target: event.target }, event.target);
+				this._clickHandler({ target: event.target }, event.target);
+				event.preventDefault();
 		}
 
 		if (toFocus) {
@@ -246,7 +250,7 @@ $.widget("ui.accordion", {
 	_clickHandler: function(event, target) {
 
 		var o = this.options;
-		if (o.disabled) return false;
+		if (o.disabled) { return; }
 
 		// called only when using activate(false) to close all parts programmatically
 		if (!event.target && o.collapsible) {
@@ -263,7 +267,7 @@ $.widget("ui.accordion", {
 				},
 				toShow = (this.active = $([]));
 			this._toggle(toShow, toHide, data);
-			return false;
+			return;
 		}
 
 		// get the click target
@@ -272,7 +276,7 @@ $.widget("ui.accordion", {
 
 		// if animations are still active, or the active header is the target, ignore click
 		if (this.running || (!o.collapsible && clickedIsActive)) {
-			return false;
+			return;
 		}
 
 		// switch classes
@@ -299,7 +303,7 @@ $.widget("ui.accordion", {
 		this.active = clickedIsActive ? $([]) : clicked;
 		this._toggle(toShow, toHide, data, clickedIsActive, down);
 
-		return false;
+		return;
 
 	},
 
