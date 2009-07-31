@@ -22,8 +22,6 @@ $.fn.position = function(options) {
 		return _position.apply(this, arguments);
 	}
 
-	options = $.extend({}, $.ui.position.defaults, options);
-
 	var target = $(options.of),
 		collision = (options.collision || 'flip').split(' '),
 		offset = options.offset ? options.offset.split(' ') : [0, 0],
@@ -51,7 +49,7 @@ $.fn.position = function(options) {
 	// force my and at to have valid horizontal and veritcal positions
 	// if a value is missing or invalid, it will be converted to center 
 	$.each(['my', 'at'], function() {
-		var pos = ( options[this] || "" ).split(' ');
+		var pos = (options[this] || '').split(' ');
 		pos = pos.length == 1
 			? horizontalPositions.test(pos[0])
 				? pos.concat([verticalDefault])
@@ -137,7 +135,7 @@ $.fn.position = function(options) {
 				}));
 		});
 
-		(options.stackfix && $.fn.stackfix && elem.stackfix());
+		(options.stackfix !== false && $.fn.stackfix && elem.stackfix());
 		// the by function is passed the offset values, not the position values
 		// we'll need the logic from the .offset() setter to be accessible for
 		// us to calculate the position values to make the by option more useful
@@ -146,9 +144,6 @@ $.fn.position = function(options) {
 };
 
 $.ui.position = {
-	defaults:{
-		stackFix: true
-	},
 	fit: {
 		left: function(position, data) {
 			var over = position.left + data.elemWidth - $(window).width() - $(window).scrollLeft();
