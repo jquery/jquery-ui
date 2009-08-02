@@ -38,6 +38,7 @@ $.fn.position = function(options) {
 		targetHeight = target.height();
 		basePosition = { top: target.scrollTop(), left: target.scrollLeft() };
 	} else if (options.of.preventDefault) {
+		options.at = "left top";	// while align to cursor, "at" default value "center" causes "collision:flip" not work.
 		targetWidth = targetHeight = 0;
 		basePosition = { top: options.of.pageY, left: options.of.pageX };
 	} else {
