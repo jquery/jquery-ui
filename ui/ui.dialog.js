@@ -10,6 +10,7 @@
  * Depends:
  *	ui.core.js
  *	ui.draggable.js
+ *	ui.position.js
  *	ui.resizable.js
  */
 (function($) {
@@ -376,56 +377,50 @@ $.widget("ui.dialog", {
 			: Math.min(options.minHeight, options.height));
 	},
 
-	_position: function(pos) {
-		var wnd = $(window), doc = $(document),
-			pTop = doc.scrollTop(), pLeft = doc.scrollLeft(),
-			minTop = pTop,
-			uiDialog = this.uiDialog;
+	_position: function(position) {
+		var myAt = [],
+			offset = [0, 0];
 
-		if ($.inArray(pos, ['center','top','right','bottom','left']) >= 0) {
-			pos = [
-				pos == 'right' || pos == 'left' ? pos : 'center',
-				pos == 'top' || pos == 'bottom' ? pos : 'middle'
-			];
-		}
-		if (pos.constructor != Array) {
-			pos = ['center', 'middle'];
-		}
-		if (pos[0].constructor == Number) {
-			pLeft += pos[0];
-		} else {
-			switch (pos[0]) {
-				case 'left':
-					pLeft += 0;
-					break;
-				case 'right':
-					pLeft += wnd.width() - uiDialog.outerWidth();
-					break;
-				default:
-				case 'center':
-					pLeft += (wnd.width() - uiDialog.outerWidth()) / 2;
+		// deep extending converts arrays to objects in jQuery <= 1.3.2 :-(
+//		if (typeof position == 'string' || $.isArray(position)) {
+//			myAt = $.isArray(position) ? position : position.split(' ');
+		if (typeof position == 'string' || '0' in position) {
+			myAt = position.split ? position.split(' ') : [position[0], position[1]];
+			if (myAt.length == 1) {
+				myAt[1] = myAt[0];
 			}
-		}
-		if (pos[1].constructor == Number) {
-			pTop += pos[1];
+
+			$.each(['left', 'top'], function(i, offsetPosition) {
+				if (+myAt[i] == myAt[i]) {
+					offset[i] = myAt[i];
+					myAt[i] = offsetPosition;
+				}
+			});
 		} else {
-			switch (pos[1]) {
-				case 'top':
-					pTop += 0;
-					break;
-				case 'bottom':
-					pTop += wnd.height() - uiDialog.outerHeight();
-					break;
-				default:
-				case 'middle':
-					pTop += (wnd.height() - uiDialog.outerHeight()) / 2;
+			if ('left' in position) {
+				myAt[0] = 'left';
+				offset[0] = position.left;
+			} else if ('right' in position) {
+				myAt[0] = 'right';
+				offset[0] = -position.right;
+			}
+
+			if ('top' in position) {
+				myAt[1] = 'top';
+				offset[1] = position.top;
+			} else if ('bottom' in position) {
+				myAt[1] = 'bottom';
+				offset[1] = -position.bottom;
 			}
 		}
 
-		// prevent the dialog from being too high (make sure the titlebar
-		// is accessible)
-		pTop = Math.max(pTop, minTop);
-		uiDialog.css({top: pTop, left: pLeft});
+		this.uiDialog.position({
+			my: myAt.join(' '),
+			at: myAt.join(' '),
+			offset: offset.join(' '),
+			of: window,
+			collision: 'fit'
+		});
 	},
 
 	_setData: function(key, value){
