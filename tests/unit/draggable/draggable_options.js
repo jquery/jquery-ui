@@ -239,61 +239,135 @@ test("{ cursorAt: false}, default", function() {
 });
 
 test("{ cursorAt: { left: -5, top: -5 } }", function() {
-
 	expect(4);
 
-	var dx = -3, dy = -3;
-	var ox = 5, oy = 5;
-	var cax = -5, cay = -5;
+	var deltaX = -3, deltaY = -3,
+		offsetX = 5, offsetY = 5,
+		cursorAtX = -5, cursorAtY = -5;
 
-	var actual = null;
-	$("#draggable2").draggable({
-		cursorAt: { left: cax, top: cay },
-		drag: function(event, ui) {
-			actual = ui.offset;
-		}
+	$.each(['relative', 'absolute'], function(i, position) {
+		var el = $('#draggable' + (i + 1)).draggable({
+				cursorAt: { left: cursorAtX, top: cursorAtY },
+				drag: function(event, ui) {
+					equals(ui.offset.left, expected.left, position + ' left');
+					equals(ui.offset.top, expected.top, position + ' top');
+				}
+			}),
+			before = el.offset(),
+			pos = {
+				clientX: before.left + offsetX,
+				clientY: before.top + offsetY
+			},
+			expected = {
+				left: before.left + offsetX - cursorAtX + deltaX,
+				top: before.top + offsetY - cursorAtY + deltaY
+			};
+
+		el.simulate("mousedown", pos);
+		pos.clientX += deltaX;
+		pos.clientY += deltaY;
+		$(document).simulate("mousemove", pos);
+		el.simulate("mouseup", pos);
 	});
-	var el = $("#draggable2").data("draggable").element;
+});
 
-	var before = el.offset();
-	var pos = { clientX: before.left + ox, clientY: before.top + oy };
-	$("#draggable2").simulate("mousedown", pos);
-	pos = { clientX: pos.clientX + dx, clientY: pos.clientY + dy };
-	$(document).simulate("mousemove", pos);
-	$(document).simulate("mousemove", pos);
-	$("#draggable2").simulate("mouseup", pos);
-	var expected = {
-		left: before.left + ox - cax + dx,
-		top: before.top + oy - cay + dy
-	};
+test("{ cursorAt: { right: 10, bottom: 20 } }", function() {
+	expect(4);
 
-	equals(actual.left, expected.left, "Absolute: -1px left");
-	equals(actual.top, expected.top, "Absolute: -1px top");
+	var deltaX = -3, deltaY = -3,
+		offsetX = 5, offsetY = 5,
+		cursorAtX = 10, cursorAtY = 20;
 
-	var actual = null;
-	$("#draggable1").draggable({
-		cursorAt: { left: cax, top: cay },
-		drag: function(event, ui) {
-			actual = ui.offset;
-		}
+	$.each(['relative', 'absolute'], function(i, position) {
+		var el = $('#draggable' + (i + 1)).draggable({
+				cursorAt: { right: cursorAtX, bottom: cursorAtY },
+				drag: function(event, ui) {
+					equals(ui.offset.left, expected.left, position + ' left');
+					equals(ui.offset.top, expected.top, position + ' top');
+				}
+			}),
+			before = el.offset(),
+			pos = {
+				clientX: before.left + offsetX,
+				clientY: before.top + offsetY
+			},
+			expected = {
+				left: before.left + offsetX - el.width() + cursorAtX + deltaX,
+				top: before.top + offsetY - el.height() + cursorAtY + deltaY
+			};
+
+		el.simulate("mousedown", pos);
+		pos.clientX += deltaX;
+		pos.clientY += deltaY;
+		$(document).simulate("mousemove", pos);
+		el.simulate("mouseup", pos);
 	});
-	var el = $("#draggable2").data("draggable").element;
+});
 
-	var before = el.offset();
-	var pos = { clientX: before.left + ox, clientY: before.top + oy };
-	$("#draggable2").simulate("mousedown", pos);
-	pos = { clientX: pos.clientX + dx, clientY: pos.clientY + dy };
-	$(document).simulate("mousemove", pos);
-	$(document).simulate("mousemove", pos);
-	$("#draggable2").simulate("mouseup", pos);
-	var expected = {
-		left: before.left + ox - cax + dx,
-		top: before.top + oy - cay + dy
-	};
+test("{ cursorAt: [10, 20] }", function() {
+	expect(4);
 
-	equals(actual.left, expected.left, "Relative: -1px left");
-	equals(actual.top, expected.top, "Relative: -1px top");
+	var deltaX = -3, deltaY = -3,
+		offsetX = 5, offsetY = 5,
+		cursorAtX = 10, cursorAtY = 20;
 
+	$.each(['relative', 'absolute'], function(i, position) {
+		var el = $('#draggable' + (i + 1)).draggable({
+				cursorAt: { left: cursorAtX, top: cursorAtY },
+				drag: function(event, ui) {
+					equals(ui.offset.left, expected.left, position + ' left');
+					equals(ui.offset.top, expected.top, position + ' top');
+				}
+			}),
+			before = el.offset(),
+			pos = {
+				clientX: before.left + offsetX,
+				clientY: before.top + offsetY
+			},
+			expected = {
+				left: before.left + offsetX - cursorAtX + deltaX,
+				top: before.top + offsetY - cursorAtY + deltaY
+			};
+
+		el.simulate("mousedown", pos);
+		pos.clientX += deltaX;
+		pos.clientY += deltaY;
+		$(document).simulate("mousemove", pos);
+		el.simulate("mouseup", pos);
+	});
+});
+
+test("{ cursorAt: '20, 40' }", function() {
+	expect(4);
+
+	var deltaX = -3, deltaY = -3,
+		offsetX = 5, offsetY = 5,
+		cursorAtX = 20, cursorAtY = 40;
+
+	$.each(['relative', 'absolute'], function(i, position) {
+		var el = $('#draggable' + (i + 1)).draggable({
+				cursorAt: { left: cursorAtX, top: cursorAtY },
+				drag: function(event, ui) {
+					equals(ui.offset.left, expected.left, position + ' left');
+					equals(ui.offset.top, expected.top, position + ' top');
+				}
+			}),
+			before = el.offset(),
+			pos = {
+				clientX: before.left + offsetX,
+				clientY: before.top + offsetY
+			},
+			expected = {
+				left: before.left + offsetX - cursorAtX + deltaX,
+				top: before.top + offsetY - cursorAtY + deltaY
+			};
+
+		el.simulate("mousedown", pos);
+		pos.clientX += deltaX;
+		pos.clientY += deltaY;
+		$(document).simulate("mousemove", pos);
+		el.simulate("mouseup", pos);
+	});
 });
 
 test("{ distance: 10 }", function() {

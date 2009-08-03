@@ -103,8 +103,7 @@ $.widget("ui.draggable", $.extend({}, $.ui.mouse, {
 		this.originalPageY = event.pageY;
 
 		//Adjust the mouse offset relative to the helper if 'cursorAt' is supplied
-		if(o.cursorAt)
-			this._adjustOffsetFromHelper(o.cursorAt);
+		(o.cursorAt && this._adjustOffsetFromHelper(o.cursorAt));
 
 		//Set a containment if given in the options
 		if(o.containment)
@@ -202,10 +201,24 @@ $.widget("ui.draggable", $.extend({}, $.ui.mouse, {
 	},
 
 	_adjustOffsetFromHelper: function(obj) {
-		if(obj.left != undefined) this.offset.click.left = obj.left + this.margins.left;
-		if(obj.right != undefined) this.offset.click.left = this.helperProportions.width - obj.right + this.margins.left;
-		if(obj.top != undefined) this.offset.click.top = obj.top + this.margins.top;
-		if(obj.bottom != undefined) this.offset.click.top = this.helperProportions.height - obj.bottom + this.margins.top;
+		if (typeof obj == 'string') {
+			obj = obj.split(' ');
+		}
+		if ($.isArray(obj)) {
+			obj = {left: +obj[0], top: +obj[1] || 0};
+		}
+		if ('left' in obj) {
+			this.offset.click.left = obj.left + this.margins.left;
+		}
+		if ('right' in obj) {
+			this.offset.click.left = this.helperProportions.width - obj.right + this.margins.left;
+		}
+		if ('top' in obj) {
+			this.offset.click.top = obj.top + this.margins.top;
+		}
+		if ('bottom' in obj) {
+			this.offset.click.top = this.helperProportions.height - obj.bottom + this.margins.top;
+		}
 	},
 
 	_getParentOffset: function() {
