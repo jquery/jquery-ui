@@ -482,7 +482,9 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 
 			return val;
 		} else {
-			return this.options.values;
+			// .slice() creates a copy of the array
+			// this prevents outside manipulation of the internal state
+			return this.options.values.slice();
 		}
 
 	},
