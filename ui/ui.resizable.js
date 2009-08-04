@@ -203,14 +203,14 @@ $.widget("ui.resizable", $.extend({}, $.ui.mouse, {
 	},
 
 	_mouseCapture: function(event) {
-
 		var handle = false;
-		for(var i in this.handles) {
-			if($(this.handles[i])[0] == event.target) handle = true;
+		for (var i in this.handles) {
+			if ($(this.handles[i])[0] == event.target) {
+				handle = true;
+			}
 		}
 
-		return this.options.disabled || !!handle;
-
+		return !this.options.disabled && handle;
 	},
 
 	_mouseStart: function(event) {
