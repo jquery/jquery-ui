@@ -184,6 +184,26 @@ $.fn.extend({
 		}
 
 		return (/fixed/).test(this.css('position')) || !scrollParent.length ? $(document) : scrollParent;
+	},
+
+	zIndex: function(zIndex) {
+		if (zIndex !== undefined) {
+			return this.css('zIndex', zIndex);
+		}
+
+		var elem = this[0];
+		while (elem && elem.style) {
+			// IE returns 0 when zIndex is not specified
+			// other browsers return an empty string
+			// we ignore the case of nested elements with an explicit value of 0
+			// <div style="z-index: -10;"><div style="z-index: 0;"></div></div>
+			if (elem.style.zIndex !== '' && elem.style.zIndex !== 0) {
+				return +elem.style.zIndex;
+			}
+			elem = elem.parentNode;
+		}
+
+		return 0;
 	}
 });
 

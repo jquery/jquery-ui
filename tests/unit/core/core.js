@@ -48,4 +48,13 @@ test('focus', function() {
 	other.focus();
 });
 
+test('zIndex', function() {
+	var el = $('#zIndexAutoWithParent');
+	equals(el.zIndex(), 100, 'zIndex traverses up to find value');
+	equals(el.zIndex(200), el, 'zIndex setter is chainable');
+	equals(el.zIndex(), 200, 'zIndex setter changed zIndex');
+	
+	equals($('#zIndexAutoNoParent').zIndex(), 0, 'zIndex never explicitly set in hierarchy');
+});
+
 })(jQuery);
