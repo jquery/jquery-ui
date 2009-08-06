@@ -55,16 +55,16 @@ test("{ animated: String }", function() {
 
 test("{ autoHeight: true }, default", function() {
 	$('#navigation').accordion({ autoHeight: true });
-	equals( $('#navigation > li:eq(0) > ul').height(), 112 );
-	equals( $('#navigation > li:eq(1) > ul').height(), 112 );
-	equals( $('#navigation > li:eq(2) > ul').height(), 112 );
+	equals( $('#navigation > li:eq(0) > ul').height(), 126 );
+	equals( $('#navigation > li:eq(1) > ul').height(), 126 );
+	equals( $('#navigation > li:eq(2) > ul').height(), 126 );
 });
 
 test("{ autoHeight: false }", function() {
 	$('#navigation').accordion({ autoHeight: false });
-	equals( $('#navigation > li:eq(0) > ul').height(), 80 );
-	equals( $('#navigation > li:eq(1) > ul').height(), 112 );
-	equals( $('#navigation > li:eq(2) > ul').height(), 48 );
+	equals( $('#navigation > li:eq(0) > ul').height(), 90 );
+	equals( $('#navigation > li:eq(1) > ul').height(), 126 );
+	equals( $('#navigation > li:eq(2) > ul').height(), 54 );
 });
 
 test("{ clearStyle: false }, default", function() {
