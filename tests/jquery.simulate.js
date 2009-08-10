@@ -1,11 +1,9 @@
 /*
  * jquery.simulate - simulate browser mouse and keyboard events
  *
- * Copyright (c) 2009 Eduardo Lundgren (eduardolundgren@gmail.com)
- * and Richard D. Worth (rdworth@gmail.com)
- *
- * Dual licensed under the MIT (http://www.opensource.org/licenses/mit-license.php) 
- * and GPL (http://www.opensource.org/licenses/gpl-license.php) licenses.
+ * Copyright (c) 2009 AUTHORS.txt (http://jqueryui.com/about)
+ * Dual licensed under the MIT (MIT-LICENSE.txt)
+ * and GPL (GPL-LICENSE.txt) licenses.
  *
  */
 
