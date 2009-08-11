@@ -38,7 +38,20 @@ test("{ active: false }", function() {
 });
 
 test("{ active: Number }", function() {
-	ok(false, 'missing test - untested code is broken code');
+	expect(4);
+	$("#list1").accordion({
+		active: 0
+	});
+	equals( $("#list1").accordion('option', 'active'), 0);
+
+	$("#list1").accordion('option', 'active', 1);
+	equals( $("#list1").accordion('option', 'active'), 1);
+
+	$('.ui-accordion-header:eq(2)', '#list1').click();
+	equals( $("#list1").accordion('option', 'active'), 2);
+
+	$("#list1").accordion('activate', 0);
+	equals( $("#list1").accordion('option', 'active'), 0);
 });
 
 test("{ animated: false }, default", function() {

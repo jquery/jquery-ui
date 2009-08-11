@@ -153,6 +153,9 @@ $.widget("ui.accordion", {
 		
 		$.widget.prototype._setData.apply(this, arguments);
 			
+		if (key == "active") {
+			this.activate(value);
+		}
 		if (key == "icons") {
 			this._destroyIcons();
 			if (value) {
@@ -230,6 +233,7 @@ $.widget("ui.accordion", {
 	},
 
 	activate: function(index) {
+		this.options.active = index;
 		// call clickHandler with custom event
 		var active = this._findActive(index)[0];
 		this._clickHandler({ target: active }, active);
@@ -273,6 +277,8 @@ $.widget("ui.accordion", {
 		// get the click target
 		var clicked = $(event.currentTarget || target);
 		var clickedIsActive = clicked[0] == this.active[0];
+		
+		o.active = $('.ui-accordion-header', this.element).index(clicked);
 
 		// if animations are still active, or the active header is the target, ignore click
 		if (this.running || (!o.collapsible && clickedIsActive)) {
