@@ -216,11 +216,10 @@ $.widget("ui.accordion", {
 				maxHeight -= $(this).outerHeight(true);
 			});
 
-			var maxPadding = 0;
 			this.headers.next().each(function() {
-				maxPadding = Math.max(maxPadding, $(this).innerHeight() - $(this).height());
-			}).height(Math.max(0, maxHeight - maxPadding))
-			.css('overflow', 'auto');
+				var padding = $(this).innerHeight() - $(this).height();
+    		   $(this).height(Math.max(0, maxHeight - padding));
+			}).css('overflow', 'auto');
 
 		} else if ( o.autoHeight ) {
 			maxHeight = 0;

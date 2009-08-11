@@ -112,11 +112,19 @@ test("{ event: 'mouseover' }", function() {
 });
 
 test("{ fillSpace: false }, default", function() {
-	ok(false, 'missing test - untested code is broken code');
+	$("#navigationWrapper").height(500);
+	$('#navigation').accordion({ fillSpace: false });
+	equals( $('#navigation > li:eq(0) > ul').height(), 126 );
+	equals( $('#navigation > li:eq(1) > ul').height(), 126 );
+	equals( $('#navigation > li:eq(2) > ul').height(), 126 );
 });
 
 test("{ fillSpace: true }", function() {
-	ok(false, 'missing test - untested code is broken code');
+	$("#navigationWrapper").height(500);
+	$('#navigation').accordion({ fillSpace: true });
+	equals( $('#navigation > li:eq(0) > ul').height(), 386 );
+	equals( $('#navigation > li:eq(1) > ul').height(), 386 );
+	equals( $('#navigation > li:eq(2) > ul').height(), 386 );
 });
 
 test("{ header: '> li > :first-child,> :not(li):even' }, default", function() {
