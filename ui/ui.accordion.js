@@ -213,7 +213,7 @@ $.widget("ui.accordion", {
 			if($.browser.msie) { this.element.parent().css('overflow', defOverflow); }
 	
 			this.headers.each(function() {
-				maxHeight -= $(this).outerHeight();
+				maxHeight -= $(this).outerHeight(true);
 			});
 
 			var maxPadding = 0;
