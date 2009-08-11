@@ -217,8 +217,7 @@ $.widget("ui.accordion", {
 			});
 
 			this.headers.next().each(function() {
-				var padding = $(this).innerHeight() - $(this).height();
-    		   $(this).height(Math.max(0, maxHeight - padding));
+    		   $(this).height(Math.max(0, maxHeight - $(this).innerHeight() + $(this).height()));
 			}).css('overflow', 'auto');
 
 		} else if ( o.autoHeight ) {
