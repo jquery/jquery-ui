@@ -6,7 +6,8 @@
 module("accordion: options");
 
 test("{ active: first child }, default", function() {
-	ok(false, 'missing test - untested code is broken code');
+	$("#list1").accordion();
+	equals( $("#list1").accordion('option', 'active'), 0);
 });
 
 test("{ active: Selector }", function() {
@@ -35,6 +36,7 @@ test("{ active: false }", function() {
 		collapsible: true
 	});
 	equals( $("#list1 .ui-accordion-header.ui-state-active").size(), 0, "no headers selected" );
+	equals( $("#list1").accordion('option', 'active'), false);
 });
 
 test("{ active: Number }", function() {
@@ -93,7 +95,12 @@ test("{ collapsible: false }, default", function() {
 });
 
 test("{ collapsible: true }", function() {
-	ok(false, 'missing test - untested code is broken code');
+	$("#list1").accordion({
+		active: 1,
+		collapsible: true
+	});
+	$('.ui-accordion-header:eq(1)', '#list1').click();
+	equals( $("#list1").accordion('option', 'active'), false);
 });
 
 test("{ event: 'click' }, default", function() {
