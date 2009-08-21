@@ -157,6 +157,10 @@ $.widget("ui.draggable", $.extend({}, $.ui.mouse, {
 			dropped = this.dropped;
 			this.dropped = false;
 		}
+		
+		//if the original element is removed, don't bother to continue
+		if(!this.element[0] || !this.element[0].parentNode)
+			return false;
 
 		if((this.options.revert == "invalid" && !dropped) || (this.options.revert == "valid" && dropped) || this.options.revert === true || ($.isFunction(this.options.revert) && this.options.revert.call(this.element, dropped))) {
 			var self = this;
