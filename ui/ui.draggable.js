@@ -754,15 +754,16 @@ $.ui.plugin.add("draggable", "stack", {
 
 		var o = $(this).data("draggable").options;
 
-		var group = $.makeArray($(o.stack.group)).sort(function(a,b) {
-			return (parseInt($(a).css("zIndex"),10) || o.stack.min) - (parseInt($(b).css("zIndex"),10) || o.stack.min);
+		var group = $.makeArray($(o.stack)).sort(function(a,b) {
+			return (parseInt($(a).css("zIndex"),10) || 0) - (parseInt($(b).css("zIndex"),10) || 0);
 		});
-
+		
+		var min = parseInt(group[0].style.zIndex) || 0;
 		$(group).each(function(i) {
-			this.style.zIndex = o.stack.min + i;
+			this.style.zIndex = min + i;
 		});
 
-		this[0].style.zIndex = o.stack.min + group.length;
+		this[0].style.zIndex = min + group.length;
 
 	}
 });
