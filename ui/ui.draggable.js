@@ -83,7 +83,7 @@ $.widget("ui.draggable", $.extend({}, $.ui.mouse, {
 		this.scrollParent = this.helper.scrollParent();
 
 		//The element's absolute position on the page minus margins
-		this.offset = this.element.offset();
+		this.offset = this.positionAbs = this.element.offset();
 		this.offset = {
 			top: this.offset.top - this.margins.top,
 			left: this.offset.left - this.margins.left
@@ -99,7 +99,7 @@ $.widget("ui.draggable", $.extend({}, $.ui.mouse, {
 		});
 
 		//Generate the original position
-		this.originalPosition = this._generatePosition(event);
+		this.originalPosition = this.position = this._generatePosition(event);
 		this.originalPageX = event.pageX;
 		this.originalPageY = event.pageY;
 
