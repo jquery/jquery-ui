@@ -485,13 +485,13 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 				for (var j = cur.length - 1; j >= 0; j--){
 					var inst = $.data(cur[j], 'sortable');
 					if(inst && inst != this && !inst.options.disabled) {
-						queries.push([$.isFunction(inst.options.items) ? inst.options.items.call(inst.element) : $(inst.options.items, inst.element).not(".ui-sortable-helper"), inst]);
+						queries.push([$.isFunction(inst.options.items) ? inst.options.items.call(inst.element) : $(inst.options.items, inst.element).not(".ui-sortable-helper").not('.ui-sortable-placeholder'), inst]);
 					}
 				};
 			};
 		}
 
-		queries.push([$.isFunction(this.options.items) ? this.options.items.call(this.element, null, { options: this.options, item: this.currentItem }) : $(this.options.items, this.element).not(".ui-sortable-helper"), this]);
+		queries.push([$.isFunction(this.options.items) ? this.options.items.call(this.element, null, { options: this.options, item: this.currentItem }) : $(this.options.items, this.element).not(".ui-sortable-helper").not('.ui-sortable-placeholder'), this]);
 
 		for (var i = queries.length - 1; i >= 0; i--){
 			queries[i][0].each(function() {
@@ -967,7 +967,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 
 		//Do what was originally in plugins
 		if(this._storedCursor) $('body').css("cursor", this._storedCursor); //Reset cursor
-		if(this._storedOpacity) this.helper.css("opacity", this._storedOpacity); //Reset cursor
+		if(this._storedOpacity) this.helper.css("opacity", this._storedOpacity); //Reset opacity
 		if(this._storedZIndex) this.helper.css("zIndex", this._storedZIndex == 'auto' ? '' : this._storedZIndex); //Reset z-index
 
 		this.dragging = false;
