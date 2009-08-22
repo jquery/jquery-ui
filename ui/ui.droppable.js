@@ -197,7 +197,7 @@ $.ui.ddmanager = {
 	droppables: { 'default': [] },
 	prepareOffsets: function(t, event) {
 
-		var m = $.ui.ddmanager.droppables[t.options.scope];
+		var m = $.ui.ddmanager.droppables[t.options.scope] || [];
 		var type = event ? event.type : null; // workaround for #2317
 		var list = (t.currentItem || t.element).find(":data(droppable)").andSelf();
 
@@ -218,7 +218,7 @@ $.ui.ddmanager = {
 	drop: function(draggable, event) {
 
 		var dropped = false;
-		$.each($.ui.ddmanager.droppables[draggable.options.scope], function() {
+		$.each($.ui.ddmanager.droppables[draggable.options.scope] || [], function() {
 
 			if(!this.options) return;
 			if (!this.options.disabled && this.visible && $.ui.intersect(draggable, this, this.options.tolerance))
@@ -240,7 +240,7 @@ $.ui.ddmanager = {
 
 		//Run through all droppables and check their positions based on specific tolerance options
 
-		$.each($.ui.ddmanager.droppables[draggable.options.scope], function() {
+		$.each($.ui.ddmanager.droppables[draggable.options.scope] || [], function() {
 
 			if(this.options.disabled || this.greedyChild || !this.visible) return;
 			var intersects = $.ui.intersect(draggable, this, this.options.tolerance);
