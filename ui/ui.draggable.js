@@ -412,6 +412,7 @@ $.widget("ui.draggable", $.extend({}, $.ui.mouse, {
 		return {
 			helper: this.helper,
 			position: this.position,
+			originalPosition: this.originalPosition,
 			offset: this.positionAbs
 		};
 	}
