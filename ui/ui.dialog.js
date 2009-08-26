@@ -43,8 +43,6 @@ $.widget("ui.dialog", {
 				.hide()
 				.addClass(uiDialogClasses + options.dialogClass)
 				.css({
-					position: 'absolute',
-					overflow: 'hidden',
 					zIndex: options.zIndex
 				})
 				// setting tabIndex makes the div focusable
