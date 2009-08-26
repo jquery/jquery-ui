@@ -57,4 +57,26 @@ test('zIndex', function() {
 	equals($('#zIndexAutoNoParent').zIndex(), 0, 'zIndex never explicitly set in hierarchy');
 });
 
+test('widget factory, merge multiple option arguments', function() {
+	expect(1);
+	$.widget("ui.widgetTest", {
+		_init: function() {
+			same(this.options, {
+				disabled: false,
+				option1: "value1",
+				option2: "value2",
+				option3: "value3"
+			});
+		}
+	});
+	$("#main > :first").widgetTest({
+		option1: "valuex",
+		option2: "valuex",
+		option3: "value3"
+	}, {
+		option1: "value1",
+		option2: "value2"
+	});
+});
+
 })(jQuery);

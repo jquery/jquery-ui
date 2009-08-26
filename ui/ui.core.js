@@ -253,6 +253,11 @@ $.widget = function(name, prototype) {
 			args = Array.prototype.slice.call(arguments, 1),
 			returnValue = this;
 
+		// allow multiple hashes to be passed on init
+		options = !isMethodCall && args.length
+			? $.extend.apply(null, arguments)
+			: options;
+
 		// prevent calls to internal methods
 		if (isMethodCall && options.substring(0, 1) == '_') {
 			return returnValue;
