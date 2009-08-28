@@ -255,7 +255,7 @@ $.widget = function(name, prototype) {
 
 		// allow multiple hashes to be passed on init
 		options = !isMethodCall && args.length
-			? $.extend.apply(null, arguments)
+			? $.extend.apply(null, [true, options].concat(args))
 			: options;
 
 		// prevent calls to internal methods

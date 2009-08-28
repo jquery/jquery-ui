@@ -65,17 +65,31 @@ test('widget factory, merge multiple option arguments', function() {
 				disabled: false,
 				option1: "value1",
 				option2: "value2",
-				option3: "value3"
+				option3: "value3",
+				option4: {
+					option4a: "valuea",
+					option4b: "valueb"
+				}
 			});
 		}
 	});
 	$("#main > :first").widgetTest({
 		option1: "valuex",
 		option2: "valuex",
-		option3: "value3"
+		option3: "value3",
+		option4: {
+			option4a: "valuex"
+		}
 	}, {
 		option1: "value1",
-		option2: "value2"
+		option2: "value2",
+		option4: {
+			option4b: "valueb"
+		}
+	}, {
+		option4: {
+			option4a: "valuea"
+		}
 	});
 });
 
