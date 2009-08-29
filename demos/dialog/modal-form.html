@@ -11,7 +11,6 @@
 	<script type="text/javascript" src="../../ui/ui.stackfix.js"></script>
 	<script type="text/javascript" src="../../ui/ui.dialog.js"></script>
 	<script type="text/javascript" src="../../ui/effects.core.js"></script>
-	<script type="text/javascript" src="../../ui/effects.highlight.js"></script>
 	<link type="text/css" href="../demos.css" rel="stylesheet" />
 	<style type="text/css">
 		body { font-size: 62.5%; }
@@ -23,8 +22,8 @@
 		div#users-contain table { margin: 1em 0; border-collapse: collapse; width: 100%; }
 		div#users-contain table td, div#users-contain table th { border: 1px solid #eee; padding: .6em 10px; text-align: left; }
 		.ui-button { outline: 0; margin: 0; padding: .4em 1em .5em; text-decoration: none; cursor: pointer; position: relative; text-align: center; }
-		.ui-dialog .ui-state-highlight, .ui-dialog .ui-state-error { padding: .3em; }
-		
+		.ui-dialog .ui-state-error { padding: .3em; }
+		.validateTips { border: 1px solid transparent; padding: 0.3em; }
 		
 	</style>
 	<script type="text/javascript">
@@ -36,10 +35,15 @@
 			email = $("#email"),
 			password = $("#password"),
 			allFields = $([]).add(name).add(email).add(password),
-			tips = $("#validateTips");
+			tips = $(".validateTips");
 
 		function updateTips(t) {
-			tips.text(t).effect("highlight",{},1500);
+			tips
+				.text(t)
+				.addClass('ui-state-highlight');
+			setTimeout(function() {
+				tips.removeClass('ui-state-highlight', 1500);
+			}, 500);
 		}
 
 		function checkLength(o,n,min,max) {
@@ -70,6 +74,7 @@
 			stackfix: true,
 			autoOpen: false,
 			height: 300,
+			width: 350,
 			modal: true,
 			buttons: {
 				'Create an account': function() {
@@ -137,7 +142,7 @@
 <div class="demo">
 
 <div id="dialog-form" title="Create new user">
-	<p id="validateTips">All form fields are required.</p>
+	<p class="validateTips">All form fields are required.</p>
 
 	<form>
 	<fieldset>
