@@ -7,12 +7,12 @@
  * Dual licensed under the MIT (MIT-LICENSE.txt)
  * and GPL (GPL-LICENSE.txt) licenses.
  *
- * $Id: testrunner.js 6343 2009-05-06 15:09:22Z joern.zaefferer $
+ * $Id: testrunner.js 6416 2009-07-10 16:08:27Z joern.zaefferer $
  */
 
 (function($) {
 
-// Tests for equality any JavaScript type and structure without unexpected results.
+// Test for equality any JavaScript type.
 // Discussions and reference: http://philrathe.com/articles/equiv
 // Test suites: http://philrathe.com/tests/equiv
 // Author: Philippe Rathé <prathe@gmail.com>
@@ -21,15 +21,16 @@ var equiv = function () {
     var innerEquiv; // the real equiv function
     var callers = []; // stack to decide between skip/abort functions
 
+
     // Determine what is o.
     function hoozit(o) {
-        if (typeof o === "string") {
+        if (o.constructor === String) {
             return "string";
-
-        } else if (typeof o === "boolean") {
+            
+        } else if (o.constructor === Boolean) {
             return "boolean";
 
-        } else if (typeof o === "number") {
+        } else if (o.constructor === Number) {
 
             if (isNaN(o)) {
                 return "nan";
@@ -64,6 +65,8 @@ var equiv = function () {
 
         } else if (o instanceof Function) {
             return "function";
+        } else {
+            return undefined;
         }
     }
 
@@ -78,12 +81,19 @@ var equiv = function () {
             }
         }
     }
-
+    
     var callbacks = function () {
 
         // for string, boolean, number and null
         function useStrictEquality(b, a) {
-            return a === b;
+            if (b instanceof a.constructor || a instanceof b.constructor) {
+                // to catch short annotaion VS 'new' annotation of a declaration
+                // e.g. var i = 1;
+                //      var j = new Number(1);
+                return a == b;
+            } else {
+                return a === b;
+            }
         }
 
         return {
@@ -182,10 +192,8 @@ var equiv = function () {
         return (function (a, b) {
             if (a === b) {
                 return true; // catch the most you can
-
-            } else if (typeof a !== typeof b || a === null || b === null || typeof a === "undefined" || typeof b === "undefined") {
+            } else if (a === null || b === null || typeof a === "undefined" || typeof b === "undefined" || hoozit(a) !== hoozit(b)) {
                 return false; // don't lose time with error prone cases
-
             } else {
                 return bindCallbacks(a, callbacks, [b, a]);
             }
@@ -195,7 +203,8 @@ var equiv = function () {
     };
 
     return innerEquiv;
-}(); // equiv
+
+}();
 
 var GETParams = $.map( location.search.slice(1).split('&'), decodeURIComponent ),
 	ngindex = $.inArray("noglobals", GETParams),
@@ -337,7 +346,7 @@ function runTest() {
 	synchronize(function() {
 		$('<p id="testresult" class="result"/>').html(['Tests completed in ',
 			+new Date - started, ' milliseconds.<br/>',
-			'<span class="bad">', config.stats.bad, '</span> tests of <span class="all">', config.stats.all, '</span> failed.']
+			'<span class="bad">', config.stats.all - config.stats.bad, '</span> tests of <span class="all">', config.stats.all, '</span> passed, ', config.stats.bad,' failed.']
 			.join(''))
 			.appendTo("body");
 		$("#banner").addClass(config.stats.bad ? "fail" : "pass");
@@ -380,6 +389,8 @@ function test(name, callback) {
 	
 	if ( !validTest(name) )
 		return;
+		
+	var testEnvironment = {};
 	
 	synchronize(function() {
 		config.assertions = [];
@@ -387,20 +398,16 @@ function test(name, callback) {
 		try {
 			if( !pollution )
 				saveGlobal();
-			lifecycle.setup();
+			lifecycle.setup.call(testEnvironment);
 		} catch(e) {
 			QUnit.ok( false, "Setup failed on " + name + ": " + e.message );
 		}
-	})
+	});
 	synchronize(function() {
 		try {
-			callback();
+			callback.call(testEnvironment);
 		} catch(e) {
-			if( typeof console != "undefined" && console.error && console.warn ) {
-				console.error("Test " + name + " died, exception and test follows");
-				console.error(e);
-				console.warn(callback.toString());
-			}
+			fail("Test " + name + " died, exception and test follows", e, callback);
 			QUnit.ok( false, "Died on test #" + (config.assertions.length + 1) + ": " + e.message );
 			// else next test will carry the responsibility
 			saveGlobal();
@@ -409,20 +416,16 @@ function test(name, callback) {
 	synchronize(function() {
 		try {
 			checkPollution();
-			lifecycle.teardown();
+			lifecycle.teardown.call(testEnvironment);
 		} catch(e) {
 			QUnit.ok( false, "Teardown failed on " + name + ": " + e.message );
 		}
-	})
+	});
 	synchronize(function() {
 		try {
 			reset();
 		} catch(e) {
-			if( typeof console != "undefined" && console.error && console.warn ) {
-				console.error("reset() failed, following Test " + name + ", exception and reset fn follows");
-				console.error(e);
-				console.warn(reset.toString());
-			}
+			fail("reset() failed, following Test " + name + ", exception and reset fn follows", e, reset);
 		}
 		
 		if(config.expected && config.expected != config.assertions.length) {
@@ -458,6 +461,16 @@ function test(name, callback) {
 			$("#filter-missing").attr("disabled", null);
 		}
 	});
+}
+
+function fail(message, exception, callback) {
+	if( typeof console != "undefined" && console.error && console.warn ) {
+		console.error(message);
+		console.error(exception);
+		console.warn(callback.toString());
+	} else if (window.opera && opera.postError) {
+		opera.postError(message, exception, callback.toString);
+	}
 }
 
 // call on start of module test to prepend name to all tests
@@ -645,7 +658,7 @@ function triggerEvent( elem, type, event ) {
 	};
 	function join( pre, arr, post ){
 		var s = jsDump.separator(),
-			base = jsDump.indent();
+			base = jsDump.indent(),
 			inner = jsDump.indent(1);
 		if( arr.join )
 			arr = arr.join( ',' + s + inner );
