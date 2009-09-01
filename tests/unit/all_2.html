@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<title>jQuery UI All Tests</title>
+	<link rel="stylesheet" href="testsuite.css" type="text/css">
+
+	<script type="text/javascript" src="../../jquery-1.3.2.js"></script>
+	<script type="text/javascript" src="../../ui/ui.core.js"></script>
+
+	<script type="text/javascript">
+	var components = ["accordion","datepicker","dialog","draggable","progressbar","resizable","selectable","slider","sortable","tabs"];
+
+	$(function() {
+
+		var $list = $("#individual_list"),
+			$main = $("#main");
+
+		$.each(components, function(i, val){
+			$list.append('<li><a href="' + val + '/' + val + '.html">' + val + '</a></li>');
+			$('<div class="component_panel" id="' + val + '">').appendTo($main);
+			$('#' + val).load(val + '.html #main *');
+		});
+
+		loadScripts();
+
+		function loadScripts() {
+			if ( $("div.component_panel").length == components.length ) {
+				$.each(components, function(i, val){
+					$('head').append('<script type="text/javascript" src="' + val + '.js"></scr'+'ipt>');
+				});
+			} else {
+				setTimeout(loadScripts, 10);
+			}
+		}
+
+
+	});
+
+
+	</script>
+
+	<script type="text/javascript" src="../../ui/ui.accordion.js"></script>
+	<script type="text/javascript" src="../../ui/ui.datepicker.js"></script>
+	<script type="text/javascript" src="../../ui/ui.dialog.js"></script>
+	<script type="text/javascript" src="../../ui/ui.draggable.js"></script>
+	<script type="text/javascript" src="../../ui/ui.droppable.js"></script>
+	<script type="text/javascript" src="../../ui/ui.progressbar.js"></script>
+	<script type="text/javascript" src="../../ui/ui.resizable.js"></script>
+	<script type="text/javascript" src="../../ui/ui.selectable.js"></script>
+	<script type="text/javascript" src="../../ui/ui.slider.js"></script>
+	<script type="text/javascript" src="../../ui/ui.sortable.js"></script>
+	<script type="text/javascript" src="../../ui/ui.tabs.js"></script>
+
+	<script type="text/javascript" src="../../external/testrunner-r6416.js"></script>
+	<script type="text/javascript" src="../../external/jquery.cookie-r6165.js"></script>
+	<script type="text/javascript" src="../jquery.simulate.js"></script>
+
+	<style type="text/css">
+		@import "../../../themes/base/ui.datepicker.css";
+		.xerror, .error, .ui-tabs-hide {
+		    display: none;
+		}
+	</style>
+
+</head>
+<body>
+	<h1>jQuery UI All Tests</h1>
+	<h2 id="banner"></h2>
+	<h2 id="userAgent"></h2>
+
+	<h4>Run individual testsuites or doubleclick a test below</h4>
+	<ul id="individual_list">
+	</ul>
+
+	<ol id="tests"></ol>
+
+	<div id="main" style="position:absolute; top:-2000000px;">
+
+	</div>
+
+	</body>
+</html>

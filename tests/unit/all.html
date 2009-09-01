@@ -1,0 +1,299 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<title>jQuery UI All Tests</title>
+	<link rel="stylesheet" href="testsuite.css" type="text/css">
+
+	<script type="text/javascript" src="../../jquery-1.3.2.js"></script>
+	<script type="text/javascript" src="../../ui/ui.core.js"></script>
+	<script type="text/javascript" src="../../ui/ui.accordion.js"></script>
+	<script type="text/javascript" src="../../ui/ui.datepicker.js"></script>
+	<script type="text/javascript" src="../../ui/ui.dialog.js"></script>
+	<script type="text/javascript" src="../../ui/ui.draggable.js"></script>
+	<script type="text/javascript" src="../../ui/ui.droppable.js"></script>
+	<script type="text/javascript" src="../../ui/ui.progressbar.js"></script>
+	<script type="text/javascript" src="../../ui/ui.resizable.js"></script>
+	<script type="text/javascript" src="../../ui/ui.selectable.js"></script>
+	<script type="text/javascript" src="../../ui/ui.slider.js"></script>
+	<script type="text/javascript" src="../../ui/ui.sortable.js"></script>
+	<script type="text/javascript" src="../../ui/ui.tabs.js"></script>
+
+	<script type="text/javascript" src="../../external/testrunner-r6416.js"></script>
+	<script type="text/javascript" src="../../external/jquery.cookie-r6165.js"></script>
+	<script type="text/javascript" src="../jquery.simulate.js"></script>
+	<script type="text/javascript" src="testsuite.js"></script>
+
+	<script type="text/javascript" src="core/core.js"></script>
+	<script type="text/javascript" src="core/selector.js"></script>
+
+	<script type="text/javascript" src="draggable/draggable_core.js"></script>
+	<script type="text/javascript" src="draggable/draggable_defaults.js"></script>
+	<script type="text/javascript" src="draggable/draggable_events.js"></script>
+	<script type="text/javascript" src="draggable/draggable_methods.js"></script>
+	<script type="text/javascript" src="draggable/draggable_options.js"></script>
+	<script type="text/javascript" src="draggable/draggable_tickets.js"></script>
+	<script type="text/javascript" src="droppable/droppable_core.js"></script>
+	<script type="text/javascript" src="droppable/droppable_defaults.js"></script>
+	<script type="text/javascript" src="droppable/droppable_events.js"></script>
+	<script type="text/javascript" src="droppable/droppable_methods.js"></script>
+	<script type="text/javascript" src="droppable/droppable_options.js"></script>
+	<script type="text/javascript" src="droppable/droppable_tickets.js"></script>
+	<script type="text/javascript" src="resizable/resizable_core.js"></script>
+	<script type="text/javascript" src="resizable/resizable_defaults.js"></script>
+	<script type="text/javascript" src="resizable/resizable_events.js"></script>
+	<script type="text/javascript" src="resizable/resizable_methods.js"></script>
+	<script type="text/javascript" src="resizable/resizable_options.js"></script>
+	<script type="text/javascript" src="resizable/resizable_tickets.js"></script>
+	<script type="text/javascript" src="selectable/selectable_core.js"></script>
+	<script type="text/javascript" src="selectable/selectable_defaults.js"></script>
+	<script type="text/javascript" src="selectable/selectable_events.js"></script>
+	<script type="text/javascript" src="selectable/selectable_methods.js"></script>
+	<script type="text/javascript" src="selectable/selectable_options.js"></script>
+	<script type="text/javascript" src="selectable/selectable_tickets.js"></script>
+	<script type="text/javascript" src="sortable/sortable_core.js"></script>
+	<script type="text/javascript" src="sortable/sortable_defaults.js"></script>
+	<script type="text/javascript" src="sortable/sortable_events.js"></script>
+	<script type="text/javascript" src="sortable/sortable_methods.js"></script>
+	<script type="text/javascript" src="sortable/sortable_options.js"></script>
+	<script type="text/javascript" src="sortable/sortable_tickets.js"></script>
+
+	<script type="text/javascript" src="accordion/accordion_core.js"></script>
+	<script type="text/javascript" src="accordion/accordion_defaults.js"></script>
+	<script type="text/javascript" src="accordion/accordion_events.js"></script>
+	<script type="text/javascript" src="accordion/accordion_methods.js"></script>
+	<script type="text/javascript" src="accordion/accordion_options.js"></script>
+	<script type="text/javascript" src="accordion/accordion_tickets.js"></script>
+	<script type="text/javascript" src="datepicker/datepicker_core.js"></script>
+	<script type="text/javascript" src="datepicker/datepicker_defaults.js"></script>
+	<script type="text/javascript" src="datepicker/datepicker_events.js"></script>
+	<script type="text/javascript" src="datepicker/datepicker_methods.js"></script>
+	<script type="text/javascript" src="datepicker/datepicker_options.js"></script>
+	<script type="text/javascript" src="datepicker/datepicker_tickets.js"></script>
+	<script type="text/javascript" src="dialog/dialog_core.js"></script>
+	<script type="text/javascript" src="dialog/dialog_defaults.js"></script>
+	<script type="text/javascript" src="dialog/dialog_events.js"></script>
+	<script type="text/javascript" src="dialog/dialog_methods.js"></script>
+	<script type="text/javascript" src="dialog/dialog_options.js"></script>
+	<script type="text/javascript" src="dialog/dialog_tickets.js"></script>
+	<script type="text/javascript" src="progressbar/progressbar_core.js"></script>
+	<script type="text/javascript" src="progressbar/progressbar_defaults.js"></script>
+	<script type="text/javascript" src="progressbar/progressbar_events.js"></script>
+	<script type="text/javascript" src="progressbar/progressbar_methods.js"></script>
+	<script type="text/javascript" src="progressbar/progressbar_options.js"></script>
+	<script type="text/javascript" src="progressbar/progressbar_tickets.js"></script>
+	<script type="text/javascript" src="slider/slider_core.js"></script>
+	<script type="text/javascript" src="slider/slider_defaults.js"></script>
+	<script type="text/javascript" src="slider/slider_events.js"></script>
+	<script type="text/javascript" src="slider/slider_methods.js"></script>
+	<script type="text/javascript" src="slider/slider_options.js"></script>
+	<script type="text/javascript" src="slider/slider_tickets.js"></script>
+	<script type="text/javascript" src="tabs/tabs_core.js"></script>
+	<script type="text/javascript" src="tabs/tabs_defaults.js"></script>
+	<script type="text/javascript" src="tabs/tabs_events.js"></script>
+	<script type="text/javascript" src="tabs/tabs_methods.js"></script>
+	<script type="text/javascript" src="tabs/tabs_options.js"></script>
+	<script type="text/javascript" src="tabs/tabs_tickets.js"></script>
+
+	<style type="text/css">
+		@import "../../../themes/base/ui.datepicker.css";
+		.xerror, .error, .ui-tabs-hide {
+		    display: none;
+		}
+	</style>
+
+</head>
+<body>
+	<h1>jQuery UI All Tests</h1>
+	<h2 id="banner"></h2>
+	<h2 id="userAgent"></h2>
+
+	<h3>Run individual testsuites or doubleclick a test below</h3>
+
+	<h4>Core</h4>
+	<ul>
+		<li><a href="core/core.html">Core</a></li>
+	</ul>
+
+	<h4>Interactions</h4>
+	<ul>
+		<li><a href="draggable/draggable.html">Draggable</a></li>
+		<li><a href="droppable/droppable.html">Droppable</a></li>
+		<li><a href="resizable/resizable.html">Resizable</a></li>
+		<li><a href="selectable/selectable.html">Selectable</a></li>
+		<li><a href="sortable/sortable.html">Sortable</a></li>
+	</ul>
+
+	<h4>Widgets</h4>
+	<ul>
+		<li><a href="accordion/accordion.html">Accordion</a></li>
+		<li><a href="datepicker/datepicker.html">Datepicker</a></li>
+		<li><a href="dialog/dialog.html">Dialog</a></li>
+		<li><a href="progressbar/progressbar.html">Progressbar</a></li>
+		<li><a href="slider/slider.html">Slider</a></li>
+		<li><a href="tabs/tabs.html">Tabs</a></li>
+	</ul>
+
+	<ol id="tests"></ol>
+
+	<div id="main" style="position:absolute;top:-2000000px;">
+
+	<p><input type="text" id="dp1"/><input type="text" id="rem"/></p>
+
+	<div id="draggable1" style="background: green; width: 200px; height: 100px;">Relative</div>
+	<div id="draggable2" style="background: green; width: 200px; height: 100px; position: absolute; top: 10px; left: 10px;"><span>Absolute</span></div>
+
+	<div id="slider1"></div>
+	<div id="slider3" style="position: relative; margin: 40px; width: 217px; height: 28px;">
+		<div class="ui-slider-handle" style="position: absolute; height: 21px; left: 0px; bottom: 0px; width: 17px;"></div>
+	</div>
+
+	<div id="list1">
+		<a>There is one obvious advantage:</a>
+		<div>
+			<p>
+				You've seen it coming!<br/>
+				Buy now and get nothing for free!<br/>
+				Well, at least no free beer. Perhaps a bear, if you can afford it.
+			</p>
+		</div>
+		<a>Now that you've got...</a>
+		<div>
+			<p>
+				your bear, you have to admit it!<br/>
+				No, we aren't selling bears.
+			</p>
+			<p>
+				We could talk about renting one.
+			</p>
+		</div>
+		<a>Rent one bear, ...</a>
+		<div>
+			<p>
+				get two for three beer.
+			</p>
+			<p>
+				And now, for something completely different.
+			</p>
+		</div>
+	</div>
+
+	<ul id="navigation">
+		<li>
+			<a class="head" href="?p=1.1.1">Guitar</a>
+			<ul>
+				<li><a href="?p=1.1.1.1">Electric</a></li>
+				<li><a href="?p=1.1.1.2">Acoustic</a></li>
+				<li><a href="?p=1.1.1.3">Amps</a></li>
+				<li><a href="?p=1.1.1.4">Effects</a></li>
+				<li><a href="?p=1.1.1.5">Accessories</a></li>
+			</ul> 
+		</li>
+		<li>
+			<a class="head" href="?p=1.1.2"><span>Bass</span></a>
+			<ul>
+				<li><a href="?p=1.1.2.1">Electric</a></li>
+				<li><a href="?p=1.1.2.2">Acoustic</a></li>
+				<li><a href="?p=1.1.2.3">Amps</a></li>
+				<li><a href="?p=1.1.2.4">Effects</a></li>
+				<li><a href="?p=1.1.2.5">Accessories</a></li>
+				<li><a href="?p=1.1.2.5">Accessories</a></li>
+				<li><a href="?p=1.1.2.5">Accessories</a></li>
+			</ul> 
+		</li>
+		<li>
+			<a class="head" href="?p=1.1.3">Drums</a>
+			<ul>
+				<li><a href="?p=1.1.3.2">Acoustic Drums</a></li>
+				<li><a href="?p=1.1.3.3">Electronic Drums</a></li>
+				<li><a href="?p=1.1.3.6">Accessories</a></li>
+			</ul> 
+		</li>
+	</ul>
+	<dl id="list2">
+		<dt class="red">Red</dt>
+		<dd>
+			Fancy stuff about red thingies.
+		</dd>
+		<dt class="green selected">Green</dt>
+		<dd>
+			Green! Green! Green!
+		</dd>
+		<dt class="blue">Blue</dt>
+		<dd>
+			Cool kids are blue.
+		</dd>
+	</dl>
+
+	<div id="list3">
+		<div>
+			<div class="title">Tennis</div>
+			<div>
+				One ball, two players. Lots of fun.
+			</div>
+		</div>
+		<div>
+			<div class="title">Soccer</div>
+			<div>
+				One ball, 22 players. Lots of fun.
+			</div>
+		</div>
+		<div>
+			<div class="title">Baseball</div>
+			<div>
+				Well, one ball, some guys running around, some guys hitting others with a stick.<br/>
+				Sounds like fun, doesn't it?
+			</div>
+			<div>
+				Well, apart from the running part.
+			</div>
+		</div>
+	</div>
+
+	<div id="resizable1" style="background: green; width: 100px; height: 100px;">I'm a resizable.</div>
+	<img src="images/test.jpg" id="resizable2" style="width: 100px; height: 100px;"/>
+
+
+	<ul id="selectable1">
+		<li>Item 1</li>
+		<li>Item 2</li>
+		<li class="special">Item 3</li>
+		<li>Item 4</li>
+		<li>Item 5</li>
+	</ul>
+
+	<ul id="sortable">
+		<li>Item 1</li>
+		<li>Item 2</li>
+		<li>Item 3</li>
+		<li>Item 4</li>
+		<li>Item 5</li>
+	</ul>
+
+	<p><input type="text" id="inp"/><input type="text" id="alt"/><div id="inl"></div></p>
+
+	<input type="text" id="spin" />
+
+	<div id="progressbar"></div>
+
+    <div id="tabs1">
+		<ul>
+			<li><a href="#fragment-1">1</a></li>
+			<li><a href="#fragment-2">2</a></li>
+			<li><a href="#fragment-3">3</a></li>
+		</ul>
+		<div id="fragment-1"></div>
+		<div id="fragment-2"></div>
+		<div id="fragment-3"></div>
+	</div>
+	<div id="tabs2">
+		<ul>
+			<li><a href="#colon:test">1</a></li>
+			<li><a href="#inline-style">2</a></li>
+		</ul>
+		<div id="colon:test"></div>
+		<div style="height: 300px;" id="inline-style"></div>
+	</div>
+
+</div>
+	</body>
+</html>
