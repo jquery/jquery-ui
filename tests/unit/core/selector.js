@@ -3,7 +3,7 @@
  */
 (function($) {
 
-module("selectors");
+module("core - selectors");
 
 function isFocusable(selector, msg) {
 	ok($(selector).is(':focusable'), msg);

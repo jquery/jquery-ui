@@ -3,7 +3,7 @@
  */
 (function($) {
 
-module('jQuery extensions');
+module('core - jQuery extensions');
 
 test("attr - aria", function() {
 	expect(6);
