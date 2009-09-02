@@ -23,7 +23,7 @@
 			height = 100;
 		$.each($.easing, function(name, impl) {
 			// skip linera/jswing and any non functioning implementation
-			if (!$.isFunction(impl) || /linear|jswing/.test(name))
+			if (!$.isFunction(impl) || /jswing/.test(name))
 				return;
 			var graph = $("<div/>").addClass("graph").appendTo("#graphs");
 			var text = $("<div/>").text(++i + ". " + name).appendTo(graph);
@@ -31,7 +31,7 @@
 			var canvas = $("<canvas/>").appendTo(graph)[0]
 			canvas.width = width;
 			canvas.height = height;
-			var drawHeight = height * 0.75;
+			var drawHeight = height * 0.8;
 			var cradius = 10;
 			var ctx = canvas.getContext("2d");
 			ctx.fillStyle = "black";
@@ -49,19 +49,27 @@
 			
 			ctx.strokeStyle = "#555";
 			ctx.beginPath();
-			ctx.moveTo(0, drawHeight + .5);
-			ctx.lineTo(width, drawHeight + .5);
+			ctx.moveTo(width * 0.1, drawHeight + .5);
+			ctx.lineTo(width * 0.9, drawHeight + .5);
+			ctx.stroke();
+
+			ctx.strokeStyle = "#555";
+			ctx.beginPath();
+			ctx.moveTo(width * 0.1, drawHeight * .3 - .5);
+			ctx.lineTo(width * 0.9, drawHeight * .3 - .5);
 			ctx.stroke();
 			
 			ctx.strokeStyle = "white";
 			ctx.lineWidth = 2;
 			ctx.beginPath();
 			$.each(new Array(width), function(position) {
-				ctx.lineTo(position, drawHeight - position * impl(0, position, 0, 1, height) * 0.75);
+				var val = impl(0, position, 0, 1, height);
+				if (/linear|jswing/.test(name)) val = position / width;
+				ctx.lineTo(position * 0.8 + width * 0.1, drawHeight - drawHeight * val * 0.7);
 			});
 			ctx.stroke();
 			graph.click(function() {
-				$(canvas).animate({height: "hide"}, "slow", name).animate({"left": "0"}, 800).animate({height: "show"}, "slow", name);
+				$(canvas).animate({height: "hide"}, 2000, name).animate({"left": "0"}, 800).animate({height: "show"}, 2000, name);
 			});
 			
 			graph.width(width).height(height + text.height() + 10);
