@@ -60,8 +60,9 @@
 			ctx.stroke();
 			
 			ctx.strokeStyle = "white";
-			ctx.lineWidth = 2;
 			ctx.beginPath();
+			ctx.lineWidth = 2;
+			ctx.moveTo(width * 0.1, drawHeight);
 			$.each(new Array(width), function(position) {
 				var val = impl(0, position, 0, 1, height);
 				if (/linear|jswing/.test(name)) val = position / width;
