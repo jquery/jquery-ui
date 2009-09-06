@@ -309,7 +309,7 @@ $.widget = function(name, prototype) {
 					return self._getData(key);
 				}
 			})
-			.bind('remove', function() {
+			.bind('remove.' + name, function() {
 				return self.destroy();
 			});
 	};
