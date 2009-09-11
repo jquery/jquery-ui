@@ -6,7 +6,15 @@
 module("progressbar: options");
 
 test("{ value : 0 }, default", function() {
-	ok(false, "missing test - untested code is broken code.");
+	$("#progressbar").progressbar();
+	same( 0, $("#progressbar").progressbar("value") );
+});
+
+test("{ value : 5 }", function() {
+	$("#progressbar").progressbar({
+		value: 5
+	});
+	same( 5, $("#progressbar").progressbar("value") );
 });
 
 })(jQuery);

@@ -6,7 +6,12 @@
 module("progressbar: events");
 
 test("change", function() {
-	ok(false, "missing test - untested code is broken code.");
+	expect(1);
+	$("#progressbar").progressbar({
+		change: function() {
+			same( 5, $(this).progressbar("value") );
+		}
+	}).progressbar("value", 5);
 });
 
 })(jQuery);
