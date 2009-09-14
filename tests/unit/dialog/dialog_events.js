@@ -86,7 +86,7 @@ test("dragStop", function() {
 	expect(7);
 
 	el = $('<div></div>').dialog({
-		dragStart: function(ev, ui) {
+		dragStop: function(ev, ui) {
 			ok(true, 'dragging fires dragStop callback');
 			equals(this, el[0], "context of callback");
 			equals(ev.type, 'dialogdragstop', 'event type in callback');
