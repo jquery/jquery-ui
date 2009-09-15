@@ -19,9 +19,10 @@ test("accessibility", function() {
 	el.progressbar("value", 77);
 	equals(el.attr("aria-valuenow"), 77, "aria-valuenow");
 	el.progressbar("disable");
-	equals(el.attr("aria-disabled"), "true", "aria-disabled");
+	equals(el.attr("aria-disabled"), "true", "aria-disabled on");
 	el.progressbar("enable");
-	equals(el.attr("aria-disabled"), "false", "enabled");
+	// FAIL: for some reason IE6 returns a boolean false instead of the string
+	equals(el.attr("aria-disabled"), "false", "aria-disabled off");
 });
 
 })(jQuery);
