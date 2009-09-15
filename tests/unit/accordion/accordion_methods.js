@@ -130,7 +130,7 @@ test("activate, string expression", function() {
 	ac.accordion("activate", ":eq(1)");
 	state(ac, 0, 1, 0);
 	ac.accordion("activate", ":last");
-	state(ac, 0, 1, 1);
+	state(ac, 0, 0, 1);
 });
 //[ 0, 1, 1 ] result: [ 0, 0, 1 ]
 //[   0,   1,   1] result: [   0,   0,   1]
