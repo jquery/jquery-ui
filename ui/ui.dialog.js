@@ -432,7 +432,8 @@ $.widget("ui.dialog", {
 				self._createButtons(value);
 				break;
 			case "closeText":
-				self.uiDialogTitlebarCloseText.text(value);
+				// convert whatever was passed in o a string, for text() to not throw up
+				self.uiDialogTitlebarCloseText.text("" + value);
 				break;
 			case "dialogClass":
 				uiDialog
