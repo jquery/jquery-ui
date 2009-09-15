@@ -8,13 +8,17 @@ function testWidgetDefaults(widget, defaults) {
 	// ensure that all defualts have the correct value
 	test('defined defaults', function() {
 		$.each(defaults, function(key, val) {
+			if ($.isFunction(val)) {
+				ok(val !== undefined);
+				return;
+			}
 			same(pluginDefaults[key], val, key);
 		});
 	});
 	
 	// ensure that all defaults were tested
 	test('tested defaults', function() {
-		$.each(pluginDefaults, function(key) {
+		$.each(pluginDefaults, function(key, val) {
 			ok(key in defaults, key);
 		});
 	});
@@ -25,6 +29,10 @@ function testWidgetDefaults(widget, defaults) {
 			instance = el.data(widget);
 		
 		$.each(defaults, function(key, val) {
+			if ($.isFunction(val)) {
+				ok(val !== undefined);
+				return;
+			}
 			same(instance.options[key], val, key);
 		});
 		el.remove();
