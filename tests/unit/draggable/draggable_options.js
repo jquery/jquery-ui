@@ -93,7 +93,7 @@ test("{ axis: ? }, unexpected", function() {
 test("{ cancel: ':input,option' }, default", function() {
 	equals(draggable_defaults.cancel, ":input,option");
 
-	$('<div id="draggable-option-cancel-default"><input type="text"></div>').appendTo('body');
+	$('<div id="draggable-option-cancel-default"><input type="text"></div>').appendTo('#main');
 
 	el = $("#draggable-option-cancel-default").draggable({ cancel: ":input,option" });
 	drag("#draggable-option-cancel-default", 50, 50);
