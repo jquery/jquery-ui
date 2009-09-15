@@ -1,3 +1,5 @@
+// FIXME remove this once updated to jQuery core 1.3.3
+var hasDuplicate = false;
 
 function testWidgetDefaults(widget, defaults) {
 	var pluginDefaults = $.extend({},
