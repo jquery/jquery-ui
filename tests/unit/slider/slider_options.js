@@ -3,6 +3,8 @@
  */
 (function($) {
 
+var el, options;
+
 function handle() {
 	return el.find(".ui-slider-handle");
 }

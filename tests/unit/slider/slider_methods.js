@@ -20,7 +20,7 @@ test("init", function() {
 	$('<div></div>').slider().slider("foo").remove();
 	ok(true, 'arbitrary method called after init');
 
-	el = $('<div></div>').slider();
+	var el = $('<div></div>').slider();
 	var foo = el.data("foo.slider");
 	el.remove();
 	ok(true, 'arbitrary option getter after init');
@@ -44,7 +44,7 @@ test("destroy", function() {
 	$('<div></div>').slider().slider("destroy").slider("foo").remove();
 	ok(true, 'arbitrary method called after destroy');
 
-	el = $('<div></div>').slider();
+	var el = $('<div></div>').slider();
 	var foo = el.slider("destroy").data("foo.slider");
 	el.remove();
 	ok(true, 'arbitrary option getter (.data) after destroy');
