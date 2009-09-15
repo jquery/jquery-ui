@@ -2,34 +2,26 @@
  * accordion_core.js
  */
 
+
+(function($) {
+
 jQuery.ui.accordion.defaults.animated = false;
 
 function state(accordion) {
 	var args = $.makeArray(arguments).slice(1);
+	var result = [];
 	$.each(args, function(i, n) {
-		equals(accordion.find(".ui-accordion-content").eq(i).is(":visible"), n);
+		result.push( accordion.find(".ui-accordion-content").eq(i).is(":visible") ? 1 : 0 );
 	});
+	same(args, result)
 }
-
-function state2(accordion) {
-	var args = $.makeArray(arguments).slice(1);
-	$.each(args, function(i, n) {
-		equals(accordion.find("div").eq(i).is(":visible"), n);
-	});
-}
-
-$.fn.triggerEvent = function(type, target) {
-	return this.triggerHandler(type, [jQuery.event.fix({ type: type, target: target })]);
-};
-
-(function($) {
 
 module("accordion: core");
 
 test("handle click on header-descendant", function() {
 	var ac = $('#navigation').accordion({ autoHeight: false });
-	ac.triggerEvent("click", $('#navigation span:contains(Bass)')[0]);
-	state2(ac, 0, 1, 0);
+	$('#navigation h2:eq(1) a').trigger("click");
+	state(ac, 0, 1, 0);
 });
 
 test("accessibility", function () {

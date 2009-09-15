@@ -19,14 +19,6 @@ $.widget("ui.accordion", {
 		var o = this.options, self = this;
 		this.running = 0;
 
-		// if the user set the alwaysOpen option on init
-		// then we need to set the collapsible option
-		// if they set both on init, collapsible will take priority
-		if (o.collapsible == $.ui.accordion.defaults.collapsible &&
-			o.alwaysOpen != $.ui.accordion.defaults.alwaysOpen) {
-			o.collapsible = !o.alwaysOpen;
-		}
-
 		this.element.addClass("ui-accordion ui-widget ui-helper-reset");
 		
 		// in lack of child-selectors in CSS we need to mark top-LIs in a UL-accordion for some IE-fix
@@ -148,9 +140,6 @@ $.widget("ui.accordion", {
 	},
 	
 	_setData: function(key, value) {
-		// alwaysOpen is deprecated
-		if(key == 'alwaysOpen'){ key = 'collapsible'; value = !value; }
-		
 		$.widget.prototype._setData.apply(this, arguments);
 			
 		if (key == "active") {
@@ -231,6 +220,7 @@ $.widget("ui.accordion", {
 	},
 
 	activate: function(index) {
+		// TODO this gets called on init, changing the option without an explicit call for that
 		this.options.active = index;
 		// call clickHandler with custom event
 		var active = this._findActive(index)[0];
@@ -249,13 +239,17 @@ $.widget("ui.accordion", {
 				: this.headers.filter(":eq(0)");
 	},
 
+	// TODO isn't event.target enough? why the seperate target argument?
 	_clickHandler: function(event, target) {
 
 		var o = this.options;
-		if (o.disabled) { return; }
+		if (o.disabled)
+			return;
 
 		// called only when using activate(false) to close all parts programmatically
-		if (!event.target && o.collapsible) {
+		if (!event.target) {
+			if (!o.collapsible)
+				return;
 			this.active.removeClass("ui-state-active ui-corner-top").addClass("ui-state-default ui-corner-all")
 				.find(".ui-icon").removeClass(o.icons.headerSelected).addClass(o.icons.header);
 			this.active.next().addClass('ui-accordion-content-active');
@@ -276,7 +270,9 @@ $.widget("ui.accordion", {
 		var clicked = $(event.currentTarget || target);
 		var clickedIsActive = clicked[0] == this.active[0];
 		
-		o.active = $('.ui-accordion-header', this.element).index(clicked);
+		// TODO the option is changed, is that correct?
+		// TODO if it is correct, shouldn't that happen after determining that the click is valid?
+		o.active = o.collapsible && clickedIsActive ? false : $('.ui-accordion-header', this.element).index(clicked);
 
 		// if animations are still active, or the active header is the target, ignore click
 		if (this.running || (!o.collapsible && clickedIsActive)) {
@@ -394,6 +390,7 @@ $.widget("ui.accordion", {
 
 		}
 
+		// TODO assert that the blur and focus triggers are really necessary, remove otherwise
 		toHide.prev().attr('aria-expanded','false').attr("tabIndex", "-1").blur();
 		toShow.prev().attr('aria-expanded','true').attr("tabIndex", "0").focus();
 
@@ -425,8 +422,7 @@ $.widget("ui.accordion", {
 $.extend($.ui.accordion, {
 	version: "@VERSION",
 	defaults: {
-		active: null,
-		alwaysOpen: true, //deprecated, use collapsible
+		active: 0,
 		animated: 'slide',
 		autoHeight: true,
 		clearStyle: false,

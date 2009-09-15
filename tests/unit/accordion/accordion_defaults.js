@@ -3,7 +3,7 @@
  */
 
 var accordion_defaults = {
-	active: null,
+	active: 0,
 	animated: false,
 	autoHeight: true,
 	clearStyle: false,
@@ -14,9 +14,7 @@ var accordion_defaults = {
 	header: "> li > :first-child,> :not(li):even",
 	icons: { "header": "ui-icon-triangle-1-e", "headerSelected": "ui-icon-triangle-1-s" },
 	navigation: false,
-	navigationFilter: function() {
-      return this.href.toLowerCase() == location.href.toLowerCase();
-    }
+	navigationFilter: function() {}
 };
 
 commonWidgetTests('accordion', { defaults: accordion_defaults });

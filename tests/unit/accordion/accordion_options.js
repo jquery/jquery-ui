@@ -3,38 +3,57 @@
  */
 (function($) {
 
+function state(accordion) {
+	var expected = $.makeArray(arguments).slice(1);
+	var actual = [];
+	$.each(expected, function(i, n) {
+		actual.push( accordion.find(".ui-accordion-content").eq(i).is(":visible") ? 1 : 0 );
+	});
+	same(actual, expected)
+}
+
+
 module("accordion: options");
 
 test("{ active: first child }, default", function() {
-	$("#list1").accordion();
-	equals( $("#list1").accordion('option', 'active'), 0);
+	var ac = $("#list1").accordion();
+	equals( ac.accordion('option', 'active'), 0);
+	state(ac, 1, 0, 0)
 });
 
 test("{ active: Selector }", function() {
-	ok(false, 'missing test - untested code is broken code');
+	var ac = $("#list1").accordion({
+		active: "a:last"
+	});
+	state(ac, 0, 0, 1);
+	ac.accordion('option', 'active', "a:eq(1)");
+	state(ac, 0, 1, 0);
 });
 
 test("{ active: Element }", function() {
-	ok(false, 'missing test - untested code is broken code');
+	var ac = $("#list1").accordion({
+		active: $("#list1 a:last")[0]
+	});
+	state(ac, 0, 0, 1);
+	ac.accordion('option', 'active', $("#list1 a:eq(1)")[0]);
+	state(ac, 0, 1, 0);
 });
 
 test("{ active: jQuery Object }", function() {
-	ok(false, 'missing test - untested code is broken code');
-});
-
-test("{ active: true }", function() {
-	$("#list1").accordion({
-		active: true,
-		collapsible: false
+	var ac = $("#list1").accordion({
+		active: $("#list1 a:last")
 	});
-	equals( $("#list1 .ui-accordion-header.ui-state-active").size(), 1, "one header selected" );
+	state(ac, 0, 0, 1);
+	ac.accordion('option', 'active', $("#list1 a:eq(1)"));
+	state(ac, 0, 1, 0);
 });
 
 test("{ active: false }", function() {
-	$("#list1").accordion({
+	var ac = $("#list1").accordion({
 		active: false,
 		collapsible: true
 	});
+	state(ac, 0, 0, 0);
 	equals( $("#list1 .ui-accordion-header.ui-state-active").size(), 0, "no headers selected" );
 	equals( $("#list1").accordion('option', 'active'), false);
 });
@@ -56,18 +75,6 @@ test("{ active: Number }", function() {
 	equals( $("#list1").accordion('option', 'active'), 0);
 });
 
-test("{ animated: false }, default", function() {
-	ok(false, 'missing test - untested code is broken code');
-});
-
-test("{ animated: true }", function() {
-	ok(false, 'missing test - untested code is broken code');
-});
-
-test("{ animated: String }", function() {
-	ok(false, 'missing test - untested code is broken code');
-});
-
 test("{ autoHeight: true }, default", function() {
 	$('#navigation').accordion({ autoHeight: true });
 	equals( $('#navigation > li:eq(0) > ul').height(), 126 );
@@ -82,33 +89,20 @@ test("{ autoHeight: false }", function() {
 	equals( $('#navigation > li:eq(2) > ul').height(), 54 );
 });
 
-test("{ clearStyle: false }, default", function() {
-	ok(false, 'missing test - untested code is broken code');
-});
-
-test("{ clearStyle: true }", function() {
-	ok(false, 'missing test - untested code is broken code');
-});
-
 test("{ collapsible: false }, default", function() {
-	ok(false, 'missing test - untested code is broken code');
+	var ac = $("#list1").accordion();
+	ac.accordion("activate", false);
+	state(ac, 1, 0, 0);
 });
 
 test("{ collapsible: true }", function() {
-	$("#list1").accordion({
+	var ac = $("#list1").accordion({
 		active: 1,
 		collapsible: true
 	});
-	$('.ui-accordion-header:eq(1)', '#list1').click();
+	var header = $('#list1 .ui-accordion-header:eq(1)').click();
 	equals( $("#list1").accordion('option', 'active'), false);
-});
-
-test("{ event: 'click' }, default", function() {
-	ok(false, 'missing test - untested code is broken code');
-});
-
-test("{ event: 'mouseover' }", function() {
-	ok(false, 'missing test - untested code is broken code');
+	state(ac, 0, 0, 0);
 });
 
 test("{ fillSpace: false }, default", function() {
@@ -128,23 +122,8 @@ test("{ fillSpace: true }", function() {
 });
 
 test("{ header: '> li > :first-child,> :not(li):even' }, default", function() {
-	ok(false, 'missing test - untested code is broken code');
-});
-
-test("{ header: Selector }", function() {
-	ok(false, 'missing test - untested code is broken code');
-});
-
-test("{ header: jQuery Object }", function() {
-	ok(false, 'missing test - untested code is broken code');
-});
-
-test("{ icons: { 'header': 'ui-icon-triangle-1-e', 'headerSelected': 'ui-icon-triangle-1-s' } }, default", function() {
-	ok(false, 'missing test - untested code is broken code');
-});
-
-test("{ icons: { 'header': 'ui-icon-foo', 'headerSelected': 'ui-icon-bar' } }", function() {
-	ok(false, 'missing test - untested code is broken code');
+	state($("#list1").accordion(), 1, 0, 0);
+	state($("#navigation").accordion(), 1, 0, 0);
 });
 
 test("{ icons: false }", function() {
