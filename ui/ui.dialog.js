@@ -465,7 +465,7 @@ $.widget("ui.dialog", {
 					uiDialog.resizable('option', 'handles', value));
 
 				// currently non-resizable, becoming resizable
-				(isResizable || self._makeResizable(value));
+				(isResizable || (value !== false && self._makeResizable(value)));
 				break;
 			case "title":
 				$(".ui-dialog-title", self.uiDialogTitlebar).html(value || '&nbsp;');
