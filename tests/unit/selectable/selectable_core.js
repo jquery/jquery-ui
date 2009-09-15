@@ -12,18 +12,5 @@ var drag = function(dx, dy) {
 	pos.clientY += dy;
 	$(document).simulate("mousemove", pos);
 	$(document).simulate("mouseup", pos);
-}
+};
 
-var border = function(el, side) { return parseInt(el.css('border-' + side + '-width')); }
-
-var margin = function(el, side) { return parseInt(el.css('margin-' + side)); }
-
-(function($) {
-
-module("selectable: core");
-
-test("testname", function() {
-	ok(false, "missing test - untested code is broken code.");
-});
-
-})(jQuery);
