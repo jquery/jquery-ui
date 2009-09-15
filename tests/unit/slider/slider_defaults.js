@@ -4,6 +4,7 @@
 
 var slider_defaults = {
 	animate: false,
+	cancel: function() {},
 	delay: 0,
 	disabled: false,
 	distance: 0,
