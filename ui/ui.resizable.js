@@ -531,7 +531,7 @@ $.ui.plugin.add("resizable", "alsoResize", {
 
 		var self = $(this).data("resizable"), o = self.options;
 
-		_store = function(exp) {
+		var _store = function(exp) {
 			$(exp).each(function() {
 				$(this).data("resizable-alsoresize", {
 					width: parseInt($(this).width(), 10), height: parseInt($(this).height(), 10),
