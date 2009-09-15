@@ -79,8 +79,10 @@ $.widget("ui.progressbar", {
 	},
 
 	_value: function() {
-
 		var val = this.options.value;
+		// normalize invalid value
+		if (typeof val != "number")
+			val = 0;
 		if (val < this._valueMin()) val = this._valueMin();
 		if (val > this._valueMax()) val = this._valueMax();
 
