@@ -3,7 +3,11 @@
  */
 (function($) {
 
-module("dialog: methods");
+module("dialog: methods", {
+	teardown: function() {
+		$("body>.ui-dialog").remove();
+	}
+});
 
 test("init", function() {
 	expect(7);
