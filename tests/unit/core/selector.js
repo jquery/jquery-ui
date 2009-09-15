@@ -6,19 +6,19 @@
 module("core - selectors");
 
 function isFocusable(selector, msg) {
-	ok($(selector).is(':focusable'), msg);
+	ok($(selector).is(':focusable'), msg + " - selector " + selector + " is focusable");
 }
 
 function isNotFocusable(selector, msg) {
-	ok($(selector).length && !$(selector).is(':focusable'), msg);
+	ok($(selector).length && !$(selector).is(':focusable'), msg + " - selector " + selector + " is not focusable");
 }
 
 function isTabbable(selector, msg) {
-	ok($(selector).is(':tabbable'), msg);
+	ok($(selector).is(':tabbable'), msg + " - selector " + selector + " is tabbable");
 }
 
 function isNotTabbable(selector, msg) {
-	ok($(selector).length && !$(selector).is(':tabbable'), msg);
+	ok($(selector).length && !$(selector).is(':tabbable'), msg + " - selector " + selector + " is not tabbable");
 }
 
 test("data", function() {
@@ -93,6 +93,7 @@ test("focusable - visible, enabled elements", function() {
 	isFocusable('#visibleAncestor-object', 'object');
 	isFocusable('#visibleAncestor-anchorWithHref', 'anchor with href');
 	isNotFocusable('#visibleAncestor-anchorWithoutHref', 'anchor without href');
+	// fails: $("map").is(":visible") and $("map").is(":hidden") both return true
 	isFocusable('#visibleAncestor-areaWithHref', 'area with href');
 	isNotFocusable('#visibleAncestor-areaWithoutHref', 'area without href');
 	isNotFocusable('#visibleAncestor-span', 'span');
@@ -131,7 +132,7 @@ test("focusable - hidden styles", function() {
 	isNotFocusable('#visibilityHidden-span', 'span with tabindex, visibility: hidden');
 });
 
-test("focusable -  natively tabbable with various tabindex", function() {
+test("focusable -  natively focusable with various tabindex", function() {
 	expect(4);
 	
 	isFocusable('#inputTabindex0', 'input, tabindex 0');
@@ -140,7 +141,7 @@ test("focusable -  natively tabbable with various tabindex", function() {
 	isFocusable('#inputTabindex-50', 'input, tabindex -50');
 });
 
-test("focusable -  not natively tabbable with various tabindex", function() {
+test("focusable -  not natively focusable with various tabindex", function() {
 	expect(4);
 	
 	isFocusable('#spanTabindex0', 'span, tabindex 0');
@@ -173,6 +174,7 @@ test("tabbable - visible, enabled elements", function() {
 	isTabbable('#visibleAncestor-object', 'object');
 	isTabbable('#visibleAncestor-anchorWithHref', 'anchor with href');
 	isNotTabbable('#visibleAncestor-anchorWithoutHref', 'anchor without href');
+	// fails: $("map").is(":visible") and $("map").is(":hidden") both return true
 	isTabbable('#visibleAncestor-areaWithHref', 'area with href');
 	isNotTabbable('#visibleAncestor-areaWithoutHref', 'area without href');
 	isNotTabbable('#visibleAncestor-span', 'span');
@@ -201,10 +203,12 @@ test("Tabbable - hidden styles", function() {
 	isNotTabbable('#displayNoneAncestor-input', 'input, display: none parent');
 	isNotTabbable('#displayNoneAncestor-span', 'span with tabindex, display: none parent');
 	
+	// fails: element hidden by parent-visibility-hidden is still visible according to :visible
 	isNotTabbable('#visibilityHiddenAncestor-input', 'input, visibility: hidden parent');
 	isNotTabbable('#visibilityHiddenAncestor-span', 'span with tabindex, visibility: hidden parent');
 	
 	isNotTabbable('#displayNone-input', 'input, display: none');
+	// fails: element hidden by parent-visibility-hidden is still visible according to :visible
 	isNotTabbable('#visibilityHidden-input', 'input, visibility: hidden');
 	
 	isNotTabbable('#displayNone-span', 'span with tabindex, display: none');
