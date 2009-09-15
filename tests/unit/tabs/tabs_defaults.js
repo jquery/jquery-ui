@@ -23,4 +23,5 @@ var tabs_defaults = {
 	tabTemplate: '<li><a href="#{href}"><span>#{label}</span></a></li>'
 };
 
+// FAIL: falsy values break the cookie option
 commonWidgetTests('tabs', { defaults: tabs_defaults });
