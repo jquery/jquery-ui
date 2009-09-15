@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<title>Dialog Visual Test : Dialog ticket #4826</title>
+	<link rel="stylesheet" href="../visual.css" type="text/css" />
+	<link rel="stylesheet" href="../../../themes/base/ui.all.css" type="text/css">
+	<script type="text/javascript" src="../../../jquery-1.3.2.js"></script>
+	<script type="text/javascript" src="../../../ui/ui.core.js"></script>
+	<script type="text/javascript" src="../../../ui/ui.draggable.js"></script>
+	<script type="text/javascript" src="../../../ui/ui.position.js"></script>
+	<script type="text/javascript" src="../../../ui/ui.resizable.js"></script>
+	<script type="text/javascript" src="../../../ui/ui.stackfix.js"></script>
+	<script type="text/javascript" src="../../../ui/ui.dialog.js"></script>
+	<script type="text/javascript">
+	$(function() {
+		
+		$('#dialog').dialog({ resizable: false });
+		
+		$('#handle').click(function() {
+		  $('#dialog')
+		  	.dialog('option', {
+				resizable: false
+			})
+			.dialog('open');
+			
+		  return false;
+		});
+		
+	});
+	</script>
+</head>
+<body>
+
+<h1 class="ui-widget-header"><a href="http://dev.jqueryui.com/ticket/4826">#4826 - Setting resizable false toggles resizable on dialog</a></h1>
+
+<button id="handle">Click me!</button>
+<div id="dialog" title="Dialog Title">
+  <p id="msg">I should <strong>NEVER</strong> be resizable!</p>
+</div>
+
+</body>
+</html>
