@@ -872,7 +872,7 @@ $.extend(Datepicker.prototype, {
 		if (altField) { // update alternate field too
 			var altFormat = this._get(inst, 'altFormat') || this._get(inst, 'dateFormat');
 			var date = this._getDate(inst);
-			dateStr = this.formatDate(altFormat, date, this._getFormatConfig(inst));
+			var dateStr = this.formatDate(altFormat, date, this._getFormatConfig(inst));
 			$(altField).each(function() { $(this).val(dateStr); });
 		}
 	},
@@ -1192,7 +1192,8 @@ $.extend(Datepicker.prototype, {
 	_setDateFromField: function(inst) {
 		var dateFormat = this._get(inst, 'dateFormat');
 		var dates = inst.input ? inst.input.val() : null;
-		var date = defaultDate = this._getDefaultDate(inst);
+		var date, defaultDate;
+		date = defaultDate = this._getDefaultDate(inst);
 		var settings = this._getFormatConfig(inst);
 		try {
 			date = this.parseDate(dateFormat, dates, settings) || defaultDate;
