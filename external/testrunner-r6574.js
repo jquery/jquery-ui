@@ -7,7 +7,7 @@
  * Dual licensed under the MIT (MIT-LICENSE.txt)
  * and GPL (GPL-LICENSE.txt) licenses.
  *
- * $Id: testrunner.js 6416 2009-07-10 16:08:27Z joern.zaefferer $
+ * $Id: testrunner.js 6574 2009-09-15 20:30:29Z joern.zaefferer $
  */
 
 (function($) {
@@ -206,13 +206,8 @@ var equiv = function () {
 
 }();
 
-var GETParams = $.map( location.search.slice(1).split('&'), decodeURIComponent ),
-	ngindex = $.inArray("noglobals", GETParams),
-	noglobals = ngindex !== -1;
+var GETParams = $.map( location.search.slice(1).split('&'), decodeURIComponent );
 
-if( noglobals )
-	GETParams.splice( ngindex, 1 );
-	
 var config = {
 	stats: {
 		all: 0,
@@ -359,9 +354,8 @@ var pollution;
 function saveGlobal(){
 	pollution = [ ];
 	
-	if( noglobals )
-		for( var key in window )
-			pollution.push(key);
+	for( var key in window )
+		pollution.push(key);
 }
 function checkPollution( name ){
 	var old = pollution;
@@ -415,8 +409,8 @@ function test(name, callback) {
 	});
 	synchronize(function() {
 		try {
-			checkPollution();
 			lifecycle.teardown.call(testEnvironment);
+			checkPollution();
 		} catch(e) {
 			QUnit.ok( false, "Teardown failed on " + name + ": " + e.message );
 		}
