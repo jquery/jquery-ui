@@ -69,7 +69,6 @@ test("enable", function() {
 	var expected = $('#list1').accordion(),
 		actual = expected.accordion('enable');
 	equals(actual, expected, 'enable is chainable');
-	
 	state(expected, 1, 0, 0)
 });
 
@@ -119,7 +118,7 @@ test("activate, boolean and numeric, collapsible:true", function() {
 test("activate, boolean, collapsible: false", function() {
 	var ac = $('#list1').accordion().accordion("activate", 2);
 	state(ac, 0, 0, 1);
-	ac.accordion("activate", -1);
+	ac.accordion("activate", false);
 	state(ac, 0, 0, 1);
 });
 
