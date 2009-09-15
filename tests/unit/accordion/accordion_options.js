@@ -128,7 +128,7 @@ test("{ header: '> li > :first-child,> :not(li):even' }, default", function() {
 
 test("{ icons: false }", function() {
 	function icons(on) {
-		same($("#list1 span.ui-icon:visible").length, on ? 3 : 0);
+		same($("#list1 span.ui-icon").length, on ? 3 : 0);
 		same( $("#list1").hasClass("ui-accordion-icons"), on );
 	}
 	$("#list1").accordion();
