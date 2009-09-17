@@ -382,6 +382,8 @@ $.widget("ui.dialog", {
 		// deep extending converts arrays to objects in jQuery <= 1.3.2 :-(
 //		if (typeof position == 'string' || $.isArray(position)) {
 //			myAt = $.isArray(position) ? position : position.split(' ');
+		if (!position || (typeof positon != "string" && typeof positon != "object"))
+			return
 		if (typeof position == 'string' || '0' in position) {
 			myAt = position.split ? position.split(' ') : [position[0], position[1]];
 			if (myAt.length == 1) {
@@ -468,7 +470,8 @@ $.widget("ui.dialog", {
 				(isResizable || (value !== false && self._makeResizable(value)));
 				break;
 			case "title":
-				$(".ui-dialog-title", self.uiDialogTitlebar).html(value || '&nbsp;');
+				// convert whatever was passed in o a string, for html() to not throw up
+				$(".ui-dialog-title", self.uiDialogTitlebar).html("" + (value || '&nbsp;'));
 				break;
 			case "width":
 				resize = true;
