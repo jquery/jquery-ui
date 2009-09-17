@@ -67,6 +67,8 @@ function testSettingOptions(widget, options) {
 				same(instance.options[option], val, option + ': ' + type);
 			});
 		});
+		
+		el.remove();
 	});
 }
 
