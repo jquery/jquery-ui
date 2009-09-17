@@ -8,7 +8,7 @@
  * http://docs.jquery.com/UI/Effects/Fold
  *
  * Depends:
- *	effects.core.js
+ *	jquery.effects.core.js
  */
 (function($) {
 

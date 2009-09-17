@@ -8,7 +8,7 @@
  * http://docs.jquery.com/UI/Effects/Clip
  *
  * Depends:
- *	effects.core.js
+ *	jquery.effects.core.js
  */
 (function($) {
 

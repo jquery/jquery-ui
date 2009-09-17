@@ -8,8 +8,8 @@
  * http://docs.jquery.com/UI/Droppables
  *
  * Depends:
- *	ui.core.js
- *	ui.draggable.js
+ *	jquery.ui.core.js
+ *	jquery.ui.draggable.js
  */
 (function($) {
 

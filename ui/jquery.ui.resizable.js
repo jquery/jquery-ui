@@ -8,7 +8,7 @@
  * http://docs.jquery.com/UI/Resizables
  *
  * Depends:
- *	ui.core.js
+ *	jquery.ui.core.js
  */
 (function($) {
 

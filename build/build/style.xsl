@@ -105,9 +105,9 @@
 				<div id="docs-overview-sidebar">
 					<h4>Dependencies:</h4>
 					<ul>							
-						<li><a href="#">ui.core.js</a></li>
-						<li><a href="#">ui.draggable.js <span>(Optional)</span></a></li>
-						<li><a href="#">ui.resizable.js <span>(Optional)</span></a></li>
+						<li><a href="#">jquery.ui.core.js</a></li>
+						<li><a href="#">jquery.ui.draggable.js <span>(Optional)</span></a></li>
+						<li><a href="#">jquery.ui.resizable.js <span>(Optional)</span></a></li>
 					</ul>
 				</div>
 				<div id="docs-overview-main">

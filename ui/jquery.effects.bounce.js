@@ -8,7 +8,7 @@
  * http://docs.jquery.com/UI/Effects/Bounce
  *
  * Depends:
- *	effects.core.js
+ *	jquery.effects.core.js
  */
 (function($) {
 

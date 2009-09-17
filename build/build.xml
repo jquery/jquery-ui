@@ -33,7 +33,7 @@
 	<property name="concatenated" value="jquery-ui" />
 	<property name="concatenated.i18n" value="jquery-ui-i18n" />
 
-	<property name="core.files" value="ui.core.js, ui.draggable.js, ui.droppable.js, ui.resizable.js, ui.selectable.js, ui.sortable.js, effects.core.js" />
+	<property name="core.files" value="jquery.ui.core.js, jquery.ui.draggable.js, jquery.ui.droppable.js, jquery.ui.resizable.js, jquery.ui.selectable.js, jquery.ui.sortable.js, jquery.effects.core.js" />
 
 	<property description="YUI Compressor" name="yui-jar" value="${build.dir}/yuicompressor-2.4.2.jar" />
 	
