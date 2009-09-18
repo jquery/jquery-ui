@@ -93,44 +93,123 @@ $.effects = {
 
 	//Base function to animate from one class to another in a seamless transition
 	animateClass: function(value, duration, easing, callback) {
-
-		var cb = (typeof easing == "function" ? easing : (callback ? callback : null));
-		var ea = (typeof easing == "string" ? easing : null);
+		if ($.isFunction(easing)) {
+			callback = easing;
+			easing = null;
+		}
 
 		return this.each(function() {
 
-			var offset = {}; var that = $(this); var oldStyleAttr = that.attr("style") || '';
-			if(typeof oldStyleAttr == 'object') oldStyleAttr = oldStyleAttr["cssText"]; /* Stupidly in IE, style is a object.. */
-			if(value.toggle) { that.hasClass(value.toggle) ? value.remove = value.toggle : value.add = value.toggle; }
+			var that = $(this),
+				originalStyleAttr = that.attr('style') || ' ',
+				originalStyle = filterStyles(getElementStyles.call(this)),
+				newStyle;
 
-			//Let's get a style offset
-			var oldStyle = $.extend({}, (document.defaultView ? document.defaultView.getComputedStyle(this,null) : this.currentStyle));
-			if(value.add) that.addClass(value.add); if(value.remove) that.removeClass(value.remove);
-			var newStyle = $.extend({}, (document.defaultView ? document.defaultView.getComputedStyle(this,null) : this.currentStyle));
-			if(value.add) that.removeClass(value.add); if(value.remove) that.addClass(value.remove);
-
-			// The main function to form the object for animation
-			for(var n in newStyle) {
-				if( typeof newStyle[n] != "function" && newStyle[n] /* No functions and null properties */
-				&& n.indexOf("Moz") == -1 && n.indexOf("length") == -1 /* No mozilla spezific render properties. */
-				&& n.indexOf("scrollbar") == -1 /* No scrollbar properties - causes problems in IE */
-				&& newStyle[n] != oldStyle[n] /* Only values that have changed are used for the animation */
-				&& (n.match(/color/i) || (!n.match(/color/i) && !isNaN(parseInt(newStyle[n],10)))) /* Only things that can be parsed to integers or colors */
-				&& (oldStyle.position != "static" || (oldStyle.position == "static" && !n.match(/left|top|bottom|right/))) /* No need for positions when dealing with static positions */
-				) offset[n] = newStyle[n];
-			}
-
-			that.animate(offset, duration, ea, function() { // Animate the newly constructed offset object
-				// Change style attribute back to original. For stupid IE, we need to clear the damn object.
-				if(typeof $(this).attr("style") == 'object') { $(this).attr("style")["cssText"] = ""; $(this).attr("style")["cssText"] = oldStyleAttr; } else $(this).attr("style", oldStyleAttr);
-				if(value.add) $(this).addClass(value.add); if(value.remove) $(this).removeClass(value.remove);
-				if(cb) cb.apply(this, arguments);
+			$.each(classAnimationActions, function(action) {
+				if (value[action]) {
+					that[action + 'Class'](value[action]);
+				}
+			});
+			newStyle = filterStyles(getElementStyles.call(this));
+			$.each(classAnimationActions, function(action, reverse) {
+				if (value[action]) {
+					that[reverse + 'Class'](value[action]);
+				}
 			});
 
+			that.animate(styleDifference(originalStyle, newStyle), duration, easing, function() {
+				$.each(classAnimationActions, function(action) {
+					if (value[action]) { that[action + 'Class'](value[action]); }
+				});
+				// work around bug in IE by clearing the cssText before setting it
+				if (typeof that.attr('style') == 'object') {
+					that.attr('style').cssText = '';
+					that.attr('style').cssText = originalStyleAttr;
+				} else {
+					that.attr('style', originalStyleAttr);
+				}
+				if (callback) { callback.apply(this, arguments); }
+			});
 		});
 	}
 };
 
+// start class animations
+
+var classAnimationActions = {
+	add: 'remove',
+	remove: 'add',
+	toggle: 'toggle'
+};
+
+function getElementStyles() {
+	var style = document.defaultView
+			? document.defaultView.getComputedStyle(this, null)
+			: this.currentStyle,
+		newStyle = {},
+		key,
+		camelCase;
+
+	// webkit enumerates style porperties
+	if (style && style.length && style[0] && style[style[0]]) {
+		var len = style.length;
+		while (len--) {
+			key = style[len];
+			if (typeof style[key] == 'string') {
+				camelCase = key.replace(/\-(\w)/g, function(all, letter){
+					return letter.toUpperCase();
+				});
+				newStyle[camelCase] = style[key];
+			}
+		}
+	} else {
+		for (key in style) {
+			if (typeof style[key] === 'string') {
+				newStyle[key] = style[key];
+			}
+		}
+	}
+	
+	return newStyle;
+}
+
+function filterStyles(styles) {
+	var name, value;
+	for (name in styles) {
+		value = styles[name];
+		if (
+			// ignore null and undefined values
+			value == null ||
+			// ignore functions (when does this occur?)
+			$.isFunction(value) ||
+			// ignore Mozilla specific styles (Moz and length)
+			// ignore scrollbars (break in IE)
+			(/(Moz)|(length)|(scrollbar)/).test(name) ||
+
+			// only colors or values that can be converted to numbers
+			(!(/color/i).test(name) && isNaN(parseFloat(value)))
+		) {
+			delete styles[name];
+		}
+	}
+	
+	return styles;
+}
+
+function styleDifference(oldStyle, newStyle) {
+	var diff = {},
+		name;
+
+	for (name in newStyle) {
+		if (oldStyle[name] != newStyle[name]) {
+			diff[name] = newStyle[name];
+		}
+	}
+
+	return diff;
+}
+
+// end class animations
 
 function _normalizeArguments(effect, options, speed, callback) {
 	// shift params for method overloading
