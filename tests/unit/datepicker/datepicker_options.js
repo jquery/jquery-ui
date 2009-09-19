@@ -4,7 +4,12 @@
 
 (function($) {
 
-module("datepicker: options");
+module("datepicker: options", {
+	teardown: function() {
+		stop();
+		setTimeout(start, 13);
+	}
+});
 
 test('setDefaults', function() {
 	var inp = init('#inp');

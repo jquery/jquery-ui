@@ -3,7 +3,12 @@
  */
 (function($) {
 
-module("datepicker: events");
+module("datepicker: events", {
+	teardown: function() {
+		stop();
+		setTimeout(start, 13);
+	}
+});
 
 var selectedThis = null;
 var selectedDate = null;

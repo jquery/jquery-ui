@@ -40,7 +40,12 @@ var PROP_NAME = 'datepicker';
 
 (function($) {
 
-module("datepicker: core");
+module("datepicker: core", {
+	teardown: function() {
+		stop();
+		setTimeout(start, 13);
+	}
+});
 
 test('baseStructure', function() {
 	var inp = init('#inp');
