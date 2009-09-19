@@ -29,6 +29,10 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 				+ " ui-widget"
 				+ " ui-widget-content"
 				+ " ui-corner-all");
+		
+		if (o.disabled) {
+			this.element.addClass('ui-slider-disabled ui-disabled');
+		}
 
 		this.range = $([]);
 
@@ -439,8 +443,10 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 					this.handles.filter(".ui-state-focus").blur();
 					this.handles.removeClass("ui-state-hover");
 					this.handles.attr("disabled", "disabled");
+					this.element.addClass("ui-disabled");
 				} else {
 					this.handles.removeAttr("disabled");
+					this.element.removeClass("ui-disabled");
 				}
 			case 'orientation':
 
