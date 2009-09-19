@@ -72,7 +72,7 @@ test("enable", function() {
 	el = $('<div></div>').dialog({ disabled: true });
 	el.dialog('enable');
 	equals(el.dialog('option', 'disabled'), false, 'enable method sets disabled option to false');
-	ok(!el.parents('.ui-dialog').hasClass('ui-dialog-disabled'), 'enable method removes ui-dialog-disabled class from ui-dialog element');
+	ok(!dlg().hasClass('ui-dialog-disabled'), 'enable method removes ui-dialog-disabled class from ui-dialog element');
 });
 
 test("disable", function() {
@@ -83,14 +83,18 @@ test("disable", function() {
 	el = $('<div></div>').dialog({ disabled: false });
 	el.dialog('disable');
 	equals(el.dialog('option', 'disabled'), true, 'disable method sets disabled option to true');
-	ok(el.parents('.ui-dialog').hasClass('ui-dialog-disabled'), 'disable method adds ui-dialog-disabled class to ui-dialog element');
+	ok(dlg().hasClass('ui-dialog-disabled'), 'disable method adds ui-dialog-disabled class to ui-dialog element');
 });
 
 test("close", function() {
 	var expected = $('<div></div>').dialog(),
 		actual = expected.dialog('close');
 	equals(actual, expected, 'close is chainable');
-	ok(false, 'missing test - untested code is broken code');
+	
+	el = $('<div></div>').dialog();
+	ok(dlg().is(':visible') && !dlg().is(':hidden'), 'dialog visible before close method called');
+	el.dialog('close');
+	ok(dlg().is(':hidden') && !dlg().is(':visible'), 'dialog hidden after close method called');
 });
 
 test("isOpen", function() {
@@ -113,14 +117,27 @@ test("moveToTop", function() {
 	var expected = $('<div></div>').dialog(),
 		actual = expected.dialog('moveToTop');
 	equals(actual, expected, 'moveToTop is chainable');
-	ok(false, 'missing test - untested code is broken code');
+
+	var d1 = $('<div></div>').dialog(), dlg1 = d1.parents('.ui-dialog');
+	d1.dialog('close');
+	d1.dialog('open');
+	var d2 = $('<div></div>').dialog(), dlg2 = d2.parents('.ui-dialog');
+	d2.dialog('close');
+	d2.dialog('open');
+	ok(dlg1.css('zIndex') < dlg2.css('zIndex'), 'dialog 1 under dialog 2 before moveToTop method called');
+	d1.dialog('moveToTop');
+	ok(dlg1.css('zIndex') > dlg2.css('zIndex'), 'dialog 1 above dialog 2 after moveToTop method called');
 });
 
 test("open", function() {
 	var expected = $('<div></div>').dialog(),
 		actual = expected.dialog('open');
 	equals(actual, expected, 'open is chainable');
-	ok(false, 'missing test - untested code is broken code');
+
+	el = $('<div></div>').dialog({ autoOpen: false });
+	ok(dlg().is(':hidden') && !dlg().is(':visible'), 'dialog hidden before open method called');
+	el.dialog('open');
+	ok(dlg().is(':visible') && !dlg().is(':hidden'), 'dialog visible after open method called');
 });
 
 })(jQuery);
