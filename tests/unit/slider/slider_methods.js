@@ -92,7 +92,31 @@ test("disable", function() {
 });
 
 test("value", function() {
-	ok(false, "missing test - untested code is broken code.");
+	$([false, 'min', 'max']).each(function() {
+		var el = $('<div></div>').slider({
+			range: this,
+			value: 5
+		});
+		equals(el.slider('value'), 5, 'range: ' + this + ' slider method get');
+		el.slider('value', 10);
+		equals(el.slider('value'), 10, 'range: ' + this + ' slider method set');
+		el.remove();
+	});
+	var el = $('<div></div>').slider({
+		min: -1, value: 0, max: 1
+	});
+	// min with value option vs value method
+	el.slider('option', 'value', -2);
+	equals(el.slider('option', 'value'), -2, 'value option does not respect min');
+	equals(el.slider('value'), -1, 'value method get respects min');
+	el.slider('value', -2);
+	equals(el.slider('option', 'value'), -1, 'value method set respects min');
+	// max with value option vs value method
+	el.slider('option', 'value', 2);
+	equals(el.slider('option', 'value'), 2, 'value option does not respect max');
+	equals(el.slider('value'), 1, 'value method get respects max');
+	el.slider('value', 2);
+	equals(el.slider('option', 'value'), 1, 'value method set respects max');
 });
 
 test("values", function() {
