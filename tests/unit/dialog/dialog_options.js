@@ -240,7 +240,16 @@ test("modal", function() {
 	ok(false, 'missing test - untested code is broken code');
 });
 
-test("position", function() {
+test("position, default center on window", function() {
+	var el = $('<div></div>').dialog();
+	var offset = el.parent().offset();
+	// use .position() instead to avoid replicating center-logic?
+	same(offset.left, Math.floor($(window).width() / 2 - el.parent().width() / 2));
+	same(offset.top, Math.floor($(window).height() / 2 - el.parent().height() / 2));
+	el.remove();
+});
+
+test("position, others", function() {
 	ok(false, 'missing test - untested code is broken code');
 });
 

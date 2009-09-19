@@ -382,35 +382,36 @@ $.widget("ui.dialog", {
 		// deep extending converts arrays to objects in jQuery <= 1.3.2 :-(
 //		if (typeof position == 'string' || $.isArray(position)) {
 //			myAt = $.isArray(position) ? position : position.split(' ');
-		if (!position || (typeof positon != "string" && typeof positon != "object"))
-			return
-		if (typeof position == 'string' || '0' in position) {
-			myAt = position.split ? position.split(' ') : [position[0], position[1]];
-			if (myAt.length == 1) {
-				myAt[1] = myAt[0];
-			}
 
-			$.each(['left', 'top'], function(i, offsetPosition) {
-				if (+myAt[i] == myAt[i]) {
-					offset[i] = myAt[i];
-					myAt[i] = offsetPosition;
+		if (position && (typeof positon == "string" || typeof positon == "object")) {
+			if (typeof position == 'string' || '0' in position) {
+				myAt = position.split ? position.split(' ') : [position[0], position[1]];
+				if (myAt.length == 1) {
+					myAt[1] = myAt[0];
 				}
-			});
-		} else {
-			if ('left' in position) {
-				myAt[0] = 'left';
-				offset[0] = position.left;
-			} else if ('right' in position) {
-				myAt[0] = 'right';
-				offset[0] = -position.right;
-			}
-
-			if ('top' in position) {
-				myAt[1] = 'top';
-				offset[1] = position.top;
-			} else if ('bottom' in position) {
-				myAt[1] = 'bottom';
-				offset[1] = -position.bottom;
+	
+				$.each(['left', 'top'], function(i, offsetPosition) {
+					if (+myAt[i] == myAt[i]) {
+						offset[i] = myAt[i];
+						myAt[i] = offsetPosition;
+					}
+				});
+			} else {
+				if ('left' in position) {
+					myAt[0] = 'left';
+					offset[0] = position.left;
+				} else if ('right' in position) {
+					myAt[0] = 'right';
+					offset[0] = -position.right;
+				}
+	
+				if ('top' in position) {
+					myAt[1] = 'top';
+					offset[1] = position.top;
+				} else if ('bottom' in position) {
+					myAt[1] = 'bottom';
+					offset[1] = -position.bottom;
+				}
 			}
 		}
 
