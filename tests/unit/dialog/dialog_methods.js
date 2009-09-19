@@ -68,14 +68,22 @@ test("enable", function() {
 	var expected = $('<div></div>').dialog(),
 		actual = expected.dialog('enable');
 	equals(actual, expected, 'enable is chainable');
-	ok(false, 'missing test - untested code is broken code');
+	
+	el = $('<div></div>').dialog({ disabled: true });
+	el.dialog('enable');
+	equals(el.dialog('option', 'disabled'), false, 'enable method sets disabled option to false');
+	ok(!el.parents('.ui-dialog').hasClass('ui-dialog-disabled'), 'enable method removes ui-dialog-disabled class from ui-dialog element');
 });
 
 test("disable", function() {
 	var expected = $('<div></div>').dialog(),
 		actual = expected.dialog('disable');
 	equals(actual, expected, 'disable is chainable');
-	ok(false, 'missing test - untested code is broken code');
+	
+	el = $('<div></div>').dialog({ disabled: false });
+	el.dialog('disable');
+	equals(el.dialog('option', 'disabled'), true, 'disable method sets disabled option to true');
+	ok(el.parents('.ui-dialog').hasClass('ui-dialog-disabled'), 'disable method adds ui-dialog-disabled class to ui-dialog element');
 });
 
 test("close", function() {

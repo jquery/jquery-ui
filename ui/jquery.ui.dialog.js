@@ -442,6 +442,11 @@ $.widget("ui.dialog", {
 					.removeClass(self.options.dialogClass)
 					.addClass(uiDialogClasses + value);
 				break;
+			case "disabled":
+				(value
+					? uiDialog.addClass('ui-dialog-disabled')
+					: uiDialog.removeClass('ui-dialog-disabled'));
+				break;
 			case "draggable":
 				(value
 					? self._makeDraggable()
