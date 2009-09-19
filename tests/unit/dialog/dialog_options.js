@@ -72,7 +72,23 @@ test("buttons", function() {
 });
 
 test("closeOnEscape", function() {
-	ok(false, 'missing test - untested code is broken code');
+	el = $('<div></div>').dialog({ closeOnEscape: false });
+	ok(true, 'closeOnEscape: false');
+	ok(dlg().is(':visible') && !dlg().is(':hidden'), 'dialog is open before ESC');
+	el.simulate('keydown', { keyCode: $.ui.keyCode.ESCAPE })
+		.simulate('keypress', { keyCode: $.ui.keyCode.ESCAPE })
+		.simulate('keyup', { keyCode: $.ui.keyCode.ESCAPE });
+	ok(dlg().is(':visible') && !dlg().is(':hidden'), 'dialog is open after ESC');
+	
+	el.remove();
+	
+	el = $('<div></div>').dialog({ closeOnEscape: true });
+	ok(true, 'closeOnEscape: true');
+	ok(dlg().is(':visible') && !dlg().is(':hidden'), 'dialog is open before ESC');
+	el.simulate('keydown', { keyCode: $.ui.keyCode.ESCAPE })
+		.simulate('keypress', { keyCode: $.ui.keyCode.ESCAPE })
+		.simulate('keyup', { keyCode: $.ui.keyCode.ESCAPE });
+	ok(dlg().is(':hidden') && !dlg().is(':visible'), 'dialog is closed after ESC');
 });
 
 test("closeText", function() {
@@ -116,13 +132,13 @@ test("draggable", function() {
 
 	el = $('<div></div>').dialog({ draggable: false });
 		shouldnotmove();
-		el.data('draggable.dialog', true);
+		el.dialog('option', 'draggable', true);
 		shouldmove();
 	el.remove();
 
 	el = $('<div></div>').dialog({ draggable: true });
 		shouldmove();
-		el.data('draggable.dialog', false);
+		el.dialog('option', 'draggable', false);
 		shouldnotmove();
 	el.remove();
 });

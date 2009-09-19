@@ -40,20 +40,20 @@ function drag(handle, dx, dy) {
 
 function moved(dx, dy, msg) {
 	msg = msg ? msg + "." : "";
-	var actual = { left: offsetAfter.left, top: offsetAfter.top };
-	var expected = { left: offsetBefore.left + dx, top: offsetBefore.top + dy };
+	var actual = { left: Math.round(offsetAfter.left), top: Math.round(offsetAfter.top) };
+	var expected = { left: Math.round(offsetBefore.left + dx), top: Math.round(offsetBefore.top + dy) };
 	same(actual, expected, 'dragged[' + dragged.dx + ', ' + dragged.dy + '] ' + msg);
 }
 
 function shouldmove(why) {
 	var handle = $(".ui-dialog-titlebar", dlg());
-	drag(handle, 50, 50);
-	moved(50, 50, why);
+	drag(handle, 50, -50);
+	moved(50, -50, why);
 }
 
 function shouldnotmove(why) {
 	var handle = $(".ui-dialog-titlebar", dlg());
-	drag(handle, 50, 50);
+	drag(handle, 50, -50);
 	moved(0, 0, why);
 }
 
