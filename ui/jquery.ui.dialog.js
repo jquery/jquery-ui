@@ -383,7 +383,7 @@ $.widget("ui.dialog", {
 //		if (typeof position == 'string' || $.isArray(position)) {
 //			myAt = $.isArray(position) ? position : position.split(' ');
 
-		if (position && (typeof positon == "string" || typeof positon == "object")) {
+		if (position && (typeof positon == "string" || typeof position == "object")) {
 			if (typeof position == 'string' || '0' in position) {
 				myAt = position.split ? position.split(' ') : [position[0], position[1]];
 				if (myAt.length == 1) {
