@@ -3,14 +3,14 @@
  * 
  * http://docs.jquery.com/QUnit
  *
- * Copyright (c) 2008 John Resig, Jörn Zaefferer
+ * Copyright (c) 2009 John Resig, Jörn Zaefferer
  * Dual licensed under the MIT (MIT-LICENSE.txt)
  * and GPL (GPL-LICENSE.txt) licenses.
  *
- * $Id: testrunner.js 6574 2009-09-15 20:30:29Z joern.zaefferer $
+ * $Id: testrunner.js 6588 2009-09-29 00:07:51Z jeresig $
  */
 
-(function($) {
+(function() {
 
 // Test for equality any JavaScript type.
 // Discussions and reference: http://philrathe.com/articles/equiv
@@ -206,8 +206,21 @@ var equiv = function () {
 
 }();
 
-var GETParams = $.map( location.search.slice(1).split('&'), decodeURIComponent );
+var GETParams = location.search.slice(1).split('&'), ngindex = -1;
 
+for ( var i = 0; i < GETParams.length; i++ ) {
+	GETParams[i] = decodeURIComponent( GETParams[i] );
+	if ( GETParams[i] === "noglobals" ) {
+		ngindex = i;
+	}
+}
+
+var noglobals = ngindex !== -1;
+
+if ( noglobals ) {
+	GETParams.splice( ngindex, 1 );
+}
+	
 var config = {
 	stats: {
 		all: 0,
@@ -222,7 +235,7 @@ var config = {
 };
 
 // public API as global methods
-$.extend(window, {
+extend(window, {
 	test: test,
 	module: module,
 	expect: expect,
@@ -259,26 +272,75 @@ $.extend(window, {
 	triggerEvent: triggerEvent
 });
 
-$(window).load(function() {
+addEvent(window, "load", function(){
 	
-	if (!$("#header, #banner, #userAgent, #tests").length) {
-		$('body').prepend(
-			'<h1 id="header">' + document.title + '</h1>' +
-			'<h2 id="banner"></h2>' +
-			'<h2 id="userAgent"></h2>' +
-			'<ol id="tests"></ol>'
-		);
+	if ( !document.getElementById("header") ) {
+		var header = document.createElement("h1");
+		header.id = "header";
+		header.innerHTML = document.title;
+
+		var banner = document.createElement("h2");
+		banner.id = "banner";
+
+		var userAgent = document.createElement("h2");
+		userAgent.id = "userAgent";
+
+		var ol = document.createElement("ol");
+		ol.id = "tests";
+
+		document.body.insertBefore( ol, document.body.firstChild );
+		document.body.insertBefore( userAgent, document.body.firstChild );
+		document.body.insertBefore( banner, document.body.firstChild );
+		document.body.insertBefore( header, document.body.firstChild );
 	}
-	
-	$('#userAgent').html(navigator.userAgent);
-	var head = $('<div class="testrunner-toolbar"><label for="filter-pass">Hide passed tests</label></div>').insertAfter("#userAgent");
-	$('<input type="checkbox" id="filter-pass" />').attr("disabled", true).prependTo(head).click(function() {
-		$('li.pass')[this.checked ? 'hide' : 'show']();
-	});
-	$('<input type="checkbox" id="filter-missing">').attr("disabled", true).appendTo(head).click(function() {
-		$("li.fail:contains('missing test - untested code is broken code')").parent('ol').parent('li.fail')[this.checked ? 'hide' : 'show']();
-	});
-	$("#filter-missing").after('<label for="filter-missing">Hide missing tests (untested code is broken code)</label>');
+
+	var userAgent = document.getElementById("userAgent");
+	if ( userAgent ) {
+		userAgent.innerHTML = navigator.userAgent;
+
+		var toolbar = document.createElement("div");
+		toolbar.className = "testrunner-toolbar";
+		userAgent.parentNode.insertBefore( toolbar, userAgent );
+
+		var filter = document.createElement("input");
+		filter.type = "checkbox";
+		filter.id = "filter-pass";
+		filter.disabled = true;
+		addEvent( filter, "click", function(){
+			var li = document.getElementsByTagName("li");
+			for ( var i = 0; i < li.length; i++ ) {
+				if ( li[i].className.indexOf("pass") > -1 ) {
+					li[i].style.display = filter.checked ? "none" : "block";
+				}
+			}
+		});
+		toolbar.appendChild( filter );
+
+		var label = document.createElement("label");
+		label.setAttribute("for", "filter-pass");
+		label.innerHTML = "Hide passed tests";
+		toolbar.appendChild( label );
+
+		var missing = document.createElement("input");
+		missing.type = "checkbox";
+		missing.id = "filter-missing";
+		missing.disabled = true;
+		addEvent( missing, "click", function(){
+			var li = document.getElementsByTagName("li");
+			for ( var i = 0; i < li.length; i++ ) {
+				if ( li[i].className.indexOf("fail") > -1 && li[i].innerHTML.indexOf('missing test - untested code is broken code') > - 1 ) {
+					li[i].parentNode.parentNode.style.display = missing.checked ? "none" : "block";
+				}
+			}
+		});
+		toolbar.appendChild( missing );
+
+		label = document.createElement("label");
+		label.setAttribute("for", "filter-missing");
+		label.innerHTML = "Hide missing tests (untested code is broken code)";
+		toolbar.appendChild( label );
+	}
+
 	runTest();	
 });
 
@@ -337,14 +399,25 @@ function runTest() {
 	config.blocking = false;
 	var started = +new Date;
 	config.fixture = document.getElementById('main').innerHTML;
-	config.ajaxSettings = $.ajaxSettings;
+
+	if ( window.jQuery ) {
+		config.ajaxSettings = window.jQuery.ajaxSettings;
+	}
+
 	synchronize(function() {
-		$('<p id="testresult" class="result"/>').html(['Tests completed in ',
+		var html = ['Tests completed in ',
 			+new Date - started, ' milliseconds.<br/>',
-			'<span class="bad">', config.stats.all - config.stats.bad, '</span> tests of <span class="all">', config.stats.all, '</span> passed, ', config.stats.bad,' failed.']
-			.join(''))
-			.appendTo("body");
-		$("#banner").addClass(config.stats.bad ? "fail" : "pass");
+			'<span class="bad">', config.stats.all - config.stats.bad, '</span> tests of <span class="all">', config.stats.all, '</span> passed, ', config.stats.bad,' failed.'].join('');
+
+		var result = document.createElement("p");
+		result.id = "testresult";
+		result.className = "result";
+		result.innerHTML = html;
+		document.body.appendChild( result );
+
+		document.getElementById("banner").className +=
+			" " + (config.stats.bad ? "fail" : "pass");
+
 		QUnit.done( config.stats.bad, config.stats.all );
 	});
 }
@@ -354,35 +427,50 @@ var pollution;
 function saveGlobal(){
 	pollution = [ ];
 	
-	for( var key in window )
-		pollution.push(key);
+	if ( noglobals ) {
+		for ( var key in window ) {
+			pollution.push(key);
+		}
+	}
 }
+
 function checkPollution( name ){
 	var old = pollution;
 	saveGlobal();
 	
-	if( pollution.length > old.length ){
+	if ( pollution.length > old.length ){
 		ok( false, "Introduced global variable(s): " + diff(old, pollution).join(", ") );
 		config.expected++;
 	}
 }
 
 function diff( clean, dirty ){
-	return $.grep( dirty, function(name){
-		return $.inArray( name, clean ) == -1;
-	});
+	var results = [];
+
+	for ( var i = 0; i < dirty.length; i++ ) {
+		for ( var c = 0; c < clean.length; c++ ) {
+			if ( clean[c] === dirty[i] ) {
+				results.push( clean[c] );
+			}
+		}
+	}
+
+	return results;
 }
 
 function test(name, callback) {
-	if(config.currentModule)
-		name = config.currentModule + " module: <span>" + name + "</span>";
-	var lifecycle = $.extend({
+	if ( config.currentModule ) {
+		name = config.currentModule + " module: " + name;
+	}
+
+	var lifecycle = extend({
 		setup: function() {},
 		teardown: function() {}
 	}, config.moduleLifecycle);
 	
-	if ( !validTest(name) )
+	if ( !validTest(name) ) {
 		return;
+	}
 		
 	var testEnvironment = {};
 	
@@ -390,8 +478,10 @@ function test(name, callback) {
 		config.assertions = [];
 		config.expected = null;
 		try {
-			if( !pollution )
+			if ( !pollution ) {
 				saveGlobal();
+			}
+
 			lifecycle.setup.call(testEnvironment);
 		} catch(e) {
 			QUnit.ok( false, "Setup failed on " + name + ": " + e.message );
@@ -409,8 +499,8 @@ function test(name, callback) {
 	});
 	synchronize(function() {
 		try {
-			lifecycle.teardown.call(testEnvironment);
 			checkPollution();
+			lifecycle.teardown.call(testEnvironment);
 		} catch(e) {
 			QUnit.ok( false, "Teardown failed on " + name + ": " + e.message );
 		}
@@ -422,37 +512,55 @@ function test(name, callback) {
 			fail("reset() failed, following Test " + name + ", exception and reset fn follows", e, reset);
 		}
 		
-		if(config.expected && config.expected != config.assertions.length) {
+		if ( config.expected && config.expected != config.assertions.length ) {
 			QUnit.ok( false, "Expected " + config.expected + " assertions, but " + config.assertions.length + " were run" );
 		}
 		
 		var good = 0, bad = 0;
-		var ol  = $("<ol/>").hide();
+		var ol  = document.createElement("ol");
+		ol.style.display = "none";
 		config.stats.all += config.assertions.length;
 		for ( var i = 0; i < config.assertions.length; i++ ) {
 			var assertion = config.assertions[i];
-			$("<li/>").addClass(assertion.result ? "pass" : "fail").text(assertion.message || "(no message)").appendTo(ol);
+			var li = document.createElement("li");
+			li.className = assertion.result ? "pass" : "fail";
+			li.innerHTML = assertion.message || "(no message)";
+			ol.appendChild( li );
 			assertion.result ? good++ : bad++;
 		}
 		config.stats.bad += bad;
-	
-		var b = $("<strong/>").html(name + " <b style='color:black;'>(<b class='fail'>" + bad + "</b>, <b class='pass'>" + good + "</b>, " + config.assertions.length + ")</b>")
-		.click(function(){
-			$(this).next().toggle();
-		})
-		.dblclick(function(event) {
-			var target = $(event.target).filter("strong").clone();
-			if ( target.length ) {
-				target.children().remove();
-				location.href = location.href.match(/^(.+?)(\?.*)?$/)[1] + "?" + encodeURIComponent($.trim(target.text()));
+		
+		var b = document.createElement("strong");
+		b.innerHTML = name + " <b style='color:black;'>(<b class='fail'>" + bad + "</b>, <b class='pass'>" + good + "</b>, " + config.assertions.length + ")</b>";
+		addEvent(b, "click", function(){
+			var next = b.nextSibling, display = next.style.display;
+			next.style.display = display === "none" ? "block" : "none";
+		});
+		addEvent(b, "dblclick", function(e){
+			var target = (e || window.event).target;
+			if ( target.nodeName.toLowerCase() === "strong" ) {
+				var text = "", node = target.firstChild;
+
+				while ( node.nodeType === 3 ) {
+					text += node.nodeValue;
+					node = node.nextSibling;
+				}
+
+				text = text.replace(/(^\s*|\s*$)/g, "");
+
+				location.href = location.href.match(/^(.+?)(\?.*)?$/)[1] + "?" + encodeURIComponent(text);
 			}
 		});
-		
-		$("<li/>").addClass(bad ? "fail" : "pass").append(b).append(ol).appendTo("#tests");
-	
+
+		var li = document.createElement("li");
+		li.className = bad ? "fail" : "pass";
+		li.appendChild( b );
+		li.appendChild( ol );
+		document.getElementById("tests").appendChild( li );
+
 		if(bad) {
-			$("#filter-pass").attr("disabled", null);
-			$("#filter-missing").attr("disabled", null);
+			document.getElementById("filter-pass").disabled = null;
+			document.getElementById("filter-missing").disabled = null;
 		}
 	});
 }
@@ -484,14 +592,18 @@ function expect(asserts) {
  * Resets the test setup. Useful for tests that modify the DOM.
  */
 function reset() {
-	$("#main").html( config.fixture );
-	$.event.global = {};
-	$.ajaxSettings = $.extend({}, config.ajaxSettings);
+	if ( window.jQuery ) {
+		jQuery("#main").html( config.fixture );
+		jQuery.event.global = {};
+		jQuery.ajaxSettings = extend({}, config.ajaxSettings);
+	} else {
+		document.getElementById("main").innerHTML = config.fixture;
+	}
 }
 
 /**
  * Asserts true.
- * @example ok( $("a").size() > 5, "There must be at least 5 anchors" );
+ * @example ok( "asdfasdf".length > 5, "There must be at least 5 chars" );
  */
 function ok(a, msg) {
 	QUnit.log(a, msg);
@@ -571,7 +683,7 @@ function q() {
  * @result returns true if "//[a]" return two elements with the IDs 'foo' and 'baar'
  */
 function t(a,b,c) {
-	var f = $(b);
+	var f = jQuery(b);
 	var s = "";
 	for ( var i = 0; i < f.length; i++ )
 		s += (s && ",") + '"' + f[i].id + '"';
@@ -597,7 +709,7 @@ function url(value) {
  *
  * Prefered to ok( actual == expected, message )
  *
- * @example equals( $.format("Received {0} bytes.", 2), "Received 2 bytes." );
+ * @example equals( format("Received {0} bytes.", 2), "Received 2 bytes." );
  *
  * @param Object actual
  * @param Object expected
@@ -621,17 +733,33 @@ function push(result, actual, expected, message) {
  * @param String type
  */
 function triggerEvent( elem, type, event ) {
-	if ( $.browser.mozilla || $.browser.opera ) {
+	if ( document.createEvent ) {
 		event = document.createEvent("MouseEvents");
 		event.initMouseEvent(type, true, true, elem.ownerDocument.defaultView,
 			0, 0, 0, 0, 0, false, false, false, false, 0, null);
 		elem.dispatchEvent( event );
-	} else if ( $.browser.msie ) {
+	} else if ( elem.fireEvent ) {
 		elem.fireEvent("on"+type);
 	}
 }
 
-})(jQuery);
+function extend(a, b){
+	for ( var prop in b ) {
+		a[prop] = b[prop];
+	}
+
+	return a;
+}
+
+function addEvent(elem, type, fn){
+	if ( elem.addEventListener ) {
+		elem.addEventListener( type, fn, false );
+	} else if ( elem.attachEvent ) {
+		elem.attachEvent( "on" + type, fn );
+	}
+}
+
+})();
 
 /**
  * jsDump
