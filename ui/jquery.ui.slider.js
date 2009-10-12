@@ -421,12 +421,12 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 
 	},
 
-	values: function(index, newValue, noPropagation) {
+	values: function(index, newValue) {
 
 		if (arguments.length > 1) {
 			this.options.values[index] = newValue;
 			this._refreshValue();
-			if(!noPropagation) this._change(null, index);
+			this._change(null, index);
 		}
 
 		if (arguments.length) {
