@@ -410,9 +410,7 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 	value: function(newValue) {
 
 		if (arguments.length) {
-			if (newValue < this._valueMin()) newValue = this._valueMin();
-			if (newValue > this._valueMax()) newValue = this._valueMax();
-			this.options.value = newValue;
+			this.options.value = this._trimValue(newValue);
 			this._refreshValue();
 			this._change(null, 0);
 		}
@@ -424,16 +422,25 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 	values: function(index, newValue) {
 
 		if (arguments.length > 1) {
-			this.options.values[index] = newValue;
+			this.options.values[index] = this._trimValue(newValue);
 			this._refreshValue();
 			this._change(null, index);
 		}
 
 		if (arguments.length) {
-			if (this.options.values && this.options.values.length) {
-				return this._values(index);
+			if ($.isArray(arguments[0])) {
+				var vals = this.options.values, newValues = arguments[0];
+				for (var i = 0, l = vals.length; i < l; i++) {
+					vals[i] = this._trimValue(newValues[i]);
+					this._change(null, i);
+				}
+				this._refreshValue();
 			} else {
-				return this.value();
+				if (this.options.values && this.options.values.length) {
+					return this._values(index);
+				} else {
+					return this.value();
+				}
 			}
 		} else {
 			return this._values();
@@ -485,29 +492,42 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 	},
 
 	_value: function() {
-
+		//internal value getter
+		// _value() returns value trimmed by min and max
 		var val = this.options.value;
-		if (val < this._valueMin()) val = this._valueMin();
-		if (val > this._valueMax()) val = this._valueMax();
+		val = this._trimValue(val);
 
 		return val;
-
 	},
 
 	_values: function(index) {
+		//internal values getter
+		// _values() returns array of values trimmed by min and max
+		// _values(index) returns single value trimmed by min and max
 
 		if (arguments.length) {
 			var val = this.options.values[index];
-			if (val < this._valueMin()) val = this._valueMin();
-			if (val > this._valueMax()) val = this._valueMax();
+			val = this._trimValue(val);
 
 			return val;
 		} else {
 			// .slice() creates a copy of the array
-			// this prevents outside manipulation of the internal state
-			return this.options.values.slice();
+			// this copy gets trimmed by min and max and then returned
+			var vals = this.options.values.slice();
+			for (var i = 0, l = vals.length; i < l; i++) {
+				vals[i] = this._trimValue(vals[i]);
+			}
+
+			return vals;
 		}
 
+	},
+	
+	_trimValue: function(val) {
+		if (val < this._valueMin()) val = this._valueMin();
+		if (val > this._valueMax()) val = this._valueMax();
+
+		return val;
 	},
 
 	_valueMin: function() {
