@@ -405,6 +405,8 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 	value: function(newValue) {
 
 		if (arguments.length) {
+			newValue = newValue >= this.options.min ? newValue : this.options.min;
+			newValue = newValue <= this.options.max ? newValue : this.options.max;
 			this._setData("value", newValue);
 			this._change(null, 0);
 		}
