@@ -12,6 +12,8 @@
  */
 (function($) {
 
+var tabId = 0;
+
 $.widget("ui.tabs", {
 
 	_init: function() {
@@ -39,7 +41,7 @@ $.widget("ui.tabs", {
 
 	_tabId: function(a) {
 		return a.title && a.title.replace(/\s/g, '_').replace(/[^A-Za-z0-9\-_:\.]/g, '') ||
-			this.options.idPrefix + $.data(a);
+			this.options.idPrefix + (++tabId);
 	},
 
 	_sanitizeSelector: function(hash) {
