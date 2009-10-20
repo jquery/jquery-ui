@@ -9,13 +9,21 @@
 	<script type="text/javascript" src="../../../ui/jquery.ui.progressbar.js"></script>
 	<script type="text/javascript">
 	$(function() {
-		$("#progressbar").progressbar();
+		var bars = $("#progressbar1, #progressbar2, #progressbar3").progressbar();
+		
+		$("#progress").keyup(function() {
+			bars.progressbar("value", +this.value);
+		}).keyup();
 	});
 	</script>
 </head>
 <body>
 
-<div id="progressbar"></div>
+<div id="progressbar1"></div>
+<div id="progressbar2" style="width:300px"></div>
+<div id="progressbar3" style="width:100px"></div>
+
+<input id="progress" value="10" />
 
 </body>
 </html>
