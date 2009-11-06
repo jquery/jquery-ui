@@ -332,7 +332,7 @@ $.fn.extend({
 
 
 // override the animation for color styles
-$.each(['backgroundColor', 'borderBottomColor', 'borderLeftColor',
+$.each(['backgroundColor', 'borderColor', 'borderBottomColor', 'borderLeftColor',
 	'borderRightColor', 'borderTopColor', 'color', 'outlineColor'],
 function(i, attr) {
 	$.fx.step[attr] = function(fx) {
