@@ -103,22 +103,19 @@ $.effects = {
 			var that = $(this),
 				originalStyleAttr = that.attr('style') || ' ',
 				originalStyle = filterStyles(getElementStyles.call(this)),
-				newStyle;
+				newStyle,
+				className = that.attr('className');
 
-			$.each(classAnimationActions, function(action) {
+			$.each(classAnimationActions, function(i, action) {
 				if (value[action]) {
 					that[action + 'Class'](value[action]);
 				}
 			});
 			newStyle = filterStyles(getElementStyles.call(this));
-			$.each(classAnimationActions, function(action, reverse) {
-				if (value[action]) {
-					that[reverse + 'Class'](value[action]);
-				}
-			});
+			that.attr('className', className);
 
 			that.animate(styleDifference(originalStyle, newStyle), duration, easing, function() {
-				$.each(classAnimationActions, function(action) {
+				$.each(classAnimationActions, function(i, action) {
 					if (value[action]) { that[action + 'Class'](value[action]); }
 				});
 				// work around bug in IE by clearing the cssText before setting it
@@ -136,11 +133,7 @@ $.effects = {
 
 // start class animations
 
-var classAnimationActions = {
-	add: 'remove',
-	remove: 'add',
-	toggle: 'toggle'
-};
+var classAnimationActions = ['add', 'remove', 'toggle'];
 
 function getElementStyles() {
 	var style = document.defaultView
