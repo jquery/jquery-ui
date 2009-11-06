@@ -197,7 +197,7 @@ function filterStyles(styles) {
 }
 
 function styleDifference(oldStyle, newStyle) {
-	var diff = {},
+	var diff = { _: 0 }, // http://dev.jquery.com/ticket/5459
 		name;
 
 	for (name in newStyle) {
