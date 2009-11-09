@@ -73,7 +73,8 @@ $.widget("ui.tabs", {
 
 	_tabify: function(init) {
 
-		this.list = this.element.children('ul:first');
+		// use $('li:first').parent() so we can find the first ul/ol in DOM order
+		this.list = this.element.find('li:first').parent();
 		this.lis = $('li:has(a[href])', this.list);
 		this.anchors = this.lis.map(function() { return $('a', this)[0]; });
 		this.panels = $([]);
