@@ -13,6 +13,10 @@
 
 (function($) {
 
+// number of pages in a slider
+// (how many times can you page up/down to go through the whole range)
+var numPages = 5;
+
 $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 
 	_init: function() {
@@ -119,6 +123,8 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 			switch (event.keyCode) {
 				case $.ui.keyCode.HOME:
 				case $.ui.keyCode.END:
+				case $.ui.keyCode.PAGE_UP:
+				case $.ui.keyCode.PAGE_DOWN:
 				case $.ui.keyCode.UP:
 				case $.ui.keyCode.RIGHT:
 				case $.ui.keyCode.DOWN:
@@ -145,6 +151,12 @@ $.widget("ui.slider", $.extend({}, $.ui.mouse, {
 					break;
 				case $.ui.keyCode.END:
 					newVal = self._valueMax();
+					break;
+				case $.ui.keyCode.PAGE_UP:
+					newVal = curVal + ((self._valueMax() - self._valueMin()) / numPages);
+					break;
+				case $.ui.keyCode.PAGE_DOWN:
+					newVal = curVal - ((self._valueMax() - self._valueMin()) / numPages);
 					break;
 				case $.ui.keyCode.UP:
 				case $.ui.keyCode.RIGHT:

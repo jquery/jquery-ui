@@ -83,6 +83,52 @@ test("keydown END on handle sets value to max", function() {
 	el.slider('destroy');
 });
 
+test("keydown PAGE_UP on handle increases value by 1/5 range, not greater than max", function() {
+	$.each(['horizontal', 'vertical'], function(i, orientation) {
+		el = $('<div></div>');
+		options = {
+			max: 100,
+			min: 0,
+			orientation: orientation,
+			step: 1
+		};
+		el.slider(options);
+
+		el.slider("value", 70);
+
+		handle().simulate("keydown", { keyCode: $.ui.keyCode.PAGE_UP });
+		equals(el.slider("value"), 90);
+
+		handle().simulate("keydown", { keyCode: $.ui.keyCode.PAGE_UP });
+		equals(el.slider("value"), 100);
+
+		el.slider("destroy");
+	});
+});
+
+test("keydown PAGE_DOWN on handle decreases value by 1/5 range, not less than min", function() {
+	$.each(['horizontal', 'vertical'], function(i, orientation) {
+		el = $('<div></div>');
+		options = {
+			max: 100,
+			min: 0,
+			orientation: orientation,
+			step: 1
+		};
+		el.slider(options);
+
+		el.slider("value", 30);
+
+		handle().simulate("keydown", { keyCode: $.ui.keyCode.PAGE_DOWN });
+		equals(el.slider("value"), 10);
+
+		handle().simulate("keydown", { keyCode: $.ui.keyCode.PAGE_DOWN });
+		equals(el.slider("value"), 0);
+
+		el.slider("destroy");
+	});
+});
+
 test("keydown UP on handle increases value by step, not greater than max", function() {
 	el = $('<div></div>');
 	options = {
