@@ -21,17 +21,15 @@ test("init", function() {
 	ok(true, 'arbitrary method called after init');
 
 	var el = $('<div></div>').slider();
-	var foo = el.data("foo.slider");
+	var foo = el.slider("option", "foo");
 	el.remove();
 	ok(true, 'arbitrary option getter after init');
 
-	$('<div></div>').slider().data("foo.slider", "bar").remove();
+	$('<div></div>').slider().slider("option", "foo", "bar").remove();
 	ok(true, 'arbitrary option setter after init');
 });
 
 test("destroy", function() {
-	expect(9);
-
 	$("<div></div>").appendTo('body').slider().slider("destroy").remove();
 	ok(true, '.slider("destroy") called on element');
 
@@ -44,22 +42,6 @@ test("destroy", function() {
 	$('<div></div>').slider().slider("destroy").slider("foo").remove();
 	ok(true, 'arbitrary method called after destroy');
 
-	var el = $('<div></div>').slider();
-	var foo = el.slider("destroy").data("foo.slider");
-	el.remove();
-	ok(true, 'arbitrary option getter (.data) after destroy');
-
-	el = $('<div></div>').slider();
-	var foo = el.slider("destroy").slider("option", "foo");
-	el.remove();
-	ok(true, 'arbitrary option getter (.slider option method) after destroy');
-
-	$('<div></div>').slider().slider("destroy").data("foo.slider", "bar").remove();
-	ok(true, 'arbitrary option setter (.data) after destroy');
-
-	$('<div></div>').slider().slider("destroy").slider("options", "foo", "bar").remove();
-	ok(true, 'arbitrary option setter (.slider option method) after destroy');
-	
 	var expected = $('<div></div>').slider(),
 		actual = expected.slider('destroy');
 	equals(actual, expected, 'destroy is chainable');

@@ -30,16 +30,14 @@ test("init", function() {
 	$("<div></div>").draggable().draggable("foo");
 	ok(true, 'arbitrary method called after init');
 
-	$("<div></div>").draggable().data("foo.draggable");
+	$("<div></div>").draggable().draggable("option", "foo");
 	ok(true, 'arbitrary option getter after init');
 
-	$("<div></div>").draggable().data("foo.draggable", "bar");
+	$("<div></div>").draggable().draggable("option", "foo", "bar");
 	ok(true, 'arbitrary option setter after init');
 });
 
 test("destroy", function() {
-	expect(7);
-
 	$("<div></div>").appendTo('body').draggable().draggable("destroy").remove();
 	ok(true, '.draggable("destroy") called on element');
 
@@ -52,12 +50,6 @@ test("destroy", function() {
 	$("<div></div>").draggable().draggable("destroy").draggable("foo");
 	ok(true, 'arbitrary method called after destroy');
 
-	$("<div></div>").draggable().draggable("destroy").data("foo.draggable");
-	ok(true, 'arbitrary option getter after destroy');
-
-	$("<div></div>").draggable().draggable("destroy").data("foo.draggable", "bar");
-	ok(true, 'arbitrary option setter after destroy');
-	
 	var expected = $('<div></div>').draggable(),
 		actual = expected.draggable('destroy');
 	equals(actual, expected, 'destroy is chainable');
@@ -69,14 +61,14 @@ test("enable", function() {
 	shouldnotmove('.draggable({ disabled: true })');
 	el.draggable("enable");
 	shouldmove('.draggable("enable")');
-	equals(el.data("disabled.draggable"), false, "disabled.draggable getter");
+	equals(el.draggable("option", "disabled"), false, "disabled option getter");
 
 	el.draggable("destroy");
 	el.draggable({ disabled: true });
 	shouldnotmove('.draggable({ disabled: true })');
-	el.data("disabled.draggable", false);
-	equals(el.data("disabled.draggable"), false, "disabled.draggable setter");
-	shouldmove('.data("disabled.draggable", false)');
+	el.draggable("option", "disabled", false);
+	equals(el.draggable("option", "disabled"), false, "disabled option setter");
+	shouldmove('.draggable("option", "disabled", false)');
 	
 	var expected = $('<div></div>').draggable(),
 		actual = expected.draggable('enable');
@@ -89,15 +81,15 @@ test("disable", function() {
 	shouldmove('.draggable({ disabled: false })');
 	el.draggable("disable");
 	shouldnotmove('.draggable("disable")');
-	equals(el.data("disabled.draggable"), true, "disabled.draggable getter");
+	equals(el.draggable("option", "disabled"), true, "disabled option getter");
 
 	el.draggable("destroy");
 
 	el.draggable({ disabled: false });
 	shouldmove('.draggable({ disabled: false })');
-	el.data("disabled.draggable", true);
-	equals(el.data("disabled.draggable"), true, "disabled.draggable setter");
-	shouldnotmove('.data("disabled.draggable", true)');
+	el.draggable("option", "disabled", true);
+	equals(el.draggable("option", "disabled"), true, "disabled option setter");
+	shouldnotmove('.draggable("option", "disabled", true)');
 	
 	var expected = $('<div></div>').draggable(),
 		actual = expected.draggable('disable');

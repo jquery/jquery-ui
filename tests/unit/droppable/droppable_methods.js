@@ -20,16 +20,14 @@ test("init", function() {
 	$("<div></div>").droppable().droppable("foo");
 	ok(true, 'arbitrary method called after init');
 
-	$("<div></div>").droppable().data("foo.droppable");
+	$("<div></div>").droppable().droppable("option", "foo");
 	ok(true, 'arbitrary option getter after init');
 
-	$("<div></div>").droppable().data("foo.droppable", "bar");
+	$("<div></div>").droppable().droppable("option", "foo", "bar");
 	ok(true, 'arbitrary option setter after init');
 });
 
 test("destroy", function() {
-	expect(7);
-
 	$("<div></div>").appendTo('body').droppable().droppable("destroy").remove();
 	ok(true, '.droppable("destroy") called on element');
 
@@ -41,12 +39,6 @@ test("destroy", function() {
 
 	$("<div></div>").droppable().droppable("destroy").droppable("foo");
 	ok(true, 'arbitrary method called after destroy');
-
-	$("<div></div>").droppable().droppable("destroy").data("foo.droppable");
-	ok(true, 'arbitrary option getter after destroy');
-
-	$("<div></div>").droppable().droppable("destroy").data("foo.droppable", "bar");
-	ok(true, 'arbitrary option setter after destroy');
 	
 	var expected = $('<div></div>').droppable(),
 		actual = expected.droppable('destroy');
@@ -59,12 +51,12 @@ test("enable", function() {
 	shouldNotBeDroppable();
 	el.droppable("enable");
 	shouldBeDroppable();
-	equals(el.data("disabled.droppable"), false, "disabled.droppable getter");
+	equals(el.droppable("option", "disabled"), false, "disabled option getter");
 	el.droppable("destroy");
 	el.droppable({ disabled: true });
 	shouldNotBeDroppable();
-	el.data("disabled.droppable", false);
-	equals(el.data("disabled.droppable"), false, "disabled.droppable setter");
+	el.droppable("option", "disabled", false);
+	equals(el.droppable("option", "disabled"), false, "disabled option setter");
 	shouldBeDroppable();
 	
 	var expected = $('<div></div>').droppable(),
@@ -78,12 +70,12 @@ test("disable", function() {
 	shouldBeDroppable();
 	el.droppable("disable");
 	shouldNotBeDroppable();
-	equals(el.data("disabled.droppable"), true, "disabled.droppable getter");
+	equals(el.droppable("option", "disabled"), true, "disabled option getter");
 	el.droppable("destroy");
 	el.droppable({ disabled: false });
 	shouldBeDroppable();
-	el.data("disabled.droppable", true);
-	equals(el.data("disabled.droppable"), true, "disabled.droppable setter");
+	el.droppable("option", "disabled", true);
+	equals(el.droppable("option", "disabled"), true, "disabled option setter");
 	shouldNotBeDroppable();
 	
 	var expected = $('<div></div>').droppable(),

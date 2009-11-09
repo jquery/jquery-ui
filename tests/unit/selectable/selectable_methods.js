@@ -21,17 +21,15 @@ test("init", function() {
 	ok(true, 'arbitrary method called after init');
 
 	el = $("<div></div>").selectable()
-	var foo = el.data("foo.selectable");
+	var foo = el.selectable("option", "foo");
 	el.remove();
 	ok(true, 'arbitrary option getter after init');
 
-	$("<div></div>").selectable().data("foo.selectable", "bar").remove();
+	$("<div></div>").selectable().selectable("option", "foo", "bar").remove();
 	ok(true, 'arbitrary option setter after init');
 });
 
 test("destroy", function() {
-	expect(7);
-
 	$("<div></div>").appendTo('body').selectable().selectable("destroy").remove();
 	ok(true, '.selectable("destroy") called on element');
 
@@ -44,14 +42,6 @@ test("destroy", function() {
 	$("<div></div>").selectable().selectable("destroy").selectable("foo").remove();
 	ok(true, 'arbitrary method called after destroy');
 
-	el = $("<div></div>").selectable();
-	var foo = el.selectable("destroy").data("foo.selectable");
-	el.remove();
-	ok(true, 'arbitrary option getter after destroy');
-
-	$("<div></div>").selectable().selectable("destroy").data("foo.selectable", "bar").remove();
-	ok(true, 'arbitrary option setter after destroy');
-	
 	var expected = $('<div></div>').selectable(),
 		actual = expected.selectable('destroy');
 	equals(actual, expected, 'destroy is chainable');

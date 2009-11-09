@@ -19,11 +19,11 @@ test('collapsible', function() {
 	el = $('#tabs1');
 
 	el.tabs({ collapsible: true });
-	equals(el.data('collapsible.tabs'), true, 'option set');
+	equals(el.tabs('option', 'collapsible'), true, 'option set');
 	ok(el.is('.ui-tabs-collapsible'), 'extra class "ui-tabs-collapsible" attached');
 	el.tabs('select', 0);
 	equals($('div.ui-tabs-hide', '#tabs1').length, 3, 'all panels should be hidden');
-	el.data('collapsible.tabs', false);
+	el.tabs('option', 'collapsible', false);
 	ok(el.is(':not(.ui-tabs-collapsible)'), 'extra class "ui-tabs-collapsible" not attached');
 	
 });
@@ -70,11 +70,11 @@ test('deselectable (deprecated)', function() {
 	el = $('#tabs1');
 	
 	el.tabs({ deselectable: true });
-	equals(el.data('collapsible.tabs'), true, 'option set');
+	equals(el.tabs('option', 'collapsible'), true, 'option set');
 	ok(el.is('.ui-tabs-collapsible'), 'extra class "ui-tabs-collapsible" attached');
 	el.tabs('select', 0);
 	equals($('div.ui-tabs-hide', '#tabs1').length, 3, 'all panels should be hidden');
-	el.data('deselectable.tabs', false);
+	el.tabs('option', 'deselectable', false);
 	ok(el.is(':not(.ui-tabs-collapsible)'), 'extra class "ui-tabs-collapsible" not attached');
 	
 });
@@ -103,30 +103,30 @@ test('selected', function() {
 	expect(8);
 		
 	el = $('#tabs1').tabs();
-	equals(el.data('selected.tabs'), 0, 'should be 0 by default');
+	equals(el.tabs('option', 'selected'), 0, 'should be 0 by default');
 	
 	el.tabs('destroy');
 	el.tabs({ selected: -1 });
-	equals(el.data('selected.tabs'), -1, 'should be -1 for all tabs unselected');
+	equals(el.tabs('option', 'selected'), -1, 'should be -1 for all tabs unselected');
 	equals( $('li.ui-tabs-selected', el).length, 0, 'no tab should be selected' );
 	equals( $('div.ui-tabs-hide', '#tabs1').length, 3, 'all panels should be hidden' );
 
 	el.tabs('destroy');
 	el.tabs({ selected: null });
-	equals(el.data('selected.tabs'), -1, 'should be -1 for all tabs unselected with value null (deprecated)');
+	equals(el.tabs('option', 'selected'), -1, 'should be -1 for all tabs unselected with value null (deprecated)');
 	
 	el.tabs('destroy');
 	el.tabs({ selected: 1 });
-	equals(el.data('selected.tabs'), 1, 'should be specified tab');
+	equals(el.tabs('option', 'selected'), 1, 'should be specified tab');
 	
 	el.tabs('destroy');
 	el.tabs({ selected: 99 });
-	equals(el.data('selected.tabs'), 0, 'selected should default to zero if given value is out of index');
+	equals(el.tabs('option', 'selected'), 0, 'selected should default to zero if given value is out of index');
 	
 	el.tabs('destroy');
 	el.tabs({ collapsible: true });
-	el.data('selected.tabs', 0);
-	equals(el.data('selected.tabs'), 0, 'should not collapse tab if value is same as selected');
+	el.tabs('option', 'selected', 0);
+	equals(el.tabs('option', 'selected'), 0, 'should not collapse tab if value is same as selected');
 });
 
 test('spinner', function() {

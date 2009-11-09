@@ -54,9 +54,9 @@ test("buttons", function() {
 		}
 	};
 
-	same(el.data("buttons.dialog"), buttons, '.data("buttons.dialog") getter');
-	el.data("buttons.dialog", newButtons);
-	same(el.data("buttons.dialog"), newButtons, '.data("buttons.dialog", ...) setter');
+	same(el.dialog("option", "buttons"), buttons, '.dialog("option", "buttons") getter');
+	el.dialog("option", "buttons", newButtons);
+	same(el.dialog("option", "buttons"), newButtons, '.dialog("option", "buttons", ...) setter');
 
 	btn = $("button", dlg());
 	equals(btn.length, 1, "number of buttons after setter");
@@ -155,7 +155,7 @@ test("height", function() {
 	el.remove();
 
 	el = $('<div></div>').dialog();
-		el.data('height.dialog', 438);
+		el.dialog('option', 'height', 438);
 		equals(dlg().height(), 438, "explicit height set after init");
 	el.remove();
 });
@@ -173,7 +173,7 @@ test("maxHeight", function() {
 		equals(heightAfter, 400, "maxHeight");
 	el.remove();
 
-	el = $('<div></div>').dialog({ maxHeight: 400 }).data('maxHeight.dialog', 600);
+	el = $('<div></div>').dialog({ maxHeight: 400 }).dialog('option', 'maxHeight', 600);
 		drag('.ui-resizable-n', -1000, -1000);
 		equals(heightAfter, 600, "maxHeight");
 	el.remove();
@@ -192,7 +192,7 @@ test("maxWidth", function() {
 		equals(widthAfter, 400, "maxWidth");
 	el.remove();
 
-	el = $('<div></div>').dialog({ maxWidth: 400 }).data('maxWidth.dialog', 600);
+	el = $('<div></div>').dialog({ maxWidth: 400 }).dialog('option', 'maxWidth', 600);
 		drag('.ui-resizable-w', -1000, -1000);
 		equals(widthAfter, 600, "maxWidth");
 	el.remove();
@@ -211,7 +211,7 @@ test("minHeight", function() {
 		equals(heightAfter, 10, "minHeight");
 	el.remove();
 
-	el = $('<div></div>').dialog({ minHeight: 10 }).data('minHeight.dialog', 30);
+	el = $('<div></div>').dialog({ minHeight: 10 }).dialog('option', 'minHeight', 30);
 		drag('.ui-resizable-n', 1000, 1000);
 		equals(heightAfter, 30, "minHeight");
 	el.remove();
@@ -230,7 +230,7 @@ test("minWidth", function() {
 		equals(widthAfter, 10, "minWidth");
 	el.remove();
 
-	el = $('<div></div>').dialog({ minWidth: 30 }).data('minWidth.dialog', 30);
+	el = $('<div></div>').dialog({ minWidth: 30 }).dialog('option', 'minWidth', 30);
 		drag('.ui-resizable-w', 1000, 1000);
 		equals(widthAfter, 30, "minWidth");
 	el.remove();
@@ -258,13 +258,13 @@ test("resizable", function() {
 
 	el = $('<div></div>').dialog();
 		shouldresize("[default]");
-		el.data('resizable.dialog', false);
+		el.dialog('option', 'resizable', false);
 		shouldnotresize('disabled after init');
 	el.remove();
 
 	el = $('<div></div>').dialog({ resizable: false });
 		shouldnotresize("disabled in init options");
-		el.data('resizable.dialog', true);
+		el.dialog('option', 'resizable', true);
 		shouldresize('enabled after init');
 	el.remove();
 });
@@ -296,7 +296,7 @@ test("title", function() {
 		equals(titleText(), "bar", "title in init options should override title in element attribute");
 	el.remove();
 
-	el = $('<div></div>').dialog().data('title.dialog', 'foo');
+	el = $('<div></div>').dialog().dialog('option', 'title', 'foo');
 		equals(titleText(), 'foo', 'title after init');
 	el.remove();
 });
@@ -310,7 +310,7 @@ test("width", function() {
 
 	el = $('<div></div>').dialog({width: 437 });
 		equals(dlg().width(), 437, "explicit width");
-		el.data('width.dialog', 438);
+		el.dialog('option', 'width', 438);
 		equals(dlg().width(), 438, 'explicit width after init');
 	el.remove();
 });

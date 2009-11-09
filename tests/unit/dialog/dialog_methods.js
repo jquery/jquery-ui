@@ -28,17 +28,15 @@ test("init", function() {
 	ok(true, 'arbitrary method called after init');
 
 	el = $('<div></div>').dialog();
-	var foo = el.data("foo.dialog");
+	var foo = el.dialog("option", "foo");
 	el.remove();
 	ok(true, 'arbitrary option getter after init');
 
-	$('<div></div>').dialog().data("foo.dialog", "bar").remove();
+	$('<div></div>').dialog().dialog("option", "foo", "bar").remove();
 	ok(true, 'arbitrary option setter after init');
 });
 
 test("destroy", function() {
-	expect(7);
-
 	$("<div></div>").appendTo('body').dialog().dialog("destroy").remove();
 	ok(true, '.dialog("destroy") called on element');
 
@@ -50,14 +48,6 @@ test("destroy", function() {
 
 	$('<div></div>').dialog().dialog("destroy").dialog("foo").remove();
 	ok(true, 'arbitrary method called after destroy');
-
-	el = $('<div></div>').dialog();
-	var foo = el.dialog("destroy").data("foo.dialog");
-	el.remove();
-	ok(true, 'arbitrary option getter after destroy');
-
-	$('<div></div>').dialog().dialog("destroy").data("foo.dialog", "bar").remove();
-	ok(true, 'arbitrary option setter after destroy');
 
 	var expected = $('<div></div>').dialog(),
 		actual = expected.dialog('destroy');

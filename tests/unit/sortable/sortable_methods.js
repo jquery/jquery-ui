@@ -37,16 +37,14 @@ test("init", function() {
 	$("<div></div>").sortable().sortable("foo");
 	ok(true, 'arbitrary method called after init');
 
-	$("<div></div>").sortable().data("foo.sortable");
+	$("<div></div>").sortable().sortable("option", "foo");
 	ok(true, 'arbitrary option getter after init');
 
-	$("<div></div>").sortable().data("foo.sortable", "bar");
+	$("<div></div>").sortable().sortable("option", "foo", "bar");
 	ok(true, 'arbitrary option setter after init');
 });
 
 test("destroy", function() {
-	expect(7);
-
 	$("<div></div>").appendTo('body').sortable().sortable("destroy").remove();
 	ok(true, '.sortable("destroy") called on element');
 
@@ -59,12 +57,6 @@ test("destroy", function() {
 	$("<div></div>").sortable().sortable("destroy").sortable("foo");
 	ok(true, 'arbitrary method called after destroy');
 
-	$("<div></div>").sortable().sortable("destroy").data("foo.sortable");
-	ok(true, 'arbitrary option getter after destroy');
-
-	$("<div></div>").sortable().sortable("destroy").data("foo.sortable", "bar");
-	ok(true, 'arbitrary option setter after destroy');
-	
 	var expected = $('<div></div>').sortable(),
 		actual = expected.sortable('destroy');
 	equals(actual, expected, 'destroy is chainable');
@@ -77,14 +69,14 @@ test("enable", function() {
 	sort($("li", el)[0], 0, 40, 0, '.sortable({ disabled: true })');
 
 	el.sortable("enable");
-	equals(el.data("disabled.sortable"), false, "disabled.sortable getter");
+	equals(el.sortable("option", "disabled"), false, "disabled option getter");
 
 	el.sortable("destroy");
 	el.sortable({ disabled: true });
-	el.data("disabled.sortable", false);
-	equals(el.data("disabled.sortable"), false, "disabled.sortable setter");
+	el.sortable("option", "disabled", false);
+	equals(el.sortable("option", "disabled"), false, "disabled option setter");
 
-	sort($("li", el)[0], 0, 40, 2, '.data("disabled.sortable", false)');
+	sort($("li", el)[0], 0, 40, 2, '.sortable("option", "disabled", false)');
 	
 	var expected = $('<div></div>').sortable(),
 		actual = expected.sortable('enable');
@@ -103,9 +95,9 @@ test("disable", function() {
 
 	el.sortable({ disabled: false });
 	sort($("li", el)[0], 0, 40, 2, '.sortable({ disabled: false })');
-	el.data("disabled.sortable", true);
-	equals(el.data("disabled.sortable"), true, "disabled.sortable setter");
-	sort($("li", el)[0], 0, 40, 0, '.data("disabled.sortable", true)');
+	el.sortable("option", "disabled", true);
+	equals(el.sortable("option", "disabled"), true, "disabled option setter");
+	sort($("li", el)[0], 0, 40, 0, '.sortable("option", "disabled", true)');
 	
 	var expected = $('<div></div>').sortable(),
 		actual = expected.sortable('disable');

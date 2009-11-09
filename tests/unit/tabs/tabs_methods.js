@@ -16,7 +16,7 @@ test('init', function() {
 	ok( $('div:eq(0)', el).is('.ui-tabs-panel.ui-widget-content.ui-corner-bottom'), 'attach classes to panel' );
 	ok( $('li:eq(0)', el).is('.ui-tabs-selected.ui-state-active.ui-corner-top'), 'attach classes to active li');
 	ok( $('li:eq(1)', el).is('.ui-state-default.ui-corner-top'), 'attach classes to inactive li');
-	equals( el.data('selected.tabs'), 0, 'selected.tabs set' );
+	equals( el.tabs('option', 'selected'), 0, 'selected option set' );
 	equals( $('li', el).index( $('li.ui-tabs-selected', el) ), 0, 'second tab active');
 	equals( $('div', el).index( $('div.ui-tabs-hide', '#tabs1') ), 1, 'second panel should be hidden' );
 });
@@ -77,7 +77,7 @@ test('remove', function() {
 	
 	el.tabs('select', 1);
 	el.tabs('remove', 1);
-	equals(el.data('selected.tabs'), 0, 'update selected property');		
+	equals(el.tabs('option', 'selected'), 0, 'update selected property');		
 });
 
 test('select', function() {
@@ -86,36 +86,36 @@ test('select', function() {
 	el = $('#tabs1').tabs();
 	
 	el.tabs('select', 1);
-	equals(el.data('selected.tabs'), 1, 'should select tab');
+	equals(el.tabs('option', 'selected'), 1, 'should select tab');
 
 	el.tabs('destroy');
 	el.tabs({ collapsible: true });
 	el.tabs('select', 0);
-	equals(el.data('selected.tabs'), -1, 'should collapse tab passing in the already selected tab');
+	equals(el.tabs('option', 'selected'), -1, 'should collapse tab passing in the already selected tab');
 
 	el.tabs('destroy');
 	el.tabs({ collapsible: true });
 	el.tabs('select', -1);
-	equals(el.data('selected.tabs'), -1, 'should collapse tab passing in -1');
+	equals(el.tabs('option', 'selected'), -1, 'should collapse tab passing in -1');
 	
 	el.tabs('destroy');
 	el.tabs({ collapsible: true });
 	el.tabs('select', null);
-	equals(el.data('selected.tabs'), -1, 'should collapse tab passing in null (deprecated)');	
+	equals(el.tabs('option', 'selected'), -1, 'should collapse tab passing in null (deprecated)');	
 	el.tabs('select', null);
-	equals(el.data('selected.tabs'), -1, 'should not select tab passing in null a second time (deprecated)');
+	equals(el.tabs('option', 'selected'), -1, 'should not select tab passing in null a second time (deprecated)');
 
 	el.tabs('destroy');
 	el.tabs();
 	el.tabs('select', 0);
-	equals(el.data('selected.tabs'), 0, 'should not collapse tab if collapsible is not set to true');
+	equals(el.tabs('option', 'selected'), 0, 'should not collapse tab if collapsible is not set to true');
 	el.tabs('select', -1);
-	equals(el.data('selected.tabs'), 0, 'should not collapse tab if collapsible is not set to true');
+	equals(el.tabs('option', 'selected'), 0, 'should not collapse tab if collapsible is not set to true');
 	el.tabs('select', null);
-	equals(el.data('selected.tabs'), 0, 'should not collapse tab if collapsible is not set to true');
+	equals(el.tabs('option', 'selected'), 0, 'should not collapse tab if collapsible is not set to true');
 	
 	el.tabs('select', '#fragment-2');
-	equals(el.data('selected.tabs'), 1, 'should select tab by id');
+	equals(el.tabs('option', 'selected'), 1, 'should select tab by id');
 });
 
 test('load', function() {

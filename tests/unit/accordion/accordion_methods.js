@@ -31,11 +31,11 @@ test("init", function() {
 	ok(true, 'arbitrary method called after init');
 
 	var el = $('<div></div>').accordion();
-	var foo = el.data("foo.accordion");
+	var foo = el.accordion("option", "foo");
 	el.remove();
 	ok(true, 'arbitrary option getter after init');
 
-	$('<div></div>').accordion().data("foo.accordion", "bar").remove();
+	$('<div></div>').accordion().accordion("option", "foo", "bar").remove();
 	ok(true, 'arbitrary option setter after init');
 });
 
@@ -51,14 +51,6 @@ test("destroy", function() {
 
 	$('<div></div>').accordion().accordion("destroy").accordion("foo").remove();
 	ok(true, 'arbitrary method called after destroy');
-
-	var el = $('<div></div>').accordion();
-	var foo = el.accordion("destroy").data("foo.accordion");
-	el.remove();
-	ok(true, 'arbitrary option getter after destroy');
-
-	$('<div></div>').accordion().accordion("destroy").data("foo.accordion", "bar").remove();
-	ok(true, 'arbitrary option setter after destroy');
 
 	var expected = $('<div></div>').accordion(),
 		actual = expected.accordion('destroy');

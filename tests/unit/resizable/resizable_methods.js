@@ -21,17 +21,15 @@ test("init", function() {
 	ok(true, 'arbitrary method called after init');
 
 	el = $('<div></div>').resizable()
-	var foo = el.data("foo.resizable");
+	var foo = el.resizable("option", "foo");
 	el.remove();
 	ok(true, 'arbitrary option getter after init');
 
-	$('<div></div>').resizable().data("foo.resizable", "bar").remove();
+	$('<div></div>').resizable().resizable("option", "foo", "bar").remove();
 	ok(true, 'arbitrary option setter after init');
 });
 
 test("destroy", function() {
-	expect(7);
-
 	$("<div></div>").appendTo('body').resizable().resizable("destroy").remove();
 	ok(true, '.resizable("destroy") called on element');
 
@@ -44,14 +42,6 @@ test("destroy", function() {
 	$('<div></div>').resizable().resizable("destroy").resizable("foo").remove();
 	ok(true, 'arbitrary method called after destroy');
 
-	el = $('<div></div>').resizable();
-	var foo = el.resizable("destroy").data("foo.resizable");
-	el.remove();
-	ok(true, 'arbitrary option getter after destroy');
-
-	$('<div></div>').resizable().resizable("destroy").data("foo.resizable", "bar").remove();
-	ok(true, 'arbitrary option setter after destroy');
-	
 	var expected = $('<div></div>').resizable(),
 		actual = expected.resizable('destroy');
 	equals(actual, expected, 'destroy is chainable');
