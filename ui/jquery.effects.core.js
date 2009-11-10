@@ -331,36 +331,48 @@ $.extend($.effects, {
 	// Wraps the element around a wrapper that copies position properties
 	createWrapper: function(element) {
 
-		//if the element is already wrapped, return it
-		if (element.parent().is('.ui-effects-wrapper'))
+		// if the element is already wrapped, return it
+		if (element.parent().is('.ui-effects-wrapper')) {
 			return element.parent();
+		}
 
-		//Cache width,height and float properties of the element, and create a wrapper around it
-		var props = { width: element.outerWidth(true), height: element.outerHeight(true), 'float': element.css('float') };
-		element.wrap('<div class="ui-effects-wrapper" style="font-size:100%;background:transparent;border:none;margin:0;padding:0"></div>');
-		var wrapper = element.parent();
+		// wrap the element
+		var props = {
+				width: element.outerWidth(true),
+				height: element.outerHeight(true),
+				'float': element.css('float')
+			},
+			wrapper = $('<div></div>')
+				.addClass('ui-effects-wrapper')
+				.css({
+					fontSize: '100%',
+					background: 'transparent',
+					border: 'none',
+					margin: 0,
+					padding: 0
+				});
 
-		//Transfer the positioning of the element to the wrapper
+		element.wrap(wrapper);
+
+		// transfer positioning properties to the wrapper
 		if (element.css('position') == 'static') {
 			wrapper.css({ position: 'relative' });
 			element.css({ position: 'relative' });
 		} else {
-			var cssProps = {
+			$.extend(props, {
 				position: element.css('position'),
 				zIndex: element.css('z-index')
-			};
+			});
 			$.each(['top', 'left', 'bottom', 'right'], function(i, pos) {
-				cssProps[pos] = element.css(pos);
-				if (isNaN(parseInt(cssProps[pos], 10))) {
-					cssProps[pos] = 'auto';
+				props[pos] = element.css(pos);
+				if (isNaN(parseInt(props[pos], 10))) {
+					props[pos] = 'auto';
 				}
 			});
-			wrapper.css(cssProps).show();
 			element.css({position: 'relative', top: 0, left: 0 });
 		}
 
-		wrapper.css(props);
-		return wrapper;
+		return wrapper.css(props).show();
 	},
 
 	removeWrapper: function(element) {
