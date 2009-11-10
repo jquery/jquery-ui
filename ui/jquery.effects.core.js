@@ -343,11 +343,19 @@ $.extend($.effects, {
 		//Transfer the positioning of the element to the wrapper
 		if (element.css('position') == 'static') {
 			wrapper.css({ position: 'relative' });
-			element.css({ position: 'relative'} );
+			element.css({ position: 'relative' });
 		} else {
-			var top = element.css('top'); if(isNaN(parseInt(top,10))) top = 'auto';
-			var left = element.css('left'); if(isNaN(parseInt(left,10))) left = 'auto';
-			wrapper.css({ position: element.css('position'), top: top, left: left, zIndex: element.css('z-index') }).show();
+			var cssProps = {
+				position: element.css('position'),
+				zIndex: element.css('z-index')
+			};
+			$.each(['top', 'left', 'bottom', 'right'], function(i, pos) {
+				cssProps[pos] = element.css(pos);
+				if (isNaN(parseInt(cssProps[pos], 10))) {
+					cssProps[pos] = 'auto';
+				}
+			});
+			wrapper.css(cssProps).show();
 			element.css({position: 'relative', top: 0, left: 0 });
 		}
 
