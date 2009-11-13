@@ -17,9 +17,6 @@ var tabId = 0;
 $.widget("ui.tabs", {
 
 	_init: function() {
-		if (this.options.deselectable !== undefined) {
-			this.options.collapsible = this.options.deselectable;
-		}
 		this._tabify(true);
 	},
 
@@ -32,9 +29,6 @@ $.widget("ui.tabs", {
 		}
 		else {
 			this.options[key] = value;
-			if (key == 'deselectable') {
-				this.options.collapsible = value;
-			}
 			this._tabify();
 		}
 	},
