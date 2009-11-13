@@ -59,7 +59,8 @@
 		<for param="file">
 			<path><fileset dir="${dist.dir}/ui/minified/" includes="*.js" /></path>
 			<sequential>
-				<propertyregex override="yes" property="target" input="@{file}" regexp=".+\\(.+)\.min\.js$" replace="\1"/>
+				<basename file="@{file}" property="target" />
+				<propertyregex override="yes" property="target" input="${target}" regexp="(.+)\.min\.js$" replace="\1"/>
 				<concat destfile="${dist.dir}/ui-headered/${target}.min.js">
 					<header file="${dist.dir}/headers/${target}.js" />
 					<fileset file="@{file}" />
@@ -86,7 +87,7 @@
 
 		<concat destfile="${dist.dir}/ui/${concatenated}.js">
 			<filelist dir="${src.dir}/" files="${core.files}" />
-			<fileset dir="${src.dir}/" includes="ui.*.js, effects.*.js" excludes="${core.files}" />
+			<fileset dir="${src.dir}/" includes="jquery.ui.*.js, effects.*.js" excludes="${core.files}" />
 		</concat>
 		<echo message="Concatenated built." />
 
@@ -115,7 +116,7 @@
 
 		<apply executable="java" parallel="false">
 			<filelist dir="${dist.dir}/ui/" files="${concatenated}.js" />
-			<fileset dir="${src.dir}/" includes="ui.*.js, effects.*.js" />
+			<fileset dir="${src.dir}/" includes="jquery.ui.*.js, jquery.effects.*.js" />
 			<arg line="-jar" />
 			<arg path="${yui-jar}" />
 			<arg value="--charset" />  
@@ -129,7 +130,7 @@
 
 		<apply executable="java" parallel="false">
 			<filelist dir="${dist.dir}/ui/i18n/" files="${concatenated.i18n}.js" />
-			<fileset dir="${src.dir}/i18n/" includes="ui.*.js" />
+			<fileset dir="${src.dir}/i18n/" includes="jquery.ui.*.js" />
 			<arg line="-jar" />
 			<arg path="${yui-jar}" />
 			<arg value="--charset" />  
@@ -151,7 +152,7 @@
 		</copy>
 
 		<copy overwrite="true" todir="${dist.dir}/ui/">
-			<fileset dir="${src.dir}/" includes="ui.*.js, effects.*.js" />
+			<fileset dir="${src.dir}/" includes="jquery.ui.*.js, jquery.effects.*.js" />
 		</copy>
 
 		<copy overwrite="true" todir="${dist.dir}/ui/i18n/" >
