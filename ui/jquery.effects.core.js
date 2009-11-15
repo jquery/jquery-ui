@@ -18,7 +18,7 @@ $.effects = {};
 /******************************************************************************/
 
 // override the animation for color styles
-$.each(['backgroundColor', 'borderColor', 'borderBottomColor', 'borderLeftColor',
+$.each(['backgroundColor', 'borderBottomColor', 'borderLeftColor',
 	'borderRightColor', 'borderTopColor', 'color', 'outlineColor'],
 function(i, attr) {
 	$.fx.step[attr] = function(fx) {
@@ -144,7 +144,18 @@ var colors = {
 /****************************** CLASS ANIMATIONS ******************************/
 /******************************************************************************/
 
-var classAnimationActions = ['add', 'remove', 'toggle'];
+var classAnimationActions = ['add', 'remove', 'toggle'],
+	shorthandStyles = {
+		border: 1,
+		borderBottom: 1,
+		borderColor: 1,
+		borderLeft: 1,
+		borderRight: 1,
+		borderTop: 1,
+		borderWidth: 1,
+		margin: 1,
+		padding: 1
+	};
 
 function getElementStyles() {
 	var style = document.defaultView
@@ -186,6 +197,8 @@ function filterStyles(styles) {
 			value == null ||
 			// ignore functions (when does this occur?)
 			$.isFunction(value) ||
+			// shorthand styles that need to be expanded
+			name in shorthandStyles ||
 			// ignore Mozilla specific styles (Moz and length)
 			// ignore scrollbars (break in IE)
 			(/(Moz)|(length)|(scrollbar)/).test(name) ||
@@ -279,7 +292,7 @@ $.fn.extend({
 
 	switchClass: function(remove,add,speed,easing,callback) {
 		return $.effects.animateClass.apply(this, [{ add: add, remove: remove },speed,easing,callback]);
-	},
+	}
 });
 
 
