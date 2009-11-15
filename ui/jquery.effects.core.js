@@ -201,7 +201,7 @@ function filterStyles(styles) {
 			name in shorthandStyles ||
 			// ignore Mozilla specific styles (Moz and length)
 			// ignore scrollbars (break in IE)
-			(/(Moz)|(length)|(scrollbar)/).test(name) ||
+//			(/(Moz)|(length)|(scrollbar)/).test(name) ||
 
 			// only colors or values that can be converted to numbers
 			(!(/color/i).test(name) && isNaN(parseFloat(value)))
