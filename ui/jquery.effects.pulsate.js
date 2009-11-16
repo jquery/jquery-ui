@@ -13,44 +13,39 @@
 (function($) {
 
 $.effects.pulsate = function(o) {
-
 	return this.queue(function() {
+		var elem = $(this),
+			mode = $.effects.setMode(elem, o.options.mode || 'show');
+			times = ((o.options.times || 5) * 2) - 1;
+			duration = o.duration ? o.duration / 2 : $.fx.speeds._default / 2,
+			isVisible = elem.is(':visible'),
+			animateTo = 0;
 
-		// Create element
-		var el = $(this);
-
-		// Set options
-		var mode = $.effects.setMode(el, o.options.mode || 'show'); // Set Mode
-		var times = o.options.times || 5; // Default # of times
-		var duration = o.duration ? o.duration / 2 : $.fx.speeds._default / 2;
-
-		// Adjust
-		if (mode == 'hide') times--;
-		if (el.is(':hidden')) { // Show fadeIn
-			el.css('opacity', 0);
-			el.show(); // Show
-			el.animate({opacity: 1}, duration, o.options.easing);
-			times = times-2;
+		if (!isVisible) {
+			elem.css('opacity', 0).show();
+			animateTo = 1;
 		}
 
-		// Animate
-		for (var i = 0; i < times; i++) { // Pulsate
-			el.animate({opacity: 0}, duration, o.options.easing).animate({opacity: 1}, duration, o.options.easing);
-		};
-		if (mode == 'hide') { // Last Pulse
-			el.animate({opacity: 0}, duration, o.options.easing, function(){
-				el.hide(); // Hide
-				if(o.callback) o.callback.apply(this, arguments); // Callback
-			});
-		} else {
-			el.animate({opacity: 0}, duration, o.options.easing).animate({opacity: 1}, duration, o.options.easing, function(){
-				if(o.callback) o.callback.apply(this, arguments); // Callback
-			});
-		};
-		el.queue('fx', function() { el.dequeue(); });
-		el.dequeue();
-	});
+		if ((mode == 'hide' && isVisible) || (mode == 'show' && !isVisible)) {
+			times--;
+		}
 
+		for (var i = 0; i < times; i++) {
+			elem.animate({ opacity: animateTo }, duration, o.options.easing);
+			animateTo = (animateTo + 1) % 2;
+		}
+
+		elem.animate({ opacity: animateTo }, duration, o.options.easing, function() {
+			if (animateTo == 0) {
+				elem.hide();
+			}
+			(o.callback && o.callback.apply(this, arguments));
+		});
+
+		elem
+			.queue('fx', function() { elem.dequeue(); })
+			.dequeue();
+	});
 };
 
 })(jQuery);
