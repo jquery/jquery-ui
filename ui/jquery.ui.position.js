@@ -29,11 +29,11 @@ $.fn.position = function(options) {
 		targetHeight,
 		basePosition;
 
-	if (options.of == document) {
+	if (options.of.nodeType === 9) {
 		targetWidth = target.width();
 		targetHeight = target.height();
 		basePosition = { top: 0, left: 0 };
-	} else if (options.of == window) {
+	} else if ('scrollTo' in options.of && options.of.document) {
 		targetWidth = target.width();
 		targetHeight = target.height();
 		basePosition = { top: target.scrollTop(), left: target.scrollLeft() };
