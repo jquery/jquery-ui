@@ -35,7 +35,7 @@ $.widget("ui.dialog", {
 		var self = this,
 			options = self.options,
 
-			title = options.title || self.originalTitle || '&nbsp;',
+			title = options.title || self.originalTitle || '&#160;',
 			titleId = $.ui.dialog.getTitleId(self.element),
 
 			uiDialog = (self.uiDialog = $('<div></div>'))
@@ -477,7 +477,7 @@ $.widget("ui.dialog", {
 				break;
 			case "title":
 				// convert whatever was passed in o a string, for html() to not throw up
-				$(".ui-dialog-title", self.uiDialogTitlebar).html("" + (value || '&nbsp;'));
+				$(".ui-dialog-title", self.uiDialogTitlebar).html("" + (value || '&#160;'));
 				break;
 			case "width":
 				resize = true;
