@@ -59,8 +59,7 @@
 		<for param="file">
 			<path><fileset dir="${dist.dir}/ui/minified/" includes="*.js" /></path>
 			<sequential>
-				<basename file="@{file}" property="target" />
-				<propertyregex override="yes" property="target" input="${target}" regexp="(.+)\.min\.js$" replace="\1"/>
+				<propertyregex override="yes" property="target" input="@{file}" regexp=".*[\\/](.+)\.min\.js$" replace="\1"/>
 				<concat destfile="${dist.dir}/ui-headered/${target}.min.js">
 					<header file="${dist.dir}/headers/${target}.js" />
 					<fileset file="@{file}" />
