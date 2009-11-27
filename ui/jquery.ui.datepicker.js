@@ -1157,6 +1157,13 @@ $.extend(Datepicker.prototype, {
 	_possibleChars: function (format) {
 		var chars = '';
 		var literal = false;
+		// Check whether a format character is doubled
+		var lookAhead = function(match) {
+			var matches = (iFormat + 1 < format.length && format.charAt(iFormat + 1) == match);
+			if (matches)
+				iFormat++;
+			return matches;
+		};
 		for (var iFormat = 0; iFormat < format.length; iFormat++)
 			if (literal)
 				if (format.charAt(iFormat) == "'" && !lookAhead("'"))
