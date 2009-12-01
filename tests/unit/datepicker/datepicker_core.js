@@ -33,7 +33,7 @@ function addMonths(date, offset) {
 
 function init(id, options) {
 	$.datepicker.setDefaults($.datepicker.regional['']);
-	return $(id).datepicker($.extend({duration: ''}, options || {}));
+	return $(id).datepicker($.extend({showAnim: ''}, options || {}));
 }
 
 var PROP_NAME = 'datepicker';

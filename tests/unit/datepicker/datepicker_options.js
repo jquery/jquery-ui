@@ -46,7 +46,7 @@ test('option', function() {
 	equals(inp.datepicker('option', 'showOn'), 'button', 'Change instance showOn');
 	inp.datepicker('option', 'showOn', undefined);
 	equals(inp.datepicker('option', 'showOn'), 'focus', 'Reset instance showOn');
-	same(inp.datepicker('option', 'all'), {duration: ''}, 'Get instance settings');
+	same(inp.datepicker('option', 'all'), {showAnim: ''}, 'Get instance settings');
 	same(inp.datepicker('option', 'defaults'), $.datepicker._defaults,
 		'Get default settings');
 });
