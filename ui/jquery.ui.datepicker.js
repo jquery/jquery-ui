@@ -74,8 +74,9 @@ function Datepicker() {
 		gotoCurrent: false, // True if today link goes back to current selection instead
 		changeMonth: false, // True if month can be selected directly, false if only prev/next
 		changeYear: false, // True if year can be selected directly, false if only prev/next
-		yearRange: '-10:+10', // Range of years to display in drop-down,
-			// either relative to current year (-nn:+nn) or absolute (nnnn:nnnn)
+		yearRange: 'c-10:c+10', // Range of years to display in drop-down,
+			// either relative to today's year (-nn:+nn), relative to currently displayed year
+			// (c-nn:c+nn), absolute (nnnn:nnnn), or a combination of the above (nnnn:-n)
 		showOtherMonths: false, // True to show dates in other months, false to leave blank
 		selectOtherMonths: false, // True to allow selection of dates in other months, false for unselectable
 		showWeek: false, // True to show week of the year, false to not show it
@@ -1511,18 +1512,15 @@ $.extend(Datepicker.prototype, {
 		else {
 			// determine range of years to display
 			var years = this._get(inst, 'yearRange').split(':');
-			var year = 0;
-			var endYear = 0;
-			if (years.length != 2) {
-				year = drawYear - 10;
-				endYear = drawYear + 10;
-			} else if (years[0].charAt(0) == '+' || years[0].charAt(0) == '-') {
-				year = drawYear + parseInt(years[0], 10);
-				endYear = drawYear + parseInt(years[1], 10);
-			} else {
-				year = parseInt(years[0], 10);
-				endYear = parseInt(years[1], 10);
-			}
+			var thisYear = new Date().getFullYear();
+			var determineYear = function(value) {
+				var year = (value.match(/c[+-].*/) ? drawYear + parseInt(value.substring(1), 10) :
+					(value.match(/[+-].*/) ? thisYear + parseInt(value, 10) :
+					parseInt(value, 10)));
+				return (isNaN(year) ? thisYear : year);
+			};
+			var year = determineYear(years[0]);
+			var endYear = Math.max(year, determineYear(years[1] || ''));
 			year = (minDate ? Math.max(year, minDate.getFullYear()) : year);
 			endYear = (maxDate ? Math.min(endYear, maxDate.getFullYear()) : endYear);
 			html += '<select class="ui-datepicker-year" ' +

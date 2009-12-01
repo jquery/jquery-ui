@@ -267,14 +267,21 @@ test('miscellaneous', function() {
 		}
 		return range;
 	};
+	var curYear = new Date().getFullYear();
 	inp.val('02/04/2008').datepicker('show');
 	equals(dp.find('.ui-datepicker-year').text(), '2008', 'Year range - read-only default');
 	inp.datepicker('hide').datepicker('option', {changeYear: true}).datepicker('show');		
 	equals(dp.find('.ui-datepicker-year').text(), genRange(2008 - 10, 21), 'Year range - changeable default');
-	inp.datepicker('hide').datepicker('option', {yearRange: '-6:+2', changeYear: true}).datepicker('show');
-	equals(dp.find('.ui-datepicker-year').text(), genRange(2008 - 6, 9), 'Year range - -6:+2');
+	inp.datepicker('hide').datepicker('option', {yearRange: 'c-6:c+2', changeYear: true}).datepicker('show');
+	equals(dp.find('.ui-datepicker-year').text(), genRange(2008 - 6, 9), 'Year range - c-6:c+2');
 	inp.datepicker('hide').datepicker('option', {yearRange: '2000:2010', changeYear: true}).datepicker('show');
 	equals(dp.find('.ui-datepicker-year').text(), genRange(2000, 11), 'Year range - 2000:2010');
+	inp.datepicker('hide').datepicker('option', {yearRange: '-5:+3', changeYear: true}).datepicker('show');
+	equals(dp.find('.ui-datepicker-year').text(), genRange(curYear - 5, 9), 'Year range - -5:+3');
+	inp.datepicker('hide').datepicker('option', {yearRange: '2000:-5', changeYear: true}).datepicker('show');
+	equals(dp.find('.ui-datepicker-year').text(), genRange(2000, curYear - 2004), 'Year range - 2000:-5');
+	inp.datepicker('hide').datepicker('option', {yearRange: '', changeYear: true}).datepicker('show');
+	equals(dp.find('.ui-datepicker-year').text(), genRange(curYear, 1), 'Year range - -6:+2');
 
 	// Navigation as date format
 	inp.datepicker('option', {showButtonPanel: true});
