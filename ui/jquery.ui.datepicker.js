@@ -764,7 +764,8 @@ $.extend(Datepicker.prototype, {
 		if (!$.datepicker._curInst)
 			return;
 		var $target = $(event.target);
-		if (($target.parents('#' + $.datepicker._mainDivId).length == 0) &&
+		if ($target[0].id != $.datepicker._mainDivId &&
+				$target.parents('#' + $.datepicker._mainDivId).length == 0 &&
 				!$target.hasClass($.datepicker.markerClassName) &&
 				!$target.hasClass($.datepicker._triggerClass) &&
 				$.datepicker._datepickerShowing && !($.datepicker._inDialog && $.blockUI))
