@@ -2,7 +2,7 @@
 /* Written by Stuart. */
 jQuery(function($){
 	$.datepicker.regional['en-GB'] = {
-		closeText: 'Clear',
+		closeText: 'Done',
 		prevText: 'Prev',
 		nextText: 'Next',
 		currentText: 'Today',
