@@ -552,18 +552,20 @@ $.extend(Datepicker.prototype, {
 	/* Synchronise manual entry and field/alternate field. */
 	_doKeyUp: function(event) {
 		var inst = $.datepicker._getInst(event.target);
-		try {
-			var date = $.datepicker.parseDate($.datepicker._get(inst, 'dateFormat'),
-				(inst.input ? inst.input.val() : null),
-				$.datepicker._getFormatConfig(inst));
-			if (date) { // only if valid
-				$.datepicker._setDateFromField(inst);
-				$.datepicker._updateAlternate(inst);
-				$.datepicker._updateDatepicker(inst);
+		if (inst.input.val() != inst.lastVal) {
+			try {
+				var date = $.datepicker.parseDate($.datepicker._get(inst, 'dateFormat'),
+					(inst.input ? inst.input.val() : null),
+					$.datepicker._getFormatConfig(inst));
+				if (date) { // only if valid
+					$.datepicker._setDateFromField(inst);
+					$.datepicker._updateAlternate(inst);
+					$.datepicker._updateDatepicker(inst);
+				}
 			}
-		}
-		catch (event) {
-			$.datepicker.log(event);
+			catch (event) {
+				$.datepicker.log(event);
+			}
 		}
 		return true;
 	},
@@ -1202,7 +1204,8 @@ $.extend(Datepicker.prototype, {
 	/* Parse existing date and initialise date picker. */
 	_setDateFromField: function(inst) {
 		var dateFormat = this._get(inst, 'dateFormat');
-		var dates = inst.input ? inst.input.val() : null;
+		inst.lastVal = inst.input ? inst.input.val() : null;
+		var dates = inst.lastVal;
 		var date, defaultDate;
 		date = defaultDate = this._getDefaultDate(inst);
 		var settings = this._getFormatConfig(inst);
