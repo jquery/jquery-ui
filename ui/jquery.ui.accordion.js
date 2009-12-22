@@ -9,6 +9,7 @@
  *
  * Depends:
  *	jquery.ui.core.js
+ *	jquery.ui.widget.js
  */
 (function($) {
 

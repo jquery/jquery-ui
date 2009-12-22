@@ -1,14 +1,14 @@
 /*!
- * jQuery UI @VERSION
+ * jQuery UI Widget @VERSION
  *
  * Copyright (c) 2009 AUTHORS.txt (http://jqueryui.com/about)
  * Dual licensed under the MIT (MIT-LICENSE.txt)
  * and GPL (GPL-LICENSE.txt) licenses.
  *
- * http://docs.jquery.com/UI
+ * http://docs.jquery.com/UI/Widget
  */
 (function($) {
-	
+
 var _remove = $.fn.remove;
 
 $.fn.remove = function() {
@@ -17,10 +17,10 @@ $.fn.remove = function() {
 	$("*", this).add(this).each(function() {
 		$(this).triggerHandler("remove");
 	});
-	return _remove.apply(this, arguments );
+	return _remove.apply(this, arguments);
 };
-	
-	// $.widget is a factory to create jQuery plugins
+
+// $.widget is a factory to create jQuery plugins
 // taking some boilerplate code out of the plugin code
 $.widget = function(name, prototype) {
 	var namespace = name.split(".")[0],
