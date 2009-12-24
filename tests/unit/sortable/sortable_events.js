@@ -16,7 +16,6 @@ test("start", function() {
 	ok(hash.helper, 'UI hash includes: helper');
 	ok(hash.placeholder, 'UI hash includes: placeholder');
 	ok(hash.position && (hash.position.top && hash.position.left), 'UI hash includes: position');
-	ok(hash.absolutePosition && (hash.absolutePosition.top && hash.absolutePosition.left), 'UI hash includes: absolutePosition');
 	ok(hash.offset && (hash.offset.top && hash.offset.left), 'UI hash includes: offset');
 	ok(hash.item, 'UI hash includes: item');
 	ok(!hash.sender, 'UI hash does not include: sender');
@@ -35,7 +34,6 @@ test("sort", function() {
 	ok(hash.helper, 'UI hash includes: helper');
 	ok(hash.placeholder, 'UI hash includes: placeholder');
 	ok(hash.position && (hash.position.top && hash.position.left), 'UI hash includes: position');
-	ok(hash.absolutePosition && (hash.absolutePosition.top && hash.absolutePosition.left), 'UI hash includes: absolutePosition');
 	ok(hash.offset && (hash.offset.top && hash.offset.left), 'UI hash includes: offset');
 	ok(hash.item, 'UI hash includes: item');
 	ok(!hash.sender, 'UI hash does not include: sender');
@@ -59,7 +57,6 @@ test("change", function() {
 	ok(hash.helper, 'UI hash includes: helper');
 	ok(hash.placeholder, 'UI hash includes: placeholder');
 	ok(hash.position && (hash.position.top && hash.position.left), 'UI hash includes: position');
-	ok(hash.absolutePosition && (hash.absolutePosition.top && hash.absolutePosition.left), 'UI hash includes: absolutePosition');
 	ok(hash.offset && (hash.offset.top && hash.offset.left), 'UI hash includes: offset');
 	ok(hash.item, 'UI hash includes: item');
 	ok(!hash.sender, 'UI hash does not include: sender');
@@ -77,7 +74,6 @@ test("beforeStop", function() {
 	ok(hash.helper, 'UI hash includes: helper');
 	ok(hash.placeholder, 'UI hash includes: placeholder');
 	ok(hash.position && (hash.position.top && hash.position.left), 'UI hash includes: position');
-	ok(hash.absolutePosition && (hash.absolutePosition.top && hash.absolutePosition.left), 'UI hash includes: absolutePosition');
 	ok(hash.offset && (hash.offset.top && hash.offset.left), 'UI hash includes: offset');
 	ok(hash.item, 'UI hash includes: item');
 	ok(!hash.sender, 'UI hash does not include: sender');
@@ -95,7 +91,6 @@ test("stop", function() {
 	ok(!hash.helper, 'UI should not include: helper');
 	ok(hash.placeholder, 'UI hash includes: placeholder');
 	ok(hash.position && (hash.position.top && hash.position.left), 'UI hash includes: position');
-	ok(hash.absolutePosition && (hash.absolutePosition.top && hash.absolutePosition.left), 'UI hash includes: absolutePosition');
 	ok(hash.offset && (hash.offset.top && hash.offset.left), 'UI hash includes: offset');
 	ok(hash.item, 'UI hash includes: item');
 	ok(!hash.sender, 'UI hash does not include: sender');
@@ -119,7 +114,6 @@ test("update", function() {
 	ok(!hash.helper, 'UI hash should not include: helper');
 	ok(hash.placeholder, 'UI hash includes: placeholder');
 	ok(hash.position && (hash.position.top && hash.position.left), 'UI hash includes: position');
-	ok(hash.absolutePosition && (hash.absolutePosition.top && hash.absolutePosition.left), 'UI hash includes: absolutePosition');
 	ok(hash.offset && (hash.offset.top && hash.offset.left), 'UI hash includes: offset');
 	ok(hash.item, 'UI hash includes: item');
 	ok(!hash.sender, 'UI hash does not include: sender');
