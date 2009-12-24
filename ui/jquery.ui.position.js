@@ -33,7 +33,7 @@ $.fn.position = function(options) {
 		targetWidth = target.width();
 		targetHeight = target.height();
 		basePosition = { top: 0, left: 0 };
-	} else if ('scrollTo' in options.of && options.of.document) {
+	} else if (options.of.scrollTo && options.of.document) {
 		targetWidth = target.width();
 		targetHeight = target.height();
 		basePosition = { top: target.scrollTop(), left: target.scrollLeft() };
