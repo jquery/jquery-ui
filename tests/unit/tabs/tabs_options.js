@@ -63,22 +63,6 @@ test('cookie', function() {
 
 });
 
-// deprecated... shadows collapsible
-test('deselectable (deprecated)', function() {
-	expect(4);
-
-	el = $('#tabs1');
-	
-	el.tabs({ deselectable: true });
-	equals(el.tabs('option', 'collapsible'), true, 'option set');
-	ok(el.is('.ui-tabs-collapsible'), 'extra class "ui-tabs-collapsible" attached');
-	el.tabs('select', 0);
-	equals($('div.ui-tabs-hide', '#tabs1').length, 3, 'all panels should be hidden');
-	el.tabs('option', 'deselectable', false);
-	ok(el.is(':not(.ui-tabs-collapsible)'), 'extra class "ui-tabs-collapsible" not attached');
-	
-});
-
 test('disabled', function() {
 	ok(false, "missing test - untested code is broken code.");
 });
