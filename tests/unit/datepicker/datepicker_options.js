@@ -510,13 +510,17 @@ test('altField', function() {
 	equals(alt.val(), '', 'Alt field - alt - ctrl+end');
 	// Verify alt field is updated on keyup
 	alt.val('');
-	inp.val('06/04/2008').datepicker('show');
-	inp.simulate('keyup', {keyCode: $.simulate.VK_ENTER});
+	inp.val('06/04/200').datepicker('show');
+	inp.simulate('keydown', {charCode: '8'.charCodeAt(0)});
+	inp.simulate('keypress', {charCode: '8'.charCodeAt(0)});
+	inp.simulate('keyup', {charCode: '8'.charCodeAt(0)});
 	equals(inp.val(), '06/04/2008', 'Alt field - dp - manual entry');
 	equals(alt.val(), '2008-06-04', 'Alt field - manual entry');
 	// Verify alt field is not updated on keyup if date is invalid
-	inp.val('12/04/');
-	inp.simulate('keyup', {keyCode: $.simulate.VK_ENTER});
+	inp.val('12/04');
+	inp.simulate('keydown', {charCode: '/'.charCodeAt(0)});
+	inp.simulate('keypress', {charCode: '/'.charCodeAt(0)});
+	inp.simulate('keyup', {charCode: '/'.charCodeAt(0)});
 	equals(inp.val(), '12/04/', 'Alt field - dp - manual entry incomplete');
 	equals(alt.val(), '2008-06-04', 'Alt field - manual entry - not updated');
 });
