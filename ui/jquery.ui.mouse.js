@@ -28,12 +28,6 @@ $.ui.mouse = {
 				}
 			});
 
-		// Prevent text selection in IE
-		if ($.browser.msie) {
-			this._mouseUnselectable = this.element.attr('unselectable');
-			this.element.attr('unselectable', 'on');
-		}
-
 		this.started = false;
 	},
 
@@ -41,10 +35,6 @@ $.ui.mouse = {
 	// other instances of mouse
 	_mouseDestroy: function() {
 		this.element.unbind('.'+this.widgetName);
-
-		// Restore text selection in IE
-		($.browser.msie
-			&& this.element.attr('unselectable', this._mouseUnselectable));
 	},
 
 	_mouseDown: function(event) {
