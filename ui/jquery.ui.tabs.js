@@ -150,7 +150,7 @@ $.widget("ui.tabs", {
 				if (typeof o.selected != 'number' && this.lis.filter('.ui-tabs-selected').length) {
 					o.selected = this.lis.index(this.lis.filter('.ui-tabs-selected'));
 				}
-				o.selected = o.selected || 0;
+				o.selected = o.selected || this.lis.length ? 0 : -1;
 			}
 			else if (o.selected === null) { // usage of null is deprecated, TODO remove in next release
 				o.selected = -1;
@@ -468,6 +468,7 @@ $.widget("ui.tabs", {
 		this._tabify();
 
 		if (this.anchors.length == 1) { // after tabify
+			o.selected = 0;
 			$li.addClass('ui-tabs-selected ui-state-active');
 			$panel.removeClass('ui-tabs-hide');
 			this.element.queue("tabs", function() {
