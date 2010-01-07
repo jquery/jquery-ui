@@ -421,6 +421,10 @@ $.widget("ui.dialog", {
 			}
 		}
 
+		var isVisible = this.uiDialog.is(':visible');
+		if (!isVisible) {
+			this.uiDialog.show();
+		}
 		this.uiDialog.position({
 			my: myAt.join(' '),
 			at: myAt.join(' '),
@@ -428,6 +432,9 @@ $.widget("ui.dialog", {
 			of: window,
 			collision: 'fit'
 		});
+		if (!isVisible) {
+			this.uiDialog.hide();
+		}
 	},
 
 	_setOption: function(key, value){
