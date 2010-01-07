@@ -127,19 +127,20 @@ test("{ header: '> li > :first-child,> :not(li):even' }, default", function() {
 });
 
 test("{ icons: false }", function() {
+	var list = $("#list1");
 	function icons(on) {
-		same($("#list1 span.ui-icon").length, on ? 3 : 0);
-		same( $("#list1").hasClass("ui-accordion-icons"), on );
+		same($("span.ui-icon", list).length, on ? 3 : 0);
+		same( list.hasClass("ui-accordion-icons"), on );
 	}
-	$("#list1").accordion();
+	list.accordion();
 	icons(true);
-	$("#list1").accordion("destroy").accordion({
+	list.accordion("destroy").accordion({
 		icons: false
 	});
 	icons(false);
-	$("#list1").accordion("option", "icons", $.ui.accordion.defaults.icons);
+	list.accordion("option", "icons", $.ui.accordion.prototype.options.icons);
 	icons(true);
-	$("#list1").accordion("option", "icons", false);
+	list.accordion("option", "icons", false);
 	icons(false);
 });
 

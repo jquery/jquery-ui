@@ -47,6 +47,11 @@ module("datepicker: core", {
 	}
 });
 
+test("widget method", function() {
+	var actual = $("#inp").datepicker().datepicker("widget")[0];
+	same($("body > #ui-datepicker-div:last-child")[0], actual);
+});
+
 test('baseStructure', function() {
 	var inp = init('#inp');
 	inp.focus();

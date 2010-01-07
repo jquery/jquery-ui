@@ -21,6 +21,9 @@ $.fn.position = function(options) {
 	if (!options || !options.of) {
 		return _position.apply(this, arguments);
 	}
+	
+	// make a copy, we don't want to modify arguments
+	options = $.extend({}, options);
 
 	var target = $(options.of),
 		collision = (options.collision || 'flip').split(' '),
@@ -138,10 +141,7 @@ $.fn.position = function(options) {
 		});
 
 		(options.stackfix !== false && $.fn.stackfix && elem.stackfix());
-		// the by function is passed the offset values, not the position values
-		// we'll need the logic from the .offset() setter to be accessible for
-		// us to calculate the position values to make the by option more useful
-		($.isFunction(options.by) ? options.by.call(this, position) : elem.offset(position));
+		elem.offset($.extend(position, { using: options.using }));
 	});
 };
 
@@ -178,50 +178,40 @@ $.ui.position = {
 	}
 };
 
+// offset setter from jQuery 1.4
+if (!$.offset.setOffset) {
+	$.offset.setOffset = function( elem, options ) {
+		// set position first, in-case top/left are set even on static elem
+		if ( /static/.test( jQuery.curCSS( elem, 'position' ) ) ) {
+			elem.style.position = 'relative';
+		}
+		var curElem   = jQuery( elem ),
+			curOffset = curElem.offset(),
+			curTop    = parseInt( jQuery.curCSS( elem, 'top',  true ), 10 ) || 0,
+			curLeft   = parseInt( jQuery.curCSS( elem, 'left', true ), 10)  || 0,
+			props     = {
+				top:  (options.top  - curOffset.top)  + curTop,
+				left: (options.left - curOffset.left) + curLeft
+			};
+		
+		if ( 'using' in options ) {
+			options.using.call( elem, props );
+		} else {
+			curElem.css( props );
+		}
+	};
 
-// the following functionality is planned for jQuery 1.4
-// based on http://plugins.jquery.com/files/offset.js.txt
-$.fn.extend({
-	_offset: $.fn.offset,
-	offset: function(newOffset) {
-	    return !newOffset ? this._offset() : this.each(function() {
-			var elem = $(this),
-				// we need to convert static positioning to relative positioning
-				isRelative = /relative|static/.test(elem.css('position')),
-				hide = elem.css('display') == 'none';
-
-			(isRelative && elem.css('position', 'relative'));
-			(hide && elem.show());
-
-			var offset = elem.offset(),
-				delta = {
-					left : parseInt(elem.css('left'), 10),
-					top: parseInt(elem.css('top'), 10)
-				};
-
-			// in case of 'auto'
-			delta.left = !isNaN(delta.left)
-				? delta.left
-				: isRelative
-					? 0
-					: this.offsetLeft;
-			delta.top = !isNaN(delta.top)
-				? delta.top
-				: isRelative
-					? 0
-					: this.offsetTop;
-
-			// allow setting only left or only top
-			if (newOffset.left || newOffset.left === 0) {
-				elem.css('left', newOffset.left - offset.left + delta.left);
-			}
-			if (newOffset.top || newOffset.top === 0) {
-				elem.css('top', newOffset.top - offset.top + delta.top);
-			}
-
-			(hide && elem.hide());
-		});
-	}
-});
+	var _offset = $.fn.offset;
+	$.fn.offset = function( options ) {
+		var elem = this[0];
+		if ( !elem || !elem.ownerDocument ) { return null; }
+		if ( options ) { 
+			return this.each(function() {
+				$.offset.setOffset( this, options );
+			});
+		}
+		return _offset.call(this);
+	};
+}
 
 })(jQuery);

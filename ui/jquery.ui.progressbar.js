@@ -14,7 +14,9 @@
 (function($) {
 
 $.widget("ui.progressbar", {
-
+	options: {
+		value: 0
+	},
 	_init: function() {
 
 		this.element
@@ -51,7 +53,7 @@ $.widget("ui.progressbar", {
 
 		this.valueDiv.remove();
 
-		$.widget.prototype.destroy.apply(this, arguments);
+		$.Widget.prototype.destroy.apply(this, arguments);
 
 		return this;
 	},
@@ -61,11 +63,11 @@ $.widget("ui.progressbar", {
 			return this._value();
 		}
 		
-		this._setData('value', newValue);
+		this._setOption('value', newValue);
 		return this;
 	},
 
-	_setData: function(key, value) {
+	_setOption: function(key, value) {
 
 		switch (key) {
 			case 'value':
@@ -75,7 +77,7 @@ $.widget("ui.progressbar", {
 				break;
 		}
 
-		$.widget.prototype._setData.apply(this, arguments);
+		$.Widget.prototype._setOption.apply(this, arguments);
 
 	},
 
@@ -111,10 +113,7 @@ $.widget("ui.progressbar", {
 });
 
 $.extend($.ui.progressbar, {
-	version: "@VERSION",
-	defaults: {
-		value: 0
-	}
+	version: "@VERSION"
 });
 
 })(jQuery);

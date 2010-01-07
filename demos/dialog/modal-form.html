@@ -7,6 +7,7 @@
 	<script type="text/javascript" src="../../ui/jquery.ui.core.js"></script>
 	<script type="text/javascript" src="../../ui/jquery.ui.widget.js"></script>
 	<script type="text/javascript" src="../../ui/jquery.ui.mouse.js"></script>
+	<script type="text/javascript" src="../../ui/jquery.ui.button.js"></script>
 	<script type="text/javascript" src="../../ui/jquery.ui.draggable.js"></script>
 	<script type="text/javascript" src="../../ui/jquery.ui.position.js"></script>
 	<script type="text/javascript" src="../../ui/jquery.ui.resizable.js"></script>
@@ -23,7 +24,6 @@
 		div#users-contain { width: 350px; margin: 20px 0; }
 		div#users-contain table { margin: 1em 0; border-collapse: collapse; width: 100%; }
 		div#users-contain table td, div#users-contain table th { border: 1px solid #eee; padding: .6em 10px; text-align: left; }
-		.ui-button { outline: 0; margin: 0; padding: .4em 1em .5em; text-decoration: none; cursor: pointer; position: relative; text-align: center; }
 		.ui-dialog .ui-state-error { padding: .3em; }
 		.validateTips { border: 1px solid transparent; padding: 0.3em; }
 		
@@ -112,29 +112,11 @@
 		
 		
 		
-		$('#create-user').click(function() {
-			$('#dialog-form').dialog('open');
-		})
-		.hover(
-			function() {
-				$(this).addClass("ui-state-hover");
-			},
-			function() {
-				$(this).removeClass("ui-state-hover");
-			}
-		)
-		.focus(function() {
-			$(this).addClass('ui-state-focus');
-		})
-		.blur(function() {
-			$(this).removeClass('ui-state-focus');
-		})
-		.mousedown(function() {
-			$(this).addClass("ui-state-active");
-		})
-		.mouseup(function() {
-				$(this).removeClass("ui-state-active");
-		});
+		$('#create-user')
+			.button()
+			.click(function() {
+				$('#dialog-form').dialog('open');
+			});
 
 	});
 	</script>
@@ -181,7 +163,7 @@
 		</tbody>
 	</table>
 </div>
-<button id="create-user" class="ui-button ui-state-default ui-corner-all">Create new user</button>
+<button id="create-user">Create new user</button>
 
 </div><!-- End demo -->
 

@@ -12,7 +12,12 @@
  */
 (function($) {
 
-$.ui.mouse = {
+$.widget("ui.mouse", {
+	options: {
+		cancel: ':input,option',
+		distance: 1,
+		delay: 0
+	},
 	_mouseInit: function() {
 		var self = this;
 
@@ -141,13 +146,6 @@ $.ui.mouse = {
 	_mouseDrag: function(event) {},
 	_mouseStop: function(event) {},
 	_mouseCapture: function(event) { return true; }
-};
-
-$.ui.mouse.defaults = {
-	cancel: ':input,option',
-	distance: 1,
-	delay: 0
-};
+});
 
 })(jQuery);
-

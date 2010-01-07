@@ -5,7 +5,7 @@
 
 (function($) {
 
-jQuery.ui.accordion.defaults.animated = false;
+$.ui.accordion.prototype.options.animated = false;
 
 function state(accordion) {
 	var args = $.makeArray(arguments).slice(1);

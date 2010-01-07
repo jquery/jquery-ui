@@ -16,12 +16,31 @@
 var tabId = 0;
 
 $.widget("ui.tabs", {
-
+	options: {
+		add: null,
+		ajaxOptions: null,
+		cache: false,
+		cookie: null, // e.g. { expires: 7, path: '/', domain: 'jquery.com', secure: true }
+		collapsible: false,
+		disable: null,
+		disabled: [],
+		enable: null,
+		event: 'click',
+		fx: null, // e.g. { height: 'toggle', opacity: 'toggle', duration: 200 }
+		idPrefix: 'ui-tabs-',
+		load: null,
+		panelTemplate: '<div></div>',
+		remove: null,
+		select: null,
+		show: null,
+		spinner: '<em>Loading&#8230;</em>',
+		tabTemplate: '<li><a href="#{href}"><span>#{label}</span></a></li>'
+	},
 	_init: function() {
 		this._tabify(true);
 	},
 
-	_setData: function(key, value) {
+	_setOption: function(key, value) {
 		if (key == 'selected') {
 			if (this.options.collapsible && value == this.options.selected) {
 				return;
@@ -625,27 +644,7 @@ $.widget("ui.tabs", {
 });
 
 $.extend($.ui.tabs, {
-	version: '@VERSION',
-	defaults: {
-		add: null,
-		ajaxOptions: null,
-		cache: false,
-		cookie: null, // e.g. { expires: 7, path: '/', domain: 'jquery.com', secure: true }
-		collapsible: false,
-		disable: null,
-		disabled: [],
-		enable: null,
-		event: 'click',
-		fx: null, // e.g. { height: 'toggle', opacity: 'toggle', duration: 200 }
-		idPrefix: 'ui-tabs-',
-		load: null,
-		panelTemplate: '<div></div>',
-		remove: null,
-		select: null,
-		show: null,
-		spinner: '<em>Loading&#8230;</em>',
-		tabTemplate: '<li><a href="#{href}"><span>#{label}</span></a></li>'
-	}
+	version: '@VERSION'
 });
 
 /*

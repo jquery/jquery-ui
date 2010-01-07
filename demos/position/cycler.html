@@ -6,7 +6,6 @@
 	<script type="text/javascript" src="../../jquery-1.3.2.js"></script>
 	<script type="text/javascript" src="../../ui/jquery.ui.core.js"></script>
 	<script type="text/javascript" src="../../ui/jquery.ui.widget.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.draggable.js"></script>
 	<script type="text/javascript" src="../../ui/jquery.ui.position.js"></script>
 	<link type="text/css" href="../demos.css" rel="stylesheet" />
     
@@ -23,7 +22,7 @@
 		$.fn.position2 = function(options) {
 			return this.position($.extend({
 				of: window,
-				by: function(to) {
+				using: function(to) {
 					$(this).css({
 						top: to.top,
 						left: to.left
@@ -33,27 +32,27 @@
 			}, options));
 		}
 		
-		$.fn.left = function(by) {
+		$.fn.left = function(using) {
 			return this.position2({
 				my: "right middle",
 				at: "left middle",
 				offset: "25 0",
-				by: by
+				using: using
 			});
 		}
-		$.fn.right = function(by) {
+		$.fn.right = function(using) {
 			return this.position2({
 				my: "left middle",
 				at: "right middle",
 				offset: "-25 0",
-				by: by
+				using: using
 			});
 		}
-		$.fn.center = function(by) {
+		$.fn.center = function(using) {
 			return this.position2({
 				my: "center middle",
 				at: "center middle",
-				by: by
+				using: using
 			});
 		};
 		

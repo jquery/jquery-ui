@@ -14,8 +14,25 @@
  */
 (function($) {
 
-$.widget("ui.resizable", $.extend({}, $.ui.mouse, {
-
+$.widget("ui.resizable", $.ui.mouse, {
+	options: {
+		alsoResize: false,
+		animate: false,
+		animateDuration: "slow",
+		animateEasing: "swing",
+		aspectRatio: false,
+		autoHide: false,
+		containment: false,
+		ghost: false,
+		grid: false,
+		handles: "e,s,se",
+		helper: false,
+		maxHeight: null,
+		maxWidth: null,
+		minHeight: 10,
+		minWidth: 10,
+		zIndex: 1000
+	},
 	_init: function() {
 
 		var self = this, o = this.options;
@@ -498,29 +515,11 @@ $.widget("ui.resizable", $.extend({}, $.ui.mouse, {
 		};
 	}
 
-}));
+});
 
 $.extend($.ui.resizable, {
 	version: "@VERSION",
-	eventPrefix: "resize",
-	defaults: $.extend({}, $.ui.mouse.defaults, {
-		alsoResize: false,
-		animate: false,
-		animateDuration: "slow",
-		animateEasing: "swing",
-		aspectRatio: false,
-		autoHide: false,
-		containment: false,
-		ghost: false,
-		grid: false,
-		handles: "e,s,se",
-		helper: false,
-		maxHeight: null,
-		maxWidth: null,
-		minHeight: 10,
-		minWidth: 10,
-		zIndex: 1000
-	})
+	eventPrefix: "resize"
 });
 
 /*

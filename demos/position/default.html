@@ -6,6 +6,7 @@
 	<script type="text/javascript" src="../../jquery-1.3.2.js"></script>
 	<script type="text/javascript" src="../../ui/jquery.ui.core.js"></script>
 	<script type="text/javascript" src="../../ui/jquery.ui.widget.js"></script>
+	<script type="text/javascript" src="../../ui/jquery.ui.mouse.js"></script>
 	<script type="text/javascript" src="../../ui/jquery.ui.draggable.js"></script>
 	<script type="text/javascript" src="../../ui/jquery.ui.position.js"></script>
 	<link type="text/css" href="../demos.css" rel="stylesheet" />
@@ -44,23 +45,23 @@
 	<script type="text/javascript">
 	$(function() {
 		
-		function position(by) {
+		function position(using) {
             $('.positionable').position({
                 of: $('#parent'),
                 my: $('#my_horizontal').val() + ' ' + $('#my_vertical').val(),
                 at: $('#at_horizontal').val() + ' '+ $('#at_vertical').val(),
                 offset: $('#offset').val(),
-				by: by,
+				using: using,
 				collision: $("#collision_horizontal").val() + ' ' + $("#collision_vertical").val()
             });
 		}
 		
 		$('.positionable').css("opacity", 0.5);
 		
-        $(':input').bind('click keyup change', position);
+        $(':input').bind('click keyup change', function() { position(); });
 		
 		$("#parent").draggable({
-			drag: position
+			drag: function() { position(); }
 		});
 		
 		$('.positionable').draggable({

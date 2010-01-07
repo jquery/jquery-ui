@@ -14,8 +14,14 @@
  */
 (function($) {
 
-$.widget("ui.selectable", $.extend({}, $.ui.mouse, {
-
+$.widget("ui.selectable", $.ui.mouse, {
+	options: {
+		appendTo: 'body',
+		autoRefresh: true,
+		distance: 0,
+		filter: '*',
+		tolerance: 'touch'
+	},
 	_init: function() {
 		var self = this;
 
@@ -243,17 +249,10 @@ $.widget("ui.selectable", $.extend({}, $.ui.mouse, {
 		return false;
 	}
 
-}));
+});
 
 $.extend($.ui.selectable, {
-	version: "@VERSION",
-	defaults: $.extend({}, $.ui.mouse.defaults, {
-		appendTo: 'body',
-		autoRefresh: true,
-		distance: 0,
-		filter: '*',
-		tolerance: 'touch'
-	})
+	version: "@VERSION"
 });
 
 })(jQuery);

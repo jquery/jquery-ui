@@ -14,8 +14,33 @@
  */
 (function($) {
 
-$.widget("ui.draggable", $.extend({}, $.ui.mouse, {
-
+$.widget("ui.draggable", $.ui.mouse, {
+	options: {
+		addClasses: true,
+		appendTo: "parent",
+		axis: false,
+		connectToSortable: false,
+		containment: false,
+		cursor: "auto",
+		cursorAt: false,
+		grid: false,
+		handle: false,
+		helper: "original",
+		iframeFix: false,
+		opacity: false,
+		refreshPositions: false,
+		revert: false,
+		revertDuration: 500,
+		scope: "default",
+		scroll: true,
+		scrollSensitivity: 20,
+		scrollSpeed: 20,
+		snap: false,
+		snapMode: "both",
+		snapTolerance: 20,
+		stack: false,
+		zIndex: false
+	},
 	_init: function() {
 
 		if (this.options.helper == 'original' && !(/^(?:r|a|f)/).test(this.element.css("position")))
@@ -405,7 +430,7 @@ $.widget("ui.draggable", $.extend({}, $.ui.mouse, {
 		ui = ui || this._uiHash();
 		$.ui.plugin.call(this, type, [event, ui]);
 		if(type == "drag") this.positionAbs = this._convertPositionTo("absolute"); //The absolute position has to be recalculated after plugins
-		return $.widget.prototype._trigger.call(this, type, event, ui);
+		return $.Widget.prototype._trigger.call(this, type, event, ui);
 	},
 
 	plugins: {},
@@ -419,37 +444,11 @@ $.widget("ui.draggable", $.extend({}, $.ui.mouse, {
 		};
 	}
 
-}));
+});
 
 $.extend($.ui.draggable, {
 	version: "@VERSION",
-	eventPrefix: "drag",
-	defaults: $.extend({}, $.ui.mouse.defaults, {
-		addClasses: true,
-		appendTo: "parent",
-		axis: false,
-		connectToSortable: false,
-		containment: false,
-		cursor: "auto",
-		cursorAt: false,
-		grid: false,
-		handle: false,
-		helper: "original",
-		iframeFix: false,
-		opacity: false,
-		refreshPositions: false,
-		revert: false,
-		revertDuration: 500,
-		scope: "default",
-		scroll: true,
-		scrollSensitivity: 20,
-		scrollSpeed: 20,
-		snap: false,
-		snapMode: "both",
-		snapTolerance: 20,
-		stack: false,
-		zIndex: false
-	})
+	eventPrefix: "drag"
 });
 
 $.ui.plugin.add("draggable", "connectToSortable", {

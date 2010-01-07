@@ -204,7 +204,7 @@ test('offset', function() {
 	same($('#elx').offset(), { top: 57, left: 45 }, 'with units');
 });
 
-test('by', function() {
+test('using', function() {
 	expect(6);
 	
 	var count = 0,
@@ -221,7 +221,7 @@ test('by', function() {
 		my: 'left top',
 		at: 'left top',
 		of: '#parentx',
-		by: function(position) {
+		using: function(position) {
 			same(this, elems[count], 'correct context for call #' + count);
 			same(position, expectedPosition, 'correct position for call #' + count);
 			count++;

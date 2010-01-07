@@ -147,4 +147,9 @@ test("ARIA", function() {
 	el.remove();
 });
 
+test("widget method", function() {
+	var dialog = $("<div/>").appendTo("#main").dialog();
+	same(dialog.parent()[0], dialog.dialog("widget")[0]);
+});
+
 })(jQuery);

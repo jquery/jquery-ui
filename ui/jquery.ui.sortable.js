@@ -14,7 +14,31 @@
  */
 (function($) {
 
-$.widget("ui.sortable", $.extend({}, $.ui.mouse, {
+$.widget("ui.sortable", $.ui.mouse, {
+	options: {
+		appendTo: "parent",
+		axis: false,
+		connectWith: false,
+		containment: false,
+		cursor: 'auto',
+		cursorAt: false,
+		dropOnEmpty: true,
+		forcePlaceholderSize: false,
+		forceHelperSize: false,
+		grid: false,
+		handle: false,
+		helper: "original",
+		items: '> *',
+		opacity: false,
+		placeholder: false,
+		revert: false,
+		scroll: true,
+		scrollSensitivity: 20,
+		scrollSpeed: 20,
+		scope: "default",
+		tolerance: "intersect",
+		zIndex: 1000
+	},
 	_init: function() {
 
 		var o = this.options;
@@ -1000,7 +1024,7 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 	},
 
 	_trigger: function() {
-		if ($.widget.prototype._trigger.apply(this, arguments) === false) {
+		if ($.Widget.prototype._trigger.apply(this, arguments) === false) {
 			this.cancel();
 		}
 	},
@@ -1018,35 +1042,11 @@ $.widget("ui.sortable", $.extend({}, $.ui.mouse, {
 		};
 	}
 
-}));
+});
 
 $.extend($.ui.sortable, {
 	version: "@VERSION",
-	eventPrefix: "sort",
-	defaults: $.extend({}, $.ui.mouse.defaults, {
-		appendTo: "parent",
-		axis: false,
-		connectWith: false,
-		containment: false,
-		cursor: 'auto',
-		cursorAt: false,
-		dropOnEmpty: true,
-		forcePlaceholderSize: false,
-		forceHelperSize: false,
-		grid: false,
-		handle: false,
-		helper: "original",
-		items: '> *',
-		opacity: false,
-		placeholder: false,
-		revert: false,
-		scroll: true,
-		scrollSensitivity: 20,
-		scrollSpeed: 20,
-		scope: "default",
-		tolerance: "intersect",
-		zIndex: 1000
-	})
+	eventPrefix: "sort"
 });
 
 })(jQuery);

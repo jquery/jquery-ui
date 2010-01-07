@@ -14,7 +14,24 @@
 (function($) {
 
 $.widget("ui.accordion", {
-
+	options: {
+		active: 0,
+		animated: 'slide',
+		autoHeight: true,
+		clearStyle: false,
+		collapsible: false,
+		event: "click",
+		fillSpace: false,
+		header: "> li > :first-child,> :not(li):even",
+		icons: {
+			header: "ui-icon-triangle-1-e",
+			headerSelected: "ui-icon-triangle-1-s"
+		},
+		navigation: false,
+		navigationFilter: function() {
+			return this.href.toLowerCase() == location.href.toLowerCase();
+		}
+	},
 	_init: function() {
 
 		var o = this.options, self = this;
@@ -140,8 +157,8 @@ $.widget("ui.accordion", {
 		return this;
 	},
 	
-	_setData: function(key, value) {
-		$.widget.prototype._setData.apply(this, arguments);
+	_setOption: function(key, value) {
+		$.Widget.prototype._setOption.apply(this, arguments);
 			
 		if (key == "active") {
 			this.activate(value);
@@ -422,24 +439,6 @@ $.widget("ui.accordion", {
 
 $.extend($.ui.accordion, {
 	version: "@VERSION",
-	defaults: {
-		active: 0,
-		animated: 'slide',
-		autoHeight: true,
-		clearStyle: false,
-		collapsible: false,
-		event: "click",
-		fillSpace: false,
-		header: "> li > :first-child,> :not(li):even",
-		icons: {
-			header: "ui-icon-triangle-1-e",
-			headerSelected: "ui-icon-triangle-1-s"
-		},
-		navigation: false,
-		navigationFilter: function() {
-			return this.href.toLowerCase() == location.href.toLowerCase();
-		}
-	},
 	animations: {
 		slide: function(options, additions) {
 			options = $.extend({

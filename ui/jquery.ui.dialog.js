@@ -9,6 +9,7 @@
  *
  * Depends:
  *	jquery.ui.core.js
+ *	jquery.ui.widget.js
  *	jquery.ui.draggable.js
  *	jquery.ui.mouse.js
  *	jquery.ui.position.js
@@ -17,20 +18,36 @@
  */
 (function($) {
 
-var setDataSwitch = {
-		maxHeight: "maxHeight.resizable",
-		maxWidth: "maxWidth.resizable",
-		minWidth: "minWidth.resizable"
-	},
-	
-	uiDialogClasses =
-		'ui-dialog ' +
-		'ui-widget ' +
-		'ui-widget-content ' +
-		'ui-corner-all ';
+var uiDialogClasses =
+	'ui-dialog ' +
+	'ui-widget ' +
+	'ui-widget-content ' +
+	'ui-corner-all ';
 
 $.widget("ui.dialog", {
-
+	options: {
+		autoOpen: true,
+		stackfix: false,
+		buttons: {},
+		closeOnEscape: true,
+		closeText: 'close',
+		dialogClass: '',
+		draggable: true,
+		hide: null,
+		height: 'auto',
+		maxHeight: false,
+		maxWidth: false,
+		minHeight: 150,
+		minWidth: 150,
+		modal: false,
+		position: 'center',
+		resizable: true,
+		show: null,
+		stack: true,
+		title: '',
+		width: 300,
+		zIndex: 1000
+	},
 	_init: function() {
 		this.originalTitle = this.element.attr('title');
 
@@ -148,6 +165,10 @@ $.widget("ui.dialog", {
 		(self.originalTitle && self.element.attr('title', self.originalTitle));
 
 		return self;
+	},
+	
+	widget: function() {
+		return this.uiDialog;
 	},
 
 	close: function(event) {
@@ -279,28 +300,11 @@ $.widget("ui.dialog", {
 			$.each(buttons, function() { return !(hasButtons = true); }));
 		if (hasButtons) {
 			$.each(buttons, function(name, fn) {
-				$('<button type="button"></button>')
-					.addClass(
-						'ui-state-default ' +
-						'ui-corner-all'
-					)
+				var button = $('<button type="button"></button>')
 					.text(name)
 					.click(function() { fn.apply(self.element[0], arguments); })
-					.hover(
-						function() {
-							$(this).addClass('ui-state-hover');
-						},
-						function() {
-							$(this).removeClass('ui-state-hover');
-						}
-					)
-					.focus(function() {
-						$(this).addClass('ui-state-focus');
-					})
-					.blur(function() {
-						$(this).removeClass('ui-state-focus');
-					})
 					.appendTo(uiDialogButtonPane);
+				($.fn.button && button.button());
 			});
 			uiDialogButtonPane.appendTo(self.uiDialog);
 		}
@@ -381,7 +385,7 @@ $.widget("ui.dialog", {
 		var myAt = [],
 			offset = [0, 0];
 
-		position = position || $.ui.dialog.defaults.position;
+		position = position || $.ui.dialog.prototype.options.position;
 
 		// deep extending converts arrays to objects in jQuery <= 1.3.2 :-(
 //		if (typeof position == 'string' || $.isArray(position)) {
@@ -426,18 +430,18 @@ $.widget("ui.dialog", {
 		});
 	},
 
-	_setData: function(key, value){
+	_setOption: function(key, value){
 		var self = this,
 			uiDialog = self.uiDialog,
+			isResizable = uiDialog.is(':data(resizable)'),
 			resize = false;
 		
-		(setDataSwitch[key] && uiDialog.data(setDataSwitch[key], value));
 		switch (key) {
 			case "buttons":
 				self._createButtons(value);
 				break;
 			case "closeText":
-				// convert whatever was passed in o a string, for text() to not throw up
+				// convert whatever was passed in to a string, for text() to not throw up
 				self.uiDialogTitlebarCloseText.text("" + value);
 				break;
 			case "dialogClass":
@@ -458,15 +462,26 @@ $.widget("ui.dialog", {
 			case "height":
 				resize = true;
 				break;
+			case "maxHeight":
+				(isResizable && uiDialog.resizable('option', 'maxHeight', value));
+				resize = true;
+				break;
+			case "maxWidth":
+				(isResizable && uiDialog.resizable('option', 'maxWidth', value));
+				resize = true;
+				break;
 			case "minHeight":
+				(isResizable && uiDialog.resizable('option', 'minHeight', value));
+				resize = true;
+				break;
+			case "minWidth":
+				(isResizable && uiDialog.resizable('option', 'minWidth', value));
 				resize = true;
 				break;
 			case "position":
 				self._position(value);
 				break;
 			case "resizable":
-				var isResizable = uiDialog.is(':data(resizable)');
-
 				// currently resizable, becoming non-resizable
 				(isResizable && !value && uiDialog.resizable('destroy'));
 
@@ -486,7 +501,7 @@ $.widget("ui.dialog", {
 				break;
 		}
 
-		$.widget.prototype._setData.apply(self, arguments);
+		$.Widget.prototype._setOption.apply(self, arguments);
 		(resize && self._size());
 	},
 
@@ -527,29 +542,6 @@ $.widget("ui.dialog", {
 
 $.extend($.ui.dialog, {
 	version: "@VERSION",
-	defaults: {
-		autoOpen: true,
-		stackfix: false,
-		buttons: {},
-		closeOnEscape: true,
-		closeText: 'close',
-		dialogClass: '',
-		draggable: true,
-		hide: null,
-		height: 'auto',
-		maxHeight: false,
-		maxWidth: false,
-		minHeight: 150,
-		minWidth: 150,
-		modal: false,
-		position: 'center',
-		resizable: true,
-		show: null,
-		stack: true,
-		title: '',
-		width: 300,
-		zIndex: 1000
-	},
 
 	uuid: 0,
 	maxZ: 0,
