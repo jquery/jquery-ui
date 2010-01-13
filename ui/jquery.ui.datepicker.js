@@ -183,12 +183,31 @@ $.extend(Datepicker.prototype, {
 		inst.trigger = $([]);
 		if (input.hasClass(this.markerClassName))
 			return;
+		this._attachments(input, inst);
+		input.addClass(this.markerClassName).keydown(this._doKeyDown).
+			keypress(this._doKeyPress).keyup(this._doKeyUp).
+			bind("setData.datepicker", function(event, key, value) {
+				inst.settings[key] = value;
+			}).bind("getData.datepicker", function(event, key) {
+				return this._get(inst, key);
+			});
+		this._autoSize(inst);
+		$.data(target, PROP_NAME, inst);
+	},
+
+	/* Make attachments based on settings. */
+	_attachments: function(input, inst) {
 		var appendText = this._get(inst, 'appendText');
 		var isRTL = this._get(inst, 'isRTL');
+		if (inst.append)
+			inst.append.remove();
 		if (appendText) {
 			inst.append = $('<span class="' + this._appendClass + '">' + appendText + '</span>');
 			input[isRTL ? 'before' : 'after'](inst.append);
 		}
+		input.unbind('focus', this._showDatepicker);
+		if (inst.trigger)
+			inst.trigger.remove();
 		var showOn = this._get(inst, 'showOn');
 		if (showOn == 'focus' || showOn == 'both') // pop-up date picker when in the marked field
 			input.focus(this._showDatepicker);
@@ -203,22 +222,13 @@ $.extend(Datepicker.prototype, {
 					{ src:buttonImage, alt:buttonText, title:buttonText })));
 			input[isRTL ? 'before' : 'after'](inst.trigger);
 			inst.trigger.click(function() {
-				if ($.datepicker._datepickerShowing && $.datepicker._lastInput == target)
+				if ($.datepicker._datepickerShowing && $.datepicker._lastInput == input[0])
 					$.datepicker._hideDatepicker();
 				else
-					$.datepicker._showDatepicker(target);
+					$.datepicker._showDatepicker(input[0]);
 				return false;
 			});
 		}
-		input.addClass(this.markerClassName).keydown(this._doKeyDown).
-			keypress(this._doKeyPress).keyup(this._doKeyUp).
-			bind("setData.datepicker", function(event, key, value) {
-				inst.settings[key] = value;
-			}).bind("getData.datepicker", function(event, key) {
-				return this._get(inst, key);
-			});
-		this._autoSize(inst);
-		$.data(target, PROP_NAME, inst);
 	},
 
 	/* Apply the maximum length for the date format. */
@@ -431,8 +441,9 @@ $.extend(Datepicker.prototype, {
 			if (this._curInst == inst) {
 				this._hideDatepicker();
 			}
-			var date = this._getDateDatepicker(target);
+			var date = this._getDateDatepicker(target, true);
 			extendRemove(inst.settings, settings);
+			this._attachments($(target), inst);
 			this._autoSize(inst);
 			this._setDateDatepicker(target, date);
 			this._updateDatepicker(inst);
@@ -466,12 +477,13 @@ $.extend(Datepicker.prototype, {
 	},
 
 	/* Get the date(s) for the first entry in a jQuery selection.
-	   @param  target  element - the target input field or division or span
+	   @param  target     element - the target input field or division or span
+	   @param  noDefault  boolean - true if no default date is to be used
 	   @return Date - the current date */
-	_getDateDatepicker: function(target) {
+	_getDateDatepicker: function(target, noDefault) {
 		var inst = this._getInst(target);
 		if (inst && !inst.inline)
-			this._setDateFromField(inst);
+			this._setDateFromField(inst, noDefault);
 		return (inst ? this._getDate(inst) : null);
 	},
 
@@ -803,10 +815,10 @@ $.extend(Datepicker.prototype, {
 			inst.drawYear = inst.selectedYear = inst.currentYear;
 		}
 		else {
-		var date = new Date();
-		inst.selectedDay = date.getDate();
-		inst.drawMonth = inst.selectedMonth = date.getMonth();
-		inst.drawYear = inst.selectedYear = date.getFullYear();
+			var date = new Date();
+			inst.selectedDay = date.getDate();
+			inst.drawMonth = inst.selectedMonth = date.getMonth();
+			inst.drawYear = inst.selectedYear = date.getFullYear();
 		}
 		this._notifyChange(inst);
 		this._adjustDate(target);
@@ -1208,7 +1220,7 @@ $.extend(Datepicker.prototype, {
 	},
 
 	/* Parse existing date and initialise date picker. */
-	_setDateFromField: function(inst) {
+	_setDateFromField: function(inst, noDefault) {
 		var dateFormat = this._get(inst, 'dateFormat');
 		inst.lastVal = inst.input ? inst.input.val() : null;
 		var dates = inst.lastVal;
@@ -1219,7 +1231,7 @@ $.extend(Datepicker.prototype, {
 			date = this.parseDate(dateFormat, dates, settings) || defaultDate;
 		} catch (event) {
 			this.log(event);
-			date = defaultDate;
+			dates = (noDefault ? '' : dates);
 		}
 		inst.selectedDay = date.getDate();
 		inst.drawMonth = inst.selectedMonth = date.getMonth();
