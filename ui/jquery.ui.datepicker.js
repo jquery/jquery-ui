@@ -1638,7 +1638,8 @@ $.extend(Datepicker.prototype, {
 	_isInRange: function(inst, date) {
 		var minDate = this._getMinMaxDate(inst, 'min');
 		var maxDate = this._getMinMaxDate(inst, 'max');
-		return ((!minDate || date >= minDate) && (!maxDate || date <= maxDate));
+		return ((!minDate || date.getTime() >= minDate.getTime()) &&
+			(!maxDate || date.getTime() <= maxDate.getTime()));
 	},
 
 	/* Provide the configuration settings for formatting/parsing. */
