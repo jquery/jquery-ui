@@ -1,0 +1,42 @@
+<!doctype html>
+<html>
+<head>
+	<title>jQuery UI Autocomplete Default Demo</title>
+	<link type="text/css" href="../../themes/base/ui.all.css" rel="stylesheet" />
+	<script type="text/javascript" src="../../jquery-1.3.2.js"></script>
+	<script type="text/javascript" src="../../ui/jquery.ui.core.js"></script>
+	<script type="text/javascript" src="../../ui/jquery.ui.widget.js"></script>
+	<script type="text/javascript" src="../../ui/jquery.ui.position.js"></script>
+	<script type="text/javascript" src="../../ui/jquery.ui.autocomplete.js"></script>
+	<link type="text/css" href="../demos.css" rel="stylesheet" />
+	<script type="text/javascript">
+	$(function() {
+		var availableTags = ["c++", "java", "php", "coldfusion", "javascript", "asp", "ruby", "python", "c", "scala", "groovy", "haskell", "perl"];
+		$("#tags").autocomplete({
+			source: availableTags
+		});
+	});
+	</script>
+</head>
+<body>
+	
+<div class="demo">
+
+<div class="ui-widget">
+	<label for="tags">Tags: </label>
+	<input id="tags" />
+</div>
+
+</div><!-- End demo -->
+
+<div class="demo-description">
+<p>
+The Autocomplete widgets provides suggestions while you type into the field. Here the suggestions are tags for programming languages, give "ja" (for Java or JavaScript) a try.
+</p>
+<p>
+The datasource is a simple JavaScript array, provided to the widget using the source-option.
+</p>
+</div><!-- End demo-description -->
+
+</body>
+</html>
