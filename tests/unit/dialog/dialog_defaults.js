@@ -4,6 +4,7 @@
 
 var dialog_defaults = {
 	autoOpen: true,
+	bgiframe: false,
 	buttons: {},
 	closeOnEscape: true,
 	closeText: 'close',
@@ -21,7 +22,6 @@ var dialog_defaults = {
 	resizable: true,
 	show: null,
 	stack: true,
-	stackfix: false,
 	title: '',
 	width: 300,
 	zIndex: 1000

@@ -4,6 +4,7 @@
 	<title>jQuery UI Dialog - Modal form</title>
 	<link type="text/css" href="../../themes/base/ui.all.css" rel="stylesheet" />
 	<script type="text/javascript" src="../../jquery-1.3.2.js"></script>
+	<script type="text/javascript" src="../../external/jquery.bgiframe-2.1.1.js"></script>
 	<script type="text/javascript" src="../../ui/jquery.ui.core.js"></script>
 	<script type="text/javascript" src="../../ui/jquery.ui.widget.js"></script>
 	<script type="text/javascript" src="../../ui/jquery.ui.mouse.js"></script>
@@ -11,7 +12,6 @@
 	<script type="text/javascript" src="../../ui/jquery.ui.draggable.js"></script>
 	<script type="text/javascript" src="../../ui/jquery.ui.position.js"></script>
 	<script type="text/javascript" src="../../ui/jquery.ui.resizable.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.stackfix.js"></script>
 	<script type="text/javascript" src="../../ui/jquery.ui.dialog.js"></script>
 	<script type="text/javascript" src="../../ui/jquery.effects.core.js"></script>
 	<link type="text/css" href="../demos.css" rel="stylesheet" />
@@ -73,7 +73,7 @@
 		}
 		
 		$("#dialog-form").dialog({
-			stackfix: true,
+			bgiframe: true,
 			autoOpen: false,
 			height: 300,
 			width: 350,

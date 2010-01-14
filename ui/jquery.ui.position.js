@@ -140,7 +140,7 @@ $.fn.position = function(options) {
 				}));
 		});
 
-		(options.stackfix !== false && $.fn.stackfix && elem.stackfix());
+		(options.bgiframe !== false && $.fn.bgiframe && elem.bgiframe());
 		elem.offset($.extend(position, { using: options.using }));
 	});
 };
