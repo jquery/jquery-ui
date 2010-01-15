@@ -65,18 +65,18 @@ $.widget = function( name, base, prototype ) {
 };
 
 $.widget.bridge = function( name, object ) {
-	$.fn[name] = function( options ) {
+	$.fn[ name ] = function( options ) {
 		var isMethodCall = typeof options === "string",
 			args = Array.prototype.slice.call( arguments, 1 ),
 			returnValue = this;
 
 		// allow multiple hashes to be passed on init
-		options = !isMethodCall && args.length
-			? $.extend.apply(null, [true, options].concat(args))
-			: options;
+		options = !isMethodCall && args.length ?
+			$.extend.apply( null, [ true, options ].concat(args) ) :
+			options;
 
 		// prevent calls to internal methods
-		if ( isMethodCall && options.substring(0, 1) === "_" ) {
+		if ( isMethodCall && options.substring( 0, 1 ) === "_" ) {
 			return returnValue;
 		}
 
@@ -84,7 +84,7 @@ $.widget.bridge = function( name, object ) {
 			this.each(function() {
 				var instance = $.data( this, name ),
 					methodValue = instance && $.isFunction( instance[options] ) ?
-						instance[options].apply( instance, args ) :
+						instance[ options ].apply( instance, args ) :
 						instance;
 				if ( methodValue !== instance && methodValue !== undefined ) {
 					returnValue = methodValue;
@@ -207,8 +207,8 @@ $.Widget.prototype = {
 
 		event = $.Event( event );
 		event.type = ( type === this.widgetEventPrefix ?
-				type :
-				this.widgetEventPrefix + type ).toLowerCase();
+			type :
+			this.widgetEventPrefix + type ).toLowerCase();
 		data = data || {};
 
 		// copy original event properties over to the new event
@@ -223,8 +223,9 @@ $.Widget.prototype = {
 
 		this.element.trigger( event, data );
 
-		return !($.isFunction(callback) && callback.call( this.element[0], event, data ) === false
-			|| event.isDefaultPrevented());
+		return !( $.isFunction(callback) &&
+			callback.call( this.element[0], event, data ) === false ||
+			event.isDefaultPrevented() );
 	}
 };
 
