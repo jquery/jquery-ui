@@ -33,7 +33,7 @@ $.widget("ui.resizable", $.ui.mouse, {
 		minWidth: 10,
 		zIndex: 1000
 	},
-	_init: function() {
+	_create: function() {
 
 		var self = this, o = this.options;
 		this.element.addClass("ui-resizable");

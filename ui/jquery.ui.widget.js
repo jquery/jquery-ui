@@ -39,7 +39,7 @@ $.widget = function(name, base, prototype) {
 	$[namespace] = $[namespace] || {};
 	$[namespace][name] = function(options, element) {
 		// allow instantiation without initializing for simple inheritance
-		(arguments.length && this._widgetInit(options, element));
+		(arguments.length && this._createWidget(options, element));
 	};
 
 	var basePrototype = new base();
@@ -99,7 +99,7 @@ $.widget.bridge = function(name, object) {
 
 $.Widget = function(options, element) {
 	// allow instantiation without initializing for simple inheritance
-	(arguments.length && this._widgetInit(options, element));
+	(arguments.length && this._createWidget(options, element));
 };
 
 $.Widget.prototype = {
@@ -108,9 +108,9 @@ $.Widget.prototype = {
 	options: {
 		disabled: false
 	},
-	_widgetInit: function(options, element) {
+	_createWidget: function(options, element) {
 		// $.widget.bridge stores the plugin instance, but we do it anyway
-		// so that it's stored even before the _init function runs
+		// so that it's stored even before the _create function runs
 		this.element = $(element).data(this.widgetName, this);
 		this.options = $.extend(true, {},
 			this.options,
@@ -119,13 +119,13 @@ $.Widget.prototype = {
 			$.metadata && $.metadata.get(element)[this.widgetName],
 			options);
 
-		// TODO: use bind's scope option when moving to jQuery 1.4
 		var self = this;
 		this.element.bind('remove.' + this.widgetName, function() {
 			self.destroy();
 		});
 
-		(this._init && this._init(options, element));
+		(this._create && this._create(options, element));
+		(this._init && this._init());
 	},
 
 	destroy: function() {

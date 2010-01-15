@@ -11,14 +11,14 @@ module('widget factory', {
 
 test('widget creation', function() {
 	var myPrototype = {
-		_init: function() {},
+		_create: function() {},
 		creationTest: function() {}
 	};
 	
 	$.widget('ui.testWidget', myPrototype);
 	ok($.isFunction($.ui.testWidget), 'constructor was created');
 	equals('object', typeof $.ui.testWidget.prototype, 'prototype was created');
-	equals($.ui.testWidget.prototype._init, myPrototype._init, 'init function is copied over');
+	equals($.ui.testWidget.prototype._create, myPrototype._create, 'create function is copied over');
 	equals($.ui.testWidget.prototype.creationTest, myPrototype.creationTest, 'random function is copied over');
 	equals($.ui.testWidget.prototype.option, $.Widget.prototype.option, 'option method copied over from base widget');
 });
@@ -30,7 +30,7 @@ test('jQuery usage', function() {
 	
 	$.widget('ui.testWidget', {
 		getterSetterVal: 5,
-		_init: function() {
+		_create: function() {
 			ok(shouldInit, 'init called on instantiation');
 		},
 		methodWithParams: function(param1, param2) {
@@ -73,7 +73,7 @@ test('direct usage', function() {
 	
 	$.widget('ui.testWidget', {
 		getterSetterVal: 5,
-		_init: function() {
+		_create: function() {
 			ok(shouldInit, 'init called on instantiation');
 		},
 		methodWithParams: function(param1, param2) {
@@ -113,7 +113,7 @@ test('direct usage', function() {
 test('merge multiple option arguments', function() {
 	expect(1);
 	$.widget("ui.testWidget", {
-		_init: function() {
+		_create: function() {
 			same(this.options, {
 				disabled: false,
 				option1: "value1",
@@ -148,7 +148,7 @@ test('merge multiple option arguments', function() {
 
 test(".widget() - base", function() {
 	$.widget("ui.testWidget", {
-		_init: function() {}
+		_create: function() {}
 	});
 	var div = $("<div></div>").testWidget()
 	same(div[0], div.testWidget("widget")[0]);
@@ -157,7 +157,7 @@ test(".widget() - base", function() {
 test(".widget() - overriden", function() {
 	var wrapper = $("<div></div>");
 	$.widget("ui.testWidget", {
-		_init: function() {},
+		_create: function() {},
 		widget: function() {
 			return wrapper;
 		}

@@ -39,7 +39,7 @@ $.widget("ui.sortable", $.ui.mouse, {
 		tolerance: "intersect",
 		zIndex: 1000
 	},
-	_init: function() {
+	_create: function() {
 
 		var o = this.options;
 		this.containerCache = {};

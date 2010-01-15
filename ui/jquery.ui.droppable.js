@@ -26,7 +26,7 @@ $.widget("ui.droppable", {
 		scope: 'default',
 		tolerance: 'intersect'
 	},
-	_init: function() {
+	_create: function() {
 
 		var o = this.options, accept = o.accept;
 		this.isover = 0; this.isout = 1;

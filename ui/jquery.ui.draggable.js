@@ -41,7 +41,7 @@ $.widget("ui.draggable", $.ui.mouse, {
 		stack: false,
 		zIndex: false
 	},
-	_init: function() {
+	_create: function() {
 
 		if (this.options.helper == 'original' && !(/^(?:r|a|f)/).test(this.element.css("position")))
 			this.element[0].style.position = 'relative';

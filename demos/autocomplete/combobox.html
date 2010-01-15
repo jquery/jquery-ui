@@ -13,7 +13,7 @@
 	<script type="text/javascript">
 	(function($) {
 		$.widget("ui.combobox", {
-			_init: function() {
+			_create: function() {
 				var self = this;
 				var select = this.element.hide();
 				var input = $("<input>")

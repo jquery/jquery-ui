@@ -32,7 +32,7 @@ $.widget("ui.accordion", {
 			return this.href.toLowerCase() == location.href.toLowerCase();
 		}
 	},
-	_init: function() {
+	_create: function() {
 
 		var o = this.options, self = this;
 		this.running = 0;

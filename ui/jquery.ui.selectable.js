@@ -22,7 +22,7 @@ $.widget("ui.selectable", $.ui.mouse, {
 		filter: '*',
 		tolerance: 'touch'
 	},
-	_init: function() {
+	_create: function() {
 		var self = this;
 
 		this.element.addClass("ui-selectable");

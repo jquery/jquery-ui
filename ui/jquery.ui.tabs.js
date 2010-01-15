@@ -36,7 +36,7 @@ $.widget("ui.tabs", {
 		spinner: '<em>Loading&#8230;</em>',
 		tabTemplate: '<li><a href="#{href}"><span>#{label}</span></a></li>'
 	},
-	_init: function() {
+	_create: function() {
 		this._tabify(true);
 	},
 

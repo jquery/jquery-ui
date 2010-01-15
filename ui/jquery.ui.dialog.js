@@ -48,7 +48,7 @@ $.widget("ui.dialog", {
 		width: 300,
 		zIndex: 1000
 	},
-	_init: function() {
+	_create: function() {
 		this.originalTitle = this.element.attr('title');
 
 		var self = this,

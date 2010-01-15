@@ -31,7 +31,7 @@ $.widget("ui.slider", $.ui.mouse, {
 		value: 0,
 		values: null
 	},
-	_init: function() {
+	_create: function() {
 
 		var self = this, o = this.options;
 		this._keySliding = false;

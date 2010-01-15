@@ -17,7 +17,7 @@ $.widget("ui.progressbar", {
 	options: {
 		value: 0
 	},
-	_init: function() {
+	_create: function() {
 
 		this.element
 			.addClass("ui-progressbar"

@@ -18,7 +18,7 @@ $.widget("ui.autocomplete", {
 		minLength: 1,
 		delay: 300
 	},
-	_init: function() {
+	_create: function() {
 		var self = this;
 		this.element
 			.addClass("ui-autocomplete ui-widget ui-widget-content ui-corner-all")
@@ -296,7 +296,7 @@ $.extend($.ui.autocomplete, {
 (function($) {
 
 $.widget("ui.menu", {
-	_init: function() {
+	_create: function() {
 		var self = this;
 		this.element
 			.addClass("ui-menu ui-widget ui-widget-content ui-corner-all")

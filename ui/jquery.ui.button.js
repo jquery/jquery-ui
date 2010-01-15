@@ -27,7 +27,7 @@ $.widget("ui.button", {
 			secondary: null
 		}
 	},
-	_init: function() {
+	_create: function() {
 		this._determineButtonType();
 		this.hasTitle = !!this.buttonElement.attr('title');
 
@@ -208,7 +208,7 @@ $.widget("ui.button", {
 });
 
 $.widget("ui.buttonset", {
-	_init: function() {
+	_create: function() {
 		this.element.addClass("ui-button-set");
 		this.buttons = this.element.find(':button, :submit, :reset, :checkbox, :radio, a, .ui-button')
 			.button()
