@@ -101,7 +101,7 @@
 		<delete file="${dist.dir}/ui/i18n/${concatenated.i18n}.js" />
 
 		<concat destfile="${dist.dir}/ui/i18n/${concatenated.i18n}.js" encoding="utf-8">
-			<fileset dir="${src.dir}/i18n/" includes="ui.*.js" />
+			<fileset dir="${src.dir}/i18n/" includes="jquery.ui.*.js" />
 		</concat>
 		<echo message="Concatenated i18n built." />
 	</target>
