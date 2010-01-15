@@ -128,8 +128,6 @@ $.Widget.prototype = {
 		this.element = $( element ).data( this.widgetName, this );
 		this.options = $.extend( true, {},
 			this.options,
-			// DEPRECATED: move defaults to prototype.options
-			$[this.namespace][this.widgetName].defaults,
 			$.metadata && $.metadata.get( element )[ this.widgetName ],
 			options );
 
@@ -230,7 +228,4 @@ $.Widget.prototype = {
 	}
 };
 
-// DEPRECATED: use the plugin's parent widget instead of $.widget
-$.widget.prototype = $.Widget.prototype;
-	
 })( jQuery );
