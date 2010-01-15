@@ -426,13 +426,16 @@ $.widget("ui.dialog", {
 		if (!isVisible) {
 			this.uiDialog.show();
 		}
-		this.uiDialog.position({
-			my: myAt.join(' '),
-			at: myAt.join(' '),
-			offset: offset.join(' '),
-			of: window,
-			collision: 'fit'
-		});
+		this.uiDialog
+			// workaround for jQuery bug #5781 http://dev.jquery.com/ticket/5781
+			.css({ top: 0, left: 0 })
+			.position({
+				my: myAt.join(' '),
+				at: myAt.join(' '),
+				offset: offset.join(' '),
+				of: window,
+				collision: 'fit'
+			});
 		if (!isVisible) {
 			this.uiDialog.hide();
 		}
