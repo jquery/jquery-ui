@@ -147,7 +147,11 @@ $.widget("ui.dialog", {
 		self._isOpen = false;
 
 		(options.bgiframe && $.fn.bgiframe && uiDialog.bgiframe());
-		(options.autoOpen && self.open());
+	},
+	_init: function() {
+		if ( this.options.autoOpen ) {
+			this.open();
+		}
 	},
 
 	destroy: function() {
