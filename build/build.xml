@@ -92,7 +92,7 @@
 
 		<concat destfile="${dist.dir}/themes/base/${concatenated}.css">
 			<fileset dir="${theme.dir}/" includes="ui.core.css" />
-			<fileset dir="${theme.dir}/" includes="ui.*.css" excludes="ui.all.css, ui.core.css, ui.base.cs, ui.theme.css" />
+			<fileset dir="${theme.dir}/" includes="ui.*.css" excludes="ui.all.css, ui.core.css, ui.base.css, ui.theme.css" />
 			<fileset dir="${theme.dir}/" includes="ui.theme.css" />
 		</concat>
 		<echo message="Concatenated theme." />
@@ -125,7 +125,7 @@
 			<mapper type="glob" from="*.js" to="${min.folder}/*.min.js" />
 			<targetfile />
 		</apply>
-		<echo message="Minified built." />
+		<echo message="Minified ui/ built." />
 
 		<apply executable="java" parallel="false">
 			<filelist dir="${dist.dir}/ui/i18n/" files="${concatenated.i18n}.js" />
@@ -139,7 +139,7 @@
 			<mapper type="glob" from="*.js" to="${min.folder}/i18n/*.min.js" />
 			<targetfile />
 		</apply>
-		<echo message="Minified i18n built." />
+		<echo message="Minified ui/i18n/ built." />
 	</target>
 
 	<target description="Copy needed folders" name="copy">
