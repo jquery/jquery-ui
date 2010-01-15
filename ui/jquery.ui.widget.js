@@ -93,7 +93,13 @@ $.widget.bridge = function( name, object ) {
 			});
 		} else {
 			this.each(function() {
-				if ( !$.data( this, name ) ) {
+				var instance = $.data( this, name );
+				if ( instance ) {
+					if ( options ) {
+						instance.option( options );
+					}
+					instance._init();
+				} else {
 					$.data( this, name, new object( options, this ) );
 				}
 			});
@@ -132,13 +138,11 @@ $.Widget.prototype = {
 			self.destroy();
 		});
 
-		if ( this._create ) {
-			this._create( options, element );
-		}
-		if ( this._init ) {
-			this._init();
-		}
+		this._create( options, element );
+		this._init();
 	},
+	_create: function() {},
+	_init: function() {},
 
 	destroy: function() {
 		this.element
