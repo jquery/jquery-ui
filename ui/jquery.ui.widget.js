@@ -136,7 +136,7 @@ $.Widget.prototype = {
 			self.destroy();
 		});
 
-		this._create( options, element );
+		this._create();
 		this._init();
 	},
 	_create: function() {},
