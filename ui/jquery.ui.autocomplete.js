@@ -247,6 +247,9 @@ $.widget("ui.autocomplete", {
 		if (ul.width() <= this.element.width()) {
 			ul.width(this.element.width());
 		}
+		if ($.fn.bgiframe) {
+			ul.bgiframe();
+		}
 	},
 
 	_move: function(direction, event) {
