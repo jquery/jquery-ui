@@ -10,7 +10,7 @@ module("button: core");
 test("checkbox", function() {
 	var input = $("#check");
 		label = $("label[for=check]");
-	ok( input.is(":visble") );	
+	ok( input.is(":visible") );	
 	ok( label.is(":not(.ui-button)") );
 	input.button();
 	ok( input.is(":hidden") );
@@ -20,7 +20,7 @@ test("checkbox", function() {
 test("radios", function() {
 	var inputs = $("#radio0 input");
 		labels = $("#radio0 label");
-	ok( inputs.is(":visble") );	
+	ok( inputs.is(":visible") );	
 	ok( labels.is(":not(.ui-button)") );
 	inputs.button();
 	ok( inputs.is(":hidden") );
