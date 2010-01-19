@@ -132,8 +132,7 @@ $.Widget.prototype = {
 			options );
 
 		var self = this;
-		this.element.bind( "remove." + this.widgetName, function(event) {
-			console.log('remove', event);
+		this.element.bind( "remove." + this.widgetName, function() {
 			self.destroy();
 		});
 
