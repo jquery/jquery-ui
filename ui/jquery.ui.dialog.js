@@ -27,7 +27,6 @@ var uiDialogClasses =
 $.widget("ui.dialog", {
 	options: {
 		autoOpen: true,
-		bgiframe: false,
 		buttons: {},
 		closeOnEscape: true,
 		closeText: 'close',
@@ -146,7 +145,7 @@ $.widget("ui.dialog", {
 		self._createButtons(options.buttons);
 		self._isOpen = false;
 
-		(options.bgiframe && $.fn.bgiframe && uiDialog.bgiframe());
+		($.fn.bgiframe && uiDialog.bgiframe());
 	},
 	_init: function() {
 		if ( this.options.autoOpen ) {
@@ -606,7 +605,7 @@ $.extend($.ui.dialog.overlay, {
 				height: this.height()
 			});
 
-		(dialog.options.bgiframe && $.fn.bgiframe && $el.bgiframe());
+		($.fn.bgiframe && $el.bgiframe());
 
 		this.instances.push($el);
 		return $el;

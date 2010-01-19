@@ -4,7 +4,6 @@
 
 var dialog_defaults = {
 	autoOpen: true,
-	bgiframe: false,
 	buttons: {},
 	closeOnEscape: true,
 	closeText: 'close',
