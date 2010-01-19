@@ -11,12 +11,12 @@
 
 var _remove = $.fn.remove;
 
-$.fn.remove = function() {
-	// Safari has a native remove event which actually removes DOM elements,
-	// so we have to use triggerHandler instead of trigger (#3037).
-	$( "*", this ).add( this ).each(function() {
-		$( this ).triggerHandler( "remove" );
-	});
+$.fn.remove = function( selector, keepData ) {
+	if ( !keepData ) {
+		$( "*", this ).add( this ).each(function() {
+			$( this ).triggerHandler( "remove" );
+		});
+	}
 	return _remove.apply( this, arguments );
 };
 
@@ -132,7 +132,8 @@ $.Widget.prototype = {
 			options );
 
 		var self = this;
-		this.element.bind( "remove." + this.widgetName, function() {
+		this.element.bind( "remove." + this.widgetName, function(event) {
+			console.log('remove', event);
 			self.destroy();
 		});
 
