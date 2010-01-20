@@ -98,6 +98,26 @@ $.ui = {
 		SPACE: 32,
 		TAB: 9,
 		UP: 38
+	},
+	
+	element: function(value, context) {
+		var ret = $([]); // $(context) ?
+		 
+		if (value.jquery) {
+			ret = value;
+		} else if (value == 'parent') {
+			ret = $(context).parent();
+		} else if (value == 'clone') {
+			ret = $(context).clone().removeAttr('id');
+		} else if (value == 'window') {
+			ret = $(context).window(); // requires .window() plugin
+		} else if (value.nodeType || typeof value == 'string' || $.isArray(value)) {
+			ret = $(value, context);
+		} else if ($.isFunction(value)) {
+			ret = value(context);
+		}
+		 
+		return ret;
 	}
 };
 
@@ -194,6 +214,12 @@ $.fn.extend({
 		}
 
 		return 0;
+	},
+	
+	window: function() {
+		return this.pushStack($.unique($.map(this, function() {
+			return this.ownerDocument.defaultView;
+		})));
 	}
 });
 
