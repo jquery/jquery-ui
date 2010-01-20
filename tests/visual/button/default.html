@@ -20,7 +20,7 @@
 		
 		buttons.add(buttonSets).click(function(event) {
 			var target = $(event.target);
-			if (target.closest('.ui-button').length) {
+			if (target.closest('.ui-button:not(.ui-state-disabled)').length) {
 				$("<div></div>")
 					.text("Clicked " + (target.text() || target.val()))
 					.appendTo("#log");
