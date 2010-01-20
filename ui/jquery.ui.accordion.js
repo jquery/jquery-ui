@@ -454,7 +454,7 @@ $.extend($.ui.accordion, {
 				return;
 			}
 			var overflow = options.toShow.css('overflow'),
-				percentDone,
+				percentDone = 0,
 				showProps = {},
 				hideProps = {},
 				fxAttrs = [ "height", "paddingTop", "paddingBottom" ],
@@ -480,7 +480,8 @@ $.extend($.ui.accordion, {
 					// IE gets very inconsistent results when animating elements
 					// with small values, which is common for padding
 					if (settings.prop == 'height') {
-						percentDone = (settings.now - settings.start) / (settings.end - settings.start);
+						percentDone = ( settings.end - settings.start === 0 ) ? 0 :
+							(settings.now - settings.start) / (settings.end - settings.start);
 					}
 					
 					options.toShow[0].style[settings.prop] =
