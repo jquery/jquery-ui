@@ -7,23 +7,34 @@
 	<script type="text/javascript" src="../../../jquery-1.3.2.js"></script>
 	<script type="text/javascript" src="../../../ui/jquery.ui.core.js"></script>
 	<script type="text/javascript" src="../../../ui/jquery.ui.widget.js"></script>
+	<script type="text/javascript" src="../../../ui/jquery.ui.mouse.js"></script>
 	<script type="text/javascript" src="../../../ui/jquery.ui.accordion.js"></script>
 	<script type="text/javascript" src="../../../ui/jquery.ui.draggable.js"></script>
+	<style type="text/css">
+	.draggable {
+		width: 10em;
+		margin: 0.5em;
+	}
+	</style>
 	<script type="text/javascript">
 	$(function() {
-		$('#accordion').accordion();
-		$('#first .draggable').draggable();
-		$('#second .draggable').draggable({
-			appendTo: 'body'
+		$( "#accordion" ).accordion();
+		$( ".draggable" ).addClass( "ui-widget ui-widget-content ui-corner-all" )
+		$( "#first .draggable" ).draggable();
+		$( "#second .draggable" ).draggable({
+			appendTo: "body"
 		});
-		$('#third .draggable').draggable();
+		$( "#third .draggable" ).draggable({
+			helper: "clone",
+			appendTo: "body"
+		});
 	});
 	</script>
 </head>
 <body>
 
 <div id="accordion">
-	<h3><a href="#">Accordion Header 1</a></h3>
+	<h3><a href="#">.draggable()</a></h3>
 	<div id="first">
 		<div class="draggable">Draggable 1-1</div>
 		<div class="draggable">Draggable 1-2</div>
@@ -31,15 +42,15 @@
 		<div class="draggable">Draggable 1-4</div>
 		<div class="draggable">Draggable 1-5</div>
 	</div>
-	<h3><a href="#">Accordion Header 2</a></h3>
+	<h3><a href="#">.draggable({ appendTo: "body" })</a></h3>
 	<div id="second">
-		<div class="draggable">Draggable with appendTo 2-1</div>
-		<div class="draggable">Draggable with appendTo 2-2</div>
-		<div class="draggable">Draggable with appendTo 2-3</div>
-		<div class="draggable">Draggable with appendTo 2-4</div>
-		<div class="draggable">Draggable with appendTo 2-5</div>
+		<div class="draggable">Draggable 2-1</div>
+		<div class="draggable">Draggable 2-2</div>
+		<div class="draggable">Draggable 2-3</div>
+		<div class="draggable">Draggable 2-4</div>
+		<div class="draggable">Draggable 2-5</div>
 	</div>
-	<h3><a href="#">Accordion Header 3</a></h3>
+	<h3><a href="#">.draggable({ helper: "clone", appendTo: "body" })</a></h3>
 	<div id="third">
 		<div class="draggable">Draggable 3-1</div>
 		<div class="draggable">Draggable 3-2</div>
