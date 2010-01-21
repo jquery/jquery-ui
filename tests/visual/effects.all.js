@@ -57,4 +57,24 @@ $(function() {
 
 	$("#transfer").bind("click", function() { $(this).addClass("current").effect("transfer", { to: "div:eq(0)" }, 1000, function() { $(this).removeClass("current"); }); });
 
+	$("#addClass").click(function() {
+		$(this).addClass(function() {
+			window.console && console.log(arguments);
+			return "current";
+		}, 1000, function() {
+			$(this).removeClass("current");
+		});
+	});
+	$("#removeClass").click(function() {
+		$(this).addClass("current").removeClass(function() {
+			window.console && console.log(arguments);
+			return "current"
+		}, 1000);
+	});
+	$("#toggleClass").click(function() {
+		$(this).toggleClass(function() {
+			window.console && console.log(arguments);
+			return "current"
+		}, 1000);
+	});
 });
