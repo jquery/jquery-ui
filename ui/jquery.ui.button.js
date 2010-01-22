@@ -137,6 +137,14 @@ $.widget( "ui.button", {
 				.bind( "keyup.button", function() {
 					$( this ).removeClass( "ui-state-active" );
 				});
+			if (this.buttonElement.is("a")) {
+				this.buttonElement.keyup(function(event) {
+					if (event.keyCode == $.ui.keyCode.SPACE) {
+						// TODO pass through original event correctly (just as 2nd argument doesn't work)
+						$(this).trigger("click");
+					}
+				})
+			}
 		}
 
 		this._resetButton();
