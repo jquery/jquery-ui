@@ -24,6 +24,7 @@
 				$("<div></div>")
 					.text("Clicked " + (target.text() || target.val()))
 					.appendTo("#log");
+				window.console && console.log(this, arguments);
 			}
 		});
 		
