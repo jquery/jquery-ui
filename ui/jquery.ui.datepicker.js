@@ -644,7 +644,7 @@ $.extend(Datepicker.prototype, {
 			if ($.effects && $.effects[showAnim])
 				inst.dpDiv.show(showAnim, $.datepicker._get(inst, 'showOptions'), duration, postProcess);
 			else
-				inst.dpDiv[showAnim || 'show']((showAnim ? duration : ''), postProcess);
+				inst.dpDiv[showAnim || 'show']((showAnim ? duration : null), postProcess);
 			if (!showAnim)
 				postProcess();
 			if (inst.input[0].type != 'hidden')
@@ -754,7 +754,7 @@ $.extend(Datepicker.prototype, {
 				inst.dpDiv.hide(showAnim, $.datepicker._get(inst, 'showOptions'), duration, postProcess);
 			else
 				inst.dpDiv[(showAnim == 'slideDown' ? 'slideUp' :
-					(showAnim == 'fadeIn' ? 'fadeOut' : 'hide'))]((showAnim ? duration : ''), postProcess);
+					(showAnim == 'fadeIn' ? 'fadeOut' : 'hide'))]((showAnim ? duration : null), postProcess);
 			if (!showAnim)
 				postProcess();
 			var onClose = this._get(inst, 'onClose');
