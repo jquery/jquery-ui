@@ -128,6 +128,14 @@ $.widget( "ui.button", {
 						return;
 					}
 					$( this ).removeClass( "ui-state-active" );
+				})
+				.bind( "keydown.button", function(event) {
+					if ( event.keyCode == $.ui.keyCode.SPACE || event.keyCode == $.ui.keyCode.ENTER ) {
+						$( this ).addClass( "ui-state-active" );
+					}
+				})
+				.bind( "keyup.button", function() {
+					$( this ).removeClass( "ui-state-active" );
 				});
 		}
 
