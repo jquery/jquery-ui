@@ -62,6 +62,9 @@ $.widget("ui.selectable", $.ui.mouse, {
 	},
 
 	destroy: function() {
+		this.selectees
+			.removeClass("ui-selectee")
+			.removeData("selectable-item");
 		this.element
 			.removeClass("ui-selectable ui-selectable-disabled")
 			.removeData("selectable")
