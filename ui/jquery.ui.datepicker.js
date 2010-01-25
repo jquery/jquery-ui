@@ -647,7 +647,7 @@ $.extend(Datepicker.prototype, {
 				inst.dpDiv[showAnim || 'show']((showAnim ? duration : null), postProcess);
 			if (!showAnim)
 				postProcess();
-			if (inst.input[0].type != 'hidden')
+			if (inst.input.is(':visible') && !inst.input.is(':disabled'))
 				inst.input[0].focus();
 			$.datepicker._curInst = inst;
 		}
@@ -691,7 +691,8 @@ $.extend(Datepicker.prototype, {
 			'Class']('ui-datepicker-multi');
 		inst.dpDiv[(this._get(inst, 'isRTL') ? 'add' : 'remove') +
 			'Class']('ui-datepicker-rtl');
-		if (inst.input && inst.input[0].type != 'hidden' && inst == $.datepicker._curInst)
+		if (inst == $.datepicker._curInst && inst.input &&
+				inst.input.is(':visible') && !inst.input.is(':disabled'))
 			$(inst.input[0]).focus();
 	},
 
