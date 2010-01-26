@@ -199,6 +199,8 @@
 		<get src="${url}Sortable" dest="${docs.dir}sortable.html" />
 
 		<get src="${url}Accordion" dest="${docs.dir}accordion.html" />
+		<get src="${url}Autocomplete" dest="${docs.dir}autocomplete.html" />
+		<get src="${url}Button" dest="${docs.dir}button.html" />
 		<get src="${url}Datepicker" dest="${docs.dir}datepicker.html" />
 		<get src="${url}Dialog" dest="${docs.dir}dialog.html" />
 		<get src="${url}Progressbar" dest="${docs.dir}progressbar.html" />
