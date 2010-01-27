@@ -137,6 +137,13 @@ $.widget("ui.dialog", {
 				.html(title)
 				.prependTo(uiDialogTitlebar);
 
+		//handling of deprecated beforeclose (vs beforeClose) option
+		//Ticket #4669 http://dev.jqueryui.com/ticket/4669
+		//TODO: remove in 1.9pre
+		if ($.isFunction(options.beforeclose) && !$.isFunction(options.beforeClose)) {
+			options.beforeClose = options.beforeclose;
+		}
+
 		uiDialogTitlebar.find("*").add(uiDialogTitlebar).disableSelection();
 
 		(options.draggable && $.fn.draggable && self._makeDraggable());
@@ -451,6 +458,12 @@ $.widget("ui.dialog", {
 			resize = false;
 		
 		switch (key) {
+			//handling of deprecated beforeclose (vs beforeClose) option
+			//Ticket #4669 http://dev.jqueryui.com/ticket/4669
+			//TODO: remove in 1.9pre
+			case "beforeclose":
+				key = "beforeClose";
+				break;
 			case "buttons":
 				self._createButtons(value);
 				break;
