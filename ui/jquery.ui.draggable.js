@@ -137,8 +137,11 @@ $.widget("ui.draggable", $.ui.mouse, {
 		if(o.containment)
 			this._setContainment();
 
-		//Call plugins and callbacks
-		this._trigger("start", event);
+		//Trigger event + callbacks
+		if(this._trigger("start", event) === false) {
+			this._clear();
+			return false;
+		}
 
 		//Recache the helper size
 		this._cacheHelperProportions();
@@ -161,7 +164,10 @@ $.widget("ui.draggable", $.ui.mouse, {
 		//Call plugins and callbacks and use the resulting position if something is returned
 		if (!noPropagation) {
 			var ui = this._uiHash();
-			this._trigger('drag', event, ui);
+			if(this._trigger('drag', event, ui) === false) {
+				this._mouseUp({});
+				return false;
+			}
 			this.position = ui.position;
 		}
 
@@ -192,15 +198,29 @@ $.widget("ui.draggable", $.ui.mouse, {
 		if((this.options.revert == "invalid" && !dropped) || (this.options.revert == "valid" && dropped) || this.options.revert === true || ($.isFunction(this.options.revert) && this.options.revert.call(this.element, dropped))) {
 			var self = this;
 			$(this.helper).animate(this.originalPosition, parseInt(this.options.revertDuration, 10), function() {
-				self._trigger("stop", event);
-				self._clear();
+				if(self._trigger("stop", event) !== false) {
+					self._clear();
+				}
 			});
 		} else {
-			this._trigger("stop", event);
-			this._clear();
+			if(this._trigger("stop", event) !== false) {
+				this._clear();
+			}
 		}
 
 		return false;
+	},
+	
+	cancel: function() {
+		
+		if(this.helper.is(".ui-draggable-dragging")) {
+			this._mouseUp({});
+		} else {
+			this._clear();
+		}
+		
+		return this;
+		
 	},
 
 	_getHandle: function(event) {

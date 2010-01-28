@@ -42,15 +42,34 @@ test("{ addClasses: false }", function() {
 test("{ appendTo: 'parent' }, default", function() {
 	equals(draggable_defaults.appendTo, "parent");
 
-	ok(false, 'missing test - untested code is broken code');
+	el = $("#draggable2").draggable({ appendTo: 'parent' });
+	drag(el, 50, 50);
+	moved(50, 50);
+	
+	el = $("#draggable1").draggable({ appendTo: 'parent' });
+	drag(el, 50, 50);
+	moved(50, 50);
+
 });
 
 test("{ appendTo: Element }", function() {
-	ok(false, 'missing test - untested code is broken code');
+	el = $("#draggable2").draggable({ appendTo: $("#draggable2").parent()[0] });
+	drag(el, 50, 50);
+	moved(50, 50);
+	
+	el = $("#draggable1").draggable({ appendTo: $("#draggable2").parent()[0] });
+	drag(el, 50, 50);
+	moved(50, 50);
 });
 
 test("{ appendTo: Selector }", function() {
-	ok(false, 'missing test - untested code is broken code');
+	el = $("#draggable2").draggable({ appendTo: "#main" });
+	drag(el, 50, 50);
+	moved(50, 50);
+	
+	el = $("#draggable1").draggable({ appendTo: "#main" });
+	drag(el, 50, 50);
+	moved(50, 50);
 });
 
 test("{ axis: false }, default", function() {
