@@ -635,6 +635,6 @@ foreach ($items as $key=>$value) {
 	if (count($result) > 12)
 		break;
 }
-echo json_encode($result);
+echo array_to_json($result);
 
 ?>
