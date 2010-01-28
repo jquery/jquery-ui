@@ -352,6 +352,9 @@ $.widget("ui.dialog", {
 		handles = (handles === undefined ? this.options.resizable : handles);
 		var self = this,
 			options = self.options,
+			// .ui-resizable has position: relative defined in the stylesheet
+			// but dialogs have to use absolute or fixed positioning
+			position = self.uiDialog.css('position'),
 			resizeHandles = typeof handles == 'string'
 				? handles
 				: 'n,e,s,w,se,sw,ne,nw';
@@ -380,6 +383,7 @@ $.widget("ui.dialog", {
 				$.ui.dialog.overlay.resize();
 			}
 		})
+		.css('position', position)
 		.find('.ui-resizable-se').addClass('ui-icon ui-icon-grip-diagonal-se');
 	},
 
