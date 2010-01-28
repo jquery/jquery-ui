@@ -365,6 +365,7 @@ $.extend($.effects, {
 				});
 
 		element.wrap(wrapper);
+		wrapper = element.parent(); //Hotfix for jQuery 1.4 since some change in wrap() seems to actually loose the reference to the wrapped element
 
 		// transfer positioning properties to the wrapper
 		if (element.css('position') == 'static') {
