@@ -21,7 +21,7 @@ $.widget( "ui.autocomplete", {
 	_create: function() {
 		var self = this;
 		this.element
-			.addClass( "ui-autocomplete ui-widget ui-widget-content ui-corner-all" )
+			.addClass( "ui-autocomplete" )
 			.attr( "autocomplete", "off" )
 			// TODO verify these actually work as intended
 			.attr({
