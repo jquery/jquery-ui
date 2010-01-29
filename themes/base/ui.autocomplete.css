@@ -5,6 +5,9 @@
 .ui-autocomplete-loading { background: white url('images/ui-anim.basic.16x16.gif') right center no-repeat; }
 .ui-autocomplete-over { background-color: #0A246A; color: white; }
 
+/* workarounds */
+* html .ui-autocomplete-menu { width:1px; } /* without this, the menu expands to 100% in IE6 */
+
 /* Menu
 ----------------------------------*/
 .ui-menu {
