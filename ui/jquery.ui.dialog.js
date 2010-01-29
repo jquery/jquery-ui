@@ -600,8 +600,8 @@ $.extend($.ui.dialog.overlay, {
 				// handle $(el).dialog().dialog('close') (see #4065)
 				if ($.ui.dialog.overlay.instances.length) {
 					$(document).bind($.ui.dialog.overlay.events, function(event) {
-						var dialogZ = $(event.target).parents('.ui-dialog').css('zIndex') || 0;
-						return (dialogZ > $.ui.dialog.overlay.maxZ);
+						// stop events if the z-index of the target is <= the z-index of the overlay
+						return ($(event.target).zIndex() > $.ui.dialog.overlay.maxZ);
 					});
 				}
 			}, 1);
