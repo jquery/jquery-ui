@@ -49,10 +49,19 @@ test('focus', function() {
 });
 
 test('zIndex', function() {
-	var el = $('#zIndexAutoWithParent');
+	var el = $('#zIndexAutoWithParent'),
+		parent = el.parent();
 	equals(el.zIndex(), 100, 'zIndex traverses up to find value');
-	equals(el.zIndex(200), el, 'zIndex setter is chainable');
+	equals(parent.zIndex(200), parent, 'zIndex setter is chainable');
 	equals(el.zIndex(), 200, 'zIndex setter changed zIndex');
+	
+	el = $('#zIndexAutoWithParentViaCSS');
+	equals(el.zIndex(), 0, 'zIndex traverses up to find CSS value, not found because not positioned');
+	
+	el = $('#zIndexAutoWithParentViaCSSPositioned');
+	equals(el.zIndex(), 100, 'zIndex traverses up to find CSS value');
+	el.parent().zIndex(200);
+	equals(el.zIndex(), 200, 'zIndex setter changed zIndex, overriding CSS');
 	
 	equals($('#zIndexAutoNoParent').zIndex(), 0, 'zIndex never explicitly set in hierarchy');
 });

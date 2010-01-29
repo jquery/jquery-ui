@@ -14,6 +14,11 @@
 
 	<script type="text/javascript" src="core.js"></script>
 	<script type="text/javascript" src="selector.js"></script>
+	
+	<style	type="text/css">
+		.zindex {z-index: 100}
+		.absolute {position: absolute}
+	</style>
 </head>
 <body>
 
@@ -95,8 +100,14 @@
 	
 	<div id="aria"></div>
 	
-	<div id="zIndex100" style="z-index: 100;">
+	<div id="zIndex100" style="z-index: 100; position: absolute">
 		<div id="zIndexAutoWithParent"></div>
+	</div>
+	<div id="zIndex100ViaCSS" class="zindex">
+		<div id="zIndexAutoWithParentViaCSS"></div>
+	</div>
+	<div id="zIndex100ViaCSSPositioned" class="zindex absolute">
+		<div id="zIndexAutoWithParentViaCSSPositioned"></div>
 	</div>
 	<div id="zIndexAutoNoParent"></div>
 </div>
