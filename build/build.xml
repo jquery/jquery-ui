@@ -86,7 +86,7 @@
 
 		<concat destfile="${dist.dir}/ui/${concatenated}.js">
 			<filelist dir="${src.dir}/" files="${core.files}" />
-			<fileset dir="${src.dir}/" includes="jquery.ui.*.js, effects.*.js" excludes="${core.files}" />
+			<fileset dir="${src.dir}/" includes="jquery.ui.*.js, jquery.effects.*.js" excludes="${core.files}" />
 		</concat>
 		<echo message="Concatenated built." />
 
