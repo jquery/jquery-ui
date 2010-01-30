@@ -243,7 +243,8 @@ $.widget( "ui.autocomplete", {
 			.position({
 				my: "left top",
 				at: "left bottom",
-				of: this.element
+				of: this.element,
+				collision: "none"
 			})
 			.data( "menu" );
 		if ( ul.width() <= this.element.width() ) {
