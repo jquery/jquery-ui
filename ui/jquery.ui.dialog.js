@@ -114,9 +114,6 @@ $.widget("ui.dialog", {
 				.blur(function() {
 					uiDialogTitlebarClose.removeClass('ui-state-focus');
 				})
-				.mousedown(function(ev) {
-					ev.stopPropagation();
-				})
 				.click(function(event) {
 					self.close(event);
 					return false;
@@ -327,7 +324,7 @@ $.widget("ui.dialog", {
 			heightBeforeDrag;
 
 		self.uiDialog.draggable({
-			cancel: '.ui-dialog-content',
+			cancel: '.ui-dialog-content, .ui-dialog-titlebar-close',
 			handle: '.ui-dialog-titlebar',
 			containment: 'document',
 			start: function(event) {

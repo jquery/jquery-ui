@@ -652,10 +652,6 @@ $.extend(Datepicker.prototype, {
 			if (inst.input.is(':visible') && !inst.input.is(':disabled'))
 				inst.input[0].focus();
 			$.datepicker._curInst = inst;
-			
-			// find the dialog wrapping the input, if any, and bind to close event
-			inst._dialog = $(input).closest('.ui-dialog-content')
-								.bind('dialogclose.datepicker', function() { $.datepicker._hideDatepicker(input); });
 		}
 	},
 
@@ -780,9 +776,6 @@ $.extend(Datepicker.prototype, {
 				}
 			}
 			this._inDialog = false;
-			
-			if (inst._dialog)
-				inst._dialog.unbind('dialogclose.datepicker');
 		}
 	},
 
