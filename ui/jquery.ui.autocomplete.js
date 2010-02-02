@@ -91,7 +91,7 @@ $.widget( "ui.autocomplete", {
 		this.response = function() {
 			return self._response.apply( self, arguments );
 		};
-		this.menu = $("<ul/>")
+		this.menu = $("<ul></ul>")
 			.addClass( "ui-autocomplete" )
 			.appendTo( this.element.parent() )
 			.menu({
