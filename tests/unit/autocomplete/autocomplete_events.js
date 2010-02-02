@@ -24,7 +24,7 @@ test("all events", function() {
 		},
 		close: function(event) {
 			same(event.type, "autocompleteclose");
-			same( $(".ui-menu").length, 1 );
+			same( $(".ui-menu:visible").length, 1 );
 		},
 		select: function(event, ui) {
 			same(event.type, "autocompleteselect");
@@ -32,13 +32,13 @@ test("all events", function() {
 		},
 		change: function(event) {
 			same(event.type, "autocompletechange");
-			same( $(".ui-menu").length, 0 );
+			same( $(".ui-menu:visible").length, 0 );
 		}
 	});
 	stop();
 	ac.val("ja").keydown();
 	setTimeout(function() {
-		same( $(".ui-menu").length, 1 );
+		same( $(".ui-menu:visible").length, 1 );
 		ac.simulate("keydown", { keyCode: $.ui.keyCode.DOWN });
 		ac.simulate("keydown", { keyCode: $.ui.keyCode.ENTER });
 		start();
@@ -66,10 +66,10 @@ test("cancel search", function() {
 	stop();
 	ac.val("ja").keydown();
 	setTimeout(function() {
-		same( $(".ui-menu").length, 0 );
+		same( $(".ui-menu:visible").length, 0 );
 		ac.val("java").keydown();
 		setTimeout(function() {
-			same( $(".ui-menu").length, 1 );
+			same( $(".ui-menu:visible").length, 1 );
 			same( $(".ui-menu .ui-menu-item").length, 2 );
 			start();
 		}, 50);

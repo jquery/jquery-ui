@@ -71,12 +71,12 @@ test("delay", function() {
 	});
 	ac.val("ja").keydown();
 	
-	same( $(".ui-menu").length, 0 );
+	same( $(".ui-menu:visible").length, 0 );
 	
 	// wait half a second for the default delay to open the menu
 	stop();
 	setTimeout(function() {
-		same( $(".ui-menu").length, 1 );
+		same( $(".ui-menu:visible").length, 1 );
 		ac.autocomplete("destroy");
 		start();		
 	}, 100);
@@ -87,11 +87,11 @@ test("minLength", function() {
 		source: data
 	});
 	ac.autocomplete("search", "");
-	same( $(".ui-menu").length, 0, "blank not enough for minLength: 1" );
+	same( $(".ui-menu:visible").length, 0, "blank not enough for minLength: 1" );
 	
 	ac.autocomplete("option", "minLength", 0);
 	ac.autocomplete("search", "");
-	same( $(".ui-menu").length, 1, "blank enough for minLength: 0" );
+	same( $(".ui-menu:visible").length, 1, "blank enough for minLength: 0" );
 	ac.autocomplete("destroy");
 });
 
