@@ -10,9 +10,8 @@
  * Depends:
  *	jquery.ui.core.js
  *	jquery.ui.widget.js
- *	jquery.ui.draggable.js
  *	jquery.ui.mouse.js
- *	jquery.ui.widget.js
+ *	jquery.ui.draggable.js
  */
 (function($) {
 
