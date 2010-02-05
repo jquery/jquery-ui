@@ -20,7 +20,7 @@
 var numPages = 5;
 
 $.widget("ui.slider", $.ui.mouse, {
-	widgetEventPrefix: "slide"
+	widgetEventPrefix: "slide",
 	options: {
 		animate: false,
 		distance: 0,
