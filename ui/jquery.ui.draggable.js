@@ -15,6 +15,7 @@
 (function($) {
 
 $.widget("ui.draggable", $.ui.mouse, {
+	widgetEventPrefix: "drag",
 	options: {
 		addClasses: true,
 		appendTo: "parent",
@@ -467,8 +468,7 @@ $.widget("ui.draggable", $.ui.mouse, {
 });
 
 $.extend($.ui.draggable, {
-	version: "@VERSION",
-	eventPrefix: "drag"
+	version: "@VERSION"
 });
 
 $.ui.plugin.add("draggable", "connectToSortable", {

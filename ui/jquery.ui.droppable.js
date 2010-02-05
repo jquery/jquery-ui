@@ -16,6 +16,7 @@
 (function($) {
 
 $.widget("ui.droppable", {
+	widgetEventPrefix: "drop",
 	options: {
 		accept: '*',
 		activeClass: false,
@@ -146,8 +147,7 @@ $.widget("ui.droppable", {
 });
 
 $.extend($.ui.droppable, {
-	version: "@VERSION",
-	eventPrefix: 'drop'
+	version: "@VERSION"
 });
 
 $.ui.intersect = function(draggable, droppable, toleranceMode) {

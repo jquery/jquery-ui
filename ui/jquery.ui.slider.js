@@ -20,6 +20,7 @@
 var numPages = 5;
 
 $.widget("ui.slider", $.ui.mouse, {
+	widgetEventPrefix: "slide"
 	options: {
 		animate: false,
 		distance: 0,
@@ -607,8 +608,7 @@ $.widget("ui.slider", $.ui.mouse, {
 });
 
 $.extend($.ui.slider, {
-	version: "@VERSION",
-	eventPrefix: "slide"
+	version: "@VERSION"
 });
 
 })(jQuery);

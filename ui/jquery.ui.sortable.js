@@ -15,6 +15,7 @@
 (function($) {
 
 $.widget("ui.sortable", $.ui.mouse, {
+	widgetEventPrefix: "sort",
 	options: {
 		appendTo: "parent",
 		axis: false,
@@ -1045,8 +1046,7 @@ $.widget("ui.sortable", $.ui.mouse, {
 });
 
 $.extend($.ui.sortable, {
-	version: "@VERSION",
-	eventPrefix: "sort"
+	version: "@VERSION"
 });
 
 })(jQuery);
