@@ -17,25 +17,23 @@
 	</style>
 	<script type="text/javascript">
 	$(function() {
-		// change defaults for range, animate and orientation
-		$.extend($.ui.slider.prototype.options, {
-			range: "min",
-			animate: true,
-			orientation: "vertical"
-		});
 		// setup master volume
 		$("#master").slider({
 			value: 60,
-			orientation: "horizontal"
+			orientation: "horizontal",
+			range: "min",
+			animate: true
 		});
 		// setup graphic EQ
 		$("#eq > span").each(function() {
 			// read initial values from markup and remove that
 			var value = parseInt($(this).text());
-			$(this).empty();
-			$(this).slider({
-				value: value
-			})
+			$(this).empty().slider({
+				value: value,
+				range: "min",
+				animate: true,
+				orientation: "vertical"
+			});
 		});
 	});
 	</script>
