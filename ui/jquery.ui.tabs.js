@@ -169,7 +169,7 @@ $.widget("ui.tabs", {
 				if (typeof o.selected != 'number' && this.lis.filter('.ui-tabs-selected').length) {
 					o.selected = this.lis.index(this.lis.filter('.ui-tabs-selected'));
 				}
-				o.selected = o.selected || this.lis.length ? 0 : -1;
+				o.selected = o.selected || (this.lis.length ? 0 : -1);
 			}
 			else if (o.selected === null) { // usage of null is deprecated, TODO remove in next release
 				o.selected = -1;
