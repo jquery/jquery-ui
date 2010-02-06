@@ -1523,7 +1523,7 @@ $.extend(Datepicker.prototype, {
 		var monthHtml = '';
 		// month selection
 		if (secondary || !changeMonth)
-			monthHtml += '<span class="ui-datepicker-month">' + monthNames[drawMonth] + '</span> ';
+			monthHtml += '<span class="ui-datepicker-month">' + monthNames[drawMonth] + '</span>';
 		else {
 			var inMinYear = (minDate && minDate.getFullYear() == drawYear);
 			var inMaxYear = (maxDate && maxDate.getFullYear() == drawYear);
@@ -1541,7 +1541,7 @@ $.extend(Datepicker.prototype, {
 			monthHtml += '</select>';
 		}
 		if (!showMonthAfterYear)
-			html += monthHtml + ((secondary || changeMonth || changeYear) && (!(changeMonth && changeYear)) ? '&#xa0;' : '');
+			html += monthHtml + (secondary || !(changeMonth && changeYear) ? '&#xa0;' : '');
 		// year selection
 		if (secondary || !changeYear)
 			html += '<span class="ui-datepicker-year">' + drawYear + '</span>';
@@ -1572,7 +1572,7 @@ $.extend(Datepicker.prototype, {
 		}
 		html += this._get(inst, 'yearSuffix');
 		if (showMonthAfterYear)
-			html += ((secondary || changeMonth || changeYear) && (!(changeMonth && changeYear)) ? '&#xa0;' : '') + monthHtml;
+			html += (secondary || !(changeMonth && changeYear) ? '&#xa0;' : '') + monthHtml;
 		html += '</div>'; // Close datepicker_header
 		return html;
 	},
