@@ -649,7 +649,7 @@ $.extend(Datepicker.prototype, {
 			if (!showAnim)
 				postProcess();
 			if (inst.input.is(':visible') && !inst.input.is(':disabled'))
-				inst.input[0].focus();
+				inst.input.focus();
 			$.datepicker._curInst = inst;
 		}
 	},
@@ -692,9 +692,9 @@ $.extend(Datepicker.prototype, {
 			'Class']('ui-datepicker-multi');
 		inst.dpDiv[(this._get(inst, 'isRTL') ? 'add' : 'remove') +
 			'Class']('ui-datepicker-rtl');
-		if (inst == $.datepicker._curInst && inst.input &&
+		if (inst == $.datepicker._curInst && $.datepicker._datepickerShowing && inst.input &&
 				inst.input.is(':visible') && !inst.input.is(':disabled'))
-			$(inst.input[0]).focus();
+			inst.input.focus();
 	},
 
 	/* Retrieve the size of left and top borders for an element.
@@ -845,7 +845,7 @@ $.extend(Datepicker.prototype, {
 		var target = $(id);
 		var inst = this._getInst(target[0]);
 		if (inst.input && inst._selectingMonthYear && !$.browser.msie)
-			inst.input[0].focus();
+			inst.input.focus();
 		inst._selectingMonthYear = !inst._selectingMonthYear;
 	},
 
@@ -889,7 +889,7 @@ $.extend(Datepicker.prototype, {
 			this._hideDatepicker();
 			this._lastInput = inst.input[0];
 			if (typeof(inst.input[0]) != 'object')
-				inst.input[0].focus(); // restore focus
+				inst.input.focus(); // restore focus
 			this._lastInput = null;
 		}
 	},
