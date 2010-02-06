@@ -445,7 +445,14 @@ $.widget("ui.dialog", {
 				at: myAt.join(' '),
 				offset: offset.join(' '),
 				of: window,
-				collision: 'fit'
+				collision: 'fit',
+				// ensure that the titlebar is never outside the document
+				using: function(pos) {
+					var topOffset = $(this).css(pos).offset().top;
+					if (topOffset < 0) {
+						$(this).css('top', pos.top - topOffset);
+					}
+				}
 			});
 		if (!isVisible) {
 			this.uiDialog.hide();
