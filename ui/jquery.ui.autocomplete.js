@@ -92,7 +92,7 @@ $.widget( "ui.autocomplete", {
 		this.response = function() {
 			return self._response.apply( self, arguments );
 		};
-		this.menu = $("<ul></ul>")
+		this.menu = $( "<ul></ul>" )
 			.addClass( "ui-autocomplete" )
 			.appendTo( this.element.parent() )
 			.menu({
@@ -139,9 +139,7 @@ $.widget( "ui.autocomplete", {
 			.removeAttr( "role" )
 			.removeAttr( "aria-autocomplete" )
 			.removeAttr( "aria-haspopup" );
-		if ( this.menu ) {
-			this.menu.element.remove();
-		}
+		this.menu.element.remove();
 		$.Widget.prototype.destroy.call( this );
 	},
 
@@ -237,8 +235,7 @@ $.widget( "ui.autocomplete", {
 	},
 
 	_suggest: function( items ) {
-		this.menu.element.empty();
-		var ul = this.menu.element;
+		var ul = this.menu.element.empty();
 		$.each( items, function( index, item ) {
 			$( "<li></li>" )
 				.data( "item.autocomplete", item )
@@ -253,7 +250,7 @@ $.widget( "ui.autocomplete", {
 	},
 
 	_move: function( direction, event ) {
-		if ( !this.menu ) {
+		if ( !this.menu.element.is(":visible") ) {
 			this.search( null, event );
 			return;
 		}
