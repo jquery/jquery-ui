@@ -235,18 +235,23 @@ $.widget( "ui.autocomplete", {
 	},
 
 	_suggest: function( items ) {
-		var ul = this.menu.element.empty();
+		var self = this,
+			ul = this.menu.element.empty();
 		$.each( items, function( index, item ) {
-			$( "<li></li>" )
-				.data( "item.autocomplete", item )
-				.append( "<a>" + item.label + "</a>" )
-				.appendTo( ul );
+			self._renderItem( ul, item );
 		});
 		this.menu.refresh();
 		this.menu.element.show();
 		if ( ul.width() <= this.element.width() ) {
 			ul.width( this.element.width() );
 		}
+	},
+
+	_renderItem: function( ul, item) {
+		return $( "<li></li>" )
+			.data( "item.autocomplete", item )
+			.append( "<a>" + item.label + "</a>" )
+			.appendTo( ul );
 	},
 
 	_move: function( direction, event ) {
