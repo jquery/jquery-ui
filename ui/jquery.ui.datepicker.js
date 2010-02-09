@@ -725,7 +725,7 @@ $.extend(Datepicker.prototype, {
 		offset.left -= Math.min(offset.left, (offset.left + dpWidth > viewWidth && viewWidth > dpWidth) ?
 			Math.abs(offset.left + dpWidth - viewWidth) : 0);
 		offset.top -= Math.min(offset.top, (offset.top + dpHeight > viewHeight && viewHeight > dpHeight) ?
-			Math.abs(offset.top + dpHeight + inputHeight * 2 - viewHeight) : 0);
+			Math.abs(dpHeight + inputHeight) : 0);
 
 		return offset;
 	},
