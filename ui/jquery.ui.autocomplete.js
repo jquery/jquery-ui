@@ -257,15 +257,12 @@ $.widget( "ui.autocomplete", {
 	},
 
 	_move: function( direction, event ) {
-		console.log("move " + direction + " with event " + event)
 		if ( !this.menu.element.is(":visible") ) {
-			console.log("move, menu not visible")
 			this.search( null, event );
 			return;
 		}
 		if ( this.menu.first() && /^previous/.test(direction) ||
 				this.menu.last() && /^next/.test(direction) ) {
-					console.log("move, first or last")
 			this.element.val( this.term );
 			this.menu.deactivate();
 			return;
