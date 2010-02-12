@@ -320,6 +320,8 @@ $.widget("ui.menu", {
 	},
 	
 	refresh: function() {
+		var self = this;
+
 		// don't refresh list items that are already adapted
 		var items = this.element.children("li:not(.ui-menu-item)")
 			.addClass("ui-menu-item")
