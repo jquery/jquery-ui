@@ -36,6 +36,7 @@ $.widget("ui.slider", $.ui.mouse, {
 
 		var self = this, o = this.options;
 		this._keySliding = false;
+		this._mouseSliding = false;
 		this._animateOff = true;
 		this._handleIndex = null;
 		this._detectOrientation();
@@ -262,6 +263,7 @@ $.widget("ui.slider", $.ui.mouse, {
 		}
 
 		this._start(event, index);
+		this._mouseSliding = true;
 
 		self._handleIndex = index;
 
@@ -305,6 +307,7 @@ $.widget("ui.slider", $.ui.mouse, {
 	_mouseStop: function(event) {
 
 		this.handles.removeClass("ui-state-active");
+		this._mouseSliding = false;
 		this._stop(event, this._handleIndex);
 		this._change(event, this._handleIndex);
 		this._handleIndex = null;
@@ -421,15 +424,17 @@ $.widget("ui.slider", $.ui.mouse, {
 	},
 
 	_change: function(event, index) {
-		var uiHash = {
-			handle: this.handles[index],
-			value: this.value()
-		};
-		if (this.options.values && this.options.values.length) {
-			uiHash.value = this.values(index);
-			uiHash.values = this.values();
+		if (!this._keySliding && !this._mouseSliding) {
+			var uiHash = {
+				handle: this.handles[index],
+				value: this.value()
+			};
+			if (this.options.values && this.options.values.length) {
+				uiHash.value = this.values(index);
+				uiHash.values = this.values();
+			}
+			this._trigger("change", event, uiHash);
 		}
-		this._trigger("change", event, uiHash);
 	},
 
 	value: function(newValue) {
