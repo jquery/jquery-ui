@@ -188,6 +188,8 @@ $.widget("ui.dialog", {
 		(self.overlay && self.overlay.destroy());
 		self.uiDialog.unbind('keypress.ui-dialog');
 
+		self._isOpen = false;
+
 		(self.options.hide
 			? self.uiDialog.hide(self.options.hide, function() {
 				self._trigger('close', event);
@@ -195,8 +197,6 @@ $.widget("ui.dialog", {
 			: self.uiDialog.hide() && self._trigger('close', event));
 
 		$.ui.dialog.overlay.resize();
-
-		self._isOpen = false;
 
 		// adjust the maxZ to allow other modal dialogs to continue to work (see #4309)
 		if (self.options.modal) {

@@ -26,4 +26,18 @@ test("#4826: setting resizable false toggles resizable on dialog", function() {
 	
 });
 
+test("#5184: isOpen in dialogclose event is true", function() {
+	expect( 3 );
+
+	el = $( "<div></div>" ).dialog({
+		close: function() {
+			ok( !el.dialog("isOpen"), "dialog is not open during close" );
+		}
+	});
+	ok( el.dialog("isOpen"), "dialog is open after init" );
+	el.dialog( "close" );
+	ok( !el.dialog("isOpen"), "dialog is not open after close" );
+	el.remove();
+});
+
 })(jQuery);
