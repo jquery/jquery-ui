@@ -91,9 +91,9 @@
 		<echo message="Concatenated built." />
 
 		<concat destfile="${dist.dir}/themes/base/${concatenated}.css">
-			<fileset dir="${theme.dir}/" includes="ui.core.css" />
-			<fileset dir="${theme.dir}/" includes="ui.*.css" excludes="ui.all.css, ui.core.css, ui.base.css, ui.theme.css" />
-			<fileset dir="${theme.dir}/" includes="ui.theme.css" />
+			<fileset dir="${theme.dir}/" includes="jquery.ui.core.css" />
+			<fileset dir="${theme.dir}/" includes="jquery.ui.*.css" excludes="jquery.ui.all.css, jquery.ui.core.css, jquery.ui.base.css, jquery.ui.theme.css" />
+			<fileset dir="${theme.dir}/" includes="jquery.ui.theme.css" />
 		</concat>
 		<echo message="Concatenated theme." />
 
