@@ -328,7 +328,7 @@ $.widget("ui.menu", {
 		var self = this;
 
 		// don't refresh list items that are already adapted
-		var items = this.element.children("li:not(.ui-menu-item)")
+		var items = this.element.children("li:not(.ui-menu-item):has(a)")
 			.addClass("ui-menu-item")
 			.attr("role", "menuitem");
 		
