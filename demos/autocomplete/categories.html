@@ -1,0 +1,69 @@
+<!doctype html>
+<html>
+<head>
+	<title>jQuery UI Autocomplete Custom Data Demo</title>
+	<link type="text/css" href="../../themes/base/jquery.ui.all.css" rel="stylesheet" />
+	<script type="text/javascript" src="../../jquery-1.4.2.js"></script>
+	<script type="text/javascript" src="../../ui/jquery.ui.core.js"></script>
+	<script type="text/javascript" src="../../ui/jquery.ui.widget.js"></script>
+	<script type="text/javascript" src="../../ui/jquery.ui.position.js"></script>
+	<script type="text/javascript" src="../../ui/jquery.ui.autocomplete.js"></script>
+	<link type="text/css" href="../demos.css" rel="stylesheet" />
+	<style type="text/css">
+	
+	</style>
+	<script type="text/javascript">
+	$(function() {
+		var data = [
+			{
+				items: ["anders", "andreas", "antal"]
+			},
+			{
+				category: "Products",
+				items: ["annhhx10", "annk K12", "annttop C13"]
+			},
+			{
+				category: "People",
+				items: ["anders andersson", "andreas andersson", "andreas johnson"]
+			}
+		];
+		
+		$.widget("custom.catcomplete", $.ui.autocomplete, {
+			_renderMenu: function( ul, items ) {
+				var self = this;
+				$.each( items, function( index, item ) {
+					if ( item.category ) {
+						ul.append( "<li class='category'>" + item.category + "</li>" );
+					}
+					$.each( item.items, function( index, item ) {
+						self._renderItem( ul, {
+							label: item
+						});
+					});
+				});
+			}
+		});
+		
+		$('#search').catcomplete({
+			source: function(request, response) {
+				response(data);
+			}
+		});
+	});
+	</script>
+</head>
+<body>
+
+<div class="demo">
+	<label for="search">Search: </label>
+	<input id="search" />
+</div><!-- End demo -->
+
+<div class="demo-description">
+<p>
+	A categorized search result. Currently just static data, will match anything you type.
+</p>
+</div><!-- End demo-description -->
+
+</body>
+</html>

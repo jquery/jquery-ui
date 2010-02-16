@@ -237,9 +237,7 @@ $.widget( "ui.autocomplete", {
 	_suggest: function( items ) {
 		var self = this,
 			ul = this.menu.element.empty();
-		$.each( items, function( index, item ) {
-			self._renderItem( ul, item );
-		});
+		this._renderMenu( ul, items );
 		// TODO refresh should check if the active item is still in the dom, removing the need for a manual deactivate
 		this.menu.deactivate();
 		this.menu.refresh();
@@ -247,6 +245,13 @@ $.widget( "ui.autocomplete", {
 		if ( ul.width() <= this.element.width() ) {
 			ul.width( this.element.width() );
 		}
+	},
+	
+	_renderMenu: function( ul, items ) {
+		var self = this;
+		$.each( items, function( index, item ) {
+			self._renderItem( ul, item );
+		});
 	},
 
 	_renderItem: function( ul, item) {
