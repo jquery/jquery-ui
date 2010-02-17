@@ -592,6 +592,8 @@ $.extend($.ui.dialog, {
 
 $.extend($.ui.dialog.overlay, {
 	instances: [],
+	// reuse old instances due to IE memory leak with alpha transparency (see #5185)
+	oldInstances: [],
 	maxZ: 0,
 	events: $.map('focus,mousedown,mouseup,keydown,keypress,click'.split(','),
 		function(event) { return event + '.dialog-overlay'; }).join(' '),
@@ -604,7 +606,7 @@ $.extend($.ui.dialog.overlay, {
 				// handle $(el).dialog().dialog('close') (see #4065)
 				if ($.ui.dialog.overlay.instances.length) {
 					$(document).bind($.ui.dialog.overlay.events, function(event) {
-						// stop events if the z-index of the target is <= the z-index of the overlay
+						// stop events if the z-index of the target is < the z-index of the overlay
 						return ($(event.target).zIndex() >= $.ui.dialog.overlay.maxZ);
 					});
 				}
@@ -620,11 +622,12 @@ $.extend($.ui.dialog.overlay, {
 			$(window).bind('resize.dialog-overlay', $.ui.dialog.overlay.resize);
 		}
 
-		var $el = $('<div></div>').appendTo(document.body)
-			.addClass('ui-widget-overlay').css({
-				width: this.width(),
-				height: this.height()
-			});
+		var $el = (this.oldInstances.length ? this.oldInstances.splice(0, 1)[0] : $('<div></div>').addClass('ui-widget-overlay'))
+					.appendTo(document.body)
+					.css({
+						width: this.width(),
+						height: this.height()
+					});
 
 		($.fn.bgiframe && $el.bgiframe());
 
@@ -633,7 +636,7 @@ $.extend($.ui.dialog.overlay, {
 	},
 
 	destroy: function($el) {
-		this.instances.splice($.inArray(this.instances, $el), 1);
+		this.oldInstances.push(this.instances.splice($.inArray(this.instances, $el), 1)[0]);
 
 		if (this.instances.length === 0) {
 			$([document, window]).unbind('.dialog-overlay');
