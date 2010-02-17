@@ -12,25 +12,11 @@
 	<style type="text/css">
 	.ui-autocomplete-category {
 		padding:.2em .4em;
+		margin:.8em 0 .2em;
 		line-height:1.5;
 	}
 	</style>
 	<script type="text/javascript">
-	$.each({
-		prevOf: "previousSibling",
-		nextOf: "nextSibling"
-	}, function( method, traversal ) {
-		$.fn[ method ] = function( selector ) {
-			return this.pushStack( this.map(function() {
-				var ret = this[ traversal ];
-				while ( ret && !$( ret ).is( selector ) ) {
-					ret = ret[ traversal ];
-				}
-				return ret;
-			}) );
-		};
-	});
-
 	$.extend( $.ui.menu.prototype, {
 		next: function() {
 			this.move("next", ".ui-menu-item:first");
@@ -45,7 +31,7 @@
 				this.activate(this.element.children(edge));
 				return;
 			}
-			var next = this.active[direction + "Of"]('.ui-menu-item');
+			var next = this.active[direction + "All"]('.ui-menu-item').eq( 0 );
 			if (next.length) {
 				this.activate(next);
 			} else {
@@ -60,7 +46,7 @@
 				currentCategory = "";
 			$.each( items, function( index, item ) {
 				if ( item.category != currentCategory ) {
-					ul.append( "<li class='ui-widget-header ui-autocomplete-category'>" + item.category + "</li>" );
+					ul.append( "<li class='ui-widget-header ui-autocomplete-category ui-corner-all'>" + item.category + "</li>" );
 					currentCategory = item.category;
 				}
 				self._renderItem( ul, item );
