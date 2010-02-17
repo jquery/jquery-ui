@@ -13,41 +13,74 @@
 	
 	</style>
 	<script type="text/javascript">
+	$.each({
+		prevOf: "previousSibling",
+		nextOf: "nextSibling"
+	}, function( method, traversal ) {
+		$.fn[ method ] = function( selector ) {
+			return this.pushStack( this.map(function() {
+				var ret = this[ traversal ];
+				while ( ret && !$( ret ).is( selector ) ) {
+					ret = ret[ traversal ];
+				}
+				return ret;
+			}) );
+		};
+	});
+
+	$.extend( $.ui.menu.prototype, {
+		next: function() {
+			this.move("next", ".ui-menu-item:first");
+		},
+
+		previous: function() {
+			this.move("prev", ".ui-menu-item:last");
+		},
+
+		move: function(direction, edge) {
+			if (!this.active) {
+				this.activate(this.element.children(edge));
+				return;
+			}
+			var next = this.active[direction + "Of"]('.ui-menu-item');
+			if (next.length) {
+				this.activate(next);
+			} else {
+				this.activate(this.element.children(edge));
+			}
+		}
+	});
+
+	$.widget("custom.catcomplete", $.ui.autocomplete, {
+		_renderMenu: function( ul, items ) {
+			var self = this,
+				currentCategory = "";
+			$.each( items, function( index, item ) {
+				if ( item.category != currentCategory ) {
+					ul.append( "<li class='category'>" + item.category + "</li>" );
+					currentCategory = item.category;
+				}
+				self._renderItem( ul, item );
+			});
+		}
+	});
+	</script>
+	<script type="text/javascript">
 	$(function() {
 		var data = [
-			{
-				items: ["anders", "andreas", "antal"]
-			},
-			{
-				category: "Products",
-				items: ["annhhx10", "annk K12", "annttop C13"]
-			},
-			{
-				category: "People",
-				items: ["anders andersson", "andreas andersson", "andreas johnson"]
-			}
+			{ label: "anders", category: "" },
+			{ label: "andreas", category: "" },
+			{ label: "antal", category: "" },
+			{ label: "annhhx10", category: "Products" },
+			{ label: "annk K12", category: "Products" },
+			{ label: "annttop C13", category: "Products" },
+			{ label: "anders andersson", category: "People" },
+			{ label: "andreas andersson", category: "People" },
+			{ label: "andreas johnson", category: "People" }
 		];
 		
-		$.widget("custom.catcomplete", $.ui.autocomplete, {
-			_renderMenu: function( ul, items ) {
-				var self = this;
-				$.each( items, function( index, item ) {
-					if ( item.category ) {
-						ul.append( "<li class='category'>" + item.category + "</li>" );
-					}
-					$.each( item.items, function( index, item ) {
-						self._renderItem( ul, {
-							label: item
-						});
-					});
-				});
-			}
-		});
-		
 		$('#search').catcomplete({
-			source: function(request, response) {
-				response(data);
-			}
+			source: data
 		});
 	});
 	</script>
@@ -61,7 +94,7 @@
 
 <div class="demo-description">
 <p>
-	A categorized search result. Currently just static data, will match anything you type.
+	A categorized search result. Try typing "a" or "n".
 </p>
 </div><!-- End demo-description -->
 
