@@ -770,6 +770,7 @@ $.ui.plugin.add("draggable", "stack", {
 		var group = $.makeArray($(o.stack)).sort(function(a,b) {
 			return (parseInt($(a).css("zIndex"),10) || 0) - (parseInt($(b).css("zIndex"),10) || 0);
 		});
+		if (!group.length) { return; }
 		
 		var min = parseInt(group[0].style.zIndex) || 0;
 		$(group).each(function(i) {
