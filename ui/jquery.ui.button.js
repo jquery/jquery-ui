@@ -73,9 +73,6 @@ $.widget( "ui.button", {
 					return;
 				}
 				$( this ).toggleClass( "ui-state-active" );
-				self.element
-					.attr( "checked", !self.element[0].checked )
-					.click();
 				self.buttonElement.attr( "aria-pressed", self.element[0].checked );
 			});
 		} else if ( this.type === "radio") {
@@ -84,9 +81,6 @@ $.widget( "ui.button", {
 					return;
 				}
 				$( this ).addClass( "ui-state-active" );
-				self.element
-					.attr( "checked", true )
-					.click();
 				self.buttonElement.attr( "aria-pressed", true );
 
 				var radio = self.element[ 0 ],
