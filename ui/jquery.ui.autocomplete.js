@@ -128,7 +128,7 @@ $.widget( "ui.autocomplete", {
 			.hide()
 			.data( "menu" );
 		if ( $.fn.bgiframe ) {
-			 menu.element.bgiframe();
+			 this.menu.element.bgiframe();
 		}
 	},
 
