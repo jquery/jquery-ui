@@ -143,7 +143,7 @@ $.widget( "ui.button", {
 						// TODO pass through original event correctly (just as 2nd argument doesn't work)
 						$(this).trigger("click");
 					}
-				})
+				});
 			}
 		}
 
@@ -167,7 +167,7 @@ $.widget( "ui.button", {
 			if ( checked ) {
 				this.buttonElement.addClass( "ui-state-active" );
 			}
-			this.buttonElement.attr( "aria-pressed", checked )
+			this.buttonElement.attr( "aria-pressed", checked );
 		} else {
 			this.buttonElement = this.element;
 		}
