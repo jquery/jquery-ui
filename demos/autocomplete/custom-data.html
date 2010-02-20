@@ -42,7 +42,7 @@
 			},
 			{
 				value: 'sizzlejs',
-				label: 'Sizzle',
+				label: 'Sizzle JS',
 				desc: 'a pure-JavaScript CSS selector engine',
 				icon: 'sizzlejs_32x32.png'
 			}
@@ -53,7 +53,6 @@
 			source: projects,
 			focus: function(event, ui) {
 				$('#project').val(ui.item.label);
-				
 				return false;
 			},
 			select: function(event, ui) {
@@ -71,7 +70,7 @@
 <body>
 
 <div class="demo">
-	<label for="tags" id="project-label">Select a project:</label>
+	<label for="tags" id="project-label">Select a project (type "j" for a start):</label>
 	<img id="project-icon" src="../images/transparent_1x1.png" class="ui-state-default">
 	<input id="project">
 	<input type="hidden" id="project-id">
