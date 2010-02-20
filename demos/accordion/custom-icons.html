@@ -7,6 +7,7 @@
 	<script type="text/javascript" src="../../ui/jquery.ui.core.js"></script>
 	<script type="text/javascript" src="../../ui/jquery.ui.widget.js"></script>
 	<script type="text/javascript" src="../../ui/jquery.ui.accordion.js"></script>
+	<script type="text/javascript" src="../../ui/jquery.ui.button.js"></script>
 	<link type="text/css" href="../demos.css" rel="stylesheet" />
 	<script type="text/javascript">
 	$(function() {
@@ -17,7 +18,7 @@
 		$("#accordion").accordion({
 			icons: icons
 		});
-		$("#toggle").toggle(function() {
+		$("#toggle").button().toggle(function() {
 			$("#accordion").accordion("option", "icons", false);
 		}, function() {
 			$("#accordion").accordion("option", "icons", icons);
