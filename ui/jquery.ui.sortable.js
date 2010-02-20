@@ -724,10 +724,10 @@ $.widget("ui.sortable", $.ui.mouse, {
 			//Update the placeholder 
 			this.options.placeholder.update(this.currentContainer, this.placeholder); 
 		
+			this.containers[innermostIndex]._trigger("over", event, this._uiHash(this)); 
+			this.containers[innermostIndex].containerCache.over = 1;
 		} 
 	
-		this.containers[innermostIndex]._trigger("over", event, this._uiHash(this)); 
-		this.containers[innermostIndex].containerCache.over = 1;
 		
 	},
 
