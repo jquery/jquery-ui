@@ -50,11 +50,11 @@ $.widget( "ui.autocomplete", {
 					break;
 				case keyCode.ENTER:
 					// when menu is open or has focus
-					if ( self.menu && self.menu.active ) {
+					if ( self.menu.active ) {
 						event.preventDefault();
 					}
 				case keyCode.TAB:
-					if ( !self.menu || !self.menu.active ) {
+					if ( !self.menu.active ) {
 						return;
 					}
 					self.menu.select();
@@ -209,6 +209,7 @@ $.widget( "ui.autocomplete", {
 		if ( this.menu.element.is(":visible") ) {
 			this._trigger( "close", event );
 			this.menu.element.hide();
+			this.menu.deactivate();
 		}
 		if ( this.previous != this.element.val() ) {
 			this._trigger( "change", event );
