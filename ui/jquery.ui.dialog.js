@@ -547,11 +547,9 @@ $.widget("ui.dialog", {
 		var options = this.options;
 
 		// reset content sizing
-		this.element.css({
-			height: 0,
-			minHeight: 0,
-			width: 'auto'
-		});
+		// hide for non content measurement because height: 0 doesn't work in IE quirks mode (see #4350)
+		this.element.css('width', 'auto')
+			.hide();
 
 		// reset wrapper sizing
 		// determine the height of all the non-content elements
@@ -567,8 +565,10 @@ $.widget("ui.dialog", {
 				height: 'auto'
 			}
 			: {
-				height: Math.max(options.height - nonContentHeight, 0)
-			});
+				minHeight: 0,
+				height: Math.max(options.height - nonContentHeight, 0)				
+			})
+			.show();
 
 		(this.uiDialog.is(':data(resizable)') &&
 			this.uiDialog.resizable('option', 'minHeight', this._minHeight()));
