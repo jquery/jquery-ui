@@ -120,12 +120,6 @@ $.widget( "ui.autocomplete", {
 			.zIndex( this.element.zIndex() + 1 )
 			// workaround for jQuery bug #5781 http://dev.jquery.com/ticket/5781
 			.css({ top: 0, left: 0 })
-			.position({
-				my: "left top",
-				at: "left bottom",
-				of: this.element,
-				collision: "none"
-			})
 			.hide()
 			.data( "menu" );
 		if ( $.fn.bgiframe ) {
@@ -243,7 +237,12 @@ $.widget( "ui.autocomplete", {
 		// TODO refresh should check if the active item is still in the dom, removing the need for a manual deactivate
 		this.menu.deactivate();
 		this.menu.refresh();
-		this.menu.element.show();
+		this.menu.element.show().position({
+			my: "left top",
+			at: "left bottom",
+			of: this.element,
+			collision: "none"
+		});
 		if ( ul.width() <= this.element.width() ) {
 			ul.width( this.element.width() );
 		}
