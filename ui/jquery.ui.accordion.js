@@ -313,8 +313,8 @@ $.widget("ui.accordion", {
 				options: o,
 				newHeader: clickedIsActive && o.collapsible ? $([]) : clicked,
 				oldHeader: this.active,
-				newContent: clickedIsActive && o.collapsible ? $([]) : toShow.find('> *'),
-				oldContent: toHide.find('> *')
+				newContent: clickedIsActive && o.collapsible ? $([]) : toShow,
+				oldContent: toHide
 			},
 			down = this.headers.index( this.active[0] ) > this.headers.index( clicked[0] );
 
