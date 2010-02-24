@@ -332,7 +332,7 @@ $.widget("ui.dialog", {
 			handle: '.ui-dialog-titlebar',
 			containment: 'document',
 			start: function(event) {
-				heightBeforeDrag = options.height;
+				heightBeforeDrag = options.height === "auto" ? "auto" : $(this).height();
 				$(this).height($(this).height()).addClass("ui-dialog-dragging");
 				self._trigger('dragStart', event);
 			},
