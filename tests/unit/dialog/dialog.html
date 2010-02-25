@@ -3,6 +3,8 @@
 <head>
 	<title>jQuery UI Dialog Test Suite</title>
 
+	<link type="text/css" href="../../../themes/base/jquery.ui.dialog.css" rel="stylesheet" />
+
 	<script type="text/javascript" src="../../../jquery-1.4.2.js"></script>
 	<script type="text/javascript" src="../../../external/jquery.bgiframe-2.1.1.js"></script>
 	<script type="text/javascript" src="../../../ui/jquery.ui.core.js"></script>
@@ -13,11 +15,11 @@
 	<script type="text/javascript" src="../../../ui/jquery.ui.resizable.js"></script>
 	<script type="text/javascript" src="../../../ui/jquery.ui.dialog.js"></script>
 
-	<link   type="text/css"       href="../testsuite.css" rel="stylesheet" />
-	<script type="text/javascript" src="../../../external/testrunner-r6588.js"></script>
+	<link rel="stylesheet" href="../../../external/qunit.css" type="text/css"/>
+	<script type="text/javascript" src="../../../external/qunit.js"></script>
 	<script type="text/javascript" src="../../jquery.simulate.js"></script>
 	<script type="text/javascript" src="../testsuite.js"></script>
-
+	
 	<script type="text/javascript" src="dialog_core.js"></script>
 	<script type="text/javascript" src="dialog_defaults.js"></script>
 	<script type="text/javascript" src="dialog_events.js"></script>
@@ -27,8 +29,13 @@
 </head>
 <body>
 
-<div id="main">
-	<div id="dialog1">Dialog Content</div>
+<h1 id="qunit-header">jQuery UI Dialog Test Suite</h1>
+<h2 id="qunit-banner"></h2>
+<h2 id="qunit-userAgent"></h2>
+<ol id="qunit-tests">
+</ol>
+
+<div id="main" style="position: absolute; top: -10000px; left: -10000px;">
 </div>
 
 </body>

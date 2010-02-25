@@ -3,7 +3,7 @@
 <head>
 	<title>jQuery UI Datepicker Test Suite</title>
 
-	<link   type="text/css"       href="../../../themes/base/jquery.ui.base.css" rel="stylesheet" />
+	<link type="text/css" href="../../../themes/base/jquery.ui.datepicker.css" rel="stylesheet" />
 
 	<script type="text/javascript" src="../../../jquery-1.4.2.js"></script>
 	<script type="text/javascript" src="../../../ui/jquery.ui.core.js"></script>
@@ -12,11 +12,11 @@
 	<script type="text/javascript" src="../../../ui/i18n/jquery.ui.datepicker-fr.js"></script>
 	<script type="text/javascript" src="../../../ui/i18n/jquery.ui.datepicker-he.js"></script>
 
-	<link   type="text/css"       href="../testsuite.css" rel="stylesheet" />
-	<script type="text/javascript" src="../../../external/testrunner-r6588.js"></script>
+	<link rel="stylesheet" href="../../../external/qunit.css" type="text/css"/>
+	<script type="text/javascript" src="../../../external/qunit.js"></script>
 	<script type="text/javascript" src="../../jquery.simulate.js"></script>
 	<script type="text/javascript" src="../testsuite.js"></script>
-
+	
 	<script type="text/javascript" src="datepicker_core.js"></script>
 	<script type="text/javascript" src="datepicker_defaults.js"></script>
 	<script type="text/javascript" src="datepicker_events.js"></script>
@@ -26,7 +26,13 @@
 </head>
 <body>
 
-<div id="main">
+<h1 id="qunit-header">jQuery UI Datepicker Test Suite</h1>
+<h2 id="qunit-banner"></h2>
+<h2 id="qunit-userAgent"></h2>
+<ol id="qunit-tests">
+</ol>
+
+<div id="main" style="position: absolute; top: -10000px; left: -10000px;">
 	<p><input type="text" id="inp"/><input type="text" id="alt"/><div id="inl"></div></p>
 </div>
 

@@ -3,16 +3,18 @@
 <head>
 	<title>jQuery UI Button Test Suite</title>
 
+	<link type="text/css" href="../../../themes/base/jquery.ui.button.css" rel="stylesheet" />
+
 	<script type="text/javascript" src="../../../jquery-1.4.2.js"></script>
 	<script type="text/javascript" src="../../../ui/jquery.ui.core.js"></script>
 	<script type="text/javascript" src="../../../ui/jquery.ui.widget.js"></script>
 	<script type="text/javascript" src="../../../ui/jquery.ui.button.js"></script>
 
-	<link   type="text/css"       href="../testsuite.css" rel="stylesheet" />
-	<script type="text/javascript" src="../../../external/testrunner-r6588.js"></script>
+	<link rel="stylesheet" href="../../../external/qunit.css" type="text/css"/>
+	<script type="text/javascript" src="../../../external/qunit.js"></script>
 	<script type="text/javascript" src="../../jquery.simulate.js"></script>
 	<script type="text/javascript" src="../testsuite.js"></script>
-
+	
 	<script type="text/javascript" src="button_core.js"></script>
 	<script type="text/javascript" src="button_defaults.js"></script>
 	<script type="text/javascript" src="button_events.js"></script>
@@ -23,7 +25,14 @@
 </head>
 <body>
 
-<div id="main">
+<h1 id="qunit-header">jQuery UI Button Test Suite</h1>
+<h2 id="qunit-banner"></h2>
+<h2 id="qunit-userAgent"></h2>
+<ol id="qunit-tests">
+</ol>
+
+<div id="main" style="position: absolute; top: -10000px; left: -10000px;">
+
 
 	<div><button id="button" class="foo">Label</button></div>
 	

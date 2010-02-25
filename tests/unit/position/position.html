@@ -6,15 +6,22 @@
 	<script type="text/javascript" src="../../../jquery-1.4.2.js"></script>
 	<script type="text/javascript" src="../../../ui/jquery.ui.position.js"></script>
 
-	<link   type="text/css"       href="../testsuite.css" rel="stylesheet" />
-	<script type="text/javascript" src="../../../external/testrunner-r6588.js"></script>
+	<link rel="stylesheet" href="../../../external/qunit.css" type="text/css"/>
+	<script type="text/javascript" src="../../../external/qunit.js"></script>
+	<script type="text/javascript" src="../../jquery.simulate.js"></script>
 	<script type="text/javascript" src="../testsuite.js"></script>
 
 	<script type="text/javascript" src="position_core.js"></script>
 </head>
 <body>
 
-<div id="main" style="top: 0; left: 0;">
+<h1 id="qunit-header">jQuery UI Position Test Suite</h1>
+<h2 id="qunit-banner"></h2>
+<h2 id="qunit-userAgent"></h2>
+<ol id="qunit-tests">
+</ol>
+
+<div id="main" style="position: absolute; top: 0; left: 0;">
 	<div id="el1" style="position: absolute; width: 6px; height: 6px;"></div>
 	<div id="el2" style="position: absolute; width: 6px; height: 6px;"></div>
 	<div id="parent" style="position: absolute; width: 6px; height: 6px; top: 4px; left: 4px;"></div>

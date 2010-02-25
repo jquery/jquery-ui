@@ -3,13 +3,15 @@
 <head>
 	<title>jQuery UI Accordion Test Suite</title>
 
+	<link type="text/css" href="../../../themes/base/jquery.ui.accordion.css" rel="stylesheet" />
+
 	<script type="text/javascript" src="../../../jquery-1.4.2.js"></script>
 	<script type="text/javascript" src="../../../ui/jquery.ui.core.js"></script>
 	<script type="text/javascript" src="../../../ui/jquery.ui.widget.js"></script>
 	<script type="text/javascript" src="../../../ui/jquery.ui.accordion.js"></script>
 
-	<link   type="text/css"       href="../testsuite.css" rel="stylesheet" />
-	<script type="text/javascript" src="../../../external/testrunner-r6588.js"></script>
+	<link rel="stylesheet" href="../../../external/qunit.css" type="text/css"/>
+	<script type="text/javascript" src="../../../external/qunit.js"></script>
 	<script type="text/javascript" src="../../jquery.simulate.js"></script>
 	<script type="text/javascript" src="../testsuite.js"></script>
 
@@ -21,12 +23,18 @@
 	<script type="text/javascript" src="accordion_tickets.js"></script>
 	
 	<style>
-		.ui-accordion-li-fix { margin: 0em; padding: 0 }
+		#main { font-size: 10pt; font-family: 'trebuchet ms', verdana, arial; }
 	</style>
 </head>
 <body>
 
-<div id="main">
+<h1 id="qunit-header">jQuery UI Accordion Test Suite</h1>
+<h2 id="qunit-banner"></h2>
+<h2 id="qunit-userAgent"></h2>
+<ol id="qunit-tests">
+</ol>
+
+<div id="main" style="position: absolute; top: -10000px; left: -10000px;">
 
 	<div id="list1">
         <a>There is one obvious advantage:</a>

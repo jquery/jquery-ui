@@ -86,7 +86,7 @@ test('positions', function() {
 			of: '#parent',
 			collision: 'none'
 		});
-		same(el.offset(), definition.result, "Position via " + jsDump.parse({my:definition.my, at:definition.at}));
+		same(el.offset(), definition.result, "Position via " + QUnit.jsDump.parse({my:definition.my, at:definition.at}));
 	});
 });
 

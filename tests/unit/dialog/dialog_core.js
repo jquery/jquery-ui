@@ -9,7 +9,7 @@ var el,
 	dragged;
 
 function dlg() {
-	return el.data("dialog").element.parents(".ui-dialog:first");
+	return el.dialog('widget');
 }
 
 function isOpen(why) {

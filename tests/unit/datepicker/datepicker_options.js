@@ -684,7 +684,7 @@ test('callbacks', function() {
 	equals($.datepicker._get(inst, 'currentText'), 'Current', 'Before show - changed');
 	ok(beforeShowThis.id == inp[0].id, 'Before show - this OK');
 	ok(beforeShowInput.id == inp[0].id, 'Before show - input OK');
-	isObj(beforeShowInst, inst, 'Before show - inst OK');
+	deepEqual(beforeShowInst, inst, 'Before show - inst OK');
 	inp.datepicker('hide').datepicker('destroy');
 	// Before show day
 	inp = init('#inp', {beforeShowDay: beforeDay});
@@ -734,7 +734,7 @@ test('localisation', function() {
 test('noWeekends', function() {
 	for (var i = 1; i <= 31; i++) {
 		var date = new Date(2001, 1 - 1, i);
-		isSet($.datepicker.noWeekends(date), [(i + 1) % 7 >= 2, ''],
+		deepEqual($.datepicker.noWeekends(date), [(i + 1) % 7 >= 2, ''],
 			'No weekends ' + date);
 	}
 });
