@@ -152,7 +152,7 @@ $.widget( "ui.autocomplete", {
 				// escape regex characters
 				var matcher = new RegExp( $.ui.autocomplete.escapeRegex(request.term), "i" );
 				response( $.grep( array, function(value) {
-    				return matcher.test( value.value || value.label || value );
+    				return matcher.test( value.label || value.value || value );
 				}) );
 			};
 		} else if ( typeof this.options.source == "string" ) {
