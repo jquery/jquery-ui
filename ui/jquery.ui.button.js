@@ -141,6 +141,10 @@ $.widget( "ui.button", {
 			}
 		}
 
+		// TODO: pull out $.Widget's handling for the disabled option into
+		// $.Widget.prototype._setOptionDisabled so it's easy to proxy and can
+		// be overridden by individual plugins
+		$.Widget.prototype._setOption.call( this, "disabled", options.disabled );
 		this._resetButton();
 	},
 
