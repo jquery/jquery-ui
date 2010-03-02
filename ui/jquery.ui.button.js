@@ -236,7 +236,7 @@ $.widget( "ui.button", {
 $.widget( "ui.buttonset", {
 	_create: function() {
 		this.element.addClass( "ui-button-set" );
-		this.buttons = this.element.find( ":button, :submit, :reset, :checkbox, :radio, a, .ui-button" )
+		this.buttons = this.element.find( ":button, :submit, :reset, :checkbox, :radio, a, :data(button)" )
 			.button()
 			.map(function() {
 				return $( this ).button( "widget" )[ 0 ];
@@ -269,5 +269,5 @@ $.widget( "ui.buttonset", {
 	}
 });
 
-
+$.fn.log = function() { console.log(this); return this; };
 })( jQuery );
