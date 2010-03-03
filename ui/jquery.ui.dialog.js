@@ -630,12 +630,12 @@ $.extend($.ui.dialog.overlay, {
 			$(window).bind('resize.dialog-overlay', $.ui.dialog.overlay.resize);
 		}
 
-		var $el = (this.oldInstances.length ? this.oldInstances.splice(0, 1)[0] : $('<div></div>').addClass('ui-widget-overlay'))
-					.appendTo(document.body)
-					.css({
-						width: this.width(),
-						height: this.height()
-					});
+		var $el = (this.oldInstances.pop() || $('<div></div>').addClass('ui-widget-overlay'))
+			.appendTo(document.body)
+			.css({
+				width: this.width(),
+				height: this.height()
+			});
 
 		($.fn.bgiframe && $el.bgiframe());
 
@@ -644,7 +644,7 @@ $.extend($.ui.dialog.overlay, {
 	},
 
 	destroy: function($el) {
-		this.oldInstances.push(this.instances.splice($.inArray(this.instances, $el), 1)[0]);
+		this.oldInstances.push(this.instances.splice($.inArray($el, this.instances), 1)[0]);
 
 		if (this.instances.length === 0) {
 			$([document, window]).unbind('.dialog-overlay');
