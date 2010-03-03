@@ -9,8 +9,6 @@
  */
 ;jQuery.ui || (function($) {
 
-var isFF2 = $.browser.mozilla && (parseFloat($.browser.version) < 1.9);
-
 //Helper functions and ui object
 $.ui = {
 	version: "@VERSION",
