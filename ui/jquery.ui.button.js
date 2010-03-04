@@ -89,9 +89,9 @@ $.widget( "ui.button", {
 					radios;
 				if ( name ) {
 					if ( form ) {
-						radios = $( form ).find( "[name=" + name + "]" );
+						radios = $( form ).find( "[name='" + name + "']" );
 					} else {
-						radios = $( "[name=" + name + "]", radio.ownerDocument )
+						radios = $( "[name='" + name + "']", radio.ownerDocument )
 							.filter(function() {
 								return !this.form;
 							});
