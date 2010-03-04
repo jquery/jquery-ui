@@ -13,7 +13,8 @@
  */
 (function($) {
 
-var tabId = 0;
+var tabId = 0,
+	listId = 0;
 
 $.widget("ui.tabs", {
 	options: {
@@ -63,7 +64,7 @@ $.widget("ui.tabs", {
 	},
 
 	_cookie: function() {
-		var cookie = this.cookie || (this.cookie = this.options.cookie.name || 'ui-tabs-' + $.data(this.list[0]));
+		var cookie = this.cookie || (this.cookie = this.options.cookie.name || 'ui-tabs-' + (++listId));
 		return $.cookie.apply(null, [cookie].concat($.makeArray(arguments)));
 	},
 
