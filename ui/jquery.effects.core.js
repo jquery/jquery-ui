@@ -418,6 +418,10 @@ function _normalizeArguments(effect, options, speed, callback) {
 		speed = null;
 		options = {};
 	}
+	if ($.isFunction(speed)) {
+		callback = speed;
+		speed = null;
+	}
 	if (typeof options == 'number' || $.fx.speeds[options]) {
 		callback = speed;
 		speed = options;
