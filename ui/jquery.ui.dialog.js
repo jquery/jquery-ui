@@ -331,19 +331,19 @@ $.widget("ui.dialog", {
 			cancel: '.ui-dialog-content, .ui-dialog-titlebar-close',
 			handle: '.ui-dialog-titlebar',
 			containment: 'document',
-			start: function(event) {
+			start: function(event, ui) {
 				heightBeforeDrag = options.height === "auto" ? "auto" : $(this).height();
 				$(this).height($(this).height()).addClass("ui-dialog-dragging");
-				self._trigger('dragStart', event);
+				self._trigger('dragStart', event, ui);
 			},
-			drag: function(event) {
-				self._trigger('drag', event);
+			drag: function(event, ui) {
+				self._trigger('drag', event, ui);
 			},
 			stop: function(event, ui) {
 				options.position = [ui.position.left - doc.scrollLeft(),
 					ui.position.top - doc.scrollTop()];
 				$(this).removeClass("ui-dialog-dragging").height(heightBeforeDrag);
-				self._trigger('dragStop', event);
+				self._trigger('dragStop', event, ui);
 				$.ui.dialog.overlay.resize();
 			}
 		});
@@ -369,18 +369,18 @@ $.widget("ui.dialog", {
 			minWidth: options.minWidth,
 			minHeight: self._minHeight(),
 			handles: resizeHandles,
-			start: function(event) {
+			start: function(event, ui) {
 				$(this).addClass("ui-dialog-resizing");
-				self._trigger('resizeStart', event);
+				self._trigger('resizeStart', event, ui);
 			},
-			resize: function(event) {
-				self._trigger('resize', event);
+			resize: function(event, ui) {
+				self._trigger('resize', event, ui);
 			},
-			stop: function(event) {
+			stop: function(event, ui) {
 				$(this).removeClass("ui-dialog-resizing");
 				options.height = $(this).height();
 				options.width = $(this).width();
-				self._trigger('resizeStop', event);
+				self._trigger('resizeStop', event, ui);
 				$.ui.dialog.overlay.resize();
 			}
 		})
