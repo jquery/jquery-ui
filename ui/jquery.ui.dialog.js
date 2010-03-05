@@ -327,6 +327,13 @@ $.widget("ui.dialog", {
 			doc = $(document),
 			heightBeforeDrag;
 
+		function filteredUi(ui) {
+			return {
+				positon: ui.position,
+				offset: ui.offset
+			};
+		}
+
 		self.uiDialog.draggable({
 			cancel: '.ui-dialog-content, .ui-dialog-titlebar-close',
 			handle: '.ui-dialog-titlebar',
@@ -334,16 +341,16 @@ $.widget("ui.dialog", {
 			start: function(event, ui) {
 				heightBeforeDrag = options.height === "auto" ? "auto" : $(this).height();
 				$(this).height($(this).height()).addClass("ui-dialog-dragging");
-				self._trigger('dragStart', event, ui);
+				self._trigger('dragStart', event, filteredUi(ui));
 			},
 			drag: function(event, ui) {
-				self._trigger('drag', event, ui);
+				self._trigger('drag', event, filteredUi(ui));
 			},
 			stop: function(event, ui) {
 				options.position = [ui.position.left - doc.scrollLeft(),
 					ui.position.top - doc.scrollTop()];
 				$(this).removeClass("ui-dialog-dragging").height(heightBeforeDrag);
-				self._trigger('dragStop', event, ui);
+				self._trigger('dragStop', event, filteredUi(ui));
 				$.ui.dialog.overlay.resize();
 			}
 		});
@@ -360,6 +367,15 @@ $.widget("ui.dialog", {
 				? handles
 				: 'n,e,s,w,se,sw,ne,nw';
 
+		function filteredUi(ui) {
+			return {
+				originalPosition: ui.originalPosition,
+				originalSize: ui.originalSize,
+				position: ui.position,
+				size: ui.size
+			};
+		}
+
 		self.uiDialog.resizable({
 			cancel: '.ui-dialog-content',
 			containment: 'document',
@@ -371,16 +387,16 @@ $.widget("ui.dialog", {
 			handles: resizeHandles,
 			start: function(event, ui) {
 				$(this).addClass("ui-dialog-resizing");
-				self._trigger('resizeStart', event, ui);
+				self._trigger('resizeStart', event, filteredUi(ui));
 			},
 			resize: function(event, ui) {
-				self._trigger('resize', event, ui);
+				self._trigger('resize', event, filteredUi(ui));
 			},
 			stop: function(event, ui) {
 				$(this).removeClass("ui-dialog-resizing");
 				options.height = $(this).height();
 				options.width = $(this).width();
-				self._trigger('resizeStop', event, ui);
+				self._trigger('resizeStop', event, filteredUi(ui));
 				$.ui.dialog.overlay.resize();
 			}
 		})
