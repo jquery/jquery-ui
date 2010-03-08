@@ -191,8 +191,8 @@ $.widget( "ui.autocomplete", {
 	_response: function( content ) {
 		if ( content.length ) {
 			content = this._normalize( content );
-			this._trigger( "open" );
 			this._suggest( content );
+			this._trigger( "open" );
 		} else {
 			this.close();
 		}
