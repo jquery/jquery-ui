@@ -13,7 +13,7 @@ test("checkbox", function() {
 	ok( input.is(":visible") );	
 	ok( label.is(":not(.ui-button)") );
 	input.button();
-	ok( input.is(":hidden") );
+	ok( input.is(".ui-helper-hidden-accessible") );
 	ok( label.is(".ui-button") );
 });
 
@@ -23,7 +23,7 @@ test("radios", function() {
 	ok( inputs.is(":visible") );	
 	ok( labels.is(":not(.ui-button)") );
 	inputs.button();
-	ok( inputs.is(":hidden") );
+	ok( inputs.is(".ui-helper-hidden-accessible") );
 	ok( labels.is(".ui-button") );
 });
 
@@ -61,7 +61,7 @@ test("buttonset", function() {
 	var set = $("#radio1").buttonset();
 	ok( set.is(".ui-button-set") );
 	same( set.children(".ui-button").length, 3 );
-	same( set.children("input:radio:hidden").length, 3 );
+	same( set.children("input:radio.ui-helper-hidden-accessible").length, 3 );
 	ok( set.children("label:eq(0)").is(".ui-button.ui-corner-left:not(.ui-corner-all)") );
 	ok( set.children("label:eq(1)").is(".ui-button:not(.ui-corner-all)") );
 	ok( set.children("label:eq(2)").is(".ui-button.ui-corner-right:not(.ui-corner-all)") );
