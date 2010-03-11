@@ -159,7 +159,7 @@ $.widget( "ui.button", {
 
 		if ( this.type === "checkbox" || this.type === "radio" ) {
 			this.buttonElement = $( "[for=" + this.element.attr("id") + "]" );
-			this.element.hide();
+			this.element.addClass('ui-helper-hidden-accessible');
 
 			var checked = this.element.is( ":checked" );
 			if ( checked ) {
