@@ -4,7 +4,11 @@
 (function($) {
 
 
-module("autocomplete: methods");
+module("autocomplete: methods", {
+	teardown: function() {
+		$( ":ui-autocomplete" ).autocomplete( "destroy" );
+	}
+});
 
 test("destroy", function() {
 	var beforeHtml = $("#autocomplete").parent().html();

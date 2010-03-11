@@ -5,7 +5,11 @@
 
 (function($) {
 
-module("autocomplete: core");
+module("autocomplete: core", {
+	teardown: function() {
+		$( ":ui-autocomplete" ).autocomplete( "destroy" );
+	}
+});
 
 test("close-on-blur is properly delayed", function() {
 	var ac = $("#autocomplete").autocomplete({

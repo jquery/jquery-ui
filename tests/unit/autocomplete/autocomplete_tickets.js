@@ -3,7 +3,11 @@
  */
 (function($) {
 
-module("autocomplete: tickets");
+module("autocomplete: tickets", {
+	teardown: function() {
+		$( ":ui-autocomplete" ).autocomplete( "destroy" );
+	}
+});
 
 
 

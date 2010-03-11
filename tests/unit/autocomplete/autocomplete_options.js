@@ -3,7 +3,11 @@
  */
 (function($) {
 
-module("autocomplete: options");
+module("autocomplete: options", {
+	teardown: function() {
+		$( ":ui-autocomplete" ).autocomplete( "destroy" );
+	}
+});
 
 
 /* disabled until autocomplete actually has built-in support for caching 

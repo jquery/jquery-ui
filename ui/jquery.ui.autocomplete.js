@@ -20,7 +20,8 @@ $.widget( "ui.autocomplete", {
 		delay: 300
 	},
 	_create: function() {
-		var self = this;
+		var self = this,
+			doc = this.element[ 0 ].ownerDocument;
 		this.element
 			.addClass( "ui-autocomplete-input" )
 			.attr( "autocomplete", "off" )
@@ -95,7 +96,7 @@ $.widget( "ui.autocomplete", {
 		};
 		this.menu = $( "<ul></ul>" )
 			.addClass( "ui-autocomplete" )
-			.appendTo( this.element.parent() )
+			.appendTo( "body", doc )
 			.menu({
 				focus: function( event, ui ) {
 					var item = ui.item.data( "item.autocomplete" );
@@ -112,7 +113,7 @@ $.widget( "ui.autocomplete", {
 					self.close( event );
 					self.previous = self.element.val();
 					// only trigger when focus was lost (click on menu)
-					if ( self.element[0] != document.activeElement ) {
+					if ( self.element[0] !== doc.activeElement ) {
 						self.element.focus();
 					}
 				}
@@ -232,7 +233,9 @@ $.widget( "ui.autocomplete", {
 
 	_suggest: function( items ) {
 		var self = this,
-			ul = this.menu.element.empty();
+			ul = this.menu.element
+				.empty()
+				.zIndex( this.element.zIndex() + 1 );
 		this._renderMenu( ul, items );
 		// TODO refresh should check if the active item is still in the dom, removing the need for a manual deactivate
 		this.menu.deactivate();

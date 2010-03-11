@@ -3,7 +3,11 @@
  */
 (function($) {
 
-module("autocomplete: events");
+module("autocomplete: events", {
+	teardown: function() {
+		$( ":ui-autocomplete" ).autocomplete( "destroy" );
+	}
+});
 
 var data = ["c++", "java", "php", "coldfusion", "javascript", "asp", "ruby", "python", "c", "scala", "groovy", "haskell", "pearl"];
 
