@@ -145,7 +145,7 @@ $.widget( "ui.button", {
 					$( this ).removeClass( "ui-state-active" );
 				})
 				.bind( "keydown.button", function(event) {
-					if ( event.keyCode == $.ui.keyCode.SPACE || event.keyCode == $.ui.keyCode.ENTER ) {
+					if ( event.keyCode === $.ui.keyCode.SPACE || event.keyCode === $.ui.keyCode.ENTER ) {
 						$( this ).addClass( "ui-state-active" );
 					}
 				})
@@ -171,14 +171,21 @@ $.widget( "ui.button", {
 	},
 
 	_determineButtonType: function() {
-		this.type = this.element.is( ":checkbox" )
-			? "checkbox"
-			: this.element.is( ":radio" )
-				? "radio"
-				: this.element.is( "input" )
-					? "input"
-					: "button";
-
+		
+		if ( this.element.is(":checkbox") ) {
+			this.type = "checkbox";
+		} else {
+			if ( this.element.is(":radio") ) {
+				this.type = "radio";
+			} else {
+				if (this.element.is("input") ) {
+					this.type = "input";
+				} else {
+					this.type = "button";
+				}
+			}
+		}
+		
 		if ( this.type === "checkbox" || this.type === "radio" ) {
 			// we don't search against the document in case the element
 			// is disconnected from the DOM
@@ -257,9 +264,8 @@ $.widget( "ui.button", {
 				.addClass( "ui-button-text" )
 				.html( this.options.label )
 				.appendTo( buttonElement.empty() )
-				.text();
-
-		var icons = this.options.icons,
+				.text(),
+			icons = this.options.icons,
 			multipleIcons = icons.primary && icons.secondary;
 		if ( icons.primary || icons.secondary ) {
 			buttonElement.addClass( "ui-button-text-icon" +
@@ -320,4 +326,4 @@ $.widget( "ui.buttonset", {
 	}
 });
 
-})( jQuery );
+}( jQuery ));
