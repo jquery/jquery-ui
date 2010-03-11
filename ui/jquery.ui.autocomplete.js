@@ -10,7 +10,7 @@
  * Depends:
  *	jquery.ui.core.js
  *	jquery.ui.widget.js
- *  jquery.ui.position.js
+ *	jquery.ui.position.js
  */
 (function( $ ) {
 
@@ -55,6 +55,7 @@ $.widget( "ui.autocomplete", {
 					if ( self.menu.active ) {
 						event.preventDefault();
 					}
+					//passthrough - ENTER and TAB both select the current element
 				case keyCode.TAB:
 					if ( !self.menu.active ) {
 						return;
@@ -65,8 +66,8 @@ $.widget( "ui.autocomplete", {
 					self.element.val( self.term );
 					self.close( event );
 					break;
-				case 16:
-				case 17:
+				case keyCode.SHIFT:
+				case keyCode.CONTROL:
 				case 18:
 					// ignore metakeys (shift, ctrl, alt)
 					break;
@@ -141,23 +142,25 @@ $.widget( "ui.autocomplete", {
 
 	_setOption: function( key ) {
 		$.Widget.prototype._setOption.apply( this, arguments );
-		if ( key == "source" ) {
+		if ( key === "source" ) {
 			this._initSource();
 		}
 	},
 
 	_initSource: function() {
+		var array,
+			url;
 		if ( $.isArray(this.options.source) ) {
-			var array = this.options.source;
+			array = this.options.source;
 			this.source = function( request, response ) {
 				// escape regex characters
 				var matcher = new RegExp( $.ui.autocomplete.escapeRegex(request.term), "i" );
 				response( $.grep( array, function(value) {
-    				return matcher.test( value.label || value.value || value );
+					return matcher.test( value.label || value.value || value );
 				}) );
 			};
-		} else if ( typeof this.options.source == "string" ) {
-			var url = this.options.source;
+		} else if ( typeof this.options.source === "string" ) {
+			url = this.options.source;
 			this.source = function( request, response ) {
 				$.getJSON( url, request, response );
 			};
@@ -207,7 +210,7 @@ $.widget( "ui.autocomplete", {
 			this.menu.element.hide();
 			this.menu.deactivate();
 		}
-		if ( this.previous != this.element.val() ) {
+		if ( this.previous !== this.element.val() ) {
 			this._trigger( "change", event );
 		}
 	},
@@ -218,7 +221,7 @@ $.widget( "ui.autocomplete", {
 			return items;
 		}
 		return $.map( items, function(item) {
-			if ( typeof item == "string" ) {
+			if ( typeof item === "string" ) {
 				return {
 					label: item,
 					value: item
@@ -232,10 +235,11 @@ $.widget( "ui.autocomplete", {
 	},
 
 	_suggest: function( items ) {
-		var self = this,
-			ul = this.menu.element
+		var ul = this.menu.element
 				.empty()
-				.zIndex( this.element.zIndex() + 1 );
+				.zIndex( this.element.zIndex() + 1 ),
+			menuWidth,
+			textWidth;
 		this._renderMenu( ul, items );
 		// TODO refresh should check if the active item is still in the dom, removing the need for a manual deactivate
 		this.menu.deactivate();
@@ -247,8 +251,8 @@ $.widget( "ui.autocomplete", {
 			collision: "none"
 		});
 
-		var menuWidth = ul.width( "" ).width(),
-			textWidth = this.element.width();
+		menuWidth = ul.width( "" ).width();
+		textWidth = this.element.width();
 		ul.width( Math.max( menuWidth, textWidth ) );
 	},
 	
@@ -291,7 +295,7 @@ $.extend( $.ui.autocomplete, {
 	}
 });
 
-})( jQuery );
+}( jQuery ));
 
 /*
  * jQuery UI Menu (not officially released)
@@ -466,4 +470,4 @@ $.widget("ui.menu", {
 	}
 });
 
-})(jQuery);
+}(jQuery));
