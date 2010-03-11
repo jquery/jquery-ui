@@ -202,17 +202,13 @@ $.widget( "ui.button", {
 
 	destroy: function() {
 		this.buttonElement
-			.removeClass( baseClasses + " " + otherClasses )
+			.removeClass( baseClasses + " ui-helper-hidden-accessible " + otherClasses )
 			.removeAttr( "role" )
 			.removeAttr( "aria-pressed" )
 			.html( this.buttonElement.find(".ui-button-text").html() );
 
 		if ( !this.hasTitle ) {
 			this.buttonElement.removeAttr( "title" );
-		}
-
-		if ( this.type === "checkbox" || this.type === "radio" ) {
-			this.element.removeClass('ui-helper-hidden-accessible');
 		}
 
 		$.Widget.prototype.destroy.call( this );
