@@ -246,9 +246,10 @@ $.widget( "ui.autocomplete", {
 			of: this.element,
 			collision: "none"
 		});
-		if ( ul.width() <= this.element.width() ) {
-			ul.width( this.element.width() );
-		}
+
+		var menuWidth = ul.width( "" ).width(),
+			textWidth = this.element.width();
+		ul.width( Math.max( menuWidth, textWidth ) );
 	},
 	
 	_renderMenu: function( ul, items ) {
