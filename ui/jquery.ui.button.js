@@ -158,7 +158,10 @@ $.widget( "ui.button", {
 					: "button";
 
 		if ( this.type === "checkbox" || this.type === "radio" ) {
-			this.buttonElement = $( "[for=" + this.element.attr("id") + "]" );
+			// we don't search against the document in case the element
+			// is disconnected from the DOM
+			this.buttonElement = this.element.parents().last()
+				.find( "[for=" + this.element.attr("id") + "]" );
 			this.element.addClass('ui-helper-hidden-accessible');
 
 			var checked = this.element.is( ":checked" );
