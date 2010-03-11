@@ -270,8 +270,8 @@ $.widget("ui.sortable", $.ui.mouse, {
 		this.positionAbs = this._convertPositionTo("absolute");
 
 		//Set the helper position
-		if(!this.options.axis || this.options.axis != "y") this.helper[0].style.left = this.position.left+'px';
-		if(!this.options.axis || this.options.axis != "x") this.helper[0].style.top = this.position.top+'px';
+		this.helper[0].style.left = this.options.axis == "y" ? this.originalPosition.left+'px' : this.position.left+'px';
+		this.helper[0].style.top = this.options.axis == "x" ? this.originalPosition.top+'px' : this.position.top+'px';
 
 		//Rearrange
 		for (var i = this.items.length - 1; i >= 0; i--) {
