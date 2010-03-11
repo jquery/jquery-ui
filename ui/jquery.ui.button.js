@@ -17,18 +17,18 @@ var lastActive,
 	baseClasses = "ui-button ui-widget ui-state-default ui-corner-all",
 	otherClasses = "ui-state-hover ui-state-active " +
 		"ui-button-icons-only ui-button-icon-only ui-button-text-icons ui-button-text-icon ui-button-text-only",
-	formResetHandler = function(event) {
-		$(':ui-button', event.target.form).each(function() {
-			var inst = $(this).data('button');
+	formResetHandler = function( event ) {
+		$( ":ui-button", event.target.form ).each(function() {
+			var inst = $( this ).data( "button" );
 			setTimeout(function() {
-				inst.refresh()
-			}, 1);
+				inst.refresh();
+			}, 1 );
 		});
 	},
-	radioGroup = function(radio) {
+	radioGroup = function( radio ) {
 		var name = radio.name,
 			form = radio.form,
-			radios = $([]);
+			radios = $( [] );
 		if ( name ) {
 			if ( form ) {
 				radios = $( form ).find( "[name='" + name + "']" );
@@ -52,8 +52,10 @@ $.widget( "ui.button", {
 		}
 	},
 	_create: function() {
-		this.element.closest('form').unbind('reset.button').bind('reset.button', formResetHandler);
-		
+		this.element.closest( "form" )
+			.unbind( "reset.button" )
+			.bind( "reset.button", formResetHandler );
+
 		this._determineButtonType();
 		this.hasTitle = !!this.buttonElement.attr( "title" );
 
@@ -92,10 +94,9 @@ $.widget( "ui.button", {
 			.bind( "blur.button", function() {
 				$( this ).removeClass( focusClass );
 			});
-			
+
 		if ( toggleButton ) {
-			var self = this;
-			this.element.bind('change.button', function() {
+			this.element.bind( "change.button", function() {
 				self.refresh();
 			});
 		}
@@ -151,11 +152,12 @@ $.widget( "ui.button", {
 				.bind( "keyup.button", function() {
 					$( this ).removeClass( "ui-state-active" );
 				});
-			if (this.buttonElement.is("a")) {
+
+			if ( this.buttonElement.is("a") ) {
 				this.buttonElement.keyup(function(event) {
-					if (event.keyCode == $.ui.keyCode.SPACE) {
+					if ( event.keyCode === $.ui.keyCode.SPACE ) {
 						// TODO pass through original event correctly (just as 2nd argument doesn't work)
-						$(this).trigger("click");
+						$( this ).click();
 					}
 				});
 			}
@@ -220,29 +222,29 @@ $.widget( "ui.button", {
 		$.Widget.prototype._setOption.apply( this, arguments );
 		this._resetButton();
 	},
-	
+
 	refresh: function() {
 		if ( this.type === "radio" ) {
 			radioGroup( this.element[0] ).each(function() {
-				if ( $(this).is(':checked') ) {
-					$(this).button('widget')
-						.addClass('ui-state-active')
-						.attr('aria-pressed', true);
+				if ( $( this ).is( ":checked" ) ) {
+					$( this ).button( "widget" )
+						.addClass( "ui-state-active" )
+						.attr( "aria-pressed", true );
 				} else {
-					$(this).button('widget')
-						.removeClass('ui-state-active')
-						.attr('aria-pressed', false);
+					$( this ).button( "widget" )
+						.removeClass( "ui-state-active" )
+						.attr( "aria-pressed", false );
 				}
 			});
 		} else if ( this.type === "checkbox" ) {
-			if ( this.element.is(':checked') ) {
+			if ( this.element.is( ":checked" ) ) {
 				this.buttonElement
-					.addClass('ui-state-active')
-					.attr('aria-pressed', true);
+					.addClass( "ui-state-active" )
+					.attr( "aria-pressed", true );
 			} else {
 				this.buttonElement
-					.removeClass('ui-state-active')
-					.attr('aria-pressed', false);
+					.removeClass( "ui-state-active" )
+					.attr( "aria-pressed", false );
 			}
 		}
 	},
