@@ -329,7 +329,7 @@ $.widget("ui.dialog", {
 
 		function filteredUi(ui) {
 			return {
-				positon: ui.position,
+				position: ui.position,
 				offset: ui.offset
 			};
 		}
