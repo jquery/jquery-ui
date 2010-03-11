@@ -187,7 +187,7 @@ $.widget( "ui.button", {
 		}
 
 		if ( this.type === "checkbox" || this.type === "radio" ) {
-			this.element.show();
+			this.element.removeClass('ui-helper-hidden-accessible');
 		}
 
 		$.Widget.prototype.destroy.call( this );
