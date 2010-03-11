@@ -27,6 +27,7 @@
 	display:block;
 	padding:.2em .4em;
 	line-height:1.5;
+	zoom:1;
 }
 .ui-menu .ui-menu-item a.ui-state-hover,
 .ui-menu .ui-menu-item a.ui-state-active {
