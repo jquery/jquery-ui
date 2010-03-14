@@ -101,7 +101,7 @@ $.widget( "ui.button", {
 			});
 		}
 
-		if ( this.type === "checkbox") {
+		if ( this.type === "checkbox" ) {
 			this.buttonElement.bind( "click.button", function() {
 				if ( options.disabled ) {
 					return;
@@ -109,7 +109,7 @@ $.widget( "ui.button", {
 				$( this ).toggleClass( "ui-state-active" );
 				self.buttonElement.attr( "aria-pressed", self.element[0].checked );
 			});
-		} else if ( this.type === "radio") {
+		} else if ( this.type === "radio" ) {
 			this.buttonElement.bind( "click.button", function() {
 				if ( options.disabled ) {
 					return;
@@ -145,7 +145,10 @@ $.widget( "ui.button", {
 					$( this ).removeClass( "ui-state-active" );
 				})
 				.bind( "keydown.button", function(event) {
-					if ( event.keyCode === $.ui.keyCode.SPACE || event.keyCode === $.ui.keyCode.ENTER ) {
+					if ( options.disabled ) {
+						return;
+					}
+					if ( event.keyCode == $.ui.keyCode.SPACE || event.keyCode == $.ui.keyCode.ENTER ) {
 						$( this ).addClass( "ui-state-active" );
 					}
 				})
@@ -166,8 +169,7 @@ $.widget( "ui.button", {
 		// TODO: pull out $.Widget's handling for the disabled option into
 		// $.Widget.prototype._setOptionDisabled so it's easy to proxy and can
 		// be overridden by individual plugins
-		$.Widget.prototype._setOption.call( this, "disabled", options.disabled );
-		this._resetButton();
+		this._setOption( "disabled", options.disabled );
 	},
 
 	_determineButtonType: function() {
@@ -326,4 +328,4 @@ $.widget( "ui.buttonset", {
 	}
 });
 
-}( jQuery ));
+}( jQuery ) );
