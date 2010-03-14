@@ -12,7 +12,12 @@
 	<script type="text/javascript" src="../../../ui/jquery.ui.accordion.js"></script>
 	<script type="text/javascript">
 	$(function() {
-		$("dl").accordion()
+		$("dl").accordion({
+			change: function(event, ui) {
+				console.log("new: " + ui.newContent.text());
+				console.log("old: " + ui.oldContent.text());
+			}
+		});
 	});
 	</script>
 </head>
@@ -23,10 +28,10 @@
 	<dd>
 		Accordion Content 1
 		<dl>
-			<dt>Term 1</dt>
-				<dt>Definition 1</dt>
-			<dt>Term 2</dt>
-				<dt>Definition 2</dt>
+			<dt><a href="#">Term 1</a></dt>
+			<dd>Definition 1</dd>
+			<dt><a href="#">Term 2</a></dt>
+			<dd>Definition 2</dd>
 		</dl>
 	</dd>
 	<dt><a href="#">Accordion Header 2</a></dt>
@@ -35,7 +40,7 @@
 	</dd>
 	<dt><a href="#">Accordion Header 3</a></dt>
 	<dd>
-		Accordion Content 2
+		Accordion Content 3
 	</dd>
 </dl>
 
