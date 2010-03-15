@@ -230,7 +230,11 @@ $.widget( "ui.button", {
 	_setOption: function( key, value ) {
 		$.Widget.prototype._setOption.apply( this, arguments );
 		if ( key === "disabled" ) {
-			this.element.attr("disabled", value);
+			if ( value ) {
+				this.element.attr( "disabled", true );
+			} else {
+				this.element.removeAttr( "disabled" );
+			}
 		}
 		this._resetButton();
 	},
