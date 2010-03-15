@@ -347,6 +347,9 @@ $.widget("ui.menu", {
 			// mouseenter doesn't work with event delegation
 			.mouseenter(function() {
 				self.activate($(this).parent());
+			})
+			.mouseleave(function() {
+				self.deactivate();
 			});
 	},
 
