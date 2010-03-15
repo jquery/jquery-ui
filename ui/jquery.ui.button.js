@@ -69,6 +69,10 @@ $.widget( "ui.button", {
 			options.label = this.buttonElement.html();
 		}
 
+		if ( this.element.is(":disabled") ) {
+			options.disabled = true;
+		}
+
 		this.buttonElement
 			.addClass( baseClasses )
 			.attr( "role", "button" )
@@ -104,7 +108,7 @@ $.widget( "ui.button", {
 		if ( this.type === "checkbox" ) {
 			this.buttonElement.bind( "click.button", function() {
 				if ( options.disabled ) {
-					return;
+					return false;
 				}
 				$( this ).toggleClass( "ui-state-active" );
 				self.buttonElement.attr( "aria-pressed", self.element[0].checked );
@@ -112,7 +116,7 @@ $.widget( "ui.button", {
 		} else if ( this.type === "radio" ) {
 			this.buttonElement.bind( "click.button", function() {
 				if ( options.disabled ) {
-					return;
+					return false;
 				}
 				$( this ).addClass( "ui-state-active" );
 				self.buttonElement.attr( "aria-pressed", true );
@@ -130,7 +134,7 @@ $.widget( "ui.button", {
 			this.buttonElement
 				.bind( "mousedown.button", function() {
 					if ( options.disabled ) {
-						return;
+						return false;
 					}
 					$( this ).addClass( "ui-state-active" );
 					lastActive = this;
@@ -140,13 +144,13 @@ $.widget( "ui.button", {
 				})
 				.bind( "mouseup.button", function() {
 					if ( options.disabled ) {
-						return;
+						return false;
 					}
 					$( this ).removeClass( "ui-state-active" );
 				})
 				.bind( "keydown.button", function(event) {
 					if ( options.disabled ) {
-						return;
+						return false;
 					}
 					if ( event.keyCode == $.ui.keyCode.SPACE || event.keyCode == $.ui.keyCode.ENTER ) {
 						$( this ).addClass( "ui-state-active" );
@@ -225,6 +229,9 @@ $.widget( "ui.button", {
 
 	_setOption: function( key, value ) {
 		$.Widget.prototype._setOption.apply( this, arguments );
+		if ( key === "disabled" ) {
+			this.element.attr("disabled", value);
+		}
 		this._resetButton();
 	},
 
