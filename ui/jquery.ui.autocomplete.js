@@ -352,12 +352,6 @@ $.widget("ui.menu", {
 
 	activate: function(item) {
 		this.deactivate();
-		this.active = item.eq(0)
-			.children("a")
-				.addClass("ui-state-hover")
-				.attr("id", "ui-active-menuitem")
-			.end();
-		this._trigger("focus", null, { item: item });
 		if (this.hasScroll()) {
 			var offset = item.offset().top - this.element.offset().top,
 				scroll = this.element.attr("scrollTop"),
@@ -368,6 +362,12 @@ $.widget("ui.menu", {
 				this.element.attr("scrollTop", scroll + offset - elementHeight + item.height());
 			}
 		}
+		this.active = item.eq(0)
+			.children("a")
+				.addClass("ui-state-hover")
+				.attr("id", "ui-active-menuitem")
+			.end();
+		this._trigger("focus", null, { item: item });
 	},
 
 	deactivate: function() {
