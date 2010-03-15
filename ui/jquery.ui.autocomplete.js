@@ -119,7 +119,9 @@ $.widget( "ui.autocomplete", {
 					}
 				},
 				blur: function( event, ui ) {
-					self.element.val( self.term );
+					if ( self.menu.element.is(":visible") ) {
+						self.element.val( self.term );
+					}
 				}
 			})
 			.zIndex( this.element.zIndex() + 1 )
