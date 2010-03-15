@@ -117,6 +117,9 @@ $.widget( "ui.autocomplete", {
 					if ( self.element[0] !== doc.activeElement ) {
 						self.element.focus();
 					}
+				},
+				blur: function( event, ui ) {
+					self.element.val( self.term );
 				}
 			})
 			.zIndex( this.element.zIndex() + 1 )
@@ -379,6 +382,7 @@ $.widget("ui.menu", {
 		this.active.children("a")
 			.removeClass("ui-state-hover")
 			.removeAttr("id");
+		this._trigger("blur", null, {});
 		this.active = null;
 	},
 
