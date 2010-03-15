@@ -240,6 +240,10 @@ $.widget( "ui.button", {
 	},
 
 	refresh: function() {
+		var isDisabled = this.element.is(":disabled");
+		if ( isDisabled !== this.options.disabled ) {
+			this._setOption( "disabled", isDisabled );
+		}
 		if ( this.type === "radio" ) {
 			radioGroup( this.element[0] ).each(function() {
 				if ( $( this ).is( ":checked" ) ) {
