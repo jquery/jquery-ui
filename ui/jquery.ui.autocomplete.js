@@ -384,7 +384,7 @@ $.widget("ui.menu", {
 		this.active.children("a")
 			.removeClass("ui-state-hover")
 			.removeAttr("id");
-		this._trigger("blur", null, {});
+		this._trigger("blur");
 		this.active = null;
 	},
 
