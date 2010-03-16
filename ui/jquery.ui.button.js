@@ -69,7 +69,7 @@ $.widget( "ui.button", {
 			options.label = this.buttonElement.html();
 		}
 
-		if ( this.element.is(":disabled") ) {
+		if ( this.element.is( ":disabled" ) ) {
 			options.disabled = true;
 		}
 
@@ -240,7 +240,7 @@ $.widget( "ui.button", {
 	},
 
 	refresh: function() {
-		var isDisabled = this.element.is(":disabled");
+		var isDisabled = this.element.is( ":disabled" );
 		if ( isDisabled !== this.options.disabled ) {
 			this._setOption( "disabled", isDisabled );
 		}
