@@ -214,8 +214,10 @@ $.widget( "ui.button", {
 	},
 
 	destroy: function() {
+		this.element
+			.removeClass( "ui-helper-hidden-accessible" );
 		this.buttonElement
-			.removeClass( baseClasses + " ui-helper-hidden-accessible " + otherClasses )
+			.removeClass( baseClasses + " " + otherClasses )
 			.removeAttr( "role" )
 			.removeAttr( "aria-pressed" )
 			.html( this.buttonElement.find(".ui-button-text").html() );
