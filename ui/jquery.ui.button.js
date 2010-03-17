@@ -312,19 +312,11 @@ $.widget( "ui.button", {
 $.widget( "ui.buttonset", {
 	_create: function() {
 		this.element.addClass( "ui-button-set" );
-		this.buttons = this.element.find( ":button, :submit, :reset, :checkbox, :radio, a, :data(button)" )
-			.button()
-			.map(function() {
-				return $( this ).button( "widget" )[ 0 ];
-			})
-				.removeClass( "ui-corner-all" )
-				.filter( ":first" )
-					.addClass( "ui-corner-left" )
-				.end()
-				.filter( ":last" )
-					.addClass( "ui-corner-right" )
-				.end()
-			.end();
+		this._init();
+	},
+	
+	_init: function() {
+		this.refresh();
 	},
 
 	_setOption: function( key, value ) {
@@ -333,6 +325,27 @@ $.widget( "ui.buttonset", {
 		}
 
 		$.Widget.prototype._setOption.apply( this, arguments );
+	},
+	
+	refresh: function() {
+		this.buttons = this.element.find( ":button, :submit, :reset, :checkbox, :radio, a, :data(button)" )
+			.filter( ":ui-button" )
+				.button( "refresh" )
+			.end()
+			.not( ":ui-button" )
+				.button()
+			.end()
+			.map(function() {
+				return $( this ).button( "widget" )[ 0 ];
+			})
+				.removeClass( "ui-corner-all ui-corner-left ui-corner-right" )
+				.filter( ":first" )
+					.addClass( "ui-corner-left" )
+				.end()
+				.filter( ":last" )
+					.addClass( "ui-corner-right" )
+				.end()
+			.end();
 	},
 
 	destroy: function() {
