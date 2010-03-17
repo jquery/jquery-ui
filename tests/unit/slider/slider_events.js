@@ -20,7 +20,7 @@ test( "slide", function() {
 // value (even if same as previous value), via mouse(mouseup) or keyboard(keyup)
 // or value method/option"
 test( "change", function() {
-	expect(4);
+	expect(7);
 	
 	var handle;
 	// Test mouseup at end of handle slide (mouse)
@@ -61,6 +61,17 @@ test( "change", function() {
 		.slider( "value", 0 );
 
 	reset();
+	// Test values method
+	el = $( "<div></div>" )
+		.slider({
+			values: [ 10, 20 ],
+			change: function(event, ui) {
+				ok( true, "change triggered by values method" );
+			}
+		})
+		.slider( "values", [80, 90] );
+
+	reset();
 	// Test value option
 	el = $( "<div></div>" )
 		.slider({
@@ -69,6 +80,17 @@ test( "change", function() {
 			}
 		})
 		.slider( "option", "value", 0 );
+
+	reset();
+	// Test values option
+	el = $( "<div></div>" )
+		.slider({
+			values: [ 10, 20 ],
+			change: function(event, ui) {
+				ok( true, "change triggered by values option" );
+			}
+		})
+		.slider( "option", "values", [80, 90] );
 
 });
 
