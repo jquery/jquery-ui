@@ -338,8 +338,12 @@ $.widget( "ui.buttonset", {
 	destroy: function() {
 		this.element.removeClass( "ui-button-set" );
 		this.buttons
+			.map(function() {
+				return $( this ).button( "widget" )[ 0 ];
+			})
+				.removeClass( "ui-corner-left ui-corner-right" )
+			.end()
 			.button( "destroy" )
-			.removeClass( "ui-corner-left ui-corner-right" );
 
 		$.Widget.prototype.destroy.call( this );
 	}
