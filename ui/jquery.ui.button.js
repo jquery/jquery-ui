@@ -311,7 +311,7 @@ $.widget( "ui.button", {
 
 $.widget( "ui.buttonset", {
 	_create: function() {
-		this.element.addClass( "ui-button-set" );
+		this.element.addClass( "ui-buttonset" );
 		this._init();
 	},
 	
@@ -349,7 +349,7 @@ $.widget( "ui.buttonset", {
 	},
 
 	destroy: function() {
-		this.element.removeClass( "ui-button-set" );
+		this.element.removeClass( "ui-buttonset" );
 		this.buttons
 			.map(function() {
 				return $( this ).button( "widget" )[ 0 ];

@@ -59,7 +59,7 @@ test("input type submit, don't create child elements", function() {
 
 test("buttonset", function() {
 	var set = $("#radio1").buttonset();
-	ok( set.is(".ui-button-set") );
+	ok( set.is(".ui-buttonset") );
 	same( set.children(".ui-button").length, 3 );
 	same( set.children("input:radio.ui-helper-hidden-accessible").length, 3 );
 	ok( set.children("label:eq(0)").is(".ui-button.ui-corner-left:not(.ui-corner-all)") );
