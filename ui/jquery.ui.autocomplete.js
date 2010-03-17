@@ -327,7 +327,7 @@ $.widget("ui.menu", {
 		this.element
 			.addClass("ui-menu ui-widget ui-widget-content ui-corner-all")
 			.attr({
-				role: "menu",
+				role: "listbox",
 				"aria-activedescendant": "ui-active-menuitem"
 			})
 			.click(function(e) {
