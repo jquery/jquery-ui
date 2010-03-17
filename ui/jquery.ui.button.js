@@ -184,7 +184,7 @@ $.widget( "ui.button", {
 			if ( this.element.is(":radio") ) {
 				this.type = "radio";
 			} else {
-				if (this.element.is("input") ) {
+				if ( this.element.is("input") ) {
 					this.type = "input";
 				} else {
 					this.type = "button";
@@ -197,7 +197,7 @@ $.widget( "ui.button", {
 			// is disconnected from the DOM
 			this.buttonElement = this.element.parents().last()
 				.find( "[for=" + this.element.attr("id") + "]" );
-			this.element.addClass('ui-helper-hidden-accessible');
+			this.element.addClass( "ui-helper-hidden-accessible" );
 
 			var checked = this.element.is( ":checked" );
 			if ( checked ) {
