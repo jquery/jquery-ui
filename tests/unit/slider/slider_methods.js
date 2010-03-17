@@ -53,11 +53,11 @@ test("enable", function() {
 	equals(actual, expected, 'enable is chainable');
 
 	var el = $('<div></div>').slider({ disabled: true });
-	ok(el.hasClass('.ui-disabled'), 'slider has ui-disabled class before enable method call');
-	ok(el.hasClass('.ui-slider-disabled'), 'slider has ui-slider-disabled class before enable method call');
+	ok(el.hasClass('ui-disabled'), 'slider has ui-disabled class before enable method call');
+	ok(el.hasClass('ui-slider-disabled'), 'slider has ui-slider-disabled class before enable method call');
 	el.slider('enable');
-	ok(!el.hasClass('.ui-disabled'), 'slider does not have ui-disabled class after enable method call');
-	ok(!el.hasClass('.ui-slider-disabled'), 'slider does not have ui-slider-disabled class after enable method call');
+	ok(!el.hasClass('ui-disabled'), 'slider does not have ui-disabled class after enable method call');
+	ok(!el.hasClass('ui-slider-disabled'), 'slider does not have ui-slider-disabled class after enable method call');
 });
 
 test("disable", function() {
@@ -66,11 +66,11 @@ test("disable", function() {
 	equals(actual, expected, 'disable is chainable');
 
 	var el = $('<div></div>').slider({ disabled: false });
-	ok(!el.hasClass('.ui-disabled'), 'slider does not have ui-disabled class before disabled method call');
-	ok(!el.hasClass('.ui-slider-disabled'), 'slider does not have ui-slider-disabled class before disable method call');
+	ok(!el.hasClass('ui-disabled'), 'slider does not have ui-disabled class before disabled method call');
+	ok(!el.hasClass('ui-slider-disabled'), 'slider does not have ui-slider-disabled class before disable method call');
 	el.slider('disable');
-	ok(el.hasClass('.ui-disabled'), 'slider has ui-disabled class after disable method call');
-	ok(el.hasClass('.ui-slider-disabled'), 'slider has ui-slider-disabled class after disable method call');
+	ok(el.hasClass('ui-disabled'), 'slider has ui-disabled class after disable method call');
+	ok(el.hasClass('ui-slider-disabled'), 'slider has ui-slider-disabled class after disable method call');
 });
 
 test("value", function() {
