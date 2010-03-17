@@ -193,9 +193,9 @@ $.widget("ui.slider", $.ui.mouse, {
 			var index = $(this).data("index.ui-slider-handle");
 
 			if (self._keySliding) {
+				self._keySliding = false;
 				self._stop(event, index);
 				self._change(event, index);
-				self._keySliding = false;
 				$(this).removeClass("ui-state-active");
 			}
 
@@ -479,6 +479,12 @@ $.widget("ui.slider", $.ui.mouse, {
 	},
 
 	_setOption: function(key, value) {
+		
+		var i,
+			valsLength = 0;
+		if ( jQuery.isArray(this.options.values) ) {
+			valsLength = this.options.values.length;
+		};
 
 		$.Widget.prototype._setOption.apply(this, arguments);
 
@@ -505,11 +511,15 @@ $.widget("ui.slider", $.ui.mouse, {
 			case 'value':
 				this._animateOff = true;
 				this._refreshValue();
+				this._change(null, 0);
 				this._animateOff = false;
 				break;
 			case 'values':
 				this._animateOff = true;
 				this._refreshValue();
+				for (i = 0; i < valsLength; i++) {
+					this._change(null, i);
+				}
 				this._animateOff = false;
 				break;
 		}

@@ -20,7 +20,7 @@ test( "slide", function() {
 // value (even if same as previous value), via mouse(mouseup) or keyboard(keyup)
 // or value method/option"
 test( "change", function() {
-	expect(7);
+	expect(8);
 	
 	var handle;
 	// Test mouseup at end of handle slide (mouse)
@@ -48,7 +48,7 @@ test( "change", function() {
 	el.find( ".ui-slider-handle" ).eq( 0 )
 		.simulate( "keydown", { keyCode: $.ui.keyCode.LEFT } )
 		.simulate( "keypress", { keyCode: $.ui.keyCode.LEFT } )
-		.simulate( "keyup", { charCode: $.ui.keyCode.LEFT } );
+		.simulate( "keyup", { keyCode: $.ui.keyCode.LEFT } );
 
 	reset();
 	// Test value method
