@@ -11,55 +11,51 @@
 	<script type="text/javascript" src="../../ui/jquery.ui.draggable.js"></script>
 	<script type="text/javascript" src="../../ui/jquery.ui.position.js"></script>
 	<link type="text/css" href="../demos.css" rel="stylesheet" />
-    
-    <style type="text/css">
-    div#parent
-    {
-        width: 60%;
-        margin: 10px auto;
-        padding: 5px;
-        
-        border: 1px solid #777;
-        background-color: #fbca93;
-        text-align: center;
-    }
+	<style type="text/css">
 
-    div.positionable
-    {
-        width: 75px;
-        height: 75px;
+	div#parent {
+		width: 60%;
+		margin: 10px auto;
+		padding: 5px;
+		
+		border: 1px solid #777;
+		background-color: #fbca93;
+		text-align: center;
+	}
+
+	div.positionable {
+		width: 75px;
+		height: 75px;
 		position: absolute;
-        display: block;
-        right: 0;
-        bottom: 0;
+		display: block;
+		right: 0;
+		bottom: 0;
+		background-color: #bcd5e6;
+		text-align: center;
+	}
 
-        background-color: #bcd5e6;
-        text-align: center;
-    }
+	select, input {
+		margin-left: 15px;
+	}
 
-    select, input
-    {
-        margin-left: 15px;
-    }
-    </style>
-    
+	</style>
 	<script type="text/javascript">
 	$(function() {
 		
 		function position(using) {
-            $('.positionable').position({
-                of: $('#parent'),
-                my: $('#my_horizontal').val() + ' ' + $('#my_vertical').val(),
-                at: $('#at_horizontal').val() + ' '+ $('#at_vertical').val(),
-                offset: $('#offset').val(),
+			$('.positionable').position({
+				of: $('#parent'),
+				my: $('#my_horizontal').val() + ' ' + $('#my_vertical').val(),
+				at: $('#at_horizontal').val() + ' '+ $('#at_vertical').val(),
+				offset: $('#offset').val(),
 				using: using,
 				collision: $("#collision_horizontal").val() + ' ' + $("#collision_vertical").val()
-            });
+			});
 		}
 		
 		$('.positionable').css("opacity", 0.5);
 		
-        $(':input').bind('click keyup change', function() { position(); });
+		$(':input').bind('click keyup change', function() { position(); });
 		
 		$("#parent").draggable({
 			drag: function() { position(); }
@@ -79,7 +75,7 @@
 		position();
 	});
 	</script>
-    
+	
 </head>
 <body>
 
@@ -87,68 +83,70 @@
 
 <div id="parent">
 	<p>
-    This is the position parent element.
-    </p>
+	This is the position parent element.
+	</p>
 </div>
 
 <div class="positionable">
-    <p>
-    to position
-    </p>
+	<p>
+	to position
+	</p>
 </div>
 
 <div class="positionable" style="width:120px; height: 40px;">
-    <p>
-    to position 2
-    </p>
+	<p>
+	to position 2
+	</p>
 </div>
 
 <div style="padding: 20px; margin-top: 75px;">
 	position...
-    <div style="padding-bottom: 20px;">
-    <b>my:</b>
-    <select id="my_horizontal">
-        <option value="left">left</option>
-        <option value="center">center</option>
-        <option value="right">right</option>
-    </select> 
-    <select id="my_vertical">
-        <option value="top">top</option>
-        <option value="middle">center</option>
-        <option value="bottom">bottom</option>
-    </select>
-    </div>
-    <div style="padding-bottom: 20px;">
-    <b>at:</b>
-    <select id="at_horizontal">
-        <option value="left">left</option>
-        <option value="center">center</option>
-        <option value="right">right</option>
-    </select>
-    <select id="at_vertical">
-        <option value="top">top</option>
-        <option value="middle">center</option>
-        <option value="bottom">bottom</option>
-    </select>
-    </div>
-    <div style="padding-bottom: 20px;">
-    <b>offset:</b>
-    <input id="offset" type="text" size="15"/>
-    </div>
 	<div style="padding-bottom: 20px;">
-    <b>collision:</b>
-    <select id="collision_horizontal">
-        <option value="flip">flip</option>
-        <option value="fit">fit</option>
-        <option value="none">none</option>
-    </select>
-    <select id="collision_vertical">
-        <option value="flip">flip</option>
-        <option value="fit">fit</option>
-        <option value="none">none</option>
-    </select>
-    </div>
+		<b>my:</b>
+		<select id="my_horizontal">
+			<option value="left">left</option>
+			<option value="center">center</option>
+			<option value="right">right</option>
+		</select> 
+		<select id="my_vertical">
+			<option value="top">top</option>
+			<option value="middle">center</option>
+			<option value="bottom">bottom</option>
+		</select>
+	</div>
+	<div style="padding-bottom: 20px;">
+		<b>at:</b>
+		<select id="at_horizontal">
+			<option value="left">left</option>
+			<option value="center">center</option>
+			<option value="right">right</option>
+		</select>
+		<select id="at_vertical">
+			<option value="top">top</option>
+			<option value="middle">center</option>
+			<option value="bottom">bottom</option>
+		</select>
+	</div>
+	<div style="padding-bottom: 20px;">
+		<b>offset:</b>
+		<input id="offset" type="text" size="15"/>
+	</div>
+	<div style="padding-bottom: 20px;">
+		<b>collision:</b>
+		<select id="collision_horizontal">
+			<option value="flip">flip</option>
+			<option value="fit">fit</option>
+			<option value="none">none</option>
+		</select>
+		<select id="collision_vertical">
+			<option value="flip">flip</option>
+			<option value="fit">fit</option>
+			<option value="none">none</option>
+		</select>
+	</div>
 </div>
+
+</div><!-- End demo -->
 
 <div class="demo-description">
 
