@@ -207,7 +207,7 @@
 		<get src="${url}Slider" dest="${docs.dir}slider.html" />
 		<get src="${url}Tabs" dest="${docs.dir}tabs.html" />
 
-		<get src="http://docs.jquery.com/action/render/UI/Utility/Position" dest="${docs.dir}position.html" />
+		<get src="${url}Position" dest="${docs.dir}position.html" />
 		
 		<get src="http://docs.jquery.com/action/render/UI/Effects/animate" dest="${docs.dir}animate.html" />
 		<get src="http://docs.jquery.com/action/render/UI/Effects/addClass" dest="${docs.dir}addClass.html" />
