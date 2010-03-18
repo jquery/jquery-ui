@@ -12,6 +12,8 @@
 	<script type="text/javascript">
 	$(function() {
 		$("button, input:submit, a", ".demo").button();
+		
+		$("a", ".demo").click(function() { return false; });
 	});
 	</script>
 	<style>
@@ -24,9 +26,9 @@
 
 	<button>A button element</button>
 	
-	<input type="submit" value="A submit button">
+	<input type="submit" value="A submit button"/>
 	
-	<a href="javascript:void(0)">An anchor</a>
+	<a href="#">An anchor</a>
 
 </div><!-- End demo -->
 
