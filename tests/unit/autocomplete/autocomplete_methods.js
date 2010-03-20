@@ -17,7 +17,7 @@ test("destroy", function() {
 	ok( beforeHtml == afterHtml );
 })
 
-var data = ["c++", "java", "php", "coldfusion", "javascript", "asp", "ruby", "python", "c", "scala", "groovy", "haskell", "pearl"];
+var data = ["c++", "java", "php", "coldfusion", "javascript", "asp", "ruby", "python", "c", "scala", "groovy", "haskell", "perl"];
 
 test("search", function() {
 	var ac = $("#autocomplete").autocomplete({

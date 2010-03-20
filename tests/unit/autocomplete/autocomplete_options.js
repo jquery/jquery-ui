@@ -66,7 +66,7 @@ test("cache: false", function() {
 });
 */
 
-var data = ["c++", "java", "php", "coldfusion", "javascript", "asp", "ruby", "python", "c", "scala", "groovy", "haskell", "pearl"];
+var data = ["c++", "java", "php", "coldfusion", "javascript", "asp", "ruby", "python", "c", "scala", "groovy", "haskell", "perl"];
 
 test("delay", function() {
 	var ac = $("#autocomplete").autocomplete({
