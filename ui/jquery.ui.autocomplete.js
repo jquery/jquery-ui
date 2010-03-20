@@ -60,7 +60,7 @@ $.widget( "ui.autocomplete", {
 					if ( !self.menu.active ) {
 						return;
 					}
-					self.menu.select();
+					self.menu.select( event );
 					break;
 				case keyCode.ESCAPE:
 					self.element.val( self.term );
@@ -334,13 +334,13 @@ $.widget("ui.menu", {
 				role: "listbox",
 				"aria-activedescendant": "ui-active-menuitem"
 			})
-			.click(function(e) {
-				if ( !$( e.target ).closest( ".ui-menu-item" ).length ) {
+			.click(function( event ) {
+				if ( !$( event.target ).closest( ".ui-menu-item" ).length ) {
 					return;
 				}
 				// temporary
-				e.preventDefault();
-				self.select();
+				event.preventDefault();
+				self.select( event );
 			});
 		this.refresh();
 	},
@@ -481,8 +481,8 @@ $.widget("ui.menu", {
 		return this.element.height() < this.element.attr("scrollHeight");
 	},
 
-	select: function() {
-		this._trigger("selected", null, { item: this.active });
+	select: function( event ) {
+		this._trigger("selected", event, { item: this.active });
 	}
 });
 
