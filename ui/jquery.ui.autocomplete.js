@@ -66,6 +66,8 @@ $.widget( "ui.autocomplete", {
 					self.element.val( self.term );
 					self.close( event );
 					break;
+				case keyCode.LEFT:
+				case keyCode.RIGHT:
 				case keyCode.SHIFT:
 				case keyCode.CONTROL:
 				case 18:
