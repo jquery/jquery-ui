@@ -12,9 +12,10 @@
 	<script type="text/javascript" src="../../ui/jquery.ui.autocomplete.js"></script>
 	<link type="text/css" href="../demos.css" rel="stylesheet" />
 	<style type="text/css">
-	.ui-autocomplete-input {
-		margin: 0;
-	}
+		/* TODO shouldn't be necessary */
+		.ui-button { margin-left: -1px; }
+		.ui-button-icon-only .ui-button-text { padding: 0.35em; } 
+		.ui-autocomplete-input { margin: 0; padding: 0.48em 0 0.47em 0.45em; }
 	</style>
 	<script type="text/javascript">
 	(function($) {
@@ -55,6 +56,7 @@
 					})
 					.addClass("ui-widget ui-widget-content ui-corner-left");
 				$("<button>&nbsp;</button>")
+				.attr("title", "Show All Items")
 				.insertAfter(input)
 				.button({
 					icons: {
@@ -82,11 +84,6 @@
 		$("select").combobox();
 	});
 	</script>
-	<style>
-		/* TODO shouldn't be necessary */
-		.ui-button-icon-only .ui-button-text { padding: 0.35em; } 
-		.ui-autocomplete-input { padding: 0.48em 0 0.47em 0.45em; }
-	</style>
 </head>
 <body>
 	
