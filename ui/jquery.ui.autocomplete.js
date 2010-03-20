@@ -66,6 +66,8 @@ $.widget( "ui.autocomplete", {
 					self.element.val( self.term );
 					self.close( event );
 					break;
+				case keyCode.LEFT:
+				case keyCode.RIGHT:
 				case keyCode.SHIFT:
 				case keyCode.CONTROL:
 				case 18:
@@ -333,6 +335,9 @@ $.widget("ui.menu", {
 				"aria-activedescendant": "ui-active-menuitem"
 			})
 			.click(function(e) {
+				if ( !$( e.target ).closest( ".ui-menu-item" ).length ) {
+					return;
+				}
 				// temporary
 				e.preventDefault();
 				self.select();
@@ -391,11 +396,11 @@ $.widget("ui.menu", {
 	},
 
 	next: function(event) {
-		this.move("next", "li:first", event);
+		this.move("next", ".ui-menu-item:first", event);
 	},
 
 	previous: function(event) {
-		this.move("prev", "li:last", event);
+		this.move("prev", ".ui-menu-item:last", event);
 	},
 
 	first: function() {
@@ -411,7 +416,7 @@ $.widget("ui.menu", {
 			this.activate(event, this.element.children(edge));
 			return;
 		}
-		var next = this.active[direction]();
+		var next = this.active[direction + "All"](".ui-menu-item").eq(0);
 		if (next.length) {
 			this.activate(event, next);
 		} else {
