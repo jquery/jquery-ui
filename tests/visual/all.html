@@ -11,6 +11,8 @@
 	<script type="text/javascript" src="../../ui/jquery.ui.mouse.js"></script>
 	<script type="text/javascript" src="../../ui/jquery.ui.position.js"></script>
 	<script type="text/javascript" src="../../ui/jquery.ui.accordion.js"></script>
+	<script type="text/javascript" src="../../ui/jquery.ui.autocomplete.js"></script>
+	<script type="text/javascript" src="../../ui/jquery.ui.button.js"></script>
 	<script type="text/javascript" src="../../ui/jquery.ui.datepicker.js"></script>
 	<script type="text/javascript" src="../../ui/jquery.ui.dialog.js"></script>
 	<script type="text/javascript" src="../../ui/jquery.ui.draggable.js"></script>
@@ -24,6 +26,11 @@
 	<script type="text/javascript">
 	$(function() {
 		$("#accordion").accordion({ header: "h3" });
+		$("#autocomplete").autocomplete({
+			source: ["c++", "java", "php", "coldfusion", "javascript", "asp", "ruby", "python", "c", "scala", "groovy", "haskell", "perl"]
+		});
+		$("#button").button();
+		$("#buttonset").buttonset();
 		$("#datepicker").datepicker();
 		$("#dialog button").click(function() {
 			$("#dlg").clone().dialog();
@@ -69,6 +76,28 @@
 				Nam dui erat, auctor a, dignissim quis.
 			</div>
 		</div>
+	</div>
+</li>
+<li class="plugin">
+	Autocomplete
+	<div>
+		<input id="autocomplete" />
+		<select>
+			<option>iframe test</option>
+		</select>
+	</div>
+</li>
+<li class="plugin">
+	Button
+	<div>
+		<button id="button">A button element</button>
+		<form style="margin-top: 1em;">
+			<div id="buttonset">
+				<input type="radio" id="radio1" name="radio" /><label for="radio1">Choice 1</label>
+				<input type="radio" id="radio2" name="radio" checked="checked" /><label for="radio2">Choice 2</label>
+				<input type="radio" id="radio3" name="radio" /><label for="radio3">Choice 3</label>
+			</div>
+		</form>
 	</div>
 </li>
 <li class="plugin">
