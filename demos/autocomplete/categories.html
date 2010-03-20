@@ -19,29 +19,6 @@
 	}
 	</style>
 	<script type="text/javascript">
-	$.extend( $.ui.menu.prototype, {
-		next: function() {
-			this.move("next", ".ui-menu-item:first");
-		},
-
-		previous: function() {
-			this.move("prev", ".ui-menu-item:last");
-		},
-
-		move: function(direction, edge) {
-			if (!this.active) {
-				this.activate(this.element.children(edge));
-				return;
-			}
-			var next = this.active[direction + "All"]('.ui-menu-item').eq( 0 );
-			if (next.length) {
-				this.activate(next);
-			} else {
-				this.activate(this.element.children(edge));
-			}
-		}
-	});
-
 	$.widget("custom.catcomplete", $.ui.autocomplete, {
 		_renderMenu: function( ul, items ) {
 			var self = this,
