@@ -11,6 +11,11 @@
 	<script type="text/javascript" src="../../ui/jquery.ui.position.js"></script>
 	<script type="text/javascript" src="../../ui/jquery.ui.autocomplete.js"></script>
 	<link type="text/css" href="../demos.css" rel="stylesheet" />
+	<style type="text/css">
+	.ui-autocomplete-input {
+		margin: 0;
+	}
+	</style>
 	<script type="text/javascript">
 	(function($) {
 		$.widget("ui.combobox", {
@@ -58,12 +63,6 @@
 					text: false
 				}).removeClass("ui-corner-all")
 				.addClass("ui-corner-right ui-button-icon")
-				.position({
-					my: "left center",
-					at: "right center",
-					of: input,
-					offset: "-1 0"
-				}).css("top", "")
 				.click(function() {
 					// close if already visible
 					if (input.autocomplete("widget").is(":visible")) {
