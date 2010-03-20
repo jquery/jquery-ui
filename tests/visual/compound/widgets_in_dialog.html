@@ -12,35 +12,88 @@
 	<script type="text/javascript" src="../../../ui/jquery.ui.position.js"></script>
 	<script type="text/javascript" src="../../../ui/jquery.ui.resizable.js"></script>
 	<script type="text/javascript" src="../../../ui/jquery.ui.draggable.js"></script>
-	<script type="text/javascript" src="../../../ui/jquery.ui.dialog.js"></script>
-	<script type="text/javascript" src="../../../ui/jquery.ui.datepicker.js"></script>
+	<script type="text/javascript" src="../../../ui/jquery.ui.accordion.js"></script>
 	<script type="text/javascript" src="../../../ui/jquery.ui.autocomplete.js"></script>
 	<script type="text/javascript" src="../../../ui/jquery.ui.button.js"></script>
-	<script type="text/javascript" src="../../../ui/jquery.ui.tabs.js"></script>
-	<script type="text/javascript" src="../../../ui/jquery.ui.accordion.js"></script>
+	<script type="text/javascript" src="../../../ui/jquery.ui.datepicker.js"></script>
+	<script type="text/javascript" src="../../../ui/jquery.ui.dialog.js"></script>
 	<script type="text/javascript" src="../../../ui/jquery.ui.progressbar.js"></script>
 	<script type="text/javascript" src="../../../ui/jquery.ui.slider.js"></script>
+	<script type="text/javascript" src="../../../ui/jquery.ui.tabs.js"></script>
 	<script type="text/javascript">
 	$(function() {
-		$('#datepicker').datepicker();
+		$("#accordion").accordion();
 		$("#autocomplete").autocomplete({
 			source: ["c++", "java", "php", "coldfusion", "javascript", "asp", "ruby", "python", "c", "scala", "groovy", "haskell", "perl"]
 		});
-		$("button").button();
+		$("button").button().click(function() {
+			$("#dialog2").dialog("open");
+		});
+		$("#datepicker").datepicker();
+		$("#progressbar").progressbar({
+			value: 30
+		});
+		$("#slider").slider({
+			// should be animated
+			animate: true,
+			value: 30,
+			slide: function(event, ui) {
+				$("#progress").val(ui.value);
+				$("#progressbar").progressbar("option", "value", ui.value);
+			}
+		});
+		$("#tabs").tabs();
 		
-		// TODO add more widgets
-		
-		$('#dialog').dialog();
+		$("#dialog").dialog();
+		$("#dialog2").dialog({
+			autoOpen: false,
+			width: 100,
+			height: 75,
+			modal: true
+		})
 	});
 	</script>
 </head>
 <body>
 
 <div id="dialog">
-	<button>A Button</button>
+	<div id="accordion">
+		<h3><a href="#">Accordion Header 1</a></h3>
+		<div>
+			Accordion Content 1
+		</div>
+		<h3><a href="#">Accordion Header 2</a></h3>
+		<div>
+			Accordion Content 2
+		</div>
+		<h3><a href="#">Accordion Header 3</a></h3>
+		<div>
+			Accordion Content 3
+		</div>
+	</div>
 	<input id="autocomplete">
+	<button>A Button</button>
 	<input id="datepicker">
 	<button>Another button</button>
+	<div>
+		<label for="progress">Progress: <input id="progress" /></label>
+	</div>
+	<div id="progressbar">
+	</div>
+	<div id="slider"></div>
+	<div id="tabs">
+		<ul>
+			<li><a href="#tabs-1">First</a></li>
+			<li><a href="#tabs-2">Second</a></li>
+			<li><a href="#tabs-3">Third</a></li>
+		</ul>
+		<div id="tabs-1">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</div>
+		<div id="tabs-2">Phasellus mattis tincidunt nibh. Cras orci urna, blandit id, pretium vel, aliquet ornare, felis. Maecenas scelerisque sem non nisl. Fusce sed lorem in enim dictum bibendum.</div>
+		<div id="tabs-3">Nam dui erat, auctor a, dignissim quis, sollicitudin eu, felis. Pellentesque nisi urna, interdum eget, sagittis et, consequat vestibulum, lacus. Mauris porttitor ullamcorper augue.</div>
+	</div>
+</div>
+<div id="dialog2">
+	Yay, another dialog.
 </div>
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam vitae urna quam. Fusce adipiscing erat eget magna malesuada vel mollis ligula ullamcorper. Donec pulvinar, libero et vehicula facilisis, odio orci fringilla magna, non ultricies ipsum justo a tellus. Proin facilisis magna vitae quam vestibulum tempor. Aenean semper placerat posuere. In nisi diam, ullamcorper sit amet viverra sed, pretium sed neque. Sed posuere vulputate mauris vitae placerat. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nam in odio elit, non tempor felis. Integer non iaculis ante. Sed erat mauris, aliquam nec consequat id, congue id libero. Maecenas elementum gravida tincidunt. Suspendisse lacinia enim sit amet nulla cursus pulvinar.
