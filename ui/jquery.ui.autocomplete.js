@@ -102,8 +102,10 @@ $.widget( "ui.autocomplete", {
 				focus: function( event, ui ) {
 					var item = ui.item.data( "item.autocomplete" );
 					if ( false !== self._trigger( "focus", null, { item: item } ) ) {
-						// use value to match what will end up in the input
-						self.element.val( item.value );
+						// use value to match what will end up in the input, if it was a key event
+						if ( /^key/.test(event.originalEvent.type) ) {
+							self.element.val( item.value );
+						}
 					}
 				},
 				selected: function( event, ui ) {
@@ -286,7 +288,7 @@ $.widget( "ui.autocomplete", {
 			this.menu.deactivate();
 			return;
 		}
-		this.menu[ direction ]();
+		this.menu[ direction ]( event );
 	},
 
 	widget: function() {
@@ -350,15 +352,15 @@ $.widget("ui.menu", {
 			.addClass("ui-corner-all")
 			.attr("tabindex", -1)
 			// mouseenter doesn't work with event delegation
-			.mouseenter(function() {
-				self.activate($(this).parent());
+			.mouseenter(function( event ) {
+				self.activate( event, $(this).parent() );
 			})
 			.mouseleave(function() {
 				self.deactivate();
 			});
 	},
 
-	activate: function(item) {
+	activate: function( event, item ) {
 		this.deactivate();
 		if (this.hasScroll()) {
 			var offset = item.offset().top - this.element.offset().top,
@@ -375,7 +377,7 @@ $.widget("ui.menu", {
 				.addClass("ui-state-hover")
 				.attr("id", "ui-active-menuitem")
 			.end();
-		this._trigger("focus", null, { item: item });
+		this._trigger("focus", event, { item: item });
 	},
 
 	deactivate: function() {
@@ -388,12 +390,12 @@ $.widget("ui.menu", {
 		this.active = null;
 	},
 
-	next: function() {
-		this.move("next", "li:first");
+	next: function(event) {
+		this.move("next", "li:first", event);
 	},
 
-	previous: function() {
-		this.move("prev", "li:last");
+	previous: function(event) {
+		this.move("prev", "li:last", event);
 	},
 
 	first: function() {
@@ -404,25 +406,25 @@ $.widget("ui.menu", {
 		return this.active && !this.active.next().length;
 	},
 
-	move: function(direction, edge) {
+	move: function(direction, edge, event) {
 		if (!this.active) {
-			this.activate(this.element.children(edge));
+			this.activate(event, this.element.children(edge));
 			return;
 		}
 		var next = this.active[direction]();
 		if (next.length) {
-			this.activate(next);
+			this.activate(event, next);
 		} else {
-			this.activate(this.element.children(edge));
+			this.activate(event, this.element.children(edge));
 		}
 	},
 
 	// TODO merge with previousPage
-	nextPage: function() {
+	nextPage: function(event) {
 		if (this.hasScroll()) {
 			// TODO merge with no-scroll-else
 			if (!this.active || this.last()) {
-				this.activate(this.element.children(":first"));
+				this.activate(event, this.element.children(":first"));
 				return;
 			}
 			var base = this.active.offset().top,
@@ -437,18 +439,18 @@ $.widget("ui.menu", {
 			if (!result.length) {
 				result = this.element.children(":last");
 			}
-			this.activate(result);
+			this.activate(event, result);
 		} else {
-			this.activate(this.element.children(!this.active || this.last() ? ":first" : ":last"));
+			this.activate(event, this.element.children(!this.active || this.last() ? ":first" : ":last"));
 		}
 	},
 
 	// TODO merge with nextPage
-	previousPage: function() {
+	previousPage: function(event) {
 		if (this.hasScroll()) {
 			// TODO merge with no-scroll-else
 			if (!this.active || this.first()) {
-				this.activate(this.element.children(":last"));
+				this.activate(event, this.element.children(":last"));
 				return;
 			}
 
@@ -464,9 +466,9 @@ $.widget("ui.menu", {
 			if (!result.length) {
 				result = this.element.children(":first");
 			}
-			this.activate(result);
+			this.activate(event, result);
 		} else {
-			this.activate(this.element.children(!this.active || this.first() ? ":last" : ":first"));
+			this.activate(event, this.element.children(!this.active || this.first() ? ":last" : ":first"));
 		}
 	},
 
