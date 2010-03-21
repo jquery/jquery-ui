@@ -257,5 +257,34 @@
 		</replaceregexp>
 		<echo message="All trailing spaces removed." />
 	</target>
+	
+	<target name="checksums">
+    	<delete dir="google" />
+    	<mkdir dir="google" />
+		<copy file="dist/jquery-ui-1.9pre/version.txt" todir="google" />
+		<copy file="dist/jquery-ui-1.9pre/AUTHORS.txt" todir="google" />
+		<copy file="dist/jquery-ui-1.9pre/GPL-LICENSE.txt" todir="google" />
+		<checksum>
+			<fileset dir="google" />
+		</checksum>
+		<concat destfile="google/MANIFEST">
+			<fileset dir="google" includes="**/*.MD5" />
+		</concat>
+		<!--
+        <for param="file">
+    		<path><fileset dir="google" includes="**/" excludes="**/*.MD5" /></path>
+			<sequential>
+				<checksum file="@{file}" />
+			</sequential>
+		</for>
+		<for param="file">
+    		<path><fileset dir="google" includes="**/" excludes="**/*.MD5" /></path>
+			<sequential>
+				<echo message="@{file}" />
+				<concat><file file="@{file}.MD5" /></concat>
+			</sequential>
+		</for>
+		-->
+    </target>
 
 </project>
