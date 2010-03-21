@@ -20,7 +20,7 @@
 		
 		function enable() {
 			// default
-			$("#context1, form input").tooltip();
+			$("#context1, form input, #childish").tooltip();
 			
 			// custom class, replaces ui-widget-content
 			$("#context2").tooltip({
@@ -103,6 +103,10 @@
 			div
 			<span title="something more" style="border:1px solid green;">nested span</span>
 		</div>
+	</div>
+	
+	<div id="childish" class="ui-widget ui-widget-content" style="margin: 2em 0; border: 1px solid black;" title="element with child elements">
+		Text in <strong>bold</strong>.
 	</div>
 	
 	<form style="margin: 2em 0;">
