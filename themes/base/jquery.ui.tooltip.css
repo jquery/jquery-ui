@@ -1,0 +1,3 @@
+/*Tooltip and Pointer CSS*/
+.ui-tooltip { padding:8px; width:100px; position:absolute; z-index:9999; }
+body .ui-tooltip { border-width:2px; }
