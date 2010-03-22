@@ -13,11 +13,19 @@
 	<script type="text/javascript" src="../../../ui/jquery.ui.droppable.js"></script>
 	<script type="text/javascript">
 	$(function() {
-		$("#droppable").droppable();
+		$("#draggable").draggable();
+		$("#droppable").droppable({
+			drop: function() {
+				alert("Dropped something");
+			}
+		});
 	});
 	</script>
 </head>
 <body>
+	<div id="draggable">
+	<p> Draggable </p>
+</div>
 <div id="droppable">
 	<p> Droppable </p>
 </div>
