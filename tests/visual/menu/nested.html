@@ -106,11 +106,16 @@
 		$("button").click(function(event) {
 			// TODO required to prevent the click handler below from handling this event
 			event.stopPropagation();
-			nestedmenu.nestedmenu("show").position({
-				my: "left top",
-				at: "right top",
-				of: event.pageX > 0 ? event : this
-			});
+			nestedmenu.nestedmenu("show")
+				.css({
+					top: 0,
+					left: 0
+				})
+				.position({
+					my: "left top",
+					at: "right top",
+					of: this
+				});
 			$(document).one("click", function() {
 				nestedmenu.nestedmenu("hide");
 			})
