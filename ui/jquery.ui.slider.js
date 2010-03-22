@@ -258,8 +258,14 @@ $.widget("ui.slider", $.ui.mouse, {
 		// workaround for bug #3736 (if both handles of a range are at 0,
 		// the first is always used as the one with least distance,
 		// and moving it is obviously prevented by preventing negative ranges)
-		if(o.range == true && this.values(1) == o.min) {
-			closestHandle = $(this.handles[++index]);
+		if(o.range == true) {
+			var vals = this.values()
+			if (vals[1] == o.min) {
+				closestHandle = $(this.handles[++index]);
+			}
+			if (vals[0] == vals[1]){
+				this._stackedHandles = true;
+			}
 		}
 
 		this._start(event, index);
@@ -368,6 +374,23 @@ $.widget("ui.slider", $.ui.mouse, {
 	_slide: function(event, index, newVal) {
 
 		var handle = this.handles[index];
+		
+		// Handle the case were range handles are stacked
+		if (this.options.range == true && this._stackedHandles) {
+			var values = this.values();
+			if (values[1] != newVal){
+				if (values[1] > newVal){
+					index = 0;
+				} else if(values[1] < newVal){
+					index = 1;
+				}
+				this._stackedHandles = false;
+				this.handles.removeClass("ui-state-active");
+				handle = this.handles[index];
+				$(handle).addClass("ui-state-active").focus();
+				this._handleIndex = index;
+			}
+		}
 
 		if (this.options.values && this.options.values.length) {
 
