@@ -23,7 +23,7 @@ $.widget("ui.slider", $.ui.mouse, {
 	widgetEventPrefix: "slide",
 	options: {
 		animate: false,
-		distance: 0,
+		distance: 1,
 		max: 100,
 		min: 0,
 		orientation: 'horizontal',
@@ -52,6 +52,8 @@ $.widget("ui.slider", $.ui.mouse, {
 		if (o.disabled) {
 			this.element.addClass('ui-slider-disabled ui-disabled');
 		}
+
+		o.distance = o.orientation == 'horizontal' ? {x:o.distance,y:0} : (o.orientation == "vertical" ? {x:0,y:o.distance} : o.distance);
 
 		this.range = $([]);
 
@@ -228,7 +230,7 @@ $.widget("ui.slider", $.ui.mouse, {
 		return this;
 	},
 
-	_mouseCapture: function(event) {
+	_mouseStart: function(event, orgEvent) {
 
 		var o = this.options;
 
@@ -255,17 +257,13 @@ $.widget("ui.slider", $.ui.mouse, {
 			}
 		});
 
-		// workaround for bug #3736 (if both handles of a range are at 0,
-		// the first is always used as the one with least distance,
-		// and moving it is obviously prevented by preventing negative ranges)
-		if(o.range == true) {
-			var vals = this.values()
-			if (vals[1] == o.min) {
-				closestHandle = $(this.handles[++index]);
-			}
-			if (vals[0] == vals[1]){
-				this._stackedHandles = true;
-			}
+		// workaround for bug #3736 (if both handles of a range are stacked,
+		// figure out which way they are moving and use that handle)
+		if (o.range == true && this.values(0) == this.values(1) && 
+			((o.orientation == 'horizontal' && (event.pageX < orgEvent.pageX)) 
+			|| (o.orientation == "vertical" && (event.pageY > orgEvent.pageY))) ) {
+			index = 1;
+			closestHandle = $(this.handles[index]);
 		}
 
 		this._start(event, index);
@@ -293,10 +291,6 @@ $.widget("ui.slider", $.ui.mouse, {
 		this._animateOff = true;
 		return true;
 
-	},
-
-	_mouseStart: function(event) {
-		return true;
 	},
 
 	_mouseDrag: function(event) {
@@ -374,23 +368,6 @@ $.widget("ui.slider", $.ui.mouse, {
 	_slide: function(event, index, newVal) {
 
 		var handle = this.handles[index];
-		
-		// Handle the case were range handles are stacked
-		if (this.options.range == true && this._stackedHandles) {
-			var values = this.values();
-			if (values[1] != newVal){
-				if (values[1] > newVal){
-					index = 0;
-				} else if(values[1] < newVal){
-					index = 1;
-				}
-				this._stackedHandles = false;
-				this.handles.removeClass("ui-state-active");
-				handle = this.handles[index];
-				$(handle).addClass("ui-state-active").focus();
-				this._handleIndex = index;
-			}
-		}
 
 		if (this.options.values && this.options.values.length) {
 

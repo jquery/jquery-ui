@@ -7,7 +7,7 @@ var slider_defaults = {
 	cancel: function() {},
 	delay: 0,
 	disabled: false,
-	distance: 0,
+	distance: 1,
 	max: 100,
 	min: 0,
 	orientation: 'horizontal',

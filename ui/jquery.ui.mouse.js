@@ -130,11 +130,16 @@ $.widget("ui.mouse", {
 	},
 
 	_mouseDistanceMet: function(event) {
-		return (Math.max(
-				Math.abs(this._mouseDownEvent.pageX - event.pageX),
-				Math.abs(this._mouseDownEvent.pageY - event.pageY)
-			) >= this.options.distance
-		);
+		var distance = this.options.distance;
+		if ( typeof distance !== "object" && !jQuery.isFunction(distance) ) {
+			return (Math.max(
+					Math.abs(this._mouseDownEvent.pageX - event.pageX),
+					Math.abs(this._mouseDownEvent.pageY - event.pageY)
+				) >= this.options.distance
+			);
+		}
+		return ((distance.x ? Math.abs(this._mouseDownEvent.pageX - event.pageX) >= distance.x : true)
+				&& (distance.y ? Math.abs(this._mouseDownEvent.pageY - event.pageY) >= distance.y : true));
 	},
 
 	_mouseDelayMet: function(event) {
