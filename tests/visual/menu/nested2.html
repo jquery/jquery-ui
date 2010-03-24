@@ -10,8 +10,15 @@
 	<script type="text/javascript" src="../../../ui/jquery.ui.position.js"></script>
 	<script type="text/javascript" src="../../../ui/jquery.ui.autocomplete.js"></script>
 	<script type="text/javascript" src="../../../external/jquery.bgiframe-2.1.1.js"></script>
+	<script type="text/javascript" src="http://jqueryui.com/themeroller/themeswitchertool/"></script>
 	<script type="text/javascript">
 	$(function() {
+		$.fn.themeswitcher && $('<div/>').css({
+			position: "absolute",
+			right: 10,
+			top: 10
+		}).appendTo(document.body).themeswitcher();
+		
 		$.fn.position2 = function(options) {
 			return this.css({
 				top: 0,
