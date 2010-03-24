@@ -335,7 +335,7 @@ $.widget("ui.menu", {
 				"aria-activedescendant": "ui-active-menuitem"
 			})
 			.click(function( event ) {
-				if ( !$( event.target ).closest( ".ui-menu-item" ).length ) {
+				if ( !$( event.target ).closest( ".ui-menu-item a" ).length ) {
 					return;
 				}
 				// temporary
