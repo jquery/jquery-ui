@@ -14,7 +14,7 @@
 		$.widget("ui.drilldown", {
 			_init: function() {
 				var self = this;
-				this.active = this.element;
+				this.active = this.element.find(">ul").attr("tabindex", 0);
 				
 				// hide submenus and create indicator icons
 				this.element.find("ul").hide().prev("a").prepend('<span class="ui-icon ui-icon-carat-1-e"></span>').end().filter(":first").show();	
@@ -84,17 +84,21 @@
 					parent.parent().removeData("submenu");
 					submenu = submenu.data("submenu");
 				};
+			},
+			
+			widget: function() {
+				return this.element.find(">ul");
 			}
 		});
 		
-		var nestedmenu = $("#drilldown").drilldown({
+		var drilldown = $("#drilldown").drilldown({
 			selected: function(event, ui) {
 				$("#log").append("<div>Selected " + ui.item.text() + "</div>");
 			}
 		});
 		
-		$().keydown(function(event) {
-			var menu = nestedmenu.data("drilldown").active.data("menu");
+		drilldown.drilldown("widget").keydown(function(event) {
+			var menu = drilldown.data("drilldown").active.data("menu");
 			if (menu.widget().is(":hidden"))
 				return;
 			event.stopPropagation();
@@ -109,10 +113,10 @@
 				menu.previous();
 				break;
 			case $.ui.keyCode.LEFT:
-				nestedmenu.nestedmenu("up");
+				drilldown.drilldown("up");
 				break;
 			case $.ui.keyCode.RIGHT:
-				nestedmenu.nestedmenu("down");
+				drilldown.drilldown("down");
 				break;
 			case $.ui.keyCode.DOWN:
 				menu.next();
@@ -121,11 +125,11 @@
 			case $.ui.keyCode.ENTER:
 			case $.ui.keyCode.TAB:
 				menu.select();
-				nestedmenu.nestedmenu("hide");
+				drilldown.drilldown("hide");
 				event.preventDefault();
 				break;
 			case $.ui.keyCode.ESCAPE:
-				nestedmenu.nestedmenu("hide");
+				drilldown.drilldown("hide");
 				break;
 			default:
 				clearTimeout(menu.filterTimer);
