@@ -14,6 +14,11 @@
  */
 (function($) {
 
+// role=application on body required for screenreaders to correctly interpret aria attributes
+if( !$(document.body).is('[role]') ){
+	$(document.body).attr('role','application');
+} 
+
 var increments = 0;
 
 $.widget("ui.tooltip", {
