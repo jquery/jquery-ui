@@ -81,6 +81,7 @@ $.widget("ui.tooltip", {
 		this.current = target;
 		this.currentTitle = target.attr("title");
 		var content = this.options.content.call(target[0], function(response) {
+			// ignore async responses that come in after the tooltip is already hidden
 			if (self.current == target)
 				self.open(target, response);
 		});
