@@ -152,7 +152,7 @@
 					});
 				}
 				if (match.length) {
-					menu.activate(match);
+					menu.activate(event, match);
 					if (match.length > 1) {
 						menu.previousFilter = character;
 						menu.filterTimer = setTimeout(function() {
