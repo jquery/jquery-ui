@@ -43,10 +43,10 @@ $.widget("ui.tooltip", {
 			.appendTo(this.tooltip);
 		this.opacity = this.tooltip.css("opacity");
 		this.element
-			.bind("focus.tooltip mouseover.tooltip", function(event) {
+			.bind("focus.tooltip mouseenter.tooltip", function(event) {
 				self.show($(event.target));
 			})
-			.bind("blur.tooltip mouseout.tooltip", function(event) {
+			.bind("blur.tooltip mouseleave.tooltip", function(event) {
 				self.close();
 			});
 	},

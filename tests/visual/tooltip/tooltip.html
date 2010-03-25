@@ -20,10 +20,10 @@
 		
 		function enable() {
 			// default
-			$("#context1, form input, #childish").tooltip();
+			$("#context1 a, form input, #childish").tooltip();
 			
 			// custom class, replaces ui-widget-content
-			$("#context2").tooltip({
+			$("#context2 [title]").tooltip({
 				tooltipClass: "ui-widget-header"
 			});
 			$("#right1").tooltip({
