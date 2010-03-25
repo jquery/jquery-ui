@@ -8,6 +8,7 @@
 	<script type="text/javascript" src="../../../ui/jquery.ui.core.js"></script>
 	<script type="text/javascript" src="../../../ui/jquery.ui.widget.js"></script>
 	<script type="text/javascript" src="../../../ui/jquery.ui.position.js"></script>
+	<script type="text/javascript" src="../../../ui/jquery.ui.button.js"></script>
 	<script type="text/javascript" src="../../../ui/jquery.ui.tooltip.js"></script>
 	<script type="text/javascript" src="http://jqueryui.com/themeroller/themeswitchertool/"></script>
 	<script type="text/javascript">
@@ -53,6 +54,19 @@
 				},
 				tooltipClass: "ui-state-highlight"
 			});
+			
+			$("#button1").button().tooltip();
+			$("#button2").button({
+				icons: {
+					primary: "ui-icon-wrench"
+				}
+			}).tooltip();
+			$("#button3").button({
+				icons: {
+					primary: "ui-icon-wrench"
+				},
+				text: false
+			}).tooltip();
 		}
 		enable();
 		
@@ -119,6 +133,10 @@
 			<input id="last" title="Your last name is optional" />
 		</div>
 	</form>
+	
+	<button id="button1" title="Button Tooltip">Button Label</button>
+	<button id="button2" title="Icon Button">Button with Icon</button>
+	<button id="button3">Icon Only Button</button>
 	
 	<div id="footnote">This is <strong>the</strong> footnote, including other elements</div>
 	
