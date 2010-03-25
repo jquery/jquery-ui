@@ -94,7 +94,10 @@ $.widget("ui.tooltip", {
 			return;
 			
 		this.tooltipContent.html(content);
-		this.tooltip.position($.extend(this.options.position, {
+		this.tooltip.css({
+			top: 0,
+			left: 0
+		}).position($.extend(this.options.position, {
 			of: target
 		}));
 		
