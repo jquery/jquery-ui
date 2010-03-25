@@ -7,4 +7,7 @@
 	-webkit-box-shadow: 0 0 5px #aaa;
 	box-shadow: 0 0 5px #aaa;
 }
+* html .ui-tooltip {
+	background-image: none;
+}
 body .ui-tooltip { border-width:2px; }
