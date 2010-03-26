@@ -140,7 +140,7 @@ $.widget( "ui.autocomplete", {
 
 	destroy: function() {
 		this.element
-			.removeClass( "ui-autocomplete-input ui-widget ui-widget-content" )
+			.removeClass( "ui-autocomplete-input" )
 			.removeAttr( "autocomplete" )
 			.removeAttr( "role" )
 			.removeAttr( "aria-autocomplete" )
