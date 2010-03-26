@@ -622,8 +622,11 @@ $.widget("ui.dialog", {
 
 		// reset content sizing
 		// hide for non content measurement because height: 0 doesn't work in IE quirks mode (see #4350)
-		this.element.css('width', 'auto')
-			.hide();
+		this.element.css({
+			width: 'auto',
+			minHeight: 0,
+			height: 0
+		});
 
 		// reset wrapper sizing
 		// determine the height of all the non-content elements

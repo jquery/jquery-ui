@@ -18,6 +18,7 @@ var QUnit = {
 			stats: { all: 0, bad: 0 },
 			moduleStats: { all: 0, bad: 0 },
 			started: +new Date,
+			updateRate: 1000,
 			blocking: false,
 			autorun: false,
 			assertions: [],
@@ -590,8 +591,16 @@ function synchronize( callback ) {
 }
 
 function process() {
+	var start = (new Date()).getTime();
+
 	while ( config.queue.length && !config.blocking ) {
-		config.queue.shift()();
+		if ( config.updateRate <= 0 || (((new Date()).getTime() - start) < config.updateRate) ) {
+			config.queue.shift()();
+
+		} else {
+			setTimeout( process, 13 );
+			break;
+		}
 	}
 }
 
@@ -679,6 +688,7 @@ QUnit.equiv = function () {
 
     var innerEquiv; // the real equiv function
     var callers = []; // stack to decide between skip/abort functions
+    var parents = []; // stack to avoiding loops from circular referencing
 
 
     // Determine what is o.
@@ -788,28 +798,39 @@ QUnit.equiv = function () {
             },
 
             "array": function (b, a) {
-                var i;
+                var i, j, loop;
                 var len;
 
                 // b could be an object literal here
                 if ( ! (hoozit(b) === "array")) {
                     return false;
-                }
-
+                }   
+                
                 len = a.length;
                 if (len !== b.length) { // safe and faster
                     return false;
                 }
+                
+                //track reference to avoid circular references
+                parents.push(a);
                 for (i = 0; i < len; i++) {
-                    if ( ! innerEquiv(a[i], b[i])) {
+                    loop = false;
+                    for(j=0;j<parents.length;j++){
+                        if(parents[j] === a[i]){
+                            loop = true;//dont rewalk array
+                        }
+                    }
+                    if (!loop && ! innerEquiv(a[i], b[i])) {
+                        parents.pop();
                         return false;
                     }
                 }
+                parents.pop();
                 return true;
             },
 
             "object": function (b, a) {
-                var i;
+                var i, j, loop;
                 var eq = true; // unless we can proove it
                 var aProperties = [], bProperties = []; // collection of strings
 
@@ -820,18 +841,25 @@ QUnit.equiv = function () {
 
                 // stack constructor before traversing properties
                 callers.push(a.constructor);
-
+                //track reference to avoid circular references
+                parents.push(a);
+                
                 for (i in a) { // be strict: don't ensures hasOwnProperty and go deep
-
+                    loop = false;
+                    for(j=0;j<parents.length;j++){
+                        if(parents[j] === a[i])
+                            loop = true; //don't go down the same path twice
+                    }
                     aProperties.push(i); // collect a's properties
 
-                    if ( ! innerEquiv(a[i], b[i])) {
+                    if (!loop && ! innerEquiv(a[i], b[i])) {
                         eq = false;
                         break;
                     }
                 }
 
                 callers.pop(); // unstack, we are done
+                parents.pop();
 
                 for (i in b) {
                     bProperties.push(i); // collect b's properties
