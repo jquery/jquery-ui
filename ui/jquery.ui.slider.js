@@ -566,13 +566,11 @@ $.widget("ui.slider", $.ui.mouse, {
 	},
 
 	_valueMin: function() {
-		var valueMin = this.options.min;
-		return valueMin;
+		return this.options.min;
 	},
 
 	_valueMax: function() {
-		var valueMax = this.options.max;
-		return valueMax;
+		return this.options.max;
 	},
 	
 	_refreshValue: function() {
