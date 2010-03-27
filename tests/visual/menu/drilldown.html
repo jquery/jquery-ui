@@ -51,11 +51,23 @@
 			_open: function(submenu) {
 				this.active = submenu.show().css({
 					top: 0,
-					left: 0
+					left: 0,
+					opacity: 0
+				}).position({
+					my: "left top",
+					at: "right top",
+					of: this.widget()
 				}).position({
 					my: "left top",
 					at: "left top",
-					of: this.widget()
+					of: this.widget(),
+					using: function(to) {
+						$(this).animate({
+							left: to.left,
+							top: to.top,
+							opacity: 1
+						});
+					}
 				});
 				this.back.show();
 			},
@@ -64,8 +76,20 @@
 				if (this.active.parent()[0] == this.element[0]) {
 					return;
 				}
-				this.active.hide();
+				this.active.position({
+					my: "left top",
+					at: "right top",
+					of: this.widget(),
+					using: function(to) {
+						$(this).animate({
+							left: to.left,
+							top: to.top,
+							opacity: 0
+						});
+					}
+				});
 				this.active = this.active.parent().parent().show();
+				this.activeItem = this.active.data("menu").active;
 				if (!this.active.parent().parent().is(":ui-menu")) {
 					this.back.hide();
 				}
