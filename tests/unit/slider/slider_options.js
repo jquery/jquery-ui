@@ -11,10 +11,6 @@ function handle() {
 
 module("slider: options");
 
-test("animate", function() {
-	ok(false, "missing test - untested code is broken code.");
-});
-
 test("max", function() {
 	el = $('<div></div>');
 	
