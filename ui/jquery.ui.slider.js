@@ -559,9 +559,12 @@ $.widget("ui.slider", $.ui.mouse, {
 	},
 	
 	_trimValue: function(val) {
-		if (val < this._valueMin()) val = this._valueMin();
-		if (val > this._valueMax()) val = this._valueMax();
-
+		if (val < this._valueMin()) {
+			return this._valueMin();
+		}
+		if (val > this._valueMax()) {
+			return this._valueMax();
+		}
 		return val;
 	},
 
