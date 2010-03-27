@@ -113,6 +113,10 @@ $.fn.position = function( options ) {
 			position.top -= elemHeight / 2;
 		}
 
+		// prevent fractions (see #5280)
+		position.left = parseInt( position.left );
+		position.top = parseInt( position.top );
+
 		$.each( [ "left", "top" ], function( i, dir ) {
 			if ( $.ui.position[ collision[i] ] ) {
 				$.ui.position[ collision[i] ][ dir ]( position, {
