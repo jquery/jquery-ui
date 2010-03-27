@@ -13,8 +13,7 @@ module("autocomplete: methods", {
 test("destroy", function() {
 	var beforeHtml = $("#autocomplete").parent().html();
 	var afterHtml = $("#autocomplete").autocomplete().autocomplete("destroy").parent().html();
-	// TODO can't use same, as that would insert the markup unescaped into the test results, screwing up other tests
-	ok( beforeHtml == afterHtml );
+	equal( afterHtml, beforeHtml, "before/after html should be the same" );
 })
 
 var data = ["c++", "java", "php", "coldfusion", "javascript", "asp", "ruby", "python", "c", "scala", "groovy", "haskell", "perl"];

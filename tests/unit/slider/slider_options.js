@@ -11,10 +11,6 @@ function handle() {
 
 module("slider: options");
 
-test("animate", function() {
-	ok(false, "missing test - untested code is broken code.");
-});
-
 test("max", function() {
 	el = $('<div></div>');
 	
@@ -93,7 +89,17 @@ test("range", function() {
 });
 
 test("step", function() {
-	ok(false, "missing test - untested code is broken code.");
+	var el = $('<div></div>').slider({
+		step: 10
+	});
+	equals( el.slider("value"), 0 )
+	el.slider("value", 1);
+	equals( el.slider("value"), 10 );
+	el.slider("value", 10);
+	equals( el.slider("value"), 10 );
+	el.slider("value", 11);
+	equals( el.slider("value"), 20 );
+	el.slider('destroy');
 });
 
 test("value", function() {

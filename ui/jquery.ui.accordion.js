@@ -74,11 +74,6 @@ $.widget("ui.accordion", {
 		//Append icon elements
 		this._createIcons();
 
-		// IE7-/Win - Extra vertical space in lists fixed
-		if ($.browser.msie) {
-			this.element.find('a').css('zoom', '1');
-		}
-
 		this.resize();
 
 		//ARIA

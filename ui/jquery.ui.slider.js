@@ -152,7 +152,7 @@ $.widget("ui.slider", $.ui.mouse, {
 					break;
 			}
 
-			var curVal, newVal, step = self._step();
+			var curVal, newVal, step = self.options.step;
 			if (self.options.values && self.options.values.length) {
 				curVal = newVal = self.values(index);
 			} else {
@@ -526,11 +526,6 @@ $.widget("ui.slider", $.ui.mouse, {
 
 	},
 
-	_step: function() {
-		var step = this.options.step;
-		return step;
-	},
-
 	_value: function() {
 		//internal value getter
 		// _value() returns value trimmed by min and max
@@ -564,20 +559,21 @@ $.widget("ui.slider", $.ui.mouse, {
 	},
 	
 	_trimValue: function(val) {
-		if (val < this._valueMin()) val = this._valueMin();
-		if (val > this._valueMax()) val = this._valueMax();
-
+		if (val < this._valueMin()) {
+			return this._valueMin();
+		}
+		if (val > this._valueMax()) {
+			return this._valueMax();
+		}
 		return val;
 	},
 
 	_valueMin: function() {
-		var valueMin = this.options.min;
-		return valueMin;
+		return this.options.min;
 	},
 
 	_valueMax: function() {
-		var valueMax = this.options.max;
-		return valueMax;
+		return this.options.max;
 	},
 	
 	_refreshValue: function() {

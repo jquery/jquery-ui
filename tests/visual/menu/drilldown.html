@@ -8,6 +8,7 @@
 	<script type="text/javascript" src="../../../ui/jquery.ui.core.js"></script>
 	<script type="text/javascript" src="../../../ui/jquery.ui.widget.js"></script>
 	<script type="text/javascript" src="../../../ui/jquery.ui.position.js"></script>
+	<script type="text/javascript" src="../../../ui/jquery.ui.button.js"></script>
 	<script type="text/javascript" src="../../../ui/jquery.ui.autocomplete.js"></script>
 	<script type="text/javascript">
 	$(function() {
@@ -20,70 +21,92 @@
 				this.element.find("ul").hide().prev("a").prepend('<span class="ui-icon ui-icon-carat-1-e"></span>').end().filter(":first").show();	
 				
 				this.element.find("ul").menu({
+					focus: function(event, ui) {
+						self.activeItem = ui.item;
+					},
 					selected: function(event, ui) {
-						var nested = $(">ul", ui.item);
-						if (!nested.length) {
-							self.element.find("h3").text(ui.item.text());
-							self.options.selected.apply(this, arguments);
+						if (this != self.active[0]) {
 							return;
 						}
-						self.active = ui.item.parent();
-						// put a previous submenu back into its place and hide it
-						self.hideDown();
+						var nested = $(">ul", ui.item);
 						if (nested.length) {
-							// append to body in order to display the submenu above the parent menu, instead of inside of it
-							nested.appendTo(document.body).menu("deactivate").show().position({
-								my: "left top",
-								at: "left top",
-								of: self.element.children("ul:first")
-							// store the current submenu
-							}).data("menuparent", ui.item);
-							
-							self.active.data("submenu", nested);
+							self._open(nested);
+						} else {
+							self.element.find("h3").text(ui.item.text());
+							self.options.selected.apply(this, arguments);
 						}
 					}
 				});
+				
+				this.back = this.element.children(":last").button({
+					icons: {
+						primary: "ui-icon-carat-1-w"
+					}
+				}).click(function() {
+					self.up();
+					return false;
+				}).hide();
+			},
+			
+			_open: function(submenu) {
+				this.active = submenu.show().css({
+					top: 0,
+					left: 0,
+					opacity: 0
+				}).position({
+					my: "left top",
+					at: "right top",
+					of: this.widget()
+				}).position({
+					my: "left top",
+					at: "left top",
+					of: this.widget(),
+					using: function(to) {
+						$(this).animate({
+							left: to.left,
+							top: to.top,
+							opacity: 1
+						});
+					}
+				});
+				this.back.show();
 			},
 			
 			up: function() {
-				if (!this.active.data("menuparent"))
+				if (this.active.parent()[0] == this.element[0]) {
 					return;
-				this.hideDown();
-				this.active.menu("deactivate");
-				this.active = this.active.data("menuparent").parent();
-			},
-			
-			down: function() {
-				var submenu = this.active.data("submenu");
-				if (!submenu)
-					return;
-				submenu.data("menu").activate(submenu.children(":first"))
-				this.active = submenu;
-			},
-			
-			show: function() {
-				this.element.menu("deactivate").show();
-				this.active = this.element;
-			},
-			
-			hide: function() {
-				this.hideDown();
-				var child = this.active.hide(), parent;
-				while(child.data("menuparent")) {
-					parent = child.data("menuparent");
-					child.appendTo(parent).removeData("menuparent");
-					child = parent.parent().removeData("submenu").hide();
+				}
+				this.active.position({
+					my: "left top",
+					at: "right top",
+					of: this.widget(),
+					using: function(to) {
+						$(this).animate({
+							left: to.left,
+							top: to.top,
+							opacity: 0
+						});
+					}
+				});
+				this.active = this.active.parent().parent().show();
+				this.activeItem = this.active.data("menu").active;
+				if (!this.active.parent().parent().is(":ui-menu")) {
+					this.back.hide();
 				}
 			},
 			
-			hideDown: function() {
-				var submenu = this.active.data("submenu");
-				while(submenu) {
-					var parent = submenu.data("menuparent");
-					submenu.appendTo(parent).hide().removeData("menuparent");
-					parent.parent().removeData("submenu");
-					submenu = submenu.data("submenu");
-				};
+			down: function(event) {
+				var nested = this.activeItem.find(">ul");
+				if (nested.length) {
+					this._open(nested);
+					nested.menu("activate", event, nested.children(":first"))
+				}
+			},
+			
+			show: function() {
+			},
+			
+			hide: function() {
 			},
 			
 			widget: function() {
@@ -129,7 +152,7 @@
 				event.preventDefault();
 				break;
 			case $.ui.keyCode.ESCAPE:
-				drilldown.drilldown("hide");
+				drilldown.drilldown("hide", event);
 				break;
 			default:
 				clearTimeout(menu.filterTimer);
@@ -153,7 +176,7 @@
 					});
 				}
 				if (match.length) {
-					menu.activate(match);
+					menu.activate(event, match);
 					if (match.length > 1) {
 						menu.previousFilter = character;
 						menu.filterTimer = setTimeout(function() {
@@ -172,6 +195,7 @@
 	<style>
 		body { font-size:62.5%; }
 		.ui-menu { width: 200px; height: 170px; }
+		.ui-menu .ui-menu { position: absolute; }
 		.ui-menu .ui-icon { float: right; }
 	</style>
 </head>
@@ -223,6 +247,7 @@
 		<li><a href="#">Utrecht</a></li>
 		<li><a href="#">Zurich</a></li>
 	</ul>
+	<a href="#">Go back</a>
 </div>
 
 <div class="ui-widget" style="margin-top:2em; font-family:Arial">

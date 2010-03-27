@@ -116,9 +116,9 @@ test("{ fillSpace: false }, default", function() {
 test("{ fillSpace: true }", function() {
 	$("#navigationWrapper").height(500);
 	$('#navigation').accordion({ fillSpace: true });
-	equals( $('#navigation > li:eq(0) > ul').height(), 362 );
-	equals( $('#navigation > li:eq(1) > ul').height(), 362 );
-	equals( $('#navigation > li:eq(2) > ul').height(), 362 );
+	equals( $('#navigation > li:eq(0) > ul').height(), 446 );
+	equals( $('#navigation > li:eq(1) > ul').height(), 446 );
+	equals( $('#navigation > li:eq(2) > ul').height(), 446 );
 });
 
 test("{ header: '> li > :first-child,> :not(li):even' }, default", function() {

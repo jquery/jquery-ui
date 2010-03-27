@@ -579,7 +579,7 @@ function validTest( name ) {
 
 function push(result, actual, expected, message) {
 	message = message || (result ? "okay" : "failed");
-	QUnit.ok( result, result ? message + ": " + expected : message + ", expected: " + QUnit.jsDump.parse(expected) + " result: " + QUnit.jsDump.parse(actual) );
+	QUnit.ok( result, result ? message + ": " + QUnit.jsDump.parse(expected) : message + ", expected: " + QUnit.jsDump.parse(expected) + " result: " + QUnit.jsDump.parse(actual) );
 }
 
 function synchronize( callback ) {
@@ -1060,9 +1060,9 @@ QUnit.jsDump = (function() {
 			name:'name',
 			'class':'className'
 		},
-		HTML:true,//if true, entities are escaped ( <, >, \t, space and \n )
+		HTML:false,//if true, entities are escaped ( <, >, \t, space and \n )
 		indentChar:'   ',//indentation unit
-		multiline:true //if true, items in a collection, are separated by a \n, else just a space.
+		multiline:false //if true, items in a collection, are separated by a \n, else just a space.
 	};
 
 	return jsDump;
