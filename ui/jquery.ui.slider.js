@@ -152,7 +152,7 @@ $.widget("ui.slider", $.ui.mouse, {
 					break;
 			}
 
-			var curVal, newVal, step = self._step();
+			var curVal, newVal, step = self.options.step;
 			if (self.options.values && self.options.values.length) {
 				curVal = newVal = self.values(index);
 			} else {
@@ -524,11 +524,6 @@ $.widget("ui.slider", $.ui.mouse, {
 				break;
 		}
 
-	},
-
-	_step: function() {
-		var step = this.options.step;
-		return step;
 	},
 
 	_value: function() {
