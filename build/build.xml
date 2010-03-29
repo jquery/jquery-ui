@@ -116,7 +116,7 @@
 		<apply executable="java" parallel="false">
 			<fileset dir="${src.dir}/" includes="jquery.ui.*.js, jquery.effects.*.js" />
 			<arg line="-jar" />
-			<arg path="build/google-compiler-20091218.jar" />
+			<arg path="${closure-jar}" />
 			<arg value="--warning_level" />
 			<arg value="QUIET" />
 			<arg value="--js_output_file" />
@@ -128,7 +128,7 @@
 		<apply executable="java" parallel="false" verbose="true" dest="${dist.dir}">
 			<filelist dir="${dist.dir}/ui/" files="${concatenated}.js" />
 			<arg line="-jar" />
-			<arg path="build/google-compiler-20091218.jar" />
+			<arg path="${closure-jar}" />
 			<arg value="--warning_level" />
 			<arg value="QUIET" />
 			<arg value="--js_output_file" />
