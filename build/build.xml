@@ -297,7 +297,7 @@
 			<fileset dir="${dist.dir}ui/minified/i18n" />
 		</copy>
 		<copy todir="${cdndist.dir}/themes">
-			<fileset dir="../themes" />
+			<fileset dir="${dist.dir}themes" />
 		</copy>
 		<checksum>
 			<fileset dir="${cdndist.dir}" />
