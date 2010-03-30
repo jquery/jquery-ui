@@ -70,7 +70,7 @@ $.widget( "ui.autocomplete", {
 				case keyCode.RIGHT:
 				case keyCode.SHIFT:
 				case keyCode.CONTROL:
-				case 18:
+				case keyCode.ALT:
 					// ignore metakeys (shift, ctrl, alt)
 					break;
 				default:
@@ -140,7 +140,7 @@ $.widget( "ui.autocomplete", {
 
 	destroy: function() {
 		this.element
-			.removeClass( "ui-autocomplete-input ui-widget ui-widget-content" )
+			.removeClass( "ui-autocomplete-input" )
 			.removeAttr( "autocomplete" )
 			.removeAttr( "role" )
 			.removeAttr( "aria-autocomplete" )
@@ -335,7 +335,7 @@ $.widget("ui.menu", {
 				"aria-activedescendant": "ui-active-menuitem"
 			})
 			.click(function( event ) {
-				if ( !$( event.target ).closest( ".ui-menu-item" ).length ) {
+				if ( !$( event.target ).closest( ".ui-menu-item a" ).length ) {
 					return;
 				}
 				// temporary

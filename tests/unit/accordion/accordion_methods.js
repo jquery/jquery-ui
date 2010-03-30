@@ -40,21 +40,9 @@ test("init", function() {
 });
 
 test("destroy", function() {
-	$("<div></div>").appendTo('body').accordion().accordion("destroy").remove();
-	ok(true, '.accordion("destroy") called on element');
-
-	$([]).accordion().accordion("destroy").remove();
-	ok(true, '.accordion("destroy") called on empty collection');
-
-	$('<div></div>').accordion().accordion("destroy").remove();
-	ok(true, '.accordion("destroy") called on disconnected DOMElement');
-
-	$('<div></div>').accordion().accordion("destroy").accordion("foo").remove();
-	ok(true, 'arbitrary method called after destroy');
-
-	var expected = $('<div></div>').accordion(),
-		actual = expected.accordion('destroy');
-	equals(actual, expected, 'destroy is chainable');
+	var beforeHtml = $("#list1").parent().html();
+	var afterHtml = $("#list1").accordion().accordion("destroy").parent().html();
+	equal( afterHtml, beforeHtml );
 });
 
 test("enable", function() {
