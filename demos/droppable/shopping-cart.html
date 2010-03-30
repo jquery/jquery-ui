@@ -36,7 +36,12 @@
 				$("<li></li>").text(ui.draggable.text()).appendTo(this);
 			}
 		}).sortable({
-			items: "li:not(.placeholder)"
+			items: "li:not(.placeholder)",
+			sort: function() {
+				// gets added unintentionally by droppable interacting with sortable
+				// using connectWithSortable fixes this, but doesn't allow you to customize active/hoverClass options
+				$(this).removeClass("ui-state-default");
+			}
 		});
 
 	});
