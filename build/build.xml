@@ -258,33 +258,28 @@
 		<echo message="All trailing spaces removed." />
 	</target>
 	
-	<target name="checksums">
+	<target name="googlecdn">
     	<delete dir="google" />
     	<mkdir dir="google" />
-		<copy file="dist/jquery-ui-1.9pre/version.txt" todir="google" />
-		<copy file="dist/jquery-ui-1.9pre/AUTHORS.txt" todir="google" />
-		<copy file="dist/jquery-ui-1.9pre/GPL-LICENSE.txt" todir="google" />
-		<checksum>
-			<fileset dir="google" />
-		</checksum>
-		<concat destfile="google/MANIFEST">
-			<fileset dir="google" includes="**/*.MD5" />
-		</concat>
-		<!--
-        <for param="file">
-    		<path><fileset dir="google" includes="**/" excludes="**/*.MD5" /></path>
-			<sequential>
-				<checksum file="@{file}" />
-			</sequential>
-		</for>
+		<copy todir="google">
+			<fileset dir=".." includes="AUTHORS.txt, GPL-LICENSE.txt, MIT-LICENSE.txt, version.txt" />
+		</copy>
+		<copy todir="google/i18n">
+			<fileset dir="${dist.dir}ui/i18n" />
+			<fileset dir="${dist.dir}ui/minified/i18n" />
+		</copy>
+		<copy todir="google/themes">
+			<fileset dir="../themes" />
+		</copy>
 		<for param="file">
     		<path><fileset dir="google" includes="**/" excludes="**/*.MD5" /></path>
 			<sequential>
-				<echo message="@{file}" />
-				<concat><file file="@{file}.MD5" /></concat>
+				<propertyregex override="yes" property="relativepath" input="@{file}" regexp=".+?google[\\/](.+)$" replace="\1"/>
+				<propertyregex override="yes" property="relativepath" input="${relativepath}" regexp="\\" replace="/" global="true" />
+				<checksum property="sum" file="@{file}" />
+				<concat destfile="google/MANIFEST" append="yes" fixlastline="yes">${relativepath} ${sum}</concat>
 			</sequential>
 		</for>
-		-->
     </target>
 
 </project>
