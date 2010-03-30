@@ -38,7 +38,7 @@
 
 	<property description="Google Closure" name="closure-jar" value="${build.dir}/google-compiler-20091218.jar" />
 	
-	<target name="deploy-release" depends="clean, docs-download, concatenate, minify, copy, replace-version, prepend-header, zip" description="Release builder">
+	<target name="deploy-release" depends="clean, docs-download, concatenate, minify, copy, replace-version, prepend-header, zip, googlecdn" description="Release builder">
 	</target>
 	
 	<target name="replace-version">
@@ -287,6 +287,10 @@
 		<copy todir="google">
 			<fileset dir=".." includes="AUTHORS.txt, GPL-LICENSE.txt, MIT-LICENSE.txt, version.txt" />
 		</copy>
+		<copy todir="google">
+			<fileset dir="${dist.dir}ui" includes="jquery-ui.js" />
+			<fileset dir="${dist.dir}ui/minified" includes="jquery-ui.min.js" />
+		</copy>
 		<copy todir="google/i18n">
 			<fileset dir="${dist.dir}ui/i18n" />
 			<fileset dir="${dist.dir}ui/minified/i18n" />
@@ -294,15 +298,19 @@
 		<copy todir="google/themes">
 			<fileset dir="../themes" />
 		</copy>
+		<checksum>
+			<fileset dir="google" />
+		</checksum>
 		<for param="file">
     		<path><fileset dir="google" includes="**/" excludes="**/*.MD5" /></path>
 			<sequential>
 				<propertyregex override="yes" property="relativepath" input="@{file}" regexp=".+?google[\\/](.+)$" replace="\1"/>
 				<propertyregex override="yes" property="relativepath" input="${relativepath}" regexp="\\" replace="/" global="true" />
-				<checksum property="sum" file="@{file}" />
-				<concat destfile="google/MANIFEST" append="yes" fixlastline="yes">${relativepath} ${sum}</concat>
+				<concat destfile="google/MANIFEST" append="yes">${relativepath} </concat>
+				<concat destfile="google/MANIFEST" append="yes"><file file="@{file}.MD5" /></concat>
 			</sequential>
 		</for>
+		<delete dir="google" includes="**/*.MD5" />
     </target>
 
 </project>
