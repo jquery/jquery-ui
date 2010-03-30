@@ -22,6 +22,7 @@
 	<property name="release.filename" value="jquery-ui-${release.version}" />
 
 	<property name="dist.dir" value="dist/${release.filename}/" />
+	<property name="cdndist.dir" value="dist/${release.filename}-googlecdn" />
 	<property name="build.dir" value="build" />
 	<property name="ui.dir" value="../" />
 	<property name="src.dir" value="${ui.dir}/ui/" />
@@ -282,35 +283,38 @@
 	</target>
 	
 	<target name="googlecdn">
-    	<delete dir="google" />
-    	<mkdir dir="google" />
-		<copy todir="google">
+    	<delete dir="${cdndist.dir}" />
+    	<mkdir dir="${cdndist.dir}" />
+		<copy todir="${cdndist.dir}">
 			<fileset dir=".." includes="AUTHORS.txt, GPL-LICENSE.txt, MIT-LICENSE.txt, version.txt" />
 		</copy>
-		<copy todir="google">
+		<copy todir="${cdndist.dir}">
 			<fileset dir="${dist.dir}ui" includes="jquery-ui.js" />
 			<fileset dir="${dist.dir}ui/minified" includes="jquery-ui.min.js" />
 		</copy>
-		<copy todir="google/i18n">
+		<copy todir="${cdndist.dir}/i18n">
 			<fileset dir="${dist.dir}ui/i18n" />
 			<fileset dir="${dist.dir}ui/minified/i18n" />
 		</copy>
-		<copy todir="google/themes">
+		<copy todir="${cdndist.dir}/themes">
 			<fileset dir="../themes" />
 		</copy>
 		<checksum>
-			<fileset dir="google" />
+			<fileset dir="${cdndist.dir}" />
 		</checksum>
 		<for param="file">
-    		<path><fileset dir="google" includes="**/" excludes="**/*.MD5" /></path>
+    		<path><fileset dir="${cdndist.dir}" includes="**/" excludes="**/*.MD5" /></path>
 			<sequential>
-				<propertyregex override="yes" property="relativepath" input="@{file}" regexp=".+?google[\\/](.+)$" replace="\1"/>
+				<propertyregex override="yes" property="relativepath" input="@{file}" regexp=".+?${cdndist.dir}[\\/](.+)$" replace="\1"/>
 				<propertyregex override="yes" property="relativepath" input="${relativepath}" regexp="\\" replace="/" global="true" />
-				<concat destfile="google/MANIFEST" append="yes">${relativepath} </concat>
-				<concat destfile="google/MANIFEST" append="yes"><file file="@{file}.MD5" /></concat>
+				<concat destfile="${cdndist.dir}/MANIFEST" append="yes">${relativepath} </concat>
+				<concat destfile="${cdndist.dir}/MANIFEST" append="yes"><file file="@{file}.MD5" /></concat>
 			</sequential>
 		</for>
-		<delete dir="google" includes="**/*.MD5" />
+		<delete dir="${cdndist.dir}" includes="**/*.MD5" />
+		<zip destfile="${dist.dir}/../${release.filename}-googlecdn.zip">
+			<zipfileset dir="${cdndist.dir}/" />
+		</zip>
     </target>
 
 </project>
