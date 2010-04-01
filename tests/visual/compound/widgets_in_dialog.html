@@ -20,11 +20,8 @@
 	<script type="text/javascript" src="../../../ui/jquery.ui.progressbar.js"></script>
 	<script type="text/javascript" src="../../../ui/jquery.ui.slider.js"></script>
 	<script type="text/javascript" src="../../../ui/jquery.ui.tabs.js"></script>
-	<script type="text/javascript" src="../../../ui/jquery.ui.tooltip.js"></script>
 	<script type="text/javascript">
 	$(function() {
-		$("[title]").tooltip();
-		
 		$("#accordion").accordion();
 		$("#autocomplete").autocomplete({
 			source: ["c++", "java", "php", "coldfusion", "javascript", "asp", "ruby", "python", "c", "scala", "groovy", "haskell", "perl"]
@@ -53,7 +50,7 @@
 			width: 100,
 			height: 75,
 			modal: true
-		});
+		})
 	});
 	</script>
 </head>
@@ -79,11 +76,11 @@
 	<input id="datepicker">
 	<button>Another button</button>
 	<div>
-		<label for="progress">Progress: <input title="The progress we made so far" id="progress" /></label>
+		<label for="progress">Progress: <input id="progress" /></label>
 	</div>
 	<div id="progressbar">
 	</div>
-	<div id="slider" title="Sliding progress..."></div>
+	<div id="slider"></div>
 	<div id="tabs">
 		<ul>
 			<li><a href="#tabs-1">First</a></li>
