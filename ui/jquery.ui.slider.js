@@ -340,17 +340,9 @@ $.widget("ui.slider", $.ui.mouse, {
 			percentMouse = 1 - percentMouse;
 
 		var valueTotal = this._valueMax() - this._valueMin(),
-			valueMouse = percentMouse * valueTotal,
-			valueMouseModStep = valueMouse % this.options.step,
-			normValue = this._valueMin() + valueMouse - valueMouseModStep;
+			valueMouse = percentMouse * valueTotal;
 
-		if (valueMouseModStep > (this.options.step / 2))
-			normValue += this.options.step;
-
-		// Since JavaScript has problems with large floats, round
-		// the final value to 5 digits after the decimal point (see #4124)
-		return parseFloat(normValue.toFixed(5));
-
+		return this._trimAlignValue(valueMouse);
 	},
 
 	_start: function(event, index) {
@@ -440,7 +432,7 @@ $.widget("ui.slider", $.ui.mouse, {
 	value: function(newValue) {
 
 		if (arguments.length) {
-			this.options.value = this._trimValue(newValue);
+			this.options.value = this._trimAlignValue(newValue);
 			this._refreshValue();
 			this._change(null, 0);
 		}
@@ -452,7 +444,7 @@ $.widget("ui.slider", $.ui.mouse, {
 	values: function(index, newValue) {
 
 		if (arguments.length > 1) {
-			this.options.values[index] = this._trimValue(newValue);
+			this.options.values[index] = this._trimAlignValue(newValue);
 			this._refreshValue();
 			this._change(null, index);
 		}
@@ -461,7 +453,7 @@ $.widget("ui.slider", $.ui.mouse, {
 			if ($.isArray(arguments[0])) {
 				var vals = this.options.values, newValues = arguments[0];
 				for (var i = 0, l = vals.length; i < l; i++) {
-					vals[i] = this._trimValue(newValues[i]);
+					vals[i] = this._trimAlignValue(newValues[i]);
 					this._change(null, i);
 				}
 				this._refreshValue();
@@ -528,9 +520,9 @@ $.widget("ui.slider", $.ui.mouse, {
 
 	_value: function() {
 		//internal value getter
-		// _value() returns value trimmed by min and max
+		// _value() returns value trimmed by min and max, aligned by step
 		var val = this.options.value;
-		val = this._trimValue(val);
+		val = this._trimAlignValue(val);
 
 		return val;
 	},
@@ -542,7 +534,7 @@ $.widget("ui.slider", $.ui.mouse, {
 
 		if (arguments.length) {
 			var val = this.options.values[index];
-			val = this._trimValue(val);
+			val = this._trimAlignValue(val);
 
 			return val;
 		} else {
@@ -550,7 +542,7 @@ $.widget("ui.slider", $.ui.mouse, {
 			// this copy gets trimmed by min and max and then returned
 			var vals = this.options.values.slice();
 			for (var i = 0, l = vals.length; i < l; i++) {
-				vals[i] = this._trimValue(vals[i]);
+				vals[i] = this._trimAlignValue(vals[i]);
 			}
 
 			return vals;
@@ -558,14 +550,25 @@ $.widget("ui.slider", $.ui.mouse, {
 
 	},
 	
-	_trimValue: function(val) {
+	// returns the step-aligned value that val is closest to, between (inclusive) min and max
+	_trimAlignValue: function(val) {
 		if (val < this._valueMin()) {
 			return this._valueMin();
 		}
 		if (val > this._valueMax()) {
 			return this._valueMax();
 		}
-		return val;
+		var step = this.options.step,
+			valModStep = val % step,
+			alignValue = this._valueMin() + val - valModStep;
+
+		if (valModStep >= (step / 2)) {
+			alignValue += step;
+		}
+
+		// Since JavaScript has problems with large floats, round
+		// the final value to 5 digits after the decimal point (see #4124)
+		return parseFloat(alignValue.toFixed(5));
 	},
 
 	_valueMin: function() {

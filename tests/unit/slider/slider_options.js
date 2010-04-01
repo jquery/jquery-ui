@@ -88,17 +88,50 @@ test("range", function() {
 	ok(false, "missing test - untested code is broken code.");
 });
 
+//spec: http://wiki.jqueryui.com/Slider#specs
+// value option/method: the value option is not restricted by min/max/step.
+// What is returned by the value method is restricted by min (>=), max (<=), and step (even multiple)
 test("step", function() {
 	var el = $('<div></div>').slider({
-		step: 10
+		min: 0,
+		value: 0,
+		step: 10,
+		max: 100,
 	});
-	equals( el.slider("value"), 0 )
+	equals( el.slider("value"), 0 );
+
 	el.slider("value", 1);
+	equals( el.slider("value"), 0 );
+
+	el.slider("value", 9);
 	equals( el.slider("value"), 10 );
-	el.slider("value", 10);
-	equals( el.slider("value"), 10 );
+
 	el.slider("value", 11);
+	equals( el.slider("value"), 10 );
+
+	el.slider("value", 19);
 	equals( el.slider("value"), 20 );
+
+el = $('<div></div>').slider({
+		min: 0,
+		value: 0,
+		step: 20,
+		max: 100,
+	});
+	el.slider("value", 0);
+
+	el.slider("option", "value", 1);
+	equals( el.slider("value"), 0 );
+
+	el.slider("option", "value", 9);
+	equals( el.slider("value"), 0 );
+
+	el.slider("option", "value", 11);
+	equals( el.slider("value"), 20 );
+
+	el.slider("option", "value", 19);
+	equals( el.slider("value"), 20 );
+
 	el.slider('destroy');
 });
 
