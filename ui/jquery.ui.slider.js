@@ -147,7 +147,10 @@ $.widget("ui.slider", $.ui.mouse, {
 					if (!self._keySliding) {
 						self._keySliding = true;
 						$(this).addClass("ui-state-active");
-						self._start(event, index);
+						var allowed = self._start(event, index);
+						if (allowed === false) {
+							return;
+						}
 					}
 					break;
 			}
@@ -262,7 +265,10 @@ $.widget("ui.slider", $.ui.mouse, {
 			closestHandle = $(this.handles[++index]);
 		}
 
-		this._start(event, index);
+		var allowed = this._start(event, index);
+		if (allowed === false) {
+			return false;
+		}
 		this._mouseSliding = true;
 
 		self._handleIndex = index;
@@ -354,7 +360,7 @@ $.widget("ui.slider", $.ui.mouse, {
 			uiHash.value = this.values(index);
 			uiHash.values = this.values();
 		}
-		this._trigger("start", event, uiHash);
+		return this._trigger("start", event, uiHash);
 	},
 
 	_slide: function(event, index, newVal) {
