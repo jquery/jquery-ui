@@ -49,7 +49,7 @@ $.widget("ui.tooltip", {
 		this.opacity = this.tooltip.css("opacity");
 		this.element
 			.bind("focus.tooltip mouseenter.tooltip", function(event) {
-				self.show($(event.target));
+				self.open();
 			})
 			.bind("blur.tooltip mouseleave.tooltip", function(event) {
 				self.close();
@@ -73,7 +73,8 @@ $.widget("ui.tooltip", {
 		return this.tooltip;
 	},
 	
-	show: function(target) {
+	open: function() {
+		var target = this.element;
 		// already visible? possible when both focus and mouseover events occur
 		if (this.current && this.current[0] == target[0])
 			return;
@@ -83,14 +84,14 @@ $.widget("ui.tooltip", {
 		var content = this.options.content.call(target[0], function(response) {
 			// ignore async responses that come in after the tooltip is already hidden
 			if (self.current == target)
-				self.open(target, response);
+				self._show(target, response);
 		});
 		if (content) {
-			self.open(target, content);
+			self._show(target, content);
 		}
 	},
 	
-	open: function(target, content) {
+	_show: function(target, content) {
 		if (!content)
 			return;
 		
@@ -115,7 +116,7 @@ $.widget("ui.tooltip", {
 		else
 			this.tooltip.is(':visible') ? this.tooltip.fadeTo("normal", this.opacity) : this.tooltip.fadeIn();
 
-		this._trigger("show", null, { target: target });
+		this._trigger( "open" );
 	},
 	
 	close: function() {
@@ -136,6 +137,7 @@ $.widget("ui.tooltip", {
 			else
 				this.tooltip.stop().fadeOut();
 		
+		this._trigger( "close" );
 	}
 	
 });
