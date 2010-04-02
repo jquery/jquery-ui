@@ -35,6 +35,8 @@ test('ajax', function() {
 		selected: 2,
 		load: function() {
 			// spinner: default spinner
+			start();
+			stop();
 			equals($('li:eq(2) > a > span', el).length, 1, "should restore tab markup after spinner is removed");
 			equals($('li:eq(2) > a > span', el).html(), '3', "should restore tab label after spinner is removed");
 			el.tabs('destroy');
