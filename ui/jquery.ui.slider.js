@@ -346,7 +346,7 @@ $.widget("ui.slider", $.ui.mouse, {
 			percentMouse = 1 - percentMouse;
 
 		var valueTotal = this._valueMax() - this._valueMin(),
-			valueMouse = percentMouse * valueTotal;
+			valueMouse = this._valueMin() + percentMouse * valueTotal;
 
 		return this._trimAlignValue(valueMouse);
 	},
@@ -566,7 +566,7 @@ $.widget("ui.slider", $.ui.mouse, {
 		}
 		var step = this.options.step,
 			valModStep = val % step,
-			alignValue = this._valueMin() + val - valModStep;
+			alignValue = val - valModStep;
 
 		if (valModStep >= (step / 2)) {
 			alignValue += step;
