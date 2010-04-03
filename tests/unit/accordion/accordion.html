@@ -23,7 +23,9 @@
 			var args = $.makeArray(arguments).slice(1);
 			var result = [];
 			$.each(args, function(i, n) {
-				result.push( accordion.find(".ui-accordion-content").eq(i).is(":visible") ? 1 : 0 );
+				result.push( accordion.find(".ui-accordion-content").eq(i).filter(function() {
+					return $(this).css("display") != "none"
+				}).length ? 1 : 0 );
 			});
 			same(args, result)
 		}
