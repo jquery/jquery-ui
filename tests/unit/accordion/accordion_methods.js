@@ -103,8 +103,7 @@ test("activate, string expression", function() {
 	ac.accordion("activate", ":last");
 	state(ac, 0, 0, 1);
 });
-//[ 0, 1, 1 ] result: [ 0, 0, 1 ]
-//[   0,   1,   1] result: [   0,   0,   1]
+
 test("activate, jQuery or DOM element", function() {
 	var ac = $('#list1').accordion({ active: $("#list1 a:last") });
 	state(ac, 0, 0, 1);
