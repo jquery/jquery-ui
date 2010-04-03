@@ -16,6 +16,18 @@
 	<script type="text/javascript" src="../../jquery.simulate.js"></script>
 	<script type="text/javascript" src="../testsuite.js"></script>
 
+	<script type="text/javascript">
+		$.ui.accordion.prototype.options.animated = false;
+
+		function state(accordion) {
+			var args = $.makeArray(arguments).slice(1);
+			var result = [];
+			$.each(args, function(i, n) {
+				result.push( accordion.find(".ui-accordion-content").eq(i).is(":visible") ? 1 : 0 );
+			});
+			same(args, result)
+		}
+	</script>
 	<script type="text/javascript" src="accordion_core.js"></script>
 	<script type="text/javascript" src="accordion_defaults.js"></script>
 	<script type="text/javascript" src="accordion_events.js"></script>
