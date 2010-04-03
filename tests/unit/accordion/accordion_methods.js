@@ -114,7 +114,7 @@ test("activate, jQuery or DOM element", function() {
 });
 
 test("resize", function() {
-	var expected = $('#list1').accordion({
+	var expected = $('#list1').parent().height(300).end().accordion({
 		fillSpace: true
 	});
 	
@@ -130,7 +130,7 @@ test("resize", function() {
 	expected.find(".ui-accordion-content").each(function() {
 		sizes2.push($(this).outerHeight());
 	});
-	same(sizes, [38, 38, 38]);
+	same(sizes, [246, 246, 246]);
 	
 	expected.parent().height(500);
 	expected.accordion("resize");
