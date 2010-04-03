@@ -114,7 +114,9 @@ test("activate, jQuery or DOM element", function() {
 });
 
 test("resize", function() {
-	var expected = $('#list1').accordion();
+	var expected = $('#list1').accordion({
+		fillSpace: true
+	});
 	
 	var sizes = [];
 	expected.find(".ui-accordion-content").each(function() {
@@ -128,10 +130,15 @@ test("resize", function() {
 	expected.find(".ui-accordion-content").each(function() {
 		sizes2.push($(this).outerHeight());
 	});
-	same(sizes, sizes2);
+	same(sizes, [38, 38, 38]);
 	
-	expected.find(".ui-accordion-content:first").height(500)
-	var sizes3 = [];
+	expected.parent().height(500);
+	expected.accordion("resize");
+	var sizes2 = [];
+	expected.find(".ui-accordion-content").each(function() {
+		sizes2.push($(this).outerHeight());
+	});
+	same(sizes2, [446, 446, 446]);
 });
 
 })(jQuery);
