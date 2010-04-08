@@ -1,7 +1,10 @@
 /* Tooltip
 ----------------------------------*/
 .ui-tooltip {
-	padding:8px; width:100px; position:absolute; z-index:9999;
+	padding:8px;
+	width:125px;
+	position:absolute;
+	z-index:9999;
 	-o-box-shadow: 0 0 5px #aaa;
 	-moz-box-shadow: 0 0 5px #aaa;
 	-webkit-box-shadow: 0 0 5px #aaa;

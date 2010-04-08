@@ -10,6 +10,7 @@
 	<script type="text/javascript" src="../../ui/jquery.ui.button.js"></script>
 	<script type="text/javascript" src="../../ui/jquery.ui.position.js"></script>
 	<script type="text/javascript" src="../../ui/jquery.ui.autocomplete.js"></script>
+	<script type="text/javascript" src="../../ui/jquery.ui.tooltip.js"></script>
 	<link type="text/css" href="../demos.css" rel="stylesheet" />
 	<style type="text/css">
 		/* TODO shouldn't be necessary */
@@ -41,8 +42,12 @@
 						delay: 0,
 						change: function(event, ui) {
 							if (!ui.item) {
-								// remove invalid value, as it didn't match anything
-								$(this).val("");
+								var value = this.value;
+								// remove invalid value, as it didn't match anything, and display a hint
+								$(this).val("").attr("title", value + " didn't match any item").tooltip("open");
+								setTimeout(function() {
+									input.tooltip("close").attr("title", "");
+								}, 2500);
 								return false;
 							}
 							select.val(ui.item.id);
@@ -54,7 +59,7 @@
 						minLength: 0
 					})
 					.addClass("ui-widget ui-widget-content ui-corner-left");
-				$("<button>&nbsp;</button>")
+				var button = $("<button>&nbsp;</button>")
 				.attr("tabIndex", -1)
 				.attr("title", "Show All Items")
 				.insertAfter(input)
@@ -74,6 +79,13 @@
 					// pass empty string as value to search for, displaying all results
 					input.autocomplete("search", "");
 					input.focus();
+				});
+				
+				input.tooltip({
+					position: {
+						offset: (button.width() + 5) + " 0"
+					},
+					tooltipClass: "ui-state-highlight"
 				});
 			}
 		});
