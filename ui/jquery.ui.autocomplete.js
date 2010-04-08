@@ -83,6 +83,7 @@ $.widget( "ui.autocomplete", {
 				}
 			})
 			.bind( "focus.autocomplete", function() {
+				self.selectedItem = null;
 				self.previous = self.element.val();
 			})
 			.bind( "blur.autocomplete", function( event ) {
@@ -91,6 +92,7 @@ $.widget( "ui.autocomplete", {
 				// TODO try to implement this without a timeout, see clearTimeout in search()
 				self.closing = setTimeout(function() {
 					self.close( event );
+					self._change( event );
 				}, 150 );
 			});
 		this._initSource();
@@ -116,11 +118,13 @@ $.widget( "ui.autocomplete", {
 						self.element.val( item.value );
 					}
 					self.close( event );
-					self.previous = self.element.val();
 					// only trigger when focus was lost (click on menu)
+					var previous = self.previous;
 					if ( self.element[0] !== doc.activeElement ) {
 						self.element.focus();
+						self.previous = previous;
 					}
+					self.selectedItem = item;
 				},
 				blur: function( event, ui ) {
 					if ( self.menu.element.is(":visible") ) {
@@ -219,8 +223,11 @@ $.widget( "ui.autocomplete", {
 			this.menu.element.hide();
 			this.menu.deactivate();
 		}
+	},
+	
+	_change: function( event ) {
 		if ( this.previous !== this.element.val() ) {
-			this._trigger( "change", event );
+			this._trigger( "change", event, { item: this.selectedItem } );
 		}
 	},
 
