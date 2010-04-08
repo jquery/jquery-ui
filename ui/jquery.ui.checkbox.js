@@ -19,8 +19,16 @@ $.widget( "ui.checkbox", {
 
 	_create: function() {
 
+		// find the checkbox's label
 		this.labelElement = $( this.element[0].ownerDocument ).find( "label[for=" + this.element.attr("id") + "]" );
 
+		// move the checkbox outside (before) the label if it's inside it
+		if ( this.labelElement.has(this.element).length ) {
+			this.element.insertBefore( this.labelElement );
+		}
+
+		// wrap the checkbox in a new div
+		// move the checkbox's label inside the new div
 		this.checkboxElement = this.element.wrap( "<div></div>" ).parent()
 			.addClass("ui-checkbox")
 			.append(this.labelElement);
