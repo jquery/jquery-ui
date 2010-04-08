@@ -3,15 +3,6 @@
  */
 (function($) {
 
-function state(accordion) {
-	var expected = $.makeArray(arguments).slice(1);
-	var actual = [];
-	$.each(expected, function(i, n) {
-		actual.push( accordion.find(".ui-accordion-content").eq(i).is(":visible") ? 1 : 0 );
-	});
-	same(actual, expected)
-}
-
 module("accordion: methods");
 
 test("init", function() {
@@ -112,8 +103,7 @@ test("activate, string expression", function() {
 	ac.accordion("activate", ":last");
 	state(ac, 0, 0, 1);
 });
-//[ 0, 1, 1 ] result: [ 0, 0, 1 ]
-//[   0,   1,   1] result: [   0,   0,   1]
+
 test("activate, jQuery or DOM element", function() {
 	var ac = $('#list1').accordion({ active: $("#list1 a:last") });
 	state(ac, 0, 0, 1);
@@ -124,7 +114,9 @@ test("activate, jQuery or DOM element", function() {
 });
 
 test("resize", function() {
-	var expected = $('#list1').accordion();
+	var expected = $('#list1').parent().height(300).end().accordion({
+		fillSpace: true
+	});
 	
 	var sizes = [];
 	expected.find(".ui-accordion-content").each(function() {
@@ -138,10 +130,15 @@ test("resize", function() {
 	expected.find(".ui-accordion-content").each(function() {
 		sizes2.push($(this).outerHeight());
 	});
-	same(sizes, sizes2);
+	same(sizes, [246, 246, 246]);
 	
-	expected.find(".ui-accordion-content:first").height(500)
-	var sizes3 = [];
+	expected.parent().height(500);
+	expected.accordion("resize");
+	var sizes2 = [];
+	expected.find(".ui-accordion-content").each(function() {
+		sizes2.push($(this).outerHeight());
+	});
+	same(sizes2, [446, 446, 446]);
 });
 
 })(jQuery);

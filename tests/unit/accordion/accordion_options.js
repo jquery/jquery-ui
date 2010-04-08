@@ -3,16 +3,6 @@
  */
 (function($) {
 
-function state(accordion) {
-	var expected = $.makeArray(arguments).slice(1);
-	var actual = [];
-	$.each(expected, function(i, n) {
-		actual.push( accordion.find(".ui-accordion-content").eq(i).is(":visible") ? 1 : 0 );
-	});
-	same(actual, expected)
-}
-
-
 module("accordion: options");
 
 test("{ active: first child }, default", function() {

@@ -16,6 +16,20 @@
 	<script type="text/javascript" src="../../jquery.simulate.js"></script>
 	<script type="text/javascript" src="../testsuite.js"></script>
 
+	<script type="text/javascript">
+		$.ui.accordion.prototype.options.animated = false;
+
+		function state(accordion) {
+			var args = $.makeArray(arguments).slice(1);
+			var result = [];
+			$.each(args, function(i, n) {
+				result.push( accordion.find(".ui-accordion-content").eq(i).filter(function() {
+					return $(this).css("display") != "none"
+				}).length ? 1 : 0 );
+			});
+			same(args, result)
+		}
+	</script>
 	<script type="text/javascript" src="accordion_core.js"></script>
 	<script type="text/javascript" src="accordion_defaults.js"></script>
 	<script type="text/javascript" src="accordion_events.js"></script>
@@ -25,7 +39,7 @@
 	
 	<style>
 		#main { font-size: 10pt; font-family: 'trebuchet ms', verdana, arial; }
-		#navigation * { margin: 0; padding: 0; font-size: 12px; }
+		#list, #list1 *, #navigation, #navigation * { margin: 0; padding: 0; font-size: 12px; }
 	</style>
 </head>
 <body>
@@ -41,7 +55,7 @@
 	<div>
 		<div id="list1" class="foo">
 	        <a class="bar">There is one obvious advantage:</a>
-	        <div style="" class="foo">
+	        <div style="font-style: normal; " class="foo">
 	            <p>
 	                You've seen it coming!
 	                <br/>
@@ -51,7 +65,7 @@
 	            </p>
 	        </div>
 	        <a class="bar">Now that you've got...</a>
-	        <div style="" class="foo">
+	        <div style="font-style: normal; " class="foo">
 	            <p>
 	                your bear, you have to admit it!
 	                <br/>
@@ -62,7 +76,7 @@
 	            </p>
 	        </div>
 	        <a class="bar">Rent one bear, ...</a>
-	        <div style="" class="foo">
+	        <div style="font-style: normal; " class="foo">
 	            <p>
 	                get two for three beer.
 	            </p>

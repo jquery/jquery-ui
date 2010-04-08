@@ -30,24 +30,23 @@
 							var matcher = new RegExp(request.term, "i");
 							response(select.children("option").map(function() {
 								var text = $(this).text();
-								if (!request.term || matcher.test(text))
+								if (this.value && (!request.term || matcher.test(text)))
 									return {
-										id: $(this).val(),
+										id: this.value,
 										label: text.replace(new RegExp("(?![^&;]+;)(?!<[^<>]*)(" + $.ui.autocomplete.escapeRegex(request.term) + ")(?![^<>]*>)(?![^&;]+;)", "gi"), "<strong>$1</strong>"),
 										value: text
 									};
 							}));
 						},
 						delay: 0,
-						select: function(e, ui) {
+						change: function(event, ui) {
 							if (!ui.item) {
 								// remove invalid value, as it didn't match anything
 								$(this).val("");
 								return false;
 							}
-							$(this).focus();
 							select.val(ui.item.id);
-							self._trigger("selected", null, {
+							self._trigger("selected", event, {
 								item: select.find("[value='" + ui.item.id + "']")
 							});
 							
@@ -56,6 +55,7 @@
 					})
 					.addClass("ui-widget ui-widget-content ui-corner-left");
 				$("<button>&nbsp;</button>")
+				.attr("tabIndex", -1)
 				.attr("title", "Show All Items")
 				.insertAfter(input)
 				.button({
@@ -81,7 +81,10 @@
 	})(jQuery);
 		
 	$(function() {
-		$("select").combobox();
+		$("#combobox").combobox();
+		$("#toggle").click(function() {
+			$("#combobox").toggle();
+		});
 	});
 	</script>
 </head>
@@ -91,7 +94,8 @@
 
 <div class="ui-widget">
 	<label>Your preferred programming language: </label>
-	<select>
+	<select id="combobox">
+		<option value="">Select one...</option>
 		<option value="a">asp</option>
         <option value="c">c</option>
         <option value="cpp">c++</option>
@@ -107,6 +111,7 @@
         <option value="s">scala</option>
 	</select>
 </div>
+<button id="toggle">Show underlying select</button>
 
 </div><!-- End demo -->
 
