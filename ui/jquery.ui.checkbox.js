@@ -15,16 +15,29 @@
  */
 (function( $ ) {
 
+var checkboxId = 0;
+
 $.widget( "ui.checkbox", {
 
 	_create: function() {
 
-		// find the checkbox's label
-		this.labelElement = $( this.element[0].ownerDocument ).find( "label[for=" + this.element.attr("id") + "]" );
-
-		// move the checkbox outside (before) the label if it's inside it
-		if ( this.labelElement.has(this.element).length ) {
+		// look for label as container of checkbox
+		this.labelElement = this.element.closest( "label" );
+		if ( this.labelElement.length ) {
+			// move the checkbox outside (before) the label
 			this.element.insertBefore( this.labelElement );
+
+			// the checkbox needs an id since it's no longer inside the label
+			if ( !this.element.attr( "id" ) ) {
+				this.element.attr( "id", "ui-checkbox-" + checkboxId );
+				checkboxId += 1;
+			}
+
+			// associate label by for=id of checkbox
+			this.labelElement.attr( "for", this.element.attr("id") );
+		} else {
+			// look for label by for=id of checkbox
+			this.labelElement = $( this.element[0].ownerDocument ).find( "label[for=" + this.element.attr("id") + "]" );
 		}
 
 		// wrap the checkbox in a new div

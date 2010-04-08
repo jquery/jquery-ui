@@ -11,8 +11,7 @@
 	<script type="text/javascript" src="../../../ui/jquery.ui.checkbox.js"></script>
 	<script type="text/javascript">
 	$(function() {
-		$("#check1, #check2, #check3").checkbox();
-
+		$(":checkbox").checkbox();
 	});
 	</script>
 </head>
@@ -20,11 +19,20 @@
 
 <form>
 
-<input type="checkbox" id="check1" /><label for="check1">Check 1</label>
+<label><input type="checkbox" />Check 1</label>
 
-<input type="checkbox" id="check2" /><label for="check2">Check 2</label>
+<label><input type="checkbox" id="check2" />Check 2</label>
 
 <input type="checkbox" id="check3" /><label for="check3">Check 3</label>
+
+<input type="checkbox" id="check4" /><span><label for="check4">Check 4</label></span>
+
+<table>
+<tr>
+<td><input type="checkbox" id="check5" /></td>
+<td><label for="check5">Check 5</label></td>
+</tr>
+</table>
 
 </form>
 
