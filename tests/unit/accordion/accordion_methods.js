@@ -31,7 +31,7 @@ test("init", function() {
 });
 
 test("destroy", function() {
-	var beforeHtml = $("#list1").parent().html();
+	var beforeHtml = $("#list1").find("div").css("font-style", "normal").end().parent().html();
 	var afterHtml = $("#list1").accordion().accordion("destroy").parent().html();
 	equal( afterHtml, beforeHtml );
 });
