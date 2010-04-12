@@ -114,21 +114,13 @@ test("activate, jQuery or DOM element", function() {
 });
 
 test("resize", function() {
-	var expected = $('#list1').parent().height(300).end().accordion({
+	var expected = $('#navigation').parent().height(300).end().accordion({
 		fillSpace: true
 	});
 	
 	var sizes = [];
 	expected.find(".ui-accordion-content").each(function() {
 		sizes.push($(this).outerHeight());
-	});
-	
-	var actual = expected.accordion('resize');
-	equals(actual, expected, 'resize is chainable');
-	
-	var sizes2 = [];
-	expected.find(".ui-accordion-content").each(function() {
-		sizes2.push($(this).outerHeight());
 	});
 	same(sizes, [246, 246, 246]);
 	
