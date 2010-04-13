@@ -77,7 +77,7 @@ test("{ autoHeight: false }", function() {
 	});
 	ok( sizes[0] >= 70 && sizes[0] <= 90, "was " + sizes[0] );
 	ok( sizes[1] >= 98 && sizes[1] <= 126, "was " + sizes[1] );
-	ok( sizes[2] >= 54 && sizes[2] <= 54, "was " + sizes[2] );
+	ok( sizes[2] >= 42 && sizes[2] <= 54, "was " + sizes[2] );
 });
 
 test("{ collapsible: false }, default", function() {
