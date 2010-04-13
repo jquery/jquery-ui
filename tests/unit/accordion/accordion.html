@@ -29,6 +29,15 @@
 			});
 			same(args, result)
 		}
+		function equalHeights(accordion, min, max) {
+			var sizes = [];
+			accordion.find(".ui-accordion-content").each(function() {
+				sizes.push($(this).outerHeight());
+			});
+			ok( sizes[0] >= min && sizes[0] <= max, "must be within " + min + " and " + max + ", was " + sizes[0] );
+			same(sizes[0], sizes[1]);
+			same(sizes[0], sizes[2]);
+		}
 	</script>
 	<script type="text/javascript" src="accordion_core.js"></script>
 	<script type="text/javascript" src="accordion_defaults.js"></script>
@@ -39,7 +48,7 @@
 	
 	<style>
 		#main { font-size: 10pt; font-family: 'trebuchet ms', verdana, arial; }
-		#list, #list1 *, #navigation, #navigation * { margin: 0; padding: 0; font-size: 12px; list-style: none; border: 0; outline: 0; }
+		#list, #list1 *, #navigation, #navigation * { margin: 0; padding: 0; font-size: 12px; }
 	</style>
 </head>
 <body>
