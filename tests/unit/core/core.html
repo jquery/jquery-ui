@@ -11,10 +11,21 @@
 	<link rel="stylesheet" href="../../../external/qunit.css" type="text/css"/>
 	<script type="text/javascript" src="../../../external/qunit.js"></script>
 	<script type="text/javascript" src="../../jquery.simulate.js"></script>
-	<script type="text/javascript" src="../testsuite.js"></script>
 	
 	<script type="text/javascript" src="core.js"></script>
 	<script type="text/javascript" src="selector.js"></script>
+	
+	<script type="text/javascript">
+	// disable this stale testsuite for testswarm only
+	var url = window.location.search;
+	url = decodeURIComponent( url.slice( url.indexOf("swarmURL=") + 9 ) );
+	if ( url && url.indexOf("http") == 0 ) {
+		// reset config to kill previous tests; make sure testsuite.js is loaded afterwards to init the testswarm script
+		QUnit.init();
+		test("core", function() { ok(true, "disabled core testsuite"); });
+	}
+	</script>
+	<script type="text/javascript" src="../testsuite.js"></script>
 	
 	<style	type="text/css">
 		.zindex {z-index: 100}
