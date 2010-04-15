@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<title>jQuery UI Tooltip Test Suite</title>
+
+	<link type="text/css" href="../../../themes/base/jquery.ui.tooltip.css" rel="stylesheet" />
+
+	<script type="text/javascript" src="../../../jquery-1.4.2.js"></script>
+	<script type="text/javascript" src="../../../ui/jquery.ui.core.js"></script>
+	<script type="text/javascript" src="../../../ui/jquery.ui.widget.js"></script>
+	<script type="text/javascript" src="../../../ui/jquery.ui.tooltip.js"></script>
+
+	<link rel="stylesheet" href="../../../external/qunit.css" type="text/css"/>
+	<script type="text/javascript" src="../../../external/qunit.js"></script>
+	<script type="text/javascript" src="../../jquery.simulate.js"></script>
+	<script type="text/javascript" src="../testsuite.js"></script>
+	
+	<script type="text/javascript" src="tooltip_core.js"></script>
+	<script type="text/javascript" src="tooltip_defaults.js"></script>
+	<script type="text/javascript" src="tooltip_events.js"></script>
+	<script type="text/javascript" src="tooltip_methods.js"></script>
+	<script type="text/javascript" src="tooltip_options.js"></script>
+	<script type="text/javascript" src="tooltip_tickets.js"></script>
+	
+</head>
+<body>
+
+<h1 id="qunit-header">jQuery UI Tooltip Test Suite</h1>
+<h2 id="qunit-banner"></h2>
+<h2 id="qunit-userAgent"></h2>
+<ol id="qunit-tests">
+</ol>
+
+<div id="main" style="position: absolute; top: -10000px; left: -10000px;">
+	<div>
+		<a id="tooltipped1" href="#" title="anchortitle">anchor</a>
+		<input title="inputtitle" />
+	</div>
+</div>
+
+</body>
+</html>
