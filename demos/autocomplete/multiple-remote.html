@@ -12,7 +12,6 @@
 	<link type="text/css" href="../demos.css" rel="stylesheet" />
 	<script type="text/javascript">
 	$(function() {
-		var availableTags = ["c++", "java", "php", "coldfusion", "javascript", "asp", "ruby", "python", "c", "scala", "groovy", "haskell", "perl"];
 		function split(val) {
 			return val.split(/,\s*/);
 		}
@@ -20,11 +19,18 @@
 			return split(term).pop();
 		}
 		
-		$("#tags").autocomplete({
-			minLength: 0,
+		$("#birds").autocomplete({
 			source: function(request, response) {
-				// delegate back to autocomplete, but extract the last term
-				response($.ui.autocomplete.filter(availableTags, extractLast(request.term)));
+				$.getJSON("search.php", {
+					term: extractLast(request.term)
+				}, response);
+			},
+			search: function() {
+				// custom minLength
+				var term = extractLast(this.value);
+				if (term.length < 2) {
+					return false;
+				}
 			},
 			focus: function() {
 				// prevent value inserted on focus
@@ -50,15 +56,15 @@
 <div class="demo">
 
 <div class="ui-widget">
-	<label for="tags">Tag programming languages: </label>
-	<input id="tags" size="50" />
+	<label for="birds">Birds: </label>
+	<input id="birds" size="50" />
 </div>
 
 </div><!-- End demo -->
 
 <div class="demo-description">
 <p>
-Usage: Type something, eg. "j" to see suggestions for tagging with programming languages. Select a value, then continue typing to add more.
+Usage: Enter at least two characters to get bird name suggestions. Select a value to continue adding more names.
 </p>
 <p>
 This is an example showing how to use the source-option along with some events to enable autocompleting multiple values into a single field.
