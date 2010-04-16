@@ -155,7 +155,7 @@ $.Widget.prototype = {
 			.removeAttr( "aria-disabled" )
 			.removeClass(
 				this.widgetBaseClass + "-disabled " +
-				this.namespace + "-state-disabled" );
+				"ui-state-disabled" );
 	},
 
 	widget: function() {
@@ -192,7 +192,7 @@ $.Widget.prototype = {
 			this.widget()
 				[ value ? "addClass" : "removeClass"](
 					this.widgetBaseClass + "-disabled" + " " +
-					this.namespace + "-state-disabled" )
+					"ui-state-disabled" )
 				.attr( "aria-disabled", value );
 		}
 

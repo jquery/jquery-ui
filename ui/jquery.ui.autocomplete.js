@@ -70,7 +70,7 @@ $.widget( "ui.autocomplete", {
 				case keyCode.RIGHT:
 				case keyCode.SHIFT:
 				case keyCode.CONTROL:
-				case 18:
+				case keyCode.ALT:
 					// ignore metakeys (shift, ctrl, alt)
 					break;
 				default:
@@ -83,6 +83,7 @@ $.widget( "ui.autocomplete", {
 				}
 			})
 			.bind( "focus.autocomplete", function() {
+				self.selectedItem = null;
 				self.previous = self.element.val();
 			})
 			.bind( "blur.autocomplete", function( event ) {
@@ -91,6 +92,7 @@ $.widget( "ui.autocomplete", {
 				// TODO try to implement this without a timeout, see clearTimeout in search()
 				self.closing = setTimeout(function() {
 					self.close( event );
+					self._change( event );
 				}, 150 );
 			});
 		this._initSource();
@@ -116,11 +118,13 @@ $.widget( "ui.autocomplete", {
 						self.element.val( item.value );
 					}
 					self.close( event );
-					self.previous = self.element.val();
 					// only trigger when focus was lost (click on menu)
+					var previous = self.previous;
 					if ( self.element[0] !== doc.activeElement ) {
 						self.element.focus();
+						self.previous = previous;
 					}
+					self.selectedItem = item;
 				},
 				blur: function( event, ui ) {
 					if ( self.menu.element.is(":visible") ) {
@@ -140,7 +144,7 @@ $.widget( "ui.autocomplete", {
 
 	destroy: function() {
 		this.element
-			.removeClass( "ui-autocomplete-input ui-widget ui-widget-content" )
+			.removeClass( "ui-autocomplete-input" )
 			.removeAttr( "autocomplete" )
 			.removeAttr( "role" )
 			.removeAttr( "aria-autocomplete" )
@@ -162,11 +166,7 @@ $.widget( "ui.autocomplete", {
 		if ( $.isArray(this.options.source) ) {
 			array = this.options.source;
 			this.source = function( request, response ) {
-				// escape regex characters
-				var matcher = new RegExp( $.ui.autocomplete.escapeRegex(request.term), "i" );
-				response( $.grep( array, function(value) {
-					return matcher.test( value.label || value.value || value );
-				}) );
+				response( $.ui.autocomplete.filter(array, request.term) );
 			};
 		} else if ( typeof this.options.source === "string" ) {
 			url = this.options.source;
@@ -219,8 +219,11 @@ $.widget( "ui.autocomplete", {
 			this.menu.element.hide();
 			this.menu.deactivate();
 		}
+	},
+	
+	_change: function( event ) {
 		if ( this.previous !== this.element.val() ) {
-			this._trigger( "change", event );
+			this._trigger( "change", event, { item: this.selectedItem } );
 		}
 	},
 
@@ -301,6 +304,12 @@ $.widget( "ui.autocomplete", {
 $.extend( $.ui.autocomplete, {
 	escapeRegex: function( value ) {
 		return value.replace( /([\^\$\(\)\[\]\{\}\*\.\+\?\|\\])/gi, "\\$1" );
+	},
+	filter: function(array, term) {
+		var matcher = new RegExp( $.ui.autocomplete.escapeRegex(term), "i" );
+		return $.grep( array, function(value) {
+			return matcher.test( value.label || value.value || value );
+		});
 	}
 });
 

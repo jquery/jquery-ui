@@ -22,12 +22,11 @@
 			source: function(request, response) {
 				if (cache.term == request.term && cache.content) {
 					response(cache.content);
+					return;
 				}
 				if (new RegExp(cache.term).test(request.term) && cache.content && cache.content.length < 13) {
-					var matcher = new RegExp($.ui.autocomplete.escapeRegex(request.term), "i");
-					response($.grep(cache.content, function(value) {
-	    				return matcher.test(value.value)
-					}));
+					response($.ui.autocomplete.filter(cache.content, request.term));
+					return;
 				}
 				$.ajax({
 					url: "search.php",

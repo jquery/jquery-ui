@@ -5,17 +5,6 @@
 
 (function($) {
 
-$.ui.accordion.prototype.options.animated = false;
-
-function state(accordion) {
-	var args = $.makeArray(arguments).slice(1);
-	var result = [];
-	$.each(args, function(i, n) {
-		result.push( accordion.find(".ui-accordion-content").eq(i).is(":visible") ? 1 : 0 );
-	});
-	same(args, result)
-}
-
 module("accordion: core");
 
 test("handle click on header-descendant", function() {

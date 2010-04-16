@@ -120,7 +120,7 @@ function source_test(source, async) {
 	}
 	if (async) {
 		stop();
-		setTimeout(result, 100);
+		$(document).one("ajaxStop", result);
 	} else {
 		result();
 	}
