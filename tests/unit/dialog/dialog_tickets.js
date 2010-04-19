@@ -40,4 +40,25 @@ test("#5184: isOpen in dialogclose event is true", function() {
 	el.remove();
 });
 
+test("#5531: dialog width should be at least minWidth on creation", function () {
+    el = $('<div></div>').dialog({
+            width: 200,
+            minWidth: 300
+        });
+
+    equals(el.dialog('option', 'width'), 300, "width is minWidth");
+    el.dialog('option', 'width', 200);
+    equals(el.dialog('option', 'width'), 300, "width unchanged when set to < minWidth");
+    el.dialog('option', 'width', 320);
+    equals(el.dialog('option', 'width'), 320, "width changed if set to > minWidth");
+    el.remove();
+
+    el = $('<div></div>').dialog({
+            minWidth: 300
+        });
+    ok(el.dialog('option', 'width') >=  300, "width is at least 300");
+    el.remove();
+
+});
+
 })(jQuery);

@@ -628,6 +628,10 @@ $.widget("ui.dialog", {
 			height: 0
 		});
 
+		if (options.minWidth > options.width) {
+			options.width = options.minWidth;
+		}
+
 		// reset wrapper sizing
 		// determine the height of all the non-content elements
 		nonContentHeight = this.uiDialog.css({
