@@ -47,7 +47,7 @@ test("all events", function() {
 		same( $(".ui-menu:visible").length, 1 );
 		ac.simulate("keydown", { keyCode: $.ui.keyCode.DOWN });
 		ac.simulate("keydown", { keyCode: $.ui.keyCode.ENTER });
-		ac.blur();
+		$.browser.msie ? ac.simulate("blur") : ac.blur();
 	}, 50);
 });
 
@@ -63,7 +63,8 @@ test("change without selection", function() {
 			start();
 		}
 	});
-	ac.focus().val("ja").blur();
+	ac.triggerHandler("focus");
+	ac.val("ja").triggerHandler("blur");
 });
 
 test("cancel search", function() {

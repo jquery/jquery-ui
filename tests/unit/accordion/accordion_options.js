@@ -66,17 +66,18 @@ test("{ active: Number }", function() {
 });
 
 test("{ autoHeight: true }, default", function() {
-	$('#navigation').accordion({ autoHeight: true });
-	equals( $('#navigation > li:eq(0) > ul').height(), 126 );
-	equals( $('#navigation > li:eq(1) > ul').height(), 126 );
-	equals( $('#navigation > li:eq(2) > ul').height(), 126 );
+	equalHeights($('#navigation').accordion({ autoHeight: true }), 95, 130);
 });
 
 test("{ autoHeight: false }", function() {
-	$('#navigation').accordion({ autoHeight: false });
-	equals( $('#navigation > li:eq(0) > ul').height(), 90 );
-	equals( $('#navigation > li:eq(1) > ul').height(), 126 );
-	equals( $('#navigation > li:eq(2) > ul').height(), 54 );
+	var accordion = $('#navigation').accordion({ autoHeight: false });
+	var sizes = [];
+	accordion.find(".ui-accordion-content").each(function() {
+		sizes.push($(this).height());
+	});
+	ok( sizes[0] >= 70 && sizes[0] <= 90, "was " + sizes[0] );
+	ok( sizes[1] >= 98 && sizes[1] <= 126, "was " + sizes[1] );
+	ok( sizes[2] >= 42 && sizes[2] <= 54, "was " + sizes[2] );
 });
 
 test("{ collapsible: false }, default", function() {
@@ -95,20 +96,10 @@ test("{ collapsible: true }", function() {
 	state(ac, 0, 0, 0);
 });
 
-test("{ fillSpace: false }, default", function() {
-	$("#navigationWrapper").height(500);
-	$('#navigation').accordion({ fillSpace: false });
-	equals( $('#navigation > li:eq(0) > ul').height(), 126 );
-	equals( $('#navigation > li:eq(1) > ul').height(), 126 );
-	equals( $('#navigation > li:eq(2) > ul').height(), 126 );
-});
-
+// fillSpace: false == autoHeight: true, covered above
 test("{ fillSpace: true }", function() {
 	$("#navigationWrapper").height(500);
-	$('#navigation').accordion({ fillSpace: true });
-	equals( $('#navigation > li:eq(0) > ul').height(), 446 );
-	equals( $('#navigation > li:eq(1) > ul').height(), 446 );
-	equals( $('#navigation > li:eq(2) > ul').height(), 446 );
+	equalHeights($('#navigation').accordion({ fillSpace: true }), 446, 458);
 });
 
 test("{ header: '> li > :first-child,> :not(li):even' }, default", function() {

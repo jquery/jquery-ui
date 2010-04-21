@@ -84,7 +84,7 @@ test("enable", function() {
 });
 
 test("disable", function() {
-	expect(6);
+	expect(7);
 	el = $("#sortable").sortable({ disabled: false });
 	sort($("li", el)[0], 0, 40, 2, '.sortable({ disabled: false })');
 
@@ -97,6 +97,7 @@ test("disable", function() {
 	sort($("li", el)[0], 0, 40, 2, '.sortable({ disabled: false })');
 	el.sortable("option", "disabled", true);
 	equals(el.sortable("option", "disabled"), true, "disabled option setter");
+	ok(el.sortable("widget").is(":not(.ui-state-disabled)"), "sortable element does not get ui-state-disabled since it's an interaction");
 	sort($("li", el)[0], 0, 40, 0, '.sortable("option", "disabled", true)');
 	
 	var expected = $('<div></div>').sortable(),

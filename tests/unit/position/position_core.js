@@ -2,6 +2,8 @@
  * position_core.js
  */
 (function($) {
+	
+module("position");
 
 test('my, at, of', function() {
 	$('#elx').position({

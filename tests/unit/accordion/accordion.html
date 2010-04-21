@@ -29,6 +29,15 @@
 			});
 			same(args, result)
 		}
+		function equalHeights(accordion, min, max) {
+			var sizes = [];
+			accordion.find(".ui-accordion-content").each(function() {
+				sizes.push($(this).outerHeight());
+			});
+			ok( sizes[0] >= min && sizes[0] <= max, "must be within " + min + " and " + max + ", was " + sizes[0] );
+			same(sizes[0], sizes[1]);
+			same(sizes[0], sizes[2]);
+		}
 	</script>
 	<script type="text/javascript" src="accordion_core.js"></script>
 	<script type="text/javascript" src="accordion_defaults.js"></script>
@@ -55,7 +64,7 @@
 	<div>
 		<div id="list1" class="foo">
 	        <a class="bar">There is one obvious advantage:</a>
-	        <div style="font-style: normal; " class="foo">
+	        <div class="foo">
 	            <p>
 	                You've seen it coming!
 	                <br/>
@@ -65,7 +74,7 @@
 	            </p>
 	        </div>
 	        <a class="bar">Now that you've got...</a>
-	        <div style="font-style: normal; " class="foo">
+	        <div class="foo">
 	            <p>
 	                your bear, you have to admit it!
 	                <br/>
@@ -76,7 +85,7 @@
 	            </p>
 	        </div>
 	        <a class="bar">Rent one bear, ...</a>
-	        <div style="font-style: normal; " class="foo">
+	        <div class="foo">
 	            <p>
 	                get two for three beer.
 	            </p>

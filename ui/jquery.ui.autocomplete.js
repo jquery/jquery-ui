@@ -166,11 +166,7 @@ $.widget( "ui.autocomplete", {
 		if ( $.isArray(this.options.source) ) {
 			array = this.options.source;
 			this.source = function( request, response ) {
-				// escape regex characters
-				var matcher = new RegExp( $.ui.autocomplete.escapeRegex(request.term), "i" );
-				response( $.grep( array, function(value) {
-					return matcher.test( value.label || value.value || value );
-				}) );
+				response( $.ui.autocomplete.filter(array, request.term) );
 			};
 		} else if ( typeof this.options.source === "string" ) {
 			url = this.options.source;
@@ -308,6 +304,12 @@ $.widget( "ui.autocomplete", {
 $.extend( $.ui.autocomplete, {
 	escapeRegex: function( value ) {
 		return value.replace( /([\^\$\(\)\[\]\{\}\*\.\+\?\|\\])/gi, "\\$1" );
+	},
+	filter: function(array, term) {
+		var matcher = new RegExp( $.ui.autocomplete.escapeRegex(term), "i" );
+		return $.grep( array, function(value) {
+			return matcher.test( value.label || value.value || value );
+		});
 	}
 });
 

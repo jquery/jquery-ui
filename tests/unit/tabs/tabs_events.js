@@ -22,14 +22,16 @@ test('show', function() {
 			uiObj = ui;
 		}
 	});
-	ok(uiObj !== undefined, 'should fire show after init');
-	equals(uiObj.tab, $('#tabs1 a')[0], 'should have tab as DOM anchor element');
-	equals(uiObj.panel, $('#tabs1 div')[0], 'should have panel as DOM div element');
-	equals(uiObj.index, 0, 'should have index');
-	
+	ok(uiObj !== undefined, 'trigger callback after initialization');
+	equals(uiObj.tab, $('a', el)[0], 'contain tab as DOM anchor element');
+	equals(uiObj.panel, $('div', el)[0], 'contain panel as DOM div element');
+	equals(uiObj.index, 0, 'contain index');
+
 });
 
 test('add', function() {
+
+	// TODO move to methods, not at all event related...
 
 	var el = $('<div id="tabs"><ul></ul></div>').tabs();
 	equals(el.tabs('option', 'selected'), -1, 'Initially empty, no selected tab');
@@ -47,11 +49,36 @@ test('remove', function() {
 });
 
 test('enable', function() {
-	ok(false, "missing test - untested code is broken code.");
+	expect(4);
+
+	var uiObj;
+	el = $('#tabs1').tabs({
+		disabled: [ 0, 1 ],
+		enable: function (event, ui) {
+			uiObj = ui;
+		}
+	});
+	el.tabs('enable', 1);
+	ok(uiObj !== undefined, 'trigger callback');
+	equals(uiObj.tab, $('a', el)[1], 'contain tab as DOM anchor element');
+	equals(uiObj.panel, $('div', el)[1], 'contain panel as DOM div element');
+	equals(uiObj.index, 1, 'contain index');
 });
 
 test('disable', function() {
-	ok(false, "missing test - untested code is broken code.");
+	expect(4);
+
+	var uiObj;
+	el = $('#tabs1').tabs({
+		disable: function (event, ui) {
+			uiObj = ui;
+		}
+	});
+	el.tabs('disable', 1);
+	ok(uiObj !== undefined, 'trigger callback');
+	equals(uiObj.tab, $('a', el)[1], 'contain tab as DOM anchor element');
+	equals(uiObj.panel, $('div', el)[1], 'contain panel as DOM div element');
+	equals(uiObj.index, 1, 'contain index');
 });
 
 })(jQuery);
