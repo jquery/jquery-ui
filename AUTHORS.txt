@@ -1,8 +1,8 @@
-﻿jQuery UI Authors (http://ui.jquery.com/about)
+﻿jQuery UI Authors (http://jqueryui.com/about)
 
 This software consists of voluntary contributions made by many
 individuals. For exact contribution history, see the revision history
-and logs, available at http://jquery-ui.googlecode.com/svn/
+and logs, available at http://github.com/jquery/jquery-ui
 
 Brandon Aaron
 Paul Bakaus (paulbakaus.com)

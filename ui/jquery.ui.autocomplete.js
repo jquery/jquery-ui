@@ -60,15 +60,17 @@ $.widget( "ui.autocomplete", {
 					if ( !self.menu.active ) {
 						return;
 					}
-					self.menu.select();
+					self.menu.select( event );
 					break;
 				case keyCode.ESCAPE:
 					self.element.val( self.term );
 					self.close( event );
 					break;
+				case keyCode.LEFT:
+				case keyCode.RIGHT:
 				case keyCode.SHIFT:
 				case keyCode.CONTROL:
-				case 18:
+				case keyCode.ALT:
 					// ignore metakeys (shift, ctrl, alt)
 					break;
 				default:
@@ -81,6 +83,7 @@ $.widget( "ui.autocomplete", {
 				}
 			})
 			.bind( "focus.autocomplete", function() {
+				self.selectedItem = null;
 				self.previous = self.element.val();
 			})
 			.bind( "blur.autocomplete", function( event ) {
@@ -89,6 +92,7 @@ $.widget( "ui.autocomplete", {
 				// TODO try to implement this without a timeout, see clearTimeout in search()
 				self.closing = setTimeout(function() {
 					self.close( event );
+					self._change( event );
 				}, 150 );
 			});
 		this._initSource();
@@ -102,8 +106,10 @@ $.widget( "ui.autocomplete", {
 				focus: function( event, ui ) {
 					var item = ui.item.data( "item.autocomplete" );
 					if ( false !== self._trigger( "focus", null, { item: item } ) ) {
-						// use value to match what will end up in the input
-						self.element.val( item.value );
+						// use value to match what will end up in the input, if it was a key event
+						if ( /^key/.test(event.originalEvent.type) ) {
+							self.element.val( item.value );
+						}
 					}
 				},
 				selected: function( event, ui ) {
@@ -112,11 +118,13 @@ $.widget( "ui.autocomplete", {
 						self.element.val( item.value );
 					}
 					self.close( event );
-					self.previous = self.element.val();
 					// only trigger when focus was lost (click on menu)
+					var previous = self.previous;
 					if ( self.element[0] !== doc.activeElement ) {
 						self.element.focus();
+						self.previous = previous;
 					}
+					self.selectedItem = item;
 				},
 				blur: function( event, ui ) {
 					if ( self.menu.element.is(":visible") ) {
@@ -136,7 +144,7 @@ $.widget( "ui.autocomplete", {
 
 	destroy: function() {
 		this.element
-			.removeClass( "ui-autocomplete-input ui-widget ui-widget-content" )
+			.removeClass( "ui-autocomplete-input" )
 			.removeAttr( "autocomplete" )
 			.removeAttr( "role" )
 			.removeAttr( "aria-autocomplete" )
@@ -158,11 +166,7 @@ $.widget( "ui.autocomplete", {
 		if ( $.isArray(this.options.source) ) {
 			array = this.options.source;
 			this.source = function( request, response ) {
-				// escape regex characters
-				var matcher = new RegExp( $.ui.autocomplete.escapeRegex(request.term), "i" );
-				response( $.grep( array, function(value) {
-					return matcher.test( value.label || value.value || value );
-				}) );
+				response( $.ui.autocomplete.filter(array, request.term) );
 			};
 		} else if ( typeof this.options.source === "string" ) {
 			url = this.options.source;
@@ -215,8 +219,11 @@ $.widget( "ui.autocomplete", {
 			this.menu.element.hide();
 			this.menu.deactivate();
 		}
+	},
+	
+	_change: function( event ) {
 		if ( this.previous !== this.element.val() ) {
-			this._trigger( "change", event );
+			this._trigger( "change", event, { item: this.selectedItem } );
 		}
 	},
 
@@ -286,7 +293,7 @@ $.widget( "ui.autocomplete", {
 			this.menu.deactivate();
 			return;
 		}
-		this.menu[ direction ]();
+		this.menu[ direction ]( event );
 	},
 
 	widget: function() {
@@ -297,6 +304,12 @@ $.widget( "ui.autocomplete", {
 $.extend( $.ui.autocomplete, {
 	escapeRegex: function( value ) {
 		return value.replace( /([\^\$\(\)\[\]\{\}\*\.\+\?\|\\])/gi, "\\$1" );
+	},
+	filter: function(array, term) {
+		var matcher = new RegExp( $.ui.autocomplete.escapeRegex(term), "i" );
+		return $.grep( array, function(value) {
+			return matcher.test( value.label || value.value || value );
+		});
 	}
 });
 
@@ -330,10 +343,13 @@ $.widget("ui.menu", {
 				role: "listbox",
 				"aria-activedescendant": "ui-active-menuitem"
 			})
-			.click(function(e) {
+			.click(function( event ) {
+				if ( !$( event.target ).closest( ".ui-menu-item a" ).length ) {
+					return;
+				}
 				// temporary
-				e.preventDefault();
-				self.select();
+				event.preventDefault();
+				self.select( event );
 			});
 		this.refresh();
 	},
@@ -350,15 +366,15 @@ $.widget("ui.menu", {
 			.addClass("ui-corner-all")
 			.attr("tabindex", -1)
 			// mouseenter doesn't work with event delegation
-			.mouseenter(function() {
-				self.activate($(this).parent());
+			.mouseenter(function( event ) {
+				self.activate( event, $(this).parent() );
 			})
 			.mouseleave(function() {
 				self.deactivate();
 			});
 	},
 
-	activate: function(item) {
+	activate: function( event, item ) {
 		this.deactivate();
 		if (this.hasScroll()) {
 			var offset = item.offset().top - this.element.offset().top,
@@ -375,7 +391,7 @@ $.widget("ui.menu", {
 				.addClass("ui-state-hover")
 				.attr("id", "ui-active-menuitem")
 			.end();
-		this._trigger("focus", null, { item: item });
+		this._trigger("focus", event, { item: item });
 	},
 
 	deactivate: function() {
@@ -388,12 +404,12 @@ $.widget("ui.menu", {
 		this.active = null;
 	},
 
-	next: function() {
-		this.move("next", "li:first");
+	next: function(event) {
+		this.move("next", ".ui-menu-item:first", event);
 	},
 
-	previous: function() {
-		this.move("prev", "li:last");
+	previous: function(event) {
+		this.move("prev", ".ui-menu-item:last", event);
 	},
 
 	first: function() {
@@ -404,25 +420,25 @@ $.widget("ui.menu", {
 		return this.active && !this.active.next().length;
 	},
 
-	move: function(direction, edge) {
+	move: function(direction, edge, event) {
 		if (!this.active) {
-			this.activate(this.element.children(edge));
+			this.activate(event, this.element.children(edge));
 			return;
 		}
-		var next = this.active[direction]();
+		var next = this.active[direction + "All"](".ui-menu-item").eq(0);
 		if (next.length) {
-			this.activate(next);
+			this.activate(event, next);
 		} else {
-			this.activate(this.element.children(edge));
+			this.activate(event, this.element.children(edge));
 		}
 	},
 
 	// TODO merge with previousPage
-	nextPage: function() {
+	nextPage: function(event) {
 		if (this.hasScroll()) {
 			// TODO merge with no-scroll-else
 			if (!this.active || this.last()) {
-				this.activate(this.element.children(":first"));
+				this.activate(event, this.element.children(":first"));
 				return;
 			}
 			var base = this.active.offset().top,
@@ -437,18 +453,18 @@ $.widget("ui.menu", {
 			if (!result.length) {
 				result = this.element.children(":last");
 			}
-			this.activate(result);
+			this.activate(event, result);
 		} else {
-			this.activate(this.element.children(!this.active || this.last() ? ":first" : ":last"));
+			this.activate(event, this.element.children(!this.active || this.last() ? ":first" : ":last"));
 		}
 	},
 
 	// TODO merge with nextPage
-	previousPage: function() {
+	previousPage: function(event) {
 		if (this.hasScroll()) {
 			// TODO merge with no-scroll-else
 			if (!this.active || this.first()) {
-				this.activate(this.element.children(":last"));
+				this.activate(event, this.element.children(":last"));
 				return;
 			}
 
@@ -464,9 +480,9 @@ $.widget("ui.menu", {
 			if (!result.length) {
 				result = this.element.children(":first");
 			}
-			this.activate(result);
+			this.activate(event, result);
 		} else {
-			this.activate(this.element.children(!this.active || this.first() ? ":last" : ":first"));
+			this.activate(event, this.element.children(!this.active || this.first() ? ":last" : ":first"));
 		}
 	},
 
@@ -474,8 +490,8 @@ $.widget("ui.menu", {
 		return this.element.height() < this.element.attr("scrollHeight");
 	},
 
-	select: function() {
-		this._trigger("selected", null, { item: this.active });
+	select: function( event ) {
+		this._trigger("selected", event, { item: this.active });
 	}
 });
 

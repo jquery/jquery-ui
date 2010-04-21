@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<title>jQuery UI Autocomplete multiple demo</title>
+	<link type="text/css" href="../../themes/base/jquery.ui.all.css" rel="stylesheet" />
+	<script type="text/javascript" src="../../jquery-1.4.2.js"></script>
+	<script type="text/javascript" src="../../ui/jquery.ui.core.js"></script>
+	<script type="text/javascript" src="../../ui/jquery.ui.widget.js"></script>
+	<script type="text/javascript" src="../../ui/jquery.ui.position.js"></script>
+	<script type="text/javascript" src="../../ui/jquery.ui.autocomplete.js"></script>
+	<link type="text/css" href="../demos.css" rel="stylesheet" />
+	<script type="text/javascript">
+	$(function() {
+		function split(val) {
+			return val.split(/,\s*/);
+		}
+		function extractLast(term) {
+			return split(term).pop();
+		}
+		
+		$("#birds").autocomplete({
+			source: function(request, response) {
+				$.getJSON("search.php", {
+					term: extractLast(request.term)
+				}, response);
+			},
+			search: function() {
+				// custom minLength
+				var term = extractLast(this.value);
+				if (term.length < 2) {
+					return false;
+				}
+			},
+			focus: function() {
+				// prevent value inserted on focus
+				return false;
+			},
+			select: function(event, ui) {
+				var terms = split( this.value );
+				// remove the current input
+				terms.pop();
+				// add the selected item
+				terms.push( ui.item.value );
+				// add placeholder to get the comma-and-space at the end
+				terms.push("");
+				this.value = terms.join(", ");
+				return false;
+			}
+		});
+	});
+	</script>
+</head>
+<body>
+
+<div class="demo">
+
+<div class="ui-widget">
+	<label for="birds">Birds: </label>
+	<input id="birds" size="50" />
+</div>
+
+</div><!-- End demo -->
+
+<div class="demo-description">
+<p>
+Usage: Enter at least two characters to get bird name suggestions. Select a value to continue adding more names.
+</p>
+<p>
+This is an example showing how to use the source-option along with some events to enable autocompleting multiple values into a single field.
+</p>
+</div><!-- End demo-description -->
+
+</body>
+</html>

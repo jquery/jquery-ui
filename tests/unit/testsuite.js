@@ -1,6 +1,3 @@
-// FIXME remove this once updated to jQuery core 1.3.3
-var hasDuplicate = false;
-
 function testWidgetDefaults(widget, defaults) {
 	var pluginDefaults = $.extend({},
 		$.ui[widget].prototype.options
@@ -48,5 +45,5 @@ function commonWidgetTests(widget, settings) {
 	if ( !url || url.indexOf("http") !== 0 ) {
 		return;
 	}
-    document.write("<scr" + "ipt src='http://testswarm.com/js/inject.js?" + (new Date).getTime() + "'></scr" + "ipt>");
+    document.write("<scr" + "ipt src='http://swarm.jquery.org/js/inject.js?" + (new Date).getTime() + "'></scr" + "ipt>");
 })();

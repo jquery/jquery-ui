@@ -2,6 +2,8 @@
  * position_core.js
  */
 (function($) {
+	
+module("position");
 
 test('my, at, of', function() {
 	$('#elx').position({
@@ -329,5 +331,23 @@ test("collision: none, with offset", function() {
 		offset: "-2 -3"
 	}, { top: -13, left: -12 }, "left top, negative offset");
 });
+
+//test('bug #5280: consistent results (avoid fractional values)', function() {
+//	var wrapper = $('#bug-5280'),
+//		elem = wrapper.children(),
+//		offset1 = elem.position({
+//			my: 'center',
+//			at: 'center',
+//			of: wrapper,
+//			collision: 'none'
+//		}).offset(),
+//		offset2 = elem.position({
+//			my: 'center',
+//			at: 'center',
+//			of: wrapper,
+//			collision: 'none'
+//		}).offset();
+//	same(offset1, offset2);
+//});
 
 })(jQuery);

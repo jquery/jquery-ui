@@ -70,6 +70,7 @@ $.ui = {
 	},
 
 	keyCode: {
+		ALT: 18,
 		BACKSPACE: 8,
 		CAPS_LOCK: 20,
 		COMMA: 188,
@@ -117,15 +118,13 @@ $.fn.extend({
 	enableSelection: function() {
 		return this
 			.attr('unselectable', 'off')
-			.css('MozUserSelect', '')
-			.unbind('selectstart.ui');
+			.css('MozUserSelect', '');
 	},
 
 	disableSelection: function() {
 		return this
 			.attr('unselectable', 'on')
-			.css('MozUserSelect', 'none')
-			.bind('selectstart.ui', function() { return false; });
+			.css('MozUserSelect', 'none');
 	},
 
 	scrollParent: function() {

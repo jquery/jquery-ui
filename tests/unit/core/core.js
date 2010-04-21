@@ -42,8 +42,8 @@ test('focus', function() {
 	// trigger event handler + callback
 	stop();
 	el.focus(500, function() {
-		start();
 		ok(true, 'callback triggered');
+		start();
 	});
 	other.focus();
 });

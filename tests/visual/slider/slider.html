@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8" />
-	<title>Slider Visual Test Page</title>
-	<link rel="stylesheet" href="../all.css" type="text/css">
+	<title>Slider Visual Test : Default</title>
+	<link rel="stylesheet" href="../visual.css" type="text/css" />
 	<link rel="stylesheet" href="../../../themes/base/jquery.ui.all.css" type="text/css">
 	<script type="text/javascript" src="../../../jquery-1.4.2.js"></script>
 	<script type="text/javascript" src="../../../ui/jquery.ui.core.js"></script>
@@ -13,100 +13,12 @@
 	<script type="text/javascript">
 	$(function() {
 		$("#slider1").slider();
-		$("#slider2").slider({
-			step: 2,
-			start: function(event, ui) {
-				//console.log('start');
-			},
-			slide: function(event, ui) {
-				//console.log('slide');
-				//return (ui.value < 50 || ui.value > 63);
-			},
-			stop: function(event, ui) {
-				//console.log('stop');
-			},
-			change: function(event, ui) {
-				//console.log('change');
-			},
-			values: [10, 50, 90]
-		});
-		$("#slider3").slider({
-			max: 10,
-			orientation: 'vertical',
-			step: 2,
-			value: 3
-		});
-		$("#h-range-true").slider({ orientation: "horizontal", range: true });
-		$("#h-range-max").slider({ orientation: "horizontal", range: 'max' });
-		$("#h-range-min").slider({ orientation: "horizontal", range: 'min' });
-		$("#v-range-true").slider({ orientation: "vertical", range: true });
-		$("#v-range-max").slider({ orientation: "vertical", range: 'max' });
-		$("#v-range-min").slider({ orientation: "vertical", range: 'min' });
 	});
 	</script>
 </head>
-
 <body>
 
-<ul class="plugins">
-
-<li class="plugin" style="padding:1em;">
-	Slider
-	<div id="slider1"></div>
-</li>
-
-<li class="plugin" style="padding:1em;">
-	Slider - values: [10, 50, 90]
-	<div id="slider2">
-		<a id="foo" href="#" class="ui-slider-handle"></a>
-		<a id="bar" href="#" class="ui-slider-handle"></a>
-	</div>
-</li>
-
-<li class="plugin" style="padding:1em;">
-	Slider - orientation: vertical
-	<div id="slider3" style="height:100%;"></div>
-</li>
-
-</ul>
-
-<ul class="plugins">
-
-<li class="plugin" style="padding:1em;">
-	Slider - range: true
-	<div id="h-range-true"></div>
-</li>
-
-<li class="plugin" style="padding:1em;">
-	Slider - range: 'max'
-	<div id="h-range-max"></div>
-</li>
-
-<li class="plugin" style="padding:1em;">
-	Slider - range: 'min'
-	<div id="h-range-min"></div>
-</li>
-
-</ul>
-
-<ul class="plugins">
-
-<li class="plugin" style="padding:1em;">
-	Slider - range: true
-	<div id="v-range-true"></div>
-</li>
-
-<li class="plugin" style="padding:1em;">
-	Slider - range: 'max'
-	<div id="v-range-max"></div>
-</li>
-
-<li class="plugin" style="padding:1em;">
-	Slider - range: 'min'
-	<div id="v-range-min"></div>
-</li>
-
-</ul>
+<div id="slider1"></div>
 
 </body>
 </html>

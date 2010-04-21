@@ -3,15 +3,6 @@
  */
 (function($) {
 
-function state(accordion) {
-	var expected = $.makeArray(arguments).slice(1);
-	var actual = [];
-	$.each(expected, function(i, n) {
-		actual.push( accordion.find(".ui-accordion-content").eq(i).is(":visible") ? 1 : 0 );
-	});
-	same(actual, expected)
-}
-
 module("accordion: methods");
 
 test("init", function() {
@@ -40,21 +31,13 @@ test("init", function() {
 });
 
 test("destroy", function() {
-	$("<div></div>").appendTo('body').accordion().accordion("destroy").remove();
-	ok(true, '.accordion("destroy") called on element');
-
-	$([]).accordion().accordion("destroy").remove();
-	ok(true, '.accordion("destroy") called on empty collection');
-
-	$('<div></div>').accordion().accordion("destroy").remove();
-	ok(true, '.accordion("destroy") called on disconnected DOMElement');
-
-	$('<div></div>').accordion().accordion("destroy").accordion("foo").remove();
-	ok(true, 'arbitrary method called after destroy');
-
-	var expected = $('<div></div>').accordion(),
-		actual = expected.accordion('destroy');
-	equals(actual, expected, 'destroy is chainable');
+	var beforeHtml = $("#list1").find("div").css("font-style", "normal").end().parent().html();
+	var afterHtml = $("#list1").accordion().accordion("destroy").parent().html();
+	// Opera 9 outputs role="" instead of removing the attribute like everyone else
+	if ($.browser.opera) {
+		afterHtml = afterHtml.replace(/ role=""/g, "");
+	}
+	equal( afterHtml, beforeHtml );
 });
 
 test("enable", function() {
@@ -124,8 +107,7 @@ test("activate, string expression", function() {
 	ac.accordion("activate", ":last");
 	state(ac, 0, 0, 1);
 });
-//[ 0, 1, 1 ] result: [ 0, 0, 1 ]
-//[   0,   1,   1] result: [   0,   0,   1]
+
 test("activate, jQuery or DOM element", function() {
 	var ac = $('#list1').accordion({ active: $("#list1 a:last") });
 	state(ac, 0, 0, 1);
@@ -136,24 +118,14 @@ test("activate, jQuery or DOM element", function() {
 });
 
 test("resize", function() {
-	var expected = $('#list1').accordion();
-	
-	var sizes = [];
-	expected.find(".ui-accordion-content").each(function() {
-		sizes.push($(this).outerHeight());
+	var expected = $('#navigation').parent().height(300).end().accordion({
+		fillSpace: true
 	});
+	equalHeights(expected, 246, 258);
 	
-	var actual = expected.accordion('resize');
-	equals(actual, expected, 'resize is chainable');
-	
-	var sizes2 = [];
-	expected.find(".ui-accordion-content").each(function() {
-		sizes2.push($(this).outerHeight());
-	});
-	same(sizes, sizes2);
-	
-	expected.find(".ui-accordion-content:first").height(500)
-	var sizes3 = [];
+	expected.parent().height(500);
+	expected.accordion("resize");
+	equalHeights(expected, 446, 458);
 });
 
 })(jQuery);

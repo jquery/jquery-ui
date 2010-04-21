@@ -1,2 +1,3 @@
 body { font-size: 62.5%; }
-#draggable { width: 100px; height: 100px; background: #abc; }
+#draggable, #resizable { width: 100px; height: 100px; background: #abc; }
+#droppable { width: 100px; height: 100px; background: #cde; }

@@ -11,6 +11,12 @@
 	<script type="text/javascript" src="../../ui/jquery.ui.position.js"></script>
 	<script type="text/javascript" src="../../ui/jquery.ui.autocomplete.js"></script>
 	<link type="text/css" href="../demos.css" rel="stylesheet" />
+	<style type="text/css">
+		/* TODO shouldn't be necessary */
+		.ui-button { margin-left: -1px; }
+		.ui-button-icon-only .ui-button-text { padding: 0.35em; } 
+		.ui-autocomplete-input { margin: 0; padding: 0.48em 0 0.47em 0.45em; }
+	</style>
 	<script type="text/javascript">
 	(function($) {
 		$.widget("ui.combobox", {
@@ -24,24 +30,23 @@
 							var matcher = new RegExp(request.term, "i");
 							response(select.children("option").map(function() {
 								var text = $(this).text();
-								if (!request.term || matcher.test(text))
+								if (this.value && (!request.term || matcher.test(text)))
 									return {
-										id: $(this).val(),
-										label: text.replace(new RegExp("(?![^&;]+;)(?!<[^<>]*)(" + request.term.replace(/([\^\$\(\)\[\]\{\}\*\.\+\?\|\\])/gi, "\\$1") + ")(?![^<>]*>)(?![^&;]+;)", "gi"), "<strong>$1</strong>"),
+										id: this.value,
+										label: text.replace(new RegExp("(?![^&;]+;)(?!<[^<>]*)(" + $.ui.autocomplete.escapeRegex(request.term) + ")(?![^<>]*>)(?![^&;]+;)", "gi"), "<strong>$1</strong>"),
 										value: text
 									};
 							}));
 						},
 						delay: 0,
-						select: function(e, ui) {
+						change: function(event, ui) {
 							if (!ui.item) {
 								// remove invalid value, as it didn't match anything
 								$(this).val("");
 								return false;
 							}
-							$(this).focus();
 							select.val(ui.item.id);
-							self._trigger("selected", null, {
+							self._trigger("selected", event, {
 								item: select.find("[value='" + ui.item.id + "']")
 							});
 							
@@ -50,6 +55,8 @@
 					})
 					.addClass("ui-widget ui-widget-content ui-corner-left");
 				$("<button>&nbsp;</button>")
+				.attr("tabIndex", -1)
+				.attr("title", "Show All Items")
 				.insertAfter(input)
 				.button({
 					icons: {
@@ -58,12 +65,6 @@
 					text: false
 				}).removeClass("ui-corner-all")
 				.addClass("ui-corner-right ui-button-icon")
-				.position({
-					my: "left center",
-					at: "right center",
-					of: input,
-					offset: "-1 0"
-				}).css("top", "")
 				.click(function() {
 					// close if already visible
 					if (input.autocomplete("widget").is(":visible")) {
@@ -80,14 +81,12 @@
 	})(jQuery);
 		
 	$(function() {
-		$("select").combobox();
+		$("#combobox").combobox();
+		$("#toggle").click(function() {
+			$("#combobox").toggle();
+		});
 	});
 	</script>
-	<style>
-		/* TODO shouldn't be necessary */
-		.ui-button-icon-only .ui-button-text { padding: 0.35em; } 
-		.ui-autocomplete-input { padding: 0.48em 0 0.47em 0.45em; }
-	</style>
 </head>
 <body>
 	
@@ -95,7 +94,8 @@
 
 <div class="ui-widget">
 	<label>Your preferred programming language: </label>
-	<select>
+	<select id="combobox">
+		<option value="">Select one...</option>
 		<option value="a">asp</option>
         <option value="c">c</option>
         <option value="cpp">c++</option>
@@ -111,6 +111,7 @@
         <option value="s">scala</option>
 	</select>
 </div>
+<button id="toggle">Show underlying select</button>
 
 </div><!-- End demo -->
 
