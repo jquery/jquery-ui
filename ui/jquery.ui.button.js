@@ -356,7 +356,7 @@ $.widget( "ui.buttonset", {
 			})
 				.removeClass( "ui-corner-left ui-corner-right" )
 			.end()
-			.button( "destroy" )
+			.button( "destroy" );
 
 		$.Widget.prototype.destroy.call( this );
 	}
