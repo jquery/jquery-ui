@@ -305,8 +305,8 @@ $.widget("ui.draggable", $.ui.mouse, {
 		if(this.cssPosition == "relative") {
 			var p = this.element.position();
 			return {
-				top: p.top - (parseInt(this.helper[0].style.top,10) || 0) + this.scrollParent.scrollTop(),
-				left: p.left - (parseInt(this.helper[0].style.left,10) || 0) + this.scrollParent.scrollLeft()
+				top: p.top - (parseInt(this.helper.css("top"),10) || 0) + this.scrollParent.scrollTop(),
+				left: p.left - (parseInt(this.helper.css("left"),10) || 0) + this.scrollParent.scrollLeft()
 			};
 		} else {
 			return { top: 0, left: 0 };
