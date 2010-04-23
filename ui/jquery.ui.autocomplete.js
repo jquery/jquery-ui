@@ -51,6 +51,7 @@ $.widget( "ui.autocomplete", {
 					event.preventDefault();
 					break;
 				case keyCode.ENTER:
+				case keyCode.NUMPAD_ENTER:
 					// when menu is open or has focus
 					if ( self.menu.active ) {
 						event.preventDefault();
@@ -71,6 +72,12 @@ $.widget( "ui.autocomplete", {
 				case keyCode.SHIFT:
 				case keyCode.CONTROL:
 				case keyCode.ALT:
+				case keyCode.COMMAND:
+				case keyCode.COMMAND_RIGHT:
+				case keyCode.INSERT:
+				case keyCode.CAPS_LOCK:
+				case keyCode.END:
+				case keyCode.HOME:
 					// ignore metakeys (shift, ctrl, alt)
 					break;
 				default:
