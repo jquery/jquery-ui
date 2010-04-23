@@ -133,7 +133,9 @@ $.widget("ui.tooltip", {
 		this.tooltip.attr("aria-hidden", "true");
 		
 		if (this.tooltip.is(':animated'))
-				this.tooltip.stop().fadeTo("normal", 0);
+				this.tooltip.stop().fadeTo("normal", 0, function() {
+					$(this).hide().css("opacity", "");
+				});
 			else
 				this.tooltip.stop().fadeOut();
 		
