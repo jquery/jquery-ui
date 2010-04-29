@@ -17,14 +17,12 @@
 	<script type="text/javascript" src="../../ui/jquery.effects.scale.js"></script>
 	<script type="text/javascript" src="../../ui/jquery.effects.shake.js"></script>
 	<script type="text/javascript" src="../../ui/jquery.effects.slide.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.effects.transfer.js"></script>
 	<link type="text/css" href="../demos.css" rel="stylesheet" />
 	<style type="text/css">
 		.toggler { width: 500px; height: 200px; }
 		#button { padding: .5em 1em; text-decoration: none; }
 		#effect { width: 240px; height: 135px; padding: 0.4em; position: relative; }
 		#effect h3 { margin: 0; padding: 0.4em; text-align: center; }
-		.ui-effects-transfer { border: 2px dotted gray; } 
 	</style>
 	<script type="text/javascript">
 	$(function() {
@@ -35,7 +33,7 @@
 			
 			//most effect types need no options passed by default
 			var options = {};
-			//check if it's scale, transfer, or size - they need options explicitly set
+			//check if it's scale or size - they need options explicitly set
 			if(selectedEffect == 'scale'){  options = {percent: 0}; }
 			else if(selectedEffect == 'size'){ options = { to: {width: 200,height: 60} }; }
 			
@@ -79,7 +77,6 @@
 	<option value="shake">Shake</option>
 	<option value="size">Size</option>
 	<option value="slide">Slide</option>
-	<option value="transfer">Transfer</option>
 </select>
 
 <a href="#" id="button" class="ui-state-default ui-corner-all">Run Effect</a>
