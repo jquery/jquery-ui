@@ -12,23 +12,43 @@
 <body>
 	
 <div class="ui-checkbox">
-	<input type="checkbox" id="check1">
+	<div class="ui-checkbox-inputwrapper">
+		<input type="checkbox" id="check1">
+	</div>
 	<label for="check1">Unchecked</label>
+	<div class="ui-checkbox-box ui-widget ui-state-active ui-corner-all">
+		<span class="ui-checkbox-icon"></span>
+	</div>
 </div>
 
 <div class="ui-checkbox">
-	<input type="checkbox" id="check2" checked="checked">
+	<div class="ui-checkbox-inputwrapper">
+		<input type="checkbox" id="check2" checked="checked">
+	</div>
 	<label for="check2">Checked</label>
+	<div class="ui-checkbox-box ui-widget ui-state-active ui-corner-all">
+		<span class="ui-checkbox-icon ui-icon ui-icon-check"></span>
+	</div>
 </div>
 
-<div class="ui-checkbox">
-	<input type="checkbox" id="check3" disabled="disabled">
+<div class="ui-checkbox ui-state-disabled">
+	<div class="ui-checkbox-inputwrapper">
+		<input type="checkbox" id="check3" disabled="disabled">
+	</div>
 	<label for="check3">Disabled</label>
+	<div class="ui-checkbox-box ui-widget ui-state-active ui-corner-all">
+		<span class="ui-checkbox-icon"></span>
+	</div>
 </div>
 
-<div class="ui-checkbox">
-	<input type="checkbox" id="check4" checked="checked" disabled="disabled">
+<div class="ui-checkbox ui-state-disabled">
+	<div class="ui-checkbox-inputwrapper">
+		<input type="checkbox" id="check4" checked="checked" disabled="disabled">
+	</div>
 	<label for="check4">Checked and disabled</label>
+	<div class="ui-checkbox-box ui-widget ui-state-active ui-corner-all">
+		<span class="ui-checkbox-icon ui-icon ui-icon-check"></span>
+	</div>
 </div>
 
 <script type="text/javascript" src="http://jqueryui.com/themeroller/themeswitchertool/"></script>
