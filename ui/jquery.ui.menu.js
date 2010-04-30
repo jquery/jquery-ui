@@ -33,6 +33,11 @@ $.widget("ui.menu", {
 		this.refresh();
 	},
 	
+	destroy: function() {
+		// TODO implement destroy
+		$.Widget.prototype.apply(this, arguments);
+	},
+	
 	refresh: function() {
 		var self = this;
 
