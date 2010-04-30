@@ -31,6 +31,39 @@ $.widget("ui.menu", {
 				self.select( event );
 			});
 		this.refresh();
+		
+		if (!this.options.input) {
+			this.options.input = this.element.attr("tabindex", 0);
+		}
+		this.options.input.bind("keydown.menu", function(event) {
+			switch (event.keyCode) {
+			case $.ui.keyCode.PAGE_UP:
+				self.previousPage();
+				event.preventDefault();
+				event.stopImmediatePropagation();
+				break;
+			case $.ui.keyCode.PAGE_DOWN:
+				self.nextPage();
+				event.preventDefault();
+				event.stopImmediatePropagation();
+				break;
+			case $.ui.keyCode.UP:
+				self.previous();
+				event.preventDefault();
+				event.stopImmediatePropagation();
+				break;
+			case $.ui.keyCode.DOWN:
+				self.next();
+				event.preventDefault();
+				event.stopImmediatePropagation();
+				break;
+			case $.ui.keyCode.ENTER:
+				self.select();
+				event.preventDefault();
+				event.stopImmediatePropagation();
+				break;
+			}
+		});
 	},
 	
 	destroy: function() {

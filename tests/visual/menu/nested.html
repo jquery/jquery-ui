@@ -28,6 +28,8 @@
 				this.element.find("ul").hide().prev("a").prepend('<span class="ui-icon ui-icon-carat-1-e"></span>');	
 				
 				this.element.find("ul").andSelf().menu({
+					// disable built-in key handling
+					input: $(),
 					selected: this.options.selected,
 					focus: function(event, ui) {
 						self.active = ui.item.parent();

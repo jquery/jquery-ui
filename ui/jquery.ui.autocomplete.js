@@ -104,6 +104,8 @@ $.widget( "ui.autocomplete", {
 			.addClass( "ui-autocomplete" )
 			.appendTo( "body", doc )
 			.menu({
+				// custom key handling for now
+				input: $(),
 				focus: function( event, ui ) {
 					var item = ui.item.data( "item.autocomplete" );
 					if ( false !== self._trigger( "focus", null, { item: item } ) ) {
