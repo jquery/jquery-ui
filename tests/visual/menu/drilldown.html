@@ -10,8 +10,15 @@
 	<script type="text/javascript" src="../../../ui/jquery.ui.position.js"></script>
 	<script type="text/javascript" src="../../../ui/jquery.ui.button.js"></script>
 	<script type="text/javascript" src="../../../ui/jquery.ui.menu.js"></script>
+	<script type="text/javascript" src="http://jqueryui.com/themeroller/themeswitchertool/"></script>
 	<script type="text/javascript">
 	$(function() {
+		$.fn.themeswitcher && $('<div/>').css({
+			position: "absolute",
+			right: 10,
+			top: 10
+		}).appendTo(document.body).themeswitcher();
+		
 		$.widget("ui.drilldown", {
 			_init: function() {
 				var self = this;
