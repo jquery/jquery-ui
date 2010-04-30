@@ -18,7 +18,7 @@
 		}).appendTo(document.body).themeswitcher();
 		
 		$("#menu1, #menu2").menu({
-			selected: function(event, ui) {
+			select: function(event, ui) {
 				$("<div/>").text("Selected: " + ui.item.text()).appendTo("#log");
 			}
 		});

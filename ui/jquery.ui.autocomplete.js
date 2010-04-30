@@ -115,7 +115,7 @@ $.widget( "ui.autocomplete", {
 						}
 					}
 				},
-				selected: function( event, ui ) {
+				select: function( event, ui ) {
 					var item = ui.item.data( "item.autocomplete" );
 					if ( false !== self._trigger( "select", event, { item: item } ) ) {
 						self.element.val( item.value );

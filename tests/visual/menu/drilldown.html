@@ -33,7 +33,7 @@
 					focus: function(event, ui) {
 						self.activeItem = ui.item;
 					},
-					selected: function(event, ui) {
+					select: function(event, ui) {
 						if (this != self.active[0]) {
 							return;
 						}
@@ -42,7 +42,7 @@
 							self._open(nested);
 						} else {
 							self.element.find("h3").text(ui.item.text());
-							self.options.selected.apply(this, arguments);
+							self.options.select.apply(this, arguments);
 						}
 					}
 				});
@@ -124,7 +124,7 @@
 		});
 		
 		var drilldown = $("#drilldown").drilldown({
-			selected: function(event, ui) {
+			select: function(event, ui) {
 				$("#log").append("<div>Selected " + ui.item.text() + "</div>");
 			}
 		});

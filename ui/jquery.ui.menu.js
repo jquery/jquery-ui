@@ -208,7 +208,7 @@ $.widget("ui.menu", {
 	},
 
 	select: function( event ) {
-		this._trigger("selected", event, { item: this.active });
+		this._trigger("select", event, { item: this.active });
 	}
 });
 
