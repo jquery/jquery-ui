@@ -59,5 +59,16 @@ test('#4033 - IE expands hash to full url and misinterprets tab as ajax', functi
 	
 });
 
+test('#5069 - ui.tabs.add creates two tab panels when using a full URL', function() {
+	// http://dev.jqueryui.com/ticket/5069
+	expect(2);
+	
+	el = $('#tabs2').tabs();
+	equals(el.children('div').length, el.find('> ul > li').length, 'After creation, number of panels should be equal to number of tabs');
+	el.tabs('add', '/ajax_html_echo', 'Test');
+	equals(el.children('div').length, el.find('> ul > li').length, 'After add, number of panels should be equal to number of tabs');
+	
+});
+
 
 })(jQuery);
