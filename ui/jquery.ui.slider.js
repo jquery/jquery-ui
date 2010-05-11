@@ -181,10 +181,10 @@ $.widget( "ui.slider", $.ui.mouse, {
 						newVal = self._valueMax();
 						break;
 					case $.ui.keyCode.PAGE_UP:
-						newVal = curVal + ( (self._valueMax() - self._valueMin()) / numPages );
+						newVal = self._trimAlignValue( curVal + ( (self._valueMax() - self._valueMin()) / numPages ) );
 						break;
 					case $.ui.keyCode.PAGE_DOWN:
-						newVal = curVal - ( (self._valueMax() - self._valueMin()) / numPages );
+						newVal = self._trimAlignValue( curVal - ( (self._valueMax() - self._valueMin()) / numPages ) );
 						break;
 					case $.ui.keyCode.UP:
 					case $.ui.keyCode.RIGHT:
