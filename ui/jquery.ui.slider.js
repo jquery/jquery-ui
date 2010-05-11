@@ -591,12 +591,12 @@ $.widget( "ui.slider", $.ui.mouse, {
 		if ( val > this._valueMax() ) {
 			return this._valueMax();
 		}
-		var step = this.options.step,
+		var step = ( this.options.step > 0 ) ? this.options.step : 1,
 			valModStep = val % step,
 			alignValue = val - valModStep;
 
-		if ( valModStep >= ( step / 2 ) ) {
-			alignValue += step;
+		if ( Math.abs(valModStep) * 2 >= step ) {
+			alignValue += ( valModStep > 0 ) ? step : ( -step );
 		}
 
 		// Since JavaScript has problems with large floats, round
