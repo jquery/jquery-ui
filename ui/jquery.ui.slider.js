@@ -191,14 +191,14 @@ $.widget( "ui.slider", $.ui.mouse, {
 						if ( curVal === self._valueMax() ) {
 							return;
 						}
-						newVal = curVal + step;
+						newVal = self._trimAlignValue( curVal + step );
 						break;
 					case $.ui.keyCode.DOWN:
 					case $.ui.keyCode.LEFT:
 						if ( curVal === self._valueMin() ) {
 							return;
 						}
-						newVal = curVal - step;
+						newVal = self._trimAlignValue( curVal - step );
 						break;
 				}
 	
