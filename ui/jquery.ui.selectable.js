@@ -121,12 +121,15 @@ $.widget("ui.selectable", $.ui.mouse, {
 		$(event.target).parents().andSelf().each(function() {
 			var selectee = $.data(this, "selectable-item");
 			if (selectee) {
-				selectee.$element.removeClass("ui-unselecting").addClass('ui-selecting');
-				selectee.unselecting = false;
-				selectee.selecting = true;
-				selectee.selected = true;
-				// selectable SELECTING callback
-				self._trigger("selecting", event, {
+				var doSelect = !event.metaKey || !selectee.$element.hasClass('ui-selected');
+				selectee.$element
+					.removeClass(doSelect ? "ui-unselecting" : "ui-selected")
+					.addClass(doSelect ? "ui-selecting" : "ui-unselecting");
+				selectee.unselecting = !doSelect;
+				selectee.selecting = doSelect;
+				selectee.selected = doSelect;
+				// selectable UNSELECTING callback
+				self._trigger(doSelect ? "selecting" : "unselecting", event, {
 					selecting: selectee.element
 				});
 				return false;
