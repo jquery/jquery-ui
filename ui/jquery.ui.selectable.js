@@ -1,3 +1,4 @@
+
 /*
  * jQuery UI Selectable @VERSION
  *
@@ -128,10 +129,16 @@ $.widget("ui.selectable", $.ui.mouse, {
 				selectee.unselecting = !doSelect;
 				selectee.selecting = doSelect;
 				selectee.selected = doSelect;
-				// selectable UNSELECTING callback
-				self._trigger(doSelect ? "selecting" : "unselecting", event, {
-					selecting: selectee.element
-				});
+				// selectable (UN)SELECTING callback
+				if (doSelect) {
+					self._trigger("selecting", event, {
+						selecting: selectee.element
+					});
+				} else {
+					self._trigger("unselecting", event, {
+						unselecting: selectee.element
+					});
+				}
 				return false;
 			}
 		});
