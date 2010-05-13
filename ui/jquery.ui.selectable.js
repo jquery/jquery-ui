@@ -57,7 +57,7 @@ $.widget("ui.selectable", $.ui.mouse, {
 
 		this._mouseInit();
 
-		this.helper = $("<div class='ui-selectable-helper'>");
+		this.helper = $("<div class='ui-selectable-helper'></div>");
 	},
 
 	destroy: function() {
