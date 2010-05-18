@@ -96,7 +96,6 @@ $.widget( "ui.autocomplete", {
 			.bind( "blur.autocomplete", function( event ) {
 				clearTimeout( self.searching );
 				// clicks on the menu (or a button to trigger a search) will cause a blur event
-				// TODO try to implement this without a timeout, see clearTimeout in search()
 				self.closing = setTimeout(function() {
 					self.close( event );
 					self._change( event );
@@ -109,6 +108,13 @@ $.widget( "ui.autocomplete", {
 		this.menu = $( "<ul></ul>" )
 			.addClass( "ui-autocomplete" )
 			.appendTo( "body", doc )
+			// prevent the close-on-blur in case of a "slow" click on the menu (long mousedown)
+			.mousedown(function() {
+				// use another timeout to make sure the blur-event-handler on the input was already triggered
+				setTimeout(function() {
+					clearTimeout( self.closing );
+				}, 13);
+			})
 			.menu({
 				focus: function( event, ui ) {
 					var item = ui.item.data( "item.autocomplete" );
