@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<title>Resizable Visual Test : Resizable ticket #4940</title>
+	<link rel="stylesheet" href="../visual.css" type="text/css" />
+	<link rel="stylesheet" href="../../../themes/base/jquery.ui.all.css" type="text/css" />
+	<script type="text/javascript" src="../../../jquery-1.4.2.js"></script>
+	<script type="text/javascript" src="../../../ui/jquery.ui.core.js"></script>
+	<script type="text/javascript" src="../../../ui/jquery.ui.widget.js"></script>
+	<script type="text/javascript" src="../../../ui/jquery.ui.mouse.js"></script>
+	<script type="text/javascript" src="../../../ui/jquery.ui.draggable.js"></script>
+	<script type="text/javascript" src="../../../ui/jquery.ui.droppable.js"></script>
+	<script type="text/javascript" src="../../../ui/jquery.ui.resizable.js"></script>
+	<script type="text/javascript">
+      $(function() {
+        $('.item.to-be-draggable').draggable({ revert: true });            
+        $('#target').droppable({ accept: '.item', drop: function() { alert('dropped!'); }});            
+        $('.item').resizable({ maxWidth: 500, minHeight: 150, minWidth: 170, maxHeight: 400,handles: 'n,s' });
+		});
+	</script>
+      <style type="text/css">
+          #main { width: 900px; height: 500px; }        
+          #main #sidebar { float: left; width: 200px; height: 100%; background-color: #88f; }
+          #main #sidebar #target { width: 180px; height: 400px; background-color: #f88; margin: 10px; }
+          #main #container { float: left; width: 600px; height: 500px; overflow: scroll;}        
+		  div.item {
+			  width: 170px; 
+			  height: 150px; 
+			  margin: 10px;
+			  border: 1px solid #aaa;
+		  }
+		  #sub {
+			  height: 2000px;
+		  }
+		  .i1 { background-color: #acacac; }
+		  .i2 { background-color: #bcacac; }
+		  .i3 { background-color: #acbcac; }
+		  .i4 { background-color: #acacbc; }
+		  .i5 { background-color: #bcbcac; }
+		  .i6 { background-color: #acbcbc; }
+
+      </style>	
+</head>
+<body>
+
+<h1 class="ui-widget-header"><a href="http://dev.jqueryui.com/ticket/5335">#5335 - Resizable: position set to absolute at end of resize</a></h1>
+  <div id="main">
+          <div id="sidebar"><div id="target">Drop target</div></div>
+		  <div id="container">
+			  <div id="sub">
+				  <table>
+					  <tr><td><div class="item i1 to-be-draggable">Drag item 1 - is draggable </div></td></tr>
+					  <tr><td><div class="item i2">Drag item 2 - is not draggable</div></td></tr>
+				  </table>
+					  <div class="item i3 to-be-draggable">Drag item 3 - is draggable - outside table</div>
+					  <div class="item i4">Drag item 4 - is not draggable - outside table</div>
+			  </div>
+		  </div>
+  </div>
+</body>
+</html>
