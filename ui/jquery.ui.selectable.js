@@ -90,8 +90,6 @@ $.widget("ui.selectable", $.ui.mouse, {
 		$(options.appendTo).append(this.helper);
 		// position helper (lasso)
 		this.helper.css({
-			"z-index": 100,
-			"position": "absolute",
 			"left": event.clientX,
 			"top": event.clientY,
 			"width": 0,
