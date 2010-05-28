@@ -269,11 +269,33 @@
 		<get src="http://docs.jquery.com/action/render/UI/Effects/Size" dest="${docs.dir}effect-size.html" />
 		<get src="http://docs.jquery.com/action/render/UI/Effects/Transfer" dest="${docs.dir}effect-transfer.html" />
 	</target>
-
+	
 	<target name="docs-clean">
 		<delete dir="${docs.dir}" />
 	</target>
 	
+	<target name="themes-download">
+		<!-- to create query strings, execute this in Firebug on /download page:
+		$("select option[value!=none]").map(function() { $(this).parent().val(this.value); return $(this).parents("form").serialize(); }).get().join("\n");
+		-->
+		<loadfile srcFile="theme" property="url" />
+		<!-- downloads just one theme and unzips it -->
+		<mkdir dir="${dist.dir}themes" />
+		<get src="http://ui-dev.jquery.com/download/?${url}" dest="${dist.dir}themes/first.zip" />
+		<unzip src="${dist.dir}themes/first.zip"
+		       dest="${dist.dir}themes/">
+		    <patternset>
+		        <include name="development-bundle/themes/**"/>
+		        <exclude name="development-bundle/themes/base/**"/>
+		    </patternset>
+			<mapper type="glob" from="development-bundle/themes/*" to="*" />
+		</unzip>
+		<delete file="${dist.dir}themes/first.zip" />
+		<!-- need to rename the concatented file, not yet working
+		<copy file="${dist.dir}themes/**/jquery-ui*custom.css" tofile="${dist.dir}themes/**/jquery-ui.css"/>
+		-->
+	</target>
+
 	<target name="whitespace">
 		<replaceregexp match="[\t ]+$" replace="" flags="g" byline="true">
 		    <fileset dir="${src.dir}" includes="*.js"/>
