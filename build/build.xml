@@ -27,7 +27,7 @@
 	<property name="ui.dir" value="../" />
 	<property name="src.dir" value="${ui.dir}/ui/" />
 	<property name="theme.dir" value="${ui.dir}/themes/base/" />
-	<property name="docs.dir" value="${ui.dir}/docs/" />
+	<property name="docs.dir" value="${dist.dir}/docs/" />
 
 	<property name="min.dir" value="${dist.dir}/ui/minified" />
 
@@ -204,10 +204,6 @@
 
 		<copy overwrite="true" todir="${dist.dir}/tests/" >
 			<fileset dir="${ui.dir}/tests/" />
-		</copy>
-
-		<copy overwrite="true" todir="${dist.dir}/docs/" >
-			<fileset dir="${ui.dir}/docs/" />
 		</copy>
 
 		<copy overwrite="true" todir="${dist.dir}/themes/" >
