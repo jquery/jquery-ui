@@ -275,25 +275,32 @@
 	</target>
 	
 	<target name="themes-download">
-		<!-- to create query strings, execute this in Firebug on /download page:
-		$("select option[value!=none]").map(function() { $(this).parent().val(this.value); return $(this).parents("form").serialize(); }).get().join("\n");
+		<!-- to create/update query strings for the theme-file, execute this in Firebug on /download page:
+		$("select option[value!=none]").map(function() { $(this).parent().val(this.value).change(); return $(this).parents("form").serialize(); }).get().join(",");
 		-->
-		<loadfile srcFile="theme" property="url" />
-		<!-- downloads just one theme and unzips it -->
+		<loadfile srcFile="themes" property="urls" />
+		<property name="zip" value="${dist.dir}themes/tmp.zip" />
 		<mkdir dir="${dist.dir}themes" />
-		<get src="http://ui-dev.jquery.com/download/?${url}" dest="${dist.dir}themes/first.zip" />
-		<unzip src="${dist.dir}themes/first.zip"
-		       dest="${dist.dir}themes/">
-		    <patternset>
-		        <include name="development-bundle/themes/**"/>
-		        <exclude name="development-bundle/themes/base/**"/>
-		    </patternset>
-			<mapper type="glob" from="development-bundle/themes/*" to="*" />
-		</unzip>
-		<delete file="${dist.dir}themes/first.zip" />
-		<!-- need to rename the concatented file, not yet working
-		<copy file="${dist.dir}themes/**/jquery-ui*custom.css" tofile="${dist.dir}themes/**/jquery-ui.css"/>
-		-->
+		<for list="${urls}" param="url">
+			<sequential>
+				<get src="http://ui-dev.jquery.com/download/?@{url}" dest="${zip}" />
+				<unzip src="${zip}"
+				       dest="${dist.dir}themes/">
+				    <patternset>
+				        <include name="development-bundle/themes/**"/>
+				        <exclude name="development-bundle/themes/base/**"/>
+				    </patternset>
+					<mapper type="glob" from="development-bundle/themes/*" to="*" />
+				</unzip>
+				<delete file="${zip}" />
+			</sequential>
+		</for>
+		<move todir="${dist.dir}themes/">
+            <fileset dir="${dist.dir}themes/" />
+            <mapper>
+                <mapper type="regexp" from="(.*)jquery-ui-.*custom.css" to="\1jquery-ui.css" />
+            </mapper>
+        </move>
 	</target>
 
 	<target name="whitespace">
