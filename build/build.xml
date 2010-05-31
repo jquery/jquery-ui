@@ -292,11 +292,14 @@
 			</sequential>
 		</for>
 		<move todir="${dist.dir}themes/">
-            <fileset dir="${dist.dir}themes/" />
-            <mapper>
-                <mapper type="regexp" from="(.*)jquery-ui-.*custom.css" to="\1jquery-ui.css" />
-            </mapper>
-        </move>
+			<fileset dir="${dist.dir}themes/" />
+			<mapper>
+				<mapper type="regexp" from="(.*)jquery-ui-.*custom.css" to="\1jquery-ui.css" />
+			</mapper>
+		</move>
+		<zip destfile="${dist.dir}/../${release.filename}-themes.zip">
+			<zipfileset dir="${dist.dir}/" includes="AUTHORS.txt,GPL-LICENSE.txt,MIT-LICENSE.txt,version.txt,themes/**" />
+		</zip>
 	</target>
 
 	<target name="whitespace">
