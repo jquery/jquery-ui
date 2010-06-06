@@ -39,7 +39,19 @@ $.widget("ui.dialog", {
 		minHeight: 150,
 		minWidth: 150,
 		modal: false,
-		position: 'center',
+		position: {
+			my: 'center',
+			at: 'center',
+			of: window,
+			collision: 'fit',
+			// ensure that the titlebar is never outside the document
+			using: function(pos) {
+				var topOffset = $(this).css(pos).offset().top;
+				if (topOffset < 0) {
+					$(this).css('top', pos.top - topOffset);
+				}
+			}
+		},
 		resizable: true,
 		show: null,
 		stack: true,
@@ -449,45 +461,40 @@ $.widget("ui.dialog", {
 		}
 	},
 
+
 	_position: function(position) {
 		var myAt = [],
 			offset = [0, 0],
 			isVisible;
 
-		position = position || $.ui.dialog.prototype.options.position;
+		if (position) {
+			// deep extending converts arrays to objects in jQuery <= 1.3.2 :-(
+	//		if (typeof position == 'string' || $.isArray(position)) {
+	//			myAt = $.isArray(position) ? position : position.split(' ');
 
-		// deep extending converts arrays to objects in jQuery <= 1.3.2 :-(
-//		if (typeof position == 'string' || $.isArray(position)) {
-//			myAt = $.isArray(position) ? position : position.split(' ');
-
-		if (typeof position === 'string' || (typeof position === 'object' && '0' in position)) {
-			myAt = position.split ? position.split(' ') : [position[0], position[1]];
-			if (myAt.length === 1) {
-				myAt[1] = myAt[0];
-			}
-
-			$.each(['left', 'top'], function(i, offsetPosition) {
-				if (+myAt[i] === myAt[i]) {
-					offset[i] = myAt[i];
-					myAt[i] = offsetPosition;
+			if (typeof position === 'string' || (typeof position === 'object' && '0' in position)) {
+				myAt = position.split ? position.split(' ') : [position[0], position[1]];
+				if (myAt.length === 1) {
+					myAt[1] = myAt[0];
 				}
-			});
-		} else if (typeof position === 'object') {
-			if ('left' in position) {
-				myAt[0] = 'left';
-				offset[0] = position.left;
-			} else if ('right' in position) {
-				myAt[0] = 'right';
-				offset[0] = -position.right;
-			}
 
-			if ('top' in position) {
-				myAt[1] = 'top';
-				offset[1] = position.top;
-			} else if ('bottom' in position) {
-				myAt[1] = 'bottom';
-				offset[1] = -position.bottom;
-			}
+				$.each(['left', 'top'], function(i, offsetPosition) {
+					if (+myAt[i] === myAt[i]) {
+						offset[i] = myAt[i];
+						myAt[i] = offsetPosition;
+					}
+				});
+				
+				position = {
+					my: myAt.join(" "),
+					at: myAt.join(" "),
+					offset: offset.join(" ")
+				};
+			} 
+				
+			position = $.extend({}, $.ui.dialog.prototype.options.position, position);
+		} else {
+			position = $.ui.dialog.prototype.options.position;
 		}
 
 		// need to show the dialog to get the actual offset in the position plugin
@@ -498,20 +505,7 @@ $.widget("ui.dialog", {
 		this.uiDialog
 			// workaround for jQuery bug #5781 http://dev.jquery.com/ticket/5781
 			.css({ top: 0, left: 0 })
-			.position({
-				my: myAt.join(' '),
-				at: myAt.join(' '),
-				offset: offset.join(' '),
-				of: window,
-				collision: 'fit',
-				// ensure that the titlebar is never outside the document
-				using: function(pos) {
-					var topOffset = $(this).css(pos).offset().top;
-					if (topOffset < 0) {
-						$(this).css('top', pos.top - topOffset);
-					}
-				}
-			});
+			.position(position);
 		if (!isVisible) {
 			this.uiDialog.hide();
 		}
