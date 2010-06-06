@@ -99,7 +99,10 @@ $.fn.position = function( options ) {
 		var elem = $( this ),
 			elemWidth = elem.outerWidth(),
 			elemHeight = elem.outerHeight(),
-			position = $.extend( {}, basePosition );
+			collisionWidth = elem.outerWidth(true),
+			collisionHeight = elem.outerHeight(true),
+			position = $.extend( {}, basePosition ),
+			collisionPosition;
 
 		if ( options.my[0] === "right" ) {
 			position.left -= elemWidth;
@@ -117,6 +120,16 @@ $.fn.position = function( options ) {
 		position.left = parseInt( position.left );
 		position.top = parseInt( position.top );
 
+		collisionPosition = $.extend( {}, position );
+		var marginLeft = elem.css("margin-left");
+		if (marginLeft && marginLeft !== "auto") {
+			collisionPosition.left -= parseInt(marginLeft);
+		}
+		var marginTop = elem.css("margin-top");
+		if (marginTop && marginTop !== "auto") {
+			collisionPosition.top -= parseInt(marginTop);
+		}
+
 		$.each( [ "left", "top" ], function( i, dir ) {
 			if ( $.ui.position[ collision[i] ] ) {
 				$.ui.position[ collision[i] ][ dir ]( position, {
@@ -124,6 +137,9 @@ $.fn.position = function( options ) {
 					targetHeight: targetHeight,
 					elemWidth: elemWidth,
 					elemHeight: elemHeight,
+					collisionPosition: collisionPosition,
+					collisionWidth: collisionWidth,
+					collisionHeight: collisionHeight,
 					offset: offset,
 					my: options.my,
 					at: options.at
@@ -142,13 +158,13 @@ $.ui.position = {
 	fit: {
 		left: function( position, data ) {
 			var win = $( window ),
-				over = position.left + data.elemWidth - win.width() - win.scrollLeft();
-			position.left = over > 0 ? position.left - over : Math.max( 0, position.left );
+				over = data.collisionPosition.left + data.collisionWidth - win.width() - win.scrollLeft();
+			position.left = over > 0 ? position.left - over : Math.max( position.left - data.collisionPosition.left, position.left );
 		},
 		top: function( position, data ) {
 			var win = $( window ),
-				over = position.top + data.elemHeight - win.height() - win.scrollTop();
-			position.top = over > 0 ? position.top - over : Math.max( 0, position.top );
+				over = data.collisionPosition.top + data.collisionHeight - win.height() - win.scrollTop();
+			position.top = over > 0 ? position.top - over : Math.max( position.top - data.collisionPosition.top, position.top );
 		}
 	},
 
@@ -158,7 +174,7 @@ $.ui.position = {
 				return;
 			}
 			var win = $( window ),
-				over = position.left + data.elemWidth - win.width() - win.scrollLeft(),
+				over = data.collisionPosition.left + data.collisionWidth - win.width() - win.scrollLeft(),
 				myOffset = data.my[ 0 ] === "left" ?
 					-data.elemWidth :
 					data.my[ 0 ] === "right" ?
@@ -168,7 +184,7 @@ $.ui.position = {
 					data.targetWidth :
 					-data.targetWidth,
 				offset = -2 * data.offset[ 0 ];
-			position.left += position.left < 0 ?
+			position.left += data.collisionPosition.left < 0 ?
 				myOffset + atOffset + offset :
 				over > 0 ?
 					myOffset + atOffset + offset :
@@ -179,7 +195,7 @@ $.ui.position = {
 				return;
 			}
 			var win = $( window ),
-				over = position.top + data.elemHeight - win.height() - win.scrollTop(),
+				over = data.collisionPosition.top + data.collisionHeight - win.height() - win.scrollTop(),
 				myOffset = data.my[ 1 ] === "top" ?
 					-data.elemHeight :
 					data.my[ 1 ] === "bottom" ?
@@ -189,7 +205,7 @@ $.ui.position = {
 					data.targetHeight :
 					-data.targetHeight,
 				offset = -2 * data.offset[ 1 ];
-			position.top += position.top < 0 ?
+			position.top += data.collisionPosition.top < 0 ?
 				myOffset + atOffset + offset :
 				over > 0 ?
 					myOffset + atOffset + offset :
