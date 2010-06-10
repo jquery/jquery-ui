@@ -589,7 +589,7 @@ $.ui.plugin.add("resizable", "alsoResize", {
 	stop: function (event, ui) {
 		var self = $(this).data("resizable");
 
-		_reset = function (exp) {
+		var _reset = function (exp) {
 			$(exp).each(function() {
 				var el = $(this);
 				// reset position for Opera - no need to verify it was changed
