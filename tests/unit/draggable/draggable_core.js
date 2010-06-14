@@ -169,4 +169,20 @@ test( "#5009: scroll not working with parent's position fixed", function() {
 	});
 });
 
+test( "#5727: draggable from iframe" , function() {
+	expect( 2 );
+
+	var iframe = $( "<iframe id='iframe-draggable-container' src='about:blank'></iframe>" ).appendTo( "#qunit-fixture" ),
+		iframeBody = iframe.contents().find( "body" ).append(
+			"<div id='iframe-draggable-1' style='background: green; width: 200px; height: 100px;'>Relative</div>"
+		),
+		draggable1 = iframeBody.find( "#iframe-draggable-1" );
+
+	draggable1.draggable();
+
+	equal( draggable1.closest( iframeBody ).length, 1 );
+
+	TestHelpers.draggable.shouldMove( draggable1 );
+});
+
 })( jQuery );

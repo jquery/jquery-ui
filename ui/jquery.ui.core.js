@@ -69,7 +69,7 @@ $.fn.extend({
 			}).eq(0);
 		}
 
-		return (/fixed/).test(this.css("position")) || !scrollParent.length ? $(document) : scrollParent;
+		return ( /fixed/ ).test( this.css( "position") ) || !scrollParent.length ? $( this[ 0 ].ownerDocument || document ) : scrollParent;
 	},
 
 	uniqueId: function() {
