@@ -82,7 +82,7 @@ $.widget("ui.mouse", {
 		this._mouseUpDelegate = function(event) {
 			return self._mouseUp(event);
 		};
-		$(document)
+		$(event.target.ownerDocument)
 			.bind('mousemove.'+this.widgetName, this._mouseMoveDelegate)
 			.bind('mouseup.'+this.widgetName, this._mouseUpDelegate);
 
@@ -116,7 +116,7 @@ $.widget("ui.mouse", {
 	},
 
 	_mouseUp: function(event) {
-		$(document)
+		$(event.target.ownerDocument)
 			.unbind('mousemove.'+this.widgetName, this._mouseMoveDelegate)
 			.unbind('mouseup.'+this.widgetName, this._mouseUpDelegate);
 

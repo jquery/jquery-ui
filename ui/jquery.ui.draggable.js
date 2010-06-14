@@ -284,12 +284,12 @@ $.widget("ui.draggable", $.ui.mouse, {
 		// 1. The position of the helper is absolute, so it's position is calculated based on the next positioned parent
 		// 2. The actual offset parent is a child of the scroll parent, and the scroll parent isn't the document, which means that
 		//    the scroll is included in the initial calculation of the offset of the parent, and never recalculated upon drag
-		if(this.cssPosition == 'absolute' && this.scrollParent[0] != document && $.ui.contains(this.scrollParent[0], this.offsetParent[0])) {
+		if(this.cssPosition == 'absolute' && this.scrollParent[0] != this.element[0].ownerDocument && $.ui.contains(this.scrollParent[0], this.offsetParent[0])) {
 			po.left += this.scrollParent.scrollLeft();
 			po.top += this.scrollParent.scrollTop();
 		}
 
-		if((this.offsetParent[0] == document.body) //This needs to be actually done for all browsers, since pageX/pageY includes this information
+		if((this.offsetParent[0] == this.element[0].ownerDocument.body) //This needs to be actually done for all browsers, since pageX/pageY includes this information
 		|| (this.offsetParent[0].tagName && this.offsetParent[0].tagName.toLowerCase() == 'html' && $.browser.msie)) //Ugly IE fix
 			po = { top: 0, left: 0 };
 
@@ -360,7 +360,7 @@ $.widget("ui.draggable", $.ui.mouse, {
 
 		if(!pos) pos = this.position;
 		var mod = d == "absolute" ? 1 : -1;
-		var o = this.options, scroll = this.cssPosition == 'absolute' && !(this.scrollParent[0] != document && $.ui.contains(this.scrollParent[0], this.offsetParent[0])) ? this.offsetParent : this.scrollParent, scrollIsRootNode = (/(html|body)/i).test(scroll[0].tagName);
+		var o = this.options, scroll = this.cssPosition == 'absolute' && !(this.scrollParent[0] != this.element[0].ownerDocument && $.ui.contains(this.scrollParent[0], this.offsetParent[0])) ? this.offsetParent : this.scrollParent, scrollIsRootNode = (/(html|body)/i).test(scroll[0].tagName);
 
 		return {
 			top: (
@@ -381,7 +381,7 @@ $.widget("ui.draggable", $.ui.mouse, {
 
 	_generatePosition: function(event) {
 
-		var o = this.options, scroll = this.cssPosition == 'absolute' && !(this.scrollParent[0] != document && $.ui.contains(this.scrollParent[0], this.offsetParent[0])) ? this.offsetParent : this.scrollParent, scrollIsRootNode = (/(html|body)/i).test(scroll[0].tagName);
+		var o = this.options, scroll = this.cssPosition == 'absolute' && !(this.scrollParent[0] !=  this.element[0].ownerDocument && $.ui.contains(this.scrollParent[0], this.offsetParent[0])) ? this.offsetParent : this.scrollParent, scrollIsRootNode = (/(html|body)/i).test(scroll[0].tagName);
 		var pageX = event.pageX;
 		var pageY = event.pageY;
 
@@ -647,13 +647,13 @@ $.ui.plugin.add("draggable", "opacity", {
 $.ui.plugin.add("draggable", "scroll", {
 	start: function(event, ui) {
 		var i = $(this).data("draggable");
-		if(i.scrollParent[0] != document && i.scrollParent[0].tagName != 'HTML') i.overflowOffset = i.scrollParent.offset();
+		if(i.scrollParent[0] != i.element[0].ownerDocument && i.scrollParent[0].tagName != 'HTML') i.overflowOffset = i.scrollParent.offset();
 	},
 	drag: function(event, ui) {
 
-		var i = $(this).data("draggable"), o = i.options, scrolled = false;
+		var i = $(this).data("draggable"), o = i.options, scrolled = false, doc = i.element[0].ownerDocument;
 
-		if(i.scrollParent[0] != document && i.scrollParent[0].tagName != 'HTML') {
+		if(i.scrollParent[0] != doc && i.scrollParent[0].tagName != 'HTML') {
 
 			if(!o.axis || o.axis != 'x') {
 				if((i.overflowOffset.top + i.scrollParent[0].offsetHeight) - event.pageY < o.scrollSensitivity)
@@ -672,17 +672,17 @@ $.ui.plugin.add("draggable", "scroll", {
 		} else {
 
 			if(!o.axis || o.axis != 'x') {
-				if(event.pageY - $(document).scrollTop() < o.scrollSensitivity)
-					scrolled = $(document).scrollTop($(document).scrollTop() - o.scrollSpeed);
-				else if($(window).height() - (event.pageY - $(document).scrollTop()) < o.scrollSensitivity)
-					scrolled = $(document).scrollTop($(document).scrollTop() + o.scrollSpeed);
+				if(event.pageY - $(doc).scrollTop() < o.scrollSensitivity)
+					scrolled = $(doc).scrollTop($(doc).scrollTop() - o.scrollSpeed);
+				else if($(window).height() - (event.pageY - $(doc).scrollTop()) < o.scrollSensitivity)
+					scrolled = $(doc).scrollTop($(doc).scrollTop() + o.scrollSpeed);
 			}
 
 			if(!o.axis || o.axis != 'y') {
-				if(event.pageX - $(document).scrollLeft() < o.scrollSensitivity)
-					scrolled = $(document).scrollLeft($(document).scrollLeft() - o.scrollSpeed);
-				else if($(window).width() - (event.pageX - $(document).scrollLeft()) < o.scrollSensitivity)
-					scrolled = $(document).scrollLeft($(document).scrollLeft() + o.scrollSpeed);
+				if(event.pageX - $(doc).scrollLeft() < o.scrollSensitivity)
+					scrolled = $(doc).scrollLeft($(doc).scrollLeft() - o.scrollSpeed);
+				else if($(window).width() - (event.pageX - $(doc).scrollLeft()) < o.scrollSensitivity)
+					scrolled = $(doc).scrollLeft($(doc).scrollLeft() + o.scrollSpeed);
 			}
 
 		}
