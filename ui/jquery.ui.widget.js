@@ -148,7 +148,7 @@ $.Widget.prototype = {
 	_init: function() {},
 	
 	_super: function( method ) {
-		this.base[ method ].apply( this, $.makeArray( arguments ).slice( 1 ) );
+		this.base[ method ].apply( this, Array.prototype.slice.call( arguments, 1 ) );
 	},
 	
 	destroy: function() {
