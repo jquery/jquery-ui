@@ -226,7 +226,7 @@ $.widget( "ui.button", {
 			this.buttonElement.removeAttr( "title" );
 		}
 
-		$.Widget.prototype.destroy.call( this );
+		this._super( "destroy" );
 	},
 
 	_setOption: function( key, value ) {
@@ -358,7 +358,7 @@ $.widget( "ui.buttonset", {
 			.end()
 			.button( "destroy" );
 
-		$.Widget.prototype.destroy.call( this );
+		this._super( "destroy" );
 	}
 });
 

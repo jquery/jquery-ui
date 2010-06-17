@@ -165,4 +165,21 @@ test(".widget() - overriden", function() {
 	same(wrapper[0], $("<div></div>").testWidget().testWidget("widget")[0]);
 });
 
+test("_super", function() {
+	expect(2);
+	$.widget("sup.parent", {
+		log: function() {
+			ok( this.called );
+		}
+	});
+	$.widget("sup.child", $.sup.parent, {
+		log: function() {
+			this.called = true;
+			ok( true );
+			this._super("log");
+		}
+	});
+	$("<div></div>").child().child("log");
+});
+
 })(jQuery);

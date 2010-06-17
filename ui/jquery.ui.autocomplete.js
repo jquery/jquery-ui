@@ -163,7 +163,7 @@ $.widget( "ui.autocomplete", {
 			.removeAttr( "aria-autocomplete" )
 			.removeAttr( "aria-haspopup" );
 		this.menu.element.remove();
-		$.Widget.prototype.destroy.call( this );
+		this._super( "destroy" );
 	},
 
 	_setOption: function( key ) {
