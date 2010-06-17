@@ -511,7 +511,7 @@ $.widget( "ui.slider", $.ui.mouse, {
 			valsLength = this.options.values.length;
 		}
 
-		$.Widget.prototype._setOption.apply( this, arguments );
+		this._superApply( "_setOption", arguments );
 
 		switch ( key ) {
 			case "disabled":

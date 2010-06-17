@@ -167,7 +167,7 @@ $.widget( "ui.autocomplete", {
 	},
 
 	_setOption: function( key ) {
-		$.Widget.prototype._setOption.apply( this, arguments );
+		this._superApply( "_setOption", arguments );
 		if ( key === "source" ) {
 			this._initSource();
 		}

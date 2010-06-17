@@ -81,7 +81,7 @@ $.widget("ui.sortable", $.ui.mouse, {
 				[ value ? "addClass" : "removeClass"]( "ui-sortable-disabled" );
 		} else {
 			// Don't call widget base _setOption for disable as it adds ui-state-disabled class
-			$.Widget.prototype._setOption.apply(this, arguments);
+			this._superApply( "_setOption", arguments );
 		}
 	},
 

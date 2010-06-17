@@ -182,4 +182,20 @@ test("_super", function() {
 	$("<div></div>").child().child("log");
 });
 
+test("_superApply", function() {
+	expect(2);
+	$.widget("sup.parent", {
+		log: function(a, b) {
+			same( a, 1 );
+			same( b, 2 );
+		}
+	});
+	$.widget("sup.child", $.sup.parent, {
+		log: function() {
+			this._superApply("log", arguments);
+		}
+	});
+	$("<div></div>").child().child("log", 1, 2);
+});
+
 })(jQuery);
