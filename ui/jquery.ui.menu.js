@@ -22,7 +22,7 @@ $.widget("ui.menu", {
 				role: "listbox",
 				"aria-activedescendant": "ui-active-menuitem"
 			})
-			.click(function( event ) {
+			.bind("click.menu", function( event ) {
 				if (self.options.disabled) {
 					return false;
 				}
@@ -36,7 +36,7 @@ $.widget("ui.menu", {
 		this.refresh();
 		
 		if (!this.options.input) {
-			this.options.input = this.element.attr("tabindex", 0);
+			this.options.input = this.element.attr("tabIndex", 0);
 		}
 		this.options.input.bind("keydown.menu", function(event) {
 			if (self.options.disabled) {
@@ -77,7 +77,7 @@ $.widget("ui.menu", {
 		
 		this.element
 			.removeClass("ui-menu ui-widget ui-widget-content ui-corner-all")
-			.removeAttr("tabindex")
+			.removeAttr("tabIndex")
 			.removeAttr("role")
 			.removeAttr("aria-activedescendant");
 		
@@ -86,7 +86,7 @@ $.widget("ui.menu", {
 			.removeAttr("role")
 			.children("a")
 			.removeClass("ui-corner-all")
-			.removeAttr("tabindex")
+			.removeAttr("tabIndex")
 			.unbind(".menu");
 	},
 	
@@ -100,7 +100,7 @@ $.widget("ui.menu", {
 		
 		items.children("a")
 			.addClass("ui-corner-all")
-			.attr("tabindex", -1)
+			.attr("tabIndex", -1)
 			// mouseenter doesn't work with event delegation
 			.bind("mouseenter.menu", function( event ) {
 				if (self.options.disabled) {
