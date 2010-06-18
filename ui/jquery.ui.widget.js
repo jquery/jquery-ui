@@ -148,11 +148,11 @@ $.Widget.prototype = {
 	_init: function() {},
 	
 	_super: function( method ) {
-		this.base[ method ].apply( this, Array.prototype.slice.call( arguments, 1 ) );
+		return this.base[ method ].apply( this, Array.prototype.slice.call( arguments, 1 ) );
 	},
 	
 	_superApply: function( method, args ) {
-		this.base[ method ].apply( this, args );
+		return this.base[ method ].apply( this, args );
 	},
 	
 	destroy: function() {
