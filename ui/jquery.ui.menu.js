@@ -23,6 +23,9 @@ $.widget("ui.menu", {
 				"aria-activedescendant": "ui-active-menuitem"
 			})
 			.click(function( event ) {
+				if (self.options.disabled) {
+					return false;
+				}
 				if ( !$( event.target ).closest( ".ui-menu-item a" ).length ) {
 					return;
 				}
@@ -36,6 +39,9 @@ $.widget("ui.menu", {
 			this.options.input = this.element.attr("tabindex", 0);
 		}
 		this.options.input.bind("keydown.menu", function(event) {
+			if (self.options.disabled) {
+				return;
+			}
 			switch (event.keyCode) {
 			case $.ui.keyCode.PAGE_UP:
 				self.previousPage();
@@ -67,8 +73,21 @@ $.widget("ui.menu", {
 	},
 	
 	destroy: function() {
-		// TODO implement destroy
-		$.Widget.prototype.apply(this, arguments);
+		$.Widget.prototype.destroy.apply(this, arguments);
+		
+		this.element
+			.removeClass("ui-menu ui-widget ui-widget-content ui-corner-all")
+			.removeAttr("tabindex")
+			.removeAttr("role")
+			.removeAttr("aria-activedescendant");
+		
+		this.element.children(".ui-menu-item")
+			.removeClass("ui-menu-item")
+			.removeAttr("role")
+			.children("a")
+			.removeClass("ui-corner-all")
+			.removeAttr("tabindex")
+			.unbind(".menu");
 	},
 	
 	refresh: function() {
@@ -83,10 +102,16 @@ $.widget("ui.menu", {
 			.addClass("ui-corner-all")
 			.attr("tabindex", -1)
 			// mouseenter doesn't work with event delegation
-			.mouseenter(function( event ) {
+			.bind("mouseenter.menu", function( event ) {
+				if (self.options.disabled) {
+					return;
+				}
 				self.activate( event, $(this).parent() );
 			})
-			.mouseleave(function() {
+			.bind("mouseleave.menu", function() {
+				if (self.options.disabled) {
+					return;
+				}
 				self.deactivate();
 			});
 	},

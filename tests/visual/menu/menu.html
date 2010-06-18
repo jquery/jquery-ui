@@ -17,12 +17,25 @@
 			top: 10
 		}).appendTo(document.body).themeswitcher();
 		
-		$("#menu1, #menu2").menu({
-			select: function(event, ui) {
-				$("<div/>").text("Selected: " + ui.item.text()).appendTo("#log");
-			}
-		});
+		function create() {
+			menus.menu({
+				select: function(event, ui) {
+					$("<div/>").text("Selected: " + ui.item.text()).appendTo("#log");
+				}
+			});
+		}
+		
+		var menus = $("#menu1, #menu2");
+		create();
 
+		$("#toggle-destroy").toggle(function() {
+			menus.menu("destroy");
+		}, create);
+		$("#toggle-disable").toggle(function() {
+			menus.menu("disable");
+		}, function() {
+			menus.menu("enable");
+		});
 	});
 	</script>
 	<style>
@@ -86,6 +99,9 @@
 	Log:
 	<div id="log" style="height: 400px; width: 300px; overflow: auto;" class="ui-widget-content"></div>
 </div>
+
+<button id="toggle-disable">Disable / Enable</button>
+<button id="toggle-destroy">Destroy / Create</button>
 
 </body>
 </html>
