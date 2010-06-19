@@ -9,10 +9,16 @@
 	<script type="text/javascript" src="../../ui/jquery.ui.position.js"></script>
 	<script type="text/javascript" src="../../ui/jquery.ui.widget.js"></script>
 	<script type="text/javascript" src="../../ui/jquery.ui.menu.js"></script>
+	<script type="text/javascript" src="../../ui/jquery.ui.button.js"></script>
 	<link type="text/css" href="../demos.css" rel="stylesheet" />
 	<script type="text/javascript">
 	$(function() {
-		$("button").each(function() {
+		$(".demo button").button({
+			icons: {
+				primary: "ui-icon-home",
+				secondary: "ui-icon-triangle-1-s"
+			}
+		}).each(function() {
 			$(this).next().menu({
 				select: function(event, ui) {
 					$(this).hide();
