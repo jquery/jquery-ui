@@ -147,11 +147,11 @@ $.widget("ui.menu", {
 	},
 
 	next: function(event) {
-		this.move("next", ".ui-menu-item:first", event);
+		this._move("next", ".ui-menu-item:first", event);
 	},
 
 	previous: function(event) {
-		this.move("prev", ".ui-menu-item:last", event);
+		this._move("prev", ".ui-menu-item:last", event);
 	},
 
 	first: function() {
@@ -162,7 +162,7 @@ $.widget("ui.menu", {
 		return this.active && !this.active.next().length;
 	},
 
-	move: function(direction, edge, event) {
+	_move: function(direction, edge, event) {
 		if (!this.active) {
 			this.activate(event, this.element.children(edge));
 			return;
