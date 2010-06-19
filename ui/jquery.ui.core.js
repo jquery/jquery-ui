@@ -7,10 +7,19 @@
  *
  * http://docs.jquery.com/UI
  */
-;jQuery.ui || (function($) {
+
+(function($) {
+
+// prevent duplicate loading
+// this is only a problem because we proxy existing functions
+// and we don't want to double proxy them
+$.ui = $.ui || {};
+if ($.ui.version) {
+	return;
+}
 
 //Helper functions and ui object
-$.ui = {
+$.extend($.ui, {
 	version: "@VERSION",
 
 	// $.ui.plugin is deprecated.  Use the proxy pattern instead.
@@ -103,7 +112,7 @@ $.ui = {
 		UP: 38,
 		WINDOWS: 91 // COMMAND
 	}
-};
+});
 
 //jQuery plugins
 $.fn.extend({

@@ -14,7 +14,7 @@ jQuery(function($){
 		dayNamesShort: ['Nie','Pn','Wt','Śr','Czw','Pt','So'],
 		dayNamesMin: ['N','Pn','Wt','Śr','Cz','Pt','So'],
 		weekHeader: 'Tydz',
-		dateFormat: 'yy-mm-dd',
+		dateFormat: 'dd.mm.yy',
 		firstDay: 1,
 		isRTL: false,
 		showMonthAfterYear: false,

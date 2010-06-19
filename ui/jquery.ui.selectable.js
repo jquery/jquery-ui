@@ -1,3 +1,4 @@
+
 /*
  * jQuery UI Selectable @VERSION
  *
@@ -56,9 +57,7 @@ $.widget("ui.selectable", $.ui.mouse, {
 
 		this._mouseInit();
 
-		this.helper = $(document.createElement('div'))
-			.css({border:'1px dotted black'})
-			.addClass("ui-selectable-helper");
+		this.helper = $("<div class='ui-selectable-helper'></div>");
 	},
 
 	destroy: function() {
@@ -91,8 +90,6 @@ $.widget("ui.selectable", $.ui.mouse, {
 		$(options.appendTo).append(this.helper);
 		// position helper (lasso)
 		this.helper.css({
-			"z-index": 100,
-			"position": "absolute",
 			"left": event.clientX,
 			"top": event.clientY,
 			"width": 0,
@@ -121,14 +118,23 @@ $.widget("ui.selectable", $.ui.mouse, {
 		$(event.target).parents().andSelf().each(function() {
 			var selectee = $.data(this, "selectable-item");
 			if (selectee) {
-				selectee.$element.removeClass("ui-unselecting").addClass('ui-selecting');
-				selectee.unselecting = false;
-				selectee.selecting = true;
-				selectee.selected = true;
-				// selectable SELECTING callback
-				self._trigger("selecting", event, {
-					selecting: selectee.element
-				});
+				var doSelect = !event.metaKey || !selectee.$element.hasClass('ui-selected');
+				selectee.$element
+					.removeClass(doSelect ? "ui-unselecting" : "ui-selected")
+					.addClass(doSelect ? "ui-selecting" : "ui-unselecting");
+				selectee.unselecting = !doSelect;
+				selectee.selecting = doSelect;
+				selectee.selected = doSelect;
+				// selectable (UN)SELECTING callback
+				if (doSelect) {
+					self._trigger("selecting", event, {
+						selecting: selectee.element
+					});
+				} else {
+					self._trigger("unselecting", event, {
+						unselecting: selectee.element
+					});
+				}
 				return false;
 			}
 		});

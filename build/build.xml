@@ -27,7 +27,7 @@
 	<property name="ui.dir" value="../" />
 	<property name="src.dir" value="${ui.dir}/ui/" />
 	<property name="theme.dir" value="${ui.dir}/themes/base/" />
-	<property name="docs.dir" value="${ui.dir}/docs/" />
+	<property name="docs.dir" value="${dist.dir}/docs/" />
 
 	<property name="min.dir" value="${dist.dir}/ui/minified" />
 
@@ -206,10 +206,6 @@
 			<fileset dir="${ui.dir}/tests/" />
 		</copy>
 
-		<copy overwrite="true" todir="${dist.dir}/docs/" >
-			<fileset dir="${ui.dir}/docs/" />
-		</copy>
-
 		<copy overwrite="true" todir="${dist.dir}/themes/" >
 			<fileset dir="${ui.dir}/themes/" />
 		</copy>
@@ -270,11 +266,43 @@
 		<get src="http://docs.jquery.com/action/render/UI/Effects/Size" dest="${docs.dir}effect-size.html" />
 		<get src="http://docs.jquery.com/action/render/UI/Effects/Transfer" dest="${docs.dir}effect-transfer.html" />
 	</target>
-
+	
 	<target name="docs-clean">
 		<delete dir="${docs.dir}" />
 	</target>
 	
+	<target name="themes-download">
+		<!-- to create/update query strings for the theme-file, execute this in Firebug on /download page:
+		$("select option[value!=none]").map(function() { $(this).parent().val(this.value).change(); return $(this).parents("form").serialize(); }).get().join(",");
+		-->
+		<loadfile srcFile="themes" property="urls" />
+		<property name="zip" value="${dist.dir}themes/tmp.zip" />
+		<mkdir dir="${dist.dir}themes" />
+		<for list="${urls}" param="url">
+			<sequential>
+				<get src="http://ui-dev.jquery.com/download/?@{url}" dest="${zip}" />
+				<unzip src="${zip}"
+				       dest="${dist.dir}themes/">
+				    <patternset>
+				        <include name="development-bundle/themes/**"/>
+				        <exclude name="development-bundle/themes/base/**"/>
+				    </patternset>
+					<mapper type="glob" from="development-bundle/themes/*" to="*" />
+				</unzip>
+				<delete file="${zip}" />
+			</sequential>
+		</for>
+		<move todir="${dist.dir}themes/">
+			<fileset dir="${dist.dir}themes/" />
+			<mapper>
+				<mapper type="regexp" from="(.*)jquery-ui-.*custom.css" to="\1jquery-ui.css" />
+			</mapper>
+		</move>
+		<zip destfile="${dist.dir}/../${release.filename}-themes.zip">
+			<zipfileset dir="${dist.dir}/" includes="AUTHORS.txt,GPL-LICENSE.txt,MIT-LICENSE.txt,version.txt,themes/**" />
+		</zip>
+	</target>
+
 	<target name="whitespace">
 		<replaceregexp match="[\t ]+$" replace="" flags="g" byline="true">
 		    <fileset dir="${src.dir}" includes="*.js"/>
