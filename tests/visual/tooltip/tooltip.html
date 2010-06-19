@@ -55,18 +55,25 @@
 				tooltipClass: "ui-state-highlight"
 			});
 			
-			$("#button1").button().tooltip();
+			var positionOnTop = {
+				position: {
+					my: "center bottom",
+					at: "center top",
+					offset: "0 -5"
+				}
+			};
+			$("#button1").button().tooltip(positionOnTop);
 			$("#button2").button({
 				icons: {
 					primary: "ui-icon-wrench"
 				}
-			}).tooltip();
-			$("#button3").button({
+			}).tooltip(positionOnTop);
+			$("#button3, #button4").button({
 				icons: {
 					primary: "ui-icon-wrench"
 				},
 				text: false
-			}).tooltip();
+			}).tooltip(positionOnTop);
 		}
 		enable();
 		
@@ -136,7 +143,8 @@
 	
 	<button id="button1" title="Button Tooltip">Button Label</button>
 	<button id="button2" title="Icon Button">Button with Icon</button>
-	<button id="button3">Icon Only Button</button>
+	<button id="button3">Icon Only Button 1</button>
+	<button id="button4">Icon Only Button 2</button>
 	
 	<div id="footnote">This is <strong>the</strong> footnote, including other elements</div>
 	
@@ -144,6 +152,7 @@
 	<button id="toggle">Toggle widget</button>
 </div>
 
+<div style="height: 2000px"></div>
 
 </body>
 </html>
