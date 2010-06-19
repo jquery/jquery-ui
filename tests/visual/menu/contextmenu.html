@@ -8,7 +8,7 @@
 	<script type="text/javascript" src="../../../ui/jquery.ui.core.js"></script>
 	<script type="text/javascript" src="../../../ui/jquery.ui.widget.js"></script>
 	<script type="text/javascript" src="../../../ui/jquery.ui.position.js"></script>
-	<script type="text/javascript" src="../../../ui/jquery.ui.autocomplete.js"></script>
+	<script type="text/javascript" src="../../../ui/jquery.ui.menu.js"></script>
 	<script type="text/javascript" src="http://jqueryui.com/themeroller/themeswitchertool/"></script>
 	<script type="text/javascript">
 	$(function() {
@@ -18,23 +18,24 @@
 			top: 10
 		}).appendTo(document.body).themeswitcher();
 		
-		var menus = $("#menu1, #menu2").menu({
-			selected: function(event, ui) {
-				$("#log").append("<div>Selected " + ui.item.text() + "</div>");
-			}
-		}).hide();
-		
-		
-		$("button").click(function(event) {
+		$("button").each(function() {
+			$(this).next().menu({
+				selected: function(event, ui) {
+					$(this).hide();
+					$("#log").append("<div>Selected " + ui.item.text() + "</div>");
+				},
+				input: $(this)
+			}).hide();
+		}).click(function(event) {
 			// TODO required to prevent the click handler below from handling this event
 			event.stopPropagation();
-			$("#menu" + this.id).menu("deactivate").show().position({
+			var menu = $("#menu" + this.id).menu("deactivate").show().position({
 				my: "left top",
 				at: "right top",
 				of: event.pageX > 0 ? event : this
 			});
 			$(document).one("click", function() {
-				menus.hide();
+				menu.hide();
 			})
 		}).keydown(function(event) {
 			var menu = $("#menu" + this.id).data("menu");
@@ -42,24 +43,8 @@
 				return;
 			event.stopPropagation();
 			switch (event.keyCode) {
-			case $.ui.keyCode.PAGE_UP:
-				menu.previousPage();
-				break;
-			case $.ui.keyCode.PAGE_DOWN:
-				menu.nextPage();
-				break;
-			case $.ui.keyCode.UP:
-				menu.previous();
-				break;
-			case $.ui.keyCode.DOWN:
-				menu.next();
-				event.preventDefault();
-				break;
-			case $.ui.keyCode.ENTER:
 			case $.ui.keyCode.TAB:
-				menu.select();
 				menu.widget().hide();
-				event.preventDefault();
 				break;
 			case $.ui.keyCode.ESCAPE:
 				menu.widget().hide();
@@ -86,7 +71,7 @@
 					});
 				}
 				if (match.length) {
-					menu.activate(match);
+					menu.activate(event, match);
 					if (match.length > 1) {
 						menu.previousFilter = character;
 						menu.filterTimer = setTimeout(function() {
@@ -111,7 +96,6 @@
 <body>
 	
 <button id="1">Show context menu 1</button>
-
 <ul id="menu1">
 	<li><a href="#">Amsterdam</a></li>
 	<li><a href="#">Anaheim</a></li>
@@ -123,6 +107,12 @@
 	<li><a href="#">Zurich</a></li>
 </ul>
 
+<div class="ui-widget" style="margin-top:2em; font-family:Arial">
+	Log:
+	<div id="log" style="height: 400px; width: 300px; overflow: auto;" class="ui-widget-content"></div>
+</div>
+
+<button id="2">Show context menu 2</button>
 <ul id="menu2">
 	<li><a href="#">Aberdeen</a></li>
 	<li><a href="#">Ada</a></li>
@@ -163,13 +153,6 @@
 	<li><a href="#">Amelia</a></li>
 	<li><a href="#">Amesville</a></li>
 </ul>
-
-<div class="ui-widget" style="margin-top:2em; font-family:Arial">
-	Log:
-	<div id="log" style="height: 400px; width: 300px; overflow: auto;" class="ui-widget-content"></div>
-</div>
-
-<button id="2">Show context menu 2</button>
 
 </body>
 </html>
