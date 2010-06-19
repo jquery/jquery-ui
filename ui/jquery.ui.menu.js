@@ -118,7 +118,7 @@ $.widget("ui.menu", {
 
 	activate: function( event, item ) {
 		this.deactivate();
-		if (this.hasScroll()) {
+		if (this._hasScroll()) {
 			var offset = item.offset().top - this.element.offset().top,
 				scroll = this.element.attr("scrollTop"),
 				elementHeight = this.element.height();
@@ -177,7 +177,7 @@ $.widget("ui.menu", {
 
 	// TODO merge with previousPage
 	nextPage: function(event) {
-		if (this.hasScroll()) {
+		if (this._hasScroll()) {
 			// TODO merge with no-scroll-else
 			if (!this.active || this.last()) {
 				this.activate(event, this.element.children(":first"));
@@ -203,7 +203,7 @@ $.widget("ui.menu", {
 
 	// TODO merge with nextPage
 	previousPage: function(event) {
-		if (this.hasScroll()) {
+		if (this._hasScroll()) {
 			// TODO merge with no-scroll-else
 			if (!this.active || this.first()) {
 				this.activate(event, this.element.children(":last"));
@@ -228,7 +228,7 @@ $.widget("ui.menu", {
 		}
 	},
 
-	hasScroll: function() {
+	_hasScroll: function() {
 		return this.element.height() < this.element.attr("scrollHeight");
 	},
 
