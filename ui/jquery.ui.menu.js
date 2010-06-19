@@ -155,11 +155,11 @@ $.widget("ui.menu", {
 	},
 
 	first: function() {
-		return this.active && !this.active.prev().length;
+		return this.active && !this.active.prevAll(".ui-menu-item").length;
 	},
 
 	last: function() {
-		return this.active && !this.active.next().length;
+		return this.active && !this.active.nextAll(".ui-menu-item").length;
 	},
 
 	_move: function(direction, edge, event) {
