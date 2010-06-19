@@ -62,7 +62,8 @@ $.widget = function( name, base, prototype ) {
 		namespace: namespace,
 		widgetName: name,
 		widgetEventPrefix: $[ namespace ][ name ].prototype.widgetEventPrefix || name,
-		widgetBaseClass: fullName
+		widgetBaseClass: fullName,
+		base: base.prototype
 	}, prototype );
 
 	$.widget.bridge( name, $[ namespace ][ name ] );
@@ -145,7 +146,15 @@ $.Widget.prototype = {
 	},
 	_create: function() {},
 	_init: function() {},
-
+	
+	_super: function( method ) {
+		return this.base[ method ].apply( this, Array.prototype.slice.call( arguments, 1 ) );
+	},
+	
+	_superApply: function( method, args ) {
+		return this.base[ method ].apply( this, args );
+	},
+	
 	destroy: function() {
 		this.element
 			.unbind( "." + this.widgetName )

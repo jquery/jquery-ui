@@ -43,7 +43,7 @@ $.widget( "ui.progressbar", {
 
 		this.valueDiv.remove();
 
-		$.Widget.prototype.destroy.apply( this, arguments );
+		this._superApply( "destroy", arguments );
 	},
 
 	value: function( newValue ) {
@@ -64,7 +64,7 @@ $.widget( "ui.progressbar", {
 				break;
 		}
 
-		$.Widget.prototype._setOption.apply( this, arguments );
+		this._superApply( "_setOption", arguments );
 	},
 
 	_value: function() {

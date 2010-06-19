@@ -226,11 +226,11 @@ $.widget( "ui.button", {
 			this.buttonElement.removeAttr( "title" );
 		}
 
-		$.Widget.prototype.destroy.call( this );
+		this._super( "destroy" );
 	},
 
 	_setOption: function( key, value ) {
-		$.Widget.prototype._setOption.apply( this, arguments );
+		this._superApply( "_setOption", arguments );
 		if ( key === "disabled" ) {
 			if ( value ) {
 				this.element.attr( "disabled", true );
@@ -324,7 +324,7 @@ $.widget( "ui.buttonset", {
 			this.buttons.button( "option", key, value );
 		}
 
-		$.Widget.prototype._setOption.apply( this, arguments );
+		this._superApply( "_setOption", arguments );
 	},
 	
 	refresh: function() {
@@ -358,7 +358,7 @@ $.widget( "ui.buttonset", {
 			.end()
 			.button( "destroy" );
 
-		$.Widget.prototype.destroy.call( this );
+		this._super( "destroy" );
 	}
 });
 

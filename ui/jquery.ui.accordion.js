@@ -151,7 +151,7 @@ $.widget("ui.accordion", {
 	},
 	
 	_setOption: function(key, value) {
-		$.Widget.prototype._setOption.apply(this, arguments);
+		this._superApply( "_setOption", arguments );
 			
 		if (key == "active") {
 			this.activate(value);
