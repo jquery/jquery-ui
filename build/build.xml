@@ -297,8 +297,11 @@
 				<mapper type="regexp" from="(.*)jquery-ui-.*custom.css" to="\1jquery-ui.css" />
 			</mapper>
 		</move>
+		<copy todir="dist/${release.filename}-themes">
+			<fileset dir="${dist.dir}/" includes="AUTHORS.txt,GPL-LICENSE.txt,MIT-LICENSE.txt,version.txt,themes/**" />
+		</copy>
 		<zip destfile="${dist.dir}/../${release.filename}-themes.zip">
-			<zipfileset dir="${dist.dir}/" includes="AUTHORS.txt,GPL-LICENSE.txt,MIT-LICENSE.txt,version.txt,themes/**" />
+			<zipfileset dir="dist/" includes="${release.filename}-themes/" />
 		</zip>
 	</target>
 
@@ -342,7 +345,7 @@
 		</for>
 		<delete dir="${cdndist.dir}" includes="**/*.MD5" />
 		<zip destfile="${dist.dir}/../${release.filename}-googlecdn.zip">
-			<zipfileset dir="${cdndist.dir}/" />
+			<zipfileset dir="dist/" includes="${release.filename}-googlecdn/" />
 		</zip>
     </target>
 
