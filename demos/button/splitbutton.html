@@ -8,6 +8,8 @@
 	<script type="text/javascript" src="../../ui/jquery.ui.core.js"></script>
 	<script type="text/javascript" src="../../ui/jquery.ui.widget.js"></script>
 	<script type="text/javascript" src="../../ui/jquery.ui.button.js"></script>
+	<script type="text/javascript" src="../../ui/jquery.ui.position.js"></script>
+	<script type="text/javascript" src="../../ui/jquery.ui.menu.js"></script>
 	<link type="text/css" href="../demos.css" rel="stylesheet" />
 	<script type="text/javascript">
 	$(function() {
@@ -24,14 +26,25 @@
 				}
 			})
 			.click( function() {
-				alert( "Could display a menu to select an action" );
+				var menu = $(this).parent().next().show().position({
+					my: "left top",
+					at: "left bottom",
+					of: this
+				});
+				$(document).one("click", function() {
+					menu.hide();
+				});
+				return false;
 			})
 		.parent()
-			.buttonset();
+			.buttonset()
+		.next()
+			.hide()
+			.menu();
 	});
 	</script>
 	<style>
-		
+		.ui-menu { position: absolute; width: 100px; }
 	</style>
 </head>
 <body>
@@ -39,8 +52,15 @@
 <div class="demo">
 
 	<div>
-		<button id="rerun">Run last action</button>
-		<button id="select">Select an action</button>
+		<div>
+			<button id="rerun">Run last action</button>
+			<button id="select">Select an action</button>
+		</div>
+		<ul>
+			<li><a href="#">Open...</a></li>
+			<li><a href="#">Save</a></li>
+			<li><a href="#">Delete</a></li>
+		</ul>
 	</div>
 
 </div><!-- End demo -->
@@ -49,7 +69,7 @@
 
 <div class="demo-description">
 
-<p>An example of a split button built with two buttons: A plan button with just text, one with only a primary icon
+<p>An example of a split button built with two buttons: A plain button with just text, one with only a primary icon
 and no text. Both are grouped together in a set.</p>
 
 </div><!-- End demo-description -->
