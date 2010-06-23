@@ -39,6 +39,13 @@
 				// add placeholder to get the comma-and-space at the end
 				terms.push("");
 				this.value = terms.join(", ");
+				if ( document.selection ) {
+					this.focus();
+					var range = document.selection.createRange();
+					range.moveStart( 'character', this.value.length );
+					range.moveEnd( 'character', 0 );
+					range.select();
+				}
 				return false;
 			}
 		});
