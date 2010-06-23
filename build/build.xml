@@ -297,11 +297,11 @@
 				<mapper type="regexp" from="(.*)jquery-ui-.*custom.css" to="\1jquery-ui.css" />
 			</mapper>
 		</move>
-		<copy todir="dist/${release.filename}-themes">
+		<copy todir="dist/jquery-ui-themes-${release.version}">
 			<fileset dir="${dist.dir}/" includes="AUTHORS.txt,GPL-LICENSE.txt,MIT-LICENSE.txt,version.txt,themes/**" />
 		</copy>
-		<zip destfile="${dist.dir}/../${release.filename}-themes.zip">
-			<zipfileset dir="dist/" includes="${release.filename}-themes/" />
+		<zip destfile="${dist.dir}/../jquery-ui-themes-${release.version}.zip">
+			<zipfileset dir="dist/" includes="jquery-ui-themes-${release.version}/" />
 		</zip>
 	</target>
 
