@@ -39,7 +39,7 @@
 
 	<property description="Google Closure" name="closure-jar" value="${build.dir}/google-compiler-20091218.jar" />
 	
-	<target name="deploy-release" depends="clean, docs-download, concatenate, minify, copy, replace-version, prepend-header, zip, googlecdn" description="Release builder">
+	<target name="deploy-release" depends="clean, docs-download, concatenate, minify, copy, replace-version, prepend-header, zip" description="Release builder">
 	</target>
 	
 	<target name="replace-version">
