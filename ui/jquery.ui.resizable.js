@@ -587,7 +587,7 @@ $.ui.plugin.add("resizable", "alsoResize", {
 	},
 
 	stop: function (event, ui) {
-		var self = $(this).data("resizable");
+		var self = $(this).data("resizable"), o = self.options;
 
 		var _reset = function (exp) {
 			$(exp).each(function() {
