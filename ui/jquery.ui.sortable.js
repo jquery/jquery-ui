@@ -409,6 +409,10 @@ $.widget("ui.sortable", $.ui.mouse, {
 			if(res) str.push((o.key || res[1]+'[]')+'='+(o.key && o.expression ? res[1] : res[2]));
 		});
 
+		if(!str.length && o.key) {
+			str.push(o.key + '=');
+		}
+
 		return str.join('&');
 
 	},
