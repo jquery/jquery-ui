@@ -310,7 +310,6 @@ $.widget( "ui.slider", $.ui.mouse, {
 				( parseInt( closestHandle.css("marginTop"), 10 ) || 0)
 		};
 
-		normValue = this._normValueFromMouse( position );
 		this._slide( event, index, normValue );
 		this._animateOff = true;
 		return true;
