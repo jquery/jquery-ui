@@ -7,7 +7,6 @@
  *
  * http://docs.jquery.com/UI
  */
-
 (function($) {
 
 // prevent duplicate loading

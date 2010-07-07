@@ -1,4 +1,3 @@
-
 /*
  * jQuery UI Selectable @VERSION
  *
