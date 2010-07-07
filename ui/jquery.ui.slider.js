@@ -12,7 +12,6 @@
  *	jquery.ui.mouse.js
  *	jquery.ui.widget.js
  */
-
 (function( $ ) {
 
 // number of pages in a slider
