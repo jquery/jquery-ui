@@ -24,6 +24,7 @@
 				var self = this;
 				var select = this.element.hide();
 				var input = $("<input>")
+					.attr('value', $(select).children('option:selected').html())
 					.insertAfter(select)
 					.autocomplete({
 						source: function(request, response) {
