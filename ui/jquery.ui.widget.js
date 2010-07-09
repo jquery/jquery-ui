@@ -15,7 +15,7 @@ $.fn.remove = function( selector, keepData ) {
 	return this.each(function() {
 		if ( !keepData ) {
 			if ( !selector || $.filter( selector, [ this ] ).length ) {
-				$( "*", this ).add( this ).each(function() {
+				$( "*", this ).add( [ this ] ).each(function() {
 					$( this ).triggerHandler( "remove" );
 				});
 			}
