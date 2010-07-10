@@ -528,6 +528,7 @@ $.widget("ui.dialog", {
 				break;
 			case "buttons":
 				self._createButtons(value);
+				resize = true;
 				break;
 			case "closeText":
 				// convert whatever was passed in to a string, for text() to not throw up
