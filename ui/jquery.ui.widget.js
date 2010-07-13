@@ -7,7 +7,7 @@
  *
  * http://docs.jquery.com/UI/Widget
  */
-(function( $ ) {
+(function( $, undefined ) {
 
 var _remove = $.fn.remove;
 

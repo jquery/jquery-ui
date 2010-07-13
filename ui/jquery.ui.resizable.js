@@ -12,7 +12,7 @@
  *	jquery.ui.mouse.js
  *	jquery.ui.widget.js
  */
-(function($) {
+(function( $, undefined ) {
 
 $.widget("ui.resizable", $.ui.mouse, {
 	widgetEventPrefix: "resize",

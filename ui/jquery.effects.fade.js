@@ -10,7 +10,7 @@
  * Depends:
  *	jquery.effects.core.js
  */
-(function($) {
+(function( $, undefined ) {
 
 $.effects.fade = function(o) {
 	return this.queue(function() {

@@ -12,7 +12,7 @@
  *	jquery.ui.mouse.js
  *	jquery.ui.widget.js
  */
-(function( $ ) {
+(function( $, undefined ) {
 
 // number of pages in a slider
 // (how many times can you page up/down to go through the whole range)

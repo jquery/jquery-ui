@@ -13,7 +13,7 @@
  *	jquery.ui.mouse.js
  *	jquery.ui.draggable.js
  */
-(function($) {
+(function( $, undefined ) {
 
 $.widget("ui.droppable", {
 	widgetEventPrefix: "drop",

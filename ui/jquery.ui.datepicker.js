@@ -10,7 +10,7 @@
  * Depends:
  *	jquery.ui.core.js
  */
-(function($) { // hide the namespace
+(function( $, undefined ) {
 
 $.extend($.ui, { datepicker: { version: "@VERSION" } });
 

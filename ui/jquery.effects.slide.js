@@ -10,7 +10,7 @@
  * Depends:
  *	jquery.effects.core.js
  */
-(function($) {
+(function( $, undefined ) {
 
 $.effects.slide = function(o) {
 

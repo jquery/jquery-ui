@@ -7,7 +7,7 @@
  *
  * http://docs.jquery.com/UI/Position
  */
-(function( $ ) {
+(function( $, undefined ) {
 
 $.ui = $.ui || {};
 

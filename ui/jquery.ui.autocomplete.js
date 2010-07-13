@@ -12,7 +12,7 @@
  *	jquery.ui.widget.js
  *	jquery.ui.position.js
  */
-(function( $ ) {
+(function( $, undefined ) {
 
 $.widget( "ui.autocomplete", {
 	options: {

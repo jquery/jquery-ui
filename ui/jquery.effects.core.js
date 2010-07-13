@@ -7,7 +7,7 @@
  *
  * http://docs.jquery.com/UI/Effects/
  */
-;jQuery.effects || (function($) {
+;jQuery.effects || (function($, undefined) {
 
 $.effects = {};
 
