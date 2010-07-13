@@ -42,11 +42,24 @@ $.widget("ui.accordion", {
 		// in lack of child-selectors in CSS we need to mark top-LIs in a UL-accordion for some IE-fix
 		this.element.children("li").addClass("ui-accordion-li-fix");
 
-		this.headers = this.element.find(o.header).addClass("ui-accordion-header ui-helper-reset ui-state-default ui-corner-all")
-			.bind("mouseenter.accordion", function(){ $(this).addClass('ui-state-hover'); })
-			.bind("mouseleave.accordion", function(){ $(this).removeClass('ui-state-hover'); })
-			.bind("focus.accordion", function(){ $(this).addClass('ui-state-focus'); })
-			.bind("blur.accordion", function(){ $(this).removeClass('ui-state-focus'); });
+		this.headers = this.element.find(o.header)
+			.addClass("ui-accordion-header ui-helper-reset ui-state-default ui-corner-all")
+			.bind("mouseenter.accordion", function() {
+				if (o.disabled) { return; }
+				$(this).addClass('ui-state-hover');
+			})
+			.bind("mouseleave.accordion", function() {
+				if (o.disabled) { return; }
+				$(this).removeClass('ui-state-hover');
+			})
+			.bind("focus.accordion", function() {
+				if (o.disabled) { return; }
+				$(this).addClass('ui-state-focus');
+			})
+			.bind("blur.accordion", function() {
+				if (o.disabled) { return; }
+				$(this).removeClass('ui-state-focus');
+			});
 
 		this.headers
 			.next()
