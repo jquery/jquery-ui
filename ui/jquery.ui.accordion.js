@@ -236,7 +236,7 @@ $.widget("ui.accordion", {
 		} else if ( o.autoHeight ) {
 			maxHeight = 0;
 			this.headers.next().each(function() {
-				maxHeight = Math.max(maxHeight, $(this).height());
+				maxHeight = Math.max(maxHeight, $(this).height("").height());
 			}).height(maxHeight);
 		}
 
