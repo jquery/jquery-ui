@@ -53,7 +53,7 @@ $.widget("ui.accordion", {
 				.addClass("ui-accordion-content ui-helper-reset ui-widget-content ui-corner-bottom");
 
 		if ( o.navigation ) {
-			var current = this.element.find("a").filter(o.navigationFilter);
+			var current = this.element.find("a").filter(o.navigationFilter).eq(0);
 			if ( current.length ) {
 				var header = current.closest(".ui-accordion-header");
 				if ( header.length ) {
