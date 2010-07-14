@@ -49,6 +49,10 @@ $.widget("ui.dialog", {
 	},
 	_create: function() {
 		this.originalTitle = this.element.attr('title');
+		// #5742 - .attr() might return a DOMElement
+		if ( typeof this.originalTitle !== "string" ) {
+			this.originalTitle = "";
+		}
 
 		var self = this,
 			options = self.options,
