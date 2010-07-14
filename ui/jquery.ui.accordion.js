@@ -117,7 +117,7 @@ $.widget("ui.accordion", {
 			this.headers.find('a').attr('tabIndex','-1');
 
 		if (o.event) {
-			this.headers.bind((o.event) + ".accordion", function(event) {
+			this.headers.bind(o.event.split(" ").join(".accordion ") + ".accordion", function(event) {
 				self._clickHandler.call(self, event, this);
 				event.preventDefault();
 			});
