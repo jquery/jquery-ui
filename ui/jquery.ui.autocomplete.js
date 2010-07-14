@@ -1,7 +1,7 @@
 /*
  * jQuery UI Autocomplete @VERSION
  *
- * Copyright 2010, AUTHORS.txt
+ * Copyright 2010, AUTHORS.txt (http://jqueryui.com/about)
  * Dual licensed under the MIT or GPL Version 2 licenses.
  * http://jquery.org/license
  *
@@ -335,7 +335,7 @@ $.extend( $.ui.autocomplete, {
  * it for the next release. You're welcome to give it a try anyway and give us feedback,
  * as long as you're okay with migrating your code later on. We can help with that, too.
  *
- * Copyright 2010, AUTHORS.txt
+ * Copyright 2010, AUTHORS.txt (http://jqueryui.com/about)
  * Dual licensed under the MIT or GPL Version 2 licenses.
  * http://jquery.org/license
  *
