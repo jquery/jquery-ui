@@ -452,11 +452,11 @@ $.extend($.ui.accordion, {
 				duration: 300
 			}, options, additions);
 			if ( !options.toHide.size() ) {
-				options.toShow.animate({height: "show"}, options);
+				options.toShow.animate({height: "show", paddingTop: "show", paddingBottom: "show"}, options);
 				return;
 			}
 			if ( !options.toShow.size() ) {
-				options.toHide.animate({height: "hide"}, options);
+				options.toHide.animate({height: "hide", paddingTop: "hide", paddingBottom: "hide"}, options);
 				return;
 			}
 			var overflow = options.toShow.css('overflow'),
