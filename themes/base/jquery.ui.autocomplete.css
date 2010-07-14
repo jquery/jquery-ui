@@ -1,13 +1,27 @@
-/* Autocomplete
-----------------------------------*/
+/*
+ * jQuery UI Autocomplete @VERSION
+ *
+ * Copyright 2010, AUTHORS.txt (http://jqueryui.com/about)
+ * Dual licensed under the MIT or GPL Version 2 licenses.
+ * http://jquery.org/license
+ *
+ * http://docs.jquery.com/UI/Autocomplete#theming
+ */
 .ui-autocomplete { position: absolute; cursor: default; }	
 .ui-autocomplete-loading { background: white url('images/ui-anim_basic_16x16.gif') right center no-repeat; }
 
 /* workarounds */
 * html .ui-autocomplete { width:1px; } /* without this, the menu expands to 100% in IE6 */
 
-/* Menu
-----------------------------------*/
+/*
+ * jQuery UI Menu @VERSION
+ *
+ * Copyright 2010, AUTHORS.txt (http://jqueryui.com/about)
+ * Dual licensed under the MIT or GPL Version 2 licenses.
+ * http://jquery.org/license
+ *
+ * http://docs.jquery.com/UI/Menu#theming
+ */
 .ui-menu {
 	list-style:none;
 	padding: 2px;
