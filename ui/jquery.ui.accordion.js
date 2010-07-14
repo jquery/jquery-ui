@@ -144,23 +144,21 @@ $.widget("ui.accordion", {
 
 		this.element
 			.removeClass("ui-accordion ui-widget ui-helper-reset")
-			.removeAttr("role")
-			.unbind('.accordion')
-			.removeData('accordion');
+			.removeAttr("role");
 
 		this.headers
 			.unbind(".accordion")
-			.removeClass("ui-accordion-header ui-helper-reset ui-state-default ui-corner-all ui-state-active ui-corner-top")
+			.removeClass("ui-accordion-header ui-accordion-disabled ui-helper-reset ui-state-default ui-corner-all ui-state-active ui-state-disabled ui-corner-top")
 			.removeAttr("role").removeAttr("aria-expanded").removeAttr("tabIndex");
 
 		this.headers.find("a").removeAttr("tabIndex");
 		this._destroyIcons();
-		var contents = this.headers.next().css("display", "").removeAttr("role").removeClass("ui-helper-reset ui-widget-content ui-corner-bottom ui-accordion-content ui-accordion-content-active");
+		var contents = this.headers.next().css("display", "").removeAttr("role").removeClass("ui-helper-reset ui-widget-content ui-corner-bottom ui-accordion-content ui-accordion-content-active ui-accordion-disabled ui-state-disabled");
 		if (o.autoHeight || o.fillHeight) {
 			contents.css("height", "");
 		}
 
-		return this;
+		return $.Widget.prototype.destroy.call( this );
 	},
 	
 	_setOption: function(key, value) {
@@ -175,7 +173,13 @@ $.widget("ui.accordion", {
 				this._createIcons();
 			}
 		}
-		
+		// #5332 - opacity doesn't cascade to positioned elements in IE
+		// so we need to add the disabled class to the headers and panels
+		if (key == "disabled") {
+			this.headers.add(this.headers.next())
+				[ value ? "addClass" : "removeClass"](
+					"ui-accordion-disabled ui-state-disabled" );
+		}
 	},
 
 	_keydown: function(event) {
