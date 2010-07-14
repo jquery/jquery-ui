@@ -17,7 +17,19 @@ var dialog_defaults = {
 	minHeight: 150,
 	minWidth: 150,
 	modal: false,
-	position: 'center',
+	position: {
+		my: 'center',
+		at: 'center',
+		of: window,
+		collision: 'fit',
+		// ensure that the titlebar is never outside the document
+		using: function(pos) {
+			var topOffset = $(this).css(pos).offset().top;
+			if (topOffset < 0) {
+				$(this).css('top', pos.top - topOffset);
+			}
+		}
+	},
 	resizable: true,
 	show: null,
 	stack: true,
