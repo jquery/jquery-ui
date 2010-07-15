@@ -22,13 +22,7 @@ var dialog_defaults = {
 		at: 'center',
 		of: window,
 		collision: 'fit',
-		// ensure that the titlebar is never outside the document
-		using: function(pos) {
-			var topOffset = $(this).css(pos).offset().top;
-			if (topOffset < 0) {
-				$(this).css('top', pos.top - topOffset);
-			}
-		}
+		using: $.ui.dialog.prototype.options.position.using
 	},
 	resizable: true,
 	show: null,
