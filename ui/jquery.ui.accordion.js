@@ -129,7 +129,7 @@ $.widget("ui.accordion", {
 		var o = this.options;
 		if (o.icons) {
 			$("<span/>").addClass("ui-icon " + o.icons.header).prependTo(this.headers);
-			this.active.find(".ui-icon").toggleClass(o.icons.header).toggleClass(o.icons.headerSelected);
+			this.active.children(".ui-icon").toggleClass(o.icons.header).toggleClass(o.icons.headerSelected);
 			this.element.addClass("ui-accordion-icons");
 		}
 	},
@@ -279,7 +279,7 @@ $.widget("ui.accordion", {
 			if (!o.collapsible)
 				return;
 			this.active.removeClass("ui-state-active ui-corner-top").addClass("ui-state-default ui-corner-all")
-				.find(".ui-icon").removeClass(o.icons.headerSelected).addClass(o.icons.header);
+				.children(".ui-icon").removeClass(o.icons.headerSelected).addClass(o.icons.header);
 			this.active.next().addClass('ui-accordion-content-active');
 			var toHide = this.active.next(),
 				data = {
@@ -309,10 +309,10 @@ $.widget("ui.accordion", {
 
 		// switch classes
 		this.active.removeClass("ui-state-active ui-corner-top").addClass("ui-state-default ui-corner-all")
-			.find(".ui-icon").removeClass(o.icons.headerSelected).addClass(o.icons.header);
+			.children(".ui-icon").removeClass(o.icons.headerSelected).addClass(o.icons.header);
 		if (!clickedIsActive) {
 			clicked.removeClass("ui-state-default ui-corner-all").addClass("ui-state-active ui-corner-top")
-				.find(".ui-icon").removeClass(o.icons.header).addClass(o.icons.headerSelected);
+				.children(".ui-icon").removeClass(o.icons.header).addClass(o.icons.headerSelected);
 			clicked.next().addClass('ui-accordion-content-active');
 		}
 
