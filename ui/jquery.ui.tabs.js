@@ -579,13 +579,9 @@ $.widget("ui.tabs", {
 
 	select: function(index) {
 		index = this._getIndex(index);
-		else if (index === null) { // usage of null is deprecated, TODO remove in next release
-			index = -1;
-		}
-		if (index == -1 && this.options.collapsible) {
+		if (isNaN(index) && this.options.collapsible) {
 			index = this.options.selected;
 		}
-
 		this.anchors.eq(index).trigger(this.options.event + '.tabs');
 		return this;
 	},
