@@ -413,6 +413,20 @@ $.widget("ui.tabs", {
 
 	},
 
+    _getIndex: function(index) {
+		// meta-function to give users option to provide a href string instead of a numerical index.
+		// also sanitizes numerical indexes to valid values.
+		if (typeof(index) == 'string') {
+			index = this.anchors.index(this.anchors.filter('[href$=' + index + ']'));
+			index = (index ==-1?NaN:index);
+		}else if (typeof(index) != 'number') {
+			index = NaN;
+		}else if (index > this.anchors.length) {
+			index = this.anchors.length;
+		}
+		return index;
+	},
+
 	destroy: function() {
 		var o = this.options;
 
@@ -512,6 +526,7 @@ $.widget("ui.tabs", {
 	},
 
 	remove: function(index) {
+		index = this._getIndex(index);
 		var o = this.options, $li = this.lis.eq(index).remove(),
 			$panel = this.panels.eq(index).remove();
 
@@ -532,6 +547,7 @@ $.widget("ui.tabs", {
 	},
 
 	enable: function(index) {
+		index = this._getIndex(index);
 		var o = this.options;
 		if ($.inArray(index, o.disabled) == -1) {
 			return;
@@ -546,6 +562,7 @@ $.widget("ui.tabs", {
 	},
 
 	disable: function(index) {
+		index = this._getIndex(index);
 		var self = this, o = this.options;
 		if (index != o.selected) { // cannot disable already selected tab
 			this.lis.eq(index).addClass('ui-state-disabled');
@@ -561,9 +578,7 @@ $.widget("ui.tabs", {
 	},
 
 	select: function(index) {
-		if (typeof index == 'string') {
-			index = this.anchors.index(this.anchors.filter('[href$=' + index + ']'));
-		}
+		index = this._getIndex(index);
 		else if (index === null) { // usage of null is deprecated, TODO remove in next release
 			index = -1;
 		}
@@ -576,6 +591,7 @@ $.widget("ui.tabs", {
 	},
 
 	load: function(index) {
+		index = this._getIndex(index);
 		var self = this, o = this.options, a = this.anchors.eq(index)[0], url = $.data(a, 'load.tabs');
 
 		this.abort();
