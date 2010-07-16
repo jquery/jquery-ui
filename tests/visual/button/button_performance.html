@@ -19,7 +19,7 @@
 		var start = +new Date();
 		$("button").button();
 		var end = +new Date();
-		alert( "Time to initialize: " + (end - start)  + "ms" );
+		$("<p></p>").text( "Time to initialize: " + (end - start)  + "ms" ).prependTo("body");
 	});
 	</script>
 </head>
