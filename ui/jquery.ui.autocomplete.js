@@ -276,9 +276,13 @@ $.widget( "ui.autocomplete", {
 			collision: "none"
 		});
 
-		menuWidth = ul.width( "" ).width();
-		textWidth = this.element.width();
-		ul.width( Math.max( menuWidth, textWidth ) );
+		menuWidth = ul.width( "" ).outerWidth();
+		textWidth = this.element.outerWidth();
+		ul.width( Math.max( menuWidth, textWidth )
+			- ( parseFloat( ul.css("paddingLeft") ) || 0 )
+			- ( parseFloat( ul.css("paddingRight") ) || 0 )
+			- ( parseFloat( ul.css("borderLeftWidth") ) || 0 )
+			- ( parseFloat( ul.css("borderRightWidth") ) || 0 ) );
 	},
 	
 	_renderMenu: function( ul, items ) {
