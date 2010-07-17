@@ -575,8 +575,12 @@ $.widget("ui.tabs", {
 
 	select: function(index) {
 		index = this._getIndex(index);
-		if (index == -1 && this.options.collapsible) {
-			index = this.options.selected;
+		if (index == -1) {
+			if (this.options.collapsible && this.options.selected != -1) {
+				index = this.options.selected;
+			} else {
+				return this;
+			}
 		}
 		this.anchors.eq(index).trigger(this.options.event + '.tabs');
 		return this;
