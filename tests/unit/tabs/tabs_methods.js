@@ -97,7 +97,7 @@ test('remove', function() {
 });
 
 test('select', function() {
-	expect(9);
+	expect(6);
 
 	el = $('#tabs1').tabs();
 
@@ -115,19 +115,10 @@ test('select', function() {
 	equals(el.tabs('option', 'selected'), -1, 'should collapse tab passing in -1');
 
 	el.tabs('destroy');
-	el.tabs({ collapsible: true });
-	el.tabs('select', null);
-	equals(el.tabs('option', 'selected'), -1, 'should collapse tab passing in null (deprecated)');
-	el.tabs('select', null);
-	equals(el.tabs('option', 'selected'), -1, 'should not select tab passing in null a second time (deprecated)');
-
-	el.tabs('destroy');
 	el.tabs();
 	el.tabs('select', 0);
 	equals(el.tabs('option', 'selected'), 0, 'should not collapse tab if collapsible is not set to true');
 	el.tabs('select', -1);
-	equals(el.tabs('option', 'selected'), 0, 'should not collapse tab if collapsible is not set to true');
-	el.tabs('select', null);
 	equals(el.tabs('option', 'selected'), 0, 'should not collapse tab if collapsible is not set to true');
 
 	el.tabs('select', '#fragment-2');

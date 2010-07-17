@@ -416,14 +416,10 @@ $.widget("ui.tabs", {
     _getIndex: function(index) {
 		// meta-function to give users option to provide a href string instead of a numerical index.
 		// also sanitizes numerical indexes to valid values.
-		if (typeof(index) == 'string') {
+		if (typeof index == 'string') {
 			index = this.anchors.index(this.anchors.filter('[href$=' + index + ']'));
-			index = (index ==-1?NaN:index);
-		}else if (typeof(index) != 'number') {
-			index = NaN;
-		}else if (index > this.anchors.length) {
-			index = this.anchors.length;
 		}
+		
 		return index;
 	},
 
@@ -579,7 +575,7 @@ $.widget("ui.tabs", {
 
 	select: function(index) {
 		index = this._getIndex(index);
-		if (isNaN(index) && this.options.collapsible) {
+		if (index == -1 && this.options.collapsible) {
 			index = this.options.selected;
 		}
 		this.anchors.eq(index).trigger(this.options.event + '.tabs');
