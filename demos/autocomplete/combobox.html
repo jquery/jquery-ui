@@ -54,6 +54,12 @@
 						minLength: 0
 					})
 					.addClass("ui-widget ui-widget-content ui-corner-left");
+				input.data("autocomplete")._renderItem = function( ul, item) {
+					return $( "<li></li>" )
+						.data( "item.autocomplete", item )
+						.append( "<a>" + item.label + "</a>" )
+						.appendTo( ul );
+				};
 				$("<button>&nbsp;</button>")
 				.attr("tabIndex", -1)
 				.attr("title", "Show All Items")
