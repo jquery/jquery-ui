@@ -132,9 +132,12 @@ $.widget( "ui.autocomplete", {
 					}
 				},
 				selected: function( event, ui ) {
-					var item = ui.item.data( "item.autocomplete" );
+					var item = ui.item.data( "item.autocomplete" ),
+						setValue = false;
 					if ( false !== self._trigger( "select", event, { item: item } ) ) {
-						self.element.val( item.value );
+						// #5639 - if we set the value before setting focus
+						// the cursor will move to the beginning of the field in IE
+						setValue = true;
 					}
 					self.close( event );
 					// only trigger when focus was lost (click on menu)
@@ -144,6 +147,9 @@ $.widget( "ui.autocomplete", {
 						self.previous = previous;
 					}
 					self.selectedItem = item;
+					if ( setValue ) {
+						self.element.val( item.value );
+					}
 				},
 				blur: function( event, ui ) {
 					if ( self.menu.element.is(":visible") ) {
