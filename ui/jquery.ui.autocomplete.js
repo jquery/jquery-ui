@@ -123,23 +123,20 @@ $.widget( "ui.autocomplete", {
 				},
 				selected: function( event, ui ) {
 					var item = ui.item.data( "item.autocomplete" ),
-						setValue = false;
-					if ( false !== self._trigger( "select", event, { item: item } ) ) {
-						// #5639 - if we set the value before setting focus
-						// the cursor will move to the beginning of the field in IE
-						setValue = true;
-					}
-					self.close( event );
+						previous = self.previous;
+
 					// only trigger when focus was lost (click on menu)
-					var previous = self.previous;
 					if ( self.element[0] !== doc.activeElement ) {
 						self.element.focus();
 						self.previous = previous;
 					}
-					self.selectedItem = item;
-					if ( setValue ) {
+
+					if ( false !== self._trigger( "select", event, { item: item } ) ) {
 						self.element.val( item.value );
 					}
+
+					self.close( event );
+					self.selectedItem = item;
 				},
 				blur: function( event, ui ) {
 					if ( self.menu.element.is(":visible") ) {
