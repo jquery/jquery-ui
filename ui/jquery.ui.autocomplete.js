@@ -16,8 +16,14 @@
 
 $.widget( "ui.autocomplete", {
 	options: {
+		delay: 300,
 		minLength: 1,
-		delay: 300
+		position: {
+			my: "left top",
+			at: "left bottom",
+			collision: "none"
+		},
+		source: null
 	},
 	_create: function() {
 		var self = this,
@@ -126,9 +132,12 @@ $.widget( "ui.autocomplete", {
 					}
 				},
 				selected: function( event, ui ) {
-					var item = ui.item.data( "item.autocomplete" );
+					var item = ui.item.data( "item.autocomplete" ),
+						setValue = false;
 					if ( false !== self._trigger( "select", event, { item: item } ) ) {
-						self.element.val( item.value );
+						// #5639 - if we set the value before setting focus
+						// the cursor will move to the beginning of the field in IE
+						setValue = true;
 					}
 					self.close( event );
 					// only trigger when focus was lost (click on menu)
@@ -138,6 +147,9 @@ $.widget( "ui.autocomplete", {
 						self.previous = previous;
 					}
 					self.selectedItem = item;
+					if ( setValue ) {
+						self.element.val( item.value );
+					}
 				},
 				blur: function( event, ui ) {
 					if ( self.menu.element.is(":visible") ) {
@@ -269,16 +281,17 @@ $.widget( "ui.autocomplete", {
 		// TODO refresh should check if the active item is still in the dom, removing the need for a manual deactivate
 		this.menu.deactivate();
 		this.menu.refresh();
-		this.menu.element.show().position({
-			my: "left top",
-			at: "left bottom",
-			of: this.element,
-			collision: "none"
-		});
+		this.menu.element.show().position( $.extend({
+			of: this.element
+		}, this.options.position ));
 
-		menuWidth = ul.width( "" ).width();
-		textWidth = this.element.width();
-		ul.width( Math.max( menuWidth, textWidth ) );
+		menuWidth = ul.width( "" ).outerWidth();
+		textWidth = this.element.outerWidth();
+		ul.width( Math.max( menuWidth, textWidth )
+			- ( parseFloat( ul.css("paddingLeft") ) || 0 )
+			- ( parseFloat( ul.css("paddingRight") ) || 0 )
+			- ( parseFloat( ul.css("borderLeftWidth") ) || 0 )
+			- ( parseFloat( ul.css("borderRightWidth") ) || 0 ) );
 	},
 	
 	_renderMenu: function( ul, items ) {
@@ -291,7 +304,7 @@ $.widget( "ui.autocomplete", {
 	_renderItem: function( ul, item) {
 		return $( "<li></li>" )
 			.data( "item.autocomplete", item )
-			.append( "<a>" + item.label + "</a>" )
+			.append( $( "<a></a>" ).text( item.label ) )
 			.appendTo( ul );
 	},
 
@@ -426,11 +439,11 @@ $.widget("ui.menu", {
 	},
 
 	first: function() {
-		return this.active && !this.active.prev().length;
+		return this.active && !this.active.prevAll(".ui-menu-item").length;
 	},
 
 	last: function() {
-		return this.active && !this.active.next().length;
+		return this.active && !this.active.nextAll(".ui-menu-item").length;
 	},
 
 	move: function(direction, edge, event) {

@@ -3,8 +3,8 @@
 $q = strtolower($_GET["term"]);
 if (!$q) return;
 $items = array(
-"Great <em>Bittern</em>"=>"Botaurus stellaris",
-"Little <em>Grebe</em>"=>"Tachybaptus ruficollis",
+"Great Bittern"=>"Botaurus stellaris",
+"Little Grebe"=>"Tachybaptus ruficollis",
 "Black-necked Grebe"=>"Podiceps nigricollis",
 "Little Bittern"=>"Ixobrychus minutus",
 "Black-crowned Night Heron"=>"Nycticorax nycticorax",

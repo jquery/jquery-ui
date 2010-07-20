@@ -59,6 +59,7 @@ $.widget("ui.dialog", {
 		width: 300,
 		zIndex: 1000
 	},
+
 	_create: function() {
 		this.originalTitle = this.element.attr('title');
 		// #5742 - .attr() might return a DOMElement
@@ -177,6 +178,7 @@ $.widget("ui.dialog", {
 			uiDialog.bgiframe();
 		}
 	},
+
 	_init: function() {
 		if ( this.options.autoOpen ) {
 			this.open();
@@ -203,7 +205,7 @@ $.widget("ui.dialog", {
 
 		return self;
 	},
-	
+
 	widget: function() {
 		return this.uiDialog;
 	},
@@ -258,12 +260,12 @@ $.widget("ui.dialog", {
 		var self = this,
 			options = self.options,
 			saveScroll;
-		
+
 		if ((options.modal && !force) ||
 			(!options.stack && !options.modal)) {
 			return self._trigger('focus', event);
 		}
-		
+
 		if (options.zIndex > $.ui.dialog.maxZ) {
 			$.ui.dialog.maxZ = options.zIndex;
 		}
@@ -305,11 +307,11 @@ $.widget("ui.dialog", {
 				if (event.keyCode !== $.ui.keyCode.TAB) {
 					return;
 				}
-	
+
 				var tabbables = $(':tabbable', this),
 					first = tabbables.filter(':first'),
 					last  = tabbables.filter(':last');
-	
+
 				if (event.target === last[0] && !event.shiftKey) {
 					first.focus(1);
 					return false;
@@ -322,12 +324,9 @@ $.widget("ui.dialog", {
 
 		// set focus to the first tabbable element in the content area or the first button
 		// if there are no tabbable elements, set focus on the dialog itself
-		$([])
-			.add(uiDialog.find('.ui-dialog-content :tabbable:first'))
-			.add(uiDialog.find('.ui-dialog-buttonpane :tabbable:first'))
-			.add(uiDialog)
-			.filter(':first')
-			.focus();
+		$(self.element.find(':tabbable').get().concat(
+			uiDialog.find('.ui-dialog-buttonpane :tabbable').get().concat(
+				uiDialog.get()))).eq(0).focus();
 
 		self._trigger('open');
 		self._isOpen = true;
@@ -461,7 +460,6 @@ $.widget("ui.dialog", {
 		}
 	},
 
-
 	_position: function(position) {
 		var myAt = [],
 			offset = [0, 0],
@@ -484,14 +482,14 @@ $.widget("ui.dialog", {
 						myAt[i] = offsetPosition;
 					}
 				});
-				
+
 				position = {
 					my: myAt.join(" "),
 					at: myAt.join(" "),
 					offset: offset.join(" ")
 				};
 			} 
-				
+
 			position = $.extend({}, $.ui.dialog.prototype.options.position, position);
 		} else {
 			position = $.ui.dialog.prototype.options.position;
@@ -516,7 +514,7 @@ $.widget("ui.dialog", {
 			uiDialog = self.uiDialog,
 			isResizable = uiDialog.is(':data(resizable)'),
 			resize = false;
-		
+
 		switch (key) {
 			//handling of deprecated beforeclose (vs beforeClose) option
 			//Ticket #4669 http://dev.jqueryui.com/ticket/4669

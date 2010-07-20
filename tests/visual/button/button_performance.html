@@ -16,7 +16,10 @@
 	<script type="text/javascript" src="../../../ui/jquery.ui.button.js"></script>
 	<script type="text/javascript">
 	$(function() {
+		var start = +new Date();
 		$("button").button();
+		var end = +new Date();
+		$("<p></p>").text( "Time to initialize: " + (end - start)  + "ms" ).prependTo("body");
 	});
 	</script>
 </head>

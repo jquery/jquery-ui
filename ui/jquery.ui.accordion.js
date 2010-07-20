@@ -79,7 +79,9 @@ $.widget("ui.accordion", {
 			}
 		}
 
-		this.active = this._findActive(this.active || o.active).toggleClass("ui-state-default").toggleClass("ui-state-active").toggleClass("ui-corner-all").toggleClass("ui-corner-top");
+		this.active = this._findActive(this.active || o.active)
+			.addClass("ui-state-default ui-state-active")
+			.toggleClass("ui-corner-all ui-corner-top");
 		this.active.next().addClass('ui-accordion-content-active');
 
 		//Append icon elements

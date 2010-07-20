@@ -8,7 +8,6 @@
  * http://docs.jquery.com/UI/Autocomplete#theming
  */
 .ui-autocomplete { position: absolute; cursor: default; }	
-.ui-autocomplete-loading { background: white url('images/ui-anim_basic_16x16.gif') right center no-repeat; }
 
 /* workarounds */
 * html .ui-autocomplete { width:1px; } /* without this, the menu expands to 100% in IE6 */
@@ -27,6 +26,7 @@
 	padding: 2px;
 	margin: 0;
 	display:block;
+	float: left;
 }
 .ui-menu .ui-menu {
 	margin-top: -3px;
