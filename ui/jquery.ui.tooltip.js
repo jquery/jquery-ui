@@ -104,9 +104,9 @@ $.widget("ui.tooltip", {
 		this.tooltip.css({
 			top: 0,
 			left: 0
-		}).show().position($.extend(this.options.position, {
+		}).show().position( $.extend({
 			of: target
-		})).hide();
+		}, this.options.position )).hide();
 		
 		this.tooltip.attr("aria-hidden", "false");
 		target.attr("aria-describedby", this.tooltip.attr("id"));
