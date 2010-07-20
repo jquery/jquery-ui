@@ -302,7 +302,7 @@ $.widget("ui.accordion", {
 		
 		// TODO the option is changed, is that correct?
 		// TODO if it is correct, shouldn't that happen after determining that the click is valid?
-		o.active = o.collapsible && clickedIsActive ? false : $('.ui-accordion-header', this.element).index(clicked);
+		o.active = o.collapsible && clickedIsActive ? false : this.headers.index(clicked);
 
 		// if animations are still active, or the active header is the target, ignore click
 		if (this.running || (!o.collapsible && clickedIsActive)) {
