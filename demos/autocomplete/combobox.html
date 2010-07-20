@@ -43,6 +43,7 @@
 							if (!ui.item) {
 								// remove invalid value, as it didn't match anything
 								$(this).val("");
+								select.val("");
 								return false;
 							}
 							select.val(ui.item.id);

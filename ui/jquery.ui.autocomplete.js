@@ -79,6 +79,7 @@ $.widget( "ui.autocomplete", {
 					self.searching = setTimeout(function() {
 						// only search if the value has changed
 						if ( self.term != self.element.val() ) {
+							self.selectedItem = null;
 							self.search( null, event );
 						}
 					}, self.options.delay );
