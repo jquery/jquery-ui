@@ -29,7 +29,7 @@
 						delay: 0,
 						minLength: 0,
 						source: function( request, response ) {
-							var matcher = new RegExp( request.term, "i" );
+							var matcher = new RegExp( $.ui.autocomplete.escapeRegex(request.term), "i" );
 							response( select.children( "option" ).map(function() {
 								var text = $( this ).text();
 								if ( this.value && ( !request.term || matcher.test(text) ) )
@@ -54,10 +54,20 @@
 						},
 						change: function( event, ui ) {
 							if ( !ui.item ) {
-								// remove invalid value, as it didn't match anything
-								$( this ).val( "" );
-								select.val( "" );
-								return false;
+								var matcher = new RegExp( "^" + $.ui.autocomplete.escapeRegex( $(this).val() ) + "$", "i" ),
+									valid = false;
+								select.children( "option" ).each(function() {
+									if ( this.value.match( matcher ) ) {
+										this.selected = valid = true;
+										return false;
+									}
+								});
+								if ( !valid ) {
+									// remove invalid value, as it didn't match anything
+									$( this ).val( "" );
+									select.val( "" );
+									return false;
+								}
 							}
 						}
 					})
