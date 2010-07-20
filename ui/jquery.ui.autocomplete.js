@@ -59,7 +59,7 @@ $.widget( "ui.autocomplete", {
 				case keyCode.ENTER:
 				case keyCode.NUMPAD_ENTER:
 					// when menu is open or has focus
-					if ( self.menu.active ) {
+					if ( self.menu.element.is( ":visible" ) ) {
 						event.preventDefault();
 					}
 					//passthrough - ENTER and TAB both select the current element
