@@ -73,24 +73,14 @@ $.widget( "ui.autocomplete", {
 					self.element.val( self.term );
 					self.close( event );
 					break;
-				case keyCode.LEFT:
-				case keyCode.RIGHT:
-				case keyCode.SHIFT:
-				case keyCode.CONTROL:
-				case keyCode.ALT:
-				case keyCode.COMMAND:
-				case keyCode.COMMAND_RIGHT:
-				case keyCode.INSERT:
-				case keyCode.CAPS_LOCK:
-				case keyCode.END:
-				case keyCode.HOME:
-					// ignore metakeys (shift, ctrl, alt)
-					break;
 				default:
 					// keypress is triggered before the input value is changed
 					clearTimeout( self.searching );
 					self.searching = setTimeout(function() {
-						self.search( null, event );
+						// only search if the value has changed
+						if ( self.term != self.element.val() ) {
+							self.search( null, event );
+						}
 					}, self.options.delay );
 					break;
 				}
