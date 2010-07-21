@@ -1,13 +1,13 @@
 /*
  * jQuery UI Position @VERSION
  *
- * Copyright (c) 2010 AUTHORS.txt (http://jqueryui.com/about)
- * Dual licensed under the MIT (MIT-LICENSE.txt)
- * and GPL (GPL-LICENSE.txt) licenses.
+ * Copyright 2010, AUTHORS.txt (http://jqueryui.com/about)
+ * Dual licensed under the MIT or GPL Version 2 licenses.
+ * http://jquery.org/license
  *
  * http://docs.jquery.com/UI/Position
  */
-(function( $ ) {
+(function( $, undefined ) {
 
 $.ui = $.ui || {};
 
@@ -112,6 +112,10 @@ $.fn.position = function( options ) {
 		} else if ( options.my[1] === verticalDefault ) {
 			position.top -= elemHeight / 2;
 		}
+
+		// prevent fractions (see #5280)
+		position.left = parseInt( position.left );
+		position.top = parseInt( position.top );
 
 		$.each( [ "left", "top" ], function( i, dir ) {
 			if ( $.ui.position[ collision[i] ] ) {

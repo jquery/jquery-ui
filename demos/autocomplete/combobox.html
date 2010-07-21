@@ -18,70 +18,103 @@
 		.ui-autocomplete-input { margin: 0; padding: 0.48em 0 0.47em 0.45em; }
 	</style>
 	<script type="text/javascript">
-	(function($) {
-		$.widget("ui.combobox", {
+	(function( $ ) {
+		$.widget( "ui.combobox", {
 			_create: function() {
 				var self = this;
-				var select = this.element.hide();
-				var input = $("<input>")
-					.insertAfter(select)
+				var select = this.element.hide(),
+					selected = select.children( ":selected" ),
+					value = selected.val() ? selected.text() : "";
+				var input = $( "<input>" )
+					.insertAfter( select )
+					.val( value )
 					.autocomplete({
-						source: function(request, response) {
-							var matcher = new RegExp(request.term, "i");
-							response(select.children("option").map(function() {
-								var text = $(this).text();
-								if (!request.term || matcher.test(text))
-									return {
-										id: $(this).val(),
-										label: text.replace(new RegExp("(?![^&;]+;)(?!<[^<>]*)(" + request.term.replace(/([\^\$\(\)\[\]\{\}\*\.\+\?\|\\])/gi, "\\$1") + ")(?![^<>]*>)(?![^&;]+;)", "gi"), "<strong>$1</strong>"),
-										value: text
-									};
-							}));
-						},
 						delay: 0,
-						select: function(e, ui) {
-							if (!ui.item) {
-								// remove invalid value, as it didn't match anything
-								$(this).val("");
-								return false;
-							}
-							$(this).focus();
-							select.val(ui.item.id);
-							self._trigger("selected", null, {
-								item: select.find("[value='" + ui.item.id + "']")
-							});
-							
+						minLength: 0,
+						source: function( request, response ) {
+							var matcher = new RegExp( $.ui.autocomplete.escapeRegex(request.term), "i" );
+							response( select.children( "option" ).map(function() {
+								var text = $( this ).text();
+								if ( this.value && ( !request.term || matcher.test(text) ) )
+									return {
+										label: text.replace(
+											new RegExp(
+												"(?![^&;]+;)(?!<[^<>]*)(" +
+												$.ui.autocomplete.escapeRegex(request.term) +
+												")(?![^<>]*>)(?![^&;]+;)", "gi"
+											), "<strong>$1</strong>" ),
+										value: text,
+										option: this
+									};
+							}) );
 						},
-						minLength: 0
+						select: function( event, ui ) {
+							ui.item.option.selected = true;
+							//select.val( ui.item.option.value );
+							self._trigger( "selected", event, {
+								item: ui.item.option
+							});
+						},
+						change: function( event, ui ) {
+							if ( !ui.item ) {
+								var matcher = new RegExp( "^" + $.ui.autocomplete.escapeRegex( $(this).val() ) + "$", "i" ),
+									valid = false;
+								select.children( "option" ).each(function() {
+									if ( this.value.match( matcher ) ) {
+										this.selected = valid = true;
+										return false;
+									}
+								});
+								if ( !valid ) {
+									// remove invalid value, as it didn't match anything
+									$( this ).val( "" );
+									select.val( "" );
+									return false;
+								}
+							}
+						}
 					})
-					.addClass("ui-widget ui-widget-content ui-corner-left");
-				$("<button>&nbsp;</button>")
-				.attr("title", "Show All Items")
-				.insertAfter(input)
-				.button({
-					icons: {
-						primary: "ui-icon-triangle-1-s"
-					},
-					text: false
-				}).removeClass("ui-corner-all")
-				.addClass("ui-corner-right ui-button-icon")
-				.click(function() {
-					// close if already visible
-					if (input.autocomplete("widget").is(":visible")) {
-						input.autocomplete("close");
-						return;
-					}
-					// pass empty string as value to search for, displaying all results
-					input.autocomplete("search", "");
-					input.focus();
-				});
+					.addClass( "ui-widget ui-widget-content ui-corner-left" );
+
+				input.data( "autocomplete" )._renderItem = function( ul, item ) {
+					return $( "<li></li>" )
+						.data( "item.autocomplete", item )
+						.append( "<a>" + item.label + "</a>" )
+						.appendTo( ul );
+				};
+
+				$( "<button>&nbsp;</button>" )
+					.attr( "tabIndex", -1 )
+					.attr( "title", "Show All Items" )
+					.insertAfter( input )
+					.button({
+						icons: {
+							primary: "ui-icon-triangle-1-s"
+						},
+						text: false
+					})
+					.removeClass( "ui-corner-all" )
+					.addClass( "ui-corner-right ui-button-icon" )
+					.click(function() {
+						// close if already visible
+						if ( input.autocomplete( "widget" ).is( ":visible" ) ) {
+							input.autocomplete( "close" );
+							return;
+						}
+
+						// pass empty string as value to search for, displaying all results
+						input.autocomplete( "search", "" );
+						input.focus();
+					});
 			}
 		});
-
 	})(jQuery);
-		
+
 	$(function() {
-		$("select").combobox();
+		$("#combobox").combobox();
+		$("#toggle").click(function() {
+			$("#combobox").toggle();
+		});
 	});
 	</script>
 </head>
@@ -91,22 +124,33 @@
 
 <div class="ui-widget">
 	<label>Your preferred programming language: </label>
-	<select>
-		<option value="a">asp</option>
-        <option value="c">c</option>
-        <option value="cpp">c++</option>
-        <option value="cf">coldfusion</option>
-        <option value="g">groovy</option>
-        <option value="h">haskell</option>
-        <option value="j">java</option>
-        <option value="js">javascript</option>
-        <option value="p1">perl</option>
-        <option value="p2">php</option>
-        <option value="p3">python</option>
-        <option value="r">ruby</option>
-        <option value="s">scala</option>
+	<select id="combobox">
+		<option value="">Select one...</option>
+		<option value="ActionScript">ActionScript</option>
+		<option value="AppleScript">AppleScript</option>
+		<option value="Asp">Asp</option>
+		<option value="BASIC">BASIC</option>
+		<option value="C">C</option>
+		<option value="C++">C++</option>
+		<option value="Clojure">Clojure</option>
+		<option value="COBOL">COBOL</option>
+		<option value="ColdFusion">ColdFusion</option>
+		<option value="Erlang">Erlang</option>
+		<option value="Fortran">Fortran</option>
+		<option value="Groovy">Groovy</option>
+		<option value="Haskell">Haskell</option>
+		<option value="Java">Java</option>
+		<option value="JavaScript">JavaScript</option>
+		<option value="Lisp">Lisp</option>
+		<option value="Perl">Perl</option>
+		<option value="PHP">PHP</option>
+		<option value="Python">Python</option>
+		<option value="Ruby">Ruby</option>
+		<option value="Scala">Scala</option>
+		<option value="Scheme">Scheme</option>
 	</select>
 </div>
+<button id="toggle">Show underlying select</button>
 
 </div><!-- End demo -->
 

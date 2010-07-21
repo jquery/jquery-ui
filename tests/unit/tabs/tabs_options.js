@@ -25,7 +25,7 @@ test('collapsible', function() {
 	equals($('div.ui-tabs-hide', '#tabs1').length, 3, 'all panels should be hidden');
 	el.tabs('option', 'collapsible', false);
 	ok(el.is(':not(.ui-tabs-collapsible)'), 'extra class "ui-tabs-collapsible" not attached');
-	
+
 });
 
 test('cookie', function() {
@@ -47,24 +47,37 @@ test('cookie', function() {
 
 	el.tabs('select', 2);
 	equals(cookie(), 2, 'cookie value updated after select');
-	
+
 	el.tabs('destroy');
 	$.cookie(cookieName, 1);
 	el.tabs({ cookie: cookieObj });
 	equals(cookie(), 1, 'initial cookie value, from existing cookie');
-	
+
 	el.tabs('destroy');
 	el.tabs({ cookie: cookieObj, collapsible: true });
 	el.tabs('select', 0);
 	equals(cookie(), -1, 'cookie value for all tabs unselected');
-	
+
 	el.tabs('destroy');
 	ok($.cookie(cookieName) === null, 'erase cookie after destroy');
 
 });
 
 test('disabled', function() {
-	ok(false, "missing test - untested code is broken code.");
+	expect(4);
+
+	el = $('#tabs1').tabs();
+	same(el.tabs('option', 'disabled'), [ ], "should not disable any tab by default");
+
+	el.tabs('option', 'disabled', [ 1 ]);
+	same(el.tabs('option', 'disabled'), [ 1 ], "should set property"); // everything else is being tested in methods module...
+
+	// FIXME bug... property needs to be [ 1 ], since selected tab cannot be disabled!
+	el.tabs('option', 'disabled', [ 0, 1 ]);
+	same(el.tabs('option', 'disabled'), [ 1 ], "should disable given tabs but not selected one"); // ...
+
+	el.tabs('option', 'disabled', [ ]);
+	same(el.tabs('option', 'disabled'), [ ], "should not disable any tab"); // ...
 });
 
 test('event', function() {
@@ -85,10 +98,10 @@ test('panelTemplate', function() {
 
 test('selected', function() {
 	expect(8);
-		
+
 	el = $('#tabs1').tabs();
 	equals(el.tabs('option', 'selected'), 0, 'should be 0 by default');
-	
+
 	el.tabs('destroy');
 	el.tabs({ selected: -1 });
 	equals(el.tabs('option', 'selected'), -1, 'should be -1 for all tabs unselected');
@@ -98,15 +111,15 @@ test('selected', function() {
 	el.tabs('destroy');
 	el.tabs({ selected: null });
 	equals(el.tabs('option', 'selected'), -1, 'should be -1 for all tabs unselected with value null (deprecated)');
-	
+
 	el.tabs('destroy');
 	el.tabs({ selected: 1 });
 	equals(el.tabs('option', 'selected'), 1, 'should be specified tab');
-	
+
 	el.tabs('destroy');
 	el.tabs({ selected: 99 });
 	equals(el.tabs('option', 'selected'), 0, 'selected should default to zero if given value is out of index');
-	
+
 	el.tabs('destroy');
 	el.tabs({ collapsible: true });
 	el.tabs('option', 'selected', 0);

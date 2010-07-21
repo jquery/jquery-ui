@@ -21,8 +21,8 @@ test("accessibility", function() {
 	el.progressbar("disable");
 	equals(el.attr("aria-disabled"), "true", "aria-disabled on");
 	el.progressbar("enable");
-	// FAIL: for some reason IE6 returns a boolean false instead of the string
-	equals(el.attr("aria-disabled"), "false", "aria-disabled off");
+	// FAIL: for some reason IE6 and 7 return a boolean false instead of the string
+	equals(el.attr("aria-disabled"), $.browser.msie && $.browser.version == 6 || $.browser.version == 7 ? false : "false", "aria-disabled off");
 });
 
 })(jQuery);

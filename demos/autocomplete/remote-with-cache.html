@@ -10,39 +10,29 @@
 	<script type="text/javascript" src="../../ui/jquery.ui.position.js"></script>
 	<script type="text/javascript" src="../../ui/jquery.ui.autocomplete.js"></script>
 	<link type="text/css" href="../demos.css" rel="stylesheet" />
+	<style type="text/css">
+	.ui-autocomplete-loading { background: white url('images/ui-anim_basic_16x16.gif') right center no-repeat; }
+	</style>
 	<script type="text/javascript">
 	$(function() {
-		function log(message) {
-			$("<div/>").text(message).prependTo("#log");
-			$("#log").attr("scrollTop", 0);
-		}
-		
 		var cache = {};
-		$("#birds").autocomplete({
+		$( "#birds" ).autocomplete({
+			minLength: 2,
 			source: function(request, response) {
-				if (cache.term == request.term && cache.content) {
-					response(cache.content);
+				if ( request.term in cache ) {
+					response( cache[ request.term ] );
+					return;
 				}
-				if (new RegExp(cache.term).test(request.term) && cache.content && cache.content.length < 13) {
-					var matcher = new RegExp($.ui.autocomplete.escapeRegex(request.term), "i");
-					response($.grep(cache.content, function(value) {
-	    				return matcher.test(value.value)
-					}));
-				}
+				
 				$.ajax({
 					url: "search.php",
 					dataType: "json",
 					data: request,
-					success: function(data) {
-						cache.term = request.term;
-						cache.content = data;
-						response(data);
+					success: function( data ) {
+						cache[ request.term ] = data;
+						response( data );
 					}
 				});
-			},
-			minLength: 2,
-			select: function(event, ui) {
-				log(ui.item ? ("Selected: " + ui.item.value + " aka " + ui.item.id) : "Nothing selected, input was " + this.value);
 			}
 		});
 	});
@@ -55,11 +45,6 @@
 <div class="ui-widget">
 	<label for="birds">Birds: </label>
 	<input id="birds" />
-</div>
-
-<div class="ui-widget" style="margin-top:2em; font-family:Arial">
-	Result:
-	<div id="log" style="height: 200px; width: 300px; overflow: auto;" class="ui-widget-content"></div>
 </div>
 
 </div><!-- End demo -->

@@ -1,9 +1,9 @@
 /*
  * jQuery UI Resizable @VERSION
  *
- * Copyright (c) 2010 AUTHORS.txt (http://jqueryui.com/about)
- * Dual licensed under the MIT (MIT-LICENSE.txt)
- * and GPL (GPL-LICENSE.txt) licenses.
+ * Copyright 2010, AUTHORS.txt (http://jqueryui.com/about)
+ * Dual licensed under the MIT or GPL Version 2 licenses.
+ * http://jquery.org/license
  *
  * http://docs.jquery.com/UI/Resizables
  *
@@ -12,7 +12,7 @@
  *	jquery.ui.mouse.js
  *	jquery.ui.widget.js
  */
-(function($) {
+(function( $, undefined ) {
 
 $.widget("ui.resizable", $.ui.mouse, {
 	widgetEventPrefix: "resize",
@@ -528,28 +528,29 @@ $.extend($.ui.resizable, {
 
 $.ui.plugin.add("resizable", "alsoResize", {
 
-	start: function(event, ui) {
-
+	start: function (event, ui) {
 		var self = $(this).data("resizable"), o = self.options;
 
-		var _store = function(exp) {
+		var _store = function (exp) {
 			$(exp).each(function() {
-				$(this).data("resizable-alsoresize", {
-					width: parseInt($(this).width(), 10), height: parseInt($(this).height(), 10),
-					left: parseInt($(this).css('left'), 10), top: parseInt($(this).css('top'), 10)
+				var el = $(this);
+				el.data("resizable-alsoresize", {
+					width: parseInt(el.width(), 10), height: parseInt(el.height(), 10),
+					left: parseInt(el.css('left'), 10), top: parseInt(el.css('top'), 10),
+					position: el.css('position') // to reset Opera on stop()
 				});
 			});
 		};
 
 		if (typeof(o.alsoResize) == 'object' && !o.alsoResize.parentNode) {
-			if (o.alsoResize.length) { o.alsoResize = o.alsoResize[0];	_store(o.alsoResize); }
-			else { $.each(o.alsoResize, function(exp, c) { _store(exp); }); }
+			if (o.alsoResize.length) { o.alsoResize = o.alsoResize[0]; _store(o.alsoResize); }
+			else { $.each(o.alsoResize, function (exp) { _store(exp); }); }
 		}else{
 			_store(o.alsoResize);
 		}
 	},
 
-	resize: function(event, ui){
+	resize: function (event, ui) {
 		var self = $(this).data("resizable"), o = self.options, os = self.originalSize, op = self.originalPosition;
 
 		var delta = {
@@ -557,18 +558,19 @@ $.ui.plugin.add("resizable", "alsoResize", {
 			top: (self.position.top - op.top) || 0, left: (self.position.left - op.left) || 0
 		},
 
-		_alsoResize = function(exp, c) {
+		_alsoResize = function (exp, c) {
 			$(exp).each(function() {
-				var el = $(this), start = $(this).data("resizable-alsoresize"), style = {}, css = c && c.length ? c : ['width', 'height', 'top', 'left'];
+				var el = $(this), start = $(this).data("resizable-alsoresize"), style = {}, 
+					css = c && c.length ? c : el.parents(ui.originalElement[0]).length ? ['width', 'height'] : ['width', 'height', 'top', 'left'];
 
-				$.each(css || ['width', 'height', 'top', 'left'], function(i, prop) {
+				$.each(css, function (i, prop) {
 					var sum = (start[prop]||0) + (delta[prop]||0);
 					if (sum && sum >= 0)
 						style[prop] = sum || null;
 				});
 
-				//Opera fixing relative position
-				if (/relative/.test(el.css('position')) && $.browser.opera) {
+				// Opera fixing relative position
+				if ($.browser.opera && /relative/.test(el.css('position'))) {
 					self._revertToRelativePosition = true;
 					el.css({ position: 'absolute', top: 'auto', left: 'auto' });
 				}
@@ -578,22 +580,33 @@ $.ui.plugin.add("resizable", "alsoResize", {
 		};
 
 		if (typeof(o.alsoResize) == 'object' && !o.alsoResize.nodeType) {
-			$.each(o.alsoResize, function(exp, c) { _alsoResize(exp, c); });
+			$.each(o.alsoResize, function (exp, c) { _alsoResize(exp, c); });
 		}else{
 			_alsoResize(o.alsoResize);
 		}
 	},
 
-	stop: function(event, ui){
-		var self = $(this).data("resizable");
+	stop: function (event, ui) {
+		var self = $(this).data("resizable"), o = self.options;
 
-		//Opera fixing relative position
-		if (self._revertToRelativePosition && $.browser.opera) {
-			self._revertToRelativePosition = false;
-			el.css({ position: 'relative' });
+		var _reset = function (exp) {
+			$(exp).each(function() {
+				var el = $(this);
+				// reset position for Opera - no need to verify it was changed
+				el.css({ position: el.data("resizable-alsoresize").position });
+			});
 		}
 
-		$(this).removeData("resizable-alsoresize-start");
+		if (self._revertToRelativePosition) {
+			self._revertToRelativePosition = false;
+			if (typeof(o.alsoResize) == 'object' && !o.alsoResize.nodeType) {
+				$.each(o.alsoResize, function (exp) { _reset(exp); });
+			}else{
+				_reset(o.alsoResize);
+			}
+		}
+
+		$(this).removeData("resizable-alsoresize");
 	}
 });
 

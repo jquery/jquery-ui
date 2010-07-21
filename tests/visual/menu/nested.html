@@ -9,8 +9,16 @@
 	<script type="text/javascript" src="../../../ui/jquery.ui.widget.js"></script>
 	<script type="text/javascript" src="../../../ui/jquery.ui.position.js"></script>
 	<script type="text/javascript" src="../../../ui/jquery.ui.autocomplete.js"></script>
+	<script type="text/javascript" src="../../../external/jquery.bgiframe-2.1.1.js"></script>
+	<script type="text/javascript" src="http://jqueryui.com/themeroller/themeswitchertool/"></script>
 	<script type="text/javascript">
 	$(function() {
+		$.fn.themeswitcher && $('<div/>').css({
+			position: "absolute",
+			right: 10,
+			top: 10
+		}).appendTo(document.body).themeswitcher();
+		
 		$.widget("ui.nestedmenu", {
 			_init: function() {
 				var self = this;
@@ -24,77 +32,46 @@
 					focus: function(event, ui) {
 						self.active = ui.item.parent();
 						self.activeItem = ui.item;
-						// put a previous submenu back into its place and hide it
-						self.hideDown();
+						ui.item.parent().find("ul").hide();
 						var nested = $(">ul", ui.item);
-						// only for mouse-events (should actually check event.originalEvent.type, but for keys, originalEvent is undefined...)
 						if (nested.length && /^mouse/.test(event.originalEvent.type)) {
-							self._openSubmenu(nested, ui.item);
+							self._open(nested);
 						}
 					}
 				})
 			},
 			
-			_openSubmenu: function(nested, item) {
-				// append to body in order to display the submenu above the parent menu, instead of inside of it
-				nested.appendTo(document.body).menu("deactivate").show().position({
+			_open: function(submenu) {
+				submenu.show().css({
+					top: 0,
+					left: 0
+				}).position({
 					my: "left top",
 					at: "right top",
-					of: item
-				// store the current submenu
-				}).data("menuparent", item);
-				
-				this.active.data("submenu", nested);
+					of: this.activeItem
+				});
 			},
 			
 			up: function(event) {
-				if (!this.active.data("menuparent"))
-					return;
-				this.active.menu("deactivate");
-				this.active = this.active.data("menuparent").parent();
+				this.active = this.active.menu("deactivate").hide().parent().parent();
 				this.activeItem = this.active.data("menu").active;
-				this.hideDown();
 			},
 			
 			down: function(event) {
-				var submenu = this.active.data("submenu");
-				if (!submenu && this.activeItem) {
-					// try to open submenu or return(?); only mouseover opens submenu directly, key doesn't
-					var item = this.activeItem,
-						nested = item.children("ul");
-					if (!nested.length)
-						return;
-					this._openSubmenu(nested, item);
-					submenu = this.active.data("submenu");
-				}
-				submenu.data("menu").activate(event, submenu.children(":first"))
-				this.active = submenu;
+				var submenu = $(">ul", this.activeItem);
+				this._open(submenu, this.activeItem);
+				submenu.menu("activate", event, submenu.children(":first"));
 			},
 			
 			show: function() {
-				this.element.menu("deactivate").show();
 				this.active = this.element;
+				this.element.show();
 			},
 			
 			hide: function() {
-				this.hideDown();
-				var child = this.active.hide(), parent;
-				while(child.data("menuparent")) {
-					parent = child.data("menuparent");
-					child.appendTo(parent).removeData("menuparent");
-					child = parent.parent().removeData("submenu").hide();
-				}
-			},
-			
-			hideDown: function() {
-				var submenu = this.active.data("submenu");
-				while(submenu) {
-					var parent = submenu.data("menuparent");
-					submenu.appendTo(parent).hide().removeData("menuparent");
-					parent.parent().removeData("submenu");
-					submenu = submenu.data("submenu");
-				};
+				this.element.find("ul").andSelf().menu("deactivate").hide();
 			}
+			
 		});
 		
 		var nestedmenu = $("#menu").nestedmenu({
@@ -200,6 +177,10 @@
 <body>
 	
 <button>Show context menu</button>
+<br/>
+<select>
+	<option>some option with some text</option>
+</select>
 
 <ul id="menu">
 	<li>

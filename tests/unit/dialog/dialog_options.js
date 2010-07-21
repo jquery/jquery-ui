@@ -242,15 +242,110 @@ test("modal", function() {
 
 test("position, default center on window", function() {
 	var el = $('<div></div>').dialog();
-	var offset = el.parent().offset();
-	// use .position() instead to avoid replicating center-logic?
-	same(offset.left, Math.floor($(window).width() / 2 - el.parent().width() / 2));
-	same(offset.top, Math.floor($(window).height() / 2 - el.parent().height() / 2));
+	var dialog = el.dialog('widget');
+	var offset = dialog.offset();
+	same(offset.left, Math.floor($(window).width() / 2 - dialog.outerWidth() / 2) + $(window).scrollLeft());
+	same(offset.top, Math.floor($(window).height() / 2 - dialog.outerHeight() / 2) + $(window).scrollTop());
 	el.remove();
 });
 
-test("position, others", function() {
-	ok(false, 'missing test - untested code is broken code');
+test("position, top on window", function() {
+	var el = $('<div></div>').dialog({ position: "top" });
+	var dialog = el.dialog('widget');
+	var offset = dialog.offset();
+	same(offset.left, Math.floor($(window).width() / 2 - dialog.outerWidth() / 2) + $(window).scrollLeft());
+	same(offset.top, $(window).scrollTop());
+	el.remove();
+});
+
+test("position, left on window", function() {
+	var el = $('<div></div>').dialog({ position: "left" });
+	var dialog = el.dialog('widget');
+	var offset = dialog.offset();
+	same(offset.left, 0);
+	same(offset.top, Math.floor($(window).height() / 2 - dialog.outerHeight() / 2) + $(window).scrollTop());
+	el.remove();
+});
+
+test("position, right bottom on window", function() {
+	var el = $('<div></div>').dialog({ position: "right bottom" });
+	var dialog = el.dialog('widget');
+	var offset = dialog.offset();
+	same(offset.left, $(window).width() - dialog.outerWidth() + $(window).scrollLeft());
+	same(offset.top, $(window).height() - dialog.outerHeight() + $(window).scrollTop());
+	el.remove();
+});
+
+test("position, right bottom on window w/array", function() {
+	var el = $('<div></div>').dialog({ position: ["right", "bottom"] });
+	var dialog = el.dialog('widget');
+	var offset = dialog.offset();
+	same(offset.left, $(window).width() - dialog.outerWidth() + $(window).scrollLeft());
+	same(offset.top, $(window).height() - dialog.outerHeight() + $(window).scrollTop());
+	el.remove();
+});
+
+test("position, offset from top left w/array", function() {
+	var el = $('<div></div>').dialog({ position: [10, 10] });
+	var dialog = el.dialog('widget');
+	var offset = dialog.offset();
+	same(offset.left, 10 + $(window).scrollLeft());
+	same(offset.top, 10 + $(window).scrollTop());
+	el.remove();
+});
+
+test("position, right bottom at right bottom via ui.position args", function() {
+	var el = $('<div></div>').dialog({
+		position: {
+			my: "right bottom",
+			at: "right bottom"
+		}
+	});
+
+	var dialog = el.dialog('widget');
+	var offset = dialog.offset();
+
+	same(offset.left, $(window).width() - dialog.outerWidth() + $(window).scrollLeft());
+	same(offset.top, $(window).height() - dialog.outerHeight() + $(window).scrollTop());
+	el.remove();
+});
+
+test("position, at another element", function() {
+	var parent = $('<div></div>').css({
+		position: 'absolute',
+		top: 400,
+		left: 600,
+		height: 10,
+		width: 10
+	}).appendTo('body');
+
+	var el = $('<div></div>').dialog({
+		position: {
+			my: "left top",
+			at: "left top",
+			of: parent
+		}
+	});
+
+	var dialog = el.dialog('widget');
+	var offset = dialog.offset();
+
+	same(offset.left, 600);
+	same(offset.top, 400);
+
+	el.dialog('option', 'position', {
+			my: "left top",
+			at: "right bottom",
+			of: parent
+	});
+
+	var offset = dialog.offset();
+
+	same(offset.left, 610);
+	same(offset.top, 410);
+
+	el.remove();
+	parent.remove();
 });
 
 test("resizable", function() {

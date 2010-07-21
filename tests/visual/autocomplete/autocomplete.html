@@ -40,8 +40,11 @@
 				close: function() {
 					log("Hiding suggestions");
 				},
+				select: function(event, ui) {
+					log("Selected: " + ui.item.value);
+				},
 				change: function(event, ui) {
-					log(ui.item ? ("Selected: " + ui.item.value) : "Nothing selected, input was " + this.value);
+					log(ui.item ? ("Changed to: " + ui.item.value) : "Nothing selected, input was " + this.value);
 				}
 			});
 		}

@@ -1,9 +1,9 @@
 /*
  * jQuery UI Tabs @VERSION
  *
- * Copyright (c) 2010 AUTHORS.txt (http://jqueryui.com/about)
- * Dual licensed under the MIT (MIT-LICENSE.txt)
- * and GPL (GPL-LICENSE.txt) licenses.
+ * Copyright 2010, AUTHORS.txt (http://jqueryui.com/about)
+ * Dual licensed under the MIT or GPL Version 2 licenses.
+ * http://jquery.org/license
  *
  * http://docs.jquery.com/UI/Tabs
  *
@@ -11,10 +11,18 @@
  *	jquery.ui.core.js
  *	jquery.ui.widget.js
  */
-(function($) {
+(function( $, undefined ) {
 
 var tabId = 0,
 	listId = 0;
+
+function getNextTabId() {
+	return ++tabId;
+}
+
+function getNextListId() {
+	return ++listId;
+}
 
 $.widget("ui.tabs", {
 	options: {
@@ -56,7 +64,7 @@ $.widget("ui.tabs", {
 
 	_tabId: function(a) {
 		return a.title && a.title.replace(/\s/g, '_').replace(/[^A-Za-z0-9\-_:\.]/g, '') ||
-			this.options.idPrefix + (++tabId);
+			this.options.idPrefix + getNextTabId();
 	},
 
 	_sanitizeSelector: function(hash) {
@@ -64,7 +72,7 @@ $.widget("ui.tabs", {
 	},
 
 	_cookie: function() {
-		var cookie = this.cookie || (this.cookie = this.options.cookie.name || 'ui-tabs-' + (++listId));
+		var cookie = this.cookie || (this.cookie = this.options.cookie.name || 'ui-tabs-' + getNextListId());
 		return $.cookie.apply(null, [cookie].concat($.makeArray(arguments)));
 	},
 
@@ -405,6 +413,16 @@ $.widget("ui.tabs", {
 
 	},
 
+    _getIndex: function(index) {
+		// meta-function to give users option to provide a href string instead of a numerical index.
+		// also sanitizes numerical indexes to valid values.
+		if (typeof index == 'string') {
+			index = this.anchors.index(this.anchors.filter('[href$=' + index + ']'));
+		}
+		
+		return index;
+	},
+
 	destroy: function() {
 		var o = this.options;
 
@@ -504,6 +522,7 @@ $.widget("ui.tabs", {
 	},
 
 	remove: function(index) {
+		index = this._getIndex(index);
 		var o = this.options, $li = this.lis.eq(index).remove(),
 			$panel = this.panels.eq(index).remove();
 
@@ -524,6 +543,7 @@ $.widget("ui.tabs", {
 	},
 
 	enable: function(index) {
+		index = this._getIndex(index);
 		var o = this.options;
 		if ($.inArray(index, o.disabled) == -1) {
 			return;
@@ -538,6 +558,7 @@ $.widget("ui.tabs", {
 	},
 
 	disable: function(index) {
+		index = this._getIndex(index);
 		var self = this, o = this.options;
 		if (index != o.selected) { // cannot disable already selected tab
 			this.lis.eq(index).addClass('ui-state-disabled');
@@ -553,21 +574,20 @@ $.widget("ui.tabs", {
 	},
 
 	select: function(index) {
-		if (typeof index == 'string') {
-			index = this.anchors.index(this.anchors.filter('[href$=' + index + ']'));
+		index = this._getIndex(index);
+		if (index == -1) {
+			if (this.options.collapsible && this.options.selected != -1) {
+				index = this.options.selected;
+			} else {
+				return this;
+			}
 		}
-		else if (index === null) { // usage of null is deprecated, TODO remove in next release
-			index = -1;
-		}
-		if (index == -1 && this.options.collapsible) {
-			index = this.options.selected;
-		}
-
 		this.anchors.eq(index).trigger(this.options.event + '.tabs');
 		return this;
 	},
 
 	load: function(index) {
+		index = this._getIndex(index);
 		var self = this, o = this.options, a = this.anchors.eq(index)[0], url = $.data(a, 'load.tabs');
 
 		this.abort();

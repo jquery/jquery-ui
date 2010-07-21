@@ -12,7 +12,7 @@ module("autocomplete: events", {
 var data = ["c++", "java", "php", "coldfusion", "javascript", "asp", "ruby", "python", "c", "scala", "groovy", "haskell", "perl"];
 
 test("all events", function() {
-	expect(11);
+	expect(12);
 	var ac = $("#autocomplete").autocomplete({
 		delay: 0,
 		source: data,
@@ -34,19 +34,37 @@ test("all events", function() {
 			same(event.type, "autocompleteselect");
 			same(ui.item, {label:"java", value:"java"});
 		},
-		change: function(event) {
+		change: function(event, ui) {
 			same(event.type, "autocompletechange");
+			same(ui.item, {label:"java", value:"java"});
 			same( $(".ui-menu:visible").length, 0 );
+			start();
 		}
 	});
 	stop();
-	ac.val("ja").keydown();
+	ac.focus().val("ja").keydown();
 	setTimeout(function() {
 		same( $(".ui-menu:visible").length, 1 );
 		ac.simulate("keydown", { keyCode: $.ui.keyCode.DOWN });
 		ac.simulate("keydown", { keyCode: $.ui.keyCode.ENTER });
-		start();
+		$.browser.msie ? ac.simulate("blur") : ac.blur();
 	}, 50);
+});
+
+test("change without selection", function() {
+	expect(2);
+	stop();
+	var ac = $("#autocomplete").autocomplete({
+		delay: 0,
+		source: data,
+		change: function(event, ui) {
+			same(event.type, "autocompletechange");
+			same(ui.item, null);
+			start();
+		}
+	});
+	ac.triggerHandler("focus");
+	ac.val("ja").triggerHandler("blur");
 });
 
 test("cancel search", function() {

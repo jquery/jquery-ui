@@ -6,7 +6,12 @@ var autocomplete_defaults = {
 	delay: 300,
 	disabled: false,
 	minLength: 1,
-	source: undefined
+	position: {
+		my: "left top",
+		at: "left bottom",
+		collision: "none"
+	},
+	source: null
 };
 
 commonWidgetTests('autocomplete', { defaults: autocomplete_defaults });

@@ -202,6 +202,10 @@ test("{ containment: Selector }", function() {
 	ok(false, 'missing test - untested code is broken code');
 });
 
+test("{ containment: [x1, y1, x2, y2] }", function() {
+	ok(false, 'missing test - untested code is broken code');
+});
+
 test("{ cursor: 'auto' }, default", function() {
 	equals(draggable_defaults.cursor, 'auto');
 
