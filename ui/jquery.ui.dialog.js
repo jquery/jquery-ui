@@ -706,7 +706,11 @@ $.extend($.ui.dialog.overlay, {
 		}
 
 		var $el = (this.oldInstances.pop() || $('<div></div>').addClass('ui-widget-overlay'))
-			.appendTo(document.body);
+			.appendTo(document.body)
+			.css({
+				width: this.width(),
+				height: this.height()
+			});
 
 		if ($.fn.bgiframe) {
 			$el.bgiframe();
