@@ -16,6 +16,7 @@
 
 $.widget( "ui.autocomplete", {
 	options: {
+		appendTo: "body",
 		delay: 300,
 		minLength: 1,
 		position: {
@@ -104,7 +105,7 @@ $.widget( "ui.autocomplete", {
 		};
 		this.menu = $( "<ul></ul>" )
 			.addClass( "ui-autocomplete" )
-			.appendTo( "body", doc )
+			.appendTo( $( this.options.appendTo || "body", doc )[0] )
 			// prevent the close-on-blur in case of a "slow" click on the menu (long mousedown)
 			.mousedown(function() {
 				// use another timeout to make sure the blur-event-handler on the input was already triggered
@@ -166,10 +167,13 @@ $.widget( "ui.autocomplete", {
 		$.Widget.prototype.destroy.call( this );
 	},
 
-	_setOption: function( key ) {
+	_setOption: function( key, value ) {
 		$.Widget.prototype._setOption.apply( this, arguments );
 		if ( key === "source" ) {
 			this._initSource();
+		}
+		if ( key === "appendTo" ) {
+			this.menu.element.appendTo( $( value || "body", this.element.ownerDocument )[0] )
 		}
 	},
 

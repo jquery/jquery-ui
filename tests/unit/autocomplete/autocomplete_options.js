@@ -68,6 +68,36 @@ test("cache: false", function() {
 
 var data = ["c++", "java", "php", "coldfusion", "javascript", "asp", "ruby", "python", "c", "scala", "groovy", "haskell", "perl"];
 
+test( "appendTo", function() {
+	var ac = $( "#autocomplete" ).autocomplete();
+	same( ac.autocomplete( "widget" ).parent()[0], document.body, "defaults to body" );
+	ac.autocomplete( "destroy" );
+
+	ac.autocomplete({
+		appendTo: "#ac-wrap2"
+	});
+	same( ac.autocomplete( "widget" ).parent()[0], $( "#ac-wrap2" )[0], "id" );
+	ac.autocomplete( "destroy" );
+
+	ac.autocomplete({
+		appendTo: ".ac-wrap"
+	});
+	same( ac.autocomplete( "widget" ).parent()[0], $( "#ac-wrap1" )[0], "class" );
+	same( $( "#ac-wrap2 .ui-autocomplete").length, 0, "class - only appends to one element")
+	ac.autocomplete( "destroy" );
+
+	ac.autocomplete({
+		appendTo: null
+	});
+	same( ac.autocomplete( "widget" ).parent()[0], document.body, "null" );
+	ac.autocomplete( "destroy" );
+	
+	ac.autocomplete().autocomplete( "option", "appendTo", "#ac-wrap1" );
+	same( ac.autocomplete( "widget" ).parent()[0], $( "#ac-wrap1" )[0], "modified after init" );
+	ac.autocomplete( "destroy" );
+});
+
+
 test("delay", function() {
 	var ac = $("#autocomplete").autocomplete({
 		source: data,
