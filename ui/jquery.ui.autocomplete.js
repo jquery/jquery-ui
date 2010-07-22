@@ -279,13 +279,9 @@ $.widget( "ui.autocomplete", {
 
 		menuWidth = ul.width( "" ).outerWidth();
 		textWidth = this.element.outerWidth();
-		ul.width( Math.max( menuWidth, textWidth )
-			- ( parseFloat( ul.css("paddingLeft") ) || 0 )
-			- ( parseFloat( ul.css("paddingRight") ) || 0 )
-			- ( parseFloat( ul.css("borderLeftWidth") ) || 0 )
-			- ( parseFloat( ul.css("borderRightWidth") ) || 0 ) );
+		ul.outerWidth( Math.max( menuWidth, textWidth ) );
 	},
-	
+
 	_renderMenu: function( ul, items ) {
 		var self = this;
 		$.each( items, function( index, item ) {
