@@ -42,6 +42,17 @@
 
 <div id="main" style="position: absolute; top: -10000px; left: -10000px;">
 
+	<img src="images/jqueryui_32x32.png" usemap="#mymap" width="10", height="10">
+	<map name="mymap">
+		<area shape="rect" coords="0,0,1,1" id="areaCoordsNoHref">
+		<area shape="rect" coords="1,1,2,2" href="foo.html" id="areaCoordsHref">
+		<area shape="rect" coords="0,0,0,0" href="foo.html" id="areaCoordsNoSizeHref">
+		<area href="foo.html" id="areaNoCoordsHref">
+	</map>
+	<map name="mymap2">
+		<area shape="rect" coords="1,1,2,2" href="foo.html" id="areaNoImg">
+	</map>
+	
 	<div>
 		<input id="visibleAncestor-inputTypeNone" />
 		<input type="text" id="visibleAncestor-inputTypeText" />
@@ -57,10 +68,6 @@
 		<object id="visibleAncestor-object">xxx</object>
 		<a href="#" id="visibleAncestor-anchorWithHref">anchor</a>
 		<a id="visibleAncestor-anchorWithoutHref">anchor</a>
-		<map>
-			<area href="#" id="visibleAncestor-areaWithHref" alt="" />
-			<area id="visibleAncestor-areaWithoutHref" alt="" />
-		</map>
 		<span id="visibleAncestor-span">x</span>
 		<div id="visibleAncestor-div">x</div>
 		<span id="visibleAncestor-spanWithTabindex" tabindex="1">x</span>
