@@ -203,7 +203,10 @@ $.extend($.expr[':'], {
 				: !isNaN(tabIndex))
 			// the element and all of its ancestors must be visible
 			// the browser may report that the area is hidden
-			&& !$(element)['area' == nodeName ? 'parents' : 'closest'](':hidden').length;
+			&& !$(element).parents().andSelf().filter(function() {
+				return $.curCSS( this, "visibility" ) === "hidden" ||
+					$.expr.filters.hidden( this );
+			}).length;
 	},
 
 	tabbable: function(element) {

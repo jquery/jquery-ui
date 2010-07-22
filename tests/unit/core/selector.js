@@ -132,7 +132,7 @@ test("focusable - hidden styles", function() {
 	isNotFocusable('#visibilityHidden-span', 'span with tabindex, visibility: hidden');
 });
 
-test("focusable -  natively focusable with various tabindex", function() {
+test("focusable - natively focusable with various tabindex", function() {
 	expect(4);
 	
 	isFocusable('#inputTabindex0', 'input, tabindex 0');
@@ -141,7 +141,7 @@ test("focusable -  natively focusable with various tabindex", function() {
 	isFocusable('#inputTabindex-50', 'input, tabindex -50');
 });
 
-test("focusable -  not natively focusable with various tabindex", function() {
+test("focusable - not natively focusable with various tabindex", function() {
 	expect(4);
 	
 	isFocusable('#spanTabindex0', 'span, tabindex 0');

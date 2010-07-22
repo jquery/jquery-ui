@@ -82,19 +82,19 @@
 	<div>
 		<div id="displayNoneAncestor" style="display: none;">
 			<input id="displayNoneAncestor-input" />
-			<span tabindex="1" id="displayNoneAncestor-span"></span>
+			<span tabindex="1" id="displayNoneAncestor-span">.</span>
 		</div>
 		
 		<div id="visibilityHiddenAncestor" style="visibility: hidden;">
 			<input id="visibilityHiddenAncestor-input" />
-			<span tabindex="1" id="visibilityHiddenAncestor-span"></span>
+			<span tabindex="1" id="visibilityHiddenAncestor-span">.</span>
 		</div>
 		
 		<input id="displayNone-input" style="display: none;" />
 		<input id="visibilityHidden-input" style="visibility: hidden;" />
 		
-		<span tabindex="1" id="displayNone-span" style="display: none;"></span>
-		<span tabindex="1" id="visibilityHidden-span" style="visibility: hidden;"></span>
+		<span tabindex="1" id="displayNone-span" style="display: none;">.</span>
+		<span tabindex="1" id="visibilityHidden-span" style="visibility: hidden;">.</span>
 	</div>
 	
 	<div>
@@ -103,28 +103,28 @@
 		<input id="inputTabindex-1" tabindex="-1" />
 		<input id="inputTabindex-50" tabindex="-50" />
 		
-		<span id="spanTabindex0" tabindex="0"></span>
-		<span id="spanTabindex10" tabindex="10"></span>
-		<span id="spanTabindex-1" tabindex="-1"></span>
-		<span id="spanTabindex-50" tabindex="-50"></span>
+		<span id="spanTabindex0" tabindex="0">.</span>
+		<span id="spanTabindex10" tabindex="10">.</span>
+		<span id="spanTabindex-1" tabindex="-1">.</span>
+		<span id="spanTabindex-50" tabindex="-50">.</span>
 	</div>
 	
 	<div>
 		<input id="inputTabindexfoo" tabindex="foo" />
 		<input id="inputTabindex3foo" tabindex="3foo" />
 		
-		<span id="spanTabindexfoo" tabindex="foo"></span>
-		<span id="spanTabindex3foo" tabindex="3foo"></span>
+		<span id="spanTabindexfoo" tabindex="foo">.</span>
+		<span id="spanTabindex3foo" tabindex="3foo">.</span>
 	</div>
 	
 	<div id="zIndex100" style="z-index: 100; position: absolute">
-		<div id="zIndexAutoWithParent"></div>
+		<div id="zIndexAutoWithParent">.</div>
 	</div>
 	<div id="zIndex100ViaCSS" class="zindex">
-		<div id="zIndexAutoWithParentViaCSS"></div>
+		<div id="zIndexAutoWithParentViaCSS">.</div>
 	</div>
 	<div id="zIndex100ViaCSSPositioned" class="zindex absolute">
-		<div id="zIndexAutoWithParentViaCSSPositioned"></div>
+		<div id="zIndexAutoWithParentViaCSSPositioned">.</div>
 	</div>
 	<div id="zIndexAutoNoParent"></div>
 </div>
