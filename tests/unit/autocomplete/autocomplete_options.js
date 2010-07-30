@@ -116,6 +116,24 @@ test("delay", function() {
 	}, 100);
 });
 
+test("disabled", function() {
+	var ac = $("#autocomplete").autocomplete({
+		source: data,
+		delay: 0,
+		disabled: true
+	});
+	ac.val("ja").keydown();
+	
+	same( $(".ui-menu:visible").length, 0 );
+	
+	stop();
+	setTimeout(function() {
+		same( $(".ui-menu:visible").length, 0 );
+		ac.autocomplete("destroy");
+		start();
+	}, 50);
+});
+
 test("minLength", function() {
 	var ac = $("#autocomplete").autocomplete({
 		source: data
