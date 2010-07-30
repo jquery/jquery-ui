@@ -70,7 +70,7 @@ $.widget("ui.tooltip", {
 	},
 	
 	widget: function() {
-		return this.tooltip;
+		return this.element.pushStack(this.tooltip.get());
 	},
 	
 	open: function(event) {
