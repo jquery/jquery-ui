@@ -129,7 +129,8 @@ $.Widget.prototype = {
 	_createWidget: function( options, element ) {
 		// $.widget.bridge stores the plugin instance, but we do it anyway
 		// so that it's stored even before the _create function runs
-		this.element = $( element ).data( this.widgetName, this );
+		$.data( element, this.widgetName, this );
+		this.element = $( element );
 		this.options = $.extend( true, {},
 			this.options,
 			$.metadata && $.metadata.get( element )[ this.widgetName ],
