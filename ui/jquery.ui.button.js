@@ -210,7 +210,7 @@ $.widget( "ui.button", {
 	},
 
 	widget: function() {
-		return this.buttonElement;
+		return this.element.pushStack(this.buttonElement.get());
 	},
 
 	destroy: function() {
