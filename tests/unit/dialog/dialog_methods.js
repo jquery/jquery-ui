@@ -130,10 +130,4 @@ test("open", function() {
 	ok(dlg().is(':visible') && !dlg().is(':hidden'), 'dialog visible after open method called');
 });
 
-test("widget", function() {
-	var dialog = $('<div></div>').dialog();
-	same(dialog.dialog("widget")[0], dialog.parent()[0]);
-	same(dialog.dialog("widget").end()[0], dialog[0]);
-});
-
 })(jQuery);

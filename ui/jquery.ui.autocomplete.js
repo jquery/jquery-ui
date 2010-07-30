@@ -311,7 +311,7 @@ $.widget( "ui.autocomplete", {
 	},
 
 	widget: function() {
-		return this.element.pushStack(this.menu.element.get());
+		return this.menu.element;
 	}
 });
 

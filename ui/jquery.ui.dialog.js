@@ -207,7 +207,7 @@ $.widget("ui.dialog", {
 	},
 
 	widget: function() {
-		return this.element.pushStack(this.uiDialog.get());
+		return this.uiDialog;
 	},
 
 	close: function(event) {

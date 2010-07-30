@@ -38,14 +38,6 @@ test("search", function() {
 	same( $(".ui-menu .ui-menu-item").length, 2, "only java and javascript for 'ja'" );
 	
 	$("#autocomplete").autocomplete("destroy");
-});
-
-test("widget", function() {
-	var ac = $("#autocomplete").autocomplete({
-		source: data
-	});
-	same(ac.autocomplete("widget")[0], $(":ui-menu")[0]);
-	same(ac.autocomplete("widget").end()[0], ac[0]);
-});
+})
 
 })(jQuery);

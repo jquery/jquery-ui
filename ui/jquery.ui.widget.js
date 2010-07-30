@@ -160,7 +160,7 @@ $.Widget.prototype = {
 	},
 
 	widget: function() {
-		return this.element.pushStack(this.element.get());
+		return this.element;
 	},
 
 	option: function( key, value ) {

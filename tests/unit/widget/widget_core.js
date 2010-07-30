@@ -151,8 +151,7 @@ test(".widget() - base", function() {
 		_create: function() {}
 	});
 	var div = $("<div></div>").testWidget()
-	same(div.testWidget("widget")[0], div[0]);
-	same(div.testWidget("widget").end()[0], div[0]);
+	same(div[0], div.testWidget("widget")[0]);
 });
 
 test(".widget() - overriden", function() {
@@ -160,12 +159,10 @@ test(".widget() - overriden", function() {
 	$.widget("ui.testWidget", {
 		_create: function() {},
 		widget: function() {
-			return this.element.pushStack(wrapper.get());
+			return wrapper;
 		}
 	});
-	var div = $("<div></div>").testWidget();
-	same(div.testWidget("widget")[0], wrapper[0]);
-	same(div.testWidget("widget").end()[0], div[0]);
+	same(wrapper[0], $("<div></div>").testWidget().testWidget("widget")[0]);
 });
 
 })(jQuery);
