@@ -43,7 +43,7 @@ test("buttons", function() {
 		i++;
 	});
 
-	ok(btn.parent().hasClass('ui-dialog-buttonpane'), "buttons in container");
+	ok(btn.parent().hasClass('ui-dialog-buttonset'), "buttons in container");
 	btn.trigger("click");
 
 	var newButtons = {
