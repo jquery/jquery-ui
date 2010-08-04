@@ -846,8 +846,11 @@ $.extend(Datepicker.prototype, {
 	_clickMonthYear: function(id) {
 		var target = $(id);
 		var inst = this._getInst(target[0]);
-		if (inst.input && inst._selectingMonthYear && !$.browser.msie)
-			inst.input.focus();
+		if (inst.input && inst._selectingMonthYear) {
+			setTimeout(function() {
+				inst.input.focus();
+			}, 0);
+		}
 		inst._selectingMonthYear = !inst._selectingMonthYear;
 	},
 
