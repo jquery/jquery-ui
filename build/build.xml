@@ -69,7 +69,7 @@
 				</concat>
 			</sequential>
 		</for>
-		<copy todir="${min.dir}">
+		<copy todir="${min.dir}" overwrite="true">
 			<fileset dir="${dist.dir}/ui-headered/" includes="*.js" />
 		</copy>
 		
