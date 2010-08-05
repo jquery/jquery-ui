@@ -18,7 +18,9 @@
 	
 	<property file="ant.properties" />
 
-	<loadfile failonerror="no" srcFile="../version.txt" property="release.version" />
+	<loadfile failonerror="no" srcFile="../version.txt" property="release.version">
+		<filterchain><striplinebreaks/></filterchain>
+	</loadfile>
 	<property name="release.filename" value="jquery-ui-${release.version}" />
 
 	<property name="dist.dir" value="dist/${release.filename}/" />
