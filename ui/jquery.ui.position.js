@@ -164,11 +164,14 @@ $.ui.position = {
 					data.my[ 0 ] === "right" ?
 						data.elemWidth :
 						0,
+				atOffset = data.at[ 0 ] === "left" ?
+					data.targetWidth :
+					-data.targetWidth,
 				offset = -2 * data.offset[ 0 ];
 			position.left += position.left < 0 ?
-				myOffset + data.targetWidth + offset :
+				myOffset + atOffset + offset :
 				over > 0 ?
-					myOffset - data.targetWidth + offset :
+					myOffset + atOffset + offset :
 					0;
 		},
 		top: function( position, data ) {
@@ -187,7 +190,7 @@ $.ui.position = {
 					-data.targetHeight,
 				offset = -2 * data.offset[ 1 ];
 			position.top += position.top < 0 ?
-				myOffset + data.targetHeight + offset :
+				myOffset + atOffset + offset :
 				over > 0 ?
 					myOffset + atOffset + offset :
 					0;
