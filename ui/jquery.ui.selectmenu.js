@@ -119,7 +119,8 @@ $.widget("ui.selectmenu", {
 		//change event on original selectmenu
 		this.element
 			.click(function(){ this._refreshValue(); })
-			.focus(function(){ this.newelement[0].focus(); });
+            // newelement can be null under unclear circumstances in IE8 
+			.focus(function () { if (this.newelement) { this.newelement[0].focus(); } });
 		
 		//create menu portion, append to body
 		var cornerClass = (o.style == "dropdown")? " ui-corner-bottom" : " ui-corner-all"
