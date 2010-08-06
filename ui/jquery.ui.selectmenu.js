@@ -531,21 +531,4 @@ $.widget("ui.selectmenu", {
 		}
 	}
 });
-
-$.extend($.ui.selectmenu, {
-	getter: "value",
-	version: "@VERSION",
-	eventPrefix: "selectmenu",
-	defaults: {
-		transferClasses: true,
-		style: 'popup', 
-		width: null, 
-		menuWidth: null, 
-		handleWidth: 26, 
-		maxHeight: null,
-		icons: null, 
-		format: null
-	}
-});
-
 })(jQuery);
