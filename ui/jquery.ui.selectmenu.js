@@ -11,7 +11,21 @@
 (function($) {
 
 $.widget("ui.selectmenu", {
-	_init: function() {
+	getter: "value",
+	version: "1.8",
+	eventPrefix: "selectmenu",
+	options: {
+		transferClasses: true,
+		style: 'popup',
+		width: null, 
+		menuWidth: null, 
+		handleWidth: 26, 
+		maxHeight: null,
+		icons: null, 
+		format: null
+	},	
+	
+	_create: function() {
 		var self = this, o = this.options;
 		
 		//quick array of button and menu id's
@@ -338,8 +352,11 @@ $.widget("ui.selectmenu", {
 		this._prevChar[0] = C;
 	},
 	_uiHash: function(){
+		var index = this.value();
 		return {
-			value: this.value()
+			index: index,
+			option: $("option", this.element).get(index),
+			value: this.element[0].value
 		};
 	},
 	open: function(event){
