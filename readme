@@ -1,7 +1,4 @@
-This is a fork of jQuery UI to push futher development of the following plugins:
+A fork of jQuery UI to push devemopment of some plug-ins. Currently selectmenu is adopted to be improved. Please see branch selectmenu!
 
-- selectmenu
-
-
-Please use GitHub for bug tracking and take a look at the jQuery UI Wiki at:
+Please use GitHub issues for bug tracking and take a look at the jQuery UI Wiki at:
 http://wiki.jqueryui.com/Selectmenu
