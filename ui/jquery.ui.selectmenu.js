@@ -144,7 +144,7 @@ $.widget("ui.selectmenu", {
 		var activeClass = (self.options.style == "popup") ? " ui-state-active" : "";
 		
 		//write li's
-		for(var i in selectOptionData){
+		for (var i = 0; i < selectOptionData.length; i++) {
 			var thisLi = $('<li role="presentation"><a href="#" tabindex="-1" role="option" aria-selected="false">'+ selectOptionData[i].text +'</a></li>')
 				.data('index',i)
 				.addClass(selectOptionData[i].classes)
