@@ -595,7 +595,7 @@ $.ui.plugin.add("resizable", "alsoResize", {
 				// reset position for Opera - no need to verify it was changed
 				el.css({ position: el.data("resizable-alsoresize").position });
 			});
-		}
+		};
 
 		if (self._revertToRelativePosition) {
 			self._revertToRelativePosition = false;

@@ -603,7 +603,7 @@ $.widget( "ui.tabs", {
 		return this;
 	},
 
-	load: function( index ) {
+	load: function( index ) {
 		index = this._getIndex( index );
 		var self = this,
 			o = this.options,
