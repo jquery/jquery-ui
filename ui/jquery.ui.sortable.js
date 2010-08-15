@@ -124,6 +124,9 @@ $.widget("ui.sortable", $.ui.mouse, {
 		var o = this.options, self = this;
 		this.currentContainer = this;
 
+		// Start out "over" the current container
+		this.currentContainer.containerCache.over = 1;
+
 		//We only need to call refreshPositions, because the refreshItems call has been moved to mouseCapture
 		this.refreshPositions();
 
@@ -685,7 +688,7 @@ $.widget("ui.sortable", $.ui.mouse, {
 	_contactContainers: function(event) {
 		
 		// get innermost container that intersects with item 
-		var innermostContainer = null, innermostIndex = null;		
+		var innermostContainer = null;
 		
 		
 		for (var i = this.containers.length - 1; i >= 0; i--){
@@ -701,8 +704,6 @@ $.widget("ui.sortable", $.ui.mouse, {
 					continue;
 
 				innermostContainer = this.containers[i]; 
-				innermostIndex = i;
-					
 			} else {
 				// container doesn't intersect. trigger "out" event if necessary 
 				if(this.containers[i].containerCache.over) {
@@ -717,16 +718,13 @@ $.widget("ui.sortable", $.ui.mouse, {
 		if(!innermostContainer) return; 
 
 		// move the item into the container if it's not there already
-		if(this.containers.length === 1) {
-			this.containers[innermostIndex]._trigger("over", event, this._uiHash(this));
-			this.containers[innermostIndex].containerCache.over = 1;
-		} else if(this.currentContainer != this.containers[innermostIndex]) { 
+		if(this.containers.length > 0 && this.currentContainer != innermostContainer) {
 
 			//When entering a new container, we will find the item with the least distance and append our item near it 
-			var dist = 10000; var itemWithLeastDistance = null; var base = this.positionAbs[this.containers[innermostIndex].floating ? 'left' : 'top']; 
+			var dist = 10000; var itemWithLeastDistance = null; var base = this.positionAbs[innermostContainer.floating ? 'left' : 'top']; 
 			for (var j = this.items.length - 1; j >= 0; j--) { 
-				if(!$.ui.contains(this.containers[innermostIndex].element[0], this.items[j].item[0])) continue; 
-				var cur = this.items[j][this.containers[innermostIndex].floating ? 'left' : 'top']; 
+				if(!$.ui.contains(innermostContainer.element[0], this.items[j].item[0])) continue; 
+				var cur = this.items[j][innermostContainer.floating ? 'left' : 'top']; 
 				if(Math.abs(cur - base) < dist) { 
 					dist = Math.abs(cur - base); itemWithLeastDistance = this.items[j]; 
 				} 
@@ -735,19 +733,19 @@ $.widget("ui.sortable", $.ui.mouse, {
 			if(!itemWithLeastDistance && !this.options.dropOnEmpty) //Check if dropOnEmpty is enabled 
 				return; 
 
-			this.currentContainer = this.containers[innermostIndex]; 
-			itemWithLeastDistance ? this._rearrange(event, itemWithLeastDistance, null, true) : this._rearrange(event, null, this.containers[innermostIndex].element, true); 
+			this.currentContainer = innermostContainer; 
+			itemWithLeastDistance ? this._rearrange(event, itemWithLeastDistance, null, true) : this._rearrange(event, null, innermostContainer.element, true); 
 			this._trigger("change", event, this._uiHash()); 
-			this.containers[innermostIndex]._trigger("change", event, this._uiHash(this)); 
+			innermostContainer._trigger("change", event, this._uiHash(this)); 
 
 			//Update the placeholder 
 			this.options.placeholder.update(this.currentContainer, this.placeholder); 
-		
-			this.containers[innermostIndex]._trigger("over", event, this._uiHash(this)); 
-			this.containers[innermostIndex].containerCache.over = 1;
 		} 
-	
-		
+
+		if (!innermostContainer.containerCache.over) {
+			innermostContainer._trigger("over", event, this._uiHash(this));
+			innermostContainer.containerCache.over = 1;
+		}
 	},
 
 	_createHelper: function(event) {

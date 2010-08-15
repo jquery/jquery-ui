@@ -22,7 +22,7 @@ $.simulate = function(el, type, options) {
 	this.target = el;
 	this.options = options;
 
-	if (/^drag$/.test(type)) {
+	if (/^drag(Start|Relative|ToElement|Stop)?$/.test(type)) {
 		this[type].apply(this, [this.target, options]);
 	} else {
 		this.simulateEvent(el, type, options);
@@ -109,8 +109,8 @@ $.extend($.simulate.prototype, {
 	},
 
 	drag: function(el) {
-		var self = this, center = this.findCenter(this.target), 
-			options = this.options,	x = Math.floor(center.x), y = Math.floor(center.y), 
+		var center = this.findCenter(this.target), 
+			options = this.options,	x = center.x, y = center.y, 
 			dx = options.dx || 0, dy = options.dy || 0, target = this.target;
 		var coord = { clientX: x, clientY: y };
 		this.simulateEvent(target, "mousedown", coord);
@@ -121,11 +121,61 @@ $.extend($.simulate.prototype, {
 		this.simulateEvent(document, "mousemove", coord);
 		this.simulateEvent(target, "mouseup", coord);
 	},
+
+	dragStart: function(el) {
+		var center = this.findCenter(this.target);
+
+		var coord = {
+			clientX: center.x,
+			clientY: center.y
+		};
+		this.simulateEvent(this.target, "mousedown", coord);
+		this.dragRelative(this.target, { dx: 1, dy: 1 });
+	},
+
+	dragRelative: function(el, options) {
+		var center = this.findCenter(this.target);
+
+		if (!options)
+		    options = this.options;
+
+		var dx = options.dx || 0;
+		var dy = options.dy || 0;
+
+		var coord = {
+			clientX: center.x + dx,
+			clientY: center.y + dy
+		};
+		this.simulateEvent(document, "mousemove", coord);
+	},
+
+	dragToElement: function(el) {
+		var to = this.findCenter(this.options.element);
+
+		var coord = {
+			clientX: to.x,
+			clientY: to.y
+		};
+		var e = this.simulateEvent(document, "mousemove", coord);
+	},
+
+	dragStop: function(el) {
+		var center = this.findCenter(this.target);
+
+		var coord = {
+			clientX: center.x,
+			clientY: center.y
+		};
+		this.simulateEvent(this.target, "mouseup", coord);
+	},
+
 	findCenter: function(el) {
-		var el = $(this.target), o = el.offset();
+		el = $(el || this.target);
+		var o = el.offset();
+
 		return {
-			x: o.left + el.outerWidth() / 2,
-			y: o.top + el.outerHeight() / 2
+			x: Math.floor(o.left + el.outerWidth() / 2),
+			y: Math.floor(o.top + el.outerHeight() / 2)
 		};
 	}
 });
