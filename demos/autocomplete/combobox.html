@@ -12,7 +12,6 @@
 	<script type="text/javascript" src="../../ui/jquery.ui.autocomplete.js"></script>
 	<link type="text/css" href="../demos.css" rel="stylesheet" />
 	<style type="text/css">
-		/* TODO shouldn't be necessary */
 		.ui-button { margin-left: -1px; }
 		.ui-button-icon-only .ui-button-text { padding: 0.35em; } 
 		.ui-autocomplete-input { margin: 0; padding: 0.48em 0 0.47em 0.45em; }
@@ -50,7 +49,6 @@
 						},
 						select: function( event, ui ) {
 							ui.item.option.selected = true;
-							//select.val( ui.item.option.value );
 							self._trigger( "selected", event, {
 								item: ui.item.option
 							});
