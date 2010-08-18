@@ -3,7 +3,7 @@
  */
 
 var button_defaults = {
-	disabled: false,
+	disabled: null,
 	text: true,
 	label: null,
 	icons: {
