@@ -146,6 +146,35 @@ test('merge multiple option arguments', function() {
 	});
 });
 
+test("re-init", function() {
+	var div = $( "<div></div>" ),
+		actions = [];
+
+	$.widget( "ui.testWidget", {
+		_create: function() {
+			actions.push( "create" );
+		},
+		_init: function() {
+			actions.push( "init" );
+		},
+		_setOption: function( key, value ) {
+			actions.push( "option" + key );
+		}
+	});
+
+	actions = [];
+	div.testWidget({ foo: "bar" });
+	same( actions, [ "create", "init" ], "correct methods called on init" );
+
+	actions = [];
+	div.testWidget();
+	same( actions, [ "init" ], "correct methods call on re-init" );
+
+	actions = [];
+	div.testWidget({ foo: "bar" });
+	same( actions, [ "optionfoo", "init" ], "correct methods called on re-init with options" );
+});
+
 test(".widget() - base", function() {
 	$.widget("ui.testWidget", {
 		_create: function() {}
