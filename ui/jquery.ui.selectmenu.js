@@ -111,10 +111,9 @@ $.widget("ui.selectmenu", {
 			});
 		
 		//document click closes menu
-		$(document)
-			.mousedown(function(event){
-				self.close(event);
-			});
+		$(document).mousedown(function(event){
+			self.close(event);
+		});
 
 		//change event on original selectmenu
 		this.element
@@ -123,7 +122,7 @@ $.widget("ui.selectmenu", {
 			.focus(function () { if (this.newelement) { this.newelement[0].focus(); } });
 		
 		//create menu portion, append to body
-		var cornerClass = (o.style == "dropdown")? " ui-corner-bottom" : " ui-corner-all"
+		var cornerClass = (o.style == "dropdown")? " ui-corner-bottom" : " ui-corner-all";
 		this.list = $('<ul class="' + self.widgetBaseClass + '-menu ui-widget ui-widget-content'+cornerClass+'" aria-hidden="true" role="listbox" aria-labelledby="'+this.ids[0]+'" id="'+this.ids[1]+'"></ul>').appendTo('body');				
 		
 		//serialize selectmenu element options	
@@ -347,7 +346,7 @@ $.widget("ui.selectmenu", {
 			focusFound = true;
 			$(elem).trigger(eventType);
 			self._prevChar[1] = ind;
-		};
+		}
 		this.list.find('li a').each(function(i){	
 			if(!focusFound){
 				var thisText = $(this).text();
@@ -508,7 +507,7 @@ $.widget("ui.selectmenu", {
 					.html() 
 			);
 			
-		this.list.attr('aria-activedescendant', activeID)
+		this.list.attr('aria-activedescendant', activeID);
 	},
 	_refreshPosition: function(){	
 		//set left value
