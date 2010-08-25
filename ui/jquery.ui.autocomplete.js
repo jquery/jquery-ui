@@ -221,10 +221,14 @@ $.widget( "ui.autocomplete", {
 		} else if ( typeof this.options.source === "string" ) {
 			url = this.options.source;
 			this.source = function( request, response ) {
+				if (self.xhr) {
+					self.xhr.abort();
+				}
 				self.xhr = $.getJSON( url, request, function( data, status, xhr ) {
 					if ( xhr === self.xhr ) {
-						response.apply( this, arguments );
+						response( data );
 					}
+					self.xhr = null;
 				});
 			};
 		} else {
