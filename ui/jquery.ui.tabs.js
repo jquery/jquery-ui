@@ -304,6 +304,7 @@ $.widget( "ui.tabs", {
 		var showTab = showFx
 			? function( clicked, $show ) {
 				$( clicked ).closest( "li" ).addClass( "ui-tabs-selected ui-state-active" );
+$show.stop(true,true);//prevent "stacking" content spots if user clicks another tab while current animation is running.
 				$show.hide().removeClass( "ui-tabs-hide" ) // avoid flicker that way
 					.animate( showFx, showFx.duration || "normal", function() {
 						resetStyle( $show, showFx );
