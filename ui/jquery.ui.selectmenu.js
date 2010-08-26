@@ -325,7 +325,8 @@ $.widget("ui.selectmenu", {
 	destroy: function() {
 		this.element.removeData(this.widgetName)
 			.removeClass(this.widgetBaseClass + '-disabled' + ' ' + this.namespace + '-state-disabled')
-			.removeAttr('aria-disabled');
+			.removeAttr('aria-disabled')
+			.unbind("click");
 	
 		//unbind click on label, reset its for attr
 		$('label[for='+this.newelement.attr('id')+']')
