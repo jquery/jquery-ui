@@ -1,49 +1,95 @@
 /*
  * widget unit tests
  */
-(function($) {
+(function( $ ) {
 
-module('widget factory', {
+module( "widget factory", {
 	teardown: function() {
 		delete $.ui.testWidget;
 	}
 });
 
-test('widget creation', function() {
+test( "widget creation", function() {
 	var myPrototype = {
 		_create: function() {},
 		creationTest: function() {}
 	};
-	
-	$.widget('ui.testWidget', myPrototype);
-	ok($.isFunction($.ui.testWidget), 'constructor was created');
-	equals('object', typeof $.ui.testWidget.prototype, 'prototype was created');
-	equals($.ui.testWidget.prototype._create, myPrototype._create, 'create function is copied over');
-	equals($.ui.testWidget.prototype.creationTest, myPrototype.creationTest, 'random function is copied over');
-	equals($.ui.testWidget.prototype.option, $.Widget.prototype.option, 'option method copied over from base widget');
+
+	$.widget( "ui.testWidget", myPrototype );
+	ok( $.isFunction( $.ui.testWidget ), "constructor was created" );
+	equals( "object", typeof $.ui.testWidget.prototype, "prototype was created" );
+	equals( $.ui.testWidget.prototype._create, myPrototype._create,
+		"create function is copied over" );
+	equals( $.ui.testWidget.prototype.creationTest, myPrototype.creationTest,
+		"random function is copied over" );
+	equals( $.ui.testWidget.prototype.option, $.Widget.prototype.option,
+		"option method copied over from base widget" );
 });
 
-test('jQuery usage', function() {
-	expect(10);
-	
+test( "jQuery usage", function() {
+	expect( 10 );
+
 	var shouldInit = false;
-	
-	$.widget('ui.testWidget', {
+
+	$.widget( "ui.testWidget", {
 		getterSetterVal: 5,
 		_create: function() {
-			ok(shouldInit, 'init called on instantiation');
+			ok( shouldInit, "init called on instantiation" );
 		},
-		methodWithParams: function(param1, param2) {
-			ok(true, 'method called via .pluginName(methodName)');
-			equals(param1, 'value1',
-				'parameter passed via .pluginName(methodName, param)');
-			equals(param2, 'value2',
-				'multiple parameters passed via .pluginName(methodName, param, param)');
+		methodWithParams: function( param1, param2 ) {
+			ok( true, "method called via .pluginName(methodName)" );
+			equals( param1, "value1",
+				"parameter passed via .pluginName(methodName, param)" );
+			equals( param2, "value2",
+				"multiple parameters passed via .pluginName(methodName, param, param)" );
 			
 			return this;
 		},
-		getterSetterMethod: function(val) {
-			if (val) {
+		getterSetterMethod: function( val ) {
+			if ( val ) {
+				this.getterSetterVal = val;
+			} else {
+				return this.getterSetterVal;
+			}
+		}
+	});
+
+	shouldInit = true;
+	var elem = $( "<div></div>" ).testWidget();
+	shouldInit = false;
+
+	var instance = elem.data( "testWidget" );
+	equals( typeof instance, "object", "instance stored in .data(pluginName)" );
+	equals( instance.element[0], elem[0], "element stored on widget" );
+	var ret = elem.testWidget( "methodWithParams", "value1", "value2" );
+	equals( ret, elem, "jQuery object returned from method call" );
+
+	ret = elem.testWidget( "getterSetterMethod" );
+	equals( ret, 5, "getter/setter can act as getter" );
+	ret = elem.testWidget( "getterSetterMethod", 30 );
+	equals( ret, elem, "getter/setter method can be chainable" );
+	equals( instance.getterSetterVal, 30, "getter/setter can act as setter" );
+});
+
+test( "direct usage", function() {
+	expect( 9 );
+
+	var shouldInit = false;
+
+	$.widget( "ui.testWidget", {
+		getterSetterVal: 5,
+		_create: function() {
+			ok( shouldInit, "init called on instantiation" );
+		},
+		methodWithParams: function( param1, param2 ) {
+			ok( true, "method called dirctly" );
+			equals( param1, "value1", "parameter passed via direct call" );
+			equals( param2, "value2", "multiple parameters passed via direct call" );
+
+			return this;
+		},
+		getterSetterMethod: function( val ) {
+			if ( val ) {
 				this.getterSetterVal = val;
 			} else {
 				return this.getterSetterVal;
@@ -51,72 +97,30 @@ test('jQuery usage', function() {
 		}
 	});
 	
+	var elem = $( "<div></div>" )[ 0 ];
+	
 	shouldInit = true;
-	var elem = $('<div></div>').testWidget();
+	var instance = new $.ui.testWidget( {}, elem );
 	shouldInit = false;
-	
-	var instance = elem.data('testWidget');
-	equals(typeof instance, 'object', 'instance stored in .data(pluginName)');
-	equals(instance.element[0], elem[0], 'element stored on widget');
-	var ret = elem.testWidget('methodWithParams', 'value1', 'value2');
-	equals(ret, elem, 'jQuery object returned from method call');
-	
-	ret = elem.testWidget('getterSetterMethod');
-	equals(ret, 5, 'getter/setter can act as getter');
-	ret = elem.testWidget('getterSetterMethod', 30);
-	equals(ret, elem, 'getter/setter method can be chainable');
-	equals(instance.getterSetterVal, 30, 'getter/setter can act as setter');
-});
 
-test('direct usage', function() {
-	expect(9);
+	equals( $( elem ).data( "testWidget" ), instance,
+		"instance stored in .data(pluginName)" );
+	equals( instance.element[ 0 ], elem, "element stored on widget" );
 	
-	var shouldInit = false;
-	
-	$.widget('ui.testWidget', {
-		getterSetterVal: 5,
-		_create: function() {
-			ok(shouldInit, 'init called on instantiation');
-		},
-		methodWithParams: function(param1, param2) {
-			ok(true, 'method called dirctly');
-			equals(param1, 'value1', 'parameter passed via direct call');
-			equals(param2, 'value2', 'multiple parameters passed via direct call');
-			
-			return this;
-		},
-		getterSetterMethod: function(val) {
-			if (val) {
-				this.getterSetterVal = val;
-			} else {
-				return this.getterSetterVal;
-			}
-		}
-	});
-	
-	var elem = $('<div></div>')[0];
-	
-	shouldInit = true;
-	var instance = new $.ui.testWidget({}, elem);
-	shouldInit = false;
-	
-	equals($(elem).data('testWidget'), instance, 'instance stored in .data(pluginName)');
-	equals(instance.element[0], elem, 'element stored on widget');
-	
-	var ret = instance.methodWithParams('value1', 'value2');
-	equals(ret, instance, 'plugin returned from method call');
-	
+	var ret = instance.methodWithParams( "value1", "value2" );
+	equals( ret, instance, "plugin returned from method call" );
+
 	ret = instance.getterSetterMethod();
-	equals(ret, 5, 'getter/setter can act as getter');
-	instance.getterSetterMethod(30);
-	equals(instance.getterSetterVal, 30, 'getter/setter can act as setter');
+	equals( ret, 5, "getter/setter can act as getter" );
+	instance.getterSetterMethod( 30 );
+	equals( instance.getterSetterVal, 30, "getter/setter can act as setter" );
 });
 
-test('merge multiple option arguments', function() {
-	expect(1);
-	$.widget("ui.testWidget", {
+test("merge multiple option arguments", function() {
+	expect( 1 );
+	$.widget( "ui.testWidget", {
 		_create: function() {
-			same(this.options, {
+			same( this.options, {
 				disabled: false,
 				option1: "value1",
 				option2: "value2",
@@ -128,7 +132,7 @@ test('merge multiple option arguments', function() {
 			});
 		}
 	});
-	$("<div></div>").testWidget({
+	$( "<div></div>" ).testWidget({
 		option1: "valuex",
 		option2: "valuex",
 		option3: "value3",
@@ -148,7 +152,7 @@ test('merge multiple option arguments', function() {
 	});
 });
 
-test("re-init", function() {
+test( "re-init", function() {
 	var div = $( "<div></div>" ),
 		actions = [];
 
@@ -236,7 +240,7 @@ test( ".option() - setter", function() {
 
 test( ".enable()", function() {
 	expect( 2 );
-	$.widget("ui.testWidget", {
+	$.widget( "ui.testWidget", {
 		_create: function() {},
 		_setOption: function( key, val ) {
 			same( key, "disabled", "_setOption called with disabled option" );
@@ -248,7 +252,7 @@ test( ".enable()", function() {
 
 test( ".disable()", function() {
 	expect( 2 );
-	$.widget("ui.testWidget", {
+	$.widget( "ui.testWidget", {
 		_create: function() {},
 		_setOption: function( key, val ) {
 			same( key, "disabled", "_setOption called with disabled option" );
@@ -258,23 +262,23 @@ test( ".disable()", function() {
 	$( "<div></div>" ).testWidget().testWidget( "disable" );
 });
 
-test(".widget() - base", function() {
-	$.widget("ui.testWidget", {
+test( ".widget() - base", function() {
+	$.widget( "ui.testWidget", {
 		_create: function() {}
 	});
-	var div = $("<div></div>").testWidget();
-	same(div[0], div.testWidget("widget")[0]);
+	var div = $( "<div></div>" ).testWidget();
+	same( div[0], div.testWidget( "widget" )[0]);
 });
 
-test(".widget() - overriden", function() {
-	var wrapper = $("<div></div>");
-	$.widget("ui.testWidget", {
+test( ".widget() - overriden", function() {
+	var wrapper = $( "<div></div>" );
+	$.widget( "ui.testWidget", {
 		_create: function() {},
 		widget: function() {
 			return wrapper;
 		}
 	});
-	same(wrapper[0], $("<div></div>").testWidget().testWidget("widget")[0]);
+	same( wrapper[0], $( "<div></div>" ).testWidget().testWidget( "widget" )[0] );
 });
 
-})(jQuery);
+})( jQuery );
