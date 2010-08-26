@@ -35,8 +35,10 @@ test('jQuery usage', function() {
 		},
 		methodWithParams: function(param1, param2) {
 			ok(true, 'method called via .pluginName(methodName)');
-			equals(param1, 'value1', 'parameter passed via .pluginName(methodName, param)');
-			equals(param2, 'value2', 'multiple parameter passed via .pluginName(methodName, param, param)');
+			equals(param1, 'value1',
+				'parameter passed via .pluginName(methodName, param)');
+			equals(param2, 'value2',
+				'multiple parameters passed via .pluginName(methodName, param, param)');
 			
 			return this;
 		},
@@ -77,9 +79,9 @@ test('direct usage', function() {
 			ok(shouldInit, 'init called on instantiation');
 		},
 		methodWithParams: function(param1, param2) {
-			ok(true, 'method called via .pluginName(methodName)');
-			equals(param1, 'value1', 'parameter passed via .pluginName(methodName, param)');
-			equals(param2, 'value2', 'multiple parameter passed via .pluginName(methodName, param, param)');
+			ok(true, 'method called dirctly');
+			equals(param1, 'value1', 'parameter passed via direct call');
+			equals(param2, 'value2', 'multiple parameters passed via direct call');
 			
 			return this;
 		},
@@ -175,11 +177,92 @@ test("re-init", function() {
 	same( actions, [ "optionfoo", "init" ], "correct methods called on re-init with options" );
 });
 
+test( ".option() - getter", function() {
+	$.widget( "ui.testWidget", {
+		_create: function() {}
+	});
+
+	var div = $( "<div></div>" ).testWidget({
+		foo: "bar",
+		baz: 5,
+		qux: [ "quux", "quuux" ]
+	});
+
+	same( div.testWidget( "option", "foo"), "bar", "single option - string" );
+	same( div.testWidget( "option", "baz"), 5, "single option - number" );
+	same( div.testWidget( "option", "qux"), [ "quux", "quuux" ],
+		"single option - array" );
+
+	var options = div.testWidget( "option" );
+	same( options, {
+		disabled: false,
+		foo: "bar",
+		baz: 5,
+		qux: [ "quux", "quuux" ]
+	}, "full options hash returned" );
+	options.foo = "notbar";
+	same( div.testWidget( "option", "foo"), "bar",
+		"modifying returned options hash does not modify plugin instance" );
+});
+
+test( ".option() - setter", function() {
+	var calls = [];
+	$.widget( "ui.testWidget", {
+		_create: function() {},
+		_setOption: function( key, val ) {
+			calls.push({
+				key: key,
+				val: val
+			});
+		}
+	});
+	var div = $( "<div></div>" ).testWidget();
+
+	calls = [];
+	div.testWidget( "option", "foo", "bar" );
+	same( calls, [{ key: "foo", val: "bar" }],
+		"_setOption called for single option" );
+	
+	calls = [];
+	div.testWidget( "option", {
+		bar: "qux",
+		quux: "quuux"
+	});
+	same( calls, [
+		{ key: "bar", val: "qux" },
+		{ key: "quux", val: "quuux" }
+	], "_setOption called with multiple options" );
+});
+
+test( ".enable()", function() {
+	expect( 2 );
+	$.widget("ui.testWidget", {
+		_create: function() {},
+		_setOption: function( key, val ) {
+			same( key, "disabled", "_setOption called with disabled option" );
+			same( val, false, "disabled set to false" );
+		}
+	});
+	$( "<div></div>" ).testWidget().testWidget( "enable" );
+});
+
+test( ".disable()", function() {
+	expect( 2 );
+	$.widget("ui.testWidget", {
+		_create: function() {},
+		_setOption: function( key, val ) {
+			same( key, "disabled", "_setOption called with disabled option" );
+			same( val, true, "disabled set to true" );
+		}
+	});
+	$( "<div></div>" ).testWidget().testWidget( "disable" );
+});
+
 test(".widget() - base", function() {
 	$.widget("ui.testWidget", {
 		_create: function() {}
 	});
-	var div = $("<div></div>").testWidget()
+	var div = $("<div></div>").testWidget();
 	same(div[0], div.testWidget("widget")[0]);
 });
 
