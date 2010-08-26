@@ -281,4 +281,132 @@ test( ".widget() - overriden", function() {
 	same( wrapper[0], $( "<div></div>" ).testWidget().testWidget( "widget" )[0] );
 });
 
+test( "._trigger() - no event, no ui", function() {
+	expect( 7 );
+	var handlers = [];
+
+	$.widget( "ui.testWidget", {
+		_create: function() {}
+	});
+
+	$( "#widget" ).testWidget({
+		foo: function( event, ui ) {
+			same( event.type, "testwidgetfoo", "correct event type in callback" );
+			same( ui, {}, "empty ui hash passed" );
+			handlers.push( "callback" );
+		}
+	});
+	$( document ).add( "#widget-wrapper" ).add( "#widget" )
+		.bind( "testwidgetfoo", function( event, ui ) {
+			same( ui, {}, "empty ui hash passed" );
+			handlers.push( this );
+		});
+	same( $( "#widget" ).data( "testWidget" )._trigger( "foo" ), true,
+		"_trigger returns true when event is not cancelled" );
+	same( handlers, [
+		$( "#widget" )[ 0 ],
+		$( "#widget-wrapper" )[ 0 ],
+		document,
+		"callback"
+	], "event bubbles and then invokes callback" );
+
+	$( document ).unbind( "testwidgetfoo" );
+});
+
+test( "._trigger() - cancelled event", function() {
+	expect( 3 );
+
+	$.widget( "ui.testWidget", {
+		_create: function() {}
+	});
+
+	$( "#widget" ).testWidget({
+		foo: function( event, ui ) {
+			ok( true, "callback invoked even if event is cancelled" );
+		}
+	})
+	.bind( "testwidgetfoo", function( event, ui ) {
+		ok( true, "event was triggered" );
+		return false;
+	});
+	same( $( "#widget" ).data( "testWidget" )._trigger( "foo" ), false,
+		"_trigger returns false when event is cancelled" );
+});
+
+test( "._trigger() - cancelled callback", function() {
+	$.widget( "ui.testWidget", {
+		_create: function() {}
+	});
+
+	$( "#widget" ).testWidget({
+		foo: function( event, ui ) {
+			return false;
+		}
+	});
+	same( $( "#widget" ).data( "testWidget" )._trigger( "foo" ), false,
+		"_trigger returns false when callback returns false" );
+});
+
+test( "._trigger() - provide event and ui", function() {
+	expect( 7 );
+
+	var originalEvent = $.Event( "originalTest" );
+	$.widget( "ui.testWidget", {
+		_create: function() {},
+		testEvent: function() {
+			var ui = {
+					foo: "bar",
+					baz: {
+						qux: 5,
+						quux: 20
+					}
+				};
+			this._trigger( "foo", originalEvent, ui );
+			same( ui, {
+				foo: "notbar",
+				baz: {
+					qux: 10,
+					quux: "jQuery"
+				}
+			}, "ui object modified" );
+		}
+	});
+	$( "#widget" ).bind( "testwidgetfoo", function( event, ui ) {
+		equal( event.originalEvent, originalEvent, "original event object passed" );
+		same( ui, {
+			foo: "bar",
+			baz: {
+				qux: 5,
+				quux: 20
+			}
+		}, "ui hash passed" );
+		ui.foo = "notbar";
+	});
+	$( "#widget-wrapper" ).bind( "testwidgetfoo", function( event, ui ) {
+		equal( event.originalEvent, originalEvent, "original event object passed" );
+		same( ui, {
+			foo: "notbar",
+			baz: {
+				qux: 5,
+				quux: 20
+			}
+		}, "modified ui hash passed" );
+		ui.baz.qux = 10;
+	});
+	$( "#widget" ).testWidget({
+		foo: function( event, ui ) {
+			equal( event.originalEvent, originalEvent, "original event object passed" );
+			same( ui, {
+				foo: "notbar",
+				baz: {
+					qux: 10,
+					quux: 20
+				}
+			}, "modified ui hash passed" );
+			ui.baz.quux = "jQuery";
+		}
+	})
+	.testWidget( "testEvent" );
+});
+
 })( jQuery );
