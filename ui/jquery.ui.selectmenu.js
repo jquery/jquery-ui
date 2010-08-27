@@ -240,6 +240,7 @@ $.widget("ui.selectmenu", {
 			.keydown(function(event){
 				var ret = true;
 				switch (event.keyCode) {
+					/*
 					case $.ui.keyCode.UP:
 					case $.ui.keyCode.LEFT:
 						ret = false;
@@ -250,10 +251,11 @@ $.widget("ui.selectmenu", {
 						ret = false;
 						self._moveFocus(1);
 						break;	
+					*/
 					case $.ui.keyCode.HOME:
 						ret = false;
 						self._moveFocus(':first');
-						break;	
+						break;		
 					case $.ui.keyCode.PAGE_UP:
 						ret = false;
 						self._scrollPage('up');
@@ -265,7 +267,7 @@ $.widget("ui.selectmenu", {
 					case $.ui.keyCode.END:
 						ret = false;
 						self._moveFocus(':last');
-						break;			
+						break;		
 					case $.ui.keyCode.ENTER:
 					case $.ui.keyCode.SPACE:
 						ret = false;
