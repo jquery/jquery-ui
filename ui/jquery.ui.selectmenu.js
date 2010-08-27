@@ -456,7 +456,7 @@ $.widget("ui.selectmenu", {
 		numPerPage = (direction == 'up') ? -numPerPage : numPerPage;
 		this._moveFocus(numPerPage);
 	},
-	_setData: function(key, value) {
+	_setOption: function(key, value) {
 		this.options[key] = value;
 		if (key == 'disabled') {
 			this.close();
