@@ -73,18 +73,6 @@ $.fn.extend({
 			this._focus.apply( this, arguments );
 	},
 
-	enableSelection: function() {
-		return this
-			.attr( "unselectable", "off" )
-			.css( "MozUserSelect", "" );
-	},
-
-	disableSelection: function() {
-		return this
-			.attr( "unselectable", "on" )
-			.css( "MozUserSelect", "none" );
-	},
-
 	scrollParent: function() {
 		var scrollParent;
 		if (($.browser.msie && (/(static|relative)/).test(this.css('position'))) || (/absolute/).test(this.css('position'))) {
@@ -129,6 +117,57 @@ $.fn.extend({
 		return 0;
 	}
 });
+
+(function() {
+	var elem = document.createElement( "div" ),
+		style = elem.style,
+		userSelectProp = "userSelect" in style && "userSelect";
+
+	if ( !userSelectProp ) {
+		$.each( [ "Moz", "Webkit", "Khtml" ], function( i, prefix ) {
+			var vendorProp = prefix + "UserSelect";
+			if ( vendorProp in style ) {
+				userSelectProp = vendorProp;
+				return false;
+			}
+		});
+	}
+	var selectStart = !userSelectProp && "onselectstart" in elem && "selectstart.mouse";
+
+	elem = null;
+
+	$.fn.extend({
+		disableSelection: function() {
+			if ( userSelectProp ) {
+				this.css( userSelectProp, "none" );
+			} else {
+				this.find( "*" ).andSelf().attr( "unselectable", "on" );
+			}
+
+			if ( selectStart ) {
+				this.bind( selectStart, function() {
+					return false;
+				});
+			}
+
+			return this;
+		},
+
+		enableSelection: function() {
+			if ( userSelectProp ) {
+				this.css( userSelectProp, "" );
+			} else {
+				this.find( "*" ).andSelf().attr( "unselectable", "off" );
+			}
+
+			if ( selectStart ) {
+				this.unbind( selectStart );
+			}
+
+			return this;
+		}
+	});
+})();
 
 $.each( [ "Width", "Height" ], function( i, name ) {
 	var side = name === "Width" ? [ "Left", "Right" ] : [ "Top", "Bottom" ],
