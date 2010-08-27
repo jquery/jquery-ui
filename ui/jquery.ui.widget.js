@@ -86,10 +86,15 @@ $.widget.bridge = function( name, object ) {
 
 		if ( isMethodCall ) {
 			this.each(function() {
-				var instance = $.data( this, name ),
-					methodValue = instance && $.isFunction( instance[options] ) ?
-						instance[ options ].apply( instance, args ) :
-						instance;
+				var instance = $.data( this, name );
+				if ( !instance ) {
+					throw "cannot call methods on " + name + " prior to initialization; " +
+						"attempted to call method '" + options + "'";
+				}
+				if ( !$.isFunction( instance[options] ) ) {
+					throw "no such method '" + options + "' for " + name + " widget instance";
+				}
+				var methodValue = instance[ options ].apply( instance, args );
 				if ( methodValue !== instance && methodValue !== undefined ) {
 					returnValue = methodValue;
 					return false;
