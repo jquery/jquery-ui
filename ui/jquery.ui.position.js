@@ -12,9 +12,8 @@
 $.ui = $.ui || {};
 
 var horizontalPositions = /left|center|right/,
-	horizontalDefault = "center",
 	verticalPositions = /top|center|bottom/,
-	verticalDefault = "center",
+	center = "center",
 	_position = $.fn.position,
 	_offset = $.fn.offset;
 
@@ -58,13 +57,13 @@ $.fn.position = function( options ) {
 		var pos = ( options[this] || "" ).split( " " );
 		if ( pos.length === 1) {
 			pos = horizontalPositions.test( pos[0] ) ?
-				pos.concat( [verticalDefault] ) :
+				pos.concat( [center] ) :
 				verticalPositions.test( pos[0] ) ?
-					[ horizontalDefault ].concat( pos ) :
-					[ horizontalDefault, verticalDefault ];
+					[ center ].concat( pos ) :
+					[ center, center ];
 		}
-		pos[ 0 ] = horizontalPositions.test( pos[0] ) ? pos[ 0 ] : horizontalDefault;
-		pos[ 1 ] = verticalPositions.test( pos[1] ) ? pos[ 1 ] : verticalDefault;
+		pos[ 0 ] = horizontalPositions.test( pos[0] ) ? pos[ 0 ] : center;
+		pos[ 1 ] = verticalPositions.test( pos[1] ) ? pos[ 1 ] : center;
 		options[ this ] = pos;
 	});
 
@@ -82,13 +81,13 @@ $.fn.position = function( options ) {
 
 	if ( options.at[0] === "right" ) {
 		basePosition.left += targetWidth;
-	} else if (options.at[0] === horizontalDefault ) {
+	} else if (options.at[0] === center ) {
 		basePosition.left += targetWidth / 2;
 	}
 
 	if ( options.at[1] === "bottom" ) {
 		basePosition.top += targetHeight;
-	} else if ( options.at[1] === verticalDefault ) {
+	} else if ( options.at[1] === center ) {
 		basePosition.top += targetHeight / 2;
 	}
 
@@ -103,13 +102,13 @@ $.fn.position = function( options ) {
 
 		if ( options.my[0] === "right" ) {
 			position.left -= elemWidth;
-		} else if ( options.my[0] === horizontalDefault ) {
+		} else if ( options.my[0] === center ) {
 			position.left -= elemWidth / 2;
 		}
 
 		if ( options.my[1] === "bottom" ) {
 			position.top -= elemHeight;
-		} else if ( options.my[1] === verticalDefault ) {
+		} else if ( options.my[1] === center ) {
 			position.top -= elemHeight / 2;
 		}
 
@@ -154,7 +153,7 @@ $.ui.position = {
 
 	flip: {
 		left: function( position, data ) {
-			if ( data.at[0] === "center" ) {
+			if ( data.at[0] === center ) {
 				return;
 			}
 			var win = $( window ),
@@ -175,7 +174,7 @@ $.ui.position = {
 					0;
 		},
 		top: function( position, data ) {
-			if ( data.at[1] === "center" ) {
+			if ( data.at[1] === center ) {
 				return;
 			}
 			var win = $( window ),
