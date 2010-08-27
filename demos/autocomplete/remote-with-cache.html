@@ -15,21 +15,20 @@
 	</style>
 	<script type="text/javascript">
 	$(function() {
-		var cache = {};
+		var cache = {},
+			lastXhr;
 		$( "#birds" ).autocomplete({
 			minLength: 2,
 			source: function(request, response) {
-				if ( request.term in cache ) {
-					response( cache[ request.term ] );
+				var term = request.term;
+				if ( term in cache ) {
+					response( cache[ term ] );
 					return;
 				}
-				
-				$.ajax({
-					url: "search.php",
-					dataType: "json",
-					data: request,
-					success: function( data ) {
-						cache[ request.term ] = data;
+
+				lastXhr = $.getJSON( "search.php", request, function( data, status, xhr ) {
+					cache[ term ] = data;
+					if ( xhr === lastXhr ) {
 						response( data );
 					}
 				});

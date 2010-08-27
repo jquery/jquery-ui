@@ -131,7 +131,29 @@ test('of', function() {
 	$('#elx').position({
 		my: 'right bottom',
 		at: 'right bottom',
+		of: $(document),
+		collision: 'none'
+	});
+	same($('#elx').offset(), {
+		top: $(document).height() - 10,
+		left: $(document).width() - 10
+	}, 'document');
+	
+	$('#elx').position({
+		my: 'right bottom',
+		at: 'right bottom',
 		of: window,
+		collision: 'none'
+	});
+	same($('#elx').offset(), {
+		top: $(window).height() - 10,
+		left: $(window).width() - 10
+	}, 'window');
+	
+	$('#elx').position({
+		my: 'right bottom',
+		at: 'right bottom',
+		of: $(window),
 		collision: 'none'
 	});
 	same($('#elx').offset(), {
