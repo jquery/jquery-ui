@@ -511,24 +511,46 @@ $.widget("ui.selectmenu", {
 		this.list.attr('aria-activedescendant', activeID);
 	},
 	_refreshPosition: function(){	
-		//set left value
-		this.list.css('left', this.newelement.offset().left);
+		var self = this, o = this.options;
 		
-		//set top value
+		// get some vars
+		var pageScroll = self._pageScroll();
 		var menuTop = this.newelement.offset().top;
-		var scrolledAmt = this.list[0].scrollTop;
-		this.list.find('li:lt('+this._selectedIndex()+')').each(function(){
-			scrolledAmt -= $(this).outerHeight();
-		});
+		var viewportHeight = $(window).height();
+		var listHeight = $(this.list[0]).outerHeight();
 		
-		if(this.newelement.is('.'+this.widgetBaseClass+'-popup')){
-			menuTop+=scrolledAmt; 
-			this.list.css('top', menuTop); 
-		}	
-		else { 
-			menuTop += this.newelement.height();
-			this.list.css('top', menuTop); 
+		// check if there's enough room to expand to the bottom
+		if ((menuTop + listHeight) > (viewportHeight + pageScroll)) {
+			menuTop -= listHeight;
+		} else {
+			if (this.newelement.is('.'+this.widgetBaseClass+'-popup')) {
+				var scrolledAmt = this.list[0].scrollTop;
+				this.list.find('li:lt('+this._selectedIndex()+')').each(function() {
+					scrolledAmt -= $(this).outerHeight();
+				});
+				menuTop+=scrolledAmt; 
+			} else { 
+				menuTop += this.newelement.height();
+			}
 		}
+		// set values
+		this.list.css({
+			top: menuTop,	
+			left: this.newelement.offset().left
+		});
+	},	
+	_pageScroll: function() {
+		var yScroll;
+		if (self.pageYOffset) {
+			yScroll = self.pageYOffset;
+		// Explorer 6 Strict
+		} else if (document.documentElement && document.documentElement.scrollTop) {
+			yScroll = document.documentElement.scrollTop;
+		// all other Explorers
+		} else if (document.body) { 
+			yScroll = document.body.scrollTop;
+		}
+		return yScroll;
 	}
 });
 })(jQuery);
