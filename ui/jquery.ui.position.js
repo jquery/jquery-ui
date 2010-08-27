@@ -26,21 +26,22 @@ $.fn.position = function( options ) {
 	options = $.extend( {}, options );
 
 	var target = $( options.of ),
+		targetElem = target[0],
 		collision = ( options.collision || "flip" ).split( " " ),
 		offset = options.offset ? options.offset.split( " " ) : [ 0, 0 ],
 		targetWidth,
 		targetHeight,
 		basePosition;
 
-	if ( options.of.nodeType === 9 ) {
+	if ( targetElem.nodeType === 9 ) {
 		targetWidth = target.width();
 		targetHeight = target.height();
 		basePosition = { top: 0, left: 0 };
-	} else if ( options.of.scrollTo && options.of.document ) {
+	} else if ( targetElem.scrollTo && targetElem.document ) {
 		targetWidth = target.width();
 		targetHeight = target.height();
 		basePosition = { top: target.scrollTop(), left: target.scrollLeft() };
-	} else if ( options.of.preventDefault ) {
+	} else if ( targetElem.preventDefault ) {
 		// force left top to allow flipping
 		options.at = "left top";
 		targetWidth = targetHeight = 0;
