@@ -316,9 +316,6 @@ $.widget("ui.selectmenu", {
 		//update value
 		this.value(this._selectedIndex());
 		
-		// needed to make menu work when placed at the very bottom of a site
-		setTimeout( function() { self._refreshPosition();}, 200); 
-		
 		// needed when window is resized
 		$(window).resize(function(){
 			self._refreshPosition();
