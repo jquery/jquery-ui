@@ -240,6 +240,7 @@ $.widget("ui.selectmenu", {
 			.keydown(function(event){
 				var ret = true;
 				switch (event.keyCode) {
+					// this needs to be fixed as _moveFocus doesnt work correctly
 					/*
 					case $.ui.keyCode.UP:
 					case $.ui.keyCode.LEFT:
@@ -334,6 +335,9 @@ $.widget("ui.selectmenu", {
 		this.newelement.remove();
 		this.list.remove();
 		this.element.show();	
+		
+		// call widget destroy function
+		$.Widget.prototype.destroy.apply(this, arguments);
 	},
 	_typeAhead: function(code, eventType){
 		var self = this;
