@@ -46,6 +46,8 @@ $.widget( "ui.tabs", {
 		tabTemplate: "<li><a href='#{href}'><span>#{label}</span></a></li>"
 	},
 
+	isRotating: false,
+
 	_create: function() {
 		this._tabify( true );
 	},
@@ -304,11 +306,11 @@ $.widget( "ui.tabs", {
 		var showTab = showFx
 			? function( clicked, $show ) {
 				$( clicked ).closest( "li" ).addClass( "ui-tabs-selected ui-state-active" );
-$show.stop(true,true);//prevent "stacking" content spots if user clicks another tab while current animation is running.
 				$show.hide().removeClass( "ui-tabs-hide" ) // avoid flicker that way
 					.animate( showFx, showFx.duration || "normal", function() {
 						resetStyle( $show, showFx );
 						self._trigger( "show", null, self._ui( clicked, $show[ 0 ] ) );
+						self.isRotating = false;
 					});
 			}
 			: function( clicked, $show ) {
@@ -350,6 +352,20 @@ $show.stop(true,true);//prevent "stacking" content spots if user clicks another 
 				self._trigger( "select", null, self._ui( this, $show[ 0 ] ) ) === false ) {
 				this.blur();
 				return false;
+			}
+
+			//if fx are being used
+			if(o.fx && ((jQuery.isArray( o.fx ) && o.fx[1]) || (!jQuery.isArray( o.fx ) && o.fx))){
+				//if is rotating
+				if(self.isRotating){
+					//return beacuse rotatin is in progress
+					return false;
+				}else{
+					//continue starting new rotating
+					self.isRotating = true;
+				}
+			}else{
+				//not using fx
 			}
 
 			o.selected = self.anchors.index( this );
@@ -720,7 +736,7 @@ $.extend( $.ui.tabs.prototype, {
 				var t = o.selected;
 				self.select( ++t < self.anchors.length ? t : 0 );
 			}, ms );
-			
+
 			if ( e ) {
 				e.stopPropagation();
 			}
