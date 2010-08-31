@@ -71,6 +71,31 @@ test("buttons", function() {
 	el.remove();
 });
 
+test("buttons - advanced", function() {
+	expect(5);
+
+	el = $("<div></div>").dialog({
+		buttons: [
+			{
+				text: "a button",
+				"class": "additional-class",
+				id: "my-button-id",
+				click: function() {
+					equals(this, el[0], "correct context");
+				}
+			}
+		]
+	});
+	var buttons = dlg().find("button");
+	equals(buttons.length, 1, "correct number of buttons");
+	equals(buttons.attr("id"), "my-button-id", "correct id");
+	equals(buttons.text(), "a button", "correct label");
+	ok(buttons.hasClass("additional-class"), "additional classes added");
+	buttons.click();
+
+	el.remove();
+});
+
 test("closeOnEscape", function() {
 	el = $('<div></div>').dialog({ closeOnEscape: false });
 	ok(true, 'closeOnEscape: false');
