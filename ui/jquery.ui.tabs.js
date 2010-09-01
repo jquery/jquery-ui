@@ -46,8 +46,6 @@ $.widget( "ui.tabs", {
 		tabTemplate: "<li><a href='#{href}'><span>#{label}</span></a></li>"
 	},
 
-	isRotating: false,
-
 	_create: function() {
 		this._tabify( true );
 	},
@@ -310,7 +308,6 @@ $.widget( "ui.tabs", {
 					.animate( showFx, showFx.duration || "normal", function() {
 						resetStyle( $show, showFx );
 						self._trigger( "show", null, self._ui( clicked, $show[ 0 ] ) );
-						self.isRotating = false;
 					});
 			}
 			: function( clicked, $show ) {
@@ -354,18 +351,10 @@ $.widget( "ui.tabs", {
 				return false;
 			}
 
-			//if fx are being used
-			if(o.fx && ((jQuery.isArray( o.fx ) && o.fx[1]) || (!jQuery.isArray( o.fx ) && o.fx))){
-				//if is rotating
-				if(self.isRotating){
-					//return beacuse rotatin is in progress
-					return false;
-				}else{
-					//continue starting new rotating
-					self.isRotating = true;
-				}
-			}else{
-				//not using fx
+			//check to see if panels are in the middle of an animation
+			if(self.panels.filter(":animated").length){
+				//return beacuse transition is in progress (fixes bug #4771)
+				return false;
 			}
 
 			o.selected = self.anchors.index( this );
