@@ -346,14 +346,9 @@ $.widget( "ui.tabs", {
 			if ( ( $li.hasClass( "ui-tabs-selected" ) && !o.collapsible) ||
 				$li.hasClass( "ui-state-disabled" ) ||
 				$li.hasClass( "ui-state-processing" ) ||
-				self._trigger( "select", null, self._ui( this, $show[ 0 ] ) ) === false ) {
+				self.panels.filter(":animated").length ||
+				self._trigger( "select", null, self._ui( this, $show[ 0 ] ) ) === false) {
 				this.blur();
-				return false;
-			}
-
-			//check to see if panels are in the middle of an animation
-			if(self.panels.filter(":animated").length){
-				//return beacuse transition is in progress (fixes bug #4771)
 				return false;
 			}
 
