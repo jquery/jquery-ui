@@ -347,7 +347,7 @@ $.widget( "ui.tabs", {
 				$li.hasClass( "ui-state-disabled" ) ||
 				$li.hasClass( "ui-state-processing" ) ||
 				self.panels.filter(":animated").length ||
-				self._trigger( "select", null, self._ui( this, $show[ 0 ] ) ) === false) {
+				self._trigger( "select", null, self._ui( this, $show[ 0 ] ) ) === false ) {
 				this.blur();
 				return false;
 			}
