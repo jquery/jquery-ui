@@ -199,7 +199,7 @@ test("maxHeight", function() {
 	el.remove();
 
 	el = $('<div></div>').dialog({ maxHeight: 400 }).dialog('option', 'maxHeight', 600);
-		drag('.ui-resizable-n', -1000, -1000);
+		drag('.ui-resizable-s', 1000, 1000);
 		equals(heightAfter, 600, "maxHeight");
 	el.remove();
 });
