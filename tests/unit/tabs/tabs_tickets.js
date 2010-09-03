@@ -70,7 +70,6 @@ test('#5069 - ui.tabs.add creates two tab panels when using a full URL', functio
 	
 });
 
-
 test('#5893 - Sublist in the tab list are considered as tab', function() {
 	// http://dev.jqueryui.com/ticket/5893
 	expect(1);
@@ -80,5 +79,16 @@ test('#5893 - Sublist in the tab list are considered as tab', function() {
 
 });
 
+asyncTest( "#4581 - title attribute for remote tabs does not support foreign languages", function() {
+	expect( 1 );
+	
+	$( "#tabs2" ).tabs({
+		selected: 3,
+		load: function( event, ui ) {
+			equal( ui.panel.id, "∫ßáö_Սե", "proper title" );
+			start();
+		}
+	});
+});
 
 })(jQuery);
