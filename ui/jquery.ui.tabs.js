@@ -129,7 +129,7 @@ $.widget( "ui.tabs", {
 				self.panels = self.panels.add( self._sanitizeSelector( href ) );
 			// remote tab
 			// prevent loading the page itself if href is just "#"
-			} else if ( href !== "#" ) {
+			} else if ( href && href !== "#" ) {
 				// required for restore on destroy
 				$.data( a, "href.tabs", href );
 
