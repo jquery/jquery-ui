@@ -409,4 +409,71 @@ test( "._trigger() - provide event and ui", function() {
 	.testWidget( "testEvent" );
 });
 
+test( "auto-destroy - .remove()", function() {
+	expect( 1 );
+	$.widget( "ui.testWidget", {
+		_create: function() {},
+		destroy: function() {
+			ok( true, "destroyed from .remove()" );
+		}
+	});
+	$( "#widget" ).testWidget().remove();
+});
+
+test( "auto-destroy - .remove() on parent", function() {
+	expect( 1 );
+	$.widget( "ui.testWidget", {
+		_create: function() {},
+		destroy: function() {
+			ok( true, "destroyed from .remove() on parent" );
+		}
+	});
+	$( "#widget" ).testWidget().parent().remove();
+});
+
+test( "auto-destroy - .remove() on child", function() {
+	$.widget( "ui.testWidget", {
+		_create: function() {},
+		destroy: function() {
+			ok( false, "destroyed from .remove() on child" );
+		}
+	});
+	$( "#widget" ).testWidget().children().remove();
+	// http://github.com/jquery/qunit/pull/34
+	$.ui.testWidget.prototype.destroy = $.noop;
+});
+
+test( "auto-destroy - .empty()", function() {
+	$.widget( "ui.testWidget", {
+		_create: function() {},
+		destroy: function() {
+			ok( false, "destroyed from .empty()" );
+		}
+	});
+	$( "#widget" ).testWidget().empty();
+	// http://github.com/jquery/qunit/pull/34
+	$.ui.testWidget.prototype.destroy = $.noop;
+});
+
+test( "auto-destroy - .empty() on parent", function() {
+	expect( 1 );
+	$.widget( "ui.testWidget", {
+		_create: function() {},
+		destroy: function() {
+			ok( true, "destroyed from .empty() on parent" );
+		}
+	});
+	$( "#widget" ).testWidget().parent().empty();
+});
+
+test( "auto-destroy - .detach()", function() {
+	$.widget( "ui.testWidget", {
+		_create: function() {},
+		destroy: function() {
+			ok( false, "destroyed from .detach()" );
+		}
+	});
+	$( "#widget" ).testWidget().detach();
+});
+
 })( jQuery );

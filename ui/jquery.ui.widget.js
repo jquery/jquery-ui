@@ -9,20 +9,30 @@
  */
 (function( $, undefined ) {
 
-var _remove = $.fn.remove;
-
-$.fn.remove = function( selector, keepData ) {
-	return this.each(function() {
-		if ( !keepData ) {
-			if ( !selector || $.filter( selector, [ this ] ).length ) {
-				$( "*", this ).add( [ this ] ).each(function() {
-					$( this ).triggerHandler( "remove" );
-				});
-			}
+// jQuery 1.4+
+if ( $.cleanData ) {
+	var _cleanData = $.cleanData;
+	$.cleanData = function( elems ) {
+		for ( var i = 0, elem; (elem = elems[i]) != null; i++ ) {
+			$( elem ).triggerHandler( "remove" );
 		}
-		return _remove.call( $(this), selector, keepData );
-	});
-};
+		_cleanData( elems );
+	};
+} else {
+	var _remove = $.fn.remove;
+	$.fn.remove = function( selector, keepData ) {
+		return this.each(function() {
+			if ( !keepData ) {
+				if ( !selector || $.filter( selector, [ this ] ).length ) {
+					$( "*", this ).add( [ this ] ).each(function() {
+						$( this ).triggerHandler( "remove" );
+					});
+				}
+			}
+			return _remove.call( $(this), selector, keepData );
+		});
+	};
+}
 
 $.widget = function( name, base, prototype ) {
 	var namespace = name.split( "." )[ 0 ],
