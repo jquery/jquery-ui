@@ -32,7 +32,12 @@ $.widget( "ui.progressbar", {
 				"aria-valuenow": this._value()
 			});
 
-		var displayValue = (this.options.displayValue !== false) ? this.options.displayValue : '';
+		var displayValue = '';
+		if(this.options.displayValue !== false) 
+			displayValue = '<span class="ui-progressbar-displayvalue">' 
+			             + this.options.displayValue 
+			             + '</span>';
+		
 		this.valueDiv = $( "<div class='ui-progressbar-value ui-widget-header ui-corner-left'>" + displayValue + "</div>" )
 			.appendTo( this.element );
 
