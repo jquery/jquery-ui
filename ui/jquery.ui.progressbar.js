@@ -15,7 +15,8 @@
 
 $.widget( "ui.progressbar", {
 	options: {
-		value: 0
+		value: 0,
+		displayValue: false
 	},
 
 	min: 0,
