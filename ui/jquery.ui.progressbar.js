@@ -32,7 +32,8 @@ $.widget( "ui.progressbar", {
 				"aria-valuenow": this._value()
 			});
 
-		this.valueDiv = $( "<div class='ui-progressbar-value ui-widget-header ui-corner-left'></div>" )
+		var displayValue = (this.options.displayValue !== false) ? this.options.displayValue : '';
+		this.valueDiv = $( "<div class='ui-progressbar-value ui-widget-header ui-corner-left'>" + displayValue + "</div>" )
 			.appendTo( this.element );
 
 		this._refreshValue();
