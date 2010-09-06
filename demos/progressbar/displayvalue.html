@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<title>jQuery UI Progressbar - Display value</title>
+	<link type="text/css" href="../../themes/base/jquery.ui.all.css" rel="stylesheet" />
+	<script type="text/javascript" src="../../jquery-1.4.2.js"></script>
+	<script type="text/javascript" src="../../ui/jquery.ui.core.js"></script>
+	<script type="text/javascript" src="../../ui/jquery.ui.widget.js"></script>
+	<script type="text/javascript" src="../../ui/jquery.ui.progressbar.js"></script>
+	<link type="text/css" href="../demos.css" rel="stylesheet" />
+	<script type="text/javascript">
+	$(function() {
+		$("#progressbar").progressbar({
+			value: 37,
+			displayValue: '37 of 100 done'
+		});
+	});
+	</script>
+</head>
+<body>
+
+<div class="demo">
+
+	<div id="progressbar"></div>
+
+</div><!-- End demo -->
+
+
+
+<div class="demo-description">
+
+<p>Display custom value (string) in progressbar.</p>
+
+</div><!-- End demo-description -->
+
+
+
+</body>
+</html>
