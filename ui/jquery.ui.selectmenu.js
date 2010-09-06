@@ -28,9 +28,12 @@ $.widget("ui.selectmenu", {
 	_create: function() {
 		var self = this, o = this.options;
 		
+		// set a default id value
+		var selectmenuId = this.element.attr('id') || 'ui-selectmenu-' +  Math.random().toString(16).slice(2, 10);
+				
 		//quick array of button and menu id's
-		this.ids = [this.element.attr('id') + '-' + 'button', this.element.attr('id') + '-' + 'menu'];
-		
+		this.ids = [selectmenuId + '-' + 'button', selectmenuId + '-' + 'menu'];
+				
 		//define safe mouseup for future toggling
 		this._safemouseup = true;
 		

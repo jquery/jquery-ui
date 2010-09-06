@@ -34,6 +34,8 @@
 		$(function(){			
 			$('select#speedA').selectmenu();
 			
+			$('#withoutID select').selectmenu();
+			
 			$('select#speedAa').selectmenu({maxHeight: 150});
 			
 			$('select#speedB').selectmenu({
@@ -95,6 +97,24 @@
 				<option value="Slower">Slower</option>
 				<option value="Slow">Slow</option>
 				<option value="Medium" selected="selected">Medium</option>
+				<option value="Fast">Fast</option>
+				<option value="Faster">Faster</option>
+			</select>
+		</fieldset>
+		
+		<h2>Default: without ID</h2>
+		<fieldset id="withoutID">
+			<select>
+				<option value="Slower" selected="selected">Slower</option>
+				<option value="Slow">Slow</option>
+				<option value="Medium">Medium</option>
+				<option value="Fast">Fast</option>
+				<option value="Faster">Faster</option>
+			</select>			
+			<select>
+				<option value="Slower" selected="selected">Slower</option>
+				<option value="Slow">Slow</option>
+				<option value="Medium">Medium</option>
 				<option value="Fast">Fast</option>
 				<option value="Faster">Faster</option>
 			</select>
