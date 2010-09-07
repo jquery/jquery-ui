@@ -175,51 +175,51 @@ test("height", function() {
 		equals(dlg().height(), dialog_defaults.minHeight, "default height");
 	el.remove();
 
-	el = $('<div></div>').dialog({ height: 437 });
-		equals(dlg().height(), 437, "explicit height");
+	el = $('<div></div>').dialog({ height: 237 });
+		equals(dlg().height(), 237, "explicit height");
 	el.remove();
 
 	el = $('<div></div>').dialog();
-		el.dialog('option', 'height', 438);
-		equals(dlg().height(), 438, "explicit height set after init");
+		el.dialog('option', 'height', 238);
+		equals(dlg().height(), 238, "explicit height set after init");
 	el.remove();
 });
 
 test("maxHeight", function() {
 	expect(3);
 
-	el = $('<div></div>').dialog({ maxHeight: 400 });
+	el = $('<div></div>').dialog({ maxHeight: 200 });
 		drag('.ui-resizable-s', 1000, 1000);
-		equals(heightAfter, 400, "maxHeight");
+		equals(heightAfter, 200, "maxHeight");
 	el.remove();
 
-	el = $('<div></div>').dialog({ maxHeight: 400 });
+	el = $('<div></div>').dialog({ maxHeight: 200 });
 		drag('.ui-resizable-n', -1000, -1000);
-		equals(heightAfter, 400, "maxHeight");
+		equals(heightAfter, 200, "maxHeight");
 	el.remove();
 
-	el = $('<div></div>').dialog({ maxHeight: 400 }).dialog('option', 'maxHeight', 600);
+	el = $('<div></div>').dialog({ maxHeight: 200 }).dialog('option', 'maxHeight', 300);
 		drag('.ui-resizable-s', 1000, 1000);
-		equals(heightAfter, 600, "maxHeight");
+		equals(heightAfter, 300, "maxHeight");
 	el.remove();
 });
 
 test("maxWidth", function() {
 	expect(3);
 
-	el = $('<div></div>').dialog({ maxWidth: 400 });
+	el = $('<div></div>').dialog({ maxWidth: 200 });
 		drag('.ui-resizable-e', 1000, 1000);
-		equals(widthAfter, 400, "maxWidth");
+		equals(widthAfter, 200, "maxWidth");
 	el.remove();
 
-	el = $('<div></div>').dialog({ maxWidth: 400 });
+	el = $('<div></div>').dialog({ maxWidth: 200 });
 		drag('.ui-resizable-w', -1000, -1000);
-		equals(widthAfter, 400, "maxWidth");
+		equals(widthAfter, 200, "maxWidth");
 	el.remove();
 
-	el = $('<div></div>').dialog({ maxWidth: 400 }).dialog('option', 'maxWidth', 600);
+	el = $('<div></div>').dialog({ maxWidth: 200 }).dialog('option', 'maxWidth', 300);
 		drag('.ui-resizable-w', -1000, -1000);
-		equals(widthAfter, 600, "maxWidth");
+		equals(widthAfter, 300, "maxWidth");
 	el.remove();
 });
 
