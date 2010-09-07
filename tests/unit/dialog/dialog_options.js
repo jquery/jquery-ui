@@ -261,10 +261,6 @@ test("minWidth", function() {
 	el.remove();
 });
 
-test("modal", function() {
-	ok(false, 'missing test - untested code is broken code');
-});
-
 test("position, default center on window", function() {
 	var el = $('<div></div>').dialog();
 	var dialog = el.dialog('widget');
@@ -387,10 +383,6 @@ test("resizable", function() {
 		el.dialog('option', 'resizable', true);
 		shouldresize('enabled after init');
 	el.remove();
-});
-
-test("stack", function() {
-	ok(false, 'missing test - untested code is broken code');
 });
 
 test("title", function() {
