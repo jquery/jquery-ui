@@ -228,7 +228,9 @@ $(function() {
 	});
 
 	$.support.minHeight = body.appendChild( div ).offsetHeight === 100;
-	body.removeChild( div );
+	// set display to none to avoid a layout bug in IE
+	// http://dev.jquery.com/ticket/4014
+	body.removeChild( div ).style.display = "none";
 });
 
 
