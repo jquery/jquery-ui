@@ -346,6 +346,7 @@ $.widget( "ui.tabs", {
 			if ( ( $li.hasClass( "ui-tabs-selected" ) && !o.collapsible) ||
 				$li.hasClass( "ui-state-disabled" ) ||
 				$li.hasClass( "ui-state-processing" ) ||
+				self.panels.filter( ":animated" ).length ||
 				self._trigger( "select", null, self._ui( this, $show[ 0 ] ) ) === false ) {
 				this.blur();
 				return false;
