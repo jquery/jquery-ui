@@ -217,14 +217,18 @@ $.extend( $.expr[ ":" ], {
 
 // support
 $(function() {
-	var div = document.createElement( "div" );
-	div.style.minHeight = "100px";
+	var div = document.createElement( "div" ),
+		body = document.body;
 
-	document.body.appendChild( div );
-	$.support.minHeight = div.offsetHeight === 100;
-	document.body.removeChild( div ).style.display = "none";
+	$.extend( div.style, {
+		minHeight: "100px",
+		height: "auto",
+		padding: 0,
+		borderWidth: 0
+	});
 
-	div = null;
+	$.support.minHeight = body.appendChild( div ).offsetHeight === 100;
+	body.removeChild( div );
 });
 
 
