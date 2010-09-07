@@ -56,7 +56,7 @@ $.extend( $.ui, {
 	}
 });
 
-//jQuery plugins
+// plugins
 $.fn.extend({
 	_focus: $.fn.focus,
 	focus: function( delay, fn ) {
@@ -174,7 +174,7 @@ $.each( [ "Width", "Height" ], function( i, name ) {
 	};
 });
 
-//Additional selectors
+// selectors
 function visible( element ) {
 	return !$( element ).parents().andSelf().filter(function() {
 		return $.curCSS( this, "visibility" ) === "hidden" ||
@@ -215,10 +215,23 @@ $.extend( $.expr[ ":" ], {
 	}
 });
 
+// support
+$(function() {
+	var div = document.createElement( "div" );
+	div.style.minHeight = "100px";
+
+	document.body.appendChild( div );
+	$.support.minHeight = div.offsetHeight === 100;
+	document.body.removeChild( div ).style.display = "none";
+
+	div = null;
+});
 
 
 
 
+
+// deprecated
 $.extend( $.ui, {
 	// $.ui.plugin is deprecated.  Use the proxy pattern instead.
 	plugin: {
