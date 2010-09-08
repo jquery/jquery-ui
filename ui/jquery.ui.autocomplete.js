@@ -24,6 +24,7 @@ $.widget( "ui.autocomplete", {
 			at: "left bottom",
 			collision: "none"
 		},
+		autoFill: false,
 		source: null
 	},
 	_create: function() {
@@ -264,8 +265,13 @@ $.widget( "ui.autocomplete", {
 	_response: function( content ) {
 		if ( content.length ) {
 			content = this._normalize( content );
-			this._suggest( content );
-			this._trigger( "open" );
+			if (this.options.autoFill && content.length == 1) {
+				this.element.val( content[0].value );
+				this.close();
+			} else {
+				this._suggest( content );
+				this._trigger( "open" );
+			}
 		} else {
 			this.close();
 		}
