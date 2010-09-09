@@ -24,6 +24,7 @@ $.widget( "ui.autocomplete", {
 			at: "left bottom",
 			collision: "none"
 		},
+		searchingMode: false,
 		source: null
 	},
 	_create: function() {
@@ -64,7 +65,7 @@ $.widget( "ui.autocomplete", {
 				case keyCode.ENTER:
 				case keyCode.NUMPAD_ENTER:
 					// when menu is open or has focus
-					if ( self.menu.element.is( ":visible" ) ) {
+					if ( self.menu.element.is( ":visible" ) && ( !self.options.searchingMode || self.menu.active ) ) {
 						event.preventDefault();
 					}
 					//passthrough - ENTER and TAB both select the current element
