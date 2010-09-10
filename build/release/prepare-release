@@ -243,7 +243,8 @@ cd build
 
 # Update the link to the docs (never contains the patch version)
 echo "Updating URL for API docs..."
-sed -i -e "s/UI\/API\/\${release\.version}/UI\/API\/$major_minor/" build.xml >build.xml
+sed "s/UI\/API\/\${release\.version}/UI\/API\/$major_minor/" build.xml >build.xml.tmp
+mv build.xml.tmp build.xml
 
 # Run the build
 echo "Running build..."
