@@ -128,7 +128,8 @@ git whatchanged $version... \
 >> $base_dir/thankyou
 
 echo
-echo "Find contributors from duplicates of fixed tickets."
+echo "Find contributors from duplicates of fixed tickets and add them to:"
+echo "$base_dir/thankyou"
 echo "Press enter when done."
 read
 
@@ -238,6 +239,7 @@ echo
 # check out the tagged version
 echo "Checking out $version_new..."
 git checkout $version_new
+cd build
 
 # Update the link to the docs (never contains the patch version)
 echo "Updating URL for API docs..."
@@ -245,7 +247,6 @@ sed -i -e "s/UI\/API\/\${release\.version}/UI\/API\/$major_minor/" build.xml >bu
 
 # Run the build
 echo "Running build..."
-cd build
 ant
 
 echo
