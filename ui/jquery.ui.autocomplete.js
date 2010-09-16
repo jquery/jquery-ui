@@ -43,6 +43,7 @@ $.widget( "ui.autocomplete", {
 					return;
 				}
 
+				var suppressKeyPress = false;
 				var keyCode = $.ui.keyCode;
 				switch( event.keyCode ) {
 				case keyCode.PAGE_UP:
@@ -65,6 +66,7 @@ $.widget( "ui.autocomplete", {
 				case keyCode.NUMPAD_ENTER:
 					// when menu is open or has focus
 					if ( self.menu.element.is( ":visible" ) ) {
+						suppressKeyPress = true;
 						event.preventDefault();
 					}
 					//passthrough - ENTER and TAB both select the current element
@@ -89,6 +91,12 @@ $.widget( "ui.autocomplete", {
 						}
 					}, self.options.delay );
 					break;
+				}
+			})
+			.bind( "keypress.autocomplete", function(event) {
+				if(suppressKeyPress) {
+					suppressKeyPress = false;
+					event.preventDefault();
 				}
 			})
 			.bind( "focus.autocomplete", function() {
