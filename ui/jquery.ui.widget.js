@@ -98,8 +98,8 @@ $.widget.bridge = function( name, object ) {
 			this.each(function() {
 				var instance = $.data( this, name );
 				if ( !instance ) {
-					throw "cannot call methods on " + name + " prior to initialization; " +
-						"attempted to call method '" + options + "'";
+					// allow lazy initialization
+					instance = $.data( this, name, new object( null, this ));						
 				}
 				if ( !$.isFunction( instance[options] ) ) {
 					throw "no such method '" + options + "' for " + name + " widget instance";
