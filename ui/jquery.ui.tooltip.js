@@ -157,6 +157,8 @@ $.widget("ui.tooltip", {
 		
 		this.tooltip.attr("aria-hidden", "false");
 		target.attr("aria-describedby", this.tooltip.attr("id"));
+		
+		this._trigger( "beforeShow", event, this.tooltip );
 
 		if (this.tooltip.is(":animated"))
 			this.tooltip.stop().show().fadeTo("normal", this.opacity);
