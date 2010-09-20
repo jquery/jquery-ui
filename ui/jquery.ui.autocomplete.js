@@ -125,7 +125,7 @@ $.widget( "ui.autocomplete", {
 				// so we have to track the next mousedown and close the menu if
 				// the user clicks somewhere outside of the autocomplete
 				var menuElement = self.menu.element[ 0 ];
-				if ( event.target === menuElement ) {
+				if ( !$( event.target ).closest( ".ui-menu-item" ).length ) {
 					setTimeout(function() {
 						$( document ).one( 'mousedown', function( event ) {
 							if ( event.target !== self.element[ 0 ] &&
