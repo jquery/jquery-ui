@@ -521,7 +521,8 @@ $.widget("ui.dialog", {
 	_setOption: function(key, value){
 		var self = this,
 			uiDialog = self.uiDialog,
-			isResizable = uiDialog.is(':data(resizable)'),
+			isDraggable = uiDialog.is( ":data(draggable)" ),
+			isResizable = uiDialog.is( ":data(resizable)" ),
 			resize = false;
 
 		switch (key) {
@@ -552,10 +553,12 @@ $.widget("ui.dialog", {
 				}
 				break;
 			case "draggable":
-				if (value) {
+				if ( isDraggable && !value ) {
+					uiDialog.draggable( "destroy" );
+				}
+				
+				if ( !isDraggable && value ) {
 					self._makeDraggable();
-				} else {
-					uiDialog.draggable('destroy');
 				}
 				break;
 			case "height":
