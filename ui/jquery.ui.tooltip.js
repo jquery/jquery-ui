@@ -31,7 +31,9 @@ $.widget("ui.tooltip", {
 			my: "left center",
 			at: "right center",
 			offset: "15 0"
-		}
+		},
+		showDelay: 500,
+		hideDelay: 250
 	},
 	_init: function() {
 		var self = this;
@@ -49,11 +51,56 @@ $.widget("ui.tooltip", {
 		this.opacity = this.tooltip.css("opacity");
 		this.element
 			.bind("focus.tooltip mouseenter.tooltip", function(event) {
-				self.open( event );
+				// Cancel any pending hide - tooltip is already visible
+				if (self.hideDelayTimeout) {
+					clearTimeout(self.hideDelayTimeout);
+					self.hideDelayTimeout = null;
+					return;
+				}
+				// Ignore repeat show events when already showing
+				if (self.showDelayTimeout) return;
+				
+				// Setup timout to show tooltip
+				self.showDelayTimeout = setTimeout(function() {
+					self.open( event );
+					self.showDelayTimeout = null;
+				}, self.options.showDelay);
 			})
 			.bind("blur.tooltip mouseleave.tooltip", function(event) {
-				self.close( event );
+				// Cancel pending show - tooltip is already hidden
+				if (self.showDelayTimeout) {
+					clearTimeout(self.showDelayTimeout);
+					self.showDelayTimeout = null;
+					return;
+				}
+				
+				// Ignore repeat hide events when already hidden
+				if (self.hideDelayTimeout) return;
+				
+				// Setup timeout to hide tooltip
+				self.hideDelayTimeout = setTimeout(function() {
+					self.close( event );
+					self.hideDelayTimeout = null;
+				}, self.options.hideDelay);
 			});
+		this.tooltip
+			.bind("focus mouseenter", function(event) {
+				// Cancel pending hide when focus moves to tooltip
+				if (self.hideDelayTimeout) {
+					clearTimeout(self.hideDelayTimeout);
+					self.hideDelayTimeout = null;
+				}
+			})
+			.bind("blur mouseleave", function(event) {
+				// Ignore repeat hide events when already hiding
+				if (self.hideDelayTimeout) return;
+				
+				// Setup timeout to hide tooltip
+				self.hideDelayTimeout = setTimeout(function() {
+					self.close( event );
+					self.hideDelayTimeout = null;
+				}, self.options.hideDelay);
+			})
 	},
 	
 	enable: function() {
