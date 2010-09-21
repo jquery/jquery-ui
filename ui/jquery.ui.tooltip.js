@@ -60,11 +60,8 @@ $.widget("ui.tooltip", {
 				// Ignore repeat show events when already showing
 				if (self.showDelayTimeout) return;
 				
-				// Setup timout to show tooltip
-				self.showDelayTimeout = setTimeout(function() {
-					self.open( event );
-					self.showDelayTimeout = null;
-				}, self.options.showDelay);
+				// Show tooltip
+				self.open( event );
 			})
 			.bind("blur.tooltip mouseleave.tooltip", function(event) {
 				// Cancel pending show - tooltip is already hidden
@@ -146,26 +143,32 @@ $.widget("ui.tooltip", {
 		
 		if (this.options.disabled)
 			return;
+
+		// Setup timout to show tooltip
+		self = this;
+		self.showDelayTimeout = setTimeout(function() {
+			self.tooltipContent.html(content);
+			self.tooltip.css({
+				top: 0,
+				left: 0
+			}).show().position( $.extend({
+				of: target
+			}, self.options.position )).hide();
+
+			self.tooltip.attr("aria-hidden", "false");
+			target.attr("aria-describedby", self.tooltip.attr("id"));
+
+			self._trigger( "beforeShow", event, self.tooltip );
+
+			if (self.tooltip.is(":animated"))
+				self.tooltip.stop().show().fadeTo("normal", self.opacity);
+			else
+				self.tooltip.is(':visible') ? self.tooltip.fadeTo("normal", self.opacity) : self.tooltip.fadeIn();
+
+			self._trigger( "open", event );
 			
-		this.tooltipContent.html(content);
-		this.tooltip.css({
-			top: 0,
-			left: 0
-		}).show().position( $.extend({
-			of: target
-		}, this.options.position )).hide();
-		
-		this.tooltip.attr("aria-hidden", "false");
-		target.attr("aria-describedby", this.tooltip.attr("id"));
-		
-		this._trigger( "beforeShow", event, this.tooltip );
-
-		if (this.tooltip.is(":animated"))
-			this.tooltip.stop().show().fadeTo("normal", this.opacity);
-		else
-			this.tooltip.is(':visible') ? this.tooltip.fadeTo("normal", this.opacity) : this.tooltip.fadeIn();
-
-		this._trigger( "open", event );
+			self.showDelayTimeout = null;
+		}, self.options.showDelay);
 	},
 	
 	close: function(event) {
