@@ -145,7 +145,7 @@ $.widget("ui.tooltip", {
 			return;
 
 		// Setup timout to show tooltip
-		self = this;
+		var self = this;
 		self.showDelayTimeout = setTimeout(function() {
 			self.tooltipContent.html(content);
 			self.tooltip.css({
