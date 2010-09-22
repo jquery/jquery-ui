@@ -171,6 +171,22 @@ $.widget("ui.tooltip", {
 		}, self.options.showDelay);
 	},
 	
+	refresh: function(event) {
+		// Ensure tooltip is open
+		this.open(event);
+	
+		var self = this;
+		var target = self.current;
+		var content = self.options.content.call(target[0], function(response) {
+			// ignore async responses that come in after the tooltip is already hidden
+			if (self.current == target)
+			self.tooltipContent.html(content);
+		});
+		if (content) {
+			self.tooltipContent.html(content);
+		}
+	},
+	
 	close: function(event) {
 		if (!this.current)
 			return;
