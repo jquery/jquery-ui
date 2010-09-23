@@ -358,6 +358,10 @@ $.widget("ui.dialog", {
 		}
 		if (hasButtons) {
 			$.each(buttons, function(name, props) {
+				// If Object was augmented, we conflict with it by calling augmented object's method
+				if(!this.hasOwnProperty(name))
+					return
+
 				props = $.isFunction( props ) ?
 					{ click: props, text: name } :
 					props;
