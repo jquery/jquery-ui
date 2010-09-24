@@ -210,8 +210,8 @@ milestone=`$remote_cmd/get-latest-milestone`
 
 # Create new milestrone and version
 echo "$version_new was tagged at $version_new_time."
-echo "Create and close $version_new Milestone with the above date and time."
-echo "Create and close $version_new Version with the above date and time."
+echo "Create and close the $version_new Milestone with the above date and time."
+echo "Create the $version_new Version with the above date and time."
 echo "Press enter when done."
 read
 
