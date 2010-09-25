@@ -9,6 +9,39 @@ module( "widget factory", {
 	}
 });
 
+test( "widget namespaces", function() {
+  var fail = function(msg) { ok(false, msg); };
+
+  var uiPrototype = { 
+    _create: function() { fail( "This widget should not have been instantiated" ); } 
+  };
+
+  var customPrototype = { 
+    _create: function() { ok( true, "Second defined widget is the one that takes over default scope" ) } 
+  }
+
+  $.widget( "ui.testWidget", uiPrototype );
+  $.widget( "custom.testWidget", customPrototype );
+
+  var elem = $( "<div></div>" ).testWidget();
+
+  ok( $.isFunction( $.ui.testWidget ), "constructor was created in the ui namespace" );
+  ok( $.isFunction( $.custom.testWidget ), "constructor was created in the custom namespace" );
+  equals( uiPrototype._create, $.ui.testWidget.prototype._create, "ui widget is in the ui namespace" );
+  equals( customPrototype._create, $.custom.testWidget.prototype._create, "custom namespace is maintained" );
+
+  // Now make sure we can explicitly pick the one we want
+  var which = "neither";
+  $.ui.testWidget.prototype._create = function(){ which = "ui"; };
+  var elem2 = $( "<div></div>" ).ui_testWidget();
+  equals( which, "ui" , "creating a namespaced widget makes the correct one" );
+
+  which = "neither";
+  $.custom.testWidget.prototype._create = function(){ which = "custom"; };
+  var elem3 = $( "<div></div>" ).custom_testWidget();
+  equals( which, "custom", "creating a namespaced widget makes the correct one" );
+});
+
 test( "widget creation", function() {
 	var myPrototype = {
 		_create: function() {},
@@ -236,7 +269,35 @@ test( ".option() - delegate to ._setOptions()", function() {
 		"_setOptions called with multiple options" );
 });
 
-test( ".option() - delegate to ._setOption()", function() {
+test( ".option() - getter - custom namespace", function() {
+	$.widget( "custom.testWidget", {
+		_create: function() {}
+	});
+
+	var div = $( "<div></div>" ).custom_testWidget({
+		foo: "bar",
+		baz: 5,
+		qux: [ "quux", "quuux" ]
+	});
+
+	same( div.custom_testWidget( "option", "foo"), "bar", "single option - string" );
+	same( div.custom_testWidget( "option", "baz"), 5, "single option - number" );
+	same( div.custom_testWidget( "option", "qux"), [ "quux", "quuux" ],
+		"single option - array" );
+
+	var options = div.custom_testWidget( "option" );
+	same( options, {
+		disabled: false,
+		foo: "bar",
+		baz: 5,
+		qux: [ "quux", "quuux" ]
+	}, "full options hash returned" );
+	options.foo = "notbar";
+	same( div.custom_testWidget( "option", "foo"), "bar",
+		"modifying returned options hash does not modify plugin instance" );
+});
+
+test( ".option() - setter", function() {
 	var calls = [];
 	$.widget( "ui.testWidget", {
 		_create: function() {},

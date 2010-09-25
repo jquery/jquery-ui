@@ -75,11 +75,11 @@ $.widget = function( name, base, prototype ) {
 		widgetBaseClass: fullName
 	}, prototype );
 
-	$.widget.bridge( name, $[ namespace ][ name ] );
+	$.widget.bridge( name, namespace, $[ namespace ][ name ] );
 };
 
-$.widget.bridge = function( name, object ) {
-	$.fn[ name ] = function( options ) {
+$.widget.bridge = function( name, namespace, object ) {
+    var bridgeFn = function( options ) {
 		var isMethodCall = typeof options === "string",
 			args = Array.prototype.slice.call( arguments, 1 ),
 			returnValue = this;
@@ -111,18 +111,27 @@ $.widget.bridge = function( name, object ) {
 				}
 			});
 		} else {
+            // Make each element of the jquery list an instance of this widget
 			this.each(function() {
-				var instance = $.data( this, name );
+				var instance = $.data( this, namespace + "." + name );
 				if ( instance ) {
 					instance.option( options || {} )._init();
 				} else {
-					$.data( this, name, new object( options, this ) );
+                    var instance = new object( options, this );
+					$.data( this, name, instance );
+                    $.data( this, namespace + "." + name, instance );
 				}
 			});
 		}
 
 		return returnValue;
 	};
+
+
+    // Attach the bridge function to both the raw name - example: `$.sortable()`
+    // And also attach it to a namespaced name         - example: `$.ui_sortable()`
+	$.fn[ name ] = bridgeFn;
+    $.fn[ namespace + "_" + name  ] = bridgeFn;
 };
 
 $.Widget = function( options, element ) {
