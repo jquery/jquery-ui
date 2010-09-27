@@ -64,6 +64,9 @@ $.widget( "ui.progressbar", {
 			this.options.value = value;
 			this._refreshValue();
 			this._trigger( "change" );
+			if ( this._value() === this.max ) {
+				this._trigger( "complete" );
+			}
 		}
 
 		$.Widget.prototype._setOption.apply( this, arguments );
