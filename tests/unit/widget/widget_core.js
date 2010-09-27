@@ -209,7 +209,30 @@ test( ".option() - getter", function() {
 		"modifying returned options hash does not modify plugin instance" );
 });
 
-test( ".option() - setter", function() {
+test( ".option() - delegate to ._setOptions()", function() {
+	var calls = [];
+	$.widget( "ui.testWidget", {
+		_create: function() {},
+		_setOptions: function( options ) {
+			calls.push( options );
+		}
+	});
+	var div = $( "<div></div>" ).testWidget();
+
+	calls = [];
+	div.testWidget( "option", "foo", "bar" );
+	same( calls, [{ foo: "bar" }], "_setOptions called for single option" );
+	
+	calls = [];
+	div.testWidget( "option", {
+		bar: "qux",
+		quux: "quuux"
+	});
+	same( calls, [{ bar: "qux", quux: "quuux" }],
+		"_setOptions called with multiple options" );
+});
+
+test( ".option() - delegate to ._setOption()", function() {
 	var calls = [];
 	$.widget( "ui.testWidget", {
 		_create: function() {},
