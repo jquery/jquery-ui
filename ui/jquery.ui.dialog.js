@@ -19,10 +19,25 @@
 (function( $, undefined ) {
 
 var uiDialogClasses =
-	'ui-dialog ' +
-	'ui-widget ' +
-	'ui-widget-content ' +
-	'ui-corner-all ';
+		'ui-dialog ' +
+		'ui-widget ' +
+		'ui-widget-content ' +
+		'ui-corner-all ',
+	sizeRelatedOptions = {
+		buttons: true,
+		height: true,
+		maxHeight: true,
+		maxWidth: true,
+		minHeight: true,
+		minWidth: true,
+		width: true
+	},
+	resizableRelatedOptions = {
+		maxHeight: true,
+		maxWidth: true,
+		minHeight: true,
+		minWidth: true
+	};
 
 $.widget("ui.dialog", {
 	options: {
@@ -518,12 +533,33 @@ $.widget("ui.dialog", {
 		}
 	},
 
+	_setOptions: function( options ) {
+		var self = this,
+			resizableOptions = {},
+			resize = false;
+
+		$.each( options, function( key, value ) {
+			self._setOption( key, value );
+			
+			if ( key in sizeRelatedOptions ) {
+				resize = true;
+			}
+			if ( key in resizableRelatedOptions ) {
+				resizableOptions[ key ] = value;
+			}
+		});
+
+		if ( resize ) {
+			this._size();
+		}
+		if ( this.uiDialog.is( ":data(resizable)" ) ) {
+			this.uiDialog.resizable( "option", resizableOptions );
+		}
+	},
+
 	_setOption: function(key, value){
 		var self = this,
-			uiDialog = self.uiDialog,
-			isDraggable = uiDialog.is( ":data(draggable)" ),
-			isResizable = uiDialog.is( ":data(resizable)" ),
-			resize = false;
+			uiDialog = self.uiDialog;
 
 		switch (key) {
 			//handling of deprecated beforeclose (vs beforeClose) option
@@ -534,10 +570,9 @@ $.widget("ui.dialog", {
 				break;
 			case "buttons":
 				self._createButtons(value);
-				resize = true;
 				break;
 			case "closeText":
-				// convert whatever was passed in to a string, for text() to not throw up
+				// ensure that we always pass a string
 				self.uiDialogTitlebarCloseText.text("" + value);
 				break;
 			case "dialogClass":
@@ -553,6 +588,7 @@ $.widget("ui.dialog", {
 				}
 				break;
 			case "draggable":
+				var isDraggable = uiDialog.is( ":data(draggable)" )
 				if ( isDraggable && !value ) {
 					uiDialog.draggable( "destroy" );
 				}
@@ -561,38 +597,12 @@ $.widget("ui.dialog", {
 					self._makeDraggable();
 				}
 				break;
-			case "height":
-				resize = true;
-				break;
-			case "maxHeight":
-				if (isResizable) {
-					uiDialog.resizable('option', 'maxHeight', value);
-				}
-				resize = true;
-				break;
-			case "maxWidth":
-				if (isResizable) {
-					uiDialog.resizable('option', 'maxWidth', value);
-				}
-				resize = true;
-				break;
-			case "minHeight":
-				if (isResizable) {
-					uiDialog.resizable('option', 'minHeight', value);
-				}
-				resize = true;
-				break;
-			case "minWidth":
-				if (isResizable) {
-					uiDialog.resizable('option', 'minWidth', value);
-				}
-				resize = true;
-				break;
 			case "position":
 				self._position(value);
 				break;
 			case "resizable":
 				// currently resizable, becoming non-resizable
+				var isResizable = uiDialog.is( ":data(resizable)" )
 				if (isResizable && !value) {
 					uiDialog.resizable('destroy');
 				}
@@ -611,15 +621,9 @@ $.widget("ui.dialog", {
 				// convert whatever was passed in o a string, for html() to not throw up
 				$(".ui-dialog-title", self.uiDialogTitlebar).html("" + (value || '&#160;'));
 				break;
-			case "width":
-				resize = true;
-				break;
 		}
 
 		$.Widget.prototype._setOption.apply(self, arguments);
-		if (resize) {
-			self._size();
-		}
 	},
 
 	_size: function() {
