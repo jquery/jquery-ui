@@ -21,6 +21,42 @@ test('init', function() {
 	equals( $('div', el).index( $('div.ui-tabs-hide', '#tabs1') ), 1, 'second panel should be hidden' );
 });
 
+test('init with hash', function() {
+	expect(5);
+	
+	//set a hash in the url
+	location.hash = '#fragment-2';
+	
+	//selection of tab with divs ordered differently than list
+	el = $('#tabs1').tabs();
+	
+	equals(el.tabs('option', 'selected'), 1, 'second tab should be selected');
+	
+	ok(!$('#tabs1 ul li:eq(0)').is('.ui-tabs-selected.ui-state-active'), 'first tab should not be selected nor active');
+	ok($('#tabs1 div:eq(0)').is('.ui-tabs-hide'), 'first div for first tab should be hidden');
+	
+	ok($('#tabs1 ul li:eq(1)').is('.ui-tabs-selected.ui-state-active'), 'second tab should be selected and active');
+	ok(!$('#tabs1 div:eq(1)').is('.ui-tabs-hide'), 'second div for second tab should not be hidden');
+});
+
+test('init mismatched order with hash', function() {
+	expect(5);
+	
+	//set a hash in the url
+	location.hash = '#tabs7-2';
+	
+	//selection of tab with divs ordered differently than list
+	el = $('#tabs7').tabs();
+	
+	equals(el.tabs('option', 'selected'), 1, 'second tab should be selected');
+	
+	ok(!$('#tabs7-list li:eq(0)').is('.ui-tabs-selected.ui-state-active'), 'first tab should not be selected nor active');
+	ok($('#tabs7 div:eq(1)').is('.ui-tabs-hide'), 'second div for first tab should be hidden');
+	
+	ok($('#tabs7-list li:eq(1)').is('.ui-tabs-selected.ui-state-active'), 'second tab should be selected and active');
+	ok(!$('#tabs7 div:eq(0)').is('.ui-tabs-hide'), 'first div for second tab should not be hidden');
+});
+
 test('destroy', function() {
 	expect(6);
 
