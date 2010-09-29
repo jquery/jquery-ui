@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<title>Demo Page for jQuery UI selectmenu</title>
+	
+	<link type="text/css" href="../../themes/base/jquery.ui.all.css" rel="stylesheet" />
+	<link type="text/css" href="../../themes/base/jquery.ui.selectmenu.css" rel="stylesheet" />
+	<script type="text/javascript" src="../../jquery-1.4.2.js"></script>
+	<script type="text/javascript" src="../../ui/jquery.ui.core.js"></script>
+	<script type="text/javascript" src="../../ui/jquery.ui.widget.js"></script>
+	<script type="text/javascript" src="../../ui/jquery.ui.position.js"></script>
+	
+	<script type="text/javascript" src="../../ui/jquery.ui.selectmenu.js"></script>
+
+	<style type="text/css">
+		/*demo styles*/
+		body {font-size: 62.5%; font-family:"Verdana",sans-serif; }
+		fieldset { border:0; margin: 20px 0 0 0;}	
+		label,select,.ui-select-menu { float: left; margin-right: 10px; }
+		select { width: 200px; }
+		
+		/*select with custom icons*/
+		body a.customicons { height: 2.8em;}
+		body .customicons li a, body a.customicons span.ui-selectmenu-status { line-height: 2em; padding-left: 30px !important; }
+		body .video .ui-selectmenu-item-icon, body .podcast .ui-selectmenu-item-icon, body .rss .ui-selectmenu-item-icon { height: 24px; width: 24px; }
+		body .video .ui-selectmenu-item-icon { background: url(images/24-video-square.png) 0 0 no-repeat; }
+		body .podcast .ui-selectmenu-item-icon { background: url(images/24-podcast-square.png) 0 0 no-repeat; }
+		body .rss .ui-selectmenu-item-icon { background: url(images/24-rss-square.png) 0 0 no-repeat; }
+		
+		
+	</style>
+	<script type="text/javascript">	
+		$(function(){		
+						
+			var speedA = $('select#speedA').selectmenu({
+				select: function(event, options) {
+					$.ajax({
+						data: "get_data=" + options.value,
+						type: "GET",
+						// you need a serversite script which checks the username
+						url: "ajax/get_data.php",
+						success: function(value) {
+							// add the returned HTML (the new select)
+							$("#result_data").html(value).find("select").selectmenu();
+							
+						}
+					});
+				}
+			});
+			
+		});		
+		
+	</script>
+</head>
+<body>
+	<form action="#">
+		<h2>Ajax Example</h2>
+		<fieldset>
+			<label for="speedA">Select an Option:</label>
+			<select name="speedA" id="speedA">
+				<option value="0">Default</option>
+				<option value="1">Ajax Call</option>
+			</select>
+		</fieldset>
+	</form>
+	
+	<div id="result_data"></div>
+</body>
+</html>
