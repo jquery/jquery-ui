@@ -13,27 +13,29 @@
 	<script type="text/javascript" src="http://jqueryui.com/themeroller/themeswitchertool/"></script>
 	<script type="text/javascript">
 	$(function() {
-		var ul = $("ul");
-		$("input").each(function() {
-			$(this).position({
-				my: this.id.replace(/-/, " "),
-				at: this.id.replace(/-/, " "),
-				of: "#container",
-				collision: "none"
+		var inputs = $("input");
+		$("ul").insertAfter(inputs);
+		$(window).resize(function() {
+			inputs.each(function() {
+				$(this).position({
+					my: this.id.replace(/-/, " "),
+					at: this.id.replace(/-/, " "),
+					of: "#container",
+					collision: "none"
+				});
+				$(this).next().menu().position({
+					my: "left top",
+					at: "left bottom",
+					of: this
+				});
 			});
-			ul.clone().insertAfter(this).menu().position({
-				my: "left top",
-				at: "left bottom",
-				of: this
-			});
-		});
-		ul.remove();
+		}).resize();
 	});
 	</script>
 	<style>
 		input, .ui-menu { position: absolute; }
 		.ui-menu { width: 200px; }
-		html, body { width: 100%; height: 100% }
+		html, body { width: 99%; height: 99% }
 		#container { width: 95%; height: 95%; border: 1px solid black; margin: auto; }
 	</style>
 </head>

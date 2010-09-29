@@ -1,30 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8" />
-	<title>jQuery UI Autocomplete Remote datasource demo</title>
-	<link type="text/css" href="../../themes/base/jquery.ui.all.css" rel="stylesheet" />
-	<script type="text/javascript" src="../../jquery-1.4.2.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.core.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.widget.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.position.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.autocomplete.js"></script>
-	<link type="text/css" href="../demos.css" rel="stylesheet" />
-	<style type="text/css">
+	<meta charset="utf-8">
+	<title>jQuery UI Autocomplete - Remote datasource</title>
+	<link rel="stylesheet" href="../../themes/base/jquery.ui.all.css">
+	<script src="../../jquery-1.4.2.js"></script>
+	<script src="../../ui/jquery.ui.core.js"></script>
+	<script src="../../ui/jquery.ui.widget.js"></script>
+	<script src="../../ui/jquery.ui.position.js"></script>
+	<script src="../../ui/jquery.ui.autocomplete.js"></script>
+	<link rel="stylesheet" href="../demos.css">
+	<style>
 	.ui-autocomplete-loading { background: white url('images/ui-anim_basic_16x16.gif') right center no-repeat; }
 	</style>
-	<script type="text/javascript">
+	<script>
 	$(function() {
-		function log(message) {
-			$("<div/>").text(message).prependTo("#log");
-			$("#log").attr("scrollTop", 0);
+		function log( message ) {
+			$( "<div/>" ).text( message ).prependTo( "#log" );
+			$( "#log" ).attr( "scrollTop", 0 );
 		}
-		
-		$("#birds").autocomplete({
+
+		$( "#birds" ).autocomplete({
 			source: "search.php",
 			minLength: 2,
-			select: function(event, ui) {
-				log(ui.item ? ("Selected: " + ui.item.value + " aka " + ui.item.id) : "Nothing selected, input was " + this.value);
+			select: function( event, ui ) {
+				log( ui.item ?
+					"Selected: " + ui.item.value + " aka " + ui.item.id :
+					"Nothing selected, input was " + this.value );
 			}
 		});
 	});
@@ -46,13 +48,11 @@
 
 </div><!-- End demo -->
 
+
+
 <div class="demo-description">
-<p>
-The Autocomplete widgets provides suggestions while you type into the field. Here the suggestions are bird names, displayed when at least two characters are entered into the field.
-</p>
-<p>
-The datasource is a server-side script which returns JSON data, specified via a simple URL for the source-option. In addition, the minLength-option is set to 2 to avoid queries that would return too many results and the select-event is used to display some feedback.
-</p>
+<p>The Autocomplete widgets provides suggestions while you type into the field. Here the suggestions are bird names, displayed when at least two characters are entered into the field.</p>
+<p>The datasource is a server-side script which returns JSON data, specified via a simple URL for the source-option. In addition, the minLength-option is set to 2 to avoid queries that would return too many results and the select-event is used to display some feedback.</p>
 </div><!-- End demo-description -->
 
 </body>

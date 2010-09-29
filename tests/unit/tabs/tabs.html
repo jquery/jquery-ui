@@ -34,7 +34,7 @@
 		test("tabs", function() { ok(true, "disabled tabs testsuite"); });
 	}
 	</script>
-	<script type="text/javascript" src="../testsuite.js"></script>
+	<script type="text/javascript" src="../swarminject.js"></script>
 </head>
 <body>
 
@@ -61,6 +61,7 @@
 				<li><a href="#colon:test"><span>1</span></a></li>
 				<li><a href="#inline-style"><span>2</span></a></li>
 				<li><a href="data/test.html#test"><span>3</span></a></li>
+				<li><a href="data/test.html" title="∫ßáö Սե"<span>4</span></a></li>
 			</ul>
 			<div id="colon:test"></div>
 			<div style="height: 300px;" id="inline-style"></div>
@@ -92,6 +93,19 @@
 			<div>
 				<ul id="tabs5-list"></ul>
 			</div>
+		</div>
+		<div id="tabs6">
+			<ul id="tabs6-list">
+				<li><a href="#tabs6-1">1</a>
+					<ul>
+						<li><a href="#item6-3">3</a></li>
+						<li><a href="#item6-4">4</a></li>
+					</ul>
+				</li>
+				<li><a href="#tabs6-2">2</a></li>
+			</ul>
+			<div id="tabs6-1"></div>
+			<div id="tabs6-2"></div>
 		</div>
 	</div>
 </body>

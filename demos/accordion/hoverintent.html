@@ -1,66 +1,67 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8" />
-	<title>jQuery UI Accordion - Default functionality</title>
-	<link type="text/css" href="../../themes/base/jquery.ui.all.css" rel="stylesheet" />
-	<script type="text/javascript" src="../../jquery-1.4.2.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.core.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.widget.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.accordion.js"></script>
-	<link type="text/css" href="../demos.css" rel="stylesheet" />
-	<script type="text/javascript">
-		
+	<meta charset="utf-8">
+	<title>jQuery UI Accordion - Open on hoverintent</title>
+	<link rel="stylesheet" href="../../themes/base/jquery.ui.all.css">
+	<script src="../../jquery-1.4.2.js"></script>
+	<script src="../../ui/jquery.ui.core.js"></script>
+	<script src="../../ui/jquery.ui.widget.js"></script>
+	<script src="../../ui/jquery.ui.accordion.js"></script>
+	<link rel="stylesheet" href="../demos.css">
+	<script>
+	$(function() {
+		$("#accordion").accordion({
+			event: "click hoverintent"
+		});
+	});
+	
 	var cfg = ($.hoverintent = {
 		sensitivity: 7,
 		interval: 100
 	});
-		
+
 	$.event.special.hoverintent = {
 		setup: function() {
-			$(this).bind("mouseover", jQuery.event.special.hoverintent.handler);
+			$( this ).bind( "mouseover", jQuery.event.special.hoverintent.handler );
 		},
 		teardown: function() {
-			$(this).unbind("mouseover", jQuery.event.special.hoverintent.handler);
+			$( this ).unbind( "mouseover", jQuery.event.special.hoverintent.handler );
 		},
-		handler: function(event) {
+		handler: function( event ) {
 			event.type = "hoverintent";
 			var self = this,
 				args = arguments,
-				target = $(event.target),
+				target = $( event.target ),
 				cX, cY, pX, pY;
-				
-			function track(event) {
+			
+			function track( event ) {
 				cX = event.pageX;
 				cY = event.pageY;
 			};
 			pX = event.pageX;
 			pY = event.pageY;
 			function clear() {
-				target.unbind("mousemove", track).unbind("mouseout", arguments.callee);
-				clearTimeout(timeout);
+				target
+					.unbind( "mousemove", track )
+					.unbind( "mouseout", arguments.callee );
+				clearTimeout( timeout );
 			}
 			function handler() {
-				if ( ( Math.abs(pX-cX) + Math.abs(pY-cY) ) < cfg.sensitivity ) {
+				if ( ( Math.abs( pX - cX ) + Math.abs( pY - cY ) ) < cfg.sensitivity ) {
 					clear();
-					jQuery.event.handle.apply(self, args);
+					jQuery.event.handle.apply( self, args );
 				} else {
-					pX = cX; pY = cY;
-					timeout = setTimeout(handler, cfg.interval);
+					pX = cX;
+					pY = cY;
+					timeout = setTimeout( handler, cfg.interval );
 				}
 			}
-			var timeout = setTimeout(handler, cfg.interval);
-			target.mousemove(track).mouseout(clear);
+			var timeout = setTimeout( handler, cfg.interval );
+			target.mousemove( track ).mouseout( clear );
 			return true;
 		}
 	};
-
-		
-	$(function() {
-		$("#accordion").accordion({
-			event: "click hoverintent"
-		});
-	});
 	</script>
 </head>
 <body>

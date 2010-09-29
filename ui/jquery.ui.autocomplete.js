@@ -16,6 +16,7 @@
 
 $.widget( "ui.autocomplete", {
 	options: {
+		appendTo: "body",
 		delay: 300,
 		minLength: 1,
 		position: {
@@ -38,6 +39,10 @@ $.widget( "ui.autocomplete", {
 				"aria-haspopup": "true"
 			})
 			.bind( "keydown.autocomplete", function( event ) {
+				if ( self.options.disabled ) {
+					return;
+				}
+
 				var keyCode = $.ui.keyCode;
 				switch( event.keyCode ) {
 				case keyCode.PAGE_UP:
@@ -58,8 +63,8 @@ $.widget( "ui.autocomplete", {
 					break;
 				case keyCode.ENTER:
 				case keyCode.NUMPAD_ENTER:
-					// when menu is open or has focus
-					if ( self.menu.element.is( ":visible" ) ) {
+					// when menu is open and has focus
+					if ( self.menu.active ) {
 						event.preventDefault();
 					}
 					//passthrough - ENTER and TAB both select the current element
@@ -87,10 +92,18 @@ $.widget( "ui.autocomplete", {
 				}
 			})
 			.bind( "focus.autocomplete", function() {
+				if ( self.options.disabled ) {
+					return;
+				}
+
 				self.selectedItem = null;
 				self.previous = self.element.val();
 			})
 			.bind( "blur.autocomplete", function( event ) {
+				if ( self.options.disabled ) {
+					return;
+				}
+
 				clearTimeout( self.searching );
 				// clicks on the menu (or a button to trigger a search) will cause a blur event
 				self.closing = setTimeout(function() {
@@ -104,9 +117,26 @@ $.widget( "ui.autocomplete", {
 		};
 		this.menu = $( "<ul></ul>" )
 			.addClass( "ui-autocomplete" )
-			.appendTo( "body", doc )
+			.appendTo( $( this.options.appendTo || "body", doc )[0] )
 			// prevent the close-on-blur in case of a "slow" click on the menu (long mousedown)
-			.mousedown(function() {
+			.mousedown(function( event ) {
+				// clicking on the scrollbar causes focus to shift to the body
+				// but we can't detect a mouseup or a click immediately afterward
+				// so we have to track the next mousedown and close the menu if
+				// the user clicks somewhere outside of the autocomplete
+				var menuElement = self.menu.element[ 0 ];
+				if ( !$( event.target ).closest( ".ui-menu-item" ).length ) {
+					setTimeout(function() {
+						$( document ).one( 'mousedown', function( event ) {
+							if ( event.target !== self.element[ 0 ] &&
+								event.target !== menuElement &&
+								!$.ui.contains( menuElement, event.target ) ) {
+								self.close();
+							}
+						});
+					}, 1 );
+				}
+
 				// use another timeout to make sure the blur-event-handler on the input was already triggered
 				setTimeout(function() {
 					clearTimeout( self.closing );
@@ -130,9 +160,16 @@ $.widget( "ui.autocomplete", {
 					if ( self.element[0] !== doc.activeElement ) {
 						self.element.focus();
 						self.previous = previous;
+						// #6109 - IE triggers two focus events and the second
+						// is asynchronous, so we need to reset the previous
+						// term synchronously and asynchronously :-(
+						setTimeout(function() {
+							self.previous = previous;
+						}, 1);
 					}
 
 					if ( false !== self._trigger( "select", event, { item: item } ) ) {
+						self.term = item.value;
 						self.element.val( item.value );
 					}
 
@@ -140,7 +177,10 @@ $.widget( "ui.autocomplete", {
 					self.selectedItem = item;
 				},
 				blur: function( event, ui ) {
-					if ( self.menu.element.is(":visible") ) {
+					// don't set the value of the text field if it's already correct
+					// this prevents moving the cursor unnecessarily
+					if ( self.menu.element.is(":visible") &&
+						( self.element.val() !== self.term ) ) {
 						self.element.val( self.term );
 					}
 				}
@@ -166,15 +206,19 @@ $.widget( "ui.autocomplete", {
 		$.Widget.prototype.destroy.call( this );
 	},
 
-	_setOption: function( key ) {
+	_setOption: function( key, value ) {
 		$.Widget.prototype._setOption.apply( this, arguments );
 		if ( key === "source" ) {
 			this._initSource();
 		}
+		if ( key === "appendTo" ) {
+			this.menu.element.appendTo( $( value || "body", this.element[0].ownerDocument )[0] )
+		}
 	},
 
 	_initSource: function() {
-		var array,
+		var self = this,
+			array,
 			url;
 		if ( $.isArray(this.options.source) ) {
 			array = this.options.source;
@@ -184,7 +228,15 @@ $.widget( "ui.autocomplete", {
 		} else if ( typeof this.options.source === "string" ) {
 			url = this.options.source;
 			this.source = function( request, response ) {
-				$.getJSON( url, request, response );
+				if (self.xhr) {
+					self.xhr.abort();
+				}
+				self.xhr = $.getJSON( url, request, function( data, status, xhr ) {
+					if ( xhr === self.xhr ) {
+						response( data );
+					}
+					self.xhr = null;
+				});
 			};
 		} else {
 			this.source = this.options.source;
@@ -193,6 +245,10 @@ $.widget( "ui.autocomplete", {
 
 	search: function( value, event ) {
 		value = value != null ? value : this.element.val();
+
+		// always save the actual value, not the one passed as an argument
+		this.term = this.element.val();
+
 		if ( value.length < this.options.minLength ) {
 			return this.close( event );
 		}
@@ -206,10 +262,7 @@ $.widget( "ui.autocomplete", {
 	},
 
 	_search: function( value ) {
-		this.term = this.element
-			.addClass( "ui-autocomplete-loading" )
-			// always save the actual value, not the one passed as an argument
-			.val();
+		this.element.addClass( "ui-autocomplete-loading" );
 
 		this.source( { term: value }, this.response );
 	},
@@ -275,13 +328,9 @@ $.widget( "ui.autocomplete", {
 
 		menuWidth = ul.width( "" ).outerWidth();
 		textWidth = this.element.outerWidth();
-		ul.width( Math.max( menuWidth, textWidth )
-			- ( parseFloat( ul.css("paddingLeft") ) || 0 )
-			- ( parseFloat( ul.css("paddingRight") ) || 0 )
-			- ( parseFloat( ul.css("borderLeftWidth") ) || 0 )
-			- ( parseFloat( ul.css("borderRightWidth") ) || 0 ) );
+		ul.outerWidth( Math.max( menuWidth, textWidth ) );
 	},
-	
+
 	_renderMenu: function( ul, items ) {
 		var self = this;
 		$.each( items, function( index, item ) {
@@ -396,7 +445,7 @@ $.widget("ui.menu", {
 				elementHeight = this.element.height();
 			if (offset < 0) {
 				this.element.attr("scrollTop", scroll + offset);
-			} else if (offset > elementHeight) {
+			} else if (offset >= elementHeight) {
 				this.element.attr("scrollTop", scroll + offset - elementHeight + item.height());
 			}
 		}
@@ -452,12 +501,12 @@ $.widget("ui.menu", {
 		if (this.hasScroll()) {
 			// TODO merge with no-scroll-else
 			if (!this.active || this.last()) {
-				this.activate(event, this.element.children(":first"));
+				this.activate(event, this.element.children(".ui-menu-item:first"));
 				return;
 			}
 			var base = this.active.offset().top,
 				height = this.element.height(),
-				result = this.element.children("li").filter(function() {
+				result = this.element.children(".ui-menu-item").filter(function() {
 					var close = $(this).offset().top - base - height + $(this).height();
 					// TODO improve approximation
 					return close < 10 && close > -10;
@@ -465,11 +514,12 @@ $.widget("ui.menu", {
 
 			// TODO try to catch this earlier when scrollTop indicates the last page anyway
 			if (!result.length) {
-				result = this.element.children(":last");
+				result = this.element.children(".ui-menu-item:last");
 			}
 			this.activate(event, result);
 		} else {
-			this.activate(event, this.element.children(!this.active || this.last() ? ":first" : ":last"));
+			this.activate(event, this.element.children(".ui-menu-item")
+				.filter(!this.active || this.last() ? ":first" : ":last"));
 		}
 	},
 
@@ -478,13 +528,13 @@ $.widget("ui.menu", {
 		if (this.hasScroll()) {
 			// TODO merge with no-scroll-else
 			if (!this.active || this.first()) {
-				this.activate(event, this.element.children(":last"));
+				this.activate(event, this.element.children(".ui-menu-item:last"));
 				return;
 			}
 
 			var base = this.active.offset().top,
 				height = this.element.height();
-				result = this.element.children("li").filter(function() {
+				result = this.element.children(".ui-menu-item").filter(function() {
 					var close = $(this).offset().top - base + height - $(this).height();
 					// TODO improve approximation
 					return close < 10 && close > -10;
@@ -492,11 +542,12 @@ $.widget("ui.menu", {
 
 			// TODO try to catch this earlier when scrollTop indicates the last page anyway
 			if (!result.length) {
-				result = this.element.children(":first");
+				result = this.element.children(".ui-menu-item:first");
 			}
 			this.activate(event, result);
 		} else {
-			this.activate(event, this.element.children(!this.active || this.first() ? ":last" : ":first"));
+			this.activate(event, this.element.children(".ui-menu-item")
+				.filter(!this.active || this.first() ? ":last" : ":first"));
 		}
 	},
 

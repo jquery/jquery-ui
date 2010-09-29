@@ -1,28 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8" />
-	<title>jQuery UI Autocomplete Combobox Demo</title>
-	<link type="text/css" href="../../themes/base/jquery.ui.all.css" rel="stylesheet" />
-	<script type="text/javascript" src="../../jquery-1.4.2.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.core.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.widget.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.button.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.position.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.autocomplete.js"></script>
-	<link type="text/css" href="../demos.css" rel="stylesheet" />
-	<style type="text/css">
-		/* TODO shouldn't be necessary */
-		.ui-button { margin-left: -1px; }
-		.ui-button-icon-only .ui-button-text { padding: 0.35em; } 
-		.ui-autocomplete-input { margin: 0; padding: 0.48em 0 0.47em 0.45em; }
+	<meta charset="utf-8">
+	<title>jQuery UI Autocomplete - Combobox</title>
+	<link rel="stylesheet" href="../../themes/base/jquery.ui.all.css">
+	<script src="../../jquery-1.4.2.js"></script>
+	<script src="../../ui/jquery.ui.core.js"></script>
+	<script src="../../ui/jquery.ui.widget.js"></script>
+	<script src="../../ui/jquery.ui.button.js"></script>
+	<script src="../../ui/jquery.ui.position.js"></script>
+	<script src="../../ui/jquery.ui.autocomplete.js"></script>
+	<link rel="stylesheet" href="../demos.css">
+	<style>
+	.ui-button { margin-left: -1px; }
+	.ui-button-icon-only .ui-button-text { padding: 0.35em; } 
+	.ui-autocomplete-input { margin: 0; padding: 0.48em 0 0.47em 0.45em; }
 	</style>
-	<script type="text/javascript">
+	<script>
 	(function( $ ) {
 		$.widget( "ui.combobox", {
 			_create: function() {
-				var self = this;
-				var select = this.element.hide(),
+				var self = this,
+					select = this.element.hide(),
 					selected = select.children( ":selected" ),
 					value = selected.val() ? selected.text() : "";
 				var input = $( "<input>" )
@@ -50,7 +49,6 @@
 						},
 						select: function( event, ui ) {
 							ui.item.option.selected = true;
-							//select.val( ui.item.option.value );
 							self._trigger( "selected", event, {
 								item: ui.item.option
 							});
@@ -108,12 +106,12 @@
 					});
 			}
 		});
-	})(jQuery);
+	})( jQuery );
 
 	$(function() {
-		$("#combobox").combobox();
-		$("#toggle").click(function() {
-			$("#combobox").toggle();
+		$( "#combobox" ).combobox();
+		$( "#toggle" ).click(function() {
+			$( "#combobox" ).toggle();
 		});
 	});
 	</script>
@@ -154,13 +152,11 @@
 
 </div><!-- End demo -->
 
+
+
 <div class="demo-description">
-<p>
-A custom widget built by composition of Autocomplete and Button. You can either type something into the field to get filtered suggestions based on your input, or use the button to get the full list of selections.
-</p>
-<p>
-The input is read from an existing select-element for progressive enhancement, passed to Autocomplete with a customized source-option.
-</p>
+<p>A custom widget built by composition of Autocomplete and Button. You can either type something into the field to get filtered suggestions based on your input, or use the button to get the full list of selections.</p>
+<p>The input is read from an existing select-element for progressive enhancement, passed to Autocomplete with a customized source-option.</p>
 </div><!-- End demo-description -->
 
 </body>

@@ -3,6 +3,7 @@
  */
 
 var autocomplete_defaults = {
+	appendTo: "body",
 	delay: 300,
 	disabled: false,
 	minLength: 1,
