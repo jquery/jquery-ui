@@ -5,27 +5,27 @@
 
 module('core - jQuery extensions');
 
-test('focus', function() {
-	expect(3);
+test('focus - original functionality', function() {
+	expect(1);
 	
-	var el = $('#inputTabindex0'),
-		// used to remove focus from the main element
-		other = $('#inputTabindex10');
-	
-	// test original functionality
-	el.focus(function() {
-		ok(true, 'event triggered');
-	});
-	el.focus();
-	other.focus();
-	
-	// trigger event handler + callback
-	stop();
-	el.focus(500, function() {
-		ok(true, 'callback triggered');
-		start();
-	});
-	other.focus();
+	$('#inputTabindex0')
+		.focus(function() {
+			ok(true, 'event triggered');
+		})
+		.focus();
+});
+
+asyncTest('focus', function() {
+	expect(2);
+	$('#inputTabindex0')
+		.focus(function() {
+			ok(true, 'event triggered');
+		})
+		.focus(500, function() {
+			ok(true, 'callback triggered');
+			$(this).unbind('focus');
+			start();
+		});
 });
 
 test('zIndex', function() {

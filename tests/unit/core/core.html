@@ -11,21 +11,12 @@
 	<link rel="stylesheet" href="../../../external/qunit.css" type="text/css"/>
 	<script type="text/javascript" src="../../../external/qunit.js"></script>
 	<script type="text/javascript" src="../../jquery.simulate.js"></script>
+	<script type="text/javascript" src="../testsuite.js"></script>
 	
 	<script type="text/javascript" src="core.js"></script>
 	<script type="text/javascript" src="selector.js"></script>
 	
-	<script type="text/javascript">
-	// disable this stale testsuite for testswarm only
-	var url = window.location.search;
-	url = decodeURIComponent( url.slice( url.indexOf("swarmURL=") + 9 ) );
-	if ( url && url.indexOf("http") == 0 ) {
-		// reset config to kill previous tests; make sure testsuite.js is loaded afterwards to init the testswarm script
-		QUnit.init();
-		test("core", function() { ok(true, "disabled core testsuite"); });
-	}
-	</script>
-	<script type="text/javascript" src="../testsuite.js"></script>
+	<script type="text/javascript" src="../swarminject.js"></script>
 	
 	<style	type="text/css">
 		.zindex {z-index: 100}
@@ -65,7 +56,7 @@
 			<option>option</option>
 		</select>
 		<textarea id="visibleAncestor-textarea">x</textarea>
-		<object id="visibleAncestor-object">xxx</object>
+		<object id="visibleAncestor-object" codebase="about:blank">xxx</object>
 		<a href="#" id="visibleAncestor-anchorWithHref">anchor</a>
 		<a id="visibleAncestor-anchorWithoutHref">anchor</a>
 		<span id="visibleAncestor-span">x</span>
@@ -97,11 +88,11 @@
 			<span tabindex="1" id="visibilityHiddenAncestor-span">.</span>
 		</div>
 		
-		<input id="displayNone-input" style="display: none;" />
-		<input id="visibilityHidden-input" style="visibility: hidden;" />
-		
 		<span tabindex="1" id="displayNone-span" style="display: none;">.</span>
 		<span tabindex="1" id="visibilityHidden-span" style="visibility: hidden;">.</span>
+		
+		<input id="displayNone-input" style="display: none;" />
+		<input id="visibilityHidden-input" style="visibility: hidden;" />
 	</div>
 	
 	<div>

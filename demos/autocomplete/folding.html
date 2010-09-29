@@ -1,25 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8" />
-	<title>jQuery UI Autocomplete Accent Folding Demo</title>
-	<link type="text/css" href="../../themes/base/jquery.ui.all.css" rel="stylesheet" />
-	<script type="text/javascript" src="../../jquery-1.4.2.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.core.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.widget.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.position.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.autocomplete.js"></script>
-	<link type="text/css" href="../demos.css" rel="stylesheet" />
-	<script type="text/javascript">
+	<meta charset="utf-8">
+	<title>jQuery UI Autocomplete - Accent folding</title>
+	<link rel="stylesheet" href="../../themes/base/jquery.ui.all.css">
+	<script src="../../jquery-1.4.2.js"></script>
+	<script src="../../ui/jquery.ui.core.js"></script>
+	<script src="../../ui/jquery.ui.widget.js"></script>
+	<script src="../../ui/jquery.ui.position.js"></script>
+	<script src="../../ui/jquery.ui.autocomplete.js"></script>
+	<link rel="stylesheet" href="../demos.css">
+	<script>
 	$(function() {
 		var names = [ "Jörn Zaefferer", "Scott González", "John Resig" ];
 
 		var accentMap = {
-			'á':'a',
-			'ö':'o'
+			"á": "a",
+			"ö": "o"
 		};
 		var normalize = function( term ) {
-			var ret = '';
+			var ret = "";
 			for ( var i = 0; i < term.length; i++ ) {
 				ret += accentMap[ term.charAt(i) ] || term.charAt(i);
 			}
@@ -51,13 +51,11 @@
 
 </div><!-- End demo -->
 
+
+
 <div class="demo-description">
-<p>
-The autocomplete field uses a custom source option which will match results that have accented characters even when the text field doesn't contain accented characters. However if the you type in accented characters in the text field it is smart enough not to show results that aren't accented.
-</p>
-<p>
-Try typing "Jo" to see "John" and "Jörn", then type "Jö" to see only "Jörn".
-</p>
+<p>The autocomplete field uses a custom source option which will match results that have accented characters even when the text field doesn't contain accented characters. However if the you type in accented characters in the text field it is smart enough not to show results that aren't accented.</p>
+<p>Try typing "Jo" to see "John" and "Jörn", then type "Jö" to see only "Jörn".</p>
 </div><!-- End demo-description -->
 
 </body>

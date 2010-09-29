@@ -131,7 +131,29 @@ test('of', function() {
 	$('#elx').position({
 		my: 'right bottom',
 		at: 'right bottom',
+		of: $(document),
+		collision: 'none'
+	});
+	same($('#elx').offset(), {
+		top: $(document).height() - 10,
+		left: $(document).width() - 10
+	}, 'document');
+	
+	$('#elx').position({
+		my: 'right bottom',
+		at: 'right bottom',
 		of: window,
+		collision: 'none'
+	});
+	same($('#elx').offset(), {
+		top: $(window).height() - 10,
+		left: $(window).width() - 10
+	}, 'window');
+	
+	$('#elx').position({
+		my: 'right bottom',
+		at: 'right bottom',
+		of: $(window),
 		collision: 'none'
 	});
 	same($('#elx').offset(), {
@@ -330,6 +352,58 @@ test("collision: none, with offset", function() {
 		collision: "none",
 		offset: "-2 -3"
 	}, { top: -13, left: -12 }, "left top, negative offset");
+});
+
+test("collision: fit, with margin", function() {
+	$("#elx").css("margin", 10);
+
+	collisionTest({
+		collision: "fit"
+	}, { top: $(window).height() - 20, left: $(window).width() - 20 }, "right bottom");
+
+	collisionTest2({
+		collision: "fit"
+	}, { top: 10, left: 10 }, "left top");
+
+	$("#elx").css({
+		"margin-left": 5,
+		"margin-top": 5
+	});
+
+	collisionTest({
+		collision: "fit"
+	}, { top: $(window).height() - 20, left: $(window).width() - 20 }, "right bottom");
+
+	collisionTest2({
+		collision: "fit"
+	}, { top: 5, left: 5 }, "left top");
+
+	$("#elx").css({
+		"margin-right": 15,
+		"margin-bottom": 15
+	});
+
+	collisionTest({
+		collision: "fit"
+	}, { top: $(window).height() - 25, left: $(window).width() - 25 }, "right bottom");
+
+	collisionTest2({
+		collision: "fit"
+	}, { top: 5, left: 5 }, "left top");
+});
+
+test("collision: flip, with margin", function() {
+	$("#elx").css("margin", 10);
+
+	collisionTest({
+		collision: "flip",
+		at: "left top"
+	}, { top: $(window).height() - 10, left: $(window).width() - 10 }, "left top");
+
+	collisionTest2({
+		collision: "flip",
+		at: "right bottom"
+	}, { top: 0, left: 0 }, "right bottom");
 });
 
 //test('bug #5280: consistent results (avoid fractional values)', function() {

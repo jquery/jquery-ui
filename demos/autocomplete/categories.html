@@ -1,25 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8" />
-	<title>jQuery UI Autocomplete Custom Data Demo</title>
-	<link type="text/css" href="../../themes/base/jquery.ui.all.css" rel="stylesheet" />
-	<script type="text/javascript" src="../../jquery-1.4.2.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.core.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.widget.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.position.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.autocomplete.js"></script>
-	<link type="text/css" href="../demos.css" rel="stylesheet" />
-	<style type="text/css">
+	<meta charset="utf-8">
+	<title>jQuery UI Autocomplete - Categories</title>
+	<link rel="stylesheet" href="../../themes/base/jquery.ui.all.css">
+	<script src="../../jquery-1.4.2.js"></script>
+	<script src="../../ui/jquery.ui.core.js"></script>
+	<script src="../../ui/jquery.ui.widget.js"></script>
+	<script src="../../ui/jquery.ui.position.js"></script>
+	<script src="../../ui/jquery.ui.autocomplete.js"></script>
+	<link rel="stylesheet" href="../demos.css">
+	<style>
 	.ui-autocomplete-category {
-		font-weight:bold;
-		padding:.2em .4em;
-		margin:.8em 0 .2em;
-		line-height:1.5;
+		font-weight: bold;
+		padding: .2em .4em;
+		margin: .8em 0 .2em;
+		line-height: 1.5;
 	}
 	</style>
-	<script type="text/javascript">
-	$.widget("custom.catcomplete", $.ui.autocomplete, {
+	<script>
+	$.widget( "custom.catcomplete", $.ui.autocomplete, {
 		_renderMenu: function( ul, items ) {
 			var self = this,
 				currentCategory = "";
@@ -33,7 +33,7 @@
 		}
 	});
 	</script>
-	<script type="text/javascript">
+	<script>
 	$(function() {
 		var data = [
 			{ label: "anders", category: "" },
@@ -47,7 +47,7 @@
 			{ label: "andreas johnson", category: "People" }
 		];
 		
-		$('#search').catcomplete({
+		$( "#search" ).catcomplete({
 			delay: 0,
 			source: data
 		});
@@ -61,10 +61,10 @@
 	<input id="search" />
 </div><!-- End demo -->
 
+
+
 <div class="demo-description">
-<p>
-	A categorized search result. Try typing "a" or "n".
-</p>
+<p>A categorized search result. Try typing "a" or "n".</p>
 </div><!-- End demo-description -->
 
 </body>

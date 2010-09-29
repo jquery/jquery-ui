@@ -6,7 +6,7 @@
 module("slider: methods");
 
 test("init", function() {
-	expect(6);
+	expect(5);
 
 	$("<div></div>").appendTo('body').slider().remove();
 	ok(true, '.slider() called on element');
@@ -16,9 +16,6 @@ test("init", function() {
 
 	$('<div></div>').slider().remove();
 	ok(true, '.slider() called on disconnected DOMElement');
-
-	$('<div></div>').slider().slider("foo").remove();
-	ok(true, 'arbitrary method called after init');
 
 	var el = $('<div></div>').slider();
 	var foo = el.slider("option", "foo");
@@ -38,9 +35,6 @@ test("destroy", function() {
 
 	$('<div></div>').appendTo('body').remove().slider().slider("destroy").remove();
 	ok(true, '.slider("destroy") called on disconnected DOMElement');
-
-	$('<div></div>').slider().slider("destroy").slider("foo").remove();
-	ok(true, 'arbitrary method called after destroy');
 
 	var expected = $('<div></div>').slider(),
 		actual = expected.slider('destroy');

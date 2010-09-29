@@ -1,44 +1,68 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8" />
-	<title>jQuery UI Autocomplete multiple demo</title>
-	<link type="text/css" href="../../themes/base/jquery.ui.all.css" rel="stylesheet" />
-	<script type="text/javascript" src="../../jquery-1.4.2.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.core.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.widget.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.position.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.autocomplete.js"></script>
-	<link type="text/css" href="../demos.css" rel="stylesheet" />
-	<script type="text/javascript">
+	<meta charset="utf-8">
+	<title>jQuery UI Autocomplete - Multiple values</title>
+	<link rel="stylesheet" href="../../themes/base/jquery.ui.all.css">
+	<script src="../../jquery-1.4.2.js"></script>
+	<script src="../../ui/jquery.ui.core.js"></script>
+	<script src="../../ui/jquery.ui.widget.js"></script>
+	<script src="../../ui/jquery.ui.position.js"></script>
+	<script src="../../ui/jquery.ui.autocomplete.js"></script>
+	<link rel="stylesheet" href="../demos.css">
+	<script>
 	$(function() {
-		var availableTags = ["ActionScript", "AppleScript", "Asp", "BASIC", "C", "C++", "Clojure", "COBOL", "ColdFusion", "Erlang", "Fortran", "Groovy", "Haskell", "Java", "JavaScript", "Lisp", "Perl", "PHP", "Python", "Ruby", "Scala", "Scheme"];
-		function split(val) {
-			return val.split(/,\s*/);
+		var availableTags = [
+			"ActionScript",
+			"AppleScript",
+			"Asp",
+			"BASIC",
+			"C",
+			"C++",
+			"Clojure",
+			"COBOL",
+			"ColdFusion",
+			"Erlang",
+			"Fortran",
+			"Groovy",
+			"Haskell",
+			"Java",
+			"JavaScript",
+			"Lisp",
+			"Perl",
+			"PHP",
+			"Python",
+			"Ruby",
+			"Scala",
+			"Scheme"
+		];
+		function split( val ) {
+			return val.split( /,\s*/ );
 		}
-		function extractLast(term) {
-			return split(term).pop();
+		function extractLast( term ) {
+			return split( term ).pop();
 		}
-		
-		$("#tags").autocomplete({
+
+		$( "#tags" ).autocomplete({
 			minLength: 0,
-			source: function(request, response) {
+			source: function( request, response ) {
 				// delegate back to autocomplete, but extract the last term
-				response($.ui.autocomplete.filter(availableTags, extractLast(request.term)));
+				response( $.ui.autocomplete.filter(
+					availableTags, extractLast( request.term ) ) );
 			},
 			focus: function() {
 				// prevent value inserted on focus
 				return false;
 			},
-			select: function(event, ui) {
+			select: function( event, ui ) {
 				var terms = split( this.value );
 				// remove the current input
 				terms.pop();
 				// add the selected item
 				terms.push( ui.item.value );
 				// add placeholder to get the comma-and-space at the end
-				terms.push("");
-				this.value = terms.join(", ");
+				terms.push( "" );
+				this.value = terms.join( ", " );
 				return false;
 			}
 		});
@@ -56,13 +80,11 @@
 
 </div><!-- End demo -->
 
+
+
 <div class="demo-description">
-<p>
-Usage: Type something, eg. "j" to see suggestions for tagging with programming languages. Select a value, then continue typing to add more.
-</p>
-<p>
-This is an example showing how to use the source-option along with some events to enable autocompleting multiple values into a single field.
-</p>
+<p>Usage: Type something, eg. "j" to see suggestions for tagging with programming languages. Select a value, then continue typing to add more.</p>
+<p>This is an example showing how to use the source-option along with some events to enable autocompleting multiple values into a single field.</p>
 </div><!-- End demo-description -->
 
 </body>

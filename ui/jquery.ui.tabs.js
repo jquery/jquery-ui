@@ -63,7 +63,7 @@ $.widget( "ui.tabs", {
 	},
 
 	_tabId: function( a ) {
-		return a.title && a.title.replace( /\s/g, "_" ).replace( /[^A-Za-z0-9\-_:\.]/g, "" ) ||
+		return a.title && a.title.replace( /\s/g, "_" ).replace( /[^\w\u00c0-\uFFFF-]/g, "" ) ||
 			this.options.idPrefix + getNextTabId();
 	},
 
@@ -103,7 +103,7 @@ $.widget( "ui.tabs", {
 			fragmentId = /^#.+/; // Safari 2 reports '#' for an empty hash
 
 		this.list = this.element.find( "ol,ul" ).eq( 0 );
-		this.lis = $( "li:has(a[href])", this.list );
+		this.lis = $( " > li:has(a[href])", this.list );
 		this.anchors = this.lis.map(function() {
 			return $( "a", this )[ 0 ];
 		});
@@ -129,7 +129,7 @@ $.widget( "ui.tabs", {
 				self.panels = self.panels.add( self._sanitizeSelector( href ) );
 			// remote tab
 			// prevent loading the page itself if href is just "#"
-			} else if ( href !== "#" ) {
+			} else if ( href && href !== "#" ) {
 				// required for restore on destroy
 				$.data( a, "href.tabs", href );
 
@@ -346,6 +346,7 @@ $.widget( "ui.tabs", {
 			if ( ( $li.hasClass( "ui-tabs-selected" ) && !o.collapsible) ||
 				$li.hasClass( "ui-state-disabled" ) ||
 				$li.hasClass( "ui-state-processing" ) ||
+				self.panels.filter( ":animated" ).length ||
 				self._trigger( "select", null, self._ui( this, $show[ 0 ] ) ) === false ) {
 				this.blur();
 				return false;
@@ -603,7 +604,7 @@ $.widget( "ui.tabs", {
 		return this;
 	},
 
-	load: function( index ) {
+	load: function( index ) {
 		index = this._getIndex( index );
 		var self = this,
 			o = this.options,

@@ -1,11 +1,11 @@
 /*
  * widget unit tests
  */
-(function($) {
+(function( $ ) {
 
-module('widget: tickets');
+module( "widget: tickets" );
 
-test('#5830 - Widget: Using inheritance overwrites the base classes options', function() {
+test( "#5830 - Widget: Using inheritance overwrites the base classes options", function() {
 	$.widget( "ui.testWidgetBase", {
 		options: {
 			obj: {
@@ -15,7 +15,7 @@ test('#5830 - Widget: Using inheritance overwrites the base classes options', fu
 			arr: [ "testing" ]
 		}
 	});
-	
+
 	$.widget( "ui.testWidgetExtension", $.ui.testWidgetBase, {
 		options: {
 			obj: {
@@ -24,7 +24,7 @@ test('#5830 - Widget: Using inheritance overwrites the base classes options', fu
 			arr: [ "alpha", "beta" ]
 		}
 	});
-	
+
 	same( $.ui.testWidgetBase.prototype.options.obj, {
 		key1: "foo",
 		key2: "bar"
@@ -38,9 +38,9 @@ test('#5830 - Widget: Using inheritance overwrites the base classes options', fu
 	}, "extension class option object extends base");
 	same( $.ui.testWidgetExtension.prototype.options.arr, [ "alpha", "beta" ],
 		"extension class option array overwrites base");
-	
+
 	delete $.ui.testWidgetBase;
 	delete $.ui.testWidgetExtension;
 });
 
-})(jQuery);
+})( jQuery );

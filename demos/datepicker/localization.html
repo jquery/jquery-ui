@@ -1,72 +1,76 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8" />
+	<meta charset="utf-8">
 	<title>jQuery UI Datepicker - Localize calendar</title>
-	<link type="text/css" href="../../themes/base/jquery.ui.all.css" rel="stylesheet" />
-	<script type="text/javascript" src="../../jquery-1.4.2.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.core.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.widget.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.datepicker.js"></script>
-	<script type="text/javascript" src="../../ui/i18n/jquery.ui.datepicker-af.js"></script>
-	<script type="text/javascript" src="../../ui/i18n/jquery.ui.datepicker-ar.js"></script>
-	<script type="text/javascript" src="../../ui/i18n/jquery.ui.datepicker-az.js"></script>
-	<script type="text/javascript" src="../../ui/i18n/jquery.ui.datepicker-bg.js"></script>
-	<script type="text/javascript" src="../../ui/i18n/jquery.ui.datepicker-bs.js"></script>
-	<script type="text/javascript" src="../../ui/i18n/jquery.ui.datepicker-ca.js"></script>
-	<script type="text/javascript" src="../../ui/i18n/jquery.ui.datepicker-cs.js"></script>
-	<script type="text/javascript" src="../../ui/i18n/jquery.ui.datepicker-da.js"></script>
-	<script type="text/javascript" src="../../ui/i18n/jquery.ui.datepicker-de.js"></script>
-	<script type="text/javascript" src="../../ui/i18n/jquery.ui.datepicker-el.js"></script>
-	<script type="text/javascript" src="../../ui/i18n/jquery.ui.datepicker-en-GB.js"></script>
-	<script type="text/javascript" src="../../ui/i18n/jquery.ui.datepicker-eo.js"></script>
-	<script type="text/javascript" src="../../ui/i18n/jquery.ui.datepicker-es.js"></script>
-	<script type="text/javascript" src="../../ui/i18n/jquery.ui.datepicker-et.js"></script>
-	<script type="text/javascript" src="../../ui/i18n/jquery.ui.datepicker-eu.js"></script>
-	<script type="text/javascript" src="../../ui/i18n/jquery.ui.datepicker-fa.js"></script>
-	<script type="text/javascript" src="../../ui/i18n/jquery.ui.datepicker-fi.js"></script>
-	<script type="text/javascript" src="../../ui/i18n/jquery.ui.datepicker-fo.js"></script>
-	<script type="text/javascript" src="../../ui/i18n/jquery.ui.datepicker-fr.js"></script>
-	<script type="text/javascript" src="../../ui/i18n/jquery.ui.datepicker-fr-CH.js"></script>
-	<script type="text/javascript" src="../../ui/i18n/jquery.ui.datepicker-he.js"></script>
-	<script type="text/javascript" src="../../ui/i18n/jquery.ui.datepicker-hr.js"></script>
-	<script type="text/javascript" src="../../ui/i18n/jquery.ui.datepicker-hu.js"></script>
-	<script type="text/javascript" src="../../ui/i18n/jquery.ui.datepicker-hy.js"></script>
-	<script type="text/javascript" src="../../ui/i18n/jquery.ui.datepicker-id.js"></script>
-	<script type="text/javascript" src="../../ui/i18n/jquery.ui.datepicker-is.js"></script>
-	<script type="text/javascript" src="../../ui/i18n/jquery.ui.datepicker-it.js"></script>
-	<script type="text/javascript" src="../../ui/i18n/jquery.ui.datepicker-ja.js"></script>
-	<script type="text/javascript" src="../../ui/i18n/jquery.ui.datepicker-ko.js"></script>
-	<script type="text/javascript" src="../../ui/i18n/jquery.ui.datepicker-lt.js"></script>
-	<script type="text/javascript" src="../../ui/i18n/jquery.ui.datepicker-lv.js"></script>
-	<script type="text/javascript" src="../../ui/i18n/jquery.ui.datepicker-ms.js"></script>
-	<script type="text/javascript" src="../../ui/i18n/jquery.ui.datepicker-nl.js"></script>
-	<script type="text/javascript" src="../../ui/i18n/jquery.ui.datepicker-no.js"></script>
-	<script type="text/javascript" src="../../ui/i18n/jquery.ui.datepicker-pl.js"></script>
-	<script type="text/javascript" src="../../ui/i18n/jquery.ui.datepicker-pt-BR.js"></script>
-	<script type="text/javascript" src="../../ui/i18n/jquery.ui.datepicker-ro.js"></script>
-	<script type="text/javascript" src="../../ui/i18n/jquery.ui.datepicker-ru.js"></script>
-	<script type="text/javascript" src="../../ui/i18n/jquery.ui.datepicker-sk.js"></script>
-	<script type="text/javascript" src="../../ui/i18n/jquery.ui.datepicker-sl.js"></script>
-	<script type="text/javascript" src="../../ui/i18n/jquery.ui.datepicker-sq.js"></script>
-	<script type="text/javascript" src="../../ui/i18n/jquery.ui.datepicker-sr.js"></script>
-	<script type="text/javascript" src="../../ui/i18n/jquery.ui.datepicker-sr-SR.js"></script>
-	<script type="text/javascript" src="../../ui/i18n/jquery.ui.datepicker-sv.js"></script>
-	<script type="text/javascript" src="../../ui/i18n/jquery.ui.datepicker-ta.js"></script>
-	<script type="text/javascript" src="../../ui/i18n/jquery.ui.datepicker-th.js"></script>
-	<script type="text/javascript" src="../../ui/i18n/jquery.ui.datepicker-tr.js"></script>
-	<script type="text/javascript" src="../../ui/i18n/jquery.ui.datepicker-uk.js"></script>
-	<script type="text/javascript" src="../../ui/i18n/jquery.ui.datepicker-vi.js"></script>
-	<script type="text/javascript" src="../../ui/i18n/jquery.ui.datepicker-zh-CN.js"></script>
-	<script type="text/javascript" src="../../ui/i18n/jquery.ui.datepicker-zh-HK.js"></script>
-	<script type="text/javascript" src="../../ui/i18n/jquery.ui.datepicker-zh-TW.js"></script>
-	<link type="text/css" href="../demos.css" rel="stylesheet" />
-	<script type="text/javascript">
+	<link rel="stylesheet" href="../../themes/base/jquery.ui.all.css">
+	<script src="../../jquery-1.4.2.js"></script>
+	<script src="../../ui/jquery.ui.core.js"></script>
+	<script src="../../ui/jquery.ui.widget.js"></script>
+	<script src="../../ui/jquery.ui.datepicker.js"></script>
+	<script src="../../ui/i18n/jquery.ui.datepicker-af.js"></script>
+	<script src="../../ui/i18n/jquery.ui.datepicker-ar.js"></script>
+	<script src="../../ui/i18n/jquery.ui.datepicker-az.js"></script>
+	<script src="../../ui/i18n/jquery.ui.datepicker-bg.js"></script>
+	<script src="../../ui/i18n/jquery.ui.datepicker-bs.js"></script>
+	<script src="../../ui/i18n/jquery.ui.datepicker-ca.js"></script>
+	<script src="../../ui/i18n/jquery.ui.datepicker-cs.js"></script>
+	<script src="../../ui/i18n/jquery.ui.datepicker-da.js"></script>
+	<script src="../../ui/i18n/jquery.ui.datepicker-de.js"></script>
+	<script src="../../ui/i18n/jquery.ui.datepicker-el.js"></script>
+	<script src="../../ui/i18n/jquery.ui.datepicker-en-GB.js"></script>
+	<script src="../../ui/i18n/jquery.ui.datepicker-eo.js"></script>
+	<script src="../../ui/i18n/jquery.ui.datepicker-es.js"></script>
+	<script src="../../ui/i18n/jquery.ui.datepicker-et.js"></script>
+	<script src="../../ui/i18n/jquery.ui.datepicker-eu.js"></script>
+	<script src="../../ui/i18n/jquery.ui.datepicker-fa.js"></script>
+	<script src="../../ui/i18n/jquery.ui.datepicker-fi.js"></script>
+	<script src="../../ui/i18n/jquery.ui.datepicker-fo.js"></script>
+	<script src="../../ui/i18n/jquery.ui.datepicker-fr.js"></script>
+	<script src="../../ui/i18n/jquery.ui.datepicker-fr-CH.js"></script>
+	<script src="../../ui/i18n/jquery.ui.datepicker-gl.js"></script>
+	<script src="../../ui/i18n/jquery.ui.datepicker-he.js"></script>
+	<script src="../../ui/i18n/jquery.ui.datepicker-hr.js"></script>
+	<script src="../../ui/i18n/jquery.ui.datepicker-hu.js"></script>
+	<script src="../../ui/i18n/jquery.ui.datepicker-hy.js"></script>
+	<script src="../../ui/i18n/jquery.ui.datepicker-id.js"></script>
+	<script src="../../ui/i18n/jquery.ui.datepicker-is.js"></script>
+	<script src="../../ui/i18n/jquery.ui.datepicker-it.js"></script>
+	<script src="../../ui/i18n/jquery.ui.datepicker-ja.js"></script>
+	<script src="../../ui/i18n/jquery.ui.datepicker-ko.js"></script>
+	<script src="../../ui/i18n/jquery.ui.datepicker-kz.js"></script>
+	<script src="../../ui/i18n/jquery.ui.datepicker-lt.js"></script>
+	<script src="../../ui/i18n/jquery.ui.datepicker-lv.js"></script>
+	<script src="../../ui/i18n/jquery.ui.datepicker-ms.js"></script>
+	<script src="../../ui/i18n/jquery.ui.datepicker-nl.js"></script>
+	<script src="../../ui/i18n/jquery.ui.datepicker-no.js"></script>
+	<script src="../../ui/i18n/jquery.ui.datepicker-pl.js"></script>
+	<script src="../../ui/i18n/jquery.ui.datepicker-pt.js"></script>
+	<script src="../../ui/i18n/jquery.ui.datepicker-pt-BR.js"></script>
+	<script src="../../ui/i18n/jquery.ui.datepicker-ro.js"></script>
+	<script src="../../ui/i18n/jquery.ui.datepicker-ru.js"></script>
+	<script src="../../ui/i18n/jquery.ui.datepicker-sk.js"></script>
+	<script src="../../ui/i18n/jquery.ui.datepicker-sl.js"></script>
+	<script src="../../ui/i18n/jquery.ui.datepicker-sq.js"></script>
+	<script src="../../ui/i18n/jquery.ui.datepicker-sr.js"></script>
+	<script src="../../ui/i18n/jquery.ui.datepicker-sr-SR.js"></script>
+	<script src="../../ui/i18n/jquery.ui.datepicker-sv.js"></script>
+	<script src="../../ui/i18n/jquery.ui.datepicker-ta.js"></script>
+	<script src="../../ui/i18n/jquery.ui.datepicker-th.js"></script>
+	<script src="../../ui/i18n/jquery.ui.datepicker-tr.js"></script>
+	<script src="../../ui/i18n/jquery.ui.datepicker-uk.js"></script>
+	<script src="../../ui/i18n/jquery.ui.datepicker-vi.js"></script>
+	<script src="../../ui/i18n/jquery.ui.datepicker-zh-CN.js"></script>
+	<script src="../../ui/i18n/jquery.ui.datepicker-zh-HK.js"></script>
+	<script src="../../ui/i18n/jquery.ui.datepicker-zh-TW.js"></script>
+	<link rel="stylesheet" href="../demos.css">
+	<script>
 	$(function() {
-		$.datepicker.setDefaults($.datepicker.regional['']);
-		$("#datepicker").datepicker($.datepicker.regional['fr']);
-		$("#locale").change(function() {
-			$('#datepicker').datepicker('option', $.datepicker.regional[$(this).val()]);
+		$.datepicker.setDefaults( $.datepicker.regional[ "" ] );
+		$( "#datepicker" ).datepicker( $.datepicker.regional[ "fr" ] );
+		$( "#locale" ).change(function() {
+			$( "#datepicker" ).datepicker( "option",
+				$.datepicker.regional[ $( this ).val() ] );
 		});
 	});
 	</script>
@@ -101,6 +105,7 @@
 		<option value="fi">Finnish (suomi)</option>
 		<option value="fr" selected="selected">French (Fran&ccedil;ais)</option>
 		<option value="fr-CH">French/Swiss (Fran&ccedil;ais de Suisse)</option>
+		<option value="gl">Galician</option>
 		<option value="de">German (Deutsch)</option>
 		<option value="el">Greek (&#917;&#955;&#955;&#951;&#957;&#953;&#954;&#940;)</option>
 		<option value="he">Hebrew (&#8235;(&#1506;&#1489;&#1512;&#1497;&#1514;</option>
@@ -110,11 +115,13 @@
 		<option value="it">Italian (Italiano)</option>
 		<option value="ja">Japanese (&#26085;&#26412;&#35486;)</option>
 		<option value="ko">Korean (&#54620;&#44397;&#50612;)</option>
+		<option value="kz">Kazakhstan (Kazakh)</option>
 		<option value="lv">Latvian (Latvie&ouml;u Valoda)</option>
 		<option value="lt">Lithuanian (lietuviu kalba)</option>
 		<option value="ms">Malaysian (Bahasa Malaysia)</option>
 		<option value="no">Norwegian (Norsk)</option>
 		<option value="pl">Polish (Polski)</option>
+		<option value="pt">Portuguese (Portugu&ecirc;s)</option>
 		<option value="pt-BR">Portuguese/Brazilian (Portugu&ecirc;s)</option>
 		<option value="ro">Romanian (Rom&acirc;n&#259;)</option>
 		<option value="ru">Russian (&#1056;&#1091;&#1089;&#1089;&#1082;&#1080;&#1081;)</option>
@@ -133,10 +140,10 @@
 
 </div><!-- End demo -->
 
+
+
 <div class="demo-description">
-
 <p>Localize the datepicker calendar language and format (English / Western formatting is the default).  The datepicker includes built-in support for languages that read right-to-left, such as Arabic and Hebrew.</p>
-
 </div><!-- End demo-description -->
 
 </body>
