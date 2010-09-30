@@ -376,7 +376,7 @@ $.widget("ui.dialog", {
 				props = $.isFunction( props ) ?
 					{ click: props, text: name } :
 					props;
-				var button = $('<button></button>', props)
+				var button = $('<button type="button"></button>', props)
 					.unbind('click')
 					.click(function() {
 						props.click.apply(self.element[0], arguments);
