@@ -154,6 +154,7 @@ $.Widget.prototype = {
 		});
 
 		this._create();
+		this._trigger( "create" );
 		this._init();
 	},
 	_create: function() {},
