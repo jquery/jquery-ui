@@ -61,4 +61,21 @@ test("#5531: dialog width should be at least minWidth on creation", function () 
 
 });
 
+test("#6137: dialog('open') causes form elements to reset on IE7", function() {
+	expect(2);
+
+	d1 = $('<form><input type="radio" name="radio" id="a" value="a" checked="checked"></input>' +
+				'<input type="radio" name="radio" id="b" value="b">b</input></form>').dialog({autoOpen: false});
+
+	d1.find('#b')[0].checked = true;
+	equal($('input:checked').val(), 'b', "checkbox b is checked");
+
+	d2 = $('<div></div>').dialog({autoOpen: false});
+
+	d1.dialog('open');
+	equal($('input:checked').val(), 'b', "checkbox b is checked");
+
+	d1.add(d2).remove();
+})
+
 })(jQuery);
