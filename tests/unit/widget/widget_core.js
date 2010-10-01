@@ -40,6 +40,18 @@ test( "widget namespaces", function() {
   $.custom.testWidget.prototype._create = function(){ which = "custom"; };
   var elem3 = $( "<div></div>" ).custom_testWidget();
   equals( which, "custom", "creating a namespaced widget makes the correct one" );
+
+  // Now make sure we can explicitly pick the one we want via the chained version of namespace.
+  var which = "neither";
+  $.ui.testWidget.prototype._create = function(){ which = "ui"; };
+  var elem2 = $( "<div></div>" ).ui().testWidget();
+  equals( which, "ui" , "creating a namespaced widget with the namespace function makes the correct one" );
+
+  which = "neither";
+  $.custom.testWidget.prototype._create = function(){ which = "custom"; };
+  var elem3 = $( "<div></div>" ).custom().testWidget();
+  equals( which, "custom", "creating a namespaced widget with the namespace function makes the correct one" );
+
 });
 
 test( "widget creation", function() {

@@ -127,6 +127,18 @@ $.widget.bridge = function( name, namespace, object ) {
 		return returnValue;
 	};
 
+    // Check to see if we aren't the first widget to come this way.
+    if ( $.isFunction( $.fn[ namespace ] ) ) {
+      $.fn[ namespace ][ name ] = bridgeFn; 
+    } else {
+      // Store off the jquery instance so we can get at it in the namespaceFn
+      var jquery_obj = this;
+      var namespaceFn = function() {
+        this[ name ] = bridgeFn;
+        return this;
+      }
+      $.fn[ namespace ] = namespaceFn;
+    }
 
     // Attach the bridge function to both the raw name - example: `$.sortable()`
     // And also attach it to a namespaced name         - example: `$.ui_sortable()`
