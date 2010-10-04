@@ -107,10 +107,10 @@ $.widget("ui.selectmenu", {
 				return ret;
 			})
 			.bind('mouseover focus', function(){ 
-				$(this).addClass(self.widgetBaseClass+'-focus ui-state-hover'); 
+				if (!o.disabled) $(this).addClass(self.widgetBaseClass+'-focus ui-state-hover'); 
 			})
 			.bind('mouseout blur', function(){  
-				$(this).removeClass(self.widgetBaseClass+'-focus ui-state-hover'); 
+				if (!o.disabled) $(this).removeClass(self.widgetBaseClass+'-focus ui-state-hover'); 
 			});
 		
 		//document click closes menu
