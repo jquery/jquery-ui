@@ -55,6 +55,7 @@
 			
 			var speedC = $('select#speedC').selectmenu();
 			
+			var speedD = $('select#speedD').selectmenu();			
 		});		
 		
 	</script>
@@ -95,6 +96,17 @@
 				<option value="Slower" selected="selected">Slower</option>
 				<option value="Slow">Slow</option>
 				<option value="Medium">Medium</option>
+				<option value="Fast">Fast</option>
+				<option value="Faster">Faster</option>
+			</select>
+		</fieldset>
+				
+		<fieldset>
+			<label for="speedD">Disabled option by HTML (initial, does not work)</label>
+			<select name="speedD" id="speedD">
+				<option value="Slower" selected="selected">Slower</option>
+				<option value="Slow">Slow</option>
+				<option disabled="disabled"  value="Medium">Medium (disabled)</option>
 				<option value="Fast">Fast</option>
 				<option value="Faster">Faster</option>
 			</select>
