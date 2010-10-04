@@ -28,7 +28,8 @@ $.widget( "ui.autocomplete", {
 	},
 	_create: function() {
 		var self = this,
-			doc = this.element[ 0 ].ownerDocument;
+			doc = this.element[ 0 ].ownerDocument,
+			suppressKeyPress = false;
 		this.element
 			.addClass( "ui-autocomplete-input" )
 			.attr( "autocomplete", "off" )
@@ -43,7 +44,7 @@ $.widget( "ui.autocomplete", {
 					return;
 				}
 
-				var suppressKeyPress = false;
+				suppressKeyPress = false;
 				var keyCode = $.ui.keyCode;
 				switch( event.keyCode ) {
 				case keyCode.PAGE_UP:
