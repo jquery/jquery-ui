@@ -156,6 +156,32 @@ test("merge multiple option arguments", function() {
 	});
 });
 
+test( "_getCreateOptions()", function() {
+	expect( 1 );
+	$.widget( "ui.testWidget", {
+		options: {
+			option1: "valuex",
+			option2: "valuex",
+			option3: "value3",
+		},
+		_getCreateOptions: function() {
+			return {
+				option1: "override1",
+				option2: "overideX",
+			};
+		},
+		_create: function() {
+			same( this.options, {
+				disabled: false,
+				option1: "override1",
+				option2: "value2",
+				option3: "value3"
+			});
+		}
+	});
+	$( "<div>" ).testWidget({ option2: "value2" });
+});
+
 test( "re-init", function() {
 	var div = $( "<div></div>" ),
 		actions = [];

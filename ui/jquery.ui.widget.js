@@ -145,7 +145,7 @@ $.Widget.prototype = {
 		this.element = $( element );
 		this.options = $.extend( true, {},
 			this.options,
-			$.metadata && $.metadata.get( element )[ this.widgetName ],
+			this._getCreateOptions(),
 			options );
 
 		var self = this;
@@ -156,6 +156,13 @@ $.Widget.prototype = {
 		this._create();
 		this._trigger( "create" );
 		this._init();
+	},
+	_getCreateOptions: function() {
+		var options = {};
+		if ( $.metadata ) {
+			options = $.metadata.get( element )[ this.widgetName ];
+		}
+		return options;
 	},
 	_create: function() {},
 	_init: function() {},
