@@ -28,7 +28,9 @@ $.widget( "ui.autocomplete", {
 	},
 	_create: function() {
 		var self = this,
-			doc = this.element[ 0 ].ownerDocument;
+			doc = this.element[ 0 ].ownerDocument,
+			suppressKeyPress;
+
 		this.element
 			.addClass( "ui-autocomplete-input" )
 			.attr( "autocomplete", "off" )
@@ -43,6 +45,7 @@ $.widget( "ui.autocomplete", {
 					return;
 				}
 
+				suppressKeyPress = false;
 				var keyCode = $.ui.keyCode;
 				switch( event.keyCode ) {
 				case keyCode.PAGE_UP:
@@ -65,6 +68,9 @@ $.widget( "ui.autocomplete", {
 				case keyCode.NUMPAD_ENTER:
 					// when menu is open and has focus
 					if ( self.menu.active ) {
+						// #6055 - Opera still allows the keypress to occur
+						// which causes forms to submit
+						suppressKeyPress = true;
 						event.preventDefault();
 					}
 					//passthrough - ENTER and TAB both select the current element
@@ -89,6 +95,12 @@ $.widget( "ui.autocomplete", {
 						}
 					}, self.options.delay );
 					break;
+				}
+			})
+			.bind( "keypress.autocomplete", function( event ) {
+				if ( suppressKeyPress ) {
+					suppressKeyPress = false;
+					event.preventDefault();
 				}
 			})
 			.bind( "focus.autocomplete", function() {
