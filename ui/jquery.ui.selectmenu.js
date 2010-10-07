@@ -243,7 +243,7 @@ $.widget("ui.selectmenu", {
 			.keydown(function(event){
 				var ret = true;
 				switch (event.keyCode) {
-					// this needs to be fixed as _moveFocus doesnt work correctly
+					// FIXME this needs to be fixed as _moveFocus doesnt work correctly
 					/*
 					case $.ui.keyCode.UP:
 					case $.ui.keyCode.LEFT:
@@ -285,11 +285,7 @@ $.widget("ui.selectmenu", {
 					case $.ui.keyCode.ESCAPE:
 						ret = false;
 						self.close(event,true);
-						break;	
-					default:
-						ret = false;
-						self._typeAhead(event.keyCode,'focus');
-						break;		
+						break;
 				}
 				return ret;
 			});
