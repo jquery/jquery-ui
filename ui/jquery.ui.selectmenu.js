@@ -528,6 +528,9 @@ $.widget("ui.selectmenu", {
 		// check if there's enough room to expand to the bottom
 		if ((menuTop + listHeight) > (viewportHeight + pageScroll)) {
 			menuTop -= listHeight;
+		//check top
+		} else if ((menuTop - pageScroll) < (listHeight)) { 
+			menuTop += this.newelement.height() + 4; // FIMXE: this is quick & dirty but we'll change to position
 		} else {
 			if (this.newelement.is('.'+this.widgetBaseClass+'-popup')) {
 				var scrolledAmt = this.list[0].scrollTop;
