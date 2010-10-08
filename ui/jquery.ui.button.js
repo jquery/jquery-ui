@@ -317,7 +317,6 @@ $.widget( "ui.button", {
 $.widget( "ui.buttonset", {
 	_create: function() {
 		this.element.addClass( "ui-buttonset" );
-		this._init();
 	},
 	
 	_init: function() {
