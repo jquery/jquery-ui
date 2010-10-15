@@ -106,7 +106,7 @@ $.widget( "ui.progressbar", {
 		}
 
 		this.valueDiv
-			.toggleClass( "ui-corner-right", value === this.max )
+			.toggleClass( "ui-corner-right", value === this.options.max )
 			.width( percentage.toFixed(0) + "%" )
 			.html( display );
 		this.element.attr( "aria-valuenow", value );
