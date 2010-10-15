@@ -65,7 +65,7 @@ $.widget( "ui.progressbar", {
 		}
 
 		newValue = ((this.options.max/100)*newPercentage);
-		this._setOption( "value", newValue );
+		this._setOption( "value", newValue.toFixed(0) );
 		return this;
 	},
 
@@ -99,14 +99,16 @@ $.widget( "ui.progressbar", {
 		var value = this.value();
 		var percentage = this.percentage();
 		var display = '';
+
 		switch(this.options.display.toLowerCase()) {
 			case 'all':
-				display = value + '/' + this.options.max + ' (' + this.percentage() + '%)'
+				display = "<span class='ui-progressbar-content'>" + value + '/' + this.options.max + ' (' + percentage.toFixed(0) + '%)</span>'
 		}
+
 		this.valueDiv
 			.toggleClass( "ui-corner-right", value === this.max )
-			.width( percentage + "%" )
-			.html(display);
+			.width( percentage.toFixed(0) + "%" )
+			.html( display );
 		this.element.attr( "aria-valuenow", value );
 	}
 });
