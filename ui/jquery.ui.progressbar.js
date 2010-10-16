@@ -15,11 +15,12 @@
 
 $.widget( "ui.progressbar", {
 	options: {
-		value: 0
+		value: 0,
+		max: 100,
 	},
 
 	min: 0,
-	max: 100,
+	oldValue: 0,
 
 	_create: function() {
 		this.element
@@ -27,7 +28,7 @@ $.widget( "ui.progressbar", {
 			.attr({
 				role: "progressbar",
 				"aria-valuemin": this.min,
-				"aria-valuemax": this.max,
+				"aria-valuemax": this.options.max,
 				"aria-valuenow": this._value()
 			});
 
@@ -54,8 +55,24 @@ $.widget( "ui.progressbar", {
 		if ( newValue === undefined ) {
 			return this._value();
 		}
-
 		this._setOption( "value", newValue );
+		return this;
+	},
+
+	percentage: function( newPercentage ) {
+		if ( newPercentage === undefined ) {
+			return this._percentage();
+		}
+		newValue = ((this.options.max/100)*newPercentage);
+		this._setOption( "value", newValue );
+		return this;
+	},
+
+	max: function( newMax ) {
+		if ( newMax === undefined ) {
+			return this.options.max;
+		}
+		this._setOption( "max", newMax );
 		return this;
 	},
 
@@ -63,8 +80,7 @@ $.widget( "ui.progressbar", {
 		if ( key === "value" ) {
 			this.options.value = value;
 			this._refreshValue();
-			this._trigger( "change" );
-			if ( this._value() === this.max ) {
+			if ( this._value() === this.options.max ) {
 				this._trigger( "complete" );
 			}
 		}
@@ -78,14 +94,25 @@ $.widget( "ui.progressbar", {
 		if ( typeof val !== "number" ) {
 			val = 0;
 		}
-		return Math.min( this.max, Math.max( this.min, val ) );
+		return Math.min( this.options.max, Math.max( this.min, val ) );
+	},
+
+	_percentage: function() {
+		return ((this._value()/this.options.max)*100);
 	},
 
 	_refreshValue: function() {
 		var value = this.value();
+		var percentage = this.percentage();
+
+		if( this.oldValue != value ) {
+			this.oldValue = value;
+			this._trigger( "change" );
+		}
+
 		this.valueDiv
-			.toggleClass( "ui-corner-right", value === this.max )
-			.width( value + "%" );
+			.toggleClass( "ui-corner-right", value === this.options.max )
+			.width( percentage.toFixed(0) + "%" );
 		this.element.attr( "aria-valuenow", value );
 	}
 });
