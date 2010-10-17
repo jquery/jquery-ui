@@ -41,7 +41,7 @@ $.widget( "ui.autocomplete", {
 				"aria-haspopup": "true"
 			})
 			.bind( "keydown.autocomplete", function( event ) {
-				if ( self.options.disabled ) {
+				if ( self.options.disabled || self.element.attr( "readonly" ) ) {
 					return;
 				}
 
@@ -157,7 +157,7 @@ $.widget( "ui.autocomplete", {
 			.menu({
 				focus: function( event, ui ) {
 					var item = ui.item.data( "item.autocomplete" );
-					if ( false !== self._trigger( "focus", null, { item: item } ) ) {
+					if ( false !== self._trigger( "focus", event, { item: item } ) ) {
 						// use value to match what will end up in the input, if it was a key event
 						if ( /^key/.test(event.originalEvent.type) ) {
 							self.element.val( item.value );
@@ -266,7 +266,7 @@ $.widget( "ui.autocomplete", {
 		}
 
 		clearTimeout( this.closing );
-		if ( this._trigger("search") === false ) {
+		if ( this._trigger( "search", event ) === false ) {
 			return;
 		}
 

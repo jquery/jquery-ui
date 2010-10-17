@@ -19,7 +19,7 @@ $.effects = {};
 
 // override the animation for color styles
 $.each(['backgroundColor', 'borderBottomColor', 'borderLeftColor',
-	'borderRightColor', 'borderTopColor', 'color', 'outlineColor'],
+	'borderRightColor', 'borderTopColor', 'borderColor', 'color', 'outlineColor'],
 function(i, attr) {
 	$.fx.step[attr] = function(fx) {
 		if (!fx.colorInit) {

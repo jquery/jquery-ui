@@ -86,18 +86,14 @@ $.widget("ui.mouse", {
 			.bind('mousemove.'+this.widgetName, this._mouseMoveDelegate)
 			.bind('mouseup.'+this.widgetName, this._mouseUpDelegate);
 
-		// preventDefault() is used to prevent the selection of text here -
-		// however, in Safari, this causes select boxes not to be selectable
-		// anymore, so this fix is needed
-		($.browser.safari || event.preventDefault());
-
+		event.preventDefault();
 		event.originalEvent.mouseHandled = true;
 		return true;
 	},
 
 	_mouseMove: function(event) {
 		// IE mouseup check - mouseup happened when mouse was out of window
-		if ($.browser.msie && !event.button) {
+		if ($.browser.msie && !(document.documentMode >= 9) && !event.button) {
 			return this._mouseUp(event);
 		}
 
