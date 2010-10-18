@@ -48,6 +48,7 @@
 		<replaceregexp match="@VERSION" replace="${release.version}" flags="g" byline="true">
 		    <fileset dir="${dist.dir}/ui/" includes="*.js"/>
 			<fileset dir="${dist.dir}/ui/minified/" includes="*.js"/>
+			<fileset dir="${dist.dir}/themes/" includes="**/*.css"/>
 		</replaceregexp>
 		<echo message="Replaced all @VERSION to ${release.version}." />
 	</target>
