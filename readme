@@ -1,4 +1,13 @@
-A fork of jQuery UI to push development of some plug-ins. Currently selectmenu is adopted to be improved. Please see branch selectmenu!
+A fork of jQuery UI to push development of some plug-ins. Currently you will 
+find: the latest version of Selectmenu (originally by filament group) and a 
+accessible version of jQuery UI Tabs.  Please check branch selectmenu and 
+tabs-accessibility.
+
+:::SELECTMENU:::
+You are currently in the selectmenu branch.
+
+This is an improved version of the jQuery UI selectmenu widget originally developed by Scott (filament group):
+http://filamentgroup.com/lab/jquery_ui_selectmenu_an_aria_accessible_plugin_for_styling_a_html_select/
 
 Please use GitHub issues for bug tracking and take a look at the jQuery UI Wiki at:
 http://wiki.jqueryui.com/Selectmenu
