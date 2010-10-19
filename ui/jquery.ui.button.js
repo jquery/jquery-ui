@@ -200,8 +200,32 @@ $.widget( "ui.button", {
 		if ( this.type === "checkbox" || this.type === "radio" ) {
 			// we don't search against the document in case the element
 			// is disconnected from the DOM
-			this.buttonElement = this.element.parents().last()
-				.find( "label[for=" + this.element.attr("id") + "]" );
+			var id = this.element.attr("id");
+			if (id) {
+				this.buttonElement = this.element.parents().last()
+					.find( "label[for=" + this.element.attr("id") + "]" );
+			}
+			this.isWrapped = false;
+			this.labelHasFakeFor = false;
+			this.buttonHasFakeID = false;
+			if (!this.buttonElement || this.buttonElement.length != 1) {
+				this.buttonElement = this.element.parent().filter('label');
+				if (this.buttonElement.length != 0) {
+					this.element.insertBefore(this.buttonElement);
+					this.isWrapped = true;
+					var id = this.element.attr('id');
+					if (!id) {
+						this.labelHasFakeFor = true;
+						this.buttonHasFakeID = true;
+						var id = 'JQUIB_'+this.element.attr($.expando);
+						this.element.attr('id',id);
+						this.buttonElement.attr('for',id);
+					} else {
+						this.labelHasFakeFor = true;
+						this.buttonElement.attr('for',id);
+					}
+				}
+			}
 			this.element.addClass( "ui-helper-hidden-accessible" );
 
 			var checked = this.element.is( ":checked" );
@@ -226,6 +250,16 @@ $.widget( "ui.button", {
 			.removeAttr( "role" )
 			.removeAttr( "aria-pressed" )
 			.html( this.buttonElement.find(".ui-button-text").html() );
+
+		if (this.isWrapped) {
+			this.buttonElement.prepend(this.element);
+			if (this.labelHasFakeFor) {
+				this.buttonElement.removeAttr('for');
+			}
+			if (this.buttonHasFakeID) {
+				this.element.removeAttr('id');
+			}
+		}
 
 		if ( !this.hasTitle ) {
 			this.buttonElement.removeAttr( "title" );
