@@ -158,7 +158,7 @@ $.Widget.prototype = {
 		this._init();
 	},
 	_getCreateOptions: function() {
-		return $.metadata && $.metadata.get( element )[ this.widgetName ];
+		return $.metadata && $.metadata.get( this.element[0] )[ this.widgetName ];
 	},
 	_create: function() {},
 	_init: function() {},
