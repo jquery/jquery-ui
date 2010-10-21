@@ -82,9 +82,12 @@ $.widget("ui.tooltip", {
 		this.current = target;
 		this.currentTitle = target.attr("title");
 		var content = this.options.content.call(target[0], function(response) {
-			// ignore async responses that come in after the tooltip is already hidden
-			if (self.current == target)
-				self._show(event, target, response);
+			// IE may instantly serve a cached response, need to give it a chance to finish with _show before that
+			setTimeout(function() {
+				// ignore async responses that come in after the tooltip is already hidden
+				if (self.current == target)
+					self._show(event, target, response);
+			}, 13);
 		});
 		if (content) {
 			self._show(event, target, content);
@@ -111,10 +114,7 @@ $.widget("ui.tooltip", {
 		this.tooltip.attr("aria-hidden", "false");
 		target.attr("aria-describedby", this.tooltip.attr("id"));
 
-		if (this.tooltip.is(":animated"))
-			this.tooltip.stop().show().fadeTo("normal", this.opacity);
-		else
-			this.tooltip.is(':visible') ? this.tooltip.fadeTo("normal", this.opacity) : this.tooltip.fadeIn();
+		this.tooltip.stop(false, true).fadeIn();
 
 		this._trigger( "open", event );
 	},
@@ -132,12 +132,7 @@ $.widget("ui.tooltip", {
 		current.removeAttr("aria-describedby");
 		this.tooltip.attr("aria-hidden", "true");
 		
-		if (this.tooltip.is(':animated'))
-				this.tooltip.stop().fadeTo("normal", 0, function() {
-					$(this).hide().css("opacity", "");
-				});
-			else
-				this.tooltip.stop().fadeOut();
+		this.tooltip.stop(false, true).fadeOut();
 		
 		this._trigger( "close", event );
 	}

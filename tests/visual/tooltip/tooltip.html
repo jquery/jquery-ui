@@ -44,6 +44,24 @@
 					return "Loading...";
 				}
 			});
+			// asynchronous content with caching
+			var content;
+			$("#ajax2").tooltip({
+				content: function(response) {
+					if (content) {
+						return content;
+					}
+					$.ajax({
+						url: "ajaxcontent.php",
+						cache: false,
+						success: function(result) {
+							content = result;
+							response(result);
+						}
+					});
+					return "Loading...";
+				}
+			});
 			
 			// custom position
 			$("#right2").tooltip({
@@ -116,6 +134,9 @@
 	
 	<div id="ajax" style="width: 100px;" class="ui-widget-content" title="never be seen">
 		gets its content via ajax
+	</div>
+	<div id="ajax2" style="width: 100px;" class="ui-widget-content" title="never be seen">
+		gets its content via ajax, caches the response
 	</div>
 	
 	<div id="context2" class="ui-widget ui-widget-content">
