@@ -9,13 +9,17 @@
  */
 .ui-datepicker { width: 17em; padding: .2em .2em 0; }
 .ui-datepicker .ui-datepicker-header { position:relative; padding:.2em 0; }
-.ui-datepicker .ui-datepicker-prev, .ui-datepicker .ui-datepicker-next { position:absolute; top: 2px; width: 1.8em; height: 1.8em; }
-.ui-datepicker .ui-datepicker-prev-hover, .ui-datepicker .ui-datepicker-next-hover { top: 1px; }
-.ui-datepicker .ui-datepicker-prev { left:2px; }
-.ui-datepicker .ui-datepicker-next { right:2px; }
-.ui-datepicker .ui-datepicker-prev-hover { left:1px; }
-.ui-datepicker .ui-datepicker-next-hover { right:1px; }
-.ui-datepicker .ui-datepicker-prev span, .ui-datepicker .ui-datepicker-next span { display: block; position: absolute; left: 50%; margin-left: -8px; top: 50%; margin-top: -8px;  }
+.ui-datepicker .ui-datepicker-prev, .ui-datepicker .ui-datepicker-prevyear, .ui-datepicker .ui-datepicker-next, .ui-datepicker .ui-datepicker-nextyear { position:absolute; top: 2px; width: 1.8em; height: 1.8em; }
+.ui-datepicker .ui-datepicker-prev-hover, .ui-datepicker .ui-datepicker-prevyear-hover, .ui-datepicker .ui-datepicker-next-hover, .ui-datepicker .ui-datepicker-nextyear-hover { top: 1px; }
+.ui-datepicker .ui-datepicker-prev { left: 32px; }
+.ui-datepicker .ui-datepicker-prevyear { left:2px; }
+.ui-datepicker .ui-datepicker-next { right: 32px; }
+.ui-datepicker .ui-datepicker-nextyear { right:2px; }		
+.ui-datepicker .ui-datepicker-prev-hover { left: 31px; }
+.ui-datepicker .ui-datepicker-prevyear-hover { left:1px; }
+.ui-datepicker .ui-datepicker-next-hover {right: 31px; }
+.ui-datepicker .ui-datepicker-nextyear-hover { right:1px; }
+.ui-datepicker .ui-datepicker-prev span, .ui-datepicker .ui-datepicker-prevyear span, .ui-datepicker .ui-datepicker-next span, .ui-datepicker .ui-datepicker-nextyear span { display: block; position: absolute; left: 50%; margin-left: -8px; top: 50%; margin-top: -8px;  }
 .ui-datepicker .ui-datepicker-title { margin: 0 2.3em; line-height: 1.8em; text-align: center; }
 .ui-datepicker .ui-datepicker-title select { font-size:1em; margin:1px 0; }
 .ui-datepicker select.ui-datepicker-month-year {width: 100%;}
@@ -43,10 +47,14 @@
 
 /* RTL support */
 .ui-datepicker-rtl { direction: rtl; }
-.ui-datepicker-rtl .ui-datepicker-prev { right: 2px; left: auto; }
-.ui-datepicker-rtl .ui-datepicker-next { left: 2px; right: auto; }
-.ui-datepicker-rtl .ui-datepicker-prev:hover { right: 1px; left: auto; }
-.ui-datepicker-rtl .ui-datepicker-next:hover { left: 1px; right: auto; }
+.ui-datepicker-rtl .ui-datepicker-prev { right: 32px; left: auto; }
+.ui-datepicker-rtl .ui-datepicker-prevyear { right: 2px; left: auto; }
+.ui-datepicker-rtl .ui-datepicker-next { right: 32px; left: auto; }
+.ui-datepicker-rtl .ui-datepicker-nextyear { left: 2px; right: auto; }
+.ui-datepicker-rtl .ui-datepicker-prev:hover { right: 31px; left: auto; }
+.ui-datepicker-rtl .ui-datepicker-prevyear:hover { right: 1px; left: auto; }
+.ui-datepicker-rtl .ui-datepicker-next:hover { left: 31px; right: auto; }
+.ui-datepicker-rtl .ui-datepicker-nextyear:hover { left: 1px; right: auto; }
 .ui-datepicker-rtl .ui-datepicker-buttonpane { clear:right; }
 .ui-datepicker-rtl .ui-datepicker-buttonpane button { float: left; }
 .ui-datepicker-rtl .ui-datepicker-buttonpane button.ui-datepicker-current { float:right; }
@@ -65,4 +73,4 @@
     left: -4px; /*must have*/
     width: 200px; /*must have*/
     height: 200px; /*must have*/
-}
+}/*

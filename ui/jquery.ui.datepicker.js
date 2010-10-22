@@ -680,6 +680,21 @@ $.extend(Datepicker.prototype, {
 					}
 				})
 			.end()
+			.find('.ui-datepicker-prevyear, .ui-datepicker-nextyear')
+				.bind('mouseout', function(){
+					$(this).removeClass('ui-state-hover');
+					if(this.className.indexOf('ui-datepicker-prevyear') != -1) $(this).removeClass('ui-datepicker-prevyear-hover');
+					if(this.className.indexOf('ui-datepicker-nextyear') != -1) $(this).removeClass('ui-datepicker-nextyear-hover');
+				})
+				.bind('mouseover', function(){
+					if (!self._isDisabledDatepicker( inst.inline ? inst.dpDiv.parent()[0] : inst.input[0])) {
+						$(this).parents('.ui-datepicker-calendar').find('a').removeClass('ui-state-hover');
+						$(this).addClass('ui-state-hover');
+						if(this.className.indexOf('ui-datepicker-prevyear') != -1) $(this).addClass('ui-datepicker-prevyear-hover');
+						if(this.className.indexOf('ui-datepicker-nextyear') != -1) $(this).addClass('ui-datepicker-nextyear-hover');
+					}
+				})
+			.end()
 			.find('.' + this._dayOverClass + ' a')
 				.trigger('mouseover')
 			.end();
@@ -1395,6 +1410,7 @@ $.extend(Datepicker.prototype, {
 			'.datepicker._adjustDate(\'#' + inst.id + '\', -' + stepMonths + ', \'M\');"' +
 			' title="' + prevText + '"><span class="ui-icon ui-icon-circle-triangle-' + ( isRTL ? 'e' : 'w') + '">' + prevText + '</span></a>' :
 			(hideIfNoPrevNext ? '' : '<a class="ui-datepicker-prev ui-corner-all ui-state-disabled" title="'+ prevText +'"><span class="ui-icon ui-icon-circle-triangle-' + ( isRTL ? 'e' : 'w') + '">' + prevText + '</span></a>'));
+		var prevyear='<a class="ui-datepicker-prevyear ui-corner-all" onclick="DP_jQuery_' + dpuuid + '.datepicker._adjustDate(\'#' + inst.id + '\', -12, \'M\');"' + ' title="Previous Year"><span class="ui-icon ui-icon-circle-double-triangle-' + ( isRTL ? 'e' : 'w') + '">Previous Year</span></a>';
 		var nextText = this._get(inst, 'nextText');
 		nextText = (!navigationAsDateFormat ? nextText : this.formatDate(nextText,
 			this._daylightSavingAdjust(new Date(drawYear, drawMonth + stepMonths, 1)),
@@ -1404,6 +1420,7 @@ $.extend(Datepicker.prototype, {
 			'.datepicker._adjustDate(\'#' + inst.id + '\', +' + stepMonths + ', \'M\');"' +
 			' title="' + nextText + '"><span class="ui-icon ui-icon-circle-triangle-' + ( isRTL ? 'w' : 'e') + '">' + nextText + '</span></a>' :
 			(hideIfNoPrevNext ? '' : '<a class="ui-datepicker-next ui-corner-all ui-state-disabled" title="'+ nextText + '"><span class="ui-icon ui-icon-circle-triangle-' + ( isRTL ? 'w' : 'e') + '">' + nextText + '</span></a>'));
+		var nextyear='<a class="ui-datepicker-nextyear ui-corner-all" onclick="DP_jQuery_' + dpuuid + '.datepicker._adjustDate(\'#' + inst.id + '\', +12, \'M\');"' + ' title="Next Year"><span class="ui-icon ui-icon-circle-double-triangle-' + ( isRTL ? 'w' : 'e') + '">Next Year</span></a>';
 		var currentText = this._get(inst, 'currentText');
 		var gotoDate = (this._get(inst, 'gotoCurrent') && inst.currentDay ? currentDate : today);
 		currentText = (!navigationAsDateFormat ? currentText :
@@ -1447,8 +1464,8 @@ $.extend(Datepicker.prototype, {
 					calender += '">';
 				}
 				calender += '<div class="ui-datepicker-header ui-widget-header ui-helper-clearfix' + cornerClass + '">' +
-					(/all|left/.test(cornerClass) && row == 0 ? (isRTL ? next : prev) : '') +
-					(/all|right/.test(cornerClass) && row == 0 ? (isRTL ? prev : next) : '') +
+					(/all|left/.test(cornerClass) && row == 0 ? (isRTL ? next+nextyear : prev+prevyear) : '') +
+					(/all|right/.test(cornerClass) && row == 0 ? (isRTL ? prev+prevyear : next+nextyear) : '') +
 					this._generateMonthYearHeader(inst, drawMonth, drawYear, minDate, maxDate,
 					row > 0 || col > 0, monthNames, monthNamesShort) + // draw month headers
 					'</div><table class="ui-datepicker-calendar"><thead>' +
