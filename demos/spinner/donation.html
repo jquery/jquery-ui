@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>jQuery UI Spinner - Default functionality</title>
+	<link type="text/css" href="../../themes/base/jquery.ui.all.css" rel="stylesheet" />
+	<script type="text/javascript" src="../../jquery-1.4.3.js"></script>
+	<script type="text/javascript" src="../../external/jquery.mousewheel-3.0.2.js"></script>
+	<script type="text/javascript" src="../../ui/jquery.ui.core.js"></script>
+	<script type="text/javascript" src="../../ui/jquery.ui.widget.js"></script>
+	<script type="text/javascript" src="../../ui/jquery.ui.button.js"></script>
+	<script type="text/javascript" src="../../ui/jquery.ui.spinner.js"></script>
+	<link type="text/css" href="../demos.css" rel="stylesheet" />
+	<script type="text/javascript">
+	$(function() {
+
+		var opts = {
+			's1': { currency: '$' },
+			's2': { currency: '€' },
+			's3': { currency: '¥' },
+			's4': { currency: '$', groupSeparator: ' ', radixPoint: '.' },
+			's5': { currency: 'Fr ', groupSeparator: "'", radixPoint: '.' },
+			's6': { currency: 'RUB', groupSeparator: ".", radixPoint: ',' }
+		};
+		
+		var currency = $("#currency").change(function() {
+			var val = $(this).val();
+			$("#amount")
+				.spinner("option", "currency", opts[val].currency)
+				.spinner("option", "groupSeparator", opts[val].groupSeparator ? opts[val].groupSeparator : ',')
+				.spinner("option", "radixPoint", opts[val].radixPoint ? opts[val].radixPoint : '.')
+				.blur();
+		});
+		$("#amount").spinner({
+			currency: opts[currency.val()].currency,
+			min: 5,
+			max: 2500,
+			step: 25,
+			start: 1000,
+			width: '10em'
+		});	
+		
+	});
+	</script>
+</head>
+<body>
+
+<div class="demo">
+
+<p>
+	<label for="currency">Currency</label>
+	<select id="currency" name="currency">
+		<option value="s1">US $</option>
+		<option value="s2">EUR €</option>
+		<option value="s3">YEN ¥</option>
+		<option value="s4">Australian $</option>
+		<option value="s5">Swiss Franc Fr</option>
+		<option value="s6">Russian Ruble RUB</option>
+	</select>	
+</p>
+<p>
+	<label for="amount">Select the amount to donate:</label>
+	<input id="amount" name="amount" value="5" />
+</p>
+</div><!-- End demo -->
+
+<div class="demo-description">
+<p>
+Example of a donation form, with currency selection and amout spinner.
+</p>
+</div><!-- End demo-description -->
+
+</body>
+</html>
