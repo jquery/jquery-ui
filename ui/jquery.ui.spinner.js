@@ -17,59 +17,28 @@
 var hover = 'ui-state-hover',
 	active = 'ui-state-active',
 	namespace = '.spinner',
-	buttonRegex = /hide|auto|fast|slow|(\d+)/,
 	uiSpinnerClasses = 'ui-spinner ui-state-default ui-widget ui-widget-content ui-corner-all ';
 
 $.widget('ui.spinner', {
 	options: {
-		currency: false,
 		dir: 'ltr',
-		groupSeparator: '',
 		incremental: true,
 		max: null,
 		min: null,
 		mouseWheel: true,
+		numberformat: "n",
 		padding: 0,
 		page: 5,
-		precision: 0,
-		radix: 10,
-		radixPoint: '.',
 		spinnerClass: null,
 		step: null,
-		value: 0,
-		width: false
+		value: 0
 	},
 	
 	_create: function() {		
-		this._initOptions();
-
 		this.value(this._parse(this.element.val() || this.options.value));
-		
 		this._draw();
-
 		this._mousewheel();
-		
 		this._aria();
-	},
-	_initOptions: function() {
-		var self = this,
-			options = self.options;
-
-		// check for precision in stepping and set _precision as internal
-		var precision = parseInt(options.precision, 10);
-		
-		if (self._step().toString().indexOf('.') != -1 && precision === 0) {
-			var s = self._step().toString();
-			precision = s.slice(s.indexOf('.')+1, s.length).length;
-		}
-		
-		// set currency options
-		if (options.currency) {
-			precision = 2;
-			options.radix = 10;
-			options.groupSeparator = options.groupSeparator || (options.radixPoint === ',' ? '' : ',');
-		}
-		options.precision = precision;
 	},
 	_draw: function() {
 		var self = this,
@@ -101,7 +70,10 @@ $.widget('ui.spinner', {
 
 		this.element
 			.bind('keydown'+namespace, function(event) {
-				return self._start(event) ? self._keydown(event) : false;
+				if (self._start(event)) {
+					return self._keydown(event);
+				}
+				return true;
 			})
 			.bind('keyup'+namespace, function(event) {
 				if (self.spinning) {
@@ -114,17 +86,12 @@ $.widget('ui.spinner', {
 				self.focused = true;
 			})
 			.bind('blur'+namespace, function(event) {
-				self._value(self.element.val());
+				self.value(self.element.val());
 				if (!self.hovered) {
 					uiSpinner.removeClass(active);
 				}		
 				self.focused = false;
 			});
-
-		// force width if passed through options
-		if (options.width) {
-			this.element.width(options.width);
-		}
 
 		// disable spinner if element was already disabled
 		if (options.disabled) {
@@ -133,6 +100,7 @@ $.widget('ui.spinner', {
 		
 		// button bindings
 		this.buttons = uiSpinner.find('.ui-spinner-button')
+			.attr("tabIndex", -1)
 			.bind('mousedown', function(event) {				
 				if (self._start(event) === false) {
 					return false;
@@ -198,7 +166,7 @@ $.widget('ui.spinner', {
 			this.counter = 1;
 		}
 		
-		var newVal = this._value() + step * (this.options.incremental && this.counter > 100
+		var newVal = this.value() + step * (this.options.incremental && this.counter > 100
 			? this.counter > 200
 				? 100 
 				: 10
@@ -206,7 +174,7 @@ $.widget('ui.spinner', {
 		
 		// cancelable
 		if (this._trigger('spin', event, { value: newVal }) !== false) {
-			this._value(newVal);
+			this.value(newVal);
 			this.counter++;			
 		}
 	},
@@ -227,10 +195,10 @@ $.widget('ui.spinner', {
 		i = i || 100;
 
 		if (this.timer) {
-			window.clearInterval(this.timer);
+			window.clearTimeout(this.timer);
 		}
 		
-		this.timer = window.setInterval(function() {
+		this.timer = window.setTimeout(function() {
 			self._repeat(self.options.incremental && self.counter > 20 ? 20 : i, steps, event);
 		}, i);
 		
@@ -241,40 +209,32 @@ $.widget('ui.spinner', {
 			KEYS = $.ui.keyCode;
 
 		switch (event.keyCode) {
-			case KEYS.UP: 			this._repeat(null, event.shiftKey ? o.page : 1, event); break;
-			case KEYS.DOWN: 		this._repeat(null, event.shiftKey ? -o.page : -1, event); break;
-			case KEYS.PAGE_UP: 		this._repeat(null, o.page, event); break;
-			case KEYS.PAGE_DOWN: 	this._repeat(null, -o.page, event); break;
+		case KEYS.UP:
+			this._repeat(null, event.shiftKey ? o.page : 1, event);
+			return false;
+		case KEYS.DOWN:
+			this._repeat(null, event.shiftKey ? -o.page : -1, event);
+			return false;
+		case KEYS.PAGE_UP:
+			this._repeat(null, o.page, event);
+			return false;
+		case KEYS.PAGE_DOWN:
+			this._repeat(null, -o.page, event);
+			return false;
 			
-			case KEYS.HOME:
-			case KEYS.END:
-				if (event.shiftKey) {
-					return true;
-				}
-				this._value(this['_' + (event.keyCode == KEYS.HOME ? 'min':'max')]());
-				break;
-			
-			case KEYS.TAB:
-			case KEYS.BACKSPACE:
-			case KEYS.LEFT:
-			case KEYS.RIGHT:
-			case KEYS.PERIOD:
-			case KEYS.NUMPAD_DECIMAL:
-			case KEYS.NUMPAD_SUBTRACT:
+		case KEYS.HOME:
+		case KEYS.END:
+			if (event.shiftKey) {
 				return true;
+			}
+			this.value(this['_' + (event.keyCode == KEYS.HOME ? 'min' : 'max')]());
+			return false;
 			
-			case KEYS.ENTER:
-				this.value(this.element.val());
-				return true;
-				
-			default:				
-				if ((event.keyCode >= 96 && event.keyCode <= 105) || // numeric keypad 0-9
-					(new RegExp('[' + this._validChars() + ']', 'i').test(String.fromCharCode(event.keyCode)))) {
-					return true;
-				};
+		case KEYS.ENTER:
+			this.value(this.element.val());
 		}
 		
-		return false;
+		return true;
 	},
 	_mousewheel: function() {
 		var self = this;
@@ -298,7 +258,7 @@ $.widget('ui.spinner', {
 			});			
 		}
 	},
-	_value: function(newVal) {
+	value: function(newVal) {
 		if (!arguments.length) {
 			return this._parse(this.element.val());
 		}
@@ -349,10 +309,6 @@ $.widget('ui.spinner', {
 				}
 				this._aria();
 				break;
-			case 'width':
-				this.element.width(value);
-				break;
-			case 'precision':
 			case 'value':
 				this._format(this._parse(this.options.value));
 				break;
@@ -364,59 +320,23 @@ $.widget('ui.spinner', {
 				.attr('aria-valuemax', this._max())
 				.attr('aria-valuenow', this.value());
 	},
-	_validChars: function() {
-		var radix = parseInt(this.options.radix);
-		return '\\-\\' + this.options.radixPoint + (this.options.groupSeparator
-			? '\\' + this.options.groupSeparator
-			:'') + (radix < 10
-				? '0-' + radix
-				: '0-9' + (radix > 10
-					? 'a-' + String.fromCharCode('a'.charCodeAt(0) + radix - 11)
-					:''));
-	},
+	
 	_parse: function(val) {
+		var input = val;
 		if (typeof val == 'string') {
-			if (this.options.groupSeparator) {
-				val = val.replace(new RegExp('\\'+this.options.groupSeparator,'g'), '');
+			// special case for currency formatting until Globalization handles currencies
+			if (this.options.numberformat == "C" && window.Globalization) {
+				// parseFloat should accept number format, including currency
+				var culture = Globalization.culture || Globalization.cultures['default'];
+				val = val.replace(culture.numberFormat.currency.symbol, "");
 			}
-			val = val.replace(new RegExp('[^' + this._validChars() + ']', 'gi'), '').split(this.options.radixPoint);
-			result = parseInt(val[0] == '-' ? 0 : val[0] || 0, this.options.radix);
-			if (val.length > 1) {
-				result += parseInt(val[1], this.options.radix) / Math.pow(this.options.radix, val[1].length) *
-					// must test first character of val[0] for minus sign because -0 is parsed as 0 in result
-					(val[0].substr(0,1) == '-' ? -1 : 1);
-			}
-			val = result;			
+			val = window.Globalization ? Globalization.parseFloat(val) : +val;
 		}
+		console.log("input", input, "parsed", val)
 		return isNaN(val) ? null : val;
 	},
 	_format: function(num) {
-		var regex = /(\d+)(\d{3})/,
-			options = this.options,
-			sym = options.currency || '',
-			dec = options.precision,
-			radix = options.radix,
-			group = options.groupSeparator,
-			pt = options.radixPoint,
-			neg = num < 0 ? '-' : '';
-	
-		for (
-			num = (
-				isNaN(num)
-					? options.value
-					: radix === 10
-						? parseFloat(num, radix).toFixed(dec) 
-						: parseInt(num, radix)
-				).toString(radix).replace('.', pt);
-			regex.test(num) && group;
-			num = num.replace(regex, '$1'+group+'$2')
-		);
-
-		result = num.replace('-','');
-		while (options.padding && (result.length < options.padding)) {
-			result = '0' + result;
-		}		
-		this.element.val(neg + sym + result);
+		this.element.val( window.Globalization ? Globalization.format(num, this.options.numberformat) : num );
 	},
 	_getOption: function(key, defaultValue) {
 		return this._parse(this.options[key] !== null
@@ -475,12 +395,6 @@ $.widget('ui.spinner', {
 			.parent()
 				.addClass('ui-spinner-disabled ui-state-disabled');
 		this.options.disabled = true;
-	},
-	value: function(newVal) {
-		if (!arguments.length) {
-			return this._value();
-		}		
-		this._value(newVal);
 	},
 	stepUp: function(steps) {
 		this._spin((steps || 1) * this._step(), null);
