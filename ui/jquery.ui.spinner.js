@@ -101,16 +101,18 @@ $.widget('ui.spinner', {
 		// button bindings
 		this.buttons = uiSpinner.find('.ui-spinner-button')
 			.attr("tabIndex", -1)
+			.button()
+			.first()
+				.removeClass("ui-corner-all")
+			.end()
+			.last()
+				.removeClass("ui-corner-all")
+			.end()
 			.bind('mousedown', function(event) {				
 				if (self._start(event) === false) {
 					return false;
 				}
 				self._repeat(null, $(this).hasClass('ui-spinner-up') ? 1 : -1, event);
-				
-				if (!self.options.disabled) {
-					$(this).addClass(active);
-					uiSpinner.addClass(active);
-				}
 			})
 			.bind('mouseup', function(event) {
 				if (self.counter == 1) {
@@ -120,19 +122,22 @@ $.widget('ui.spinner', {
 					self._stop(event);
 					self._change(event);					
 				}
-				$(this).removeClass(active);
 			})
-			.hover(function() {
-				if (!self.options.disabled) {
-					$(this).addClass(hover);					
+			.bind("mouseenter", function() {
+				// button will add ui-state-active if mouse was down while mouseleave and kept down
+				if ($(this).hasClass("ui-state-active")) {
+					if (self._start(event) === false) {
+						return false;
+					}
+					self._repeat(null, $(this).hasClass('ui-spinner-up') ? 1 : -1, event);
 				}
-			}, function(event) {
-				$(this).removeClass(active + ' ' + hover);
+			})
+			.bind("mouseleave", function() {
 				if (self.timer && self.spinning) {
 					self._stop(event);
 					self._change(event);
 				}
-			});
+			})
 					
 		self.uiSpinner = uiSpinner;
 	},
@@ -143,9 +148,9 @@ $.widget('ui.spinner', {
 				'"></div>';
 	},
 	_buttonHtml: function() {
-		return '<a class="ui-spinner-button ui-spinner-up ui-state-default ui-corner-t' + this.options.dir.substr(-1,1) + 
+		return '<a class="ui-spinner-button ui-spinner-up ui-corner-t' + this.options.dir.substr(-1,1) + 
 				'"><span class="ui-icon ui-icon-triangle-1-n">&#9650;</span></a>' +
-				'<a class="ui-spinner-button ui-spinner-down ui-state-default ui-corner-b' + this.options.dir.substr(-1,1) + 
+				'<a class="ui-spinner-button ui-spinner-down ui-corner-b' + this.options.dir.substr(-1,1) + 
 				'"><span class="ui-icon ui-icon-triangle-1-s">&#9660;</span></a>';
 	},
 	_start: function(event) {
