@@ -28,7 +28,6 @@ $.widget('ui.spinner', {
 		mouseWheel: true,
 		numberformat: "n",
 		page: 5,
-		spinnerClass: null,
 		step: null,
 		value: 0
 	},
@@ -141,10 +140,7 @@ $.widget('ui.spinner', {
 		self.uiSpinner = uiSpinner;
 	},
 	_uiSpinnerHtml: function() {
-		return '<div role="spinbutton" class="' + uiSpinnerClasses + 
-				(this.options.spinnerClass || '') + 
-				' ui-spinner-' + this.options.dir + 
-				'"></div>';
+		return '<div role="spinbutton" class="ui-spinner-' + this.options.dir + '"></div>';
 	},
 	_buttonHtml: function() {
 		return '<a class="ui-spinner-button ui-spinner-up ui-corner-t' + this.options.dir.substr(-1,1) + 
@@ -278,26 +274,17 @@ $.widget('ui.spinner', {
 		}
 		return this.options[key];
 	},
-	_setOption: function(key, value) {		
-		switch (key) {
-			case 'value':
-				value = this._parse(value);
-				if (value < this._min()) {
-					value = this._min();
-				}
-				if (value > this._max()) {
-					value = this._max();
-				}
-				break;
-			case 'spinnerClass':
-				this.uiSpinner
-					.removeClass(this.options.spinnerClass)
-					.addClass(uiSpinnerClasses + value);
-				break;
-		}
-
+	_setOption: function(key, value) {
+		if (key == 'value') {
+			value = this._parse(value);
+			if (value < this._min()) {
+				value = this._min();
+			}
+			if (value > this._max()) {
+				value = this._max();
+			}
+		}		
 		$.Widget.prototype._setOption.call( this, key, value );
-		
 		this._afterSetData(key, value);
 	},
 	_afterSetData: function(key, value) {

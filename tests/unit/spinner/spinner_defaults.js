@@ -11,7 +11,6 @@ var spinner_defaults = {
 	mouseWheel: true,
 	numberformat: "n",
 	page: 5,
-	spinnerClass: null,
 	step: null,
 	value: 0
 };
