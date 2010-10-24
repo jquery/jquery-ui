@@ -27,7 +27,6 @@ $.widget('ui.spinner', {
 		min: null,
 		mouseWheel: true,
 		numberformat: "n",
-		padding: 0,
 		page: 5,
 		spinnerClass: null,
 		step: null,
@@ -35,7 +34,7 @@ $.widget('ui.spinner', {
 	},
 	
 	_create: function() {		
-		this.value(this._parse(this.element.val() || this.options.value));
+		this.value(this.element.val() || this.options.value);
 		this._draw();
 		this._mousewheel();
 		this._aria();

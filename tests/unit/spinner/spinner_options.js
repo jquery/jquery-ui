@@ -468,15 +468,4 @@ test("value", function() {
 	equals(el.val(), 1000, "value option changed and set as current value");
 });
 
-test("width", function() {
-	expect(2);
-	
-	el = $('#spin').spinner({ width: 1000 });
-	equals(el.width(), 1000, "spinner width initialized");
-
-	el.spinner('option', 'width', 500);
-	equals(el.width(), 500, "spinner width changed");
-
-});
-
 })(jQuery);
