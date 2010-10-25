@@ -157,15 +157,30 @@ test("step", function() {
 
 });
 
-test("value", function() {
-	expect(2);
-	
-	el = $('#spin').spinner({ value: 100 });
-	
+test("value, default, specified in markup", function() {
+	var el = $('#spin2').spinner();
+	equals(el.val(), 2, "starting value");
+});
+
+test("value, default, nothing specified", function() {
+	var el = $('#spin').spinner();
+	equals(el.val(), 0, "starting value");
+});
+
+test("value, override", function() {
+	var el = $('#spin').spinner({ value: 100 });
 	equals(el.val(), 100, "starting value");
-	
+});
+
+test("value, override markup", function() {
+	var el = $('#spin2').spinner({ value: 100 });
+	equals(el.val(), 100, "starting value");
+});
+
+test("value, override later", function() {
+	var el = $('#spin').spinner();
+	equals(el.val(), 0, "starting value");
 	el.spinner('option', 'value', 1000);
-	
 	equals(el.val(), 1000, "value option changed and set as current value");
 });
 

@@ -12,7 +12,7 @@ var spinner_defaults = {
 	numberformat: "n",
 	page: 5,
 	step: null,
-	value: 0
+	value: null
 };
 
 commonWidgetTests('spinner', { defaults: spinner_defaults });

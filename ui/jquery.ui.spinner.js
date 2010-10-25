@@ -29,11 +29,11 @@ $.widget('ui.spinner', {
 		numberformat: "n",
 		page: 5,
 		step: null,
-		value: 0
+		value: null
 	},
 	
 	_create: function() {		
-		this.value(this.element.val() || this.options.value);
+		this.value(this.options.value !== null ? this.options.value : this.element.val());
 		this._draw();
 		this._mousewheel();
 		this._aria();
