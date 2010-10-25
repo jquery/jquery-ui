@@ -21,7 +21,6 @@ var hover = 'ui-state-hover',
 
 $.widget('ui.spinner', {
 	options: {
-		dir: 'ltr',
 		incremental: true,
 		max: Number.MAX_VALUE,
 		min: -Number.MAX_VALUE,
@@ -138,13 +137,11 @@ $.widget('ui.spinner', {
 		self.uiSpinner = uiSpinner;
 	},
 	_uiSpinnerHtml: function() {
-		return '<div role="spinbutton" class="ui-spinner ui-state-default ui-widget ui-widget-content ui-corner-all ui-spinner-' + this.options.dir + '"></div>';
+		return '<div role="spinbutton" class="ui-spinner ui-state-default ui-widget ui-widget-content ui-corner-all"></div>';
 	},
 	_buttonHtml: function() {
-		return '<a class="ui-spinner-button ui-spinner-up ui-corner-t' + this.options.dir.substr(-1,1) + 
-				'"><span class="ui-icon ui-icon-triangle-1-n">&#9650;</span></a>' +
-				'<a class="ui-spinner-button ui-spinner-down ui-corner-b' + this.options.dir.substr(-1,1) + 
-				'"><span class="ui-icon ui-icon-triangle-1-s">&#9660;</span></a>';
+		return '<a class="ui-spinner-button ui-spinner-up ui-corner-tr"><span class="ui-icon ui-icon-triangle-1-n">&#9650;</span></a>' +
+				'<a class="ui-spinner-button ui-spinner-down ui-corner-br"><span class="ui-icon ui-icon-triangle-1-s">&#9660;</span></a>';
 	},
 	_start: function(event) {
 		if (!this.spinning && this._trigger('start', event, { value: this.value()}) !== false) {
