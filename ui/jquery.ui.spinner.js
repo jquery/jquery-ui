@@ -17,18 +17,16 @@
 var hover = 'ui-state-hover',
 	active = 'ui-state-active',
 	namespace = '.spinner',
-	uiSpinnerClasses = 'ui-spinner ui-state-default ui-widget ui-widget-content ui-corner-all ';
+	pageModifier = 10;
 
 $.widget('ui.spinner', {
 	options: {
 		dir: 'ltr',
 		incremental: true,
-		max: null,
-		min: null,
-		mouseWheel: true,
+		max: Number.MAX_VALUE,
+		min: -Number.MAX_VALUE,
 		numberformat: "n",
-		page: 5,
-		step: null,
+		step: 1,
 		value: null
 	},
 	
@@ -114,7 +112,7 @@ $.widget('ui.spinner', {
 			})
 			.bind('mouseup', function(event) {
 				if (self.counter == 1) {
-					self._spin(($(this).hasClass('ui-spinner-up') ? 1 : -1) * self._step(), event);
+					self._spin(($(this).hasClass('ui-spinner-up') ? 1 : -1) * self.options.step, event);
 				}
 				if (self.spinning) {
 					self._stop(event);
@@ -140,7 +138,7 @@ $.widget('ui.spinner', {
 		self.uiSpinner = uiSpinner;
 	},
 	_uiSpinnerHtml: function() {
-		return '<div role="spinbutton" class="ui-spinner-' + this.options.dir + '"></div>';
+		return '<div role="spinbutton" class="ui-spinner ui-state-default ui-widget ui-widget-content ui-corner-all ui-spinner-' + this.options.dir + '"></div>';
 	},
 	_buttonHtml: function() {
 		return '<a class="ui-spinner-button ui-spinner-up ui-corner-t' + this.options.dir.substr(-1,1) + 
@@ -202,7 +200,7 @@ $.widget('ui.spinner', {
 			self._repeat(self.options.incremental && self.counter > 20 ? 20 : i, steps, event);
 		}, i);
 		
-		self._spin(steps*self._step(), event);
+		self._spin(steps*self.options.step, event);
 	},
 	_keydown: function(event) {
 		var o = this.options,
@@ -210,24 +208,16 @@ $.widget('ui.spinner', {
 
 		switch (event.keyCode) {
 		case KEYS.UP:
-			this._repeat(null, event.shiftKey ? o.page : 1, event);
+			this._repeat(null, 1, event);
 			return false;
 		case KEYS.DOWN:
-			this._repeat(null, event.shiftKey ? -o.page : -1, event);
+			this._repeat(null, -1, event);
 			return false;
 		case KEYS.PAGE_UP:
-			this._repeat(null, o.page, event);
+			this._repeat(null, pageModifier, event);
 			return false;
 		case KEYS.PAGE_DOWN:
-			this._repeat(null, -o.page, event);
-			return false;
-			
-		case KEYS.HOME:
-		case KEYS.END:
-			if (event.shiftKey) {
-				return true;
-			}
-			this.value(this['_' + (event.keyCode == KEYS.HOME ? 'min' : 'max')]());
+			this._repeat(null, -pageModifier, event);
 			return false;
 			
 		case KEYS.ENTER:
@@ -237,26 +227,26 @@ $.widget('ui.spinner', {
 		return true;
 	},
 	_mousewheel: function() {
+		if (!$.fn.mousewheel)
+			return;
 		var self = this;
-		if ($.fn.mousewheel && self.options.mouseWheel) {
-			this.element.mousewheel(function(event, delta) {
-				delta = ($.browser.opera ? -delta / Math.abs(delta) : delta);
-				if (!self._start(event)) {
-					return false;
+		this.element.mousewheel(function(event, delta) {
+			delta = ($.browser.opera ? -delta / Math.abs(delta) : delta);
+			if (!self._start(event)) {
+				return false;
+			}
+			self._spin((delta > 0 ? 1 : -1) * self.options.step, event);
+			if (self.timeout) {
+				window.clearTimeout(self.timeout);
+			}
+			self.timeout = window.setTimeout(function() {
+				if (self.spinning) {
+					self._stop(event);
+					self._change(event);
 				}
-				self._spin((delta > 0 ? 1 : -1) * self._step(), event);					
-				if (self.timeout) {
-					window.clearTimeout(self.timeout);
-				}
-				self.timeout = window.setTimeout(function() {
-					if (self.spinning) {
-						self._stop(event);
-						self._change(event);						
-					}
-				}, 400);
-				event.preventDefault();			
-			});			
-		}
+			}, 400);
+			event.preventDefault();
+		});
 	},
 	value: function(newVal) {
 		if (!arguments.length) {
@@ -277,11 +267,11 @@ $.widget('ui.spinner', {
 	_setOption: function(key, value) {
 		if (key == 'value') {
 			value = this._parse(value);
-			if (value < this._min()) {
-				value = this._min();
+			if (value < this.options.min) {
+				value = this.options.min;
 			}
-			if (value > this._max()) {
-				value = this._max();
+			if (value > this.options.max) {
+				value = this.options.max;
 			}
 		}		
 		$.Widget.prototype._setOption.call( this, key, value );
@@ -307,8 +297,8 @@ $.widget('ui.spinner', {
 	},
 	_aria: function() {
 		this.uiSpinner
-				.attr('aria-valuemin', this._min())
-				.attr('aria-valuemax', this._max())
+				.attr('aria-valuemin', this.options.min)
+				.attr('aria-valuemax', this.options.max)
 				.attr('aria-valuenow', this.value());
 	},
 	
@@ -328,31 +318,6 @@ $.widget('ui.spinner', {
 	},
 	_format: function(num) {
 		this.element.val( window.Globalization ? Globalization.format(num, this.options.numberformat) : num );
-	},
-	_getOption: function(key, defaultValue) {
-		return this._parse(this.options[key] !== null
-				? this.options[key]
-				: this.element.attr(key)
-					? this.element.attr(key)
-					: defaultValue);
-	},
-	_step: function(newVal) {
-		if (!arguments.length) {
-			return this._getOption('step', 1);
-		}
-		this._setOption('step', newVal);
-	},
-	_min: function(newVal) {
-		if (!arguments.length) {
-			return this._getOption('min', -Number.MAX_VALUE);
-		}
-		this._setOption('min', newVal);
-	},
-	_max: function(newVal) {
-		if (!arguments.length) {
-			return this._getOption('max', Number.MAX_VALUE);
-		}
-		this._setOption('max', newVal);
 	},
 		
 	destroy: function() {
@@ -388,11 +353,11 @@ $.widget('ui.spinner', {
 		this.options.disabled = true;
 	},
 	stepUp: function(steps) {
-		this._spin((steps || 1) * this._step(), null);
+		this._spin((steps || 1) * this.options.step, null);
 		return this;
 	},
 	stepDown: function(steps) {
-		this._spin((steps || 1) * -this._step(), null);	
+		this._spin((steps || 1) * -this.options.step, null);	
 		return this;
 	},
 	pageUp: function(pages) {
