@@ -3,24 +3,38 @@
  */
 (function($) {
 
-module("tooltip: options");
-
-function contentTest(name, expected, impl) {
-	test(name, function() {
-		$("#tooltipped1").tooltip({
-			content: impl
-		}).tooltip("open");
-		same( $(".ui-tooltip").text(), expected );
+module("tooltip: options", {
+	teardown: function() {
 		$(":ui-tooltip").tooltip("destroy");
-	});
-}
-
-contentTest("content: default", "anchortitle");
-contentTest("content: return string", "customstring", function() {
-	return "customstring";
+	}
 });
-contentTest("content: callback string", "customstring2", function(response) {
-	response("customstring2");
+
+test("content: default", function() {
+	$("#tooltipped1").tooltip().tooltip("open");
+	same( $(".ui-tooltip").text(), "anchortitle" );
+});
+
+test("content: return string", function() {
+	$("#tooltipped1").tooltip({
+		content: function() {
+			return "customstring";
+		}
+	}).tooltip("open");
+	same( $(".ui-tooltip").text(), "customstring" );
+});
+
+test("content: callback string", function() {
+	stop();
+	$("#tooltipped1").tooltip({
+		content: function(response) {
+			response("customstring2");
+			setTimeout(function() {
+				same( $(".ui-tooltip").text(), "customstring2" );
+				start();
+			}, 100)
+		}
+	}).tooltip("open");
+	
 });
 
 test("tooltipClass, default", function() {
