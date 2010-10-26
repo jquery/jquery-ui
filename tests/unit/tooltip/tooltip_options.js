@@ -9,6 +9,11 @@ module("tooltip: options", {
 	}
 });
 
+
+test("option: items", function() {
+	ok(false, "missing items test");
+});
+
 test("content: default", function() {
 	$("#tooltipped1").tooltip().tooltip("open");
 	same( $(".ui-tooltip").text(), "anchortitle" );

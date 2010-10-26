@@ -18,6 +18,7 @@ var increments = 0;
 
 $.widget("ui.tooltip", {
 	options: {
+		items: "[title]",
 		content: function() {
 			return $(this).attr("title");
 		},
@@ -41,10 +42,10 @@ $.widget("ui.tooltip", {
 			.appendTo(this.tooltip);
 		this.opacity = this.tooltip.css("opacity");
 		this.element
-			.bind("focus.tooltip mouseenter.tooltip", function(event) {
+			.bind("focus.tooltip mouseover.tooltip", function(event) {
 				self.open( event );
 			})
-			.bind("blur.tooltip mouseleave.tooltip", function(event) {
+			.bind("blur.tooltip mouseout.tooltip", function(event) {
 				self.close( event );
 			});
 	},
@@ -67,7 +68,7 @@ $.widget("ui.tooltip", {
 	},
 	
 	open: function(event) {
-		var target = this.element;
+		var target = $(event && event.target || this.element).closest(this.options.items);
 		// already visible? possible when both focus and mouseover events occur
 		if (this.current && this.current[0] == target[0])
 			return;

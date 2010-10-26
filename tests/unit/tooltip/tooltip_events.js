@@ -24,11 +24,11 @@ test("mouse events", function() {
 	var e = $("#tooltipped1").tooltip({
 		open: function(event, ui) {
 			same( event.type, "tooltipopen" );
-			same( event.originalEvent.type, "mouseenter" );
+			same( event.originalEvent.type, "mouseover" );
 		},
 		close: function(event, ui) {
 			same( event.type, "tooltipclose" );
-			same( event.originalEvent.type, "mouseleave" );
+			same( event.originalEvent.type, "mouseout" );
 		}
 	});
 	e.trigger("mouseover").trigger("mouseout");

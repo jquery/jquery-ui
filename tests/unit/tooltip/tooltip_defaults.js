@@ -4,6 +4,7 @@
 
 var tooltip_defaults = {
 	disabled: false,
+	items: "[title]",
 	content: $.ui.tooltip.prototype.options.content,
 	position: {
 		my: "left center",
