@@ -224,11 +224,8 @@ $.widget('ui.spinner', {
 		return true;
 	},
 	_mousewheel: function() {
-		if (!$.fn.mousewheel)
-			return;
 		var self = this;
-		this.element.mousewheel(function(event, delta) {
-			delta = ($.browser.opera ? -delta / Math.abs(delta) : delta);
+		this.element.bind("mousewheel", function(event, delta) {
 			if (!self._start(event)) {
 				return false;
 			}
