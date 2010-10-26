@@ -27,7 +27,7 @@ $.widget("ui.tooltip", {
 			offset: "15 0"
 		}
 	},
-	_init: function() {
+	_create: function() {
 		var self = this;
 		this.tooltip = $("<div></div>")
 			.attr("id", "ui-tooltip-" + increments++)
