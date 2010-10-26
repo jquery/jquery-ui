@@ -359,20 +359,18 @@ $.widget('ui.spinner', {
 	
 	stepUp: function(steps) {
 		this._spin((steps || 1) * this.options.step, null);
-		return this;
 	},
 	
 	stepDown: function(steps) {
 		this._spin((steps || 1) * -this.options.step, null);	
-		return this;
 	},
 	
 	pageUp: function(pages) {
-		return this.stepUp((pages || 1) * pageModifier);		
+		this.stepUp((pages || 1) * pageModifier);		
 	},
 	
 	pageDown: function(pages) {
-		return this.stepDown((pages || 1) * pageModifier);		
+		this.stepDown((pages || 1) * pageModifier);		
 	},
 	
 	value: function(newVal) {
