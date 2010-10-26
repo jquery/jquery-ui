@@ -35,7 +35,7 @@ test("keydown UP on input, increases value not greater than max", function() {
 	}
 	equals(el.val(), 100);
 	
-	el.val(50);
+	el.spinner("value", 50);
 	simulateKeyDownUp(el, $.ui.keyCode.UP);
 	equals(el.val(), 60);
 });
@@ -55,7 +55,7 @@ test("keydown DOWN on input, decreases value not less than min", function() {
 	}
 	equals(el.val(), -100);
 	
-	el.val(50);
+	el.spinner("value", 50);
 	simulateKeyDownUp(el, $.ui.keyCode.DOWN);
 	equals(el.val(), 40);
 });
@@ -75,7 +75,7 @@ test("keydown PGUP on input, increases value not greater than max", function() {
 	}
 	equal(el.val(), 500);
 	
-	el.val(0);
+	el.spinner("value", 0);
 	simulateKeyDownUp(el, $.ui.keyCode.PAGE_UP);
 	equals(el.val(), 100);
 });
@@ -95,7 +95,7 @@ test("keydown PGDN on input, decreases value not less than min", function() {
 	}
 	equals(el.val(), -500);
 	
-	el.val(0);
+	el.spinner("value", 0);
 	simulateKeyDownUp(el, $.ui.keyCode.PAGE_DOWN);
 	equals(el.val(), -100);
 });
@@ -110,11 +110,11 @@ test("mouse click on buttons", function() {
 	$(".ui-spinner-down").trigger("mousedown").trigger("mouseup");
 	equals(el.val(), --val, "mouse click to down");
 	
-	el.val(50);
+	el.spinner("value", 50);
 	$(".ui-spinner-up").trigger("mousedown").trigger("mouseup");
 	equals(el.val(), 51);
 
-	el.val(50);
+	el.spinner("value", 50);
 	$(".ui-spinner-down").trigger("mousedown").trigger("mouseup");
 	equals(el.val(), 49);
 });

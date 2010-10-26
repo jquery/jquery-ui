@@ -14,10 +14,7 @@
 (function($) {
 
 // shortcut constants
-var hover = 'ui-state-hover',
-	active = 'ui-state-active',
-	namespace = '.spinner',
-	pageModifier = 10;
+var pageModifier = 10;
 
 $.widget('ui.spinner', {
 	options: {
@@ -49,6 +46,7 @@ $.widget('ui.spinner', {
 		this._mousewheel();
 		this._aria();
 	},
+	
 	_draw: function() {
 		var self = this,
 			options = self.options;
@@ -63,11 +61,11 @@ $.widget('ui.spinner', {
 				// add behaviours
 				.hover(function() {
 					if (!options.disabled) {
-						$(this).addClass(hover);
+						$(this).addClass('ui-state-hover');
 					}
 					self.hovered = true;
 				}, function() {
-					$(this).removeClass(hover);
+					$(this).removeClass('ui-state-hover');
 					self.hovered = false;
 				});
 
@@ -78,7 +76,7 @@ $.widget('ui.spinner', {
 		}
 
 		this.element
-			.bind('keydown'+namespace, function(event) {
+			.bind('keydown.spinner', function(event) {
 				if (self.options.disabled) {
 					return;
 				}
@@ -87,7 +85,7 @@ $.widget('ui.spinner', {
 				}
 				return true;
 			})
-			.bind('keyup'+namespace, function(event) {
+			.bind('keyup.spinner', function(event) {
 				if (self.options.disabled) {
 					return;
 				}
@@ -96,14 +94,14 @@ $.widget('ui.spinner', {
 					self._change(event);					
 				}
 			})
-			.bind('focus'+namespace, function() {
-				uiSpinner.addClass(active);
+			.bind('focus.spinner', function() {
+				uiSpinner.addClass('ui-state-active');
 				self.focused = true;
 			})
-			.bind('blur'+namespace, function(event) {
+			.bind('blur.spinner', function(event) {
 				self.value(self.element.val());
 				if (!self.hovered) {
-					uiSpinner.removeClass(active);
+					uiSpinner.removeClass('ui-state-active');
 				}		
 				self.focused = false;
 			});
@@ -163,66 +161,7 @@ $.widget('ui.spinner', {
 			this.disable();
 		}
 	},
-	_uiSpinnerHtml: function() {
-		return '<div role="spinbutton" class="ui-spinner ui-state-default ui-widget ui-widget-content ui-corner-all"></div>';
-	},
-	_buttonHtml: function() {
-		return '<a class="ui-spinner-button ui-spinner-up ui-corner-tr"><span class="ui-icon ui-icon-triangle-1-n">&#9650;</span></a>' +
-				'<a class="ui-spinner-button ui-spinner-down ui-corner-br"><span class="ui-icon ui-icon-triangle-1-s">&#9660;</span></a>';
-	},
-	_start: function(event) {
-		if (!this.spinning && this._trigger('start', event, { value: this.value()}) !== false) {
-			if (!this.counter) {
-				this.counter = 1;
-			}
-			this.spinning = true;
-			return true;
-		}
-		return false;
-	},
-	_spin: function(step, event) {
-		if (!this.counter) {
-			this.counter = 1;
-		}
-		
-		var newVal = this.value() + step * (this.options.incremental && this.counter > 100
-			? this.counter > 200
-				? 100 
-				: 10
-			: 1);
-		
-		// cancelable
-		if (this._trigger('spin', event, { value: newVal }) !== false) {
-			this.value(newVal);
-			this.counter++;			
-		}
-	},
-	_stop: function(event) {
-		this.counter = 0;
-		if (this.timer) {
-			window.clearTimeout(this.timer);
-		}
-		this.element[0].focus();
-		this.spinning = false;
-		this._trigger('stop', event);
-	},
-	_change: function(event) {
-		this._trigger('change', event);
-	},
-	_repeat: function(i, steps, event) {
-		var self = this;
-		i = i || 100;
-
-		if (this.timer) {
-			window.clearTimeout(this.timer);
-		}
-		
-		this.timer = window.setTimeout(function() {
-			self._repeat(self.options.incremental && self.counter > 20 ? 20 : i, steps, event);
-		}, i);
-		
-		self._spin(steps*self.options.step, event);
-	},
+	
 	_keydown: function(event) {
 		var o = this.options,
 			KEYS = $.ui.keyCode;
@@ -247,9 +186,10 @@ $.widget('ui.spinner', {
 		
 		return true;
 	},
+	
 	_mousewheel: function() {
 		var self = this;
-		this.element.bind("mousewheel", function(event, delta) {
+		this.element.bind("mousewheel.spinner", function(event, delta) {
 			if (self.options.disabled) {
 				return;
 			}
@@ -270,22 +210,75 @@ $.widget('ui.spinner', {
 			event.preventDefault();
 		});
 	},
-	value: function(newVal) {
-		if (!arguments.length) {
-			return this._parse(this.element.val());
-		}
-		this._setOption('value', newVal);
+	
+	_uiSpinnerHtml: function() {
+		return '<div role="spinbutton" class="ui-spinner ui-state-default ui-widget ui-widget-content ui-corner-all"></div>';
 	},
-	_getData: function(key) {
-		switch (key) {
-			case 'min':
-			case 'max':
-			case 'step':
-				return this['_'+key]();
-				break;
-		}
-		return this.options[key];
+	
+	_buttonHtml: function() {
+		return '<a class="ui-spinner-button ui-spinner-up ui-corner-tr"><span class="ui-icon ui-icon-triangle-1-n">&#9650;</span></a>' +
+				'<a class="ui-spinner-button ui-spinner-down ui-corner-br"><span class="ui-icon ui-icon-triangle-1-s">&#9660;</span></a>';
 	},
+	
+	_start: function(event) {
+		if (!this.spinning && this._trigger('start', event, { value: this.options.value}) !== false) {
+			if (!this.counter) {
+				this.counter = 1;
+			}
+			this.spinning = true;
+			return true;
+		}
+		return false;
+	},
+	
+	// TODO tune repeat behaviour, see http://jsbin.com/aruki4/2 for reference
+	_repeat: function(i, steps, event) {
+		var self = this;
+		i = i || 100;
+
+		if (this.timer) {
+			window.clearTimeout(this.timer);
+		}
+		
+		this.timer = window.setTimeout(function() {
+			self._repeat(self.options.incremental && self.counter > 20 ? 20 : i, steps, event);
+		}, i);
+		
+		self._spin(steps*self.options.step, event);
+	},
+	
+	_spin: function(step, event) {
+		if (!this.counter) {
+			this.counter = 1;
+		}
+		
+		var newVal = this.options.value + step * (this.options.incremental && this.counter > 100
+			? this.counter > 200
+				? 100 
+				: 10
+			: 1);
+		
+		// cancelable
+		if (this._trigger('spin', event, { value: newVal }) !== false) {
+			this.value(newVal);
+			this.counter++;			
+		}
+	},
+	
+	_stop: function(event) {
+		this.counter = 0;
+		if (this.timer) {
+			window.clearTimeout(this.timer);
+		}
+		this.element[0].focus();
+		this.spinning = false;
+		this._trigger('stop', event);
+	},
+	
+	_change: function(event) {
+		this._trigger('change', event);
+	},
+	
 	_setOption: function(key, value) {
 		if (key == 'value') {
 			value = this._parse(value);
@@ -299,31 +292,24 @@ $.widget('ui.spinner', {
 		$.Widget.prototype._setOption.call( this, key, value );
 		this._afterSetData(key, value);
 	},
+	
 	_afterSetData: function(key, value) {
 		switch(key) {
+			case 'value':
+				this._format(this.options.value);
 			case 'max':
 			case 'min':
 			case 'step':
-				if (value != null) {
-					// write attributes back to element if original exist
-					if (this.element.attr(key)) {
-						this.element.attr(key, value);
-					}
-				}
 				this._aria();
-				break;
-			case 'value':
-				this._format(this._parse(this.options.value));
-				this._aria();
-				break;
 		}
 	},
+	
 	_aria: function() {
 		// TODO remove check, as soon as this method doesn't get called anymore before uiSpinner is initalized
 		this.uiSpinner && this.uiSpinner
 				.attr('aria-valuemin', this.options.min)
 				.attr('aria-valuemax', this.options.max)
-				.attr('aria-valuenow', this.value());
+				.attr('aria-valuenow', this.options.value);
 	},
 	
 	_parse: function(val) {
@@ -337,9 +323,9 @@ $.widget('ui.spinner', {
 			}
 			val = window.Globalization && this.options.numberformat ? Globalization.parseFloat(val) : +val;
 		}
-		console.log("input", input, "parsed", val)
 		return isNaN(val) ? null : val;
 	},
+	
 	_format: function(num) {
 		this.element.val( window.Globalization && this.options.numberformat ? Globalization.format(num, this.options.numberformat) : num );
 	},
@@ -354,10 +340,11 @@ $.widget('ui.spinner', {
 			.removeAttr('disabled')
 			.removeAttr('autocomplete')
 			.removeData('spinner')
-			.unbind(namespace);
+			.unbind(".spinner");
 		
 		this.uiSpinner.replaceWith(this.element);	
 	},
+	
 	enable: function() {
 		this.element
 			.removeAttr('disabled')
@@ -366,6 +353,7 @@ $.widget('ui.spinner', {
 		this.options.disabled = false;
 		this.buttons.button("enable");
 	},
+	
 	disable: function() {
 		this.element
 			.attr('disabled', true)
@@ -374,19 +362,30 @@ $.widget('ui.spinner', {
 		this.options.disabled = true;
 		this.buttons.button("disable");
 	},
+	
 	stepUp: function(steps) {
 		this._spin((steps || 1) * this.options.step, null);
 		return this;
 	},
+	
 	stepDown: function(steps) {
 		this._spin((steps || 1) * -this.options.step, null);	
 		return this;
 	},
+	
 	pageUp: function(pages) {
 		return this.stepUp((pages || 1) * pageModifier);		
 	},
+	
 	pageDown: function(pages) {
 		return this.stepDown((pages || 1) * pageModifier);		
+	},
+	
+	value: function(newVal) {
+		if (!arguments.length) {
+			return this.options.value;
+		}
+		this._setOption('value', newVal);
 	},
 	
 	widget: function() {
