@@ -241,7 +241,7 @@ $.widget('ui.spinner', {
 					self._stop(event);
 					self._change(event);
 				}
-			}, 400);
+			}, 50);
 			event.preventDefault();
 		});
 	},
