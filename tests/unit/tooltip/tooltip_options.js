@@ -37,17 +37,4 @@ test("content: callback string", function() {
 	
 });
 
-test("tooltipClass, default", function() {
-	$("#tooltipped1").tooltip().tooltip("open");
-	same( $(".ui-tooltip").attr("class"), "ui-tooltip ui-widget ui-corner-all ui-widget-content");
-	$(":ui-tooltip").tooltip("destroy");
-});
-test("tooltipClass, custom", function() {
-	$("#tooltipped1").tooltip({
-		tooltipClass: "pretty fancy"
-	}).tooltip("open");
-	same( $(".ui-tooltip").attr("class"), "ui-tooltip ui-widget ui-corner-all pretty fancy");
-	$(":ui-tooltip").tooltip("destroy");
-});
-
 })(jQuery);

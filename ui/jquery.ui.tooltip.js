@@ -23,7 +23,6 @@ var increments = 0;
 
 $.widget("ui.tooltip", {
 	options: {
-		tooltipClass: "ui-widget-content",
 		content: function() {
 			return $(this).attr("title");
 		},
@@ -39,8 +38,7 @@ $.widget("ui.tooltip", {
 			.attr("id", "ui-tooltip-" + increments++)
 			.attr("role", "tooltip")
 			.attr("aria-hidden", "true")
-			.addClass("ui-tooltip ui-widget ui-corner-all")
-			.addClass(this.options.tooltipClass)
+			.addClass("ui-tooltip ui-widget ui-corner-all ui-widget-content")
 			.appendTo(document.body)
 			.hide();
 		this.tooltipContent = $("<div></div>")
