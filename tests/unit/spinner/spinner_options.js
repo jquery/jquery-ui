@@ -5,36 +5,33 @@
 
 module("spinner: options");
 
-test("numberformat", function() {
-	ok( false, "tests for numberformat!");
+test("numberformat, number", function() {
+	var el = $("#spin").spinner({
+		value: "1",
+		numberformat: "n"
+	});
+	equal(el.val(), "1.00");
 });
 
-test("dir - left-to-right (default)", function() {	
-	expect(3);
-	
-	el = $("#spin");	
-	el.spinner();
-	
-	ok(upButton().position().left > box().position().left, 'input on left up button on right');
-	ok(downButton().position().left > box().position().left, 'input on left down button on right');
-	ok(wrapper().hasClass('ui-spinner-ltr'), 'container has correct text direction class setting');
+test("numberformat, number, simple", function() {
+	var el = $("#spin").spinner({
+		value: "1",
+		numberformat: "n0"
+	});
+	equal(el.val(), "1");
 });
 
-test("dir - right-to-left", function() {
-	expect(3);
-	
-	el = $("#spin");
-	el.spinner({ dir: 'rtl' });
-	
-	ok(upButton().position().left < box().position().left, 'input on right up button on left');
-	ok(downButton().position().left < box().position().left, 'input on right down button on left');
-	ok(wrapper().hasClass('ui-spinner-rtl'), 'container has correct text direction class setting');
+test("numberformat, currency", function() {
+	var el = $("#spin").spinner({
+		value: "1",
+		numberformat: "C"
+	});
+	equal(el.val(), "$1.00");
 });
 
+/* TODO figure out how to test this properly
 test("incremental - false (default)", function() {
-	expect(2);
-	
-	el = $("#spin").spinner({ incremental:false });
+	var el = $("#spin").spinner({ incremental:false });
 
 	for ( var i = 1 ; i<=120 ; i++ ) {
 		el.simulate("keydown",{keyCode:$.ui.keyCode.UP});
@@ -51,10 +48,8 @@ test("incremental - false (default)", function() {
 	equals(el.val(), -90, "incremental false - keydown 210 times");
 });
 
-test("incremental - true", function() {
-	expect(2);
-	
-	el.spinner('option', 'incremental', true );
+test("incremental - true (default)", function() {
+	var el = $("#spin").spinner();
 
 	for ( var i = 1 ; i<=120 ; i++ ) {
 		el.simulate("keydown",{keyCode:$.ui.keyCode.UP});
@@ -70,11 +65,10 @@ test("incremental - true", function() {
 
 	equals(el.val(), -1800, "incremental true - keydown 210 times (300-100-100*10-10*100)");
 });
+*/
 
 test("max", function() {
-	expect(3);
-	
-	el = $("#spin").spinner({ max: 100, value: 1000 });
+	var el = $("#spin").spinner({ max: 100, value: 1000 });
 	equals(el.val(), 100, "max constrained if value option is greater");
 	
 	el.spinner('value', 1000);
@@ -85,9 +79,7 @@ test("max", function() {
 });
 
 test("min", function() {
-	expect(3);
-	
-	el = $("#spin").spinner({ min: -100, value: -1000 });
+	var el = $("#spin").spinner({ min: -100, value: -1000 });
 	equals(el.val(), -100, "min constrained if value option is greater");
 	
 	el.spinner('value', -1000);
@@ -97,53 +89,14 @@ test("min", function() {
 	equals(el.val(), -100, "min constrained if manual entry");
 });
 
-test("mouseWheel", function() {
-	ok(false, 'missing test - untested code is broken code');
-});
-
-test("page", function() {
-	expect(3);
-
-	el = $("#spin").spinner({ step: 2, page:2.5 });
-
-	equals(el.val(), "0", "start number");
-
-	simulateKeyDownUp(el, $.ui.keyCode.PAGE_DOWN);
-
-	equals(el.val(), "-5", "PAGE_DOWN on spinner once");
-
-	for ( var i = 1 ; i<=11 ; i++ ) {
-		simulateKeyDownUp(el, $.ui.keyCode.PAGE_UP);
-	}
-
-	equals(el.val(), "50", "PAGE_UP 11 times on spinner");
-});
-
-test("step", function() {
-	expect(7);
-
-	el = $("#spin").spinner({ step:0.7 });
-	equals(el.val(), "0.0", "value initialized to");
-
-	simulateKeyDownUp(el, $.ui.keyCode.DOWN);
-	equals(el.val(), "-0.7", "DOWN 1 time with step: 0.7");
-
-	for ( var i = 0 ; i < 11 ; i++ ) {
-		simulateKeyDownUp(el, $.ui.keyCode.UP);
-	}
-	equals(el.val(), "7.0", "UP 11 times with step: 0.7");
-
-	el.spinner('option', 'step', 1);
-	for ( var i = 0 ; i < 3 ; i++ ) {
-		simulateKeyDownUp(el, $.ui.keyCode.UP);
-	}
-	equals(el.val(), "10.0", "UP 3 times with step: 1");
+test("step, 2", function() {
+	var el = $("#spin").spinner({ step: 2 });
+	equals(el.val(), "0", "value initialized to");
 	
-	el.spinner('option', 'step', 2);
 	for ( var i = 0 ; i < 5 ; i++ ) {
 		simulateKeyDownUp(el, $.ui.keyCode.UP);
 	}
-	equals(el.val(), "20.0", "UP 5 times with step: 2");
+	equals(el.val(), "10", "UP 5 times with step: 2");
 
 	el.spinner('value', '10.5');
 	equals(el.val(), "10.5", "value reset to");
@@ -153,8 +106,22 @@ test("step", function() {
 		simulateKeyDownUp(el, $.ui.keyCode.UP);
 	}
 	equals(el.val(), "20.5", "UP 5 times with step: 2");
+});
 
+test("step, 0.7", function() {
+	var el = $("#spin").spinner({
+		step: 0.7,
+		numberformat: "n1"
+	});
+	equals(el.val(), "0.0", "value initialized to");
 
+	simulateKeyDownUp(el, $.ui.keyCode.DOWN);
+	equals(el.val(), "-0.7", "DOWN 1 time with step: 0.7");
+
+	for ( var i = 0 ; i < 11 ; i++ ) {
+		simulateKeyDownUp(el, $.ui.keyCode.UP);
+	}
+	equals(el.val(), "7.0", "UP 11 times with step: 0.7");
 });
 
 test("value, default, specified in markup", function() {

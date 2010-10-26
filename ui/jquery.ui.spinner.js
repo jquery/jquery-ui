@@ -24,13 +24,27 @@ $.widget('ui.spinner', {
 		incremental: true,
 		max: Number.MAX_VALUE,
 		min: -Number.MAX_VALUE,
-		numberformat: "n",
+		numberformat: null,
 		step: 1,
 		value: null
 	},
 	
-	_create: function() {		
-		this.value(this.options.value !== null ? this.options.value : this.element.val());
+	_create: function() {
+		// html5 attributes initalization
+		// TODO refactor
+		var min = this.element.attr("min");
+		if (typeof min == "string" && min.length > 0) {
+			this.options.min = this._parse(min);
+		}
+		var max = this.element.attr("max");
+		if (typeof max == "string" && max.length > 0) {
+			this.options.max = this._parse(max);
+		}
+		var step = this.element.attr("step");
+		if (typeof step == "string" && step.length > 0) {
+			this.options.step = this._parse(step);
+		}
+		this.value(this.options.value !== null ? this.options.value : this.element.val() || 0);
 		this._draw();
 		this._mousewheel();
 		this._aria();
@@ -39,7 +53,7 @@ $.widget('ui.spinner', {
 		var self = this,
 			options = self.options;
 
-		var uiSpinner = self.element
+		var uiSpinner = this.uiSpinner = self.element
 			.addClass('ui-spinner-input')
 			.attr('autocomplete', 'off')
 			.wrap(self._uiSpinnerHtml())
@@ -65,12 +79,18 @@ $.widget('ui.spinner', {
 
 		this.element
 			.bind('keydown'+namespace, function(event) {
+				if (self.options.disabled) {
+					return;
+				}
 				if (self._start(event)) {
 					return self._keydown(event);
 				}
 				return true;
 			})
 			.bind('keyup'+namespace, function(event) {
+				if (self.options.disabled) {
+					return;
+				}
 				if (self.spinning) {
 					self._stop(event);
 					self._change(event);					
@@ -88,11 +108,6 @@ $.widget('ui.spinner', {
 				self.focused = false;
 			});
 
-		// disable spinner if element was already disabled
-		if (options.disabled) {
-			this.disable();
-		}
-		
 		// button bindings
 		this.buttons = uiSpinner.find('.ui-spinner-button')
 			.attr("tabIndex", -1)
@@ -103,13 +118,19 @@ $.widget('ui.spinner', {
 			.last()
 				.removeClass("ui-corner-all")
 			.end()
-			.bind('mousedown', function(event) {				
+			.bind('mousedown', function(event) {
+				if (self.options.disabled) {
+					return;
+				}
 				if (self._start(event) === false) {
 					return false;
 				}
 				self._repeat(null, $(this).hasClass('ui-spinner-up') ? 1 : -1, event);
 			})
 			.bind('mouseup', function(event) {
+				if (self.options.disabled) {
+					return;
+				}
 				if (self.counter == 1) {
 					self._spin(($(this).hasClass('ui-spinner-up') ? 1 : -1) * self.options.step, event);
 				}
@@ -119,6 +140,9 @@ $.widget('ui.spinner', {
 				}
 			})
 			.bind("mouseenter", function() {
+				if (self.options.disabled) {
+					return;
+				}
 				// button will add ui-state-active if mouse was down while mouseleave and kept down
 				if ($(this).hasClass("ui-state-active")) {
 					if (self._start(event) === false) {
@@ -132,9 +156,12 @@ $.widget('ui.spinner', {
 					self._stop(event);
 					self._change(event);
 				}
-			})
+			});
 					
-		self.uiSpinner = uiSpinner;
+		// disable spinner if element was already disabled
+		if (options.disabled) {
+			this.disable();
+		}
 	},
 	_uiSpinnerHtml: function() {
 		return '<div role="spinbutton" class="ui-spinner ui-state-default ui-widget ui-widget-content ui-corner-all"></div>';
@@ -154,9 +181,6 @@ $.widget('ui.spinner', {
 		return false;
 	},
 	_spin: function(step, event) {
-		if (this.options.disabled) {
-			return;
-		}
 		if (!this.counter) {
 			this.counter = 1;
 		}
@@ -176,7 +200,7 @@ $.widget('ui.spinner', {
 	_stop: function(event) {
 		this.counter = 0;
 		if (this.timer) {
-			window.clearInterval(this.timer);
+			window.clearTimeout(this.timer);
 		}
 		this.element[0].focus();
 		this.spinning = false;
@@ -226,6 +250,9 @@ $.widget('ui.spinner', {
 	_mousewheel: function() {
 		var self = this;
 		this.element.bind("mousewheel", function(event, delta) {
+			if (self.options.disabled) {
+				return;
+			}
 			if (!self._start(event)) {
 				return false;
 			}
@@ -233,12 +260,13 @@ $.widget('ui.spinner', {
 			if (self.timeout) {
 				window.clearTimeout(self.timeout);
 			}
+			// TODO can we implement that without a timeout?
 			self.timeout = window.setTimeout(function() {
 				if (self.spinning) {
 					self._stop(event);
 					self._change(event);
 				}
-			}, 50);
+			}, 13);
 			event.preventDefault();
 		});
 	},
@@ -286,11 +314,13 @@ $.widget('ui.spinner', {
 				break;
 			case 'value':
 				this._format(this._parse(this.options.value));
+				this._aria();
 				break;
 		}
 	},
 	_aria: function() {
-		this.uiSpinner
+		// TODO remove check, as soon as this method doesn't get called anymore before uiSpinner is initalized
+		this.uiSpinner && this.uiSpinner
 				.attr('aria-valuemin', this.options.min)
 				.attr('aria-valuemax', this.options.max)
 				.attr('aria-valuenow', this.value());
@@ -305,13 +335,13 @@ $.widget('ui.spinner', {
 				var culture = Globalization.culture || Globalization.cultures['default'];
 				val = val.replace(culture.numberFormat.currency.symbol, "");
 			}
-			val = window.Globalization ? Globalization.parseFloat(val) : +val;
+			val = window.Globalization && this.options.numberformat ? Globalization.parseFloat(val) : +val;
 		}
 		console.log("input", input, "parsed", val)
 		return isNaN(val) ? null : val;
 	},
 	_format: function(num) {
-		this.element.val( window.Globalization ? Globalization.format(num, this.options.numberformat) : num );
+		this.element.val( window.Globalization && this.options.numberformat ? Globalization.format(num, this.options.numberformat) : num );
 	},
 		
 	destroy: function() {
@@ -331,20 +361,18 @@ $.widget('ui.spinner', {
 	enable: function() {
 		this.element
 			.removeAttr('disabled')
-			.siblings()
-				.removeAttr('disabled')
 			.parent()
 				.removeClass('ui-spinner-disabled ui-state-disabled');
 		this.options.disabled = false;
+		this.buttons.button("enable");
 	},
 	disable: function() {
 		this.element
 			.attr('disabled', true)
-			.siblings()
-				.attr('disabled', true)
 			.parent()
 				.addClass('ui-spinner-disabled ui-state-disabled');
 		this.options.disabled = true;
+		this.buttons.button("disable");
 	},
 	stepUp: function(steps) {
 		this._spin((steps || 1) * this.options.step, null);
@@ -355,10 +383,10 @@ $.widget('ui.spinner', {
 		return this;
 	},
 	pageUp: function(pages) {
-		return this.stepUp((pages || 1) * this.options.page);		
+		return this.stepUp((pages || 1) * pageModifier);		
 	},
 	pageDown: function(pages) {
-		return this.stepDown((pages || 1) * this.options.page);		
+		return this.stepDown((pages || 1) * pageModifier);		
 	},
 	
 	widget: function() {

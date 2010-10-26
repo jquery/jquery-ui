@@ -6,11 +6,9 @@
 module("spinner: events");
 
 test("start", function() {
-	expect(1);
-
 	var start = 0;
 	
-	el = $("#spin").spinner({
+	var el = $("#spin").spinner({
 		start: function(){
 			start++;
 		}
@@ -22,11 +20,9 @@ test("start", function() {
 });
 
 test("spin", function() {
-	expect(1);
-
 	var spin = 0;
 	
-	el = $("#spin").spinner({
+	var el = $("#spin").spinner({
 		spin: function(){
 			spin++;
 		}
@@ -38,11 +34,9 @@ test("spin", function() {
 });
 
 test("stop", function() {
-	expect(1);
-
 	var stop = 0;
 	
-	el = $("#spin").spinner({
+	var el = $("#spin").spinner({
 		stop: function(){
 			stop++;
 		}
@@ -54,11 +48,9 @@ test("stop", function() {
 });
 
 test("change", function() {
-	expect(1);
-
 	var start = spin = stop = change = 0;
 	
-	el = $("#spin").spinner({
+	var el = $("#spin").spinner({
 		change: function(){
 			change++;
 		}

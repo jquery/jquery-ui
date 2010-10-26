@@ -3,15 +3,12 @@
  */
 
 var spinner_defaults = {
-	dir: 'ltr',
 	disabled: false,
 	incremental: true,
-	max: null,
-	min: null,
-	mouseWheel: true,
-	numberformat: "n",
-	page: 5,
-	step: null,
+	max: Number.MAX_VALUE,
+	min: -Number.MAX_VALUE,
+	numberformat: null,
+	step: 1,
 	value: null
 };
 
