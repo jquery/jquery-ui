@@ -22,7 +22,8 @@ $.widget("ui.selectmenu", {
 		handleWidth: 26, 
 		maxHeight: null,
 		icons: null, 
-		format: null
+		format: null,
+		bgImage: function() {}
 	},	
 	
 	_create: function() {
@@ -138,7 +139,8 @@ $.widget("ui.selectmenu", {
 					text: self._formatText(jQuery(this).text()),
 					selected: $(this).attr('selected'),
 					classes: $(this).attr('class'),
-					parentOptGroup: $(this).parent('optgroup').attr('label')
+					parentOptGroup: $(this).parent('optgroup').attr('label'),
+					bgImage: o.bgImage.call($(this))
 				});
 			});		
 				
@@ -202,11 +204,13 @@ $.widget("ui.selectmenu", {
 						thisLi
 							.data('optionClasses', selectOptionData[i].classes + ' ' + self.widgetBaseClass + '-hasIcon')
 							.addClass(self.widgetBaseClass + '-hasIcon');
-						var iconClass = o.icons[j].icon || "";
-						
+						var iconClass = o.icons[j].icon || "";						
 						thisLi
 							.find('a:eq(0)')
-							.prepend('<span class="'+self.widgetBaseClass+'-item-icon ui-icon '+iconClass + '"></span>');
+							.prepend('<span class="'+self.widgetBaseClass+'-item-icon ui-icon ' +iconClass + '"></span>');
+						if (selectOptionData[i].bgImage) {
+							thisLi.find('span').css('background-image', selectOptionData[i].bgImage);
+						}
 					}
 				}
 			}

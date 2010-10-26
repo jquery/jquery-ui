@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<title>Demo Page for jQuery UI selectmenu</title>
+	
+	<link type="text/css" href="../../themes/base/jquery.ui.all.css" rel="stylesheet" />
+	<link type="text/css" href="../../themes/base/jquery.ui.selectmenu.css" rel="stylesheet" />
+	<script type="text/javascript" src="../../jquery-1.4.2.js"></script>
+	<script type="text/javascript" src="../../ui/jquery.ui.core.js"></script>
+	<script type="text/javascript" src="../../ui/jquery.ui.widget.js"></script>
+	<script type="text/javascript" src="../../ui/jquery.ui.position.js"></script>
+	
+	<script type="text/javascript" src="../../ui/jquery.ui.selectmenu.js"></script>
+
+	<style type="text/css">
+		/*demo styles*/
+		body {font-size: 62.5%; font-family:"Verdana",sans-serif; }
+		fieldset { border:0; }	
+		label,select,.ui-select-menu { float: left; margin-right: 10px; }
+		select { width: 200px; }
+					
+		/*select with CSS avatar icons*/
+		option.css-avatar { background-repeat: no-repeat !important; padding-left: 20px;}
+		
+		/*select with big avatar icons*/
+		a.avatar-big { height: 5em; }
+		.avatar-big .ui-selectmenu-item-icon { height: 50px; width: 50px; }		
+		.ui-selectmenu-menu li.avatar-big a, a.avatar-big span.ui-selectmenu-status { padding-left: 5em !important; height: 50px; }
+	</style>
+	<script type="text/javascript">	
+		$(function(){
+			$('select#peopleA').selectmenu({
+				style:'dropdown',
+				icons: [
+					{find: '.avatar'}
+				],
+				bgImage: function() {
+					return 'url(' + $(this).attr("title") + ')';
+				}
+			});
+
+			$('select#peopleB').selectmenu({
+				style:'dropdown',
+				icons: [
+					{find: '.css-avatar'}
+				],
+				bgImage: function() {
+					return $(this).css("background-image");
+				}
+			});
+
+			$('select#peopleC').selectmenu({
+				icons: [
+					{find: '.avatar-big'}
+				],
+				bgImage: function() {
+					return 'url(' + $(this).attr("title") + ')';
+				},
+				menuWidth: "300px"
+			});
+		});
+		
+		//a custom format option callback
+		var addressFormatting = function(text){
+			var newText = text;
+			//array of find replaces
+			var findreps = [
+				{find:/^([^\-]+) \- /g, rep: '<span class="ui-selectmenu-item-header">$1</span>'},
+				{find:/([^\|><]+) \| /g, rep: '<span class="ui-selectmenu-item-content">$1</span>'},
+				{find:/([^\|><\(\)]+) (\()/g, rep: '<span class="ui-selectmenu-item-content">$1</span>$2'},
+				{find:/([^\|><\(\)]+)$/g, rep: '<span class="ui-selectmenu-item-content">$1</span>'},
+				{find:/(\([^\|><]+\))$/g, rep: '<span class="ui-selectmenu-item-footer">$1</span>'}
+			];
+			
+			for(var i in findreps){
+				newText = newText.replace(findreps[i].find, findreps[i].rep);
+			}
+			return newText;
+		}		
+	</script>
+</head>
+<body>
+	<form action="#">
+		<h2>"dropdown" Style with custom avatar 16x16 images</h2>
+		<fieldset>
+			<label for="peopleA">Select a Person:</label>
+			<select name="peopleA" id="peopleA">
+				<option value="1" class="avatar" title="http://www.gravatar.com/avatar/b3e04a46e85ad3e165d66f5d927eb609?d=monsterid&r=g&s=16">John Resig</option>
+				<option value="2" class="avatar" title="http://www.gravatar.com/avatar/e42b1e5c7cfd2be0933e696e292a4d5f?d=monsterid&r=g&s=16">Tauren Mills</option>
+				<option value="3" class="avatar" title="http://www.gravatar.com/avatar/bdeaec11dd663f26fa58ced0eb7facc8?d=monsterid&r=g&s=16">Jane Doe</option>
+			</select>
+		</fieldset>
+		
+		<h2>"dropdown" Style with custom avatar 16x16 images as CSS background</h2>
+		<fieldset>
+			<label for="peopleB">Select a Person:</label>
+			<select name="peopleB" id="peopleB">
+				<option value="1" class="css-avatar" style="background-image: url(http://www.gravatar.com/avatar/b3e04a46e85ad3e165d66f5d927eb609?d=monsterid&r=g&s=16);">John Resig</option>
+				<option value="2" class="css-avatar" style="background-image: url(http://www.gravatar.com/avatar/e42b1e5c7cfd2be0933e696e292a4d5f?d=monsterid&r=g&s=16);">Tauren Mills</option>
+				<option value="3" class="css-avatar" style="background-image: url(http://www.gravatar.com/avatar/bdeaec11dd663f26fa58ced0eb7facc8?d=monsterid&r=g&s=16);">Jane Doe</option>
+			</select>
+		</fieldset>
+		
+		<h2>"dropdown" Style with custom avatar 50x50 images</h2>
+		<fieldset>
+			<label for="peopleC">Select an Address:</label>
+			<select name="peopleC" id="peopleC">
+				<option class="avatar-big" title="http://www.gravatar.com/avatar/bdeaec11dd663f26fa58ced0eb7facc8?d=monsterid&r=g&s=50">John Doe - 78 West Main St Apt 3A | Bloomsburg, PA 12345 (footer text)</option>
+				<option selected="selected" class="avatar-big" title="http://www.gravatar.com/avatar/bdeaec11dd663f26fa58ced0eb7facc8?d=monsterid&r=g&s=50">Jane Doe - 78 West Main St Apt 3A | Bloomsburg, PA 12345 (footer text)</option>
+				<option class="avatar-big" title="http://www.gravatar.com/avatar/bdeaec11dd663f26fa58ced0eb7facc8?d=monsterid&r=g&s=50">Joseph Doe - 78 West Main St Apt 3A | Bloomsburg, PA 12345 (footer text)</option>
+				<option class="avatar-big" title="http://www.gravatar.com/avatar/bdeaec11dd663f26fa58ced0eb7facc8?d=monsterid&r=g&s=50">Mad Doe Kiiid - 78 West Main St Apt 3A | Bloomsburg, PA 12345 (footer text)</option>
+			</select>
+		</fieldset>
+	</form>
+</body>
+</html>
