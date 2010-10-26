@@ -24,12 +24,10 @@
 			$("#context1 a, form input, #childish").tooltip();
 			
 			// custom class, replaces ui-widget-content
-			$("#context2 [title]").tooltip({
-				tooltipClass: "ui-widget-header"
-			});
-			$("#right1").tooltip({
-				tooltipClass: "ui-state-error"
-			});
+			$("#context2 [title]").tooltip().each(function() {
+				$(this).tooltip("widget").addClass("ui-widget-header");
+			})
+			$("#right1").tooltip().tooltip("widget").addClass("ui-state-error");
 			
 			// synchronous content
 			$("#see-footnote").tooltip({
@@ -69,9 +67,8 @@
 					my: "center top",
 					at: "center bottom",
 					offset: "0 10"
-				},
-				tooltipClass: "ui-state-highlight"
-			});
+				}
+			}).tooltip("widget").addClass("ui-state-highlight");
 			
 			var positionOnTop = {
 				position: {

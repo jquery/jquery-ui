@@ -23,6 +23,15 @@ test("content: return string", function() {
 	same( $(".ui-tooltip").text(), "customstring" );
 });
 
+test("content: return jQuery", function() {
+	$("#tooltipped1").tooltip({
+		content: function() {
+			return $("<div></div>").html("cu<b>s</b>tomstring");
+		}
+	}).tooltip("open");
+	same( $(".ui-tooltip").text(), "customstring" );
+});
+
 test("content: callback string", function() {
 	stop();
 	$("#tooltipped1").tooltip({
