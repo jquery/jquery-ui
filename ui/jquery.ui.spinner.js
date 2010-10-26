@@ -331,18 +331,12 @@ $.widget('ui.spinner', {
 	},
 		
 	destroy: function() {
-		if ($.fn.mousewheel) {
-			this.element.unmousewheel();
-		}
-		
 		this.element
 			.removeClass('ui-spinner-input')
 			.removeAttr('disabled')
-			.removeAttr('autocomplete')
-			.removeData('spinner')
-			.unbind(".spinner");
-		
-		this.uiSpinner.replaceWith(this.element);	
+			.removeAttr('autocomplete');
+		$.Widget.prototype.destroy.call( this );
+		this.uiSpinner.replaceWith(this.element);
 	},
 	
 	enable: function() {
