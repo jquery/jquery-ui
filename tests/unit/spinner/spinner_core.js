@@ -13,14 +13,10 @@ var simulateKeyDownUp = function(el, kCode, shift) {
 module("spinner: core");
 
 test("destroy", function() {
+	// cheat a bit to get IE6 to pass
+	$("#spin").val(0);
 	var beforeHtml = $("#spin").parent().html();
 	var afterHtml = $("#spin").spinner().spinner("destroy").parent().html();
-	// Opera 9 outputs role="" instead of removing the attribute like everyone else
-	/*
-	if ($.browser.opera) {
-		afterHtml = afterHtml.replace(/ role=""/g, "");
-	}
-	*/
 	equal( afterHtml, beforeHtml, "before/after html should be the same" );
 });
 

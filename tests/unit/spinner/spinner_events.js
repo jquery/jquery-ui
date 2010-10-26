@@ -48,7 +48,7 @@ test("stop", function() {
 });
 
 test("change", function() {
-	var start = spin = stop = change = 0;
+	var change = 0;
 	
 	var el = $("#spin").spinner({
 		change: function(){
