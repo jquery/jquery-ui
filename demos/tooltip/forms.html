@@ -12,7 +12,7 @@
 	<link type="text/css" href="../demos.css" rel="stylesheet" />
 	<script type="text/javascript">
 	$(function() {
-		$("[title]").tooltip();
+		$("[title]").tooltip().unbind(".tooltip");
 		$("<button/>").text("Show help").button().toggle(function() {
 			$(":ui-tooltip").tooltip("open");
 		}, function() {
@@ -59,7 +59,7 @@
 
 <div class="demo-description">
 
-<p>Hover the questionmark-buttons or use the button below to display the help texts all at once. Click again to hide them.</p>
+<p>Use the button below to display the help texts. Click again to hide them. Default hover and focus events are removed to show tooltip only programmatically.</p>
 
 <p>A fixed width is defined in CSS to make the tooltips look consistent when displayed all at once.</p>
 
