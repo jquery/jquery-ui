@@ -27,8 +27,14 @@ $.widget('ui.spinner', {
 	},
 	
 	_create: function() {
-		// html5 attributes initalization
-		// TODO refactor
+		this._draw();
+		this._markupOptions();
+		this._mousewheel();
+		this._aria();
+	},
+	
+	_markupOptions: function() {
+		// TODO refactor and read only when the related option is null (set default to null, init Number.MAX_VALUE only when nothing is specified)
 		var min = this.element.attr("min");
 		if (typeof min == "string" && min.length > 0) {
 			this.options.min = this._parse(min);
@@ -42,9 +48,6 @@ $.widget('ui.spinner', {
 			this.options.step = this._parse(step);
 		}
 		this.value(this.options.value !== null ? this.options.value : this.element.val() || 0);
-		this._draw();
-		this._mousewheel();
-		this._aria();
 	},
 	
 	_draw: function() {
@@ -69,7 +72,7 @@ $.widget('ui.spinner', {
 					self.hovered = false;
 				});
 
-		// TODO: need a better way to exclude IE8 without resorting to $.browser.version
+		// TODO: move to theme, ask FG how
 		// fix inline-block issues for IE. Since IE8 supports inline-block we need to exclude it.
 		if (!$.support.opacity && uiSpinner.css('display') == 'inline-block' && $.browser.version < 8) {
 			uiSpinner.css('display', 'inline');
@@ -110,12 +113,7 @@ $.widget('ui.spinner', {
 		this.buttons = uiSpinner.find('.ui-spinner-button')
 			.attr("tabIndex", -1)
 			.button()
-			.first()
-				.removeClass("ui-corner-all")
-			.end()
-			.last()
-				.removeClass("ui-corner-all")
-			.end()
+			.removeClass("ui-corner-all")
 			.bind('mousedown', function(event) {
 				if (self.options.disabled) {
 					return;
@@ -128,9 +126,6 @@ $.widget('ui.spinner', {
 			.bind('mouseup', function(event) {
 				if (self.options.disabled) {
 					return;
-				}
-				if (self.counter == 1) {
-					self._spin(($(this).hasClass('ui-spinner-up') ? 1 : -1) * self.options.step, event);
 				}
 				if (self.spinning) {
 					self._stop(event);
@@ -150,7 +145,7 @@ $.widget('ui.spinner', {
 				}
 			})
 			.bind("mouseleave", function() {
-				if (self.timer && self.spinning) {
+				if (self.spinning) {
 					self._stop(event);
 					self._change(event);
 				}
@@ -197,11 +192,9 @@ $.widget('ui.spinner', {
 				return false;
 			}
 			self._spin((delta > 0 ? 1 : -1) * self.options.step, event);
-			if (self.timeout) {
-				window.clearTimeout(self.timeout);
-			}
+			clearTimeout(self.timeout);
 			// TODO can we implement that without a timeout?
-			self.timeout = window.setTimeout(function() {
+			self.timeout = setTimeout(function() {
 				if (self.spinning) {
 					self._stop(event);
 					self._change(event);
@@ -231,20 +224,16 @@ $.widget('ui.spinner', {
 		return false;
 	},
 	
-	// TODO tune repeat behaviour, see http://jsbin.com/aruki4/2 for reference
 	_repeat: function(i, steps, event) {
 		var self = this;
-		i = i || 100;
+		i = i || 500;
 
-		if (this.timer) {
-			window.clearTimeout(this.timer);
-		}
-		
-		this.timer = window.setTimeout(function() {
-			self._repeat(self.options.incremental && self.counter > 20 ? 20 : i, steps, event);
+		clearTimeout(this.timer);
+		this.timer = setTimeout(function() {
+			self._repeat(40, steps, event);
 		}, i);
 		
-		self._spin(steps*self.options.step, event);
+		self._spin(steps * self.options.step, event);
 	},
 	
 	_spin: function(step, event) {
@@ -252,13 +241,16 @@ $.widget('ui.spinner', {
 			this.counter = 1;
 		}
 		
-		var newVal = this.options.value + step * (this.options.incremental && this.counter > 100
-			? this.counter > 200
-				? 100 
-				: 10
-			: 1);
+		// TODO refactor, maybe figure out some non-linear math
+		var newVal = this.options.value + step * (this.options.incremental &&
+			this.counter > 20
+				? this.counter > 100
+					? this.counter > 200
+						? 100 
+						: 10
+					: 2
+				: 1);
 		
-		// cancelable
 		if (this._trigger('spin', event, { value: newVal }) !== false) {
 			this.value(newVal);
 			this.counter++;			
@@ -288,28 +280,32 @@ $.widget('ui.spinner', {
 			if (value > this.options.max) {
 				value = this.options.max;
 			}
-		}		
+		}
+		if (key == 'disabled') {
+			if (value) {
+				this.element.attr("disabled", true);
+				this.buttons.button("disable");
+			} else {
+				this.element.removeAttr("disabled");
+				this.buttons.button("enable");
+			}
+		}
 		$.Widget.prototype._setOption.call( this, key, value );
-		this._afterSetData(key, value);
 	},
 	
-	_afterSetData: function(key, value) {
-		switch(key) {
-			case 'value':
-				this._format(this.options.value);
-			case 'max':
-			case 'min':
-			case 'step':
-				this._aria();
+	_setOptions: function( options ) {
+		$.Widget.prototype._setOptions.call( this, options );
+		if ( "value" in options ) {
+			this._format( this.options.value );
 		}
+		this._aria();
 	},
 	
 	_aria: function() {
-		// TODO remove check, as soon as this method doesn't get called anymore before uiSpinner is initalized
-		this.uiSpinner && this.uiSpinner
-				.attr('aria-valuemin', this.options.min)
-				.attr('aria-valuemax', this.options.max)
-				.attr('aria-valuenow', this.options.value);
+		this.uiSpinner
+			.attr('aria-valuemin', this.options.min)
+			.attr('aria-valuemax', this.options.max)
+			.attr('aria-valuenow', this.options.value);
 	},
 	
 	_parse: function(val) {
@@ -327,6 +323,7 @@ $.widget('ui.spinner', {
 	},
 	
 	_format: function(num) {
+		var num = this.options.value;
 		this.element.val( window.Globalization && this.options.numberformat ? Globalization.format(num, this.options.numberformat) : num );
 	},
 		
@@ -339,30 +336,12 @@ $.widget('ui.spinner', {
 		this.uiSpinner.replaceWith(this.element);
 	},
 	
-	enable: function() {
-		this.element
-			.removeAttr('disabled')
-			.parent()
-				.removeClass('ui-spinner-disabled ui-state-disabled');
-		this.options.disabled = false;
-		this.buttons.button("enable");
-	},
-	
-	disable: function() {
-		this.element
-			.attr('disabled', true)
-			.parent()
-				.addClass('ui-spinner-disabled ui-state-disabled');
-		this.options.disabled = true;
-		this.buttons.button("disable");
-	},
-	
 	stepUp: function(steps) {
-		this._spin((steps || 1) * this.options.step, null);
+		this._spin((steps || 1) * this.options.step);
 	},
 	
 	stepDown: function(steps) {
-		this._spin((steps || 1) * -this.options.step, null);	
+		this._spin((steps || 1) * -this.options.step);	
 	},
 	
 	pageUp: function(pages) {
@@ -377,7 +356,7 @@ $.widget('ui.spinner', {
 		if (!arguments.length) {
 			return this.options.value;
 		}
-		this._setOption('value', newVal);
+		this.option('value', newVal);
 	},
 	
 	widget: function() {

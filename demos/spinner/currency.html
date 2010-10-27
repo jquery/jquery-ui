@@ -18,7 +18,6 @@
 	$(function() {
 		$("#currency").change(function() {
 			var current = $("#spinner").spinner("value");
-			console.log("before!!", current)
 			Globalization.preferCulture($(this).val());
 			$("#spinner").spinner("value", current);
 		})
