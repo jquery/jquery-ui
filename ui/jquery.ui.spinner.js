@@ -183,23 +183,26 @@ $.widget('ui.spinner', {
 	},
 	
 	_mousewheel: function() {
+		// need the delta normalization that mousewheel plugin provides
+		if (!$.fn.mousewheel) {
+			return;
+		}
 		var self = this;
 		this.element.bind("mousewheel.spinner", function(event, delta) {
 			if (self.options.disabled) {
 				return;
 			}
-			if (!self._start(event)) {
+			if (!self.spinning && !self._start(event)) {
 				return false;
 			}
 			self._spin((delta > 0 ? 1 : -1) * self.options.step, event);
 			clearTimeout(self.timeout);
-			// TODO can we implement that without a timeout?
 			self.timeout = setTimeout(function() {
 				if (self.spinning) {
 					self._stop(event);
 					self._change(event);
 				}
-			}, 13);
+			}, 100);
 			event.preventDefault();
 		});
 	},
@@ -214,7 +217,7 @@ $.widget('ui.spinner', {
 	},
 	
 	_start: function(event) {
-		if (!this.spinning && this._trigger('start', event, { value: this.options.value}) !== false) {
+		if (!this.spinning && this._trigger('start', event) !== false) {
 			if (!this.counter) {
 				this.counter = 1;
 			}
