@@ -131,7 +131,7 @@ $.widget("ui.menu", {
 				this.element.attr( "scrollTop", scroll + offset - elementHeight + item.height() );
 			}
 		}
-		this.active = item.eq( 0 )
+		this.active = item.first()
 			.children( "a" )
 				.addClass( "ui-state-hover" )
 				.attr( "id", "ui-active-menuitem" )
@@ -150,11 +150,11 @@ $.widget("ui.menu", {
 	},
 
 	next: function(event) {
-		this._move( "next", ".ui-menu-item:first", event );
+		this._move( "next", ".ui-menu-item", "first", event );
 	},
 
 	previous: function(event) {
-		this._move( "prev", ".ui-menu-item:last", event );
+		this._move( "prev", ".ui-menu-item", "last", event );
 	},
 
 	first: function() {
@@ -165,57 +165,59 @@ $.widget("ui.menu", {
 		return this.active && !this.active.nextAll( ".ui-menu-item" ).length;
 	},
 
-	_move: function(direction, edge, event) {
+	_move: function(direction, edge, filter, event) {
 		if ( !this.active ) {
-			this.activate( event, this.element.children(edge) );
+			this.activate( event, this.element.children(edge)[filter]() );
 			return;
 		}
 		var next = this.active[ direction + "All" ]( ".ui-menu-item" ).eq( 0 );
 		if ( next.length ) {
 			this.activate( event, next );
 		} else {
-			this.activate( event, this.element.children(edge) );
+			this.activate( event, this.element.children(edge)[filter]() );
 		}
 	},
 
 	// TODO merge with previousPage
 	nextPage: function( event ) {
 		if ( this._hasScroll() ) {
-			// TODO merge with no-scroll-else
 			if ( !this.active || this.last() ) {
-				this.activate( event, this.element.children(":first") );
+				this.activate( event, this.element.children( ".ui-menu-item" ).first() );
 				return;
 			}
 			var base = this.active.offset().top,
 				height = this.element.height(),
-				result = this.element.children( "li" ).filter( function() {
+				// TODO replace children with nextAll
+				// TODO replace filter with each, break once close > 0 and use that item as the result 
+				result = this.element.children( ".ui-menu-item" ).filter( function() {
 					var close = $( this ).offset().top - base - height + $( this ).height();
-					// TODO improve approximation
+					// TODO replace with check close > 0
 					return close < 10 && close > -10;
 				});
 
 			// TODO try to catch this earlier when scrollTop indicates the last page anyway
 			if ( !result.length ) {
-				result = this.element.children( ":last" );
+				result = this.element.children( ".ui-menu-item" ).last();
 			}
 			this.activate( event, result );
 		} else {
-			this.activate( event, this.element.children( !this.active || this.last() ? ":first" : ":last" ) );
+			this.activate( event, this.element.children( ".ui-menu-item" )
+				// TODO use .first()/.last()
+				.filter( !this.active || this.last() ? ":first" : ":last" ) );
 		}
 	},
 
 	// TODO merge with nextPage
 	previousPage: function( event ) {
 		if ( this._hasScroll() ) {
-			// TODO merge with no-scroll-else
 			if ( !this.active || this.first() ) {
-				this.activate( event, this.element.children(":last") );
+				this.activate( event, this.element.children( ".ui-menu-item" ).last() );
 				return;
 			}
 
 			var base = this.active.offset().top,
 				height = this.element.height();
-				result = this.element.children( "li" ).filter( function() {
+				result = this.element.children( ".ui-menu-item" ).filter( function() {
 					var close = $(this).offset().top - base + height - $(this).height();
 					// TODO improve approximation
 					return close < 10 && close > -10;
@@ -223,11 +225,13 @@ $.widget("ui.menu", {
 
 			// TODO try to catch this earlier when scrollTop indicates the last page anyway
 			if (!result.length) {
-				result = this.element.children( ":first" );
+				result = this.element.children( ".ui-menu-item" ).first();
 			}
 			this.activate( event, result );
 		} else {
-			this.activate( event, this.element.children( !this.active || this.first() ? ":last" : ":first" ) );
+			this.activate( event, this.element.children( ".ui-menu-item" )
+				// TODO use .first()/.last()
+				.filter( !this.active || this.first() ? ":last" : ":first" ) );
 		}
 	},
 
