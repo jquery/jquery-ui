@@ -359,7 +359,7 @@
     		<path><fileset dir="${cdndist.dir}" includes="**/" excludes="**/*.MD5" /></path>
 			<sequential>
 				<!-- @{file} is an absolute path, use that ugly regexes to make it relative --> 
-				<propertyregex override="yes" property="relativepath" input="@{file}" regexp=".+?googlecdn[\\/](.+)$" replace="\1"/>
+				<propertyregex override="yes" property="relativepath" input="@{file}" regexp=".+?cdn[\\/](.+)$" replace="\1"/>
 				<propertyregex override="yes" property="relativepath" input="${relativepath}" regexp="\\" replace="/" global="true" />
 				<concat destfile="${cdndist.dir}/MANIFEST" append="yes">${relativepath} </concat>
 				<concat destfile="${cdndist.dir}/MANIFEST" append="yes"><file file="@{file}.MD5" /></concat>
