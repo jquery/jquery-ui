@@ -19,10 +19,10 @@ var pageModifier = 10;
 $.widget('ui.spinner', {
 	options: {
 		incremental: true,
-		max: Number.MAX_VALUE,
-		min: -Number.MAX_VALUE,
+		max: null,
+		min: null,
 		numberformat: null,
-		step: 1,
+		step: null,
 		value: null
 	},
 	
@@ -34,19 +34,17 @@ $.widget('ui.spinner', {
 	},
 	
 	_markupOptions: function() {
-		// TODO refactor and read only when the related option is null (set default to null, init Number.MAX_VALUE only when nothing is specified)
-		var min = this.element.attr("min");
-		if (typeof min == "string" && min.length > 0) {
-			this.options.min = this._parse(min);
-		}
-		var max = this.element.attr("max");
-		if (typeof max == "string" && max.length > 0) {
-			this.options.max = this._parse(max);
-		}
-		var step = this.element.attr("step");
-		if (typeof step == "string" && step.length > 0) {
-			this.options.step = this._parse(step);
-		}
+		var _this = this;
+		$.each({
+			min: -Number.MAX_VALUE,
+			max: Number.MAX_VALUE,
+			step: 1
+		}, function(attr, defaultValue) {
+			if (_this.options[attr] === null) {
+				var value = _this.element.attr(attr);
+				_this.options[attr] = typeof value == "string" && value.length > 0 ? _this._parse(value) : defaultValue;
+			}
+		});
 		this.value(this.options.value !== null ? this.options.value : this.element.val() || 0);
 	},
 	

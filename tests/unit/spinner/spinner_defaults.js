@@ -5,10 +5,10 @@
 var spinner_defaults = {
 	disabled: false,
 	incremental: true,
-	max: Number.MAX_VALUE,
-	min: -Number.MAX_VALUE,
+	max: null,
+	min: null,
 	numberformat: null,
-	step: 1,
+	step: null,
 	value: null
 };
 
