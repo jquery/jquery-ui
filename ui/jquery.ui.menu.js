@@ -23,7 +23,7 @@ $.widget("ui.menu", {
 				"aria-activedescendant": "ui-active-menuitem"
 			})
 			.bind("click.menu", function( event ) {
-				if (self.options.disabled) {
+				if ( self.options.disabled ) {
 					return false;
 				}
 				if ( !$( event.target ).closest( ".ui-menu-item a" ).length ) {
@@ -32,7 +32,25 @@ $.widget("ui.menu", {
 				// temporary
 				event.preventDefault();
 				self.select( event );
-			});
+			})
+			.bind("mouseover.menu", function( event ) {
+				if ( self.options.disabled ) {
+					return;
+				}
+				var target = $( event.target ).closest( ".ui-menu-item" );
+				if ( target.length && target.parent()[0] === self.element[0] ) {
+					self.activate( event, target );
+				}
+			})
+			.bind("mouseout.menu", function( event ) {
+				if ( self.options.disabled ) {
+					return;
+				}
+				var target = $( event.target ).closest( ".ui-menu-item" );
+				if ( target.length && target.parent()[0] === self.element[0] ) {
+					self.deactivate( event );
+				}
+			});;
 		this.refresh();
 		
 		if (!this.options.input) {
@@ -91,8 +109,6 @@ $.widget("ui.menu", {
 	},
 	
 	refresh: function() {
-		var self = this;
-
 		// don't refresh list items that are already adapted
 		var items = this.element.children("li:not(.ui-menu-item):has(a)")
 			.addClass("ui-menu-item")
@@ -100,20 +116,7 @@ $.widget("ui.menu", {
 		
 		items.children("a")
 			.addClass("ui-corner-all")
-			.attr("tabIndex", -1)
-			// mouseenter doesn't work with event delegation
-			.bind("mouseenter.menu", function( event ) {
-				if (self.options.disabled) {
-					return;
-				}
-				self.activate( event, $(this).parent() );
-			})
-			.bind("mouseleave.menu", function() {
-				if (self.options.disabled) {
-					return;
-				}
-				self.deactivate();
-			});
+			.attr("tabIndex", -1);
 	},
 
 	activate: function( event, item ) {
@@ -136,13 +139,13 @@ $.widget("ui.menu", {
 		this._trigger("focus", event, { item: item });
 	},
 
-	deactivate: function() {
+	deactivate: function(event) {
 		if (!this.active) { return; }
 
 		this.active.children("a")
 			.removeClass("ui-state-hover")
 			.removeAttr("id");
-		this._trigger("blur");
+		this._trigger("blur", event);
 		this.active = null;
 	},
 
