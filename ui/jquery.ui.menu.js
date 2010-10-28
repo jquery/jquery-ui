@@ -192,18 +192,14 @@ $.widget("ui.menu", {
 				height = this.element.height(),
 				result;
 			this.active.nextAll( ".ui-menu-item" ).each( function() {
-				var close = $( this ).offset().top - base - height;
-				if (close >= 0) {
-					result = $( this );
-					return false;
-				}
+				result = $( this );
+				return $( this ).offset().top - base - height < 0;
 			});
 
-			this.activate( event, result || this.element.children( ".ui-menu-item" ).last() );
+			this.activate( event, result );
 		} else {
 			this.activate( event, this.element.children( ".ui-menu-item" )
-				// TODO use .first()/.last()
-				.filter( !this.active || this.last() ? ":first" : ":last" ) );
+				[ !this.active || this.last() ? "first" : "last" ]() );
 		}
 	},
 
@@ -219,18 +215,14 @@ $.widget("ui.menu", {
 				height = this.element.height(),
 				result;
 			this.active.prevAll( ".ui-menu-item" ).each( function() {
-				var close = $(this).offset().top - base + height;
-				if (close <= 0) {
-					result = $( this );
-					return false;
-				}
+				result = $( this );
+				return $(this).offset().top - base + height > 0;
 			});
 
-			this.activate( event, result || this.element.children( ".ui-menu-item" ).first() );
+			this.activate( event, result );
 		} else {
 			this.activate( event, this.element.children( ".ui-menu-item" )
-				// TODO use .first()/.last()
-				.filter( !this.active || this.first() ? ":last" : ":first" ) );
+				[ !this.active || this.first() ? ":last" : ":first" ]() );
 		}
 	},
 
