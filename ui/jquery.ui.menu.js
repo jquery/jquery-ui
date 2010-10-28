@@ -122,13 +122,16 @@ $.widget("ui.menu", {
 	activate: function( event, item ) {
 		this.deactivate();
 		if ( this._hasScroll() ) {
-			var offset = item.offset().top - this.element.offset().top,
+			var borderTop = parseFloat( $.curCSS( this.element[0], "borderTopWidth", true) ) || 0,
+				paddingtop = parseFloat( $.curCSS( this.element[0], "paddingTop", true) ) || 0,
+				offset = item.offset().top - this.element.offset().top - borderTop - paddingtop,
 				scroll = this.element.attr( "scrollTop" ),
-				elementHeight = this.element.height();
-			if (offset < 0) {
+				elementHeight = this.element.height(),
+				itemHeight = item.height();
+			if ( offset < 0 ) {
 				this.element.attr( "scrollTop", scroll + offset );
-			} else if (offset > elementHeight) {
-				this.element.attr( "scrollTop", scroll + offset - elementHeight + item.height() );
+			} else if ( offset + itemHeight > elementHeight ) {
+				this.element.attr( "scrollTop", scroll + offset - elementHeight + itemHeight );
 			}
 		}
 		this.active = item.first()
@@ -187,19 +190,16 @@ $.widget("ui.menu", {
 			}
 			var base = this.active.offset().top,
 				height = this.element.height(),
-				// TODO replace children with nextAll
-				// TODO replace filter with each, break once close > 0 and use that item as the result 
-				result = this.element.children( ".ui-menu-item" ).filter( function() {
-					var close = $( this ).offset().top - base - height + $( this ).height();
-					// TODO replace with check close > 0
-					return close < 10 && close > -10;
-				});
+				result;
+			this.active.nextAll( ".ui-menu-item" ).each( function() {
+				var close = $( this ).offset().top - base - height;
+				if (close >= 0) {
+					result = $( this );
+					return false;
+				}
+			});
 
-			// TODO try to catch this earlier when scrollTop indicates the last page anyway
-			if ( !result.length ) {
-				result = this.element.children( ".ui-menu-item" ).last();
-			}
-			this.activate( event, result );
+			this.activate( event, result || this.element.children( ".ui-menu-item" ).last() );
 		} else {
 			this.activate( event, this.element.children( ".ui-menu-item" )
 				// TODO use .first()/.last()
@@ -216,18 +216,17 @@ $.widget("ui.menu", {
 			}
 
 			var base = this.active.offset().top,
-				height = this.element.height();
-				result = this.element.children( ".ui-menu-item" ).filter( function() {
-					var close = $(this).offset().top - base + height - $(this).height();
-					// TODO improve approximation
-					return close < 10 && close > -10;
-				});
+				height = this.element.height(),
+				result;
+			this.active.prevAll( ".ui-menu-item" ).each( function() {
+				var close = $(this).offset().top - base + height;
+				if (close <= 0) {
+					result = $( this );
+					return false;
+				}
+			});
 
-			// TODO try to catch this earlier when scrollTop indicates the last page anyway
-			if (!result.length) {
-				result = this.element.children( ".ui-menu-item" ).first();
-			}
-			this.activate( event, result );
+			this.activate( event, result || this.element.children( ".ui-menu-item" ).first() );
 		} else {
 			this.activate( event, this.element.children( ".ui-menu-item" )
 				// TODO use .first()/.last()
