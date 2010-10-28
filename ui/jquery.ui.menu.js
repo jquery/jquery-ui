@@ -180,8 +180,7 @@ $.widget("ui.menu", {
 			this.activate( event, this.element.children(edge)[filter]() );
 		}
 	},
-
-	// TODO merge with previousPage
+	
 	nextPage: function( event ) {
 		if ( this._hasScroll() ) {
 			if ( !this.active || this.last() ) {
@@ -203,7 +202,6 @@ $.widget("ui.menu", {
 		}
 	},
 
-	// TODO merge with nextPage
 	previousPage: function( event ) {
 		if ( this._hasScroll() ) {
 			if ( !this.active || this.first() ) {
