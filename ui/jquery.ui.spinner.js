@@ -243,7 +243,7 @@ $.widget('ui.spinner', {
 		}
 		
 		// TODO refactor, maybe figure out some non-linear math
-		var newVal = this.options.value + step * (this.options.incremental &&
+		var newVal = this.value() + step * (this.options.incremental &&
 			this.counter > 20
 				? this.counter > 100
 					? this.counter > 200
@@ -355,7 +355,7 @@ $.widget('ui.spinner', {
 	
 	value: function(newVal) {
 		if (!arguments.length) {
-			return this.options.value;
+			return this._parse(this.element.val());
 		}
 		this.option('value', newVal);
 	},
