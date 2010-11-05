@@ -9,6 +9,16 @@
  *
  * Depends:
  *	jquery.ui.core.js
+ *
+ * ---------------------------------------------------------------------------------------------
+ * NOTE Updated by Yuri Ingultsov Software Laboratory (yurii@softlab.in.ua)
+ *
+ * Ticket #5308: Reset of datepicker field impossible.
+ * 
+ * Description: Adds ability to reset user input via clear button on the buttons panel at 
+ * the bottom. NOTE: This update will also require the update of theme css
+ * ---------------------------------------------------------------------------------------------
+ *
  */
 (function( $, undefined ) {
 
@@ -41,6 +51,7 @@ function Datepicker() {
 	this.regional = []; // Available regional settings, indexed by language code
 	this.regional[''] = { // Default regional settings
 		closeText: 'Done', // Display text for close link
+/*YI:*/         clearText: 'Clear', // Display text for clear link 
 		prevText: 'Prev', // Display text for previous month link
 		nextText: 'Next', // Display text for next month link
 		currentText: 'Today', // Display text for current month link
@@ -104,6 +115,7 @@ function Datepicker() {
 		altFormat: '', // The date format to use for the alternate field
 		constrainInput: true, // The input is constrained by the current date format
 		showButtonPanel: false, // True to show button panel, false to not show it
+/*YI:*/         showClearButton: false, // True to show clear button on button panel, false to not show it
 		autoSize: false // True to size the input for the date format, false to leave as is
 	};
 	$.extend(this._defaults, this.regional['']);
@@ -1356,6 +1368,7 @@ $.extend(Datepicker.prototype, {
 			new Date(today.getFullYear(), today.getMonth(), today.getDate())); // clear time
 		var isRTL = this._get(inst, 'isRTL');
 		var showButtonPanel = this._get(inst, 'showButtonPanel');
+/*YI:*/	        var showClearButton = this._get(inst, 'showClearButton');
 		var hideIfNoPrevNext = this._get(inst, 'hideIfNoPrevNext');
 		var navigationAsDateFormat = this._get(inst, 'navigationAsDateFormat');
 		var numMonths = this._getNumberOfMonths(inst);
@@ -1408,8 +1421,15 @@ $.extend(Datepicker.prototype, {
 		var gotoDate = (this._get(inst, 'gotoCurrent') && inst.currentDay ? currentDate : today);
 		currentText = (!navigationAsDateFormat ? currentText :
 			this.formatDate(currentText, gotoDate, this._getFormatConfig(inst)));
-		var controls = (!inst.inline ? '<button type="button" class="ui-datepicker-close ui-state-default ui-priority-primary ui-corner-all" onclick="DP_jQuery_' + dpuuid +
+
+/*YI:begin*/
+		var closeButton = (!inst.inline ? '<button type="button" class="ui-datepicker-close ui-state-default ui-priority-primary ui-corner-all" onclick="DP_jQuery_' + dpuuid +
 			'.datepicker._hideDatepicker();">' + this._get(inst, 'closeText') + '</button>' : '');
+		var clearButton = (showClearButton ? '<button type="button" class="ui-datepicker-clear ui-state-default ui-priority-middle ui-corner-all" onclick="DP_jQuery_' + dpuuid +
+			'.datepicker._selectDate(\'#' + inst.id + '\',\'\');">' + this._get(inst, 'clearText') + '</button>' : '');
+		var controls = (!isRTL ? closeButton + clearButton : clearButton + closeButton);
+/*YI:end*/
+
 		var buttonPanel = (showButtonPanel) ? '<div class="ui-datepicker-buttonpane ui-widget-content">' + (isRTL ? controls : '') +
 			(this._isInRange(inst, gotoDate) ? '<button type="button" class="ui-datepicker-current ui-state-default ui-priority-secondary ui-corner-all" onclick="DP_jQuery_' + dpuuid +
 			'.datepicker._gotoToday(\'#' + inst.id + '\');"' +
