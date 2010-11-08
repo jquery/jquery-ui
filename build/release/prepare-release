@@ -80,7 +80,7 @@ git whatchanged $version... --pretty=format:"$format_full" \
 | sed '/^:/ d' \
 | sed '/^$/ d' \
 | sed 's/\(Fixe[sd] #\)\([0-9][0-9]*\)\(.*\)\(XXXX #XXXX\)/Fixed #\2\3\2 #\2/' \
-| sort -f \
+| LC_ALL='C' sort -f \
 >> $base_dir/changelog
 
 # find all fixed tickets
@@ -118,7 +118,7 @@ $remote_cmd/generate-contributors >> $base_dir/thankyou
 
 # sort names
 echo "Sorting contributors..."
-sort -f $base_dir/thankyou | uniq > $base_dir/_thankyou
+LC_ALL='C' sort -f $base_dir/thankyou | uniq > $base_dir/_thankyou
 mv $base_dir/_thankyou $base_dir/thankyou
 
 # find all people that were thanked

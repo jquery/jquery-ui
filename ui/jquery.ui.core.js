@@ -158,7 +158,7 @@ $.each( [ "Width", "Height" ], function( i, name ) {
 		}
 
 		return this.each(function() {
-			$.style( this, type, reduce( this, size ) + "px" );
+			$( this ).css( type, reduce( this, size ) + "px" );
 		});
 	};
 
@@ -168,7 +168,7 @@ $.each( [ "Width", "Height" ], function( i, name ) {
 		}
 
 		return this.each(function() {
-			$.style( this, type, reduce( this, size, true, margin ) + "px" );
+			$( this).css( type, reduce( this, size, true, margin ) + "px" );
 		});
 	};
 });

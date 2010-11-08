@@ -181,9 +181,11 @@ $.widget( "ui.autocomplete", {
 					}
 
 					if ( false !== self._trigger( "select", event, { item: item } ) ) {
-						self.term = item.value;
 						self.element.val( item.value );
 					}
+					// reset the term after the select event
+					// this allows custom select handling to work properly
+					self.term = self.element.val();
 
 					self.close( event );
 					self.selectedItem = item;
@@ -293,9 +295,9 @@ $.widget( "ui.autocomplete", {
 	close: function( event ) {
 		clearTimeout( this.closing );
 		if ( this.menu.element.is(":visible") ) {
-			this._trigger( "close", event );
 			this.menu.element.hide();
 			this.menu.deactivate();
+			this._trigger( "close", event );
 		}
 	},
 	
@@ -326,10 +328,8 @@ $.widget( "ui.autocomplete", {
 
 	_suggest: function( items ) {
 		var ul = this.menu.element
-				.empty()
-				.zIndex( this.element.zIndex() + 1 ),
-			menuWidth,
-			textWidth;
+			.empty()
+			.zIndex( this.element.zIndex() + 1 );
 		this._renderMenu( ul, items );
 		// TODO refresh should check if the active item is still in the dom, removing the need for a manual deactivate
 		this.menu.deactivate();
@@ -338,9 +338,15 @@ $.widget( "ui.autocomplete", {
 			of: this.element
 		}, this.options.position ));
 
-		menuWidth = ul.width( "" ).outerWidth();
-		textWidth = this.element.outerWidth();
-		ul.outerWidth( Math.max( menuWidth, textWidth ) );
+		this._resizeMenu();
+	},
+
+	_resizeMenu: function() {
+		var ul = this.menu.element;
+		ul.outerWidth( Math.max(
+			ul.width( "" ).outerWidth(),
+			this.element.outerWidth()
+		) );
 	},
 
 	_renderMenu: function( ul, items ) {

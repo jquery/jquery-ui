@@ -5,7 +5,7 @@ jQuery(function($){
 		closeText: 'Fermer',
 		prevText: '&#x3c;Préc',
 		nextText: 'Suiv&#x3e;',
-		currentText: 'Courant',
+		currentText: 'Aujourd\'hui',
 		monthNames: ['Janvier','Février','Mars','Avril','Mai','Juin',
 		'Juillet','Août','Septembre','Octobre','Novembre','Décembre'],
 		monthNamesShort: ['Jan','Fév','Mar','Avr','Mai','Jun',

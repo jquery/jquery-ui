@@ -40,14 +40,16 @@
 	<property name="core.files.min" value="jquery.ui.core.min.js, jquery.ui.widget.min.js, jquery.ui.mouse.min.js, jquery.ui.draggable.min.js, jquery.ui.droppable.min.js, jquery.ui.resizable.min.js, jquery.ui.selectable.min.js, jquery.ui.sortable.min.js, jquery.effects.core.min.js" />
 
 	<property description="Google Closure" name="closure-jar" value="${build.dir}/google-compiler-20091218.jar" />
+	<property description="YUI Compressor" name="yuicompressor-jar" value="${build.dir}/yuicompressor-2.4.2.jar" />
 	
-	<target name="deploy-release" depends="clean, docs-download, concatenate, minify, copy, replace-version, prepend-header, zip" description="Release builder">
+	<target name="deploy-release" depends="clean, docs-download, copy, minify, replace-version, prepend-header, zip" description="Release builder">
 	</target>
 	
 	<target name="replace-version">
 		<replaceregexp match="@VERSION" replace="${release.version}" flags="g" byline="true">
 		    <fileset dir="${dist.dir}/ui/" includes="*.js"/>
 			<fileset dir="${dist.dir}/ui/minified/" includes="*.js"/>
+			<fileset dir="${dist.dir}/themes/" includes="**/*.css"/>
 		</replaceregexp>
 		<echo message="Replaced all @VERSION to ${release.version}." />
 	</target>
@@ -71,6 +73,26 @@
 		</for>
 		<copy todir="${min.dir}" overwrite="true">
 			<fileset dir="${dist.dir}/ui-headered/" includes="*.js" />
+		</copy>
+		
+		<copy todir="${dist.dir}/headers/">
+			<fileset dir="${dist.dir}/themes/base" includes="*.css" />
+		</copy>
+		<replaceregexp match="^(\/\*.*?\*\/\s).+" replace="\1" flags="s">
+		    <fileset dir="${dist.dir}/headers/" includes="*.css"/>
+		</replaceregexp>
+		<for param="file">
+			<path><fileset dir="${dist.dir}/themes/base/minified" includes="*.css" /></path>
+			<sequential>
+				<propertyregex override="yes" property="target" input="@{file}" regexp=".*[\\/](.+)\.min\.css$" replace="\1"/>
+				<concat destfile="${dist.dir}/ui-headered/${target}.min.css">
+					<header file="${dist.dir}/headers/${target}.css" />
+					<fileset file="@{file}" />
+				</concat>
+			</sequential>
+		</for>
+		<copy todir="${dist.dir}/themes/base/minified" overwrite="true">
+			<fileset dir="${dist.dir}/ui-headered/" includes="*.css" />
 		</copy>
 		
 		<!-- once more for the i18n files -->
@@ -135,13 +157,12 @@
 
 	<target name="minify" depends="concatenate" description="Remove all comments and whitespace, no compression, great in combination with GZip">
 		<echo message="Building minified" />
-		<delete dir="${min.dir}/" />
 		<mkdir dir="${min.dir}" />
-		<delete dir="${min.dir}/i18n/" />
 		<mkdir dir="${min.dir}/i18n/" />
+		<mkdir dir="${dist.dir}/themes/base/minified" />
 		
 		<apply executable="java" parallel="false">
-			<fileset dir="${src.dir}/" includes="jquery.ui.*.js, jquery.effects.*.js" />
+			<fileset dir="${dist.dir}/ui" includes="*.js" />
 			<arg line="-jar" />
 			<arg path="${closure-jar}" />
 			<arg value="--warning_level" />
@@ -152,13 +173,8 @@
 			<mapper type="glob" from="*.js" to="${min.dir}/*.min.js" />
 		</apply>
 
-		<concat destfile="${min.dir}/${concatenated}.min.js">
-			<filelist dir="${min.dir}" files="${core.files.min}" />
-			<fileset dir="${min.dir}" includes="jquery.ui.*.js, jquery.effects.*.js" excludes="${core.files.min}" />
-		</concat>
-		
 		<apply executable="java" parallel="false">
-			<fileset dir="${src.dir}/i18n/" includes="jquery.ui.*.js" />
+			<fileset dir="${dist.dir}/ui/i18n" includes="*.js" />
 			<arg line="-jar" />
 			<arg path="${closure-jar}" />
 			<arg value="--warning_level" />
@@ -169,9 +185,17 @@
 			<mapper type="glob" from="*.js" to="${min.dir}/i18n/*.min.js" />
 		</apply>
 
-		<concat destfile="${min.dir}/i18n/${concatenated.i18n}.min.js">
-			<fileset dir="${min.dir}/i18n" includes="jquery.ui.*.js" />
-		</concat>
+		<apply executable="java" parallel="false">
+			<fileset dir="${dist.dir}/themes/base" includes="*.css" />
+			<arg line="-jar" />
+			<arg path="${yuicompressor-jar}" />
+			<arg line="--charset utf-8" />
+			<arg line="-v" />
+			<srcfile />
+			<arg line="-o" />
+			<mapper type="glob" from="*.css" to="${dist.dir}/themes/base/minified/*.min.css" />
+			<targetfile/>
+		</apply>
 				
 		<echo message="Minified ui/ built." />
 	</target>
@@ -218,7 +242,7 @@
 	 	<delete dir="dist" />
     </target>
 	
-	<target name="docs-download" depends="docs-clean">
+	<target name="docs-download">
 		<mkdir dir="${docs.dir}" />
 		<property name="url" value="http://docs.jquery.com/action/render/UI/API/${release.version}/" />
 
@@ -266,10 +290,6 @@
 		<get src="http://docs.jquery.com/action/render/UI/Effects/Shake" dest="${docs.dir}effect-shake.html" />
 		<get src="http://docs.jquery.com/action/render/UI/Effects/Size" dest="${docs.dir}effect-size.html" />
 		<get src="http://docs.jquery.com/action/render/UI/Effects/Transfer" dest="${docs.dir}effect-transfer.html" />
-	</target>
-	
-	<target name="docs-clean">
-		<delete dir="${docs.dir}" />
 	</target>
 	
 	<target name="themes-download">
@@ -339,7 +359,7 @@
     		<path><fileset dir="${cdndist.dir}" includes="**/" excludes="**/*.MD5" /></path>
 			<sequential>
 				<!-- @{file} is an absolute path, use that ugly regexes to make it relative --> 
-				<propertyregex override="yes" property="relativepath" input="@{file}" regexp=".+?googlecdn[\\/](.+)$" replace="\1"/>
+				<propertyregex override="yes" property="relativepath" input="@{file}" regexp=".+?cdn[\\/](.+)$" replace="\1"/>
 				<propertyregex override="yes" property="relativepath" input="${relativepath}" regexp="\\" replace="/" global="true" />
 				<concat destfile="${cdndist.dir}/MANIFEST" append="yes">${relativepath} </concat>
 				<concat destfile="${cdndist.dir}/MANIFEST" append="yes"><file file="@{file}.MD5" /></concat>

@@ -15,17 +15,17 @@ test('beforeShowDay-getDate', function() {
 	var inp = init('#inp', {beforeShowDay: function(date) { inp.datepicker('getDate'); return [true, '']; }});
 	var dp = $('#ui-datepicker-div');
 	inp.val('01/01/2010').datepicker('show');
-	// result has line-break instead of space inbetween, therefore comparsion fails
-	equals($('div.ui-datepicker-title').text(), 'January 2010', 'Initial month');
+	// contains non-breaking space
+	equals($('div.ui-datepicker-title').text(), 'January 2010', 'Initial month');
 	$('a.ui-datepicker-next', dp).click();
 	$('a.ui-datepicker-next', dp).click();
-	// fails, see above
-	equals($('div.ui-datepicker-title').text(), 'March 2010', 'After next clicks');
+	// contains non-breaking space
+	equals($('div.ui-datepicker-title').text(), 'March 2010', 'After next clicks');
 	inp.datepicker('hide').datepicker('show');
 	$('a.ui-datepicker-prev', dp).click();
 	$('a.ui-datepicker-prev', dp).click();
-	// fails, see above
-	equals($('div.ui-datepicker-title').text(), 'November 2009', 'After prev clicks');
+	// contains non-breaking space
+	equals($('div.ui-datepicker-title').text(), 'November 2009', 'After prev clicks');
 	inp.datepicker('hide');
 });
 
