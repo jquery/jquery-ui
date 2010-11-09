@@ -247,8 +247,6 @@ $.widget("ui.selectmenu", {
 			.keydown(function(event){
 				var ret = true;
 				switch (event.keyCode) {
-					// FIXME this needs to be fixed as _moveFocus doesnt work correctly
-					/*
 					case $.ui.keyCode.UP:
 					case $.ui.keyCode.LEFT:
 						ret = false;
@@ -259,7 +257,6 @@ $.widget("ui.selectmenu", {
 						ret = false;
 						self._moveFocus(1);
 						break;	
-					*/
 					case $.ui.keyCode.HOME:
 						ret = false;
 						self._moveFocus(':first');
@@ -442,7 +439,7 @@ $.widget("ui.selectmenu", {
 	},
 	_moveFocus: function(amt){
 		if(!isNaN(amt)){
-			var currIndex = parseInt(this._focusedOptionLi().data('index'), 10);
+			var currIndex = parseInt(this._focusedOptionLi().data('index') || 0, 10);
 			var newIndex = currIndex + amt;
 		}
 		else { var newIndex = parseInt(this._optionLis.filter(amt).data('index'), 10); }
@@ -454,7 +451,7 @@ $.widget("ui.selectmenu", {
 		var activeID = this.widgetBaseClass + '-item-' + Math.round(Math.random() * 1000);
 		
 		this._focusedOptionLi().find('a:eq(0)').attr('id','');
-		this._optionLis.eq(newIndex).find('a:eq(0)').attr('id',activeID)[0].focus();
+		this._optionLis.eq(newIndex).find('a:eq(0)').attr('id',activeID).focus();
 		this.list.attr('aria-activedescendant', activeID);
 	},
 	_scrollPage: function(direction){
