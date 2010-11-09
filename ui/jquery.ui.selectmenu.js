@@ -101,7 +101,7 @@ $.widget("ui.selectmenu", {
 						ret = true;
 						break;	
 					default:
-						ret = false;
+						ret = true;
 						self._typeAhead(event.keyCode, 'mouseup');
 						break;	
 				}
