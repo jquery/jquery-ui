@@ -750,7 +750,10 @@ $.extend($.ui.dialog.overlay, {
 	},
 
 	destroy: function($el) {
-		this.oldInstances.push(this.instances.splice($.inArray($el, this.instances), 1)[0]);
+		var indexOf = $.inArray($el, this.instances);
+		if (indexOf != -){
+			this.oldInstances.push(this.instances.splice(indexOf, 1)[0]);
+		}
 
 		if (this.instances.length === 0) {
 			$([document, window]).unbind('.dialog-overlay');
