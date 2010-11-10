@@ -14,22 +14,45 @@
 	<script type="text/javascript" src="../../ui/jquery.ui.selectmenu.js"></script>
 
 	<style type="text/css">
-		/*demo styles*/
+		/* demo styles */
 		body {font-size: 62.5%; font-family:"Verdana",sans-serif; }
 		fieldset { border:0; }	
 		label,select,.ui-select-menu { float: left; margin-right: 10px; }
 		select { width: 200px; }
 					
-		/*select with CSS avatar icons*/
+		/* select with custom icons */
+		body a.customicons { height: 2.8em;}
+		body .customicons li a, body a.customicons span.ui-selectmenu-status { line-height: 2em; padding-left: 30px !important; }
+		body .video .ui-selectmenu-item-icon, body .podcast .ui-selectmenu-item-icon, body .rss .ui-selectmenu-item-icon { height: 24px; width: 24px; }
+		body .video .ui-selectmenu-item-icon { background: url(images/24-video-square.png) 0 0 no-repeat; }
+		body .podcast .ui-selectmenu-item-icon { background: url(images/24-podcast-square.png) 0 0 no-repeat; }
+		body .rss .ui-selectmenu-item-icon { background: url(images/24-rss-square.png) 0 0 no-repeat; }
+		
+		/* select with CSS avatar icons */
 		option.css-avatar { background-repeat: no-repeat !important; padding-left: 20px;}
 		
-		/*select with big avatar icons*/
+		/* select with big avatar icons */
 		a.avatar-big { height: 5em; }
 		.avatar-big .ui-selectmenu-item-icon { height: 50px; width: 50px; }		
 		.ui-selectmenu-menu li.avatar-big a, a.avatar-big span.ui-selectmenu-status { padding-left: 5em !important; height: 50px; }
 	</style>
 	<script type="text/javascript">	
 		$(function(){
+			$('select#files').selectmenu({
+				icons: [
+					{find: '.script', icon: 'ui-icon-script'},
+					{find: '.image', icon: 'ui-icon-image'}
+				]
+			});	
+			
+			$('select#filesB').selectmenu({
+				icons: [
+					{find: '.video'},
+					{find: '.podcast'},
+					{find: '.rss'}
+				]
+			});			
+			
 			$('select#peopleA').selectmenu({
 				style:'dropdown',
 				icons: [
@@ -82,6 +105,28 @@
 </head>
 <body>
 	<form action="#">
+		<h2>Default: "popup" Style with framework icons</h2>
+		<fieldset>
+			<label for="files">Select a File:</label>
+			<select name="files" id="files">
+				<option value="jquery" class="script">jQuery.js</option>
+				<option value="jquerylogo" class="image">jQuery Logo</option>
+				<option value="jqueryui" class="script">ui.jQuery.js</option>
+				<option value="jqueryuilogo" selected="selected" class="image">jQuery UI Logo</option>
+				<option value="somefile">Some unknown file</option>
+			</select>
+		</fieldset>
+		
+		<h2>Default: "popup" Style with custom icon images</h2>
+		<fieldset>
+			<label for="filesB">Select a File:</label>
+			<select name="filesB" id="filesB" class="customicons">
+				<option value="mypodcast" class="podcast">John Resig Podcast</option>
+				<option value="myvideo" class="video">Scott Gonzales Video</option>
+				<option value="myrss" class="rss">jQuery RSS XML</option>
+			</select>
+		</fieldset>		
+		
 		<h2>"dropdown" Style with custom avatar 16x16 images</h2>
 		<fieldset>
 			<label for="peopleA">Select a Person:</label>

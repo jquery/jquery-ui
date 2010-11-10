@@ -14,27 +14,15 @@
 	<script type="text/javascript" src="../../ui/jquery.ui.selectmenu.js"></script>
 
 	<style type="text/css">
-		/*demo styles*/
+		/* demo styles */
 		body {font-size: 62.5%; font-family:"Verdana",sans-serif; }
 		fieldset { border:0; }	
 		label,select,.ui-select-menu { float: left; margin-right: 10px; }
-		select { width: 200px; }
-		
-		/*select with custom icons*/
-		body a.customicons { height: 2.8em;}
-		body .customicons li a, body a.customicons span.ui-selectmenu-status { line-height: 2em; padding-left: 30px !important; }
-		body .video .ui-selectmenu-item-icon, body .podcast .ui-selectmenu-item-icon, body .rss .ui-selectmenu-item-icon { height: 24px; width: 24px; }
-		body .video .ui-selectmenu-item-icon { background: url(images/24-video-square.png) 0 0 no-repeat; }
-		body .podcast .ui-selectmenu-item-icon { background: url(images/24-podcast-square.png) 0 0 no-repeat; }
-		body .rss .ui-selectmenu-item-icon { background: url(images/24-rss-square.png) 0 0 no-repeat; }
-		
-		
+		select { width: 200px; }		
 	</style>
 	<script type="text/javascript">	
 		$(function(){			
 			$('select#speedA').selectmenu();
-			
-			$('#withoutID select').selectmenu();
 			
 			$('select#speedAa').selectmenu({maxHeight: 150});
 			
@@ -51,20 +39,7 @@
 				format: addressFormatting
 			});
 			
-			$('select#files, select#filesC').selectmenu({
-				icons: [
-					{find: '.script', icon: 'ui-icon-script'},
-					{find: '.image', icon: 'ui-icon-image'}
-				]
-			});	
-			
-			$('select#filesB').selectmenu({
-				icons: [
-					{find: '.video'},
-					{find: '.podcast'},
-					{find: '.rss'}
-				]
-			});			
+			$('select#filesC').selectmenu();	
 		});		
 		
 		//a custom format option callback
@@ -97,24 +72,6 @@
 				<option value="Slower">Slower</option>
 				<option value="Slow">Slow</option>
 				<option value="Medium" selected="selected">Medium</option>
-				<option value="Fast">Fast</option>
-				<option value="Faster">Faster</option>
-			</select>
-		</fieldset>
-		
-		<h2>Default: without ID</h2>
-		<fieldset id="withoutID">
-			<select>
-				<option value="Slower" selected="selected">Slower</option>
-				<option value="Slow">Slow</option>
-				<option value="Medium">Medium</option>
-				<option value="Fast">Fast</option>
-				<option value="Faster">Faster</option>
-			</select>			
-			<select>
-				<option value="Slower" selected="selected">Slower</option>
-				<option value="Slow">Slow</option>
-				<option value="Medium">Medium</option>
 				<option value="Fast">Fast</option>
 				<option value="Faster">Faster</option>
 			</select>
@@ -176,39 +133,13 @@
 			</select>
 		</fieldset>
 		
-		<h2>Default: "popup" Style with framework icons</h2>
-		<fieldset>
-			<label for="files">Select a File:</label>
-			<select name="files" id="files">
-				<option value="jquery" class="script">jQuery.js</option>
-				<option value="jquerylogo" class="image">jQuery Logo</option>
-				<option value="jqueryui" class="script">ui.jQuery.js</option>
-				<option value="jqueryuilogo" selected="selected" class="image">jQuery UI Logo</option>
-				<option value="somefile">Some unknown file</option>
-			</select>
-		</fieldset>
-		
-		<h2>Default: "popup" Style with custom icon images</h2>
-		<fieldset>
-			<label for="filesB">Select a File:</label>
-			<select name="filesB" id="filesB" class="customicons">
-				<option value="mypodcast" class="podcast">John Resig Podcast</option>
-				<option value="myvideo" class="video">Scott Gonzales Video</option>
-				<option value="myrss" class="rss">jQuery RSS XML</option>
-			</select>
-		</fieldset>		
-		
 		<h2>Demo with optgroups</h2>
 		<fieldset>
 			<label for="filesC">Select a File:</label>
 			<select name="filesC" id="filesC">
-				<optgroup label="images">
-					<option value="jquerylogo" class="image">jQuery Logo</option>
-					<option value="jqueryuilogo" selected="selected" class="image">jQuery UI Logo</option>
-				</optgroup>
 				<optgroup label="scripts">
-					<option value="jquery" class="script">jQuery.js</option>
-					<option value="jqueryui" class="script">ui.jQuery.js</option>
+					<option value="jquery">jQuery.js</option>
+					<option value="jqueryui">ui.jQuery.js</option>
 				</optgroup>
 				<optgroup label="Label with space">
 					<option value="somefile">Some unknown file</option>
