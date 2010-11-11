@@ -751,7 +751,7 @@ $.extend($.ui.dialog.overlay, {
 
 	destroy: function($el) {
 		var indexOf = $.inArray($el, this.instances);
-		if (indexOf != -){
+		if (indexOf != -1){
 			this.oldInstances.push(this.instances.splice(indexOf, 1)[0]);
 		}
 
