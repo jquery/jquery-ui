@@ -334,11 +334,13 @@ $.widget( "ui.autocomplete", {
 		// TODO refresh should check if the active item is still in the dom, removing the need for a manual deactivate
 		this.menu.deactivate();
 		this.menu.refresh();
-		this.menu.element.show().position( $.extend({
+
+		// size and position menu
+		ul.show();
+		this._resizeMenu();
+		ul.position( $.extend({
 			of: this.element
 		}, this.options.position ));
-
-		this._resizeMenu();
 	},
 
 	_resizeMenu: function() {
