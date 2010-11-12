@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<title>Positioning Demos for jQuery UI selectmenu</title>
+	
+	<link type="text/css" href="../../themes/base/jquery.ui.all.css" rel="stylesheet" />
+	<link type="text/css" href="../../themes/base/jquery.ui.selectmenu.css" rel="stylesheet" />
+	<script type="text/javascript" src="../../jquery-1.4.2.js"></script>
+	<script type="text/javascript" src="../../ui/jquery.ui.core.js"></script>
+	<script type="text/javascript" src="../../ui/jquery.ui.widget.js"></script>
+	<script type="text/javascript" src="../../ui/jquery.ui.position.js"></script>
+	
+	<script type="text/javascript" src="../../ui/jquery.ui.selectmenu.js"></script>
+
+	<style type="text/css">
+		/*demo styles*/
+		body {font-size: 62.5%; font-family:"Verdana",sans-serif; }
+		fieldset { border:0; }	
+		label,select,.ui-select-menu { float: left; margin-right: 10px; }
+		select { width: 200px; }
+		
+		/*select with custom icons*/
+		body a.customicons { height: 2.8em;}
+		body .customicons li a, body a.customicons span.ui-selectmenu-status { line-height: 2em; padding-left: 30px !important; }
+		body .video .ui-selectmenu-item-icon, body .podcast .ui-selectmenu-item-icon, body .rss .ui-selectmenu-item-icon { height: 24px; width: 24px; }
+		body .video .ui-selectmenu-item-icon { background: url(images/24-video-square.png) 0 0 no-repeat; }
+		body .podcast .ui-selectmenu-item-icon { background: url(images/24-podcast-square.png) 0 0 no-repeat; }
+		body .rss .ui-selectmenu-item-icon { background: url(images/24-rss-square.png) 0 0 no-repeat; }
+
+		/*select with avatar icons*/
+		body a.avatars { height: 2.8em;}
+		body .avatars li a, body a.avatars span.ui-selectmenu-status { line-height: 2em; padding-left: 30px !important; }
+		body .avatar .ui-selectmenu-item-icon { height: 25px; width: 25px; }
+		
+		.scroller {overflow: auto; height: 100px; background-color: #aed6f1;}
+		
+	</style>
+	<script type="text/javascript">	
+		$(function(){			
+			$('select#positionA, select#positionB, select#positionD, select#positionE').selectmenu({
+				maxHeight: 150,
+			});			
+
+			$('select#positionC').selectmenu({
+				style: "popup",
+				maxHeight: 150,
+				menuWidth: "300px",
+				icons: [
+					{find: '.video'},
+					{find: '.podcast'},
+					{find: '.rss'}
+				]
+			});			
+			
+			$('#scrollerB').scroll(function() {
+				$("select#positionE").selectmenu("close");
+			})
+
+		});		
+	</script>
+	<script type="text/javascript" src="http://ui.jquery.com/applications/themeroller/themeswitchertool/"></script>
+	<script type="text/javascript"> $(function(){ $('<div style="position: absolute; top: 20px; right: 10px;" />').appendTo('body').themeswitcher(); }); </script>
+</head>
+<body>
+	<form action="#">
+		<h2>Set maxHeight to 150px with lots of content</h2>
+		<p>Select something besides the default and the menu appears correctly the next time you open it. 
+		If you add some &lt;BR&gt; tags before the &lt;FORM&gt; tag, then this selectmenu doesn't work
+		correctly either. NOTE: This is now fixed and should work correctly. See an older version of
+		selectmenu to see it not work properly.</p>
+		<fieldset>
+			<label for="positionA">Select Media:</label>
+			<select name="positionA" id="positionA" class="customicons">
+				<optgroup label="Podcasts">
+					<option value="p1" class="podcast">Podcast 1</option>
+					<option value="p2" class="podcast">Podcast 2</option>
+					<option value="p3" class="podcast">Podcast 3</option>
+					<option value="p4" class="podcast">Podcast 4</option>
+					<option value="p5" class="podcast">Podcast 5</option>
+					<option value="p6" class="podcast">Podcast 6</option>
+				</optgroup>
+				<optgroup label="Videos">
+					<option value="v1" class="video">Video 1</option>
+					<option value="v2" class="video">Video 2</option>
+					<option value="v3" class="video">Video 3</option>
+					<option value="v4" class="video">Video 4</option>
+					<option value="v5" class="video">Video 5</option>
+					<option value="v6" class="video">Video 6</option>
+					<option value="v7" class="video">Video 7</option>
+					<option value="v8" class="video">Video 8</option>
+					<option value="v9" class="video">Video 9</option>
+				</optgroup>
+				<optgroup label="RSS Feeds">
+					<option value="r1" class="rss">Feed 1</option>
+					<option value="r2" class="rss">Feed 2</option>
+					<option value="r3" class="rss">Feed 3</option>
+					<option value="r4" class="rss">Feed 4</option>
+					<option value="r5" class="rss">Feed 5</option>
+					<option value="r6" class="rss">Feed 6</option>
+					<option value="r7" class="rss">Feed 7</option>
+					<option value="r8" class="rss">Feed 8</option>
+					<option value="r9" class="rss">Feed 9</option>
+					<option value="r10" class="rss">Feed 10</option>
+					<option value="r11" class="rss">Feed 11</option>
+					<option value="r12" class="rss">Feed 12</option>
+				</optgroup>
+			</select>
+		</fieldset>
+		<h2>Exactly the same as previous: Set maxHeight to 150px with lots of content</h2>
+		<p>Select something besides the default and the menu appears in the wrong place next time you open it. NOTE: 
+		This is now fixed and should work correctly. See an older version of
+		selectmenu to see it not work properly.</p>
+		<fieldset>
+			<label for="positionB">Select Media:</label>
+			<select name="positionB" id="positionB" class="customicons">
+				<optgroup label="Podcasts">
+					<option value="p1" class="podcast">Podcast 1</option>
+					<option value="p2" class="podcast">Podcast 2</option>
+					<option value="p3" class="podcast">Podcast 3</option>
+					<option value="p4" class="podcast">Podcast 4</option>
+					<option value="p5" class="podcast">Podcast 5</option>
+					<option value="p6" class="podcast">Podcast 6</option>
+				</optgroup>
+				<optgroup label="Videos">
+					<option value="v1" class="video">Video 1</option>
+					<option value="v2" class="video">Video 2</option>
+					<option value="v3" class="video">Video 3</option>
+					<option value="v4" class="video">Video 4</option>
+					<option value="v5" class="video">Video 5</option>
+					<option value="v6" class="video">Video 6</option>
+					<option value="v7" class="video">Video 7</option>
+					<option value="v8" class="video">Video 8</option>
+					<option value="v9" class="video">Video 9</option>
+				</optgroup>
+				<optgroup label="RSS Feeds">
+					<option value="r1" class="rss">Feed 1</option>
+					<option value="r2" class="rss">Feed 2</option>
+					<option value="r3" class="rss">Feed 3</option>
+					<option value="r4" class="rss">Feed 4</option>
+					<option value="r5" class="rss">Feed 5</option>
+					<option value="r6" class="rss">Feed 6</option>
+					<option value="r7" class="rss">Feed 7</option>
+					<option value="r8" class="rss">Feed 8</option>
+					<option value="r9" class="rss">Feed 9</option>
+					<option value="r10" class="rss">Feed 10</option>
+					<option value="r11" class="rss">Feed 11</option>
+					<option value="r12" class="rss">Feed 12</option>
+				</optgroup>
+			</select>
+		</fieldset>
+		<h2>Set maxHeight to 150px, using optgroups and custom icons</h2>
+		<fieldset>
+			<label for="positionC">Select Media:</label>
+			<select name="positionC" id="positionC" class="customicons">
+				<optgroup label="Podcasts">
+					<option value="p1" class="podcast">Podcast 1</option>
+					<option value="p2" class="podcast">Podcast 2</option>
+					<option value="p3" class="podcast">Podcast 3</option>
+					<option value="p4" class="podcast">Podcast 4</option>
+					<option value="p5" class="podcast">Podcast 5</option>
+					<option value="p6" class="podcast">Podcast 6</option>
+				</optgroup>
+				<optgroup label="Videos">
+					<option value="v1" class="video">Video 1</option>
+					<option value="v2" class="video">Video 2</option>
+					<option value="v3" class="video">Video 3</option>
+					<option value="v4" class="video">Video 4</option>
+					<option value="v5" class="video">Video 5</option>
+					<option value="v6" class="video">Video 6</option>
+					<option value="v7" class="video">Video 7</option>
+					<option value="v8" class="video">Video 8</option>
+					<option value="v9" class="video">Video 9</option>
+				</optgroup>
+				<optgroup label="RSS Feeds">
+					<option value="r1" class="rss">Feed 1</option>
+					<option value="r2" class="rss">Feed 2</option>
+					<option value="r3" class="rss">Feed 3</option>
+					<option value="r4" class="rss">Feed 4</option>
+					<option value="r5" class="rss">Feed 5</option>
+					<option value="r6" class="rss">Feed 6</option>
+					<option value="r7" class="rss">Feed 7</option>
+					<option value="r8" class="rss">Feed 8</option>
+					<option value="r9" class="rss">Feed 9</option>
+					<option value="r10" class="rss">Feed 10</option>
+					<option value="r11" class="rss">Feed 11</option>
+					<option value="r12" class="rss">Feed 12</option>
+				</optgroup>
+			</select>
+		</fieldset>
+		<h2>Inside of a scrolling container</h2>
+		<p>Not working correctly: Scroll down, open the selectmenu, then use scroll wheel over blue area. Note that blue area scrolls and selectmenu stays visible in same position.</p>
+		<fieldset>
+			<div id="scrollerA" class="scroller">
+				<p>Scroll down</p>
+				<p>Scroll down</p>
+				<p>Scroll down</p>
+				<p>Scroll down</p>
+				<p>Scroll down</p>
+				<p>Scroll down</p>
+				<label for="positionD">Select Media:</label>
+				<select name="positionD" id="positionD" class="customicons">
+					<option value="p1" class="podcast">Podcast 1</option>
+					<option value="p2" class="podcast">Podcast 2</option>
+					<option value="p3" class="podcast">Podcast 3</option>
+					<option value="p4" class="podcast">Podcast 4</option>
+					<option value="p5" class="podcast">Podcast 5</option>
+					<option value="p6" class="podcast">Podcast 6</option>
+				</select>
+				<p>Scroll up</p>
+				<p>Scroll up</p>
+				<p>Scroll up</p>
+				<p>Scroll up</p>
+				<p>Scroll up</p>
+			</div>
+		</fieldset>
+		<h2>Inside of a scrolling container - close selectmenu on scroll</h2>
+		<p>Working correctly: Scroll down, open the selectmenu, then use scroll wheel over blue area. Note that blue area scrolls and selectmenu immediately closes on scroll.</p>
+		<fieldset>
+			<div id="scrollerB" class="scroller">
+				<p>Scroll down</p>
+				<p>Scroll down</p>
+				<p>Scroll down</p>
+				<p>Scroll down</p>
+				<p>Scroll down</p>
+				<p>Scroll down</p>
+				<label for="positionE">Select Media:</label>
+				<select name="positionE" id="positionE" class="customicons">
+					<option value="p1" class="podcast">Podcast 1</option>
+					<option value="p2" class="podcast">Podcast 2</option>
+					<option value="p3" class="podcast">Podcast 3</option>
+					<option value="p4" class="podcast">Podcast 4</option>
+					<option value="p5" class="podcast">Podcast 5</option>
+					<option value="p6" class="podcast">Podcast 6</option>
+				</select>
+				<p>Scroll up</p>
+				<p>Scroll up</p>
+				<p>Scroll up</p>
+				<p>Scroll up</p>
+				<p>Scroll up</p>
+			</div>
+		</fieldset>
+	</form>
+	<div id="output"></div>
+</body>
+</html>

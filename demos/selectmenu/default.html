@@ -22,24 +22,35 @@
 	</style>
 	<script type="text/javascript">	
 		$(function(){			
-			$('select#speedA').selectmenu();
+			$('select#speedA').selectmenu({style:'popup'});
 			
-			$('select#speedAa').selectmenu({maxHeight: 150});
+			$('select#speedAa').selectmenu({
+				style:'popup', 
+				maxHeight: 150
+			});
 			
 			$('select#speedB').selectmenu({
+				style:'popup', 
 				width: 300,
 				format: addressFormatting
 			});
 			
-			$('select#speedC').selectmenu({style:'dropdown'});
+			$('select#speedC').selectmenu();
 			
 			$('select#speedD').selectmenu({
-				style:'dropdown', 
+				style:'popup', 
 				menuWidth: 400,
 				format: addressFormatting
 			});
 			
-			$('select#filesC').selectmenu();	
+			$('select#filesC').selectmenu({
+				style:'popup', 
+				positionOptions: {
+					my: "left center",
+					at: "right center",
+					offset: "10 0"
+				}
+			});	
 		});		
 		
 		//a custom format option callback
@@ -64,38 +75,37 @@
 	<script type="text/javascript"> $(function(){ $('<div style="position: absolute; top: 20px; right: 10px;" />').appendTo('body').themeswitcher(); }); </script>
 </head>
 <body>
+	<br />
+	<br />
 	<form action="#">
-		<h2>Default: "popup" Style</h2>
+		<h2>"default popup" Style</h2>
 		<fieldset>
 			<label for="speedA">Select a Speed:</label>
 			<select name="speedA" id="speedA">
 				<option value="Slower">Slower</option>
-				<option value="Slow">Slow</option>
-				<option value="Medium" selected="selected">Medium</option>
+				<option value="Slow" selected="selected">Slow</option>
+				<option value="Medium">Medium</option>
 				<option value="Fast">Fast</option>
 				<option value="Faster">Faster</option>
 			</select>
 		</fieldset>
-		
-		<h2>Default: "popup" Style with maxHeight set </h2>
+		<h2>"default popup" Style with maxHeight set </h2>
 		<fieldset>
 			<label for="speedAa">Select a Speed:</label>
 			<select name="speedAa" id="speedAa">
-				<option value="Slower">Slower</option>
-				<option value="Slow">Slow</option>
-				<option value="Medium" selected="selected">Medium</option>
-				<option value="Fast">Fast</option>
-				<option value="Faster">Faster</option>
-				<option value="Slower">Slower</option>
-				<option value="Slow">Slow</option>
-				<option value="Medium" selected="selected">Medium</option>
-				<option value="Fast">Fast</option>
-				<option value="Faster">Faster</option>
-				<option value="Slower">Slower</option>
-				<option value="Slow">Slow</option>
-				<option value="Medium" selected="selected">Medium</option>
-				<option value="Fast">Fast</option>
-				<option value="Faster">Faster</option>
+				<option value="Slower">-6 Slower</option>
+				<option value="Slower">-5 Slower</option>
+				<option value="Slower">-4 Slower</option>
+				<option value="Slow">-3 Slow</option>
+				<option value="Slow">-2 Slow</option>
+				<option value="Slow">-1 Slow</option>
+				<option value="Medium" selected="selected">0 Medium</option>
+				<option value="Fast">1 Fast</option>
+				<option value="Fast">2 Fast</option>
+				<option value="Fast">3 Fast</option>
+				<option value="Faster">4 Faster</option>
+				<option value="Faster">5 Faster</option>
+				<option value="Faster">6 Faster</option>
 			</select>
 		</fieldset>
 		
@@ -133,8 +143,7 @@
 			</select>
 		</fieldset>
 		
-		<h2>Demo with optgroups</h2>
-		<fieldset>
+		<h2>"popup" Style with custom positioning and optgroups</h2>		<fieldset>
 			<label for="filesC">Select a File:</label>
 			<select name="filesC" id="filesC">
 				<optgroup label="scripts">
@@ -143,7 +152,7 @@
 				</optgroup>
 				<optgroup label="Label with space">
 					<option value="somefile">Some unknown file</option>
-					<option value="someotherfile">Some other unknown file</option>
+					<option value="someotherfile">Some other file</option>
 				</optgroup>
 			</select>
 		</fieldset>

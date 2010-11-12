@@ -16,7 +16,12 @@ $.widget("ui.selectmenu", {
 	eventPrefix: "selectmenu",
 	options: {
 		transferClasses: true,
-		style: 'popup',
+		style: 'dropdown',
+		positionOptions: {
+			my: "left top",
+			at: "left bottom",
+			offset: null
+		},
 		width: null, 
 		menuWidth: null, 
 		handleWidth: 26, 
@@ -387,7 +392,6 @@ $.widget("ui.selectmenu", {
 				.attr('aria-hidden', false)
 				.find('li:not(.'+ self.widgetBaseClass +'-group):eq('+ this._selectedIndex() +') a')[0].focus();	
 			if(this.options.style == "dropdown"){ this.newelement.removeClass('ui-corner-all').addClass('ui-corner-top'); }	
-			this._refreshPosition();
 			this._trigger("open", event, this._uiHash());
 		}
 	},
@@ -514,49 +518,19 @@ $.widget("ui.selectmenu", {
 		this.list.attr('aria-activedescendant', activeID);
 	},
 	_refreshPosition: function(){	
-		var self = this, o = this.options;
-		
-		// get some vars
-		var pageScroll = self._pageScroll();
-		var menuTop = this.newelement.offset().top;
-		var viewportHeight = $(window).height();
-		var listHeight = $(this.list[0]).outerHeight();
-		
-		// check if there's enough room to expand to the bottom
-		if ((menuTop + listHeight) > (viewportHeight + pageScroll)) {
-			menuTop -= listHeight;
-		//check top
-		} else if ((menuTop - pageScroll) < (listHeight)) { 
-			menuTop += this.newelement.height() + 4; // FIMXE: this is quick & dirty but we'll change to position
-		} else {
-			if (this.newelement.is('.'+this.widgetBaseClass+'-popup')) {
-				var scrolledAmt = this.list[0].scrollTop;
-				this.list.find('li:lt('+this._selectedIndex()+')').each(function() {
-					scrolledAmt -= $(this).outerHeight();
-				});
-				menuTop+=scrolledAmt; 
-			} else { 
-				menuTop += this.newelement.height();
-			}
+		var o = this.options;		
+		// if its a native pop-up we need to calculate the position of the selected li
+		if (o.style == "popup" && !o.positionOptions.offset) {
+			var selected = this.list.find('li:not(.ui-selectmenu-group):eq('+this._selectedIndex()+')');
+			var _offset = "0 -" + (selected.outerHeight() + selected.offset().top - this.list.offset().top);
 		}
-		// set values
-		this.list.css({
-			top: menuTop,	
-			left: this.newelement.offset().left
+		this.list.position({
+			// set options for position plugin
+			of: o.positionOptions.of || this.newelement,
+			my: o.positionOptions.my,
+			at: o.positionOptions.at,
+			offset: o.positionOptions.offset || _offset
 		});
-	},	
-	_pageScroll: function() {
-		var yScroll;
-		if (self.pageYOffset) {
-			yScroll = self.pageYOffset;
-		// Explorer 6 Strict
-		} else if (document.documentElement && document.documentElement.scrollTop) {
-			yScroll = document.documentElement.scrollTop;
-		// all other Explorers
-		} else if (document.body) { 
-			yScroll = document.body.scrollTop;
-		}
-		return yScroll;
 	}
 });
 })(jQuery);
