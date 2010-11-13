@@ -244,9 +244,9 @@ $.widget("ui.selectmenu", {
 		// calculate default max height
 		if(o.maxHeight) {
 			//set max height from option 
-			 if (o.maxHeight < this.list.height()){ this.list.height(o.maxHeight); }	
+			 if (o.maxHeight < this.list.height()){ this.list.height(o.maxHeight); }
 		} else {
-			if (($(window).height() / 3) < this.list.height()) {
+			if (!o.format && ($(window).height() / 3) < this.list.height()) {
 				o.maxHeight = $(window).height() / 3
 				this.list.height(o.maxHeight);
 			}
@@ -388,6 +388,7 @@ $.widget("ui.selectmenu", {
 		var self = this;
 		var disabledStatus = this.newelement.attr("aria-disabled");
 		if(disabledStatus != 'true'){
+			this._refreshPosition();
 			this._closeOthers(event);
 			this.newelement
 				.addClass('ui-state-active');
@@ -529,6 +530,7 @@ $.widget("ui.selectmenu", {
 		// if its a native pop-up we need to calculate the position of the selected li
 		if (o.style == "popup" && !o.positionOptions.offset) {
 			var selected = this.list.find('li:not(.ui-selectmenu-group):eq('+this._selectedIndex()+')');
+			// var _offset = "0 -" + (selected.outerHeight() + selected.offset().top - this.list.offset().top);
 			var _offset = "0 -" + (selected.outerHeight() + selected.offset().top - this.list.offset().top);
 		}
 		this.list.position({
