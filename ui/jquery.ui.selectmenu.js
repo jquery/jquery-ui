@@ -247,7 +247,7 @@ $.widget("ui.selectmenu", {
 			 if (o.maxHeight < this.list.height()){ this.list.height(o.maxHeight); }
 		} else {
 			if (!o.format && ($(window).height() / 3) < this.list.height()) {
-				o.maxHeight = $(window).height() / 3
+				o.maxHeight = $(window).height() / 3;
 				this.list.height(o.maxHeight);
 			}
 		}
