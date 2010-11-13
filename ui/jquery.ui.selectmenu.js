@@ -241,9 +241,16 @@ $.widget("ui.selectmenu", {
 		if(o.style == 'dropdown'){ this.list.width( (o.menuWidth) ? o.menuWidth : ((o.width) ? o.width : selectWidth)); }
 		else { this.list.width( (o.menuWidth) ? o.menuWidth : ((o.width) ? o.width - o.handleWidth : selectWidth - o.handleWidth)); }	
 		
-		//set max height from option 
-		if(o.maxHeight && o.maxHeight < this.list.height()){ this.list.height(o.maxHeight); }	
-		
+		// calculate default max height
+		if(o.maxHeight) {
+			//set max height from option 
+			 if (o.maxHeight < this.list.height()){ this.list.height(o.maxHeight); }	
+		} else {
+			if (($(window).height() / 3) < this.list.height()) {
+				o.maxHeight = $(window).height() / 3
+				this.list.height(o.maxHeight);
+			}
+		}
 		//save reference to actionable li's (not group label li's)
 		this._optionLis = this.list.find('li:not(.'+ self.widgetBaseClass +'-group)');
 				
@@ -381,7 +388,6 @@ $.widget("ui.selectmenu", {
 		var self = this;
 		var disabledStatus = this.newelement.attr("aria-disabled");
 		if(disabledStatus != 'true'){
-			this._refreshPosition();
 			this._closeOthers(event);
 			this.newelement
 				.addClass('ui-state-active');
@@ -392,6 +398,7 @@ $.widget("ui.selectmenu", {
 				.attr('aria-hidden', false)
 				.find('li:not(.'+ self.widgetBaseClass +'-group):eq('+ this._selectedIndex() +') a')[0].focus();	
 			if(this.options.style == "dropdown"){ this.newelement.removeClass('ui-corner-all').addClass('ui-corner-top'); }	
+			this._refreshPosition();
 			this._trigger("open", event, this._uiHash());
 		}
 	},
