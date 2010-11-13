@@ -777,12 +777,12 @@ test('parseDate', function() {
 		new Date(2001, 12 - 1, 13), 'Parse date d m y');
 	equalsDate($.datepicker.parseDate('dd mm yy', '13 12 2001'),
 		new Date(2001, 12 - 1, 13), 'Parse date dd mm yy');
-	equalsDate($.datepicker.parseDate('y-o', '2001-34'),
+	equalsDate($.datepicker.parseDate('y-o', '01-34'),
 		new Date(2001, 2 - 1, 3), 'Parse date y-o');
 	equalsDate($.datepicker.parseDate('yy-oo', '2001-347'),
-		new Date(2001, 12 - 1, 13), 'Parse date yy oo');
+		new Date(2001, 12 - 1, 13), 'Parse date yy-oo');
 	equalsDate($.datepicker.parseDate('oo yy', '348 2004'),
-		new Date(2004, 12 - 1, 13), 'Parse date oo-yy');
+		new Date(2004, 12 - 1, 13), 'Parse date oo yy');
 	equalsDate($.datepicker.parseDate('D d M y', 'Sat 3 Feb 01'),
 		new Date(2001, 2 - 1, 3), 'Parse date D d M y');
 	equalsDate($.datepicker.parseDate('d MM DD yy', '3 February Saturday 2001'),
@@ -792,6 +792,8 @@ test('parseDate', function() {
 	equalsDate($.datepicker.parseDate('\'day\' d \'of\' MM (\'\'DD\'\'), yy',
 		'day 3 of February (\'Saturday\'), 2001'), new Date(2001, 2 - 1, 3),
 		'Parse date \'day\' d \'of\' MM (\'\'DD\'\'), yy');
+	equalsDate($.datepicker.parseDate('ymmdd', '010203'),
+		new Date(2001, 2 - 1, 3), 'Parse date ymmdd - default cutoff');
 	equalsDate($.datepicker.parseDate('y-m-d', '01-02-03'),
 		new Date(2001, 2 - 1, 3), 'Parse date y-m-d - default cutoff');
 	equalsDate($.datepicker.parseDate('y-m-d', '51-02-03'),
@@ -845,8 +847,8 @@ test('parseDateErrors', function() {
 		'3 2 AD01 - d m y', 'Missing number at position 4');
 	expectError(function() { $.datepicker.parseDate('d m yy', '3 2 AD01'); },
 		'3 2 AD01 - dd mm yy', 'Missing number at position 4');
-	expectError(function() { $.datepicker.parseDate('y-o', '2001-D01'); },
-		'2001-D01 - y-o', 'Missing number at position 5');
+	expectError(function() { $.datepicker.parseDate('y-o', '01-D01'); },
+		'2001-D01 - y-o', 'Missing number at position 3');
 	expectError(function() { $.datepicker.parseDate('yy-oo', '2001-D01'); },
 		'2001-D01 - yy-oo', 'Missing number at position 5');
 	expectError(function() { $.datepicker.parseDate('D d M y', 'D7 3 Feb 01'); },
