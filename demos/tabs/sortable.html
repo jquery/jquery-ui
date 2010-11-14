@@ -1,19 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8" />
+	<meta charset="utf-8">
 	<title>jQuery UI Tabs - Sortable</title>
-	<link type="text/css" href="../../themes/base/jquery.ui.all.css" rel="stylesheet" />
-	<script type="text/javascript" src="../../jquery-1.4.2.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.core.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.widget.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.mouse.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.sortable.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.tabs.js"></script>
-	<link type="text/css" href="../demos.css" rel="stylesheet" />
-	<script type="text/javascript">
+	<link rel="stylesheet" href="../../themes/base/jquery.ui.all.css">
+	<script src="../../jquery-1.4.4.js"></script>
+	<script src="../../ui/jquery.ui.core.js"></script>
+	<script src="../../ui/jquery.ui.widget.js"></script>
+	<script src="../../ui/jquery.ui.mouse.js"></script>
+	<script src="../../ui/jquery.ui.sortable.js"></script>
+	<script src="../../ui/jquery.ui.tabs.js"></script>
+	<link rel="stylesheet" href="../demos.css">
+	<script>
 	$(function() {
-		$("#tabs").tabs().find(".ui-tabs-nav").sortable({axis:'x'});
+		$( "#tabs" ).tabs().find( ".ui-tabs-nav" ).sortable({ axis: "x" });
 	});
 	</script>
 </head>
@@ -41,24 +41,17 @@
 
 </div><!-- End demo -->
 
+
+
 <div class="demo-description">
-
-<p>
-Drag the tabs above to re-order them.
-<p>
-
+<p>Drag the tabs above to re-order them.</p>
 <p>
 Making tabs sortable is as simple as calling
-
 <code>.sortable()</code>
-
 on the
-
 <code>.ui-tabs-nav</code>
-
 element.
 </p>
-
 </div><!-- End demo-description -->
 
 </body>

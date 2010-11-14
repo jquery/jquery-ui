@@ -27,14 +27,14 @@ test( "widget creation", function() {
 });
 
 test( "jQuery usage", function() {
-	expect( 10 );
+	expect( 11 );
 
-	var shouldInit = false;
+	var shouldCreate = false;
 
 	$.widget( "ui.testWidget", {
 		getterSetterVal: 5,
 		_create: function() {
-			ok( shouldInit, "init called on instantiation" );
+			ok( shouldCreate, "create called on instantiation" );
 		},
 		methodWithParams: function( param1, param2 ) {
 			ok( true, "method called via .pluginName(methodName)" );
@@ -54,9 +54,13 @@ test( "jQuery usage", function() {
 		}
 	});
 
-	shouldInit = true;
-	var elem = $( "<div></div>" ).testWidget();
-	shouldInit = false;
+	shouldCreate = true;
+	var elem = $( "<div></div>" )
+		.bind( "testwidgetcreate", function() {
+			ok( shouldCreate, "create event triggered on instantiation" );
+		})
+		.testWidget();
+	shouldCreate = false;
 
 	var instance = elem.data( "testWidget" );
 	equals( typeof instance, "object", "instance stored in .data(pluginName)" );
@@ -74,12 +78,12 @@ test( "jQuery usage", function() {
 test( "direct usage", function() {
 	expect( 9 );
 
-	var shouldInit = false;
+	var shouldCreate = false;
 
 	$.widget( "ui.testWidget", {
 		getterSetterVal: 5,
 		_create: function() {
-			ok( shouldInit, "init called on instantiation" );
+			ok( shouldCreate, "create called on instantiation" );
 		},
 		methodWithParams: function( param1, param2 ) {
 			ok( true, "method called dirctly" );
@@ -99,9 +103,9 @@ test( "direct usage", function() {
 	
 	var elem = $( "<div></div>" )[ 0 ];
 	
-	shouldInit = true;
+	shouldCreate = true;
 	var instance = new $.ui.testWidget( {}, elem );
-	shouldInit = false;
+	shouldCreate = false;
 
 	equals( $( elem ).data( "testWidget" ), instance,
 		"instance stored in .data(pluginName)" );
@@ -150,6 +154,32 @@ test("merge multiple option arguments", function() {
 			option4a: "valuea"
 		}
 	});
+});
+
+test( "_getCreateOptions()", function() {
+	expect( 1 );
+	$.widget( "ui.testWidget", {
+		options: {
+			option1: "valuex",
+			option2: "valuex",
+			option3: "value3",
+		},
+		_getCreateOptions: function() {
+			return {
+				option1: "override1",
+				option2: "overideX",
+			};
+		},
+		_create: function() {
+			same( this.options, {
+				disabled: false,
+				option1: "override1",
+				option2: "value2",
+				option3: "value3"
+			});
+		}
+	});
+	$( "<div>" ).testWidget({ option2: "value2" });
 });
 
 test( "re-init", function() {

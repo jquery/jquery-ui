@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<title>jQuery UI Autocomplete - Scrollable results</title>
 	<link rel="stylesheet" href="../../themes/base/jquery.ui.all.css">
-	<script src="../../jquery-1.4.2.js"></script>
+	<script src="../../jquery-1.4.4.js"></script>
 	<script src="../../ui/jquery.ui.core.js"></script>
 	<script src="../../ui/jquery.ui.widget.js"></script>
 	<script src="../../ui/jquery.ui.position.js"></script>
@@ -14,6 +14,10 @@
 	.ui-autocomplete {
 		max-height: 100px;
 		overflow-y: auto;
+		/* prevent horizontal scrollbar */
+		overflow-x: hidden;
+		/* add padding to account for vertical scrollbar */
+		padding-right: 20px;
 	}
 	/* IE 6 doesn't support max-height
 	 * we use height instead, but this forces the menu to always be this tall

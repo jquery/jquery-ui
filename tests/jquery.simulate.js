@@ -120,6 +120,7 @@ $.extend($.simulate.prototype, {
 		this.simulateEvent(document, "mousemove", coord);
 		this.simulateEvent(document, "mousemove", coord);
 		this.simulateEvent(target, "mouseup", coord);
+		this.simulateEvent(target, "click", coord);
 	},
 	findCenter: function(el) {
 		var el = $(this.target), o = el.offset();

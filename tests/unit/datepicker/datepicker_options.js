@@ -710,7 +710,7 @@ test('localisation', function() {
 	equals($('.ui-datepicker-close', dp).text(), 'Fermer', 'Localisation - close');
 	$('.ui-datepicker-close', dp).simulate('mouseover');
 	equals($('.ui-datepicker-prev', dp).text(), '<Préc', 'Localisation - previous');
-	equals($('.ui-datepicker-current', dp).text(), 'Courant', 'Localisation - current');
+	equals($('.ui-datepicker-current', dp).text(), 'Aujourd\'hui', 'Localisation - current');
 	equals($('.ui-datepicker-next', dp).text(), 'Suiv>', 'Localisation - next');
 	var month = 0;
 	$('.ui-datepicker-month option', dp).each(function() {

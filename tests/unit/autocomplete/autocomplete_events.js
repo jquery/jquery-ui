@@ -28,7 +28,7 @@ test("all events", function() {
 		},
 		close: function(event) {
 			same(event.type, "autocompleteclose");
-			same( $(".ui-menu:visible").length, 1 );
+			same( $(".ui-menu:visible").length, 0 );
 		},
 		select: function(event, ui) {
 			same(event.type, "autocompleteselect");
