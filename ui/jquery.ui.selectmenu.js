@@ -177,7 +177,7 @@ $.widget("ui.selectmenu", {
 					$(this).removeClass('ui-state-active').addClass(self.widgetBaseClass + '-item-focus ui-state-hover'); 
 				})
 				.bind('mouseout blur', function(){ 
-					if($(this).is( self._selectedOptionLi() )){ $(this).addClass(activeClass); }
+					if ($(this).is( self._selectedOptionLi().selector )){ $(this).addClass(activeClass); }
 					$(this).removeClass(self.widgetBaseClass + '-item-focus ui-state-hover'); 
 				});
 				
