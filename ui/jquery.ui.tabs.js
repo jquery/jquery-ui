@@ -43,7 +43,8 @@ $.widget( "ui.tabs", {
 		select: null,
 		show: null,
 		spinner: "<em>Loading&#8230;</em>",
-		tabTemplate: "<li><a href='#{href}'><span>#{label}</span></a></li>"
+		tabTemplate: "<li><a href='#{href}'><span>#{label}</span></a></li>",
+		panelContainer: null
 	},
 
 	_create: function() {
@@ -141,10 +142,12 @@ $.widget( "ui.tabs", {
 				a.href = "#" + id;
 				var $panel = $( "#" + id );
 				if ( !$panel.length ) {
-					$panel = $( o.panelTemplate )
-						.attr( "id", id )
-						.addClass( "ui-tabs-panel ui-widget-content ui-corner-bottom" )
-						.insertAfter( self.panels[ i - 1 ] || self.list );
+					$panel = $(o.panelTemplate).attr('id', id).addClass('ui-tabs-panel ui-widget-content ui-corner-bottom');
+					if (o.panelContainer) {
+						$panel.appendTo(o.panelContainer);
+					} else {
+						$panel.insertAfter(self.panels[i - 1] || self.list);
+					}
 					$panel.data( "destroy.tabs", true );
 				}
 				self.panels = self.panels.add( $panel );
