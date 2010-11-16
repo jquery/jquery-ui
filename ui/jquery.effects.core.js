@@ -432,7 +432,7 @@ function _normalizeArguments(effect, options, speed, callback) {
 
 	speed = speed || options.duration;
 	speed = $.fx.off ? 0 : typeof speed == 'number'
-		? speed : $.fx.speeds[speed] || $.fx.speeds._default;
+		? speed : speed in $.fx.speeds ? $.fx.speeds[speed] : $.fx.speeds._default;
 
 	callback = callback || options.complete;
 
