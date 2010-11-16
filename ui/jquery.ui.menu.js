@@ -12,15 +12,18 @@
  *	jquery.ui.widget.js
  */
 (function($) {
+	
+var idIncrement = 0;
 
 $.widget("ui.menu", {
 	_create: function() {
 		var self = this;
+		this.menuId = this.element.attr( "id" ) || "ui-menu-" + idIncrement++;
 		this.element
 			.addClass( "ui-menu ui-widget ui-widget-content ui-corner-all" )
 			.attr({
-				role: "listbox",
-				"aria-activedescendant": "ui-active-menuitem"
+				id: this.menuId,
+				role: "listbox"
 			})
 			.bind( "click.menu", function( event ) {
 				if ( self.options.disabled ) {
@@ -120,6 +123,7 @@ $.widget("ui.menu", {
 	},
 
 	activate: function( event, item ) {
+		var self = this;
 		this.deactivate();
 		if ( this._hasScroll() ) {
 			var borderTop = parseFloat( $.curCSS( this.element[0], "borderTopWidth", true) ) || 0,
@@ -137,17 +141,26 @@ $.widget("ui.menu", {
 		this.active = item.first()
 			.children( "a" )
 				.addClass( "ui-state-hover" )
-				.attr( "id", "ui-active-menuitem" )
+				.attr( "id", function(index, id) {
+					return (self.itemId = id || self.menuId + "-activedescendant");
+				})
 			.end();
+		// need to remove the attribute before adding it for the screenreader to pick up the change
+		// see http://groups.google.com/group/jquery-a11y/msg/929e0c1e8c5efc8f
+		this.element.removeAttr("aria-activedescenant").attr("aria-activedescenant", self.itemId);
 		this._trigger( "focus", event, { item: item } );
 	},
 
 	deactivate: function(event) {
-		if (!this.active) { return; }
+		if (!this.active) {
+			return;
+		}
 
-		this.active.children( "a" )
-			.removeClass( "ui-state-hover" )
-			.removeAttr( "id" );
+		var self = this;
+		this.active.children( "a" ).removeClass( "ui-state-hover" );
+		// remove only generated id
+		$( "#" + self.menuId + "-activedescendant" ).removeAttr( "id" );
+		this.element.removeAttr( "aria-activedescenant" );
 		this._trigger( "blur", event );
 		this.active = null;
 	},
