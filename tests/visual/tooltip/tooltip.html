@@ -21,18 +21,17 @@
 		
 		function enable() {
 			// default
-			$("#context1 a, form input, #childish").tooltip();
+			$("#context1, form, #childish").tooltip();
 			
 			// custom class, replaces ui-widget-content
-			$("#context2 [title]").tooltip({
-				tooltipClass: "ui-widget-header"
-			});
-			$("#right1").tooltip({
-				tooltipClass: "ui-state-error"
-			});
+			$("#context2").tooltip().each(function() {
+				$(this).tooltip("widget").addClass("ui-widget-header");
+			})
+			$("#right1").tooltip().tooltip("widget").addClass("ui-state-error");
 			
 			// synchronous content
-			$("#see-footnote").tooltip({
+			$("#footnotes").tooltip({
+				items: "[href^=#]",
 				content: function() {
 					return $($(this).attr("href")).html();
 				}
@@ -44,6 +43,24 @@
 					return "Loading...";
 				}
 			});
+			// asynchronous content with caching
+			var content;
+			$("#ajax2").tooltip({
+				content: function(response) {
+					if (content) {
+						return content;
+					}
+					$.ajax({
+						url: "ajaxcontent.php",
+						cache: false,
+						success: function(result) {
+							content = result;
+							response(result);
+						}
+					});
+					return "Loading...";
+				}
+			});
 			
 			// custom position
 			$("#right2").tooltip({
@@ -51,29 +68,28 @@
 					my: "center top",
 					at: "center bottom",
 					offset: "0 10"
-				},
-				tooltipClass: "ui-state-highlight"
-			});
-			
-			var positionOnTop = {
-				position: {
-					my: "center bottom",
-					at: "center top",
-					offset: "0 -5"
 				}
-			};
-			$("#button1").button().tooltip(positionOnTop);
+			}).tooltip("widget").addClass("ui-state-highlight");
+			
+			$("#button1").button();
 			$("#button2").button({
 				icons: {
 					primary: "ui-icon-wrench"
 				}
-			}).tooltip(positionOnTop);
+			});
 			$("#button3, #button4").button({
 				icons: {
 					primary: "ui-icon-wrench"
 				},
 				text: false
-			}).tooltip(positionOnTop);
+			});
+			$("#buttons").tooltip({
+				position: {
+					my: "center bottom",
+					at: "center top",
+					offset: "0 -5"
+				}
+			});
 		}
 		enable();
 		
@@ -106,8 +122,9 @@
 		collision detection should kick in around here
 	</div>
 	
-	<div style="margin: 2em 0">
-		<a id="see-footnote" href="#footnote">I'm a link to a footnote.</a>
+	<div id="footnotes" style="margin: 2em 0">
+		<a href="#footnote1">I'm a link to a footnote.</a>
+		<a href="#footnote2">I'm another link to a footnote.</a>
 	</div>
 	
 	<div id="right2" style="position: absolute; right: 1em" title="right aligned element with custom position">
@@ -116,6 +133,9 @@
 	
 	<div id="ajax" style="width: 100px;" class="ui-widget-content" title="never be seen">
 		gets its content via ajax
+	</div>
+	<div id="ajax2" style="width: 100px;" class="ui-widget-content" title="never be seen">
+		gets its content via ajax, caches the response
 	</div>
 	
 	<div id="context2" class="ui-widget ui-widget-content">
@@ -141,12 +161,15 @@
 		</div>
 	</form>
 	
-	<button id="button1" title="Button Tooltip">Button Label</button>
-	<button id="button2" title="Icon Button">Button with Icon</button>
-	<button id="button3">Icon Only Button 1</button>
-	<button id="button4">Icon Only Button 2</button>
+	<div id="buttons">
+		<button id="button1" title="Button Tooltip">Button Label</button>
+		<button id="button2" title="Icon Button">Button with Icon</button>
+		<button id="button3">Icon Only Button 1</button>
+		<button id="button4">Icon Only Button 2</button>
+	</div>
 	
-	<div id="footnote">This is <strong>the</strong> footnote, including other elements</div>
+	<div id="footnote1">This is <strong>the</strong> footnote, including other elements</div>
+	<div id="footnote2">This is <strong>the other</strong> footnote, including other elements</div>
 	
 	<button id="disable">Toggle disabled</button>
 	<button id="toggle">Toggle widget</button>

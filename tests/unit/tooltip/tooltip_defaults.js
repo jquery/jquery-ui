@@ -4,8 +4,8 @@
 
 var tooltip_defaults = {
 	disabled: false,
+	items: "[title]",
 	content: $.ui.tooltip.prototype.options.content,
-	tooltipClass: "ui-widget-content",
 	position: {
 		my: "left center",
 		at: "right center",

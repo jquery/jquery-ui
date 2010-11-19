@@ -20,4 +20,11 @@ test("open", function() {
 	$(":ui-tooltip").tooltip("destroy");
 });
 
+test("widget", function() {
+	var tooltip = $("#tooltipped1").tooltip();
+	same(tooltip.tooltip("widget")[0], $(".ui-tooltip")[0]);
+	same(tooltip.tooltip("widget").end()[0], tooltip[0]);
+});
+
+
 })(jQuery);

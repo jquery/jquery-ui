@@ -1,29 +1,24 @@
 /*
  * jQuery UI Tooltip @VERSION
  *
- * Copyright (c) 2009 AUTHORS.txt (http://jqueryui.com/about)
- * Dual licensed under the MIT (MIT-LICENSE.txt)
- * and GPL (GPL-LICENSE.txt) licenses.
+ * Copyright 2010, AUTHORS.txt
+ * Dual licensed under the MIT or GPL Version 2 licenses.
+ * http://jquery.org/license
  *
  * http://docs.jquery.com/UI/Tooltip
  *
  * Depends:
  *	jquery.ui.core.js
  *	jquery.ui.widget.js
- *  jquery.ui.position.js
+ *	jquery.ui.position.js
  */
 (function($) {
-
-// role=application on body required for screenreaders to correctly interpret aria attributes
-if( !$(document.body).is('[role]') ){
-	$(document.body).attr('role','application');
-} 
 
 var increments = 0;
 
 $.widget("ui.tooltip", {
 	options: {
-		tooltipClass: "ui-widget-content",
+		items: "[title]",
 		content: function() {
 			return $(this).attr("title");
 		},
@@ -33,14 +28,13 @@ $.widget("ui.tooltip", {
 			offset: "15 0"
 		}
 	},
-	_init: function() {
+	_create: function() {
 		var self = this;
 		this.tooltip = $("<div></div>")
 			.attr("id", "ui-tooltip-" + increments++)
 			.attr("role", "tooltip")
 			.attr("aria-hidden", "true")
-			.addClass("ui-tooltip ui-widget ui-corner-all")
-			.addClass(this.options.tooltipClass)
+			.addClass("ui-tooltip ui-widget ui-corner-all ui-widget-content")
 			.appendTo(document.body)
 			.hide();
 		this.tooltipContent = $("<div></div>")
@@ -48,10 +42,10 @@ $.widget("ui.tooltip", {
 			.appendTo(this.tooltip);
 		this.opacity = this.tooltip.css("opacity");
 		this.element
-			.bind("focus.tooltip mouseenter.tooltip", function(event) {
+			.bind("focus.tooltip mouseover.tooltip", function(event) {
 				self.open( event );
 			})
-			.bind("blur.tooltip mouseleave.tooltip", function(event) {
+			.bind("blur.tooltip mouseout.tooltip", function(event) {
 				self.close( event );
 			});
 	},
@@ -70,11 +64,11 @@ $.widget("ui.tooltip", {
 	},
 	
 	widget: function() {
-		return this.tooltip;
+		return this.element.pushStack(this.tooltip.get());
 	},
 	
 	open: function(event) {
-		var target = this.element;
+		var target = $(event && event.target || this.element).closest(this.options.items);
 		// already visible? possible when both focus and mouseover events occur
 		if (this.current && this.current[0] == target[0])
 			return;
@@ -82,9 +76,12 @@ $.widget("ui.tooltip", {
 		this.current = target;
 		this.currentTitle = target.attr("title");
 		var content = this.options.content.call(target[0], function(response) {
-			// ignore async responses that come in after the tooltip is already hidden
-			if (self.current == target)
-				self._show(event, target, response);
+			// IE may instantly serve a cached response, need to give it a chance to finish with _show before that
+			setTimeout(function() {
+				// ignore async responses that come in after the tooltip is already hidden
+				if (self.current == target)
+					self._show(event, target, response);
+			}, 13);
 		});
 		if (content) {
 			self._show(event, target, content);
@@ -104,17 +101,14 @@ $.widget("ui.tooltip", {
 		this.tooltip.css({
 			top: 0,
 			left: 0
-		}).show().position($.extend(this.options.position, {
+		}).show().position( $.extend({
 			of: target
-		})).hide();
+		}, this.options.position )).hide();
 		
 		this.tooltip.attr("aria-hidden", "false");
 		target.attr("aria-describedby", this.tooltip.attr("id"));
 
-		if (this.tooltip.is(":animated"))
-			this.tooltip.stop().show().fadeTo("normal", this.opacity);
-		else
-			this.tooltip.is(':visible') ? this.tooltip.fadeTo("normal", this.opacity) : this.tooltip.fadeIn();
+		this.tooltip.stop(false, true).fadeIn();
 
 		this._trigger( "open", event );
 	},
@@ -132,12 +126,7 @@ $.widget("ui.tooltip", {
 		current.removeAttr("aria-describedby");
 		this.tooltip.attr("aria-hidden", "true");
 		
-		if (this.tooltip.is(':animated'))
-				this.tooltip.stop().fadeTo("normal", 0, function() {
-					$(this).hide().css("opacity", "");
-				});
-			else
-				this.tooltip.stop().fadeOut();
+		this.tooltip.stop(false, true).fadeOut();
 		
 		this._trigger( "close", event );
 	}
