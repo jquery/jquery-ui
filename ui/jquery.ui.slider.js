@@ -309,7 +309,7 @@ $.widget( "ui.slider", $.ui.mouse, {
 				( parseInt( closestHandle.css("marginTop"), 10 ) || 0)
 		};
 
-		this._slide( event, index, normValue );
+		if (!this.handles.hasClass('ui-state-hover')) { this._slide( event, index, normValue ); }
 		this._animateOff = true;
 		return true;
 	},
