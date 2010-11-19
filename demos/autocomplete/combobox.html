@@ -58,7 +58,7 @@
 								var matcher = new RegExp( "^" + $.ui.autocomplete.escapeRegex( $(this).val() ) + "$", "i" ),
 									valid = false;
 								select.children( "option" ).each(function() {
-									if ( this.value.match( matcher ) ) {
+									if ( this.innerHTML.match( matcher ) ) {
 										this.selected = valid = true;
 										return false;
 									}
