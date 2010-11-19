@@ -42,7 +42,7 @@
 	<property description="Google Closure" name="closure-jar" value="${build.dir}/google-compiler-20091218.jar" />
 	<property description="YUI Compressor" name="yuicompressor-jar" value="${build.dir}/yuicompressor-2.4.2.jar" />
 	
-	<target name="deploy-release" depends="clean, copy, minify, replace-version, prepend-header, zip" description="Release builder">
+	<target name="deploy-release" depends="clean, docs-download, copy, minify, replace-version, prepend-header, zip" description="Release builder">
 	</target>
 	
 	<target name="replace-version">
