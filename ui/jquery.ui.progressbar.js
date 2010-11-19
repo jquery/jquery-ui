@@ -59,23 +59,6 @@ $.widget( "ui.progressbar", {
 		return this;
 	},
 
-	percentage: function( newPercentage ) {
-		if ( newPercentage === undefined ) {
-			return this._percentage();
-		}
-		newValue = ((this.options.max/100)*newPercentage);
-		this._setOption( "value", newValue );
-		return this;
-	},
-
-	max: function( newMax ) {
-		if ( newMax === undefined ) {
-			return this.options.max;
-		}
-		this._setOption( "max", newMax );
-		return this;
-	},
-
 	_setOption: function( key, value ) {
 		if ( key === "value" ) {
 			this.options.value = value;
@@ -103,7 +86,7 @@ $.widget( "ui.progressbar", {
 
 	_refreshValue: function() {
 		var value = this.value();
-		var percentage = this.percentage();
+		var percentage = this._percentage();
 
 		if( this.oldValue != value ) {
 			this.oldValue = value;
