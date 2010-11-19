@@ -1,17 +1,16 @@
 /*
  * jQuery UI Datepicker @VERSION
  *
- * Copyright (c) 2010 AUTHORS.txt (http://jqueryui.com/about)
- * Dual licensed under the MIT (MIT-LICENSE.txt)
- * and GPL (GPL-LICENSE.txt) licenses.
+ * Copyright 2010, AUTHORS.txt (http://jqueryui.com/about)
+ * Dual licensed under the MIT or GPL Version 2 licenses.
+ * http://jquery.org/license
  *
  * http://docs.jquery.com/UI/Datepicker
  *
  * Depends:
  *	jquery.ui.core.js
  */
-
-(function($) { // hide the namespace
+(function( $, undefined ) {
 
 $.extend($.ui, { datepicker: { version: "@VERSION" } });
 
@@ -168,7 +167,7 @@ $.extend(Datepicker.prototype, {
 
 	/* Create a new instance object. */
 	_newInst: function(target, inline) {
-		var id = target[0].id.replace(/([^A-Za-z0-9_])/g, '\\\\$1'); // escape jQuery meta chars
+		var id = target[0].id.replace(/([^A-Za-z0-9_-])/g, '\\\\$1'); // escape jQuery meta chars
 		return {id: id, input: target, // associated target
 			selectedDay: 0, selectedMonth: 0, selectedYear: 0, // current selection
 			drawMonth: 0, drawYear: 0, // month being drawn
@@ -847,8 +846,11 @@ $.extend(Datepicker.prototype, {
 	_clickMonthYear: function(id) {
 		var target = $(id);
 		var inst = this._getInst(target[0]);
-		if (inst.input && inst._selectingMonthYear && !$.browser.msie)
-			inst.input.focus();
+		if (inst.input && inst._selectingMonthYear) {
+			setTimeout(function() {
+				inst.input.focus();
+			}, 0);
+		}
 		inst._selectingMonthYear = !inst._selectingMonthYear;
 	},
 
@@ -980,7 +982,7 @@ $.extend(Datepicker.prototype, {
 		var getName = function(match, shortNames, longNames) {
 			var names = (lookAhead(match) ? longNames : shortNames);
 			for (var i = 0; i < names.length; i++) {
-				if (value.substr(iValue, names[i].length) == names[i]) {
+				if (value.substr(iValue, names[i].length).toLowerCase() == names[i].toLowerCase()) {
 					iValue += names[i].length;
 					return i + 1;
 				}
@@ -1491,7 +1493,7 @@ $.extend(Datepicker.prototype, {
 							(otherMonth && !showOtherMonths ? '&#xa0;' : // display for other months
 							(unselectable ? '<span class="ui-state-default">' + printDate.getDate() + '</span>' : '<a class="ui-state-default' +
 							(printDate.getTime() == today.getTime() ? ' ui-state-highlight' : '') +
-							(printDate.getTime() == selectedDate.getTime() ? ' ui-state-active' : '') + // highlight selected day
+							(printDate.getTime() == currentDate.getTime() ? ' ui-state-active' : '') + // highlight selected day
 							(otherMonth ? ' ui-priority-secondary' : '') + // distinguish dates from other months
 							'" href="#">' + printDate.getDate() + '</a>')) + '</td>'; // display selectable date
 						printDate.setDate(printDate.getDate() + 1);

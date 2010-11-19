@@ -79,7 +79,7 @@ test("data", function() {
 });
 
 test("focusable - visible, enabled elements", function() {
-	expect(18);
+	expect(16);
 	
 	isFocusable('#visibleAncestor-inputTypeNone', 'input, no type');
 	isFocusable('#visibleAncestor-inputTypeText', 'input, type text');
@@ -93,9 +93,6 @@ test("focusable - visible, enabled elements", function() {
 	isFocusable('#visibleAncestor-object', 'object');
 	isFocusable('#visibleAncestor-anchorWithHref', 'anchor with href');
 	isNotFocusable('#visibleAncestor-anchorWithoutHref', 'anchor without href');
-	// fails: $("map").is(":visible") and $("map").is(":hidden") both return true
-	isFocusable('#visibleAncestor-areaWithHref', 'area with href');
-	isNotFocusable('#visibleAncestor-areaWithoutHref', 'area without href');
 	isNotFocusable('#visibleAncestor-span', 'span');
 	isNotFocusable('#visibleAncestor-div', 'div');
 	isFocusable("#visibleAncestor-spanWithTabindex", 'span with tabindex');
@@ -132,7 +129,7 @@ test("focusable - hidden styles", function() {
 	isNotFocusable('#visibilityHidden-span', 'span with tabindex, visibility: hidden');
 });
 
-test("focusable -  natively focusable with various tabindex", function() {
+test("focusable - natively focusable with various tabindex", function() {
 	expect(4);
 	
 	isFocusable('#inputTabindex0', 'input, tabindex 0');
@@ -141,7 +138,7 @@ test("focusable -  natively focusable with various tabindex", function() {
 	isFocusable('#inputTabindex-50', 'input, tabindex -50');
 });
 
-test("focusable -  not natively focusable with various tabindex", function() {
+test("focusable - not natively focusable with various tabindex", function() {
 	expect(4);
 	
 	isFocusable('#spanTabindex0', 'span, tabindex 0');
@@ -159,8 +156,16 @@ test("focusable - invalid tabindex", function() {
 	isNotFocusable('#spanTabindex3foo', 'span, tabindex 3foo');
 });
 
+test("focusable - area elements", function() {
+	isNotFocusable('#areaCoordsNoHref', 'coords but no href');
+	isFocusable('#areaCoordsHref', 'coords and href');
+	isFocusable('#areaCoordsNoSizeHref', 'coords of zero px and href');
+	isFocusable('#areaNoCoordsHref', 'href but no coords');
+	isNotFocusable('#areaNoImg', 'not associated with an image');
+});
+
 test("tabbable - visible, enabled elements", function() {
-	expect(18);
+	expect(16);
 	
 	isTabbable('#visibleAncestor-inputTypeNone', 'input, no type');
 	isTabbable('#visibleAncestor-inputTypeText', 'input, type text');
@@ -174,16 +179,13 @@ test("tabbable - visible, enabled elements", function() {
 	isTabbable('#visibleAncestor-object', 'object');
 	isTabbable('#visibleAncestor-anchorWithHref', 'anchor with href');
 	isNotTabbable('#visibleAncestor-anchorWithoutHref', 'anchor without href');
-	// fails: $("map").is(":visible") and $("map").is(":hidden") both return true
-	isTabbable('#visibleAncestor-areaWithHref', 'area with href');
-	isNotTabbable('#visibleAncestor-areaWithoutHref', 'area without href');
 	isNotTabbable('#visibleAncestor-span', 'span');
 	isNotTabbable('#visibleAncestor-div', 'div');
 	isTabbable("#visibleAncestor-spanWithTabindex", 'span with tabindex');
 	isNotTabbable("#visibleAncestor-divWithNegativeTabindex", 'div with tabindex');
 });
 
-test("Tabbable - disabled elements", function() {
+test("tabbable - disabled elements", function() {
 	expect(9);
 	
 	isNotTabbable('#disabledElement-inputTypeNone', 'input, no type');
@@ -197,25 +199,23 @@ test("Tabbable - disabled elements", function() {
 	isNotTabbable('#disabledElement-textarea', 'textarea');
 });
 
-test("Tabbable - hidden styles", function() {
+test("tabbable - hidden styles", function() {
 	expect(8);
 	
 	isNotTabbable('#displayNoneAncestor-input', 'input, display: none parent');
 	isNotTabbable('#displayNoneAncestor-span', 'span with tabindex, display: none parent');
 	
-	// fails: element hidden by parent-visibility-hidden is still visible according to :visible
 	isNotTabbable('#visibilityHiddenAncestor-input', 'input, visibility: hidden parent');
 	isNotTabbable('#visibilityHiddenAncestor-span', 'span with tabindex, visibility: hidden parent');
 	
 	isNotTabbable('#displayNone-input', 'input, display: none');
-	// fails: element hidden by parent-visibility-hidden is still visible according to :visible
 	isNotTabbable('#visibilityHidden-input', 'input, visibility: hidden');
 	
 	isNotTabbable('#displayNone-span', 'span with tabindex, display: none');
 	isNotTabbable('#visibilityHidden-span', 'span with tabindex, visibility: hidden');
 });
 
-test("Tabbable -  natively tabbable with various tabindex", function() {
+test("tabbable -  natively tabbable with various tabindex", function() {
 	expect(4);
 	
 	isTabbable('#inputTabindex0', 'input, tabindex 0');
@@ -224,7 +224,7 @@ test("Tabbable -  natively tabbable with various tabindex", function() {
 	isNotTabbable('#inputTabindex-50', 'input, tabindex -50');
 });
 
-test("Tabbable -  not natively tabbable with various tabindex", function() {
+test("tabbable -  not natively tabbable with various tabindex", function() {
 	expect(4);
 	
 	isTabbable('#spanTabindex0', 'span, tabindex 0');
@@ -233,13 +233,21 @@ test("Tabbable -  not natively tabbable with various tabindex", function() {
 	isNotTabbable('#spanTabindex-50', 'span, tabindex -50');
 });
 
-test("Tabbable - invalid tabindex", function() {
+test("tabbable - invalid tabindex", function() {
 	expect(4);
 	
 	isTabbable('#inputTabindexfoo', 'input, tabindex foo');
 	isTabbable('#inputTabindex3foo', 'input, tabindex 3foo');
 	isNotTabbable('#spanTabindexfoo', 'span tabindex foo');
 	isNotTabbable('#spanTabindex3foo', 'span, tabindex 3foo');
+});
+
+test("tabbable - area elements", function() {
+	isNotTabbable('#areaCoordsNoHref', 'coords but no href');
+	isTabbable('#areaCoordsHref', 'coords and href');
+	isTabbable('#areaCoordsNoSizeHref', 'coords of zero px and href');
+	isTabbable('#areaNoCoordsHref', 'href but no coords');
+	isNotTabbable('#areaNoImg', 'not associated with an image');
 });
 
 })(jQuery);

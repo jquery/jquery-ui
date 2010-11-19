@@ -17,7 +17,13 @@ var dialog_defaults = {
 	minHeight: 150,
 	minWidth: 150,
 	modal: false,
-	position: 'center',
+	position: {
+		my: 'center',
+		at: 'center',
+		of: window,
+		collision: 'fit',
+		using: $.ui.dialog.prototype.options.position.using
+	},
 	resizable: true,
 	show: null,
 	stack: true,

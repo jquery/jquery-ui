@@ -1,9 +1,9 @@
 /*
  * jQuery UI Progressbar @VERSION
  *
- * Copyright (c) 2010 AUTHORS.txt (http://jqueryui.com/about)
- * Dual licensed under the MIT (MIT-LICENSE.txt)
- * and GPL (GPL-LICENSE.txt) licenses.
+ * Copyright 2010, AUTHORS.txt (http://jqueryui.com/about)
+ * Dual licensed under the MIT or GPL Version 2 licenses.
+ * http://jquery.org/license
  *
  * http://docs.jquery.com/UI/Progressbar
  *
@@ -11,19 +11,23 @@
  *   jquery.ui.core.js
  *   jquery.ui.widget.js
  */
-(function( $ ) {
+(function( $, undefined ) {
 
 $.widget( "ui.progressbar", {
 	options: {
 		value: 0
 	},
+
+	min: 0,
+	max: 100,
+
 	_create: function() {
 		this.element
 			.addClass( "ui-progressbar ui-widget ui-widget-content ui-corner-all" )
 			.attr({
 				role: "progressbar",
-				"aria-valuemin": this._valueMin(),
-				"aria-valuemax": this._valueMax(),
+				"aria-valuemin": this.min,
+				"aria-valuemax": this.max,
 				"aria-valuenow": this._value()
 			});
 
@@ -56,12 +60,13 @@ $.widget( "ui.progressbar", {
 	},
 
 	_setOption: function( key, value ) {
-		switch ( key ) {
-			case "value":
-				this.options.value = value;
-				this._refreshValue();
-				this._trigger( "change" );
-				break;
+		if ( key === "value" ) {
+			this.options.value = value;
+			this._refreshValue();
+			this._trigger( "change" );
+			if ( this._value() === this.max ) {
+				this._trigger( "complete" );
+			}
 		}
 
 		this._superApply( "_setOption", arguments );
@@ -73,28 +78,13 @@ $.widget( "ui.progressbar", {
 		if ( typeof val !== "number" ) {
 			val = 0;
 		}
-		if ( val < this._valueMin() ) {
-			val = this._valueMin();
-		}
-		if ( val > this._valueMax() ) {
-			val = this._valueMax();
-		}
-
-		return val;
-	},
-
-	_valueMin: function() {
-		return 0;
-	},
-
-	_valueMax: function() {
-		return 100;
+		return Math.min( this.max, Math.max( this.min, val ) );
 	},
 
 	_refreshValue: function() {
 		var value = this.value();
 		this.valueDiv
-			[ value === this._valueMax() ? "addClass" : "removeClass"]( "ui-corner-right" )
+			.toggleClass( "ui-corner-right", value === this.max )
 			.width( value + "%" );
 		this.element.attr( "aria-valuenow", value );
 	}

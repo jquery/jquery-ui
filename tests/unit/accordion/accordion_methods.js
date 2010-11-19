@@ -18,9 +18,6 @@ test("init", function() {
 	$('<div></div>').appendTo('body').remove().accordion().remove();
 	ok(true, '.accordion() called on disconnected DOMElement - removed');
 
-	$('<div></div>').accordion().accordion("foo").remove();
-	ok(true, 'arbitrary method called after init');
-
 	var el = $('<div></div>').accordion();
 	var foo = el.accordion("option", "foo");
 	el.remove();

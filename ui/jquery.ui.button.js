@@ -1,9 +1,9 @@
 /*
  * jQuery UI Button @VERSION
  *
- * Copyright (c) 2010 AUTHORS.txt (http://jqueryui.com/about)
- * Dual licensed under the MIT (MIT-LICENSE.txt)
- * and GPL (GPL-LICENSE.txt) licenses.
+ * Copyright 2010, AUTHORS.txt (http://jqueryui.com/about)
+ * Dual licensed under the MIT or GPL Version 2 licenses.
+ * http://jquery.org/license
  *
  * http://docs.jquery.com/UI/Button
  *
@@ -11,7 +11,7 @@
  *	jquery.ui.core.js
  *	jquery.ui.widget.js
  */
-(function( $ ) {
+(function( $, undefined ) {
 
 var lastActive,
 	baseClasses = "ui-button ui-widget ui-state-default ui-corner-all",
@@ -44,6 +44,7 @@ var lastActive,
 
 $.widget( "ui.button", {
 	options: {
+		disabled: null,
 		text: true,
 		label: null,
 		icons: {
@@ -55,6 +56,10 @@ $.widget( "ui.button", {
 		this.element.closest( "form" )
 			.unbind( "reset.button" )
 			.bind( "reset.button", formResetHandler );
+
+		if ( typeof this.options.disabled !== "boolean" ) {
+			this.options.disabled = this.element.attr( "disabled" );
+		}
 
 		this._determineButtonType();
 		this.hasTitle = !!this.buttonElement.attr( "title" );
@@ -196,7 +201,7 @@ $.widget( "ui.button", {
 			// we don't search against the document in case the element
 			// is disconnected from the DOM
 			this.buttonElement = this.element.parents().last()
-				.find( "[for=" + this.element.attr("id") + "]" );
+				.find( "label[for=" + this.element.attr("id") + "]" );
 			this.element.addClass( "ui-helper-hidden-accessible" );
 
 			var checked = this.element.is( ":checked" );
@@ -312,7 +317,6 @@ $.widget( "ui.button", {
 $.widget( "ui.buttonset", {
 	_create: function() {
 		this.element.addClass( "ui-buttonset" );
-		this._init();
 	},
 	
 	_init: function() {
@@ -339,11 +343,13 @@ $.widget( "ui.buttonset", {
 				return $( this ).button( "widget" )[ 0 ];
 			})
 				.removeClass( "ui-corner-all ui-corner-left ui-corner-right" )
-				.filter( ":first" )
-					.addClass( "ui-corner-left" )
-				.end()
-				.filter( ":last" )
-					.addClass( "ui-corner-right" )
+				.filter( ":visible" )
+					.filter( ":first" )
+						.addClass( "ui-corner-left" )
+					.end()
+					.filter( ":last" )
+						.addClass( "ui-corner-right" )
+					.end()
 				.end()
 			.end();
 	},

@@ -1,9 +1,9 @@
 /*
  * jQuery UI Resizable @VERSION
  *
- * Copyright (c) 2010 AUTHORS.txt (http://jqueryui.com/about)
- * Dual licensed under the MIT (MIT-LICENSE.txt)
- * and GPL (GPL-LICENSE.txt) licenses.
+ * Copyright 2010, AUTHORS.txt (http://jqueryui.com/about)
+ * Dual licensed under the MIT or GPL Version 2 licenses.
+ * http://jquery.org/license
  *
  * http://docs.jquery.com/UI/Resizables
  *
@@ -12,7 +12,7 @@
  *	jquery.ui.mouse.js
  *	jquery.ui.widget.js
  */
-(function($) {
+(function( $, undefined ) {
 
 $.widget("ui.resizable", $.ui.mouse, {
 	widgetEventPrefix: "resize",
@@ -587,7 +587,7 @@ $.ui.plugin.add("resizable", "alsoResize", {
 	},
 
 	stop: function (event, ui) {
-		var self = $(this).data("resizable");
+		var self = $(this).data("resizable"), o = self.options;
 
 		var _reset = function (exp) {
 			$(exp).each(function() {
@@ -595,7 +595,7 @@ $.ui.plugin.add("resizable", "alsoResize", {
 				// reset position for Opera - no need to verify it was changed
 				el.css({ position: el.data("resizable-alsoresize").position });
 			});
-		}
+		};
 
 		if (self._revertToRelativePosition) {
 			self._revertToRelativePosition = false;

@@ -1,16 +1,16 @@
 /*!
  * jQuery UI Mouse @VERSION
  *
- * Copyright (c) 2010 AUTHORS.txt (http://jqueryui.com/about)
- * Dual licensed under the MIT (MIT-LICENSE.txt)
- * and GPL (GPL-LICENSE.txt) licenses.
+ * Copyright 2010, AUTHORS.txt (http://jqueryui.com/about)
+ * Dual licensed under the MIT or GPL Version 2 licenses.
+ * http://jquery.org/license
  *
  * http://docs.jquery.com/UI/Mouse
  *
  * Depends:
  *	jquery.ui.widget.js
  */
-(function($) {
+(function( $, undefined ) {
 
 $.widget("ui.mouse", {
 	options: {
@@ -86,18 +86,14 @@ $.widget("ui.mouse", {
 			.bind('mousemove.'+this.widgetName, this._mouseMoveDelegate)
 			.bind('mouseup.'+this.widgetName, this._mouseUpDelegate);
 
-		// preventDefault() is used to prevent the selection of text here -
-		// however, in Safari, this causes select boxes not to be selectable
-		// anymore, so this fix is needed
-		($.browser.safari || event.preventDefault());
-
+		event.preventDefault();
 		event.originalEvent.mouseHandled = true;
 		return true;
 	},
 
 	_mouseMove: function(event) {
 		// IE mouseup check - mouseup happened when mouse was out of window
-		if ($.browser.msie && !event.button) {
+		if ($.browser.msie && !(document.documentMode >= 9) && !event.button) {
 			return this._mouseUp(event);
 		}
 

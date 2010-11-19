@@ -1,9 +1,9 @@
 /*
  * jQuery UI Droppable @VERSION
  *
- * Copyright (c) 2010 AUTHORS.txt (http://jqueryui.com/about)
- * Dual licensed under the MIT (MIT-LICENSE.txt)
- * and GPL (GPL-LICENSE.txt) licenses.
+ * Copyright 2010, AUTHORS.txt (http://jqueryui.com/about)
+ * Dual licensed under the MIT or GPL Version 2 licenses.
+ * http://jquery.org/license
  *
  * http://docs.jquery.com/UI/Droppables
  *
@@ -13,7 +13,7 @@
  *	jquery.ui.mouse.js
  *	jquery.ui.draggable.js
  */
-(function($) {
+(function( $, undefined ) {
 
 $.widget("ui.droppable", {
 	widgetEventPrefix: "drop",
@@ -161,8 +161,8 @@ $.ui.intersect = function(draggable, droppable, toleranceMode) {
 
 	switch (toleranceMode) {
 		case 'fit':
-			return (l < x1 && x2 < r
-				&& t < y1 && y2 < b);
+			return (l <= x1 && x2 <= r
+				&& t <= y1 && y2 <= b);
 			break;
 		case 'intersect':
 			return (l < x1 + (draggable.helperProportions.width / 2) // Right Half

@@ -6,11 +6,12 @@
 module("dialog: events");
 
 test("open", function() {
-	expect(11);
+	expect(13);
 
 	el = $("<div></div>");
 	el.dialog({
 		open: function(ev, ui) {
+			ok(el.data("dialog")._isOpen, "interal _isOpen flag is set");
 			ok(true, 'autoOpen: true fires open callback');
 			equals(this, el[0], "context of callback");
 			equals(ev.type, 'dialogopen', 'event type in callback');
@@ -29,6 +30,7 @@ test("open", function() {
 			same(ui, {}, 'ui hash in callback');
 		}
 	}).bind('dialogopen', function(ev, ui) {
+		ok(el.data("dialog")._isOpen, "interal _isOpen flag is set");
 		ok(true, 'dialog("open") fires open event');
 		equals(this, el[0], 'context of event');
 		same(ui, {}, 'ui hash in event');
