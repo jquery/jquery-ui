@@ -8,6 +8,8 @@
 	<script src="../../ui/jquery.ui.core.js"></script>
 	<script src="../../ui/jquery.ui.widget.js"></script>
 	<script src="../../ui/jquery.ui.button.js"></script>
+	<script src="../../ui/jquery.ui.position.js"></script>
+	<script src="../../ui/jquery.ui.menu.js"></script>
 	<link rel="stylesheet" href="../demos.css">
 	<script>
 	$(function() {
@@ -23,25 +25,43 @@
 						primary: "ui-icon-triangle-1-s"
 					}
 				})
-				.click(function() {
-					alert( "Could display a menu to select an action" );
+				.click( function() {
+					var menu = $(this).parent().next().show().position({
+						my: "left top",
+						at: "left bottom",
+						of: this
+					});
+					$(document).one("click", function() {
+						menu.hide();
+					});
+					return false;
 				})
-				.parent()
-					.buttonset();
+			.parent()
+				.buttonset()
+			.next()
+				.hide()
+				.menu();
 	});
 	</script>
 	<style>
-		
+		.ui-menu { position: absolute; width: 100px; }
 	</style>
 </head>
 <body>
 
 <div class="demo">
 
-<div>
-	<button id="rerun">Run last action</button>
-	<button id="select">Select an action</button>
-</div>
+	<div>
+		<div>
+			<button id="rerun">Run last action</button>
+			<button id="select">Select an action</button>
+		</div>
+		<ul>
+			<li><a href="#">Open...</a></li>
+			<li><a href="#">Save</a></li>
+			<li><a href="#">Delete</a></li>
+		</ul>
+	</div>
 
 </div><!-- End demo -->
 
