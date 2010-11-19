@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>jQuery UI Progressbar - Labeled updating</title>
+	<link rel="stylesheet" href="../../themes/base/jquery.ui.all.css">
+	<script src="../../jquery-1.4.2.js"></script>
+	<script src="../../ui/jquery.ui.core.js"></script>
+	<script src="../../ui/jquery.ui.widget.js"></script>
+	<script src="../../ui/jquery.ui.progressbar.js"></script>
+	<link rel="stylesheet" href="../demos.css">
+	<style type="text/css" media="screen">
+		#progressbar .ui-progressbar .ui-progressbar-value {
+			position: relative;
+		}
+		#progressbar .ui-progressbar-value .ui-progressbar-content {
+			width: 97%;
+			padding: 4px 0px;
+			position: absolute;
+			text-align: center;
+		}
+	</style>
+	<script>
+
+	// updateProgressDisplay is called once when it is created and everytime its value changes
+	updateProgressDisplay = function() {
+		value = $(this).progressbar('value');
+		max = $(this).progressbar('option', 'max');
+		percentage = ((value/max)*100.0);
+		var display = "<span class='ui-progressbar-content'>" + value + '/' + max + ' (' + percentage + '%)</span>';
+		$(this).children('.ui-progressbar-value').html(display);
+	}
+
+	$(function() {
+		$( "#progressbar" ).progressbar({
+			value: 50,
+			change: updateProgressDisplay,
+			create: updateProgressDisplay
+		})
+	});
+	</script>
+</head>
+<body>
+
+<div class="demo">
+
+<div id="progressbar"></div>
+
+<a href="javascript:$('#progressbar').progressbar('value', 49.5);">Set Value to 49.5</a><br />
+<a href="javascript:$('#progressbar').progressbar('value', 100);">Set Value to 100</a>
+
+</div><!-- End demo -->
+
+
+
+<div class="demo-description">
+<p>A labeled progressbar, demonstrating labeling and updating.</p>
+</div><!-- End demo-description -->
+
+</body>
+</html>
