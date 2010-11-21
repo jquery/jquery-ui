@@ -470,6 +470,10 @@ test('setDate', function() {
 	equalsDate(inp.datepicker('getDate'), minDate, 'Set date min/max - setDate < min');
 	inp.datepicker('setDate', date2);
 	equalsDate(inp.datepicker('getDate'), maxDate, 'Set date min/max - setDate > max');
+	var dateAndTimeToSet = new Date(2008, 3 - 1, 28, 1, 11, 0);
+	var dateAndTimeClone = new Date(2008, 3 - 1, 28, 1, 11, 0);
+	inp.datepicker('setDate', dateAndTimeToSet);
+	equals(dateAndTimeToSet.getTime(), dateAndTimeClone.getTime(), 'Date object passed should not be changed by setDate');
 });
 
 test('altField', function() {
