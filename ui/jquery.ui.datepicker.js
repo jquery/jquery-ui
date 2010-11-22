@@ -1316,7 +1316,7 @@ $.extend(Datepicker.prototype, {
 			}
 			return new Date(year, month, day);
 		};
-		var newDate = (date == null ? defaultDate : (typeof date == 'string' ? offsetString(date) :
+		var newDate = (date == null || date === '' ? defaultDate : (typeof date == 'string' ? offsetString(date) :
 			(typeof date == 'number' ? (isNaN(date) ? defaultDate : offsetNumeric(date)) : new Date(date.getTime()))));
 		newDate = (newDate && newDate.toString() == 'Invalid Date' ? defaultDate : newDate);
 		if (newDate) {
@@ -1342,10 +1342,7 @@ $.extend(Datepicker.prototype, {
 
 	/* Set the date(s) directly. */
 	_setDate: function(inst, date, noChange) {
-		if ( !date ) {
-			inst.input.val( "" );
-			return;
-		}
+		var clear = !date;
 		var origMonth = inst.selectedMonth;
 		var origYear = inst.selectedYear;
 		var newDate = this._restrictMinMax(inst, this._determineDate(inst, date, new Date()));
@@ -1356,7 +1353,7 @@ $.extend(Datepicker.prototype, {
 			this._notifyChange(inst);
 		this._adjustInstDate(inst);
 		if (inst.input) {
-			inst.input.val(this._formatDate(inst));
+			inst.input.val(clear ? '' : this._formatDate(inst));
 		}
 	},
 
