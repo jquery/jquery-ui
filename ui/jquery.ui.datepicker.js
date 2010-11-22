@@ -1341,19 +1341,22 @@ $.extend(Datepicker.prototype, {
 
 	/* Set the date(s) directly. */
 	_setDate: function(inst, date, noChange) {
-		var clear = !(date);
-		var origMonth = inst.selectedMonth;
-		var origYear = inst.selectedYear;
-		date = this._restrictMinMax(inst, this._determineDate(inst, date, new Date()));
-		inst.selectedDay = inst.currentDay = date.getDate();
-		inst.drawMonth = inst.selectedMonth = inst.currentMonth = date.getMonth();
-		inst.drawYear = inst.selectedYear = inst.currentYear = date.getFullYear();
-		if ((origMonth != inst.selectedMonth || origYear != inst.selectedYear) && !noChange)
-			this._notifyChange(inst);
-		this._adjustInstDate(inst);
-		if (inst.input) {
-			inst.input.val(clear ? '' : this._formatDate(inst));
-		}
+		 var clear = !(date) || date == "";
+                    if (clear) {
+                        if (inst.input) inst.input.val('');
+                    }
+                    else {
+                        var origMonth = inst.selectedMonth;
+                        var origYear = inst.selectedYear;
+                        date = this._restrictMinMax(inst, this._determineDate(inst, date, new Date()));
+                        inst.selectedDay = inst.currentDay = date.getDate();
+                        inst.drawMonth = inst.selectedMonth = inst.currentMonth = date.getMonth();
+                        inst.drawYear = inst.selectedYear = inst.currentYear = date.getFullYear();
+                        if ((origMonth != inst.selectedMonth || origYear != inst.selectedYear) && !noChange)
+                            this._notifyChange(inst);
+                        this._adjustInstDate(inst);
+                        if (inst.input) inst.input.val(this._formatDate(inst));
+                    }
 	},
 
 	/* Retrieve the date(s) directly. */
