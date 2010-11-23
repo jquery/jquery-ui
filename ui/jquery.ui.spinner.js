@@ -26,7 +26,8 @@ $.widget('ui.spinner', {
 		value: null
 		
 		,
-		emptyAllowed: true
+		emptyAllowed: true,
+		customParser: {}
 	},
 	
 	_create: function() {
@@ -315,6 +316,11 @@ $.widget('ui.spinner', {
 			if(!val && this.options.emptyAllowed){
 				return val;
 			}
+			
+			if (this.options.customParser.asNumber) {
+				return this.options.customParser.asNumber(val, this.options, this);
+			}
+			
 			// special case for currency formatting until Globalization handles currencies
 			if (this.options.numberformat == "C" && window.Globalization) {
 				// parseFloat should accept number format, including currency
@@ -323,6 +329,7 @@ $.widget('ui.spinner', {
 			}
 			val = window.Globalization && this.options.numberformat ? Globalization.parseFloat(val) : +val;
 		}
+		//returning NaN would be fine?
 		return isNaN(val) ? null : val;
 	},
 	
@@ -332,7 +339,11 @@ $.widget('ui.spinner', {
 			this.element.val( num );
 			return;
 		}
-		this.element.val( window.Globalization && this.options.numberformat ? Globalization.format(num, this.options.numberformat) : num );
+		num = this.options.customParser.asValue ? 
+			this.options.customParser.asValue( num, this.options, this ) :
+			 window.Globalization && this.options.numberformat ? Globalization.format(num, this.options.numberformat) : num
+		
+		this.element.val( num );
 	},
 		
 	destroy: function() {
