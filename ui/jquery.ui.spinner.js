@@ -24,6 +24,9 @@ $.widget('ui.spinner', {
 		numberformat: null,
 		step: null,
 		value: null
+		
+		,
+		emptyAllowed: true
 	},
 	
 	_create: function() {
@@ -270,11 +273,13 @@ $.widget('ui.spinner', {
 	_setOption: function(key, value) {
 		if (key == 'value') {
 			value = this._parse(value);
-			if (value < this.options.min) {
-				value = this.options.min;
-			}
-			if (value > this.options.max) {
-				value = this.options.max;
+			if (value !== '') {
+				if (value < this.options.min) {
+					value = this.options.min;
+				}
+				if (value > this.options.max) {
+					value = this.options.max;
+				}
 			}
 		}
 		if (key == 'disabled') {
@@ -307,6 +312,9 @@ $.widget('ui.spinner', {
 	_parse: function(val) {
 		var input = val;
 		if (typeof val == 'string') {
+			if(!val && this.options.emptyAllowed){
+				return val;
+			}
 			// special case for currency formatting until Globalization handles currencies
 			if (this.options.numberformat == "C" && window.Globalization) {
 				// parseFloat should accept number format, including currency
@@ -320,6 +328,10 @@ $.widget('ui.spinner', {
 	
 	_format: function(num) {
 		var num = this.options.value;
+		if(num === "" && this.options.emptyAllowed){
+			this.element.val( num );
+			return;
+		}
 		this.element.val( window.Globalization && this.options.numberformat ? Globalization.format(num, this.options.numberformat) : num );
 	},
 		
