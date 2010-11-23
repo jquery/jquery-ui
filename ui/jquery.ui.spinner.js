@@ -143,7 +143,7 @@ $.widget('ui.spinner', {
 					self._change(event);
 				}
 			});
-					
+				
 		// disable spinner if element was already disabled
 		if (options.disabled) {
 			this.disable();
@@ -298,7 +298,7 @@ $.widget('ui.spinner', {
 	},
 	
 	_aria: function() {
-		this.uiSpinner
+		this.element
 			.attr('aria-valuemin', this.options.min)
 			.attr('aria-valuemax', this.options.max)
 			.attr('aria-valuenow', this.options.value);
