@@ -9,4 +9,4 @@
 .ui-spinner-down { bottom: 0; }
 
 /* TR overrides */
-div.ui-spinner { background: none; }
+span.ui-spinner { background: none; }
