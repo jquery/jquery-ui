@@ -24,7 +24,7 @@
 					select = this.element.hide(),
 					selected = select.children( ":selected" ),
 					value = selected.val() ? selected.text() : "";
-				var input = $( "<input>" )
+				var input = this.input = $( "<input>" )
 					.insertAfter( select )
 					.val( value )
 					.autocomplete({
@@ -81,7 +81,7 @@
 						.appendTo( ul );
 				};
 
-				$( "<button>&nbsp;</button>" )
+				this.button = $( "<button>&nbsp;</button>" )
 					.attr( "tabIndex", -1 )
 					.attr( "title", "Show All Items" )
 					.insertAfter( input )
@@ -104,6 +104,13 @@
 						input.autocomplete( "search", "" );
 						input.focus();
 					});
+			},
+
+			destroy: function() {
+				this.input.remove();
+				this.button.remove();
+				this.element.show();
+				$.Widget.prototype.destroy.call( this );
 			}
 		});
 	})( jQuery );
