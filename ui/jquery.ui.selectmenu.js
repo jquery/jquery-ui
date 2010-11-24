@@ -329,6 +329,11 @@ $.widget("ui.selectmenu", {
 		//update value
 		this.value(this._selectedIndex());
 		
+		// needed when selectmenu is placed at the very bottom / top of the page
+        window.setTimeout(function() {
+            self._refreshPosition();
+        }, 200);
+		
 		// needed when window is resized
 		$(window).resize(function(){
 			self._refreshPosition();

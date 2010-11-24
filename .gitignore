@@ -6,3 +6,4 @@ docs
 *.patch
 .DS_Store
 *.db
+*.session
