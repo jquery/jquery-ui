@@ -493,7 +493,6 @@ $.widget("ui.selectmenu", {
 		if (arguments.length) {
 			this.element[0].selectedIndex = newValue;
 			this._refreshValue();
-			this._refreshPosition();
 		}
 		return this.element[0].selectedIndex;
 	},
