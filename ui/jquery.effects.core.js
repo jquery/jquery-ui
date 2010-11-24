@@ -232,8 +232,7 @@ $.effects.animateClass = function(value, duration, easing, callback) {
 	}
 
 	return this.each(function() {
-
-		var animation = function() {
+		$.queue(this, 'fx', function() {
 			var that = $(this),
 				originalStyleAttr = that.attr('style') || ' ',
 				originalStyle = filterStyles(getElementStyles.call(this)),
@@ -262,13 +261,13 @@ $.effects.animateClass = function(value, duration, easing, callback) {
 				if (callback) { callback.apply(this, arguments); }
 			});
 
-			// $.animate adds a function to the end of the queue, but we want it at the front
-			var queue = jQuery.queue(this);
-			var anim = queue.splice(queue.length - 1, 1)[0];
+			// $.animate adds a function to the end of the queue
+			// but we want it at the front
+			var queue = $.queue(this),
+				anim = queue.splice(queue.length - 1, 1)[0];
 			queue.splice(1, 0, anim);
-			jQuery.dequeue(this);
-		}	
-		jQuery.queue(this, 'fx', animation);
+			$.dequeue(this);
+		});
 	});
 };
 
@@ -441,7 +440,7 @@ function _normalizeArguments(effect, options, speed, callback) {
 
 	speed = speed || options.duration;
 	speed = $.fx.off ? 0 : typeof speed == 'number'
-		? speed : $.fx.speeds[speed] || $.fx.speeds._default;
+		? speed : speed in $.fx.speeds ? $.fx.speeds[speed] : $.fx.speeds._default;
 
 	callback = callback || options.complete;
 
