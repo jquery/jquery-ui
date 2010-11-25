@@ -144,7 +144,7 @@ var colors = {
 /****************************** CLASS ANIMATIONS ******************************/
 /******************************************************************************/
 
-var classAnimationActions = ['add', 'remove', 'toggle'],
+var classAnimationActions = ['add', 'remove', 'toggle', 'set'],
 	shorthandStyles = {
 		border: 1,
 		borderBottom: 1,
@@ -300,6 +300,29 @@ $.fn.extend({
 	switchClass: function(remove,add,speed,easing,callback) {
 		return $.effects.animateClass.apply(this, [{ add: add, remove: remove },speed,easing,callback]);
 	}
+
+  _setClass: function(value) {
+    if ( jQuery.isFunction(value) ) {
+      return this.each(function(i) {
+          var self = jQuery(this);
+          self.setClass( value.call(this, i, self.attr("class")) );
+        });
+    }
+
+    if ( value && typeof value === "string" ) {
+      for ( var i = 0, l = this.length; i < l; i++ ) {
+        var elem = this[i];
+        if ( elem.nodeType === 1 ) {
+          elem.className = value;
+        }
+      }
+    }
+    return this;
+  },
+
+  setClass: function(classNames, speed, easing, callback) {
+    return speed ? $.effects.animateClass.apply(this, [{ set: classNames },speed,easing,callback]) : this._setClass(classNames);
+  }
 });
 
 
