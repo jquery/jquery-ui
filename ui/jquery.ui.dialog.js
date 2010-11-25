@@ -340,9 +340,11 @@ $.widget("ui.dialog", {
 
 		// set focus to the first tabbable element in the content area or the first button
 		// if there are no tabbable elements, set focus on the dialog itself
-		$(self.element.find(':tabbable').get().concat(
-			uiDialog.find('.ui-dialog-buttonpane :tabbable').get().concat(
-				uiDialog.get()))).eq(0).focus();
+		$(self.element.find(':tabbable[active=true]').get().concat(
+			uiDialog.find('.ui-dialog-buttonpane :tabbable[active=true]').get().concat(
+				self.element.find(':tabbable').get().concat(
+					uiDialog.find('.ui-dialog-buttonpane :tabbable').get().concat(
+						uiDialog.get()))))).eq(0).focus();
 
 		self._isOpen = true;
 		self._trigger('open');
