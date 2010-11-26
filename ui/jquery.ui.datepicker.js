@@ -580,7 +580,8 @@ $.extend(Datepicker.prototype, {
 				if (date) { // only if valid
 					$.datepicker._setDateFromField(inst);
 					$.datepicker._updateAlternate(inst);
-					$.datepicker._updateDatepicker(inst);
+                                        if (this._datepickerShowing) 
+					   $.datepicker._updateDatepicker(inst);
 				}
 			}
 			catch (event) {
