@@ -530,20 +530,24 @@ $.widget("ui.selectmenu", {
 		this.list.attr('aria-activedescendant', activeID);
 	},
 	_refreshPosition: function(){	
-		var o = this.options;		
+		var o = this.options;				
 		// if its a native pop-up we need to calculate the position of the selected li
 		if (o.style == "popup" && !o.positionOptions.offset) {
 			var selected = this.list.find('li:not(.ui-selectmenu-group):eq('+this._selectedIndex()+')');
 			// var _offset = "0 -" + (selected.outerHeight() + selected.offset().top - this.list.offset().top);
 			var _offset = "0 -" + (selected.outerHeight() + selected.offset().top - this.list.offset().top);
 		}
-		this.list.position({
-			// set options for position plugin
-			of: o.positionOptions.of || this.newelement,
-			my: o.positionOptions.my,
-			at: o.positionOptions.at,
-			offset: o.positionOptions.offset || _offset
-		});
+		this.list
+			.css({
+				zIndex: this.element.zIndex()
+			})
+			.position({
+				// set options for position plugin
+				of: o.positionOptions.of || this.newelement,
+				my: o.positionOptions.my,
+				at: o.positionOptions.at,
+				offset: o.positionOptions.offset || _offset
+			});
 	}
 });
 })(jQuery);
