@@ -16,7 +16,7 @@
 $.widget( "ui.progressbar", {
 	options: {
 		value: 0,
-		max: 100,
+		max: 100
 	},
 
 	min: 0,
