@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<title>Demo Page for jQuery UI selectmenu</title>
+	
+	<link type="text/css" href="../../themes/base/jquery.ui.all.css" rel="stylesheet" />
+	<link type="text/css" href="../../themes/base/jquery.ui.selectmenu.css" rel="stylesheet" />
+	<script type="text/javascript" src="../../jquery-1.4.4.js"></script>
+	<script type="text/javascript" src="../../ui/jquery.ui.core.js"></script>
+	<script type="text/javascript" src="../../ui/jquery.ui.widget.js"></script>
+	<script type="text/javascript" src="../../ui/jquery.ui.position.js"></script>
+	
+	<script type="text/javascript" src="../../ui/jquery.ui.selectmenu.js"></script>
+
+	<style type="text/css">
+		/* demo styles */
+		body {font-size: 62.5%; font-family:"Verdana",sans-serif; }
+		fieldset { border:0; }	
+		label,select,.ui-select-menu { float: left; margin-right: 10px; }
+		select { width: 200px; }		
+	</style>
+	<script type="text/javascript">	
+		$(function(){			
+			$('select#switch').selectmenu({
+				style:'popup',
+				// use seleect callback
+				select: function(event, options) {
+					if (options.value == 1) { 
+						$('select#ghost').parent("fieldset").show();
+					} else {
+						$('select#ghost').parent("fieldset").hide();
+					}
+				}
+			});
+			
+			var ghost = $('select#ghost').selectmenu({
+				maxHeight: 150
+			}).parent("fieldset").hide();
+		});		
+	</script>
+</head>
+<body>
+	<br />
+	<br />
+	<form action="#">
+	
+		<fieldset>
+			<label for="switch">Select a Speed:</label>
+			<select name="switch" id="switch">
+				<option value="1">shown</option>
+				<option value="0" selected="selected">hidden</option>
+			</select>
+		</fieldset>
+		
+		<fieldset>
+			<label for="ghost">Hiding in the dark</label>
+			<select name="ghost" id="ghost">
+				<option value="Slower">-6 Slower</option>
+				<option value="Slower">-5 Slower</option>
+				<option value="Slower">-4 Slower</option>
+				<option value="Slow">-3 Slow</option>
+				<option value="Slow">-2 Slow</option>
+				<option value="Slow">-1 Slow</option>
+				<option value="Medium" selected="selected">0 Medium</option>
+				<option value="Fast">1 Fast</option>
+				<option value="Fast">2 Fast</option>
+				<option value="Fast">3 Fast</option>
+				<option value="Faster">4 Faster</option>
+				<option value="Faster">5 Faster</option>
+				<option value="Faster">6 Faster</option>
+			</select>
+		</fieldset>
+	</form>
+</body>
+</html>
