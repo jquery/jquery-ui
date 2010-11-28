@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>jQuery UI Spinner - decimal</title>
+	<link type="text/css" href="../../themes/base/jquery.ui.all.css" rel="stylesheet" />
+	<script type="text/javascript" src="../../jquery-1.4.3.js"></script>
+	<script type="text/javascript" src="../../external/jquery.mousewheel-3.0.4.js"></script>
+	<script type="text/javascript" src="../../external/glob.js"></script>
+	<script type="text/javascript" src="../../external/glob.de-DE.js"></script>
+	<script type="text/javascript" src="../../external/glob.ja-JP.js"></script>
+	<script type="text/javascript" src="../../ui/jquery.ui.core.js"></script>
+	<script type="text/javascript" src="../../ui/jquery.ui.widget.js"></script>
+	<script type="text/javascript" src="../../ui/jquery.ui.button.js"></script>
+	<script type="text/javascript" src="../../ui/jquery.ui.spinner.js"></script>
+	<link type="text/css" href="../demos.css" rel="stylesheet" />
+	<script type="text/javascript">
+	$.widget("ui.timespinner", $.ui.spinner, {
+		_parse: function(value) {
+			if (typeof value == 'string') {
+				// TODO use Globalization to parse time
+				var parts = value.split(":");
+				return parseInt(parts[0]) * 60 + parseInt(parts[1]);
+			}
+			return value;
+		},
+		_format: function() {
+			if (!this.options.value) {
+				this.element.val( "00:00" );
+			}
+			// TODO use Globalization to format time
+			this.element.val( parseInt(this.options.value / 60) + ":" + (this.options.value % 60) );
+		}
+	})
+	$(function() {
+		$("#spinner").timespinner({
+			step: 60
+		});
+	});
+	</script>
+</head>
+<body>
+
+<div class="demo">
+<p>
+	<label for="spinner">Decimal spinner:</label>
+	<input id="spinner" name="spinner" value="15:30" />
+</p>
+</div>
+
+<div class="demo-description">
+<p>
+	Example of a decimal spinner. Step is set to 0.01.
+	<br/>The code handling the culture change reads the current spinner value,
+	then changes the culture, then sets the value again, resulting in an updated
+	formatting, based on the new culture.
+</p>
+</div>
+
+</body>
+</html>
