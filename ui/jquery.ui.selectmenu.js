@@ -161,7 +161,7 @@ $.widget("ui.selectmenu", {
 				.mouseup(function(event){
 						if(self._safemouseup){
 							var changed = $(this).data('index') != self._selectedIndex();
-							self.value($(this).data('index'));
+							self.index($(this).data('index'));
 							self.select(event);
 							if(changed){ self.change(event); }
 							self.close(event,true);
@@ -327,7 +327,7 @@ $.widget("ui.selectmenu", {
 		if(this.element.attr('disabled') == true){ this.disable(); }
 		
 		//update value
-		this.value(this._selectedIndex());
+		this.index(this._selectedIndex());
 		
 		// needed when selectmenu is placed at the very bottom / top of the page
         window.setTimeout(function() {
@@ -382,7 +382,7 @@ $.widget("ui.selectmenu", {
 		this._prevChar[0] = C;
 	},
 	_uiHash: function(){
-		var index = this.value();
+		var index = this.index();
 		return {
 			index: index,
 			option: $("option", this.element).get(index),
@@ -416,8 +416,6 @@ $.widget("ui.selectmenu", {
 				.attr('aria-hidden', true)
 				.removeClass(this.widgetBaseClass+'-open');
 			if(this.options.style == "dropdown"){ this.newelement.removeClass('ui-corner-top').addClass('ui-corner-all'); }
-			console.log(this.newelement);
-			console.log(this.retainFocus);
 			if(retainFocus){this.newelement.focus();}	
 			this._trigger("close", event, this._uiHash());
 		}
@@ -491,12 +489,26 @@ $.widget("ui.selectmenu", {
 					.attr("aria-disabled", value);
 		}
 	},
-	value: function(newValue) {
+	index: function(newValue) {
 		if (arguments.length) {
 			this.element[0].selectedIndex = newValue;
 			this._refreshValue();
+		} else {
+			return this._selectedIndex();
 		}
-		return this.element[0].selectedIndex;
+	},
+	value: function(newValue) {
+		if (arguments.length) {
+			// FIXME test for number is a kind of legacy support, could be removed at any time (Dez. 2010)
+			if (typeof newValue == "number") {
+					this.index(newValue);
+			} else if (typeof newValue == "string") {
+				this.element[0].value = newValue;
+				this._refreshValue();
+			}
+		} else {
+			return this.element[0].value;
+		}
 	},
 	_refreshValue: function() {
 		var activeClass = (this.options.style == "popup") ? " ui-state-active" : "";

@@ -22,28 +22,43 @@
 	</style>
 	<script type="text/javascript">	
 		$(function(){			
-			var speedA = $('select#speedA').selectmenu(
-			);
+			var speedA = $('select#speedA').selectmenu();
 			
-			$("#getValue").click(function(event){
+			$("#index").click(function(event){
+				console.log($('select#speedA').selectmenu("index"));
+			});
+			$("#indexNumber").click(function(event){
+				console.log($('select#speedA').selectmenu("index", 4));
+			});
+			$("#value").click(function(event){
 				console.log($('select#speedA').selectmenu("value"));
 			});
-			$("#setValue").click(function(event){
+			$("#valueString").click(function(event){
+				console.log($('select#speedA').selectmenu("value", "Medium"));
+			});
+			$("#valueNumber").click(function(event){
 				console.log($('select#speedA').selectmenu("value", 4));
+			});
+			$("#valueNumberAsString").click(function(event){
+				console.log($('select#speedA').selectmenu("value", "11"));
+			});
+			$("#valueNonExisting").click(function(event){
+				console.log($('select#speedA').selectmenu("value", "test123"));
 			});
 		});	
 	</script>
-	<!--
-	<script type="text/javascript" src="http://ui.jquery.com/applications/themeroller/themeswitchertool/"></script>
-	<script type="text/javascript"> $(function(){ $('<div style="position: absolute; top: 20px; right: 10px;" />').appendTo('body').themeswitcher(); }); </script>
-	-->
 </head>
 <body>
 	<br />
 	<br />
 	<form action="#">
-		<a href="#nogo" id="getValue">getValue</a>
-		<a href="#nogo" id="setValue">setValue to 4</a>
+		<a href="#nogo" id="index">method index without paramaters (get index)</a><br />
+		<a href="#nogo" id="indexNumber">method index with  paramater '4' (set index by number)</a><br />
+		<a href="#nogo" id="value">method value without paramaters (get value)</a><br />
+		<a href="#nogo" id="valueString">method value with  paramater 'Medium' (set value by string)</a><br />
+		<a href="#nogo" id="valueNumber">method value with  paramater '4' (passed as number)</a><br />
+		<a href="#nogo" id="valueNumberAsString">method value with  paramater '11' (passed as string)</a><br />
+		<a href="#nogo" id="valueNonExisting">method value with  paramater 'test123' (not existing value)</a>
 		<br />
 		<h2>"default popup" Style</h2>
 		<fieldset>
@@ -54,6 +69,7 @@
 				<option value="Medium">Medium</option>
 				<option value="Fast">Fast</option>
 				<option value="Faster">Faster</option>
+				<option value="11">Up to eleven</option>
 			</select>
 		</fieldset>
 	</form>
