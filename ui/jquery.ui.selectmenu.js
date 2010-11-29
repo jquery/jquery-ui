@@ -71,7 +71,7 @@ $.widget("ui.selectmenu", {
 		//click toggle for menu visibility
 		this.newelement
 			.bind('mousedown', function(event){
-				self._toggle(event);
+				self._toggle(event, true);
 				//make sure a click won't open/close instantly
 				if(o.style == "popup"){
 					self._safemouseup = false;
@@ -416,7 +416,9 @@ $.widget("ui.selectmenu", {
 				.attr('aria-hidden', true)
 				.removeClass(this.widgetBaseClass+'-open');
 			if(this.options.style == "dropdown"){ this.newelement.removeClass('ui-corner-top').addClass('ui-corner-all'); }
-			if(retainFocus){this.newelement[0].focus();}	
+			console.log(this.newelement);
+			console.log(this.retainFocus);
+			if(retainFocus){this.newelement.focus();}	
 			this._trigger("close", event, this._uiHash());
 		}
 	},
