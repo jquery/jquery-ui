@@ -70,12 +70,6 @@ $.widget('ui.spinner', {
 					self.hovered = false;
 				});
 
-		// TODO: move to theme, ask FG how
-		// fix inline-block issues for IE. Since IE8 supports inline-block we need to exclude it.
-		if (!$.support.opacity && uiSpinner.css('display') == 'inline-block' && $.browser.version < 8) {
-			uiSpinner.css('display', 'inline');
-		}
-
 		this.element
 			.bind('keydown.spinner', function(event) {
 				if (self.options.disabled) {
@@ -206,7 +200,7 @@ $.widget('ui.spinner', {
 	},
 	
 	_uiSpinnerHtml: function() {
-		return '<div role="spinbutton" class="ui-spinner ui-state-default ui-widget ui-widget-content ui-corner-all"></div>';
+		return '<span role="spinbutton" class="ui-spinner ui-state-default ui-widget ui-widget-content ui-corner-all"></span>';
 	},
 	
 	_buttonHtml: function() {
