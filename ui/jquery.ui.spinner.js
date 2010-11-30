@@ -297,7 +297,7 @@ $.widget('ui.spinner', {
 	},
 	
 	_aria: function() {
-		this.uiSpinner
+		this.element
 			.attr('aria-valuemin', this.options.min)
 			.attr('aria-valuemax', this.options.max)
 			.attr('aria-valuenow', this.options.value);
