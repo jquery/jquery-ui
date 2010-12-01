@@ -245,11 +245,22 @@ $.widget( "ui.autocomplete", {
 				if (self.xhr) {
 					self.xhr.abort();
 				}
-				self.xhr = $.getJSON( url, request, function( data, status, xhr ) {
-					if ( xhr === self.xhr ) {
-						response( data );
+				self.xhr = $.ajax({
+					url: url,
+					data: request,
+					dataType: "json",
+					success: function( data, status, xhr ) {
+						if ( xhr === self.xhr ) {
+							response( data );
+						}
+						self.xhr = null;
+					},
+					error: function( xhr ) {
+						if ( xhr === self.xhr ) {
+							response( [] );
+						}
+						self.xhr = null;
 					}
-					self.xhr = null;
 				});
 			};
 		} else {
