@@ -44,7 +44,7 @@ $.widget("ui.selectmenu", {
 		this._safemouseup = true;
 		
 		//create menu button wrapper
-		this.newelement = $('<a class="'+ this.widgetBaseClass +' ui-widget ui-state-default ui-corner-all" id="'+this.ids[0]+'" role="button" href="#" aria-haspopup="true" aria-owns="'+this.ids[1]+'"></a>')
+		this.newelement = $('<a class="'+ this.widgetBaseClass +' ui-widget ui-state-default ui-corner-all" id="'+this.ids[0]+'" role="button" href="#" tabindex="0" aria-haspopup="true" aria-owns="'+this.ids[1]+'"></a>')
 			.insertAfter(this.element);
 		
 		//transfer tabindex
