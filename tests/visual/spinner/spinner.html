@@ -10,8 +10,15 @@
 	<script type="text/javascript" src="../../../ui/jquery.ui.widget.js"></script>
 	<script type="text/javascript" src="../../../ui/jquery.ui.button.js"></script>
 	<script type="text/javascript" src="../../../ui/jquery.ui.spinner.js"></script>
+	<script type="text/javascript" src="http://jqueryui.com/themeroller/themeswitchertool/"></script>
 	<script type="text/javascript">
 	$(function() {
+		$.fn.themeswitcher && $('<div/>').css({
+			position: "absolute",
+			right: 10,
+			top: 10
+		}).appendTo(document.body).themeswitcher();
+		
 		$('#spinner').spinner({
 			start: function(event, ui) {
 				console.log(event.type, ui.value, $(this).spinner("value"));
