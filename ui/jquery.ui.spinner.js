@@ -13,15 +13,13 @@
  */
 (function($) {
 
-// shortcut constants
-var pageModifier = 10;
-
 $.widget('ui.spinner', {
 	options: {
 		incremental: true,
 		max: null,
 		min: null,
 		numberformat: null,
+		page: 10,
 		step: null,
 		value: null
 	},
@@ -161,10 +159,10 @@ $.widget('ui.spinner', {
 			this._repeat(null, -1, event);
 			return false;
 		case KEYS.PAGE_UP:
-			this._repeat(null, pageModifier, event);
+			this._repeat(null, this.options.page, event);
 			return false;
 		case KEYS.PAGE_DOWN:
-			this._repeat(null, -pageModifier, event);
+			this._repeat(null, -this.options.page, event);
 			return false;
 			
 		case KEYS.ENTER:
@@ -340,11 +338,11 @@ $.widget('ui.spinner', {
 	},
 	
 	pageUp: function(pages) {
-		this.stepUp((pages || 1) * pageModifier);		
+		this.stepUp((pages || 1) * this.options.page);		
 	},
 	
 	pageDown: function(pages) {
-		this.stepDown((pages || 1) * pageModifier);		
+		this.stepDown((pages || 1) * this.options.page);		
 	},
 	
 	value: function(newVal) {

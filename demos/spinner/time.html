@@ -8,7 +8,6 @@
 	<script type="text/javascript" src="../../external/jquery.mousewheel-3.0.4.js"></script>
 	<script type="text/javascript" src="../../external/glob.js"></script>
 	<script type="text/javascript" src="../../external/glob.de-DE.js"></script>
-	<script type="text/javascript" src="../../external/glob.ja-JP.js"></script>
 	<script type="text/javascript" src="../../ui/jquery.ui.core.js"></script>
 	<script type="text/javascript" src="../../ui/jquery.ui.widget.js"></script>
 	<script type="text/javascript" src="../../ui/jquery.ui.button.js"></script>
@@ -16,25 +15,31 @@
 	<link type="text/css" href="../demos.css" rel="stylesheet" />
 	<script type="text/javascript">
 	$.widget("ui.timespinner", $.ui.spinner, {
+		options: {
+			// seconds
+			step: 60 * 1000,
+			// hours
+			page: 60
+		},
+		
 		_parse: function(value) {
 			if (typeof value == 'string') {
-				// TODO use Globalization to parse time
-				var parts = value.split(":");
-				return parseInt(parts[0]) * 60 + parseInt(parts[1]);
+				return +Globalization.parseDate(value)
 			}
 			return value;
 		},
 		_format: function() {
-			if (!this.options.value) {
-				this.element.val( "00:00" );
-			}
-			// TODO use Globalization to format time
-			this.element.val( parseInt(this.options.value / 60) + ":" + (this.options.value % 60) );
+			this.element.val( Globalization.format(new Date(this.options.value), "t") );
 		}
 	})
 	$(function() {
-		$("#spinner").timespinner({
-			step: 60
+		$("#spinner").timespinner();
+		
+		
+		$("#culture").change(function() {
+			var current = $("#spinner").timespinner("value");
+			Globalization.preferCulture($(this).val());
+			$("#spinner").timespinner("value", current);
 		});
 	});
 	</script>
@@ -44,7 +49,14 @@
 <div class="demo">
 <p>
 	<label for="spinner">Decimal spinner:</label>
-	<input id="spinner" name="spinner" value="15:30" />
+	<input id="spinner" name="spinner" value="08:30 PM" />
+</p>
+<p>
+	<label for="culture">Select a culture to use for formatting:</label>
+	<select id="culture">
+		<option value="en-EN" selected="selected">English</option>
+		<option value="de-DE">German</option>
+	</select>
 </p>
 </div>
 
