@@ -19,14 +19,17 @@
 		fieldset { border:0; }	
 		label,select,.ui-select-menu { float: left; margin-right: 10px; }
 		select { width: 200px; }		
+		.wrap span.ui-selectmenu-item-header,
+		.wrap ul.ui-selectmenu-menu li a { text-decoration: underline !important; }
 	</style>
 	<script type="text/javascript">	
 		$(function(){			
 			$('select#speedA').selectmenu({style:'popup'});
-			
+						
 			$('select#speedAa').selectmenu({
 				style:'popup', 
-				maxHeight: 150
+				maxHeight: 150,
+				wrapperElement: "<div class='wrap' />"
 			});
 			
 			$('select#speedB').selectmenu({
@@ -69,11 +72,19 @@
 			}
 			return newText;
 		}		
+		
+		// add themeswitcher
+		$(function(){ 
+			var ts = $('<div class="ui-button ui-widget ui-state-default ui-corner-all" style="padding: 5px; position: absolute; top: 20px; right: 10px;">Click here to add Themeswitcher!</div>')
+			.appendTo('body')
+			.bind("click", function() {
+				ts.text("Loading Themeswitcher...");
+				$.getScript('http://ui.jquery.com/applications/themeroller/themeswitchertool/', function() {
+					ts.removeClass("ui-button ui-widget ui-state-default ui-corner-all").text("").unbind("click").themeswitcher(); 
+				});
+			}); 
+		});
 	</script>
-	<!--
-	<script type="text/javascript" src="http://ui.jquery.com/applications/themeroller/themeswitchertool/"></script>
-	<script type="text/javascript"> $(function(){ $('<div style="position: absolute; top: 20px; right: 10px;" />').appendTo('body').themeswitcher(); }); </script>
-	-->
 </head>
 <body>
 	<br />
@@ -90,7 +101,7 @@
 				<option value="Faster">Faster</option>
 			</select>
 		</fieldset>
-		<h2>"default popup" Style with maxHeight set </h2>
+		<h2>"default popup" Style with maxHeight set and custom wrapper</h2>
 		<fieldset>
 			<label for="speedAa">Select a Speed:</label>
 			<select name="speedAa" id="speedAa">
