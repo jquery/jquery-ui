@@ -24,11 +24,12 @@ $.widget("ui.selectmenu", {
 		},
 		width: null, 
 		menuWidth: null, 
-		handleWidth: 26, 
+		handleWidth: 26,
 		maxHeight: null,
 		icons: null, 
 		format: null,
-		bgImage: function() {}
+		bgImage: function() {},
+		wrapperElement: ""
 	},	
 	
 	_create: function() {
@@ -46,7 +47,8 @@ $.widget("ui.selectmenu", {
 		//create menu button wrapper
 		this.newelement = $('<a class="'+ this.widgetBaseClass +' ui-widget ui-state-default ui-corner-all" id="'+this.ids[0]+'" role="button" href="#" tabindex="0" aria-haspopup="true" aria-owns="'+this.ids[1]+'"></a>')
 			.insertAfter(this.element);
-		
+		// 
+		this.newelement.wrap(o.wrapperElement);
 		//transfer tabindex
 		var tabindex = this.element.attr('tabindex');
 		if(tabindex){ this.newelement.attr('tabindex', tabindex); }
@@ -133,6 +135,7 @@ $.widget("ui.selectmenu", {
 		//create menu portion, append to body
 		var cornerClass = (o.style == "dropdown")? " ui-corner-bottom" : " ui-corner-all";
 		this.list = $('<ul class="' + self.widgetBaseClass + '-menu ui-widget ui-widget-content'+cornerClass+'" aria-hidden="true" role="listbox" aria-labelledby="'+this.ids[0]+'" id="'+this.ids[1]+'"></ul>').appendTo('body');				
+		this.list.wrap(o.wrapperElement);
 		
 		//serialize selectmenu element options	
 		var selectOptionData = [];
@@ -350,6 +353,7 @@ $.widget("ui.selectmenu", {
 			.attr('for',this.element.attr('id'))
 			.unbind('click');
 		this.newelement.remove();
+		// FIXME option.wrapper needs
 		this.list.remove();
 		this.element.show();	
 		
@@ -397,10 +401,12 @@ $.widget("ui.selectmenu", {
 			this._closeOthers(event);
 			this.newelement
 				.addClass('ui-state-active');
-			
-			this.list
-				.appendTo('body')
-				.addClass(self.widgetBaseClass + '-open')
+			if (self.options.wrapperElement) {
+				this.list.parent().appendTo('body');
+			} else {
+				this.list.appendTo('body');
+			}
+			this.list.addClass(self.widgetBaseClass + '-open')
 				.attr('aria-hidden', false)
 				.find('li:not(.'+ self.widgetBaseClass +'-group):eq('+ this._selectedIndex() +') a')[0].focus();	
 			if(this.options.style == "dropdown"){ this.newelement.removeClass('ui-corner-all').addClass('ui-corner-top'); }	
