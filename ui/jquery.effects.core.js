@@ -491,8 +491,10 @@ $.fn.extend({
 
 	_show: $.fn.show,
 	show: function(speed) {
+		// Is this element is already visible, don't try to show it again
 		if ( this.is(':visible') ) { 
-			return this; }
+			return this; 
+		}
 		
 		if ( standardSpeed( speed ) ) {
 			return this._show.apply(this, arguments);
@@ -505,8 +507,10 @@ $.fn.extend({
 
 	_hide: $.fn.hide,
 	hide: function(speed) {
+		// If this element is already hidden, don't try to hide it again
 		if ( this.is(':hidden') ) {
-			return this; }
+			return this; 
+		}
 		
 		if ( standardSpeed( speed ) ) {
 			return this._hide.apply(this, arguments);
