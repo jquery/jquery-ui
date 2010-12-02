@@ -491,6 +491,9 @@ $.fn.extend({
 
 	_show: $.fn.show,
 	show: function(speed) {
+		if ( this.is(':visible') ) { 
+			return this; }
+		
 		if ( standardSpeed( speed ) ) {
 			return this._show.apply(this, arguments);
 		} else {
@@ -502,6 +505,9 @@ $.fn.extend({
 
 	_hide: $.fn.hide,
 	hide: function(speed) {
+		if ( this.is(':hidden') ) {
+			return this; }
+		
 		if ( standardSpeed( speed ) ) {
 			return this._hide.apply(this, arguments);
 		} else {
