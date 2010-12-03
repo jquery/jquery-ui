@@ -633,7 +633,8 @@ $.widget("ui.dialog", {
 		 */
 		var options = this.options,
 			nonContentHeight,
-			minContentHeight;
+			minContentHeight,
+			isVisible = this.uiDialog.is( ":visible" );
 
 		// reset content sizing
 		this.element.show().css({
@@ -665,7 +666,9 @@ $.widget("ui.dialog", {
 			} else {
 				this.uiDialog.show();
 				var autoHeight = this.element.css( "height", "auto" ).height();
-				this.uiDialog.hide();
+				if ( !isVisible ) {
+					this.uiDialog.hide();
+				}
 				this.element.height( Math.max( autoHeight, minContentHeight ) );
 			}
 		} else {
