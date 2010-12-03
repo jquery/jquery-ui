@@ -117,8 +117,9 @@ $.widget("ui.tooltip", {
 		if (!this.current)
 			return;
 		
-		var current = this.current.attr("title", this.currentTitle);
+		var current = this.current;
 		this.current = null;
+		current.attr("title", this.currentTitle);
 		
 		if (this.options.disabled)
 			return;
