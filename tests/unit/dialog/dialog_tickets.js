@@ -76,6 +76,16 @@ test("#6137: dialog('open') causes form elements to reset on IE7", function() {
 	equal($('input:checked').val(), 'b', "checkbox b is checked");
 
 	d1.add(d2).remove();
-})
+});
+
+test("#6645: Missing element not found check in overlay", function(){
+    expect(2);
+    d1 = $('<div title="dialog 1">Dialog 1</div>').dialog({modal: true});
+    d2 = $('<div title="dialog 2">Dialog 2</div>').dialog({modal: true, close: function(){ d2.remove()}});
+    equals($.ui.dialog.overlay.instances.length, 2, 'two overlays created');
+    d2.dialog('close');
+    equals($.ui.dialog.overlay.instances.length, 1, 'one overlay remains after closing the 2nd overlay');
+    d1.add(d2).remove();
+});
 
 })(jQuery);

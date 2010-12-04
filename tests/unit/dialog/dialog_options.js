@@ -265,8 +265,8 @@ test("position, default center on window", function() {
 	var el = $('<div></div>').dialog();
 	var dialog = el.dialog('widget');
 	var offset = dialog.offset();
-	same(offset.left, Math.floor($(window).width() / 2 - dialog.outerWidth() / 2) + $(window).scrollLeft());
-	same(offset.top, Math.floor($(window).height() / 2 - dialog.outerHeight() / 2) + $(window).scrollTop());
+	same(offset.left, Math.round($(window).width() / 2 - dialog.outerWidth() / 2) + $(window).scrollLeft());
+	same(offset.top, Math.round($(window).height() / 2 - dialog.outerHeight() / 2) + $(window).scrollTop());
 	el.remove();
 });
 
@@ -274,7 +274,7 @@ test("position, top on window", function() {
 	var el = $('<div></div>').dialog({ position: "top" });
 	var dialog = el.dialog('widget');
 	var offset = dialog.offset();
-	same(offset.left, Math.floor($(window).width() / 2 - dialog.outerWidth() / 2) + $(window).scrollLeft());
+	same(offset.left, Math.round($(window).width() / 2 - dialog.outerWidth() / 2) + $(window).scrollLeft());
 	same(offset.top, $(window).scrollTop());
 	el.remove();
 });
@@ -284,7 +284,7 @@ test("position, left on window", function() {
 	var dialog = el.dialog('widget');
 	var offset = dialog.offset();
 	same(offset.left, 0);
-	same(offset.top, Math.floor($(window).height() / 2 - dialog.outerHeight() / 2) + $(window).scrollTop());
+	same(offset.top, Math.round($(window).height() / 2 - dialog.outerHeight() / 2) + $(window).scrollTop());
 	el.remove();
 });
 

@@ -31,4 +31,12 @@ test("{ value : 105 }", function() {
 	same( 100, $("#progressbar").progressbar("value") );
 });
 
+test("{ max : 5, value : 10 }", function() {
+	$("#progressbar").progressbar({
+		max: 5,
+		value: 10
+	});
+	same( 5, $("#progressbar").progressbar("value") );
+});
+
 })(jQuery);
