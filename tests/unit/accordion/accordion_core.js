@@ -13,6 +13,13 @@ test("handle click on header-descendant", function() {
 	state(ac, 0, 1, 0);
 });
 
+test("ui-accordion-heading class added to headers anchor", function() {
+	expect(1);
+	var ac = $("#list1").accordion();
+	var anchors = $(".ui-accordion-heading");
+	equals( anchors.length, "3"); 
+});
+
 test("accessibility", function () {
 	expect(9);
 	var ac = $('#list1').accordion().accordion("activate", 1);
