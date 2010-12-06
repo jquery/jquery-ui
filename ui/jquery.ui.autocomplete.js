@@ -55,11 +55,13 @@ $.widget( "ui.autocomplete", {
 					self._move( "nextPage", event );
 					break;
 				case keyCode.UP:
+					if (!self.menu.element.is(':visible')) return;
 					self._move( "previous", event );
 					// prevent moving cursor to beginning of text field in some browsers
 					event.preventDefault();
 					break;
 				case keyCode.DOWN:
+					if (!self.menu.element.is(':visible')) return;
 					self._move( "next", event );
 					// prevent moving cursor to end of text field in some browsers
 					event.preventDefault();
