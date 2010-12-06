@@ -13,28 +13,28 @@ test("{ active: first child }, default", function() {
 
 test("{ active: Selector }", function() {
 	var ac = $("#list1").accordion({
-		active: "a:last"
+		active: "h3:last"
 	});
 	state(ac, 0, 0, 1);
-	ac.accordion('option', 'active', "a:eq(1)");
+	ac.accordion('option', 'active', "h3:eq(1)");
 	state(ac, 0, 1, 0);
 });
 
 test("{ active: Element }", function() {
 	var ac = $("#list1").accordion({
-		active: $("#list1 a:last")[0]
+		active: $("#list1 h3:last")[0]
 	});
 	state(ac, 0, 0, 1);
-	ac.accordion('option', 'active', $("#list1 a:eq(1)")[0]);
+	ac.accordion('option', 'active', $("#list1 h3:eq(1)")[0]);
 	state(ac, 0, 1, 0);
 });
 
 test("{ active: jQuery Object }", function() {
 	var ac = $("#list1").accordion({
-		active: $("#list1 a:last")
+		active: $("#list1 h3:last")
 	});
 	state(ac, 0, 0, 1);
-	ac.accordion('option', 'active', $("#list1 a:eq(1)"));
+	ac.accordion('option', 'active', $("#list1 h3:eq(1)"));
 	state(ac, 0, 1, 0);
 });
 
