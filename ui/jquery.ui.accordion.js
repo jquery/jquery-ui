@@ -75,6 +75,7 @@ $.widget( "ui.accordion", {
 
 		self.headers.next()
 			.addClass( "ui-accordion-content ui-helper-reset ui-widget-content ui-corner-bottom" );
+		self.headers.find( ":first-child" ).addClass( "ui-accordion-heading" );
 
 		if ( options.navigation ) {
 			var current = self.element.find( "a" ).filter( options.navigationFilter ).eq( 0 );
@@ -177,6 +178,7 @@ $.widget( "ui.accordion", {
 
 		this.headers.find( "a" ).removeAttr( "tabIndex" );
 		this._destroyIcons();
+		this.headers.find( "a:first-child" ).removeClass( "ui-accordion-heading" );
 		var contents = this.headers.next()
 			.css( "display", "" )
 			.removeAttr( "role" )
