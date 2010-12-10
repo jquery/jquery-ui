@@ -120,6 +120,23 @@ test( "direct usage", function() {
 	equals( instance.getterSetterVal, 30, "getter/setter can act as setter" );
 });
 
+test( "error handling", function() {
+	expect( 2 );
+	var error = $.error;
+	$.widget( "ui.testWidget", {} );
+	$.error = function( msg ) {
+		equal( msg, "cannot call methods on testWidget prior to initialization; " +
+			"attempted to call method 'missing'", "method call before init" );
+	};
+	$( "<div>" ).testWidget( "missing" );
+	$.error = function( msg ) {
+		equal( msg, "no such method 'missing' for testWidget widget instance",
+			"invalid method call on widget instance" );
+	};
+	$( "<div>" ).testWidget().testWidget( "missing" );
+	$.error = error;
+});
+
 test("merge multiple option arguments", function() {
 	expect( 1 );
 	$.widget( "ui.testWidget", {
