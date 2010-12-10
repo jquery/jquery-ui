@@ -329,3 +329,8 @@ echo
 #
 # Generate themes
 # 
+
+
+
+
+# ruby -e 'puts File.read("thankyou").split("\n").join(", ")' > thankyou2
