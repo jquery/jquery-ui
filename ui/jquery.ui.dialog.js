@@ -57,6 +57,7 @@ $.widget("ui.dialog", {
 		position: {
 			my: 'center',
 			at: 'center',
+			of: window,
 			collision: 'fit',
 			// ensure that the titlebar is never outside the document
 			using: function(pos) {
@@ -527,7 +528,7 @@ $.widget("ui.dialog", {
 		this.uiDialog
 			// workaround for jQuery bug #5781 http://dev.jquery.com/ticket/5781
 			.css({ top: 0, left: 0 })
-			.position($.extend({ of: window }, position));
+			.position(position);
 		if (!isVisible) {
 			this.uiDialog.hide();
 		}

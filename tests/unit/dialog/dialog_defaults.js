@@ -20,6 +20,7 @@ var dialog_defaults = {
 	position: {
 		my: 'center',
 		at: 'center',
+		of: window,
 		collision: 'fit',
 		using: $.ui.dialog.prototype.options.position.using
 	},
