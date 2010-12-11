@@ -26,10 +26,6 @@ $.widget( "ui.accordion", {
 		icons: {
 			header: "ui-icon-triangle-1-e",
 			headerSelected: "ui-icon-triangle-1-s"
-		},
-		navigation: false,
-		navigationFilter: function() {
-			return this.href.toLowerCase() === location.href.toLowerCase();
 		}
 	},
 
@@ -76,20 +72,6 @@ $.widget( "ui.accordion", {
 		self.headers.next()
 			.addClass( "ui-accordion-content ui-helper-reset ui-widget-content ui-corner-bottom" );
 		self.headers.find( ":first-child" ).addClass( "ui-accordion-heading" );
-
-		if ( options.navigation ) {
-			var current = self.element.find( "a" ).filter( options.navigationFilter ).eq( 0 );
-			if ( current.length ) {
-				var header = current.closest( ".ui-accordion-header" );
-				if ( header.length ) {
-					// anchor within header
-					self.active = header;
-				} else {
-					// anchor within content
-					self.active = current.closest( ".ui-accordion-content" ).prev();
-				}
-			}
-		}
 
 		self.active = self._findActive( self.active || options.active )
 			.addClass( "ui-state-default ui-state-active" )
@@ -597,5 +579,41 @@ $.extend( $.ui.accordion, {
 		}
 	}
 });
+
+
+
+// DEPRECATED
+
+// navigation options
+(function( $, prototype ) {
+	$.extend( prototype.options, {
+		navigation: false,
+		navigationFilter: function() {
+			return this.href.toLowerCase() === location.href.toLowerCase();
+		}
+	});
+	
+	var _create = prototype._create;
+	prototype._create = function() {
+		if ( this.options.navigation ) {
+			var self = this,
+				headers = this.element.find( this.options.header ),
+				content = headers.next();
+				current = headers.add( content )
+					.find( "a" )
+					.filter( this.options.navigationFilter )
+					[ 0 ];
+			if ( current ) {
+				headers.add( content ).each( function( index ) {
+					if ( $.contains( this, current ) ) {
+						self.options.active = Math.floor( index / 2 );
+						return false;
+					}
+				});
+			}
+		}
+		_create.call( this );
+	};
+}( jQuery, jQuery.ui.accordion.prototype ));
 
 })( jQuery );
