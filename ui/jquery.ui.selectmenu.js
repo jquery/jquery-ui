@@ -211,9 +211,9 @@ $.widget("ui.selectmenu", {
 			});			
 		
 		// needed when window is resized
-		$(window).resize(function(){
-			self._refreshPosition();
-		});			
+		$(window).resize(
+			$.proxy(self._refreshPosition, this)
+		);
 	},
 	_init: function() {
 		var self = this, o = this.options;
