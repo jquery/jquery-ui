@@ -58,6 +58,7 @@ function Datepicker() {
 		yearSuffix: '' // Additional text to append to the year in the month headers
 	};
 	this._defaults = { // Global defaults for all the date picker instances
+	  zIndexOffset: 1   // How much add to z-index by default
 		showOn: 'focus', // 'focus' for popup on focus,
 			// 'button' for trigger button, or 'both' for either
 		showAnim: 'fadeIn', // Name of jQuery animation for popup
@@ -648,7 +649,7 @@ $.extend(Datepicker.prototype, {
 						width: inst.dpDiv.outerWidth(), height: inst.dpDiv.outerHeight()});
 				}
 			};
-			inst.dpDiv.zIndex($(input).zIndex()+1);
+			inst.dpDiv.zIndex($(input).zIndex()+$.datepicker._get(inst, 'zIndexOffset'));
 			if ($.effects && $.effects[showAnim])
 				inst.dpDiv.show(showAnim, $.datepicker._get(inst, 'showOptions'), duration, postProcess);
 			else
