@@ -69,6 +69,10 @@ test("{ autoHeight: true }, default", function() {
 	equalHeights($('#navigation').accordion({ autoHeight: true }), 95, 130);
 });
 
+test("{ heightStyle: 'auto' }, default", function() {
+	equalHeights($('#navigation').accordion({ heightStyle: 'auto' }), 95, 130);
+});
+
 test("{ autoHeight: false }", function() {
 	var accordion = $('#navigation').accordion({ autoHeight: false });
 	var sizes = [];
@@ -80,6 +84,16 @@ test("{ autoHeight: false }", function() {
 	ok( sizes[2] >= 42 && sizes[2] <= 54, "was " + sizes[2] );
 });
 
+test("{ heightStyle: 'content' }", function() {
+	var accordion = $('#navigation').accordion({ heightStyle: 'content' });
+	var sizes = [];
+	accordion.find(".ui-accordion-content").each(function() {
+		sizes.push($(this).height());
+	});
+	ok( sizes[0] >= 70 && sizes[0] <= 90, "was " + sizes[0] );
+	ok( sizes[1] >= 98 && sizes[1] <= 126, "was " + sizes[1] );
+	ok( sizes[2] >= 42 && sizes[2] <= 54, "was " + sizes[2] );
+});
 test("{ collapsible: false }, default", function() {
 	var ac = $("#list1").accordion();
 	ac.accordion("activate", false);
@@ -100,6 +114,19 @@ test("{ collapsible: true }", function() {
 test("{ fillSpace: true }", function() {
 	$("#navigationWrapper").height(500);
 	equalHeights($('#navigation').accordion({ fillSpace: true }), 446, 458);
+});
+
+test("{ heightStyle: 'fill' }", function() {
+	$("#navigationWrapper").height(500);
+	equalHeights($('#navigation').accordion({ heightStyle: 'fill' }), 446, 458);
+});
+
+test("{ fillSpace: true } with sibling", function() {
+	$("#navigationWrapper").height(500);
+	var sibling = $("<p>Lorem Ipsum</p>");
+	$("#navigationWrapper").prepend( sibling.height(100) );
+	//sibling.outerHeight(true) == 126
+	equalHeights($('#navigation').accordion({ fillSpace: true}), 320, 332);
 });
 
 test("{ header: '> li > :first-child,> :not(li):even' }, default", function() {
