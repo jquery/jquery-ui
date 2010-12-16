@@ -98,12 +98,13 @@
 						// close if already visible
 						if ( input.autocomplete( "widget" ).is( ":visible" ) ) {
 							input.autocomplete( "close" );
-							return;
+							return false;
 						}
 
 						// pass empty string as value to search for, displaying all results
 						input.autocomplete( "search", "" );
 						input.focus();
+                                                return false;
 					});
 			},
 
