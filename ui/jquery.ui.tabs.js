@@ -333,7 +333,7 @@ $.widget( "ui.tabs", {
 			};
 
 		// attach tab event handler, unbind to avoid duplicates from former tabifying...
-		this.anchors.bind( o.event + ".tabs", function(event) {
+		this.anchors.bind( o.event + ".tabs", function( event ) {
       event.preventDefault();
 			var el = this,
 				$li = $(el).closest( "li" ),
@@ -350,7 +350,7 @@ $.widget( "ui.tabs", {
 				self.panels.filter( ":animated" ).length ||
 				self._trigger( "select", null, self._ui( this, $show[ 0 ] ) ) === false ) {
 				this.blur();
-        return
+        return;
 			}
 
 			o.selected = self.anchors.index( this );
@@ -419,7 +419,7 @@ $.widget( "ui.tabs", {
 		});
 
 		// disable click in any case
-		this.anchors.bind( "click.tabs", function(event){
+		this.anchors.bind( "click.tabs", function( event ){
 			event.preventDefault();
 		});
 	},
