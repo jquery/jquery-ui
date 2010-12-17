@@ -26,6 +26,9 @@ $.widget( "ui.autocomplete", {
 		},
 		source: null
 	},
+
+	pending: 0,
+
 	_create: function() {
 		var self = this,
 			doc = this.element[ 0 ].ownerDocument,
@@ -291,6 +294,7 @@ $.widget( "ui.autocomplete", {
 	},
 
 	_search: function( value ) {
+		this.pending++;
 		this.element.addClass( "ui-autocomplete-loading" );
 
 		this.source( { term: value }, this.response );
@@ -304,7 +308,10 @@ $.widget( "ui.autocomplete", {
 		} else {
 			this.close();
 		}
-		this.element.removeClass( "ui-autocomplete-loading" );
+		this.pending--;
+		if ( !this.pending ) {
+			this.element.removeClass( "ui-autocomplete-loading" );
+		}
 	},
 
 	close: function( event ) {
