@@ -129,6 +129,15 @@ test("{ fillSpace: true } with sibling", function() {
 	equalHeights($('#navigation').accordion({ fillSpace: true}), 320, 332);
 });
 
+test("{ fillSpace: true } with multiple siblings", function() {
+	$("#navigationWrapper").height(500);
+	var sibling = $("<p>Lorem Ipsum</p>");
+	$("#navigationWrapper").prepend( sibling.height(100) );
+	$("#navigationWrapper").prepend( sibling.clone().height(50) );
+	//sibling.outerHeight(true) == 126
+	equalHeights($('#navigation').accordion({ fillSpace: true}), 244, 256);
+});
+
 test("{ header: '> li > :first-child,> :not(li):even' }, default", function() {
 	state($("#list1").accordion(), 1, 0, 0);
 	state($("#navigation").accordion(), 1, 0, 0);
