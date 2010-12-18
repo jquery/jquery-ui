@@ -24,7 +24,7 @@ $.widget( "ui.accordion", {
 		heightStyle: null, // "auto"
 		icons: {
 			header: "ui-icon-triangle-1-e",
-			headerSelected: "ui-icon-triangle-1-s"
+			activeHeader: "ui-icon-triangle-1-s"
 		}
 	},
 
@@ -133,7 +133,7 @@ $.widget( "ui.accordion", {
 				.prependTo( this.headers );
 			this.active.children( ".ui-icon" )
 				.toggleClass(options.icons.header)
-				.toggleClass(options.icons.headerSelected);
+				.toggleClass(options.icons.activeHeader);
 			this.element.addClass( "ui-accordion-icons" );
 		}
 	},
@@ -307,7 +307,7 @@ $.widget( "ui.accordion", {
 				.removeClass( "ui-state-active ui-corner-top" )
 				.addClass( "ui-state-default ui-corner-all" )
 				.children( ".ui-icon" )
-					.removeClass( options.icons.headerSelected )
+					.removeClass( options.icons.activeHeader )
 					.addClass( options.icons.header );
 			this.active.next().addClass( "ui-accordion-content-active" );
 			var toHide = this.active.next(),
@@ -343,7 +343,7 @@ $.widget( "ui.accordion", {
 			.removeClass( "ui-state-active ui-corner-top" )
 			.addClass( "ui-state-default ui-corner-all" )
 			.children( ".ui-icon" )
-				.removeClass( options.icons.headerSelected )
+				.removeClass( options.icons.activeHeader )
 				.addClass( options.icons.header );
 		if ( !clickedIsActive ) {
 			clicked
@@ -351,7 +351,7 @@ $.widget( "ui.accordion", {
 				.addClass( "ui-state-active ui-corner-top" )
 				.children( ".ui-icon" )
 					.removeClass( options.icons.header )
-					.addClass( options.icons.headerSelected );
+					.addClass( options.icons.activeHeader );
 			clicked
 				.next()
 				.addClass( "ui-accordion-content-active" );
