@@ -132,8 +132,10 @@ test("{ fillSpace: true } with sibling", function() {
 test("{ fillSpace: true } with multiple siblings", function() {
 	$("#navigationWrapper").height(500);
 	var sibling = $("<p>Lorem Ipsum</p>");
-	$("#navigationWrapper").prepend( sibling.height(100) );
-	$("#navigationWrapper").prepend( sibling.clone().height(50) );
+	$("#navigationWrapper")
+		.prepend( sibling.clone().height(100) )
+		.prepend( sibling.clone().height(100).css( "position", "absolute" ) )
+		.prepend( sibling.clone().height(50) );
 	//sibling.outerHeight(true) == 126
 	equalHeights($('#navigation').accordion({ fillSpace: true}), 244, 256);
 });
