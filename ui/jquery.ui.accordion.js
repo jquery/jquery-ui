@@ -194,7 +194,12 @@ $.widget( "ui.accordion", {
 
 	_setOption: function( key, value ) {
 		$.Widget.prototype._setOption.apply( this, arguments );
-			
+		
+		// handle deprecated options
+		// TODO: remove in 2.0
+		if ( key === "autoHeight" || key === "clearStyle" || key === "fillSpace" ) {
+			this.options.heightStyle = this._mergeHeightStyle();
+		}
 		if ( key == "active" ) {
 			this.activate( value );
 		}
