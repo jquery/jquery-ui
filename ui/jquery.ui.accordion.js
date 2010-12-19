@@ -264,7 +264,13 @@ $.widget( "ui.accordion", {
 			}
 			maxHeight = this.element.parent().height();
 			this.element.siblings( ":visible" ).each(function() {
-				maxHeight -= $( this ).outerHeight( true );	
+				var elem = $( this ),
+					position = elem.css( "position" );
+
+				if ( position === "absolute" || position === "fixed" ) {
+					return;
+				}
+				maxHeight -= elem.outerHeight( true );	
 			});
 			if ($.browser.msie) {
 				this.element.parent().css( "overflow", defOverflow );
