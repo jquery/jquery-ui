@@ -188,8 +188,7 @@ $.widget( "ui.accordion", {
 		// so we need to add the disabled class to the headers and panels
 		if ( key == "disabled" ) {
 			this.headers.add(this.headers.next())
-				[ value ? "addClass" : "removeClass" ](
-					"ui-accordion-disabled ui-state-disabled" );
+				.toggleClass( "ui-accordion-disabled ui-state-disabled", !!value );
 		}
 	},
 

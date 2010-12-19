@@ -233,9 +233,7 @@ $.widget( "ui.tabs", {
 			o.selected = this.lis.index( this.lis.filter( ".ui-tabs-selected" ) );
 		}
 
-		// update collapsible
-		// TODO: use .toggleClass()
-		this.element[ o.collapsible ? "addClass" : "removeClass" ]( "ui-tabs-collapsible" );
+		this.element.toggleClass( "ui-tabs-collapsible", o.collapsible );
 
 		// set or update cookie after init and add/remove respectively
 		if ( o.cookie ) {
@@ -244,9 +242,8 @@ $.widget( "ui.tabs", {
 
 		// disable tabs
 		for ( var i = 0, li; ( li = this.lis[ i ] ); i++ ) {
-			$( li )[ $.inArray( i, o.disabled ) != -1 &&
-				// TODO: use .toggleClass()
-				!$( li ).hasClass( "ui-tabs-selected" ) ? "addClass" : "removeClass" ]( "ui-state-disabled" );
+			$( li ).toggleClass( "ui-state-disabled",
+				$.inArray( i, o.disabled ) != -1 && !$( li ).hasClass( "ui-tabs-selected" ) );
 		}
 
 		// reset cache if switching from cached to not cached
