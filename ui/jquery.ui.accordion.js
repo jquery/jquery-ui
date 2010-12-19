@@ -17,13 +17,11 @@ $.widget( "ui.accordion", {
 	options: {
 		active: 0,
 		animated: "slide",
-		autoHeight: true, //DEPRECATED - use heightStyle: "auto"
-		clearStyle: false, //DEPRECATED - use heightStyle: "content"
 		collapsible: false,
 		event: "click",
-		fillSpace: false, //DEPRECATED - use heightStyle: "fill"
-		//heightStyle: "auto",
 		header: "> li > :first-child,> :not(li):even",
+		// TODO: set to "auto" in 2.0 (#5868, #5872)
+		heightStyle: null, // "auto"
 		icons: {
 			header: "ui-icon-triangle-1-e",
 			headerSelected: "ui-icon-triangle-1-s"
@@ -33,9 +31,6 @@ $.widget( "ui.accordion", {
 	_create: function() {
 		var self = this,
 			options = self.options;
-
-		//Merge autoheight, fillSpace and clearStyle
-		options.heightStyle = options.heightStyle || self._mergeHeightStyle();	
 
 		self.running = 0;
 
@@ -176,30 +171,9 @@ $.widget( "ui.accordion", {
 		return $.Widget.prototype.destroy.call( this );
 	},
 
-	_mergeHeightStyle: function() {
-		var options = this.options;
-
-		if ( options.fillSpace ) {
-			return "fill";
-		}
-
-		if ( options.clearStyle ) {
-			return "content";
-		}
-
-		if ( options.autoHeight ) {
-			return "auto";
-		}
-	},
-
 	_setOption: function( key, value ) {
 		$.Widget.prototype._setOption.apply( this, arguments );
 		
-		// handle deprecated options
-		// TODO: remove in 2.0
-		if ( key === "autoHeight" || key === "clearStyle" || key === "fillSpace" ) {
-			this.options.heightStyle = this._mergeHeightStyle();
-		}
 		if ( key == "active" ) {
 			this.activate( value );
 		}
@@ -626,7 +600,7 @@ $.extend( $.ui.accordion, {
 			return this.href.toLowerCase() === location.href.toLowerCase();
 		}
 	});
-	
+
 	var _create = prototype._create;
 	prototype._create = function() {
 		if ( this.options.navigation ) {
@@ -648,6 +622,48 @@ $.extend( $.ui.accordion, {
 		}
 		_create.call( this );
 	};
-}( jQuery, jQuery.ui.accordion.prototype ));
+}( jQuery, jQuery.ui.accordion.prototype ) );
+
+(function( $, prototype ) {
+	$.extend( prototype.options, {
+		autoHeight: true, // use heightStyle: "auto"
+		clearStyle: false, // use heightStyle: "content"
+		fillSpace: false // use heightStyle: "fill"
+	});
+
+	var _create = prototype._create,
+		_setOption = prototype._setOption;
+
+	$.extend( prototype, {
+		_create: function() {
+			this.options.heightStyle = this.options.heightStyle ||
+				this._mergeHeightStyle();
+			_create.call( this );
+		},
+
+		_setOption: function( key, value ) {
+			if ( key === "autoHeight" || key === "clearStyle" || key === "fillSpace" ) {
+				this.options.heightStyle = this._mergeHeightStyle();
+			}
+			_setOption.apply( this, arguments );
+		},
+
+		_mergeHeightStyle: function() {
+			var options = this.options;
+
+			if ( options.fillSpace ) {
+				return "fill";
+			}
+
+			if ( options.clearStyle ) {
+				return "content";
+			}
+
+			if ( options.autoHeight ) {
+				return "auto";
+			}
+		}
+	});
+}( jQuery, jQuery.ui.accordion.prototype ) );
 
 })( jQuery );
