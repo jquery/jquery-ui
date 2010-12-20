@@ -140,8 +140,8 @@ $.widget("ui.dialog", {
 					uiDialogTitlebarClose.removeClass( "ui-state-focus" );
 				})
 				.click(function( event ) {
+					event.preventDefault();
 					self.close( event );
-					return false;
 				})
 				.appendTo( uiDialogTitlebar ),
 
