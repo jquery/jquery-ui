@@ -384,7 +384,7 @@ $.widget("ui.selectmenu", {
 	_typeAhead: function(code, eventType){
 		var self = this;
 		//define self._prevChar if needed
-		if(!self._prevChar){ self._prevChar = ['',0]; }
+		if (!self._prevChar){ self._prevChar = ['',0]; }
 		var C = String.fromCharCode(code);
 		c = C.toLowerCase();
 		var focusFound = false;
