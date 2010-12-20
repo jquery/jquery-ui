@@ -330,7 +330,8 @@ $.widget( "ui.tabs", {
 			};
 
 		// attach tab event handler, unbind to avoid duplicates from former tabifying...
-		this.anchors.bind( o.event + ".tabs", function() {
+		this.anchors.bind( o.event + ".tabs", function( event ) {
+      event.preventDefault();
 			var el = this,
 				$li = $(el).closest( "li" ),
 				$hide = self.panels.filter( ":not(.ui-tabs-hide)" ),
@@ -346,7 +347,7 @@ $.widget( "ui.tabs", {
 				self.panels.filter( ":animated" ).length ||
 				self._trigger( "select", null, self._ui( this, $show[ 0 ] ) ) === false ) {
 				this.blur();
-				return false;
+        return;
 			}
 
 			o.selected = self.anchors.index( this );
@@ -367,7 +368,7 @@ $.widget( "ui.tabs", {
 					}).dequeue( "tabs" );
 
 					this.blur();
-					return false;
+					return;
 				} else if ( !$hide.length ) {
 					if ( o.cookie ) {
 						self._cookie( o.selected, o.cookie );
@@ -381,7 +382,7 @@ $.widget( "ui.tabs", {
 					self.load( self.anchors.index( this ) );
 
 					this.blur();
-					return false;
+					return;
 				}
 			}
 
@@ -415,8 +416,8 @@ $.widget( "ui.tabs", {
 		});
 
 		// disable click in any case
-		this.anchors.bind( "click.tabs", function(){
-			return false;
+		this.anchors.bind( "click.tabs", function( event ){
+			event.preventDefault();
 		});
 	},
 
