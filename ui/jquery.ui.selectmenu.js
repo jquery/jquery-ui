@@ -317,7 +317,7 @@ $.widget("ui.selectmenu", {
 		// add corners to top and bottom menu items
 		.find('li:first')
 			.toggleClass("ui-corner-top", !isDropDown)
-		.find('li:last')
+		.end().find('li:last')
 			.addClass("ui-corner-bottom");
 		this.selectmenuIcon
 			.toggleClass('ui-icon-triangle-1-s', isDropDown)
@@ -431,7 +431,7 @@ $.widget("ui.selectmenu", {
 			this.list.addClass(self.widgetBaseClass + '-open')
 				.attr('aria-hidden', false)
 				.find('li:not(.'+ self.widgetBaseClass +'-group):eq('+ this._selectedIndex() +') a')[0].focus();	
-			if(this.options.style == "dropdown"){ this.newelement.removeClass('ui-corner-all').addClass('ui-corner-top'); }	
+			if (this.options.style == "dropdown"){ this.newelement.removeClass('ui-corner-all').addClass('ui-corner-top'); }	
 			this._refreshPosition();
 			this._trigger("open", event, this._uiHash());
 		}
@@ -443,8 +443,8 @@ $.widget("ui.selectmenu", {
 			this.list
 				.attr('aria-hidden', true)
 				.removeClass(this.widgetBaseClass+'-open');
-			if(this.options.style == "dropdown"){ this.newelement.removeClass('ui-corner-top').addClass('ui-corner-all'); }
-			if(retainFocus){this.newelement.focus();}	
+			if (this.options.style == "dropdown"){ this.newelement.removeClass('ui-corner-top').addClass('ui-corner-all'); }
+			if (retainFocus){this.newelement.focus();}	
 			this._trigger("close", event, this._uiHash());
 		}
 	},

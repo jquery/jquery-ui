@@ -40,6 +40,7 @@
 	<script type="text/javascript">	
 		$(function(){
 			$('select#files').selectmenu({
+				style:'popup', 
 				icons: [
 					{find: '.script', icon: 'ui-icon-script'},
 					{find: '.image', icon: 'ui-icon-image'}
@@ -47,6 +48,7 @@
 			});	
 			
 			$('select#filesB').selectmenu({
+				style:'popup', 
 				icons: [
 					{find: '.video'},
 					{find: '.podcast'},
@@ -55,7 +57,6 @@
 			});			
 			
 			$('select#peopleA').selectmenu({
-				style:'dropdown',
 				icons: [
 					{find: '.avatar'}
 				],
@@ -65,7 +66,6 @@
 			});
 
 			$('select#peopleB').selectmenu({
-				style:'dropdown',
 				icons: [
 					{find: '.css-avatar'}
 				],
