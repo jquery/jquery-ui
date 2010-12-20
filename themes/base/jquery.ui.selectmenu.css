@@ -14,6 +14,9 @@
 .ui-selectmenu-status { line-height: 1.4em; }
 .ui-selectmenu-open li.ui-selectmenu-item-focus a {  }
 .ui-selectmenu-open li.ui-selectmenu-item-selected { }
+/* Disabled option styling */
+.ui-selectmenu-menu li.disabled { border: 1px solid transparent; }
+.ui-selectmenu-menu li.disabled a { cursor: default; color: #A9ACAF; background: #EBEBEC; }
 .ui-selectmenu-menu li span,.ui-selectmenu-status span { display:block; margin-bottom: .2em; }
 .ui-selectmenu-menu li .ui-selectmenu-item-header { font-weight: bold; }
 .ui-selectmenu-menu li .ui-selectmenu-item-content {  }

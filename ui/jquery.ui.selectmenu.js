@@ -427,10 +427,12 @@ $.widget("ui.selectmenu", {
 		}
 	},
 	change: function(event) {
-		this.element.trigger('change');
+		if (this._disabled(event.currentTarget)) { return false; }
+                this.element.trigger('change');
 		this._trigger("change", event, this._uiHash());
 	},
 	select: function(event) {
+                if (this._disabled(event.currentTarget)) { return false; }
 		this._trigger("select", event, this._uiHash());
 	},
 	_closeOthers: function(event){
@@ -471,10 +473,19 @@ $.widget("ui.selectmenu", {
 		if(newIndex > this._optionLis.size()-1){
 			newIndex =  this._optionLis.size()-1;
 		}
-		var activeID = this.widgetBaseClass + '-item-' + Math.round(Math.random() * 1000);
+                //Occurs when a full loop has been made
+                if (newIndex === recIndex) { return false; }
+
+                var activeID = this.widgetBaseClass + '-item-' + Math.round(Math.random() * 1000);
 		
 		this._focusedOptionLi().find('a:eq(0)').attr('id','');
-		this._optionLis.eq(newIndex).find('a:eq(0)').attr('id',activeID).focus();
+                if (this._optionLis.eq(newIndex).hasClass('disabled')) {
+                        //if option at newIndex is disabled, call _moveFocus, incrementing amt by one
+                        (amt > 0) ? amt++ : amt--;
+                        this._moveFocus(amt, newIndex);
+                } else {
+                        this._optionLis.eq(newIndex).find('a:eq(0)').attr('id',activeID).focus();
+                }
 		this.list.attr('aria-activedescendant', activeID);
 	},
 	_scrollPage: function(direction){
@@ -495,8 +506,35 @@ $.widget("ui.selectmenu", {
 					.attr("aria-disabled", value);
 		}
 	},
+        disable: function(optionIndex){
+                //if options is not provided, call the parents disable function
+                (!optionIndex)? this._setOption('disabled', true) : this._disableOption(optionIndex);
+        },
+
+        enable: function(optionIndex) {
+                //if options is not provided, call the parents enable function
+                (!optionIndex)? this._setOption('disabled', false) : this._enableOption(optionIndex);
+        },
+
+        _disableOption: function(index) {
+                var optionElem = this._optionLis.eq(index);
+                if (optionElem) {
+                       optionElem.addClass('disabled');
+                }
+        },
+
+        _enableOption: function(index) {
+                var optionElem = this._optionLis.eq(index);
+                if (optionElem) {
+                       optionElem.removeClass('disabled');
+                }
+        },
+
+        _disabled: function(elem) {
+                return $(elem).hasClass('disabled');
+        },
 	index: function(newValue) {
-		if (arguments.length) {
+		if (arguments.length && !this._disabled($(this._optionLis[newValue]))) {
 			this.element[0].selectedIndex = newValue;
 			this._refreshValue();
 		} else {
