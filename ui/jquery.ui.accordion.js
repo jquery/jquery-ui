@@ -24,7 +24,7 @@ $.widget( "ui.accordion", {
 		heightStyle: null, // "auto"
 		icons: {
 			header: "ui-icon-triangle-1-e",
-			activeHeader: "ui-icon-triangle-1-s"
+			activeHeader: null //"ui-icon-triangle-1-s"
 		}
 	},
 
@@ -627,7 +627,10 @@ $.extend( $.ui.accordion, {
 	$.extend( prototype.options, {
 		autoHeight: true, // use heightStyle: "auto"
 		clearStyle: false, // use heightStyle: "content"
-		fillSpace: false // use heightStyle: "fill"
+		fillSpace: false, // use heightStyle: "fill"
+		icons: $.extend( prototype.options.icons, {
+			headerSelected: "ui-icon-triangle-1-s"
+		})
 	});
 
 	var _create = prototype._create,
@@ -637,6 +640,8 @@ $.extend( $.ui.accordion, {
 		_create: function() {
 			this.options.heightStyle = this.options.heightStyle ||
 				this._mergeHeightStyle();
+
+			this.options.icons.activeHeader = this.options.icons.activeHeader || this.options.icons.headerSelected;
 			_create.call( this );
 		},
 

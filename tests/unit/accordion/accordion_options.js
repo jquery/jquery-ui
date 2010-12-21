@@ -163,6 +163,12 @@ test("{ icons: false }", function() {
 	icons(false);
 });
 
+test("{ icons: { activeHeader : 'test' } }", function() {
+	var list = $("#list1");
+	list.accordion( { icons: { "activeHeader": "test" } } );
+	equals( $( "#list1 span.test" ).length, 1);
+});
+
 test("{ navigation: true, navigationFilter: header }", function() {
 	$("#navigation").accordion({
 		navigation: true,
