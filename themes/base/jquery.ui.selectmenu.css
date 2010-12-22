@@ -18,7 +18,10 @@
 .ui-selectmenu-menu li .ui-selectmenu-item-header { font-weight: bold; }
 .ui-selectmenu-menu li .ui-selectmenu-item-content { }
 .ui-selectmenu-menu li .ui-selectmenu-item-footer { opacity: .8; }
-/*for optgroups*/
+/* for optgroups */
 .ui-selectmenu-menu .ui-selectmenu-group { font-size: 1em; }
 .ui-selectmenu-menu .ui-selectmenu-group .ui-selectmenu-group-label { line-height: 1.4em; display:block; padding: .6em .5em 0; font-weight: bold; }
 .ui-selectmenu-menu .ui-selectmenu-group ul { margin: 0; padding: 0; }
+/* IE6 workaround (dotted transparent borders) */
+* html .ui-selectmenu-menu li { border-color: pink; filter:chroma(color=pink); width:100%; }
+* html .ui-selectmenu-menu li a { position: relative }
