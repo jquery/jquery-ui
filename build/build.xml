@@ -271,6 +271,7 @@
 		<get src="${url}Dialog" dest="${docs.dir}dialog.html" />
 		<get src="${url}Progressbar" dest="${docs.dir}progressbar.html" />
 		<get src="${url}Slider" dest="${docs.dir}slider.html" />
+		<get src="${url}Tooltip" dest="${docs.dir}tooltip.html" />
 		<get src="${url}Tabs" dest="${docs.dir}tabs.html" />
 
 		<get src="${url}Position" dest="${docs.dir}position.html" />

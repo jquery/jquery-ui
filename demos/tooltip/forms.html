@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<title>jQuery UI Tooltip - Default demo</title>
+	<link type="text/css" href="../../themes/base/jquery.ui.all.css" rel="stylesheet" />
+	<script type="text/javascript" src="../../jquery-1.4.4.js"></script>
+	<script type="text/javascript" src="../../ui/jquery.ui.core.js"></script>
+	<script type="text/javascript" src="../../ui/jquery.ui.widget.js"></script>
+	<script type="text/javascript" src="../../ui/jquery.ui.position.js"></script>
+	<script type="text/javascript" src="../../ui/jquery.ui.tooltip.js"></script>
+	<script type="text/javascript" src="../../ui/jquery.ui.button.js"></script>
+	<link type="text/css" href="../demos.css" rel="stylesheet" />
+	<script type="text/javascript">
+	$(function() {
+		$("[title]").tooltip().unbind(".tooltip");
+		$("<button/>").text("Show help").button().toggle(function() {
+			$(":ui-tooltip").tooltip("open");
+		}, function() {
+			$(":ui-tooltip").tooltip("close");
+		}).appendTo("form");
+	});
+	</script>
+	<style>
+		label { display: inline-block; width: 5em; }
+		.ui-icon { display: inline-block; }
+		fieldset div {
+			margin-bottom: 2em;
+		}
+		.ui-tooltip { width: 210px; }
+	</style>
+</head>
+<body>
+
+<div class="demo">
+
+	<form>
+		<fieldset>
+			<div>
+				<label for="firstname">Firstname</label>
+				<input id="firstname" name="firstname" />
+				<span title="Please provide your firstname." class="ui-state-default ui-corner-all ui-icon ui-icon-help">?</span>
+			</div>
+			<div>
+				<label for="lastname">Lastname</label>
+				<input id="lastname" name="lastname" />
+				<span title="Please provide also your lastname." class="ui-state-default ui-corner-all ui-icon ui-icon-help">?</span>
+			</div>
+			<div>
+				<label for="address">Address</label>
+				<input id="address" name="address" />
+				<span title="Your home or work address." class="ui-state-default ui-corner-all ui-icon ui-icon-help">?</span>
+			</div>
+		</fieldset>
+	</form>
+
+</div><!-- End demo -->
+
+
+
+<div class="demo-description">
+
+<p>Use the button below to display the help texts. Click again to hide them. Default hover and focus events are removed to show tooltip only programmatically.</p>
+
+<p>A fixed width is defined in CSS to make the tooltips look consistent when displayed all at once.</p>
+
+</div><!-- End demo-description -->
+
+
+
+</body>
+</html>
