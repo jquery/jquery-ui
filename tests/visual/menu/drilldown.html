@@ -9,9 +9,16 @@
 	<script type="text/javascript" src="../../../ui/jquery.ui.widget.js"></script>
 	<script type="text/javascript" src="../../../ui/jquery.ui.position.js"></script>
 	<script type="text/javascript" src="../../../ui/jquery.ui.button.js"></script>
-	<script type="text/javascript" src="../../../ui/jquery.ui.autocomplete.js"></script>
+	<script type="text/javascript" src="../../../ui/jquery.ui.menu.js"></script>
+	<script type="text/javascript" src="http://jqueryui.com/themeroller/themeswitchertool/"></script>
 	<script type="text/javascript">
 	$(function() {
+		$.fn.themeswitcher && $('<div/>').css({
+			position: "absolute",
+			right: 10,
+			top: 10
+		}).appendTo(document.body).themeswitcher();
+		
 		$.widget("ui.drilldown", {
 			_init: function() {
 				var self = this;
@@ -21,10 +28,12 @@
 				this.element.find("ul").hide().prev("a").prepend('<span class="ui-icon ui-icon-carat-1-e"></span>').end().filter(":first").show();	
 				
 				this.element.find("ul").menu({
+					// disable built-in key handling
+					input: $(),
 					focus: function(event, ui) {
 						self.activeItem = ui.item;
 					},
-					selected: function(event, ui) {
+					select: function(event, ui) {
 						if (this != self.active[0]) {
 							return;
 						}
@@ -33,7 +42,7 @@
 							self._open(nested);
 						} else {
 							self.element.find("h3").text(ui.item.text());
-							self.options.selected.apply(this, arguments);
+							self.options.select.apply(this, arguments);
 						}
 					}
 				});
@@ -115,7 +124,7 @@
 		});
 		
 		var drilldown = $("#drilldown").drilldown({
-			selected: function(event, ui) {
+			select: function(event, ui) {
 				$("#log").append("<div>Selected " + ui.item.text() + "</div>");
 			}
 		});
