@@ -12,12 +12,15 @@ module("autocomplete: events", {
 var data = ["c++", "java", "php", "coldfusion", "javascript", "asp", "ruby", "python", "c", "scala", "groovy", "haskell", "perl"];
 
 test("all events", function() {
-	expect(12);
+	expect(13);
 	var ac = $("#autocomplete").autocomplete({
 		delay: 0,
 		source: data,
 		search: function(event) {
 			same(event.type, "autocompletesearch");
+		},
+		complete: function(event) {
+		  same(event.type, "autocompletecomplete");
 		},
 		open: function(event) {
 			same(event.type, "autocompleteopen");

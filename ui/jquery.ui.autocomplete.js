@@ -299,6 +299,7 @@ $.widget( "ui.autocomplete", {
 	},
 
 	_response: function( content ) {
+	  this._trigger( "complete" );
 		if ( !this.options.disabled && content && content.length ) {
 			content = this._normalize( content );
 			this._suggest( content );
