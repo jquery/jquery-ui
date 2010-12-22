@@ -1,8 +1,31 @@
+/*
+	list of callbacks
+	nice for when you make your own
+	
+	beforeAnimate
+		- runs on each element before each animation
+		- this = jQuery object of element
+	finished
+		- runs after all animations are done
+		- this = jQuery object of original selector
+	animate (interval, duration, i, wordCount, parentCoords)
+		- runs per element and is expected to animate it
+		- this = jQuery object of current animated element
+		- arguments:
+			* interval:		the calculated interval between an animation
+			* duration:		the duration of the current animation
+			* i: 			the current element index
+			* wordCount:	total amount of words in your set
+			* parentCoords:	hashmap of height, width and offset (left, top) of the original selector
+		
+
+*/
 var defaultOptions	= {
 	easing: 'linear',
 	words: true,
 	text: '',
 	distance: 1, // move element to/from where * parent.height ()
+	direction: 'down',
 	reverse: false,
 	random: false
 };
@@ -15,6 +38,8 @@ $.effects.disintegrate	= function (o, show) {
 	/* Internal callback to run before animation has started */
 	function start ($set) {
 		
+		
+		
 		var $this 	= this.css (this.offset ());
 		
 		setTimeout (
@@ -22,6 +47,7 @@ $.effects.disintegrate	= function (o, show) {
 				$this.css ('position', 'absolute');
 			}, 10
 		);
+		
 	}
 	
 	var options = o.options	= $.extend ({},
@@ -33,7 +59,7 @@ $.effects.disintegrate	= function (o, show) {
 			animate: function (interval, duration, i, wordCount, parentCoords) {
 				
 				/* set some basic stuff */
-				var offset		= this.offset (),
+				var offset		= this.position (),
 					width		= this.width (),
 					height		= this.height (),
 					properties	= {};
@@ -45,11 +71,19 @@ $.effects.disintegrate	= function (o, show) {
 					/* we're going to build */
 					properties.top		= offset.top;
 					properties.opacity	= 1;
-					this.css ('top', offset.top - parentCoords.height * options.distance); // 1 = o.distance
+					if (options.direction === 'down') {
+						this.css ('top', offset.top - parentCoords.height * options.distance); // 1 = o.distance
+					} else {
+						this.css ('top', offset.top + parentCoords.height * options.distance); // 1 = o.distance
+					}
 				
 				} else {
 					/* We're going to disintegrate */
-					properties.top		= offset.top + parentCoords.height * options.distance; // 1 = o.distance
+					if (options.direction === 'down') {
+						properties.top		= offset.top + parentCoords.height * options.distance; // 1 = o.distance
+					} else {
+						properties.top		= offset.top - parentCoords.height * options.distance; // 1 = o.distance
+					}
 					properties.opacity	= 0;
 				}
 
@@ -62,7 +96,7 @@ $.effects.disintegrate	= function (o, show) {
 				*/
 				if (options.random !== false) {
 					
-					var randomDelay = Math.random() * wordCount * interval,
+					var randomDelay = Math.random () * wordCount * interval,
 					/* If interval or random is negative, start from the bottom instead of top */
 					uniformDelay = options.reverse ?
 						((wordCount - i) * interval) : (i * interval);
@@ -122,12 +156,12 @@ $.effects.blockFadeOut	= function (o, show) {
 				*/
 				if (options.random !== false) {
 					
-					var randomDelay = Math.random() * wordCount * interval,
+					var randomDelay = Math.random () * wordCount * interval,
 					/* If interval or random is negative, start from the bottom instead of top */
 					uniformDelay = options.reverse ?
 						((wordCount - i) * interval) : (i * interval);
 					
-					delay = randomDelay * options.random + Math.max(1 - options.random, 0) * uniformDelay;
+					delay = randomDelay * options.random + Math.max (1 - options.random, 0) * uniformDelay;
 				}
 				
 				/* run it */
@@ -158,6 +192,7 @@ $.effects.textAnim	= function (o) {
 			/* No height etc. */
 			$this.width ($this.width ());
 			$this.height ($this.height ());
+
 
 			/*
 				The following regular expression courtesy of Phil Haack
@@ -222,7 +257,6 @@ $.effects.textAnim	= function (o) {
 			if (options.reverse) {
 				set.reverse ();
 			}
-			i			= 0;
 			
 			/* Width, height, left, top of parent for calculations */
 			parentCoords	= $.extend ($this.offset (), {width: $this.width (), height: $this.height ()});
