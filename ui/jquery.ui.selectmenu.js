@@ -364,21 +364,26 @@ $.widget("ui.selectmenu", {
         }, 200);
 	},
 	destroy: function() {
-		this.element.removeData(this.widgetName)
-			.removeClass(this.widgetBaseClass + '-disabled' + ' ' + this.namespace + '-state-disabled')
-			.removeAttr('aria-disabled')
-			.unbind(".selectmenu");
+		this.element.removeData( this.widgetName )
+			.removeClass( this.widgetBaseClass + '-disabled' + ' ' + this.namespace + '-state-disabled' )
+			.removeAttr( 'aria-disabled' )
+			.unbind( ".selectmenu" );
 			
-		$(window).unbind(".selectmenu");
-		$(document).unbind(".selectmenu");
+		$( window ).unbind( ".selectmenu" );
+		$( document ).unbind( ".selectmenu" );
 	
 		// unbind click on label, reset its for attr
-		$('label[for='+this.newelement.attr('id')+']')
-			.attr('for',this.element.attr('id'))
-			.unbind('.selectmenu');
-		this.newelement.remove();
-		// FIXME option.wrapper needs
-		this.list.remove();
+		$( 'label[for=' + this.newelement.attr('id') + ']' )
+			.attr( 'for', this.element.attr( 'id' ) )
+			.unbind( '.selectmenu' );
+		
+		if ( o.wrapperElement ) {
+			this.newelement.find( o.wrapperElement ).remove();
+			this.list.find( o.wrapperElement ).remove();
+		} else {
+			this.newelement.remove();
+			this.list.remove();
+		}
 		this.element.show();	
 		
 		// call widget destroy function
