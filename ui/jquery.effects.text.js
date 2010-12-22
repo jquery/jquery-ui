@@ -2,15 +2,94 @@ var defaultOptions	= {
 	easing: 'linear',
 	words: true,
 	text: '',
+	distance: 1, // move element to/from where * parent.height ()
 	reverse: false,
-	random: false,
-	start: $.noop,
-	finished: $.noop
+	random: false
 };
 	
+$.effects.disintegrate	= function (o, show) {
+
+	/* show is either 1 or null (build or disintegrate) */
+	show	= show ? 1 : 0;
+	
+	/* Internal callback to run before animation has started */
+	function start ($set) {
+		
+		var $this 	= this.css (this.offset ());
+		
+		setTimeout (
+			function () {
+				$this.css ('position', 'absolute');
+			}, 10
+		);
+	}
+	
+	var options = o.options	= $.extend ({},
+		defaultOptions,
+		o.options,
+		{
+			beforeAnimate: start,
+			/* animation function */
+			animate: function (interval, duration, i, wordCount, parentCoords) {
+				
+				/* set some basic stuff */
+				var offset		= this.offset (),
+					width		= this.width (),
+					height		= this.height (),
+					properties	= {};
+					
+				/* Hide or show the element according to what we're going to do */
+				this.css ({opacity: show ? 0 : 1});
+
+				if (show) {
+					/* we're going to build */
+					properties.top		= offset.top;
+					properties.opacity	= 1;
+					this.css ('top', offset.top - parentCoords.height * options.distance); // 1 = o.distance
+				
+				} else {
+					/* We're going to disintegrate */
+					properties.top		= offset.top + parentCoords.height * options.distance; // 1 = o.distance
+					properties.opacity	= 0;
+				}
+
+				/* default delay */
+				var delay	= interval * i;
+
+				/*
+					Randomize delay if necessary
+					Note, reverse doesn't really matter at this time
+				*/
+				if (options.random !== false) {
+					
+					var randomDelay = Math.random() * wordCount * interval,
+					/* If interval or random is negative, start from the bottom instead of top */
+					uniformDelay = options.reverse ?
+						((wordCount - i) * interval) : (i * interval);
+					
+					delay = randomDelay * options.random + Math.max(1 - options.random, 0) * uniformDelay;
+				}
+				
+				
+				
+				/* run it */
+				this.delay (delay).animate (properties, duration, options.easing);
+			}
+		}
+	);
+	
+	/* Pass everything to the general text engine */
+	$.effects.textAnim.call (this, o);
+}
+
+$.effects.build	= function (o) {
+	/* Use the disintegrate, for redundancy purposes */
+	$.effects.disintegrate.call (this, o, 1);
+}
 
 $.effects.blockFadeOut	= function (o, show) {
 	/* show is either 1 or null */
+	show	= show || 0;
 	
 	/* Internal callback to run when animation has finished */
 	function finished ($set) {
@@ -24,37 +103,37 @@ $.effects.blockFadeOut	= function (o, show) {
 	
 	
 	var options = o.options	= $.extend ({},
-			defaultOptions,
-			o.options,
-			{
-				/* only run when we fadeOut */
-				finished: !show ? finished : null,
-				/* only run when we fadeIn */
-				beforeAnimate: show ? start : null,
-				/* animation function */
-				animate: function (interval, duration, i, wordCount) {
+		defaultOptions,
+		o.options,
+		{
+			/* only run when we fadeOut */
+			finished: !show ? finished : null,
+			/* only run when we fadeIn */
+			beforeAnimate: show ? start : null,
+			/* animation function */
+			animate: function (interval, duration, i, wordCount, parentCoords) {
 
-					/* default delay */
-					var delay	= interval * i;
+				/* default delay */
+				var delay	= interval * i;
 
-					/*
-						Randomize delay if necessary
-						Note, reverse doesn't really matter at this time
-					*/
-					if (options.random !== false) {
-						
-						var randomDelay = Math.random() * wordCount * interval,
-						/* If interval or random is negative, start from the bottom instead of top */
-						uniformDelay = options.reverse ?
-							((wordCount - i) * interval) : (i * interval);
-						
-						delay = randomDelay * options.random + Math.max(1 - options.random, 0) * uniformDelay;
-					}
+				/*
+					Randomize delay if necessary
+					Note, reverse doesn't really matter at this time
+				*/
+				if (options.random !== false) {
 					
-					/* run it */
-					this.delay (delay).animate ({opacity: show || 0}, duration, options.easing);
+					var randomDelay = Math.random() * wordCount * interval,
+					/* If interval or random is negative, start from the bottom instead of top */
+					uniformDelay = options.reverse ?
+						((wordCount - i) * interval) : (i * interval);
+					
+					delay = randomDelay * options.random + Math.max(1 - options.random, 0) * uniformDelay;
 				}
+				
+				/* run it */
+				this.delay (delay).animate ({opacity: show}, duration, options.easing);
 			}
+		}
 	);
 	
 	/* Pass everything to the general text engine */
@@ -63,7 +142,6 @@ $.effects.blockFadeOut	= function (o, show) {
 
 
 $.effects.blockFadeIn	= function (o) {
-	
 	/* Use the blockFadeOut, for redundancy purposes */
 	$.effects.blockFadeOut.call (this, o, 1);
 }
@@ -75,7 +153,7 @@ $.effects.textAnim	= function (o) {
 	return this.queue (
 		function () {
 
-			var replaceWith, tagReg, reg, html, i, $set, set, wordCount, duration, interval,
+			var replaceWith, tagReg, reg, html, i, $set, set, wordCount, duration, interval, parentCoords,
 			$this	= $(this);
 			/* No height etc. */
 			$this.width ($this.width ());
@@ -115,7 +193,6 @@ $.effects.textAnim	= function (o) {
 				if (!word.match (tagReg)) {
 					html.push ('<span>' + word + '</span>');
 				} else {
-					console.log (word);
 					html.push (word);
 				}
 			}
@@ -147,6 +224,9 @@ $.effects.textAnim	= function (o) {
 			}
 			i			= 0;
 			
+			/* Width, height, left, top of parent for calculations */
+			parentCoords	= $.extend ($this.offset (), {width: $this.width (), height: $this.height ()});
+			
 			/* Iterate over all the elements run their animation function on it */
 			for (i = 0, l = set.length; i < l; i++) {
 				var $word	= $(set[i]);
@@ -158,7 +238,7 @@ $.effects.textAnim	= function (o) {
 					Call the animation per element
 					This way each method can define it's manipulation per element
 				*/
-				options.animate.call ($word, interval, duration, i, wordCount);
+				options.animate.call ($word, interval, duration, i, wordCount, parentCoords);
 			}
 			
 			setTimeout (
