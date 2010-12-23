@@ -25,7 +25,7 @@ var defaultOptions	= {
 	words: true,
 	text: '',
 	distance: 1, // move element to/from where * parent.height ()
-	direction: 'down',
+	direction: 'up',
 	reverse: false,
 	random: false
 };
@@ -38,10 +38,14 @@ $.effects.disintegrate	= function (o, show) {
 	/* Internal callback to run before animation has started */
 	function start ($set) {
 		
-		
-		
+		/* Set the current position of the element */
 		var $this 	= this.css (this.offset ());
 		
+		/*
+			Have to find out why this happends,
+			just doing this.css ('position', 'absolute') doesn't work >:-[
+			So we use this hack
+		*/
 		setTimeout (
 			function () {
 				$this.css ('position', 'absolute');
@@ -50,10 +54,15 @@ $.effects.disintegrate	= function (o, show) {
 		
 	}
 	
+	function finished () {
+		this.empty ();
+	}
+	
 	var options = o.options	= $.extend ({},
 		defaultOptions,
 		o.options,
 		{
+			finished: show ? null : finished,
 			beforeAnimate: start,
 			/* animation function */
 			animate: function (interval, duration, i, wordCount, parentCoords) {
@@ -70,19 +79,32 @@ $.effects.disintegrate	= function (o, show) {
 				if (show) {
 					/* we're going to build */
 					properties.top		= offset.top;
+					properties.left		= offset.left;
 					properties.opacity	= 1;
-					if (options.direction === 'down') {
+					if (options.direction.indexOf ('top') !== -1) {
 						this.css ('top', offset.top - parentCoords.height * options.distance); // 1 = o.distance
-					} else {
+					} else if (options.direction.indexOf ('bottom') !== -1) {
 						this.css ('top', offset.top + parentCoords.height * options.distance); // 1 = o.distance
+					}
+					
+					if (options.direction.indexOf ('left') !== -1) {
+						this.css ('left', offset.left - parentCoords.width * options.distance); // 1 = o.distance
+					} else if (options.direction.indexOf ('right') !== -1) {
+						this.css ('left', offset.left + parentCoords.width * options.distance); // 1 = o.distance
 					}
 				
 				} else {
 					/* We're going to disintegrate */
-					if (options.direction === 'down') {
+					if (options.direction.indexOf ('bottom') !== -1) {
 						properties.top		= offset.top + parentCoords.height * options.distance; // 1 = o.distance
-					} else {
+					} else if (options.direction.indexOf ('top') !== -1) {
 						properties.top		= offset.top - parentCoords.height * options.distance; // 1 = o.distance
+					}
+					
+					if (options.direction.indexOf ('right') !== -1) {
+						properties.left		= offset.left + parentCoords.width * options.distance; // 1 = o.distance
+					} else if (options.direction.indexOf ('left') !== -1) {
+						properties.left		= offset.left - parentCoords.width * options.distance; // 1 = o.distance
 					}
 					properties.opacity	= 0;
 				}
