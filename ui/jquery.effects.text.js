@@ -14,7 +14,7 @@
 		- arguments:
 			* interval:		the calculated interval between an animation
 			* duration:		the duration of the current animation
-			* i: 			the current element index
+			* i:			the current element index
 			* wordCount:	total amount of words in your set
 			* parentCoords:	hashmap of height, width and offset (left, top) of the original selector
 		
@@ -32,6 +32,8 @@ var defaultOptions	= {
 	
 $.effects.disintegrate	= function (o, show) {
 
+	var docHeight	= $(document).height (),
+	docWidth	= $(document).width ();
 	/* show is either 1 or null (build or disintegrate) */
 	show	= show ? 1 : 0;
 	
@@ -69,42 +71,63 @@ $.effects.disintegrate	= function (o, show) {
 				
 				/* set some basic stuff */
 				var offset		= this.position (),
-					width		= this.width (),
-					height		= this.height (),
-					properties	= {};
+					width		= this.outerWidth (),
+					height		= this.outerHeight (),
+					properties	= {},
+					/* max top */
+					mTop		= docHeight - height,
+					/* max left */
+					mLeft		= docWidth - width;
 					
 				/* Hide or show the element according to what we're going to do */
 				this.css ({opacity: show ? 0 : 1});
 
+				var top, left;
 				if (show) {
 					/* we're going to build */
 					properties.top		= offset.top;
 					properties.left		= offset.left;
 					properties.opacity	= 1;
 					if (options.direction.indexOf ('top') !== -1) {
-						this.css ('top', offset.top - parentCoords.height * options.distance); // 1 = o.distance
+						top	= offset.top - parentCoords.height * options.distance;
+						
+						this.css ('top', top < 0 ? 0 : top); // 1 = o.distance
 					} else if (options.direction.indexOf ('bottom') !== -1) {
-						this.css ('top', offset.top + parentCoords.height * options.distance); // 1 = o.distance
+						top	= offset.top + parentCoords.height * options.distance;
+						
+						this.css ('top', top > mTop ? mTop : top); // 1 = o.distance
 					}
 					
 					if (options.direction.indexOf ('left') !== -1) {
-						this.css ('left', offset.left - parentCoords.width * options.distance); // 1 = o.distance
+						left	= offset.left - parentCoords.width * options.distance;
+						
+						this.css ('left', left < 0 ? 0 : left); // 1 = o.distance
 					} else if (options.direction.indexOf ('right') !== -1) {
-						this.css ('left', offset.left + parentCoords.width * options.distance); // 1 = o.distance
+						left	= offset.left + parentCoords.width * options.distance;
+						
+						this.css ('left', left > mLeft ? mLeft : left); // 1 = o.distance
 					}
 				
 				} else {
 					/* We're going to disintegrate */
 					if (options.direction.indexOf ('bottom') !== -1) {
-						properties.top		= offset.top + parentCoords.height * options.distance; // 1 = o.distance
+						 top	= offset.top + parentCoords.height * options.distance;
+						
+						properties.top		= top > mTop ? mTop : top; // 1 = o.distance
 					} else if (options.direction.indexOf ('top') !== -1) {
-						properties.top		= offset.top - parentCoords.height * options.distance; // 1 = o.distance
+						var top	= offset.top - parentCoords.height * options.distance
+						
+						properties.top		= top > 0 ? 0 : top; // 1 = o.distance
 					}
 					
 					if (options.direction.indexOf ('right') !== -1) {
-						properties.left		= offset.left + parentCoords.width * options.distance; // 1 = o.distance
+						left	= offset.left + parentCoords.width * options.distance;
+						
+						properties.left		= left > mLeft ? mLeft : left; // 1 = o.distance
 					} else if (options.direction.indexOf ('left') !== -1) {
-						properties.left		= offset.left - parentCoords.width * options.distance; // 1 = o.distance
+						left	= offset.left - parentCoords.width * options.distance;
+						
+						properties.left		= left < 0 ? 0 : left; // 1 = o.distance
 					}
 					properties.opacity	= 0;
 				}
@@ -136,12 +159,12 @@ $.effects.disintegrate	= function (o, show) {
 	
 	/* Pass everything to the general text engine */
 	$.effects.textAnim.call (this, o);
-}
+};
 
 $.effects.build	= function (o) {
 	/* Use the disintegrate, for redundancy purposes */
 	$.effects.disintegrate.call (this, o, 1);
-}
+};
 
 $.effects.blockFadeOut	= function (o, show) {
 	/* show is either 1 or null */
@@ -194,13 +217,13 @@ $.effects.blockFadeOut	= function (o, show) {
 	
 	/* Pass everything to the general text engine */
 	$.effects.textAnim.call (this, o);
-}
+};
 
 
 $.effects.blockFadeIn	= function (o) {
 	/* Use the blockFadeOut, for redundancy purposes */
 	$.effects.blockFadeOut.call (this, o, 1);
-}
+};
 
 $.effects.textAnim	= function (o) {
 
@@ -267,7 +290,7 @@ $.effects.textAnim	= function (o) {
 			$this.html (html.join (''));
 
 			/* Retreive the total set of elements */
-			$set	= $this.find ('span:not(:has(span))')
+			$set	= $this.find ('span:not(:has(span))');
 			set		= $set.get ();
 			
 			/* Calculate the duration and interval points */
