@@ -126,7 +126,7 @@ $.widget( "ui.tabs", {
 
 			// inline tab
 			if ( fragmentId.test( href ) ) {
-				self.panels = self.panels.add( self._sanitizeSelector( href ), self.element );
+				self.panels = self.panels.add( self.element.find( self._sanitizeSelector( href ) ) );
 			// remote tab
 			// prevent loading the page itself if href is just "#"
 			} else if ( href && href !== "#" ) {
@@ -233,9 +233,7 @@ $.widget( "ui.tabs", {
 			o.selected = this.lis.index( this.lis.filter( ".ui-tabs-selected" ) );
 		}
 
-		// update collapsible
-		// TODO: use .toggleClass()
-		this.element[ o.collapsible ? "addClass" : "removeClass" ]( "ui-tabs-collapsible" );
+		this.element.toggleClass( "ui-tabs-collapsible", o.collapsible );
 
 		// set or update cookie after init and add/remove respectively
 		if ( o.cookie ) {
@@ -244,9 +242,8 @@ $.widget( "ui.tabs", {
 
 		// disable tabs
 		for ( var i = 0, li; ( li = this.lis[ i ] ); i++ ) {
-			$( li )[ $.inArray( i, o.disabled ) != -1 &&
-				// TODO: use .toggleClass()
-				!$( li ).hasClass( "ui-tabs-selected" ) ? "addClass" : "removeClass" ]( "ui-state-disabled" );
+			$( li ).toggleClass( "ui-state-disabled",
+				$.inArray( i, o.disabled ) != -1 && !$( li ).hasClass( "ui-tabs-selected" ) );
 		}
 
 		// reset cache if switching from cached to not cached
@@ -333,7 +330,8 @@ $.widget( "ui.tabs", {
 			};
 
 		// attach tab event handler, unbind to avoid duplicates from former tabifying...
-		this.anchors.bind( o.event + ".tabs", function() {
+		this.anchors.bind( o.event + ".tabs", function( event ) {
+      event.preventDefault();
 			var el = this,
 				$li = $(el).closest( "li" ),
 				$hide = self.panels.filter( ":not(.ui-tabs-hide)" ),
@@ -349,7 +347,7 @@ $.widget( "ui.tabs", {
 				self.panels.filter( ":animated" ).length ||
 				self._trigger( "select", null, self._ui( this, $show[ 0 ] ) ) === false ) {
 				this.blur();
-				return false;
+        return;
 			}
 
 			o.selected = self.anchors.index( this );
@@ -370,7 +368,7 @@ $.widget( "ui.tabs", {
 					}).dequeue( "tabs" );
 
 					this.blur();
-					return false;
+					return;
 				} else if ( !$hide.length ) {
 					if ( o.cookie ) {
 						self._cookie( o.selected, o.cookie );
@@ -384,7 +382,7 @@ $.widget( "ui.tabs", {
 					self.load( self.anchors.index( this ) );
 
 					this.blur();
-					return false;
+					return;
 				}
 			}
 
@@ -411,15 +409,15 @@ $.widget( "ui.tabs", {
 			// Prevent IE from keeping other link focussed when using the back button
 			// and remove dotted border from clicked link. This is controlled via CSS
 			// in modern browsers; blur() removes focus from address bar in Firefox
-			// which can become a usability and annoying problem with tabs('rotate').
+			// which can become a usability
 			if ( $.browser.msie ) {
 				this.blur();
 			}
 		});
 
 		// disable click in any case
-		this.anchors.bind( "click.tabs", function(){
-			return false;
+		this.anchors.bind( "click.tabs", function( event ){
+			event.preventDefault();
 		});
 	},
 
@@ -699,60 +697,6 @@ $.widget( "ui.tabs", {
 
 $.extend( $.ui.tabs, {
 	version: "@VERSION"
-});
-
-/*
- * Tabs Extensions
- */
-
-/*
- * Rotate
- */
-$.extend( $.ui.tabs.prototype, {
-	rotation: null,
-	rotate: function( ms, continuing ) {
-		var self = this,
-			o = this.options;
-
-		var rotate = self._rotate || ( self._rotate = function( e ) {
-			clearTimeout( self.rotation );
-			self.rotation = setTimeout(function() {
-				var t = o.selected;
-				self.select( ++t < self.anchors.length ? t : 0 );
-			}, ms );
-			
-			if ( e ) {
-				e.stopPropagation();
-			}
-		});
-
-		var stop = self._unrotate || ( self._unrotate = !continuing
-			? function(e) {
-				if (e.clientX) { // in case of a true click
-					self.rotate(null);
-				}
-			}
-			: function( e ) {
-				t = o.selected;
-				rotate();
-			});
-
-		// start rotation
-		if ( ms ) {
-			this.element.bind( "tabsshow", rotate );
-			this.anchors.bind( o.event + ".tabs", stop );
-			rotate();
-		// stop rotation
-		} else {
-			clearTimeout( self.rotation );
-			this.element.unbind( "tabsshow", rotate );
-			this.anchors.unbind( o.event + ".tabs", stop );
-			delete this._rotate;
-			delete this._unrotate;
-		}
-
-		return this;
-	}
 });
 
 })( jQuery );

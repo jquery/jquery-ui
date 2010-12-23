@@ -9,7 +9,9 @@
 	<script src="../../ui/jquery.ui.widget.js"></script>
 	<script src="../../ui/jquery.ui.button.js"></script>
 	<script src="../../ui/jquery.ui.position.js"></script>
+	<script src="../../ui/jquery.ui.menu.js"></script>
 	<script src="../../ui/jquery.ui.autocomplete.js"></script>
+	<script src="../../ui/jquery.ui.tooltip.js"></script>
 	<link rel="stylesheet" href="../demos.css">
 	<style>
 	.ui-button { margin-left: -1px; }
@@ -65,8 +67,10 @@
 								});
 								if ( !valid ) {
 									// remove invalid value, as it didn't match anything
-									$( this ).val( "" );
-									select.val( "" );
+									$(this).val( "").attr( "title", value + " didn't match any item" ).tooltip( "open" );
+									setTimeout( function() {
+										input.tooltip( "close" ).attr( "title", "" );
+									}, 2500 );
 									input.data( "autocomplete" ).term = "";
 									return false;
 								}
@@ -82,7 +86,7 @@
 						.appendTo( ul );
 				};
 
-				this.button = $( "<button>&nbsp;</button>" )
+				this.button = $( "<button type='button'>&nbsp;</button>" )
 					.attr( "tabIndex", -1 )
 					.attr( "title", "Show All Items" )
 					.insertAfter( input )
@@ -105,6 +109,12 @@
 						input.autocomplete( "search", "" );
 						input.focus();
 					});
+					
+					input.tooltip( {
+						position: {
+						  offset: (this.button.width() + 5) + " 0"
+						}
+					}).tooltip( "widget" ).addClass( "ui-state-highlight" );
 			},
 
 			destroy: function() {

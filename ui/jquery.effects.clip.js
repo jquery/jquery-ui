@@ -17,7 +17,7 @@ $.effects.clip = function(o) {
 	return this.queue(function() {
 
 		// Create element
-		var el = $(this), props = ['position','top','left','height','width'];
+		var el = $(this), props = ['position','top','bottom','left','right','height','width'];
 
 		// Set options
 		var mode = $.effects.setMode(el, o.options.mode || 'hide'); // Set Mode

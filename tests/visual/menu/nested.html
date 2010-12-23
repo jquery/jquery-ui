@@ -8,8 +8,8 @@
 	<script type="text/javascript" src="../../../ui/jquery.ui.core.js"></script>
 	<script type="text/javascript" src="../../../ui/jquery.ui.widget.js"></script>
 	<script type="text/javascript" src="../../../ui/jquery.ui.position.js"></script>
-	<script type="text/javascript" src="../../../ui/jquery.ui.autocomplete.js"></script>
-	<script type="text/javascript" src="../../../external/jquery.bgiframe-2.1.2.js"></script>
+	<script type="text/javascript" src="../../../ui/jquery.ui.menu.js"></script>
+	<script type="text/javascript" src="../../../external/jquery.bgiframe-2.1.1.js"></script>
 	<script type="text/javascript" src="http://jqueryui.com/themeroller/themeswitchertool/"></script>
 	<script type="text/javascript">
 	$(function() {
@@ -28,7 +28,9 @@
 				this.element.find("ul").hide().prev("a").prepend('<span class="ui-icon ui-icon-carat-1-e"></span>');	
 				
 				this.element.find("ul").andSelf().menu({
-					selected: this.options.selected,
+					// disable built-in key handling
+					input: $(),
+					select: this.options.select,
 					focus: function(event, ui) {
 						self.active = ui.item.parent();
 						self.activeItem = ui.item;
@@ -75,7 +77,7 @@
 		});
 		
 		var nestedmenu = $("#menu").nestedmenu({
-			selected: function(event, ui) {
+			select: function(event, ui) {
 				$("#log").append("<div>Selected " + ui.item.text() + "</div>");
 			}
 		}).hide();

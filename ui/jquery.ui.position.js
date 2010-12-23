@@ -37,8 +37,7 @@ $.fn.position = function( options ) {
 		targetWidth = target.width();
 		targetHeight = target.height();
 		basePosition = { top: 0, left: 0 };
-	// TODO: use $.isWindow() in 1.9
-	} else if ( targetElem.setTimeout ) {
+	} else if ( $.isWindow( targetElem ) ) {
 		targetWidth = target.width();
 		targetHeight = target.height();
 		basePosition = { top: target.scrollTop(), left: target.scrollLeft() };

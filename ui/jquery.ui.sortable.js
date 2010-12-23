@@ -77,8 +77,7 @@ $.widget("ui.sortable", $.ui.mouse, {
 		if ( key === "disabled" ) {
 			this.options[ key ] = value;
 	
-			this.widget()
-				[ value ? "addClass" : "removeClass"]( "ui-sortable-disabled" );
+			this.widget().toggleClass( "ui-sortable-disabled", !!value );
 		} else {
 			// Don't call widget base _setOption for disable as it adds ui-state-disabled class
 			$.Widget.prototype._setOption.apply(this, arguments);
@@ -294,8 +293,8 @@ $.widget("ui.sortable", $.ui.mouse, {
 
 			if(itemElement != this.currentItem[0] //cannot intersect with itself
 				&&	this.placeholder[intersection == 1 ? "next" : "prev"]()[0] != itemElement //no useless actions that have been done before
-				&&	!$.ui.contains(this.placeholder[0], itemElement) //no action if the item moved is the parent of the item checked
-				&& (this.options.type == 'semi-dynamic' ? !$.ui.contains(this.element[0], itemElement) : true)
+				&&	!$.contains(this.placeholder[0], itemElement) //no action if the item moved is the parent of the item checked
+				&& (this.options.type == 'semi-dynamic' ? !$.contains(this.element[0], itemElement) : true)
 				//&& itemElement.parentNode == this.placeholder[0].parentNode // only rearrange items within the same container
 			) {
 
@@ -691,13 +690,13 @@ $.widget("ui.sortable", $.ui.mouse, {
 		for (var i = this.containers.length - 1; i >= 0; i--){
 
 			// never consider a container that's located within the item itself 
-			if($.ui.contains(this.currentItem[0], this.containers[i].element[0]))
+			if($.contains(this.currentItem[0], this.containers[i].element[0]))
 				continue;
 
 			if(this._intersectsWith(this.containers[i].containerCache)) {
 
 				// if we've already found a container and it's more "inner" than this, then continue 
-				if(innermostContainer && $.ui.contains(this.containers[i].element[0], innermostContainer.element[0]))
+				if(innermostContainer && $.contains(this.containers[i].element[0], innermostContainer.element[0]))
 					continue;
 
 				innermostContainer = this.containers[i]; 
@@ -725,7 +724,7 @@ $.widget("ui.sortable", $.ui.mouse, {
 			//When entering a new container, we will find the item with the least distance and append our item near it 
 			var dist = 10000; var itemWithLeastDistance = null; var base = this.positionAbs[this.containers[innermostIndex].floating ? 'left' : 'top']; 
 			for (var j = this.items.length - 1; j >= 0; j--) { 
-				if(!$.ui.contains(this.containers[innermostIndex].element[0], this.items[j].item[0])) continue; 
+				if(!$.contains(this.containers[innermostIndex].element[0], this.items[j].item[0])) continue; 
 				var cur = this.items[j][this.containers[innermostIndex].floating ? 'left' : 'top']; 
 				if(Math.abs(cur - base) < dist) { 
 					dist = Math.abs(cur - base); itemWithLeastDistance = this.items[j]; 
@@ -800,7 +799,7 @@ $.widget("ui.sortable", $.ui.mouse, {
 		// 1. The position of the helper is absolute, so it's position is calculated based on the next positioned parent
 		// 2. The actual offset parent is a child of the scroll parent, and the scroll parent isn't the document, which means that
 		//    the scroll is included in the initial calculation of the offset of the parent, and never recalculated upon drag
-		if(this.cssPosition == 'absolute' && this.scrollParent[0] != document && $.ui.contains(this.scrollParent[0], this.offsetParent[0])) {
+		if(this.cssPosition == 'absolute' && this.scrollParent[0] != document && $.contains(this.scrollParent[0], this.offsetParent[0])) {
 			po.left += this.scrollParent.scrollLeft();
 			po.top += this.scrollParent.scrollTop();
 		}
@@ -874,7 +873,7 @@ $.widget("ui.sortable", $.ui.mouse, {
 
 		if(!pos) pos = this.position;
 		var mod = d == "absolute" ? 1 : -1;
-		var o = this.options, scroll = this.cssPosition == 'absolute' && !(this.scrollParent[0] != document && $.ui.contains(this.scrollParent[0], this.offsetParent[0])) ? this.offsetParent : this.scrollParent, scrollIsRootNode = (/(html|body)/i).test(scroll[0].tagName);
+		var o = this.options, scroll = this.cssPosition == 'absolute' && !(this.scrollParent[0] != document && $.contains(this.scrollParent[0], this.offsetParent[0])) ? this.offsetParent : this.scrollParent, scrollIsRootNode = (/(html|body)/i).test(scroll[0].tagName);
 
 		return {
 			top: (
@@ -895,7 +894,7 @@ $.widget("ui.sortable", $.ui.mouse, {
 
 	_generatePosition: function(event) {
 
-		var o = this.options, scroll = this.cssPosition == 'absolute' && !(this.scrollParent[0] != document && $.ui.contains(this.scrollParent[0], this.offsetParent[0])) ? this.offsetParent : this.scrollParent, scrollIsRootNode = (/(html|body)/i).test(scroll[0].tagName);
+		var o = this.options, scroll = this.cssPosition == 'absolute' && !(this.scrollParent[0] != document && $.contains(this.scrollParent[0], this.offsetParent[0])) ? this.offsetParent : this.scrollParent, scrollIsRootNode = (/(html|body)/i).test(scroll[0].tagName);
 
 		// This is another very weird special case that only happens for relative elements:
 		// 1. If the css position is relative
@@ -992,10 +991,10 @@ $.widget("ui.sortable", $.ui.mouse, {
 
 		if(this.fromOutside && !noPropagation) delayedTriggers.push(function(event) { this._trigger("receive", event, this._uiHash(this.fromOutside)); });
 		if((this.fromOutside || this.domPosition.prev != this.currentItem.prev().not(".ui-sortable-helper")[0] || this.domPosition.parent != this.currentItem.parent()[0]) && !noPropagation) delayedTriggers.push(function(event) { this._trigger("update", event, this._uiHash()); }); //Trigger update callback if the DOM position has changed
-		if(!$.ui.contains(this.element[0], this.currentItem[0])) { //Node was moved out of the current element
+		if(!$.contains(this.element[0], this.currentItem[0])) { //Node was moved out of the current element
 			if(!noPropagation) delayedTriggers.push(function(event) { this._trigger("remove", event, this._uiHash()); });
 			for (var i = this.containers.length - 1; i >= 0; i--){
-				if($.ui.contains(this.containers[i].element[0], this.currentItem[0]) && !noPropagation) {
+				if($.contains(this.containers[i].element[0], this.currentItem[0]) && !noPropagation) {
 					delayedTriggers.push((function(c) { return function(event) { c._trigger("receive", event, this._uiHash(this)); };  }).call(this, this.containers[i]));
 					delayedTriggers.push((function(c) { return function(event) { c._trigger("update", event, this._uiHash(this));  }; }).call(this, this.containers[i]));
 				}

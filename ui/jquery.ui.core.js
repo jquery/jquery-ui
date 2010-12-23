@@ -263,12 +263,7 @@ $.extend( $.ui, {
 		}
 	},
 	
-	// will be deprecated when we switch to jQuery 1.4 - use jQuery.contains()
-	contains: function( a, b ) {
-		return document.compareDocumentPosition ?
-			a.compareDocumentPosition( b ) & 16 :
-			a !== b && a.contains( b );
-	},
+	contains: $.contains,
 	
 	// only used by resizable
 	hasScroll: function( el, a ) {

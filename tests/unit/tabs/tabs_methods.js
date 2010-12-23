@@ -176,8 +176,4 @@ test('length', function() {
 	equals(el.tabs('length'), $('ul a', el).length, ' should return length');
 });
 
-test('rotate', function() {
-	ok(false, "missing test - untested code is broken code.");
-});
-
 })(jQuery);

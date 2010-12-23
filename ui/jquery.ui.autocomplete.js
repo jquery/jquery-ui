@@ -11,6 +11,7 @@
  *	jquery.ui.core.js
  *	jquery.ui.widget.js
  *	jquery.ui.position.js
+ *	jquery.ui.menu.js
  */
 (function( $, undefined ) {
 
@@ -26,6 +27,9 @@ $.widget( "ui.autocomplete", {
 		},
 		source: null
 	},
+
+	pending: 0,
+
 	_create: function() {
 		var self = this,
 			doc = this.element[ 0 ].ownerDocument,
@@ -142,7 +146,7 @@ $.widget( "ui.autocomplete", {
 						$( document ).one( 'mousedown', function( event ) {
 							if ( event.target !== self.element[ 0 ] &&
 								event.target !== menuElement &&
-								!$.ui.contains( menuElement, event.target ) ) {
+								!$.contains( menuElement, event.target ) ) {
 								self.close();
 							}
 						});
@@ -155,6 +159,8 @@ $.widget( "ui.autocomplete", {
 				}, 13);
 			})
 			.menu({
+				// custom key handling for now
+				input: $(),
 				focus: function( event, ui ) {
 					var item = ui.item.data( "item.autocomplete" );
 					if ( false !== self._trigger( "focus", event, { item: item } ) ) {
@@ -164,7 +170,7 @@ $.widget( "ui.autocomplete", {
 						}
 					}
 				},
-				selected: function( event, ui ) {
+				select: function( event, ui ) {
 					var item = ui.item.data( "item.autocomplete" ),
 						previous = self.previous;
 
@@ -201,8 +207,6 @@ $.widget( "ui.autocomplete", {
 				}
 			})
 			.zIndex( this.element.zIndex() + 1 )
-			// workaround for jQuery bug #5781 http://dev.jquery.com/ticket/5781
-			.css({ top: 0, left: 0 })
 			.hide()
 			.data( "menu" );
 		if ( $.fn.bgiframe ) {
@@ -229,6 +233,9 @@ $.widget( "ui.autocomplete", {
 		if ( key === "appendTo" ) {
 			this.menu.element.appendTo( $( value || "body", this.element[0].ownerDocument )[0] )
 		}
+		if ( key === "disabled" && value && this.xhr ) {
+			this.xhr.abort();
+		}
 	},
 
 	_initSource: function() {
@@ -243,7 +250,7 @@ $.widget( "ui.autocomplete", {
 		} else if ( typeof this.options.source === "string" ) {
 			url = this.options.source;
 			this.source = function( request, response ) {
-				if (self.xhr) {
+				if ( self.xhr ) {
 					self.xhr.abort();
 				}
 				self.xhr = $.ajax({
@@ -288,20 +295,24 @@ $.widget( "ui.autocomplete", {
 	},
 
 	_search: function( value ) {
+		this.pending++;
 		this.element.addClass( "ui-autocomplete-loading" );
 
 		this.source( { term: value }, this.response );
 	},
 
 	_response: function( content ) {
-		if ( content && content.length ) {
+		if ( !this.options.disabled && content && content.length ) {
 			content = this._normalize( content );
 			this._suggest( content );
 			this._trigger( "open" );
 		} else {
 			this.close();
 		}
-		this.element.removeClass( "ui-autocomplete-loading" );
+		this.pending--;
+		if ( !this.pending ) {
+			this.element.removeClass( "ui-autocomplete-loading" );
+		}
 	},
 
 	close: function( event ) {
@@ -409,187 +420,3 @@ $.extend( $.ui.autocomplete, {
 });
 
 }( jQuery ));
-
-/*
- * jQuery UI Menu (not officially released)
- * 
- * This widget isn't yet finished and the API is subject to change. We plan to finish
- * it for the next release. You're welcome to give it a try anyway and give us feedback,
- * as long as you're okay with migrating your code later on. We can help with that, too.
- *
- * Copyright 2010, AUTHORS.txt (http://jqueryui.com/about)
- * Dual licensed under the MIT or GPL Version 2 licenses.
- * http://jquery.org/license
- *
- * http://docs.jquery.com/UI/Menu
- *
- * Depends:
- *	jquery.ui.core.js
- *  jquery.ui.widget.js
- */
-(function($) {
-
-$.widget("ui.menu", {
-	_create: function() {
-		var self = this;
-		this.element
-			.addClass("ui-menu ui-widget ui-widget-content ui-corner-all")
-			.attr({
-				role: "listbox",
-				"aria-activedescendant": "ui-active-menuitem"
-			})
-			.click(function( event ) {
-				if ( !$( event.target ).closest( ".ui-menu-item a" ).length ) {
-					return;
-				}
-				// temporary
-				event.preventDefault();
-				self.select( event );
-			});
-		this.refresh();
-	},
-	
-	refresh: function() {
-		var self = this;
-
-		// don't refresh list items that are already adapted
-		var items = this.element.children("li:not(.ui-menu-item):has(a)")
-			.addClass("ui-menu-item")
-			.attr("role", "menuitem");
-		
-		items.children("a")
-			.addClass("ui-corner-all")
-			.attr("tabindex", -1)
-			// mouseenter doesn't work with event delegation
-			.mouseenter(function( event ) {
-				self.activate( event, $(this).parent() );
-			})
-			.mouseleave(function() {
-				self.deactivate();
-			});
-	},
-
-	activate: function( event, item ) {
-		this.deactivate();
-		if (this.hasScroll()) {
-			var offset = item.offset().top - this.element.offset().top,
-				scroll = this.element.attr("scrollTop"),
-				elementHeight = this.element.height();
-			if (offset < 0) {
-				this.element.attr("scrollTop", scroll + offset);
-			} else if (offset >= elementHeight) {
-				this.element.attr("scrollTop", scroll + offset - elementHeight + item.height());
-			}
-		}
-		this.active = item.eq(0)
-			.children("a")
-				.addClass("ui-state-hover")
-				.attr("id", "ui-active-menuitem")
-			.end();
-		this._trigger("focus", event, { item: item });
-	},
-
-	deactivate: function() {
-		if (!this.active) { return; }
-
-		this.active.children("a")
-			.removeClass("ui-state-hover")
-			.removeAttr("id");
-		this._trigger("blur");
-		this.active = null;
-	},
-
-	next: function(event) {
-		this.move("next", ".ui-menu-item:first", event);
-	},
-
-	previous: function(event) {
-		this.move("prev", ".ui-menu-item:last", event);
-	},
-
-	first: function() {
-		return this.active && !this.active.prevAll(".ui-menu-item").length;
-	},
-
-	last: function() {
-		return this.active && !this.active.nextAll(".ui-menu-item").length;
-	},
-
-	move: function(direction, edge, event) {
-		if (!this.active) {
-			this.activate(event, this.element.children(edge));
-			return;
-		}
-		var next = this.active[direction + "All"](".ui-menu-item").eq(0);
-		if (next.length) {
-			this.activate(event, next);
-		} else {
-			this.activate(event, this.element.children(edge));
-		}
-	},
-
-	// TODO merge with previousPage
-	nextPage: function(event) {
-		if (this.hasScroll()) {
-			// TODO merge with no-scroll-else
-			if (!this.active || this.last()) {
-				this.activate(event, this.element.children(".ui-menu-item:first"));
-				return;
-			}
-			var base = this.active.offset().top,
-				height = this.element.height(),
-				result = this.element.children(".ui-menu-item").filter(function() {
-					var close = $(this).offset().top - base - height + $(this).height();
-					// TODO improve approximation
-					return close < 10 && close > -10;
-				});
-
-			// TODO try to catch this earlier when scrollTop indicates the last page anyway
-			if (!result.length) {
-				result = this.element.children(".ui-menu-item:last");
-			}
-			this.activate(event, result);
-		} else {
-			this.activate(event, this.element.children(".ui-menu-item")
-				.filter(!this.active || this.last() ? ":first" : ":last"));
-		}
-	},
-
-	// TODO merge with nextPage
-	previousPage: function(event) {
-		if (this.hasScroll()) {
-			// TODO merge with no-scroll-else
-			if (!this.active || this.first()) {
-				this.activate(event, this.element.children(".ui-menu-item:last"));
-				return;
-			}
-
-			var base = this.active.offset().top,
-				height = this.element.height();
-				result = this.element.children(".ui-menu-item").filter(function() {
-					var close = $(this).offset().top - base + height - $(this).height();
-					// TODO improve approximation
-					return close < 10 && close > -10;
-				});
-
-			// TODO try to catch this earlier when scrollTop indicates the last page anyway
-			if (!result.length) {
-				result = this.element.children(".ui-menu-item:first");
-			}
-			this.activate(event, result);
-		} else {
-			this.activate(event, this.element.children(".ui-menu-item")
-				.filter(!this.active || this.first() ? ":last" : ":first"));
-		}
-	},
-
-	hasScroll: function() {
-		return this.element.height() < this.element.attr("scrollHeight");
-	},
-
-	select: function( event ) {
-		this._trigger("selected", event, { item: this.active });
-	}
-});
-
-}(jQuery));

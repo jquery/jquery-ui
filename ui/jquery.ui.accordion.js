@@ -17,19 +17,14 @@ $.widget( "ui.accordion", {
 	options: {
 		active: 0,
 		animated: "slide",
-		autoHeight: true,
-		clearStyle: false,
 		collapsible: false,
 		event: "click",
-		fillSpace: false,
 		header: "> li > :first-child,> :not(li):even",
+		// TODO: set to "auto" in 2.0 (#5868, #5872)
+		heightStyle: null, // "auto"
 		icons: {
 			header: "ui-icon-triangle-1-e",
 			headerSelected: "ui-icon-triangle-1-s"
-		},
-		navigation: false,
-		navigationFilter: function() {
-			return this.href.toLowerCase() === location.href.toLowerCase();
 		}
 	},
 
@@ -75,20 +70,7 @@ $.widget( "ui.accordion", {
 
 		self.headers.next()
 			.addClass( "ui-accordion-content ui-helper-reset ui-widget-content ui-corner-bottom" );
-
-		if ( options.navigation ) {
-			var current = self.element.find( "a" ).filter( options.navigationFilter ).eq( 0 );
-			if ( current.length ) {
-				var header = current.closest( ".ui-accordion-header" );
-				if ( header.length ) {
-					// anchor within header
-					self.active = header;
-				} else {
-					// anchor within content
-					self.active = current.closest( ".ui-accordion-content" ).prev();
-				}
-			}
-		}
+		self.headers.find( ":first-child" ).addClass( "ui-accordion-heading" );
 
 		self.active = self._findActive( self.active || options.active )
 			.addClass( "ui-state-default ui-state-active" )
@@ -177,11 +159,12 @@ $.widget( "ui.accordion", {
 
 		this.headers.find( "a" ).removeAttr( "tabIndex" );
 		this._destroyIcons();
+		this.headers.find( "a:first-child" ).removeClass( "ui-accordion-heading" );
 		var contents = this.headers.next()
 			.css( "display", "" )
 			.removeAttr( "role" )
 			.removeClass( "ui-helper-reset ui-widget-content ui-corner-bottom ui-accordion-content ui-accordion-content-active ui-accordion-disabled ui-state-disabled" );
-		if ( options.autoHeight || options.fillHeight ) {
+		if ( options.heightStyle !== "content" ) {
 			contents.css( "height", "" );
 		}
 
@@ -190,7 +173,7 @@ $.widget( "ui.accordion", {
 
 	_setOption: function( key, value ) {
 		$.Widget.prototype._setOption.apply( this, arguments );
-			
+		
 		if ( key == "active" ) {
 			this.activate( value );
 		}
@@ -204,8 +187,7 @@ $.widget( "ui.accordion", {
 		// so we need to add the disabled class to the headers and panels
 		if ( key == "disabled" ) {
 			this.headers.add(this.headers.next())
-				[ value ? "addClass" : "removeClass" ](
-					"ui-accordion-disabled ui-state-disabled" );
+				.toggleClass( "ui-accordion-disabled ui-state-disabled", !!value );
 		}
 	},
 
@@ -248,12 +230,21 @@ $.widget( "ui.accordion", {
 		var options = this.options,
 			maxHeight;
 
-		if ( options.fillSpace ) {
+		if ( options.heightStyle === "fill" ) {
 			if ( $.browser.msie ) {
 				var defOverflow = this.element.parent().css( "overflow" );
 				this.element.parent().css( "overflow", "hidden");
 			}
 			maxHeight = this.element.parent().height();
+			this.element.siblings( ":visible" ).each(function() {
+				var elem = $( this ),
+					position = elem.css( "position" );
+
+				if ( position === "absolute" || position === "fixed" ) {
+					return;
+				}
+				maxHeight -= elem.outerHeight( true );	
+			});
 			if ($.browser.msie) {
 				this.element.parent().css( "overflow", defOverflow );
 			}
@@ -268,7 +259,7 @@ $.widget( "ui.accordion", {
 						$( this ).innerHeight() + $( this ).height() ) );
 				})
 				.css( "overflow", "auto" );
-		} else if ( options.autoHeight ) {
+		} else if ( options.heightStyle === "auto" ) {
 			maxHeight = 0;
 			this.headers.next()
 				.each(function() {
@@ -414,7 +405,7 @@ $.widget( "ui.accordion", {
 					toHide: toHide,
 					complete: complete,
 					down: down,
-					autoHeight: options.autoHeight || options.fillSpace
+					autoHeight: options.heightStyle !== "content"
 				};
 			} else {
 				animOptions = {
@@ -422,7 +413,7 @@ $.widget( "ui.accordion", {
 					toHide: toHide,
 					complete: complete,
 					down: down,
-					autoHeight: options.autoHeight || options.fillSpace
+					autoHeight: options.heightStyle !== "content"
 				};
 			}
 
@@ -491,7 +482,7 @@ $.widget( "ui.accordion", {
 			return;
 		}
 
-		if ( this.options.clearStyle ) {
+		if ( this.options.heightStyle === "content" ) {
 			this.toShow.add( this.toHide ).css({
 				height: "",
 				overflow: ""
@@ -595,5 +586,83 @@ $.extend( $.ui.accordion, {
 		}
 	}
 });
+
+
+
+// DEPRECATED
+
+// navigation options
+(function( $, prototype ) {
+	$.extend( prototype.options, {
+		navigation: false,
+		navigationFilter: function() {
+			return this.href.toLowerCase() === location.href.toLowerCase();
+		}
+	});
+
+	var _create = prototype._create;
+	prototype._create = function() {
+		if ( this.options.navigation ) {
+			var self = this,
+				headers = this.element.find( this.options.header ),
+				content = headers.next();
+				current = headers.add( content )
+					.find( "a" )
+					.filter( this.options.navigationFilter )
+					[ 0 ];
+			if ( current ) {
+				headers.add( content ).each( function( index ) {
+					if ( $.contains( this, current ) ) {
+						self.options.active = Math.floor( index / 2 );
+						return false;
+					}
+				});
+			}
+		}
+		_create.call( this );
+	};
+}( jQuery, jQuery.ui.accordion.prototype ) );
+
+(function( $, prototype ) {
+	$.extend( prototype.options, {
+		autoHeight: true, // use heightStyle: "auto"
+		clearStyle: false, // use heightStyle: "content"
+		fillSpace: false // use heightStyle: "fill"
+	});
+
+	var _create = prototype._create,
+		_setOption = prototype._setOption;
+
+	$.extend( prototype, {
+		_create: function() {
+			this.options.heightStyle = this.options.heightStyle ||
+				this._mergeHeightStyle();
+			_create.call( this );
+		},
+
+		_setOption: function( key, value ) {
+			if ( key === "autoHeight" || key === "clearStyle" || key === "fillSpace" ) {
+				this.options.heightStyle = this._mergeHeightStyle();
+			}
+			_setOption.apply( this, arguments );
+		},
+
+		_mergeHeightStyle: function() {
+			var options = this.options;
+
+			if ( options.fillSpace ) {
+				return "fill";
+			}
+
+			if ( options.clearStyle ) {
+				return "content";
+			}
+
+			if ( options.autoHeight ) {
+				return "auto";
+			}
+		}
+	});
+}( jQuery, jQuery.ui.accordion.prototype ) );
 
 })( jQuery );
