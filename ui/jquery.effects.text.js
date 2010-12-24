@@ -151,7 +151,6 @@ $.effects.disintegrate	= function (o, show) {
 				
 				
 				/* run it */
-				console.log (options.easing);
 				this.delay (delay).animate (properties, duration, options.easing);
 			}
 		}
@@ -183,6 +182,7 @@ $.effects.blockFadeOut	= function (o, show) {
 	
 	var options = o.options	= $.extend ({},
 		defaultOptions,
+		{easing: 'easeInOutSine'},
 		o.options,
 		{
 			/* only run when we fadeOut */
