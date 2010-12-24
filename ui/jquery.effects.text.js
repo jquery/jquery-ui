@@ -17,19 +17,78 @@
 			* i:			the current element index
 			* wordCount:	total amount of words in your set
 			* parentCoords:	hashmap of height, width and offset (left, top) of the original selector
-		
-
 */
 var defaultOptions	= {
 	easing: 'linear',
 	words: true,
 	text: '',
 	distance: 1, // move element to/from where * parent.height ()
-	direction: 'up',
+	direction: 'top',
 	reverse: false,
 	random: false
 };
+
+
+$.effects.backspace	= function (o, show) {
+	/* show is either 1 or null */
+	show	= show || 0;
 	
+	/* Internal callback to run when animation has finished */
+	function finished () {
+		this.empty ();
+	}
+	
+	/* Internal callback to run before animation has started */
+	function beforeAnimate () {
+		this.css ('opacity', 0);
+	}
+	
+	var options = o.options	= $.extend ({},
+		defaultOptions,
+		{easing: 'easeInOutSine'},
+		o.options,
+		{words: false, wordDelay: 0},
+		{
+			finished: show ? null : finished,
+			beforeAnimate: show ? beforeAnimate : null,
+			animate: function (interval, duration, i, wordCount, parentCoords) {
+				
+				
+				var text	= this.text (),
+					space	= /\s/.test (text),
+					
+				/* default delay */
+					delay	= show ? 
+					(interval * i) : (wordCount - i - 1) * interval;
+
+				/*
+					Randomize delay if necessary
+					Note, reverse doesn't really matter at this time
+				*/
+				if (options.random !== false && show) {
+					var randomDelay = ((Math.random() * text.length * interval) * interval) / (1 + options.random);
+					
+					delay	= randomDelay + options.wordDelay;
+					options.wordDelay = delay;
+				}
+				
+				
+				/* run it */
+				this.delay (delay).animate ({opacity: show}, 10, options.easing);
+			}
+		}
+	);
+	
+	/* Pass everything to the general text engine */
+	$.effects.textAnim.call (this, o);
+};
+
+
+$.effects.type	= function (o) {
+	/* Use the backspace, for redundancy purposes */
+	$.effects.backspace.call (this, o, 1);
+};
+
 $.effects.disintegrate	= function (o, show) {
 
 	var docHeight	= $(document).height (),
@@ -38,7 +97,7 @@ $.effects.disintegrate	= function (o, show) {
 	show	= show ? 1 : 0;
 	
 	/* Internal callback to run before animation has started */
-	function start ($set) {
+	function beforeAnimate () {
 		
 		/* Set the current position of the element */
 		var $this 	= this.css (this.offset ());
@@ -65,7 +124,7 @@ $.effects.disintegrate	= function (o, show) {
 		o.options,
 		{
 			finished: show ? null : finished,
-			beforeAnimate: start,
+			beforeAnimate: beforeAnimate,
 			/* animation function */
 			animate: function (interval, duration, i, wordCount, parentCoords) {
 				
@@ -143,7 +202,7 @@ $.effects.disintegrate	= function (o, show) {
 					
 					var randomDelay = Math.random () * wordCount * interval,
 					/* If interval or random is negative, start from the bottom instead of top */
-					uniformDelay = options.reverse ?
+					uniformDelay	= options.reverse ?
 						((wordCount - i) * interval) : (i * interval);
 					
 					delay = randomDelay * options.random + Math.max(1 - options.random, 0) * uniformDelay;
@@ -151,7 +210,7 @@ $.effects.disintegrate	= function (o, show) {
 				
 				
 				/* run it */
-				this.delay (delay).animate (properties, duration, options.easing);
+				this.delay (delay/* + 10 /* fixes stuff in chrome*/).animate (properties, duration, options.easing);
 			}
 		}
 	);
@@ -170,12 +229,12 @@ $.effects.blockFadeOut	= function (o, show) {
 	show	= show || 0;
 	
 	/* Internal callback to run when animation has finished */
-	function finished ($set) {
+	function finished () {
 		this.empty ();
 	}
 	
 	/* Internal callback to run before animation has started */
-	function start ($set) {
+	function beforeAnimate () {
 		this.css ('opacity', 0);
 	}
 	
@@ -188,7 +247,7 @@ $.effects.blockFadeOut	= function (o, show) {
 			/* only run when we fadeOut */
 			finished: !show ? finished : null,
 			/* only run when we fadeIn */
-			beforeAnimate: show ? start : null,
+			beforeAnimate: show ? beforeAnimate : null,
 			/* animation function */
 			animate: function (interval, duration, i, wordCount, parentCoords) {
 
@@ -203,7 +262,7 @@ $.effects.blockFadeOut	= function (o, show) {
 					
 					var randomDelay = Math.random () * wordCount * interval,
 					/* If interval or random is negative, start from the bottom instead of top */
-					uniformDelay = options.reverse ?
+					uniformDelay	= options.reverse ?
 						((wordCount - i) * interval) : (i * interval);
 					
 					delay = randomDelay * options.random + Math.max (1 - options.random, 0) * uniformDelay;
@@ -323,7 +382,7 @@ $.effects.textAnim	= function (o) {
 			setTimeout (
 				function () {
 					/* internal callback when event has finished, therefor pass object */
-					$.type (options.finished) === 'function' && options.finished.call ($this, $set);
+					$.type (options.finished) === 'function' && options.finished.call ($this);
 					
 					/* normal object, expecting domElement, so give it */
 					$.type (o.callback) === 'function' && o.callback.call ($this[0]);
