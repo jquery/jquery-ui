@@ -117,7 +117,7 @@ $.effects.disintegrate	= function (o, show) {
 					} else if (options.direction.indexOf ('top') !== -1) {
 						var top	= offset.top - parentCoords.height * options.distance
 						
-						properties.top		= top > 0 ? 0 : top; // 1 = o.distance
+						properties.top		= top < 0 ? 0 : top; // 1 = o.distance
 					}
 					
 					if (options.direction.indexOf ('right') !== -1) {
