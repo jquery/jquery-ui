@@ -42,7 +42,6 @@ $.effects.disintegrate	= function (o, show) {
 		
 		/* Set the current position of the element */
 		var $this 	= this.css (this.offset ());
-		
 		/*
 			Have to find out why this happends,
 			just doing this.css ('position', 'absolute') doesn't work >:-[
@@ -62,6 +61,7 @@ $.effects.disintegrate	= function (o, show) {
 	
 	var options = o.options	= $.extend ({},
 		defaultOptions,
+		{easing: show ? 'easeInSine' : 'easeInCirc'},
 		o.options,
 		{
 			finished: show ? null : finished,
@@ -150,8 +150,8 @@ $.effects.disintegrate	= function (o, show) {
 				}
 				
 				
-				
 				/* run it */
+				console.log (options.easing);
 				this.delay (delay).animate (properties, duration, options.easing);
 			}
 		}
