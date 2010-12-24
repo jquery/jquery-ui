@@ -378,9 +378,9 @@ $.widget("ui.selectmenu", {
 			.attr( 'for', this.element.attr( 'id' ) )
 			.unbind( '.selectmenu' );
 		
-		if ( o.wrapperElement ) {
-			this.newelement.find( o.wrapperElement ).remove();
-			this.list.find( o.wrapperElement ).remove();
+		if ( this.options.wrapperElement ) {
+			this.newelement.find( this.options.wrapperElement ).remove();
+			this.list.find( this.options.wrapperElement ).remove();
 		} else {
 			this.newelement.remove();
 			this.list.remove();
