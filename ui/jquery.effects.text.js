@@ -28,8 +28,130 @@ var defaultOptions	= {
 	random: false
 };
 
+$.effects.textExplode	= function (o, show) {
 
-$.effects.backspace	= function (o, show) {
+	var docHeight	= $(document).height (),
+	docWidth	= $(document).width ();
+	/* show is either 1 or null */
+	show	= show ? 1 : 0;
+	
+	/* Internal callback to run before animation has started */
+	function beforeAnimate () {
+		
+		/* Set the current position of the element */
+		var $this 	= this.css (this.offset ());
+		/*
+			Have to find out why this happends,
+			just doing this.css ('position', 'absolute') doesn't work >:-[
+			So we use this work around
+		*/
+		setTimeout (
+			function () {
+				$this.css ('position', 'absolute');
+			}, 10
+		);
+		
+	}
+	
+	function finished () {
+		this.empty ();
+	}
+	
+	var options = o.options	= $.extend ({},
+		defaultOptions,
+		{easing: show ? 'easeInSine' : 'easeInCirc'},
+		o.options,
+		{
+			finished: show ? null : finished,
+			beforeAnimate: beforeAnimate,
+			/* animation function */
+			animate: function (interval, duration, i, wordCount, parentCoords) {
+				
+				/* set some basic stuff */
+				var offset		= this.offset (),
+					offsetTo	= {},
+					width		= this.outerWidth (),
+					height		= this.outerHeight (),
+					properties	= {},
+					/* max top */
+					mTop		= docHeight - height,
+					/* max left */
+					mLeft		= docWidth - width,
+					distance	= options.distance * 2,
+					distanceY,
+					distanceX,
+					distanceXY,
+					properties	= {opacity: show ? 1 : 0},
+					_duration	= duration,
+					randomX		= 0,
+					randomY		= 0,
+					delay		= 10;
+
+				/* Hide or show the element according to what we're going to do */
+				this.css ({opacity: show ? 0 : 1});
+
+
+				if (options.random !== false) {
+					var seed	= (Math.random () * options.random) + Math.max (1 - options.random, 0);
+					
+					distance	*= seed;
+					duration	*= seed;
+					
+// To syncronize, give each piece an appropriate delay so they end together
+//delay = ((args.unhide && args.sync) || (!args.unhide && !args.sync)) ? (args.duration - duration) : 0;
+
+					randomX		= Math.random () - 0.5;
+					randomY		= Math.random () - 0.5;
+				}
+
+				distanceY	= ((parentCoords.height - height) / 2 - (offset.top - parentCoords.top));
+				distanceX	= ((parentCoords.width - width) / 2 - (offset.left - parentCoords.left));
+				distanceXY	= Math.sqrt (Math.pow (distanceX, 2) + Math.pow (distanceY, 2));
+
+				offsetTo.top	= offset.top - distanceY * distance + distanceXY * randomY;
+				offsetTo.left	= offset.left - distanceX * distance + distanceXY * randomX;
+				
+				if (offsetTo.top > (docHeight - height)) {
+					offsetTo.top	= docHeight - height;
+				} else if (offsetTo.top < 0) {
+					offsetTo.top	= 0;
+				}
+
+				if (offsetTo.left > (docWidth - width)) {
+					offsetTo.left	= docWidth - width;
+				} else if (offsetTo.left < 0) {
+					offsetTo.left	= 0;
+				}
+
+				if (show) {
+					this.css (offsetTo);
+					properties.top	= offset.top;
+					properties.left	= offset.left;
+					
+				} else { 
+					this.css (offset);
+					properties.top	= offsetTo.top;
+					properties.left	= offsetTo.left;
+				}
+
+				/* run it */
+				this.delay (delay).animate (properties, duration, options.easing);
+				
+
+
+			}
+		}
+	);
+	
+	/* Pass everything to the general text engine */
+	$.effects.textAnim.call (this, o);
+};
+
+$.effects.textConverge	= function (o) {
+	$.effects.textExplode.call (this, o, 1);
+};
+
+$.effects.backspace		= function (o, show) {
 	/* show is either 1 or null */
 	show	= show || 0;
 	
@@ -66,9 +188,10 @@ $.effects.backspace	= function (o, show) {
 					Note, reverse doesn't really matter at this time
 				*/
 				if (options.random !== false && show) {
-					var randomDelay = ((Math.random() * text.length * interval) * interval) / (1 + options.random);
+					var randomDelay = (Math.random() * text.length * interval) * interval;
 					
-					delay	= randomDelay + options.wordDelay;
+					/* The higher the random % the slower */
+					delay	= (randomDelay / (2 - options.random)) + options.wordDelay;
 					options.wordDelay = delay;
 				}
 				
@@ -104,7 +227,7 @@ $.effects.disintegrate	= function (o, show) {
 		/*
 			Have to find out why this happends,
 			just doing this.css ('position', 'absolute') doesn't work >:-[
-			So we use this hack
+			So we use this work around
 		*/
 		setTimeout (
 			function () {
@@ -129,7 +252,7 @@ $.effects.disintegrate	= function (o, show) {
 			animate: function (interval, duration, i, wordCount, parentCoords) {
 				
 				/* set some basic stuff */
-				var offset		= this.position (),
+				var offset		= this.offset (),
 					width		= this.outerWidth (),
 					height		= this.outerHeight (),
 					properties	= {},
@@ -210,7 +333,7 @@ $.effects.disintegrate	= function (o, show) {
 				
 				
 				/* run it */
-				this.delay (delay/* + 10 /* fixes stuff in chrome*/).animate (properties, duration, options.easing);
+				this.delay (delay + 10 /* fixes stuff in chrome*/).animate (properties, duration, options.easing);
 			}
 		}
 	);
