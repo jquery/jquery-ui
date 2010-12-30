@@ -43,4 +43,53 @@ test( "#5830 - Widget: Using inheritance overwrites the base classes options", f
 	delete $.ui.testWidgetExtension;
 });
 
+test( "#6795 - Widget: handle array arguments to _trigger consistently", function() {
+	expect( 4 );
+
+	var originalEvent = $.Event( "originalTest" );
+	$.widget( "ui.testWidget", {
+		_create: function() {},
+		testEvent: function() {
+			var ui = {
+					foo: "bar",
+					baz: {
+						qux: 5,
+						quux: 20
+					}
+				};
+			var extra = {
+				bar: 5
+			};
+			this._trigger( "foo", originalEvent, [ui, extra] );
+		}
+	});
+	$( "#widget" ).bind( "testwidgetfoo", function( event, ui, extra ) {
+		same( ui, {
+			foo: "bar",
+			baz: {
+				qux: 5,
+				quux: 20
+			}
+		}, "ui hash passed" );
+		same( extra, {
+			bar: 5
+		}, "extra argument passed" );
+	});
+	$( "#widget" ).testWidget({
+		foo: function( event, ui, extra ) {
+			same( ui, {
+				foo: "bar",
+				baz: {
+					qux: 5,
+					quux: 20
+				}
+			}, "ui hash passed" );
+			same( extra, {
+				bar: 5
+			}, "extra argument passed" );
+		}
+	})
+	.testWidget( "testEvent" );
+});
+
 })( jQuery );
