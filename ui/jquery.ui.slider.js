@@ -248,6 +248,7 @@ $.widget( "ui.slider", $.ui.mouse, {
 			position,
 			normValue,
 			distance,
+                        minDistance, maxDistance,
 			closestHandle,
 			self,
 			index,
@@ -267,24 +268,27 @@ $.widget( "ui.slider", $.ui.mouse, {
 
 		position = { x: event.pageX, y: event.pageY };
 		normValue = this._normValueFromMouse( position );
-		distance = this._valueMax() - this._valueMin() + 1;
+		distance = minDistance = maxDistance = this._valueMax() - this._valueMin() + 1;
 		self = this;
-		this.handles.each(function( i ) {
-			var thisDistance = Math.abs( normValue - self.values(i) );
-			if ( distance > thisDistance ) {
-				distance = thisDistance;
-				closestHandle = $( this );
-				index = i;
-			}
-		});
+        
+        this.handles.each(function( i ) {
+			var thisDistance = normValue - self.values(i);
+            if (thisDistance < 0) {
+                thisDistance = Math.abs(thisDistance);
+               	if ( (minDistance > thisDistance) && (thisDistance < maxDistance) ) {
+                    minDistance = distance = thisDistance;
+                    closestHandle = $( this );
+                    index = i;
+                }                           
+            } else {
+            	if ( (maxDistance >= thisDistance) && (thisDistance <= minDistance) ) {
+                    maxDistance = distance = thisDistance;
+                    closestHandle = $( this );
+                    index = i;
+                }
+            }
 
-		// workaround for bug #3736 (if both handles of a range are at 0,
-		// the first is always used as the one with least distance,
-		// and moving it is obviously prevented by preventing negative ranges)
-		if( o.range === true && this.values(1) === o.min ) {
-			index += 1;
-			closestHandle = $( this.handles[index] );
-		}
+		});
 
 		allowed = this._start( event, index );
 		if ( allowed === false ) {
@@ -396,14 +400,19 @@ $.widget( "ui.slider", $.ui.mouse, {
 			newValues,
 			allowed;
 
-		if ( this.options.values && this.options.values.length ) {
+if ( this.options.values && this.options.values.length ) {
 			otherVal = this.values( index ? 0 : 1 );
 
-			if ( ( this.options.values.length === 2 && this.options.range === true ) && 
-					( ( index === 0 && newVal > otherVal) || ( index === 1 && newVal < otherVal ) )
-				) {
-				newVal = otherVal;
-			}
+			if ( this.options.values.length === 2 && this.options.range === true ) {
+                
+                if ( index === 0 && newVal > otherVal ) { 
+                    index = 1;
+                } else if ( index === 1 && newVal < otherVal ) {
+                    index = 0;
+                }
+                this._handleIndex = index;
+                this.handles[index].focus();
+            }
 
 			if ( newVal !== this.values( index ) ) {
 				newValues = this.values();
