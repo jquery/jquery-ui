@@ -627,10 +627,7 @@ $.extend( $.ui.accordion, {
 	$.extend( prototype.options, {
 		autoHeight: true, // use heightStyle: "auto"
 		clearStyle: false, // use heightStyle: "content"
-		fillSpace: false, // use heightStyle: "fill"
-		icons: $.extend( prototype.options.icons, {
-			headerSelected: "ui-icon-triangle-1-s"
-		})
+		fillSpace: false // use heightStyle: "fill"
 	});
 
 	var _create = prototype._create,
@@ -641,7 +638,6 @@ $.extend( $.ui.accordion, {
 			this.options.heightStyle = this.options.heightStyle ||
 				this._mergeHeightStyle();
 
-			this.options.icons.activeHeader = this.options.icons.activeHeader || this.options.icons.headerSelected;
 			_create.call( this );
 		},
 
@@ -666,6 +662,23 @@ $.extend( $.ui.accordion, {
 			if ( options.autoHeight ) {
 				return "auto";
 			}
+		}
+	});
+}( jQuery, jQuery.ui.accordion.prototype ) );
+
+(function( $, prototype ) {
+	$.extend( prototype.options, {
+		icons: $.extend( prototype.options.icons, {
+			headerSelected: "ui-icon-triangle-1-s"
+		})
+	});
+
+	var _createIcons = prototype._createIcons;
+
+	$.extend( prototype, {
+		_createIcons: function() {
+			this.options.icons.activeHeader = this.options.icons.activeHeader || this.options.icons.headerSelected;
+			_createIcons.call( this );
 		}
 	});
 }( jQuery, jQuery.ui.accordion.prototype ) );
