@@ -11,6 +11,7 @@
 	<script type="text/javascript" src="../../../jquery-1.4.4.js"></script>
 	<script type="text/javascript" src="../../../ui/jquery.ui.core.js"></script>
 	<script type="text/javascript" src="../../../ui/jquery.ui.widget.js"></script>
+	<script type="text/javascript" src="../../../ui/jquery.ui.datepicker.js"></script>
 	<script type="text/javascript">
 	$(function() {
 		var table = $("table");
@@ -40,18 +41,97 @@
 			head.data("sort-order", order);
 		});
 		thead.children().clone().insertAfter(thead).find("th").each(function() {
-			$(this).empty().append("<input />");
+			var input = $("<input />").appendTo($(this).empty());
+			if ($(this).data("type") == "date") {
+				//input.datepicker();
+			}
 		});
-		table.delegate("input", "keyup", function() {
-			var index = $(this).parent()[0].cellIndex;
-				value = new RegExp("^" + this.value, "i");
-			if (!value) {
+		table.delegate("input", "keyup change", function() {
+			var head = $(this).parent(),
+				index = head[0].cellIndex,
+				culture = head.data("culture"),
+				format = head.data("format"),
+				type = head.data("type"),
+				input = this.value;
+
+			if (/^[<>]=?/.test(input)) {
+				var compare = input.replace(/^([<>]=?).+/, "$1");
+				input = input.substring(compare.length);
+				if (type == "currency") {
+					input = Globalization.parseFloat(input.replace(/[^\d,.-]/g, ""), 10, culture);
+				} else if (type == "date") {
+					input = Globalization.parseDate(input, format, culture);
+				}
+				input = input == null || isNaN(input) ? "" : input;
+			}
+				
+			function test(value) {
+				if (compare) {
+					if (type == "currency") {
+						value = Globalization.parseFloat(value.replace(/[^\d,.-]/g, ""), 10, culture);
+					} else if (type == "date") {
+						value = Globalization.parseDate(value, format, culture);
+					} else {
+						value = parseFloat(value);
+					}
+					if (compare == "<") {
+						return value < input;
+					} else if (compare == "<=") {
+						return value <= input;
+					} else if (compare == ">") {
+						return value > input;
+					} else {
+						return value >= input;
+					}
+				}
+				return new RegExp(input, "i").test(value);
+			};
+			
+			if (input.length == "0") {
 				tbody.children().show();
 				return;
 			}
 			tbody.children().each(function(i, row) {
-				$(this).toggle( value.test( $($(row).children()[index]).text() ) );
+				$(this).toggle( test( $($(row).children()[index]).text() ) );
 			});
+		});
+		
+		thead.children().clone().insertAfter(thead).find("th").each(function() {
+			$(this).empty();
+			var input = $("<select />").appendTo(this),
+				index = this.cellIndex;
+			input.append("<option value=''>Filter...</option>")
+			var tds = tbody.children().map(function() {
+				return $($(this).children()[index]).text();
+			}).each(function() {
+				input.append("<option>" + this + "</option>");
+			});
+			
+			$("<button>x</button>").hide().appendTo(this);
+		});
+		
+		table.delegate("select", "click change", function() {
+			var head = $(this).parent(),
+				index = head[0].cellIndex,
+				input = $(this).val();
+			
+			function test(value) {
+				return new RegExp(input, "i").test(value);
+			}	
+			
+			if (input.length == "0") {
+				tbody.children().show();
+				$(this).next().hide();
+				return;
+			}
+			tbody.children().each(function(i, row) {
+				$(this).toggle( test( $($(row).children()[index]).text() ) );
+			});
+			$(this).next().show();
+		});
+		
+		table.delegate("button", "click", function() {
+			$(this).prev().val("").click();
 		});
 	});
 	</script>
