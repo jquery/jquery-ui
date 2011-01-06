@@ -166,7 +166,15 @@ test('load', function() {
 });
 
 test('url', function() {
-	ok(false, "missing test - untested code is broken code.");
+	el = $('#tabs1').tabs();
+	el.tabs('url', 1, '#newurl');		
+	equals($('#tabs1 > ul > li:eq(1) a').data('load.tabs'), '#newurl', 'should change tab URL')
+	equals(el.tabs('url', 1), '#newurl', 'should get the URL for tab 1')
+
+	el.tabs('url', 2, '#selectedurl');	
+	el.tabs('select', 2);
+	equals(el.tabs('url'), '#selectedurl', 'should get the URL for selected tab')
+	
 });
 
 test('length', function() {

@@ -661,6 +661,12 @@ $.widget( "ui.tabs", {
 	},
 
 	url: function( index, url ) {
+    	// getter
+    	if (arguments.length < 2) {
+    		return this.anchors.eq( arguments.length ? index : this.options.selected ).data( "load.tabs" );
+    	}
+    	
+    	// setter
 		this.anchors.eq( index ).removeData( "cache.tabs" ).data( "load.tabs", url );
 		return this;
 	},
