@@ -584,5 +584,3 @@ foreach ($items as $key=>$value) {
 
 // json_encode is available in PHP 5.2 and above, or you can install a PECL module in earlier versions
 echo json_encode($result);
-
-?>
