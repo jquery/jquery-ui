@@ -29,6 +29,7 @@
 				var input = this.input = $( "<input>" )
 					.insertAfter( select )
 					.val( value )
+					.attr( "title", "" )
 					.autocomplete({
 						delay: 0,
 						minLength: 0,
@@ -57,7 +58,8 @@
 						},
 						change: function( event, ui ) {
 							if ( !ui.item ) {
-								var matcher = new RegExp( "^" + $.ui.autocomplete.escapeRegex( $(this).val() ) + "$", "i" ),
+								var value = $( this ).val(),
+									matcher = new RegExp( "^" + $.ui.autocomplete.escapeRegex( value ) + "$", "i" ),
 									valid = false;
 								select.children( "option" ).each(function() {
 									if ( $( this ).text().match( matcher ) ) {
@@ -67,8 +69,12 @@
 								});
 								if ( !valid ) {
 									// remove invalid value, as it didn't match anything
-									$(this).val( "").attr( "title", value + " didn't match any item" ).tooltip( "open" );
-									setTimeout( function() {
+									$( this )
+										.val( "" )
+										.attr( "title", value + " didn't match any item" )
+										.tooltip( "open" );
+									select.val( "" );
+									setTimeout(function() {
 										input.tooltip( "close" ).attr( "title", "" );
 									}, 2500 );
 									input.data( "autocomplete" ).term = "";
@@ -89,6 +95,7 @@
 				this.button = $( "<button type='button'>&nbsp;</button>" )
 					.attr( "tabIndex", -1 )
 					.attr( "title", "Show All Items" )
+					.tooltip()
 					.insertAfter( input )
 					.button({
 						icons: {
@@ -109,12 +116,15 @@
 						input.autocomplete( "search", "" );
 						input.focus();
 					});
-					
-					input.tooltip( {
-						position: {
-						  offset: (this.button.width() + 5) + " 0"
-						}
-					}).tooltip( "widget" ).addClass( "ui-state-highlight" );
+
+					input
+						.tooltip({
+							position: {
+								of: this.button
+							}
+						})
+						.tooltip( "widget" )
+							.addClass( "ui-state-highlight" );
 			},
 
 			destroy: function() {
