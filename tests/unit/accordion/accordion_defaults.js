@@ -13,7 +13,9 @@ var accordion_defaults = {
 	fillSpace: false,
 	header: "> li > :first-child,> :not(li):even",
 	heightStyle: null,
-	icons: { "header": "ui-icon-triangle-1-e", "headerSelected": "ui-icon-triangle-1-s" },
+	icons: { "header": "ui-icon-triangle-1-e", 
+			"activeHeader": null,
+			"headerSelected": "ui-icon-triangle-1-s" },
 	navigation: false,
 	navigationFilter: function() {}
 };
