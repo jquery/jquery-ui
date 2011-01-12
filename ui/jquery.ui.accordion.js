@@ -120,7 +120,7 @@ $.widget( "ui.accordion", {
 
 		if ( options.event ) {
 			self.headers.bind( options.event.split(" ").join(".accordion ") + ".accordion", function(event) {
-				self._clickHandler.call( self, event, this );
+				self._eventHandler( event );
 				event.preventDefault();
 			});
 		}
@@ -176,7 +176,7 @@ $.widget( "ui.accordion", {
 		$.Widget.prototype._setOption.apply( this, arguments );
 		
 		if ( key == "active" ) {
-			this.activate( value );
+			this._activate( value );
 		}
 		if ( key == "icons" ) {
 			this._destroyIcons();
@@ -213,7 +213,7 @@ $.widget( "ui.accordion", {
 				break;
 			case keyCode.SPACE:
 			case keyCode.ENTER:
-				this._clickHandler( { target: event.target }, event.target );
+				this._eventHandler( event );
 				event.preventDefault();
 		}
 
@@ -272,14 +272,11 @@ $.widget( "ui.accordion", {
 		return this;
 	},
 
-	activate: function( index ) {
-		// TODO this gets called on init, changing the option without an explicit call for that
+	_activate: function( index ) {
+		// TODO: handle invalid values
 		this.options.active = index;
-		// call clickHandler with custom event
 		var active = this._findActive( index )[ 0 ];
-		this._clickHandler( { target: active }, active );
-
-		return this;
+		this._eventHandler( { target: active, currentTarget: active } );
 	},
 
 	_findActive: function( selector ) {
@@ -292,8 +289,7 @@ $.widget( "ui.accordion", {
 				: this.headers.filter( ":eq(0)" );
 	},
 
-	// TODO isn't event.target enough? why the separate target argument?
-	_clickHandler: function( event, target ) {
+	_eventHandler: function( event ) {
 		var options = this.options;
 		if ( options.disabled ) {
 			return;
@@ -325,7 +321,7 @@ $.widget( "ui.accordion", {
 		}
 
 		// get the click target
-		var clicked = $( event.currentTarget || target ),
+		var clicked = $( event.currentTarget ),
 			clickedIsActive = clicked[0] === this.active[0];
 
 		// TODO the option is changed, is that correct?
@@ -682,5 +678,8 @@ $.extend( $.ui.accordion, {
 		_createIcons.call( this );
 	};
 }( jQuery, jQuery.ui.accordion.prototype ) );
+
+// activate method
+jQuery.ui.accordion.prototype.activate = jQuery.ui.accordion.prototype._activate;
 
 })( jQuery );

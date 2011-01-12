@@ -50,10 +50,10 @@ test("disable", function() {
 	equals(actual, expected, 'disable is chainable');
 	
 	state(expected, 1, 0, 0)
-	expected.accordion("activate", 1);
+	expected.accordion("option", "active", 1);
 	state(expected, 1, 0, 0)
 	expected.accordion("enable");
-	expected.accordion("activate", 1);
+	expected.accordion("option", "active", 1);
 	state(expected, 0, 1, 0)
 });
 
