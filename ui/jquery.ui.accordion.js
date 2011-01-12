@@ -173,11 +173,14 @@ $.widget( "ui.accordion", {
 	},
 
 	_setOption: function( key, value ) {
+		if ( key == "active" ) {
+			// _activate() will handle invalid values and update this.options
+			this._activate( value );
+			return;
+		}
+		
 		$.Widget.prototype._setOption.apply( this, arguments );
 		
-		if ( key == "active" ) {
-			this._activate( value );
-		}
 		if ( key == "icons" ) {
 			this._destroyIcons();
 			if ( value ) {
@@ -273,20 +276,28 @@ $.widget( "ui.accordion", {
 	},
 
 	_activate: function( index ) {
-		// TODO: handle invalid values
-		this.options.active = index;
 		var active = this._findActive( index )[ 0 ];
+		if ( !active ) {
+			if ( !this.options.collapsible ) {
+				return;
+			}
+			index = false;
+		}
+		this.options.active = index;
 		this._eventHandler( { target: active, currentTarget: active } );
 	},
 
 	_findActive: function( selector ) {
-		return selector
-			? typeof selector === "number"
-				? this.headers.filter( ":eq(" + selector + ")" )
-				: this.headers.not( this.headers.not( selector ) )
-			: selector === false
-				? $( [] )
-				: this.headers.filter( ":eq(0)" );
+		// handle -1 separately, we should drop support for this
+		// so that we can allow selecting via negative index, like .eq()
+		if ( selector === -1 ) {
+			selector = undefined;
+		}
+		return typeof selector === "number" ?
+			this.headers.eq( selector ) :
+			selector ?
+				this.headers.filter( selector ) : 
+				$( [] );
 	},
 
 	_eventHandler: function( event ) {
