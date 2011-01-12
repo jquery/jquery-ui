@@ -67,8 +67,7 @@ $.widget( "ui.button", {
 		var self = this,
 			options = this.options,
 			toggleButton = this.type === "checkbox" || this.type === "radio",
-			hoverClass = "ui-state-hover" + ( !toggleButton ? " ui-state-active" : "" ),
-			focusClass = "ui-state-focus";
+			hoverClass = "ui-state-hover" + ( !toggleButton ? " ui-state-active" : "" );
 
 		if ( options.label === null ) {
 			options.label = this.buttonElement.html();
@@ -98,10 +97,10 @@ $.widget( "ui.button", {
 			})
 			.bind( "focus.button", function() {
 				// no need to check disabled, focus won't be triggered anyway
-				$( this ).addClass( focusClass );
+				$( this ).addClass( "ui-state-focus" );
 			})
 			.bind( "blur.button", function() {
-				$( this ).removeClass( focusClass );
+				$( this ).removeClass( "ui-state-focus" );
 			});
 
 		if ( toggleButton ) {
@@ -182,19 +181,14 @@ $.widget( "ui.button", {
 	},
 
 	_determineButtonType: function() {
-		
 		if ( this.element.is(":checkbox") ) {
 			this.type = "checkbox";
+		} else if ( this.element.is(":radio") ) {
+			this.type = "radio";
+		} else if ( this.element.is("input") ) {
+			this.type = "input";
 		} else {
-			if ( this.element.is(":radio") ) {
-				this.type = "radio";
-			} else {
-				if ( this.element.is("input") ) {
-					this.type = "input";
-				} else {
-					this.type = "button";
-				}
-			}
+			this.type = "button";
 		}
 		
 		if ( this.type === "checkbox" || this.type === "radio" ) {
