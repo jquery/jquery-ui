@@ -723,16 +723,12 @@ $.extend( $.ui.dialog.overlay, {
 			$( window ).bind( "resize.dialog-overlay", $.ui.dialog.overlay.resize );
 		}
 
-		//prevent too short overlay, when content is tall
-		var dialogOuterHeight = dialog.element.parent().outerHeight();
-		var newDocumentHeight = dialogOuterHeight > $( document ).height() ? dialogOuterHeight : $( document ).height();
-
-
 		var $el = ( this.oldInstances.pop() || $( "<div>" ).addClass( "ui-widget-overlay" ) )
 			.appendTo( document.body )
 			.css({
 				width: this.width(),
-				height: newDocumentHeight
+				//prevent too short overlay, when content is tall
+				height: Math.max( dialog.uiDialog.outerHeight(), $( document ).height() )
 			});
 
 		if ( $.fn.bgiframe ) {
