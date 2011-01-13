@@ -277,14 +277,37 @@ $.widget( "ui.accordion", {
 
 	_activate: function( index ) {
 		var active = this._findActive( index )[ 0 ];
-		if ( !active ) {
-			if ( !this.options.collapsible ) {
-				return;
+
+		// we found a header to activate, just delegate to the event handler
+		if ( active ) {
+			if ( active !== this.active[ 0 ] ) {
+				this._eventHandler( { target: active, currentTarget: active } );
 			}
-			index = false;
+			return;
 		}
-		this.options.active = index;
-		this._eventHandler( { target: active, currentTarget: active } );
+
+		// no header to activate, check if we can collapse
+		if ( !this.options.collapsible ) {
+			return;
+		}
+
+		this.active
+			.removeClass( "ui-state-active ui-corner-top" )
+			.addClass( "ui-state-default ui-corner-all" )
+			.children( ".ui-icon" )
+				.removeClass( this.options.icons.activeHeader )
+				.addClass( this.options.icons.header );
+		this.active.next().addClass( "ui-accordion-content-active" );
+		var toHide = this.active.next(),
+			data = {
+				options: this.options,
+				newHeader: $( [] ),
+				oldHeader: this.active,
+				newContent: $( [] ),
+				oldContent: toHide
+			},
+			toShow = ( this.active = $( [] ) );
+		this._toggle( toShow, toHide, data );
 	},
 
 	// TODO: add tests/docs for negative values in 2.0 (#6854)
@@ -293,50 +316,22 @@ $.widget( "ui.accordion", {
 	},
 
 	_eventHandler: function( event ) {
-		var options = this.options;
+		var options = this.options,
+			clicked = $( event.currentTarget ),
+			clickedIsActive = clicked[0] === this.active[0];
+
 		if ( options.disabled ) {
 			return;
 		}
-
-		// called only when using activate(false) to close all parts programmatically
-		if ( !event.target ) {
-			if ( !options.collapsible ) {
-				return;
-			}
-			this.active
-				.removeClass( "ui-state-active ui-corner-top" )
-				.addClass( "ui-state-default ui-corner-all" )
-				.children( ".ui-icon" )
-					.removeClass( options.icons.activeHeader )
-					.addClass( options.icons.header );
-			this.active.next().addClass( "ui-accordion-content-active" );
-			var toHide = this.active.next(),
-				data = {
-					options: options,
-					newHeader: $( [] ),
-					oldHeader: options.active,
-					newContent: $( [] ),
-					oldContent: toHide
-				},
-				toShow = ( this.active = $( [] ) );
-			this._toggle( toShow, toHide, data );
-			return;
-		}
-
-		// get the click target
-		var clicked = $( event.currentTarget ),
-			clickedIsActive = clicked[0] === this.active[0];
-
-		// TODO the option is changed, is that correct?
-		// TODO if it is correct, shouldn't that happen after determining that the click is valid?
-		options.active = options.collapsible && clickedIsActive ?
-			false :
-			this.headers.index( clicked );
 
 		// if animations are still active, or the active header is the target, ignore click
 		if ( this.running || ( !options.collapsible && clickedIsActive ) ) {
 			return;
 		}
+
+		options.active = options.collapsible && clickedIsActive ?
+			false :
+			this.headers.index( clicked );
 
 		// find elements to show and hide
 		var active = this.active,
@@ -374,8 +369,6 @@ $.widget( "ui.accordion", {
 				.next()
 				.addClass( "ui-accordion-content-active" );
 		}
-
-		return;
 	},
 
 	_toggle: function( toShow, toHide, data, clickedIsActive, down ) {

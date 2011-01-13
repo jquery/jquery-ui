@@ -24,7 +24,7 @@ test("accordionchange event, open closed and close again", function() {
 		equals( ui.newHeader.size(), 0 );
 		equals( ui.newContent.size(), 0 );
 	})
-	.accordion("option", "active", 0);
+	.accordion("option", "active", false);
 });
 
 })(jQuery);
