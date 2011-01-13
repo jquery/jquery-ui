@@ -22,7 +22,7 @@ test("ui-accordion-heading class added to headers anchor", function() {
 
 test("accessibility", function () {
 	expect(9);
-	var ac = $('#list1').accordion().accordion("activate", 1);
+	var ac = $('#list1').accordion().accordion("option", "active", 1);
 	var headers = $(".ui-accordion-header");
 
 	equals( headers.eq(1).attr("tabindex"), "0", "active header should have tabindex=0");
@@ -32,7 +32,7 @@ test("accessibility", function () {
 	equals( headers.next().attr("role"), "tabpanel", "tabpanel roles");
 	equals( headers.eq(1).attr("aria-expanded"), "true", "active tab has aria-expanded");
 	equals( headers.eq(0).attr("aria-expanded"), "false", "inactive tab has aria-expanded");
-	ac.accordion("activate", 0);
+	ac.accordion("option", "active", 0);
 	equals( headers.eq(0).attr("aria-expanded"), "true", "newly active tab has aria-expanded");
 	equals( headers.eq(1).attr("aria-expanded"), "false", "newly inactive tab has aria-expanded");
 });

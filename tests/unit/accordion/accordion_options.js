@@ -61,7 +61,7 @@ test("{ active: Number }", function() {
 	$('.ui-accordion-header:eq(2)', '#list1').click();
 	equals( $("#list1").accordion('option', 'active'), 2);
 
-	$("#list1").accordion('activate', 0);
+	$("#list1").accordion('option', 'active', 0);
 	equals( $("#list1").accordion('option', 'active'), 0);
 });
 
@@ -96,7 +96,7 @@ test("{ heightStyle: 'content' }", function() {
 });
 test("{ collapsible: false }, default", function() {
 	var ac = $("#list1").accordion();
-	ac.accordion("activate", false);
+	ac.accordion("option", "active", false);
 	state(ac, 1, 0, 0);
 });
 
