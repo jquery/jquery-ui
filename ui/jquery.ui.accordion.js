@@ -73,7 +73,7 @@ $.widget( "ui.accordion", {
 			.addClass( "ui-accordion-content ui-helper-reset ui-widget-content ui-corner-bottom" );
 		self.headers.find( ":first-child" ).addClass( "ui-accordion-heading" );
 
-		self.active = self._findActive( self.active || options.active )
+		self.active = self._findActive( options.active )
 			.addClass( "ui-state-default ui-state-active" )
 			.toggleClass( "ui-corner-all" )
 			.toggleClass( "ui-corner-top" );
@@ -287,17 +287,9 @@ $.widget( "ui.accordion", {
 		this._eventHandler( { target: active, currentTarget: active } );
 	},
 
+	// TODO: add tests for negative values in 2.0
 	_findActive: function( selector ) {
-		// handle -1 separately, we should drop support for this
-		// so that we can allow selecting via negative index, like .eq()
-		if ( selector === -1 ) {
-			selector = undefined;
-		}
-		return typeof selector === "number" ?
-			this.headers.eq( selector ) :
-			selector ?
-				this.headers.filter( selector ) : 
-				$( [] );
+		return typeof selector === "number" ? this.headers.eq( selector ) : $( [] );
 	},
 
 	_eventHandler: function( event ) {
@@ -690,7 +682,23 @@ $.extend( $.ui.accordion, {
 	};
 }( jQuery, jQuery.ui.accordion.prototype ) );
 
-// activate method
-jQuery.ui.accordion.prototype.activate = jQuery.ui.accordion.prototype._activate;
+// expanded active option, activate method
+(function( $, prototype ) {
+	prototype.activate = prototype._activate;
+
+	var _findActive = prototype._findActive;
+	prototype._findActive = function( index ) {
+		if ( index === -1 ) {
+			index = false;
+		}
+		if ( index && typeof index !== "number" ) {
+			index = this.headers.index( this.headers.filter( index ) );
+			if ( index === -1 ) {
+				index = false;
+			}
+		}
+		return _findActive.call( this, index );
+	};
+}( jQuery, jQuery.ui.accordion.prototype ) );
 
 })( jQuery );
