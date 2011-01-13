@@ -287,7 +287,7 @@ $.widget( "ui.accordion", {
 		this._eventHandler( { target: active, currentTarget: active } );
 	},
 
-	// TODO: add tests for negative values in 2.0
+	// TODO: add tests/docs for negative values in 2.0 (#6854)
 	_findActive: function( selector ) {
 		return typeof selector === "number" ? this.headers.eq( selector ) : $( [] );
 	},
