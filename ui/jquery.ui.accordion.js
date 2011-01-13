@@ -119,10 +119,8 @@ $.widget( "ui.accordion", {
 		}
 
 		if ( options.event ) {
-			self.headers.bind( options.event.split(" ").join(".accordion ") + ".accordion", function(event) {
-				self._eventHandler( event );
-				event.preventDefault();
-			});
+			self.headers.bind( options.event.split(" ").join(".accordion ") + ".accordion",
+				$.proxy( self, "_eventHandler" ) );
 		}
 	},
 
@@ -217,7 +215,6 @@ $.widget( "ui.accordion", {
 			case keyCode.SPACE:
 			case keyCode.ENTER:
 				this._eventHandler( event );
-				event.preventDefault();
 		}
 
 		if ( toFocus ) {
@@ -281,7 +278,11 @@ $.widget( "ui.accordion", {
 		// we found a header to activate, just delegate to the event handler
 		if ( active ) {
 			if ( active !== this.active[ 0 ] ) {
-				this._eventHandler( { target: active, currentTarget: active } );
+				this._eventHandler({
+					target: active,
+					currentTarget: active,
+					preventDefault: $.noop
+				});
 			}
 			return;
 		}
@@ -319,6 +320,8 @@ $.widget( "ui.accordion", {
 		var options = this.options,
 			clicked = $( event.currentTarget ),
 			clickedIsActive = clicked[0] === this.active[0];
+
+		event.preventDefault();
 
 		if ( options.disabled ) {
 			return;
