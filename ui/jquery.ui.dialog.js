@@ -765,9 +765,12 @@ $.extend($.ui.dialog.overlay, {
 		$el.remove();
 		
 		// adjust the maxZ to allow other modal dialogs to continue to work (see #4309)
-		var maxZ = 0;
+		var maxZ = 0, thisZ = 0;
 		$.each(this.instances, function() {
-			maxZ = Math.max(maxZ, this.css('z-index'));
+			thisZ = this.css('z-index');
+			if(!isNaN(thisZ)) {
+				maxZ = Math.max(maxZ, thisZ);
+			}
 		});
 		this.maxZ = maxZ;
 	},
