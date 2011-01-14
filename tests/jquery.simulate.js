@@ -114,15 +114,14 @@ $.extend($.simulate.prototype, {
 			dx = options.dx || 0, dy = options.dy || 0, target = this.target;
 
 		var $container = $(this.target).parent();
-		while(!$container.is("body"))
-		{
-			x-=$container.scrollLeft();
-			y-=$container.scrollTop();
-			$container=$container.parent();
+		while(!$container.is("body")){
+			x -= $container.scrollLeft();
+			y -= $container.scrollTop();
+			$container = $container.parent();
 		}
 		var $document = $(document);
-		x-=$document.scrollLeft();
-		y-=$document.scrollTop();
+		x -= $document.scrollLeft();
+		y -= $document.scrollTop();
 
 		var coord = { clientX: x, clientY: y };
 		this.simulateEvent(target, "mousedown", coord);
