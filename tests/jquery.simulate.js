@@ -119,6 +119,7 @@ $.extend($.simulate.prototype, {
 			y -= $container.scrollTop();
 			$container = $container.parent();
 		}
+
 		var $document = $(document);
 		x -= $document.scrollLeft();
 		y -= $document.scrollTop();
