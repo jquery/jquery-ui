@@ -499,16 +499,34 @@ $.extend( $.ui.accordion, {
 	version: "@VERSION",
 	animations: {
 		slide: function( options, additions ) {
+			var overflow = options.toShow.css( "overflow" ),
+				percentDone = 0,
+				showProps = {},
+				hideProps = {},
+				fxAttrs = [ "height", "paddingTop", "paddingBottom" ],
+				originalWidth;
 			options = $.extend({
 				easing: "swing",
 				duration: 300
 			}, options, additions );
 			if ( !options.toHide.size() ) {
-				options.toShow.animate({
-					height: "show",
-					paddingTop: "show",
-					paddingBottom: "show"
-				}, options );
+				originalWidth = options.toShow[0].style.width;
+				options.toShow
+					.show()
+					.width( options.toShow.width() )
+					.hide()
+					.animate({
+						height: "show",
+						paddingTop: "show",
+						paddingBottom: "show"
+					}, {
+						duration: options.duration,
+						easing: options.easing,
+						complete: function() {
+							options.toShow.width( originalWidth );
+							options.complete();
+						}
+					});
 				return;
 			}
 			if ( !options.toShow.size() ) {
@@ -519,12 +537,6 @@ $.extend( $.ui.accordion, {
 				}, options );
 				return;
 			}
-			var overflow = options.toShow.css( "overflow" ),
-				percentDone = 0,
-				showProps = {},
-				hideProps = {},
-				fxAttrs = [ "height", "paddingTop", "paddingBottom" ],
-				originalWidth;
 			// fix width before calculating height of hidden element
 			var s = options.toShow;
 			originalWidth = s[0].style.width;
