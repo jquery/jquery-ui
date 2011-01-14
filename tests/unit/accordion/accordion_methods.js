@@ -114,14 +114,14 @@ test("activate, jQuery or DOM element", function() {
 	state(ac, 0, 1, 0);
 });
 
-test("resize", function() {
+test("refresh", function() {
 	var expected = $('#navigation').parent().height(300).end().accordion({
 		fillSpace: true
 	});
 	equalHeights(expected, 246, 258);
 	
 	expected.parent().height(500);
-	expected.accordion("resize");
+	expected.accordion("refresh");
 	equalHeights(expected, 446, 458);
 });
 

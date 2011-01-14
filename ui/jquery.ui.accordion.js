@@ -80,7 +80,7 @@ $.widget( "ui.accordion", {
 		self.active.next().addClass( "ui-accordion-content-active" );
 
 		self._createIcons();
-		self.resize();
+		self.refresh();
 		
 		// ARIA
 		self.element.attr( "role", "tablist" );
@@ -223,7 +223,7 @@ $.widget( "ui.accordion", {
 		}
 	},
 
-	resize: function() {
+	refresh: function() {
 		var options = this.options,
 			maxHeight;
 
@@ -696,5 +696,8 @@ $.extend( $.ui.accordion, {
 		return _findActive.call( this, index );
 	};
 }( jQuery, jQuery.ui.accordion.prototype ) );
+
+// resize method
+jQuery.ui.accordion.prototype.resize = jQuery.ui.accordion.prototype.refresh;
 
 })( jQuery );
