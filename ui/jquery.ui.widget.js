@@ -49,7 +49,7 @@ $.widget = function( name, base, prototype ) {
 	$[ namespace ][ name ].prototype = $.extend( true, basePrototype, {
 		namespace: namespace,
 		widgetName: name,
-		widgetEventPrefix: $[ namespace ][ name ].prototype.widgetEventPrefix || name,
+		widgetEventPrefix: name,
 		widgetBaseClass: fullName
 	}, prototype );
 
