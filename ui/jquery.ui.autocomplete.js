@@ -214,7 +214,7 @@ $.widget( "ui.autocomplete", {
 		}
 	},
 
-	destroy: function() {
+	_destroy: function() {
 		this.element
 			.removeClass( "ui-autocomplete-input" )
 			.removeAttr( "autocomplete" )
@@ -222,7 +222,6 @@ $.widget( "ui.autocomplete", {
 			.removeAttr( "aria-autocomplete" )
 			.removeAttr( "aria-haspopup" );
 		this.menu.element.remove();
-		$.Widget.prototype.destroy.call( this );
 	},
 
 	_setOption: function( key, value ) {

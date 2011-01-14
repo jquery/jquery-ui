@@ -140,7 +140,7 @@ $.widget( "ui.accordion", {
 		this.element.removeClass( "ui-accordion-icons" );
 	},
 
-	destroy: function() {
+	_destroy: function() {
 		var options = this.options;
 
 		this.element
@@ -164,8 +164,6 @@ $.widget( "ui.accordion", {
 		if ( options.heightStyle !== "content" ) {
 			contents.css( "height", "" );
 		}
-
-		return $.Widget.prototype.destroy.call( this );
 	},
 
 	_setOption: function( key, value ) {

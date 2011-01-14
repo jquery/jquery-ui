@@ -58,9 +58,8 @@ $.widget("ui.tooltip", {
 		this.options.disabled = true;
 	},
 	
-	destroy: function() {
+	_destroy: function() {
 		this.tooltip.remove();
-		$.Widget.prototype.destroy.apply(this, arguments);
 	},
 	
 	widget: function() {

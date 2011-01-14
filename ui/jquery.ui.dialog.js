@@ -179,7 +179,7 @@ $.widget("ui.dialog", {
 		}
 	},
 
-	destroy: function() {
+	_destroy: function() {
 		var self = this;
 		
 		if ( self.overlay ) {
@@ -195,9 +195,6 @@ $.widget("ui.dialog", {
 		if ( self.originalTitle ) {
 			self.element.attr( "title", self.originalTitle );
 		}
-
-		$.Widget.prototype.destroy.call( this );
-		return self;
 	},
 
 	widget: function() {
