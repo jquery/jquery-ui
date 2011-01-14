@@ -141,8 +141,8 @@ $.Widget.prototype = {
 	_getCreateOptions: function() {
 		return $.metadata && $.metadata.get( this.element[0] )[ this.widgetName ];
 	},
-	_create: function() {},
-	_init: function() {},
+	_create: $.noop,
+	_init: $.noop,
 
 	_super: function( method ) {
 		return this.base[ method ].apply( this, slice.call( arguments, 1 ) );
@@ -152,6 +152,7 @@ $.Widget.prototype = {
 	},
 
 	destroy: function() {
+		this._destroy();
 		this.element
 			.unbind( "." + this.widgetName )
 			.removeData( this.widgetName );
@@ -162,6 +163,7 @@ $.Widget.prototype = {
 				this.widgetBaseClass + "-disabled " +
 				"ui-state-disabled" );
 	},
+	_destroy: $.noop,
 
 	widget: function() {
 		return this.element;
