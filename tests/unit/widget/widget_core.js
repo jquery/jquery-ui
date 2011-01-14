@@ -228,6 +228,59 @@ test( "re-init", function() {
 	same( actions, [ "optionfoo", "init" ], "correct methods called on re-init with options" );
 });
 
+test( "._super()", function() {
+	expect( 6 );
+	var instance;
+	$.widget( "ui.testWidget", {
+		method: function( a, b ) {
+			same( this, instance, "this is correct in super widget" );
+			same( a, 5, "parameter passed to super widget" );
+			same( b, 10, "second parameter passed to super widget" );
+			return a + b;
+		}
+	});
+
+	$.widget( "ui.testWidget2", $.ui.testWidget, {
+		method: function( a ) {
+			same( this, instance, "this is correct in widget" );
+			same( a, 5, "parameter passed to widget" );
+			var ret = this._super( "method", a, a*2 );
+			same( ret, 15, "super returned value" );
+		}
+	});
+
+	instance = $( "<div>" ).testWidget2().data( "testWidget2" );
+	instance.method( 5 );
+	delete $.ui.testWidget2;
+});
+
+test( "._superApply()", function() {
+	expect( 7 );
+	var instance;
+	$.widget( "ui.testWidget", {
+		method: function( a, b ) {
+			same( this, instance, "this is correct in super widget" );
+			same( a, 5, "parameter passed to super widget" );
+			same( b, 10, "second parameter passed to super widget" );
+			return a + b;
+		}
+	});
+
+	$.widget( "ui.testWidget2", $.ui.testWidget, {
+		method: function( a, b ) {
+			same( this, instance, "this is correct in widget" );
+			same( a, 5, "parameter passed to widget" );
+			same( b, 10, "second parameter passed to widget" );
+			var ret = this._superApply( "method", arguments );
+			same( ret, 15, "super returned value" );
+		}
+	});
+
+	instance = $( "<div>" ).testWidget2().data( "testWidget2" );
+	instance.method( 5, 10 );
+	delete $.ui.testWidget2;
+});
+
 test( ".option() - getter", function() {
 	$.widget( "ui.testWidget", {
 		_create: function() {}

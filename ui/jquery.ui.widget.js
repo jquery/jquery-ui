@@ -9,6 +9,8 @@
  */
 (function( $, undefined ) {
 
+var slice = Array.prototype.slice;
+
 var _cleanData = $.cleanData;
 $.cleanData = function( elems ) {
 	for ( var i = 0, elem; (elem = elems[i]) != null; i++ ) {
@@ -50,7 +52,8 @@ $.widget = function( name, base, prototype ) {
 		namespace: namespace,
 		widgetName: name,
 		widgetEventPrefix: name,
-		widgetBaseClass: fullName
+		widgetBaseClass: fullName,
+		base: base.prototype
 	}, prototype );
 
 	$.widget.bridge( name, $[ namespace ][ name ] );
@@ -59,7 +62,7 @@ $.widget = function( name, base, prototype ) {
 $.widget.bridge = function( name, object ) {
 	$.fn[ name ] = function( options ) {
 		var isMethodCall = typeof options === "string",
-			args = Array.prototype.slice.call( arguments, 1 ),
+			args = slice.call( arguments, 1 ),
 			returnValue = this;
 
 		// allow multiple hashes to be passed on init
@@ -140,6 +143,13 @@ $.Widget.prototype = {
 	},
 	_create: function() {},
 	_init: function() {},
+
+	_super: function( method ) {
+		return this.base[ method ].apply( this, slice.call( arguments, 1 ) );
+	},
+	_superApply: function( method, args ) {
+		return this.base[ method ].apply( this, args );
+	},
 
 	destroy: function() {
 		this.element
