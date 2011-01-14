@@ -123,14 +123,14 @@ $.widget( "ui.accordion", {
 	},
 
 	_createIcons: function() {
-		var options = this.options;
-		if ( options.icons ) {
-			$( "<span></span>" )
-				.addClass( "ui-icon " + options.icons.header )
+		var icons = this.options.icons;
+		if ( icons ) {
+			$( "<span>" )
+				.addClass( "ui-icon " + icons.header )
 				.prependTo( this.headers );
 			this.active.children( ".ui-icon" )
-				.toggleClass(options.icons.header)
-				.toggleClass(options.icons.activeHeader);
+				.removeClass( icons.header )
+				.addClass( icons.activeHeader );
 			this.element.addClass( "ui-accordion-icons" );
 		}
 	},
