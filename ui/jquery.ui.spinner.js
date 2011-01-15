@@ -283,11 +283,11 @@ $.widget('ui.spinner', {
 				this.buttons.button("enable");
 			}
 		}
-		$.Widget.prototype._setOption.call( this, key, value );
+		this._super( "_setOption", key, value );
 	},
 	
 	_setOptions: function( options ) {
-		$.Widget.prototype._setOptions.call( this, options );
+		this._super( "_setOptions", options );
 		if ( "value" in options ) {
 			this._format( this.options.value );
 		}
@@ -325,7 +325,7 @@ $.widget('ui.spinner', {
 			.removeClass('ui-spinner-input')
 			.removeAttr('disabled')
 			.removeAttr('autocomplete');
-		$.Widget.prototype.destroy.call( this );
+		this._super( "destroy" );
 		this.uiSpinner.replaceWith(this.element);
 	},
 	

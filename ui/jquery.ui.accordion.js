@@ -173,7 +173,7 @@ $.widget( "ui.accordion", {
 			return;
 		}
 		
-		$.Widget.prototype._setOption.apply( this, arguments );
+		this._super( "_setOption", key, value );
 		
 		if ( key == "icons" ) {
 			this._destroyIcons();

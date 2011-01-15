@@ -600,7 +600,7 @@ $.widget("ui.dialog", {
 				break;
 		}
 
-		$.Widget.prototype._setOption.apply( self, arguments );
+		this._super( "_setOption", key, value );
 	},
 
 	_size: function() {
