@@ -150,22 +150,21 @@ test("reading HTML5 attributes", function() {
 });
 
 test("ARIA attributes", function() {
-	var el = $('#spin').spinner({ min: -5, max: 5, value: 2 }),
-		wrapper = el.spinner("widget");
+	var el = $('#spin').spinner({ min: -5, max: 5, value: 2 });;
 	
-	equals(wrapper.attr('role'), 'spinbutton', 'role');
-	equals(wrapper.attr('aria-valuemin'), -5, 'aria-valuemin');
-	equals(wrapper.attr('aria-valuemax'), 5, 'aria-valuemax');
-	equals(wrapper.attr('aria-valuenow'), 2, 'aria-valuenow');
+	equals(el.attr('role'), 'spinbutton', 'role');
+	equals(el.attr('aria-valuemin'), -5, 'aria-valuemin');
+	equals(el.attr('aria-valuemax'), 5, 'aria-valuemax');
+	equals(el.attr('aria-valuenow'), 2, 'aria-valuenow');
 	
 	el.spinner('stepUp');
 	
-	equals(wrapper.attr('aria-valuenow'), 3, 'stepUp 1 step changes aria-valuenow');
+	equals(el.attr('aria-valuenow'), 3, 'stepUp 1 step changes aria-valuenow');
 	
 	el.spinner('option', { min: -10, max: 10 });
 	
-	equals(wrapper.attr('aria-valuemin'), -10, 'min option changed aria-valuemin changes');
-	equals(wrapper.attr('aria-valuemax'), 10, 'max option changed aria-valuemax changes');
+	equals(el.attr('aria-valuemin'), -10, 'min option changed aria-valuemin changes');
+	equals(el.attr('aria-valuemax'), 10, 'max option changed aria-valuemax changes');
 });
 
 })(jQuery);

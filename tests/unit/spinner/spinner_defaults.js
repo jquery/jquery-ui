@@ -8,6 +8,7 @@ var spinner_defaults = {
 	max: null,
 	min: null,
 	numberformat: null,
+	page: 10,
 	step: null,
 	value: null
 };

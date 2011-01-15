@@ -69,6 +69,7 @@ $.widget('ui.spinner', {
 				});
 
 		this.element
+			.attr( "role", "spinbutton" )
 			.bind('keydown.spinner', function(event) {
 				if (self.options.disabled) {
 					return;
@@ -198,7 +199,7 @@ $.widget('ui.spinner', {
 	},
 	
 	_uiSpinnerHtml: function() {
-		return '<span role="spinbutton" class="ui-spinner ui-state-default ui-widget ui-widget-content ui-corner-all"></span>';
+		return '<span class="ui-spinner ui-state-default ui-widget ui-widget-content ui-corner-all"></span>';
 	},
 	
 	_buttonHtml: function() {
@@ -324,7 +325,11 @@ $.widget('ui.spinner', {
 		this.element
 			.removeClass('ui-spinner-input')
 			.removeAttr('disabled')
-			.removeAttr('autocomplete');
+			.removeAttr('autocomplete')
+			.removeAttr('role')
+			.removeAttr('aria-valuemin')
+			.removeAttr('aria-valuemax')
+			.removeAttr('aria-valuenow');
 		this._super( "destroy" );
 		this.uiSpinner.replaceWith(this.element);
 	},
