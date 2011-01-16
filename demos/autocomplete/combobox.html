@@ -112,8 +112,8 @@
 							return;
 						}
 
-						//unselects the button, so it behaves correctly
-						$(this).trigger('blur');
+						// unselects the button, so it behaves correctly
+						$( this ).blur();
 	
 						// pass empty string as value to search for, displaying all results
 						input.autocomplete( "search", "" );
