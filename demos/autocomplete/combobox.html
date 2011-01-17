@@ -81,6 +81,9 @@
 									return false;
 								}
 							}
+							
+							// triggers the change event in the select, as it can hold some events
+							select.change();
 						}
 					})
 					.addClass( "ui-widget ui-widget-content ui-corner-left" );
