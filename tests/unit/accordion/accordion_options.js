@@ -61,7 +61,7 @@ test("{ active: Number }", function() {
 	$('.ui-accordion-header:eq(2)', '#list1').click();
 	equals( $("#list1").accordion('option', 'active'), 2);
 
-	$("#list1").accordion('activate', 0);
+	$("#list1").accordion('option', 'active', 0);
 	equals( $("#list1").accordion('option', 'active'), 0);
 });
 
@@ -96,7 +96,7 @@ test("{ heightStyle: 'content' }", function() {
 });
 test("{ collapsible: false }, default", function() {
 	var ac = $("#list1").accordion();
-	ac.accordion("activate", false);
+	ac.accordion("option", "active", false);
 	state(ac, 1, 0, 0);
 });
 
@@ -163,6 +163,15 @@ test("{ icons: false }", function() {
 	icons(false);
 });
 
+test("{ icons: { activeHeader : 'test' } }", function() {
+	var list = $("#list1");
+	list.accordion( { icons: { "activeHeader": "test" } } );
+	equals( $( "#list1 span.test" ).length, 1);
+	list.accordion("option", "icons", { "activeHeader": "news" } );
+	equals( $( "#list1 span.test" ).length, 0);
+	equals( $( "#list1 span.news" ).length, 1);
+});
+
 test("{ navigation: true, navigationFilter: header }", function() {
 	$("#navigation").accordion({
 		navigation: true,
@@ -181,6 +190,14 @@ test("{ navigation: true, navigationFilter: content }", function() {
 		}
 	});
 	equals( $("#navigation .ui-accordion-content:eq(2)").size(), 1, "third content active" );
+});
+
+test("change headerSelected option after creation", function() {
+	var list = $("#list1");
+	list.accordion( { icons: { "activeHeader": "test" } } );
+	equals( $( "#list1 span.test" ).length, 1);
+	list.accordion( "option", "icons", { "headerSelected": "deprecated" } );
+	equals( $( "#list1 span.deprecated" ).length, 1);
 });
 
 })(jQuery);

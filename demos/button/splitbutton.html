@@ -11,6 +11,9 @@
 	<script src="../../ui/jquery.ui.position.js"></script>
 	<script src="../../ui/jquery.ui.menu.js"></script>
 	<link rel="stylesheet" href="../demos.css">
+	<style>
+		.ui-menu { position: absolute; width: 100px; }
+	</style>
 	<script>
 	$(function() {
 		$( "#rerun" )
@@ -18,34 +21,31 @@
 			.click(function() {
 				alert( "Running the last action" );
 			})
-		.next()
-			.button( {
-				text: false,
-				icons: {
-					primary: "ui-icon-triangle-1-s"
-				}
-			})
-			.click( function() {
-				var menu = $(this).parent().next().show().position({
-					my: "left top",
-					at: "left bottom",
-					of: this
-				});
-				$(document).one("click", function() {
-					menu.hide();
-				});
-				return false;
-			})
-		.parent()
-			.buttonset()
-		.next()
-			.hide()
-			.menu();
+			.next()
+				.button({
+					text: false,
+					icons: {
+						primary: "ui-icon-triangle-1-s"
+					}
+				})
+				.click(function() {
+					var menu = $( this ).parent().next().show().position({
+						my: "left top",
+						at: "left bottom",
+						of: this
+					});
+					$( document ).one( "click", function() {
+						menu.hide();
+					});
+					return false;
+				})
+				.parent()
+					.buttonset()
+					.next()
+						.hide()
+						.menu();
 	});
 	</script>
-	<style>
-		.ui-menu { position: absolute; width: 100px; }
-	</style>
 </head>
 <body>
 

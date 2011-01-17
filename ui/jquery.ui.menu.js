@@ -93,9 +93,7 @@ $.widget("ui.menu", {
 		});
 	},
 	
-	destroy: function() {
-		$.Widget.prototype.destroy.apply( this, arguments );
-		
+	_destroy: function() {
 		this.element
 			.removeClass( "ui-menu ui-widget ui-widget-content ui-corner-all" )
 			.removeAttr( "tabIndex" )

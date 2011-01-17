@@ -122,7 +122,7 @@ $.widget("ui.dialog", {
 					"ui-corner-all  ui-helper-clearfix" )
 				.prependTo( uiDialog ),
 
-			uiDialogTitlebarClose = $( "<a href='#'>" )
+			uiDialogTitlebarClose = $( "<a href='#'></a>" )
 				.addClass( "ui-dialog-titlebar-close  ui-corner-all" )
 				.attr( "role", "button" )
 				.hover(
@@ -179,7 +179,7 @@ $.widget("ui.dialog", {
 		}
 	},
 
-	destroy: function() {
+	_destroy: function() {
 		var self = this;
 		
 		if ( self.overlay ) {
@@ -195,9 +195,6 @@ $.widget("ui.dialog", {
 		if ( self.originalTitle ) {
 			self.element.attr( "title", self.originalTitle );
 		}
-
-		$.Widget.prototype.destroy.call( this );
-		return self;
 	},
 
 	widget: function() {
@@ -603,7 +600,7 @@ $.widget("ui.dialog", {
 				break;
 		}
 
-		$.Widget.prototype._setOption.apply( self, arguments );
+		this._super( "_setOption", key, value );
 	},
 
 	_size: function() {
