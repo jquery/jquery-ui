@@ -58,7 +58,7 @@
 				var compare = input.replace(/^([<>]=?).+/, "$1");
 				input = input.substring(compare.length);
 				if (type == "currency") {
-					input = $.global.parseFloat(input.replace(/[^\d,.-]/g, ""), 10, culture);
+					input = $.global.parseCurrency(input, culture);
 				} else if (type == "date") {
 					input = $.global.parseDate(input, format, culture);
 				}
@@ -68,7 +68,7 @@
 			function test(value) {
 				if (compare) {
 					if (type == "currency") {
-						value = $.global.parseFloat(value.replace(/[^\d,.-]/g, ""), 10, culture);
+						value = $.global.parseCurrency(value, culture);
 					} else if (type == "date") {
 						value = $.global.parseDate(value, format, culture);
 					} else {
