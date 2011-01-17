@@ -1,5 +1,5 @@
 (function($) {
-    var cultures = $.cultures,
+    var cultures = $.global.cultures,
         en = cultures.en,
         standard = en.calendars.standard,
         culture = cultures["de-DE"] = $.extend(true, {}, en, {
@@ -52,4 +52,4 @@
         }
     }, cultures["de-DE"]);
     culture.calendar = culture.calendars.standard;
-})(Globalization);
+})(jQuery);
