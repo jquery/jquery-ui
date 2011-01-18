@@ -152,6 +152,12 @@ Globalization.parseInt = function(value, radix, culture) {
     return Math.floor( this.parseFloat( value, radix, culture ) );
 }
 Globalization.parseFloat = function(value, radix, culture) {
+	// make radix optional
+	if (typeof radix === "string") {
+		culture = radix;
+		radix = 10;
+	}
+	
     culture = this.findClosestCulture( culture );
     var ret = NaN,
         nf = culture.numberFormat;
