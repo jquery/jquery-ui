@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<title>Spinner Visual Test Page</title>
+	<link rel="stylesheet" href="../visual.css" type="text/css" />
+	<link rel="stylesheet" href="../../../themes/base/jquery.ui.all.css" type="text/css" title="ui-theme" />
+	<script type="text/javascript" src="../../../jquery-1.4.4.js"></script>
+	<script type="text/javascript" src="../../../external/jquery.mousewheel-3.0.4.js"></script>
+	<script type="text/javascript" src="../../../ui/jquery.ui.core.js"></script>
+	<script type="text/javascript" src="../../../ui/jquery.ui.widget.js"></script>
+	<script type="text/javascript" src="../../../ui/jquery.ui.button.js"></script>
+	<script type="text/javascript" src="../../../ui/jquery.ui.spinner.js"></script>
+	<script type="text/javascript" src="http://jqueryui.com/themeroller/themeswitchertool/"></script>
+	<script type="text/javascript">
+	$(function() {
+		$.fn.themeswitcher && $('<div/>').css({
+			position: "absolute",
+			right: 10,
+			top: 10
+		}).appendTo(document.body).themeswitcher();
+		
+		$('#spinner').spinner({
+			start: function(event, ui) {
+				console.log(event.type, ui.value, $(this).spinner("value"));
+			},
+			spin: function(event, ui) {
+				console.log(event.type, ui.value, $(this).spinner("value"));
+			},
+			stop: function(event) {
+				console.log(event.type, $(this).spinner("value"));
+			},
+			change: function(event) {
+				console.log(event.type, $(this).spinner("value"));
+			}
+		});
+	});
+	</script>
+</head>
+<body>
+
+<p><label for="spinner">Basic with event callbacks:</label> <input id="spinner"></p>
+</body>
+</html>

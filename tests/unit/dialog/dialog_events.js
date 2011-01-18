@@ -212,38 +212,6 @@ test("close", function() {
 	el.remove();
 });
 
-//handling of deprecated beforeclose (vs beforeClose) option
-//Ticket #4669 http://dev.jqueryui.com/ticket/4669
-//TODO: remove in 1.9pre
-test("beforeclose", function() {
-	expect(10);
-
-	el = $('<div></div>').dialog({
-		beforeclose: function(ev, ui) {
-			ok(true, '.dialog("close") fires beforeClose callback');
-			equals(this, el[0], "context of callback");
-			equals(ev.type, 'dialogbeforeclose', 'event type in callback');
-			same(ui, {}, 'ui hash in callback');
-			return false;
-		}
-	});
-	el.dialog('close');
-	isOpen('beforeclose (deprecated) callback should prevent dialog from closing');
-	el.remove();
-
-	el = $('<div></div>').dialog();
-	el.dialog('option', 'beforeclose', function(ev, ui) {
-		ok(true, '.dialog("close") fires beforeClose callback');
-		equals(this, el[0], "context of callback");
-		equals(ev.type, 'dialogbeforeclose', 'event type in callback');
-		same(ui, {}, 'ui hash in callback');
-		return false;
-	});
-	el.dialog('close');
-	isOpen('beforeclose (deprecated) callback should prevent dialog from closing');
-	el.remove();
-});
-
 test("beforeClose", function() {
 	expect(14);
 

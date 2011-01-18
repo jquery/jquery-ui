@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Tooltip Visual Test: Default</title>
+	<link rel="stylesheet" href="../visual.css" type="text/css" />
+	<link rel="stylesheet" href="../../../themes/base/jquery.ui.all.css" type="text/css">
+	<script type="text/javascript" src="../../../jquery-1.4.4.js"></script>
+	<script type="text/javascript" src="../../../ui/jquery.ui.core.js"></script>
+	<script type="text/javascript" src="../../../ui/jquery.ui.widget.js"></script>
+	<script type="text/javascript" src="../../../ui/jquery.ui.position.js"></script>
+	<script type="text/javascript" src="../../../ui/jquery.ui.tooltip.js"></script>
+	<script type="text/javascript">
+	$.widget("ui.callout", {
+		_init: function() {
+			this.element.append('<div class="ui-tooltip-pointer ui-widget-content"><div class="ui-tooltip-pointer-inner" style="border-right-color:rgb(255, 255, 255)"></div></div>');
+		},
+		pointAt: function(target) {
+			target = $(target);
+			var tx = target.offset().left + target.width() / 2,
+				ty = target.offset().top + target.height() / 2,
+				dx = this.element.offset().left + this.element.width() / 2,
+				dy = this.element.offset().top + this.element.height() / 2;
+			function d(a, b) {
+				return a > b ? a - b : b - a;
+			}
+			this.element.attr("class", this.element.attr("class").replace(/(.+)ui-tooltip-arrow-..(.+)?/, "$1 $2"));
+			if (dx < tx && d(dx, tx) > d(dy, tx)) {
+				this.element.addClass("ui-tooltip-arrow-rc");
+			}
+			if (dx > tx && d(dx, tx) > d(dy, ty)) {
+				this.element.addClass("ui-tooltip-arrow-lc");
+			}
+			if (dy > ty && d(dx, tx) < d(dy, ty)) {
+				this.element.addClass("ui-tooltip-arrow-tc");
+			}
+			if (dy < ty && d(dx, tx) < d(dy, ty)) {
+				this.element.addClass("ui-tooltip-arrow-bc");
+			}
+			
+			// fix inner borders
+			$('.ui-tooltip-pointer-inner', this.element).each(function(){
+				var pt = $(this).parent().parent();
+				var bColor = pt.css('backgroundColor');
+				$(this).css({
+					borderLeftColor: '',
+					borderRightColor: '',
+					borderTopColor: '',
+					borderBottomColor: ''
+				});
+				if(pt.is('.ui-tooltip-arrow-rb,.ui-tooltip-arrow-rc,.ui-tooltip-arrow-rt')){ $(this).css('border-left-color', bColor); }
+				else if(pt.is('.ui-tooltip-arrow-br,.ui-tooltip-arrow-bc,.ui-tooltip-arrow-bl')){ $(this).css('border-top-color', bColor); }
+				else if(pt.is('.ui-tooltip-arrow-lb,.ui-tooltip-arrow-lc,.ui-tooltip-arrow-lt')){ $(this).css('border-right-color', bColor); }
+				else { $(this).css('border-bottom-color', bColor);  }
+			});
+		}
+	});
+		
+	$(function() {
+		$.ui.tooltip.prototype.options.show = function(event, ui) {
+			$(this).tooltip("widget").callout("pointAt", ui.target);
+		}
+		
+		function enable() {
+			// default
+			$("#context1, form input").tooltip();
+			
+			// custom class, replaces ui-widget-content
+			$("#context2").tooltip({
+				tooltipClass: "ui-widget-header"
+			});
+			$("#right1").tooltip({
+				tooltipClass: "ui-state-error"
+			});
+			
+			// synchronous content
+			$("#see-footnote").tooltip({
+				content: function() {
+					return $($(this).attr("href")).html();
+				}
+			});
+			// asynchronous content
+			$("#ajax").tooltip({
+				content: function(response) {
+					$.get("ajaxcontent.html", response);
+				}
+			});
+			
+			// custom position
+			$("#right2").tooltip({
+				position: {
+					my: "center top",
+					at: "center bottom",
+					offset: "0 10"
+				},
+				tooltipClass: "ui-state-highlight"
+			});
+			
+			$(".ui-tooltip").callout();
+		}
+		enable();
+		
+		$("#disable").toggle(function() {
+			$("*").tooltip("disable");
+		}, function() {
+			$("*").tooltip("enable");
+		});
+		$("#toggle").toggle(function() {
+			$("*").tooltip("destroy");
+		}, function() {
+			enable();
+		});
+	});
+	</script>
+	
+	<style>
+		.ui-tooltip .ui-tooltip-pointer,.ui-tooltip .ui-tooltip-pointer-inner { position:absolute; width:0; height:0; background:none; }
+
+		/*top*/
+		.ui-tooltip-arrow-tr .ui-tooltip-pointer,.ui-tooltip-arrow-tc .ui-tooltip-pointer,.ui-tooltip-arrow-tl .ui-tooltip-pointer { top:-14px; border-top:0; border-bottom-width:14px; }
+		.ui-tooltip-arrow-tr .ui-tooltip-pointer { border-left:18px dotted transparent; border-right:0; right:10px; }
+		.ui-tooltip-arrow-tc .ui-tooltip-pointer { border-left:10px dotted transparent; border-right:10px dotted transparent; left:50%; margin-left:-10px; }
+		.ui-tooltip-arrow-tl .ui-tooltip-pointer { border-left:0; border-right:18px dotted transparent; left:10px; }
+		.ui-tooltip-arrow-tr .ui-tooltip-pointer-inner,.ui-tooltip-arrow-tc .ui-tooltip-pointer-inner,.ui-tooltip-arrow-tl .ui-tooltip-pointer-inner { border-bottom:10px solid #fff; bottom:-14px; }
+		.ui-tooltip-arrow-tr .ui-tooltip-pointer-inner { border-left:12px dotted transparent; border-right:0; right:2px; }
+		.ui-tooltip-arrow-tc .ui-tooltip-pointer-inner { border-left:8px dotted transparent; border-right:8px dotted transparent; left:-8px; }
+		.ui-tooltip-arrow-tl .ui-tooltip-pointer-inner { border-left:0; border-right:12px dotted transparent; left:2px; }
+		
+		/*right*/
+		.ui-tooltip-arrow-rb .ui-tooltip-pointer,.ui-tooltip-arrow-rc .ui-tooltip-pointer,.ui-tooltip-arrow-rt .ui-tooltip-pointer { right:-14px; border-right:0; border-left-width:14px; }
+		.ui-tooltip-arrow-rb .ui-tooltip-pointer { border-bottom:0; border-top:18px dotted transparent; bottom:10px; }
+		.ui-tooltip-arrow-rc .ui-tooltip-pointer { border-bottom:10px dotted transparent; border-top:10px dotted transparent; bottom:50%; margin-bottom:-10px; }
+		.ui-tooltip-arrow-rt .ui-tooltip-pointer { border-bottom:18px dotted transparent; border-top:0; top:10px; }
+		.ui-tooltip-arrow-rb .ui-tooltip-pointer-inner,.ui-tooltip-arrow-rc .ui-tooltip-pointer-inner,.ui-tooltip-arrow-rt .ui-tooltip-pointer-inner { border-left:10px solid #fff; left:-14px; }
+		.ui-tooltip-arrow-rb .ui-tooltip-pointer-inner { border-bottom:0; border-top:12px dotted transparent; bottom:2px; }
+		.ui-tooltip-arrow-rc .ui-tooltip-pointer-inner { border-bottom:8px dotted transparent; border-top:8px dotted transparent; bottom:-8px; }
+		.ui-tooltip-arrow-rt .ui-tooltip-pointer-inner { border-bottom:12px dotted transparent; border-top:0; top:2px; }
+		
+		/*bottom*/
+		.ui-tooltip-arrow-br .ui-tooltip-pointer,.ui-tooltip-arrow-bc .ui-tooltip-pointer,.ui-tooltip-arrow-bl .ui-tooltip-pointer { bottom:-14px; border-bottom:0; border-top-width:14px; }
+		.ui-tooltip-arrow-br .ui-tooltip-pointer { border-left:18px dotted transparent; border-right:0; right:10px; }
+		.ui-tooltip-arrow-bc .ui-tooltip-pointer { border-left:10px dotted transparent; border-right:10px dotted transparent; left:50%; margin-left:-10px; }
+		.ui-tooltip-arrow-bl .ui-tooltip-pointer { border-left:0; border-right:18px dotted transparent; left:10px; }
+		.ui-tooltip-arrow-br .ui-tooltip-pointer-inner,.ui-tooltip-arrow-bc .ui-tooltip-pointer-inner,.ui-tooltip-arrow-bl .ui-tooltip-pointer-inner { border-top:10px solid #fff; top:-14px; }
+		.ui-tooltip-arrow-br .ui-tooltip-pointer-inner { border-left:12px dotted transparent; border-right:0; right:2px; }
+		.ui-tooltip-arrow-bc .ui-tooltip-pointer-inner { border-left:8px dotted transparent; border-right:8px dotted transparent; left:-8px; }
+		.ui-tooltip-arrow-bl .ui-tooltip-pointer-inner { border-left:0; border-right:12px dotted transparent; left:2px; }
+		
+		/*left*/
+		.ui-tooltip-arrow-lb .ui-tooltip-pointer,.ui-tooltip-arrow-lc .ui-tooltip-pointer,.ui-tooltip-arrow-lt .ui-tooltip-pointer { left:-14px; border-left:0; border-right-width:14px; }
+		.ui-tooltip-arrow-lb .ui-tooltip-pointer { border-bottom:0; border-top:18px dotted transparent; bottom:10px; }
+		.ui-tooltip-arrow-lc .ui-tooltip-pointer { border-bottom:10px dotted transparent; border-top:10px dotted transparent; bottom:50%; margin-bottom:-10px; }
+		.ui-tooltip-arrow-lt .ui-tooltip-pointer { border-bottom:18px dotted transparent; border-top:0; top:10px; }
+		.ui-tooltip-arrow-lb .ui-tooltip-pointer-inner,.ui-tooltip-arrow-lc .ui-tooltip-pointer-inner,.ui-tooltip-arrow-lt .ui-tooltip-pointer-inner { border-right:10px solid #fff; right:-14px; }
+		.ui-tooltip-arrow-lb .ui-tooltip-pointer-inner { border-bottom:0; border-top:12px dotted transparent; bottom:2px; }
+		.ui-tooltip-arrow-lc .ui-tooltip-pointer-inner { border-bottom:8px dotted transparent; border-top:8px dotted transparent; bottom:-8px; }
+	</style>
+</head>
+<body>
+
+<div style="width:300px">
+	<ul id="context1" class="ui-widget ui-widget-header">
+		<li><a href="#" title="Tooltip text 1">Anchor 1</a></li>
+		<li><a href="#" title="Tooltip text 2">Anchor 2</a></li>
+		<li><a href="#" title="Tooltip text 3">Anchor 3</a></li>
+		<li><a href="#" title="Tooltip text 4 more Tooltip text Tooltip text ">Anchor 4</a></li>
+		<li><a href="#" title="Tooltip text 5 more Tooltip text Tooltip text ">Anchor 5</a></li>
+		<li><a href="#" title="Tooltip text 6 more Tooltip text Tooltip text ">Anchor 6</a></li>
+	</ul>
+
+	<div id="right1" style="position: absolute; right: 1em" title="right aligned element">
+		collision detection should kick in around here
+	</div>
+	
+	<div style="margin: 2em 0">
+		<a id="see-footnote" href="#footnote">I'm a link to a footnote.</a>
+	</div>
+	
+	<div id="right2" style="position: absolute; right: 1em" title="right aligned element with custom position">
+		right aligned with custom position
+	</div>
+	
+	<div id="ajax" style="width: 100px;" class="ui-widget-content" title="never be seen">
+		gets its content via ajax
+	</div>
+	
+	<div id="context2" class="ui-widget ui-widget-content">
+		<span title="something" style="border:1px solid blue">span</span>
+		<div title="something else" style="border:1px solid red;">
+			div
+			<span title="something more" style="border:1px solid green;">nested span</span>
+		</div>
+	</div>
+	
+	<form style="margin: 2em 0;">
+		<div>
+			<label for="first">First Name:</label>
+			<input id="first" title="Your first name is optional" />
+		</div>
+		<div>
+			<label for="last">Last Name:</label>
+			<input id="last" title="Your last name is optional" />
+		</div>
+	</form>
+	
+	<div id="footnote">This is <strong>the</strong> footnote, including other elements</div>
+	
+	<button id="disable">Toggle disabled</button>
+	<button id="toggle">Toggle widget</button>
+</div>
+
+
+</body>
+</html>

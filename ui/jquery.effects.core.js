@@ -1,7 +1,7 @@
 /*
  * jQuery UI Effects @VERSION
  *
- * Copyright 2010, AUTHORS.txt (http://jqueryui.com/about)
+ * Copyright 2011, AUTHORS.txt (http://jqueryui.com/about)
  * Dual licensed under the MIT or GPL Version 2 licenses.
  * http://jquery.org/license
  *
@@ -231,43 +231,41 @@ $.effects.animateClass = function(value, duration, easing, callback) {
 		easing = null;
 	}
 
-	return this.each(function() {
-		$.queue(this, 'fx', function() {
-			var that = $(this),
-				originalStyleAttr = that.attr('style') || ' ',
-				originalStyle = filterStyles(getElementStyles.call(this)),
-				newStyle,
-				className = that.attr('className');
+	return this.queue('fx', function() {
+		var that = $(this),
+			originalStyleAttr = that.attr('style') || ' ',
+			originalStyle = filterStyles(getElementStyles.call(this)),
+			newStyle,
+			className = that.attr('className');
 
-			$.each(classAnimationActions, function(i, action) {
-				if (value[action]) {
-					that[action + 'Class'](value[action]);
-				}
-			});
-			newStyle = filterStyles(getElementStyles.call(this));
-			that.attr('className', className);
-
-			that.animate(styleDifference(originalStyle, newStyle), duration, easing, function() {
-				$.each(classAnimationActions, function(i, action) {
-					if (value[action]) { that[action + 'Class'](value[action]); }
-				});
-				// work around bug in IE by clearing the cssText before setting it
-				if (typeof that.attr('style') == 'object') {
-					that.attr('style').cssText = '';
-					that.attr('style').cssText = originalStyleAttr;
-				} else {
-					that.attr('style', originalStyleAttr);
-				}
-				if (callback) { callback.apply(this, arguments); }
-			});
-
-			// $.animate adds a function to the end of the queue
-			// but we want it at the front
-			var queue = $.queue(this),
-				anim = queue.splice(queue.length - 1, 1)[0];
-			queue.splice(1, 0, anim);
-			$.dequeue(this);
+		$.each(classAnimationActions, function(i, action) {
+			if (value[action]) {
+				that[action + 'Class'](value[action]);
+			}
 		});
+		newStyle = filterStyles(getElementStyles.call(this));
+		that.attr('className', className);
+
+		that.animate(styleDifference(originalStyle, newStyle), duration, easing, function() {
+			$.each(classAnimationActions, function(i, action) {
+				if (value[action]) { that[action + 'Class'](value[action]); }
+			});
+			// work around bug in IE by clearing the cssText before setting it
+			if (typeof that.attr('style') == 'object') {
+				that.attr('style').cssText = '';
+				that.attr('style').cssText = originalStyleAttr;
+			} else {
+				that.attr('style', originalStyleAttr);
+			}
+			if (callback) { callback.apply(this, arguments); }
+		});
+
+		// $.animate adds a function to the end of the queue
+		// but we want it at the front
+		var queue = $.queue(this),
+			anim = queue.splice(queue.length - 1, 1)[0];
+		queue.splice(1, 0, anim);
+		$.dequeue(this);
 	});
 };
 
@@ -390,7 +388,7 @@ $.extend($.effects, {
 					props[pos] = 'auto';
 				}
 			});
-			element.css({position: 'relative', top: 0, left: 0 });
+			element.css({position: 'relative', top: 0, left: 0, right: 'auto', bottom: 'auto' });
 		}
 
 		return wrapper.css(props).show();

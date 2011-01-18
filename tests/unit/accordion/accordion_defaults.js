@@ -12,7 +12,10 @@ var accordion_defaults = {
 	event: "click",
 	fillSpace: false,
 	header: "> li > :first-child,> :not(li):even",
-	icons: { "header": "ui-icon-triangle-1-e", "headerSelected": "ui-icon-triangle-1-s" },
+	heightStyle: null,
+	icons: { "header": "ui-icon-triangle-1-e", 
+			"activeHeader": null,
+			"headerSelected": "ui-icon-triangle-1-s" },
 	navigation: false,
 	navigationFilter: function() {}
 };
