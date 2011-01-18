@@ -796,16 +796,21 @@ test('parseDate', function() {
 	equalsDate($.datepicker.parseDate('\'day\' d \'of\' MM (\'\'DD\'\'), yy',
 		'day 3 of February (\'Saturday\'), 2001'), new Date(2001, 2 - 1, 3),
 		'Parse date \'day\' d \'of\' MM (\'\'DD\'\'), yy');
-	equalsDate($.datepicker.parseDate('ymmdd', '010203'),
-		new Date(2001, 2 - 1, 3), 'Parse date ymmdd - default cutoff');
-	equalsDate($.datepicker.parseDate('y-m-d', '01-02-03'),
-		new Date(2001, 2 - 1, 3), 'Parse date y-m-d - default cutoff');
-	equalsDate($.datepicker.parseDate('y-m-d', '51-02-03'),
-		new Date(1951, 2 - 1, 3), 'Parse date y-m-d - default cutoff');
-	equalsDate($.datepicker.parseDate('y-m-d', '51-02-03', {shortYearCutoff: 80}),
-		new Date(2051, 2 - 1, 3), 'Parse date y-m-d - cutoff 80');
-	equalsDate($.datepicker.parseDate('y-m-d', '51-02-03', {shortYearCutoff: '+60'}),
-		new Date(2051, 2 - 1, 3), 'Parse date y-m-d - cutoff +60');
+	var currentYear = new Date().getFullYear();
+	equalsDate($.datepicker.parseDate('y-m-d', (currentYear - 2000) + '-02-03'),
+			new Date(currentYear, 2 - 1, 3), 'Parse date y-m-d - default cutuff');
+	equalsDate($.datepicker.parseDate('y-m-d', (currentYear - 2000 + 10) + '-02-03'),
+			new Date(currentYear+10, 2 - 1, 3), 'Parse date y-m-d - default cutuff');
+	equalsDate($.datepicker.parseDate('y-m-d', (currentYear - 2000 + 11) + '-02-03'),
+			new Date(currentYear-89, 2 - 1, 3), 'Parse date y-m-d - default cutuff');
+	equalsDate($.datepicker.parseDate('y-m-d', '80-02-03', {shortYearCutoff: 80}),
+		new Date(2080, 2 - 1, 3), 'Parse date y-m-d - cutoff 80');
+	equalsDate($.datepicker.parseDate('y-m-d', '81-02-03', {shortYearCutoff: 80}),
+		new Date(1981, 2 - 1, 3), 'Parse date y-m-d - cutoff 80');
+	equalsDate($.datepicker.parseDate('y-m-d', (currentYear - 2000 + 60) + '-02-03', {shortYearCutoff: '+60'}),
+			new Date(currentYear + 60, 2 - 1, 3), 'Parse date y-m-d - cutoff +60');
+	equalsDate($.datepicker.parseDate('y-m-d', (currentYear - 2000 + 61) + '-02-03', {shortYearCutoff: '+60'}),
+			new Date(currentYear - 39, 2 - 1, 3), 'Parse date y-m-d - cutoff +60');
 	var gmtDate = new Date(2001, 2 - 1, 3);
 	gmtDate.setMinutes(gmtDate.getMinutes() - gmtDate.getTimezoneOffset());
 	equalsDate($.datepicker.parseDate('@', '981158400000'), gmtDate, 'Parse date @');
