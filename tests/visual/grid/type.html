@@ -21,7 +21,7 @@
 			function extract(row) {
 				var text = $($(row).children()[index]).text();
 				if (type == "currency") {
-					return $.global.parseCurrency(text, culture);
+					return $.global.parseFloat(text, culture);
 				} else if (type == "date") {
 					return $.global.parseDate(text, format, culture);
 				} else {
@@ -58,7 +58,7 @@
 				var compare = input.replace(/^([<>]=?).+/, "$1");
 				input = input.substring(compare.length);
 				if (type == "currency") {
-					input = $.global.parseCurrency(input, culture);
+					input = $.global.parseFloat(input, culture);
 				} else if (type == "date") {
 					input = $.global.parseDate(input, format, culture);
 				}
@@ -68,7 +68,7 @@
 			function test(value) {
 				if (compare) {
 					if (type == "currency") {
-						value = $.global.parseCurrency(value, culture);
+						value = $.global.parseFloat(value, culture);
 					} else if (type == "date") {
 						value = $.global.parseDate(value, format, culture);
 					} else {
