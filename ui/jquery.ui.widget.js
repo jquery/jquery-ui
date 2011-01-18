@@ -130,11 +130,7 @@ $.Widget.prototype = {
 			options );
 
 		this.bindings = $();
-
-		var self = this;
-		this.element.bind( "remove." + this.widgetName, function() {
-			self.destroy();
-		});
+		this._bind({ remove: "destroy" });
 
 		this._create();
 		this._trigger( "create" );
@@ -233,7 +229,8 @@ $.Widget.prototype = {
 				if ( instance.options.disabled ) {
 					return;
 				}
-				return handler.apply( instance, arguments );
+				return ( typeof handler === "string" ? instance[ handler ] : handler )
+					.apply( instance, arguments );
 			});
 		});
 	},

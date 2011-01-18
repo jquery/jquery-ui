@@ -412,7 +412,7 @@ test( "_bind to element (default)", function() {
 			self = this;
 			this._bind({
 				keyup: this.keyup,
-				keydown: this.keydown
+				keydown: "keydown"
 			});
 		},
 		keyup: function( event ) {
@@ -452,7 +452,7 @@ test( "_bind to descendent", function() {
 			self = this;
 			this._bind( this.element.find( "strong" ), {
 				keyup: this.keyup,
-				keydown: this.keydown
+				keydown: "keydown"
 			});
 		},
 		keyup: function( event ) {
