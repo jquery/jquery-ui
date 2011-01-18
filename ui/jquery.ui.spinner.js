@@ -305,20 +305,14 @@ $.widget('ui.spinner', {
 	_parse: function(val) {
 		var input = val;
 		if (typeof val == 'string') {
-			// special case for currency formatting until Globalization handles currencies
-			if (this.options.numberformat == "C" && window.Globalization) {
-				// parseFloat should accept number format, including currency
-				var culture = Globalization.culture || Globalization.cultures['default'];
-				val = val.replace(culture.numberFormat.currency.symbol, "");
-			}
-			val = window.Globalization && this.options.numberformat ? Globalization.parseFloat(val) : +val;
+			val = $.global && this.options.numberformat ? $.global.parseFloat(val) : +val;
 		}
 		return isNaN(val) ? null : val;
 	},
 	
 	_format: function(num) {
 		var num = this.options.value;
-		this.element.val( window.Globalization && this.options.numberformat ? Globalization.format(num, this.options.numberformat) : num );
+		this.element.val( $.global && this.options.numberformat ? $.global.format(num, this.options.numberformat) : num );
 	},
 		
 	destroy: function() {
