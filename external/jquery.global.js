@@ -151,13 +151,17 @@ Globalization.format = function(value, format, culture) {
 Globalization.parseInt = function(value, radix, culture) {
     return Math.floor( this.parseFloat( value, radix, culture ) );
 }
-Globalization.parseCurrency = function(value, culture) {
-	return this.parseFloat(value.replace(/[^\d,.-]/g, ""), 10, culture);
-}
 Globalization.parseFloat = function(value, radix, culture) {
     culture = this.findClosestCulture( culture );
     var ret = NaN,
         nf = culture.numberFormat;
+
+	if (value.indexOf(culture.numberFormat.currency.symbol) > -1) {
+		// remove currency symbol
+		value = value.replace(culture.numberFormat.currency.symbol, "");
+		// replace decimal seperator
+		value = value.replace(culture.numberFormat.currency["."], culture.numberFormat["."]);
+	}
 
     // trim leading and trailing whitespace
     value = trim( value );
