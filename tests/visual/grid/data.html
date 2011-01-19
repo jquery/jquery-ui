@@ -25,6 +25,15 @@
 		},
 		_getItems: function( offset, limit ) {
 			return this._items.slice( offset, offset + limit );
+		},
+		select: function( index ) {
+			var item;
+			if (typeof index == "number" ) {
+				item = this.item( index )
+			} else {
+				item = index;
+			}
+			this._trigger( "select", null, item );
 		}
 	});
 
@@ -53,29 +62,28 @@
 	];
 
 	$(function() {
+		var details = $("#developer");
 		var datastore = new $.ui.datastore({
-			source: data
+			source: data,
+			select: function( event, item ) {
+				$( "#developer-tmpl" ).tmpl( item ).appendTo( details.empty() );
+			}
 		}, {} );
+		datastore.select(0);
 
 		var summaryTable = $( "#developers" )
 				.delegate( "tbody > tr", "click", function() {
-					renderDetails( $(this).tmplItem().data );
+					datastore.select( $(this).tmplItem().data );
 				});
 			details = $( "#developer" );
 
 		initializeTable( summaryTable );
-		renderDetails( datastore.item(0) );
 
 		function initializeTable( table ) {
 			var tbody = table.find( "tbody" );
 			$.each( datastore.items( 0, 5 ), function( itemId, item ) {
 				$( "#row-tmpl" ).tmpl( item ).appendTo( tbody );
 			});
-		}
-
-		var details = $("#developer");
-		function renderDetails( item ) {
-			$( "#developer-tmpl" ).tmpl( item ).appendTo( details.empty() );
 		}
 	});
 	</script>
