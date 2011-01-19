@@ -1,6 +1,5 @@
-﻿/* Algerian Arabic Translation for jQuery UI date picker plugin. (can be used for Tunisia)*/
+/* Algerian Arabic Translation for jQuery UI date picker plugin. (can be used for Tunisia)*/
 /* Mohamed Cherif BOUCHELAGHEM -- cherifbouchelaghem@yahoo.fr */
-/* NOTE: monthNames maybe original names are in jquery.ui.datepicker-ar.js, but we must use the months that we know here in North Africa which is جانفي فيفري they look like French months in arabic way but the rest is ok. More information for months in arabic http://en.wikipedia.org/wiki/Arabic_names_of_calendar_months*/
 
 jQuery(function($){
 	$.datepicker.regional['ar-DZ'] = {
