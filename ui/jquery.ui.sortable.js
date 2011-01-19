@@ -359,7 +359,7 @@ $.widget("ui.sortable", $.ui.mouse, {
 
 		if(this.dragging) {
 
-			this._mouseUp();
+			this._mouseUp({ target: null });
 
 			if(this.options.helper == "original")
 				this.currentItem.css(this._storedCSS).removeClass("ui-sortable-helper");
