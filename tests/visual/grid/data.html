@@ -73,8 +73,9 @@
 			});
 		}
 
+		var details = $("#developer");
 		function renderDetails( item ) {
-			$( "#developer-tmpl" ).tmpl( item ).appendTo( "#developer" );
+			$( "#developer-tmpl" ).tmpl( item ).appendTo( details.empty() );
 		}
 	});
 	</script>
