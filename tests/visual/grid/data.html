@@ -59,32 +59,23 @@
 
 		var summaryTable = $( "#developers" )
 				.delegate( "tbody > tr", "click", function() {
-					renderDetails( $( this ).data( "item-id" ) );
+					renderDetails( $(this).tmplItem().data );
 				});
 			details = $( "#developer" );
 
 		initializeTable( summaryTable );
-		renderDetails( 0 );
+		renderDetails( datastore.item(0) );
 
 		function initializeTable( table ) {
-			var tbody = table.find( "tbody" ),
-				columns = table.find( "th" ).map(function() {
-					return $( this ).data( "field" );
-				});
-
+			var tbody = table.find( "tbody" );
 			$.each( datastore.items( 0, 5 ), function( itemId, item ) {
-				var row = $( "<tr>" )
-					.data( "item-id", itemId )
-					.appendTo( tbody );
-				$.each( columns, function( columnId, column ) {
-					$( "<td>" ).text( item[ columns[ columnId ] ] ).appendTo( row );
-				});
+				$("#row-tmpl").tmpl(item).appendTo(tbody);
 			});
 		}
 
-		function renderDetails( itemId ) {
+		function renderDetails( item ) {
 			$( "#developer" ).html(
-				$( "#developer-tmpl" ).tmpl( datastore.item( itemId ) ) );
+				$( "#developer-tmpl" ).tmpl( item ) );
 		}
 	});
 	</script>
@@ -104,6 +95,14 @@
 </table>
 
 <div id="developer"></div>
+
+<script type="text/x-jquery-tmpl" id="row-tmpl">
+<tr>
+	<td>${firstName}</td>
+	<td>${lastName}</td>
+	<td>${country}</td>
+</tr>
+</script>
 
 <script type="text/x-jquery-tmpl" id="developer-tmpl">
 <div>
