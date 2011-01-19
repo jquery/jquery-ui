@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Grid: Data</title>
+	<link rel="stylesheet" href="../../../themes/base/jquery.ui.all.css">
+	<script src="../../../jquery-1.4.4.js"></script>
+	<script src="../../../external/jquery.tmpl.js"></script>
+	<script src="../../../ui/jquery.ui.core.js"></script>
+	<script src="../../../ui/jquery.ui.widget.js"></script>
+	<script>
+	// widget factory is nice, but we probably won't have an element
+	$.widget( "ui.datastore", {
+		options: {
+			source: null
+		},
+		_create: function() {
+			this._items = this.options.source;
+		},
+		item: function( index ) {
+			return this._getItems( index, 1 )[ 0 ];
+		},
+		items: function( offset, limit ) {
+			return this._getItems( offset, limit );
+		},
+		_getItems: function( offset, limit ) {
+			return this._items.slice( offset, offset + limit );
+		}
+	});
+
+	var data = [
+		{
+			firstName: "Scott",
+			lastName: "González",
+			country: "USA",
+			twitter: "scott_gonzalez",
+			github: "scottgonzalez"
+		},
+		{
+			firstName: "Richard",
+			lastName: "Worth",
+			country: "USA",
+			twitter: "rworth",
+			github: "rdworth"
+		},
+		{
+			firstName: "Jörn",
+			lastName: "Zaefferer",
+			country: "Germany",
+			twitter: "bassistance",
+			github: "jzaefferer"
+		}
+	];
+
+	$(function() {
+		var datastore = new $.ui.datastore({
+			source: data
+		}, {} );
+
+		var summaryTable = $( "#developers" )
+				.delegate( "tbody > tr", "click", function() {
+					renderDetails( $( this ).data( "item-id" ) );
+				});
+			details = $( "#developer" );
+
+		initializeTable( summaryTable );
+		renderDetails( 0 );
+
+		function initializeTable( table ) {
+			var tbody = table.find( "tbody" ),
+				columns = table.find( "th" ).map(function() {
+					return $( this ).data( "field" );
+				});
+
+			$.each( datastore.items( 0, 5 ), function( itemId, item ) {
+				var row = $( "<tr>" )
+					.data( "item-id", itemId )
+					.appendTo( tbody );
+				$.each( columns, function( columnId, column ) {
+					$( "<td>" ).text( item[ columns[ columnId ] ] ).appendTo( row );
+				});
+			});
+		}
+
+		function renderDetails( itemId ) {
+			$( "#developer" ).html(
+				$( "#developer-tmpl" ).tmpl( datastore.item( itemId ) ) );
+		}
+	});
+	</script>
+</head>
+<body>
+
+<table id="developers">
+	<thead>
+		<tr>
+			<th data-field="firstName">First Name</th>
+			<th data-field="lastName">Last Name</th>
+			<th data-field="country">Country</th>
+		</tr>
+	</thead>
+	<tbody>
+	</tbody>
+</table>
+
+<div id="developer"></div>
+
+<script type="text/x-jquery-tmpl" id="developer-tmpl">
+<div>
+	<h2>${lastName}, ${firstName}</h2>
+	<p>GitHub: <a href="http://github.com/${github}">${github}</a></p>
+	<p>Twitter: <a href="http://twitter.com/${twitter}">${twitter}</a></p>
+</div>
+</script>
+
+</body>
+</html>
