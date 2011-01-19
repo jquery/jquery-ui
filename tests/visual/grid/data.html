@@ -75,16 +75,12 @@
 				.delegate( "tbody > tr", "click", function() {
 					datastore.select( $(this).tmplItem().data );
 				});
-			details = $( "#developer" );
 
-		initializeTable( summaryTable );
+		var tbody = summaryTable.find( "tbody" );
+		$.each( datastore.items( 0, 5 ), function( itemId, item ) {
+			$( "#row-tmpl" ).tmpl( item ).appendTo( tbody );
+		});
 
-		function initializeTable( table ) {
-			var tbody = table.find( "tbody" );
-			$.each( datastore.items( 0, 5 ), function( itemId, item ) {
-				$( "#row-tmpl" ).tmpl( item ).appendTo( tbody );
-			});
-		}
 	});
 	</script>
 </head>
