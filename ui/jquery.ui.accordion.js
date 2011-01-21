@@ -95,6 +95,7 @@ $.widget( "ui.accordion", {
 			.not( self.active || "" )
 			.attr({
 				"aria-expanded": "false",
+				"aria-selected": "true",
 				tabIndex: -1
 			})
 			.next()
@@ -107,6 +108,7 @@ $.widget( "ui.accordion", {
 			self.active
 				.attr({
 					"aria-expanded": "true",
+					"aria-selected": "true",
 					tabIndex: 0
 				});
 		}
@@ -152,6 +154,7 @@ $.widget( "ui.accordion", {
 			.removeClass( "ui-accordion-header ui-accordion-disabled ui-helper-reset ui-state-default ui-corner-all ui-state-active ui-state-disabled ui-corner-top" )
 			.removeAttr( "role" )
 			.removeAttr( "aria-expanded" )
+			.removeAttr( "aria-selected" )
 			.removeAttr( "tabIndex" );
 
 		this.headers.find( "a" ).removeAttr( "tabIndex" );
@@ -458,12 +461,14 @@ $.widget( "ui.accordion", {
 		toHide.prev()
 			.attr({
 				"aria-expanded": "false",
+				"aria-selected": "false",
 				tabIndex: -1
 			})
 			.blur();
 		toShow.prev()
 			.attr({
 				"aria-expanded": "true",
+				"aria-selected": "true",
 				tabIndex: 0
 			})
 			.focus();
