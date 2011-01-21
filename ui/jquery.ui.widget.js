@@ -130,6 +130,8 @@ $.Widget.prototype = {
 			options );
 
 		this.bindings = $();
+		this.hoverable = $();
+		this.focusable = $();
 		this._bind({ remove: "destroy" });
 
 		this._create();
@@ -151,6 +153,8 @@ $.Widget.prototype = {
 
 	destroy: function() {
 		this._destroy();
+		// we can probably remove the unbind calls in 2.0
+		// all event bindings should go through this._bind()
 		this.element
 			.unbind( "." + this.widgetName )
 			.removeData( this.widgetName );
@@ -160,7 +164,11 @@ $.Widget.prototype = {
 			.removeClass(
 				this.widgetBaseClass + "-disabled " +
 				"ui-state-disabled" );
+
+		// clean up events and states
 		this.bindings.unbind( "." + this.widgetName );
+		this.hoverable.removeClass( "ui-state-hover" );
+		this.focusable.removeClass( "ui-state-focus" );
 	},
 	_destroy: $.noop,
 
@@ -203,6 +211,8 @@ $.Widget.prototype = {
 			this.widget()
 				.toggleClass( this.widgetBaseClass + "-disabled ui-state-disabled", !!value )
 				.attr( "aria-disabled", value );
+			this.hoverable.removeClass( "ui-state-hover" );
+			this.focusable.removeClass( "ui-state-focus" );
 		}
 
 		return this;
@@ -232,6 +242,30 @@ $.Widget.prototype = {
 				return ( typeof handler === "string" ? instance[ handler ] : handler )
 					.apply( instance, arguments );
 			});
+		});
+	},
+
+	_hoverable: function( element ) {
+		this.hoverable = this.hoverable.add( element );
+		this._bind( element, {
+			mouseenter: function( event ) {
+				$( event.currentTarget ).addClass( "ui-state-hover" );
+			},
+			mouseleave: function( event ) {
+				$( event.currentTarget ).removeClass( "ui-state-hover" );
+			}
+		});
+	},
+
+	_focusable: function( element ) {
+		this.focusable = this.focusable.add( element );
+		this._bind( element, {
+			focus: function( event ) {
+				$( event.currentTarget ).addClass( "ui-state-focus" );
+			},
+			blur: function( event ) {
+				$( event.currentTarget ).removeClass( "ui-state-focus" );
+			}
 		});
 	},
 
