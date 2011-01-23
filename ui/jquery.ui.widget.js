@@ -116,10 +116,12 @@ $.Widget = function( options, element ) {
 $.Widget.prototype = {
 	widgetName: "widget",
 	widgetEventPrefix: "",
+	defaultElement: "<div>",
 	options: {
 		disabled: false
 	},
 	_createWidget: function( options, element ) {
+		element = $( element || this.defaultElement )[ 0 ];
 		// $.widget.bridge stores the plugin instance, but we do it anyway
 		// so that it's stored even before the _create function runs
 		$.data( element, this.widgetName, this );
