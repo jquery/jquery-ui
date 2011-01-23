@@ -16,6 +16,7 @@
 var idIncrement = 0;
 
 $.widget("ui.menu", {
+	defaultElement: "<ul>",
 	_create: function() {
 		var self = this;
 		this.menuId = this.element.attr( "id" ) || "ui-menu-" + idIncrement++;

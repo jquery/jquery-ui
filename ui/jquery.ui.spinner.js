@@ -14,6 +14,7 @@
 (function($) {
 
 $.widget('ui.spinner', {
+	defaultElement: "<input>",
 	options: {
 		incremental: true,
 		max: null,
