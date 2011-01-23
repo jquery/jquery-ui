@@ -10,12 +10,36 @@
 	<script src="../../../ui/jquery.ui.widget.js"></script>
 	<script>
 	// widget factory is nice, but we probably won't have an element
+	$.widget( "ui.dataitem", {
+		options: {
+			source: null
+		},
+		_create: function() {
+			this.props = this.options.source;
+		},
+		get: function( key ) {
+			return this.props[ key ];
+		},
+		set: function( key, value ) {
+			this.props[ key ] = value;
+			return this;
+		}
+	});
+	
 	$.widget( "ui.datastore", {
 		options: {
 			source: null
 		},
 		_create: function() {
-			this._items = this.options.source;
+			var that = this;
+			this._items = [];
+			$.each( this.options.source, function( i, item ) {
+				var dataitem = new $.ui.dataitem({
+					source: item
+				}, {} );
+				dataitem.set( "__ref__", dataitem );
+				that._items[ i ] = dataitem;
+			});
 		},
 		item: function( index ) {
 			return this._getItems( index, 1 )[ 0 ];
@@ -28,12 +52,12 @@
 		},
 		select: function( index ) {
 			var item;
-			if (typeof index == "number" ) {
+			if ( typeof index === "number" ) {
 				item = this.item( index )
 			} else {
 				item = index;
 			}
-			this._trigger( "select", null, item );
+			this._trigger( "select", null, { item: item } );
 		}
 	});
 
@@ -65,22 +89,21 @@
 		var details = $("#developer");
 		var datastore = new $.ui.datastore({
 			source: data,
-			select: function( event, item ) {
-				$( "#developer-tmpl" ).tmpl( item ).appendTo( details.empty() );
+			select: function( event, ui ) {
+				$( "#developer-tmpl" ).tmpl( ui.item.props ).appendTo( details.empty() );
 			}
 		}, {} );
-		datastore.select(0);
+		datastore.select( 0 );
 
 		var summaryTable = $( "#developers" )
 				.delegate( "tbody > tr", "click", function() {
-					datastore.select( $(this).tmplItem().data );
+					datastore.select( $(this).tmplItem().data.__ref__ );
 				});
 
 		var tbody = summaryTable.find( "tbody" );
 		$.each( datastore.items( 0, 5 ), function( itemId, item ) {
-			$( "#row-tmpl" ).tmpl( item ).appendTo( tbody );
+			$( "#row-tmpl" ).tmpl( item.props ).appendTo( tbody );
 		});
-
 	});
 	</script>
 </head>
