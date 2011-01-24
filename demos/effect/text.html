@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>jQuery UI Effects - Text Effect demo</title>
+	<link rel="stylesheet" href="../../themes/base/jquery.ui.all.css">
+	<script src="../../jquery-1.4.4.js"></script>
+	<script src="../../ui/jquery.effects.core.js"></script>
+	<script src="../../ui/jquery.effects.text.js"></script>
+	<link rel="stylesheet" href="../demos.css">
+
+	<style> 
+	 
+			.box, .boxContainer {
+				height: 70px;
+				width: 100px;
+				overflow: visible;
+			}
+ 
+			.box {
+				color: #292929;
+				border: 1px solid #ccc;
+				background-color: #eee;
+				cursor: pointer;
+				overflow: hidden;
+				margin: 0;
+				padding: 5px;
+			}
+			
+			.box:hover { 
+				background-color: #efefef;
+			}
+			
+			h3 { 
+				padding: 5px;
+				margin: .5em 0;
+			}
+ 
+			.textBox p {
+				width: 100px;
+				height: 100px;
+			}
+ 
+			.box p, .box code {
+				margin: 0;
+				text-align: left;
+			}
+ 
+			.effectList {
+				list-style: none;
+				padding: 0;
+				font-size: 10px;
+				margin: 0;
+				clear: both;
+			}
+ 
+			.effectList li {
+				float: left;
+				margin: 1em;
+				padding: 0 .5em .5em;
+			} 
+	</style> 
+</head> 
+ 
+<body> 
+
+
+
+<p style="font-weight: bold"> 
+	Click each block of text to play its animation
+</p> 
+
+
+<ul class="effectList"> 
+	<li class="ui-widget-content ui-corner-all"><h3 class="ui-widget-header ui-corner-all">BlockFadeOut<br />(by word)</h3>
+		<div class="box textBox"> 
+			<p data-duration="1000" data-effect="blockFadeOut">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Morbi nibh. Maecenas metus nisi, tempus sed.</p> 
+		</div> 
+	</li> 
+	<li class="vr ui-widget-content ui-corner-all"><h3 class="ui-widget-header ui-corner-all">BlockFadeIn<br />(by word)</h3>
+		<div class="box textBox"> 
+			<p data-duration="1000" data-effect="blockFadeIn"></p> 
+		</div> 
+	</li> 
+	<li class="vr ui-widget-content ui-corner-all"><h3 class="ui-widget-header ui-corner-all">BlockFadeOut<br />(by character)</h3>
+		<div class="box textBox"> 
+			<p data-duration="1000" data-words="false" data-effect="blockFadeOut">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Morbi nibh. Maecenas metus nisi, tempus sed.</p> 
+		</div> 
+	</li> 
+	<li class="vr ui-widget-content ui-corner-all"><h3 class="ui-widget-header ui-corner-all">BlockFadeIn<br />(by character)</h3>
+		<div class="box textBox"> 
+			<p data-duration="1000" data-words="false" data-effect="blockFadeIn"></p> 
+		</div> 
+	</li> 
+	
+</ul> 
+<ul class="effectList"> 
+	<li class="ui-widget-content ui-corner-all"><h3 class="ui-widget-header ui-corner-all">build<br />(by word)</h3>
+		<div class="box textBox"> 
+			<p data-duration="1000" data-effect="build"></p> 
+		</div> 
+	</li> 
+	<li class="vr ui-widget-content ui-corner-all"><h3 class="ui-widget-header ui-corner-all">disintegrate<br />(by word)</h3>
+		<div class="box textBox"> 
+			<p data-duration="1000" data-effect="disintegrate">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Morbi nibh. Maecenas metus nisi, tempus sed.</p> 
+		</div> 
+	</li> 
+	<li class="vr ui-widget-content ui-corner-all"><h3 class="ui-widget-header ui-corner-all">build<br />(by character)</h3>
+		<div class="box textBox"> 
+			<p data-duration="1000" data-words="false" data-effect="build"></p> 
+		</div> 
+	</li> 
+	<li class="vr ui-widget-content ui-corner-all"><h3 class="ui-widget-header ui-corner-all">disintegrate<br />(by character)</h3>
+		<div class="box textBox"> 
+			<p data-duration="1000" data-words="false" data-effect="disintegrate">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Morbi nibh. Maecenas metus nisi, tempus sed.</p> 
+		</div> 
+	</li> 
+ 
+</ul> 
+<ul class="effectList"> 
+	<li class="ui-widget-content ui-corner-all"><h3 class="ui-widget-header ui-corner-all">type<br /> (letters)</h3>
+		<div class="box textBox"> 
+			<p data-duration="2500" data-effect="type"></p> 
+		</div> 
+	</li> 
+	<li class="vr ui-widget-content ui-corner-all"><h3 class="ui-widget-header ui-corner-all">backspace<br /> (letters)</h3>
+		<div class="box textBox"> 
+			<p data-duration="2500" data-effect="backspace">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Morbi nibh. Maecenas metus nisi, tempus sed.</p> 
+		</div> 
+	</li> 
+</ul> 
+<ul class="effectList"> 
+	<li class="ui-widget-content ui-corner-all"><h3 class="ui-widget-header ui-corner-all">textExplode<br />(by word)</h3>
+		<div class="box textBox"> 
+			<p data-duration="1000" data-effect="textExplode">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Morbi nibh. Maecenas metus nisi, tempus sed.</p> 
+		</div> 
+	</li> 
+	<li class="vr ui-widget-content ui-corner-all"><h3 class="ui-widget-header ui-corner-all">textConverge<br />(by word)</h3>
+		<div class="box textBox"> 
+			<p data-duration="1000" data-effect="textConverge"></p> 
+		</div> 
+	</li> 
+	<li class="vr ui-widget-content ui-corner-all"><h3 class="ui-widget-header ui-corner-all">textExplode<br />(by character)</h3>
+		<div class="box textBox"> 
+			<p data-duration="1000" data-words="false" data-effect="textExplode">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Morbi nibh. Maecenas metus nisi, tempus sed.</p> 
+		</div> 
+	</li> 
+	<li class="vr ui-widget-content ui-corner-all"><h3 class="ui-widget-header ui-corner-all">textConverge<br />(by character)</h3>
+		<div class="box textBox"> 
+			<p data-duration="1000" data-words="false" data-effect="textConverge"></p> 
+		</div> 
+	</li> 
+	
+</ul> 
+
+<hr style="clear:both">
+
+<h3>options available in each effect:</h3> 
+<ul> 
+	<li>Whether or not the	 text should be split into words rather than characers</li> 
+	<li>Text to use instead of the element's innerHTML</li> 
+	<li>The distance the pieces travel (as a multiple of the element's respective dimensions)</li> 
+	<li>The direction the pieces travel</li> 
+	<li>Whether or not to fade the pieces in/out</li> 
+	<li>How much the effect should be randomized (a percentage)</li> 
+	<li>stop elements from leaving the document's boundaries</li> 
+</ul>
+	
+<ul class="effectList"> 
+	<li> 
+		<p style="font-weight: bold"> 
+		General Options
+		</p> 
+		<input id="random" type="checkbox" value="1"> Random?<br> 
+		<input type="number" id="ratio" size="5" value="30"> % randomness<br> 
+		<input id="reverse" type="checkbox" value="1"> 
+		Reverse? (not really visible when random is turned on)<br> 
+	</li>
+	<li>
+		<p style="font-weight: bold"> Build/Disintegrate options:</p> 
+		<select id="direction"> 
+			<option value="bottom">bottom</option> 
+			<option value="top">top</option> 
+			<option value="left">left</option> 
+			<option value="right">right</option> 
+			<option value="bottom left">bottom left</option> 
+			<option value="bottom right">bottom right</option> 
+			<option value="top left">top left</option> 
+			<option value="top right">top right</option> 
+		</select> 
+		<div> 
+		<input type="number" id="distance" size="5" value="1"> Distance? (* parent height)</div> 
+	</li> 
+</ul> 
+
+ 
+	<script> 
+
+		
+		/* Some vars */
+		var origHTML			= 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Morbi nibh. Maecenas metus nisi, tempus sed.',
+			$replacement		= $('#replacementText'),
+			$random				= $('#random'),
+			$direction			= $('#direction'),
+			$reverse			= $('#reverse'),
+			$distance			= $('#distance'),
+			$ratio				= $('#ratio'),
+			$header				= $('h1.header');
+		
+		//$header.effect ('build', {distance: 5, direction: 'top', words: false, text: $header.data ('text')}, 2000);
+		$header.effect ('build', {words: false, text: $header.data ('text')}, 1500);
+		
+		/* See if it's random or not */
+		function isRandom () {
+			return $random.is (':checked') ? parseFloat ($ratio.val ()) / 100 : false;
+		}
+		
+		/* See if it's in reverse or not */
+		function isReverse () {
+			return $reverse.is (':checked') ? true : false;
+		}
+
+		/* See if it's in direction or not */
+		function getDirection () {
+			return $direction.val ();
+		}
+
+		/* Get the Distance to animate to/from */
+		function getDistance () {
+			return parseFloat ($distance.val ());
+		}
+		
+		/*
+			Iterate over everything and bind events
+		*/
+		$('p[data-effect]').bind ('click',
+			function () {
+				var $this = $(this),
+					words = $this.data ('words') === 'false' ? false : true;
+
+
+				$this.effect ($this.data ('effect'), {distance: getDistance (), direction: getDirection (), words: $this.data ('words'), text: origHTML, random: isRandom (), reverse: isReverse ()}, $this.data ('duration'));
+			}
+		);
+
+ 
+	</script> 
+</body> 
+</html>
