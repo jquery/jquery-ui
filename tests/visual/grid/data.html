@@ -9,60 +9,75 @@
 	<script src="../../../ui/jquery.ui.core.js"></script>
 	<script src="../../../ui/jquery.ui.widget.js"></script>
 	<script>
-	// widget factory is nice, but we probably won't have an element
-	$.widget( "ui.dataitem", {
-		options: {
-			source: null
-		},
-		_create: function() {
-			this.props = this.options.source;
-		},
-		get: function( key ) {
-			return this.props[ key ];
-		},
-		set: function( key, value ) {
-			this.props[ key ] = value;
-			return this;
-		}
-	});
-	
 	$.widget( "ui.datastore", {
-		options: {
-			source: null
-		},
 		_create: function() {
-			var that = this;
-			this._items = [];
-			$.each( this.options.source, function( i, item ) {
-				var dataitem = new $.ui.dataitem({
-					source: item
-				}, {} );
-				dataitem.set( "__ref__", dataitem );
-				that._items[ i ] = dataitem;
+			this.items = {};
+		},
+		create: function( type, props ) {
+			return $.ui.datasource.types[ type ].create( props );
+		},
+		get: function( type, query ) {
+			if ( !query ) {
+				if ( !this.items[ type ].length ) {
+					this.items[ type ] = $.ui.datasource.types[ type ].get( query );
+				}
+				return this.items[ type ];
+			}
+			return $.map( this.items[ type ], function( item ) {
+				return item.options.data.guid === query.guid ? item : undefined;
 			});
 		},
-		item: function( index ) {
-			return this._getItems( index, 1 )[ 0 ];
+		save: function() {
+			$.each( this.items, function( type, items ) {
+				$.ui.datasource.types[ type ].save( items );
+			});
+		}
+	});
+	$.ui.datastore.main = $.ui.datastore();
+
+	$.widget( "ui.datasource", {
+		options: {
+			type: null,
+			source: null
 		},
-		items: function( offset, limit ) {
-			return this._getItems( offset, limit );
+		_create: function() {
+			$.ui.datasource.types[ this.options.type ] = this;
+			$.ui.datastore.main.items[ this.options.type ] = {};
 		},
-		_getItems: function( offset, limit ) {
-			return this._items.slice( offset, offset + limit );
+		create: function( props ) {
+			this.options.push( props );
 		},
-		select: function( index ) {
-			var item;
-			if ( typeof index === "number" ) {
-				item = this.item( index )
-			} else {
-				item = index;
-			}
-			this._trigger( "select", null, { item: item } );
+		get: function( query ) {
+			return $.map( this.options.source, function( item ) {
+				return $.ui.dataitem({ data: item });
+			});
+		},
+		save: function( items ) {
+			$.each( items, function( itemId, item ) {
+				item.save();
+			});
+		},
+	});
+	$.ui.datasource.types = {};
+
+	$.widget( "ui.dataitem", {
+		options: {
+			data: null
+		},
+		_create: function() {
+		},
+		get: function( key ) {
+			return this.options.data[ key ];
+		},
+		set: function( key, vaule ) {
+			this.options.data[ key ] = value;
+			return this;
 		}
 	});
 
 	var data = [
 		{
+			guid: 1,
 			firstName: "Scott",
 			lastName: "González",
 			country: "USA",
@@ -70,6 +85,7 @@
 			github: "scottgonzalez"
 		},
 		{
+			guid: 2,
 			firstName: "Richard",
 			lastName: "Worth",
 			country: "USA",
@@ -77,6 +93,7 @@
 			github: "rdworth"
 		},
 		{
+			guid: 3,
 			firstName: "Jörn",
 			lastName: "Zaefferer",
 			country: "Germany",
@@ -85,25 +102,30 @@
 		}
 	];
 
+	$.ui.datasource({
+		type: "developer",
+		source: data
+	});
+
 	$(function() {
 		var details = $("#developer");
-		var datastore = new $.ui.datastore({
-			source: data,
-			select: function( event, ui ) {
-				$( "#developer-tmpl" ).tmpl( ui.item.props ).appendTo( details.empty() );
-			}
-		}, {} );
-		datastore.select( 0 );
-
 		var summaryTable = $( "#developers" )
-				.delegate( "tbody > tr", "click", function() {
-					datastore.select( $(this).tmplItem().data.__ref__ );
-				});
+			.delegate( "tbody > tr", "click", function() {
+				showDetails( $( this ).tmplItem().data.guid );
+			});
 
-		var tbody = summaryTable.find( "tbody" );
-		$.each( datastore.items( 0, 5 ), function( itemId, item ) {
-			$( "#row-tmpl" ).tmpl( item.props ).appendTo( tbody );
+		var tbody = summaryTable.find( "tbody" ),
+			developers = $.ui.datastore.main.get( "developer" );
+		$.each( developers, function( itemId, item ) {
+			$( "#row-tmpl" ).tmpl( item.options.data ).appendTo( tbody );
 		});
+
+		showDetails( developers[ 0 ].options.data.guid );
+		function showDetails( guid ) {
+			$( "#developer-tmpl" )
+				.tmpl( $.ui.datastore.main.get( "developer", { guid: guid } )[ 0 ].options.data )
+				.appendTo( details.empty() );
+		}
 	});
 	</script>
 </head>
