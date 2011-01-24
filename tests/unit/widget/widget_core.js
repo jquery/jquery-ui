@@ -27,7 +27,7 @@ test( "widget creation", function() {
 });
 
 test( "element normalization", function() {
-	expect( 10 );
+	expect( 12 );
 	var elem;
 	$.widget( "ui.testWidget", {} );
 
@@ -65,6 +65,14 @@ test( "element normalization", function() {
 		same( elem.data( "testWidget" ), this, "instace stored in .data()" );
 	};
 	$.ui.testWidget( {}, "#element-normalization-selector" );
+
+	$.ui.testWidget.prototype.defaultElement = null;
+	$.ui.testWidget.prototype._create = function() {
+		// using strictEqual throws an error (Maximum call stack size exceeded)
+		ok( this.element[ 0 ] === this, "instance as element" );
+		ok( this.element.data( "testWidget" ) === this, "instance stored in .data()" );
+	};
+	$.ui.testWidget();
 });
 
 test( "jQuery usage", function() {
@@ -571,6 +579,28 @@ test( "._trigger() - provide event and ui", function() {
 		}
 	})
 	.testWidget( "testEvent" );
+});
+
+test( "._triger() - instance as element", function() {
+	expect( 4 );
+	$.widget( "ui.testWidget", {
+		defaultElement: null,
+		testEvent: function() {
+			var ui = { foo: "bar" };
+			this._trigger( "foo", null, ui );
+		}
+	});
+	var instance = $.ui.testWidget({
+		foo: function( event, ui ) {
+			equal( event.type, "testwidgetfoo", "event object passed to callback" );
+			same( ui, { foo: "bar" }, "ui object passed to callback" );
+		}
+	});
+	$( instance ).bind( "testwidgetfoo", function( event, ui ) {
+		equal( event.type, "testwidgetfoo", "event object passed to event handler" );
+		same( ui, { foo: "bar" }, "ui object passed to event handler" );
+	});
+	instance.testEvent();
 });
 
 test( "auto-destroy - .remove()", function() {
