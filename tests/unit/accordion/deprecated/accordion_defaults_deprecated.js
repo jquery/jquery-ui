@@ -1,6 +1,3 @@
-/*
- * accordion_defaults.js
- */
 
 var accordion_defaults = {
 	active: 0,
@@ -14,8 +11,8 @@ var accordion_defaults = {
 	header: "> li > :first-child,> :not(li):even",
 	heightStyle: null,
 	icons: {
-		"header": "ui-icon-triangle-1-e",
 		"activeHeader": null,
+		"header": "ui-icon-triangle-1-e",
 		"headerSelected": "ui-icon-triangle-1-s"
 	},
 	navigation: false,
