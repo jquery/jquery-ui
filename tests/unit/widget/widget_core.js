@@ -26,6 +26,47 @@ test( "widget creation", function() {
 		"option method copied over from base widget" );
 });
 
+test( "element normalization", function() {
+	expect( 10 );
+	var elem;
+	$.widget( "ui.testWidget", {} );
+
+	$.ui.testWidget.prototype._create = function() {
+		ok( this.element.is( "div" ), "generated div" );
+		same( this.element.data( "testWidget" ), this, "intance stored in .data()" );
+	};
+	$.ui.testWidget();
+
+	$.ui.testWidget.prototype.defaultElement = "<span data-test='pass'>";
+	$.ui.testWidget.prototype._create = function() {
+		ok( this.element.is( "span[data-test=pass]" ), "generated span with properties" );
+		same( this.element.data( "testWidget" ), this, "instace stored in .data()" );
+	};
+	$.ui.testWidget();
+
+	elem = $( "<input>" );
+	$.ui.testWidget.prototype._create = function() {
+		same( this.element[ 0 ], elem[ 0 ], "from element" );
+		same( elem.data( "testWidget" ), this, "instace stored in .data()" );
+	};
+	$.ui.testWidget( {}, elem[ 0 ] );
+
+	elem = $( "<div>" );
+	$.ui.testWidget.prototype._create = function() {
+		same( this.element[ 0 ], elem[ 0 ], "from jQuery object" );
+		same( elem.data( "testWidget" ), this, "instace stored in .data()" );
+	};
+	$.ui.testWidget( {}, elem );
+
+	elem = $( "<div id='element-normalization-selector'></div>" )
+		.appendTo( "#main" );
+	$.ui.testWidget.prototype._create = function() {
+		same( this.element[ 0 ], elem[ 0 ], "from selector" );
+		same( elem.data( "testWidget" ), this, "instace stored in .data()" );
+	};
+	$.ui.testWidget( {}, "#element-normalization-selector" );
+});
+
 test( "jQuery usage", function() {
 	expect( 11 );
 

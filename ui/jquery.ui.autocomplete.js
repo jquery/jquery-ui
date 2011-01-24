@@ -16,6 +16,7 @@
 (function( $, undefined ) {
 
 $.widget( "ui.autocomplete", {
+	defaultElement: "<input>",
 	options: {
 		appendTo: "body",
 		delay: 300,
