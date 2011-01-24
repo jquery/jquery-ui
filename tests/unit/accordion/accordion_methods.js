@@ -57,66 +57,9 @@ test("disable", function() {
 	state(expected, 0, 1, 0)
 });
 
-test("activate", function() {
-	var expected = $('#list1').accordion(),
-		actual = expected.accordion('activate', 2);
-	equals(actual, expected, 'activate is chainable');
-});
-
-test("activate, numeric", function() {
-	var ac = $('#list1').accordion({ active: 1 });
-	state(ac, 0, 1, 0);
-	ac.accordion("activate", 2);
-	state(ac, 0, 0, 1);
-	ac.accordion("activate", 0);
-	state(ac, 1, 0, 0);
-	ac.accordion("activate", 1);
-	state(ac, 0, 1, 0);
-	ac.accordion("activate", 2);
-	state(ac, 0, 0, 1);
-});
-
-test("activate, boolean and numeric, collapsible:true", function() {
-	var ac = $('#list1').accordion({collapsible: true}).accordion("activate", 2);
-	state(ac, 0, 0, 1);
-	ok("x", "----");
-	ac.accordion("activate", 0);
-	state(ac, 1, 0, 0);
-	ok("x", "----");
-	ac.accordion("activate", -1);
-	state(ac, 0, 0, 0);
-});
-
-test("activate, boolean, collapsible: false", function() {
-	var ac = $('#list1').accordion().accordion("activate", 2);
-	state(ac, 0, 0, 1);
-	ac.accordion("activate", false);
-	state(ac, 0, 0, 1);
-});
-
-test("activate, string expression", function() {
-	var ac = $('#list1').accordion({ active: "h3:last" });
-	state(ac, 0, 0, 1);
-	ac.accordion("activate", ":first");
-	state(ac, 1, 0, 0);
-	ac.accordion("activate", ":eq(1)");
-	state(ac, 0, 1, 0);
-	ac.accordion("activate", ":last");
-	state(ac, 0, 0, 1);
-});
-
-test("activate, jQuery or DOM element", function() {
-	var ac = $('#list1').accordion({ active: $("#list1 h3:last") });
-	state(ac, 0, 0, 1);
-	ac.accordion("activate", $("#list1 h3:first"));
-	state(ac, 1, 0, 0);
-	ac.accordion("activate", $("#list1 h3")[1]);
-	state(ac, 0, 1, 0);
-});
-
 test("refresh", function() {
 	var expected = $('#navigation').parent().height(300).end().accordion({
-		fillSpace: true
+		heightStyle: "fill"
 	});
 	equalHeights(expected, 246, 258);
 	

@@ -20,12 +20,10 @@ $.widget( "ui.accordion", {
 		collapsible: false,
 		event: "click",
 		header: "> li > :first-child,> :not(li):even",
-		// TODO: set to "auto" in 2.0 (#5868, #5872)
-		heightStyle: null, // "auto"
+		heightStyle: "auto",
 		icons: {
 			header: "ui-icon-triangle-1-e",
-			// TODO: set to "ui-icon-triangle-1-s" in 2.0 (#6835)
-			activeHeader: null // "ui-icon-triangle-1-s"
+			activeHeader: "ui-icon-triangle-1-s"
 		}
 	},
 
@@ -599,115 +597,120 @@ $.extend( $.ui.accordion, {
 
 
 // DEPRECATED
-
-// navigation options
-(function( $, prototype ) {
-	$.extend( prototype.options, {
-		navigation: false,
-		navigationFilter: function() {
-			return this.href.toLowerCase() === location.href.toLowerCase();
-		}
-	});
-
-	var _create = prototype._create;
-	prototype._create = function() {
-		if ( this.options.navigation ) {
-			var self = this,
-				headers = this.element.find( this.options.header ),
-				content = headers.next();
-				current = headers.add( content )
-					.find( "a" )
-					.filter( this.options.navigationFilter )
-					[ 0 ];
-			if ( current ) {
-				headers.add( content ).each( function( index ) {
-					if ( $.contains( this, current ) ) {
-						self.options.active = Math.floor( index / 2 );
-						return false;
-					}
-				});
+if ( $.uiBackCompat !== false ) {
+	// navigation options
+	(function( $, prototype ) {
+		$.extend( prototype.options, {
+			navigation: false,
+			navigationFilter: function() {
+				return this.href.toLowerCase() === location.href.toLowerCase();
 			}
-		}
-		_create.call( this );
-	};
-}( jQuery, jQuery.ui.accordion.prototype ) );
+		});
 
-// height options
-(function( $, prototype ) {
-	$.extend( prototype.options, {
-		autoHeight: true, // use heightStyle: "auto"
-		clearStyle: false, // use heightStyle: "content"
-		fillSpace: false // use heightStyle: "fill"
-	});
-
-	var _create = prototype._create,
-		_setOption = prototype._setOption;
-
-	$.extend( prototype, {
-		_create: function() {
-			this.options.heightStyle = this.options.heightStyle ||
-				this._mergeHeightStyle();
-
+		var _create = prototype._create;
+		prototype._create = function() {
+			if ( this.options.navigation ) {
+				var self = this,
+					headers = this.element.find( this.options.header ),
+					content = headers.next();
+					current = headers.add( content )
+						.find( "a" )
+						.filter( this.options.navigationFilter )
+						[ 0 ];
+				if ( current ) {
+					headers.add( content ).each( function( index ) {
+						if ( $.contains( this, current ) ) {
+							self.options.active = Math.floor( index / 2 );
+							return false;
+						}
+					});
+				}
+			}
 			_create.call( this );
-		},
+		};
+	}( jQuery, jQuery.ui.accordion.prototype ) );
 
-		_setOption: function( key, value ) {
-			if ( key === "autoHeight" || key === "clearStyle" || key === "fillSpace" ) {
-				this.options.heightStyle = this._mergeHeightStyle();
+	// height options
+	(function( $, prototype ) {
+		$.extend( prototype.options, {
+			heightStyle: null, // remove default so we fall back to old values
+			autoHeight: true, // use heightStyle: "auto"
+			clearStyle: false, // use heightStyle: "content"
+			fillSpace: false // use heightStyle: "fill"
+		});
+
+		var _create = prototype._create,
+			_setOption = prototype._setOption;
+
+		$.extend( prototype, {
+			_create: function() {
+				this.options.heightStyle = this.options.heightStyle ||
+					this._mergeHeightStyle();
+
+				_create.call( this );
+			},
+
+			_setOption: function( key, value ) {
+				if ( key === "autoHeight" || key === "clearStyle" || key === "fillSpace" ) {
+					this.options.heightStyle = this._mergeHeightStyle();
+				}
+				_setOption.apply( this, arguments );
+			},
+
+			_mergeHeightStyle: function() {
+				var options = this.options;
+
+				if ( options.fillSpace ) {
+					return "fill";
+				}
+
+				if ( options.clearStyle ) {
+					return "content";
+				}
+
+				if ( options.autoHeight ) {
+					return "auto";
+				}
 			}
-			_setOption.apply( this, arguments );
-		},
+		});
+	}( jQuery, jQuery.ui.accordion.prototype ) );
 
-		_mergeHeightStyle: function() {
-			var options = this.options;
+	// icon options
+	(function( $, prototype ) {
+		$.extend( prototype.options.icons, {
+			activeHeader: null, // remove default so we fall back to old values
+			headerSelected: "ui-icon-triangle-1-s"
+		});
 
-			if ( options.fillSpace ) {
-				return "fill";
-			}
+		var _createIcons = prototype._createIcons;
+		prototype._createIcons = function() {
+			this.options.icons.activeHeader = this.options.icons.activeHeader ||
+				this.options.icons.headerSelected;
+			_createIcons.call( this );
+		};
+	}( jQuery, jQuery.ui.accordion.prototype ) );
 
-			if ( options.clearStyle ) {
-				return "content";
-			}
+	// expanded active option, activate method
+	(function( $, prototype ) {
+		prototype.activate = prototype._activate;
 
-			if ( options.autoHeight ) {
-				return "auto";
-			}
-		}
-	});
-}( jQuery, jQuery.ui.accordion.prototype ) );
-
-// icon options
-(function( $, prototype ) {
-	prototype.options.icons.headerSelected = "ui-icon-triangle-1-s";
-
-	var _createIcons = prototype._createIcons;
-	prototype._createIcons = function() {
-		this.options.icons.activeHeader = this.options.icons.activeHeader ||
-			this.options.icons.headerSelected;
-		_createIcons.call( this );
-	};
-}( jQuery, jQuery.ui.accordion.prototype ) );
-
-// expanded active option, activate method
-(function( $, prototype ) {
-	prototype.activate = prototype._activate;
-
-	var _findActive = prototype._findActive;
-	prototype._findActive = function( index ) {
-		if ( index === -1 ) {
-			index = false;
-		}
-		if ( index && typeof index !== "number" ) {
-			index = this.headers.index( this.headers.filter( index ) );
+		var _findActive = prototype._findActive;
+		prototype._findActive = function( index ) {
 			if ( index === -1 ) {
 				index = false;
 			}
-		}
-		return _findActive.call( this, index );
-	};
-}( jQuery, jQuery.ui.accordion.prototype ) );
+			if ( index && typeof index !== "number" ) {
+				index = this.headers.index( this.headers.filter( index ) );
+				if ( index === -1 ) {
+					index = false;
+				}
+			}
+			return _findActive.call( this, index );
+		};
+	}( jQuery, jQuery.ui.accordion.prototype ) );
 
-// resize method
-jQuery.ui.accordion.prototype.resize = jQuery.ui.accordion.prototype.refresh;
+	// resize method
+	jQuery.ui.accordion.prototype.resize = jQuery.ui.accordion.prototype.refresh;
+}
 
 })( jQuery );
