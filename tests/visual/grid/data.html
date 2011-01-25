@@ -48,8 +48,9 @@
 			this.options.push( props );
 		},
 		get: function( query ) {
+			var type = this.options.type;
 			return $.map( this.options.source, function( item ) {
-				return $.ui.dataitem({ data: item });
+				return $.ui.dataitem.types[ type ]({ data: item });
 			});
 		},
 		save: function( items ) {
@@ -72,6 +73,21 @@
 		set: function( key, vaule ) {
 			this.options.data[ key ] = value;
 			return this;
+		}
+	});
+	$.ui.dataitem.types = {};
+	$.ui.dataitem.extend = function( type, prototype ) {
+		$.widget( "ui.dataitem-" + type, $.ui.dataitem, prototype );
+		$.ui.dataitem.types[ type ] = $.ui[ "dataitem-" + type ];
+	};
+
+	//----------------------------------------
+	// Application level
+	//----------------------------------------
+
+	$.ui.dataitem.extend( "developer", {
+		fullName: function() {
+			return this.get( "firstName" ) + " " + this.get( "lastName" );
 		}
 	});
 
