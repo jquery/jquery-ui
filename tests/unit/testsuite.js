@@ -48,10 +48,10 @@ function testBasicUsage( widget ) {
 		$( defaultElement ).appendTo( "body" )[ widget ]().remove();
 		ok( true, "initialized on element" );
 
-		$( defaultElement ).accordion().remove();
+		$( defaultElement )[ widget ]().remove();
 		ok( true, "initialized on disconnected DOMElement - never connected" );
 
-		$( defaultElement ).appendTo( "body" ).remove().accordion().remove();
+		$( defaultElement ).appendTo( "body" ).remove()[ widget ]().remove();
 		ok( true, "initialized on disconnected DOMElement - removed" );
 	});
 }
