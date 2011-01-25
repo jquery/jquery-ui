@@ -16,15 +16,31 @@
 		create: function( type, props ) {
 			return $.ui.datasource.types[ type ].create( props );
 		},
-		get: function( type, query ) {
-			if ( !query ) {
-				if ( !this.items[ type ].length ) {
-					this.items[ type ] = $.ui.datasource.types[ type ].get( query );
-				}
-				return this.items[ type ];
+		_normalize: function( type, id ) {
+			var item = this.items[ type ][ id ],
+				ctor = $.ui.dataitem.types[ type ];
+			if ( !( item instanceof $.ui.dataitem ) ) {
+				item = this.items[ type ][ id ] = ctor({ data: item });
 			}
-			return $.map( this.items[ type ], function( item ) {
-				return item.options.data.guid === query.guid ? item : undefined;
+			return item;
+		},
+		get: function( type, id ) {
+			if ( id ) {
+				return this._normalize( type, id );
+			}
+
+			for ( id in this.items[ type ] ) {
+				this._normalize( type, id );
+			}
+			return $.ui.dataitems({ items: this.items[ type ] });
+		},
+		populate: function( type ) {
+			$.ui.datasource.types[ type ].get( this );
+		},
+		_populate: function( type, items ) {
+			var local = this.items[ type ];
+			$.each( items, function( i, item ) {
+				local[ item.guid ] = item;
 			});
 		},
 		save: function() {
@@ -45,13 +61,10 @@
 			$.ui.datastore.main.items[ this.options.type ] = {};
 		},
 		create: function( props ) {
-			this.options.push( props );
+			this.options.source.push( props );
 		},
-		get: function( query ) {
-			var type = this.options.type;
-			return $.map( this.options.source, function( item ) {
-				return $.ui.dataitem.types[ type ]({ data: item });
-			});
+		get: function( store ) {
+			store._populate( this.options.type, this.options.source );
 		},
 		save: function( items ) {
 			$.each( items, function( itemId, item ) {
@@ -80,6 +93,12 @@
 		$.widget( "ui.dataitem-" + type, $.ui.dataitem, prototype );
 		$.ui.dataitem.types[ type ] = $.ui[ "dataitem-" + type ];
 	};
+
+	$.widget( "ui.dataitems", {
+		options: {
+			items: null
+		}
+	});
 
 	//----------------------------------------
 	// Application level
@@ -122,6 +141,7 @@
 		type: "developer",
 		source: data
 	});
+	$.ui.datastore.main.populate( "developer" );
 
 	$(function() {
 		var details = $("#developer");
@@ -131,15 +151,15 @@
 			});
 
 		var tbody = summaryTable.find( "tbody" ),
-			developers = $.ui.datastore.main.get( "developer" );
+			developers = $.ui.datastore.main.get( "developer" ).options.items;
 		$.each( developers, function( itemId, item ) {
 			$( "#row-tmpl" ).tmpl( item.options.data ).appendTo( tbody );
 		});
 
-		showDetails( developers[ 0 ].options.data.guid );
+		showDetails( developers[ 1 ].options.data.guid );
 		function showDetails( guid ) {
 			$( "#developer-tmpl" )
-				.tmpl( $.ui.datastore.main.get( "developer", { guid: guid } )[ 0 ].options.data )
+				.tmpl( $.ui.datastore.main.get( "developer", guid ).options.data )
 				.appendTo( details.empty() );
 		}
 	});
