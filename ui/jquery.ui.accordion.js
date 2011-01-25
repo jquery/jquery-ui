@@ -284,6 +284,17 @@ $.widget( "ui.accordion", {
 			return;
 		}
 
+		// allow the activation to be canceled
+		var eventData = {
+			oldHeader: this.active,
+			oldContent: this.active.next(),
+			newHeader: $(),
+			newContent: $()
+		};
+		if ( this._trigger( "beforeActivate", null, eventData ) === false ) {
+			return;
+		}
+
 		this.active
 			.removeClass( "ui-state-active ui-corner-top" )
 			.addClass( "ui-state-default ui-corner-all" )
@@ -294,24 +305,34 @@ $.widget( "ui.accordion", {
 		var toHide = this.active.next(),
 			data = {
 				options: this.options,
-				newHeader: $( [] ),
+				newHeader: $(),
 				oldHeader: this.active,
-				newContent: $( [] ),
+				newContent: $(),
 				oldContent: toHide
 			},
-			toShow = ( this.active = $( [] ) );
+			toShow = ( this.active = $() );
 		this._toggle( toShow, toHide, data );
 	},
 
 	// TODO: add tests/docs for negative values in 2.0 (#6854)
 	_findActive: function( selector ) {
-		return typeof selector === "number" ? this.headers.eq( selector ) : $( [] );
+		return typeof selector === "number" ? this.headers.eq( selector ) : $();
 	},
 
 	_eventHandler: function( event ) {
 		var options = this.options,
+			active = this.active,
 			clicked = $( event.currentTarget ),
-			clickedIsActive = clicked[0] === this.active[0];
+			clickedIsActive = clicked[ 0 ] === active[ 0 ],
+			collapsing = clickedIsActive && options.collapsible,
+			toShow = clicked.next(),
+			toHide = active.next(),
+			eventData = {
+				oldHeader: active,
+				oldContent: toHide,
+				newHeader: collapsing ? $() : clicked,
+				newContent: collapsing ? $() : toShow
+			};
 
 		event.preventDefault();
 
@@ -324,26 +345,26 @@ $.widget( "ui.accordion", {
 			return;
 		}
 
-		options.active = options.collapsible && clickedIsActive ?
-			false :
-			this.headers.index( clicked );
+		// allow the activation to be canceled
+		if ( this._trigger( "beforeActivate", null, eventData ) === false ) {
+			return;
+		}
+
+		options.active = collapsing ? false : this.headers.index( clicked );
 
 		// find elements to show and hide
-		var active = this.active,
-			toShow = clicked.next(),
-			toHide = this.active.next(),
-			data = {
+		var data = {
 				options: options,
-				newHeader: clickedIsActive && options.collapsible ? $([]) : clicked,
-				oldHeader: this.active,
-				newContent: clickedIsActive && options.collapsible ? $([]) : toShow,
+				newHeader: collapsing ? $() : clicked,
+				oldHeader: active,
+				newContent: collapsing ? $() : toShow,
 				oldContent: toHide
 			},
-			down = this.headers.index( this.active[0] ) > this.headers.index( clicked[0] );
+			down = this.headers.index( active[0] ) > this.headers.index( clicked[0] );
 
 		// when the call to ._toggle() comes after the class changes
 		// it causes a very odd bug in IE 8 (see #6720)
-		this.active = clickedIsActive ? $([]) : clicked;
+		this.active = clickedIsActive ? $() : clicked;
 		this._toggle( toShow, toHide, data, clickedIsActive, down );
 
 		// switch classes
@@ -381,8 +402,6 @@ $.widget( "ui.accordion", {
 			return self._completed.apply( self, arguments );
 		};
 
-		self._trigger( "beforeActivate", null, self.data );
-
 		// count elements to animate
 		self.running = toHide.size() === 0 ? toShow.size() : toHide.size();
 
@@ -391,7 +410,7 @@ $.widget( "ui.accordion", {
 
 			if ( options.collapsible && clickedIsActive ) {
 				animOptions = {
-					toShow: $( [] ),
+					toShow: $(),
 					toHide: toHide,
 					complete: complete,
 					down: down,

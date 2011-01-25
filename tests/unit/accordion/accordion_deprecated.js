@@ -228,7 +228,7 @@ test( "{ navigation: true, navigationFilter: content }", function() {
 module( "accordion (deprecated) - changestart/change events", accordionSetupTeardown() );
 
 test( "changestart", function() {
-	expect( 20 );
+	expect( 26 );
 	var ac = $( "#list1" ).accordion({
 		active: false,
 		collapsible: true
@@ -243,8 +243,10 @@ test( "changestart", function() {
 		strictEqual( ui.newHeader[ 0 ], headers[ 0 ] );
 		equals( ui.newContent.size(), 1 );
 		strictEqual( ui.newContent[ 0 ], content[ 0 ] );
+		state( ac, 0, 0, 0 );
 	});
 	ac.accordion( "option", "active", 0 );
+	state( ac, 1, 0, 0 );
 
 	ac.one( "accordionchangestart", function( event, ui ) {
 		equals( ui.oldHeader.size(), 1 );
@@ -255,8 +257,10 @@ test( "changestart", function() {
 		strictEqual( ui.newHeader[ 0 ], headers[ 1 ] );
 		equals( ui.newContent.size(), 1 );
 		strictEqual( ui.newContent[ 0 ], content[ 1 ] );
+		state( ac, 1, 0, 0 );
 	});
 	headers.eq( 1 ).click();
+	state( ac, 0, 1, 0 );
 
 	ac.one( "accordionchangestart", function( event, ui ) {
 		equals( ui.oldHeader.size(), 1 );
@@ -265,8 +269,10 @@ test( "changestart", function() {
 		strictEqual( ui.oldContent[ 0 ], content[ 1 ] );
 		equals( ui.newHeader.size(), 0 );
 		equals( ui.newContent.size(), 0 );
+		state( ac, 0, 1, 0 );
 	});
 	ac.accordion( "option", "active", false );
+	state( ac, 0, 0, 0 );
 });
 
 test( "change", function() {
