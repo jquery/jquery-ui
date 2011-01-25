@@ -1,6 +1,3 @@
-/*
- * widget unit tests
- */
 (function( $ ) {
 
 module( "widget: tickets" );
@@ -43,4 +40,4 @@ test( "#5830 - Widget: Using inheritance overwrites the base classes options", f
 	delete $.ui.testWidgetExtension;
 });
 
-})( jQuery );
+}( jQuery ) );
