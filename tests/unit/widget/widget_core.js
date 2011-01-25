@@ -404,7 +404,7 @@ test( ".widget() - overriden", function() {
 	same( wrapper[0], $( "<div></div>" ).testWidget().testWidget( "widget" )[0] );
 });
 
-test( "_bind to element (default)", function() {
+test( "._bind() to element (default)", function() {
 	expect( 12 );
 	var self;
 	$.widget( "ui.testWidget", {
@@ -444,7 +444,7 @@ test( "_bind to element (default)", function() {
 		.trigger( "keydown" );
 });
 
-test( "_bind to descendent", function() {
+test( "._bind() to descendent", function() {
 	expect( 12 );
 	var self;
 	$.widget( "ui.testWidget", {
@@ -495,6 +495,68 @@ test( "_bind to descendent", function() {
 	descendent
 		.trigger( "keyup" )
 		.trigger( "keydown" );
+});
+
+test( "._hoverable()", function() {
+	$.widget( "ui.testWidget", {
+		_create: function() {
+			this._hoverable( this.element.children() );
+		}
+	});
+
+	var div = $( "#widget" ).testWidget().children();
+	ok( !div.hasClass( "ui-state-hover" ), "not hovered on init" );
+	div.trigger( "mouseenter" );
+	ok( div.hasClass( "ui-state-hover" ), "hovered after mouseenter" );
+	div.trigger( "mouseleave" );
+	ok( !div.hasClass( "ui-state-hover" ), "not hovered after mouseleave" );
+
+	div.trigger( "mouseenter" );
+	ok( div.hasClass( "ui-state-hover" ), "hovered after mouseenter" );
+	$( "#widget" ).testWidget( "disable" );
+	ok( !div.hasClass( "ui-state-hover" ), "not hovered while disabled" );
+	div.trigger( "mouseenter" );
+	ok( !div.hasClass( "ui-state-hover" ), "can't hover while disabled" );
+	$( "#widget" ).testWidget( "enable" );
+	ok( !div.hasClass( "ui-state-hover" ), "enabling doesn't reset hover" );
+
+	div.trigger( "mouseenter" );
+	ok( div.hasClass( "ui-state-hover" ), "hovered after mouseenter" );
+	$( "#widget" ).testWidget( "destroy" );
+	ok( !div.hasClass( "ui-state-hover" ), "not hovered after destroy" );
+	div.trigger( "mouseenter" );
+	ok( !div.hasClass( "ui-state-hover" ), "event handler removed on destroy" );
+});
+
+test( "._focusable()", function() {
+	$.widget( "ui.testWidget", {
+		_create: function() {
+		this._focusable( this.element.children() );
+	}
+	});
+	
+	var div = $( "#widget" ).testWidget().children();
+	ok( !div.hasClass( "ui-state-focus" ), "not focused on init" );
+	div.trigger( "focus" );
+	ok( div.hasClass( "ui-state-focus" ), "focused after explicit focus" );
+	div.trigger( "blur" );
+	ok( !div.hasClass( "ui-state-focus" ), "not focused after blur" );
+	
+	div.trigger( "focus" );
+	ok( div.hasClass( "ui-state-focus" ), "focused after explicit focus" );
+	$( "#widget" ).testWidget( "disable" );
+	ok( !div.hasClass( "ui-state-focus" ), "not focused while disabled" );
+	div.trigger( "focus" );
+	ok( !div.hasClass( "ui-state-focus" ), "can't focus while disabled" );
+	$( "#widget" ).testWidget( "enable" );
+	ok( !div.hasClass( "ui-state-focus" ), "enabling doesn't reset focus" );
+	
+	div.trigger( "focus" );
+	ok( div.hasClass( "ui-state-focus" ), "focused after explicit focus" );
+	$( "#widget" ).testWidget( "destroy" );
+	ok( !div.hasClass( "ui-state-focus" ), "not focused after destroy" );
+	div.trigger( "focus" );
+	ok( !div.hasClass( "ui-state-focus" ), "event handler removed on destroy" );
 });
 
 test( "._trigger() - no event, no ui", function() {
