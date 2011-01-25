@@ -34,12 +34,14 @@ var privateMethods = [
 ];
 
 function testWidgetOverrides( widget ) {
-	test( "$.widget overrides", function() {
-		$.each( privateMethods, function( i, method ) {
-			strictEqual( $.ui[ widget ].prototype[ method ],
-				$.Widget.prototype[ method ], "should not override " + method );
+	if ( $.uiBackCompat === false ) {
+		test( "$.widget overrides", function() {
+			$.each( privateMethods, function( i, method ) {
+				strictEqual( $.ui[ widget ].prototype[ method ],
+					$.Widget.prototype[ method ], "should not override " + method );
+			});
 		});
-	});
+	}
 }
 
 function testBasicUsage( widget ) {

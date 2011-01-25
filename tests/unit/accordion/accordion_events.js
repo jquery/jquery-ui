@@ -2,7 +2,7 @@
 
 module( "accordion: events", accordionSetupTeardown() );
 
-test( "changestart", function() {
+test( "beforeActivate", function() {
 	expect( 20 );
 	var ac = $( "#list1" ).accordion({
 		active: false,
@@ -11,7 +11,7 @@ test( "changestart", function() {
 	var headers = ac.find( ".ui-accordion-header" );
 	var content = ac.find( ".ui-accordion-content" );
 
-	ac.one( "accordionchangestart", function( event, ui ) {
+	ac.one( "accordionbeforeactivate", function( event, ui ) {
 		equals( ui.oldHeader.size(), 0 );
 		equals( ui.oldContent.size(), 0 );
 		equals( ui.newHeader.size(), 1 );
@@ -21,7 +21,7 @@ test( "changestart", function() {
 	});
 	ac.accordion( "option", "active", 0 );
 
-	ac.one( "accordionchangestart", function( event, ui ) {
+	ac.one( "accordionbeforeactivate", function( event, ui ) {
 		equals( ui.oldHeader.size(), 1 );
 		strictEqual( ui.oldHeader[ 0 ], headers[ 0 ] );
 		equals( ui.oldContent.size(), 1 );
@@ -33,7 +33,7 @@ test( "changestart", function() {
 	});
 	headers.eq( 1 ).click();
 
-	ac.one( "accordionchangestart", function( event, ui ) {
+	ac.one( "accordionbeforeactivate", function( event, ui ) {
 		equals( ui.oldHeader.size(), 1 );
 		strictEqual( ui.oldHeader[ 0 ], headers[ 1 ] );
 		equals( ui.oldContent.size(), 1 );
@@ -44,7 +44,7 @@ test( "changestart", function() {
 	ac.accordion( "option", "active", false );
 });
 
-test( "change", function() {
+test( "activate", function() {
 	expect( 20 );
 	var ac = $( "#list1" ).accordion({
 		active: false,
@@ -53,7 +53,7 @@ test( "change", function() {
 	var headers = ac.find( ".ui-accordion-header" );
 	var content = ac.find( ".ui-accordion-content" );
 
-	ac.one( "accordionchange", function( event, ui ) {
+	ac.one( "accordionactivate", function( event, ui ) {
 		equals( ui.oldHeader.size(), 0 );
 		equals( ui.oldContent.size(), 0 );
 		equals( ui.newHeader.size(), 1 );
@@ -63,7 +63,7 @@ test( "change", function() {
 	});
 	ac.accordion( "option", "active", 0 );
 
-	ac.one( "accordionchange", function( event, ui ) {
+	ac.one( "accordionactivate", function( event, ui ) {
 		equals( ui.oldHeader.size(), 1 );
 		strictEqual( ui.oldHeader[ 0 ], headers[ 0 ] );
 		equals( ui.oldContent.size(), 1 );
@@ -75,7 +75,7 @@ test( "change", function() {
 	});
 	headers.eq( 1 ).click();
 
-	ac.one( "accordionchange", function( event, ui ) {
+	ac.one( "accordionactivate", function( event, ui ) {
 		equals( ui.oldHeader.size(), 1 );
 		strictEqual( ui.oldHeader[ 0 ], headers[ 1 ] );
 		equals( ui.oldContent.size(), 1 );

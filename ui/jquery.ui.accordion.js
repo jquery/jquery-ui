@@ -381,8 +381,7 @@ $.widget( "ui.accordion", {
 			return self._completed.apply( self, arguments );
 		};
 
-		// trigger changestart event
-		self._trigger( "changestart", null, self.data );
+		self._trigger( "beforeActivate", null, self.data );
 
 		// count elements to animate
 		self.running = toHide.size() === 0 ? toShow.size() : toHide.size();
@@ -487,7 +486,7 @@ $.widget( "ui.accordion", {
 			this.toHide.parent()[0].className = this.toHide.parent()[0].className;
 		}
 
-		this._trigger( "change", null, this.data );
+		this._trigger( "activate", null, this.data );
 	}
 });
 
@@ -711,6 +710,23 @@ if ( $.uiBackCompat !== false ) {
 
 	// resize method
 	jQuery.ui.accordion.prototype.resize = jQuery.ui.accordion.prototype.refresh;
+
+	(function( $, prototype ) {
+		var _trigger = prototype._trigger;
+		prototype._trigger = function( type, event, data ) {
+			var ret = _trigger.apply( this, arguments );
+			if ( !ret ) {
+				return false;
+			}
+
+			if ( type === "beforeActivate" ) {
+				ret = _trigger.call( this, "changestart", event, data );
+			} else if ( type === "activate" ) {
+				ret = _trigger.call( this, "change", event, data );
+			}
+			return ret;
+		}
+	}( jQuery, jQuery.ui.accordion.prototype ) );
 }
 
 })( jQuery );
