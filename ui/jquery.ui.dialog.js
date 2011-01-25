@@ -125,20 +125,6 @@ $.widget("ui.dialog", {
 			uiDialogTitlebarClose = $( "<a href='#'></a>" )
 				.addClass( "ui-dialog-titlebar-close  ui-corner-all" )
 				.attr( "role", "button" )
-				.hover(
-					function() {
-						uiDialogTitlebarClose.addClass( "ui-state-hover" );
-					},
-					function() {
-						uiDialogTitlebarClose.removeClass( "ui-state-hover" );
-					}
-				)
-				.focus(function() {
-					uiDialogTitlebarClose.addClass( "ui-state-focus" );
-				})
-				.blur(function() {
-					uiDialogTitlebarClose.removeClass( "ui-state-focus" );
-				})
 				.click(function( event ) {
 					event.preventDefault();
 					self.close( event );
@@ -157,6 +143,8 @@ $.widget("ui.dialog", {
 				.prependTo( uiDialogTitlebar );
 
 		uiDialogTitlebar.find( "*" ).add( uiDialogTitlebar ).disableSelection();
+		this._hoverable( uiDialogTitlebarClose );
+		this._focusable( uiDialogTitlebarClose );
 
 		if ( options.draggable && $.fn.draggable ) {
 			self._makeDraggable();
