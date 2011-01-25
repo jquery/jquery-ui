@@ -2,6 +2,18 @@
 
 module( "accordion: core", accordionSetupTeardown() );
 
+test( "markup structure", function() {
+	var ac = $( "#navigation" ).accordion();
+	ok( ac.hasClass( "ui-accordion" ), "main element is .ui-accordion" );
+	equal( ac.find( ".ui-accordion-header" ).length, 3,
+		".ui-accordion-header elements exist, correct number" );
+	equal( ac.find( ".ui-accordion-content" ).length, 3,
+		".ui-accordion-content elements exist, correct number" );
+	same( ac.find( ".ui-accordion-header" ).next().get(),
+		ac.find( ".ui-accordion-content" ).get(),
+		"content panels come immediately after headers" );
+});
+
 test( "handle click on header-descendant", function() {
 	var ac = $( "#navigation" ).accordion();
 	$( "#navigation h2:eq(1) a" ).click();
