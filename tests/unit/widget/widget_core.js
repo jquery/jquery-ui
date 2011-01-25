@@ -183,7 +183,7 @@ test( "error handling", function() {
 	$.error = error;
 });
 
-test("merge multiple option arguments", function() {
+test( "merge multiple option arguments", function() {
 	expect( 1 );
 	$.widget( "ui.testWidget", {
 		_create: function() {
@@ -630,8 +630,6 @@ test( "auto-destroy - .remove() on child", function() {
 		}
 	});
 	$( "#widget" ).testWidget().children().remove();
-	// http://github.com/jquery/qunit/pull/34
-	$.ui.testWidget.prototype.destroy = $.noop;
 });
 
 test( "auto-destroy - .empty()", function() {
@@ -642,8 +640,6 @@ test( "auto-destroy - .empty()", function() {
 		}
 	});
 	$( "#widget" ).testWidget().empty();
-	// http://github.com/jquery/qunit/pull/34
-	$.ui.testWidget.prototype.destroy = $.noop;
 });
 
 test( "auto-destroy - .empty() on parent", function() {
