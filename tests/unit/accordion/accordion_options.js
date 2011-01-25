@@ -193,7 +193,7 @@ test( "{ icons: false }", function() {
 		icons: false
 	});
 	icons( false );
-	list.accordion( "option", "icons", $.ui.accordion.prototype.options.icons );
+	list.accordion( "option", "icons", { header: "foo", activeHeader: "bar" } );
 	icons( true );
 	list.accordion( "option", "icons", false );
 	icons( false );
