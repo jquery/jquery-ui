@@ -1,6 +1,6 @@
 (function( $ ) {
 
-module( "accordion: events" );
+module( "accordion: events", accordionSetupTeardown() );
 
 // TODO: verify correct elements in ui properties
 // TODO: add tests for switching between active panels (not collapsed)

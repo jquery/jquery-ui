@@ -1,8 +1,5 @@
-/*
- * accordion_tickets.js
- */
-(function($) {
+(function( $ ) {
 
-module("accordion: tickets");
+module( "accordion: tickets", accordionSetupTeardown() );
 
-})(jQuery);
+}( jQuery ) );

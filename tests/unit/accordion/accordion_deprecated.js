@@ -5,7 +5,7 @@
 
 (function($) {
 
-module("accordion (deprecated): expanded active option, activate method");
+module("accordion (deprecated): expanded active option, activate method", accordionSetupTeardown() );
 
 test("activate", function() {
 	var expected = $('#list1').accordion(),
@@ -96,7 +96,7 @@ test("{ active: jQuery Object }", function() {
 
 
 
-module("accordion (deprecated) - height options");
+module("accordion (deprecated) - height options", accordionSetupTeardown() );
 
 test("{ autoHeight: true }, default", function() {
 	equalHeights($('#navigation').accordion({ autoHeight: true }), 95, 130);
@@ -141,7 +141,7 @@ test("{ fillSpace: true } with multiple siblings", function() {
 
 
 
-module("accordion (deprecated) - icons");
+module("accordion (deprecated) - icons", accordionSetupTeardown() );
 
 test("change headerSelected option after creation", function() {
 	var list = $("#list1");
@@ -149,6 +149,52 @@ test("change headerSelected option after creation", function() {
 	equals( $( "#list1 span.test" ).length, 1);
 	list.accordion( "option", "icons", { "headerSelected": "deprecated" } );
 	equals( $( "#list1 span.deprecated" ).length, 1);
+});
+
+
+
+
+
+module( "accordion (deprecated) - resize", accordionSetupTeardown() );
+
+test( "resize", function() {
+	var expected = $( "#navigation" )
+		.parent()
+			.height( 300 )
+		.end()
+		.accordion({
+			heightStyle: "fill"
+		});
+	equalHeights( expected, 246, 258 );
+
+	expected.parent().height( 500 );
+	expected.accordion( "resize" );
+	equalHeights( expected, 446, 458 );
+});
+
+
+
+
+module( "accordion (deprecated) - navigation", accordionSetupTeardown() );
+
+test("{ navigation: true, navigationFilter: header }", function() {
+	$("#navigation").accordion({
+		navigation: true,
+		navigationFilter: function() {
+			return /\?p=1\.1\.3$/.test(this.href);
+		}
+	});
+	equals( $("#navigation .ui-accordion-content:eq(2)").size(), 1, "third content active" );
+});
+
+test("{ navigation: true, navigationFilter: content }", function() {
+	$("#navigation").accordion({
+		navigation: true,
+		navigationFilter: function() {
+			return /\?p=1\.1\.3\.2$/.test(this.href);
+		}
+	});
+	equals( $("#navigation .ui-accordion-content:eq(2)").size(), 1, "third content active" );
 });
 
 })(jQuery);

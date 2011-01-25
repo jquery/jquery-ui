@@ -1,6 +1,6 @@
 (function( $ ) {
 
-module( "accordion: core" );
+module( "accordion: core", accordionSetupTeardown() );
 
 test( "handle click on header-descendant", function() {
 	var ac = $( "#navigation" ).accordion();
