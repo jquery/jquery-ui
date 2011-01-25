@@ -100,6 +100,34 @@
 		}
 	});
 
+	$.widget( "ui.grid", {
+		options: {
+			type: null,
+			rowTemplate: null
+		},
+		_create: function() {
+			var that = this;
+			this.element.addClass( "ui-widget" );
+			this.element.find( "th" ).addClass( "ui-widget-header" );
+			this.element.delegate( "tbody > tr", "click", function( event ) {
+				that._trigger( "select", event, {
+					item: $.ui.datastore.main.get( that.options.type,
+						$( this ).tmplItem().data.guid )
+				});
+			});
+			this.refresh();
+		},
+		refresh: function() {
+			var tbody = this.element.find( "tbody" ),
+				developers = $.ui.datastore.main.get( this.options.type ).options.items,
+				template = $( this.options.rowTemplate );
+			$.each( developers, function( itemId, item ) {
+				template.tmpl( item.options.data ).appendTo( tbody );
+			});
+			tbody.find( "td" ).addClass( "ui-widget-content" );
+		}
+	});
+
 	//----------------------------------------
 	// Application level
 	//----------------------------------------
@@ -145,23 +173,15 @@
 
 	$(function() {
 		var details = $("#developer");
-		var summaryTable = $( "#developers" )
-			.delegate( "tbody > tr", "click", function() {
-				showDetails( $( this ).tmplItem().data.guid );
-			});
-
-		var tbody = summaryTable.find( "tbody" ),
-			developers = $.ui.datastore.main.get( "developer" ).options.items;
-		$.each( developers, function( itemId, item ) {
-			$( "#row-tmpl" ).tmpl( item.options.data ).appendTo( tbody );
+		$( "#developers" ).grid({
+			type: "developer",
+			rowTemplate: "#row-tmpl",
+			select: function( event, ui ) {
+				$( "#developer-tmpl" )
+					.tmpl( ui.item.options.data )
+					.appendTo( details.empty() );
+			}
 		});
-
-		showDetails( developers[ 1 ].options.data.guid );
-		function showDetails( guid ) {
-			$( "#developer-tmpl" )
-				.tmpl( $.ui.datastore.main.get( "developer", guid ).options.data )
-				.appendTo( details.empty() );
-		}
 	});
 	</script>
 </head>
