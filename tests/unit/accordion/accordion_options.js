@@ -137,12 +137,48 @@ test( "{ heightStyle: 'content' }", function() {
 test( "{ heightStyle: 'fill' }", function() {
 	$( "#navigationWrapper" ).height( 500 );
 	var ac = $( "#navigation" ).accordion({ heightStyle: "fill" });
-	equalHeights( ac, 446, 458);
-	ac.accordion( "destroy" );
+	equalHeights( ac, 446, 458 );
+});
 
-	$( "<div>" ).height( 100 ).appendTo( "#navigationWrapper" );
-	ac.accordion({ heightStyle: "fill" });
-	equalHeights( ac, 346, 358 );
+test( "{ heightStyle: 'fill' } with sibling", function() {
+	$( "#navigationWrapper" ).height( 500 );
+	$( "<p>Lorem Ipsum</p>" )
+		.css({
+			height: 50,
+			marginTop: 20,
+			marginBottom: 30
+		})
+		.prependTo( "#navigationWrapper" );
+	var ac = $( "#navigation" ).accordion({ heightStyle: "fill" });
+	equalHeights( ac , 346, 358);
+});
+
+test( "{ heightStyle: 'fill' } with multiple siblings", function() {
+	$( "#navigationWrapper" ).height( 500 );
+	$( "<p>Lorem Ipsum</p>" )
+		.css({
+			height: 50,
+			marginTop: 20,
+			marginBottom: 30
+		})
+		.prependTo( "#navigationWrapper" );
+	$( "<p>Lorem Ipsum</p>" )
+		.css({
+			height: 50,
+			marginTop: 20,
+			marginBottom: 30,
+			position: "absolute"
+		})
+		.prependTo( "#navigationWrapper" );
+	$( "<p>Lorem Ipsum</p>" )
+		.css({
+			height: 25,
+			marginTop: 10,
+			marginBottom: 15
+		})
+		.prependTo( "#navigationWrapper" );
+	var ac = $( "#navigation" ).accordion({ heightStyle: "fill" });
+	equalHeights( ac, 296, 308 );
 });
 
 test( "{ icons: false }", function() {
