@@ -19,34 +19,57 @@
 	<script src="grid.js"></script>
 	<script type="text/javascript">
 	$(function() {
-		var grid = $( "table" ).grid().delegate( "th", "click", function() {
-			
-			var header = $( this ),
-				type = header.data( "type" ),
-				culture = header.data( "culture" ),
-				format = header.data( "format" ),
-				order = header.data("sort-order") || 1;
-			// TODO map this.cellIndex to field name instead
-			var field = header.text().toLowerCase().replace( /\s|[^a-z0-9]/g, "_" );
-			var items = $.ui.datastore.main.get( grid.options.type ).options.items;
-			function extract( row ) {
-				var text = row.options.data[ field ];
-				if (type == "currency") {
-					return $.global.parseFloat(text, culture);
-				} else if (type == "date") {
-					return $.global.parseDate(text, format, culture);
-				} else {
-					return text;
+		// just a temporary design to show what a new widget inheriting from
+		// 		grid could look like
+		// metadata such as column type, culture, format and sort-order probably
+		//		belongs in the model
+		// all that this widget should handle is the click on the column header,
+		//		creating a custom event with enough metadata to implement
+		// 		sorting elsewhere
+		$.widget( "ui.sortablegrid", $.ui.grid, {
+			_create: function() {
+				$.ui.grid.prototype._create.apply( this, arguments );
+				var that = this;
+				this.element.delegate( "th", "click", function() {
+					that._sort( $( this ) );
+				});
+			},
+			_sort: function( header ) {
+				var type = header.data( "type" ),
+					culture = header.data( "culture" ),
+					format = header.data( "format" ),
+					order = header.data("sort-order") || 1;
+
+				// TODO map this.cellIndex to field name instead
+				var field = header.text().toLowerCase().replace( /\s|[^a-z0-9]/g, "_" );
+				
+				function extract( row ) {
+					var text = row.options.data[ field ];
+					if ( type == "currency" ) {
+						return $.global.parseFloat( text, culture );
+					} else if (type == "date") {
+						return $.global.parseDate( text, format, culture );
+					} else {
+						return text;
+					}
 				}
+
+				// TODO should there be something more direct to access on grid?
+				var items = $.ui.datastore.main.get( this.options.type ).options.items;
+
+				// TODO sort actually modifies the input, so this works
+				// a better implementation would seperate data extraction from sorting
+				// that isn't possible here, as methods like .map() produce a new array
+				items.sort(function( a, b ) {
+					return ( extract( a ) < extract( b ) ? -1 : 1 ) * order;
+				});
+				order *= -1;
+				header.data( "sort-order", order );
+				this.refresh();
 			}
-			items.sort(function(a, b) {
-				// get property for field name and compare that
-				return (extract(a) < extract(b) ? -1 : 1) * order;
-			});
-			order *= -1;
-			header.data("sort-order", order);
-			grid.refresh();
-		}).data("grid");
+		});
+
+		$( "table" ).sortablegrid();
 	});
 	</script>
 </head>
@@ -104,6 +127,34 @@
 				<td>-10.000,00 €</td>
 				<td>¥15</td>
 				<td>2/28/2010</td>
+			</tr>
+		</tbody>
+	</table>
+	
+	<table id="developers-pe">
+		<thead>
+			<tr>
+				<th data-field="firstName">First Name</th>
+				<th data-field="lastName">Last Name</th>
+				<th data-field="country">Country</th>
+				<th data-field="twitter">Twitter</th>
+				<th data-field="github">GitHub</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr data-guid="john.resig">
+				<td>John</td>
+				<td>Resig</td>
+				<td>USA</td>
+				<td>jeresig</td>
+				<td>jeresig</td>
+			</tr>
+			<tr data-guid="scott.jehl">
+				<td>Scott</td>
+				<td>Jehl</td>
+				<td>USA</td>
+				<td>filamentgroup</td>
+				<td>scottjehl</td>
 			</tr>
 		</tbody>
 	</table>
