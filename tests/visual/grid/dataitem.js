@@ -1,0 +1,35 @@
+/*
+ * Dataitem and Dataitems
+ * 
+ * Depends on:
+ * ---
+ */
+(function( $ ) {
+	
+	$.widget( "ui.dataitem", {
+		options: {
+			data: null
+		},
+		_create: function() {
+		},
+		get: function( key ) {
+			return this.options.data[ key ];
+		},
+		set: function( key, vaule ) {
+			this.options.data[ key ] = value;
+			return this;
+		}
+	});
+	$.ui.dataitem.types = {};
+	$.ui.dataitem.extend = function( type, prototype ) {
+		$.widget( "ui.dataitem-" + type, $.ui.dataitem, prototype );
+		$.ui.dataitem.types[ type ] = $.ui[ "dataitem-" + type ];
+	};
+
+	$.widget( "ui.dataitems", {
+		options: {
+			items: null
+		}
+	});
+	
+})( jQuery );

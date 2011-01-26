@@ -3,167 +3,20 @@
 <head>
 	<meta charset="utf-8">
 	<title>Grid: Data</title>
+	<link rel="stylesheet" href="../visual.css" />
 	<link rel="stylesheet" href="../../../themes/base/jquery.ui.all.css">
+	<link rel="stylesheet" href="grid.css" />
 	<script src="../../../jquery-1.4.4.js"></script>
 	<script src="../../../external/jquery.tmpl.js"></script>
 	<script src="../../../ui/jquery.ui.core.js"></script>
 	<script src="../../../ui/jquery.ui.widget.js"></script>
+	<script src="dataitem.js"></script>
+	<script src="datasource.js"></script>
+	<script src="datastore.js"></script>
+	<script src="grid.js"></script>
 	<script>
-	$.widget( "ui.datastore", {
-		_create: function() {
-			this.items = {};
-		},
-		create: function( type, props ) {
-			return $.ui.datasource.types[ type ].create( props );
-		},
-		_normalize: function( type, id ) {
-			var item = this.items[ type ][ id ],
-				ctor = $.ui.dataitem.types[ type ];
-			if ( !( item instanceof $.ui.dataitem ) ) {
-				item = this.items[ type ][ id ] = ctor({ data: item });
-			}
-			return item;
-		},
-		get: function( type, id ) {
-			if ( id ) {
-				return this._normalize( type, id );
-			}
-
-			for ( id in this.items[ type ] ) {
-				this._normalize( type, id );
-			}
-			return $.ui.dataitems({ items: this.items[ type ] });
-		},
-		populate: function( type ) {
-			$.ui.datasource.types[ type ].get( this );
-		},
-		_populate: function( type, items ) {
-			var local = this.items[ type ];
-			$.each( items, function( i, item ) {
-				local[ item.guid ] = item;
-			});
-		},
-		save: function() {
-			$.each( this.items, function( type, items ) {
-				$.ui.datasource.types[ type ].save( items );
-			});
-		}
-	});
-	$.ui.datastore.main = $.ui.datastore();
-
-	$.widget( "ui.datasource", {
-		options: {
-			type: null,
-			source: null
-		},
-		_create: function() {
-			$.ui.datasource.types[ this.options.type ] = this;
-			$.ui.datastore.main.items[ this.options.type ] = {};
-		},
-		create: function( props ) {
-			this.options.source.push( props );
-		},
-		get: function( store ) {
-			store._populate( this.options.type, this.options.source );
-		},
-		save: function( items ) {
-			$.each( items, function( itemId, item ) {
-				item.save();
-			});
-		},
-	});
-	$.ui.datasource.types = {};
-
-	$.widget( "ui.dataitem", {
-		options: {
-			data: null
-		},
-		_create: function() {
-		},
-		get: function( key ) {
-			return this.options.data[ key ];
-		},
-		set: function( key, vaule ) {
-			this.options.data[ key ] = value;
-			return this;
-		}
-	});
-	$.ui.dataitem.types = {};
-	$.ui.dataitem.extend = function( type, prototype ) {
-		$.widget( "ui.dataitem-" + type, $.ui.dataitem, prototype );
-		$.ui.dataitem.types[ type ] = $.ui[ "dataitem-" + type ];
-	};
-
-	$.widget( "ui.dataitems", {
-		options: {
-			items: null
-		}
-	});
-
-	$.widget( "ui.grid", {
-		options: {
-			type: null,
-			rowTemplate: null
-		},
-		_create: function() {
-			if ( !this.options.type ) {
-				this._parseData();
-			}
-			var that = this;
-			this.element.addClass( "ui-widget" );
-			this.element.find( "th" ).addClass( "ui-widget-header" );
-			this.element.delegate( "tbody > tr", "click", function( event ) {
-				that._trigger( "select", event, {
-					item: $.ui.datastore.main.get( that.options.type,
-						$( this ).tmplItem().data.guid )
-				});
-			});
-			this.refresh();
-		},
-		refresh: function() {
-			var tbody = this.element.find( "tbody" ).empty(),
-				items = $.ui.datastore.main.get( this.options.type ).options.items,
-				template = this.options.rowTemplate;
-			$.each( items, function( itemId, item ) {
-				$.tmpl( template, item.options.data ).appendTo( tbody );
-			});
-			tbody.find( "td" ).addClass( "ui-widget-content" );
-		},
-		_parseData: function() {
-			var type = "generated" + $.now();
-			this.options.type = type;
-
-			var fields = this.element.find( "th" ).map(function() {
-				return $( this ).data( "field" );
-			}).get();
-
-			var items = this.element.find( "tbody" ).children().map(function() {
-				var item = { guid: $( this ).data( "guid" ) };
-				$( this ).children().each(function( i ) {
-					item[ fields[ i ] ] = $( this ).text();
-				});
-				return item;
-			}).get();
-
-			var template = $.map( fields, function( field ) {
-				return "<td>${" + field + "}</td>";
-			}).join( "" );
-			template = "<tr>" + template + "</tr>";
-			this.options.rowTemplate = template;
-
-			$.ui.datasource({
-				type: type,
-				source: items
-			});
-			$.ui.dataitem.extend( type, {} );
-			$.ui.datastore.main.populate( type );
-		}
-	});
-
-	//----------------------------------------
-	// Application level
-	//----------------------------------------
-
+	// TODO this isn't used anywhere - how to access this method from #row-tmpl?
+	// grid passed dataitem.options.data, that doesn't include access to this method
 	$.ui.dataitem.extend( "developer", {
 		fullName: function() {
 			return this.get( "firstName" ) + " " + this.get( "lastName" );
@@ -197,10 +50,13 @@
 		}
 	];
 
+	// TODO what's the relation between datasource and datastore?
+	// couldn't/shouldn't this be just one widget? 
 	$.ui.datasource({
 		type: "developer",
 		source: data
 	});
+	// TODO when will be a need for a non-main datastore?
 	$.ui.datastore.main.populate( "developer" );
 
 	$(function() {
@@ -210,12 +66,21 @@
 			select: showDetails
 		});
 
+		// TODO shouldn't the extraction be seperate from the grid?
+		// e.g. as a datasource extracting the table data and providing the result to grid
 		$( "#developers-pe" ).grid({
 			select: showDetails
 		});
 
+		// TODO this could be a form view, having to handle events
+		// and modifying item accordingly
+		// and telling datastore/source about the changes
+		//
+		// implement as extension of a view widget?
 		function showDetails( event, ui ) {
 			$( "#developer-tmpl" )
+				// TODO accessing data though item.options makes no sense
+				// this should be just ui.item passed to .tmpl
 				.tmpl( ui.item.options.data )
 				.appendTo( $( "#developer" ).empty() );
 		}
