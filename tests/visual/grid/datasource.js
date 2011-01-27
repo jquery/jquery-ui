@@ -14,6 +14,11 @@
 		_create: function() {
 			$.ui.datasource.types[ this.options.type ] = this;
 			$.ui.datastore.main.items[ this.options.type ] = [];
+			// populate store with static data directly
+			if ($.isArray(this.options.source)) {
+				// TODO pass this (as the datasource instance) instead of type?
+				$.ui.datastore.main.populate( this.options.type );
+			}
 		},
 		create: function( props ) {
 			this.options.source.push( props );

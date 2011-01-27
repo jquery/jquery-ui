@@ -35,20 +35,16 @@
 				});
 			},
 			_sort: function( header ) {
-				var type = header.data( "type" ),
-					culture = header.data( "culture" ),
-					format = header.data( "format" ),
-					order = header.data("sort-order") || 1;
+				var fieldname = this.options.columns[ header[0].cellIndex ];
+				// TODO access shouldn't happen through the prototype
+				var field = $.ui.dataitem.types[ this.options.type ].prototype.fields[ fieldname ];
 
-				// TODO map this.cellIndex to field name instead
-				var field = header.text().toLowerCase().replace( /\s|[^a-z0-9]/g, "_" );
-				
 				function extract( row ) {
-					var text = row.options.data[ field ];
-					if ( type == "currency" ) {
-						return $.global.parseFloat( text, culture );
-					} else if (type == "date") {
-						return $.global.parseDate( text, format, culture );
+					var text = row.options.data[ fieldname ];
+					if ( field.type == "currency" ) {
+						return $.global.parseFloat( text, field.culture );
+					} else if (field.type == "date") {
+						return $.global.parseDate( text, field.format, field.culture );
 					} else {
 						return text;
 					}
@@ -61,10 +57,9 @@
 				// a better implementation would seperate data extraction from sorting
 				// that isn't possible here, as methods like .map() produce a new array
 				items.sort(function( a, b ) {
-					return ( extract( a ) < extract( b ) ? -1 : 1 ) * order;
+					return ( extract( a ) < extract( b ) ? -1 : 1 ) * field.sortOrder;
 				});
-				order *= -1;
-				header.data( "sort-order", order );
+				field.sortOrder *= -1;
 				this.refresh();
 			}
 		});

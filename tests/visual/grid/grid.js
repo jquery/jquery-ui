@@ -40,12 +40,22 @@
 			var type = "generated" + $.now();
 			this.options.type = type;
 
-			var fields = this.element.find( "th" ).map(function() {
-				var field = $( this ).data( "field" );
+			var fieldDescriptions = {};
+			var fields = this.options.columns = this.element.find( "th" ).map(function() {
+				var th = $( this ),
+					field = $( this ).data( "field" );
 				if ( !field ) {
 					// generate field name if missing
 					field = $( this ).text().toLowerCase().replace(/\s|[^a-z0-9]/g, "_");
 				}
+
+				fieldDescriptions[field] = {
+					type: th.data( "type" ),
+					culture: th.data( "culture" ),
+					format: th.data( "format" ),
+					sortOrder: th.data( "sort-order" ) || 1
+				};
+
 				return field;
 			}).get();
 
@@ -62,18 +72,20 @@
 				return item;
 			}).get();
 
+			// TODO seperate template generation from data extraction
 			var template = $.map( fields, function( field ) {
 				return "<td>${" + field + "}</td>";
 			}).join( "" );
 			template = "<tr>" + template + "</tr>";
 			this.options.rowTemplate = template;
 
+			$.ui.dataitem.extend( type, {
+				fields: fieldDescriptions
+			} );
 			$.ui.datasource({
 				type: type,
 				source: items
 			});
-			$.ui.dataitem.extend( type, {} );
-			$.ui.datastore.main.populate( type );
 		}
 	});
 	

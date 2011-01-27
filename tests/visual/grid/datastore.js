@@ -9,9 +9,9 @@
 (function( $ ) {
 	
 	$.widget( "ui.datastore", {
-		// TODO hackity hack to get the same dataitems instance back for calls to datastore.get(type)
-		dataitems: {},
 		_create: function() {
+			// TODO hackity hack to get the same dataitems instance back for calls to datastore.get(type)
+			this.dataitems = {};
 			this.items = {};
 		},
 		create: function( type, props ) {
@@ -44,10 +44,12 @@
 			}
 			return this.dataitems[type] = $.ui.dataitems({ items: this.items[ type ] });
 		},
+		// TODO rename this
 		populate: function( type ) {
-			// TODO datasource.get is calling datastore._populate - inline that?
+			// TODO or rename datasource.get
 			$.ui.datasource.types[ type ].get( this );
 		},
+		// TODO or rename this
 		_populate: function( type, items ) {
 			// TODO just assign items to this.items[type]?
 			var local = this.items[ type ];
