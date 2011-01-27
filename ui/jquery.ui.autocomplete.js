@@ -14,6 +14,9 @@
  */
 (function( $, undefined ) {
 
+// used to prevent race conditions with remote data sources
+var requestIndex = 0;
+
 $.widget( "ui.autocomplete", {
 	options: {
 		appendTo: "body",
@@ -256,17 +259,16 @@ $.widget( "ui.autocomplete", {
 					url: url,
 					data: request,
 					dataType: "json",
-					success: function( data, status, xhr ) {
-						if ( xhr === self.xhr ) {
+					autocompleteRequest: ++requestIndex,
+					success: function( data, status ) {
+						if ( this.autocompleteRequest === requestIndex ) {
 							response( data );
 						}
-						self.xhr = null;
 					},
-					error: function( xhr ) {
-						if ( xhr === self.xhr ) {
+					error: function() {
+						if ( this.autocompleteRequest === requestIndex ) {
 							response( [] );
 						}
-						self.xhr = null;
 					}
 				});
 			};
