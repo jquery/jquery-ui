@@ -1,0 +1,64 @@
+<!doctype html>
+<html>
+<head>
+	<title>Grid: Type</title>
+	<meta charset=utf-8 />
+	<link rel="stylesheet" href="../visual.css" />
+	<link rel="stylesheet" href="../../../themes/base/jquery.ui.all.css" title="ui-theme" />
+	<link rel="stylesheet" href="grid.css" />
+	<script src="../../../jquery-1.4.4.js"></script>
+	<script src="../../../external/jquery.tmpl.js"></script>
+	<script src="../../../external/jquery.global.js"></script>
+	<script src="../../../external/jquery.global.de-DE.js"></script>
+	<script src="../../../external/jquery.global.ja-JP.js"></script>
+	<script src="../../../ui/jquery.ui.core.js"></script>
+	<script src="../../../ui/jquery.ui.widget.js"></script>
+	<script src="dataitem.js"></script>
+	<script src="datasource.js"></script>
+	<script src="datastore.js"></script>
+	<script src="grid.js"></script>
+	<script type="text/javascript">
+	$(function() {
+		$.ui.dataitem.extend( "developer", {});
+		
+		$.ui.datasource({
+			type: "developer",
+			source: function(request, response) {
+				console.log(this, arguments);
+				$.getJSON("fixture.json", response);
+			}
+		});
+		
+		$("table").grid({
+			type: "developers",
+			// TODO remove this; move template generation from extractor to grid init or refresh
+			rowTemplate: $( "#row-tmpl" ).html(),
+		})
+	});
+	</script>
+</head>
+<body>
+
+<h2>remote data source</h2>
+<table>
+	<thead>
+		<tr>
+			<th data-field="firstName">First Name</th>
+			<th data-field="lastName">Last Name</th>
+			<th data-field="country">Country</th>
+		</tr>
+	</thead>
+	<tbody>
+	</tbody>
+</table>
+	
+<script type="text/x-jquery-tmpl" id="row-tmpl">
+<tr>
+	<td>${firstName}</td>
+	<td>${lastName}</td>
+	<td>${country}</td>
+</tr>
+</script>
+	
+</body>
+</html>
