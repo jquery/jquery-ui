@@ -32,6 +32,7 @@
 				items = $.ui.datastore.main.get( this.options.type ).options.items,
 				template = this.options.rowTemplate;
 			$.each( items, function( itemId, item ) {
+				// TODO use item.toJSON() or a method like that to compute values to pass to tmpl
 				$.tmpl( template, item.options.data ).appendTo( tbody );
 			});
 			tbody.find( "td" ).addClass( "ui-widget-content" );
