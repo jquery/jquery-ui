@@ -29,6 +29,7 @@
 		},
 		refresh: function() {
 			var tbody = this.element.find( "tbody" ).empty(),
+				// TODO the get() call needs to be async for remote sources
 				items = $.ui.datastore.main.get( this.options.type ).options.items,
 				template = this.options.rowTemplate;
 			$.each( items, function( itemId, item ) {
