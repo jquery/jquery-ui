@@ -27,8 +27,8 @@
 		
 		$("table").grid({
 			type: "developer",
-			// TODO remove this; move template generation from extractor to grid init or refresh
-			rowTemplate: $( "#row-tmpl" ).html(),
+			// TODO when these are specified, the table header row should be removeable/generated?
+			columns: ["firstName", "lastName", "country"]
 		})
 	});
 	</script>
@@ -47,14 +47,6 @@
 	<tbody>
 	</tbody>
 </table>
-	
-<script type="text/x-jquery-tmpl" id="row-tmpl">
-<tr>
-	<td>${firstName}</td>
-	<td>${lastName}</td>
-	<td>${country}</td>
-</tr>
-</script>
 	
 </body>
 </html>

@@ -16,6 +16,7 @@
 			if ( !this.options.type ) {
 				this._parseData();
 			}
+			this._rowTemplate();
 			var that = this;
 			this.element.addClass( "ui-widget" );
 			this.element.find( "th" ).addClass( "ui-widget-header" );
@@ -74,13 +75,6 @@
 				return item;
 			}).get();
 
-			// TODO seperate template generation from data extraction
-			var template = $.map( fields, function( field ) {
-				return "<td>${" + field + "}</td>";
-			}).join( "" );
-			template = "<tr>" + template + "</tr>";
-			this.options.rowTemplate = template;
-
 			$.ui.dataitem.extend( type, {
 				fields: fieldDescriptions
 			} );
@@ -88,6 +82,17 @@
 				type: type,
 				source: items
 			});
+		},
+		
+		_rowTemplate: function() {
+			if (this.options.rowTemplate) {
+				return;
+			}
+			var template = $.map( this.options.columns, function( field ) {
+				return "<td>${" + field + "}</td>";
+			}).join( "" );
+			template = "<tr>" + template + "</tr>";
+			this.options.rowTemplate = template;
 		}
 	});
 	
