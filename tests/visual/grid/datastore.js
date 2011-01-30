@@ -51,11 +51,10 @@
 		},
 		// TODO or rename this
 		_populate: function( type, items ) {
-			// TODO just assign items to this.items[type]?
+			// remove cached dataitems object
+			delete this.dataitems[ type ];
 			var local = this.items[ type ];
 			$.each( items, function( i, item ) {
-				// TODO changed this to use index for proper array indexing
-				// was item.guid which is not useful as array index
 				local[ i ] = item;
 			});
 		},

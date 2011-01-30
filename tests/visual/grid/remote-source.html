@@ -8,9 +8,6 @@
 	<link rel="stylesheet" href="grid.css" />
 	<script src="../../../jquery-1.4.4.js"></script>
 	<script src="../../../external/jquery.tmpl.js"></script>
-	<script src="../../../external/jquery.global.js"></script>
-	<script src="../../../external/jquery.global.de-DE.js"></script>
-	<script src="../../../external/jquery.global.ja-JP.js"></script>
 	<script src="../../../ui/jquery.ui.core.js"></script>
 	<script src="../../../ui/jquery.ui.widget.js"></script>
 	<script src="dataitem.js"></script>
@@ -24,13 +21,12 @@
 		$.ui.datasource({
 			type: "developer",
 			source: function(request, response) {
-				console.log(this, arguments);
-				$.getJSON("fixture.json", response);
+				$.getJSON("fixture.json", request, response);
 			}
 		});
 		
 		$("table").grid({
-			type: "developers",
+			type: "developer",
 			// TODO remove this; move template generation from extractor to grid init or refresh
 			rowTemplate: $( "#row-tmpl" ).html(),
 		})
