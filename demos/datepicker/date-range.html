@@ -17,7 +17,7 @@
 			numberOfMonths: 3,
 			onSelect: function( selectedDate ) {
 				var option = this.id == "from" ? "minDate" : "maxDate",
-					instance = $( this ).data( "datepicker" );
+					instance = $( this ).data( "datepicker" ),
 					date = $.datepicker.parseDate(
 						instance.settings.dateFormat ||
 						$.datepicker._defaults.dateFormat,
