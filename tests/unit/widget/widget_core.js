@@ -24,7 +24,7 @@ test( "widget creation", function() {
 });
 
 test( "element normalization", function() {
-	expect( 12 );
+	expect( 11 );
 	var elem;
 	$.widget( "ui.testWidget", {} );
 
@@ -67,7 +67,6 @@ test( "element normalization", function() {
 	$.ui.testWidget.prototype._create = function() {
 		// using strictEqual throws an error (Maximum call stack size exceeded)
 		ok( this.element[ 0 ] === this, "instance as element" );
-		ok( this.element.data( "testWidget" ) === this, "instance stored in .data()" );
 	};
 	$.ui.testWidget();
 });
