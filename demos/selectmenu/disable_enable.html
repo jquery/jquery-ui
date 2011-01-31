@@ -6,7 +6,7 @@
 	
 	<link type="text/css" href="../../themes/base/jquery.ui.all.css" rel="stylesheet" />
 	<link type="text/css" href="../../themes/base/jquery.ui.selectmenu.css" rel="stylesheet" />
-	<script type="text/javascript" src="../../jquery-1.4.2.js"></script>
+	<script type="text/javascript" src="../../jquery-1.4.4.js"></script>
 	<script type="text/javascript" src="../../ui/jquery.ui.core.js"></script>
 	<script type="text/javascript" src="../../ui/jquery.ui.widget.js"></script>
 	<script type="text/javascript" src="../../ui/jquery.ui.position.js"></script>
@@ -33,11 +33,12 @@
 	<script type="text/javascript">	
 		$(function(){		
 			
-			// does not work see: http://github.com/fnagel/jquery-ui/issues#issue/12
+			// please note that option.event is always passed as a string, so do not test for true or 1 with if (options.value)
+			// see this issue for more information http://github.com/fnagel/jquery-ui/issues#issue/12
 			var speedA_depends = $('select#speedA_depends').selectmenu();		
 			var speedA = $('select#speedA').selectmenu({
 				select: function(event, options) {
-					if (options.value) { 
+					if (options.value == "on") { 
 						speedA_depends.selectmenu('enable');
 					} else {
 						speedA_depends.selectmenu('disable');
@@ -61,15 +62,15 @@
 	</script>
 </head>
 <body>
+	<h2>Disable / Enable Testing</h2>
 	<form action="#">
+		<label for="speedA">Disabled by select callback (does not change original select)</label>
 		<fieldset>
-			<label for="speedA">Disabled by select callback (does not work)</label>
 			<select name="speedA" id="speedA">
-				<option value="1">On</option>
-				<option value="0">Off</option>
+				<option value="on">On</option>
+				<option value="off">Off</option>
 			</select>
 			<br />
-			<label for="speedA_depends">Depends on</label>
 			<select name="speedA_depends" id="speedA_depends">
 				<option value="Slow">Slow</option>
 				<option value="Medium">Medium</option>
