@@ -134,18 +134,19 @@ $.Widget.prototype = {
 	},
 	_createWidget: function( options, element ) {
 		element = $( element || this.defaultElement || this )[ 0 ];
-		$.data( element, this.widgetName, this );
 		this.element = $( element );
 		this.options = $.extend( true, {},
 			this.options,
 			this._getCreateOptions(),
 			options );
-
-		var self = this;
-		this.element.bind( "remove." + this.widgetName, function() {
-			self.destroy();
-		});
-
+		if (element !== this) {
+			$.data(element, this.widgetName, this);
+			
+			var self = this;
+			this.element.bind("remove." + this.widgetName, function(){
+				self.destroy();
+			});
+		}
 		this._create();
 		this._trigger( "create" );
 		this._init();
