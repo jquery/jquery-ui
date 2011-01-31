@@ -3,9 +3,9 @@
 <head>
 	<meta charset="utf-8">
 	<title>Grid: Editing</title>
-	<link rel="stylesheet" href="../visual.css" />
+	<link rel="stylesheet" href="../visual.css">
 	<link rel="stylesheet" href="../../../themes/base/jquery.ui.all.css">
-	<link rel="stylesheet" href="grid.css" />
+	<link rel="stylesheet" href="grid.css">
 	<script src="../../../jquery-1.4.4.js"></script>
 	<script src="../../../external/jquery.tmpl.js"></script>
 	<script src="../../../ui/jquery.ui.core.js"></script>
@@ -26,16 +26,16 @@
 		$( "#developers" ).grid({
 			type: "developer",
 			select: showDetails,
-			columns: ["firstName", "lastName", "country"]
+			columns: [ "firstName", "lastName", "country" ]
 		});
 
 		var formItem;
-		var form = $( "#developer" ).submit( function(event) {
+		var form = $( "#developer" ).submit(function( event ) {
 			event.preventDefault();
-			var serialized = $( this ).children("form").serializeArray();
-			var item = $.ui.datastore.main.get( "developer", formItem.options.data.guid ).options.data;
-			$.map(serialized, function(field) {
-				item[field.name] = field.value;
+			var serialized = $( this ).children( "form" ).serializeArray();
+			var item = formItem.options.data;
+			$.each( serialized, function( i, field ) {
+				item[ field.name ] = field.value;
 			});
 			$( "table" ).grid( "refresh" );
 			form.empty();
@@ -43,11 +43,8 @@
 		function showDetails( event, ui ) {
 			formItem = ui.item;
 			$( "#developer-tmpl" )
-				// TODO accessing data though item.options makes no sense
-				// this should be just ui.item passed to .tmpl
 				.tmpl( ui.item.options.data )
 				.appendTo( form.empty() );
-				
 		}
 	});
 	</script>
@@ -74,25 +71,25 @@
 	<legend>Edit</legend>
 	<div>
 		<label>Firstname: </label>
-		<input name="firstName" value="${firstName}" />
+		<input name="firstName" value="${firstName}">
 	</div>
 	<div>
 		<label>Lastname: </label>
-		<input name="lastName" value="${lastName}" />
+		<input name="lastName" value="${lastName}">
 	</div>
 	<div>
 		<label>GitHub username: </label>
-		<input name="github" value="${github}" />
+		<input name="github" value="${github}">
 	</div>
 	<div>
 		<label>Twitter username: </label>
-		<input name="twitter" value="${twitter}" />
+		<input name="twitter" value="${twitter}">
 	</div>
 	<div>
 		<label>Country: </label>
-		<input name="country" value="${country}" />
+		<input name="country" value="${country}">
 	</div>
-	<input type="submit" />
+	<input type="submit">
 </form>
 </script>
 

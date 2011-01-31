@@ -1,11 +1,11 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
+	<meta charset="utf-8">
 	<title>Grid: Sorting grid</title>
-	<meta charset=utf-8 />
-	<link rel="stylesheet" href="../visual.css" />
-	<link rel="stylesheet" href="../../../themes/base/jquery.ui.all.css" title="ui-theme" />
-	<link rel="stylesheet" href="grid.css" />
+	<link rel="stylesheet" href="../visual.css">
+	<link rel="stylesheet" href="../../../themes/base/jquery.ui.all.css">
+	<link rel="stylesheet" href="grid.css">
 	<script src="../../../jquery-1.4.4.js"></script>
 	<script src="../../../external/jquery.tmpl.js"></script>
 	<script src="../../../external/jquery.global.js"></script>
@@ -17,46 +17,43 @@
 	<script src="datasource.js"></script>
 	<script src="datastore.js"></script>
 	<script src="grid.js"></script>
-	<script type="text/javascript">
+	<script>
 	$(function() {
-		// just a temporary design to show what a new widget inheriting from
-		// 		grid could look like
-		// metadata such as column type, culture, format and sort-order probably
-		//		belongs in the model
-		// all that this widget should handle is the click on the column header,
-		//		creating a custom event with enough metadata to implement
-		// 		sorting elsewhere
+		// Just a temporary design to show what a new widget inheriting from
+		// grid could look like.
+		// Metadata such as column type, culture, format and sort-order probably
+		// belongs in the model.
+		// All that this widget should handle is the click on the column header,
+		// creating a custom event with enough metadata to implement
+		// sorting elsewhere.
 		$.widget( "ui.sortablegrid", $.ui.grid, {
 			_create: function() {
-				$.ui.grid.prototype._create.apply( this, arguments );
+				this._superApply( "_create", arguments );
 				var that = this;
 				this.element.delegate( "th", "click", function() {
 					that._sort( $( this ) );
 				});
 			},
 			_sort: function( header ) {
-				var fieldname = this.options.columns[ header[0].cellIndex ];
-				// TODO access shouldn't happen through the prototype
-				var field = $.ui.dataitem.types[ this.options.type ].prototype.fields[ fieldname ];
+				var fieldname = this.options.columns[ header[0].cellIndex ],
+					// TODO access shouldn't happen through the prototype
+					field = $.ui.dataitem.types[ this.options.type ].prototype.fields[ fieldname ];
 
 				function extract( row ) {
 					var text = row.options.data[ fieldname ];
 					if ( field.type == "currency" ) {
 						return $.global.parseFloat( text, field.culture );
-					} else if (field.type == "date") {
+					} else if ( field.type == "date" ) {
 						return $.global.parseDate( text, field.format, field.culture );
 					} else {
 						return text;
 					}
 				}
 
-				// TODO should there be something more direct to access on grid?
-				var items = $.ui.datastore.main.get( this.options.type ).options.items;
-
 				// TODO sort actually modifies the input, so this works
 				// a better implementation would seperate data extraction from sorting
 				// that isn't possible here, as methods like .map() produce a new array
-				items.sort(function( a, b ) {
+				this.items.sort(function( a, b ) {
 					return ( extract( a ) < extract( b ) ? -1 : 1 ) * field.sortOrder;
 				});
 				field.sortOrder *= -1;
@@ -70,6 +67,7 @@
 </head>
 <body>
 
+	<h2>table with metadata</h2>
 	<table>
 		<thead>
 			<tr>
@@ -125,7 +123,8 @@
 			</tr>
 		</tbody>
 	</table>
-	
+
+	<h2>table without metadata</h2>
 	<table id="developers-pe">
 		<thead>
 			<tr>
