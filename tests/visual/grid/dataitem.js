@@ -7,6 +7,7 @@
 (function( $ ) {
 	
 	$.widget( "ui.dataitem", {
+		defaultElement: null,
 		options: {
 			data: null
 		},
