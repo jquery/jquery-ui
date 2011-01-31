@@ -375,7 +375,7 @@ $.widget("ui.selectmenu", {
 		this._optionLis = this.list.find('li:not(.' + self.widgetBaseClass + '-group)');
 						
 		// transfer disabled state
-		if (this.element.attr('disabled') == true) {
+		if (this.element.attr('disabled') === true) {
 			this.disable();
 		}
 
@@ -432,7 +432,7 @@ $.widget("ui.selectmenu", {
 		this.list.find('li a').each(function(i) {
 			if (!focusFound) {
 				var thisText = $(this).text();
-				if ( thisText.indexOf(C) == 0 || thisText.indexOf(c) == 0 ) {
+				if ( thisText.indexOf(C) === 0 || thisText.indexOf(c) === 0 ) {
 					if (self._prevChar[0] == C) {
 						if (self._prevChar[1] < i) {
 							focusOpt(this, i);
@@ -577,11 +577,10 @@ $.widget("ui.selectmenu", {
 			this.close();
 			this.element
 				.add(this.newelement)
-				.add(this.list)
-					[value ? 'addClass' : 'removeClass'](
-						this.widgetBaseClass + '-disabled' + ' ' +
-						this.namespace + '-state-disabled')
-					.attr("aria-disabled", value);
+				.add(this.list)[value ? 'addClass' : 'removeClass'](
+					this.widgetBaseClass + '-disabled' + ' ' +
+					this.namespace + '-state-disabled')
+				.attr("aria-disabled", value);
 		}
 	},
 
