@@ -725,6 +725,7 @@ if ( $.uiBackCompat !== false ) {
 	// resize method
 	jQuery.ui.accordion.prototype.resize = jQuery.ui.accordion.prototype.refresh;
 
+	// change events
 	(function( $, prototype ) {
 		var _trigger = prototype._trigger;
 		prototype._trigger = function( type, event, data ) {
