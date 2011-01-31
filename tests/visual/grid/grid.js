@@ -53,6 +53,8 @@ $.widget( "ui.grid", {
 		this.options.type = type;
 
 		var fieldDescriptions = {};
+		// TODO seperate column extraction from data extraction to make columns option actually optional
+		// TODO if columns is specified but not table header exist, generate it
 		var fields = this.options.columns = this.element.find( "th" ).map(function() {
 			var th = $( this ),
 				field = $( this ).data( "field" );
