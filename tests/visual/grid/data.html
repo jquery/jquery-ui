@@ -67,6 +67,19 @@
 		$( "#developers-pe" ).grid({
 			select: showDetails
 		});
+		
+		var formItem;
+		var form = $( "#developer-form" ).submit(function( event ) {
+			event.preventDefault();
+			var serialized = $( this ).children( "form" ).serializeArray();
+			var item = formItem.options.data;
+			$.each( serialized, function( i, field ) {
+				item[ field.name ] = field.value;
+			});
+			// TODO also refresh read-only view
+			$( "table" ).grid( "refresh" );
+			form.empty();
+		});
 
 		// TODO this could be a form view, having to handle events
 		// and modifying item accordingly
@@ -74,6 +87,11 @@
 		//
 		// implement as extension of a view widget?
 		function showDetails( event, ui ) {
+			formItem = ui.item;
+			$( "#developer-form-tmpl" )
+				.tmpl( ui.item.options.data )
+				.appendTo( form.empty() );
+				
 			$( "#developer-tmpl" )
 				// TODO accessing data though item.options makes no sense
 				// this should be just ui.item passed to .tmpl
@@ -128,6 +146,7 @@
 </table>
 
 <div id="developer"></div>
+<div id="developer-form"></div>
 
 <script type="text/x-jquery-tmpl" id="row-tmpl">
 <tr>
@@ -143,6 +162,33 @@
 	<p>GitHub: <a href="http://github.com/${github}">${github}</a></p>
 	<p>Twitter: <a href="http://twitter.com/${twitter}">${twitter}</a></p>
 </div>
+</script>
+
+<script type="text/x-jquery-tmpl" id="developer-form-tmpl">
+<form>
+	<legend><h2>Edit this developer</h2></legend>
+	<div>
+		<label>Firstname: </label>
+		<input name="firstName" value="${firstName}">
+	</div>
+	<div>
+		<label>Lastname: </label>
+		<input name="lastName" value="${lastName}">
+	</div>
+	<div>
+		<label>GitHub username: </label>
+		<input name="github" value="${github}">
+	</div>
+	<div>
+		<label>Twitter username: </label>
+		<input name="twitter" value="${twitter}">
+	</div>
+	<div>
+		<label>Country: </label>
+		<input name="country" value="${country}">
+	</div>
+	<input type="submit">
+</form>
 </script>
 
 </body>
