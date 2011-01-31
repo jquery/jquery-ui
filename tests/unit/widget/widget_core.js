@@ -1,6 +1,3 @@
-/*
- * widget unit tests
- */
 (function( $ ) {
 
 module( "widget factory", {
@@ -27,7 +24,7 @@ test( "widget creation", function() {
 });
 
 test( "element normalization", function() {
-	expect( 10 );
+	expect( 12 );
 	var elem;
 	$.widget( "ui.testWidget", {} );
 
@@ -65,6 +62,14 @@ test( "element normalization", function() {
 		same( elem.data( "testWidget" ), this, "instace stored in .data()" );
 	};
 	$.ui.testWidget( {}, "#element-normalization-selector" );
+
+	$.ui.testWidget.prototype.defaultElement = null;
+	$.ui.testWidget.prototype._create = function() {
+		// using strictEqual throws an error (Maximum call stack size exceeded)
+		ok( this.element[ 0 ] === this, "instance as element" );
+		ok( this.element.data( "testWidget" ) === this, "instance stored in .data()" );
+	};
+	$.ui.testWidget();
 });
 
 test( "jQuery usage", function() {
@@ -96,7 +101,7 @@ test( "jQuery usage", function() {
 	});
 
 	shouldCreate = true;
-	var elem = $( "<div></div>" )
+	var elem = $( "<div>" )
 		.bind( "testwidgetcreate", function() {
 			ok( shouldCreate, "create event triggered on instantiation" );
 		})
@@ -142,7 +147,7 @@ test( "direct usage", function() {
 		}
 	});
 	
-	var elem = $( "<div></div>" )[ 0 ];
+	var elem = $( "<div>" )[ 0 ];
 	
 	shouldCreate = true;
 	var instance = new $.ui.testWidget( {}, elem );
@@ -178,7 +183,7 @@ test( "error handling", function() {
 	$.error = error;
 });
 
-test("merge multiple option arguments", function() {
+test( "merge multiple option arguments", function() {
 	expect( 1 );
 	$.widget( "ui.testWidget", {
 		_create: function() {
@@ -194,7 +199,7 @@ test("merge multiple option arguments", function() {
 			});
 		}
 	});
-	$( "<div></div>" ).testWidget({
+	$( "<div>" ).testWidget({
 		option1: "valuex",
 		option2: "valuex",
 		option3: "value3",
@@ -241,7 +246,7 @@ test( "_getCreateOptions()", function() {
 });
 
 test( "re-init", function() {
-	var div = $( "<div></div>" ),
+	var div = $( "<div>" ),
 		actions = [];
 
 	$.widget( "ui.testWidget", {
@@ -327,7 +332,7 @@ test( ".option() - getter", function() {
 		_create: function() {}
 	});
 
-	var div = $( "<div></div>" ).testWidget({
+	var div = $( "<div>" ).testWidget({
 		foo: "bar",
 		baz: 5,
 		qux: [ "quux", "quuux" ]
@@ -358,7 +363,7 @@ test( ".option() - delegate to ._setOptions()", function() {
 			calls.push( options );
 		}
 	});
-	var div = $( "<div></div>" ).testWidget();
+	var div = $( "<div>" ).testWidget();
 
 	calls = [];
 	div.testWidget( "option", "foo", "bar" );
@@ -384,7 +389,7 @@ test( ".option() - delegate to ._setOption()", function() {
 			});
 		}
 	});
-	var div = $( "<div></div>" ).testWidget();
+	var div = $( "<div>" ).testWidget();
 
 	calls = [];
 	div.testWidget( "option", "foo", "bar" );
@@ -411,7 +416,7 @@ test( ".enable()", function() {
 			same( val, false, "disabled set to false" );
 		}
 	});
-	$( "<div></div>" ).testWidget().testWidget( "enable" );
+	$( "<div>" ).testWidget().testWidget( "enable" );
 });
 
 test( ".disable()", function() {
@@ -423,26 +428,26 @@ test( ".disable()", function() {
 			same( val, true, "disabled set to true" );
 		}
 	});
-	$( "<div></div>" ).testWidget().testWidget( "disable" );
+	$( "<div>" ).testWidget().testWidget( "disable" );
 });
 
 test( ".widget() - base", function() {
 	$.widget( "ui.testWidget", {
 		_create: function() {}
 	});
-	var div = $( "<div></div>" ).testWidget();
+	var div = $( "<div>" ).testWidget();
 	same( div[0], div.testWidget( "widget" )[0]);
 });
 
 test( ".widget() - overriden", function() {
-	var wrapper = $( "<div></div>" );
+	var wrapper = $( "<div>" );
 	$.widget( "ui.testWidget", {
 		_create: function() {},
 		widget: function() {
 			return wrapper;
 		}
 	});
-	same( wrapper[0], $( "<div></div>" ).testWidget().testWidget( "widget" )[0] );
+	same( wrapper[0], $( "<div>" ).testWidget().testWidget( "widget" )[0] );
 });
 
 test( "._trigger() - no event, no ui", function() {
@@ -573,6 +578,28 @@ test( "._trigger() - provide event and ui", function() {
 	.testWidget( "testEvent" );
 });
 
+test( "._triger() - instance as element", function() {
+	expect( 4 );
+	$.widget( "ui.testWidget", {
+		defaultElement: null,
+		testEvent: function() {
+			var ui = { foo: "bar" };
+			this._trigger( "foo", null, ui );
+		}
+	});
+	var instance = $.ui.testWidget({
+		foo: function( event, ui ) {
+			equal( event.type, "testwidgetfoo", "event object passed to callback" );
+			same( ui, { foo: "bar" }, "ui object passed to callback" );
+		}
+	});
+	$( instance ).bind( "testwidgetfoo", function( event, ui ) {
+		equal( event.type, "testwidgetfoo", "event object passed to event handler" );
+		same( ui, { foo: "bar" }, "ui object passed to event handler" );
+	});
+	instance.testEvent();
+});
+
 test( "auto-destroy - .remove()", function() {
 	expect( 1 );
 	$.widget( "ui.testWidget", {
@@ -603,8 +630,6 @@ test( "auto-destroy - .remove() on child", function() {
 		}
 	});
 	$( "#widget" ).testWidget().children().remove();
-	// http://github.com/jquery/qunit/pull/34
-	$.ui.testWidget.prototype.destroy = $.noop;
 });
 
 test( "auto-destroy - .empty()", function() {
@@ -615,8 +640,6 @@ test( "auto-destroy - .empty()", function() {
 		}
 	});
 	$( "#widget" ).testWidget().empty();
-	// http://github.com/jquery/qunit/pull/34
-	$.ui.testWidget.prototype.destroy = $.noop;
 });
 
 test( "auto-destroy - .empty() on parent", function() {
@@ -640,4 +663,4 @@ test( "auto-destroy - .detach()", function() {
 	$( "#widget" ).testWidget().detach();
 });
 
-})( jQuery );
+}( jQuery ) );

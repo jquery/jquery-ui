@@ -133,7 +133,7 @@ $.Widget.prototype = {
 		disabled: false
 	},
 	_createWidget: function( options, element ) {
-		element = $( element || this.defaultElement )[ 0 ];
+		element = $( element || this.defaultElement || this )[ 0 ];
 		$.data( element, this.widgetName, this );
 		this.element = $( element );
 		this.options = $.extend( true, {},
