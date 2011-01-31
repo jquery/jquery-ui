@@ -67,7 +67,6 @@ $.widget("ui.selectmenu", {
 		this.newelement.prepend('<span class="' + self.widgetBaseClass + '-status" />');
 			
 		// make associated form label trigger focus
-		// FIXME: and what happens if this element has no id set?
 		$('label[for="' + this.element.attr('id') + '"]')
 			.attr('for', this.ids[0])
 			.bind('click.selectmenu', function() {
@@ -157,7 +156,6 @@ $.widget("ui.selectmenu", {
 			});
 
 		// original selectmenu width
-		// FIXME: there should be a + 12 here for reserving space for the arrow
 		var selectWidth = this.element.width();
 
 		// set menu button width
