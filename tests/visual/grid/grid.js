@@ -26,14 +26,21 @@ $.widget( "ui.grid", {
 					$( this ).tmplItem().data.guid )
 			});
 		});
-		this.refresh();
+		this.items = $.ui.datastore.main.get( this.options.type );
+		// if data is already available, refresh directly
+		if (this.items.options.items.length) {
+			this.refresh();
+		}
+		$(this.items).bind("dataitemsdata", function() {
+			that.refresh();
+		});
 	},
 	refresh: function() {
 		var tbody = this.element.find( "tbody" ).empty(),
-			// TODO the get() call needs to be async for remote sources
-			items = this.items = $.ui.datastore.main.get( this.options.type ).options.items,
 			template = this.options.rowTemplate;
-		$.each( items, function( itemId, item ) {
+		// TODO try to replace $.each with passing an array to $.tmpl, produced by this.items.something()
+		// TODO how to refresh a single row?
+		$.each( this.items.options.items, function( itemId, item ) {
 			// TODO use item.toJSON() or a method like that to compute values to pass to tmpl
 			$.tmpl( template, item.options.data ).appendTo( tbody );
 		});

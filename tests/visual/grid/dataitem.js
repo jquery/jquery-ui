@@ -28,8 +28,13 @@
 	};
 
 	$.widget( "ui.dataitems", {
+		defaultElement: null,
 		options: {
 			items: null
+		},
+		// TODO find a better name
+		updated: function() {
+			this._trigger("data");
 		}
 	});
 	

@@ -53,7 +53,7 @@
 				// TODO sort actually modifies the input, so this works
 				// a better implementation would seperate data extraction from sorting
 				// that isn't possible here, as methods like .map() produce a new array
-				this.items.sort(function( a, b ) {
+				this.items.options.items.sort(function( a, b ) {
 					return ( extract( a ) < extract( b ) ? -1 : 1 ) * field.sortOrder;
 				});
 				field.sortOrder *= -1;
