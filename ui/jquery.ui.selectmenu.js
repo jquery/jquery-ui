@@ -17,6 +17,7 @@ $.widget("ui.selectmenu", {
 	eventPrefix: "selectmenu",
 	options: {
 		transferClasses: true,
+		typeAhead: "sequential",
 		style: 'dropdown',
 		positionOptions: {
 			my: "left top",
@@ -219,7 +220,8 @@ $.widget("ui.selectmenu", {
 						break;
 					default:
 						ret = true;
-						break;	
+	
+						self._typeAhead(event.keyCode,'focus');					break;	
 				}
 				return ret;
 			});			
@@ -243,6 +245,7 @@ $.widget("ui.selectmenu", {
 					text: self._formatText($(this).text()),
 					selected: $(this).attr('selected'),
 					classes: $(this).attr('class'),
+					typeahead: $(this).attr('typeahead'),
 					parentOptGroup: $(this).parent('optgroup').attr('label'),
 					bgImage: o.bgImage.call($(this))
 				});
@@ -256,7 +259,7 @@ $.widget("ui.selectmenu", {
 
 		// write li's
 		for (var i = 0; i < selectOptionData.length; i++) {
-			var thisLi = $('<li role="presentation"><a href="#" tabindex="-1" role="option" aria-selected="false">' + selectOptionData[i].text + '</a></li>')
+					var thisLi = $('<li role="presentation"><a href="#" tabindex="-1" role="option" aria-selected="false"'+ (selectOptionData[i].typeahead ? ' typeahead="' + selectOptionData[i].typeahead + '"' : '' ) + '>'+ selectOptionData[i].text +'</a></li>')
 				.data('index', i)
 				.addClass(selectOptionData[i].classes)
 				.data('optionClasses', selectOptionData[i].classes || '')
@@ -415,37 +418,70 @@ $.widget("ui.selectmenu", {
 		$.Widget.prototype.destroy.apply(this, arguments);
 	},
 
-	_typeAhead: function(code, eventType) {
-		var self = this;
-		//define self._prevChar if needed
-		if (!self._prevChar) {
-			self._prevChar = [ '', 0 ];
-		}
-		var C = String.fromCharCode(code);
+	_typeAhead: function(code, eventType){
+		var self = this, focusFound = false, C = String.fromCharCode(code);
 		c = C.toLowerCase();
-		var focusFound = false;
-		function focusOpt(elem, ind) {
-			focusFound = true;
-			$(elem).trigger(eventType);
-			self._prevChar[1] = ind;
-		}
-		this.list.find('li a').each(function(i) {
-			if (!focusFound) {
-				var thisText = $(this).text();
-				if ( thisText.indexOf(C) === 0 || thisText.indexOf(c) === 0 ) {
-					if (self._prevChar[0] == C) {
-						if (self._prevChar[1] < i) {
-							focusOpt(this, i);
-						}
-					} else {
-						focusOpt(this, i);
+
+		if (self.options.typeAhead == 'sequential') {
+			// clear the timeout so we can use _prevChar
+			window.clearTimeout('ui.selectmenu-' + self.selectmenuId);
+
+			// define our find var
+			var find = typeof(self._prevChar) == 'undefined' ? '' : self._prevChar.join('');
+			
+			function focusOptSeq(elem, ind, char){
+				focusFound = true;
+				$(elem).trigger(eventType);
+				typeof(self._prevChar) == 'undefined' ? self._prevChar = [char] : self._prevChar[self._prevChar.length] = char;
+			}
+			this.list.find('li a').each(function(i) {	
+				if (!focusFound) {
+					// allow the typeahead attribute on the option tag for a more specific lookup
+					var thisText = $(this).attr('typeahead') || $(this).text();
+					if (thisText.indexOf(find+C) == 0) {
+						focusOptSeq(this,i, C)
+					} else if (thisText.indexOf(find+c) == 0) {
+						focusOptSeq(this,i,c)
 					}
 				}
+			});
+			
+			// if we didnt find it clear the prevChar
+			if (!focusFound) {
+				//self._prevChar = undefined
 			}
-		});
-		this._prevChar[0] = C;
-	},
 
+			// set a 1 second timeout for sequenctial typeahead
+			//  	keep this set even if we have no matches so it doesnt typeahead somewhere else
+			window.setTimeout(function(el) {
+				el._prevChar = undefined;
+			}, 1000, self);
+
+		} else {
+			//define self._prevChar if needed
+			if (!self._prevChar){ self._prevChar = ['',0]; }
+
+			var focusFound = false;
+			function focusOpt(elem, ind){
+				focusFound = true;
+				$(elem).trigger(eventType);
+				self._prevChar[1] = ind;
+			}
+			this.list.find('li a').each(function(i){	
+				if(!focusFound){
+					var thisText = $(this).text();
+					if( thisText.indexOf(C) == 0 || thisText.indexOf(c) == 0){
+							if(self._prevChar[0] == C){
+								if(self._prevChar[1] < i){ focusOpt(this,i); }	
+							}
+							else{ focusOpt(this,i); }	
+					}
+				}
+			});
+			this._prevChar[0] = C;
+		}
+	},
+	
 	// returns some usefull information, called by callbacks only
 	_uiHash: function() {
 		var index = this.index();
