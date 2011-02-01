@@ -20,12 +20,10 @@ $.widget( "ui.accordion", {
 		collapsible: false,
 		event: "click",
 		header: "> li > :first-child,> :not(li):even",
-		// TODO: set to "auto" in 2.0 (#5868, #5872)
-		heightStyle: null, // "auto"
+		heightStyle: "auto",
 		icons: {
-			header: "ui-icon-triangle-1-e",
-			// TODO: set to "ui-icon-triangle-1-s" in 2.0 (#6835)
-			activeHeader: null // "ui-icon-triangle-1-s"
+			activeHeader: "ui-icon-triangle-1-s",
+			header: "ui-icon-triangle-1-e"
 		}
 	},
 
@@ -35,40 +33,14 @@ $.widget( "ui.accordion", {
 
 		self.running = 0;
 
-		self.element
-			.addClass( "ui-accordion ui-widget ui-helper-reset" )
-			// in lack of child-selectors in CSS
-			// we need to mark top-LIs in a UL-accordion for some IE-fix
-			.children( "li" )
-				.addClass( "ui-accordion-li-fix" );
+		self.element.addClass( "ui-accordion ui-widget ui-helper-reset" );
 
 		self.headers = self.element.find( options.header )
-			.addClass( "ui-accordion-header ui-helper-reset ui-state-default ui-corner-all" )
-			.bind( "mouseenter.accordion", function() {
-				if ( options.disabled ) {
-					return;
-				}
-				$( this ).addClass( "ui-state-hover" );
-			})
-			.bind( "mouseleave.accordion", function() {
-				if ( options.disabled ) {
-					return;
-				}
-				$( this ).removeClass( "ui-state-hover" );
-			})
-			.bind( "focus.accordion", function() {
-				if ( options.disabled ) {
-					return;
-				}
-				$( this ).addClass( "ui-state-focus" );
-			})
-			.bind( "blur.accordion", function() {
-				if ( options.disabled ) {
-					return;
-				}
-				$( this ).removeClass( "ui-state-focus" );
-			});
+			.addClass( "ui-accordion-header ui-helper-reset ui-state-default ui-corner-all" );
 
+		self._hoverable( self.headers );
+		self._focusable( self.headers );
+		
 		self.headers.next()
 			.addClass( "ui-accordion-content ui-helper-reset ui-widget-content ui-corner-bottom" );
 		self.headers.find( ":first-child" ).addClass( "ui-accordion-heading" );
@@ -286,6 +258,17 @@ $.widget( "ui.accordion", {
 			return;
 		}
 
+		// allow the activation to be canceled
+		var eventData = {
+			oldHeader: this.active,
+			oldContent: this.active.next(),
+			newHeader: $(),
+			newContent: $()
+		};
+		if ( this._trigger( "beforeActivate", null, eventData ) === false ) {
+			return;
+		}
+
 		this.active
 			.removeClass( "ui-state-active ui-corner-top" )
 			.addClass( "ui-state-default ui-corner-all" )
@@ -296,24 +279,34 @@ $.widget( "ui.accordion", {
 		var toHide = this.active.next(),
 			data = {
 				options: this.options,
-				newHeader: $( [] ),
+				newHeader: $(),
 				oldHeader: this.active,
-				newContent: $( [] ),
+				newContent: $(),
 				oldContent: toHide
 			},
-			toShow = ( this.active = $( [] ) );
+			toShow = ( this.active = $() );
 		this._toggle( toShow, toHide, data );
 	},
 
 	// TODO: add tests/docs for negative values in 2.0 (#6854)
 	_findActive: function( selector ) {
-		return typeof selector === "number" ? this.headers.eq( selector ) : $( [] );
+		return typeof selector === "number" ? this.headers.eq( selector ) : $();
 	},
 
 	_eventHandler: function( event ) {
 		var options = this.options,
+			active = this.active,
 			clicked = $( event.currentTarget ),
-			clickedIsActive = clicked[0] === this.active[0];
+			clickedIsActive = clicked[ 0 ] === active[ 0 ],
+			collapsing = clickedIsActive && options.collapsible,
+			toShow = clicked.next(),
+			toHide = active.next(),
+			eventData = {
+				oldHeader: active,
+				oldContent: toHide,
+				newHeader: collapsing ? $() : clicked,
+				newContent: collapsing ? $() : toShow
+			};
 
 		event.preventDefault();
 
@@ -326,26 +319,26 @@ $.widget( "ui.accordion", {
 			return;
 		}
 
-		options.active = options.collapsible && clickedIsActive ?
-			false :
-			this.headers.index( clicked );
+		// allow the activation to be canceled
+		if ( this._trigger( "beforeActivate", null, eventData ) === false ) {
+			return;
+		}
+
+		options.active = collapsing ? false : this.headers.index( clicked );
 
 		// find elements to show and hide
-		var active = this.active,
-			toShow = clicked.next(),
-			toHide = this.active.next(),
-			data = {
+		var data = {
 				options: options,
-				newHeader: clickedIsActive && options.collapsible ? $([]) : clicked,
-				oldHeader: this.active,
-				newContent: clickedIsActive && options.collapsible ? $([]) : toShow,
+				newHeader: collapsing ? $() : clicked,
+				oldHeader: active,
+				newContent: collapsing ? $() : toShow,
 				oldContent: toHide
 			},
-			down = this.headers.index( this.active[0] ) > this.headers.index( clicked[0] );
+			down = this.headers.index( active[0] ) > this.headers.index( clicked[0] );
 
 		// when the call to ._toggle() comes after the class changes
 		// it causes a very odd bug in IE 8 (see #6720)
-		this.active = clickedIsActive ? $([]) : clicked;
+		this.active = clickedIsActive ? $() : clicked;
 		this._toggle( toShow, toHide, data, clickedIsActive, down );
 
 		// switch classes
@@ -383,9 +376,6 @@ $.widget( "ui.accordion", {
 			return self._completed.apply( self, arguments );
 		};
 
-		// trigger changestart event
-		self._trigger( "changestart", null, self.data );
-
 		// count elements to animate
 		self.running = toHide.size() === 0 ? toShow.size() : toHide.size();
 
@@ -394,7 +384,7 @@ $.widget( "ui.accordion", {
 
 			if ( options.collapsible && clickedIsActive ) {
 				animOptions = {
-					toShow: $( [] ),
+					toShow: $(),
 					toHide: toHide,
 					complete: complete,
 					down: down,
@@ -489,7 +479,7 @@ $.widget( "ui.accordion", {
 			this.toHide.parent()[0].className = this.toHide.parent()[0].className;
 		}
 
-		this._trigger( "change", null, this.data );
+		this._trigger( "activate", null, this.data );
 	}
 });
 
@@ -599,115 +589,138 @@ $.extend( $.ui.accordion, {
 
 
 // DEPRECATED
-
-// navigation options
-(function( $, prototype ) {
-	$.extend( prototype.options, {
-		navigation: false,
-		navigationFilter: function() {
-			return this.href.toLowerCase() === location.href.toLowerCase();
-		}
-	});
-
-	var _create = prototype._create;
-	prototype._create = function() {
-		if ( this.options.navigation ) {
-			var self = this,
-				headers = this.element.find( this.options.header ),
-				content = headers.next();
-				current = headers.add( content )
-					.find( "a" )
-					.filter( this.options.navigationFilter )
-					[ 0 ];
-			if ( current ) {
-				headers.add( content ).each( function( index ) {
-					if ( $.contains( this, current ) ) {
-						self.options.active = Math.floor( index / 2 );
-						return false;
-					}
-				});
+if ( $.uiBackCompat !== false ) {
+	// navigation options
+	(function( $, prototype ) {
+		$.extend( prototype.options, {
+			navigation: false,
+			navigationFilter: function() {
+				return this.href.toLowerCase() === location.href.toLowerCase();
 			}
-		}
-		_create.call( this );
-	};
-}( jQuery, jQuery.ui.accordion.prototype ) );
+		});
 
-// height options
-(function( $, prototype ) {
-	$.extend( prototype.options, {
-		autoHeight: true, // use heightStyle: "auto"
-		clearStyle: false, // use heightStyle: "content"
-		fillSpace: false // use heightStyle: "fill"
-	});
-
-	var _create = prototype._create,
-		_setOption = prototype._setOption;
-
-	$.extend( prototype, {
-		_create: function() {
-			this.options.heightStyle = this.options.heightStyle ||
-				this._mergeHeightStyle();
-
+		var _create = prototype._create;
+		prototype._create = function() {
+			if ( this.options.navigation ) {
+				var self = this,
+					headers = this.element.find( this.options.header ),
+					content = headers.next();
+					current = headers.add( content )
+						.find( "a" )
+						.filter( this.options.navigationFilter )
+						[ 0 ];
+				if ( current ) {
+					headers.add( content ).each( function( index ) {
+						if ( $.contains( this, current ) ) {
+							self.options.active = Math.floor( index / 2 );
+							return false;
+						}
+					});
+				}
+			}
 			_create.call( this );
-		},
+		};
+	}( jQuery, jQuery.ui.accordion.prototype ) );
 
-		_setOption: function( key, value ) {
-			if ( key === "autoHeight" || key === "clearStyle" || key === "fillSpace" ) {
-				this.options.heightStyle = this._mergeHeightStyle();
+	// height options
+	(function( $, prototype ) {
+		$.extend( prototype.options, {
+			heightStyle: null, // remove default so we fall back to old values
+			autoHeight: true, // use heightStyle: "auto"
+			clearStyle: false, // use heightStyle: "content"
+			fillSpace: false // use heightStyle: "fill"
+		});
+
+		var _create = prototype._create,
+			_setOption = prototype._setOption;
+
+		$.extend( prototype, {
+			_create: function() {
+				this.options.heightStyle = this.options.heightStyle ||
+					this._mergeHeightStyle();
+
+				_create.call( this );
+			},
+
+			_setOption: function( key, value ) {
+				if ( key === "autoHeight" || key === "clearStyle" || key === "fillSpace" ) {
+					this.options.heightStyle = this._mergeHeightStyle();
+				}
+				_setOption.apply( this, arguments );
+			},
+
+			_mergeHeightStyle: function() {
+				var options = this.options;
+
+				if ( options.fillSpace ) {
+					return "fill";
+				}
+
+				if ( options.clearStyle ) {
+					return "content";
+				}
+
+				if ( options.autoHeight ) {
+					return "auto";
+				}
 			}
-			_setOption.apply( this, arguments );
-		},
+		});
+	}( jQuery, jQuery.ui.accordion.prototype ) );
 
-		_mergeHeightStyle: function() {
-			var options = this.options;
+	// icon options
+	(function( $, prototype ) {
+		$.extend( prototype.options.icons, {
+			activeHeader: null, // remove default so we fall back to old values
+			headerSelected: "ui-icon-triangle-1-s"
+		});
 
-			if ( options.fillSpace ) {
-				return "fill";
-			}
+		var _createIcons = prototype._createIcons;
+		prototype._createIcons = function() {
+			this.options.icons.activeHeader = this.options.icons.activeHeader ||
+				this.options.icons.headerSelected;
+			_createIcons.call( this );
+		};
+	}( jQuery, jQuery.ui.accordion.prototype ) );
 
-			if ( options.clearStyle ) {
-				return "content";
-			}
+	// expanded active option, activate method
+	(function( $, prototype ) {
+		prototype.activate = prototype._activate;
 
-			if ( options.autoHeight ) {
-				return "auto";
-			}
-		}
-	});
-}( jQuery, jQuery.ui.accordion.prototype ) );
-
-// icon options
-(function( $, prototype ) {
-	prototype.options.icons.headerSelected = "ui-icon-triangle-1-s";
-
-	var _createIcons = prototype._createIcons;
-	prototype._createIcons = function() {
-		this.options.icons.activeHeader = this.options.icons.activeHeader ||
-			this.options.icons.headerSelected;
-		_createIcons.call( this );
-	};
-}( jQuery, jQuery.ui.accordion.prototype ) );
-
-// expanded active option, activate method
-(function( $, prototype ) {
-	prototype.activate = prototype._activate;
-
-	var _findActive = prototype._findActive;
-	prototype._findActive = function( index ) {
-		if ( index === -1 ) {
-			index = false;
-		}
-		if ( index && typeof index !== "number" ) {
-			index = this.headers.index( this.headers.filter( index ) );
+		var _findActive = prototype._findActive;
+		prototype._findActive = function( index ) {
 			if ( index === -1 ) {
 				index = false;
 			}
-		}
-		return _findActive.call( this, index );
-	};
-}( jQuery, jQuery.ui.accordion.prototype ) );
+			if ( index && typeof index !== "number" ) {
+				index = this.headers.index( this.headers.filter( index ) );
+				if ( index === -1 ) {
+					index = false;
+				}
+			}
+			return _findActive.call( this, index );
+		};
+	}( jQuery, jQuery.ui.accordion.prototype ) );
 
-// resize method
-jQuery.ui.accordion.prototype.resize = jQuery.ui.accordion.prototype.refresh;
+	// resize method
+	jQuery.ui.accordion.prototype.resize = jQuery.ui.accordion.prototype.refresh;
+
+	// change events
+	(function( $, prototype ) {
+		var _trigger = prototype._trigger;
+		prototype._trigger = function( type, event, data ) {
+			var ret = _trigger.apply( this, arguments );
+			if ( !ret ) {
+				return false;
+			}
+
+			if ( type === "beforeActivate" ) {
+				ret = _trigger.call( this, "changestart", event, data );
+			} else if ( type === "activate" ) {
+				ret = _trigger.call( this, "change", event, data );
+			}
+			return ret;
+		}
+	}( jQuery, jQuery.ui.accordion.prototype ) );
+}
 
 })( jQuery );

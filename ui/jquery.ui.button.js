@@ -43,6 +43,7 @@ var lastActive,
 	};
 
 $.widget( "ui.button", {
+	defaultElement: "<button>",
 	options: {
 		disabled: null,
 		text: true,

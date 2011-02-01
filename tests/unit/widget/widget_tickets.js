@@ -1,6 +1,3 @@
-/*
- * widget unit tests
- */
 (function( $ ) {
 
 module( "widget: tickets" );
@@ -43,4 +40,52 @@ test( "#5830 - Widget: Using inheritance overwrites the base classes options", f
 	delete $.ui.testWidgetExtension;
 });
 
-})( jQuery );
+test( "#6795 - Widget: handle array arguments to _trigger consistently", function() {
+	expect( 4 );
+
+	$.widget( "ui.testWidget", {
+		_create: function() {},
+		testEvent: function() {
+			var ui = {
+					foo: "bar",
+					baz: {
+						qux: 5,
+						quux: 20
+					}
+				};
+			var extra = {
+				bar: 5
+			};
+			this._trigger( "foo", null, [ ui, extra ] );
+		}
+	});
+	$( "#widget" ).bind( "testwidgetfoo", function( event, ui, extra ) {
+		same( ui, {
+			foo: "bar",
+			baz: {
+				qux: 5,
+				quux: 20
+			}
+		}, "event: ui hash passed" );
+		same( extra, {
+			bar: 5
+		}, "event: extra argument passed" );
+	});
+	$( "#widget" ).testWidget({
+		foo: function( event, ui, extra ) {
+			same( ui, {
+				foo: "bar",
+				baz: {
+					qux: 5,
+					quux: 20
+				}
+			}, "callback: ui hash passed" );
+			same( extra, {
+				bar: 5
+			}, "callback: extra argument passed" );
+		}
+	})
+	.testWidget( "testEvent" );
+});
+
+}( jQuery ) );
