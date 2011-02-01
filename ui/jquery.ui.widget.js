@@ -236,7 +236,11 @@ $.Widget.prototype = {
 		var instance = this;
 		$.each( handlers, function( event, handler ) {
 			element.bind( event + "." + instance.widgetName, function() {
-				if ( instance.options.disabled ) {
+				// allow widgets to customize the disabled handling
+				// - disabled as an array instead of boolean
+				// - disabled class as method for disabling individual parts
+				if ( instance.options.disabled === true ||
+						$( this ).hasClass( "ui-state-disabled" ) ) {
 					return;
 				}
 				return ( typeof handler === "string" ? instance[ handler ] : handler )
@@ -260,10 +264,10 @@ $.Widget.prototype = {
 	_focusable: function( element ) {
 		this.focusable = this.focusable.add( element );
 		this._bind( element, {
-			focus: function( event ) {
+			focusin: function( event ) {
 				$( event.currentTarget ).addClass( "ui-state-focus" );
 			},
-			blur: function( event ) {
+			focusout: function( event ) {
 				$( event.currentTarget ).removeClass( "ui-state-focus" );
 			}
 		});

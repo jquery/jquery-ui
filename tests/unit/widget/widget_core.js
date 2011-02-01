@@ -137,7 +137,7 @@ test( "error handling", function() {
 	$.error = error;
 });
 
-test("merge multiple option arguments", function() {
+test( "merge multiple option arguments", function() {
 	expect( 1 );
 	$.widget( "ui.testWidget", {
 		_create: function() {
@@ -173,7 +173,7 @@ test("merge multiple option arguments", function() {
 	});
 });
 
-test( "_getCreateOptions()", function() {
+test( "._getCreateOptions()", function() {
 	expect( 1 );
 	$.widget( "ui.testWidget", {
 		options: {
@@ -488,6 +488,10 @@ test( "._bind() to descendent", function() {
 	descendent
 		.trigger( "keyup" )
 		.trigger( "keydown" );
+	descendent
+		.addClass( "ui-state-disabled" )
+		.trigger( "keyup" )
+		.trigger( "keydown" );
 	widget
 		.testWidget( "destroy" )
 		.trigger( "keyup" )
@@ -537,25 +541,25 @@ test( "._focusable()", function() {
 	
 	var div = $( "#widget" ).testWidget().children();
 	ok( !div.hasClass( "ui-state-focus" ), "not focused on init" );
-	div.trigger( "focus" );
+	div.trigger( "focusin" );
 	ok( div.hasClass( "ui-state-focus" ), "focused after explicit focus" );
-	div.trigger( "blur" );
+	div.trigger( "focusout" );
 	ok( !div.hasClass( "ui-state-focus" ), "not focused after blur" );
 	
-	div.trigger( "focus" );
+	div.trigger( "focusin" );
 	ok( div.hasClass( "ui-state-focus" ), "focused after explicit focus" );
 	$( "#widget" ).testWidget( "disable" );
 	ok( !div.hasClass( "ui-state-focus" ), "not focused while disabled" );
-	div.trigger( "focus" );
+	div.trigger( "focusin" );
 	ok( !div.hasClass( "ui-state-focus" ), "can't focus while disabled" );
 	$( "#widget" ).testWidget( "enable" );
 	ok( !div.hasClass( "ui-state-focus" ), "enabling doesn't reset focus" );
 	
-	div.trigger( "focus" );
+	div.trigger( "focusin" );
 	ok( div.hasClass( "ui-state-focus" ), "focused after explicit focus" );
 	$( "#widget" ).testWidget( "destroy" );
 	ok( !div.hasClass( "ui-state-focus" ), "not focused after destroy" );
-	div.trigger( "focus" );
+	div.trigger( "focusin" );
 	ok( !div.hasClass( "ui-state-focus" ), "event handler removed on destroy" );
 });
 
