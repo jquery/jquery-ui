@@ -56,10 +56,25 @@
 		source: data
 	});
 
+	$.ui.dataitem.extend( "developer2", {} );
+	$.ui.datasource({
+		type: "developer2",
+		source: function( request, response ) {
+			$.getJSON( "fixture.json", request, response );
+		}
+	});
+	
 	$(function() {
 		$( "#developers" ).grid({
 			type: "developer",
 			rowTemplate: $( "#row-tmpl" ).html(),
+			select: showDetails
+		});
+		
+		$( "#developers-remote" ).grid({
+			type: "developer2",
+			// TODO when these are specified, the table header row should be removeable/generated?
+			columns: [ "firstName", "lastName", "country" ],
 			select: showDetails
 		});
 
@@ -131,7 +146,7 @@
 	</tbody>
 </table>
 
-<h2>data source</h2>
+<h2>local data source</h2>
 <table id="developers">
 	<thead>
 		<tr>
@@ -143,6 +158,21 @@
 	<tbody>
 	</tbody>
 </table>
+
+
+<h2>remote data source</h2>
+<table id="developers-remote">
+	<thead>
+		<tr>
+			<th data-field="firstName">First Name</th>
+			<th data-field="lastName">Last Name</th>
+			<th data-field="country">Country</th>
+		</tr>
+	</thead>
+	<tbody>
+	</tbody>
+</table>
+
 
 <div id="developer"></div>
 <div id="developer-form"></div>
