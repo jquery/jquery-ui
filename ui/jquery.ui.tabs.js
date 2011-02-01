@@ -254,28 +254,8 @@ $.widget( "ui.tabs", {
 		// remove all handlers before, tabify may run on existing tabs after add or option change
 		this.lis.add( this.anchors ).unbind( ".tabs" );
 
-		if ( o.event !== "mouseover" ) {
-			var addState = function( state, el ) {
-				if ( el.is( ":not(.ui-state-disabled)" ) ) {
-					el.addClass( "ui-state-" + state );
-				}
-			};
-			var removeState = function( state, el ) {
-				el.removeClass( "ui-state-" + state );
-			};
-			this.lis.bind( "mouseover.tabs" , function() {
-				addState( "hover", $( this ) );
-			});
-			this.lis.bind( "mouseout.tabs", function() {
-				removeState( "hover", $( this ) );
-			});
-			this.anchors.bind( "focus.tabs", function() {
-				addState( "focus", $( this ).closest( "li" ) );
-			});
-			this.anchors.bind( "blur.tabs", function() {
-				removeState( "focus", $( this ).closest( "li" ) );
-			});
-		}
+		this._focusable( this.lis );
+		this._hoverable( this.lis );
 
 		// set up animations
 		var hideFx, showFx;
@@ -431,15 +411,12 @@ $.widget( "ui.tabs", {
 		return index;
 	},
 
-	destroy: function() {
+	_destroy: function() {
 		var o = this.options;
 
 		this.abort();
 
-		this.element
-			.unbind( ".tabs" )
-			.removeClass( "ui-tabs ui-widget ui-widget-content ui-corner-all ui-tabs-collapsible" )
-			.removeData( "tabs" );
+		this.element.removeClass( "ui-tabs ui-widget ui-widget-content ui-corner-all ui-tabs-collapsible" );
 
 		this.list.removeClass( "ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all" );
 
@@ -463,8 +440,6 @@ $.widget( "ui.tabs", {
 					"ui-corner-top",
 					"ui-tabs-selected",
 					"ui-state-active",
-					"ui-state-hover",
-					"ui-state-focus",
 					"ui-state-disabled",
 					"ui-tabs-panel",
 					"ui-widget-content",
