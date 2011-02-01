@@ -289,7 +289,8 @@ $.Widget.prototype = {
 	},
 
 	_trigger: function( type, event, data ) {
-		var callback = this.options[ type ];
+		var callback = this.options[ type ],
+			args;
 
 		event = $.Event( event );
 		event.type = ( type === this.widgetEventPrefix ?
@@ -309,8 +310,12 @@ $.Widget.prototype = {
 
 		this.element.trigger( event, data );
 
-		return !( $.isFunction(callback) &&
-			callback.call( this.element[0], event, data ) === false ||
+		args = $.isArray( data ) ?
+			[ event ].concat( data ) :
+			[ event, data ];
+
+		return !( $.isFunction( callback ) &&
+			callback.apply( this.element[0], args ) === false ||
 			event.isDefaultPrevented() );
 	}
 };
