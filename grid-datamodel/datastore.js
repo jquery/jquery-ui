@@ -31,7 +31,6 @@
 		},
 		// TODO rename or remove this (call datasource.get(store) directly instead)
 		populate: function( type ) {
-			console.log("never called?")
 			// TODO or rename datasource.get
 			$.ui.datasource.types[ type ].get( this );
 		},

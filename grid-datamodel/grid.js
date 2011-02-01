@@ -4,18 +4,21 @@
  * Depends on:
  * tmpl
  * datastore
+ * 
+ * Optional:
+ * extractingDatasource
  */
 (function( $ ) {
 
 $.widget( "ui.grid", {
 	options: {
+		columns: null,
 		type: null,
 		rowTemplate: null
 	},
 	_create: function() {
-		if ( !this.options.type ) {
-			this._parseData();
-		}
+		this._type();
+		this._columns();
 		this._rowTemplate();
 		var that = this;
 		this.element.addClass( "ui-widget" );
@@ -46,53 +49,30 @@ $.widget( "ui.grid", {
 		});
 		tbody.find( "td" ).addClass( "ui-widget-content" );
 	},
-	// TODO: data extraction should live on its own
-	// and grid should delegate the work to the data extractor
-	_parseData: function() {
-		var type = "generated" + $.now();
-		this.options.type = type;
-
-		var fieldDescriptions = {};
-		// TODO seperate column extraction from data extraction to make columns option actually optional
-		// TODO if columns is specified but not table header exist, generate it
-		var fields = this.options.columns = this.element.find( "th" ).map(function() {
-			var th = $( this ),
-				field = $( this ).data( "field" );
+	
+	_type: function() {
+		if ( !this.options.type ) {
+			// doesn't cover generationg the columns option or generating headers when option is specified
+			this.options.type = new $.ui.extractingDatasource( {
+				// TODO generate columns first, and pass along?
+				table: this.element
+			}).type();
+		}
+	},
+	
+	_columns: function() {
+		if ( this.options.columns ) {
+			// TODO check if table headers exist, generate if not
+			return;
+		}
+		this.options.columns = this.element.find( "th" ).map(function() {
+			var field = $( this ).data( "field" );
 			if ( !field ) {
 				// generate field name if missing
 				field = $( this ).text().toLowerCase().replace(/\s|[^a-z0-9]/g, "_");
 			}
-
-			fieldDescriptions[ field ] = {
-				type: th.data( "type" ),
-				culture: th.data( "culture" ),
-				format: th.data( "format" ),
-				sortOrder: th.data( "sort-order" ) || 1
-			};
-
 			return field;
-		}).get();
-
-		var indexedGuid = 1;
-		var items = this.element.find( "tbody" ).children().map(function() {
-			var item = { guid: $( this ).data( "guid" ) };
-			// generate guid if missing
-			if ( !item.guid ) {
-				item.guid = indexedGuid++;
-			}
-			$( this ).children().each(function( i ) {
-				item[ fields[ i ] ] = $( this ).text();
-			});
-			return item;
-		}).get();
-
-		$.ui.dataitem.extend( type, {
-			fields: fieldDescriptions
-		});
-		$.ui.datasource({
-			type: type,
-			source: items
-		});
+		}).get()
 	},
 
 	_rowTemplate: function() {
