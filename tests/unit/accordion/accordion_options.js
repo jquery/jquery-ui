@@ -1,203 +1,212 @@
-/*
- * accordion_options.js
- */
-(function($) {
+(function( $ ) {
 
-module("accordion: options");
+module( "accordion: options", accordionSetupTeardown() );
 
-test("{ active: first child }, default", function() {
-	var ac = $("#list1").accordion();
-	equals( ac.accordion('option', 'active'), 0);
-	state(ac, 1, 0, 0)
+test( "{ active: default }", function() {
+	var ac = $( "#list1" ).accordion();
+	equals( ac.accordion( "option", "active" ), 0 );
+	state( ac, 1, 0, 0 );
 });
 
-test("{ active: Selector }", function() {
-	var ac = $("#list1").accordion({
-		active: "h3:last"
-	});
-	state(ac, 0, 0, 1);
-	ac.accordion('option', 'active', "h3:eq(1)");
-	state(ac, 0, 1, 0);
-});
-
-test("{ active: Element }", function() {
-	var ac = $("#list1").accordion({
-		active: $("#list1 h3:last")[0]
-	});
-	state(ac, 0, 0, 1);
-	ac.accordion('option', 'active', $("#list1 h3:eq(1)")[0]);
-	state(ac, 0, 1, 0);
-});
-
-test("{ active: jQuery Object }", function() {
-	var ac = $("#list1").accordion({
-		active: $("#list1 h3:last")
-	});
-	state(ac, 0, 0, 1);
-	ac.accordion('option', 'active', $("#list1 h3:eq(1)"));
-	state(ac, 0, 1, 0);
-});
-
-test("{ active: false }", function() {
-	var ac = $("#list1").accordion({
+test( "{ active: false }", function() {
+	var ac = $( "#list1" ).accordion({
 		active: false,
 		collapsible: true
 	});
-	state(ac, 0, 0, 0);
-	equals( $("#list1 .ui-accordion-header.ui-state-active").size(), 0, "no headers selected" );
-	equals( $("#list1").accordion('option', 'active'), false);
+	state( ac, 0, 0, 0 );
+	equals( ac.find( ".ui-accordion-header.ui-state-active" ).size(), 0, "no headers selected" );
+	equals( ac.accordion( "option", "active" ), false );
+
+	// TODO: fix active: false when not collapsible
+//	ac.accordion( "option", "collapsible", false );
+//	state( ac, 1, 0, 0 );
+//	equals( ac.accordion( "option", "active" ), 0 );
+//
+//	ac.accordion( "destroy" );
+//	ac.accordion({
+//		active: false
+//	});
+//	state( ac, 1, 0, 0 );
+//	strictEqual( ac.accordion( "option", "active" ), 0 );
 });
 
-test("{ active: Number }", function() {
-	expect(4);
-	$("#list1").accordion({
-		active: 0
+test( "{ active: Number }", function() {
+	var ac = $( "#list1" ).accordion({
+		active: 2
 	});
-	equals( $("#list1").accordion('option', 'active'), 0);
+	equals( ac.accordion( "option", "active" ), 2 );
+	state( ac, 0, 0, 1 );
 
-	$("#list1").accordion('option', 'active', 1);
-	equals( $("#list1").accordion('option', 'active'), 1);
+	ac.accordion( "option", "active", 0 );
+	equals( ac.accordion( "option", "active" ), 0 );
+	state( ac, 1, 0, 0 );
 
-	$('.ui-accordion-header:eq(2)', '#list1').click();
-	equals( $("#list1").accordion('option', 'active'), 2);
+	ac.find( ".ui-accordion-header" ).eq( 1 ).click();
+	equals( ac.accordion( "option", "active" ), 1 );
+	state( ac, 0, 1, 0 );
 
-	$("#list1").accordion('option', 'active', 0);
-	equals( $("#list1").accordion('option', 'active'), 0);
+	ac.accordion( "option", "active", 10 );
+	equals( ac.accordion( "option", "active" ), 1 );
+	state( ac, 0, 1, 0 );
 });
 
-test("{ autoHeight: true }, default", function() {
-	equalHeights($('#navigation').accordion({ autoHeight: true }), 95, 130);
-});
+if ( $.uiBackCompat === false ) {
+	test( "{ active: -Number }", function() {
+		// TODO: fix initializing with negative value
+		var ac = $( "#list1" ).accordion({
+//			active: -1
+		});
+//		equals( ac.accordion( "option", "active" ), 2 );
+//		state( ac, 0, 0, 1 );
 
-test("{ heightStyle: 'auto' }, default", function() {
-	equalHeights($('#navigation').accordion({ heightStyle: 'auto' }), 95, 130);
-});
+		ac.accordion( "option", "active", -2 );
+		equals( ac.accordion( "option", "active" ), 1 );
+		state( ac, 0, 1, 0 );
 
-test("{ autoHeight: false }", function() {
-	var accordion = $('#navigation').accordion({ autoHeight: false });
-	var sizes = [];
-	accordion.find(".ui-accordion-content").each(function() {
-		sizes.push($(this).height());
+		ac.accordion( "option", "active", -10 );
+		equals( ac.accordion( "option", "active" ), 1 );
+		state( ac, 0, 1, 0 );
+
+		ac.accordion( "option", "active", -3 );
+		equals( ac.accordion( "option", "active" ), 0 );
+		state( ac, 1, 0, 0 );
 	});
-	ok( sizes[0] >= 70 && sizes[0] <= 90, "was " + sizes[0] );
-	ok( sizes[1] >= 98 && sizes[1] <= 126, "was " + sizes[1] );
-	ok( sizes[2] >= 42 && sizes[2] <= 54, "was " + sizes[2] );
-});
+}
 
-test("{ heightStyle: 'content' }", function() {
-	var accordion = $('#navigation').accordion({ heightStyle: 'content' });
-	var sizes = [];
-	accordion.find(".ui-accordion-content").each(function() {
-		sizes.push($(this).height());
+// TODO: add animation tests
+
+test( "{ collapsible: false }", function() {
+	var ac = $( "#list1" ).accordion({
+		active: 1
 	});
-	ok( sizes[0] >= 70 && sizes[0] <= 90, "was " + sizes[0] );
-	ok( sizes[1] >= 98 && sizes[1] <= 126, "was " + sizes[1] );
-	ok( sizes[2] >= 42 && sizes[2] <= 54, "was " + sizes[2] );
-});
-test("{ collapsible: false }, default", function() {
-	var ac = $("#list1").accordion();
-	ac.accordion("option", "active", false);
-	state(ac, 1, 0, 0);
+	ac.accordion( "option", "active", false );
+	equal( ac.accordion( "option", "active" ), 1 );
+	state( ac, 0, 1, 0 );
+
+	ac.find( ".ui-accordion-header" ).eq( 1 ).click();
+	equal( ac.accordion( "option", "active" ), 1 );
+	state( ac, 0, 1, 0 );
 });
 
-test("{ collapsible: true }", function() {
-	var ac = $("#list1").accordion({
+test( "{ collapsible: true }", function() {
+	var ac = $( "#list1" ).accordion({
 		active: 1,
 		collapsible: true
 	});
-	var header = $('#list1 .ui-accordion-header:eq(1)').click();
-	equals( $("#list1").accordion('option', 'active'), false);
-	state(ac, 0, 0, 0);
+
+	// TODO: fix setting active to false
+//	ac.accordion( "option", "active", false );
+//	equal( ac.accordion( "option", "active" ), false );
+//	state( ac, 0, 0, 0 );
+
+	ac.accordion( "option", "active", 1 );
+	equal( ac.accordion( "option", "active" ), 1 );
+	state( ac, 0, 1, 0 );
+
+	ac.find( ".ui-accordion-header" ).eq( 1 ).click();
+	equals( ac.accordion( "option", "active" ), false );
+	state( ac, 0, 0, 0 );
 });
 
-// fillSpace: false == autoHeight: true, covered above
-test("{ fillSpace: true }", function() {
-	$("#navigationWrapper").height(500);
-	equalHeights($('#navigation').accordion({ fillSpace: true }), 446, 458);
+// TODO: add event tests
+
+// TODO: add more header tests
+test( "{ header: default }", function() {
+	// default: > li > :first-child,> :not(li):even
+	// > :not(li):even
+	state( $( "#list1" ).accordion(), 1, 0, 0);
+	// > li > :first-child
+	state( $( "#navigation" ).accordion(), 1, 0, 0);
 });
 
-test("{ heightStyle: 'fill' }", function() {
-	$("#navigationWrapper").height(500);
-	equalHeights($('#navigation').accordion({ heightStyle: 'fill' }), 446, 458);
+test( "{ heightStyle: 'auto' }", function() {
+	var ac = $( "#navigation" ).accordion({ heightStyle: "auto" });
+	equalHeights( ac, 95, 130 );
 });
 
-test("{ fillSpace: true } with sibling", function() {
-	$("#navigationWrapper").height(500);
-	var sibling = $("<p>Lorem Ipsum</p>");
-	$("#navigationWrapper").prepend( sibling.height(100) );
-	//sibling.outerHeight(true) == 126
-	equalHeights($('#navigation').accordion({ fillSpace: true}), 320, 332);
+test( "{ heightStyle: 'content' }", function() {
+	var ac = $( "#navigation" ).accordion({ heightStyle: "content" });
+	var sizes = ac.find( ".ui-accordion-content" ).map(function() {
+		return $( this ).height();
+	}).get();
+	ok( sizes[ 0 ] >= 70 && sizes[ 0 ] <= 90, "was " + sizes[ 0 ] );
+	ok( sizes[ 1 ] >= 98 && sizes[ 1 ] <= 126, "was " + sizes[ 1 ] );
+	ok( sizes[ 2 ] >= 42 && sizes[ 2 ] <= 54, "was " + sizes[ 2 ] );
 });
 
-test("{ fillSpace: true } with multiple siblings", function() {
-	$("#navigationWrapper").height(500);
-	var sibling = $("<p>Lorem Ipsum</p>");
-	$("#navigationWrapper")
-		.prepend( sibling.clone().height(100) )
-		.prepend( sibling.clone().height(100).css( "position", "absolute" ) )
-		.prepend( sibling.clone().height(50) );
-	//sibling.outerHeight(true) == 126
-	equalHeights($('#navigation').accordion({ fillSpace: true}), 244, 256);
+test( "{ heightStyle: 'fill' }", function() {
+	$( "#navigationWrapper" ).height( 500 );
+	var ac = $( "#navigation" ).accordion({ heightStyle: "fill" });
+	equalHeights( ac, 446, 458 );
 });
 
-test("{ header: '> li > :first-child,> :not(li):even' }, default", function() {
-	state($("#list1").accordion(), 1, 0, 0);
-	state($("#navigation").accordion(), 1, 0, 0);
+test( "{ heightStyle: 'fill' } with sibling", function() {
+	$( "#navigationWrapper" ).height( 500 );
+	$( "<p>Lorem Ipsum</p>" )
+		.css({
+			height: 50,
+			marginTop: 20,
+			marginBottom: 30
+		})
+		.prependTo( "#navigationWrapper" );
+	var ac = $( "#navigation" ).accordion({ heightStyle: "fill" });
+	equalHeights( ac , 346, 358);
 });
 
-test("{ icons: false }", function() {
-	var list = $("#list1");
-	function icons(on) {
-		same($("span.ui-icon", list).length, on ? 3 : 0);
-		same( list.hasClass("ui-accordion-icons"), on );
+test( "{ heightStyle: 'fill' } with multiple siblings", function() {
+	$( "#navigationWrapper" ).height( 500 );
+	$( "<p>Lorem Ipsum</p>" )
+		.css({
+			height: 50,
+			marginTop: 20,
+			marginBottom: 30
+		})
+		.prependTo( "#navigationWrapper" );
+	$( "<p>Lorem Ipsum</p>" )
+		.css({
+			height: 50,
+			marginTop: 20,
+			marginBottom: 30,
+			position: "absolute"
+		})
+		.prependTo( "#navigationWrapper" );
+	$( "<p>Lorem Ipsum</p>" )
+		.css({
+			height: 25,
+			marginTop: 10,
+			marginBottom: 15
+		})
+		.prependTo( "#navigationWrapper" );
+	var ac = $( "#navigation" ).accordion({ heightStyle: "fill" });
+	equalHeights( ac, 296, 308 );
+});
+
+test( "{ icons: false }", function() {
+	var list = $( "#list1" );
+	function icons( on ) {
+		same( list.find( "span.ui-icon").length, on ? 3 : 0 );
+		same( list.hasClass( "ui-accordion-icons" ), on );
 	}
 	list.accordion();
-	icons(true);
-	list.accordion("destroy").accordion({
+	icons( true );
+	list.accordion( "destroy" ).accordion({
 		icons: false
 	});
-	icons(false);
-	list.accordion("option", "icons", $.ui.accordion.prototype.options.icons);
-	icons(true);
-	list.accordion("option", "icons", false);
-	icons(false);
+	icons( false );
+	list.accordion( "option", "icons", { header: "foo", activeHeader: "bar" } );
+	icons( true );
+	list.accordion( "option", "icons", false );
+	icons( false );
 });
 
-test("{ icons: { activeHeader : 'test' } }", function() {
-	var list = $("#list1");
-	list.accordion( { icons: { "activeHeader": "test" } } );
-	equals( $( "#list1 span.test" ).length, 1);
-	list.accordion("option", "icons", { "activeHeader": "news" } );
-	equals( $( "#list1 span.test" ).length, 0);
-	equals( $( "#list1 span.news" ).length, 1);
-});
-
-test("{ navigation: true, navigationFilter: header }", function() {
-	$("#navigation").accordion({
-		navigation: true,
-		navigationFilter: function() {
-			return /\?p=1\.1\.3$/.test(this.href);
-		}
+test( "{ icons: hash }", function() {
+	var list = $( "#list1" ).accordion({
+		icons: { activeHeader: "a1", header: "h1" }
 	});
-	equals( $("#navigation .ui-accordion-content:eq(2)").size(), 1, "third content active" );
+	ok( list.find( ".ui-accordion-header.ui-state-active span.ui-icon" ).hasClass( "a1" ) );
+	list.accordion( "option", "icons", { activeHeader: "a2", header: "h2" } );
+	ok( !list.find( ".ui-accordion-header.ui-state-active span.ui-icon" ).hasClass( "a1" ) );
+	ok( list.find( ".ui-accordion-header.ui-state-active span.ui-icon" ).hasClass( "a2" ) );
 });
 
-test("{ navigation: true, navigationFilter: content }", function() {
-	$("#navigation").accordion({
-		navigation: true,
-		navigationFilter: function() {
-			return /\?p=1\.1\.3\.2$/.test(this.href);
-		}
-	});
-	equals( $("#navigation .ui-accordion-content:eq(2)").size(), 1, "third content active" );
-});
-
-test("change headerSelected option after creation", function() {
-	var list = $("#list1");
-	list.accordion( { icons: { "activeHeader": "test" } } );
-	equals( $( "#list1 span.test" ).length, 1);
-	list.accordion( "option", "icons", { "headerSelected": "deprecated" } );
-	equals( $( "#list1 span.deprecated" ).length, 1);
-});
-
-})(jQuery);
+}( jQuery ) );

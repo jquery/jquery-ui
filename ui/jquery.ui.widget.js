@@ -37,7 +37,13 @@ $.widget = function( name, base, prototype ) {
 
 	$[ namespace ] = $[ namespace ] || {};
 	$[ namespace ][ name ] = function( options, element ) {
+		// allow instantiation without "new" keyword
+		if ( !this._createWidget ) {
+			return new $[ namespace ][ name ]( options, element );
+		}
+
 		// allow instantiation without initializing for simple inheritance
+		// must use "new" keyword (the code above always passes args)
 		if ( arguments.length ) {
 			this._createWidget( options, element );
 		}
@@ -97,7 +103,7 @@ $.widget.bridge = function( name, object ) {
 				if ( instance ) {
 					instance.option( options || {} )._init();
 				} else {
-					$.data( this, name, new object( options, this ) );
+					object( options, this );
 				}
 			});
 		}
@@ -107,7 +113,13 @@ $.widget.bridge = function( name, object ) {
 };
 
 $.Widget = function( options, element ) {
+	// allow instantiation without "new" keyword
+	if ( !this._createWidget ) {
+		return new $[ namespace ][ name ]( options, element );
+	}
+
 	// allow instantiation without initializing for simple inheritance
+	// must use "new" keyword (the code above always passes args)
 	if ( arguments.length ) {
 		this._createWidget( options, element );
 	}
@@ -116,13 +128,12 @@ $.Widget = function( options, element ) {
 $.Widget.prototype = {
 	widgetName: "widget",
 	widgetEventPrefix: "",
+	defaultElement: "<div>",
 	options: {
 		disabled: false
 	},
 	_createWidget: function( options, element ) {
-		// $.widget.bridge stores the plugin instance, but we do it anyway
-		// so that it's stored even before the _create function runs
-		$.data( element, this.widgetName, this );
+		element = $( element || this.defaultElement || this )[ 0 ];
 		this.element = $( element );
 		this.options = $.extend( true, {},
 			this.options,
@@ -132,7 +143,11 @@ $.Widget.prototype = {
 		this.bindings = $();
 		this.hoverable = $();
 		this.focusable = $();
-		this._bind({ remove: "destroy" });
+
+		if ( element !== this ) {
+			$.data( element, this.widgetName, this );
+			this._bind({ remove: "destroy" });
+		}
 
 		this._create();
 		this._trigger( "create" );
