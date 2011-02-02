@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Grid: Markup</title>
+	<style>body{font:62.5% Verdana,Arial,sans-serif}</style>
+	<link rel="stylesheet" href="../themes/base/jquery.ui.all.css">
+	<link rel="stylesheet" href="grid.css">
+	<script src="../jquery-1.4.4.js"></script>
+	<script src="../ui/jquery.ui.core.js"></script>
+	<script src="../ui/jquery.ui.widget.js"></script>
+	<script src="grid.js"></script>
+	<script>
+	$(function() {
+		$( "#dataTable1" ).grid();
+	});
+	</script>
+</head>
+<body>
+
+<table id="dataTable1">
+	<thead>
+		<tr>
+			<th>First Name</th>
+			<th>Last Name</th>
+			<th>Country</th>
+			<th>Twitter</th>
+			<th>GitHub</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>John</td>
+			<td>Resig</td>
+			<td>USA</td>
+			<td>jeresig</td>
+			<td>jeresig</td>
+		</tr>
+		<tr>
+			<td>Scott</td>
+			<td>Jehl</td>
+			<td>USA</td>
+			<td>filamentgroup</td>
+			<td>scottjehl</td>
+		</tr>
+	</tbody>
+</table>
+
+</body>
+</html>
