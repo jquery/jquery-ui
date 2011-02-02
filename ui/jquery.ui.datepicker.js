@@ -216,7 +216,7 @@ $.extend(Datepicker.prototype, {
 			var buttonText = this._get(inst, 'buttonText');
 			var buttonImage = this._get(inst, 'buttonImage');
 			var buttonCss = this._get(inst, 'buttonCss');
-			if(buttonCss != ''){//we only use buttonCss if informed
+			if(buttonCss == ''){//we only use buttonCss if informed
 				inst.trigger = $(this._get(inst, 'buttonImageOnly') ?
 					$('<img/>').addClass(this._triggerClass).
 						attr({ src: buttonImage, alt: buttonText, title: buttonText }) :
@@ -224,7 +224,7 @@ $.extend(Datepicker.prototype, {
 						html(buttonImage == '' ? buttonText : $('<img/>').attr(
 						{ src:buttonImage, alt:buttonText, title:buttonText })));
 			}else
-				inst.trigger = $('<button><span class="'+buttonCss+'"></span></button>').button();			
+				inst.trigger = $('<button><span class="'+buttonCss+'"></span></button>').addClass(this._triggerClass);			
 			
 			input[isRTL ? 'before' : 'after'](inst.trigger);
 			inst.trigger.click(function() {
