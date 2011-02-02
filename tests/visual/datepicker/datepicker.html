@@ -11,13 +11,23 @@
 	<script type="text/javascript" src="../../../ui/jquery.ui.datepicker.js"></script>
 	<script type="text/javascript">
 	$(function() {
-		$('#datepicker').datepicker();
+		$('.datepicker').datepicker();
+		$("#tst").datepicker({
+			buttonCss:"ui-icon ui-icon-calculator",
+			showOn:'both'
+		});
+		$("#tst2").datepicker({
+			buttonImage: "images/calendar.gif",
+			showOn:'both'
+		});
 	});
 	</script>
 </head>
 <body>
+<div class="datepicker"></div>
+<input class="datepicker"/>
 
-<div id="datepicker"></div>
-
+<input id="tst"/>
+<input id="tst2"/>
 </body>
 </html>
