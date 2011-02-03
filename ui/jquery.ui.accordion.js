@@ -285,6 +285,7 @@ $.widget( "ui.accordion", {
 			return;
 		}
 
+		this.options.active = false;
 		this.active
 			.removeClass( "ui-state-active ui-corner-top" )
 			.addClass( "ui-state-default ui-corner-all" )

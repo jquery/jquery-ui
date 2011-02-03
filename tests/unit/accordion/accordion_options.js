@@ -92,10 +92,9 @@ test( "{ collapsible: true }", function() {
 		collapsible: true
 	});
 
-	// TODO: fix setting active to false
-//	ac.accordion( "option", "active", false );
-//	equal( ac.accordion( "option", "active" ), false );
-//	state( ac, 0, 0, 0 );
+	ac.accordion( "option", "active", false );
+	equal( ac.accordion( "option", "active" ), false );
+	state( ac, 0, 0, 0 );
 
 	ac.accordion( "option", "active", 1 );
 	equal( ac.accordion( "option", "active" ), 1 );
