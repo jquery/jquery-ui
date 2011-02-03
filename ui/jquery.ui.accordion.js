@@ -37,13 +37,12 @@ $.widget( "ui.accordion", {
 
 		self.headers = self.element.find( options.header )
 			.addClass( "ui-accordion-header ui-helper-reset ui-state-default ui-corner-all" );
-
 		self._hoverable( self.headers );
 		self._focusable( self.headers );
-		
+		self.headers.find( ":first-child" ).addClass( "ui-accordion-heading" );
+
 		self.headers.next()
 			.addClass( "ui-accordion-content ui-helper-reset ui-widget-content ui-corner-bottom" );
-		self.headers.find( ":first-child" ).addClass( "ui-accordion-heading" );
 
 		self.active = self._findActive( options.active )
 			.addClass( "ui-state-default ui-state-active" )
@@ -53,7 +52,7 @@ $.widget( "ui.accordion", {
 
 		self._createIcons();
 		self.refresh();
-		
+
 		// ARIA
 		self.element.attr( "role", "tablist" );
 
@@ -64,7 +63,7 @@ $.widget( "ui.accordion", {
 				.attr( "role", "tabpanel" );
 
 		self.headers
-			.not( self.active || "" )
+			.not( self.active )
 			.attr({
 				"aria-expanded": "false",
 				tabIndex: -1
@@ -89,7 +88,7 @@ $.widget( "ui.accordion", {
 		}
 
 		if ( options.event ) {
-			self.headers.bind( options.event.split(" ").join(".accordion ") + ".accordion",
+			self.headers.bind( options.event.split( " " ).join( ".accordion " ) + ".accordion",
 				$.proxy( self, "_eventHandler" ) );
 		}
 	},
@@ -124,11 +123,14 @@ $.widget( "ui.accordion", {
 			.removeClass( "ui-accordion-header ui-accordion-disabled ui-helper-reset ui-state-default ui-corner-all ui-state-active ui-state-disabled ui-corner-top" )
 			.removeAttr( "role" )
 			.removeAttr( "aria-expanded" )
-			.removeAttr( "tabIndex" );
-
-		this.headers.find( "a" ).removeAttr( "tabIndex" );
+			.removeAttr( "tabIndex" )
+			.find( "a" )
+				.removeAttr( "tabIndex" )
+			.end()
+			.find( ".ui-accordion-heading" )
+				.removeClass( "ui-accordion-heading" );
 		this._destroyIcons();
-		this.headers.find( "a:first-child" ).removeClass( "ui-accordion-heading" );
+
 		var contents = this.headers.next()
 			.css( "display", "" )
 			.removeAttr( "role" )
@@ -139,15 +141,15 @@ $.widget( "ui.accordion", {
 	},
 
 	_setOption: function( key, value ) {
-		if ( key == "active" ) {
+		if ( key === "active" ) {
 			// _activate() will handle invalid values and update this.options
 			this._activate( value );
 			return;
 		}
-		
+
 		this._super( "_setOption", key, value );
-		
-		if ( key == "icons" ) {
+
+		if ( key === "icons" ) {
 			this._destroyIcons();
 			if ( value ) {
 				this._createIcons();
@@ -155,7 +157,7 @@ $.widget( "ui.accordion", {
 		}
 		// #5332 - opacity doesn't cascade to positioned elements in IE
 		// so we need to add the disabled class to the headers and panels
-		if ( key == "disabled" ) {
+		if ( key === "disabled" ) {
 			this.headers.add(this.headers.next())
 				.toggleClass( "ui-accordion-disabled ui-state-disabled", !!value );
 		}
