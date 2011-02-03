@@ -37,8 +37,10 @@ $.widget( "ui.grid", {
 		uiGridBodyTable.find("caption")
 			.prependTo( uiGridHeadTable );
 
+		// Create COLGROUP and COLs if missing
 		if ( !uiGridBodyTable.find("colgroup").length ) {
 			// TODO: Consider adding support for existing COL elements not inside COLGROUP
+			// TODO: ... in the meantime, remove any that might exist
 			uiGridBodyTable.find("col").remove();
 			var colgroup = $("<colgroup></colgroup>").insertBefore( uiGridBodyTable.find("thead") );
 			uiGridBodyTable.find("tr:eq(0)").children().each(function(i) {
@@ -46,6 +48,7 @@ $.widget( "ui.grid", {
 			});
 		}
 
+		// Auto-size columns based on relative widths of pre-grid table column widths
 		uiGridBody.find("colgroup").children().each(function(i) {
 			$(this).css("width", ( colWidths[i] / totalWidth * 100 ) + '%' );
 		});
@@ -54,13 +57,6 @@ $.widget( "ui.grid", {
 		uiGridBodyTable.find("colgroup")
 			.clone()
 			.appendTo( uiGridHeadTable );
-
-		// TODO: handle case of no COLs existing
-		// Set head col widths equal to body col widths
-		var headCols = uiGridHeadTable.find("col");
-		uiGridBodyTable.find("col").each(function(i, a) {
-			headCols.eq(i).width( $(this).width() );
-		});
 
 		// Move table THEAD to grid head for fixed column headers
 		uiGridBodyTable.find("thead")
@@ -78,6 +74,17 @@ $.widget( "ui.grid", {
 		// Give body cells a clickable state
 		uiGridBodyTable.find("td").addClass("ui-state-default");
 
+		this.refresh();
+
+	},
+	refresh: function() {
+		// Adjust head in case of visible scrollbar on body to keep columns aligned
+		var vertScrollbar = ( this.uiGridBody[0].scrollHeight !== this.uiGridBody[0].clientHeight );
+		if ( vertScrollbar ) {
+			this.uiGridHead.css("padding-right", ( this.uiGridBody.width() - this.uiGridBodyTable.width() ) + "px" );
+		} else {
+			this.uiGridHead.css("padding-right", 0);
+		}
 	}
 });
 

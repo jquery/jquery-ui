@@ -8,6 +8,7 @@ Functional
 .ui-grid .ui-grid-head-table, .ui-grid .ui-grid-body-table {
 	border-collapse: collapse;
 	table-layout: fixed;
+	width: 100%;
 }
 .ui-grid .ui-grid-body-table thead th {
 	height: 0!important;
