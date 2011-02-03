@@ -1,3 +1,33 @@
 /*
  * grid.css
  */
+
+/*
+Functional
+*/
+.ui-grid .ui-grid-head-table, .ui-grid .ui-grid-body-table {
+	border-collapse: collapse;
+	table-layout: fixed;
+}
+.ui-grid .ui-grid-body-table thead th {
+	height: 0!important;
+}
+.ui-grid .ui-grid-head-table th, .ui-grid .ui-grid-head-table td,
+.ui-grid .ui-grid-body-table th, .ui-grid .ui-grid-body-table td {
+	overflow: hidden;
+	white-space: nowrap;
+}
+
+/*
+Presentational
+*/
+.ui-grid .ui-grid-body tr {
+	height: 2em;
+}
+.ui-grid th, .ui-grid td {
+	padding: 0.2em 0.4em;
+}
+.ui-grid tr.ui-state-default,
+.ui-grid td.ui-state-default {
+	background: none;
+}
