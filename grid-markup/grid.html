@@ -11,9 +11,18 @@
 	<script src="../ui/jquery.ui.widget.js"></script>
 	<script src="../ui/jquery.ui.mouse.js"></script>
 	<script src="../ui/jquery.ui.resizable.js"></script>
+	<!--
+	<script type="text/javascript" src="http://jqueryui.com/themeroller/themeswitchertool/"></script>
+	-->
 	<script src="grid.js"></script>
 	<script>
 	$(function() {
+		$.fn.themeswitcher && $('<div/>').css({
+			position: "absolute",
+			right: 10,
+			top: 10
+		}).appendTo(document.body).themeswitcher();
+		
 		$( "#dataTable1" ).grid();
 		$( "#dataTable2" ).grid().grid("widget").resizable({
 			resize: function() {
