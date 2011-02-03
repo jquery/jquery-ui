@@ -9,17 +9,17 @@
 	<script src="../jquery-1.4.4.js"></script>
 	<script src="../ui/jquery.ui.core.js"></script>
 	<script src="../ui/jquery.ui.widget.js"></script>
+	<script src="../ui/jquery.ui.mouse.js"></script>
+	<script src="../ui/jquery.ui.resizable.js"></script>
 	<script src="grid.js"></script>
-	<style>
-	.ui-grid-body {
-		height: 150px;
-		overflow: auto;
-	}
-	</style>
 	<script>
 	$(function() {
 		$( "#dataTable1" ).grid();
-		$( "#dataTable2" ).grid();
+		$( "#dataTable2" ).grid().grid("widget").resizable({
+			resize: function() {
+				$(this).find(".ui-grid-body").height( $(this).height() - $(this).find(".ui-grid-head").height() - 20 );
+			}
+		}).find(".ui-grid-body").height(300);
 	});
 	</script>
 </head>

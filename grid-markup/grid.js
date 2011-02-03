@@ -77,6 +77,11 @@ $.widget( "ui.grid", {
 		this.refresh();
 
 	},
+
+	widget: function() {
+		return this.uiGrid;
+	},
+
 	refresh: function() {
 		// Adjust head in case of visible scrollbar on body to keep columns aligned
 		var vertScrollbar = ( this.uiGridBody[0].scrollHeight !== this.uiGridBody[0].clientHeight );

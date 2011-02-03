@@ -5,6 +5,9 @@
 /*
 Functional
 */
+.ui-grid .ui-grid-body {
+	overflow: auto;
+}
 .ui-grid .ui-grid-head-table, .ui-grid .ui-grid-body-table {
 	border-collapse: collapse;
 	table-layout: fixed;
