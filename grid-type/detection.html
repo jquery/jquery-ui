@@ -19,12 +19,14 @@
 				type = "string";
 			
 			tbody.children().each( function() {
-				var cell = $( this.cells[index] ).text();
-				if ($.global.parseDate(cell)) {
+				var cell = $( this.cells[ index ] ).text();
+				if ( $.global.parseDate( cell ) ) {
 					type = "date";
-				} else if ($.global.parseFloat(cell)) {
-					// add check for currency symbol(s) to detecht currency
+				} else if ( $.global.parseFloat( cell ) ) {
 					type = "number"
+					if ( cell.indexOf( $.global.cultures["default"].numberFormat.currency.symbol ) > -1) {
+						type = "currency";
+					}
 				}
 			});
 			
