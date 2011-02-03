@@ -107,13 +107,25 @@ test( "{ collapsible: true }", function() {
 
 // TODO: add event tests
 
-// TODO: add more header tests
 test( "{ header: default }", function() {
 	// default: > li > :first-child,> :not(li):even
 	// > :not(li):even
 	state( $( "#list1" ).accordion(), 1, 0, 0);
 	// > li > :first-child
 	state( $( "#navigation" ).accordion(), 1, 0, 0);
+});
+
+test( "{ header: custom }", function() {
+	var ac = $( "#navigationWrapper" ).accordion({
+		header: "h2"
+	});
+	ac.find( "h2" ).each(function() {
+		ok( $( this ).hasClass( "ui-accordion-header" ) );
+	});
+	equal( ac.find( ".ui-accordion-header" ).length, 3 );
+	state( ac, 1, 0, 0 );
+	ac.accordion( "option", "active", 2 );
+	state( ac, 0, 0, 1 );
 });
 
 test( "{ heightStyle: 'auto' }", function() {
