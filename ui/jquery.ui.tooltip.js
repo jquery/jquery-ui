@@ -130,7 +130,8 @@ $.widget("ui.tooltip", {
 		
 		this._trigger( "close", event );
 	}
-	
 });
+
+$.ui.tooltip.version = "@VERSION";
 
 })(jQuery);

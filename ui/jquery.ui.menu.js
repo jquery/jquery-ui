@@ -245,4 +245,6 @@ $.widget("ui.menu", {
 	}
 });
 
+$.ui.menu.version = "@VERSION";
+
 }( jQuery ));

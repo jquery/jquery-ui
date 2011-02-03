@@ -17,17 +17,16 @@ test( "{ active: false }", function() {
 	equals( ac.find( ".ui-accordion-header.ui-state-active" ).size(), 0, "no headers selected" );
 	equals( ac.accordion( "option", "active" ), false );
 
-	// TODO: fix active: false when not collapsible
-//	ac.accordion( "option", "collapsible", false );
-//	state( ac, 1, 0, 0 );
-//	equals( ac.accordion( "option", "active" ), 0 );
-//
-//	ac.accordion( "destroy" );
-//	ac.accordion({
-//		active: false
-//	});
-//	state( ac, 1, 0, 0 );
-//	strictEqual( ac.accordion( "option", "active" ), 0 );
+	ac.accordion( "option", "collapsible", false );
+	state( ac, 1, 0, 0 );
+	equals( ac.accordion( "option", "active" ), 0 );
+
+	ac.accordion( "destroy" );
+	ac.accordion({
+		active: false
+	});
+	state( ac, 1, 0, 0 );
+	strictEqual( ac.accordion( "option", "active" ), 0 );
 });
 
 test( "{ active: Number }", function() {
@@ -52,12 +51,11 @@ test( "{ active: Number }", function() {
 
 if ( $.uiBackCompat === false ) {
 	test( "{ active: -Number }", function() {
-		// TODO: fix initializing with negative value
 		var ac = $( "#list1" ).accordion({
-//			active: -1
+			active: -1
 		});
-//		equals( ac.accordion( "option", "active" ), 2 );
-//		state( ac, 0, 0, 1 );
+		equals( ac.accordion( "option", "active" ), 2 );
+		state( ac, 0, 0, 1 );
 
 		ac.accordion( "option", "active", -2 );
 		equals( ac.accordion( "option", "active" ), 1 );
@@ -94,10 +92,9 @@ test( "{ collapsible: true }", function() {
 		collapsible: true
 	});
 
-	// TODO: fix setting active to false
-//	ac.accordion( "option", "active", false );
-//	equal( ac.accordion( "option", "active" ), false );
-//	state( ac, 0, 0, 0 );
+	ac.accordion( "option", "active", false );
+	equal( ac.accordion( "option", "active" ), false );
+	state( ac, 0, 0, 0 );
 
 	ac.accordion( "option", "active", 1 );
 	equal( ac.accordion( "option", "active" ), 1 );
@@ -110,13 +107,25 @@ test( "{ collapsible: true }", function() {
 
 // TODO: add event tests
 
-// TODO: add more header tests
 test( "{ header: default }", function() {
 	// default: > li > :first-child,> :not(li):even
 	// > :not(li):even
 	state( $( "#list1" ).accordion(), 1, 0, 0);
 	// > li > :first-child
 	state( $( "#navigation" ).accordion(), 1, 0, 0);
+});
+
+test( "{ header: custom }", function() {
+	var ac = $( "#navigationWrapper" ).accordion({
+		header: "h2"
+	});
+	ac.find( "h2" ).each(function() {
+		ok( $( this ).hasClass( "ui-accordion-header" ) );
+	});
+	equal( ac.find( ".ui-accordion-header" ).length, 3 );
+	state( ac, 1, 0, 0 );
+	ac.accordion( "option", "active", 2 );
+	state( ac, 0, 0, 1 );
 });
 
 test( "{ heightStyle: 'auto' }", function() {
