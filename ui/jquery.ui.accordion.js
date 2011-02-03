@@ -120,12 +120,12 @@ $.widget( "ui.accordion", {
 	},
 
 	_destroy: function() {
-		var options = this.options;
-
+		// clean up main element
 		this.element
 			.removeClass( "ui-accordion ui-widget ui-helper-reset" )
 			.removeAttr( "role" );
 
+		// clean up headers
 		this.headers
 			.unbind( ".accordion" )
 			.removeClass( "ui-accordion-header ui-accordion-disabled ui-helper-reset ui-state-default ui-corner-all ui-state-active ui-state-disabled ui-corner-top" )
@@ -139,11 +139,12 @@ $.widget( "ui.accordion", {
 				.removeClass( "ui-accordion-heading" );
 		this._destroyIcons();
 
+		// clean up content panels
 		var contents = this.headers.next()
 			.css( "display", "" )
 			.removeAttr( "role" )
 			.removeClass( "ui-helper-reset ui-widget-content ui-corner-bottom ui-accordion-content ui-accordion-content-active ui-accordion-disabled ui-state-disabled" );
-		if ( options.heightStyle !== "content" ) {
+		if ( this.options.heightStyle !== "content" ) {
 			contents.css( "height", "" );
 		}
 	},
@@ -211,14 +212,20 @@ $.widget( "ui.accordion", {
 
 	refresh: function() {
 		var options = this.options,
-			maxHeight;
+			parent = this.element.parent(),
+			maxHeight,
+			overflow;
 
 		if ( options.heightStyle === "fill" ) {
-			if ( $.browser.msie ) {
-				var defOverflow = this.element.parent().css( "overflow" );
-				this.element.parent().css( "overflow", "hidden");
+			// IE 6 treats height like minHeight, so we need to turn off overflow
+			// in ordder to get a reliable height
+			// we use the minHeight support test because we assume that only
+			// browsers that don't support minHeight will treat height as minHeight
+			if ( !$.support.minHeight ) {
+				overflow = parent.css( "overflow" );
+				parent.css( "overflow", "hidden");
 			}
-			maxHeight = this.element.parent().height();
+			maxHeight = parent.height();
 			this.element.siblings( ":visible" ).each(function() {
 				var elem = $( this ),
 					position = elem.css( "position" );
@@ -228,8 +235,8 @@ $.widget( "ui.accordion", {
 				}
 				maxHeight -= elem.outerHeight( true );	
 			});
-			if ($.browser.msie) {
-				this.element.parent().css( "overflow", defOverflow );
+			if ( overflow ) {
+				parent.css( "overflow", overflow );
 			}
 
 			this.headers.each(function() {
@@ -305,7 +312,6 @@ $.widget( "ui.accordion", {
 		this._toggle( toShow, toHide, data );
 	},
 
-	// TODO: add tests/docs for negative values in 2.0 (#6854)
 	_findActive: function( selector ) {
 		return typeof selector === "number" ? this.headers.eq( selector ) : $();
 	},
