@@ -90,6 +90,11 @@ $.widget( "ui.grid", {
 		} else {
 			this.uiGridHead.css("padding-right", 0);
 		}
+		// Adjust body height to fill
+		// TODO: create footer and calculate height
+		// ... in the meantime, fax it
+		var gridFootHeight = 20;
+		this.uiGridBody.height( this.uiGrid.height() - this.uiGridHead.height() - gridFootHeight )
 	}
 });
 
