@@ -12,8 +12,7 @@
 	<script>
 	$(function() {
 		$( "#accordion" ).accordion({
-			autoHeight: false,
-			navigation: true
+			heightStyle: "content"
 		});
 	});
 	</script>
@@ -52,8 +51,7 @@
 
 
 <div class="demo-description">
-<p>Setting <code>autoHeight: false</code> allows to accordion panels to keep their native height.</p>
-<p>In addition, the <code>navigation</code> option is enabled, opening the panel based on the current location, eg. no-auto-height.html#panel2 would open the second panel on page load. It also finds anchors within the content, so #othercontent will open the third section, as it contains a link with that href.</p>
+<p>Setting <code>heightStyle: "content"</code> allows the accordion panels to keep their native height.</p>
 </div><!-- End demo-description -->
 
 </body>
