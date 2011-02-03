@@ -48,6 +48,10 @@ $.widget( "ui.accordion", {
 		if ( !options.collapsible && options.active === false ) {
 			options.active = 0;
 		}
+		// handle negative values
+		if ( options.active < 0 ) {
+			options.active += this.headers.length;
+		}
 		self.active = self._findActive( options.active )
 			.addClass( "ui-state-default ui-state-active" )
 			.toggleClass( "ui-corner-all" )

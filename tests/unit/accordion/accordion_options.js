@@ -51,12 +51,11 @@ test( "{ active: Number }", function() {
 
 if ( $.uiBackCompat === false ) {
 	test( "{ active: -Number }", function() {
-		// TODO: fix initializing with negative value
 		var ac = $( "#list1" ).accordion({
-//			active: -1
+			active: -1
 		});
-//		equals( ac.accordion( "option", "active" ), 2 );
-//		state( ac, 0, 0, 1 );
+		equals( ac.accordion( "option", "active" ), 2 );
+		state( ac, 0, 0, 1 );
 
 		ac.accordion( "option", "active", -2 );
 		equals( ac.accordion( "option", "active" ), 1 );
