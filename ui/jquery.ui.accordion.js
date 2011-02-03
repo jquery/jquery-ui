@@ -98,9 +98,9 @@ $.widget( "ui.accordion", {
 		var icons = this.options.icons;
 		if ( icons ) {
 			$( "<span>" )
-				.addClass( "ui-icon " + icons.header )
+				.addClass( "ui-accordion-header-icon ui-icon " + icons.header )
 				.prependTo( this.headers );
-			this.active.children( ".ui-icon" )
+			this.active.children( ".ui-accordion-header-icon" )
 				.removeClass( icons.header )
 				.addClass( icons.activeHeader );
 			this.element.addClass( "ui-accordion-icons" );
@@ -108,7 +108,7 @@ $.widget( "ui.accordion", {
 	},
 
 	_destroyIcons: function() {
-		this.headers.children( ".ui-icon" ).remove();
+		this.headers.children( ".ui-accordion-header-icon" ).remove();
 		this.element.removeClass( "ui-accordion-icons" );
 	},
 
@@ -272,7 +272,7 @@ $.widget( "ui.accordion", {
 		this.active
 			.removeClass( "ui-state-active ui-corner-top" )
 			.addClass( "ui-state-default ui-corner-all" )
-			.children( ".ui-icon" )
+			.children( ".ui-accordion-header-icon" )
 				.removeClass( this.options.icons.activeHeader )
 				.addClass( this.options.icons.header );
 		this.active.next().addClass( "ui-accordion-content-active" );
@@ -345,14 +345,14 @@ $.widget( "ui.accordion", {
 		active
 			.removeClass( "ui-state-active ui-corner-top" )
 			.addClass( "ui-state-default ui-corner-all" )
-			.children( ".ui-icon" )
+			.children( ".ui-accordion-header-icon" )
 				.removeClass( options.icons.activeHeader )
 				.addClass( options.icons.header );
 		if ( !clickedIsActive ) {
 			clicked
 				.removeClass( "ui-state-default ui-corner-all" )
 				.addClass( "ui-state-active ui-corner-top" )
-				.children( ".ui-icon" )
+				.children( ".ui-accordion-header-icon" )
 					.removeClass( options.icons.header )
 					.addClass( options.icons.activeHeader );
 			clicked
