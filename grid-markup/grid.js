@@ -23,6 +23,8 @@ $.widget( "ui.grid", {
 				.appendTo( uiGrid ),
 			uiGridBody = ( this.uiGridBody = $("<div class='ui-widget-content ui-grid-body'></div>") )
 				.appendTo( uiGrid ),
+			uiGridFoot = ( this.uiGridFoot = $("<div class='ui-widget-header ui-grid-foot'></div>") )
+				.appendTo( uiGrid ),
 
 			// New table in grid head for column headers
 			uiGridHeadTable = ( this.uiGridHeadTable = $("<table class='ui-grid-head-table'></table>") )
@@ -83,6 +85,13 @@ $.widget( "ui.grid", {
 	},
 
 	refresh: function() {
+		var gridHeight = this.uiGrid.height(),
+			headHeight = this.uiGridHead.height(),
+			footHeight = this.uiGridFoot.height();
+
+		// Adjust body height to fill
+		this.uiGridBody.height( gridHeight - headHeight - footHeight );
+
 		// Adjust head in case of visible scrollbar on body to keep columns aligned
 		var vertScrollbar = ( this.uiGridBody[0].scrollHeight !== this.uiGridBody[0].clientHeight );
 		if ( vertScrollbar ) {
@@ -90,11 +99,7 @@ $.widget( "ui.grid", {
 		} else {
 			this.uiGridHead.css("padding-right", 0);
 		}
-		// Adjust body height to fill
-		// TODO: create footer and calculate height
-		// ... in the meantime, fax it
-		var gridFootHeight = 20;
-		this.uiGridBody.height( this.uiGrid.height() - this.uiGridHead.height() - gridFootHeight )
+		
 	}
 });
 
