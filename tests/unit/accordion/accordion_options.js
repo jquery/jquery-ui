@@ -17,17 +17,16 @@ test( "{ active: false }", function() {
 	equals( ac.find( ".ui-accordion-header.ui-state-active" ).size(), 0, "no headers selected" );
 	equals( ac.accordion( "option", "active" ), false );
 
-	// TODO: fix active: false when not collapsible
-//	ac.accordion( "option", "collapsible", false );
-//	state( ac, 1, 0, 0 );
-//	equals( ac.accordion( "option", "active" ), 0 );
-//
-//	ac.accordion( "destroy" );
-//	ac.accordion({
-//		active: false
-//	});
-//	state( ac, 1, 0, 0 );
-//	strictEqual( ac.accordion( "option", "active" ), 0 );
+	ac.accordion( "option", "collapsible", false );
+	state( ac, 1, 0, 0 );
+	equals( ac.accordion( "option", "active" ), 0 );
+
+	ac.accordion( "destroy" );
+	ac.accordion({
+		active: false
+	});
+	state( ac, 1, 0, 0 );
+	strictEqual( ac.accordion( "option", "active" ), 0 );
 });
 
 test( "{ active: Number }", function() {

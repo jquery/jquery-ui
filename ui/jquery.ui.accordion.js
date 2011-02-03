@@ -44,6 +44,10 @@ $.widget( "ui.accordion", {
 		self.headers.next()
 			.addClass( "ui-accordion-content ui-helper-reset ui-widget-content ui-corner-bottom" );
 
+		// don't allow collapsible: false and active: false
+		if ( !options.collapsible && options.active === false ) {
+			options.active = 0;
+		}
 		self.active = self._findActive( options.active )
 			.addClass( "ui-state-default ui-state-active" )
 			.toggleClass( "ui-corner-all" )
@@ -149,12 +153,18 @@ $.widget( "ui.accordion", {
 
 		this._super( "_setOption", key, value );
 
+		// setting collapsible: false while collapsed; open first panel
+		if ( key === "collapsible" && !value && this.options.active === false ) {
+			this._activate( 0 );
+		}
+
 		if ( key === "icons" ) {
 			this._destroyIcons();
 			if ( value ) {
 				this._createIcons();
 			}
 		}
+
 		// #5332 - opacity doesn't cascade to positioned elements in IE
 		// so we need to add the disabled class to the headers and panels
 		if ( key === "disabled" ) {
