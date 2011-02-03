@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Grid: Type</title>
+	<meta charset=utf-8 />
+	<link rel="stylesheet" href="../themes/base/jquery.ui.all.css" title="ui-theme" />
+	<script src="../jquery-1.4.4.js"></script>
+	<script src="../external/jquery.global.js"></script>
+	<script src="../external/jquery.global.de-DE.js"></script>
+	<script src="../external/jquery.global.ja-JP.js"></script>
+	<script type="text/javascript">
+	$(function() {
+		var table = $( "table" );
+			thead = table.children( "thead" ),
+			tbody = table.children( "tbody" );
+		
+		thead.find( "th" ).each(function() {
+			var index = this.cellIndex,
+				type = "string";
+			
+			tbody.children().each( function() {
+				var cell = $( this.cells[ index ] ).text();
+				if ( $.global.parseDate( cell ) ) {
+					type = "date";
+				} else if ( $.global.parseFloat( cell ) ) {
+					type = "number"
+					if ( cell.indexOf( $.global.cultures["default"].numberFormat.currency.symbol ) > -1) {
+						type = "currency";
+					}
+				}
+			});
+			
+			$( this ).text( function( index, text ) {
+				return text + " (" + type + ")";
+			})
+		});
+	});
+	</script>
+	<style>
+		body { font-size:62.5%; }
+		table {
+			border-collapse: collapse;
+		}
+		th, td {
+			padding: 0.5em;
+			border: 1px solid black;
+		}
+	</style>
+</head>
+<body>
+
+	<table>
+		<thead>
+			<tr>
+				<th>Year</th>
+				<th>US Revenue</th>
+				<th>EU Revenue</th>
+				<th>JP Revenue</th>
+				<th>Peak Traffic</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>2005</td>
+				<td>$0.00</td>
+				<td>0,00 €</td>
+				<td>¥0</td>
+				<td>12/1/2005</td>
+			</tr>
+			<tr>
+				<td>2006</td>
+				<td>$0.50</td>
+				<td>10.000,00 €</td>
+				<td>¥1,500</td>
+				<td>5/16/2006</td>
+			</tr>
+			<tr>
+				<td>2007</td>
+				<td>$10,000.00</td>
+				<td>0,50 €</td>
+				<td>-¥115</td>
+				<td>6/3/2007</td>
+			</tr>
+			<tr>
+				<td>2008</td>
+				<td>$-10,000.00</td>
+				<td>0,06 €</td>
+				<td>¥10,000</td>
+				<td>12/1/2008</td>
+			</tr>
+			<tr>
+				<td>2009</td>
+				<td>$-10.00</td>
+				<td>-10,00 €</td>
+				<td>-¥150</td>
+				<td>12/30/2009</td>
+			</tr>
+			<tr>
+				<td>2010</td>
+				<td>$0.06</td>
+				<td>-10.000,00 €</td>
+				<td>¥15</td>
+				<td>2/28/2010</td>
+			</tr>
+		</tbody>
+	</table>
+
+</body>
+</html>
