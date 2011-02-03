@@ -36,7 +36,7 @@ $.widget = function( name, base, prototype ) {
 	};
 
 	$[ namespace ] = $[ namespace ] || {};
-	$[ namespace ][ name ] = function( options, element ) {
+	$[ namespace ][ name ] = $[ namespace ][ name ] || function( options, element ) {
 		// allow instantiation without "new" keyword
 		if ( !this._createWidget ) {
 			return new $[ namespace ][ name ]( options, element );
