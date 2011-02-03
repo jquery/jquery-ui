@@ -64,6 +64,9 @@ window.commonWidgetTests = function( widget, settings ) {
 	testWidgetDefaults( widget, settings.defaults );
 	testWidgetOverrides( widget );
 	testBasicUsage( widget );
+	test( "version", function() {
+		ok( "version" in $.ui[ widget ], "version property exists" );
+	});
 };
 
 }());

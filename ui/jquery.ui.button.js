@@ -313,6 +313,8 @@ $.widget( "ui.button", {
 	}
 });
 
+$.ui.button.version = "@VERSION";
+
 $.widget( "ui.buttonset", {
 	options: {
 		items: ":button, :submit, :reset, :checkbox, :radio, a, :data(button)"
@@ -366,5 +368,7 @@ $.widget( "ui.buttonset", {
 			.button( "destroy" );
 	}
 });
+
+$.ui.buttonset.version = "@VERSION";
 
 }( jQuery ) );
