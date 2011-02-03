@@ -68,7 +68,7 @@ $.widget( "ui.grid", {
 		uiGridHeadTable.find("tr").addClass("ui-state-default");
 
 		// Give head cells a clickable state
-		uiGridHeadTable.find("th").addClass("ui-state-default");
+		this._hoverable( uiGridHeadTable.find("th").addClass("ui-state-default") );
 
 		// Give body rows a clickable state
 		uiGridBodyTable.find("tr").addClass("ui-state-default");
