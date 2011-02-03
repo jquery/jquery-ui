@@ -1,17 +1,13 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
 <head>
 	<title>Grid: Type</title>
 	<meta charset=utf-8 />
-	<link rel="stylesheet" href="../visual.css" />
 	<link rel="stylesheet" href="../themes/base/jquery.ui.all.css" title="ui-theme" />
 	<script src="../jquery-1.4.4.js"></script>
 	<script src="../external/jquery.global.js"></script>
 	<script src="../external/jquery.global.de-DE.js"></script>
 	<script src="../external/jquery.global.ja-JP.js"></script>
-	<script src="../ui/jquery.ui.core.js"></script>
-	<script src="../ui/jquery.ui.widget.js"></script>
-	<script src="../ui/jquery.ui.datepicker.js"></script>
 	<script type="text/javascript">
 	$(function() {
 		var table = $("table");
@@ -41,10 +37,7 @@
 			head.data("sort-order", order);
 		});
 		thead.children().clone().insertAfter(thead).find("th").each(function() {
-			var input = $("<input />").appendTo($(this).empty());
-			if ($(this).data("type") == "date") {
-				//input.datepicker();
-			}
+			$("<input />").appendTo($(this).empty());
 		});
 		table.delegate("input", "keyup change", function() {
 			var head = $(this).parent(),
