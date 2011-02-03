@@ -10,9 +10,6 @@ Functional
 	table-layout: fixed;
 	width: 100%;
 }
-.ui-grid .ui-grid-body-table thead th {
-	height: 0!important;
-}
 .ui-grid .ui-grid-head-table th, .ui-grid .ui-grid-head-table td,
 .ui-grid .ui-grid-body-table th, .ui-grid .ui-grid-body-table td {
 	overflow: hidden;
