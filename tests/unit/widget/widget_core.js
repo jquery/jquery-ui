@@ -821,4 +821,25 @@ test( "auto-destroy - .detach()", function() {
 	$( "#widget" ).testWidget().detach();
 });
 
+test( "redefine", function() {
+	expect( 4 );
+	$.widget( "ui.testWidget", {
+		method: function( str ) {
+			strictEqual( this, instance, "original invoked with correct this" );
+			equal( str, "bar", "original invoked with correct parameter" );
+		}
+	});
+	var ctor = $.ui.testWidget;
+	$.widget( "ui.testWidget", $.ui.testWidget, {
+		method: function( str ) {
+			equal( str, "foo", "new invoked with correct parameter" );
+			this._super( "method", "bar" );
+		}
+	});
+
+	var instance = new $.ui.testWidget();
+	instance.method( "foo" );
+	equal( $.ui.testWidget, ctor, "constructor did not change" );
+});
+
 }( jQuery ) );

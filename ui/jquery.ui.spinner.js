@@ -357,4 +357,6 @@ $.widget('ui.spinner', {
 	}
 });
 
+$.ui.spinner.version = "@VERSION";
+
 })(jQuery);
