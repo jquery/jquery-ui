@@ -283,17 +283,22 @@ $.widget( "ui.button", {
 			return;
 		}
 		var buttonElement = this.buttonElement.removeClass( typeClasses ),
-			buttonText = $('span.ui-button-text', buttonElement),
+			buttonTextElement = $('span.ui-button-text', buttonElement),
+			buttonText = null,
 			icons = this.options.icons,
+			label = this.options.label,
 			multipleIcons = icons.primary && icons.secondary;
 			
-		if ( buttonText.length === 0 ) {
-		    buttonText = $( "<span></span>" )
-				.addClass( "ui-button-text" )
-				.html( this.options.label )
+			if ( buttonTextElement.length === 0 ) {
+			    buttonTextElement = $( "<span></span>" ).addClass( "ui-button-text" );
+			}
+			if ( $(label).text() === '' ) {
+				buttonTextElement.html( label );
+			}
+			
+			buttonText = buttonTextElement
 				.appendTo( buttonElement.empty() )
 				.text();
-		}
 			
 		if ( icons.primary || icons.secondary ) {
 			buttonElement.addClass( "ui-button-text-icon" +
