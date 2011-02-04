@@ -262,7 +262,13 @@ $.widget( "ui.accordion", {
 	},
 
 	_activate: function( index ) {
-		var active = this._findActive( index )[ 0 ];
+		var active = this._findActive( index )[ 0 ],
+			eventData = {
+				oldHeader: this.active,
+				oldContent: this.active.next(),
+				newHeader: $(),
+				newContent: $()
+			};
 
 		// we found a header to activate, just delegate to the event handler
 		if ( active ) {
@@ -282,17 +288,10 @@ $.widget( "ui.accordion", {
 		}
 
 		// allow the activation to be canceled
-		var eventData = {
-			oldHeader: this.active,
-			oldContent: this.active.next(),
-			newHeader: $(),
-			newContent: $()
-		};
 		if ( this._trigger( "beforeActivate", null, eventData ) === false ) {
 			return;
 		}
 
-		this.options.active = false;
 		this.active
 			.removeClass( "ui-state-active ui-corner-top" )
 			.addClass( "ui-state-default ui-corner-all" )
@@ -300,16 +299,9 @@ $.widget( "ui.accordion", {
 				.removeClass( this.options.icons.activeHeader )
 				.addClass( this.options.icons.header );
 		this.active.next().addClass( "ui-accordion-content-active" );
-		var toHide = this.active.next(),
-			data = {
-				options: this.options,
-				newHeader: $(),
-				oldHeader: this.active,
-				newContent: $(),
-				oldContent: toHide
-			},
-			toShow = ( this.active = $() );
-		this._toggle( toShow, toHide, data );
+		this.options.active = false;
+		this.active = $();
+		this._toggle( eventData );
 	},
 
 	_findActive: function( selector ) {
@@ -322,47 +314,33 @@ $.widget( "ui.accordion", {
 			clicked = $( event.currentTarget ),
 			clickedIsActive = clicked[ 0 ] === active[ 0 ],
 			collapsing = clickedIsActive && options.collapsible,
-			toShow = clicked.next(),
+			toShow = collapsing ? $() : clicked.next(),
 			toHide = active.next(),
 			eventData = {
 				oldHeader: active,
 				oldContent: toHide,
 				newHeader: collapsing ? $() : clicked,
-				newContent: collapsing ? $() : toShow
+				newContent: toShow
 			};
 
 		event.preventDefault();
 
-		if ( options.disabled ) {
-			return;
-		}
-
-		// if animations are still active, or the active header is the target, ignore click
-		if ( this.running || ( !options.collapsible && clickedIsActive ) ) {
-			return;
-		}
-
-		// allow the activation to be canceled
-		if ( this._trigger( "beforeActivate", null, eventData ) === false ) {
+		if ( options.disabled ||
+				// can't switch during an animation
+				this.running ||
+				// click on active header, but not collapsible
+				( clickedIsActive && !options.collapsible ) ||
+				// allow canceling activation
+				( this._trigger( "beforeActivate", null, eventData ) === false ) ) {
 			return;
 		}
 
 		options.active = collapsing ? false : this.headers.index( clicked );
 
-		// find elements to show and hide
-		var data = {
-				options: options,
-				newHeader: collapsing ? $() : clicked,
-				oldHeader: active,
-				newContent: collapsing ? $() : toShow,
-				oldContent: toHide
-			},
-			down = this.headers.index( active[0] ) > this.headers.index( clicked[0] );
-
 		// when the call to ._toggle() comes after the class changes
 		// it causes a very odd bug in IE 8 (see #6720)
 		this.active = clickedIsActive ? $() : clicked;
-		this._toggle( toShow, toHide, data, clickedIsActive, down );
+		this._toggle( eventData );
 
 		// switch classes
 		active
@@ -384,9 +362,12 @@ $.widget( "ui.accordion", {
 		}
 	},
 
-	_toggle: function( toShow, toHide, data, clickedIsActive, down ) {
+	_toggle: function( data ) {
 		var self = this,
-			options = self.options;
+			options = self.options,
+			toShow = data.newContent,
+			toHide = data.oldContent,
+			down = toShow.length && ( !toHide.length || ( toShow.index() < toHide.index() ) );
 
 		self.toShow = toShow;
 		self.toHide = toHide;
@@ -403,25 +384,13 @@ $.widget( "ui.accordion", {
 		self.running = toHide.size() === 0 ? toShow.size() : toHide.size();
 
 		if ( options.animated ) {
-			var animOptions = {};
-
-			if ( options.collapsible && clickedIsActive ) {
-				animOptions = {
-					toShow: $(),
-					toHide: toHide,
-					complete: complete,
-					down: down,
-					autoHeight: options.heightStyle !== "content"
-				};
-			} else {
-				animOptions = {
-					toShow: toShow,
-					toHide: toHide,
-					complete: complete,
-					down: down,
-					autoHeight: options.heightStyle !== "content"
-				};
-			}
+			var animOptions = {
+				toShow: toShow,
+				toHide: toHide,
+				complete: complete,
+				down: down,
+				autoHeight: options.heightStyle !== "content"
+			};
 
 			if ( !options.proxied ) {
 				options.proxied = options.animated;
@@ -457,13 +426,8 @@ $.widget( "ui.accordion", {
 
 			animations[ easing ]( animOptions );
 		} else {
-			if ( options.collapsible && clickedIsActive ) {
-				toShow.toggle();
-			} else {
-				toHide.hide();
-				toShow.show();
-			}
-
+			toHide.hide();
+			toShow.show();
 			complete( true );
 		}
 
