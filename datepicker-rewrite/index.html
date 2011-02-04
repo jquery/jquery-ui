@@ -1,0 +1,69 @@
+<!doctype html>
+<html>
+<head>
+	<script src="../jquery-1.4.4.js"></script>
+	<script src="../ui/jquery.ui.core.js"></script>
+	<script src="../ui/jquery.ui.widget.js"></script>
+	<script src="../ui/jquery.ui.button.js"></script>
+	<script src="../ui/jquery.ui.position.js"></script>
+	<script src="jquery.tmpl.js"></script>
+	<script src="../external/jquery.global.js"></script>
+	<script src="../external/jquery.global.de-DE.js"></script>
+	<script src="../external/jquery.global.ja-JP.js"></script>
+	<script src="date.js"></script>
+	<script src="picker.js"></script>
+	<!-- ui.datepicker.lite.html -->
+	<link rel="stylesheet" href="../themes/base/jquery.ui.all.css">
+	<title>jQuery UI Datepicker Lite</title>
+	<style>body{font:62.5% Verdana,Arial,sans-serif}</style>
+</head>
+<body>
+	<div id="datepicker-inline" style="margin-bottom:100px"></div>
+	<input id="datepicker" type="text" />
+	<input id="datepicker2" type="text" />
+	<script>
+		jQuery(function($){
+			//$.preferCulture("de-DE");
+			$("#datepicker-inline").datepicker();
+			$("#datepicker, #datepicker2").datepicker();
+		});
+	</script>
+
+	<script id="ui-datepicker-div" type="text/x-jquery-tmpl">
+		<div id="ui-datepicker-div" class="ui-datepicker ui-widget ui-widget-content ui-helper-clearfix ui-corner-all">
+			<div class="ui-datepicker-header ui-widget-header ui-helper-clearfix ui-corner-all">
+				<a class="ui-datepicker-prev ui-corner-all" title="Prev"><span class="ui-icon ui-icon-circle-triangle-w">Prev</span></a>
+				<a class="ui-datepicker-next ui-corner-all" title="Next"><span class="ui-icon ui-icon-circle-triangle-e">Next</span></a>
+				<div class="ui-datepicker-title">
+					<span class="ui-datepicker-month">${date.monthname()}</span> <span class="ui-datepicker-year">${date.year()}</span>
+				</div>
+			</div>
+			<table class="ui-datepicker-calendar">
+				<thead>
+					<tr>
+						{{each(index, day) date.weekdays()}}
+							<th class=""><span title="${day.fullname}">${day.shortname}</span></th>
+						{{/each}}
+					</tr>
+				</thead>
+				<tbody>
+					{{each(index, week) date.days()}}
+					<tr>
+						{{each(index, day) week.days}}
+							<td class="">
+								<a class="ui-state-default" href="#">${day}</a>
+							</td>
+						{{/each}}
+					</tr>
+					{{/each}}
+				</tbody>
+			</table>
+			<div class="ui-datepicker-buttonpane ui-widget-content">
+				<button class="ui-datepicker-current">Today</button>
+				<button class="ui-datepicker-close">Done</button>
+			</div>
+		</div>
+	</script>
+
+</body>
+</html>
