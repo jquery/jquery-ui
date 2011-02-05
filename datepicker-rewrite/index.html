@@ -43,7 +43,7 @@
 	</script>
 
 	<script id="ui-datepicker-tmpl" type="text/x-jquery-tmpl">
-		<div id="ui-datepicker-div" class="ui-datepicker ui-widget ui-widget-content ui-helper-clearfix ui-corner-all">
+		<div class="ui-datepicker ui-widget ui-widget-content ui-helper-clearfix ui-corner-all">
 			<div class="ui-datepicker-header ui-widget-header ui-helper-clearfix ui-corner-all">
 				<a class="ui-datepicker-prev ui-corner-all" title="Prev"><span class="ui-icon ui-icon-circle-triangle-w">Prev</span></a>
 				<a class="ui-datepicker-next ui-corner-all" title="Next"><span class="ui-icon ui-icon-circle-triangle-e">Next</span></a>
@@ -63,9 +63,11 @@
 					{{each(index, week) date.days()}}
 					<tr>
 						{{each(index, day) week.days}}
-							<td class="">
+							<td>
 								{{if !day.lead}}
-									<a class="ui-state-default" href="#">${day.date}</a>
+									<a class="ui-state-default{{if day.current}} ui-state-active{{/if}}{{if day.today}} ui-state-highlight{{/if}}" href="#">
+										${day.date}
+									</a>
 								{{/if}}
 							</td>
 						{{/each}}

@@ -75,13 +75,28 @@ $.date = function ( datestring, formatstring ) {
 				for (var day = 0; day < 7; day++) {
 					week.days.push({
 						lead: printDate.getMonth() != month,
-						date: printDate.getDate()
+						date: printDate.getDate(),
+						current: this.selected && this.selected.equal(printDate),
+						today: today.equal(printDate)
 					});
 					// use adjust("D", 1)?
 					printDate.setDate(printDate.getDate() + 1);
 				}
 			}
 			return result;
+		},
+		select: function() {
+			this.selected = this.clone();
+			return this;
+		},
+		clone: function() {
+			return $.date(this.format(), format);
+		},
+		equal: function(other) {
+			function format(date) {
+				return $.global.format(date, "d");
+			}
+			return format(date) == format(other);
 		},
 		date: function() {
 			return date;
@@ -98,5 +113,7 @@ $.date = function ( datestring, formatstring ) {
 		}
 	}
 }
+
+var today = $.date();
 
 }( jQuery ));

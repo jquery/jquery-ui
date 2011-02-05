@@ -38,10 +38,12 @@ $.widget( "ui.datepicker", {
 		this.picker.delegate( ".ui-datepicker-calendar a", "click", function( event ) {
 			event.preventDefault();
 			// TODO exclude clicks on lead days or handle them correctly
-			self.date.setDay( +$( this ).text() );
+			self.date.setDay( +$( this ).text() ).select();
 			if ( !self.inline ) {
 				self.element.val( self.date.format() );
 				self.close();
+			} else {
+				self.refresh();
 			}
 			self._trigger( "select", event, {
 				date: self.date.format(),
@@ -58,7 +60,10 @@ $.widget( "ui.datepicker", {
 			date: this.date
 		}).appendTo( this.picker )
 			.find( "button" ).button().end()
-		
+
+		if ( this.inline ) {
+			this.picker.children().addClass( "ui-datepicker-inline" );
+		}		
 		// against display:none in datepicker.css
 		this.picker.find( ".ui-datepicker" ).css( "display", "block" );
 		this._hoverable( this.picker.find( ".ui-datepicker-header a" ) );
