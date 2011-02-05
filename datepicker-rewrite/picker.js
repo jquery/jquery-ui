@@ -7,10 +7,12 @@
 
 $.widget( "ui.datepicker", {
 	options: {
+		eachDay: $.noop
 	},
 	_create: function() {
 		var self = this;
 		this.date = $.date();
+		this.date.eachDay = this.options.eachDay;
 		if ( this.element.is( "input" ) ) {
 			self._bind( {
 				click: "open",

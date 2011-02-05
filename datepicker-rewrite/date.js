@@ -71,13 +71,15 @@ $.date = function ( datestring, formatstring ) {
 				var week = result[ result.length ] = {
 					days: []
 				};
-				for ( var day = 0; day < 7; day++ ) {
-					week.days.push( {
+				for ( var dayx = 0; dayx < 7; dayx++ ) {
+					var day = week.days[ week.days.length ] = {
 						lead: printDate.getMonth() != date.getMonth(),
 						date: printDate.getDate(),
 						current: this.selected && this.selected.equal( printDate ),
 						today: today.equal( printDate )
-					});
+					};
+					day.render = day.selectable = !day.lead;
+					this.eachDay( day );
 					// TODO use adjust("D", 1)?
 					printDate.setDate( printDate.getDate() + 1 );
 				}

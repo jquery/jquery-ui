@@ -36,6 +36,21 @@
 			$( "#datepicker-inline" ).datepicker( {
 				select: function( event, ui ) {
 					$( "#inline-output" ).val( ui.date );
+				},
+				eachDay: function( day ) {
+					if ( day.lead && day.date > 20 ) {
+						day.selectable = false;
+						day.render = true;
+						day.title = "These are the days of last month";
+						day.extraClasses = "ui-state-disabled";
+					}
+					if ( day.date == 1 ) {
+						day.extraClasses = "ui-state-error";
+						day.title = "Something bad explaining the error highlight";
+					}
+					if ( day.today ) {
+						day.title = "A good day!";
+					}
 				}
 			});
 			$( "#datepicker, #datepicker2" ).datepicker();
@@ -64,10 +79,17 @@
 					<tr>
 						{{each(index, day) week.days}}
 							<td>
-								{{if !day.lead}}
-									<a class="ui-state-default{{if day.current}} ui-state-active{{/if}}{{if day.today}} ui-state-highlight{{/if}}" href="#">
+								{{if day.render}}
+									{{if day.selectable}}
+									<a title="${day.title}" class="ui-state-default{{if day.current}} ui-state-active{{/if}}{{if day.today}} ui-state-highlight{{/if}} ${day.extraClasses}" href="#">
 										${day.date}
 									</a>
+									{{/if}}
+									{{if !day.selectable}}
+									<span title="${day.title}" class="{{if day.current}} ui-state-active{{/if}}{{if day.today}} ui-state-highlight{{/if}} ${day.extraClasses}">
+										${day.date}
+									</span>
+									{{/if}}
 								{{/if}}
 							</td>
 						{{/each}}
