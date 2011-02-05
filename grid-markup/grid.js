@@ -110,7 +110,7 @@ $.widget( "ui.grid", {
 		// Adjust head in case of visible scrollbar on body to keep columns aligned
 		var vertScrollbar = ( this.uiGridBody[0].scrollHeight !== this.uiGridBody[0].clientHeight );
 		if ( vertScrollbar ) {
-			this.uiGridHead.css("padding-right", ( this.uiGridBody.width() - this.uiGridBodyTable.width() ) + "px" );
+			this.uiGridHead.css("padding-right", ( this.uiGridBody.width() - this.uiGridBodyTable.outerWidth() ) + "px" );
 		} else {
 			this.uiGridHead.css("padding-right", 0);
 		}

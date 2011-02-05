@@ -23,16 +23,14 @@ Functional
 Presentational
 */
 .ui-grid .ui-grid-head {
-	border-left-width: 0;
-	border-right-width: 0;
 	border-bottom-width: 0;
 }
 .ui-grid .ui-grid-head tr {
 	border-left-width: 0;
 	border-right-width: 0;
 }
-.ui-grid .ui-grid-head td {
-	border-left-width: 0;
+.ui-grid .ui-grid-head th {
+	border-right-width: 0;
 }
 .ui-grid .ui-grid-body {
 	border-top-width: 0;
@@ -40,11 +38,13 @@ Presentational
 }
 .ui-grid .ui-grid-body tr {
 	height: 2em;
+	border-top-width: 0;
 	border-left-width: 0;
 	border-right-width: 0;
 }
 .ui-grid .ui-grid-body td {
-	border-left-width: 0;
+	border-top-width: 0;
+	border-right-width: 0;
 }
 .ui-grid th, .ui-grid td {
 	padding: 0.2em 0.4em;
