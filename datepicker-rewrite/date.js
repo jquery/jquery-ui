@@ -66,13 +66,17 @@ $.date = function ( datestring, formatstring ) {
 				firstDayOfMonth = new Date(this.year(), date.getMonth(), 1).getDay(),
 				leadDays = (firstDayOfMonth - calendar.firstDay + 7) % 7,
 				rows = Math.ceil((leadDays + daysInMonth) / 7),
-				printDate = new Date(this.year(), date.getMonth(), 1 - leadDays);
+				printDate = new Date(this.year(), date.getMonth(), 1 - leadDays),
+				month = date.getMonth();
 			for (var row = 0; row < rows; row++) {
 				var week = result[result.length] = {
 					days: []
 				};
 				for (var day = 0; day < 7; day++) {
-					week.days.push(printDate.getDate());
+					week.days.push({
+						lead: printDate.getMonth() != month,
+						date: printDate.getDate()
+					});
 					// use adjust("D", 1)?
 					printDate.setDate(printDate.getDate() + 1);
 				}

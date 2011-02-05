@@ -64,7 +64,9 @@
 					<tr>
 						{{each(index, day) week.days}}
 							<td class="">
-								<a class="ui-state-default" href="#">${day}</a>
+								{{if !day.lead}}
+									<a class="ui-state-default" href="#">${day.date}</a>
+								{{/if}}
 							</td>
 						{{/each}}
 					</tr>
