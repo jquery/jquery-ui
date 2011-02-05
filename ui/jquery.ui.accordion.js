@@ -341,8 +341,7 @@ $.widget( "ui.accordion", {
 		var self = this,
 			options = self.options,
 			toShow = data.newContent,
-			toHide = data.oldContent,
-			down = toShow.length && ( !toHide.length || ( toShow.index() < toHide.index() ) );
+			toHide = data.oldContent;
 
 		self.running = true;
 		function complete() {
@@ -351,27 +350,24 @@ $.widget( "ui.accordion", {
 
 		if ( options.animated ) {
 			var animations = $.ui.accordion.animations,
-				easing = options.animated;
+				animation = options.animated,
+				additional;
 
-			if ( easing && !animations[ easing ] && !$.easing[ easing ] ) {
-				easing = "slide";
-			}
-			if ( !animations[ easing ] ) {
-				animations[ easing ] = function( options ) {
-					this.slide( options, {
-						easing: easing,
-						duration: 700
-					});
+			if ( !animations[ animation ] ) {
+				additional = {
+					easing: $.easing[ animation ] ? animation : "slide",
+					duration: 700
 				};
+				animation = "slide";
 			}
 
-			animations[ easing ]({
+			animations[ animation ]({
 				toShow: toShow,
 				toHide: toHide,
 				complete: complete,
-				down: down,
+				down: toShow.length && ( !toHide.length || ( toShow.index() < toHide.index() ) ),
 				autoHeight: options.heightStyle !== "content"
-			});
+			}, additional );
 		} else {
 			toHide.hide();
 			toShow.show();
