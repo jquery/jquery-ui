@@ -22,13 +22,54 @@ Functional
 /*
 Presentational
 */
+.ui-grid .ui-grid-head {
+	border-left-width: 0;
+	border-right-width: 0;
+	border-bottom-width: 0;
+}
+.ui-grid .ui-grid-head tr {
+	border-left-width: 0;
+	border-right-width: 0;
+}
+.ui-grid .ui-grid-head td {
+	border-left-width: 0;
+}
+.ui-grid .ui-grid-body {
+	border-top-width: 0;
+	border-bottom-width: 0;
+}
 .ui-grid .ui-grid-body tr {
 	height: 2em;
+	border-left-width: 0;
+	border-right-width: 0;
+}
+.ui-grid .ui-grid-body td {
+	border-left-width: 0;
 }
 .ui-grid th, .ui-grid td {
 	padding: 0.2em 0.4em;
 }
+.ui-grid .ui-grid-foot {
+	border-top-width: 0;
+}
+
 .ui-grid tr.ui-state-default,
 .ui-grid td.ui-state-default {
 	background: none;
+}
+
+.ui-grid-resizable .ui-resizable-se {
+	width: 17px;
+	height: 17px;
+	bottom: -5px;
+	right: -2px;
+}
+.ui-grid-resizable .ui-resizable-s {
+	width: auto;
+	bottom: -7px;
+	right: 16px;
+}
+.ui-grid-resizable .ui-resizable-e {
+	height: auto;
+	bottom: 10px;
 }

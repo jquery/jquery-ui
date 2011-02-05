@@ -17,25 +17,23 @@
 	<script src="grid.js"></script>
 	<script>
 	$(function() {
-		$.fn.themeswitcher && $('<div/>').css({
+		$.fn.themeswitcher && $( "<div></div>" ).css({
 			position: "absolute",
 			right: 10,
 			top: 10
-		}).appendTo(document.body).themeswitcher();
+		}).appendTo( document.body ).themeswitcher();
 		
 		$( "#dataTable1" ).grid();
-		$( "#dataTable2" ).grid().grid("widget").resizable({
-			resize: function() {
-				$(this).find(".ui-grid-body-table").grid("refresh");
-			}
-		}).height(300).find(".ui-grid-foot").height(20);
-		$( "#dataTable2" ).grid( "refresh" );
+		$( "#dataTable2" ).grid()
+			.grid("widget").height(300).resizable()
+		$( "#dataTable2" ).grid("refresh");
+		$( "#dataTable2" ).grid("refresh");
 	});
 	</script>
 </head>
 <body>
 
-<div style="width: 450px;">
+<div style="width: 45em;">
 <table id="dataTable1">
 	<thead>
 		<tr>
