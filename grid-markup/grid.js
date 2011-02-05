@@ -20,7 +20,7 @@ $.widget( "ui.grid", {
 				.insertBefore( this.element ),
 
 			// Add grid head and grid body
-			uiGridHead = ( this.uiGridHead = $("<div class='ui-widget-header ui-grid-head'></div>") )
+			uiGridHead = ( this.uiGridHead = $("<div class='ui-grid-head'></div>") )
 				.appendTo( uiGrid ),
 			uiGridBody = ( this.uiGridBody = $("<div class='ui-widget-content ui-grid-body'></div>") )
 				.appendTo( uiGrid ),
@@ -28,7 +28,7 @@ $.widget( "ui.grid", {
 				.appendTo( uiGrid ),
 
 			// New table in grid head for column headers
-			uiGridHeadTable = ( this.uiGridHeadTable = $("<table class='ui-grid-head-table'></table>") )
+			uiGridHeadTable = ( this.uiGridHeadTable = $("<table class='ui-widget-content ui-grid-head-table'></table>") )
 				.appendTo( uiGridHead );
 
 			// Existing table in grid body for the body table
@@ -37,7 +37,7 @@ $.widget( "ui.grid", {
 				.appendTo( uiGridBody );
 
 		// Move table CAPTION to grid head
-		uiGridBodyTable.find( "caption" )
+		uiGridBodyTable.find( "caption" ).addClass( "ui-widget-header" )
 			.prependTo( uiGridHeadTable );
 
 		// Create COLGROUP and COLs if missing
@@ -72,7 +72,7 @@ $.widget( "ui.grid", {
 		this._hoverable( uiGridHeadTable.find("th").addClass("ui-state-default") );
 
 		// Give body rows a clickable state
-		uiGridBodyTable.find( "tr" ).addClass( "ui-state-default" );
+		this._hoverable( uiGridBodyTable.find( "tr" ).addClass( "ui-state-default" ) );
 
 		// Give body cells a clickable state
 		uiGridBodyTable.find( "td" ).addClass( "ui-state-default" );

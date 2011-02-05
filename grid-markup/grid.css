@@ -33,8 +33,7 @@ Presentational
 	border-right-width: 0;
 }
 .ui-grid .ui-grid-body {
-	border-top-width: 0;
-	border-bottom-width: 0;
+	border-width: 0;
 }
 .ui-grid .ui-grid-body tr {
 	height: 2em;
@@ -45,6 +44,7 @@ Presentational
 .ui-grid .ui-grid-body td {
 	border-top-width: 0;
 	border-right-width: 0;
+	background: none;
 }
 .ui-grid th, .ui-grid td {
 	padding: 0.2em 0.4em;
@@ -53,15 +53,18 @@ Presentational
 	border-top-width: 0;
 }
 
+.ui-grid .ui-grid-body {
+	background-image: none;
+}
 .ui-grid tr.ui-state-default,
 .ui-grid td.ui-state-default {
-	background: none;
+	background-image: none;
 }
 
 .ui-grid-resizable .ui-resizable-se {
 	width: 17px;
 	height: 17px;
-	bottom: -5px;
+	bottom: -4px;
 	right: -2px;
 }
 .ui-grid-resizable .ui-resizable-s {
