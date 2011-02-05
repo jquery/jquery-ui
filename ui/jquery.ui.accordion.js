@@ -262,46 +262,21 @@ $.widget( "ui.accordion", {
 	},
 
 	_activate: function( index ) {
-		var active = this._findActive( index )[ 0 ],
-			eventData = {
-				oldHeader: this.active,
-				oldContent: this.active.next(),
-				newHeader: $(),
-				newContent: $()
-			};
+		var active = this._findActive( index )[ 0 ];
 
-		// we found a header to activate, just delegate to the event handler
-		if ( active ) {
-			if ( active !== this.active[ 0 ] ) {
-				this._eventHandler({
-					target: active,
-					currentTarget: active,
-					preventDefault: $.noop
-				});
-			}
+		// trying to activate the already active panel
+		if ( active === this.active[ 0 ] ) {
 			return;
 		}
 
-		// no header to activate, check if we can collapse
-		if ( !this.options.collapsible ) {
-			return;
-		}
+		// trying to collapse, simulate a click on the currently active header
+		active = active || this.active;
 
-		// allow the activation to be canceled
-		if ( this._trigger( "beforeActivate", null, eventData ) === false ) {
-			return;
-		}
-
-		this.active
-			.removeClass( "ui-state-active ui-corner-top" )
-			.addClass( "ui-state-default ui-corner-all" )
-			.children( ".ui-accordion-header-icon" )
-				.removeClass( this.options.icons.activeHeader )
-				.addClass( this.options.icons.header );
-		this.active.next().addClass( "ui-accordion-content-active" );
-		this.options.active = false;
-		this.active = $();
-		this._toggle( eventData );
+		this._eventHandler({
+			target: active,
+			currentTarget: active,
+			preventDefault: $.noop
+		});
 	},
 
 	_findActive: function( selector ) {
