@@ -1,6 +1,7 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
 <head>
+	<meta charset="utf-8">
 	<script src="../jquery-1.4.4.js"></script>
 	<script src="../ui/jquery.ui.core.js"></script>
 	<script src="../ui/jquery.ui.widget.js"></script>
@@ -18,18 +19,31 @@
 	<style>body{font:62.5% Verdana,Arial,sans-serif}</style>
 </head>
 <body>
+	<select id="culture">
+		<option value="en-US">en-US</option>
+		<option value="de-DE">de-DE</option>
+		<option value="ja-JP">ja-JP</option>
+	</select>
+	<input id="inline-output" />
 	<div id="datepicker-inline" style="margin-bottom:100px"></div>
 	<input id="datepicker" type="text" />
 	<input id="datepicker2" type="text" />
 	<script>
-		jQuery(function($){
-			//$.preferCulture("de-DE");
-			$("#datepicker-inline").datepicker();
+		jQuery(function($) {
+			$("#culture").change( function() {
+				$.global.preferCulture( $( this ).val() );
+				$( ":ui-datepicker" ).datepicker( "refresh" );
+			})
+			$("#datepicker-inline").datepicker({
+				select: function( event, ui ) {
+					$("#inline-output").val( ui.date );
+				}
+			});
 			$("#datepicker, #datepicker2").datepicker();
 		});
 	</script>
 
-	<script id="ui-datepicker-div" type="text/x-jquery-tmpl">
+	<script id="ui-datepicker-tmpl" type="text/x-jquery-tmpl">
 		<div id="ui-datepicker-div" class="ui-datepicker ui-widget ui-widget-content ui-helper-clearfix ui-corner-all">
 			<div class="ui-datepicker-header ui-widget-header ui-helper-clearfix ui-corner-all">
 				<a class="ui-datepicker-prev ui-corner-all" title="Prev"><span class="ui-icon ui-icon-circle-triangle-w">Prev</span></a>

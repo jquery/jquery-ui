@@ -19,10 +19,19 @@ $.date = function ( datestring, formatstring ) {
 		format = formatstring ? formatstring : calendar.patterns.d,
 		date = datestring ? $.global.parseDate(datestring, format) : new Date();
 	return {
+		refresh: function() {
+			calendar = $.global.culture.calendar;
+			format = formatstring || calendar.patterns.d;
+			return this;
+		},
 		setFormat: function( formatstring ) {
 			if (formatstring) {
 				format = formatstring;
 			}	
+			return this;
+		},
+		setDay: function( day ) {
+			date = new Date(date.getFullYear(), date.getMonth(), day);
 			return this;
 		},
 		adjust: function( period, offset ) {
@@ -59,7 +68,7 @@ $.date = function ( datestring, formatstring ) {
 			var result = [],
 				daysInMonth = this.daysInMonth(),
 				firstDayOfMonth = new Date(this.year(), date.getMonth(), 1).getDay(),
-				leadDays = (firstDayOfMonth - calendar.firstDay + 7) % 7
+				leadDays = (firstDayOfMonth - calendar.firstDay + 7) % 7,
 				rows = Math.ceil((leadDays + daysInMonth) / 7),
 				printDate = new Date(this.year(), date.getMonth(), 1 - leadDays);
 			for (var row = 0; row < rows; row++) {
