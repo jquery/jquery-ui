@@ -1,12 +1,8 @@
 /*
- * jQuery Date
- *
- * Copyright 2010 Marc Grabanski
- * Licensed under the MIT license
- *
- *
- * Depends:
- *	jquery.glob.js
+ * Calendar math built on jquery-global
+ * 
+ * Based on Marc Grabanski's jQuery Date Plugin
+ * http://marcgrabanski.com/articles/jquery-date-plugin
  */
 (function( $, undefined ) {
 	
