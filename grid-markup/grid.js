@@ -97,7 +97,8 @@ $.widget( "ui.grid", {
 		if ( this.uiGrid.is(":ui-resizable") ) {
 			this.uiGrid.addClass( "ui-grid-resizable" );
 			if ( footHeight < 16) {
-				footHeight = this.uiGridFoot.height( 16 );
+				this.uiGridFoot.height( 16 );
+				footHeight = this.uiGridFoot.height();
 			}
 		} else {
 			this.uiGrid.removeClass( "ui-grid-resizable" );
