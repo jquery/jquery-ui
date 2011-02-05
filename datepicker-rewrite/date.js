@@ -6,8 +6,8 @@
  */
 (function( $, undefined ) {
 	
-if (typeof($.global.culture) == "undefined") {
-	$.global.culture = $.global.cultures["default"];
+if ( typeof( $.global.culture ) == "undefined" ) {
+	$.global.culture = $.global.cultures[ "default" ];
 }
 
 $.date = function ( datestring, formatstring ) {
@@ -21,29 +21,29 @@ $.date = function ( datestring, formatstring ) {
 			return this;
 		},
 		setFormat: function( formatstring ) {
-			if (formatstring) {
+			if ( formatstring ) {
 				format = formatstring;
 			}	
 			return this;
 		},
 		setDay: function( day ) {
-			date = new Date(date.getFullYear(), date.getMonth(), day);
+			date = new Date( date.getFullYear(), date.getMonth(), day );
 			return this;
 		},
 		adjust: function( period, offset ) {
 			var day = period == "D" ? date.getDate() + offset : date.getDate(), 
 				month = period == "M" ? date.getMonth() + offset : date.getMonth(), 
 				year = period == "Y" ? date.getFullYear() + offset : date.getFullYear();
-			date = new Date(year, month, day);
+			date = new Date( year, month, day );
 			return this;
 		},
-		daysInMonth: function(year, month){
+		daysInMonth: function( year, month ) {
 			year = year || date.getFullYear();
 			month = month || date.getMonth();
-			return 32 - new Date(year, month, 32).getDate();
+			return 32 - new Date( year, month, 32 ).getDate();
 		},
 		monthname: function() {
-			return calendar.months.names[date.getMonth()];
+			return calendar.months.names[ date.getMonth() ];
 		},
 		year: function() {
 			return date.getFullYear();
@@ -51,11 +51,11 @@ $.date = function ( datestring, formatstring ) {
 		weekdays: function() {
 			// TODO take firstDay into account
 			var result = [];
-			for (var dow = 0; dow < 7; dow++) {
-				var day = (dow + calendar.firstDay) % 7;
-				result.push({
-					shortname: calendar.days.namesShort[day],
-					fullname: calendar.days.names[day],
+			for ( var dow = 0; dow < 7; dow++ ) {
+				var day = ( dow + calendar.firstDay ) % 7;
+				result.push( {
+					shortname: calendar.days.namesShort[ day ],
+					fullname: calendar.days.names[ day ],
 				});
 			}
 			return result;
@@ -63,24 +63,23 @@ $.date = function ( datestring, formatstring ) {
 		days: function() {
 			var result = [],
 				daysInMonth = this.daysInMonth(),
-				firstDayOfMonth = new Date(this.year(), date.getMonth(), 1).getDay(),
-				leadDays = (firstDayOfMonth - calendar.firstDay + 7) % 7,
-				rows = Math.ceil((leadDays + daysInMonth) / 7),
-				printDate = new Date(this.year(), date.getMonth(), 1 - leadDays),
-				month = date.getMonth();
-			for (var row = 0; row < rows; row++) {
-				var week = result[result.length] = {
+				firstDayOfMonth = new Date( this.year(), date.getMonth(), 1 ).getDay(),
+				leadDays = ( firstDayOfMonth - calendar.firstDay + 7 ) % 7,
+				rows = Math.ceil( ( leadDays + daysInMonth ) / 7),
+				printDate = new Date( this.year(), date.getMonth(), 1 - leadDays );
+			for ( var row = 0; row < rows; row++ ) {
+				var week = result[ result.length ] = {
 					days: []
 				};
-				for (var day = 0; day < 7; day++) {
-					week.days.push({
-						lead: printDate.getMonth() != month,
+				for ( var day = 0; day < 7; day++ ) {
+					week.days.push( {
+						lead: printDate.getMonth() != date.getMonth(),
 						date: printDate.getDate(),
-						current: this.selected && this.selected.equal(printDate),
-						today: today.equal(printDate)
+						current: this.selected && this.selected.equal( printDate ),
+						today: today.equal( printDate )
 					});
-					// use adjust("D", 1)?
-					printDate.setDate(printDate.getDate() + 1);
+					// TODO use adjust("D", 1)?
+					printDate.setDate( printDate.getDate() + 1 );
 				}
 			}
 			return result;
@@ -89,23 +88,25 @@ $.date = function ( datestring, formatstring ) {
 			this.selected = this.clone();
 			return this;
 		},
+		// TODO create new Date with year, month, day instead
 		clone: function() {
-			return $.date(this.format(), format);
+			return $.date( this.format(), format );
 		},
-		equal: function(other) {
-			function format(date) {
-				return $.global.format(date, "d");
+		// TODO compare year, month, day each for better performance
+		equal: function( other ) {
+			function format( date ) {
+				return $.global.format( date, "d" );
 			}
-			return format(date) == format(other);
+			return format( date ) == format( other );
 		},
 		date: function() {
 			return date;
 		},
 		format: function( formatstring ) {
-			return $.global.format(date, formatstring ? formatstring : format);
+			return $.global.format( date, formatstring ? formatstring : format );
 		},
 		calendar: function( newcalendar ) {
-			if (newcalendar) {
+			if ( newcalendar ) {
 				calendar = newcalendar;
 				return this;
 			}
