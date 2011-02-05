@@ -7,7 +7,8 @@
 
 $.widget( "ui.datepicker", {
 	options: {
-		eachDay: $.noop
+		eachDay: $.noop,
+		tmpl: "#ui-datepicker-tmpl"
 	},
 	_create: function() {
 		var self = this;
@@ -58,7 +59,7 @@ $.widget( "ui.datepicker", {
 		this.date.refresh();
 		this.picker.empty();
 
-		$( "#ui-datepicker-tmpl" ).tmpl({
+		$( this.options.tmpl ).tmpl({
 			date: this.date
 		}).appendTo( this.picker )
 			.find( "button" ).button().end()

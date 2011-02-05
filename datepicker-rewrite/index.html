@@ -24,7 +24,8 @@
 		<option value="ja-JP">ja-JP</option>
 	</select>
 	<input id="inline-output" />
-	<div id="datepicker-inline" style="margin-bottom:100px"></div>
+	<div id="datepicker-inline-default"></div>
+	<div id="datepicker-inline"></div>
 	<input id="datepicker" type="text" />
 	<input id="datepicker2" type="text" />
 	<script>
@@ -33,7 +34,13 @@
 				$.global.preferCulture( $( this ).val() );
 				$( ":ui-datepicker" ).datepicker( "refresh" );
 			})
+			$( "#datepicker-inline-default" ).datepicker({
+				select: function( event, ui ) {
+					$( "#inline-output" ).val( ui.date );
+				}
+			});
 			$( "#datepicker-inline" ).datepicker( {
+				tmpl: "#ui-datepicker-weeks-tmpl",
 				select: function( event, ui ) {
 					$( "#inline-output" ).val( ui.date );
 				},
@@ -42,6 +49,11 @@
 						day.selectable = false;
 						day.render = true;
 						day.title = "These are the days of last month";
+						day.extraClasses = "ui-state-disabled";
+					}
+					if ( day.lead && day.date < 3 ) {
+						day.selectable = true;
+						day.render = true;
 						day.extraClasses = "ui-state-disabled";
 					}
 					if ( day.date == 1 ) {
@@ -103,6 +115,51 @@
 				<button class="ui-datepicker-close">Done</button>
 			</div>
 			-->
+		</div>
+	</script>
+	
+	<script id="ui-datepicker-weeks-tmpl" type="text/x-jquery-tmpl">
+		<div class="ui-datepicker ui-widget ui-widget-content ui-helper-clearfix ui-corner-all">
+			<div class="ui-datepicker-header ui-widget-header ui-helper-clearfix ui-corner-all">
+				<a class="ui-datepicker-prev ui-corner-all" title="Prev"><span class="ui-icon ui-icon-circle-triangle-w">Prev</span></a>
+				<a class="ui-datepicker-next ui-corner-all" title="Next"><span class="ui-icon ui-icon-circle-triangle-e">Next</span></a>
+				<div class="ui-datepicker-title">
+					<span class="ui-datepicker-month">${date.monthname()}</span> <span class="ui-datepicker-year">${date.year()}</span>
+				</div>
+			</div>
+			<table class="ui-datepicker-calendar">
+				<thead>
+					<tr>
+						<th>Wk</th>
+						{{each(index, day) date.weekdays()}}
+							<th class=""><span title="${day.fullname}">${day.shortname}</span></th>
+						{{/each}}
+					</tr>
+				</thead>
+				<tbody>
+					{{each(index, week) date.days()}}
+					<tr>
+						<td>${week.number}</td>
+						{{each(index, day) week.days}}
+							<td>
+								{{if day.render}}
+									{{if day.selectable}}
+									<a title="${day.title}" class="ui-state-default{{if day.current}} ui-state-active{{/if}}{{if day.today}} ui-state-highlight{{/if}} ${day.extraClasses}" href="#">
+										${day.date}
+									</a>
+									{{/if}}
+									{{if !day.selectable}}
+									<span title="${day.title}" class="{{if day.current}} ui-state-active{{/if}}{{if day.today}} ui-state-highlight{{/if}} ${day.extraClasses}">
+										${day.date}
+									</span>
+									{{/if}}
+								{{/if}}
+							</td>
+						{{/each}}
+					</tr>
+					{{/each}}
+				</tbody>
+			</table>
 		</div>
 	</script>
 

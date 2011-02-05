@@ -69,6 +69,7 @@ $.date = function ( datestring, formatstring ) {
 				printDate = new Date( this.year(), date.getMonth(), 1 - leadDays );
 			for ( var row = 0; row < rows; row++ ) {
 				var week = result[ result.length ] = {
+					number: this.iso8601Week( printDate ),
 					days: []
 				};
 				for ( var dayx = 0; dayx < 7; dayx++ ) {
@@ -85,6 +86,15 @@ $.date = function ( datestring, formatstring ) {
 				}
 			}
 			return result;
+		},
+		iso8601Week: function( date ) {
+			var checkDate = new Date( date.getTime() );
+			// Find Thursday of this week starting on Monday
+			checkDate.setDate( checkDate.getDate() + 4 - ( checkDate.getDay() || 7 ) );
+			var time = checkDate.getTime();
+			checkDate.setMonth( 0 ); // Compare with Jan 1
+			checkDate.setDate( 1 );
+			return Math.floor( Math.round( ( time - checkDate ) / 86400000) / 7 ) + 1;
 		},
 		select: function() {
 			this.selected = this.clone();
