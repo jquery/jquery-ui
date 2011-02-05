@@ -25,15 +25,18 @@ $.widget( "ui.datepicker", {
 			this.inline = true;
 			this.picker = this.element;
 		}
-		this.picker.delegate( ".ui-datepicker-prev", "click", function() {
+		this.picker.delegate( ".ui-datepicker-prev", "click", function( event ) {
+			event.preventDefault();
 			self.date.adjust( "M", -1 );
 			self.refresh();
 		});
-		this.picker.delegate( ".ui-datepicker-next", "click", function() {
+		this.picker.delegate( ".ui-datepicker-next", "click", function( event ) {
+			event.preventDefault();
 			self.date.adjust( "M", +1 )
 			self.refresh();
 		});
 		this.picker.delegate( ".ui-datepicker-calendar a", "click", function( event ) {
+			event.preventDefault();
 			// TODO exclude clicks on lead days or handle them correctly
 			self.date.setDay( +$( this ).text() );
 			if ( !self.inline ) {
