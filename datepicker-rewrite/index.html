@@ -29,17 +29,17 @@
 	<input id="datepicker" type="text" />
 	<input id="datepicker2" type="text" />
 	<script>
-		jQuery(function($) {
-			$("#culture").change( function() {
+		$( function() {
+			$( "#culture" ).change( function() {
 				$.global.preferCulture( $( this ).val() );
 				$( ":ui-datepicker" ).datepicker( "refresh" );
 			})
-			$("#datepicker-inline").datepicker({
+			$( "#datepicker-inline" ).datepicker( {
 				select: function( event, ui ) {
-					$("#inline-output").val( ui.date );
+					$( "#inline-output" ).val( ui.date );
 				}
 			});
-			$("#datepicker, #datepicker2").datepicker();
+			$( "#datepicker, #datepicker2" ).datepicker();
 		});
 	</script>
 
