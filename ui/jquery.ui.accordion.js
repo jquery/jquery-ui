@@ -31,7 +31,7 @@ $.widget( "ui.accordion", {
 		var self = this,
 			options = self.options;
 
-		self.running = 0;
+		self.running = false;
 
 		self.element.addClass( "ui-accordion ui-widget ui-helper-reset" );
 
@@ -344,47 +344,13 @@ $.widget( "ui.accordion", {
 			toHide = data.oldContent,
 			down = toShow.length && ( !toHide.length || ( toShow.index() < toHide.index() ) );
 
-		self.toShow = toShow;
-		self.toHide = toHide;
-		self.data = data;
-
-		var complete = function() {
-			if ( !self ) {
-				return;
-			}
-			return self._completed.apply( self, arguments );
-		};
-
-		// count elements to animate
-		self.running = toHide.size() === 0 ? toShow.size() : toHide.size();
+		self.running = true;
+		function complete() {
+			self._completed( data );
+		}
 
 		if ( options.animated ) {
-			var animOptions = {
-				toShow: toShow,
-				toHide: toHide,
-				complete: complete,
-				down: down,
-				autoHeight: options.heightStyle !== "content"
-			};
-
-			if ( !options.proxied ) {
-				options.proxied = options.animated;
-			}
-
-			if ( !options.proxiedDuration ) {
-				options.proxiedDuration = options.duration;
-			}
-
-			options.animated = $.isFunction( options.proxied ) ?
-				options.proxied( animOptions ) :
-				options.proxied;
-
-			options.duration = $.isFunction( options.proxiedDuration ) ?
-				options.proxiedDuration( animOptions ) :
-				options.proxiedDuration;
-
 			var animations = $.ui.accordion.animations,
-				duration = options.duration,
 				easing = options.animated;
 
 			if ( easing && !animations[ easing ] && !$.easing[ easing ] ) {
@@ -394,16 +360,22 @@ $.widget( "ui.accordion", {
 				animations[ easing ] = function( options ) {
 					this.slide( options, {
 						easing: easing,
-						duration: duration || 700
+						duration: 700
 					});
 				};
 			}
 
-			animations[ easing ]( animOptions );
+			animations[ easing ]({
+				toShow: toShow,
+				toHide: toHide,
+				complete: complete,
+				down: down,
+				autoHeight: options.heightStyle !== "content"
+			});
 		} else {
 			toHide.hide();
 			toShow.show();
-			complete( true );
+			complete();
 		}
 
 		// TODO assert that the blur and focus triggers are really necessary, remove otherwise
@@ -421,27 +393,27 @@ $.widget( "ui.accordion", {
 			.focus();
 	},
 
-	_completed: function( cancel ) {
-		this.running = cancel ? 0 : --this.running;
-		if ( this.running ) {
-			return;
-		}
+	_completed: function( data ) {
+		var toShow = data.newContent,
+			toHide = data.oldContent;
+
+		this.running = false;
 
 		if ( this.options.heightStyle === "content" ) {
-			this.toShow.add( this.toHide ).css({
+			toShow.add( toHide ).css({
 				height: "",
 				overflow: ""
 			});
 		}
 
 		// other classes are removed before the animation; this one needs to stay until completed
-		this.toHide.removeClass( "ui-accordion-content-active" );
+		toHide.removeClass( "ui-accordion-content-active" );
 		// Work around for rendering bug in IE (#5421)
-		if ( this.toHide.length ) {
-			this.toHide.parent()[0].className = this.toHide.parent()[0].className;
+		if ( toHide.length ) {
+			toHide.parent()[0].className = toHide.parent()[0].className;
 		}
 
-		this._trigger( "activate", null, this.data );
+		this._trigger( "activate", null, data );
 	}
 });
 
