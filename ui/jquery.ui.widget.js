@@ -78,7 +78,7 @@ $.widget.bridge = function( name, object ) {
 
 		// prevent calls to internal methods
 		if ( isMethodCall && options.charAt( 0 ) === "_" ) {
-			return returnValue;
+			throw "Attempted to call private method " + options + " of " + name;
 		}
 
 		if ( isMethodCall ) {
@@ -119,7 +119,7 @@ $.Widget = function( options, element ) {
 	}
 
 	// allow instantiation without initializing for simple inheritance
-	// must use "new" keyword (the code above always passes args)
+	// must use "new" keyword (the code above always passeFs args)
 	if ( arguments.length ) {
 		this._createWidget( options, element );
 	}
