@@ -88,16 +88,4 @@ test( "#6795 - Widget: handle array arguments to _trigger consistently", functio
 	.testWidget( "testEvent" );
 });
 
-test( "#6947 - Widget: Attempt to access private member of widget returns jQuery object", function() {
-	$.widget( "ui.testWidget", {
-		_create: function() {},
-		_privateMethod: function() {}
-		}
-	);
-
-	raises( function () {
-		$( "#widget" ).testWidget( "_privateMethod" );
-	});
-});
-
 }( jQuery ) );

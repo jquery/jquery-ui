@@ -76,11 +76,6 @@ $.widget.bridge = function( name, object ) {
 			$.extend.apply( null, [ true, options ].concat(args) ) :
 			options;
 
-		// prevent calls to internal methods
-		if ( isMethodCall && options.charAt( 0 ) === "_" ) {
-			throw "Attempted to call private method " + options + " of " + name;
-		}
-
 		if ( isMethodCall ) {
 			this.each(function() {
 				var instance = $.data( this, name );
@@ -88,9 +83,13 @@ $.widget.bridge = function( name, object ) {
 					return $.error( "cannot call methods on " + name + " prior to initialization; " +
 						"attempted to call method '" + options + "'" );
 				}
+
 				if ( !$.isFunction( instance[options] ) ) {
 					return $.error( "no such method '" + options + "' for " + name + " widget instance" );
+				} else if ( options.charAt( 0 ) === "_" ) {
+					return $.error( "Attempted to call private method '" + options + "' of " + name );
 				}
+
 				var methodValue = instance[ options ].apply( instance, args );
 				if ( methodValue !== instance && methodValue !== undefined ) {
 					returnValue = methodValue;
