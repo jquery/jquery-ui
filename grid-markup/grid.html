@@ -17,6 +17,7 @@
 	<script src="grid.js"></script>
 	<script>
 	$(function() {
+
 		$.fn.themeswitcher && $( "<div></div>" ).css({
 			position: "absolute",
 			right: 10,
@@ -25,8 +26,10 @@
 		
 		$( "#dataTable1" ).grid();
 		$( "#dataTable2" ).grid()
-			.grid("widget").height(300).resizable()
-		$( "#dataTable2" ).grid("refresh");
+			.grid( "widget" )
+				.height( 300 ).resizable();
+		$( "#dataTable2" ).grid( "refresh" );
+
 	});
 	</script>
 </head>

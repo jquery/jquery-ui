@@ -25,6 +25,9 @@ Presentational
 .ui-grid .ui-grid-head {
 	border-bottom-width: 0;
 }
+.ui-grid .ui-grid-head-table {
+	border: none;
+}
 .ui-grid .ui-grid-head tr {
 	border-left-width: 0;
 	border-right-width: 0;
