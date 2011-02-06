@@ -533,6 +533,12 @@ $.widget( "ui.tabs", {
 	},
 
 	enable: function( index ) {
+		if ( index === undefined ) {
+			for ( var i = 0, len = this.lis.length; i < len; i++ ) {
+				this.enable( i );
+			}
+			return this;
+		}
 		index = this._getIndex( index );
 		var o = this.options;
 		if ( $.inArray( index, o.disabled ) == -1 ) {
@@ -549,11 +555,18 @@ $.widget( "ui.tabs", {
 	},
 
 	disable: function( index ) {
+		if ( index === undefined ) {
+			for ( var i = 0, len = this.lis.length; i < len; i++ ) {
+				this.disable( i );
+			}
+			return this;
+		}
 		index = this._getIndex( index );
-		var self = this, o = this.options;
+		var o = this.options,
+			elem = this.lis.eq( index );
 		// cannot disable already selected tab
-		if ( index != o.selected ) {
-			this.lis.eq( index ).addClass( "ui-state-disabled" );
+		if ( index != o.selected && elem.is(":not(.ui-state-disabled)") ) {
+			elem.addClass( "ui-state-disabled" );
 
 			o.disabled.push( index );
 			o.disabled.sort();

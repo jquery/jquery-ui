@@ -73,16 +73,22 @@ test('destroy', function() {
 });
 
 test('enable', function() {
-    expect(2);
+    expect(4);
 
 	el = $('#tabs1').tabs({ disabled: [ 0, 1 ] });
 	el.tabs("enable", 1);
 	ok( $('li:eq(1)', el).is(':not(.ui-state-disabled)'), 'remove class from li');
 	same(el.tabs('option', 'disabled'), [ ], 'update property');
+	
+	// enable all tabs
+	el.tabs({ disabled: [ 0, 1 ] });
+	el.tabs("enable");
+	ok( !$('li.ui-state-disabled', el).length, 'enable all');
+	same(el.tabs('option', 'disabled'), [ ], 'update property');
 });
 
 test('disable', function() {
-    expect(4);
+    expect(6);
 
 	// normal
 	el = $('#tabs1').tabs();
@@ -94,6 +100,11 @@ test('disable', function() {
 	el.tabs('disable', 0);
 	ok( $('li:eq(0)', el).is(':not(.ui-state-disabled)'), 'not add class to li');
 	same(el.tabs('option', 'disabled'), [ 1 ], 'not update property');
+	
+	// disable all tabs but selected one
+	el.tabs('disable');
+	ok( $('li:gt(0)', el).is('.ui-state-disabled') && $('li:eq(0)', el).is(':not(.ui-state-disabled)'), 'disable all but selected');
+	same(el.tabs('option', 'disabled'), [ 1, 2 ], 'not update property');
 });
 
 test('add', function() {
