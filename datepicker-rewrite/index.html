@@ -11,10 +11,11 @@
 	<script src="../external/jquery.global.js"></script>
 	<script src="../external/jquery.global.de-DE.js"></script>
 	<script src="../external/jquery.global.ja-JP.js"></script>
+	<script src="localization.js"></script>
 	<script src="date.js"></script>
 	<script src="picker.js"></script>
 	<link rel="stylesheet" href="../themes/base/jquery.ui.all.css">
-	<title>jQuery UI Datepicker Lite</title>
+	<title>jQuery UI Datepicker Rewrite</title>
 	<style>body{font:62.5% Verdana,Arial,sans-serif}</style>
 </head>
 <body>
@@ -72,8 +73,8 @@
 	<script id="ui-datepicker-tmpl" type="text/x-jquery-tmpl">
 		<div class="ui-datepicker ui-widget ui-widget-content ui-helper-clearfix ui-corner-all">
 			<div class="ui-datepicker-header ui-widget-header ui-helper-clearfix ui-corner-all">
-				<a class="ui-datepicker-prev ui-corner-all" title="Prev"><span class="ui-icon ui-icon-circle-triangle-w">Prev</span></a>
-				<a class="ui-datepicker-next ui-corner-all" title="Next"><span class="ui-icon ui-icon-circle-triangle-e">Next</span></a>
+				<a class="ui-datepicker-prev ui-corner-all" title="${labels.prevText}"><span class="ui-icon ui-icon-circle-triangle-w">${labels.prevText}</span></a>
+				<a class="ui-datepicker-next ui-corner-all" title="${labels.nextText}"><span class="ui-icon ui-icon-circle-triangle-e">${labels.nextText}</span></a>
 				<div class="ui-datepicker-title">
 					<span class="ui-datepicker-month">${date.monthname()}</span> <span class="ui-datepicker-year">${date.year()}</span>
 				</div>
@@ -109,20 +110,18 @@
 					{{/each}}
 				</tbody>
 			</table>
-			<!--
 			<div class="ui-datepicker-buttonpane ui-widget-content">
-				<button class="ui-datepicker-current">Today</button>
-				<button class="ui-datepicker-close">Done</button>
+				<button class="ui-datepicker-current">${labels.currentText}</button>
+				<button class="ui-datepicker-close">${labels.closeText}</button>
 			</div>
-			-->
 		</div>
 	</script>
 	
 	<script id="ui-datepicker-weeks-tmpl" type="text/x-jquery-tmpl">
 		<div class="ui-datepicker ui-widget ui-widget-content ui-helper-clearfix ui-corner-all">
 			<div class="ui-datepicker-header ui-widget-header ui-helper-clearfix ui-corner-all">
-				<a class="ui-datepicker-prev ui-corner-all" title="Prev"><span class="ui-icon ui-icon-circle-triangle-w">Prev</span></a>
-				<a class="ui-datepicker-next ui-corner-all" title="Next"><span class="ui-icon ui-icon-circle-triangle-e">Next</span></a>
+				<a class="ui-datepicker-prev ui-corner-all" title="${labels.prevText}"><span class="ui-icon ui-icon-circle-triangle-w">${labels.prevText}</span></a>
+				<a class="ui-datepicker-next ui-corner-all" title="${labels.nextText}"><span class="ui-icon ui-icon-circle-triangle-e">${labels.nextText}</span></a>
 				<div class="ui-datepicker-title">
 					<span class="ui-datepicker-month">${date.monthname()}</span> <span class="ui-datepicker-year">${date.year()}</span>
 				</div>
@@ -130,7 +129,7 @@
 			<table class="ui-datepicker-calendar">
 				<thead>
 					<tr>
-						<th>Wk</th>
+						<th>${labels.weekHeader}</th>
 						{{each(index, day) date.weekdays()}}
 							<th class=""><span title="${day.fullname}">${day.shortname}</span></th>
 						{{/each}}

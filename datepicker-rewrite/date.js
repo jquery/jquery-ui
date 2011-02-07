@@ -62,10 +62,9 @@ $.date = function ( datestring, formatstring ) {
 		},
 		days: function() {
 			var result = [],
-				daysInMonth = this.daysInMonth(),
 				firstDayOfMonth = new Date( this.year(), date.getMonth(), 1 ).getDay(),
 				leadDays = ( firstDayOfMonth - calendar.firstDay + 7 ) % 7,
-				rows = Math.ceil( ( leadDays + daysInMonth ) / 7),
+				rows = Math.ceil( ( leadDays + this.daysInMonth() ) / 7),
 				printDate = new Date( this.year(), date.getMonth(), 1 - leadDays );
 			for ( var row = 0; row < rows; row++ ) {
 				var week = result[ result.length ] = {

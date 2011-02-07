@@ -60,7 +60,8 @@ $.widget( "ui.datepicker", {
 		this.picker.empty();
 
 		$( this.options.tmpl ).tmpl({
-			date: this.date
+			date: this.date,
+			labels: $.global.localize("datepicker")
 		}).appendTo( this.picker )
 			.find( "button" ).button().end()
 
