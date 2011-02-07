@@ -312,7 +312,6 @@ $.widget('ui.spinner', {
 	},
 	
 	_format: function(num) {
-		var num = this.options.value;
 		this.element.val( $.global && this.options.numberformat ? $.global.format(num, this.options.numberformat) : num );
 	},
 		
