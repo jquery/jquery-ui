@@ -53,15 +53,19 @@ $.widget( "ui.datepicker", {
 			});
 		});
 		
+		this.picker.delegate( ".ui-datepicker-header a, .ui-datepicker-calendar a", "mouseenter.datepicker mouseleave.datepicker", function() {
+			$( this ).toggleClass( "ui-state-hover" );
+		});
+		
 		this.refresh();
 	},
 	refresh: function() {
 		this.date.refresh();
 		this.picker.empty();
 
-		$( this.options.tmpl ).tmpl({
+		$( this.options.tmpl ).tmpl( {
 			date: this.date,
-			labels: $.global.localize("datepicker")
+			labels: $.global.localize( "datepicker" )
 		}).appendTo( this.picker )
 			.find( "button" ).button().end()
 
@@ -70,8 +74,6 @@ $.widget( "ui.datepicker", {
 		}		
 		// against display:none in datepicker.css
 		this.picker.find( ".ui-datepicker" ).css( "display", "block" );
-		this._hoverable( this.picker.find( ".ui-datepicker-header a" ) );
-		this._hoverable( this.picker.find( ".ui-datepicker-header a, .ui-datepicker-calendar a" ) );
 	},
 	open: function( event ) {
 		this.picker.fadeIn( "fast" );
