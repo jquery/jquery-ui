@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 	<meta charset="utf-8">
@@ -24,21 +24,20 @@
 		
 		_parse: function(value) {
 			if (typeof value == 'string') {
-				return +Globalization.parseDate(value)
+				return +$.global.parseDate(value)
 			}
 			return value;
 		},
 		_format: function() {
-			this.element.val( Globalization.format(new Date(this.options.value), "t") );
+			this.element.val( $.global.format(new Date(this.options.value), "t") );
 		}
 	})
 	$(function() {
 		$("#spinner").timespinner();
 		
-		
 		$("#culture").change(function() {
 			var current = $("#spinner").timespinner("value");
-			Globalization.preferCulture($(this).val());
+			$.global.preferCulture($(this).val());
 			$("#spinner").timespinner("value", current);
 		});
 	});
