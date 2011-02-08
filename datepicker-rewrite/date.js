@@ -86,6 +86,20 @@ $.date = function ( datestring, formatstring ) {
 			}
 			return result;
 		},
+		// specialzed for multi-month template, could be used in general
+		months: function( add ) {
+			var result = [],
+				current = date.getMonth(),
+				self = this;
+			for ( var i = 0; i < add + 1; i++ ) {
+				result.push( this.clone() );
+				this.adjust( "M", 1 );
+			}
+			result[0].first = true;
+			result[result.length - 1].last = true;
+			date.setMonth(current);
+			return result;
+		},
 		iso8601Week: function( date ) {
 			var checkDate = new Date( date.getTime() );
 			// Find Thursday of this week starting on Monday
@@ -101,7 +115,9 @@ $.date = function ( datestring, formatstring ) {
 		},
 		// TODO create new Date with year, month, day instead
 		clone: function() {
-			return $.date( this.format(), format );
+			var result = $.date( this.format(), format );
+			result.eachDay = this.eachDay;
+			return result;
 		},
 		// TODO compare year, month, day each for better performance
 		equal: function( other ) {

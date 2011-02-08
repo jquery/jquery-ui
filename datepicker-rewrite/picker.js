@@ -41,6 +41,7 @@ $.widget( "ui.datepicker", {
 		this.picker.delegate( ".ui-datepicker-calendar a", "click", function( event ) {
 			event.preventDefault();
 			// TODO exclude clicks on lead days or handle them correctly
+			// TODO store/read more then just date, also required for multi month picker
 			self.date.setDay( +$( this ).text() ).select();
 			if ( !self.inline ) {
 				self.element.val( self.date.format() );
