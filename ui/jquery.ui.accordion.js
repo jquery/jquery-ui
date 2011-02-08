@@ -13,6 +13,7 @@
  */
 (function( $, undefined ) {
 
+// TODO: use ui-accordion-header-active class and fix styling
 $.widget( "ui.accordion", {
 	options: {
 		active: 0,
