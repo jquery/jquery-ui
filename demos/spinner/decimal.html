@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 	<meta charset="utf-8">
@@ -23,7 +23,7 @@
 		
 		$("#culture").change(function() {
 			var current = $("#spinner").spinner("value");
-			Globalization.preferCulture($(this).val());
+			$.global.preferCulture($(this).val());
 			$("#spinner").spinner("value", current);
 		})
 	});

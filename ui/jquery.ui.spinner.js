@@ -285,11 +285,16 @@ $.widget('ui.spinner', {
 				this.buttons.button("enable");
 			}
 		}
-		this._super( "_setOption", key, value );
+		// TODO see below
+		//this._super( "_setOption", key, value );
+		$.Widget.prototype._setOption.apply( this, arguments );
 	},
 	
 	_setOptions: function( options ) {
-		this._super( "_setOptions", options );
+		// TODO _super doesn't handle inheritance with more then one subclass
+		// spinner subclass will have spinner as base, calling spinner._setOptions infinitely
+		//this._super( "_setOptions", options );
+		$.Widget.prototype._setOptions.apply( this, arguments );
 		if ( "value" in options ) {
 			this._format( this.options.value );
 		}
@@ -312,7 +317,6 @@ $.widget('ui.spinner', {
 	},
 	
 	_format: function(num) {
-		var num = this.options.value;
 		this.element.val( $.global && this.options.numberformat ? $.global.format(num, this.options.numberformat) : num );
 	},
 		
