@@ -219,7 +219,7 @@ $.widget( "ui.accordion", {
 
 		if ( options.heightStyle === "fill" ) {
 			// IE 6 treats height like minHeight, so we need to turn off overflow
-			// in ordder to get a reliable height
+			// in order to get a reliable height
 			// we use the minHeight support test because we assume that only
 			// browsers that don't support minHeight will treat height as minHeight
 			if ( !$.support.minHeight ) {
@@ -366,8 +366,7 @@ $.widget( "ui.accordion", {
 				toShow: toShow,
 				toHide: toHide,
 				complete: complete,
-				down: toShow.length && ( !toHide.length || ( toShow.index() < toHide.index() ) ),
-				autoHeight: options.heightStyle !== "content"
+				down: toShow.length && ( !toHide.length || ( toShow.index() < toHide.index() ) )
 			}, additional );
 		} else {
 			toHide.hide();
@@ -418,7 +417,8 @@ $.extend( $.ui.accordion, {
 	version: "@VERSION",
 	animations: {
 		slide: function( options, additions ) {
-			var overflow = options.toShow.css( "overflow" ),
+			var showOverflow = options.toShow.css( "overflow" ),
+				hideOverflow = options.toHide.css( "overflow" ),
 				percentDone = 0,
 				showProps = {},
 				hideProps = {},
@@ -497,13 +497,11 @@ $.extend( $.ui.accordion, {
 				duration: options.duration,
 				easing: options.easing,
 				complete: function() {
-					if ( !options.autoHeight ) {
-						options.toShow.css( "height", "" );
-					}
 					options.toShow.css({
 						width: originalWidth,
-						overflow: overflow
+						overflow: showOverflow
 					});
+					options.toHide.css( "overflow", hideOverflow );
 					options.complete();
 				}
 			});
