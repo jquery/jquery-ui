@@ -444,7 +444,12 @@ $.widget("ui.sortable", $.ui.mouse, {
 		var dyClick = this.offset.click.top,
 			dxClick = this.offset.click.left;
 
-		var isOverElement = (y1 + dyClick) > t && (y1 + dyClick) < b && (x1 + dxClick) > l && (x1 + dxClick) < r;
+		if (this.options.axis == 'y')
+			var isOverElement = (y1 + dyClick) > t && (y1 + dyClick) < b;
+		else if (this.options.axis == 'x')
+			var isOverElement = (x1 + dxClick) > l && (x1 + dxClick) < r;
+		else
+			var isOverElement = (y1 + dyClick) > t && (y1 + dyClick) < b && (x1 + dxClick) > l && (x1 + dxClick) < r;
 
 		if(	   this.options.tolerance == "pointer"
 			|| this.options.forcePointerForContainers
@@ -465,9 +470,15 @@ $.widget("ui.sortable", $.ui.mouse, {
 
 		var isOverElementHeight = $.ui.isOverAxis(this.positionAbs.top + this.offset.click.top, item.top, item.height),
 			isOverElementWidth = $.ui.isOverAxis(this.positionAbs.left + this.offset.click.left, item.left, item.width),
-			isOverElement = isOverElementHeight && isOverElementWidth,
 			verticalDirection = this._getDragVerticalDirection(),
 			horizontalDirection = this._getDragHorizontalDirection();
+
+		if (this.options.axis == 'y')
+			isOverElement = isOverElementWidth;
+		else if (this.options.axis == 'x')
+			isOverElement = isOverElementHeight;
+		else
+			isOverElement = isOverElementHeight && isOverElementWidth;
 
 		if (!isOverElement)
 			return false;
