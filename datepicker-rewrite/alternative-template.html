@@ -22,7 +22,6 @@
 	</style>
 </head>
 <body>
-	<a href="alternative-template.html">Alternative templating example</a>
 	<select id="culture">
 		<option value="en-US">en-US</option>
 		<option value="de-DE">de-DE</option>
@@ -80,6 +79,40 @@
 			$( "#datepicker, #datepicker2" ).datepicker();
 		});
 	</script>
+	
+	<script id="ui-datepicker-month" type="text/x-jquery-tmpl">
+		<table class="ui-datepicker-calendar">
+			<thead>
+				<tr>
+					{{each(index, day) $data.weekdays()}}
+						<th class=""><span title="${day.fullname}">${day.shortname}</span></th>
+					{{/each}}
+				</tr>
+			</thead>
+			<tbody>
+				{{each(index, week) $data.days()}}
+				<tr>
+					{{each(index, day) week.days}}
+						<td>
+							{{if day.render}}
+								{{if day.selectable}}
+								<a title="${day.title}" class="ui-state-default{{if day.current}} ui-state-active{{/if}}{{if day.today}} ui-state-highlight{{/if}} ${day.extraClasses}" href="#">
+									${day.date}
+								</a>
+								{{/if}}
+								{{if !day.selectable}}
+								<span title="${day.title}" class="{{if day.current}} ui-state-active{{/if}}{{if day.today}} ui-state-highlight{{/if}} ${day.extraClasses}">
+									${day.date}
+								</span>
+								{{/if}}
+							{{/if}}
+						</td>
+					{{/each}}
+				</tr>
+				{{/each}}
+			</tbody>
+		</table>
+	</script>
 
 	<script id="ui-datepicker-tmpl" type="text/x-jquery-tmpl">
 		<div class="ui-datepicker ui-widget ui-widget-content ui-helper-clearfix ui-corner-all">
@@ -90,37 +123,7 @@
 					<span class="ui-datepicker-month">${date.monthname()}</span> <span class="ui-datepicker-year">${date.year()}</span>
 				</div>
 			</div>
-			<table class="ui-datepicker-calendar">
-				<thead>
-					<tr>
-						{{each(index, day) date.weekdays()}}
-							<th class=""><span title="${day.fullname}">${day.shortname}</span></th>
-						{{/each}}
-					</tr>
-				</thead>
-				<tbody>
-					{{each(index, week) date.days()}}
-					<tr>
-						{{each(index, day) week.days}}
-							<td>
-								{{if day.render}}
-									{{if day.selectable}}
-									<a title="${day.title}" class="ui-state-default{{if day.current}} ui-state-active{{/if}}{{if day.today}} ui-state-highlight{{/if}} ${day.extraClasses}" href="#">
-										${day.date}
-									</a>
-									{{/if}}
-									{{if !day.selectable}}
-									<span title="${day.title}" class="{{if day.current}} ui-state-active{{/if}}{{if day.today}} ui-state-highlight{{/if}} ${day.extraClasses}">
-										${day.date}
-									</span>
-									{{/if}}
-								{{/if}}
-							</td>
-						{{/each}}
-					</tr>
-					{{/each}}
-				</tbody>
-			</table>
+			{{tmpl(date) "#ui-datepicker-month"}}
 			<div class="ui-datepicker-buttonpane ui-widget-content">
 				<button class="ui-datepicker-current">${labels.currentText}</button>
 				<button class="ui-datepicker-close">${labels.closeText}</button>
@@ -188,37 +191,7 @@
 							<span class="ui-datepicker-month">${month.monthname()}</span> <span class="ui-datepicker-year">${month.year()}</span>
 						</div>
 					</div>
-					<table class="ui-datepicker-calendar">
-						<thead>
-							<tr>
-								{{each(index, day) month.weekdays()}}
-									<th class=""><span title="${day.fullname}">${day.shortname}</span></th>
-								{{/each}}
-							</tr>
-						</thead>
-						<tbody>
-							{{each(index, week) month.days()}}
-							<tr>
-								{{each(index, day) week.days}}
-									<td>
-										{{if day.render}}
-											{{if day.selectable}}
-											<a title="${day.title}" class="ui-state-default{{if day.current}} ui-state-active{{/if}}{{if day.today}} ui-state-highlight{{/if}} ${day.extraClasses}" href="#">
-												${day.date}
-											</a>
-											{{/if}}
-											{{if !day.selectable}}
-											<span title="${day.title}" class="{{if day.current}} ui-state-active{{/if}}{{if day.today}} ui-state-highlight{{/if}} ${day.extraClasses}">
-												${day.date}
-											</span>
-											{{/if}}
-										{{/if}}
-									</td>
-								{{/each}}
-							</tr>
-							{{/each}}
-						</tbody>
-					</table>
+					{{tmpl(month) "#ui-datepicker-month"}}
 				</div>
 			{{/each}}
 			<div class="ui-datepicker-row-break"></div>
