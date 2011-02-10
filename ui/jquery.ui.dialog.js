@@ -100,7 +100,7 @@ $.widget("ui.dialog", {
 					if ( options.closeOnEscape && event.keyCode &&
 							event.keyCode === $.ui.keyCode.ESCAPE ) {
 						self.close( event );
-						event.preventDefault();
+						return false;
 					}
 				})
 				.attr({
@@ -703,7 +703,7 @@ $.extend( $.ui.dialog.overlay, {
 					event.keyCode === $.ui.keyCode.ESCAPE ) {
 					
 					dialog.close( event );
-					event.preventDefault();
+					return false;
 				}
 			});
 
