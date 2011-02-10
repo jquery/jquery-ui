@@ -4,12 +4,14 @@
 	<meta charset="utf-8">
 	<title>jQuery UI Autocomplete - Combobox</title>
 	<link rel="stylesheet" href="../../themes/base/jquery.ui.all.css">
-	<script src="../../jquery-1.4.3.js"></script>
+	<script src="../../jquery-1.4.4.js"></script>
 	<script src="../../ui/jquery.ui.core.js"></script>
 	<script src="../../ui/jquery.ui.widget.js"></script>
 	<script src="../../ui/jquery.ui.button.js"></script>
 	<script src="../../ui/jquery.ui.position.js"></script>
+	<script src="../../ui/jquery.ui.menu.js"></script>
 	<script src="../../ui/jquery.ui.autocomplete.js"></script>
+	<script src="../../ui/jquery.ui.tooltip.js"></script>
 	<link rel="stylesheet" href="../demos.css">
 	<style>
 	.ui-button { margin-left: -1px; }
@@ -24,9 +26,10 @@
 					select = this.element.hide(),
 					selected = select.children( ":selected" ),
 					value = selected.val() ? selected.text() : "";
-				var input = $( "<input>" )
+				var input = this.input = $( "<input>" )
 					.insertAfter( select )
 					.val( value )
+					.attr( "title", "" )
 					.autocomplete({
 						delay: 0,
 						minLength: 0,
@@ -55,18 +58,26 @@
 						},
 						change: function( event, ui ) {
 							if ( !ui.item ) {
-								var matcher = new RegExp( "^" + $.ui.autocomplete.escapeRegex( $(this).val() ) + "$", "i" ),
+								var value = $( this ).val(),
+									matcher = new RegExp( "^" + $.ui.autocomplete.escapeRegex( value ) + "$", "i" ),
 									valid = false;
 								select.children( "option" ).each(function() {
-									if ( this.value.match( matcher ) ) {
+									if ( $( this ).text().match( matcher ) ) {
 										this.selected = valid = true;
 										return false;
 									}
 								});
 								if ( !valid ) {
 									// remove invalid value, as it didn't match anything
-									$( this ).val( "" );
+									$( this )
+										.val( "" )
+										.attr( "title", value + " didn't match any item" )
+										.tooltip( "open" );
 									select.val( "" );
+									setTimeout(function() {
+										input.tooltip( "close" ).attr( "title", "" );
+									}, 2500 );
+									input.data( "autocomplete" ).term = "";
 									return false;
 								}
 							}
@@ -81,9 +92,10 @@
 						.appendTo( ul );
 				};
 
-				$( "<button>&nbsp;</button>" )
+				this.button = $( "<button type='button'>&nbsp;</button>" )
 					.attr( "tabIndex", -1 )
 					.attr( "title", "Show All Items" )
+					.tooltip()
 					.insertAfter( input )
 					.button({
 						icons: {
@@ -104,6 +116,22 @@
 						input.autocomplete( "search", "" );
 						input.focus();
 					});
+
+					input
+						.tooltip({
+							position: {
+								of: this.button
+							}
+						})
+						.tooltip( "widget" )
+							.addClass( "ui-state-highlight" );
+			},
+
+			destroy: function() {
+				this.input.remove();
+				this.button.remove();
+				this.element.show();
+				$.Widget.prototype.destroy.call( this );
 			}
 		});
 	})( jQuery );

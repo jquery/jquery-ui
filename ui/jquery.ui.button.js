@@ -1,7 +1,7 @@
 /*
  * jQuery UI Button @VERSION
  *
- * Copyright 2010, AUTHORS.txt (http://jqueryui.com/about)
+ * Copyright 2011, AUTHORS.txt (http://jqueryui.com/about)
  * Dual licensed under the MIT or GPL Version 2 licenses.
  * http://jquery.org/license
  *
@@ -43,6 +43,7 @@ var lastActive,
 	};
 
 $.widget( "ui.button", {
+	defaultElement: "<button>",
 	options: {
 		disabled: null,
 		text: true,
@@ -218,7 +219,7 @@ $.widget( "ui.button", {
 		return this.buttonElement;
 	},
 
-	destroy: function() {
+	_destroy: function() {
 		this.element
 			.removeClass( "ui-helper-hidden-accessible" );
 		this.buttonElement
@@ -230,12 +231,10 @@ $.widget( "ui.button", {
 		if ( !this.hasTitle ) {
 			this.buttonElement.removeAttr( "title" );
 		}
-
-		$.Widget.prototype.destroy.call( this );
 	},
 
 	_setOption: function( key, value ) {
-		$.Widget.prototype._setOption.apply( this, arguments );
+		this._super( "_setOption", key, value );
 		if ( key === "disabled" ) {
 			if ( value ) {
 				this.element.attr( "disabled", true );
@@ -314,7 +313,13 @@ $.widget( "ui.button", {
 	}
 });
 
+$.ui.button.version = "@VERSION";
+
 $.widget( "ui.buttonset", {
+	options: {
+		items: ":button, :submit, :reset, :checkbox, :radio, a, :data(button)"
+	},
+
 	_create: function() {
 		this.element.addClass( "ui-buttonset" );
 	},
@@ -328,11 +333,11 @@ $.widget( "ui.buttonset", {
 			this.buttons.button( "option", key, value );
 		}
 
-		$.Widget.prototype._setOption.apply( this, arguments );
+		this._super( "_setOption", key, value );
 	},
 	
 	refresh: function() {
-		this.buttons = this.element.find( ":button, :submit, :reset, :checkbox, :radio, a, :data(button)" )
+		this.buttons = this.element.find( this.options.items )
 			.filter( ":ui-button" )
 				.button( "refresh" )
 			.end()
@@ -343,18 +348,16 @@ $.widget( "ui.buttonset", {
 				return $( this ).button( "widget" )[ 0 ];
 			})
 				.removeClass( "ui-corner-all ui-corner-left ui-corner-right" )
-				.filter( ":visible" )
-					.filter( ":first" )
-						.addClass( "ui-corner-left" )
-					.end()
-					.filter( ":last" )
-						.addClass( "ui-corner-right" )
-					.end()
+				.filter( ":first" )
+					.addClass( "ui-corner-left" )
+				.end()
+				.filter( ":last" )
+					.addClass( "ui-corner-right" )
 				.end()
 			.end();
 	},
 
-	destroy: function() {
+	_destroy: function() {
 		this.element.removeClass( "ui-buttonset" );
 		this.buttons
 			.map(function() {
@@ -363,9 +366,9 @@ $.widget( "ui.buttonset", {
 				.removeClass( "ui-corner-left ui-corner-right" )
 			.end()
 			.button( "destroy" );
-
-		$.Widget.prototype.destroy.call( this );
 	}
 });
+
+$.ui.buttonset.version = "@VERSION";
 
 }( jQuery ) );

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>jQuery UI Spinner - decimal</title>
+	<link type="text/css" href="../../themes/base/jquery.ui.all.css" rel="stylesheet" />
+	<script type="text/javascript" src="../../jquery-1.4.4.js"></script>
+	<script type="text/javascript" src="../../external/jquery.mousewheel-3.0.4.js"></script>
+	<script type="text/javascript" src="../../external/jquery.global.js"></script>
+	<script type="text/javascript" src="../../external/jquery.global.de-DE.js"></script>
+	<script type="text/javascript" src="../../external/jquery.global.ja-JP.js"></script>
+	<script type="text/javascript" src="../../ui/jquery.ui.core.js"></script>
+	<script type="text/javascript" src="../../ui/jquery.ui.widget.js"></script>
+	<script type="text/javascript" src="../../ui/jquery.ui.button.js"></script>
+	<script type="text/javascript" src="../../ui/jquery.ui.spinner.js"></script>
+	<link type="text/css" href="../demos.css" rel="stylesheet" />
+	<script type="text/javascript">
+	$(function() {
+		$("#spinner").spinner({
+			step: 0.01,
+			numberformat: "n"
+		});	
+		
+		$("#culture").change(function() {
+			var current = $("#spinner").spinner("value");
+			$.global.preferCulture($(this).val());
+			$("#spinner").spinner("value", current);
+		})
+	});
+	</script>
+</head>
+<body>
+
+<div class="demo">
+<p>
+	<label for="spinner">Decimal spinner:</label>
+	<input id="spinner" name="spinner" value="5.06" />
+</p>
+<p>
+	<label for="culture">Select a culture to use for formatting:</label>
+	<select id="culture">
+		<option value="en-EN" selected="selected">English</option>
+		<option value="de-DE">German</option>
+		<option value="ja-JP">Japanese</option>
+	</select>
+</p>
+</div>
+
+<div class="demo-description">
+<p>
+	Example of a decimal spinner. Step is set to 0.01.
+	<br/>The code handling the culture change reads the current spinner value,
+	then changes the culture, then sets the value again, resulting in an updated
+	formatting, based on the new culture.
+</p>
+</div>
+
+</body>
+</html>

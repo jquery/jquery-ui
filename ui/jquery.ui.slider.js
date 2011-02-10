@@ -1,7 +1,7 @@
 /*
  * jQuery UI Slider @VERSION
  *
- * Copyright 2010, AUTHORS.txt (http://jqueryui.com/about)
+ * Copyright 2011, AUTHORS.txt (http://jqueryui.com/about)
  * Dual licensed under the MIT or GPL Version 2 licenses.
  * http://jquery.org/license
  *
@@ -309,7 +309,9 @@ $.widget( "ui.slider", $.ui.mouse, {
 				( parseInt( closestHandle.css("marginTop"), 10 ) || 0)
 		};
 
-		this._slide( event, index, normValue );
+		if ( !this.handles.hasClass( "ui-state-hover" ) ) {
+			this._slide( event, index, normValue );
+		}
 		this._animateOff = true;
 		return true;
 	},
@@ -583,14 +585,14 @@ $.widget( "ui.slider", $.ui.mouse, {
 	
 	// returns the step-aligned value that val is closest to, between (inclusive) min and max
 	_trimAlignValue: function( val ) {
-		if ( val < this._valueMin() ) {
+		if ( val <= this._valueMin() ) {
 			return this._valueMin();
 		}
-		if ( val > this._valueMax() ) {
+		if ( val >= this._valueMax() ) {
 			return this._valueMax();
 		}
 		var step = ( this.options.step > 0 ) ? this.options.step : 1,
-			valModStep = val % step,
+			valModStep = (val - this._valueMin()) % step;
 			alignValue = val - valModStep;
 
 		if ( Math.abs(valModStep) * 2 >= step ) {

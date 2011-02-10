@@ -1,7 +1,7 @@
 /*
  * jQuery UI Position @VERSION
  *
- * Copyright 2010, AUTHORS.txt (http://jqueryui.com/about)
+ * Copyright 2011, AUTHORS.txt (http://jqueryui.com/about)
  * Dual licensed under the MIT or GPL Version 2 licenses.
  * http://jquery.org/license
  *
@@ -37,8 +37,7 @@ $.fn.position = function( options ) {
 		targetWidth = target.width();
 		targetHeight = target.height();
 		basePosition = { top: 0, left: 0 };
-	// TODO: use $.isWindow() in 1.9
-	} else if ( targetElem.setTimeout ) {
+	} else if ( $.isWindow( targetElem ) ) {
 		targetWidth = target.width();
 		targetHeight = target.height();
 		basePosition = { top: target.scrollTop(), left: target.scrollLeft() };
@@ -83,7 +82,7 @@ $.fn.position = function( options ) {
 
 	if ( options.at[0] === "right" ) {
 		basePosition.left += targetWidth;
-	} else if (options.at[0] === center ) {
+	} else if ( options.at[0] === center ) {
 		basePosition.left += targetWidth / 2;
 	}
 
@@ -103,9 +102,9 @@ $.fn.position = function( options ) {
 			marginLeft = parseInt( $.curCSS( this, "marginLeft", true ) ) || 0,
 			marginTop = parseInt( $.curCSS( this, "marginTop", true ) ) || 0,
 			collisionWidth = elemWidth + marginLeft +
-				parseInt( $.curCSS( this, "marginRight", true ) ) || 0,
+				( parseInt( $.curCSS( this, "marginRight", true ) ) || 0 ),
 			collisionHeight = elemHeight + marginTop +
-				parseInt( $.curCSS( this, "marginBottom", true ) ) || 0,
+				( parseInt( $.curCSS( this, "marginBottom", true ) ) || 0 ),
 			position = $.extend( {}, basePosition ),
 			collisionPosition;
 
@@ -122,8 +121,8 @@ $.fn.position = function( options ) {
 		}
 
 		// prevent fractions (see #5280)
-		position.left = parseInt( position.left );
-		position.top = parseInt( position.top );
+		position.left = Math.round( position.left );
+		position.top = Math.round( position.top );
 
 		collisionPosition = {
 			left: position.left - marginLeft,

@@ -1,7 +1,7 @@
 /*
  * jQuery UI Effects Drop @VERSION
  *
- * Copyright 2010, AUTHORS.txt (http://jqueryui.com/about)
+ * Copyright 2011, AUTHORS.txt (http://jqueryui.com/about)
  * Dual licensed under the MIT or GPL Version 2 licenses.
  * http://jquery.org/license
  *
@@ -17,7 +17,7 @@ $.effects.drop = function(o) {
 	return this.queue(function() {
 
 		// Create element
-		var el = $(this), props = ['position','top','left','opacity'];
+		var el = $(this), props = ['position','top','bottom','left','right','opacity'];
 
 		// Set options
 		var mode = $.effects.setMode(el, o.options.mode || 'hide'); // Set Mode

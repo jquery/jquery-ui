@@ -1,0 +1,94 @@
+<!doctype html>
+<html>
+<head>
+	<title>Menu Visual Test: Default</title>
+	<link rel="stylesheet" href="../visual.css" type="text/css" />
+	<link rel="stylesheet" href="../../../themes/base/jquery.ui.all.css" type="text/css" title="ui-theme" />
+	<script type="text/javascript" src="../../../jquery-1.4.4.js"></script>
+	<script type="text/javascript" src="../../../ui/jquery.ui.core.js"></script>
+	<script type="text/javascript" src="../../../ui/jquery.ui.widget.js"></script>
+	<script type="text/javascript" src="../../../ui/jquery.ui.position.js"></script>
+	<script type="text/javascript" src="../../../ui/jquery.ui.button.js"></script>
+	<script type="text/javascript" src="../../../ui/jquery.ui.menu.js"></script>
+	<script type="text/javascript" src="http://jqueryui.com/themeroller/themeswitchertool/"></script>
+	<script type="text/javascript">
+	$(function() {
+		$.fn.themeswitcher && $('<div/>').css({
+			position: "absolute",
+			right: 10,
+			top: 10
+		}).appendTo(document.body).themeswitcher();
+		
+		$(".menubar").children("a")
+			.button()
+			.click(function() {
+				var button = $(this);
+				var menu = button.next();
+				if (menu.is(":visible")) {
+					menu.hide();
+					return false;
+				}
+				menu.parent().find(".ui-menu").not(menu).hide();
+				menu.show().css({ left:0, top: 0 }).position({
+					my: "left top",
+					at: "left bottom",
+					of: button
+				});
+				$(document).bind("click.menubar", function(event) {
+					if ($(event.target).closest(".ui-menu")[0] == menu[0]) {
+						return;
+					}
+					$(this).unbind(".menubar");
+					menu.hide();
+				});
+				return false;
+			})
+			.each(function() {
+				$(this).next().hide().menu({
+					input: $(this),
+					select: function(event, ui) {
+						$("<div/>").text("Selected: " + ui.item.text()).appendTo("#log");
+					}
+				});
+			});
+
+	});
+	</script>
+	<style>
+		body { font-size:62.5%; }
+		.ui-menu { width: 200px; }
+		.menubar .ui-menu { position: absolute; }
+	</style>
+</head>
+<body>
+
+<div class="menubar ui-widget-header">
+	<a href="#">File</a>
+	<ul>
+		<li><a href="#">Open...</a></li>
+		<li><a href="#">Save</a></li>
+		<li><a href="#">Save as...</a></li>
+		<li><a href="#">Close</a></li>
+		<li><a href="#">Quit</a></li>
+	</ul>
+	<a href="#">Edit</a>
+	<ul>
+		<li><a href="#">Copy</a></li>
+		<li><a href="#">Cut</a></li>
+		<li><a href="#">Paste</a></li>
+	</ul>
+	<a href="#">View</a>
+	<ul>
+		<li><a href="#">Fullscreen</a></li>
+		<li><a href="#">Fit into view</a></li>
+		<li><a href="#">Customize...</a></li>
+	</ul>
+</div>
+
+<div class="ui-widget" style="margin-top:2em; font-family:Arial">
+	Log:
+	<div id="log" style="height: 400px; width: 300px; overflow: auto;" class="ui-widget-content"></div>
+</div>
+
+</body>
+</html>

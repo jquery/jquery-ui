@@ -196,10 +196,22 @@
 			<mapper type="glob" from="*.css" to="${dist.dir}/themes/base/minified/*.min.css" />
 			<targetfile/>
 		</apply>
-				
+		
+		<replaceregexp match=".css" replace=".min.css" flags="g">
+			<fileset dir="${dist.dir}/themes/base/minified/">
+				<include name="*.base.min.css"/>
+				<include name="*.all.min.css"/>
+			</fileset>
+		</replaceregexp>
+		
+		<!-- make a copy of all theme images to ensure that relative paths in minified css files work -->
+		<copy todir="${dist.dir}/themes/base/minified/images" >
+			<fileset dir="${ui.dir}/themes/base/images" />
+		</copy>
+		
 		<echo message="Minified ui/ built." />
 	</target>
-
+	
 	<target description="Copy needed folders" name="copy">
 		<echo message="Copying files" />
 		<mkdir dir="${dist.dir}" />
@@ -257,8 +269,11 @@
 		<get src="${url}Button" dest="${docs.dir}button.html" />
 		<get src="${url}Datepicker" dest="${docs.dir}datepicker.html" />
 		<get src="${url}Dialog" dest="${docs.dir}dialog.html" />
+		<get src="${url}Menu" dest="${docs.dir}menu.html" />
 		<get src="${url}Progressbar" dest="${docs.dir}progressbar.html" />
 		<get src="${url}Slider" dest="${docs.dir}slider.html" />
+		<get src="${url}Spinner" dest="${docs.dir}spinner.html" />
+		<get src="${url}Tooltip" dest="${docs.dir}tooltip.html" />
 		<get src="${url}Tabs" dest="${docs.dir}tabs.html" />
 
 		<get src="${url}Position" dest="${docs.dir}position.html" />

@@ -1,55 +1,65 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8" />
+	<meta charset="utf-8">
 	<title>jQuery UI Accordion Test Suite</title>
 
-	<link type="text/css" href="../../../themes/base/jquery.ui.accordion.css" rel="stylesheet" />
+	<link rel="stylesheet" href="../../../themes/base/jquery.ui.accordion.css">
 
-	<script type="text/javascript" src="../../../jquery-1.4.3.js"></script>
-	<script type="text/javascript" src="../../../ui/jquery.ui.core.js"></script>
-	<script type="text/javascript" src="../../../ui/jquery.ui.widget.js"></script>
-	<script type="text/javascript" src="../../../ui/jquery.ui.accordion.js"></script>
-
-	<link rel="stylesheet" href="../../../external/qunit.css" type="text/css"/>
-	<script type="text/javascript" src="../../../external/qunit.js"></script>
-	<script type="text/javascript" src="../../jquery.simulate.js"></script>
-	<script type="text/javascript" src="../testsuite.js"></script>
-
-	<script type="text/javascript">
-		$.ui.accordion.prototype.options.animated = false;
-
-		function state(accordion) {
-			var args = $.makeArray(arguments).slice(1);
-			var result = [];
-			$.each(args, function(i, n) {
-				result.push( accordion.find(".ui-accordion-content").eq(i).filter(function() {
-					return $(this).css("display") != "none"
-				}).length ? 1 : 0 );
-			});
-			same(args, result)
-		}
-		function equalHeights(accordion, min, max) {
-			var sizes = [];
-			accordion.find(".ui-accordion-content").each(function() {
-				sizes.push($(this).outerHeight());
-			});
-			ok( sizes[0] >= min && sizes[0] <= max, "must be within " + min + " and " + max + ", was " + sizes[0] );
-			same(sizes[0], sizes[1]);
-			same(sizes[0], sizes[2]);
-		}
+	<script src="../../../jquery-1.4.4.js"></script>
+	<script>
+	$.uiBackCompat = false;
 	</script>
-	<script type="text/javascript" src="accordion_core.js"></script>
-	<script type="text/javascript" src="accordion_defaults.js"></script>
-	<script type="text/javascript" src="accordion_events.js"></script>
-	<script type="text/javascript" src="accordion_methods.js"></script>
-	<script type="text/javascript" src="accordion_options.js"></script>
-	<script type="text/javascript" src="accordion_tickets.js"></script>
-	
-	<script type="text/javascript" src="../swarminject.js"></script>
+	<script src="../../../ui/jquery.ui.core.js"></script>
+	<script src="../../../ui/jquery.ui.widget.js"></script>
+	<script src="../../../ui/jquery.ui.accordion.js"></script>
+
+	<link rel="stylesheet" href="../../../external/qunit.css">
+	<script src="../../../external/qunit.js"></script>
+	<script src="../../jquery.simulate.js"></script>
+	<script src="../testsuite.js"></script>
+
+	<script>
+	function state( accordion ) {
+		var expected = $.makeArray( arguments ).slice( 1 );
+		var actual = accordion.find( ".ui-accordion-content" ).map(function() {
+			return $( this ).css( "display" ) === "none" ? 0 : 1;
+		}).get();
+		same( actual, expected );
+	}
+	function equalHeights( accordion, min, max ) {
+		var sizes = [];
+		accordion.find( ".ui-accordion-content" ).each(function() {
+			sizes.push( $( this ).outerHeight() );
+		});
+		ok( sizes[ 0 ] >= min && sizes[ 0 ] <= max,
+			"must be within " + min + " and " + max + ", was " + sizes[ 0 ] );
+		same( sizes[ 0 ], sizes[ 1 ] );
+		same( sizes[ 0 ], sizes[ 2 ] );
+	}
+	function accordionSetupTeardown() {
+		var animated = $.ui.accordion.prototype.options.animated;
+		return {
+			setup: function() {
+				$.ui.accordion.prototype.options.animated = false;
+			},
+			teardown: function() {
+				$.ui.accordion.prototype.options.animated = animated;
+			}
+		};
+	}
+	</script>
+	<script src="accordion_defaults.js"></script>
+	<script src="accordion_core.js"></script>
+	<script src="accordion_events.js"></script>
+	<script src="accordion_methods.js"></script>
+	<script src="accordion_options.js"></script>
+	<script src="accordion_tickets.js"></script>
+
+	<script src="../swarminject.js"></script>
 	<style>
-		#main { font-size: 10pt; font-family: 'trebuchet ms', verdana, arial; }
-		#list, #list1 *, #navigation, #navigation * { margin: 0; padding: 0; font-size: 12px; }
+	#main { font-size: 10pt; font-family: "trebuchet ms", verdana, arial; }
+	#list, #list1 *, #navigation, #navigation * { margin: 0; padding: 0; font-size: 12px; }
 	</style>
 </head>
 <body>
@@ -64,7 +74,7 @@
 
 	<div>
 		<div id="list1" class="foo">
-	        <a class="bar">There is one obvious advantage:</a>
+	        <h3 class="bar"><a class="anchor">There is one obvious advantage:</a></h3>
 	        <div class="foo">
 	            <p>
 	                You've seen it coming!
@@ -74,7 +84,7 @@
 	                Well, at least no free beer. Perhaps a bear, if you can afford it.
 	            </p>
 	        </div>
-	        <a class="bar">Now that you've got...</a>
+	        <h3 class="bar"><a class="anchor">Now that you've got...</a></h3>
 	        <div class="foo">
 	            <p>
 	                your bear, you have to admit it!
@@ -85,7 +95,7 @@
 	                We could talk about renting one.
 	            </p>
 	        </div>
-	        <a class="bar">Rent one bear, ...</a>
+	        <h3 class="bar"><a class="anchor">Rent one bear, ...</a></h3>
 	        <div class="foo">
 	            <p>
 	                get two for three beer.

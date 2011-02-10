@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>jQuery UI Spinner - decimal</title>
+	<link type="text/css" href="../../themes/base/jquery.ui.all.css" rel="stylesheet" />
+	<script type="text/javascript" src="../../jquery-1.4.4.js"></script>
+	<script type="text/javascript" src="../../external/jquery.mousewheel-3.0.4.js"></script>
+	<script type="text/javascript" src="../../external/jquery.global.js"></script>
+	<script type="text/javascript" src="../../external/jquery.global.de-DE.js"></script>
+	<script type="text/javascript" src="../../ui/jquery.ui.core.js"></script>
+	<script type="text/javascript" src="../../ui/jquery.ui.widget.js"></script>
+	<script type="text/javascript" src="../../ui/jquery.ui.button.js"></script>
+	<script type="text/javascript" src="../../ui/jquery.ui.spinner.js"></script>
+	<link type="text/css" href="../demos.css" rel="stylesheet" />
+	<script type="text/javascript">
+	$.widget("ui.timespinner", $.ui.spinner, {
+		options: {
+			// seconds
+			step: 60 * 1000,
+			// hours
+			page: 60
+		},
+		
+		_parse: function(value) {
+			if (typeof value == 'string') {
+				return +$.global.parseDate(value)
+			}
+			return value;
+		},
+		_format: function() {
+			this.element.val( $.global.format(new Date(this.options.value), "t") );
+		}
+	})
+	$(function() {
+		$("#spinner").timespinner();
+		
+		$("#culture").change(function() {
+			var current = $("#spinner").timespinner("value");
+			$.global.preferCulture($(this).val());
+			$("#spinner").timespinner("value", current);
+		});
+	});
+	</script>
+</head>
+<body>
+
+<div class="demo">
+<p>
+	<label for="spinner">Time spinner:</label>
+	<input id="spinner" name="spinner" value="08:30 PM" />
+</p>
+<p>
+	<label for="culture">Select a culture to use for formatting:</label>
+	<select id="culture">
+		<option value="en-EN" selected="selected">English</option>
+		<option value="de-DE">German</option>
+	</select>
+</p>
+</div>
+
+<div class="demo-description">
+<p>
+	A custom widget extending spinner. Use the Globalization plugin to parse and output
+	a timestamp, with custom step and page options. Cursor up/down spins minutes, page up/down
+	spins hours.
+</p>
+</div>
+
+</body>
+</html>

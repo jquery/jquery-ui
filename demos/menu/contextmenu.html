@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<title>jQuery UI Menu - Contextmenu demo</title>
+	<link type="text/css" href="../../themes/base/jquery.ui.all.css" rel="stylesheet" />
+	<script type="text/javascript" src="../../jquery-1.4.4.js"></script>
+	<script type="text/javascript" src="../../ui/jquery.ui.core.js"></script>
+	<script type="text/javascript" src="../../ui/jquery.ui.position.js"></script>
+	<script type="text/javascript" src="../../ui/jquery.ui.widget.js"></script>
+	<script type="text/javascript" src="../../ui/jquery.ui.menu.js"></script>
+	<script type="text/javascript" src="../../ui/jquery.ui.button.js"></script>
+	<link type="text/css" href="../demos.css" rel="stylesheet" />
+	<script type="text/javascript">
+	$(function() {
+		$(".demo button").button({
+			icons: {
+				primary: "ui-icon-home",
+				secondary: "ui-icon-triangle-1-s"
+			}
+		}).each(function() {
+			$(this).next().menu({
+				select: function(event, ui) {
+					$(this).hide();
+					$("#log").append("<div>Selected " + ui.item.text() + "</div>");
+				},
+				input: $(this)
+			}).hide();
+		}).click(function(event) {
+			var menu = $(this).next();
+			if (menu.is(":visible")) {
+				menu.hide();
+				return false;
+			}
+			menu.menu("deactivate").show().css({top:0, left:0}).position({
+				my: "left top",
+				at: "right top",
+				of: this
+			});
+			$(document).one("click", function() {
+				menu.hide();
+			});
+			return false;
+		})
+	});
+	</script>
+	<style>
+		.ui-menu { width: 200px; position: absolute; }
+	</style>
+</head>
+<body>
+
+<div class="demo">
+
+	<button>Select a city</button>
+	<ul>
+		<li><a href="#">Amsterdam</a></li>
+		<li><a href="#">Anaheim</a></li>
+		<li><a href="#">Cologne</a></li>
+		<li><a href="#">Frankfurt</a></li>
+		<li><a href="#">Magdeburg</a></li>
+		<li><a href="#">Munich</a></li>
+		<li><a href="#">Utrecht</a></li>
+		<li><a href="#">Zurich</a></li>
+	</ul>
+	
+	<div id="log"></div>
+
+</div><!-- End demo -->
+
+<div class="demo-description">
+
+<p>A simple contextmenu: Click the button, or tab to it and hit space to open the menu. Use the mouse or cursor keys to select an item, click it or hit enter to select it.</p>
+
+<p>The keyboard handling is part of the menu. Using the input option to menu is configured to add the key event handlers to the button, as that button gets focused when clicked.</p>
+
+</div><!-- End demo-description -->
+
+
+
+</body>
+</html>
