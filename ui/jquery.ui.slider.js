@@ -33,6 +33,7 @@ $.widget( "ui.slider", $.ui.mouse, {
 		value: 0,
 		values: null
 	},
+  _overlap: { 'handles':[], 'eventX':-1, 'eventY':-1 },
 
 	_create: function() {
 		var self = this,
@@ -126,7 +127,7 @@ $.widget( "ui.slider", $.ui.mouse, {
 			.blur(function() {
 				$( this ).removeClass( "ui-state-focus" );
 			});
-
+      
 		this.handles.each(function( i ) {
 			$( this ).data( "index.ui-slider-handle", i );
 		});
@@ -248,7 +249,6 @@ $.widget( "ui.slider", $.ui.mouse, {
 			position,
 			normValue,
 			distance,
-			closestHandle,
 			self,
 			index,
 			allowed,
@@ -265,65 +265,123 @@ $.widget( "ui.slider", $.ui.mouse, {
 		};
 		this.elementOffset = this.element.offset();
 
-		position = { x: event.pageX, y: event.pageY };
+		position  = { x: event.pageX, y: event.pageY };
 		normValue = this._normValueFromMouse( position );
+
+    this._overlap = { 'handles':[], 'eventX':-1, 'eventY':-1 };
 		distance = this._valueMax() - this._valueMin() + 1;
-		self = this;
-		this.handles.each(function( i ) {
-			var thisDistance = Math.abs( normValue - self.values(i) );
-			if ( distance > thisDistance ) {
-				distance = thisDistance;
-				closestHandle = $( this );
+		self     = this;
+		this.handles.each(function( i ) 
+    {
+      if ( o.orientation === "vertical" ) 
+      {
+        low   = $(this).offset().top;
+        high  = low + $(this).outerHeight(),
+        check = position.y;
+      } else {
+        low   = $(this).offset().left;
+        high  = low + $(this).outerWidth();
+        check = position.x;
+      }
+      if ( low <= check && check <= high )
+      {
+        self._overlap.handles.push(i);
+      }
+      var thisDistance = normValue - self.values(i);
+			var absDistance  = Math.abs( thisDistance );
+      if ( ( distance > absDistance ) || 
+           ( distance === absDistance && thisDistance > 0 ) )
+      {
+				distance = absDistance;
 				index = i;
-			}
+      }
+      
 		});
-
-		// workaround for bug #3736 (if both handles of a range are at 0,
-		// the first is always used as the one with least distance,
-		// and moving it is obviously prevented by preventing negative ranges)
-		if( o.range === true && this.values(1) === o.min ) {
-			index += 1;
-			closestHandle = $( this.handles[index] );
-		}
-
-		allowed = this._start( event, index );
+		if( this._overlap.handles.length>1 )
+    {
+      var first_overlap = this._overlap.handles[0];
+      var last_overlap  = this._overlap.handles[this._overlap.handles.length-1];
+      if ( this.values(last_overlap) === o.min ) 
+      {
+        index = last_overlap;
+      } else if ( this.values(first_overlap) === o.max ) {
+        index = first_overlap;
+      } else {
+        this._overlap.eventX = event.pageX;
+        this._overlap.eventY = event.pageY;
+        return true;
+      }
+    }
+    
+    if ( !this._chooseHandle(event,index) )
+    { 
+      return false; 
+    }
+    
+    if ( !this.handles.hasClass("ui-state-hover") ) {
+      this._slide( event, index, normValue );
+    }
+    
+    var $handle = $(this.handles[index]);
+    var offset = $handle.offset();
+    var mouseOverHandle = !$handle.parents().andSelf().is( ".ui-slider-handle" );
+    this._clickOffset = mouseOverHandle ? { left: 0, top: 0 } : {
+      left: event.pageX - offset.left - ( $handle.width() / 2 ),
+      top:  event.pageY - offset.top -
+        ( $handle.height() / 2 ) -
+        ( parseInt( $handle.css("borderTopWidth"),    10 ) || 0 ) -
+        ( parseInt( $handle.css("borderBottomWidth"), 10 ) || 0) +
+        ( parseInt( $handle.css("marginTop"),         10 ) || 0)
+    };
+    
+    this._animateOff = true;
+		return true;
+	},
+  _chooseHandle: function ( event, index ) {
+		var allowed = this._start( event, index );
 		if ( allowed === false ) {
 			return false;
 		}
 		this._mouseSliding = true;
 
-		self._handleIndex = index;
+		this._handleIndex = index;
 
-		closestHandle
+		$(this.handles[index])
 			.addClass( "ui-state-active" )
 			.focus();
-		
-		offset = closestHandle.offset();
-		mouseOverHandle = !$( event.target ).parents().andSelf().is( ".ui-slider-handle" );
-		this._clickOffset = mouseOverHandle ? { left: 0, top: 0 } : {
-			left: event.pageX - offset.left - ( closestHandle.width() / 2 ),
-			top: event.pageY - offset.top -
-				( closestHandle.height() / 2 ) -
-				( parseInt( closestHandle.css("borderTopWidth"), 10 ) || 0 ) -
-				( parseInt( closestHandle.css("borderBottomWidth"), 10 ) || 0) +
-				( parseInt( closestHandle.css("marginTop"), 10 ) || 0)
-		};
-
-		if ( !this.handles.hasClass( "ui-state-hover" ) ) {
-			this._slide( event, index, normValue );
-		}
-		this._animateOff = true;
-		return true;
-	},
+      
+    this._overlap = { 'handles':[], 'eventX':-1, 'eventY':-1 };
+    return true;
+  },
 
 	_mouseStart: function( event ) {
 		return true;
 	},
 
 	_mouseDrag: function( event ) {
-		var position = { x: event.pageX, y: event.pageY },
-			normValue = this._normValueFromMouse( position );
-		
+    var position  = { x: event.pageX, y: event.pageY },
+        normValue = this._normValueFromMouse( position );
+    if ( this._overlap.handles.length > 1 ) 
+    {
+      if ( this.options.orientation === "vertical" ) 
+      {
+        if ( ( this._overlap.eventY - position.y ) === 0 ) {
+          return false;
+        } if ( ( this._overlap.eventY - position.y ) < 0 ) {
+          this._chooseHandle( event, this._overlap.handles[0] );
+        } else {
+          this._chooseHandle( event, this._overlap.handles[this._overlap.handles.length-1] );
+        }
+      } else {
+        if ( ( this._overlap.eventX - position.x ) === 0 ) {
+          return false;
+        } if ( ( this._overlap.eventX - position.x ) > 0 ) {
+          this._chooseHandle( event, this._overlap.handles[0] );
+        } else {
+          this._chooseHandle( event, this._overlap.handles[this._overlap.handles.length-1] );
+        }
+      }
+    }
 		this._slide( event, this._handleIndex, normValue );
 
 		return false;
@@ -339,7 +397,7 @@ $.widget( "ui.slider", $.ui.mouse, {
 		this._handleIndex = null;
 		this._clickOffset = null;
 		this._animateOff = false;
-
+    this._overlap = { 'handles':[], 'eventX':-1, 'eventY':-1 };
 		return false;
 	},
 	
@@ -382,10 +440,10 @@ $.widget( "ui.slider", $.ui.mouse, {
 	_start: function( event, index ) {
 		var uiHash = {
 			handle: this.handles[ index ],
-			value: this.value()
+			value:  this.value()
 		};
 		if ( this.options.values && this.options.values.length ) {
-			uiHash.value = this.values( index );
+			uiHash.value  = this.values( index );
 			uiHash.values = this.values();
 		}
 		return this._trigger( "start", event, uiHash );
@@ -399,9 +457,11 @@ $.widget( "ui.slider", $.ui.mouse, {
 		if ( this.options.values && this.options.values.length ) {
 			otherVal = this.values( index ? 0 : 1 );
 
-			if ( ( this.options.values.length === 2 && this.options.range === true ) && 
+			if ( 
+          ( this.options.values.length === 2 && this.options.range === true ) && 
 					( ( index === 0 && newVal > otherVal) || ( index === 1 && newVal < otherVal ) )
-				) {
+				 ) 
+      {
 				newVal = otherVal;
 			}
 
