@@ -126,6 +126,30 @@ $.fn.extend({
 
 	enableSelection: function() {
 		return this.unbind( ".ui-disableSelection" );
+	},
+	
+	/* added new functionality that allows to apply effects on element. Fix #3772
+		based on kbwood solution posted http://bugs.jqueryui.com/ticket/3772#comment:6 */
+	showHideAnim: function ( effect, showing ) {
+		//showing defines whether to hide or to show this element
+		if ( typeof showing === 'undefined' ) {
+			showing = 0;
+		}
+		
+		//define which effect to apply
+		// Convert to array
+		effect = ( $.isArray( effect ) ? effect : ( typeof effect === 'string' ? [effect] : [effect.fx, effect.options, effect.speed, effect.callback] ) );
+		// Check for options
+		( effect[1] && typeof effect[1] !== 'object' ? effect.splice( 1, 0, null ) : effect );
+		// Check for callback
+		( $.isFunction( effect[2] ) ? effect.splice( 2, 0, null ) : effect );
+		// Special case for 'show'
+		effect = ( effect[0] && effect[0] !== 'show' ? effect : effect.slice( 2 ) );
+		( effect[0] === 'fade' ?
+			// Special case for 'fade'
+			this[showing ? 'fadeIn' : 'fadeOut'].apply( this, effect.slice( 2 ) ) :
+			// Apply effect
+			this[showing ? 'show' : 'hide'].apply( this, effect ) );
 	}
 });
 

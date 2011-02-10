@@ -26,7 +26,8 @@ $.widget("ui.tooltip", {
 			my: "left center",
 			at: "right center",
 			offset: "15 0"
-		}
+		},
+		animation: 'show'//added animation option. e.g. "fade", "slide", "show", "normal"
 	},
 	_create: function() {
 		var self = this;
@@ -67,19 +68,21 @@ $.widget("ui.tooltip", {
 	},
 	
 	open: function(event) {
-		var target = $(event && event.target || this.element).closest(this.options.items);
+		var target = $( event && event.target || this.element ).closest( this.options.items );
 		// already visible? possible when both focus and mouseover events occur
-		if (this.current && this.current[0] == target[0])
+		if ( this.current && this.current[0] == target[0] ) {
 			return;
+		}
 		var self = this;
 		this.current = target;
-		this.currentTitle = target.attr("title");
-		var content = this.options.content.call(target[0], function(response) {
+		this.currentTitle = target.attr( "title" );
+		var content = this.options.content.call( target[0], function( response ) {
 			// IE may instantly serve a cached response, need to give it a chance to finish with _show before that
 			setTimeout(function() {
 				// ignore async responses that come in after the tooltip is already hidden
-				if (self.current == target)
-					self._show(event, target, response);
+				if ( self.current == target ) {
+					self._show( event, target, response );
+				}
 			}, 13);
 		});
 		if (content) {
@@ -88,13 +91,15 @@ $.widget("ui.tooltip", {
 	},
 	
 	_show: function(event, target, content) {
-		if (!content)
+		if ( !content ) {
 			return;
+		}
 		
-		target.attr("title", "");
+		target.attr( "title", "" );
 		
-		if (this.options.disabled)
+		if ( this.options.disabled ) {
 			return;
+		}
 			
 		this.tooltipContent.html(content);
 		this.tooltip.css({
@@ -107,7 +112,8 @@ $.widget("ui.tooltip", {
 		this.tooltip.attr("aria-hidden", "false");
 		target.attr("aria-describedby", this.tooltip.attr("id"));
 
-		this.tooltip.stop(false, true).fadeIn();
+		//new animation call
+		this.tooltip.stop(false, true).showHideAnim(this.options.animation, 1);
 
 		this._trigger( "open", event );
 	},
@@ -125,8 +131,9 @@ $.widget("ui.tooltip", {
 		
 		current.removeAttr("aria-describedby");
 		this.tooltip.attr("aria-hidden", "true");
-		
-		this.tooltip.stop(false, true).fadeOut();
+
+		//new animation call
+		this.tooltip.stop(false, true).showHideAnim(this.options.animation, 0);
 		
 		this._trigger( "close", event );
 	}
