@@ -66,9 +66,19 @@ $.widget = function( name, base, prototype ) {
 					return base.prototype[ method ].apply( this, args );
 				};
 				return function() {
+					var __super = this._super,
+						__superApply = this._superApply,
+						returnValue;
+
 					this._super = _super;
 					this._superApply = _superApply;
-					return value.apply( this, arguments );
+
+					returnValue = value.apply( this, arguments );
+
+					this._super = __super;
+					this._superApply = __superApply;
+
+					return returnValue;
 				};
 			}());
 		}

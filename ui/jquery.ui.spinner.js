@@ -285,16 +285,11 @@ $.widget('ui.spinner', {
 				this.buttons.button("enable");
 			}
 		}
-		// TODO see below
-		//this._super( "_setOption", key, value );
-		$.Widget.prototype._setOption.apply( this, arguments );
+		this._super( "_setOption", key, value );
 	},
 	
 	_setOptions: function( options ) {
-		// TODO _super doesn't handle inheritance with more then one subclass
-		// spinner subclass will have spinner as base, calling spinner._setOptions infinitely
-		//this._super( "_setOptions", options );
-		$.Widget.prototype._setOptions.apply( this, arguments );
+		this._super( "_setOptions", options );
 		if ( "value" in options ) {
 			this._format( this.options.value );
 		}
