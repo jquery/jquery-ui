@@ -146,7 +146,7 @@ $.widget("ui.menu", {
 			.end();
 		// need to remove the attribute before adding it for the screenreader to pick up the change
 		// see http://groups.google.com/group/jquery-a11y/msg/929e0c1e8c5efc8f
-		this.element.removeAttr("aria-activedescenant").attr("aria-activedescenant", self.itemId);
+		this.element.removeAttr("aria-activedescendant").attr("aria-activedescendant", self.itemId);
 		this._trigger( "focus", event, { item: item } );
 	},
 

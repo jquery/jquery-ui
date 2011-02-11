@@ -24,8 +24,6 @@ function testWidgetDefaults( widget, defaults ) {
 
 var privateMethods = [
 	"_createWidget",
-	"_super",
-	"_superApply",
 	"destroy",
 	"option",
 	"enable",
