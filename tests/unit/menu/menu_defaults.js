@@ -3,9 +3,7 @@
  */
 
 var menu_defaults = {
-	disabled: false,
-	navigationFilter: function() {}
-	
+	disabled: false
 };
 
 commonWidgetTests('menu', { defaults: menu_defaults });
