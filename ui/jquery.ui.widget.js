@@ -58,15 +58,19 @@ $.widget = function( name, base, prototype ) {
 	basePrototype.options = $.extend( true, {}, basePrototype.options );
 	$.each( prototype, function( prop, value ) {
 		if ( $.isFunction( value ) ) {
-			prototype[ prop ] = function() {
-				this._super = function( method ) {
+			prototype[ prop ] = (function() {
+				var _super = function( method ) {
 					return base.prototype[ method ].apply( this, slice.call( arguments, 1 ) );
 				};
-				this._superApply = function( method, args ) {
+				var _superApply = function( method, args ) {
 					return base.prototype[ method ].apply( this, args );
 				};
-				return value.apply( this, arguments );
-			};
+				return function() {
+					this._super = _super;
+					this._superApply = _superApply;
+					return value.apply( this, arguments );
+				};
+			}());
 		}
 	});
 	$[ namespace ][ name ].prototype = $.extend( true, basePrototype, {
