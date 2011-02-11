@@ -36,7 +36,9 @@ $.widget = function( name, base, prototype ) {
 	};
 
 	$[ namespace ] = $[ namespace ] || {};
-	$[ namespace ][ name ] = $[ namespace ][ name ] || function( options, element ) {
+	// create the constructor using $.extend() so we can carry over any
+	// static properties stored on the existing constructor (if there is one)
+	$[ namespace ][ name ] = $.extend( function( options, element ) {
 		// allow instantiation without "new" keyword
 		if ( !this._createWidget ) {
 			return new $[ namespace ][ name ]( options, element );
@@ -47,19 +49,31 @@ $.widget = function( name, base, prototype ) {
 		if ( arguments.length ) {
 			this._createWidget( options, element );
 		}
-	};
+	}, $[ namespace ][ name ] );
 
 	var basePrototype = new base();
 	// we need to make the options hash a property directly on the new instance
 	// otherwise we'll modify the options hash on the prototype that we're
 	// inheriting from
 	basePrototype.options = $.extend( true, {}, basePrototype.options );
+	$.each( prototype, function( prop, value ) {
+		if ( $.isFunction( value ) ) {
+			prototype[ prop ] = function() {
+				this._super = function( method ) {
+					return base.prototype[ method ].apply( this, slice.call( arguments, 1 ) );
+				};
+				this._superApply = function( method, args ) {
+					return base.prototype[ method ].apply( this, args );
+				};
+				return value.apply( this, arguments );
+			};
+		}
+	});
 	$[ namespace ][ name ].prototype = $.extend( true, basePrototype, {
 		namespace: namespace,
 		widgetName: name,
 		widgetEventPrefix: name,
-		widgetBaseClass: fullName,
-		base: base.prototype
+		widgetBaseClass: fullName
 	}, prototype );
 
 	$.widget.bridge( name, $[ namespace ][ name ] );
@@ -158,13 +172,6 @@ $.Widget.prototype = {
 	},
 	_create: $.noop,
 	_init: $.noop,
-
-	_super: function( method ) {
-		return this.base[ method ].apply( this, slice.call( arguments, 1 ) );
-	},
-	_superApply: function( method, args ) {
-		return this.base[ method ].apply( this, args );
-	},
 
 	destroy: function() {
 		this._destroy();
