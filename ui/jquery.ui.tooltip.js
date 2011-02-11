@@ -18,6 +18,7 @@ var increments = 0;
 
 $.widget("ui.tooltip", {
 	options: {
+		hide: null,
 		items: "[title]",
 		content: function() {
 			return $(this).attr("title");
@@ -26,7 +27,8 @@ $.widget("ui.tooltip", {
 			my: "left center",
 			at: "right center",
 			offset: "15 0"
-		}
+		},
+		show: null
 	},
 	_create: function() {
 		var self = this;
@@ -107,7 +109,7 @@ $.widget("ui.tooltip", {
 		this.tooltip.attr("aria-hidden", "false");
 		target.attr("aria-describedby", this.tooltip.attr("id"));
 
-		this.tooltip.stop(false, true).fadeIn();
+		this.tooltip.stop(false, true).show( this.options.show );
 
 		this._trigger( "open", event );
 	},
@@ -126,7 +128,7 @@ $.widget("ui.tooltip", {
 		current.removeAttr("aria-describedby");
 		this.tooltip.attr("aria-hidden", "true");
 		
-		this.tooltip.stop(false, true).fadeOut();
+		this.tooltip.stop(false, true).hide( this.options.hide );
 		
 		this._trigger( "close", event );
 	}

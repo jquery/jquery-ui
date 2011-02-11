@@ -1,23 +1,23 @@
 <!doctype html>
 <html lang="en">
 <head>
-	<title>jQuery UI Tooltip - Custom animation demo</title>
+	<title>jQuery UI Tooltip - Default demo</title>
 	<link type="text/css" href="../../themes/base/jquery.ui.all.css" rel="stylesheet" />
 	<script type="text/javascript" src="../../jquery-1.4.4.js"></script>
 	<script type="text/javascript" src="../../ui/jquery.ui.core.js"></script>
 	<script type="text/javascript" src="../../ui/jquery.ui.widget.js"></script>
 	<script type="text/javascript" src="../../ui/jquery.ui.position.js"></script>
+	<script src="../../ui/jquery.effects.core.js"></script>
+	<script src="../../ui/jquery.effects.slide.js"></script>
+	<script src="../../ui/jquery.effects.blind.js"></script>
+	<script src="../../ui/jquery.effects.explode.js"></script>
 	<script type="text/javascript" src="../../ui/jquery.ui.tooltip.js"></script>
 	<link type="text/css" href="../demos.css" rel="stylesheet" />
 	<script type="text/javascript">
 	$(function() {
-		$(".demo").tooltip({
-			open: function() {
-				$(this).tooltip("widget").stop(false, true).hide().slideDown();
-			},
-			close: function() {
-				$(this).tooltip("widget").stop(false, true).show().slideUp();
-			}
+		$("#age").tooltip({
+			show: 'slide',
+			hide: 'slide'
 		});
 	});
 	</script>
@@ -45,7 +45,7 @@
 
 <div class="demo-description">
 
-<p>Here the tooltips are positioned relative to the mouse, and follow the mouse while it moves above the element.</p>
+<p>Hover the links above or use the tab key to cycle the focus on each element.</p>
 
 </div><!-- End demo-description -->
 
