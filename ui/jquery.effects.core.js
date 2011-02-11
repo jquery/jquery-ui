@@ -188,7 +188,7 @@ function getElementStyles() {
 	return newStyle;
 }
 
-function filterStyles(styles) {
+function filterStyles(styles, keepMore) {
 	var name, value;
 	for (name in styles) {
 		value = styles[name];
@@ -199,16 +199,17 @@ function filterStyles(styles) {
 			$.isFunction(value) ||
 			// shorthand styles that need to be expanded
 			name in shorthandStyles ||
+			// skip members that simply point to property names as array indices
+			!isNaN(parseInt(name)) ||
 			// ignore scrollbars (break in IE)
 			(/scrollbar/).test(name) ||
-
 			// only colors or values that can be converted to numbers
-			(!(/color/i).test(name) && isNaN(parseFloat(value)))
+			(!keepMore && !(/color/i).test(name) && isNaN(parseFloat(value)))
 		) {
 			delete styles[name];
 		}
 	}
-	
+
 	return styles;
 }
 
@@ -225,8 +226,9 @@ function styleDifference(oldStyle, newStyle) {
 	return diff;
 }
 
-$.effects.animateClass = function(value, duration, easing, callback) {
+$.effects.animateClass = function(value, duration, easing, callback, useNewDuringAnimation) {
 	if ($.isFunction(easing)) {
+		useNewDuringAnimation = callback;
 		callback = easing;
 		easing = null;
 	}
@@ -236,20 +238,42 @@ $.effects.animateClass = function(value, duration, easing, callback) {
 			originalStyleAttr = that.attr('style') || ' ',
 			originalStyle = filterStyles(getElementStyles.call(this)),
 			newStyle,
-			className = that.attr('className');
+			origClassName = that.attr('className'),
+			newClassName,
+			styleDiff,
+			undoStyleDiff = {},
+			propName;
 
 		$.each(classAnimationActions, function(i, action) {
 			if (value[action]) {
 				that[action + 'Class'](value[action]);
 			}
 		});
+		newClassName = that.attr('className');
 		newStyle = filterStyles(getElementStyles.call(this));
-		that.attr('className', className);
+		styleDiff = styleDifference(originalStyle, newStyle);
+		if (useNewDuringAnimation) {
+			// Set the class back to the original so we can inspect it
+			that.attr('className', origClassName);
+			// For each property we plan to animate, find the original value
+			for (propName in styleDiff) {
+				undoStyleDiff[propName] = that.css(propName);
+			}
+			// Set the class back to the new value during animation
+			that.attr('className', newClassName);
+			// Apply the undo diff to give the initial appearance back to the element
+			that.css(undoStyleDiff);
+		} else {
+			// Set the class back to its original value during animation
+			that.attr('className', origClassName);
+		}
 
-		that.animate(styleDifference(originalStyle, newStyle), duration, easing, function() {
-			$.each(classAnimationActions, function(i, action) {
-				if (value[action]) { that[action + 'Class'](value[action]); }
-			});
+		that.animate(styleDiff, duration, easing, function() {
+			if (!useNewDuringAnimation) {
+				$.each(classAnimationActions, function(i, action) {
+					if (value[action]) { that[action + 'Class'](value[action]); }
+				});
+			}
 			// work around bug in IE by clearing the cssText before setting it
 			if (typeof that.attr('style') == 'object') {
 				that.attr('style').cssText = '';
@@ -271,32 +295,32 @@ $.effects.animateClass = function(value, duration, easing, callback) {
 
 $.fn.extend({
 	_addClass: $.fn.addClass,
-	addClass: function(classNames, speed, easing, callback) {
-		return speed ? $.effects.animateClass.apply(this, [{ add: classNames },speed,easing,callback]) : this._addClass(classNames);
+	addClass: function(classNames, speed, easing, callback, useNewDuringAnimation) {
+		return speed ? $.effects.animateClass.apply(this, [{ add: classNames },speed,easing,callback,useNewDuringAnimation]) : this._addClass(classNames);
 	},
 
 	_removeClass: $.fn.removeClass,
-	removeClass: function(classNames,speed,easing,callback) {
-		return speed ? $.effects.animateClass.apply(this, [{ remove: classNames },speed,easing,callback]) : this._removeClass(classNames);
+	removeClass: function(classNames,speed,easing,callback,useNewDuringAnimation) {
+		return speed ? $.effects.animateClass.apply(this, [{ remove: classNames },speed,easing,callback,useNewDuringAnimation]) : this._removeClass(classNames);
 	},
 
 	_toggleClass: $.fn.toggleClass,
-	toggleClass: function(classNames, force, speed, easing, callback) {
+	toggleClass: function(classNames, force, speed, easing, callback,useNewDuringAnimation) {
 		if ( typeof force == "boolean" || force === undefined ) {
 			if ( !speed ) {
 				// without speed parameter;
 				return this._toggleClass(classNames, force);
 			} else {
-				return $.effects.animateClass.apply(this, [(force?{add:classNames}:{remove:classNames}),speed,easing,callback]);
+				return $.effects.animateClass.apply(this, [(force?{add:classNames}:{remove:classNames}),speed,easing,callback,useNewDuringAnimation]);
 			}
 		} else {
 			// without switch parameter;
-			return $.effects.animateClass.apply(this, [{ toggle: classNames },force,speed,easing]);
+			return $.effects.animateClass.apply(this, [{ toggle: classNames },force,speed,easing,useNewDuringAnimation]);
 		}
 	},
 
-	switchClass: function(remove,add,speed,easing,callback) {
-		return $.effects.animateClass.apply(this, [{ add: add, remove: remove },speed,easing,callback]);
+	switchClass: function(remove,add,speed,easing,callback,useNewDuringAnimation) {
+		return $.effects.animateClass.apply(this, [{ add: add, remove: remove },speed,easing,callback,useNewDuringAnimation]);
 	}
 });
 
