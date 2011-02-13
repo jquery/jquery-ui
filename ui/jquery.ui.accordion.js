@@ -542,7 +542,7 @@ if ( $.uiBackCompat !== false ) {
 			if ( this.options.navigation ) {
 				var self = this,
 					headers = this.element.find( this.options.header ),
-					content = headers.next();
+					content = headers.next(),
 					current = headers.add( content )
 						.find( "a" )
 						.filter( this.options.navigationFilter )
