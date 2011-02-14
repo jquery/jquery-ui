@@ -105,7 +105,7 @@ $.widget("ui.menu", {
 			.removeClass( "ui-menu-item" )
 			.removeAttr( "role" )
 			.children( "a" )
-			.removeClass( "ui-corner-all" )
+			.removeClass( "ui-corner-all ui-state-hover" )
 			.removeAttr( "tabIndex" )
 			.unbind( ".menu" );
 	},
