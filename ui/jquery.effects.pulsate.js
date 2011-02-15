@@ -19,7 +19,7 @@ $.effects.pulsate = function(o) {
 			times = ((o.options.times || 5) * 2) - 1;
 			duration = o.duration ? o.duration / 2 : $.fx.speeds._default / 2,
 			isVisible = elem.is(':visible'),
-			opacity = o.opacity || 0,
+			opacity = o.options.opacity || 0,
 			animateTo = 0;
 
 		if (!isVisible) {
@@ -32,14 +32,11 @@ $.effects.pulsate = function(o) {
 		}
 
 		for (var i = 0; i < times; i++) {
-			elem.animate({ opacity: animateTo * opacity }, duration, o.options.easing);
+			elem.animate({ opacity: animateTo === 1 ? 1 : opacity }, duration, o.options.easing);
 			animateTo = (animateTo + 1) % 2;
 		}
 
-		elem.animate({ opacity: animateTo * opacity }, duration, o.options.easing, function() {
-			if (animateTo == 0) {
-				elem.hide();
-			}
+		elem.animate({ opacity: animateTo === 1 ? 1 : opacity }, duration, o.options.easing, function() {
 			(o.callback && o.callback.apply(this, arguments));
 		});
 
@@ -50,3 +47,4 @@ $.effects.pulsate = function(o) {
 };
 
 })(jQuery);
+
