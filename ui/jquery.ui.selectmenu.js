@@ -149,7 +149,7 @@ $.widget("ui.selectmenu", {
 			.bind("click.selectmenu", function() {
 				self._refreshValue();
 			})
-			// newelement can be null under unclear circumstances in IE8 
+			// FIXME: newelement can be null under unclear circumstances in IE8 
 			.bind("focus.selectmenu", function() {
 				if (this.newelement) {
 					this.newelement[0].focus();
@@ -629,7 +629,7 @@ $.widget("ui.selectmenu", {
 
 	value: function(newValue) {
 		if (arguments.length) {
-			// FIXME test for number is a kind of legacy support, could be removed at any time (Dez. 2010)
+			// FIXME test for number is a kind of legacy support, will be remoced in v1.1
 			// see this post for more info: https://github.com/fnagel/jquery-ui/issues#issue/33
 			if (typeof newValue == "number") {
 					this.index(newValue);
