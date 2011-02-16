@@ -127,10 +127,8 @@ $.widget("ui.tooltip", {
 		this.tooltip.attr("aria-hidden", "false");
 		target.attr("aria-describedby", this.tooltip.attr("id"));
 
-		//move animation code apart, so will be no need to repeat stop in "if" closures
 		this.tooltip.stop(false, true);
-
-		//if show was not provided -> trigger default fadeIn animation
+		//animation stuff - if show was not provided -> trigger default fadeIn animation
 		this._animate( !this.options.show ? 'fade' : this.options.show, 1 );
 
 		this._trigger( "open", event );
@@ -149,11 +147,9 @@ $.widget("ui.tooltip", {
 		
 		current.removeAttr("aria-describedby");
 		this.tooltip.attr("aria-hidden", "true");
-		
-		//move animation code apart, so will be no need to repeat stop in "if" closures
+
 		this.tooltip.stop(false, true);
-		
-		//trigger close event just before animation fired?
+		//animation stuff - trigger close event just before animation fired?
 		this._trigger( "close", event );
 		
 		//show was not provided -> trigger default fadeIn animation
