@@ -13,6 +13,7 @@ $.ui = $.ui || {};
 
 var horizontalPositions = /left|center|right/,
 	verticalPositions = /top|center|bottom/,
+	offsetMatch = /([\+\-]\d+)([%]?)/,
 	center = "center",
 	_position = $.fn.position,
 	_offset = $.fn.offset;
@@ -28,7 +29,7 @@ $.fn.position = function( options ) {
 	var target = $( options.of ),
 		targetElem = target[0],
 		collision = ( options.collision || "flip" ).split( " " ),
-		offset = options.offset ? options.offset.split( " " ) : [ 0, 0 ],
+		offset = [0, 0],
 		targetWidth,
 		targetHeight,
 		basePosition;
@@ -52,48 +53,27 @@ $.fn.position = function( options ) {
 		basePosition = target.offset();
 	}
 
-	// force my and at to have valid horizontal and veritcal positions
-	// if a value is missing or invalid, it will be converted to center 
-	$.each( [ "my", "at" ], function() {
-		var pos = ( options[this] || "" ).split( " " );
-		if ( pos.length === 1) {
-			pos = horizontalPositions.test( pos[0] ) ?
-				pos.concat( [center] ) :
-				verticalPositions.test( pos[0] ) ?
-					[ center ].concat( pos ) :
-					[ center, center ];
-		}
-		pos[ 0 ] = horizontalPositions.test( pos[0] ) ? pos[ 0 ] : center;
-		pos[ 1 ] = verticalPositions.test( pos[1] ) ? pos[ 1 ] : center;
-		options[ this ] = pos;
-	});
+	normalizePositions( options );
 
 	// normalize collision option
 	if ( collision.length === 1 ) {
 		collision[ 1 ] = collision[ 0 ];
 	}
 
-	// normalize offset option
-	offset[ 0 ] = parseInt( offset[0], 10 ) || 0;
-	if ( offset.length === 1 ) {
-		offset[ 1 ] = offset[ 0 ];
-	}
-	offset[ 1 ] = parseInt( offset[1], 10 ) || 0;
-
-	if ( options.at[0] === "right" ) {
+	if ( options.at.horizontal.value === "right" ) {
 		basePosition.left += targetWidth;
-	} else if ( options.at[0] === center ) {
+	} else if ( options.at.horizontal.value === center ) {
 		basePosition.left += targetWidth / 2;
 	}
 
-	if ( options.at[1] === "bottom" ) {
+	if ( options.at.vertical.value === "bottom" ) {
 		basePosition.top += targetHeight;
-	} else if ( options.at[1] === center ) {
+	} else if ( options.at.vertical.value === center ) {
 		basePosition.top += targetHeight / 2;
 	}
 
-	basePosition.left += offset[ 0 ];
-	basePosition.top += offset[ 1 ];
+	basePosition.left = options.at.horizontal.offset.calculate( basePosition.left );
+	basePosition.top = options.at.vertical.offset.calculate( basePosition.top );
 
 	return this.each(function() {
 		var elem = $( this ),
@@ -108,21 +88,21 @@ $.fn.position = function( options ) {
 			position = $.extend( {}, basePosition ),
 			collisionPosition;
 
-		if ( options.my[0] === "right" ) {
+		if ( options.my.horizontal.value === "right" ) {
 			position.left -= elemWidth;
-		} else if ( options.my[0] === center ) {
+		} else if ( options.my.horizontal.value === center ) {
 			position.left -= elemWidth / 2;
 		}
 
-		if ( options.my[1] === "bottom" ) {
+		if ( options.my.vertical.value === "bottom" ) {
 			position.top -= elemHeight;
-		} else if ( options.my[1] === center ) {
+		} else if ( options.my.vertical.value === center ) {
 			position.top -= elemHeight / 2;
 		}
 
 		// prevent fractions (see #5280)
-		position.left = Math.round( position.left );
-		position.top = Math.round( position.top );
+		position.left = Math.round( ( position.left - ( options.my.horizontal.offset.calculate( position.left ) - position.left ) ) );
+		position.top = Math.round( ( position.top - ( options.my.vertical.offset.calculate( position.top ) - position.top ) ) );
 
 		collisionPosition = {
 			left: position.left - marginLeft,
@@ -169,20 +149,20 @@ $.ui.position = {
 
 	flip: {
 		left: function( position, data ) {
-			if ( data.at[0] === center ) {
+			if ( data.at.horizontal.value === center ) {
 				return;
 			}
 			var win = $( window ),
 				over = data.collisionPosition.left + data.collisionWidth - win.width() - win.scrollLeft(),
-				myOffset = data.my[ 0 ] === "left" ?
+				myOffset = data.my.horizontal.value === "left" ?
 					-data.elemWidth :
-					data.my[ 0 ] === "right" ?
+					data.my.horizontal.value === "right" ?
 						data.elemWidth :
 						0,
-				atOffset = data.at[ 0 ] === "left" ?
+				atOffset = data.at.horizontal.value === "left" ?
 					data.targetWidth :
 					-data.targetWidth,
-				offset = -2 * data.offset[ 0 ];
+				offset = -2 * data.at.horizontal.offset.offset;
 			position.left += data.collisionPosition.left < 0 ?
 				myOffset + atOffset + offset :
 				over > 0 ?
@@ -190,20 +170,20 @@ $.ui.position = {
 					0;
 		},
 		top: function( position, data ) {
-			if ( data.at[1] === center ) {
+			if ( data.at.vertical.value === center ) {
 				return;
 			}
 			var win = $( window ),
 				over = data.collisionPosition.top + data.collisionHeight - win.height() - win.scrollTop(),
-				myOffset = data.my[ 1 ] === "top" ?
+				myOffset = data.my.vertical.value === "top" ?
 					-data.elemHeight :
-					data.my[ 1 ] === "bottom" ?
+					data.my.vertical.value === "bottom" ?
 						data.elemHeight :
 						0,
-				atOffset = data.at[ 1 ] === "top" ?
+				atOffset = data.at.vertical.value === "top" ?
 					data.targetHeight :
 					-data.targetHeight,
-				offset = -2 * data.offset[ 1 ];
+				offset = -2 * data.at.vertical.offset.offset;
 			position.top += data.collisionPosition.top < 0 ?
 				myOffset + atOffset + offset :
 				over > 0 ?
@@ -212,5 +192,108 @@ $.ui.position = {
 		}
 	}
 };
+
+$.extend ( $.ui.position, (
+
+	normalizePositions = function( options ) {
+
+		// force my and at to have valid horizontal and veritcal positions
+		// if a value is missing or invalid, it will be converted to center 
+		$.each( [ "my", "at" ], function() {		
+			options[ this ] = positionData( options[ this ] );
+		});
+	},
+
+	positionData = function( position ) { 
+
+		var pos = ( ( position || "" ).split( " " ) );
+		var positionData = {};
+			
+		if ( pos.length === 1 ) {
+			pos = horizontalPositions.test( pos[ 0 ] ) ?
+				pos.concat( [ center ] ) :
+				verticalPositions.test( pos[ 0 ] ) ?
+					[ center ].concat( pos ) :
+					[ center, center ];
+		}
+
+		positionData.horizontal = {},
+			positionData.vertical = {};
+
+		positionData.horizontal.originalValue = horizontalPositions.test( pos[ 0 ] ) ? pos[ 0 ] : center;
+		positionData.vertical.originalValue = verticalPositions.test( pos[ 1 ] ) ? pos[ 1 ] : center;
+
+		positionData.horizontal.offset = new offsetTranslator( positionData.horizontal.originalValue );
+		positionData.vertical.offset = new offsetTranslator( positionData.vertical.originalValue );
+
+		positionData.horizontal.value = positionData.horizontal.originalValue.match( horizontalPositions )[ 0 ];
+		positionData.vertical.value = positionData.vertical.originalValue.match( verticalPositions )[ 0 ];
+
+		return positionData;
+	},
+
+	offsetTranslator = function( option ) {
+		
+		if ( !option ) {
+			return 0;
+		}
+
+		var matched = option.match(offsetMatch);
+		this.offset = 0,
+			this.percent = false;
+
+		if ( matched && matched.length >= 2 ) {
+			this.offset = matched[ 1 ] !== undefined 
+				? parseInt( matched[ 1 ], 10 ) 
+				: 0,
+			this.percent = matched[ 2 ] !== "";
+		}
+		
+		this.calculate = function( original ) {
+			var result;
+
+			if ( typeof original !== "number" ) {
+				return original; 
+			}
+
+			if ( this.percent ) {
+				result = original * ( 1 + ( this.offset / 100 ) ); 
+			}
+			else {
+				result = original + this.offset;
+			}
+
+			return Math.floor( result );
+		}
+	}
+)
+);
+
+// DEPRECATED
+if ( $.uiBackCompat !== false ) {
+	//offset option
+	(function( $, prototype ) {
+
+		var _normalizePositions = normalizePositions;
+		normalizePositions = function( options ) {
+			_normalizePositions.call( this, options );	
+			
+			if ( options.offset ) {
+
+				offset = options.offset ? options.offset.split( " " ) : [ 0, 0 ],
+
+				// normalize offset option
+				offset[ 0 ] = parseInt( offset[0], 10 ) || 0;
+				if ( offset.length === 1 ) {
+					offset[ 1 ] = offset[ 0 ];
+				}
+				offset[ 1 ] = parseInt( offset[1], 10 ) || 0;
+				
+				options.at.horizontal.offset.offset += offset[ 0 ];
+				options.at.vertical.offset.offset += offset[ 1 ];
+			}	
+		}
+	}( jQuery, jQuery.ui.position.prototype ) );
+}
 
 }( jQuery ));
