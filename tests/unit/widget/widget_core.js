@@ -166,9 +166,11 @@ test( "direct usage", function() {
 });
 
 test( "error handling", function() {
-	expect( 2 );
+	expect( 3 );
 	var error = $.error;
-	$.widget( "ui.testWidget", {} );
+	$.widget( "ui.testWidget", {
+		_privateMethod: function () {}
+	});
 	$.error = function( msg ) {
 		equal( msg, "cannot call methods on testWidget prior to initialization; " +
 			"attempted to call method 'missing'", "method call before init" );
@@ -179,6 +181,11 @@ test( "error handling", function() {
 			"invalid method call on widget instance" );
 	};
 	$( "<div>" ).testWidget().testWidget( "missing" );
+	$.error = function ( msg ) {
+		equal( msg, "no such method '_privateMethod' for testWidget widget instance",
+			"invalid method call on widget instance" );
+	};
+	$( "<div>" ).testWidget().testWidget( "_privateMethod" );		
 	$.error = error;
 });
 
