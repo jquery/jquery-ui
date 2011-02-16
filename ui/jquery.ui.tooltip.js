@@ -86,7 +86,27 @@ $.widget("ui.tooltip", {
 			self._show(event, target, content);
 		}
 	},
-	
+
+	/**
+	 * used function from this comment http://bugs.jqueryui.com/ticket/3772#comment:6
+	 */
+	_animate: function (effect, showing) {
+		// Convert to array
+		effect = ($.isArray(effect) ? effect : (typeof effect === 'string' ? [effect] :
+			[effect.fx, effect.options, effect.speed, effect.callback]));
+		// Check for options
+		(effect[1] && typeof effect[1] !== 'object' ? effect.splice(1, 0, null) : effect);
+		// Check for callback
+		($.isFunction(effect[2]) ? effect.splice(2, 0, null) : effect);
+		// Special case for 'show'
+		effect = (effect[0] && effect[0] !== 'show' ? effect : effect.slice(2));
+		(effect[0] === 'fade' ?
+			// Special case for 'fade'
+			this.tooltip[showing ? 'fadeIn' : 'fadeOut'].apply(this.tooltip, effect.slice(2)) :
+			// Apply effect
+			this.tooltip[showing ? 'show' : 'hide'].apply(this.tooltip, effect));
+	},
+
 	_show: function(event, target, content) {
 		if (!content)
 			return;
@@ -107,7 +127,11 @@ $.widget("ui.tooltip", {
 		this.tooltip.attr("aria-hidden", "false");
 		target.attr("aria-describedby", this.tooltip.attr("id"));
 
-		this.tooltip.stop(false, true).fadeIn();
+		//move animation code apart, so will be no need to repeat stop in "if" closures
+		this.tooltip.stop(false, true);
+
+		//if show was not provided -> trigger default fadeIn animation
+		this._animate( !this.options.show ? 'fade' : this.options.show, 1 );
 
 		this._trigger( "open", event );
 	},
@@ -126,9 +150,14 @@ $.widget("ui.tooltip", {
 		current.removeAttr("aria-describedby");
 		this.tooltip.attr("aria-hidden", "true");
 		
-		this.tooltip.stop(false, true).fadeOut();
+		//move animation code apart, so will be no need to repeat stop in "if" closures
+		this.tooltip.stop(false, true);
 		
+		//trigger close event just before animation fired?
 		this._trigger( "close", event );
+		
+		//show was not provided -> trigger default fadeIn animation
+		this._animate( !this.options.hide ? 'fade' : this.options.hide, 0 );
 	}
 });
 
