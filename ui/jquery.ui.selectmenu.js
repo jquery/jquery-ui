@@ -492,9 +492,9 @@ $.widget("ui.selectmenu", {
 
 	open: function(event) {
 		var self = this;
-		var disabledStatus = this.newelement.attr("aria-disabled");
-		if ( disabledStatus != 'true' ) {
-			this._refreshPosition();
+		if ( this.newelement.attr("aria-disabled") != 'true' ) {
+			// TODO: seems to be useless
+			// this._refreshPosition();
 			this._closeOthers(event);
 			this.newelement
 				.addClass('ui-state-active');
@@ -678,6 +678,7 @@ $.widget("ui.selectmenu", {
 
 	_refreshPosition: function() {
 		var o = this.options;
+		console.log("_refreshPosition");
 		// if its a native pop-up we need to calculate the position of the selected li
 		if (o.style == "popup" && !o.positionOptions.offset) {
 			var selected = this._selectedOptionLi();
