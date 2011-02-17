@@ -629,14 +629,8 @@ $.widget("ui.selectmenu", {
 
 	value: function(newValue) {
 		if (arguments.length) {
-			// FIXME test for number is a kind of legacy support, will be remoced in v1.1
-			// see this post for more info: https://github.com/fnagel/jquery-ui/issues#issue/33
-			if (typeof newValue == "number") {
-					this.index(newValue);
-			} else if (typeof newValue == "string") {
-				this.element[0].value = newValue;
-				this._refreshValue();
-			}
+			this.element[0].value = newValue;
+			this._refreshValue();
 		} else {
 			return this.element[0].value;
 		}
