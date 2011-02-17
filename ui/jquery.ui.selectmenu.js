@@ -678,7 +678,6 @@ $.widget("ui.selectmenu", {
 
 	_refreshPosition: function() {
 		var o = this.options;
-		console.log("_refreshPosition");
 		// if its a native pop-up we need to calculate the position of the selected li
 		if (o.style == "popup" && !o.positionOptions.offset) {
 			var selected = this._selectedOptionLi();
