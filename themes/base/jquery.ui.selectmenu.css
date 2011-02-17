@@ -1,6 +1,6 @@
 /* Selectmenu
 ----------------------------------*/
-.ui-selectmenu { display: block; display: inline-block; position: relative; height: 2.2em; text-decoration: none; overflow: hidden; zoom: 1; }
+.ui-selectmenu { display: block; display: inline-block; position: relative; height: 2.2em; vertical-align: middle; text-decoration: none; overflow: hidden; zoom: 1; }
 .ui-selectmenu-icon { position:absolute; right:6px; margin-top:-8px; top: 50%; }
 .ui-selectmenu-menu { padding:0; margin:0; list-style:none; position:absolute; top: 0; visibility: hidden; overflow: auto; z-index: 1005;} /* z-index: 1005 to make selectmenu work with dialog */
 .ui-selectmenu-open { visibility: visible; }
