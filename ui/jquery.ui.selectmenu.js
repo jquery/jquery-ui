@@ -427,10 +427,10 @@ $.widget("ui.selectmenu", {
 			// define our find var
 			var find = typeof(self._prevChar) == 'undefined' ? '' : self._prevChar.join('');
 			
-			function focusOptSeq(elem, ind, char){
+			function focusOptSeq(elem, ind, c){
 				focusFound = true;
 				$(elem).trigger(eventType);
-				typeof(self._prevChar) == 'undefined' ? self._prevChar = [char] : self._prevChar[self._prevChar.length] = char;
+				typeof(self._prevChar) == 'undefined' ? self._prevChar = [c] : self._prevChar[self._prevChar.length] = c;
 			}
 			this.list.find('li a').each(function(i) {	
 				if (!focusFound) {
