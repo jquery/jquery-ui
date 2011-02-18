@@ -40,12 +40,7 @@ var PROP_NAME = 'datepicker';
 
 (function($) {
 
-module("datepicker: core", {
-	teardown: function() {
-		stop();
-		setTimeout(start, 13);
-	}
-});
+module("datepicker: core");
 
 test( "widget method - empty collection", function() {
 	$( "#nonExist" ).datepicker(); // should create nothing
