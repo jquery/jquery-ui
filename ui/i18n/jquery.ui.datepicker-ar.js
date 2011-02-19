@@ -4,8 +4,8 @@
 jQuery(function($){
 	$.datepicker.regional['ar'] = {
 		closeText: 'إغلاق',
-		prevText: '&#x3c;السابق',
-		nextText: 'التالي&#x3e;',
+		prevText: '&#x3C;السابق',
+		nextText: 'التالي&#x3E;',
 		currentText: 'اليوم',
 		monthNames: ['كانون الثاني', 'شباط', 'آذار', 'نيسان', 'آذار', 'حزيران',
 		'تموز', 'آب', 'أيلول',	'تشرين الأول', 'تشرين الثاني', 'كانون الأول'],

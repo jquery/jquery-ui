@@ -3,9 +3,9 @@
 jQuery(function($){
     $.datepicker.regional['bg'] = {
         closeText: 'затвори',
-        prevText: '&#x3c;назад',
-        nextText: 'напред&#x3e;',
-		nextBigText: '&#x3e;&#x3e;',
+        prevText: '&#x3C;назад',
+        nextText: 'напред&#x3E;',
+		nextBigText: '&#x3E;&#x3E;',
         currentText: 'днес',
         monthNames: ['Януари','Февруари','Март','Април','Май','Юни',
         'Юли','Август','Септември','Октомври','Ноември','Декември'],

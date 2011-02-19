@@ -3,8 +3,8 @@
 jQuery(function($){
 	$.datepicker.regional['hu'] = {
 		closeText: 'bezárás',
-		prevText: '&laquo;&nbsp;vissza',
-		nextText: 'előre&nbsp;&raquo;',
+		prevText: '&#xAB;&#xA0;vissza',
+		nextText: 'előre&#xA0;&#xBB;',
 		currentText: 'ma',
 		monthNames: ['Január', 'Február', 'Március', 'Április', 'Május', 'Június',
 		'Július', 'Augusztus', 'Szeptember', 'Október', 'November', 'December'],
