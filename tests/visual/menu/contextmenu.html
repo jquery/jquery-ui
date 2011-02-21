@@ -20,7 +20,7 @@
 		
 		$("button").each(function() {
 			$(this).next().menu({
-				selected: function(event, ui) {
+				select: function(event, ui) {
 					$(this).hide();
 					$("#log").append("<div>Selected " + ui.item.text() + "</div>");
 				},
