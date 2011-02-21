@@ -3,8 +3,8 @@
 jQuery(function($){
     $.datepicker.regional['sv'] = {
 		closeText: 'Stäng',
-        prevText: '&laquo;Förra',
-		nextText: 'Nästa&raquo;',
+        prevText: '&#xAB;Förra',
+		nextText: 'Nästa&#xBB;',
 		currentText: 'Idag',
         monthNames: ['Januari','Februari','Mars','April','Maj','Juni',
         'Juli','Augusti','September','Oktober','November','December'],

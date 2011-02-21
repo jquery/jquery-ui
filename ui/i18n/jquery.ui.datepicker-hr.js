@@ -3,8 +3,8 @@
 jQuery(function($){
 	$.datepicker.regional['hr'] = {
 		closeText: 'Zatvori',
-		prevText: '&#x3c;',
-		nextText: '&#x3e;',
+		prevText: '&#x3C;',
+		nextText: '&#x3E;',
 		currentText: 'Danas',
 		monthNames: ['Siječanj','Veljača','Ožujak','Travanj','Svibanj','Lipanj',
 		'Srpanj','Kolovoz','Rujan','Listopad','Studeni','Prosinac'],

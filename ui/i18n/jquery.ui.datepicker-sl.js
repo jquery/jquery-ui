@@ -4,8 +4,8 @@
 jQuery(function($){
 	$.datepicker.regional['sl'] = {
 		closeText: 'Zapri',
-		prevText: '&lt;Prej&#x161;nji',
-		nextText: 'Naslednji&gt;',
+		prevText: '&#x3C;Prej&#x161;nji',
+		nextText: 'Naslednji&#x3E;',
 		currentText: 'Trenutni',
 		monthNames: ['Januar','Februar','Marec','April','Maj','Junij',
 		'Julij','Avgust','September','Oktober','November','December'],
