@@ -257,7 +257,7 @@ $.widget('ui.spinner', {
 		if (this.timer) {
 			window.clearTimeout(this.timer);
 		}
-		this.element[0].focus();
+		this.element.focus();
 		this.spinning = false;
 		this._trigger('stop', event);
 	},
