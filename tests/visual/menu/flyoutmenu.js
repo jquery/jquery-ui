@@ -34,14 +34,17 @@ $.widget("ui.flyoutmenu", {
 		}).keydown(function(event) {
 			if (self.element.is(":hidden")) 
 				return;
-			event.stopPropagation();
 			switch (event.keyCode) {
 			case $.ui.keyCode.LEFT:
-				self.left(event);
+				if (self.left(event)) {
+					event.stopImmediatePropagation();
+				}
 				event.preventDefault();
 				break;
 			case $.ui.keyCode.RIGHT:
-				self.right(event);
+				if (self.right(event)) {
+					event.stopImmediatePropagation();
+				} 
 				event.preventDefault();
 				break;
 			case $.ui.keyCode.ESCAPE:
@@ -98,22 +101,18 @@ $.widget("ui.flyoutmenu", {
 			at: "right top",
 			of: this.activeItem
 		});
-		$(document).one("click", function() {
-			//clicking outside menu flyouts should close all flyouts
-			//$(document).find(".ui-menu-flyout").hide();
-		})
 	},
 	_select: function(event) {
 		event.stopPropagation();
 		// TODO make _select cancelable?
 		this._trigger( "select", event, { item: this.activeItem } );
-		//this.activate(event, this.element.children("li").first());
 		this.hide();
 	},
 	left: function(event) {
 		var newItem = this.activeItem.parents("li").first();
 		if (newItem.length) {
 			this.activate(event, newItem);
+			return true;
 		}
 	},
 	right: function(event) {
@@ -121,6 +120,7 @@ $.widget("ui.flyoutmenu", {
 		if (newItem.length) {
 			this._open(newItem.parent());
 			this.activate(event, newItem);
+			return true;
 		}
 	},
 	activate: function(event, item) {
@@ -135,12 +135,6 @@ $.widget("ui.flyoutmenu", {
 	show: function() {
 		this.active = this.element;
 		this.element.show();
-		if (this.element.hasClass("ui-menu-flyout")) {
-			$(document).one("click", function() {
-				//clicking outside menu flyouts should close all flyouts
-				//$(document).find(".ui-menu-flyout").hide();
-			})
-		}
 	},
 	hide: function() {
 		this.activeItem = this.element.children("li").first();
