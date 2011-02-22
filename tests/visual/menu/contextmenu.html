@@ -9,7 +9,9 @@
 	<script type="text/javascript" src="../../../ui/jquery.ui.widget.js"></script>
 	<script type="text/javascript" src="../../../ui/jquery.ui.position.js"></script>
 	<script type="text/javascript" src="../../../ui/jquery.ui.menu.js"></script>
+	<!--
 	<script type="text/javascript" src="http://jqueryui.com/themeroller/themeswitchertool/"></script>
+	-->
 	<script type="text/javascript">
 	$(function() {
 		$.fn.themeswitcher && $('<div/>').css({
@@ -21,10 +23,9 @@
 		$("button").each(function() {
 			$(this).next().menu({
 				select: function(event, ui) {
-					$(this).hide();
+					$(this).hide().prev().focus();
 					$("#log").append("<div>Selected " + ui.item.text() + "</div>");
-				},
-				input: $(this)
+				}
 			}).hide();
 		}).click(function(event) {
 			// TODO required to prevent the click handler below from handling this event
@@ -33,12 +34,12 @@
 				my: "left top",
 				at: "right top",
 				of: event.pageX > 0 ? event : this
-			});
+			}).focus();
 			$(document).one("click", function() {
 				menu.hide();
 			})
-		}).keydown(function(event) {
-			var menu = $("#menu" + this.id).data("menu");
+		}).next().keydown(function(event) {
+			var menu = $(this).data("menu");
 			if (menu.widget().is(":hidden"))
 				return;
 			event.stopPropagation();

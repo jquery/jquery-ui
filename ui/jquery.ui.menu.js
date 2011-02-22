@@ -57,10 +57,7 @@ $.widget("ui.menu", {
 			});
 		this.refresh();
 		
-		if ( !this.options.input ) {
-			this.options.input = this.element.attr( "tabIndex", 0 );
-		}
-		this.options.input.bind( "keydown.menu", function( event ) {
+		this.element.attr( "tabIndex", 0 ).bind( "keydown.menu", function( event ) {
 			if ( self.options.disabled ) {
 				return;
 			}
