@@ -1,11 +1,7 @@
 /*
- * jQuery UI flyout menu
- *   - written for jQuery UI 1.9 milestone 2 using the widget factory
+ * jQuery UI menubar
  *
- * Copyright (c) 2010 Michael Lang, http://nexul.com/
- * Dual licensed under the MIT (MIT-LICENSE.txt)
- * and GPL (GPL-LICENSE.txt) licenses.
- *
+ * backported from Michael Lang's fork: http://www.nexul.com/prototypes/toolbar/demo.html
  */
 (function($) {
 

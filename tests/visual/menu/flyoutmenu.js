@@ -1,12 +1,7 @@
 /*
- * jQuery UI flyout menu
- *   - written for jQuery UI 1.9 milestone 2 using the widget factory
- * Dual licensed under the MIT (MIT-LICENSE.txt)
- * and GPL (GPL-LICENSE.txt) licenses.
+ * jQuery UI flyoutmenu
  *
- * modified from: http://view.jqueryui.com/menu/tests/visual/menu/nested.html
- * 	by: Michael Lang, http://nexul.com/
- *
+ * backported from Michael Lang's fork: http://www.nexul.com/prototypes/toolbar/demo.html
  */
 (function($) {
 
@@ -64,11 +59,13 @@ $.widget("ui.flyoutmenu", {
 					return value.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
 				}
 				var match = self.activeItem.parent("ul").children("li").filter(function() {
+					// TODO why filter child anchor here, but not in the filter below?
 					return new RegExp("^" + escape(character), "i").test($("a", this).text());
 				});
 				var match = skip && match.index(self.active.next()) != -1 ? match.next() : match;
 				if (!match.length) {
 					character = String.fromCharCode(event.keyCode);
+					// TODO why use self.widget() here instead of self.activeItem??
 					match = self.widget().children("li").filter(function() {
 						return new RegExp("^" + escape(character), "i").test($(this).text());
 					});
