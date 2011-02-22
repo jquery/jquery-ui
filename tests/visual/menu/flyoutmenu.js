@@ -57,15 +57,17 @@ $.widget("ui.flyoutmenu", {
 				} else {
 					character = prev + character;
 				}
-				
+				function escape(value) {
+					return value.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+				}
 				var match = self.activeItem.parent("ul").children("li").filter(function() {
-					return new RegExp("^" + character, "i").test($("a", this).text());
+					return new RegExp("^" + escape(character), "i").test($("a", this).text());
 				});
 				var match = skip && match.index(self.active.next()) != -1 ? match.next() : match;
 				if (!match.length) {
 					character = String.fromCharCode(event.keyCode);
 					match = self.widget().children("li").filter(function() {
-						return new RegExp("^" + character, "i").test($(this).text());
+						return new RegExp("^" + escape(character), "i").test($(this).text());
 					});
 				}
 				if (match.length) {
