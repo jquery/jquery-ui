@@ -54,7 +54,7 @@
 			},
 			*/
 			select: function(event, ui) {
-				$("#log").append("<div>Selected " + ui.item.children("a").text() + "</div>");
+				$("#log").append("<div>Selected " + ui.item.children("a").text() + "(" + ui.item.children("a").attr("id") + ")</div>");
 				button.focus();
 			}
 		}).hide();
@@ -79,10 +79,10 @@
 
 <ul id="menu">
 	<li>
-		<a href="#">Amsterdam</a>
+		<a id="a1" href="#">Amsterdam</a>
 		<ul>
-			<li><a href="#">Aberdeen</a></li>
-			<li><a href="#">Ada</a></li>
+			<li><a id="b1" href="#">Aberdeen</a></li>
+			<li><a id="b2" href="#">Ada</a></li>
 			<li>
 				<a href="#">Adamsville</a>
 				<ul>
@@ -104,8 +104,8 @@
 			<li><a href="#">Amesville</a></li>
 		</ul>
 	</li>
-	<li><a href="#">Anaheim</a></li>
-	<li><a href="#">Cologne</a></li>
+	<li><a id="a2" href="#">Anaheim</a></li>
+	<li><a id="a3" href="#">Cologne</a></li>
 	<li><a href="#">Frankfurt</a></li>
 	<li>
 		<a href="#">Magdeburg</a>
