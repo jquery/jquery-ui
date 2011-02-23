@@ -56,7 +56,7 @@ test( "element normalization", function() {
 	$.ui.testWidget( {}, elem );
 
 	elem = $( "<div id='element-normalization-selector'></div>" )
-		.appendTo( "#main" );
+		.appendTo( "#qunit-fixture" );
 	$.ui.testWidget.prototype._create = function() {
 		same( this.element[ 0 ], elem[ 0 ], "from selector" );
 		same( elem.data( "testWidget" ), this, "instace stored in .data()" );
