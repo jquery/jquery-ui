@@ -6,6 +6,14 @@
 (function($) {
 
 $.widget("ui.flyoutmenu", {
+	
+	options: {
+		position: {
+			my: "left top",
+			at: "right top"
+		}
+	},
+	
 	_create: function() {
 		var self = this;
 		this.active = this.element;
@@ -90,14 +98,18 @@ $.widget("ui.flyoutmenu", {
 		// TODO restrict to widget
 		//only one menu can have items open at a time.
 		$(document).find(".ui-menu-flyout").not(submenu.parents()).hide();
+		
+		var position = $.extend({}, {
+			of: this.activeItem
+		}, $.type(this.options.position) == "function"
+			? this.options.position(this.activeItem)
+			: this.options.position
+		);
+		
 		submenu.show().css({
 			top: 0,
 			left: 0
-		}).position({
-			my: "left top",
-			at: "right top",
-			of: this.activeItem
-		});
+		}).position(position);
 	},
 	_select: function(event) {
 		event.stopPropagation();

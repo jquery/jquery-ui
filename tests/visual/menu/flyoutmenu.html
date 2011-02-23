@@ -28,7 +28,6 @@
 			// TODO required to prevent the click handler below from handling this event
 			event.stopPropagation();
 			menu.flyoutmenu("show")
-				//.attr("tabIndex", 0)
 				.focus()
 				.css({
 					top: 0,
@@ -45,17 +44,28 @@
 		});
 
 		menu.flyoutmenu({
-			//input: button,
+			/* top-alignment
+			position: function(item) {
+				return {
+					my: "left top",
+					at: "right top",
+					of: item.parent()
+				}
+			},
+			*/
 			select: function(event, ui) {
 				$("#log").append("<div>Selected " + ui.item.children("a").text() + "</div>");
 				button.focus();
 			}
 		}).hide();
+		
+		// equal height
+		//menu.find("ul").height(menu.height()); 
 	});
 	</script>
 	<style>
 		body { font-size:62.5%; }
-		.ui-menu { width: 200px; position: absolute; }
+		.ui-menu { width: 200px; position: absolute; outline: none; }
 		.ui-menu .ui-icon { float: right; }
 	</style>
 </head>
