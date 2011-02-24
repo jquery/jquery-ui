@@ -25,6 +25,7 @@ $.widget("ui.menu", {
 	},
 	_create: function() {
 		var self = this;
+		this.activeMenu = this.element;
 		this.menuId = this.element.attr( "id" ) || "ui-menu-" + idIncrement++;
 		this.element
 			.addClass( "ui-menu ui-widget ui-widget-content ui-corner-all" )
@@ -48,7 +49,7 @@ $.widget("ui.menu", {
 					return;
 				}
 				var target = $( event.target ).closest( ".ui-menu-item" );
-				if ( target.length && target.parent()[0] === self.element[0] ) {
+				if ( target.length ) {
 					self.focus( event, target );
 				}
 			})
@@ -57,7 +58,7 @@ $.widget("ui.menu", {
 					return;
 				}
 				var target = $( event.target ).closest( ".ui-menu-item" );
-				if ( target.length && target.parent()[0] === self.element[0] ) {
+				if ( target.length ) {
 					self.blur( event );
 				}
 			});
@@ -69,24 +70,36 @@ $.widget("ui.menu", {
 			}
 			switch ( event.keyCode ) {
 			case $.ui.keyCode.PAGE_UP:
-				self.previousPage();
+				self.previousPage( event );
 				event.preventDefault();
 				event.stopImmediatePropagation();
 				break;
 			case $.ui.keyCode.PAGE_DOWN:
-				self.nextPage();
+				self.nextPage( event );
 				event.preventDefault();
 				event.stopImmediatePropagation();
 				break;
 			case $.ui.keyCode.UP:
-				self.previous();
+				self.previous( event );
 				event.preventDefault();
 				event.stopImmediatePropagation();
 				break;
 			case $.ui.keyCode.DOWN:
-				self.next();
+				self.next( event );
 				event.preventDefault();
 				event.stopImmediatePropagation();
+				break;
+			case $.ui.keyCode.LEFT:
+				if (self.left( event )) {
+					event.stopImmediatePropagation();
+				}
+				event.preventDefault();
+				break;
+			case $.ui.keyCode.RIGHT:
+				if (self.right( event )) {
+					event.stopImmediatePropagation();
+				}
+				event.preventDefault();
 				break;
 			case $.ui.keyCode.ENTER:
 				self.select();
@@ -174,7 +187,9 @@ $.widget("ui.menu", {
 
 	focus: function( event, item ) {
 		var self = this;
+		
 		this.blur();
+		
 		if ( this._hasScroll() ) {
 			var borderTop = parseFloat( $.curCSS( this.element[0], "borderTopWidth", true) ) || 0,
 				paddingtop = parseFloat( $.curCSS( this.element[0], "paddingTop", true) ) || 0,
@@ -188,6 +203,7 @@ $.widget("ui.menu", {
 				this.element.attr( "scrollTop", scroll + offset - elementHeight + itemHeight );
 			}
 		}
+		
 		this.active = item.first()
 			.children( "a" )
 				.addClass( "ui-state-focus" )
@@ -198,6 +214,14 @@ $.widget("ui.menu", {
 		// need to remove the attribute before adding it for the screenreader to pick up the change
 		// see http://groups.google.com/group/jquery-a11y/msg/929e0c1e8c5efc8f
 		this.element.removeAttr("aria-activedescendant").attr("aria-activedescendant", self.itemId);
+		
+		self._close();
+		var nested = $(">ul", item);
+		if (nested.length && /^mouse/.test(event.type)) {
+			self._open(nested);
+		}
+		this.activeMenu = item.parent();
+		
 		this._trigger( "focus", event, { item: item } );
 	},
 
@@ -206,13 +230,57 @@ $.widget("ui.menu", {
 			return;
 		}
 
-		var self = this;
 		this.active.children( "a" ).removeClass( "ui-state-focus" );
 		// remove only generated id
-		$( "#" + self.menuId + "-activedescendant" ).removeAttr( "id" );
+		$( "#" + this.menuId + "-activedescendant" ).removeAttr( "id" );
 		this.element.removeAttr( "aria-activedescenant" );
 		this._trigger( "blur", event );
 		this.active = null;
+	},
+
+	_open: function(submenu) {
+		// TODO restrict to widget
+		//only one menu can have items open at a time.
+		//$(document).find(".ui-menu").not(submenu.parents()).hide().data("menu").blur();
+		this.element.find(".ui-menu").not(submenu.parents()).hide();
+		
+		var position = $.extend({}, {
+			of: this.active
+		}, $.type(this.options.position) == "function"
+			? this.options.position(this.active)
+			: this.options.position
+		);
+
+		submenu.show().position(position);
+	},
+	
+	closeAll: function() {
+		this.element.find("ul").hide();
+		this.blur();
+		this.activeMenu = this.element;
+	},
+	
+	_close: function() {
+		this.active.parent().find("ul").hide();
+	},
+
+	left: function(event) {
+		var newItem = this.active && this.active.parents("li").first();
+		if (newItem && newItem.length) {
+			this.active.parent().hide();
+			this.focus(event, newItem);
+			return true;
+		}
+	},
+
+	right: function(event) {
+		var newItem = this.active && this.active.children("ul").children("li").first();
+		if (newItem && newItem.length) {
+			this._open(newItem.parent());
+			var current = this.active;
+			this.focus(event, newItem);
+			return true;
+		}
 	},
 
 	next: function(event) {
@@ -233,21 +301,21 @@ $.widget("ui.menu", {
 
 	_move: function(direction, edge, filter, event) {
 		if ( !this.active ) {
-			this.focus( event, this.element.children(edge)[filter]() );
+			this.focus( event, this.activeMenu.children(edge)[filter]() );
 			return;
 		}
 		var next = this.active[ direction + "All" ]( ".ui-menu-item" ).eq( 0 );
 		if ( next.length ) {
 			this.focus( event, next );
 		} else {
-			this.focus( event, this.element.children(edge)[filter]() );
+			this.focus( event, this.activeMenu.children(edge)[filter]() );
 		}
 	},
 	
 	nextPage: function( event ) {
 		if ( this._hasScroll() ) {
 			if ( !this.active || this.last() ) {
-				this.focus( event, this.element.children( ".ui-menu-item" ).first() );
+				this.focus( event, this.activeMenu.children( ".ui-menu-item" ).first() );
 				return;
 			}
 			var base = this.active.offset().top,
@@ -260,7 +328,7 @@ $.widget("ui.menu", {
 
 			this.focus( event, result );
 		} else {
-			this.focus( event, this.element.children( ".ui-menu-item" )
+			this.focus( event, this.activeMenu.children( ".ui-menu-item" )
 				[ !this.active || this.last() ? "first" : "last" ]() );
 		}
 	},
@@ -268,7 +336,7 @@ $.widget("ui.menu", {
 	previousPage: function( event ) {
 		if ( this._hasScroll() ) {
 			if ( !this.active || this.first() ) {
-				this.focus( event, this.element.children( ".ui-menu-item" ).last() );
+				this.focus( event, this.activeMenu.children( ".ui-menu-item" ).last() );
 				return;
 			}
 
@@ -282,7 +350,7 @@ $.widget("ui.menu", {
 
 			this.focus( event, result );
 		} else {
-			this.focus( event, this.element.children( ".ui-menu-item" )
+			this.focus( event, this.activeMenu.children( ".ui-menu-item" )
 				[ !this.active || this.first() ? ":last" : ":first" ]() );
 		}
 	},
@@ -292,7 +360,12 @@ $.widget("ui.menu", {
 	},
 
 	select: function( event ) {
-		this._trigger( "select", event, { item: this.active } );
+		// save active reference before closeAll triggers blur
+		var ui = {
+			item: this.active
+		};
+		this.closeAll();
+		this._trigger( "select", event, ui );
 	}
 });
 

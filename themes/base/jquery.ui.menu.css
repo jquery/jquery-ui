@@ -39,3 +39,5 @@
 }
 
 .ui-menu .ui-icon { float: right; }
+
+.ui-menu .ui-menu { position: absolute; }
