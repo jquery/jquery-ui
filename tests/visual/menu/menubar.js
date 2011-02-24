@@ -10,6 +10,9 @@ $.widget("ui.menubar", {
 	_create: function() {
 		var self = this;
 		var items = this.element.children("button, a");
+		
+		this.element.addClass('ui-menubar ui-widget-header ui-helper-clearfix');
+		
 		items.next("ul").each(function(i, elm) {
 			$(elm).menu({
 				select: function(event, ui) {
