@@ -87,6 +87,42 @@ $.widget("ui.menu", {
 				event.preventDefault();
 				event.stopImmediatePropagation();
 				break;
+			default:
+				clearTimeout(self.filterTimer);
+				var prev = self.previousFilter || "";
+				var character = String.fromCharCode(event.keyCode);
+				var skip = false;
+				if (character == prev) {
+					skip = true;
+				} else {
+					character = prev + character;
+				}
+				function escape(value) {
+					return value.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+				}
+				var match = self.widget().children(".ui-menu-item").filter(function() {
+					return new RegExp("^" + escape(character), "i").test($(this).text());
+				});
+				var match = skip && match.index(self.active.next()) != -1 ? self.active.nextAll(".ui-menu-item") : match;
+				if (!match.length) {
+					character = String.fromCharCode(event.keyCode);
+					match = self.widget().children(".ui-menu-item").filter(function() {
+						return new RegExp("^" + escape(character), "i").test($(this).text());
+					});
+				}
+				if (match.length) {
+					self.focus(event, match);
+					if (match.length > 1) {
+						self.previousFilter = character;
+						self.filterTimer = setTimeout(function() {
+							delete self.previousFilter;
+						}, 1000);
+					} else {
+						delete self.previousFilter;
+					}
+				} else {
+					delete self.previousFilter;
+				}
 			}
 		});
 	},

@@ -51,39 +51,7 @@
 				menu.widget().hide();
 				break;
 			default:
-				clearTimeout(menu.filterTimer);
-				var prev = menu.previousFilter || "";
-				var character = String.fromCharCode(event.keyCode);
-				var skip = false;
-				if (character == prev) {
-					skip = true;
-				} else {
-					character = prev + character;
-				}
 				
-				var match = menu.widget().children("li").filter(function() {
-					return new RegExp("^" + character, "i").test($(this).text());
-				});
-				var match = skip && match.index(menu.active.next()) != -1 ? match.next() : match;
-				if (!match.length) {
-					character = String.fromCharCode(event.keyCode);
-					match = menu.widget().children("li").filter(function() {
-						return new RegExp("^" + character, "i").test($(this).text());
-					});
-				}
-				if (match.length) {
-					menu.focus(event, match);
-					if (match.length > 1) {
-						menu.previousFilter = character;
-						menu.filterTimer = setTimeout(function() {
-							delete menu.previousFilter;
-						}, 1000);
-					} else {
-						delete menu.previousFilter;
-					}
-				} else {
-					delete menu.previousFilter;
-				}
 			}
 		});
 	});
