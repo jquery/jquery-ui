@@ -10,7 +10,6 @@
 	<script type="text/javascript" src="../../../ui/jquery.ui.position.js"></script>
 	<script type="text/javascript" src="../../../ui/jquery.ui.button.js"></script>
 	<script type="text/javascript" src="../../../ui/jquery.ui.menu.js"></script>
-	<script type="text/javascript" src="flyoutmenu.js"></script>
 	<script type="text/javascript" src="menubar.js"></script>
 	<!--
 	<script type="text/javascript" src="http://jqueryui.com/themeroller/themeswitchertool/"></script>
@@ -26,7 +25,6 @@
 		$(".menubar").menubar({
 			select: function(event, ui) {
 				$("<div/>").text("Selected: " + ui.item.text()).appendTo("#log");
-				ui.item.parents("ul:last").prev().focus()
 			}
 		});
 	});
@@ -46,6 +44,9 @@
 <body>
 
 <div class="menubar ui-widget-header">
+	<!--
+	<a href="#">About...</a>
+	-->
 	<a href="#">File</a>
 	<ul>
 		<li><a href="#">Open...</a></li>

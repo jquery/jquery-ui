@@ -5,14 +5,18 @@
  */
 (function($) {
 
+// TODO take non-menubar buttons into account
 $.widget("ui.menubar", {
 	_create: function() {
 		var self = this;
 		var items = this.element.children("button, a");
 		items.next("ul").each(function(i, elm) {
-			$(elm).flyoutmenu({
-				select: self.options.select
-			}).hide().addClass("ui-menu-flyout").keydown(function(event) {
+			$(elm).menu({
+				select: function(event, ui) {
+					ui.item.parents("ul:last").hide()
+					self.options.select.apply(this, arguments);
+				}
+			}).hide().keydown(function(event) {
 				var menu = $(this);
 				if (menu.is(":hidden")) 
 					return;
@@ -54,8 +58,8 @@ $.widget("ui.menubar", {
 	},
 	
 	_open: function(event, menu) {
-		this.active && this.active.flyoutmenu("hide");
-		this.active = menu.flyoutmenu("show").position({
+		this.active && this.active.menu("closeAll").hide();
+		this.active = menu.show().position({
 			my: "left top",
 			at: "left bottom",
 			offset: "0 -1",
@@ -64,20 +68,20 @@ $.widget("ui.menubar", {
 	},
 	
 	left: function(event) {
-		var prev = this.active.prevAll( ".ui-menu-flyout" ).eq( 0 );
+		var prev = this.active.prevAll( ".ui-menu" ).eq( 0 );
 		if (prev.length) {
 			this._open(event, prev);
 		} else {
-			this._open(event, this.element.children(".ui-menu-flyout:last"));
+			this._open(event, this.element.children(".ui-menu:last"));
 		}
 	},
 	
 	right: function(event) {
-		var next =  this.active.nextAll( ".ui-menu-flyout" ).eq( 0 );
+		var next =  this.active.nextAll( ".ui-menu" ).eq( 0 );
 		if (next.length) {
 			this._open(event, next);
 		} else {
-			this._open(event, this.element.children(".ui-menu-flyout:first"));
+			this._open(event, this.element.children(".ui-menu:first"));
 		}
 	}
 });
