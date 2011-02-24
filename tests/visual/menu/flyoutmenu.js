@@ -47,53 +47,16 @@ $.widget("ui.flyoutmenu", {
 			case $.ui.keyCode.RIGHT:
 				if (self.right(event)) {
 					event.stopImmediatePropagation();
-				} 
+				}
 				event.preventDefault();
 				break;
 			case $.ui.keyCode.ESCAPE:
 				self.hide();
 				break;
-			default:
-				clearTimeout(self.filterTimer);
-				var prev = self.previousFilter || "";
-				var character = String.fromCharCode(event.keyCode);
-				var skip = false;
-				if (character == prev) {
-					skip = true;
-				} else {
-					character = prev + character;
-				}
-				function escape(value) {
-					return value.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
-				}
-				var match = self.activeItem.parent("ul").children("li").filter(function() {
-					// TODO why filter child anchor here, but not in the filter below?
-					return new RegExp("^" + escape(character), "i").test($("a", this).text());
-				});
-				var match = skip && match.index(self.active.next()) != -1 ? match.next() : match;
-				if (!match.length) {
-					character = String.fromCharCode(event.keyCode);
-					// TODO why use self.widget() here instead of self.activeItem??
-					match = self.widget().children("li").filter(function() {
-						return new RegExp("^" + escape(character), "i").test($(this).text());
-					});
-				}
-				if (match.length) {
-					self.activate(event, match);
-					if (match.length > 1) {
-						self.previousFilter = character;
-						self.filterTimer = setTimeout(function() {
-							delete self.previousFilter;
-						}, 1000);
-					} else {
-						delete self.previousFilter;
-					}
-				} else {
-					delete self.previousFilter;
-				}
 			}
 		});
 	},
+	
 	_open: function(submenu) {
 		// TODO restrict to widget
 		//only one menu can have items open at a time.
