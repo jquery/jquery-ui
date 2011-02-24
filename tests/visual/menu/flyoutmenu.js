@@ -106,10 +106,7 @@ $.widget("ui.flyoutmenu", {
 			: this.options.position
 		);
 		
-		submenu.show().css({
-			top: 0,
-			left: 0
-		}).position(position);
+		submenu.show().position(position);
 	},
 	_select: function(event) {
 		event.stopPropagation();

@@ -55,11 +55,7 @@ $.widget("ui.menubar", {
 	
 	_open: function(event, menu) {
 		this.active && this.active.flyoutmenu("hide");
-		this.active = menu.flyoutmenu("show").css({
-			position: "absolute",
-			top: 0,
-			left: 0
-		}).position({
+		this.active = menu.flyoutmenu("show").position({
 			my: "left top",
 			at: "left bottom",
 			offset: "0 -1",
