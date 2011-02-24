@@ -13,7 +13,7 @@ $.widget("ui.menubar", {
    },
 	_create: function() {
 		var self = this;
-		var items = this.element.children("button, a");
+		var items = this.items = this.element.children("button, a");
 		var o = this.options;
 				
 		this.element.addClass('ui-menubar ui-widget-header ui-helper-clearfix');
@@ -69,17 +69,26 @@ $.widget("ui.menubar", {
 			
 		});
 		$(document).click(function(event) {
-			!$(event.target).closest(".ui-menubar").length && items.next("ul").hide();
+			!$(event.target).closest(".ui-menubar").length && self._close();
 		});
 	},
 	
+	_close: function() {
+		this.items.next("ul").hide();
+		this.items.removeClass("ui-state-active");
+	},
+	
 	_open: function(event, menu) {
-		this.active && this.active.menu("closeAll").hide();
+		if (this.active) {
+			this.active.menu("closeAll").hide();
+			this.active.prev().removeClass("ui-state-active");
+		}
+		var button = menu.prev().addClass("ui-state-active");
 		this.active = menu.show().position({
 			my: "left top",
 			at: "left bottom",
 			offset: "0 -1",
-			of: menu.prev()
+			of: button
 		}).focus();
 	},
 	
