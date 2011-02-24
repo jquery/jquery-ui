@@ -47,7 +47,9 @@ test("all events", function() {
 		same( $(".ui-menu:visible").length, 1 );
 		ac.simulate("keydown", { keyCode: $.ui.keyCode.DOWN });
 		ac.simulate("keydown", { keyCode: $.ui.keyCode.ENTER });
-		$.browser.msie ? ac.simulate("blur") : ac.blur();
+		// blurring through jQuery causes a bug in IE 6 which causes the
+		// autocompletechange event to occur twice
+		ac[0].blur();
 	}, 50);
 });
 
@@ -87,7 +89,9 @@ test("all events - contenteditable", function() {
 		same( $(".ui-menu:visible").length, 1 );
 		ac.simulate("keydown", { keyCode: $.ui.keyCode.DOWN });
 		ac.simulate("keydown", { keyCode: $.ui.keyCode.ENTER });
-		$.browser.msie ? ac.simulate("blur") : ac.blur();
+		// blurring through jQuery causes a bug in IE 6 which causes the
+		// autocompletechange event to occur twice
+		ac[0].blur();
 	}, 50);
 });
 
