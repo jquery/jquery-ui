@@ -323,7 +323,7 @@ $.widget( "ui.autocomplete", {
 		clearTimeout( this.closing );
 		if ( this.menu.element.is(":visible") ) {
 			this.menu.element.hide();
-			this.menu.deactivate();
+			this.menu.blur();
 			this._trigger( "close", event );
 		}
 	},
@@ -358,8 +358,8 @@ $.widget( "ui.autocomplete", {
 			.empty()
 			.zIndex( this.element.zIndex() + 1 );
 		this._renderMenu( ul, items );
-		// TODO refresh should check if the active item is still in the dom, removing the need for a manual deactivate
-		this.menu.deactivate();
+		// TODO refresh should check if the active item is still in the dom, removing the need for a manual blur
+		this.menu.blur();
 		this.menu.refresh();
 
 		// size and position menu
@@ -400,7 +400,7 @@ $.widget( "ui.autocomplete", {
 		if ( this.menu.first() && /^previous/.test(direction) ||
 				this.menu.last() && /^next/.test(direction) ) {
 			this._value( this.term );
-			this.menu.deactivate();
+			this.menu.blur();
 			return;
 		}
 		this.menu[ direction ]( event );

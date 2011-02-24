@@ -17,6 +17,12 @@ var idIncrement = 0;
 
 $.widget("ui.menu", {
 	defaultElement: "<ul>",
+	options: {
+		position: {
+			my: "left top",
+			at: "right top"
+		}
+	},
 	_create: function() {
 		var self = this;
 		this.menuId = this.element.attr( "id" ) || "ui-menu-" + idIncrement++;
@@ -145,8 +151,19 @@ $.widget("ui.menu", {
 	},
 	
 	refresh: function() {
+		// initialize nested menus
+		// TODO add role=listbox to these, too? or just the top level menu?
+		var submenus = this.element.find("ul:not(.ui-menu)")
+			.addClass( "ui-menu ui-widget ui-widget-content ui-corner-all" )
+			.hide()
+		
+		submenus
+			.prev("a")
+			.prepend('<span class="ui-icon ui-icon-carat-1-e"></span>');
+		
+		
 		// don't refresh list items that are already adapted
-		var items = this.element.children( "li:not(.ui-menu-item):has(a)" )
+		var items = submenus.add(this.element).children( "li:not(.ui-menu-item):has(a)" )
 			.addClass( "ui-menu-item" )
 			.attr( "role", "menuitem" );
 		
