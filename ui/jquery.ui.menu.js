@@ -213,12 +213,13 @@ $.widget("ui.menu", {
 			.end();
 		// need to remove the attribute before adding it for the screenreader to pick up the change
 		// see http://groups.google.com/group/jquery-a11y/msg/929e0c1e8c5efc8f
-		this.element.removeAttr("aria-activedescendant").attr("aria-activedescendant", self.itemId);
-		
+		this.element.removeAttr("aria-activedescendant").attr("aria-activedescendant", self.itemId)
+		 		
 		self._close();
 		var nested = $(">ul", item);
 		if (nested.length && /^mouse/.test(event.type)) {
 			self._open(nested);
+			this.active.find(">a:first").addClass("ui-state-active");
 		}
 		this.activeMenu = item.parent();
 		
@@ -229,7 +230,7 @@ $.widget("ui.menu", {
 		if (!this.active) {
 			return;
 		}
-
+		
 		this.active.children( "a" ).removeClass( "ui-state-focus" );
 		// remove only generated id
 		$( "#" + this.menuId + "-activedescendant" ).removeAttr( "id" );
@@ -261,7 +262,9 @@ $.widget("ui.menu", {
 	},
 	
 	_close: function() {
-		this.active.parent().find("ul").hide();
+		this.active.parent()
+		 .find("ul").hide().end()
+		 .find("a.ui-state-active").removeClass("ui-state-active");
 	},
 
 	left: function(event) {
