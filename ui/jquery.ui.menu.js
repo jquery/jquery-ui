@@ -256,7 +256,9 @@ $.widget("ui.menu", {
 	},
 	
 	closeAll: function() {
-		this.element.find("ul").hide();
+		this.element
+		 .find("ul").hide().end()
+		 .find("a.ui-state-active").removeClass("ui-state-active");
 		this.blur();
 		this.activeMenu = this.element;
 	},
