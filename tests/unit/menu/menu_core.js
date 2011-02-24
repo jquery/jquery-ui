@@ -16,10 +16,10 @@ test("accessibility", function () {
 	equals( ac.attr("role"), "listbox", "main role");
 	equals( ac.attr("aria-activedescendant"), undefined, "aria attribute not yet active");
 	var item = ac.find( "li:first" ).find( "a" ).attr( "id", "xid" ).end();
-	ac.menu( "activate", $.Event(), item );
+	ac.menu( "focus", $.Event(), item );
 	equals( ac.attr("aria-activedescendant"), "xid", "aria attribute, id from dom");
 	var item = ac.find( "li:last" );
-	ac.menu( "activate", $.Event(), item );
+	ac.menu( "focus", $.Event(), item );
 	equals( ac.attr("aria-activedescendant"), "menu1-activedescendant", "aria attribute, generated id");
 });
 
