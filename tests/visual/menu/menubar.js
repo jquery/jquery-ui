@@ -55,7 +55,7 @@ $.widget("ui.menubar", {
 				}
 			});
 		});
-		$(document).click(function() {
+		$(document).click(function(event) {
 			!$(event.target).closest(".ui-menubar").length && items.next("ul").hide();
 		});
 	},
