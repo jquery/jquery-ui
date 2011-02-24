@@ -16,7 +16,6 @@ $.widget("ui.flyoutmenu", {
 	
 	_create: function() {
 		var self = this;
-		this.active = this.element;
 		this.activeItem = this.element.children("li").first();
 		// hide submenus and create indicator icons
 		this.element.find("ul").addClass("ui-menu-flyout").hide().prev("a").prepend('<span class="ui-icon ui-icon-carat-1-e"></span>');
@@ -26,12 +25,13 @@ $.widget("ui.flyoutmenu", {
 				self._select(event);
 			},
 			focus: function(event, ui) {
-				self.active = ui.item.parent();
 				self.activeItem = ui.item;
+				ui.item.parent().focus();
 				ui.item.parent().find("ul").hide();
 				var nested = $(">ul", ui.item);
 				if (nested.length && event.originalEvent && /^mouse/.test(event.originalEvent.type)) {
 					self._open(nested);
+					nested.focus();
 				}
 			}
 		}).keydown(function(event) {
@@ -60,7 +60,7 @@ $.widget("ui.flyoutmenu", {
 	_open: function(submenu) {
 		// TODO restrict to widget
 		//only one menu can have items open at a time.
-		$(document).find(".ui-menu-flyout").not(submenu.parents()).hide();
+		$(document).find(".ui-menu-flyout").not(submenu.parents()).hide().data("menu").blur();
 		
 		var position = $.extend({}, {
 			of: this.activeItem
@@ -93,16 +93,12 @@ $.widget("ui.flyoutmenu", {
 		}
 	},
 	activate: function(event, item) {
-		if (item) {
-			item.parent().data("menu").widget().show();
-			item.parent().data("menu").focus(event, item);
-		}
+		var parent = item.parent();
+		parent.data("menu").focus(event, item);
 		this.activeItem = item;
-		this.active = item.parent("ul")
-		this.active.focus();
+		parent.focus();
 	},
 	show: function() {
-		this.active = this.element;
 		this.element.show();
 	},
 	hide: function() {
