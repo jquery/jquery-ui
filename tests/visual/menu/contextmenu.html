@@ -30,7 +30,7 @@
 		}).click(function(event) {
 			// TODO required to prevent the click handler below from handling this event
 			event.stopPropagation();
-			var menu = $("#menu" + this.id).menu("deactivate").show().position({
+			var menu = $("#menu" + this.id).menu("blur").show().position({
 				my: "left top",
 				at: "right top",
 				of: event.pageX > 0 ? event : this
@@ -72,7 +72,7 @@
 					});
 				}
 				if (match.length) {
-					menu.activate(event, match);
+					menu.focus(event, match);
 					if (match.length > 1) {
 						menu.previousFilter = character;
 						menu.filterTimer = setTimeout(function() {

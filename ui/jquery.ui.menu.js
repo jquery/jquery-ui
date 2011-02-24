@@ -43,7 +43,7 @@ $.widget("ui.menu", {
 				}
 				var target = $( event.target ).closest( ".ui-menu-item" );
 				if ( target.length && target.parent()[0] === self.element[0] ) {
-					self.activate( event, target );
+					self.focus( event, target );
 				}
 			})
 			.bind("mouseout.menu", function( event ) {
@@ -52,7 +52,7 @@ $.widget("ui.menu", {
 				}
 				var target = $( event.target ).closest( ".ui-menu-item" );
 				if ( target.length && target.parent()[0] === self.element[0] ) {
-					self.deactivate( event );
+					self.blur( event );
 				}
 			});
 		this.refresh();
@@ -118,9 +118,9 @@ $.widget("ui.menu", {
 			.attr( "tabIndex", -1 );
 	},
 
-	activate: function( event, item ) {
+	focus: function( event, item ) {
 		var self = this;
-		this.deactivate();
+		this.blur();
 		if ( this._hasScroll() ) {
 			var borderTop = parseFloat( $.curCSS( this.element[0], "borderTopWidth", true) ) || 0,
 				paddingtop = parseFloat( $.curCSS( this.element[0], "paddingTop", true) ) || 0,
@@ -147,7 +147,7 @@ $.widget("ui.menu", {
 		this._trigger( "focus", event, { item: item } );
 	},
 
-	deactivate: function(event) {
+	blur: function(event) {
 		if (!this.active) {
 			return;
 		}
@@ -179,21 +179,21 @@ $.widget("ui.menu", {
 
 	_move: function(direction, edge, filter, event) {
 		if ( !this.active ) {
-			this.activate( event, this.element.children(edge)[filter]() );
+			this.focus( event, this.element.children(edge)[filter]() );
 			return;
 		}
 		var next = this.active[ direction + "All" ]( ".ui-menu-item" ).eq( 0 );
 		if ( next.length ) {
-			this.activate( event, next );
+			this.focus( event, next );
 		} else {
-			this.activate( event, this.element.children(edge)[filter]() );
+			this.focus( event, this.element.children(edge)[filter]() );
 		}
 	},
 	
 	nextPage: function( event ) {
 		if ( this._hasScroll() ) {
 			if ( !this.active || this.last() ) {
-				this.activate( event, this.element.children( ".ui-menu-item" ).first() );
+				this.focus( event, this.element.children( ".ui-menu-item" ).first() );
 				return;
 			}
 			var base = this.active.offset().top,
@@ -204,9 +204,9 @@ $.widget("ui.menu", {
 				return $( this ).offset().top - base - height < 0;
 			});
 
-			this.activate( event, result );
+			this.focus( event, result );
 		} else {
-			this.activate( event, this.element.children( ".ui-menu-item" )
+			this.focus( event, this.element.children( ".ui-menu-item" )
 				[ !this.active || this.last() ? "first" : "last" ]() );
 		}
 	},
@@ -214,7 +214,7 @@ $.widget("ui.menu", {
 	previousPage: function( event ) {
 		if ( this._hasScroll() ) {
 			if ( !this.active || this.first() ) {
-				this.activate( event, this.element.children( ".ui-menu-item" ).last() );
+				this.focus( event, this.element.children( ".ui-menu-item" ).last() );
 				return;
 			}
 
@@ -226,9 +226,9 @@ $.widget("ui.menu", {
 				return $(this).offset().top - base + height > 0;
 			});
 
-			this.activate( event, result );
+			this.focus( event, result );
 		} else {
-			this.activate( event, this.element.children( ".ui-menu-item" )
+			this.focus( event, this.element.children( ".ui-menu-item" )
 				[ !this.active || this.first() ? ":last" : ":first" ]() );
 		}
 	},

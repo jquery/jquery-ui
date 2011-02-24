@@ -135,7 +135,7 @@ $.widget("ui.flyoutmenu", {
 	activate: function(event, item) {
 		if (item) {
 			item.parent().data("menu").widget().show();
-			item.parent().data("menu").activate(event, item);
+			item.parent().data("menu").focus(event, item);
 		}
 		this.activeItem = item;
 		this.active = item.parent("ul")
@@ -147,7 +147,7 @@ $.widget("ui.flyoutmenu", {
 	},
 	hide: function() {
 		this.activeItem = this.element.children("li").first();
-		this.element.find("ul").andSelf().menu("deactivate").hide();
+		this.element.find("ul").andSelf().menu("blur").hide();
 	}
 });
 

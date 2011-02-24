@@ -108,7 +108,7 @@
 				var nested = this.activeItem.find(">ul");
 				if (nested.length) {
 					this._open(nested);
-					nested.menu("activate", event, nested.children(":first"))
+					nested.menu("focus", event, nested.children(":first"))
 				}
 			},
 			
@@ -185,7 +185,7 @@
 					});
 				}
 				if (match.length) {
-					menu.activate(event, match);
+					menu.focus(event, match);
 					if (match.length > 1) {
 						menu.previousFilter = character;
 						menu.filterTimer = setTimeout(function() {
