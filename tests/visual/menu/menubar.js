@@ -87,7 +87,6 @@ $.widget("ui.menubar", {
 		this.active = menu.show().position({
 			my: "left top",
 			at: "left bottom",
-			offset: "0 -1",
 			of: button
 		}).focus();
 	},
