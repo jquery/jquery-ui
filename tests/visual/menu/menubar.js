@@ -7,10 +7,15 @@
 
 // TODO take non-menubar buttons into account
 $.widget("ui.menubar", {
+   options: {
+      buttons: false,
+      menuIcon: false
+   },
 	_create: function() {
 		var self = this;
 		var items = this.element.children("button, a");
-		
+		var o = this.options;
+				
 		this.element.addClass('ui-menubar ui-widget-header ui-helper-clearfix');
 		
 		items.next("ul").each(function(i, elm) {
@@ -42,18 +47,26 @@ $.widget("ui.menubar", {
 		});
 		items.each(function() {
 			var input = $(this),
-				menu = input.next("ul");
-			input.bind("click focus mouseenter", function(event) {
-				if (menu.length && (!/^mouse/.test(event.type) || self.active && self.active.is(":visible") )) {
-					self._open(event, menu);
-				}
-				event.preventDefault();
-				event.stopPropagation();
-			}).button({
-				icons: {
-					secondary: menu.length ? 'ui-icon-triangle-1-s' : ''
-				}
-			});
+				   menu = input.next("ul");
+			
+			input
+			   .bind("click focus mouseenter", function(event) {
+   				if (menu.length && (!/^mouse/.test(event.type) || self.active && self.active.is(":visible") )) {
+   					self._open(event, menu);
+   				}
+   				event.preventDefault();
+   				event.stopPropagation();
+   			})
+   			.button({
+   				icons: {
+   					secondary: o.menuIcon ? (menu.length ? 'ui-icon-triangle-1-s' : '') : ''   					
+   				}
+   			});
+   			
+         if (!o.buttons) {
+            input.addClass('ui-menubar-link').removeClass('ui-state-default');
+         };			
+			
 		});
 		$(document).click(function(event) {
 			!$(event.target).closest(".ui-menubar").length && items.next("ul").hide();
