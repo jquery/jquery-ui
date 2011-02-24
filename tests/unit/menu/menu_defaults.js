@@ -3,7 +3,11 @@
  */
 
 var menu_defaults = {
-	disabled: false
+	disabled: false,
+	position: {
+		my: "left top",
+		at: "right top"
+	}
 };
 
 commonWidgetTests('menu', { defaults: menu_defaults });
