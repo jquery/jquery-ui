@@ -136,7 +136,7 @@ $.widget("ui.menu", {
 		}
 		this.active = item.first()
 			.children( "a" )
-				.addClass( "ui-state-hover" )
+				.addClass( "ui-state-focus" )
 				.attr( "id", function(index, id) {
 					return (self.itemId = id || self.menuId + "-activedescendant");
 				})
@@ -153,7 +153,7 @@ $.widget("ui.menu", {
 		}
 
 		var self = this;
-		this.active.children( "a" ).removeClass( "ui-state-hover" );
+		this.active.children( "a" ).removeClass( "ui-state-focus" );
 		// remove only generated id
 		$( "#" + self.menuId + "-activedescendant" ).removeAttr( "id" );
 		this.element.removeAttr( "aria-activedescenant" );
