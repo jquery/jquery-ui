@@ -102,6 +102,9 @@ $.widget( "ui.tabs", {
 			o = this.options,
 			fragmentId = /^#.+/; // Safari 2 reports '#' for an empty hash
 
+		if ( o.panelsElement  === undefined ){
+                        o.panelsElement = this.element;
+		}
 		this.list = this.element.find( "ol,ul" ).eq( 0 );
 		this.lis = $( " > li:has(a[href])", this.list );
 		this.anchors = this.lis.map(function() {
@@ -126,7 +129,7 @@ $.widget( "ui.tabs", {
 
 			// inline tab
 			if ( fragmentId.test( href ) ) {
-				self.panels = self.panels.add( self.element.find( self._sanitizeSelector( href ) ) );
+				self.panels = self.panels.add( o.panelsElement.find( self._sanitizeSelector( href ) ) );
 			// remote tab
 			// prevent loading the page itself if href is just "#"
 			} else if ( href && href !== "#" ) {
@@ -139,7 +142,7 @@ $.widget( "ui.tabs", {
 
 				var id = self._tabId( a );
 				a.href = "#" + id;
-				var $panel = self.element.find( "#" + id );
+				var $panel = o.panelsElement.find( "#" + id );
 				if ( !$panel.length ) {
 					$panel = $( o.panelTemplate )
 						.attr( "id", id )
@@ -161,7 +164,7 @@ $.widget( "ui.tabs", {
 			this.list.addClass( "ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all" );
 			this.lis.addClass( "ui-state-default ui-corner-top" );
 			this.panels.addClass( "ui-tabs-panel ui-widget-content ui-corner-bottom" );
-
+                        o.panelsElement.addClass( "ui-tabs" );
 			// Selected tab
 			// use "selected" option or try to retrieve:
 			// 1. from fragment identifier in url
@@ -210,13 +213,13 @@ $.widget( "ui.tabs", {
 			this.lis.removeClass( "ui-tabs-selected ui-state-active" );
 			// check for length avoids error when initializing empty list
 			if ( o.selected >= 0 && this.anchors.length ) {
-				self.element.find( self._sanitizeSelector( self.anchors[ o.selected ].hash ) ).removeClass( "ui-tabs-hide" );
+				o.panelsElement.find( self._sanitizeSelector( self.anchors[ o.selected ].hash ) ).removeClass( "ui-tabs-hide" );
 				this.lis.eq( o.selected ).addClass( "ui-tabs-selected ui-state-active" );
 
 				// seems to be expected behavior that the show callback is fired
 				self.element.queue( "tabs", function() {
 					self._trigger( "show", null,
-						self._ui( self.anchors[ o.selected ], self.element.find( self._sanitizeSelector( self.anchors[ o.selected ].hash ) )[ 0 ] ) );
+						self._ui( self.anchors[ o.selected ], o.panelsElement.find( self._sanitizeSelector( self.anchors[ o.selected ].hash ) )[ 0 ] ) );
 				});
 
 				this.load( o.selected );
@@ -315,7 +318,7 @@ $.widget( "ui.tabs", {
 			var el = this,
 				$li = $(el).closest( "li" ),
 				$hide = self.panels.filter( ":not(.ui-tabs-hide)" ),
-				$show = self.element.find( self._sanitizeSelector( el.hash ) );
+				$show = o.panelsElement.find( self._sanitizeSelector( el.hash ) );
 
 			// If tab is already selected and not collapsible or tab disabled or
 			// or is already loading or click callback returns false stop here.
@@ -469,7 +472,7 @@ $.widget( "ui.tabs", {
 		$li.addClass( "ui-state-default ui-corner-top" ).data( "destroy.tabs", true );
 
 		// try to find an existing element before creating a new one
-		var $panel = self.element.find( "#" + id );
+		var $panel = o.panelsElement.find( "#" + id );
 		if ( !$panel.length ) {
 			$panel = $( o.panelTemplate )
 				.attr( "id", id )
@@ -603,7 +606,7 @@ $.widget( "ui.tabs", {
 		this.xhr = $.ajax( $.extend( {}, o.ajaxOptions, {
 			url: url,
 			success: function( r, s ) {
-				self.element.find( self._sanitizeSelector( a.hash ) ).html( r );
+				o.panelsElement.find( self._sanitizeSelector( a.hash ) ).html( r );
 
 				// take care of tab labels
 				self._cleanup();
