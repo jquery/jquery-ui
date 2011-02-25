@@ -14,7 +14,7 @@ test("accessibility", function () {
 
 	ok( ac.hasClass("ui-menu ui-widget ui-widget-content ui-corner-all"), "menu class");
 	equals( ac.attr("role"), "listbox", "main role");
-	equals( ac.attr("aria-activedescendant"), undefined, "aria attribute not yet active");
+	ok( !ac.attr("aria-activedescendant"), "aria attribute not yet active");
 	var item = ac.find( "li:first" ).find( "a" ).attr( "id", "xid" ).end();
 	ac.menu( "focus", $.Event(), item );
 	equals( ac.attr("aria-activedescendant"), "xid", "aria attribute, id from dom");
