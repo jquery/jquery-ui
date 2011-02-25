@@ -16,7 +16,7 @@
 		get: function( key ) {
 			return this.options.data[ key ];
 		},
-		set: function( key, vaule ) {
+		set: function( key, value ) {
 			this.options.data[ key ] = value;
 			return this;
 		}
