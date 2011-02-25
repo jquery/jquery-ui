@@ -65,6 +65,38 @@ window.commonWidgetTests = function( widget, settings ) {
 	test( "version", function() {
 		ok( "version" in $.ui[ widget ], "version property exists" );
 	});
-};
+}
+
+/*
+ * Experimental assertion for comparing DOM objects.
+ * 
+ * Serializes an element and some attributes and it's children if any, otherwise the text.
+ * Then compares the result using deepEqual.
+ */
+window.domEqual = function( selector, modifier, message ) {
+	var attributes = ["class", "role", "id", "tabIndex", "aria-activedescendant"];
+	
+	function extract(value) {
+		var result = {};
+		result.nodeName = value[0].nodeName;
+		$.each(attributes, function(index, attr) {
+			result[attr] = value.attr(attr);
+		});
+		result.children = [];
+		var children = value.children();
+		if (children.length) {
+			children.each(function() {
+				result.children.push(extract($(this)));
+			});
+		} else {
+			result.text = value.text();
+		}
+		return result;
+	}
+	var expected = extract($(selector));
+	modifier($(selector));
+	
+	deepEqual( extract($(selector)), expected, message );
+}
 
 }());
