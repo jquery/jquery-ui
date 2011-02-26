@@ -29,6 +29,8 @@ test( "element normalization", function() {
 	$.widget( "ui.testWidget", {} );
 
 	$.ui.testWidget.prototype._create = function() {
+		// workaround for core ticket #8381
+		this.element.appendTo( "#qunit-fixture" );
 		ok( this.element.is( "div" ), "generated div" );
 		same( this.element.data( "testWidget" ), this, "intance stored in .data()" );
 	};
