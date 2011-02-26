@@ -293,7 +293,9 @@ $.widget( "ui.button", {
 			buttonClasses = [];  
 
 		if ( icons.primary || icons.secondary ) {
-			buttonClasses.push( "ui-button-text-icon" + ( multipleIcons ? "s" : ( icons.primary ? "-primary" : "-secondary" ) ) );
+			if ( this.options.text ) {
+				buttonClasses.push( "ui-button-text-icon" + ( multipleIcons ? "s" : ( icons.primary ? "-primary" : "-secondary" ) ) );
+			}
 
 			if ( icons.primary ) {
 				buttonElement.prepend( "<span class='ui-button-icon-primary ui-icon " + icons.primary + "'></span>" );
@@ -305,7 +307,6 @@ $.widget( "ui.button", {
 
 			if ( !this.options.text ) {
 				buttonClasses.push( multipleIcons ? "ui-button-icons-only" : "ui-button-icon-only" );
-				buttonElement.removeClass( "ui-button-text-icons ui-button-text-icon-primary ui-button-text-icon-secondary" );
 
 				if ( !this.hasTitle ) {
 					buttonElement.attr( "title", buttonText );
