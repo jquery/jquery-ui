@@ -181,12 +181,13 @@ $.widget('ui.spinner', {
 		}
 		var self = this;
 		this.element.bind("mousewheel.spinner", function(event, delta) {
-			if (self.options.disabled) {
+			if (self.options.disabled || !delta) {
 				return;
 			}
 			if (!self.spinning && !self._start(event)) {
 				return false;
 			}
+			$("<div>").text("delta: " + delta).appendTo(document.body)
 			self._spin((delta > 0 ? 1 : -1) * self.options.step, event);
 			clearTimeout(self.timeout);
 			self.timeout = setTimeout(function() {
