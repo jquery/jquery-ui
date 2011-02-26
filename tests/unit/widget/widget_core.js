@@ -29,6 +29,8 @@ test( "element normalization", function() {
 	$.widget( "ui.testWidget", {} );
 
 	$.ui.testWidget.prototype._create = function() {
+		// workaround for core ticket #8381
+		this.element.appendTo( "#qunit-fixture" );
 		ok( this.element.is( "div" ), "generated div" );
 		same( this.element.data( "testWidget" ), this, "intance stored in .data()" );
 	};
@@ -56,7 +58,7 @@ test( "element normalization", function() {
 	$.ui.testWidget( {}, elem );
 
 	elem = $( "<div id='element-normalization-selector'></div>" )
-		.appendTo( "#main" );
+		.appendTo( "#qunit-fixture" );
 	$.ui.testWidget.prototype._create = function() {
 		same( this.element[ 0 ], elem[ 0 ], "from selector" );
 		same( elem.data( "testWidget" ), this, "instace stored in .data()" );
@@ -166,9 +168,11 @@ test( "direct usage", function() {
 });
 
 test( "error handling", function() {
-	expect( 2 );
+	expect( 3 );
 	var error = $.error;
-	$.widget( "ui.testWidget", {} );
+	$.widget( "ui.testWidget", {
+		_privateMethod: function () {}
+	});
 	$.error = function( msg ) {
 		equal( msg, "cannot call methods on testWidget prior to initialization; " +
 			"attempted to call method 'missing'", "method call before init" );
@@ -179,6 +183,11 @@ test( "error handling", function() {
 			"invalid method call on widget instance" );
 	};
 	$( "<div>" ).testWidget().testWidget( "missing" );
+	$.error = function ( msg ) {
+		equal( msg, "no such method '_privateMethod' for testWidget widget instance",
+			"invalid method call on widget instance" );
+	};
+	$( "<div>" ).testWidget().testWidget( "_privateMethod" );		
 	$.error = error;
 });
 

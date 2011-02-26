@@ -96,10 +96,7 @@ $.widget( "ui.accordion", {
 			self.headers.find( "a" ).attr( "tabIndex", -1 );
 		}
 
-		if ( options.event ) {
-			self.headers.bind( options.event.split( " " ).join( ".accordion " ) + ".accordion",
-				$.proxy( self, "_eventHandler" ) );
-		}
+		this._setupEvents( options.event );
 	},
 
 	_createIcons: function() {
@@ -162,6 +159,10 @@ $.widget( "ui.accordion", {
 		// setting collapsible: false while collapsed; open first panel
 		if ( key === "collapsible" && !value && this.options.active === false ) {
 			this._activate( 0 );
+		}
+
+		if ( key === "event" ) {
+			this._setupEvents( value );
 		}
 
 		if ( key === "icons" ) {
@@ -282,6 +283,14 @@ $.widget( "ui.accordion", {
 
 	_findActive: function( selector ) {
 		return typeof selector === "number" ? this.headers.eq( selector ) : $();
+	},
+
+	_setupEvents: function( event ) {
+		this.headers.unbind( ".accordion" );
+		if ( event ) {
+			this.headers.bind( event.split( " " ).join( ".accordion " ) + ".accordion",
+				$.proxy( this, "_eventHandler" ) );
+		}
 	},
 
 	_eventHandler: function( event ) {
@@ -533,7 +542,7 @@ if ( $.uiBackCompat !== false ) {
 			if ( this.options.navigation ) {
 				var self = this,
 					headers = this.element.find( this.options.header ),
-					content = headers.next();
+					content = headers.next(),
 					current = headers.add( content )
 						.find( "a" )
 						.filter( this.options.navigationFilter )

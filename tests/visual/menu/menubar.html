@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
 <head>
 	<title>Menu Visual Test: Default</title>
@@ -10,7 +10,10 @@
 	<script type="text/javascript" src="../../../ui/jquery.ui.position.js"></script>
 	<script type="text/javascript" src="../../../ui/jquery.ui.button.js"></script>
 	<script type="text/javascript" src="../../../ui/jquery.ui.menu.js"></script>
+	<script type="text/javascript" src="menubar.js"></script>
+	<!--
 	<script type="text/javascript" src="http://jqueryui.com/themeroller/themeswitchertool/"></script>
+	-->
 	<script type="text/javascript">
 	$(function() {
 		$.fn.themeswitcher && $('<div/>').css({
@@ -19,53 +22,50 @@
 			top: 10
 		}).appendTo(document.body).themeswitcher();
 		
-		$(".menubar").children("a")
-			.button()
-			.click(function() {
-				var button = $(this);
-				var menu = button.next();
-				if (menu.is(":visible")) {
-					menu.hide();
-					return false;
-				}
-				menu.parent().find(".ui-menu").not(menu).hide();
-				menu.show().css({ left:0, top: 0 }).position({
-					my: "left top",
-					at: "left bottom",
-					of: button
-				});
-				$(document).bind("click.menubar", function(event) {
-					if ($(event.target).closest(".ui-menu")[0] == menu[0]) {
-						return;
-					}
-					$(this).unbind(".menubar");
-					menu.hide();
-				});
-				return false;
-			})
-			.each(function() {
-				$(this).next().hide().menu({
-					input: $(this),
-					select: function(event, ui) {
-						$("<div/>").text("Selected: " + ui.item.text()).appendTo("#log");
-					}
-				});
-			});
-
+		$(".menubar").menubar({
+			select: function(event, ui) {
+				$("<div/>").text("Selected: " + ui.item.text()).appendTo("#log");
+			}
+		});
+		
+		$(".menubar-icons").menubar({
+			menuIcon: true,
+			buttons: true,
+			select: function(event, ui) {
+				$("<div/>").text("Selected: " + ui.item.text()).appendTo("#log");
+			}
+		});
+		
+		
 	});
 	</script>
-	<style>
+	<style type="text/css">
 		body { font-size:62.5%; }
-		.ui-menu { width: 200px; }
-		.menubar .ui-menu { position: absolute; }
+		.menubar { margin: 0 0 4em; } /* style for this page only */
+		.ui-menu { width: 200px; position: absolute; outline: none; z-index: 9999; }
+		.ui-menu .ui-icon { float: right; }
+		.ui-menu li.ui-state-disabled {
+			font-weight: bold;
+			padding: .0em .4em;
+			margin: .4em 0 .2em;
+			line-height: 1.5;
+		}
+		
+		/* menubar styles */
+		.ui-menubar .ui-button { float: left; font-weight: normal; border-top-width: 0 !important; border-bottom-width: 0 !important; margin: 0; }
+		.ui-menubar .ui-button.ui-corner-all { -moz-border-radius: 0; -webkit-border-radius: 0; border-radius: 0; }
+		.ui-menubar .ui-menubar-link { border-right: 1px dashed transparent; border-left: 1px dashed transparent; }
+		
+		
 	</style>
 </head>
 <body>
 
-<div class="menubar ui-widget-header">
+<div class="menubar">
 	<a href="#">File</a>
 	<ul>
 		<li><a href="#">Open...</a></li>
+		<li class="ui-state-disabled">Open recent...</li>
 		<li><a href="#">Save</a></li>
 		<li><a href="#">Save as...</a></li>
 		<li><a href="#">Close</a></li>
@@ -75,12 +75,68 @@
 	<ul>
 		<li><a href="#">Copy</a></li>
 		<li><a href="#">Cut</a></li>
-		<li><a href="#">Paste</a></li>
+		<li class="ui-state-disabled">Paste</li>
 	</ul>
 	<a href="#">View</a>
 	<ul>
 		<li><a href="#">Fullscreen</a></li>
 		<li><a href="#">Fit into view</a></li>
+		<li>
+			<a href="#">Encoding</a>
+			<ul>
+				<li><a href="#">Auto-detect</a></li>
+				<li><a href="#">UTF-8</a></li>
+				<li>
+				  <a href="#">UTF-16</a>
+			      <ul>
+			         <li><a href="#">Option 1</a></li>
+			         <li><a href="#">Option 2</a></li>
+			         <li><a href="#">Option 3</a></li>
+			         <li><a href="#">Option 4</a></li>
+			      </ul>
+			   </li>
+			</ul>
+		</li>
+		<li><a href="#">Customize...</a></li>
+	</ul>
+</div>
+
+<div class="menubar-icons">
+	<a href="#">File</a>
+	<ul>
+		<li><a href="#">Open...</a></li>
+		<li class="ui-state-disabled">Open recent...</li>
+		<li><a href="#">Save</a></li>
+		<li><a href="#">Save as...</a></li>
+		<li><a href="#">Close</a></li>
+		<li><a href="#">Quit</a></li>
+	</ul>
+	<a href="#">Edit</a>
+	<ul>
+		<li><a href="#">Copy</a></li>
+		<li><a href="#">Cut</a></li>
+		<li class="ui-state-disabled">Paste</li>
+	</ul>
+	<a href="#">View</a>
+	<ul>
+		<li><a href="#">Fullscreen</a></li>
+		<li><a href="#">Fit into view</a></li>
+		<li>
+			<a href="#">Encoding</a>
+			<ul>
+				<li><a href="#">Auto-detect</a></li>
+				<li><a href="#">UTF-8</a></li>
+				<li>
+				  <a href="#">UTF-16</a>
+			      <ul>
+			         <li><a href="#">Option 1</a></li>
+			         <li><a href="#">Option 2</a></li>
+			         <li><a href="#">Option 3</a></li>
+			         <li><a href="#">Option 4</a></li>
+			      </ul>
+			   </li>
+			</ul>
+		</li>
 		<li><a href="#">Customize...</a></li>
 	</ul>
 </div>

@@ -3,12 +3,7 @@
  */
 (function($) {
 
-module("datepicker: methods", {
-	teardown: function() {
-		stop();
-		setTimeout(start, 13);
-	}
-});
+module("datepicker: methods");
 
 test('destroy', function() {
 	var inp = init('#inp');

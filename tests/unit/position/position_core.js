@@ -139,6 +139,8 @@ test('of', function() {
 		left: $(document).width() - 10
 	}, 'document');
 	
+	$(window).scrollTop(0);
+	
 	$('#elx').position({
 		my: 'right bottom',
 		at: 'right bottom',
@@ -161,18 +163,24 @@ test('of', function() {
 		left: $(window).width() - 10
 	}, 'window');
 	
-	$(window).scrollTop(500).scrollLeft(200);
-	$('#elx').position({
-		my: 'right bottom',
-		at: 'right bottom',
-		of: window,
-		collision: 'none'
-	});
-	same($('#elx').offset(), {
-		top: $(window).height() + 500 - 10,
-		left: $(window).width() + 200 - 10
-	}, 'window, scrolled');
-	$(window).scrollTop(0).scrollLeft(0);
+	var scrollTopSupport = (function() {
+		$(window).scrollTop(1);
+		return $(window).scrollTop() == 1;
+	})();
+	if (scrollTopSupport) {
+		$(window).scrollTop(500).scrollLeft(200);
+		$('#elx').position({
+			my: 'right bottom',
+			at: 'right bottom',
+			of: window,
+			collision: 'none'
+		});
+		same($('#elx').offset(), {
+			top: $(window).height() + 500 - 10,
+			left: $(window).width() + 200 - 10
+		}, 'window, scrolled');
+		$(window).scrollTop(0).scrollLeft(0);
+	}
 	
 	var event = $.extend($.Event('someEvent'), { pageX: 200, pageY: 300 });
 	$('#elx').position({

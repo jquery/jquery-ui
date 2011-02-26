@@ -23,8 +23,7 @@
 				select: function(event, ui) {
 					$(this).hide();
 					$("#log").append("<div>Selected " + ui.item.text() + "</div>");
-				},
-				input: $(this)
+				}
 			}).hide();
 		}).click(function(event) {
 			var menu = $(this).next();
@@ -32,7 +31,7 @@
 				menu.hide();
 				return false;
 			}
-			menu.menu("deactivate").show().css({top:0, left:0}).position({
+			menu.menu("blur").show().position({
 				my: "left top",
 				at: "right top",
 				of: this

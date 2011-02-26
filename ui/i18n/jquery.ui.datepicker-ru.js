@@ -3,8 +3,8 @@
 jQuery(function($){
 	$.datepicker.regional['ru'] = {
 		closeText: 'Закрыть',
-		prevText: '&#x3c;Пред',
-		nextText: 'След&#x3e;',
+		prevText: '&#x3C;Пред',
+		nextText: 'След&#x3E;',
 		currentText: 'Сегодня',
 		monthNames: ['Январь','Февраль','Март','Апрель','Май','Июнь',
 		'Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'],

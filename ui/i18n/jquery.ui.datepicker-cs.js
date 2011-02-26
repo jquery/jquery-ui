@@ -3,8 +3,8 @@
 jQuery(function($){
 	$.datepicker.regional['cs'] = {
 		closeText: 'Zavřít',
-		prevText: '&#x3c;Dříve',
-		nextText: 'Později&#x3e;',
+		prevText: '&#x3C;Dříve',
+		nextText: 'Později&#x3E;',
 		currentText: 'Nyní',
 		monthNames: ['leden','únor','březen','duben','květen','červen',
         'červenec','srpen','září','říjen','listopad','prosinec'],

@@ -68,6 +68,9 @@ $.widget("ui.tooltip", {
 	
 	open: function(event) {
 		var target = $(event && event.target || this.element).closest(this.options.items);
+		if ( !target.length ) {
+			return;
+		}
 		// already visible? possible when both focus and mouseover events occur
 		if (this.current && this.current[0] == target[0])
 			return;
@@ -75,19 +78,19 @@ $.widget("ui.tooltip", {
 		this.current = target;
 		this.currentTitle = target.attr("title");
 		var content = this.options.content.call(target[0], function(response) {
-			// IE may instantly serve a cached response, need to give it a chance to finish with _show before that
+			// IE may instantly serve a cached response, need to give it a chance to finish with _open before that
 			setTimeout(function() {
 				// ignore async responses that come in after the tooltip is already hidden
 				if (self.current == target)
-					self._show(event, target, response);
+					self._open(event, target, response);
 			}, 13);
 		});
 		if (content) {
-			self._show(event, target, content);
+			self._open(event, target, content);
 		}
 	},
 	
-	_show: function(event, target, content) {
+	_open: function(event, target, content) {
 		if (!content)
 			return;
 		

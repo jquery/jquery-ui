@@ -105,7 +105,52 @@ test( "{ collapsible: true }", function() {
 	state( ac, 0, 0, 0 );
 });
 
-// TODO: add event tests
+test( "{ event: null }", function() {
+	var ac = $( "#list1" ).accordion({
+		event: null
+	});
+	state( ac, 1, 0, 0 );
+
+	ac.accordion( "option", "active", 1 );
+	equal( ac.accordion( "option", "active" ), 1 );
+	state( ac, 0, 1, 0 );
+
+	// ensure default click handler isn't bound
+	ac.find( ".ui-accordion-header" ).eq( 2 ).click();
+	equal( ac.accordion( "option", "active" ), 1 );
+	state( ac, 0, 1, 0 );
+});
+
+test( "{ event: custom }", function() {
+	var ac = $( "#list1" ).accordion({
+		event: "custom1 custom2"
+	});
+	state( ac, 1, 0, 0 );
+
+	ac.find( ".ui-accordion-header" ).eq( 1 ).trigger( "custom1" );
+	equal( ac.accordion( "option", "active" ), 1 );
+	state( ac, 0, 1, 0 );
+
+	// ensure default click handler isn't bound
+	ac.find( ".ui-accordion-header" ).eq( 2 ).trigger( "click" );
+	equal( ac.accordion( "option", "active" ), 1 );
+	state( ac, 0, 1, 0 );
+
+	ac.find( ".ui-accordion-header" ).eq( 2 ).trigger( "custom2" );
+	equal( ac.accordion( "option", "active" ), 2 );
+	state( ac, 0, 0, 1 );
+
+	ac.accordion( "option", "event", "custom3" );
+
+	// ensure old event handlers are unbound
+	ac.find( ".ui-accordion-header" ).eq( 1 ).trigger( "custom1" );
+	equal( ac.accordion( "option", "active" ), 2 );
+	state( ac, 0, 0, 1 );
+
+	ac.find( ".ui-accordion-header" ).eq( 1 ).trigger( "custom3" );
+	equal( ac.accordion( "option", "active" ), 1 );
+	state( ac, 0, 1, 0 );
+});
 
 test( "{ header: default }", function() {
 	// default: > li > :first-child,> :not(li):even
@@ -138,7 +183,7 @@ test( "{ heightStyle: 'content' }", function() {
 	var sizes = ac.find( ".ui-accordion-content" ).map(function() {
 		return $( this ).height();
 	}).get();
-	ok( sizes[ 0 ] >= 70 && sizes[ 0 ] <= 90, "was " + sizes[ 0 ] );
+	ok( sizes[ 0 ] >= 70 && sizes[ 0 ] <= 105, "was " + sizes[ 0 ] );
 	ok( sizes[ 1 ] >= 98 && sizes[ 1 ] <= 126, "was " + sizes[ 1 ] );
 	ok( sizes[ 2 ] >= 42 && sizes[ 2 ] <= 54, "was " + sizes[ 2 ] );
 });

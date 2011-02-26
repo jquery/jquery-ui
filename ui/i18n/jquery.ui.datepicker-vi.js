@@ -3,8 +3,8 @@
 jQuery(function($){
 	$.datepicker.regional['vi'] = {
 		closeText: 'Đóng',
-		prevText: '&#x3c;Trước',
-		nextText: 'Tiếp&#x3e;',
+		prevText: '&#x3C;Trước',
+		nextText: 'Tiếp&#x3E;',
 		currentText: 'Hôm nay',
 		monthNames: ['Tháng Một', 'Tháng Hai', 'Tháng Ba', 'Tháng Tư', 'Tháng Năm', 'Tháng Sáu',
 		'Tháng Bảy', 'Tháng Tám', 'Tháng Chín', 'Tháng Mười', 'Tháng Mười Một', 'Tháng Mười Hai'],
