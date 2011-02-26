@@ -34,6 +34,7 @@
 	<div id="datepicker-inline"></div>
 	<input id="datepicker" type="text" />
 	<input id="datepicker2" type="text" />
+	<input id="datepicker3" type="text" />
 	<script>
 		$( function() {
 			$( "#culture" ).change( function() {
@@ -78,6 +79,23 @@
 				}
 			});
 			$( "#datepicker, #datepicker2" ).datepicker();
+			
+			var input = $("#datepicker3");
+			var button = $("<button>").insertAfter(input);
+			var picker = $("<div>").css( {
+				position: "absolute"
+			}).datepicker({
+				select: function(event, ui) {
+					input.val(ui.date);
+					picker.datepicker("close");
+				},
+				position: {
+					of: input
+				}
+			}).insertAfter(input).hide();
+			button.click(function() {
+				picker.datepicker("open");
+			});
 		});
 	</script>
 

@@ -8,7 +8,11 @@
 $.widget( "ui.datepicker", {
 	options: {
 		eachDay: $.noop,
-		tmpl: "#ui-datepicker-tmpl"
+		tmpl: "#ui-datepicker-tmpl",
+		position: {
+			my: "left top",
+			at: "left bottom"
+		}
 	},
 	_create: function() {
 		var self = this;
@@ -78,11 +82,10 @@ $.widget( "ui.datepicker", {
 	},
 	open: function( event ) {
 		this.picker.fadeIn( "fast" );
-		this.picker.position({
-			my: "left top",
-			at: "left bottom",
+		
+		this.picker.position( $.extend( {
 			of: this.element
-		});
+		}, this.options.position ));
 	},
 	close: function( event ) {
 		this.picker.fadeOut();
