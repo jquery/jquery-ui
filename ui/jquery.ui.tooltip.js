@@ -68,6 +68,9 @@ $.widget("ui.tooltip", {
 	
 	open: function(event) {
 		var target = $(event && event.target || this.element).closest(this.options.items);
+		if ( !target.length ) {
+			return;
+		}
 		// already visible? possible when both focus and mouseover events occur
 		if (this.current && this.current[0] == target[0])
 			return;
