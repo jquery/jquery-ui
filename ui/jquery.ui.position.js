@@ -219,14 +219,14 @@ $.extend ( $.ui.position, (
 		positionData.horizontal = {},
 			positionData.vertical = {};
 
-		positionData.horizontal.originalValue = horizontalPositions.test( pos[ 0 ] ) ? pos[ 0 ] : center;
-		positionData.vertical.originalValue = verticalPositions.test( pos[ 1 ] ) ? pos[ 1 ] : center;
+		pos[ 0 ] = horizontalPositions.test( pos[ 0 ] ) ? pos[ 0 ] : center;
+		pos[ 1 ] = verticalPositions.test( pos[ 1 ] ) ? pos[ 1 ] : center;
 
-		positionData.horizontal.offset = new offsetTranslator( positionData.horizontal.originalValue );
-		positionData.vertical.offset = new offsetTranslator( positionData.vertical.originalValue );
+		positionData.horizontal.offset = new offsetTranslator( pos[ 0 ] );
+		positionData.vertical.offset = new offsetTranslator( pos[ 1 ] );
 
-		positionData.horizontal.value = positionData.horizontal.originalValue.match( horizontalPositions )[ 0 ];
-		positionData.vertical.value = positionData.vertical.originalValue.match( verticalPositions )[ 0 ];
+		positionData.horizontal.value = pos[ 0 ].match( horizontalPositions )[ 0 ];
+		positionData.vertical.value = pos[ 1 ].match( verticalPositions )[ 0 ];
 
 		return positionData;
 	},
