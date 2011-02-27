@@ -29,7 +29,6 @@ $.fn.position = function( options ) {
 	var target = $( options.of ),
 		targetElem = target[0],
 		collision = ( options.collision || "flip" ).split( " " ),
-		offset = [0, 0],
 		targetWidth,
 		targetHeight,
 		basePosition;
@@ -283,11 +282,11 @@ if ( $.uiBackCompat !== false ) {
 				offset = options.offset ? options.offset.split( " " ) : [ 0, 0 ],
 
 				// normalize offset option
-				offset[ 0 ] = parseInt( offset[0], 10 ) || 0;
+				offset[ 0 ] = parseInt( offset[ 0 ], 10 ) || 0;
 				if ( offset.length === 1 ) {
 					offset[ 1 ] = offset[ 0 ];
 				}
-				offset[ 1 ] = parseInt( offset[1], 10 ) || 0;
+				offset[ 1 ] = parseInt( offset[ 1 ], 10 ) || 0;
 				
 				options.at.horizontal.offset.offset += offset[ 0 ];
 				options.at.vertical.offset.offset += offset[ 1 ];
