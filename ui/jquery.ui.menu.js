@@ -219,7 +219,6 @@ $.widget("ui.menu", {
 		var nested = $(">ul", item);
 		if (nested.length && /^mouse/.test(event.type)) {
 			self._open(nested);
-			this.active.find(">a:first").addClass("ui-state-active");
 		}
 		this.activeMenu = item.parent();
 		
@@ -253,6 +252,8 @@ $.widget("ui.menu", {
 		);
 
 		submenu.show().position(position);
+		
+		this.active.find(">a:first").addClass("ui-state-active");
 	},
 	
 	closeAll: function() {
