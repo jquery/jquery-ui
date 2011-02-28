@@ -67,7 +67,7 @@ test('disabled', function() {
 	expect(4);
 
 	el = $('#tabs1').tabs();
-	same(el.tabs('option', 'disabled'), [ ], "should not disable any tab by default");
+	same(el.tabs('option', 'disabled'), false, "should not disable any tab by default");
 
 	el.tabs('option', 'disabled', [ 1 ]);
 	same(el.tabs('option', 'disabled'), [ 1 ], "should set property"); // everything else is being tested in methods module...
@@ -77,7 +77,7 @@ test('disabled', function() {
 	same(el.tabs('option', 'disabled'), [ 1 ], "should disable given tabs but not selected one"); // ...
 
 	el.tabs('option', 'disabled', [ ]);
-	same(el.tabs('option', 'disabled'), [ ], "should not disable any tab"); // ...
+	same(el.tabs('option', 'disabled'), false, "should not disable any tab"); // ...
 });
 
 test('event', function() {

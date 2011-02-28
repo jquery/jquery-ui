@@ -32,7 +32,7 @@ $.widget( "ui.tabs", {
 		cookie: null, // e.g. { expires: 7, path: '/', domain: 'jquery.com', secure: true }
 		collapsible: false,
 		disable: null,
-		disabled: [],
+		disabled: false,
 		enable: null,
 		event: "click",
 		fx: null, // e.g. { height: 'toggle', opacity: 'toggle', duration: 200 }
@@ -195,11 +195,13 @@ $.widget( "ui.tabs", {
 			// Take disabling tabs via class attribute from HTML
 			// into account and update option properly.
 			// A selected tab cannot become disabled.
-			o.disabled = $.unique( o.disabled.concat(
-				$.map( this.lis.filter( ".ui-state-disabled" ), function( n, i ) {
-					return self.lis.index( n );
-				})
-			) ).sort();
+			if ( $.isArray( o.disabled ) ) {
+				o.disabled = $.unique( o.disabled.concat(
+					$.map( this.lis.filter( ".ui-state-disabled" ), function( n, i ) {
+						return self.lis.index( n );
+					})
+				) ).sort();
+			}
 
 			if ( $.inArray( o.selected, o.disabled ) != -1 ) {
 				o.disabled.splice( $.inArray( o.selected, o.disabled ), 1 );
@@ -231,6 +233,10 @@ $.widget( "ui.tabs", {
 		// update selected after add/remove
 		} else {
 			o.selected = this.lis.index( this.lis.filter( ".ui-tabs-selected" ) );
+		}
+
+		if ( !o.disabled.length ) {
+			o.disabled = false;
 		}
 
 		this.element.toggleClass( "ui-tabs-collapsible", o.collapsible );
@@ -541,7 +547,7 @@ $.widget( "ui.tabs", {
 		}
 		index = this._getIndex( index );
 		var o = this.options;
-		if ( $.inArray( index, o.disabled ) == -1 ) {
+		if ( !o.disabled || $.inArray( index, o.disabled ) == -1 ) {
 			return;
 		}
 
@@ -549,6 +555,10 @@ $.widget( "ui.tabs", {
 		o.disabled = $.grep( o.disabled, function( n, i ) {
 			return n != index;
 		});
+
+		if ( !o.disabled.length ) {
+			o.disabled = false;
+		}
 
 		this._trigger( "enable", null, this._ui( this.anchors[ index ], this.panels[ index ] ) );
 		return this;
@@ -568,8 +578,14 @@ $.widget( "ui.tabs", {
 		if ( index != o.selected && elem.is(":not(.ui-state-disabled)") ) {
 			elem.addClass( "ui-state-disabled" );
 
+			if ( !$.isArray( o.disabled ) ) {
+				o.disabled = [];
+			}
 			o.disabled.push( index );
 			o.disabled.sort();
+			if ( o.disabled.length === this.anchors.not( this.anchors.eq( o.selected ) ).length ) {
+				o.disabled = true;
+			}
 
 			this._trigger( "disable", null, this._ui( this.anchors[ index ], this.panels[ index ] ) );
 		}
