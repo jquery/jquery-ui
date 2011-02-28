@@ -57,15 +57,18 @@ $.widget("ui.menubar", {
    				event.preventDefault();
    				event.stopPropagation();
    			})
-   			.button({
-   				icons: {
-   					secondary: o.menuIcon ? (menu.length ? 'ui-icon-triangle-1-s' : '') : ''   					
-   				}
-   			});
+			.addClass("ui-button ui-widget ui-button-text-only ui-menubar-link")
+			.wrapInner("<span class='ui-button-text'></span>");
+			self._hoverable(input)
+			
+			if (o.menuIcon) {
+				input.addClass("ui-state-default").append("<span class='ui-button-icon-secondary ui-icon ui-icon-triangle-1-s'></span>");
+				input.removeClass("ui-button-text-only").addClass("ui-button-text-icon-secondary");
+			}
    			
-         if (!o.buttons) {
-            input.addClass('ui-menubar-link').removeClass('ui-state-default');
-         };			
+			if (!o.buttons) {
+				input.addClass('ui-menubar-link').removeClass('ui-state-default');
+			};			
 			
 		});
 		$(document).click(function(event) {
