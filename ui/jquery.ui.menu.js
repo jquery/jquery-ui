@@ -239,9 +239,6 @@ $.widget("ui.menu", {
 	},
 
 	_open: function(submenu) {
-		// TODO restrict to widget
-		//only one menu can have items open at a time.
-		//$(document).find(".ui-menu").not(submenu.parents()).hide().data("menu").blur();
 		this.element.find(".ui-menu").not(submenu.parents()).hide();
 		
 		var position = $.extend({}, {
