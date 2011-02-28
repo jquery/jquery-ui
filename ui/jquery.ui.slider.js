@@ -24,7 +24,7 @@ $.widget( "ui.slider", $.ui.mouse, {
 
 	options: {
 		animate: false,
-		distance: 1,
+		distance: 0,
 		max: 100,
 		min: 0,
 		orientation: "horizontal",
@@ -55,8 +55,6 @@ $.widget( "ui.slider", $.ui.mouse, {
 		if ( o.disabled ) {
 			this.element.addClass( "ui-slider-disabled ui-disabled" );
 		}
-
-		o.distance = o.orientation == 'horizontal' ? {x:o.distance,y:0} : (o.orientation == "vertical" ? {x:0,y:o.distance} : o.distance);
 
 		this.range = $([]);
 
