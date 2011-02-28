@@ -49,13 +49,16 @@ $.widget("ui.menubar", {
 			var input = $(this),
 				   menu = input.next("ul");
 			
-			input
-			   .bind("click focus mouseenter", function(event) {
+			input.bind("click focus mouseenter", function(event) {
+   				event.preventDefault();
+   				event.stopPropagation();
+			   	if (menu.is(":visible") && self.active && self.active[0] == menu[0]) {
+					self._close();
+					return;
+				}
    				if (menu.length && (!/^mouse/.test(event.type) || self.active && self.active.is(":visible") )) {
    					self._open(event, menu);
    				}
-   				event.preventDefault();
-   				event.stopPropagation();
    			})
 			.addClass("ui-button ui-widget ui-button-text-only ui-menubar-link")
 			.wrapInner("<span class='ui-button-text'></span>");
