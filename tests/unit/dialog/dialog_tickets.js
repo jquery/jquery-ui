@@ -95,9 +95,7 @@ test("#6966: Escape key closes all dialogs, not the top one", function(){
     d2 = $('<div title="dialog 2">Dialog 2</div>').dialog({modal: true, close: function(){ d2.remove()}});
     ok(d1.dialog("isOpen"), 'first dialog is open');
     ok(d2.dialog("isOpen"), 'second dialog is open');
-    var e = jQuery.Event("keydown");
-    e.keyCode = $.ui.keyCode.ESCAPE;
-    d2.parent().trigger(e);
+    d2.simulate("keydown", {keyCode: $.ui.keyCode.ESCAPE});
     ok(d1.dialog("isOpen"), 'first dialog still open');
     ok(!d2.data('dialog'), 'second dialog is closed');
     d2.remove();
@@ -108,9 +106,7 @@ test("#6966: Escape key closes all dialogs, not the top one", function(){
     d2 = $('<div title="dialog 2">Dialog 2</div>').dialog({modal: true});
     ok(d1.dialog("isOpen"), 'first dialog is open');
     ok(d2.dialog("isOpen"), 'second dialog is open');
-    var e = jQuery.Event("keydown");
-    e.keyCode = $.ui.keyCode.ESCAPE;
-    d2.parent().trigger(e);
+    d2.simulate("keydown", {keyCode: $.ui.keyCode.ESCAPE});
     ok(d1.dialog("isOpen"), 'first dialog still open');
     ok(!d2.dialog("isOpen"), 'second dialog is closed');
     d2.remove();
