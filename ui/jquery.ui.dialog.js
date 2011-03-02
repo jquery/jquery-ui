@@ -353,7 +353,10 @@ $.widget("ui.dialog", {
 					button.button();
 				}
 			});
+			self.uiDialog.addClass( "ui-dialog-buttons" );
 			uiDialogButtonPane.appendTo( self.uiDialog );
+		} else {
+			self.uiDialog.removeClass( "ui-dialog-buttons" );
 		}
 	},
 
