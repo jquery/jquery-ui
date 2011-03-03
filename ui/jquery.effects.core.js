@@ -410,39 +410,43 @@ $.extend($.effects, {
 	}
 });
 
+// return an effect options object for the given parameters:
+function _normalizeArguments( effect, options, speed, callback ) {
+	var effectObj = {
+		effect: effect		
+	};
 
-function _normalizeArguments(effect, options, speed, callback) {
-	// shift params for method overloading
-	if (typeof effect == 'object') {
-		callback = options;
-		speed = null;
-		options = effect;
-		effect = options.effect;
+	// passed an effect options object:
+	if ( $.isPlainObject( effect ) ) {
+		return effect;
 	}
-	if ($.isFunction(options)) {
+
+	if ( $.isFunction(options) ) {
 		callback = options;
 		speed = null;
 		options = {};
 	}
-        if (typeof options == 'number' || $.fx.speeds[options]) {
+	if (typeof options == 'number' || $.fx.speeds[options]) {
 		callback = speed;
 		speed = options;
 		options = {};
 	}
-	if ($.isFunction(speed)) {
+	if ( $.isFunction(speed) ) {
 		callback = speed;
 		speed = null;
 	}
 
-	options = options || {};
-
+	if ( options ) {
+		$.extend( effectObj, options );
+	}
+	
 	speed = speed || options.duration;
-	speed = $.fx.off ? 0 : typeof speed == 'number'
+	effectObj.duration = $.fx.off ? 0 : typeof speed == 'number'
 		? speed : speed in $.fx.speeds ? $.fx.speeds[speed] : $.fx.speeds._default;
 
-	callback = callback || options.complete;
+	effectObj.complete = callback || options.complete;
 
-	return [effect, options, speed, callback];
+	return effectObj;
 }
 
 function standardSpeed( speed ) {
@@ -462,29 +466,23 @@ function standardSpeed( speed ) {
 $.fn.extend({
 	effect: function(effect, options, speed, callback) {
 		var args = _normalizeArguments.apply(this, arguments),
-			// TODO: make effects take actual parameters instead of a hash
-			args2 = {
-				options: args[1],
-				duration: args[2],
-				callback: args[3]
-			},
-			mode = args2.options.mode,
-			effectMethod = $.effects[effect];
+			mode = args.mode,
+			effectMethod = $.effects[args.effect];
 		
 		if ( $.fx.off || !effectMethod ) {
 			// delegate to the original method (e.g., .show()) if possible
 			if ( mode ) {
-				return this[ mode ]( args2.duration, args2.callback );
+				return this[ mode ]( args.duration, args.callback );
 			} else {
 				return this.each(function() {
-					if ( args2.callback ) {
-						args2.callback.call( this );
+					if ( args.callback ) {
+						args.callback.call( this );
 					}
 				});
 			}
 		}
 		
-		return effectMethod.call(this, args2);
+		return effectMethod.call(this, args);
 	},
 
 	_show: $.fn.show,
@@ -493,8 +491,8 @@ $.fn.extend({
 			return this._show.apply(this, arguments);
 		} else {
 			var args = _normalizeArguments.apply(this, arguments);
-			args[1].mode = 'show';
-			return this.effect.apply(this, args);
+			args.mode = 'show';
+			return this.effect.call(this, args);
 		}
 	},
 
@@ -504,8 +502,8 @@ $.fn.extend({
 			return this._hide.apply(this, arguments);
 		} else {
 			var args = _normalizeArguments.apply(this, arguments);
-			args[1].mode = 'hide';
-			return this.effect.apply(this, args);
+			args.mode = 'hide';
+			return this.effect.call(this, args);
 		}
 	},
 
@@ -516,8 +514,8 @@ $.fn.extend({
 			return this.__toggle.apply(this, arguments);
 		} else {
 			var args = _normalizeArguments.apply(this, arguments);
-			args[1].mode = 'toggle';
-			return this.effect.apply(this, args);
+			args.mode = 'toggle';
+			return this.effect.call(this, args);
 		}
 	},
 
