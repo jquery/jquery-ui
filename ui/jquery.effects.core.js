@@ -412,41 +412,47 @@ $.extend($.effects, {
 
 // return an effect options object for the given parameters:
 function _normalizeArguments( effect, options, speed, callback ) {
-	var effectObj = {
-		effect: effect		
-	};
 
-	// passed an effect options object:
+	// short path for passing an effect options object:
 	if ( $.isPlainObject( effect ) ) {
 		return effect;
 	}
 
-	if ( $.isFunction(options) ) {
+	// convert to an object
+	effect = { effect: effect };
+
+	// catch (effect, callback)
+	if ( $.isFunction( options ) ) {
 		callback = options;
 		speed = null;
 		options = {};
 	}
-	if (typeof options == 'number' || $.fx.speeds[options]) {
+
+	// catch (effect, speed, ?)
+	if ( $.type( options ) == 'number' || $.fx.speeds[ options ]) {
 		callback = speed;
 		speed = options;
 		options = {};
 	}
-	if ( $.isFunction(speed) ) {
+
+	// catch (effect, options, callback)
+	if ( $.isFunction( speed ) ) {
 		callback = speed;
 		speed = null;
 	}
 
+	// add options to effect
 	if ( options ) {
-		$.extend( effectObj, options );
+		$.extend( effect, options );
 	}
 	
 	speed = speed || options.duration;
-	effectObj.duration = $.fx.off ? 0 : typeof speed == 'number'
-		? speed : speed in $.fx.speeds ? $.fx.speeds[speed] : $.fx.speeds._default;
+	effect.duration = $.fx.off ? 0 : typeof speed == 'number'
+		? speed : speed in $.fx.speeds ? $.fx.speeds[ speed ] : $.fx.speeds._default;
 
-	effectObj.complete = callback || options.complete;
+	effect.complete = callback || options.complete;
 
-	return effectObj;
+	return effect;
 }
 
 function standardSpeed( speed ) {
