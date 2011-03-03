@@ -17,11 +17,10 @@ $.effects.clip = function(o) {
 	return this.queue(function() {
 
 		// Create element
-		var el = $(this), props = ['position','top','bottom','left','right','height','width'];
-
-		// Set options
-		var mode = $.effects.setMode(el, o.options.mode || 'hide'); // Set Mode
-		var direction = o.options.direction || 'vertical'; // Default direction
+		var el = $( this ), 
+			props = ['position','top','bottom','left','right','height','width'], 
+			mode = $.effects.setMode( el, o.mode || 'hide' ),
+			direction = o.direction || 'vertical'; // Default direction
 
 		// Adjust
 		$.effects.save(el, props); el.show(); // Save & Show
@@ -40,10 +39,10 @@ $.effects.clip = function(o) {
 		animation[ref.position] = mode == 'show' ? 0 : distance / 2;
 
 		// Animate
-		animate.animate(animation, { queue: false, duration: o.duration, easing: o.options.easing, complete: function() {
+		animate.animate(animation, { queue: false, duration: o.duration, easing: o.easing, complete: function() {
 			if(mode == 'hide') el.hide(); // Hide
 			$.effects.restore(el, props); $.effects.removeWrapper(el); // Restore
-			if(o.callback) o.callback.apply(el[0], arguments); // Callback
+			if(o.complete) o.complete.apply(el[0], arguments); // Callback
 			el.dequeue();
 		}});
 

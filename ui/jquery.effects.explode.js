@@ -16,10 +16,10 @@ $.effects.explode = function(o) {
 
 	return this.queue(function() {
 
-	var rows = o.options.pieces ? Math.round(Math.sqrt(o.options.pieces)) : 3;
-	var cells = o.options.pieces ? Math.round(Math.sqrt(o.options.pieces)) : 3;
+	var rows = o.pieces ? Math.round(Math.sqrt(o.pieces)) : 3;
+	var cells = o.pieces ? Math.round(Math.sqrt(o.pieces)) : 3;
 
-	o.options.mode = o.options.mode == 'toggle' ? ($(this).is(':visible') ? 'hide' : 'show') : o.options.mode;
+	o.mode = o.mode == 'toggle' ? ($(this).is(':visible') ? 'hide' : 'show') : o.mode;
 	var el = $(this).show().css('visibility', 'hidden');
 	var offset = el.offset();
 
@@ -49,13 +49,13 @@ $.effects.explode = function(o) {
 					overflow: 'hidden',
 					width: width/cells,
 					height: height/rows,
-					left: offset.left + j*(width/cells) + (o.options.mode == 'show' ? (j-Math.floor(cells/2))*(width/cells) : 0),
-					top: offset.top + i*(height/rows) + (o.options.mode == 'show' ? (i-Math.floor(rows/2))*(height/rows) : 0),
-					opacity: o.options.mode == 'show' ? 0 : 1
+					left: offset.left + j*(width/cells) + (o.mode == 'show' ? (j-Math.floor(cells/2))*(width/cells) : 0),
+					top: offset.top + i*(height/rows) + (o.mode == 'show' ? (i-Math.floor(rows/2))*(height/rows) : 0),
+					opacity: o.mode == 'show' ? 0 : 1
 				}).animate({
-					left: offset.left + j*(width/cells) + (o.options.mode == 'show' ? 0 : (j-Math.floor(cells/2))*(width/cells)),
-					top: offset.top + i*(height/rows) + (o.options.mode == 'show' ? 0 : (i-Math.floor(rows/2))*(height/rows)),
-					opacity: o.options.mode == 'show' ? 1 : 0
+					left: offset.left + j*(width/cells) + (o.mode == 'show' ? 0 : (j-Math.floor(cells/2))*(width/cells)),
+					top: offset.top + i*(height/rows) + (o.mode == 'show' ? 0 : (i-Math.floor(rows/2))*(height/rows)),
+					opacity: o.mode == 'show' ? 1 : 0
 				}, o.duration || 500);
 		}
 	}
@@ -63,8 +63,8 @@ $.effects.explode = function(o) {
 	// Set a timeout, to call the callback approx. when the other animations have finished
 	setTimeout(function() {
 
-		o.options.mode == 'show' ? el.css({ visibility: 'visible' }) : el.css({ visibility: 'visible' }).hide();
-				if(o.callback) o.callback.apply(el[0]); // Callback
+		o.mode == 'show' ? el.css({ visibility: 'visible' }) : el.css({ visibility: 'visible' }).hide();
+				if(o.complete) o.complete.apply(el[0]); // Callback
 				el.dequeue();
 
 				$('div.ui-effects-explode').remove();

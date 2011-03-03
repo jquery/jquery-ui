@@ -15,7 +15,7 @@
 $.effects.transfer = function(o) {
 	return this.queue(function() {
 		var elem = $(this),
-			target = $(o.options.to),
+			target = $(o.to),
 			endPosition = target.offset(),
 			animation = {
 				top: endPosition.top,
@@ -26,7 +26,7 @@ $.effects.transfer = function(o) {
 			startPosition = elem.offset(),
 			transfer = $('<div class="ui-effects-transfer"></div>')
 				.appendTo(document.body)
-				.addClass(o.options.className)
+				.addClass(o.className)
 				.css({
 					top: startPosition.top,
 					left: startPosition.left,
@@ -34,9 +34,9 @@ $.effects.transfer = function(o) {
 					width: elem.innerWidth(),
 					position: 'absolute'
 				})
-				.animate(animation, o.duration, o.options.easing, function() {
+				.animate(animation, o.duration, o.easing, function() {
 					transfer.remove();
-					(o.callback && o.callback.apply(elem[0], arguments));
+					(o.complete && o.complete.apply(elem[0], arguments));
 					elem.dequeue();
 				});
 	});
