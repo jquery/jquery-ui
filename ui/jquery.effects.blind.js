@@ -15,30 +15,28 @@
 $.effects.blind = function(o) {
 
 	return this.queue(function() {
-
 		// Create element
 		var el = $(this), 
 			props = ['position','top','bottom','left','right'],
 			mode = $.effects.setMode( el, o.mode || 'hide' ),
 			direction = o.direction || 'vertical',
 			ref = (direction == 'vertical') ? 'height' : 'width',
-			wrapper, distance; // Default direction
+			animation = {},
+			wrapper, distance;
 
 		// Adjust
 		$.effects.save(el, props); el.show(); // Save & Show
+		
 		wrapper = $.effects.createWrapper(el).css({overflow:'hidden'}); // Create Wrapper
-		distance = wrapper[ direction == 'vertical' ? "height" : "width" ]();
-		if(mode == 'show') wrapper.css(ref, 0); // Shift
 
-		// Animation
-		var animation = {};
-		animation[ref] = mode == 'show' ? distance : 0;
+		animation[ref] = ( mode == 'show' ? wrapper[ ref ]() : 0 );
+		(mode == 'show' && wrapper.css(ref, 0)); // start at 0 if we are showing
 
 		// Animate
-		wrapper.animate(animation, o.duration, o.easing, function() {
-			if(mode == 'hide') el.hide(); // Hide
+		wrapper.animate( animation, o.duration, o.easing, function() {
+			(mode == 'hide' && el.hide()); // Hide
 			$.effects.restore(el, props); $.effects.removeWrapper(el); // Restore
-			if(o.complete) o.complete.apply(el[0], arguments); // Callback
+			(o.complete && o.complete.apply(el[0], arguments)); // Callback
 			el.dequeue();
 		});
 
