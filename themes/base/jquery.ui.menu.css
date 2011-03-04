@@ -12,6 +12,7 @@
 	padding: 2px;
 	margin: 0;
 	display:block;
+	outline: none;
 }
 .ui-menu .ui-menu {
 	margin-top: -3px;
@@ -32,8 +33,12 @@
 .ui-menu .ui-menu-item a {
 	font-weight: normal;
 }
-.ui-menu .ui-menu-item a.ui-state-hover,
+.ui-menu .ui-menu-item a.ui-state-focus,
 .ui-menu .ui-menu-item a.ui-state-active {
 	font-weight: normal;
 	margin: -1px;
 }
+
+.ui-menu .ui-icon { float: right; }
+
+.ui-menu .ui-menu { position: absolute; }

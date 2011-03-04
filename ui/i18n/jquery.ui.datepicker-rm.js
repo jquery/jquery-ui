@@ -3,8 +3,8 @@
 jQuery(function($){
 	$.datepicker.regional['rm'] = {
 		closeText: 'Serrar',
-		prevText: '&#x3c;Suandant',
-		nextText: 'Precedent&#x3e;',
+		prevText: '&#x3C;Suandant',
+		nextText: 'Precedent&#x3E;',
 		currentText: 'Actual',
 		monthNames: ['Schaner','Favrer','Mars','Avrigl','Matg','Zercladur', 'Fanadur','Avust','Settember','October','November','December'],
 		monthNamesShort: ['Scha','Fev','Mar','Avr','Matg','Zer', 'Fan','Avu','Sett','Oct','Nov','Dec'],

@@ -8,13 +8,19 @@
 module("menu: core");
 
 test("accessibility", function () {
-	expect(3);
+	expect(5);
 	var ac = $('#menu1').menu();
 	var item0 = $("li:eq(0) a");
 
 	ok( ac.hasClass("ui-menu ui-widget ui-widget-content ui-corner-all"), "menu class");
 	equals( ac.attr("role"), "listbox", "main role");
-	equals( ac.attr("aria-activedescendant"), "ui-active-menuitem", "aria attribute");
+	ok( !ac.attr("aria-activedescendant"), "aria attribute not yet active");
+	var item = ac.find( "li:first" ).find( "a" ).attr( "id", "xid" ).end();
+	ac.menu( "focus", $.Event(), item );
+	equals( ac.attr("aria-activedescendant"), "xid", "aria attribute, id from dom");
+	var item = ac.find( "li:last" );
+	ac.menu( "focus", $.Event(), item );
+	equals( ac.attr("aria-activedescendant"), "menu1-activedescendant", "aria attribute, generated id");
 });
 
 test("items class and role", function () {

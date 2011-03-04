@@ -4,8 +4,10 @@
 
 var menu_defaults = {
 	disabled: false,
-	navigationFilter: function() {}
-	
+	position: {
+		my: "left top",
+		at: "right top"
+	}
 };
 
 commonWidgetTests('menu', { defaults: menu_defaults });

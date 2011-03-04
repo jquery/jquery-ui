@@ -1,10 +1,10 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 	<meta charset="utf-8">
 	<title>jQuery UI Spinner - Default functionality</title>
 	<link type="text/css" href="../../themes/base/jquery.ui.all.css" rel="stylesheet" />
-	<script type="text/javascript" src="../../jquery-1.4.4.js"></script>
+	<script type="text/javascript" src="../../jquery-1.5.1.js"></script>
 	<script type="text/javascript" src="../../external/jquery.mousewheel-3.0.4.js"></script>
 	<script type="text/javascript" src="../../external/jquery.global.js"></script>
 	<script type="text/javascript" src="../../external/jquery.global.de-DE.js"></script>
@@ -18,7 +18,7 @@
 	$(function() {
 		$("#currency").change(function() {
 			var current = $("#spinner").spinner("value");
-			Globalization.preferCulture($(this).val());
+			$.global.preferCulture($(this).val());
 			$("#spinner").spinner("value", current);
 		})
 		

@@ -6,7 +6,7 @@
 
 	<link rel="stylesheet" href="../../../themes/base/jquery.ui.accordion.css">
 
-	<script src="../../../jquery-1.4.4.js"></script>
+	<script src="../../../jquery-1.5.1.js"></script>
 	<script>
 	$.uiBackCompat = false;
 	</script>
@@ -58,19 +58,20 @@
 
 	<script src="../swarminject.js"></script>
 	<style>
-	#main { font-size: 10pt; font-family: "trebuchet ms", verdana, arial; }
-	#list, #list1 *, #navigation, #navigation * { margin: 0; padding: 0; font-size: 12px; }
+	#qunit-fixture { font-size: 10pt; font-family: "trebuchet ms", verdana, arial; }
+	#list, #list1 *, #navigation, #navigation * { margin: 0; padding: 0; font-size: 12px; line-height: 15px; }
 	</style>
 </head>
 <body>
 
 <h1 id="qunit-header">jQuery UI Accordion Test Suite</h1>
 <h2 id="qunit-banner"></h2>
+<div id="qunit-testrunner-toolbar"></div>
 <h2 id="qunit-userAgent"></h2>
 <ol id="qunit-tests">
 </ol>
 
-<div id="main" style="position: absolute; top: -10000px; left: -10000px;">
+<div id="qunit-fixture">
 
 	<div>
 		<div id="list1" class="foo">

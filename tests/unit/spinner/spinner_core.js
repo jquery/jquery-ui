@@ -120,14 +120,15 @@ test("mouse click on buttons", function() {
 });
 
 test("mouse wheel on input", function() {
-	expect(3);
+	expect(4);
+	stop();
 	
 	var el = $("#spin").spinner();
+	equal(el.val(), 0);
 	el.trigger("mousewheel", 1);
 	equal(el.val(), 1);
 	
 	// mousewheel handler uses a timeout, need to accomodate that
-	stop();
 	setTimeout(function() {
 		el.trigger("mousewheel", -1);
 		equal(el.val(), 0);

@@ -4,8 +4,8 @@
 jQuery(function($) {
 	$.datepicker.regional['fa'] = {
 		closeText: 'بستن',
-		prevText: '&#x3c;قبلي',
-		nextText: 'بعدي&#x3e;',
+		prevText: '&#x3C;قبلي',
+		nextText: 'بعدي&#x3E;',
 		currentText: 'امروز',
 		monthNames: ['فروردين','ارديبهشت','خرداد','تير','مرداد','شهريور',
 		'مهر','آبان','آذر','دي','بهمن','اسفند'],

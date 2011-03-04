@@ -4,7 +4,7 @@
 	<title>Menu Visual Test: Default</title>
 	<link rel="stylesheet" href="../visual.css" type="text/css" />
 	<link rel="stylesheet" href="../../../themes/base/jquery.ui.all.css" type="text/css" title="ui-theme" />
-	<script type="text/javascript" src="../../../jquery-1.4.4.js"></script>
+	<script type="text/javascript" src="../../../jquery-1.5.1.js"></script>
 	<script type="text/javascript" src="../../../ui/jquery.ui.core.js"></script>
 	<script type="text/javascript" src="../../../ui/jquery.ui.widget.js"></script>
 	<script type="text/javascript" src="../../../ui/jquery.ui.position.js"></script>
@@ -59,8 +59,6 @@
 			
 			_open: function(submenu) {
 				this.active = submenu.show().css({
-					top: 0,
-					left: 0,
 					opacity: 0
 				}).position({
 					my: "left top",
@@ -108,7 +106,7 @@
 				var nested = this.activeItem.find(">ul");
 				if (nested.length) {
 					this._open(nested);
-					nested.menu("activate", event, nested.children(":first"))
+					nested.menu("focus", event, nested.children(":first"))
 				}
 			},
 			
@@ -185,7 +183,7 @@
 					});
 				}
 				if (match.length) {
-					menu.activate(event, match);
+					menu.focus(event, match);
 					if (match.length > 1) {
 						menu.previousFilter = character;
 						menu.filterTimer = setTimeout(function() {

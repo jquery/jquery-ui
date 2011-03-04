@@ -3,8 +3,8 @@
 jQuery(function($){
     $.datepicker.regional['da'] = {
 		closeText: 'Luk',
-        prevText: '&#x3c;Forrige',
-		nextText: 'Næste&#x3e;',
+        prevText: '&#x3C;Forrige',
+		nextText: 'Næste&#x3E;',
 		currentText: 'Idag',
         monthNames: ['Januar','Februar','Marts','April','Maj','Juni',
         'Juli','August','September','Oktober','November','December'],

@@ -3,8 +3,8 @@
 jQuery(function($){
 	$.datepicker.regional['sk'] = {
 		closeText: 'Zavrieť',
-		prevText: '&#x3c;Predchádzajúci',
-		nextText: 'Nasledujúci&#x3e;',
+		prevText: '&#x3C;Predchádzajúci',
+		nextText: 'Nasledujúci&#x3E;',
 		currentText: 'Dnes',
 		monthNames: ['Január','Február','Marec','Apríl','Máj','Jún',
 		'Júl','August','September','Október','November','December'],

@@ -3,8 +3,8 @@
 jQuery(function($){
 	$.datepicker.regional['eu'] = {
 		closeText: 'Egina',
-		prevText: '&#x3c;Aur',
-		nextText: 'Hur&#x3e;',
+		prevText: '&#x3C;Aur',
+		nextText: 'Hur&#x3E;',
 		currentText: 'Gaur',
 		monthNames: ['Urtarrila','Otsaila','Martxoa','Apirila','Maiatza','Ekaina',
 		'Uztaila','Abuztua','Iraila','Urria','Azaroa','Abendua'],

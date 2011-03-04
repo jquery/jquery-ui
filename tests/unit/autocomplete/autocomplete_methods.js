@@ -11,13 +11,9 @@ module("autocomplete: methods", {
 });
 
 test("destroy", function() {
-	var beforeHtml = $("#autocomplete").parent().html();
-	var afterHtml = $("#autocomplete").autocomplete().autocomplete("destroy").parent().html();
-	// Opera 9 outputs role="" instead of removing the attribute like everyone else
-	if ($.browser.opera) {
-		afterHtml = afterHtml.replace(/ role=""/g, "");
-	}
-	equal( afterHtml, beforeHtml, "before/after html should be the same" );
+	domEqual("#autocomplete", function() {
+		$("#autocomplete").autocomplete().autocomplete("destroy");
+	});
 })
 
 var data = ["c++", "java", "php", "coldfusion", "javascript", "asp", "ruby", "python", "c", "scala", "groovy", "haskell", "perl"];

@@ -47,7 +47,51 @@ test("all events", function() {
 		same( $(".ui-menu:visible").length, 1 );
 		ac.simulate("keydown", { keyCode: $.ui.keyCode.DOWN });
 		ac.simulate("keydown", { keyCode: $.ui.keyCode.ENTER });
-		$.browser.msie ? ac.simulate("blur") : ac.blur();
+		// blurring through jQuery causes a bug in IE 6 which causes the
+		// autocompletechange event to occur twice
+		ac[0].blur();
+	}, 50);
+});
+
+test("all events - contenteditable", function() {
+	expect(12);
+	var ac = $("#autocomplete-contenteditable").autocomplete({
+		delay: 0,
+		source: data,
+		search: function(event) {
+			same(event.type, "autocompletesearch");
+		},
+		open: function(event) {
+			same(event.type, "autocompleteopen");
+		},
+		focus: function(event, ui) {
+			same(event.type, "autocompletefocus");
+			same(ui.item, {label:"java", value:"java"});
+		},
+		close: function(event) {
+			same(event.type, "autocompleteclose");
+			same( $(".ui-menu:visible").length, 0 );
+		},
+		select: function(event, ui) {
+			same(event.type, "autocompleteselect");
+			same(ui.item, {label:"java", value:"java"});
+		},
+		change: function(event, ui) {
+			same(event.type, "autocompletechange");
+			same(ui.item, {label:"java", value:"java"});
+			same( $(".ui-menu:visible").length, 0 );
+			start();
+		}
+	});
+	stop();
+	ac.focus().text("ja").keydown();
+	setTimeout(function() {
+		same( $(".ui-menu:visible").length, 1 );
+		ac.simulate("keydown", { keyCode: $.ui.keyCode.DOWN });
+		ac.simulate("keydown", { keyCode: $.ui.keyCode.ENTER });
+		// blurring through jQuery causes a bug in IE 6 which causes the
+		// autocompletechange event to occur twice
+		ac[0].blur();
 	}, 50);
 });
 

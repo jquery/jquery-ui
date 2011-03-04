@@ -6,7 +6,9 @@
 module("tabs: events");
 
 test('select', function() {
-	expect(6);
+	expect(7);
+
+	var eventObj;
 	el = $('#tabs1').tabs({
 		select: function(event, ui) {
 			ok(true, 'select triggered after initialization');
@@ -15,9 +17,13 @@ test('select', function() {
 			equals(ui.tab, el.find('a')[1], 'contain tab as DOM anchor element');
 			equals(ui.panel, el.find('div')[1], 'contain panel as DOM div element');
 			equals(ui.index, 1, 'contain index');
+			evenObj = event;
 		}
 	});
 	el.tabs('select', 1);
+
+	el.find( "li:eq(1) a" ).simulate( "click" );
+	equals( evenObj.originalEvent.type, "click", "select triggered by click" );
 });
 
 test('load', function() {
@@ -25,18 +31,22 @@ test('load', function() {
 });
 
 test('show', function() {
-	expect(4);
+	expect(5);
 
-	var uiObj;
+	var uiObj, eventObj;
 	el = $('#tabs1').tabs({
 		show: function(event, ui) {
 			uiObj = ui;
+			eventObj = event;
 		}
 	});
 	ok(uiObj !== undefined, 'trigger callback after initialization');
 	equals(uiObj.tab, $('a', el)[0], 'contain tab as DOM anchor element');
 	equals(uiObj.panel, $('div', el)[0], 'contain panel as DOM div element');
 	equals(uiObj.index, 0, 'contain index');
+
+	el.find( "li:eq(1) a" ).simulate( "click" );
+	equals( eventObj.originalEvent.type, "click", "show triggered by click" );
 
 });
 

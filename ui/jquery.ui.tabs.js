@@ -279,18 +279,18 @@ $.widget( "ui.tabs", {
 
 		// Show a tab...
 		var showTab = showFx
-			? function( clicked, $show ) {
+			? function( clicked, $show, event ) {
 				$( clicked ).closest( "li" ).addClass( "ui-tabs-selected ui-state-active" );
 				$show.hide().removeClass( "ui-tabs-hide" ) // avoid flicker that way
 					.animate( showFx, showFx.duration || "normal", function() {
 						resetStyle( $show, showFx );
-						self._trigger( "show", null, self._ui( clicked, $show[ 0 ] ) );
+						self._trigger( "show", event, self._ui( clicked, $show[ 0 ] ) );
 					});
 			}
-			: function( clicked, $show ) {
+			: function( clicked, $show, event ) {
 				$( clicked ).closest( "li" ).addClass( "ui-tabs-selected ui-state-active" );
 				$show.removeClass( "ui-tabs-hide" );
-				self._trigger( "show", null, self._ui( clicked, $show[ 0 ] ) );
+				self._trigger( "show", event, self._ui( clicked, $show[ 0 ] ) );
 			};
 
 		// Hide a tab, $show is optional...
@@ -311,7 +311,7 @@ $.widget( "ui.tabs", {
 
 		// attach tab event handler, unbind to avoid duplicates from former tabifying...
 		this.anchors.bind( o.event + ".tabs", function( event ) {
-      event.preventDefault();
+			event.preventDefault();
 			var el = this,
 				$li = $(el).closest( "li" ),
 				$hide = self.panels.filter( ":not(.ui-tabs-hide)" ),
@@ -325,9 +325,9 @@ $.widget( "ui.tabs", {
 				$li.hasClass( "ui-state-disabled" ) ||
 				$li.hasClass( "ui-state-processing" ) ||
 				self.panels.filter( ":animated" ).length ||
-				self._trigger( "select", null, self._ui( this, $show[ 0 ] ) ) === false ) {
+				self._trigger( "select", event, self._ui( this, $show[ 0 ] ) ) === false ) {
 				this.blur();
-        return;
+				return;
 			}
 
 			o.selected = self.anchors.index( this );
@@ -355,7 +355,7 @@ $.widget( "ui.tabs", {
 					}
 
 					self.element.queue( "tabs", function() {
-						showTab( el, $show );
+						showTab( el, $show, event );
 					});
 
 					// TODO make passing in node possible, see also http://dev.jqueryui.com/ticket/3171
@@ -378,7 +378,7 @@ $.widget( "ui.tabs", {
 					});
 				}
 				self.element.queue( "tabs", function() {
-					showTab( el, $show );
+					showTab( el, $show, event );
 				});
 
 				self.load( self.anchors.index( this ) );

@@ -11,7 +11,15 @@ module("tooltip: options", {
 
 
 test("option: items", function() {
-	ok(false, "missing items test");
+	var event = $.Event("mouseenter");
+	event.target = $("[data-tooltip]");
+	$("#qunit-fixture").tooltip({
+		items: "[data-tooltip]",
+		content: function() {
+			return $(this).attr("data-tooltip");
+		}
+	}).tooltip("open", event);
+	same( $(".ui-tooltip").text(), "text" );
 });
 
 test("content: default", function() {

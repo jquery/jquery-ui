@@ -4,7 +4,7 @@
 	<meta charset="UTF-8" />
 	<title>jQuery UI Menu - Contextmenu demo</title>
 	<link type="text/css" href="../../themes/base/jquery.ui.all.css" rel="stylesheet" />
-	<script type="text/javascript" src="../../jquery-1.4.4.js"></script>
+	<script type="text/javascript" src="../../jquery-1.5.1.js"></script>
 	<script type="text/javascript" src="../../ui/jquery.ui.core.js"></script>
 	<script type="text/javascript" src="../../ui/jquery.ui.position.js"></script>
 	<script type="text/javascript" src="../../ui/jquery.ui.widget.js"></script>
@@ -23,8 +23,7 @@
 				select: function(event, ui) {
 					$(this).hide();
 					$("#log").append("<div>Selected " + ui.item.text() + "</div>");
-				},
-				input: $(this)
+				}
 			}).hide();
 		}).click(function(event) {
 			var menu = $(this).next();
@@ -32,7 +31,7 @@
 				menu.hide();
 				return false;
 			}
-			menu.menu("deactivate").show().css({top:0, left:0}).position({
+			menu.menu("blur").show().position({
 				my: "left top",
 				at: "right top",
 				of: this

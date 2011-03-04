@@ -29,12 +29,14 @@ test( "element normalization", function() {
 	$.widget( "ui.testWidget", {} );
 
 	$.ui.testWidget.prototype._create = function() {
+		// workaround for core ticket #8381
+		this.element.appendTo( "#qunit-fixture" );
 		ok( this.element.is( "div" ), "generated div" );
 		same( this.element.data( "testWidget" ), this, "intance stored in .data()" );
 	};
 	$.ui.testWidget();
 
-	$.ui.testWidget.prototype.defaultElement = "<span data-test='pass'>";
+	$.ui.testWidget.prototype.defaultElement = "<span data-test='pass'></span>";
 	$.ui.testWidget.prototype._create = function() {
 		ok( this.element.is( "span[data-test=pass]" ), "generated span with properties" );
 		same( this.element.data( "testWidget" ), this, "instace stored in .data()" );
@@ -56,7 +58,7 @@ test( "element normalization", function() {
 	$.ui.testWidget( {}, elem );
 
 	elem = $( "<div id='element-normalization-selector'></div>" )
-		.appendTo( "#main" );
+		.appendTo( "#qunit-fixture" );
 	$.ui.testWidget.prototype._create = function() {
 		same( this.element[ 0 ], elem[ 0 ], "from selector" );
 		same( elem.data( "testWidget" ), this, "instace stored in .data()" );
@@ -166,9 +168,11 @@ test( "direct usage", function() {
 });
 
 test( "error handling", function() {
-	expect( 2 );
+	expect( 3 );
 	var error = $.error;
-	$.widget( "ui.testWidget", {} );
+	$.widget( "ui.testWidget", {
+		_privateMethod: function () {}
+	});
 	$.error = function( msg ) {
 		equal( msg, "cannot call methods on testWidget prior to initialization; " +
 			"attempted to call method 'missing'", "method call before init" );
@@ -179,6 +183,11 @@ test( "error handling", function() {
 			"invalid method call on widget instance" );
 	};
 	$( "<div>" ).testWidget().testWidget( "missing" );
+	$.error = function ( msg ) {
+		equal( msg, "no such method '_privateMethod' for testWidget widget instance",
+			"invalid method call on widget instance" );
+	};
+	$( "<div>" ).testWidget().testWidget( "_privateMethod" );		
 	$.error = error;
 });
 
@@ -224,12 +233,12 @@ test( "._getCreateOptions()", function() {
 		options: {
 			option1: "valuex",
 			option2: "valuex",
-			option3: "value3",
+			option3: "value3"
 		},
 		_getCreateOptions: function() {
 			return {
 				option1: "override1",
-				option2: "overideX",
+				option2: "overideX"
 			};
 		},
 		_create: function() {
@@ -274,55 +283,75 @@ test( "re-init", function() {
 });
 
 test( "._super()", function() {
-	expect( 6 );
+	expect( 9 );
 	var instance;
 	$.widget( "ui.testWidget", {
 		method: function( a, b ) {
-			same( this, instance, "this is correct in super widget" );
-			same( a, 5, "parameter passed to super widget" );
-			same( b, 10, "second parameter passed to super widget" );
+			same( this, instance, "this is correct in testWidget" );
+			same( a, 5, "parameter passed to testWidget" );
+			same( b, 20, "second parameter passed to testWidget" );
 			return a + b;
 		}
 	});
 
 	$.widget( "ui.testWidget2", $.ui.testWidget, {
-		method: function( a ) {
-			same( this, instance, "this is correct in widget" );
-			same( a, 5, "parameter passed to widget" );
-			var ret = this._super( "method", a, a*2 );
-			same( ret, 15, "super returned value" );
+		method: function( a, b ) {
+			same( this, instance, "this is correct in testWidget2" );
+			same( a, 5, "parameter passed to testWidget2" );
+			same( b, 10, "parameter passed to testWidget2" );
+			return this._super( "method", a, b*2 );
 		}
 	});
 
-	instance = $( "<div>" ).testWidget2().data( "testWidget2" );
+	$.widget( "ui.testWidget3", $.ui.testWidget2, {
+		method: function( a ) {
+			same( this, instance, "this is correct in testWidget3" );
+			same( a, 5, "parameter passed to testWidget3" );
+			var ret = this._super( "method", a, a*2 );
+			same( ret, 25, "super returned value" );
+		}
+	});
+
+	instance = $( "<div>" ).testWidget3().data( "testWidget3" );
 	instance.method( 5 );
+	delete $.ui.testWidget3;
 	delete $.ui.testWidget2;
 });
 
 test( "._superApply()", function() {
-	expect( 7 );
+	expect( 10 );
 	var instance;
 	$.widget( "ui.testWidget", {
 		method: function( a, b ) {
-			same( this, instance, "this is correct in super widget" );
-			same( a, 5, "parameter passed to super widget" );
-			same( b, 10, "second parameter passed to super widget" );
+			same( this, instance, "this is correct in testWidget" );
+			same( a, 5, "parameter passed to testWidget" );
+			same( b, 10, "second parameter passed to testWidget" );
 			return a + b;
 		}
 	});
 
 	$.widget( "ui.testWidget2", $.ui.testWidget, {
 		method: function( a, b ) {
-			same( this, instance, "this is correct in widget" );
-			same( a, 5, "parameter passed to widget" );
-			same( b, 10, "second parameter passed to widget" );
+			same( this, instance, "this is correct in testWidget2" );
+			same( a, 5, "parameter passed to testWidget2" );
+			same( b, 10, "second parameter passed to testWidget2" );
+			return this._superApply( "method", arguments );
+		}
+	});
+
+	$.widget( "ui.testWidget3", $.ui.testWidget2, {
+		method: function( a, b ) {
+			same( this, instance, "this is correct in testWidget3" );
+			same( a, 5, "parameter passed to testWidget3" );
+			same( b, 10, "second parameter passed to testWidget3" );
 			var ret = this._superApply( "method", arguments );
 			same( ret, 15, "super returned value" );
 		}
 	});
 
-	instance = $( "<div>" ).testWidget2().data( "testWidget2" );
+	instance = $( "<div>" ).testWidget3().data( "testWidget3" );
 	instance.method( 5, 10 );
+	delete $.ui.testWidget3;
 	delete $.ui.testWidget2;
 });
 
@@ -819,6 +848,27 @@ test( "auto-destroy - .detach()", function() {
 		}
 	});
 	$( "#widget" ).testWidget().detach();
+});
+
+test( "redefine", function() {
+	expect( 4 );
+	$.widget( "ui.testWidget", {
+		method: function( str ) {
+			strictEqual( this, instance, "original invoked with correct this" );
+			equal( str, "bar", "original invoked with correct parameter" );
+		}
+	});
+	$.ui.testWidget.foo = "bar";
+	$.widget( "ui.testWidget", $.ui.testWidget, {
+		method: function( str ) {
+			equal( str, "foo", "new invoked with correct parameter" );
+			this._super( "method", "bar" );
+		}
+	});
+
+	var instance = new $.ui.testWidget();
+	instance.method( "foo" );
+	equal( $.ui.testWidget.foo, "bar", "static properties remain" );
 });
 
 }( jQuery ) );

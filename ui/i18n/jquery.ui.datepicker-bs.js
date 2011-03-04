@@ -3,8 +3,8 @@
 jQuery(function($){
 	$.datepicker.regional['bs'] = {
 		closeText: 'Zatvori', 
-		prevText: '&#x3c;', 
-		nextText: '&#x3e;', 
+		prevText: '&#x3C;', 
+		nextText: '&#x3E;', 
 		currentText: 'Danas', 
 		monthNames: ['Januar','Februar','Mart','April','Maj','Juni',
 		'Juli','August','Septembar','Oktobar','Novembar','Decembar'],

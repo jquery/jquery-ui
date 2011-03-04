@@ -1,0 +1,67 @@
+<!doctype html>
+<html>
+<head>
+	<title>Menu Visual Test: Default</title>
+	<link rel="stylesheet" href="../visual.css" type="text/css" />
+	<link rel="stylesheet" href="../../../themes/base/jquery.ui.all.css" type="text/css" title="ui-theme" />
+	<script type="text/javascript" src="../../../jquery-1.5.1.js"></script>
+	<script type="text/javascript" src="../../../ui/jquery.ui.core.js"></script>
+	<script type="text/javascript" src="../../../ui/jquery.ui.widget.js"></script>
+	<script type="text/javascript" src="../../../ui/jquery.ui.menu.js"></script>
+	<script type="text/javascript">
+	$(function() {
+		var table = $("table");
+		var colgroup = table.find("colgroup");
+		var menu = $("<ul>").insertAfter(table);
+		var thead = table.find("thead");
+		thead.children("tr").addClass("ui-state-default");
+		var rows = table.find("tbody tr");
+		$("<table>").width("100%").append(colgroup.clone()).append(thead).wrap("<li>").parent().appendTo(menu);
+		rows.each(function() {
+			$("<table>").width("100%").append(colgroup.clone()).append(this).wrap("<li><a></a></li>").parent().parent().appendTo(menu);
+		});
+		
+		menu.menu({
+			select: function(event, ui) {
+				$("<div/>").text("Selected: " + ui.item.text()).appendTo("#log");
+			}
+		});
+	});
+	</script>
+	<style>
+		body { font-size:62.5%; }
+		.ui-menu { width: 200px; }
+	</style>
+</head>
+<body>
+	
+<table>
+	<colgroup><col style="width: 50%"><col style="width: 50%"></colgroup>
+	<thead>
+		<tr>
+			<th>Firstname</th>
+			<th>Lastname</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>Scott</td>
+			<td>Gonzo</td>
+		</tr>
+		<tr>
+			<td>Richy</td>
+			<td>Worth</td>
+		</tr>
+	</tbody>
+</table>
+	
+<div class="ui-widget" style="clear: left; margin-top:2em; font-family:Arial">
+	Log:
+	<div id="log" style="height: 400px; width: 300px; overflow: auto;" class="ui-widget-content"></div>
+</div>
+
+<button id="toggle-disable">Disable / Enable</button>
+<button id="toggle-destroy">Destroy / Create</button>
+
+</body>
+</html>
