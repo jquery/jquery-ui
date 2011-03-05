@@ -487,7 +487,6 @@ $.fn.extend({
 				});
 			}
 		}
-		
 		return effectMethod.call(this, args);
 	},
 

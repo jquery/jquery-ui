@@ -26,6 +26,7 @@ $.effects.highlight = function(o) {
 		}
 
 		$.effects.save(elem, props);
+		
 		elem
 			.show()
 			.css({
