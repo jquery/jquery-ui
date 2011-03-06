@@ -12,39 +12,40 @@
  */
 (function( $, undefined ) {
 
-$.effects.pulsate = function(o) {
-	return this.queue(function() {
-		var elem = $(this),
-			mode = $.effects.setMode(elem, o.mode || 'show'),
-			times = ((o.times || 5) * 2) - 1,
-			duration = o.duration ? o.duration / 2 : $.fx.speeds._default / 2,
-			isVisible = elem.is(':visible'),
-			animateTo = 0;
+$.effects.pulsate = function( o ) {
+	return this.queue( function() {
+		var elem = $( this ),
+			mode = $.effects.setMode( elem, o.mode || 'show' ),
+			times = ( ( o.times || 5 ) * 2 ) - 1,
+			duration = o.duration / 2,
+			isVisible = elem.is( ':visible' ),
+			animateTo = 0,
+			i;
 
-		if (!isVisible) {
+		if ( !isVisible ) {
 			elem.css('opacity', 0).show();
 			animateTo = 1;
 		}
 
-		if ((mode == 'hide' && isVisible) || (mode == 'show' && !isVisible)) {
+		if ( ( mode == 'hide' && isVisible ) || ( mode == 'show' && !isVisible ) ) {
 			times--;
 		}
 
-		for (var i = 0; i < times; i++) {
-			elem.animate({ opacity: animateTo }, duration, o.easing);
-			animateTo = (animateTo + 1) % 2;
+		for ( i = 0; i < times; i++ ) {
+			elem.animate({ 
+				opacity: animateTo 
+			}, duration, o.easing );
+			animateTo = ( animateTo + 1 ) % 2;
 		}
 
-		elem.animate({ opacity: animateTo }, duration, o.easing, function() {
+		elem.animate({ 
+			opacity: animateTo 
+		}, duration, o.easing, function() {
 			if (animateTo == 0) {
 				elem.hide();
 			}
 			(o.complete && o.complete.apply(this, arguments));
-		});
-
-		elem
-			.queue('fx', function() { elem.dequeue(); })
-			.dequeue();
+		}).dequeue();
 	});
 };
 
