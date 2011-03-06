@@ -36,7 +36,7 @@ $.effects.clip = function( o ) {
 			overflow: 'hidden' 
 		});
 		animate = ( el[0].tagName == 'IMG' ) ? wrapper : el;
-		distance = ( direction == 'vertical' ) ? animate.height() : animate.width();
+		distance = animate[ ref.size ]();
 
 		// Shift
 		if ( mode == 'show' ) {
