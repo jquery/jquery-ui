@@ -49,6 +49,8 @@ $(function() {
 	effect("#explode9", "explode", {});
 	effect("#explode36", "explode", { pieces: 36 });
 
+	effect("#fade", "fade", {});
+
 	effect("#fold", "fold", { size: 50 });
 
 	effect("#highlight", "highlight", {});
@@ -71,7 +73,7 @@ $(function() {
 		$(this).addClass(function() {
 			window.console && console.log(arguments);
 			return "current";
-		}, 1000, function() {
+		}, duration, function() {
 			$(this).removeClass("current");
 		});
 	});
@@ -79,12 +81,12 @@ $(function() {
 		$(this).addClass("current").removeClass(function() {
 			window.console && console.log(arguments);
 			return "current"
-		}, 1000);
+		}, duration);
 	});
 	$("#toggleClass").click(function() {
 		$(this).toggleClass(function() {
 			window.console && console.log(arguments);
 			return "current"
-		}, 1000);
+		}, duration);
 	});
 });
