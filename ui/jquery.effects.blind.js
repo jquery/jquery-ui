@@ -16,11 +16,11 @@ $.effects.blind = function(o) {
 
 	return this.queue(function() {
 		// Create element
-		var el = $(this), 
+		var el = $( this ), 
 			props = ['position','top','bottom','left','right'],
 			mode = $.effects.setMode( el, o.mode || 'hide' ),
 			direction = o.direction || 'vertical',
-			ref = (direction == 'vertical') ? 'height' : 'width',
+			ref = ( direction == 'vertical' ) ? 'height' : 'width',
 			animation = {},
 			wrapper, distance;
 
