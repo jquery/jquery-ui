@@ -44,13 +44,30 @@ $.dataSource.oDataSettings = {
             path += "&$orderby=" + sortProperty + (sortDir && sortDir.toLowerCase().indexOf("desc") === 0 ? "%20desc" : "");
         }
         if (filter) {
+			// see http://www.odata.org/developers/protocols/uri-conventions#FilterSystemQueryOption
             filter = Object.prototype.toString.call(filter) === "[object Array]" ? filter : [ filter ];
+			var filters = []
             $.each(filter, function (index, filterPart) {
-                path +=
-                    "&$filter=" + filterPart.filterProperty + filterPart.filterOperator + 
-                    (typeof filterPart.filterBy === "string" ? ("'" + filterPart.filterBy + "'") : filterPart.filterBy);
+				if (filterPart.filterOperator == "like") {
+					filters[filters.length] = "indexof(" + filterPart.filterProperty + ", '" + filterPart.filterValue + "') ge 0";
+				} else {
+					var operators = {
+						"<": "lt",
+						"<=": "le",
+						">": "gt",
+						">=": "ge",
+						"==": "eq",
+						"!=": "ne"
+					};
+	                filters[filters.length] = filterPart.filterProperty + " " + operators[filterPart.filterOperator] + " " + 
+	                    (typeof filterPart.filterValue === "string" ? ("'" + filterPart.filterValue + "'") : filterPart.filterValue);
+					
+				}
+				
             });
+			path += "&$filter=" + filters.join(" and ");
         }
+		console.log("odata url: " + path)
         return path;
     }
 }
@@ -170,7 +187,8 @@ DataSource.prototype = {
                     "==": ["==", "isequalto", "equals", "equalto", "equal", "eq"],
                     "!=": ["!=", "isnotequalto", "notequals", "notequalto", "notequal", "neq", "not"],
                     ">=": [">=", "isgreaterthanorequalto", "greaterthanequal", "gte"],
-                    ">": [">", "isgreaterthan", "greaterthan", "greater", "gt"]
+                    ">": [">", "isgreaterthan", "greaterthan", "greater", "gt"],
+					"like": ["like"]
                 },
                 lowerOperator = filter.operator.toLowerCase();
             for (op in operatorStrings) {

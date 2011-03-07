@@ -44,6 +44,32 @@
 			github: "cworth"
 		}
 	];
+	
+	$.fn.filter = function(datasource) {
+		var filtered = {};
+		this.addClass("filter").find("input").click(function() {
+			var field = $(this).data("filter-field"),
+				value = $(this).data("filter-value"),
+				operator = $(this).data("filter-operator");
+			if (filtered[field]) {
+				delete filtered[field];
+			} else {
+				filtered[field] = {
+					property: field,
+					value: value,
+					operator: operator
+				};
+			}
+			var filter = [];
+			for (var key in filtered) {
+				filter.push(filtered[key]);
+			}
+			datasource.option("filter", filter).refresh();
+			
+			$(this).toggleClass("filtered");
+		})
+		return this;
+	}
 
 	$(function() {
 		var developers = $.dataSource({
@@ -53,7 +79,7 @@
 		var dev2 = $.ui.datasource({
 			source: localDevelopers
 		})
-		console.log(dev2.toArray());
+		//console.log(dev2.toArray());
 
 		$( "#developers-local" ).grid({
 			columns: [ "firstName", "lastName", "country" ],
@@ -62,56 +88,27 @@
 		
 		// Dynamically configure the query options on the dataSource.  refresh() to update the array contents.
 		var filtered = {};
-		$("#filterDevelopers input").click(function () {
-			var field = $(this).data("filter-field"),
-				value = $(this).data("filter-value");
-			if (filtered[field]) {
-				delete filtered[field];
-			} else {
-				filtered[field] = value;
-			}
-			var filter = [];
-			for (var key in filtered) {
-				filter.push({
-					property: key,
-					value: filtered[key]
-				});
-			}
-			developers.option("filter", filter).refresh();
-			
-			$(this).toggleClass("filtered");
-		});
-		
+		$("#filterDevelopers").filter(developers);
 		
 		// A similar example...but with server integration and remote queries.
-		var genres = $.dataSource($.extend({}, $.dataSource.oDataSettings, {
-			path: "http://odata.netflix.com/Catalog/Genres",
+		var movies = $.dataSource($.extend({}, $.dataSource.oDataSettings, {
+			path: "http://odata.netflix.com/Catalog/Titles",
 			paging: { take: 10 },
 			jsonp: "$callback"
 		}));
-		var genresGrid = $( "#genres" ).grid({
-			columns: [ "Name" ],
-			source: genres
+		$( "#movies" ).grid({
+			source: movies
 		});
 
-		var sorted;
-		$("#sortGenres").click(function () {
-			if (sorted) {
-				genres.option("sort").refresh();
-			} else {
-				genres.option("sort", { property: "Name", direction: "desc" }).refresh();
-			}
-			sorted = !sorted;
-			$("#sortGenres").val(sorted ? "Remove sort" : "Sort genres");
-		});
+		$("#filterMovies").filter(movies);
 	});
 	</script>
 	
 	<style>
-		#filterDevelopers input {
+		.filter input {
 			border: 1px solid white;
 		}
-		#filterDevelopers input.filtered {
+		.filter input.filtered {
 			border: 1px solid black;
 		}
 	</style>
@@ -141,19 +138,24 @@
 
 
 <h2>remote data source</h2>
+<p id="filterMovies">
+	<input data-filter-field="AverageRating" data-filter-operator=">" data-filter-value="3" type="button" value="Toggle AverageRating > 3"/>
+	<input data-filter-field="ReleaseYear" data-filter-operator="<="  data-filter-value="1990"  type="button" value="Toggle ReleaseYear <= 1990"/>
+	<input data-filter-field="Name" data-filter-operator="like"  data-filter-value="ultra"  type="button" value="Toggle Name like 'ultra'"/>
+</p>
 <p>
-<table id="genres">
+<table id="movies">
 	<thead>
 		<tr>
 			<th data-field="Name">Name</th>
+			<th data-field="ReleaseYear">Release Year</th>
+			<th data-field="AverageRating">Average Rating</th>
 		</tr>
 	</thead>
 	<tbody>
 	</tbody>
 </table>
 </p>
-
-<p><input id="sortGenres" type="button" value="Sort genres"></input></p>
 
 </body>
 </html>
