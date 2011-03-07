@@ -39,7 +39,7 @@
 		{
 			firstName: "Carl",
 			lastName: "Worth",
-			country: "USA",
+			country: "Canada",
 			twitter: "cworth",
 			github: "cworth"
 		}
@@ -56,15 +56,25 @@
 		});
 		
 		// Dynamically configure the query options on the dataSource.  refresh() to update the array contents.
-		var filtered;
-		$("#filterDevelopers").click(function () {
-			if (filtered) {
-				developers.option("filter").refresh();  // No r-value means unset.
+		var filtered = {};
+		$("#filterDevelopers input").click(function () {
+			var field = $(this).data("filter-field"),
+				value = $(this).data("filter-value");
+			if (filtered[field]) {
+				delete filtered[field];
 			} else {
-				developers.option("filter", { property: "firstName", value: "Richard" }).refresh();
+				filtered[field] = value;
 			}
-			filtered = !filtered;
-			$("#filterDevelopers").val(filtered ? "Remove filter" : "Filter developers");
+			var filter = [];
+			for (var key in filtered) {
+				filter.push({
+					property: key,
+					value: filtered[key]
+				});
+			}
+			developers.option("filter", filter).refresh();
+			
+			$(this).toggleClass("filtered");
 		});
 		
 		
@@ -91,11 +101,25 @@
 		});
 	});
 	</script>
+	
+	<style>
+		#filterDevelopers input {
+			border: 1px solid white;
+		}
+		#filterDevelopers input.filtered {
+			border: 1px solid black;
+		}
+	</style>
 </head>
 <body>
 
 
 <h2>local data source</h2>
+<p id="filterDevelopers">
+	<input data-filter-field="firstName" data-filter-value="Scott" type="button" value="Toggle firstName=Scott"/>
+	<input data-filter-field="lastName" data-filter-value="Worth"  type="button" value="Toggle lastName=Worth"/>
+	<input data-filter-field="country" data-filter-value="USA" type="button" value="Toggle country=USA"/>
+</p>
 <p>
 <table id="developers-local">
 	<thead>
@@ -110,7 +134,6 @@
 </table>
 </p>
 
-<p><input id="filterDevelopers" type="button" value="Filter developers"></input></p>
 
 <h2>remote data source</h2>
 <p>
