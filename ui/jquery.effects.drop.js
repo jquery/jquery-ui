@@ -49,8 +49,8 @@ $.effects.drop = function( o ) {
 			easing: o.easing, 
 			complete: function() {
 				mode == 'hide' && el.hide();
-				$.effects.restore(el, props); 
-				$.effects.removeWrapper(el); 
+				$.effects.restore( el, props ); 
+				$.effects.removeWrapper( el ); 
 				$.isFunction( o.complete ) && o.complete.apply(this, arguments);
 				el.dequeue();
 			}
