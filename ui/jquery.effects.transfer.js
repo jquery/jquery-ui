@@ -12,8 +12,9 @@
  */
 (function( $, undefined ) {
 
-$.effects.transfer = function(o) {
-	return this.queue(function() {
+$.effects.transfer = function( o ) {
+	
+	return this.queue( function() {
 		var elem = $( this ),
 			target = $( o.to ),
 			endPosition = target.offset(),
@@ -36,7 +37,7 @@ $.effects.transfer = function(o) {
 				})
 				.animate( animation, o.duration, o.easing, function() {
 					transfer.remove();
-					(o.complete && o.complete.apply(elem[0], arguments));
+					$.isFunction( o.complete ) && o.complete.apply(elem[0], arguments);
 					elem.dequeue();
 				});
 	});
