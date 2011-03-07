@@ -35,6 +35,13 @@
 			country: "Germany",
 			twitter: "bassistance",
 			github: "jzaefferer"
+		},
+		{
+			firstName: "Carl",
+			lastName: "Worth",
+			country: "USA",
+			twitter: "cworth",
+			github: "cworth"
 		}
 	];
 
@@ -43,7 +50,7 @@
 			source: localDevelopers
 		});
 
-		var developersGrid = $( "#developers-local" ).grid({
+		$( "#developers-local" ).grid({
 			columns: [ "firstName", "lastName", "country" ],
 			source: developers
 		});
