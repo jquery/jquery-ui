@@ -20,17 +20,18 @@ $.effects.drop = function( o ) {
 			props = [ 'position', 'top', 'bottom', 'left', 'right', 'opacity' ],
 			mode = $.effects.setMode( el, o.mode || 'hide' ),
 			direction = o.direction || 'left',
-			ref = (direction == 'up' || direction == 'down') ? 'top' : 'left',
-			motion = (direction == 'up' || direction == 'left') ? 'pos' : 'neg',
+			ref = ( direction == 'up' || direction == 'down' ) ? 'top' : 'left',
+			motion = ( direction == 'up' || direction == 'left' ) ? 'pos' : 'neg',
 			animation = {
 				opacity: mode == 'show' ? 1 : 0
 			},
 			distance;
-			
+
 		// Adjust
-		$.effects.save(el, props); el.show(); 
-		$.effects.createWrapper(el); 
-		
+		$.effects.save( el, props ); 
+		el.show(); 
+		$.effects.createWrapper( el ); 
+
 		distance = o.distance || el[ ref == 'top' ? 'outerHeight': 'outerWidth' ]({ margin: true }) / 2;
 
 		if ( mode == 'show' ) {
