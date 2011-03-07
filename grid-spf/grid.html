@@ -46,6 +46,8 @@
 	];
 	
 	$.fn.filter = function(datasource) {
+		// TODO this shouldn't have to keep track of active filters
+		// TODO datasource API should be flexible enough to set and remove filters individualy
 		var filtered = {};
 		this.addClass("filter").find("input").click(function() {
 			var field = $(this).data("filter-field"),
@@ -118,6 +120,7 @@
 
 <h2>local data source</h2>
 <p id="filterDevelopers">
+	Filter:
 	<input data-filter-field="firstName" data-filter-value="Scott" type="button" value="Toggle firstName=Scott"/>
 	<input data-filter-field="lastName" data-filter-value="Worth"  type="button" value="Toggle lastName=Worth"/>
 	<input data-filter-field="country" data-filter-value="USA" type="button" value="Toggle country=USA"/>
@@ -139,6 +142,7 @@
 
 <h2>remote data source</h2>
 <p id="filterMovies">
+	Filter:
 	<input data-filter-field="AverageRating" data-filter-operator=">" data-filter-value="3" type="button" value="Toggle AverageRating > 3"/>
 	<input data-filter-field="ReleaseYear" data-filter-operator="<="  data-filter-value="1990"  type="button" value="Toggle ReleaseYear <= 1990"/>
 	<input data-filter-field="Name" data-filter-operator="like"  data-filter-value="ultra"  type="button" value="Toggle Name like 'ultra'"/>
