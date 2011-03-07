@@ -40,10 +40,7 @@
 
 	$(function() {
 		var developers = $.dataSource({
-			source: localDevelopers,
-			refresh: function() {
-				developersGrid.grid("refresh");
-			}
+			source: localDevelopers
 		});
 
 		var developersGrid = $( "#developers-local" ).grid({
@@ -51,8 +48,6 @@
 			source: developers
 		});
 		
-		developers.refresh();
-
 		// Dynamically configure the query options on the dataSource.  refresh() to update the array contents.
 		var filtered;
 		$("#filterDevelopers").click(function () {
@@ -69,9 +64,6 @@
 		// A similar example...but with server integration and remote queries.
 		var genres = $.dataSource($.extend({}, $.dataSource.oDataSettings, {
 			path: "http://odata.netflix.com/Catalog/Genres",
-			refresh: function () {
-				genresGrid.grid("refresh");
-			},
 			paging: { take: 10 },
 			jsonp: "$callback"
 		}));
@@ -90,8 +82,6 @@
 			sorted = !sorted;
 			$("#sortGenres").val(sorted ? "Remove sort" : "Sort genres");
 		});
-		
-		genres.refresh();
 	});
 	</script>
 </head>

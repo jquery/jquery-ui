@@ -27,10 +27,10 @@ $.widget( "ui.grid", {
 				// TODO add item
 			});
 		});
-		$(this.options.source).bind("datasourcedata", function() {
+		$(this.options.source).bind("datasourcerefresh", function() {
 			that.refresh();
 		});
-		//this.options.source.refresh();
+		this.options.source.refresh();
 	},
 	refresh: function() {
 		var tbody = this.element.find( "tbody" ).empty(),

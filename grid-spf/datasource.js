@@ -100,6 +100,7 @@ DataSource.prototype = {
             if (self._refreshHandler) {
                 self._refreshHandler();
             }
+			$(self).trigger("datasourcerefresh");
         });
         return this;
     },
@@ -354,7 +355,6 @@ RemoteDataSource.prototype = $.extend({}, new DataSource(), {
         var self = this,
             queryString = this._urlMapper(this._path, this._queryParams, this._sortProperty, 
                 this._sortDir, this._filter, this._skip, this._take, this._includeTotalCount);
-				console.log(options, self.options)
         $.ajax({
             dataType: "jsonp",
             url: queryString,
