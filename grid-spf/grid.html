@@ -49,6 +49,11 @@
 		var developers = $.dataSource({
 			source: localDevelopers
 		});
+		
+		var dev2 = $.ui.datasource({
+			source: localDevelopers
+		})
+		console.log(dev2.toArray());
 
 		$( "#developers-local" ).grid({
 			columns: [ "firstName", "lastName", "country" ],

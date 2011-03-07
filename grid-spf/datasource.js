@@ -1,6 +1,21 @@
-// port from https://github.com/brado23/jquery-ui/tree/borisGrid/grid-datamodel2
 (function ($) {
 
+// this is what a widget-based datasource could look like
+$.widget("ui.datasource", {
+	defaultElement: null,
+	_create: function() {
+		this.source = $.isArray(this.options.source)
+			? new LocalDataSource(this.options)
+			: new RemoteDataSource(this.options);
+		this.source.refresh();
+	},
+	toArray: function() {
+		return this.source.toArray();
+	}
+});
+
+
+// port from https://github.com/brado23/jquery-ui/tree/borisGrid/grid-datamodel2
 $.dataSource = function (options) {
 	return $.isArray(options.source)
 		? new LocalDataSource(options)
