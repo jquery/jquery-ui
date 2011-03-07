@@ -45,6 +45,9 @@ $.widget("ui.selectmenu", {
 
 		// define safe mouseup for future toggling
 		this._safemouseup = true;
+		
+		// FIXME temp workaround for IE
+		if ($.browser.msie) o.typeAhead = "";
 
 		// create menu button wrapper
 		this.newelement = $('<a class="' + this.widgetBaseClass + ' ui-widget ui-state-default ui-corner-all" id="' + this.ids[0] + '" role="button" href="#" tabindex="0" aria-haspopup="true" aria-owns="' + this.ids[1] + '"></a>')
@@ -219,9 +222,9 @@ $.widget("ui.selectmenu", {
 						self.close(event, true);
 						break;
 					default:
-						ret = true;
-	
-						self._typeAhead(event.keyCode,'focus');					break;	
+						ret = true;	
+						self._typeAhead(event.keyCode,'focus');					
+						break;	
 				}
 				return ret;
 			});			
