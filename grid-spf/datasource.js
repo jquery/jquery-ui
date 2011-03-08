@@ -28,7 +28,7 @@ $.dataSource.oDataSettings = {
         return data.d.results;
     },
 
-    urlMapper: function (path, queryParams, sortProperty, sortDir, filter, skip, take, includeTotalCount) {
+    urlMapper: function (path, queryParams, sort, filter, skip, take, includeTotalCount) {
         var questionMark = (path.indexOf("?") < 0 ? "?" : "&");
         for (param in queryParams) {
             path = path.split("$" + queryParam).join(queryParams[param]);
@@ -40,8 +40,12 @@ $.dataSource.oDataSettings = {
             "&$skip=" + (skip || 0) +
             (take !== null && take !== undefined ? ("&$top=" + take) : "");
 
-        if (sortProperty) {
-            path += "&$orderby=" + sortProperty + (sortDir && sortDir.toLowerCase().indexOf("desc") === 0 ? "%20desc" : "");
+        if (sort && sort.length) {
+			var sorts = [];
+			$.each(sort, function (index, sortPart) {
+				sorts[sorts.length] = sortPart.property + (sortPart.direction && sortPart.direction.toLowerCase().indexOf("desc") === 0 ? "%20desc" : "");
+			});
+            path += "&$orderby=" + sorts.join(","); 
         }
         if (filter) {
 			// see http://www.odata.org/developers/protocols/uri-conventions#FilterSystemQueryOption
@@ -83,8 +87,7 @@ DataSource.prototype = {
     _refreshingHandler: null,
     _refreshHandler: null,
 
-    _sortProperty: null,  // TODO -- Generalize these to [ { property: ..., direction: ... } ].
-    _sortDir: null,
+    _sort: null,
     _filter: null,
     _skip: null,
     _take: null,
@@ -226,9 +229,7 @@ DataSource.prototype = {
     },
 
     _setSort: function (options) {
-        options = options || {};
-        this._sortProperty = options.property;
-        this._sortDir = options.direction;
+		this._sort = options;
     },
 	
 	toArray: function() {
@@ -254,23 +255,30 @@ LocalDataSource.prototype = $.extend({}, new DataSource(), {
                 return self._filter(item);
             });
         } else {
-            filteredItems = items;
+			// copy input array to avoid sorting original
+            filteredItems = $.makeArray(items);
         }
 
         var sortedItems;
-        if (this._sortProperty) {
-            var isAscending = (this._sortDir || "asc").toLowerCase().indexOf("asc") === 0;
-            sortedItems = filteredItems.sort(function (item1, item2) {
-                var propertyValue1 = self._normalizePropertyValue(item1, self._sortProperty),
-                    propertyValue2 = self._normalizePropertyValue(item2, self._sortProperty);
-                if (propertyValue1 == propertyValue2) {
-                    return 0;
-                } else if (propertyValue1 > propertyValue2) {
-                    return isAscending ? 1 : -1;
-                } else {
-                    return isAscending ? -1 : 1;
-                }
-            });
+        if (this._sort && this._sort.length) {
+			function sorter(property, direction, secondary) {
+				var order = (direction || "asc").toLowerCase().indexOf("asc") === 0 ? 1 : -1;
+				return function (item1, item2) {
+	                var value1 = self._normalizePropertyValue(item1, property),
+	                    value2 = self._normalizePropertyValue(item2, property);
+	                if (value1 == value2) {
+						if (secondary.length) {
+							var next = secondary[0]
+							return sorter(next.property, next.direction, secondary.slice(1))(item1, item2);
+						} else {
+							return 0;
+						}
+					}
+					return order * (value1 > value2 ? 1 : -1);
+	            }
+			}
+			var first = this._sort[0];
+            sortedItems = filteredItems.sort(sorter(first.property, first.direction, this._sort.slice(1)));
         } else {
             sortedItems = filteredItems;
         }
@@ -386,8 +394,7 @@ RemoteDataSource.prototype = $.extend({}, new DataSource(), {
 
     _refresh: function (options, completed) {
         var self = this,
-            queryString = this._urlMapper(this._path, this._queryParams, this._sortProperty, 
-                this._sortDir, this._filter, this._skip, this._take, this._includeTotalCount);
+            queryString = this._urlMapper(this._path, this._queryParams, this._sort, this._filter, this._skip, this._take, this._includeTotalCount);
         $.ajax({
             dataType: "jsonp",
             url: queryString,

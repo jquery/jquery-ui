@@ -16,18 +16,18 @@
 
 	var localDevelopers = [
 		{
-			firstName: "Scott",
-			lastName: "González",
-			country: "USA",
-			twitter: "scott_gonzalez",
-			github: "scottgonzalez"
-		},
-		{
 			firstName: "Richard",
 			lastName: "Worth",
 			country: "USA",
 			twitter: "rworth",
 			github: "rdworth"
+		},
+		{
+			firstName: "Scott",
+			lastName: "González",
+			country: "USA",
+			twitter: "scott_gonzalez",
+			github: "scottgonzalez"
 		},
 		{
 			firstName: "Jörn",
@@ -97,8 +97,7 @@
 			for (var key in sorted) {
 				sort.push(sorted[key]);
 			}
-			// TODO extend sort option to accept array
-			datasource.option("sort", sort.length && sort[0]).refresh();
+			datasource.option("sort", sort).refresh();
 		})
 		return this;
 	}
@@ -118,8 +117,8 @@
 			source: developers
 		});
 		
-		// Dynamically configure the query options on the dataSource.  refresh() to update the array contents.
 		$("#filterDevelopers").filter(developers);
+		$("#sortDevelopers").sorter(developers);
 		
 		// A similar example...but with server integration and remote queries.
 		var movies = $.dataSource($.extend({}, $.dataSource.oDataSettings, {
@@ -157,10 +156,15 @@
 <h2>local data source</h2>
 <p id="filterDevelopers">
 	Filter:
-	<button>foobar</button>
 	<button data-filter-field="firstName" data-filter-value="Scott" type="button">Toggle firstName=Scott</button>
 	<button data-filter-field="lastName" data-filter-value="Worth"  type="button">Toggle lastName=Worth</button>
 	<button data-filter-field="country" data-filter-value="USA" type="button">Toggle country=USA</button>
+</p>
+<p id="sortDevelopers">
+	Sort:
+	<button data-sort-field="firstName" type="button">Sort by first name</button>
+	<button data-sort-field="lastName" type="button">Sort by last name</button>
+	<button data-sort-field="country" type="button">Sort country</button>
 </p>
 <p>
 <table id="developers-local">
@@ -186,9 +190,9 @@
 </p>
 <p id="sortMovies">
 	Sort:
-	<button data-sort-field="Name" type="button">Toggle Sort by Name</button>
-	<button data-sort-field="ReleaseYear" type="button">Toggle Sort by Release Year</button>
-	<button data-sort-field="AverageRating" type="button">Toggle Sort by Average Rating</button>
+	<button data-sort-field="Name" type="button">Sort by Name</button>
+	<button data-sort-field="ReleaseYear" type="button">Sort by Release Year</button>
+	<button data-sort-field="AverageRating" type="button">Sort by Average Rating</button>
 </p>
 <p>
 <table id="movies">
