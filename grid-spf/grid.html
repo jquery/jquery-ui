@@ -49,7 +49,7 @@
 		// TODO this shouldn't have to keep track of active filters
 		// TODO datasource API should be flexible enough to set and remove filters individualy
 		var filtered = {};
-		this.addClass("filter").find("input").click(function() {
+		this.addClass("tool").find("button").click(function() {
 			var field = $(this).data("filter-field"),
 				value = $(this).data("filter-value"),
 				operator = $(this).data("filter-operator");
@@ -68,7 +68,37 @@
 			}
 			datasource.option("filter", filter).refresh();
 			
-			$(this).toggleClass("filtered");
+			$(this).toggleClass("active");
+		})
+		return this;
+	}
+
+	$.fn.sorter = function(datasource) {
+		// TODO see above
+		var sorted = {};
+		this.addClass("tool").find("button").click(function() {
+			var field = $(this).data("sort-field");
+			if (sorted[field]) {
+				if (sorted[field].direction == "asc") {
+					sorted[field].direction = "desc";
+					$(this).removeClass("sort-asc").addClass("sort-desc");
+				} else {
+					delete sorted[field];
+					$(this).removeClass("active sort-desc");
+				}
+			} else {
+				sorted[field] = {
+					property: field,
+					direction: "asc"
+				};
+				$(this).addClass("active sort-asc")
+			}
+			var sort = [];
+			for (var key in sorted) {
+				sort.push(sorted[key]);
+			}
+			// TODO extend sort option to accept array
+			datasource.option("sort", sort.length && sort[0]).refresh();
 		})
 		return this;
 	}
@@ -89,7 +119,6 @@
 		});
 		
 		// Dynamically configure the query options on the dataSource.  refresh() to update the array contents.
-		var filtered = {};
 		$("#filterDevelopers").filter(developers);
 		
 		// A similar example...but with server integration and remote queries.
@@ -103,15 +132,22 @@
 		});
 
 		$("#filterMovies").filter(movies);
+		$("#sortMovies").sorter(movies);
 	});
 	</script>
 	
 	<style>
-		.filter input {
+		.tool button {
 			border: 1px solid white;
 		}
-		.filter input.filtered {
+		.tool button.active {
 			border: 1px solid black;
+		}
+		.sort-asc:before {
+			content: "/\\"
+		}
+		.sort-desc:before {
+			content: "\\/"
 		}
 	</style>
 </head>
@@ -121,9 +157,10 @@
 <h2>local data source</h2>
 <p id="filterDevelopers">
 	Filter:
-	<input data-filter-field="firstName" data-filter-value="Scott" type="button" value="Toggle firstName=Scott"/>
-	<input data-filter-field="lastName" data-filter-value="Worth"  type="button" value="Toggle lastName=Worth"/>
-	<input data-filter-field="country" data-filter-value="USA" type="button" value="Toggle country=USA"/>
+	<button>foobar</button>
+	<button data-filter-field="firstName" data-filter-value="Scott" type="button">Toggle firstName=Scott</button>
+	<button data-filter-field="lastName" data-filter-value="Worth"  type="button">Toggle lastName=Worth</button>
+	<button data-filter-field="country" data-filter-value="USA" type="button">Toggle country=USA</button>
 </p>
 <p>
 <table id="developers-local">
@@ -143,9 +180,15 @@
 <h2>remote data source</h2>
 <p id="filterMovies">
 	Filter:
-	<input data-filter-field="AverageRating" data-filter-operator=">" data-filter-value="3" type="button" value="Toggle AverageRating > 3"/>
-	<input data-filter-field="ReleaseYear" data-filter-operator="<="  data-filter-value="1990"  type="button" value="Toggle ReleaseYear <= 1990"/>
-	<input data-filter-field="Name" data-filter-operator="like"  data-filter-value="ultra"  type="button" value="Toggle Name like 'ultra'"/>
+	<button data-filter-field="Name" data-filter-operator="like"  data-filter-value="ultra"  type="button">Toggle Name like 'ultra'</button>
+	<button data-filter-field="ReleaseYear" data-filter-operator="<="  data-filter-value="1990"  type="button">Toggle ReleaseYear <= 1990</button>
+	<button data-filter-field="AverageRating" data-filter-operator=">" data-filter-value="3" type="button">Toggle AverageRating > 3</button>
+</p>
+<p id="sortMovies">
+	Sort:
+	<button data-sort-field="Name" type="button">Toggle Sort by Name</button>
+	<button data-sort-field="ReleaseYear" type="button">Toggle Sort by Release Year</button>
+	<button data-sort-field="AverageRating" type="button">Toggle Sort by Average Rating</button>
 </p>
 <p>
 <table id="movies">
