@@ -14,15 +14,15 @@
 
 var rshowhide = /show|hide/;
 
-$.effects.bounce = function(o) {
+$.effects.effect.bounce = function(o) {
 
 	return this.queue(function() {
 
 		// Create element
-		var el = $( this ), 
+		var el = $.effects.$( this ), 
 			props = [ 'position', 'top', 'bottom', 'left', 'right' ],
 			// defaults:
-			mode = $.effects.setMode( el, o.mode || 'effect' ),
+			mode = el.setMode( o.mode || 'effect' ),
 			direction = o.direction || 'up', 
 			distance = o.distance || 20,
 			times = o.times || 5, 
@@ -37,9 +37,7 @@ $.effects.bounce = function(o) {
 			props.push( 'opacity' );
 		} 
 
-		$.effects.save( el, props ); 
-		el.show(); 
-		$.effects.createWrapper( el ); // Create Wrapper
+		el.save( props ).show().createWrapper();
 
 		if ( !distance ) {
 			distance = el[ ref == 'top' ? 'outerHeight' : 'outerWidth' ]({ margin:true }) / 3;
@@ -76,9 +74,9 @@ $.effects.bounce = function(o) {
 			};
 			animation[ ref ] = ( motion ? '-=' : '+=' ) + distance;
 			el.animate( animation, speed / 2, o.easing, function(){
-				el.hide();
-				$.effects.restore( el, props );
-				$.effects.removeWrapper( el );
+				el.hide()
+					.restore( props )
+					.removeWrapper();
 				$.isFunction( o.complete ) && o.complete.apply( this, arguments );
 			});
 		} else {
@@ -89,11 +87,11 @@ $.effects.bounce = function(o) {
 			el
 				.animate( animation1, speed / 2, o.easing )
 				.animate( animation2, speed / 2, o.easing, function() {
-					$.effects.restore( el, props );
-					$.effects.removeWrapper( el );
+					el.restore( props ).removeWrapper();
 					$.isFunction( o.complete ) && o.complete.apply( this, arguments );
 				});
 		}
+
 		el.dequeue();
 	});
 

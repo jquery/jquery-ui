@@ -12,18 +12,18 @@
  */
 (function( $, undefined ) {
 
-$.effects.pulsate = function( o ) {
+$.effects.effect.pulsate = function( o ) {
 	return this.queue( function() {
-		var elem = $( this ),
-			mode = $.effects.setMode( elem, o.mode || 'show' ),
+		var el = $.effects.$( this ),
+			mode = el.setMode( o.mode || 'show' ),
 			times = ( ( o.times || 5 ) * 2 ) - 1,
 			duration = o.duration / 2,
-			isVisible = elem.is( ':visible' ),
+			isVisible = el.is( ':visible' ),
 			animateTo = 0,
 			i;
 
 		if ( !isVisible ) {
-			elem.css('opacity', 0).show();
+			el.css('opacity', 0).show();
 			animateTo = 1;
 		}
 
@@ -32,17 +32,17 @@ $.effects.pulsate = function( o ) {
 		}
 
 		for ( i = 0; i < times; i++ ) {
-			elem.animate({ 
+			el.animate({ 
 				opacity: animateTo 
 			}, duration, o.easing );
 			animateTo = ( animateTo + 1 ) % 2;
 		}
 
-		elem.animate({ 
+		el.animate({ 
 			opacity: animateTo 
 		}, duration, o.easing, function() {
 			if (animateTo == 0) {
-				elem.hide();
+				el.hide();
 			}
 			(o.complete && o.complete.apply(this, arguments));
 		}).dequeue();

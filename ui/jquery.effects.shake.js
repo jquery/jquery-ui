@@ -12,13 +12,13 @@
  */
 (function( $, undefined ) {
 
-$.effects.shake = function( o ) {
+$.effects.effect.shake = function( o ) {
 
 	return this.queue( function() {
 
-		var el = $( this ),
+		var el = $.effect.$( this ),
 			props = [ 'position', 'top', 'bottom', 'left', 'right' ],
-			mode = $.effects.setMode( el, o.mode || 'effect' ),
+			mode = el.setMode( o.mode || 'effect' ),
 			direction = o.direction || 'left',
 			distance = o.distance || 20,
 			times = o.times || 3,
@@ -30,10 +30,7 @@ $.effects.shake = function( o ) {
 			animation2 = {},
 			i; 
 
-		// Adjust
-		$.effects.save( el, props ); 
-		el.show(); 
-		$.effects.createWrapper( el ); // Create Wrapper
+		el.save( props ).show().createWrapper(); 
 
 		// Animation
 		animation[ ref ] = ( motion == 'pos' ? '-=' : '+=' ) + distance;
@@ -52,8 +49,7 @@ $.effects.shake = function( o ) {
 			.animate( animation, speed / 2, o.easing, function() { 
 
 				// Last shake
-				$.effects.restore( el, props ); 
-				$.effects.removeWrapper( el ); 
+				el.restore( props ).removeWrapper(); 
 				$.isFunction( o.complete ) && o.complete.apply( this, arguments ); 
 			})
 			.dequeue();

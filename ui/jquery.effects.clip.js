@@ -12,31 +12,25 @@
  */
 (function( $, undefined ) {
 
-$.effects.clip = function( o ) {
+$.effects.effect.clip = function( o ) {
 
 	return this.queue( function() {
 
 		// Create element
-		var el = $( this ), 
+		var el = $.effects.$( this ), 
 			props = ['position','top','bottom','left','right','height','width'], 
-			mode = $.effects.setMode( el, o.mode || 'hide' ),
+			mode = el.setMode( o.mode || 'hide' ),
 			direction = o.direction || 'vertical',
 			ref = {
 				size: (direction == 'vertical') ? 'height' : 'width',
 				position: (direction == 'vertical') ? 'top' : 'left'
 			},
 			animation = {},
-			wrapper, animate, distance;
-
-		// Save & Show
-		$.effects.save( el, props ); el.show(); 
-
-		// Create Wrapper
-		wrapper = $.effects.createWrapper( el ).css({ 
-			overflow: 'hidden' 
-		});
-		animate = ( el[0].tagName == 'IMG' ) ? wrapper : el;
-		distance = animate[ ref.size ]();
+			wrapper = el.save( props ).show().createWrapper({ 
+				overflow: 'hidden' 
+			}),
+			animate = ( el[0].tagName == 'IMG' ) ? wrapper : el,
+			distance = animate[ ref.size ]();
 
 		// Shift
 		if ( mode == 'show' ) {
@@ -55,8 +49,7 @@ $.effects.clip = function( o ) {
 			easing: o.easing, 
 			complete: function() {
 				mode == 'hide' && el.hide(); 
-				$.effects.restore( el, props ); 
-				$.effects.removeWrapper( el ); 
+				el.restore( props ).removeWrapper(); 
 				$.isFunction( o.complete ) && o.complete.apply( el[ 0 ], arguments );
 				el.dequeue();
 			}

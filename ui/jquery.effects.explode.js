@@ -12,14 +12,16 @@
  */
 (function( $, undefined ) {
 
-$.effects.explode = function( o ) {
+$.effects.effect.explode = function( o ) {
 
 	return this.queue( function() {
 
 		var rows = o.pieces ? Math.round(Math.sqrt(o.pieces)) : 3,
 			cells = rows,
-			el = $( this ).show().css( 'visibility', 'hidden' ),
-			mode = $.effects.setMode( el, o.mode || 'hide' ),
+			el = $.effects.$( this )
+				.show()
+				.css( 'visibility', 'hidden' ),
+			mode = el.setMode( o.mode || 'hide' ),
 			offset = el.offset(),
 			width = el.outerWidth( true ),
 			height = el.outerHeight( true );

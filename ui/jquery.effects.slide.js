@@ -12,14 +12,14 @@
  */
 (function( $, undefined ) {
 
-$.effects.slide = function( o ) {
+$.effects.effect.slide = function( o ) {
 
 	return this.queue( function() {
 
 		// Create element
 		var el = $( this ),
 			props = ['position','top','bottom','left','right'],
-			mode = $.effects.setMode( el, o.mode || 'show' ),
+			mode = el.setMode( o.mode || 'show' ),
 			direction = o.direction || 'left',
 			ref = (direction == 'up' || direction == 'down') ? 'top' : 'left',
 			motion = (direction == 'up' || direction == 'left') ? 'pos' : 'neg',
@@ -27,9 +27,7 @@ $.effects.slide = function( o ) {
 			animation = {}; 
 
 		// Adjust
-		$.effects.save( el, props ); 
-		el.show();
-		$.effects.createWrapper( el ).css({
+		el.save( props ).show().createWrapper({
 			overflow: 'hidden'
 		}); 
 		
@@ -55,8 +53,7 @@ $.effects.slide = function( o ) {
 				if ( mode == 'hide' ) {
 					el.hide(); 
 				}
-				$.effects.restore( el, props );
-				$.effects.removeWrapper( el );
+				el.restore( props ).removeWrapper();
 				$.isFunction(o.complete) && o.complete.apply( this, arguments ); 
 				el.dequeue();
 			}

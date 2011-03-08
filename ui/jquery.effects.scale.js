@@ -12,16 +12,15 @@
  */
 (function( $, undefined ) {
 
-$.effects.puff = function( o ) {
-	console.log(o);
+$.effects.effect.puff = function( o ) {
 	return this.queue( function() {
-		var elem = $( this ),
-			mode = $.effects.setMode( elem, o.mode || 'hide' ),
+		var el = $.effects.$( this ),
+			mode = el.setMode( o.mode || 'hide' ),
 			percent = parseInt( o.percent, 10 ) || 150,
 			factor = percent / 100,
 			original = { 
-				height: elem.height(), 
-				width: elem.width() 
+				height: el.height(), 
+				width: el.width() 
 			};
 
 		$.extend(o, {
@@ -37,18 +36,18 @@ $.effects.puff = function( o ) {
 				}
 		});
 
-		elem.effect( o ).dequeue();
+		el.effect( o ).dequeue();
 	});
 };
 
-$.effects.scale = function( o ) {
+$.effects.effect.scale = function( o ) {
 
 	return this.queue( function() {
 
 		// Create element
-		var el = $( this ),
+		var el = $.effects.$( this ),
 			options = $.extend( true, {}, o ),
-			mode = $.effects.setMode( el, o.mode || 'effect' ),
+			mode = el.setMode( o.mode || 'effect' ),
 			percent = parseInt( o.percent, 10 ) || ( parseInt( o.percent, 10 ) == 0 ? 0 : ( mode == 'hide' ? 0 : 100 ) ),
 			direction = o.direction || 'both',
 			origin = o.origin,
@@ -93,11 +92,11 @@ $.effects.scale = function( o ) {
 
 };
 
-$.effects.size = function( o ) {
+$.effects.effect.size = function( o ) {
 
 	return this.queue( function() {
 		// Create element
-		var el = $( this ), 
+		var el = $.effects.$( this ), 
 			props = [ 'position', 'top', 'bottom', 'left', 'right', 'width', 'height', 'overflow', 'opacity' ],
 
 			// Always restore
@@ -110,7 +109,7 @@ $.effects.size = function( o ) {
 			hProps = [ 'borderLeftWidth', 'borderRightWidth', 'paddingLeft', 'paddingRight' ],
 
 			// Set options
-			mode = $.effects.setMode( el, o.mode || 'effect' ),
+			mode = el.setMode( o.mode || 'effect' ),
 			restore = o.restore || false,
 			scale = o.scale || 'both',
 			origin = o.origin,
@@ -150,15 +149,15 @@ $.effects.size = function( o ) {
 			// Vertical props scaling
 			if ( factor.from.y != factor.to.y ) { 
 				props = props.concat( vProps );
-				el.from = $.effects.setTransition( el, vProps, factor.from.y, el.from );
-				el.to = $.effects.setTransition( el, vProps, factor.to.y, el.to );
+				el.from = el.setTransition( vProps, factor.from.y, el.from );
+				el.to = el.setTransition( vProps, factor.to.y, el.to );
 			};
 
 			// Horizontal props scaling
 			if ( factor.from.x != factor.to.x ) { 
 				props = props.concat( hProps );
-				el.from = $.effects.setTransition( el, hProps, factor.from.x, el.from );
-				el.to = $.effects.setTransition( el, hProps, factor.to.x, el.to );
+				el.from = el.setTransition( hProps, factor.from.x, el.from );
+				el.to = el.setTransition( hProps, factor.to.x, el.to );
 			};
 		};
 
@@ -168,14 +167,12 @@ $.effects.size = function( o ) {
 			// Vertical props scaling
 			if ( factor.from.y != factor.to.y ) { 
 				props = props.concat( cProps );
-				el.from = $.effects.setTransition( el, cProps, factor.from.y, el.from );
-				el.to = $.effects.setTransition( el, cProps, factor.to.y, el.to );
+				el.from = el.setTransition( cProps, factor.from.y, el.from );
+				el.to = el.setTransition( cProps, factor.to.y, el.to );
 			};
 		};
 		
-		$.effects.save( el, restore ? props : props1 ); 
-		el.show(); 
-		$.effects.createWrapper( el );
+		el.save( restore ? props : props1 ).show().createWrapper();
 		el.css( 'overflow', 'hidden' ).css( el.from ); 
 
 		// Animate
@@ -187,12 +184,12 @@ $.effects.size = function( o ) {
 			props2 = props.concat(vProps).concat(hProps);
 
 			el.find( "*[width]" ).each( function(){
-				var child = $( this ),
+				var child = $.effects.$( this ),
 					c_original = { 
 						height: child.height(), 
 						width: child.width()
 					};
-				if (restore) $.effects.save(child, props2);
+				if (restore) el.save(child, props2);
 				
 				child.from = {
 					height: c_original.height * factor.from.y, 
@@ -205,14 +202,14 @@ $.effects.size = function( o ) {
 
 				// Vertical props scaling
 				if ( factor.from.y != factor.to.y ) { 
-					child.from = $.effects.setTransition( child, vProps, factor.from.y, child.from );
-					child.to = $.effects.setTransition( child, vProps, factor.to.y, child.to );
+					child.from = child.setTransition( vProps, factor.from.y, child.from );
+					child.to = child.setTransition( vProps, factor.to.y, child.to );
 				};
 
 				// Horizontal props scaling
 				if ( factor.from.x != factor.to.x ) {
-					child.from = $.effects.setTransition( child, hProps, factor.from.x, child.from );
-					child.to = $.effects.setTransition( child, hProps, factor.to.x, child.to );
+					child.from = child.setTransition( hProps, factor.from.x, child.from );
+					child.to = child.setTransition( hProps, factor.to.x, child.to );
 				};
 
 				// Animate children
@@ -220,7 +217,7 @@ $.effects.size = function( o ) {
 				child.animate( child.to, o.duration, o.easing, function() {
 
 					// Restore children
-					if (restore) $.effects.restore( child, props2 ); 
+					if (restore) child.restore( props2 ); 
 				});
 			});
 		};
@@ -237,8 +234,7 @@ $.effects.size = function( o ) {
 				if( mode == 'hide' ) {
 					el.hide();
 				}
-				$.effects.restore( el, restore ? props : props1 ); 
-				$.effects.removeWrapper( el ); 
+				el.restore( restore ? props : props1 ).removeWrapper(); 
 				$.isFunction( o.complete ) && o.complete.apply( this, arguments ); // Callback
 				el.dequeue();
 			}

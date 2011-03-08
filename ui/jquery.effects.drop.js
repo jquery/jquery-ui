@@ -12,13 +12,13 @@
  */
 (function( $, undefined ) {
 
-$.effects.drop = function( o ) {
+$.effects.effect.drop = function( o ) {
 
 	return this.queue( function() {
 
-		var el = $( this ), 
+		var el = $.effects.$( this ), 
 			props = [ 'position', 'top', 'bottom', 'left', 'right', 'opacity' ],
-			mode = $.effects.setMode( el, o.mode || 'hide' ),
+			mode = el.setMode( o.mode || 'hide' ),
 			direction = o.direction || 'left',
 			ref = (direction == 'up' || direction == 'down') ? 'top' : 'left',
 			motion = (direction == 'up' || direction == 'left') ? 'pos' : 'neg',
@@ -28,14 +28,12 @@ $.effects.drop = function( o ) {
 			distance;
 			
 		// Adjust
-		$.effects.save(el, props); el.show(); 
-		$.effects.createWrapper(el); 
-		
+		el.save( props ).show().createWrapper(); 
+
 		distance = o.distance || el[ ref == 'top' ? 'outerHeight': 'outerWidth' ]({ margin: true }) / 2;
 
 		if ( mode == 'show' ) {
-			el
-				.css( 'opacity', 0 )
+			el.css( 'opacity', 0 )
 				.css( ref, motion == 'pos' ? -distance : distance );
 		}
 
@@ -49,8 +47,7 @@ $.effects.drop = function( o ) {
 			easing: o.easing, 
 			complete: function() {
 				mode == 'hide' && el.hide();
-				$.effects.restore( el, props ); 
-				$.effects.removeWrapper( el ); 
+				el.restore( props ).removeWrapper(); 
 				$.isFunction( o.complete ) && o.complete.apply(this, arguments);
 				el.dequeue();
 			}
