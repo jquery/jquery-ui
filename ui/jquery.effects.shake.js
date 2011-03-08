@@ -16,7 +16,7 @@ $.effects.effect.shake = function( o ) {
 
 	return this.queue( function() {
 
-		var el = $.effect.$( this ),
+		var el = $.effects.$( this ),
 			props = [ 'position', 'top', 'bottom', 'left', 'right' ],
 			mode = el.setMode( o.mode || 'effect' ),
 			direction = o.direction || 'left',

@@ -17,7 +17,7 @@ $.effects.effect.slide = function( o ) {
 	return this.queue( function() {
 
 		// Create element
-		var el = $( this ),
+		var el = $.effects.$( this ),
 			props = ['position','top','bottom','left','right'],
 			mode = el.setMode( o.mode || 'show' ),
 			direction = o.direction || 'left',
