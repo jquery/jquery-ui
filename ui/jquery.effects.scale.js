@@ -13,7 +13,6 @@
 (function( $, undefined ) {
 
 $.effects.puff = function( o ) {
-	console.log(o);
 	return this.queue( function() {
 		var elem = $( this ),
 			mode = $.effects.setMode( elem, o.mode || 'hide' ),
