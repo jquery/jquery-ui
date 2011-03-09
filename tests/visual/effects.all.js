@@ -1,5 +1,6 @@
 
 $(function() {
+	var duration = 1000, wait = 500;
 
 	$("div.effect")
 		.hover(function() { $(this).addClass("hover"); },
@@ -13,15 +14,24 @@ $(function() {
 
 		$(el).bind("click", function() {
 
-			$(this).addClass("current").hide(n, o, 1000, function() {
+			$(this).addClass("current").hide(n, o, duration, function() {
 				var self = this;
 				window.setTimeout(function() {
-					$(self).show(n, o, 1000, function() { $(this).removeClass("current"); });
-				},500);
+					$(self).show(n, o, duration, function() { $(this).removeClass("current"); });
+				}, wait);
 			});
 		});
 
 	};
+	
+	$("#hide").click(function() {
+		var el = $(this);
+		el.addClass("current").hide(duration, function() {
+			setTimeout(function() {
+				el.show(duration, function() { el.removeClass("current") });
+			}, wait);
+		})
+	})
 
 	effect("#blindHorizontally", "blind", { direction: "horizontal" });
 	effect("#blindVertically", "blind", { direction: "vertical" });
@@ -38,6 +48,8 @@ $(function() {
 
 	effect("#explode9", "explode", {});
 	effect("#explode36", "explode", { pieces: 36 });
+
+	effect("#fade", "fade", {});
 
 	effect("#fold", "fold", { size: 50 });
 
@@ -61,7 +73,7 @@ $(function() {
 		$(this).addClass(function() {
 			window.console && console.log(arguments);
 			return "current";
-		}, 1000, function() {
+		}, duration, function() {
 			$(this).removeClass("current");
 		});
 	});
@@ -69,12 +81,12 @@ $(function() {
 		$(this).addClass("current").removeClass(function() {
 			window.console && console.log(arguments);
 			return "current"
-		}, 1000);
+		}, duration);
 	});
 	$("#toggleClass").click(function() {
 		$(this).toggleClass(function() {
 			window.console && console.log(arguments);
 			return "current"
-		}, 1000);
+		}, duration);
 	});
 });
