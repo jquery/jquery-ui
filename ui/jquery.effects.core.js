@@ -447,6 +447,11 @@ function _normalizeArguments( effect, options, speed, callback ) {
 	// convert to an object
 	effect = { effect: effect };
 
+	// catch (effect)
+	if ( options === undefined ) {
+		options = {};
+	}
+
 	// catch (effect, callback)
 	if ( $.isFunction( options ) ) {
 		callback = options;
