@@ -3,11 +3,19 @@
  */
 (function($) {
 
-module("tooltip: options", {
-	teardown: function() {
-		$(":ui-tooltip").tooltip("destroy");
-	}
-});
+module("tooltip: options", (function(off) {
+
+      return {
+              setup: function() {
+                      $.fx.off = true;
+              },
+              teardown: function() {
+                      $(":ui-tooltip").tooltip("destroy");
+                      $.fx.off = off;
+              }
+      };
+
+})($.fx.off));
 
 
 test("option: items", function() {
@@ -84,74 +92,47 @@ test("option: disabled false on init", function() {
 test("option: disabled set to false using disabled option", function() {
 
     expect(5);
-    stop();
 
     var div = $( "#tooltipped1" ),
-        widget = div.tooltip().tooltip("widget"),
-        tests = {
-          13: function() {
-            ok( widget.is(":hidden") );
-            div.simulate( "mouseover", { target: div[0] });
-          },
-          500: function() {
-            ok( widget.is(":visible") );
-            div.simulate( "mouseout", { target: div[0] });
-          },
-          1000: function() {
-            ok( widget.is(":hidden") );
-            div.tooltip("option","disabled",true);
-            div.simulate( "mouseover", { target: div[0] });
-          },
-          1500: function() {
-            ok( widget.is(":hidden") );
-            div.simulate( "mouseout", { target: div[0] });
-          },
-          2000: function() {
-            ok( widget.is(":hidden") );
-            start();
-          }
-      };
+        widget = div.tooltip().tooltip("widget");
 
+    ok( widget.is(":hidden") );
 
-      for (var f in tests) {
-        setTimeout(tests[f],f);
-      }
+    div.simulate( "mouseover", { target: div[0] });
+    ok( widget.is(":visible") );
+
+    div.simulate( "mouseout", { target: div[0] });
+    ok( widget.is(":hidden") );
+
+    div.tooltip("option","disabled",true);
+    div.simulate( "mouseover", { target: div[0] });
+    ok( widget.is(":hidden") );
+
+    div.simulate( "mouseout", { target: div[0] });
+    ok( widget.is(":hidden") );
 
 });
 test("option: disabled true on init, set to false using disabled option", function() {
 
     expect(5);
-    stop();
 
     var div = $( "#tooltipped1" ),
-        widget = div.tooltip({disabled:true}).tooltip("widget"),
-        tests = {
-          13: function() {
-            ok( widget.is(":hidden") );
-            div.simulate( "mouseover", { target: div[0] });
-          },
-          500: function() {
-            ok( widget.is(":hidden") );
-            div.simulate( "mouseout", { target: div[0] });
-          },
-          1000: function() {
-            ok( widget.is(":hidden") );
-            div.tooltip("option","disabled",false);
-            div.simulate( "mouseover", { target: div[0] });
-          },
-          1500: function() {
-            ok( widget.is(":visible") );
-            div.simulate( "mouseout", { target: div[0] });
-          },
-          2000: function() {
-            ok( widget.is(":hidden") );
-            start();
-          }
-      };
+        widget = div.tooltip({disabled:true}).tooltip("widget");
 
-      for (var f in tests) {
-        setTimeout(tests[f],f);
-      }
+    ok( widget.is(":hidden") );
+
+    div.simulate( "mouseover", { target: div[0] });
+    ok( widget.is(":hidden") );
+
+    div.simulate( "mouseout", { target: div[0] });
+    ok( widget.is(":hidden") );
+
+    div.tooltip("option","disabled",false);
+    div.simulate( "mouseover", { target: div[0] });
+    ok( widget.is(":visible") );
+
+    div.simulate( "mouseout", { target: div[0] });
+    ok( widget.is(":hidden") );
 
 });
 
