@@ -20,13 +20,13 @@ $.effects.effect.drop = function( o ) {
 			props = [ 'position', 'top', 'bottom', 'left', 'right', 'opacity' ],
 			mode = el.setMode( o.mode || 'hide' ),
 			direction = o.direction || 'left',
-			ref = (direction == 'up' || direction == 'down') ? 'top' : 'left',
-			motion = (direction == 'up' || direction == 'left') ? 'pos' : 'neg',
+			ref = ( direction == 'up' || direction == 'down' ) ? 'top' : 'left',
+			motion = ( direction == 'up' || direction == 'left' ) ? 'pos' : 'neg',
 			animation = {
 				opacity: mode == 'show' ? 1 : 0
 			},
 			distance;
-			
+
 		// Adjust
 		el.save( props ).show().createWrapper(); 
 

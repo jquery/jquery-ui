@@ -97,7 +97,7 @@ $.widget("ui.dialog", {
 				// TODO: move to stylesheet
 				.css( "outline", 0 )
 				.keydown(function( event ) {
-					if ( options.closeOnEscape && event.keyCode &&
+					if ( options.closeOnEscape && !event.isDefaultPrevented() && event.keyCode &&
 							event.keyCode === $.ui.keyCode.ESCAPE ) {
 						self.close( event );
 						event.preventDefault();
@@ -699,7 +699,7 @@ $.extend( $.ui.dialog.overlay, {
 
 			// allow closing by pressing the escape key
 			$( document ).bind( "keydown.dialog-overlay", function( event ) {
-				if ( dialog.options.closeOnEscape && event.keyCode &&
+				if ( dialog.options.closeOnEscape && !event.isDefaultPrevented() && event.keyCode &&
 					event.keyCode === $.ui.keyCode.ESCAPE ) {
 					
 					dialog.close( event );

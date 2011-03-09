@@ -24,7 +24,7 @@ $.effects.effect.fade = function( o ) {
 			duration: o.duration,
 			easing: o.easing,
 			complete: function() {
-				jQuery.isFunction( o.complete ) && o.complete.apply( this, arguments );
+				$.isFunction( o.complete ) && o.complete.apply( this, arguments );
 				el.dequeue();
 			}
 		});
