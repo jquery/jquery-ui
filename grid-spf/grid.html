@@ -42,6 +42,34 @@
 			country: "Canada",
 			twitter: "cworth",
 			github: "cworth"
+		},
+		{
+			firstName: "Adam",
+			lastName: "Piano",
+			country: "USA",
+			twitter: "ajpiano",
+			github: "ajpiano"
+		},
+		{
+			firstName: "Remy",
+			lastName: "Sharp",
+			country: "UK",
+			twitter: "rem",
+			github: "rem"
+		},
+		{
+			firstName: "Benjamin",
+			lastName: "Lupton",
+			country: "Australia",
+			twitter: "balupton",
+			github: "balupton"
+		},
+		{
+			firstName: "Haymo",
+			lastName: "Meran",
+			country: "Austria",
+			twitter: "draftkraft",
+			github: ""
 		}
 	];
 	
@@ -101,10 +129,23 @@
 		})
 		return this;
 	}
+	
+	$.fn.pager = function(datasource) {
+		$(this).addClass("tool").find("button").click(function() {
+			var method = $(this).data("page");
+			datasource[method]();
+			datasource.refresh();
+		});
+		return this;
+	}
 
 	$(function() {
 		var developers = $.dataSource({
-			source: localDevelopers
+			source: localDevelopers,
+			paging: {
+				take: 3,
+				skip: 0
+			}
 		});
 		
 		var dev2 = $.ui.datasource({
@@ -119,6 +160,7 @@
 		
 		$("#filterDevelopers").filter(developers);
 		$("#sortDevelopers").sorter(developers);
+		$("#pageDevelopers").pager(developers);
 		
 		// A similar example...but with server integration and remote queries.
 		var movies = $.dataSource($.extend({}, $.dataSource.oDataSettings, {
@@ -132,6 +174,7 @@
 
 		$("#filterMovies").filter(movies);
 		$("#sortMovies").sorter(movies);
+		$("#pageMovies").pager(movies);
 	});
 	</script>
 	
@@ -166,6 +209,13 @@
 	<button data-sort-field="lastName" type="button">Sort by last name</button>
 	<button data-sort-field="country" type="button">Sort country</button>
 </p>
+<p id="pageDevelopers">
+	Page:
+	<button data-page="first">First</button>
+	<button data-page="prev">Prev</button>
+	<button data-page="next">Next</button>
+	<button data-page="last">Last</button>
+<p>
 <p>
 <table id="developers-local">
 	<thead>
@@ -194,6 +244,12 @@
 	<button data-sort-field="ReleaseYear" type="button">Sort by Release Year</button>
 	<button data-sort-field="AverageRating" type="button">Sort by Average Rating</button>
 </p>
+<p id="pageMovies">
+	Page:
+	<button data-page="first">First</button>
+	<button data-page="prev">Prev</button>
+	<button data-page="next">Next</button>
+	<button data-page="last">Last</button>
 <p>
 <table id="movies">
 	<thead>

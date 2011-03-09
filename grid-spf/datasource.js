@@ -28,14 +28,12 @@ $.dataSource.oDataSettings = {
         return data.d.results;
     },
 
-    urlMapper: function (path, queryParams, sort, filter, skip, take, includeTotalCount) {
+    urlMapper: function (path, queryParams, sort, filter, skip, take) {
         var questionMark = (path.indexOf("?") < 0 ? "?" : "&");
         for (param in queryParams) {
             path = path.split("$" + queryParam).join(queryParams[param]);
         }
         path += questionMark + "$format=json" +
-            // TODO -- Without inlineCount, the form of the AJAX result changes and resultsFilter breaks.
-            // (includeTotalCount ? "&$inlinecount=allpages" : "") +
             "&$inlinecount=allpages" +
             "&$skip=" + (skip || 0) +
             (take !== null && take !== undefined ? ("&$top=" + take) : "");
@@ -91,7 +89,6 @@ DataSource.prototype = {
     _filter: null,
     _skip: null,
     _take: null,
-    _includeTotalCount: false,
 
     items: [],
     totalCount: 0,
@@ -225,7 +222,6 @@ DataSource.prototype = {
         options = options || {};
         this._skip = options.skip;
         this._take = options.take;
-        this._includeTotalCount = !!options.includeTotalCount;
     },
 
     _setSort: function (options) {
@@ -234,6 +230,29 @@ DataSource.prototype = {
 	
 	toArray: function() {
 		return this._items;
+	},
+	
+	first: function() {
+		this._skip = 0;
+	},
+	
+	prev: function() {
+		if (this._skip) {
+			this._skip -= this._take;
+		}
+	},
+	
+	next: function() {
+		if (!this._skip) {
+			this._skip = this._take;
+		} else if (this._skip + this._take < this.totalCount) {
+			this._skip += this._take;
+		}
+	},
+	
+	last: function() {
+		// TODO need to actually calculate the page
+		this._skip = this.totalCount - this._take;
 	}
 };
 
@@ -288,9 +307,8 @@ LocalDataSource.prototype = $.extend({}, new DataSource(), {
         if (this._take) {
             pagedItems = pagedItems.slice(0, this._take);
         }
-        var totalCount = this._includeTotalCount ? sortedItems.length : undefined;
 
-        return { items: pagedItems, totalCount: totalCount };
+        return { items: pagedItems, totalCount: sortedItems.length };
     },
 
     _createFilterFunction: function (filter) {
@@ -394,7 +412,7 @@ RemoteDataSource.prototype = $.extend({}, new DataSource(), {
 
     _refresh: function (options, completed) {
         var self = this,
-            queryString = this._urlMapper(this._path, this._queryParams, this._sort, this._filter, this._skip, this._take, this._includeTotalCount);
+            queryString = this._urlMapper(this._path, this._queryParams, this._sort, this._filter, this._skip, this._take);
         $.ajax({
             dataType: "jsonp",
             url: queryString,
@@ -420,6 +438,7 @@ RemoteDataSource.prototype = $.extend({}, new DataSource(), {
             this._filter = [ this._processFilter(filter) ];
         }
     }
+	
 });
 
 })(jQuery);
