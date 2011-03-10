@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Grid: Data</title>
+	<link rel="stylesheet" href="../themes/base/jquery.ui.all.css">
+	<link rel="stylesheet" href="grid.css">
+	<script src="../jquery-1.5.1.js"></script>
+	<script src="../external/jquery.tmpl.js"></script>
+	<script src="../ui/jquery.ui.core.js"></script>
+	<script src="../ui/jquery.ui.widget.js"></script>
+	<script src="../ui/jquery.ui.button.js"></script>
+	<script src="../ui/jquery.ui.menu.js"></script>
+	<script src="../ui/jquery.ui.position.js"></script>
+	<script src="datasource.js"></script>
+	<script src="grid.js"></script>
+
+	<script>
+	$(function() {
+		var movies = $.dataSource($.extend({}, $.dataSource.oDataSettings, {
+			path: "http://odata.netflix.com/Catalog/Titles",
+			paging: { take: 10 },
+			jsonp: "$callback"
+		}));
+		var grid = $( "#movies" ).grid({
+			source: movies
+		});
+		grid.find("th").each(function() {
+			var header = $(this),
+				field = header.data("field");
+			var menu = $("#menu-tmpl").tmpl().appendTo(this).menu({
+				select: function(event, ui) {
+					event.stopPropagation();
+					movies.option("sort", [{
+						property: field,
+						direction: ui.item.find("a").data("sort")
+					}]).refresh();
+					menu.hide();
+				}
+			}).hide();
+			$(this).click(function(event) {
+				event.stopPropagation();
+				$(":ui-menu").hide();
+				menu.show().position({
+					my: "left top",
+					at: "right top",
+					of: event
+				});
+			});
+		});
+		$(document).click(function() {
+			$(":ui-menu").hide();
+		});
+		
+		var thead = grid.find("thead");
+		thead.children().clone().insertAfter(thead).find("th").each(function() {
+			$("<input />").appendTo($(this).empty());
+		});
+		
+		grid.bind("keyup change", function() {
+			var filters = [];
+			$(this).find("input").each(function() {
+				var head = $(this).parent(),
+					field = head.data("field"),
+					type = head.data("type"),
+					input = this.value;
+					
+				if (/^[<>]=?/.test(input)) {
+					var compare = input.replace(/^([<>]=?).+/, "$1");
+					input = input.substring(compare.length);
+					input = input == null || isNaN(input) ? "" : input;
+				}
+				if (type == "number") {
+					input = parseFloat(input);
+				}
+				if (type == "string") {
+					compare = "like";
+				}
+				if (input) {
+					filters.push({
+						property: field,
+						operator: compare,
+						value: input
+					});
+				}
+			});
+			if (!filters.length) {
+				movies.option("filter").refresh();
+				return;
+			}
+			movies.option("filter", filters).refresh();
+		});
+		
+		var buttons = $("#pager").buttonset().find("button").click(function() {
+			var method = $(this).data("page");
+			movies[method]();
+			movies.refresh();
+		});
+		$(movies).bind("datasourcerefresh", function() {
+			buttons.button("enable");
+			if (!movies._skip) {
+				buttons.slice(0, 2).button("disable")
+			}
+			if (movies._skip + movies._take >= movies.totalCount) {
+				buttons.slice(2, 4).button("disable")
+			}
+		});
+
+	});
+	</script>
+	
+	<style>
+		.ui-menu {
+			position: absolute;
+		}
+	</style>
+</head>
+<body>
+
+<script type="text/x-jquery-tmpl" id="menu-tmpl">
+	<ul>
+		<li>
+			<a href="#" data-sort="asc">Sort Ascending</a>
+		</li>
+		<li>
+			<a href="#" data-sort="desc">Sort Descending</a>
+		</li>
+	</ul>
+</script>
+
+<h2>Movies! Click header for sort menu, use inputs for filtering, pager for paging</h2>
+<p>
+<table id="movies">
+	<thead>
+		<tr>
+			<th data-field="Name" data-type="string">Name</th>
+			<th data-field="ReleaseYear" data-type="number">Release Year</th>
+			<th data-field="AverageRating" data-type="number">Average Rating</th>
+		</tr>
+	</thead>
+	<tbody>
+	</tbody>
+</table>
+</p>
+<p id="pager">
+	<button data-page="first">First</button>
+	<button data-page="prev">Prev</button>
+	<button data-page="next">Next</button>
+	<button data-page="last">Last</button>
+</p>
+
+</body>
+</html>
