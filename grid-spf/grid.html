@@ -73,7 +73,7 @@
 		}
 	];
 	
-	$.fn.filter = function(datasource) {
+	$.fn.filterControl = function(datasource) {
 		// TODO this shouldn't have to keep track of active filters
 		// TODO datasource API should be flexible enough to set and remove filters individualy
 		var filtered = {};
@@ -101,7 +101,7 @@
 		return this;
 	}
 
-	$.fn.sorter = function(datasource) {
+	$.fn.sorterControl = function(datasource) {
 		// TODO see above
 		var sorted = {};
 		this.addClass("tool").find("button").click(function() {
@@ -130,7 +130,7 @@
 		return this;
 	}
 	
-	$.fn.pager = function(datasource) {
+	$.fn.pagerControl = function(datasource) {
 		$(this).addClass("tool").find("button").click(function() {
 			var method = $(this).data("page");
 			datasource[method]();
@@ -158,9 +158,9 @@
 			source: developers
 		});
 		
-		$("#filterDevelopers").filter(developers);
-		$("#sortDevelopers").sorter(developers);
-		$("#pageDevelopers").pager(developers);
+		$("#filterDevelopers").filterControl(developers);
+		$("#sortDevelopers").sorterControl(developers);
+		$("#pageDevelopers").pagerControl(developers);
 		
 		// A similar example...but with server integration and remote queries.
 		var movies = $.dataSource($.extend({}, $.dataSource.oDataSettings, {
@@ -172,9 +172,9 @@
 			source: movies
 		});
 
-		$("#filterMovies").filter(movies);
-		$("#sortMovies").sorter(movies);
-		$("#pageMovies").pager(movies);
+		$("#filterMovies").filterControl(movies);
+		$("#sortMovies").sorterControl(movies);
+		$("#pageMovies").pagerControl(movies);
 	});
 	</script>
 	
