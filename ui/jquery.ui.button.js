@@ -201,8 +201,30 @@ $.widget( "ui.button", {
 		if ( this.type === "checkbox" || this.type === "radio" ) {
 			// we don't search against the document in case the element
 			// is disconnected from the DOM
+			var label = "label[for=" + this.element.attr("id") + "]";
+			// in most cases there is a shared ancestor
 			this.buttonElement = this.element.parents().last()
-				.find( "label[for=" + this.element.attr("id") + "]" );
+				.find( label );
+			// if not, maybe the label is an "cousin"
+			if (!this.buttonElement.is( label )) {
+				this.buttonElement = this.element.parents().last()
+					.siblings().find( label );
+			}
+			// if not, maybe the label is an "uncle"
+			if (!this.buttonElement.is( label )) {
+				this.buttonElement = this.element.parents().last()
+					.siblings().andSelf().filter( label );
+			}
+			// if not, maybe the label is a "nephew"
+			if (!this.buttonElement.is( label )) {
+				this.buttonElement = this.element
+					.siblings().find( label );
+			}
+			// if not, maybe the label is a sibling (without a parent)
+			if (!this.buttonElement.is( label )) {
+				this.buttonElement = this.element
+					.siblings().filter( label );
+			}
 			this.element.addClass( "ui-helper-hidden-accessible" );
 
 			var checked = this.element.is( ":checked" );
