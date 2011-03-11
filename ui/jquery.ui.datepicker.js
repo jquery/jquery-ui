@@ -656,7 +656,9 @@ $.extend(Datepicker.prototype, {
 				}
 			};
 			inst.dpDiv.zIndex($(input).zIndex()+1);
-			if ($.effects && $.effects[showAnim])
+
+			// DEPRECATED: after BC for 1.8.x $.effects[ showAnim ] is not needed
+			if ( $.effects && ( $.effects.effect[ showAnim ] || $.effects[ showAnim ] ) )
 				inst.dpDiv.show(showAnim, $.datepicker._get(inst, 'showOptions'), duration, postProcess);
 			else
 				inst.dpDiv[showAnim || 'show']((showAnim ? duration : null), postProcess);
@@ -781,7 +783,9 @@ $.extend(Datepicker.prototype, {
 				$.datepicker._tidyDialog(inst);
 				this._curInst = null;
 			};
-			if ($.effects && $.effects[showAnim])
+
+			// DEPRECATED: after BC for 1.8.x $.effects[ showAnim ] is not needed
+			if ( $.effects && ( $.effects.effect[ showAnim ] || $.effects[ showAnim ] ) )
 				inst.dpDiv.hide(showAnim, $.datepicker._get(inst, 'showOptions'), duration, postProcess);
 			else
 				inst.dpDiv[(showAnim == 'slideDown' ? 'slideUp' :
