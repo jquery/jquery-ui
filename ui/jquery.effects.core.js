@@ -543,11 +543,11 @@ $.fn.extend({
 		if ( $.fx.off || ! ( effectMethod || oldEffectMethod ) ) {
 			// delegate to the original method (e.g., .show()) if possible
 			if ( mode ) {
-				return this[ mode ]( args.duration, args.callback );
+				return this[ mode ]( args.duration, args.complete );
 			} else {
 				return this.each( function() {
-					if ( args.callback ) {
-						args.callback.call( this );
+					if ( args.complete ) {
+						args.complete.call( this );
 					}
 				});
 			}
