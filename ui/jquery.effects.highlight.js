@@ -12,7 +12,7 @@
  */
 (function( $, undefined ) {
 
-$.effects.highlight = function( o ) {
+$.effects.effect.highlight = function( o ) {
 	return this.queue( function() {
 		var elem = $( this ),
 			props = [ 'backgroundImage', 'backgroundColor', 'opacity' ],

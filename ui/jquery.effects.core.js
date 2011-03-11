@@ -9,8 +9,12 @@
  */
 ;jQuery.effects || (function($, undefined) {
 
-$.effects = {};
+var  BC = $.uiBackCompat !== false;
 
+$.effects = {
+	// contains effects 1.9+ API effect functions
+	effect: {}
+};
 /******************************************************************************/
 /****************************** COLOR ANIMATIONS ******************************/
 /******************************************************************************/
@@ -493,7 +497,7 @@ function standardSpeed( speed ) {
 	}
 	
 	// invalid strings - treat as "normal" speed
-	if ( typeof speed === "string" && !$.effects[ speed ] ) {
+	if ( typeof speed === "string" && ! ( $.effects.effect[ speed ] || BC && $.effects[ speed ] ) ) {
 		return true;
 	}
 	
@@ -504,9 +508,12 @@ $.fn.extend({
 	effect: function( effect, options, speed, callback ) {
 		var args = _normalizeArguments.apply( this, arguments ),
 			mode = args.mode,
-			effectMethod = $.effects[ args.effect ];
-		
-		if ( $.fx.off || !effectMethod ) {
+			effectMethod = $.effects.effect[ args.effect ],
+
+			// DEPRECATED: Pre 1.9 API - effect functions existed in $.effects
+			oldEffectMethod = !effectMethod && BC && $.effects[ args.effect ];
+
+		if ( $.fx.off || ! ( effectMethod || oldEffectMethod ) ) {
 			// delegate to the original method (e.g., .show()) if possible
 			if ( mode ) {
 				return this[ mode ]( args.duration, args.complete );
@@ -518,7 +525,20 @@ $.fn.extend({
 				});
 			}
 		}
-		return effectMethod.call( this, args );
+
+		// DEPRECATED: effectMethod will always be true once BC is removed
+		if ( effectMethod ) {
+			return effectMethod.call( this, args );			
+		} else {
+
+			// DEPRECATED: convert back to old format
+			return oldEffectMethod.call(this, { 
+				options: args,
+				duration: args.duration,
+				callback: args.complete,
+				mode: args.mode
+			});
+		}
 	},
 
 	_show: $.fn.show,

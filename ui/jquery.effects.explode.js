@@ -12,7 +12,7 @@
  */
 (function( $, undefined ) {
 
-$.effects.explode = function( o ) {
+$.effects.effect.explode = function( o ) {
 
 	return this.queue( function( next ) {
 

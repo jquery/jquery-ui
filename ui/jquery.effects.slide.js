@@ -12,7 +12,7 @@
  */
 (function( $, undefined ) {
 
-$.effects.slide = function( o ) {
+$.effects.effect.slide = function( o ) {
 
 	return this.queue( function() {
 
