@@ -14,7 +14,7 @@
 
 $.effects.effect.explode = function( o ) {
 
-	return this.queue( function() {
+	return this.queue( function( next ) {
 
 		var rows = o.pieces ? Math.round(Math.sqrt(o.pieces)) : 3,
 			cells = rows,
@@ -24,12 +24,14 @@ $.effects.effect.explode = function( o ) {
 			mode = el.setMode( o.mode || 'hide' ),
 			offset = el.offset(),
 			width = el.outerWidth( true ),
-			height = el.outerHeight( true );
+			height = el.outerHeight( true ),
+			peices = [];
 
 		//Substract the margins - not fixing the problem yet.
 		offset.top -= parseInt( el.css( "marginTop" ), 10 ) || 0;
 		offset.left -= parseInt( el.css( "marginLeft" ), 10 ) || 0;
 
+		// clone the element for each row and cell.
 		for( var i = 0; i < rows ; i++ ) { // =
 			for( var j = 0; j < cells ; j++ ) { // ||
 				el
@@ -56,23 +58,29 @@ $.effects.effect.explode = function( o ) {
 						left: offset.left + j*(width/cells) + (o.mode == 'show' ? 0 : (j-Math.floor(cells/2))*(width/cells)),
 						top: offset.top + i*(height/rows) + (o.mode == 'show' ? 0 : (i-Math.floor(rows/2))*(height/rows)),
 						opacity: mode == 'show' ? 1 : 0
-					}, o.duration || 500);
+					}, o.duration || 500, childComplete );
 			}
 		}
 
-		// Set a timeout, to call the callback approx. when the other animations have finished
-		setTimeout(function() {
+		// children animate complete:
+		function childComplete() {
+			peices.push( this );
+			if ( peices.length == rows * cells ) {
+				animComplete();
+			}
+		}
 
+		function animComplete() {
 			el.css({ visibility: 'visible' });
-			mode != 'show' && el.hide();
-			$.isFunction( o.complete ) && o.complete.apply( el[ 0 ] );
-			el.dequeue();
-
-			// Note: This is removing all exploding peices from the dom, rather than the ones for this animation only... Ticket# 6022
-			$('div.ui-effects-explode').remove();
-		}, o.duration || 500);
-
-
+			$( peices ).remove();
+			if ( mode != 'show' ) {
+				el.hide();
+			}
+			if ( $.isFunction( o.complete ) ) {
+				o.complete.apply( el[ 0 ] );
+			}
+			next();
+		}
 	});
 
 };
