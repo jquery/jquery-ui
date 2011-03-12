@@ -28,21 +28,19 @@ $.effects.explode = function( o ) {
 			// width and height of a piece
 			width = Math.ceil( el.outerWidth() / cells ),
 			height = Math.ceil( el.outerHeight() / rows ),
-			peices = [],
-			i, j, pos;
+			pieces = [],
+
+			// loop
+			i, j, left, top, mx, my;
 
 		// clone the element for each row and cell.
 		for( i = 0; i < rows ; i++ ) { // ===>
-			for( j = 0; j < cells ; j++ ) { // |||
-				pos = {
-					// wrapper base position in body
-					left: offset.left + j * width,
-					top: offset.top + i * height,
+			top = offset.top + i * height;
+			my = i - ( rows - 1 ) / 2 ;
 
-					// x position in matrix with 0,0 at the center
-					rx: j - cells / 2,
-					ry: i - rows / 2
-				};
+			for( j = 0; j < cells ; j++ ) { // |||
+				left = offset.left + j * width;
+				mx = j - ( cells - 1 ) / 2 ;
 
 				// Create a clone of the now hidden main element that will be absolute positioned
 				// within a wrapper div off the -left and -top equal to size of our pieces
@@ -66,12 +64,12 @@ $.effects.explode = function( o ) {
 						overflow: 'hidden',
 						width: width,
 						height: height,
-						left: pos.left + ( show ? pos.rx * width : 0 ),
-						top: pos.top + ( show ? pos.ry * height : 0 ),
+						left: left + ( show ? mx * width : 0 ),
+						top: top + ( show ? my * height : 0 ),
 						opacity: show ? 0 : 1
 					}).animate({
-						left: pos.left + ( show ? 0 : pos.rx * width ),
-						top: pos.top + ( show ? 0 : pos.ry * height ),
+						left: left + ( show ? 0 : mx * width ),
+						top: top + ( show ? 0 : my * height ),
 						opacity: show ? 1 : 0
 					}, o.duration || 500, o.easing, childComplete );
 			}
@@ -79,8 +77,8 @@ $.effects.explode = function( o ) {
 
 		// children animate complete:
 		function childComplete() {
-			peices.push( this );
-			if ( peices.length == rows * cells ) {
+			pieces.push( this );
+			if ( pieces.length == rows * cells ) {
 				animComplete();
 			}
 		}
@@ -89,7 +87,7 @@ $.effects.explode = function( o ) {
 			el.css({
 				visibility: 'visible'
 			});
-			$( peices ).remove();
+			$( pieces ).remove();
 			if ( !show ) {
 				el.hide();
 			}
