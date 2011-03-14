@@ -200,7 +200,7 @@ $.widget( "ui.button", {
 		if ( this.type === "checkbox" || this.type === "radio" ) {
 			// we don't search against the document in case the element
 			// is disconnected from the DOM
-			var ancestor = this.element.parents().last(),
+			var ancestor = this.element.parents().filter(":last"),
 				labelSelector = "label[for=" + this.element.attr("id") + "]";
 			this.buttonElement = ancestor.find( labelSelector );
 			if ( !this.buttonElement.length ) {
