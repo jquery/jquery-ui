@@ -190,11 +190,18 @@ function getElementStyles() {
 // ignore scrollbars (break in IE)
 var rignore = /scrollbar|Origin/,
 	rcolor = /[Cc]olor/,
-	rcssstyles = /border.*Style/;
+	rcssstyles = /border.*Style/,
+
+	// prefix used for storing data on .data()
+	dataSpace = "ec.storage.";
 
 function styleDifference( oldStyle, newStyle ) {
 	var diff = {
+
+			// properties that can be animated
 			animate: {},
+
+			// properties that should be set pre-anim using CSS
 			css: {}
 		},
 		name, value;
@@ -226,7 +233,7 @@ function styleDifference( oldStyle, newStyle ) {
 $.effects.animateClass = function( value, duration, easing, callback ) {
 	var o = $.speed( duration, easing, callback );
 
-	return this.queue( 'fx', function(next) {
+	return this.queue( function( next ) {
 		var animated = $( this ),
 			baseClass = animated.attr( 'className' ),
 			finalClass,
@@ -270,26 +277,33 @@ $.effects.animateClass = function( value, duration, easing, callback ) {
 								dfd.resolve(that);
 						}
 					})
-					.data( 'ec.storage.originalStyle', originalStyleAttr );
+					.data( dataSpace + 'originalStyle', originalStyleAttr );
 				return dfd.promise();
 			}).get();
-		// will get passed the $( el ) for each animated element once all are complete
+
 		function allDone() {
 			animated.attr( 'className', finalClass );
 
-			// work around bug in IE by clearing the cssText before setting it
+			// the deferreds resolve using their "that" so, each argument should be
+			// a $( this ) for an animated element.
 			$.each( arguments, function(i, that) {
+
+				// work around bug in IE by clearing the cssText before setting it
 				if ( typeof that.attr( 'style' ) == 'object' ) {
 					that.attr( 'style' ).cssText = '';
-					that.attr( 'style' ).cssText = that.data( 'ec.storage.originalStyle' );
+					that.attr( 'style' ).cssText = that.data( dataSpace + 'originalStyle' );
 				} else {
-					that.attr( 'style', that.data( 'ec.storage.originalStyle' ) );
+					that.attr( 'style', that.data( dataSpace + 'originalStyle' ) );
 				}
-				that.removeData( 'ec.storage.originalStyle' );
+				that.removeData( dataSpace + 'originalStyle' );
 			});
 		}
 
-		$.when.apply( $, promised ).then([ allDone, complete, next ]);
+		$.when.apply( $, promised ).then([ 
+			allDone,
+			complete,
+			next 
+		]);
 	});
 };
 
@@ -344,7 +358,7 @@ $.extend( $.effects, {
 	save: function( element, set ) {
 		for( var i=0; i < set.length; i++ ) {
 			if ( set[ i ] !== null ) {
-				element.data( "ec.storage." + set[ i ], element[ 0 ].style[ set[ i ] ] );
+				element.data( dataSpace + set[ i ], element[ 0 ].style[ set[ i ] ] );
 			}
 		}
 	},
@@ -353,7 +367,7 @@ $.extend( $.effects, {
 	restore: function( element, set ) {
 		for( var i=0; i < set.length; i++ ) {
 			if ( set[ i ] !== null ) {
-				element.css( set[ i ], element.data( "ec.storage." + set[ i ] ) );
+				element.css( set[ i ], element.data( dataSpace + set[ i ] ) );
 			}
 		}
 	},
