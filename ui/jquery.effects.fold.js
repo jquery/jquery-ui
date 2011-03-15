@@ -12,7 +12,7 @@
  */
 (function( $, undefined ) {
 
-$.effects.fold = function( o ) {
+$.effects.effect.fold = function( o ) {
 
 	return this.queue( function() {
 

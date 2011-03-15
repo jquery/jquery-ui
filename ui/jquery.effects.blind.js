@@ -12,7 +12,7 @@
  */
 (function( $, undefined ) {
 
-$.effects.blind = function( o ) {
+$.effects.effect.blind = function( o ) {
 
 	return this.queue( function() {
 

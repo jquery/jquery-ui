@@ -12,7 +12,7 @@
  */
 (function( $, undefined ) {
 
-$.effects.shake = function( o ) {
+$.effects.effect.shake = function( o ) {
 
 	return this.queue( function() {
 

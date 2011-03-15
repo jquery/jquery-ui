@@ -12,7 +12,7 @@
  */
 (function( $, undefined ) {
 
-$.effects.pulsate = function( o ) {
+$.effects.effect.pulsate = function( o ) {
 	return this.queue( function() {
 		var elem = $( this ),
 			mode = $.effects.setMode( elem, o.mode || 'show' ),

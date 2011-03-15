@@ -12,7 +12,7 @@
  */
 (function( $, undefined ) {
 
-$.effects.drop = function( o ) {
+$.effects.effect.drop = function( o ) {
 
 	return this.queue( function() {
 

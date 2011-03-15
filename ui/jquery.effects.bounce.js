@@ -14,7 +14,7 @@
 
 var rshowhide = /show|hide/;
 
-$.effects.bounce = function(o) {
+$.effects.effect.bounce = function(o) {
 
 	return this.queue(function() {
 

@@ -12,7 +12,7 @@
  */
 (function( $, undefined ) {
 
-$.effects.clip = function( o ) {
+$.effects.effect.clip = function( o ) {
 
 	return this.queue( function() {
 
