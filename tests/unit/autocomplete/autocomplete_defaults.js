@@ -4,7 +4,7 @@
 
 var autocomplete_defaults = {
 	appendTo: "body",
-	autoFocus: false,
+	autoFocus: true,
 	delay: 300,
 	disabled: false,
 	minLength: 1,

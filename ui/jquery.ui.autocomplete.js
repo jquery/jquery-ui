@@ -22,7 +22,7 @@ $.widget( "ui.autocomplete", {
 	defaultElement: "<input>",
 	options: {
 		appendTo: "body",
-		autoFocus: false,
+		autoFocus: true,
 		delay: 300,
 		minLength: 1,
 		position: {

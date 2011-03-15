@@ -14,6 +14,7 @@ var data = ["c++", "java", "php", "coldfusion", "javascript", "asp", "ruby", "py
 test("all events", function() {
 	expect(12);
 	var ac = $("#autocomplete").autocomplete({
+		autoFocus: false,
 		delay: 0,
 		source: data,
 		search: function(event) {
@@ -56,6 +57,7 @@ test("all events", function() {
 test("all events - contenteditable", function() {
 	expect(12);
 	var ac = $("#autocomplete-contenteditable").autocomplete({
+		autoFocus: false,
 		delay: 0,
 		source: data,
 		search: function(event) {

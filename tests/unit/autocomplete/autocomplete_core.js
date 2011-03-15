@@ -60,6 +60,7 @@ test( "prevent form submit on enter when menu is active", function() {
 test( "allow form submit on enter when menu is not active", function() {
 	var event;
 	var ac = $( "#autocomplete" ).autocomplete({
+		autoFocus: false,
 		source: [ "java", "javascript" ]
 	}).val( "ja" ).autocomplete( "search" );
 	
