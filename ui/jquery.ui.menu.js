@@ -34,14 +34,19 @@ $.widget("ui.menu", {
 				role: "listbox"
 			})
 			.bind( "click.menu", function( event ) {
+				var item = $( event.target ).closest( ".ui-menu-item:has(a)" );
 				if ( self.options.disabled ) {
 					return false;
 				}
-				if ( !$( event.target ).closest( ".ui-menu-item a" ).length ) {
+				if ( !item.length ) {
 					return;
 				}
 				// temporary
 				event.preventDefault();
+				// it's possible to click an item without hovering it (#7085)
+				if ( !self.active || ( self.active[ 0 ] !== item[ 0 ] ) ) {
+					self.focus( event, item );
+				}
 				self.select( event );
 			})
 			.bind( "mouseover.menu", function( event ) {
@@ -102,7 +107,7 @@ $.widget("ui.menu", {
 				event.preventDefault();
 				break;
 			case $.ui.keyCode.ENTER:
-				self.select();
+				self.select( event );
 				event.preventDefault();
 				event.stopImmediatePropagation();
 				break;
