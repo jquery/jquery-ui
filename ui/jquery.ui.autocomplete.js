@@ -20,6 +20,7 @@ var requestIndex = 0;
 $.widget( "ui.autocomplete", {
 	options: {
 		appendTo: "body",
+		autoFocus: false,
 		delay: 300,
 		minLength: 1,
 		position: {
@@ -358,6 +359,10 @@ $.widget( "ui.autocomplete", {
 		// TODO refresh should check if the active item is still in the dom, removing the need for a manual deactivate
 		this.menu.deactivate();
 		this.menu.refresh();
+
+		if ( this.options.autoFocus ) {
+			this.menu.next( new $.Event("mouseover") );
+		}
 
 		// size and position menu
 		ul.show();
