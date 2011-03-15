@@ -97,6 +97,33 @@ test( "appendTo", function() {
 	ac.autocomplete( "destroy" );
 });
 
+test( "autoFocus: false", function() {
+	var ac = $( "#autocomplete" ).autocomplete({
+		autoFocus: false,
+		delay: 0,
+		source: data,
+		open: function( event, ui ) {
+			equals( 0, ac.autocomplete( "widget" ).children( ".ui-menu-item:first .ui-state-focus" ).length, "first item is not auto focused" );
+			start();			
+		}
+	});
+	ac.val( "ja" ).keydown();
+	stop();
+});
+
+test( "autoFocus: true", function() {
+	var ac = $( "#autocomplete" ).autocomplete({
+		autoFocus: true,
+		delay: 0,
+		source: data,
+		open: function( event, ui ) {
+			equals( 1, ac.autocomplete( "widget" ).children( ".ui-menu-item:first .ui-state-focus" ).length, "first item is auto focused" );
+			start();			
+		}
+	});
+	ac.val( "ja" ).keydown();
+	stop();
+});
 
 test("delay", function() {
 	var ac = $("#autocomplete").autocomplete({
