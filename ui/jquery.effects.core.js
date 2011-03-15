@@ -9,7 +9,7 @@
  */
 ;jQuery.effects || (function($, undefined) {
 
-var	BC = $.uiBackCompat !== false;
+var backCompat = $.uiBackCompat !== false;
 
 $.effects = {
 	$: $.sub(),
@@ -523,7 +523,11 @@ function standardSpeed( speed ) {
 	}
 	
 	// invalid strings - treat as "normal" speed
-	if ( typeof speed === "string" && ! ( $.effects.effect[ speed ] || BC && $.effects[ speed ] ) ) {
+	if ( typeof speed === "string" && !$.effects.effect[ speed ] ) {
+		// TODO: remove in 2.0 (#7115)
+		if ( backCompat && $.effects[ speed ] ) {
+			return false;
+		}
 		return true;
 	}
 	
@@ -536,10 +540,10 @@ $.fn.extend({
 			mode = args.mode,
 			effectMethod = $.effects.effect[ args.effect ],
 
-			// DEPRECATED: Pre 1.9 API - effect functions existed in $.effects
-			oldEffectMethod = !effectMethod && BC && $.effects[ args.effect ];
+			// DEPRECATED: remove in 2.0 (#7115)
+			oldEffectMethod = !effectMethod && backCompat && $.effects[ args.effect ];
 
-		if ( $.fx.off || ! ( effectMethod || oldEffectMethod ) ) {
+		if ( $.fx.off || !( effectMethod || oldEffectMethod ) ) {
 			// delegate to the original method (e.g., .show()) if possible
 			if ( mode ) {
 				return this[ mode ]( args.duration, args.complete );
@@ -552,13 +556,12 @@ $.fn.extend({
 			}
 		}
 
-		// DEPRECATED: effectMethod will always be true once BC is removed
+		// TODO: remove this check in 2.0, effectMethod will always be true
 		if ( effectMethod ) {
-			return effectMethod.call( this, args );			
+			return effectMethod.call( this, args );
 		} else {
-
-			// DEPRECATED: convert back to old format
-			return oldEffectMethod.call(this, { 
+			// DEPRECATED: remove in 2.0 (#7115)
+			return oldEffectMethod.call(this, {
 				options: args,
 				duration: args.duration,
 				callback: args.complete,

@@ -22,7 +22,9 @@
 			top: 10
 		}).appendTo(document.body).themeswitcher();
 		
-		$(".menubar").menubar({
+		$("td:has(.menubar)").clone().appendTo("tbody tr:not(:first)");
+		
+		$("#bar1, .menubar").menubar({
 			select: function(event, ui) {
 				$("<div/>").text("Selected: " + ui.item.text()).appendTo("#log");
 			}
@@ -35,13 +37,11 @@
 				$("<div/>").text("Selected: " + ui.item.text()).appendTo("#log");
 			}
 		});
-		
-		
 	});
 	</script>
 	<style type="text/css">
 		body { font-size:62.5%; }
-		.menubar { margin: 0 0 4em; } /* style for this page only */
+		#bar1, #bar2 { margin: 0 0 4em; } /* style for this page only */
 		.ui-menu { width: 200px; position: absolute; outline: none; z-index: 9999; }
 		.ui-menu .ui-icon { float: right; }
 		.ui-menu li.ui-state-disabled {
@@ -55,12 +55,18 @@
 		.ui-menubar .ui-button { float: left; font-weight: normal; border-top-width: 0 !important; border-bottom-width: 0 !important; margin: 0; }
 		.ui-menubar .ui-menubar-link { border-right: 1px dashed transparent; border-left: 1px dashed transparent; }
 		
-		
-	</style>
+		table {
+			border-collapse: collapse;
+		}
+		th, td {
+			padding: 0.5em;
+			border: 1px solid black;
+		}
+ 	</style>
 </head>
 <body>
 
-<div class="menubar">
+<div id="bar1" class="menubar">
 	<a href="#">File</a>
 	<ul>
 		<li><a href="#">Open...</a></li>
@@ -100,7 +106,7 @@
 	</ul>
 </div>
 
-<div class="menubar-icons">
+<div id="bar2" class="menubar-icons">
 	<a href="#">File</a>
 	<ul>
 		<li><a href="#">Open...</a></li>
@@ -139,6 +145,59 @@
 		<li><a href="#">Customize...</a></li>
 	</ul>
 </div>
+
+<table id="movies" class="ui-widget">
+	<thead>
+		<tr>
+			<th data-field="Name" class="ui-widget-header">Name</th>
+			<th data-field="ReleaseYear" class="ui-widget-header">Release Year</th>
+			<th data-field="AverageRating" class="ui-widget-header">Average Rating</th>
+			<th class="ui-widget-header"></th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td class="ui-widget-content">Red Hot Chili Peppers: Funky Monks</td>
+			<td class="ui-widget-content">1993</td>
+			<td class="ui-widget-content">3.6</td>
+			<td class="ui-widget-content">
+				<div class="menubar">
+					<a href="#">Options</a>
+					<ul>
+						<li><a href="#">Order...</a></li>
+						<li class="ui-state-disabled">Write a Review...</li>
+						<li><a href="#">Find Similar Movies...</a></li>
+						<li>
+							<a href="#">Rate</a>
+							<ul>
+								<li><a href="#">5 stars</a></li>
+								<li><a href="#">4 stars</a></li>
+								<li><a href="#">3 stars</a></li>
+								<li><a href="#">2 stars</a></li>
+								<li><a href="#">1 stars</a></li>
+							</ul>
+						</li>
+					</ul>
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<td class="ui-widget-content">Rod Stewart: Storyteller 1984-1991</td>
+			<td class="ui-widget-content">1991</td>
+			<td class="ui-widget-content">3.1</td>
+		</tr>
+		<tr>
+			<td class="ui-widget-content">Stevie Ray Vaughan and Double Trouble: Live at the El Mocambo 1983</td>
+			<td class="ui-widget-content">1991</td>
+			<td class="ui-widget-content">3.9</td>
+		</tr>
+		<tr>
+			<td class="ui-widget-content">Spike and Mike's Sick &amp; Twisted Festival of Animation</td>
+			<td class="ui-widget-content">1997</td>
+			<td class="ui-widget-content">2.6</td>
+		</tr>
+	</tbody>
+</table>
 
 <div class="ui-widget" style="margin-top:2em; font-family:Arial">
 	Log:
