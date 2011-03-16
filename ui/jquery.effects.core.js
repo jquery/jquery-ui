@@ -237,14 +237,12 @@ function styleDifference( oldStyle, newStyle ) {
 $.effects.animateClass = function( value, duration, easing, callback ) {
 	var o = $.speed( duration, easing, callback );
 
-	return this.queue( function( next ) {
+	return this.queue( function() {
 		var animated = $( this ),
 			baseClass = animated.attr( 'className' ),
 			finalClass,
-			complete = $.isFunction( o.complete ) && $.proxy( o.complete, this ),
 			originalStyleAttr = animated.attr( 'style' ) || ' ',
 			originalStyle = getElementStyles.call( this ),
-			dfd = $.Deferred(),
 			newStyle,
 			diff,
 			prop;
@@ -266,27 +264,21 @@ $.effects.animateClass = function( value, duration, easing, callback ) {
 				easing: o.easing,
 				queue: false,
 				complete: function() {
-						dfd.resolve();
+					animated.attr( 'className', finalClass );
+
+					if ( typeof animated.attr( 'style' ) == 'object' ) {
+						animated.attr( 'style' ).cssText = '';
+						animated.attr( 'style' ).cssText = originalStyleAttr;
+					} else {
+						animated.attr( 'style', originalStyleAttr );
+					}
+
+					// this is guarnteed to be there if you use jQuery.speed()
+					// it also handles dequeuing the next anim...
+					o.complete.call( this );
 				}
 			});
 
-		function done() {
-			animated.attr( 'className', finalClass );
-
-			if ( typeof animated.attr( 'style' ) == 'object' ) {
-				animated.attr( 'style' ).cssText = '';
-				animated.attr( 'style' ).cssText = originalStyleAttr;
-			} else {
-				animated.attr( 'style', originalStyleAttr );
-			}
-
-		}
-
-		$.when( dfd ).then([ 
-			done,
-			complete,
-			next 
-		]);
 	});
 };
 
@@ -315,7 +307,7 @@ $.fn.extend({
 				return $.effects.animateClass.apply( this, [( force ? { add:classNames } : { remove:classNames }), speed, easing, callback ]);
 			}
 		} else {
-			// without switch parameter;
+			// without force parameter;
 			return $.effects.animateClass.apply( this, [{ toggle: classNames }, force, speed, easing ]);
 		}
 	},
