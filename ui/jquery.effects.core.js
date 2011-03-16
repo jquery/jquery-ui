@@ -191,37 +191,43 @@ function getElementStyles() {
 	return newStyle;
 }
 
-function filterStyles( styles ) {
-	var name, value;
-	for ( name in styles ) {
-		value = styles[ name ];
-		if (
-			// ignore null and undefined values
-			value == null ||
-			// ignore functions (when does this occur?)
-			$.isFunction( value ) ||
-			// shorthand styles that need to be expanded
-			name in shorthandStyles ||
-			// ignore scrollbars (break in IE)
-			( /scrollbar/ ).test( name ) ||
+// ignore scrollbars (break in IE)
+var rignore = /scrollbar|Origin/,
+	rcolor = /[Cc]olor/,
+	rcssstyles = /border.*Style/,
 
-			// only colors or values that can be converted to numbers
-			( !( /color/i ).test( name ) && isNaN( parseFloat( value ) ) )
-		) {
-			delete styles[ name ];
-		}
-	}
-	
-	return styles;
-}
+	// prefix used for storing data on .data()
+	dataSpace = "ec.storage.";
 
 function styleDifference( oldStyle, newStyle ) {
-	var diff = { _: 0 }, // http://dev.jquery.com/ticket/5459
-		name;
+	var diff = {
+
+			// properties that can be animated
+			animate: {},
+
+			// properties that should be set pre-anim using CSS
+			css: {}
+		},
+		name, value;
 
 	for ( name in newStyle ) {
-		if ( oldStyle[ name ] != newStyle[ name ] ) {
-			diff[ name ] = newStyle[ name ];
+		value = newStyle[ name ];
+		if ( oldStyle[ name ] != value ) {
+			if (
+				// ignore null and undefined values
+				value == null ||
+				// ignore functions (when does this occur?)
+				$.isFunction( value ) ||
+				// shorthand styles that need to be expanded
+				name in shorthandStyles ||
+				rignore.test( name )
+			) {
+				// do nothing 
+			} else if ( rcolor.test( name ) || !isNaN( parseFloat( value ) ) ) {
+				diff.animate[ name ] = value;
+			} else if ( rcssstyles.test( name ) && value != 'none' ) {
+				diff.css[ name ] = value;
+			}
 		}
 	}
 
@@ -229,50 +235,58 @@ function styleDifference( oldStyle, newStyle ) {
 }
 
 $.effects.animateClass = function( value, duration, easing, callback ) {
-	if ( $.isFunction( easing ) ) {
-		callback = easing;
-		easing = null;
-	}
+	var o = $.speed( duration, easing, callback );
 
-	return this.queue( 'fx', function() {
-		var that = $( this ),
-			originalStyleAttr = that.attr( 'style' ) || ' ',
-			originalStyle = filterStyles( getElementStyles.call( this ) ),
+	return this.queue( function( next ) {
+		var animated = $( this ),
+			baseClass = animated.attr( 'className' ),
+			finalClass,
+			complete = $.isFunction( o.complete ) && $.proxy( o.complete, this ),
+			originalStyleAttr = animated.attr( 'style' ) || ' ',
+			originalStyle = getElementStyles.call( this ),
+			dfd = $.Deferred(),
 			newStyle,
-			className = that.attr( 'className' );
+			diff,
+			prop;
 
 		$.each( classAnimationActions, function(i, action) {
 			if ( value[ action ] ) {
-				that[ action + 'Class' ]( value[ action ] );
+				animated[ action + 'Class' ]( value[ action ] );
 			}
 		});
-		newStyle = filterStyles( getElementStyles.call( this ) );
-		that.attr( 'className', className );
+		newStyle = getElementStyles.call( this );
+		finalClass = animated.attr( 'className' );
+		animated.attr( 'className', baseClass );
 
-		that.animate( styleDifference( originalStyle, newStyle ), duration, easing, function() {
-			$.each( classAnimationActions, function( i, action ) {
-				if ( value[ action ] ) { 
-					that[ action + 'Class' ]( value[ action ] );
+		diff = styleDifference( originalStyle, newStyle );
+		animated
+			.css( diff.css )
+			.animate( diff.animate , {
+				duration: duration,
+				easing: o.easing,
+				queue: false,
+				complete: function() {
+						dfd.resolve();
 				}
 			});
-			// work around bug in IE by clearing the cssText before setting it
-			if ( typeof that.attr( 'style' ) == 'object' ) {
-				that.attr( 'style' ).cssText = '';
-				that.attr( 'style' ).cssText = originalStyleAttr;
-			} else {
-				that.attr( 'style', originalStyleAttr );
-			}
-			if ( callback ) { 
-				callback.apply( this, arguments );
-			}
-		});
 
-		// $.animate adds a function to the end of the queue
-		// but we want it at the front
-		var queue = $.queue( this ),
-			anim = queue.splice( queue.length - 1, 1 )[ 0 ];
-		queue.splice( 1, 0, anim );
-		$.dequeue( this );
+		function done() {
+			animated.attr( 'className', finalClass );
+
+			if ( typeof animated.attr( 'style' ) == 'object' ) {
+				animated.attr( 'style' ).cssText = '';
+				animated.attr( 'style' ).cssText = originalStyleAttr;
+			} else {
+				animated.attr( 'style', originalStyleAttr );
+			}
+
+		}
+
+		$.when( dfd ).then([ 
+			done,
+			complete,
+			next 
+		]);
 	});
 };
 
@@ -327,7 +341,7 @@ $.extend( $.effects, {
 	save: function( element, set ) {
 		for( var i=0; i < set.length; i++ ) {
 			if ( set[ i ] !== null ) {
-				element.data( "ec.storage." + set[ i ], element[ 0 ].style[ set[ i ] ] );
+				element.data( dataSpace + set[ i ], element[ 0 ].style[ set[ i ] ] );
 			}
 		}
 	},
@@ -336,7 +350,7 @@ $.extend( $.effects, {
 	restore: function( element, set ) {
 		for( var i=0; i < set.length; i++ ) {
 			if ( set[ i ] !== null ) {
-				element.css( set[ i ], element.data( "ec.storage." + set[ i ] ) );
+				element.css( set[ i ], element.data( dataSpace + set[ i ] ) );
 			}
 		}
 	},
