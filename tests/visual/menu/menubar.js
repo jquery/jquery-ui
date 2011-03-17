@@ -14,6 +14,7 @@ $.widget("ui.menubar", {
 	_create: function() {
 		var self = this;
 		var items = this.items = this.element.children("button, a");
+		items.slice(1).attr("tabIndex", -1);
 		var o = this.options;
 				
 		this.element.addClass('ui-menubar ui-widget-header ui-helper-clearfix');
@@ -32,19 +33,16 @@ $.widget("ui.menubar", {
 				event.stopPropagation();
 				switch (event.keyCode) {
 				case $.ui.keyCode.LEFT:
-					self.left(event);
+					self._left(event);
 					event.preventDefault();
 					break;
 				case $.ui.keyCode.RIGHT:
-					self.right(event);
+					self._right(event);
 					event.preventDefault();
 					break;
 				};
 			}).blur(function() {
-				$(this).hide().prev().removeClass("ui-state-active").removeAttr("tabIndex");
-				self.timer = setTimeout(function() {
-					self.open = false;
-				}, 13);
+				self._close();
 			});
 		});
 		items.each(function() {
@@ -64,9 +62,18 @@ $.widget("ui.menubar", {
    			})
 			.bind( "keydown", function( event ) {
 				switch ( event.keyCode ) {
+				case $.ui.keyCode.SPACE:
 				case $.ui.keyCode.UP:
 				case $.ui.keyCode.DOWN:
 					self._open( event, $( this ).next() );
+					event.preventDefault();
+					break;
+				case $.ui.keyCode.LEFT:
+					self._prev( event, $( this ) );
+					event.preventDefault();
+					break;
+				case $.ui.keyCode.RIGHT:
+					self._next( event, $( this ) );
 					event.preventDefault();
 					break;
 				}
@@ -86,7 +93,7 @@ $.widget("ui.menubar", {
 		});
 		self._bind(document, {
 			click: function(event) {
-				!$(event.target).closest(".ui-menubar").length && self._close();
+				self.open && !$(event.target).closest(".ui-menubar").length && self._close();
 			}
 		})
 		self._bind({
@@ -103,12 +110,18 @@ $.widget("ui.menubar", {
 	},
 	
 	_close: function() {
-		this.items.next("ul").hide();
-		this.items.removeClass("ui-state-active").removeAttr("tabIndex");
-		this.open = false;
+		this.active.menu("closeAll").hide();
+		this.active.prev().removeClass("ui-state-active").removeAttr("tabIndex");
+		this.active = null;
+		var self = this;
+		// delay for the next focus event to see it as still "open"
+		self.timer = setTimeout(function() {
+			self.open = false;
+		}, 13);
 	},
 	
 	_open: function(event, menu) {
+		// TODO refactor with _close
 		if (this.active) {
 			this.active.menu("closeAll").hide();
 			this.active.prev().removeClass("ui-state-active").removeAttr("tabIndex");
@@ -124,7 +137,27 @@ $.widget("ui.menubar", {
 		}).focus();
 	},
 	
-	left: function(event) {
+	_prev: function( event, button ) {
+		button.attr("tabIndex", -1);
+		var prev = button.prevAll( ".ui-button" ).eq( 0 );
+		if (prev.length) {
+			prev.removeAttr("tabIndex")[0].focus();
+		} else {
+			this.element.children(".ui-button:last").removeAttr("tabIndex")[0].focus();
+		}
+	},
+	
+	_next: function( event, button ) {
+		button.attr("tabIndex", -1);
+		var next =  button.nextAll( ".ui-button" ).eq( 0 );
+		if (next.length) {
+			next.removeAttr("tabIndex")[0].focus();
+		} else {
+			this.element.children(".ui-button:first").removeAttr("tabIndex")[0].focus();
+		}
+	},
+	
+	_left: function(event) {
 		var prev = this.active.prevAll( ".ui-menu" ).eq( 0 );
 		if (prev.length) {
 			this._open(event, prev);
@@ -133,7 +166,7 @@ $.widget("ui.menubar", {
 		}
 	},
 	
-	right: function(event) {
+	_right: function(event) {
 		var next =  this.active.nextAll( ".ui-menu" ).eq( 0 );
 		if (next.length) {
 			this._open(event, next);
