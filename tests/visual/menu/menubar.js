@@ -75,8 +75,17 @@ $.widget("ui.menubar", {
 			};			
 			
 		});
-		$(document).click(function(event) {
-			!$(event.target).closest(".ui-menubar").length && self._close();
+		self._bind(document, {
+			click: function(event) {
+				!$(event.target).closest(".ui-menubar").length && self._close();
+			}
+		})
+		self._bind({
+			keyup: function(event) {
+				if (event.keyCode == $.ui.keyCode.ESCAPE) {
+					self._close();
+				}
+			}
 		});
 	},
 	
