@@ -62,6 +62,15 @@ $.widget("ui.menubar", {
    					self._open(event, menu);
    				}
    			})
+			.bind( "keydown", function( event ) {
+				switch ( event.keyCode ) {
+				case $.ui.keyCode.UP:
+				case $.ui.keyCode.DOWN:
+					self._open( event, $( this ).next() );
+					event.preventDefault();
+					break;
+				}
+			})
 			.addClass("ui-button ui-widget ui-button-text-only ui-menubar-link")
 			.wrapInner("<span class='ui-button-text'></span>");
 			
