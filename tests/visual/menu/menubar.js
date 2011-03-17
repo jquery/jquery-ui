@@ -92,8 +92,10 @@ $.widget("ui.menubar", {
 		self._bind({
 			keyup: function(event) {
 				if (event.keyCode == $.ui.keyCode.ESCAPE) {
-					if (self.active.menu("left") !== true) {
-						self._close();
+					if (self.active.menu("left", event) !== true) {
+						self._close( event );
+						// bypass the focus event handler above
+						self.active.prev()[0].focus();
 					}
 				}
 			}
