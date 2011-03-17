@@ -262,6 +262,8 @@ $.Widget.prototype = {
 			handlers = element;
 			element = this.element;
 		} else {
+			// accept selectors, DOM elements
+			element = $( element );
 			this.bindings = this.bindings.add( element );
 		}
 		var instance = this;
