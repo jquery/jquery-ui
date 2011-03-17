@@ -112,6 +112,12 @@ $.widget("ui.menu", {
 				event.preventDefault();
 				event.stopImmediatePropagation();
 				break;
+			case $.ui.keyCode.ESCAPE:
+				if ( self.left( event ) ) {
+					event.stopImmediatePropagation();
+				}
+				event.preventDefault();
+				break;
 			default:
 				event.stopPropagation();
 				clearTimeout(self.filterTimer);
