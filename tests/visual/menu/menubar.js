@@ -50,13 +50,17 @@ $.widget("ui.menubar", {
 				   menu = input.next("ul");
 			
 			input.bind("click focus mouseenter", function(event) {
+				// ignore triggered focus event
+				if (event.type == "focus" && !event.originalEvent) {
+					return;
+				}
    				event.preventDefault();
    				event.stopPropagation();
 			   	if (menu.is(":visible") && self.active && self.active[0] == menu[0]) {
 					self._close();
 					return;
 				}
-   				if (menu.length && (self.open || event.type == "click")) {
+   				if (self.open || event.type == "click") {
    					self._open(event, menu);
    				}
    			})
@@ -98,11 +102,11 @@ $.widget("ui.menubar", {
 		})
 		self._bind({
 			keyup: function(event) {
-				if (event.keyCode == $.ui.keyCode.ESCAPE) {
+				if (event.keyCode == $.ui.keyCode.ESCAPE && self.open) {
 					if (self.active.menu("left", event) !== true) {
-						self._close( event );
-						// bypass the focus event handler above
-						self.active.prev()[0].focus();
+						var active = self.active;
+						self.active.blur();
+						active.prev().focus();
 					}
 				}
 			}
