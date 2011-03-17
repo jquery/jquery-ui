@@ -127,6 +127,10 @@ $.widget("ui.menubar", {
 	},
 	
 	_open: function(event, menu) {
+		// on a single-button menubar, ignore reopening the same menu
+		if (this.active && this.active[0] == menu[0]) {
+			return;
+		}
 		// almost the same as _close above, but don't remove tabIndex
 		if (this.active) {
 			this.active.menu("closeAll").hide();
