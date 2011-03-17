@@ -56,7 +56,7 @@ $.widget("ui.menubar", {
 				}
    				event.preventDefault();
    				event.stopPropagation();
-			   	if (menu.is(":visible") && self.active && self.active[0] == menu[0]) {
+			   	if (event.type == "click" && menu.is(":visible") && self.active && self.active[0] == menu[0]) {
 					self._close();
 					return;
 				}
