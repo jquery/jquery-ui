@@ -18,6 +18,7 @@ $.widget("ui.menubar", {
 				
 		this.element.addClass('ui-menubar ui-widget-header ui-helper-clearfix');
 		this._focusable(items);
+		this._hoverable(items);
 		items.next("ul").each(function(i, elm) {
 			$(elm).menu({
 				select: function(event, ui) {
@@ -63,7 +64,6 @@ $.widget("ui.menubar", {
    			})
 			.addClass("ui-button ui-widget ui-button-text-only ui-menubar-link")
 			.wrapInner("<span class='ui-button-text'></span>");
-			self._hoverable(input)
 			
 			if (o.menuIcon) {
 				input.addClass("ui-state-default").append("<span class='ui-button-icon-secondary ui-icon ui-icon-triangle-1-s'></span>");
