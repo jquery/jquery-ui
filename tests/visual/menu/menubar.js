@@ -17,7 +17,7 @@ $.widget("ui.menubar", {
 		var o = this.options;
 				
 		this.element.addClass('ui-menubar ui-widget-header ui-helper-clearfix');
-		
+		this._focusable(items);
 		items.next("ul").each(function(i, elm) {
 			$(elm).menu({
 				select: function(event, ui) {
@@ -38,11 +38,12 @@ $.widget("ui.menubar", {
 					self.right(event);
 					event.preventDefault();
 					break;
-				case $.ui.keyCode.TAB:
-					self[ event.shiftKey ? "left" : "right" ]( event );
-					event.preventDefault();
-					break;
 				};
+			}).blur(function() {
+				$(this).hide().prev().removeClass("ui-state-active").removeAttr("tabIndex");
+				self.timer = setTimeout(function() {
+					self.open = false;
+				}, 13);
 			});
 		});
 		items.each(function() {
@@ -56,7 +57,7 @@ $.widget("ui.menubar", {
 					self._close();
 					return;
 				}
-   				if (menu.length && (!/^mouse/.test(event.type) || self.active && self.active.is(":visible") )) {
+   				if (menu.length && (self.open || event.type == "click")) {
    					self._open(event, menu);
    				}
    			})
@@ -81,15 +82,19 @@ $.widget("ui.menubar", {
 	
 	_close: function() {
 		this.items.next("ul").hide();
-		this.items.removeClass("ui-state-active");
+		this.items.removeClass("ui-state-active").removeAttr("tabIndex");
+		this.open = false;
 	},
 	
 	_open: function(event, menu) {
 		if (this.active) {
 			this.active.menu("closeAll").hide();
-			this.active.prev().removeClass("ui-state-active");
+			this.active.prev().removeClass("ui-state-active").removeAttr("tabIndex");
 		}
-		var button = menu.prev().addClass("ui-state-active");
+		clearTimeout(this.timer);
+		this.open = true;
+		// set tabIndex -1 to have the button skipped on shift-tab when menu is open (it gets focus)
+		var button = menu.prev().addClass("ui-state-active").attr("tabIndex", -1);
 		this.active = menu.show().position({
 			my: "left top",
 			at: "left bottom",
