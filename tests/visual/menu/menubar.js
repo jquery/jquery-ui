@@ -41,8 +41,8 @@ $.widget("ui.menubar", {
 					event.preventDefault();
 					break;
 				};
-			}).blur(function() {
-				self._close();
+			}).blur(function( event ) {
+				self._close( event );
 			});
 		});
 		items.each(function() {
@@ -97,7 +97,9 @@ $.widget("ui.menubar", {
 		});
 		self._bind(document, {
 			click: function(event) {
-				self.open && !$(event.target).closest(".ui-menubar").length && self._close();
+				if (self.open && !$(event.target).closest(".ui-menubar").length) {
+					self._close();
+				}
 			}
 		})
 		self._bind({
@@ -125,10 +127,10 @@ $.widget("ui.menubar", {
 	},
 	
 	_open: function(event, menu) {
-		// TODO refactor with _close
+		// almost the same as _close above, but don't remove tabIndex
 		if (this.active) {
 			this.active.menu("closeAll").hide();
-			this.active.prev().removeClass("ui-state-active").removeAttr("tabIndex");
+			this.active.prev().removeClass("ui-state-active");
 		}
 		clearTimeout(this.timer);
 		this.open = true;
