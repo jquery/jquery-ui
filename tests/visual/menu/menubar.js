@@ -92,7 +92,9 @@ $.widget("ui.menubar", {
 		self._bind({
 			keyup: function(event) {
 				if (event.keyCode == $.ui.keyCode.ESCAPE) {
-					self._close();
+					if (self.active.menu("left") !== true) {
+						self._close();
+					}
 				}
 			}
 		});
