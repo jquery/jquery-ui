@@ -14,6 +14,15 @@ $.widget("ui.datasource", {
 	}
 });
 
+// an ad-hoc implementation
+var datasource = {
+	toArray: function() {
+		return localData;
+	},
+	refresh: function() {
+		$(this).trigger("datasourcerefresh");
+	}
+};
 
 // port from https://github.com/brado23/jquery-ui/tree/borisGrid/grid-datamodel2
 $.dataSource = function (options) {
