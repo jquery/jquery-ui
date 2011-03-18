@@ -12,40 +12,55 @@
  */
 (function( $, undefined ) {
 
-$.effects.clip = function(o) {
+$.effects.effect.clip = function( o ) {
 
-	return this.queue(function() {
+	return this.queue( function() {
 
 		// Create element
-		var el = $(this), props = ['position','top','bottom','left','right','height','width'];
+		var el = $( this ), 
+			props = ['position','top','bottom','left','right','height','width'], 
+			mode = $.effects.setMode( el, o.mode || 'hide' ),
+			direction = o.direction || 'vertical',
+			ref = {
+				size: (direction == 'vertical') ? 'height' : 'width',
+				position: (direction == 'vertical') ? 'top' : 'left'
+			},
+			animation = {},
+			wrapper, animate, distance;
 
-		// Set options
-		var mode = $.effects.setMode(el, o.options.mode || 'hide'); // Set Mode
-		var direction = o.options.direction || 'vertical'; // Default direction
+		// Save & Show
+		$.effects.save( el, props ); el.show(); 
 
-		// Adjust
-		$.effects.save(el, props); el.show(); // Save & Show
-		var wrapper = $.effects.createWrapper(el).css({overflow:'hidden'}); // Create Wrapper
-		var animate = el[0].tagName == 'IMG' ? wrapper : el;
-		var ref = {
-			size: (direction == 'vertical') ? 'height' : 'width',
-			position: (direction == 'vertical') ? 'top' : 'left'
-		};
-		var distance = (direction == 'vertical') ? animate.height() : animate.width();
-		if(mode == 'show') { animate.css(ref.size, 0); animate.css(ref.position, distance / 2); } // Shift
+		// Create Wrapper
+		wrapper = $.effects.createWrapper( el ).css({ 
+			overflow: 'hidden' 
+		});
+		animate = ( el[0].tagName == 'IMG' ) ? wrapper : el;
+		distance = animate[ ref.size ]();
 
-		// Animation
-		var animation = {};
-		animation[ref.size] = mode == 'show' ? distance : 0;
-		animation[ref.position] = mode == 'show' ? 0 : distance / 2;
+		// Shift
+		if ( mode == 'show' ) {
+			animate.css( ref.size, 0 );
+			animate.css( ref.position, distance / 2 );
+		}
+
+		// Create Animation Object:
+		animation[ ref.size ] = mode == 'show' ? distance : 0;
+		animation[ ref.position ] = mode == 'show' ? 0 : distance / 2;
 
 		// Animate
-		animate.animate(animation, { queue: false, duration: o.duration, easing: o.options.easing, complete: function() {
-			if(mode == 'hide') el.hide(); // Hide
-			$.effects.restore(el, props); $.effects.removeWrapper(el); // Restore
-			if(o.callback) o.callback.apply(el[0], arguments); // Callback
-			el.dequeue();
-		}});
+		animate.animate( animation, { 
+			queue: false, 
+			duration: o.duration, 
+			easing: o.easing, 
+			complete: function() {
+				mode == 'hide' && el.hide(); 
+				$.effects.restore( el, props ); 
+				$.effects.removeWrapper( el ); 
+				$.isFunction( o.complete ) && o.complete.apply( el[ 0 ], arguments );
+				el.dequeue();
+			}
+		});
 
 	});
 

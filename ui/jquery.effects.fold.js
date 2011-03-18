@@ -12,42 +12,59 @@
  */
 (function( $, undefined ) {
 
-$.effects.fold = function(o) {
+$.effects.effect.fold = function( o ) {
 
-	return this.queue(function() {
+	return this.queue( function() {
 
 		// Create element
-		var el = $(this), props = ['position','top','bottom','left','right'];
+		var el = $( this ),
+			props = ['position','top','bottom','left','right'],
+			mode = $.effects.setMode(el, o.mode || 'hide'),
+			size = o.size || 15,
+			percent = /([0-9]+)%/.exec(size),
+			horizFirst = !!o.horizFirst,
+			widthFirst = ((mode == 'show') != horizFirst),
+			ref = widthFirst ? ['width', 'height'] : ['height', 'width'],
+			duration = o.duration / 2,
+			wrapper, distance;
 
-		// Set options
-		var mode = $.effects.setMode(el, o.options.mode || 'hide'); // Set Mode
-		var size = o.options.size || 15; // Default fold size
-		var horizFirst = !(!o.options.horizFirst); // Ensure a boolean value
-		var duration = o.duration ? o.duration / 2 : $.fx.speeds._default / 2;
+		$.effects.save( el, props ); 
+		el.show();
 
-		// Adjust
-		$.effects.save(el, props); el.show(); // Save & Show
-		var wrapper = $.effects.createWrapper(el).css({overflow:'hidden'}); // Create Wrapper
-		var widthFirst = ((mode == 'show') != horizFirst);
-		var ref = widthFirst ? ['width', 'height'] : ['height', 'width'];
-		var distance = widthFirst ? [wrapper.width(), wrapper.height()] : [wrapper.height(), wrapper.width()];
-		var percent = /([0-9]+)%/.exec(size);
-		if(percent) size = parseInt(percent[1],10) / 100 * distance[mode == 'hide' ? 0 : 1];
-		if(mode == 'show') wrapper.css(horizFirst ? {height: 0, width: size} : {height: size, width: 0}); // Shift
+		// Create Wrapper
+		wrapper = $.effects.createWrapper( el ).css({ 
+			overflow: 'hidden' 
+		}); 
+		distance = widthFirst ? 
+			[ wrapper.width(), wrapper.height() ] : 
+			[ wrapper.height(), wrapper.width() ];
+
+		if ( percent ) { 
+			size = parseInt( percent[ 1 ], 10 ) / 100 * distance[ ( mode == 'hide') ? 0 : 1 ];
+		}
+		mode == 'show' && wrapper.css( horizFirst ? {
+				height: 0, 
+				width: size
+			} : {
+				height: size, 
+				width: 0
+			}); 
 
 		// Animation
 		var animation1 = {}, animation2 = {};
-		animation1[ref[0]] = mode == 'show' ? distance[0] : size;
-		animation2[ref[1]] = mode == 'show' ? distance[1] : 0;
+		animation1[ ref[ 0 ] ] = mode == 'show' ? distance[ 0 ] : size;
+		animation2[ ref[ 1 ] ] = mode == 'show' ? distance[ 1 ] : 0;
 
 		// Animate
-		wrapper.animate(animation1, duration, o.options.easing)
-		.animate(animation2, duration, o.options.easing, function() {
-			if(mode == 'hide') el.hide(); // Hide
-			$.effects.restore(el, props); $.effects.removeWrapper(el); // Restore
-			if(o.callback) o.callback.apply(el[0], arguments); // Callback
-			el.dequeue();
-		});
+		wrapper
+			.animate( animation1, duration, o.easing )
+			.animate( animation2, duration, o.easing, function() {
+				(mode == 'hide') && el.hide();
+				$.effects.restore( el, props ); 
+				$.effects.removeWrapper( el ); 
+				jQuery.isFunction(o.complete) && o.complete.apply( el[ 0 ], arguments ); 
+				el.dequeue();
+			});
 
 	});
 

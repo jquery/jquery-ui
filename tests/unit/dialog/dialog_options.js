@@ -18,7 +18,7 @@ test("autoOpen", function() {
 });
 
 test("buttons", function() {
-	expect(17);
+	expect(21);
 
 	var buttons = {
 		"Ok": function(ev, ui) {
@@ -44,6 +44,8 @@ test("buttons", function() {
 	});
 
 	ok(btn.parent().hasClass('ui-dialog-buttonset'), "buttons in container");
+	ok(el.parent().hasClass('ui-dialog-buttons'), "dialog wrapper adds class about having buttons");
+	
 	btn.trigger("click");
 
 	var newButtons = {
@@ -67,6 +69,12 @@ test("buttons", function() {
 		equals(btn.eq(i).text(), key, "text of button " + (i+1));
 		i += 1;
 	});
+	
+	el.dialog("option", "buttons", null);
+	btn = $("button", dlg());
+	equals(btn.length, 0, "all buttons have been removed");
+	equals(el.find(".ui-dialog-buttonset").length, 0, "buttonset has been removed");
+	equals(el.parent().hasClass('ui-dialog-buttons'), false, "dialog wrapper removes class about having buttons");
 
 	el.remove();
 });

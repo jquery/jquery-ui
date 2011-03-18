@@ -12,66 +12,90 @@
  */
 (function( $, undefined ) {
 
-$.effects.explode = function(o) {
+$.effects.effect.explode = function( o ) {
 
-	return this.queue(function() {
+	return this.queue( function( next ) {
 
-	var rows = o.options.pieces ? Math.round(Math.sqrt(o.options.pieces)) : 3;
-	var cells = o.options.pieces ? Math.round(Math.sqrt(o.options.pieces)) : 3;
+		var rows = o.pieces ? Math.round(Math.sqrt(o.pieces)) : 3,
+			cells = rows,
+			el = $( this ),
+			mode = $.effects.setMode( el, o.mode || 'hide' ),
+			show = ( mode == 'show' ),
 
-	o.options.mode = o.options.mode == 'toggle' ? ($(this).is(':visible') ? 'hide' : 'show') : o.options.mode;
-	var el = $(this).show().css('visibility', 'hidden');
-	var offset = el.offset();
+			// show and then visibility:hidden the element before calculating offset
+			offset = el.show().css( 'visibility', 'hidden' ).offset(),
 
-	//Substract the margins - not fixing the problem yet.
-	offset.top -= parseInt(el.css("marginTop"),10) || 0;
-	offset.left -= parseInt(el.css("marginLeft"),10) || 0;
+			// width and height of a piece
+			width = Math.ceil( el.outerWidth() / cells ),
+			height = Math.ceil( el.outerHeight() / rows ),
+			pieces = [],
 
-	var width = el.outerWidth(true);
-	var height = el.outerHeight(true);
+			// loop
+			i, j, left, top, mx, my;
 
-	for(var i=0;i<rows;i++) { // =
-		for(var j=0;j<cells;j++) { // ||
-			el
-				.clone()
-				.appendTo('body')
-				.wrap('<div></div>')
-				.css({
-					position: 'absolute',
-					visibility: 'visible',
-					left: -j*(width/cells),
-					top: -i*(height/rows)
-				})
-				.parent()
-				.addClass('ui-effects-explode')
-				.css({
-					position: 'absolute',
-					overflow: 'hidden',
-					width: width/cells,
-					height: height/rows,
-					left: offset.left + j*(width/cells) + (o.options.mode == 'show' ? (j-Math.floor(cells/2))*(width/cells) : 0),
-					top: offset.top + i*(height/rows) + (o.options.mode == 'show' ? (i-Math.floor(rows/2))*(height/rows) : 0),
-					opacity: o.options.mode == 'show' ? 0 : 1
-				}).animate({
-					left: offset.left + j*(width/cells) + (o.options.mode == 'show' ? 0 : (j-Math.floor(cells/2))*(width/cells)),
-					top: offset.top + i*(height/rows) + (o.options.mode == 'show' ? 0 : (i-Math.floor(rows/2))*(height/rows)),
-					opacity: o.options.mode == 'show' ? 1 : 0
-				}, o.duration || 500);
+		// clone the element for each row and cell.
+		for( i = 0; i < rows ; i++ ) { // ===>
+			top = offset.top + i * height;
+			my = i - ( rows - 1 ) / 2 ;
+
+			for( j = 0; j < cells ; j++ ) { // |||
+				left = offset.left + j * width;
+				mx = j - ( cells - 1 ) / 2 ;
+
+				// Create a clone of the now hidden main element that will be absolute positioned
+				// within a wrapper div off the -left and -top equal to size of our pieces
+				el
+					.clone()
+					.appendTo( 'body' )
+					.wrap( '<div></div>' )
+					.css({
+						position: 'absolute',
+						visibility: 'visible',
+						left: -j * width,
+						top: -i * height
+					})
+
+				// select the wrapper - make it overflow: hidden and absolute positioned based on
+				// where the original was located +left and +top equal to the size of pieces
+					.parent()
+					.addClass( 'ui-effects-explode' )
+					.css({
+						position: 'absolute',
+						overflow: 'hidden',
+						width: width,
+						height: height,
+						left: left + ( show ? mx * width : 0 ),
+						top: top + ( show ? my * height : 0 ),
+						opacity: show ? 0 : 1
+					}).animate({
+						left: left + ( show ? 0 : mx * width ),
+						top: top + ( show ? 0 : my * height ),
+						opacity: show ? 1 : 0
+					}, o.duration || 500, o.easing, childComplete );
+			}
 		}
-	}
 
-	// Set a timeout, to call the callback approx. when the other animations have finished
-	setTimeout(function() {
+		// children animate complete:
+		function childComplete() {
+			pieces.push( this );
+			if ( pieces.length == rows * cells ) {
+				animComplete();
+			}
+		}
 
-		o.options.mode == 'show' ? el.css({ visibility: 'visible' }) : el.css({ visibility: 'visible' }).hide();
-				if(o.callback) o.callback.apply(el[0]); // Callback
-				el.dequeue();
-
-				$('div.ui-effects-explode').remove();
-
-	}, o.duration || 500);
-
-
+		function animComplete() {
+			el.css({
+				visibility: 'visible'
+			});
+			$( pieces ).remove();
+			if ( !show ) {
+				el.hide();
+			}
+			if ( $.isFunction( o.complete ) ) {
+				o.complete.apply( el[ 0 ] );
+			}
+			next();
+		}
 	});
 
 };

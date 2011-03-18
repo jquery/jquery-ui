@@ -12,44 +12,51 @@
  */
 (function( $, undefined ) {
 
-$.effects.shake = function(o) {
+$.effects.effect.shake = function( o ) {
 
-	return this.queue(function() {
+	return this.queue( function() {
 
-		// Create element
-		var el = $(this), props = ['position','top','bottom','left','right'];
-
-		// Set options
-		var mode = $.effects.setMode(el, o.options.mode || 'effect'); // Set Mode
-		var direction = o.options.direction || 'left'; // Default direction
-		var distance = o.options.distance || 20; // Default distance
-		var times = o.options.times || 3; // Default # of times
-		var speed = o.duration || o.options.duration || 140; // Default speed per shake
+		var el = $( this ),
+			props = [ 'position', 'top', 'bottom', 'left', 'right' ],
+			mode = $.effects.setMode( el, o.mode || 'effect' ),
+			direction = o.direction || 'left',
+			distance = o.distance || 20,
+			times = o.times || 3,
+			speed = o.duration || 140,
+			ref = (direction == 'up' || direction == 'down') ? 'top' : 'left',
+			motion = (direction == 'up' || direction == 'left') ? 'pos' : 'neg',
+			animation = {},
+			animation1 = {},
+			animation2 = {},
+			i; 
 
 		// Adjust
-		$.effects.save(el, props); el.show(); // Save & Show
-		$.effects.createWrapper(el); // Create Wrapper
-		var ref = (direction == 'up' || direction == 'down') ? 'top' : 'left';
-		var motion = (direction == 'up' || direction == 'left') ? 'pos' : 'neg';
+		$.effects.save( el, props ); 
+		el.show(); 
+		$.effects.createWrapper( el ); // Create Wrapper
 
 		// Animation
-		var animation = {}, animation1 = {}, animation2 = {};
-		animation[ref] = (motion == 'pos' ? '-=' : '+=')  + distance;
-		animation1[ref] = (motion == 'pos' ? '+=' : '-=')  + distance * 2;
-		animation2[ref] = (motion == 'pos' ? '-=' : '+=')  + distance * 2;
+		animation[ ref ] = ( motion == 'pos' ? '-=' : '+=' ) + distance;
+		animation1[ ref ] = ( motion == 'pos' ? '+=' : '-=' ) + distance * 2;
+		animation2[ ref ] = ( motion == 'pos' ? '-=' : '+=' ) + distance * 2;
 
 		// Animate
-		el.animate(animation, speed, o.options.easing);
-		for (var i = 1; i < times; i++) { // Shakes
-			el.animate(animation1, speed, o.options.easing).animate(animation2, speed, o.options.easing);
+		el.animate( animation, speed, o.easing );
+
+		// Shakes
+		for ( i = 1; i < times; i++ ) { 
+			el.animate( animation1, speed, o.easing ).animate( animation2, speed, o.easing );
 		};
-		el.animate(animation1, speed, o.options.easing).
-		animate(animation, speed / 2, o.options.easing, function(){ // Last shake
-			$.effects.restore(el, props); $.effects.removeWrapper(el); // Restore
-			if(o.callback) o.callback.apply(this, arguments); // Callback
-		});
-		el.queue('fx', function() { el.dequeue(); });
-		el.dequeue();
+		el
+			.animate( animation1, speed, o.easing )
+			.animate( animation, speed / 2, o.easing, function() { 
+
+				// Last shake
+				$.effects.restore( el, props ); 
+				$.effects.removeWrapper( el ); 
+				$.isFunction( o.complete ) && o.complete.apply( this, arguments ); 
+			})
+			.dequeue();
 	});
 
 };
