@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Photo Slideshow</title>
+	<link rel="stylesheet" href="../themes/base/jquery.ui.all.css">
+	<script src="../jquery-1.5.1.js"></script>
+	<script src="../external/jquery.tmpl.js"></script>
+	<script src="../ui/jquery.ui.core.js"></script>
+	<script src="../ui/jquery.ui.widget.js"></script>
+	<script src="../ui/jquery.ui.position.js"></script>
+	<script src="datasource.js"></script>
+	<script>
+	
+	var photos = [],
+		perPage = 2;
+	
+	$(function() {
+		$("#gal1 > li > a").each(function() {
+			var a = $(this),
+				img = a.children("img"),
+				photo = {
+					href: a.attr("href"),
+					title: a.attr("title"),
+					src: img.attr("src"),
+					width: img.attr("width"),
+					height: img.attr("height")
+				};
+			photos.push(photo);
+		});
+
+		var ds = $.dataSource({
+			source: photos
+		});
+	});
+	
+	</script>
+</head>
+<body>
+
+<h1>Photo Slideshow</h1>
+<p>features: paging</p>
+
+<ul class="gallery" id="gal1">
+	<li>
+		<a href="http://www.flickr.com/photos/43611094@N07/4418243604/" title="shamrocks by cobalt123_feature by hillary.ryland, on Flickr"><img src="http://farm3.static.flickr.com/2735/4418243604_985de45c5e.jpg" width="500" height="354" alt="shamrocks by cobalt123_feature" /></a>
+	</li>
+	<li>
+		<a href="http://www.flickr.com/photos/origamiancy/3595747489/" title="Origami Shamrock (Design by Gerwin Sturm) by Origamiancy, on Flickr"><img src="http://farm4.static.flickr.com/3302/3595747489_53e5a3dd79.jpg" width="500" height="375" alt="Origami Shamrock (Design by Gerwin Sturm)" /></a>
+	</li>
+	<li>
+		<a href="http://www.flickr.com/photos/uwehermann/173505490/" title="Shamrocks by Uwe Hermann, on Flickr"><img src="http://farm1.static.flickr.com/65/173505490_ac1a3b40b7.jpg" width="500" height="375" alt="Shamrocks" /></a>
+	</li>
+	<li>
+		<a href="http://www.flickr.com/photos/j1x4r/4575399261/" title="Shamrock by Jixar, on Flickr"><img src="http://farm4.static.flickr.com/3305/4575399261_74e3b6666a.jpg" width="500" height="333" alt="Shamrock" /></a>
+	</li>
+	<li>
+		<a href="http://www.flickr.com/photos/cloppy/2983054651/" title="Shamrock by jez.atkinson, on Flickr"><img src="http://farm4.static.flickr.com/3007/2983054651_6870c93ab2.jpg" width="320" height="480" alt="Shamrock" /></a>
+	</li>
+	<li>
+		<a href="http://www.flickr.com/photos/32554040@N08/3035575238/" title="shamrock trivet by woollypunk, on Flickr"><img src="http://farm4.static.flickr.com/3191/3035575238_ea2c924edb.jpg" width="500" height="375" alt="shamrock trivet" /></a>
+	</li>
+</ul>
+
+</body>
+</html>
