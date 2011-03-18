@@ -12,26 +12,27 @@
 	<script src="datasource.js"></script>
 	<script>
 	
-	var photos = [],
-		perPage = 2;
-	
 	$(function() {
-		$("#gal1 > li > a").each(function() {
+		var perPage = 2;
+		var photos = $("#gal1 > li > a").map(function() {
 			var a = $(this),
-				img = a.children("img"),
-				photo = {
-					href: a.attr("href"),
-					title: a.attr("title"),
-					src: img.attr("src"),
-					width: img.attr("width"),
-					height: img.attr("height")
-				};
-			photos.push(photo);
-		});
+				img = a.children("img");
+			return {
+				href: a.attr("href"),
+				title: a.attr("title"),
+				src: img.attr("src"),
+				width: img.attr("width"),
+				height: img.attr("height")
+			};
+		}).get();
 
 		var ds = $.dataSource({
-			source: photos
+			source: photos,
+			paging: {
+				take: 2
+			}
 		});
+		console.log(ds.refresh().toArray());
 	});
 	
 	</script>
