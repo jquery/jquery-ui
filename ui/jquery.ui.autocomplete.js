@@ -360,16 +360,16 @@ $.widget( "ui.autocomplete", {
 		this.menu.deactivate();
 		this.menu.refresh();
 
-		if ( this.options.autoFocus ) {
-			this.menu.next( new $.Event("mouseover") );
-		}
-
 		// size and position menu
 		ul.show();
 		this._resizeMenu();
 		ul.position( $.extend({
 			of: this.element
 		}, this.options.position ));
+
+		if ( this.options.autoFocus ) {
+			this.menu.next( new $.Event("mouseover") );
+		}
 	},
 
 	_resizeMenu: function() {

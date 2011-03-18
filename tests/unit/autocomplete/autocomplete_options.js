@@ -97,32 +97,26 @@ test( "appendTo", function() {
 	ac.autocomplete( "destroy" );
 });
 
-test( "autoFocus: false", function() {
+function autoFocusTest( afValue, focusedLength ) {
 	var ac = $( "#autocomplete" ).autocomplete({
-		autoFocus: false,
+		autoFocus: afValue,
 		delay: 0,
 		source: data,
 		open: function( event, ui ) {
-			equals( 0, ac.autocomplete( "widget" ).children( ".ui-menu-item:first .ui-state-focus" ).length, "first item is not auto focused" );
+			equal( ac.autocomplete( "widget" ).children( ".ui-menu-item:first .ui-state-hover" ).length, focusedLength, "first item is " + afValue ? "" : "not" + " auto focused" );
 			start();			
 		}
 	});
 	ac.val( "ja" ).keydown();
 	stop();
+}
+
+test( "autoFocus: false", function() {
+	autoFocusTest( false, 0 );
 });
 
 test( "autoFocus: true", function() {
-	var ac = $( "#autocomplete" ).autocomplete({
-		autoFocus: true,
-		delay: 0,
-		source: data,
-		open: function( event, ui ) {
-			equals( 1, ac.autocomplete( "widget" ).children( ".ui-menu-item:first .ui-state-focus" ).length, "first item is auto focused" );
-			start();			
-		}
-	});
-	ac.val( "ja" ).keydown();
-	stop();
+	autoFocusTest( true, 1 );
 });
 
 test("delay", function() {
