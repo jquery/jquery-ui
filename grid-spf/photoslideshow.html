@@ -4,12 +4,22 @@
 	<meta charset="UTF-8">
 	<title>Photo Slideshow</title>
 	<link rel="stylesheet" href="../themes/base/jquery.ui.all.css">
+	<link rel="stylesheet" href="grid.css">
 	<script src="../jquery-1.5.1.js"></script>
 	<script src="../external/kite.js"></script>
 	<script src="../ui/jquery.ui.core.js"></script>
 	<script src="../ui/jquery.ui.widget.js"></script>
 	<script src="../ui/jquery.ui.position.js"></script>
+	<script src="../ui/jquery.ui.button.js"></script>
 	<script src="datasource.js"></script>
+	<script type="text/x-kite" id="controls-tmpl">
+		<div class="controls">
+			<button data-page="first">First</button>
+			<button data-page="prev">Prev</button>
+			<button data-page="next">Next</button>
+			<button data-page="last">Last</button>
+		</div>
+	</script>
 	<script type="text/x-kite" id="photo-tmpl">
 		<a href="{{href}}" title="{{title}}">
 			<img src="{{src}}" width="{{width}}" height="{{height}}" alt="{{alt}}" />
@@ -29,6 +39,13 @@
 			$( this.options.source ).bind( "datasourcerefresh", function() {
 				that.refresh();
 			});
+			
+			this.element.delegate("button", "click", function() {
+				var method = $(this).data("page");
+				var source = that.options.source;
+				source[method]();
+				source.refresh();
+			});
 
 			this.options.source.refresh();
 		},
@@ -43,30 +60,37 @@
 			this.element.empty();
 			this.element.html( photosHtml.join("") );
 			
+			var buttons = this.element.prepend( kite( "#controls-tmpl" ) ).find(".controls").buttonset().find("button");
+			buttons.button("enable");
+			
+			var source = this.options.source;
+			if (!source._skip) {
+				buttons.slice(0, 2).button("disable")
+			}
+			if (source._skip + source._take >= source.totalCount) {
+				buttons.slice(2, 4).button("disable")
+			}
 		},
 		destroy: function() {
 			this.element.removeClass( "spf-slideshow" );
 		}
 	});
 	
-	var photos = [],
-		ds = null;
-
 	$(function() {
-		$( "#gal1 > li > a" ).each(function() {
+		var photos = $( "#gal1 > li > a" ).map(function() {
 			var a = $( this ),
-				img = a.children( "img" ),
-				photo = {
-					href: a.attr( "href" ),
-					title: a.attr( "title" ),
-					src: img.attr( "src" ),
-					width: img.attr( "width" ),
-					height: img.attr( "height" )
-				};
-			photos.push( photo );
-		});
+				img = a.children( "img" );
+			return {
+				href: a.attr( "href" ),
+				title: a.attr( "title" ),
+				src: img.attr( "src" ),
+				width: img.attr( "width" ),
+				height: img.attr( "height" )
+			};
+		}).get();
+		$("#gal1").hide();
 
-		ds = $.dataSource({
+		var datasource = $.dataSource({
 			source: photos,
 			paging: {
 				take: 2,
@@ -74,12 +98,16 @@
 			}
 		});
 
-		$( "#ss" ).slideshow({
-			source: ds
+		$( "#slideshow" ).slideshow({
+			source: datasource
 		});
 
 		$( "#page-size" ).change(function() {
-			// TODO: Change page size
+			datasource.option("paging", {
+				take: +$(this).val(),
+				// can't yet only set take
+				skip: datasource._skip
+			}).refresh();
 		});
 	});
 	
@@ -94,7 +122,7 @@
 
 Per page: <input id="page-size" value="2">
 
-<div id="ss"></div>
+<div id="slideshow"></div>
 
 <ul class="gallery" id="gal1">
 	<li>
