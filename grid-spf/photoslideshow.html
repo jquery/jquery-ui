@@ -5,34 +5,82 @@
 	<title>Photo Slideshow</title>
 	<link rel="stylesheet" href="../themes/base/jquery.ui.all.css">
 	<script src="../jquery-1.5.1.js"></script>
-	<script src="../external/jquery.tmpl.js"></script>
+	<script src="../external/kite.js"></script>
 	<script src="../ui/jquery.ui.core.js"></script>
 	<script src="../ui/jquery.ui.widget.js"></script>
 	<script src="../ui/jquery.ui.position.js"></script>
 	<script src="datasource.js"></script>
+	<script type="text/x-kite" id="photo-tmpl">
+		<a href="{{href}}" title="{{title}}">
+			<img src="{{src}}" width="{{width}}" height="{{height}}" alt="{{alt}}" />
+		</a>
+	</script>
 	<script>
 	
-	$(function() {
-		var perPage = 2;
-		var photos = $("#gal1 > li > a").map(function() {
-			var a = $(this),
-				img = a.children("img");
-			return {
-				href: a.attr("href"),
-				title: a.attr("title"),
-				src: img.attr("src"),
-				width: img.attr("width"),
-				height: img.attr("height")
-			};
-		}).get();
+	$.widget( "spf.slideshow", {
+		options: {
+			source: null,
+			pageSize: 2
+		},
+		_create: function() {
+			var that = this;
 
-		var ds = $.dataSource({
+			this.element.addClass( "spf-slideshow" );
+			$( this.options.source ).bind( "datasourcerefresh", function() {
+				that.refresh();
+			});
+
+			this.options.source.refresh();
+		},
+		refresh: function() {
+			var photosHtml = [];
+
+			$.each( this.options.source.toArray(), function( i, photo ) {
+				var html = kite( "#photo-tmpl", photo );
+				photosHtml.push( html );
+			});
+
+			this.element.empty();
+			this.element.html( photosHtml.join("") );
+			
+		},
+		destroy: function() {
+			this.element.removeClass( "spf-slideshow" );
+		}
+	});
+	
+	var photos = [],
+		ds = null;
+
+	$(function() {
+		$( "#gal1 > li > a" ).each(function() {
+			var a = $( this ),
+				img = a.children( "img" ),
+				photo = {
+					href: a.attr( "href" ),
+					title: a.attr( "title" ),
+					src: img.attr( "src" ),
+					width: img.attr( "width" ),
+					height: img.attr( "height" )
+				};
+			photos.push( photo );
+		});
+
+		ds = $.dataSource({
 			source: photos,
 			paging: {
-				take: 2
+				take: 2,
+				skip: 0
 			}
 		});
-		console.log(ds.refresh().toArray());
+
+		$( "#ss" ).slideshow({
+			source: ds
+		});
+
+		$( "#page-size" ).change(function() {
+			// TODO: Change page size
+		});
 	});
 	
 	</script>
@@ -41,6 +89,12 @@
 
 <h1>Photo Slideshow</h1>
 <p>features: paging</p>
+
+<hr>
+
+Per page: <input id="page-size" value="2">
+
+<div id="ss"></div>
 
 <ul class="gallery" id="gal1">
 	<li>
