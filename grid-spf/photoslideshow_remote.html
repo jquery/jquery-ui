@@ -41,7 +41,7 @@
 					format: "json",
 					api_key: "d86848d57cb3f7ad94f2ee9a3c90eff1",
 					method: "flickr.photos.search",
-					tags: "jquery",
+					tags: filter[0].filterValue,
 					sort: "relevance",
 					per_page: take,
 					page: skip
@@ -50,7 +50,6 @@
 			resultsFilter: function (data) {
 		        this.totalCount = data.photos.total;
 		        return $.map( data.photos.photo, function( photo ) {
-					console.log(photo)
 					return {
 						src: kite( "http://farm{{farm}}.static.flickr.com/{{server}}/{{id}}_{{secret}}_m.jpg", photo ),
 						href: kite( "http://www.flickr.com/photos/{{owner}}/{{id}}/", photo )
@@ -58,11 +57,21 @@
 				});
 		    }
 		});
+		datasource.option("filter", {
+			property: "tags",
+			value: "jquery"
+		})
 
 		$( "#slideshow" ).slideshow({
 			source: datasource
 		});
 
+		$( "#filter" ).change(function() {
+			datasource.option("filter", {
+				property: "tags",
+				value: $(this).val()
+			}).refresh();
+		});
 		$( "#page-size" ).change(function() {
 			datasource.option("paging", {
 				take: +$(this).val(),
@@ -81,7 +90,13 @@
 
 <hr>
 
-Per page: <input id="page-size" value="2">
+<p>
+	Per page: <input id="page-size" value="2">
+</p>
+<p>
+	Tags to look for (comma seperated): <input id="filter" value="jquery"> 
+</p>
+
 
 <div id="slideshow"></div>
 
