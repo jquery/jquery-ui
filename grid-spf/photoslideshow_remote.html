@@ -37,20 +37,23 @@
 			path: "http://api.flickr.com/services/rest/",
 			paging: { take: 2 },
 			urlMapper: function(path, queryParams, sort, filter, skip, take) {
-				console.log(take, arguments)
 				return path + "?" + $.param({
 					format: "json",
 					api_key: "d86848d57cb3f7ad94f2ee9a3c90eff1",
-					method: "flickr.photos.getRecent",
+					method: "flickr.photos.search",
+					tags: "jquery",
 					sort: "relevance",
-					per_page: take
+					per_page: take,
+					page: skip
 				});
 			},
 			resultsFilter: function (data) {
 		        this.totalCount = data.photos.total;
 		        return $.map( data.photos.photo, function( photo ) {
+					console.log(photo)
 					return {
-						src: kite( "http://farm{{farm}}.static.flickr.com/{{server}}/{{id}}_{{secret}}_m.jpg", photo ) 
+						src: kite( "http://farm{{farm}}.static.flickr.com/{{server}}/{{id}}_{{secret}}_m.jpg", photo ),
+						href: kite( "http://www.flickr.com/photos/{{owner}}/{{id}}/", photo )
 					}
 				});
 		    }
