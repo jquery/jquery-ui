@@ -12,6 +12,7 @@
 	<script src="../ui/jquery.ui.position.js"></script>
 	<script src="../ui/jquery.ui.button.js"></script>
 	<script src="datasource.js"></script>
+	<script src="slideshow.js"></script>
 	<script type="text/x-kite" id="controls-tmpl">
 		<div class="controls">
 			<button data-page="first">First</button>
@@ -26,97 +27,46 @@
 		</a>
 	</script>
 	<script>
-	
-	$.widget( "spf.slideshow", {
-		options: {
-			source: null,
-			pageSize: 2
-		},
-		_create: function() {
-			var that = this;
-
-			this.element.addClass( "spf-slideshow" );
-			$( this.options.source ).bind( "datasourcerefresh", function() {
-				that.refresh();
-			});
-			
-			this.element.delegate("button", "click", function() {
-				var method = $(this).data("page");
-				var source = that.options.source;
-				source[method]();
-				source.refresh();
-			});
-
-			this.options.source.refresh();
-		},
-		refresh: function() {
-			var photosHtml = [];
-
-			$.each( this.options.source.toArray(), function( i, photo ) {
-				var html = kite( "#photo-tmpl", photo );
-				photosHtml.push( html );
-			});
-
-			this.element.empty();
-			this.element.html( photosHtml.join("") );
-			
-			var buttons = this.element.prepend( kite( "#controls-tmpl" ) ).find(".controls").buttonset().find("button");
-			buttons.button("enable");
-			
-			var source = this.options.source;
-			if (!source._skip) {
-				buttons.slice(0, 2).button("disable")
-			}
-			if (source._skip + source._take >= source.totalCount) {
-				buttons.slice(2, 4).button("disable")
-			}
-		},
-		destroy: function() {
-			this.element.removeClass( "spf-slideshow" );
-		}
-	});
-	
 	$(function() {
-		$.ajax({
-			url: "http://api.flickr.com/services/rest/",
+		// TODO must be possible to set these through the datasource
+		$.ajaxSetup({
 			dataType: "jsonp",
 			jsonpCallback: "jsonFlickrApi",
-			data: {
-				format: "json",
-				api_key: "d86848d57cb3f7ad94f2ee9a3c90eff1",
-				method: "flickr.photos.getRecent",
-				sort: "relevance",
-				per_page: 15
+		});
+		var datasource = $.dataSource({
+			path: "http://api.flickr.com/services/rest/",
+			paging: { take: 2 },
+			urlMapper: function(path, queryParams, sort, filter, skip, take) {
+				console.log(take, arguments)
+				return path + "?" + $.param({
+					format: "json",
+					api_key: "d86848d57cb3f7ad94f2ee9a3c90eff1",
+					method: "flickr.photos.getRecent",
+					sort: "relevance",
+					per_page: take
+				});
 			},
-			success: function(result) {
-				var photos = $.map(result.photos.photo, function(photo) {
+			resultsFilter: function (data) {
+		        this.totalCount = data.photos.total;
+		        return $.map( data.photos.photo, function( photo ) {
 					return {
 						src: kite( "http://farm{{farm}}.static.flickr.com/{{server}}/{{id}}_{{secret}}_m.jpg", photo ) 
 					}
-				})
-				
-				var datasource = $.dataSource({
-					source: photos,
-					paging: {
-						take: 2,
-						skip: 0
-					}
 				});
-		
-				$( "#slideshow" ).slideshow({
-					source: datasource
-				});
-		
-				$( "#page-size" ).change(function() {
-					datasource.option("paging", {
-						take: +$(this).val(),
-						// can't yet only set take
-						skip: datasource._skip
-					}).refresh();
-				});
-			}
+		    }
 		});
-		
+
+		$( "#slideshow" ).slideshow({
+			source: datasource
+		});
+
+		$( "#page-size" ).change(function() {
+			datasource.option("paging", {
+				take: +$(this).val(),
+				// can't yet only set take
+				skip: datasource._skip
+			}).refresh();
+		});
 	});
 	
 	</script>

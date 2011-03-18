@@ -20,7 +20,7 @@
 		var cities = $.dataSource({
 			path: "http://ws.geonames.org/searchJSON",
 			paging: { take: 10 },
-			urlMapper: function(path, queryParams, sortProperty, sortDir, filter, skip, take, includeTotalCount) {
+			urlMapper: function(path, queryParams, sort, filter, skip, take) {
 				return path + "?" + $.param({
 					featureClass: "P",
 					style: "full",
