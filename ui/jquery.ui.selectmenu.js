@@ -247,7 +247,7 @@ $.widget("ui.selectmenu", {
 					selected: $(this).attr('selected'),
 					classes: $(this).attr('class'),
 					typeahead: $(this).attr('typeahead'),
-					parentOptGroup: $(this).parent('optgroup').attr('label'),
+					parentOptGroup: $(this).parent('optgroup'),
 					bgImage: o.bgImage.call($(this))
 				});
 			});		
@@ -292,16 +292,15 @@ $.widget("ui.selectmenu", {
 				});
 
 			// optgroup or not...
-			if (selectOptionData[i].parentOptGroup) {
-				// whitespace in the optgroupname must be replaced, otherwise the li of existing optgroups are never found
-				var optGroupName = self.widgetBaseClass + '-group-' + selectOptionData[i].parentOptGroup.replace(/[^a-zA-Z0-9]/g, "");
-				if (this.list.find('li.' + optGroupName).size()) {
-					this.list.find('li.' + optGroupName + ':last ul').append(thisLi);
+			if ( selectOptionData[i].parentOptGroup.length ) {
+				var optGroupName = self.widgetBaseClass + '-group-' + this.element.find( 'optgroup' ).index( selectOptionData[i].parentOptGroup );
+				if (this.list.find( 'li.' + optGroupName ).length ) {
+					this.list.find( 'li.' + optGroupName + ':last ul' ).append( thisLi );
 				} else {
-					$('<li role="presentation" class="' + self.widgetBaseClass + '-group ' + optGroupName + '"><span class="' + self.widgetBaseClass + '-group-label">' + selectOptionData[i].parentOptGroup + '</span><ul></ul></li>')
-						.appendTo(this.list)
-						.find('ul')
-						.append(thisLi);
+					$(' <li role="presentation" class="' + self.widgetBaseClass + '-group ' + optGroupName + '"><span class="' + self.widgetBaseClass + '-group-label">' + selectOptionData[i].parentOptGroup.attr('label') + '</span><ul></ul></li> ')
+						.appendTo( this.list )
+						.find( 'ul' )
+						.append( thisLi );
 				}
 			} else {
 				thisLi.appendTo(this.list);
