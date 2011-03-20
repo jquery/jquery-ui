@@ -245,6 +245,7 @@ $.widget("ui.selectmenu", {
 					value: $(this).attr('value'),
 					text: self._formatText($(this).text()),
 					selected: $(this).attr('selected'),
+					disabled: $(this).attr('disabled'),
 					classes: $(this).attr('class'),
 					typeahead: $(this).attr('typeahead'),
 					parentOptGroup: $(this).parent('optgroup'),
@@ -260,20 +261,20 @@ $.widget("ui.selectmenu", {
 
 		// write li's
 		for (var i = 0; i < selectOptionData.length; i++) {
-					var thisLi = $('<li role="presentation"><a href="#" tabindex="-1" role="option" aria-selected="false"'+ (selectOptionData[i].typeahead ? ' typeahead="' + selectOptionData[i].typeahead + '"' : '' ) + '>'+ selectOptionData[i].text +'</a></li>')
+				var thisLi = $('<li role="presentation"' + (selectOptionData[i].disabled ? ' class="' + this.namespace + '-state-disabled' + '"' : '' ) + '><a href="#" tabindex="-1" role="option"' + (selectOptionData[i].disabled ? ' aria-disabled="true"' : '' ) + ' aria-selected="false"' + (selectOptionData[i].typeahead ? ' typeahead="' + selectOptionData[i].typeahead + '"' : '' ) + '>'+ selectOptionData[i].text +'</a></li>')
 				.data('index', i)
 				.addClass(selectOptionData[i].classes)
 				.data('optionClasses', selectOptionData[i].classes || '')
 				.bind("mouseup.selectmenu", function(event) {
-						if (self._safemouseup) {
-							var changed = $(this).data('index') != self._selectedIndex();
-							self.index($(this).data('index'));
-							self.select(event);
-							if (changed) {
-								self.change(event);
-							}
-							self.close(event, true);
+					if (self._safemouseup && !self._disabled(event.currentTarget) && !self._disabled($( event.currentTarget ).parents( "ul>li." + self.widgetBaseClass + "-group " )) ) {
+						var changed = $(this).data('index') != self._selectedIndex();
+						self.index($(this).data('index'));
+						self.select(event);
+						if (changed) {
+							self.change(event);
 						}
+						self.close(event, true);
+					}
 					return false;
 				})
 				.bind("click.selectmenu", function() {
@@ -297,7 +298,7 @@ $.widget("ui.selectmenu", {
 				if (this.list.find( 'li.' + optGroupName ).length ) {
 					this.list.find( 'li.' + optGroupName + ':last ul' ).append( thisLi );
 				} else {
-					$(' <li role="presentation" class="' + self.widgetBaseClass + '-group ' + optGroupName + '"><span class="' + self.widgetBaseClass + '-group-label">' + selectOptionData[i].parentOptGroup.attr('label') + '</span><ul></ul></li> ')
+					$(' <li role="presentation" class="' + self.widgetBaseClass + '-group ' + optGroupName + (selectOptionData[i].parentOptGroup.attr("disabled") ? ' ' + this.namespace + '-state-disabled" aria-disabled="true"' : '"' ) + '><span class="' + self.widgetBaseClass + '-group-label">' + selectOptionData[i].parentOptGroup.attr('label') + '</span><ul></ul></li> ')
 						.appendTo( this.list )
 						.find( 'ul' )
 						.append( thisLi );
@@ -594,10 +595,24 @@ $.widget("ui.selectmenu", {
 		if (newIndex > this._optionLis.size() - 1) {
 			newIndex = this._optionLis.size() - 1;
 		}
+		
+		//Occurs when a full loop has been made
+		if (newIndex === recIndex) { 
+			return false; 
+		}
+		
 		var activeID = this.widgetBaseClass + '-item-' + Math.round(Math.random() * 1000);
 
 		this._focusedOptionLi().find('a:eq(0)').attr('id', '');
-		this._optionLis.eq(newIndex).find('a:eq(0)').attr('id', activeID).focus();
+		
+		if (this._optionLis.eq(newIndex).hasClass( this.namespace + '-state-disabled' )) {
+			// if option at newIndex is disabled, call _moveFocus, incrementing amt by one
+			(amt > 0) ? amt++ : amt--;
+			this._moveFocus(amt, newIndex);
+		} else {
+			this._optionLis.eq(newIndex).find('a:eq(0)').attr('id',activeID).focus();
+		}
+		
 		this.list.attr('aria-activedescendant', activeID);
 	},
 
@@ -609,6 +624,7 @@ $.widget("ui.selectmenu", {
 
 	_setOption: function(key, value) {
 		this.options[key] = value;
+		// set 
 		if (key == 'disabled') {
 			this.close();
 			this.element
@@ -620,10 +636,81 @@ $.widget("ui.selectmenu", {
 		}
 	},
 
+	disable: function(index, type){
+			//if options is not provided, call the parents disable function
+			if ( !index ) { 
+				this._setOption( 'disabled', true );
+			} else {
+				if ( type == "optgroup" ) {
+					this._disableOptgroup(index);
+				} else {
+					this._disableOption(index);
+				}
+			}
+	},
+
+	enable: function(index, type) {
+			//if options is not provided, call the parents enable function
+			if ( !index ) {
+				this._setOption('disabled', false);
+			} else {
+				if ( type == "optgroup" ) {
+					this._enableOptgroup(index);
+				} else {
+					this._enableOption(index);
+				}
+			}
+	},
+
+	_disabled: function(elem) {
+			return $(elem).hasClass( this.namespace + '-state-disabled' );
+	},
+	
+
+	_disableOption: function(index) {
+			var optionElem = this._optionLis.eq(index);
+			if (optionElem) {
+				optionElem.addClass(this.namespace + '-state-disabled')
+					.find("a").attr("aria-disabled", true);
+				this.element.find("option").eq(index).attr("disabled", "disabled");
+			}
+	},
+
+	_enableOption: function(index) {
+			var optionElem = this._optionLis.eq(index);
+			if (optionElem) {
+				optionElem.removeClass( this.namespace + '-state-disabled' )
+					.find("a").attr("aria-disabled", false);
+				this.element.find("option").eq(index).removeAttr("disabled");
+			}
+	},
+
+	_disableOptgroup: function(index) {		
+			var optGroupElem = this.list.find( 'li.' + this.widgetBaseClass + '-group-' + index );
+			if (optGroupElem) {
+				optGroupElem.addClass(this.namespace + '-state-disabled')
+					.attr("aria-disabled", true);
+				this.element.find("optgroup").eq(index).attr("disabled", "disabled");
+			}
+	},
+
+	_enableOptgroup: function(index) {		
+			var optGroupElem = this.list.find( 'li.' + this.widgetBaseClass + '-group-' + index );
+			if (optGroupElem) {
+				optGroupElem.removeClass(this.namespace + '-state-disabled')
+					.attr("aria-disabled", false);
+				this.element.find("optgroup").eq(index).removeAttr("disabled");
+			}
+	},
+	
 	index: function(newValue) {
 		if (arguments.length) {
-			this.element[0].selectedIndex = newValue;
-			this._refreshValue();
+			if (!this._disabled($(this._optionLis[newValue]))) {
+				this.element[0].selectedIndex = newValue;
+				this._refreshValue();
+			} else {
+				return false;
+			}
 		} else {
 			return this._selectedIndex();
 		}
