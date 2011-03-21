@@ -30,7 +30,7 @@
 	</script>
 	<script type="text/x-kite" id="photo-tmpl">
 		<a href="{{href}}" title="{{title}}">
-			<img src="{{src}}" width="{{width}}" height="{{height}}" alt="{{alt}}" />
+			<img src="{{src}}" alt="{{alt}}" />
 		</a>
 	</script>
 	<script>
@@ -41,9 +41,7 @@
 			return {
 				href: a.attr( "href" ),
 				title: a.attr( "title" ),
-				src: img.attr( "src" ),
-				width: img.attr( "width" ),
-				height: img.attr( "height" )
+				src: img.attr( "src" )
 			};
 		}).get();
 		$("#gal1").hide();
@@ -51,7 +49,7 @@
 		var datasource = $.dataSource({
 			source: photos,
 			paging: {
-				take: 2,
+				take: 3,
 				skip: 0
 			}
 		});
@@ -85,28 +83,28 @@
 
 <hr>
 
-Per page: <input id="page-size" value="2">
+Per page: <input id="page-size" value="3">
 
 <div id="slideshow"></div>
 
 <ul class="gallery" id="gal1">
 	<li>
-		<a href="http://www.flickr.com/photos/43611094@N07/4418243604/" title="shamrocks by cobalt123_feature by hillary.ryland, on Flickr"><img src="http://farm3.static.flickr.com/2735/4418243604_985de45c5e.jpg" width="500" height="354" alt="shamrocks by cobalt123_feature" /></a>
+		<a href="http://www.flickr.com/photos/43611094@N07/4418243604/" title="shamrocks by cobalt123_feature by hillary.ryland, on Flickr"><img src="http://farm3.static.flickr.com/2735/4418243604_985de45c5e_m.jpg" alt="shamrocks by cobalt123_feature" /></a>
 	</li>
 	<li>
-		<a href="http://www.flickr.com/photos/origamiancy/3595747489/" title="Origami Shamrock (Design by Gerwin Sturm) by Origamiancy, on Flickr"><img src="http://farm4.static.flickr.com/3302/3595747489_53e5a3dd79.jpg" width="500" height="375" alt="Origami Shamrock (Design by Gerwin Sturm)" /></a>
+		<a href="http://www.flickr.com/photos/origamiancy/3595747489/" title="Origami Shamrock (Design by Gerwin Sturm) by Origamiancy, on Flickr"><img src="http://farm4.static.flickr.com/3302/3595747489_53e5a3dd79_m.jpg" alt="Origami Shamrock (Design by Gerwin Sturm)" /></a>
 	</li>
 	<li>
-		<a href="http://www.flickr.com/photos/uwehermann/173505490/" title="Shamrocks by Uwe Hermann, on Flickr"><img src="http://farm1.static.flickr.com/65/173505490_ac1a3b40b7.jpg" width="500" height="375" alt="Shamrocks" /></a>
+		<a href="http://www.flickr.com/photos/uwehermann/173505490/" title="Shamrocks by Uwe Hermann, on Flickr"><img src="http://farm1.static.flickr.com/65/173505490_ac1a3b40b7_m.jpg" alt="Shamrocks" /></a>
 	</li>
 	<li>
-		<a href="http://www.flickr.com/photos/j1x4r/4575399261/" title="Shamrock by Jixar, on Flickr"><img src="http://farm4.static.flickr.com/3305/4575399261_74e3b6666a.jpg" width="500" height="333" alt="Shamrock" /></a>
+		<a href="http://www.flickr.com/photos/j1x4r/4575399261/" title="Shamrock by Jixar, on Flickr"><img src="http://farm4.static.flickr.com/3305/4575399261_74e3b6666a_m.jpg" alt="Shamrock" /></a>
 	</li>
 	<li>
-		<a href="http://www.flickr.com/photos/cloppy/2983054651/" title="Shamrock by jez.atkinson, on Flickr"><img src="http://farm4.static.flickr.com/3007/2983054651_6870c93ab2.jpg" width="320" height="480" alt="Shamrock" /></a>
+		<a href="http://www.flickr.com/photos/cloppy/2983054651/" title="Shamrock by jez.atkinson, on Flickr"><img src="http://farm4.static.flickr.com/3007/2983054651_6870c93ab2_m.jpg" alt="Shamrock" /></a>
 	</li>
 	<li>
-		<a href="http://www.flickr.com/photos/32554040@N08/3035575238/" title="shamrock trivet by woollypunk, on Flickr"><img src="http://farm4.static.flickr.com/3191/3035575238_ea2c924edb.jpg" width="500" height="375" alt="shamrock trivet" /></a>
+		<a href="http://www.flickr.com/photos/32554040@N08/3035575238/" title="shamrock trivet by woollypunk, on Flickr"><img src="http://farm4.static.flickr.com/3191/3035575238_ea2c924edb_m.jpg" alt="shamrock trivet" /></a>
 	</li>
 </ul>
 
