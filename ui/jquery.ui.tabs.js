@@ -32,7 +32,7 @@ $.widget( "ui.tabs", {
 		cookie: null, // e.g. { expires: 7, path: '/', domain: 'jquery.com', secure: true }
 		collapsible: false,
 		disable: null,
-		disabled: [],
+		disabled: false,
 		enable: null,
 		event: "click",
 		fx: null, // e.g. { height: 'toggle', opacity: 'toggle', duration: 200 }
@@ -194,15 +194,12 @@ $.widget( "ui.tabs", {
 
 			// Take disabling tabs via class attribute from HTML
 			// into account and update option properly.
-			// A selected tab cannot become disabled.
-			o.disabled = $.unique( o.disabled.concat(
-				$.map( this.lis.filter( ".ui-state-disabled" ), function( n, i ) {
-					return self.lis.index( n );
-				})
-			) ).sort();
-
-			if ( $.inArray( o.selected, o.disabled ) != -1 ) {
-				o.disabled.splice( $.inArray( o.selected, o.disabled ), 1 );
+			if ( $.isArray( o.disabled ) ) {
+				o.disabled = $.unique( o.disabled.concat(
+					$.map( this.lis.filter( ".ui-state-disabled" ), function( n, i ) {
+						return self.lis.index( n );
+					})
+				) ).sort();
 			}
 
 			// highlight selected tab
@@ -233,6 +230,10 @@ $.widget( "ui.tabs", {
 			o.selected = this.lis.index( this.lis.filter( ".ui-tabs-selected" ) );
 		}
 
+		if ( !o.disabled.length ) {
+			o.disabled = false;
+		}
+
 		this.element.toggleClass( "ui-tabs-collapsible", o.collapsible );
 
 		// set or update cookie after init and add/remove respectively
@@ -242,8 +243,7 @@ $.widget( "ui.tabs", {
 
 		// disable tabs
 		for ( var i = 0, li; ( li = this.lis[ i ] ); i++ ) {
-			$( li ).toggleClass( "ui-state-disabled",
-				$.inArray( i, o.disabled ) != -1 && !$( li ).hasClass( "ui-tabs-selected" ) );
+			$( li ).toggleClass( "ui-state-disabled", $.inArray( i, o.disabled ) != -1 );
 		}
 
 		// reset cache if switching from cached to not cached
@@ -533,30 +533,50 @@ $.widget( "ui.tabs", {
 	},
 
 	enable: function( index ) {
+		if ( index === undefined ) {
+			for ( var i = 0, len = this.lis.length; i < len; i++ ) {
+				this.enable( i );
+			}
+			return this;
+		}
 		index = this._getIndex( index );
 		var o = this.options;
-		if ( $.inArray( index, o.disabled ) == -1 ) {
+		if ( !o.disabled || ($.isArray( o.disabled ) && $.inArray( index, o.disabled ) == -1 ) ) {
 			return;
 		}
 
 		this.lis.eq( index ).removeClass( "ui-state-disabled" );
-		o.disabled = $.grep( o.disabled, function( n, i ) {
-			return n != index;
-		});
+		o.disabled = this.lis.map( function( i ) {
+			return $(this).is( ".ui-state-disabled" ) ? i : null;
+		}).get();
+
+		if ( !o.disabled.length ) {
+			o.disabled = false;
+		}
 
 		this._trigger( "enable", null, this._ui( this.anchors[ index ], this.panels[ index ] ) );
 		return this;
 	},
 
 	disable: function( index ) {
+		if ( index === undefined ) {
+			for ( var i = 0, len = this.lis.length; i < len; i++ ) {
+				this.disable( i );
+			}
+			return this;
+		}
 		index = this._getIndex( index );
-		var self = this, o = this.options;
-		// cannot disable already selected tab
-		if ( index != o.selected ) {
+		var o = this.options;
+		if ( !o.disabled || ($.isArray( o.disabled ) && $.inArray( index, o.disabled ) == -1 ) ) {
 			this.lis.eq( index ).addClass( "ui-state-disabled" );
 
-			o.disabled.push( index );
-			o.disabled.sort();
+			o.disabled = this.lis.map( function( i ) {
+				return $(this).is( ".ui-state-disabled" ) ? i : null;
+			}).get();
+			
+			if ( o.disabled.length === this.anchors.length ) {
+				o.disabled = true;
+			}
 
 			this._trigger( "disable", null, this._ui( this.anchors[ index ], this.panels[ index ] ) );
 		}
