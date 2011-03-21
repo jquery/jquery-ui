@@ -15,6 +15,7 @@
 
 $.widget('ui.spinner', {
 	defaultElement: "<input>",
+  widgetEventPrefix: "spin",
 	options: {
 		incremental: true,
 		max: null,
