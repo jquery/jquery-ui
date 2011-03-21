@@ -69,10 +69,12 @@
 			path: "doesn't-matter-just-need-a-remote-source",
 			paging: { take: 2 }
 		});
-		flickr._take = datasource._take * 3;
+		// TODO needs to load next batch before reaching the last local page
 		datasource._refresh = function(options, completed) {
+			flickr._take = datasource._take * 3;
 			flickr._filter = this._filter;
 			
+			// TODO this breaks down when not just using next page
 			if (this._nextTake && this._nextTake.length) {
 				this._items = this._nextTake.slice(0, datasource._take);
 				this._nextTake = this._nextTake.slice(datasource._take);
@@ -81,7 +83,7 @@
 			}
 			
 			flickr._skip = this._skip;
-			// would be nice to be able to just pass this as a callback to refresh
+			// TODO would be nice to be able to just pass this as a callback to refresh
 			flickr.option("refresh", function() {
 				datasource._items = flickr._items.slice(0, datasource._take);
 				datasource._nextTake = flickr._items.slice(datasource._take);
