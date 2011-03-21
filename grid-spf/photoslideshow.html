@@ -12,8 +12,9 @@
 	<script src="../ui/jquery.ui.position.js"></script>
 	<script src="../ui/jquery.ui.button.js"></script>
 	<script src="datasource.js"></script>
+	<script src="pager.js"></script>
 	<script src="slideshow.js"></script>
-	<script type="text/x-kite" id="controls-tmpl">
+	<script type="text/x-kite" id="pager-tmpl">
 		<div class="controls">
 			<button data-page="first">First</button>
 			<button data-page="prev">Prev</button>
@@ -52,6 +53,11 @@
 		$( "#slideshow" ).slideshow({
 			source: datasource
 		});
+		
+		$( kite( "#pager-tmpl" )() ).insertBefore( "#slideshow" ).pager({
+			source: datasource
+		})
+		
 
 		$( "#page-size" ).change(function() {
 			datasource.option("paging", {
@@ -60,6 +66,8 @@
 				skip: datasource._skip
 			}).refresh();
 		});
+
+		datasource.refresh();
 	});
 	
 	</script>

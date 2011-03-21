@@ -10,15 +10,6 @@ $.widget( "spf.slideshow", {
 		$( this.options.source ).bind( "datasourcerefresh", function() {
 			that.refresh();
 		});
-		
-		this.buttons = $( kite( "#controls-tmpl" )() ).insertBefore( this.element ).delegate("button", "click", function() {
-			var method = $(this).data("page");
-			var source = that.options.source;
-			source[method]();
-			source.refresh();
-		}).buttonset().find("button");
-
-		this.options.source.refresh();
 	},
 	refresh: function() {
 		var photosHtml = [];
@@ -30,15 +21,5 @@ $.widget( "spf.slideshow", {
 
 		this.element.empty();
 		this.element.html( photosHtml.join("") );
-		
-		this.buttons.button("enable");
-		
-		var source = this.options.source;
-		if (!source._skip) {
-			this.buttons.slice(0, 2).button("disable")
-		}
-		if (source._skip + source._take >= source.totalCount) {
-			this.buttons.slice(2, 4).button("disable")
-		}
 	}
 });

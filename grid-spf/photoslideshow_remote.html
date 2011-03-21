@@ -13,12 +13,12 @@
 	<script src="../ui/jquery.ui.button.js"></script>
 	<script src="datasource.js"></script>
 	<script src="slideshow.js"></script>
-	<script type="text/x-kite" id="controls-tmpl">
+	<script src="pager.js"></script>
+	<script type="text/x-kite" id="pager-tmpl">
 		<div class="controls">
 			<button data-page="first">First</button>
 			<button data-page="prev">Prev</button>
 			<button data-page="next">Next</button>
-			<button data-page="last">Last</button>
 		</div>
 	</script>
 	<script type="text/x-kite" id="photo-tmpl">
@@ -65,6 +65,10 @@
 		$( "#slideshow" ).slideshow({
 			source: datasource
 		});
+		
+		$( kite( "#pager-tmpl" )() ).insertBefore( "#slideshow" ).pager({
+			source: datasource
+		});
 
 		$( "#filter" ).change(function() {
 			datasource.option("filter", {
@@ -79,6 +83,8 @@
 				skip: datasource._skip
 			}).refresh();
 		});
+		
+		datasource.refresh();
 	});
 	
 	</script>
