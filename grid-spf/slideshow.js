@@ -11,12 +11,12 @@ $.widget( "spf.slideshow", {
 			that.refresh();
 		});
 		
-		this.element.delegate("button", "click", function() {
+		this.buttons = $( kite( "#controls-tmpl" )() ).insertBefore( this.element ).delegate("button", "click", function() {
 			var method = $(this).data("page");
 			var source = that.options.source;
 			source[method]();
 			source.refresh();
-		});
+		}).buttonset().find("button");
 
 		this.options.source.refresh();
 	},
@@ -31,15 +31,14 @@ $.widget( "spf.slideshow", {
 		this.element.empty();
 		this.element.html( photosHtml.join("") );
 		
-		var buttons = this.element.prepend( kite( "#controls-tmpl" ) ).find(".controls").buttonset().find("button");
-		buttons.button("enable");
+		this.buttons.button("enable");
 		
 		var source = this.options.source;
 		if (!source._skip) {
-			buttons.slice(0, 2).button("disable")
+			this.buttons.slice(0, 2).button("disable")
 		}
 		if (source._skip + source._take >= source.totalCount) {
-			buttons.slice(2, 4).button("disable")
+			this.buttons.slice(2, 4).button("disable")
 		}
 	}
 });
