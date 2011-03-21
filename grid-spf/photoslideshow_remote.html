@@ -64,10 +64,6 @@
 				});
 		    }
 		});
-		datasource.option("filter", {
-			property: "tags",
-			value: "jquery"
-		})
 
 		$( "#slideshow" ).slideshow({
 			source: datasource
@@ -77,12 +73,6 @@
 			source: datasource
 		});
 
-		$( "#filter" ).change(function() {
-			datasource.option("filter", {
-				property: "tags",
-				value: $(this).val()
-			}).refresh();
-		});
 		$( "#page-size" ).change(function() {
 			datasource.option("paging", {
 				take: +$(this).val(),
@@ -91,7 +81,12 @@
 			}).refresh();
 		});
 		
-		datasource.refresh();
+		$( "#filter" ).change(function() {
+			datasource.option("filter", {
+				property: "tags",
+				value: $(this).val()
+			}).refresh();
+		}).trigger("change");
 	});
 	
 	</script>
