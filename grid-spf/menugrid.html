@@ -95,22 +95,8 @@
 		$("#pager").pager({
 			source: movies
 		});
-		return;
-		var buttons = $("#pager").buttonset().find("button").click(function() {
-			var method = $(this).data("page");
-			movies[method]();
-			movies.refresh();
-		});
-		$(movies).bind("datasourcerefresh", function() {
-			buttons.button("enable");
-			if (!movies._skip) {
-				buttons.slice(0, 2).button("disable")
-			}
-			if (movies._skip + movies._take >= movies.totalCount) {
-				buttons.slice(2, 4).button("disable")
-			}
-		});
-
+		
+		movies.refresh();
 	});
 	</script>
 	
@@ -150,6 +136,12 @@
 <p id="pager">
 	<button data-page="first">First</button>
 	<button data-page="prev">Prev</button>
+	<button data-page="prevStep">-1</button>
+	<span>
+		Page <input class="current" size="4"/><span class="total">0</span>,
+		Total records <span class="totalRecords">0</span>
+	</span>
+	<button data-page="nextStep">+1</button>
 	<button data-page="next">Next</button>
 	<button data-page="last">Last</button>
 </p>

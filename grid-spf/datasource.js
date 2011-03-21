@@ -239,29 +239,6 @@ DataSource.prototype = {
 	
 	toArray: function() {
 		return this._items;
-	},
-	
-	first: function() {
-		this._skip = 0;
-	},
-	
-	prev: function() {
-		if (this._skip) {
-			this._skip -= this._take;
-		}
-	},
-	
-	next: function() {
-		if (!this._skip) {
-			this._skip = this._take;
-		} else if (this._skip + this._take < this.totalCount) {
-			this._skip += this._take;
-		}
-	},
-	
-	last: function() {
-		// TODO need to actually calculate the page
-		this._skip = this.totalCount - this._take;
 	}
 };
 

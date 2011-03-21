@@ -18,7 +18,14 @@
 		<div class="controls">
 			<button data-page="first">First</button>
 			<button data-page="prev">Prev</button>
+			<button data-page="prevStep">-1</button>
+			<span>
+				Page <input class="current" size="4"/><span class="total">0</span>,
+				Total records <span class="totalRecords">0</span>
+			</span>
+			<button data-page="nextStep">+1</button>
 			<button data-page="next">Next</button>
+			<button data-page="last">Last</button>
 		</div>
 	</script>
 	<script type="text/x-kite" id="photo-tmpl">
@@ -44,7 +51,7 @@
 					tags: filter[0].filterValue,
 					sort: "relevance",
 					per_page: take,
-					page: skip
+					page: Math.ceil((skip || 0) / take + 1)
 				});
 			},
 			resultsFilter: function (data) {
