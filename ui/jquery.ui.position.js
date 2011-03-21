@@ -14,8 +14,7 @@ $.ui = $.ui || {};
 var horizontalPositions = /left|center|right/,
 	verticalPositions = /top|center|bottom/,
 	center = "center",
-	_position = $.fn.position,
-	_offset = $.fn.offset;
+	_position = $.fn.position;
 
 $.fn.position = function( options ) {
 	if ( !options || !options.of ) {
