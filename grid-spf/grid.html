@@ -9,8 +9,10 @@
 	<script src="../external/jquery.tmpl.js"></script>
 	<script src="../ui/jquery.ui.core.js"></script>
 	<script src="../ui/jquery.ui.widget.js"></script>
+	<script src="../ui/jquery.ui.button.js"></script>
 	<script src="datasource.js"></script>
 	<script src="grid.js"></script>
+	<script src="pager.js"></script>
 
 	<script>
 
@@ -130,15 +132,6 @@
 		return this;
 	}
 	
-	$.fn.pagerControl = function(datasource) {
-		$(this).addClass("tool").find("button").click(function() {
-			var method = $(this).data("page");
-			datasource[method]();
-			datasource.refresh();
-		});
-		return this;
-	}
-
 	$(function() {
 		var developers = $.dataSource({
 			source: localDevelopers,
@@ -160,7 +153,11 @@
 		
 		$("#filterDevelopers").filterControl(developers);
 		$("#sortDevelopers").sorterControl(developers);
-		$("#pageDevelopers").pagerControl(developers);
+		$("#pageDevelopers").pager({
+			source: developers
+		});
+		
+		developers.refresh();
 		
 		// A similar example...but with server integration and remote queries.
 		var movies = $.dataSource($.extend({}, $.dataSource.oDataSettings, {
@@ -174,7 +171,11 @@
 
 		$("#filterMovies").filterControl(movies);
 		$("#sortMovies").sorterControl(movies);
-		$("#pageMovies").pagerControl(movies);
+		$("#pageMovies").pager({
+			source: movies
+		});
+		
+		movies.refresh();
 	});
 	</script>
 	
