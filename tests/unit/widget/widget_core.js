@@ -74,7 +74,7 @@ test( "element normalization", function() {
 });
 
 test( "jQuery usage", function() {
-	expect( 11 );
+	expect( 13 );
 
 	var shouldCreate = false;
 
@@ -98,6 +98,9 @@ test( "jQuery usage", function() {
 			} else {
 				return this.getterSetterVal;
 			}
+		},
+		jQueryObject: function() {
+			return $( "body" );
 		}
 	});
 
@@ -120,6 +123,9 @@ test( "jQuery usage", function() {
 	ret = elem.testWidget( "getterSetterMethod", 30 );
 	equals( ret, elem, "getter/setter method can be chainable" );
 	equals( instance.getterSetterVal, 30, "getter/setter can act as setter" );
+	ret = elem.testWidget( "jQueryObject" );
+	equal( ret[ 0 ], document.body, "returned jQuery object" );
+	equal( ret.end(), elem, "stack preserved" );
 });
 
 test( "direct usage", function() {
@@ -765,7 +771,7 @@ test( "._trigger() - provide event and ui", function() {
 	.testWidget( "testEvent" );
 });
 
-test( "._triger() - instance as element", function() {
+test( "._trigger() - instance as element", function() {
 	expect( 4 );
 	$.widget( "ui.testWidget", {
 		defaultElement: null,
