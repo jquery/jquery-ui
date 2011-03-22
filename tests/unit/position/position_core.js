@@ -207,7 +207,41 @@ test('of', function() {
 	}, 'event - left top, right bottom');
 });
 
-test('offset', function() {
+test('offsets', function() {
+	$('#elx').position({
+		my: 'left top',
+		at: 'left+10 bottom+10',
+		of: '#parentx',
+		collision: 'none'
+	});
+	same($('#elx').offset(), { top: 70, left: 50 }, 'offsets in at');
+	
+	$('#elx').position({
+		my: 'left+10 top-10',
+		at: 'left bottom',
+		of: '#parentx',
+		collision: 'none'
+	});
+	same($('#elx').offset(), { top: 50, left: 50 }, 'offsets in my');
+
+	$('#elx').position({
+		my: 'left top',
+		at: 'left+50% bottom-10%',
+		of: '#parentx',
+		collision: 'none'
+	});
+	same($('#elx').offset(), { top: 58, left: 50 }, 'percentage offsets in at');
+
+	$('#elx').position({
+		my: 'left-30% top+50%',
+		at: 'left bottom',
+		of: '#parentx',
+		collision: 'none'
+	});
+	same($('#elx').offset(), { top: 65, left: 37 }, 'percentage offsets in my');
+});
+
+test('offset - deprecated', function() {
 	$('#elx').position({
 		my: 'left top',
 		at: 'left bottom',
