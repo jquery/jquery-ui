@@ -188,7 +188,6 @@ $.widget('ui.spinner', {
 			if (!self.spinning && !self._start(event)) {
 				return false;
 			}
-			$("<div>").text("delta: " + delta).appendTo(document.body)
 			self._spin((delta > 0 ? 1 : -1) * self.options.step, event);
 			clearTimeout(self.timeout);
 			self.timeout = setTimeout(function() {
