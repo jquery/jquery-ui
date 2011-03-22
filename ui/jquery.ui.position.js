@@ -11,8 +11,8 @@
 
 $.ui = $.ui || {};
 
-var horizontalPositions = /left|center|right/,
-	verticalPositions = /top|center|bottom/,
+var rhorizontal = /left|center|right/,
+	rvertical = /top|center|bottom/,
 	roffset = /[+-]\d+%?/,
 	rposition = /^\w+/,
 	rpercent = /%$/,
@@ -58,23 +58,23 @@ $.fn.position = function( options ) {
 	// force my and at to have valid horizontal and vertical positions
 	// if a value is missing or invalid, it will be converted to center 
 	$.each( [ "my", "at" ], function() {
-		var pos = ( options[this] || "" ).split( " " ),
+		var pos = ( options[ this ] || "" ).split( " " ),
 			horizontalOffset,
 			verticalOffset;
 
 		if ( pos.length === 1) {
-			pos = horizontalPositions.test( pos[0] ) ?
-				pos.concat( [center] ) :
-				verticalPositions.test( pos[0] ) ?
+			pos = rhorizontal.test( pos[ 0 ] ) ?
+				pos.concat( [ center ] ) :
+				rvertical.test( pos[ 0 ] ) ?
 					[ center ].concat( pos ) :
 					[ center, center ];
 		}
-		pos[ 0 ] = horizontalPositions.test( pos[0] ) ? pos[ 0 ] : center;
-		pos[ 1 ] = verticalPositions.test( pos[1] ) ? pos[ 1 ] : center;
+		pos[ 0 ] = rhorizontal.test( pos[ 0 ] ) ? pos[ 0 ] : center;
+		pos[ 1 ] = rvertical.test( pos[ 1 ] ) ? pos[ 1 ] : center;
 
 		// calculate offsets
 		horizontalOffset = roffset.exec( pos[ 0 ] );
-		verticalOffset = roffset.exec( pos [ 1 ] );
+		verticalOffset = roffset.exec( pos[ 1 ] );
 		offsets[ this ] = [
 			horizontalOffset ? horizontalOffset[ 0 ] : 0,
 			verticalOffset ? verticalOffset[ 0 ] : 0
@@ -92,15 +92,15 @@ $.fn.position = function( options ) {
 		collision[ 1 ] = collision[ 0 ];
 	}
 
-	if ( options.at[0] === "right" ) {
+	if ( options.at[ 0 ] === "right" ) {
 		basePosition.left += targetWidth;
-	} else if ( options.at[0] === center ) {
+	} else if ( options.at[ 0 ] === center ) {
 		basePosition.left += targetWidth / 2;
 	}
 
-	if ( options.at[1] === "bottom" ) {
+	if ( options.at[ 1 ] === "bottom" ) {
 		basePosition.top += targetHeight;
-	} else if ( options.at[1] === center ) {
+	} else if ( options.at[ 1 ] === center ) {
 		basePosition.top += targetHeight / 2;
 	}
 
@@ -132,15 +132,15 @@ $.fn.position = function( options ) {
 			],
 			collisionPosition;
 
-		if ( options.my[0] === "right" ) {
+		if ( options.my[ 0 ] === "right" ) {
 			position.left -= elemWidth;
-		} else if ( options.my[0] === center ) {
+		} else if ( options.my[ 0 ] === center ) {
 			position.left -= elemWidth / 2;
 		}
 
-		if ( options.my[1] === "bottom" ) {
+		if ( options.my[ 1 ] === "bottom" ) {
 			position.top -= elemHeight;
-		} else if ( options.my[1] === center ) {
+		} else if ( options.my[ 1 ] === center ) {
 			position.top -= elemHeight / 2;
 		}
 
@@ -157,8 +157,8 @@ $.fn.position = function( options ) {
 		};
 
 		$.each( [ "left", "top" ], function( i, dir ) {
-			if ( $.ui.position[ collision[i] ] ) {
-				$.ui.position[ collision[i] ][ dir ]( position, {
+			if ( $.ui.position[ collision[ i ] ] ) {
+				$.ui.position[ collision[ i ] ][ dir ]( position, {
 					targetWidth: targetWidth,
 					targetHeight: targetHeight,
 					elemWidth: elemWidth,
@@ -185,18 +185,22 @@ $.ui.position = {
 		left: function( position, data ) {
 			var win = $( window ),
 				over = data.collisionPosition.left + data.collisionWidth - win.width() - win.scrollLeft();
-			position.left = over > 0 ? position.left - over : Math.max( position.left - data.collisionPosition.left, position.left );
+			position.left = over > 0 ?
+				position.left - over :
+				Math.max( position.left - data.collisionPosition.left, position.left );
 		},
 		top: function( position, data ) {
 			var win = $( window ),
 				over = data.collisionPosition.top + data.collisionHeight - win.height() - win.scrollTop();
-			position.top = over > 0 ? position.top - over : Math.max( position.top - data.collisionPosition.top, position.top );
+			position.top = over > 0 ?
+				position.top - over :
+				Math.max( position.top - data.collisionPosition.top, position.top );
 		}
 	},
 
 	flip: {
 		left: function( position, data ) {
-			if ( data.at[0] === center ) {
+			if ( data.at[ 0 ] === center ) {
 				return;
 			}
 			var win = $( window ),
@@ -217,7 +221,7 @@ $.ui.position = {
 					0;
 		},
 		top: function( position, data ) {
-			if ( data.at[1] === center ) {
+			if ( data.at[ 1 ] === center ) {
 				return;
 			}
 			var win = $( window ),
@@ -273,7 +277,7 @@ if ( $.uiBackCompat !== false ) {
 				offset: undefined
 			} ) );
 		}
-	}( jQuery ));
+	}( jQuery ) );
 }
 
-}( jQuery ));
+}( jQuery ) );
