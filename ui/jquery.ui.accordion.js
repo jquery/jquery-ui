@@ -662,7 +662,7 @@ if ( $.uiBackCompat !== false ) {
 				ret = _trigger.call( this, "change", event, data );
 			}
 			return ret;
-		}
+		};
 	}( jQuery, jQuery.ui.accordion.prototype ) );
 }
 
