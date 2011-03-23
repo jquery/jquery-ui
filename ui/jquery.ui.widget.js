@@ -178,9 +178,7 @@ $.Widget.prototype = {
 		this._trigger( "create" );
 		this._init();
 	},
-	_getCreateOptions: function() {
-		return $.metadata && $.metadata.get( this.element[0] )[ this.widgetName ];
-	},
+	_getCreateOptions: $.noop,
 	_create: $.noop,
 	_init: $.noop,
 
@@ -339,5 +337,12 @@ $.Widget.prototype = {
 			event.isDefaultPrevented() );
 	}
 };
+
+// DEPRECATED
+if ( $.uiBackCompat !== false ) {
+	$.Widget.prototype._getCreateOptions = function() {
+		return $.metadata && $.metadata.get( this.element[0] )[ this.widgetName ];
+	}
+}
 
 })( jQuery );
