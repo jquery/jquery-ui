@@ -441,6 +441,30 @@ test( ".option() - delegate to ._setOption()", function() {
 	], "_setOption called with multiple options" );
 });
 
+test( ".option() - deep option setter", function() {
+	$.widget( "ui.testWidget", {} );
+	var div = $( "<div>" ).testWidget();
+	function deepOption( from, to, msg ) {
+		div.data( "testWidget" ).options.foo = from;
+		$.ui.testWidget.prototype._setOption = function( key, value ) {
+			same( key, "foo", msg + ": key" );
+			same( value, to, msg + ": value" );
+		};
+	}
+
+	deepOption( { bar: "baz" }, { bar: "qux" }, "one deep" );
+	div.testWidget( "option", "foo.bar", "qux" );
+
+	deepOption( null, { bar: "baz" }, "null" );
+	div.testWidget( "option", "foo.bar", "baz" );
+
+	deepOption(
+		{ bar: "baz", qux: { quux: "quuux" } },
+		{ bar: "baz", qux: { quux: "quuux", newOpt: "newVal" } },
+		"add property" );
+	div.testWidget( "option", "foo.qux.newOpt", "newVal" );
+});
+
 test( ".enable()", function() {
 	expect( 2 );
 	$.widget( "ui.testWidget", {
