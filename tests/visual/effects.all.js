@@ -89,4 +89,8 @@ $(function() {
 			return "current"
 		}, duration);
 	});
+	
+	$("#piecer").click(function(){
+		$.effects.piecer.call(this, 5, 5);
+	});
 });
