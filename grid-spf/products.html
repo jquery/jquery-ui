@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Product Browsing</title>
+	<link rel="stylesheet" href="../themes/base/jquery.ui.all.css">
+	<link rel="stylesheet" href="grid.css">
+	<script src="../jquery-1.5.1.js"></script>
+	<script src="../external/jquery.tmpl.js"></script>
+	<script src="../ui/jquery.ui.core.js"></script>
+	<script src="../ui/jquery.ui.widget.js"></script>
+	<script src="../ui/jquery.ui.position.js"></script>
+	<script src="../ui/jquery.ui.button.js"></script>
+	<script src="datasource.js"></script>
+	<script src="grid.js"></script>
+	<script src="pager.js"></script>
+	
+	<script>
+	$(function() {
+		
+		function parseTimeLeft(value) {
+			return value
+			// remove leading character, probably timezone indicator?
+			.slice(1)
+			// insert comma and space
+			.replace(/(\d+[A-Z]+)/g, "$1, ")
+			// remove at the end
+			.replace(/,\s$/, "")
+			// remove entries with 0
+			.replace(/(^|\s)0[A-Z]+,?/g, "")
+			// insert words
+			.replace(/([A-Z]+)/g, function(match) {
+				return " " + {
+					DT: "days",
+					"H": "hours",
+					"M": "minutes",
+					"S": "seconds"
+				}[match];
+			})
+			// cut of s for singular entries
+			.replace(/(?:^|\s)1 ([a-z]+)s/g, " 1 $1")
+		}
+		
+		var ebay = $.dataSource({
+			path: "http://svcs.ebay.com/services/search/FindingService/v1",
+			paging: {
+				take: 5
+			},
+			resultsFilter: function (data) {
+				var response = data.findItemsByKeywordsResponse[0];
+		        this.totalCount = response.paginationOutput[0].totalEntries[0];
+				var items = response.searchResult[0].item || [];
+				return $.map(items, function( item ) {
+					return {
+						title: item.title[0],
+						condition: item.condition && item.condition[0].conditionDisplayName[0],
+						category: item.primaryCategory[0].categoryName[0],
+						price: item.sellingStatus[0].currentPrice[0].__value__,
+						timeleft: parseTimeLeft(item.sellingStatus[0].timeLeft[0])
+					}
+				});
+		    },
+		
+		    urlMapper: function (path, queryParams, sort, filter, skip, take) {
+				// http://developer.ebay.com/DevZone/finding/CallRef/findItemsByKeywords.html
+		        return path + "?" + $.param({
+					"OPERATION-NAME": "findItemsByKeywords",
+					"SERVICE-VERSION": "1.0.0",
+					"SECURITY-APPNAME": "JrnZaeff-a73f-49ab-8af3-5916011027ef",
+					"GLOBAL-ID": "EBAY-US",
+					"RESPONSE-DATA-FORMAT": "JSON",
+					"keywords": filter[0].filterValue,
+					"paginationInput.entriesPerPage": take,
+					"sortOrder": sort.property,
+					// TODO hard limit at 100 pages - pager should be aware of that
+					"paginationInput.pageNumber": Math.min(100, Math.ceil((skip || 0) / take + 1))
+				})
+				// TODO add UI to customize itemFilter
+				// http://developer.ebay.com/DevZone/finding/Concepts/FindingAPIGuide.html#useitemfilters
+				// http://developer.ebay.com/DevZone/finding/CallRef/types/ItemFilterType.html
+				+ "&itemFilter(0).name=MaxPrice"
+				+ "&itemFilter(0).value=25"
+				+ "&itemFilter(0).paramName=Currency"
+				+ "&itemFilter(0).paramValue=USD"
+				+ "&itemFilter(1).name=FreeShippingOnly"
+				+ "&itemFilter(1).value=true"
+				+ "&itemFilter(2).name=ListingType"
+				+ "&itemFilter(2).value(0)=AuctionWithBIN"
+				+ "&itemFilter(2).value(1)=FixedPrice"
+				+ "&itemFilter(2).value(2)=StoreInventory";
+		    }
+		});
+		
+		$("table").grid({
+			source: ebay
+		});
+		
+		$("#pager").pager({
+			source: ebay
+		});
+		
+		$("#sort").change(function() {
+			ebay.option("sort", {
+				property: $(this).val(),
+				value: $(this).text()
+			});
+		}).trigger("change");
+		
+		$("#keywords").change(function() {
+			ebay.option("filter", {
+				property: "keywords",
+				value: $(this).val()
+			});
+		}).trigger("change");
+		
+		$("#sort, #keywords").change(function() {
+			ebay.refresh();
+		});
+		ebay.refresh();
+	});
+	
+	</script>
+</head>
+<body>
+	
+	<p>
+		Sort:
+		<select id="sort" size="4">
+			<option value="BestMatch" selected="selected">Best match</option>
+			<option value="PricePlusShippingHighest">Price, highest first</option>
+			<option value="PricePlusShippingLowest">Price, lowest first</option>
+			<option value="EndTimeSoonest">Ends soon</option>
+		</select>
+	</p>
+	<p>
+		Keywords: <input id="keywords" value="harry potter" />
+	</p>
+	<p id="pager">
+		<button data-page="first">First</button>
+		<button data-page="prev">Prev</button>
+		<button data-page="prevStep">-1</button>
+		<span>
+			Page <input class="current" size="4"/>/<span class="total">0</span>,
+			Total records <span class="totalRecords">0</span>
+		</span>
+		<button data-page="nextStep">+1</button>
+		<button data-page="next">Next</button>
+		<button data-page="last">Last</button>
+	</p>
+	<table>
+		<thead>
+			<tr>
+				<th data-field="title">Title</th>
+				<th data-field="condition">Condition</th>
+				<th data-field="category">Category</th>
+				<th data-field="price">Price ($)</th>
+				<th data-field="timeleft">Time Left</th>
+			</tr>
+		</thead>
+		<tbody></tbody>
+	</table>
+
+</body>
+</html>
