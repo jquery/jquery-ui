@@ -98,6 +98,14 @@
 			this._filter[filter.property] = filter.value;
 		};
 		
+		var overlay = $("<div id='loading-overlay'>").addClass("ui-widget-overlay").hide().appendTo("body");
+		$(ebay).bind("datasourcerequest", function() {
+			overlay.show();
+		}).bind("datasourceresponse", function() {
+			overlay.hide();
+		})
+		
+		
 		$("table").grid({
 			source: ebay
 		});

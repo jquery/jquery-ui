@@ -20,7 +20,7 @@ var datasource = {
 		return localData;
 	},
 	refresh: function() {
-		$(this).trigger("datasourcerefresh");
+		$(this).trigger("datasourceresponse");
 	}
 };
 
@@ -137,11 +137,12 @@ DataSource.prototype = {
             this._refreshingHandler();
         }
         var self = this;
+		$(self).trigger("datasourcerequest");
         this._refresh(options, function () {
             if (self._refreshHandler) {
                 self._refreshHandler();
             }
-			$(self).trigger("datasourcerefresh");
+			$(self).trigger("datasourceresponse");
         });
         return this;
     },

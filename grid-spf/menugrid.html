@@ -58,7 +58,7 @@
 			$("<input />").appendTo($(this).empty());
 		});
 		
-		grid.bind("keyup change", function() {
+		grid.bind("change", function() {
 			var filters = [];
 			$(this).find("input").each(function() {
 				var head = $(this).parent(),

@@ -7,7 +7,7 @@ $.widget( "spf.slideshow", {
 		var that = this;
 
 		this.element.addClass( "spf-slideshow" );
-		$( this.options.source ).bind( "datasourcerefresh", function() {
+		$( this.options.source ).bind( "datasourceresponse", function() {
 			that.refresh();
 		});
 	},
