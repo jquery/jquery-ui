@@ -44,7 +44,7 @@
 		var ebay = $.dataSource({
 			path: "http://svcs.ebay.com/services/search/FindingService/v1",
 			paging: {
-				take: 5
+				take: 10
 			},
 			resultsFilter: function (data) {
 				var response = data.findItemsByKeywordsResponse[0];
@@ -56,40 +56,47 @@
 						condition: item.condition && item.condition[0].conditionDisplayName[0],
 						category: item.primaryCategory[0].categoryName[0],
 						price: item.sellingStatus[0].currentPrice[0].__value__,
-						timeleft: parseTimeLeft(item.sellingStatus[0].timeLeft[0])
+						shipping: item.shippingInfo[0].shippingServiceCost && item.shippingInfo[0].shippingServiceCost[0].__value__,
+						timeleft: parseTimeLeft(item.sellingStatus[0].timeLeft[0]),
 					}
 				});
 		    },
 		
 		    urlMapper: function (path, queryParams, sort, filter, skip, take) {
 				// http://developer.ebay.com/DevZone/finding/CallRef/findItemsByKeywords.html
-		        return path + "?" + $.param({
+		        var url = path + "?" + $.param({
 					"OPERATION-NAME": "findItemsByKeywords",
 					"SERVICE-VERSION": "1.0.0",
 					"SECURITY-APPNAME": "JrnZaeff-a73f-49ab-8af3-5916011027ef",
 					"GLOBAL-ID": "EBAY-US",
 					"RESPONSE-DATA-FORMAT": "JSON",
-					"keywords": filter[0].filterValue,
+					"keywords": filter.keywords,
 					"paginationInput.entriesPerPage": take,
 					"sortOrder": sort.property,
 					// TODO hard limit at 100 pages - pager should be aware of that
 					"paginationInput.pageNumber": Math.min(100, Math.ceil((skip || 0) / take + 1))
-				})
-				// TODO add UI to customize itemFilter
+				});
+				// add item filters
 				// http://developer.ebay.com/DevZone/finding/Concepts/FindingAPIGuide.html#useitemfilters
 				// http://developer.ebay.com/DevZone/finding/CallRef/types/ItemFilterType.html
-				+ "&itemFilter(0).name=MaxPrice"
-				+ "&itemFilter(0).value=25"
-				+ "&itemFilter(0).paramName=Currency"
-				+ "&itemFilter(0).paramValue=USD"
-				+ "&itemFilter(1).name=FreeShippingOnly"
-				+ "&itemFilter(1).value=true"
-				+ "&itemFilter(2).name=ListingType"
-				+ "&itemFilter(2).value(0)=AuctionWithBIN"
-				+ "&itemFilter(2).value(1)=FixedPrice"
-				+ "&itemFilter(2).value(2)=StoreInventory";
+				var index = 0;
+				for (property in filter) {
+					// keywords is a filter, but has its own field above
+					if (property == "keywords" || $.isEmptyObject(filter[property]))
+						continue;
+					url += "&itemFilter(" + index + ").name=" + property;
+					for (arg in filter[property]) {
+						url += "&itemFilter(" + index + ")." + arg + "=" + filter[property][arg];
+					}
+					index += 1;
+				}
+				return url;
 		    }
 		});
+		ebay._filter = {};
+		ebay._setFilter = function(filter) {
+			this._filter[filter.property] = filter.value;
+		};
 		
 		$("table").grid({
 			source: ebay
@@ -113,7 +120,43 @@
 			});
 		}).trigger("change");
 		
-		$("#sort, #keywords").change(function() {
+		$("#freeShipping").change(function() {
+			ebay.option("filter", {
+				property: "FreeShippingOnly",
+				value: {
+					value: $(this).is(":checked")
+				}
+			});
+		}).trigger("change");
+		
+		$("#maxPrice").change(function() {
+			var value = $(this).val();
+			ebay.option("filter", {
+				property: "MaxPrice",
+				value: value ? {
+					value: $(this).val(),
+					paramName: "Currency",
+					paramValue: "USD"
+				} : {}
+			});
+		}).trigger("change");
+		
+		var listingType = $("input[name=listingType]").change(function() {
+			var index = 0,
+				values = {};
+			listingType.each(function() {
+				if ($(this).is(":checked")) {
+					values["value(" + index + ")"] = $(this).val();
+					index += 1;
+				}
+			});
+			ebay.option("filter", {
+				property: "ListingType",
+				value: values
+			}).refresh();
+		});
+		
+		$("#sort, #keywords, #freeShipping, #maxPrice").change(function() {
 			ebay.refresh();
 		});
 		ebay.refresh();
@@ -133,7 +176,33 @@
 		</select>
 	</p>
 	<p>
-		Keywords: <input id="keywords" value="harry potter" />
+		<label for="keywords">Keywords: </label>
+		<input id="keywords" value="harry potter" />
+	</p>
+	<p>
+		<input type="checkbox" id="freeShipping">
+		<label for="freeShipping">Only Free Shipping</label>
+	</p>
+	<p>
+		<label for="maxPrice">Max Price</label>
+		<input id="maxPrice" value="25">
+	</p>
+	<p>
+		Listing Type
+		<ul>
+			<li>
+				<input type="checkbox" id="listing-bin" value="AuctionWithBIN" name="listingType">
+				<label for="listing-bin">Auction with BIN</label>
+			</li>
+			<li>
+				<input type="checkbox" id="listing-fixed" value="FixedPrice" name="listingType">
+				<label for="listing-fixed">Fixed Price</label>
+			</li>
+			<li>
+				<input type="checkbox" id="listing-store" value="StoreInventory" name="listingType">
+				<label for="listing-store">Store Inventory</label>
+			</li>
+		</ul>
 	</p>
 	<p id="pager">
 		<button data-page="first">First</button>
@@ -154,6 +223,7 @@
 				<th data-field="condition">Condition</th>
 				<th data-field="category">Category</th>
 				<th data-field="price">Price ($)</th>
+				<th data-field="shipping">Shipping ($)</th>
 				<th data-field="timeleft">Time Left</th>
 			</tr>
 		</thead>
