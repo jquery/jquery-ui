@@ -30,9 +30,7 @@ $.widget( "ui.tabs", {
 		beforeload: null,
 		cookie: null, // e.g. { expires: 7, path: '/', domain: 'jquery.com', secure: true }
 		collapsible: false,
-		disable: null,
 		disabled: false,
-		enable: null,
 		event: "click",
 		fx: null, // e.g. { height: 'toggle', opacity: 'toggle', duration: 200 }
 		idPrefix: "ui-tabs-",
@@ -545,7 +543,6 @@ $.widget( "ui.tabs", {
 			o.disabled = false;
 		}
 
-		this._trigger( "enable", null, this._ui( this.anchors[ index ], this.panels[ index ] ) );
 		return this;
 	},
 
@@ -569,7 +566,6 @@ $.widget( "ui.tabs", {
 				o.disabled = true;
 			}
 
-			this._trigger( "disable", null, this._ui( this.anchors[ index ], this.panels[ index ] ) );
 		}
 
 		return this;
@@ -766,6 +762,47 @@ if ( $.uiBackCompat !== false ) {
 					}
 				});
 			});
+		};
+	}( jQuery, jQuery.ui.tabs.prototype ) );
+
+	// enable/disable events
+	(function( $, prototype ) {
+		$.extend( prototype.options, {
+			enable: null,
+			disable: null
+		});
+
+		var enable = prototype.enable,
+			disable = prototype.disable;
+
+		prototype.enable = function( index ) {
+			var o = this.options,
+				trigger;
+
+			if ( index && o.disabled || ($.isArray( o.disabled ) && $.inArray( index, o.disabled ) !== -1 ) ) {
+				trigger = true;
+			}
+
+			enable.apply( this, arguments );
+
+			if ( trigger ) {
+				this._trigger( "enable", null, this._ui( this.anchors[ index ], this.panels[ index ] ) );
+			}
+		};
+
+		prototype.disable = function( index ) {
+			var o = this.options,
+				trigger;
+
+			if ( index && !o.disabled || ($.isArray( o.disabled ) && $.inArray( index, o.disabled ) == -1 ) ) {
+				trigger = true;
+			}
+
+			disable.apply( this, arguments );
+
+			if ( trigger ) {
+				this._trigger( "disable", null, this._ui( this.anchors[ index ], this.panels[ index ] ) );
+			}
 		};
 	}( jQuery, jQuery.ui.tabs.prototype ) );
 }

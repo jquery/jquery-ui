@@ -88,37 +88,4 @@ test('remove', function() {
 	ok(false, "missing test - untested code is broken code.");
 });
 
-test('enable', function() {
-	expect(4);
-
-	var uiObj;
-	el = $('#tabs1').tabs({
-		disabled: [ 0, 1 ],
-		enable: function (event, ui) {
-			uiObj = ui;
-		}
-	});
-	el.tabs('enable', 1);
-	ok(uiObj !== undefined, 'trigger callback');
-	equals(uiObj.tab, $('a', el)[1], 'contain tab as DOM anchor element');
-	equals(uiObj.panel, $('div', el)[1], 'contain panel as DOM div element');
-	equals(uiObj.index, 1, 'contain index');
-});
-
-test('disable', function() {
-	expect(4);
-
-	var uiObj;
-	el = $('#tabs1').tabs({
-		disable: function (event, ui) {
-			uiObj = ui;
-		}
-	});
-	el.tabs('disable', 1);
-	ok(uiObj !== undefined, 'trigger callback');
-	equals(uiObj.tab, $('a', el)[1], 'contain tab as DOM anchor element');
-	equals(uiObj.panel, $('div', el)[1], 'contain panel as DOM div element');
-	equals(uiObj.index, 1, 'contain index');
-});
-
 })(jQuery);
