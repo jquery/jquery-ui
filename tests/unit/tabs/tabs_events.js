@@ -26,6 +26,25 @@ test('select', function() {
 	equals( evenObj.originalEvent.type, "click", "select triggered by click" );
 });
 
+test('beforeload', function() {
+	expect( 5 );
+
+	el = $('#tabs2');
+
+	el.tabs({
+		selected: 2,
+		beforeload: function( event, ui ) {
+			ok( $.isFunction( ui.jqXHR.promise ), 'contain jqXHR object');
+			equals( ui.settings.url, "data/test.html", 'contain ajax settings url');
+			equals( ui.tab, el.find('a')[ 2 ], 'contain tab as DOM anchor element');
+			equals( ui.panel, el.find('div')[ 2 ], 'contain panel as DOM div element');
+			equals( ui.index, 2, 'contain index');
+			event.preventDefault();
+		}
+	});
+
+});
+
 test('load', function() {
 	ok(false, "missing test - untested code is broken code.");
 });

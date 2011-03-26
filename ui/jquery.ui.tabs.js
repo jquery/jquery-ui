@@ -27,8 +27,7 @@ function getNextListId() {
 $.widget( "ui.tabs", {
 	options: {
 		add: null,
-		ajaxOptions: null,
-		cache: false,
+		beforeload: null,
 		cookie: null, // e.g. { expires: 7, path: '/', domain: 'jquery.com', secure: true }
 		collapsible: false,
 		disable: null,
@@ -246,11 +245,6 @@ $.widget( "ui.tabs", {
 			$( li ).toggleClass( "ui-state-disabled", $.inArray( i, o.disabled ) != -1 );
 		}
 
-		// reset cache if switching from cached to not cached
-		if ( o.cache === false ) {
-			this.anchors.removeData( "cache.tabs" );
-		}
-
 		// remove all handlers before, tabify may run on existing tabs after add or option change
 		this.lis.add( this.anchors ).unbind( ".tabs" );
 
@@ -431,7 +425,7 @@ $.widget( "ui.tabs", {
 				this.href = href;
 			}
 			var $this = $( this ).unbind( ".tabs" );
-			$.each( [ "href", "load", "cache" ], function( i, prefix ) {
+			$.each( [ "href", "load" ], function( i, prefix ) {
 				$this.removeData( prefix + ".tabs" );
 			});
 		});
@@ -607,57 +601,45 @@ $.widget( "ui.tabs", {
 		var self = this,
 			o = this.options,
 			a = this.anchors.eq( index )[ 0 ],
-			url = $.data( a, "load.tabs" );
+			url = $.data( a, "load.tabs" ),
+			eventData = self._ui( self.anchors[ index ], self.panels[ index ] );
 
 		this.abort();
 
-		// not remote or from cache
-		if ( !url || this.element.queue( "tabs" ).length !== 0 && $.data( a, "cache.tabs" ) ) {
+		// not remote
+		if ( !url ) {
 			this.element.dequeue( "tabs" );
 			return;
 		}
 
-		// load remote from here on
-		this.lis.eq( index ).addClass( "ui-state-processing" );
-
-		if ( o.spinner ) {
-			var span = $( "span", a );
-			span.data( "label.tabs", span.html() ).html( o.spinner );
-		}
-
-		this.xhr = $.ajax( $.extend( {}, o.ajaxOptions, {
+		this.xhr = $.ajax({
 			url: url,
-			success: function( r, s ) {
-				self.element.find( self._sanitizeSelector( a.hash ) ).html( r );
-
-				// take care of tab labels
-				self._cleanup();
-
-				if ( o.cache ) {
-					$.data( a, "cache.tabs", true );
-				}
-
-				self._trigger( "load", null, self._ui( self.anchors[ index ], self.panels[ index ] ) );
-				try {
-					o.ajaxOptions.success( r, s );
-				}
-				catch ( e ) {}
-			},
-			error: function( xhr, s, e ) {
-				// take care of tab labels
-				self._cleanup();
-
-				self._trigger( "load", null, self._ui( self.anchors[ index ], self.panels[ index ] ) );
-				try {
-					// Passing index avoid a race condition when this method is
-					// called after the user has selected another tab.
-					// Pass the anchor that initiated this request allows
-					// loadError to manipulate the tab content panel via $(a.hash)
-					o.ajaxOptions.error( xhr, s, index, a );
-				}
-				catch ( e ) {}
+			beforeSend: function( jqXHR, settings ) {
+				return self._trigger( "beforeload", null,
+						$.extend( { jqXHR: jqXHR, settings: settings }, eventData ) );
 			}
-		} ) );
+		});
+
+		if ( this.xhr ) {
+			// load remote from here on
+			this.lis.eq( index ).addClass( "ui-state-processing" );
+
+			if ( o.spinner ) {
+				var span = $( "span", a );
+				span.data( "label.tabs", span.html() ).html( o.spinner );
+			}
+
+			this.xhr
+				.success( function( response ) {
+					self.element.find( self._sanitizeSelector( a.hash ) ).html( response );
+				})
+				.complete( function( jqXHR, status ) {
+					// take care of tab labels
+					self._cleanup();
+
+					self._trigger( "load", null, eventData );
+				});
+		}
 
 		// last, so that load event is fired before show...
 		self.element.dequeue( "tabs" );
@@ -686,7 +668,7 @@ $.widget( "ui.tabs", {
 	},
 
 	url: function( index, url ) {
-		this.anchors.eq( index ).removeData( "cache.tabs" ).data( "load.tabs", url );
+		this.anchors.eq( index ).data( "load.tabs", url );
 		return this;
 	},
 
@@ -698,5 +680,75 @@ $.widget( "ui.tabs", {
 $.extend( $.ui.tabs, {
 	version: "@VERSION"
 });
+
+// DEPRECATED
+if ( $.uiBackCompat !== false ) {
+
+	// ajaxOptions and cache options
+	(function( $, prototype ) {
+		$.extend( prototype.options, {
+			ajaxOptions: null,
+			cache: false
+		});
+
+		var _create = prototype._create,
+			_setOption = prototype._setOption,
+			_destroy = prototype._destroy,
+			oldurl = prototype._url;
+
+		$.extend( prototype, {
+			_create: function() {
+				_create.call( this );
+
+				var self = this;
+
+				this.element.bind( "tabsbeforeload", function( event, ui ) {
+					// tab is already cached
+					if ( $.data( ui.tab, "cache.tabs" ) ) {
+						event.preventDefault();
+						return;
+					}
+
+					$.extend( ui.settings, self.options.ajaxOptions, {
+						error: function( xhr, s, e ) {
+							try {
+								// Passing index avoid a race condition when this method is
+								// called after the user has selected another tab.
+								// Pass the anchor that initiated this request allows
+								// loadError to manipulate the tab content panel via $(a.hash)
+								self.options.ajaxOptions.error( xhr, s, ui.index, ui.tab );
+							}
+							catch ( e ) {}
+						}
+					});
+
+					ui.jqXHR.success( function() {
+						if ( self.options.cache ) {
+							$.data( ui.tab, "cache.tabs", true );
+						}
+					});
+				});
+			},
+
+			_setOption: function( key, value ) {
+				// reset cache if switching from cached to not cached
+				if ( key === "cache" && value === false ) {
+					this.anchors.removeData( "cache.tabs" );
+				}
+				_setOption.apply( this, arguments );
+			},
+
+			_destroy: function() {
+				this.anchors.removeData( "cache.tabs" );
+				_destroy.call( this );
+			},
+
+			url: function( index, url ){
+				this.anchors.eq( index ).removeData( "cache.tabs" );
+				oldurl.apply( this, arguments );
+			}
+		});
+	}( jQuery, jQuery.ui.tabs.prototype ) );
+}
 
 })( jQuery );

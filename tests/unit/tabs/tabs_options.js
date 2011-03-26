@@ -5,14 +5,6 @@
 
 module("tabs: options");
 
-test('ajaxOptions', function() {
-	ok(false, "missing test - untested code is broken code.");
-});
-
-test('cache', function() {
-	ok(false, "missing test - untested code is broken code.");
-});
-
 test('collapsible', function() {
 	expect(4);
 
