@@ -5,11 +5,246 @@
  * Dual licensed under the MIT or GPL Version 2 licenses.
  * http://jquery.org/license
  *
- * http://docs.jquery.com/UI/Effects/Explode
+ * http://docs.jquery.com/UI/Effects/Split (Not yet!)
  *
  * Depends:
- *  jquery.effects.core.js
+ *  
  */
+
+(function( $, undefined ) {
+	
+	//Helper function to control the split on each animation
+    function startSplitAnim( o, animation, next ){    	
+    	var el = $( this ),
+    		interval = o.interval || o.duration / ( o.rows + o.columns * 2 ),
+    		duration = o.duration - ( o.rows + o.columns ) * interval,
+    		pieceCounter = [],	
+	    	documentCoords = {
+    			height: $( document ).height(),
+    			width: $( document ).width()
+    		},
+    		parentCoords = el.offset(),
+    		container, pieces, i, j, properties;
+    	
+    	parentCoords.width = el.outerWidth();
+    	parentCoords.height = el.outerHeight();
+    	
+        // To ensure that the element is hidden/shown correctly
+        if ( o.show && o.fade ) {
+            el.css( 'opacity', 0 ).show();
+        } else {
+            el.css( 'opacity', 1 ).show();
+        }
+        
+    	//split into pieces
+        pieces = $.effects.piecer.call( this, o.rows, o.columns );
+        container = $( pieces[0] ).parent();
+    
+        // If element is to be hidden we make it invisible until the
+        // transformation is done and then hide it.
+        if ( !o.show ) {
+            el.css( 'visibility', 'hidden' );
+        }
+        
+        //Make animation
+        for ( i = 0; i < o.rows; i++ ) {
+            for ( j = 0; j < o.columns; j++ ) {
+                // call the animation for each piece.
+                animation.call( pieces[ i * o.rows + j ], interval, duration, i, j, documentCoords, parentCoords, childComplete );
+            }
+        }
+        
+		// children animate complete:
+		function childComplete() {
+        	pieceCounter.push( this );
+			if ( pieceCounter.length == o.rows * o.columns ) {
+				animComplete();
+			}
+		}
+		
+		
+		function animComplete() {
+            // Ensures that the element is hidden/shown correctly
+            if ( o.show ) {
+                el.css( 'opacity', '' ).show();
+            } else {
+                el.css( {
+                    opacity : '',
+                    visibility : ''
+                } ).hide();
+            }
+            container.detach();
+            if ( $.isFunction( o.complete ) ) {
+            	o.complete.apply( el[ 0 ] );
+            }
+            next();
+		}
+        
+    }
+    
+    
+    $.effects.piecer = function(rows, columns){
+        var el = $( this ), 
+            height = el.outerHeight(), 
+            width = el.outerWidth(), 
+            position = el.offset(),
+            pieceHeight = Math.ceil( height / rows ), 
+            pieceWidth = Math.ceil( width / columns ), 
+            container = $( '<div></div>' ).css({
+                position : 'absolute',
+                padding : 0,
+                margin : 0,
+                border : 0,
+                top : position.top + "px",
+                left : position.left + "px",
+                height : height + "px",
+                width : width + "px",
+                zIndex : el.css( 'z-index' )
+            }).appendTo('body'),
+            pieces = [],
+            
+            i, j, left, top;
+        
+        for( i = 0; i < rows; i++ ){
+            top = i * pieceHeight;
+            
+            for( j = 0; j < columns; j++ ){
+                left = j * pieceWidth;
+                
+                pieces.push(
+                    el
+                        .clone()
+                        .css({
+                            position: 'absolute',
+                            visibility: 'visible',
+                            top : -top + "px",
+                            left : -left + "px"
+                        })
+                        .wrap( '<div></div>' )
+                        .parent()
+                        .css({
+                            position : 'absolute',
+                            padding : 0,
+                            margin : 0,
+                            border : 0,
+                            height : pieceHeight + "px",
+                            width : pieceWidth + "px",
+                            left: left + "px",
+                            top: top + "px",
+                            overflow : "hidden"
+                        }).appendTo(container)
+                );
+                    
+            }
+        }
+        
+        el.hide();
+        
+        return pieces;
+    }
+    
+    $.effects.effect.build = function( o ){
+    	/*Options:
+    	 * 		random,
+    	 * 		reverse, 
+    	 * 		distance, 
+    	 * 		rows, 
+    	 * 		columns, 
+    	 * 		direction, 
+    	 * 		duration, 
+    	 * 		interval, 
+    	 * 		easing, 
+    	 * 		crop, 
+    	 * 		fade, 
+    	 * 		show
+    	 */
+    	
+    	return this.queue( function( next ) {	    	 		
+	    	o = $.extend(
+	    		{
+	    			direction: 'bottom',
+	    			distance: 1,
+	    			reverse: false,
+	    			random: false,
+	    			fade: true,
+	    			rows: 3,
+	    			columns: 3,
+	    			show: o.mode == "hide" ? 0 : 1,
+	    			crop: false
+	    		},
+	    		o
+	    	);	    	
+	    	
+	    	function animate( interval, duration, row, column, documentCoords, parentCoords, callback ) {	    		
+	             var random = o.random ? Math.abs( o.random ) : 0, 
+	            	el = $( this ),
+                 	randomDelay = Math.random() * ( o.rows + o.columns ) * interval, 
+            		
+                 	uniformDelay = ( o.reverse || o.distance < 0 ) ? 
+                 			( ( row + column ) * interval ) : 
+                 			( ( ( o.rows + o.columns ) - ( row + column ) ) * interval ), 
+                 	delay = randomDelay * random + Math.max( 1 - random, 0 ) * uniformDelay, 
+                 	offset = el.offset(), 
+                 	width = el.outerWidth(), 
+                 	height = el.outerHeight(), 
+                 	maxTop = documentCoords.height - height,
+                 	maxLeft = documentCoords.width - width, 
+                 	properties, top, left;
+                 			
+                 offset = {
+                     top : offset.top - parentCoords.top,
+                     left : offset.left - parentCoords.left
+                 };
+
+                 properties = offset;
+                 
+                 if ( o.fade ) {
+                     properties.opacity = o.show ? 1 : 0;
+                     el.css( 'opacity', o.show ? 0 : '' );
+                 }
+
+                 if ( o.direction.indexOf( 'bottom' ) !== -1 ) {
+                     top = offset.top + parentCoords.height * o.distance;
+                     top = top > maxTop ? maxTop : top;
+                 } else if ( o.direction.indexOf( 'top' ) !== -1 ) {
+                     top = offset.top - parentCoords.height * o.distance;
+                     top = top < 0 ? 0 : top;
+                 }
+
+                 if ( o.direction.indexOf( 'right' ) !== -1 ) {
+                     left = offset.left + parentCoords.width * o.distance;
+                     left = left > maxLeft ? maxLeft : left;
+                 } else if ( o.direction.indexOf( 'left' ) !== -1 ) {
+                     left = offset.left - parentCoords.width * o.distance;
+                     left = left < 0 ? 0 : left;
+                 }
+
+                 if ( o.direction.indexOf( 'right' ) || o.direction.indexOf( 'left' ) ) {
+                     if ( o.show ) {
+                    	 el.css( 'left', left );
+                     } else {
+                    	 properties.left = left;
+                     }
+                 }
+                 
+                 if ( o.direction.indexOf( 'top' ) || options.direction.indexOf( 'bottom' ) ) {
+                     if ( o.show ) {
+                    	 el.css( 'top', top );
+                     } else {
+                    	 properties.top = top;
+                     }
+                 } 
+                 
+                 el.delay( delay ).animate( properties, duration, o.easing, callback );
+             }
+	    		
+	    	startSplitAnim.call( this, o, animate, next );
+	    	
+		} );
+    	
+    }
+    
+})( jQuery );
 
 var defaultOptions = {
     easing : 'linear', // jQuery easing, The easing to use
@@ -195,7 +430,7 @@ $.effects.splitUnPinwheel = function( o ) {
 
 $.effects.splitDisintegrate = function( o, show ) {
     var docHeight = $( document ).height(), docWidth = $( document ).width();
-
+    
     /* show is either 1 or null */
     show = show || 0;
 
@@ -210,17 +445,20 @@ $.effects.splitDisintegrate = function( o, show ) {
                         animate : function( interval, duration, x, y,
                                 parentCoords ) {
 
-                            var random = options.random ? Math
-                                    .abs( options.random ) : 0, randomDelay = Math
-                                    .random()
-                                    * ( options.rows + options.cols )
-                                    * interval, uniformDelay = ( options.reverse || options.distance < 0 ) ? ( ( x + y ) * interval )
-                                    : ( ( ( options.rows + options.cols ) - ( x + y ) ) * interval ), delay = randomDelay
-                                    * random
-                                    + Math.max( 1 - random, 0 )
-                                    * uniformDelay, offset = this.offset(), width = this
-                                    .outerWidth(), height = this.outerHeight(), maxTop = docHeight
-                                    - height, maxLeft = docWidth - width, properties = offset, top, left;
+                            var random = options.random ? Math.abs( options.random ) : 0, 
+                            	randomDelay = Math.random() * ( options.rows + options.cols ) * interval, 
+                            	uniformDelay = ( options.reverse || options.distance < 0 ) ? 
+                            			( ( x + y ) * interval ) : 
+                            			( ( ( options.rows + options.cols ) - ( x + y ) ) * interval ), 
+                            	delay = randomDelay * random + Math.max( 1 - random, 0 ) * uniformDelay, 
+                            	offset = this.offset(), 
+                            	width = this.outerWidth(), 
+                            	height = this.outerHeight(), 
+                            	maxTop = docHeight - height, 
+                            	maxLeft = docWidth - width, 
+                            	properties = offset, 
+                            	top, 
+                            	left;
 
                             offset = {
                                 top : offset.top - parentCoords.top,
@@ -404,69 +642,6 @@ $.effects.blockSplitFadeOut = function( o, show ) {
 $.effects.blockSplitFadeIn = function( o ) {
     $.effects.blockSplitFadeOut.call( this, o, 1 );
 };
-
-(function( $, undefined ) {
-    
-    $.effects.piecer = function(rows, columns){
-        var el = $( this ), 
-            height = el.outerHeight(), 
-            width = el.outerWidth(), 
-            position = el.offset(),
-            pieceHeight = Math.ceil( height / rows ), 
-            pieceWidth = Math.ceil( width / columns ), 
-            container = $( '<div></div>' ).css({
-                position : 'absolute',
-                padding : 0,
-                margin : 0,
-                border : 0,
-                top : position.top + "px",
-                left : position.left + "px",
-                height : height + "px",
-                width : width + "px",
-                zIndex : el.css( 'z-index' )
-            }).appendTo('body'),
-            pieces = [],
-            
-            i, j, left, top;
-        
-        for( i = 0; i < rows; i++ ){
-            top = i * pieceHeight;
-            
-            for( j = 0; j < columns; j++ ){
-                left = j * pieceWidth;
-                
-                pieces.push(
-                    el
-                        .clone()
-                        .css({
-                            position: 'absolute',
-                            visibility: 'visible',
-                            top : -top + "px",
-                            left : -left + "px"
-                        })
-                        .wrap( '<div></div>' )
-                        .parent()
-                        .css({
-                            position : 'absolute',
-                            padding : 0,
-                            margin : 0,
-                            border : 0,
-                            height : pieceHeight + "px",
-                            width : pieceWidth + "px",
-                            left: left + "px",
-                            top: top + "px",
-                            overflow : "hidden"
-                        }).appendTo(container)
-                );
-                    
-            }
-        }
-        
-        el.hide();
-                
-    }
-    
-})(jQuery);
 
 $.effects.splitAnim = function( o, show ) {
     var options = o.options;
