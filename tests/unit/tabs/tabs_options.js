@@ -117,10 +117,6 @@ test('selected', function() {
 	equals(el.tabs('option', 'selected'), 0, 'should not collapse tab if value is same as selected');
 });
 
-test('spinner', function() {
-	ok(false, "missing test - untested code is broken code.");
-});
-
 test('tabTemplate', function() {
 	ok(false, "missing test - untested code is broken code.");
 });

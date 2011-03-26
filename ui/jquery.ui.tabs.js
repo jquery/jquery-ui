@@ -41,7 +41,6 @@ $.widget( "ui.tabs", {
 		remove: null,
 		select: null,
 		show: null,
-		spinner: "<em>Loading&#8230;</em>",
 		tabTemplate: "<li><a href='#{href}'><span>#{label}</span></a></li>"
 	},
 
@@ -83,17 +82,6 @@ $.widget( "ui.tabs", {
 			panel: panel,
 			index: this.anchors.index( tab )
 		};
-	},
-
-	_cleanup: function() {
-		// restore all former loading tabs labels
-		this.lis.filter( ".ui-state-processing" )
-			.removeClass( "ui-state-processing" )
-			.find( "span:data(label.tabs)" )
-				.each(function() {
-					var el = $( this );
-					el.html( el.data( "label.tabs" ) ).removeData( "label.tabs" );
-				});
 	},
 
 	_tabify: function( init ) {
@@ -630,11 +618,6 @@ $.widget( "ui.tabs", {
 			// load remote from here on
 			this.lis.eq( index ).addClass( "ui-state-processing" );
 
-			if ( o.spinner ) {
-				var span = $( "span", a );
-				span.data( "label.tabs", span.html() ).html( o.spinner );
-			}
-
 			this.xhr
 				.success( function( response ) {
 					self.element.find( self._sanitizeSelector( a.hash ) ).html( response );
@@ -651,8 +634,8 @@ $.widget( "ui.tabs", {
 
 						delete this.xhr;
 					}
-					// take care of tab labels
-					self._cleanup();
+
+					self.lis.eq( index ).removeClass( "ui-state-processing" );
 
 					self._trigger( "load", null, eventData );
 				});
@@ -753,6 +736,36 @@ if ( $.uiBackCompat !== false ) {
 			if ( this.xhr ) {
 				this.xhr.abort();
 			}
+		};
+	}( jQuery, jQuery.ui.tabs.prototype ) );
+
+	// spinner
+	(function( $, prototype ) {
+		$.extend( prototype.options, {
+			spinner: "<em>Loading&#8230;</em>"
+		});
+
+		var _create = prototype._create;
+		prototype._create = function() {
+			_create.call( this );
+			var self = this;
+
+			this.element.bind( "tabsbeforeload", function( event, ui ) {
+				if ( self.options.spinner ) {
+					var span = $( "span", ui.tab );
+					if ( span.length ) {
+						span.data( "label.tabs", span.html() ).html( self.options.spinner );
+					}
+				}
+				ui.jqXHR.complete( function() {
+					if ( self.options.spinner ) {
+						var span = $( "span", ui.tab );
+						if ( span.length ) {
+							span.html( span.data( "label.tabs" ) ).removeData( "label.tabs" );
+						}
+					}
+				});
+			});
 		};
 	}( jQuery, jQuery.ui.tabs.prototype ) );
 }
