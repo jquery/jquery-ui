@@ -337,7 +337,9 @@ $.widget( "ui.tabs", {
 
 		o.selected = self.anchors.index( el );
 
-		self.abort();
+		if ( self.xhr ) {
+			self.xhr.abort();
+		}
 
 		// if tab may be closed
 		if ( o.collapsible ) {
@@ -413,7 +415,9 @@ $.widget( "ui.tabs", {
 	_destroy: function() {
 		var o = this.options;
 
-		this.abort();
+		if ( this.xhr ) {
+			this.xhr.abort();
+		}
 
 		this.element.removeClass( "ui-tabs ui-widget ui-widget-content ui-corner-all ui-tabs-collapsible" );
 
@@ -604,7 +608,9 @@ $.widget( "ui.tabs", {
 			url = $.data( a, "load.tabs" ),
 			eventData = self._ui( self.anchors[ index ], self.panels[ index ] );
 
-		this.abort();
+		if ( this.xhr ) {
+			this.xhr.abort();
+		}
 
 		// not remote
 		if ( !url ) {
@@ -634,6 +640,17 @@ $.widget( "ui.tabs", {
 					self.element.find( self._sanitizeSelector( a.hash ) ).html( response );
 				})
 				.complete( function( jqXHR, status ) {
+					if ( status === "abort" ) {
+						// stop possibly running animations
+						self.element.queue( [] );
+						self.panels.stop( false, true );
+
+						// "tabs" queue must not contain more than two elements,
+						// which are the callbacks for the latest clicked tab...
+						self.element.queue( "tabs", self.element.queue( "tabs" ).splice( -2, 2 ) );
+
+						delete this.xhr;
+					}
 					// take care of tab labels
 					self._cleanup();
 
@@ -644,26 +661,6 @@ $.widget( "ui.tabs", {
 		// last, so that load event is fired before show...
 		self.element.dequeue( "tabs" );
 
-		return this;
-	},
-
-	abort: function() {
-		// stop possibly running animations
-		this.element.queue( [] );
-		this.panels.stop( false, true );
-
-		// "tabs" queue must not contain more than two elements,
-		// which are the callbacks for the latest clicked tab...
-		this.element.queue( "tabs", this.element.queue( "tabs" ).splice( -2, 2 ) );
-
-		// terminate pending requests from other tabs
-		if ( this.xhr ) {
-			this.xhr.abort();
-			delete this.xhr;
-		}
-
-		// take care of tab labels
-		this._cleanup();
 		return this;
 	},
 
@@ -748,6 +745,15 @@ if ( $.uiBackCompat !== false ) {
 				oldurl.apply( this, arguments );
 			}
 		});
+	}( jQuery, jQuery.ui.tabs.prototype ) );
+
+	// abort method
+	(function( $, prototype ) {
+		prototype.abort = function() {
+			if ( this.xhr ) {
+				this.xhr.abort();
+			}
+		};
 	}( jQuery, jQuery.ui.tabs.prototype ) );
 }
 
