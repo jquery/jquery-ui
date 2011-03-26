@@ -258,147 +258,152 @@ $.widget( "ui.tabs", {
 		this._hoverable( this.lis );
 
 		// set up animations
-		var hideFx, showFx;
 		if ( o.fx ) {
 			if ( $.isArray( o.fx ) ) {
-				hideFx = o.fx[ 0 ];
-				showFx = o.fx[ 1 ];
+				this.hideFx = o.fx[ 0 ];
+				this.showFx = o.fx[ 1 ];
 			} else {
-				hideFx = showFx = o.fx;
+				this.hideFx = this.showFx = o.fx;
 			}
 		}
-
-		// Reset certain styles left over from animation
-		// and prevent IE's ClearType bug...
-		function resetStyle( $el, fx ) {
-			$el.css( "display", "" );
-			if ( !$.support.opacity && fx.opacity ) {
-				$el[ 0 ].style.removeAttribute( "filter" );
-			}
-		}
-
-		// Show a tab...
-		var showTab = showFx
-			? function( clicked, $show, event ) {
-				$( clicked ).closest( "li" ).addClass( "ui-tabs-selected ui-state-active" );
-				$show.hide().removeClass( "ui-tabs-hide" ) // avoid flicker that way
-					.animate( showFx, showFx.duration || "normal", function() {
-						resetStyle( $show, showFx );
-						self._trigger( "show", event, self._ui( clicked, $show[ 0 ] ) );
-					});
-			}
-			: function( clicked, $show, event ) {
-				$( clicked ).closest( "li" ).addClass( "ui-tabs-selected ui-state-active" );
-				$show.removeClass( "ui-tabs-hide" );
-				self._trigger( "show", event, self._ui( clicked, $show[ 0 ] ) );
-			};
-
-		// Hide a tab, $show is optional...
-		var hideTab = hideFx
-			? function( clicked, $hide ) {
-				$hide.animate( hideFx, hideFx.duration || "normal", function() {
-					self.lis.removeClass( "ui-tabs-selected ui-state-active" );
-					$hide.addClass( "ui-tabs-hide" );
-					resetStyle( $hide, hideFx );
-					self.element.dequeue( "tabs" );
-				});
-			}
-			: function( clicked, $hide, $show ) {
-				self.lis.removeClass( "ui-tabs-selected ui-state-active" );
-				$hide.addClass( "ui-tabs-hide" );
-				self.element.dequeue( "tabs" );
-			};
 
 		// attach tab event handler, unbind to avoid duplicates from former tabifying...
-		this.anchors.bind( o.event + ".tabs", function( event ) {
-			event.preventDefault();
-			var el = this,
-				$li = $(el).closest( "li" ),
-				$hide = self.panels.filter( ":not(.ui-tabs-hide)" ),
-				$show = self.element.find( self._sanitizeSelector( el.hash ) );
-
-			// If tab is already selected and not collapsible or tab disabled or
-			// or is already loading or click callback returns false stop here.
-			// Check if click handler returns false last so that it is not executed
-			// for a disabled or loading tab!
-			if ( ( $li.hasClass( "ui-tabs-selected" ) && !o.collapsible) ||
-				$li.hasClass( "ui-state-disabled" ) ||
-				$li.hasClass( "ui-state-processing" ) ||
-				self.panels.filter( ":animated" ).length ||
-				self._trigger( "select", event, self._ui( this, $show[ 0 ] ) ) === false ) {
-				this.blur();
-				return;
-			}
-
-			o.selected = self.anchors.index( this );
-
-			self.abort();
-
-			// if tab may be closed
-			if ( o.collapsible ) {
-				if ( $li.hasClass( "ui-tabs-selected" ) ) {
-					o.selected = -1;
-
-					if ( o.cookie ) {
-						self._cookie( o.selected, o.cookie );
-					}
-
-					self.element.queue( "tabs", function() {
-						hideTab( el, $hide );
-					}).dequeue( "tabs" );
-
-					this.blur();
-					return;
-				} else if ( !$hide.length ) {
-					if ( o.cookie ) {
-						self._cookie( o.selected, o.cookie );
-					}
-
-					self.element.queue( "tabs", function() {
-						showTab( el, $show, event );
-					});
-
-					// TODO make passing in node possible, see also http://dev.jqueryui.com/ticket/3171
-					self.load( self.anchors.index( this ) );
-
-					this.blur();
-					return;
-				}
-			}
-
-			if ( o.cookie ) {
-				self._cookie( o.selected, o.cookie );
-			}
-
-			// show new tab
-			if ( $show.length ) {
-				if ( $hide.length ) {
-					self.element.queue( "tabs", function() {
-						hideTab( el, $hide );
-					});
-				}
-				self.element.queue( "tabs", function() {
-					showTab( el, $show, event );
-				});
-
-				self.load( self.anchors.index( this ) );
-			} else {
-				throw "jQuery UI Tabs: Mismatching fragment identifier.";
-			}
-
-			// Prevent IE from keeping other link focussed when using the back button
-			// and remove dotted border from clicked link. This is controlled via CSS
-			// in modern browsers; blur() removes focus from address bar in Firefox
-			// which can become a usability
-			if ( $.browser.msie ) {
-				this.blur();
-			}
-		});
+		this.anchors.bind( o.event + ".tabs", $.proxy( this, "_eventHandler" ));
 
 		// disable click in any case
 		this.anchors.bind( "click.tabs", function( event ){
 			event.preventDefault();
 		});
+	},
+
+	// Reset certain styles left over from animation
+	// and prevent IE's ClearType bug...
+	_resetStyle: function ( $el, fx ) {
+		$el.css( "display", "" );
+		if ( !$.support.opacity && fx.opacity ) {
+			$el[ 0 ].style.removeAttribute( "filter" );
+		}
+	},
+
+	_showTab: function( clicked, show, event ) {
+		var self = this;
+
+		$( clicked ).closest( "li" ).addClass( "ui-tabs-selected ui-state-active" );
+
+		if ( this.showFx ) {
+			show.hide().removeClass( "ui-tabs-hide" ) // avoid flicker that way
+				.animate( showFx, showFx.duration || "normal", function() {
+					self._resetStyle( show, showFx );
+					self._trigger( "show", event, self._ui( clicked, show[ 0 ] ) );
+				});
+		} else {
+			show.removeClass( "ui-tabs-hide" );
+			self._trigger( "show", event, self._ui( clicked, show[ 0 ] ) );
+		}
+	},
+
+	_hideTab: function( clicked, $hide ) {
+		var self = this;
+
+		if ( this.hideFx ) {
+			$hide.animate( hideFx, hideFx.duration || "normal", function() {
+				self.lis.removeClass( "ui-tabs-selected ui-state-active" );
+				$hide.addClass( "ui-tabs-hide" );
+				self._resetStyle( $hide, hideFx );
+				self.element.dequeue( "tabs" );
+			});
+		} else {
+			self.lis.removeClass( "ui-tabs-selected ui-state-active" );
+			$hide.addClass( "ui-tabs-hide" );
+			self.element.dequeue( "tabs" );
+		}
+	},
+
+	_eventHandler: function( event ) {
+		event.preventDefault();
+		var self = this,
+			o = this.options,
+			el = event.currentTarget,
+			$li = $(el).closest( "li" ),
+			$hide = self.panels.filter( ":not(.ui-tabs-hide)" ),
+			$show = self.element.find( self._sanitizeSelector( el.hash ) );
+
+		// If tab is already selected and not collapsible or tab disabled or
+		// or is already loading or click callback returns false stop here.
+		// Check if click handler returns false last so that it is not executed
+		// for a disabled or loading tab!
+		if ( ( $li.hasClass( "ui-tabs-selected" ) && !o.collapsible) ||
+			$li.hasClass( "ui-state-disabled" ) ||
+			$li.hasClass( "ui-state-processing" ) ||
+			self.panels.filter( ":animated" ).length ||
+			self._trigger( "select", event, self._ui( el, $show[ 0 ] ) ) === false ) {
+			el.blur();
+			return;
+		}
+
+		o.selected = self.anchors.index( el );
+
+		self.abort();
+
+		// if tab may be closed
+		if ( o.collapsible ) {
+			if ( $li.hasClass( "ui-tabs-selected" ) ) {
+				o.selected = -1;
+
+				if ( o.cookie ) {
+					self._cookie( o.selected, o.cookie );
+				}
+
+				self.element.queue( "tabs", function() {
+					self._hideTab( el, $hide );
+				}).dequeue( "tabs" );
+
+				el.blur();
+				return;
+			} else if ( !$hide.length ) {
+				if ( o.cookie ) {
+					self._cookie( o.selected, o.cookie );
+				}
+
+				self.element.queue( "tabs", function() {
+					self._showTab( el, $show, event );
+				});
+
+				// TODO make passing in node possible, see also http://dev.jqueryui.com/ticket/3171
+				self.load( self.anchors.index( el ) );
+
+				el.blur();
+				return;
+			}
+		}
+
+		if ( o.cookie ) {
+			self._cookie( o.selected, o.cookie );
+		}
+
+		// show new tab
+		if ( $show.length ) {
+			if ( $hide.length ) {
+				self.element.queue( "tabs", function() {
+					self._hideTab( el, $hide );
+				});
+			}
+			self.element.queue( "tabs", function() {
+				self._showTab( el, $show, event );
+			});
+
+			self.load( self.anchors.index( el ) );
+		} else {
+			throw "jQuery UI Tabs: Mismatching fragment identifier.";
+		}
+
+		// Prevent IE from keeping other link focussed when using the back button
+		// and remove dotted border from clicked link. This is controlled via CSS
+		// in modern browsers; blur() removes focus from address bar in Firefox
+		// which can become a usability
+		if ( $.browser.msie ) {
+			el.blur();
+		}
 	},
 
     _getIndex: function( index ) {
