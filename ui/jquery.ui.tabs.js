@@ -568,10 +568,6 @@ $.widget( "ui.tabs", {
 	url: function( index, url ) {
 		this.anchors.eq( index ).data( "load.tabs", url );
 		return this;
-	},
-
-	length: function() {
-		return this.anchors.length;
 	}
 });
 
@@ -812,6 +808,12 @@ if ( $.uiBackCompat !== false ) {
 		};
 	}( jQuery, jQuery.ui.tabs.prototype ) );
 
+	// length method
+	(function( $, prototype ) {
+		prototype.length = function() {
+			return this.anchors.length;
+		};
+	}( jQuery, jQuery.ui.tabs.prototype ) );
 }
 
 })( jQuery );

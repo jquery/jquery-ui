@@ -54,7 +54,7 @@ test('#4033 - IE expands hash to full url and misinterprets tab as ajax', functi
 	
 	el = $('<div><ul><li><a href="#tab">Tab</a></li></ul><div id="tab"></div></div>')
 			.appendTo('#main').tabs();
-    
+
 	equals($('a', el).data('load.tabs'), undefined, 'should not create ajax tab');
 	
 });
@@ -64,7 +64,7 @@ test('#5893 - Sublist in the tab list are considered as tab', function() {
 	expect(1);
 
 	el = $('#tabs6').tabs();
-	equals(el.tabs( "length" ), 2, 'should contain 2 tab');
+	equals(el.data("tabs").anchors.length, 2, 'should contain 2 tab');
 
 });
 

@@ -167,11 +167,4 @@ test('url', function() {
 	ok(false, "missing test - untested code is broken code.");
 });
 
-test('length', function() {
-	expect(1);
-
-	el = $('#tabs1').tabs();
-	equals(el.tabs('length'), $('ul a', el).length, ' should return length');
-});
-
 })(jQuery);
