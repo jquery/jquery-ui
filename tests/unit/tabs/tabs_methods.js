@@ -130,42 +130,6 @@ test('disable', function() {
 	same(el.tabs('option', 'disabled'), true, 'set to true');
 });
 
-test('add', function() {
-	expect(4);
-
-	el = $('#tabs1').tabs();
-	el.tabs('add', '#new', 'New');
-
-	var added = $('li:last', el).simulate('mouseover');
-	ok(added.is('.ui-state-hover'), 'should add mouseover handler to added tab');
-	added.simulate('mouseout');
-	var other = $('li:first', el).simulate('mouseover');
-	ok(other.is('.ui-state-hover'), 'should not remove mouseover handler from existing tab');
-	other.simulate('mouseout');
-
-	equals($('a', added).attr('href'), '#new', 'should not expand href to full url of current page');
-
-	ok(false, "missing test - untested code is broken code.");
-});
-
-test('remove', function() {
-	expect(4);
-
-	el = $('#tabs1').tabs();
-
-	el.tabs('remove', 0);
-	equals(el.tabs('length'), 2, 'remove tab');
-	equals($('li a[href$="fragment-1"]', el).length, 0, 'remove associated list item');
-	equals($('#fragment-1').length, 0, 'remove associated panel');
-
-	// TODO delete tab -> focus tab to right
-	// TODO delete last tab -> focus tab to left
-
-	el.tabs('select', 1);
-	el.tabs('remove', 1);
-	equals(el.tabs('option', 'selected'), 0, 'update selected property');
-});
-
 test('select', function() {
 	expect(6);
 

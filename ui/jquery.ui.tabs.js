@@ -26,7 +26,6 @@ function getNextListId() {
 
 $.widget( "ui.tabs", {
 	options: {
-		add: null,
 		beforeload: null,
 		cookie: null, // e.g. { expires: 7, path: '/', domain: 'jquery.com', secure: true }
 		collapsible: false,
@@ -36,7 +35,6 @@ $.widget( "ui.tabs", {
 		idPrefix: "ui-tabs-",
 		load: null,
 		panelTemplate: "<div></div>",
-		remove: null,
 		select: null,
 		show: null,
 		tabTemplate: "<li><a href='#{href}'><span>#{label}</span></a></li>"
@@ -445,82 +443,6 @@ $.widget( "ui.tabs", {
 		return this;
 	},
 
-	add: function( url, label, index ) {
-		if ( index === undefined ) {
-			index = this.anchors.length;
-		}
-
-		var self = this,
-			o = this.options,
-			$li = $( o.tabTemplate.replace( /#\{href\}/g, url ).replace( /#\{label\}/g, label ) ),
-			id = !url.indexOf( "#" ) ? url.replace( "#", "" ) : this._tabId( $( "a", $li )[ 0 ] );
-
-		$li.addClass( "ui-state-default ui-corner-top" ).data( "destroy.tabs", true );
-
-		// try to find an existing element before creating a new one
-		var $panel = self.element.find( "#" + id );
-		if ( !$panel.length ) {
-			$panel = $( o.panelTemplate )
-				.attr( "id", id )
-				.data( "destroy.tabs", true );
-		}
-		$panel.addClass( "ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs-hide" );
-
-		if ( index >= this.lis.length ) {
-			$li.appendTo( this.list );
-			$panel.appendTo( this.list[ 0 ].parentNode );
-		} else {
-			$li.insertBefore( this.lis[ index ] );
-			$panel.insertBefore( this.panels[ index ] );
-		}
-
-		o.disabled = $.map( o.disabled, function( n, i ) {
-			return n >= index ? ++n : n;
-		});
-
-		this._tabify();
-
-		if ( this.anchors.length == 1 ) {
-			o.selected = 0;
-			$li.addClass( "ui-tabs-selected ui-state-active" );
-			$panel.removeClass( "ui-tabs-hide" );
-			this.element.queue( "tabs", function() {
-				self._trigger( "show", null, self._ui( self.anchors[ 0 ], self.panels[ 0 ] ) );
-			});
-
-			this.load( 0 );
-		}
-
-		this._trigger( "add", null, this._ui( this.anchors[ index ], this.panels[ index ] ) );
-		return this;
-	},
-
-	remove: function( index ) {
-		index = this._getIndex( index );
-		var o = this.options,
-			$li = this.lis.eq( index ).remove(),
-			$panel = this.panels.eq( index ).remove();
-
-		// If selected tab was removed focus tab to the right or
-		// in case the last tab was removed the tab to the left.
-		if ( $li.hasClass( "ui-tabs-selected" ) && this.anchors.length > 1) {
-			this.select( index + ( index + 1 < this.anchors.length ? 1 : -1 ) );
-		}
-
-		o.disabled = $.map(
-			$.grep( o.disabled, function(n, i) {
-				return n != index;
-			}),
-			function( n, i ) {
-				return n >= index ? --n : n;
-			});
-
-		this._tabify();
-
-		this._trigger( "remove", null, this._ui( $li.find( "a" )[ 0 ], $panel[ 0 ] ) );
-		return this;
-	},
-
 	enable: function( index ) {
 		if ( index === undefined ) {
 			for ( var i = 0, len = this.lis.length; i < len; i++ ) {
@@ -805,6 +727,91 @@ if ( $.uiBackCompat !== false ) {
 			}
 		};
 	}( jQuery, jQuery.ui.tabs.prototype ) );
+
+	// add/remove methods and events
+	(function( $, prototype ) {
+		$.extend( prototype.options, {
+			add: null,
+			remove: null
+		});
+
+		prototype.add = function( url, label, index ) {
+			if ( index === undefined ) {
+				index = this.anchors.length;
+			}
+
+			var self = this,
+				o = this.options,
+				$li = $( o.tabTemplate.replace( /#\{href\}/g, url ).replace( /#\{label\}/g, label ) ),
+				id = !url.indexOf( "#" ) ? url.replace( "#", "" ) : this._tabId( $( "a", $li )[ 0 ] );
+
+			$li.addClass( "ui-state-default ui-corner-top" ).data( "destroy.tabs", true );
+
+			// try to find an existing element before creating a new one
+			var $panel = self.element.find( "#" + id );
+			if ( !$panel.length ) {
+				$panel = $( o.panelTemplate )
+					.attr( "id", id )
+					.data( "destroy.tabs", true );
+			}
+			$panel.addClass( "ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs-hide" );
+
+			if ( index >= this.lis.length ) {
+				$li.appendTo( this.list );
+				$panel.appendTo( this.list[ 0 ].parentNode );
+			} else {
+				$li.insertBefore( this.lis[ index ] );
+				$panel.insertBefore( this.panels[ index ] );
+			}
+
+			o.disabled = $.map( o.disabled, function( n, i ) {
+				return n >= index ? ++n : n;
+			});
+
+			this._tabify();
+
+			if ( this.anchors.length == 1 ) {
+				o.selected = 0;
+				$li.addClass( "ui-tabs-selected ui-state-active" );
+				$panel.removeClass( "ui-tabs-hide" );
+				this.element.queue( "tabs", function() {
+					self._trigger( "show", null, self._ui( self.anchors[ 0 ], self.panels[ 0 ] ) );
+				});
+
+				this.load( 0 );
+			}
+
+			this._trigger( "add", null, this._ui( this.anchors[ index ], this.panels[ index ] ) );
+			return this;
+		};
+
+		prototype.remove = function( index ) {
+			index = this._getIndex( index );
+			var o = this.options,
+				$li = this.lis.eq( index ).remove(),
+				$panel = this.panels.eq( index ).remove();
+
+			// If selected tab was removed focus tab to the right or
+			// in case the last tab was removed the tab to the left.
+			if ( $li.hasClass( "ui-tabs-selected" ) && this.anchors.length > 1) {
+				this.select( index + ( index + 1 < this.anchors.length ? 1 : -1 ) );
+			}
+
+			o.disabled = $.map(
+				$.grep( o.disabled, function(n, i) {
+					return n != index;
+				}),
+				function( n, i ) {
+					return n >= index ? --n : n;
+				});
+
+			this._tabify();
+
+			this._trigger( "remove", null, this._ui( $li.find( "a" )[ 0 ], $panel[ 0 ] ) );
+			return this;
+		};
+	}( jQuery, jQuery.ui.tabs.prototype ) );
+
 }
 
 })( jQuery );

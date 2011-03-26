@@ -3,7 +3,6 @@
  */
 
 var tabs_defaults = {
-	add: null,
 	beforeload: null,
 	collapsible: false,
 	cookie: null,
@@ -13,7 +12,6 @@ var tabs_defaults = {
 	idPrefix: "ui-tabs-",
 	load: null,
 	panelTemplate: "<div></div>",
-	remove: null,
 	select: null,
 	show: null,
 	tabTemplate: "<li><a href='#{href}'><span>#{label}</span></a></li>"

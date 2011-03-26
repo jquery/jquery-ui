@@ -1,6 +1,6 @@
 (function( $ ) {
 
-module("tabs (deprecated): cache and ajaxoptions");
+module("tabs (deprecated): options");
 
 test('ajaxOptions', function() {
 	ok(false, "missing test - untested code is broken code.");
@@ -9,8 +9,6 @@ test('ajaxOptions', function() {
 test('cache', function() {
 	ok(false, "missing test - untested code is broken code.");
 });
-
-module("tabs (deprecated): spinner");
 
 test('spinner', function() {
 	expect(4);
@@ -41,7 +39,7 @@ test('spinner', function() {
 	});
 });
 
-module("tabs (deprecated): enable/disable events");
+module("tabs (deprecated): events");
 
 test('enable', function() {
 	expect(4);
@@ -74,6 +72,74 @@ test('disable', function() {
 	equals(uiObj.tab, $('a', el)[1], 'contain tab as DOM anchor element');
 	equals(uiObj.panel, $('div', el)[1], 'contain panel as DOM div element');
 	equals(uiObj.index, 1, 'contain index');
+});
+
+test('add', function() {
+
+	// TODO move to methods, not at all event related...
+
+	var el = $('<div id="tabs"><ul></ul></div>').tabs();
+	equals(el.tabs('option', 'selected'), -1, 'Initially empty, no selected tab');
+
+	el.tabs('add', '#test1', 'Test 1');
+	equals(el.tabs('option', 'selected'), 0, 'First tab added should be auto selected');
+
+	el.tabs('add', '#test2', 'Test 2');
+	equals(el.tabs('option', 'selected'), 0, 'Second tab added should not be auto selected');
+
+});
+
+test('remove', function() {
+	ok(false, "missing test - untested code is broken code.");
+});
+
+module("tabs (deprecated): methods");
+
+test('add', function() {
+	expect(4);
+
+	el = $('#tabs1').tabs();
+	el.tabs('add', '#new', 'New');
+
+	var added = $('li:last', el).simulate('mouseover');
+	ok(added.is('.ui-state-hover'), 'should add mouseover handler to added tab');
+	added.simulate('mouseout');
+	var other = $('li:first', el).simulate('mouseover');
+	ok(other.is('.ui-state-hover'), 'should not remove mouseover handler from existing tab');
+	other.simulate('mouseout');
+
+	equals($('a', added).attr('href'), '#new', 'should not expand href to full url of current page');
+
+	ok(false, "missing test - untested code is broken code.");
+});
+
+test('remove', function() {
+	expect(4);
+
+	el = $('#tabs1').tabs();
+
+	el.tabs('remove', 0);
+	equals(el.tabs('length'), 2, 'remove tab');
+	equals($('li a[href$="fragment-1"]', el).length, 0, 'remove associated list item');
+	equals($('#fragment-1').length, 0, 'remove associated panel');
+
+	// TODO delete tab -> focus tab to right
+	// TODO delete last tab -> focus tab to left
+
+	el.tabs('select', 1);
+	el.tabs('remove', 1);
+	equals(el.tabs('option', 'selected'), 0, 'update selected property');
+});
+
+test('#5069 - ui.tabs.add creates two tab panels when using a full URL', function() {
+	// http://dev.jqueryui.com/ticket/5069
+	expect(2);
+
+	el = $('#tabs2').tabs();
+	equals(el.children('div').length, el.find('> ul > li').length, 'After creation, number of panels should be equal to number of tabs');
+	el.tabs('add', '/ajax_html_echo', 'Test');
+	equals(el.children('div').length, el.find('> ul > li').length, 'After add, number of panels should be equal to number of tabs');
+
 });
 
 }( jQuery ) );
