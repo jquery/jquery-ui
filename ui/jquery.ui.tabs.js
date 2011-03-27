@@ -44,6 +44,8 @@ $.widget( "ui.tabs", {
 		var self = this,
 			o = this.options;
 
+		this.running = false;
+
 		this.element.addClass( "ui-tabs ui-widget ui-widget-content ui-corner-all" );
 
 		this._processTabs();
@@ -294,9 +296,11 @@ $.widget( "ui.tabs", {
 		$( clicked ).closest( "li" ).addClass( "ui-tabs-selected ui-state-active" );
 
 		if ( this.showFx ) {
+			self.running = true;
 			show.hide().removeClass( "ui-tabs-hide" ) // avoid flicker that way
 				.animate( showFx, showFx.duration || "normal", function() {
 					self._resetStyle( show, showFx );
+					self.running = false;
 					self._trigger( "show", event, self._ui( clicked, show[ 0 ] ) );
 				});
 		} else {
@@ -309,7 +313,9 @@ $.widget( "ui.tabs", {
 		var self = this;
 
 		if ( this.hideFx ) {
+			self.running = true;
 			$hide.animate( hideFx, hideFx.duration || "normal", function() {
+				self.running = false;
 				self.lis.removeClass( "ui-tabs-selected ui-state-active" );
 				$hide.addClass( "ui-tabs-hide" );
 				self._resetStyle( $hide, hideFx );
@@ -346,14 +352,15 @@ $.widget( "ui.tabs", {
 			$hide = self.panels.filter( ":not(.ui-tabs-hide)" ),
 			$show = self.element.find( self._sanitizeSelector( el.hash ) );
 
-		// If tab is already selected and not collapsible or tab disabled or
-		// or is already loading or click callback returns false stop here.
-		// Check if click handler returns false last so that it is not executed
-		// for a disabled or loading tab!
-		if ( ( $li.hasClass( "ui-tabs-selected" ) && !o.collapsible) ||
+		// tab is already selected, but not collapsible
+		if ( ( $li.hasClass( "ui-tabs-selected" ) && !o.collapsible ) ||
+			// can't switch durning an animation
+			self.running ||
+			// tab is disabled
 			$li.hasClass( "ui-state-disabled" ) ||
+			// tab is already loading
 			$li.hasClass( "ui-state-processing" ) ||
-			self.panels.filter( ":animated" ).length ||
+			// allow canceling by select event
 			self._trigger( "select", event, self._ui( el, $show[ 0 ] ) ) === false ) {
 			el.blur();
 			return;
