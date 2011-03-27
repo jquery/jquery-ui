@@ -95,4 +95,5 @@ $(function() {
 	});
 	
 	effect('#build', "build", {easing: 'linear' });
+	effect('#pinwheel', "pinwheel", {easing: 'linear' });
 });
