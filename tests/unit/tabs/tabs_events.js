@@ -32,7 +32,7 @@ test('beforeload', function() {
 	el = $('#tabs2');
 
 	el.tabs({
-		selected: 2,
+		active: 2,
 		beforeload: function( event, ui ) {
 			ok( $.isFunction( ui.jqXHR.promise ), 'contain jqXHR object');
 			equals( ui.settings.url, "data/test.html", 'contain ajax settings url');

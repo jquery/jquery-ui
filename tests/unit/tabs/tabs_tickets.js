@@ -43,7 +43,7 @@ test('#3627 - Ajax tab with url containing a fragment identifier fails to load',
 	expect(1);
 
 	el = $('#tabs2').tabs({
-		selected: 2,
+		active: 2,
 		beforeload: function( event, ui ) {
 			event.preventDefault();
 			ok(/test.html$/.test( ui.settings.url ), 'should ignore fragment identifier');

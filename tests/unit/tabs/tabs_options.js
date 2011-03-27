@@ -34,8 +34,8 @@ test('cookie', function() {
 	equals(cookie(), 0, 'initial cookie value');
 
 	el.tabs('destroy');
-	el.tabs({ selected: 1, cookie: cookieObj });
-	equals(cookie(), 1, 'initial cookie value, from selected property');
+	el.tabs({ active: 1, cookie: cookieObj });
+	equals(cookie(), 1, 'initial cookie value, from active property');
 
 	el.tabs('select', 2);
 	equals(cookie(), 2, 'cookie value updated after select');
@@ -79,34 +79,34 @@ test('fx', function() {
 	ok(false, "missing test - untested code is broken code.");
 });
 
-test('selected', function() {
+test('active', function() {
 	expect(8);
 
 	el = $('#tabs1').tabs();
-	equals(el.tabs('option', 'selected'), 0, 'should be 0 by default');
+	equals(el.tabs('option', 'active'), 0, 'should be 0 by default');
 
 	el.tabs('destroy');
-	el.tabs({ selected: -1 });
-	equals(el.tabs('option', 'selected'), -1, 'should be -1 for all tabs unselected');
-	equals( $('li.ui-tabs-selected', el).length, 0, 'no tab should be selected' );
+	el.tabs({ active: -1 });
+	equals(el.tabs('option', 'active'), -1, 'should be -1 for all tabs deactive');
+	equals( $('li.ui-tabs-selected', el).length, 0, 'no tab should be active' );
 	equals( $('div.ui-tabs-hide', '#tabs1').length, 3, 'all panels should be hidden' );
 
 	el.tabs('destroy');
-	el.tabs({ selected: null });
-	equals(el.tabs('option', 'selected'), -1, 'should be -1 for all tabs unselected with value null (deprecated)');
+	el.tabs({ active: null });
+	equals(el.tabs('option', 'active'), -1, 'should be -1 for all tabs deactive with value null (deprecated)');
 
 	el.tabs('destroy');
-	el.tabs({ selected: 1 });
-	equals(el.tabs('option', 'selected'), 1, 'should be specified tab');
+	el.tabs({ active: 1 });
+	equals(el.tabs('option', 'active'), 1, 'should be specified tab');
 
 	el.tabs('destroy');
-	el.tabs({ selected: 99 });
-	equals(el.tabs('option', 'selected'), 0, 'selected should default to zero if given value is out of index');
+	el.tabs({ active: 99 });
+	equals(el.tabs('option', 'active'), 0, 'active should default to zero if given value is out of index');
 
 	el.tabs('destroy');
 	el.tabs({ collapsible: true });
-	el.tabs('option', 'selected', 0);
-	equals(el.tabs('option', 'selected'), 0, 'should not collapse tab if value is same as selected');
+	el.tabs('option', 'active', 0);
+	equals(el.tabs('option', 'active'), 0, 'should not collapse tab if value is same as active');
 });
 
 })(jQuery);

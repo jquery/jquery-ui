@@ -16,7 +16,7 @@ test('init', function() {
 	ok( $('div:eq(0)', el).is('.ui-tabs-panel.ui-widget-content.ui-corner-bottom'), 'attach classes to panel' );
 	ok( $('li:eq(0)', el).is('.ui-tabs-selected.ui-state-active.ui-corner-top'), 'attach classes to active li');
 	ok( $('li:eq(1)', el).is('.ui-state-default.ui-corner-top'), 'attach classes to inactive li');
-	equals( el.tabs('option', 'selected'), 0, 'selected option set' );
+	equals( el.tabs('option', 'active'), 0, 'active option set' );
 	equals( $('li', el).index( $('li.ui-tabs-selected', el) ), 0, 'second tab active');
 	equals( $('div', el).index( $('div.ui-tabs-hide', '#tabs1') ), 1, 'second panel should be hidden' );
 });
@@ -30,7 +30,7 @@ test('init with hash', function() {
 	//selection of tab with divs ordered differently than list
 	el = $('#tabs1').tabs();
 	
-	equals(el.tabs('option', 'selected'), 1, 'second tab should be selected');
+	equals(el.tabs('option', 'active'), 1, 'second tab should be active');
 	
 	ok(!$('#tabs1 ul li:eq(0)').is('.ui-tabs-selected.ui-state-active'), 'first tab should not be selected nor active');
 	ok($('#tabs1 div:eq(0)').is('.ui-tabs-hide'), 'first div for first tab should be hidden');
@@ -48,7 +48,7 @@ test('init mismatched order with hash', function() {
 	//selection of tab with divs ordered differently than list
 	el = $('#tabs7').tabs();
 	
-	equals(el.tabs('option', 'selected'), 1, 'second tab should be selected');
+	equals(el.tabs('option', 'active'), 1, 'second tab should be active');
 	
 	ok(!$('#tabs7-list li:eq(0)').is('.ui-tabs-selected.ui-state-active'), 'first tab should not be selected nor active');
 	ok($('#tabs7 div:eq(1)').is('.ui-tabs-hide'), 'second div for first tab should be hidden');
@@ -136,27 +136,27 @@ test('select', function() {
 	el = $('#tabs1').tabs();
 
 	el.tabs('select', 1);
-	equals(el.tabs('option', 'selected'), 1, 'should select tab');
+	equals(el.tabs('option', 'active'), 1, 'should select tab');
 
 	el.tabs('destroy');
 	el.tabs({ collapsible: true });
 	el.tabs('select', 0);
-	equals(el.tabs('option', 'selected'), -1, 'should collapse tab passing in the already selected tab');
+	equals(el.tabs('option', 'active'), -1, 'should collapse tab passing in the already active tab');
 
 	el.tabs('destroy');
 	el.tabs({ collapsible: true });
 	el.tabs('select', -1);
-	equals(el.tabs('option', 'selected'), -1, 'should collapse tab passing in -1');
+	equals(el.tabs('option', 'active'), -1, 'should collapse tab passing in -1');
 
 	el.tabs('destroy');
 	el.tabs();
 	el.tabs('select', 0);
-	equals(el.tabs('option', 'selected'), 0, 'should not collapse tab if collapsible is not set to true');
+	equals(el.tabs('option', 'active'), 0, 'should not collapse tab if collapsible is not set to true');
 	el.tabs('select', -1);
-	equals(el.tabs('option', 'selected'), 0, 'should not collapse tab if collapsible is not set to true');
+	equals(el.tabs('option', 'active'), 0, 'should not collapse tab if collapsible is not set to true');
 
 	el.tabs('select', '#fragment-2');
-	equals(el.tabs('option', 'selected'), 1, 'should select tab by id');
+	equals(el.tabs('option', 'active'), 1, 'should select tab by id');
 });
 
 test('refresh', function() {
@@ -165,7 +165,7 @@ test('refresh', function() {
 	var el = $('<div id="tabs"><ul></ul></div>').tabs(),
 		ul = el.find('ul');
 
-	equals(el.tabs('option', 'selected'), -1, 'Initially empty, no selected tab');
+	equals(el.tabs('option', 'active'), -1, 'Initially empty, no active tab');
 
 	ul.append('<li><a href="data/test.html">Test 1</a></li>');
 	el.tabs('refresh');
@@ -179,12 +179,12 @@ test('refresh', function() {
 	$('<div id="test1">Test Panel 1</div>').insertAfter( ul );
 	el.tabs('refresh');
 	el.tabs('select', 0);
-	equals( el.tabs('option', 'selected'), 0, 'First tab added should be auto selected');
+	equals( el.tabs('option', 'active'), 0, 'First tab added should be auto active');
 
 	ul.append('<li><a href="#test2">Test 2</a></li>');
 	$('<div id="test2">Test Panel 2</div>').insertAfter( ul );
 	el.tabs('refresh');
-	equals( el.tabs('option', 'selected'), 0, 'Second tab added should not be auto selected');
+	equals( el.tabs('option', 'active'), 0, 'Second tab added should not be auto active');
 });
 
 test('load', function() {
