@@ -74,7 +74,7 @@ test( "element normalization", function() {
 });
 
 test( "jQuery usage", function() {
-	expect( 11 );
+	expect( 13 );
 
 	var shouldCreate = false;
 
@@ -98,6 +98,9 @@ test( "jQuery usage", function() {
 			} else {
 				return this.getterSetterVal;
 			}
+		},
+		jQueryObject: function() {
+			return $( "body" );
 		}
 	});
 
@@ -120,6 +123,9 @@ test( "jQuery usage", function() {
 	ret = elem.testWidget( "getterSetterMethod", 30 );
 	equals( ret, elem, "getter/setter method can be chainable" );
 	equals( instance.getterSetterVal, 30, "getter/setter can act as setter" );
+	ret = elem.testWidget( "jQueryObject" );
+	equal( ret[ 0 ], document.body, "returned jQuery object" );
+	equal( ret.end(), elem, "stack preserved" );
 });
 
 test( "direct usage", function() {
@@ -433,6 +439,30 @@ test( ".option() - delegate to ._setOption()", function() {
 		{ key: "bar", val: "qux" },
 		{ key: "quux", val: "quuux" }
 	], "_setOption called with multiple options" );
+});
+
+test( ".option() - deep option setter", function() {
+	$.widget( "ui.testWidget", {} );
+	var div = $( "<div>" ).testWidget();
+	function deepOption( from, to, msg ) {
+		div.data( "testWidget" ).options.foo = from;
+		$.ui.testWidget.prototype._setOption = function( key, value ) {
+			same( key, "foo", msg + ": key" );
+			same( value, to, msg + ": value" );
+		};
+	}
+
+	deepOption( { bar: "baz" }, { bar: "qux" }, "one deep" );
+	div.testWidget( "option", "foo.bar", "qux" );
+
+	deepOption( null, { bar: "baz" }, "null" );
+	div.testWidget( "option", "foo.bar", "baz" );
+
+	deepOption(
+		{ bar: "baz", qux: { quux: "quuux" } },
+		{ bar: "baz", qux: { quux: "quuux", newOpt: "newVal" } },
+		"add property" );
+	div.testWidget( "option", "foo.qux.newOpt", "newVal" );
 });
 
 test( ".enable()", function() {
@@ -765,7 +795,7 @@ test( "._trigger() - provide event and ui", function() {
 	.testWidget( "testEvent" );
 });
 
-test( "._triger() - instance as element", function() {
+test( "._trigger() - instance as element", function() {
 	expect( 4 );
 	$.widget( "ui.testWidget", {
 		defaultElement: null,

@@ -73,16 +73,32 @@ test('destroy', function() {
 });
 
 test('enable', function() {
-    expect(2);
+    expect(8);
 
 	el = $('#tabs1').tabs({ disabled: [ 0, 1 ] });
 	el.tabs("enable", 1);
 	ok( $('li:eq(1)', el).is(':not(.ui-state-disabled)'), 'remove class from li');
-	same(el.tabs('option', 'disabled'), [ ], 'update property');
+	same(el.tabs('option', 'disabled'), [ 0 ], 'update property');
+	
+	// enable all tabs
+	el.tabs({ disabled: [ 0, 1 ] });
+	el.tabs("enable");
+	ok( !$('li.ui-state-disabled', el).length, 'enable all');
+	same(el.tabs('option', 'disabled'), false, 'update property');
+
+	el.tabs('destroy');
+	// enable all tabs one by one
+	el.tabs({ disabled: [ 1, 2 ] });
+	el.tabs("enable", 1);
+	ok( $('li:eq(1)', el).is(':not(.ui-state-disabled)'), 'remove class from li');
+	same(el.tabs('option', 'disabled'), [ 2 ], 'update property');
+	el.tabs("enable", 2);
+	ok( $('li:eq(2)', el).is(':not(.ui-state-disabled)'), 'remove class from li');
+	same( el.tabs('option', 'disabled'), false, 'set to false');
 });
 
 test('disable', function() {
-    expect(4);
+    expect(12);
 
 	// normal
 	el = $('#tabs1').tabs();
@@ -90,10 +106,28 @@ test('disable', function() {
 	ok( $('li:eq(1)', el).is('.ui-state-disabled'), 'add class to li');
 	same(el.tabs('option', 'disabled'), [ 1 ], 'update disabled property');
 
-	// attempt to disable selected has no effect
+	// disable selected
 	el.tabs('disable', 0);
-	ok( $('li:eq(0)', el).is(':not(.ui-state-disabled)'), 'not add class to li');
-	same(el.tabs('option', 'disabled'), [ 1 ], 'not update property');
+	ok( $('li:eq(0)', el).is('.ui-state-disabled'), 'add class to selected li');
+	same(el.tabs('option', 'disabled'), [ 0, 1 ], 'update disabled property');
+	
+	// disable all tabs
+	el.tabs('disable');
+	same( $('li.ui-state-disabled', el).length, 3, 'disable all');
+	same(el.tabs('option', 'disabled'), true, 'set to true');
+
+	el.tabs("destroy");
+	// disable all tabs one by one
+	el.tabs();
+	el.tabs('disable', 0);
+	ok( $('li:eq(0)', el).is('.ui-state-disabled'), 'add class to li');
+	same(el.tabs('option', 'disabled'), [ 0 ], 'update disabled property');
+	el.tabs('disable', 1);
+	ok( $('li:eq(1)', el).is('.ui-state-disabled'), 'add class to li');
+	same(el.tabs('option', 'disabled'), [ 0, 1 ], 'update disabled property');
+	el.tabs('disable', 2);
+	ok( $('li:eq(2)', el).is('.ui-state-disabled'), 'add class to li');
+	same(el.tabs('option', 'disabled'), true, 'set to true');
 });
 
 test('add', function() {

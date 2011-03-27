@@ -307,8 +307,11 @@ $.widget( "ui.autocomplete", {
 	},
 
 	_response: function( content ) {
-		if ( !this.options.disabled && content && content.length ) {
+		if ( content ) {
 			content = this._normalize( content );
+		}
+		this._trigger( "response", null, { content: content } );
+		if ( !this.options.disabled && content && content.length ) {
 			this._suggest( content );
 			this._trigger( "open" );
 		} else {
@@ -363,16 +366,16 @@ $.widget( "ui.autocomplete", {
 		this.menu.blur();
 		this.menu.refresh();
 
-		if ( this.options.autoFocus ) {
-			this.menu.next( new $.Event("mouseover") );
-		}
-
 		// size and position menu
 		ul.show();
 		this._resizeMenu();
 		ul.position( $.extend({
 			of: this.element
 		}, this.options.position ));
+
+		if ( this.options.autoFocus ) {
+			this.menu.next( new $.Event("mouseover") );
+		}
 	},
 
 	_resizeMenu: function() {

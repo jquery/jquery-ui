@@ -9,7 +9,7 @@ var tabs_defaults = {
 	collapsible: false,
 	cookie: null,
 	disable: null,
-	disabled: [],
+	disabled: false,
 	enable: null,
 	event: "click",
 	fx: null,

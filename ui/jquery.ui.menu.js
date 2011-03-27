@@ -17,6 +17,7 @@ var idIncrement = 0;
 
 $.widget("ui.menu", {
 	defaultElement: "<ul>",
+	delay: 150,
 	options: {
 		position: {
 			my: "left top",
@@ -34,14 +35,19 @@ $.widget("ui.menu", {
 				role: "listbox"
 			})
 			.bind( "click.menu", function( event ) {
+				var item = $( event.target ).closest( ".ui-menu-item:has(a)" );
 				if ( self.options.disabled ) {
 					return false;
 				}
-				if ( !$( event.target ).closest( ".ui-menu-item a" ).length ) {
+				if ( !item.length ) {
 					return;
 				}
 				// temporary
 				event.preventDefault();
+				// it's possible to click an item without hovering it (#7085)
+				if ( !self.active || ( self.active[ 0 ] !== item[ 0 ] ) ) {
+					self.focus( event, item );
+				}
 				self.select( event );
 			})
 			.bind( "mouseover.menu", function( event ) {
@@ -102,9 +108,15 @@ $.widget("ui.menu", {
 				event.preventDefault();
 				break;
 			case $.ui.keyCode.ENTER:
-				self.select();
+				self.select( event );
 				event.preventDefault();
 				event.stopImmediatePropagation();
+				break;
+			case $.ui.keyCode.ESCAPE:
+				if ( self.left( event ) ) {
+					event.stopImmediatePropagation();
+				}
+				event.preventDefault();
 				break;
 			default:
 				event.stopPropagation();
@@ -214,11 +226,13 @@ $.widget("ui.menu", {
 		// need to remove the attribute before adding it for the screenreader to pick up the change
 		// see http://groups.google.com/group/jquery-a11y/msg/929e0c1e8c5efc8f
 		this.element.removeAttr("aria-activedescendant").attr("aria-activedescendant", self.itemId)
-		 		
-		self._close();
+		
+		self.timer = setTimeout(function() {
+			self._close();
+		}, self.delay)
 		var nested = $(">ul", item);
 		if (nested.length && /^mouse/.test(event.type)) {
-			self._open(nested);
+			self._startOpening(nested);
 		}
 		this.activeMenu = item.parent();
 		
@@ -230,6 +244,8 @@ $.widget("ui.menu", {
 			return;
 		}
 		
+		clearTimeout(this.timer);
+		
 		this.active.children( "a" ).removeClass( "ui-state-focus" );
 		// remove only generated id
 		$( "#" + this.menuId + "-activedescendant" ).removeAttr( "id" );
@@ -238,9 +254,18 @@ $.widget("ui.menu", {
 		this.active = null;
 	},
 
+	_startOpening: function(submenu) {
+		clearTimeout(this.timer);
+		var self = this;
+		self.timer = setTimeout(function() {
+			self._close();
+			self._open(submenu);
+		}, self.delay);
+	},
+	
 	_open: function(submenu) {
 		this.element.find(".ui-menu").not(submenu.parents()).hide();
-		
+			
 		var position = $.extend({}, {
 			of: this.active
 		}, $.type(this.options.position) == "function"

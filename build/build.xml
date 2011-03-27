@@ -39,7 +39,7 @@
 	<property name="core.files" value="jquery.ui.core.js, jquery.ui.widget.js, jquery.ui.mouse.js, jquery.ui.draggable.js, jquery.ui.droppable.js, jquery.ui.resizable.js, jquery.ui.selectable.js, jquery.ui.sortable.js, jquery.effects.core.js" />
 	<property name="core.files.min" value="jquery.ui.core.min.js, jquery.ui.widget.min.js, jquery.ui.mouse.min.js, jquery.ui.draggable.min.js, jquery.ui.droppable.min.js, jquery.ui.resizable.min.js, jquery.ui.selectable.min.js, jquery.ui.sortable.min.js, jquery.effects.core.min.js" />
 
-	<property description="Google Closure" name="closure-jar" value="${build.dir}/google-compiler-20091218.jar" />
+	<property description="Google Closure" name="closure-jar" value="${build.dir}/google-compiler-20110320.jar" />
 	<property description="YUI Compressor" name="yuicompressor-jar" value="${build.dir}/yuicompressor-2.4.2.jar" />
 	
 	<target name="deploy-release" depends="clean, docs-download, copy, minify, replace-version, prepend-header, zip" description="Release builder">
