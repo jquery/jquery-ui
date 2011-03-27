@@ -9,12 +9,9 @@ var tabs_defaults = {
 	disabled: false,
 	event: "click",
 	fx: null,
-	idPrefix: "ui-tabs-",
 	load: null,
-	panelTemplate: "<div></div>",
 	select: null,
-	show: null,
-	tabTemplate: "<li><a href='#{href}'><span>#{label}</span></a></li>"
+	show: null
 };
 
 // FAIL: falsy values break the cookie option

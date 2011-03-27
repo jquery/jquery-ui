@@ -32,12 +32,9 @@ $.widget( "ui.tabs", {
 		disabled: false,
 		event: "click",
 		fx: null, // e.g. { height: 'toggle', opacity: 'toggle', duration: 200 }
-		idPrefix: "ui-tabs-",
 		load: null,
-		panelTemplate: "<div></div>",
 		select: null,
-		show: null,
-		tabTemplate: "<li><a href='#{href}'><span>#{label}</span></a></li>"
+		show: null
 	},
 
 	_create: function() {
@@ -135,7 +132,7 @@ $.widget( "ui.tabs", {
 
 	_tabId: function( a ) {
 		return ( $( a ).attr( "aria-controls" ) || "" ).replace( /^#/ , "" ) ||
-			this.options.idPrefix + getNextTabId();
+			"ui-tabs-" + getNextTabId();
 	},
 
 	_sanitizeSelector: function( hash ) {
@@ -253,11 +250,8 @@ $.widget( "ui.tabs", {
 				selector = "#" + id;
 				panel = self.element.find( selector );
 				if ( !panel.length ) {
-					panel = $( self.options.panelTemplate )
-						.attr( "id", id )
-						.addClass( "ui-tabs-panel ui-widget-content ui-corner-bottom" )
-						.data( "destroy.tabs", true )
-						.insertAfter( self.panels[ i - 1 ] || self.list );
+					panel = self._createPanel( id );
+					panel.insertAfter( self.panels[ i - 1 ] || self.list );
 				}
 			// invalid tab href
 			} else {
@@ -269,6 +263,13 @@ $.widget( "ui.tabs", {
 			}
 			$( a ).attr( "aria-controls", selector );
 		});
+	},
+
+	_createPanel: function( id ) {
+		return $( "<div></div>" )
+					.attr( "id", id )
+					.addClass( "ui-tabs-panel ui-widget-content ui-corner-bottom" )
+					.data( "destroy.tabs", true );
 	},
 
 	_setupFx: function( fx ) {
@@ -772,7 +773,8 @@ if ( $.uiBackCompat !== false ) {
 	(function( $, prototype ) {
 		$.extend( prototype.options, {
 			add: null,
-			remove: null
+			remove: null,
+			tabTemplate: "<li><a href='#{href}'><span>#{label}</span></a></li>"
 		});
 
 		prototype.add = function( url, label, index ) {
@@ -790,9 +792,7 @@ if ( $.uiBackCompat !== false ) {
 			// try to find an existing element before creating a new one
 			var $panel = self.element.find( "#" + id );
 			if ( !$panel.length ) {
-				$panel = $( o.panelTemplate )
-					.attr( "id", id )
-					.data( "destroy.tabs", true );
+				$panel = self._createPanel( id );
 			}
 			$panel.addClass( "ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs-hide" );
 
@@ -868,10 +868,30 @@ if ( $.uiBackCompat !== false ) {
 
 	// _tabId method
 	(function( $, prototype ) {
+		$.extend( prototype.options, {
+			idPrefix: "ui-tabs-"
+		});
+
 		var _tabId = prototype._tabId;
 		prototype._tabId = function( a ) {
-		return a.title && a.title.replace( /\s/g, "_" ).replace( /[^\w\u00c0-\uFFFF-]/g, "" ) ||
-			_tabId.apply( this, arguments );
+			return ( $( a ).attr( "aria-controls" ) || "" ).replace( /^#/ , "" ) ||
+				a.title && a.title.replace( /\s/g, "_" ).replace( /[^\w\u00c0-\uFFFF-]/g, "" ) ||
+				this.options.idPrefix + getNextTabId();
+		};
+	}( jQuery, jQuery.ui.tabs.prototype ) );
+
+	// _tabId method
+	(function( $, prototype ) {
+		$.extend( prototype.options, {
+			panelTemplate: "<div></div>"
+		});
+
+		var _createPanel = prototype._createPanel;
+		prototype._createPanel = function( id ) {
+			return $( this.options.panelTemplate )
+					.attr( "id", id )
+					.addClass( "ui-tabs-panel ui-widget-content ui-corner-bottom" )
+					.data( "destroy.tabs", true );
 		};
 	}( jQuery, jQuery.ui.tabs.prototype ) );
 }

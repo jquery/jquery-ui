@@ -79,14 +79,6 @@ test('fx', function() {
 	ok(false, "missing test - untested code is broken code.");
 });
 
-test('idPrefix', function() {
-	ok(false, "missing test - untested code is broken code.");
-});
-
-test('panelTemplate', function() {
-	ok(false, "missing test - untested code is broken code.");
-});
-
 test('selected', function() {
 	expect(8);
 
@@ -115,10 +107,6 @@ test('selected', function() {
 	el.tabs({ collapsible: true });
 	el.tabs('option', 'selected', 0);
 	equals(el.tabs('option', 'selected'), 0, 'should not collapse tab if value is same as selected');
-});
-
-test('tabTemplate', function() {
-	ok(false, "missing test - untested code is broken code.");
 });
 
 })(jQuery);

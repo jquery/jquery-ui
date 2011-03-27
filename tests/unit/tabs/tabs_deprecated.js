@@ -24,6 +24,18 @@ test('cache', function() {
 	ok(false, "missing test - untested code is broken code.");
 });
 
+test('idPrefix', function() {
+	ok(false, "missing test - untested code is broken code.");
+});
+
+test('tabTemplate', function() {
+	ok(false, "missing test - untested code is broken code.");
+});
+
+test('panelTemplate', function() {
+	ok(false, "missing test - untested code is broken code.");
+});
+
 test('spinner', function() {
 	expect(4);
 	stop();
