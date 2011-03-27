@@ -159,6 +159,34 @@ test('select', function() {
 	equals(el.tabs('option', 'selected'), 1, 'should select tab by id');
 });
 
+test('refresh', function() {
+	expect(5);
+
+	var el = $('<div id="tabs"><ul></ul></div>').tabs(),
+		ul = el.find('ul');
+
+	equals(el.tabs('option', 'selected'), -1, 'Initially empty, no selected tab');
+
+	ul.append('<li><a href="data/test.html">Test 1</a></li>');
+	el.tabs('refresh');
+	equals( el.find('.ui-tabs-panel').length, 1, 'Panel created after refresh');
+
+	ul.find('li').remove();
+	el.tabs('refresh');
+	equals( el.find('.ui-tabs-panel').length, 0, 'Panel removed after refresh');
+
+	ul.append('<li><a href="#test1">Test 1</a></li>');
+	$('<div id="test1">Test Panel 1</div>').insertAfter( ul );
+	el.tabs('refresh');
+	el.tabs('select', 0);
+	equals( el.tabs('option', 'selected'), 0, 'First tab added should be auto selected');
+
+	ul.append('<li><a href="#test2">Test 2</a></li>');
+	$('<div id="test2">Test Panel 2</div>').insertAfter( ul );
+	el.tabs('refresh');
+	equals( el.tabs('option', 'selected'), 0, 'Second tab added should not be auto selected');
+});
+
 test('load', function() {
 	ok(false, "missing test - untested code is broken code.");
 });
