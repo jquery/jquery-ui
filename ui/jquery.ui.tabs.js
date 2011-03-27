@@ -99,15 +99,16 @@ $.widget( "ui.tabs", {
 		this.lis.removeClass( "ui-tabs-selected ui-state-active" );
 		// check for length avoids error when initializing empty list
 		if ( o.selected >= 0 && this.anchors.length ) {
-			var temp = self.element.find( self._sanitizeSelector( self.anchors[ o.selected ].hash ) )
-				.removeClass( "ui-tabs-hide" );
+			var tab = self.anchors[ o.selected ],
+				panel = self.element.find( self._sanitizeSelector( $( tab ).attr( "aria-controls" ) ) );
+
+			panel.removeClass( "ui-tabs-hide" );
 
 			this.lis.eq( o.selected ).addClass( "ui-tabs-selected ui-state-active" );
 
 			// seems to be expected behavior that the show callback is fired
 			self.element.queue( "tabs", function() {
-				self._trigger( "show", null,
-					self._ui( self.anchors[ o.selected ], self.element.find( self._sanitizeSelector( self.anchors[ o.selected ].hash ) )[ 0 ] ) );
+				self._trigger( "show", null, self._ui( tab, panel[ 0 ] ) );
 			});
 
 			this.load( o.selected );
@@ -133,7 +134,7 @@ $.widget( "ui.tabs", {
 	},
 
 	_tabId: function( a ) {
-		return a.title && a.title.replace( /\s/g, "_" ).replace( /[^\w\u00c0-\uFFFF-]/g, "" ) ||
+		return ( $( a ).attr( "aria-controls" ) || "" ).replace( /^#/ , "" ) ||
 			this.options.idPrefix + getNextTabId();
 	},
 
@@ -165,7 +166,7 @@ $.widget( "ui.tabs", {
 
 		// Remove panels that we created that are missing their tab
 		this.element.find(".ui-tabs-panel:data(destroy.tabs)").each( function( index, panel ) {
-			var anchor = self.anchors.filter( "[href$='#" + panel.id + "']");
+			var anchor = self.anchors.filter( "[aria-controls='#" + panel.id + "']");
 			if ( !anchor.length ) {
 				$( panel ).remove();
 			}
@@ -224,14 +225,17 @@ $.widget( "ui.tabs", {
 		this.panels = $( [] );
 
 		this.anchors.each(function( i, a ) {
-			var href = $( a ).attr( "href" );
+			var href = $( a ).attr( "href" ),
+				hrefBase = href.split( "#" )[ 0 ],
+				selector,
+				panel,
+				baseEl;
+
 			// For dynamically created HTML that contains a hash as href IE < 8 expands
 			// such href to the full page url with hash and then misinterprets tab as ajax.
 			// Same consideration applies for an added tab with a fragment identifier
 			// since a[href=#fragment-identifier] does unexpectedly not match.
 			// Thus normalize href attribute...
-			var hrefBase = href.split( "#" )[ 0 ],
-				baseEl;
 			if ( hrefBase && ( hrefBase === location.toString().split( "#" )[ 0 ] ||
 					( baseEl = $( "base" )[ 0 ]) && hrefBase === baseEl.href ) ) {
 				href = a.hash;
@@ -240,32 +244,30 @@ $.widget( "ui.tabs", {
 
 			// inline tab
 			if ( fragmentId.test( href ) ) {
-				self.panels = self.panels.add( self.element.find( self._sanitizeSelector( href ) ) );
+				selector = href;
+				panel = self.element.find( self._sanitizeSelector( selector ) );
 			// remote tab
 			// prevent loading the page itself if href is just "#"
 			} else if ( href && href !== "#" ) {
-				// required for restore on destroy
-				$.data( a, "href.tabs", href );
-
-				// TODO until #3808 is fixed strip fragment identifier from url
-				// (IE fails to load from such url)
-				$.data( a, "load.tabs", href.replace( /#.*$/, "" ) );
-
 				var id = self._tabId( a );
-				a.href = "#" + id;
-				var $panel = self.element.find( "#" + id );
-				if ( !$panel.length ) {
-					$panel = $( self.options.panelTemplate )
+				selector = "#" + id;
+				panel = self.element.find( selector );
+				if ( !panel.length ) {
+					panel = $( self.options.panelTemplate )
 						.attr( "id", id )
 						.addClass( "ui-tabs-panel ui-widget-content ui-corner-bottom" )
+						.data( "destroy.tabs", true )
 						.insertAfter( self.panels[ i - 1 ] || self.list );
-					$panel.data( "destroy.tabs", true );
 				}
-				self.panels = self.panels.add( $panel );
 			// invalid tab href
 			} else {
 				self.options.disabled.push( i );
 			}
+
+			if ( panel.length) {
+				self.panels = self.panels.add( panel );
+			}
+			$( a ).attr( "aria-controls", selector );
 		});
 	},
 
@@ -348,9 +350,9 @@ $.widget( "ui.tabs", {
 		var self = this,
 			o = this.options,
 			el = event.currentTarget,
-			$li = $(el).closest( "li" ),
+			$li = $( el ).closest( "li" ),
 			$hide = self.panels.filter( ":not(.ui-tabs-hide)" ),
-			$show = self.element.find( self._sanitizeSelector( el.hash ) );
+			$show = self.element.find( self._sanitizeSelector( $( el ).attr( "aria-controls" ) ) );
 
 		// tab is already selected, but not collapsible
 		if ( ( $li.hasClass( "ui-tabs-selected" ) && !o.collapsible ) ||
@@ -455,10 +457,6 @@ $.widget( "ui.tabs", {
 		this.list.removeClass( "ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all" );
 
 		this.anchors.each(function() {
-			var href = $.data( this, "href.tabs" );
-			if ( href ) {
-				this.href = href;
-			}
 			var $this = $( this ).unbind( ".tabs" );
 			$.each( [ "href", "load" ], function( i, prefix ) {
 				$this.removeData( prefix + ".tabs" );
@@ -558,8 +556,11 @@ $.widget( "ui.tabs", {
 		var self = this,
 			o = this.options,
 			a = this.anchors.eq( index )[ 0 ],
-			url = $.data( a, "load.tabs" ),
-			eventData = self._ui( self.anchors[ index ], self.panels[ index ] );
+			panel = self.element.find( self._sanitizeSelector( $( a ).attr( "aria-controls" ) ) ),
+			// TODO until #3808 is fixed strip fragment identifier from url
+			// (IE fails to load from such url)
+			url = $( a ).attr( "href" ).replace( /#.*$/, "" ),
+			eventData = self._ui( a, panel[ 0 ] );
 
 		if ( this.xhr ) {
 			this.xhr.abort();
@@ -585,7 +586,7 @@ $.widget( "ui.tabs", {
 
 			this.xhr
 				.success( function( response ) {
-					self.element.find( self._sanitizeSelector( a.hash ) ).html( response );
+					panel.html( response );
 				})
 				.complete( function( jqXHR, status ) {
 					if ( status === "abort" ) {
@@ -610,12 +611,8 @@ $.widget( "ui.tabs", {
 		self.element.dequeue( "tabs" );
 
 		return this;
-	},
-
-	url: function( index, url ) {
-		this.anchors.eq( index ).data( "load.tabs", url );
-		return this;
 	}
+
 });
 
 $.extend( $.ui.tabs, {
@@ -859,6 +856,22 @@ if ( $.uiBackCompat !== false ) {
 	(function( $, prototype ) {
 		prototype.length = function() {
 			return this.anchors.length;
+		};
+	}( jQuery, jQuery.ui.tabs.prototype ) );
+
+	// url method
+	(function( $, prototype ) {
+		prototype.url = function( index, url ) {
+			this.anchors.eq( index ).attr( "href", url );
+		};
+	}( jQuery, jQuery.ui.tabs.prototype ) );
+
+	// _tabId method
+	(function( $, prototype ) {
+		var _tabId = prototype._tabId;
+		prototype._tabId = function( a ) {
+		return a.title && a.title.replace( /\s/g, "_" ).replace( /[^\w\u00c0-\uFFFF-]/g, "" ) ||
+			_tabId.apply( this, arguments );
 		};
 	}( jQuery, jQuery.ui.tabs.prototype ) );
 }

@@ -191,8 +191,4 @@ test('load', function() {
 	ok(false, "missing test - untested code is broken code.");
 });
 
-test('url', function() {
-	ok(false, "missing test - untested code is broken code.");
-});
-
 })(jQuery);

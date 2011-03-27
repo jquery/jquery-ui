@@ -1,5 +1,19 @@
 (function( $ ) {
 
+module("tabs (deprecated): core");
+
+test( "#4581 - title attribute for remote tabs does not support foreign languages", function() {
+	expect( 1 );
+
+	$( "#tabs2" ).tabs({
+		selected: 3,
+		beforeload: function( event, ui ) {
+			event.preventDefault();
+			equal( ui.panel.id, "∫ßáö_Սե", "proper title" );
+		}
+	});
+});
+
 module("tabs (deprecated): options");
 
 test('ajaxOptions', function() {
@@ -146,6 +160,16 @@ test('length', function() {
 
 	el = $('#tabs1').tabs();
 	equals(el.tabs('length'), $('ul a', el).length, ' should return length');
+});
+
+test('url', function() {
+	el = $('#tabs2').tabs();
+	var tab = el.find('a:eq(3)'),
+		url = tab.attr('href');
+
+	el.tabs('url', 3, "data/test2.html");
+	equals(tab.attr('href'), 'data/test2.html', 'Url was updated');
+	tab.attr('href', url );
 });
 
 }( jQuery ) );

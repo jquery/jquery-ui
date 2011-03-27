@@ -42,21 +42,29 @@ test('#3627 - Ajax tab with url containing a fragment identifier fails to load',
 	// http://dev.jqueryui.com/ticket/3627
 	expect(1);
 
-	el = $('#tabs2').tabs();
-	
-	ok(/test.html$/.test( $('a:eq(2)', el).data('load.tabs') ), 'should ignore fragment identifier');
-
+	el = $('#tabs2').tabs({
+		selected: 2,
+		beforeload: function( event, ui ) {
+			event.preventDefault();
+			ok(/test.html$/.test( ui.settings.url ), 'should ignore fragment identifier');
+		}
+	});
 });
 
 test('#4033 - IE expands hash to full url and misinterprets tab as ajax', function() {
 	// http://dev.jqueryui.com/ticket/4033
 	expect(1);
 	
-	el = $('<div><ul><li><a href="#tab">Tab</a></li></ul><div id="tab"></div></div>')
-			.appendTo('#main').tabs();
+	el = $('<div><ul><li><a href="#tab">Tab</a></li></ul><div id="tab"></div></div>');
+	el.appendTo('#main');
+	el.tabs({
+		beforeload: function( event, ui ) {
+			event.preventDefault();
+			ok( false, 'should not be an ajax tab');
+		}
+	});
 
-	equals($('a', el).data('load.tabs'), undefined, 'should not create ajax tab');
-	
+	equals($('a', el).attr('aria-controls'), '#tab', 'aria-contorls attribute is correct');
 });
 
 test('#5893 - Sublist in the tab list are considered as tab', function() {
@@ -67,19 +75,6 @@ test('#5893 - Sublist in the tab list are considered as tab', function() {
 	equals(el.data("tabs").anchors.length, 2, 'should contain 2 tab');
 
 });
-
-asyncTest( "#4581 - title attribute for remote tabs does not support foreign languages", function() {
-	expect( 1 );
-	
-	$( "#tabs2" ).tabs({
-		selected: 3,
-		load: function( event, ui ) {
-			equal( ui.panel.id, "∫ßáö_Սե", "proper title" );
-			start();
-		}
-	});
-});
-
 
 test('#6710 - selectors are global', function() {
 	// http://bugs.jqueryui.com/ticket/6710
