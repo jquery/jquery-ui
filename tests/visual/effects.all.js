@@ -14,12 +14,14 @@ $(function() {
 
 		$(el).bind("click", function() {
 
-			$(this).addClass("current").hide(n, o, duration, function() {
-				var self = this;
-				window.setTimeout(function() {
-					$(self).show(n, o, duration, function() { $(this).removeClass("current"); });
-				}, wait);
-			});
+			$(this).addClass("current")
+				// delaying the initial animation makes sure that the queue stays in tact
+				.delay( 10 )
+				.hide( n, o, duration )
+				.delay( wait )
+				.show( n, o, duration, function() { 
+					$( this ).removeClass("current"); 
+				});
 		});
 
 	};
