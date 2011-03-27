@@ -5,13 +5,13 @@
 var tabs_defaults = {
 	activate: null,
 	beforeload: null,
+	beforeActivate: null,
 	collapsible: false,
 	cookie: null,
 	disabled: false,
 	event: "click",
 	fx: null,
-	load: null,
-	select: null
+	load: null
 };
 
 // FAIL: falsy values break the cookie option

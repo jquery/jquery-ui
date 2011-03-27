@@ -7,6 +7,7 @@ var tabs_defaults = {
 	add: null,
 	ajaxOptions: null,
 	beforeload: null,
+	beforeActivate: null,
 	cache: false,
 	collapsible: false,
 	cookie: null,

@@ -28,13 +28,13 @@ $.widget( "ui.tabs", {
 	options: {
 		activate: null,
 		beforeload: null,
+		beforeActivate: null,
 		cookie: null, // e.g. { expires: 7, path: '/', domain: 'jquery.com', secure: true }
 		collapsible: false,
 		disabled: false,
 		event: "click",
 		fx: null, // e.g. { height: 'toggle', opacity: 'toggle', duration: 200 }
-		load: null,
-		select: null
+		load: null
 	},
 
 	_create: function() {
@@ -363,8 +363,8 @@ $.widget( "ui.tabs", {
 			$li.hasClass( "ui-state-disabled" ) ||
 			// tab is already loading
 			$li.hasClass( "ui-state-processing" ) ||
-			// allow canceling by select event
-			self._trigger( "select", event, self._ui( el, $show[ 0 ] ) ) === false ) {
+			// allow canceling by beforeActivate event
+			self._trigger( "beforeActivate", event, self._ui( el, $show[ 0 ] ) ) === false ) {
 			el.blur();
 			return;
 		}
@@ -927,10 +927,11 @@ if ( $.uiBackCompat !== false ) {
 		};
 	}( jQuery, jQuery.ui.tabs.prototype ) );
 
-	// show event
+	// show and select event
 	(function( $, prototype ) {
 		$.extend( prototype.options, {
-			show: null
+			show: null,
+			select: null
 		});
 		var _trigger = prototype._trigger;
 
@@ -939,7 +940,9 @@ if ( $.uiBackCompat !== false ) {
 			if ( !ret ) {
 				return false;
 			}
-			if ( type === "activate" ) {
+			if ( type === "beforeActivate" ) {
+				ret = _trigger.call( this, "select", event, data );
+			} else if ( type === "activate" ) {
 				ret = _trigger.call( this, "show", event, data );
 			}
 		};
