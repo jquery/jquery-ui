@@ -26,6 +26,7 @@ function getNextListId() {
 
 $.widget( "ui.tabs", {
 	options: {
+		activate: null,
 		beforeload: null,
 		cookie: null, // e.g. { expires: 7, path: '/', domain: 'jquery.com', secure: true }
 		collapsible: false,
@@ -33,8 +34,7 @@ $.widget( "ui.tabs", {
 		event: "click",
 		fx: null, // e.g. { height: 'toggle', opacity: 'toggle', duration: 200 }
 		load: null,
-		select: null,
-		show: null
+		select: null
 	},
 
 	_create: function() {
@@ -103,9 +103,9 @@ $.widget( "ui.tabs", {
 
 			this.lis.eq( o.active ).addClass( "ui-tabs-selected ui-state-active" );
 
-			// seems to be expected behavior that the show callback is fired
+			// seems to be expected behavior that the activate callback is fired
 			self.element.queue( "tabs", function() {
-				self._trigger( "show", null, self._ui( tab, panel[ 0 ] ) );
+				self._trigger( "activate", null, self._ui( tab, panel[ 0 ] ) );
 			});
 
 			this.load( o.active );
@@ -304,11 +304,11 @@ $.widget( "ui.tabs", {
 				.animate( showFx, showFx.duration || "normal", function() {
 					self._resetStyle( show, showFx );
 					self.running = false;
-					self._trigger( "show", event, self._ui( clicked, show[ 0 ] ) );
+					self._trigger( "activate", event, self._ui( clicked, show[ 0 ] ) );
 				});
 		} else {
 			show.removeClass( "ui-tabs-hide" );
-			self._trigger( "show", event, self._ui( clicked, show[ 0 ] ) );
+			self._trigger( "activate", event, self._ui( clicked, show[ 0 ] ) );
 		}
 	},
 
@@ -815,7 +815,7 @@ if ( $.uiBackCompat !== false ) {
 				$li.addClass( "ui-tabs-selected ui-state-active" );
 				$panel.removeClass( "ui-tabs-hide" );
 				this.element.queue( "tabs", function() {
-					self._trigger( "show", null, self._ui( self.anchors[ 0 ], self.panels[ 0 ] ) );
+					self._trigger( "activate", null, self._ui( self.anchors[ 0 ], self.panels[ 0 ] ) );
 				});
 
 				this.load( 0 );
@@ -924,6 +924,24 @@ if ( $.uiBackCompat !== false ) {
 		prototype._eventHandler = function( event ) {
 			_eventHandler.apply( this, arguments );
 			this.options.selected = this.options.active ;
+		};
+	}( jQuery, jQuery.ui.tabs.prototype ) );
+
+	// show event
+	(function( $, prototype ) {
+		$.extend( prototype.options, {
+			show: null
+		});
+		var _trigger = prototype._trigger;
+
+		prototype._trigger = function( type, event, data ) {
+			var ret = _trigger.apply( this, arguments );
+			if ( !ret ) {
+				return false;
+			}
+			if ( type === "activate" ) {
+				ret = _trigger.call( this, "show", event, data );
+			}
 		};
 	}( jQuery, jQuery.ui.tabs.prototype ) );
 }

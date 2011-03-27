@@ -3,6 +3,7 @@
  */
 
 var tabs_defaults = {
+	activate: null,
 	add: null,
 	ajaxOptions: null,
 	beforeload: null,

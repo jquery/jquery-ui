@@ -3,6 +3,7 @@
  */
 
 var tabs_defaults = {
+	activate: null,
 	beforeload: null,
 	collapsible: false,
 	cookie: null,
@@ -10,8 +11,7 @@ var tabs_defaults = {
 	event: "click",
 	fx: null,
 	load: null,
-	select: null,
-	show: null
+	select: null
 };
 
 // FAIL: falsy values break the cookie option

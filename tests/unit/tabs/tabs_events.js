@@ -49,12 +49,12 @@ test('load', function() {
 	ok(false, "missing test - untested code is broken code.");
 });
 
-test('show', function() {
+test('activate', function() {
 	expect(5);
 
 	var uiObj, eventObj;
 	el = $('#tabs1').tabs({
-		show: function(event, ui) {
+		activate: function(event, ui) {
 			uiObj = ui;
 			eventObj = event;
 		}
