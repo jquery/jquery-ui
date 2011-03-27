@@ -8,7 +8,7 @@
  * http://docs.jquery.com/UI/Effects/Split (Not yet!)
  *
  * Depends:
- *  
+ *  jquery.effects.core.js
  */
 
 (function( $, undefined ) {
@@ -23,22 +23,17 @@
     			height: $( document ).height(),
     			width: $( document ).width()
     		},
-    		parentCoords = el.offset(),
+    		parentCoords = el.show().css('visibility','hidden').offset(),
     		container, pieces, i, j, properties;
     	
     	parentCoords.width = el.outerWidth();
     	parentCoords.height = el.outerHeight();
-    	
-        // To ensure that the element is hidden/shown correctly
-        if ( o.show && o.fade ) {
-            el.css( 'opacity', 0 ).show();
-        } else {
-            el.css( 'opacity', 1 ).show();
-        }
         
     	//split into pieces
         pieces = $.effects.piecer.call( this, o.rows, o.columns );
         container = $( pieces[0] ).parent();
+        
+        container.css('overflow', o.crop ? 'hidden' : 'visible');
     
         // If element is to be hidden we make it invisible until the
         // transformation is done and then hide it.
@@ -50,11 +45,11 @@
         for ( i = 0; i < o.rows; i++ ) {
             for ( j = 0; j < o.columns; j++ ) {
                 // call the animation for each piece.
-                animation.call( pieces[ i * o.rows + j ], interval, duration, i, j, documentCoords, parentCoords, childComplete );
+                animation.call( pieces[ i*o.columns + j ], interval, duration, i, j, documentCoords, parentCoords, childComplete );
             }
         }
         
-		// children animate complete:
+		// children animate complete:       
 		function childComplete() {
         	pieceCounter.push( this );
 			if ( pieceCounter.length == o.rows * o.columns ) {
@@ -65,14 +60,21 @@
 		
 		function animComplete() {
             // Ensures that the element is hidden/shown correctly
+			
             if ( o.show ) {
-                el.css( 'opacity', '' ).show();
+                el.css( {
+                	opacity: '',
+                	visibility: ''
+                } ).show();
             } else {
                 el.css( {
                     opacity : '',
                     visibility : ''
                 } ).hide();
             }
+            
+            
+            
             container.detach();
             if ( $.isFunction( o.complete ) ) {
             	o.complete.apply( el[ 0 ] );
@@ -99,7 +101,7 @@
                 left : position.left + "px",
                 height : height + "px",
                 width : width + "px",
-                zIndex : el.css( 'z-index' )
+                zIndex : el.css( 'zIndex' )
             }).appendTo('body'),
             pieces = [],
             
@@ -134,7 +136,6 @@
                             overflow : "hidden"
                         }).appendTo(container)
                 );
-                    
             }
         }
         
@@ -155,34 +156,45 @@
     	 * 		interval, 
     	 * 		easing, 
     	 * 		crop, 
+    	 * 		pieces
     	 * 		fade, 
     	 * 		show
     	 */
     	
-    	return this.queue( function( next ) {	    	 		
-	    	o = $.extend(
+    	return this.queue( function( next ) {
+    		
+    		var opt = $.extend(
 	    		{
 	    			direction: 'bottom',
 	    			distance: 1,
 	    			reverse: false,
 	    			random: false,
 	    			fade: true,
-	    			rows: 3,
-	    			columns: 3,
-	    			show: o.mode == "hide" ? 0 : 1,
 	    			crop: false
 	    		},
 	    		o
-	    	);	    	
+	    	);
+    		
+	    	//Support for toggle
+    		opt.mode = $.effects.setMode( this, opt.mode );
+    		opt.show = ( opt.mode == 'show' );
+	    	
+	    	//Support for pieces
+	    	if ( ( !opt.rows || !opt.columns ) && opt.pieces ) {
+	    		opt.rows = opt.columns = Math.round( Math.sqrt( opt.pieces ) );
+	    	} else {
+	    		opt.rows = opt.rows || 3;
+	    		opt.columns = opt.columns || 3;
+	    	}
 	    	
 	    	function animate( interval, duration, row, column, documentCoords, parentCoords, callback ) {	    		
-	             var random = o.random ? Math.abs( o.random ) : 0, 
+	             var random = opt.random ? Math.abs( opt.random ) : 0, 
 	            	el = $( this ),
-                 	randomDelay = Math.random() * ( o.rows + o.columns ) * interval, 
+                 	randomDelay = Math.random() * ( opt.rows + opt.columns ) * interval, 
             		
-                 	uniformDelay = ( o.reverse || o.distance < 0 ) ? 
+                 	uniformDelay = ( opt.reverse || opt.distance < 0 ) ? 
                  			( ( row + column ) * interval ) : 
-                 			( ( ( o.rows + o.columns ) - ( row + column ) ) * interval ), 
+                 			( ( ( opt.rows + opt.columns ) - ( row + column ) ) * interval ), 
                  	delay = randomDelay * random + Math.max( 1 - random, 0 ) * uniformDelay, 
                  	offset = el.offset(), 
                  	width = el.outerWidth(), 
@@ -198,47 +210,48 @@
 
                  properties = offset;
                  
-                 if ( o.fade ) {
-                     properties.opacity = o.show ? 1 : 0;
-                     el.css( 'opacity', o.show ? 0 : '' );
+                 if ( opt.fade ) {
+                     properties.opacity = opt.show ? 1 : 0;
+                     el.css( 'opacity', opt.show ? 0 : '' );
                  }
+                 
 
-                 if ( o.direction.indexOf( 'bottom' ) !== -1 ) {
-                     top = offset.top + parentCoords.height * o.distance;
+                 if ( opt.direction.indexOf( 'bottom' ) !== -1 ) {
+                     top = offset.top + parentCoords.height * opt.distance;
                      top = top > maxTop ? maxTop : top;
-                 } else if ( o.direction.indexOf( 'top' ) !== -1 ) {
-                     top = offset.top - parentCoords.height * o.distance;
+                 } else if ( opt.direction.indexOf( 'top' ) !== -1 ) {
+                     top = offset.top - parentCoords.height * opt.distance;
                      top = top < 0 ? 0 : top;
                  }
 
-                 if ( o.direction.indexOf( 'right' ) !== -1 ) {
-                     left = offset.left + parentCoords.width * o.distance;
+                 if ( opt.direction.indexOf( 'right' ) !== -1 ) {
+                     left = offset.left + parentCoords.width * opt.distance;
                      left = left > maxLeft ? maxLeft : left;
-                 } else if ( o.direction.indexOf( 'left' ) !== -1 ) {
-                     left = offset.left - parentCoords.width * o.distance;
+                 } else if ( opt.direction.indexOf( 'left' ) !== -1 ) {
+                     left = offset.left - parentCoords.width * opt.distance;
                      left = left < 0 ? 0 : left;
                  }
 
-                 if ( o.direction.indexOf( 'right' ) || o.direction.indexOf( 'left' ) ) {
-                     if ( o.show ) {
+                 if ( opt.direction.indexOf( 'right' ) || opt.direction.indexOf( 'left' ) ) {
+                     if ( opt.show ) {
                     	 el.css( 'left', left );
                      } else {
                     	 properties.left = left;
                      }
                  }
                  
-                 if ( o.direction.indexOf( 'top' ) || options.direction.indexOf( 'bottom' ) ) {
-                     if ( o.show ) {
+                 if ( opt.direction.indexOf( 'top' ) || opt.direction.indexOf( 'bottom' ) ) {
+                     if ( opt.show ) {
                     	 el.css( 'top', top );
                      } else {
                     	 properties.top = top;
                      }
-                 } 
+                 }
                  
                  el.delay( delay ).animate( properties, duration, o.easing, callback );
              }
 	    		
-	    	startSplitAnim.call( this, o, animate, next );
+	    	startSplitAnim.call( this, opt, animate, next );
 	    	
 		} );
     	

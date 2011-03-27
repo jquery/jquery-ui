@@ -91,12 +91,8 @@ $(function() {
 	});
 	
 	$("#piecer").click(function(){
-		$.effects.piecer.call(this, 5, 5);
+		$.effects.piecer.call(this, 4, 10);
 	});
-	$("#build").click(function(){
-		$(this).hide("build",{easing: 'linear'},2000,function(){
-			console.log("testing");
-			$(this).show("build");
-		});
-	});
+	
+	effect('#build', "build", {easing: 'linear' });
 });
