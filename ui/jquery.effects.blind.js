@@ -34,8 +34,7 @@ $.effects.blind = function( o ) {
 		$.effects.save( el, props ); 
 		el.show(); 
 		wrapper = $.effects.createWrapper( el ).css({ 
-			overflow: 'hidden',
-			position: 'relative'
+			overflow: 'hidden'
 		});
 
 		distance = wrapper[ ref ]();
