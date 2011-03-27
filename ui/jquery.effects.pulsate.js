@@ -16,26 +16,26 @@ $.effects.effect.pulsate = function( o ) {
 	return this.queue( function() {
 		var elem = $( this ),
 			mode = $.effects.setMode( elem, o.mode || 'show' ),
-			times = ( ( o.times || 5 ) * 2 ) - 1,
-			duration = o.duration / 2,
-			isVisible = elem.is( ':visible' ),
-			animateTo = 0,
-			i;
 
-		if ( !isVisible ) {
+			// showing or hiding leave of the "last" time
+			times = ( ( o.times || 5 ) * 2 ) - ( mode == "show" || mode == "hide" ),
+			duration = o.duration / times,
+			show = !elem.is( ":visible" ),
+			animateTo = 0,
+			i,
+			queue = elem.queue(),
+			queuelen = queue.length;
+
+		if ( show ) {
 			elem.css('opacity', 0).show();
 			animateTo = 1;
 		}
 
-		if ( ( mode == 'hide' && isVisible ) || ( mode == 'show' && !isVisible ) ) {
-			times--;
-		}
-
-		for ( i = 0; i < times; i++ ) {
+		for ( i = 0; i < times - 1; i++ ) {
 			elem.animate({ 
 				opacity: animateTo 
 			}, duration, o.easing );
-			animateTo = ( animateTo + 1 ) % 2;
+			animateTo = 1 - animateTo;
 		}
 
 		elem.animate({ 
@@ -45,7 +45,13 @@ $.effects.effect.pulsate = function( o ) {
 				elem.hide();
 			}
 			(o.complete && o.complete.apply(this, arguments));
-		}).dequeue();
+		});
+
+		if ( queuelen > 1) {
+			queue.splice.apply( queue,
+				[ 1, 0 ].concat( queue.splice( queuelen, times ) ) );
+		}
+		elem.dequeue();
 	});
 };
 
