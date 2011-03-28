@@ -13,4 +13,4 @@ var spinner_defaults = {
 	value: null
 };
 
-commonWidgetTests('spinner', { defaults: spinner_defaults });
+commonWidgetTests( 'spinner', { defaults: spinner_defaults });
