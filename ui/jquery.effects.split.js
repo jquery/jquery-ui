@@ -25,7 +25,7 @@
 	}
 	
 	//Helper function to control the split on each animation
-    function startSplitAnim( o, animation, next ){
+    function startSplitAnim( o, animation, next ) {
     	
     	var el = $( this ),
     		interval = o.interval, 
