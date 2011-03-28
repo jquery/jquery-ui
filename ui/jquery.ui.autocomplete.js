@@ -38,7 +38,8 @@ $.widget( "ui.autocomplete", {
 	_create: function() {
 		var self = this,
 			doc = this.element[ 0 ].ownerDocument,
-			suppressKeyPress;
+			suppressKeyPress,
+			keyIsEnter;
 
 		this.valueMethod = this.element[ this.element.is( "input" ) ? "val" : "text" ];
 
@@ -57,6 +58,7 @@ $.widget( "ui.autocomplete", {
 				}
 
 				suppressKeyPress = false;
+				keyIsEnter = false;
 				var keyCode = $.ui.keyCode;
 				switch( event.keyCode ) {
 				case keyCode.PAGE_UP:
@@ -84,6 +86,7 @@ $.widget( "ui.autocomplete", {
 						suppressKeyPress = true;
 						event.preventDefault();
 					}
+					keyIsEnter = true;
 					//passthrough - ENTER and TAB both select the current element
 				case keyCode.TAB:
 					if ( !self.menu.active ) {
@@ -113,6 +116,29 @@ $.widget( "ui.autocomplete", {
 					suppressKeyPress = false;
 					event.preventDefault();
 				}
+				if (event.keyCode == $.ui.keyCode.ENTER || event.keyCode ==  $.ui.keyCode.NUMPAD_ENTER) {
+					keyIsEnter = true;
+				}
+			})
+			.bind( "keyup.autocomplete", function( event ) {
+				if (keyIsEnter) {
+					keyIsEnter = false;
+					return;
+				}
+				if (event.keyCode != $.ui.keyCode.ENTER && event.keyCode !=  $.ui.keyCode.NUMPAD_ENTER) {
+					return;
+				}
+				if ( self.options.disabled || self.element.attr( "readonly" ) ) {
+					return;
+				}
+				clearTimeout( self.searching );
+				self.searching = setTimeout(function() {
+					// only search if the value has changed
+					if ( self.term != self.element.val() ) {
+						self.selectedItem = null;
+						self.search( null, event );
+					}
+				}, self.options.delay );
 			})
 			.bind( "focus.autocomplete", function() {
 				if ( self.options.disabled ) {
