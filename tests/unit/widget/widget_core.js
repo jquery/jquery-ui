@@ -288,6 +288,45 @@ test( "re-init", function() {
 	same( actions, [ "optionfoo", "init" ], "correct methods called on re-init with options" );
 });
 
+test( "inheritance - options", function() {
+	// #5830 - Widget: Using inheritance overwrites the base classes options
+	$.widget( "ui.testWidgetBase", {
+		options: {
+			obj: {
+				key1: "foo",
+				key2: "bar"
+			},
+			arr: [ "testing" ]
+		}
+	});
+
+	$.widget( "ui.testWidgetExtension", $.ui.testWidgetBase, {
+		options: {
+			obj: {
+				key1: "baz"
+			},
+			arr: [ "alpha", "beta" ]
+		}
+	});
+
+	same( $.ui.testWidgetBase.prototype.options.obj, {
+		key1: "foo",
+		key2: "bar"
+	}, "base class option object not overridden");
+	same( $.ui.testWidgetBase.prototype.options.arr, [ "testing" ],
+		"base class option array not overridden");
+
+	same( $.ui.testWidgetExtension.prototype.options.obj, {
+		key1: "baz",
+		key2: "bar"
+	}, "extension class option object extends base");
+	same( $.ui.testWidgetExtension.prototype.options.arr, [ "alpha", "beta" ],
+		"extension class option array overwrites base");
+
+	delete $.ui.testWidgetBase;
+	delete $.ui.testWidgetExtension;
+});
+
 test( "._super()", function() {
 	expect( 9 );
 	var instance;
@@ -790,6 +829,55 @@ test( "._trigger() - provide event and ui", function() {
 				}
 			}, "modified ui hash passed" );
 			ui.baz.quux = "jQuery";
+		}
+	})
+	.testWidget( "testEvent" );
+});
+
+test( "._trigger() - array as ui", function() {
+	// #6795 - Widget: handle array arguments to _trigger consistently
+	expect( 4 );
+
+	$.widget( "ui.testWidget", {
+		_create: function() {},
+		testEvent: function() {
+			var ui = {
+					foo: "bar",
+					baz: {
+						qux: 5,
+						quux: 20
+					}
+				};
+			var extra = {
+				bar: 5
+			};
+			this._trigger( "foo", null, [ ui, extra ] );
+		}
+	});
+	$( "#widget" ).bind( "testwidgetfoo", function( event, ui, extra ) {
+		same( ui, {
+			foo: "bar",
+			baz: {
+				qux: 5,
+				quux: 20
+			}
+		}, "event: ui hash passed" );
+		same( extra, {
+			bar: 5
+		}, "event: extra argument passed" );
+	});
+	$( "#widget" ).testWidget({
+		foo: function( event, ui, extra ) {
+			same( ui, {
+				foo: "bar",
+				baz: {
+					qux: 5,
+					quux: 20
+				}
+			}, "callback: ui hash passed" );
+			same( extra, {
+				bar: 5
+			}, "callback: extra argument passed" );
 		}
 	})
 	.testWidget( "testEvent" );
