@@ -33,6 +33,17 @@ test("option: items", function() {
 test("content: default", function() {
 	$("#tooltipped1").tooltip().tooltip("open");
 	same( $(".ui-tooltip").text(), "anchortitle" );
+test( "option: position", function() {
+	var tip = $( "#sizedtooltip" ).tooltip({
+			position: {
+				my: "left top",
+				at: "right bottom",
+				offset: "35 10"
+			}
+		}),
+		widget = tip.tooltip("open").tooltip("widget");
+	
+	deepEqual( widget.offset(), { top: 170, left: 295 }, "The tooltip is positioned properly" );
 });
 
 test("content: return string", function() {
