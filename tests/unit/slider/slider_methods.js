@@ -74,7 +74,7 @@ test("value", function() {
 			value: 5
 		});
 		equals(el.slider('value'), 5, 'range: ' + this + ' slider method get');
-		el.slider('value', 10);
+		equals(el.slider('value', 10), el, 'value method is chainable');
 		equals(el.slider('value'), 10, 'range: ' + this + ' slider method set');
 		el.remove();
 	});
@@ -85,13 +85,13 @@ test("value", function() {
 	el.slider('option', 'value', -2);
 	equals(el.slider('option', 'value'), -2, 'value option does not respect min');
 	equals(el.slider('value'), -1, 'value method get respects min');
-	el.slider('value', -2);
+	equals(el.slider('value', -2), el, 'value method is chainable');
 	equals(el.slider('option', 'value'), -1, 'value method set respects min');
 	// max with value option vs value method
 	el.slider('option', 'value', 2);
 	equals(el.slider('option', 'value'), 2, 'value option does not respect max');
 	equals(el.slider('value'), 1, 'value method get respects max');
-	el.slider('value', 2);
+	equals(el.slider('value', 2), el, 'value method is chainable');
 	equals(el.slider('option', 'value'), 1, 'value method set respects max');
 });
 
