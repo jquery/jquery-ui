@@ -25,10 +25,10 @@
 	}
 	
 	//Helper function to control the split on each animation
-    function startSplitAnim( o, animation, next ){    	
-    	// TODO make interval a part of the animations because of the difference
+    function startSplitAnim( o, animation, next ){
+    	
     	var el = $( this ),
-    		interval = o.interval || o.duration / ( o.rows + o.columns * 2 ),
+    		interval = o.interval, 
     		duration = o.duration - ( o.rows + o.columns ) * interval,
     		pieceCounter = [],	
 	    	documentCoords = {
@@ -41,6 +41,11 @@
     	parentCoords.width = el.outerWidth();
     	parentCoords.height = el.outerHeight();
         
+    	if (interval === false){
+    		interval = o.duration / ( o.rows + o.columns * 2 );
+    	}
+    	console.log(interval);
+    	
     	//split into pieces
         pieces = $.effects.piecer.call( this, o.rows, o.columns );
         container = $( pieces[0] ).parent();
@@ -177,6 +182,7 @@
 	    			distance: 1,
 	    			reverse: false,
 	    			random: false,
+	    			interval: false,
 	    			fade: true,
 	    			crop: false
 	    		},
@@ -292,11 +298,18 @@
 	    			distance: 1,
 	    			reverse: false,
 	    			random: false,
+	    			interval: 0,
 	    			fade: true,
 	    			crop: false
 	    		},
 	    		o
-	    	);
+	    	);   
+    		
+    		if (opt.interval === false) {
+    			console.log("true");
+    		} else {
+    			console.log("false");
+    		}
     		
 	    	//Support for toggle
     		opt.mode = $.effects.setMode( this, opt.mode );
