@@ -7,11 +7,11 @@ module("spinner: events");
 
 test("start", function() {
 	var start = 0,
-            el = $("#spin").spinner({
-		start: function(){
-			start++;
-		}
-            });
+			el = $( "#spin" ).spinner({
+				start: function(){
+					start++;
+				}
+			});
 
 	simulateKeyDownUp(el, $.ui.keyCode.UP);
 
@@ -60,12 +60,12 @@ test("change", function() {
 	equals(change, 1, "Change triggered");
 });
 
-test("ensure proper event order", function() {
+test( "ensure proper event order", function() {
 	var events = [],
         pushEvent = function(e,ui) {
             events.push(e.type);
         },
-        el = $("#spin").spinner({
+        el = $( "#spin" ).spinner({
             start: pushEvent,
             spin: pushEvent,
             stop: pushEvent,
@@ -74,40 +74,40 @@ test("ensure proper event order", function() {
 
 	simulateKeyDownUp(el, $.ui.keyCode.UP);
 
-	deepEqual(events, ["spinstart","spin","spinstop","spinchange"], "start then spin then stop then change");
+	deepEqual(events, [ "spinstart", "spin", "spinstop", "spinchange" ], "start then spin then stop then change");
 });
 
-test("canceling 'start' should prevent spin, stop, and change", function() {
+test( "canceling 'start' should prevent spin, stop, and change", function() {
 	var events = [],
-        pushEvent = function(e,ui) {
-            events.push(e.type);
-        },
-        el = $("#spin").spinner({
-            start: function(e,ui){
-                pushEvent(e,ui);
-                return false;
-            },
-            spin: pushEvent,
-            stop: pushEvent,
-            change: pushEvent
-        });
+			pushEvent = function(e,ui) {
+					events.push(e.type);
+			},
+			el = $( "#spin").spinner({
+					start: function(e,ui){
+							pushEvent(e,ui);
+							return false;
+					},
+					spin: pushEvent,
+					stop: pushEvent,
+					change: pushEvent
+			});
 
 	simulateKeyDownUp(el, $.ui.keyCode.UP);
 
-	deepEqual(events, ["spinstart"], "only 'start' was fired and canceled, suppressing other events");
+	deepEqual(events, [ "spinstart" ], "only 'start' was fired and canceled, suppressing other events");
 });
 // These tests are suppressed until the relevant fixes for the change event have been implemented.
 /*
-test("change should only fire if the value of the spinner has changed", function() {
+test( "change should only fire if the value of the spinner has changed", function() {
   expect(4);
   var changed = 0,
-      el = $("#spin2").spinner({
+      el = $( "#spin2" ).spinner({
           change: function(e,ui) {
               changed++;
-              val = $(this).spinner("option","value");
+              val = $(this).spinner( "option", "value" );
           }
       }),
-      originalValue = el.spinner("option","value"),
+      originalValue = el.spinner( "option", "value" ),
       val;
 
       simulateKeyDownUp(el, $.ui.keyCode.UP);
@@ -126,16 +126,16 @@ test("change should only fire if the value of the spinner has changed", function
 
 });
 
-test("changing value option should fire change event", function() {
+test( "changing value option should fire change event", function() {
   var changed = false,
-      el = $("#spin2").spinner({
+      el = $( "#spin2" ).spinner({
           change: function(e,ui) {
               changed = true;
-              val = $(this).spinner("option","value");
+              val = $(this).spinner( "option", "value" );
       }
   });
 
-  el.spinner("option","value",7);
+  el.spinner( "option", "value", 7);
 
   equals(changed, true, "change event was fired");
 });
