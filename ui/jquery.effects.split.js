@@ -26,6 +26,7 @@
 	
 	//Helper function to control the split on each animation
     function startSplitAnim( o, animation, next ){    	
+    	// TODO make interval a part of the animations because of the difference
     	var el = $( this ),
     		interval = o.interval || o.duration / ( o.rows + o.columns * 2 ),
     		duration = o.duration - ( o.rows + o.columns ) * interval,
@@ -211,6 +212,8 @@
                  	maxLeft = documentCoords.width - width, 
                  	properties, top, left;
                  			
+                 //TODO Porperties and offset can be collected in one object!
+                 			
                  offset = {
                      top : offset.top - parentCoords.top,
                      left : offset.left - parentCoords.left
@@ -315,8 +318,6 @@
                  	height = el.outerHeight(), 
                  	rowOdd = !( row % 2 ),
 		        	colOdd = !( column % 2 ),
-		        	distanceX = opt.distance * parentCoords.width, 
-		        	distanceY = opt.distance * parentCoords.height,
                  	properties, top, left;
 		
 		        startProperties = {
@@ -551,8 +552,8 @@ $.effects.splitUnShear = function( o ) {
 };
 
 /*******************************************************************************
- * Don't use fade and direction TODO: make the fading comming from the
- * options.direction.
+ * Don't use fade and direction 
+ * TODO: make the fading comming from the options.direction.
  ******************************************************************************/
 $.effects.blockSplitFadeOut = function( o, show ) {
     var docHeight = $( document ).height(), docWidth = $( document ).width();
