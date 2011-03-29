@@ -13,7 +13,7 @@ test('#2715 - id containing colon', function() {
 	ok( $('div.ui-tabs-panel:eq(0)', '#tabs2').is(':visible'), 'first panel should be visible' );
 	ok( $('div.ui-tabs-panel:eq(1)', '#tabs2').is(':hidden'), 'second panel should be hidden' );
 
-	el.tabs('select', 1).tabs('select', 0);
+	el.tabs('option', 'active', 1).tabs('option', 'active', 0);
 	ok( $('div.ui-tabs-panel:eq(0)', '#tabs2').is(':visible'), 'first panel should be visible' );
 	ok( $('div.ui-tabs-panel:eq(1)', '#tabs2').is(':hidden'), 'second panel should be hidden' );
 
@@ -30,10 +30,10 @@ test('#???? - panel containing inline style', function() {
 	el = $('#tabs2').tabs();
 	equals(inlineStyle('height'), expected, 'init should not remove inline style');
 
-	el.tabs('select', 1);
+	el.tabs('option', 'active', 1);
 	equals(inlineStyle('height'), expected, 'show tab should not remove inline style');
 
-	el.tabs('select', 0);
+	el.tabs('option', 'active', 0);
 	equals(inlineStyle('height'), expected, 'hide tab should not remove inline style');
 
 });

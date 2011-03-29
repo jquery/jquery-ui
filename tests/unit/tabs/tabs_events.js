@@ -8,7 +8,6 @@ module("tabs: events");
 test('beforeActivate', function() {
 	expect(7);
 
-	var eventObj;
 	el = $('#tabs1').tabs({
 		beforeActivate: function(event, ui) {
 			ok(true, 'beforeActivate triggered after initialization');
@@ -17,13 +16,17 @@ test('beforeActivate', function() {
 			equals(ui.tab, el.find('a')[1], 'contain tab as DOM anchor element');
 			equals(ui.panel, el.find('div')[1], 'contain panel as DOM div element');
 			equals(ui.index, 1, 'contain index');
-			evenObj = event;
 		}
 	});
-	el.tabs('select', 1);
+	el.tabs('option', 'active', 1);
 
+	el.tabs('destroy');
+	el.tabs({
+		beforeActivate: function(event, ui) {
+			equals( event.originalEvent.type, "click", "beforeActivate triggered by click" );
+		}
+	});
 	el.find( "li:eq(1) a" ).simulate( "click" );
-	equals( evenObj.originalEvent.type, "click", "beforeActivate triggered by click" );
 });
 
 test('beforeload', function() {

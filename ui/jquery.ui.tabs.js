@@ -96,8 +96,8 @@ $.widget( "ui.tabs", {
 		this.lis.removeClass( "ui-tabs-selected ui-state-active" );
 		// check for length avoids error when initializing empty list
 		if ( o.active >= 0 && this.anchors.length ) {
-			var tab = self.anchors[ o.active ],
-				panel = self.element.find( self._sanitizeSelector( $( tab ).attr( "aria-controls" ) ) );
+			this.active = this._findActive( o.active );
+			var panel = self.element.find( self._sanitizeSelector( this.active.attr( "aria-controls" ) ) );
 
 			panel.removeClass( "ui-tabs-hide" );
 
@@ -105,7 +105,7 @@ $.widget( "ui.tabs", {
 
 			// seems to be expected behavior that the activate callback is fired
 			self.element.queue( "tabs", function() {
-				self._trigger( "activate", null, self._ui( tab, panel[ 0 ] ) );
+				self._trigger( "activate", null, self._ui( self.active[ 0 ], panel[ 0 ] ) );
 			});
 
 			this.load( o.active );
@@ -120,10 +120,9 @@ $.widget( "ui.tabs", {
 
 	_setOption: function( key, value ) {
 		if ( key == "active" ) {
-			if (this.options.collapsible && value == this.options.active ) {
-				return;
-			}
-			this.select( value );
+			// _activate() will handle invalid values and update this.option
+			this._activate( value );
+			return
 		} else {
 			this.options[ key ] = value;
 			this.refresh();
@@ -350,10 +349,10 @@ $.widget( "ui.tabs", {
 		event.preventDefault();
 		var self = this,
 			o = this.options,
-			el = event.currentTarget,
-			$li = $( el ).closest( "li" ),
+			clicked = $( event.currentTarget ),
+			$li = clicked.closest( "li" ),
 			$hide = self.panels.filter( ":not(.ui-tabs-hide)" ),
-			$show = self.element.find( self._sanitizeSelector( $( el ).attr( "aria-controls" ) ) );
+			$show = self.element.find( self._sanitizeSelector( clicked.attr( "aria-controls" ) ) );
 
 		// tab is already selected, but not collapsible
 		if ( ( $li.hasClass( "ui-tabs-selected" ) && !o.collapsible ) ||
@@ -364,12 +363,14 @@ $.widget( "ui.tabs", {
 			// tab is already loading
 			$li.hasClass( "ui-state-processing" ) ||
 			// allow canceling by beforeActivate event
-			self._trigger( "beforeActivate", event, self._ui( el, $show[ 0 ] ) ) === false ) {
-			el.blur();
+			self._trigger( "beforeActivate", event, self._ui( clicked[ 0 ], $show[ 0 ] ) ) === false ) {
+			clicked[ 0 ].blur();
 			return;
 		}
 
-		o.active = self.anchors.index( el );
+		o.active = self.anchors.index( clicked );
+
+		self.active = clicked;
 
 		if ( self.xhr ) {
 			self.xhr.abort();
@@ -379,16 +380,17 @@ $.widget( "ui.tabs", {
 		if ( o.collapsible ) {
 			if ( $li.hasClass( "ui-tabs-selected" ) ) {
 				o.active = -1;
+				self.active = null;
 
 				if ( o.cookie ) {
 					self._cookie( o.active, o.cookie );
 				}
 
 				self.element.queue( "tabs", function() {
-					self._hideTab( el, $hide );
+					self._hideTab( clicked, $hide );
 				}).dequeue( "tabs" );
 
-				el.blur();
+				clicked[ 0 ].blur();
 				return;
 			} else if ( !$hide.length ) {
 				if ( o.cookie ) {
@@ -396,13 +398,13 @@ $.widget( "ui.tabs", {
 				}
 
 				self.element.queue( "tabs", function() {
-					self._showTab( el, $show, event );
+					self._showTab( clicked, $show, event );
 				});
 
 				// TODO make passing in node possible, see also http://dev.jqueryui.com/ticket/3171
-				self.load( self.anchors.index( el ) );
+				self.load( self.anchors.index( clicked ) );
 
-				el.blur();
+				clicked[ 0 ].blur();
 				return;
 			}
 		}
@@ -415,14 +417,14 @@ $.widget( "ui.tabs", {
 		if ( $show.length ) {
 			if ( $hide.length ) {
 				self.element.queue( "tabs", function() {
-					self._hideTab( el, $hide );
+					self._hideTab( clicked, $hide );
 				});
 			}
 			self.element.queue( "tabs", function() {
-				self._showTab( el, $show, event );
+				self._showTab( clicked, $show, event );
 			});
 
-			self.load( self.anchors.index( el ) );
+			self.load( self.anchors.index( clicked ) );
 		} else {
 			throw "jQuery UI Tabs: Mismatching fragment identifier.";
 		}
@@ -432,8 +434,31 @@ $.widget( "ui.tabs", {
 		// in modern browsers; blur() removes focus from address bar in Firefox
 		// which can become a usability
 		if ( $.browser.msie ) {
-			el.blur();
+			clicked[ 0 ].blur();
 		}
+	},
+
+	_activate: function( index ) {
+		var active = this._findActive( index )[ 0 ];
+
+		// trying to activate the already active panel
+		if ( this.active && active === this.active[ 0 ] ) {
+			return;
+		}
+
+		// trying to collapse, simulate a click on the current active header
+		active = active || this.active;
+
+		this._eventHandler({
+			target: active,
+			currentTarget: active,
+			preventDefault: $.noop
+		});
+	},
+
+	_findActive: function( selector ) {
+		return typeof selector === "number" ? this.anchors.eq( selector ) :
+				typeof selector === "string" ? this.anchors.filter( "[href$='" + selector + "']" ) : $();
 	},
 
     _getIndex: function( index ) {
@@ -536,19 +561,6 @@ $.widget( "ui.tabs", {
 
 		}
 
-		return this;
-	},
-
-	select: function( index ) {
-		index = this._getIndex( index );
-		if ( index == -1 ) {
-			if ( this.options.collapsible && this.options.active != -1 ) {
-				index = this.options.active;
-			} else {
-				return this;
-			}
-		}
-		this.anchors.eq( index ).trigger( this.options.event + ".tabs" );
 		return this;
 	},
 
@@ -834,7 +846,7 @@ if ( $.uiBackCompat !== false ) {
 			// If selected tab was removed focus tab to the right or
 			// in case the last tab was removed the tab to the left.
 			if ( $li.hasClass( "ui-tabs-selected" ) && this.anchors.length > 1) {
-				this.select( index + ( index + 1 < this.anchors.length ? 1 : -1 ) );
+				this._activate( index + ( index + 1 < this.anchors.length ? 1 : -1 ) );
 			}
 
 			o.disabled = $.map(
@@ -945,6 +957,21 @@ if ( $.uiBackCompat !== false ) {
 			} else if ( type === "activate" ) {
 				ret = _trigger.call( this, "show", event, data );
 			}
+		};
+	}( jQuery, jQuery.ui.tabs.prototype ) );
+
+	// select method
+	(function( $, prototype ) {
+		prototype.select = function( index ) {
+			index = this._getIndex( index );
+			if ( index == -1 ) {
+				if ( this.options.collapsible && this.options.selected != -1 ) {
+					index = this.options.selected;
+				} else {
+					return;
+				}
+			}
+			this.anchors.eq( index ).trigger( this.options.event + ".tabs" );
 		};
 	}( jQuery, jQuery.ui.tabs.prototype ) );
 }

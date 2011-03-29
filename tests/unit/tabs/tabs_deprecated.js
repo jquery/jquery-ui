@@ -247,6 +247,36 @@ test('remove', function() {
 	equals(el.tabs('option', 'selected'), 0, 'update selected property');
 });
 
+test('select', function() {
+	expect(6);
+
+	el = $('#tabs1').tabs();
+
+	el.tabs('select', 1);
+	equals(el.tabs('option', 'active'), 1, 'should select tab');
+
+	el.tabs('destroy');
+	el.tabs({ collapsible: true });
+	el.tabs('select', 0);
+	equals(el.tabs('option', 'active'), -1, 'should collapse tab passing in the already active tab');
+
+	el.tabs('destroy');
+	el.tabs({ collapsible: true });
+	el.tabs('select', -1);
+	equals(el.tabs('option', 'active'), -1, 'should collapse tab passing in -1');
+
+	el.tabs('destroy');
+	el.tabs();
+	el.tabs('select', 0);
+	equals(el.tabs('option', 'active'), 0, 'should not collapse tab if collapsible is not set to true');
+	el.tabs('select', -1);
+	equals(el.tabs('option', 'active'), 0, 'should not collapse tab if collapsible is not set to true');
+
+	el.tabs('select', '#fragment-2');
+	equals(el.tabs('option', 'active'), 1, 'should select tab by id');
+});
+
+
 test('#5069 - ui.tabs.add creates two tab panels when using a full URL', function() {
 	// http://dev.jqueryui.com/ticket/5069
 	expect(2);

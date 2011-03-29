@@ -13,8 +13,10 @@ test('collapsible', function() {
 	el.tabs({ collapsible: true });
 	equals(el.tabs('option', 'collapsible'), true, 'option set');
 	ok(el.is('.ui-tabs-collapsible'), 'extra class "ui-tabs-collapsible" attached');
-	el.tabs('select', 0);
+
+	el.tabs('option', 'active', false);
 	equals($('div.ui-tabs-hide', '#tabs1').length, 3, 'all panels should be hidden');
+
 	el.tabs('option', 'collapsible', false);
 	ok(el.is(':not(.ui-tabs-collapsible)'), 'extra class "ui-tabs-collapsible" not attached');
 
@@ -37,8 +39,8 @@ test('cookie', function() {
 	el.tabs({ active: 1, cookie: cookieObj });
 	equals(cookie(), 1, 'initial cookie value, from active property');
 
-	el.tabs('select', 2);
-	equals(cookie(), 2, 'cookie value updated after select');
+	el.tabs('option', 'active', 2);
+	equals(cookie(), 2, 'cookie value updated after activating');
 
 	el.tabs('destroy');
 	$.cookie(cookieName, 1);
@@ -47,7 +49,7 @@ test('cookie', function() {
 
 	el.tabs('destroy');
 	el.tabs({ cookie: cookieObj, collapsible: true });
-	el.tabs('select', 0);
+	el.tabs('option', 'active', false);
 	equals(cookie(), -1, 'cookie value for all tabs unselected');
 
 	el.tabs('destroy');

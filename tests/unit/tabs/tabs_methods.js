@@ -130,35 +130,6 @@ test('disable', function() {
 	same(el.tabs('option', 'disabled'), true, 'set to true');
 });
 
-test('select', function() {
-	expect(6);
-
-	el = $('#tabs1').tabs();
-
-	el.tabs('select', 1);
-	equals(el.tabs('option', 'active'), 1, 'should select tab');
-
-	el.tabs('destroy');
-	el.tabs({ collapsible: true });
-	el.tabs('select', 0);
-	equals(el.tabs('option', 'active'), -1, 'should collapse tab passing in the already active tab');
-
-	el.tabs('destroy');
-	el.tabs({ collapsible: true });
-	el.tabs('select', -1);
-	equals(el.tabs('option', 'active'), -1, 'should collapse tab passing in -1');
-
-	el.tabs('destroy');
-	el.tabs();
-	el.tabs('select', 0);
-	equals(el.tabs('option', 'active'), 0, 'should not collapse tab if collapsible is not set to true');
-	el.tabs('select', -1);
-	equals(el.tabs('option', 'active'), 0, 'should not collapse tab if collapsible is not set to true');
-
-	el.tabs('select', '#fragment-2');
-	equals(el.tabs('option', 'active'), 1, 'should select tab by id');
-});
-
 test('refresh', function() {
 	expect(5);
 
@@ -178,7 +149,7 @@ test('refresh', function() {
 	ul.append('<li><a href="#test1">Test 1</a></li>');
 	$('<div id="test1">Test Panel 1</div>').insertAfter( ul );
 	el.tabs('refresh');
-	el.tabs('select', 0);
+	el.tabs('option', 'active', 0);
 	equals( el.tabs('option', 'active'), 0, 'First tab added should be auto active');
 
 	ul.append('<li><a href="#test2">Test 2</a></li>');
