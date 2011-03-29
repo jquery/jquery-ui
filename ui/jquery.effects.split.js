@@ -192,7 +192,7 @@
 
 			//Reverse it if it is hidden and mode is toggle
 			if ( $( this ).is(':hidden') && opt.mode == 'toggle' ) {
-				opt.reverse = !reverse;
+				opt.reverse = !opt.reverse;
 			}
 
 			//Sets mode for toggle
@@ -303,7 +303,7 @@
 
 			//Reverse it if it is hidden and mode is toggle
 			if ( $( this ).is(':hidden') && opt.mode == 'toggle' ) {
-				opt.reverse = !reverse;
+				opt.reverse = !opt.reverse;
 			}
 
 			//Sets mode for toggle
@@ -398,14 +398,14 @@
 						distance: 1,
 						reverse: false,
 						random: false,
-						interval: false,
+						interval: false
 					},
 					o
 			);
 
 			//Reverse it if it is hidden and mode is toggle
 			if ( $( this ).is(':hidden') && opt.mode == 'toggle' ) {
-				opt.reverse = !reverse;
+				opt.reverse = !opt.reverse;
 			}
 
 			//Sets mode for toggle
@@ -414,7 +414,6 @@
 			opt.show = 0 + ( opt.mode == 'show' );
 			
 			setupRowsColumns( opt );
-
 
 			function animate( width, height, interval, duration, row, column, documentCoords, parentCoords, callback ) {
 				var random = opt.random ? Math.abs( opt.random ) : 0, 
@@ -466,8 +465,13 @@
 
 			//Support for toggle
 			opt.mode = $.effects.setMode( this, opt.mode );
+			
+			//Reverse it if it is hidden and mode is toggle
+			if ( $( this ).is(':hidden') && opt.mode == 'toggle' ) {
+				opt.reverse = !opt.reverse;
+			}
 
-			opt.show = ( opt.mode == 'show' );
+			opt.show = 0 + ( opt.mode == 'show' );
 
 			setupRowsColumns( opt );
 
@@ -479,17 +483,21 @@
 		} );
 	}
 	
-	$.effects.effect.schear = function( o ) {
+	$.effects.effect.shear = function( o ) {
 		/*Options:
 		 * 		random,
 		 * 		reverse, 
+		 * 		distance, 
 		 * 		rows, 
 		 * 		columns, 
-		 * 		duration,
+		 * 		direction, 
+		 * 		duration, 
 		 * 		interval, 
 		 * 		easing,
 		 * 		pieces,
-		 * 		show
+		 * 		fade, 
+		 * 		show,
+		 * 		crop
 		 */
 
 		return this.queue( function( next ) {
@@ -500,7 +508,7 @@
 						distance: 1,
 						reverse: false,
 						random: false,
-						interval: 0,
+						interval: false,
 						fade: true,
 						crop: false
 					},
@@ -509,13 +517,67 @@
 
 			//Support for toggle
 			opt.mode = $.effects.setMode( this, opt.mode );
-
-			opt.show = ( opt.mode == 'show' );
-
+			
+			opt.show = 0 + ( opt.mode == 'show' );
+			
 			setupRowsColumns( opt );
 
 			function animate( width, height, interval, duration, row, column, documentCoords, parentCoords, callback ) {
-				el.delay( delay ).animate( { opacity: opt.show }, duration, opt.easing, callback );
+				var random = opt.random ? Math.abs( opt.random ) : 0, 
+					el = $( this ),
+					randomDelay = Math.random() * ( opt.rows + opt.columns ) * interval, 
+					uniformDelay = ( opt.reverse ) ? 
+						( ( ( opt.rows + opt.columns ) - ( row + column ) ) * interval ) : 
+						( ( row + column ) * interval ), 
+					delay = randomDelay * random + Math.max( 1 - random, 0 ) * uniformDelay, 
+					startProperties = el.offset(),
+					rowOdd = !( row % 2 ),
+					colOdd = !( column % 2 ),
+					properties, top, left;
+				startProperties = {
+						top : startProperties.top - parentCoords.top,
+						left : startProperties.left - parentCoords.left,
+						width : width,
+						height : height
+				};
+
+				//Copy object
+				properties = $.extend( {}, startProperties );
+
+				// If we have only rows or columns, ignore the other dimension
+				if ( opt.columns == 1 ) {
+					colOdd = rowOdd;
+				} else if ( opt.rows == 1 ) {
+					rowOdd = !colOdd;
+				}
+
+				if ( opt.fade ) {
+					properties.opacity = 0;
+					startProperties.opacity = 1;
+				}
+
+				if ( colOdd == rowOdd ) {
+					if ( !colOdd ) {
+						properties.left -= opt.distance * parentCoords.width;
+					} else {
+						properties.left += opt.distance * parentCoords.width;
+					}
+				} else {
+					if ( !colOdd ){
+						properties.top -= opt.distance * parentCoords.height;
+					} else {
+						properties.top += opt.distance * parentCoords.height;
+					}
+				}
+
+				console.log({properties: properties, startProperties: startProperties, show: opt.show });
+				
+				if ( opt.show ) {
+					el.css( properties );
+					properties = startProperties;
+				}
+
+				el.delay( delay ).animate( properties, duration, opt.easing, callback );
 			}
 
 			startSplitAnim.call( this, opt, animate, next );
@@ -634,60 +696,61 @@ $.effects.splitShear = function( o, show ) {
 				// piece animate function
 				animate : function( interval, duration, x, y,
 						parentCoords ) {
-					var random = options.random ? Math.abs( options.random ) : 0, randomDelay = Math
-							.random()
-							* duration, uniformDelay = ( options.reverse ) ? ( ( ( options.rows + options.cols ) - ( x + y ) ) * interval )
-									: ( ( x + y ) * interval ), delay = randomDelay
-									* Math.abs( options.random )
-									+ Math.max( 1 - Math.abs( options.random ),
-											0 ) * uniformDelay, rowOdd = !( y % 2 ), colOdd = !( x % 2 ), offset = this
-											.offset(), properties = offset, distanceX = options.distance
-											* parentCoords.width, distanceY = options.distance
-											* parentCoords.height;
+					var random = options.random ? Math.abs( options.random ) : 0, 
+						randomDelay = Math.random() * duration, 
+						uniformDelay = ( options.reverse ) ? 
+								( ( ( options.rows + options.cols ) - ( x + y ) ) * interval ) :
+								( ( x + y ) * interval ), 
+						delay = randomDelay * Math.abs( options.random ) + Math.max( 1 - Math.abs( options.random ), 0 ) * uniformDelay, 
+						rowOdd = !( y % 2 ), 
+						colOdd = !( x % 2 ), 
+						offset = this.offset(), 
+						properties = offset, 
+						distanceX = options.distance * parentCoords.width, 
+						distanceY = options.distance * parentCoords.height;
 
-							offset = {
-									top : offset.top - parentCoords.top,
-									left : offset.left - parentCoords.left
+						offset = {
+								top : offset.top - parentCoords.top,
+								left : offset.left - parentCoords.left
+						};
+
+						properties = $.extend( {}, offset );
+
+						this.css( 'opacity', show ? 0 : '' );
+
+						// If we have only rows or columns, ignore the other
+						// dimension
+						if ( options.cols == 1 ) {
+							colOdd = rowOdd;
+						} else if ( options.rows == 1 ) {
+							rowOdd = !colOdd;
+						}
+
+						if ( colOdd == rowOdd ) {
+							properties.left = !colOdd ? offset.left
+									- distanceX : offset.left + distanceX;
+						} else {
+							properties.top = !colOdd ? offset.top
+									- distanceY : offset.top + distanceY;
+						}
+
+						if ( show ) {
+							// Bug: it should work just by switching
+							// properties and offset but somehow this won't
+							// work. therefore we takes and configure a new
+							// offset.
+							var newOffset = this.offset();
+							newOffset = {
+									top : newOffset.top - parentCoords.top,
+									left : newOffset.left - parentCoords.left
 							};
+							this.css( properties );
+							properties = newOffset;
+						}
 
-							properties = $.extend( {}, offset );
+						properties.opacity = show ? 1 : 0;
 
-							this.css( 'opacity', show ? 0 : '' );
-
-							// If we have only rows or columns, ignore the other
-							// dimension
-							if ( options.cols == 1 ) {
-								colOdd = rowOdd;
-							} else if ( options.rows == 1 ) {
-								rowOdd = !colOdd;
-							}
-
-							if ( colOdd == rowOdd ) {
-								properties.left = !colOdd ? offset.left
-										- distanceX : offset.left + distanceX;
-							} else {
-								properties.top = !colOdd ? offset.top
-										- distanceY : offset.top + distanceY;
-							}
-
-							if ( show ) {
-								// Bug: it should work just by switching
-								// properties and offset but somehow this won't
-								// work. therefore we takes and configure a new
-								// offset.
-								var newOffset = this.offset();
-								newOffset = {
-										top : newOffset.top - parentCoords.top,
-										left : newOffset.left - parentCoords.left
-								};
-								this.css( properties );
-								properties = newOffset;
-							}
-
-							properties.opacity = show ? 1 : 0;
-
-							this.delay( delay ).animate( properties, duration,
-									options.easing );
+						this.delay( delay ).animate( properties, duration, options.easing );
 
 				}
 			} );
