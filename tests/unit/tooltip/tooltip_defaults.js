@@ -13,4 +13,4 @@ var tooltip_defaults = {
 	}
 };
 
-commonWidgetTests( 'tooltip', { defaults: tooltip_defaults } );
+commonWidgetTests( "tooltip", { defaults: tooltip_defaults } );
