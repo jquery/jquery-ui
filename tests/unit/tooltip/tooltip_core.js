@@ -5,7 +5,7 @@
 
 (function($) {
 
-module("tooltip: core");
+module( "tooltip: core" );
 
 
 })(jQuery);
