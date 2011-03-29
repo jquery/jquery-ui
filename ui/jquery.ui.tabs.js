@@ -29,7 +29,6 @@ $.widget( "ui.tabs", {
 		activate: null,
 		beforeload: null,
 		beforeActivate: null,
-		cookie: null, // e.g. { expires: 7, path: '/', domain: 'jquery.com', secure: true }
 		collapsible: false,
 		disabled: false,
 		event: "click",
@@ -50,8 +49,7 @@ $.widget( "ui.tabs", {
 		// Selected tab
 		// use "selected" option or try to retrieve:
 		// 1. from fragment identifier in url
-		// 2. from cookie
-		// 3. from selected class attribute on <li>
+		// 2. from selected class attribute on <li>
 		if ( o.active === undefined ) {
 			if ( location.hash ) {
 				this.anchors.each(function( i, a ) {
@@ -60,9 +58,6 @@ $.widget( "ui.tabs", {
 						return false;
 					}
 				});
-			}
-			if ( typeof o.active !== "number" && o.cookie ) {
-				o.active = parseInt( self._cookie(), 10 );
 			}
 			if ( typeof o.active !== "number" && this.lis.filter( ".ui-tabs-selected" ).length ) {
 				o.active = this.lis.index( this.lis.filter( ".ui-tabs-selected" ) );
@@ -139,12 +134,6 @@ $.widget( "ui.tabs", {
 		return hash.replace( /:/g, "\\:" );
 	},
 
-	_cookie: function() {
-		var cookie = this.cookie ||
-			( this.cookie = this.options.cookie.name || "ui-tabs-" + getNextListId() );
-		return $.cookie.apply( null, [ cookie ].concat( $.makeArray( arguments ) ) );
-	},
-
 	_ui: function( tab, panel ) {
 		return {
 			tab: tab,
@@ -187,11 +176,6 @@ $.widget( "ui.tabs", {
 
 		if ( !o.disabled.length ) {
 			o.disabled = false;
-		}
-
-		// set or update cookie after init and add/remove respectively
-		if ( o.cookie ) {
-			this._cookie( o.active, o.cookie );
 		}
 
 		// disable tabs
@@ -382,10 +366,6 @@ $.widget( "ui.tabs", {
 				o.active = -1;
 				self.active = null;
 
-				if ( o.cookie ) {
-					self._cookie( o.active, o.cookie );
-				}
-
 				self.element.queue( "tabs", function() {
 					self._hideTab( clicked, $hide );
 				}).dequeue( "tabs" );
@@ -393,10 +373,6 @@ $.widget( "ui.tabs", {
 				clicked[ 0 ].blur();
 				return;
 			} else if ( !$hide.length ) {
-				if ( o.cookie ) {
-					self._cookie( o.active, o.cookie );
-				}
-
 				self.element.queue( "tabs", function() {
 					self._showTab( clicked, $show, event );
 				});
@@ -407,10 +383,6 @@ $.widget( "ui.tabs", {
 				clicked[ 0 ].blur();
 				return;
 			}
-		}
-
-		if ( o.cookie ) {
-			self._cookie( o.active, o.cookie );
 		}
 
 		// show new tab
@@ -506,10 +478,6 @@ $.widget( "ui.tabs", {
 				].join( " " ) );
 			}
 		});
-
-		if ( o.cookie ) {
-			this._cookie( null, o.cookie );
-		}
 
 		return this;
 	},
@@ -972,6 +940,59 @@ if ( $.uiBackCompat !== false ) {
 				}
 			}
 			this.anchors.eq( index ).trigger( this.options.event + ".tabs" );
+		};
+	}( jQuery, jQuery.ui.tabs.prototype ) );
+
+	// cookie option
+	(function( $, prototype ) {
+		$.extend( prototype.options, {
+			cookie: null // e.g. { expires: 7, path: '/', domain: 'jquery.com', secure: true }
+		});
+
+		var _create = prototype._create,
+			_refresh = prototype._refresh,
+			_eventHandler = prototype._eventHandler,
+			_destroy = prototype._destroy;
+
+		prototype._create = function() {
+			var o = this.options;
+			if ( o.active === undefined ) {
+				if ( typeof o.active !== "number" && o.cookie ) {
+					o.active = parseInt( this._cookie(), 10 );
+				}
+			}
+			_create.call( this );
+		};
+
+		prototype._cookie = function() {
+			var cookie = this.cookie ||
+				( this.cookie = this.options.cookie.name || "ui-tabs-" + getNextListId() );
+			return $.cookie.apply( null, [ cookie ].concat( $.makeArray( arguments ) ) );
+		};
+
+		prototype._refresh = function() {
+			_refresh.call( this );
+
+			// set or update cookie after init and add/remove respectively
+			if ( this.options.cookie ) {
+				this._cookie( this.options.active, this.options.cookie );
+			}
+		};
+
+		prototype._eventHandler = function( event ) {
+			_eventHandler.apply( this, arguments );
+
+			if ( this.options.cookie ) {
+				this._cookie( this.options.active, this.options.cookie );
+			}
+		};
+
+		prototype._destroy = function() {
+			_destroy.call( this );
+
+			if ( this.options.cookie ) {
+				this._cookie( null, this.options.cookie );
+			}
 		};
 	}( jQuery, jQuery.ui.tabs.prototype ) );
 }

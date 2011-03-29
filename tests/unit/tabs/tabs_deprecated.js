@@ -36,6 +36,42 @@ test('panelTemplate', function() {
 	ok(false, "missing test - untested code is broken code.");
 });
 
+test('cookie', function() {
+	expect(6);
+
+	el = $('#tabs1');
+	var cookieName = 'tabs_test', cookieObj = { name: cookieName };
+	$.cookie(cookieName, null); // blank state
+	var cookie = function() {
+		return parseInt($.cookie(cookieName), 10);
+	};
+
+	el.tabs({ cookie: cookieObj });
+	equals(cookie(), 0, 'initial cookie value');
+
+	el.tabs('destroy');
+	el.tabs({ active: 1, cookie: cookieObj });
+	equals(cookie(), 1, 'initial cookie value, from active property');
+
+	el.tabs('option', 'active', 2);
+	equals(cookie(), 2, 'cookie value updated after activating');
+
+	el.tabs('destroy');
+	$.cookie(cookieName, 1);
+	el.tabs({ cookie: cookieObj });
+	equals(cookie(), 1, 'initial cookie value, from existing cookie');
+
+	el.tabs('destroy');
+	el.tabs({ cookie: cookieObj, collapsible: true });
+	el.tabs('option', 'active', false);
+	equals(cookie(), -1, 'cookie value for all tabs unselected');
+
+	el.tabs('destroy');
+	ok($.cookie(cookieName) === null, 'erase cookie after destroy');
+
+});
+
+
 test('spinner', function() {
 	expect(4);
 	stop();
