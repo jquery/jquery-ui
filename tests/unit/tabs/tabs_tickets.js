@@ -92,7 +92,7 @@ test('#6710 - selectors are global', function() {
 		</div>\
 	</div>');
 	container.find('#tabs_6710').tabs();
-	ok( container.find('#tabs-2_6710').hasClass('ui-tabs-hide'),  'should find panels and add corresponding classes' );
+	ok( container.find('#tabs-2_6710').is(':hidden'),  'should find panels and add corresponding classes' );
 });
 
 

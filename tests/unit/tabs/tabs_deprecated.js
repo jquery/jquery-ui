@@ -125,7 +125,7 @@ test('selected', function() {
 	el = $('#tabs1').tabs({ selected: -1 });
 	equals(el.tabs('option', 'selected'), -1, 'should be -1 for all tabs unselected');
 	equals( $('li.ui-tabs-selected', el).length, 0, 'no tab should be selected' );
-	equals( $('div.ui-tabs-hide', '#tabs1').length, 3, 'all panels should be hidden' );
+	equals( $('div:hidden', '#tabs1').length, 3, 'all panels should be hidden' );
 
 	el.tabs('destroy');
 	el.tabs({ selected: null });

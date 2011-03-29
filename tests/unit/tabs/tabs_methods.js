@@ -14,11 +14,11 @@ test('init', function() {
 	ok( el.is('.ui-tabs.ui-widget.ui-widget-content.ui-corner-all'), 'attach classes to container');
 	ok( $('ul', el).is('.ui-tabs-nav.ui-helper-reset.ui-helper-clearfix.ui-widget-header.ui-corner-all'), 'attach classes to list' );
 	ok( $('div:eq(0)', el).is('.ui-tabs-panel.ui-widget-content.ui-corner-bottom'), 'attach classes to panel' );
-	ok( $('li:eq(0)', el).is('.ui-tabs-selected.ui-state-active.ui-corner-top'), 'attach classes to active li');
+	ok( $('li:eq(0)', el).is('.ui-tabs-active.ui-state-active.ui-corner-top'), 'attach classes to active li');
 	ok( $('li:eq(1)', el).is('.ui-state-default.ui-corner-top'), 'attach classes to inactive li');
 	equals( el.tabs('option', 'active'), 0, 'active option set' );
-	equals( $('li', el).index( $('li.ui-tabs-selected', el) ), 0, 'second tab active');
-	equals( $('div', el).index( $('div.ui-tabs-hide', '#tabs1') ), 1, 'second panel should be hidden' );
+	equals( $('li', el).index( $('li.ui-tabs-active', el) ), 0, 'second tab active');
+	equals( $('div', el).index( $('div:hidden', '#tabs1') ), 1, 'second panel should be hidden' );
 });
 
 test('init with hash', function() {
@@ -32,11 +32,11 @@ test('init with hash', function() {
 	
 	equals(el.tabs('option', 'active'), 1, 'second tab should be active');
 	
-	ok(!$('#tabs1 ul li:eq(0)').is('.ui-tabs-selected.ui-state-active'), 'first tab should not be selected nor active');
-	ok($('#tabs1 div:eq(0)').is('.ui-tabs-hide'), 'first div for first tab should be hidden');
+	ok(!$('#tabs1 ul li:eq(0)').is('.ui-tabs-active.ui-state-active'), 'first tab should not be selected nor active');
+	ok($('#tabs1 div:eq(0)').is(':hidden'), 'first div for first tab should be hidden');
 	
-	ok($('#tabs1 ul li:eq(1)').is('.ui-tabs-selected.ui-state-active'), 'second tab should be selected and active');
-	ok(!$('#tabs1 div:eq(1)').is('.ui-tabs-hide'), 'second div for second tab should not be hidden');
+	ok($('#tabs1 ul li:eq(1)').is('.ui-tabs-active.ui-state-active'), 'second tab should be selected and active');
+	ok(!$('#tabs1 div:eq(1)').is(':hidden'), 'second div for second tab should not be hidden');
 });
 
 test('init mismatched order with hash', function() {
@@ -50,11 +50,11 @@ test('init mismatched order with hash', function() {
 	
 	equals(el.tabs('option', 'active'), 1, 'second tab should be active');
 	
-	ok(!$('#tabs7-list li:eq(0)').is('.ui-tabs-selected.ui-state-active'), 'first tab should not be selected nor active');
-	ok($('#tabs7 div:eq(1)').is('.ui-tabs-hide'), 'second div for first tab should be hidden');
+	ok(!$('#tabs7-list li:eq(0)').is('.ui-tabs-active.ui-state-active'), 'first tab should not be selected nor active');
+	ok($('#tabs7 div:eq(1)').is(':hidden'), 'second div for first tab should be hidden');
 	
-	ok($('#tabs7-list li:eq(1)').is('.ui-tabs-selected.ui-state-active'), 'second tab should be selected and active');
-	ok(!$('#tabs7 div:eq(0)').is('.ui-tabs-hide'), 'first div for second tab should not be hidden');
+	ok($('#tabs7-list li:eq(1)').is('.ui-tabs-active.ui-state-active'), 'second tab should be selected and active');
+	ok(!$('#tabs7 div:eq(0)').is(':hidden'), 'first div for second tab should not be hidden');
 });
 
 test('destroy', function() {
@@ -66,8 +66,8 @@ test('destroy', function() {
 
 	ok( el.is(':not(.ui-tabs, .ui-widget, .ui-widget-content, .ui-corner-all, .ui-tabs-collapsible)'), 'remove classes from container');
 	ok( $('ul', el).is(':not(.ui-tabs-nav, .ui-helper-reset, .ui-helper-clearfix, .ui-widget-header, .ui-corner-all)'), 'remove classes from list' );
-	ok( $('div:eq(1)', el).is(':not(.ui-tabs-panel, .ui-widget-content, .ui-corner-bottom, .ui-tabs-hide)'), 'remove classes to panel' );
-	ok( $('li:eq(0)', el).is(':not(.ui-tabs-selected, .ui-state-active, .ui-corner-top)'), 'remove classes from active li');
+	ok( $('div:eq(1)', el).is(':not(.ui-tabs-panel, .ui-widget-content, .ui-corner-bottom)'), 'remove classes to panel' );
+	ok( $('li:eq(0)', el).is(':not(.ui-tabs-active, .ui-state-active, .ui-corner-top)'), 'remove classes from active li');
 	ok( $('li:eq(1)', el).is(':not(.ui-state-default, .ui-corner-top)'), 'remove classes from inactive li');
 	ok( $('li:eq(2)', el).is(':not(.ui-state-hover, .ui-state-focus)'), 'remove classes from mouseovered or focused li');
 });

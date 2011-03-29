@@ -15,7 +15,7 @@ test('collapsible', function() {
 	ok(el.is('.ui-tabs-collapsible'), 'extra class "ui-tabs-collapsible" attached');
 
 	el.tabs('option', 'active', false);
-	equals($('div.ui-tabs-hide', '#tabs1').length, 3, 'all panels should be hidden');
+	equals($('div:hidden', '#tabs1').length, 3, 'all panels should be hidden');
 
 	el.tabs('option', 'collapsible', false);
 	ok(el.is(':not(.ui-tabs-collapsible)'), 'extra class "ui-tabs-collapsible" not attached');
@@ -56,7 +56,7 @@ test('active', function() {
 	el.tabs({ active: -1 });
 	equals(el.tabs('option', 'active'), -1, 'should be -1 for all tabs deactive');
 	equals( $('li.ui-tabs-selected', el).length, 0, 'no tab should be active' );
-	equals( $('div.ui-tabs-hide', '#tabs1').length, 3, 'all panels should be hidden' );
+	equals( $('div:hidden', '#tabs1').length, 3, 'all panels should be hidden' );
 
 	el.tabs('destroy');
 	el.tabs({ active: null });

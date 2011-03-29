@@ -59,8 +59,8 @@ $.widget( "ui.tabs", {
 					}
 				});
 			}
-			if ( typeof o.active !== "number" && this.lis.filter( ".ui-tabs-selected" ).length ) {
-				o.active = this.lis.index( this.lis.filter( ".ui-tabs-selected" ) );
+			if ( typeof o.active !== "number" && this.lis.filter( ".ui-tabs-active" ).length ) {
+				o.active = this.lis.index( this.lis.filter( ".ui-tabs-active" ) );
 			}
 			o.active = o.active || ( this.lis.length ? 0 : -1 );
 		} else if ( o.active === null ) { // usage of null is deprecated, TODO remove in next release
@@ -87,16 +87,16 @@ $.widget( "ui.tabs", {
 		this._refresh();
 
 		// highlight selected tab
-		this.panels.addClass( "ui-tabs-hide" );
-		this.lis.removeClass( "ui-tabs-selected ui-state-active" );
+		this.panels.hide();
+		this.lis.removeClass( "ui-tabs-active ui-state-active" );
 		// check for length avoids error when initializing empty list
 		if ( o.active >= 0 && this.anchors.length ) {
 			this.active = this._findActive( o.active );
 			var panel = self.element.find( self._sanitizeSelector( this.active.attr( "aria-controls" ) ) );
 
-			panel.removeClass( "ui-tabs-hide" );
+			panel.show();
 
-			this.lis.eq( o.active ).addClass( "ui-tabs-selected ui-state-active" );
+			this.lis.eq( o.active ).addClass( "ui-tabs-active ui-state-active" );
 
 			// seems to be expected behavior that the activate callback is fired
 			self.element.queue( "tabs", function() {
@@ -131,7 +131,7 @@ $.widget( "ui.tabs", {
 
 	_sanitizeSelector: function( hash ) {
 		// we need this because an id may contain a ":"
-		return hash.replace( /:/g, "\\:" );
+		return hash ? hash.replace( /:/g, "\\:" ) : "";
 	},
 
 	_ui: function( tab, panel ) {
@@ -279,18 +279,18 @@ $.widget( "ui.tabs", {
 	_showTab: function( clicked, show, event ) {
 		var self = this;
 
-		$( clicked ).closest( "li" ).addClass( "ui-tabs-selected ui-state-active" );
+		$( clicked ).closest( "li" ).addClass( "ui-tabs-active ui-state-active" );
 
 		if ( this.showFx ) {
 			self.running = true;
-			show.hide().removeClass( "ui-tabs-hide" ) // avoid flicker that way
+			show.hide()
 				.animate( showFx, showFx.duration || "normal", function() {
 					self._resetStyle( show, showFx );
 					self.running = false;
 					self._trigger( "activate", event, self._ui( clicked, show[ 0 ] ) );
 				});
 		} else {
-			show.removeClass( "ui-tabs-hide" );
+			show.show();
 			self._trigger( "activate", event, self._ui( clicked, show[ 0 ] ) );
 		}
 	},
@@ -302,14 +302,13 @@ $.widget( "ui.tabs", {
 			self.running = true;
 			$hide.animate( hideFx, hideFx.duration || "normal", function() {
 				self.running = false;
-				self.lis.removeClass( "ui-tabs-selected ui-state-active" );
-				$hide.addClass( "ui-tabs-hide" );
+				self.lis.removeClass( "ui-tabs-active ui-state-active" );
 				self._resetStyle( $hide, hideFx );
 				self.element.dequeue( "tabs" );
 			});
 		} else {
-			self.lis.removeClass( "ui-tabs-selected ui-state-active" );
-			$hide.addClass( "ui-tabs-hide" );
+			self.lis.removeClass( "ui-tabs-active ui-state-active" );
+			$hide.hide();
 			self.element.dequeue( "tabs" );
 		}
 	},
@@ -335,17 +334,17 @@ $.widget( "ui.tabs", {
 			o = this.options,
 			clicked = $( event.currentTarget ),
 			$li = clicked.closest( "li" ),
-			$hide = self.panels.filter( ":not(.ui-tabs-hide)" ),
+			$hide = self.element.find( self._sanitizeSelector( $( this.active ).attr( "aria-controls" ) ) ),
 			$show = self.element.find( self._sanitizeSelector( clicked.attr( "aria-controls" ) ) );
 
 		// tab is already selected, but not collapsible
-		if ( ( $li.hasClass( "ui-tabs-selected" ) && !o.collapsible ) ||
+		if ( ( $li.hasClass( "ui-tabs-active" ) && !o.collapsible ) ||
 			// can't switch durning an animation
 			self.running ||
 			// tab is disabled
 			$li.hasClass( "ui-state-disabled" ) ||
 			// tab is already loading
-			$li.hasClass( "ui-state-processing" ) ||
+			$li.hasClass( "ui-tabs-loading" ) ||
 			// allow canceling by beforeActivate event
 			self._trigger( "beforeActivate", event, self._ui( clicked[ 0 ], $show[ 0 ] ) ) === false ) {
 			clicked[ 0 ].blur();
@@ -362,7 +361,7 @@ $.widget( "ui.tabs", {
 
 		// if tab may be closed
 		if ( o.collapsible ) {
-			if ( $li.hasClass( "ui-tabs-selected" ) ) {
+			if ( $li.hasClass( "ui-tabs-active" ) ) {
 				o.active = -1;
 				self.active = null;
 
@@ -468,13 +467,12 @@ $.widget( "ui.tabs", {
 				$( this ).removeClass([
 					"ui-state-default",
 					"ui-corner-top",
-					"ui-tabs-selected",
+					"ui-tabs-active",
 					"ui-state-active",
 					"ui-state-disabled",
 					"ui-tabs-panel",
 					"ui-widget-content",
-					"ui-corner-bottom",
-					"ui-tabs-hide"
+					"ui-corner-bottom"
 				].join( " " ) );
 			}
 		});
@@ -563,7 +561,7 @@ $.widget( "ui.tabs", {
 
 		if ( this.xhr ) {
 			// load remote from here on
-			this.lis.eq( index ).addClass( "ui-state-processing" );
+			this.lis.eq( index ).addClass( "ui-tabs-loading" );
 
 			this.xhr
 				.success( function( response ) {
@@ -582,7 +580,7 @@ $.widget( "ui.tabs", {
 						delete this.xhr;
 					}
 
-					self.lis.eq( index ).removeClass( "ui-state-processing" );
+					self.lis.eq( index ).removeClass( "ui-tabs-loading" );
 
 					self._trigger( "load", null, eventData );
 				});
@@ -774,7 +772,7 @@ if ( $.uiBackCompat !== false ) {
 			if ( !$panel.length ) {
 				$panel = self._createPanel( id );
 			}
-			$panel.addClass( "ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs-hide" );
+			$panel.addClass( "ui-tabs-panel ui-widget-content ui-corner-bottom" ).hide();
 
 			if ( index >= this.lis.length ) {
 				$li.appendTo( this.list );
@@ -792,8 +790,8 @@ if ( $.uiBackCompat !== false ) {
 
 			if ( this.anchors.length == 1 ) {
 				o.active = o.selected = 0;
-				$li.addClass( "ui-tabs-selected ui-state-active" );
-				$panel.removeClass( "ui-tabs-hide" );
+				$li.addClass( "ui-tabs-active ui-state-active" );
+				$panel.show();
 				this.element.queue( "tabs", function() {
 					self._trigger( "activate", null, self._ui( self.anchors[ 0 ], self.panels[ 0 ] ) );
 				});
@@ -813,7 +811,7 @@ if ( $.uiBackCompat !== false ) {
 
 			// If selected tab was removed focus tab to the right or
 			// in case the last tab was removed the tab to the left.
-			if ( $li.hasClass( "ui-tabs-selected" ) && this.anchors.length > 1) {
+			if ( $li.hasClass( "ui-tabs-active" ) && this.anchors.length > 1) {
 				this._activate( index + ( index + 1 < this.anchors.length ? 1 : -1 ) );
 			}
 
