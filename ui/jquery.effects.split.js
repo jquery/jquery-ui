@@ -30,33 +30,28 @@
 		var el = $( this ),
 		interval = o.interval, 
 		duration = o.duration - ( o.rows + o.columns ) * interval,
-		pieceCounter = [],	
+		pieceCounter = [],
 		documentCoords = {
 			height: $( document ).height(),
 			width: $( document ).width()
 		},
-		parentCoords = el.show().css('visibility','hidden').offset(),
-		container, pieces, i, j, properties;
-
+		parentCoords, container, pieces, i, j, properties;
+		
+		$.effects.save( el, [ 'visibility', 'opacity' ] );
+		
+		parentCoords = el.show().css('visibility','hidden').offset();
 		parentCoords.width = el.outerWidth();
 		parentCoords.height = el.outerHeight();
 
 		if (interval === false){
 			interval = o.duration / ( o.rows + o.columns * 2 );
 		}
-		console.log(interval);
 
 		//split into pieces
 		pieces = $.effects.piecer.call( this, o.rows, o.columns );
 		container = $( pieces[0] ).parent();
 
 		container.css('overflow', o.crop ? 'hidden' : 'visible');
-
-		// If element is to be hidden we make it invisible until the
-		// transformation is done and then hide it.
-		if ( !o.show ) {
-			el.css( 'visibility', 'hidden' );
-		}
 
 		//Make animation
 		for ( i = 0; i < o.rows; i++ ) {
@@ -77,16 +72,11 @@
 
 		function animComplete() {
 			// Ensures that the element is hidden/shown correctly
+			$.effects.restore( el, [ 'visibility', 'opacity' ] );
 			if ( o.show ) {
-				el.css( {
-					opacity: '',
-					visibility: ''
-				} ).show();
+				el.show();
 			} else {
-				el.css( {
-					opacity : '',
-					visibility : ''
-				} ).hide();
+				el.hide();
 			}
 			container.detach();
 			if ( $.isFunction( o.complete ) ) {
@@ -215,10 +205,10 @@
 					width = el.outerWidth(), 
 					height = el.outerHeight(), 
 					maxTop = documentCoords.height - height,
-					maxLeft = documentCoords.width - width, 
+					maxLeft = documentCoords.width - width,
 					properties, top, left;
 
-						//TODO Porperties and offset can be collected in one object!
+				//TODO Porperties and offset can be collected in one object!, send width, height and offset into the function instead of calcing it.
 
 				offset = {
 						top : offset.top - parentCoords.top,
