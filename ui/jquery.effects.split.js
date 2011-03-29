@@ -10,6 +10,11 @@
  * Depends:
  *  jquery.effects.core.js
  * 
+ * 
+ * TODO: 
+ * - Properties and offset can be collected in one object in $.effects.effect.build's animate function
+ * - The random calculations is the same in every function set it out in startSplitAnim function		
+ * 
  */
 
 (function( $, undefined ) {
@@ -35,7 +40,7 @@
 			height: $( document ).height(),
 			width: $( document ).width()
 		},
-		parentCoords, container, pieces, i, j, properties;
+		parentCoords, container, pieces, i, j, properties, width, height;
 		
 		$.effects.save( el, [ 'visibility', 'opacity' ] );
 		
@@ -49,19 +54,23 @@
 
 		//split into pieces
 		pieces = $.effects.piecer.call( this, o.rows, o.columns );
-		container = $( pieces[0] ).parent();
+		firstEl = $( pieces[ 0 ] );
+		container = firstEl.parent();
+		width = firstEl.outerWidth();
+		height = firstEl.outerHeight();
 
 		container.css('overflow', o.crop ? 'hidden' : 'visible');
-
+		
+		
 		//Make animation
 		for ( i = 0; i < o.rows; i++ ) {
 			for ( j = 0; j < o.columns; j++ ) {
 				// call the animation for each piece.
-				animation.call( pieces[ i*o.columns + j ], interval, duration, i, j, documentCoords, parentCoords, childComplete );
+				animation.call( pieces[ i*o.columns + j ], width, height, interval, duration, i, j, documentCoords, parentCoords, childComplete );
 			}
 		}
 
-		// children animate complete:       
+		// children animate complete
 		function childComplete() {
 			pieceCounter.push( this );
 			if ( pieceCounter.length == o.rows * o.columns ) {
@@ -73,6 +82,7 @@
 		function animComplete() {
 			// Ensures that the element is hidden/shown correctly
 			$.effects.restore( el, [ 'visibility', 'opacity' ] );
+			
 			if ( o.show ) {
 				el.show();
 			} else {
@@ -188,12 +198,11 @@
 			//Sets mode for toggle
 			opt.mode = $.effects.setMode( this, opt.mode );
 
-
-			opt.show = ( opt.mode == 'show' );
+			opt.show = 0 + ( opt.mode == 'show' );
 
 			setupRowsColumns( opt );
 
-			function animate( interval, duration, row, column, documentCoords, parentCoords, callback ) {	    		
+			function animate( width, height, interval, duration, row, column, documentCoords, parentCoords, callback ) {	    		
 				var random = opt.random ? Math.abs( opt.random ) : 0, 
 					el = $( this ),
 					randomDelay = Math.random() * ( opt.rows + opt.columns ) * interval, 
@@ -201,14 +210,10 @@
 							( ( row + column ) * interval ) : 
 							( ( ( opt.rows + opt.columns ) - ( row + column ) ) * interval ), 
 					delay = randomDelay * random + Math.max( 1 - random, 0 ) * uniformDelay, 
-					offset = el.offset(), 
-					width = el.outerWidth(), 
-					height = el.outerHeight(), 
+					offset = el.offset(),   
 					maxTop = documentCoords.height - height,
 					maxLeft = documentCoords.width - width,
 					properties, top, left;
-
-				//TODO Porperties and offset can be collected in one object!, send width, height and offset into the function instead of calcing it.
 
 				offset = {
 						top : offset.top - parentCoords.top,
@@ -218,7 +223,7 @@
 				properties = offset;
 
 				if ( opt.fade ) {
-					properties.opacity = opt.show ? 1 : 0;
+					properties.opacity = opt.show;
 					el.css( 'opacity', opt.show ? 0 : '' );
 				}
 
@@ -257,7 +262,7 @@
 
 				el.delay( delay ).animate( properties, duration, opt.easing, callback );
 			}
-
+			
 			startSplitAnim.call( this, opt, animate, next );
 
 		} );
@@ -293,13 +298,171 @@
 						crop: false
 					},
 					o
-			);   
+			);
+			
 
-			if (opt.interval === false) {
-				console.log("true");
-			} else {
-				console.log("false");
+			//Reverse it if it is hidden and mode is toggle
+			if ( $( this ).is(':hidden') && opt.mode == 'toggle' ) {
+				opt.reverse = !reverse;
 			}
+
+			//Sets mode for toggle
+			opt.mode = $.effects.setMode( this, opt.mode );
+			
+			opt.show = 0 + ( opt.mode == 'show' );
+
+			setupRowsColumns( opt );
+
+			function animate( width, height, interval, duration, row, column, documentCoords, parentCoords, callback ) {
+				var random = opt.random ? Math.abs( opt.random ) : 0, 
+					el = $( this ),
+					randomDelay = Math.random() * ( opt.rows + opt.columns ) * interval, 
+					uniformDelay = ( opt.reverse ) ? 
+						( ( ( opt.rows + opt.columns ) - ( row + column ) ) * interval ) : 
+						( ( row + column ) * interval ), 
+					delay = randomDelay * random + Math.max( 1 - random, 0 ) * uniformDelay, 
+					startProperties = el.offset(),
+					rowOdd = !( row % 2 ),
+					colOdd = !( column % 2 ),
+					properties, top, left;
+
+				startProperties = {
+						top : startProperties.top - parentCoords.top,
+						left : startProperties.left - parentCoords.left,
+						width : width,
+						height : height
+				};
+
+				//Copy object
+				properties = $.extend( {}, startProperties );
+
+				// If we have only rows or columns, ignore the other dimension
+				if ( opt.columns == 1 ) {
+					colOdd = !rowOdd;
+				} else if ( opt.rows == 1 ) {
+					rowOdd = colOdd;
+				}
+
+				if ( opt.fade ) {
+					properties.opacity = opt.show;
+					startProperties.opacity = 1;
+				}
+
+				if ( colOdd ) {
+					if ( rowOdd ) {
+						properties.top = properties.top + height * opt.distance;
+					} else {
+						properties.left = properties.left + width * opt.distance;
+					}
+				}
+
+				if ( colOdd != rowOdd ) {
+					properties.width = width * ( 1 - opt.distance );
+				} else {
+					properties.height = height * ( 1 - opt.distance );
+				}
+
+				if ( opt.show ) {
+					el.css( properties );
+					if ( opt.fade ) {
+						el.css( 'opacity', 0 );
+					}
+					properties = startProperties;
+				}
+
+				el.delay( delay ).animate( properties, duration, opt.easing, callback );
+			}
+
+			startSplitAnim.call( this, opt, animate, next );
+		} );
+	}
+	
+	$.effects.effect.blockfade = function( o ) {
+		/*Options:
+		 * 		random,
+		 * 		reverse, 
+		 * 		rows, 
+		 * 		columns, 
+		 * 		duration,
+		 * 		interval, 
+		 * 		easing,
+		 * 		pieces,
+		 * 		show
+		 */
+
+		return this.queue( function( next ) {
+
+			var opt = $.extend(
+					{
+						direction: 'bottom',
+						distance: 1,
+						reverse: false,
+						random: false,
+						interval: false,
+					},
+					o
+			);
+
+			//Reverse it if it is hidden and mode is toggle
+			if ( $( this ).is(':hidden') && opt.mode == 'toggle' ) {
+				opt.reverse = !reverse;
+			}
+
+			//Sets mode for toggle
+			opt.mode = $.effects.setMode( this, opt.mode );
+
+			opt.show = 0 + ( opt.mode == 'show' );
+			
+			setupRowsColumns( opt );
+
+
+			function animate( width, height, interval, duration, row, column, documentCoords, parentCoords, callback ) {
+				var random = opt.random ? Math.abs( opt.random ) : 0, 
+					el = $( this ),
+					randomDelay = Math.random() * ( opt.rows + opt.columns ) * interval, 
+					uniformDelay = ( opt.reverse ) ? 
+						( ( ( opt.rows + opt.columns ) - ( row + column ) ) * interval ) : 
+						( ( row + column ) * interval ), 
+					delay = randomDelay * random + Math.max( 1 - random, 0 ) * uniformDelay;
+				
+				if ( opt.show ) {
+					el.css('opacity', 0);
+				}
+						
+				el.delay( delay ).animate( { opacity: opt.show }, duration, opt.easing, callback );
+			}
+
+			startSplitAnim.call( this, opt, animate, next );
+		} );
+	}
+	
+	$.effects.effect.newExplode = function( o ) {
+		/*Options:
+		 * 		random,
+		 * 		reverse, 
+		 * 		rows, 
+		 * 		columns, 
+		 * 		duration,
+		 * 		interval, 
+		 * 		easing,
+		 * 		pieces,
+		 * 		show
+		 */
+
+		return this.queue( function( next ) {
+
+			var opt = $.extend(
+					{
+						direction: 'bottom',
+						distance: 1,
+						reverse: false,
+						random: false,
+						interval: 0,
+						fade: true,
+						crop: false
+					},
+					o
+			);
 
 			//Support for toggle
 			opt.mode = $.effects.setMode( this, opt.mode );
@@ -308,66 +471,51 @@
 
 			setupRowsColumns( opt );
 
-			function animate( interval, duration, row, column, documentCoords, parentCoords, callback ) {
-				var random = opt.random ? Math.abs( opt.random ) : 0, 
-					el = $( this ),
-					randomDelay = Math.random() * ( opt.rows + opt.columns ) * interval, 
-					uniformDelay = ( opt.reverse ) ? 
-						( ( ( opt.rows + opt.columns ) - ( row + column ) ) * interval ) : 
-						( ( row + column ) * interval ), 
-					delay = randomDelay * random + Math.max( 1 - random, 0 ) * uniformDelay, 
-					startProperties = el.offset(), 
-					width = el.outerWidth(), 
-					height = el.outerHeight(), 
-					rowOdd = !( row % 2 ),
-					colOdd = !( column % 2 ),
-					properties, top, left;
+			function animate( width, height, interval, duration, row, column, documentCoords, parentCoords, callback ) {
+				el.delay( delay ).animate( { opacity: opt.show }, duration, opt.easing, callback );
+			}
 
-					startProperties = {
-							top : startProperties.top - parentCoords.top,
-							left : startProperties.left - parentCoords.left,
-							width : width,
-							height : height
-					};
+			startSplitAnim.call( this, opt, animate, next );
+		} );
+	}
+	
+	$.effects.effect.schear = function( o ) {
+		/*Options:
+		 * 		random,
+		 * 		reverse, 
+		 * 		rows, 
+		 * 		columns, 
+		 * 		duration,
+		 * 		interval, 
+		 * 		easing,
+		 * 		pieces,
+		 * 		show
+		 */
 
-					//Copy object
-					properties = $.extend( {}, startProperties );
+		return this.queue( function( next ) {
 
-					// If we have only rows or columns, ignore the other dimension
-					if ( opt.columns == 1 ) {
-						colOdd = !rowOdd;
-					} else if ( opt.rows == 1 ) {
-						rowOdd = colOdd;
-					}
+			var opt = $.extend(
+					{
+						direction: 'bottom',
+						distance: 1,
+						reverse: false,
+						random: false,
+						interval: 0,
+						fade: true,
+						crop: false
+					},
+					o
+			);
 
-					if ( opt.fade ) {
-						properties.opacity = opt.show ? 1 : 0;
-						startProperties.opacity = 1;
-					}
+			//Support for toggle
+			opt.mode = $.effects.setMode( this, opt.mode );
 
-					if ( colOdd ) {
-						if ( rowOdd ) {
-							properties.top = properties.top + height * opt.distance;
-						} else {
-							properties.left = properties.left + width * opt.distance;
-						}
-					}
+			opt.show = ( opt.mode == 'show' );
 
-					if ( colOdd != rowOdd ) {
-						properties.width = width * ( 1 - opt.distance );
-					} else {
-						properties.height = height * ( 1 - opt.distance );
-					}
+			setupRowsColumns( opt );
 
-					if ( opt.show ) {
-						el.css( properties );
-						if ( opt.fade ) {
-							el.css( 'opacity', 0 );
-						}
-						properties = startProperties;
-					}
-
-					el.delay( delay ).animate( properties, duration, opt.easing, callback );
+			function animate( width, height, interval, duration, row, column, documentCoords, parentCoords, callback ) {
+				el.delay( delay ).animate( { opacity: opt.show }, duration, opt.easing, callback );
 			}
 
 			startSplitAnim.call( this, opt, animate, next );
@@ -486,8 +634,7 @@ $.effects.splitShear = function( o, show ) {
 				// piece animate function
 				animate : function( interval, duration, x, y,
 						parentCoords ) {
-					var random = options.random ? Math
-							.abs( options.random ) : 0, randomDelay = Math
+					var random = options.random ? Math.abs( options.random ) : 0, randomDelay = Math
 							.random()
 							* duration, uniformDelay = ( options.reverse ) ? ( ( ( options.rows + options.cols ) - ( x + y ) ) * interval )
 									: ( ( x + y ) * interval ), delay = randomDelay
@@ -554,54 +701,6 @@ $.effects.splitUnShear = function( o ) {
 	$.effects.splitShear.call( this, o, 1 );
 };
 
-/*******************************************************************************
- * Don't use fade and direction 
- * TODO: make the fading comming from the options.direction.
- ******************************************************************************/
-$.effects.blockSplitFadeOut = function( o, show ) {
-	var docHeight = $( document ).height(), docWidth = $( document ).width();
-	/* show is either 1 or null */
-	show = show || 0;
-
-	/* Internal callback to run before animation has started */
-	function beforeAnimate( ) {
-		this.css( {
-			opacity : show ? 0 : 1
-		} );
-	}
-
-	var options = o.options = $
-	.extend(
-			{},
-			defaultOptions,
-			o.options,
-			{
-				beforeAnimate : beforeAnimate,
-
-				// animation piece function
-				animate : function( interval, duration, x, y,
-						parentCoords ) {
-					options.random = options.random || 0;
-					var randomDelay = Math.random() * duration, uniformDelay = ( options.reverse ) ? ( ( ( options.rows + options.cols ) - ( x + y ) ) * interval )
-							: ( ( x + y ) * interval ), delay = randomDelay
-							* Math.abs( options.random )
-							+ Math.max( 1 - Math.abs( options.random ),
-									0 ) * uniformDelay;
-
-					// make the animation
-					this.delay( delay ).animate( {
-						opacity : show
-					}, duration, options.easing );
-				}
-			} );
-	/* sends the options to the split animation */
-	$.effects.splitAnim.call( this, o, show );
-};
-
-$.effects.blockSplitFadeIn = function( o ) {
-	$.effects.blockSplitFadeOut.call( this, o, 1 );
-};
-
 $.effects.splitAnim = function( o, show ) {
 	var options = o.options;
 
@@ -612,8 +711,7 @@ $.effects.splitAnim = function( o, show ) {
 		this.css( 'opacity', 1 ).show();
 	}
 
-	return this
-	.queue( function( ) {
+	return this.queue( function( ) {
 		var $this = $( this ), 
 		height = $this.outerHeight(), 
 		width = $this.outerWidth(), 
