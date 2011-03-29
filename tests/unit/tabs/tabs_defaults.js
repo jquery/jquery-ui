@@ -3,24 +3,14 @@
  */
 
 var tabs_defaults = {
-	add: null,
-	ajaxOptions: null,
-	cache: false,
+	activate: null,
+	beforeload: null,
+	beforeActivate: null,
 	collapsible: false,
-	cookie: null,
-	disable: null,
 	disabled: false,
-	enable: null,
 	event: "click",
 	fx: null,
-	idPrefix: "ui-tabs-",
-	load: null,
-	panelTemplate: "<div></div>",
-	remove: null,
-	select: null,
-	show: null,
-	spinner: "<em>Loading&#8230;</em>",
-	tabTemplate: "<li><a href='#{href}'><span>#{label}</span></a></li>"
+	load: null
 };
 
 // FAIL: falsy values break the cookie option
