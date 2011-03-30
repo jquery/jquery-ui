@@ -26,8 +26,6 @@ var privateMethods = [
 	"_createWidget",
 	"destroy",
 	"option",
-	"enable",
-	"disable",
 	"_trigger"
 ];
 
