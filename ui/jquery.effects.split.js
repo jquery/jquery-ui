@@ -12,7 +12,6 @@
  * 
  * 
  * TODO: 
- * - Properties and offset can be collected in one object in $.effects.effect.build's animate function
  * - The random calculations is the same in every function set it out in startSplitAnim function		
  * - secure that there is a max left/top on the effects which has elements wider than the element they are animating
  */
@@ -209,17 +208,13 @@
 							( ( row + column ) * interval ) : 
 							( ( ( opt.rows + opt.columns ) - ( row + column ) ) * interval ), 
 					delay = randomDelay * random + Math.max( 1 - random, 0 ) * uniformDelay, 
-					offset = el.offset(),   
+					properties = el.offset(),   
 					maxTop = documentCoords.height - height,
 					maxLeft = documentCoords.width - width,
-					properties, top, left;
+					top, left;
 
-				offset = {
-						top : offset.top - parentCoords.top,
-						left : offset.left - parentCoords.left
-				};
-
-				properties = offset;
+				properties.top -= parentCoords.top;
+				properties.left -= parentCoords.left;
 
 				if ( opt.fade ) {
 					properties.opacity = opt.show;
@@ -228,18 +223,18 @@
 
 
 				if ( opt.direction.indexOf( 'bottom' ) !== -1 ) {
-					top = offset.top + parentCoords.height * opt.distance;
+					top = properties.top + parentCoords.height * opt.distance;
 					top = top > maxTop ? maxTop : top;
 				} else if ( opt.direction.indexOf( 'top' ) !== -1 ) {
-					top = offset.top - parentCoords.height * opt.distance;
+					top = properties.top - parentCoords.height * opt.distance;
 					top = top < 0 ? 0 : top;
 				}
 
 				if ( opt.direction.indexOf( 'right' ) !== -1 ) {
-					left = offset.left + parentCoords.width * opt.distance;
+					left = properties.left + parentCoords.width * opt.distance;
 					left = left > maxLeft ? maxLeft : left;
 				} else if ( opt.direction.indexOf( 'left' ) !== -1 ) {
-					left = offset.left - parentCoords.width * opt.distance;
+					left = properties.left - parentCoords.width * opt.distance;
 					left = left < 0 ? 0 : left;
 				}
 
