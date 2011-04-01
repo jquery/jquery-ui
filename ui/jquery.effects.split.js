@@ -21,7 +21,7 @@
 
 	//Helper function to control the split on each animation
 	function startSplitAnim( el, o, animation, next ) {
-		//Calling the piecer so o.rows and o.columns is setup!
+		//Calling the piecer so o.rows and o.columns gets setup for the rest of the cuntions.
 		var	pieces = $.effects.piecer( el, o ),
 			firstEl = $( pieces[ 0 ] ),
 			interval = o.interval,
@@ -194,8 +194,6 @@
 
 			opt.show = 0 + ( opt.mode == 'show' );
 
-			setupRowsColumns( opt );
-
 			function animate( width, height, interval, duration, row, column, documentCoords, parentCoords, callback ) {	    		
 				var random = opt.random ? Math.abs( opt.random ) : 0, 
 					el = $( this ),
@@ -305,8 +303,6 @@
 			
 			opt.show = 0 + ( opt.mode == 'show' );
 
-			setupRowsColumns( opt );
-
 			function animate( width, height, interval, duration, row, column, documentCoords, parentCoords, callback ) {
 				var random = opt.random ? Math.abs( opt.random ) : 0, 
 					el = $( this ),
@@ -406,8 +402,6 @@
 			opt.mode = $.effects.setMode( el, opt.mode );
 
 			opt.show = 0 + ( opt.mode == 'show' );
-			
-			setupRowsColumns( opt );
 
 			function animate( width, height, interval, duration, row, column, documentCoords, parentCoords, callback ) {
 				var random = opt.random ? Math.abs( opt.random ) : 0, 
@@ -472,8 +466,6 @@
 			}
 
 			opt.show = 0 + ( opt.mode == 'show' );
-
-			setupRowsColumns( opt );
 
 			function animate( width, height, interval, duration, row, column, documentCoords, parentCoords, callback ) {
 				var el = $( this ),
@@ -567,8 +559,6 @@
 			opt.mode = $.effects.setMode( el, opt.mode );
 			
 			opt.show = 0 + ( opt.mode == 'show' );
-			
-			setupRowsColumns( opt );
 
 			function animate( width, height, interval, duration, row, column, documentCoords, parentCoords, callback ) {
 				var random = opt.random ? Math.abs( opt.random ) : 0, 
