@@ -21,17 +21,22 @@
 
 	//Helper function to control the split on each animation
 	function startSplitAnim( el, o, animation, next ) {
-		//Calling the piecer so o.rows and o.columns gets setup for the rest of the cuntions.
-		var	pieces = $.effects.piecer( el, o ),
-			firstEl = $( pieces[ 0 ] ),
-			interval = o.interval,
-			pieceCounter = [],
+		//Support for pieces
+		if ( ( !o.rows || !o.columns ) && o.pieces ) {
+			o.rows = o.columns = Math.round( Math.sqrt( o.pieces ) );
+		} else {
+			o.rows = o.rows || 3;
+			o.columns = o.columns || 3;
+		}
+		
+		var interval = o.interval, 
 			duration = o.duration - ( o.rows + o.columns ) * interval,
+			pieceCounter = [],
 			documentCoords = {
 				height: $( document ).height(),
 				width: $( document ).width()
 			},
-			parentCoords, container, i, j, properties, width, height;
+			parentCoords, container, i, j, pieces, properties, width, height, firstEl;
 		
 		$.effects.save( el, [ 'visibility', 'opacity' ] );
 		
@@ -42,13 +47,15 @@
 		if (interval === false){
 			interval = o.duration / ( o.rows + o.columns * 2 );
 		}
-		
+
+		//split into pieces
+		pieces = $.effects.piecer( el, o );
+		firstEl = $( pieces[ 0 ] );
 		container = firstEl.parent().addClass( 'ui-effects-split' );
 		width = firstEl.outerWidth();
 		height = firstEl.outerHeight();
 
 		container.css( 'overflow', o.crop ? 'hidden' : 'visible' );
-		
 		
 		//Make animation
 		for ( i = 0; i < o.rows; i++ ) {
@@ -65,7 +72,6 @@
 				animComplete();
 			}
 		}
-
 
 		function animComplete() {
 			// Ensures that the element is hidden/shown correctly
@@ -92,13 +98,14 @@
 	 * 	pieces
 	 */
 	$.effects.piecer = function( el, o ){
+		//Support pieces
 		if ( ( !o.rows || !o.columns ) && o.pieces ) {
 			o.rows = o.columns = Math.round( Math.sqrt( o.pieces ) );
 		} else {
 			o.rows = o.rows || 3;
 			o.columns = o.columns || 3;
 		}
-		console.log(o);
+		
 		var height = el.outerHeight(), 
 			width = el.outerWidth(), 
 			position = el.offset(),
@@ -384,7 +391,7 @@
 
 			var opt = $.extend( {
 						direction: 'bottom',
-						distance: 1,
+						distance: 1,						
 						reverse: false,
 						random: false,
 						interval: false
