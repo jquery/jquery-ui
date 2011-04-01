@@ -10,10 +10,6 @@
  * Depends:
  *  jquery.effects.core.js
  * 
- * 
- * TODO: 
- * - The random calculations is the same in every function set it out in startSplitAnim function		
- * - secure that there is a max left/top on the effects which has elements wider than the element they are animating
  */
 
 (function( $, undefined ) {
