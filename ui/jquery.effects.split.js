@@ -19,47 +19,35 @@
 
 (function( $, undefined ) {
 
-	function setupRowsColumns( opt ) {
-		//Support for pieces
-		if ( ( !opt.rows || !opt.columns ) && opt.pieces ) {
-			opt.rows = opt.columns = Math.round( Math.sqrt( opt.pieces ) );
-		} else {
-			opt.rows = opt.rows || 3;
-			opt.columns = opt.columns || 3;
-		}
-	}
-
 	//Helper function to control the split on each animation
-	function startSplitAnim( o, animation, next ) {
-
-		var el = $( this ),
-		interval = o.interval, 
-		duration = o.duration - ( o.rows + o.columns ) * interval,
-		pieceCounter = [],
-		documentCoords = {
-			height: $( document ).height(),
-			width: $( document ).width()
-		},
-		parentCoords, container, pieces, i, j, properties, width, height;
+	function startSplitAnim( el, o, animation, next ) {
+		//Calling the piecer so o.rows and o.columns is setup!
+		var	pieces = $.effects.piecer( el, o ),
+			firstEl = $( pieces[ 0 ] ),
+			interval = o.interval,
+			pieceCounter = [],
+			duration = o.duration - ( o.rows + o.columns ) * interval,
+			documentCoords = {
+				height: $( document ).height(),
+				width: $( document ).width()
+			},
+			parentCoords, container, i, j, properties, width, height;
 		
 		$.effects.save( el, [ 'visibility', 'opacity' ] );
 		
-		parentCoords = el.show().css('visibility','hidden').offset();
+		parentCoords = el.show().css( 'visibility', 'hidden' ).offset();
 		parentCoords.width = el.outerWidth();
 		parentCoords.height = el.outerHeight();
 
 		if (interval === false){
 			interval = o.duration / ( o.rows + o.columns * 2 );
 		}
-
-		//split into pieces
-		pieces = $.effects.piecer.call( this, o.rows, o.columns );
-		firstEl = $( pieces[ 0 ] );
+		
 		container = firstEl.parent().addClass( 'ui-effects-split' );
 		width = firstEl.outerWidth();
 		height = firstEl.outerHeight();
 
-		container.css('overflow', o.crop ? 'hidden' : 'visible');
+		container.css( 'overflow', o.crop ? 'hidden' : 'visible' );
 		
 		
 		//Make animation
@@ -97,35 +85,41 @@
 
 	}
 
+	/*
+	 * Options
+	 * 	rows
+	 * 	columns
+	 * 	pieces
+	 */
+	$.effects.piecer = function( el, o ){
+		if ( ( !o.rows || !o.columns ) && o.pieces ) {
+			o.rows = o.columns = Math.round( Math.sqrt( o.pieces ) );
+		} else {
+			o.rows = o.rows || 3;
+			o.columns = o.columns || 3;
+		}
+		console.log(o);
+		var height = el.outerHeight(), 
+			width = el.outerWidth(), 
+			position = el.offset(),
+			pieceHeight = Math.ceil( height / o.rows ), 
+			pieceWidth = Math.ceil( width / o.columns ), 
+			container = $( '<div></div>' ).css({
+				position : 'absolute',
+				padding : 0,
+				margin : 0,
+				border : 0,
+				top : position.top + "px",
+				left : position.left + "px",
+				height : height + "px",
+				width : width + "px",
+				zIndex : el.css( 'zIndex' )
+			}).appendTo( 'body' ),
+			pieces = [],
+			left, top;
 
-	$.effects.piecer = function(rows, columns){
-		var el = $( this ), 
-		height = el.outerHeight(), 
-		width = el.outerWidth(), 
-		position = el.offset(),
-		pieceHeight = Math.ceil( height / rows ), 
-		pieceWidth = Math.ceil( width / columns ), 
-		container = $( '<div></div>' ).css({
-			position : 'absolute',
-			padding : 0,
-			margin : 0,
-			border : 0,
-			top : position.top + "px",
-			left : position.left + "px",
-			height : height + "px",
-			width : width + "px",
-			zIndex : el.css( 'zIndex' )
-		}).appendTo('body'),
-		pieces = [],
-
-		i, j, left, top;
-
-		for( i = 0; i < rows; i++ ){
-			top = i * pieceHeight;
-
-			for( j = 0; j < columns; j++ ){
-				left = j * pieceWidth;
-
+		for( top = 0; top < height; top += pieceHeight ){
+			for( left = 0; left < width; left += pieceWidth ){
 				pieces.push(
 						el
 						.clone()
@@ -147,7 +141,7 @@
 							left: left + "px",
 							top: top + "px",
 							overflow : "hidden"
-						}).appendTo(container)
+						}).appendTo( container )
 				);
 			}
 		}
@@ -176,8 +170,7 @@
 
 		return this.queue( function( next ) {
 
-			var opt = $.extend(
-					{
+			var opt = $.extend( {
 						direction: 'bottom',
 						distance: 1,
 						reverse: false,
@@ -187,16 +180,17 @@
 						crop: false
 					},
 					o
-			);
+				),
+				el = $( this );
 
 
 			//Reverse it if it is hidden and mode is toggle
-			if ( $( this ).is(':hidden') && opt.mode == 'toggle' ) {
+			if ( el.is( ':hidden' ) && opt.mode == 'toggle' ) {
 				opt.reverse = !opt.reverse;
 			}
 
 			//Sets mode for toggle
-			opt.mode = $.effects.setMode( this, opt.mode );
+			opt.mode = $.effects.setMode( el, opt.mode );
 
 			opt.show = 0 + ( opt.mode == 'show' );
 
@@ -263,7 +257,7 @@
 				el.delay( delay ).animate( properties, duration, opt.easing, callback );
 			}
 			
-			startSplitAnim.call( this, opt, animate, next );
+			startSplitAnim( el, opt, animate, next );
 
 		} );
 
@@ -287,8 +281,7 @@
 
 		return this.queue( function( next ) {
 
-			var opt = $.extend(
-					{
+			var opt = $.extend( {
 						direction: 'bottom',
 						distance: 1,
 						reverse: false,
@@ -298,16 +291,17 @@
 						crop: false
 					},
 					o
-			);
+				),
+				el = $( this );
 			
 
 			//Reverse it if it is hidden and mode is toggle
-			if ( $( this ).is(':hidden') && opt.mode == 'toggle' ) {
+			if ( el.is(':hidden') && opt.mode == 'toggle' ) {
 				opt.reverse = !opt.reverse;
 			}
 
 			//Sets mode for toggle
-			opt.mode = $.effects.setMode( this, opt.mode );
+			opt.mode = $.effects.setMode( el, opt.mode );
 			
 			opt.show = 0 + ( opt.mode == 'show' );
 
@@ -373,7 +367,7 @@
 				el.delay( delay ).animate( properties, duration, opt.easing, callback );
 			}
 
-			startSplitAnim.call( this, opt, animate, next );
+			startSplitAnim( el, opt, animate, next );
 		} );
 	}
 	
@@ -392,8 +386,7 @@
 
 		return this.queue( function( next ) {
 
-			var opt = $.extend(
-					{
+			var opt = $.extend( {
 						direction: 'bottom',
 						distance: 1,
 						reverse: false,
@@ -401,15 +394,16 @@
 						interval: false
 					},
 					o
-			);
+				),
+				el = $( this );
 
 			//Reverse it if it is hidden and mode is toggle
-			if ( $( this ).is(':hidden') && opt.mode == 'toggle' ) {
+			if ( el.is( ':hidden' ) && opt.mode == 'toggle' ) {
 				opt.reverse = !opt.reverse;
 			}
 
 			//Sets mode for toggle
-			opt.mode = $.effects.setMode( this, opt.mode );
+			opt.mode = $.effects.setMode( el, opt.mode );
 
 			opt.show = 0 + ( opt.mode == 'show' );
 			
@@ -425,13 +419,13 @@
 					delay = randomDelay * random + Math.max( 1 - random, 0 ) * uniformDelay;
 				
 				if ( opt.show ) {
-					el.css('opacity', 0);
+					el.css( 'opacity', 0 );
 				}
 						
 				el.delay( delay ).animate( { opacity: opt.show }, duration, opt.easing, callback );
 			}
 
-			startSplitAnim.call( this, opt, animate, next );
+			startSplitAnim( el, opt, animate, next );
 		} );
 	}
 	
@@ -455,25 +449,25 @@
 
 		return this.queue( function( next ) {
 
-			var opt = $.extend(
-				{
-					direction: 'bottom',
-					distance: 1,
-					reverse: false,
-					random: 0.5,
-					sync: false,
-					interval: false,
-					fade: true,
-					crop: false
-				},
-				o
-			);
+			var opt = $.extend( {
+						direction: 'bottom',
+						distance: 1,
+						reverse: false,
+						random: false,
+						sync: false,
+						interval: false,
+						fade: true,
+						crop: false
+					},
+					o
+				),
+				el = $( this );
 			
 			//Support for toggle
-			opt.mode = $.effects.setMode( this, opt.mode );
+			opt.mode = $.effects.setMode( el, opt.mode );
 			
 			//Reverse it if it is hidden and mode is toggle
-			if ( $( this ).is(':hidden') && opt.mode == 'toggle' ) {
+			if ( el.is( ':hidden' ) && opt.mode == 'toggle' ) {
 				opt.reverse = !opt.reverse;
 			}
 
@@ -533,7 +527,7 @@
 				el.delay( delay ).animate( properties, duration, opt.easing, callback );
 			}
 
-			startSplitAnim.call( this, opt, animate, next );
+			startSplitAnim( el, opt, animate, next );
 		} );
 	}
 	
@@ -556,8 +550,7 @@
 
 		return this.queue( function( next ) {
 
-			var opt = $.extend(
-					{
+			var opt = $.extend( {
 						direction: 'bottom',
 						distance: 1,
 						reverse: false,
@@ -567,10 +560,11 @@
 						crop: false
 					},
 					o
-			);
+				),
+				el = $( this );
 
 			//Support for toggle
-			opt.mode = $.effects.setMode( this, opt.mode );
+			opt.mode = $.effects.setMode( el, opt.mode );
 			
 			opt.show = 0 + ( opt.mode == 'show' );
 			
@@ -623,8 +617,6 @@
 						properties.top += opt.distance * parentCoords.height;
 					}
 				}
-
-				console.log({properties: properties, startProperties: startProperties, show: opt.show });
 				
 				if ( opt.show ) {
 					el.css( properties );
@@ -634,7 +626,7 @@
 				el.delay( delay ).animate( properties, duration, opt.easing, callback );
 			}
 
-			startSplitAnim.call( this, opt, animate, next );
+			startSplitAnim( el, opt, animate, next );
 		} );
 	}
 
