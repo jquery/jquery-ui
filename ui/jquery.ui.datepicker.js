@@ -1606,14 +1606,8 @@ $.extend(Datepicker.prototype, {
 					'>' + year + '</option>';
 			}
 			inst.yearshtml += '</select>';
-			//when showing there is no need for later update
-			if( ! $.browser.mozilla ){
-				html += inst.yearshtml;
-				inst.yearshtml = null;
-			} else {
-				// will be replaced later with inst.yearshtml
-				html += '<select class="ui-datepicker-year"><option value="' + drawYear + '" selected="selected">' + drawYear + '</option></select>';
-			}
+			html += inst.yearshtml;
+			inst.yearshtml = null;
 		}
 		html += this._get(inst, 'yearSuffix');
 		if (showMonthAfterYear)
