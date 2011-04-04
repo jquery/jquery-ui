@@ -27,10 +27,11 @@ function getNextListId() {
 $.widget( "ui.tabs", {
 	options: {
 		activate: null,
-		beforeload: null,
+		// TODO: uncomment (requires fixing code related to active option)
+//		active: null,
+		beforeLoad: null,
 		beforeActivate: null,
 		collapsible: false,
-		disabled: false,
 		event: "click",
 		fx: null, // e.g. { height: 'toggle', opacity: 'toggle', duration: 200 }
 		load: null
@@ -118,13 +119,13 @@ $.widget( "ui.tabs", {
 
 	_setOption: function( key, value ) {
 		if ( key == "active" ) {
-			// _activate() will handle invalid values and update this.option
+			// _activate() will handle invalid values and update this.options
 			this._activate( value );
-			return
-		} else {
-			this.options[ key ] = value;
-			this.refresh();
+			return;
 		}
+
+		this.options[ key ] = value;
+		this.refresh();
 	},
 
 	_tabId: function( a ) {
@@ -573,8 +574,9 @@ $.widget( "ui.tabs", {
 		this.xhr = $.ajax({
 			url: url,
 			beforeSend: function( jqXHR, settings ) {
-				return self._trigger( "beforeload", null,
-						$.extend( { jqXHR: jqXHR, settings: settings }, eventData ) );
+				// TODO: pass relevant event
+				return self._trigger( "beforeLoad", null,
+					$.extend( { jqXHR : jqXHR, settings: settings }, eventData ) );
 			}
 		});
 
@@ -609,8 +611,12 @@ $.widget( "ui.tabs", {
 		self.element.dequeue( "tabs" );
 
 		return this;
-	}
+	},
 
+	_getPanelForTab: function( tab ) {
+		var id = $( tab ).attr( "aria-controls" );
+		return this.element.find( this._sanitizeSelector( "#" + id ) );
+	}
 });
 
 $.extend( $.ui.tabs, {
@@ -619,7 +625,6 @@ $.extend( $.ui.tabs, {
 
 // DEPRECATED
 if ( $.uiBackCompat !== false ) {
-
 	// ajaxOptions and cache options
 	(function( $, prototype ) {
 		$.extend( prototype.options, {

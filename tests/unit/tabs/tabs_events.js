@@ -139,14 +139,14 @@ test( "activate", function() {
 	element.tabs( "option", "active", 1 );
 });
 
-test('beforeload', function() {
+test( "beforeLoad", function() {
 	expect( 5 );
 
-	el = $('#tabs2');
+	el = $( "#tabs2" );
 
 	el.tabs({
 		active: 2,
-		beforeload: function( event, ui ) {
+		beforeLoad: function( event, ui ) {
 			ok( $.isFunction( ui.jqXHR.promise ), 'contain jqXHR object');
 			equals( ui.settings.url, "data/test.html", 'contain ajax settings url');
 			equals( ui.tab, el.find('a')[ 2 ], 'contain tab as DOM anchor element');
@@ -155,7 +155,6 @@ test('beforeload', function() {
 			event.preventDefault();
 		}
 	});
-
 });
 
 test('load', function() {

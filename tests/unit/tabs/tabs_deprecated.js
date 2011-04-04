@@ -7,7 +7,7 @@ test( "#4581 - title attribute for remote tabs does not support foreign language
 
 	$( "#tabs2" ).tabs({
 		selected: 3,
-		beforeload: function( event, ui ) {
+		beforeLoad: function( event, ui ) {
 			event.preventDefault();
 			equal( ui.panel.id, "∫ßáö_Սե", "proper title" );
 		}

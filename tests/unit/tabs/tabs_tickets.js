@@ -44,7 +44,7 @@ test('#3627 - Ajax tab with url containing a fragment identifier fails to load',
 
 	el = $('#tabs2').tabs({
 		active: 2,
-		beforeload: function( event, ui ) {
+		beforeLoad: function( event, ui ) {
 			event.preventDefault();
 			ok(/test.html$/.test( ui.settings.url ), 'should ignore fragment identifier');
 		}
@@ -58,7 +58,7 @@ test('#4033 - IE expands hash to full url and misinterprets tab as ajax', functi
 	el = $('<div><ul><li><a href="#tab">Tab</a></li></ul><div id="tab"></div></div>');
 	el.appendTo('#main');
 	el.tabs({
-		beforeload: function( event, ui ) {
+		beforeLoad: function( event, ui ) {
 			event.preventDefault();
 			ok( false, 'should not be an ajax tab');
 		}
