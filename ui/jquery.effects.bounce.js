@@ -30,7 +30,7 @@ $.effects.effect.bounce = function(o) {
 
 			// number of internal animations
 			anims = times * 2 + showhide,
-			speed = (o.duration || 250) / anims,
+			speed = o.duration / anims,
 			easing = o.easing,
 
 			// utility:
