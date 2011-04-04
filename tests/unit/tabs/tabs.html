@@ -27,6 +27,15 @@
 	<script src="tabs_tickets.js"></script>
 
 	<script>
+	function tabs_state( tabs ) {
+		var expected = $.makeArray( arguments ).slice( 1 );
+		var actual = tabs.find( ".ui-tabs-nav li" ).map(function() {
+			return $( this ).hasClass( "ui-state-active" ) ? 1 : 0;
+		}).get();
+		same( actual, expected );
+	}
+	</script>
+	<script>
 	// disable this stale testsuite for testswarm only
 	var url = window.location.search;
 	url = decodeURIComponent( url.slice( url.indexOf("swarmURL=") + 9 ) );

@@ -104,6 +104,8 @@ $.widget( "ui.tabs", {
 			});
 
 			this.load( o.active );
+		} else {
+			this.active = $();
 		}
 
 		// clean up to avoid memory leaks in certain versions of IE 6
@@ -329,55 +331,62 @@ $.widget( "ui.tabs", {
 	},
 
 	_eventHandler: function( event ) {
-		event.preventDefault();
-		var self = this,
-			o = this.options,
+		var that = this,
+			options = that.options,
+			active = that.active,
 			clicked = $( event.currentTarget ),
-			$li = clicked.closest( "li" ),
-			$hide = self.element.find( self._sanitizeSelector( $( this.active ).attr( "aria-controls" ) ) ),
-			$show = self.element.find( self._sanitizeSelector( clicked.attr( "aria-controls" ) ) );
+			clickedIsActive = clicked[ 0 ] === active[ 0 ],
+			collapsing = clickedIsActive && options.collapsible,
+			toShow = collapsing ? $() : that.element.find( that._sanitizeSelector( clicked.attr( "aria-controls" ) ) ),
+			toHide = !active.length ? $() : that.element.find( that._sanitizeSelector( active.attr( "aria-controls" ) ) ),
+			tab = clicked.closest( "li" ),
+			eventData = {
+				oldTab: active,
+				oldPanel: toHide,
+				newTab: collapsing ? $() : clicked,
+				newPanel: toShow
+			};
 
-		// tab is already selected, but not collapsible
-		if ( ( $li.hasClass( "ui-tabs-active" ) && !o.collapsible ) ||
-			// can't switch durning an animation
-			self.running ||
-			// tab is disabled
-			$li.hasClass( "ui-state-disabled" ) ||
-			// tab is already loading
-			$li.hasClass( "ui-tabs-loading" ) ||
-			// allow canceling by beforeActivate event
-			self._trigger( "beforeActivate", event, self._ui( clicked[ 0 ], $show[ 0 ] ) ) === false ) {
+		event.preventDefault();
+
+		if ( tab.hasClass( "ui-state-disabled" ) ||
+				// tab is already loading
+				tab.hasClass( "ui-tabs-loading" ) || 
+				// can't switch durning an animation
+				that.running ||
+				// click on active header, but not collapsible
+				( clickedIsActive && !options.collapsible ) ||
+				// allow canceling activation
+				( that._trigger( "beforeActivate", event, eventData ) === false ) ) {
 			clicked[ 0 ].blur();
 			return;
 		}
 
-		o.active = self.anchors.index( clicked );
+		options.active = collapsing ? false : that.anchors.index( clicked );
 
-		self.active = clicked;
-
-		if ( self.xhr ) {
-			self.xhr.abort();
+		that.active = clicked;
+		if ( that.xhr ) {
+			that.xhr.abort();
 		}
 
 		// if tab may be closed
-		if ( o.collapsible ) {
-			if ( $li.hasClass( "ui-tabs-active" ) ) {
-				o.active = -1;
-				self.active = null;
+		if ( options.collapsible ) {
+			if ( collapsing ) {
+				options.active = false;
 
-				self.element.queue( "tabs", function() {
-					self._hideTab( clicked, $hide );
+				that.element.queue( "tabs", function() {
+					that._hideTab( clicked, toHide );
 				}).dequeue( "tabs" );
 
 				clicked[ 0 ].blur();
 				return;
-			} else if ( !$hide.length ) {
-				self.element.queue( "tabs", function() {
-					self._showTab( clicked, $show, event );
+			} else if ( !toHide.length ) {
+				that.element.queue( "tabs", function() {
+					that._showTab( clicked, toShow, event );
 				});
 
 				// TODO make passing in node possible, see also http://dev.jqueryui.com/ticket/3171
-				self.load( self.anchors.index( clicked ) );
+				that.load( that.anchors.index( clicked ) );
 
 				clicked[ 0 ].blur();
 				return;
@@ -385,17 +394,17 @@ $.widget( "ui.tabs", {
 		}
 
 		// show new tab
-		if ( $show.length ) {
-			if ( $hide.length ) {
-				self.element.queue( "tabs", function() {
-					self._hideTab( clicked, $hide );
+		if ( toShow.length ) {
+			if ( toHide.length ) {
+				that.element.queue( "tabs", function() {
+					that._hideTab( clicked, toHide );
 				});
 			}
-			self.element.queue( "tabs", function() {
-				self._showTab( clicked, $show, event );
+			that.element.queue( "tabs", function() {
+				that._showTab( clicked, toShow, event );
 			});
 
-			self.load( self.anchors.index( clicked ) );
+			that.load( that.anchors.index( clicked ) );
 		} else {
 			throw "jQuery UI Tabs: Mismatching fragment identifier.";
 		}
@@ -919,7 +928,11 @@ if ( $.uiBackCompat !== false ) {
 				return false;
 			}
 			if ( type === "beforeActivate" ) {
-				ret = _trigger.call( this, "select", event, data );
+				ret = _trigger.call( this, "select", event, {
+					tab: data.newTab[ 0],
+					panel: data.newPanel[ 0 ],
+					index: data.newTab.closest( "li" ).index()
+				});
 			} else if ( type === "activate" ) {
 				ret = _trigger.call( this, "show", event, data );
 			}

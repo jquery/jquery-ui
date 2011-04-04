@@ -1,32 +1,55 @@
-/*
- * tabs_events.js
- */
-(function($) {
+(function( $ ) {
 
-module("tabs: events");
+module( "tabs: events" );
 
-test('beforeActivate', function() {
-	expect(7);
+test( "beforeActivate", function() {
+	expect( 26 );
 
-	el = $('#tabs1').tabs({
-		beforeActivate: function(event, ui) {
-			ok(true, 'beforeActivate triggered after initialization');
-			equals(this, el[0], "context of callback");
-			equals(event.type, 'tabsbeforeactivate', 'event type in callback');
-			equals(ui.tab, el.find('a')[1], 'contain tab as DOM anchor element');
-			equals(ui.panel, el.find('div')[1], 'contain panel as DOM div element');
-			equals(ui.index, 1, 'contain index');
-		}
+	var element = $( "#tabs1" ).tabs({
+			// TODO: should be false
+			active: -1,
+			collapsible: true
+		}),
+		tabs = element.find( ".ui-tabs-nav a" ),
+		panels = element.find( ".ui-tabs-panel" );
+
+	element.one( "tabsbeforeactivate", function( event, ui ) {
+		equals( ui.oldTab.size(), 0 );
+		equals( ui.oldPanel.size(), 0 );
+		equals( ui.newTab.size(), 1 );
+		strictEqual( ui.newTab[ 0 ], tabs[ 0 ] );
+		equals( ui.newPanel.size(), 1 );
+		strictEqual( ui.newPanel[ 0 ], panels[ 0 ] );
+		tabs_state( element, 0, 0, 0 );
 	});
-	el.tabs('option', 'active', 1);
+	element.tabs( "option", "active", 0 );
+	tabs_state( element, 1, 0, 0 );
 
-	el.tabs('destroy');
-	el.tabs({
-		beforeActivate: function(event, ui) {
-			equals( event.originalEvent.type, "click", "beforeActivate triggered by click" );
-		}
+	element.one( "tabsbeforeactivate", function( event, ui ) {
+		equals( ui.oldTab.size(), 1 );
+		strictEqual( ui.oldTab[ 0 ], tabs[ 0 ] );
+		equals( ui.oldPanel.size(), 1 );
+		strictEqual( ui.oldPanel[ 0 ], panels[ 0 ] );
+		equals( ui.newTab.size(), 1 );
+		strictEqual( ui.newTab[ 0 ], tabs[ 1 ] );
+		equals( ui.newPanel.size(), 1 );
+		strictEqual( ui.newPanel[ 0 ], panels[ 1 ] );
+		tabs_state( element, 1, 0, 0 );
 	});
-	el.find( "li:eq(1) a" ).simulate( "click" );
+	element.tabs( "option", "active", 1 );
+	tabs_state( element, 0, 1, 0 );
+
+	element.one( "tabsbeforeactivate", function( event, ui ) {
+		equals( ui.oldTab.size(), 1 );
+		strictEqual( ui.oldTab[ 0 ], tabs[ 1 ] );
+		equals( ui.oldPanel.size(), 1 );
+		strictEqual( ui.oldPanel[ 0 ], panels[ 1 ] );
+		equals( ui.newTab.size(), 0 );
+		equals( ui.newPanel.size(), 0 );
+		tabs_state( element, 0, 1, 0 );
+	});
+	element.tabs( "option", "active", false );
+	tabs_state( element, 0, 0, 0 );
 });
 
 test('beforeload', function() {
