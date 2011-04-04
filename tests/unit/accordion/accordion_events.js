@@ -3,7 +3,7 @@
 module( "accordion: events", accordionSetupTeardown() );
 
 test( "beforeActivate", function() {
-	expect( 47 );
+	expect( 38 );
 	var ac = $( "#list1" ).accordion({
 		active: false,
 		collapsible: true
@@ -57,27 +57,13 @@ test( "beforeActivate", function() {
 		equals( ui.oldHeader.size(), 0 );
 		equals( ui.oldContent.size(), 0 );
 		equals( ui.newHeader.size(), 1 );
-		strictEqual( ui.newHeader[ 0 ], headers[ 1 ] );
-		equals( ui.newContent.size(), 1 );
-		strictEqual( ui.newContent[ 0 ], content[ 1 ] );
-		event.preventDefault();
-		state( ac, 0, 0, 0 );
-	});
-	ac.accordion( "option", "active", 1 );
-	state( ac, 0, 0, 0 );
-
-	ac.one( "accordionbeforeactivate", function( event, ui ) {
-		equals( event.originalEvent.type, "click" );
-		equals( ui.oldHeader.size(), 0 );
-		equals( ui.oldContent.size(), 0 );
-		equals( ui.newHeader.size(), 1 );
 		strictEqual( ui.newHeader[ 0 ], headers[ 2 ] );
 		equals( ui.newContent.size(), 1 );
 		strictEqual( ui.newContent[ 0 ], content[ 2 ] );
 		event.preventDefault();
 		state( ac, 0, 0, 0 );
 	});
-	headers.eq( 2 ).click();
+	ac.accordion( "option", "active", 2 );
 	state( ac, 0, 0, 0 );
 });
 
