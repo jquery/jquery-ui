@@ -1,28 +1,33 @@
-/*
- * tabs_core.js
- */
-var el;
+(function( $ ) {
 
-(function($) {
+module( "tabs: core" );
 
-module("tabs: core");
-
-test('navigation markup', function() {
-	el = $('#tabs3').tabs();
-	ok($('#tabs3-list').hasClass('ui-tabs-nav'), 'custom markup; allow list to be any descendant');
-	el.tabs('destroy');
-
-	el = $('#tabs4').tabs();
-	ok($('#tabs4-list').hasClass('ui-tabs-nav'), 'first list found becomes nav - ul');
-	el.tabs('destroy');
-
-	el = $('#tabs4a').tabs();
-	ok($('#tabs4a-list').hasClass('ui-tabs-nav'), 'first list found becomes nav - ol');
-	el.tabs('destroy');
-
-	el = $('#tabs5').tabs();
-	ok($('#tabs5-list').hasClass('ui-tabs-nav'), 'empty list can be used');
-	el.tabs('destroy');
+test( "markup structure", function() {
+	expect( 3 );
+	var el = $( "#tabs1" ).tabs();
+	ok( el.hasClass( "ui-tabs" ), "main element is .ui-tabs" );
+	ok( el.find( "ul" ).hasClass( "ui-tabs-nav" ), "list item is .ui-tabs-nav" );
+	equal( el.find( ".ui-tabs-panel" ).length, 3,
+		".ui-tabs-panel elements exist, correct number" );
 });
 
-})(jQuery);
+$.each({
+	"deep ul": "#tabs3",
+	"multiple lists, ul first": "#tabs4",
+	"multiple lists, ol first": "#tabs5",
+	"empty list": "#tabs6"
+}, function( type, selector ) {
+	test( "markup structure: " + type, function() {
+		expect( 2 );
+		var el = $( selector ).tabs();
+		ok( el.hasClass( "ui-tabs" ), "main element is .ui-tabs" );
+		ok( $( selector + "-list" ).hasClass( "ui-tabs-nav" ),
+			"list item is .ui-tabs-nav" );
+	});
+});
+
+test( "accessibility", function() {
+	// TODO: add tests
+});
+
+}( jQuery ) );
