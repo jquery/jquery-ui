@@ -319,7 +319,7 @@ $.widget( "ui.accordion", {
 				// click on active header, but not collapsible
 				( clickedIsActive && !options.collapsible ) ||
 				// allow canceling activation
-				( this._trigger( "beforeActivate", null, eventData ) === false ) ) {
+				( this._trigger( "beforeActivate", event, eventData ) === false ) ) {
 			return;
 		}
 

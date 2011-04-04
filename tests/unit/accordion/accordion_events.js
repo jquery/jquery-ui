@@ -3,7 +3,7 @@
 module( "accordion: events", accordionSetupTeardown() );
 
 test( "beforeActivate", function() {
-	expect( 42 );
+	expect( 47 );
 	var ac = $( "#list1" ).accordion({
 		active: false,
 		collapsible: true
@@ -12,6 +12,7 @@ test( "beforeActivate", function() {
 	var content = ac.find( ".ui-accordion-content" );
 
 	ac.one( "accordionbeforeactivate", function( event, ui ) {
+		ok( !( "originalEvent" in event ) );
 		equals( ui.oldHeader.size(), 0 );
 		equals( ui.oldContent.size(), 0 );
 		equals( ui.newHeader.size(), 1 );
@@ -24,6 +25,7 @@ test( "beforeActivate", function() {
 	state( ac, 1, 0, 0 );
 
 	ac.one( "accordionbeforeactivate", function( event, ui ) {
+		equals( event.originalEvent.type, "click" );
 		equals( ui.oldHeader.size(), 1 );
 		strictEqual( ui.oldHeader[ 0 ], headers[ 0 ] );
 		equals( ui.oldContent.size(), 1 );
@@ -38,6 +40,7 @@ test( "beforeActivate", function() {
 	state( ac, 0, 1, 0 );
 
 	ac.one( "accordionbeforeactivate", function( event, ui ) {
+		ok( !( "originalEvent" in event ) );
 		equals( ui.oldHeader.size(), 1 );
 		strictEqual( ui.oldHeader[ 0 ], headers[ 1 ] );
 		equals( ui.oldContent.size(), 1 );
@@ -50,6 +53,7 @@ test( "beforeActivate", function() {
 	state( ac, 0, 0, 0 );
 
 	ac.one( "accordionbeforeactivate", function( event, ui ) {
+		ok( !( "originalEvent" in event ) );
 		equals( ui.oldHeader.size(), 0 );
 		equals( ui.oldContent.size(), 0 );
 		equals( ui.newHeader.size(), 1 );
@@ -63,6 +67,7 @@ test( "beforeActivate", function() {
 	state( ac, 0, 0, 0 );
 
 	ac.one( "accordionbeforeactivate", function( event, ui ) {
+		equals( event.originalEvent.type, "click" );
 		equals( ui.oldHeader.size(), 0 );
 		equals( ui.oldContent.size(), 0 );
 		equals( ui.newHeader.size(), 1 );
