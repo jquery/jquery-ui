@@ -275,7 +275,7 @@ $.widget( "ui.accordion", {
 		}
 
 		// trying to collapse, simulate a click on the currently active header
-		active = active || this.active;
+		active = active || this.active[ 0 ];
 
 		this._eventHandler({
 			target: active,
