@@ -98,6 +98,7 @@ $.widget( "ui.tabs", {
 
 			this.lis.eq( o.active ).addClass( "ui-tabs-active ui-state-active" );
 
+			// TODO: we need to remove this or add it to accordion
 			// seems to be expected behavior that the activate callback is fired
 			self.element.queue( "tabs", function() {
 				self._trigger( "activate", null, self._ui( self.active[ 0 ], panel[ 0 ] ) );
@@ -278,40 +279,49 @@ $.widget( "ui.tabs", {
 		}
 	},
 
-	_showTab: function( clicked, show, event ) {
-		var self = this;
+	_showTab: function( event, eventData ) {
+		var that = this;
 
-		$( clicked ).closest( "li" ).addClass( "ui-tabs-active ui-state-active" );
+		$( eventData.newTab ).closest( "li" ).addClass( "ui-tabs-active ui-state-active" );
 
-		if ( this.showFx ) {
-			self.running = true;
-			show.hide()
-				.animate( showFx, showFx.duration || "normal", function() {
-					self._resetStyle( show, showFx );
-					self.running = false;
-					self._trigger( "activate", event, self._ui( clicked, show[ 0 ] ) );
+		if ( that.showFx ) {
+			that.running = true;
+			eventData.newPanel
+				// TODO: why are we hiding? old code?
+				.hide()
+				.animate( that.showFx, that.showFx.duration || "normal", function() {
+					that._resetStyle( $( this ), that.showFx );
+					that.running = false;
+					that._trigger( "activate", event, eventData );
 				});
 		} else {
-			show.show();
-			self._trigger( "activate", event, self._ui( clicked, show[ 0 ] ) );
+			eventData.newPanel.show();
+			that._trigger( "activate", event, eventData );
 		}
 	},
 
-	_hideTab: function( clicked, $hide ) {
-		var self = this;
+	// TODO: combine with _showTab()
+	_hideTab: function( event, eventData ) {
+		var that = this;
 
-		if ( this.hideFx ) {
-			self.running = true;
-			$hide.animate( hideFx, hideFx.duration || "normal", function() {
-				self.running = false;
-				self.lis.removeClass( "ui-tabs-active ui-state-active" );
-				self._resetStyle( $hide, hideFx );
-				self.element.dequeue( "tabs" );
+		if ( that.hideFx ) {
+			that.running = true;
+			eventData.oldPanel.animate( that.hideFx, that.hideFx.duration || "normal", function() {
+				that.running = false;
+				eventData.oldTab.closest( "li" ).removeClass( "ui-tabs-active ui-state-active" );
+				that._resetStyle( $( this ), that.hideFx );
+				that.element.dequeue( "tabs" );
+				if ( !eventData.newPanel.length ) {
+					that._trigger( "activate", event, eventData );
+				}
 			});
 		} else {
-			self.lis.removeClass( "ui-tabs-active ui-state-active" );
-			$hide.hide();
-			self.element.dequeue( "tabs" );
+			eventData.oldTab.closest( "li" ).removeClass( "ui-tabs-active ui-state-active" );
+			eventData.oldPanel.hide();
+			that.element.dequeue( "tabs" );
+			if ( !eventData.newPanel.length ) {
+				that._trigger( "activate", event, eventData );
+			}
 		}
 	},
 
@@ -375,14 +385,14 @@ $.widget( "ui.tabs", {
 				options.active = false;
 
 				that.element.queue( "tabs", function() {
-					that._hideTab( clicked, toHide );
+					that._hideTab( event, eventData );
 				}).dequeue( "tabs" );
 
 				clicked[ 0 ].blur();
 				return;
 			} else if ( !toHide.length ) {
 				that.element.queue( "tabs", function() {
-					that._showTab( clicked, toShow, event );
+					that._showTab( event, eventData );
 				});
 
 				// TODO make passing in node possible, see also http://dev.jqueryui.com/ticket/3171
@@ -397,11 +407,11 @@ $.widget( "ui.tabs", {
 		if ( toShow.length ) {
 			if ( toHide.length ) {
 				that.element.queue( "tabs", function() {
-					that._hideTab( clicked, toHide );
+					that._hideTab( event, eventData );
 				});
 			}
 			that.element.queue( "tabs", function() {
-				that._showTab( clicked, toShow, event );
+				that._showTab( event, eventData );
 			});
 
 			that.load( that.anchors.index( clicked ) );
