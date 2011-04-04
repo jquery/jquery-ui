@@ -68,7 +68,7 @@ test( "beforeActivate", function() {
 });
 
 test( "activate", function() {
-	expect( 20 );
+	expect( 21 );
 	var ac = $( "#list1" ).accordion({
 		active: false,
 		collapsible: true
@@ -107,6 +107,16 @@ test( "activate", function() {
 		equals( ui.newContent.size(), 0 );
 	});
 	ac.accordion( "option", "active", false );
+
+	// prevent activation
+	ac.one( "accordionbeforeactivate", function( event ) {
+		ok( true );
+		event.preventDefault();
+	});
+	ac.one( "accordionactivate", function() {
+		ok( false );
+	});
+	ac.accordion( "option", "active", 1 );
 });
 
 }( jQuery ) );
