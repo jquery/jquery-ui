@@ -364,7 +364,7 @@ $.widget( "ui.tabs", {
 
 		options.active = collapsing ? false : that.anchors.index( clicked );
 
-		that.active = clicked;
+		that.active = clickedIsActive ? $() : clicked;
 		if ( that.xhr ) {
 			that.xhr.abort();
 		}
@@ -422,12 +422,12 @@ $.widget( "ui.tabs", {
 		var active = this._findActive( index )[ 0 ];
 
 		// trying to activate the already active panel
-		if ( this.active && active === this.active[ 0 ] ) {
+		if ( active === this.active[ 0 ] ) {
 			return;
 		}
 
 		// trying to collapse, simulate a click on the current active header
-		active = active || this.active;
+		active = active || this.active[ 0 ];
 
 		this._eventHandler({
 			target: active,

@@ -3,7 +3,7 @@
 module( "tabs: events" );
 
 test( "beforeActivate", function() {
-	expect( 26 );
+	expect( 38 );
 
 	var element = $( "#tabs1" ).tabs({
 			// TODO: should be false
@@ -13,7 +13,9 @@ test( "beforeActivate", function() {
 		tabs = element.find( ".ui-tabs-nav a" ),
 		panels = element.find( ".ui-tabs-panel" );
 
+	// from collapsed
 	element.one( "tabsbeforeactivate", function( event, ui ) {
+		ok( !( "originalEvent" in event ) );
 		equals( ui.oldTab.size(), 0 );
 		equals( ui.oldPanel.size(), 0 );
 		equals( ui.newTab.size(), 1 );
@@ -25,7 +27,9 @@ test( "beforeActivate", function() {
 	element.tabs( "option", "active", 0 );
 	tabs_state( element, 1, 0, 0 );
 
+	// switching tabs
 	element.one( "tabsbeforeactivate", function( event, ui ) {
+		equals( event.originalEvent.type, "click" );
 		equals( ui.oldTab.size(), 1 );
 		strictEqual( ui.oldTab[ 0 ], tabs[ 0 ] );
 		equals( ui.oldPanel.size(), 1 );
@@ -36,10 +40,12 @@ test( "beforeActivate", function() {
 		strictEqual( ui.newPanel[ 0 ], panels[ 1 ] );
 		tabs_state( element, 1, 0, 0 );
 	});
-	element.tabs( "option", "active", 1 );
+	tabs.eq( 1 ).click();
 	tabs_state( element, 0, 1, 0 );
 
+	// collapsing
 	element.one( "tabsbeforeactivate", function( event, ui ) {
+		ok( !( "originalEvent" in event ) );
 		equals( ui.oldTab.size(), 1 );
 		strictEqual( ui.oldTab[ 0 ], tabs[ 1 ] );
 		equals( ui.oldPanel.size(), 1 );
@@ -49,6 +55,21 @@ test( "beforeActivate", function() {
 		tabs_state( element, 0, 1, 0 );
 	});
 	element.tabs( "option", "active", false );
+	tabs_state( element, 0, 0, 0 );
+
+	// prevent activation
+	element.one( "tabsbeforeactivate", function( event, ui ) {
+		ok( !( "originalEvent" in event ) );
+		equals( ui.oldTab.size(), 0 );
+		equals( ui.oldPanel.size(), 0 );
+		equals( ui.newTab.size(), 1 );
+		strictEqual( ui.newTab[ 0 ], tabs[ 1 ] );
+		equals( ui.newPanel.size(), 1 );
+		strictEqual( ui.newPanel[ 0 ], panels[ 1 ] );
+		event.preventDefault();
+		tabs_state( element, 0, 0, 0 );
+	});
+	element.tabs( "option", "active", 1 );
 	tabs_state( element, 0, 0, 0 );
 });
 
