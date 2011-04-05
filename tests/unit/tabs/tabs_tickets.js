@@ -46,7 +46,7 @@ test('#3627 - Ajax tab with url containing a fragment identifier fails to load',
 		active: 2,
 		beforeLoad: function( event, ui ) {
 			event.preventDefault();
-			ok(/test.html$/.test( ui.settings.url ), 'should ignore fragment identifier');
+			ok(/test.html$/.test( ui.ajaxSettings.url ), 'should ignore fragment identifier');
 		}
 	});
 });
@@ -64,7 +64,7 @@ test('#4033 - IE expands hash to full url and misinterprets tab as ajax', functi
 		}
 	});
 
-	equals($('a', el).attr('aria-controls'), '#tab', 'aria-contorls attribute is correct');
+	equals($('a', el).attr('aria-controls'), 'tab', 'aria-contorls attribute is correct');
 });
 
 test('#5893 - Sublist in the tab list are considered as tab', function() {

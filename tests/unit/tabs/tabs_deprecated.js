@@ -9,7 +9,7 @@ test( "#4581 - title attribute for remote tabs does not support foreign language
 		selected: 3,
 		beforeLoad: function( event, ui ) {
 			event.preventDefault();
-			equal( ui.panel.id, "∫ßáö_Սե", "proper title" );
+			equal( ui.panel.attr( "id" ), "∫ßáö_Սե", "proper title" );
 		}
 	});
 });
