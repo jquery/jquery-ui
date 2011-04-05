@@ -31,6 +31,28 @@ $.dataSource = function (options) {
 		: new RemoteDataSource(options);
 };
 
+/*
+$.dataSource({
+	source: function(request, response) {
+		$.ajax({
+			dataType: "jsonp",
+			callback: "something",
+			data: {
+				name_startswith: this.options.filter.term
+			},
+			success: function(data) {
+		        response(data.photos.total, $.map( data.photos.photo, function( photo ) {
+					return {
+						src: kite( "http://farm{{farm}}.static.flickr.com/{{server}}/{{id}}_{{secret}}_m.jpg", photo ),
+						href: kite( "http://www.flickr.com/photos/{{owner}}/{{id}}/", photo )
+					}
+				}));
+			}
+		})
+	}
+});
+ */
+
 $.dataSource.oDataSettings = {
     resultsFilter: function (data) {
         this.totalCount = data.d.__count;

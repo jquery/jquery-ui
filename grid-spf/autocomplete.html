@@ -25,6 +25,7 @@
 					featureClass: "P",
 					style: "full",
 					maxRows: take,
+					// name_startsWith: filter.term
 					name_startsWith: filter[0].filterValue
 				});
 			},
@@ -42,6 +43,11 @@
 		$("#city").autocomplete({
 			minLength: 3,
 			source: function(request, response) {
+				/*
+				cities.option("filter", request).refresh(function() {
+					response(cities.toArray());
+				});
+				*/
 				cities
 					.option("filter", {
 						property: "name",
