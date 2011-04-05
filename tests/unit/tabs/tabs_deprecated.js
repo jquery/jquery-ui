@@ -102,7 +102,7 @@ test('spinner', function() {
 });
 
 test('selected', function() {
-	expect(11);
+	expect(10);
 
 	el = $('#tabs1').tabs();
 	equals(el.tabs('option', 'selected'), 0, 'should be 0 by default');
@@ -126,10 +126,6 @@ test('selected', function() {
 	equals(el.tabs('option', 'selected'), -1, 'should be -1 for all tabs unselected');
 	equals( $('li.ui-tabs-selected', el).length, 0, 'no tab should be selected' );
 	equals( $('div:hidden', '#tabs1').length, 3, 'all panels should be hidden' );
-
-	el.tabs('destroy');
-	el.tabs({ selected: null });
-	equals(el.tabs('option', 'selected'), -1, 'should be -1 for all tabs unselected with value null (deprecated)');
 
 	el.tabs('destroy');
 	el.tabs({ selected: 1 });

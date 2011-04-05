@@ -53,14 +53,14 @@ test('active', function() {
 	equals(el.tabs('option', 'active'), 0, 'should be 0 by default');
 
 	el.tabs('destroy');
-	el.tabs({ active: -1 });
-	equals(el.tabs('option', 'active'), -1, 'should be -1 for all tabs deactive');
+	el.tabs({ active: false });
+	equals(el.tabs('option', 'active'), false, 'should be false for all tabs deactive');
 	equals( $('li.ui-tabs-selected', el).length, 0, 'no tab should be active' );
 	equals( $('div:hidden', '#tabs1').length, 3, 'all panels should be hidden' );
 
 	el.tabs('destroy');
 	el.tabs({ active: null });
-	equals(el.tabs('option', 'active'), -1, 'should be -1 for all tabs deactive with value null (deprecated)');
+	equals(el.tabs('option', 'active'), false, 'should be false for all tabs deactive with value null (deprecated)');
 
 	el.tabs('destroy');
 	el.tabs({ active: 1 });

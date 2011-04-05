@@ -136,7 +136,7 @@ test('refresh', function() {
 	var el = $('<div id="tabs"><ul></ul></div>').tabs(),
 		ul = el.find('ul');
 
-	equals(el.tabs('option', 'active'), -1, 'Initially empty, no active tab');
+	equals(el.tabs('option', 'active'), false, 'Initially empty, no active tab');
 
 	ul.append('<li><a href="data/test.html">Test 1</a></li>');
 	el.tabs('refresh');

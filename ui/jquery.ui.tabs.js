@@ -27,10 +27,9 @@ function getNextListId() {
 $.widget( "ui.tabs", {
 	options: {
 		activate: null,
-		// TODO: uncomment (requires fixing code related to active option)
-//		active: null,
-		beforeLoad: null,
+		active: null,
 		beforeActivate: null,
+		beforeLoad: null,
 		collapsible: false,
 		event: "click",
 		fx: null, // e.g. { height: 'toggle', opacity: 'toggle', duration: 200 }
@@ -38,52 +37,58 @@ $.widget( "ui.tabs", {
 	},
 
 	_create: function() {
-		var self = this,
-			o = this.options;
+		var that = this,
+			options = that.options,
+			active = options.active;
 
-		this.running = false;
+		that.running = false;
 
-		this.element.addClass( "ui-tabs ui-widget ui-widget-content ui-corner-all" );
+		that.element.addClass( "ui-tabs ui-widget ui-widget-content ui-corner-all" );
 
-		this._processTabs();
+		that._processTabs();
 
-		// Selected tab
-		// use "selected" option or try to retrieve:
-		// 1. from fragment identifier in url
-		// 2. from selected class attribute on <li>
-		if ( o.active === undefined ) {
+		if ( active === null ) {
+			// check the fragment identifier in the URL
 			if ( location.hash ) {
-				this.anchors.each(function( i, a ) {
-					if ( a.hash == location.hash ) {
-						o.active = i;
+				that.anchors.each(function( i, tab ) {
+					if ( tab.hash === location.hash ) {
+						active = i;
 						return false;
 					}
 				});
 			}
-			if ( typeof o.active !== "number" && this.lis.filter( ".ui-tabs-active" ).length ) {
-				o.active = this.lis.index( this.lis.filter( ".ui-tabs-active" ) );
+
+			// check for a tab marked active via a class
+			if ( active === null ) {
+				active = that.lis.filter( ".ui-tabs-active" ).index();
 			}
-			o.active = o.active || ( this.lis.length ? 0 : -1 );
-		} else if ( o.active === null ) { // usage of null is deprecated, TODO remove in next release
-			o.active = -1;
+
+			// no active tab, set to false
+			if ( active === null || active === -1 ) {
+				active = that.lis.length ? 0 : false;
+			}
 		}
 
-		// sanity check - default to first tab...
-		o.active = ( ( o.active >= 0 && this.anchors[ o.active ] ) || o.active < 0 )
-			? o.active
-			: 0;
+		// handle numbers: negative, out of range
+		if ( active !== false ) {
+			active = this.lis.eq( active ).index();
+			if ( active === -1 ) {
+				active = options.collapsible ? false : 0;
+			}
+		}
+		options.active = active;
 
 		// Take disabling tabs via class attribute from HTML
 		// into account and update option properly.
-		if ( $.isArray( o.disabled ) ) {
-			o.disabled = $.unique( o.disabled.concat(
+		if ( $.isArray( options.disabled ) ) {
+			options.disabled = $.unique( options.disabled.concat(
 				$.map( this.lis.filter( ".ui-state-disabled" ), function( n, i ) {
-					return self.lis.index( n );
+					return that.lis.index( n );
 				})
 			) ).sort();
 		}
 
-		this._setupFx( o.fx );
+		this._setupFx( options.fx );
 
 		this._refresh();
 
@@ -91,30 +96,24 @@ $.widget( "ui.tabs", {
 		this.panels.hide();
 		this.lis.removeClass( "ui-tabs-active ui-state-active" );
 		// check for length avoids error when initializing empty list
-		if ( o.active >= 0 && this.anchors.length ) {
-			this.active = this._findActive( o.active );
-			var panel = self._getPanelForTab( this.active );
+		if ( options.active !== false && this.anchors.length ) {
+			this.active = this._findActive( options.active );
+			var panel = that._getPanelForTab( this.active );
 
 			panel.show();
 
-			this.lis.eq( o.active ).addClass( "ui-tabs-active ui-state-active" );
+			this.lis.eq( options.active ).addClass( "ui-tabs-active ui-state-active" );
 
 			// TODO: we need to remove this or add it to accordion
 			// seems to be expected behavior that the activate callback is fired
-			self.element.queue( "tabs", function() {
-				self._trigger( "activate", null, self._ui( self.active[ 0 ], panel[ 0 ] ) );
+			that.element.queue( "tabs", function() {
+				that._trigger( "activate", null, that._ui( that.active[ 0 ], panel[ 0 ] ) );
 			});
 
-			this.load( o.active );
+			this.load( options.active );
 		} else {
 			this.active = $();
 		}
-
-		// clean up to avoid memory leaks in certain versions of IE 6
-		$( window ).bind( "unload.tabs", function() {
-			self.lis.add( self.anchors ).unbind( ".tabs" );
-			self.lis = self.anchors = self.panels = null;
-		});
 	},
 
 	_setOption: function( key, value ) {
@@ -163,36 +162,27 @@ $.widget( "ui.tabs", {
 	},
 
 	_refresh: function() {
-		var self = this,
-			o = this.options;
+		var that = this,
+			options = that.options;
 
-		this.element
-			.toggleClass( "ui-tabs-collapsible", o.collapsible );
+		this.element.toggleClass( "ui-tabs-collapsible", options.collapsible );
+		this.list.addClass("ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all" );
+		this.lis.addClass( "ui-state-default ui-corner-top" );
+		this.panels.addClass( "ui-tabs-panel ui-widget-content ui-corner-bottom" );
 
-		this.list
-			.addClass( "ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all" );
-
-		this.lis
-			.addClass( "ui-state-default ui-corner-top" );
-
-		this.panels
-			.addClass( "ui-tabs-panel ui-widget-content ui-corner-bottom" );
-
-		if ( !o.disabled.length ) {
-			o.disabled = false;
+		if ( !options.disabled.length ) {
+			options.disabled = false;
 		}
 
 		// disable tabs
 		for ( var i = 0, li; ( li = this.lis[ i ] ); i++ ) {
-			$( li ).toggleClass( "ui-state-disabled", $.inArray( i, o.disabled ) != -1 );
+			$( li ).toggleClass( "ui-state-disabled", $.inArray( i, options.disabled ) !== -1 );
 		}
 
-		this._setupEvents( o.event );
+		this._setupEvents( options.event );
 
 		// remove all handlers, may run on existing tabs
 		this.lis.unbind( ".tabs" );
-
-
 		this._focusable( this.lis );
 		this._hoverable( this.lis );
 	},
@@ -907,11 +897,14 @@ if ( $.uiBackCompat !== false ) {
 
 		prototype._create = function() {
 			var options = this.options;
-			if ( options.active === undefined && options.selected !== undefined ) {
-				options.active = options.selected;
+			if ( options.active === null && options.selected !== undefined ) {
+				options.active = options.selected === -1 ? false : options.selected;
 			}
 			_create.call( this );
 			options.selected = options.active;
+			if ( options.selected === false ) {
+				options.selected = -1;
+			}
 		};
 
 		prototype._setOption = function( key, value ) {
@@ -921,13 +914,22 @@ if ( $.uiBackCompat !== false ) {
 			}
 			_setOption.apply( this, arguments );
 			if ( key === "active" ) {
-				options.selected = options.active ;
+				if ( key === - 1 ) {
+					key = false;
+				}
+				options.selected = options.active;
+				if ( options.selected === false ) {
+					options.selected = -1;
+				}
 			}
 		};
 
 		prototype._eventHandler = function( event ) {
 			_eventHandler.apply( this, arguments );
-			this.options.selected = this.options.active ;
+			this.options.selected = this.options.active;
+			if ( this.options.selected === false ) {
+				this.options.selected = -1;
+			}
 		};
 	}( jQuery, jQuery.ui.tabs.prototype ) );
 

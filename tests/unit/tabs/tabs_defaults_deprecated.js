@@ -1,7 +1,7 @@
 commonWidgetTests( "tabs", {
 	defaults: {
 		activate: null,
-//		active: null,
+		active: null,
 		add: null,
 		ajaxOptions: null,
 		beforeLoad: null,
