@@ -2,16 +2,22 @@
 
 module("tabs (deprecated): core");
 
-test( "#4581 - title attribute for remote tabs does not support foreign languages", function() {
-	expect( 1 );
+test( "panel ids", function() {
+	expect( 2 );
 
-	$( "#tabs2" ).tabs({
-		selected: 3,
-		beforeLoad: function( event, ui ) {
-			event.preventDefault();
-			equal( ui.panel.attr( "id" ), "∫ßáö_Սե", "proper title" );
-		}
+	var element = $( "#tabs2" ).tabs();
+
+	element.one( "tabsbeforeload", function( event, ui ) {
+		equal( ui.panel.attr( "id" ), "∫ßáö_Սե", "from title attribute" );
+		event.preventDefault();
 	});
+	element.tabs( "option", "active", 3 );
+
+	element.one( "tabsbeforeload", function( event, ui ) {
+		ok( /^ui-tabs-\d+$/.test( ui.panel.attr( "id" ) ), "generated id" );
+		event.preventDefault();
+	});
+	element.tabs( "option", "active", 2 );
 });
 
 module("tabs (deprecated): options");
@@ -326,14 +332,19 @@ test( "length", function() {
 	equals( $( "#tabs2" ).tabs().tabs( "length" ), 4, "ajax tabs with missing panels" );
 });
 
-test('url', function() {
-	el = $('#tabs2').tabs();
-	var tab = el.find('a:eq(3)'),
-		url = tab.attr('href');
+test( "url", function() {
+	expect( 2 );
 
-	el.tabs('url', 3, "data/test2.html");
-	equals(tab.attr('href'), 'data/test2.html', 'Url was updated');
-	tab.attr('href', url );
+	var element = $( "#tabs2" ).tabs(),
+		tab = element.find( "a" ).eq( 3 );
+
+	element.tabs( "url", 3, "data/test2.html" );
+	equals( tab.attr( "href" ), "data/test2.html", "href was updated" );
+	element.one( "tabsbeforeload", function( event, ui ) {
+		equals( ui.ajaxSettings.url, "data/test2.html", "ajaxSettings.url" );
+		event.preventDefault();
+	});
+	element.tabs( "option", "active", 3 );
 });
 
 }( jQuery ) );

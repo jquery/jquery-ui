@@ -128,8 +128,7 @@ $.widget( "ui.tabs", {
 	},
 
 	_tabId: function( a ) {
-		return ( $( a ).attr( "aria-controls" ) || "" ) ||
-			"ui-tabs-" + getNextTabId();
+		return $( a ).attr( "aria-controls" ) || "ui-tabs-" + getNextTabId();
 	},
 
 	_sanitizeSelector: function( hash ) {
@@ -860,7 +859,7 @@ if ( $.uiBackCompat !== false ) {
 		};
 	}( jQuery, jQuery.ui.tabs.prototype ) );
 
-	// _tabId method
+	// panel ids (idPrefix option + title attribute)
 	(function( $, prototype ) {
 		$.extend( prototype.options, {
 			idPrefix: "ui-tabs-"
@@ -868,13 +867,13 @@ if ( $.uiBackCompat !== false ) {
 
 		var _tabId = prototype._tabId;
 		prototype._tabId = function( a ) {
-			return ( $( a ).attr( "aria-controls" ) || "" ) ||
+			return $( a ).attr( "aria-controls" ) ||
 				a.title && a.title.replace( /\s/g, "_" ).replace( /[^\w\u00c0-\uFFFF-]/g, "" ) ||
 				this.options.idPrefix + getNextTabId();
 		};
 	}( jQuery, jQuery.ui.tabs.prototype ) );
 
-	// _tabId method
+	// _createPanel method
 	(function( $, prototype ) {
 		$.extend( prototype.options, {
 			panelTemplate: "<div></div>"
