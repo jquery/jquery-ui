@@ -319,11 +319,11 @@ test('#5069 - ui.tabs.add creates two tab panels when using a full URL', functio
 	equals(el.children('div').length, el.find('> ul > li').length, 'After add, number of panels should be equal to number of tabs');
 });
 
-test('length', function() {
-	expect(1);
+test( "length", function() {
+	expect( 2 );
 
-	el = $('#tabs1').tabs();
-	equals(el.tabs('length'), $('ul a', el).length, ' should return length');
+	equals( $( "#tabs1" ).tabs().tabs( "length" ), 3, "basic tabs" );
+	equals( $( "#tabs2" ).tabs().tabs( "length" ), 4, "ajax tabs with missing panels" );
 });
 
 test('url', function() {
