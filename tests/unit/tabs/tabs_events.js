@@ -163,10 +163,10 @@ test( "beforeLoad", function() {
 		strictEqual( ui.panel[ 0 ], panel[ 0 ], "panel" );
 		equals( ui.panel.html(), "", "panel html" );
 		event.preventDefault();
-		tabs_state( element, 1, 0, 0, 0 );
+		tabs_state( element, 1, 0, 0, 0, 0 );
 	});
 	element.tabs( "option", "active", 2 );
-	tabs_state( element, 0, 0, 1, 0 );
+	tabs_state( element, 0, 0, 1, 0, 0 );
 	equals( panel.html(), "", "panel html after" );
 
 	// click, change panel content
@@ -184,10 +184,10 @@ test( "beforeLoad", function() {
 		strictEqual( ui.panel[ 0 ], panel[ 0 ], "panel" );
 		ui.panel.html( "<p>testing</p>" );
 		event.preventDefault();
-		tabs_state( element, 0, 0, 1, 0 );
+		tabs_state( element, 0, 0, 1, 0, 0 );
 	});
 	element.find( ".ui-tabs-nav a" ).eq( 3 ).click();
-	tabs_state( element, 0, 0, 0, 1 );
+	tabs_state( element, 0, 0, 0, 1, 0 );
 	equals( panel.html(), "<p>testing</p>", "panel html after" );
 });
 

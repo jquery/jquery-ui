@@ -11,7 +11,7 @@ test( "panel ids", function() {
 		equal( ui.panel.attr( "id" ), "∫ßáö_Սե", "from title attribute" );
 		event.preventDefault();
 	});
-	element.tabs( "option", "active", 3 );
+	element.tabs( "option", "active", 4 );
 
 	element.one( "tabsbeforeload", function( event, ui ) {
 		ok( /^ui-tabs-\d+$/.test( ui.panel.attr( "id" ) ), "generated id" );
@@ -329,7 +329,7 @@ test( "length", function() {
 	expect( 2 );
 
 	equals( $( "#tabs1" ).tabs().tabs( "length" ), 3, "basic tabs" );
-	equals( $( "#tabs2" ).tabs().tabs( "length" ), 4, "ajax tabs with missing panels" );
+	equals( $( "#tabs2" ).tabs().tabs( "length" ), 5, "ajax tabs with missing panels" );
 });
 
 test( "url", function() {
