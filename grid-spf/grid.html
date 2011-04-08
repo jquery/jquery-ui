@@ -104,7 +104,7 @@
 
         var firstNameFilterFlag = false;
         $("#firstNameFilterButton").button().click(function (){
-            if(firstNameFilter)
+            if(firstNameFilterFlag)
             {
                 developers.option('filter', null);
                 developers.refresh();

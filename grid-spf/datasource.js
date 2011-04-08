@@ -300,21 +300,33 @@ LocalDataSource.prototype = $.extend({}, new DataSource(), {
 
     _createFilterFunction: function (filter) {
         var self = this;
+        var newFilters;
         if (Object.prototype.toString.call(filter) === "[object Array]") {
-            var comparisonFunctions = $.map(filter, function (subfilter) {
-                return createFunction(subfilter);
+            newFilters = $.map(filter, function (subfilter) {
+                    return createFunction(subfilter);
             });
-            return function (item) {
-                for (var i = 0; i < comparisonFunctions.length; i++) {
-                    if (!comparisonFunctions[i](item)) {
-                        return false;
-                    }
-                }
-                return true;
-            };
-        } else {
-            return createFunction(filter);
         }
+        else
+        {
+            newFilters = [createFunction(filter)];
+        }
+
+        var allFilters = [];
+        if(Object.prototype.toString.call(self._filter) === "[object Function]") { // There are existing filters
+            allFilters = allFilters.concat(self._filter);
+        }
+        allFilters = allFilters.concat (newFilters);
+
+
+
+        return function (item) {
+            for (var i = 0; i < allFilters.length; i++) {
+                if (!allFilters[i](item)) {
+                    return false;
+                }
+            }
+            return true;
+        };
 
         function createFunction (filter) {
             var processedFilter = self._processFilter(filter),
