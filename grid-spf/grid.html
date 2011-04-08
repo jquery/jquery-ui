@@ -100,9 +100,49 @@
 		$( "#developers-local" ).grid({
 			columns: [ "firstName", "lastName", "country" ],
 			source: developers
-		});
+        });
+
+        var firstNameFilterFlag = false;
+        $("#firstNameFilterButton").button().click(function (){
+            if(firstNameFilter)
+            {
+                developers.option('filter', null);
+                developers.refresh();
+                firstNameFilterFlag = false;
+                return;
+            }
+            developers.option('filter',{property:'firstName', value:'Scott', operator:'=='});
+            developers.refresh();
+            firstNameFilterFlag = true;
+        });
+        var lastNameFilterFlag = false;
+        $("#lastNameFilterButton").button().click(function(){
+            if(lastNameFilterFlag)
+            {
+                developers.option('filter', null);
+                developers.refresh();
+                lastNameFilterFlag = false;
+                return;
+            }
+            developers.option('filter', {property: 'lastName', value:'Worth', operator:'=='});
+            developers.refresh ();
+            lastNameFilterFlag = true;
+        });
+        var countryFilterFlag = false;
+        $("#countryFilterButton").button().click(function(){
+            if(countryFilterFlag)
+            {
+                developers.option('filter', null);
+                developers.refresh();
+                countryFilterFlag = false;
+                return;
+            }
+            developers.option('filter', {property: 'country', value:'USA', operator:'=='});
+            developers.refresh ();
+            countryFilterFlag = true;
+        });
+
 		
-		$("#filterDevelopers").filterControl(developers);
 		$("#sortDevelopers").sorterControl(developers);
 		$("#pageDevelopers").pager({
 			source: developers
@@ -151,9 +191,9 @@
 <h2>local data source</h2>
 <p id="filterDevelopers">
 	Filter:
-	<button data-filter-field="firstName" data-filter-value="Scott" type="button">Toggle firstName=Scott</button>
-	<button data-filter-field="lastName" data-filter-value="Worth"  type="button">Toggle lastName=Worth</button>
-	<button data-filter-field="country" data-filter-value="USA" type="button">Toggle country=USA</button>
+	<button id="firstNameFilterButton" type="button">Toggle firstName=Scott</button>
+	<button id="lastNameFilterButton" type="button">Toggle lastName=Worth</button>
+	<button id="countryFilterButton" type="button">Toggle country=USA</button>
 </p>
 <p id="sortDevelopers">
 	Sort:
