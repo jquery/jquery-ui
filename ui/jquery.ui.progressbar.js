@@ -31,7 +31,7 @@ $.widget( "ui.progressbar", {
 				"aria-valuenow": this._value()
 			});
 
-		this.valueDiv = $( "<div class='ui-progressbar-value ui-widget-header ui-corner-left'></div>" )
+		this.valueDiv = $( "<div class='ui-progressbar-value ui-corner-left'></div>" )
 			.appendTo( this.element );
 
 		this.oldValue = this._value();
@@ -94,6 +94,7 @@ $.widget( "ui.progressbar", {
 
 		this.valueDiv
 			.toggleClass( "ui-corner-right", value === this.options.max )
+			.toggleClass( "ui-widget-header", value !== this.min )
 			.width( percentage.toFixed(0) + "%" );
 		this.element.attr( "aria-valuenow", value );
 	}
