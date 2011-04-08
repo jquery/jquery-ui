@@ -141,12 +141,12 @@ $.each( [ "Width", "Height" ], function( i, name ) {
 
 	function reduce( elem, size, border, margin ) {
 		$.each( side, function() {
-			size -= parseFloat( $.curCSS( elem, "padding" + this, true) ) || 0;
+			size -= parseFloat( $.curCSS( elem, "padding" + this, true ) ) || 0;
 			if ( border ) {
-				size -= parseFloat( $.curCSS( elem, "border" + this + "Width", true) ) || 0;
+				size -= parseFloat( $.curCSS( elem, "border" + this + "Width", true ) ) || 0;
 			}
 			if ( margin ) {
-				size -= parseFloat( $.curCSS( elem, "margin" + this, true) ) || 0;
+				size -= parseFloat( $.curCSS( elem, "margin" + this, true ) ) || 0;
 			}
 		});
 		return size;

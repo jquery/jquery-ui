@@ -1,58 +1,50 @@
-/*
- * tabs_core.js
- */
-var el;
+(function( $ ) {
 
-(function($) {
+module( "tabs: core" );
 
-module("tabs: core");
-
-test('navigation markup', function() {
-	el = $('#tabs3').tabs();
-	ok($('#tabs3-list').hasClass('ui-tabs-nav'), 'custom markup; allow list to be any descendant');
-	el.tabs('destroy');
-
-	el = $('#tabs4').tabs();
-	ok($('#tabs4-list').hasClass('ui-tabs-nav'), 'first list found becomes nav - ul');
-	el.tabs('destroy');
-
-	el = $('#tabs4a').tabs();
-	ok($('#tabs4a-list').hasClass('ui-tabs-nav'), 'first list found becomes nav - ol');
-	el.tabs('destroy');
-
-	el = $('#tabs5').tabs();
-	ok($('#tabs5-list').hasClass('ui-tabs-nav'), 'empty list can be used');
-	el.tabs('destroy');
+test( "markup structure", function() {
+	expect( 3 );
+	var element = $( "#tabs1" ).tabs();
+	ok( element.hasClass( "ui-tabs" ), "main element is .ui-tabs" );
+	ok( element.find( "ul" ).hasClass( "ui-tabs-nav" ), "list item is .ui-tabs-nav" );
+	equal( element.find( ".ui-tabs-panel" ).length, 3,
+		".ui-tabs-panel elements exist, correct number" );
 });
 
-test('ajax', function() {
-	expect(4);
-	stop();
-	
-	el = $('#tabs2');
-	
-	el.tabs({
-		selected: 2,
-		load: function() {
-			// spinner: default spinner
-			setTimeout(function() {
-				equals($('li:eq(2) > a > span', el).length, 1, "should restore tab markup after spinner is removed");
-				equals($('li:eq(2) > a > span', el).html(), '3', "should restore tab label after spinner is removed");
-				el.tabs('destroy');
-				el.tabs({
-					selected: 2,
-					spinner: '<img src="spinner.gif" alt="">',
-					load: function() {
-						// spinner: image
-						equals($('li:eq(2) > a > span', el).length, 1, "should restore tab markup after spinner is removed");
-						equals($('li:eq(2) > a > span', el).html(), '3', "should restore tab label after spinner is removed");
-						start();
-					}
-				});
-			}, 1);
-		}
+$.each({
+	"deep ul": "#tabs3",
+	"multiple lists, ul first": "#tabs4",
+	"multiple lists, ol first": "#tabs5",
+	"empty list": "#tabs6"
+}, function( type, selector ) {
+	test( "markup structure: " + type, function() {
+		expect( 2 );
+		var element = $( selector ).tabs();
+		ok( element.hasClass( "ui-tabs" ), "main element is .ui-tabs" );
+		ok( $( selector + "-list" ).hasClass( "ui-tabs-nav" ),
+			"list item is .ui-tabs-nav" );
 	});
-	
 });
 
-})(jQuery);
+test( "aria-controls", function() {
+	expect( 7 );
+	var element = $( "#tabs1" ).tabs(),
+		tabs = element.find( ".ui-tabs-nav a" );
+	tabs.each(function() {
+		var tab = $( this );
+		equal( tab.attr( "href" ).substring( 1 ), tab.attr( "aria-controls" ) );
+	});
+
+	element = $( "#tabs2" ).tabs();
+	tabs = element.find( ".ui-tabs-nav a" );
+	equal( tabs.eq( 0 ).attr( "aria-controls" ), "colon:test" );
+	equal( tabs.eq( 1 ).attr( "aria-controls" ), "inline-style" );
+	ok( /^ui-tabs-\d+$/.test( tabs.eq( 2 ).attr( "aria-controls" ) ), "generated id" );
+	equal( tabs.eq( 3 ).attr( "aria-controls" ), "custom-id" );
+});
+
+test( "accessibility", function() {
+	// TODO: add tests
+});
+
+}( jQuery ) );

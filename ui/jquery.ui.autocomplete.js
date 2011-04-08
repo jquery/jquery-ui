@@ -22,7 +22,7 @@ $.widget( "ui.autocomplete", {
 	defaultElement: "<input>",
 	options: {
 		appendTo: "body",
-		autoFocus: true,
+		autoFocus: false,
 		delay: 300,
 		minLength: 1,
 		position: {
@@ -307,8 +307,11 @@ $.widget( "ui.autocomplete", {
 	},
 
 	_response: function( content ) {
-		if ( !this.options.disabled && content && content.length ) {
+		if ( content ) {
 			content = this._normalize( content );
+		}
+		this._trigger( "response", null, { content: content } );
+		if ( !this.options.disabled && content && content.length ) {
 			this._suggest( content );
 			this._trigger( "open" );
 		} else {

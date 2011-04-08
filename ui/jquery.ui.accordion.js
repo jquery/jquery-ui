@@ -275,7 +275,7 @@ $.widget( "ui.accordion", {
 		}
 
 		// trying to collapse, simulate a click on the currently active header
-		active = active || this.active;
+		active = active || this.active[ 0 ];
 
 		this._eventHandler({
 			target: active,
@@ -319,7 +319,7 @@ $.widget( "ui.accordion", {
 				// click on active header, but not collapsible
 				( clickedIsActive && !options.collapsible ) ||
 				// allow canceling activation
-				( this._trigger( "beforeActivate", null, eventData ) === false ) ) {
+				( this._trigger( "beforeActivate", event, eventData ) === false ) ) {
 			return;
 		}
 
@@ -662,7 +662,7 @@ if ( $.uiBackCompat !== false ) {
 				ret = _trigger.call( this, "change", event, data );
 			}
 			return ret;
-		}
+		};
 	}( jQuery, jQuery.ui.accordion.prototype ) );
 }
 

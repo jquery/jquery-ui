@@ -13,7 +13,7 @@ test('#2715 - id containing colon', function() {
 	ok( $('div.ui-tabs-panel:eq(0)', '#tabs2').is(':visible'), 'first panel should be visible' );
 	ok( $('div.ui-tabs-panel:eq(1)', '#tabs2').is(':hidden'), 'second panel should be hidden' );
 
-	el.tabs('select', 1).tabs('select', 0);
+	el.tabs('option', 'active', 1).tabs('option', 'active', 0);
 	ok( $('div.ui-tabs-panel:eq(0)', '#tabs2').is(':visible'), 'first panel should be visible' );
 	ok( $('div.ui-tabs-panel:eq(1)', '#tabs2').is(':hidden'), 'second panel should be hidden' );
 
@@ -30,10 +30,10 @@ test('#???? - panel containing inline style', function() {
 	el = $('#tabs2').tabs();
 	equals(inlineStyle('height'), expected, 'init should not remove inline style');
 
-	el.tabs('select', 1);
+	el.tabs('option', 'active', 1);
 	equals(inlineStyle('height'), expected, 'show tab should not remove inline style');
 
-	el.tabs('select', 0);
+	el.tabs('option', 'active', 0);
 	equals(inlineStyle('height'), expected, 'hide tab should not remove inline style');
 
 });
@@ -42,32 +42,29 @@ test('#3627 - Ajax tab with url containing a fragment identifier fails to load',
 	// http://dev.jqueryui.com/ticket/3627
 	expect(1);
 
-	el = $('#tabs2').tabs();
-	
-	ok(/test.html$/.test( $('a:eq(2)', el).data('load.tabs') ), 'should ignore fragment identifier');
-
+	el = $('#tabs2').tabs({
+		active: 2,
+		beforeLoad: function( event, ui ) {
+			event.preventDefault();
+			ok(/test.html$/.test( ui.ajaxSettings.url ), 'should ignore fragment identifier');
+		}
+	});
 });
 
 test('#4033 - IE expands hash to full url and misinterprets tab as ajax', function() {
 	// http://dev.jqueryui.com/ticket/4033
 	expect(1);
 	
-	el = $('<div><ul><li><a href="#tab">Tab</a></li></ul><div id="tab"></div></div>')
-			.appendTo('#main').tabs();
-    
-	equals($('a', el).data('load.tabs'), undefined, 'should not create ajax tab');
-	
-});
+	el = $('<div><ul><li><a href="#tab">Tab</a></li></ul><div id="tab"></div></div>');
+	el.appendTo('#main');
+	el.tabs({
+		beforeLoad: function( event, ui ) {
+			event.preventDefault();
+			ok( false, 'should not be an ajax tab');
+		}
+	});
 
-test('#5069 - ui.tabs.add creates two tab panels when using a full URL', function() {
-	// http://dev.jqueryui.com/ticket/5069
-	expect(2);
-	
-	el = $('#tabs2').tabs();
-	equals(el.children('div').length, el.find('> ul > li').length, 'After creation, number of panels should be equal to number of tabs');
-	el.tabs('add', '/ajax_html_echo', 'Test');
-	equals(el.children('div').length, el.find('> ul > li').length, 'After add, number of panels should be equal to number of tabs');
-	
+	equals($('a', el).attr('aria-controls'), 'tab', 'aria-contorls attribute is correct');
 });
 
 test('#5893 - Sublist in the tab list are considered as tab', function() {
@@ -75,22 +72,9 @@ test('#5893 - Sublist in the tab list are considered as tab', function() {
 	expect(1);
 
 	el = $('#tabs6').tabs();
-	equals(el.tabs( "length" ), 2, 'should contain 2 tab');
+	equals(el.data("tabs").anchors.length, 2, 'should contain 2 tab');
 
 });
-
-asyncTest( "#4581 - title attribute for remote tabs does not support foreign languages", function() {
-	expect( 1 );
-	
-	$( "#tabs2" ).tabs({
-		selected: 3,
-		load: function( event, ui ) {
-			equal( ui.panel.id, "∫ßáö_Սե", "proper title" );
-			start();
-		}
-	});
-});
-
 
 test('#6710 - selectors are global', function() {
 	// http://bugs.jqueryui.com/ticket/6710
@@ -108,7 +92,7 @@ test('#6710 - selectors are global', function() {
 		</div>\
 	</div>');
 	container.find('#tabs_6710').tabs();
-	ok( container.find('#tabs-2_6710').hasClass('ui-tabs-hide'),  'should find panels and add corresponding classes' );
+	ok( container.find('#tabs-2_6710').is(':hidden'),  'should find panels and add corresponding classes' );
 });
 
 

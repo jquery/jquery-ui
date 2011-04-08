@@ -116,7 +116,9 @@ $.widget.bridge = function( name, object ) {
 				}
 				var methodValue = instance[ options ].apply( instance, args );
 				if ( methodValue !== instance && methodValue !== undefined ) {
-					returnValue = methodValue;
+					returnValue = methodValue.jquery ?
+						returnValue.pushStack( methodValue.get() ) :
+						methodValue;
 					return false;
 				}
 			});
@@ -176,9 +178,7 @@ $.Widget.prototype = {
 		this._trigger( "create" );
 		this._init();
 	},
-	_getCreateOptions: function() {
-		return $.metadata && $.metadata.get( this.element[0] )[ this.widgetName ];
-	},
+	_getCreateOptions: $.noop,
 	_create: $.noop,
 	_init: $.noop,
 
@@ -208,19 +208,34 @@ $.Widget.prototype = {
 	},
 
 	option: function( key, value ) {
-		var options = key;
+		var options = key,
+			parts,
+			curOption,
+			i;
 
 		if ( arguments.length === 0 ) {
 			// don't return a reference to the internal hash
 			return $.extend( {}, this.options );
 		}
 
-		if  (typeof key === "string" ) {
+		if ( typeof key === "string" ) {
 			if ( value === undefined ) {
 				return this.options[ key ];
 			}
+			// handle nested keys, e.g., "foo.bar" => { foo: { bar: ___ } }
 			options = {};
-			options[ key ] = value;
+			parts = key.split( "." );
+			key = parts.shift();
+			if ( parts.length ) {
+				curOption = options[ key ] = $.extend( true, {}, this.options[ key ] );
+				for ( i = 0; i < parts.length - 1; i++ ) {
+					curOption[ parts[ i ] ] = curOption[ parts[ i ] ] || {};
+					curOption = curOption[ parts[ i ] ];
+				}
+				curOption[ parts.pop() ] = value;
+			} else {
+				options[ key ] = value;
+			}
 		}
 
 		this._setOptions( options );
@@ -337,5 +352,12 @@ $.Widget.prototype = {
 			event.isDefaultPrevented() );
 	}
 };
+
+// DEPRECATED
+if ( $.uiBackCompat !== false ) {
+	$.Widget.prototype._getCreateOptions = function() {
+		return $.metadata && $.metadata.get( this.element[0] )[ this.widgetName ];
+	}
+}
 
 })( jQuery );

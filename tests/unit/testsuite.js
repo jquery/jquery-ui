@@ -26,8 +26,6 @@ var privateMethods = [
 	"_createWidget",
 	"destroy",
 	"option",
-	"enable",
-	"disable",
 	"_trigger"
 ];
 
@@ -96,7 +94,8 @@ window.domEqual = function( selector, modifier, message ) {
 	var expected = extract($(selector));
 	modifier($(selector));
 	
-	deepEqual( extract($(selector)), expected, message );
+	var actual = extract($(selector));
+	QUnit.push( QUnit.equiv(actual, expected), actual, expected, message );
 }
 
 }());
