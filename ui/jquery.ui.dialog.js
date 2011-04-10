@@ -340,8 +340,11 @@ $.widget("ui.dialog", {
 		if ( hasButtons ) {
 			$.each( buttons, function( name, props ) {
 				props = $.isFunction( props ) ?
-					{ click: props, text: name } :
+					{ click: props } :
 					props;
+				if (props.text == null) {
+					props.text = name;
+				}
 				var button = $( "<button type='button'>" )
 					.attr( props, true )
 					.unbind( "click" )
