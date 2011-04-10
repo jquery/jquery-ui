@@ -352,6 +352,13 @@ $.widget("ui.dialog", {
 						props.click.apply( self.element[0], arguments );
 					})
 					.appendTo( uiButtonSet );
+				if (props.isDefault) {
+					self.uiDialog.keyup(function(e) {
+						if (e.which === 13) {
+							button.click();
+						}
+					});
+				}
 				if ( $.fn.button ) {
 					button.button();
 				}
