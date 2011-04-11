@@ -1,118 +1,6 @@
-(function ($) {
+(function( $, undefined ) {
 
-// this is what a widget-based datasource could look like
-$.widget("ui.datasource", {
-	defaultElement: null,
-	_create: function() {
-		this.source = $.isArray(this.options.source)
-			? new LocalDataSource(this.options)
-			: new RemoteDataSource(this.options);
-		this.source.refresh();
-	},
-	toArray: function() {
-		return this.source.toArray();
-	}
-});
-
-// an ad-hoc implementation
-var datasource = {
-	toArray: function() {
-		return localData;
-	},
-	refresh: function() {
-		$(this).trigger("datasourceresponse");
-	}
-};
-
-// port from https://github.com/brado23/jquery-ui/tree/borisGrid/grid-datamodel2
-$.dataSource = function (options) {
-	return $.isArray(options.source)
-		? new LocalDataSource(options)
-		: new RemoteDataSource(options);
-};
-
-/*
-$.dataSource({
-	source: function(request, response) {
-		$.ajax({
-			dataType: "jsonp",
-			callback: "something",
-			data: {
-				name_startswith: this.options.filter.term
-			},
-			success: function(data) {
-		        response(data.photos.total, $.map( data.photos.photo, function( photo ) {
-					return {
-						src: kite( "http://farm{{farm}}.static.flickr.com/{{server}}/{{id}}_{{secret}}_m.jpg", photo ),
-						href: kite( "http://www.flickr.com/photos/{{owner}}/{{id}}/", photo )
-					}
-				}));
-			}
-		})
-	}
-});
- */
-
-$.dataSource.oDataSettings = {
-    resultsFilter: function (data) {
-        this.totalCount = data.d.__count;
-        return data.d.results;
-    },
-
-    urlMapper: function (path, queryParams, sort, filter, skip, take) {
-        var questionMark = (path.indexOf("?") < 0 ? "?" : "&");
-        for (param in queryParams) {
-            path = path.split("$" + queryParam).join(queryParams[param]);
-        }
-        path += questionMark + "$format=json" +
-            "&$inlinecount=allpages" +
-            "&$skip=" + (skip || 0) +
-            (take !== null && take !== undefined ? ("&$top=" + take) : "");
-
-        if (sort && sort.length) {
-			var sorts = [];
-			$.each(sort, function (index, sortPart) {
-				sorts[sorts.length] = sortPart.property + (sortPart.direction && sortPart.direction.toLowerCase().indexOf("desc") === 0 ? "%20desc" : "");
-			});
-            path += "&$orderby=" + sorts.join(","); 
-        }
-        if (filter) {
-			// see http://www.odata.org/developers/protocols/uri-conventions#FilterSystemQueryOption
-            filter = Object.prototype.toString.call(filter) === "[object Array]" ? filter : [ filter ];
-			var filters = []
-            $.each(filter, function (index, filterPart) {
-				if (filterPart.filterOperator == "like") {
-					filters[filters.length] = "indexof(" + filterPart.filterProperty + ", '" + filterPart.filterValue + "') ge 0";
-				} else {
-					var operators = {
-						"<": "lt",
-						"<=": "le",
-						">": "gt",
-						">=": "ge",
-						"==": "eq",
-						"!=": "ne"
-					};
-	                filters[filters.length] = filterPart.filterProperty + " " + operators[filterPart.filterOperator] + " " + 
-	                    (typeof filterPart.filterValue === "string" ? ("'" + filterPart.filterValue + "'") : filterPart.filterValue);
-					
-				}
-				
-            });
-			path += "&$filter=" + filters.join(" and ");
-        }
-		console.log("odata url: " + path)
-        return path;
-    }
-}
-
-function DataSource (options) {
-	if (!options) {
-		return;
-	}
-    this._applyOptions(options);
-};
-
-DataSource.prototype = {
+$.widget( "ui.abstractDataSource", {
     _refreshingHandler: null,
     _refreshHandler: null,
 
@@ -123,22 +11,21 @@ DataSource.prototype = {
 
     items: [],
     totalCount: 0,
+    defaultElement: null,
 
-    destroy: function () {
+	options: {
+	},
+
+	min: 0,
+
+    _create: function() {
+	},
+
+	_destroy: function() {
         if (this.itemsArray) {
             delete this.itemsArray.__dataSource__;
             this.itemsArray = null;
         }
-    },
-
-    option: function (option, value) {
-        this._applyOption(option, value);
-        return this;
-    },
-
-    options: function (options) {
-        this._applyOptions(options);
-        return this;
     },
 
     refresh: function (options) {
@@ -169,8 +56,8 @@ DataSource.prototype = {
         return this;
     },
 
-    _applyOption: function (option, value) {
-        switch (option) {
+	_setOption: function( key, value ) {
+        switch (key) {
             case "filter":
                 this._setFilter(value);
                 break;
@@ -190,21 +77,9 @@ DataSource.prototype = {
             case "refresh":
                 this._refreshHandler = value;
                 break;
-
-            default:
-                throw "Unrecognized option '" + option + "'";
         }
-    },
-
-    // N.B.  Null/undefined option values will unset the given option.
-    _applyOptions: function (options) {
-        options = options || {};
-
-        var self = this;
-        $.each([ "filter", "sort", "paging", "refreshing", "refresh" ], function (index, optionName) {
-            self._applyOption(optionName, options[optionName]);
-        });
-    },
+		this._super( "_setOption", key, value );
+	},
 
     _processFilter: function (filter) {
         var filterProperty = filter.property,
@@ -259,18 +134,20 @@ DataSource.prototype = {
     _setSort: function (options) {
 		this._sort = options;
     },
-	
+
 	toArray: function() {
 		return this._items;
 	}
-};
+});
 
-function LocalDataSource (options) {
-    DataSource.call(this, options);
+function LocalDataSource (options)
+{
+    $.ui.abstractDataSource.call(this, options);
     this._inputItems = options.source;
-};
+    this._setOptions (options);
+}
 
-LocalDataSource.prototype = $.extend({}, new DataSource(), {
+LocalDataSource.prototype = $.extend ({}, new $.ui.abstractDataSource(), {
     _inputItems: [],
 
     _applyQuery: function () {
@@ -399,10 +276,13 @@ LocalDataSource.prototype = $.extend({}, new DataSource(), {
     _setFilter: function (filter) {
         this._filter = (!filter || $.isFunction(filter)) ? filter : this._createFilterFunction(filter);
     }
+
 });
 
+
 function RemoteDataSource (options) {
-    DataSource.apply(this, [ options ]);
+    $.ui.abstractDataSource.call(this, options);
+    this._setOptions (options);
 
     this._urlMapper = options.urlMapper || function (path, queryParams) {
         return path + queryParams;
@@ -413,7 +293,7 @@ function RemoteDataSource (options) {
     this._resultsFilter = options.resultsFilter;
 };
 
-RemoteDataSource.prototype = $.extend({}, new DataSource(), {
+RemoteDataSource.prototype = $.extend({}, new $.ui.abstractDataSource(), {
     _urlMapper: null,
     _path: null,
     _queryParams: null,
@@ -450,4 +330,68 @@ RemoteDataSource.prototype = $.extend({}, new DataSource(), {
 	
 });
 
-})(jQuery);
+$.dataSource = function (options) {
+    if($.isArray (options.source))
+    {
+        return new LocalDataSource (options);
+    }
+    else
+    {
+        return new RemoteDataSource (options);
+    }
+
+};
+
+// oDataSettings for the RemoteDataSource
+$.dataSource.oDataSettings = {
+    resultsFilter: function (data) {
+        this.totalCount = data.d.__count;
+        return data.d.results;
+    },
+
+    urlMapper: function (path, queryParams, sort, filter, skip, take) {
+        var questionMark = (path.indexOf("?") < 0 ? "?" : "&");
+        for (param in queryParams) {
+            path = path.split("$" + queryParam).join(queryParams[param]);
+        }
+        path += questionMark + "$format=json" +
+            "&$inlinecount=allpages" +
+            "&$skip=" + (skip || 0) +
+            (take !== null && take !== undefined ? ("&$top=" + take) : "");
+
+        if (sort && sort.length) {
+			var sorts = [];
+			$.each(sort, function (index, sortPart) {
+				sorts[sorts.length] = sortPart.property + (sortPart.direction && sortPart.direction.toLowerCase().indexOf("desc") === 0 ? "%20desc" : "");
+			});
+            path += "&$orderby=" + sorts.join(","); 
+        }
+        if (filter) {
+			// see http://www.odata.org/developers/protocols/uri-conventions#FilterSystemQueryOption
+            filter = Object.prototype.toString.call(filter) === "[object Array]" ? filter : [ filter ];
+			var filters = []
+            $.each(filter, function (index, filterPart) {
+				if (filterPart.filterOperator == "like") {
+					filters[filters.length] = "indexof(" + filterPart.filterProperty + ", '" + filterPart.filterValue + "') ge 0";
+				} else {
+					var operators = {
+						"<": "lt",
+						"<=": "le",
+						">": "gt",
+						">=": "ge",
+						"==": "eq",
+						"!=": "ne"
+					};
+	                filters[filters.length] = filterPart.filterProperty + " " + operators[filterPart.filterOperator] + " " + 
+	                    (typeof filterPart.filterValue === "string" ? ("'" + filterPart.filterValue + "'") : filterPart.filterValue);
+					
+				}
+				
+            });
+			path += "&$filter=" + filters.join(" and ");
+        }
+		console.log("odata url: " + path)
+        return path;
+    }
+}
+})( jQuery );

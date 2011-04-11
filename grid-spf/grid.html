@@ -22,7 +22,7 @@
 		url: "developers.json",
 		async: false,
 		success: function(result) {
-			localDevelopers = result;
+			localDevelopers = eval(result);
 		}
 	});
 	
@@ -91,11 +91,6 @@
 				skip: 0
 			}
 		});
-		
-		var dev2 = $.ui.datasource({
-			source: localDevelopers
-		})
-		//console.log(dev2.toArray());
 
 		$( "#developers-local" ).grid({
 			columns: [ "firstName", "lastName", "country" ],
