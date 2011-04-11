@@ -38,16 +38,11 @@
 				delete filtered[field];
 			} else {
 				filtered[field] = {
-					property: field,
 					value: value,
 					operator: operator
 				};
 			}
-			var filter = [];
-			for (var key in filtered) {
-				filter.push(filtered[key]);
-			}
-			datasource.option("filter", filter).refresh();
+			datasource.option("filter", filtered).refresh();
 			
 			$(this).toggleClass("active");
 		})
@@ -101,7 +96,8 @@
 		$("#sortDevelopers").sorterControl(developers);
 		$("#pageDevelopers").pager({
 			source: developers
-		});
+        });
+
 		
 		developers.refresh();
 		

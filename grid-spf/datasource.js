@@ -56,10 +56,38 @@ $.widget( "ui.abstractDataSource", {
         return this;
     },
 
+    // Takes a nested property list and returns an array with the "property"
+    // variable set
+    //
+    // example input:
+    // [ firstName : {
+    //      value: 'foo',
+    //      operator: '=='},
+    //   lastName: {
+    //      value: 'bar',
+    //      operator: '=='}]
+    //
+    //  corresponding output:
+    //  [ { property: 'firstName',
+    //      value: 'foo',
+    //      operator: '==' },
+    //    { property: 'lastName',
+    //      value: 'bar',
+    //      operator: '==' },
+    _nestedToProperty: function(input)  {
+        output = [];
+        $.each(input, function (key, value) {
+            value.property = value.property ? value.property : key;
+            output.push (value);
+        });
+
+        return output;
+    },
+
 	_setOption: function( key, value ) {
         switch (key) {
             case "filter":
-                this._setFilter(value);
+                this._setFilter(this._nestedToProperty (value));
                 break;
 
             case "sort":
