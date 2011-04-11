@@ -55,7 +55,7 @@ test('active', function() {
 	el.tabs('destroy');
 	el.tabs({ active: false });
 	equals(el.tabs('option', 'active'), false, 'should be false for all tabs deactive');
-	equals( $('li.ui-tabs-selected', el).length, 0, 'no tab should be active' );
+	equals( $('li.ui-tabs-active', el).length, 0, 'no tab should be active' );
 	equals( $('div:hidden', '#tabs1').length, 3, 'all panels should be hidden' );
 
 	el.tabs('destroy');
