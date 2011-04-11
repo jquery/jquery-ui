@@ -78,6 +78,11 @@ $.widget( "ui.tabs", {
 		}
 		options.active = active;
 
+		// don't allow collapsible: false and active: false
+		if ( !options.collapsible && options.active === false ) {
+			options.active = 0;
+		}
+
 		// Take disabling tabs via class attribute from HTML
 		// into account and update option properly.
 		if ( $.isArray( options.disabled ) ) {
@@ -121,6 +126,11 @@ $.widget( "ui.tabs", {
 			// _activate() will handle invalid values and update this.options
 			this._activate( value );
 			return;
+		}
+
+		// setting collapsible: false while collapsed; open first panel
+		if ( key === "collapsible" && !value && this.options.active === false ) {
+			this._activate( 0 );
 		}
 
 		this.options[ key ] = value;
