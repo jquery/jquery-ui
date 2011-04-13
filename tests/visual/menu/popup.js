@@ -29,7 +29,7 @@ $.widget( "ui.popup", {
 		}
 		
 		this.options.trigger
-			.attr( "aria-haspop", true )
+			.attr( "aria-haspopup", true )
 			.attr( "aria-owns", this.element.attr( "id" ) );
 		
 		this.element
@@ -38,9 +38,11 @@ $.widget( "ui.popup", {
 		
 		this._bind(this.options.trigger, {
 			click: function( event ) {
-				event.stopPropagation();
 				event.preventDefault();
-				this._open( event );
+				var that = this;
+				setTimeout(function() {
+					that._open( event );
+				}, 1);
 			}
 		});
 		
@@ -68,6 +70,10 @@ $.widget( "ui.popup", {
 			.removeClass( "ui-popup" )
 			.removeAttr( "aria-hidden" )
 			.removeAttr( "aria-expanded" );
+
+		this.options.trigger
+			.removeAttr( "aria-haspopup" )
+			.removeAttr( "aria-owns" );
 			
 		if ( this.generatedId ) {
 			this.element.removeAttr( "id" );
