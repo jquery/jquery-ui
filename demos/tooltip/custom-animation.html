@@ -11,15 +11,12 @@
 	<link type="text/css" href="../demos.css" rel="stylesheet" />
 	<script type="text/javascript">
 	$(function() {
-		// TODO overhaul this with custom animation API
 		$(".demo").tooltip({
-			open: function() {
-				$(".ui-tooltip").stop(false, true).hide().slideDown();
+			show: {
+				effect: "slideDown"
 			},
-			close: function() {
-				$(".ui-tooltip").stop(false, false).show().slideUp(function() {
-					$(this).remove();
-				});
+			hide: {
+				effect: "slideUp"
 			}
 		});
 	});

@@ -353,6 +353,26 @@ $.Widget.prototype = {
 	}
 };
 
+$.each( { show: "fadeIn", hide: "fadeOut" }, function( method, defaultEffect ) {
+	$.Widget.prototype[ "_" + method ] = function( element, options, callback ) {
+		options = options || {};
+		var hasOptions = !$.isEmptyObject( options ),
+			effectName = options.effect || defaultEffect;
+		options.complete = callback;
+
+		if ( hasOptions && $.effects && $.effects[ effectName ] ) {
+			element[ method ]( options );
+		} else if ( element[ effectName ] ) {
+			element[ effectName ]( options.duration, options.easing, callback );
+		} else {
+			element[ method ]();
+			if ( callback ) {
+				callback.call( element[ 0 ] );
+			}
+		}
+	};
+});
+
 // DEPRECATED
 if ( $.uiBackCompat !== false ) {
 	$.Widget.prototype._getCreateOptions = function() {
