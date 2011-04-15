@@ -111,6 +111,7 @@ $.widget("ui.tooltip", {
 		var tooltip = this._find( target );
 		target.removeAttr( "aria-describedby" );
 		
+		tooltip.stop();
 		this._hide( tooltip, this.options.hide, function() {
 			$( this ).remove();
 		});
