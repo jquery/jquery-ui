@@ -32,7 +32,7 @@ $.widget("ui.menu", {
 			.addClass( "ui-menu ui-widget ui-widget-content ui-corner-all" )
 			.attr({
 				id: this.menuId,
-				role: "listbox"
+				role: "menu"
 			})
 			.bind( "click.menu", function( event ) {
 				var item = $( event.target ).closest( ".ui-menu-item:has(a)" );
@@ -160,41 +160,62 @@ $.widget("ui.menu", {
 	},
 	
 	_destroy: function() {
+		//destroy (sub)menus
 		this.element
+			.removeAttr( "aria-activedescendant" )
+			.find("ul")
+			.andSelf()
 			.removeClass( "ui-menu ui-widget ui-widget-content ui-corner-all" )
-			.removeAttr( "tabIndex" )
 			.removeAttr( "role" )
-			.removeAttr( "aria-activedescendant" );
+			.removeAttr("id")
+			.removeAttr( "aria-labelledby" )
+			.removeAttr( "aria-expanded" )
+			.removeAttr( "aria-hidden" )
+			.show();
 		
-		this.element.children( ".ui-menu-item" )
+		//destroy menu items
+		this.element.find( ".ui-menu-item" )
+			.unbind( ".menu" )
 			.removeClass( "ui-menu-item" )
 			.removeAttr( "role" )
 			.children( "a" )
 			.removeClass( "ui-corner-all ui-state-hover" )
 			.removeAttr( "tabIndex" )
-			.unbind( ".menu" );
+			.removeAttr( "role" )
+			.removeAttr( "aria-haspopup" )
+			.removeAttr( "id" )
+			.children(".ui-icon").remove();		
 	},
 	
 	refresh: function() {
+		var self = this;
 		// initialize nested menus
-		// TODO add role=listbox to these, too? or just the top level menu?
 		var submenus = this.element.find("ul:not(.ui-menu)")
 			.addClass( "ui-menu ui-widget ui-widget-content ui-corner-all" )
+			.attr("role", "menu")
 			.hide()
-		
-		submenus
-			.prev("a")
-			.prepend('<span class="ui-icon ui-icon-carat-1-e"></span>');
-		
+			.attr("aria-hidden", "true")
+			.attr("aria-expanded", "false")
+			;
 		
 		// don't refresh list items that are already adapted
 		var items = submenus.add(this.element).children( "li:not(.ui-menu-item):has(a)" )
 			.addClass( "ui-menu-item" )
-			.attr( "role", "menuitem" );
+			.attr( "role", "presentation" );
 		
 		items.children( "a" )
 			.addClass( "ui-corner-all" )
-			.attr( "tabIndex", -1 );
+			.attr( "tabIndex", -1 )
+			.attr( "role", "menuitem" )
+			.attr("id", function(i) {return self.element.attr("id") + "-" + i});
+		
+		submenus.each(function() {
+			var menu = $(this);
+			var item = menu.prev("a") 
+			item.attr("aria-haspopup", "true")
+			.prepend('<span class="ui-icon ui-icon-carat-1-e"></span>');
+			menu.attr("aria-labelledby", item.attr("id"));
+		});
 	},
 
 	focus: function( event, item ) {
@@ -219,13 +240,8 @@ $.widget("ui.menu", {
 		this.active = item.first()
 			.children( "a" )
 				.addClass( "ui-state-focus" )
-				.attr( "id", function(index, id) {
-					return (self.itemId = id || self.menuId + "-activedescendant");
-				})
 			.end();
-		// need to remove the attribute before adding it for the screenreader to pick up the change
-		// see http://groups.google.com/group/jquery-a11y/msg/929e0c1e8c5efc8f
-		this.element.removeAttr("aria-activedescendant").attr("aria-activedescendant", self.itemId)
+		self.element.attr("aria-activedescendant", self.active.children("a").attr("id"))
 		
 		self.timer = setTimeout(function() {
 			self._close();
@@ -247,10 +263,6 @@ $.widget("ui.menu", {
 		clearTimeout(this.timer);
 		
 		this.active.children( "a" ).removeClass( "ui-state-focus" );
-		// remove only generated id
-		$( "#" + this.menuId + "-activedescendant" ).removeAttr( "id" );
-		this.element.removeAttr( "aria-activedescenant" );
-		this._trigger( "blur", event );
 		this.active = null;
 	},
 
@@ -264,7 +276,7 @@ $.widget("ui.menu", {
 	},
 	
 	_open: function(submenu) {
-		this.element.find(".ui-menu").not(submenu.parents()).hide();
+		this.element.find(".ui-menu").not(submenu.parents()).hide().attr("aria-hidden", "true");
 			
 		var position = $.extend({}, {
 			of: this.active
@@ -273,14 +285,14 @@ $.widget("ui.menu", {
 			: this.options.position
 		);
 
-		submenu.show().position(position);
+		submenu.show().removeAttr("aria-hidden").attr("aria-expanded", "true").position(position);
 		
 		this.active.find(">a:first").addClass("ui-state-active");
 	},
 	
 	closeAll: function() {
 		this.element
-		 .find("ul").hide().end()
+		 .find("ul").hide().attr("aria-hidden", "true").attr("aria-expanded", "false").end()
 		 .find("a.ui-state-active").removeClass("ui-state-active");
 		this.blur();
 		this.activeMenu = this.element;
@@ -288,25 +300,26 @@ $.widget("ui.menu", {
 	
 	_close: function() {
 		this.active.parent()
-		 .find("ul").hide().end()
+		 .find("ul").hide().attr("aria-hidden", "true").attr("aria-expanded", "false").end()
 		 .find("a.ui-state-active").removeClass("ui-state-active");
 	},
 
 	left: function(event) {
-		var newItem = this.active && this.active.parents("li").first();
+		var newItem = this.active && this.active.parents("li:not(.ui-menubar-item)").first();
 		if (newItem && newItem.length) {
-			this.active.parent().hide();
+			this.active.parent().attr("aria-hidden", "true").attr("aria-expanded", "false").hide();
 			this.focus(event, newItem);
 			return true;
 		}
 	},
 
 	right: function(event) {
+		var self= this;
 		var newItem = this.active && this.active.children("ul").children("li").first();
 		if (newItem && newItem.length) {
 			this._open(newItem.parent());
 			var current = this.active;
-			this.focus(event, newItem);
+			setTimeout(function(){self.focus(event, newItem)}, 20);
 			return true;
 		}
 	},
