@@ -129,6 +129,7 @@ $.widget("ui.menubar", {
 			}
 		});
 	},
+	
 	_destroy : function() {
 		var items = this.element.children("li")
 			.removeClass("ui-menubar-item")
@@ -138,17 +139,18 @@ $.widget("ui.menubar", {
 		this.element.removeClass('ui-menubar ui-widget-header ui-helper-clearfix').removeAttr("role", "menubar").unbind(".menubar");;
 		items.unbind("focusin focusout click focus mouseenter keydown");
 		
-			items
-			.removeClass("ui-button ui-widget ui-button-text-only ui-menubar-link")
+		items
+			.removeClass("ui-button ui-widget ui-button-text-only ui-menubar-link ui-state-default")
 			.removeAttr("role", "menuitem")
 			.removeAttr("aria-haspopup", "true")
 			.children("span.ui-button-text").each(function(i, e) {
 				var item = $(this);
 				item.parent().html(item.html());
-			});
-		$(document).unbind(".menubar");
+			})
+			.end()
+			.children(".ui-icon").remove();
 
-		//TODO remove icons
+		$(document).unbind(".menubar");
 		
 		this.element.find(":ui-menu").menu("destroy")
 		.show()
