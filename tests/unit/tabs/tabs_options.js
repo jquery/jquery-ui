@@ -10,10 +10,11 @@ test( "{ active: default }", function() {
 	tabs_state( element, 1, 0, 0 );
 	element.tabs( "destroy" );
 
-	window.location.hash = "#fragment-3";
+	location.hash = "#fragment-3";
 	element = $( "#tabs1" ).tabs();
 	equals( element.tabs( "option", "active" ), 2, "should be 2 based on URL" );
 	tabs_state( element, 0, 0, 1 );
+	element.tabs( "destroy" );
 });
 
 test( "{ active: false }", function() {
@@ -82,6 +83,17 @@ if ( $.uiBackCompat === false ) {
 		tabs_state( element, 1, 0, 0 );
 	});
 }
+
+test( "active - mismatched tab/panel order", function() {
+	expect( 3 );
+
+	location.hash = "#tabs7-2";
+	var element = $( "#tabs7" ).tabs();
+	equals( element.tabs( "option", "active" ), 1, "should be 1 based on URL" );
+	tabs_state( element, 0, 1 );
+	element.tabs( "option", "active", 0 );
+	tabs_state( element, 1, 0 );	
+});
 
 test( "{ collapsible: false }", function() {
 	expect( 4 );
