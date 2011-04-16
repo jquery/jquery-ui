@@ -579,7 +579,8 @@ $.widget("ui.selectmenu", {
 	_moveSelection: function(amt) {
 		var currIndex = parseInt(this._selectedOptionLi().data('index'), 10);
 		var newIndex = currIndex + amt;
-		return this._optionLis.eq(newIndex).trigger('mouseup');
+		// do not loop when using up key
+		if (newIndex >= 0 )  return this._optionLis.eq(newIndex).trigger('mouseup');
 	},
 
 	_moveFocus: function(amt) {
