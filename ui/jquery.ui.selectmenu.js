@@ -281,10 +281,13 @@ $.widget("ui.selectmenu", {
 				.bind("click.selectmenu", function() {
 					return false;
 				})
-				.bind('mouseover.selectmenu focus.selectmenu', function() { 
-					self._selectedOptionLi().addClass(activeClass); 
-					self._focusedOptionLi().removeClass(self.widgetBaseClass + '-item-focus ui-state-hover'); 
-					$(this).removeClass('ui-state-active').addClass(self.widgetBaseClass + '-item-focus ui-state-hover'); 
+				.bind('mouseover.selectmenu focus.selectmenu', function(e) {
+					// no hover if diabled
+					if (!$(e.currentTarget).hasClass(self.namespace + '-state-disabled')) {
+						self._selectedOptionLi().addClass(activeClass); 
+						self._focusedOptionLi().removeClass(self.widgetBaseClass + '-item-focus ui-state-hover'); 
+						$(this).removeClass('ui-state-active').addClass(self.widgetBaseClass + '-item-focus ui-state-hover'); 
+					}
 				})
 				.bind('mouseout.selectmenu blur.selectmenu', function() { 
 					if ($(this).is(self._selectedOptionLi().selector)) {
