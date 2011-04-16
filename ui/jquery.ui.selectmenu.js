@@ -639,7 +639,7 @@ $.widget("ui.selectmenu", {
 
 	disable: function(index, type){
 			//if options is not provided, call the parents disable function
-			if ( !index ) { 
+			if ( index === null ) { 
 				this._setOption( 'disabled', true );
 			} else {
 				if ( type == "optgroup" ) {
