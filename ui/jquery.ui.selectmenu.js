@@ -218,6 +218,7 @@ $.widget("ui.selectmenu", {
 					case $.ui.keyCode.TAB:
 						ret = true;
 						self.close(event, true);
+						$(event.target).parents('li:eq(0)').trigger('mouseup');
 						break;	
 					case $.ui.keyCode.ESCAPE:
 						self.close(event, true);
