@@ -597,11 +597,6 @@ $.widget("ui.selectmenu", {
 			newIndex = this._optionLis.size() - 1;
 		}
 		
-		//Occurs when a full loop has been made
-		if (newIndex === recIndex) { 
-			return false; 
-		}
-		
 		var activeID = this.widgetBaseClass + '-item-' + Math.round(Math.random() * 1000);
 
 		this._focusedOptionLi().find('a:eq(0)').attr('id', '');
