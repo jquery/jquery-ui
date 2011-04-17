@@ -181,14 +181,7 @@ $.widget( "ui.tabs", {
 		this.lis.addClass( "ui-state-default ui-corner-top" );
 		this.panels.addClass( "ui-tabs-panel ui-widget-content ui-corner-bottom" );
 
-		if ( !options.disabled.length ) {
-			options.disabled = false;
-		}
-
-		// disable tabs
-		for ( var i = 0, li; ( li = this.lis[ i ] ); i++ ) {
-			$( li ).toggleClass( "ui-state-disabled", $.inArray( i, options.disabled ) !== -1 );
-		}
+		this._setupDisabled( options.disabled );
 
 		this._setupEvents( options.event );
 
@@ -258,6 +251,23 @@ $.widget( "ui.tabs", {
 					.attr( "id", id )
 					.addClass( "ui-tabs-panel ui-widget-content ui-corner-bottom" )
 					.data( "destroy.tabs", true );
+	},
+
+	_setupDisabled: function( disabled ) {
+		if ( $.isArray( disabled ) ) {
+			if ( !disabled.length ) {
+				disabled = false;
+			} else if ( disabled.length === this.anchors.length ) {
+				disabled = true;
+			}
+		}
+
+		// disable tabs
+		for ( var i = 0, li; ( li = this.lis[ i ] ); i++ ) {
+			$( li ).toggleClass( "ui-state-disabled", ( disabled === true || $.inArray( i, disabled ) !== -1 ) );
+		}
+
+		this.options.disabled = disabled;
 	},
 
 	_setupFx: function( fx ) {
@@ -502,53 +512,37 @@ $.widget( "ui.tabs", {
 	},
 
 	enable: function( index ) {
+		var disabled = this.options.disabled;
+
 		if ( index === undefined ) {
-			for ( var i = 0, len = this.lis.length; i < len; i++ ) {
-				this.enable( i );
+			disabled = false;
+		} else {
+			index = this._getIndex( index );
+			if ( $.isArray( disabled ) ) {
+				disabled = $.map( disabled, function( num ) {
+					return num !== index ? num : null;
+				});
+			} else {
+				disabled = [ index ];
 			}
-			return this;
 		}
-		index = this._getIndex( index );
-		var o = this.options;
-		if ( !o.disabled || ($.isArray( o.disabled ) && $.inArray( index, o.disabled ) == -1 ) ) {
-			return;
-		}
-
-		this.lis.eq( index ).removeClass( "ui-state-disabled" );
-		o.disabled = this.lis.map( function( i ) {
-			return $(this).is( ".ui-state-disabled" ) ? i : null;
-		}).get();
-
-		if ( !o.disabled.length ) {
-			o.disabled = false;
-		}
-
-		return this;
+		this._setupDisabled( disabled );
 	},
 
 	disable: function( index ) {
+		var disabled = this.options.disabled;
+
 		if ( index === undefined ) {
-			for ( var i = 0, len = this.lis.length; i < len; i++ ) {
-				this.disable( i );
+			disabled = true;
+		} else {
+			index = this._getIndex( index );
+			if ( $.isArray( disabled ) ) {
+				disabled = $.merge( [ index ], disabled ).sort();
+			} else {
+				disabled = [ index ];
 			}
-			return this;
 		}
-		index = this._getIndex( index );
-		var o = this.options;
-		if ( !o.disabled || ($.isArray( o.disabled ) && $.inArray( index, o.disabled ) == -1 ) ) {
-			this.lis.eq( index ).addClass( "ui-state-disabled" );
-
-			o.disabled = this.lis.map( function( i ) {
-				return $(this).is( ".ui-state-disabled" ) ? i : null;
-			}).get();
-			
-			if ( o.disabled.length === this.anchors.length ) {
-				o.disabled = true;
-			}
-
-		}
-
-		return this;
+		this._setupDisabled( disabled );
 	},
 
 	load: function( index, event ) {
