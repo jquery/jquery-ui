@@ -130,13 +130,26 @@ $.widget( "ui.tabs", {
 			return;
 		}
 
+		if ( key === "disabled" ) {
+			// don't use the widget factory's disabled handling
+			this._setupDisabled( value );
+			return;
+		}
+
+		this._super( "_setOption", key, value);
+
 		// setting collapsible: false while collapsed; open first panel
 		if ( key === "collapsible" && !value && this.options.active === false ) {
 			this._activate( 0 );
 		}
 
-		this.options[ key ] = value;
-		this.refresh();
+		if ( key === "event" ) {
+			this._setupEvents( value );
+		}
+
+		if ( key === "fx" ) {
+			this._setupFx( value );
+		}
 	},
 
 	_tabId: function( a ) {
