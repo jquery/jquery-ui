@@ -453,9 +453,9 @@ $.widget("ui.selectmenu", {
 			});
 			
 			// if we didnt find it clear the prevChar
-			if (!focusFound) {
+			// if (!focusFound) {
 				//self._prevChar = undefined
-			}
+			// }
 
 			// set a 1 second timeout for sequenctial typeahead
 			//  	keep this set even if we have no matches so it doesnt typeahead somewhere else
@@ -639,8 +639,8 @@ $.widget("ui.selectmenu", {
 	},
 
 	disable: function(index, type){
-			//if options is not provided, call the parents disable function
-			if ( index === null ) { 
+			// if options is not provided, call the parents disable function
+			if ( typeof( index ) == 'undefined' ) {
 				this._setOption( 'disabled', true );
 			} else {
 				if ( type == "optgroup" ) {
@@ -652,8 +652,8 @@ $.widget("ui.selectmenu", {
 	},
 
 	enable: function(index, type) {
-			//if options is not provided, call the parents enable function
-			if ( !index ) {
+			// if options is not provided, call the parents enable function
+			if ( typeof( index ) == 'undefined' ) {
 				this._setOption('disabled', false);
 			} else {
 				if ( type == "optgroup" ) {
