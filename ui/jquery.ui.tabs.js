@@ -513,6 +513,9 @@ $.widget( "ui.tabs", {
 
 	enable: function( index ) {
 		var disabled = this.options.disabled;
+		if ( disabled === false ) {
+			return;
+		}
 
 		if ( index === undefined ) {
 			disabled = false;
@@ -523,7 +526,9 @@ $.widget( "ui.tabs", {
 					return num !== index ? num : null;
 				});
 			} else {
-				disabled = [ index ];
+				disabled = $.map( this.lis, function( li, num ) {
+					return num !== index ? num : null;
+				});
 			}
 		}
 		this._setupDisabled( disabled );
@@ -531,6 +536,9 @@ $.widget( "ui.tabs", {
 
 	disable: function( index ) {
 		var disabled = this.options.disabled;
+		if ( disabled === true ) {
+			return;
+		}
 
 		if ( index === undefined ) {
 			disabled = true;
