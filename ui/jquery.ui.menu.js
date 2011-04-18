@@ -319,6 +319,7 @@ $.widget("ui.menu", {
 		if (newItem && newItem.length) {
 			this._open(newItem.parent());
 			var current = this.active;
+			//timeout so Firefox will not hide activedescendant change in expanding submenu from AT
 			setTimeout(function(){self.focus(event, newItem)}, 20);
 			return true;
 		}

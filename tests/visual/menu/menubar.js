@@ -67,7 +67,6 @@ $.widget("ui.menubar", {
 					return;
 				}
    				event.preventDefault();
-   				event.stopPropagation();
 			   	if (event.type == "click" && menu.is(":visible") && self.active && self.active[0] == menu[0]) {
 					self._close();
 					return;
@@ -111,8 +110,11 @@ $.widget("ui.menubar", {
 		});
 		self._bind(document, {
 			click: function(event) {
-				if (self.open && !$(event.target).closest(".ui-menubar").length) {
-					self._close();
+				if (self.open) {
+					var menubar = $(event.target).closest(".ui-menubar");
+					if (!menubar.length || menubar.get(0) !== self.element.get(0)) {
+						self._close();
+					}
 				}
 			}
 		})
@@ -162,6 +164,8 @@ $.widget("ui.menubar", {
 	},
 	
 	_close: function() {
+		if (!this.active || !this.active.length)
+			return;
 		this.active.menu("closeAll").hide().attr("aria-hidden", "true").attr("aria-expanded", "false");
 		this.active.prev().removeClass("ui-state-active").removeAttr("tabIndex");
 		this.active = null;
