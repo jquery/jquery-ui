@@ -81,7 +81,7 @@ $.widget( "ui.tabs", {
 		options.active = active;
 
 		// don't allow collapsible: false and active: false
-		if ( !options.collapsible && options.active === false ) {
+		if ( !options.collapsible && options.active === false && this.anchors.length ) {
 			options.active = 0;
 		}
 
@@ -170,7 +170,14 @@ $.widget( "ui.tabs", {
 	},
 
 	refresh: function() {
-		var self = this;
+		var self = this,
+			options = this.options,
+			lis = $( " > li:has(a[href])", this.list );
+
+		// Get disabled tabs from class attribute from HTML
+		options.disabled = $.map( lis.filter( ".ui-state-disabled" ), function( n ) {
+			return lis.index( n );
+		});
 
 		this._processTabs();
 
@@ -183,6 +190,20 @@ $.widget( "ui.tabs", {
 				$( panel ).remove();
 			}
 		});
+
+		this.panels.not( this._getPanelForTab( this.active ) ).hide();
+
+		if ( !this.anchors.length ) {
+			options.active = false;
+			this.active = $();
+		} else if ( !this.active || ( this.active && !$.contains( this.list[ 0 ], this.active[ 0 ] ) ) ) {
+			// Activate previous tab
+			var next = options.active - 1;
+			this._activate( next >= 0 ? next : 0 );
+		} else {
+			// Make sure active index is correct
+			options.active = this.anchors.index( this.active );
+		}
 	},
 
 	_refresh: function() {
@@ -840,17 +861,6 @@ if ( $.uiBackCompat !== false ) {
 			});
 
 			this.refresh();
-
-			if ( this.anchors.length == 1 ) {
-				o.active = o.selected = 0;
-				$li.addClass( "ui-tabs-active ui-state-active" );
-				$panel.show();
-				this.element.queue( "tabs", function() {
-					self._trigger( "activate", null, self._ui( self.anchors[ 0 ], self.panels[ 0 ] ) );
-				});
-
-				this.load( 0 );
-			}
 
 			this._trigger( "add", null, this._ui( this.anchors[ index ], this.panels[ index ] ) );
 			return this;

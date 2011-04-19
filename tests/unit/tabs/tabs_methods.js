@@ -86,7 +86,7 @@ test( "disable( index )", function() {
 });
 
 test('refresh', function() {
-	expect(5);
+	expect( 13 );
 
 	var el = $('<div id="tabs"><ul></ul></div>').tabs(),
 		ul = el.find('ul');
@@ -95,22 +95,45 @@ test('refresh', function() {
 
 	ul.append('<li><a href="data/test.html">Test 1</a></li>');
 	el.tabs('refresh');
+	equals( el.tabs('option', 'active'), 0, 'First tab added should be auto active');
+	ok( $( "li:eq(0)", el).is('.ui-tabs-active'), 'First tab should be auto active');
 	equals( el.find('.ui-tabs-panel').length, 1, 'Panel created after refresh');
 
 	ul.find('li').remove();
 	el.tabs('refresh');
 	equals( el.find('.ui-tabs-panel').length, 0, 'Panel removed after refresh');
+	equals( el.tabs('option', 'active'), false, 'No tabs are active');
 
-	ul.append('<li><a href="#test1">Test 1</a></li>');
-	$('<div id="test1">Test Panel 1</div>').insertAfter( ul );
-	el.tabs('refresh');
-	el.tabs('option', 'active', 0);
-	equals( el.tabs('option', 'active'), 0, 'First tab added should be auto active');
-
-	ul.append('<li><a href="#test2">Test 2</a></li>');
-	$('<div id="test2">Test Panel 2</div>').insertAfter( ul );
+	// Hide second tab
+	$('<li><a href="#test1">Test 1</a></li><li><a href="#test2">Test 2</a></li><li><a href="#test3">Test 3</a></li>')
+		.appendTo( ul );
+	$('<div id="test1">Test Panel 1</div><div id="test2">Test Panel 2</div><div id="test3">Test Panel 3</div>')
+		.insertAfter( ul );
 	el.tabs('refresh');
 	equals( el.tabs('option', 'active'), 0, 'Second tab added should not be auto active');
+	equals( $( "#test2", el ).css("display"), "none", 'Second panel is hidden');
+
+	// Make second tab active and then remove the first one
+	el.tabs('option', 'active', 1);
+	el.find('a[href="#test1"]').parent().remove();
+	el.tabs('refresh');
+	equals( el.tabs('option', 'active'), 0, 'Active index correctly updated');
+	ok( el.find('a[href="#test2"]').parent().is('.ui-tabs-active'), 'Tab is still active');
+
+	// Refresh with disabled tabs
+	el.tabs('disable', 1);
+	same( el.tabs('option', 'disabled'), [ 1 ], 'Second tab disabled');
+
+	el.find('a[href="#test3"]').remove();
+	ul.append('<li><a href="#test4">Test 4</a></li>');
+	$('<div id="test4">Test Panel 4</div>').insertAfter( ul );
+	el.tabs('refresh');
+	equals( el.tabs('option', 'disabled'), false, 'Not disabled');
+
+	ul.append('<li class="ui-state-disabled"><a href="#test3">Test 3</a></li>');
+	$('<div id="test3">Test Panel 3</div>').insertAfter( ul );
+	el.tabs('refresh');
+	same( el.tabs('option', 'disabled'), [ 2 ], 'Second tab disabled');
 });
 
 test('load', function() {
