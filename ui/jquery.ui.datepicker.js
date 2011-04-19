@@ -348,29 +348,22 @@ $.extend(Datepicker.prototype, {
 	/* Enable the date picker to a jQuery selection.
 	   @param  target    element - the target input field or division or span */
 	_enableDatepicker: function(target) {
-		var $target = $(target);
-		var inst = $.data(target, PROP_NAME);
-		if (!$target.hasClass(this.markerClassName)) {
-			return;
-		}
-		var nodeName = target.nodeName.toLowerCase();
-		if (nodeName == 'input') {
-			target.disabled = false;
-			inst.trigger.filter('button').
-				each(function() { this.disabled = false; }).end().
-				filter('img').css({opacity: '1.0', cursor: ''});
-		}
-		else if (nodeName == 'div' || nodeName == 'span') {
-			var inline = $target.children('.' + this._inlineClass);
-			inline.children().removeClass('ui-state-disabled');
-		}
-		this._disabledInputs = $.map(this._disabledInputs,
-			function(value) { return (value == target ? null : value); }); // delete entry
+		this._toggleDatepicker(target, false, "1.0");
 	},
 
 	/* Disable the date picker to a jQuery selection.
 	   @param  target    element - the target input field or division or span */
 	_disableDatepicker: function(target) {
+		this._toggleDatepicker(target, true, "0.5");
+		this._disabledInputs[this._disabledInputs.length] = target;
+	},
+
+	/* Toogle  the date picker to a jQuery selection.
+	    @param target       element  - the target input field or division or span
+	    @param isEnabled    boollen  - true if element is enable
+	    @param imageOpacity string   - opacity for image */
+
+	_toggleDatepicker: function (target, isEnabled, imageOpacity) {
 		var $target = $(target);
 		var inst = $.data(target, PROP_NAME);
 		if (!$target.hasClass(this.markerClassName)) {
@@ -378,18 +371,17 @@ $.extend(Datepicker.prototype, {
 		}
 		var nodeName = target.nodeName.toLowerCase();
 		if (nodeName == 'input') {
-			target.disabled = true;
+			target.disabled = isEnabled;
 			inst.trigger.filter('button').
-				each(function() { this.disabled = true; }).end().
-				filter('img').css({opacity: '0.5', cursor: 'default'});
+				each(function() { this.disabled = isEnabled; }).end().
+				filter('img').css({opacity: imageOpacity, cursor: 'default'});
 		}
 		else if (nodeName == 'div' || nodeName == 'span') {
 			var inline = $target.children('.' + this._inlineClass);
-			inline.children().addClass('ui-state-disabled');
+			inline.children().toggleClass('ui-state-disabled', isEnabled);
 		}
 		this._disabledInputs = $.map(this._disabledInputs,
 			function(value) { return (value == target ? null : value); }); // delete entry
-		this._disabledInputs[this._disabledInputs.length] = target;
 	},
 
 	/* Is the first field in a jQuery collection disabled as a datepicker?
