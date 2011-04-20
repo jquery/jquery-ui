@@ -28,6 +28,9 @@ $.widget("ui.menu", {
 		var self = this;
 		this.activeMenu = this.element;
 		this.menuId = this.element.attr( "id" ) || "ui-menu-" + idIncrement++;
+		if (this.element.find(".ui-icon").length) {
+			this.element.addClass("ui-menu-icons");
+		}
 		this.element
 			.addClass( "ui-menu ui-widget ui-widget-content ui-corner-all" )
 			.attr({
@@ -184,7 +187,7 @@ $.widget("ui.menu", {
 		
 		submenus
 			.prev("a")
-			.prepend('<span class="ui-icon ui-icon-carat-1-e"></span>');
+			.prepend('<span class="ui-menu-icon ui-icon ui-icon-carat-1-e"></span>');
 		
 		
 		// don't refresh list items that are already adapted

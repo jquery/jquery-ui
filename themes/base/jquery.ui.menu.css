@@ -39,6 +39,15 @@
 	margin: -1px;
 }
 
-.ui-menu .ui-icon { float: right; }
-
+/* nested menus */
 .ui-menu .ui-menu { position: absolute; }
+
+/* icon support */
+.ui-menu-icons { position: relative; }
+.ui-menu-icons .ui-menu-item a { position: relative; padding-left: 2em; }
+
+/* left-aligned */
+.ui-menu .ui-icon { position: absolute; top: .2em; left: .2em; }
+
+/* right-aligned */
+.ui-menu .ui-menu-icon { position: static; float: right; }
