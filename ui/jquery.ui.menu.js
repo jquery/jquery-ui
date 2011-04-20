@@ -132,13 +132,13 @@ $.widget("ui.menu", {
 				function escape(value) {
 					return value.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
 				}
-				var match = self.widget().children(".ui-menu-item").filter(function() {
+				var match = self.activeMenu.children(".ui-menu-item").filter(function() {
 					return new RegExp("^" + escape(character), "i").test($(this).children("a").text());
 				});
 				var match = skip && match.index(self.active.next()) != -1 ? self.active.nextAll(".ui-menu-item") : match;
 				if (!match.length) {
 					character = String.fromCharCode(event.keyCode);
-					match = self.widget().children(".ui-menu-item").filter(function() {
+					match = self.activeMenu.children(".ui-menu-item").filter(function() {
 						return new RegExp("^" + escape(character), "i").test($(this).children("a").text());
 					});
 				}
