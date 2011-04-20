@@ -38,7 +38,6 @@ $.widget("ui.menubar", {
 				var menu = $(this);
 				if (menu.is(":hidden")) 
 					return;
-				event.stopPropagation();
 				switch (event.keyCode) {
 				case $.ui.keyCode.LEFT:
 					self._left(event);
@@ -119,7 +118,7 @@ $.widget("ui.menubar", {
 			}
 		})
 		self._bind({
-			keyup: function(event) {
+			keydown: function(event) {
 				if (event.keyCode == $.ui.keyCode.ESCAPE && self.open) {
 					if (self.active.menu("left", event) !== true) {
 						var active = self.active;
