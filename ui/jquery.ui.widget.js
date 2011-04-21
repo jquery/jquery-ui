@@ -359,7 +359,9 @@ $.each( { show: "fadeIn", hide: "fadeOut" }, function( method, defaultEffect ) {
 		var hasOptions = !$.isEmptyObject( options ),
 			effectName = options.effect || defaultEffect;
 		options.complete = callback;
-
+		if (options.delay) {
+			element.delay( options.delay );
+		}
 		if ( hasOptions && $.effects && $.effects[ effectName ] ) {
 			element[ method ]( options );
 		} else if ( element[ effectName ] ) {
