@@ -283,17 +283,15 @@ $.widget("ui.menu", {
 	},
 	
 	_open: function(submenu) {
+		clearTimeout(this.timer);
 		this.element.find(".ui-menu").not(submenu.parents()).hide().attr("aria-hidden", "true");
-			
 		var position = $.extend({}, {
 			of: this.active
 		}, $.type(this.options.position) == "function"
 			? this.options.position(this.active)
 			: this.options.position
 		);
-
 		submenu.show().removeAttr("aria-hidden").attr("aria-expanded", "true").position(position);
-		
 		this.active.find(">a:first").addClass("ui-state-active");
 	},
 	
