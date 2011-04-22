@@ -104,7 +104,7 @@ $.widget("ui.menubar", {
 		self._bind({
 			keydown: function(event) {
 				if (event.keyCode == $.ui.keyCode.ESCAPE) {
-					if (self.active.menu("left", event) !== true) {
+					if (self.active && self.active.menu("left", event) !== true) {
 						var active = self.active;
 						self.active.blur();
 						self._close( event );
