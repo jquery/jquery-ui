@@ -214,6 +214,41 @@ $.extend( $.expr[ ":" ], {
 	}
 });
 
+//Initialize high-contrast mode check when we have document.body
+$(function() {
+	// create div for testing if high contrast mode is on or images are turned off
+	var div = document.createElement("div");
+	div.style.borderWidth = "1px";
+	div.style.borderStyle = "solid";
+	div.style.borderTopColor = "red";
+	div.style.borderRightColor = "green";
+	div.style.position = "absolute";
+	div.style.top = "-999px";
+	if ($.browser.msie && parseInt($.browser.version, 10) < 8) {
+		// No support for data urls. The ui-icon class will give it a background image.
+		// Proper caching should mean no additional requests will be made.
+		div.className = "ui-icon";
+	}
+	else {
+		div.style.backgroundImage = "url(data:image/gif;base64,R0lGODlhAQABAID/AMDAwAAAACH5BAEAAAAALAAAAAABAAEAAAEBMgA7)";
+	}
+	$(document.body).append(div);
+	
+	// test it
+	var bkImg = $.curCSS(div, "backgroundImage");
+	$.support.highContrast = ($.curCSS(div, "borderTopColor") == $.curCSS(div, "borderRightColor")) ||
+		(bkImg != null && (bkImg == "none" || bkImg == "url(invalid-url:)"));
+	if ($.support.highContrast) {
+		$("body").addClass("ui-helper-highcontrast");
+	}
+
+	if ($.browser.msie) {
+		div.outerHTML = "";	 // prevent mixed-content warning, see http://support.microsoft.com/kb/925014
+	} else {
+		document.body.removeChild(div);
+	}
+});
+
 // support
 $(function() {
 	var body = document.body,
