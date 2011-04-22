@@ -108,9 +108,16 @@ $.widget("ui.menu", {
 				event.preventDefault();
 				break;
 			case $.ui.keyCode.ENTER:
-				self.select( event );
+				if (self.active.children("a[aria-haspopup='true']").length) {
+					if (self.right( event )) {
+						event.stopImmediatePropagation();
+					}
+				}
+				else {
+					self.select( event );
+					event.stopImmediatePropagation();
+				}
 				event.preventDefault();
-				event.stopImmediatePropagation();
 				break;
 			case $.ui.keyCode.ESCAPE:
 				if ( self.left( event ) ) {
