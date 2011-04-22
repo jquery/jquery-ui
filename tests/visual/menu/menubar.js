@@ -47,14 +47,8 @@ $.widget("ui.menubar", {
 					self._right(event);
 					event.preventDefault();
 					break;
-				case $.ui.keyCode.TAB:
-					self.open= false;
-					break;
 				};
-			}).blur(function( event ) {
-				if (!self.open)
-					self._close( event );
-			});
+			})
 		});
 		items.each(function() {
 			var input = $(this),
@@ -107,19 +101,9 @@ $.widget("ui.menubar", {
 			};			
 			
 		});
-		self._bind(document, {
-			click: function(event) {
-				if (self.open) {
-					var menubar = $(event.target).closest(".ui-menubar");
-					if (!menubar.length || menubar.get(0) !== self.element.get(0)) {
-						self._close();
-					}
-				}
-			}
-		})
 		self._bind({
 			keydown: function(event) {
-				if (event.keyCode == $.ui.keyCode.ESCAPE && self.open) {
+				if (event.keyCode == $.ui.keyCode.ESCAPE) {
 					if (self.active.menu("left", event) !== true) {
 						var active = self.active;
 						self.active.blur();
@@ -127,6 +111,14 @@ $.widget("ui.menubar", {
 						active.prev().focus();
 					}
 				}
+			},
+			focusout : function( event ) {
+				self.closeTimer = setTimeout(function() {
+					self._close( event );
+				}, 100);
+			},
+			focusin :function( event ) {
+				clearTimeout(self.closeTimer);
 			}
 		});
 	},
@@ -158,7 +150,7 @@ $.widget("ui.menubar", {
 		.removeAttr("aria-hidden", "true")
 		.removeAttr("aria-expanded", "false")
 		.removeAttr("tabindex")
-		.unbind("keydown", "blur")
+		.unbind("keydown", "blur", "focusin", "focusout")
 		;
 	},
 	
@@ -168,11 +160,7 @@ $.widget("ui.menubar", {
 		this.active.menu("closeAll").hide().attr("aria-hidden", "true").attr("aria-expanded", "false");
 		this.active.prev().removeClass("ui-state-active").removeAttr("tabIndex");
 		this.active = null;
-		var self = this;
-		// delay for the next focus event to see it as still "open"
-		self.timer = setTimeout(function() {
-			self.open = false;
-		}, 13);
+		self.open = false;
 	},
 	
 	_open: function(event, menu) {
@@ -185,8 +173,6 @@ $.widget("ui.menubar", {
 			this.active.menu("closeAll").hide().attr("aria-hidden", "true").attr("aria-expanded", "false");
 			this.active.prev().removeClass("ui-state-active");
 		}
-		clearTimeout(this.timer);
-		this.open = true;
 		// set tabIndex -1 to have the button skipped on shift-tab when menu is open (it gets focus)
 		var button = menu.prev().addClass("ui-state-active").attr("tabIndex", -1);
 		this.active = menu.show().position({
@@ -196,8 +182,10 @@ $.widget("ui.menubar", {
 		})
 		.removeAttr("aria-hidden").attr("aria-expanded", "true")
 		.menu("focus", event, menu.children("li").first())
-		.focus();
-		
+		.focus()
+		.focusin()
+		;
+		self.open = true;
 	},
 	
 	_prev: function( event, button ) {
