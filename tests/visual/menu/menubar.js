@@ -160,7 +160,7 @@ $.widget("ui.menubar", {
 		this.active.menu("closeAll").hide().attr("aria-hidden", "true").attr("aria-expanded", "false");
 		this.active.prev().removeClass("ui-state-active").removeAttr("tabIndex");
 		this.active = null;
-		self.open = false;
+		this.open = false;
 	},
 	
 	_open: function(event, menu) {
@@ -185,7 +185,7 @@ $.widget("ui.menubar", {
 		.focus()
 		.focusin()
 		;
-		self.open = true;
+		this.open = true;
 	},
 	
 	_prev: function( event, button ) {
