@@ -150,7 +150,7 @@ $.widget("ui.menubar", {
 		.removeAttr("aria-hidden", "true")
 		.removeAttr("aria-expanded", "false")
 		.removeAttr("tabindex")
-		.unbind("keydown", "blur", "focusin", "focusout")
+		.unbind("keydown", "blur")
 		;
 	},
 	
