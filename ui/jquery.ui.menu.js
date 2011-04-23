@@ -229,6 +229,9 @@ $.widget("ui.menu", {
 		// need to remove the attribute before adding it for the screenreader to pick up the change
 		// see http://groups.google.com/group/jquery-a11y/msg/929e0c1e8c5efc8f
 		this.element.removeAttr("aria-activedescendant").attr("aria-activedescendant", self.itemId)
+
+		// highlight active parent menu item, if any
+		this.active.parent().closest(".ui-menu-item").children("a:first").addClass("ui-state-active");
 		
 		self.timer = setTimeout(function() {
 			self._close();
@@ -277,8 +280,6 @@ $.widget("ui.menu", {
 		);
 
 		submenu.show().position(position);
-		
-		this.active.find(">a:first").addClass("ui-state-active");
 	},
 	
 	closeAll: function() {
