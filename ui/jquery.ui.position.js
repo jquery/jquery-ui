@@ -184,17 +184,15 @@ $.ui.position = {
 	fit: {
 		left: function( position, data ) {
 			var win = $( window ),
-				over = data.collisionPosition.left + data.collisionWidth - win.width() - win.scrollLeft();
-			position.left = over > 0 ?
-				position.left - over :
-				Math.max( position.left - data.collisionPosition.left, position.left );
+                overLeft = win.scrollLeft() - data.collisionPosition.left,
+				overRight = data.collisionPosition.left + data.collisionWidth - win.width() - win.scrollLeft();
+			position.left = overLeft > 0 ? position.left + overLeft : (overRight > 0 ? position.left - overRight : Math.max( position.left - data.collisionPosition.left, position.left ));
 		},
 		top: function( position, data ) {
 			var win = $( window ),
-				over = data.collisionPosition.top + data.collisionHeight - win.height() - win.scrollTop();
-			position.top = over > 0 ?
-				position.top - over :
-				Math.max( position.top - data.collisionPosition.top, position.top );
+                overTop = win.scrollTop() - data.collisionPosition.top,
+				overBottom = data.collisionPosition.top + data.collisionHeight - win.height() - win.scrollTop();
+			position.top = overTop > 0 ? position.top + overTop : (overBottom > 0 ? position.top - overBottom : Math.max( position.top - data.collisionPosition.top, position.top ));
 		}
 	},
 
