@@ -22,6 +22,7 @@ commonWidgetTests( "accordion", {
 		activate: null,
 		beforeActivate: null,
 		change: null,
-		changestart: null
+		changestart: null,
+		create: null
 	}
 });

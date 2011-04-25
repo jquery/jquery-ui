@@ -14,6 +14,7 @@ commonWidgetTests( "accordion", {
 
 		// callbacks
 		activate: null,
-		beforeActivate: null
+		beforeActivate: null,
+		create: null
 	}
 });

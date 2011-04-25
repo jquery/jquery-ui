@@ -180,7 +180,7 @@ test("height", function() {
 	expect(3);
 
 	el = $('<div></div>').dialog();
-		equals(dlg().height(), dialog_defaults.minHeight, "default height");
+		equals(dlg().height(), 150, "default height");
 	el.remove();
 
 	el = $('<div></div>').dialog({ height: 237 });
@@ -431,7 +431,7 @@ test("width", function() {
 	expect(3);
 
 	el = $('<div></div>').dialog();
-		equals(dlg().width(), dialog_defaults.width, "default width");
+		equals(dlg().width(), 300, "default width");
 	el.remove();
 
 	el = $('<div></div>').dialog({width: 437 });

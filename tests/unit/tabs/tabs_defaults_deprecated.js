@@ -18,6 +18,7 @@ commonWidgetTests( "tabs", {
 		add: null,
 		beforeActivate: null,
 		beforeLoad: null,
+		create: null,
 		disable: null,
 		enable: null,
 		load: null,

@@ -10,6 +10,7 @@ commonWidgetTests( "tabs", {
 		activate: null,
 		beforeActivate: null,
 		beforeLoad: null,
+		create: null,
 		load: null
 	}
 });

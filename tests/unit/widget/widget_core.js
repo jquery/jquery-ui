@@ -202,6 +202,7 @@ test( "merge multiple option arguments", function() {
 	$.widget( "ui.testWidget", {
 		_create: function() {
 			same( this.options, {
+				create: null,
 				disabled: false,
 				option1: "value1",
 				option2: "value2",
@@ -249,6 +250,7 @@ test( "._getCreateOptions()", function() {
 		},
 		_create: function() {
 			same( this.options, {
+				create: null,
 				disabled: false,
 				option1: "override1",
 				option2: "value2",
@@ -418,6 +420,7 @@ test( ".option() - getter", function() {
 
 	var options = div.testWidget( "option" );
 	same( options, {
+		create: null,
 		disabled: false,
 		foo: "bar",
 		baz: 5,

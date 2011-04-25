@@ -155,7 +155,10 @@ $.Widget.prototype = {
 	widgetEventPrefix: "",
 	defaultElement: "<div>",
 	options: {
-		disabled: false
+		disabled: false,
+
+		// callbacks
+		create: null
 	},
 	_createWidget: function( options, element ) {
 		element = $( element || this.defaultElement || this )[ 0 ];

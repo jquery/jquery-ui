@@ -15,6 +15,7 @@ commonWidgetTests( "autocomplete", {
 		// callbacks
 		change: null,
 		close: null,
+		create: null,
 		focus: null,
 		open: null,
 		response: null,
