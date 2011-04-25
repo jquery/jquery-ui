@@ -181,19 +181,52 @@ $.fn.position = function( options ) {
 };
 
 $.ui.position = {
-	fit: {
 		left: function( position, data ) {
 			var win = $( window ),
                 overLeft = win.scrollLeft() - data.collisionPosition.left,
 				overRight = data.collisionPosition.left + data.collisionWidth - win.width() - win.scrollLeft();
-			position.left = overLeft > 0 ? position.left + overLeft : (overRight > 0 ? position.left - overRight : Math.max( position.left - data.collisionPosition.left, position.left ));
+            /*
+            Cases considered:
+            1) element width does not fit. Left align on left border of screen
+            2) element is too far left, bring back on left side of screen
+            3) element is too far right, bring back on right side of the screen
+            4) set element accordingly while making sure it's more than leftMargin from the left border of the document
+             */
+
+            if(data.collisionWidth > win.width()) {
+                position.left = win.scrollLeft() + position.left - data.collisionPosition.left;
+            } else if( overLeft > 0 ) {
+                position.left = position.left + overLeft;
+            } else if( overRight > 0) {
+                position.left = position.left - overRight;
+            } else {
+                position.left = Math.max( position.left - data.collisionPosition.left, position.left );
+            }
 		},
 		top: function( position, data ) {
 			var win = $( window ),
                 overTop = win.scrollTop() - data.collisionPosition.top,
 				overBottom = data.collisionPosition.top + data.collisionHeight - win.height() - win.scrollTop();
-			position.top = overTop > 0 ? position.top + overTop : (overBottom > 0 ? position.top - overBottom : Math.max( position.top - data.collisionPosition.top, position.top ));
+
+            /*
+            Cases considered:
+            1) element height does not fit. Top align on top border of screen
+            2) element is too far up, bring back on top of screen
+            3) element is too far down, bring back on bottom of the screen
+            4) set element accordingly while making sure it's more than topMargin from the top of the document
+             */
+
+            if( data.collisionHeight > win.height()) {
+                position.top = win.scrollTop() + position.top - data.collisionPosition.top;
+            } else if(overTop > 0) {
+                position.top = position.top + overTop;
+            } else if(overBottom > 0) {
+                position.top = position.top - overBottom;
+            } else {
+                position.top = Math.max( position.top - data.collisionPosition.top, position.top );
+            }
 		}
+
 	},
 
 	flip: {
