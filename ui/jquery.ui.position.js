@@ -194,9 +194,7 @@ $.ui.position = {
             4) set element accordingly while making sure it's more than leftMargin from the left border of the document
              */
 
-            if(data.collisionWidth > win.width()) {
-                position.left = win.scrollLeft() + position.left - data.collisionPosition.left;
-            } else if( overLeft > 0 ) {
+            if( data.collisionWidth > win.width() || overLeft > 0 ) {
                 position.left = position.left + overLeft;
             } else if( overRight > 0) {
                 position.left = position.left - overRight;
@@ -217,9 +215,7 @@ $.ui.position = {
             4) set element accordingly while making sure it's more than topMargin from the top of the document
              */
 
-            if( data.collisionHeight > win.height()) {
-                position.top = win.scrollTop() + position.top - data.collisionPosition.top;
-            } else if(overTop > 0) {
+            if( data.collisionHeight > win.height() || overTop > 0 ) {
                 position.top = position.top + overTop;
             } else if(overBottom > 0) {
                 position.top = position.top - overBottom;
@@ -229,7 +225,6 @@ $.ui.position = {
 		}
 
 	},
-
 	flip: {
 		left: function( position, data ) {
 			if ( data.at[ 0 ] === center ) {
