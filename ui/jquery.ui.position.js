@@ -181,6 +181,7 @@ $.fn.position = function( options ) {
 };
 
 $.ui.position = {
+	fit: {
 		left: function( position, data ) {
 			var win = $( window ),
                 overLeft = win.scrollLeft() - data.collisionPosition.left,
