@@ -417,6 +417,16 @@ test( "collision: flip, with margin", function() {
 	}, { top: 0, left: 0 }, "right bottom" );
 });
 
+test( "fractions", function() {
+	$( "#fractions-element" ).position({
+		my: "left top",
+		at: "left top",
+		of: "#fractions-parent",
+		collision: "none"
+	});
+	same( $( "#fractions-element" ).offset(), $( "#fractions-parent" ).offset(), "left top, left top" );
+});
+
 //test( "bug #5280: consistent results (avoid fractional values)", function() {
 //	var wrapper = $( "#bug-5280" ),
 //		elem = wrapper.children(),
