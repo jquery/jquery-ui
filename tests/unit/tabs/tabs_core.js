@@ -26,6 +26,22 @@ $.each({
 	});
 });
 
+// #5893 - Sublist in the tab list are considered as tab
+test( "nested list", function() {
+	expect( 1 );
+
+	var element = $( "#tabs6" ).tabs();
+	equals( element.data( "tabs" ).anchors.length, 2, "should contain 2 tab" );
+});
+
+test( "disconnected from DOM", function() {
+	expect( 2 );
+
+	var element = $( "#tabs1" ).remove().tabs();
+	equals( element.find( ".ui-tabs-nav" ).length, 1, "should initialize nav" );
+	equals( element.find( ".ui-tabs-panel" ).length, 3, "should initialize panels" );
+});
+
 test( "aria-controls", function() {
 	expect( 7 );
 	var element = $( "#tabs1" ).tabs(),

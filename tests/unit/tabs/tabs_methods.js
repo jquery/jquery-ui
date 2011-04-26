@@ -1,61 +1,6 @@
-/*
- * tabs_methods.js
- */
-(function($) {
+(function( $ ) {
 
-module("tabs: methods");
-
-test('init', function() {
-	expect(9);
-
-	el = $('#tabs1').tabs();
-
-	ok(true, '.tabs() called on element');
-	ok( el.is('.ui-tabs.ui-widget.ui-widget-content.ui-corner-all'), 'attach classes to container');
-	ok( $('ul', el).is('.ui-tabs-nav.ui-helper-reset.ui-helper-clearfix.ui-widget-header.ui-corner-all'), 'attach classes to list' );
-	ok( $('div:eq(0)', el).is('.ui-tabs-panel.ui-widget-content.ui-corner-bottom'), 'attach classes to panel' );
-	ok( $('li:eq(0)', el).is('.ui-tabs-active.ui-state-active.ui-corner-top'), 'attach classes to active li');
-	ok( $('li:eq(1)', el).is('.ui-state-default.ui-corner-top'), 'attach classes to inactive li');
-	equals( el.tabs('option', 'active'), 0, 'active option set' );
-	equals( $('li', el).index( $('li.ui-tabs-active', el) ), 0, 'second tab active');
-	equals( $('div', el).index( $('div:hidden', '#tabs1') ), 1, 'second panel should be hidden' );
-});
-
-test('init with hash', function() {
-	expect(5);
-	
-	//set a hash in the url
-	location.hash = '#fragment-2';
-	
-	//selection of tab with divs ordered differently than list
-	el = $('#tabs1').tabs();
-	
-	equals(el.tabs('option', 'active'), 1, 'second tab should be active');
-	
-	ok(!$('#tabs1 ul li:eq(0)').is('.ui-tabs-active.ui-state-active'), 'first tab should not be selected nor active');
-	ok($('#tabs1 div:eq(0)').is(':hidden'), 'first div for first tab should be hidden');
-	
-	ok($('#tabs1 ul li:eq(1)').is('.ui-tabs-active.ui-state-active'), 'second tab should be selected and active');
-	ok(!$('#tabs1 div:eq(1)').is(':hidden'), 'second div for second tab should not be hidden');
-});
-
-test('init mismatched order with hash', function() {
-	expect(5);
-	
-	//set a hash in the url
-	location.hash = '#tabs7-2';
-	
-	//selection of tab with divs ordered differently than list
-	el = $('#tabs7').tabs();
-	
-	equals(el.tabs('option', 'active'), 1, 'second tab should be active');
-	
-	ok(!$('#tabs7-list li:eq(0)').is('.ui-tabs-active.ui-state-active'), 'first tab should not be selected nor active');
-	ok($('#tabs7 div:eq(1)').is(':hidden'), 'second div for first tab should be hidden');
-	
-	ok($('#tabs7-list li:eq(1)').is('.ui-tabs-active.ui-state-active'), 'second tab should be selected and active');
-	ok(!$('#tabs7 div:eq(0)').is(':hidden'), 'first div for second tab should not be hidden');
-});
+module( "tabs: methods" );
 
 test('destroy', function() {
 	expect(6);
@@ -162,4 +107,4 @@ test('load', function() {
 	ok(false, "missing test - untested code is broken code.");
 });
 
-})(jQuery);
+}( jQuery ) );

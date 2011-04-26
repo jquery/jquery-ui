@@ -29,7 +29,19 @@
 	function tabs_state( tabs ) {
 		var expected = $.makeArray( arguments ).slice( 1 );
 		var actual = tabs.find( ".ui-tabs-nav li" ).map(function() {
-			return $( this ).hasClass( "ui-state-active" ) ? 1 : 0;
+			var tab = $( this ),
+				panel = $( $.ui.tabs.prototype._sanitizeSelector(
+					"#" + tab.find( "a" ).attr( "aria-controls" ) ) ),
+				tabIsActive = tab.hasClass( "ui-state-active" ),
+				panelIsActive = panel.is( ":visible" );
+
+			if ( tabIsActive && panelIsActive ) {
+				return 1;
+			}
+			if ( !tabIsActive && !panelIsActive ) {
+				return 0;
+			}
+			return -1; // mixed state - invalid
 		}).get();
 		same( actual, expected );
 	}

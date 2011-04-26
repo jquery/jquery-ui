@@ -28,6 +28,9 @@ $.widget("ui.menu", {
 		var self = this;
 		this.activeMenu = this.element;
 		this.menuId = this.element.attr( "id" ) || "ui-menu-" + idIncrement++;
+		if (this.element.find(".ui-icon").length) {
+			this.element.addClass("ui-menu-icons");
+		}
 		this.element
 			.addClass( "ui-menu ui-widget ui-widget-content ui-corner-all" )
 			.attr({
@@ -139,13 +142,13 @@ $.widget("ui.menu", {
 				function escape(value) {
 					return value.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
 				}
-				var match = self.widget().children(".ui-menu-item").filter(function() {
+				var match = self.activeMenu.children(".ui-menu-item").filter(function() {
 					return new RegExp("^" + escape(character), "i").test($(this).children("a").text());
 				});
 				var match = skip && match.index(self.active.next()) != -1 ? self.active.nextAll(".ui-menu-item") : match;
 				if (!match.length) {
 					character = String.fromCharCode(event.keyCode);
-					match = self.widget().children(".ui-menu-item").filter(function() {
+					match = self.activeMenu.children(".ui-menu-item").filter(function() {
 						return new RegExp("^" + escape(character), "i").test($(this).children("a").text());
 					});
 				}
@@ -220,7 +223,7 @@ $.widget("ui.menu", {
 			var menu = $(this);
 			var item = menu.prev("a") 
 			item.attr("aria-haspopup", "true")
-			.prepend('<span class="ui-icon ui-icon-carat-1-e"></span>');
+			.prepend('<span class="ui-menu-icon ui-icon ui-icon-carat-1-e"></span>');
 			menu.attr("aria-labelledby", item.attr("id"));
 		});
 	},
@@ -249,6 +252,9 @@ $.widget("ui.menu", {
 				.addClass( "ui-state-focus" )
 			.end();
 		self.element.attr("aria-activedescendant", self.active.children("a").attr("id"))
+
+		// highlight active parent menu item, if any
+		this.active.parent().closest(".ui-menu-item").children("a:first").addClass("ui-state-active");
 		
 		self.timer = setTimeout(function() {
 			self._close();
@@ -292,7 +298,6 @@ $.widget("ui.menu", {
 			: this.options.position
 		);
 		submenu.show().removeAttr("aria-hidden").attr("aria-expanded", "true").position(position);
-		this.active.find(">a:first").addClass("ui-state-active");
 	},
 	
 	closeAll: function() {

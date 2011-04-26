@@ -35,7 +35,7 @@ $.widget( "ui.popup", {
 		this.element
 			.addClass("ui-popup")
 		this._close();
-		
+
 		this._bind(this.options.trigger, {
 			click: function( event ) {
 				event.preventDefault();
@@ -46,6 +46,10 @@ $.widget( "ui.popup", {
 			}
 		});
 		
+		this._bind(this.element, {
+			blur: "_close"
+		});
+
 		this._bind({
 			keyup: function( event ) {
 				if (event.keyCode == $.ui.keyCode.ESCAPE && this.element.is( ":visible" )) {
@@ -94,6 +98,10 @@ $.widget( "ui.popup", {
 			.attr( "aria-expanded", true )
 			.position( position )
 			.focus();
+
+		// take trigger out of tab order to allow shift-tab to skip trigger
+		this.options.trigger.attr("tabindex", -1);
+
 		this.open = true;
 		this._trigger( "open", event );
 	},
@@ -103,6 +111,9 @@ $.widget( "ui.popup", {
 			.hide()
 			.attr( "aria-hidden", true )
 			.attr( "aria-expanded", false );
+
+		this.options.trigger.attr("tabindex", 0);
+
 		this.open = false;
 		this._trigger( "close", event );
 	}

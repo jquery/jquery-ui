@@ -26,13 +26,15 @@ function getNextListId() {
 
 $.widget( "ui.tabs", {
 	options: {
-		activate: null,
 		active: null,
-		beforeActivate: null,
-		beforeLoad: null,
 		collapsible: false,
 		event: "click",
 		fx: null, // e.g. { height: 'toggle', opacity: 'toggle', duration: 200 }
+
+		// callbacks
+		activate: null,
+		beforeActivate: null,
+		beforeLoad: null,
 		load: null
 	},
 
