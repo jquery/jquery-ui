@@ -16,6 +16,7 @@
 
 	//Helper function to control the split on each animation
 	function startSplitAnim( el, o, animation, next ) {
+		
 		//Support for pieces
 		if ( ( !o.rows || !o.columns ) && o.pieces ) {
 			o.rows = o.columns = Math.round( Math.sqrt( o.pieces ) );
@@ -93,6 +94,7 @@
 	 * 	pieces
 	 */
 	$.effects.piecer = function( el, o ){
+		
 		//Support pieces
 		if ( ( !o.rows || !o.columns ) && o.pieces ) {
 			o.rows = o.columns = Math.round( Math.sqrt( o.pieces ) );
@@ -154,6 +156,7 @@
 	}
 
 	$.effects.effect.build = function( o ){
+		
 		/*Options:
 		 * 		random,
 		 * 		reverse, 
@@ -194,7 +197,7 @@
 			//Sets mode for toggle
 			opt.mode = $.effects.setMode( el, opt.mode );
 
-			opt.show = 0 + ( opt.mode == 'show' );
+			opt.show = opt.mode === 'show';
 
 			function animate( width, height, interval, duration, row, column, documentCoords, parentCoords, callback ) {	    		
 				var random = opt.random ? Math.abs( opt.random ) : 0, 
@@ -213,7 +216,7 @@
 				properties.left -= parentCoords.left;
 
 				if ( opt.fade ) {
-					properties.opacity = opt.show;
+					properties.opacity = ( opt.show ? 1 : 0 );
 					el.css( 'opacity', opt.show ? 0 : '' );
 				}
 
@@ -260,6 +263,7 @@
 	}
 
 	$.effects.effect.pinwheel = function( o ) {
+		
 		/*Options:
 		 * 		random,
 		 * 		reverse, 
@@ -299,7 +303,7 @@
 			//Sets mode for toggle
 			opt.mode = $.effects.setMode( el, opt.mode );
 			
-			opt.show = 0 + ( opt.mode == 'show' );
+			opt.show = opt.mode === 'show';
 
 			function animate( width, height, interval, duration, row, column, documentCoords, parentCoords, callback ) {
 				var random = opt.random ? Math.abs( opt.random ) : 0, 
@@ -332,7 +336,7 @@
 				}
 
 				if ( opt.fade ) {
-					properties.opacity = opt.show;
+					properties.opacity = ( opt.show ? 1 : 0 );
 					startProperties.opacity = 1;
 				}
 
@@ -366,6 +370,7 @@
 	}
 	
 	$.effects.effect.blockfade = function( o ) {
+		
 		/*Options:
 		 * 		random,
 		 * 		reverse, 
@@ -399,7 +404,7 @@
 			//Sets mode for toggle
 			opt.mode = $.effects.setMode( el, opt.mode );
 
-			opt.show = 0 + ( opt.mode == 'show' );
+			opt.show = opt.mode === 'show';
 
 			function animate( width, height, interval, duration, row, column, documentCoords, parentCoords, callback ) {
 				var random = opt.random ? Math.abs( opt.random ) : 0, 
@@ -414,7 +419,7 @@
 					el.css( 'opacity', 0 );
 				}
 						
-				el.delay( delay ).animate( { opacity: opt.show }, duration, opt.easing, callback );
+				el.delay( delay ).animate( { opacity: ( opt.show ? 1 : 0 ) }, duration, opt.easing, callback );
 			}
 
 			startSplitAnim( el, opt, animate, next );
@@ -422,6 +427,7 @@
 	}
 	
 	$.effects.effect.sexplode = function( o ) {
+		
 		/*Options:
 		 * 		random,
 		 * 		reverse, 
@@ -438,7 +444,7 @@
 		 * 		show,
 		 * 		crop
 		 */
-
+		
 		return this.queue( function( next ) {
 
 			var opt = $.extend( {
@@ -463,7 +469,7 @@
 				opt.reverse = !opt.reverse;
 			}
 
-			opt.show = 0 + ( opt.mode == 'show' );
+			opt.show = opt.mode === 'show';
 
 			function animate( width, height, interval, duration, row, column, documentCoords, parentCoords, callback ) {
 				var el = $( this ),
@@ -483,7 +489,7 @@
 				properties = $.extend( {}, startProperties );
 				
 				if ( opt.fade ) {
-					properties.opacity = opt.show;
+					properties.opacity = ( opt.show ? 1 : 0 );
 					startProperties.opacity = 1;
 				}
 
@@ -556,7 +562,7 @@
 			//Support for toggle
 			opt.mode = $.effects.setMode( el, opt.mode );
 			
-			opt.show = 0 + ( opt.mode == 'show' );
+			opt.show = opt.mode === 'show';
 
 			function animate( width, height, interval, duration, row, column, documentCoords, parentCoords, callback ) {
 				var random = opt.random ? Math.abs( opt.random ) : 0, 
