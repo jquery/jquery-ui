@@ -22,7 +22,7 @@
 		url: "developers.json",
 		async: false,
 		success: function(result) {
-			localDevelopers = result;
+			localDevelopers = eval(result);
 		}
 	});
 	
@@ -38,16 +38,11 @@
 				delete filtered[field];
 			} else {
 				filtered[field] = {
-					property: field,
 					value: value,
 					operator: operator
 				};
 			}
-			var filter = [];
-			for (var key in filtered) {
-				filter.push(filtered[key]);
-			}
-			datasource.option("filter", filter).refresh();
+			datasource.option("filter", filtered).refresh();
 			
 			$(this).toggleClass("active");
 		})
@@ -91,11 +86,6 @@
 				skip: 0
 			}
 		});
-		
-		var dev2 = $.ui.datasource({
-			source: localDevelopers
-		})
-		//console.log(dev2.toArray());
 
 		$( "#developers-local" ).grid({
 			columns: [ "firstName", "lastName", "country" ],
@@ -106,7 +96,8 @@
 		$("#sortDevelopers").sorterControl(developers);
 		$("#pageDevelopers").pager({
 			source: developers
-		});
+        });
+
 		
 		developers.refresh();
 		
