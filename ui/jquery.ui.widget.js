@@ -11,6 +11,24 @@
 
 var slice = Array.prototype.slice;
 
+function extend( target ) {
+	var input = slice.call( arguments, 1 ),
+		inputIndex = 0,
+		inputLength = input.length,
+		key,
+		value;
+	for ( ; inputIndex < inputLength; inputIndex++ ) {
+		for ( key in input[ inputIndex ] ) {
+			value = input[ inputIndex ][ key ];
+			if (input[ inputIndex ].hasOwnProperty( key ) && value !== undefined ) {
+				target[ key ] = $.isPlainObject( value ) ? extend( {}, target[ key ], value ) : value;
+			}
+		}
+	}
+	return target;
+}
+$.extend2 = extend;
+
 var _cleanData = $.cleanData;
 $.cleanData = function( elems ) {
 	for ( var i = 0, elem; (elem = elems[i]) != null; i++ ) {
@@ -55,7 +73,7 @@ $.widget = function( name, base, prototype ) {
 	// we need to make the options hash a property directly on the new instance
 	// otherwise we'll modify the options hash on the prototype that we're
 	// inheriting from
-	basePrototype.options = $.extend( true, {}, basePrototype.options );
+	basePrototype.options = extend( {}, basePrototype.options );
 	$.each( prototype, function( prop, value ) {
 		if ( $.isFunction( value ) ) {
 			prototype[ prop ] = (function() {
@@ -83,7 +101,7 @@ $.widget = function( name, base, prototype ) {
 			}());
 		}
 	});
-	$[ namespace ][ name ].prototype = $.extend( true, basePrototype, {
+	$[ namespace ][ name ].prototype = extend( basePrototype, {
 		namespace: namespace,
 		widgetName: name,
 		widgetEventPrefix: name,
@@ -101,7 +119,7 @@ $.widget.bridge = function( name, object ) {
 
 		// allow multiple hashes to be passed on init
 		options = !isMethodCall && args.length ?
-			$.extend.apply( null, [ true, options ].concat(args) ) :
+			extend.apply( null, [ options ].concat(args) ) :
 			options;
 
 		if ( isMethodCall ) {
@@ -163,7 +181,7 @@ $.Widget.prototype = {
 	_createWidget: function( options, element ) {
 		element = $( element || this.defaultElement || this )[ 0 ];
 		this.element = $( element );
-		this.options = $.extend( true, {},
+		this.options = extend( {},
 			this.options,
 			this._getCreateOptions(),
 			options );
@@ -218,7 +236,7 @@ $.Widget.prototype = {
 
 		if ( arguments.length === 0 ) {
 			// don't return a reference to the internal hash
-			return $.extend( {}, this.options );
+			return extend( {}, this.options );
 		}
 
 		if ( typeof key === "string" ) {
@@ -230,7 +248,7 @@ $.Widget.prototype = {
 			parts = key.split( "." );
 			key = parts.shift();
 			if ( parts.length ) {
-				curOption = options[ key ] = $.extend( true, {}, this.options[ key ] );
+				curOption = options[ key ] = extend( {}, this.options[ key ] );
 				for ( i = 0; i < parts.length - 1; i++ ) {
 					curOption[ parts[ i ] ] = curOption[ parts[ i ] ] || {};
 					curOption = curOption[ parts[ i ] ];
