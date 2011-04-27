@@ -34,24 +34,24 @@
 			},
 			parentCoords, container, i, j, pieces, properties, width, height, firstEl;
 		
-		$.effects.save( el, [ 'visibility', 'opacity' ] );
+		$.effects.save( el, [ "visibility", "opacity" ] );
 		
-		parentCoords = el.show().css( 'visibility', 'hidden' ).offset();
+		parentCoords = el.show().css( "visibility", "hidden" ).offset();
 		parentCoords.width = el.outerWidth();
 		parentCoords.height = el.outerHeight();
 
-		if (interval === false){
+		if ( interval === false ){
 			interval = o.duration / ( o.rows + o.columns * 2 );
 		}
 
 		//split into pieces
 		pieces = $.effects.piecer( el, o );
 		firstEl = $( pieces[ 0 ] );
-		container = firstEl.parent().addClass( 'ui-effects-split' );
+		container = firstEl.parent().addClass( "ui-effects-split" );
 		width = firstEl.outerWidth();
 		height = firstEl.outerHeight();
 
-		container.css( 'overflow', o.crop ? 'hidden' : 'visible' );
+		container.css( "overflow", o.crop ? "hidden" : "visible" );
 		
 		//Make animation
 		for ( i = 0; i < o.rows; i++ ) {
@@ -64,14 +64,14 @@
 		// children animate complete
 		function childComplete() {
 			pieceCounter.push( this );
-			if ( pieceCounter.length == o.rows * o.columns ) {
+			if ( pieceCounter.length === o.rows * o.columns ) {
 				animComplete();
 			}
 		}
 
 		function animComplete() {
 			// Ensures that the element is hidden/shown correctly
-			$.effects.restore( el, [ 'visibility', 'opacity' ] );
+			$.effects.restore( el, [ "visibility", "opacity" ] );
 			
 			if ( o.show ) {
 				el.show();
@@ -108,8 +108,8 @@
 			position = el.offset(),
 			pieceHeight = Math.ceil( height / o.rows ), 
 			pieceWidth = Math.ceil( width / o.columns ), 
-			container = $( '<div></div>' ).css({
-				position : 'absolute',
+			container = $( "<div></div>" ).css({
+				position : "absolute",
 				padding : 0,
 				margin : 0,
 				border : 0,
@@ -117,8 +117,8 @@
 				left : position.left + "px",
 				height : height + "px",
 				width : width + "px",
-				zIndex : el.css( 'zIndex' )
-			}).appendTo( 'body' ),
+				zIndex : el.css( "zIndex" )
+			}).appendTo( "body" ),
 			pieces = [],
 			left, top;
 
@@ -128,15 +128,15 @@
 						el
 						.clone()
 						.css({
-							position: 'absolute',
-							visibility: 'visible',
+							position: "absolute",
+							visibility: "visible",
 							top : -top + "px",
 							left : -left + "px"
 						})
-						.wrap( '<div></div>' )
+						.wrap( "<div></div>" )
 						.parent()
 						.css({
-							position : 'absolute',
+							position : "absolute",
 							padding : 0,
 							margin : 0,
 							border : 0,
@@ -176,7 +176,7 @@
 		return this.queue( function( next ) {
 
 			var opt = $.extend( {
-						direction: 'bottom',
+						direction: "bottom",
 						distance: 1,
 						reverse: false,
 						random: false,
@@ -190,14 +190,14 @@
 
 
 			//Reverse it if it is hidden and mode is toggle
-			if ( el.is( ':hidden' ) && opt.mode == 'toggle' ) {
+			if ( el.is( ":hidden" ) && opt.mode === "toggle" ) {
 				opt.reverse = !opt.reverse;
 			}
 
 			//Sets mode for toggle
 			opt.mode = $.effects.setMode( el, opt.mode );
 
-			opt.show = opt.mode === 'show';
+			opt.show = opt.mode === "show";
 
 			function animate( width, height, interval, duration, row, column, documentCoords, parentCoords, callback ) {	    		
 				var random = opt.random ? Math.abs( opt.random ) : 0, 
@@ -217,37 +217,37 @@
 
 				if ( opt.fade ) {
 					properties.opacity = ( opt.show ? 1 : 0 );
-					el.css( 'opacity', opt.show ? 0 : '' );
+					el.css( "opacity", opt.show ? 0 : "" );
 				}
 
 
-				if ( opt.direction.indexOf( 'bottom' ) !== -1 ) {
+				if ( opt.direction.indexOf( "bottom" ) !== -1 ) {
 					top = properties.top + parentCoords.height * opt.distance;
 					top = top > maxTop ? maxTop : top;
-				} else if ( opt.direction.indexOf( 'top' ) !== -1 ) {
+				} else if ( opt.direction.indexOf( "top" ) !== -1 ) {
 					top = properties.top - parentCoords.height * opt.distance;
 					top = top < 0 ? 0 : top;
 				}
 
-				if ( opt.direction.indexOf( 'right' ) !== -1 ) {
+				if ( opt.direction.indexOf( "right" ) !== -1 ) {
 					left = properties.left + parentCoords.width * opt.distance;
 					left = left > maxLeft ? maxLeft : left;
-				} else if ( opt.direction.indexOf( 'left' ) !== -1 ) {
+				} else if ( opt.direction.indexOf( "left" ) !== -1 ) {
 					left = properties.left - parentCoords.width * opt.distance;
 					left = left < 0 ? 0 : left;
 				}
 
-				if ( opt.direction.indexOf( 'right' ) || opt.direction.indexOf( 'left' ) ) {
+				if ( opt.direction.indexOf( "right" ) || opt.direction.indexOf( "left" ) ) {
 					if ( opt.show ) {
-						el.css( 'left', left );
+						el.css( "left", left );
 					} else {
 						properties.left = left;
 					}
 				}
 
-				if ( opt.direction.indexOf( 'top' ) || opt.direction.indexOf( 'bottom' ) ) {
+				if ( opt.direction.indexOf( "top" ) || opt.direction.indexOf( "bottom" ) ) {
 					if ( opt.show ) {
-						el.css( 'top', top );
+						el.css( "top", top );
 					} else {
 						properties.top = top;
 					}
@@ -282,7 +282,7 @@
 		return this.queue( function( next ) {
 
 			var opt = $.extend( {
-						direction: 'bottom',
+						direction: "bottom",
 						distance: 1,
 						reverse: false,
 						random: false,
@@ -296,14 +296,14 @@
 			
 
 			//Reverse it if it is hidden and mode is toggle
-			if ( el.is(':hidden') && opt.mode == 'toggle' ) {
+			if ( el.is( ":hidden" ) && opt.mode === "toggle" ) {
 				opt.reverse = !opt.reverse;
 			}
 
 			//Sets mode for toggle
 			opt.mode = $.effects.setMode( el, opt.mode );
 			
-			opt.show = opt.mode === 'show';
+			opt.show = opt.mode === "show";
 
 			function animate( width, height, interval, duration, row, column, documentCoords, parentCoords, callback ) {
 				var random = opt.random ? Math.abs( opt.random ) : 0, 
@@ -329,9 +329,9 @@
 				properties = $.extend( {}, startProperties );
 
 				// If we have only rows or columns, ignore the other dimension
-				if ( opt.columns == 1 ) {
+				if ( opt.columns === 1 ) {
 					colOdd = !rowOdd;
-				} else if ( opt.rows == 1 ) {
+				} else if ( opt.rows === 1 ) {
 					rowOdd = colOdd;
 				}
 
@@ -357,7 +357,7 @@
 				if ( opt.show ) {
 					el.css( properties );
 					if ( opt.fade ) {
-						el.css( 'opacity', 0 );
+						el.css( "opacity", 0 );
 					}
 					properties = startProperties;
 				}
@@ -386,7 +386,7 @@
 		return this.queue( function( next ) {
 
 			var opt = $.extend( {
-						direction: 'bottom',
+						direction: "bottom",
 						distance: 1,						
 						reverse: false,
 						random: false,
@@ -397,14 +397,14 @@
 				el = $( this );
 
 			//Reverse it if it is hidden and mode is toggle
-			if ( el.is( ':hidden' ) && opt.mode == 'toggle' ) {
+			if ( el.is( ":hidden" ) && opt.mode === "toggle" ) {
 				opt.reverse = !opt.reverse;
 			}
 
 			//Sets mode for toggle
 			opt.mode = $.effects.setMode( el, opt.mode );
 
-			opt.show = opt.mode === 'show';
+			opt.show = opt.mode === "show";
 
 			function animate( width, height, interval, duration, row, column, documentCoords, parentCoords, callback ) {
 				var random = opt.random ? Math.abs( opt.random ) : 0, 
@@ -416,7 +416,7 @@
 					delay = randomDelay * random + Math.max( 1 - random, 0 ) * uniformDelay;
 				
 				if ( opt.show ) {
-					el.css( 'opacity', 0 );
+					el.css( "opacity", 0 );
 				}
 						
 				el.delay( delay ).animate( { opacity: ( opt.show ? 1 : 0 ) }, duration, opt.easing, callback );
@@ -448,7 +448,7 @@
 		return this.queue( function( next ) {
 
 			var opt = $.extend( {
-						direction: 'bottom',
+						direction: "bottom",
 						distance: 1,
 						reverse: false,
 						random: false,
@@ -465,11 +465,11 @@
 			opt.mode = $.effects.setMode( el, opt.mode );
 			
 			//Reverse it if it is hidden and mode is toggle
-			if ( el.is( ':hidden' ) && opt.mode == 'toggle' ) {
+			if ( el.is( ":hidden" ) && opt.mode === "toggle" ) {
 				opt.reverse = !opt.reverse;
 			}
 
-			opt.show = opt.mode === 'show';
+			opt.show = opt.mode === "show";
 
 			function animate( width, height, interval, duration, row, column, documentCoords, parentCoords, callback ) {
 				var el = $( this ),
@@ -515,7 +515,7 @@
 				if ( opt.show ) {
 					el.css( properties );
 					if ( opt.fade ) {
-						el.css( 'opacity', 0 );
+						el.css( "opacity", 0 );
 					}
 					properties = startProperties;
 				}
@@ -547,7 +547,7 @@
 		return this.queue( function( next ) {
 
 			var opt = $.extend( {
-						direction: 'bottom',
+						direction: "bottom",
 						distance: 1,
 						reverse: false,
 						random: false,
@@ -562,7 +562,7 @@
 			//Support for toggle
 			opt.mode = $.effects.setMode( el, opt.mode );
 			
-			opt.show = opt.mode === 'show';
+			opt.show = opt.mode === "show";
 
 			function animate( width, height, interval, duration, row, column, documentCoords, parentCoords, callback ) {
 				var random = opt.random ? Math.abs( opt.random ) : 0, 
@@ -587,9 +587,9 @@
 				properties = $.extend( {}, startProperties );
 
 				// If we have only rows or columns, ignore the other dimension
-				if ( opt.columns == 1 ) {
+				if ( opt.columns === 1 ) {
 					colOdd = rowOdd;
-				} else if ( opt.rows == 1 ) {
+				} else if ( opt.rows === 1 ) {
 					rowOdd = !colOdd;
 				}
 
@@ -598,7 +598,7 @@
 					startProperties.opacity = 1;
 				}
 
-				if ( colOdd == rowOdd ) {
+				if ( colOdd === rowOdd ) {
 					if ( !colOdd ) {
 						properties.left -= opt.distance * parentCoords.width;
 					} else {
