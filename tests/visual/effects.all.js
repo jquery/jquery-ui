@@ -90,10 +90,6 @@ $(function() {
 		}, duration);
 	});
 	
-	$("#piecer").click(function(){
-		$.effects.piecer.call(this, 4, 10);
-	});
-	
 	effect('#build', "build", {easing: 'linear' });
 	effect('#pinwheel', "pinwheel", {easing: 'linear' });
 	effect('#blockfade', "blockfade", {easing: 'linear' });
