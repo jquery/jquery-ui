@@ -427,22 +427,22 @@ test( "fractions", function() {
 	same( $( "#fractions-element" ).offset(), $( "#fractions-parent" ).offset(), "left top, left top" );
 });
 
-//test( "bug #5280: consistent results (avoid fractional values)", function() {
-//	var wrapper = $( "#bug-5280" ),
-//		elem = wrapper.children(),
-//		offset1 = elem.position({
-//			my: "center",
-//			at: "center",
-//			of: wrapper,
-//			collision: "none"
-//		}).offset(),
-//		offset2 = elem.position({
-//			my: "center",
-//			at: "center",
-//			of: wrapper,
-//			collision: "none"
-//		}).offset();
-//	same( offset1, offset2 );
-//});
+test( "bug #5280: consistent results (avoid fractional values)", function() {
+	var wrapper = $( "#bug-5280" ),
+		elem = wrapper.children(),
+		offset1 = elem.position({
+			my: "center",
+			at: "center",
+			of: wrapper,
+			collision: "none"
+		}).offset(),
+		offset2 = elem.position({
+			my: "center",
+			at: "center",
+			of: wrapper,
+			collision: "none"
+		}).offset();
+	same( offset1, offset2 );
+});
 
 }( jQuery ) );
