@@ -628,6 +628,14 @@ $.extend( $.ui.tabs, {
 
 // DEPRECATED
 if ( $.uiBackCompat !== false ) {
+
+	// url method
+	(function( $, prototype ) {
+		prototype.url = function( index, url ) {
+			this.anchors.eq( index ).attr( "href", url );
+		};
+	}( jQuery, jQuery.ui.tabs.prototype ) );
+
 	// ajaxOptions and cache options
 	(function( $, prototype ) {
 		$.extend( prototype.options, {
@@ -638,7 +646,7 @@ if ( $.uiBackCompat !== false ) {
 		var _create = prototype._create,
 			_setOption = prototype._setOption,
 			_destroy = prototype._destroy,
-			oldurl = prototype._url;
+			oldurl = prototype.url || $.noop;
 
 		$.extend( prototype, {
 			_create: function() {
@@ -861,13 +869,6 @@ if ( $.uiBackCompat !== false ) {
 	(function( $, prototype ) {
 		prototype.length = function() {
 			return this.anchors.length;
-		};
-	}( jQuery, jQuery.ui.tabs.prototype ) );
-
-	// url method
-	(function( $, prototype ) {
-		prototype.url = function( index, url ) {
-			this.anchors.eq( index ).attr( "href", url );
 		};
 	}( jQuery, jQuery.ui.tabs.prototype ) );
 
