@@ -17,80 +17,72 @@ test('destroy', function() {
 	ok( $('li:eq(2)', el).is(':not(.ui-state-hover, .ui-state-focus)'), 'remove classes from mouseovered or focused li');
 });
 
-test('enable', function() {
-    expect(12);
+test( "enable", function() {
+	expect( 8 );
 
-	el = $('#tabs1').tabs({ disabled: [ 0, 1 ] });
-	el.tabs("enable", 1);
-	ok( $('li:eq(1)', el).is(':not(.ui-state-disabled)'), 'remove class from li');
-	same(el.tabs('option', 'disabled'), [ 0 ], 'update property');
-	
-	// enable all tabs
-	el.tabs({ disabled: [ 0, 1 ] });
-	el.tabs("enable");
-	ok( !$('li.ui-state-disabled', el).length, 'enable all');
-	same(el.tabs('option', 'disabled'), false, 'update property');
+	var element = $( "#tabs1" ).tabs({ disabled: true });
+	tabs_disabled( element, true );
+	element.tabs( "enable" );
+	tabs_disabled( element, false );
+	element.tabs( "destroy" );
 
-	// enable one tab
-	el.tabs({ disabled: true });
-	el.tabs("enable", 1);
-	ok( $('li:eq(1)', el).is(':not(.ui-state-disabled)'), 'remove class from li');
-	same(el.tabs('option', 'disabled'), [ 0, 2 ], 'update property');
-
-	// all tabs already enabled
-	el.tabs({ disabled: false });
-	el.tabs("enable", 1);
-	ok( !$('li.ui-state-disabled', el).length, 'enable all');
-	same(el.tabs('option', 'disabled'), false, 'update property');
-
-	el.tabs('destroy');
-	// enable all tabs one by one
-	el.tabs({ disabled: [ 1, 2 ] });
-	el.tabs("enable", 1);
-	ok( $('li:eq(1)', el).is(':not(.ui-state-disabled)'), 'remove class from li');
-	same(el.tabs('option', 'disabled'), [ 2 ], 'update property');
-	el.tabs("enable", 2);
-	ok( $('li:eq(2)', el).is(':not(.ui-state-disabled)'), 'remove class from li');
-	same( el.tabs('option', 'disabled'), false, 'set to false');
+	element.tabs({ disabled: [ 0, 1 ] });
+	tabs_disabled( element, [ 0, 1 ] );
+	element.tabs( "enable" );
+	tabs_disabled( element, false );
 });
 
-test('disable', function() {
-    expect(14);
+test( "enable( index )", function() {
+    expect( 10 );
 
-	// normal
-	el = $('#tabs1').tabs();
-	el.tabs('disable', 1);
-	ok( $('li:eq(1)', el).is('.ui-state-disabled'), 'add class to li');
-	same(el.tabs('option', 'disabled'), [ 1 ], 'update disabled property');
+	var element = $( "#tabs1" ).tabs({ disabled: true });
+	tabs_disabled( element, true );
+	// fully disabled -> partially disabled
+	element.tabs( "enable", 1 );
+	tabs_disabled( element, [ 0, 2 ] );
+	// partially disabled -> partially disabled
+	element.tabs( "enable", 2 );
+	tabs_disabled( element, [ 0 ] );
+	// already enabled tab, no change
+	element.tabs( "enable", 2 );
+	tabs_disabled( element, [ 0 ] );
+	// partially disabled -> fully enabled
+	element.tabs( "enable", 0 );
+	tabs_disabled( element, false );
+});
 
-	// disable selected
-	el.tabs('disable', 0);
-	ok( $('li:eq(0)', el).is('.ui-state-disabled'), 'add class to selected li');
-	same(el.tabs('option', 'disabled'), [ 0, 1 ], 'update disabled property');
-	
-	// disable all tabs
-	el.tabs('disable');
-	same( $('li.ui-state-disabled', el).length, 3, 'disable all');
-	same(el.tabs('option', 'disabled'), true, 'set to true');
+test( "disable", function() {
+	expect( 8 );
 
-	// all tabs already disabled
-	el.tabs({ disabled: true });
-	el.tabs("disable", 1);
-	ok( $('li.ui-state-disabled', el).length, 'disable all');
-	same(el.tabs('option', 'disabled'), true, 'set to true');
+	var element = $( "#tabs1" ).tabs({ disabled: false });
+	tabs_disabled( element, false );
+	element.tabs( "disable" );
+	tabs_disabled( element, true );
+	element.tabs( "destroy" );
 
-	el.tabs("destroy");
-	// disable all tabs one by one
-	el.tabs();
-	el.tabs('disable', 0);
-	ok( $('li:eq(0)', el).is('.ui-state-disabled'), 'add class to li');
-	same(el.tabs('option', 'disabled'), [ 0 ], 'update disabled property');
-	el.tabs('disable', 1);
-	ok( $('li:eq(1)', el).is('.ui-state-disabled'), 'add class to li');
-	same(el.tabs('option', 'disabled'), [ 0, 1 ], 'update disabled property');
-	el.tabs('disable', 2);
-	ok( $('li:eq(2)', el).is('.ui-state-disabled'), 'add class to li');
-	same(el.tabs('option', 'disabled'), true, 'set to true');
+	element.tabs({ disabled: [ 0, 1 ] });
+	tabs_disabled( element, [ 0, 1 ] );
+	element.tabs( "disable" );
+	tabs_disabled( element, true );
+});
+
+test( "disable( index )", function() {
+    expect( 10 );
+
+	var element = $( "#tabs1" ).tabs({ disabled: false });
+	tabs_disabled( element, false );
+	// fully enabled -> partially disabled
+	element.tabs( "disable", 1 );
+	tabs_disabled( element, [ 1 ] );
+	// partially disabled -> partially disabled
+	element.tabs( "disable", 2 );
+	tabs_disabled( element, [ 1, 2 ] );
+	// already disabled tab, no change
+	element.tabs( "disable", 2 );
+	tabs_disabled( element, [ 1, 2 ] );
+	// partially disabled -> fully disabled
+	element.tabs( "disable", 0 );
+	tabs_disabled( element, true );
 });
 
 test('refresh', function() {

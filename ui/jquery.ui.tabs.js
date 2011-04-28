@@ -544,6 +544,9 @@ $.widget( "ui.tabs", {
 			disabled = true;
 		} else {
 			index = this._getIndex( index );
+			if ( $.inArray( index, disabled ) !== -1 ) {
+				return;
+			}
 			if ( $.isArray( disabled ) ) {
 				disabled = $.merge( [ index ], disabled ).sort();
 			} else {
