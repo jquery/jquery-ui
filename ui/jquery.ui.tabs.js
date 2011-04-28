@@ -172,51 +172,43 @@ $.widget( "ui.tabs", {
 	refresh: function() {
 		var self = this,
 			options = this.options,
-			lis = $( " > li:has(a[href])", this.list );
+			lis = this.list.children( ":has(a[href])" );
 
-		// Get disabled tabs from class attribute from HTML
-		options.disabled = $.map( lis.filter( ".ui-state-disabled" ), function( n ) {
-			return lis.index( n );
+		// get disabled tabs from class attribute from HTML
+		// this will get converted to a boolean if needed in _refresh()
+		options.disabled = $.map( lis.filter( ".ui-state-disabled" ), function( tab ) {
+			return lis.index( tab );
 		});
 
 		this._processTabs();
-
 		this._refresh();
-
-		// Remove panels that we created that are missing their tab
-		this.element.find(".ui-tabs-panel:data(destroy.tabs)").each( function( index, panel ) {
-			var anchor = self.anchors.filter( "[aria-controls='" + panel.id + "']");
-			if ( !anchor.length ) {
-				$( panel ).remove();
-			}
-		});
-
 		this.panels.not( this._getPanelForTab( this.active ) ).hide();
 
-		if ( !this.anchors.length ) {
+		// was collapsed or no tabs
+		if ( options.active === false || !this.anchors.length ) {
 			options.active = false;
 			this.active = $();
-		} else if ( !this.active || ( this.active && !$.contains( this.list[ 0 ], this.active[ 0 ] ) ) ) {
-			// Activate previous tab
+		// was active, but active tab is gone
+		} else if ( this.active.length && !$.contains( this.list[ 0 ], this.active[ 0 ] ) ) {
+			// activate previous tab
 			var next = options.active - 1;
 			this._activate( next >= 0 ? next : 0 );
+		// was active, active tab still exists
 		} else {
-			// Make sure active index is correct
+			// make sure active index is correct
 			options.active = this.anchors.index( this.active );
 		}
 	},
 
 	_refresh: function() {
-		var that = this,
-			options = that.options;
+		var options = this.options;
 
 		this.element.toggleClass( "ui-tabs-collapsible", options.collapsible );
-		this.list.addClass("ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all" );
+		this.list.addClass( "ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all" );
 		this.lis.addClass( "ui-state-default ui-corner-top" );
 		this.panels.addClass( "ui-tabs-panel ui-widget-content ui-corner-bottom" );
 
 		this._setupDisabled( options.disabled );
-
 		this._setupEvents( options.event );
 
 		// remove all handlers, may run on existing tabs

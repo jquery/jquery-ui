@@ -85,55 +85,73 @@ test( "disable( index )", function() {
 	tabs_disabled( element, true );
 });
 
-test('refresh', function() {
-	expect( 13 );
+test( "refersh", function() {
+	expect( 27 );
 
-	var el = $('<div id="tabs"><ul></ul></div>').tabs(),
-		ul = el.find('ul');
+	var element = $( "#tabs1" ).tabs();
+	tabs_state( element, 1, 0, 0 );
+	tabs_disabled( element, false );
 
-	equals(el.tabs('option', 'active'), false, 'Initially empty, no active tab');
+	// disable tab via markup
+	element.find( ".ui-tabs-nav li" ).eq( 1 ).addClass( "ui-state-disabled" );
+	element.tabs( "refresh" );
+	tabs_state( element, 1, 0, 0 );
+	tabs_disabled( element, [ 1 ] );
 
-	ul.append('<li><a href="data/test.html">Test 1</a></li>');
-	el.tabs('refresh');
-	equals( el.tabs('option', 'active'), 0, 'First tab added should be auto active');
-	ok( $( "li:eq(0)", el).is('.ui-tabs-active'), 'First tab should be auto active');
-	equals( el.find('.ui-tabs-panel').length, 1, 'Panel created after refresh');
+	// add remote tab
+	element.find( ".ui-tabs-nav" ).append( "<li id='newTab'><a href='data/test.html'>new</a></li>" );
+	element.tabs( "refresh" );
+	tabs_state( element, 1, 0, 0, 0 );
+	tabs_disabled( element, [ 1 ] );
+	equals( element.find( "#" + $( "#newTab a" ).attr( "aria-controls" ) ).length, 1,
+		"panel added for remote tab" );
 
-	ul.find('li').remove();
-	el.tabs('refresh');
-	equals( el.find('.ui-tabs-panel').length, 0, 'Panel removed after refresh');
-	equals( el.tabs('option', 'active'), false, 'No tabs are active');
+	// remove all tabs
+	element.find( ".ui-tabs-nav li, .ui-tabs-panel" ).remove();
+	element.tabs( "refresh" );
+	tabs_state( element );
+	equals( element.tabs( "option", "active" ), false, "no active tab" );
 
-	// Hide second tab
-	$('<li><a href="#test1">Test 1</a></li><li><a href="#test2">Test 2</a></li><li><a href="#test3">Test 3</a></li>')
-		.appendTo( ul );
-	$('<div id="test1">Test Panel 1</div><div id="test2">Test Panel 2</div><div id="test3">Test Panel 3</div>')
-		.insertAfter( ul );
-	el.tabs('refresh');
-	equals( el.tabs('option', 'active'), 0, 'Second tab added should not be auto active');
-	equals( $( "#test2", el ).css("display"), "none", 'Second panel is hidden');
+	// add tabs
+	element.find( ".ui-tabs-nav" )
+		.append( "<li class='ui-state-disabled'><a href='#newTab2'>new 2</a></li>" )
+		.append( "<li><a href='#newTab3'>new 3</a></li>" )
+		.append( "<li><a href='#newTab4'>new 4</a></li>" )
+		.append( "<li><a href='#newTab5'>new 5</a></li>" );
+	element
+		.append( "<div id='newTab2'>new 2</div>" )
+		.append( "<div id='newTab3'>new 3</div>" )
+		.append( "<div id='newTab4'>new 4</div>" )
+		.append( "<div id='newTab5'>new 5</div>" );
+	element.tabs( "refresh" );
+	tabs_state( element, 0, 0, 0, 0 );
+	tabs_disabled( element, [ 0 ] );
 
-	// Make second tab active and then remove the first one
-	el.tabs('option', 'active', 1);
-	el.find('a[href="#test1"]').parent().remove();
-	el.tabs('refresh');
-	equals( el.tabs('option', 'active'), 0, 'Active index correctly updated');
-	ok( el.find('a[href="#test2"]').parent().is('.ui-tabs-active'), 'Tab is still active');
+	// activate third tab
+	element.tabs( "option", "active", 2 );
+	tabs_state( element, 0, 0, 1, 0 );
+	tabs_disabled( element, [ 0 ] );
 
-	// Refresh with disabled tabs
-	el.tabs('disable', 1);
-	same( el.tabs('option', 'disabled'), [ 1 ], 'Second tab disabled');
+	// remove fourth tab, third tab should stay active
+	element.find( ".ui-tabs-nav li" ).eq( 3 ).remove();
+	element.find( ".ui-tabs-panel" ).eq( 3 ).remove();
+	element.tabs( "refresh" );
+	tabs_state( element, 0, 0, 1 );
+	tabs_disabled( element, [ 0 ] );
 
-	el.find('a[href="#test3"]').remove();
-	ul.append('<li><a href="#test4">Test 4</a></li>');
-	$('<div id="test4">Test Panel 4</div>').insertAfter( ul );
-	el.tabs('refresh');
-	equals( el.tabs('option', 'disabled'), false, 'Not disabled');
-
-	ul.append('<li class="ui-state-disabled"><a href="#test3">Test 3</a></li>');
-	$('<div id="test3">Test Panel 3</div>').insertAfter( ul );
-	el.tabs('refresh');
-	same( el.tabs('option', 'disabled'), [ 2 ], 'Second tab disabled');
+	// remove third (active) tab, second tab should become active
+	element.find( ".ui-tabs-nav li" ).eq( 2 ).remove();
+	element.find( ".ui-tabs-panel" ).eq( 2 ).remove();
+	element.tabs( "refresh" );
+	tabs_state( element, 0, 1 );
+	tabs_disabled( element, [ 0 ] );
+	
+	// remove first tab, previously active tab (now first) should stay active
+	element.find( ".ui-tabs-nav li" ).eq( 0 ).remove();
+	element.find( ".ui-tabs-panel" ).eq( 0 ).remove();
+	element.tabs( "refresh" );
+	tabs_state( element, 1 );
+	tabs_disabled( element, false );
 });
 
 test('load', function() {
