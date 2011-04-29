@@ -187,25 +187,6 @@ test('disable', function() {
 	equals(uiObj.index, 1, 'contain index');
 });
 
-test('add', function() {
-
-	// TODO move to methods, not at all event related...
-
-	var el = $('<div id="tabs"><ul></ul></div>').tabs();
-	equals(el.tabs('option', 'selected'), -1, 'Initially empty, no selected tab');
-
-	el.tabs('add', '#test1', 'Test 1');
-	equals(el.tabs('option', 'selected'), 0, 'First tab added should be auto selected');
-
-	el.tabs('add', '#test2', 'Test 2');
-	equals(el.tabs('option', 'selected'), 0, 'Second tab added should not be auto selected');
-
-});
-
-test('remove', function() {
-	ok(false, "missing test - untested code is broken code.");
-});
-
 test('show', function() {
 	expect(5);
 
@@ -250,12 +231,17 @@ test('select', function() {
 module( "tabs (deprecated): methods" );
 
 test( "add", function() {
-	expect( 18 );
+	expect( 27 );
 
 	var element = $( "#tabs1" ).tabs();
 	tabs_state( element, 1, 0, 0 );
 
 	// add without index
+	element.one( "tabsadd", function( event, ui ) {
+		equal( ui.index, 3, "ui.index" );
+		equal( $( ui.tab ).text(), "New", "ui.tab" );
+		equal( ui.panel.id, "new", "ui.panel" );
+	});
 	element.tabs( "add", "#new", "New" );
 	tabs_state( element, 1, 0, 0, 0 );
 	var tab = element.find( ".ui-tabs-nav li" ).last(),
@@ -270,6 +256,11 @@ test( "add", function() {
 	tabs_state( element, 0, 0, 0, 1 );
 
 	// add remote tab with index
+	element.one( "tabsadd", function( event, ui ) {
+		equal( ui.index, 1, "ui.index" );
+		equal( $( ui.tab ).text(), "New Remote", "ui.tab" );
+		equal( ui.panel.id, $( ui.tab ).attr( "aria-controls" ), "ui.panel" );
+	});
 	element.tabs( "add", "data/test.html", "New Remote", 1 );
 	tabs_state( element, 0, 0, 0, 0, 1 );
 	tab = element.find( ".ui-tabs-nav li" ).eq( 1 );
@@ -286,6 +277,11 @@ test( "add", function() {
 	// add to empty tab set
 	element = $( "<div><ul></ul></div>" ).tabs();
 	equals( element.tabs( "option", "active" ), false, "active: false on init" );
+	element.one( "tabsadd", function( event, ui ) {
+		equal( ui.index, 0, "ui.index" );
+		equal( $( ui.tab ).text(), "First", "ui.tab" );
+		equal( ui.panel.id, "first", "ui.panel" );
+	});
 	element.tabs( "add", "#first", "First" );
 	tabs_state( element, 1 );
 	equals( element.tabs( "option", "active" ), 0, "active: 0 after add" );
@@ -301,11 +297,16 @@ test( "#5069 - ui.tabs.add creates two tab panels when using a full URL", functi
 });
 
 test( "remove", function() {
-	expect( 8 );
+	expect( 17 );
 
 	var element = $( "#tabs1" ).tabs({ active: 1 });
 	tabs_state( element, 0, 1, 0 );
 
+	element.one( "tabsremove", function( event, ui ) {
+		equal( ui.index, -1, "ui.index" );
+		equal( $( ui.tab ).text(), "2", "ui.tab" );
+		equal( ui.panel.id, "fragment-2", "ui.panel" );
+	});
 	element.tabs( "remove", 1 );
 	tabs_state( element, 0, 1 );
 	equals( element.tabs( "option", "active" ), 1 );
@@ -313,10 +314,20 @@ test( "remove", function() {
 		"remove correct list item" );
 	equals( element.find( "#fragment-2" ).length, 0, "remove correct panel" );
 
+	element.one( "tabsremove", function( event, ui ) {
+		equal( ui.index, -1, "ui.index" );
+		equal( $( ui.tab ).text(), "3", "ui.tab" );
+		equal( ui.panel.id, "fragment-3", "ui.panel" );
+	});
 	element.tabs( "remove", 1 );
 	tabs_state( element, 1 );
 	equals( element.tabs( "option", "active"), 0 );
 
+	element.one( "tabsremove", function( event, ui ) {
+		equal( ui.index, -1, "ui.index" );
+		equal( $( ui.tab ).text(), "1", "ui.tab" );
+		equal( ui.panel.id, "fragment-1", "ui.panel" );
+	});
 	element.tabs( "remove", 0 );
 	equals( element.tabs( "option", "active" ), false );
 });
