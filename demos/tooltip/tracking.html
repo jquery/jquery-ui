@@ -13,12 +13,11 @@
 	$(function() {
 		$(".demo").tooltip({
 			open: function() {
-				var tooltip = $(this).tooltip("widget");
-				$(document).mousemove(function(event) {
-					tooltip.position({
-						my: "left center",
-						at: "right center",
-						offset: "25 25",
+				var tooltip = $( ".ui-tooltip" );
+				$(document).mousemove(function( event ) {
+					tooltip.position( {
+						my: "left+25 center",
+						at: "right+25 center",
 						of: event
 					});
 				})
@@ -26,7 +25,7 @@
 				.mousemove();
 			},
 			close: function() {
-				$(document).unbind("mousemove");
+				$(document).unbind( "mousemove" );
 			}
 		});
 	});

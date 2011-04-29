@@ -13,24 +13,31 @@ $.widget("ui.menubar", {
    },
 	_create: function() {
 		var self = this;
-		var items = this.items = this.element.children("button, a");
+		var items = this.items = this.element.children("li")
+			.addClass("ui-menubar-item")
+			.attr("role", "presentation")
+			.children("button, a");
 		items.slice(1).attr("tabIndex", -1);
 		var o = this.options;
 				
-		this.element.addClass('ui-menubar ui-widget-header ui-helper-clearfix');
+		this.element.addClass('ui-menubar ui-widget-header ui-helper-clearfix').attr("role", "menubar");
 		this._focusable(items);
 		this._hoverable(items);
 		items.next("ul").each(function(i, elm) {
 			$(elm).menu({
 				select: function(event, ui) {
-					ui.item.parents("ul:last").hide()
-					self.options.select.apply(this, arguments);
+					ui.item.parents("ul.ui-menu:last").hide();
+					self._trigger( "select", event, ui );
+					self._close();
+					$(event.target).prev().focus();
 				}
-			}).hide().keydown(function(event) {
+			}).hide()
+			.attr("aria-hidden", "true")
+			.attr("aria-expanded", "false")
+			.keydown(function(event) {
 				var menu = $(this);
 				if (menu.is(":hidden")) 
 					return;
-				event.stopPropagation();
 				switch (event.keyCode) {
 				case $.ui.keyCode.LEFT:
 					self._left(event);
@@ -41,9 +48,7 @@ $.widget("ui.menubar", {
 					event.preventDefault();
 					break;
 				};
-			}).blur(function( event ) {
-				self._close( event );
-			});
+			})
 		});
 		items.each(function() {
 			var input = $(this),
@@ -55,12 +60,11 @@ $.widget("ui.menubar", {
 					return;
 				}
    				event.preventDefault();
-   				event.stopPropagation();
 			   	if (event.type == "click" && menu.is(":visible") && self.active && self.active[0] == menu[0]) {
 					self._close();
 					return;
 				}
-   				if (self.open || event.type == "click") {
+   				if ((self.open && event.type == "mouseenter") || event.type == "click") {
    					self._open(event, menu);
    				}
    			})
@@ -83,6 +87,8 @@ $.widget("ui.menubar", {
 				}
 			})
 			.addClass("ui-button ui-widget ui-button-text-only ui-menubar-link")
+			.attr("role", "menuitem")
+			.attr("aria-haspopup", "true")
 			.wrapInner("<span class='ui-button-text'></span>");
 			
 			if (o.menuIcon) {
@@ -95,35 +101,66 @@ $.widget("ui.menubar", {
 			};			
 			
 		});
-		self._bind(document, {
-			click: function(event) {
-				if (self.open && !$(event.target).closest(".ui-menubar").length) {
-					self._close();
-				}
-			}
-		})
 		self._bind({
-			keyup: function(event) {
-				if (event.keyCode == $.ui.keyCode.ESCAPE && self.open) {
-					if (self.active.menu("left", event) !== true) {
+			keydown: function(event) {
+				if (event.keyCode == $.ui.keyCode.ESCAPE) {
+					if (self.active && self.active.menu("left", event) !== true) {
 						var active = self.active;
 						self.active.blur();
+						self._close( event );
 						active.prev().focus();
 					}
 				}
+			},
+			focusout : function( event ) {
+				self.closeTimer = setTimeout(function() {
+					self._close( event );
+				}, 100);
+			},
+			focusin :function( event ) {
+				clearTimeout(self.closeTimer);
 			}
 		});
 	},
 	
+	_destroy : function() {
+		var items = this.element.children("li")
+			.removeClass("ui-menubar-item")
+			.removeAttr("role", "presentation")
+			.children("button, a");
+		
+		this.element.removeClass('ui-menubar ui-widget-header ui-helper-clearfix').removeAttr("role", "menubar").unbind(".menubar");;
+		items.unbind("focusin focusout click focus mouseenter keydown");
+		
+		items
+			.removeClass("ui-button ui-widget ui-button-text-only ui-menubar-link ui-state-default")
+			.removeAttr("role", "menuitem")
+			.removeAttr("aria-haspopup", "true")
+			.children("span.ui-button-text").each(function(i, e) {
+				var item = $(this);
+				item.parent().html(item.html());
+			})
+			.end()
+			.children(".ui-icon").remove();
+
+		$(document).unbind(".menubar");
+		
+		this.element.find(":ui-menu").menu("destroy")
+		.show()
+		.removeAttr("aria-hidden", "true")
+		.removeAttr("aria-expanded", "false")
+		.removeAttr("tabindex")
+		.unbind("keydown", "blur")
+		;
+	},
+	
 	_close: function() {
-		this.active.menu("closeAll").hide();
+		if (!this.active || !this.active.length)
+			return;
+		this.active.menu("closeAll").hide().attr("aria-hidden", "true").attr("aria-expanded", "false");
 		this.active.prev().removeClass("ui-state-active").removeAttr("tabIndex");
 		this.active = null;
-		var self = this;
-		// delay for the next focus event to see it as still "open"
-		self.timer = setTimeout(function() {
-			self.open = false;
-		}, 13);
+		this.open = false;
 	},
 	
 	_open: function(event, menu) {
@@ -133,55 +170,63 @@ $.widget("ui.menubar", {
 		}
 		// almost the same as _close above, but don't remove tabIndex
 		if (this.active) {
-			this.active.menu("closeAll").hide();
+			this.active.menu("closeAll").hide().attr("aria-hidden", "true").attr("aria-expanded", "false");
 			this.active.prev().removeClass("ui-state-active");
 		}
-		clearTimeout(this.timer);
-		this.open = true;
 		// set tabIndex -1 to have the button skipped on shift-tab when menu is open (it gets focus)
 		var button = menu.prev().addClass("ui-state-active").attr("tabIndex", -1);
 		this.active = menu.show().position({
 			my: "left top",
 			at: "left bottom",
 			of: button
-		}).focus();
+		})
+		.removeAttr("aria-hidden").attr("aria-expanded", "true")
+		.menu("focus", event, menu.children("li").first())
+		.focus()
+		.focusin()
+		;
+		this.open = true;
 	},
 	
 	_prev: function( event, button ) {
 		button.attr("tabIndex", -1);
-		var prev = button.prevAll( ".ui-button" ).eq( 0 );
+		var prev = button.parent().prevAll("li").children( ".ui-button" ).eq( 0 );
 		if (prev.length) {
 			prev.removeAttr("tabIndex")[0].focus();
 		} else {
-			this.element.children(".ui-button:last").removeAttr("tabIndex")[0].focus();
+			var lastItem = this.element.children("li:last").children(".ui-button:last");
+			lastItem.removeAttr("tabIndex")[0].focus();
 		}
 	},
 	
 	_next: function( event, button ) {
 		button.attr("tabIndex", -1);
-		var next =  button.nextAll( ".ui-button" ).eq( 0 );
+		var next = button.parent().nextAll("li").children( ".ui-button" ).eq( 0 );
 		if (next.length) {
 			next.removeAttr("tabIndex")[0].focus();
 		} else {
-			this.element.children(".ui-button:first").removeAttr("tabIndex")[0].focus();
+			var firstItem = this.element.children("li:first").children(".ui-button:first");
+			firstItem.removeAttr("tabIndex")[0].focus();
 		}
 	},
 	
 	_left: function(event) {
-		var prev = this.active.prevAll( ".ui-menu" ).eq( 0 );
+		var prev = this.active.parent().prevAll("li:eq(0)").children( ".ui-menu" ).eq( 0 );
 		if (prev.length) {
 			this._open(event, prev);
 		} else {
-			this._open(event, this.element.children(".ui-menu:last"));
+			var lastItem = this.element.children("li:last").children(".ui-menu:first");
+			this._open(event, lastItem);
 		}
 	},
 	
 	_right: function(event) {
-		var next =  this.active.nextAll( ".ui-menu" ).eq( 0 );
+		var next = this.active.parent().nextAll("li:eq(0)").children( ".ui-menu" ).eq( 0 );
 		if (next.length) {
 			this._open(event, next);
 		} else {
-			this._open(event, this.element.children(".ui-menu:first"));
+			var firstItem = this.element.children("li:first").children(".ui-menu:first");
+			this._open(event, firstItem);
 		}
 	}
 });
