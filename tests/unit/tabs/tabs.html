@@ -34,7 +34,7 @@
 				panel = $( $.ui.tabs.prototype._sanitizeSelector(
 					"#" + tab.find( "a" ).attr( "aria-controls" ) ) ),
 				tabIsActive = tab.hasClass( "ui-state-active" ),
-				panelIsActive = panel.is( ":visible" );
+				panelIsActive = panel.css( "display" ) !== "none";
 
 			if ( tabIsActive && panelIsActive ) {
 				return 1;

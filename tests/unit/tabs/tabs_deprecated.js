@@ -247,42 +247,78 @@ test('select', function() {
 	equals( evenObj.originalEvent.type, "click", "select triggered by click" );
 });
 
-module("tabs (deprecated): methods");
+module( "tabs (deprecated): methods" );
 
-test('add', function() {
-	expect(4);
+test( "add", function() {
+	expect( 18 );
 
-	el = $('#tabs1').tabs();
-	el.tabs('add', '#new', 'New');
+	var element = $( "#tabs1" ).tabs();
+	tabs_state( element, 1, 0, 0 );
 
-	var added = $('li:last', el).simulate('mouseover');
-	ok(added.is('.ui-state-hover'), 'should add mouseover handler to added tab');
-	added.simulate('mouseout');
-	var other = $('li:first', el).simulate('mouseover');
-	ok(other.is('.ui-state-hover'), 'should not remove mouseover handler from existing tab');
-	other.simulate('mouseout');
+	// add without index
+	element.tabs( "add", "#new", "New" );
+	tabs_state( element, 1, 0, 0, 0 );
+	var tab = element.find( ".ui-tabs-nav li" ).last(),
+		anchor = tab.find( "a" );
+	equals( tab.text(), "New", "label" );
+	equals( anchor.attr( "href" ), "#new", "href" );
+	equals( anchor.attr( "aria-controls" ), "new", "aria-controls" );
+	ok( !tab.hasClass( "ui-state-hover" ), "not hovered" );
+	anchor.simulate( "mouseover" );
+	ok( tab.hasClass( "ui-state-hover" ), "hovered" );
+	anchor.simulate( "click" );
+	tabs_state( element, 0, 0, 0, 1 );
 
-	equals($('a', added).attr('href'), '#new', 'should not expand href to full url of current page');
+	// add remote tab with index
+	element.tabs( "add", "data/test.html", "New Remote", 1 );
+	tabs_state( element, 0, 0, 0, 0, 1 );
+	tab = element.find( ".ui-tabs-nav li" ).eq( 1 );
+	anchor = tab.find( "a" );
+	equals( tab.text(), "New Remote", "label" );
+	equals( anchor.attr( "href" ), "data/test.html", "href" );
+	ok( /^ui-tabs-\d+$/.test( anchor.attr( "aria-controls" ) ), "aria controls" );
+	ok( !tab.hasClass( "ui-state-hover" ), "not hovered" );
+	anchor.simulate( "mouseover" );
+	ok( tab.hasClass( "ui-state-hover" ), "hovered" );
+	anchor.simulate( "click" );
+	tabs_state( element, 0, 1, 0, 0, 0 );
 
-	ok(false, "missing test - untested code is broken code.");
+	// add to empty tab set
+	element = $( "<div><ul></ul></div>" ).tabs();
+	equals( element.tabs( "option", "active" ), false, "active: false on init" );
+	element.tabs( "add", "#first", "First" );
+	tabs_state( element, 1 );
+	equals( element.tabs( "option", "active" ), 0, "active: 0 after add" );
 });
 
-test('remove', function() {
-	expect(4);
+test( "#5069 - ui.tabs.add creates two tab panels when using a full URL", function() {
+	expect( 2 );
 
-	el = $('#tabs1').tabs();
+	var element = $( "#tabs2" ).tabs();
+	equals( element.children( "div" ).length, element.find( ".ui-tabs-nav li" ).length );
+	element.tabs( "add", "/new", "New" );
+	equals( element.children( "div" ).length, element.find( ".ui-tabs-nav li" ).length );
+});
 
-	el.tabs('remove', 0);
-	equals(el.tabs('length'), 2, 'remove tab');
-	equals($('li a[href$="fragment-1"]', el).length, 0, 'remove associated list item');
-	equals($('#fragment-1').length, 0, 'remove associated panel');
+test( "remove", function() {
+	expect( 8 );
 
-	// TODO delete tab -> focus tab to right
-	// TODO delete last tab -> focus tab to left
+	var element = $( "#tabs1" ).tabs({ active: 1 });
+	tabs_state( element, 0, 1, 0 );
 
-	el.tabs('select', 1);
-	el.tabs('remove', 1);
-	equals(el.tabs('option', 'selected'), 0, 'update selected property');
+	element.tabs( "remove", 1 );
+	tabs_state( element, 0, 1 );
+	equals( element.tabs( "option", "active" ), 1 );
+	equals( element.find( ".ui-tabs-nav li a[href$='fragment-2']" ).length, 0,
+		"remove correct list item" );
+	equals( element.find( "#fragment-2" ).length, 0, "remove correct panel" );
+
+	element.tabs( "remove", 1 );
+	tabs_state( element, 1 );
+	equals( element.tabs( "option", "active"), 0 );
+
+	element.tabs( "remove", 0 );
+	equals( element.tabs( "option", "active" ), false );
 });
 
 test('select', function() {
@@ -312,17 +348,6 @@ test('select', function() {
 
 	el.tabs('select', '#fragment-2');
 	equals(el.tabs('option', 'active'), 1, 'should select tab by id');
-});
-
-
-test('#5069 - ui.tabs.add creates two tab panels when using a full URL', function() {
-	// http://dev.jqueryui.com/ticket/5069
-	expect(2);
-
-	el = $('#tabs2').tabs();
-	equals(el.children('div').length, el.find('> ul > li').length, 'After creation, number of panels should be equal to number of tabs');
-	el.tabs('add', '/ajax_html_echo', 'Test');
-	equals(el.children('div').length, el.find('> ul > li').length, 'After add, number of panels should be equal to number of tabs');
 });
 
 test( "length", function() {
