@@ -12,6 +12,7 @@
 	<script src="../ui/jquery.ui.position.js"></script>
 	<script src="../ui/jquery.ui.button.js"></script>
 	<script src="datasource.js"></script>
+	<script src="datasource-local.js"></script>
 	<script src="pager.js"></script>
 	<script src="slideshow.js"></script>
 	<script type="text/x-kite" id="pager-tmpl">
@@ -46,29 +47,24 @@
 		}).get();
 		$("#gal1").hide();
 
-		var datasource = $.dataSource({
-			source: photos,
+		var datasource = $.ui.localDatasource( {
+			input: photos,
 			paging: {
-				take: 3,
-				skip: 0
+				limit: 3,
 			}
 		});
 
-		$( "#slideshow" ).slideshow({
+		$( "#slideshow" ).slideshow( {
 			source: datasource
 		});
 		
-		$( kite( "#pager-tmpl" )() ).insertBefore( "#slideshow" ).pager({
+		$( kite( "#pager-tmpl" )() ).insertBefore( "#slideshow" ).pager( {
 			source: datasource
 		})
 		
 
-		$( "#page-size" ).change(function() {
-			datasource.option("paging", {
-				take: +$(this).val(),
-				// can't yet only set take
-				skip: datasource._skip
-			}).refresh();
+		$( "#page-size" ).change( function() {
+			datasource.option( "paging.limit", +$(this).val() ).refresh();
 		});
 
 		datasource.refresh();

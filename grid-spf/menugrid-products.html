@@ -19,11 +19,11 @@
 
 	<script>
 	$(function() {
-		var movies = $.ui.odataDatasource({
-			resource: "http://odata.netflix.com/Catalog/Titles"
+		var products = $.ui.odataDatasource({
+			resource: "http://services.odata.org/Northwind/Northwind.svc/Products_by_Categories"
 		});
-		var grid = $( "#movies" ).grid({
-			source: movies
+		var grid = $( "#products" ).grid({
+			source: products
 		});
 		grid.find("th").each(function() {
 			var header = $(this),
@@ -32,7 +32,7 @@
 			var menu = $("#menu-tmpl").tmpl().appendTo(this).menu({
 				select: function(event, ui) {
 					event.stopPropagation();
-					movies.option("sort", ui.item.find("a").data("sort") == "asc" ? field : "-" + field).refresh();
+					products.option("sort", ui.item.find("a").data("sort") == "asc" ? field : "-" + field).refresh();
 					menu.hide();
 				}
 			}).hide();
@@ -49,12 +49,12 @@
 		$(document).click(function() {
 			$(":ui-menu").hide();
 		});
-		
+
 		var thead = grid.find("thead");
 		thead.children().clone().insertAfter(thead).find("th").each(function() {
 			$("<input />").appendTo($(this).empty());
 		});
-		
+
 		grid.find("input").bind("change", function() {
 			var head = $(this).parent(),
 				field = head.data("field"),
@@ -73,24 +73,24 @@
 				compare = "like";
 			}
 			if (input) {
-				movies.option("filter." + field, {
+				products.option("filter." + field, {
 					operator: compare,
 					value: input
 				});
 			} else {
-				movies.option("filter." + field, null);
+				products.option("filter." + field, null);
 			}
-			movies.refresh();
+			products.refresh();
 		});
-		
+
 		$("#pager").pager({
-			source: movies
+			source: products
 		});
-		
-		movies.refresh();
+
+		products.refresh();
 	});
 	</script>
-	
+
 	<style>
 		.ui-menu {
 			position: absolute;
@@ -110,14 +110,15 @@
 	</ul>
 </script>
 
-<h2>Movies! Click header for sort menu, use inputs for filtering, pager for paging</h2>
+<h2>products! Click header for sort menu, use inputs for filtering, pager for paging</h2>
 <p>
-<table id="movies">
+<table id="products">
 	<thead>
 		<tr>
-			<th data-field="Name" data-type="string">Name</th>
-			<th data-field="ReleaseYear" data-type="number">Release Year</th>
-			<th data-field="AverageRating" data-type="number">Average Rating</th>
+			<th data-field="CategoryName" data-type="string">Category</th>
+			<th data-field="ProductName" data-type="string">Product</th>
+			<th data-field="QuantityPerUnit" data-type="string">Quantity Per Unit</th>
+			<th data-field="UnitsInStock" data-type="number">UnitsInStock</th>
 		</tr>
 	</thead>
 	<tbody>

@@ -26,10 +26,10 @@ $.widget( "spf.pager", {
 		this.buttons.button("enable");
 		
 		var source = this.options.source;
-		if (!source._skip) {
+		if (!source.options.paging.offset) {
 			this.buttons.slice(0, 3).button("disable")
 		}
-		if (source._skip + source._take >= source.totalCount) {
+		if (source.options.paging.offset + source.options.paging.limit >= source.totalCount) {
 			this.buttons.slice(3, 6).button("disable")
 		}
 		this.element.find(".current").val(this.page());
@@ -38,16 +38,11 @@ $.widget( "spf.pager", {
 	},
 	
 	totalPages: function() {
-		var source = this.options.source; 
-		return Math.ceil(source.totalCount / source._take);
+		return this.options.source.totalPages();
 	},
 	
 	page: function(pageIndex) {
-		var source = this.options.source;
-		if (pageIndex !== undefined) {
-			source._skip = pageIndex * source._take - source._take;
-		}
-		return Math.ceil((source._skip || 0) / source._take + 1);
+		return this.options.source.page(pageIndex);
 	},
 	
 	first: function() {
@@ -55,7 +50,7 @@ $.widget( "spf.pager", {
 	},
 	
 	prevStep: function() {
-		this.options.source._skip -= 1;
+		this.options.source.options.paging.offset -= 1;
 	},
 	
 	prev: function() {
@@ -67,10 +62,7 @@ $.widget( "spf.pager", {
 	},
 	
 	nextStep: function() {
-		if (!this.options.source._skip) {
-			this.options.source._skip = 0;
-		}
-		this.options.source._skip += 1;
+		this.options.source.options.paging.offset += 1;
 	},
 	
 	last: function() {

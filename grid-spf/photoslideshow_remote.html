@@ -35,34 +35,35 @@
 	</script>
 	<script>
 	$(function() {
-		// TODO must be possible to set these through the datasource
-		$.ajaxSetup({
-			dataType: "jsonp",
-			jsonpCallback: "jsonFlickrApi",
-		});
-		var datasource = $.dataSource({
-			path: "http://api.flickr.com/services/rest/",
-			paging: { take: 2 },
-			urlMapper: function(path, queryParams, sort, filter, skip, take) {
-				return path + "?" + $.param({
-					format: "json",
-					api_key: "d86848d57cb3f7ad94f2ee9a3c90eff1",
-					method: "flickr.photos.search",
-					tags: filter[0].filterValue,
-					sort: "relevance",
-					per_page: take,
-					page: Math.ceil((skip || 0) / take + 1)
-				});
+		var datasource = $.ui.datasource( {
+			paging: {
+				limit: 2
 			},
-			resultsFilter: function (data) {
-		        this.totalCount = data.photos.total;
-		        return $.map( data.photos.photo, function( photo ) {
-					return {
-						src: kite( "http://farm{{farm}}.static.flickr.com/{{server}}/{{id}}_{{secret}}_m.jpg", photo ),
-						href: kite( "http://www.flickr.com/photos/{{owner}}/{{id}}/", photo )
+			source: function( request, response ) {
+				$.ajax({
+					url: "http://api.flickr.com/services/rest/",
+					dataType: "jsonp",
+					jsonpCallback: "jsonFlickrApi",
+					data: {
+						format: "json",
+						api_key: "d86848d57cb3f7ad94f2ee9a3c90eff1",
+						method: "flickr.photos.search",
+						tags: request.filter,
+						sort: "relevance",
+						per_page: request.paging.limit,
+						page: request.page
+					},
+					success: function( data ) {
+						var result = $.map( data.photos.photo, function( photo ) {
+							return {
+								src: kite( "http://farm{{farm}}.static.flickr.com/{{server}}/{{id}}_{{secret}}_m.jpg", photo ),
+								href: kite( "http://www.flickr.com/photos/{{owner}}/{{id}}/", photo )
+							}
+						})
+				        response( result, data.photos.total );
 					}
-				});
-		    }
+				})
+			}
 		});
 
 		$( "#slideshow" ).slideshow({
@@ -73,20 +74,13 @@
 			source: datasource
 		});
 
-		$( "#page-size" ).change(function() {
-			datasource.option("paging", {
-				take: +$(this).val(),
-				// can't yet only set take
-				skip: datasource._skip
-			}).refresh();
+		$( "#page-size" ).change( function() {
+			datasource.option( "paging.limit", +$( this ).val() ).refresh();
 		});
 		
 		$( "#filter" ).change(function() {
-			datasource.option("filter", {
-				property: "tags",
-				value: $(this).val()
-			}).refresh();
-		}).trigger("change");
+			datasource.option( "filter", $( this ).val() ).refresh();
+		}).trigger( "change" );
 	});
 	
 	</script>
@@ -94,7 +88,7 @@
 <body>
 
 <h1>Photo Slideshow</h1>
-<p>features: paging</p>
+<p>features: paging, filtering</p>
 
 <hr>
 

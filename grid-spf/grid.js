@@ -45,7 +45,13 @@ $.widget( "ui.grid", {
 	
 	_columns: function() {
 		if ( this.options.columns ) {
-			// TODO check if table headers exist, generate if not
+			if ( !this.element.find( "th" ).length ) {
+				// TODO improve this
+				var head = this.element.find("thead");
+				$.each( this.options.columns, function(index, column) {
+					$("<th>").attr("data-field", column).text(column).appendTo(head)
+				});
+			}
 			return;
 		}
 		this.options.columns = this.element.find( "th" ).map(function() {

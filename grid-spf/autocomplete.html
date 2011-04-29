@@ -17,56 +17,63 @@
 
 	<script>
 	$(function() {
-		var cities = $.dataSource({
-			path: "http://ws.geonames.org/searchJSON",
-			paging: { take: 10 },
-			urlMapper: function(path, queryParams, sort, filter, skip, take) {
-				return path + "?" + $.param({
-					featureClass: "P",
-					style: "full",
-					maxRows: take,
-					// name_startsWith: filter.term
-					name_startsWith: filter[0].filterValue
-				});
-			},
-			resultsFilter: function (data) {
-		        this.totalCount = data.totalResultsCount;
-		        return $.map( data.geonames, function( item ) {
-					return {
-						label: item.name + (item.adminName1 ? ", " + item.adminName1 : "") + ", " + item.countryName,
-						value: item.name
+		var cities = $.ui.datasource( {
+			source: function( request, response ) {
+				$.ajax( {
+					url: "http://ws.geonames.org/searchJSON",
+					dataType: "jsonp",
+					data: {
+						featureClass: "P",
+						style: "full",
+						maxRows: 12,
+						name_startsWith: request.filter.term
+					},
+					success: function( data ) {
+						var result = $.map( data.geonames, function( item ) {
+							return $.extend( {
+								label: item.name + (item.adminName1 ? ", " + item.adminName1 : "") + ", " + item.countryName,
+								value: item.name
+							}, item );
+						});
+						response( result, data.totalResultsCount);
 					}
 				});
-		    }
+			}
 		});
+
 
 		$("#city").autocomplete({
 			minLength: 3,
-			source: function(request, response) {
-				/*
-				cities.option("filter", request).refresh(function() {
-					response(cities.toArray());
+			source: function( request, response ) {
+				cities.option( "filter", request ).refresh( function() {
+					response( cities.toArray() );
 				});
-				*/
-				cities
-					.option("filter", {
-						property: "name",
-						value: request.term
-					})
-					.option("refresh", function() {
-						response(cities.toArray())
-					})
-					.refresh();
 			}
-		})
+		});
+
+		// secondary view
+		$( "table" ).grid( {
+			source: cities,
+			columns: [ "name", "adminName1", "adminCode1", "fclName", "adminName2", "population", "countryName" ]
+		});
 	});
 	</script>
 </head>
 <body>
 
+<h1>Autocomplete with custom datasource and secondary grid view</h1>
+<p>features: filtering</p>
+
 <form>
 	<label for="city">City</label><input id="city"/>
 </form>
+
+<table>
+	<thead>
+	</thead>
+	<tbody>
+	</tbody>
+</table>
 
 </body>
 </html>
