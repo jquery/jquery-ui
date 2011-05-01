@@ -146,7 +146,7 @@ var colors = {
 /****************************** CLASS ANIMATIONS ******************************/
 /******************************************************************************/
 
-var classAnimationActions = [ 'add', 'remove', 'toggle' ],
+var classAnimationActions = [ "add", "remove", "toggle" ],
 	shorthandStyles = {
 		border: 1,
 		borderBottom: 1,
@@ -157,7 +157,15 @@ var classAnimationActions = [ 'add', 'remove', 'toggle' ],
 		borderWidth: 1,
 		margin: 1,
 		padding: 1
-	};
+	},
+	preAnimateStyles = {
+		borderLeftStyle: 1,
+		borderRightStyle: 1,
+		borderBottomStyle: 1,
+		borderTopStyle: 1
+	},
+	// prefix used for storing data on .data()
+	dataSpace = "ec.storage.";
 
 function getElementStyles() {
 	var style = document.defaultView
@@ -173,60 +181,42 @@ function getElementStyles() {
 		len = style.length;
 		while ( len-- ) {
 			key = style[ len ];
-			if ( typeof style[ key ] == 'string' ) {
-				camelCase = key.replace( /\-(\w)/g, function( all, letter ) {
-					return letter.toUpperCase();
-				});
-				newStyle[ camelCase ] = style[ key ];
+			if ( typeof style[ key ] === "string" ) {
+				newStyle[ $.camelCase( key ) ] = style[ key ];
 			}
 		}
 	} else {
 		for ( key in style ) {
-			if ( typeof style[ key ] === 'string' ) {
+			if ( typeof style[ key ] === "string" ) {
 				newStyle[ key ] = style[ key ];
 			}
 		}
 	}
-	
+
 	return newStyle;
 }
 
-// ignore scrollbars (break in IE)
-var rignore = /scrollbar|Origin/,
-	rcolor = /[Cc]olor/,
-	rcssstyles = /border.*Style/,
-
-	// prefix used for storing data on .data()
-	dataSpace = "ec.storage.";
 
 function styleDifference( oldStyle, newStyle ) {
 	var diff = {
 
-			// properties that can be animated
+			// properties that will be animated
 			animate: {},
 
-			// properties that should be set pre-anim using CSS
-			css: {}
+			// properties that should be set pre-animation using CSS
+			preCss: {}
 		},
 		name, value;
 
 	for ( name in newStyle ) {
 		value = newStyle[ name ];
 		if ( oldStyle[ name ] != value ) {
-			if (
-				// ignore null and undefined values
-				value == null ||
-				// ignore functions (when does this occur?)
-				$.isFunction( value ) ||
-				// shorthand styles that need to be expanded
-				name in shorthandStyles ||
-				rignore.test( name )
-			) {
-				// do nothing 
-			} else if ( rcolor.test( name ) || !isNaN( parseFloat( value ) ) ) {
-				diff.animate[ name ] = value;
-			} else if ( rcssstyles.test( name ) && value != 'none' ) {
-				diff.css[ name ] = value;
+			if ( !shorthandStyles[ name ] ) {
+				if ( $.fx.step[ name ] || !isNaN( parseFloat( value ) ) ) {
+					diff.animate[ name ] = value;
+				} else if ( preAnimateStyles[ name ] && value !== "none" ) {
+					diff.preCss[ name ] = value;
+				}
 			}
 		}
 	}
@@ -258,7 +248,7 @@ $.effects.animateClass = function( value, duration, easing, callback ) {
 
 		diff = styleDifference( originalStyle, newStyle );
 		animated
-			.css( diff.css )
+			.css( diff.preCss )
 			.animate( diff.animate , {
 				duration: duration,
 				easing: o.easing,
@@ -285,14 +275,14 @@ $.effects.animateClass = function( value, duration, easing, callback ) {
 $.fn.extend({
 	_addClass: $.fn.addClass,
 	addClass: function( classNames, speed, easing, callback ) {
-		return speed ? 
+		return speed ?
 			$.effects.animateClass.apply( this, [{ add: classNames }, speed, easing, callback ]) :
 			this._addClass(classNames);
 	},
 
 	_removeClass: $.fn.removeClass,
 	removeClass: function( classNames, speed, easing, callback ) {
-		return speed ? 
+		return speed ?
 			$.effects.animateClass.apply( this, [{ remove: classNames }, speed, easing, callback ]) :
 			this._removeClass(classNames);
 	},
@@ -313,9 +303,9 @@ $.fn.extend({
 	},
 
 	switchClass: function( remove, add, speed, easing, callback) {
-		return $.effects.animateClass.apply( this, [{ 
-				add: add, 
-				remove: remove 
+		return $.effects.animateClass.apply( this, [{
+				add: add,
+				remove: remove
 			}, speed, easing, callback ]);
 	}
 });
@@ -349,14 +339,14 @@ $.extend( $.effects, {
 
 	setMode: function( el, mode ) {
 		if (mode == 'toggle') {
-			mode = el.is( ':hidden' ) ? 'show' : 'hide'; 
+			mode = el.is( ':hidden' ) ? 'show' : 'hide';
 		}
 		return mode;
 	},
 
 	// Translates a [top,left] array into a baseline value
 	// this should be a little more flexible in the future to handle a string & hash
-	getBaseline: function( origin, original ) { 
+	getBaseline: function( origin, original ) {
 		var y, x;
 		switch ( origin[ 0 ] ) {
 			case 'top': y = 0; break;
@@ -486,7 +476,7 @@ function _normalizeArguments( effect, options, speed, callback ) {
 	if ( options ) {
 		$.extend( effect, options );
 	}
-	
+
 	speed = speed || options.duration;
 	effect.duration = $.fx.off ? 0 : typeof speed == 'number'
 		? speed : speed in $.fx.speeds ? $.fx.speeds[ speed ] : $.fx.speeds._default;
@@ -501,7 +491,7 @@ function standardSpeed( speed ) {
 	if ( !speed || typeof speed === "number" || $.fx.speeds[ speed ] ) {
 		return true;
 	}
-	
+
 	// invalid strings - treat as "normal" speed
 	if ( typeof speed === "string" && !$.effects.effect[ speed ] ) {
 		// TODO: remove in 2.0 (#7115)
@@ -510,7 +500,7 @@ function standardSpeed( speed ) {
 		}
 		return true;
 	}
-	
+
 	return false;
 }
 
@@ -725,9 +715,9 @@ $.extend( $.easing, {
 			a = c;
 		if ( t == 0 ) return b;
 		if ( ( t /= d ) == 1 ) return b+c;
-		if ( a < Math.abs( c ) ) { 
-			a = c; 
-			s = p / 4; 
+		if ( a < Math.abs( c ) ) {
+			a = c;
+			s = p / 4;
 		} else {
 			s = p / ( 2 * Math.PI ) * Math.asin( c / a );
 		}
@@ -740,8 +730,8 @@ $.extend( $.easing, {
 		if ( t == 0 ) return b;
 		if ( ( t /= d ) == 1 ) return b+c;
 		if ( a < Math.abs( c ) ) {
-			a = c; 
-			s = p / 4; 
+			a = c;
+			s = p / 4;
 		} else {
 			s = p / ( 2 * Math.PI ) * Math.asin( c / a );
 		}
@@ -753,7 +743,7 @@ $.extend( $.easing, {
 			a = c;
 		if ( t == 0 ) return b;
 		if ( ( t /= d / 2 ) == 2 ) return b+c;
-		if ( a < Math.abs( c ) ) { 
+		if ( a < Math.abs( c ) ) {
 			a = c;
 			s = p / 4;
 		} else {
