@@ -13,45 +13,49 @@
 (function( $, undefined ) {
 
 $.effects.effect.pulsate = function( o ) {
-	return this.queue( function() {
+	return this.queue( function( next ) {
 		var elem = $( this ),
-			mode = $.effects.setMode( elem, o.mode || 'show' ),
+			mode = $.effects.setMode( elem, o.mode || "show" ),
+			show = mode === "show" || !elem.is( ":visible" ),
+			showhide = ( show || mode === "hide" ),
 
-			// showing or hiding leave of the "last" time
-			times = ( ( o.times || 5 ) * 2 ) - ( mode == "show" || mode == "hide" ),
-			duration = o.duration / times,
-			show = !elem.is( ":visible" ),
+			// showing or hiding leaves of the "last" animation
+			anims = ( ( o.times || 5 ) * 2 ) - ( showhide ? 1 : 0 ),
+			duration = o.duration / anims,
 			animateTo = 0,
-			i,
 			queue = elem.queue(),
-			queuelen = queue.length;
+			queuelen = queue.length,
+			i;
 
 		if ( show ) {
-			elem.css('opacity', 0).show();
+			elem.css( "opacity", 0 ).show();
 			animateTo = 1;
 		}
 
-		for ( i = 0; i < times - 1; i++ ) {
-			elem.animate({ 
-				opacity: animateTo 
+		for ( i = 0; i < anims - 1; i++ ) {
+			elem.animate({
+				opacity: animateTo
 			}, duration, o.easing );
 			animateTo = 1 - animateTo;
 		}
 
-		elem.animate({ 
-			opacity: animateTo 
+		elem.animate({
+			opacity: animateTo
 		}, duration, o.easing, function() {
-			if (animateTo == 0) {
+			if ( animateTo === 0 ) {
 				elem.hide();
 			}
-			(o.complete && o.complete.apply(this, arguments));
+			if ( o.complete ) {
+				o.complete.apply( this );
+			}
 		});
 
+		// We just queued up "anims" animations, we need to put them next in the queue
 		if ( queuelen > 1) {
 			queue.splice.apply( queue,
-				[ 1, 0 ].concat( queue.splice( queuelen, times ) ) );
+				[ 1, 0 ].concat( queue.splice( queuelen, anims ) ) );
 		}
-		elem.dequeue();
+		next();
 	});
 };
 
