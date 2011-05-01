@@ -229,9 +229,9 @@ $.effects.animateClass = function( value, duration, easing, callback ) {
 
 	return this.queue( function() {
 		var animated = $( this ),
-			baseClass = animated.attr( 'className' ),
+			baseClass = animated.attr( "class" ),
 			finalClass,
-			originalStyleAttr = animated.attr( 'style' ) || ' ',
+			originalStyleAttr = animated.attr( "style" ) || ' ',
 			originalStyle = getElementStyles.call( this ),
 			newStyle,
 			diff,
@@ -239,12 +239,12 @@ $.effects.animateClass = function( value, duration, easing, callback ) {
 
 		$.each( classAnimationActions, function(i, action) {
 			if ( value[ action ] ) {
-				animated[ action + 'Class' ]( value[ action ] );
+				animated[ action + "Class" ]( value[ action ] );
 			}
 		});
 		newStyle = getElementStyles.call( this );
-		finalClass = animated.attr( 'className' );
-		animated.attr( 'className', baseClass );
+		finalClass = animated.attr( "class" );
+		animated.attr( "class", baseClass );
 
 		diff = styleDifference( originalStyle, newStyle );
 		animated
@@ -254,7 +254,7 @@ $.effects.animateClass = function( value, duration, easing, callback ) {
 				easing: o.easing,
 				queue: false,
 				complete: function() {
-					animated.attr( 'className', finalClass );
+					animated.attr( "class", finalClass );
 
 					if ( typeof animated.attr( 'style' ) == 'object' ) {
 						animated.attr( 'style' ).cssText = '';
@@ -268,7 +268,6 @@ $.effects.animateClass = function( value, duration, easing, callback ) {
 					o.complete.call( this );
 				}
 			});
-
 	});
 };
 

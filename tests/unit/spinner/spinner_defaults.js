@@ -1,16 +1,15 @@
-/*
- * spinner_defaults.js
- */
+commonWidgetTests( "spinner", {
+	defaults: {
+		disabled: false,
+		incremental: true,
+		max: null,
+		min: null,
+		numberformat: null,
+		page: 10,
+		step: null,
+		value: null,
 
-var spinner_defaults = {
-	disabled: false,
-	incremental: true,
-	max: null,
-	min: null,
-	numberformat: null,
-	page: 10,
-	step: null,
-	value: null
-};
-
-commonWidgetTests('spinner', { defaults: spinner_defaults });
+		// callbacks
+		create: null
+	}
+});

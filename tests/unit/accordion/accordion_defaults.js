@@ -10,6 +10,11 @@ commonWidgetTests( "accordion", {
 		icons: {
 			"activeHeader": "ui-icon-triangle-1-s",
 			"header": "ui-icon-triangle-1-e"
-		}
+		},
+
+		// callbacks
+		activate: null,
+		beforeActivate: null,
+		create: null
 	}
 });
