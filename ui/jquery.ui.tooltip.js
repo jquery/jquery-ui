@@ -18,9 +18,10 @@ var increments = 0;
 
 $.widget("ui.tooltip", {
 	options: {
+		tooltipClass: null,
 		items: "[title]",
 		content: function() {
-			return $(this).attr("title");
+			return $( this ).attr( "title" );
 		},
 		position: {
 			my: "left center",
@@ -29,25 +30,10 @@ $.widget("ui.tooltip", {
 		}
 	},
 	_create: function() {
-		var self = this;
-		this.tooltip = $("<div></div>")
-			.attr("id", "ui-tooltip-" + increments++)
-			.attr("role", "tooltip")
-			.attr("aria-hidden", "true")
-			.addClass("ui-tooltip ui-widget ui-corner-all ui-widget-content")
-			.appendTo(document.body)
-			.hide();
-		this.tooltipContent = $("<div></div>")
-			.addClass("ui-tooltip-content")
-			.appendTo(this.tooltip);
-		this.opacity = this.tooltip.css("opacity");
-		this.element
-			.bind("focus.tooltip mouseover.tooltip", function(event) {
-				self.open( event );
-			})
-			.bind("blur.tooltip mouseout.tooltip", function(event) {
-				self.close( event );
-			});
+		this._bind( {
+			mouseover: "open",
+			focusin: "open"
+		});
 	},
 	
 	enable: function() {
@@ -55,15 +41,8 @@ $.widget("ui.tooltip", {
 	},
 	
 	disable: function() {
+		// only set option, disable element style changes
 		this.options.disabled = true;
-	},
-	
-	_destroy: function() {
-		this.tooltip.remove();
-	},
-	
-	widget: function() {
-		return this.element.pushStack(this.tooltip.get());
 	},
 	
 	open: function(event) {
@@ -71,18 +50,19 @@ $.widget("ui.tooltip", {
 		if ( !target.length ) {
 			return;
 		}
-		// already visible? possible when both focus and mouseover events occur
-		if (this.current && this.current[0] == target[0])
-			return;
 		var self = this;
-		this.current = target;
-		this.currentTitle = target.attr("title");
+		if ( !target.data("tooltip-title") ) {
+			target.data("tooltip-title", target.attr("title"));
+		}
 		var content = this.options.content.call(target[0], function(response) {
 			// IE may instantly serve a cached response, need to give it a chance to finish with _open before that
 			setTimeout(function() {
-				// ignore async responses that come in after the tooltip is already hidden
-				if (self.current == target)
+				// when undefined, it got removeAttr, then ignore (ajax response)
+				// intially its an empty string, so not undefined
+				// TODO is there a better approach to enable ajax tooltips to have two updates?
+				if (target.attr( "aria-describedby" ) !== undefined) {
 					self._open(event, target, response);
+				}
 			}, 13);
 		});
 		if (content) {
@@ -90,48 +70,74 @@ $.widget("ui.tooltip", {
 		}
 	},
 	
-	_open: function(event, target, content) {
-		if (!content)
+	_open: function( event, target, content ) {
+		if ( !content )
 			return;
-		
-		target.attr("title", "");
-		
-		if (this.options.disabled)
-			return;
-			
-		this.tooltipContent.html(content);
-		this.tooltip.css({
-			top: 0,
-			left: 0
-		}).show().position( $.extend({
-			of: target
-		}, this.options.position )).hide();
-		
-		this.tooltip.attr("aria-hidden", "false");
-		target.attr("aria-describedby", this.tooltip.attr("id"));
 
-		this.tooltip.stop(false, true).fadeIn();
+		target.attr("title", "");
+
+		if ( this.options.disabled )
+			return;
+
+		// ajaxy tooltip can update an existing one
+		var tooltip = this._find( target );
+		if (!tooltip.length) {
+			tooltip = this._tooltip();
+			target.attr( "aria-describedby", tooltip.attr( "id" ) );
+		}
+		tooltip.find(".ui-tooltip-content").html( content );
+		tooltip.position( $.extend({
+			of: target
+		}, this.options.position ) ).hide();
+
+
+		tooltip.fadeIn();
 
 		this._trigger( "open", event );
+
+		this._bind( target, {
+			mouseleave: "close",
+			blur: "close"
+		});
 	},
 	
-	close: function(event) {
-		if (!this.current)
+	close: function( event ) {
+		var target = $( event && event.currentTarget || this.element );
+		target.attr( "title", target.data( "tooltip-title" ) );
+		
+		if ( this.options.disabled )
 			return;
+
+		var tooltip = this._find( target );
+		target.removeAttr( "aria-describedby" );
 		
-		var current = this.current;
-		this.current = null;
-		current.attr("title", this.currentTitle);
+		tooltip.fadeOut( function() {
+			$( this ).remove();
+		});
 		
-		if (this.options.disabled)
-			return;
-		
-		current.removeAttr("aria-describedby");
-		this.tooltip.attr("aria-hidden", "true");
-		
-		this.tooltip.stop(false, true).fadeOut();
+		target.unbind( "mouseleave.tooltip blur.tooltip" );
 		
 		this._trigger( "close", event );
+	},
+
+	_tooltip: function() {
+		var tooltip = $( "<div></div>" )
+			.attr( "id", "ui-tooltip-" + increments++ )
+			.attr( "role", "tooltip" )
+			.addClass( "ui-tooltip ui-widget ui-corner-all ui-widget-content" );
+		if (this.options.tooltipClass) {
+			tooltip.addClass(this.options.tooltipClass);
+		}
+		$( "<div></div>" )
+			.addClass( "ui-tooltip-content" )
+			.appendTo( tooltip );
+		tooltip.appendTo( document.body );
+		return tooltip;
+	},
+
+	_find: function( target ) {
+		var id = target.attr( "aria-describedby" );
+		return id ? $( document.getElementById( id ) ) : $();
 	}
 });
 
