@@ -36,75 +36,56 @@ $.widget( "ui.slider", $.ui.mouse, {
 
 	_create: function() {
 		var self = this,
-			o = this.options;
+			o = self.options,
+			handle = "<a class='ui-slider-handle ui-state-default ui-corner-all' href='#'></a>",
+			handleCount = ( o.values && o.values.length ) || 1,
+			handles = [];
 
-		this._keySliding = false;
-		this._mouseSliding = false;
-		this._animateOff = true;
-		this._handleIndex = null;
-		this._detectOrientation();
-		this._mouseInit();
+		self._keySliding = false;
+		self._mouseSliding = false;
+		self._animateOff = true;
+		self._handleIndex = null;
+		self._detectOrientation();
+		self._mouseInit();
 
-		this.element
+		self.element
 			.addClass( "ui-slider" +
-				" ui-slider-" + this.orientation +
+				" ui-slider-" + self.orientation +
 				" ui-widget" +
 				" ui-widget-content" +
-				" ui-corner-all" );
-		
-		if ( o.disabled ) {
-			this.element.addClass( "ui-slider-disabled ui-disabled" );
-		}
+				" ui-corner-all" +
+				( o.disabled ? " ui-slider-disabled ui-disabled" : "" ) );
 
-		this.range = $([]);
+		self.range = $([]);
 
 		if ( o.range ) {
 			if ( o.range === true ) {
-				this.range = $( "<div></div>" );
 				if ( !o.values ) {
-					o.values = [ this._valueMin(), this._valueMin() ];
+					o.values = [ self._valueMin(), self._valueMin() ];
 				}
 				if ( o.values.length && o.values.length !== 2 ) {
 					o.values = [ o.values[0], o.values[0] ];
 				}
-			} else {
-				this.range = $( "<div></div>" );
 			}
 
-			this.range
-				.appendTo( this.element )
-				.addClass( "ui-slider-range" );
-
-			if ( o.range === "min" || o.range === "max" ) {
-				this.range.addClass( "ui-slider-range-" + o.range );
-			}
-
-			// note: this isn't the most fittingly semantic framework class for this element,
-			// but worked best visually with a variety of themes
-			this.range.addClass( "ui-widget-header" );
+			self.range = $( "<div></div>" )
+				.appendTo( self.element )
+				.addClass( "ui-slider-range" +
+					// note: this isn't the most fittingly semantic framework class for this element,
+					// but worked best visually with a variety of themes
+					" ui-widget-header" + 
+					( ( o.range === "min" || o.range === "max" ) ? " ui-slider-range-" + o.range : "" ) );
 		}
 
-		if ( $( ".ui-slider-handle", this.element ).length === 0 ) {
-			$( "<a href='#'></a>" )
-				.appendTo( this.element )
-				.addClass( "ui-slider-handle" );
+		for ( var i = 0; i < handleCount; i += 1 ) {
+			handles.push(handle);
 		}
 
-		if ( o.values && o.values.length ) {
-			while ( $(".ui-slider-handle", this.element).length < o.values.length ) {
-				$( "<a href='#'></a>" )
-					.appendTo( this.element )
-					.addClass( "ui-slider-handle" );
-			}
-		}
+		self.handles = $( handles.join( "" ) ).appendTo( self.element );
 
-		this.handles = $( ".ui-slider-handle", this.element )
-			.addClass( "ui-state-default" +
-				" ui-corner-all" );
+		self.handle = self.handles.eq( 0 );
 
-		this.handle = this.handles.eq( 0 );
-
-		this.handles.add( this.range ).filter( "a" )
+		self.handles.add( self.range ).filter( "a" )
 			.click(function( event ) {
 				event.preventDefault();
 			})
@@ -127,11 +108,11 @@ $.widget( "ui.slider", $.ui.mouse, {
 				$( this ).removeClass( "ui-state-focus" );
 			});
 
-		this.handles.each(function( i ) {
+		self.handles.each(function( i ) {
 			$( this ).data( "index.ui-slider-handle", i );
 		});
 
-		this.handles
+		self.handles
 			.keydown(function( event ) {
 				var ret = true,
 					index = $( this ).data( "index.ui-slider-handle" ),
@@ -139,11 +120,11 @@ $.widget( "ui.slider", $.ui.mouse, {
 					curVal,
 					newVal,
 					step;
-	
+
 				if ( self.options.disabled ) {
 					return;
 				}
-	
+
 				switch ( event.keyCode ) {
 					case $.ui.keyCode.HOME:
 					case $.ui.keyCode.END:
@@ -164,14 +145,14 @@ $.widget( "ui.slider", $.ui.mouse, {
 						}
 						break;
 				}
-	
+
 				step = self.options.step;
 				if ( self.options.values && self.options.values.length ) {
 					curVal = newVal = self.values( index );
 				} else {
 					curVal = newVal = self.value();
 				}
-	
+
 				switch ( event.keyCode ) {
 					case $.ui.keyCode.HOME:
 						newVal = self._valueMin();
@@ -200,27 +181,27 @@ $.widget( "ui.slider", $.ui.mouse, {
 						newVal = self._trimAlignValue( curVal - step );
 						break;
 				}
-	
+
 				self._slide( event, index, newVal );
-	
+
 				return ret;
-	
+
 			})
 			.keyup(function( event ) {
 				var index = $( this ).data( "index.ui-slider-handle" );
-	
+
 				if ( self._keySliding ) {
 					self._keySliding = false;
 					self._stop( event, index );
 					self._change( event, index );
 					$( this ).removeClass( "ui-state-active" );
 				}
-	
+
 			});
 
-		this._refreshValue();
+		self._refreshValue();
 
-		this._animateOff = false;
+		self._animateOff = false;
 	},
 
 	destroy: function() {
