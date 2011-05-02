@@ -13,6 +13,7 @@
 	<script type="text/javascript" src="../../../ui/jquery.effects.core.js"></script>
 	<script type="text/javascript" src="../../../ui/jquery.effects.blind.js"></script>
 	<script type="text/javascript" src="../../../ui/jquery.effects.bounce.js"></script>
+	<script type="text/javascript" src="../../../ui/jquery.effects.drop.js"></script>
 	<script type="text/javascript" src="../../../ui/jquery.effects.explode.js"></script>
 	<!--
 	<script type="text/javascript" src="http://jqueryui.com/themeroller/themeswitchertool/"></script>
@@ -39,6 +40,16 @@
 			},
 			hide: {
 				effect: "blind"
+			}
+		},
+		{
+			show: {
+				effect: "drop",
+				direction: "right"
+			},
+			hide: {
+				effect: "drop",
+				direction: "right"
 			}
 		}];
 		$.each(animations, function(index, animation) {
