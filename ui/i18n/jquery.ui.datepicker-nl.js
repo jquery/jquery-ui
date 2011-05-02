@@ -14,7 +14,7 @@ jQuery(function($){
 		dayNamesShort: ['zon', 'maa', 'din', 'woe', 'don', 'vri', 'zat'],
 		dayNamesMin: ['zo', 'ma', 'di', 'wo', 'do', 'vr', 'za'],
 		weekHeader: 'Wk',
-		dateFormat: 'dd/mm/yy',
+		dateFormat: 'dd-mm-yy',
 		firstDay: 1,
 		isRTL: false,
 		showMonthAfterYear: false,

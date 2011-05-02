@@ -17,7 +17,7 @@
 	<script src="../testsuite.js"></script>
 
 	<script>
-	function state( accordion ) {
+	function accordion_state( accordion ) {
 		var expected = $.makeArray( arguments ).slice( 1 );
 		var actual = accordion.find( ".ui-accordion-content" ).map(function() {
 			return $( this ).css( "display" ) === "none" ? 0 : 1;
