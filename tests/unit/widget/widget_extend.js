@@ -1,4 +1,4 @@
-test("jQuery.extend(Object, Object)", function() {
+test("$.widget.extend(Object, Object)", function() {
 	expect(28);
 
 	var settings = { xnumber1: 5, xnumber2: 7, xstring1: "peter", xstring2: "pan" },
@@ -13,62 +13,62 @@ test("jQuery.extend(Object, Object)", function() {
 		arr = [1, 2, 3],
 		nestedarray = { arr: arr };
 
-	jQuery.extend2(settings, options);
+	$.widget.extend(settings, options);
 	same( settings, merged, "Check if extended: settings must be extended" );
 	same( options, optionsCopy, "Check if not modified: options must not be modified" );
-	jQuery.extend2(settings, null, options);
+	$.widget.extend(settings, null, options);
 	same( settings, merged, "Check if extended: settings must be extended" );
 	same( options, optionsCopy, "Check if not modified: options must not be modified" );
 
-	jQuery.extend2(deep1, deep2);
+	$.widget.extend(deep1, deep2);
 	same( deep1.foo, deepmerged.foo, "Check if foo: settings must be extended" );
 	same( deep2.foo, deep2copy.foo, "Check if not deep2: options must not be modified" );
 	equals( deep1.foo2, document, "Make sure that a deep clone was not attempted on the document" );
 
-	ok( jQuery.extend2({}, nestedarray).arr === arr, "Don't clone arrays" );
-	ok( jQuery.isPlainObject( jQuery.extend2({ arr: arr }, { arr: {} }).arr ), "Cloned object heve to be an plain object" );
+	ok( $.widget.extend({}, nestedarray).arr === arr, "Don't clone arrays" );
+	ok( jQuery.isPlainObject( $.widget.extend({ arr: arr }, { arr: {} }).arr ), "Cloned object heve to be an plain object" );
 
 	var empty = {};
 	var optionsWithLength = { foo: { length: -1 } };
-	jQuery.extend2(empty, optionsWithLength);
+	$.widget.extend(empty, optionsWithLength);
 	same( empty.foo, optionsWithLength.foo, "The length property must copy correctly" );
 
 	empty = {};
 	var optionsWithDate = { foo: { date: new Date } };
-	jQuery.extend2(empty, optionsWithDate);
+	$.widget.extend(empty, optionsWithDate);
 	same( empty.foo, optionsWithDate.foo, "Dates copy correctly" );
 
 	var myKlass = function() {};
 	var customObject = new myKlass();
 	var optionsWithCustomObject = { foo: { date: customObject } };
 	empty = {};
-	jQuery.extend2(empty, optionsWithCustomObject);
+	$.widget.extend(empty, optionsWithCustomObject);
 	ok( empty.foo && empty.foo.date === customObject, "Custom objects copy correctly (no methods)" );
 
 	// Makes the class a little more realistic
 	myKlass.prototype = { someMethod: function(){} };
 	empty = {};
-	jQuery.extend2(empty, optionsWithCustomObject);
+	$.widget.extend(empty, optionsWithCustomObject);
 	ok( empty.foo && empty.foo.date === customObject, "Custom objects copy correctly" );
 
-	var ret = jQuery.extend2({ foo: 4 }, { foo: new Number(5) } );
+	var ret = $.widget.extend({ foo: 4 }, { foo: new Number(5) } );
 	ok( ret.foo == 5, "Wrapped numbers copy correctly" );
 
 	var nullUndef;
-	nullUndef = jQuery.extend2({}, options, { xnumber2: null });
+	nullUndef = $.widget.extend({}, options, { xnumber2: null });
 	ok( nullUndef.xnumber2 === null, "Check to make sure null values are copied");
 
-	nullUndef = jQuery.extend2({}, options, { xnumber2: undefined });
+	nullUndef = $.widget.extend({}, options, { xnumber2: undefined });
 	ok( nullUndef.xnumber2 === options.xnumber2, "Check to make sure undefined values are not copied");
 
-	nullUndef = jQuery.extend2({}, options, { xnumber0: null });
+	nullUndef = $.widget.extend({}, options, { xnumber0: null });
 	ok( nullUndef.xnumber0 === null, "Check to make sure null values are inserted");
 
 	// TODO weird test
 	/*
 	var target = {};
 	var recursive = { foo:target, bar:5 };
-	jQuery.extend2(target, recursive);
+	$.widget.extend(target, recursive);
 	same( target, { bar:5 }, "Check to make sure a recursive obj doesn't go never-ending loop by not copying it over" );
 	*/
 
@@ -106,7 +106,7 @@ test("jQuery.extend(Object, Object)", function() {
 	var input = {
 		key: [ 1, 2, 3 ]
 	}
-	var output = jQuery.extend2( {}, input );
+	var output = $.widget.extend( {}, input );
 	deepEqual( input, output, "don't clone arrays" );
 	input.key[0] = 10;
 	deepEqual( input, output, "don't clone arrays" );

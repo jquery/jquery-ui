@@ -11,24 +11,6 @@
 
 var slice = Array.prototype.slice;
 
-function extend( target ) {
-	var input = slice.call( arguments, 1 ),
-		inputIndex = 0,
-		inputLength = input.length,
-		key,
-		value;
-	for ( ; inputIndex < inputLength; inputIndex++ ) {
-		for ( key in input[ inputIndex ] ) {
-			value = input[ inputIndex ][ key ];
-			if (input[ inputIndex ].hasOwnProperty( key ) && value !== undefined ) {
-				target[ key ] = $.isPlainObject( value ) ? extend( {}, target[ key ], value ) : value;
-			}
-		}
-	}
-	return target;
-}
-$.extend2 = extend;
-
 var _cleanData = $.cleanData;
 $.cleanData = function( elems ) {
 	for ( var i = 0, elem; (elem = elems[i]) != null; i++ ) {
@@ -56,7 +38,7 @@ $.widget = function( name, base, prototype ) {
 	$[ namespace ] = $[ namespace ] || {};
 	// create the constructor using $.extend() so we can carry over any
 	// static properties stored on the existing constructor (if there is one)
-	$[ namespace ][ name ] = $.extend( function( options, element ) {
+	$[ namespace ][ name ] = $.widget.extend( function( options, element ) {
 		// allow instantiation without "new" keyword
 		if ( !this._createWidget ) {
 			return new $[ namespace ][ name ]( options, element );
@@ -73,7 +55,7 @@ $.widget = function( name, base, prototype ) {
 	// we need to make the options hash a property directly on the new instance
 	// otherwise we'll modify the options hash on the prototype that we're
 	// inheriting from
-	basePrototype.options = extend( {}, basePrototype.options );
+	basePrototype.options = $.widget.extend( {}, basePrototype.options );
 	$.each( prototype, function( prop, value ) {
 		if ( $.isFunction( value ) ) {
 			prototype[ prop ] = (function() {
@@ -101,7 +83,7 @@ $.widget = function( name, base, prototype ) {
 			}());
 		}
 	});
-	$[ namespace ][ name ].prototype = extend( basePrototype, {
+	$[ namespace ][ name ].prototype = $.widget.extend( basePrototype, {
 		namespace: namespace,
 		widgetName: name,
 		widgetEventPrefix: name,
@@ -109,6 +91,23 @@ $.widget = function( name, base, prototype ) {
 	}, prototype );
 
 	$.widget.bridge( name, $[ namespace ][ name ] );
+};
+
+$.widget.extend = function( target ) {
+	var input = slice.call( arguments, 1 ),
+		inputIndex = 0,
+		inputLength = input.length,
+		key,
+		value;
+	for ( ; inputIndex < inputLength; inputIndex++ ) {
+		for ( key in input[ inputIndex ] ) {
+			value = input[ inputIndex ][ key ];
+			if (input[ inputIndex ].hasOwnProperty( key ) && value !== undefined ) {
+				target[ key ] = $.isPlainObject( value ) ? $.widget.extend( {}, target[ key ], value ) : value;
+			}
+		}
+	}
+	return target;
 };
 
 $.widget.bridge = function( name, object ) {
@@ -119,7 +118,7 @@ $.widget.bridge = function( name, object ) {
 
 		// allow multiple hashes to be passed on init
 		options = !isMethodCall && args.length ?
-			extend.apply( null, [ options ].concat(args) ) :
+			$.widget.extend.apply( null, [ options ].concat(args) ) :
 			options;
 
 		if ( isMethodCall ) {
@@ -181,7 +180,7 @@ $.Widget.prototype = {
 	_createWidget: function( options, element ) {
 		element = $( element || this.defaultElement || this )[ 0 ];
 		this.element = $( element );
-		this.options = extend( {},
+		this.options = $.widget.extend( {},
 			this.options,
 			this._getCreateOptions(),
 			options );
@@ -236,7 +235,7 @@ $.Widget.prototype = {
 
 		if ( arguments.length === 0 ) {
 			// don't return a reference to the internal hash
-			return extend( {}, this.options );
+			return $.widget.extend( {}, this.options );
 		}
 
 		if ( typeof key === "string" ) {
@@ -248,7 +247,7 @@ $.Widget.prototype = {
 			parts = key.split( "." );
 			key = parts.shift();
 			if ( parts.length ) {
-				curOption = options[ key ] = extend( {}, this.options[ key ] );
+				curOption = options[ key ] = $.widget.extend( {}, this.options[ key ] );
 				for ( i = 0; i < parts.length - 1; i++ ) {
 					curOption[ parts[ i ] ] = curOption[ parts[ i ] ] || {};
 					curOption = curOption[ parts[ i ] ];
