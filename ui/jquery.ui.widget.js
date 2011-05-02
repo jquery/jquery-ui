@@ -365,7 +365,7 @@ $.each( { show: "fadeIn", hide: "fadeOut" }, function( method, defaultEffect ) {
 		if (options.delay) {
 			element.delay( options.delay );
 		}
-		if ( hasOptions && $.effects && $.effects.effect[ effectName ] ) {
+		if ( hasOptions && $.effects && ( $.effects.effect[ effectName ] || $.uiBackCompat !== false && $.effects[ effectName ] ) ) {
 			element[ method ]( options );
 		} else if ( effectName !== method && element[ effectName ] ) {
 			element[ effectName ]( options.duration, options.easing, callback );
@@ -384,7 +384,7 @@ $.each( { show: "fadeIn", hide: "fadeOut" }, function( method, defaultEffect ) {
 if ( $.uiBackCompat !== false ) {
 	$.Widget.prototype._getCreateOptions = function() {
 		return $.metadata && $.metadata.get( this.element[0] )[ this.widgetName ];
-	}
+	};
 }
 
 })( jQuery );
