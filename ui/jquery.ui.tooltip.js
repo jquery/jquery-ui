@@ -24,9 +24,8 @@ $.widget("ui.tooltip", {
 			return $( this ).attr( "title" );
 		},
 		position: {
-			my: "left center",
-			at: "right center",
-			offset: "15 0"
+			my: "left+15 center",
+			at: "right center"
 		}
 	},
 	_create: function() {
