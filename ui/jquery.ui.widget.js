@@ -365,12 +365,23 @@ $.each( { show: "fadeIn", hide: "fadeOut" }, function( method, defaultEffect ) {
 		if ( hasOptions && $.effects && $.effects[ effectName ] ) {
 			element[ method ]( options );
 		} else if ( element[ effectName ] ) {
-			element[ effectName ]( options.duration, options.easing, callback );
-		} else {
-			element[ method ]();
-			if ( callback ) {
-				callback.call( element[ 0 ] );
+			if ( /show|hide/.test( effectName ) ) {
+				element.queue( function() {
+					element[ effectName ]();
+					if ( callback ) {
+						callback.call( element[ 0 ] );
+					}
+				});
+			} else {
+				element[ effectName ]( options.duration, options.easing, callback );
 			}
+		} else {
+			element.queue( function() {
+				$( this )[ method ]();
+				if ( callback ) {
+					callback.call( element[ 0 ] );
+				}
+			});
 		}
 	};
 });
