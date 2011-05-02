@@ -4,10 +4,10 @@ commonWidgetTests( "tooltip", {
 		items: "[title]",
 		content: $.ui.tooltip.prototype.options.content,
 		position: {
-			my: "left center",
-			at: "right center",
-			offset: "15 0"
+			my: "left+15 center",
+			at: "right center"
 		},
+		tooltipClass: null,
 
 		// callbacks
 		create: null
