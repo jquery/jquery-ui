@@ -365,19 +365,10 @@ $.each( { show: "fadeIn", hide: "fadeOut" }, function( method, defaultEffect ) {
 		if (options.delay) {
 			element.delay( options.delay );
 		}
-		if ( hasOptions && $.effects && $.effects[ effectName ] ) {
+		if ( hasOptions && $.effects && $.effects.effect[ effectName ] ) {
 			element[ method ]( options );
-		} else if ( element[ effectName ] ) {
-			if ( /show|hide/.test( effectName ) ) {
-				element.queue( function() {
-					element[ effectName ]();
-					if ( callback ) {
-						callback.call( element[ 0 ] );
-					}
-				});
-			} else {
-				element[ effectName ]( options.duration, options.easing, callback );
-			}
+		} else if ( effectName !== method && element[ effectName ] ) {
+			element[ effectName ]( options.duration, options.easing, callback );
 		} else {
 			element.queue( function() {
 				$( this )[ method ]();
