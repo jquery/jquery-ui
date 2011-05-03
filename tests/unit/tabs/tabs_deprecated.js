@@ -338,33 +338,49 @@ test( "remove", function() {
 	equals( element.tabs( "option", "active" ), false );
 });
 
-test('select', function() {
-	expect(6);
+test( "select", function() {
+	expect( 23 );
 
-	el = $('#tabs1').tabs();
+	var element = $( "#tabs1" ).tabs();
+	tabs_state( element, 1, 0, 0 );
+	element.tabs( "select", 1 );
+	tabs_state( element, 0, 1, 0 );
+	equals( element.tabs( "option", "active" ), 1, "active" );
+	equals( element.tabs( "option", "selected" ), 1, "selected" );
+	element.tabs( "destroy" );
 
-	el.tabs('select', 1);
-	equals(el.tabs('option', 'active'), 1, 'should select tab');
+	element.tabs({ collapsible: true });
+	tabs_state( element, 1, 0, 0 );
+	element.tabs( "select", 0 );
+	tabs_state( element, 0, 0, 0 );
+	equals( element.tabs( "option", "active" ), false, "active" );
+	equals( element.tabs( "option", "selected" ), -1, "selected" );
+	element.tabs( "destroy" );
 
-	el.tabs('destroy');
-	el.tabs({ collapsible: true });
-	el.tabs('select', 0);
-	equals(el.tabs('option', 'active'), -1, 'should collapse tab passing in the already active tab');
+	element.tabs({ collapsible: true });
+	element.tabs( "select", -1 );
+	tabs_state( element, 0, 0, 0 );
+	equals( element.tabs( "option", "active" ), false, "active" );
+	equals( element.tabs( "option", "selected" ), -1, "selected" );
+	element.tabs( "destroy" );
 
-	el.tabs('destroy');
-	el.tabs({ collapsible: true });
-	el.tabs('select', -1);
-	equals(el.tabs('option', 'active'), -1, 'should collapse tab passing in -1');
+	element.tabs();
+	tabs_state( element, 1, 0, 0 );
+	equals( element.tabs( "option", "active" ), 0, "active" );
+	equals( element.tabs( "option", "selected" ), 0, "selected" );
+	element.tabs( "select", 0 );
+	tabs_state( element, 1, 0, 0 );
+	equals( element.tabs( "option", "active" ), 0, "active" );
+	equals( element.tabs( "option", "selected" ), 0, "selected" );
+	element.tabs( "select", -1 );
+	tabs_state( element, 1, 0, 0 );
+	equals( element.tabs( "option", "active" ), 0, "active" );
+	equals( element.tabs( "option", "selected" ), 0, "selected" );
 
-	el.tabs('destroy');
-	el.tabs();
-	el.tabs('select', 0);
-	equals(el.tabs('option', 'active'), 0, 'should not collapse tab if collapsible is not set to true');
-	el.tabs('select', -1);
-	equals(el.tabs('option', 'active'), 0, 'should not collapse tab if collapsible is not set to true');
-
-	el.tabs('select', '#fragment-2');
-	equals(el.tabs('option', 'active'), 1, 'should select tab by id');
+	element.tabs( "select", "#fragment-2" );
+	tabs_state( element, 0, 1, 0 );
+	equals( element.tabs( "option", "active" ), 1, "active" );
+	equals( element.tabs( "option", "selected" ), 1, "selected" );
 });
 
 test( "length", function() {

@@ -998,8 +998,8 @@ if ( $.uiBackCompat !== false ) {
 	(function( $, prototype ) {
 		prototype.select = function( index ) {
 			index = this._getIndex( index );
-			if ( index == -1 ) {
-				if ( this.options.collapsible && this.options.selected != -1 ) {
+			if ( index === -1 ) {
+				if ( this.options.collapsible && this.options.selected !== -1 ) {
 					index = this.options.selected;
 				} else {
 					return;
