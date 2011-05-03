@@ -23,7 +23,7 @@ $.effects.effect.bounce = function(o) {
 			hide = mode === "hide",
 			show = mode === "show",
 			direction = o.direction || "up", 
-			distance = o.distance || 20,
+			distance = o.distance,
 			times = o.times || 5,
 
 			// number of internal animations
