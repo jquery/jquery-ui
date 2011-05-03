@@ -783,10 +783,11 @@ if ( $.uiBackCompat !== false ) {
 			disable = prototype.disable;
 
 		prototype.enable = function( index ) {
-			var o = this.options,
+			var options = this.options,
 				trigger;
 
-			if ( index && o.disabled || ($.isArray( o.disabled ) && $.inArray( index, o.disabled ) !== -1 ) ) {
+			if ( index && options.disabled === true ||
+					( $.isArray( options.disabled ) && $.inArray( index, options.disabled ) !== -1 ) ) {
 				trigger = true;
 			}
 
@@ -798,10 +799,11 @@ if ( $.uiBackCompat !== false ) {
 		};
 
 		prototype.disable = function( index ) {
-			var o = this.options,
+			var options = this.options,
 				trigger;
 
-			if ( index && !o.disabled || ($.isArray( o.disabled ) && $.inArray( index, o.disabled ) == -1 ) ) {
+			if ( index && options.disabled === false ||
+					( $.isArray( options.disabled ) && $.inArray( index, options.disabled ) === -1 ) ) {
 				trigger = true;
 			}
 

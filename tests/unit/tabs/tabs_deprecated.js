@@ -152,39 +152,37 @@ test('selected', function() {
 	equals(el.tabs('option', 'selected'), 1, 'should select tab');
 });
 
-module("tabs (deprecated): events");
+module( "tabs (deprecated): events" );
 
-test('enable', function() {
-	expect(4);
+test( "enable", function() {
+	expect( 3 );
 
-	var uiObj;
-	el = $('#tabs1').tabs({
+	var element = $( "#tabs1" ).tabs({
 		disabled: [ 0, 1 ],
-		enable: function (event, ui) {
-			uiObj = ui;
+		enable: function ( event, ui ) {
+			equals( ui.tab, element.find( ".ui-tabs-nav a" )[ 1 ], "ui.tab" );
+			equals( ui.panel, element.find( ".ui-tabs-panel" )[ 1 ], "ui.panel" );
+			equals( ui.index, 1, "ui.index" );
 		}
 	});
-	el.tabs('enable', 1);
-	ok(uiObj !== undefined, 'trigger callback');
-	equals(uiObj.tab, $('a', el)[1], 'contain tab as DOM anchor element');
-	equals(uiObj.panel, $('div', el)[1], 'contain panel as DOM div element');
-	equals(uiObj.index, 1, 'contain index');
+	element.tabs( "enable", 1 );
+	// shouldn't trigger event
+	element.tabs( "enable", 2 );
 });
 
-test('disable', function() {
-	expect(4);
+test( "disable", function() {
+	expect( 3 );
 
-	var uiObj;
-	el = $('#tabs1').tabs({
-		disable: function (event, ui) {
-			uiObj = ui;
+	var element = $( "#tabs1" ).tabs({
+		disable: function ( event, ui ) {
+		equals( ui.tab, element.find( ".ui-tabs-nav a" )[ 1 ], "ui.tab" );
+		equals( ui.panel, element.find( ".ui-tabs-panel" )[ 1 ], "ui.panel" );
+		equals( ui.index, 1, "ui.index" );
 		}
 	});
-	el.tabs('disable', 1);
-	ok(uiObj !== undefined, 'trigger callback');
-	equals(uiObj.tab, $('a', el)[1], 'contain tab as DOM anchor element');
-	equals(uiObj.panel, $('div', el)[1], 'contain panel as DOM div element');
-	equals(uiObj.index, 1, 'contain index');
+	element.tabs( "disable", 1 );
+	// shouldn't trigger event
+	element.tabs( "disable", 1 );
 });
 
 test('show', function() {
