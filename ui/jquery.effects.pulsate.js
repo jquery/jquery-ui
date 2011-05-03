@@ -19,8 +19,8 @@ $.effects.effect.pulsate = function( o ) {
 			show = mode === "show" || elem.is( ":hidden" ),
 			showhide = ( show || mode === "hide" ),
 
-			// showing or hiding leaves of the "last" animation
-			anims = ( ( o.times || 5 ) * 2 ) - ( showhide ? 1 : 0 ),
+			// showing or hiding adds an extra "half" animation
+			anims = ( ( o.times || 5 ) * 2 ) + ( showhide ? 1 : 0 ),
 			duration = o.duration / anims,
 			animateTo = 0,
 			queue = elem.queue(),
