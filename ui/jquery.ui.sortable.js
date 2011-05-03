@@ -295,7 +295,7 @@ $.widget("ui.sortable", $.ui.mouse, {
 				&&	this.placeholder[intersection == 1 ? "next" : "prev"]()[0] != itemElement //no useless actions that have been done before
 				&&	!$.contains(this.placeholder[0], itemElement) //no action if the item moved is the parent of the item checked
 				&& (this.options.type == 'semi-dynamic' ? !$.contains(this.element[0], itemElement) : true)
-				//&& itemElement.parentNode == this.placeholder[0].parentNode // only rearrange items within the same container
+				&& itemElement.parentNode == this.placeholder[0].parentNode // only rearrange items within the same container
 			) {
 
 				this.direction = intersection == 1 ? "down" : "up";
