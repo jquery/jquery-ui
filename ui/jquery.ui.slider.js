@@ -77,7 +77,7 @@ $.widget( "ui.slider", $.ui.mouse, {
 				( ( o.range === "min" || o.range === "max" ) ? " ui-slider-range-" + o.range : "" ) );
 		}
 
-		for ( var i = 0; i < handleCount; i += 1 ) {
+		for ( var i = this.element.find( ".ui-slider-handle" ).length; i < handleCount; i += 1 ) {
 			handles.push( handle );
 		}
 
