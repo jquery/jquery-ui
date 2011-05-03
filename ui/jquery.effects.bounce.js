@@ -53,7 +53,7 @@ $.effects.effect.bounce = function(o) {
 
 		// default distance for the BIGGEST bounce is the outer Distance / 3
 		if ( !distance ) {
-			distance = el[ ref === "top" ? "outerHeight" : "outerWidth" ]({ margin:true }) / 3;
+			distance = el[ ref === "top" ? "outerHeight" : "outerWidth" ]() / 3;
 		}
 
 		if ( show ) {
