@@ -85,11 +85,11 @@
 					})
 					.addClass( "ui-widget ui-widget-content ui-corner-left" );
 
-				input.data( "autocomplete" )._renderItem = function( ul, item ) {
-					return $( "<li></li>" )
-						.data( "item.autocomplete", item )
-						.append( "<a>" + item.label + "</a>" )
-						.appendTo( ul );
+					input.data( "autocomplete" )._renderItem = function( ul, item ) {
+						var li = $( "<li></li>" ).data( "item.autocomplete", item )
+						.append( "<a></a>" ).appendTo( ul );
+						appendWithHighlight(li.find('a'), item.label);
+						return li;
 				};
 
 				this.button = $( "<button type='button'>&nbsp;</button>" )
@@ -145,6 +145,23 @@
 			$( "#combobox" ).toggle();
 		});
 	});
+
+	//All text elements should be added by the #text(val) method
+	//This method receives an <a> tag, and appends DOM components, with scaped text
+	//it just adds the normal text with the span tag, and the hightlighted with the strong tag.
+	function appendWithHighlight(a, alreadyScapedString){
+		var pieces = alreadyScapedString.split("<strong>");
+		for(var index in pieces){
+			var subPieces = pieces[index].split("</strong>");
+			if(subPieces.length > 1) {
+				if (subPieces[0].length > 0) a.append($("<strong></strong>").text(subPieces[0]))
+				if (subPieces[1].length > 0) a.append($("<span></span>").text(subPieces[1]))
+			} else if (subPieces[0].length > 0){
+				a.append($("<span></span>").text(subPieces[0]))
+			}
+		}
+	}
+
 	</script>
 </head>
 <body>
