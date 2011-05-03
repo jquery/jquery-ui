@@ -21,12 +21,12 @@ $.effects.blind = function( o ) {
 
 		// Create element
 		var el = $( this ),
-			props = [ 'position', 'top', 'bottom', 'left', 'right' ],
-			mode = $.effects.setMode( el, o.mode || 'hide' ),
-			direction = o.direction || 'up',
+			props = [ "position", "top", "bottom", "left", "right" ],
+			mode = $.effects.setMode( el, o.mode || "hide" ),
+			direction = o.direction || "up",
 			vertical = rvertical.test( direction ),
-			ref = vertical ? 'height' : 'width',
-			ref2 = vertical ? 'top': 'left',
+			ref = vertical ? "height" : "width",
+			ref2 = vertical ? "top" : "left",
 			motion = rpositivemotion.test( direction ),
 			animation = {},
 			wrapper, distance;
@@ -34,19 +34,22 @@ $.effects.blind = function( o ) {
 		$.effects.save( el, props ); 
 		el.show(); 
 		wrapper = $.effects.createWrapper( el ).css({ 
-			overflow: 'hidden'
+			overflow: "hidden"
 		});
 
 		distance = wrapper[ ref ]();
 
-		animation[ ref ] = ( mode == 'show' ? distance : 0 );
+		animation[ ref ] = ( mode === "show" ? distance : 0 );
 		if ( !motion ) {
-			el.css( vertical ? 'bottom' : 'right' , 0 ).css( 'position', 'absolute' );
-			animation[ ref2 ] = (mode == 'show') ? 0 : distance;
+			el
+				.css( vertical ? "bottom" : "right", 0 )
+				.css( vertical ? "top" : "left", "" )
+				.css({ position: "absolute" });
+			animation[ ref2 ] = ( mode === "show" ) ? 0 : distance;
 		}
 
 		// start at 0 if we are showing
-		if ( mode == 'show' ) {
+		if ( mode == "show" ) {
 			wrapper.css( ref, 0 );
 			if ( ! motion ) {
 				wrapper.css( ref2, distance );
@@ -59,7 +62,7 @@ $.effects.blind = function( o ) {
 			easing: o.easing,
 			queue: false,
 			complete: function() {
-				if ( mode == 'hide' ) {
+				if ( mode == "hide" ) {
 					el.hide();
 				}
 				$.effects.restore( el, props ); 
