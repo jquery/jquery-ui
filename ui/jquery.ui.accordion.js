@@ -25,7 +25,11 @@ $.widget( "ui.accordion", {
 		icons: {
 			activeHeader: "ui-icon-triangle-1-s",
 			header: "ui-icon-triangle-1-e"
-		}
+		},
+
+		// callbacks
+		activate: null,
+		beforeActivate: null
 	},
 
 	_create: function() {
@@ -649,6 +653,11 @@ if ( $.uiBackCompat !== false ) {
 
 	// change events
 	(function( $, prototype ) {
+		$.extend( prototype.options, {
+			change: null,
+			changestart: null
+		});
+
 		var _trigger = prototype._trigger;
 		prototype._trigger = function( type, event, data ) {
 			var ret = _trigger.apply( this, arguments );

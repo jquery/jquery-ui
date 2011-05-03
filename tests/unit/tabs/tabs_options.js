@@ -15,6 +15,7 @@ test( "{ active: default }", function() {
 	equals( element.tabs( "option", "active" ), 2, "should be 2 based on URL" );
 	tabs_state( element, 0, 0, 1 );
 	element.tabs( "destroy" );
+	location.hash = "#";
 });
 
 test( "{ active: false }", function() {
@@ -92,7 +93,8 @@ test( "active - mismatched tab/panel order", function() {
 	equals( element.tabs( "option", "active" ), 1, "should be 1 based on URL" );
 	tabs_state( element, 0, 1 );
 	element.tabs( "option", "active", 0 );
-	tabs_state( element, 1, 0 );	
+	tabs_state( element, 1, 0 );
+	location.hash = "#";
 });
 
 test( "{ collapsible: false }", function() {

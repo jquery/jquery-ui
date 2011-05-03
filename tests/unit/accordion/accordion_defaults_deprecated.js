@@ -16,6 +16,13 @@ commonWidgetTests( "accordion", {
 			"headerSelected": "ui-icon-triangle-1-s"
 		},
 		navigation: false,
-		navigationFilter: function() {}
+		navigationFilter: function() {},
+
+		// callbacks
+		activate: null,
+		beforeActivate: null,
+		change: null,
+		changestart: null,
+		create: null
 	}
 });

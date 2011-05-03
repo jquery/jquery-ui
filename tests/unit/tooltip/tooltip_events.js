@@ -28,10 +28,10 @@ test("mouse events", function() {
 		},
 		close: function(event, ui) {
 			same( event.type, "tooltipclose" );
-			same( event.originalEvent.type, "mouseout" );
+			same( event.originalEvent.type, "mouseleave" );
 		}
 	});
-	e.trigger("mouseover").trigger("mouseout");
+	e.trigger("mouseover").trigger("mouseleave");
 	e.tooltip("destroy");
 });
 
@@ -40,7 +40,7 @@ test("focus events", function() {
 	var e = $("#tooltipped1").tooltip({
 		open: function(event, ui) {
 			same( event.type, "tooltipopen" );
-			same( event.originalEvent.type, "focus" );
+			same( event.originalEvent.type, "focusin" );
 		},
 		close: function(event, ui) {
 			same( event.type, "tooltipclose" );

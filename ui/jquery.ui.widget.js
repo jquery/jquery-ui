@@ -155,7 +155,10 @@ $.Widget.prototype = {
 	widgetEventPrefix: "",
 	defaultElement: "<div>",
 	options: {
-		disabled: false
+		disabled: false,
+
+		// callbacks
+		create: null
 	},
 	_createWidget: function( options, element ) {
 		element = $( element || this.defaultElement || this )[ 0 ];
@@ -353,11 +356,35 @@ $.Widget.prototype = {
 	}
 };
 
+$.each( { show: "fadeIn", hide: "fadeOut" }, function( method, defaultEffect ) {
+	$.Widget.prototype[ "_" + method ] = function( element, options, callback ) {
+		options = options || {};
+		var hasOptions = !$.isEmptyObject( options ),
+			effectName = options.effect || defaultEffect;
+		options.complete = callback;
+		if (options.delay) {
+			element.delay( options.delay );
+		}
+		if ( hasOptions && $.effects && ( $.effects.effect[ effectName ] || $.uiBackCompat !== false && $.effects[ effectName ] ) ) {
+			element[ method ]( options );
+		} else if ( effectName !== method && element[ effectName ] ) {
+			element[ effectName ]( options.duration, options.easing, callback );
+		} else {
+			element.queue( function() {
+				$( this )[ method ]();
+				if ( callback ) {
+					callback.call( element[ 0 ] );
+				}
+			});
+		}
+	};
+});
+
 // DEPRECATED
 if ( $.uiBackCompat !== false ) {
 	$.Widget.prototype._getCreateOptions = function() {
 		return $.metadata && $.metadata.get( this.element[0] )[ this.widgetName ];
-	}
+	};
 }
 
 })( jQuery );

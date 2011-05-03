@@ -55,6 +55,16 @@
 		.ui-menubar .ui-button { float: left; font-weight: normal; border-top-width: 0 !important; border-bottom-width: 0 !important; margin: 0; outline: none; }
 		.ui-menubar .ui-menubar-link { border-right: 1px dashed transparent; border-left: 1px dashed transparent; }
 		
+		.ui-menubar {
+			list-style: none;
+			margin: 0;
+			padding-left: 0;	
+		}
+		
+		.ui-menubar-item {
+			float: left;  		
+		}
+		
 		table {
 			border-collapse: collapse;
 		}
@@ -66,85 +76,97 @@
 </head>
 <body>
 
-<div id="bar1" class="menubar">
-	<a href="#">File</a>
-	<ul>
-		<li><a href="#">Open...</a></li>
-		<li class="ui-state-disabled">Open recent...</li>
-		<li><a href="#">Save</a></li>
-		<li><a href="#">Save as...</a></li>
-		<li><a href="#">Close</a></li>
-		<li><a href="#">Quit</a></li>
-	</ul>
-	<a href="#">Edit</a>
-	<ul>
-		<li><a href="#">Copy</a></li>
-		<li><a href="#">Cut</a></li>
-		<li class="ui-state-disabled">Paste</li>
-	</ul>
-	<a href="#">View</a>
-	<ul>
-		<li><a href="#">Fullscreen</a></li>
-		<li><a href="#">Fit into view</a></li>
-		<li>
-			<a href="#">Encoding</a>
-			<ul>
-				<li><a href="#">Auto-detect</a></li>
-				<li><a href="#">UTF-8</a></li>
-				<li>
-				  <a href="#">UTF-16</a>
-			      <ul>
-			         <li><a href="#">Option 1</a></li>
-			         <li><a href="#">Option 2</a></li>
-			         <li><a href="#">Option 3</a></li>
-			         <li><a href="#">Option 4</a></li>
-			      </ul>
-			   </li>
-			</ul>
-		</li>
-		<li><a href="#">Customize...</a></li>
-	</ul>
-</div>
+<ul id="bar1" class="menubar">
+	<li>
+		<a href="#">File</a>
+		<ul>
+			<li><a href="#">Open...</a></li>
+			<li class="ui-state-disabled">Open recent...</li>
+			<li><a href="#">Save</a></li>
+			<li><a href="#">Save as...</a></li>
+			<li><a href="#">Close</a></li>
+			<li><a href="#">Quit</a></li>
+		</ul>
+	</li>
+	<li>
+		<a href="#">Edit</a>
+		<ul>
+			<li><a href="#">Copy</a></li>
+			<li><a href="#">Cut</a></li>
+			<li class="ui-state-disabled">Paste</li>
+		</ul>
+	</li>
+	<li>
+		<a href="#">View</a>
+		<ul>
+			<li><a href="#">Fullscreen</a></li>
+			<li><a href="#">Fit into view</a></li>
+			<li>
+				<a href="#">Encoding</a>
+				<ul>
+					<li><a href="#">Auto-detect</a></li>
+					<li><a href="#">UTF-8</a></li>
+					<li>
+					  <a href="#">UTF-16</a>
+				      <ul>
+				         <li><a href="#">Option 1</a></li>
+				         <li><a href="#">Option 2</a></li>
+				         <li><a href="#">Option 3</a></li>
+				         <li><a href="#">Option 4</a></li>
+				      </ul>
+				   </li>
+				</ul>
+			</li>
+			<li><a href="#">Customize...</a></li>
+		</ul>
+	</li>
+</ul>
 
-<div id="bar2" class="menubar-icons">
-	<a href="#">File</a>
-	<ul>
-		<li><a href="#">Open...</a></li>
-		<li class="ui-state-disabled">Open recent...</li>
-		<li><a href="#">Save</a></li>
-		<li><a href="#">Save as...</a></li>
-		<li><a href="#">Close</a></li>
-		<li><a href="#">Quit</a></li>
-	</ul>
-	<a href="#">Edit</a>
-	<ul>
-		<li><a href="#">Copy</a></li>
-		<li><a href="#">Cut</a></li>
-		<li class="ui-state-disabled">Paste</li>
-	</ul>
-	<a href="#">View</a>
-	<ul>
-		<li><a href="#">Fullscreen</a></li>
-		<li><a href="#">Fit into view</a></li>
-		<li>
-			<a href="#">Encoding</a>
-			<ul>
-				<li><a href="#">Auto-detect</a></li>
-				<li><a href="#">UTF-8</a></li>
-				<li>
-				  <a href="#">UTF-16</a>
-			      <ul>
-			         <li><a href="#">Option 1</a></li>
-			         <li><a href="#">Option 2</a></li>
-			         <li><a href="#">Option 3</a></li>
-			         <li><a href="#">Option 4</a></li>
-			      </ul>
-			   </li>
-			</ul>
-		</li>
-		<li><a href="#">Customize...</a></li>
-	</ul>
-</div>
+<ul id="bar2" class="menubar-icons">
+	<li>
+		<a href="#">File</a>
+		<ul>
+			<li><a href="#">Open...</a></li>
+			<li class="ui-state-disabled">Open recent...</li>
+			<li><a href="#">Save</a></li>
+			<li><a href="#">Save as...</a></li>
+			<li><a href="#">Close</a></li>
+			<li><a href="#">Quit</a></li>
+		</ul>
+	</li>
+	<li>
+		<a href="#">Edit</a>
+		<ul>
+			<li><a href="#">Copy</a></li>
+			<li><a href="#">Cut</a></li>
+			<li class="ui-state-disabled">Paste</li>
+		</ul>
+	</li>
+	<li>
+		<a href="#">View</a>
+		<ul>
+			<li><a href="#">Fullscreen</a></li>
+			<li><a href="#">Fit into view</a></li>
+			<li>
+				<a href="#">Encoding</a>
+				<ul>
+					<li><a href="#">Auto-detect</a></li>
+					<li><a href="#">UTF-8</a></li>
+					<li>
+					  <a href="#">UTF-16</a>
+				      <ul>
+				         <li><a href="#">Option 1</a></li>
+				         <li><a href="#">Option 2</a></li>
+				         <li><a href="#">Option 3</a></li>
+				         <li><a href="#">Option 4</a></li>
+				      </ul>
+				   </li>
+				</ul>
+			</li>
+			<li><a href="#">Customize...</a></li>
+		</ul>
+	</li>
+</ul>
 
 <table id="movies" class="ui-widget">
 	<thead>
@@ -161,24 +183,26 @@
 			<td class="ui-widget-content">1993</td>
 			<td class="ui-widget-content">3.6</td>
 			<td class="ui-widget-content">
-				<div class="menubar">
-					<a href="#">Options</a>
-					<ul>
-						<li><a href="#">Order...</a></li>
-						<li class="ui-state-disabled">Write a Review...</li>
-						<li><a href="#">Find Similar Movies...</a></li>
-						<li>
-							<a href="#">Rate</a>
-							<ul>
-								<li><a href="#">5 stars</a></li>
-								<li><a href="#">4 stars</a></li>
-								<li><a href="#">3 stars</a></li>
-								<li><a href="#">2 stars</a></li>
-								<li><a href="#">1 stars</a></li>
-							</ul>
-						</li>
-					</ul>
-				</div>
+				<ul class="menubar">
+					<li>
+						<a href="#">Options</a>
+						<ul>
+							<li><a href="#">Order...</a></li>
+							<li class="ui-state-disabled">Write a Review...</li>
+							<li><a href="#">Find Similar Movies...</a></li>
+							<li>
+								<a href="#">Rate</a>
+								<ul>
+									<li><a href="#">5 stars</a></li>
+									<li><a href="#">4 stars</a></li>
+									<li><a href="#">3 stars</a></li>
+									<li><a href="#">2 stars</a></li>
+									<li><a href="#">1 stars</a></li>
+								</ul>
+							</li>
+						</ul>
+					</li>
+				</ul>
 			</td>
 		</tr>
 		<tr>

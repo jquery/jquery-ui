@@ -17,90 +17,141 @@ test('destroy', function() {
 	ok( $('li:eq(2)', el).is(':not(.ui-state-hover, .ui-state-focus)'), 'remove classes from mouseovered or focused li');
 });
 
-test('enable', function() {
-    expect(8);
+test( "enable", function() {
+	expect( 8 );
 
-	el = $('#tabs1').tabs({ disabled: [ 0, 1 ] });
-	el.tabs("enable", 1);
-	ok( $('li:eq(1)', el).is(':not(.ui-state-disabled)'), 'remove class from li');
-	same(el.tabs('option', 'disabled'), [ 0 ], 'update property');
-	
-	// enable all tabs
-	el.tabs({ disabled: [ 0, 1 ] });
-	el.tabs("enable");
-	ok( !$('li.ui-state-disabled', el).length, 'enable all');
-	same(el.tabs('option', 'disabled'), false, 'update property');
+	var element = $( "#tabs1" ).tabs({ disabled: true });
+	tabs_disabled( element, true );
+	element.tabs( "enable" );
+	tabs_disabled( element, false );
+	element.tabs( "destroy" );
 
-	el.tabs('destroy');
-	// enable all tabs one by one
-	el.tabs({ disabled: [ 1, 2 ] });
-	el.tabs("enable", 1);
-	ok( $('li:eq(1)', el).is(':not(.ui-state-disabled)'), 'remove class from li');
-	same(el.tabs('option', 'disabled'), [ 2 ], 'update property');
-	el.tabs("enable", 2);
-	ok( $('li:eq(2)', el).is(':not(.ui-state-disabled)'), 'remove class from li');
-	same( el.tabs('option', 'disabled'), false, 'set to false');
+	element.tabs({ disabled: [ 0, 1 ] });
+	tabs_disabled( element, [ 0, 1 ] );
+	element.tabs( "enable" );
+	tabs_disabled( element, false );
 });
 
-test('disable', function() {
-    expect(12);
+test( "enable( index )", function() {
+    expect( 10 );
 
-	// normal
-	el = $('#tabs1').tabs();
-	el.tabs('disable', 1);
-	ok( $('li:eq(1)', el).is('.ui-state-disabled'), 'add class to li');
-	same(el.tabs('option', 'disabled'), [ 1 ], 'update disabled property');
-
-	// disable selected
-	el.tabs('disable', 0);
-	ok( $('li:eq(0)', el).is('.ui-state-disabled'), 'add class to selected li');
-	same(el.tabs('option', 'disabled'), [ 0, 1 ], 'update disabled property');
-	
-	// disable all tabs
-	el.tabs('disable');
-	same( $('li.ui-state-disabled', el).length, 3, 'disable all');
-	same(el.tabs('option', 'disabled'), true, 'set to true');
-
-	el.tabs("destroy");
-	// disable all tabs one by one
-	el.tabs();
-	el.tabs('disable', 0);
-	ok( $('li:eq(0)', el).is('.ui-state-disabled'), 'add class to li');
-	same(el.tabs('option', 'disabled'), [ 0 ], 'update disabled property');
-	el.tabs('disable', 1);
-	ok( $('li:eq(1)', el).is('.ui-state-disabled'), 'add class to li');
-	same(el.tabs('option', 'disabled'), [ 0, 1 ], 'update disabled property');
-	el.tabs('disable', 2);
-	ok( $('li:eq(2)', el).is('.ui-state-disabled'), 'add class to li');
-	same(el.tabs('option', 'disabled'), true, 'set to true');
+	var element = $( "#tabs1" ).tabs({ disabled: true });
+	tabs_disabled( element, true );
+	// fully disabled -> partially disabled
+	element.tabs( "enable", 1 );
+	tabs_disabled( element, [ 0, 2 ] );
+	// partially disabled -> partially disabled
+	element.tabs( "enable", 2 );
+	tabs_disabled( element, [ 0 ] );
+	// already enabled tab, no change
+	element.tabs( "enable", 2 );
+	tabs_disabled( element, [ 0 ] );
+	// partially disabled -> fully enabled
+	element.tabs( "enable", 0 );
+	tabs_disabled( element, false );
 });
 
-test('refresh', function() {
-	expect(5);
+test( "disable", function() {
+	expect( 8 );
 
-	var el = $('<div id="tabs"><ul></ul></div>').tabs(),
-		ul = el.find('ul');
+	var element = $( "#tabs1" ).tabs({ disabled: false });
+	tabs_disabled( element, false );
+	element.tabs( "disable" );
+	tabs_disabled( element, true );
+	element.tabs( "destroy" );
 
-	equals(el.tabs('option', 'active'), false, 'Initially empty, no active tab');
+	element.tabs({ disabled: [ 0, 1 ] });
+	tabs_disabled( element, [ 0, 1 ] );
+	element.tabs( "disable" );
+	tabs_disabled( element, true );
+});
 
-	ul.append('<li><a href="data/test.html">Test 1</a></li>');
-	el.tabs('refresh');
-	equals( el.find('.ui-tabs-panel').length, 1, 'Panel created after refresh');
+test( "disable( index )", function() {
+    expect( 10 );
 
-	ul.find('li').remove();
-	el.tabs('refresh');
-	equals( el.find('.ui-tabs-panel').length, 0, 'Panel removed after refresh');
+	var element = $( "#tabs1" ).tabs({ disabled: false });
+	tabs_disabled( element, false );
+	// fully enabled -> partially disabled
+	element.tabs( "disable", 1 );
+	tabs_disabled( element, [ 1 ] );
+	// partially disabled -> partially disabled
+	element.tabs( "disable", 2 );
+	tabs_disabled( element, [ 1, 2 ] );
+	// already disabled tab, no change
+	element.tabs( "disable", 2 );
+	tabs_disabled( element, [ 1, 2 ] );
+	// partially disabled -> fully disabled
+	element.tabs( "disable", 0 );
+	tabs_disabled( element, true );
+});
 
-	ul.append('<li><a href="#test1">Test 1</a></li>');
-	$('<div id="test1">Test Panel 1</div>').insertAfter( ul );
-	el.tabs('refresh');
-	el.tabs('option', 'active', 0);
-	equals( el.tabs('option', 'active'), 0, 'First tab added should be auto active');
+test( "refresh", function() {
+	expect( 27 );
 
-	ul.append('<li><a href="#test2">Test 2</a></li>');
-	$('<div id="test2">Test Panel 2</div>').insertAfter( ul );
-	el.tabs('refresh');
-	equals( el.tabs('option', 'active'), 0, 'Second tab added should not be auto active');
+	var element = $( "#tabs1" ).tabs();
+	tabs_state( element, 1, 0, 0 );
+	tabs_disabled( element, false );
+
+	// disable tab via markup
+	element.find( ".ui-tabs-nav li" ).eq( 1 ).addClass( "ui-state-disabled" );
+	element.tabs( "refresh" );
+	tabs_state( element, 1, 0, 0 );
+	tabs_disabled( element, [ 1 ] );
+
+	// add remote tab
+	element.find( ".ui-tabs-nav" ).append( "<li id='newTab'><a href='data/test.html'>new</a></li>" );
+	element.tabs( "refresh" );
+	tabs_state( element, 1, 0, 0, 0 );
+	tabs_disabled( element, [ 1 ] );
+	equals( element.find( "#" + $( "#newTab a" ).attr( "aria-controls" ) ).length, 1,
+		"panel added for remote tab" );
+
+	// remove all tabs
+	element.find( ".ui-tabs-nav li, .ui-tabs-panel" ).remove();
+	element.tabs( "refresh" );
+	tabs_state( element );
+	equals( element.tabs( "option", "active" ), false, "no active tab" );
+
+	// add tabs
+	element.find( ".ui-tabs-nav" )
+		.append( "<li class='ui-state-disabled'><a href='#newTab2'>new 2</a></li>" )
+		.append( "<li><a href='#newTab3'>new 3</a></li>" )
+		.append( "<li><a href='#newTab4'>new 4</a></li>" )
+		.append( "<li><a href='#newTab5'>new 5</a></li>" );
+	element
+		.append( "<div id='newTab2'>new 2</div>" )
+		.append( "<div id='newTab3'>new 3</div>" )
+		.append( "<div id='newTab4'>new 4</div>" )
+		.append( "<div id='newTab5'>new 5</div>" );
+	element.tabs( "refresh" );
+	tabs_state( element, 0, 0, 0, 0 );
+	tabs_disabled( element, [ 0 ] );
+
+	// activate third tab
+	element.tabs( "option", "active", 2 );
+	tabs_state( element, 0, 0, 1, 0 );
+	tabs_disabled( element, [ 0 ] );
+
+	// remove fourth tab, third tab should stay active
+	element.find( ".ui-tabs-nav li" ).eq( 3 ).remove();
+	element.find( ".ui-tabs-panel" ).eq( 3 ).remove();
+	element.tabs( "refresh" );
+	tabs_state( element, 0, 0, 1 );
+	tabs_disabled( element, [ 0 ] );
+
+	// remove third (active) tab, second tab should become active
+	element.find( ".ui-tabs-nav li" ).eq( 2 ).remove();
+	element.find( ".ui-tabs-panel" ).eq( 2 ).remove();
+	element.tabs( "refresh" );
+	tabs_state( element, 0, 1 );
+	tabs_disabled( element, [ 0 ] );
+	
+	// remove first tab, previously active tab (now first) should stay active
+	element.find( ".ui-tabs-nav li" ).eq( 0 ).remove();
+	element.find( ".ui-tabs-panel" ).eq( 0 ).remove();
+	element.tabs( "refresh" );
+	tabs_state( element, 1 );
+	tabs_disabled( element, false );
 });
 
 test('load', function() {
