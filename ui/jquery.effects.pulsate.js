@@ -15,8 +15,8 @@
 $.effects.effect.pulsate = function( o ) {
 	return this.queue( function( next ) {
 		var elem = $( this ),
-			mode = $.effects.setMode( elem, o.mode || "show" ),
-			show = mode === "show" || !elem.is( ":visible" ),
+			mode = $.effects.setMode( elem, o.mode || "effect" ),
+			show = mode === "show" || elem.is( ":hidden" ),
 			showhide = ( show || mode === "hide" ),
 
 			// showing or hiding leaves of the "last" animation
@@ -32,7 +32,8 @@ $.effects.effect.pulsate = function( o ) {
 			animateTo = 1;
 		}
 
-		for ( i = 0; i < anims - 1; i++ ) {
+		// anims - 1 opacity "toggles"
+		for ( i = 1; i < anims; i++ ) {
 			elem.animate({
 				opacity: animateTo
 			}, duration, o.easing );
