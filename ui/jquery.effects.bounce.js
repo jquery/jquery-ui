@@ -69,7 +69,7 @@ $.effects.effect.bounce = function(o) {
 
 		// start at the smallest distance if we are hiding
 		if ( hide ) {
-			distance = distance / ( ( times - 1 ) * 2 );
+			distance = distance / Math.pow( 2, times - 1 );
 		}
 
 		downAnim = {};
