@@ -948,19 +948,15 @@ if ( $.uiBackCompat !== false ) {
 		};
 
 		prototype._setOption = function( key, value ) {
-			var options = this.options;
-			if ( key === "selected" ) {
-				key = "active";
+			if ( key !== "selected" ) {
+				return _setOption.apply( this, arguments );
 			}
-			_setOption.apply( this, arguments );
-			if ( key === "active" ) {
-				if ( key === - 1 ) {
-					key = false;
-				}
-				options.selected = options.active;
-				if ( options.selected === false ) {
-					options.selected = -1;
-				}
+
+			var options = this.options;
+			_setOption.call( this, "active", value === -1 ? false : value );
+			options.selected = options.active;
+			if ( options.selected === false ) {
+				options.selected = -1;
 			}
 		};
 
