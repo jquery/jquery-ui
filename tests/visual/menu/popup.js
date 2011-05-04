@@ -39,6 +39,10 @@ $.widget( "ui.popup", {
 		this._bind(this.options.trigger, {
 			click: function( event ) {
 				event.preventDefault();
+				if (this.open) {
+					// let it propagate to close
+					return;
+				}
 				var that = this;
 				setTimeout(function() {
 					that._open( event );
@@ -47,10 +51,14 @@ $.widget( "ui.popup", {
 		});
 		
 		this._bind(this.element, {
-			blur: "_close"
+			// TODO also triggered when open and clicking the trigger again
+			// figure out how to close in that case, while still closing on regular blur
+			//blur: "_close"
 		});
 
 		this._bind({
+			// TODO only triggerd on element if it can receive focus
+			// bind to document instead?
 			keyup: function( event ) {
 				if (event.keyCode == $.ui.keyCode.ESCAPE && this.element.is( ":visible" )) {
 					this._close( event );
