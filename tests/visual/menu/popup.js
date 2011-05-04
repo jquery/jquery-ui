@@ -37,6 +37,12 @@ $.widget( "ui.popup", {
 		this.close();
 
 		this._bind(this.options.trigger, {
+			keydown: function( event ) {
+				// prevent space-to-open to scroll the page
+				if (event.keyCode == $.ui.keyCode.SPACE) {
+					event.preventDefault()
+				}
+			},
 			click: function( event ) {
 				event.preventDefault();
 				if (this.open) {
