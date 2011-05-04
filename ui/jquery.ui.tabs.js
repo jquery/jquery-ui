@@ -46,7 +46,7 @@ $.widget( "ui.tabs", {
 		that.running = false;
 
 		that.element.addClass( "ui-tabs ui-widget ui-widget-content ui-corner-all" );
-
+		
 		that._processTabs();
 
 		if ( active === null ) {
@@ -269,6 +269,61 @@ $.widget( "ui.tabs", {
 				self.panels = self.panels.add( panel );
 			}
 			$( a ).attr( "aria-controls", selector.substring( 1 ) );
+
+			// Keyboard Accessibility :
+			$( a ).keydown(function(event){
+				// find previous and next tab id
+				var tab = self._getPanelForTab( event.currentTarget );
+				var next = $( tab ).next( ".ui-tabs-panel" );
+				if ( next.length == 0 ) {
+					next = $( self.panels[0] );
+				}
+				var next_id = next[0].id;
+				var prev = $( tab ).prev( ".ui-tabs-panel" );
+				if ( prev.length == 0 ) {
+					prev = $( self.panels[self.panels.length-1] );
+				}
+				var prev_id = prev[0].id;
+				// Open / focus the appropriate tab:
+				var keyCode = $.ui.keyCode;
+				if (event.ctrlKey) {
+					switch( event.keyCode ) {
+						case keyCode.LEFT:
+						case keyCode.UP:
+							$( 'a[href="#' + prev_id + '"]' ).focus();
+							break;
+						case keyCode.RIGHT:
+						case keyCode.DOWN:
+							$( 'a[href="#' + next_id + '"]' ).focus();
+							break;          }
+				} else {
+					switch( event.keyCode ) {
+						case keyCode.PAGE_UP:
+						case keyCode.LEFT:
+						case keyCode.UP:
+							self._activate(prev_id);
+							$( 'a[href="#' + prev_id + '"]' ).focus();
+							break;
+						case keyCode.PAGE_DOWN:
+						case keyCode.RIGHT:
+						case keyCode.DOWN:
+							self._activate(next_id);
+							$( 'a[href="#' + next_id + '"]' ).focus();
+							break;
+						case keyCode.SPACE:
+							self._activate( self._tabId( a ) );
+							break;
+						case keyCode.HOME:
+							self._activate( self.panels[0].id );
+							$( 'a[href="#' + self.panels[0].id + '"]' ).focus();
+							break;
+						case keyCode.END:
+							self._activate( self.panels[self.panels.length-1].id );
+							$( 'a[href="#' + self.panels[self.panels.length-1].id + '"]' ).focus();
+							break;
+					}
+				}
+			});
 		});
 	},
 
