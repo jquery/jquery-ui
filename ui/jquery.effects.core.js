@@ -531,7 +531,12 @@ $.fn.extend({
 
 		// TODO: remove this check in 2.0, effectMethod will always be true
 		if ( effectMethod ) {
-			return effectMethod.call( this, args );
+			return this[ args.queue === false ? "each" : "queue" ](function() {
+				var el = $( this );
+				effectMethod.call( this, args, function() {
+					el.dequeue();
+				});
+			});
 		} else {
 			// DEPRECATED: remove in 2.0 (#7115)
 			return oldEffectMethod.call(this, {
