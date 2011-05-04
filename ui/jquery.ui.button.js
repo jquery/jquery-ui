@@ -114,33 +114,6 @@ $.widget( "ui.button", {
 			this.element.bind( "change.button", function() {
 				self.refresh();
 			});
-		}
-
-		if ( this.type === "checkbox" ) {
-			this.buttonElement.bind( "click.button", function() {
-				if ( options.disabled ) {
-					return false;
-				}
-				$( this ).toggleClass( "ui-state-active" );
-				self.buttonElement.attr( "aria-pressed", self.element[0].checked );
-			});
-		} else if ( this.type === "radio" ) {
-			this.buttonElement.bind( "click.button", function() {
-				if ( options.disabled ) {
-					return false;
-				}
-				$( this ).addClass( "ui-state-active" );
-				self.buttonElement.attr( "aria-pressed", true );
-
-				var radio = self.element[ 0 ];
-				radioGroup( radio )
-					.not( radio )
-					.map(function() {
-						return $( this ).button( "widget" )[ 0 ];
-					})
-					.removeClass( "ui-state-active" )
-					.attr( "aria-pressed", false );
-			});
 		} else {
 			this.buttonElement
 				.bind( "mousedown.button", function() {
