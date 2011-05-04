@@ -1,5 +1,10 @@
 (function( $ ) {
 
+function scrollTopSupport() {
+	$( window ).scrollTop( 1 );
+	return $( window ).scrollTop() === 1;
+}
+
 module( "position" );
 
 test( "my, at, of", function() {
@@ -161,11 +166,7 @@ test( "of", function() {
 		left: $( window ).width() - 10
 	}, "window as jQuery object" );
 
-	var scrollTopSupport = (function() {
-		$( window ).scrollTop( 1 );
-		return $( window ).scrollTop() === 1;
-	}() );
-	if ( scrollTopSupport ) {
+	if ( scrollTopSupport() ) {
 		$( window ).scrollTop( 500 ).scrollLeft( 200 );
 		$( "#elx" ).position({
 			my: "right bottom",
@@ -309,6 +310,22 @@ test( "collision: fit, with offset", function() {
 		collision: "fit",
 		at: "left-2 top-3"
 	}, { top: 0, left: 0 }, "left top, negative offset" );
+});
+
+test( "collision: fit, window scrolled", function() {
+	if ( scrollTopSupport() ) {
+		var win = $( window );
+		win.scrollTop( 300 ).scrollLeft( 200 );
+		collisionTest({
+			collision: "fit",
+			at: "left-100 top-100"
+		}, { top: 300, left: 200 }, "top left" );
+		collisionTest2({
+			collision: "fit",
+			at: "right+100 bottom+100"
+		}, { top: 300 + win.height() - 10, left: 200 + win.width() - 10 }, "right bottom" );
+		win.scrollTop( 0 ).scrollLeft( 0 );
+	}
 });
 
 test( "collision: flip, no offset", function() {

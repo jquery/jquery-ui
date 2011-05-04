@@ -11,15 +11,14 @@
 	<link type="text/css" href="../demos.css" rel="stylesheet" />
 	<script type="text/javascript">
 	$(function() {
-		// TODO overhaul this with custom animation API
 		$(".demo").tooltip({
-			open: function() {
-				$(".ui-tooltip").stop(false, true).hide().slideDown();
+			show: {
+				effect: "slideDown",
+				delay: 250
 			},
-			close: function() {
-				$(".ui-tooltip").stop(false, false).show().slideUp(function() {
-					$(this).remove();
-				});
+			hide: {
+				effect: "hide",
+				delay: 250
 			}
 		});
 	});
@@ -48,7 +47,9 @@
 
 <div class="demo-description">
 
-<p>Here the tooltips are positioned relative to the mouse, and follow the mouse while it moves above the element.</p>
+<p>This demo shows how to customize animations. The tooltip is shown, after a
+delay of 250ms, using a slide down animation, and hidden, after another delay,
+without an animation.</p>
 
 </div><!-- End demo-description -->
 

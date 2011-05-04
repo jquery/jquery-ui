@@ -85,7 +85,7 @@ test( "disable( index )", function() {
 	tabs_disabled( element, true );
 });
 
-test( "refersh", function() {
+test( "refresh", function() {
 	expect( 27 );
 
 	var element = $( "#tabs1" ).tabs();

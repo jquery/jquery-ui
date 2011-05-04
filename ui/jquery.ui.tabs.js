@@ -783,10 +783,11 @@ if ( $.uiBackCompat !== false ) {
 			disable = prototype.disable;
 
 		prototype.enable = function( index ) {
-			var o = this.options,
+			var options = this.options,
 				trigger;
 
-			if ( index && o.disabled || ($.isArray( o.disabled ) && $.inArray( index, o.disabled ) !== -1 ) ) {
+			if ( index && options.disabled === true ||
+					( $.isArray( options.disabled ) && $.inArray( index, options.disabled ) !== -1 ) ) {
 				trigger = true;
 			}
 
@@ -798,10 +799,11 @@ if ( $.uiBackCompat !== false ) {
 		};
 
 		prototype.disable = function( index ) {
-			var o = this.options,
+			var options = this.options,
 				trigger;
 
-			if ( index && !o.disabled || ($.isArray( o.disabled ) && $.inArray( index, o.disabled ) == -1 ) ) {
+			if ( index && options.disabled === false ||
+					( $.isArray( options.disabled ) && $.inArray( index, options.disabled ) === -1 ) ) {
 				trigger = true;
 			}
 
@@ -946,19 +948,15 @@ if ( $.uiBackCompat !== false ) {
 		};
 
 		prototype._setOption = function( key, value ) {
-			var options = this.options;
-			if ( key === "selected" ) {
-				key = "active";
+			if ( key !== "selected" ) {
+				return _setOption.apply( this, arguments );
 			}
-			_setOption.apply( this, arguments );
-			if ( key === "active" ) {
-				if ( key === - 1 ) {
-					key = false;
-				}
-				options.selected = options.active;
-				if ( options.selected === false ) {
-					options.selected = -1;
-				}
+
+			var options = this.options;
+			_setOption.call( this, "active", value === -1 ? false : value );
+			options.selected = options.active;
+			if ( options.selected === false ) {
+				options.selected = -1;
 			}
 		};
 
@@ -1000,8 +998,8 @@ if ( $.uiBackCompat !== false ) {
 	(function( $, prototype ) {
 		prototype.select = function( index ) {
 			index = this._getIndex( index );
-			if ( index == -1 ) {
-				if ( this.options.collapsible && this.options.selected != -1 ) {
+			if ( index === -1 ) {
+				if ( this.options.collapsible && this.options.selected !== -1 ) {
 					index = this.options.selected;
 				} else {
 					return;

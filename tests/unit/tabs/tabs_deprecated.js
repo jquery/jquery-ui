@@ -107,84 +107,90 @@ test('spinner', function() {
 	});
 });
 
-test('selected', function() {
-	expect(10);
+test( "selected", function() {
+	expect( 19 );
 
-	el = $('#tabs1').tabs();
-	equals(el.tabs('option', 'selected'), 0, 'should be 0 by default');
+	var element = $( "#tabs1" ).tabs();
+	equals( element.tabs( "option", "selected" ), 0, "should be 0 by default" );
+	tabs_state( element, 1, 0, 0 );
+	element.tabs( "destroy" );
 
-	el.tabs('destroy');
-	//set a hash in the url
-	location.hash = '#fragment-2';
-	//selection of tab with divs ordered differently than list
-	el = $('#tabs1').tabs();
-	equals(el.tabs('option', 'selected'), 1, 'second tab should be selected');
+	location.hash = "#fragment-3";
+	element = $( "#tabs1" ).tabs();
+	equals( element.tabs( "option", "selected" ), 2, "should be 2 based on URL" );
+	tabs_state( element, 0, 0, 1 );
+	element.tabs( "destroy" );
 
-	el.tabs('destroy');
-	//set a hash in the url
-	location.hash = '#tabs7-2';
-	//selection of tab with divs ordered differently than list
-	el = $('#tabs7').tabs();
-	equals(el.tabs('option', 'selected'), 1, 'second tab should be selected');
+	el = $('#tabs1').tabs({
+		selected: -1,
+		collapsible: true
+	});
+	tabs_state( element, 0, 0, 0 );
+	equal( element.find( ".ui-tabs-nav .ui-state-active" ).size(), 0, "no tabs selected" );
+	strictEqual( element.tabs( "option", "selected" ), -1 );
 
-	el.tabs('destroy');
-	el = $('#tabs1').tabs({ selected: -1 });
-	equals(el.tabs('option', 'selected'), -1, 'should be -1 for all tabs unselected');
-	equals( $('li.ui-tabs-active', el).length, 0, 'no tab should be selected' );
-	equals( $('div:hidden', '#tabs1').length, 3, 'all panels should be hidden' );
+	element.tabs( "option", "collapsible", false );
+	tabs_state( element, 1, 0, 0 );
+	equal( element.tabs( "option", "selected" ), 0 );
+	element.tabs( "destroy" );
 
-	el.tabs('destroy');
-	el.tabs({ selected: 1 });
-	equals(el.tabs('option', 'selected'), 1, 'should be specified tab');
+	element.tabs({
+		selected: -1
+	});
+	tabs_state( element, 1, 0, 0 );
+	strictEqual( element.tabs( "option", "selected" ), 0 );
+	element.tabs( "destroy" );
 
-	el.tabs('destroy');
-	el.tabs({ selected: 99 });
-	equals(el.tabs('option', 'selected'), 0, 'selected should default to zero if given value is out of index');
+	element.tabs({ selected: 2 });
+	equals( element.tabs( "option", "selected" ), 2 );
+	tabs_state( element, 0, 0, 1 );
 
-	el.tabs('destroy');
-	el.tabs({ collapsible: true });
-	el.tabs('option', 'selected', 0);
-	equals(el.tabs('option', 'selected'), 0, 'should not collapse tab if value is same as selected');
+	element.tabs( "option", "selected", 0 );
+	equals( element.tabs( "option", "selected" ), 0 );
+	tabs_state( element, 1, 0, 0 );
 
-	el.tabs('destroy');
-	el = $('#tabs1').tabs();
-	el.tabs('select', 1);
-	equals(el.tabs('option', 'selected'), 1, 'should select tab');
+	element.find( ".ui-tabs-nav a" ).eq( 1 ).click();
+	equals( element.tabs( "option", "selected" ), 1 );
+	tabs_state( element, 0, 1, 0 );
+
+	element.tabs( "option", "selected", 10 );
+	equals( element.tabs( "option", "selected" ), 1 );
+	tabs_state( element, 0, 1, 0 );
+
+	location.hash = "#";
 });
 
-module("tabs (deprecated): events");
+module( "tabs (deprecated): events" );
 
-test('enable', function() {
-	expect(4);
+test( "enable", function() {
+	expect( 3 );
 
-	var uiObj;
-	el = $('#tabs1').tabs({
+	var element = $( "#tabs1" ).tabs({
 		disabled: [ 0, 1 ],
-		enable: function (event, ui) {
-			uiObj = ui;
+		enable: function ( event, ui ) {
+			equals( ui.tab, element.find( ".ui-tabs-nav a" )[ 1 ], "ui.tab" );
+			equals( ui.panel, element.find( ".ui-tabs-panel" )[ 1 ], "ui.panel" );
+			equals( ui.index, 1, "ui.index" );
 		}
 	});
-	el.tabs('enable', 1);
-	ok(uiObj !== undefined, 'trigger callback');
-	equals(uiObj.tab, $('a', el)[1], 'contain tab as DOM anchor element');
-	equals(uiObj.panel, $('div', el)[1], 'contain panel as DOM div element');
-	equals(uiObj.index, 1, 'contain index');
+	element.tabs( "enable", 1 );
+	// shouldn't trigger event
+	element.tabs( "enable", 2 );
 });
 
-test('disable', function() {
-	expect(4);
+test( "disable", function() {
+	expect( 3 );
 
-	var uiObj;
-	el = $('#tabs1').tabs({
-		disable: function (event, ui) {
-			uiObj = ui;
+	var element = $( "#tabs1" ).tabs({
+		disable: function ( event, ui ) {
+		equals( ui.tab, element.find( ".ui-tabs-nav a" )[ 1 ], "ui.tab" );
+		equals( ui.panel, element.find( ".ui-tabs-panel" )[ 1 ], "ui.panel" );
+		equals( ui.index, 1, "ui.index" );
 		}
 	});
-	el.tabs('disable', 1);
-	ok(uiObj !== undefined, 'trigger callback');
-	equals(uiObj.tab, $('a', el)[1], 'contain tab as DOM anchor element');
-	equals(uiObj.panel, $('div', el)[1], 'contain panel as DOM div element');
-	equals(uiObj.index, 1, 'contain index');
+	element.tabs( "disable", 1 );
+	// shouldn't trigger event
+	element.tabs( "disable", 1 );
 });
 
 test('show', function() {
@@ -332,33 +338,49 @@ test( "remove", function() {
 	equals( element.tabs( "option", "active" ), false );
 });
 
-test('select', function() {
-	expect(6);
+test( "select", function() {
+	expect( 23 );
 
-	el = $('#tabs1').tabs();
+	var element = $( "#tabs1" ).tabs();
+	tabs_state( element, 1, 0, 0 );
+	element.tabs( "select", 1 );
+	tabs_state( element, 0, 1, 0 );
+	equals( element.tabs( "option", "active" ), 1, "active" );
+	equals( element.tabs( "option", "selected" ), 1, "selected" );
+	element.tabs( "destroy" );
 
-	el.tabs('select', 1);
-	equals(el.tabs('option', 'active'), 1, 'should select tab');
+	element.tabs({ collapsible: true });
+	tabs_state( element, 1, 0, 0 );
+	element.tabs( "select", 0 );
+	tabs_state( element, 0, 0, 0 );
+	equals( element.tabs( "option", "active" ), false, "active" );
+	equals( element.tabs( "option", "selected" ), -1, "selected" );
+	element.tabs( "destroy" );
 
-	el.tabs('destroy');
-	el.tabs({ collapsible: true });
-	el.tabs('select', 0);
-	equals(el.tabs('option', 'active'), -1, 'should collapse tab passing in the already active tab');
+	element.tabs({ collapsible: true });
+	element.tabs( "select", -1 );
+	tabs_state( element, 0, 0, 0 );
+	equals( element.tabs( "option", "active" ), false, "active" );
+	equals( element.tabs( "option", "selected" ), -1, "selected" );
+	element.tabs( "destroy" );
 
-	el.tabs('destroy');
-	el.tabs({ collapsible: true });
-	el.tabs('select', -1);
-	equals(el.tabs('option', 'active'), -1, 'should collapse tab passing in -1');
+	element.tabs();
+	tabs_state( element, 1, 0, 0 );
+	equals( element.tabs( "option", "active" ), 0, "active" );
+	equals( element.tabs( "option", "selected" ), 0, "selected" );
+	element.tabs( "select", 0 );
+	tabs_state( element, 1, 0, 0 );
+	equals( element.tabs( "option", "active" ), 0, "active" );
+	equals( element.tabs( "option", "selected" ), 0, "selected" );
+	element.tabs( "select", -1 );
+	tabs_state( element, 1, 0, 0 );
+	equals( element.tabs( "option", "active" ), 0, "active" );
+	equals( element.tabs( "option", "selected" ), 0, "selected" );
 
-	el.tabs('destroy');
-	el.tabs();
-	el.tabs('select', 0);
-	equals(el.tabs('option', 'active'), 0, 'should not collapse tab if collapsible is not set to true');
-	el.tabs('select', -1);
-	equals(el.tabs('option', 'active'), 0, 'should not collapse tab if collapsible is not set to true');
-
-	el.tabs('select', '#fragment-2');
-	equals(el.tabs('option', 'active'), 1, 'should select tab by id');
+	element.tabs( "select", "#fragment-2" );
+	tabs_state( element, 0, 1, 0 );
+	equals( element.tabs( "option", "active" ), 1, "active" );
+	equals( element.tabs( "option", "selected" ), 1, "selected" );
 });
 
 test( "length", function() {

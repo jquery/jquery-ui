@@ -35,8 +35,10 @@ $(function() {
 		})
 	})
 
-	effect("#blindHorizontally", "blind", { direction: "horizontal" });
-	effect("#blindVertically", "blind", { direction: "vertical" });
+	effect("#blindLeft", "blind", { direction: "left" });
+	effect("#blindUp", "blind", { direction: "up" });
+	effect("#blindRight", "blind", { direction: "right" });
+	effect("#blindDown", "blind", { direction: "down" });
 
 	effect("#bounce3times", "bounce", { times: 3 });
 
