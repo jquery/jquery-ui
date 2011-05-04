@@ -1,11 +1,11 @@
 /*
  * jQuery UI menubar
- *
- * backported from Michael Lang's fork: http://www.nexul.com/prototypes/toolbar/demo.html
+ * 
+ * TODO move to jquery.ui.menubar.js
  */
 (function($) {
 
-// TODO take non-menubar buttons into account
+// TODO code formatting
 $.widget("ui.menubar", {
    options: {
       buttons: false,
@@ -23,12 +23,14 @@ $.widget("ui.menubar", {
 		this.element.addClass('ui-menubar ui-widget-header ui-helper-clearfix').attr("role", "menubar");
 		this._focusable(items);
 		this._hoverable(items);
+		// TODO elm is used just once, so the each probably isn't nedded anymore
 		items.next("ul").each(function(i, elm) {
 			$(elm).menu({
 				select: function(event, ui) {
 					ui.item.parents("ul.ui-menu:last").hide();
 					self._trigger( "select", event, ui );
 					self._close();
+					// TODO what is this targetting? there's probably a better way to access it
 					$(event.target).prev().focus();
 				}
 			}).hide()
@@ -60,6 +62,8 @@ $.widget("ui.menubar", {
 					return;
 				}
    				event.preventDefault();
+				// TODO can we simplify or extractthis check? especially the last two expressions
+				// there's a similar active[0] == menu[0] check in _open
 			   	if (event.type == "click" && menu.is(":visible") && self.active && self.active[0] == menu[0]) {
 					self._close();
 					return;
@@ -90,19 +94,22 @@ $.widget("ui.menubar", {
 			.attr("role", "menuitem")
 			.attr("aria-haspopup", "true")
 			.wrapInner("<span class='ui-button-text'></span>");
-			
+
+			// TODO review if these options are a good choice, maybe they can be merged
 			if (o.menuIcon) {
 				input.addClass("ui-state-default").append("<span class='ui-button-icon-secondary ui-icon ui-icon-triangle-1-s'></span>");
 				input.removeClass("ui-button-text-only").addClass("ui-button-text-icon-secondary");
 			}
    			
 			if (!o.buttons) {
+				// TODO ui-menubar-link is added above, not needed here?
 				input.addClass('ui-menubar-link').removeClass('ui-state-default');
 			};			
 			
 		});
 		self._bind({
 			keydown: function(event) {
+				// TODO merge the two ifs
 				if (event.keyCode == $.ui.keyCode.ESCAPE) {
 					if (self.active && self.active.menu("left", event) !== true) {
 						var active = self.active;
@@ -117,6 +124,7 @@ $.widget("ui.menubar", {
 					self._close( event );
 				}, 100);
 			},
+			// TODO change order, focusin first
 			focusin :function( event ) {
 				clearTimeout(self.closeTimer);
 			}
@@ -150,8 +158,7 @@ $.widget("ui.menubar", {
 		.removeAttr("aria-hidden", "true")
 		.removeAttr("aria-expanded", "false")
 		.removeAttr("tabindex")
-		.unbind("keydown", "blur")
-		;
+		.unbind("keydown", "blur");
 	},
 	
 	_close: function() {
@@ -182,12 +189,13 @@ $.widget("ui.menubar", {
 		})
 		.removeAttr("aria-hidden").attr("aria-expanded", "true")
 		.menu("focus", event, menu.children("li").first())
+		// TODO need a comment here why both events are triggered
 		.focus()
-		.focusin()
-		;
+		.focusin();
 		this.open = true;
 	},
 	
+	// TODO refactor this and the next three methods
 	_prev: function( event, button ) {
 		button.attr("tabIndex", -1);
 		var prev = button.parent().prevAll("li").children( ".ui-button" ).eq( 0 );
@@ -209,7 +217,8 @@ $.widget("ui.menubar", {
 			firstItem.removeAttr("tabIndex")[0].focus();
 		}
 	},
-	
+
+	// TODO rename to parent
 	_left: function(event) {
 		var prev = this.active.parent().prevAll("li:eq(0)").children( ".ui-menu" ).eq( 0 );
 		if (prev.length) {
@@ -220,6 +229,7 @@ $.widget("ui.menubar", {
 		}
 	},
 	
+	// TODO rename to child (or something like that)
 	_right: function(event) {
 		var next = this.active.parent().nextAll("li:eq(0)").children( ".ui-menu" ).eq( 0 );
 		if (next.length) {
