@@ -177,7 +177,7 @@ $.widget("ui.menu", {
 			.andSelf()
 			.removeClass( "ui-menu ui-widget ui-widget-content ui-corner-all" )
 			.removeAttr( "role" )
-			.removeAttr("id")
+			.removeAttr("tabIndex")
 			.removeAttr( "aria-labelledby" )
 			.removeAttr( "aria-expanded" )
 			.removeAttr( "aria-hidden" )

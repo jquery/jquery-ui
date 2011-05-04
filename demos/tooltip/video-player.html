@@ -24,8 +24,12 @@
 		});
 		$(".set").buttonset();
 
-		// TODO hide the tooltip when clicking the button
-		$("ul").menu().popup({
+		$("ul").menu({
+			select: function() {
+				// would also execute some other action here
+				$(this).popup("close");
+			}
+		}).popup({
 			trigger: $(".menu")
 		});
 
