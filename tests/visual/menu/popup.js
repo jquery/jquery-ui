@@ -51,7 +51,7 @@ $.widget( "ui.popup", {
 				}
 				var that = this;
 				setTimeout(function() {
-					that._open( event );
+					that.open( event );
 				}, 1);
 			}
 		});
@@ -101,7 +101,7 @@ $.widget( "ui.popup", {
 		}
 	},
 	
-	_open: function( event ) {
+	open: function( event ) {
 		var position = $.extend( {}, {
 			of: this.options.trigger
 		}, this.options.position );
