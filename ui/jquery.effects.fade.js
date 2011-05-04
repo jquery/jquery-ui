@@ -13,21 +13,19 @@
 (function( $, undefined ) {
 
 $.effects.effect.fade = function( o ) {
-	return this.queue( function() {
-		var el = $( this ),
-			mode = $.effects.setMode( el, o.mode || 'hide' );
+	var el = $( this ),
+		mode = $.effects.setMode( el, o.mode || 'hide' );
 
-		el.animate({ 
-			opacity: mode 
-		}, {
-			queue: false,
-			duration: o.duration,
-			easing: o.easing,
-			complete: function() {
-				$.isFunction( o.complete ) && o.complete.apply( this, arguments );
-				el.dequeue();
-			}
-		});
+	el.animate({ 
+		opacity: mode 
+	}, {
+		queue: false,
+		duration: o.duration,
+		easing: o.easing,
+		complete: function() {
+			$.isFunction( o.complete ) && o.complete.apply( this, arguments );
+			el.dequeue();
+		}
 	});
 };
 
