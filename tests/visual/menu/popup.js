@@ -34,7 +34,7 @@ $.widget( "ui.popup", {
 		
 		this.element
 			.addClass("ui-popup")
-		this._close();
+		this.close();
 
 		this._bind(this.options.trigger, {
 			click: function( event ) {
@@ -53,7 +53,7 @@ $.widget( "ui.popup", {
 		this._bind(this.element, {
 			// TODO also triggered when open and clicking the trigger again
 			// figure out how to close in that case, while still closing on regular blur
-			//blur: "_close"
+			//blur: "close"
 		});
 
 		this._bind({
@@ -61,7 +61,7 @@ $.widget( "ui.popup", {
 			// bind to document instead?
 			keyup: function( event ) {
 				if (event.keyCode == $.ui.keyCode.ESCAPE && this.element.is( ":visible" )) {
-					this._close( event );
+					this.close( event );
 					this.options.trigger.focus();
 				}
 			}
@@ -70,7 +70,7 @@ $.widget( "ui.popup", {
 		this._bind(document, {
 			click: function( event ) {
 				if (this.open && !$(event.target).closest(".ui-popup").length) {
-					this._close( event );
+					this.close( event );
 				}
 			}
 		})
@@ -114,7 +114,7 @@ $.widget( "ui.popup", {
 		this._trigger( "open", event );
 	},
 
-	_close: function( event ) {
+	close: function( event ) {
 		this.element
 			.hide()
 			.attr( "aria-hidden", true )

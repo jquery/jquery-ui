@@ -25,7 +25,7 @@
 		var selected = {
 			select: function( event, ui ) {
 				$( "<div/>" ).text( "Selected: " + ui.item.text() ).appendTo( "#log" );
-				$(this).hide();
+				$(this).popup("close");
 			}
 		};
 
