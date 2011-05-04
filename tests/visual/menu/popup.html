@@ -28,7 +28,9 @@
 				$(this).hide();
 			}
 		};
-		
+
+		$("#members-popup").popup();
+
 		$("#button1").button();
 		$("#menu1").menu(selected).popup();
 		
@@ -69,9 +71,23 @@
 			padding: 0.5em;
 			border: 1px solid black;
 		}
+
+		#members-popup {
+			width: 200px; height: 150px; border: 1px solid gray; border-radius: 5px;
+			box-shadow: 3px 3px 5px -1px rgba(0, 0, 0, 0.5);
+			background: lightgray; background-image: -webkit-gradient(linear, left top, left bottom, from(#eee), to(#ddd));
+			font-size: 120%; text-align: center; line-height: 150px;
+		}
  	</style>
 </head>
 <body>
+
+<div>
+	<a href="#members-popup">Project members</a>
+	<div id="members-popup" tabIndex="0">
+		some form controls in here
+	</div>
+</div>
 
 <button id="button1">Show context menu 1</button>
 <ul id="menu1">
@@ -84,6 +100,7 @@
 	<li><a href="#">Utrecht</a></li>
 	<li><a href="#">Zurich</a></li>
 </ul>
+
 
 <div>
 	<div>
