@@ -102,6 +102,11 @@ $.widget( "ui.button", {
 			})
 			.bind( "blur.button", function() {
 				$( this ).removeClass( focusClass );
+			})
+			.bind( "click.button", function( event ) {
+				if ( options.disabled ) {
+					event.stopImmediatePropagation();
+				}
 			});
 
 		if ( toggleButton ) {
