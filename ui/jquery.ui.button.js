@@ -241,7 +241,7 @@ $.widget( "ui.button", {
 		this._super( "_setOption", key, value );
 		if ( key === "disabled" ) {
 			if ( value ) {
-				this.element.attr( "disabled", true );
+				this.element.attr( "disabled", true ).removeClass(stateClasses);
 			} else {
 				this.element.removeAttr( "disabled" );
 			}
