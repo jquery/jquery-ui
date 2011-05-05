@@ -455,7 +455,8 @@ $.extend(Datepicker.prototype, {
 				inst.settings.maxDate = this._formatDate(inst, maxDate);
 			this._attachments($(target), inst);
 			this._autoSize(inst);
-			this._setDateDatepicker(target, date);
+                        this._setDate(inst, date);
+                        this._updateAlternate(inst);
 			this._updateDatepicker(inst);
 		}
 	},
@@ -698,12 +699,12 @@ $.extend(Datepicker.prototype, {
 				inst.input.is(':visible') && !inst.input.is(':disabled') && inst.input[0] != document.activeElement)
 			inst.input.focus();
 		// deffered render of the years select (to avoid flashes on Firefox) 
-		if( inst.yearshtml ){
+                if( inst.yearshtml ){
 			var origyearshtml = inst.yearshtml;
 			setTimeout(function(){
 				//assure that inst.yearshtml didn't change.
 				if( origyearshtml === inst.yearshtml ){
-					inst.dpDiv.find('select.ui-datepicker-year:first').replaceWith(inst.yearshtml);
+                                        inst.dpDiv.find('select.ui-datepicker-year:first').replaceWith(inst.yearshtml);
 				}
 				origyearshtml = inst.yearshtml = null;
 			}, 0);
