@@ -45,7 +45,7 @@ $.widget( "ui.popup", {
 			},
 			click: function( event ) {
 				event.preventDefault();
-				if (this.open) {
+				if (this.isOpen) {
 					// let it propagate to close
 					return;
 				}
@@ -75,7 +75,7 @@ $.widget( "ui.popup", {
 		
 		this._bind(document, {
 			click: function( event ) {
-				if (this.open && !$(event.target).closest(".ui-popup").length) {
+				if (this.isOpen && !$(event.target).closest(".ui-popup").length) {
 					this.close( event );
 				}
 			}
@@ -116,7 +116,7 @@ $.widget( "ui.popup", {
 		// take trigger out of tab order to allow shift-tab to skip trigger
 		this.options.trigger.attr("tabindex", -1);
 
-		this.open = true;
+		this.isOpen = true;
 		this._trigger( "open", event );
 	},
 
@@ -128,7 +128,7 @@ $.widget( "ui.popup", {
 
 		this.options.trigger.attr("tabindex", 0);
 
-		this.open = false;
+		this.isOpen = false;
 		this._trigger( "close", event );
 	}
 	
