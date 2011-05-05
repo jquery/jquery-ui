@@ -46,7 +46,7 @@ $.widget( "ui.tabs", {
 		that.running = false;
 
 		that.element.addClass( "ui-tabs ui-widget ui-widget-content ui-corner-all" );
-
+		
 		that._processTabs();
 
 		if ( active === null ) {
@@ -269,6 +269,66 @@ $.widget( "ui.tabs", {
 				self.panels = self.panels.add( panel );
 			}
 			$( a ).attr( "aria-controls", selector.substring( 1 ) );
+
+			// Keyboard Accessibility :
+			$( a ).keydown( function( event ){
+				// find current, previous, next, first and last tab
+				var current = self._getPanelForTab( event.currentTarget )[0];
+				var first = self.panels[0];
+				var last = self.panels[self.panels.length-1];
+				var next = $( current ).next( ".ui-tabs-panel" ).first();
+				if ( next.length == 0 ) {
+					next = first;
+				} else {
+					next = next[0];
+				}
+				var prev = $( current ).prev( ".ui-tabs-panel" ).first();
+				if ( prev.length == 0 ) {
+					prev = last;
+				} else {
+					prev = prev[0];
+				}
+				// Open / focus the appropriate tab:
+				var keyCode = $.ui.keyCode;
+				if ( event.ctrlKey ) {
+					switch( event.keyCode ) {
+						case keyCode.LEFT:
+						case keyCode.UP:
+							$( 'a[href="#' + prev.id + '"]' ).focus();
+							break;
+						case keyCode.RIGHT:
+						case keyCode.DOWN:
+							$( 'a[href="#' + next.id + '"]' ).focus();
+							break;
+					}
+				} else {
+					switch( event.keyCode ) {
+						case keyCode.PAGE_UP:
+						case keyCode.LEFT:
+						case keyCode.UP:
+							self._activate( prev.id );
+							$( 'a[href="#' + prev.id + '"]' ).focus();
+							break;
+						case keyCode.PAGE_DOWN:
+						case keyCode.RIGHT:
+						case keyCode.DOWN:
+							self._activate( next.id );
+							$( 'a[href="#' + next.id + '"]' ).focus();
+							break;
+						case keyCode.SPACE:
+							self._activate( current.id );
+							break;
+						case keyCode.HOME:
+							self._activate( first.id );
+							$( 'a[href="#' + first.id + '"]' ).focus();
+							break;
+						case keyCode.END:
+							self._activate( last.id );
+							$( 'a[href="#' + last.id + '"]' ).focus();
+							break;
+					}
+				}
+			});
 		});
 	},
 
