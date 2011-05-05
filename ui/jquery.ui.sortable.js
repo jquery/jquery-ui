@@ -38,7 +38,8 @@ $.widget("ui.sortable", $.ui.mouse, {
 		scrollSpeed: 20,
 		scope: "default",
 		tolerance: "intersect",
-		zIndex: 1000
+		zIndex: 1000,
+		floating: false
 	},
 	_create: function() {
 
@@ -50,7 +51,7 @@ $.widget("ui.sortable", $.ui.mouse, {
 		this.refresh();
 
 		//Let's determine if the items are being displayed horizontally
-		this.floating = this.items.length ? o.axis === 'x' || (/left|right/).test(this.items[0].item.css('float')) || (/inline|table-cell/).test(this.items[0].item.css('display')) : false;
+		this.floating = this.items.length ? o.axis === 'x' || (/left|right/).test(this.items[0].item.css('float')) || (/inline|table-cell/).test(this.items[0].item.css('display')) : this.options.floating;
 
 		//Let's determine the parent's offset
 		this.offset = this.element.offset();
