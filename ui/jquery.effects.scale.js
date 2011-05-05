@@ -120,13 +120,9 @@ $.effects.effect.size = function( o ) {
 			baseline, factor,
 			props = restore ? props0 : props1;
 
-		if ( o.mode === "toggle" && mode === "show" ) {
-			el.from = o.to || { height: 0, width: 0 };
-			el.to = o.from || original;
-		} else {
-			el.from = o.from || original;
-			el.to = o.to || { height: 0, width: 0 };
-		}
+		var zero = { height: 0, width: 0 };
+		el.from = o.from || ( mode === "show" ? zero : original );
+		el.to = o.to || ( mode === "hide" ? zero : original );
 
 		// Adjust
 		if (origin) { // Calculate baseline shifts
