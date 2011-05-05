@@ -61,6 +61,7 @@ $(function() {
 
 	effect("#puff", "puff", { times: 2 });
 	effect("#scale", "scale", {});
+	effect("#size", "size", { from: { width: 300, height: 300 }});
 
 	$("#shake").bind("click", function() { $(this).addClass("current").effect("shake", {}, 100, function() { $(this).removeClass("current"); }); });
 
