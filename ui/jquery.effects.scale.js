@@ -69,7 +69,7 @@ $.effects.effect.scale = function( o ) {
 			options.restore = true;
 		}
 
-		options.from = o.from;
+		options.from = o.from || ( mode == 'show' ? { height: 0, width: 0 } : original ); 
 		options.to = {
 			height: original.height * factor.y, 
 			width: original.width * factor.x
@@ -120,15 +120,13 @@ $.effects.effect.size = function( o ) {
 			baseline, factor,
 			props = restore ? props0 : props1;
 
-		if (mode == 'show') {
-			el.from = o.to;
-			el.to = o.from;
+		if ( o.mode === "toggle" && mode === "show" ) {
+			el.from = o.to || { height: 0, width: 0 };
+			el.to = o.from || original;
 		} else {
-			el.from = o.from;
-			el.to = o.to;
+			el.from = o.from || original;
+			el.to = o.to || { height: 0, width: 0 };
 		}
-		el.from = el.from || original;
-		el.to = el.to || original;
 
 		// Adjust
 		if (origin) { // Calculate baseline shifts
