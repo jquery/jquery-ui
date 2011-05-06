@@ -43,6 +43,8 @@ $.widget( "ui.popup", {
 				if (event.keyCode == $.ui.keyCode.SPACE) {
 					event.preventDefault()
 				}
+				// TODO handle keydown to open popup?
+				//if (event.keyCode == $.ui.keyCode.SPACE) { .. }
 			},
 			click: function( event ) {
 				event.preventDefault();
