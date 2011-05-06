@@ -352,26 +352,28 @@ $.widget("ui.draggable", $.ui.mouse, {
 
 	_setContainment: function() {
 
-		var o = this.options;
+		var o = this.options,
+			scrollLeft,	scrollTop;
 		if(o.containment == 'parent') o.containment = this.helper[0].parentNode;
 		if(o.containment == 'document' || o.containment == 'window') this.containment = [
-			(o.containment == 'document' ? 0 : $(window).scrollLeft()) - this.offset.relative.left - this.offset.parent.left,
-			(o.containment == 'document' ? 0 : $(window).scrollTop()) - this.offset.relative.top - this.offset.parent.top,
-			(o.containment == 'document' ? 0 : $(window).scrollLeft()) + $(o.containment == 'document' ? document : window).width() - this.helperProportions.width - this.margins.left,
-			(o.containment == 'document' ? 0 : $(window).scrollTop()) + ($(o.containment == 'document' ? document : window).height() || document.body.parentNode.scrollHeight) - this.helperProportions.height - this.margins.top
+			(o.containment == 'document' ? 0 : (scrollLeft = $(window).scrollLeft())) - this.offset.relative.left - this.offset.parent.left,
+			(o.containment == 'document' ? 0 : (scrollTop = $(window).scrollTop())) - this.offset.relative.top - this.offset.parent.top,
+			(o.containment == 'document' ? 0 : scrollLeft) + $(o.containment == 'document' ? document : window).width() - this.helperProportions.width - this.margins.left,
+			(o.containment == 'document' ? 0 : scrollTop) + ($(o.containment == 'document' ? document : window).height() || document.body.parentNode.scrollHeight) - this.helperProportions.height - this.margins.top
 		];
 
 		if(!(/^(document|window|parent)$/).test(o.containment) && o.containment.constructor != Array) {
 		        var c = $(o.containment);
 			var ce = c[0]; if(!ce) return;
+			var $ce = $(ce);
 			var co = c.offset();
-			var over = ($(ce).css("overflow") != 'hidden');
+			var over = ($ce.css("overflow") != 'hidden');
 
 			this.containment = [
-				(parseInt($(ce).css("borderLeftWidth"),10) || 0) + (parseInt($(ce).css("paddingLeft"),10) || 0),
-				(parseInt($(ce).css("borderTopWidth"),10) || 0) + (parseInt($(ce).css("paddingTop"),10) || 0),
-				(over ? Math.max(ce.scrollWidth,ce.offsetWidth) : ce.offsetWidth) - (parseInt($(ce).css("borderLeftWidth"),10) || 0) - (parseInt($(ce).css("paddingRight"),10) || 0) - this.helperProportions.width - this.margins.left - this.margins.right,
-				(over ? Math.max(ce.scrollHeight,ce.offsetHeight) : ce.offsetHeight) - (parseInt($(ce).css("borderTopWidth"),10) || 0) - (parseInt($(ce).css("paddingBottom"),10) || 0) - this.helperProportions.height - this.margins.top  - this.margins.bottom
+				(parseInt($ce.css("borderLeftWidth"),10) || 0) + (parseInt($ce.css("paddingLeft"),10) || 0),
+				(parseInt($ce.css("borderTopWidth"),10) || 0) + (parseInt($ce.css("paddingTop"),10) || 0),
+				(over ? Math.max(ce.scrollWidth,ce.offsetWidth) : ce.offsetWidth) - (parseInt($ce.css("borderLeftWidth"),10) || 0) - (parseInt($ce.css("paddingRight"),10) || 0) - this.helperProportions.width - this.margins.left - this.margins.right,
+				(over ? Math.max(ce.scrollHeight,ce.offsetHeight) : ce.offsetHeight) - (parseInt($ce.css("borderTopWidth"),10) || 0) - (parseInt($ce.css("paddingBottom"),10) || 0) - this.helperProportions.height - this.margins.top  - this.margins.bottom
 			];
 			this.relative_container = c;
 
