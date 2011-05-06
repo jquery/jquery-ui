@@ -39,6 +39,7 @@ $.widget( "ui.popup", {
 		this._bind(this.options.trigger, {
 			keydown: function( event ) {
 				// prevent space-to-open to scroll the page
+				// TODO do this only for a:ui-button?
 				if (event.keyCode == $.ui.keyCode.SPACE) {
 					event.preventDefault()
 				}
@@ -50,6 +51,7 @@ $.widget( "ui.popup", {
 					return;
 				}
 				var that = this;
+				clearTimeout( this.closeTimer );
 				setTimeout(function() {
 					that.open( event );
 				}, 1);
@@ -57,9 +59,14 @@ $.widget( "ui.popup", {
 		});
 		
 		this._bind(this.element, {
-			// TODO also triggered when open and clicking the trigger again
-			// figure out how to close in that case, while still closing on regular blur
-			//blur: "close"
+			blur: function( event ) {
+				var that = this;
+				// use a timer to allow click to clear it and letting that
+				// handle the closing instead of opening again
+				that.closeTimer = setTimeout( function() {
+					that.close( event );
+				}, 100);
+			}
 		});
 
 		this._bind({
