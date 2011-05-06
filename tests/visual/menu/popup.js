@@ -38,13 +38,13 @@ $.widget( "ui.popup", {
 
 		this._bind(this.options.trigger, {
 			keydown: function( event ) {
-				// prevent space-to-open to scroll the page
-				// TODO do this only for a:ui-button?
-				if (event.keyCode == $.ui.keyCode.SPACE) {
+				// prevent space-to-open to scroll the page, only hapens for anchor ui.button
+				if ($( event.currentTarget ).is( "a:ui-button" ) && event.keyCode == $.ui.keyCode.SPACE) {
 					event.preventDefault()
 				}
-				// TODO handle keydown to open popup?
-				//if (event.keyCode == $.ui.keyCode.SPACE) { .. }
+				// TODO handle keydown to open popup? only when not handled by ui.button
+				//if (event.keyCode == $.ui.keyCode.SPACE) {
+				//}
 			},
 			click: function( event ) {
 				event.preventDefault();
