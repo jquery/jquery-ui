@@ -353,7 +353,9 @@ $.widget("ui.draggable", $.ui.mouse, {
 	_setContainment: function() {
 
 		var o = this.options,
-			scrollLeft,	scrollTop;
+			scrollLeft,	scrollTop
+			c, ce,
+			co, over;
 		if(o.containment == 'parent') o.containment = this.helper[0].parentNode;
 		if(o.containment == 'document' || o.containment == 'window') this.containment = [
 			(o.containment == 'document' ? 0 : (scrollLeft = $(window).scrollLeft())) - this.offset.relative.left - this.offset.parent.left,
@@ -363,17 +365,16 @@ $.widget("ui.draggable", $.ui.mouse, {
 		];
 
 		if(!(/^(document|window|parent)$/).test(o.containment) && o.containment.constructor != Array) {
-		        var c = $(o.containment);
-			var ce = c[0]; if(!ce) return;
-			var $ce = $(ce);
-			var co = c.offset();
-			var over = ($ce.css("overflow") != 'hidden');
+			c = $(o.containment);
+			ce = c[0]; if(!ce) return;
+			co = c.offset();
+			over = (c.css("overflow") != 'hidden');
 
 			this.containment = [
-				(parseInt($ce.css("borderLeftWidth"),10) || 0) + (parseInt($ce.css("paddingLeft"),10) || 0),
-				(parseInt($ce.css("borderTopWidth"),10) || 0) + (parseInt($ce.css("paddingTop"),10) || 0),
-				(over ? Math.max(ce.scrollWidth,ce.offsetWidth) : ce.offsetWidth) - (parseInt($ce.css("borderLeftWidth"),10) || 0) - (parseInt($ce.css("paddingRight"),10) || 0) - this.helperProportions.width - this.margins.left - this.margins.right,
-				(over ? Math.max(ce.scrollHeight,ce.offsetHeight) : ce.offsetHeight) - (parseInt($ce.css("borderTopWidth"),10) || 0) - (parseInt($ce.css("paddingBottom"),10) || 0) - this.helperProportions.height - this.margins.top  - this.margins.bottom
+				(parseInt(c.css("borderLeftWidth"),10) || 0) + (parseInt(c.css("paddingLeft"),10) || 0),
+				(parseInt(c.css("borderTopWidth"),10) || 0) + (parseInt(c.css("paddingTop"),10) || 0),
+				(over ? Math.max(ce.scrollWidth,ce.offsetWidth) : ce.offsetWidth) - (parseInt(c.css("borderLeftWidth"),10) || 0) - (parseInt(c.css("paddingRight"),10) || 0) - this.helperProportions.width - this.margins.left - this.margins.right,
+				(over ? Math.max(ce.scrollHeight,ce.offsetHeight) : ce.offsetHeight) - (parseInt(c.css("borderTopWidth"),10) || 0) - (parseInt(c.css("paddingBottom"),10) || 0) - this.helperProportions.height - this.margins.top  - this.margins.bottom
 			];
 			this.relative_container = c;
 
