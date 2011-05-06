@@ -120,6 +120,10 @@ $.widget( "ui.popup", {
 			.position( position )
 			.focus();
 
+		if (this.element.is(":ui-menu")) {
+			this.element.menu("focus", event, this.element.children( "li" ).first() );
+		}
+
 		// take trigger out of tab order to allow shift-tab to skip trigger
 		this.options.trigger.attr("tabindex", -1);
 
