@@ -7,4 +7,4 @@
  *
  * http://docs.jquery.com/UI/Selectable#theming
  */
-.ui-selectable-helper { position: absolute; z-index: 100; border:1px dotted black; }
+.ui-selectable-helper { position: absolute; border:1px dotted black; }
