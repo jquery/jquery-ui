@@ -10,24 +10,34 @@
 	<script type="text/javascript" src="../../ui/jquery.ui.tooltip.js"></script>
 	<script type="text/javascript" src="../../ui/jquery.ui.button.js"></script>
 	<script type="text/javascript" src="../../ui/jquery.ui.menu.js"></script>
+	<script type="text/javascript" src="../../ui/jquery.effects.core.js"></script>
+	<script type="text/javascript" src="../../ui/jquery.effects.blind.js"></script>
 	<script type="text/javascript" src="../../tests/visual/menu/popup.js"></script>
 	<link type="text/css" href="../demos.css" rel="stylesheet" />
 	<script type="text/javascript">
 	$(function() {
 		function notify( input ) {
 			var msg = "Selected " + $.trim($(input).text());
-			$("<div/>").appendTo(document.body).text(msg).addClass("notification ui-state-highlight").position({
-				my: "center top+20",
+			$("<div/>").appendTo(document.body).text(msg).addClass("notification ui-state-default ui-corner-bottom").position({
+				my: "center top",
 				at: "center top",
 				of: window
-			}).delay(1000).fadeOut("slow", function() {
+			}).show({
+				effect: "blind"
+			}).delay(1000).hide({
+				effect: "blind",
+				duration: "slow"
+			}, function() {
 				$(this).remove();
 			});
 		}
 		$("ul").menu({
 			select: function(event, ui) {
-				// stop button from handling the click
+				// TODO stop button from handling the click
 				$(this).popup("close");
+				// TODO should probably be handled by poup, see ESCAPE key handler
+				// affects key handling
+				$(this).prev().focus();
 				notify(ui.item);
 			}
 		}).popup();
@@ -75,7 +85,7 @@
 
 		.set { display: inline-block; }
 
-		.notification { position: absolute; display: inline-block; font-size: 2em; padding: 1em; border-radius: 15px; box-shadow: 2px 2px 5px -2px rgba(0,0,0,0.5); }
+		.notification { position: absolute; display: inline-block; font-size: 2em; padding: .5em; box-shadow: 2px 2px 5px -2px rgba(0,0,0,0.5); }
 	</style>
 </head>
 <body>
