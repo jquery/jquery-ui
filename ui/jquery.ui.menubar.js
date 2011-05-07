@@ -1,7 +1,17 @@
 /*
- * jQuery UI menubar
- * 
- * TODO move to jquery.ui.menubar.js
+ * jQuery UI Menubar @VERSION
+ *
+ * Copyright 2011, AUTHORS.txt (http://jqueryui.com/about)
+ * Dual licensed under the MIT or GPL Version 2 licenses.
+ * http://jquery.org/license
+ *
+ * http://docs.jquery.com/UI/Menubar
+ *
+ * Depends:
+ *	jquery.ui.core.js
+ *	jquery.ui.widget.js
+ *	jquery.ui.position.js
+ *	jquery.ui.menu.js
  */
 (function( $ ) {
 
