@@ -39,12 +39,18 @@ $.widget( "ui.popup", {
 		this._bind(this.options.trigger, {
 			keydown: function( event ) {
 				// prevent space-to-open to scroll the page, only hapens for anchor ui.button
-				if ($( event.currentTarget ).is( "a:ui-button" ) && event.keyCode == $.ui.keyCode.SPACE) {
+				if ( this.options.trigger.is( "a:ui-button" ) && event.keyCode == $.ui.keyCode.SPACE) {
 					event.preventDefault()
 				}
-				// TODO handle keydown to open popup? only when not handled by ui.button
-				//if (event.keyCode == $.ui.keyCode.SPACE) {
-				//}
+				// TODO handle SPACE to open popup? only when not handled by ui.button
+				if ( event.keyCode == $.ui.keyCode.SPACE && this.options.trigger.is("a:not(:ui-button)") ) {
+					this.options.trigger.trigger( "click", event );
+				}
+				// translate keydown to click
+				// opens popup and let's tooltip hide itself
+				if ( event.keyCode == $.ui.keyCode.DOWN ) {
+					this.options.trigger.trigger( "click", event );
+				}
 			},
 			click: function( event ) {
 				event.preventDefault();
@@ -61,6 +67,7 @@ $.widget( "ui.popup", {
 		});
 		
 		this._bind(this.element, {
+			// TODO use focusout so that element itself doesn't need to be focussable
 			blur: function( event ) {
 				var that = this;
 				// use a timer to allow click to clear it and letting that
@@ -74,9 +81,11 @@ $.widget( "ui.popup", {
 		this._bind({
 			// TODO only triggerd on element if it can receive focus
 			// bind to document instead?
+			// either element itself or a child should be focusable
 			keyup: function( event ) {
 				if (event.keyCode == $.ui.keyCode.ESCAPE && this.element.is( ":visible" )) {
 					this.close( event );
+					// TODO move this to close()? would allow menu.select to call popup.close, and get focus back to trigger
 					this.options.trigger.focus();
 				}
 			}
@@ -120,6 +129,7 @@ $.widget( "ui.popup", {
 			.attr( "aria-hidden", false )
 			.attr( "aria-expanded", true )
 			.position( position )
+			// TODO find a focussable child, otherwise put focus on element, add tabIndex=0 if not focussable
 			.focus();
 
 		if (this.element.is(":ui-menu")) {
