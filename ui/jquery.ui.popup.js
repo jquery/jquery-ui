@@ -60,6 +60,8 @@ $.widget( "ui.popup", {
 				// translate keydown to click
 				// opens popup and let's tooltip hide itself
 				if ( event.keyCode == $.ui.keyCode.DOWN ) {
+					// prevent scrolling
+					event.preventDefault();
 					this.options.trigger.trigger( "click", event );
 				}
 			},
