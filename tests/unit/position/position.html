@@ -1,25 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8" />
+	<meta charset="utf-8">
 	<title>jQuery UI Position Test Suite</title>
 
-	<script type="text/javascript" src="../../../jquery-1.4.4.js"></script>
-	<script type="text/javascript" src="../../../ui/jquery.ui.position.js"></script>
+	<script src="../../../jquery-1.5.1.js"></script>
+	<script>
+	$.uiBackCompat = false;
+	</script>
+	<script src="../../../ui/jquery.ui.position.js"></script>
 
-	<link rel="stylesheet" href="../../../external/qunit.css" type="text/css"/>
-	<script type="text/javascript" src="../../../external/qunit.js"></script>
-	<script type="text/javascript" src="../../jquery.simulate.js"></script>
-	<script type="text/javascript" src="../testsuite.js"></script>
+	<link rel="stylesheet" href="../../../external/qunit.css">
+	<script src="../../../external/qunit.js"></script>
+	<script src="../../jquery.simulate.js"></script>
+	<script src="../testsuite.js"></script>
 
-	<script type="text/javascript" src="position_core.js"></script>
-	
-	<script type="text/javascript" src="../swarminject.js"></script>
+	<script src="position_core.js"></script>
+
+	<script src="../swarminject.js"></script>
 </head>
 <body>
 
 <h1 id="qunit-header">jQuery UI Position Test Suite</h1>
 <h2 id="qunit-banner"></h2>
+<div id="qunit-testrunner-toolbar"></div>
 <h2 id="qunit-userAgent"></h2>
 <ol id="qunit-tests">
 </ol>
@@ -29,7 +33,7 @@ elements smaller than 10px have a line-height set on them to avoid a bug in IE6
 .height() returns the greater of the height and line-height
 -->
 
-<div id="main" style="position: absolute; top: 0; left: 0;">
+<div id="qunit-fixture" style="top: 0; left: 0;">
 	<div id="el1" style="position: absolute; width: 6px; height: 6px; line-height: 6px;"></div>
 	<div id="el2" style="position: absolute; width: 6px; height: 6px; line-height: 6px;"></div>
 	<div id="parent" style="position: absolute; width: 6px; height: 6px; top: 4px; left: 4px; line-height: 6px;"></div>

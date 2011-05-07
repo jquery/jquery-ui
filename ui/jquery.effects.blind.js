@@ -1,7 +1,7 @@
 /*
  * jQuery UI Effects Blind @VERSION
  *
- * Copyright 2010, AUTHORS.txt (http://jqueryui.com/about)
+ * Copyright 2011, AUTHORS.txt (http://jqueryui.com/about)
  * Dual licensed under the MIT or GPL Version 2 licenses.
  * http://jquery.org/license
  *
@@ -11,35 +11,67 @@
  *	jquery.effects.core.js
  */
 (function( $, undefined ) {
+	
+var rvertical = /up|down|vertical/;
+var rpositivemotion = /up|left|vertical|horizontal/;
 
-$.effects.blind = function(o) {
+$.effects.effect.blind = function( o ) {
 
-	return this.queue(function() {
+	return this.queue( function() {
 
 		// Create element
-		var el = $(this), props = ['position','top','bottom','left','right'];
+		var el = $( this ),
+			props = [ "position", "top", "bottom", "left", "right" ],
+			mode = $.effects.setMode( el, o.mode || "hide" ),
+			direction = o.direction || "up",
+			vertical = rvertical.test( direction ),
+			ref = vertical ? "height" : "width",
+			ref2 = vertical ? "top" : "left",
+			motion = rpositivemotion.test( direction ),
+			animation = {},
+			wrapper, distance;
 
-		// Set options
-		var mode = $.effects.setMode(el, o.options.mode || 'hide'); // Set Mode
-		var direction = o.options.direction || 'vertical'; // Default direction
+		$.effects.save( el, props ); 
+		el.show(); 
+		wrapper = $.effects.createWrapper( el ).css({ 
+			overflow: "hidden"
+		});
 
-		// Adjust
-		$.effects.save(el, props); el.show(); // Save & Show
-		var wrapper = $.effects.createWrapper(el).css({overflow:'hidden'}); // Create Wrapper
-		var ref = (direction == 'vertical') ? 'height' : 'width';
-		var distance = (direction == 'vertical') ? wrapper.height() : wrapper.width();
-		if(mode == 'show') wrapper.css(ref, 0); // Shift
+		distance = wrapper[ ref ]();
 
-		// Animation
-		var animation = {};
-		animation[ref] = mode == 'show' ? distance : 0;
+		animation[ ref ] = ( mode === "show" ? distance : 0 );
+		if ( !motion ) {
+			el
+				.css( vertical ? "bottom" : "right", 0 )
+				.css( vertical ? "top" : "left", "" )
+				.css({ position: "absolute" });
+			animation[ ref2 ] = ( mode === "show" ) ? 0 : distance;
+		}
+
+		// start at 0 if we are showing
+		if ( mode == "show" ) {
+			wrapper.css( ref, 0 );
+			if ( ! motion ) {
+				wrapper.css( ref2, distance );
+			}
+		}
 
 		// Animate
-		wrapper.animate(animation, o.duration, o.options.easing, function() {
-			if(mode == 'hide') el.hide(); // Hide
-			$.effects.restore(el, props); $.effects.removeWrapper(el); // Restore
-			if(o.callback) o.callback.apply(el[0], arguments); // Callback
-			el.dequeue();
+		wrapper.animate( animation, {
+			duration: o.duration,
+			easing: o.easing,
+			queue: false,
+			complete: function() {
+				if ( mode == "hide" ) {
+					el.hide();
+				}
+				$.effects.restore( el, props ); 
+				$.effects.removeWrapper( el );
+				if ( $.isFunction( o.complete ) ) {
+					o.complete.apply( el[ 0 ], arguments );
+				}
+				el.dequeue();
+			}
 		});
 
 	});

@@ -3,12 +3,7 @@
  */
 (function($) {
 
-module("datepicker: tickets", {
-	teardown: function() {
-		stop();
-		setTimeout(start, 13);
-	}
-});
+module("datepicker: tickets");
 
 // http://forum.jquery.com/topic/several-breaking-changes-in-jquery-ui-1-8rc1
 test('beforeShowDay-getDate', function() {

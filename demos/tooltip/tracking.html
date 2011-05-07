@@ -3,7 +3,7 @@
 <head>
 	<title>jQuery UI Tooltip - Default demo</title>
 	<link type="text/css" href="../../themes/base/jquery.ui.all.css" rel="stylesheet" />
-	<script type="text/javascript" src="../../jquery-1.4.4.js"></script>
+	<script type="text/javascript" src="../../jquery-1.5.1.js"></script>
 	<script type="text/javascript" src="../../ui/jquery.ui.core.js"></script>
 	<script type="text/javascript" src="../../ui/jquery.ui.widget.js"></script>
 	<script type="text/javascript" src="../../ui/jquery.ui.position.js"></script>
@@ -13,12 +13,11 @@
 	$(function() {
 		$(".demo").tooltip({
 			open: function() {
-				var tooltip = $(this).tooltip("widget");
-				$(document).mousemove(function(event) {
-					tooltip.position({
-						my: "left center",
-						at: "right center",
-						offset: "25 25",
+				var tooltip = $( ".ui-tooltip" );
+				$(document).mousemove(function( event ) {
+					tooltip.position( {
+						my: "left+25 center",
+						at: "right+25 center",
 						of: event
 					});
 				})
@@ -26,7 +25,7 @@
 				.mousemove();
 			},
 			close: function() {
-				$(document).unbind("mousemove");
+				$(document).unbind( "mousemove" );
 			}
 		});
 	});

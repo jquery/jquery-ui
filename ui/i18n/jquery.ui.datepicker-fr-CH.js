@@ -1,10 +1,10 @@
-﻿/* Swiss-French initialisation for the jQuery UI date picker plugin. */
+/* Swiss-French initialisation for the jQuery UI date picker plugin. */
 /* Written Martin Voelkle (martin.voelkle@e-tc.ch). */
 jQuery(function($){
 	$.datepicker.regional['fr-CH'] = {
 		closeText: 'Fermer',
-		prevText: '&#x3c;Préc',
-		nextText: 'Suiv&#x3e;',
+		prevText: '&#x3C;Préc',
+		nextText: 'Suiv&#x3E;',
 		currentText: 'Courant',
 		monthNames: ['Janvier','Février','Mars','Avril','Mai','Juin',
 		'Juillet','Août','Septembre','Octobre','Novembre','Décembre'],

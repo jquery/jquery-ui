@@ -1,10 +1,10 @@
-﻿/* Croatian i18n for the jQuery UI date picker plugin. */
+/* Croatian i18n for the jQuery UI date picker plugin. */
 /* Written by Vjekoslav Nesek. */
 jQuery(function($){
 	$.datepicker.regional['hr'] = {
 		closeText: 'Zatvori',
-		prevText: '&#x3c;',
-		nextText: '&#x3e;',
+		prevText: '&#x3C;',
+		nextText: '&#x3E;',
 		currentText: 'Danas',
 		monthNames: ['Siječanj','Veljača','Ožujak','Travanj','Svibanj','Lipanj',
 		'Srpanj','Kolovoz','Rujan','Listopad','Studeni','Prosinac'],

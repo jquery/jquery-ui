@@ -1,15 +1,18 @@
 /*
  * jQuery UI Menu @VERSION
  *
- * Copyright 2010, AUTHORS.txt (http://jqueryui.com/about)
+ * Copyright 2011, AUTHORS.txt (http://jqueryui.com/about)
  * Dual licensed under the MIT or GPL Version 2 licenses.
  * http://jquery.org/license
+ *
+ * http://docs.jquery.com/UI/Menu#theming
  */
 .ui-menu {
 	list-style:none;
 	padding: 2px;
 	margin: 0;
 	display:block;
+	outline: none;
 }
 .ui-menu .ui-menu {
 	margin-top: -3px;
@@ -23,15 +26,26 @@
 .ui-menu .ui-menu-item a {
 	text-decoration:none;
 	display:block;
-	padding:.2em .4em;
+	padding: 2px .4em;
 	line-height:1.5;
 	zoom:1;
-}
-.ui-menu .ui-menu-item a {
 	font-weight: normal;
 }
-.ui-menu .ui-menu-item a.ui-state-hover,
+.ui-menu .ui-menu-item a.ui-state-focus,
 .ui-menu .ui-menu-item a.ui-state-active {
 	font-weight: normal;
 	margin: -1px;
 }
+
+/* nested menus */
+.ui-menu .ui-menu { position: absolute; }
+
+/* icon support */
+.ui-menu-icons { position: relative; }
+.ui-menu-icons .ui-menu-item a { position: relative; padding-left: 2em; }
+
+/* left-aligned */
+.ui-menu .ui-icon { position: absolute; top: .2em; left: .2em; }
+
+/* right-aligned */
+.ui-menu .ui-menu-icon { position: static; float: right; }

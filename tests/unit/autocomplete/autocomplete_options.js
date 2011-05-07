@@ -97,6 +97,27 @@ test( "appendTo", function() {
 	ac.autocomplete( "destroy" );
 });
 
+function autoFocusTest( afValue, focusedLength ) {
+	var ac = $( "#autocomplete" ).autocomplete({
+		autoFocus: afValue,
+		delay: 0,
+		source: data,
+		open: function( event, ui ) {
+			equal( ac.autocomplete( "widget" ).children( ".ui-menu-item:first .ui-state-focus" ).length, focusedLength, "first item is " + afValue ? "" : "not" + " auto focused" );
+			start();			
+		}
+	});
+	ac.val( "ja" ).keydown();
+	stop();
+}
+
+test( "autoFocus: false", function() {
+	autoFocusTest( false, 0 );
+});
+
+test( "autoFocus: true", function() {
+	autoFocusTest( true, 1 );
+});
 
 test("delay", function() {
 	var ac = $("#autocomplete").autocomplete({

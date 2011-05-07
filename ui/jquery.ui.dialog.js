@@ -1,7 +1,7 @@
 /*
  * jQuery UI Dialog @VERSION
  *
- * Copyright 2010, AUTHORS.txt (http://jqueryui.com/about)
+ * Copyright 2011, AUTHORS.txt (http://jqueryui.com/about)
  * Dual licensed under the MIT or GPL Version 2 licenses.
  * http://jquery.org/license
  *
@@ -86,18 +86,16 @@ $.widget("ui.dialog", {
 			titleId = $.ui.dialog.getTitleId( self.element ),
 
 			uiDialog = ( self.uiDialog = $( "<div>" ) )
-				.appendTo( document.body )
-				.hide()
 				.addClass( uiDialogClasses + options.dialogClass )
 				.css({
+					display: "none",
+					outline: 0, // TODO: move to stylesheet
 					zIndex: options.zIndex
 				})
 				// setting tabIndex makes the div focusable
 				.attr( "tabIndex", -1)
-				// TODO: move to stylesheet
-				.css( "outline", 0 )
 				.keydown(function( event ) {
-					if ( options.closeOnEscape && event.keyCode &&
+					if ( options.closeOnEscape && !event.isDefaultPrevented() && event.keyCode &&
 							event.keyCode === $.ui.keyCode.ESCAPE ) {
 						self.close( event );
 						event.preventDefault();
@@ -122,23 +120,9 @@ $.widget("ui.dialog", {
 					"ui-corner-all  ui-helper-clearfix" )
 				.prependTo( uiDialog ),
 
-			uiDialogTitlebarClose = $( "<a href='#'>" )
+			uiDialogTitlebarClose = $( "<a href='#'></a>" )
 				.addClass( "ui-dialog-titlebar-close  ui-corner-all" )
 				.attr( "role", "button" )
-				.hover(
-					function() {
-						uiDialogTitlebarClose.addClass( "ui-state-hover" );
-					},
-					function() {
-						uiDialogTitlebarClose.removeClass( "ui-state-hover" );
-					}
-				)
-				.focus(function() {
-					uiDialogTitlebarClose.addClass( "ui-state-focus" );
-				})
-				.blur(function() {
-					uiDialogTitlebarClose.removeClass( "ui-state-focus" );
-				})
 				.click(function( event ) {
 					event.preventDefault();
 					self.close( event );
@@ -157,6 +141,8 @@ $.widget("ui.dialog", {
 				.prependTo( uiDialogTitlebar );
 
 		uiDialogTitlebar.find( "*" ).add( uiDialogTitlebar ).disableSelection();
+		this._hoverable( uiDialogTitlebarClose );
+		this._focusable( uiDialogTitlebarClose );
 
 		if ( options.draggable && $.fn.draggable ) {
 			self._makeDraggable();
@@ -167,6 +153,8 @@ $.widget("ui.dialog", {
 
 		self._createButtons( options.buttons );
 		self._isOpen = false;
+
+		uiDialog.appendTo( document.body );
 
 		if ( $.fn.bgiframe ) {
 			uiDialog.bgiframe();
@@ -179,7 +167,7 @@ $.widget("ui.dialog", {
 		}
 	},
 
-	destroy: function() {
+	_destroy: function() {
 		var self = this;
 		
 		if ( self.overlay ) {
@@ -195,9 +183,6 @@ $.widget("ui.dialog", {
 		if ( self.originalTitle ) {
 			self.element.attr( "title", self.originalTitle );
 		}
-
-		$.Widget.prototype.destroy.call( this );
-		return self;
 	},
 
 	widget: function() {
@@ -325,9 +310,14 @@ $.widget("ui.dialog", {
 
 		// set focus to the first tabbable element in the content area or the first button
 		// if there are no tabbable elements, set focus on the dialog itself
-		$( self.element.find( ":tabbable" ).get().concat(
-			uiDialog.find( ".ui-dialog-buttonpane :tabbable" ).get().concat(
-				uiDialog.get() ) ) ).eq( 0 ).focus();
+		var hasFocus = self.element.find( ":tabbable" );
+		if ( !hasFocus.length ) {
+			hasFocus = uiDialog.find( ".ui-dialog-buttonpane :tabbable" );
+			if ( !hasFocus.length ) {
+				hasFocus = uiDialog;
+			}
+		}
+		hasFocus.eq( 0 ).focus();
 
 		self._isOpen = true;
 		self._trigger( "open" );
@@ -337,12 +327,7 @@ $.widget("ui.dialog", {
 
 	_createButtons: function( buttons ) {
 		var self = this,
-			hasButtons = false,
-			uiDialogButtonPane = $( "<div>" )
-				.addClass( "ui-dialog-buttonpane  ui-widget-content ui-helper-clearfix" ),
-			uiButtonSet = $( "<div>" )
-				.addClass( "ui-dialog-buttonset" )
-				.appendTo( uiDialogButtonPane );
+			hasButtons = false;
 
 		// if we already have a button pane, remove it
 		self.uiDialog.find( ".ui-dialog-buttonpane" ).remove();
@@ -353,6 +338,12 @@ $.widget("ui.dialog", {
 			});
 		}
 		if ( hasButtons ) {
+			var uiDialogButtonPane = $( "<div>" )
+					.addClass( "ui-dialog-buttonpane  ui-widget-content ui-helper-clearfix" ),
+				uiButtonSet = $( "<div>" )
+					.addClass( "ui-dialog-buttonset" )
+					.appendTo( uiDialogButtonPane );
+
 			$.each( buttons, function( name, props ) {
 				props = $.isFunction( props ) ?
 					{ click: props, text: name } :
@@ -368,7 +359,10 @@ $.widget("ui.dialog", {
 					button.button();
 				}
 			});
+			self.uiDialog.addClass( "ui-dialog-buttons" );
 			uiDialogButtonPane.appendTo( self.uiDialog );
+		} else {
+			self.uiDialog.removeClass( "ui-dialog-buttons" );
 		}
 	},
 
@@ -603,7 +597,7 @@ $.widget("ui.dialog", {
 				break;
 		}
 
-		$.Widget.prototype._setOption.apply( self, arguments );
+		this._super( "_setOption", key, value );
 	},
 
 	_size: function() {
@@ -711,7 +705,7 @@ $.extend( $.ui.dialog.overlay, {
 
 			// allow closing by pressing the escape key
 			$( document ).bind( "keydown.dialog-overlay", function( event ) {
-				if ( dialog.options.closeOnEscape && event.keyCode &&
+				if ( dialog.options.closeOnEscape && !event.isDefaultPrevented() && event.keyCode &&
 					event.keyCode === $.ui.keyCode.ESCAPE ) {
 					
 					dialog.close( event );

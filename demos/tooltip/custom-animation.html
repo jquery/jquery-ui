@@ -3,7 +3,7 @@
 <head>
 	<title>jQuery UI Tooltip - Custom animation demo</title>
 	<link type="text/css" href="../../themes/base/jquery.ui.all.css" rel="stylesheet" />
-	<script type="text/javascript" src="../../jquery-1.4.4.js"></script>
+	<script type="text/javascript" src="../../jquery-1.5.1.js"></script>
 	<script type="text/javascript" src="../../ui/jquery.ui.core.js"></script>
 	<script type="text/javascript" src="../../ui/jquery.ui.widget.js"></script>
 	<script type="text/javascript" src="../../ui/jquery.ui.position.js"></script>
@@ -12,11 +12,13 @@
 	<script type="text/javascript">
 	$(function() {
 		$(".demo").tooltip({
-			open: function() {
-				$(this).tooltip("widget").stop(false, true).hide().slideDown();
+			show: {
+				effect: "slideDown",
+				delay: 250
 			},
-			close: function() {
-				$(this).tooltip("widget").stop(false, true).show().slideUp();
+			hide: {
+				effect: "hide",
+				delay: 250
 			}
 		});
 	});
@@ -45,7 +47,9 @@
 
 <div class="demo-description">
 
-<p>Here the tooltips are positioned relative to the mouse, and follow the mouse while it moves above the element.</p>
+<p>This demo shows how to customize animations. The tooltip is shown, after a
+delay of 250ms, using a slide down animation, and hidden, after another delay,
+without an animation.</p>
 
 </div><!-- End demo-description -->
 

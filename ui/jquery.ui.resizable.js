@@ -1,7 +1,7 @@
 /*
  * jQuery UI Resizable @VERSION
  *
- * Copyright 2010, AUTHORS.txt (http://jqueryui.com/about)
+ * Copyright 2011, AUTHORS.txt (http://jqueryui.com/about)
  * Dual licensed under the MIT or GPL Version 2 licenses.
  * http://jquery.org/license
  *
@@ -322,10 +322,10 @@ $.widget("ui.resizable", $.ui.mouse, {
 
 		if(this._helper) {
 			var pr = this._proportionallyResizeElements, ista = pr.length && (/textarea/i).test(pr[0].nodeName),
-						soffseth = ista && $.ui.hasScroll(pr[0], 'left') /* TODO - jump height */ ? 0 : self.sizeDiff.height,
-							soffsetw = ista ? 0 : self.sizeDiff.width;
+				soffseth = ista && $.ui.hasScroll(pr[0], 'left') /* TODO - jump height */ ? 0 : self.sizeDiff.height,
+				soffsetw = ista ? 0 : self.sizeDiff.width;
 
-			var s = { width: (self.size.width - soffsetw), height: (self.size.height - soffseth) },
+			var s = { width: (self.helper.width()  - soffsetw), height: (self.helper.height() - soffseth) },
 				left = (parseInt(self.element.css('left'), 10) + (self.position.left - self.originalPosition.left)) || null,
 				top = (parseInt(self.element.css('top'), 10) + (self.position.top - self.originalPosition.top)) || null;
 

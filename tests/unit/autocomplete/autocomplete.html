@@ -6,10 +6,11 @@
 
 	<link type="text/css" href="../../../themes/base/jquery.ui.autocomplete.css" rel="stylesheet" />
 
-	<script type="text/javascript" src="../../../jquery-1.4.4.js"></script>
+	<script type="text/javascript" src="../../../jquery-1.5.1.js"></script>
 	<script type="text/javascript" src="../../../ui/jquery.ui.core.js"></script>
 	<script type="text/javascript" src="../../../ui/jquery.ui.widget.js"></script>
 	<script type="text/javascript" src="../../../ui/jquery.ui.position.js"></script>
+	<script type="text/javascript" src="../../../ui/jquery.ui.menu.js"></script>
 	<script type="text/javascript" src="../../../ui/jquery.ui.autocomplete.js"></script>
 
 	<link rel="stylesheet" href="../../../external/qunit.css" type="text/css"/>
@@ -22,7 +23,6 @@
 	<script type="text/javascript" src="autocomplete_events.js"></script>
 	<script type="text/javascript" src="autocomplete_methods.js"></script>
 	<script type="text/javascript" src="autocomplete_options.js"></script>
-	<script type="text/javascript" src="autocomplete_tickets.js"></script>
 	
 	<script type="text/javascript" src="../swarminject.js"></script>
 </head>
@@ -30,14 +30,16 @@
 
 <h1 id="qunit-header">jQuery UI Autocomplete Test Suite</h1>
 <h2 id="qunit-banner"></h2>
+<div id="qunit-testrunner-toolbar"></div>
 <h2 id="qunit-userAgent"></h2>
 <ol id="qunit-tests">
 </ol>
 
-<div id="main" style="position: absolute; top: -10000px; left: -10000px;">
+<div id="qunit-fixture">
 
 	<div id="ac-wrap1" class="ac-wrap"></div>
 	<div id="ac-wrap2" class="ac-wrap"><input id="autocomplete" class="foo" /></div>
+	<div id="autocomplete-contenteditable" contenteditable="" tabindex=0></div>
 </div>
 
 </body>
