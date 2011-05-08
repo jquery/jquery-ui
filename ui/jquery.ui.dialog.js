@@ -693,7 +693,7 @@ $.extend( $.ui.dialog.overlay, {
 			setTimeout(function() {
 				// handle $(el).dialog().dialog('close') (see #4065)
 				if ( $.ui.dialog.overlay.instances.length ) {
-					$( document ).bind( $.ui.dialog.overlay.events, function( event ) {
+					this.bind( $.ui.dialog.overlay.events, function( event ) {
 						// stop events if the z-index of the target is < the z-index of the overlay
 						// we cannot return true when we don't want to cancel the event (#3523)
 						if ( $( event.target ).zIndex() < $.ui.dialog.overlay.maxZ ) {
