@@ -89,6 +89,8 @@ $.widget("ui.draggable", $.ui.mouse, {
 			.css($(this).offset())
 			.appendTo("body");
 		});
+		
+		if ($.browser.msie) event.stopPropagation();
 
 		return true;
 
