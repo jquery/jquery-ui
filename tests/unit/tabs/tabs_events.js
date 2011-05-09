@@ -191,8 +191,66 @@ test( "beforeLoad", function() {
 	equals( panel.html(), "<p>testing</p>", "panel html after" );
 });
 
-test( "load", function() {
-	ok( false, "missing test - untested code is broken code." );
+asyncTest( "load", function() {
+	expect( 21 );
+
+	var tab, panelId, panel,
+		element = $( "#tabs2" );
+
+	// init
+	element.one( "tabsload", function( event, ui ) {
+		tab = element.find( ".ui-tabs-nav a" ).eq( 2 );
+		panelId = tab.attr( "aria-controls" );
+		panel = $( "#" + panelId );
+
+		ok( !( "originalEvent" in event ), "originalEvent" );
+		equals( ui.tab.size(), 1, "tab size" );
+		strictEqual( ui.tab[ 0 ], tab[ 0 ], "tab" );
+		equals( ui.panel.size(), 1, "panel size" );
+		strictEqual( ui.panel[ 0 ], panel[ 0 ], "panel" );
+		equals( ui.panel.find( "p" ).length, 1, "panel html" );
+		tabs_state( element, 0, 0, 1, 0, 0 );
+		tabsload1();
+	});
+	element.tabs({ active: 2 });
+
+	function tabsload1() {
+		// .option()
+		element.one( "tabsload", function( event, ui ) {
+			tab = element.find( ".ui-tabs-nav a" ).eq( 3 );
+			panelId = tab.attr( "aria-controls" );
+			panel = $( "#" + panelId );
+
+			ok( !( "originalEvent" in event ), "originalEvent" );
+			equals( ui.tab.size(), 1, "tab size" );
+			strictEqual( ui.tab[ 0 ], tab[ 0 ], "tab" );
+			equals( ui.panel.size(), 1, "panel size" );
+			strictEqual( ui.panel[ 0 ], panel[ 0 ], "panel" );
+			equals( ui.panel.find( "p" ).length, 1, "panel html" );
+			tabs_state( element, 0, 0, 0, 1, 0 );
+			tabsload2();
+		});
+		element.tabs( "option", "active", 3 );
+	}
+
+	function tabsload2() {
+		// click, change panel content
+		element.one( "tabsload", function( event, ui ) {
+			tab = element.find( ".ui-tabs-nav a" ).eq( 4 );
+			panelId = tab.attr( "aria-controls" );
+			panel = $( "#" + panelId );
+
+			equals( event.originalEvent.type, "click", "originalEvent" );
+			equals( ui.tab.size(), 1, "tab size" );
+			strictEqual( ui.tab[ 0 ], tab[ 0 ], "tab" );
+			equals( ui.panel.size(), 1, "panel size" );
+			strictEqual( ui.panel[ 0 ], panel[ 0 ], "panel" );
+			equals( ui.panel.find( "p" ).length, 1, "panel html" );
+			tabs_state( element, 0, 0, 0, 0, 1 );
+			start();
+		});
+		element.find( ".ui-tabs-nav a" ).eq( 4 ).click();
+	}
 });
 
 }( jQuery ) );
