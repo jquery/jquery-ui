@@ -156,8 +156,11 @@ asyncTest( "spinner", function() {
 		equals( element.find( ".ui-tabs-nav li:eq(2) em" ).length, 1, "beforeload" );
 	});
 	element.one( "tabsload", function( event, ui ) {
-		equals( element.find( ".ui-tabs-nav li:eq(2) em" ).length, 0, "load" );
-		start();
+		// wait until after the load finishes before checking for the spinner to be removed
+		setTimeout(function() {
+			equals( element.find( ".ui-tabs-nav li:eq(2) em" ).length, 0, "load" );
+			start();
+		}, 1 );
 	});
 	element.tabs( "option", "active", 2 );
 });

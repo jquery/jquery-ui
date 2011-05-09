@@ -621,6 +621,7 @@ $.widget( "ui.tabs", {
 			this.xhr
 				.success(function( response ) {
 					panel.html( response );
+					self._trigger( "load", event, eventData );
 				})
 				.complete(function( jqXHR, status ) {
 					if ( status === "abort" ) {
@@ -631,13 +632,11 @@ $.widget( "ui.tabs", {
 						// "tabs" queue must not contain more than two elements,
 						// which are the callbacks for the latest clicked tab...
 						self.element.queue( "tabs", self.element.queue( "tabs" ).splice( -2, 2 ) );
-
-						delete this.xhr;
 					}
 
 					self.lis.eq( index ).removeClass( "ui-tabs-loading" );
 
-					self._trigger( "load", event, eventData );
+					delete self.xhr;
 				});
 		}
 
