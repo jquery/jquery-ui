@@ -133,20 +133,28 @@ test( "{ collapsible: true }", function() {
 	tabs_state( element, 0, 0, 0 );
 });
 
-test('disabled', function() {
-	expect(4);
+test( "disabled", function() {
+	expect( 10 );
 
-	el = $('#tabs1').tabs();
-	same(el.tabs('option', 'disabled'), false, "should not disable any tab by default");
+	// fully enabled by default
+	var element = $( "#tabs1" ).tabs();
+	tabs_disabled( element, false );
 
-	el.tabs('option', 'disabled', [ 1 ]);
-	same(el.tabs('option', 'disabled'), [ 1 ], "should set property"); // everything else is being tested in methods module...
+	// disable single tab
+	element.tabs( "option", "disabled", [ 1 ] );
+	tabs_disabled( element, [ 1 ] );
 
-	el.tabs('option', 'disabled', [ 0, 1 ]);
-	same(el.tabs('option', 'disabled'), [ 0, 1 ], "should disable given tabs, even selected one"); // ...
+	// disabled active tab
+	element.tabs( "option", "disabled", [ 0, 1 ] );
+	tabs_disabled( element, [ 0, 1 ] );
 
-	el.tabs('option', 'disabled', [ ]);
-	same(el.tabs('option', 'disabled'), false, "should not disable any tab"); // ...
+	// disable all tabs
+	element.tabs( "option", "disabled", [ 0, 1, 2 ] );
+	tabs_disabled( element, true );
+
+	// enable all tabs
+	element.tabs( "option", "disabled", [] );
+	tabs_disabled( element, false );
 });
 
 test( "{ event: null }", function() {
@@ -200,8 +208,6 @@ test( "{ event: custom }", function() {
 	tabs_state( element, 0, 1, 0 );
 });
 
-test('fx', function() {
-	ok(false, "missing test - untested code is broken code.");
-});
+// TODO: add animation tests
 
 })(jQuery);
