@@ -463,8 +463,18 @@ test( "url", function() {
 	element.tabs( "option", "active", 3 );
 });
 
-test( "abort", function() {
-	ok( false, "missing test - untested code is broken code." );
+asyncTest( "abort", function() {
+	expect( 1 );
+
+	var element = $( "#tabs2" ).tabs();
+	element.one( "tabsbeforeload", function( event, ui ) {
+		ui.jqXHR.error(function( jqXHR, status ) {
+			equals( status, "abort", "aborted" );
+			start();
+		});
+	});
+	element.tabs( "option", "active", 2 );
+	element.tabs( "abort" );
 });
 
 }( jQuery ) );
