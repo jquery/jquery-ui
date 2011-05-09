@@ -41,8 +41,34 @@ asyncTest( "ajaxOptions", function() {
 	element.tabs( "option", "active", 2 );
 });
 
-test('cache', function() {
-	ok(false, "missing test - untested code is broken code.");
+asyncTest( "cache", function() {
+	expect( 5 );
+
+	var element = $( "#tabs2" ).tabs({
+		cache: true
+	});
+	element.one( "tabsshow", function( event, ui ) {
+		tabs_state( element, 0, 0, 1, 0, 0 );
+	});
+	element.one( "tabsload", function( event, ui ) {
+		ok( true, "tabsload" );
+
+		setTimeout(function() {
+			element.tabs( "option", "active", 0 );
+			tabs_state( element, 1, 0, 0, 0, 0 );
+	
+			element.one( "tabsshow", function( event, ui ) {
+				tabs_state( element, 0, 0, 1, 0, 0 );
+			});
+			element.one( "tabsload", function( event, ui ) {
+				ok( false, "should be cached" );
+			});
+			element.tabs( "option", "active", 2 );
+			start();
+		}, 1 );
+	});
+	element.tabs( "option", "active", 2 );
+	tabs_state( element, 0, 0, 1, 0, 0 );
 });
 
 test( "idPrefix", function() {

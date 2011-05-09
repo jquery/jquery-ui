@@ -705,7 +705,7 @@ if ( $.uiBackCompat !== false ) {
 						}
 					});
 
-					ui.jqXHR.success( function() {
+					ui.jqXHR.success(function() {
 						if ( self.options.cache ) {
 							$.data( ui.tab[ 0 ], "cache.tabs", true );
 						}
