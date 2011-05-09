@@ -22,8 +22,23 @@ test( "panel ids", function() {
 
 module( "tabs (deprecated): options" );
 
-test('ajaxOptions', function() {
-	ok(false, "missing test - untested code is broken code.");
+asyncTest( "ajaxOptions", function() {
+	expect( 1 );
+
+	var element = $( "#tabs2" ).tabs({
+		ajaxOptions: {
+			converters: {
+				"text html": function() {
+					return "test";
+				}
+			}
+		}
+	});
+	element.one( "tabsload", function( event, ui ) {
+		equals( ui.panel.html(), "test" );
+		start();
+	});
+	element.tabs( "option", "active", 2 );
 });
 
 test('cache', function() {
@@ -417,6 +432,10 @@ test( "url", function() {
 		event.preventDefault();
 	});
 	element.tabs( "option", "active", 3 );
+});
+
+test( "abort", function() {
+	ok( false, "missing test - untested code is broken code." );
 });
 
 }( jQuery ) );
