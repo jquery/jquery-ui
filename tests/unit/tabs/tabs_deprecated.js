@@ -106,34 +106,19 @@ test('cookie', function() {
 
 });
 
+asyncTest( "spinner", function() {
+	expect( 2 );
 
-test('spinner', function() {
-	expect(4);
-	stop();
+	var element = $( "#tabs2" ).tabs();
 
-	el = $('#tabs2');
-
-	el.tabs({
-		selected: 2,
-		load: function() {
-			// spinner: default spinner
-			setTimeout(function() {
-				equals($('li:eq(2) > a > span', el).length, 1, "should restore tab markup after spinner is removed");
-				equals($('li:eq(2) > a > span', el).html(), '3', "should restore tab label after spinner is removed");
-				el.tabs('destroy');
-				el.tabs({
-					selected: 2,
-					spinner: '<img src="spinner.gif" alt="">',
-					load: function() {
-						// spinner: image
-						equals($('li:eq(2) > a > span', el).length, 1, "should restore tab markup after spinner is removed");
-						equals($('li:eq(2) > a > span', el).html(), '3', "should restore tab label after spinner is removed");
-						start();
-					}
-				});
-			}, 1);
-		}
+	element.one( "tabsbeforeload", function( event, ui ) {
+		equals( element.find( ".ui-tabs-nav li:eq(2) em" ).length, 1, "beforeload" );
 	});
+	element.one( "tabsload", function( event, ui ) {
+		equals( element.find( ".ui-tabs-nav li:eq(2) em" ).length, 0, "load" );
+		start();
+	});
+	element.tabs( "option", "active", 2 );
 });
 
 test( "selected", function() {

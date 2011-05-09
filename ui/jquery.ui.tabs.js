@@ -743,34 +743,28 @@ if ( $.uiBackCompat !== false ) {
 	}( jQuery, jQuery.ui.tabs.prototype ) );
 
 	// spinner
-	(function( $, prototype ) {
-		$.extend( prototype.options, {
+	$.widget( "ui.tabs", $.ui.tabs, {
+		options: {
 			spinner: "<em>Loading&#8230;</em>"
-		});
-
-		var _create = prototype._create;
-		prototype._create = function() {
-			_create.call( this );
-			var self = this;
-
-			this.element.bind( "tabsbeforeload", function( event, ui ) {
-				if ( self.options.spinner ) {
-					var span = $( "span", ui.tab );
-					if ( span.length ) {
-						span.data( "label.tabs", span.html() ).html( self.options.spinner );
+		},
+		_create: function() {
+			this._super( "_create" );
+			this._bind({
+				tabsbeforeload: function( event, ui ) {
+					if ( !this.options.spinner ) {
+						return;
 					}
+	
+					var span = ui.tab.find( "span" ),
+						html = span.html();
+					span.html( this.options.spinner );
+					ui.jqXHR.complete(function() {
+						span.html( html );
+					});
 				}
-				ui.jqXHR.complete( function() {
-					if ( self.options.spinner ) {
-						var span = $( "span", ui.tab );
-						if ( span.length ) {
-							span.html( span.data( "label.tabs" ) ).removeData( "label.tabs" );
-						}
-					}
-				});
 			});
-		};
-	}( jQuery, jQuery.ui.tabs.prototype ) );
+		}
+	});
 
 	// enable/disable events
 	(function( $, prototype ) {
