@@ -281,7 +281,7 @@ $.widget("ui.dialog", {
 			options = self.options,
 			uiDialog = self.uiDialog;
 
-		self.overlay = options.modal ? new $.ui.dialog.overlay( self ) : null;
+		self.overlay = options.modal ? new $.ui.dialog.overlay( self ) : null;
 		self._size();
 		self._position( options.position );
 		uiDialog.show( options.show );

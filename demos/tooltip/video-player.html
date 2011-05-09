@@ -10,28 +10,53 @@
 	<script type="text/javascript" src="../../ui/jquery.ui.tooltip.js"></script>
 	<script type="text/javascript" src="../../ui/jquery.ui.button.js"></script>
 	<script type="text/javascript" src="../../ui/jquery.ui.menu.js"></script>
-	<script type="text/javascript" src="../../tests/visual/menu/popup.js"></script>
+	<script type="text/javascript" src="../../ui/jquery.ui.popup.js"></script>
+	<script type="text/javascript" src="../../ui/jquery.effects.core.js"></script>
+	<script type="text/javascript" src="../../ui/jquery.effects.blind.js"></script>
 	<link type="text/css" href="../demos.css" rel="stylesheet" />
 	<script type="text/javascript">
 	$(function() {
+		function notify( input ) {
+			var msg = "Selected " + $.trim($(input).text());
+			$("<div/>").appendTo(document.body).text(msg).addClass("notification ui-state-default ui-corner-bottom").position({
+				my: "center top",
+				at: "center top",
+				of: window
+			}).show({
+				effect: "blind"
+			}).delay(1000).hide({
+				effect: "blind",
+				duration: "slow"
+			}, function() {
+				$(this).remove();
+			});
+		}
+		$("ul").menu({
+			select: function(event, ui) {
+				// TODO stop button from handling the click
+				$(this).popup("close");
+				// TODO should probably be handled by poup, see ESCAPE key handler
+				// affects key handling
+				$(this).prev().focus();
+				notify(ui.item);
+			}
+		}).popup();
+
 		$("button").each(function() {
 			$(this).button({
 				icons: {
 					primary: $(this).data("icon")
 				},
 				text: !!$(this).attr("title")
+			}).click(function() {
+				// TODO don't notify if the button is opening a popup
+				notify(this);
 			});
 		});
-		$(".set").buttonset();
-
-		$("ul").menu({
-			select: function() {
-				// would also execute some other action here
-				$(this).popup("close");
-			}
-		}).popup({
-			trigger: $(".menu")
+		$(".set").buttonset({
+			items: "button"
 		});
+
 
 		$(".demo").tooltip({
 			position: {
@@ -57,6 +82,10 @@
 			background: rgba(20, 20, 20, 1);
 			color: white;
 		}
+
+		.set { display: inline-block; }
+
+		.notification { position: absolute; display: inline-block; font-size: 2em; padding: .5em; box-shadow: 2px 2px 5px -2px rgba(0,0,0,0.5); }
 	</style>
 </head>
 <body>
@@ -69,23 +98,23 @@
 			<button data-icon="ui-icon-circle-arrow-n" title="I like this">Like</button>
 			<button data-icon="ui-icon-circle-arrow-s">I dislike this</button>
 		</span>
-		<span class="set">
+		<div class="set">
 			<button data-icon="ui-icon-circle-plus" title="Add to Watch Later">Add to</button>
 			<button class="menu" data-icon="ui-icon-triangle-1-s">Add to favorites or playlist</button>
-		</span>
+			<ul>
+				<li>
+					<a href="#">Favorites</a>
+				</li>
+				<li>
+					<a href="#">Watch Later</a>
+				</li>
+				<li>
+					<a href="#">New Playlist...</a>
+				</li>
+			</ul>
+		</div>
 		<button title="Share this video">Share</button>
 		<button data-icon="ui-icon-alert">Flag as inappropiate</button>
-		<ul>
-			<li>
-				<a href="#">Favorites</a>
-			</li>
-			<li>
-				<a href="#">Watch Later</a>
-			</li>
-			<li>
-				<a href="#">New Playlist...</a>
-			</li>
-		</ul>
 	</div>
  </div>
 

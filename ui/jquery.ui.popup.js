@@ -1,5 +1,16 @@
 /*
- * jQuery UI popup utility
+ * jQuery UI Popup @VERSION
+ *
+ * Copyright 2011, AUTHORS.txt (http://jqueryui.com/about)
+ * Dual licensed under the MIT or GPL Version 2 licenses.
+ * http://jquery.org/license
+ *
+ * http://docs.jquery.com/UI/Popup
+ *
+ * Depends:
+ *	jquery.ui.core.js
+ *	jquery.ui.widget.js
+ *	jquery.ui.position.js
  */
 (function($) {
 	
@@ -38,9 +49,20 @@ $.widget( "ui.popup", {
 
 		this._bind(this.options.trigger, {
 			keydown: function( event ) {
-				// prevent space-to-open to scroll the page
-				if (event.keyCode == $.ui.keyCode.SPACE) {
+				// prevent space-to-open to scroll the page, only hapens for anchor ui.button
+				if ( this.options.trigger.is( "a:ui-button" ) && event.keyCode == $.ui.keyCode.SPACE) {
 					event.preventDefault()
+				}
+				// TODO handle SPACE to open popup? only when not handled by ui.button
+				if ( event.keyCode == $.ui.keyCode.SPACE && this.options.trigger.is("a:not(:ui-button)") ) {
+					this.options.trigger.trigger( "click", event );
+				}
+				// translate keydown to click
+				// opens popup and let's tooltip hide itself
+				if ( event.keyCode == $.ui.keyCode.DOWN ) {
+					// prevent scrolling
+					event.preventDefault();
+					this.options.trigger.trigger( "click", event );
 				}
 			},
 			click: function( event ) {
@@ -50,6 +72,7 @@ $.widget( "ui.popup", {
 					return;
 				}
 				var that = this;
+				clearTimeout( this.closeTimer );
 				setTimeout(function() {
 					that.open( event );
 				}, 1);
@@ -57,17 +80,25 @@ $.widget( "ui.popup", {
 		});
 		
 		this._bind(this.element, {
-			// TODO also triggered when open and clicking the trigger again
-			// figure out how to close in that case, while still closing on regular blur
-			//blur: "close"
+			// TODO use focusout so that element itself doesn't need to be focussable
+			blur: function( event ) {
+				var that = this;
+				// use a timer to allow click to clear it and letting that
+				// handle the closing instead of opening again
+				that.closeTimer = setTimeout( function() {
+					that.close( event );
+				}, 100);
+			}
 		});
 
 		this._bind({
 			// TODO only triggerd on element if it can receive focus
 			// bind to document instead?
+			// either element itself or a child should be focusable
 			keyup: function( event ) {
 				if (event.keyCode == $.ui.keyCode.ESCAPE && this.element.is( ":visible" )) {
 					this.close( event );
+					// TODO move this to close()? would allow menu.select to call popup.close, and get focus back to trigger
 					this.options.trigger.focus();
 				}
 			}
@@ -111,7 +142,12 @@ $.widget( "ui.popup", {
 			.attr( "aria-hidden", false )
 			.attr( "aria-expanded", true )
 			.position( position )
+			// TODO find a focussable child, otherwise put focus on element, add tabIndex=0 if not focussable
 			.focus();
+
+		if (this.element.is(":ui-menu")) {
+			this.element.menu("focus", event, this.element.children( "li" ).first() );
+		}
 
 		// take trigger out of tab order to allow shift-tab to skip trigger
 		this.options.trigger.attr("tabindex", -1);
