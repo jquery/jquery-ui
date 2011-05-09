@@ -20,7 +20,7 @@ test( "panel ids", function() {
 	element.tabs( "option", "active", 2 );
 });
 
-module("tabs (deprecated): options");
+module( "tabs (deprecated): options" );
 
 test('ajaxOptions', function() {
 	ok(false, "missing test - untested code is broken code.");
@@ -30,16 +30,45 @@ test('cache', function() {
 	ok(false, "missing test - untested code is broken code.");
 });
 
-test('idPrefix', function() {
-	ok(false, "missing test - untested code is broken code.");
+test( "idPrefix", function() {
+	expect( 1 );
+
+	$( "#tabs2" )
+		.one( "tabsbeforeload", function( event, ui ) {
+			ok( /^testing-\d+$/.test( ui.panel.attr( "id" ) ), "generated id" );
+			event.preventDefault();
+		})
+		.tabs({
+			idPrefix: "testing-",
+			active: 2
+		});
 });
 
-test('tabTemplate', function() {
-	ok(false, "missing test - untested code is broken code.");
-});
+test( "tabTemplate + panelTemplate", function() {
+	// defaults are tested in the add method test
+	expect( 11 );
 
-test('panelTemplate', function() {
-	ok(false, "missing test - untested code is broken code.");
+	var element = $( "#tabs2" ).tabs({
+		tabTemplate: "<li class='customTab'><a href='http://example.com/#{href}'>#{label}</a></li>",
+		panelTemplate: "<div class='customPanel'></div>"
+	});
+	element.one( "tabsadd", function( event, ui ) {
+		var anchor = $( ui.tab );
+		equal( ui.index, 5, "ui.index" );
+		equal( anchor.text(), "New", "ui.tab" );
+		equal( anchor.attr( "href" ), "http://example.com/#new", "tab href" );
+		ok( anchor.parent().hasClass( "customTab" ), "tab custom class" );
+		equal( ui.panel.id, "new", "ui.panel" );
+		ok( $( ui.panel ).hasClass( "customPanel" ), "panel custom class" );
+	});
+	element.tabs( "add", "#new", "New" );
+	var tab = element.find( ".ui-tabs-nav li" ).last(),
+		anchor = tab.find( "a" );
+	equals( tab.text(), "New", "label" );
+	ok( tab.hasClass( "customTab" ), "tab custom class" );
+	equals( anchor.attr( "href" ), "http://example.com/#new", "href" );
+	equals( anchor.attr( "aria-controls" ), "new", "aria-controls" );
+	ok( element.find( "#new" ).hasClass( "customPanel" ), "panel custom class" );
 });
 
 test('cookie', function() {
