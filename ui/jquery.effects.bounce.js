@@ -23,7 +23,7 @@ $.effects.effect.bounce = function(o) {
 			hide = mode === "hide",
 			show = mode === "show",
 			direction = o.direction || "up", 
-			distance = o.distance || 20,
+			distance = o.distance,
 			times = o.times || 5,
 
 			// number of internal animations
@@ -53,7 +53,7 @@ $.effects.effect.bounce = function(o) {
 
 		// default distance for the BIGGEST bounce is the outer Distance / 3
 		if ( !distance ) {
-			distance = el[ ref === "top" ? "outerHeight" : "outerWidth" ]({ margin:true }) / 3;
+			distance = el[ ref === "top" ? "outerHeight" : "outerWidth" ]() / 3;
 		}
 
 		if ( show ) {
@@ -69,7 +69,7 @@ $.effects.effect.bounce = function(o) {
 
 		// start at the smallest distance if we are hiding
 		if ( hide ) {
-			distance = distance / ( ( times - 1 ) * 2 );
+			distance = distance / Math.pow( 2, times - 1 );
 		}
 
 		downAnim = {};

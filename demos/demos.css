@@ -129,8 +129,7 @@ eventually we should convert the font sizes to ems -- using px for now to minimi
 
 .normal h3.demo-header { font-size:32px; padding:0 0 5px; border-bottom:1px solid #eee; text-transform: capitalize; }
 .normal h4.demo-subheader { font-size:10px; text-transform: uppercase; color:#999; padding:8px 0 3px; border:0; margin:0; }
-.normal a:link,
-.normal a:visited { color:#1b75bb; text-decoration:none; }
+#demo-notes a, #demo-link a, #demo-source a { color:#1b75bb; text-decoration:none; }
 .normal a:hover,
 .normal a:active { color:#0b559b; }
 

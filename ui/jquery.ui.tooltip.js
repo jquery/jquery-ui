@@ -96,7 +96,8 @@ $.widget("ui.tooltip", {
 
 		this._bind( target, {
 			mouseleave: "close",
-			blur: "close"
+			blur: "close",
+			click: "close"
 		});
 	},
 	

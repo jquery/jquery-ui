@@ -827,6 +827,10 @@ test('parseDate', function() {
 	equalsDate($.datepicker.parseDate('\'jour\' d \'de\' MM (\'\'DD\'\'), yy',
 		'jour 9 de Avril (\'Lundi\'), 2001', settings), new Date(2001, 4 - 1, 9),
 		'Parse date \'jour\' d \'de\' MM (\'\'DD\'\'), yy with settings');
+
+	var zh = $.datepicker.regional['zh-CN'];
+	equalsDate($.datepicker.parseDate('yy M d', '2011 十一 22', zh),
+		new Date(2011, 11 - 1, 22), 'Parse date yy M d with zh-CN');
 });
 
 test('parseDateErrors', function() {
