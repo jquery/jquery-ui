@@ -129,6 +129,7 @@ $.widget( "ui.autocomplete", {
                     return;
 				}
 
+				// replicate some key handlers to allow them to repeat in Firefox and Opera
 				var keyCode = $.ui.keyCode;
 				switch( event.keyCode ) {
 				case keyCode.PAGE_UP:
