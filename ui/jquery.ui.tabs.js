@@ -108,15 +108,7 @@ $.widget( "ui.tabs", {
 			var panel = that._getPanelForTab( this.active );
 
 			panel.show();
-
 			this.lis.eq( options.active ).addClass( "ui-tabs-active ui-state-active" );
-
-			// TODO: we need to remove this or add it to accordion
-			// seems to be expected behavior that the activate callback is fired
-			that.element.queue( "tabs", function() {
-				that._trigger( "activate", null, that._ui( that.active[ 0 ], panel[ 0 ] ) );
-			});
-
 			this.load( options.active );
 		} else {
 			this.active = $();
@@ -968,8 +960,16 @@ if ( $.uiBackCompat !== false ) {
 			show: null,
 			select: null
 		});
-		var _trigger = prototype._trigger;
+		var _create = prototype._create,
+			_trigger = prototype._trigger;
 
+		prototype._create = function() {
+			_create.call( this );
+			if ( this.options.active !== false ) {
+				this._trigger( "show", null, this._ui(
+					this.active[ 0 ], this._getPanelForTab( this.active )[ 0 ] ) );
+			}
+		}
 		prototype._trigger = function( type, event, data ) {
 			var ret = _trigger.apply( this, arguments );
 			if ( !ret ) {
@@ -981,8 +981,12 @@ if ( $.uiBackCompat !== false ) {
 					panel: data.newPanel[ 0 ],
 					index: data.newTab.closest( "li" ).index()
 				});
-			} else if ( type === "activate" ) {
-				ret = _trigger.call( this, "show", event, data );
+			} else if ( type === "activate" && data.newTab.length ) {
+				ret = _trigger.call( this, "show", event, {
+					tab: data.newTab[ 0 ],
+					panel: data.newPanel[ 0 ],
+					index: data.newTab.closest( "li" ).index()
+				});
 			}
 		};
 	}( jQuery, jQuery.ui.tabs.prototype ) );
