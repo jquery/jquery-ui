@@ -210,4 +210,4 @@ test( "{ event: custom }", function() {
 
 // TODO: add animation tests
 
-})(jQuery);
+}( jQuery ) );
