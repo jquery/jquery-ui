@@ -129,10 +129,9 @@
 						.tooltip({
 							position: {
 								of: this.button
-							}
-						})
-						.tooltip( "widget" )
-							.addClass( "ui-state-highlight" );
+							},
+							tooltipClass: "ui-state-highlight"
+						});
 			},
 
 			destroy: function() {
