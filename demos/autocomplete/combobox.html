@@ -16,7 +16,7 @@
 	<style>
 	.ui-button { margin-left: -1px; }
 	.ui-button-icon-only .ui-button-text { padding: 0.35em; } 
-	.ui-autocomplete-input { margin: 0; padding: 0.48em 0 0.47em 0.45em; }
+	.ui-autocomplete-input { margin: 0; padding: 0.4em 0 0.4em 0.45em; }
 	</style>
 	<script>
 	(function( $ ) {
@@ -26,6 +26,32 @@
 					select = this.element.hide(),
 					selected = select.children( ":selected" ),
 					value = selected.val() ? selected.text() : "";
+
+				function removeIfInvalid(element) {
+					var value = $( element ).val(),
+						matcher = new RegExp( "^" + $.ui.autocomplete.escapeRegex( value ) + "$", "i" ),
+						valid = false;
+					select.children( "option" ).each(function() {
+						if ( $( this ).text().match( matcher ) ) {
+							this.selected = valid = true;
+							return false;
+						}
+					});
+					if ( !valid ) {
+						// remove invalid value, as it didn't match anything
+						$( element )
+							.val( "" )
+							.attr( "title", value + " didn't match any item" )
+							.tooltip( "open" );
+						select.val( "" );
+						setTimeout(function() {
+							input.tooltip( "close" ).attr( "title", "" );
+						}, 2500 );
+						input.data( "autocomplete" ).term = "";
+						return false;
+					}
+				}
+
 				var input = this.input = $( "<input>" )
 					.insertAfter( select )
 					.val( value )
@@ -57,30 +83,8 @@
 							});
 						},
 						change: function( event, ui ) {
-							if ( !ui.item ) {
-								var value = $( this ).val(),
-									matcher = new RegExp( "^" + $.ui.autocomplete.escapeRegex( value ) + "$", "i" ),
-									valid = false;
-								select.children( "option" ).each(function() {
-									if ( $( this ).text().match( matcher ) ) {
-										this.selected = valid = true;
-										return false;
-									}
-								});
-								if ( !valid ) {
-									// remove invalid value, as it didn't match anything
-									$( this )
-										.val( "" )
-										.attr( "title", value + " didn't match any item" )
-										.tooltip( "open" );
-									select.val( "" );
-									setTimeout(function() {
-										input.tooltip( "close" ).attr( "title", "" );
-									}, 2500 );
-									input.data( "autocomplete" ).term = "";
-									return false;
-								}
-							}
+							if ( !ui.item )
+								return removeIfInvalid( this );
 						}
 					})
 					.addClass( "ui-widget ui-widget-content ui-corner-left" );
@@ -109,6 +113,7 @@
 						// close if already visible
 						if ( input.autocomplete( "widget" ).is( ":visible" ) ) {
 							input.autocomplete( "close" );
+							removeIfInvalid( input );
 							return;
 						}
 
@@ -124,10 +129,9 @@
 						.tooltip({
 							position: {
 								of: this.button
-							}
-						})
-						.tooltip( "widget" )
-							.addClass( "ui-state-highlight" );
+							},
+							tooltipClass: "ui-state-highlight"
+						});
 			},
 
 			destroy: function() {
