@@ -153,14 +153,6 @@ $.widget( "ui.tabs", {
 		return hash ? hash.replace( /:/g, "\\:" ) : "";
 	},
 
-	_ui: function( tab, panel ) {
-		return {
-			tab: tab,
-			panel: panel,
-			index: this.anchors.index( tab )
-		};
-	},
-
 	refresh: function() {
 		var self = this,
 			options = this.options,
@@ -651,6 +643,15 @@ $.extend( $.ui.tabs, {
 // DEPRECATED
 if ( $.uiBackCompat !== false ) {
 
+	// helper method for a lot of the back compat extensions
+	$.ui.tabs.prototype._ui = function( tab, panel ) {
+		return {
+			tab: tab,
+			panel: panel,
+			index: this.anchors.index( tab )
+		};
+	};
+
 	// url method
 	(function( $, prototype ) {
 		prototype.url = function( index, url ) {
@@ -975,7 +976,7 @@ if ( $.uiBackCompat !== false ) {
 			if ( !ret ) {
 				return false;
 			}
-			if ( type === "beforeActivate" ) {
+			if ( type === "beforeActivate" && data.newTab.length ) {
 				ret = _trigger.call( this, "select", event, {
 					tab: data.newTab[ 0],
 					panel: data.newPanel[ 0 ],
