@@ -338,6 +338,7 @@ $.widget( "ui.autocomplete", {
 			this.menu.element.hide();
 			this.menu.blur();
 			this._trigger( "close", event );
+			this.menu.isNewMenu = true;
 		}
 	},
 	
