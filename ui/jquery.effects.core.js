@@ -558,7 +558,7 @@ $.fn.extend({
 
 	_hide: $.fn.hide,
 	hide: function( speed ) {
-		if(this.is(":visible")){
+		if(this.css("display") !== "none"){
 			if ( standardSpeed( speed ) ) {
 				return this._hide.apply( this, arguments );
 			} else {
