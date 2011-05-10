@@ -1003,57 +1003,50 @@ if ( $.uiBackCompat !== false ) {
 	}( jQuery, jQuery.ui.tabs.prototype ) );
 
 	// cookie option
-	(function( $, prototype ) {
-		$.extend( prototype.options, {
+	$.widget( "ui.tabs", $.ui.tabs, {
+		options: {
 			cookie: null // e.g. { expires: 7, path: '/', domain: 'jquery.com', secure: true }
-		});
-
-		var _create = prototype._create,
-			_refresh = prototype._refresh,
-			_eventHandler = prototype._eventHandler,
-			_destroy = prototype._destroy;
-
-		prototype._create = function() {
-			var o = this.options;
-			if ( o.active === undefined ) {
-				if ( typeof o.active !== "number" && o.cookie ) {
-					o.active = parseInt( this._cookie(), 10 );
+		},
+		_create: function() {
+			var options = this.options,
+				active;
+			if ( options.active == null && options.cookie ) {
+				active = parseInt( this._cookie(), 10 );
+				if ( active === -1 ) {
+					active = false;
 				}
+				options.active = active;
 			}
-			_create.call( this );
-		};
-
-		prototype._cookie = function() {
-			var cookie = this.cookie ||
-				( this.cookie = this.options.cookie.name || "ui-tabs-" + getNextListId() );
-			return $.cookie.apply( null, [ cookie ].concat( $.makeArray( arguments ) ) );
-		};
-
-		prototype._refresh = function() {
-			_refresh.call( this );
-
-			// set or update cookie after init and add/remove respectively
+			this._super( "_create" );
+		},
+		_cookie: function( active ) {
+			var cookie = [ this.cookie ||
+				( this.cookie = this.options.cookie.name || "ui-tabs-" + getNextListId() ) ];
+			if ( arguments.length ) {
+				cookie.push( active === false ? -1 : active );
+				cookie.push( this.options.cookie );
+			}
+			return $.cookie.apply( null, cookie );
+		},
+		_refresh: function() {
+			this._super( "_refresh" );
 			if ( this.options.cookie ) {
 				this._cookie( this.options.active, this.options.cookie );
 			}
-		};
-
-		prototype._eventHandler = function( event ) {
-			_eventHandler.apply( this, arguments );
-
+		},
+		_eventHandler: function( event ) {
+			this._superApply( "_eventHandler", arguments );
 			if ( this.options.cookie ) {
 				this._cookie( this.options.active, this.options.cookie );
 			}
-		};
-
-		prototype._destroy = function() {
-			_destroy.call( this );
-
+		},
+		_destroy: function() {
+			this._super( "_destroy" );
 			if ( this.options.cookie ) {
 				this._cookie( null, this.options.cookie );
 			}
-		};
-	}( jQuery, jQuery.ui.tabs.prototype ) );
+		}
+	});
 }
 
 })( jQuery );
