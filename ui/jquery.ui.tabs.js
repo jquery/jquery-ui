@@ -621,6 +621,7 @@ $.widget( "ui.tabs", {
 			this.xhr
 				.success(function( response ) {
 					panel.html( response );
+					self._trigger( "load", event, eventData );
 				})
 				.complete(function( jqXHR, status ) {
 					if ( status === "abort" ) {
@@ -631,13 +632,11 @@ $.widget( "ui.tabs", {
 						// "tabs" queue must not contain more than two elements,
 						// which are the callbacks for the latest clicked tab...
 						self.element.queue( "tabs", self.element.queue( "tabs" ).splice( -2, 2 ) );
-
-						delete this.xhr;
 					}
 
 					self.lis.eq( index ).removeClass( "ui-tabs-loading" );
 
-					self._trigger( "load", event, eventData );
+					delete self.xhr;
 				});
 		}
 
@@ -705,7 +704,7 @@ if ( $.uiBackCompat !== false ) {
 						}
 					});
 
-					ui.jqXHR.success( function() {
+					ui.jqXHR.success(function() {
 						if ( self.options.cache ) {
 							$.data( ui.tab[ 0 ], "cache.tabs", true );
 						}
@@ -743,34 +742,28 @@ if ( $.uiBackCompat !== false ) {
 	}( jQuery, jQuery.ui.tabs.prototype ) );
 
 	// spinner
-	(function( $, prototype ) {
-		$.extend( prototype.options, {
+	$.widget( "ui.tabs", $.ui.tabs, {
+		options: {
 			spinner: "<em>Loading&#8230;</em>"
-		});
-
-		var _create = prototype._create;
-		prototype._create = function() {
-			_create.call( this );
-			var self = this;
-
-			this.element.bind( "tabsbeforeload", function( event, ui ) {
-				if ( self.options.spinner ) {
-					var span = $( "span", ui.tab );
-					if ( span.length ) {
-						span.data( "label.tabs", span.html() ).html( self.options.spinner );
+		},
+		_create: function() {
+			this._super( "_create" );
+			this._bind({
+				tabsbeforeload: function( event, ui ) {
+					if ( !this.options.spinner ) {
+						return;
 					}
+	
+					var span = ui.tab.find( "span" ),
+						html = span.html();
+					span.html( this.options.spinner );
+					ui.jqXHR.complete(function() {
+						span.html( html );
+					});
 				}
-				ui.jqXHR.complete( function() {
-					if ( self.options.spinner ) {
-						var span = $( "span", ui.tab );
-						if ( span.length ) {
-							span.html( span.data( "label.tabs" ) ).removeData( "label.tabs" );
-						}
-					}
-				});
 			});
-		};
-	}( jQuery, jQuery.ui.tabs.prototype ) );
+		}
+	});
 
 	// enable/disable events
 	(function( $, prototype ) {
@@ -1010,57 +1003,50 @@ if ( $.uiBackCompat !== false ) {
 	}( jQuery, jQuery.ui.tabs.prototype ) );
 
 	// cookie option
-	(function( $, prototype ) {
-		$.extend( prototype.options, {
+	$.widget( "ui.tabs", $.ui.tabs, {
+		options: {
 			cookie: null // e.g. { expires: 7, path: '/', domain: 'jquery.com', secure: true }
-		});
-
-		var _create = prototype._create,
-			_refresh = prototype._refresh,
-			_eventHandler = prototype._eventHandler,
-			_destroy = prototype._destroy;
-
-		prototype._create = function() {
-			var o = this.options;
-			if ( o.active === undefined ) {
-				if ( typeof o.active !== "number" && o.cookie ) {
-					o.active = parseInt( this._cookie(), 10 );
+		},
+		_create: function() {
+			var options = this.options,
+				active;
+			if ( options.active == null && options.cookie ) {
+				active = parseInt( this._cookie(), 10 );
+				if ( active === -1 ) {
+					active = false;
 				}
+				options.active = active;
 			}
-			_create.call( this );
-		};
-
-		prototype._cookie = function() {
-			var cookie = this.cookie ||
-				( this.cookie = this.options.cookie.name || "ui-tabs-" + getNextListId() );
-			return $.cookie.apply( null, [ cookie ].concat( $.makeArray( arguments ) ) );
-		};
-
-		prototype._refresh = function() {
-			_refresh.call( this );
-
-			// set or update cookie after init and add/remove respectively
+			this._super( "_create" );
+		},
+		_cookie: function( active ) {
+			var cookie = [ this.cookie ||
+				( this.cookie = this.options.cookie.name || "ui-tabs-" + getNextListId() ) ];
+			if ( arguments.length ) {
+				cookie.push( active === false ? -1 : active );
+				cookie.push( this.options.cookie );
+			}
+			return $.cookie.apply( null, cookie );
+		},
+		_refresh: function() {
+			this._super( "_refresh" );
 			if ( this.options.cookie ) {
 				this._cookie( this.options.active, this.options.cookie );
 			}
-		};
-
-		prototype._eventHandler = function( event ) {
-			_eventHandler.apply( this, arguments );
-
+		},
+		_eventHandler: function( event ) {
+			this._superApply( "_eventHandler", arguments );
 			if ( this.options.cookie ) {
 				this._cookie( this.options.active, this.options.cookie );
 			}
-		};
-
-		prototype._destroy = function() {
-			_destroy.call( this );
-
+		},
+		_destroy: function() {
+			this._super( "_destroy" );
 			if ( this.options.cookie ) {
 				this._cookie( null, this.options.cookie );
 			}
-		};
-	}( jQuery, jQuery.ui.tabs.prototype ) );
+		}
+	});
 }
 
 })( jQuery );

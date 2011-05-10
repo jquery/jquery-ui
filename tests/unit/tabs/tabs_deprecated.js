@@ -1,6 +1,6 @@
 (function( $ ) {
 
-module("tabs (deprecated): core");
+module( "tabs (deprecated): core" );
 
 test( "panel ids", function() {
 	expect( 2 );
@@ -22,12 +22,53 @@ test( "panel ids", function() {
 
 module( "tabs (deprecated): options" );
 
-test('ajaxOptions', function() {
-	ok(false, "missing test - untested code is broken code.");
+asyncTest( "ajaxOptions", function() {
+	expect( 1 );
+
+	var element = $( "#tabs2" ).tabs({
+		ajaxOptions: {
+			converters: {
+				"text html": function() {
+					return "test";
+				}
+			}
+		}
+	});
+	element.one( "tabsload", function( event, ui ) {
+		equals( ui.panel.html(), "test" );
+		start();
+	});
+	element.tabs( "option", "active", 2 );
 });
 
-test('cache', function() {
-	ok(false, "missing test - untested code is broken code.");
+asyncTest( "cache", function() {
+	expect( 5 );
+
+	var element = $( "#tabs2" ).tabs({
+		cache: true
+	});
+	element.one( "tabsshow", function( event, ui ) {
+		tabs_state( element, 0, 0, 1, 0, 0 );
+	});
+	element.one( "tabsload", function( event, ui ) {
+		ok( true, "tabsload" );
+
+		setTimeout(function() {
+			element.tabs( "option", "active", 0 );
+			tabs_state( element, 1, 0, 0, 0, 0 );
+	
+			element.one( "tabsshow", function( event, ui ) {
+				tabs_state( element, 0, 0, 1, 0, 0 );
+			});
+			element.one( "tabsload", function( event, ui ) {
+				ok( false, "should be cached" );
+			});
+			element.tabs( "option", "active", 2 );
+			start();
+		}, 1 );
+	});
+	element.tabs( "option", "active", 2 );
+	tabs_state( element, 0, 0, 1, 0, 0 );
 });
 
 test( "idPrefix", function() {
@@ -71,69 +112,57 @@ test( "tabTemplate + panelTemplate", function() {
 	ok( element.find( "#new" ).hasClass( "customPanel" ), "panel custom class" );
 });
 
-test('cookie', function() {
-	expect(6);
+test( "cookie", function() {
+	expect( 6 );
 
-	el = $('#tabs1');
-	var cookieName = 'tabs_test', cookieObj = { name: cookieName };
-	$.cookie(cookieName, null); // blank state
-	var cookie = function() {
-		return parseInt($.cookie(cookieName), 10);
-	};
+	var element = $( "#tabs1" ),
+		cookieName = "tabs_test",
+		cookieObj = { name: cookieName };
+	$.cookie( cookieName, null );
+	function cookie() {
+		return parseInt( $.cookie( cookieName ), 10 );
+	}
 
-	el.tabs({ cookie: cookieObj });
-	equals(cookie(), 0, 'initial cookie value');
+	element.tabs({ cookie: cookieObj });
+	equals( cookie(), 0, "initial cookie value" );
 
-	el.tabs('destroy');
-	el.tabs({ active: 1, cookie: cookieObj });
-	equals(cookie(), 1, 'initial cookie value, from active property');
+	element.tabs( "destroy" );
+	element.tabs({ active: 1, cookie: cookieObj });
+	equals( cookie(), 1, "initial cookie value, from active property" );
 
-	el.tabs('option', 'active', 2);
-	equals(cookie(), 2, 'cookie value updated after activating');
+	element.tabs( "option", "active", 2 );
+	equals( cookie(), 2, "cookie value updated after activating" );
 
-	el.tabs('destroy');
-	$.cookie(cookieName, 1);
-	el.tabs({ cookie: cookieObj });
-	equals(cookie(), 1, 'initial cookie value, from existing cookie');
+	element.tabs( "destroy" );
+	$.cookie( cookieName, 1 );
+	element.tabs({ cookie: cookieObj });
+	equals( cookie(), 1, "initial cookie value, from existing cookie" );
 
-	el.tabs('destroy');
-	el.tabs({ cookie: cookieObj, collapsible: true });
-	el.tabs('option', 'active', false);
-	equals(cookie(), -1, 'cookie value for all tabs unselected');
+	element.tabs( "destroy" );
+	element.tabs({ cookie: cookieObj, collapsible: true });
+	element.tabs( "option", "active", false );
+	equals( cookie(), -1, "cookie value for all tabs unselected" );
 
-	el.tabs('destroy');
-	ok($.cookie(cookieName) === null, 'erase cookie after destroy');
-
+	element.tabs( "destroy" );
+	ok( $.cookie( cookieName ) === null, "erase cookie after destroy" );
 });
 
+asyncTest( "spinner", function() {
+	expect( 2 );
 
-test('spinner', function() {
-	expect(4);
-	stop();
+	var element = $( "#tabs2" ).tabs();
 
-	el = $('#tabs2');
-
-	el.tabs({
-		selected: 2,
-		load: function() {
-			// spinner: default spinner
-			setTimeout(function() {
-				equals($('li:eq(2) > a > span', el).length, 1, "should restore tab markup after spinner is removed");
-				equals($('li:eq(2) > a > span', el).html(), '3', "should restore tab label after spinner is removed");
-				el.tabs('destroy');
-				el.tabs({
-					selected: 2,
-					spinner: '<img src="spinner.gif" alt="">',
-					load: function() {
-						// spinner: image
-						equals($('li:eq(2) > a > span', el).length, 1, "should restore tab markup after spinner is removed");
-						equals($('li:eq(2) > a > span', el).html(), '3', "should restore tab label after spinner is removed");
-						start();
-					}
-				});
-			}, 1);
-		}
+	element.one( "tabsbeforeload", function( event, ui ) {
+		equals( element.find( ".ui-tabs-nav li:eq(2) em" ).length, 1, "beforeload" );
 	});
+	element.one( "tabsload", function( event, ui ) {
+		// wait until after the load finishes before checking for the spinner to be removed
+		setTimeout(function() {
+			equals( element.find( ".ui-tabs-nav li:eq(2) em" ).length, 0, "load" );
+			start();
+		}, 1 );
+	});
+	element.tabs( "option", "active", 2 );
 });
 
 test( "selected", function() {
@@ -432,6 +461,20 @@ test( "url", function() {
 		event.preventDefault();
 	});
 	element.tabs( "option", "active", 3 );
+});
+
+asyncTest( "abort", function() {
+	expect( 1 );
+
+	var element = $( "#tabs2" ).tabs();
+	element.one( "tabsbeforeload", function( event, ui ) {
+		ui.jqXHR.error(function( jqXHR, status ) {
+			equals( status, "abort", "aborted" );
+			start();
+		});
+	});
+	element.tabs( "option", "active", 2 );
+	element.tabs( "abort" );
 });
 
 }( jQuery ) );
