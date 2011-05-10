@@ -365,7 +365,7 @@ $.widget( "ui.accordion", {
 			self._completed( data );
 		}
 
-		if ( options.animated && toHide.is(":visible") && toShow.is(":visible") ) {
+		if ( options.animated && toHide.is(":visible") ) {
 			var animations = $.ui.accordion.animations,
 				animation = options.animated,
 				additional;
