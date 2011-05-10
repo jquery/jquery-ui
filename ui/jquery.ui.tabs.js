@@ -121,6 +121,44 @@ $.widget( "ui.tabs", {
 		} else {
 			this.active = $();
 		}
+
+		this.list.delegate( 'a', 'keydown', function( e ) {
+			that._keyStrokeHandler( e );
+		});
+		that.panels.delegate( 'a', 'keydown', function( e ) {
+			that._keyStrokeHandler( e, that.list, that.panels );
+		});
+	},
+
+	_keyStrokeHandler: function( e, tabs, panels ) {
+		var target = $( e.target ),
+				parent = target.parent(),
+				keyCode = $.ui.keyCode;
+		
+		switch(e.keyCode){
+			case keyCode.LEFT:
+			case keyCode.UP:
+			case keyCode.PAGE_UP:
+				return parent.prev().find( 'a' ).trigger( 'click' ).focus();
+			case keyCode.RIGHT:
+			case keyCode.DOWN:
+			case keyCode.PAGE_DOWN:
+				return parent.next().find( 'a' ).trigger( 'click' ).focus();
+			case keyCode.TAB:
+				var firstPanelLink = tabs && panels && e.target === panels.filter( '#' + e.target.parentNode.id ).children( 'a:first' )[0];
+			
+				if( e.shiftKey ) {
+					if ( firstPanelLink ) {
+						e.preventDefault();
+						tabs.find( '[href=#' + e.target.parentNode.id + ']' ).focus();
+					} else {
+						parent.siblings( ':first' ).find( 'a' ).focus();
+					}
+				} else if ( parent.hasClass( 'ui-state-active' )) {
+					e.preventDefault();
+					$( target.attr( 'href' ) ).find( 'a:first' ).focus();
+				}
+		}
 	},
 
 	_setOption: function( key, value ) {
@@ -320,8 +358,8 @@ $.widget( "ui.tabs", {
 	_showTab: function( event, eventData ) {
 		var that = this;
 
-		$( eventData.newTab ).closest( "li" ).addClass( "ui-tabs-active ui-state-active" );
-
+		$( eventData.newTab ).closest( "li" ).addClass( "ui-tabs-active ui-state-active" ).trigger( "active" );
+    
 		if ( that.showFx ) {
 			that.running = true;
 			eventData.newPanel
