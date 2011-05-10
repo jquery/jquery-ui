@@ -488,7 +488,7 @@ $.extend( $.ui.accordion, {
 
 				var parts = ( "" + $.css( options.toShow[0], prop ) ).match( /^([\d+-.]+)(.*)$/ );
 				showProps[ prop ] = {
-					value: parts[ 1 ],
+					value: parts[ 1 ] != 0 ? parts[ 1 ] : 1,
 					unit: parts[ 2 ] || "px"
 				};
 			});
