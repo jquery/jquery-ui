@@ -54,20 +54,21 @@ $.effects.effect.shake = function( o ) {
 		};
 		el
 			.animate( animation1, speed, o.easing )
-			.animate( animation, speed / 2, o.easing, function() {
+			.animate( animation, speed / 2, o.easing )
+			.queue( function( next ) {
 				if ( mode === "hide" ) {
 					el.hide();
 				}
-				// Last shake
 				$.effects.restore( el, props );
 				$.effects.removeWrapper( el );
 				$.isFunction( o.complete ) && o.complete.apply( this, arguments );
+				next();
 			});
 
 		// inject all the animations we just queued to be first in line (after "inprogress")
 		if ( queuelen > 1) {
 			queue.splice.apply( queue,
-				[ 1, 0 ].concat( queue.splice( queuelen, anims ) ) );
+				[ 1, 0 ].concat( queue.splice( queuelen, anims + 1 ) ) );
 		}
 		el.dequeue();
 	});

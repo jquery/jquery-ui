@@ -43,19 +43,22 @@ $.effects.effect.pulsate = function( o ) {
 
 		elem.animate({
 			opacity: animateTo
-		}, duration, o.easing, function() {
+		}, duration, o.easing);
+
+		elem.queue( function( next ) {
 			if ( hide ) {
 				elem.hide();
 			}
 			if ( o.complete ) {
 				o.complete.apply( this );
 			}
+			next();
 		});
 
 		// We just queued up "anims" animations, we need to put them next in the queue
 		if ( queuelen > 1) {
 			queue.splice.apply( queue,
-				[ 1, 0 ].concat( queue.splice( queuelen, anims ) ) );
+				[ 1, 0 ].concat( queue.splice( queuelen, anims + 1 ) ) );
 		}
 		next();
 	});
