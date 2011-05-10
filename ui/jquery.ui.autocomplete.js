@@ -62,6 +62,7 @@ $.widget( "ui.autocomplete", {
 			})
 			.bind( "keydown.autocomplete", function( event ) {
 				if ( self.options.disabled || self.element.attr( "readonly" ) ) {
+                    suppressKeyPress = true;
 					return;
 				}
 
@@ -69,17 +70,21 @@ $.widget( "ui.autocomplete", {
 				var keyCode = $.ui.keyCode;
 				switch( event.keyCode ) {
 				case keyCode.PAGE_UP:
+                    suppressKeyPress = true;
 					self._move( "previousPage", event );
 					break;
 				case keyCode.PAGE_DOWN:
+                    suppressKeyPress = true;
 					self._move( "nextPage", event );
 					break;
 				case keyCode.UP:
+                    suppressKeyPress = true;
 					self._move( "previous", event );
 					// prevent moving cursor to beginning of text field in some browsers
 					event.preventDefault();
 					break;
 				case keyCode.DOWN:
+                    suppressKeyPress = true;
 					self._move( "next", event );
 					// prevent moving cursor to end of text field in some browsers
 					event.preventDefault();
@@ -121,7 +126,28 @@ $.widget( "ui.autocomplete", {
 				if ( suppressKeyPress ) {
 					suppressKeyPress = false;
 					event.preventDefault();
+                    return;
 				}
+
+				var keyCode = $.ui.keyCode;
+				switch( event.keyCode ) {
+				case keyCode.PAGE_UP:
+					self._move( "previousPage", event );
+					break;
+				case keyCode.PAGE_DOWN:
+					self._move( "nextPage", event );
+					break;
+				case keyCode.UP:
+					self._move( "previous", event );
+					// prevent moving cursor to beginning of text field in some browsers
+					event.preventDefault();
+					break;
+				case keyCode.DOWN:
+					self._move( "next", event );
+					// prevent moving cursor to end of text field in some browsers
+					event.preventDefault();
+					break;
+                }
 			})
 			.bind( "focus.autocomplete", function() {
 				if ( self.options.disabled ) {
