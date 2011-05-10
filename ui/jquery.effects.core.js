@@ -545,23 +545,27 @@ $.fn.extend({
 
 	_show: $.fn.show,
 	show: function( speed ) {
-		if ( standardSpeed( speed ) ) {
-			return this._show.apply( this, arguments );
-		} else {
-			var args = _normalizeArguments.apply( this, arguments );
-			args.mode = 'show';
-			return this.effect.call( this, args );
+		if(this.is(":hidden")){
+			if ( standardSpeed( speed ) ) {
+				return this._show.apply( this, arguments );
+			} else {
+				var args = _normalizeArguments.apply( this, arguments );
+				args.mode = 'show';
+				return this.effect.call( this, args );
+			}
 		}
 	},
 
 	_hide: $.fn.hide,
 	hide: function( speed ) {
-		if ( standardSpeed( speed ) ) {
-			return this._hide.apply( this, arguments );
-		} else {
-			var args = _normalizeArguments.apply( this, arguments );
-			args.mode = 'hide';
-			return this.effect.call( this, args );
+		if(this.css("display") !== "none"){
+			if ( standardSpeed( speed ) ) {
+				return this._hide.apply( this, arguments );
+			} else {
+				var args = _normalizeArguments.apply( this, arguments );
+				args.mode = 'hide';
+				return this.effect.call( this, args );
+			}
 		}
 	},
 
