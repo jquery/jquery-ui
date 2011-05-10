@@ -1,5 +1,5 @@
 test("$.widget.extend(Object, Object)", function() {
-	expect(26);
+	expect(27);
 
 	var settings = { xnumber1: 5, xnumber2: 7, xstring1: "peter", xstring2: "pan" },
 		options = { xnumber2: 1, xstring2: "x", xxx: "newstring" },
@@ -24,7 +24,7 @@ test("$.widget.extend(Object, Object)", function() {
 	equal( deep1.foo2, document, "Make sure that a deep clone was not attempted on the document" );
 
 	strictEqual( $.widget.extend({}, nestedarray).arr, arr, "Don't clone arrays" );
-	ok( jQuery.isPlainObject( $.widget.extend({ arr: arr }, { arr: {} }).arr ), "Cloned object heve to be an plain object" );
+	ok( $.isPlainObject( $.widget.extend({ arr: arr }, { arr: {} }).arr ), "Cloned object heve to be an plain object" );
 
 	var empty = {};
 	var optionsWithLength = { foo: { length: -1 } };
@@ -62,29 +62,26 @@ test("$.widget.extend(Object, Object)", function() {
 	nullUndef = $.widget.extend({}, options, { xnumber0: null });
 	strictEqual( nullUndef.xnumber0, null, "Check to make sure null values are inserted");
 
-	// TODO weird test
-	/*
 	var target = {};
 	var recursive = { foo:target, bar:5 };
 	$.widget.extend(target, recursive);
-	deepEqual( target, { bar:5 }, "Check to make sure a recursive obj doesn't go never-ending loop by not copying it over" );
-	*/
+	deepEqual( target, { foo: {}, bar: 5 }, "Check to make sure a recursive obj doesn't go never-ending loop by not copying it over" );
 
-	ret = jQuery.extend(true, { foo: [] }, { foo: [0] } ); // 1907
+	ret = $.widget.extend( { foo: [] }, { foo: [0] } ); // 1907
 	equal( ret.foo.length, 1, "Check to make sure a value with coersion 'false' copies over when necessary to fix #1907" );
 
-	ret = jQuery.extend(true, { foo: "1,2,3" }, { foo: [1, 2, 3] } );
-	notStrictEqual( typeof ret.foo, "string", "Check to make sure values equal with coersion (but not actually equal) overwrite correctly" );
+	ret = $.widget.extend( { foo: "1,2,3" }, { foo: [1, 2, 3] } );
+	strictEqual( typeof ret.foo, "object", "Check to make sure values equal with coersion (but not actually equal) overwrite correctly" );
 
-	ret = jQuery.extend(true, { foo:"bar" }, { foo:null } );
-	notStrictEqual( typeof ret.foo, "undefined", "Make sure a null value doesn't crash with deep extend, for #1908" );
+	ret = $.widget.extend( { foo:"bar" }, { foo:null } );
+	strictEqual( typeof ret.foo, "object", "Make sure a null value doesn't crash with deep extend, for #1908" );
 
 	var obj = { foo:null };
-	jQuery.extend(true, obj, { foo:"notnull" } );
+	$.widget.extend( obj, { foo:"notnull" } );
 	equal( obj.foo, "notnull", "Make sure a null value can be overwritten" );
 
 	function func() {}
-	jQuery.extend(func, { key: "value" } );
+	$.widget.extend(func, { key: "value" } );
 	equal( func.key, "value", "Verify a function can be extended" );
 
 	var defaults = { xnumber1: 5, xnumber2: 7, xstring1: "peter", xstring2: "pan" },
@@ -95,7 +92,7 @@ test("$.widget.extend(Object, Object)", function() {
 		options2Copy = { xstring2: "xx", xxx: "newstringx" },
 		merged2 = { xnumber1: 5, xnumber2: 1, xstring1: "peter", xstring2: "xx", xxx: "newstringx" };
 
-	var settings = jQuery.extend({}, defaults, options1, options2);
+	var settings = $.widget.extend({}, defaults, options1, options2);
 	deepEqual( settings, merged2, "Check if extended: settings must be extended" );
 	deepEqual( defaults, defaultsCopy, "Check if not modified: options1 must not be modified" );
 	deepEqual( options1, options1Copy, "Check if not modified: options1 must not be modified" );
