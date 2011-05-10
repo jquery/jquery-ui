@@ -203,4 +203,20 @@ test("cancel select", function() {
 	}, 50);
 });
 
+test("blur without selection", function() {
+	expect(1);
+	var ac = $("#autocomplete").autocomplete({
+		delay: 0,
+		source: data
+	});
+	stop();
+	ac.val("j").keydown();
+	setTimeout(function() {
+		$( ".ui-menu-item" ).first().simulate("mouseover");
+		ac.simulate("keydown", { keyCode: $.ui.keyCode.TAB });
+		same( ac.val(), "j" );
+		start();
+	}, 50);
+});
+
 })(jQuery);
