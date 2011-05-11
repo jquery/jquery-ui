@@ -13,15 +13,9 @@
  */
 (function( $, undefined ) {
 
-var tabId = 0,
-	listId = 0;
-
+var tabId = 0
 function getNextTabId() {
 	return ++tabId;
-}
-
-function getNextListId() {
-	return ++listId;
 }
 
 $.widget( "ui.tabs", {
@@ -651,7 +645,7 @@ if ( $.uiBackCompat !== false ) {
 
 				var self = this;
 
-				this.element.bind( "tabsbeforeload", function( event, ui ) {
+				this.element.bind( "tabsbeforeload.tabs", function( event, ui ) {
 					// tab is already cached
 					if ( $.data( ui.tab[ 0 ], "cache.tabs" ) ) {
 						event.preventDefault();
@@ -982,6 +976,10 @@ if ( $.uiBackCompat !== false ) {
 	}( jQuery, jQuery.ui.tabs.prototype ) );
 
 	// cookie option
+	var listId = 0;
+	function getNextListId() {
+		return ++listId;
+	}
 	$.widget( "ui.tabs", $.ui.tabs, {
 		options: {
 			cookie: null // e.g. { expires: 7, path: '/', domain: 'jquery.com', secure: true }
