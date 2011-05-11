@@ -45,8 +45,6 @@ $.widget("ui.menu", {
 				if ( !item.length ) {
 					return;
 				}
-				// temporary
-				event.preventDefault();
 				// it's possible to click an item without hovering it (#7085)
 				if ( !self.active || ( self.active[ 0 ] !== item[ 0 ] ) ) {
 					self.focus( event, item );
