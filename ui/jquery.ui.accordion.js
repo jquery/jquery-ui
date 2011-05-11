@@ -488,7 +488,9 @@ $.extend( $.ui.accordion, {
 
 				var parts = ( "" + $.css( options.toShow[0], prop ) ).match( /^([\d+-.]+)(.*)$/ );
 				showProps[ prop ] = {
-					value: parts[ 1 ] != 0 ? parts[ 1 ] : 1,
+					// #7335 - Accordion: Incorrect size when a panel is empty (i.e. height == 0)
+					// so set value to 1 when parts[ 1 ] == 0
+					value: parts[ 1 ] || 1,
 					unit: parts[ 2 ] || "px"
 				};
 			});
