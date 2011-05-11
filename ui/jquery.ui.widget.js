@@ -268,7 +268,8 @@ $.Widget.prototype = {
 	},
 
 	enable: function() {
-		return this._setOption( "disabled", false );
+		//Only enable if currently disabled - fixes #6242 but applies to any widget that is already enabled
+		return this.options[ "disabled" ] ? this._setOption( "disabled", false ) : this;
 	},
 	disable: function() {
 		return this._setOption( "disabled", true );
