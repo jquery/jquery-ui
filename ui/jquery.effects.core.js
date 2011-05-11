@@ -158,14 +158,17 @@ var classAnimationActions = [ "add", "remove", "toggle" ],
 		margin: 1,
 		padding: 1
 	},
-	preAnimateStyles = {
-		borderLeftStyle: 1,
-		borderRightStyle: 1,
-		borderBottomStyle: 1,
-		borderTopStyle: 1
-	},
 	// prefix used for storing data on .data()
 	dataSpace = "ec.storage.";
+	
+$.each([ "borderLeftStyle", "borderRightStyle", "borderBottomStyle", "borderTopStyle" ], function(_, prop) {
+	$.fx.step[ prop ] = function( fx ) {
+		if ( fx.end !== "none" && !fx.setAttr || fx.pos === 1 && !fx.setAttr ) {
+			jQuery.style( fx.elem, prop, fx.end );
+			fx.setAttr = true;
+		}
+	};
+})
 
 function getElementStyles() {
 	var style = document.defaultView
@@ -198,14 +201,7 @@ function getElementStyles() {
 
 
 function styleDifference( oldStyle, newStyle ) {
-	var diff = {
-
-			// properties that will be animated
-			animate: {},
-
-			// properties that should be set pre-animation using CSS
-			preCss: {}
-		},
+	var diff = {},
 		name, value;
 
 	for ( name in newStyle ) {
@@ -213,9 +209,7 @@ function styleDifference( oldStyle, newStyle ) {
 		if ( oldStyle[ name ] != value ) {
 			if ( !shorthandStyles[ name ] ) {
 				if ( $.fx.step[ name ] || !isNaN( parseFloat( value ) ) ) {
-					diff.animate[ name ] = value;
-				} else if ( preAnimateStyles[ name ] && value !== "none" ) {
-					diff.preCss[ name ] = value;
+					diff[ name ] = value;
 				}
 			}
 		}
@@ -248,8 +242,7 @@ $.effects.animateClass = function( value, duration, easing, callback ) {
 
 		diff = styleDifference( originalStyle, newStyle );
 		animated
-			.css( diff.preCss )
-			.animate( diff.animate , {
+			.animate( diff, {
 				duration: duration,
 				easing: o.easing,
 				queue: false,
