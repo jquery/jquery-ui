@@ -239,13 +239,13 @@ $.widget("ui.menu", {
 			var borderTop = parseFloat( $.curCSS( this.element[0], "borderTopWidth", true) ) || 0,
 				paddingtop = parseFloat( $.curCSS( this.element[0], "paddingTop", true) ) || 0,
 				offset = item.offset().top - this.element.offset().top - borderTop - paddingtop,
-				scroll = this.element.attr( "scrollTop" ),
+				scroll = this.element.scrollTop(),
 				elementHeight = this.element.height(),
 				itemHeight = item.height();
 			if ( offset < 0 ) {
-				this.element.attr( "scrollTop", scroll + offset );
+				this.element.scrollTop( scroll + offset );
 			} else if ( offset + itemHeight > elementHeight ) {
-				this.element.attr( "scrollTop", scroll + offset - elementHeight + itemHeight );
+				this.element.scrollTop( scroll + offset - elementHeight + itemHeight );
 			}
 		}
 		
@@ -410,7 +410,8 @@ $.widget("ui.menu", {
 	},
 
 	_hasScroll: function() {
-		return this.element.height() < this.element.attr( "scrollHeight" );
+		// TODO: just use .prop() when we drop support for jQuery <1.6
+		return this.element.height() < this.element[ $.fn.prop ? "prop" : "attr" ]( "scrollHeight" );
 	},
 
 	select: function( event ) {
