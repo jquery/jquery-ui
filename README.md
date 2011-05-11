@@ -8,7 +8,7 @@ If you want to use jQuery UI, go to [jqueryui.com](http://jqueryui.com) to get s
 If you are interested in helping developing jQuery UI, you are in the right place.
 To discuss development with team members and the community, visit the [Developing jQuery UI Forum](http://forum.jquery.com/developing-jquery-ui).
 
-For commiters
+For committers
 ---
 When looking at pull requests, first check for [proper commit messages](http://wiki.jqueryui.com/w/page/12137724/Bug-Fixing-Guide).
 
