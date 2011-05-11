@@ -401,52 +401,26 @@ $.widget( "ui.tabs", {
 			that.xhr.abort();
 		}
 
-		// if tab may be closed
-		if ( options.collapsible ) {
-			if ( collapsing ) {
-				options.active = false;
-
-				that.element.queue( "tabs", function() {
-					that._hideTab( event, eventData );
-				}).dequeue( "tabs" );
-
-				clicked[ 0 ].blur();
-				return;
-			} else if ( !toHide.length ) {
-				that.element.queue( "tabs", function() {
-					that._showTab( event, eventData );
-				});
-
-				// TODO make passing in node possible, see also http://dev.jqueryui.com/ticket/3171
-				that.load( that.anchors.index( clicked ), event );
-
-				clicked[ 0 ].blur();
-				return;
-			}
+		if ( !toHide.length && !toShow.length ) {
+			throw "jQuery UI Tabs: Mismatching fragment identifier.";
 		}
 
-		// show new tab
+		if ( toHide.length ) {
+			that.element.queue( "tabs", function() {
+				that._hideTab( event, eventData );
+			});
+		}
 		if ( toShow.length ) {
-			if ( toHide.length ) {
-				that.element.queue( "tabs", function() {
-					that._hideTab( event, eventData );
-				});
-			}
 			that.element.queue( "tabs", function() {
 				that._showTab( event, eventData );
 			});
 
+			// TODO make passing in node possible, see also http://dev.jqueryui.com/ticket/3171
 			that.load( that.anchors.index( clicked ), event );
-		} else {
-			throw "jQuery UI Tabs: Mismatching fragment identifier.";
-		}
 
-		// Prevent IE from keeping other link focussed when using the back button
-		// and remove dotted border from clicked link. This is controlled via CSS
-		// in modern browsers; blur() removes focus from address bar in Firefox
-		// which can become a usability
-		if ( $.browser.msie ) {
 			clicked[ 0 ].blur();
+		} else {
+			that.element.dequeue( "tabs" );
 		}
 	},
 
