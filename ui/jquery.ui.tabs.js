@@ -808,8 +808,8 @@ if ( $.uiBackCompat !== false ) {
 
 			if ( index >= this.lis.length ) {
 				li.appendTo( this.list );
-				if( index > 0 ){
-					panel.insertAfter( this.anchors.eq(-1) );
+				if( index > 0 ) {
+					panel.insertAfter( this.panels.eq( -1 ) );
 				} else {
 					panel.appendTo( this.list[0].parentNode );
 				}
