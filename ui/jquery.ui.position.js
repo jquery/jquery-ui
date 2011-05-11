@@ -37,8 +37,6 @@ $.fn.position = function( options ) {
 		targetHeight,
 		basePosition;
 
-	options.within = within;
-
 	if ( targetElem.nodeType === 9 ) {
 		targetWidth = target.width();
 		targetHeight = target.height();
@@ -187,11 +185,12 @@ $.fn.position = function( options ) {
 $.ui.position = {
 	fit: {
 		left: function( position, data ) {
-			var win = $( data.within ),
-				winOffset = win.offset(),
-				outerWidth = win.outerWidth(),
-				overLeft = win.scrollLeft() - data.collisionPosition.left + winOffset.left,
-				overRight = data.collisionPosition.left + data.collisionWidth - outerWidth - win.scrollLeft() - winOffset.left;
+			var win = data.within,
+				isWindow = $.isWindow(data.within[0]),
+				winOffset = isWindow ? 0 : win.offset().left,
+				outerWidth = isWindow ? win.width() : win.outerWidth(),
+				overLeft = win.scrollLeft() - data.collisionPosition.left + winOffset,
+				overRight = data.collisionPosition.left + data.collisionWidth - outerWidth - win.scrollLeft() - winOffset;
 
 			// element is wider than window or too far left -> align with left edge
 			if ( data.collisionWidth > outerWidth || overLeft > 0 ) {
@@ -205,11 +204,12 @@ $.ui.position = {
 			}
 		},
 		top: function( position, data ) {
-			var win = $( data.within ),
-				winOffset = win.offset(),
-				outerHeight = win.outerHeight(),
-				overTop = win.scrollTop() - data.collisionPosition.top + winOffset.top,
-				overBottom = data.collisionPosition.top + data.collisionHeight - outerHeight - win.scrollTop() - winOffset.top;
+			var win = data.within,
+				isWindow = $.isWindow(data.within[0]),
+				winOffset = isWindow ? 0 : win.offset().top,
+				outerHeight = isWindow ? win.height() : win.outerHeight(),
+				overTop = win.scrollTop() - data.collisionPosition.top + winOffset,
+				overBottom = data.collisionPosition.top + data.collisionHeight - outerHeight - win.scrollTop() - winOffset;
 
 			// element is taller than window or too far up -> align with top edge
 			if ( data.collisionHeight > outerHeight || overTop > 0 ) {
@@ -228,11 +228,12 @@ $.ui.position = {
 			if ( data.at[ 0 ] === center ) {
 				return;
 			}
-			var win = $( data.within ),
-				winOffset = win.offset(),
-				outerWidth = win.outerWidth(),
-				overLeft = data.collisionPosition.left - winOffset.left,
-				overRight = data.collisionPosition.left + data.collisionWidth - outerWidth - win.scrollLeft() - winOffset.left,
+			var win = data.within,
+				isWindow = $.isWindow(data.within[0]),
+				winOffset = isWindow ? 0 : win.offset().left,
+				outerWidth = isWindow ? win.width() : win.outerWidth(),
+				overLeft = data.collisionPosition.left - winOffset,
+				overRight = data.collisionPosition.left + data.collisionWidth - outerWidth - win.scrollLeft() - winOffset
 				left = data.my[ 0 ] === "left",
 				myOffset = data.my[ 0 ] === "left" ?
 					-data.elemWidth :
@@ -251,11 +252,12 @@ $.ui.position = {
 			if ( data.at[ 1 ] === center ) {
 				return;
 			}
-			var win = $( data.within ),
-				winOffset = win.offset(),
-				outerHeight = win.outerHeight(),
-				overTop = data.collisionPosition.top - winOffset.top,
-				overBottom = data.collisionPosition.top + data.collisionHeight - outerHeight - win.scrollTop() - winOffset.top,
+			var win = data.within,
+				isWindow = $.isWindow(data.within[0]),
+				winOffset = isWindow ? 0 : win.offset().top,
+				outerHeight = isWindow ? win.height() : win.outerHeight(),
+				overTop = data.collisionPosition.top - winOffset,
+				overBottom = data.collisionPosition.top + data.collisionHeight - outerHeight - win.scrollTop() - winOffset,
 				top = data.my[ 1 ] === "top",
 				myOffset = top ?
 					-data.elemHeight :
