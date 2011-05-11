@@ -25,6 +25,7 @@ $.effects.effect.puff = function( o ) {
 
 		$.extend(o, {
 			effect: 'scale',
+			queue: false,
 			fade: true,
 			mode: mode,
 			percent: mode == 'hide' ? percent : 100,
@@ -36,13 +37,13 @@ $.effects.effect.puff = function( o ) {
 				}
 		});
 
-		elem.effect( o ).dequeue();
+		elem.effect( o );
 	});
 };
 
 $.effects.effect.scale = function( o ) {
 
-	return this.queue( function() {
+	return this[ o.queue === false ? "each" : "queue" ]( function() {
 
 		// Create element
 		var el = $( this ),
@@ -62,6 +63,7 @@ $.effects.effect.scale = function( o ) {
 
 		// We are going to pass this effect to the size effect:
 		options.effect = "size";
+		options.queue = false;
 
 		// Set default origin and restore for show/hide
 		if ( mode != 'effect' ) { 
@@ -87,14 +89,14 @@ $.effects.effect.scale = function( o ) {
 		};
 
 		// Animate
-		el.effect(options).dequeue();
+		el.effect(options);
 	});
 
 };
 
 $.effects.effect.size = function( o ) {
 
-	return this.queue( function() {
+	return this[ o.queue === false ? "each" : "queue" ]( function() {
 		// Create element
 		var el = $( this ), 
 			props = [ 'position', 'top', 'bottom', 'left', 'right', 'width', 'height', 'overflow', 'opacity' ],
