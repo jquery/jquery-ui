@@ -102,16 +102,19 @@ test('enableDisable', function() {
 	ok(inp.next('img').css('opacity') == 1, 'Enable/disable image - image now enabled');
 	inp.datepicker('destroy');
 	// Inline
-	var inl = init('#inl');
+	var inl = init('#inl', {changeYear: true});
 	var dp = $('.ui-datepicker-inline', inl);
 	ok(!inl.datepicker('isDisabled'), 'Enable/disable inline - initially marked as enabled');
 	ok(!dp.children().is('.ui-state-disabled'), 'Enable/disable inline - not visually disabled initially');
+	ok(!dp.find('select').attr('disabled'), 'Enable/disable inline - form element enabled initially');
 	inl.datepicker('disable');
 	ok(inl.datepicker('isDisabled'), 'Enable/disable inline - now marked as disabled');
 	ok(dp.children().is('.ui-state-disabled'), 'Enable/disable inline - visually disabled');
+	ok(dp.find('select').attr('disabled'), 'Enable/disable inline - form element disabled');
 	inl.datepicker('enable');
 	ok(!inl.datepicker('isDisabled'), 'Enable/disable inline - now marked as enabled');
 	ok(!dp.children().is('.ui-state-disabled'), 'Enable/disable inline - not visiually disabled');
+	ok(!dp.find('select').attr('disabled'), 'Enable/disable inline - form element enabled');
 	inl.datepicker('destroy');
 });
 
