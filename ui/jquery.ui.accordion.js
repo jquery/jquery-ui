@@ -487,8 +487,16 @@ $.extend( $.ui.accordion, {
 				hideProps[ prop ] = "hide";
 
 				var parts = ( "" + $.css( options.toShow[0], prop ) ).match( /^([\d+-.]+)(.*)$/ );
+				var propVal;
+				//If height is 0 (panel is empty), set to 1 to prevent incorrect sizing of non-empty panels
+				//see ticket #7335
+				if( prop === "height" ) {
+					propVal = parts[ 1 ] != "0" ? parts[ 1 ] : 1;
+				} else {
+					propVal = parts[ 1 ];
+				}
 				showProps[ prop ] = {
-					value: parts[ 1 ] != 0 ? parts[ 1 ] : 1,
+					value: propVal,
 					unit: parts[ 2 ] || "px"
 				};
 			});
