@@ -261,7 +261,7 @@ $.widget("ui.draggable", $.ui.mouse, {
 	_createHelper: function(event) {
 
 		var o = this.options;
-		var helper = $.isFunction(o.helper) ? $(o.helper.apply(this.element[0], [event])) : (o.helper == 'clone' ? this.element.clone() : this.element);
+		var helper = $.isFunction(o.helper) ? $(o.helper.apply(this.element[0], [event])) : (o.helper == 'clone' ? this.element.clone().removeAttr('id') : this.element);
 
 		if(!helper.parents('body').length)
 			helper.appendTo((o.appendTo == 'parent' ? this.element[0].parentNode : o.appendTo));
@@ -580,7 +580,7 @@ $.ui.plugin.add("draggable", "connectToSortable", {
 					//Now we fake the start of dragging for the sortable instance,
 					//by cloning the list group item, appending it to the sortable and using it as inst.currentItem
 					//We can then fire the start event of the sortable with our passed browser event, and our own helper (so it doesn't create a new one)
-					this.instance.currentItem = $(self).clone().appendTo(this.instance.element).data("sortable-item", true);
+					this.instance.currentItem = $(self).clone().removeAttr('id').appendTo(this.instance.element).data("sortable-item", true);
 					this.instance.options._helper = this.instance.options.helper; //Store helper option to later restore it
 					this.instance.options.helper = function() { return ui.helper[0]; };
 
