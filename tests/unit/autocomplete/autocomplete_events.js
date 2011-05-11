@@ -203,6 +203,7 @@ test("cancel select", function() {
 	}, 50);
 });
 
+/* TODO previous fix broke more than it fixed, disabling this for now - messed up regular menu select event
 test("blur without selection", function() {
 	expect(1);
 	var ac = $("#autocomplete").autocomplete({
@@ -218,5 +219,6 @@ test("blur without selection", function() {
 		start();
 	}, 50);
 });
+*/
 
 })(jQuery);

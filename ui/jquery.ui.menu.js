@@ -18,7 +18,6 @@ var idIncrement = 0;
 $.widget("ui.menu", {
 	defaultElement: "<ul>",
 	delay: 150,
-	isNewMenu: true,
 	options: {
 		position: {
 			my: "left top",
@@ -55,8 +54,7 @@ $.widget("ui.menu", {
 				self.select( event );
 			})
 			.bind( "mouseover.menu", function( event ) {
-				if ( self.options.disabled || self.isNewMenu ) {
-					self.isNewMenu = false;
+				if ( self.options.disabled ) {
 					return;
 				}
 				var target = $( event.target ).closest( ".ui-menu-item" );
