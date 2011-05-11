@@ -237,8 +237,8 @@ $.widget("ui.menu", {
 		
 		if ( this._hasScroll() ) {
 			var borderTop = parseFloat( $.curCSS( this.element[0], "borderTopWidth", true) ) || 0,
-				paddingtop = parseFloat( $.curCSS( this.element[0], "paddingTop", true) ) || 0,
-				offset = item.offset().top - this.element.offset().top - borderTop - paddingtop,
+				paddingTop = parseFloat( $.curCSS( this.element[0], "paddingTop", true) ) || 0,
+				offset = item.offset().top - this.element.offset().top - borderTop - paddingTop,
 				scroll = this.element.scrollTop(),
 				elementHeight = this.element.height(),
 				itemHeight = item.height();
