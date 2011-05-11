@@ -490,12 +490,12 @@ $.widget("ui.menu", {
 		this.deactivate();
 		if (this.hasScroll()) {
 			var offset = item.offset().top - this.element.offset().top,
-				scroll = this.element.attr("scrollTop"),
+				scroll = this.element.scrollTop(),
 				elementHeight = this.element.height();
 			if (offset < 0) {
-				this.element.attr("scrollTop", scroll + offset);
+				this.element.scrollTop( scroll + offset);
 			} else if (offset >= elementHeight) {
-				this.element.attr("scrollTop", scroll + offset - elementHeight + item.height());
+				this.element.scrollTop( scroll + offset - elementHeight + item.height());
 			}
 		}
 		this.active = item.eq(0)
@@ -601,7 +601,7 @@ $.widget("ui.menu", {
 	},
 
 	hasScroll: function() {
-		return this.element.height() < this.element.attr("scrollHeight");
+		return this.element.height() < this.element[ $.fn.prop ? "prop" : "attr" ]("scrollHeight");
 	},
 
 	select: function( event ) {
