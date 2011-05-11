@@ -186,7 +186,7 @@ $.ui.position = {
 	fit: {
 		left: function( position, data ) {
 			var win = data.within,
-				isWindow = $.isWindow(data.within[0]),
+				isWindow = $.isWindow( data.within[0] ),
 				winOffset = isWindow ? 0 : win.offset().left,
 				outerWidth = isWindow ? win.width() : win.outerWidth(),
 				overLeft = win.scrollLeft() - data.collisionPosition.left + winOffset,
@@ -205,7 +205,7 @@ $.ui.position = {
 		},
 		top: function( position, data ) {
 			var win = data.within,
-				isWindow = $.isWindow(data.within[0]),
+				isWindow = $.isWindow( data.within[0] ),
 				winOffset = isWindow ? 0 : win.offset().top,
 				outerHeight = isWindow ? win.height() : win.outerHeight(),
 				overTop = win.scrollTop() - data.collisionPosition.top + winOffset,
@@ -228,12 +228,13 @@ $.ui.position = {
 			if ( data.at[ 0 ] === center ) {
 				return;
 			}
+
 			var win = data.within,
-				isWindow = $.isWindow(data.within[0]),
+				isWindow = $.isWindow( data.within[0] ),
 				winOffset = isWindow ? 0 : win.offset().left,
 				outerWidth = isWindow ? win.width() : win.outerWidth(),
 				overLeft = data.collisionPosition.left - winOffset,
-				overRight = data.collisionPosition.left + data.collisionWidth - outerWidth - win.scrollLeft() - winOffset
+				overRight = data.collisionPosition.left + data.collisionWidth - outerWidth - win.scrollLeft() - winOffset,
 				left = data.my[ 0 ] === "left",
 				myOffset = data.my[ 0 ] === "left" ?
 					-data.elemWidth :
@@ -253,7 +254,7 @@ $.ui.position = {
 				return;
 			}
 			var win = data.within,
-				isWindow = $.isWindow(data.within[0]),
+				isWindow = $.isWindow( data.within[0] ),
 				winOffset = isWindow ? 0 : win.offset().top,
 				outerHeight = isWindow ? win.height() : win.outerHeight(),
 				overTop = data.collisionPosition.top - winOffset,
