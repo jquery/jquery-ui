@@ -185,6 +185,7 @@ $.widget( "ui.button", {
 		// $.Widget.prototype._setOptionDisabled so it's easy to proxy and can
 		// be overridden by individual plugins
 		this._setOption( "disabled", options.disabled );
+		this._resetButton();
 	},
 
 	_determineButtonType: function() {
@@ -250,6 +251,7 @@ $.widget( "ui.button", {
 			} else {
 				this.element.removeAttr( "disabled" );
 			}
+			return;
 		}
 		this._resetButton();
 	},
