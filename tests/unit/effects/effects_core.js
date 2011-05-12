@@ -80,4 +80,24 @@ asyncTest( "animateClass works with colors", function() {
 	}, 50);
 });
 
+asyncTest( "animateClass works with children", function() {
+	var test = $("div.animateClass"),
+		h2 = test.find("h2");
+	
+	expect(4);
+	test.toggleClass("testChildren", { children: true, duration: 100, complete: function() {
+		equal( h2.css("fontSize"), "20px", "Text size is final during complete");
+		test.toggleClass("testChildren", 100, function() {
+			equal( h2.css("fontSize"), "10px", "Text size revertted after class removed");
+			start();
+		});
+		setTimeout(function() {
+			equal( h2.css("fontSize"), "20px", "Text size unchanged with children: undefined" );
+		}, 50);
+	}});
+	setTimeout(function() {
+		notPresent( h2.css("fontSize"), ["10px","20px"], "Font size is neither endpoint when in middle.");
+	}, 50);
+});
+
 })(jQuery);
