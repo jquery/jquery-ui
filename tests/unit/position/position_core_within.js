@@ -3,33 +3,33 @@
 $("#within-container").show();
 
 function scrollTopSupport() {
-    $( window ).scrollTop( 1 );
-    return $( window ).scrollTop() === 1;
+	$( window ).scrollTop( 1 );
+	return $( window ).scrollTop() === 1;
 }
 var addTop = -20,
-    addLeft = -20;
-    
+	addLeft = -20;
+	
 $.fn.addOffsets = function() {
-    var elOffset = this.offset(),
-        offset = $("#within-container").offset();
+	var elOffset = this.offset(),
+		offset = $("#within-container").offset();
 
-    elOffset.top -= offset.top;
-    elOffset.left -= offset.left;
-    
-    return {top: elOffset.top - offset.top, left: elOffset.left - offset.left };
+	elOffset.top -= offset.top;
+	elOffset.left -= offset.left;
+	
+	return {top: elOffset.top - offset.top, left: elOffset.left - offset.left };
 };
 
 test( "within: my, at, of", function() {
-    $("#within-container").css({"width": "500px", "height": "500px", "top": "20px", "left": "20px", "position": "relative"});
-    
-        
-    
+	$("#within-container").css({"width": "500px", "height": "500px", "top": "20px", "left": "20px", "position": "relative"});
+	
+		
+	
 	$( "#elx" ).position({
 		my: "left top",
 		at: "left top",
 		of: "#parentx",
 		collision: "none",
-        within: $("#within-container")
+		within: $("#within-container")
 	});
 	same( $( "#elx" ).addOffsets(), { top: addTop + 40, left: addLeft + 40 }, "left top, left top" );
 
@@ -38,7 +38,7 @@ test( "within: my, at, of", function() {
 		at: "left bottom",
 		of: "#parentx",
 		collision: "none",
-        within: $("#within-container")
+		within: $("#within-container")
 	});
 	same( $( "#elx" ).addOffsets(), { top: addTop + 60, left: addLeft + 40 }, "left top, left bottom" );
 
@@ -47,7 +47,7 @@ test( "within: my, at, of", function() {
 		at: "bottom",
 		of: "#parentx",
 		collision: "none",
-        within: $("#within-container")
+		within: $("#within-container")
 	});
 	same( $( "#elx" ).addOffsets(), { top: addTop + 55, left: addLeft + 50 }, "left, bottom" );
 
@@ -56,23 +56,23 @@ test( "within: my, at, of", function() {
 		at: "bar baz",
 		of: "#parentx",
 		collision: "none",
-        within: $("#within-container")
+		within: $("#within-container")
 	});
 	same( $( "#elx" ).addOffsets(), { top: addTop + 45, left: addLeft +50 }, "left foo, bar baz" );
 });
 
 test( "within: multiple elements", function() {
-    $("#within-container").css({"width": "500px", "height": "500px", "top": "20px", "left": "20px", "position": "relative"});
-    
-        
-    
+	$("#within-container").css({"width": "500px", "height": "500px", "top": "20px", "left": "20px", "position": "relative"});
+	
+		
+	
 	var elements = $( "#el1, #el2" );
 	var result = elements.position({
 		my: "left top",
 		at: "left bottom",
 		of: "#parent",
 		collision: "none",
-        within: $("#within-container")
+		within: $("#within-container")
 	});
 
 	same( result, elements );
@@ -83,10 +83,10 @@ test( "within: multiple elements", function() {
 });
 
 test( "within: positions", function() {
-    $("#within-container").css({"width": "500px", "height": "500px", "top": "20px", "left": "20px", "position": "relative"});
-    
-        
-    
+	$("#within-container").css({"width": "500px", "height": "500px", "top": "20px", "left": "20px", "position": "relative"});
+	
+		
+	
 	var definitions = [];
 	var offsets = {
 		left: 0,
@@ -117,7 +117,7 @@ test( "within: positions", function() {
 			at: definition.at,
 			of: "#parent",
 			collision: "none",
-            within: $("#within-container")
+			within: $("#within-container")
 		});
 		same( el.addOffsets(), definition.result,
 			"Position via " + QUnit.jsDump.parse({ my:definition.my, at:definition.at }) );
@@ -125,17 +125,17 @@ test( "within: positions", function() {
 });
 
 test( "within: of", function() {
-    $("#within-container").css({"width": "500px", "height": "500px", "top": "20px", "left": "20px", "position": "relative"});
-    
-            
-    
-    
+	$("#within-container").css({"width": "500px", "height": "500px", "top": "20px", "left": "20px", "position": "relative"});
+	
+			
+	
+	
 	$( "#elx" ).position({
 		my: "left top",
 		at: "left top",
 		of: "#parentx",
 		collision: "none",
-        within: $("#within-container")
+		within: $("#within-container")
 	});
 	same( $( "#elx" ).addOffsets(), { top: addTop + 40, left: addLeft + 40 }, "selector" );
 
@@ -144,7 +144,7 @@ test( "within: of", function() {
 		at: "left bottom",
 		of: $( "#parentx"),
 		collision: "none",
-        within: $("#within-container")
+		within: $("#within-container")
 	});
 	same( $( "#elx" ).addOffsets(), { top: addTop + 60, left: addLeft + 40 }, "jQuery object" );
 
@@ -153,18 +153,18 @@ test( "within: of", function() {
 		at: "left top",
 		of: $( "#parentx" )[ 0 ],
 		collision: "none",
-        within: $("#within-container")
+		within: $("#within-container")
 	});
 	same( $( "#elx" ).addOffsets(), { top: addTop + 40, left: addLeft + 40 }, "DOM element" );
 
-    // these tests are not valid for "within" since of is not contained by within.
-    /*
-    $( "#elx" ).position({
+	// these tests are not valid for "within" since of is not contained by within.
+	/*
+	$( "#elx" ).position({
 		my: "right bottom",
 		at: "right bottom",
 		of: document,
 		collision: "none",
-        within: $("#within-container")
+		within: $("#within-container")
 	});
 	same( $( "#elx" ).addOffsets(), {
 		top: addTop + $( document ).height() - 10,
@@ -176,7 +176,7 @@ test( "within: of", function() {
 		at: "right bottom",
 		of: $( document ),
 		collision: "none",
-        within: $("#within-container")
+		within: $("#within-container")
 	});
 	same( $( "#elx" ).addOffsets(), {
 		top: addTop + $( document ).height() - 10,
@@ -190,7 +190,7 @@ test( "within: of", function() {
 		at: "right bottom",
 		of: window,
 		collision: "none",
-        within: $("#within-container")
+		within: $("#within-container")
 	});
 	same( $( "#elx" ).addOffsets(), {
 		top: addTop + $( window ).height() - 10,
@@ -202,7 +202,7 @@ test( "within: of", function() {
 		at: "right bottom",
 		of: $( window ),
 		collision: "none",
-        within: $("#within-container")
+		within: $("#within-container")
 	});
 	same( $( "#elx" ).addOffsets(), {
 		top: addTop + $( window ).height() - 10,
@@ -216,7 +216,7 @@ test( "within: of", function() {
 			at: "right bottom",
 			of: window,
 			collision: "none",
-            within: $("#within-container")
+			within: $("#within-container")
 		});
 		same( $( "#elx" ).addOffsets(), {
 			top: addTop + $( window ).height() + 500 - 10,
@@ -231,7 +231,7 @@ test( "within: of", function() {
 		at: "left top",
 		of: event,
 		collision: "none",
-        within: $("#within-container")
+		within: $("#within-container")
 	});
 	same( $( "#elx" ).offset(), {
 		top: 300,
@@ -244,7 +244,7 @@ test( "within: of", function() {
 		at: "right bottom",
 		of: event,
 		collision: "none",
-        within: $("#within-container")
+		within: $("#within-container")
 	});
 	same( $( "#elx" ).offset(), {
 		top: 600,
@@ -253,16 +253,16 @@ test( "within: of", function() {
 });
 
 test( "within:offsets", function() {
-    $("#within-container").css({"width": "500px", "height": "500px", "top": "20px", "left": "20px", "position": "relative"});
-    
-        
-    
+	$("#within-container").css({"width": "500px", "height": "500px", "top": "20px", "left": "20px", "position": "relative"});
+	
+		
+	
 	$( "#elx" ).position({
 		my: "left top",
 		at: "left+10 bottom+10",
 		of: "#parentx",
 		collision: "none",
-        within: $("#within-container")
+		within: $("#within-container")
 	});
 	same( $( "#elx" ).addOffsets(), { top: addTop + 70, left: addLeft + 50 }, "offsets in at" );
 
@@ -271,7 +271,7 @@ test( "within:offsets", function() {
 		at: "left bottom",
 		of: "#parentx",
 		collision: "none",
-        within: $("#within-container")
+		within: $("#within-container")
 	});
 	same( $( "#elx" ).addOffsets(), { top: addTop + 50, left: addLeft + 50 }, "offsets in my" );
 
@@ -280,7 +280,7 @@ test( "within:offsets", function() {
 		at: "left+50% bottom-10%",
 		of: "#parentx",
 		collision: "none",
-        within: $("#within-container")
+		within: $("#within-container")
 	});
 	same( $( "#elx" ).addOffsets(), { top: addTop + 58, left: addLeft + 50 }, "percentage offsets in at" );
 
@@ -289,16 +289,16 @@ test( "within:offsets", function() {
 		at: "left bottom",
 		of: "#parentx",
 		collision: "none",
-        within: $("#within-container")
+		within: $("#within-container")
 	});
 	same( $( "#elx" ).addOffsets(), { top: addTop + 65, left: addLeft + 37 }, "percentage offsets in my" );
 });
 
 test( "within: using", function() {
-    $("#within-container").css({"width": "500px", "height": "500px", "top": "20px", "left": "20px", "position": "relative"});
-    
-        
-    
+	$("#within-container").css({"width": "500px", "height": "500px", "top": "20px", "left": "20px", "position": "relative"});
+	
+		
+	
 	expect( 6 );
 
 	var count = 0,
@@ -309,7 +309,7 @@ test( "within: using", function() {
 			at: "rigt bottom",
 			of: "#parentx",
 			collision: "none",
-            within: $("#within-container")
+			within: $("#within-container")
 		}).addOffsets();
 
 	elems.position({
@@ -317,13 +317,13 @@ test( "within: using", function() {
 		at: "left top",
 		of: "#parentx",
 		using: function( position ) {
-            position.top -= $("#within-container").offset().top;
-            position.left -= $("#within-container").offset().left;
+			position.top -= $("#within-container").offset().top;
+			position.left -= $("#within-container").offset().left;
 			same( this, elems[ count ], "correct context for call #" + count );
 			same( position, expectedPosition, "correct position for call #" + count );
 			count++;
 		},
-        within: $("#within-container")
+		within: $("#within-container")
 	});
 
 	elems.each(function() {
@@ -336,7 +336,7 @@ function collisionTest( config, result, msg ) {
 		my: "left top",
 		at: "right bottom",
 		of: $("#within-container")[0],
-        within: $("#within-container")
+		within: $("#within-container")
 	}, config ) );
 	same( elem.addOffsets(), result, msg );
 }
@@ -349,10 +349,10 @@ function collisionTest2( config, result, msg ) {
 }
 
 test( "within: collision: fit, no offset", function() {
-    $("#within-container").css({"width": "500px", "height": "500px", "top": "20px", "left": "20px", "position": "relative"});
-    
-        
-    
+	$("#within-container").css({"width": "500px", "height": "500px", "top": "20px", "left": "20px", "position": "relative"});
+	
+		
+	
 	collisionTest({
 		collision: "fit"
 	}, { top: addTop + $("#within-container").height() - 10, left: addLeft + $("#within-container").width() - 10 }, "right bottom" );
@@ -364,10 +364,10 @@ test( "within: collision: fit, no offset", function() {
 
 
 test( "within: collision: fit, with offset", function() {
-    $("#within-container").css({"width": "500px", "height": "500px", "top": "20px", "left": "20px", "position": "relative"});
-    
-        
-    
+	$("#within-container").css({"width": "500px", "height": "500px", "top": "20px", "left": "20px", "position": "relative"});
+	
+		
+	
 	collisionTest({
 		collision: "fit",
 		at: "right+2 bottom+3"
@@ -386,13 +386,13 @@ test( "within: collision: fit, with offset", function() {
 
 test( "within: collision: fit, window scrolled", function() {
 	if ( scrollTopSupport() ) {
-        $("#within-container").css({"width": "1000px", "height": "800px", "top": "20px", "left": "20px", "position": "relative"});
-        
-            
-        
-        var win = $("#within-container").css("overflow", "auto");
-        win.scrollTop( 300 ).scrollLeft( 150 );
-        
+		$("#within-container").css({"width": "1000px", "height": "800px", "top": "20px", "left": "20px", "position": "relative"});
+		
+			
+		
+		var win = $("#within-container").css("overflow", "auto");
+		win.scrollTop( 300 ).scrollLeft( 150 );
+		
 		collisionTest({
 			collision: "fit",
 			at: "left-100 top-100"
@@ -406,12 +406,12 @@ test( "within: collision: fit, window scrolled", function() {
 	}
 
 });
-        
+		
 test( "within: collision: flip, no offset", function() {
-    $("#within-container").css({"width": "500px", "height": "500px", "top": "20px", "left": "20px", "position": "relative"});
-    
-        
-    
+	$("#within-container").css({"width": "500px", "height": "500px", "top": "20px", "left": "20px", "position": "relative"});
+	
+		
+	
 	collisionTest({
 		collision: "flip"
 	}, { top: addTop + -10, left: addLeft + -10 }, "left top" );
@@ -422,10 +422,10 @@ test( "within: collision: flip, no offset", function() {
 });
 
 test( "within: collision: flip, with offset", function() {
-    $("#within-container").css({"width": "500px", "height": "500px", "top": "20px", "left": "20px", "position": "relative"});
-    
-        
-    
+	$("#within-container").css({"width": "500px", "height": "500px", "top": "20px", "left": "20px", "position": "relative"});
+	
+		
+	
 	collisionTest({
 		collision: "flip",
 		at: "right+2 bottom+3"
@@ -443,10 +443,10 @@ test( "within: collision: flip, with offset", function() {
 });
 
 test( "within: collision: none, no offset", function() {
-    $("#within-container").css({"width": "500px", "height": "500px", "top": "20px", "left": "20px", "position": "relative"});
-    
-        
-    
+	$("#within-container").css({"width": "500px", "height": "500px", "top": "20px", "left": "20px", "position": "relative"});
+	
+		
+	
 	collisionTest({
 		collision: "none"
 	}, { top: addTop + $("#within-container").height(), left: addLeft + $("#within-container").width() }, "left top" );
@@ -457,10 +457,10 @@ test( "within: collision: none, no offset", function() {
 });
 
 test( "within: collision: none, with offset", function() {
-    $("#within-container").css({"width": "500px", "height": "500px", "top": "20px", "left": "20px", "position": "relative"});
-    
-        
-    
+	$("#within-container").css({"width": "500px", "height": "500px", "top": "20px", "left": "20px", "position": "relative"});
+	
+		
+	
 	collisionTest({
 		collision: "none",
 		at: "right+2 bottom+3"
@@ -478,10 +478,10 @@ test( "within: collision: none, with offset", function() {
 });
 
 test( "within: collision: fit, with margin", function() {
-    $("#within-container").css({"width": "500px", "height": "500px", "top": "20px", "left": "20px", "position": "relative"});
-    
-        
-    
+	$("#within-container").css({"width": "500px", "height": "500px", "top": "20px", "left": "20px", "position": "relative"});
+	
+		
+	
 	$( "#elx" ).css( "margin", 10 );
 
 	collisionTest({
@@ -520,10 +520,10 @@ test( "within: collision: fit, with margin", function() {
 });
 
 test( "within: collision: flip, with margin", function() {
-    $("#within-container").css({"width": "500px", "height": "500px", "top": "20px", "left": "20px", "position": "relative"});
-    
-        
-    
+	$("#within-container").css({"width": "500px", "height": "500px", "top": "20px", "left": "20px", "position": "relative"});
+	
+		
+	
 	$( "#elx" ).css( "margin", 10 );
 
 	collisionTest({
