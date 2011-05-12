@@ -76,6 +76,7 @@
                     collision: $( "#collision_horizontal" ).val() + " " + $( "#collision_vertical" ).val()
                 });
             }
+            $( ".demo" ).append("<div style='width:5000px;height:5000px;' />").css("overflow","auto").scrollTop( 500 ).scrollLeft( 500 );
 
             $( ".positionable" ).css( "opacity", 0.5 );
 
