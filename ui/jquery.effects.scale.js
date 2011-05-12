@@ -125,8 +125,8 @@ $.effects.effect.size = function( o ) {
 			el.from = o.to || zero;
 			el.to = o.from || original;
 		} else {
-			el.from = o.from || original;
-			el.to = o.to || zero;
+			el.from = o.from || ( mode === "show" ? zero : original );
+			el.to = o.to || ( mode === "hide" ? zero : original );
 		}
 
 		// Adjust
