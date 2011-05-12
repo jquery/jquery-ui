@@ -555,6 +555,4 @@ test( "within: collision: flip, with margin", function() {
 //	same( offset1, offset2 );
 //});
 
-
-
 }( jQuery ) );
