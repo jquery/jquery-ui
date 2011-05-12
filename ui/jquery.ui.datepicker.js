@@ -705,7 +705,7 @@ $.extend(Datepicker.prototype, {
 			var origyearshtml = inst.yearshtml;
 			setTimeout(function(){
 				//assure that inst.yearshtml didn't change.
-				if( origyearshtml === inst.yearshtml ){
+				if( origyearshtml === inst.yearshtml && inst.yearshtml ){
 					inst.dpDiv.find('select.ui-datepicker-year:first').replaceWith(inst.yearshtml);
 				}
 				origyearshtml = inst.yearshtml = null;
@@ -1602,14 +1602,9 @@ $.extend(Datepicker.prototype, {
 						'>' + year + '</option>';
 				}
 				inst.yearshtml += '</select>';
-				//when showing there is no need for later update
-				if( ! $.browser.mozilla ){
-					html += inst.yearshtml;
-					inst.yearshtml = null;
-				} else {
-					// will be replaced later with inst.yearshtml
-					html += '<select class="ui-datepicker-year"><option value="' + drawYear + '" selected="selected">' + drawYear + '</option></select>';
-				}
+				
+				html += inst.yearshtml;
+				inst.yearshtml = null;
 			}
 		}
 		html += this._get(inst, 'yearSuffix');
