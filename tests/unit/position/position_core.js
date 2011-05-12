@@ -1,7 +1,7 @@
 (function( $ ) {
 
 function scrollTopSupport() {
-    $( window ).scrollTop( 1 );
+	$( window ).scrollTop( 1 );
 	return $( window ).scrollTop() === 1;
 }
 
