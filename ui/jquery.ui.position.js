@@ -111,7 +111,7 @@ $.fn.position = function( options ) {
 		parseInt( offsets.at[ 1 ], 10 ) *
 			( rpercent.test( offsets.at[ 1 ] ) ? targetHeight / 100 : 1 )
 	];
-	basePosition.left += atOffset[ 0 ],
+	basePosition.left += atOffset[ 0 ];
 	basePosition.top += atOffset[ 1 ];
 
 	return this.each(function() {
