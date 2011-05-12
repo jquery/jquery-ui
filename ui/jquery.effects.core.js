@@ -225,42 +225,72 @@ $.effects.animateClass = function( value, duration, easing, callback ) {
 		var animated = $( this ),
 			baseClass = animated.attr( "class" ),
 			finalClass,
-			originalStyleAttr = animated.attr( "style" ) || " ",
-			originalStyle = getElementStyles.call( this ),
-			newStyle,
-			diff,
-			prop;
+			allAnimations = o.children ? animated.find( "*" ).andSelf() : animated;
 
+		// map the animated objects to store the original styles.
+		allAnimations = allAnimations.map(function() {
+			var el = $( this );
+			return {
+				el: el,
+				originalStyleAttr: el.attr( "style" ) || " ",
+				start: getElementStyles.call( this )
+			};
+		});
+
+		// apply class change
 		$.each( classAnimationActions, function(i, action) {
 			if ( value[ action ] ) {
 				animated[ action + "Class" ]( value[ action ] );
 			}
 		});
-		newStyle = getElementStyles.call( this );
 		finalClass = animated.attr( "class" );
+
+		// map all animated objects again - calculate new styles and diff
+		allAnimations = allAnimations.map(function() {
+			this.end = getElementStyles.call( this.el[ 0 ] );
+			this.diff = styleDifference( this.start, this.end );
+			return this;
+		});
+
+		// apply original class
 		animated.attr( "class", baseClass );
 
-		diff = styleDifference( originalStyle, newStyle );
-		animated
-			.animate( diff, {
+		// map all animated objects again - this time collecting a promise
+		allAnimations = allAnimations.map(function() {
+			var styleInfo = this,
+				dfd = $.Deferred();
+
+			this.el.animate( this.diff, {
 				duration: duration,
 				easing: o.easing,
 				queue: false,
 				complete: function() {
-					animated.attr( "class", finalClass );
-
-					if ( typeof animated.attr( "style" ) === "object" ) {
-						animated.attr( "style" ).cssText = "";
-						animated.attr( "style" ).cssText = originalStyleAttr;
-					} else {
-						animated.attr( "style", originalStyleAttr );
-					}
-
-					// this is guarnteed to be there if you use jQuery.speed()
-					// it also handles dequeuing the next anim...
-					o.complete.call( this );
+					dfd.resolve( styleInfo );
 				}
 			});
+			return dfd.promise();
+		});
+
+		// once all animations have completed:
+		$.when.apply( $, allAnimations.get() ).done(function() {
+
+			// set the final class
+			animated.attr( "class", finalClass );
+
+			// for each animated element
+			$.each( arguments, function() {
+				if ( typeof this.el.attr( "style" ) === "object" ) {
+					this.el.attr( "style" ).cssText = "";
+					this.el.attr( "style" ).cssText = this.originalStyleAttr;
+				} else {
+					this.el.attr( "style", this.originalStyleAttr );
+				}
+			});
+
+			// this is guarnteed to be there if you use jQuery.speed()
+			// it also handles dequeuing the next anim...
+			o.complete.call( animated[ 0 ] );
+		});
 	});
 };
 
