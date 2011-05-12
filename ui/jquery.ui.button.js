@@ -13,7 +13,7 @@
  */
 (function( $, undefined ) {
 
-var lastActive,
+var lastActive, startXPos, startYPos, endXPos, endYPos,
 	baseClasses = "ui-button ui-widget ui-state-default ui-corner-all",
 	stateClasses = "ui-state-hover ui-state-active ",
 	typeClasses = "ui-button-icons-only ui-button-icon-only ui-button-text-icons ui-button-text-icon-primary ui-button-text-icon-secondary ui-button-text-only",
@@ -112,13 +112,31 @@ $.widget( "ui.button", {
 
 		if ( toggleButton ) {
 			this.element.bind( "change.button", function() {
+				if ( startXPos != endXPos || startYPos != endYPos ) {
+					return false;
+				}
 				self.refresh();
+			});
+			this.buttonElement
+				.bind( "mousedown.button", function( event ) {
+					if ( options.disabled ) {
+						return false;
+					}
+					startXPos = event.pageX;
+					startYPos = event.pageY;
+				})
+				.bind( "mouseup.button", function( event ) {
+					if ( options.disabled ) {
+						return false;
+					}
+					endXPos = event.pageX;
+					endYPos = event.pageY;
 			});
 		}
 
 		if ( this.type === "checkbox" ) {
 			this.buttonElement.bind( "click.button", function() {
-				if ( options.disabled ) {
+				if ( options.disabled || startXPos != endXPos || startYPos != endYPos ) {
 					return false;
 				}
 				$( this ).toggleClass( "ui-state-active" );
@@ -126,7 +144,7 @@ $.widget( "ui.button", {
 			});
 		} else if ( this.type === "radio" ) {
 			this.buttonElement.bind( "click.button", function() {
-				if ( options.disabled ) {
+				if ( options.disabled || startXPos != endXPos || startYPos != endYPos ) {
 					return false;
 				}
 				$( this ).addClass( "ui-state-active" );
