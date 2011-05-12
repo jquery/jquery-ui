@@ -18,7 +18,6 @@ var idIncrement = 0;
 $.widget("ui.menu", {
 	defaultElement: "<ul>",
 	delay: 150,
-	isNewMenu: true,
 	options: {
 		position: {
 			my: "left top",
@@ -46,8 +45,6 @@ $.widget("ui.menu", {
 				if ( !item.length ) {
 					return;
 				}
-				// temporary
-				event.preventDefault();
 				// it's possible to click an item without hovering it (#7085)
 				if ( !self.active || ( self.active[ 0 ] !== item[ 0 ] ) ) {
 					self.focus( event, item );
@@ -55,8 +52,7 @@ $.widget("ui.menu", {
 				self.select( event );
 			})
 			.bind( "mouseover.menu", function( event ) {
-				if ( self.options.disabled || self.isNewMenu ) {
-					self.isNewMenu = false;
+				if ( self.options.disabled ) {
 					return;
 				}
 				var target = $( event.target ).closest( ".ui-menu-item" );
@@ -237,15 +233,15 @@ $.widget("ui.menu", {
 		
 		if ( this._hasScroll() ) {
 			var borderTop = parseFloat( $.curCSS( this.element[0], "borderTopWidth", true) ) || 0,
-				paddingtop = parseFloat( $.curCSS( this.element[0], "paddingTop", true) ) || 0,
-				offset = item.offset().top - this.element.offset().top - borderTop - paddingtop,
-				scroll = this.element.attr( "scrollTop" ),
+				paddingTop = parseFloat( $.curCSS( this.element[0], "paddingTop", true) ) || 0,
+				offset = item.offset().top - this.element.offset().top - borderTop - paddingTop,
+				scroll = this.element.scrollTop(),
 				elementHeight = this.element.height(),
 				itemHeight = item.height();
 			if ( offset < 0 ) {
-				this.element.attr( "scrollTop", scroll + offset );
+				this.element.scrollTop( scroll + offset );
 			} else if ( offset + itemHeight > elementHeight ) {
-				this.element.attr( "scrollTop", scroll + offset - elementHeight + itemHeight );
+				this.element.scrollTop( scroll + offset - elementHeight + itemHeight );
 			}
 		}
 		
@@ -410,7 +406,8 @@ $.widget("ui.menu", {
 	},
 
 	_hasScroll: function() {
-		return this.element.height() < this.element.attr( "scrollHeight" );
+		// TODO: just use .prop() when we drop support for jQuery <1.6
+		return this.element.height() < this.element[ $.fn.prop ? "prop" : "attr" ]( "scrollHeight" );
 	},
 
 	select: function( event ) {

@@ -79,10 +79,8 @@ $.effects.effect.bounce = function(o) {
 			upAnim = {};
 			upAnim[ ref ] = ( motion ? "-=" : "+=" ) + distance;
 
-			// add the finish callback to the last animation if we aren't hiding
 			el.animate( upAnim, speed, easing )
-				.animate( downAnim, speed, easing,
-					( ( i === times - 1 ) && !hide ) ? finish : undefined );
+				.animate( downAnim, speed, easing );
 
 			distance = hide ? distance * 2 : distance / 2;
 		}
@@ -92,24 +90,25 @@ $.effects.effect.bounce = function(o) {
 			upAnim = { opacity: 0 };
 			upAnim[ ref ] = ( motion ? "-=" : "+=" ) + distance;
 
-			el.animate( upAnim, speed, easing, function(){
-				el.hide();
-				finish();
-			});
+			el.animate( upAnim, speed, easing );
 		}
-
-		function finish() {
+		
+		el.queue( function( next ) {
+			if ( hide ) {
+				el.hide();
+			}
 			$.effects.restore( el, props );
 			$.effects.removeWrapper( el );
 			if ( o.complete ) {
 				o.complete.apply( el[ 0 ] );
 			}
-		}
+			next();
+		});
 
 		// inject all the animations we just queued to be first in line (after "inprogress")
 		if ( queuelen > 1) {
 			queue.splice.apply( queue,
-				[ 1, 0 ].concat( queue.splice( queuelen, anims ) ) );
+				[ 1, 0 ].concat( queue.splice( queuelen, anims + 1 ) ) );
 		}
 		next();
 

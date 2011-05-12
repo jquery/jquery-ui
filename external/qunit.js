@@ -1,4 +1,4 @@
-/*
+/**
  * QUnit - A JavaScript Unit Testing Framework
  * 
  * http://docs.jquery.com/QUnit
@@ -154,9 +154,9 @@ Test.prototype = {
 			// store result when possible
 			if ( QUnit.config.reorder && defined.sessionStorage ) {
 				if (bad) {
-					sessionStorage.setItem("qunit-" + this.module + "-" + this.testName, bad)
+					sessionStorage.setItem("qunit-" + this.module + "-" + this.testName, bad);
 				} else {
-					sessionStorage.removeItem("qunit-" + this.testName);
+					sessionStorage.removeItem("qunit-" + this.module + "-" + this.testName);
 				}
 			}
 
@@ -536,9 +536,9 @@ extend(QUnit, {
 	 */
 	reset: function() {
 		if ( window.jQuery ) {
-			jQuery( "#main, #qunit-fixture" ).html( config.fixture );
+			jQuery( "#qunit-fixture" ).html( config.fixture );
 		} else {
-			var main = id( 'main' ) || id( 'qunit-fixture' );
+			var main = id( 'qunit-fixture' );
 			if ( main ) {
 				main.innerHTML = config.fixture;
 			}
@@ -730,7 +730,7 @@ addEvent(window, "load", function() {
 		toolbar.appendChild( label );
 	}
 
-	var main = id('main') || id('qunit-fixture');
+	var main = id('qunit-fixture');
 	if ( main ) {
 		config.fixture = main.innerHTML;
 	}
@@ -776,6 +776,11 @@ function done() {
 
 	if ( tests ) {	
 		id( "qunit-testresult" ).innerHTML = html;
+	}
+
+	if ( typeof document !== "undefined" && document.title ) {
+		// TODO what are the unicode codes for these? as-is fails if qunit.js isn't served with the right mimetype/charset
+		document.title = (config.stats.bad ? "✖" : "✔") + " " + document.title;
 	}
 
 	QUnit.done( {
@@ -881,16 +886,14 @@ function checkPollution( name ) {
 	var old = config.pollution;
 	saveGlobal();
 	
-	var newGlobals = diff( old, config.pollution );
+	var newGlobals = diff( config.pollution, old );
 	if ( newGlobals.length > 0 ) {
 		ok( false, "Introduced global variable(s): " + newGlobals.join(", ") );
-		config.current.expected++;
 	}
 
-	var deletedGlobals = diff( config.pollution, old );
+	var deletedGlobals = diff( old, config.pollution );
 	if ( deletedGlobals.length > 0 ) {
 		ok( false, "Deleted global variable(s): " + deletedGlobals.join(", ") );
-		config.current.expected++;
 	}
 }
 

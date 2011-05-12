@@ -146,7 +146,7 @@ var colors = {
 /****************************** CLASS ANIMATIONS ******************************/
 /******************************************************************************/
 
-var classAnimationActions = [ 'add', 'remove', 'toggle' ],
+var classAnimationActions = [ "add", "remove", "toggle" ],
 	shorthandStyles = {
 		border: 1,
 		borderBottom: 1,
@@ -157,7 +157,18 @@ var classAnimationActions = [ 'add', 'remove', 'toggle' ],
 		borderWidth: 1,
 		margin: 1,
 		padding: 1
+	},
+	// prefix used for storing data on .data()
+	dataSpace = "ec.storage.";
+	
+$.each([ "borderLeftStyle", "borderRightStyle", "borderBottomStyle", "borderTopStyle" ], function(_, prop) {
+	$.fx.step[ prop ] = function( fx ) {
+		if ( fx.end !== "none" && !fx.setAttr || fx.pos === 1 && !fx.setAttr ) {
+			jQuery.style( fx.elem, prop, fx.end );
+			fx.setAttr = true;
+		}
 	};
+})
 
 function getElementStyles() {
 	var style = document.defaultView
@@ -173,55 +184,34 @@ function getElementStyles() {
 		len = style.length;
 		while ( len-- ) {
 			key = style[ len ];
-			if ( typeof style[ key ] == 'string' ) {
-				camelCase = key.replace( /\-(\w)/g, function( all, letter ) {
-					return letter.toUpperCase();
-				});
-				newStyle[ camelCase ] = style[ key ];
+			if ( typeof style[ key ] === "string" ) {
+				newStyle[ $.camelCase( key ) ] = style[ key ];
 			}
 		}
 	} else {
 		for ( key in style ) {
-			if ( typeof style[ key ] === 'string' ) {
+			if ( typeof style[ key ] === "string" ) {
 				newStyle[ key ] = style[ key ];
 			}
 		}
 	}
-	
+
 	return newStyle;
 }
 
-function filterStyles( styles ) {
-	var name, value;
-	for ( name in styles ) {
-		value = styles[ name ];
-		if (
-			// ignore null and undefined values
-			value == null ||
-			// ignore functions (when does this occur?)
-			$.isFunction( value ) ||
-			// shorthand styles that need to be expanded
-			name in shorthandStyles ||
-			// ignore scrollbars (break in IE)
-			( /scrollbar/ ).test( name ) ||
-
-			// only colors or values that can be converted to numbers
-			( !( /color/i ).test( name ) && isNaN( parseFloat( value ) ) )
-		) {
-			delete styles[ name ];
-		}
-	}
-	
-	return styles;
-}
 
 function styleDifference( oldStyle, newStyle ) {
-	var diff = { _: 0 }, // http://dev.jquery.com/ticket/5459
-		name;
+	var diff = {},
+		name, value;
 
 	for ( name in newStyle ) {
-		if ( oldStyle[ name ] != newStyle[ name ] ) {
-			diff[ name ] = newStyle[ name ];
+		value = newStyle[ name ];
+		if ( oldStyle[ name ] != value ) {
+			if ( !shorthandStyles[ name ] ) {
+				if ( $.fx.step[ name ] || !isNaN( parseFloat( value ) ) ) {
+					diff[ name ] = value;
+				}
+			}
 		}
 	}
 
@@ -229,49 +219,48 @@ function styleDifference( oldStyle, newStyle ) {
 }
 
 $.effects.animateClass = function( value, duration, easing, callback ) {
-	if ( $.isFunction( easing ) ) {
-		callback = easing;
-		easing = null;
-	}
+	var o = $.speed( duration, easing, callback );
 
-	return this.queue(function() {
-		var that = $( this ),
-			originalStyleAttr = that.attr( 'style' ) || ' ',
-			originalStyle = filterStyles( getElementStyles.call( this ) ),
+	return this.queue( function() {
+		var animated = $( this ),
+			baseClass = animated.attr( "class" ),
+			finalClass,
+			originalStyleAttr = animated.attr( "style" ) || ' ',
+			originalStyle = getElementStyles.call( this ),
 			newStyle,
-			className = that.attr( 'class' );
+			diff,
+			prop;
 
 		$.each( classAnimationActions, function(i, action) {
 			if ( value[ action ] ) {
-				that[ action + 'Class' ]( value[ action ] );
+				animated[ action + "Class" ]( value[ action ] );
 			}
 		});
-		newStyle = filterStyles( getElementStyles.call( this ) );
-		that.attr( 'class', className );
+		newStyle = getElementStyles.call( this );
+		finalClass = animated.attr( "class" );
+		animated.attr( "class", baseClass );
 
-		that.animate( styleDifference( originalStyle, newStyle ), {
-			queue: false,
-			duration: duration,
-			easing: easing,
-			complete: function() {
-				$.each( classAnimationActions, function( i, action ) {
-					if ( value[ action ] ) { 
-						that[ action + 'Class' ]( value[ action ] );
+		diff = styleDifference( originalStyle, newStyle );
+		animated
+			.animate( diff, {
+				duration: duration,
+				easing: o.easing,
+				queue: false,
+				complete: function() {
+					animated.attr( "class", finalClass );
+
+					if ( typeof animated.attr( 'style' ) == 'object' ) {
+						animated.attr( 'style' ).cssText = '';
+						animated.attr( 'style' ).cssText = originalStyleAttr;
+					} else {
+						animated.attr( 'style', originalStyleAttr );
 					}
-				});
-				// work around bug in IE by clearing the cssText before setting it
-				if ( typeof that.attr( 'style' ) == 'object' ) {
-					that.attr( 'style' ).cssText = '';
-					that.attr( 'style' ).cssText = originalStyleAttr;
-				} else {
-					that.attr( 'style', originalStyleAttr );
+
+					// this is guarnteed to be there if you use jQuery.speed()
+					// it also handles dequeuing the next anim...
+					o.complete.call( this );
 				}
-				if ( callback ) { 
-					callback.apply( this, arguments );
-				}
-				$.dequeue( this );
-			}
-		});
+			});
 	});
 };
 
@@ -300,7 +289,7 @@ $.fn.extend({
 				return $.effects.animateClass.apply( this, [( force ? { add:classNames } : { remove:classNames }), speed, easing, callback ]);
 			}
 		} else {
-			// without switch parameter;
+			// without force parameter;
 			return $.effects.animateClass.apply( this, [{ toggle: classNames }, force, speed, easing ]);
 		}
 	},
@@ -326,7 +315,7 @@ $.extend( $.effects, {
 	save: function( element, set ) {
 		for( var i=0; i < set.length; i++ ) {
 			if ( set[ i ] !== null ) {
-				element.data( "ec.storage." + set[ i ], element[ 0 ].style[ set[ i ] ] );
+				element.data( dataSpace + set[ i ], element[ 0 ].style[ set[ i ] ] );
 			}
 		}
 	},
@@ -335,7 +324,7 @@ $.extend( $.effects, {
 	restore: function( element, set ) {
 		for( var i=0; i < set.length; i++ ) {
 			if ( set[ i ] !== null ) {
-				element.css( set[ i ], element.data( "ec.storage." + set[ i ] ) );
+				element.css( set[ i ], element.data( dataSpace + set[ i ] ) );
 			}
 		}
 	},
