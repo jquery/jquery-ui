@@ -384,7 +384,7 @@ test( "within: collision: fit, with offset", function() {
 	}, { top: addTop + 0, left: addLeft + 0 }, "left top, negative offset" );
 });
 
-test( "within: collision: fit, window scrolled", function() {
+test( "within: collision: fit, within scrolled", function() {
 	if ( scrollTopSupport() ) {
 		$("#within-container").css({"width": "1000px", "height": "800px", "top": "20px", "left": "20px", "position": "relative"});
 		
@@ -396,15 +396,13 @@ test( "within: collision: fit, window scrolled", function() {
 		collisionTest({
 			collision: "fit",
 			at: "left-100 top-100"
-		}, { top: addTop + 300, left: addLeft + 150 }, "top left" );
+		}, { top: addTop, left: addLeft }, "top left" );
 		collisionTest2({
 			collision: "fit",
 			at: "right+100 bottom+100"
-		}, { top: addTop + 300 + win.height() + 10, left: addLeft + 150 + win.width() + 10 }, "right bottom" );
+		}, { top: addTop + win.height() - 10, left: addLeft + win.width() - 10 }, "right bottom" );
 		win.scrollTop( 0 ).scrollLeft( 0 );
-
 	}
-
 });
 		
 test( "within: collision: flip, no offset", function() {
