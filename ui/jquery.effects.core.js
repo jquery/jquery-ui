@@ -261,7 +261,7 @@ $.effects.animateClass = function( value, duration, easing, callback ) {
 				dfd = $.Deferred();
 
 			this.el.animate( this.diff, {
-				duration: duration,
+				duration: o.duration,
 				easing: o.easing,
 				queue: false,
 				complete: function() {
