@@ -170,6 +170,18 @@ $.widget( "ui.autocomplete", {
 					self._change( event );
 				}, 150 );
 			});
+			
+		// dragging or resizing the appendTo element or any of its descendants should
+    // cause the menu's position to be recalculated
+    $( this.options.appendTo || "body", doc ).bind( "drag.autocomplete, resize.autocomplete", function( event ) {
+      if ( self.menu.element.is(":hidden") ) return;
+      setTimeout( function() {
+        self.menu.element.position( $.extend({
+          of: self.element
+        }, self.options.position )).zIndex( self.element.zIndex() + 1 );
+      }, 0 );
+    });
+
 		this._initSource();
 		this.response = function() {
 			return self._response.apply( self, arguments );
