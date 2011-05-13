@@ -19,6 +19,9 @@
             height:100%;
             width:100%;
             margin:0;
+            /* force scroll bar*/
+            min-height:800px;
+            min-width:800px;
         }
         .demo-description {
             text-align:center;
@@ -76,7 +79,7 @@
                     collision: $( "#collision_horizontal" ).val() + " " + $( "#collision_vertical" ).val()
                 });
             }
-            $( ".demo" ).append("<div style='width:5000px;height:5000px;' />").css("overflow","auto").scrollTop( 500 ).scrollLeft( 500 );
+            $( ".demo" ).append("<div style='width:5000px;height:5000px;' />").css("overflow","auto");
 
             $( ".positionable" ).css( "opacity", 0.5 );
 
@@ -91,8 +94,9 @@
                     // reset offset before calculating it
                     $( "#offset" ).val( "0" );
                     position(function( result ) {
-                        $( "#offset" ).val( "" + ( ui.offset.left - result.left ) +
-                            " " + ( ui.offset.top - result.top ) );
+                    	var demo = $( ".demo" );
+                        $( "#offset" ).val( "" + ( ui.offset.left - result.left - demo.offset().left + demo.scrollLeft() ) +
+                            " " + ( ui.offset.top - result.top - demo.offset().top + demo.scrollTop() ) );
                         position();
                     });
                 }
