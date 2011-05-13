@@ -113,4 +113,17 @@ test("#6966: Escape key closes all dialogs, not the top one", function(){
     d1.remove();
 });
 
+test("#5916: Dialog: shrinks on drag in IE8 in standards mode", function(){
+    var d = $('<div id="dialog" title="Basic dialog"><br><br><br><br><br><br><br></div>').dialog({
+        height:400
+    });
+	var dialog = d.parent();
+    dialog.css("padding", "0.22em").show(); // set the padding to a value that rounds up
+    var beforeDrag = dialog.height();
+	dialog.find(".ui-dialog-titlebar").simulate("drag", {dx: 50, dy: -50});
+    var afterDrag = dialog.height();
+    equals(afterDrag, beforeDrag);
+    d.remove();
+});
+
 })(jQuery);
