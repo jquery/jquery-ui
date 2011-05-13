@@ -112,15 +112,17 @@ $.widget( "ui.button", {
 
 		if ( toggleButton ) {
 			this.element.bind( "change.button", function() {
-				if(clickDragged) {
-					return false;
+				if( clickDragged ) {
+					return;
 				}
 				self.refresh();
 			});
+			//Added event handlers to monitor mouse position during a click. If mouse moves between mousedown and mouseup (drag) set clickDragged flag
+			//Prevents issue where button state changes but checkbox/radio checked state does not in Firefox (see ticket #6970)
 			this.buttonElement
 				.bind( "mousedown.button", function( event ) {
 					if ( options.disabled ) {
-						return false;
+						return;
 					}
 					clickDragged = false;
 					startXPos = event.pageX;
@@ -128,9 +130,9 @@ $.widget( "ui.button", {
 				})
 				.bind( "mouseup.button", function( event ) {
 					if ( options.disabled ) {
-						return false;
+						return;
 					}
-					if( startXPos != event.pageX || startYPos != event.pageY) {
+					if( startXPos !== event.pageX || startYPos !== event.pageY ) {
 						clickDragged = true;
 					}
 			});
@@ -138,7 +140,7 @@ $.widget( "ui.button", {
 
 		if ( this.type === "checkbox" ) {
 			this.buttonElement.bind( "click.button", function() {
-				if ( options.disabled || clickDragged) {
+				if ( options.disabled || clickDragged ) {
 					return false;
 				}
 				$( this ).toggleClass( "ui-state-active" );
