@@ -186,11 +186,12 @@ $.ui.position = {
 	fit: {
 		left: function( position, data ) {
 			var within = data.within,
+				win = $( window ),
 				isWindow = $.isWindow( data.within[0] ),
 				withinOffset = isWindow ? 0 : within.offset().left,
 				outerWidth = isWindow ? within.width() : within.outerWidth(),
-				overLeft = within.scrollLeft() - data.collisionPosition.left + withinOffset,
-				overRight = data.collisionPosition.left + data.collisionWidth - outerWidth - within.scrollLeft() - withinOffset;
+				overLeft = - data.collisionPosition.left + withinOffset,
+				overRight = data.collisionPosition.left + data.collisionWidth - outerWidth - withinOffset;
 
 			// element is wider than window or too far left -> align with left edge
 			if ( data.collisionWidth > outerWidth || overLeft > 0 ) {
@@ -205,11 +206,12 @@ $.ui.position = {
 		},
 		top: function( position, data ) {
 			var within = data.within,
+				win = $( window ),
 				isWindow = $.isWindow( data.within[0] ),
 				withinOffset = isWindow ? 0 : within.offset().top,
 				outerHeight = isWindow ? within.height() : within.outerHeight(),
-				overTop = within.scrollTop() - data.collisionPosition.top + withinOffset,
-				overBottom = data.collisionPosition.top + data.collisionHeight - outerHeight - within.scrollTop() - withinOffset;
+				overTop = - data.collisionPosition.top + withinOffset,
+				overBottom = data.collisionPosition.top + data.collisionHeight - outerHeight - withinOffset;
 
 			// element is taller than window or too far up -> align with top edge
 			if ( data.collisionHeight > outerHeight || overTop > 0 ) {
@@ -230,11 +232,12 @@ $.ui.position = {
 			}
 
 			var within = data.within,
+				win = $( window ),
 				isWindow = $.isWindow( data.within[0] ),
 				withinOffset = isWindow ? 0 : within.offset().left,
 				outerWidth = isWindow ? within.width() : within.outerWidth(),
 				overLeft = data.collisionPosition.left - withinOffset,
-				overRight = data.collisionPosition.left + data.collisionWidth - outerWidth - within.scrollLeft() - withinOffset,
+				overRight = data.collisionPosition.left + data.collisionWidth - outerWidth - withinOffset,
 				left = data.my[ 0 ] === "left",
 				myOffset = data.my[ 0 ] === "left" ?
 					-data.elemWidth :
@@ -254,11 +257,12 @@ $.ui.position = {
 				return;
 			}
 			var within = data.within,
+				win = $( window ),
 				isWindow = $.isWindow( data.within[0] ),
 				withinOffset = isWindow ? 0 : within.offset().top,
 				outerHeight = isWindow ? within.height() : within.outerHeight(),
 				overTop = data.collisionPosition.top - withinOffset,
-				overBottom = data.collisionPosition.top + data.collisionHeight - outerHeight - within.scrollTop() - withinOffset,
+				overBottom = data.collisionPosition.top + data.collisionHeight - outerHeight - withinOffset,
 				top = data.my[ 1 ] === "top",
 				myOffset = top ?
 					-data.elemHeight :
@@ -269,6 +273,7 @@ $.ui.position = {
 					data.targetHeight :
 					-data.targetHeight,
 				offset = -2 * data.offset[ 1 ];
+				console.log(overBottom);
 			if ( overTop < 0 || overBottom > 0) {
 				position.top += myOffset + atOffset + offset;
 			}
