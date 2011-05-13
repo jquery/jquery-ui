@@ -281,10 +281,10 @@ $.widget("ui.dialog", {
 			options = self.options,
 			uiDialog = self.uiDialog;
 
-		self.overlay = options.modal ? new $.ui.dialog.overlay( self ) : null;
 		self._size();
 		self._position( options.position );
 		uiDialog.show( options.show );
+		self.overlay = options.modal ? new $.ui.dialog.overlay( self ) : null;
 		self.moveToTop( true );
 
 		// prevent tabbing out of modal dialogs
@@ -755,8 +755,8 @@ $.extend( $.ui.dialog.overlay, {
 	height: function() {
 		var scrollHeight,
 			offsetHeight;
-		// handle IE 6
-		if ( $.browser.msie && $.browser.version < 7 ) {
+		// handle IE
+		if ( $.browser.msie ) {
 			scrollHeight = Math.max(
 				document.documentElement.scrollHeight,
 				document.body.scrollHeight
