@@ -46,7 +46,7 @@ button.ui-button::-moz-focus-inner { border: 0; padding: 0; } /* reset extra pad
 	input.ui-button { padding: .43em .71em; } /* reset extra padding in Firefox */
 }
 a.ui-button-text-only .ui-button-text { padding: .46em 1.1em .56em !ie; } /* IE<8 needs some extra love to style anchors correctly */
-input.ui-button { margin-right: .34em !ie; padding-top:.47em\0/; } /* IE6,7 need help with margins and IE8 doesnt treat our em padding correctly */
+input.ui-button { margin-right: .34em !ie; padding-top:.47em \0/; } /* IE6,7 need help with margins and IE8 doesnt treat our em padding correctly */
 @media all and (min-width:0) {
-	input.ui-button { padding-top:.45em\0/; } /* IE9 is also a bit odd */
+	input.ui-button { padding-top:.45em \0/; } /* IE9 is also a bit odd */
 }
