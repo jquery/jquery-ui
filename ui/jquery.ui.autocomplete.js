@@ -47,6 +47,7 @@ $.widget( "ui.autocomplete", {
 	_create: function() {
 		var self = this,
 			doc = this.element[ 0 ].ownerDocument,
+	    appendToEl = $( this.options.appendTo || "body", doc ),
 			suppressKeyPress;
 
 		this.valueMethod = this.element[ this.element.is( "input" ) ? "val" : "text" ];
@@ -170,13 +171,25 @@ $.widget( "ui.autocomplete", {
 					self._change( event );
 				}, 150 );
 			});
+    
+		// dragging or resizing the appendTo element or any of its descendants should
+    // cause the menu's position to be recalculated
+    appendToEl.bind( "drag.autocomplete, resize.autocomplete", function( event ) {
+      if ( self.menu.element.is(":hidden") ) return;
+      setTimeout( function() {
+        self.menu.element.position( $.extend({
+          of: self.element
+        }, self.options.position )).zIndex( self.element.zIndex() + 1 );
+      }, 0 );
+    });
+
 		this._initSource();
 		this.response = function() {
 			return self._response.apply( self, arguments );
 		};
 		this.menu = $( "<ul></ul>" )
 			.addClass( "ui-autocomplete" )
-			.appendTo( $( this.options.appendTo || "body", doc )[0] )
+			.appendTo( appendToEl )
 			// prevent the close-on-blur in case of a "slow" click on the menu (long mousedown)
 			.mousedown(function( event ) {
 				// clicking on the scrollbar causes focus to shift to the body
@@ -367,7 +380,7 @@ $.widget( "ui.autocomplete", {
 			this._trigger( "close", event );
 		}
 	},
-	
+
 	_change: function( event ) {
 		if ( this.previous !== this._value() ) {
 			this._trigger( "change", event, { item: this.selectedItem } );
