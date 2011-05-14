@@ -20,8 +20,8 @@ $.effects = {
 /******************************************************************************/
 
 // override the animation for color styles
-$.each(['backgroundColor', 'borderBottomColor', 'borderLeftColor',
-	'borderRightColor', 'borderTopColor', 'borderColor', 'color', 'outlineColor'],
+$.each(["backgroundColor", "borderBottomColor", "borderLeftColor",
+	"borderRightColor", "borderTopColor", "borderColor", "color", "outlineColor"],
 function(i, attr) {
 	$.fx.step[attr] = function(fx) {
 		if (!fx.colorInit) {
@@ -30,10 +30,10 @@ function(i, attr) {
 			fx.colorInit = true;
 		}
 
-		fx.elem.style[attr] = 'rgb(' +
-			Math.max(Math.min(parseInt((fx.pos * (fx.end[0] - fx.start[0])) + fx.start[0], 10), 255), 0) + ',' +
-			Math.max(Math.min(parseInt((fx.pos * (fx.end[1] - fx.start[1])) + fx.start[1], 10), 255), 0) + ',' +
-			Math.max(Math.min(parseInt((fx.pos * (fx.end[2] - fx.start[2])) + fx.start[2], 10), 255), 0) + ')';
+		fx.elem.style[attr] = "rgb(" +
+			Math.max(Math.min(parseInt((fx.pos * (fx.end[0] - fx.start[0])) + fx.start[0], 10), 255), 0) + "," +
+			Math.max(Math.min(parseInt((fx.pos * (fx.end[1] - fx.start[1])) + fx.start[1], 10), 255), 0) + "," +
+			Math.max(Math.min(parseInt((fx.pos * (fx.end[2] - fx.start[2])) + fx.start[2], 10), 255), 0) + ")";
 	};
 });
 
@@ -46,7 +46,7 @@ function getRGB(color) {
 		var result;
 
 		// Check if we're already dealing with an array of colors
-		if ( color && color.constructor == Array && color.length == 3 )
+		if ( color && color.constructor === Array && color.length === 3 )
 				return color;
 
 		// Look for rgb(num,num,num)
@@ -67,7 +67,7 @@ function getRGB(color) {
 
 		// Look for rgba(0, 0, 0, 0) == transparent in Safari 3
 		if (result = /rgba\(0, 0, 0, 0\)/.exec(color))
-				return colors['transparent'];
+				return colors["transparent"];
 
 		// Otherwise, we're most likely dealing with a named color
 		return colors[$.trim(color).toLowerCase()];
@@ -80,7 +80,7 @@ function getColor(elem, attr) {
 				color = $.curCSS(elem, attr);
 
 				// Keep going until we find an element that has color, or we hit the body
-				if ( color != '' && color != 'transparent' || $.nodeName(elem, "body") )
+				if ( color != "" && color !== "transparent" || $.nodeName(elem, "body") )
 						break;
 
 				attr = "backgroundColor";
@@ -160,7 +160,7 @@ var classAnimationActions = [ "add", "remove", "toggle" ],
 	},
 	// prefix used for storing data on .data()
 	dataSpace = "ec.storage.";
-	
+
 $.each([ "borderLeftStyle", "borderRightStyle", "borderBottomStyle", "borderTopStyle" ], function(_, prop) {
 	$.fx.step[ prop ] = function( fx ) {
 		if ( fx.end !== "none" && !fx.setAttr || fx.pos === 1 && !fx.setAttr ) {
@@ -168,7 +168,7 @@ $.each([ "borderLeftStyle", "borderRightStyle", "borderBottomStyle", "borderTopS
 			fx.setAttr = true;
 		}
 	};
-})
+});
 
 function getElementStyles() {
 	var style = document.defaultView
@@ -225,63 +225,93 @@ $.effects.animateClass = function( value, duration, easing, callback ) {
 		var animated = $( this ),
 			baseClass = animated.attr( "class" ),
 			finalClass,
-			originalStyleAttr = animated.attr( "style" ) || ' ',
-			originalStyle = getElementStyles.call( this ),
-			newStyle,
-			diff,
-			prop;
+			allAnimations = o.children ? animated.find( "*" ).andSelf() : animated;
 
+		// map the animated objects to store the original styles.
+		allAnimations = allAnimations.map(function() {
+			var el = $( this );
+			return {
+				el: el,
+				originalStyleAttr: el.attr( "style" ) || " ",
+				start: getElementStyles.call( this )
+			};
+		});
+
+		// apply class change
 		$.each( classAnimationActions, function(i, action) {
 			if ( value[ action ] ) {
 				animated[ action + "Class" ]( value[ action ] );
 			}
 		});
-		newStyle = getElementStyles.call( this );
 		finalClass = animated.attr( "class" );
+
+		// map all animated objects again - calculate new styles and diff
+		allAnimations = allAnimations.map(function() {
+			this.end = getElementStyles.call( this.el[ 0 ] );
+			this.diff = styleDifference( this.start, this.end );
+			return this;
+		});
+
+		// apply original class
 		animated.attr( "class", baseClass );
 
-		diff = styleDifference( originalStyle, newStyle );
-		animated
-			.animate( diff, {
-				duration: duration,
+		// map all animated objects again - this time collecting a promise
+		allAnimations = allAnimations.map(function() {
+			var styleInfo = this,
+				dfd = $.Deferred();
+
+			this.el.animate( this.diff, {
+				duration: o.duration,
 				easing: o.easing,
 				queue: false,
 				complete: function() {
-					animated.attr( "class", finalClass );
-
-					if ( typeof animated.attr( 'style' ) == 'object' ) {
-						animated.attr( 'style' ).cssText = '';
-						animated.attr( 'style' ).cssText = originalStyleAttr;
-					} else {
-						animated.attr( 'style', originalStyleAttr );
-					}
-
-					// this is guarnteed to be there if you use jQuery.speed()
-					// it also handles dequeuing the next anim...
-					o.complete.call( this );
+					dfd.resolve( styleInfo );
 				}
 			});
+			return dfd.promise();
+		});
+
+		// once all animations have completed:
+		$.when.apply( $, allAnimations.get() ).done(function() {
+
+			// set the final class
+			animated.attr( "class", finalClass );
+
+			// for each animated element
+			$.each( arguments, function() {
+				if ( typeof this.el.attr( "style" ) === "object" ) {
+					this.el.attr( "style" ).cssText = "";
+					this.el.attr( "style" ).cssText = this.originalStyleAttr;
+				} else {
+					this.el.attr( "style", this.originalStyleAttr );
+				}
+			});
+
+			// this is guarnteed to be there if you use jQuery.speed()
+			// it also handles dequeuing the next anim...
+			o.complete.call( animated[ 0 ] );
+		});
 	});
 };
 
 $.fn.extend({
 	_addClass: $.fn.addClass,
 	addClass: function( classNames, speed, easing, callback ) {
-		return speed ? 
+		return speed ?
 			$.effects.animateClass.apply( this, [{ add: classNames }, speed, easing, callback ]) :
 			this._addClass(classNames);
 	},
 
 	_removeClass: $.fn.removeClass,
 	removeClass: function( classNames, speed, easing, callback ) {
-		return speed ? 
+		return speed ?
 			$.effects.animateClass.apply( this, [{ remove: classNames }, speed, easing, callback ]) :
 			this._removeClass(classNames);
 	},
 
 	_toggleClass: $.fn.toggleClass,
 	toggleClass: function( classNames, force, speed, easing, callback ) {
-		if ( typeof force == "boolean" || force === undefined ) {
+		if ( typeof force === "boolean" || force === undefined ) {
 			if ( !speed ) {
 				// without speed parameter;
 				return this._toggleClass( classNames, force );
@@ -295,9 +325,9 @@ $.fn.extend({
 	},
 
 	switchClass: function( remove, add, speed, easing, callback) {
-		return $.effects.animateClass.apply( this, [{ 
-				add: add, 
-				remove: remove 
+		return $.effects.animateClass.apply( this, [{
+				add: add,
+				remove: remove
 			}, speed, easing, callback ]);
 	}
 });
@@ -330,26 +360,26 @@ $.extend( $.effects, {
 	},
 
 	setMode: function( el, mode ) {
-		if (mode == 'toggle') {
-			mode = el.is( ':hidden' ) ? 'show' : 'hide'; 
+		if (mode === "toggle") {
+			mode = el.is( ":hidden" ) ? "show" : "hide";
 		}
 		return mode;
 	},
 
 	// Translates a [top,left] array into a baseline value
 	// this should be a little more flexible in the future to handle a string & hash
-	getBaseline: function( origin, original ) { 
+	getBaseline: function( origin, original ) {
 		var y, x;
 		switch ( origin[ 0 ] ) {
-			case 'top': y = 0; break;
-			case 'middle': y = 0.5; break;
-			case 'bottom': y = 1; break;
+			case "top": y = 0; break;
+			case "middle": y = 0.5; break;
+			case "bottom": y = 1; break;
 			default: y = origin[ 0 ] / original.height;
 		};
 		switch ( origin[ 1 ] ) {
-			case 'left': x = 0; break;
-			case 'center': x = 0.5; break;
-			case 'right': x = 1; break;
+			case "left": x = 0; break;
+			case "center": x = 0.5; break;
+			case "right": x = 1; break;
 			default: x = origin[ 1 ] / original.width;
 		};
 		return {
@@ -362,7 +392,7 @@ $.extend( $.effects, {
 	createWrapper: function( element ) {
 
 		// if the element is already wrapped, return it
-		if ( element.parent().is( '.ui-effects-wrapper' )) {
+		if ( element.parent().is( ".ui-effects-wrapper" )) {
 			return element.parent();
 		}
 
@@ -370,14 +400,14 @@ $.extend( $.effects, {
 		var props = {
 				width: element.outerWidth(true),
 				height: element.outerHeight(true),
-				'float': element.css( 'float' )
+				"float": element.css( "float" )
 			},
-			wrapper = $( '<div></div>' )
-				.addClass( 'ui-effects-wrapper' )
+			wrapper = $( "<div></div>" )
+				.addClass( "ui-effects-wrapper" )
 				.css({
-					fontSize: '100%',
-					background: 'transparent',
-					border: 'none',
+					fontSize: "100%",
+					background: "transparent",
+					border: "none",
 					margin: 0,
 					padding: 0
 				});
@@ -386,26 +416,26 @@ $.extend( $.effects, {
 		wrapper = element.parent(); //Hotfix for jQuery 1.4 since some change in wrap() seems to actually loose the reference to the wrapped element
 
 		// transfer positioning properties to the wrapper
-		if ( element.css( 'position' ) == 'static' ) {
-			wrapper.css({ position: 'relative' });
-			element.css({ position: 'relative' });
+		if ( element.css( "position" ) === "static" ) {
+			wrapper.css({ position: "relative" });
+			element.css({ position: "relative" });
 		} else {
 			$.extend( props, {
-				position: element.css( 'position' ),
-				zIndex: element.css( 'z-index' )
+				position: element.css( "position" ),
+				zIndex: element.css( "z-index" )
 			});
-			$.each([ 'top', 'left', 'bottom', 'right' ], function(i, pos) {
+			$.each([ "top", "left", "bottom", "right" ], function(i, pos) {
 				props[ pos ] = element.css( pos );
 				if ( isNaN( parseInt( props[ pos ], 10 ) ) ) {
-					props[ pos ] = 'auto';
+					props[ pos ] = "auto";
 				}
 			});
 			element.css({
-				position: 'relative',
+				position: "relative",
 				top: 0,
 				left: 0,
-				right: 'auto',
-				bottom: 'auto'
+				right: "auto",
+				bottom: "auto"
 			});
 		}
 
@@ -413,7 +443,7 @@ $.extend( $.effects, {
 	},
 
 	removeWrapper: function( element ) {
-		if ( element.parent().is( '.ui-effects-wrapper' ) )
+		if ( element.parent().is( ".ui-effects-wrapper" ) )
 			return element.parent().replaceWith( element );
 		return element;
 	},
@@ -452,7 +482,7 @@ function _normalizeArguments( effect, options, speed, callback ) {
 	}
 
 	// catch (effect, speed, ?)
-	if ( $.type( options ) == 'number' || $.fx.speeds[ options ]) {
+	if ( $.type( options ) === "number" || $.fx.speeds[ options ]) {
 		callback = speed;
 		speed = options;
 		options = {};
@@ -468,9 +498,9 @@ function _normalizeArguments( effect, options, speed, callback ) {
 	if ( options ) {
 		$.extend( effect, options );
 	}
-	
+
 	speed = speed || options.duration;
-	effect.duration = $.fx.off ? 0 : typeof speed == 'number'
+	effect.duration = $.fx.off ? 0 : typeof speed === "number"
 		? speed : speed in $.fx.speeds ? $.fx.speeds[ speed ] : $.fx.speeds._default;
 
 	effect.complete = callback || options.complete;
@@ -483,7 +513,7 @@ function standardSpeed( speed ) {
 	if ( !speed || typeof speed === "number" || $.fx.speeds[ speed ] ) {
 		return true;
 	}
-	
+
 	// invalid strings - treat as "normal" speed
 	if ( typeof speed === "string" && !$.effects.effect[ speed ] ) {
 		// TODO: remove in 2.0 (#7115)
@@ -492,7 +522,7 @@ function standardSpeed( speed ) {
 		}
 		return true;
 	}
-	
+
 	return false;
 }
 
@@ -538,7 +568,7 @@ $.fn.extend({
 			return this._show.apply( this, arguments );
 		} else {
 			var args = _normalizeArguments.apply( this, arguments );
-			args.mode = 'show';
+			args.mode = "show";
 			return this.effect.call( this, args );
 		}
 	},
@@ -549,7 +579,7 @@ $.fn.extend({
 			return this._hide.apply( this, arguments );
 		} else {
 			var args = _normalizeArguments.apply( this, arguments );
-			args.mode = 'hide';
+			args.mode = "hide";
 			return this.effect.call( this, args );
 		}
 	},
@@ -561,7 +591,7 @@ $.fn.extend({
 			return this.__toggle.apply( this, arguments );
 		} else {
 			var args = _normalizeArguments.apply( this, arguments );
-			args.mode = 'toggle';
+			args.mode = "toggle";
 			return this.effect.call( this, args );
 		}
 	},
@@ -571,7 +601,7 @@ $.fn.extend({
 		var style = this.css( key ),
 			val = [];
 
-		$.each( [ 'em', 'px', '%', 'pt' ], function( i, unit ) {
+		$.each( [ "em", "px", "%", "pt" ], function( i, unit ) {
 			if ( style.indexOf( unit ) > 0 )
 				val = [ parseFloat( style ), unit ];
 		});
@@ -626,7 +656,7 @@ $.fn.extend({
 $.easing.jswing = $.easing.swing;
 
 $.extend( $.easing, {
-	def: 'easeOutQuad',
+	def: "easeOutQuad",
 	swing: function ( x, t, b, c, d ) {
 		return $.easing[ $.easing.def ]( x, t, b, c, d );
 	},
@@ -707,9 +737,9 @@ $.extend( $.easing, {
 			a = c;
 		if ( t == 0 ) return b;
 		if ( ( t /= d ) == 1 ) return b+c;
-		if ( a < Math.abs( c ) ) { 
-			a = c; 
-			s = p / 4; 
+		if ( a < Math.abs( c ) ) {
+			a = c;
+			s = p / 4;
 		} else {
 			s = p / ( 2 * Math.PI ) * Math.asin( c / a );
 		}
@@ -722,8 +752,8 @@ $.extend( $.easing, {
 		if ( t == 0 ) return b;
 		if ( ( t /= d ) == 1 ) return b+c;
 		if ( a < Math.abs( c ) ) {
-			a = c; 
-			s = p / 4; 
+			a = c;
+			s = p / 4;
 		} else {
 			s = p / ( 2 * Math.PI ) * Math.asin( c / a );
 		}
@@ -735,7 +765,7 @@ $.extend( $.easing, {
 			a = c;
 		if ( t == 0 ) return b;
 		if ( ( t /= d / 2 ) == 2 ) return b+c;
-		if ( a < Math.abs( c ) ) { 
+		if ( a < Math.abs( c ) ) {
 			a = c;
 			s = p / 4;
 		} else {
