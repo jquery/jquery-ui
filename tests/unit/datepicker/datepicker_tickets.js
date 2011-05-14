@@ -24,4 +24,9 @@ test('beforeShowDay-getDate', function() {
 	inp.datepicker('hide');
 });
 
+test('Ticket 6827: formatDate day of year calculation is wrong during day lights savings time', function(){
+    var time = $.datepicker.formatDate("oo", new Date("2010/03/30 12:00:00 CDT")); 
+    equals(time, "089");
+});
+
 })(jQuery);
