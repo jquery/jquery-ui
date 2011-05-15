@@ -2,29 +2,29 @@
 <html>
 <head>
 	<title>Grid: Type</title>
-	<meta charset=utf-8 />
+	<meta charset="utf-8">
 	<link rel="stylesheet" href="../themes/base/jquery.ui.all.css" title="ui-theme" />
 	<script src="../jquery-1.5.1.js"></script>
 	<script src="../external/jquery.global.js"></script>
 	<script src="../external/jquery.global.de-DE.js"></script>
 	<script src="../external/jquery.global.ja-JP.js"></script>
-	<script type="text/javascript">
+	<script>
 	$(function() {
 		var table = $( "table" );
 			thead = table.children( "thead" ),
 			tbody = table.children( "tbody" );
-		
+
 		thead.find( "th" ).each(function() {
 			var index = this.cellIndex,
 				type = "string";
-			
+
 			tbody.children().each( function() {
 				var cell = $( this.cells[ index ] ).text();
 				if ( $.global.parseDate( cell ) ) {
 					type = "date";
 				} else if ( $.global.parseFloat( cell ) ) {
 					type = "number"
-					if ( cell.indexOf( $.global.cultures["default"].numberFormat.currency.symbol ) > -1) {
+					if ( cell.indexOf( $.global.cultures["default"].numberFormat.currency.symbol ) > -1 ) {
 						type = "currency";
 					}
 				}
@@ -37,18 +37,16 @@
 	});
 	</script>
 	<style>
-		body { font-size:62.5%; }
-		table {
-			border-collapse: collapse;
-		}
-		th, td {
-			padding: 0.5em;
-			border: 1px solid black;
-		}
+	table {
+		border-collapse: collapse;
+	}
+	th, td {
+		padding: 0.5em;
+		border: 1px solid black;
+	}
 	</style>
 </head>
 <body>
-
 	<table>
 		<thead>
 			<tr>
@@ -104,6 +102,5 @@
 			</tr>
 		</tbody>
 	</table>
-
 </body>
 </html>
