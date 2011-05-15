@@ -86,6 +86,21 @@
 		}
 
 	}
+	
+	//Intern function for setting up standard options
+	function splitOptions( el, defaults, o ) {
+		var opt = $.extend( defaults, o );
+		//Reverse it if it is hidden and mode is toggle
+		if ( el.is( ":hidden" ) && opt.mode === "toggle" ) {
+			opt.reverse = !opt.reverse;
+		}
+
+		//Sets mode for toggle
+		opt.mode = $.effects.setMode( el, opt.mode );
+		opt.show = opt.mode === "show";
+		
+		return opt;
+	}
 
 	/*
 	 * Options
@@ -174,8 +189,9 @@
 		 */
 
 		return this.queue( function( next ) {
-
-			var opt = $.extend( {
+	
+			var el = $( this ),
+				opt = splitOptions( el, {
 						direction: "bottom",
 						distance: 1,
 						reverse: false,
@@ -183,21 +199,7 @@
 						interval: false,
 						fade: true,
 						crop: false
-					},
-					o
-				),
-				el = $( this );
-
-
-			//Reverse it if it is hidden and mode is toggle
-			if ( el.is( ":hidden" ) && opt.mode === "toggle" ) {
-				opt.reverse = !opt.reverse;
-			}
-
-			//Sets mode for toggle
-			opt.mode = $.effects.setMode( el, opt.mode );
-
-			opt.show = opt.mode === "show";
+					}, o );
 
 			function animate( width, height, interval, duration, row, column, documentCoords, parentCoords, callback ) {	    		
 				var random = opt.random ? Math.abs( opt.random ) : 0, 
@@ -281,7 +283,8 @@
 
 		return this.queue( function( next ) {
 
-			var opt = $.extend( {
+			var el = $( this ),
+				opt = splitOptions ( el, {
 						direction: "bottom",
 						distance: 1,
 						reverse: false,
@@ -289,21 +292,7 @@
 						interval: 0,
 						fade: true,
 						crop: false
-					},
-					o
-				),
-				el = $( this );
-			
-
-			//Reverse it if it is hidden and mode is toggle
-			if ( el.is( ":hidden" ) && opt.mode === "toggle" ) {
-				opt.reverse = !opt.reverse;
-			}
-
-			//Sets mode for toggle
-			opt.mode = $.effects.setMode( el, opt.mode );
-			
-			opt.show = opt.mode === "show";
+					}, o );
 
 			function animate( width, height, interval, duration, row, column, documentCoords, parentCoords, callback ) {
 				var random = opt.random ? Math.abs( opt.random ) : 0, 
@@ -384,27 +373,14 @@
 		 */
 
 		return this.queue( function( next ) {
-
-			var opt = $.extend( {
+			var el = $( this ),
+				opt = splitOptions( el, {
 						direction: "bottom",
 						distance: 1,						
 						reverse: false,
 						random: false,
 						interval: false
-					},
-					o
-				),
-				el = $( this );
-
-			//Reverse it if it is hidden and mode is toggle
-			if ( el.is( ":hidden" ) && opt.mode === "toggle" ) {
-				opt.reverse = !opt.reverse;
-			}
-
-			//Sets mode for toggle
-			opt.mode = $.effects.setMode( el, opt.mode );
-
-			opt.show = opt.mode === "show";
+					}, o );
 
 			function animate( width, height, interval, duration, row, column, documentCoords, parentCoords, callback ) {
 				var random = opt.random ? Math.abs( opt.random ) : 0, 
@@ -446,8 +422,8 @@
 		 */
 		
 		return this.queue( function( next ) {
-
-			var opt = $.extend( {
+			var el = $( this ),
+				opt = splitOptions( el, {
 						direction: "bottom",
 						distance: 1,
 						reverse: false,
@@ -456,20 +432,7 @@
 						interval: false,
 						fade: true,
 						crop: false
-					},
-					o
-				),
-				el = $( this );
-			
-			//Support for toggle
-			opt.mode = $.effects.setMode( el, opt.mode );
-			
-			//Reverse it if it is hidden and mode is toggle
-			if ( el.is( ":hidden" ) && opt.mode === "toggle" ) {
-				opt.reverse = !opt.reverse;
-			}
-
-			opt.show = opt.mode === "show";
+					}, o );
 
 			function animate( width, height, interval, duration, row, column, documentCoords, parentCoords, callback ) {
 				var el = $( this ),
@@ -545,8 +508,8 @@
 		 */
 
 		return this.queue( function( next ) {
-
-			var opt = $.extend( {
+			var el = $( this ),
+				opt = splitOptions( el, {
 						direction: "bottom",
 						distance: 1,
 						reverse: false,
@@ -554,15 +517,7 @@
 						interval: false,
 						fade: true,
 						crop: false
-					},
-					o
-				),
-				el = $( this );
-
-			//Support for toggle
-			opt.mode = $.effects.setMode( el, opt.mode );
-			
-			opt.show = opt.mode === "show";
+					}, o );
 
 			function animate( width, height, interval, duration, row, column, documentCoords, parentCoords, callback ) {
 				var random = opt.random ? Math.abs( opt.random ) : 0, 
