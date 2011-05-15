@@ -148,7 +148,7 @@ $.widget( "ui.tabs", {
 	},
 
 	refresh: function() {
-		var self = this,
+		var that = this,
 			options = this.options,
 			lis = this.list.children( ":has(a[href])" );
 
@@ -196,7 +196,7 @@ $.widget( "ui.tabs", {
 	},
 
 	_processTabs: function() {
-		var self = this,
+		var that = this,
 			fragmentId = /^#.+/; // Safari 2 reports '#' for an empty hash
 
 		this.list = this.element.find( "ol,ul" ).eq( 0 );
@@ -227,24 +227,24 @@ $.widget( "ui.tabs", {
 			// inline tab
 			if ( fragmentId.test( href ) ) {
 				selector = href;
-				panel = self.element.find( self._sanitizeSelector( selector ) );
+				panel = that.element.find( that._sanitizeSelector( selector ) );
 			// remote tab
 			// prevent loading the page itself if href is just "#"
 			} else if ( href && href !== "#" ) {
-				var id = self._tabId( a );
+				var id = that._tabId( a );
 				selector = "#" + id;
-				panel = self.element.find( selector );
+				panel = that.element.find( selector );
 				if ( !panel.length ) {
-					panel = self._createPanel( id );
-					panel.insertAfter( self.panels[ i - 1 ] || self.list );
+					panel = that._createPanel( id );
+					panel.insertAfter( that.panels[ i - 1 ] || that.list );
 				}
 			// invalid tab href
 			} else {
-				self.options.disabled.push( i );
+				that.options.disabled.push( i );
 			}
 
 			if ( panel.length) {
-				self.panels = self.panels.add( panel );
+				that.panels = that.panels.add( panel );
 			}
 			$( a ).attr( "aria-controls", selector.substring( 1 ) );
 		});
@@ -536,10 +536,10 @@ $.widget( "ui.tabs", {
 
 	load: function( index, event ) {
 		index = this._getIndex( index );
-		var self = this,
+		var that = this,
 			o = this.options,
 			a = this.anchors.eq( index )[ 0 ],
-			panel = self._getPanelForTab( a ),
+			panel = that._getPanelForTab( a ),
 			// TODO until #3808 is fixed strip fragment identifier from url
 			// (IE fails to load from such url)
 			url = $( a ).attr( "href" ).replace( /#.*$/, "" ),
@@ -561,7 +561,7 @@ $.widget( "ui.tabs", {
 		this.xhr = $.ajax({
 			url: url,
 			beforeSend: function( jqXHR, settings ) {
-				return self._trigger( "beforeLoad", event,
+				return that._trigger( "beforeLoad", event,
 					$.extend( { jqXHR : jqXHR, ajaxSettings: settings }, eventData ) );
 			}
 		});
@@ -573,27 +573,27 @@ $.widget( "ui.tabs", {
 			this.xhr
 				.success(function( response ) {
 					panel.html( response );
-					self._trigger( "load", event, eventData );
+					that._trigger( "load", event, eventData );
 				})
 				.complete(function( jqXHR, status ) {
 					if ( status === "abort" ) {
 						// stop possibly running animations
-						self.element.queue( [] );
-						self.panels.stop( false, true );
+						that.element.queue( [] );
+						that.panels.stop( false, true );
 
 						// "tabs" queue must not contain more than two elements,
 						// which are the callbacks for the latest clicked tab...
-						self.element.queue( "tabs", self.element.queue( "tabs" ).splice( -2, 2 ) );
+						that.element.queue( "tabs", that.element.queue( "tabs" ).splice( -2, 2 ) );
 					}
 
-					self.lis.eq( index ).removeClass( "ui-tabs-loading" );
+					that.lis.eq( index ).removeClass( "ui-tabs-loading" );
 
-					delete self.xhr;
+					delete that.xhr;
 				});
 		}
 
 		// last, so that load event is fired before show...
-		self.element.dequeue( "tabs" );
+		that.element.dequeue( "tabs" );
 
 		return this;
 	},
@@ -643,7 +643,7 @@ if ( $.uiBackCompat !== false ) {
 			_create: function() {
 				_create.call( this );
 
-				var self = this;
+				var that = this;
 
 				this.element.bind( "tabsbeforeload.tabs", function( event, ui ) {
 					// tab is already cached
@@ -652,21 +652,21 @@ if ( $.uiBackCompat !== false ) {
 						return;
 					}
 
-					$.extend( ui.ajaxSettings, self.options.ajaxOptions, {
+					$.extend( ui.ajaxSettings, that.options.ajaxOptions, {
 						error: function( xhr, s, e ) {
 							try {
 								// Passing index avoid a race condition when this method is
 								// called after the user has selected another tab.
 								// Pass the anchor that initiated this request allows
 								// loadError to manipulate the tab content panel via $(a.hash)
-								self.options.ajaxOptions.error( xhr, s, ui.tab.closest( "li" ).index(), ui.tab[ 0 ] );
+								that.options.ajaxOptions.error( xhr, s, ui.tab.closest( "li" ).index(), ui.tab[ 0 ] );
 							}
 							catch ( e ) {}
 						}
 					});
 
 					ui.jqXHR.success(function() {
-						if ( self.options.cache ) {
+						if ( that.options.cache ) {
 							$.data( ui.tab[ 0 ], "cache.tabs", true );
 						}
 					});
