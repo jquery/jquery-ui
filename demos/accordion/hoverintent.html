@@ -30,7 +30,7 @@
 		},
 		handler: function( event ) {
 			event.type = "hoverintent";
-			var self = this,
+			var that = this,
 				args = arguments,
 				target = $( event.target ),
 				cX, cY, pX, pY;
@@ -50,7 +50,7 @@
 			function handler() {
 				if ( ( Math.abs( pX - cX ) + Math.abs( pY - cY ) ) < cfg.sensitivity ) {
 					clear();
-					jQuery.event.handle.apply( self, args );
+					jQuery.event.handle.apply( that, args );
 				} else {
 					pX = cX;
 					pY = cY;
