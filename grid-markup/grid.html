@@ -1,9 +1,11 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
 	<meta charset="utf-8">
 	<title>Grid: Markup</title>
-	<style>body{font:62.5% Verdana,Arial,sans-serif}</style>
+	<style>
+	body { font: 62.5% Verdana, Arial, sans-serif; }
+	</style>
 	<link rel="stylesheet" href="../themes/base/jquery.ui.all.css">
 	<link rel="stylesheet" href="grid.css">
 	<script src="../jquery-1.5.1.js"></script>
@@ -17,19 +19,21 @@
 	<script src="grid.js"></script>
 	<script>
 	$(function() {
+		if ( $.fn.themeswitcher ) {
+			$( "<div>" ).css({
+				position: "absolute",
+				right: 10,
+				top: 10
+			}).appendTo( document.body ).themeswitcher();
+		}
 
-		$.fn.themeswitcher && $( "<div></div>" ).css({
-			position: "absolute",
-			right: 10,
-			top: 10
-		}).appendTo( document.body ).themeswitcher();
-		
 		$( "#dataTable1" ).grid();
 		$( "#dataTable2" ).grid()
 			.grid( "widget" )
-				.height( 300 ).resizable();
-		$( "#dataTable2" ).grid( "refresh" );
-
+			// TODO: grid doesn't adjust for height properly (but does on resize)
+			.height( 300 )
+			.resizable()
+			.grid( "refresh" );
 	});
 	</script>
 </head>
