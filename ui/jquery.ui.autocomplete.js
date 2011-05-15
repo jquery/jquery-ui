@@ -47,7 +47,7 @@ $.widget( "ui.autocomplete", {
 	_create: function() {
 		var self = this,
 			doc = this.element[ 0 ].ownerDocument,
-			suppressKeyPress;
+			suppressKeyPress, acOffset, menuOffset, mouseIsDown = false;
 
 		this.valueMethod = this.element[ this.element.is( "input" ) ? "val" : "text" ];
 
@@ -162,6 +162,12 @@ $.widget( "ui.autocomplete", {
 				if ( self.options.disabled ) {
 					return;
 				}
+				
+				//IE fires blur on mousedown so if mouseIsDown (dragging), reset focus and return (see ticket #6642)
+				if( mouseIsDown ) {
+					self.element.focus();
+					return;
+				}
 
 				clearTimeout( self.searching );
 				// clicks on the menu (or a button to trigger a search) will cause a blur event
@@ -255,6 +261,36 @@ $.widget( "ui.autocomplete", {
 		if ( $.fn.bgiframe ) {
 			 this.menu.element.bgiframe();
 		}
+		
+		//Track the offset of the autocomplete element, then if moved reset the menu element rather than blur
+		//This allows autocompletes inside of draggables without losing the autocomplete functionality and also
+		//not orphaning the menu element of the draggable is removed (see ticket #6642)
+		acOffset = self.element.offset();
+		
+		$( doc ).bind( "mousedown", function( event ) {
+			mouseIsDown = true;
+			menuOffset = self.menu.element.offset();
+		});
+		
+		$( doc ).bind( "mouseup", function( event ) {
+			mouseIsDown = false;
+			
+			if( acOffset.top !== self.element.offset().top || acOffset.left !== self.element.offset().left ) {
+				if( menuOffset.left || menuOffset.top ) {
+					self.menu.element.offset( {
+						top: self.element.offset().top + self.element.height() + 6,
+						left: self.element.offset().left
+					});
+					self.menu.element.zIndex( self.element.zIndex() + 1 );
+				}
+			} else {
+				if( $(event.target)[ 0 ] !== self.element[ 0 ] ) {
+					self.element.trigger( 'blur.autocomplete' );
+				}
+			}
+			
+			acOffset = self.element.offset();
+		});
 	},
 
 	_destroy: function() {
