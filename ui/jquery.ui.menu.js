@@ -22,7 +22,8 @@ $.widget("ui.menu", {
 		position: {
 			my: "left top",
 			at: "right top"
-		}
+		},
+		isNewMenu: false
 	},
 	_create: function() {
 		var self = this;
@@ -52,7 +53,8 @@ $.widget("ui.menu", {
 				self.select( event );
 			})
 			.bind( "mouseover.menu", function( event ) {
-				if ( self.options.disabled ) {
+				if ( self.options.disabled || self.options.isNewMenu ) {
+					self.options.isNewMenu = false;
 					return;
 				}
 				var target = $( event.target ).closest( ".ui-menu-item" );

@@ -203,6 +203,7 @@ $.widget( "ui.autocomplete", {
 			})
 			.menu({
 				// custom key handling for now
+				isNewMenu: true,
 				input: $(),
 				focus: function( event, ui ) {
 					var item = ui.item.data( "item.autocomplete" );
@@ -362,6 +363,7 @@ $.widget( "ui.autocomplete", {
 	close: function( event ) {
 		clearTimeout( this.closing );
 		if ( this.menu.element.is(":visible") ) {
+			this.menu.element.menu( "option", "isNewMenu", true );
 			this.menu.element.hide();
 			this.menu.blur();
 			this._trigger( "close", event );
