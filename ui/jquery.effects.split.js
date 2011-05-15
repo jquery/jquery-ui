@@ -53,6 +53,18 @@
 
 		container.css( "overflow", o.crop ? "hidden" : "visible" );
 		
+		//Makes another container so the animations won't overflow the document size if crop not used
+		if ( !o.crop ) {
+			container = container.wrap( "<div></div>" ).parent().css( { 
+				position: 'absolute',
+				top: 0,
+				left: 0,
+				width: $ ( document ).width( ),
+				height: $ ( document ).height( ),
+				overflow: 'hidden'
+			} );
+		}
+		
 		//Make animation
 		for ( i = 0; i < o.rows; i++ ) {
 			for ( j = 0; j < o.columns; j++ ) {
@@ -78,7 +90,9 @@
 			} else {
 				el.hide();
 			}
-			container.detach();
+			
+			container.remove( );
+			
 			if ( $.isFunction( o.complete ) ) {
 				o.complete.apply( el[ 0 ] );
 			}
