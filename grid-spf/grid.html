@@ -15,28 +15,28 @@
 	<script src="datasource-odata.js"></script>
 	<script src="grid.js"></script>
 	<script src="pager.js"></script>
-
 	<script>
-
 	var localDevelopers;
 	$.ajax({
 		dataType: "json",
 		url: "developers.json",
 		async: false,
-		success: function(result) {
+		success: function( result ) {
 			localDevelopers = result;
 		}
 	});
-	
-	$.fn.filterControl = function(datasource) {
-		this.addClass("tool").find("button").click(function() {
-			var field = $(this).data("filter-field"),
-				value = $(this).data("filter-value"),
-				operator = $(this).data("filter-operator");
-			var key = "filter." + field;
+
+	$.fn.filterControl = function( datasource ) {
+		this.addClass( "tool" ).find( "button" ).click(function() {
+			var button = $( this ),
+				field = button.data( "filter-field" ),
+				value = button.data( "filter-value" ),
+				operator = button.data( "filter-operator" ),
+				key = "filter." + field;
+
 			// TODO nested getter support would be nice here
-			if (datasource.option("filter") && datasource.option("filter")[field]) {
-				datasource.option(key, null);
+			if ( datasource.option( "filter" ) && datasource.option( "filter" )[ field ] ) {
+				datasource.option( key, null );
 			} else {
 				datasource.option(key, {
 					value: value,
@@ -44,38 +44,39 @@
 				});
 			}
 			datasource.refresh();
-			
-			$(this).toggleClass("active");
+
+			button.toggleClass( "active" );
 		})
 		return this;
-	}
+	};
 
-	$.fn.sorterControl = function(datasource) {
+	$.fn.sorterControl = function( datasource ) {
 		// TODO see above
 		var sorted = {};
-		this.addClass("tool").find("button").click(function() {
-			var field = $(this).data("sort-field");
-			if (sorted[field]) {
-				if (sorted[field].charAt(0) == "-") {
-					delete sorted[field];
-					$(this).removeClass("active sort-desc");
+		this.addClass( "tool" ).find( "button" ).click(function() {
+			var button = $( this ),
+				field = button.data( "sort-field" );
+			if ( sorted[ field ] ) {
+				if ( sorted[ field ].charAt( 0 ) === "-" ) {
+					delete sorted[ field ];
+					button.removeClass( "active sort-desc" );
 				} else {
-					sorted[field] = "-" + sorted[field];
-					$(this).removeClass("sort-asc").addClass("sort-desc");
+					sorted[ field ] = "-" + sorted[ field ];
+					button.removeClass( "sort-asc" ).addClass( "sort-desc" );
 				}
 			} else {
-				sorted[field] = field;
-				$(this).addClass("active sort-asc")
+				sorted[ field ] = field;
+				$( this ).addClass( "active sort-asc" )
 			}
 			var sort = [];
-			for (var key in sorted) {
-				sort.push(sorted[key]);
+			for ( var key in sorted ) {
+				sort.push( sorted[ key ] );
 			}
-			datasource.option("sort", sort).refresh();
+			datasource.option( "sort", sort ).refresh();
 		})
 		return this;
-	}
-	
+	};
+
 	$(function() {
 		var developers = $.ui.localDatasource({
 			input: localDevelopers,
@@ -83,15 +84,15 @@
 				limit: 3
 			}
 		});
-		
+
 		$( "#developers-local" ).grid({
 			columns: [ "firstName", "lastName", "country" ],
 			source: developers
 		});
-		
-		$("#filterDevelopers").filterControl(developers);
-		$("#sortDevelopers").sorterControl(developers);
-		$("#pageDevelopers").pager({
+
+		$( "#filterDevelopers" ).filterControl( developers );
+		$( "#sortDevelopers" ).sorterControl( developers );
+		$( "#pageDevelopers" ).pager({
 			source: developers
 		});
 
@@ -105,29 +106,28 @@
 			source: movies
 		});
 
-		$("#filterMovies").filterControl(movies);
-		$("#sortMovies").sorterControl(movies);
-		$("#pageMovies").pager({
+		$( "#filterMovies" ).filterControl( movies );
+		$( "#sortMovies" ).sorterControl( movies );
+		$( "#pageMovies" ).pager({
 			source: movies
 		});
 
 		movies.refresh();
 	});
 	</script>
-	
 	<style>
-		.tool button {
-			border: 1px solid white;
-		}
-		.tool button.active {
-			border: 1px solid black;
-		}
-		.sort-asc:before {
-			content: "/\\"
-		}
-		.sort-desc:before {
-			content: "\\/"
-		}
+	.tool button {
+		border: 1px solid white;
+	}
+	.tool button.active {
+		border: 1px solid black;
+	}
+	.sort-asc:before {
+		content: "/\\"
+	}
+	.sort-desc:before {
+		content: "\\/"
+	}
 	</style>
 </head>
 <body>
@@ -160,8 +160,7 @@
 	<button data-page="nextStep">+1</button>
 	<button data-page="next">Next</button>
 	<button data-page="last">Last</button>
-<p>
-<p>
+</p>
 <table id="developers-local">
 	<thead>
 		<tr>
@@ -173,14 +172,13 @@
 	<tbody>
 	</tbody>
 </table>
-</p>
 
 
 <h2>remote data source</h2>
 <p id="filterMovies">
 	Filter:
 	<button data-filter-field="Name" data-filter-operator="like"  data-filter-value="ultra"  type="button">Toggle Name like 'ultra'</button>
-	<button data-filter-field="ReleaseYear" data-filter-operator="<="  data-filter-value="1990"  type="button">Toggle ReleaseYear <= 1990</button>
+	<button data-filter-field="ReleaseYear" data-filter-operator="<="  data-filter-value="1990"  type="button">Toggle ReleaseYear &lt;= 1990</button>
 	<button data-filter-field="AverageRating" data-filter-operator=">" data-filter-value="3" type="button">Toggle AverageRating > 3</button>
 </p>
 <p id="sortMovies">
@@ -201,7 +199,6 @@
 	<button data-page="next">Next</button>
 	<button data-page="last">Last</button>
 </p>
-<p>
 <table id="movies">
 	<thead>
 		<tr>
@@ -213,7 +210,6 @@
 	<tbody>
 	</tbody>
 </table>
-</p>
 
 </body>
 </html>

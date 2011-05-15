@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="UTF-8">
+	<meta charset="utf-8">
 	<title>Product Browsing</title>
 	<link rel="stylesheet" href="../themes/base/jquery.ui.all.css">
 	<link rel="stylesheet" href="grid.css">
@@ -14,39 +14,37 @@
 	<script src="datasource.js"></script>
 	<script src="grid.js"></script>
 	<script src="pager.js"></script>
-	
 	<script>
 	$(function() {
-		
-		function parseTimeLeft(value) {
+		function parseTimeLeft( value ) {
 			return value
 			// remove leading character, probably timezone indicator?
-			.slice(1)
+			.slice( 1 )
 			// insert comma and space
-			.replace(/(\d+[A-Z]+)/g, "$1, ")
+			.replace( /(\d+[A-Z]+)/g, "$1, " )
 			// remove at the end
-			.replace(/,\s$/, "")
+			.replace( /,\s$/, "" )
 			// remove entries with 0
-			.replace(/(^|\s)0[A-Z]+,?/g, "")
+			.replace( /(^|\s)0[A-Z]+,?/g, "" )
 			// insert words
-			.replace(/([A-Z]+)/g, function(match) {
+			.replace( /([A-Z]+)/g, function( match ) {
 				return " " + {
 					DT: "days",
-					"H": "hours",
-					"M": "minutes",
-					"S": "seconds"
-				}[match];
+					H: "hours",
+					M: "minutes",
+					S: "seconds"
+				}[ match ];
 			})
-			// cut of s for singular entries
-			.replace(/(?:^|\s)1 ([a-z]+)s/g, " 1 $1")
+			// cut off s for singular entries
+			.replace( /(?:^|\s)1 ([a-z]+)s/g, " 1 $1" );
 		}
-		
+
 		var ebay = $.ui.datasource({
 			paging: {
 				limit: 10
 			},
 			source: function( request, response ) {
-				var filter = request.filter
+				var filter = request.filter;
 				var data = {
 					"OPERATION-NAME": "findItemsByKeywords",
 					"SERVICE-VERSION": "1.0.0",
@@ -62,26 +60,27 @@
 				// add item filters
 				// http://developer.ebay.com/DevZone/finding/Concepts/FindingAPIGuide.html#useitemfilters
 				// http://developer.ebay.com/DevZone/finding/CallRef/types/ItemFilterType.html
-				var index = 0;
-				for (property in filter) {
+				var index = 0,
+					arg;
+				for ( property in filter ) {
 					// keywords is a filter, but has its own field above
-					if (property == "keywords" || $.isEmptyObject(filter[property]))
+					if ( property === "keywords" || $.isEmptyObject( filter[ property ] ) ) {
 						continue;
-					data["itemFilter(" + index + ").name"] = property;
-					for (arg in filter[property]) {
-						data["itemFilter(" + index + ")." + arg] = filter[property][arg];
+					}
+					data[ "itemFilter(" + index + ").name" ] = property;
+					for ( arg in filter[ property ] ) {
+						data[ "itemFilter(" + index + ")." + arg ] = filter[ property ][ arg ];
 					}
 					index += 1;
-		        }
+				}
 				$.ajax({
 					url: "http://svcs.ebay.com/services/search/FindingService/v1",
 					dataType: "jsonp",
 					data: data,
 					success: function( data ) {
-						console.log(data)
 						var keywordsResponse = data.findItemsByKeywordsResponse[0];
 						var items = keywordsResponse.searchResult[0].item || [];
-						response( $.map(items, function( item ) {
+						response( $.map( items, function( item ) {
 							return {
 								title: item.title[0],
 								condition: item.condition && item.condition[0].conditionDisplayName[0],
@@ -95,69 +94,68 @@
 				});
 			}
 		});
-		
-		var overlay = $("<div id='loading-overlay'>").addClass("ui-widget-overlay").hide().appendTo("body");
-		$(ebay).bind("datasourcerequest", function() {
+
+		var overlay = $( "<div id='loading-overlay'>" )
+			.addClass( "ui-widget-overlay" )
+			.hide()
+			.appendTo( "body" );
+		$( ebay ).bind( "datasourcerequest", function() {
 			overlay.show();
-		}).bind("datasourceresponse", function() {
+		}).bind( "datasourceresponse", function() {
 			overlay.hide();
-		})
-		
-		
-		$("table").grid({
+		});
+
+		$( "table" ).grid({
 			source: ebay
 		});
-		
-		$("#pager").pager({
+
+		$( "#pager" ).pager({
 			source: ebay
 		});
-		
-		$("#sort").change(function() {
-			ebay.option("sort", $(this).val());
-		}).trigger("change");
-		
-		$("#keywords").change(function() {
-			ebay.option( "filter.keywords", $(this).val() );
-		}).trigger("change");
-		
-		$("#freeShipping").change(function() {
-			ebay.option("filter.FreeShippingOnly", {
-				value: $(this).is(":checked")
+
+		$( "#sort" ).change(function() {
+			ebay.option( "sort", $( this ).val() );
+		}).trigger( "change" );
+
+		$( "#keywords" ).change(function() {
+			ebay.option( "filter.keywords", $( this ).val() );
+		}).trigger( "change" );
+
+		$( "#freeShipping" ).change(function() {
+			ebay.option( "filter.FreeShippingOnly", {
+				value: $( this ).is( ":checked" )
 			});
-		}).trigger("change");
-		
-		$("#maxPrice").change(function() {
-			var value = $(this).val();
-			ebay.option("filter.MaxPrice", value ? {
-				value: $(this).val(),
+		}).trigger( "change" );
+
+		$( "#maxPrice" ).change(function() {
+			var value = $( this ).val();
+			ebay.option( "filter.MaxPrice", value ? {
+				value: $( this ).val(),
 				paramName: "Currency",
 				paramValue: "USD"
-			} : {});
-		}).trigger("change");
+			} : {} );
+		}).trigger( "change" );
 
-		var listingType = $("input[name=listingType]").change(function() {
+		var listingType = $( "input[name=listingType]" ).change(function() {
 			var index = 0,
 				values = {};
 			listingType.each(function() {
-				if ($(this).is(":checked")) {
-					values["value(" + index + ")"] = $(this).val();
+				if ( $( this ).is( ":checked" ) ) {
+					values[ "value(" + index + ")" ] = $( this ).val();
 					index += 1;
 				}
 			});
-			console.log(values)
-			ebay.option("filter.ListingType", values).refresh();
+			ebay.option( "filter.ListingType", values ).refresh();
 		});
 
-		$("#sort, #keywords, #freeShipping, #maxPrice").change(function() {
+		$( "#sort, #keywords, #freeShipping, #maxPrice" ).change(function() {
 			ebay.refresh();
 		});
 		ebay.refresh();
 	});
-	
 	</script>
 </head>
 <body>
-	
 	<p>
 		Sort:
 		<select id="sort" size="4">
@@ -169,7 +167,7 @@
 	</p>
 	<p>
 		<label for="keywords">Keywords: </label>
-		<input id="keywords" value="harry potter" />
+		<input id="keywords" value="harry potter">
 	</p>
 	<p>
 		<input type="checkbox" id="freeShipping">
@@ -179,7 +177,7 @@
 		<label for="maxPrice">Max Price</label>
 		<input id="maxPrice" value="25">
 	</p>
-	<p>
+	<div>
 		Listing Type
 		<ul>
 			<li>
@@ -195,7 +193,7 @@
 				<label for="listing-store">Store Inventory</label>
 			</li>
 		</ul>
-	</p>
+	</div>
 	<p id="pager">
 		<button data-page="first">First</button>
 		<button data-page="prev">Prev</button>
@@ -221,6 +219,5 @@
 		</thead>
 		<tbody></tbody>
 	</table>
-
 </body>
 </html>

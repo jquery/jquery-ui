@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="UTF-8">
+	<meta charset="utf-8">
 	<title>Photo Slideshow</title>
 	<link rel="stylesheet" href="../themes/base/jquery.ui.all.css">
 	<link rel="stylesheet" href="grid.css">
@@ -60,7 +60,7 @@
 								href: kite( "http://www.flickr.com/photos/{{owner}}/{{id}}/", photo )
 							}
 						})
-				        response( result, data.photos.total );
+						response( result, data.photos.total );
 					}
 				})
 			}
@@ -69,7 +69,7 @@
 		$( "#slideshow" ).slideshow({
 			source: datasource
 		});
-		
+
 		$( kite( "#pager-tmpl" )() ).insertBefore( "#slideshow" ).pager({
 			source: datasource
 		});
@@ -77,12 +77,11 @@
 		$( "#page-size" ).change( function() {
 			datasource.option( "paging.limit", +$( this ).val() ).refresh();
 		});
-		
+
 		$( "#filter" ).change(function() {
 			datasource.option( "filter", $( this ).val() ).refresh();
 		}).trigger( "change" );
 	});
-	
 	</script>
 </head>
 <body>

@@ -16,7 +16,6 @@
 	<script src="datasource-odata.js"></script>
 	<script src="grid.js"></script>
 	<script src="pager.js"></script>
-
 	<script>
 	$(function() {
 		var movies = $.ui.odataDatasource({
@@ -25,20 +24,23 @@
 		var grid = $( "#movies" ).grid({
 			source: movies
 		});
-		grid.find("th").each(function() {
-			var header = $(this),
-				field = header.data("field");
+		grid.find( "th" ).each(function() {
+			var header = $( this ),
+				field = header.data( "field" );
 			// TODO use popup for this
-			var menu = $("#menu-tmpl").tmpl().appendTo(this).menu({
-				select: function(event, ui) {
+			var menu = $( "#menu-tmpl" ).tmpl().appendTo( this ).menu({
+				select: function( event, ui ) {
 					event.stopPropagation();
-					movies.option("sort", ui.item.find("a").data("sort") == "asc" ? field : "-" + field).refresh();
+					movies
+						.option( "sort",
+							ui.item.find( "a" ).data( "sort" ) === "asc" ? field : "-" + field )
+						.refresh();
 					menu.hide();
 				}
 			}).hide();
-			$(this).click(function(event) {
+			header.click(function( event ) {
 				event.stopPropagation();
-				$(":ui-menu").hide();
+				$( ".ui-menu" ).hide();
 				menu.show().position({
 					my: "left top",
 					at: "right top",
@@ -46,55 +48,59 @@
 				});
 			});
 		});
-		$(document).click(function() {
-			$(":ui-menu").hide();
+		$( document ).click(function() {
+			$( ".ui-menu" ).hide();
 		});
-		
-		var thead = grid.find("thead");
-		thead.children().clone().insertAfter(thead).find("th").each(function() {
-			$("<input />").appendTo($(this).empty());
-		});
-		
-		grid.find("input").bind("change", function() {
-			var head = $(this).parent(),
-				field = head.data("field"),
-				type = head.data("type"),
+
+		var thead = grid.find( "thead" );
+		thead.children()
+			.clone()
+			.insertAfter( thead )
+			.find( "th" )
+				.each(function() {
+					$( "<input>" ).appendTo( $( this ).empty() );
+				});
+
+		grid.find( "input" ).bind( "change", function() {
+			var head = $( this ).parent(),
+				field = head.data( "field" ),
+				type = head.data( "type" ),
 				input = this.value;
 
-			if (/^[<>]=?/.test(input)) {
-				var compare = input.replace(/^([<>]=?).+/, "$1");
-				input = input.substring(compare.length);
-				input = input == null || isNaN(input) ? "" : input;
+			if ( /^[<>]=?/.test( input ) ) {
+				var compare = input.replace( /^([<>]=?).+/, "$1" );
+				input = input.substring( compare.length );
+				input = input == null || isNaN( input ) ? "" : input;
 			}
-			if (type == "number") {
-				input = parseFloat(input);
+			if ( type === "number" ) {
+				input = parseFloat( input );
+				compare = "==";
 			}
-			if (type == "string") {
+			if ( type === "string" ) {
 				compare = "like";
 			}
-			if (input) {
-				movies.option("filter." + field, {
+			if ( input ) {
+				movies.option( "filter." + field, {
 					operator: compare,
 					value: input
 				});
 			} else {
-				movies.option("filter." + field, null);
+				movies.option( "filter." + field, null );
 			}
 			movies.refresh();
 		});
-		
-		$("#pager").pager({
+
+		$( "#pager" ).pager({
 			source: movies
 		});
-		
+
 		movies.refresh();
 	});
 	</script>
-	
 	<style>
-		.ui-menu {
-			position: absolute;
-		}
+	.ui-menu {
+		position: absolute;
+	}
 	</style>
 </head>
 <body>
@@ -111,7 +117,6 @@
 </script>
 
 <h2>Movies! Click header for sort menu, use inputs for filtering, pager for paging</h2>
-<p>
 <table id="movies">
 	<thead>
 		<tr>
@@ -123,7 +128,7 @@
 	<tbody>
 	</tbody>
 </table>
-</p>
+
 <p id="pager">
 	<button data-page="first">First</button>
 	<button data-page="prev">Prev</button>

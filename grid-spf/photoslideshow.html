@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="UTF-8">
+	<meta charset="utf-8">
 	<title>Photo Slideshow</title>
 	<link rel="stylesheet" href="../themes/base/jquery.ui.all.css">
 	<link rel="stylesheet" href="grid.css">
@@ -45,7 +45,7 @@
 				src: img.attr( "src" )
 			};
 		}).get();
-		$("#gal1").hide();
+		$( "#gal1" ).hide();
 
 		var datasource = $.ui.localDatasource( {
 			input: photos,
@@ -57,19 +57,17 @@
 		$( "#slideshow" ).slideshow( {
 			source: datasource
 		});
-		
-		$( kite( "#pager-tmpl" )() ).insertBefore( "#slideshow" ).pager( {
+
+		$( kite( "#pager-tmpl" )() ).insertBefore( "#slideshow" ).pager({
 			source: datasource
 		})
-		
 
 		$( "#page-size" ).change( function() {
-			datasource.option( "paging.limit", +$(this).val() ).refresh();
+			datasource.option( "paging.limit", +$( this ).val() ).refresh();
 		});
 
 		datasource.refresh();
 	});
-	
 	</script>
 </head>
 <body>

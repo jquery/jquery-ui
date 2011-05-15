@@ -17,9 +17,9 @@
 
 	<script>
 	$(function() {
-		var cities = $.ui.datasource( {
+		var cities = $.ui.datasource({
 			source: function( request, response ) {
-				$.ajax( {
+				$.ajax({
 					url: "http://ws.geonames.org/searchJSON",
 					dataType: "jsonp",
 					data: {
@@ -30,17 +30,16 @@
 					},
 					success: function( data ) {
 						var result = $.map( data.geonames, function( item ) {
-							return $.extend( {
+							return $.extend({
 								label: item.name + (item.adminName1 ? ", " + item.adminName1 : "") + ", " + item.countryName,
 								value: item.name
 							}, item );
 						});
-						response( result, data.totalResultsCount);
+						response( result, data.totalResultsCount );
 					}
 				});
 			}
 		});
-
 
 		$("#city").autocomplete({
 			minLength: 3,
@@ -52,7 +51,7 @@
 		});
 
 		// secondary view
-		$( "table" ).grid( {
+		$( "table" ).grid({
 			source: cities,
 			columns: [ "name", "adminName1", "adminCode1", "fclName", "adminName2", "population", "countryName" ]
 		});
@@ -65,7 +64,7 @@
 <p>features: filtering</p>
 
 <form>
-	<label for="city">City</label><input id="city"/>
+	<label for="city">City</label><input id="city">
 </form>
 
 <table>

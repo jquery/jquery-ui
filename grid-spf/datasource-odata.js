@@ -20,12 +20,12 @@ $.widget( "ui.odataDatasource", $.ui.datasource, {
 				$.each(request.sort, function (index, field) {
 					sorts[sorts.length] = field.replace(/-(.+)/, "$1 desc");
 				});
-	            data["$orderby"] = sorts.join(",");
+				data["$orderby"] = sorts.join(",");
 				
 			}
 			if (request.filter) {
 				var filters = [];
-	            $.each(request.filter, function (property, filter) {
+				$.each(request.filter, function (property, filter) {
 					if (filter.operator == "like") {
 						filters[filters.length] = "indexof(" + property + ", '" + filter.value + "') ge 0";
 					} else {
@@ -37,24 +37,24 @@ $.widget( "ui.odataDatasource", $.ui.datasource, {
 							"==": "eq",
 							"!=": "ne"
 						};
-		                filters[filters.length] = property + " " + operators[filter.operator] + " " + 
-		                    (typeof filter.value === "string" ? ("'" + filter.value + "'") : filter.value);
+						filters[filters.length] = property + " " + operators[filter.operator] + " " + 
+							(typeof filter.value === "string" ? ("'" + filter.value + "'") : filter.value);
 					}
 					
-	            });
+				});
 				data["$filter"] = filters.join(" and ");
-	        }
+			}
 			$.ajax({
 				url: request.resource,
 				dataType: "jsonp",
 				jsonp: "$callback",
 				data: data,
 				success: function( data ) {
-			        response( data.d.results, data.d.__count );
+					response( data.d.results, data.d.__count );
 				}
 			});
 		}
 	}
 });
 
-})(jQuery);
+}( jQuery ) );
