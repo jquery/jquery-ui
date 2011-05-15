@@ -1,66 +1,81 @@
-<script src="../jquery-1.5.1.js"></script>
-<script src="../ui/jquery.ui.widget.js"></script>
-<script src="dataitem.js"></script>
-<script>
-var input = [
-    [
-        "100",
-        "200",
-        "300",
-        "400",
-        "500",
-        "1000",
-        "2000"
-    ],
-    [
-        "Alpha",
-        "Beta",
-        "Gamma",
-        "Zeta",
-        "Özgan",
-        "Ågren"
-    ],
-    [
-        "2011-01-01",
-        "2011-05-07",
-        "2012-12-15",
-        "1948-05-30"     
-    ],
-    [
-        "Alpha",
-        "Beta",
-        "Gamma",
-        "Zeta",
-        "Özgan",
-        "Ågren",
-        "100",
-        "200",
-        "300",
-        "400",
-        "500",
-        "1000",
-        "2000",
-        "2011-01-01",
-        "2011-05-07",
-        "2012-12-15",
-        "1948-05-30"  
-    ]
-];
-var data = [];
-for ( var i = 0; i < 10000; i++ ) {
-	var row = data[data.length] = {};
-    for ( var j = 0; j < 4; j++ ) {
-        var random = input[ j ][ Math.floor( Math.random() * input[ j ].length ) ];
-        row["key" + j] = random;
-    }
-}
-console.log("go!");
-var start = +new Date;
-var items = [];
-for ( var i = 0, l = data.length; i < l; i++ ) {
-	items.push( new $.ui.dataitem( {
-		data: data[ i ]
-	}));
-}
-console.log( "Took, in ms: " + (+new Date - start) );
-</script>
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Grid: Dataitem performance</title>
+	<script src="../jquery-1.5.1.js"></script>
+	<script src="../ui/jquery.ui.widget.js"></script>
+	<script src="dataitem.js"></script>
+	<script>
+	var input = [
+		[
+			"100",
+			"200",
+			"300",
+			"400",
+			"500",
+			"1000",
+			"2000"
+		],
+		[
+			"Alpha",
+			"Beta",
+			"Gamma",
+			"Zeta",
+			"Özgan",
+			"Ågren"
+		],
+		[
+			"2011-01-01",
+			"2011-05-07",
+			"2012-12-15",
+			"1948-05-30"
+		],
+		[
+			"Alpha",
+			"Beta",
+			"Gamma",
+			"Zeta",
+			"Özgan",
+			"Ågren",
+			"100",
+			"200",
+			"300",
+			"400",
+			"500",
+			"1000",
+			"2000",
+			"2011-01-01",
+			"2011-05-07",
+			"2012-12-15",
+			"1948-05-30"
+		]
+	];
+	var data = [];
+	var numItems = 10000;
+	for ( var i = 0; i < numItems; i++ ) {
+		var row = data[data.length] = {};
+		for ( var j = 0; j < 4; j++ ) {
+			var random = input[ j ][ Math.floor( Math.random() * input[ j ].length ) ];
+			row["key" + j] = random;
+		}
+	}
+	var start = +new Date;
+	var items = [];
+	for ( var i = 0, l = data.length; i < l; i++ ) {
+		items.push( new $.ui.dataitem( {
+			data: data[ i ]
+		}));
+	}
+	var totalTime = +new Date - start;
+	$(function() {
+		$( "<div>" +
+			"<p>Items: " + numItems + "</p>" +
+			"<p>Time: " + totalTime + "ms</p>" +
+		"</div>" ).prependTo( "body" );
+	});
+	</script>
+</head>
+<body>
+</body>
+</html>

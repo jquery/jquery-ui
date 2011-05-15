@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<title>Grid: Data</title>
+	<title>Grid: Large Dataset</title>
 	<link rel="stylesheet" href="../themes/base/jquery.ui.all.css">
 	<link rel="stylesheet" href="grid.css">
 	<script src="../jquery-1.5.1.js"></script>
@@ -14,74 +14,84 @@
 	<script src="datastore.js"></script>
 	<script src="grid.js"></script>
 	<script>
-	// TODO this isn't used anywhere - how to access this method from #row-tmpl?
-	// grid passed dataitem.options.data, that doesn't include access to this method
 	$.ui.dataitem.extend( "random", {});
 
 	var input = [
-	    [
-	        "100",
-	        "200",
-	        "300",
-	        "400",
-	        "500",
-	        "1000",
-	        "2000"
-	    ],
-	    [
-	        "Alpha",
-	        "Beta",
-	        "Gamma",
-	        "Zeta",
-	        "Özgan",
-	        "Ågren"
-	    ],
-	    [
-	        "2011-01-01",
-	        "2011-05-07",
-	        "2012-12-15",
-	        "1948-05-30"     
-	    ],
-	    [
-	        "Alpha",
-	        "Beta",
-	        "Gamma",
-	        "Zeta",
-	        "Özgan",
-	        "Ågren",
-	        "100",
-	        "200",
-	        "300",
-	        "400",
-	        "500",
-	        "1000",
-	        "2000",
-	        "2011-01-01",
-	        "2011-05-07",
-	        "2012-12-15",
-	        "1948-05-30"  
-	    ]
+		[
+			"100",
+			"200",
+			"300",
+			"400",
+			"500",
+			"1000",
+			"2000"
+		],
+		[
+			"Alpha",
+			"Beta",
+			"Gamma",
+			"Zeta",
+			"Özgan",
+			"Ågren"
+		],
+		[
+			"2011-01-01",
+			"2011-05-07",
+			"2012-12-15",
+			"1948-05-30"
+		],
+		[
+			"Alpha",
+			"Beta",
+			"Gamma",
+			"Zeta",
+			"Özgan",
+			"Ågren",
+			"100",
+			"200",
+			"300",
+			"400",
+			"500",
+			"1000",
+			"2000",
+			"2011-01-01",
+			"2011-05-07",
+			"2012-12-15",
+			"1948-05-30"
+		]
 	];
 	var columns = [ "number", "names", "dates", "mixed" ];
 	var data = [];
-	for ( var i = 0; i < 1000; i++ ) {
+	var numItems = 1000;
+	for ( var i = 0; i < numItems; i++ ) {
 		var row = data[data.length] = {};
-	    for ( var j = 0; j < 4; j++ ) {
-	        var random = input[ j ][ Math.floor( Math.random() * input[ j ].length ) ];
-	        row[ columns[ j ] ] = random;
-	    }
+		for ( var j = 0; j < 4; j++ ) {
+			var random = input[ j ][ Math.floor( Math.random() * input[ j ].length ) ];
+			row[ columns[ j ] ] = random;
+		}
 	}
-	
-	$.ui.datasource({
-		type: "random",
-		source: data
-	});
 
 	$(function() {
+		var datasourceTime, gridTime,
+			start = +new Date;
+		$.ui.datasource({
+			type: "random",
+			source: data
+		});
+		datasourceTime = $.now() - start;
+
+		start = +new Date;
 		$( "#random" ).grid({
 			type: "random",
 			columns: columns
 		});
+		gridTime = $.now() - start;
+
+		$( "<div>" +
+			"<p>Items: " + numItems + "</p>" +
+			"<p>Datasource: " + datasourceTime + "ms</p>" +
+			"<p>Grid: " + gridTime + "ms</p>" +
+		"</div>" ).prependTo( "body" );
 	});
 	</script>
 </head>

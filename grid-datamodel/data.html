@@ -64,14 +64,14 @@
 			$.getJSON( "fixture.json", request, response );
 		}
 	});
-	
+
 	$(function() {
 		$( "#developers" ).grid({
 			type: "developer",
 			rowTemplate: $( "#row-tmpl" ).html(),
 			select: showDetails
 		});
-		
+
 		$( "#developers-remote" ).grid({
 			type: "developer2",
 			// TODO when these are specified, the table header row should be removeable/generated?
@@ -82,7 +82,7 @@
 		$( "#developers-pe" ).grid({
 			select: showDetails
 		});
-		
+
 		var formItem;
 		var form = $( "#developer-form" ).submit(function( event ) {
 			event.preventDefault();
@@ -106,7 +106,7 @@
 			$( "#developer-form-tmpl" )
 				.tmpl( ui.item.options.data )
 				.appendTo( form.empty() );
-				
+
 			$( "#developer-tmpl" )
 				// TODO accessing data though item.options makes no sense
 				// this should be just ui.item passed to .tmpl
@@ -146,6 +146,7 @@
 		</tr>
 	</tbody>
 </table>
+
 
 <h2>local data source</h2>
 <table id="developers">
