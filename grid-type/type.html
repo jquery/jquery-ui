@@ -2,145 +2,155 @@
 <html>
 <head>
 	<title>Grid: Type</title>
-	<meta charset=utf-8 />
+	<meta charset="utf-8">
 	<link rel="stylesheet" href="../themes/base/jquery.ui.all.css" title="ui-theme" />
 	<script src="../jquery-1.5.1.js"></script>
 	<script src="../external/jquery.global.js"></script>
 	<script src="../external/jquery.global.de-DE.js"></script>
 	<script src="../external/jquery.global.ja-JP.js"></script>
-	<script type="text/javascript">
+	<script>
 	$(function() {
-		var table = $("table");
-			thead = table.children("thead"),
-			tbody = table.children("tbody");
-		thead.delegate("th", "click", function() {
-			function extract(row) {
-				var text = $($(row).children()[index]).text();
-				if (type == "currency") {
-					return $.global.parseFloat(text, culture);
-				} else if (type == "date") {
-					return $.global.parseDate(text, format, culture);
+		var table = $( "table" );
+			thead = table.children( "thead" ),
+			tbody = table.children( "tbody" );
+
+		thead.delegate( "th", "click", function() {
+			function extract( row ) {
+				var text = $( $( row ).children()[ index ] ).text();
+				if ( type === "currency" ) {
+					return $.global.parseFloat( text, culture );
+				} else if ( type === "date" ) {
+					return $.global.parseDate( text, format, culture );
 				} else {
 					return text;
 				}
 			}
-			var head = $(this),
-				culture = head.data("culture"),
-				format = head.data("format"),
-				type = head.data("type"),
-				order = head.data("sort-order") || 1,
+
+			var head = $( this ),
+				culture = head.data( "culture" ),
+				format = head.data( "format" ),
+				type = head.data( "type" ),
+				order = head.data( "sort-order" ) || 1,
 				index = this.cellIndex;
-			tbody.children().sort(function(a, b) {
-				return (extract(a) < extract(b) ? -1 : 1) * order;
-			}).appendTo(tbody);
+
+			tbody.children().sort(function( a, b ) {
+				return ( extract( a ) < extract( b ) ? -1 : 1 ) * order;
+			}).appendTo( tbody );
 			order *= -1;
-			head.data("sort-order", order);
+			head.data( "sort-order", order );
 		});
-		thead.children().clone().insertAfter(thead).find("th").each(function() {
-			$("<input />").appendTo($(this).empty());
-		});
-		table.delegate("input", "keyup change", function() {
-			var head = $(this).parent(),
+		thead.children()
+			.clone()
+			.insertAfter( thead )
+			.find( "th" )
+				.each(function() {
+					$( "<input>" ).appendTo( $( this ).empty() );
+				});
+
+		table.delegate( "input", "keyup change", function() {
+			var head = $( this ).parent(),
 				index = head[0].cellIndex,
-				culture = head.data("culture"),
-				format = head.data("format"),
-				type = head.data("type"),
+				culture = head.data( "culture" ),
+				format = head.data( "format" ),
+				type = head.data( "type" ),
 				input = this.value;
 
-			if (/^[<>]=?/.test(input)) {
-				var compare = input.replace(/^([<>]=?).+/, "$1");
-				input = input.substring(compare.length);
-				if (type == "currency") {
-					input = $.global.parseFloat(input, culture);
-				} else if (type == "date") {
-					input = $.global.parseDate(input, format, culture);
+			if ( /^[<>]=?/.test( input ) ) {
+				var compare = input.replace( /^([<>]=?).+/, "$1" );
+				input = input.substring( compare.length );
+				if ( type === "currency" ) {
+					input = $.global.parseFloat( input, culture );
+				} else if ( type === "date" ) {
+					input = $.global.parseDate( input, format, culture );
 				}
-				input = input == null || isNaN(input) ? "" : input;
+				input = input == null || isNaN( input ) ? "" : input;
 			}
-				
-			function test(value) {
-				if (compare) {
-					if (type == "currency") {
-						value = $.global.parseFloat(value, culture);
-					} else if (type == "date") {
-						value = $.global.parseDate(value, format, culture);
+
+			function test( value ) {
+				if ( compare ) {
+					if ( type === "currency" ) {
+						value = $.global.parseFloat( value, culture );
+					} else if ( type === "date" ) {
+						value = $.global.parseDate( value, format, culture );
 					} else {
-						value = parseFloat(value);
+						value = parseFloat( value );
 					}
-					if (compare == "<") {
+					if ( compare === "<" ) {
 						return value < input;
-					} else if (compare == "<=") {
+					} else if ( compare === "<=" ) {
 						return value <= input;
-					} else if (compare == ">") {
+					} else if ( compare === ">" ) {
 						return value > input;
 					} else {
 						return value >= input;
 					}
 				}
-				return new RegExp(input.replace(/(\$)/g, "\\$1"), "i").test(value);
-			};
-			
-			if (input.length == "0") {
+				return new RegExp( input.replace( /(\$)/g, "\\$1" ), "i" ).test( value );
+			}
+
+			if ( !input && input !== 0 ) {
 				tbody.children().show();
 				return;
 			}
-			tbody.children().each(function(i, row) {
-				$(this).toggle( test( $($(row).children()[index]).text() ) );
+			tbody.children().each(function( i, row ) {
+				$( this ).toggle( test( $( $(row).children()[index] ).text() ) );
 			});
 		});
-		
-		thead.children().clone().insertAfter(thead).find("th").each(function() {
-			$(this).empty();
-			var input = $("<select />").appendTo(this),
-				index = this.cellIndex;
-			input.append("<option value=''>Filter...</option>")
-			var tds = tbody.children().map(function() {
-				return $($(this).children()[index]).text();
-			}).each(function() {
-				input.append("<option>" + this + "</option>");
-			});
-			
-			$("<button>x</button>").hide().appendTo(this);
-		});
-		
-		table.delegate("select", "click change", function() {
-			var head = $(this).parent(),
+
+		thead.children()
+			.clone()
+			.insertAfter( thead )
+			.find( "th" )
+				.each(function() {
+					$( this ).empty();
+					var input = $( "<select>" ).appendTo( this ),
+						index = this.cellIndex;
+					input.append( "<option value=''>Filter...</option>" )
+					var tds = tbody.children().map(function() {
+						return $( $(this).children()[index] ).text();
+					}).each(function() {
+						input.append( "<option>" + this + "</option>" );
+					});
+
+					$( "<button>x</button>" ).hide().appendTo( this );
+				});
+
+		table.delegate( "select", "click change", function() {
+			var head = $( this ).parent(),
 				index = head[0].cellIndex,
-				input = $(this).val();
-			
-			function test(value) {
-				return new RegExp(input.replace(/(\$)/g, "\\$1"), "i").test(value);
-			}	
-			
-			if (input.length == "0") {
+				input = $( this ).val();
+
+			function test( value ) {
+				return new RegExp( input.replace(/(\$)/g, "\\$1" ), "i" ).test( value );
+			}
+
+			if ( !input.length) {
 				tbody.children().show();
-				$(this).next().hide();
+				$( this ).next().hide();
 				return;
 			}
-			tbody.children().each(function(i, row) {
-				$(this).toggle( test( $($(row).children()[index]).text() ) );
+			tbody.children().each(function( i, row ) {
+				$( this ).toggle( test( $( $(row).children()[index] ).text() ) );
 			});
-			$(this).next().show();
+			$( this ).next().show();
 		});
-		
-		table.delegate("button", "click", function() {
-			$(this).prev().val("").click();
+
+		table.delegate( "button", "click", function() {
+			$( this ).prev().val( "" ).click();
 		});
 	});
 	</script>
 	<style>
-		body { font-size:62.5%; }
-		table {
-			border-collapse: collapse;
-		}
-		th, td {
-			padding: 0.5em;
-			border: 1px solid black;
-		}
+	table {
+		border-collapse: collapse;
+	}
+	th, td {
+		padding: 0.5em;
+		border: 1px solid black;
+	}
 	</style>
 </head>
 <body>
-
 	<table>
 		<thead>
 			<tr>
@@ -197,6 +207,6 @@
 		</tbody>
 	</table>
 
-	<p>Try ">0" or "<=1" for filtering.</p>
+	<p>Try ">0" or "&lt;=1" for filtering.</p>
 </body>
 </html>
