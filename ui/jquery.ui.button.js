@@ -108,6 +108,7 @@ $.widget( "ui.button", {
 				if ( options.disabled ) {
 					event.stopImmediatePropagation();
 				}
+				$(this).blur();
 			});
 
 		if ( toggleButton ) {
