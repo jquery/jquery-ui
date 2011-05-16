@@ -35,6 +35,22 @@
 		.hidden {
 			display: none;
 		}
+		.test {
+			background: #000;
+			border: 0;
+		}
+		.testAddBorder {
+			border: 10px solid #000;
+		}
+		.testChangeBackground {
+			background: #fff;
+		}
+		.test h2 {
+			font-size: 10px;
+		}
+		.testChildren h2 {
+			font-size: 20px;
+		}
 	</style>
 </head>
 <body>
@@ -48,7 +64,9 @@
 
 <div id="qunit-fixture">
 	<div class="hidden test"></div>
-	<div class="shown test"></div>
+	<div class="animateClass test">
+		<h2>Child Element Test</h2>
+	</div>
 </div>
 
 </body>
