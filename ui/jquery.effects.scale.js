@@ -181,7 +181,6 @@ $.effects.effect.size = function( o ) {
  			el.to.leftAbs = parseInt( el.css( "left" ) , 10 ) + el.to.left;
 			$.effects.save( el, props1 );
 		}
-		$.effects.save( el, restore ? props : props1 ); 
 		el.show(); 
 		$.effects.createWrapper( el );
 		el.css( 'overflow', 'hidden' ).css( el.from ); 
