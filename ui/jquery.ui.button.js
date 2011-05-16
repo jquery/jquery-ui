@@ -338,6 +338,16 @@ $.widget( "ui.button", {
 			if ( icons.secondary ) {
 				buttonElement.append( "<span class='ui-button-icon-secondary ui-icon " + icons.secondary + "'></span>" );
 			}
+			
+			//Firefox does not follow the standard box model when displaying buttons
+			//so the icon position must be recalculated (see ticket #5603)
+			if( $.browser.mozilla ) {
+				var lineHeight = this.buttonElement.css( "line-height" );
+				var ffIconPos = parseInt( lineHeight.substr( 0, lineHeight.indexOf("px") ) );
+				buttonElement.find( ".ui-icon" ).each( function() {
+					$( this ).css( "top", ffIconPos + "px" );
+				});
+			}
 
 			if ( !this.options.text ) {
 				buttonClasses.push( multipleIcons ? "ui-button-icons-only" : "ui-button-icon-only" );
