@@ -775,20 +775,30 @@ if ( $.uiBackCompat !== false ) {
 			li.addClass( "ui-state-default ui-corner-top" ).data( "destroy.tabs", true );
 			li.find( "a" ).attr( "aria-controls", id );
 
+			var doInsertAfter = index >= this.lis.length;
+
 			// try to find an existing element before creating a new one
 			var panel = this.element.find( "#" + id );
 			if ( !panel.length ) {
 				panel = this._createPanel( id );
+				if ( doInsertAfter ) {
+					if ( index > 0 ) {
+						panel.insertAfter( this.panels.eq( -1 ) );
+					} else {
+						panel.appendTo( this.element );
+					}
+				} else {
+					panel.insertBefore( this.panels[ index ] );
+				}
 			}
 			panel.addClass( "ui-tabs-panel ui-widget-content ui-corner-bottom" ).hide();
 
-			if ( index >= this.lis.length ) {
+			if ( doInsertAfter ) {
 				li.appendTo( this.list );
-				panel.appendTo( this.list[ 0 ].parentNode );
 			} else {
 				li.insertBefore( this.lis[ index ] );
-				panel.insertBefore( this.panels[ index ] );
 			}
+
 			options.disabled = $.map( options.disabled, function( n ) {
 				return n >= index ? ++n : n;
 			});
