@@ -174,6 +174,13 @@ $.effects.effect.size = function( o ) {
 			};
 		};
 		
+		if (restore) {
+			$.effects.save( el, props ); 
+		} else {
+ 			el.to.topAbs = parseInt( el.css( "top" ) , 10 ) + el.to.top;
+ 			el.to.leftAbs = parseInt( el.css( "left" ) , 10 ) + el.to.left;
+			$.effects.save( el, props1 );
+		}
 		$.effects.save( el, restore ? props : props1 ); 
 		el.show(); 
 		$.effects.createWrapper( el );
@@ -238,7 +245,13 @@ $.effects.effect.size = function( o ) {
 				if( mode == 'hide' ) {
 					el.hide();
 				}
-				$.effects.restore( el, restore ? props : props1 ); 
+				if ( restore ) {
+					$.effects.restore( el, props );
+				} else {
+					$.effects.restore( el, props1 );
+					el.css( "top", el.to.topAbs );
+					el.css( "left", el.to.leftAbs );
+				}
 				$.effects.removeWrapper( el ); 
 				$.isFunction( o.complete ) && o.complete.apply( this, arguments ); // Callback
 				el.dequeue();
