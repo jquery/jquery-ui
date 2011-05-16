@@ -191,20 +191,18 @@ $.ui.position = {
 				withinOffset = isWindow ? win.scrollLeft() : within.offset().left,
 				outerWidth = isWindow ? win.width() : within.outerWidth(),
 				overLeft = withinOffset - data.collisionPosition.left,
-				overRight = data.collisionPosition.left + data.collisionWidth - outerWidth - withinOffset,
-				newLeft;
+				overRight = data.collisionPosition.left + data.collisionWidth - outerWidth - withinOffset;
 
 			// element is wider than window or too far left -> align with left edge
 			if ( data.collisionWidth > outerWidth || overLeft > 0 ) {
-				newLeft = position.left + overLeft;
+				position.left += overLeft;
 			// too far right -> align with right edge
 			} else if ( overRight > 0 ) {
-				newLeft = position.left - overRight;
+				position.left -= overRight;
 			// adjust based on position and margin
 			} else {
-				newLeft = Math.max( position.left - data.collisionPosition.left, position.left );
+				position.left = Math.max( position.left - data.collisionPosition.left, position.left );
 			}
-			position.left = newLeft;
 		},
 		top: function( position, data ) {
 			var within = data.within,
@@ -213,20 +211,18 @@ $.ui.position = {
 				withinOffset = isWindow ? win.scrollTop() : within.offset().top,
 				outerHeight = isWindow ? win.height() : within.outerHeight(),
 				overTop = withinOffset - data.collisionPosition.top,
-				overBottom = data.collisionPosition.top + data.collisionHeight - outerHeight - withinOffset,
-				newTop;
+				overBottom = data.collisionPosition.top + data.collisionHeight - outerHeight - withinOffset;
 
 			// element is taller than window or too far up -> align with top edge
 			if ( data.collisionHeight > outerHeight || overTop > 0 ) {
-				newTop = position.top + overTop;
+				position.top += overTop;
 			// too far down -> align with bottom edge
 			} else if ( overBottom > 0 ) {
-				newTop = position.top - overBottom;
+				position.top -= overBottom;
 			// adjust based on position and margin
 			} else {
-				newTop = Math.max( position.top - data.collisionPosition.top, position.top );
+				position.top = Math.max( position.top - data.collisionPosition.top, position.top );
 			}
-			position.top = newTop;
 		}
 	},
 	flip: {

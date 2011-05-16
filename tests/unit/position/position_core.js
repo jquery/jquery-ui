@@ -314,7 +314,8 @@ test( "collision: fit, with offset", function() {
 test( "collision: fit, window scrolled", function() {
 	if ( scrollTopSupport() ) {
 		var win = $( window );
-		$( window ).scrollTop( 300 ).scrollLeft( 200 ); 
+		win.scrollTop( 300 ).scrollLeft( 200 );
+
 		collisionTest({
 			collision: "fit",
 			at: "left-100 top-100"
@@ -323,7 +324,7 @@ test( "collision: fit, window scrolled", function() {
 			collision: "fit",
 			at: "right+100 bottom+100"
 		}, { top: 300 + win.height() - 10, left: 200 + win.width() - 10 }, "right bottom" );
-		
+
 		win.scrollTop( 0 ).scrollLeft( 0 );
 	}
 });
