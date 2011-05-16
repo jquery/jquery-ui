@@ -24,16 +24,17 @@ $.effects.effect.slide = function( o ) {
 			ref = (direction == 'up' || direction == 'down') ? 'top' : 'left',
 			motion = (direction == 'up' || direction == 'left') ? 'pos' : 'neg',
 			distance,
-			animation = {}; 
+			animation = {}, wrapper; 
 
 		// Adjust
 		$.effects.save( el, props ); 
 		el.show();
-		$.effects.createWrapper( el ).css({
+		wrapper = $.effects.createWrapper( el ).css({
 			overflow: 'hidden'
 		}); 
-		
-		distance = o.distance || el[ ref == 'top' ? "outerHeight" : "outerWidth" ]({ 
+
+		// use the wrapper size, since it differs according to the block margin
+		distance = o.distance || wrapper[ ref == 'top' ? "outerHeight" : "outerWidth" ]({ 
 			margin: true 
 		});
 		if (mode == 'show') {
