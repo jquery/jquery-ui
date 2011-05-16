@@ -529,14 +529,14 @@ $.widget( "ui.tabs", {
 	load: function( index, event ) {
 		index = this._getIndex( index );
 		var self = this,
-			o = this.options,
-			a = this.anchors.eq( index )[ 0 ],
-			panel = self._getPanelForTab( a ),
+			options = this.options,
+			anchor = this.anchors.eq( index ),
+			panel = self._getPanelForTab( anchor ),
 			// TODO until #3808 is fixed strip fragment identifier from url
 			// (IE fails to load from such url)
-			url = $( a ).attr( "href" ).replace( /#.*$/, "" ),
+			url = anchor.attr( "href" ).replace( /#.*$/, "" ),
 			eventData = {
-				tab: $( a ),
+				tab: anchor,
 				panel: panel
 			};
 
@@ -558,7 +558,6 @@ $.widget( "ui.tabs", {
 		});
 
 		if ( this.xhr ) {
-			// load remote from here on
 			this.lis.eq( index ).addClass( "ui-tabs-loading" );
 
 			this.xhr
