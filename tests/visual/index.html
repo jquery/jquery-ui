@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<title>jQuery UI Visual Tests</title>
+
+	<link   type="text/css"       href="../../themes/base/jquery.ui.base.css" rel="stylesheet" />
+	<link rel="stylesheet" href="../../external/qunit.css" type="text/css"/>
+	<style type="text/css">
+	ul { font-family: 'trebuchet ms', verdana, arial; }
+	h2, ul {font-size: 10pt; }
+	h2 {
+		background-color:#EEEEEE;
+		color:black;
+		font-size:small;
+		font-weight:normal;
+		margin:0;
+		padding:10px;
+	}
+	#index {
+		padding: 0.5em 1em;
+		background: #ccc;
+	}
+	
+	#index h3 {
+		margin-bottom: 0;
+		padding: 0;
+	}
+	
+	#index ul {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		line-height: 140%;
+	}
+	h3 { font-size: 0.8em; color: black; font-weight: bold; font-family: 'trebuchet ms', verdana, arial; padding: 0.5em 0 0 1em; margin-bottom: -10px}
+	</style>
+
+</head>
+<body>
+
+<h1 id="qunit-header">jQuery UI Visual Tests</h1>
+
+<div id="index">
+	<h3>Index</h3>
+	<ul>
+		<li><a href="#general">General</a></li>
+		<li><a href="#core">Core</a></li>
+		<li><a href="#interactions">Interactions</a></li>
+		<li><a href="#widgets">Widgets</a></li>
+		<li><a href="#utilities">Utilities</a></li>
+		<li><a href="#effects">Effects</a></li>
+	</ul>
+</div>
+
+
+<h2 id="general">General</h2>
+<ul>
+	<li><a href="all.html">All (Grid of tests)</a></li>
+	<li><a href="theme.html">Theme</a></li>
+</ul>
+
+
+
+<h2 id="core">Core</h2>
+
+<h3>Mouse</h3>
+<ul>
+	<li><a href="mouse/mouse_ticket_6946.html">Mouse #6946</a></li>
+</ul>
+
+<h2 id="interactions">Interactions</h2>
+<h3>Draggable</h3>
+<ul>
+	<li><a href="draggable/draggable.html">Draggable</a></li>
+	<li><a href="draggable/draggable.scroll.html">Scroll Tests</a></li>
+	<li><a href="draggable/draggable_option_containment_array.html">Option: Containment array</a></li>
+	<li><a href="draggable/draggable_option_cursorAt_object.html">Option: cursorAt object</a></li>
+	<li><a href="draggable/draggable_option_handle_selector.html">Option: Handle selector</a></li>
+	<li><a href="draggable/draggable_option_iframeFix_false.html">Option: iframeFix false</a></li>
+	<li><a href="draggable/draggable_option_iframeFix_selector.html">Option: iframeFix selector</a></li>
+	<li><a href="draggable/draggable_option_iframeFix_true.html">Option: iframeFix true</a></li>
+</ul>
+
+<h3>Droppable</h3>
+<ul>
+	<li><a href="droppable/droppable.html">Droppable</a></li>
+	<li><a href="droppable/droppable_option_accept_default.html">Option: Accept default</a></li>
+	<li><a href="droppable/droppable_option_accept_function.html">Option: Accept function</a></li>
+	<li><a href="droppable/droppable_option_accept_selector.html">Option: Accept selector</a></li>
+	<li><a href="droppable/droppable_ticket_4087.html">Droppable #4087</a></li>
+	<li><a href="droppable/droppable_ticket_4088.html">Droppable #4088</a></li>
+</ul>
+
+<h3>Resizable</h3>
+<ul>
+	<li><a href="resizable/resizable.html">Resizable</a></li>
+</ul>
+<ul>
+	<li><a href="resizable/resizable_option_alsoResize_child.html">Option: alsoResize child</a></li>
+	<li><a href="resizable/resizable_option_aspectRatio_0.5.html">Option: aspectRatio 0.5</a></li>
+	<li><a href="resizable/resizable_option_aspectRatio_1.0.html">Option: aspectRatio 1.0</a></li>
+	<li><a href="resizable/resizable_option_aspectRatio_1.5.html">Option: aspectRatio 1.5</a></li>
+	
+	<li><a href="resizable/resizable_option_aspectRatio_preserve_maxHeight_150.html">Option: aspectRatio "preserve" maxHeight 150</a></li>
+	<li><a href="resizable/resizable_option_aspectRatio_preserve_maxWidth_150.html">Option: aspectRatio "preserve" maxWidth 150</a></li>
+	<li><a href="resizable/resizable_option_aspectRatio_preserve_minHeight_50.html">Option: aspectRatio "preserve" minHeight 50</a></li>
+	<li><a href="resizable/resizable_option_aspectRatio_preserve_minWidth_50.html">Option: aspectRatio "preserve" minWidth 50</a></li>
+	<li><a href="resizable/resizable_option_aspectRatio_preserve_w100xh100.html">Option: aspectRatio "preserve" width 100 height 100</a></li>
+	<li><a href="resizable/resizable_option_aspectRatio_preserve_w100xh50.html">Option: aspectRatio "preserve" width 100 height 50</a></li>
+	<li><a href="resizable/resizable_option_aspectRatio_preserve_w50xh100.html">Option: aspectRatio "preserve" width 50 height 100</a></li>
+</ul>
+<ul>	
+	<li><a href="resizable/resizable_ticket_3053.html">Resizable #3053</a></li>
+	<li><a href="resizable/resizable_ticket_4199.html">Resizable #4199</a></li>
+	<li><a href="resizable/resizable_ticket_4217.html">Resizable #4217</a></li>
+	<li><a href="resizable/resizable_ticket_4940.html">Resizable #4940</a></li>
+	<li><a href="resizable/resizable_ticket_5335.html">Resizable #5335</a></li>
+</ul>
+
+<h3>Selectable</h3>
+
+<ul>
+	<li><a href="selectable/selectable.html">Selectable</a></li>
+	<li><a href="selectable/selectable_ticket_4341.html">Selectable #4341</a></li>
+</ul>
+
+<h3>Sortable</h3>
+
+<ul>
+	<li><a href="sortable/sortable.html">Sortable</a></li>
+	<li><a href="sortable/sortable_massive_scale.html">Massive Scale Test</a></li>
+	<li><a href="sortable/sortable_option_revert_false.html">Option: revert false</a></li>
+	<li><a href="sortable/sortable_option_revert_true.html">Option: revert true</a></li>
+	<li><a href="sortable/sortable_ticket_4231.html">Sortable #4231</a></li>
+	<li><a href="sortable/sortable_ticket_5355.html">Sortable #5335</a></li>
+</ul>
+
+<h2 id="widgets">Widgets</h2>
+
+<h3>Button</h3>
+<ul>
+	<li><a href="button/button.html">Button</a></li>
+	<li><a href="button/button_disabled_true.html">Disabled true</a></li>
+	<li><a href="button/button_input_type_checkbox.html">Input Type: checkbox</a></li>
+	<li><a href="button/button_option_disabled_true.html">Option: disabled true</a></li>
+	<li><a href="button/button_performance.html">Performance</a></li>
+	<li><a href="button/button_ticket_5254.html">Button #5254</a></li>
+	<li><a href="button/button_ticket_5261.html">Button #5261</a></li>
+	<li><a href="button/button_ticket_5278.html">Button #5278</a></li>
+</ul>
+
+<h3>Datepicker</h3>
+<ul>
+	<li><a href="datepicker/datepicker.html">Datepicker</a></li>
+	<li><a href="datepicker/datepicker_multi_inline.html">Multi Inline</a></li>
+	<li><a href="datepicker/multimonth.html">Multimonth</a></li>
+	<li><a href="datepicker/viewport.html">Viewport</a></li>
+	<li><a href="datepicker/datepicker_ticket_4071.html">Datepicker #4071</a></li>
+	<li><a href="datepicker/datepicker_ticket_4240.html">Datepicker #4240</a></li>
+	<li><a href="datepicker/datepicker_ticket_4443.html">Datepicker #4443</a></li>
+	<li><a href="datepicker/datepicker_ticket_5676.html">Datepicker #5676</a></li>
+</ul>
+
+<h3>Dialog</h3>
+<ul>
+	<li><a href="dialog/dialog_on_page_with_large_dom.html">Dialog on page with large DOM</a></li>
+</ul>
+
+<h3>Menu</h3>
+<ul>
+	<li><a href="menu/menu.html">Menu</a></li>
+	<li><a href="menu/drilldown.html">Drilldown</a></li>
+	<li><a href="menu/tablemenu.html">Table Menu</a></li>
+</ul>
+
+<h3>Slider</h3>
+<ul>
+	<li><a href="slider/slider.html">Slider</a></li>
+	<li><a href="slider/slider_horizontal.html">Horizontal</a></li>
+	<li><a href="slider/slider_horizontal_range.html">Horizontal Range</a></li>
+	<li><a href="slider/slider_horizontal_range_min.html">Horizontal Range Min</a></li>
+	<li><a href="slider/slider_horizontal_range_max.html">Horizontal Range Max</a></li>
+	<li><a href="slider/slider_vertical.html">Vertical</a></li>
+	<li><a href="slider/slider_vertical_range.html">Vertical Range</a></li>
+	<li><a href="slider/slider_vertical_range_min.html">Vertical Range Min</a></li>
+	<li><a href="slider/slider_vertical_range_max.html">Vertical Range Max</a></li>
+	<li><a href="slider/slider_in_container_with_scrollbars.html">In Container with Scrollbars</a></li>
+</ul>
+<ul>
+	<li><a href="slider/slider_method_destroy.html">Method: destroy</a></li>
+	<li><a href="slider/slider_method_disable.html">Method: disable</a></li>
+</ul>
+<ul>
+	<li><a href="slider/slider_option_animate_false.html">Option: animate false</a></li>
+	<li><a href="slider/slider_option_animate_true.html">Options: animate true</a></li>
+	<li><a href="slider/slider_option_max_3.html">Option: max 3</a></li>
+	<li><a href="slider/slider_option_max_30.html">Option: max 30</a></li>
+	<li><a href="slider/slider_option_max_300.html">Option: max 300</a></li>
+	<li><a href="slider/slider_option_min_-3.html">Option: min 3</a></li>
+	<li><a href="slider/slider_option_min_-30.html">Option: min 30</a></li>
+	<li><a href="slider/slider_option_min_-300.html">Option: min 300</a></li>
+	<li><a href="slider/slider_option_orientation_horizontal.html">Option: orientation horizontal</a></li>
+	<li><a href="slider/slider_option_orientation_vertical.html">Option: orientation vertical</a></li>
+	<li><a href="slider/slider_option_range_true.html">Option: range true</a></li>
+	<li><a href="slider/slider_option_range_false.html">Option: range false</a></li>
+	<li><a href="slider/slider_option_range_min.html">Option: range min</a></li>
+	<li><a href="slider/slider_option_range_max.html">Option: range max</a></li>
+	<li><a href="slider/slider_option_step_25.html">Option: step 25</a></li>
+	<li><a href="slider/slider_option_step_5.html">Option: step 5</a></li>
+	<li><a href="slider/slider_option_value_3.html">Option: value 3</a></li>
+	<li><a href="slider/slider_option_value_30.html">Option: value 30</a></li>
+	<li><a href="slider/slider_option_values_25_50_75.html">Option: values 25, 50, 75</a></li>
+	<li><a href="slider/slider_option_values_25_75.html">Option: values 25, 75</a></li>
+	<li><a href="slider/slider_option_values_50.html">Option: values 50</a></li>
+</ul>
+<ul>
+	<li><a href="slider/slider_ticket_3736.html">Slider #3736</a></li>
+	<li><a href="slider/slider_ticket_3762.html">Slider #3762</a></li>
+	<li><a href="slider/slider_ticket_4385.html">Slider #4385</a></li>
+	<li><a href="slider/slider_ticket_4467.html">Slider #4467</a></li>
+</ul>
+
+<h3>Spinner</h3>
+<ul>
+	<li><a href="spinner/spinner.html">Spinner</a></li>
+</ul>
+
+<h3>Tooltip</h3>
+<ul>
+	<li><a href="tooltip/tooltip.html">Tooltip</a></li>
+	<li><a href="tooltip/animations.html">Animations</a></li>
+	<li><a href="tooltip/callout.html">Callout</a></li>
+</ul>
+
+<h3>Compound Tests</h3>
+<ul>
+	<li><a href="compound/accordion_dialog.html">Accordion and Dialog</a></li>
+	<li><a href="compound/accordion_tabs.html">Accordion and Tabs</a></li>
+	<li><a href="compound/datepicker_dialog.html">Datepicker and Dialog</a></li>
+	<li><a href="compound/draggable_accordion.html">Draggable and Accordion</a></li>
+	<li><a href="compound/draggable_accordion_accordion_tabs_draggable.html">Draggable Accordion, Accordion Tabs</a></li>
+	<li><a href="compound/sortable_accordion_sortable_tabs.html">Sortable Accordion, Sortable Tabs</a></li>
+	<li><a href="compound/tabs_tabs.html">Tabs and Tabs</a></li>
+	<li><a href="compound/tabs_tooltips.html">Tabs and Tooltips</a></li>
+	<li><a href="compound/widgets_in_dialog.html">Widgets in Dialog</a></li>
+</ul>
+
+<h2 id="utilities">Utilities</h2>
+
+<h3>Position</h3>
+<ul>
+	<li><a href="position/position.html">Position</a></li>
+	<li><a href="position/position_margin.html">Position Margin</a></li>
+</ul>
+
+<h2 id="effects">Effects</h2>
+
+<ul>
+	<li><a href="effects.all.html">All Effects</a></li>
+</ul>
+
+<h3>addClass</h3>
+<ul>
+	<li><a href="addClass/addClass_queue.html">addClass Queue</a></li>
+</ul>
+
+<h3>Animate</h3>
+<ul>
+	<li><a href="animate/animate_backgroundColor_hex.html">Animate backgroundColor Hex</a></li>
+	<li><a href="animate/animate_backgroundColor_rgb.html">Animate backgroundColor RGB</a></li>
+	<li><a href="animate/animate_color_hex.html">Animate Color Hex</a></li>
+	<li><a href="animate/animate_color_rgb.html">Animate Color RGB</a></li>
+</ul>
+
+</body>
+
+</html>
