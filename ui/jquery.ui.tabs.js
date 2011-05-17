@@ -144,7 +144,7 @@ $.widget( "ui.tabs", {
 
 	_sanitizeSelector: function( hash ) {
 		// we need this because an id may contain a ":"
-		return hash ? hash.replace( /:/g, "\\:" ) : "";
+		return hash ? hash.replace( /[!"$%&'()*+,.\/:;<=>?@[\]^`{|}~]/g, "\\$&" ) : "";
 	},
 
 	refresh: function() {
