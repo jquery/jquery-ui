@@ -1009,6 +1009,18 @@ if ( $.uiBackCompat !== false ) {
 			}
 		}
 	});
+
+	// load event
+	$.widget( "ui.tabs", $.ui.tabs, {
+		_trigger: function( type, event, data ) {
+			var _data = $.extend( {}, data );
+			if ( type === "load" ) {
+				_data.panel = _data.panel[ 0 ];
+				_data.tab = _data.tab[ 0 ];
+			}
+			return this._super( "_trigger", type, event, _data );
+		}
+	});
 }
 
 })( jQuery );
