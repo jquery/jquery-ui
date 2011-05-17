@@ -1096,6 +1096,33 @@ $.extend(Datepicker.prototype, {
 		return date;
 	},
 
+	/* Check if given fields have a valid date as value (following format in settings)
+
+	   @param  target           Object|String - the expected format of the date
+	   @param  onErrorCallback  function - Callback that is called for 
+	   @return boolean - True if no invalid date found if given field */
+	validate: function (target, onErrorCallback) {
+            var obj;
+
+            if (target instanceof jQuery) {
+                obj = target;
+            } else if (typeof arguments[0] == 'string') {
+                obj = $(target);
+            } else {
+                throw 'Invalid target to validate';
+            }
+            var errorfound = false;
+            obj.each(function ()  {
+                if ($(this).val() != $.datepicker.formatDate($.datepicker._defaults.dateFormat, $(this).datepicker('getDate'))) {
+                    errorfound = true;
+                    return onErrorCallback($(this));
+                }
+                return true;
+            });
+            return !errorfound;
+
+	},
+
 	/* Standard date formats. */
 	ATOM: 'yy-mm-dd', // RFC 3339 (ISO 8601)
 	COOKIE: 'D, dd M yy',
