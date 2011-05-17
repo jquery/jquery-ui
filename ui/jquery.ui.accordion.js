@@ -33,20 +33,20 @@ $.widget( "ui.accordion", {
 	},
 
 	_create: function() {
-		var self = this,
-			options = self.options;
+		var that = this,
+			options = that.options;
 
-		self.running = false;
+		that.running = false;
 
-		self.element.addClass( "ui-accordion ui-widget ui-helper-reset" );
+		that.element.addClass( "ui-accordion ui-widget ui-helper-reset" );
 
-		self.headers = self.element.find( options.header )
+		that.headers = that.element.find( options.header )
 			.addClass( "ui-accordion-header ui-helper-reset ui-state-default ui-corner-all" );
-		self._hoverable( self.headers );
-		self._focusable( self.headers );
-		self.headers.find( ":first-child" ).addClass( "ui-accordion-heading" );
+		that._hoverable( that.headers );
+		that._focusable( that.headers );
+		that.headers.find( ":first-child" ).addClass( "ui-accordion-heading" );
 
-		self.headers.next()
+		that.headers.next()
 			.addClass( "ui-accordion-content ui-helper-reset ui-widget-content ui-corner-bottom" );
 
 		// don't allow collapsible: false and active: false
@@ -57,26 +57,26 @@ $.widget( "ui.accordion", {
 		if ( options.active < 0 ) {
 			options.active += this.headers.length;
 		}
-		self.active = self._findActive( options.active )
+		that.active = that._findActive( options.active )
 			.addClass( "ui-state-default ui-state-active" )
 			.toggleClass( "ui-corner-all" )
 			.toggleClass( "ui-corner-top" );
-		self.active.next().addClass( "ui-accordion-content-active" );
+		that.active.next().addClass( "ui-accordion-content-active" );
 
-		self._createIcons();
-		self.refresh();
+		that._createIcons();
+		that.refresh();
 
 		// ARIA
-		self.element.attr( "role", "tablist" );
+		that.element.attr( "role", "tablist" );
 
-		self.headers
+		that.headers
 			.attr( "role", "tab" )
-			.bind( "keydown.accordion", $.proxy( self, "_keydown" ) )
+			.bind( "keydown.accordion", $.proxy( that, "_keydown" ) )
 			.next()
 				.attr( "role", "tabpanel" );
 
-		self.headers
-			.not( self.active )
+		that.headers
+			.not( that.active )
 			.attr({
 				"aria-expanded": "false",
 				"aria-selected": "false",
@@ -86,10 +86,10 @@ $.widget( "ui.accordion", {
 				.hide();
 
 		// make sure at least one header is in the tab order
-		if ( !self.active.length ) {
-			self.headers.eq( 0 ).attr( "tabIndex", 0 );
+		if ( !that.active.length ) {
+			that.headers.eq( 0 ).attr( "tabIndex", 0 );
 		} else {
-			self.active
+			that.active
 				.attr({
 					"aria-expanded": "true",
 					"aria-selected": "true",
@@ -99,7 +99,7 @@ $.widget( "ui.accordion", {
 
 		// only need links in tab order for Safari
 		if ( !$.browser.safari ) {
-			self.headers.find( "a" ).attr( "tabIndex", -1 );
+			that.headers.find( "a" ).attr( "tabIndex", -1 );
 		}
 
 		this._setupEvents( options.event );
@@ -355,14 +355,14 @@ $.widget( "ui.accordion", {
 	},
 
 	_toggle: function( data ) {
-		var self = this,
-			options = self.options,
+		var that = this,
+			options = that.options,
 			toShow = data.newContent,
 			toHide = data.oldContent;
 
-		self.running = true;
+		that.running = true;
 		function complete() {
-			self._completed( data );
+			that._completed( data );
 		}
 
 		if ( options.animated ) {
@@ -549,7 +549,7 @@ if ( $.uiBackCompat !== false ) {
 		var _create = prototype._create;
 		prototype._create = function() {
 			if ( this.options.navigation ) {
-				var self = this,
+				var that = this,
 					headers = this.element.find( this.options.header ),
 					content = headers.next(),
 					current = headers.add( content )
@@ -559,7 +559,7 @@ if ( $.uiBackCompat !== false ) {
 				if ( current ) {
 					headers.add( content ).each( function( index ) {
 						if ( $.contains( this, current ) ) {
-							self.options.active = Math.floor( index / 2 );
+							that.options.active = Math.floor( index / 2 );
 							return false;
 						}
 					});

@@ -49,7 +49,7 @@ $.widget("ui.tooltip", {
 		if ( !target.length ) {
 			return;
 		}
-		var self = this;
+		var that = this;
 		if ( !target.data("tooltip-title") ) {
 			target.data("tooltip-title", target.attr("title"));
 		}
@@ -60,12 +60,12 @@ $.widget("ui.tooltip", {
 				// intially its an empty string, so not undefined
 				// TODO is there a better approach to enable ajax tooltips to have two updates?
 				if (target.attr( "aria-describedby" ) !== undefined) {
-					self._open(event, target, response);
+					that._open(event, target, response);
 				}
 			}, 13);
 		});
 		if (content) {
-			self._open(event, target, content);
+			that._open(event, target, content);
 		}
 	},
 	

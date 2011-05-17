@@ -96,13 +96,13 @@ $.widget("ui.sortable", $.ui.mouse, {
 		this._refreshItems(event);
 
 		//Find out if the clicked node (or one of its parents) is a actual item in this.items
-		var currentItem = null, self = this, nodes = $(event.target).parents().each(function() {
-			if($.data(this, 'sortable-item') == self) {
+		var currentItem = null, that = this, nodes = $(event.target).parents().each(function() {
+			if($.data(this, 'sortable-item') == that) {
 				currentItem = $(this);
 				return false;
 			}
 		});
-		if($.data(event.target, 'sortable-item') == self) currentItem = $(event.target);
+		if($.data(event.target, 'sortable-item') == that) currentItem = $(event.target);
 
 		if(!currentItem) return false;
 		if(this.options.handle && !overrideHandle) {
@@ -120,7 +120,7 @@ $.widget("ui.sortable", $.ui.mouse, {
 
 	_mouseStart: function(event, overrideHandle, noActivation) {
 
-		var o = this.options, self = this;
+		var o = this.options, that = this;
 		this.currentContainer = this;
 
 		//We only need to call refreshPositions, because the refreshItems call has been moved to mouseCapture
@@ -216,7 +216,7 @@ $.widget("ui.sortable", $.ui.mouse, {
 
 		//Post 'activate' events to possible containers
 		if(!noActivation) {
-			 for (var i = this.containers.length - 1; i >= 0; i--) { this.containers[i]._trigger("activate", event, self._uiHash(this)); }
+			 for (var i = this.containers.length - 1; i >= 0; i--) { this.containers[i]._trigger("activate", event, that._uiHash(this)); }
 		}
 
 		//Prepare possible droppables
@@ -334,16 +334,16 @@ $.widget("ui.sortable", $.ui.mouse, {
 			$.ui.ddmanager.drop(this, event);
 
 		if(this.options.revert) {
-			var self = this;
-			var cur = self.placeholder.offset();
+			var that = this;
+			var cur = that.placeholder.offset();
 
-			self.reverting = true;
+			that.reverting = true;
 
 			$(this.helper).animate({
-				left: cur.left - this.offset.parent.left - self.margins.left + (this.offsetParent[0] == document.body ? 0 : this.offsetParent[0].scrollLeft),
-				top: cur.top - this.offset.parent.top - self.margins.top + (this.offsetParent[0] == document.body ? 0 : this.offsetParent[0].scrollTop)
+				left: cur.left - this.offset.parent.left - that.margins.left + (this.offsetParent[0] == document.body ? 0 : this.offsetParent[0].scrollLeft),
+				top: cur.top - this.offset.parent.top - that.margins.top + (this.offsetParent[0] == document.body ? 0 : this.offsetParent[0].scrollTop)
 			}, parseInt(this.options.revert, 10) || 500, function() {
-				self._clear(event);
+				that._clear(event);
 			});
 		} else {
 			this._clear(event, noPropagation);
@@ -355,7 +355,7 @@ $.widget("ui.sortable", $.ui.mouse, {
 
 	cancel: function() {
 
-		var self = this;
+		var that = this;
 
 		if(this.dragging) {
 
@@ -368,9 +368,9 @@ $.widget("ui.sortable", $.ui.mouse, {
 
 			//Post deactivating events to containers
 			for (var i = this.containers.length - 1; i >= 0; i--){
-				this.containers[i]._trigger("deactivate", null, self._uiHash(this));
+				this.containers[i]._trigger("deactivate", null, that._uiHash(this));
 				if(this.containers[i].containerCache.over) {
-					this.containers[i]._trigger("out", null, self._uiHash(this));
+					this.containers[i]._trigger("out", null, that._uiHash(this));
 					this.containers[i].containerCache.over = 0;
 				}
 			}
@@ -518,7 +518,7 @@ $.widget("ui.sortable", $.ui.mouse, {
 	
 	_getItemsAsjQuery: function(connected) {
 
-		var self = this;
+		var that = this;
 		var items = [];
 		var queries = [];
 		var connectWith = this._connectWith();
@@ -567,7 +567,7 @@ $.widget("ui.sortable", $.ui.mouse, {
 		this.items = [];
 		this.containers = [this];
 		var items = this.items;
-		var self = this;
+		var that = this;
 		var queries = [[$.isFunction(this.options.items) ? this.options.items.call(this.element[0], event, { item: this.currentItem }) : $(this.options.items, this.element), this]];
 		var connectWith = this._connectWith();
 
@@ -647,15 +647,15 @@ $.widget("ui.sortable", $.ui.mouse, {
 
 	_createPlaceholder: function(that) {
 
-		var self = that || this, o = self.options;
+		var that = that || this, o = that.options;
 
 		if(!o.placeholder || o.placeholder.constructor == String) {
 			var className = o.placeholder;
 			o.placeholder = {
 				element: function() {
 
-					var el = $(document.createElement(self.currentItem[0].nodeName))
-						.addClass(className || self.currentItem[0].className+" ui-sortable-placeholder")
+					var el = $(document.createElement(that.currentItem[0].nodeName))
+						.addClass(className || that.currentItem[0].className+" ui-sortable-placeholder")
 						.removeClass("ui-sortable-helper")[0];
 
 					if(!className)
@@ -670,20 +670,20 @@ $.widget("ui.sortable", $.ui.mouse, {
 					if(className && !o.forcePlaceholderSize) return;
 
 					//If the element doesn't have a actual height by itself (without styles coming from a stylesheet), it receives the inline height from the dragged item
-					if(!p.height()) { p.height(self.currentItem.innerHeight() - parseInt(self.currentItem.css('paddingTop')||0, 10) - parseInt(self.currentItem.css('paddingBottom')||0, 10)); };
-					if(!p.width()) { p.width(self.currentItem.innerWidth() - parseInt(self.currentItem.css('paddingLeft')||0, 10) - parseInt(self.currentItem.css('paddingRight')||0, 10)); };
+					if(!p.height()) { p.height(that.currentItem.innerHeight() - parseInt(that.currentItem.css('paddingTop')||0, 10) - parseInt(that.currentItem.css('paddingBottom')||0, 10)); };
+					if(!p.width()) { p.width(that.currentItem.innerWidth() - parseInt(that.currentItem.css('paddingLeft')||0, 10) - parseInt(that.currentItem.css('paddingRight')||0, 10)); };
 				}
 			};
 		}
 
 		//Create the placeholder
-		self.placeholder = $(o.placeholder.element.call(self.element, self.currentItem));
+		that.placeholder = $(o.placeholder.element.call(that.element, that.currentItem));
 
 		//Append it after the actual current item
-		self.currentItem.after(self.placeholder);
+		that.currentItem.after(that.placeholder);
 
 		//Update the size of the placeholder (TODO: Logic to fuzzy, see line 316/317)
-		o.placeholder.update(self, self.placeholder);
+		o.placeholder.update(that, that.placeholder);
 
 	},
 
@@ -966,10 +966,10 @@ $.widget("ui.sortable", $.ui.mouse, {
 		// 3. on the local scope, we copy the counter variable, and check in the timeout, if it's still the same
 		// 4. this lets only the last addition to the timeout stack through
 		this.counter = this.counter ? ++this.counter : 1;
-		var self = this, counter = this.counter;
+		var that = this, counter = this.counter;
 
 		window.setTimeout(function() {
-			if(counter == self.counter) self.refreshPositions(!hardRefresh); //Precompute after each DOM insertion, NOT on mousemove
+			if(counter == that.counter) that.refreshPositions(!hardRefresh); //Precompute after each DOM insertion, NOT on mousemove
 		},0);
 
 	},
@@ -979,7 +979,7 @@ $.widget("ui.sortable", $.ui.mouse, {
 		this.reverting = false;
 		// We delay all events that have to be triggered to after the point where the placeholder has been removed and
 		// everything else normalized again
-		var delayedTriggers = [], self = this;
+		var delayedTriggers = [], that = this;
 
 		// We first have to update the dom position of the actual currentItem
 		// Note: don't do it if the current item is already removed (by a user), or it gets reappended (see #4088)
@@ -1055,14 +1055,14 @@ $.widget("ui.sortable", $.ui.mouse, {
 	},
 
 	_uiHash: function(inst) {
-		var self = inst || this;
+		var that = inst || this;
 		return {
-			helper: self.helper,
-			placeholder: self.placeholder || $([]),
-			position: self.position,
-			originalPosition: self.originalPosition,
-			offset: self.positionAbs,
-			item: self.currentItem,
+			helper: that.helper,
+			placeholder: that.placeholder || $([]),
+			position: that.position,
+			originalPosition: that.originalPosition,
+			offset: that.positionAbs,
+			item: that.currentItem,
 			sender: inst ? inst.element : null
 		};
 	}

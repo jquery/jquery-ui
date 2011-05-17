@@ -25,7 +25,7 @@ $.widget("ui.menu", {
 		}
 	},
 	_create: function() {
-		var self = this;
+		var that = this;
 		this.activeMenu = this.element;
 		this.menuId = this.element.attr( "id" ) || "ui-menu-" + idIncrement++;
 		if (this.element.find(".ui-icon").length) {
@@ -39,97 +39,97 @@ $.widget("ui.menu", {
 			})
 			.bind( "click.menu", function( event ) {
 				var item = $( event.target ).closest( ".ui-menu-item:has(a)" );
-				if ( self.options.disabled ) {
+				if ( that.options.disabled ) {
 					return false;
 				}
 				if ( !item.length ) {
 					return;
 				}
 				// it's possible to click an item without hovering it (#7085)
-				if ( !self.active || ( self.active[ 0 ] !== item[ 0 ] ) ) {
-					self.focus( event, item );
+				if ( !that.active || ( that.active[ 0 ] !== item[ 0 ] ) ) {
+					that.focus( event, item );
 				}
-				self.select( event );
+				that.select( event );
 			})
 			.bind( "mouseover.menu", function( event ) {
-				if ( self.options.disabled ) {
+				if ( that.options.disabled ) {
 					return;
 				}
 				var target = $( event.target ).closest( ".ui-menu-item" );
 				if ( target.length ) {
-					self.focus( event, target );
+					that.focus( event, target );
 				}
 			})
 			.bind("mouseout.menu", function( event ) {
-				if ( self.options.disabled ) {
+				if ( that.options.disabled ) {
 					return;
 				}
 				var target = $( event.target ).closest( ".ui-menu-item" );
 				if ( target.length ) {
-					self.blur( event );
+					that.blur( event );
 				}
 			});
 		this.refresh();
 		
 		this.element.attr( "tabIndex", 0 ).bind( "keydown.menu", function( event ) {
-			if ( self.options.disabled ) {
+			if ( that.options.disabled ) {
 				return;
 			}
 			switch ( event.keyCode ) {
 			case $.ui.keyCode.PAGE_UP:
-				self.previousPage( event );
+				that.previousPage( event );
 				event.preventDefault();
 				event.stopImmediatePropagation();
 				break;
 			case $.ui.keyCode.PAGE_DOWN:
-				self.nextPage( event );
+				that.nextPage( event );
 				event.preventDefault();
 				event.stopImmediatePropagation();
 				break;
 			case $.ui.keyCode.UP:
-				self.previous( event );
+				that.previous( event );
 				event.preventDefault();
 				event.stopImmediatePropagation();
 				break;
 			case $.ui.keyCode.DOWN:
-				self.next( event );
+				that.next( event );
 				event.preventDefault();
 				event.stopImmediatePropagation();
 				break;
 			case $.ui.keyCode.LEFT:
-				if (self.left( event )) {
+				if (that.left( event )) {
 					event.stopImmediatePropagation();
 				}
 				event.preventDefault();
 				break;
 			case $.ui.keyCode.RIGHT:
-				if (self.right( event )) {
+				if (that.right( event )) {
 					event.stopImmediatePropagation();
 				}
 				event.preventDefault();
 				break;
 			case $.ui.keyCode.ENTER:
-				if (self.active.children("a[aria-haspopup='true']").length) {
-					if (self.right( event )) {
+				if (that.active.children("a[aria-haspopup='true']").length) {
+					if (that.right( event )) {
 						event.stopImmediatePropagation();
 					}
 				}
 				else {
-					self.select( event );
+					that.select( event );
 					event.stopImmediatePropagation();
 				}
 				event.preventDefault();
 				break;
 			case $.ui.keyCode.ESCAPE:
-				if ( self.left( event ) ) {
+				if ( that.left( event ) ) {
 					event.stopImmediatePropagation();
 				}
 				event.preventDefault();
 				break;
 			default:
 				event.stopPropagation();
-				clearTimeout(self.filterTimer);
-				var prev = self.previousFilter || "";
+				clearTimeout(that.filterTimer);
+				var prev = that.previousFilter || "";
 				var character = String.fromCharCode(event.keyCode);
 				var skip = false;
 				if (character == prev) {
@@ -140,28 +140,28 @@ $.widget("ui.menu", {
 				function escape(value) {
 					return value.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
 				}
-				var match = self.activeMenu.children(".ui-menu-item").filter(function() {
+				var match = that.activeMenu.children(".ui-menu-item").filter(function() {
 					return new RegExp("^" + escape(character), "i").test($(this).children("a").text());
 				});
-				var match = skip && match.index(self.active.next()) != -1 ? self.active.nextAll(".ui-menu-item") : match;
+				var match = skip && match.index(that.active.next()) != -1 ? that.active.nextAll(".ui-menu-item") : match;
 				if (!match.length) {
 					character = String.fromCharCode(event.keyCode);
-					match = self.activeMenu.children(".ui-menu-item").filter(function() {
+					match = that.activeMenu.children(".ui-menu-item").filter(function() {
 						return new RegExp("^" + escape(character), "i").test($(this).children("a").text());
 					});
 				}
 				if (match.length) {
-					self.focus(event, match);
+					that.focus(event, match);
 					if (match.length > 1) {
-						self.previousFilter = character;
-						self.filterTimer = setTimeout(function() {
-							delete self.previousFilter;
+						that.previousFilter = character;
+						that.filterTimer = setTimeout(function() {
+							delete that.previousFilter;
 						}, 1000);
 					} else {
-						delete self.previousFilter;
+						delete that.previousFilter;
 					}
 				} else {
-					delete self.previousFilter;
+					delete that.previousFilter;
 				}
 			}
 		});
@@ -196,7 +196,7 @@ $.widget("ui.menu", {
 	},
 	
 	refresh: function() {
-		var self = this;
+		var that = this;
 		// initialize nested menus
 		var submenus = this.element.find("ul:not(.ui-menu)")
 			.addClass( "ui-menu ui-widget ui-widget-content ui-corner-all" )
@@ -215,7 +215,7 @@ $.widget("ui.menu", {
 			.addClass( "ui-corner-all" )
 			.attr( "tabIndex", -1 )
 			.attr( "role", "menuitem" )
-			.attr("id", function(i) {return self.element.attr("id") + "-" + i});
+			.attr("id", function(i) {return that.element.attr("id") + "-" + i});
 		
 		submenus.each(function() {
 			var menu = $(this);
@@ -227,7 +227,7 @@ $.widget("ui.menu", {
 	},
 
 	focus: function( event, item ) {
-		var self = this;
+		var that = this;
 		
 		this.blur();
 		
@@ -249,17 +249,17 @@ $.widget("ui.menu", {
 			.children( "a" )
 				.addClass( "ui-state-focus" )
 			.end();
-		self.element.attr("aria-activedescendant", self.active.children("a").attr("id"))
+		that.element.attr("aria-activedescendant", that.active.children("a").attr("id"))
 
 		// highlight active parent menu item, if any
 		this.active.parent().closest(".ui-menu-item").children("a:first").addClass("ui-state-active");
 		
-		self.timer = setTimeout(function() {
-			self._close();
-		}, self.delay)
+		that.timer = setTimeout(function() {
+			that._close();
+		}, that.delay)
 		var nested = $(">ul", item);
 		if (nested.length && /^mouse/.test(event.type)) {
-			self._startOpening(nested);
+			that._startOpening(nested);
 		}
 		this.activeMenu = item.parent();
 		
@@ -279,11 +279,11 @@ $.widget("ui.menu", {
 
 	_startOpening: function(submenu) {
 		clearTimeout(this.timer);
-		var self = this;
-		self.timer = setTimeout(function() {
-			self._close();
-			self._open(submenu);
-		}, self.delay);
+		var that = this;
+		that.timer = setTimeout(function() {
+			that._close();
+			that._open(submenu);
+		}, that.delay);
 	},
 	
 	_open: function(submenu) {
@@ -322,13 +322,13 @@ $.widget("ui.menu", {
 	},
 
 	right: function(event) {
-		var self= this;
+		var that= this;
 		var newItem = this.active && this.active.children("ul").children("li").first();
 		if (newItem && newItem.length) {
 			this._open(newItem.parent());
 			var current = this.active;
 			//timeout so Firefox will not hide activedescendant change in expanding submenu from AT
-			setTimeout(function(){self.focus(event, newItem)}, 20);
+			setTimeout(function(){that.focus(event, newItem)}, 20);
 			return true;
 		}
 	},

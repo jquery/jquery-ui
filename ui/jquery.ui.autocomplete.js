@@ -45,7 +45,7 @@ $.widget( "ui.autocomplete", {
 	pending: 0,
 
 	_create: function() {
-		var self = this,
+		var that = this,
 			doc = this.element[ 0 ].ownerDocument,
 			suppressKeyPress;
 
@@ -61,7 +61,7 @@ $.widget( "ui.autocomplete", {
 				"aria-haspopup": "true"
 			})
 			.bind( "keydown.autocomplete", function( event ) {
-				if ( self.options.disabled || self.element.attr( "readonly" ) ) {
+				if ( that.options.disabled || that.element.attr( "readonly" ) ) {
                     suppressKeyPress = true;
 					return;
 				}
@@ -71,28 +71,28 @@ $.widget( "ui.autocomplete", {
 				switch( event.keyCode ) {
 				case keyCode.PAGE_UP:
                     suppressKeyPress = true;
-					self._move( "previousPage", event );
+					that._move( "previousPage", event );
 					break;
 				case keyCode.PAGE_DOWN:
                     suppressKeyPress = true;
-					self._move( "nextPage", event );
+					that._move( "nextPage", event );
 					break;
 				case keyCode.UP:
                     suppressKeyPress = true;
-					self._move( "previous", event );
+					that._move( "previous", event );
 					// prevent moving cursor to beginning of text field in some browsers
 					event.preventDefault();
 					break;
 				case keyCode.DOWN:
                     suppressKeyPress = true;
-					self._move( "next", event );
+					that._move( "next", event );
 					// prevent moving cursor to end of text field in some browsers
 					event.preventDefault();
 					break;
 				case keyCode.ENTER:
 				case keyCode.NUMPAD_ENTER:
 					// when menu is open and has focus
-					if ( self.menu.active ) {
+					if ( that.menu.active ) {
 						// #6055 - Opera still allows the keypress to occur
 						// which causes forms to submit
 						suppressKeyPress = true;
@@ -100,25 +100,25 @@ $.widget( "ui.autocomplete", {
 					}
 					//passthrough - ENTER and TAB both select the current element
 				case keyCode.TAB:
-					if ( !self.menu.active ) {
+					if ( !that.menu.active ) {
 						return;
 					}
-					self.menu.select( event );
+					that.menu.select( event );
 					break;
 				case keyCode.ESCAPE:
-					self._value( self.term );
-					self.close( event );
+					that._value( that.term );
+					that.close( event );
 					break;
 				default:
 					// keypress is triggered before the input value is changed
-					clearTimeout( self.searching );
-					self.searching = setTimeout(function() {
+					clearTimeout( that.searching );
+					that.searching = setTimeout(function() {
 						// only search if the value has changed
-						if ( self.term != self._value() ) {
-							self.selectedItem = null;
-							self.search( null, event );
+						if ( that.term != that._value() ) {
+							that.selectedItem = null;
+							that.search( null, event );
 						}
-					}, self.options.delay );
+					}, that.options.delay );
 					break;
 				}
 			})
@@ -133,46 +133,46 @@ $.widget( "ui.autocomplete", {
 				var keyCode = $.ui.keyCode;
 				switch( event.keyCode ) {
 				case keyCode.PAGE_UP:
-					self._move( "previousPage", event );
+					that._move( "previousPage", event );
 					break;
 				case keyCode.PAGE_DOWN:
-					self._move( "nextPage", event );
+					that._move( "nextPage", event );
 					break;
 				case keyCode.UP:
-					self._move( "previous", event );
+					that._move( "previous", event );
 					// prevent moving cursor to beginning of text field in some browsers
 					event.preventDefault();
 					break;
 				case keyCode.DOWN:
-					self._move( "next", event );
+					that._move( "next", event );
 					// prevent moving cursor to end of text field in some browsers
 					event.preventDefault();
 					break;
                 }
 			})
 			.bind( "focus.autocomplete", function() {
-				if ( self.options.disabled ) {
+				if ( that.options.disabled ) {
 					return;
 				}
 
-				self.selectedItem = null;
-				self.previous = self._value();
+				that.selectedItem = null;
+				that.previous = that._value();
 			})
 			.bind( "blur.autocomplete", function( event ) {
-				if ( self.options.disabled ) {
+				if ( that.options.disabled ) {
 					return;
 				}
 
-				clearTimeout( self.searching );
+				clearTimeout( that.searching );
 				// clicks on the menu (or a button to trigger a search) will cause a blur event
-				self.closing = setTimeout(function() {
-					self.close( event );
-					self._change( event );
+				that.closing = setTimeout(function() {
+					that.close( event );
+					that._change( event );
 				}, 150 );
 			});
 		this._initSource();
 		this.response = function() {
-			return self._response.apply( self, arguments );
+			return that._response.apply( that, arguments );
 		};
 		this.menu = $( "<ul></ul>" )
 			.addClass( "ui-autocomplete" )
@@ -183,14 +183,14 @@ $.widget( "ui.autocomplete", {
 				// but we can't detect a mouseup or a click immediately afterward
 				// so we have to track the next mousedown and close the menu if
 				// the user clicks somewhere outside of the autocomplete
-				var menuElement = self.menu.element[ 0 ];
+				var menuElement = that.menu.element[ 0 ];
 				if ( !$( event.target ).closest( ".ui-menu-item" ).length ) {
 					setTimeout(function() {
 						$( document ).one( 'mousedown', function( event ) {
-							if ( event.target !== self.element[ 0 ] &&
+							if ( event.target !== that.element[ 0 ] &&
 								event.target !== menuElement &&
 								!$.contains( menuElement, event.target ) ) {
-								self.close();
+								that.close();
 							}
 						});
 					}, 1 );
@@ -198,7 +198,7 @@ $.widget( "ui.autocomplete", {
 
 				// use another timeout to make sure the blur-event-handler on the input was already triggered
 				setTimeout(function() {
-					clearTimeout( self.closing );
+					clearTimeout( that.closing );
 				}, 13);
 			})
 			.menu({
@@ -206,46 +206,46 @@ $.widget( "ui.autocomplete", {
 				input: $(),
 				focus: function( event, ui ) {
 					var item = ui.item.data( "item.autocomplete" );
-					if ( false !== self._trigger( "focus", event, { item: item } ) ) {
+					if ( false !== that._trigger( "focus", event, { item: item } ) ) {
 						// use value to match what will end up in the input, if it was a key event
 						if ( /^key/.test(event.originalEvent.type) ) {
-							self._value( item.value );
+							that._value( item.value );
 						}
 					}
 				},
 				select: function( event, ui ) {
 					var item = ui.item.data( "item.autocomplete" ),
-						previous = self.previous;
+						previous = that.previous;
 
 					// only trigger when focus was lost (click on menu)
-					if ( self.element[0] !== doc.activeElement ) {
-						self.element.focus();
-						self.previous = previous;
+					if ( that.element[0] !== doc.activeElement ) {
+						that.element.focus();
+						that.previous = previous;
 						// #6109 - IE triggers two focus events and the second
 						// is asynchronous, so we need to reset the previous
 						// term synchronously and asynchronously :-(
 						setTimeout(function() {
-							self.previous = previous;
-							self.selectedItem = item;
+							that.previous = previous;
+							that.selectedItem = item;
 						}, 1);
 					}
 
-					if ( false !== self._trigger( "select", event, { item: item } ) ) {
-						self._value( item.value );
+					if ( false !== that._trigger( "select", event, { item: item } ) ) {
+						that._value( item.value );
 					}
 					// reset the term after the select event
 					// this allows custom select handling to work properly
-					self.term = self._value();
+					that.term = that._value();
 
-					self.close( event );
-					self.selectedItem = item;
+					that.close( event );
+					that.selectedItem = item;
 				},
 				blur: function( event, ui ) {
 					// don't set the value of the text field if it's already correct
 					// this prevents moving the cursor unnecessarily
-					if ( self.menu.element.is(":visible") &&
-						( self._value() !== self.term ) ) {
-						self._value( self.term );
+					if ( that.menu.element.is(":visible") &&
+						( that._value() !== that.term ) ) {
+						that._value( that.term );
 					}
 				}
 			})
@@ -281,7 +281,7 @@ $.widget( "ui.autocomplete", {
 	},
 
 	_initSource: function() {
-		var self = this,
+		var that = this,
 			array,
 			url;
 		if ( $.isArray(this.options.source) ) {
@@ -292,10 +292,10 @@ $.widget( "ui.autocomplete", {
 		} else if ( typeof this.options.source === "string" ) {
 			url = this.options.source;
 			this.source = function( request, response ) {
-				if ( self.xhr ) {
-					self.xhr.abort();
+				if ( that.xhr ) {
+					that.xhr.abort();
 				}
-				self.xhr = $.ajax({
+				that.xhr = $.ajax({
 					url: url,
 					data: request,
 					dataType: "json",
@@ -423,9 +423,9 @@ $.widget( "ui.autocomplete", {
 	},
 
 	_renderMenu: function( ul, items ) {
-		var self = this;
+		var that = this;
 		$.each( items, function( index, item ) {
-			self._renderItem( ul, item );
+			that._renderItem( ul, item );
 		});
 	},
 
