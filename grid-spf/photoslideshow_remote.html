@@ -20,7 +20,7 @@
 			<button data-page="prev">Prev</button>
 			<button data-page="prevStep">-1</button>
 			<span>
-				Page <input class="current" size="4"/>/<span class="total">0</span>,
+				Page <input class="current" size="4">/<span class="total">0</span>,
 				Total records <span class="totalRecords">0</span>
 			</span>
 			<button data-page="nextStep">+1</button>
@@ -30,12 +30,12 @@
 	</script>
 	<script type="text/x-kite" id="photo-tmpl">
 		<a href="{{href}}" title="{{title}}">
-			<img src="{{src}}" width="{{width}}" height="{{height}}" alt="{{alt}}" />
+			<img src="{{src}}" width="{{width}}" height="{{height}}" alt="{{alt}}">
 		</a>
 	</script>
 	<script>
 	$(function() {
-		var datasource = $.ui.datasource( {
+		var datasource = $.ui.datasource({
 			paging: {
 				limit: 2
 			},
@@ -59,10 +59,10 @@
 								src: kite( "http://farm{{farm}}.static.flickr.com/{{server}}/{{id}}_{{secret}}_m.jpg", photo ),
 								href: kite( "http://www.flickr.com/photos/{{owner}}/{{id}}/", photo )
 							}
-						})
+						});
 						response( result, data.photos.total );
 					}
-				})
+				});
 			}
 		});
 
