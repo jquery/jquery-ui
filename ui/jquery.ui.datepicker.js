@@ -1074,6 +1074,8 @@ $.extend(Datepicker.prototype, {
 						checkLiteral();
 				}
 		}
+		if (day == -1)
+			day = new Date().getDate();
 		if (year == -1)
 			year = new Date().getFullYear();
 		else if (year < 100)
