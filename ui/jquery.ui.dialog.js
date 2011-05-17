@@ -241,8 +241,7 @@ $.widget("ui.dialog", {
 	},
 	
 	isOnTop: function() {
-		var that = this,
-			_isOnTop = false,
+		var _isOnTop = false,
 			isAfter = false,
 			myZ;
 		if( this._isOpen ) {
