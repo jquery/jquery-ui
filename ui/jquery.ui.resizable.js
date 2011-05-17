@@ -38,6 +38,12 @@ $.widget("ui.resizable", $.ui.mouse, {
 
 		var self = this, o = this.options;
 		this.element.addClass("ui-resizable");
+		
+		//IE does not support position:fixed; and explicitly sets position:static; which causes the handles
+		//to be positioned incorrectly. IE6 does not change fixed to static so a separate check is added (see ticket #3628)
+		if( this.element.css( "position" ) === "static" || this.element.css( "position" ) === "fixed" && $.browser.msie && $.browser.version < 7 ) {
+			this.element.css( "position", "" );
+		}
 
 		$.extend(this, {
 			_aspectRatio: !!(o.aspectRatio),
@@ -301,10 +307,19 @@ $.widget("ui.resizable", $.ui.mouse, {
 		// plugins callbacks need to be called first
 		this._propagate("resize", event);
 
-		el.css({
-			top: this.position.top + "px", left: this.position.left + "px",
-			width: this.size.width + "px", height: this.size.height + "px"
-		});
+		//If position is fixed, set top and left based on offset rather than position
+		//to prevent the resizable from jumping to 0,0 when top and left are not set (see ticket #3628)
+		if( el.css( "position" ) === "fixed" ) {
+			el.css({
+				top: this.offset.top + "px", left: this.offset.left + "px",
+				width: this.size.width + "px", height: this.size.height + "px"
+			});
+		} else {
+			el.css({
+				top: this.position.top + "px", left: this.position.left + "px",
+				width: this.size.width + "px", height: this.size.height + "px"
+			});
+		}
 
 		if (!this._helper && this._proportionallyResizeElements.length)
 			this._proportionallyResize();
