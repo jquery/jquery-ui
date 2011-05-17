@@ -534,10 +534,6 @@ $.widget( "ui.tabs", {
 				panel: panel
 			};
 
-		if ( this.xhr ) {
-			this.xhr.abort();
-		}
-
 		// not remote
 		if ( !url ) {
 			return;
@@ -566,7 +562,9 @@ $.widget( "ui.tabs", {
 
 					self.lis.eq( index ).removeClass( "ui-tabs-loading" );
 
-					delete self.xhr;
+					if ( jqXHR === self.xhr ) {
+						delete self.xhr;
+					}
 				});
 		}
 
