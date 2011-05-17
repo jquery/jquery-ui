@@ -286,12 +286,8 @@ $.widget( "ui.tabs", {
 		}
 	},
 
-	// Reset certain styles left over from animation
-	// and prevent IE's ClearType bug...
+	// TODO: remove once jQuery core properly removes filters - see #4621
 	_resetStyle: function ( $el, fx ) {
-		$el.css( "display", function( oldValue ) {
-			return oldValue === "none" ? oldValue : "";
-		});
 		if ( !$.support.opacity && fx.opacity ) {
 			$el[ 0 ].style.removeAttribute( "filter" );
 		}
@@ -384,8 +380,6 @@ $.widget( "ui.tabs", {
 
 			if ( toShow.length && that.showFx ) {
 				toShow
-					// TODO: why are we hiding? old code?
-					.hide()
 					.animate( that.showFx, that.showFx.duration || "normal", function() {
 						that._resetStyle( $( this ), that.showFx );
 						complete();
