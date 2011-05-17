@@ -1,23 +1,23 @@
-/* Inicialització en català per a l'extenció 'calendar' per jQuery. */
+/* Inicialització en català per a l'extenció "calendar" per jQuery. */
 /* Writers: (joan.leon@gmail.com). */
 jQuery(function($){
-	$.datepicker.regional['ca'] = {
-		closeText: 'Tancar',
-		prevText: '&#x3C;Ant',
-		nextText: 'Seg&#x3E;',
-		currentText: 'Avui',
-		monthNames: ['Gener','Febrer','Mar&#xE7;','Abril','Maig','Juny',
-		'Juliol','Agost','Setembre','Octubre','Novembre','Desembre'],
-		monthNamesShort: ['Gen','Feb','Mar','Abr','Mai','Jun',
-		'Jul','Ago','Set','Oct','Nov','Des'],
-		dayNames: ['Diumenge','Dilluns','Dimarts','Dimecres','Dijous','Divendres','Dissabte'],
-		dayNamesShort: ['Dug','Dln','Dmt','Dmc','Djs','Dvn','Dsb'],
-		dayNamesMin: ['Dg','Dl','Dt','Dc','Dj','Dv','Ds'],
-		weekHeader: 'Sm',
-		dateFormat: 'dd/mm/yy',
+	$.datepicker.regional["ca"] = {
+		closeText: "Tancar",
+		prevText: "&#x3C;Ant",
+		nextText: "Seg&#x3E;",
+		currentText: "Avui",
+		monthNames: ["Gener","Febrer","Mar&#xE7;","Abril","Maig","Juny",
+		"Juliol","Agost","Setembre","Octubre","Novembre","Desembre"],
+		monthNamesShort: ["Gen","Feb","Mar","Abr","Mai","Jun",
+		"Jul","Ago","Set","Oct","Nov","Des"],
+		dayNames: ["Diumenge","Dilluns","Dimarts","Dimecres","Dijous","Divendres","Dissabte"],
+		dayNamesShort: ["Dug","Dln","Dmt","Dmc","Djs","Dvn","Dsb"],
+		dayNamesMin: ["Dg","Dl","Dt","Dc","Dj","Dv","Ds"],
+		weekHeader: "Sm",
+		dateFormat: "dd/mm/yy",
 		firstDay: 1,
 		isRTL: false,
 		showMonthAfterYear: false,
-		yearSuffix: ''};
-	$.datepicker.setDefaults($.datepicker.regional['ca']);
+		yearSuffix: ""};
+	$.datepicker.setDefaults($.datepicker.regional["ca"]);
 });
