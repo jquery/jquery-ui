@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="UTF-8">
+	<meta charset="utf-8">
 	<title>Photo Slideshow</title>
 	<link rel="stylesheet" href="../themes/base/jquery.ui.all.css">
 	<link rel="stylesheet" href="grid.css">
@@ -35,89 +35,85 @@
 	</script>
 	<script>
 	$(function() {
-		alert("this demo didn't ever work that well and needs a complete overhaul")
-		return
-		// TODO must be possible to set these through the datasource
-		$.ajaxSetup({
-			dataType: "jsonp",
-			jsonpCallback: "jsonFlickrApi",
-		});
-		var flickr = $.dataSource({
-			path: "http://api.flickr.com/services/rest/",
-			urlMapper: function(path, queryParams, sort, filter, skip, take) {
-				return path + "?" + $.param({
-					format: "json",
-					api_key: "d86848d57cb3f7ad94f2ee9a3c90eff1",
-					method: "flickr.photos.search",
-					tags: filter[0].filterValue,
-					sort: "relevance",
-					per_page: take,
-					page: Math.ceil((skip || 0) / take + 1)
-				});
+		var cache = {};
+		var datasource = $.ui.datasource({
+			paging: {
+				limit: 2
 			},
-			resultsFilter: function (data) {
-		        this.totalCount = data.photos.total;
-		        return $.map( data.photos.photo, function( photo ) {
-					return {
-						src: kite( "http://farm{{farm}}.static.flickr.com/{{server}}/{{id}}_{{secret}}_m.jpg", photo ),
-						href: kite( "http://www.flickr.com/photos/{{owner}}/{{id}}/", photo )
+			source: function( request, response ) {
+				var i, length,
+					cached = true,
+					tags = request.filter,
+					pageSize = request.paging.limit,
+					page = request.page,
+					start = ( page - 1 ) * pageSize;
+
+				if ( !cache[ tags ] ) {
+					cache[ tags ] = [];
+				}
+
+				// check if we have cached data
+				for ( i = start; i < start + pageSize; i++ ) {
+					if ( !cache[ tags ][ i ] ) {
+						cached = false;
+						break;
+					}
+				}
+				if ( cached ) {
+					response( cache[ tags ].slice( start, start + pageSize ), cache[ tags ].total );
+					return;
+				}
+
+				// not cached, make a remote request
+				$.ajax({
+					url: "http://api.flickr.com/services/rest/",
+					dataType: "jsonp",
+					jsonpCallback: "jsonFlickrApi",
+					data: {
+						format: "json",
+						api_key: "d86848d57cb3f7ad94f2ee9a3c90eff1",
+						method: "flickr.photos.search",
+						tags: request.filter,
+						sort: "relevance",
+						per_page: pageSize,
+						page: page
+					},
+					success: function( data ) {
+						var result = $.map( data.photos.photo, function( photo ) {
+							return {
+								src: kite( "http://farm{{farm}}.static.flickr.com/{{server}}/{{id}}_{{secret}}_m.jpg", photo ),
+								href: kite( "http://www.flickr.com/photos/{{owner}}/{{id}}/", photo )
+							}
+						});
+
+						// cache the data
+						cache[ tags ].total = data.photos.total;
+						for ( i = 0, length = result.length; i < length; i++ ) {
+							cache[ tags ][ start + i ] = result[ i ];
+						}
+
+						response( result, data.photos.total );
 					}
 				});
-		    }
-		});
-		
-		// wrap the original source to preload
-		datasource = $.dataSource({
-			path: "doesn't-matter-just-need-a-remote-source",
-			paging: { take: 2 }
-		});
-		// TODO needs to load next batch before reaching the last local page
-		datasource._refresh = function(options, completed) {
-			flickr._take = datasource._take * 3;
-			flickr._filter = this._filter;
-			
-			// TODO this breaks down when not just using next page
-			if (this._nextTake && this._nextTake.length) {
-				this._items = this._nextTake.slice(0, datasource._take);
-				this._nextTake = this._nextTake.slice(datasource._take);
-				completed();
-				return;
 			}
-			
-			flickr._skip = this._skip;
-			// TODO would be nice to be able to just pass this as a callback to refresh
-			flickr.option("refresh", function() {
-				datasource._items = flickr._items.slice(0, datasource._take);
-				datasource._nextTake = flickr._items.slice(datasource._take);
-				datasource.totalCount = flickr.totalCount;
-				completed();
-			}).refresh();
-		};
+		});
 
 		$( "#slideshow" ).slideshow({
 			source: datasource
 		});
-		
+
 		$( kite( "#pager-tmpl" )() ).insertBefore( "#slideshow" ).pager({
 			source: datasource
 		});
 
-		$( "#page-size" ).change(function() {
-			datasource.option("paging", {
-				take: +$(this).val(),
-				// can't yet only set take
-				skip: datasource._skip
-			}).refresh();
+		$( "#page-size" ).change( function() {
+			datasource.option( "paging.limit", +$( this ).val() ).refresh();
 		});
-		
+
 		$( "#filter" ).change(function() {
-			datasource.option("filter", {
-				property: "tags",
-				value: $(this).val()
-			}).refresh();
-		}).trigger("change");
+			datasource.option( "filter", $( this ).val() ).refresh();
+		}).trigger( "change" );
 	});
-	
 	</script>
 </head>
 <body>
@@ -131,7 +127,7 @@
 	Per page: <input id="page-size" value="2">
 </p>
 <p>
-	Tags to look for (comma seperated): <input id="filter" value="jquery"> 
+	Tags to look for (comma seperated): <input id="filter" value="jquery">
 </p>
 
 
