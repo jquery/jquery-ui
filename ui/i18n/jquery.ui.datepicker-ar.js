@@ -16,7 +16,7 @@ jQuery(function($){
 		weekHeader: "أسبوع",
 		dateFormat: "dd/mm/yy",
 		firstDay: 6,
-  		isRTL: true,
+		isRTL: true,
 		showMonthAfterYear: false,
 		yearSuffix: ""};
 	$.datepicker.setDefaults($.datepicker.regional["ar"]);
