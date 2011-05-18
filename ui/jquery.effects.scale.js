@@ -99,7 +99,7 @@ $.effects.effect.size = function( o ) {
 	return this[ o.queue === false ? "each" : "queue" ]( function() {
 		// Create element
 		var el = $( this ), 
-			props = [ 'position', 'top', 'bottom', 'left', 'right', 'width', 'height', 'overflow', 'opacity' ],
+			props0 = [ 'position', 'top', 'bottom', 'left', 'right', 'width', 'height', 'overflow', 'opacity' ],
 
 			// Always restore
 			props1 = [ 'position', 'top', 'bottom', 'left', 'right', 'overflow', 'opacity' ],
@@ -119,10 +119,17 @@ $.effects.effect.size = function( o ) {
 				height: el.height(), 
 				width: el.width()
 			},
-			baseline, factor;
+			baseline, factor,
+			props = restore ? props0 : props1,
+			zero = { height: 0, width: 0 };
 
-		el.from = o.from || original;
-		el.to = o.to || original;
+		if ( o.mode === "toggle" && mode === "show" ) {
+			el.from = o.to || zero;
+			el.to = o.from || original;
+		} else {
+			el.from = o.from || ( mode === "show" ? zero : original );
+			el.to = o.to || ( mode === "hide" ? zero : original );
+		}
 
 		// Adjust
 		if (origin) { // Calculate baseline shifts
@@ -168,13 +175,13 @@ $.effects.effect.size = function( o ) {
 
 			// Vertical props scaling
 			if ( factor.from.y != factor.to.y ) { 
-				props = props.concat( cProps );
+				props = props.concat(cProps).concat(props2);
 				el.from = $.effects.setTransition( el, cProps, factor.from.y, el.from );
 				el.to = $.effects.setTransition( el, cProps, factor.to.y, el.to );
 			};
 		};
 		
-		$.effects.save( el, restore ? props : props1 ); 
+		$.effects.save( el, props );
 		el.show(); 
 		$.effects.createWrapper( el );
 		el.css( 'overflow', 'hidden' ).css( el.from ); 
@@ -185,7 +192,7 @@ $.effects.effect.size = function( o ) {
 			// Add margins/font-size
 			vProps = vProps.concat([ 'marginTop', 'marginBottom' ]).concat(cProps);
 			hProps = hProps.concat([ 'marginLeft', 'marginRight' ]);
-			props2 = props.concat(vProps).concat(hProps);
+			props2 = props0.concat(vProps).concat(hProps);
 
 			el.find( "*[width]" ).each( function(){
 				var child = $( this ),
@@ -238,7 +245,7 @@ $.effects.effect.size = function( o ) {
 				if( mode == 'hide' ) {
 					el.hide();
 				}
-				$.effects.restore( el, restore ? props : props1 ); 
+				$.effects.restore( el, props );
 				$.effects.removeWrapper( el ); 
 				$.isFunction( o.complete ) && o.complete.apply( this, arguments ); // Callback
 				el.dequeue();
