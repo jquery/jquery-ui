@@ -272,7 +272,7 @@ $.effects.effect.size = function( o ) {
 							if ( isNaN( pos[ attr ] ) ) {
 								pos[ attr ] = "auto";
 							} else {
-								pos[ attr ] += attr === "bottom" ?	el.to.top : el.to.left;
+								pos[ attr ] += attr === "bottom" ? el.to.top : el.to.left;
 							}
 						});
 						el.css( pos );
