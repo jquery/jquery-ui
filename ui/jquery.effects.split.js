@@ -274,7 +274,6 @@
 		 * 		distance, 
 		 * 		rows, 
 		 * 		columns, 
-		 * 		direction, 
 		 * 		duration, 
 		 * 		interval, 
 		 * 		easing,
@@ -287,7 +286,6 @@
 
 			var el = $( this ),
 				opt = splitOptions ( el, {
-						direction: "bottom",
 						distance: 1,
 						reverse: false,
 						random: false,
@@ -377,7 +375,6 @@
 		return this.queue( function( next ) {
 			var el = $( this ),
 				opt = splitOptions( el, {
-						direction: "bottom",
 						distance: 1,						
 						reverse: false,
 						random: false,
@@ -412,7 +409,6 @@
 		 * 		distance, 
 		 * 		rows, 
 		 * 		columns, 
-		 * 		direction, 
 		 * 		duration, 
 		 * 		sync,
 		 * 		easing,
@@ -426,7 +422,6 @@
 		return this.queue( function( next ) {
 			var el = $( this ),
 				opt = splitOptions( el, {
-						direction: "bottom",
 						distance: 1,
 						reverse: false,
 						random: false,
@@ -499,7 +494,6 @@
 		 * 		distance, 
 		 * 		rows, 
 		 * 		columns, 
-		 * 		direction, 
 		 * 		duration, 
 		 * 		interval, 
 		 * 		easing,
@@ -512,7 +506,6 @@
 		return this.queue( function( next ) {
 			var el = $( this ),
 				opt = splitOptions( el, {
-						direction: "bottom",
 						distance: 1,
 						reverse: false,
 						random: false,
