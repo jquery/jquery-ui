@@ -243,52 +243,42 @@ $.effects.effect.size = function( o ) {
 			duration: o.duration, 
 			easing: o.easing, 
 			complete: function() {
-        var pos = {};
+				var pos = {};
 				if ( el.to.opacity === 0 ) {
 					el.css( 'opacity', el.from.opacity );
 				}
 				if( mode == 'hide' ) {
 					el.hide();
 				}
-        console.log(el.parent());
 				$.effects.restore( el, restore ? props : props1 ); 
-        if (el.parent().is( ".ui-effects-wrapper" )) {
-          console.log(el, " is wrapped");
-          if ( el.css( "position" ) === "static" ) {
-            console.log(el, " is static");
-            console.log(el.parent());
-            el.css({
-              position: "relative",
-              top: el.to.top,
-              left: el.to.left
-            });
-          } else {
-            console.log(el.to);
-            console.log(el.parent().css("top"), el.parent().css("left"), el.parent().css("right"), el.parent().css("bottom"));
-            console.log(el.css("top"), el.css("left"), el.css("right"), el.css("bottom"));
-
-			      $.each([ "top", "left" ], function(i, attr) {
-				      pos[ attr ] = parseInt( el.parent().css( attr ), 10 );
-              console.log(attr,pos[attr]);
-				      if ( isNaN( pos[ attr ] ) ) {
-					      pos[ attr ] = "auto";
-				      } else {
-                pos[ attr ] += el.to[ attr ];
-              }
-			      });
-            $.each([ "bottom", "right" ], function(i, attr) {
-				      pos[ attr ] = parseInt( el.parent().css( attr ), 10 );
-				      if ( isNaN( pos[ attr ] ) ) {
-					      pos[ attr ] = "auto";
-				      } else {
-                pos[ attr ] += attr === "bottom" ?  el.to.top : el.to.left;
-              }
-            });
-            console.log(pos);
-            el.css( pos );
-          }
-          
-        }
+				if (el.parent().is( ".ui-effects-wrapper" )) {
+					if ( el.css( "position" ) === "static" ) {
+						el.css({
+							position: "relative",
+							top: el.to.top,
+							left: el.to.left
+						});
+					} else {
+						$.each([ "top", "left" ], function(i, attr) {
+							pos[ attr ] = parseInt( el.parent().css( attr ), 10 );
+							if ( isNaN( pos[ attr ] ) ) {
+								pos[ attr ] = "auto";
+							} else {
+								pos[ attr ] += el.to[ attr ];
+							}
+						});
+						$.each([ "bottom", "right" ], function(i, attr) {
+							pos[ attr ] = parseInt( el.parent().css( attr ), 10 );
+							if ( isNaN( pos[ attr ] ) ) {
+								pos[ attr ] = "auto";
+							} else {
+								pos[ attr ] += attr === "bottom" ?	el.to.top : el.to.left;
+							}
+						});
+						el.css( pos );
+					}
+					
+				}
 				$.effects.removeWrapper( el ); 
 				$.isFunction( o.complete ) && o.complete.apply( this, arguments ); // Callback
 				el.dequeue();
