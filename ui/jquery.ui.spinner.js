@@ -11,11 +11,11 @@
  *  jquery.ui.core.js
  *  jquery.ui.widget.js
  */
-(function($) {
+(function( $ ) {
 
-$.widget('ui.spinner', {
+$.widget( "ui.spinner", {
 	defaultElement: "<input>",
-  widgetEventPrefix: "spin",
+	widgetEventPrefix: "spin",
 	options: {
 		incremental: true,
 		max: null,
@@ -25,218 +25,227 @@ $.widget('ui.spinner', {
 		step: null,
 		value: null
 	},
-	
+
 	_create: function() {
 		this._draw();
 		this._markupOptions();
 		this._mousewheel();
 		this._aria();
 	},
-	
+
 	_markupOptions: function() {
-		var _this = this;
+		var that = this;
 		$.each({
 			min: -Number.MAX_VALUE,
 			max: Number.MAX_VALUE,
 			step: 1
-		}, function(attr, defaultValue) {
-			if (_this.options[attr] === null) {
-				var value = _this.element.attr(attr);
-				_this.options[attr] = typeof value == "string" && value.length > 0 ? _this._parse(value) : defaultValue;
+		}, function( attr, defaultValue ) {
+			if ( that.options[ attr ] === null ) {
+				var value = that.element.attr( attr );
+				that.options[ attr ] = typeof value === "string" && value.length > 0 ?
+					that._parse( value ) :
+					defaultValue;
 			}
 		});
-		this.value(this.options.value !== null ? this.options.value : this.element.val() || 0);
+		this.value( this.options.value !== null ? this.options.value : this.element.val() || 0 );
 	},
-	
+
 	_draw: function() {
 		var self = this,
 			options = self.options;
 
 		var uiSpinner = this.uiSpinner = self.element
-			.addClass('ui-spinner-input')
-			.attr('autocomplete', 'off')
-			.wrap(self._uiSpinnerHtml())
+			.addClass( "ui-spinner-input" )
+			.attr( "autocomplete", "off" )
+			.wrap( self._uiSpinnerHtml() )
 			.parent()
 				// add buttons
-				.append(self._buttonHtml())
+				.append( self._buttonHtml() )
 				// add behaviours
+				// TODO: user ._hoverable
 				.hover(function() {
-					if (!options.disabled) {
-						$(this).addClass('ui-state-hover');
+					if ( !options.disabled ) {
+						$( this ).addClass( "ui-state-hover" );
 					}
 					self.hovered = true;
 				}, function() {
-					$(this).removeClass('ui-state-hover');
+					$( this ).removeClass( "ui-state-hover" );
 					self.hovered = false;
 				});
 
+		// TODO: use ._bind()
 		this.element
 			.attr( "role", "spinbutton" )
-			.bind('keydown.spinner', function(event) {
-				if (self.options.disabled) {
+			.bind( "keydown.spinner", function( event ) {
+				if ( options.disabled ) {
 					return;
 				}
-				if (self._start(event)) {
-					return self._keydown(event);
+				if ( self._start( event ) ) {
+					return self._keydown( event );
 				}
 				return true;
 			})
-			.bind('keyup.spinner', function(event) {
-				if (self.options.disabled) {
+			.bind( "keyup.spinner", function( event ) {
+				if ( options.disabled ) {
 					return;
 				}
-				if (self.spinning) {
-					self._stop(event);
-					self._change(event);					
+				if ( self.spinning ) {
+					self._stop( event );
+					self._change( event );
 				}
 			})
-			.bind('focus.spinner', function() {
-				uiSpinner.addClass('ui-state-active');
+			.bind( "focus.spinner", function() {
+				uiSpinner.addClass( "ui-state-active" );
 				self.focused = true;
 			})
-			.bind('blur.spinner', function(event) {
-				self.value(self.element.val());
-				if (!self.hovered) {
-					uiSpinner.removeClass('ui-state-active');
-				}		
+			.bind( "blur.spinner", function( event ) {
+				self.value( self.element.val() );
+				if ( !self.hovered ) {
+					uiSpinner.removeClass( "ui-state-active" );
+				}
 				self.focused = false;
 			});
 
 		// button bindings
-		this.buttons = uiSpinner.find('.ui-spinner-button')
-			.attr("tabIndex", -1)
+		this.buttons = uiSpinner.find( ".ui-spinner-button" )
+			.attr( "tabIndex", -1 )
 			.button()
-			.removeClass("ui-corner-all")
-			.bind('mousedown', function(event) {
-				if (self.options.disabled) {
+			.removeClass( "ui-corner-all" )
+			.bind( "mousedown", function( event ) {
+				if ( options.disabled ) {
 					return;
 				}
-				if (self._start(event) === false) {
+				if ( self._start( event ) === false ) {
 					return false;
 				}
-				self._repeat(null, $(this).hasClass('ui-spinner-up') ? 1 : -1, event);
+				self._repeat( null, $( this ).hasClass( "ui-spinner-up" ) ? 1 : -1, event );
 			})
-			.bind('mouseup', function(event) {
-				if (self.options.disabled) {
+			.bind( "mouseup", function( event ) {
+				if ( options.disabled ) {
 					return;
 				}
-				if (self.spinning) {
-					self._stop(event);
-					self._change(event);					
+				if ( self.spinning ) {
+					self._stop( event );
+					self._change( event );
 				}
 			})
-			.bind("mouseenter", function() {
-				if (self.options.disabled) {
+			.bind( "mouseenter", function() {
+				if ( self.options.disabled ) {
 					return;
 				}
 				// button will add ui-state-active if mouse was down while mouseleave and kept down
-				if ($(this).hasClass("ui-state-active")) {
-					if (self._start(event) === false) {
+				if ( $( this ).hasClass( "ui-state-active" ) ) {
+					if ( self._start( event ) === false ) {
 						return false;
 					}
-					self._repeat(null, $(this).hasClass('ui-spinner-up') ? 1 : -1, event);
+					self._repeat( null, $( this ).hasClass( "ui-spinner-up" ) ? 1 : -1, event );
 				}
 			})
-			.bind("mouseleave", function() {
-				if (self.spinning) {
-					self._stop(event);
-					self._change(event);
+			.bind( "mouseleave", function() {
+				if ( self.spinning ) {
+					self._stop( event );
+					self._change( event );
 				}
 			});
-					
+
 		// disable spinner if element was already disabled
-		if (options.disabled) {
+		if ( options.disabled ) {
 			this.disable();
 		}
 	},
-	
-	_keydown: function(event) {
-		var o = this.options,
-			KEYS = $.ui.keyCode;
 
-		switch (event.keyCode) {
-		case KEYS.UP:
-			this._repeat(null, 1, event);
+	_keydown: function( event ) {
+		var options = this.options,
+			keyCode = $.ui.keyCode;
+
+		switch ( event.keyCode ) {
+		case keyCode.UP:
+			this._repeat( null, 1, event );
 			return false;
-		case KEYS.DOWN:
-			this._repeat(null, -1, event);
+		case keyCode.DOWN:
+			this._repeat( null, -1, event );
 			return false;
-		case KEYS.PAGE_UP:
-			this._repeat(null, this.options.page, event);
+		case keyCode.PAGE_UP:
+			this._repeat( null, options.page, event );
 			return false;
-		case KEYS.PAGE_DOWN:
-			this._repeat(null, -this.options.page, event);
+		case keyCode.PAGE_DOWN:
+			this._repeat( null, -options.page, event );
 			return false;
-			
-		case KEYS.ENTER:
-			this.value(this.element.val());
+		case keyCode.ENTER:
+			this.value( this.element.val() );
 		}
-		
+
 		return true;
 	},
-	
+
 	_mousewheel: function() {
 		// need the delta normalization that mousewheel plugin provides
-		if (!$.fn.mousewheel) {
+		if ( !$.fn.mousewheel ) {
 			return;
 		}
 		var self = this;
-		this.element.bind("mousewheel.spinner", function(event, delta) {
-			if (self.options.disabled || !delta) {
+		this.element.bind( "mousewheel.spinner", function( event, delta ) {
+			if ( self.options.disabled || !delta ) {
 				return;
 			}
-			if (!self.spinning && !self._start(event)) {
+			if ( !self.spinning && !self._start( event ) ) {
 				return false;
 			}
-			self._spin((delta > 0 ? 1 : -1) * self.options.step, event);
-			clearTimeout(self.timeout);
+			self._spin( (delta > 0 ? 1 : -1) * self.options.step, event );
+			clearTimeout( self.timeout );
 			self.timeout = setTimeout(function() {
-				if (self.spinning) {
-					self._stop(event);
-					self._change(event);
+				if ( self.spinning ) {
+					self._stop( event );
+					self._change( event );
 				}
 			}, 100);
 			event.preventDefault();
 		});
 	},
-	
+
 	_uiSpinnerHtml: function() {
-		return '<span class="ui-spinner ui-state-default ui-widget ui-widget-content ui-corner-all"></span>';
+		return "<span class='ui-spinner ui-state-default ui-widget ui-widget-content ui-corner-all'></span>";
 	},
-	
+
 	_buttonHtml: function() {
-		return '<a class="ui-spinner-button ui-spinner-up ui-corner-tr"><span class="ui-icon ui-icon-triangle-1-n">&#9650;</span></a>' +
-				'<a class="ui-spinner-button ui-spinner-down ui-corner-br"><span class="ui-icon ui-icon-triangle-1-s">&#9660;</span></a>';
+		return "" +
+			"<a class='ui-spinner-button ui-spinner-up ui-corner-tr'>" +
+				"<span class='ui-icon ui-icon-triangle-1-n'>&#9650;</span>" +
+			"</a>" +
+			"<a class='ui-spinner-button ui-spinner-down ui-corner-br'>" +
+				"<span class='ui-icon ui-icon-triangle-1-s'>&#9660;</span>" +
+			"</a>";
 	},
-	
-	_start: function(event) {
-		if (!this.spinning && this._trigger('start', event) !== false) {
-			if (!this.counter) {
-				this.counter = 1;
-			}
-			this.spinning = true;
-			return true;
+
+	_start: function( event ) {
+		if ( !this.spinning && this._trigger( "start", event ) === false ) {
+			return false;
 		}
-		return false;
+
+		if ( !this.counter ) {
+			this.counter = 1;
+		}
+		this.spinning = true;
+		return true;
 	},
-	
-	_repeat: function(i, steps, event) {
+
+	_repeat: function( i, steps, event ) {
 		var self = this;
 		i = i || 500;
 
-		clearTimeout(this.timer);
+		clearTimeout( this.timer );
 		this.timer = setTimeout(function() {
-			self._repeat(40, steps, event);
-		}, i);
-		
-		self._spin(steps * self.options.step, event);
+			self._repeat( 40, steps, event );
+		}, i );
+
+		self._spin( steps * self.options.step, event );
 	},
-	
-	_spin: function(step, event) {
-		if (!this.counter) {
+
+	_spin: function( step, event ) {
+		if ( !this.counter ) {
 			this.counter = 1;
 		}
-		
+
 		// TODO refactor, maybe figure out some non-linear math
 		var newVal = this.value() + step * (this.options.incremental &&
 			this.counter > 20
@@ -246,49 +255,51 @@ $.widget('ui.spinner', {
 						: 10
 					: 2
 				: 1);
-		
-		if (this._trigger('spin', event, { value: newVal }) !== false) {
-			this.value(newVal);
-			this.counter++;			
+
+		if ( this._trigger( "spin", event, { value: newVal } ) !== false) {
+			this.value( newVal );
+			this.counter++;
 		}
 	},
-	
-	_stop: function(event) {
+
+	_stop: function( event ) {
 		this.counter = 0;
-		if (this.timer) {
-			window.clearTimeout(this.timer);
+		if ( this.timer ) {
+			clearTimeout( this.timer );
 		}
 		this.element.focus();
 		this.spinning = false;
-		this._trigger('stop', event);
+		this._trigger( "stop", event );
 	},
-	
-	_change: function(event) {
-		this._trigger('change', event);
+
+	_change: function( event ) {
+		this._trigger( "change", event );
 	},
-	
-	_setOption: function(key, value) {
-		if (key == 'value') {
-			value = this._parse(value);
-			if (value < this.options.min) {
+
+	_setOption: function( key, value ) {
+		if ( key === "value") {
+			value = this._parse( value );
+			if ( value < this.options.min ) {
 				value = this.options.min;
 			}
-			if (value > this.options.max) {
+			if ( value > this.options.max ) {
 				value = this.options.max;
 			}
 		}
-		if (key == 'disabled') {
-			if (value) {
-				this.element.attr("disabled", true);
-				this.buttons.button("disable");
+
+		if ( key === "disabled" ) {
+			if ( value ) {
+				this.element.attr( "disabled", true );
+				this.buttons.button( "disable" );
 			} else {
-				this.element.removeAttr("disabled");
-				this.buttons.button("enable");
+				this.element.removeAttr( "disabled" );
+				this.buttons.button( "enable" );
 			}
 		}
+
 		this._super( "_setOption", key, value );
 	},
-	
+
 	_setOptions: function( options ) {
 		this._super( "_setOptions", options );
 		if ( "value" in options ) {
@@ -296,62 +307,62 @@ $.widget('ui.spinner', {
 		}
 		this._aria();
 	},
-	
+
 	_aria: function() {
-		this.element
-			.attr('aria-valuemin', this.options.min)
-			.attr('aria-valuemax', this.options.max)
-			.attr('aria-valuenow', this.options.value);
+		this.element.attr({
+			"aria-valuemin": this.options.min,
+			"aria-valuemax": this.options.max,
+			"aria-valuenow": this.options.value
+		});
 	},
-	
-	_parse: function(val) {
-		var input = val;
-		if (typeof val == 'string') {
-			val = $.global && this.options.numberformat ? $.global.parseFloat(val) : +val;
+
+	_parse: function( val ) {
+		if ( typeof val === "string" ) {
+			val = $.global && this.options.numberformat ? $.global.parseFloat( val ) : +val;
 		}
-		return isNaN(val) ? null : val;
+		return isNaN( val ) ? null : val;
 	},
-	
-	_format: function(num) {
-		this.element.val( $.global && this.options.numberformat ? $.global.format(num, this.options.numberformat) : num );
+
+	_format: function( num ) {
+		this.element.val( $.global && this.options.numberformat ? $.global.format( num, this.options.numberformat ) : num );
 	},
-		
+
 	destroy: function() {
 		this.element
-			.removeClass('ui-spinner-input')
-			.removeAttr('disabled')
-			.removeAttr('autocomplete')
-			.removeAttr('role')
-			.removeAttr('aria-valuemin')
-			.removeAttr('aria-valuemax')
-			.removeAttr('aria-valuenow');
+			.removeClass( "ui-spinner-input" )
+			.removeAttr( "disabled" )
+			.removeAttr( "autocomplete" )
+			.removeAttr( "role" )
+			.removeAttr( "aria-valuemin" )
+			.removeAttr( "aria-valuemax" )
+			.removeAttr( "aria-valuenow" );
 		this._super( "destroy" );
-		this.uiSpinner.replaceWith(this.element);
+		this.uiSpinner.replaceWith( this.element );
 	},
-	
-	stepUp: function(steps) {
-		this._spin((steps || 1) * this.options.step);
+
+	stepUp: function( steps ) {
+		this._spin( (steps || 1) * this.options.step );
 	},
-	
-	stepDown: function(steps) {
-		this._spin((steps || 1) * -this.options.step);	
+
+	stepDown: function( steps ) {
+		this._spin( (steps || 1) * -this.options.step );
 	},
-	
-	pageUp: function(pages) {
-		this.stepUp((pages || 1) * this.options.page);		
+
+	pageUp: function( pages ) {
+		this.stepUp( (pages || 1) * this.options.page );
 	},
-	
-	pageDown: function(pages) {
-		this.stepDown((pages || 1) * this.options.page);		
+
+	pageDown: function( pages ) {
+		this.stepDown( (pages || 1) * this.options.page );
 	},
-	
-	value: function(newVal) {
-		if (!arguments.length) {
-			return this._parse(this.element.val());
+
+	value: function( newVal ) {
+		if ( !arguments.length ) {
+			return this._parse( this.element.val() );
 		}
-		this.option('value', newVal);
+		this.option( "value", newVal );
 	},
-	
+
 	widget: function() {
 		return this.uiSpinner;
 	}
@@ -359,4 +370,4 @@ $.widget('ui.spinner', {
 
 $.ui.spinner.version = "@VERSION";
 
-})(jQuery);
+}( jQuery ) );
