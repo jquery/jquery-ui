@@ -487,8 +487,14 @@ $.extend( $.ui.accordion, {
 				hideProps[ prop ] = "hide";
 
 				var parts = ( "" + $.css( options.toShow[0], prop ) ).match( /^([\d+-.]+)(.*)$/ );
+				var propVal;
+				if( prop === "height" ) {
+					propVal = parts[ 1 ] != "0" ? parts[ 1 ] : 1;
+				} else {
+					propVal = parts[ 1 ];
+				}
 				showProps[ prop ] = {
-					value: parts[ 1 ],
+					value: propVal,
 					unit: parts[ 2 ] || "px"
 				};
 			});
