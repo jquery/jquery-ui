@@ -1,25 +1,23 @@
+(function( $ ) {
+
 $.widget( "spf.slideshow", {
 	options: {
 		source: null,
 		pageSize: 2
 	},
-	_create: function() {
-		var that = this;
 
+	_create: function() {
 		this.element.addClass( "spf-slideshow" );
-		$( this.options.source ).bind( "datasourceresponse", function() {
-			that.refresh();
+		this._bind( this.options.source, {
+			datasourceresponse: "refresh"
 		});
 	},
+
 	refresh: function() {
-		var photosHtml = [];
-
-		$.each( this.options.source.toArray(), function( i, photo ) {
-			var html = kite( "#photo-tmpl", photo );
-			photosHtml.push( html );
-		});
-
-		this.element.empty();
-		this.element.html( photosHtml.join("") );
+		this.element.html( $.map( this.options.source.toArray(), function( photo ) {
+			return kite( "#photo-tmpl", photo );
+		}).join( "" ) );
 	}
 });
+
+}( jQuery ) );
