@@ -780,8 +780,8 @@ $.extend( $.ui.dialog.overlay, {
 	width: function() {
 		var scrollWidth,
 			offsetWidth;
-		// handle IE 6
-		if ( $.browser.msie && $.browser.version < 7 ) {
+		// handle IE
+		if ( $.browser.msie ) {
 			scrollWidth = Math.max(
 				document.documentElement.scrollWidth,
 				document.body.scrollWidth
