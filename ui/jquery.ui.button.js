@@ -18,7 +18,7 @@ var lastActive, startXPos, startYPos, clickDragged,
 	stateClasses = "ui-state-hover ui-state-active ",
 	typeClasses = "ui-button-icons-only ui-button-icon-only ui-button-text-icons ui-button-text-icon-primary ui-button-text-icon-secondary ui-button-text-only",
 	formResetHandler = function( event ) {
-		$( ":ui-button", event.target.form ).each(function() {
+		$( ":ui-button", event.target ).each(function() {
 			var inst = $( this ).data( "button" );
 			setTimeout(function() {
 				inst.refresh();
