@@ -117,7 +117,9 @@ $.effects.effect.size = function( o ) {
 			origin = o.origin,
 			original = {
 				height: el.height(), 
-				width: el.width()
+				width: el.width(),
+				top: el.offset().top,
+				left: el.offset().left
 			},
 			baseline, factor;
 
@@ -174,7 +176,13 @@ $.effects.effect.size = function( o ) {
 			};
 		};
 		
-		$.effects.save( el, restore ? props : props1 ); 
+		if (restore) {
+			$.effects.save( el, props ); 
+		} else {
+ 			el.to.topAbs = original.top + el.to.top;
+ 			el.to.leftAbs = original.left + el.to.left;
+			$.effects.save( el, props1 );
+		}
 		el.show(); 
 		$.effects.createWrapper( el );
 		el.css( 'overflow', 'hidden' ).css( el.from ); 
@@ -238,7 +246,14 @@ $.effects.effect.size = function( o ) {
 				if( mode == 'hide' ) {
 					el.hide();
 				}
-				$.effects.restore( el, restore ? props : props1 ); 
+				if ( restore ) {
+					$.effects.restore( el, props );
+				} else {
+					$.effects.restore( el, props1 );
+					el.css( "position", "absolute" );
+					el.css( "top", el.to.topAbs );
+					el.css( "left", el.to.leftAbs );
+				}
 				$.effects.removeWrapper( el ); 
 				$.isFunction( o.complete ) && o.complete.apply( this, arguments ); // Callback
 				el.dequeue();
