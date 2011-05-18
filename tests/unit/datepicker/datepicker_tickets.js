@@ -34,4 +34,13 @@ test('Ticket 6827: formatDate day of year calculation is wrong during day lights
     equals(time, "089");
 });
 
+test('Ticket #7244: date parser does not fail when too many numbers are passed into the date function', function() {
+    expect(1);
+    try{
+        var date = $.datepicker.parseDate('dd/mm/yy', '18/04/19881');
+    }catch(e){
+        ok("invalid date detected");
+    }
+});
+
 })(jQuery);
