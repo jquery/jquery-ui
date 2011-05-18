@@ -117,7 +117,9 @@ $.effects.effect.size = function( o ) {
 			origin = o.origin,
 			original = {
 				height: el.height(), 
-				width: el.width()
+				width: el.width(),
+				top: el.offset().top,
+				left: el.offset().left
 			},
 			baseline, factor;
 
@@ -177,8 +179,8 @@ $.effects.effect.size = function( o ) {
 		if (restore) {
 			$.effects.save( el, props ); 
 		} else {
- 			el.to.topAbs = parseInt( el.css( "top" ) , 10 ) + el.to.top;
- 			el.to.leftAbs = parseInt( el.css( "left" ) , 10 ) + el.to.left;
+ 			el.to.topAbs = original.top + el.to.top;
+ 			el.to.leftAbs = original.left + el.to.left;
 			$.effects.save( el, props1 );
 		}
 		el.show(); 
@@ -248,6 +250,7 @@ $.effects.effect.size = function( o ) {
 					$.effects.restore( el, props );
 				} else {
 					$.effects.restore( el, props1 );
+					el.css( "position", "absolute" );
 					el.css( "top", el.to.topAbs );
 					el.css( "left", el.to.leftAbs );
 				}
