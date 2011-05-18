@@ -58,8 +58,8 @@ $.widget("ui.mouse", {
 
 		var self = this,
 			btnIsLeft = (event.which == 1),
-			elIsCancel = (typeof this.options.cancel == "string" ? $(event.target).parents(this.options.cancel).add($(event.target)).length : false);
-		if (!btnIsLeft || elIsCancel || !this._mouseCapture(event)) {
+			elIsCancel = (typeof this.options.cancel == "string" ? $(event.target).parents(this.options.cancel).length : false);
+		if (!btnIsLeft || elIsCancel || $(event.target).is(this.options.cancel) || !this._mouseCapture(event)) {
 			return true;
 		}
 
