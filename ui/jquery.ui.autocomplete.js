@@ -47,7 +47,8 @@ $.widget( "ui.autocomplete", {
 	_create: function() {
 		var self = this,
 			doc = this.element[ 0 ].ownerDocument,
-			suppressKeyPress;
+			suppressKeyPress,
+			suppressInput;
 
 		this.valueMethod = this.element[ this.element.is( "input" ) ? "val" : "text" ];
 
@@ -63,10 +64,12 @@ $.widget( "ui.autocomplete", {
 			.bind( "keydown.autocomplete", function( event ) {
 				if ( self.options.disabled || self.element.attr( "readonly" ) ) {
                     suppressKeyPress = true;
+					suppressInput = true;
 					return;
 				}
 
 				suppressKeyPress = false;
+				suppressInput = false;
 				var keyCode = $.ui.keyCode;
 				switch( event.keyCode ) {
 				case keyCode.PAGE_UP:
@@ -110,15 +113,8 @@ $.widget( "ui.autocomplete", {
 					self.close( event );
 					break;
 				default:
-					// keypress is triggered before the input value is changed
-					clearTimeout( self.searching );
-					self.searching = setTimeout(function() {
-						// only search if the value has changed
-						if ( self.term != self._value() ) {
-							self.selectedItem = null;
-							self.search( null, event );
-						}
-					}, self.options.delay );
+					// search timeout should be triggered before the input value is changed
+					self._searchTimeout( event );
 					break;
 				}
 			})
@@ -149,6 +145,14 @@ $.widget( "ui.autocomplete", {
 					event.preventDefault();
 					break;
                 }
+			})
+			.bind( "input.autocomplete", function(event) {
+				if ( suppressInput ) {
+					suppressInput = false;
+					event.preventDefault();
+					return;
+				}
+				self._searchTimeout( event );
 			})
 			.bind( "focus.autocomplete", function() {
 				if ( self.options.disabled ) {
@@ -315,6 +319,17 @@ $.widget( "ui.autocomplete", {
 		} else {
 			this.source = this.options.source;
 		}
+	},
+
+	_searchTimeout: function( event ) {
+		var self = this;
+		self.searching = setTimeout(function() {
+			// only search if the value has changed
+			if ( self.term != self.element.val() ) {
+				self.selectedItem = null;
+				self.search( null, event );
+			}
+		}, self.options.delay );
 	},
 
 	search: function( value, event ) {
