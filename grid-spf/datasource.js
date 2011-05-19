@@ -44,7 +44,7 @@ $.widget( "ui.datasource", {
 	page: function( pageIndex ) {
 		var limit = this.options.paging.limit;
 		if ( pageIndex !== undefined ) {
-			this.options.paging.offset = pageIndex * limit - limit;
+			this.option( "paging.offset", pageIndex * limit - limit );
 		}
 		return Math.ceil( this.options.paging.offset / limit + 1 );
 	},
