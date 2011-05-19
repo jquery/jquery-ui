@@ -18,7 +18,7 @@ $.effects.effect.slide = function( o ) {
 
 		// Create element
 		var el = $( this ),
-			props = ['position','top','bottom','left','right'],
+			props = ['position','top','bottom','left','right', "width", "height"],
 			mode = $.effects.setMode( el, o.mode || 'show' ),
 			direction = o.direction || 'left',
 			ref = (direction == 'up' || direction == 'down') ? 'top' : 'left',
@@ -29,13 +29,14 @@ $.effects.effect.slide = function( o ) {
 		// Adjust
 		$.effects.save( el, props ); 
 		el.show();
+		distance = o.distance || el[ ref == 'top' ? "outerHeight" : "outerWidth" ]({ 
+			margin: true
+		});
 		$.effects.createWrapper( el ).css({
 			overflow: 'hidden'
-		}); 
-		
-		distance = o.distance || el[ ref == 'top' ? "outerHeight" : "outerWidth" ]({ 
-			margin: true 
 		});
+		el.css({ width: "100%", height: "100%" });
+		
 		if (mode == 'show') {
 			el.css( ref, motion == 'pos' ? (isNaN(distance) ? "-" + distance : -distance) : distance );
 		}
