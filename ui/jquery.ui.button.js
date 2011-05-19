@@ -106,6 +106,9 @@ $.widget( "ui.button", {
 				if ( options.disabled ) {
 					event.stopImmediatePropagation();
 				}
+				if( $( document.activeElement ) != $( this ) ) {
+					$( this ).removeClass( "ui-state-focus ui-state-active" );
+				}
 			});
 
 		if ( toggleButton ) {
