@@ -595,6 +595,9 @@ $.widget("ui.dialog", {
 				$( ".ui-dialog-title", self.uiDialogTitlebar )
 					.html( "" + ( value || "&#160;" ) );
 				break;
+			case "zIndex":
+				uiDialog.css({ zIndex: value });
+				break;
 		}
 
 		this._super( "_setOption", key, value );
