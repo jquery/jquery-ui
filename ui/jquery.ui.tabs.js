@@ -13,7 +13,7 @@
  */
 (function( $, undefined ) {
 
-var tabId = 0
+var tabId = 0;
 function getNextTabId() {
 	return ++tabId;
 }
@@ -144,7 +144,7 @@ $.widget( "ui.tabs", {
 
 	_sanitizeSelector: function( hash ) {
 		// we need this because an id may contain a ":"
-		return hash ? hash.replace( /:/g, "\\:" ) : "";
+		return hash ? hash.replace( /[!"$%&'()*+,.\/:;<=>?@[\]^`{|}~]/g, "\\$&" ) : "";
 	},
 
 	refresh: function() {
@@ -286,58 +286,10 @@ $.widget( "ui.tabs", {
 		}
 	},
 
-	// Reset certain styles left over from animation
-	// and prevent IE's ClearType bug...
+	// TODO: remove once jQuery core properly removes filters - see #4621
 	_resetStyle: function ( $el, fx ) {
-		$el.css( "display", "" );
 		if ( !$.support.opacity && fx.opacity ) {
 			$el[ 0 ].style.removeAttribute( "filter" );
-		}
-	},
-
-	_showTab: function( event, eventData ) {
-		var that = this;
-
-		$( eventData.newTab ).closest( "li" ).addClass( "ui-tabs-active ui-state-active" );
-
-		if ( that.showFx ) {
-			that.running = true;
-			eventData.newPanel
-				// TODO: why are we hiding? old code?
-				.hide()
-				.animate( that.showFx, that.showFx.duration || "normal", function() {
-					that._resetStyle( $( this ), that.showFx );
-					that.running = false;
-					that._trigger( "activate", event, eventData );
-				});
-		} else {
-			eventData.newPanel.show();
-			that._trigger( "activate", event, eventData );
-		}
-	},
-
-	// TODO: combine with _showTab()
-	_hideTab: function( event, eventData ) {
-		var that = this;
-
-		if ( that.hideFx ) {
-			that.running = true;
-			eventData.oldPanel.animate( that.hideFx, that.hideFx.duration || "normal", function() {
-				that.running = false;
-				eventData.oldTab.closest( "li" ).removeClass( "ui-tabs-active ui-state-active" );
-				that._resetStyle( $( this ), that.hideFx );
-				that.element.dequeue( "tabs" );
-				if ( !eventData.newPanel.length ) {
-					that._trigger( "activate", event, eventData );
-				}
-			});
-		} else {
-			eventData.oldTab.closest( "li" ).removeClass( "ui-tabs-active ui-state-active" );
-			eventData.oldPanel.hide();
-			that.element.dequeue( "tabs" );
-			if ( !eventData.newPanel.length ) {
-				that._trigger( "activate", event, eventData );
-			}
 		}
 	},
 
@@ -399,22 +351,56 @@ $.widget( "ui.tabs", {
 			throw "jQuery UI Tabs: Mismatching fragment identifier.";
 		}
 
-		if ( toHide.length ) {
-			that.element.queue( "tabs", function() {
-				that._hideTab( event, eventData );
-			});
-		}
 		if ( toShow.length ) {
-			that.element.queue( "tabs", function() {
-				that._showTab( event, eventData );
-			});
 
 			// TODO make passing in node possible, see also http://dev.jqueryui.com/ticket/3171
 			that.load( that.anchors.index( clicked ), event );
 
 			clicked[ 0 ].blur();
+		}
+		that._toggle( event, eventData );
+	},
+
+	// handles show/hide for selecting tabs
+	_toggle: function( event, eventData ) {
+		var that = this,
+			options = that.options,
+			toShow = eventData.newPanel,
+			toHide = eventData.oldPanel;
+
+		that.running = true;
+
+		function complete() {
+			that.running = false;
+			that._trigger( "activate", event, eventData );
+		}
+
+		function show() {
+			eventData.newTab.closest( "li" ).addClass( "ui-tabs-active ui-state-active" );
+
+			if ( toShow.length && that.showFx ) {
+				toShow
+					.animate( that.showFx, that.showFx.duration || "normal", function() {
+						that._resetStyle( $( this ), that.showFx );
+						complete();
+					});
+			} else {
+				toShow.show();
+				complete();
+			}
+		}
+
+		// start out by hiding, then showing, then completing
+		if ( toHide.length && that.hideFx ) {
+			toHide.animate( that.hideFx, that.hideFx.duration || "normal", function() {
+				eventData.oldTab.closest( "li" ).removeClass( "ui-tabs-active ui-state-active" );
+				that._resetStyle( $( this ), that.hideFx );
+				show();
+			});
 		} else {
-			that.element.dequeue( "tabs" );
+			eventData.oldTab.closest( "li" ).removeClass( "ui-tabs-active ui-state-active" );
+			toHide.hide();
+			show();
 		}
 	},
 
@@ -537,24 +523,19 @@ $.widget( "ui.tabs", {
 	load: function( index, event ) {
 		index = this._getIndex( index );
 		var self = this,
-			o = this.options,
-			a = this.anchors.eq( index )[ 0 ],
-			panel = self._getPanelForTab( a ),
+			options = this.options,
+			anchor = this.anchors.eq( index ),
+			panel = self._getPanelForTab( anchor ),
 			// TODO until #3808 is fixed strip fragment identifier from url
 			// (IE fails to load from such url)
-			url = $( a ).attr( "href" ).replace( /#.*$/, "" ),
+			url = anchor.attr( "href" ).replace( /#.*$/, "" ),
 			eventData = {
-				tab: $( a ),
+				tab: anchor,
 				panel: panel
 			};
 
-		if ( this.xhr ) {
-			this.xhr.abort();
-		}
-
 		// not remote
 		if ( !url ) {
-			this.element.dequeue( "tabs" );
 			return;
 		}
 
@@ -567,7 +548,6 @@ $.widget( "ui.tabs", {
 		});
 
 		if ( this.xhr ) {
-			// load remote from here on
 			this.lis.eq( index ).addClass( "ui-tabs-loading" );
 
 			this.xhr
@@ -577,23 +557,16 @@ $.widget( "ui.tabs", {
 				})
 				.complete(function( jqXHR, status ) {
 					if ( status === "abort" ) {
-						// stop possibly running animations
-						self.element.queue( [] );
 						self.panels.stop( false, true );
-
-						// "tabs" queue must not contain more than two elements,
-						// which are the callbacks for the latest clicked tab...
-						self.element.queue( "tabs", self.element.queue( "tabs" ).splice( -2, 2 ) );
 					}
 
 					self.lis.eq( index ).removeClass( "ui-tabs-loading" );
 
-					delete self.xhr;
+					if ( jqXHR === self.xhr ) {
+						delete self.xhr;
+					}
 				});
 		}
-
-		// last, so that load event is fired before show...
-		self.element.dequeue( "tabs" );
 
 		return this;
 	},
@@ -793,20 +766,30 @@ if ( $.uiBackCompat !== false ) {
 			li.addClass( "ui-state-default ui-corner-top" ).data( "destroy.tabs", true );
 			li.find( "a" ).attr( "aria-controls", id );
 
+			var doInsertAfter = index >= this.lis.length;
+
 			// try to find an existing element before creating a new one
 			var panel = this.element.find( "#" + id );
 			if ( !panel.length ) {
 				panel = this._createPanel( id );
+				if ( doInsertAfter ) {
+					if ( index > 0 ) {
+						panel.insertAfter( this.panels.eq( -1 ) );
+					} else {
+						panel.appendTo( this.element );
+					}
+				} else {
+					panel.insertBefore( this.panels[ index ] );
+				}
 			}
 			panel.addClass( "ui-tabs-panel ui-widget-content ui-corner-bottom" ).hide();
 
-			if ( index >= this.lis.length ) {
+			if ( doInsertAfter ) {
 				li.appendTo( this.list );
-				panel.appendTo( this.list[ 0 ].parentNode );
 			} else {
 				li.insertBefore( this.lis[ index ] );
-				panel.insertBefore( this.panels[ index ] );
 			}
+
 			options.disabled = $.map( options.disabled, function( n ) {
 				return n >= index ? ++n : n;
 			});
@@ -938,7 +921,7 @@ if ( $.uiBackCompat !== false ) {
 				this._trigger( "show", null, this._ui(
 					this.active[ 0 ], this._getPanelForTab( this.active )[ 0 ] ) );
 			}
-		}
+		};
 		prototype._trigger = function( type, event, data ) {
 			var ret = _trigger.apply( this, arguments );
 			if ( !ret ) {
@@ -1022,6 +1005,18 @@ if ( $.uiBackCompat !== false ) {
 			if ( this.options.cookie ) {
 				this._cookie( null, this.options.cookie );
 			}
+		}
+	});
+
+	// load event
+	$.widget( "ui.tabs", $.ui.tabs, {
+		_trigger: function( type, event, data ) {
+			var _data = $.extend( {}, data );
+			if ( type === "load" ) {
+				_data.panel = _data.panel[ 0 ];
+				_data.tab = _data.tab[ 0 ];
+			}
+			return this._super( "_trigger", type, event, _data );
 		}
 	});
 }

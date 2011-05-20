@@ -145,8 +145,93 @@ test( "refresh", function() {
 	tabs_disabled( element, false );
 });
 
-test('load', function() {
-	ok(false, "missing test - untested code is broken code.");
+asyncTest( "load", function() {
+	expect( 30 );
+
+	var element = $( "#tabs2" ).tabs();
+
+	// load content of inactive tab
+	// useful for preloading content with custom caching
+	element.one( "tabsbeforeload", function( event, ui ) {
+		var tab = element.find( ".ui-tabs-nav a" ).eq( 3 ),
+			panelId = tab.attr( "aria-controls" ),
+			panel = $( "#" + panelId );
+
+		ok( !( "originalEvent" in event ), "originalEvent" );
+		equals( ui.tab.size(), 1, "tab size" );
+		strictEqual( ui.tab[ 0 ], tab[ 0 ], "tab" );
+		equals( ui.panel.size(), 1, "panel size" );
+		strictEqual( ui.panel[ 0 ], panel[ 0 ], "panel" );
+		tabs_state( element, 1, 0, 0, 0, 0 );
+	});
+	element.one( "tabsload", function( event, ui ) {
+		// TODO: remove wrapping in 2.0
+		var uiTab = $( ui.tab ),
+			uiPanel = $( ui.panel );
+
+		var tab = element.find( ".ui-tabs-nav a" ).eq( 3 ),
+			panelId = tab.attr( "aria-controls" ),
+			panel = $( "#" + panelId );
+		
+		ok( !( "originalEvent" in event ), "originalEvent" );
+		equals( uiTab.size(), 1, "tab size" );
+		strictEqual( uiTab[ 0 ], tab[ 0 ], "tab" );
+		equals( uiPanel.size(), 1, "panel size" );
+		strictEqual( uiPanel[ 0 ], panel[ 0 ], "panel" );
+		equals( uiPanel.find( "p" ).length, 1, "panel html" );
+		tabs_state( element, 1, 0, 0, 0, 0 );
+		setTimeout( tabsload1, 1 );
+	});
+	element.tabs( "load", 3 );
+	tabs_state( element, 1, 0, 0, 0, 0 );
+
+	function tabsload1() {
+		// no need to test details of event (tested in events tests)
+		element.one( "tabsbeforeload", function() {
+			ok( true, "tabsbeforeload invoked" );
+		});
+		element.one( "tabsload", function() {
+			ok( true, "tabsload invoked" );
+			setTimeout( tabsload2, 1 );
+		});
+		element.tabs( "option", "active", 3 );
+		tabs_state( element, 0, 0, 0, 1, 0 );
+	}
+
+	function tabsload2() {
+		// reload content of active tab
+		element.one( "tabsbeforeload", function( event, ui ) {
+			var tab = element.find( ".ui-tabs-nav a" ).eq( 3 ),
+				panelId = tab.attr( "aria-controls" ),
+				panel = $( "#" + panelId );
+
+			ok( !( "originalEvent" in event ), "originalEvent" );
+			equals( ui.tab.size(), 1, "tab size" );
+			strictEqual( ui.tab[ 0 ], tab[ 0 ], "tab" );
+			equals( ui.panel.size(), 1, "panel size" );
+			strictEqual( ui.panel[ 0 ], panel[ 0 ], "panel" );
+			tabs_state( element, 0, 0, 0, 1, 0 );
+		});
+		element.one( "tabsload", function( event, ui ) {
+			// TODO: remove wrapping in 2.0
+			var uiTab = $( ui.tab ),
+				uiPanel = $( ui.panel );
+
+			var tab = element.find( ".ui-tabs-nav a" ).eq( 3 ),
+				panelId = tab.attr( "aria-controls" ),
+				panel = $( "#" + panelId );
+			
+			ok( !( "originalEvent" in event ), "originalEvent" );
+			equals( uiTab.size(), 1, "tab size" );
+			strictEqual( uiTab[ 0 ], tab[ 0 ], "tab" );
+			equals( uiPanel.size(), 1, "panel size" );
+			strictEqual( uiPanel[ 0 ], panel[ 0 ], "panel" );
+			tabs_state( element, 0, 0, 0, 1, 0 );
+			start();
+		});
+		element.tabs( "load", 3 );
+		tabs_state( element, 0, 0, 0, 1, 0 );
+	}
 });
 
 }( jQuery ) );

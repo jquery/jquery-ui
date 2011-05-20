@@ -742,7 +742,7 @@ $.extend( $.ui.dialog.overlay, {
 			$( [ document, window ] ).unbind( ".dialog-overlay" );
 		}
 
-		$el.remove();
+		$el.height( 0 ).width( 0 ).remove();
 
 		// adjust the maxZ to allow other modal dialogs to continue to work (see #4309)
 		var maxZ = 0;
@@ -780,8 +780,8 @@ $.extend( $.ui.dialog.overlay, {
 	width: function() {
 		var scrollWidth,
 			offsetWidth;
-		// handle IE 6
-		if ( $.browser.msie && $.browser.version < 7 ) {
+		// handle IE
+		if ( $.browser.msie ) {
 			scrollWidth = Math.max(
 				document.documentElement.scrollWidth,
 				document.body.scrollWidth
