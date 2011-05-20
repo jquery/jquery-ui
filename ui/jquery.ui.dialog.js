@@ -597,7 +597,20 @@ $.widget("ui.dialog", {
 					.html( "" + ( value || "&#160;" ) );
 				break;
 			case "zIndex":
-				uiDialog.css({ zIndex: value });
+				if ( value > $.ui.dialog.maxZ ) {
+					$.ui.dialog.maxZ = value;
+					
+					if ( self.overlay ) {
+						$.ui.dialog.maxZ += 1;
+						$.ui.dialog.overlay.maxZ = $.ui.dialog.maxZ;
+					}
+					
+					value = $.ui.dialog.maxZ;
+				}
+				
+				self.overlay && self.overlay.$el.css( "z-index", value > 0 ? value : 0 );
+				uiDialog.css( "z-index", value );
+				
 				break;
 		}
 
