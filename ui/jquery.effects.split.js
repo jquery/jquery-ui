@@ -442,7 +442,7 @@
 				
 				startProperties = {
 						top : startProperties.top - parentCoords.top,
-						left : startProperties.left - parentCoords.left,
+						left : startProperties.left - parentCoords.left
 				};
 				
 				//Copy object
