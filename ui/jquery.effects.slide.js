@@ -18,24 +18,31 @@ $.effects.effect.slide = function( o ) {
 
 		// Create element
 		var el = $( this ),
-			props = ['position','top','bottom','left','right', "width", "height"],
+			props = [ "position", "top", "bottom", "left", "right", "width", "height" ],
 			mode = $.effects.setMode( el, o.mode || 'show' ),
 			direction = o.direction || 'left',
 			ref = (direction == 'up' || direction == 'down') ? 'top' : 'left',
 			motion = (direction == 'up' || direction == 'left') ? 'pos' : 'neg',
 			distance,
-			animation = {}; 
+			animation = {},
+			size;
 
 		// Adjust
-		$.effects.save( el, props ); 
+		$.effects.save( el, props );
 		el.show();
 		distance = o.distance || el[ ref == 'top' ? "outerHeight" : "outerWidth" ]({ 
 			margin: true
 		});
+		
+		// Store the size in case width/height are defined in % - Fixes #5245
+		size = {
+			width: el.width(),
+			height: el.height()
+		};
 		$.effects.createWrapper( el ).css({
 			overflow: 'hidden'
 		});
-		el.css({ width: "100%", height: "100%" });
+		el.css( size );
 		
 		if (mode == 'show') {
 			el.css( ref, motion == 'pos' ? (isNaN(distance) ? "-" + distance : -distance) : distance );
