@@ -108,4 +108,13 @@ asyncTest( "animateClass works with children", function() {
 	}});
 });
 
+module("slide");
+test( "slide with % width", function() {
+	var test = $("div.slide.relWidth"),
+		width = test.width();
+
+	test.toggle( "slide", minDuration );
+	equal( test.width(), width, "Width is the same after animation started" );
+});
+
 })(jQuery);
