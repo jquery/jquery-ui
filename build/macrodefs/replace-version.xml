@@ -1,0 +1,13 @@
+<project name="replace-version">
+    <macrodef name="replace-version">
+        <attribute name="dir" />
+        <attribute name="includes" />
+        <attribute name="version" />
+
+        <sequential>
+            <replaceregexp match="@VERSION" replace="@{version}" flags="g" byline="true">
+                <fileset dir="@{dir}" includes="@{includes}"/>
+            </replaceregexp>
+        </sequential>
+    </macrodef>
+</project>

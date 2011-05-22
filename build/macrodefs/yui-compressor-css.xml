@@ -1,0 +1,24 @@
+<project name="yui-compressor-css">
+
+    <property description="YUI Compressor" name="yuicompressor-jar" value="build/yuicompressor-2.4.2.jar" />
+
+    <macrodef name="yui-compressor-css">
+
+        <attribute name="inputDir" />
+        <attribute name="outputDir" />
+
+        <sequential>
+            <apply executable="java" parallel="false">
+                <fileset dir="@{inputDir}" includes="*.css" />
+                <arg line="-jar" />
+                <arg path="${yuicompressor-jar}" />
+                <arg line="--charset utf-8" />
+                <arg line="-v" />
+                <srcfile />
+                <arg line="-o" />
+                <mapper type="glob" from="*.css" to="@{outputDir}/*.min.css" />
+                <targetfile/>
+            </apply>
+        </sequential>
+    </macrodef>
+</project>

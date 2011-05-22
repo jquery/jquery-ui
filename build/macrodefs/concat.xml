@@ -1,0 +1,51 @@
+<project name="concat">
+    <macrodef name="concat-js">
+        <attribute name="dist.dir"/>
+        <attribute name="concatenated"/>
+        <attribute name="src.dir"/>
+        <attribute name="core.files"/>
+
+        <sequential>
+            <echo message="Building concatenated" />
+            <mkdir dir="@{dist.dir}/ui/" />
+            <delete file="@{dist.dir}/ui/@{concatenated}.js" />
+
+            <concat destfile="@{dist.dir}/ui/@{concatenated}.js">
+                <filelist dir="@{src.dir}/" files="@{core.files}" />
+                <fileset dir="@{src.dir}/" includes="jquery.ui.*.js, jquery.effects.*.js" excludes="@{core.files}" />
+            </concat>
+            <echo message="Concatenated built." />
+        </sequential>
+    </macrodef>
+
+    <macrodef name="concat-css">
+        <attribute name="dist.dir" />
+        <attribute name="concatenated" />
+        <attribute name="theme.dir" />
+
+        <sequential>
+            <concat destfile="@{dist.dir}/themes/base/@{concatenated}.css">
+                <fileset dir="@{theme.dir}/" includes="jquery.ui.core.css" />
+                <fileset dir="@{theme.dir}/" includes="jquery.ui.*.css" excludes="jquery.ui.all.css, jquery.ui.core.css, jquery.ui.base.css, jquery.ui.theme.css" />
+                <fileset dir="@{theme.dir}/" includes="jquery.ui.theme.css" />
+            </concat>
+            <echo message="Concatenated theme." />
+        </sequential>
+    </macrodef>
+
+    <macrodef name="concat-i18n">
+        <attribute name="dist.dir" />
+        <attribute name="concatenated.i18n" />
+        <attribute name="src.dir" />
+
+        <sequential>
+            <mkdir dir="@{dist.dir}/ui/i18n/" />
+            <delete file="@{dist.dir}/ui/i18n/@{concatenated.i18n}.js" />
+
+            <concat destfile="@{dist.dir}/ui/i18n/@{concatenated.i18n}.js" encoding="utf-8">
+                <fileset dir="@{src.dir}/i18n/" includes="jquery.ui.*.js" />
+            </concat>
+            <echo message="Concatenated i18n built." />
+        </sequential>
+    </macrodef>
+</project>
