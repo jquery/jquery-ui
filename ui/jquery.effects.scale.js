@@ -243,15 +243,54 @@ $.effects.effect.size = function( o ) {
 			duration: o.duration, 
 			easing: o.easing, 
 			complete: function() {
-				var pos = {};
+				var pos = {}, parent = el.parent();
 				if ( el.to.opacity === 0 ) {
 					el.css( 'opacity', el.from.opacity );
 				}
 				if( mode == 'hide' ) {
 					el.hide();
 				}
-				$.effects.restore( el, restore ? props : props1 ); 
-				if (el.parent().is( ".ui-effects-wrapper" )) {
+				$.effects.restore( el, restore ? props : props1 );
+
+				function setPos( pos, attr ) {
+					pos[ attr ] = parseInt( parent.css( attr ), 10 );
+					if ( isNaN( pos[ attr ] ) ) {
+						pos[ attr ] = "auto";
+					} else {
+						switch ( attr ) {
+						case "top":
+							pos[ attr ] += el.to.top;
+							break;
+						case "bottom":
+							pos[ attr ] -= el.css("position") === "relative" ? el.to.top : - el.to.top;
+							break;
+						case "left":
+							pos[ attr ] += el.to.left;
+							break;
+						case "right":
+							pos[ attr ] -= el.css("position") === "relative" ? el.to.left : - el.to.left;
+							break;
+						}
+					}
+				}
+
+				function setAutoPos( pos, attr ) {
+					switch ( el.css( "position" ) ) {
+					case "relative":
+						pos[ attr ] = el.to[ attr ];
+						break;
+					case "absolute":
+						pos[ attr ] = el.offset()[ attr ] + el.to[ attr ];
+						break;
+					case "fixed":
+						pos[ attr ] = parent.offset()[ attr ] -
+							( attr === "top" ? $( "body" ).scrollTop() : $( "body" ).scrollLeft() ) +
+							el.to[attr];
+						break;
+					}
+				}
+
+				if (parent.is( ".ui-effects-wrapper" )) {
 					if ( el.css( "position" ) === "static" ) {
 						el.css({
 							position: "relative",
@@ -259,25 +298,32 @@ $.effects.effect.size = function( o ) {
 							left: el.to.left
 						});
 					} else {
-						$.each([ "top", "left" ], function(i, attr) {
-							pos[ attr ] = parseInt( el.parent().css( attr ), 10 );
-							if ( isNaN( pos[ attr ] ) ) {
-								pos[ attr ] = "auto";
-							} else {
-								pos[ attr ] += el.to[ attr ];
+						if ( el.css( "top" ) === "auto" &&
+						     el.css( "bottom" ) === "auto" ){
+							setAutoPos( pos, "top" );
+						} else {
+							if ( origin[ 0 ] !== 'top') {
+								setPos( pos, "top" );
 							}
-						});
-						$.each([ "bottom", "right" ], function(i, attr) {
-							pos[ attr ] = parseInt( el.parent().css( attr ), 10 );
-							if ( isNaN( pos[ attr ] ) ) {
-								pos[ attr ] = "auto";
-							} else {
-								pos[ attr ] += attr === "bottom" ? el.to.top : el.to.left;
+							if ( origin[ 0 ] !== "bottom" ||
+							     el.css ("position") === "relative" ) {
+								setPos( pos, "bottom" );
 							}
-						});
+						}
+						if ( el.css( "left" ) === "auto" &&
+						     el.css( "right" ) === "auto" ){
+							setAutoPos( pos, "left" );
+						} else {
+							if ( origin[ 1 ] !== "left" ) {
+								setPos( pos, "left" );
+							}
+							if ( origin[ 1 ] !== "right" ||
+							     el.css ("position") === "relative" ) {
+								setPos( pos, "right" );
+							}
+						}
 						el.css( pos );
 					}
-					
 				}
 				$.effects.removeWrapper( el ); 
 				$.isFunction( o.complete ) && o.complete.apply( this, arguments ); // Callback
