@@ -501,8 +501,6 @@ $.widget("ui.selectmenu", {
 	open: function(event) {
 		var self = this;
 		if ( this.newelement.attr("aria-disabled") != 'true' ) {
-			// TODO: seems to be useless
-			// this._refreshPosition();
 			this._closeOthers(event);
 			this.newelement
 				.addClass('ui-state-active');
