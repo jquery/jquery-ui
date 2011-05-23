@@ -14,7 +14,7 @@ test("handle click on header-descendant", function() {
 });
 
 test("accessibility", function () {
-	expect(9);
+	expect(13);
 	var ac = $('#list1').accordion().accordion("activate", 1);
 	var headers = $(".ui-accordion-header");
 
@@ -25,9 +25,13 @@ test("accessibility", function () {
 	equals( headers.next().attr("role"), "tabpanel", "tabpanel roles");
 	equals( headers.eq(1).attr("aria-expanded"), "true", "active tab has aria-expanded");
 	equals( headers.eq(0).attr("aria-expanded"), "false", "inactive tab has aria-expanded");
+	equals( headers.eq(1).attr("aria-selected"), "true", "active tab has aria-selected");
+	equals( headers.eq(0).attr("aria-selected"), "false", "inactive tab has aria-selected");
 	ac.accordion("activate", 0);
 	equals( headers.eq(0).attr("aria-expanded"), "true", "newly active tab has aria-expanded");
 	equals( headers.eq(1).attr("aria-expanded"), "false", "newly inactive tab has aria-expanded");
+	equals( headers.eq(0).attr("aria-selected"), "true", "active tab has aria-selected");
+	equals( headers.eq(1).attr("aria-selected"), "false", "inactive tab has aria-selected");
 });
 
 })(jQuery);

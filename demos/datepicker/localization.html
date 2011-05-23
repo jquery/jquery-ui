@@ -4,12 +4,13 @@
 	<meta charset="utf-8">
 	<title>jQuery UI Datepicker - Localize calendar</title>
 	<link rel="stylesheet" href="../../themes/base/jquery.ui.all.css">
-	<script src="../../jquery-1.4.4.js"></script>
+	<script src="../../jquery-1.5.1.js"></script>
 	<script src="../../ui/jquery.ui.core.js"></script>
 	<script src="../../ui/jquery.ui.widget.js"></script>
 	<script src="../../ui/jquery.ui.datepicker.js"></script>
 	<script src="../../ui/i18n/jquery.ui.datepicker-af.js"></script>
 	<script src="../../ui/i18n/jquery.ui.datepicker-ar.js"></script>
+	<script src="../../ui/i18n/jquery.ui.datepicker-ar-DZ.js"></script>
 	<script src="../../ui/i18n/jquery.ui.datepicker-az.js"></script>
 	<script src="../../ui/i18n/jquery.ui.datepicker-bg.js"></script>
 	<script src="../../ui/i18n/jquery.ui.datepicker-bs.js"></script>
@@ -18,7 +19,9 @@
 	<script src="../../ui/i18n/jquery.ui.datepicker-da.js"></script>
 	<script src="../../ui/i18n/jquery.ui.datepicker-de.js"></script>
 	<script src="../../ui/i18n/jquery.ui.datepicker-el.js"></script>
+	<script src="../../ui/i18n/jquery.ui.datepicker-en-AU.js"></script>
 	<script src="../../ui/i18n/jquery.ui.datepicker-en-GB.js"></script>
+	<script src="../../ui/i18n/jquery.ui.datepicker-en-NZ.js"></script>
 	<script src="../../ui/i18n/jquery.ui.datepicker-eo.js"></script>
 	<script src="../../ui/i18n/jquery.ui.datepicker-es.js"></script>
 	<script src="../../ui/i18n/jquery.ui.datepicker-et.js"></script>
@@ -41,12 +44,14 @@
 	<script src="../../ui/i18n/jquery.ui.datepicker-kz.js"></script>
 	<script src="../../ui/i18n/jquery.ui.datepicker-lt.js"></script>
 	<script src="../../ui/i18n/jquery.ui.datepicker-lv.js"></script>
+	<script src="../../ui/i18n/jquery.ui.datepicker-ml.js"></script>
 	<script src="../../ui/i18n/jquery.ui.datepicker-ms.js"></script>
 	<script src="../../ui/i18n/jquery.ui.datepicker-nl.js"></script>
 	<script src="../../ui/i18n/jquery.ui.datepicker-no.js"></script>
 	<script src="../../ui/i18n/jquery.ui.datepicker-pl.js"></script>
 	<script src="../../ui/i18n/jquery.ui.datepicker-pt.js"></script>
 	<script src="../../ui/i18n/jquery.ui.datepicker-pt-BR.js"></script>
+	<script src="../../ui/i18n/jquery.ui.datepicker-rm.js"></script>
 	<script src="../../ui/i18n/jquery.ui.datepicker-ro.js"></script>
 	<script src="../../ui/i18n/jquery.ui.datepicker-ru.js"></script>
 	<script src="../../ui/i18n/jquery.ui.datepicker-sk.js"></script>
@@ -57,6 +62,7 @@
 	<script src="../../ui/i18n/jquery.ui.datepicker-sv.js"></script>
 	<script src="../../ui/i18n/jquery.ui.datepicker-ta.js"></script>
 	<script src="../../ui/i18n/jquery.ui.datepicker-th.js"></script>
+	<script src="../../ui/i18n/jquery.ui.datepicker-tj.js"></script>
 	<script src="../../ui/i18n/jquery.ui.datepicker-tr.js"></script>
 	<script src="../../ui/i18n/jquery.ui.datepicker-uk.js"></script>
 	<script src="../../ui/i18n/jquery.ui.datepicker-vi.js"></script>
@@ -83,6 +89,7 @@
 	<select id="locale">
 		<option value="af">Afrikaans</option>
 		<option value="sq">Albanian (Gjuha shqipe)</option>
+		<option value="ar-DZ">Algerian Arabic</option>
 		<option value="ar">Arabic (&#8235;(&#1604;&#1593;&#1585;&#1576;&#1610;</option>
 		<option value="hy">Armenian (&#1344;&#1377;&#1397;&#1381;&#1408;&#1381;&#1398;)</option>
 		<option value="az">Azerbaijani (Az&#601;rbaycan dili)</option>
@@ -97,6 +104,8 @@
 		<option value="cs">Czech (&#269;e&#353;tina)</option>
 		<option value="da">Danish (Dansk)</option>
 		<option value="nl">Dutch (Nederlands)</option>
+		<option value="en-AU">English/Australia</option>
+		<option value="en-NZ">English/New Zealand</option>
 		<option value="en-GB">English/UK</option>
 		<option value="eo">Esperanto</option>
 		<option value="et">Estonian (eesti keel)</option>
@@ -118,11 +127,13 @@
 		<option value="kz">Kazakhstan (Kazakh)</option>
 		<option value="lv">Latvian (Latvie&ouml;u Valoda)</option>
 		<option value="lt">Lithuanian (lietuviu kalba)</option>
+		<option value="ml">Malayalam</option>
 		<option value="ms">Malaysian (Bahasa Malaysia)</option>
 		<option value="no">Norwegian (Norsk)</option>
 		<option value="pl">Polish (Polski)</option>
 		<option value="pt">Portuguese (Portugu&ecirc;s)</option>
 		<option value="pt-BR">Portuguese/Brazilian (Portugu&ecirc;s)</option>
+		<option value="rm">Rhaeto-Romanic (Romansh)</option>
 		<option value="ro">Romanian (Rom&acirc;n&#259;)</option>
 		<option value="ru">Russian (&#1056;&#1091;&#1089;&#1089;&#1082;&#1080;&#1081;)</option>
 		<option value="sr">Serbian (&#1089;&#1088;&#1087;&#1089;&#1082;&#1080; &#1112;&#1077;&#1079;&#1080;&#1082;)</option>
@@ -133,6 +144,7 @@
 		<option value="sv">Swedish (Svenska)</option>
 		<option value="ta">Tamil (&#2980;&#2990;&#3007;&#2996;&#3021;)</option>
 		<option value="th">Thai (&#3616;&#3634;&#3625;&#3634;&#3652;&#3607;&#3618;)</option>
+		<option value="tj">Tajikistan</option>
 		<option value="tr">Turkish (T&uuml;rk&ccedil;e)</option>
 		<option value="uk">Ukranian (&#1059;&#1082;&#1088;&#1072;&#1111;&#1085;&#1089;&#1100;&#1082;&#1072;)</option>
 		<option value="vi">Vietnamese (Ti&#7871;ng Vi&#7879;t)</option>

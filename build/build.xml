@@ -196,10 +196,22 @@
 			<mapper type="glob" from="*.css" to="${dist.dir}/themes/base/minified/*.min.css" />
 			<targetfile/>
 		</apply>
-				
+		
+		<replaceregexp match=".css" replace=".min.css" flags="g">
+			<fileset dir="${dist.dir}/themes/base/minified/">
+				<include name="*.base.min.css"/>
+				<include name="*.all.min.css"/>
+			</fileset>
+		</replaceregexp>
+		
+		<!-- make a copy of all theme images to ensure that relative paths in minified css files work -->
+		<copy todir="${dist.dir}/themes/base/minified/images" >
+			<fileset dir="${ui.dir}/themes/base/images" />
+		</copy>
+		
 		<echo message="Minified ui/ built." />
 	</target>
-
+	
 	<target description="Copy needed folders" name="copy">
 		<echo message="Copying files" />
 		<mkdir dir="${dist.dir}" />

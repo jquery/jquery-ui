@@ -1,7 +1,7 @@
 /*
  * jQuery UI Accordion @VERSION
  *
- * Copyright 2010, AUTHORS.txt (http://jqueryui.com/about)
+ * Copyright 2011, AUTHORS.txt (http://jqueryui.com/about)
  * Dual licensed under the MIT or GPL Version 2 licenses.
  * http://jquery.org/license
  *
@@ -114,6 +114,7 @@ $.widget( "ui.accordion", {
 			.not( self.active || "" )
 			.attr({
 				"aria-expanded": "false",
+				"aria-selected": "false",
 				tabIndex: -1
 			})
 			.next()
@@ -126,6 +127,7 @@ $.widget( "ui.accordion", {
 			self.active
 				.attr({
 					"aria-expanded": "true",
+					"aria-selected": "true",
 					tabIndex: 0
 				});
 		}
@@ -173,6 +175,7 @@ $.widget( "ui.accordion", {
 			.removeClass( "ui-accordion-header ui-accordion-disabled ui-helper-reset ui-state-default ui-corner-all ui-state-active ui-state-disabled ui-corner-top" )
 			.removeAttr( "role" )
 			.removeAttr( "aria-expanded" )
+			.removeAttr( "aria-selected" )
 			.removeAttr( "tabIndex" );
 
 		this.headers.find( "a" ).removeAttr( "tabIndex" );
@@ -347,8 +350,26 @@ $.widget( "ui.accordion", {
 			return;
 		}
 
+		// find elements to show and hide
+		var active = this.active,
+			toShow = clicked.next(),
+			toHide = this.active.next(),
+			data = {
+				options: options,
+				newHeader: clickedIsActive && options.collapsible ? $([]) : clicked,
+				oldHeader: this.active,
+				newContent: clickedIsActive && options.collapsible ? $([]) : toShow,
+				oldContent: toHide
+			},
+			down = this.headers.index( this.active[0] ) > this.headers.index( clicked[0] );
+
+		// when the call to ._toggle() comes after the class changes
+		// it causes a very odd bug in IE 8 (see #6720)
+		this.active = clickedIsActive ? $([]) : clicked;
+		this._toggle( toShow, toHide, data, clickedIsActive, down );
+
 		// switch classes
-		this.active
+		active
 			.removeClass( "ui-state-active ui-corner-top" )
 			.addClass( "ui-state-default ui-corner-all" )
 			.children( ".ui-icon" )
@@ -365,21 +386,6 @@ $.widget( "ui.accordion", {
 				.next()
 				.addClass( "ui-accordion-content-active" );
 		}
-
-		// find elements to show and hide
-		var toShow = clicked.next(),
-			toHide = this.active.next(),
-			data = {
-				options: options,
-				newHeader: clickedIsActive && options.collapsible ? $([]) : clicked,
-				oldHeader: this.active,
-				newContent: clickedIsActive && options.collapsible ? $([]) : toShow,
-				oldContent: toHide
-			},
-			down = this.headers.index( this.active[0] ) > this.headers.index( clicked[0] );
-
-		this.active = clickedIsActive ? $([]) : clicked;
-		this._toggle( toShow, toHide, data, clickedIsActive, down );
 
 		return;
 	},
@@ -474,12 +480,14 @@ $.widget( "ui.accordion", {
 		toHide.prev()
 			.attr({
 				"aria-expanded": "false",
+				"aria-selected": "false",
 				tabIndex: -1
 			})
 			.blur();
 		toShow.prev()
 			.attr({
 				"aria-expanded": "true",
+				"aria-selected": "true",
 				tabIndex: 0
 			})
 			.focus();
@@ -500,6 +508,10 @@ $.widget( "ui.accordion", {
 
 		// other classes are removed before the animation; this one needs to stay until completed
 		this.toHide.removeClass( "ui-accordion-content-active" );
+		// Work around for rendering bug in IE (#5421)
+		if ( this.toHide.length ) {
+			this.toHide.parent()[0].className = this.toHide.parent()[0].className;
+		}
 
 		this._trigger( "change", null, this.data );
 	}

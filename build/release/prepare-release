@@ -5,7 +5,8 @@ repo_dir="$base_dir/jquery-ui"
 release_dir="$repo_dir/build/release"
 
 github_repo="git@github.com:jquery/jquery-ui.git"
-remote_cmd="ssh jqadmin@ui-dev.jquery.com /srv/dev.jqueryui.com/prepare-release"
+git_branch="1-8-stable"
+trac_url="http://bugs.jqueryui.com"
 
 
 
@@ -25,6 +26,7 @@ cd $base_dir
 echo "Cloning repo from $github_repo..."
 git clone $github_repo
 cd $repo_dir
+git checkout $git_branch
 
 echo
 echo "Environment setup complete."
@@ -43,11 +45,12 @@ echo "------------------------"
 echo
 
 # NOTE: this will be different for minor and major releases
-version=`$remote_cmd/get-latest-version`
-major_minor=${version%.*}
-point=${version##*.}
-version_new="${major_minor}.$(($point + 1))"
-version_next=`cat version.txt`
+version_new=`cat version.txt`
+version_new=${version_new:0:$((${#version_new} - 3))}
+major_minor=${version_new%.*}
+point=${version_new##*.}
+version="${major_minor}.$(($point - 1))"
+version_next="${major_minor}.$(($point + 1))pre"
 
 echo "We are going from $version to $version_new."
 echo "version.txt will be set to $version_next when complete."
@@ -85,7 +88,9 @@ git whatchanged $version... --pretty=format:"$format_full" \
 
 # find all fixed tickets
 echo "Adding Trac tickets to changelog..."
-$remote_cmd/generate-changelog >> $base_dir/changelog
+trac_changelog="$trac_url/query?format=tab&milestone=$version_new"
+trac_changelog="$trac_changelog&resolution=fixed&col=id&col=component&col=summary&order=component"
+curl $trac_changelog >> $base_dir/changelog
 
 echo
 echo "Changelog complete."
@@ -114,11 +119,11 @@ git whatchanged $version... --pretty=format:"$format_contributors" \
 
 # find all reporters and commenters from Trac
 echo "Adding reporters and commenters from Trac..."
-$remote_cmd/generate-contributors >> $base_dir/thankyou
+curl "$trac_url/report/22?V=$version_new&max=-1&format=tab" | tail -n +2 >> $base_dir/thankyou
 
 # sort names
 echo "Sorting contributors..."
-LC_ALL='C' sort -f $base_dir/thankyou | uniq > $base_dir/_thankyou
+LC_ALL='C' sort -f $base_dir/thankyou | col -b | uniq > $base_dir/_thankyou
 mv $base_dir/_thankyou $base_dir/thankyou
 
 # find all people that were thanked
@@ -162,7 +167,7 @@ git tag $version_new
 echo "Updating version.txt to $version_next..."
 echo $version_next > version.txt
 
-git commit -a -m "Updating the master version to $version_next"
+git commit -a -m "Updating the $git_branch version to $version_next"
 echo "Committed version.txt..."
 
 echo
@@ -206,17 +211,11 @@ echo
 
 # TODO: automate this
 # NOTE: this will be different for minor and major releases
-milestone=`$remote_cmd/get-latest-milestone`
 
 # Create new milestrone and version
 echo "$version_new was tagged at $version_new_time."
 echo "Create and close the $version_new Milestone with the above date and time."
 echo "Create the $version_new Version with the above date and time."
-echo "Press enter when done."
-read
-
-# Update milestone for all fixed tickets
-echo "Change all $milestone fixed tickets to $version_new."
 echo "Press enter when done."
 read
 
@@ -329,3 +328,8 @@ echo
 #
 # Generate themes
 # 
+
+
+
+
+# ruby -e 'puts File.read("thankyou").split("\n").join(", ")' > thankyou2
