@@ -17,7 +17,7 @@ $.effects.effect.shake = function( o ) {
 	return this.queue( function() {
 
 		var el = $( this ),
-			props = [ "position", "top", "bottom", "left", "right" ],
+			props = [ "position", "top", "bottom", "left", "right", "height", "width" ],
 			mode = $.effects.setMode( el, o.mode || "effect" ),
 			direction = o.direction || "left",
 			distance = o.distance || 20,

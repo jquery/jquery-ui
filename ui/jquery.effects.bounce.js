@@ -16,7 +16,7 @@ $.effects.effect.bounce = function(o) {
 
 	return this.queue( function( next ) {
 		var el = $( this ), 
-			props = [ "position", "top", "bottom", "left", "right" ],
+			props = [ "position", "top", "bottom", "left", "right", "height", "width" ],
 
 			// defaults:
 			mode = $.effects.setMode( el, o.mode || "effect" ),

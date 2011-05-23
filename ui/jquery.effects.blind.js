@@ -21,7 +21,7 @@ $.effects.effect.blind = function( o ) {
 
 		// Create element
 		var el = $( this ),
-			props = [ "position", "top", "bottom", "left", "right" ],
+			props = [ "position", "top", "bottom", "left", "right", "height", "width" ],
 			mode = $.effects.setMode( el, o.mode || "hide" ),
 			direction = o.direction || "up",
 			vertical = rvertical.test( direction ),
