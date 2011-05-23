@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>jQuery UI Widget - Default functionality</title>
+	<link rel="stylesheet" href="../../themes/base/jquery.ui.all.css">
+	<script src="../../jquery-1.5.1.js"></script>
+	<script src="../../ui/jquery.ui.core.js"></script>
+	<script src="../../ui/jquery.ui.widget.js"></script>
+	<script src="../../ui/jquery.ui.position.js"></script>
+	<link rel="stylesheet" href="../demos.css">
+	<style>
+	/* this could go into custom.inlineedit.css */
+	/* make it display:block to replace the block element that's being edited */
+	.inlineedit-input { display: block; }
+	/* this would need a few more styles to make it look decent */
+	</style>
+	<script>
+	$(function() {
+		// this defines a new widget, in the "custom" namespace
+		$.widget( "custom.inlineedit", {
+			// default options
+			options: {
+				submitOnBlur: true
+			},
+			// this is the constructor
+			_create: function() {
+				// basic event binding to this.element
+				this._bind({
+					// string as value is mapped to instance method
+					click: "start"
+				});
+
+				// creating a new element to show later
+				this.input = $( "<input>" ).addClass("inlineedit-input").hide().insertAfter( this.element );
+				// with events on input, here functions that to do event-specific checks
+				this._bind( this.input, {
+					blur: function( event ) {
+						// ignore blur event if already hidden
+						if (!this.input.is(":visible")) {
+							return;
+						}
+						if ( this.options.submitOnBlur ) {
+							this.submit( event )
+						} else {
+							this.cancel( event );
+						}
+					},
+					keyup: function( event ) {
+						// using $.ui.keyCode to map keyboard input to the right action 
+						if ( event.keyCode === $.ui.keyCode.ENTER || event.keyCode === $.ui.keyCode.NUMPAD_ENTER ) {
+							this.submit( event );
+						} else if ( event.keyCode === $.ui.keyCode.ESCAPE ) {
+							this.cancel( event );
+						}
+					}
+				});
+			},
+			// a public method
+			start: function( event ) {
+				this.element.hide();
+				this.input.val( this.element.text() ).show().focus();
+				// trigger a custom event when something changes
+				this._trigger("start", event );
+			},
+			// another custom method
+			_hide: function( event ) {
+				this.input.hide();
+				this.element.show();
+			},
+			submit: function( event ) {
+				var newValue = this.input.val(),
+					ui = {
+						value: newValue
+					};
+				// trigger an event, cancel the default action when event handler returns false
+				if ( this._trigger( "submit", event, ui ) !== false ) {
+					this.element.text( newValue );
+				}
+				this._hide();
+			},
+			cancel: function( event ) {
+				this._hide();
+				// trigger an event when something changes
+				this._trigger( "cancel", event );
+			}
+		});
+		// this is how we can use our custom widget, just like any jQuery plugin
+		$( ".demo h1" ).inlineedit();
+		$( ".demo p" ).inlineedit({
+			// configure an option
+			submitOnBlur: false
+		});
+		$( ".demo button" ).click( function() {
+			// call a public method
+			$( ".demo :custom-inlineedit" ).inlineedit( "start" );
+		});
+		// widget's create a custom selector
+		// triggered events can be used with regular bind, just prepend name
+		$( ".demo :custom-inlineedit" ).bind( "inlineeditstart inlineeditsubmit inlineeditcancel" , function( event, ui ) {
+			$( "<div></div>" ).text( "edit event " + event.type ).appendTo(".demo");
+		});
+	});
+	</script>
+</head>
+<body>
+
+<div class="demo">
+
+<div>
+	<h1>This is an editable header</h1>
+	<p>And an editable paragraph</p>
+	<button>Start editing</button>
+</div>
+
+</div><!-- End demo -->
+
+
+
+<div class="demo-description">
+<p>This demo shows a simple custom widget built using the widget factory (jquery.ui.widget.js).</p>
+<p>The header is set to change the element on blur, the paragraph only changes when you submit with Enter.</p>
+<p><a href="http://wiki.jqueryui.com/w/page/12138135/Widget-factory">For more details on the widget factory, visit the jQuery UI planning wiki.</a></p>
+</div><!-- End demo-description -->
+
+</body>
+</html>
