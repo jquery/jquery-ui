@@ -55,13 +55,19 @@ $.each( $.effects.effect, function( effect ) {
 		}));
 	});
 
-	test( "toggle with % width", function() {
+	asyncTest( "relative width & height - properties are preserved", function() {
 		var test = $("div.relWidth.relHeight"),
-			 width = test.width(), height = test.height();
+			width = test.width(), height = test.height(),
+			cssWidth = test[0].style.width, cssHeight = test[0].style.height;
 
-		test.toggle( effect, minDuration );
-		equal( test.width(), width, "Width is the same after animation started" );
-		equal( test.height(), height, "Height is the same after animation started" );
+		expect( 4 );
+		test.toggle( effect, minDuration, function() {
+			equal( test[0].style.width, cssWidth, "Inline CSS Width has been reset after animation ended" );
+			equal( test[0].style.height, cssHeight, "Inline CSS Height has been rest after animation ended" );
+			start();
+		});
+		equal( test.width(), width, "Width is the same px after animation started" );
+		equal( test.height(), height, "Height is the same px after animation started" );
 	});
 });
 
