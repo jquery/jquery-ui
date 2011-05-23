@@ -56,11 +56,12 @@ $.each( $.effects.effect, function( effect ) {
 	});
 
   test( "toggle with % width", function() {
-	  var test = $("div.slide.relWidth"),
-		   width = test.width();
+	  var test = $("div.relWidth.relHeight"),
+		   width = test.width(), height = test.height();
 
 	  test.toggle( effect, minDuration );
 	  equal( test.width(), width, "Width is the same after animation started" );
+    equal( test.height(), height, "Height is the same after animation started" );
   });
 });
 
