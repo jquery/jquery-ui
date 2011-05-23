@@ -54,6 +54,15 @@ $.each( $.effects.effect, function( effect ) {
 			start();
 		}));
 	});
+
+	test( "toggle with % width", function() {
+		var test = $("div.relWidth.relHeight"),
+			 width = test.width(), height = test.height();
+
+		test.toggle( effect, minDuration );
+		equal( test.width(), width, "Width is the same after animation started" );
+		equal( test.height(), height, "Height is the same after animation started" );
+	});
 });
 
 module("animateClass");
@@ -106,15 +115,6 @@ asyncTest( "animateClass works with children", function() {
 			equal( h2.css("fontSize"), "20px", "Text size unchanged during animate with children: undefined" );
 		}, mid);
 	}});
-});
-
-module("slide");
-test( "slide with % width", function() {
-	var test = $("div.slide.relWidth"),
-		width = test.width();
-
-	test.toggle( "slide", minDuration );
-	equal( test.width(), width, "Width is the same after animation started" );
 });
 
 })(jQuery);

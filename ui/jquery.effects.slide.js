@@ -34,15 +34,9 @@ $.effects.effect.slide = function( o ) {
 			margin: true
 		});
 		
-		// Store the size in case width/height are defined in % - Fixes #5245
-		size = {
-			width: el.width(),
-			height: el.height()
-		};
 		$.effects.createWrapper( el ).css({
 			overflow: 'hidden'
 		});
-		el.css( size );
 		
 		if (mode == 'show') {
 			el.css( ref, motion == 'pos' ? (isNaN(distance) ? "-" + distance : -distance) : distance );
