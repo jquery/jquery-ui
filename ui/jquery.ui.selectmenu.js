@@ -766,7 +766,8 @@ $.widget("ui.selectmenu", {
 				of: o.positionOptions.of || this.newelement,
 				my: o.positionOptions.my,
 				at: o.positionOptions.at,
-				offset: o.positionOptions.offset || _offset
+				offset: o.positionOptions.offset || _offset,
+				collision: o.positionOptions.collision || 'flip'
 			});
 	}
 });
