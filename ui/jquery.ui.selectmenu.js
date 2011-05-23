@@ -46,9 +46,6 @@ $.widget("ui.selectmenu", {
 		// define safe mouseup for future toggling
 		this._safemouseup = true;
 		
-		// FIXME temp workaround for IE
-		if ($.browser.msie) o.typeAhead = "";
-
 		// create menu button wrapper
 		this.newelement = $('<a class="' + this.widgetBaseClass + ' ui-widget ui-state-default ui-corner-all" id="' + this.ids[0] + '" role="button" href="#" tabindex="0" aria-haspopup="true" aria-owns="' + this.ids[1] + '"></a>')
 			.insertAfter(this.element);
@@ -451,16 +448,10 @@ $.widget("ui.selectmenu", {
 					}
 				}
 			});
-			
-			// if we didnt find it clear the prevChar
-			// if (!focusFound) {
-				//self._prevChar = undefined
-			// }
-
 			// set a 1 second timeout for sequenctial typeahead
 			//  	keep this set even if we have no matches so it doesnt typeahead somewhere else
 			window.setTimeout(function(el) {
-				el._prevChar = undefined;
+				self._prevChar = undefined;
 			}, 1000, self);
 
 		} else {
