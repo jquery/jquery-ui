@@ -5,6 +5,19 @@
 
 module("progressbar: events");
 
+test("create", function() {
+	expect(1);
+	$("#progressbar").progressbar({
+		value: 5,
+		create: function() {
+			same(5, $(this).progressbar("value") );
+		},
+		change: function() {
+			ok(false, 'create() has triggered change()');
+		}
+	})
+});
+
 test("change", function() {
 	expect(1);
 	$("#progressbar").progressbar({

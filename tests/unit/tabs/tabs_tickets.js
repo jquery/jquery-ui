@@ -91,4 +91,25 @@ asyncTest( "#4581 - title attribute for remote tabs does not support foreign lan
 	});
 });
 
+
+test('#6710 - selectors are global', function() {
+	// http://bugs.jqueryui.com/ticket/6710
+	expect(1);
+
+	var container = $('\
+		<div>\
+			<div id="tabs_6710">\
+			<ul>\
+				<li><a href="#tabs-1_6710">Nunc tincidunt</a></li>\
+				<li><a href="#tabs-2_6710">Proin dolor</a></li>\
+			</ul>\
+			<div id="tabs-1_6710"> <p>first</p> </div>\
+			<div id="tabs-2_6710"> <p>second</p>\
+		</div>\
+	</div>');
+	container.find('#tabs_6710').tabs();
+	ok( container.find('#tabs-2_6710').hasClass('ui-tabs-hide'),  'should find panels and add corresponding classes' );
+});
+
+
 })(jQuery);

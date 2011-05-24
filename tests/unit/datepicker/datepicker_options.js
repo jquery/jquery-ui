@@ -470,6 +470,10 @@ test('setDate', function() {
 	equalsDate(inp.datepicker('getDate'), minDate, 'Set date min/max - setDate < min');
 	inp.datepicker('setDate', date2);
 	equalsDate(inp.datepicker('getDate'), maxDate, 'Set date min/max - setDate > max');
+	var dateAndTimeToSet = new Date(2008, 3 - 1, 28, 1, 11, 0);
+	var dateAndTimeClone = new Date(2008, 3 - 1, 28, 1, 11, 0);
+	inp.datepicker('setDate', dateAndTimeToSet);
+	equals(dateAndTimeToSet.getTime(), dateAndTimeClone.getTime(), 'Date object passed should not be changed by setDate');
 });
 
 test('altField', function() {
@@ -777,12 +781,12 @@ test('parseDate', function() {
 		new Date(2001, 12 - 1, 13), 'Parse date d m y');
 	equalsDate($.datepicker.parseDate('dd mm yy', '13 12 2001'),
 		new Date(2001, 12 - 1, 13), 'Parse date dd mm yy');
-	equalsDate($.datepicker.parseDate('y-o', '2001-34'),
+	equalsDate($.datepicker.parseDate('y-o', '01-34'),
 		new Date(2001, 2 - 1, 3), 'Parse date y-o');
 	equalsDate($.datepicker.parseDate('yy-oo', '2001-347'),
-		new Date(2001, 12 - 1, 13), 'Parse date yy oo');
+		new Date(2001, 12 - 1, 13), 'Parse date yy-oo');
 	equalsDate($.datepicker.parseDate('oo yy', '348 2004'),
-		new Date(2004, 12 - 1, 13), 'Parse date oo-yy');
+		new Date(2004, 12 - 1, 13), 'Parse date oo yy');
 	equalsDate($.datepicker.parseDate('D d M y', 'Sat 3 Feb 01'),
 		new Date(2001, 2 - 1, 3), 'Parse date D d M y');
 	equalsDate($.datepicker.parseDate('d MM DD yy', '3 February Saturday 2001'),
@@ -792,14 +796,21 @@ test('parseDate', function() {
 	equalsDate($.datepicker.parseDate('\'day\' d \'of\' MM (\'\'DD\'\'), yy',
 		'day 3 of February (\'Saturday\'), 2001'), new Date(2001, 2 - 1, 3),
 		'Parse date \'day\' d \'of\' MM (\'\'DD\'\'), yy');
-	equalsDate($.datepicker.parseDate('y-m-d', '01-02-03'),
-		new Date(2001, 2 - 1, 3), 'Parse date y-m-d - default cutoff');
-	equalsDate($.datepicker.parseDate('y-m-d', '51-02-03'),
-		new Date(1951, 2 - 1, 3), 'Parse date y-m-d - default cutoff');
-	equalsDate($.datepicker.parseDate('y-m-d', '51-02-03', {shortYearCutoff: 80}),
-		new Date(2051, 2 - 1, 3), 'Parse date y-m-d - cutoff 80');
-	equalsDate($.datepicker.parseDate('y-m-d', '51-02-03', {shortYearCutoff: '+60'}),
-		new Date(2051, 2 - 1, 3), 'Parse date y-m-d - cutoff +60');
+	var currentYear = new Date().getFullYear();
+	equalsDate($.datepicker.parseDate('y-m-d', (currentYear - 2000) + '-02-03'),
+			new Date(currentYear, 2 - 1, 3), 'Parse date y-m-d - default cutuff');
+	equalsDate($.datepicker.parseDate('y-m-d', (currentYear - 2000 + 10) + '-02-03'),
+			new Date(currentYear+10, 2 - 1, 3), 'Parse date y-m-d - default cutuff');
+	equalsDate($.datepicker.parseDate('y-m-d', (currentYear - 2000 + 11) + '-02-03'),
+			new Date(currentYear-89, 2 - 1, 3), 'Parse date y-m-d - default cutuff');
+	equalsDate($.datepicker.parseDate('y-m-d', '80-02-03', {shortYearCutoff: 80}),
+		new Date(2080, 2 - 1, 3), 'Parse date y-m-d - cutoff 80');
+	equalsDate($.datepicker.parseDate('y-m-d', '81-02-03', {shortYearCutoff: 80}),
+		new Date(1981, 2 - 1, 3), 'Parse date y-m-d - cutoff 80');
+	equalsDate($.datepicker.parseDate('y-m-d', (currentYear - 2000 + 60) + '-02-03', {shortYearCutoff: '+60'}),
+			new Date(currentYear + 60, 2 - 1, 3), 'Parse date y-m-d - cutoff +60');
+	equalsDate($.datepicker.parseDate('y-m-d', (currentYear - 2000 + 61) + '-02-03', {shortYearCutoff: '+60'}),
+			new Date(currentYear - 39, 2 - 1, 3), 'Parse date y-m-d - cutoff +60');
 	var gmtDate = new Date(2001, 2 - 1, 3);
 	gmtDate.setMinutes(gmtDate.getMinutes() - gmtDate.getTimezoneOffset());
 	equalsDate($.datepicker.parseDate('@', '981158400000'), gmtDate, 'Parse date @');
@@ -816,6 +827,10 @@ test('parseDate', function() {
 	equalsDate($.datepicker.parseDate('\'jour\' d \'de\' MM (\'\'DD\'\'), yy',
 		'jour 9 de Avril (\'Lundi\'), 2001', settings), new Date(2001, 4 - 1, 9),
 		'Parse date \'jour\' d \'de\' MM (\'\'DD\'\'), yy with settings');
+
+	var zh = $.datepicker.regional['zh-CN'];
+	equalsDate($.datepicker.parseDate('yy M d', '2011 十一 22', zh),
+		new Date(2011, 11 - 1, 22), 'Parse date yy M d with zh-CN');
 });
 
 test('parseDateErrors', function() {
@@ -845,8 +860,8 @@ test('parseDateErrors', function() {
 		'3 2 AD01 - d m y', 'Missing number at position 4');
 	expectError(function() { $.datepicker.parseDate('d m yy', '3 2 AD01'); },
 		'3 2 AD01 - dd mm yy', 'Missing number at position 4');
-	expectError(function() { $.datepicker.parseDate('y-o', '2001-D01'); },
-		'2001-D01 - y-o', 'Missing number at position 5');
+	expectError(function() { $.datepicker.parseDate('y-o', '01-D01'); },
+		'2001-D01 - y-o', 'Missing number at position 3');
 	expectError(function() { $.datepicker.parseDate('yy-oo', '2001-D01'); },
 		'2001-D01 - yy-oo', 'Missing number at position 5');
 	expectError(function() { $.datepicker.parseDate('D d M y', 'D7 3 Feb 01'); },
