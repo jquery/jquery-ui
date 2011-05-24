@@ -157,11 +157,12 @@ $.widget("ui.selectmenu", {
 				}
 			});
 
-		// original selectmenu width
-		var selectWidth = this.element.width();
-
+		// set width when not set via options
+		if (!o.width) {
+			o.width = this.element.outerWidth();
+		}		
 		// set menu button width
-		this.newelement.width(o.width ? o.width : selectWidth);
+		this.newelement.width(o.width);
 
 		// hide original selectmenu element
 		this.element.hide();		
@@ -354,14 +355,11 @@ $.widget("ui.selectmenu", {
 			this.newelement.add(this.list).addClass(transferClasses);
 		}
 
-		// original selectmenu width
-		var selectWidth = this.element.width();
-
 		// set menu width to either menuWidth option value, width option value, or select width 
 		if (o.style == 'dropdown') { 
-			this.list.width(o.menuWidth ? o.menuWidth : (o.width ? o.width : selectWidth)); 
+			this.list.width(o.menuWidth ? o.menuWidth : o.width); 
 		} else { 
-			this.list.width(o.menuWidth ? o.menuWidth : (o.width ? o.width - o.handleWidth : selectWidth - o.handleWidth)); 
+			this.list.width(o.menuWidth ? o.menuWidth : o.width - o.handleWidth); 
 		}
 
 		// calculate default max height
