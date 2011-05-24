@@ -27,7 +27,7 @@
 		
 		var interval = o.interval, 
 			duration = o.duration - ( o.rows + o.columns ) * interval,
-			pieceCounter = [],
+			pieceCounter = 0,
 			documentCoords = {
 				height: $( document ).height(),
 				width: $( document ).width()
@@ -63,8 +63,8 @@
 
 		// children animate complete
 		function childComplete() {
-			pieceCounter.push( this );
-			if ( pieceCounter.length === o.rows * o.columns ) {
+			pieceCounter++;
+			if ( pieceCounter === o.rows * o.columns ) {
 				animComplete();
 			}
 		}
@@ -188,6 +188,7 @@
 		 * 		pieces,
 		 * 		fade, 
 		 * 		show
+		 *		complete
 		 */
 
 		return this.queue( function( next ) {
@@ -279,7 +280,8 @@
 		 * 		easing,
 		 * 		pieces,
 		 * 		fade, 
-		 * 		show
+		 * 		show,
+		 * 		complete
 		 */
 
 		return this.queue( function( next ) {
@@ -369,7 +371,8 @@
 		 * 		interval, 
 		 * 		easing,
 		 * 		pieces,
-		 * 		show
+		 * 		show,
+		 * 		complete
 		 */
 
 		return this.queue( function( next ) {
@@ -416,6 +419,7 @@
 		 * 		interval,
 		 * 		fade, 
 		 * 		show,
+		 * 		complete,
 		 * 		crop
 		 */
 		
@@ -500,6 +504,8 @@
 		 * 		pieces,
 		 * 		fade, 
 		 * 		show,
+		 * 		show,
+		 * 		complete
 		 * 		crop
 		 */
 
