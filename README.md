@@ -14,13 +14,13 @@ When looking at pull requests, first check for [proper commit messages](http://w
 
 Unless everything is fine and you can merge directly via GitHub's interface, fetch the remote first:
 
-  git remote add [username] [his-fork.git] -f
+    git remote add [username] [his-fork.git] -f
 
 If you want just one commit and edit the commit message:
 
-  git cherry-pick -e [sha-of-commit]
+    git cherry-pick -e [sha-of-commit]
 
 If it should go to the stable brach, cherry-pick it to stable:
 
-  git checkout 1-8-stable
-  git cherry-pick -x [sha-of-commit]
+    git checkout 1-8-stable
+    git cherry-pick -x [sha-of-commit]
