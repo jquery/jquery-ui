@@ -68,7 +68,8 @@ $.widget("ui.dialog", {
 		stack: true,
 		title: "",
 		width: 300,
-		zIndex: 1000
+		zIndex: 1000,
+		focusOnClose: false
 	},
 
 	_create: function() {
@@ -228,6 +229,10 @@ $.widget("ui.dialog", {
 			});
 			$.ui.dialog.maxZ = maxZ;
 		}
+		// restore focus of underlying page, unless overidden at some point while the dialog is open.
+		if (self.options.focusOnClose){
+			$(self.options.focusOnClose).focus();
+		}
 
 		return self;
 	},
@@ -280,6 +285,10 @@ $.widget("ui.dialog", {
 		var self = this,
 			options = self.options,
 			uiDialog = self.uiDialog;
+
+		// store the element with the current focus, so it can be restored when the dialog closes. Also force a Blur event to it. requires jquery core 1.6
+		self.options.focusOnClose = $(":focus");
+		$(self.options.focusOnClose).blur();
 
 		self._size();
 		self._position( options.position );
