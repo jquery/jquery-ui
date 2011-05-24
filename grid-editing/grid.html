@@ -35,8 +35,12 @@
 				limit: 4
 			}
 		});
-		developers.save = function(object) {
-			console.log("save updates to server or something");
+		developers.save = function( object ) {
+			if ( object ) {
+				console.log("save update to " + object.firstName + " " + object.lastName);
+			} else {
+				console.log("save all");
+			}
 		}
 
 		$( "#developers-local" ).grid({
@@ -69,8 +73,7 @@
 </head>
 <body>
 
-<h1>Grids with local and remote datasource</h1>
-<p>features: sorting, filtering, paging</p>
+<h1>Grids with editable local datasource</h1>
 
 <h2>local data source</h2>
 <p id="pageDevelopers">
