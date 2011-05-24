@@ -123,10 +123,12 @@ $.widget("ui.selectmenu", {
 						break;
 					default:
 						ret = true;
-						self._typeAhead(event.keyCode, 'mouseup');
-						break;	
 				}
 				return ret;
+			})
+			.bind('keypress.selectmenu', function(event) {
+				self._typeAhead(event.which, 'mouseup');
+				return true;
 			})
 			.bind('mouseover.selectmenu focus.selectmenu', function() { 
 				if (!o.disabled) {
@@ -223,10 +225,12 @@ $.widget("ui.selectmenu", {
 						break;
 					default:
 						ret = true;	
-						self._typeAhead(event.keyCode,'focus');					
-						break;	
 				}
 				return ret;
+			})
+			.bind('keypress.selectmenu', function(event) {
+				self._typeAhead(event.which, 'focus');
+				return true;
 			});			
 		
 		// needed when window is resized
@@ -420,7 +424,7 @@ $.widget("ui.selectmenu", {
 	},
 
 	_typeAhead: function(code, eventType){
-		var self = this, focusFound = false, C = String.fromCharCode(code);
+		var self = this, focusFound = false, C = String.fromCharCode(code).toUpperCase();
 		c = C.toLowerCase();
 
 		if (self.options.typeAhead == 'sequential') {
@@ -440,7 +444,7 @@ $.widget("ui.selectmenu", {
 					// allow the typeahead attribute on the option tag for a more specific lookup
 					var thisText = $(this).attr('typeahead') || $(this).text();
 					if (thisText.indexOf(find+C) == 0) {
-						focusOptSeq(this,i, C)
+						focusOptSeq(this,i,C)
 					} else if (thisText.indexOf(find+c) == 0) {
 						focusOptSeq(this,i,c)
 					}
