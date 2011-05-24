@@ -2,19 +2,10 @@
 
 module( "tabs: methods" );
 
-test('destroy', function() {
-	expect(6);
-
-	el = $('#tabs1').tabs({ collapsible: true });
-	$('li:eq(2)', el).simulate('mouseover').find('a').focus();
-	el.tabs('destroy');
-
-	ok( el.is(':not(.ui-tabs, .ui-widget, .ui-widget-content, .ui-corner-all, .ui-tabs-collapsible)'), 'remove classes from container');
-	ok( $('ul', el).is(':not(.ui-tabs-nav, .ui-helper-reset, .ui-helper-clearfix, .ui-widget-header, .ui-corner-all)'), 'remove classes from list' );
-	ok( $('div:eq(1)', el).is(':not(.ui-tabs-panel, .ui-widget-content, .ui-corner-bottom)'), 'remove classes to panel' );
-	ok( $('li:eq(0)', el).is(':not(.ui-tabs-active, .ui-state-active, .ui-corner-top)'), 'remove classes from active li');
-	ok( $('li:eq(1)', el).is(':not(.ui-state-default, .ui-corner-top)'), 'remove classes from inactive li');
-	ok( $('li:eq(2)', el).is(':not(.ui-state-hover, .ui-state-focus)'), 'remove classes from mouseovered or focused li');
+test( "destroy", function() {
+	domEqual( "#tabs1", function() {
+		$( "#tabs1" ).tabs().tabs( "destroy" );
+	});
 });
 
 test( "enable", function() {
@@ -85,7 +76,7 @@ test( "disable( index )", function() {
 	tabs_disabled( element, true );
 });
 
-test( "refersh", function() {
+test( "refresh", function() {
 	expect( 27 );
 
 	var element = $( "#tabs1" ).tabs();
@@ -154,8 +145,93 @@ test( "refersh", function() {
 	tabs_disabled( element, false );
 });
 
-test('load', function() {
-	ok(false, "missing test - untested code is broken code.");
+asyncTest( "load", function() {
+	expect( 30 );
+
+	var element = $( "#tabs2" ).tabs();
+
+	// load content of inactive tab
+	// useful for preloading content with custom caching
+	element.one( "tabsbeforeload", function( event, ui ) {
+		var tab = element.find( ".ui-tabs-nav a" ).eq( 3 ),
+			panelId = tab.attr( "aria-controls" ),
+			panel = $( "#" + panelId );
+
+		ok( !( "originalEvent" in event ), "originalEvent" );
+		equals( ui.tab.size(), 1, "tab size" );
+		strictEqual( ui.tab[ 0 ], tab[ 0 ], "tab" );
+		equals( ui.panel.size(), 1, "panel size" );
+		strictEqual( ui.panel[ 0 ], panel[ 0 ], "panel" );
+		tabs_state( element, 1, 0, 0, 0, 0 );
+	});
+	element.one( "tabsload", function( event, ui ) {
+		// TODO: remove wrapping in 2.0
+		var uiTab = $( ui.tab ),
+			uiPanel = $( ui.panel );
+
+		var tab = element.find( ".ui-tabs-nav a" ).eq( 3 ),
+			panelId = tab.attr( "aria-controls" ),
+			panel = $( "#" + panelId );
+		
+		ok( !( "originalEvent" in event ), "originalEvent" );
+		equals( uiTab.size(), 1, "tab size" );
+		strictEqual( uiTab[ 0 ], tab[ 0 ], "tab" );
+		equals( uiPanel.size(), 1, "panel size" );
+		strictEqual( uiPanel[ 0 ], panel[ 0 ], "panel" );
+		equals( uiPanel.find( "p" ).length, 1, "panel html" );
+		tabs_state( element, 1, 0, 0, 0, 0 );
+		setTimeout( tabsload1, 1 );
+	});
+	element.tabs( "load", 3 );
+	tabs_state( element, 1, 0, 0, 0, 0 );
+
+	function tabsload1() {
+		// no need to test details of event (tested in events tests)
+		element.one( "tabsbeforeload", function() {
+			ok( true, "tabsbeforeload invoked" );
+		});
+		element.one( "tabsload", function() {
+			ok( true, "tabsload invoked" );
+			setTimeout( tabsload2, 1 );
+		});
+		element.tabs( "option", "active", 3 );
+		tabs_state( element, 0, 0, 0, 1, 0 );
+	}
+
+	function tabsload2() {
+		// reload content of active tab
+		element.one( "tabsbeforeload", function( event, ui ) {
+			var tab = element.find( ".ui-tabs-nav a" ).eq( 3 ),
+				panelId = tab.attr( "aria-controls" ),
+				panel = $( "#" + panelId );
+
+			ok( !( "originalEvent" in event ), "originalEvent" );
+			equals( ui.tab.size(), 1, "tab size" );
+			strictEqual( ui.tab[ 0 ], tab[ 0 ], "tab" );
+			equals( ui.panel.size(), 1, "panel size" );
+			strictEqual( ui.panel[ 0 ], panel[ 0 ], "panel" );
+			tabs_state( element, 0, 0, 0, 1, 0 );
+		});
+		element.one( "tabsload", function( event, ui ) {
+			// TODO: remove wrapping in 2.0
+			var uiTab = $( ui.tab ),
+				uiPanel = $( ui.panel );
+
+			var tab = element.find( ".ui-tabs-nav a" ).eq( 3 ),
+				panelId = tab.attr( "aria-controls" ),
+				panel = $( "#" + panelId );
+			
+			ok( !( "originalEvent" in event ), "originalEvent" );
+			equals( uiTab.size(), 1, "tab size" );
+			strictEqual( uiTab[ 0 ], tab[ 0 ], "tab" );
+			equals( uiPanel.size(), 1, "panel size" );
+			strictEqual( uiPanel[ 0 ], panel[ 0 ], "panel" );
+			tabs_state( element, 0, 0, 0, 1, 0 );
+			start();
+		});
+		element.tabs( "load", 3 );
+		tabs_state( element, 0, 0, 0, 1, 0 );
+	}
 });
 
 }( jQuery ) );

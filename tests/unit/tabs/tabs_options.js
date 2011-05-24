@@ -15,6 +15,7 @@ test( "{ active: default }", function() {
 	equals( element.tabs( "option", "active" ), 2, "should be 2 based on URL" );
 	tabs_state( element, 0, 0, 1 );
 	element.tabs( "destroy" );
+	location.hash = "#";
 });
 
 test( "{ active: false }", function() {
@@ -92,7 +93,8 @@ test( "active - mismatched tab/panel order", function() {
 	equals( element.tabs( "option", "active" ), 1, "should be 1 based on URL" );
 	tabs_state( element, 0, 1 );
 	element.tabs( "option", "active", 0 );
-	tabs_state( element, 1, 0 );	
+	tabs_state( element, 1, 0 );
+	location.hash = "#";
 });
 
 test( "{ collapsible: false }", function() {
@@ -131,28 +133,81 @@ test( "{ collapsible: true }", function() {
 	tabs_state( element, 0, 0, 0 );
 });
 
-test('disabled', function() {
-	expect(4);
+test( "disabled", function() {
+	expect( 10 );
 
-	el = $('#tabs1').tabs();
-	same(el.tabs('option', 'disabled'), false, "should not disable any tab by default");
+	// fully enabled by default
+	var element = $( "#tabs1" ).tabs();
+	tabs_disabled( element, false );
 
-	el.tabs('option', 'disabled', [ 1 ]);
-	same(el.tabs('option', 'disabled'), [ 1 ], "should set property"); // everything else is being tested in methods module...
+	// disable single tab
+	element.tabs( "option", "disabled", [ 1 ] );
+	tabs_disabled( element, [ 1 ] );
 
-	el.tabs('option', 'disabled', [ 0, 1 ]);
-	same(el.tabs('option', 'disabled'), [ 0, 1 ], "should disable given tabs, even selected one"); // ...
+	// disabled active tab
+	element.tabs( "option", "disabled", [ 0, 1 ] );
+	tabs_disabled( element, [ 0, 1 ] );
 
-	el.tabs('option', 'disabled', [ ]);
-	same(el.tabs('option', 'disabled'), false, "should not disable any tab"); // ...
+	// disable all tabs
+	element.tabs( "option", "disabled", [ 0, 1, 2 ] );
+	tabs_disabled( element, true );
+
+	// enable all tabs
+	element.tabs( "option", "disabled", [] );
+	tabs_disabled( element, false );
 });
 
-test('event', function() {
-	ok(false, "missing test - untested code is broken code.");
+test( "{ event: null }", function() {
+	expect( 5 );
+
+	var element = $( "#tabs1" ).tabs({
+		event: null
+	});
+	tabs_state( element, 1, 0, 0 );
+
+	element.tabs( "option", "active", 1 );
+	equal( element.tabs( "option", "active" ), 1 );
+	tabs_state( element, 0, 1, 0 );
+
+	// ensure default click handler isn't bound
+	element.find( ".ui-tabs-nav a" ).eq( 2 ).click();
+	equal( element.tabs( "option", "active" ), 1 );
+	tabs_state( element, 0, 1, 0 );
 });
 
-test('fx', function() {
-	ok(false, "missing test - untested code is broken code.");
+test( "{ event: custom }", function() {
+	expect( 11 );
+
+	var element = $( "#tabs1" ).tabs({
+		event: "custom1 custom2"
+	});
+	tabs_state( element, 1, 0, 0 );
+
+	element.find( ".ui-tabs-nav a" ).eq( 1 ).trigger( "custom1" );
+	equal( element.tabs( "option", "active" ), 1 );
+	tabs_state( element, 0, 1, 0 );
+
+	// ensure default click handler isn't bound
+	element.find( ".ui-tabs-nav a" ).eq( 2 ).trigger( "click" );
+	equal( element.tabs( "option", "active" ), 1 );
+	tabs_state( element, 0, 1, 0 );
+
+	element.find( ".ui-tabs-nav a" ).eq( 2 ).trigger( "custom2" );
+	equal( element.tabs( "option", "active" ), 2 );
+	tabs_state( element, 0, 0, 1 );
+
+	element.tabs( "option", "event", "custom3" );
+
+	// ensure old event handlers are unbound
+	element.find( ".ui-tabs-nav a" ).eq( 1 ).trigger( "custom1" );
+	equal( element.tabs( "option", "active" ), 2 );
+	tabs_state( element, 0, 0, 1 );
+
+	element.find( ".ui-tabs-nav a" ).eq( 1 ).trigger( "custom3" );
+	equal( element.tabs( "option", "active" ), 1 );
+	tabs_state( element, 0, 1, 0 );
 });
 
-})(jQuery);
+// TODO: add animation tests
+
+}( jQuery ) );

@@ -1,4 +1,4 @@
-﻿/* Chinese initialisation for the jQuery UI date picker plugin. */
+/* Chinese initialisation for the jQuery UI date picker plugin. */
 /* Written by Ressol (ressol@gmail.com). */
 jQuery(function($){
 	$.datepicker.regional['zh-TW'] = {

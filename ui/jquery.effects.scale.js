@@ -25,6 +25,7 @@ $.effects.effect.puff = function( o ) {
 
 		$.extend(o, {
 			effect: 'scale',
+			queue: false,
 			fade: true,
 			mode: mode,
 			percent: mode == 'hide' ? percent : 100,
@@ -36,13 +37,13 @@ $.effects.effect.puff = function( o ) {
 				}
 		});
 
-		elem.effect( o ).dequeue();
+		elem.effect( o );
 	});
 };
 
 $.effects.effect.scale = function( o ) {
 
-	return this.queue( function() {
+	return this[ o.queue === false ? "each" : "queue" ]( function() {
 
 		// Create element
 		var el = $( this ),
@@ -62,6 +63,7 @@ $.effects.effect.scale = function( o ) {
 
 		// We are going to pass this effect to the size effect:
 		options.effect = "size";
+		options.queue = false;
 
 		// Set default origin and restore for show/hide
 		if ( mode != 'effect' ) { 
@@ -87,14 +89,14 @@ $.effects.effect.scale = function( o ) {
 		};
 
 		// Animate
-		el.effect(options).dequeue();
+		el.effect(options);
 	});
 
 };
 
 $.effects.effect.size = function( o ) {
 
-	return this.queue( function() {
+	return this[ o.queue === false ? "each" : "queue" ]( function() {
 		// Create element
 		var el = $( this ), 
 			props = [ 'position', 'top', 'bottom', 'left', 'right', 'width', 'height', 'overflow', 'opacity' ],
@@ -113,11 +115,15 @@ $.effects.effect.size = function( o ) {
 			restore = o.restore || false,
 			scale = o.scale || 'both',
 			origin = o.origin,
-			original = {
-				height: el.height(), 
-				width: el.width()
-			},
-			baseline, factor;
+			original, baseline, factor;
+
+		if ( mode === "show" ) {
+			el.show();
+		}
+		original = {
+			height: el.height(), 
+			width: el.width()
+		};
 
 		el.from = o.from || original;
 		el.to = o.to || original;
@@ -147,14 +153,14 @@ $.effects.effect.size = function( o ) {
 		if ( scale == 'box' || scale == 'both' ) {
 
 			// Vertical props scaling
-			if ( factor.from.y != factor.to.y ) { 
+			if ( factor.from.y !== factor.to.y ) { 
 				props = props.concat( vProps );
 				el.from = $.effects.setTransition( el, vProps, factor.from.y, el.from );
 				el.to = $.effects.setTransition( el, vProps, factor.to.y, el.to );
 			};
 
 			// Horizontal props scaling
-			if ( factor.from.x != factor.to.x ) { 
+			if ( factor.from.x !== factor.to.x ) { 
 				props = props.concat( hProps );
 				el.from = $.effects.setTransition( el, hProps, factor.from.x, el.from );
 				el.to = $.effects.setTransition( el, hProps, factor.to.x, el.to );
@@ -165,7 +171,7 @@ $.effects.effect.size = function( o ) {
 		if ( scale == 'content' || scale == 'both' ) { 
 
 			// Vertical props scaling
-			if ( factor.from.y != factor.to.y ) { 
+			if ( factor.from.y !== factor.to.y ) { 
 				props = props.concat( cProps );
 				el.from = $.effects.setTransition( el, cProps, factor.from.y, el.from );
 				el.to = $.effects.setTransition( el, cProps, factor.to.y, el.to );

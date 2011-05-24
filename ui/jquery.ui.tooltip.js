@@ -24,9 +24,8 @@ $.widget("ui.tooltip", {
 			return $( this ).attr( "title" );
 		},
 		position: {
-			my: "left center",
-			at: "right center",
-			offset: "15 0"
+			my: "left+15 center",
+			at: "right center"
 		}
 	},
 	_create: function() {
@@ -90,14 +89,15 @@ $.widget("ui.tooltip", {
 			of: target
 		}, this.options.position ) ).hide();
 
-
-		tooltip.fadeIn();
+		tooltip.stop( true );
+		this._show( tooltip, this.options.show );
 
 		this._trigger( "open", event );
 
 		this._bind( target, {
 			mouseleave: "close",
-			blur: "close"
+			blur: "close",
+			click: "close"
 		});
 	},
 	
@@ -111,7 +111,8 @@ $.widget("ui.tooltip", {
 		var tooltip = this._find( target );
 		target.removeAttr( "aria-describedby" );
 		
-		tooltip.fadeOut( function() {
+		tooltip.stop( true );
+		this._hide( tooltip, this.options.hide, function() {
 			$( this ).remove();
 		});
 		

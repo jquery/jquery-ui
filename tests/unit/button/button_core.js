@@ -67,4 +67,18 @@ test("buttonset", function() {
 	ok( set.children("label:eq(2)").is(".ui-button.ui-corner-right:not(.ui-corner-all)") );
 });
 
+test("buttonset (rtl)", function() {
+	var parent = $("#radio1").parent();
+	// Set to rtl
+	parent.attr("dir", "rtl");
+	
+	var set = $("#radio1").buttonset();
+	ok( set.is(".ui-buttonset") );
+	same( set.children(".ui-button").length, 3 );
+	same( set.children("input:radio.ui-helper-hidden-accessible").length, 3 );
+	ok( set.children("label:eq(0)").is(".ui-button.ui-corner-right:not(.ui-corner-all)") );
+	ok( set.children("label:eq(1)").is(".ui-button:not(.ui-corner-all)") );
+	ok( set.children("label:eq(2)").is(".ui-button.ui-corner-left:not(.ui-corner-all)") );
+});
+
 })(jQuery);

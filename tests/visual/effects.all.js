@@ -14,12 +14,14 @@ $(function() {
 
 		$(el).bind("click", function() {
 
-			$(this).addClass("current").hide(n, o, duration, function() {
-				var self = this;
-				window.setTimeout(function() {
-					$(self).show(n, o, duration, function() { $(this).removeClass("current"); });
-				}, wait);
-			});
+			$(this).addClass("current")
+				// delaying the initial animation makes sure that the queue stays in tact
+				.delay( 10 )
+				.hide( n, o, duration )
+				.delay( wait )
+				.show( n, o, duration, function() { 
+					$( this ).removeClass("current"); 
+				});
 		});
 
 	};
@@ -28,13 +30,15 @@ $(function() {
 		var el = $(this);
 		el.addClass("current").hide(duration, function() {
 			setTimeout(function() {
-				el.show(duration, function() { el.removeClass("current") });
+				el.show(duration, function() { el.removeClass("current"); });
 			}, wait);
-		})
-	})
+		});
+	});
 
-	effect("#blindHorizontally", "blind", { direction: "horizontal" });
-	effect("#blindVertically", "blind", { direction: "vertical" });
+	effect("#blindLeft", "blind", { direction: "left" });
+	effect("#blindUp", "blind", { direction: "up" });
+	effect("#blindRight", "blind", { direction: "right" });
+	effect("#blindDown", "blind", { direction: "down" });
 
 	effect("#bounce3times", "bounce", { times: 3 });
 
@@ -59,6 +63,16 @@ $(function() {
 
 	effect("#puff", "puff", { times: 2 });
 	effect("#scale", "scale", {});
+	effect("#size", "size", {});
+	$("#sizeToggle").bind("click", function() {
+		var opts = { to: { width: 300, height: 300 }};
+		$(this).addClass('current')
+			.toggle("size", opts, duration)
+			.delay(wait)
+			.toggle("size", opts, duration, function() {
+				$(this).removeClass("current");
+			});
+	});
 
 	$("#shake").bind("click", function() { $(this).addClass("current").effect("shake", {}, 100, function() { $(this).removeClass("current"); }); });
 
@@ -80,13 +94,13 @@ $(function() {
 	$("#removeClass").click(function() {
 		$(this).addClass("current").removeClass(function() {
 			window.console && console.log(arguments);
-			return "current"
+			return "current";
 		}, duration);
 	});
 	$("#toggleClass").click(function() {
 		$(this).toggleClass(function() {
 			window.console && console.log(arguments);
-			return "current"
+			return "current";
 		}, duration);
 	});
 });
