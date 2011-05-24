@@ -41,6 +41,7 @@ $.widget( "ui.grid", {
 			$.tmpl( template, item ).appendTo( tbody );
 		});
 		tbody.find( "td" ).addClass( "ui-widget-content" );
+		this._trigger("refresh");
 	},
 	
 	_columns: function() {

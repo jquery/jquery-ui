@@ -4,55 +4,63 @@
 		"lastName": "Worth",
 		"country": "USA",
 		"twitter": "rworth",
-		"github": "rdworth"
+		"github": "rdworth",
+		"bitcoins": 150
 	},
 	{
 		"firstName": "Scott",
 		"lastName": "González",
 		"country": "USA",
 		"twitter": "scott_gonzalez",
-		"github": "scottgonzalez"
+		"github": "scottgonzalez",
+		"bitcoins": 10
 	},
 	{
 		"firstName": "Jörn",
 		"lastName": "Zaefferer",
 		"country": "Germany",
 		"twitter": "bassistance",
-		"github": "jzaefferer"
+		"github": "jzaefferer",
+		"bitcoins": 1
 	},
 	{
 		"firstName": "Carl",
 		"lastName": "Worth",
 		"country": "Canada",
 		"twitter": "cworth",
-		"github": "cworth"
+		"github": "cworth",
+		"bitcoins": 1500
 	},
 	{
 		"firstName": "Adam",
 		"lastName": "Piano",
 		"country": "USA",
 		"twitter": "ajpiano",
-		"github": "ajpiano"
+		"github": "ajpiano",
+		"bitcoins": 1337
 	},
 	{
 		"firstName": "Remy",
 		"lastName": "Sharp",
 		"country": "UK",
 		"twitter": "rem",
-		"github": "rem"
+		"github": "rem",
+		"bitcoins": 55.5
 	},
 	{
 		"firstName": "Benjamin",
 		"lastName": "Lupton",
 		"country": "Australia",
 		"twitter": "balupton",
-		"github": "balupton"
+		"github": "balupton",
+		"bitcoins": 2501
 	},
 	{
 		"firstName": "Haymo",
 		"lastName": "Meran",
 		"country": "Austria",
 		"twitter": "draftkraft",
-		"github": ""
+		"github": "",
+		"bitcoins": 0
 	}
 ]
