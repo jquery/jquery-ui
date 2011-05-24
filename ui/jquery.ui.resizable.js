@@ -41,7 +41,8 @@ $.widget("ui.resizable", $.ui.mouse, {
 		
 		//IE does not support position:fixed; and explicitly sets position:static; which causes the handles
 		//to be positioned incorrectly. IE6 does not change fixed to static so a separate check is added (see ticket #3628)
-		if( this.element.css( "position" ) === "static" || this.element.css( "position" ) === "fixed" && $.browser.msie && $.browser.version < 7 ) {
+		$.offset.initialize();
+		if( this.element.css( "position" ) === "static" ) {
 			this.element.css( "position", "" );
 		}
 
@@ -309,9 +310,9 @@ $.widget("ui.resizable", $.ui.mouse, {
 
 		//If position is fixed, set top and left based on offset rather than position
 		//to prevent the resizable from jumping to 0,0 when top and left are not set (see ticket #3628)
-		if( el.css( "position" ) === "fixed" ) {
+		if( el.css( "position" ) === "fixed" && $.offset.supportsFixedPosition ) {
 			el.css({
-				top: this.offset.top + "px", left: this.offset.left + "px",
+				top: el.offset.top + "px", left: el.offset.left + "px",
 				width: this.size.width + "px", height: this.size.height + "px"
 			});
 		} else {
