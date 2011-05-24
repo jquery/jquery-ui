@@ -70,9 +70,9 @@
 		})
 		
 		$( ".removeSelected" ).click(function() {
-			for (var i = localDevelopers.length-1; i >= 0; i--) {
+			for ( var i = localDevelopers.length - 1; i >= 0; i-- ) {
 				if ( localDevelopers[i].selected ) {
-					var rem = localDevelopers.splice(i, 1);
+					var rem = localDevelopers.splice( i, 1 );
 					// Logging
 					$( "<div></div>" ).text( "Removed " + rem[0].firstName + " " + rem[0].lastName ).appendTo( ".log" );
 				}
