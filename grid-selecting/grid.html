@@ -61,6 +61,10 @@
 			stop: function() {
 				$( this ).find( "tbody tr" ).each( function() {
 					$( this ).tmplItem().data.selected = $( this ).is(".ui-selected");
+					// Logging
+					if ( $(this).tmplItem().data.selected ) {
+						$( "<div></div>" ).text( "Selected " + $(this).text() ).appendTo( ".log" );						
+					}
 				});
 			}
 		});
@@ -109,6 +113,7 @@
 	<tbody>
 	</tbody>
 </table>
+<div class="log"></div>
 
 </body>
 </html>
