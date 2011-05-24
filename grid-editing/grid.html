@@ -60,12 +60,13 @@
 			if ( localStorageSupport ) {
 				localStorage.setItem( "grid-editing-developers", JSON.stringify( localDevelopers ) )
 			}
+			return this;
 		}
 
-		$( "#developers-local" ).grid({
+		var grid = $( "#developers-local" ).grid({
 			source: developers,
 			refresh: function() {
-				$( this ).find( "td" ).each( function() {
+				$( this ).find( "td:not(:has(button))" ).each( function() {
 					var th = $( this ).parents( "table:first" ).find( "th" ).eq( this.cellIndex ),
 						field = th.data( "field" );
 					$( this ).editor({
@@ -78,6 +79,57 @@
 						})
 				});
 			}
+		}).data("grid");
+		// TODO find a better way to add markup to the generated row template
+		grid.options.rowTemplate = grid.options.rowTemplate.substring( 0, grid.options.rowTemplate.length - 35 )
+			+ "<button class='edit'>Edit</button></td>"
+			+ "<td><button class='remove'>Remove</button></td></tr>";
+
+		function set(object, name, value) {
+			var fields = name.split("."),
+				target = object,
+				field;
+			while (fields.length > 1) {
+				field = fields.shift(),
+				target = target[field];
+			}
+			target[fields[0]] = value;
+		}
+		function get(object, name) {
+			var fields = name.split("."),
+				target = object,
+				field;
+			while (fields.length > 1) {
+				field = fields.shift(),
+				target = target[field];
+			}
+			return target[fields[0]];
+		}
+
+		var developer;
+		var editForm = $( "#editForm" ).hide().submit( function( event ) {
+			event.preventDefault();
+			$.each( $( this ).serializeArray(), function( index, object ) {
+				set( developer, object.name, object.value );
+			});
+			developers.save( developer ).refresh();
+			editForm.hide();
+		});
+		grid.element.delegate( "button.edit", "click", function() {
+			developer = $( this ).tmplItem().data;
+			$("input:text", editForm).each(function() {
+				$(this).val(get(developer, this.name));
+			});
+			editForm.show();
+		});
+		grid.element.delegate( "button.remove", "click", function() {
+			var developer = $( this ).tmplItem().data;
+			for ( var i = localDevelopers.length - 1; i >= 0; i-- ) {
+				if ( localDevelopers[i] === developer ) {
+					localDevelopers.splice( i, 1 );
+				}
+			}
+			developers.save().refresh();
 		});
 
 		$( "#pageDevelopers" ).pager({
@@ -122,13 +174,12 @@
 <table id="developers-local">
 	<thead>
 		<tr>
-			<!-- see comment in editor.js
-			<th data-field="selected" data-type="boolean">Selected</th>
-			-->
 			<th data-field="firstName">First Name</th>
 			<th data-field="lastName">Last Name</th>
 			<th data-field="country">Country</th>
 			<th data-field="bitcoins" data-type="number">Bitcoins</th>
+			<th>Edit</th>
+			<th>Remove</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -136,8 +187,14 @@
 </table>
 
 <div>
-	<button id="addDeveloper">Insert developer</button>
+	<button id="addDeveloper">Insert new developer</button>
 </div>
+<form id="editForm">
+	<input type="text" name="firstName" placeholder="Firstname" />
+	<input type="text" name="lastName" placeholder="Lastname" />
+	<input type="text" name="country" placeholder="Country" />
+	<input type="submit" value="Save changes" />
+</form>
 
 </body>
 </html>

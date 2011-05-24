@@ -1,9 +1,9 @@
 /*
  * Inline Editor
- * 
+ *
  * Depends on:
  * widget
- * 
+ *
  * Optional:
  * spinner
  */
@@ -22,14 +22,8 @@ $.widget( "ui.editor", {
 			this.input = this.input.spinner();
 			this.inputWrapper = this.input.spinner("widget");
 		}
-		/* no need to display as inline editor, checkbox should always be visible
-		if ( this.options.type === "boolean" ) {
-			this.input.remove();
-			this.input = $( "<input type='checkbox'>" ).hide().appendTo( this.element );
-		}
-		*/
 		this.inputWrapper.hide().appendTo( this.element )
-		
+
 		this._bind( this.input, {
 			// TODO ignore clicks (=blur) on spinner controls
 			blur: function( event ) {
@@ -72,6 +66,6 @@ $.widget( "ui.editor", {
 		this._trigger( "cancel", event );
 	}
 });
-		
+
 
 })( jQuery );
