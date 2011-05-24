@@ -8,7 +8,7 @@
 .ui-selectmenu-menu-dropdown { }
 .ui-selectmenu-menu li { padding:0; margin:0; display: block; border-top: 1px dotted transparent; border-bottom: 1px dotted transparent; border-right-width: 0 !important; border-left-width: 0 !important; font-weight: normal !important; }
 .ui-selectmenu-menu li a,.ui-selectmenu-status { line-height: 1.4em; display: block; padding: .405em 1em; outline:none; text-decoration:none; }
-.ui-selectmenu-menu li.ui-state-disabled a { cursor: default; }
+.ui-selectmenu-menu li.ui-state-disabled a, .ui-state-disabled { cursor: default; }
 .ui-selectmenu-menu li.ui-selectmenu-hasIcon a,
 .ui-selectmenu-hasIcon .ui-selectmenu-status { padding-left: 20px; position: relative; margin-left: 5px; }
 .ui-selectmenu-menu li .ui-icon, .ui-selectmenu-status .ui-icon { position: absolute; top: 1em; margin-top: -8px; left: 0; }
@@ -26,3 +26,5 @@
 /* IE6 workaround (dotted transparent borders) */
 * html .ui-selectmenu-menu li { border-color: pink; filter:chroma(color=pink); width:100%; }
 * html .ui-selectmenu-menu li a { position: relative }
+/* IE7 workaround (opacity disabled) */
+*+html .ui-state-disabled, *+html .ui-state-disabled a{ color: silver; }
