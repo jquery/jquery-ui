@@ -67,7 +67,14 @@
 			developers.refresh();
 			// Logging
 			$( "<div></div>" ).text("Cleared selection").appendTo( ".log" );
-		})
+		});
+		
+		$( ".invertSelection" ).click(function() {
+			$.each( localDevelopers, function() { this.selected = !this.selected; });
+			developers.refresh();
+			// Logging
+			$( "<div></div>" ).text("Inverted selection").appendTo( ".log" );
+		});
 		
 		$( ".removeSelected" ).click(function() {
 			for ( var i = localDevelopers.length - 1; i >= 0; i-- ) {
@@ -78,7 +85,7 @@
 				}
 			}
 			developers.refresh();
-		})
+		});
 
 		$( "#pageDevelopers" ).pager({
 			source: developers
@@ -109,7 +116,9 @@
 	<button data-page="next">Next</button>
 	<button data-page="last">Last</button>
 </p>
-<button class="clearSelection">Clear selection</button> <button class="removeSelected">Remove selected</button>
+<button class="clearSelection">Clear selection</button>
+<button class="invertSelection">Invert selection</button>
+<button class="removeSelected">Remove selected</button>
 <table id="developers-local">
 	<thead>
 		<tr>
