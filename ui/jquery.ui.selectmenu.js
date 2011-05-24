@@ -535,6 +535,7 @@ $.widget("ui.selectmenu", {
 	},
 
 	select: function(event) {
+                if (this._disabled(event.currentTarget)) { return false; }
 		this._trigger("select", event, this._uiHash());
 	},
 
@@ -569,14 +570,30 @@ $.widget("ui.selectmenu", {
 		return this.list.find('.' + this.widgetBaseClass + '-item-focus');
 	},
 
-	_moveSelection: function(amt) {
-		var currIndex = parseInt(this._selectedOptionLi().data('index'), 10);
+	_moveSelection: function(amt, recIndex) {
+		var currIndex = parseInt(this._selectedOptionLi().data('index') || 0, 10);
 		var newIndex = currIndex + amt;
 		// do not loop when using up key
-		if (newIndex >= 0 )  return this._optionLis.eq(newIndex).trigger('mouseup');
+        
+        if (newIndex < 0) {
+			newIndex = 0;
+		}
+		if (newIndex > this._optionLis.size() - 1) {
+			newIndex = this._optionLis.size() - 1;
+		}
+        //Occurs when a full loop has been made
+        if (newIndex === recIndex) { return false; }
+        
+        if (this._optionLis.eq(newIndex).hasClass( this.namespace + '-state-disabled' )) {
+			// if option at newIndex is disabled, call _moveFocus, incrementing amt by one
+			(amt > 0) ? ++amt : --amt;
+			this._moveSelection(amt, newIndex);
+		} else {
+            return this._optionLis.eq(newIndex).trigger('mouseup');
+		}
 	},
 
-	_moveFocus: function(amt) {
+	_moveFocus: function(amt, recIndex) {
 		if (!isNaN(amt)) {
 			var currIndex = parseInt(this._focusedOptionLi().data('index') || 0, 10);
 			var newIndex = currIndex + amt;
@@ -591,6 +608,9 @@ $.widget("ui.selectmenu", {
 		if (newIndex > this._optionLis.size() - 1) {
 			newIndex = this._optionLis.size() - 1;
 		}
+        
+        //Occurs when a full loop has been made
+        if (newIndex === recIndex) { return false; }
 		
 		var activeID = this.widgetBaseClass + '-item-' + Math.round(Math.random() * 1000);
 
@@ -598,7 +618,7 @@ $.widget("ui.selectmenu", {
 		
 		if (this._optionLis.eq(newIndex).hasClass( this.namespace + '-state-disabled' )) {
 			// if option at newIndex is disabled, call _moveFocus, incrementing amt by one
-			(amt > 0) ? amt++ : amt--;
+			(amt > 0) ? ++amt : --amt;
 			this._moveFocus(amt, newIndex);
 		} else {
 			this._optionLis.eq(newIndex).find('a:eq(0)').attr('id',activeID).focus();
