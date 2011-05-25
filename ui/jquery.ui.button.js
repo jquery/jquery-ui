@@ -95,21 +95,20 @@ $.widget( "ui.button", {
 				}
 				$( this ).removeClass( hoverClass );
 			})
-						.bind( "click.button", function( event ) {
+			.bind( "click.button", function( event ) {
 				if ( options.disabled ) {
 					event.stopImmediatePropagation();
 				}
 			});
 
-                // Bind to the element's focus/blur to capture tabs.                            
-                this.element.bind( "focus.button", $.proxy(function() {
-				// no need to check disabled, focus won't be triggered anyway
-                                // the context here is set to the label element
-				$( this ).addClass( focusClass );
-			}, this.buttonElement))
-			.bind( "blur.button", $.proxy(function() {
-				$( this ).removeClass( focusClass );
-			}, this.buttonElement));
+        // Bind to the element's focus/blur to capture tabs.                            
+        this.element.bind( "focus.button", function() {
+            // no need to check disabled, focus won't be triggered anyway
+            self.buttonElement.addClass( focusClass );
+        })
+        .bind( "blur.button", function() {
+            self.buttonElement.removeClass( focusClass );
+        });
 
 		if ( toggleButton ) {
 			this.element.bind( "change.button", function() {
@@ -118,7 +117,7 @@ $.widget( "ui.button", {
 				}
 				self.refresh();
 			});
-                       	// if mouse moves between mousedown and mouseup (drag) set clickDragged flag
+            // if mouse moves between mousedown and mouseup (drag) set clickDragged flag
 			// prevents issue where button state changes but checkbox/radio checked state
 			// does not in Firefox (see ticket #6970)
 			this.buttonElement
