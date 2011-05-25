@@ -240,8 +240,9 @@ $.ui.ddmanager = {
 	},
 	drag: function(draggable, event) {
 
-		//If you have a highly dynamic page, you might try this option. It renders positions every time you move the mouse.
-		if(draggable.options.refreshPositions) $.ui.ddmanager.prepareOffsets(draggable, event);
+		//Renders positions every time you move the mouse. Necessary when dragging causes scroll which gives the
+		//droppable negative positions that must be recalculated. (see ticket #5003)
+		$.ui.ddmanager.prepareOffsets(draggable, event);
 
 		//Run through all droppables and check their positions based on specific tolerance options
 		$.each($.ui.ddmanager.droppables[draggable.options.scope] || [], function() {
