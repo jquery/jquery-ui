@@ -174,6 +174,27 @@ $.each( [ "Width", "Height" ], function( i, name ) {
 });
 
 // selectors
+function focusable( element, isTabIndexNotNaN ) {
+	var nodeName = element.nodeName.toLowerCase();
+	if ( "area" === nodeName ) {
+		var map = element.parentNode,
+			mapName = map.name,
+			img;
+		if ( !element.href || !mapName || map.nodeName.toLowerCase() !== "map" ) {
+			return false;
+		}
+		img = $( "img[usemap=#" + mapName + "]" )[0];
+		return !!img && visible( img );
+	}
+	return ( /input|select|textarea|button|object/.test( nodeName )
+		? !element.disabled
+		: "a" == nodeName
+			? element.href || isTabIndexNotNaN
+			: isTabIndexNotNaN)
+		// the element and all of its ancestors must be visible
+		&& visible( element );
+}
+
 function visible( element ) {
 	return !$( element ).parents().andSelf().filter(function() {
 		return $.curCSS( this, "visibility" ) === "hidden" ||
@@ -187,30 +208,48 @@ $.extend( $.expr[ ":" ], {
 	},
 
 	focusable: function( element ) {
-		var nodeName = element.nodeName.toLowerCase(),
-			tabIndex = $.attr( element, "tabindex" );
-		if ( "area" === nodeName ) {
-			var map = element.parentNode,
-				mapName = map.name,
-				img;
-			if ( !element.href || !mapName || map.nodeName.toLowerCase() !== "map" ) {
-				return false;
-			}
-			img = $( "img[usemap=#" + mapName + "]" )[0];
-			return !!img && visible( img );
-		}
-		return ( /input|select|textarea|button|object/.test( nodeName )
-			? !element.disabled
-			: "a" == nodeName
-				? element.href || !isNaN( tabIndex )
-				: !isNaN( tabIndex ))
-			// the element and all of its ancestors must be visible
-			&& visible( element );
+		return focusable( element, !isNaN( $.attr( element, "tabindex" ) ) );
 	},
 
 	tabbable: function( element ) {
-		var tabIndex = $.attr( element, "tabindex" );
-		return ( isNaN( tabIndex ) || tabIndex >= 0 ) && $( element ).is( ":focusable" );
+		var tabIndex = $.attr( element, "tabindex" ),
+			isTabIndexNaN = isNaN( tabIndex );
+		return ( isTabIndexNaN || tabIndex >= 0 ) && focusable( element, !isTabIndexNaN );
+	}
+});
+
+//Initialize high-contrast mode check when we have document.body
+$(function() {
+	// create div for testing if high contrast mode is on or images are turned off
+	var div = document.createElement("div");
+	div.style.borderWidth = "1px";
+	div.style.borderStyle = "solid";
+	div.style.borderTopColor = "red";
+	div.style.borderRightColor = "green";
+	div.style.position = "absolute";
+	div.style.top = "-999px";
+	if ($.browser.msie && parseInt($.browser.version, 10) < 8) {
+		// No support for data urls. The ui-icon class will give it a background image.
+		// Proper caching should mean no additional requests will be made.
+		div.className = "ui-icon";
+	}
+	else {
+		div.style.backgroundImage = "url(data:image/gif;base64,R0lGODlhAQABAID/AMDAwAAAACH5BAEAAAAALAAAAAABAAEAAAEBMgA7)";
+	}
+	$(document.body).append(div);
+	
+	// test it
+	var bkImg = $.curCSS(div, "backgroundImage");
+	$.support.highContrast = ($.curCSS(div, "borderTopColor") == $.curCSS(div, "borderRightColor")) ||
+		(bkImg != null && (bkImg == "none" || bkImg == "url(invalid-url:)"));
+	if ($.support.highContrast) {
+		$("body").addClass("ui-helper-highcontrast");
+	}
+
+	if ($.browser.msie) {
+		div.outerHTML = "";	 // prevent mixed-content warning, see http://support.microsoft.com/kb/925014
+	} else {
+		document.body.removeChild(div);
 	}
 });
 

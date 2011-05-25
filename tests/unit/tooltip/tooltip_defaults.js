@@ -1,16 +1,15 @@
-/*
- * tooltip_defaults.js
- */
+commonWidgetTests( "tooltip", {
+	defaults: {
+		disabled: false,
+		items: "[title]",
+		content: $.ui.tooltip.prototype.options.content,
+		position: {
+			my: "left+15 center",
+			at: "right center"
+		},
+		tooltipClass: null,
 
-var tooltip_defaults = {
-	disabled: false,
-	items: "[title]",
-	content: $.ui.tooltip.prototype.options.content,
-	position: {
-		my: "left center",
-		at: "right center",
-		offset: "15 0"
+		// callbacks
+		create: null
 	}
-};
-
-commonWidgetTests('tooltip', { defaults: tooltip_defaults });
+});

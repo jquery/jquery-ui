@@ -34,26 +34,40 @@ $.widget( "ui.popup", {
 		
 		this.element
 			.addClass("ui-popup")
-		this._close();
+		this.close();
 
 		this._bind(this.options.trigger, {
+			keydown: function( event ) {
+				// prevent space-to-open to scroll the page
+				if (event.keyCode == $.ui.keyCode.SPACE) {
+					event.preventDefault()
+				}
+			},
 			click: function( event ) {
 				event.preventDefault();
+				if (this.isOpen) {
+					// let it propagate to close
+					return;
+				}
 				var that = this;
 				setTimeout(function() {
-					that._open( event );
+					that.open( event );
 				}, 1);
 			}
 		});
 		
 		this._bind(this.element, {
-			blur: "_close"
+			// TODO also triggered when open and clicking the trigger again
+			// figure out how to close in that case, while still closing on regular blur
+			//blur: "close"
 		});
 
 		this._bind({
+			// TODO only triggerd on element if it can receive focus
+			// bind to document instead?
 			keyup: function( event ) {
 				if (event.keyCode == $.ui.keyCode.ESCAPE && this.element.is( ":visible" )) {
-					this._close( event );
+					this.close( event );
 					this.options.trigger.focus();
 				}
 			}
@@ -61,8 +75,8 @@ $.widget( "ui.popup", {
 		
 		this._bind(document, {
 			click: function( event ) {
-				if (this.open && !$(event.target).closest(".ui-popup").length) {
-					this._close( event );
+				if (this.isOpen && !$(event.target).closest(".ui-popup").length) {
+					this.close( event );
 				}
 			}
 		})
@@ -87,7 +101,7 @@ $.widget( "ui.popup", {
 		}
 	},
 	
-	_open: function( event ) {
+	open: function( event ) {
 		var position = $.extend( {}, {
 			of: this.options.trigger
 		}, this.options.position );
@@ -102,11 +116,11 @@ $.widget( "ui.popup", {
 		// take trigger out of tab order to allow shift-tab to skip trigger
 		this.options.trigger.attr("tabindex", -1);
 
-		this.open = true;
+		this.isOpen = true;
 		this._trigger( "open", event );
 	},
 
-	_close: function( event ) {
+	close: function( event ) {
 		this.element
 			.hide()
 			.attr( "aria-hidden", true )
@@ -114,7 +128,7 @@ $.widget( "ui.popup", {
 
 		this.options.trigger.attr("tabindex", 0);
 
-		this.open = false;
+		this.isOpen = false;
 		this._trigger( "close", event );
 	}
 	

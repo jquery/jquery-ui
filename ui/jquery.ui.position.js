@@ -184,20 +184,37 @@ $.ui.position = {
 	fit: {
 		left: function( position, data ) {
 			var win = $( window ),
-				over = data.collisionPosition.left + data.collisionWidth - win.width() - win.scrollLeft();
-			position.left = over > 0 ?
-				position.left - over :
-				Math.max( position.left - data.collisionPosition.left, position.left );
+				overLeft = win.scrollLeft() - data.collisionPosition.left,
+				overRight = data.collisionPosition.left + data.collisionWidth - win.width() - win.scrollLeft();
+
+			// element is wider than window or too far left -> align with left edge
+			if ( data.collisionWidth > win.width() || overLeft > 0 ) {
+				position.left = position.left + overLeft;
+			// too far right -> align with right edge
+			} else if ( overRight > 0 ) {
+				position.left = position.left - overRight;
+			// adjust based on position and margin
+			} else {
+				position.left = Math.max( position.left - data.collisionPosition.left, position.left );
+			}
 		},
 		top: function( position, data ) {
 			var win = $( window ),
-				over = data.collisionPosition.top + data.collisionHeight - win.height() - win.scrollTop();
-			position.top = over > 0 ?
-				position.top - over :
-				Math.max( position.top - data.collisionPosition.top, position.top );
+				overTop = win.scrollTop() - data.collisionPosition.top,
+				overBottom = data.collisionPosition.top + data.collisionHeight - win.height() - win.scrollTop();
+
+			// element is taller than window or too far up -> align with top edge
+			if ( data.collisionHeight > win.height() || overTop > 0 ) {
+				position.top = position.top + overTop;
+			// too far down -> align with bottom edge
+			} else if ( overBottom > 0 ) {
+				position.top = position.top - overBottom;
+			// adjust based on position and margin
+			} else {
+				position.top = Math.max( position.top - data.collisionPosition.top, position.top );
+			}
 		}
 	},
-
 	flip: {
 		left: function( position, data ) {
 			if ( data.at[ 0 ] === center ) {

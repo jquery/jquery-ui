@@ -13,7 +13,13 @@
 	<link rel="stylesheet" href="../demos.css">
 	<script>
 	$(function() {
-		$( "#tabs" ).tabs().find( ".ui-tabs-nav" ).sortable({ axis: "x" });
+		var tabs = $( "#tabs" ).tabs();
+		tabs.find( ".ui-tabs-nav" ).sortable({
+			axis: "x",
+			stop: function() {
+				tabs.tabs( "refresh" );
+			}
+		});
 	});
 	</script>
 </head>

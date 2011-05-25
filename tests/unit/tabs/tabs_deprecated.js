@@ -107,103 +107,90 @@ test('spinner', function() {
 	});
 });
 
-test('selected', function() {
-	expect(10);
+test( "selected", function() {
+	expect( 19 );
 
-	el = $('#tabs1').tabs();
-	equals(el.tabs('option', 'selected'), 0, 'should be 0 by default');
+	var element = $( "#tabs1" ).tabs();
+	equals( element.tabs( "option", "selected" ), 0, "should be 0 by default" );
+	tabs_state( element, 1, 0, 0 );
+	element.tabs( "destroy" );
 
-	el.tabs('destroy');
-	//set a hash in the url
-	location.hash = '#fragment-2';
-	//selection of tab with divs ordered differently than list
-	el = $('#tabs1').tabs();
-	equals(el.tabs('option', 'selected'), 1, 'second tab should be selected');
+	location.hash = "#fragment-3";
+	element = $( "#tabs1" ).tabs();
+	equals( element.tabs( "option", "selected" ), 2, "should be 2 based on URL" );
+	tabs_state( element, 0, 0, 1 );
+	element.tabs( "destroy" );
 
-	el.tabs('destroy');
-	//set a hash in the url
-	location.hash = '#tabs7-2';
-	//selection of tab with divs ordered differently than list
-	el = $('#tabs7').tabs();
-	equals(el.tabs('option', 'selected'), 1, 'second tab should be selected');
+	el = $('#tabs1').tabs({
+		selected: -1,
+		collapsible: true
+	});
+	tabs_state( element, 0, 0, 0 );
+	equal( element.find( ".ui-tabs-nav .ui-state-active" ).size(), 0, "no tabs selected" );
+	strictEqual( element.tabs( "option", "selected" ), -1 );
 
-	el.tabs('destroy');
-	el = $('#tabs1').tabs({ selected: -1 });
-	equals(el.tabs('option', 'selected'), -1, 'should be -1 for all tabs unselected');
-	equals( $('li.ui-tabs-active', el).length, 0, 'no tab should be selected' );
-	equals( $('div:hidden', '#tabs1').length, 3, 'all panels should be hidden' );
+	element.tabs( "option", "collapsible", false );
+	tabs_state( element, 1, 0, 0 );
+	equal( element.tabs( "option", "selected" ), 0 );
+	element.tabs( "destroy" );
 
-	el.tabs('destroy');
-	el.tabs({ selected: 1 });
-	equals(el.tabs('option', 'selected'), 1, 'should be specified tab');
+	element.tabs({
+		selected: -1
+	});
+	tabs_state( element, 1, 0, 0 );
+	strictEqual( element.tabs( "option", "selected" ), 0 );
+	element.tabs( "destroy" );
 
-	el.tabs('destroy');
-	el.tabs({ selected: 99 });
-	equals(el.tabs('option', 'selected'), 0, 'selected should default to zero if given value is out of index');
+	element.tabs({ selected: 2 });
+	equals( element.tabs( "option", "selected" ), 2 );
+	tabs_state( element, 0, 0, 1 );
 
-	el.tabs('destroy');
-	el.tabs({ collapsible: true });
-	el.tabs('option', 'selected', 0);
-	equals(el.tabs('option', 'selected'), 0, 'should not collapse tab if value is same as selected');
+	element.tabs( "option", "selected", 0 );
+	equals( element.tabs( "option", "selected" ), 0 );
+	tabs_state( element, 1, 0, 0 );
 
-	el.tabs('destroy');
-	el = $('#tabs1').tabs();
-	el.tabs('select', 1);
-	equals(el.tabs('option', 'selected'), 1, 'should select tab');
+	element.find( ".ui-tabs-nav a" ).eq( 1 ).click();
+	equals( element.tabs( "option", "selected" ), 1 );
+	tabs_state( element, 0, 1, 0 );
+
+	element.tabs( "option", "selected", 10 );
+	equals( element.tabs( "option", "selected" ), 1 );
+	tabs_state( element, 0, 1, 0 );
+
+	location.hash = "#";
 });
 
-module("tabs (deprecated): events");
+module( "tabs (deprecated): events" );
 
-test('enable', function() {
-	expect(4);
+test( "enable", function() {
+	expect( 3 );
 
-	var uiObj;
-	el = $('#tabs1').tabs({
+	var element = $( "#tabs1" ).tabs({
 		disabled: [ 0, 1 ],
-		enable: function (event, ui) {
-			uiObj = ui;
+		enable: function ( event, ui ) {
+			equals( ui.tab, element.find( ".ui-tabs-nav a" )[ 1 ], "ui.tab" );
+			equals( ui.panel, element.find( ".ui-tabs-panel" )[ 1 ], "ui.panel" );
+			equals( ui.index, 1, "ui.index" );
 		}
 	});
-	el.tabs('enable', 1);
-	ok(uiObj !== undefined, 'trigger callback');
-	equals(uiObj.tab, $('a', el)[1], 'contain tab as DOM anchor element');
-	equals(uiObj.panel, $('div', el)[1], 'contain panel as DOM div element');
-	equals(uiObj.index, 1, 'contain index');
+	element.tabs( "enable", 1 );
+	// shouldn't trigger event
+	element.tabs( "enable", 2 );
 });
 
-test('disable', function() {
-	expect(4);
+test( "disable", function() {
+	expect( 3 );
 
-	var uiObj;
-	el = $('#tabs1').tabs({
-		disable: function (event, ui) {
-			uiObj = ui;
+	var element = $( "#tabs1" ).tabs({
+		disable: function ( event, ui ) {
+		equals( ui.tab, element.find( ".ui-tabs-nav a" )[ 1 ], "ui.tab" );
+		equals( ui.panel, element.find( ".ui-tabs-panel" )[ 1 ], "ui.panel" );
+		equals( ui.index, 1, "ui.index" );
 		}
 	});
-	el.tabs('disable', 1);
-	ok(uiObj !== undefined, 'trigger callback');
-	equals(uiObj.tab, $('a', el)[1], 'contain tab as DOM anchor element');
-	equals(uiObj.panel, $('div', el)[1], 'contain panel as DOM div element');
-	equals(uiObj.index, 1, 'contain index');
-});
-
-test('add', function() {
-
-	// TODO move to methods, not at all event related...
-
-	var el = $('<div id="tabs"><ul></ul></div>').tabs();
-	equals(el.tabs('option', 'selected'), -1, 'Initially empty, no selected tab');
-
-	el.tabs('add', '#test1', 'Test 1');
-	equals(el.tabs('option', 'selected'), 0, 'First tab added should be auto selected');
-
-	el.tabs('add', '#test2', 'Test 2');
-	equals(el.tabs('option', 'selected'), 0, 'Second tab added should not be auto selected');
-
-});
-
-test('remove', function() {
-	ok(false, "missing test - untested code is broken code.");
+	element.tabs( "disable", 1 );
+	// shouldn't trigger event
+	element.tabs( "disable", 1 );
 });
 
 test('show', function() {
@@ -247,82 +234,153 @@ test('select', function() {
 	equals( evenObj.originalEvent.type, "click", "select triggered by click" );
 });
 
-module("tabs (deprecated): methods");
+module( "tabs (deprecated): methods" );
 
-test('add', function() {
-	expect(4);
+test( "add", function() {
+	expect( 27 );
 
-	el = $('#tabs1').tabs();
-	el.tabs('add', '#new', 'New');
+	var element = $( "#tabs1" ).tabs();
+	tabs_state( element, 1, 0, 0 );
 
-	var added = $('li:last', el).simulate('mouseover');
-	ok(added.is('.ui-state-hover'), 'should add mouseover handler to added tab');
-	added.simulate('mouseout');
-	var other = $('li:first', el).simulate('mouseover');
-	ok(other.is('.ui-state-hover'), 'should not remove mouseover handler from existing tab');
-	other.simulate('mouseout');
+	// add without index
+	element.one( "tabsadd", function( event, ui ) {
+		equal( ui.index, 3, "ui.index" );
+		equal( $( ui.tab ).text(), "New", "ui.tab" );
+		equal( ui.panel.id, "new", "ui.panel" );
+	});
+	element.tabs( "add", "#new", "New" );
+	tabs_state( element, 1, 0, 0, 0 );
+	var tab = element.find( ".ui-tabs-nav li" ).last(),
+		anchor = tab.find( "a" );
+	equals( tab.text(), "New", "label" );
+	equals( anchor.attr( "href" ), "#new", "href" );
+	equals( anchor.attr( "aria-controls" ), "new", "aria-controls" );
+	ok( !tab.hasClass( "ui-state-hover" ), "not hovered" );
+	anchor.simulate( "mouseover" );
+	ok( tab.hasClass( "ui-state-hover" ), "hovered" );
+	anchor.simulate( "click" );
+	tabs_state( element, 0, 0, 0, 1 );
 
-	equals($('a', added).attr('href'), '#new', 'should not expand href to full url of current page');
+	// add remote tab with index
+	element.one( "tabsadd", function( event, ui ) {
+		equal( ui.index, 1, "ui.index" );
+		equal( $( ui.tab ).text(), "New Remote", "ui.tab" );
+		equal( ui.panel.id, $( ui.tab ).attr( "aria-controls" ), "ui.panel" );
+	});
+	element.tabs( "add", "data/test.html", "New Remote", 1 );
+	tabs_state( element, 0, 0, 0, 0, 1 );
+	tab = element.find( ".ui-tabs-nav li" ).eq( 1 );
+	anchor = tab.find( "a" );
+	equals( tab.text(), "New Remote", "label" );
+	equals( anchor.attr( "href" ), "data/test.html", "href" );
+	ok( /^ui-tabs-\d+$/.test( anchor.attr( "aria-controls" ) ), "aria controls" );
+	ok( !tab.hasClass( "ui-state-hover" ), "not hovered" );
+	anchor.simulate( "mouseover" );
+	ok( tab.hasClass( "ui-state-hover" ), "hovered" );
+	anchor.simulate( "click" );
+	tabs_state( element, 0, 1, 0, 0, 0 );
 
-	ok(false, "missing test - untested code is broken code.");
+	// add to empty tab set
+	element = $( "<div><ul></ul></div>" ).tabs();
+	equals( element.tabs( "option", "active" ), false, "active: false on init" );
+	element.one( "tabsadd", function( event, ui ) {
+		equal( ui.index, 0, "ui.index" );
+		equal( $( ui.tab ).text(), "First", "ui.tab" );
+		equal( ui.panel.id, "first", "ui.panel" );
+	});
+	element.tabs( "add", "#first", "First" );
+	tabs_state( element, 1 );
+	equals( element.tabs( "option", "active" ), 0, "active: 0 after add" );
 });
 
-test('remove', function() {
-	expect(4);
+test( "#5069 - ui.tabs.add creates two tab panels when using a full URL", function() {
+	expect( 2 );
 
-	el = $('#tabs1').tabs();
-
-	el.tabs('remove', 0);
-	equals(el.tabs('length'), 2, 'remove tab');
-	equals($('li a[href$="fragment-1"]', el).length, 0, 'remove associated list item');
-	equals($('#fragment-1').length, 0, 'remove associated panel');
-
-	// TODO delete tab -> focus tab to right
-	// TODO delete last tab -> focus tab to left
-
-	el.tabs('select', 1);
-	el.tabs('remove', 1);
-	equals(el.tabs('option', 'selected'), 0, 'update selected property');
+	var element = $( "#tabs2" ).tabs();
+	equals( element.children( "div" ).length, element.find( ".ui-tabs-nav li" ).length );
+	element.tabs( "add", "/new", "New" );
+	equals( element.children( "div" ).length, element.find( ".ui-tabs-nav li" ).length );
 });
 
-test('select', function() {
-	expect(6);
+test( "remove", function() {
+	expect( 17 );
 
-	el = $('#tabs1').tabs();
+	var element = $( "#tabs1" ).tabs({ active: 1 });
+	tabs_state( element, 0, 1, 0 );
 
-	el.tabs('select', 1);
-	equals(el.tabs('option', 'active'), 1, 'should select tab');
+	element.one( "tabsremove", function( event, ui ) {
+		equal( ui.index, -1, "ui.index" );
+		equal( $( ui.tab ).text(), "2", "ui.tab" );
+		equal( ui.panel.id, "fragment-2", "ui.panel" );
+	});
+	element.tabs( "remove", 1 );
+	tabs_state( element, 0, 1 );
+	equals( element.tabs( "option", "active" ), 1 );
+	equals( element.find( ".ui-tabs-nav li a[href$='fragment-2']" ).length, 0,
+		"remove correct list item" );
+	equals( element.find( "#fragment-2" ).length, 0, "remove correct panel" );
 
-	el.tabs('destroy');
-	el.tabs({ collapsible: true });
-	el.tabs('select', 0);
-	equals(el.tabs('option', 'active'), -1, 'should collapse tab passing in the already active tab');
+	element.one( "tabsremove", function( event, ui ) {
+		equal( ui.index, -1, "ui.index" );
+		equal( $( ui.tab ).text(), "3", "ui.tab" );
+		equal( ui.panel.id, "fragment-3", "ui.panel" );
+	});
+	element.tabs( "remove", 1 );
+	tabs_state( element, 1 );
+	equals( element.tabs( "option", "active"), 0 );
 
-	el.tabs('destroy');
-	el.tabs({ collapsible: true });
-	el.tabs('select', -1);
-	equals(el.tabs('option', 'active'), -1, 'should collapse tab passing in -1');
-
-	el.tabs('destroy');
-	el.tabs();
-	el.tabs('select', 0);
-	equals(el.tabs('option', 'active'), 0, 'should not collapse tab if collapsible is not set to true');
-	el.tabs('select', -1);
-	equals(el.tabs('option', 'active'), 0, 'should not collapse tab if collapsible is not set to true');
-
-	el.tabs('select', '#fragment-2');
-	equals(el.tabs('option', 'active'), 1, 'should select tab by id');
+	element.one( "tabsremove", function( event, ui ) {
+		equal( ui.index, -1, "ui.index" );
+		equal( $( ui.tab ).text(), "1", "ui.tab" );
+		equal( ui.panel.id, "fragment-1", "ui.panel" );
+	});
+	element.tabs( "remove", 0 );
+	equals( element.tabs( "option", "active" ), false );
 });
 
+test( "select", function() {
+	expect( 23 );
 
-test('#5069 - ui.tabs.add creates two tab panels when using a full URL', function() {
-	// http://dev.jqueryui.com/ticket/5069
-	expect(2);
+	var element = $( "#tabs1" ).tabs();
+	tabs_state( element, 1, 0, 0 );
+	element.tabs( "select", 1 );
+	tabs_state( element, 0, 1, 0 );
+	equals( element.tabs( "option", "active" ), 1, "active" );
+	equals( element.tabs( "option", "selected" ), 1, "selected" );
+	element.tabs( "destroy" );
 
-	el = $('#tabs2').tabs();
-	equals(el.children('div').length, el.find('> ul > li').length, 'After creation, number of panels should be equal to number of tabs');
-	el.tabs('add', '/ajax_html_echo', 'Test');
-	equals(el.children('div').length, el.find('> ul > li').length, 'After add, number of panels should be equal to number of tabs');
+	element.tabs({ collapsible: true });
+	tabs_state( element, 1, 0, 0 );
+	element.tabs( "select", 0 );
+	tabs_state( element, 0, 0, 0 );
+	equals( element.tabs( "option", "active" ), false, "active" );
+	equals( element.tabs( "option", "selected" ), -1, "selected" );
+	element.tabs( "destroy" );
+
+	element.tabs({ collapsible: true });
+	element.tabs( "select", -1 );
+	tabs_state( element, 0, 0, 0 );
+	equals( element.tabs( "option", "active" ), false, "active" );
+	equals( element.tabs( "option", "selected" ), -1, "selected" );
+	element.tabs( "destroy" );
+
+	element.tabs();
+	tabs_state( element, 1, 0, 0 );
+	equals( element.tabs( "option", "active" ), 0, "active" );
+	equals( element.tabs( "option", "selected" ), 0, "selected" );
+	element.tabs( "select", 0 );
+	tabs_state( element, 1, 0, 0 );
+	equals( element.tabs( "option", "active" ), 0, "active" );
+	equals( element.tabs( "option", "selected" ), 0, "selected" );
+	element.tabs( "select", -1 );
+	tabs_state( element, 1, 0, 0 );
+	equals( element.tabs( "option", "active" ), 0, "active" );
+	equals( element.tabs( "option", "selected" ), 0, "selected" );
+
+	element.tabs( "select", "#fragment-2" );
+	tabs_state( element, 0, 1, 0 );
+	equals( element.tabs( "option", "active" ), 1, "active" );
+	equals( element.tabs( "option", "selected" ), 1, "selected" );
 });
 
 test( "length", function() {
