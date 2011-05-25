@@ -416,8 +416,8 @@ $.widget("ui.draggable", $.ui.mouse, {
 		 */
 
 		if(this.originalPosition) { //If we are not dragging yet, we won't check for options
-		         var containment;
-		         if(this.containment) {
+			 var containment;
+			 if(this.containment) {
 				 if (this.relative_container){
 				     var co = this.relative_container.offset();
 				     containment = [ this.containment[0] + co.left,
