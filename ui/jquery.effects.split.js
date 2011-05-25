@@ -27,7 +27,7 @@
 		
 		var interval = o.interval, 
 			duration = o.duration - ( o.rows + o.columns ) * interval,
-			pieceCounter = 0,
+			pieceCounter = o.rows * o.columns,
 			documentCoords = {
 				height: $( document ).height(),
 				width: $( document ).width()
@@ -63,8 +63,8 @@
 
 		// children animate complete
 		function childComplete() {
-			pieceCounter++;
-			if ( pieceCounter === o.rows * o.columns ) {
+			pieceCounter--;
+			if ( pieceCounter === 0 ) {
 				animComplete();
 			}
 		}
