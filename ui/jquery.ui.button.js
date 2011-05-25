@@ -117,7 +117,7 @@ $.widget( "ui.button", {
 				}
 				self.refresh();
 			});
-            // if mouse moves between mousedown and mouseup (drag) set clickDragged flag
+			// if mouse moves between mousedown and mouseup (drag) set clickDragged flag
 			// prevents issue where button state changes but checkbox/radio checked state
 			// does not in Firefox (see ticket #6970)
 			this.buttonElement
