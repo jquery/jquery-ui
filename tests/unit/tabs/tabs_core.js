@@ -63,4 +63,32 @@ test( "accessibility", function() {
 	// TODO: add tests
 });
 
+test( "#3627 - Ajax tab with url containing a fragment identifier fails to load", function() {
+	expect( 1 );
+
+	var element = $( "#tabs2" ).tabs({
+		active: 2,
+		beforeLoad: function( event, ui ) {
+			event.preventDefault();
+			ok( /test.html$/.test( ui.ajaxSettings.url ), "should ignore fragment identifier" );
+		}
+	});
+});
+
+test( "#4033 - IE expands hash to full url and misinterprets tab as ajax", function() {
+	expect( 2 );
+
+	var element = $( "<div><ul><li><a href='#tab'>Tab</a></li></ul><div id='tab'></div></div>" );
+	element.appendTo( "#main" );
+	element.tabs({
+		beforeLoad: function( event, ui ) {
+			event.preventDefault();
+			ok( false, 'should not be an ajax tab');
+		}
+	});
+
+	equals( element.find( ".ui-tabs-nav a" ).attr( "aria-controls" ), "tab", "aria-contorls attribute is correct" );
+	tabs_state( element, 1 );
+});
+
 }( jQuery ) );

@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>jQuery UI Core Test Suite</title>
+
+	<script src="../../../jquery-1.5.1.js"></script>
+	<script>
+	$.uiBackCompat = false;
+	</script>
+	<script src="../../../ui/jquery.effects.core.js"></script>
+	<script src="../../../ui/jquery.effects.blind.js"></script>
+	<script src="../../../ui/jquery.effects.bounce.js"></script>
+	<script src="../../../ui/jquery.effects.clip.js"></script>
+	<script src="../../../ui/jquery.effects.drop.js"></script>
+	<script src="../../../ui/jquery.effects.explode.js"></script>
+	<script src="../../../ui/jquery.effects.fade.js"></script>
+	<script src="../../../ui/jquery.effects.fold.js"></script>
+	<script src="../../../ui/jquery.effects.highlight.js"></script>
+	<script src="../../../ui/jquery.effects.pulsate.js"></script>
+	<script src="../../../ui/jquery.effects.scale.js"></script>
+	<script src="../../../ui/jquery.effects.shake.js"></script>
+	<script src="../../../ui/jquery.effects.slide.js"></script>
+	<script src="../../../ui/jquery.effects.transfer.js"></script>
+
+	<link rel="stylesheet" href="../../../external/qunit.css">
+	<script src="../../../external/qunit.js"></script>
+	<script src="../../jquery.simulate.js"></script>
+	<script src="../testsuite.js"></script>
+	<script src="effects_core.js"></script>
+            
+	<script src="../swarminject.js"></script>
+
+	<style type="text/css">
+		.hidden {
+			display: none;
+		}
+		.test {
+			background: #000;
+			border: 0;
+			width: 100px;
+			height: 100px;
+		}
+		.testAddBorder {
+			border: 10px solid #000;
+		}
+		.testChildren,
+		.testChangeBackground {
+			background: #fff;
+		}
+		.test h2 {
+			font-size: 10px;
+		}
+		.testChildren h2 {
+			font-size: 20px;
+		}
+	</style>
+</head>
+<body>
+
+<h1 id="qunit-header">jQuery UI Effects Test Suite</h1>
+<h2 id="qunit-banner"></h2>
+<div id="qunit-testrunner-toolbar"></div>
+<h2 id="qunit-userAgent"></h2>
+<ol id="qunit-tests">
+</ol>
+
+<div id="qunit-fixture">
+	<div class="hidden test"></div>
+	<div class="animateClass test">
+		<h2>Child Element Test</h2>
+	</div>
+</div>
+
+</body>
+</html>

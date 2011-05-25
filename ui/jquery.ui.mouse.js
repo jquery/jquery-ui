@@ -12,6 +12,11 @@
  */
 (function( $, undefined ) {
 
+var mouseHandled = false;
+$(document).mousedown(function(e) {
+	mouseHandled = false;
+});
+
 $.widget("ui.mouse", {
 	options: {
 		cancel: ':input,option',
@@ -44,9 +49,7 @@ $.widget("ui.mouse", {
 
 	_mouseDown: function(event) {
 		// don't let more than one widget handle mouseStart
-		// TODO: figure out why we have to use originalEvent
-		event.originalEvent = event.originalEvent || {};
-		if (event.originalEvent.mouseHandled) { return; }
+		if(mouseHandled) {return};
 
 		// we may have missed mouseup (out of window)
 		(this._mouseStarted && this._mouseUp(event));
@@ -92,7 +95,8 @@ $.widget("ui.mouse", {
 			.bind('mouseup.'+this.widgetName, this._mouseUpDelegate);
 
 		event.preventDefault();
-		event.originalEvent.mouseHandled = true;
+		
+		mouseHandled = true;
 		return true;
 	},
 

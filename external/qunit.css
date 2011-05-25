@@ -1,7 +1,17 @@
+/**
+ * QUnit - A JavaScript Unit Testing Framework
+ *
+ * http://docs.jquery.com/QUnit
+ *
+ * Copyright (c) 2011 John Resig, Jörn Zaefferer
+ * Dual licensed under the MIT (MIT-LICENSE.txt)
+ * or GPL (GPL-LICENSE.txt) licenses.
+ */
+
 /** Font Family and Sizes */
 
 #qunit-tests, #qunit-header, #qunit-banner, #qunit-testrunner-toolbar, #qunit-userAgent, #qunit-testresult {
-	font-family: "Helvetica Neue Light", "HelveticaNeue-Light", "Helvetica Neue", Calibri, Helvetica, Arial;
+	font-family: "Helvetica Neue Light", "HelveticaNeue-Light", "Helvetica Neue", Calibri, Helvetica, Arial, sans-serif;
 }
 
 #qunit-testrunner-toolbar, #qunit-userAgent, #qunit-testresult, #qunit-tests li { font-size: small; }
@@ -27,7 +37,7 @@
 	font-size: 1.5em;
 	line-height: 1em;
 	font-weight: normal;
-	
+
 	border-radius: 15px 15px 0 0;
 	-moz-border-radius: 15px 15px 0 0;
 	-webkit-border-top-right-radius: 15px;
@@ -95,13 +105,13 @@
 #qunit-tests ol {
 	margin-top: 0.5em;
 	padding: 0.5em;
-	
+
 	background-color: #fff;
-	
+
 	border-radius: 15px;
 	-moz-border-radius: 15px;
 	-webkit-border-radius: 15px;
-	
+
 	box-shadow: inset 0px 2px 13px #999;
 	-moz-box-shadow: inset 0px 2px 13px #999;
 	-webkit-box-shadow: inset 0px 2px 13px #999;
@@ -164,7 +174,7 @@
 
 #qunit-tests .pass                          { color: #528CE0; background-color: #D2E0E6; }
 #qunit-tests .pass .test-name               { color: #366097; }
- 
+
 #qunit-tests .pass .test-actual,
 #qunit-tests .pass .test-expected           { color: #999999; }
 
