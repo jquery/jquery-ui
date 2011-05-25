@@ -1383,7 +1383,7 @@ $.extend(Datepicker.prototype, {
         
 		var onSelect = this._get(inst, 'onSelect');
 		if (onSelect) {
-			var dateStr = inst.drawMonth + '/' + inst.selectedDay + '/' + inst.drawYear;
+			var dateStr = this._formatDate(inst);
 			onSelect.apply((inst.input ? inst.input[0] : null), [dateStr, inst]);  // trigger custom callback
 		}
 	},
