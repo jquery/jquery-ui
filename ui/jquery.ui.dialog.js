@@ -197,38 +197,39 @@ $.widget("ui.dialog", {
 			return;
 		}
 		
-		if( self._isOpen ) {
-			self._isOpen = false;
-		
-			if ( self.overlay ) {
-				self.overlay.destroy();
-			}
-			self.uiDialog.unbind( "keypress.ui-dialog" );
+		if( !self._isOpen ) {
+			return self;
+		}
+		self._isOpen = false;
 	
-			if ( self.options.hide ) {
-				self.uiDialog.hide( self.options.hide, function() {
-					self._trigger( "close", event );
-				});
-			} else {
-				self.uiDialog.hide();
+		if ( self.overlay ) {
+			self.overlay.destroy();
+		}
+		self.uiDialog.unbind( "keypress.ui-dialog" );
+
+		if ( self.options.hide ) {
+			self.uiDialog.hide( self.options.hide, function() {
 				self._trigger( "close", event );
-			}
-	
-			$.ui.dialog.overlay.resize();
-	
-			// adjust the maxZ to allow other modal dialogs to continue to work (see #4309)
-			if ( self.options.modal ) {
-				maxZ = 0;
-				$( ".ui-dialog" ).each(function() {
-					if ( this !== self.uiDialog[0] ) {
-						thisZ = $( this ).css( "z-index" );
-						if ( !isNaN( thisZ ) ) {
-							maxZ = Math.max( maxZ, thisZ );
-						}
+			});
+		} else {
+			self.uiDialog.hide();
+			self._trigger( "close", event );
+		}
+
+		$.ui.dialog.overlay.resize();
+
+		// adjust the maxZ to allow other modal dialogs to continue to work (see #4309)
+		if ( self.options.modal ) {
+			maxZ = 0;
+			$( ".ui-dialog" ).each(function() {
+				if ( this !== self.uiDialog[0] ) {
+					thisZ = $( this ).css( "z-index" );
+					if ( !isNaN( thisZ ) ) {
+						maxZ = Math.max( maxZ, thisZ );
 					}
-				});
-				$.ui.dialog.maxZ = maxZ;
-			}
+				}
+			});
+			$.ui.dialog.maxZ = maxZ;
 		}
 
 		return self;
