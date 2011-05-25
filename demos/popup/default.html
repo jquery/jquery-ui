@@ -54,22 +54,26 @@
 <body>
 
 <div class="demo">
-	<a href="#login-form">Log In</a>
-	<div id="login-form" class="ui-widget-content" tabIndex="0">
+	<a href="#login-form">Log In</a>	
+	<div class="ui-widget-content" id="login-form" aria-label="Login options">
 		<form>
 			<div>
-				<label>Username</label>
-				<input type="username" />
+				<label for="un">Username</label>
+				<input type="text" id="un" />
 			</div>
 			<div>
-				<label>Password</label>
-				<input type="password" />
+				<label for="pw">Password</label>
+				<input type="password" id="pw" />
 			</div>
 			<div>
-				<input type="submit" class="submit" value="Login" />
+				<input type="submit" value="Login" class="submit" />
 			</div>
 		</form>
 	</div>
+	
+	
+	
+	
 </div>
 
 <div class="demo-description">
