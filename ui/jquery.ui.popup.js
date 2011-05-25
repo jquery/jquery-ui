@@ -155,7 +155,7 @@ $.widget( "ui.popup", {
 		else {
 			//default use case, popup could be anything (e.g. a form)
 			this.element
-				.bind( "keypress.ui-popup", function( event ) {
+				.bind( "keydown.ui-popup", function( event ) {
 	                if ( event.keyCode !== $.ui.keyCode.TAB ) {
 	                    return;
 	                }
