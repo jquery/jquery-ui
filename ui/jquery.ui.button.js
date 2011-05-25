@@ -101,14 +101,15 @@ $.widget( "ui.button", {
 				}
 			});
 
-        // Bind to the element's focus/blur to capture tabs.                            
-        this.element.bind( "focus.button", function() {
-            // no need to check disabled, focus won't be triggered anyway
-            self.buttonElement.addClass( focusClass );
-        })
-        .bind( "blur.button", function() {
-            self.buttonElement.removeClass( focusClass );
-        });
+		// Bind to the element's focus/blur to capture tabs.                            
+		this.element
+			.bind( "focus.button", function() {
+				// no need to check disabled, focus won't be triggered anyway
+				self.buttonElement.addClass( focusClass );
+			})
+			.bind( "blur.button", function() {
+				self.buttonElement.removeClass( focusClass );
+			});
 
 		if ( toggleButton ) {
 			this.element.bind( "change.button", function() {
