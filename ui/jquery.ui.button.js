@@ -17,13 +17,11 @@ var lastActive, startXPos, startYPos, clickDragged,
 	baseClasses = "ui-button ui-widget ui-state-default ui-corner-all",
 	stateClasses = "ui-state-hover ui-state-active ",
 	typeClasses = "ui-button-icons-only ui-button-icon-only ui-button-text-icons ui-button-text-icon-primary ui-button-text-icon-secondary ui-button-text-only",
-	formResetHandler = function( event ) {
-		$( ":ui-button", event.target.form ).each(function() {
-			var inst = $( this ).data( "button" );
-			setTimeout(function() {
-				inst.refresh();
-			}, 1 );
-		});
+	formResetHandler = function() {
+		var buttons = $( this ).find( ":ui-button" );
+		setTimeout(function() {
+			buttons.button( "refresh" );
+		}, 1 );
 	},
 	radioGroup = function( radio ) {
 		var name = radio.name,

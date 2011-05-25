@@ -160,42 +160,46 @@
 		<mkdir dir="${min.dir}" />
 		<mkdir dir="${min.dir}/i18n/" />
 		<mkdir dir="${dist.dir}/themes/base/minified" />
-		
-		<apply executable="java" parallel="false">
-			<fileset dir="${dist.dir}/ui" includes="*.js" />
-			<arg line="-jar" />
-			<arg path="${closure-jar}" />
-			<arg value="--warning_level" />
-			<arg value="QUIET" />
-			<arg value="--js_output_file" />
-			<targetfile />
-			<arg value="--js" />
-			<mapper type="glob" from="*.js" to="${min.dir}/*.min.js" />
-		</apply>
 
-		<apply executable="java" parallel="false">
-			<fileset dir="${dist.dir}/ui/i18n" includes="*.js" />
-			<arg line="-jar" />
-			<arg path="${closure-jar}" />
-			<arg value="--warning_level" />
-			<arg value="QUIET" />
-			<arg value="--js_output_file" />
-			<targetfile />
-			<arg value="--js" />
-			<mapper type="glob" from="*.js" to="${min.dir}/i18n/*.min.js" />
-		</apply>
+        <parallel threadsperprocessor="1">
 
-		<apply executable="java" parallel="false">
-			<fileset dir="${dist.dir}/themes/base" includes="*.css" />
-			<arg line="-jar" />
-			<arg path="${yuicompressor-jar}" />
-			<arg line="--charset utf-8" />
-			<arg line="-v" />
-			<srcfile />
-			<arg line="-o" />
-			<mapper type="glob" from="*.css" to="${dist.dir}/themes/base/minified/*.min.css" />
-			<targetfile/>
-		</apply>
+            <apply executable="java" parallel="false">
+                <fileset dir="${dist.dir}/ui" includes="*.js" />
+                <arg line="-jar" />
+                <arg path="${closure-jar}" />
+                <arg value="--warning_level" />
+                <arg value="QUIET" />
+                <arg value="--js_output_file" />
+                <targetfile />
+                <arg value="--js" />
+                <mapper type="glob" from="*.js" to="${min.dir}/*.min.js" />
+            </apply>
+
+            <apply executable="java" parallel="false">
+                <fileset dir="${dist.dir}/ui/i18n" includes="*.js" />
+                <arg line="-jar" />
+                <arg path="${closure-jar}" />
+                <arg value="--warning_level" />
+                <arg value="QUIET" />
+                <arg value="--js_output_file" />
+                <targetfile />
+                <arg value="--js" />
+                <mapper type="glob" from="*.js" to="${min.dir}/i18n/*.min.js" />
+            </apply>
+
+            <apply executable="java" parallel="false">
+                <fileset dir="${dist.dir}/themes/base" includes="*.css" />
+                <arg line="-jar" />
+                <arg path="${yuicompressor-jar}" />
+                <arg line="--charset utf-8" />
+                <arg line="-v" />
+                <srcfile />
+                <arg line="-o" />
+                <mapper type="glob" from="*.css" to="${dist.dir}/themes/base/minified/*.min.css" />
+                <targetfile/>
+            </apply>
+
+        </parallel>
 		
 		<replaceregexp match=".css" replace=".min.css" flags="g">
 			<fileset dir="${dist.dir}/themes/base/minified/">
@@ -258,53 +262,56 @@
 		<mkdir dir="${docs.dir}" />
 		<property name="url" value="http://docs.jquery.com/action/render/UI/API/${release.version}/" />
 
-		<get src="${url}Draggable" dest="${docs.dir}draggable.html" />
-		<get src="${url}Droppable" dest="${docs.dir}droppable.html" />
-		<get src="${url}Resizable" dest="${docs.dir}resizable.html" />
-		<get src="${url}Selectable" dest="${docs.dir}selectable.html" />
-		<get src="${url}Sortable" dest="${docs.dir}sortable.html" />
+        <parallel threadcount="8">
 
-		<get src="${url}Accordion" dest="${docs.dir}accordion.html" />
-		<get src="${url}Autocomplete" dest="${docs.dir}autocomplete.html" />
-		<get src="${url}Button" dest="${docs.dir}button.html" />
-		<get src="${url}Datepicker" dest="${docs.dir}datepicker.html" />
-		<get src="${url}Dialog" dest="${docs.dir}dialog.html" />
-		<get src="${url}Menu" dest="${docs.dir}menu.html" />
-		<get src="${url}Progressbar" dest="${docs.dir}progressbar.html" />
-		<get src="${url}Slider" dest="${docs.dir}slider.html" />
-		<get src="${url}Spinner" dest="${docs.dir}spinner.html" />
-		<get src="${url}Tooltip" dest="${docs.dir}tooltip.html" />
-		<get src="${url}Tabs" dest="${docs.dir}tabs.html" />
+            <get src="${url}Draggable" dest="${docs.dir}draggable.html" />
+            <get src="${url}Droppable" dest="${docs.dir}droppable.html" />
+            <get src="${url}Resizable" dest="${docs.dir}resizable.html" />
+            <get src="${url}Selectable" dest="${docs.dir}selectable.html" />
+            <get src="${url}Sortable" dest="${docs.dir}sortable.html" />
 
-		<get src="${url}Position" dest="${docs.dir}position.html" />
-		
-		<get src="http://docs.jquery.com/action/render/UI/Effects/animate" dest="${docs.dir}animate.html" />
-		<get src="http://docs.jquery.com/action/render/UI/Effects/addClass" dest="${docs.dir}addClass.html" />
-		<get src="http://docs.jquery.com/action/render/UI/Effects/effect" dest="${docs.dir}effect.html" />
-		<get src="http://docs.jquery.com/action/render/UI/Effects/hide" dest="${docs.dir}hide.html" />
-		<get src="http://docs.jquery.com/action/render/UI/Effects/removeClass" dest="${docs.dir}removeClass.html" />
-		<get src="http://docs.jquery.com/action/render/UI/Effects/show" dest="${docs.dir}show.html" />
-		<get src="http://docs.jquery.com/action/render/UI/Effects/switchClass" dest="${docs.dir}switchClass.html" />
-		<get src="http://docs.jquery.com/action/render/UI/Effects/toggle" dest="${docs.dir}toggle.html" />
-		<get src="http://docs.jquery.com/action/render/UI/Effects/toggleClass" dest="${docs.dir}toggleClass.html" />
-		
-		
-		<get src="http://docs.jquery.com/action/render/UI/Effects/Blind" dest="${docs.dir}effect-blind.html" />
-		<get src="http://docs.jquery.com/action/render/UI/Effects/Clip" dest="${docs.dir}effect-clip.html" />
-		<get src="http://docs.jquery.com/action/render/UI/Effects/Drop" dest="${docs.dir}effect-drop.html" />
-		<get src="http://docs.jquery.com/action/render/UI/Effects/Explode" dest="${docs.dir}effect-explode.html" />
-		<get src="http://docs.jquery.com/action/render/UI/Effects/Fade" dest="${docs.dir}effect-fade.html" />
-		<get src="http://docs.jquery.com/action/render/UI/Effects/Fold" dest="${docs.dir}effect-fold.html" />
-		<get src="http://docs.jquery.com/action/render/UI/Effects/Puff" dest="${docs.dir}effect-puff.html" />
-		<get src="http://docs.jquery.com/action/render/UI/Effects/Slide" dest="${docs.dir}effect-slide.html" />
-		<get src="http://docs.jquery.com/action/render/UI/Effects/Scale" dest="${docs.dir}effect-scale.html" />
-		
-		<get src="http://docs.jquery.com/action/render/UI/Effects/Bounce" dest="${docs.dir}effect-bounce.html" />
-		<get src="http://docs.jquery.com/action/render/UI/Effects/Highlight" dest="${docs.dir}effect-highlight.html" />
-		<get src="http://docs.jquery.com/action/render/UI/Effects/Pulsate" dest="${docs.dir}effect-pulsate.html" />
-		<get src="http://docs.jquery.com/action/render/UI/Effects/Shake" dest="${docs.dir}effect-shake.html" />
-		<get src="http://docs.jquery.com/action/render/UI/Effects/Size" dest="${docs.dir}effect-size.html" />
-		<get src="http://docs.jquery.com/action/render/UI/Effects/Transfer" dest="${docs.dir}effect-transfer.html" />
+            <get src="${url}Accordion" dest="${docs.dir}accordion.html" />
+            <get src="${url}Autocomplete" dest="${docs.dir}autocomplete.html" />
+            <get src="${url}Button" dest="${docs.dir}button.html" />
+            <get src="${url}Datepicker" dest="${docs.dir}datepicker.html" />
+            <get src="${url}Dialog" dest="${docs.dir}dialog.html" />
+            <get src="${url}Menu" dest="${docs.dir}menu.html" />
+            <get src="${url}Progressbar" dest="${docs.dir}progressbar.html" />
+            <get src="${url}Slider" dest="${docs.dir}slider.html" />
+            <get src="${url}Spinner" dest="${docs.dir}spinner.html" />
+            <get src="${url}Tooltip" dest="${docs.dir}tooltip.html" />
+            <get src="${url}Tabs" dest="${docs.dir}tabs.html" />
+
+            <get src="${url}Position" dest="${docs.dir}position.html" />
+
+            <get src="http://docs.jquery.com/action/render/UI/Effects/animate" dest="${docs.dir}animate.html" />
+            <get src="http://docs.jquery.com/action/render/UI/Effects/addClass" dest="${docs.dir}addClass.html" />
+            <get src="http://docs.jquery.com/action/render/UI/Effects/effect" dest="${docs.dir}effect.html" />
+            <get src="http://docs.jquery.com/action/render/UI/Effects/hide" dest="${docs.dir}hide.html" />
+            <get src="http://docs.jquery.com/action/render/UI/Effects/removeClass" dest="${docs.dir}removeClass.html" />
+            <get src="http://docs.jquery.com/action/render/UI/Effects/show" dest="${docs.dir}show.html" />
+            <get src="http://docs.jquery.com/action/render/UI/Effects/switchClass" dest="${docs.dir}switchClass.html" />
+            <get src="http://docs.jquery.com/action/render/UI/Effects/toggle" dest="${docs.dir}toggle.html" />
+            <get src="http://docs.jquery.com/action/render/UI/Effects/toggleClass" dest="${docs.dir}toggleClass.html" />
+
+
+            <get src="http://docs.jquery.com/action/render/UI/Effects/Blind" dest="${docs.dir}effect-blind.html" />
+            <get src="http://docs.jquery.com/action/render/UI/Effects/Clip" dest="${docs.dir}effect-clip.html" />
+            <get src="http://docs.jquery.com/action/render/UI/Effects/Drop" dest="${docs.dir}effect-drop.html" />
+            <get src="http://docs.jquery.com/action/render/UI/Effects/Explode" dest="${docs.dir}effect-explode.html" />
+            <get src="http://docs.jquery.com/action/render/UI/Effects/Fade" dest="${docs.dir}effect-fade.html" />
+            <get src="http://docs.jquery.com/action/render/UI/Effects/Fold" dest="${docs.dir}effect-fold.html" />
+            <get src="http://docs.jquery.com/action/render/UI/Effects/Puff" dest="${docs.dir}effect-puff.html" />
+            <get src="http://docs.jquery.com/action/render/UI/Effects/Slide" dest="${docs.dir}effect-slide.html" />
+            <get src="http://docs.jquery.com/action/render/UI/Effects/Scale" dest="${docs.dir}effect-scale.html" />
+
+            <get src="http://docs.jquery.com/action/render/UI/Effects/Bounce" dest="${docs.dir}effect-bounce.html" />
+            <get src="http://docs.jquery.com/action/render/UI/Effects/Highlight" dest="${docs.dir}effect-highlight.html" />
+            <get src="http://docs.jquery.com/action/render/UI/Effects/Pulsate" dest="${docs.dir}effect-pulsate.html" />
+            <get src="http://docs.jquery.com/action/render/UI/Effects/Shake" dest="${docs.dir}effect-shake.html" />
+            <get src="http://docs.jquery.com/action/render/UI/Effects/Size" dest="${docs.dir}effect-size.html" />
+            <get src="http://docs.jquery.com/action/render/UI/Effects/Transfer" dest="${docs.dir}effect-transfer.html" />
+        </parallel>
 	</target>
 	
 	<target name="themes-download">

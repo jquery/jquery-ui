@@ -614,6 +614,9 @@ $.extend(Datepicker.prototype, {
 			return;
 		var inst = $.datepicker._getInst(input);
 		if ($.datepicker._curInst && $.datepicker._curInst != inst) {
+			if ( $.datepicker._datepickerShowing ) {
+				$.datepicker._triggerOnClose($.datepicker._curInst);
+			}
 			$.datepicker._curInst.dpDiv.stop(true, true);
 		}
 		var beforeShow = $.datepicker._get(inst, 'beforeShow');
@@ -759,6 +762,14 @@ $.extend(Datepicker.prototype, {
 	    return [position.left, position.top];
 	},
 
+	/* Trigger custom callback of onClose. */
+	_triggerOnClose: function(inst) {
+		var onClose = this._get(inst, 'onClose');
+		if (onClose)
+			onClose.apply((inst.input ? inst.input[0] : null),
+						  [(inst.input ? inst.input.val() : ''), inst]);
+	},
+
 	/* Hide the date picker from view.
 	   @param  input  element - the input field attached to the date picker */
 	_hideDatepicker: function(input) {
@@ -781,10 +792,7 @@ $.extend(Datepicker.prototype, {
 					(showAnim == 'fadeIn' ? 'fadeOut' : 'hide'))]((showAnim ? duration : null), postProcess);
 			if (!showAnim)
 				postProcess();
-			var onClose = this._get(inst, 'onClose');
-			if (onClose)
-				onClose.apply((inst.input ? inst.input[0] : null),
-					[(inst.input ? inst.input.val() : ''), inst]);  // trigger custom callback
+			$.datepicker._triggerOnClose(inst);
 			this._datepickerShowing = false;
 			this._lastInput = null;
 			if (this._inDialog) {
@@ -1073,6 +1081,9 @@ $.extend(Datepicker.prototype, {
 					default:
 						checkLiteral();
 				}
+		}
+		if (iValue < value.length){
+			throw "Extra/unparsed characters found in date: " + value.substring(iValue);
 		}
 		if (year == -1)
 			year = new Date().getFullYear();

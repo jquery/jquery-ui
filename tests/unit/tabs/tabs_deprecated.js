@@ -35,7 +35,7 @@ asyncTest( "ajaxOptions", function() {
 		}
 	});
 	element.one( "tabsload", function( event, ui ) {
-		equals( ui.panel.html(), "test" );
+		equals( $( ui.panel ).html(), "test" );
 		start();
 	});
 	element.tabs( "option", "active", 2 );
@@ -219,6 +219,62 @@ test( "selected", function() {
 });
 
 module( "tabs (deprecated): events" );
+
+asyncTest( "load", function() {
+	expect( 15 );
+
+	var tab, panelId, panel,
+		element = $( "#tabs2" );
+
+	// init
+	element.one( "tabsload", function( event, ui ) {
+		tab = element.find( ".ui-tabs-nav a" ).eq( 2 );
+		panelId = tab.attr( "aria-controls" );
+		panel = $( "#" + panelId );
+
+		ok( !( "originalEvent" in event ), "originalEvent" );
+		strictEqual( ui.tab, tab[ 0 ], "tab" );
+		strictEqual( ui.panel, panel[ 0 ], "panel" );
+		equals( $( ui.panel ).find( "p" ).length, 1, "panel html" );
+		tabs_state( element, 0, 0, 1, 0, 0 );
+		tabsload1();
+	});
+	element.tabs({ active: 2 });
+
+	function tabsload1() {
+		// .option()
+		element.one( "tabsload", function( event, ui ) {
+			tab = element.find( ".ui-tabs-nav a" ).eq( 3 );
+			panelId = tab.attr( "aria-controls" );
+			panel = $( "#" + panelId );
+
+			ok( !( "originalEvent" in event ), "originalEvent" );
+			strictEqual( ui.tab, tab[ 0 ], "tab" );
+			strictEqual( ui.panel, panel[ 0 ], "panel" );
+			equals( $( ui.panel ).find( "p" ).length, 1, "panel html" );
+			tabs_state( element, 0, 0, 0, 1, 0 );
+			tabsload2();
+		});
+		element.tabs( "option", "active", 3 );
+	}
+
+	function tabsload2() {
+		// click, change panel content
+		element.one( "tabsload", function( event, ui ) {
+			tab = element.find( ".ui-tabs-nav a" ).eq( 4 );
+			panelId = tab.attr( "aria-controls" );
+			panel = $( "#" + panelId );
+
+			equals( event.originalEvent.type, "click", "originalEvent" );
+			strictEqual( ui.tab, tab[ 0 ], "tab" );
+			strictEqual( ui.panel, panel[ 0 ], "panel" );
+			equals( $( ui.panel ).find( "p" ).length, 1, "panel html" );
+			tabs_state( element, 0, 0, 0, 0, 1 );
+			start();
+		});
+		element.find( ".ui-tabs-nav a" ).eq( 4 ).click();
+	}
+});
 
 test( "enable", function() {
 	expect( 3 );

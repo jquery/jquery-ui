@@ -534,10 +534,6 @@ $.widget( "ui.tabs", {
 				panel: panel
 			};
 
-		if ( this.xhr ) {
-			this.xhr.abort();
-		}
-
 		// not remote
 		if ( !url ) {
 			return;
@@ -566,7 +562,9 @@ $.widget( "ui.tabs", {
 
 					self.lis.eq( index ).removeClass( "ui-tabs-loading" );
 
-					delete self.xhr;
+					if ( jqXHR === self.xhr ) {
+						delete self.xhr;
+					}
 				});
 		}
 
@@ -1007,6 +1005,18 @@ if ( $.uiBackCompat !== false ) {
 			if ( this.options.cookie ) {
 				this._cookie( null, this.options.cookie );
 			}
+		}
+	});
+
+	// load event
+	$.widget( "ui.tabs", $.ui.tabs, {
+		_trigger: function( type, event, data ) {
+			var _data = $.extend( {}, data );
+			if ( type === "load" ) {
+				_data.panel = _data.panel[ 0 ];
+				_data.tab = _data.tab[ 0 ];
+			}
+			return this._super( "_trigger", type, event, _data );
 		}
 	});
 }
