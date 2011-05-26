@@ -22,7 +22,7 @@ test( "#6262 - buttonset not applying ui-corner to invisible elements", function
 
 test("#6711 Checkbox/Radiobutton do not Show Focused State when using Keyboard Navigation", function() {
 	var check = $( "#check" ).button(),
-		label = $( "label[for='check']" );
+	    label = $( "label[for='check']" );
 	ok( !label.is( ".ui-state-focus" ) );
 	check.focus();
 	ok( label.is( ".ui-state-focus" ) );
