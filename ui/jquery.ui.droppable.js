@@ -14,6 +14,8 @@
  *	jquery.ui.draggable.js
  */
 (function( $, undefined ) {
+		  
+var scrolling = false;
 
 $.widget("ui.droppable", {
 	widgetEventPrefix: "drop",
@@ -44,6 +46,12 @@ $.widget("ui.droppable", {
 
 		(o.addClasses && this.element.addClass("ui-droppable"));
 
+		//Listen for scrolling so that if the dragging causes scrolling the position of the droppables can be recalculated (see #5003)
+		$(this.element).parentsUntil("body").each(function() {
+			$(this).scroll(function() {
+				scrolling = $( this ).scrollTop() || $( this ).scrollLeft() ? true : false;
+			});
+		});
 	},
 
 	destroy: function() {
@@ -241,7 +249,10 @@ $.ui.ddmanager = {
 	drag: function(draggable, event) {
 
 		//If you have a highly dynamic page, you might try this option. It renders positions every time you move the mouse.
-		if(draggable.options.refreshPositions) $.ui.ddmanager.prepareOffsets(draggable, event);
+		//If the drag causes scrolling, recalculate the positions of the droppables (see #5003)
+		if(draggable.options.refreshPositions || scrolling) {
+			$.ui.ddmanager.prepareOffsets(draggable, event);
+		}
 
 		//Run through all droppables and check their positions based on specific tolerance options
 		$.each($.ui.ddmanager.droppables[draggable.options.scope] || [], function() {
