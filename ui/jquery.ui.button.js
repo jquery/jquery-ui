@@ -95,17 +95,20 @@ $.widget( "ui.button", {
 				}
 				$( this ).removeClass( hoverClass );
 			})
-			.bind( "focus.button", function() {
-				// no need to check disabled, focus won't be triggered anyway
-				$( this ).addClass( focusClass );
-			})
-			.bind( "blur.button", function() {
-				$( this ).removeClass( focusClass );
-			})
 			.bind( "click.button", function( event ) {
 				if ( options.disabled ) {
 					event.stopImmediatePropagation();
 				}
+			});
+
+		// Bind to the element's focus/blur to capture tabs.                            
+		this.element
+			.bind( "focus.button", function() {
+				// no need to check disabled, focus won't be triggered anyway
+				self.buttonElement.addClass( focusClass );
+			})
+			.bind( "blur.button", function() {
+				self.buttonElement.removeClass( focusClass );
 			});
 
 		if ( toggleButton ) {
