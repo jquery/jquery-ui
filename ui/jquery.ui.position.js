@@ -17,7 +17,32 @@ var rhorizontal = /left|center|right/,
 	rposition = /^\w+/,
 	rpercent = /%$/,
 	center = "center",
-	_position = $.fn.position;
+	_position = $.fn.position,
+	getScrollbarWidth = function() { 
+	    var div = $( "<div style='display:block;width:50px;height:50px;overflow:hidden;'><div style='height:100px;width:auto;'></div></div>" ),
+		    innerDiv = div.children()[0],
+		    w1, w2;
+	    $( "body" ).append( div );
+	    w1 = innerDiv.offsetWidth; 
+	    div.css( "overflow", "scroll" ); 
+	    
+	    w2 = innerDiv.offsetWidth;
+	    
+		if ( w1 === w2 ) {
+			w2 = div[0].clientWidth;
+		}
+
+	    div.remove();
+	    
+	    return w1 - w2; 
+	},
+	getScrollInfo = function( within ) {
+		var that = within[0],
+			scrollHeight = within.height() < that.scrollHeight,
+			scrollWidth = within.width() < that.scrollWidth,
+			scrollbarWidth = getScrollbarWidth();
+	    return { height : scrollHeight ? scrollbarWidth : 0, width : scrollWidth ? scrollbarWidth : 0 };
+	};
 
 $.fn.position = function( options ) {
 	if ( !options || !options.of ) {
@@ -114,16 +139,17 @@ $.fn.position = function( options ) {
 	basePosition.left += atOffset[ 0 ];
 	basePosition.top += atOffset[ 1 ];
 
-	return this.each(function() {
+	return this.each(function() { console.log(getScrollInfo( within ));
 		var elem = $( this ),
 			elemWidth = elem.outerWidth(),
 			elemHeight = elem.outerHeight(),
 			marginLeft = parseInt( $.curCSS( this, "marginLeft", true ) ) || 0,
 			marginTop = parseInt( $.curCSS( this, "marginTop", true ) ) || 0,
+			scrollInfo = getScrollInfo( within ),
 			collisionWidth = elemWidth + marginLeft +
-				( parseInt( $.curCSS( this, "marginRight", true ) ) || 0 ),
+				( parseInt( $.curCSS( this, "marginRight", true ) ) || 0 ) + scrollInfo.width,
 			collisionHeight = elemHeight + marginTop +
-				( parseInt( $.curCSS( this, "marginBottom", true ) ) || 0 ),
+				( parseInt( $.curCSS( this, "marginBottom", true ) ) || 0 ) + scrollInfo.height,
 			position = $.extend( {}, basePosition ),
 			myOffset = [
 				parseInt( offsets.my[ 0 ], 10 ) *
