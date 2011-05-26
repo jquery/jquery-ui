@@ -172,6 +172,11 @@ $.widget("ui.draggable", $.ui.mouse, {
 		this.position = this._generatePosition(event);
 		this.positionAbs = this._convertPositionTo("absolute");
 
+		//Reset position to absolute position when scroll will only happen on the document element to prevent "jumping" while dragging and scrolling (see #7278)
+		if(this.scrollParent[0] == document) {
+			this.position = this.positionAbs;
+		}
+
 		//Call plugins and callbacks and use the resulting position if something is returned
 		if (!noPropagation) {
 			var ui = this._uiHash();
