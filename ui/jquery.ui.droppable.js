@@ -29,7 +29,7 @@ $.widget("ui.droppable", {
 	scrolling: false,
 	_create: function() {
 
-		var o = this.options, accept = o.accept, scrolling = this.scrolling;
+		var o = this.options, accept = o.accept;
 		this.isover = 0; this.isout = 1;
 
 		this.accept = $.isFunction(accept) ? accept : function(d) {
@@ -47,8 +47,8 @@ $.widget("ui.droppable", {
 
 		//Listen for scrolling so that if the dragging causes scrolling the position of the droppables can be recalculated (see #5003)
 		this.element.parentsUntil("body").scroll(function() {
-			scrolling = true;
-			setTimeout(function() { scrolling = false; }, 1);
+			this.scrolling = true;
+			setTimeout(function() { this.scrolling = false; }, 1);
 		});
 	},
 
