@@ -17,10 +17,11 @@ $.effects.effect.transfer = function( o ) {
 	return this.queue( function() {
 		var elem = $( this ),
 			target = $( o.to ),
+			isFixed = target.css( "position" ) === "fixed",
 			endPosition = target.offset(),
 			animation = {
-				top: endPosition.top,
-				left: endPosition.left,
+				top: isFixed ? endPosition.top - $("body").scrollTop() : endPosition.top,
+				left: isFixed ? endPosition.left - $("body").scrollLeft() : endPosition.left,
 				height: target.innerHeight(),
 				width: target.innerWidth()
 			},
@@ -29,11 +30,11 @@ $.effects.effect.transfer = function( o ) {
 				.appendTo( document.body )
 				.addClass( o.className )
 				.css({
-					top: startPosition.top,
-					left: startPosition.left,
+					top: isFixed ? startPosition.top - $("body").scrollTop() : startPosition.top,
+					left: isFixed ? startPosition.left - $("body").scrollLeft() : startPosition.left,
 					height: elem.innerHeight(),
 					width: elem.innerWidth(),
-					position: 'absolute'
+					position: isFixed ? 'fixed' : 'absolute'
 				})
 				.animate( animation, o.duration, o.easing, function() {
 					transfer.remove();
