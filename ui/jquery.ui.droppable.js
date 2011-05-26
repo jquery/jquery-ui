@@ -47,7 +47,8 @@ $.widget("ui.droppable", {
 
 		//Listen for scrolling so that if the dragging causes scrolling the position of the droppables can be recalculated (see #5003)
 		this.element.parentsUntil("body").scroll(function() {
-			scrolling = $( this ).scrollTop() || $( this ).scrollLeft() ? true : false;
+			scrolling = true;
+			setTimeout(function() { scrolling = false; }, 1);
 		});
 	},
 
