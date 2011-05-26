@@ -96,6 +96,7 @@ $.widget( "ui.button", {
 			})
 			.bind( "click.button", function( event ) {
 				if ( options.disabled ) {
+					event.preventDefault();
 					event.stopImmediatePropagation();
 				}
 			});
