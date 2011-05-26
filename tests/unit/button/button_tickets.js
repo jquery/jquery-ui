@@ -24,8 +24,7 @@ test("#6711 Checkbox/Radiobutton do not Show Focused State when using Keyboard N
 	var check = $( "#check" ).button(),
 		label = $( "label[for='check']" );
 	ok( !label.is( ".ui-state-focus" ) );
-	check.trigger( "focus.button" );
-	label = $( "label[for='check']" );
+	check.focus();
 	ok( label.is( ".ui-state-focus" ) );
 });
 
