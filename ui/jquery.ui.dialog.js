@@ -196,13 +196,16 @@ $.widget("ui.dialog", {
 		if ( false === self._trigger( "beforeClose", event ) ) {
 			return;
 		}
-
+		
+		if( !self._isOpen ) {
+			return self;
+		}
+		self._isOpen = false;
+	
 		if ( self.overlay ) {
 			self.overlay.destroy();
 		}
 		self.uiDialog.unbind( "keypress.ui-dialog" );
-
-		self._isOpen = false;
 
 		if ( self.options.hide ) {
 			self.uiDialog.hide( self.options.hide, function() {

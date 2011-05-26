@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<title>Dialog Visual Test : Modal Dialog should Only Close Once</title>
+	<link rel="stylesheet" href="../visual.css" type="text/css" />
+	<link rel="stylesheet" href="../../../themes/base/jquery.ui.all.css" type="text/css">
+	<script type="text/javascript" src="../../../jquery-1.5.1.js"></script>
+	<script type="text/javascript" src="../../../external/jquery.bgiframe-2.1.2.js"></script>
+	<script type="text/javascript" src="../../../ui/jquery.ui.core.js"></script>
+	<script type="text/javascript" src="../../../ui/jquery.ui.widget.js"></script>
+	<script type="text/javascript" src="../../../ui/jquery.ui.position.js"></script>
+	<script type="text/javascript" src="../../../ui/jquery.ui.dialog.js"></script>
+	<script type="text/javascript">
+	$(function() {
+	    $("#body").dialog({
+	        height: 330,
+	        width: 380,
+	        modal: true,
+	        closeOnEscape: false,
+	        open: function(event, ui) { jQuery('.ui-dialog-titlebar-close').hide(); },
+	        draggable: false,
+	        resizable: false,
+	        autoOpen:false,
+	        show:'drop',
+	        hide: 'drop'
+	    });
+    $("a").live("click", function(){
+        $( "#body" ).dialog( this.id==="off" ? "close" :"open" );
+        $( "#body" ).dialog( this.id==="off" ? "close" :"open" );
+        $( "#body" ).dialog( this.id==="off" ? "close" :"open" );
+        $( "#body" ).dialog( this.id==="off" ? "close" :"open" );
+        $( "#body" ).dialog( this.id==="off" ? "close" :"open" );
+        return false;
+    });
+	});
+	</script>
+</head>
+<body>
+
+<div id="body">
+    Hello. When you press the close button make sure the dialog's close animation only plays once.<br/>
+    <a href="http://bugs.jqueryui.com/ticket/7327" target="_blank">#7327: Dialog box size and close animation bugs</a><br/><br/>
+    <a href="#" id="off">Close</a>
+</div>
+<a href="#">Click Me To Open</a>
+
+</body>
+</html>
