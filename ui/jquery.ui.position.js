@@ -139,7 +139,7 @@ $.fn.position = function( options ) {
 	basePosition.left += atOffset[ 0 ];
 	basePosition.top += atOffset[ 1 ];
 
-	return this.each(function() { console.log(getScrollInfo( within ));
+	return this.each(function() {
 		var elem = $( this ),
 			elemWidth = elem.outerWidth(),
 			elemHeight = elem.outerHeight(),

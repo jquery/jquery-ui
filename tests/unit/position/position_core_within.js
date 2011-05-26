@@ -4,6 +4,31 @@ function scrollTopSupport() {
 	$( window ).scrollTop( 1 );
 	return $( window ).scrollTop() === 1;
 }
+function getScrollbarWidth() { 
+    var div = $( "<div style='display:block;width:50px;height:50px;overflow:hidden;'><div style='height:100px;width:auto;'></div></div>" ),
+	    innerDiv = div.children()[0],
+	    w1, w2;
+    $( "body" ).append( div );
+    w1 = innerDiv.offsetWidth; 
+    div.css( "overflow", "scroll" ); 
+    
+    w2 = innerDiv.offsetWidth;
+    
+	if ( w1 === w2 ) {
+		w2 = div[0].clientWidth;
+	}
+
+    div.remove();
+    
+    return w1 - w2; 
+}
+function getScrollInfo ( within ) {
+	var that = within[0],
+		scrollHeight = within.height() < that.scrollHeight,
+		scrollWidth = within.width() < that.scrollWidth,
+		scrollbarWidth = getScrollbarWidth();
+    return { height : scrollHeight ? scrollbarWidth : 0, width : scrollWidth ? scrollbarWidth : 0 };
+};
 
 module( "position - within", {
 	setup: function(){
@@ -276,7 +301,7 @@ test( "collision: fit, no offset", function() {
 	
 	collisionTest({
 		collision: "fit"
-	}, { top: addTop + within.height() - 10, left: addLeft + within.width() - 10 }, "right bottom" );
+	}, { top: addTop + within.height() - 10 - getScrollInfo( within ).height, left: addLeft + within.width() - 10 - getScrollInfo( within ).width }, "right bottom" );
 
 	collisionTest2({
 		collision: "fit"
@@ -290,7 +315,7 @@ test( "collision: fit, with offset", function() {
 	collisionTest({
 		collision: "fit",
 		at: "right+2 bottom+3"
-	}, { top: addTop + within.height() - 10, left: addLeft + within.width() - 10 }, "right bottom");
+	}, { top: addTop + within.height() - 10 - getScrollInfo( within ).height, left: addLeft + within.width() - 10 - getScrollInfo( within ).width }, "right bottom");
 
 	collisionTest2({
 		collision: "fit",
@@ -315,7 +340,7 @@ test( "collision: fit, within scrolled", function() {
 		collisionTest2({
 			collision: "fit",
 			at: "right+100 bottom+100"
-		}, { top: addTop + within.height() - 10, left: addLeft + within.width() - 10 }, "right bottom" );
+		}, { top: addTop + within.height() - 10 - getScrollInfo( within ).height, left: addLeft + within.width() - 10 - getScrollInfo( within ).width }, "right bottom" );
 		within.scrollTop( 0 ).scrollLeft( 0 );
 	}
 });
@@ -389,7 +414,7 @@ test( "collision: fit, with margin", function() {
 
 	collisionTest({
 		collision: "fit"
-	}, { top: addTop + within.height() - 20, left: addLeft + within.width() - 20 }, "right bottom" );
+	}, { top: addTop + within.height() - 20 - getScrollInfo( within ).height, left: addLeft + within.width() - 20 - getScrollInfo( within ).width }, "right bottom" );
 
 	collisionTest2({
 		collision: "fit"
@@ -402,7 +427,7 @@ test( "collision: fit, with margin", function() {
 
 	collisionTest({
 		collision: "fit"
-	}, { top: addTop + within.height() - 20, left: addLeft + within.width() - 20 }, "right bottom" );
+	}, { top: addTop + within.height() - 20 - getScrollInfo( within ).height, left: addLeft + within.width() - 20 - getScrollInfo( within ).width }, "right bottom" );
 
 	collisionTest2({
 		collision: "fit"
@@ -415,7 +440,7 @@ test( "collision: fit, with margin", function() {
 
 	collisionTest({
 		collision: "fit"
-	}, { top: addTop + within.height() - 25, left: addLeft + within.width() - 25 }, "right bottom" );
+	}, { top: addTop + within.height() - 25 - getScrollInfo( within ).height, left: addLeft + within.width() - 25 - getScrollInfo( within ).width }, "right bottom" );
 
 	collisionTest2({
 		collision: "fit"
