@@ -123,10 +123,10 @@ $.extend($.simulate.prototype, {
 		this.simulateEvent(target, "click", coord);
 	},
 	findCenter: function(el) {
-		var el = $(this.target), o = el.offset();
+		var el = $(this.target), o = el.offset(), d = $(document);
 		return {
-			x: o.left + el.outerWidth() / 2,
-			y: o.top + el.outerHeight() / 2
+			x: o.left + el.outerWidth() / 2 - d.scrollLeft(),
+			y: o.top + el.outerHeight() / 2 - d.scrollTop()
 		};
 	}
 });
