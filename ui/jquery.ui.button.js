@@ -65,6 +65,7 @@ $.widget( "ui.button", {
 
 		var self = this,
 			options = this.options,
+			buttonElement = this.buttonElement,
 			toggleButton = this.type === "checkbox" || this.type === "radio",
 			hoverClass = "ui-state-hover" + ( !toggleButton ? " ui-state-active" : "" ),
 			focusClass = "ui-state-focus";
@@ -148,6 +149,15 @@ $.widget( "ui.button", {
 				$( this ).toggleClass( "ui-state-active" );
 				self.buttonElement.attr( "aria-pressed", self.element[0].checked );
 			});
+			
+			//Add event handlers to the checkbox element to change the state of the label (see ticket #6711)
+			this.element
+				.bind( "focus.button", function() {
+					buttonElement.addClass( focusClass );
+				})
+				.bind( "blur.button", function() {
+					buttonElement.removeClass( focusClass );
+				});
 		} else if ( this.type === "radio" ) {
 			this.buttonElement.bind( "click.button", function() {
 				if ( options.disabled || clickDragged ) {
@@ -165,6 +175,15 @@ $.widget( "ui.button", {
 					.removeClass( "ui-state-active" )
 					.attr( "aria-pressed", false );
 			});
+			
+			//Add event handlers to the radio element to change the state of the label (see ticket #6711)
+			this.element
+				.bind( "focus.button", function() {
+					buttonElement.addClass( focusClass );
+				})
+				.bind( "blur.button", function() {
+					buttonElement.removeClass( focusClass );
+				});
 		} else {
 			this.buttonElement
 				.bind( "mousedown.button", function() {
