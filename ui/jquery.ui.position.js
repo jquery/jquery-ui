@@ -17,8 +17,10 @@ var rhorizontal = /left|center|right/,
 	rposition = /^\w+/,
 	rpercent = /%$/,
 	center = "center",
-	_position = $.fn.position,
-	getScrollbarWidth = function() { 
+	_position = $.fn.position;
+
+$.position = {
+	scrollbarWidth : function() {
 	    var div = $( "<div style='display:block;width:50px;height:50px;overflow:hidden;'><div style='height:100px;width:auto;'></div></div>" ),
 		    innerDiv = div.children()[0],
 		    w1, w2;
@@ -36,13 +38,14 @@ var rhorizontal = /left|center|right/,
 	    
 	    return w1 - w2; 
 	},
-	getScrollInfo = function( within ) {
+	getScrollInfo : function( within ) {
 		var that = within[0],
 			scrollHeight = within.height() < that.scrollHeight,
 			scrollWidth = within.width() < that.scrollWidth,
-			scrollbarWidth = getScrollbarWidth();
+			scrollbarWidth = $.position.scrollbarWidth();
 	    return { height : scrollHeight ? scrollbarWidth : 0, width : scrollWidth ? scrollbarWidth : 0 };
-	};
+	}
+};
 
 $.fn.position = function( options ) {
 	if ( !options || !options.of ) {
@@ -145,7 +148,7 @@ $.fn.position = function( options ) {
 			elemHeight = elem.outerHeight(),
 			marginLeft = parseInt( $.curCSS( this, "marginLeft", true ) ) || 0,
 			marginTop = parseInt( $.curCSS( this, "marginTop", true ) ) || 0,
-			scrollInfo = getScrollInfo( within ),
+			scrollInfo = $.position.getScrollInfo( within ),
 			collisionWidth = elemWidth + marginLeft +
 				( parseInt( $.curCSS( this, "marginRight", true ) ) || 0 ) + scrollInfo.width,
 			collisionHeight = elemHeight + marginTop +

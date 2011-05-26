@@ -22,6 +22,9 @@
             /* force scroll bar*/
             min-height:800px;
             min-width:800px;
+            
+            /* IE6 needs this */
+            text-align:center;
         }
         .demo-description {
             text-align:center;
@@ -29,8 +32,10 @@
         }
         .demo-container {
             background:#aaa;
-            width:80%;    
+            width:80%;   
             height:80%;
+            
+            text-align:left;
             margin:0 auto;
             position:relative;
             padding:10px;
@@ -40,6 +45,8 @@
             overflow:hidden;
             position:relative;
             height:100%;
+            /* IE6 needs this */
+            width:100%;
         }
     	#parent {
     		width: 60%;
