@@ -44,6 +44,7 @@ $.widget( "ui.button", {
 	defaultElement: "<button>",
 	options: {
 		disabled: null,
+		hovering: false,
 		text: true,
 		label: null,
 		icons: {
@@ -62,12 +63,14 @@ $.widget( "ui.button", {
 
 		this._determineButtonType();
 		this.hasTitle = !!this.buttonElement.attr( "title" );
+		this.focusClass = "ui-state-focus";
+		this.hoverClass = "ui-state-hover";
 
 		var self = this,
 			options = this.options,
 			toggleButton = this.type === "checkbox" || this.type === "radio",
-			hoverClass = "ui-state-hover" + ( !toggleButton ? " ui-state-active" : "" ),
-			focusClass = "ui-state-focus";
+			hoverClass = this.hoverClass + ( !toggleButton ? " ui-state-active" : "" ),
+			focusClass = this.focusClass;
 
 		if ( options.label === null ) {
 			options.label = this.buttonElement.html();
@@ -88,12 +91,15 @@ $.widget( "ui.button", {
 				if ( this === lastActive ) {
 					$( this ).addClass( "ui-state-active" );
 				}
+				
+				options.hovering = true;
 			})
 			.bind( "mouseleave.button", function() {
 				if ( options.disabled ) {
 					return;
 				}
 				$( this ).removeClass( hoverClass );
+				options.hovering = false;
 			})
 			.bind( "click.button", function( event ) {
 				if ( options.disabled ) {
@@ -271,9 +277,16 @@ $.widget( "ui.button", {
 		this._super( "_setOption", key, value );
 		if ( key === "disabled" ) {
 			if ( value ) {
-				this.element.attr( "disabled", true );
+				this.element
+					.attr( "disabled", true )
+					.removeClass( this.hoverClass + " " + this.focusClass );
 			} else {
+				
 				this.element.removeAttr( "disabled" );
+				
+				if( this.options.hovering ){
+					this.element.addClass( this.hoverClass );
+				}
 			}
 			return;
 		}
