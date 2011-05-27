@@ -114,6 +114,9 @@ function Datepicker() {
 $.extend(Datepicker.prototype, {
 	/* Class name added to elements to indicate already configured with a date picker. */
 	markerClassName: 'hasDatepicker',
+	
+	//Keep track of the maximum number of rows displayed (see #7043)
+	maxRows: 4,
 
 	/* Debug logging (if enabled). */
 	log: function () {
@@ -680,6 +683,7 @@ $.extend(Datepicker.prototype, {
 	/* Generate the date picker content. */
 	_updateDatepicker: function(inst) {
 		var self = this;
+		self.maxRows = 4; //Reset the max number of rows being displayed (see #7043)
 		var borders = $.datepicker._getBorders(inst.dpDiv);
 		instActive = inst; // for delegate hover events
 		inst.dpDiv.empty().append(this._generateHTML(inst));
@@ -1501,7 +1505,9 @@ $.extend(Datepicker.prototype, {
 				if (drawYear == inst.selectedYear && drawMonth == inst.selectedMonth)
 					inst.selectedDay = Math.min(inst.selectedDay, daysInMonth);
 				var leadDays = (this._getFirstDayOfMonth(drawYear, drawMonth) - firstDay + 7) % 7;
-				var numRows = (isMultiMonth ? 6 : Math.ceil((leadDays + daysInMonth) / 7)); // calculate the number of rows to generate
+				var curRows = Math.ceil((leadDays + daysInMonth) / 7); // calculate the number of rows to generate
+				var numRows = (isMultiMonth ? this.maxRows > curRows ? this.maxRows : curRows : curRows); //If multiple months, use the higher number of rows (see #7043)
+				this.maxRows = numRows;
 				var printDate = this._daylightSavingAdjust(new Date(drawYear, drawMonth, 1 - leadDays));
 				for (var dRow = 0; dRow < numRows; dRow++) { // create date picker rows
 					calender += '<tr>';
