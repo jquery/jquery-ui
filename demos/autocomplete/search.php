@@ -1,4 +1,6 @@
 <?php
+
+sleep( 3 );
 // no term passed - just exit early with no response
 if (empty($_GET['term'])) exit ;
 $q = strtolower($_GET["term"]);
