@@ -12,14 +12,16 @@
 	<script src="../../ui/jquery.ui.autocomplete.js"></script>
 	<link rel="stylesheet" href="../demos.css">
 	<style>
-	.ui-autocomplete-loading { background: white url('images/ui-anim_basic_16x16.gif') right center no-repeat; }
+	.ui-autocomplete-loading {
+		background: white url('images/ui-anim_basic_16x16.gif') right center no-repeat;
+	}
 	#city { width: 25em; }
 	</style>
 	<script>
 	$(function() {
 		function log( message ) {
-			$( "<div/>" ).text( message ).prependTo( "#log" );
-			$( "#log" ).attr( "scrollTop", 0 );
+			$( "<div>" ).text( message ).prependTo( "#log" );
+			$( "#log" ).scrollTop( 0 );
 		}
 
 		$( "#city" ).autocomplete({
@@ -65,7 +67,7 @@
 
 <div class="ui-widget">
 	<label for="city">Your city: </label>
-	<input id="city" />
+	<input id="city">
 	Powered by <a href="http://geonames.org">geonames.org</a>
 </div>
 

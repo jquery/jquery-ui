@@ -14,9 +14,16 @@
 	<script src="../../ui/jquery.ui.tooltip.js"></script>
 	<link rel="stylesheet" href="../demos.css">
 	<style>
-	.ui-button { margin-left: -1px; }
-	.ui-button-icon-only .ui-button-text { padding: 0.35em; } 
-	.ui-autocomplete-input { margin: 0; padding: 0.4em 0 0.4em 0.45em; }
+	.ui-button {
+		margin-left: -1px;
+	}
+	.ui-button-icon-only .ui-button-text {
+		padding: 0.35em;
+	} 
+	.ui-autocomplete-input {
+		margin: 0;
+		padding: 0.4em 0 0.4em 0.45em;
+	}
 	</style>
 	<script>
 	(function( $ ) {
@@ -90,7 +97,7 @@
 					.addClass( "ui-widget ui-widget-content ui-corner-left" );
 
 				input.data( "autocomplete" )._renderItem = function( ul, item ) {
-					return $( "<li></li>" )
+					return $( "<li>" )
 						.data( "item.autocomplete", item )
 						.append( "<a>" + item.label + "</a>" )
 						.appendTo( ul );
