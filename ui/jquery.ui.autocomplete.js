@@ -203,6 +203,7 @@ $.widget( "ui.autocomplete", {
 				// use another timeout to make sure the blur-event-handler on the input was already triggered
 				setTimeout(function() {
 					clearTimeout( self.closing );
+					self.closing = 0;
 				}, 13);
 			})
 			.menu({
@@ -343,6 +344,7 @@ $.widget( "ui.autocomplete", {
 		}
 
 		clearTimeout( this.closing );
+		this.closing = 0;
 		if ( this._trigger( "search", event ) === false ) {
 			return;
 		}
@@ -362,11 +364,13 @@ $.widget( "ui.autocomplete", {
 			content = this._normalize( content );
 		}
 		this._trigger( "response", null, { content: content } );
-		if ( !this.options.disabled && content && content.length ) {
-			this._suggest( content );
-			this._trigger( "open" );
-		} else {
-			this.close();
+		if (!this.closing) {
+			if ( !this.options.disabled && content && content.length ) {
+				this._suggest( content );
+				this._trigger( "open" );
+			} else {
+				this.close();
+			}
 		}
 		this.pending--;
 		if ( !this.pending ) {
@@ -376,6 +380,7 @@ $.widget( "ui.autocomplete", {
 
 	close: function( event ) {
 		clearTimeout( this.closing );
+		this.closing = 0;
 		if ( this.menu.element.is(":visible") ) {
 			this.menu.element.hide();
 			this.menu.blur();
