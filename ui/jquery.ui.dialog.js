@@ -373,8 +373,7 @@ $.widget("ui.dialog", {
 	_makeDraggable: function() {
 		var self = this,
 			options = self.options,
-			doc = $( document ),
-			heightBeforeDrag;
+			doc = $( document );
 
 		function filteredUi( ui ) {
 			return {
@@ -388,9 +387,7 @@ $.widget("ui.dialog", {
 			handle: ".ui-dialog-titlebar",
 			containment: "document",
 			start: function( event, ui ) {
-				heightBeforeDrag = options.height === "auto" ? "auto" : $( this ).height();
 				$( this )
-					.height( $( this ).height() )
 					.addClass( "ui-dialog-dragging" );
 				self._trigger( "dragStart", event, filteredUi( ui ) );
 			},
@@ -403,8 +400,7 @@ $.widget("ui.dialog", {
 					ui.position.top - doc.scrollTop()
 				];
 				$( this )
-					.removeClass( "ui-dialog-dragging" )
-					.height( heightBeforeDrag );
+					.removeClass( "ui-dialog-dragging" );
 				self._trigger( "dragStop", event, filteredUi( ui ) );
 				$.ui.dialog.overlay.resize();
 			}
