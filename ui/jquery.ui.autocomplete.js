@@ -362,11 +362,13 @@ $.widget( "ui.autocomplete", {
 			content = this._normalize( content );
 		}
 		this._trigger( "response", null, { content: content } );
-		if ( !this.options.disabled && content && content.length ) {
-			this._suggest( content );
-			this._trigger( "open" );
-		} else {
-			this.close();
+		if (this.element.is(":focus")) {
+			if ( !this.options.disabled && content && content.length ) {
+				this._suggest( content );
+				this._trigger( "open" );
+			} else {
+				this.close();
+			}
 		}
 		this.pending--;
 		if ( !this.pending ) {
