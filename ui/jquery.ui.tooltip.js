@@ -36,13 +36,13 @@ $.widget( "ui.tooltip", {
 		});
 	},
 
-	enable: function() {
-		this.options.disabled = false;
-	},
-
-	disable: function() {
+	_setOption: function( key, value ) {
 		// only set option, disable element style changes
-		this.options.disabled = true;
+		if ( key === "disabled" ) {
+			this.options[ key ] = value;
+			return;
+		}
+		this._super( "_setOption", key, value );
 	},
 
 	open: function( event ) {
