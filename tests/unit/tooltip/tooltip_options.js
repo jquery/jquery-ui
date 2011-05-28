@@ -2,25 +2,6 @@
 
 module( "tooltip: options" );
 
-test( "items", function() {
-	expect( 2 );
-	var element = $( "#qunit-fixture" ).tooltip({
-		items: "#fixture-span"
-	});
-
-	var event = $.Event( "mouseenter" );
-	event.target = $( "#fixture-span" )[ 0 ];
-	element.tooltip( "open", event );
-	same( $( "#" + $( "#fixture-span" ).attr( "aria-describedby" ) ).text(), "title-text" );
-
-	// make sure default [title] doesn't get used
-	event.target = $( "#tooltipped1" )[ 0 ];
-	element.tooltip( "open", event );
-	same( $( "#tooltipped1" ).attr( "aria-describedby" ), undefined );
-
-	element.tooltip( "destroy" );
-});
-
 test( "content: default", function() {
 	var element = $( "#tooltipped1" ).tooltip().tooltip( "open" );
 	same( $( "#" + element.attr( "aria-describedby" ) ).text(), "anchortitle" );
@@ -60,6 +41,33 @@ asyncTest( "content: sync + async callback", function() {
 			return "loading...";
 		}
 	}).tooltip( "open" );
+});
+
+test( "items", function() {
+	expect( 2 );
+	var element = $( "#qunit-fixture" ).tooltip({
+		items: "#fixture-span"
+	});
+
+	var event = $.Event( "mouseenter" );
+	event.target = $( "#fixture-span" )[ 0 ];
+	element.tooltip( "open", event );
+	same( $( "#" + $( "#fixture-span" ).attr( "aria-describedby" ) ).text(), "title-text" );
+
+	// make sure default [title] doesn't get used
+	event.target = $( "#tooltipped1" )[ 0 ];
+	element.tooltip( "open", event );
+	same( $( "#tooltipped1" ).attr( "aria-describedby" ), undefined );
+
+	element.tooltip( "destroy" );
+});
+
+test( "tooltipClass", function() {
+	expect( 1 )
+	var element = $( "#tooltipped1" ).tooltip({
+		tooltipClass: "custom"
+	}).tooltip( "open" );
+	ok( $( "#" + element.attr( "aria-describedby" ) ).hasClass( "custom" ) );
 });
 
 }( jQuery ) );
