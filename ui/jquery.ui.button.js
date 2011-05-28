@@ -41,6 +41,7 @@ var lastActive, startXPos, startYPos, clickDragged,
 	};
 
 $.widget( "ui.button", {
+	version: "@VERSION",
 	defaultElement: "<button>",
 	options: {
 		disabled: null,
@@ -411,7 +412,5 @@ $.widget( "ui.buttonset", {
 			.button( "destroy" );
 	}
 });
-
-$.ui.buttonset.version = "@VERSION";
 
 }( jQuery ) );

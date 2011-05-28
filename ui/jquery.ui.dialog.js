@@ -36,6 +36,7 @@ var uiDialogClasses = "ui-dialog ui-widget ui-widget-content ui-corner-all ",
 	};
 
 $.widget("ui.dialog", {
+	version: "@VERSION",
 	options: {
 		autoOpen: true,
 		buttons: {},
@@ -655,8 +656,6 @@ $.widget("ui.dialog", {
 });
 
 $.extend($.ui.dialog, {
-	version: "@VERSION",
-
 	uuid: 0,
 	maxZ: 0,
 

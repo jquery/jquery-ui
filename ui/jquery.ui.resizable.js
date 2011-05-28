@@ -15,6 +15,7 @@
 (function( $, undefined ) {
 
 $.widget("ui.resizable", $.ui.mouse, {
+	version: "@VERSION",
 	widgetEventPrefix: "resize",
 	options: {
 		alsoResize: false,
@@ -546,10 +547,6 @@ $.widget("ui.resizable", $.ui.mouse, {
 		};
 	}
 
-});
-
-$.extend($.ui.resizable, {
-	version: "@VERSION"
 });
 
 /*

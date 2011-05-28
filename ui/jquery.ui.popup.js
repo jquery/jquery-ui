@@ -17,6 +17,7 @@
 var idIncrement = 0;
 
 $.widget( "ui.popup", {
+	version: "@VERSION",
 	options: {
 		position: {
 			my: "left top",

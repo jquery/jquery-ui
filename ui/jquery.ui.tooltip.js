@@ -17,6 +17,7 @@
 var increments = 0;
 
 $.widget( "ui.tooltip", {
+	version: "@VERSION",
 	options: {
 		tooltipClass: null,
 		items: "[title]",
@@ -154,7 +155,5 @@ $.widget( "ui.tooltip", {
 		return id ? $( "#" + id ) : $();
 	}
 });
-
-$.ui.tooltip.version = "@VERSION";
 
 }( jQuery ) );

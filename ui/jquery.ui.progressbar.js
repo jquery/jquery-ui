@@ -14,6 +14,7 @@
 (function( $, undefined ) {
 
 $.widget( "ui.progressbar", {
+	version: "@VERSION",
 	options: {
 		value: 0,
 		max: 100
@@ -98,10 +99,6 @@ $.widget( "ui.progressbar", {
 			.width( percentage.toFixed(0) + "%" );
 		this.element.attr( "aria-valuenow", value );
 	}
-});
-
-$.extend( $.ui.progressbar, {
-	version: "@VERSION"
 });
 
 })( jQuery );

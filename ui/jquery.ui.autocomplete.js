@@ -19,6 +19,7 @@
 var requestIndex = 0;
 
 $.widget( "ui.autocomplete", {
+	version: "@VERSION",
 	defaultElement: "<input>",
 	options: {
 		appendTo: "body",
@@ -475,7 +476,6 @@ $.widget( "ui.autocomplete", {
 });
 
 $.extend( $.ui.autocomplete, {
-	version: "@VERSION",
 	escapeRegex: function( value ) {
 		return value.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
 	},

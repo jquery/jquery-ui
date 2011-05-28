@@ -18,6 +18,7 @@ $(document).mousedown(function(e) {
 });
 
 $.widget("ui.mouse", {
+	version: "@VERSION",
 	options: {
 		cancel: ':input,option',
 		distance: 1,

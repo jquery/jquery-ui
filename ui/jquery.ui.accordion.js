@@ -15,6 +15,7 @@
 
 // TODO: use ui-accordion-header-active class and fix styling
 $.widget( "ui.accordion", {
+	version: "@VERSION",
 	options: {
 		active: 0,
 		animated: "slide",
@@ -432,7 +433,6 @@ $.widget( "ui.accordion", {
 });
 
 $.extend( $.ui.accordion, {
-	version: "@VERSION",
 	animations: {
 		slide: function( options, additions ) {
 			var showOverflow = options.toShow.css( "overflow" ),

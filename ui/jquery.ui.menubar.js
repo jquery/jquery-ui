@@ -18,6 +18,7 @@
 // TODO when mixing clicking menus and keyboard navigation, focus handling is broken
 // there has to be just one item that has tabindex
 $.widget( "ui.menubar", {
+	version: "@VERSION",
    options: {
       buttons: false,
       menuIcon: false

@@ -14,6 +14,7 @@
 (function( $ ) {
 
 $.widget( "ui.spinner", {
+	version: "@VERSION",
 	defaultElement: "<input>",
 	widgetEventPrefix: "spin",
 	options: {
@@ -367,7 +368,5 @@ $.widget( "ui.spinner", {
 		return this.uiSpinner;
 	}
 });
-
-$.ui.spinner.version = "@VERSION";
 
 }( jQuery ) );
