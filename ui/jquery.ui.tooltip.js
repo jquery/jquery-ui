@@ -63,12 +63,7 @@ $.widget( "ui.tooltip", {
 			// IE may instantly serve a cached response for ajax requests
 			// delay this call to _open so the other call to _open runs first
 			setTimeout(function() {
-				// when undefined, it got removeAttr, then ignore (ajax response)
-				// initially its an empty string, so not undefined
-				// TODO is there a better approach to enable ajax tooltips to have two updates?
-				if ( target.attr( "aria-describedby" ) !== undefined ) {
-					that._open( event, target, response );
-				}
+				that._open( event, target, response );
 			}, 1 );
 		});
 		if ( content ) {

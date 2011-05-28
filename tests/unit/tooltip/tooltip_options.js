@@ -3,15 +3,21 @@
 module( "tooltip: options" );
 
 test( "items", function() {
-	var event = $.Event( "mouseenter" );
-	event.target = $( "[data-tooltip]" )[ 0 ];
+	expect( 2 );
 	var element = $( "#qunit-fixture" ).tooltip({
-		items: "[data-tooltip]",
-		content: function() {
-			return $( this ).attr( "data-tooltip" );
-		}
-	}).tooltip( "open", event );
-	same( $( "#" + $( "#fixture-span" ).attr( "aria-describedby" ) ).text(), "text" );
+		items: "#fixture-span"
+	});
+
+	var event = $.Event( "mouseenter" );
+	event.target = $( "#fixture-span" )[ 0 ];
+	element.tooltip( "open", event );
+	same( $( "#" + $( "#fixture-span" ).attr( "aria-describedby" ) ).text(), "title-text" );
+
+	// make sure default [title] doesn't get used
+	event.target = $( "#tooltipped1" )[ 0 ];
+	element.tooltip( "open", event );
+	same( $( "#tooltipped1" ).attr( "aria-describedby" ), undefined );
+
 	element.tooltip( "destroy" );
 });
 
@@ -38,22 +44,22 @@ test( "content: return jQuery", function() {
 	same( $( "#" + element.attr( "aria-describedby" ) ).text(), "customstring" );
 });
 
-/*
-TODO broken, probably related to async content
-test("content: callback string", function() {
-	stop();
-	$("#tooltipped1").tooltip({
-		content: function(response) {
-			response("customstring2");
+asyncTest( "content: sync + async callback", function() {
+	expect( 2 );
+	var element = $( "#tooltipped1" ).tooltip({
+		content: function( response ) {
 			setTimeout(function() {
-				//console.log($("#tooltipped1").attr("aria-describedby"))
-				same( $( "#" + $("#tooltipped1").attr("aria-describedby") ).text(), "customstring2" );
-				start();
-			}, 100)
+				same( $( "#" + element.attr("aria-describedby") ).text(), "loading..." );
+
+				response( "customstring2" );
+				setTimeout(function() {
+					same( $( "#" + element.attr("aria-describedby") ).text(), "customstring2" );
+					start();
+				}, 13 );
+			}, 13 );
+			return "loading...";
 		}
-	}).tooltip("open");
-	
+	}).tooltip( "open" );
 });
-*/
 
 }( jQuery ) );

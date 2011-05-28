@@ -3,9 +3,14 @@
 module( "tooltip: methods" );
 
 test( "destroy", function() {
+	expect( 2 );
 	domEqual( "#tooltipped1", function() {
 		$( "#tooltipped1" ).tooltip().tooltip( "destroy" );
 	});
+
+	// make sure that open tooltips are removed on destroy
+	$( "#tooltipped1" ).tooltip().tooltip( "open" ).tooltip( "destroy" );
+	equal( $( ".ui-tooltip" ).length, 0 );
 });
 
 test( "open/close", function() {
@@ -13,12 +18,11 @@ test( "open/close", function() {
 	$.fx.off = true;
 	var element = $( "#tooltipped1" ).tooltip();
 	equal( $( ".ui-tooltip" ).length, 0, "no tooltip on init" );
-$( ".ui-tooltip" ).each(function() {
-	console.log( $( this ).html() );
-});
+
 	element.tooltip( "open" );
 	var tooltip = $( "#" + element.attr( "aria-describedby" ) );
 	ok( tooltip.is( ":visible" ) );
+
 	element.tooltip( "close" );
 	ok( tooltip.is( ":hidden" ) );
 	$.fx.off = false;
