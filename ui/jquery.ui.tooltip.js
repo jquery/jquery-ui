@@ -90,11 +90,16 @@ $.widget("ui.tooltip", {
 			target.attr( "aria-describedby", tooltip.attr( "id" ) );
 		}
 		tooltip.find( ".ui-tooltip-content" ).html( content );
-		tooltip.position( $.extend({
-			of: target
-		}, this.options.position ) ).hide();
+		tooltip
+			.stop( true )
+			.position( $.extend({
+				of: target,
+				using: function( pos ) {
+					// we only want to hide if there's no custom using defined
+					$( this ).css( pos ).hide();
+				}
+			}, this.options.position ) );
 
-		tooltip.stop( true );
 		this._show( tooltip, this.options.show );
 
 		this._trigger( "open", event );

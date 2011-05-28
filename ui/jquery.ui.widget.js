@@ -379,7 +379,7 @@ $.each( { show: "fadeIn", hide: "fadeOut" }, function( method, defaultEffect ) {
 		var hasOptions = !$.isEmptyObject( options ),
 			effectName = options.effect || defaultEffect;
 		options.complete = callback;
-		if (options.delay) {
+		if ( options.delay ) {
 			element.delay( options.delay );
 		}
 		if ( hasOptions && $.effects && ( $.effects.effect[ effectName ] || $.uiBackCompat !== false && $.effects[ effectName ] ) ) {
