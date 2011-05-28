@@ -3,15 +3,25 @@
 module( "tooltip: methods" );
 
 test( "destroy", function() {
-	var beforeHtml = $( "#tooltipped1" ).parent().html();
-	var afterHtml = $( "#tooltipped1" ).tooltip().tooltip( "destroy" ).parent().html();
-	equal( afterHtml, beforeHtml );
+	domEqual( "#tooltipped1", function() {
+		$( "#tooltipped1" ).tooltip().tooltip( "destroy" );
+	});
 });
 
-test( "open", function() {
+test( "open/close", function() {
+	expect( 3 );
+	$.fx.off = true;
 	var element = $( "#tooltipped1" ).tooltip();
+	equal( $( ".ui-tooltip" ).length, 0, "no tooltip on init" );
+$( ".ui-tooltip" ).each(function() {
+	console.log( $( this ).html() );
+});
 	element.tooltip( "open" );
-	ok( $( ".ui-tooltip" ).is( ":visible" ) );
+	var tooltip = $( "#" + element.attr( "aria-describedby" ) );
+	ok( tooltip.is( ":visible" ) );
+	element.tooltip( "close" );
+	ok( tooltip.is( ":hidden" ) );
+	$.fx.off = false;
 });
 
 /*

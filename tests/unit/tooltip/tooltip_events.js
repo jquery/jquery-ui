@@ -4,45 +4,47 @@ module( "tooltip: events" );
 
 test( "programmatic triggers", function() {
 	expect( 2 );
-	var element = $( "#tooltipped1" ).tooltip({
-		open: function( event, ui ) {
-			same( event.type, "tooltipopen" );
-		},
-		close: function( event, ui ) {
-			same( event.type, "tooltipclose" );
-		}
+	var element = $( "#tooltipped1" ).tooltip();
+
+	element.one( "tooltipopen", function( event ) {
+		ok( !( "originalEvent" in event ), "open" );
 	});
-	element.tooltip( "open" ).tooltip( "close" );
+	element.tooltip( "open" );
+
+	element.one( "tooltipclose", function( event ) {
+		ok( !( "originalEvent" in event ), "close" );
+	});
+	element.tooltip( "close" );
 });
 
 test( "mouse events", function() {
-	expect( 4 );
-	var element = $( "#tooltipped1" ).tooltip({
-		open: function( event, ui ) {
-			same( event.type, "tooltipopen" );
-			same( event.originalEvent.type, "mouseover" );
-		},
-		close: function( event, ui ) {
-			same( event.type, "tooltipclose" );
-			same( event.originalEvent.type, "mouseleave" );
-		}
+	expect( 2 );
+	var element = $( "#tooltipped1" ).tooltip();
+
+	element.one( "tooltipopen", function( event ) {
+		same( event.originalEvent.type, "mouseover" );
 	});
-	element.trigger( "mouseover" ).trigger( "mouseleave" );
+	element.trigger( "mouseover" );
+
+	element.one( "tooltipclose", function( event ) {
+		same( event.originalEvent.type, "mouseleave" );
+	});
+	element.trigger( "mouseleave" );
 });
 
 test( "focus events", function() {
-	expect( 4 );
-	var element = $( "#tooltipped1" ).tooltip({
-		open: function( event, ui ) {
-			same( event.type, "tooltipopen" );
-			same( event.originalEvent.type, "focusin" );
-		},
-		close: function( event, ui ) {
-			same( event.type, "tooltipclose" );
-			same( event.originalEvent.type, "blur" );
-		}
+	expect( 2 );
+	var element = $( "#tooltipped1" ).tooltip();
+
+	element.one( "tooltipopen", function( event ) {
+		same( event.originalEvent.type, "focusin" );
 	});
-	element.trigger( "focus" ).trigger( "blur" );
+	element.trigger( "focusin" );
+
+	element.one( "tooltipclose", function( event ) {
+		same( event.originalEvent.type, "blur" );
+	});
+	element.trigger( "blur" );
 });
 
 }( jQuery ) );
