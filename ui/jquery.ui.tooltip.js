@@ -35,6 +35,9 @@ $.widget( "ui.tooltip", {
 			mouseover: "open",
 			focusin: "open"
 		});
+
+		// IDs of generated tooltips, needed for destroy
+		this.tooltips = {};
 	},
 
 	_setOption: function( key, value ) {
@@ -114,7 +117,8 @@ $.widget( "ui.tooltip", {
 	},
 
 	close: function( event ) {
-		var target = $( event ? event.currentTarget : this.element );
+		var that = this,
+			target = $( event ? event.currentTarget : this.element );
 		target.attr( "title", target.data( "tooltip-title" ) );
 
 		if ( this.options.disabled ) {
@@ -127,6 +131,7 @@ $.widget( "ui.tooltip", {
 		tooltip.stop( true );
 		this._hide( tooltip, this.options.hide, function() {
 			$( this ).remove();
+			delete that[ this.id ];
 		});
 
 		// TODO: why isn't click unbound here?
@@ -136,9 +141,10 @@ $.widget( "ui.tooltip", {
 	},
 
 	_tooltip: function() {
-		var tooltip = $( "<div>" )
+		var id = "ui-tooltip-" + increments++,
+			tooltip = $( "<div>" )
 			.attr({
-				id: "ui-tooltip-" + increments++,
+				id: id,
 				role: "tooltip"
 			})
 			.addClass( "ui-tooltip ui-widget ui-corner-all ui-widget-content" +
@@ -147,12 +153,20 @@ $.widget( "ui.tooltip", {
 			.addClass( "ui-tooltip-content" )
 			.appendTo( tooltip );
 		tooltip.appendTo( document.body );
+		this.tooltips[ id ] = true;
 		return tooltip;
 	},
 
 	_find: function( target ) {
 		var id = target.attr( "aria-describedby" );
 		return id ? $( "#" + id ) : $();
+	},
+
+	destroy: function() {
+		$.each( this.tooltips, function( id ) {
+			$( "#" + id ).remove();
+		});
+		this._super( "destroy" );
 	}
 });
 
