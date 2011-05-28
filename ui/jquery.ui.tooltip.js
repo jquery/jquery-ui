@@ -16,7 +16,7 @@
 
 var increments = 0;
 
-$.widget("ui.tooltip", {
+$.widget( "ui.tooltip", {
 	options: {
 		tooltipClass: null,
 		items: "[title]",
@@ -56,7 +56,8 @@ $.widget("ui.tooltip", {
 			target.data( "tooltip-title", target.attr( "title" ) );
 		}
 		var content = this.options.content.call( target[0], function( response ) {
-			// IE may instantly serve a cached response, need to give it a chance to finish with _open before that
+			// IE may instantly serve a cached response for ajax requests
+			// delay this call to _open so the other call to _open runs first
 			setTimeout(function() {
 				// when undefined, it got removeAttr, then ignore (ajax response)
 				// initially its an empty string, so not undefined
@@ -64,7 +65,7 @@ $.widget("ui.tooltip", {
 				if ( target.attr( "aria-describedby" ) !== undefined ) {
 					that._open( event, target, response );
 				}
-			}, 13 );
+			}, 1 );
 		});
 		if ( content ) {
 			that._open( event, target, content );
@@ -127,6 +128,7 @@ $.widget("ui.tooltip", {
 			$( this ).remove();
 		});
 
+		// TODO: why isn't click unbound here?
 		target.unbind( "mouseleave.tooltip blur.tooltip" );
 
 		this._trigger( "close", event );
@@ -149,7 +151,7 @@ $.widget("ui.tooltip", {
 
 	_find: function( target ) {
 		var id = target.attr( "aria-describedby" );
-		return id ? $( document.getElementById( id ) ) : $();
+		return id ? $( "#" + id ) : $();
 	}
 });
 
