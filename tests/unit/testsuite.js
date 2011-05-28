@@ -61,7 +61,7 @@ window.commonWidgetTests = function( widget, settings ) {
 	testWidgetOverrides( widget );
 	testBasicUsage( widget );
 	test( "version", function() {
-		ok( "version" in $.ui[ widget ], "version property exists" );
+		ok( "version" in $.ui[ widget ].prototype, "version property exists" );
 	});
 }
 
