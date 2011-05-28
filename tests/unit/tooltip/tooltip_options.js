@@ -16,7 +16,7 @@ test( "items", function() {
 });
 
 test( "content: default", function() {
-	var element = $( "#tooltipped1" ).tooltip().tooltip("open");
+	var element = $( "#tooltipped1" ).tooltip().tooltip( "open" );
 	same( $( "#" + element.attr( "aria-describedby" ) ).text(), "anchortitle" );
 });
 
