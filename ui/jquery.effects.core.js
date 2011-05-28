@@ -249,7 +249,7 @@ $.effects.animateClass = function(value, duration, easing, callback) {
 		that.animate(styleDifference(originalStyle, newStyle), {
 			queue: false,
 			duration: duration,
-			easding: easing,
+			easing: easing,
 			complete: function() {
 				$.each(classAnimationActions, function(i, action) {
 					if (value[action]) { that[action + 'Class'](value[action]); }
