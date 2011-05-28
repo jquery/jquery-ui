@@ -1,11 +1,7 @@
-/*
- * tooltip_core.js
- */
+(function( $ ) {
+
+module( "tooltip: core" );
 
 
-(function($) {
 
-module("tooltip: core");
-
-
-})(jQuery);
+}( jQuery ) );

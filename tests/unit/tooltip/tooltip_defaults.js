@@ -2,7 +2,7 @@ commonWidgetTests( "tooltip", {
 	defaults: {
 		disabled: false,
 		items: "[title]",
-		content: $.ui.tooltip.prototype.options.content,
+		content: function() {},
 		position: {
 			my: "left+15 center",
 			at: "right center"

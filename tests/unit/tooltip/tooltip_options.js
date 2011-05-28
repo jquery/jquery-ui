@@ -1,48 +1,41 @@
-/*
- * tooltip_options.js
- */
-(function($) {
+(function( $ ) {
 
-module("tooltip: options", {
-	teardown: function() {
-		$(":ui-tooltip").tooltip("destroy");
-	}
-});
+module( "tooltip: options" );
 
-
-test("option: items", function() {
-	var event = $.Event("mouseenter");
-	event.target = $("[data-tooltip]");
-	$("#qunit-fixture").tooltip({
+test( "items", function() {
+	var event = $.Event( "mouseenter" );
+	event.target = $( "[data-tooltip]" )[ 0 ];
+	var element = $( "#qunit-fixture" ).tooltip({
 		items: "[data-tooltip]",
 		content: function() {
-			return $(this).attr("data-tooltip");
+			return $( this ).attr( "data-tooltip" );
 		}
-	}).tooltip("open", event);
-	same( $( "#" + $("#fixture-span").attr("aria-describedby") ).text(), "text" );
+	}).tooltip( "open", event );
+	same( $( "#" + $( "#fixture-span" ).attr( "aria-describedby" ) ).text(), "text" );
+	element.tooltip( "destroy" );
 });
 
-test("content: default", function() {
-	$("#tooltipped1").tooltip().tooltip("open");
-	same( $( "#" + $("#tooltipped1").attr("aria-describedby") ).text(), "anchortitle" );
+test( "content: default", function() {
+	var element = $( "#tooltipped1" ).tooltip().tooltip("open");
+	same( $( "#" + element.attr( "aria-describedby" ) ).text(), "anchortitle" );
 });
 
-test("content: return string", function() {
-	$("#tooltipped1").tooltip({
+test( "content: return string", function() {
+	var element = $( "#tooltipped1" ).tooltip({
 		content: function() {
 			return "customstring";
 		}
-	}).tooltip("open");
-	same( $( "#" + $("#tooltipped1").attr("aria-describedby") ).text(), "customstring" );
+	}).tooltip( "open" );
+	same( $( "#" + element.attr( "aria-describedby" ) ).text(), "customstring" );
 });
 
-test("content: return jQuery", function() {
-	$("#tooltipped1").tooltip({
+test( "content: return jQuery", function() {
+	var element = $( "#tooltipped1" ).tooltip({
 		content: function() {
-			return $("<div></div>").html("cu<b>s</b>tomstring");
+			return $( "<div>" ).html( "cu<b>s</b>tomstring" );
 		}
-	}).tooltip("open");
-	same( $( "#" + $("#tooltipped1").attr("aria-describedby") ).text(), "customstring" );
+	}).tooltip( "open" );
+	same( $( "#" + element.attr( "aria-describedby" ) ).text(), "customstring" );
 });
 
 /*
@@ -63,4 +56,4 @@ test("content: callback string", function() {
 });
 */
 
-})(jQuery);
+}( jQuery ) );

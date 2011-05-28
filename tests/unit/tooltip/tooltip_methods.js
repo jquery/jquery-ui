@@ -1,22 +1,17 @@
-/*
- * tooltip_methods.js
- */
-(function($) {
+(function( $ ) {
 
+module( "tooltip: methods" );
 
-module("tooltip: methods");
-
-test("destroy", function() {
-	var beforeHtml = $("#tooltipped1").parent().html();
-	var afterHtml = $("#tooltipped1").tooltip().tooltip("destroy").parent().html();
+test( "destroy", function() {
+	var beforeHtml = $( "#tooltipped1" ).parent().html();
+	var afterHtml = $( "#tooltipped1" ).tooltip().tooltip( "destroy" ).parent().html();
 	equal( afterHtml, beforeHtml );
 });
 
-test("open", function() {
-	var e = $("#tooltipped1").tooltip();
-	e.tooltip("open");
-	ok( $(".ui-tooltip").is(":visible") );
-	$(":ui-tooltip").tooltip("destroy");
+test( "open", function() {
+	var element = $( "#tooltipped1" ).tooltip();
+	element.tooltip( "open" );
+	ok( $( ".ui-tooltip" ).is( ":visible" ) );
 });
 
 /*
@@ -29,5 +24,4 @@ test("widget", function() {
 });
 */
 
-
-})(jQuery);
+}( jQuery ) );
