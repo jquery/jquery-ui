@@ -126,7 +126,7 @@ $.widget( "ui.tooltip", {
 		tooltip.stop( true );
 		this._hide( tooltip, this.options.hide, function() {
 			$( this ).remove();
-			delete that[ this.id ];
+			delete that.tooltips[ this.id ];
 		});
 
 		// TODO: why isn't click unbound here?
@@ -157,11 +157,10 @@ $.widget( "ui.tooltip", {
 		return id ? $( "#" + id ) : $();
 	},
 
-	destroy: function() {
+	_destroy: function() {
 		$.each( this.tooltips, function( id ) {
 			$( "#" + id ).remove();
 		});
-		this._super( "destroy" );
 	}
 });
 
