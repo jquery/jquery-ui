@@ -106,8 +106,7 @@ $.widget( "ui.tooltip", {
 
 		this._bind( target, {
 			mouseleave: "close",
-			blur: "close",
-			click: "close"
+			blur: "close"
 		});
 	},
 
@@ -129,7 +128,6 @@ $.widget( "ui.tooltip", {
 			delete that.tooltips[ this.id ];
 		});
 
-		// TODO: why isn't click unbound here?
 		target.unbind( "mouseleave.tooltip blur.tooltip" );
 
 		this._trigger( "close", event );
