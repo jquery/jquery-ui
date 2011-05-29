@@ -83,6 +83,9 @@ $.widget( "ui.tooltip", {
 		}
 
 		// if we have a title, clear it to prevent the native tooltip
+		// we do this before the disabled check to prevent native tooltips
+		// even when disabled
+		// TODO: the above doesn't work since ._bind() does a disabled check
 		// we have to check first to avoid defining a title if none exists
 		// (we don't want to cause an element to start matching [title])
 		// TODO: document why we don't use .removeAttr()
@@ -90,7 +93,6 @@ $.widget( "ui.tooltip", {
 			target.attr( "title", "" );
 		}
 
-		// TODO: why is this check after we clear the title?
 		if ( this.options.disabled ) {
 			return;
 		}
