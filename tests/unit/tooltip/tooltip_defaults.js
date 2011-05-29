@@ -1,8 +1,8 @@
 commonWidgetTests( "tooltip", {
 	defaults: {
+		content: function() {},
 		disabled: false,
 		items: "[title]",
-		content: function() {},
 		position: {
 			my: "left+15 center",
 			at: "right center"

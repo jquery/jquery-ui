@@ -19,15 +19,15 @@ var increments = 0;
 $.widget( "ui.tooltip", {
 	version: "@VERSION",
 	options: {
-		tooltipClass: null,
-		items: "[title]",
 		content: function() {
 			return $( this ).attr( "title" );
 		},
+		items: "[title]",
 		position: {
 			my: "left+15 center",
 			at: "right center"
-		}
+		},
+		tooltipClass: null
 	},
 
 	_create: function() {
