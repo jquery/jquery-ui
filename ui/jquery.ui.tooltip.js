@@ -164,6 +164,9 @@ $.widget( "ui.tooltip", {
 			.addClass( "ui-tooltip-content" )
 			.appendTo( tooltip );
 		tooltip.appendTo( document.body );
+		if ( $.fn.bgiframe ) {
+			tooltip.bgiframe();
+		}
 		this.tooltips[ id ] = true;
 		return tooltip;
 	},
