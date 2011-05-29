@@ -85,9 +85,12 @@
 				},
 				text: !!$( this ).attr( "title" )
 			});
-			if ( !button.next().is( ":ui-popup" ) ) {
+			if ( button.next().is( ":ui-popup" ) ) {
+				button.click(function( event ) {
+					$( ".demo" ).tooltip( "close", event );
+				});
+			} else {
 				button.click(function() {
-					console.log( "click" );
 					notify( button );
 				});
 			}
