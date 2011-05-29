@@ -47,4 +47,30 @@ test( "focus events", function() {
 	element.trigger( "blur" );
 });
 
+test( "mixed events", function() {
+	expect( 2 );
+	var element = $( "#tooltipped1" ).tooltip();
+
+	element.one( "tooltipopen", function( event ) {
+		same( event.originalEvent.type, "focusin" );
+	});
+	element[0].focus();
+
+	element.one( "tooltipopen", function() {
+		ok( false, "open triggered while already open" );
+	});
+	element.trigger( "mouseover" );
+
+	element.bind( "tooltipclose", function( event ) {
+		ok( false, "close triggered while still focused" );
+	});
+	element.trigger( "mouseleave" );
+	element.unbind( "tooltipclose" );
+
+	element.one( "tooltipclose", function( event ) {
+		same( event.originalEvent.type, "blur" );
+	});
+	element[0].blur();
+});
+
 }( jQuery ) );

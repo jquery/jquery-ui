@@ -56,7 +56,8 @@ $.widget( "ui.tooltip", {
 			target = $( event ? event.target : this.element )
 				.closest( this.options.items );
 
-		if ( !target.length ) {
+		// if aria-describedby exists, then the tooltip is already open
+		if ( !target.length || target.attr( "aria-describedby" ) ) {
 			return;
 		}
 
@@ -131,7 +132,9 @@ $.widget( "ui.tooltip", {
 			target.attr( "title", target.data( "tooltip-title" ) );
 		}
 
-		if ( this.options.disabled ) {
+		// don't close if the element has focus
+		// this prevents the tooltip from closing if you hover while focused
+		if ( this.options.disabled || document.activeElement === target[0] ) {
 			return;
 		}
 
