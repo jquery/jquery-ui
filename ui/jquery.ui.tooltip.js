@@ -25,7 +25,8 @@ $.widget( "ui.tooltip", {
 		items: "[title]",
 		position: {
 			my: "left+15 center",
-			at: "right center"
+			at: "right center",
+			collision: "flip fit"
 		},
 		tooltipClass: null
 	},
