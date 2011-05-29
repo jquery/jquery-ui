@@ -81,7 +81,13 @@ $.widget( "ui.tooltip", {
 			return;
 		}
 
-		target.attr( "title", "" );
+		// if we have a title, clear it to prevent the native tooltip
+		// we have to check first to avoid defining a title if none exists
+		// (we don't want to cause an element to start matching [title])
+		// TODO: document why we don't use .removeAttr()
+		if ( target.is( "[title]" ) ) {
+			target.attr( "title", "" );
+		}
 
 		// TODO: why is this check after we clear the title?
 		if ( this.options.disabled ) {
@@ -120,7 +126,10 @@ $.widget( "ui.tooltip", {
 			target = $( event ? event.currentTarget : this.element ),
 			tooltip = this._find( target );
 
-		target.attr( "title", target.data( "tooltip-title" ) );
+		// only set title if we had one before (see comment in _open())
+		if ( target.data( "tooltip-title" ) ) {
+			target.attr( "title", target.data( "tooltip-title" ) );
+		}
 
 		if ( this.options.disabled ) {
 			return;
