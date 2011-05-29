@@ -50,16 +50,20 @@ $.widget( "ui.tooltip", {
 	},
 
 	open: function( event ) {
-		var target = $( event ? event.target : this.element ).closest( this.options.items );
+		var content,
+			that = this,
+			target = $( event ? event.target : this.element )
+				.closest( this.options.items );
+
 		if ( !target.length ) {
 			return;
 		}
 
-		var that = this;
 		if ( !target.data( "tooltip-title" ) ) {
 			target.data( "tooltip-title", target.attr( "title" ) );
 		}
-		var content = this.options.content.call( target[0], function( response ) {
+
+		content = this.options.content.call( target[0], function( response ) {
 			// IE may instantly serve a cached response for ajax requests
 			// delay this call to _open so the other call to _open runs first
 			setTimeout(function() {
@@ -112,14 +116,15 @@ $.widget( "ui.tooltip", {
 
 	close: function( event ) {
 		var that = this,
-			target = $( event ? event.currentTarget : this.element );
+			target = $( event ? event.currentTarget : this.element ),
+			tooltip = this._find( target );
+
 		target.attr( "title", target.data( "tooltip-title" ) );
 
 		if ( this.options.disabled ) {
 			return;
 		}
 
-		var tooltip = this._find( target );
 		target.removeAttr( "aria-describedby" );
 
 		tooltip.stop( true );
@@ -136,12 +141,12 @@ $.widget( "ui.tooltip", {
 	_tooltip: function() {
 		var id = "ui-tooltip-" + increments++,
 			tooltip = $( "<div>" )
-			.attr({
-				id: id,
-				role: "tooltip"
-			})
-			.addClass( "ui-tooltip ui-widget ui-corner-all ui-widget-content " +
-				( this.options.tooltipClass || "" ) );
+				.attr({
+					id: id,
+					role: "tooltip"
+				})
+				.addClass( "ui-tooltip ui-widget ui-corner-all ui-widget-content " +
+					( this.options.tooltipClass || "" ) );
 		$( "<div>" )
 			.addClass( "ui-tooltip-content" )
 			.appendTo( tooltip );
