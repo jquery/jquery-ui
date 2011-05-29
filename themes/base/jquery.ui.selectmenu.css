@@ -27,4 +27,4 @@
 * html .ui-selectmenu-menu li { border-color: pink; filter:chroma(color=pink); width:100%; }
 * html .ui-selectmenu-menu li a { position: relative }
 /* IE7 workaround (opacity disabled) */
-*+html .ui-state-disabled, *+html .ui-state-disabled a{ color: silver; }
+*+html .ui-state-disabled, *+html .ui-state-disabled a { color: silver; }

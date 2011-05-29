@@ -779,11 +779,14 @@ $.widget("ui.selectmenu", {
 			var selected = this._selectedOptionLi();
 			var _offset = "0 -" + (selected.outerHeight() + selected.offset().top - this.list.offset().top);
 		}
-		this.list
-			.css({
-				zIndex: this.element.zIndex()
-			})
-			.position({
+		// update zIndex if jQuery UI is able to process
+		var zIndexElement = this.element.zIndex();
+		if (zIndexElement) {
+			this.list.css({
+				zIndex: zIndexElement
+			});
+		}
+		this.list.position({
 				// set options for position plugin
 				of: o.positionOptions.of || this.newelement,
 				my: o.positionOptions.my,
