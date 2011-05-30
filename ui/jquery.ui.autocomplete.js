@@ -19,6 +19,7 @@
 var requestIndex = 0;
 
 $.widget( "ui.autocomplete", {
+	version: "@VERSION",
 	defaultElement: "<input>",
 	options: {
 		appendTo: "body",
@@ -63,7 +64,7 @@ $.widget( "ui.autocomplete", {
 			})
 			.bind( "keydown.autocomplete", function( event ) {
 				if ( self.options.disabled || self.element.attr( "readonly" ) ) {
-                    suppressKeyPress = true;
+					suppressKeyPress = true;
 					suppressInput = true;
 					return;
 				}
@@ -73,21 +74,21 @@ $.widget( "ui.autocomplete", {
 				var keyCode = $.ui.keyCode;
 				switch( event.keyCode ) {
 				case keyCode.PAGE_UP:
-                    suppressKeyPress = true;
+					suppressKeyPress = true;
 					self._move( "previousPage", event );
 					break;
 				case keyCode.PAGE_DOWN:
-                    suppressKeyPress = true;
+					suppressKeyPress = true;
 					self._move( "nextPage", event );
 					break;
 				case keyCode.UP:
-                    suppressKeyPress = true;
+					suppressKeyPress = true;
 					self._move( "previous", event );
 					// prevent moving cursor to beginning of text field in some browsers
 					event.preventDefault();
 					break;
 				case keyCode.DOWN:
-                    suppressKeyPress = true;
+					suppressKeyPress = true;
 					self._move( "next", event );
 					// prevent moving cursor to end of text field in some browsers
 					event.preventDefault();
@@ -122,7 +123,7 @@ $.widget( "ui.autocomplete", {
 				if ( suppressKeyPress ) {
 					suppressKeyPress = false;
 					event.preventDefault();
-                    return;
+					return;
 				}
 
 				// replicate some key handlers to allow them to repeat in Firefox and Opera
@@ -144,7 +145,7 @@ $.widget( "ui.autocomplete", {
 					// prevent moving cursor to end of text field in some browsers
 					event.preventDefault();
 					break;
-                }
+				}
 			})
 			.bind( "input.autocomplete", function(event) {
 				if ( suppressInput ) {
@@ -475,7 +476,6 @@ $.widget( "ui.autocomplete", {
 });
 
 $.extend( $.ui.autocomplete, {
-	version: "@VERSION",
 	escapeRegex: function( value ) {
 		return value.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
 	},

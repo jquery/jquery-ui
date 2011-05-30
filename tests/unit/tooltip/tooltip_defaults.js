@@ -1,11 +1,12 @@
 commonWidgetTests( "tooltip", {
 	defaults: {
+		content: function() {},
 		disabled: false,
 		items: "[title]",
-		content: $.ui.tooltip.prototype.options.content,
 		position: {
 			my: "left+15 center",
-			at: "right center"
+			at: "right center",
+			collision: "flip fit"
 		},
 		tooltipClass: null,
 

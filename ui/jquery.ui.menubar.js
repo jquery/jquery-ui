@@ -18,10 +18,11 @@
 // TODO when mixing clicking menus and keyboard navigation, focus handling is broken
 // there has to be just one item that has tabindex
 $.widget( "ui.menubar", {
-   options: {
-      buttons: false,
-      menuIcon: false
-   },
+	version: "@VERSION",
+	options: {
+		buttons: false,
+		menuIcon: false
+	},
 	_create: function() {
 		var that = this;
 		var items = this.items = this.element.children( "li" )
@@ -68,13 +69,13 @@ $.widget( "ui.menubar", {
 			var input = $(this),
 				// TODO menu var is only used on two places, doesn't quite justify the .each
 				menu = input.next( "ul" );
-			
+
 			input.bind( "click.menubar focus.menubar mouseenter.menubar", function( event ) {
 				// ignore triggered focus event
 				if ( event.type == "focus" && !event.originalEvent ) {
 					return;
 				}
-   				event.preventDefault();
+				event.preventDefault();
 				// TODO can we simplify or extractthis check? especially the last two expressions
 				// there's a similar active[0] == menu[0] check in _open
 				if ( event.type == "click" && menu.is( ":visible" ) && that.active && that.active[0] == menu[0] ) {
@@ -84,7 +85,7 @@ $.widget( "ui.menubar", {
 				if ( ( that.open && event.type == "mouseenter" ) || event.type == "click" ) {
 					that._open( event, menu );
 				}
-   			})
+			})
 			.bind( "keydown", function( event ) {
 				switch ( event.keyCode ) {
 				case $.ui.keyCode.SPACE:
@@ -113,11 +114,11 @@ $.widget( "ui.menubar", {
 				input.addClass( "ui-state-default" ).append( "<span class='ui-button-icon-secondary ui-icon ui-icon-triangle-1-s'></span>" );
 				input.removeClass( "ui-button-text-only" ).addClass( "ui-button-text-icon-secondary" );
 			}
-   			
+
 			if ( !that.options.buttons ) {
 				// TODO ui-menubar-link is added above, not needed here?
 				input.addClass( "ui-menubar-link" ).removeClass( "ui-state-default" );
-			};			
+			};
 			
 		});
 		that._bind( {
@@ -139,18 +140,18 @@ $.widget( "ui.menubar", {
 			}
 		});
 	},
-	
+
 	_destroy : function() {
 		var items = this.element.children( "li" )
 			.removeClass( "ui-menubar-item" )
 			.removeAttr( "role", "presentation" )
 			.children( "button, a" );
-		
+
 		this.element
 			.removeClass( "ui-menubar ui-widget-header ui-helper-clearfix" )
 			.removeAttr( "role", "menubar" )
 			.unbind( ".menubar" );
-		
+
 		items
 			.unbind( ".menubar" )
 			.removeClass( "ui-button ui-widget ui-button-text-only ui-menubar-link ui-state-default" )
@@ -172,7 +173,7 @@ $.widget( "ui.menubar", {
 			.removeAttr( "tabindex" )
 			.unbind( ".menubar" );
 	},
-	
+
 	_close: function() {
 		if ( !this.active || !this.active.length )
 			return;
@@ -188,7 +189,7 @@ $.widget( "ui.menubar", {
 		this.active = null;
 		this.open = false;
 	},
-	
+
 	_open: function( event, menu ) {
 		// on a single-button menubar, ignore reopening the same menu
 		if ( this.active && this.active[0] == menu[0] ) {
@@ -222,7 +223,7 @@ $.widget( "ui.menubar", {
 			.focusin();
 		this.open = true;
 	},
-	
+
 	// TODO refactor this and the next three methods
 	_prev: function( event, button ) {
 		button.attr( "tabIndex", -1 );
@@ -234,7 +235,7 @@ $.widget( "ui.menubar", {
 			lastItem.removeAttr( "tabIndex" )[0].focus();
 		}
 	},
-	
+
 	_next: function( event, button ) {
 		button.attr( "tabIndex", -1 );
 		var next = button.parent().nextAll( "li" ).children( ".ui-button" ).eq( 0 );
@@ -256,7 +257,7 @@ $.widget( "ui.menubar", {
 			this._open( event, lastItem );
 		}
 	},
-	
+
 	// TODO rename to child (or something like that)
 	_right: function( event ) {
 		var next = this.active.parent().nextAll( "li:eq(0)" ).children( ".ui-menu" ).eq( 0 );

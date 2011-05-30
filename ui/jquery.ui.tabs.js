@@ -19,6 +19,7 @@ function getNextTabId() {
 }
 
 $.widget( "ui.tabs", {
+	version: "@VERSION",
 	options: {
 		active: null,
 		collapsible: false,
@@ -575,10 +576,6 @@ $.widget( "ui.tabs", {
 		var id = $( tab ).attr( "aria-controls" );
 		return this.element.find( this._sanitizeSelector( "#" + id ) );
 	}
-});
-
-$.extend( $.ui.tabs, {
-	version: "@VERSION"
 });
 
 // DEPRECATED
