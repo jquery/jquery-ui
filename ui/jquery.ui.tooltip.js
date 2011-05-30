@@ -22,13 +22,19 @@ $.widget( "ui.tooltip", {
 		content: function() {
 			return $( this ).attr( "title" );
 		},
+		hide: true,
 		items: "[title]",
 		position: {
 			my: "left+15 center",
 			at: "right center",
 			collision: "flip fit"
 		},
-		tooltipClass: null
+		show: true,
+		tooltipClass: null,
+
+		// callbacks
+		close: null,
+		open: null
 	},
 
 	_create: function() {
