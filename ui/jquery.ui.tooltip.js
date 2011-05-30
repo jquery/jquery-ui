@@ -138,16 +138,13 @@ $.widget( "ui.tooltip", {
 		tooltip
 			.stop( true )
 			.position( $.extend({
-				of: target,
-				using: function( pos ) {
-					// we only want to hide if there's no custom using defined
-					$( this ).css( pos ).hide();
-				}
-			}, this.options.position ) );
+				of: target
+			}, this.options.position ) )
+			.hide();
 
 		this._show( tooltip, this.options.show );
 
-		this._trigger( "open", event );
+		this._trigger( "open", event, { tooltip: tooltip } );
 
 		this._bind( target, {
 			mouseleave: "close",
@@ -181,7 +178,7 @@ $.widget( "ui.tooltip", {
 
 		target.unbind( "mouseleave.tooltip blur.tooltip" );
 
-		this._trigger( "close", event );
+		this._trigger( "close", event, { tooltip: tooltip } );
 	},
 
 	_tooltip: function( element ) {
