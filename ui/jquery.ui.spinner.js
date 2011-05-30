@@ -63,6 +63,7 @@ $.widget( "ui.spinner", {
 				// add buttons
 				.append( self._buttonHtml() )
 				// add behaviours
+				.disableSelection()
 				// TODO: user ._hoverable
 				.hover(function() {
 					if ( !options.disabled ) {
@@ -252,7 +253,7 @@ $.widget( "ui.spinner", {
 			this.counter > 20
 				? this.counter > 100
 					? this.counter > 200
-						? 100 
+						? 100
 						: 10
 					: 2
 				: 1);
