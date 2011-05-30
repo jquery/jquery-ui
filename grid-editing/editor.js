@@ -13,7 +13,12 @@ $.widget( "ui.editor", {
 	_create: function() {
 		this.inner = this.element.wrapInner("<div class='editor-wrapper'></div>").children();
 		this._bind({
-			click: "start"
+			click: function( event ) {
+				if (this.input.is(":visible")) {
+					return;
+				}
+				this.start( event );
+			}
 		});
 
 		this.input = this.inputWrapper = $( "<input>" );
@@ -24,13 +29,18 @@ $.widget( "ui.editor", {
 		}
 		this.inputWrapper.hide().appendTo( this.element )
 
-		this._bind( this.input, {
-			// TODO ignore clicks (=blur) on spinner controls
-			blur: function( event ) {
+		this._bind( this.inputWrapper, {
+			focusin: function() {
+				clearTimeout( this.timer );
+			},
+			focusout: function( event ) {
 				if (!this.input.is(":visible")) {
 					return;
 				}
-				this.submit( event );
+				var that = this;
+				this.timer = setTimeout( function() {
+					that.submit( event );
+				}, 100 );
 			},
 			keyup: function( event ) {
 				if ( event.keyCode === $.ui.keyCode.ENTER || event.keyCode === $.ui.keyCode.NUMPAD_ENTER ) {

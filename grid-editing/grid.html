@@ -17,32 +17,13 @@
 	<script src="../grid-spf/grid.js"></script>
 	<script src="../grid-spf/pager.js"></script>
 	<script src="editor.js"></script>
+	<script src="localstore.js"></script>
 	<script>
-	var localStorageSupport = (function() {
-		try {
-			return !!localStorage.getItem;
-		} catch(e){
-			return false;
-		}
-	})();
-
-	var localDevelopers;
-	if ( localStorageSupport ) {
-		var item = localStorage.getItem( "grid-editing-developers" );
-		if ( item ) {
-			localDevelopers = JSON.parse( item );
-		}
-	}
-	if ( !localDevelopers ) {
-		$.ajax({
-			dataType: "json",
-			url: "../grid-spf/developers.json",
-			async: false,
-			success: function( result ) {
-				localDevelopers = result;
-			}
-		});
-	}
+	var store = $.demos.localstore( {
+		key: "grid-editing-developers",
+		initial: "../grid-spf/developers.json"
+	});
+	var localDevelopers = store.load();
 
 	$(function() {
 		var developers = $.ui.localDatasource({
@@ -51,15 +32,8 @@
 				limit: 8
 			}
 		});
-		developers.save = function( object ) {
-			if ( object ) {
-				console.log( "save update to " + object.firstName + " " + object.lastName );
-			} else {
-				console.log( "save all" );
-			}
-			if ( localStorageSupport ) {
-				localStorage.setItem( "grid-editing-developers", JSON.stringify( localDevelopers ) )
-			}
+		developers.save = function() {
+			store.save( localDevelopers );
 			return this;
 		}
 
@@ -70,13 +44,13 @@
 					var th = $( this ).parents( "table:first" ).find( "th" ).eq( this.cellIndex ),
 						field = th.data( "field" );
 					$( this ).editor({
-							type: th.data( "type" ),
-							submit: function( event, ui ) {
-								var object = $( this ).tmplItem().data;
-								object[field] = ui.value;
-								developers.save( object );
-							}
-						})
+						type: th.data( "type" ),
+						submit: function( event, ui ) {
+							var object = $( this ).tmplItem().data;
+							set(object, field, ui.value);
+							developers.save();
+						}
+					});
 				});
 			}
 		}).data("grid");
@@ -112,7 +86,7 @@
 			$.each( $( this ).serializeArray(), function( index, object ) {
 				set( developer, object.name, object.value );
 			});
-			developers.save( developer ).refresh();
+			developers.save().refresh();
 			editForm.hide();
 		});
 		grid.element.delegate( "button.edit", "click", function() {
@@ -144,8 +118,7 @@
 				country: "Unknown",
 				bitcoins: 0
 			});
-			developers.save();
-			developers.refresh();
+			developers.save().refresh();
 		});
 
 		developers.refresh();
