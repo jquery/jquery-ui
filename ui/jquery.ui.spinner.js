@@ -20,7 +20,7 @@ $.widget( "ui.spinner", {
 		incremental: true,
 		max: null,
 		min: null,
-		numberformat: null,
+		numberFormat: null,
 		page: 10,
 		step: null,
 		value: null
@@ -318,13 +318,13 @@ $.widget( "ui.spinner", {
 
 	_parse: function( val ) {
 		if ( typeof val === "string" ) {
-			val = $.global && this.options.numberformat ? $.global.parseFloat( val ) : +val;
+			val = $.global && this.options.numberFormat ? $.global.parseFloat( val ) : +val;
 		}
 		return isNaN( val ) ? null : val;
 	},
 
 	_format: function( num ) {
-		this.element.val( $.global && this.options.numberformat ? $.global.format( num, this.options.numberformat ) : num );
+		this.element.val( $.global && this.options.numberFormat ? $.global.format( num, this.options.numberFormat ) : num );
 	},
 
 	destroy: function() {
