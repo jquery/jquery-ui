@@ -28,6 +28,32 @@ test( "open/close", function() {
 	$.fx.off = false;
 });
 
+test( "enable/disable", function() {
+	expect( 7 );
+	$.fx.off = true;
+	var element = $( "#tooltipped1" ).tooltip();
+	equal( $( ".ui-tooltip" ).length, 0, "no tooltip on init" );
+
+	element.tooltip( "open" );
+	var tooltip = $( "#" + element.attr( "aria-describedby" ) );
+	ok( tooltip.is( ":visible" ) );
+
+	element.tooltip( "disable" );
+	equal( $( ".ui-tooltip" ).length, 0, "no tooltip when disabled" );
+	equal( tooltip.attr( "title" ), "", "title removed on disable" );
+
+	element.tooltip( "open" );
+	equal( $( ".ui-tooltip" ).length, 0, "open does nothing when disabled" );
+
+	element.tooltip( "enable" );
+	equal( element.attr( "title" ), "anchortitle", "title restored on enable" );
+
+	element.tooltip( "open" );
+	tooltip = $( "#" + element.attr( "aria-describedby" ) );
+	ok( tooltip.is( ":visible" ) );
+	$.fx.off = false;
+});
+
 /*
 TODO currently tooltip doesn't override widget
 can't return anything useful if no element is kept around and there's no useful reference

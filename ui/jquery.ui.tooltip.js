@@ -42,12 +42,44 @@ $.widget( "ui.tooltip", {
 	},
 
 	_setOption: function( key, value ) {
-		// only set option, disable element style changes
 		if ( key === "disabled" ) {
+			this[ value ? "_disable" : "_enable" ]();
 			this.options[ key ] = value;
+			// disable element style changes
 			return;
 		}
 		this._super( "_setOption", key, value );
+	},
+
+	_disable: function() {
+		var that = this;
+
+		// close open tooltips
+		$.each( this.tooltips, function( id, element ) {
+			var event = $.Event( "blur" );
+			event.target = event.currentTarget = element[0];
+			that.close( event, true );
+		});
+
+		// remove title attributes to prevent native tooltips
+		this.element.find( this.options.items ).andSelf().each(function() {
+			var element = $( this );
+			if ( element.is( "[title]" ) ) {
+				element
+					.data( "tooltip-title", element.attr( "title" ) )
+					.attr( "title", "" );
+			}
+		});
+	},
+
+	_enable: function() {
+		// restore title attributes
+		this.element.find( this.options.items ).andSelf().each(function() {
+			var element = $( this );
+			if ( element.data( "tooltip-title" ) ) {
+				element.attr( "title", element.data( "tooltip-title" ) );
+			}
+		});
 	},
 
 	open: function( event ) {
@@ -83,9 +115,6 @@ $.widget( "ui.tooltip", {
 		}
 
 		// if we have a title, clear it to prevent the native tooltip
-		// we do this before the disabled check to prevent native tooltips
-		// even when disabled
-		// TODO: the above doesn't work since ._bind() does a disabled check
 		// we have to check first to avoid defining a title if none exists
 		// (we don't want to cause an element to start matching [title])
 		// TODO: document why we don't use .removeAttr()
@@ -93,14 +122,10 @@ $.widget( "ui.tooltip", {
 			target.attr( "title", "" );
 		}
 
-		if ( this.options.disabled ) {
-			return;
-		}
-
 		// ajaxy tooltip can update an existing one
 		var tooltip = this._find( target );
 		if ( !tooltip.length ) {
-			tooltip = this._tooltip();
+			tooltip = this._tooltip( target );
 			target.attr( "aria-describedby", tooltip.attr( "id" ) );
 		}
 		tooltip.find( ".ui-tooltip-content" ).html( content );
@@ -124,20 +149,20 @@ $.widget( "ui.tooltip", {
 		});
 	},
 
-	close: function( event ) {
+	close: function( event, force ) {
 		var that = this,
 			target = $( event ? event.currentTarget : this.element ),
 			tooltip = this._find( target );
 
+		// don't close if the element has focus
+		// this prevents the tooltip from closing if you hover while focused
+		if ( !force && document.activeElement === target[0] ) {
+			return;
+		}
+
 		// only set title if we had one before (see comment in _open())
 		if ( target.data( "tooltip-title" ) ) {
 			target.attr( "title", target.data( "tooltip-title" ) );
-		}
-
-		// don't close if the element has focus
-		// this prevents the tooltip from closing if you hover while focused
-		if ( this.options.disabled || document.activeElement === target[0] ) {
-			return;
 		}
 
 		target.removeAttr( "aria-describedby" );
@@ -153,7 +178,7 @@ $.widget( "ui.tooltip", {
 		this._trigger( "close", event );
 	},
 
-	_tooltip: function() {
+	_tooltip: function( element ) {
 		var id = "ui-tooltip-" + increments++,
 			tooltip = $( "<div>" )
 				.attr({
@@ -169,7 +194,7 @@ $.widget( "ui.tooltip", {
 		if ( $.fn.bgiframe ) {
 			tooltip.bgiframe();
 		}
-		this.tooltips[ id ] = true;
+		this.tooltips[ id ] = element;
 		return tooltip;
 	},
 
