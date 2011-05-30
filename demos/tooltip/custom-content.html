@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<title>jQuery UI Tooltip - Default demo</title>
+	<title>jQuery UI Tooltip - Custom content</title>
 	<link rel="stylesheet" href="../../themes/base/jquery.ui.all.css">
 	<script src="../../jquery-1.5.1.js"></script>
 	<script src="../../ui/jquery.ui.core.js"></script>
@@ -18,6 +18,10 @@
 	.photo .ui-widget-header {
 		margin: 1em 0;
 	}
+	.map {
+		width: 350px;
+		height: 350px;
+	}
 	</style>
 	<script>
 	$(function() {
@@ -26,7 +30,7 @@
 			content: function() {
 				var element = $( this );
 				if ( element.is( "[data-geo]" ) ) {
-					return "<img src='http://maps.google.com/maps/api/staticmap?" +
+					return "<img class='map' src='http://maps.google.com/maps/api/staticmap?" +
 						"zoom=11&size=350x350&maptype=terrain&sensor=false&center=" +
 						element.text() + "'>";
 				}
