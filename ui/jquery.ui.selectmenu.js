@@ -537,7 +537,7 @@ $.widget("ui.selectmenu", {
 	},
 
 	select: function(event) {
-                if (this._disabled(event.currentTarget)) { return false; }
+		if (this._disabled(event.currentTarget)) { return false; }
 		this._trigger("select", event, this._uiHash());
 	},
 
@@ -577,21 +577,21 @@ $.widget("ui.selectmenu", {
 		var newIndex = currIndex + amt;
 		// do not loop when using up key
 
-        if (newIndex < 0) {
+		if (newIndex < 0) {
 			newIndex = 0;
 		}
 		if (newIndex > this._optionLis.size() - 1) {
 			newIndex = this._optionLis.size() - 1;
 		}
-        //Occurs when a full loop has been made
-        if (newIndex === recIndex) { return false; }
+		//Occurs when a full loop has been made
+		if (newIndex === recIndex) { return false; }
 
-        if (this._optionLis.eq(newIndex).hasClass( this.namespace + '-state-disabled' )) {
+		if (this._optionLis.eq(newIndex).hasClass( this.namespace + '-state-disabled' )) {
 			// if option at newIndex is disabled, call _moveFocus, incrementing amt by one
 			(amt > 0) ? ++amt : --amt;
 			this._moveSelection(amt, newIndex);
 		} else {
-            return this._optionLis.eq(newIndex).trigger('mouseup');
+			return this._optionLis.eq(newIndex).trigger('mouseup');
 		}
 	},
 
@@ -611,8 +611,8 @@ $.widget("ui.selectmenu", {
 			newIndex = this._optionLis.size() - 1;
 		}
 
-        //Occurs when a full loop has been made
-        if (newIndex === recIndex) { return false; }
+		//Occurs when a full loop has been made
+		if (newIndex === recIndex) { return false; }
 
 		var activeID = this.widgetBaseClass + '-item-' + Math.round(Math.random() * 1000);
 
