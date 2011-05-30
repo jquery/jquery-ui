@@ -5,7 +5,10 @@
 		"country": "USA",
 		"twitter": "rworth",
 		"github": "rdworth",
-		"bitcoins": 150
+		"bitcoins": 150,
+		"random": {
+			"value": 10
+		}
 	},
 	{
 		"firstName": "Scott",
@@ -13,7 +16,10 @@
 		"country": "USA",
 		"twitter": "scott_gonzalez",
 		"github": "scottgonzalez",
-		"bitcoins": 10
+		"bitcoins": 10,
+		"random": {
+			"value": 20
+		}
 	},
 	{
 		"firstName": "Jörn",
@@ -21,7 +27,10 @@
 		"country": "Germany",
 		"twitter": "bassistance",
 		"github": "jzaefferer",
-		"bitcoins": 1
+		"bitcoins": 1,
+		"random": {
+			"value": 30
+		}
 	},
 	{
 		"firstName": "Carl",
@@ -29,7 +38,10 @@
 		"country": "Canada",
 		"twitter": "cworth",
 		"github": "cworth",
-		"bitcoins": 1500
+		"bitcoins": 1500,
+		"random": {
+			"value": 40
+		}
 	},
 	{
 		"firstName": "Adam",
@@ -37,7 +49,10 @@
 		"country": "USA",
 		"twitter": "ajpiano",
 		"github": "ajpiano",
-		"bitcoins": 1337
+		"bitcoins": 1337,
+		"random": {
+			"value": 50
+		}
 	},
 	{
 		"firstName": "Remy",
@@ -45,7 +60,10 @@
 		"country": "UK",
 		"twitter": "rem",
 		"github": "rem",
-		"bitcoins": 55.5
+		"bitcoins": 55.5,
+		"random": {
+			"value": 60
+		}
 	},
 	{
 		"firstName": "Benjamin",
@@ -53,7 +71,10 @@
 		"country": "Australia",
 		"twitter": "balupton",
 		"github": "balupton",
-		"bitcoins": 2501
+		"bitcoins": 2501,
+		"random": {
+			"value": 70
+		}
 	},
 	{
 		"firstName": "Haymo",
@@ -61,6 +82,9 @@
 		"country": "Austria",
 		"twitter": "draftkraft",
 		"github": "",
-		"bitcoins": 0
+		"bitcoins": 0,
+		"random": {
+			"value": 80
+		}
 	}
 ]

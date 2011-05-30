@@ -18,6 +18,7 @@
 	<script src="../grid-spf/pager.js"></script>
 	<script src="editor.js"></script>
 	<script src="localstore.js"></script>
+	<script src="helpers.js"></script>
 	<script>
 	var store = $.demos.localstore( {
 		key: "grid-editing-developers",
@@ -54,46 +55,22 @@
 				});
 			}
 		}).data("grid");
+
 		// TODO find a better way to add markup to the generated row template
 		grid.options.rowTemplate = grid.options.rowTemplate.substring( 0, grid.options.rowTemplate.length - 35 )
 			+ "<button class='edit'>Edit</button></td>"
 			+ "<td><button class='remove'>Remove</button></td></tr>";
 
-		function set(object, name, value) {
-			var fields = name.split("."),
-				target = object,
-				field;
-			while (fields.length > 1) {
-				field = fields.shift(),
-				target = target[field];
-			}
-			target[fields[0]] = value;
-		}
-		function get(object, name) {
-			var fields = name.split("."),
-				target = object,
-				field;
-			while (fields.length > 1) {
-				field = fields.shift(),
-				target = target[field];
-			}
-			return target[fields[0]];
-		}
-
 		var developer;
 		var editForm = $( "#editForm" ).hide().submit( function( event ) {
 			event.preventDefault();
-			$.each( $( this ).serializeArray(), function( index, object ) {
-				set( developer, object.name, object.value );
-			});
+			serializeForm( this, developer );
 			developers.save().refresh();
 			editForm.hide();
 		});
 		grid.element.delegate( "button.edit", "click", function() {
 			developer = $( this ).tmplItem().data;
-			$("input:text", editForm).each(function() {
-				$(this).val(get(developer, this.name));
-			});
+			deserializeForm( editForm, developer );
 			editForm.show();
 		});
 		grid.element.delegate( "button.remove", "click", function() {
@@ -151,6 +128,7 @@
 			<th data-field="lastName">Last Name</th>
 			<th data-field="country">Country</th>
 			<th data-field="bitcoins" data-type="number">Bitcoins</th>
+			<th data-field="random.value" data-type="number">Random</th>
 			<th>Edit</th>
 			<th>Remove</th>
 		</tr>
@@ -166,6 +144,7 @@
 	<input type="text" name="firstName" placeholder="Firstname" />
 	<input type="text" name="lastName" placeholder="Lastname" />
 	<input type="text" name="country" placeholder="Country" />
+	<input type="text" name="random.value" placeholder="Random Value" />
 	<input type="submit" value="Save changes" />
 </form>
 
