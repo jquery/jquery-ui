@@ -44,6 +44,9 @@
 		$( "#newTodo" ).submit(function( event ) {
 			event.preventDefault();
 			var input = $( this ).find( "input" );
+			if ( !input.val() ) {
+				return;
+			}
 			todos.push( {
 				id: ids++,
 				title: input.val()
