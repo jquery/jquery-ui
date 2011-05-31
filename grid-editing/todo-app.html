@@ -51,12 +51,15 @@
 			update( li.index(), checked );
 		});
 		$( "#markDone" ).click(function() {
-			var check = !$( this ).find( "input" ).is( ":checked" );
-			$( this ).find( "input" ).attr( "checked", check );
-			$.each( todos, function( index, todo ) {
-				todo.done = check;
-			});
-			save();
+			var checkbox = $( this ).find( "input" );
+			// need to wait for checked state to change, inconsistent within click event handler
+			setTimeout(function() {
+				var check = checkbox.is( ":checked" );
+				$.each( todos, function( index, todo ) {
+					todo.done = check;
+				});
+				save();
+			}, 1);
 		});
 		$( "#clearCompleted" ).click( function() {
 			for ( var i = todos.length - 1; i >= 0; i-- ) {
