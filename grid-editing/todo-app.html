@@ -8,7 +8,6 @@
 	<link rel="stylesheet" href="../demos/demos.css">
 	<script src="../jquery-1.5.1.js"></script>
 	<script src="../external/jquery.tmpl.js"></script>
-	<script src="../external/jquery.mousewheel-3.0.4.js"></script>
 	<script src="../ui/jquery.ui.core.js"></script>
 	<script src="../ui/jquery.ui.widget.js"></script>
 	<script src="../ui/jquery.ui.button.js"></script>
@@ -23,54 +22,54 @@
 		var todos = store.load();
 		var ids = todos.length;
 
-		$(":submit").button();
+		$( ":submit" ).button();
 
 		function save() {
 			store.save( todos );
-			$(store).trigger("update");
+			$(store).trigger( "update" );
 			return this;
 		}
-		function update(index, checked) {
-			todos[index].done = checked;
+		function update( index, checked ) {
+			todos[ index ].done = checked;
 			store.save( todos );
 		}
 
-		$("#newTodo").submit(function( event ) {
+		$( "#newTodo" ).submit(function( event ) {
 			event.preventDefault();
-			var input = $(this).find("input");
+			var input = $( this ).find( "input" );
 			todos.push( {
 				id: ids++,
 				title: input.val()
 			});
-			input.val("");
+			input.val( "" );
 			save();
 		});
 
-		var list = $("#todos-list").delegate("input", "click", function(event) {
+		var list = $( "#todos-list" ).delegate( "input", "click", function( event ) {
 			var checked = $( this ).is( ":checked" );
 			var li = $( this ).closest( "li" ).toggleClass( "done", checked );
 			update( li.index(), checked );
 		});
-		$("#markDone").click(function() {
-			var check = !$(this).find("input").is(":checked");
-			$(this).find("input").attr("checked", check);
-			$.each(todos, function(index, todo) {
+		$( "#markDone" ).click(function() {
+			var check = !$( this ).find( "input" ).is( ":checked" );
+			$( this ).find( "input" ).attr( "checked", check );
+			$.each( todos, function( index, todo ) {
 				todo.done = check;
 			});
 			save();
 		});
-		$("#clearCompleted").click(function() {
+		$( "#clearCompleted" ).click( function() {
 			for ( var i = todos.length - 1; i >= 0; i-- ) {
-				if ( todos[i].done ) {
+				if ( todos[ i ].done ) {
 					todos.splice( i, 1 );
 				}
 			}
 			save();
 		});
-		$(store).bind("update", function() {
-			$("#remaining").text( todos.length + (todos.length === 1 ? " item" : " items") + " remaining" );
-			list.empty().append( $("#todo-list-item").tmpl( todos ) );
-		}).trigger("update");
+		$(store).bind( "update", function() {
+			$( "#remaining" ).text( todos.length + (todos.length === 1 ? " item" : " items") + " remaining" );
+			list.empty().append( $( "#todo-list-item" ).tmpl( todos ) );
+		}).trigger( "update" );
 	});
 	</script>
 	<style>
