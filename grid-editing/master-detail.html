@@ -2,18 +2,16 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, minimum-scale=1, maximum-scale=1">
 	<title>Grid: Editing, Master/Detail</title>
 	<link rel="stylesheet" href="../themes/base/jquery.ui.all.css">
-	<link rel="stylesheet" href="../grid-spf/grid.css">
+	<link rel="stylesheet" href="../demos/demos.css">
 	<script src="../jquery-1.5.1.js"></script>
 	<script src="../external/jquery.tmpl.js"></script>
 	<script src="../external/jquery.mousewheel-3.0.4.js"></script>
 	<script src="../ui/jquery.ui.core.js"></script>
 	<script src="../ui/jquery.ui.widget.js"></script>
 	<script src="../ui/jquery.ui.button.js"></script>
-	<script src="../ui/jquery.ui.spinner.js"></script>
-	<script src="../grid-spf/datasource.js"></script>
-	<script src="../grid-spf/datasource-local.js"></script>
 	<script src="localstore.js"></script>
 	<script src="helpers.js"></script>
 	<script>
@@ -24,14 +22,10 @@
 	var localMovies = store.load();
 
 	$(function() {
-		var movies = $.ui.localDatasource({
-			input: localMovies,
-			paging: {
-				limit: 8
-			}
-		});
-		movies.save = function() {
+		$(":submit").button();
+		function save() {
 			store.save( localMovies );
+			$(store).trigger("update");
 			return this;
 		};
 
@@ -39,7 +33,7 @@
 		var editForm = $( "#editForm" ).hide().submit( function( event ) {
 			event.preventDefault();
 			serializeForm( this, movie );
-			movies.save().refresh();
+			save();
 			editForm.hide();
 		});
 		var list = $("#movies-list").delegate("li:has(li)", "click", function() {
@@ -47,7 +41,7 @@
 			deserializeForm( editForm, movie );
 			editForm.show();
 		});
-		$(movies).bind("datasourceresponse", function() {
+		$(store).bind("update", function() {
 			list.empty().append( $("#movie-list-item").tmpl( localMovies ) );
 		});
 
@@ -59,20 +53,28 @@
 					name: "English"
 				}]
 			});
-			movies.save().refresh();
+			save();
 		});
 
 		$("#editForm").hide();
 
-		movies.refresh();
+		$(store).trigger("update");
 	});
 	</script>
+	<style>
+		h1, h2 { padding: .5em; margin: 0; position: relative; }
+		#movies-list { margin: 0; margin-top: -1px; padding-top: 1em; padding-bottom: 1em; }
+		#addMovie { right: 1em; position: absolute; font-size: 0.6em; }
+	</style>
 </head>
 <body>
 
-<h1>Non-grid master/details editing</h1>
+<h1 class="ui-widget-header">
+	<button id="addMovie">Add movie</button>
+	Non-grid master/details editing
+</h1>
 
-<ul id="movies-list">
+<ul id="movies-list" class="ui-widget ui-widget-content">
 
 </ul>
 
@@ -87,17 +89,17 @@
 	</li>
 </script>
 
-<div>
-	<button id="addMovie">Insert new movie</button>
-</div>
 <form id="editForm">
-	<input type="text" name="title" placeholder="Title" />
-	<input type="text" name="released" placeholder="Release Year" />
-	<!--
-	<input type="text" name="alternative_titles" size="30" placeholder="Alternative Titles" />
-	<input type="text" name="languages" placeholder="Languages" />
-	-->
-	<input type="submit" value="Save changes" />
+	<h2 class="ui-widget-header">Edit movie</h2>
+	<fieldset class="ui-widget ui-widget-content">
+		<input type="text" name="title" placeholder="Title" />
+		<input type="text" name="released" placeholder="Release Year" />
+		<!--
+		<input type="text" name="alternative_titles" size="30" placeholder="Alternative Titles" />
+		<input type="text" name="languages" placeholder="Languages" />
+		-->
+		<input type="submit" value="Save changes" />
+	</fieldset>
 </form>
 
 </body>
