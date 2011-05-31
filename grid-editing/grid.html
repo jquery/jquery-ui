@@ -38,7 +38,7 @@
 			return this;
 		}
 
-		var grid = $( "#developers-local" ).grid({
+		var grid = $.ui.grid( {
 			source: developers,
 			refresh: function() {
 				$( this ).find( "td:not(:has(button))" ).each( function() {
@@ -54,7 +54,7 @@
 					});
 				});
 			}
-		}).data("grid");
+		}, "#developers-local" );
 
 		// TODO find a better way to add markup to the generated row template
 		grid.options.rowTemplate = grid.options.rowTemplate.substring( 0, grid.options.rowTemplate.length - 35 )
