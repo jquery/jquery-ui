@@ -168,6 +168,7 @@ $.widget( "ui.autocomplete", {
 				}
 
 				clearTimeout( self.searching );
+				self.cancelSearch = true; // cancel any pending search results
 				// clicks on the menu (or a button to trigger a search) will cause a blur event
 				self.closing = setTimeout(function() {
 					self.close( event );
@@ -203,7 +204,6 @@ $.widget( "ui.autocomplete", {
 				// use another timeout to make sure the blur-event-handler on the input was already triggered
 				setTimeout(function() {
 					clearTimeout( self.closing );
-					self.closing = 0;
 				}, 13);
 			})
 			.menu({
@@ -344,7 +344,6 @@ $.widget( "ui.autocomplete", {
 		}
 
 		clearTimeout( this.closing );
-		this.closing = 0;
 		if ( this._trigger( "search", event ) === false ) {
 			return;
 		}
@@ -355,7 +354,7 @@ $.widget( "ui.autocomplete", {
 	_search: function( value ) {
 		this.pending++;
 		this.element.addClass( "ui-autocomplete-loading" );
-
+		this.cancelSearch = false;
 		this.source( { term: value }, this.response );
 	},
 
@@ -364,7 +363,7 @@ $.widget( "ui.autocomplete", {
 			content = this._normalize( content );
 		}
 		this._trigger( "response", null, { content: content } );
-		if (!this.closing) {
+		if (!this.cancelSearch) {
 			if ( !this.options.disabled && content && content.length ) {
 				this._suggest( content );
 				this._trigger( "open" );
@@ -380,7 +379,6 @@ $.widget( "ui.autocomplete", {
 
 	close: function( event ) {
 		clearTimeout( this.closing );
-		this.closing = 0;
 		if ( this.menu.element.is(":visible") ) {
 			this.menu.element.hide();
 			this.menu.blur();
