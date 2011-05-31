@@ -31,7 +31,14 @@
 		}
 		function update( index, checked ) {
 			todos[ index ].done = checked;
+			updateAllChecked();
 			store.save( todos );
+		}
+		function updateAllChecked() {
+			var allChecked = $.grep( todos, function( item, index ) {
+				return !item.done
+			} ).length == 0;
+			$( "#markDone" ).find( "input" ).attr( "checked", allChecked );
 		}
 
 		$( "#newTodo" ).submit(function( event ) {
@@ -70,6 +77,7 @@
 			save();
 		});
 		$(store).bind( "update", function() {
+			updateAllChecked();
 			$( "#remaining" ).text( todos.length + (todos.length === 1 ? " item" : " items") + " remaining" );
 			list.empty().append( $( "#todo-list-item" ).tmpl( todos ) );
 		}).trigger( "update" );
