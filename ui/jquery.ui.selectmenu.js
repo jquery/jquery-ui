@@ -24,11 +24,11 @@ $.widget("ui.selectmenu", {
 			at: "left bottom",
 			offset: null
 		},
-		width: null, 
-		menuWidth: null, 
+		width: null,
+		menuWidth: null,
 		handleWidth: 26,
 		maxHeight: null,
-		icons: null, 
+		icons: null,
 		format: null,
 		bgImage: function() {},
 		wrapperElement: ""
@@ -45,7 +45,7 @@ $.widget("ui.selectmenu", {
 
 		// define safe mouseup for future toggling
 		this._safemouseup = true;
-		
+
 		// create menu button wrapper
 		this.newelement = $('<a class="' + this.widgetBaseClass + ' ui-widget ui-state-default ui-corner-all" id="' + this.ids[0] + '" role="button" href="#" tabindex="0" aria-haspopup="true" aria-owns="' + this.ids[1] + '"></a>')
 			.insertAfter(this.element);
@@ -59,22 +59,22 @@ $.widget("ui.selectmenu", {
 
 		// save reference to select in data for ease in calling methods
 		this.newelement.data('selectelement', this.element);
-		
+
 		// menu icon
 		this.selectmenuIcon = $('<span class="' + this.widgetBaseClass + '-icon ui-icon"></span>')
 			.prependTo(this.newelement);
-			
+
 		// append status span to button
 		this.newelement.prepend('<span class="' + self.widgetBaseClass + '-status" />');
-			
+
 		// make associated form label trigger focus
 		$('label[for="' + this.element.attr('id') + '"]')
 			.attr('for', this.ids[0])
 			.bind('click.selectmenu', function() {
 				self.newelement[0].focus();
 				return false;
-			});	
-			
+			});
+
 		// click toggle for menu visibility
 		this.newelement
 			.bind('mousedown.selectmenu', function(event) {
@@ -96,7 +96,7 @@ $.widget("ui.selectmenu", {
 						ret = true;
 						break;
 					case $.ui.keyCode.SPACE:
-						self._toggle(event);	
+						self._toggle(event);
 						break;
 					case $.ui.keyCode.UP:
 						if (event.altKey) {
@@ -130,7 +130,7 @@ $.widget("ui.selectmenu", {
 				self._typeAhead(event.which, 'mouseup');
 				return true;
 			})
-			.bind('mouseover.selectmenu focus.selectmenu', function() { 
+			.bind('mouseover.selectmenu focus.selectmenu', function() {
 				if (!o.disabled) {
 					$(this).addClass(self.widgetBaseClass + '-focus ui-state-hover');
 				}
@@ -151,7 +151,7 @@ $.widget("ui.selectmenu", {
 			.bind("click.selectmenu", function() {
 				self._refreshValue();
 			})
-			// FIXME: newelement can be null under unclear circumstances in IE8 
+			// FIXME: newelement can be null under unclear circumstances in IE8
 			// TODO not sure if this is still a problem (fnagel 20.03.11)
 			.bind("focus.selectmenu", function() {
 				if (self.newelement) {
@@ -162,16 +162,16 @@ $.widget("ui.selectmenu", {
 		// set width when not set via options
 		if (!o.width) {
 			o.width = this.element.outerWidth();
-		}		
+		}
 		// set menu button width
 		this.newelement.width(o.width);
 
 		// hide original selectmenu element
-		this.element.hide();		
+		this.element.hide();
 
 		// create menu portion, append to body
 		this.list = $('<ul class="' + self.widgetBaseClass + '-menu ui-widget ui-widget-content" aria-hidden="true" role="listbox" aria-labelledby="' + this.ids[0] + '" id="' + this.ids[1] + '"></ul>').appendTo('body');
-		this.list.wrap(o.wrapperElement);				
+		this.list.wrap(o.wrapperElement);
 
 		// transfer menu click to menu button
 		this.list
@@ -191,56 +191,56 @@ $.widget("ui.selectmenu", {
 						} else {
 							self._moveFocus(1);
 						}
-						break;	
+						break;
 					case $.ui.keyCode.LEFT:
 						self._moveFocus(-1);
 						break;
 					case $.ui.keyCode.RIGHT:
 						self._moveFocus(1);
-						break;	
+						break;
 					case $.ui.keyCode.HOME:
 						self._moveFocus(':first');
-						break;		
+						break;
 					case $.ui.keyCode.PAGE_UP:
 						self._scrollPage('up');
-						break;	
+						break;
 					case $.ui.keyCode.PAGE_DOWN:
 						self._scrollPage('down');
 						break;
 					case $.ui.keyCode.END:
 						self._moveFocus(':last');
-						break;		
+						break;
 					case $.ui.keyCode.ENTER:
 					case $.ui.keyCode.SPACE:
 						self.close(event, true);
 						$(event.target).parents('li:eq(0)').trigger('mouseup');
-						break;		
+						break;
 					case $.ui.keyCode.TAB:
 						ret = true;
 						self.close(event, true);
 						$(event.target).parents('li:eq(0)').trigger('mouseup');
-						break;	
+						break;
 					case $.ui.keyCode.ESCAPE:
 						self.close(event, true);
 						break;
 					default:
-						ret = true;	
+						ret = true;
 				}
 				return ret;
 			})
 			.bind('keypress.selectmenu', function(event) {
 				self._typeAhead(event.which, 'focus');
 				return true;
-			});			
-		
+			});
+
 		// needed when window is resized
 		$(window).bind( "resize.selectmenu", $.proxy( self._refreshPosition, this ) );
 	},
 
 	_init: function() {
 		var self = this, o = this.options;
-		
-		// serialize selectmenu element options	
+
+		// serialize selectmenu element options
 		var selectOptionData = [];
 		this.element
 			.find('option')
@@ -255,8 +255,8 @@ $.widget("ui.selectmenu", {
 					parentOptGroup: $(this).parent('optgroup'),
 					bgImage: o.bgImage.call($(this))
 				});
-			});		
-				
+			});
+
 		// active state class is only used in popup style
 		var activeClass = (self.options.style == "popup") ? " ui-state-active" : "";
 
@@ -287,12 +287,12 @@ $.widget("ui.selectmenu", {
 				.bind('mouseover.selectmenu focus.selectmenu', function(e) {
 					// no hover if diabled
 					if (!$(e.currentTarget).hasClass(self.namespace + '-state-disabled')) {
-						self._selectedOptionLi().addClass(activeClass); 
-						self._focusedOptionLi().removeClass(self.widgetBaseClass + '-item-focus ui-state-hover'); 
-						$(this).removeClass('ui-state-active').addClass(self.widgetBaseClass + '-item-focus ui-state-hover'); 
+						self._selectedOptionLi().addClass(activeClass);
+						self._focusedOptionLi().removeClass(self.widgetBaseClass + '-item-focus ui-state-hover');
+						$(this).removeClass('ui-state-active').addClass(self.widgetBaseClass + '-item-focus ui-state-hover');
 					}
 				})
-				.bind('mouseout.selectmenu blur.selectmenu', function() { 
+				.bind('mouseout.selectmenu blur.selectmenu', function() {
 					if ($(this).is(self._selectedOptionLi().selector)) {
 						$(this).addClass(activeClass);
 					}
@@ -313,10 +313,10 @@ $.widget("ui.selectmenu", {
 			} else {
 				thisLi.appendTo(this.list);
 			}
-			
+
 			// this allows for using the scrollbar in an overflowed list
 			this.list.bind('mousedown.selectmenu mouseup.selectmenu', function() { return false; });
-			
+
 			// append icon if option is specified
 			if (o.icons) {
 				for (var j in o.icons) {
@@ -324,7 +324,7 @@ $.widget("ui.selectmenu", {
 						thisLi
 							.data('optionClasses', selectOptionData[i].classes + ' ' + self.widgetBaseClass + '-hasIcon')
 							.addClass(self.widgetBaseClass + '-hasIcon');
-						var iconClass = o.icons[j].icon || "";						
+						var iconClass = o.icons[j].icon || "";
 						thisLi
 							.find('a:eq(0)')
 							.prepend('<span class="' + self.widgetBaseClass + '-item-icon ui-icon ' + iconClass + '"></span>');
@@ -334,8 +334,8 @@ $.widget("ui.selectmenu", {
 					}
 				}
 			}
-		}	
-				
+		}
+
 		// we need to set and unset the CSS classes for dropdown and popup style
 		var isDropDown = (o.style == 'dropdown');
 		this.newelement
@@ -359,16 +359,16 @@ $.widget("ui.selectmenu", {
 			this.newelement.add(this.list).addClass(transferClasses);
 		}
 
-		// set menu width to either menuWidth option value, width option value, or select width 
-		if (o.style == 'dropdown') { 
-			this.list.width(o.menuWidth ? o.menuWidth : o.width); 
-		} else { 
-			this.list.width(o.menuWidth ? o.menuWidth : o.width - o.handleWidth); 
+		// set menu width to either menuWidth option value, width option value, or select width
+		if (o.style == 'dropdown') {
+			this.list.width(o.menuWidth ? o.menuWidth : o.width);
+		} else {
+			this.list.width(o.menuWidth ? o.menuWidth : o.width - o.handleWidth);
 		}
 
 		// calculate default max height
 		if (o.maxHeight) {
-			// set max height from option 
+			// set max height from option
 			if (o.maxHeight < this.list.height()) {
 				this.list.height(o.maxHeight);
 			}
@@ -381,14 +381,14 @@ $.widget("ui.selectmenu", {
 
 		// save reference to actionable li's (not group label li's)
 		this._optionLis = this.list.find('li:not(.' + self.widgetBaseClass + '-group)');
-						
+
 		// transfer disabled state
 		if (this.element.attr('disabled') === true) {
 			this.disable();
 		}
 
 		// update value
-		this.index(this._selectedIndex());		
+		this.index(this._selectedIndex());
 
 		// needed when selectmenu is placed at the very bottom / top of the page
 		window.setTimeout(function() {
@@ -401,15 +401,15 @@ $.widget("ui.selectmenu", {
 			.removeClass( this.widgetBaseClass + '-disabled' + ' ' + this.namespace + '-state-disabled' )
 			.removeAttr( 'aria-disabled' )
 			.unbind( ".selectmenu" );
-			
+
 		$( window ).unbind( ".selectmenu" );
 		$( document ).unbind( ".selectmenu" );
-	
+
 		// unbind click on label, reset its for attr
 		$( 'label[for=' + this.newelement.attr('id') + ']' )
 			.attr( 'for', this.element.attr( 'id' ) )
 			.unbind( '.selectmenu' );
-		
+
 		if ( this.options.wrapperElement ) {
 			this.newelement.find( this.options.wrapperElement ).remove();
 			this.list.find( this.options.wrapperElement ).remove();
@@ -417,7 +417,7 @@ $.widget("ui.selectmenu", {
 			this.newelement.remove();
 			this.list.remove();
 		}
-		this.element.show();	
+		this.element.show();
 
 		// call widget destroy function
 		$.Widget.prototype.destroy.apply(this, arguments);
@@ -433,13 +433,13 @@ $.widget("ui.selectmenu", {
 
 			// define our find var
 			var find = typeof(self._prevChar) == 'undefined' ? '' : self._prevChar.join('');
-			
+
 			function focusOptSeq(elem, ind, c){
 				focusFound = true;
 				$(elem).trigger(eventType);
 				typeof(self._prevChar) == 'undefined' ? self._prevChar = [c] : self._prevChar[self._prevChar.length] = c;
 			}
-			this.list.find('li a').each(function(i) {	
+			this.list.find('li a').each(function(i) {
 				if (!focusFound) {
 					// allow the typeahead attribute on the option tag for a more specific lookup
 					var thisText = $(this).attr('typeahead') || $(this).text();
@@ -466,21 +466,21 @@ $.widget("ui.selectmenu", {
 				$(elem).trigger(eventType);
 				self._prevChar[1] = ind;
 			}
-			this.list.find('li a').each(function(i){	
+			this.list.find('li a').each(function(i){
 				if(!focusFound){
 					var thisText = $(this).text();
 					if( thisText.indexOf(C) == 0 || thisText.indexOf(c) == 0){
 							if(self._prevChar[0] == C){
-								if(self._prevChar[1] < i){ focusOpt(this,i); }	
+								if(self._prevChar[1] < i){ focusOpt(this,i); }
 							}
-							else{ focusOpt(this,i); }	
+							else{ focusOpt(this,i); }
 					}
 				}
 			});
 			this._prevChar[0] = C;
 		}
 	},
-	
+
 	// returns some usefull information, called by callbacks only
 	_uiHash: function() {
 		var index = this.index();
@@ -502,7 +502,7 @@ $.widget("ui.selectmenu", {
 			} else {
 				this.list.appendTo('body');
 			}
-			
+
 			this.list.addClass(self.widgetBaseClass + '-open').attr('aria-hidden', false);
 			// FIX IE: Refreshing position before focusing the element, prevents IE from scrolling to the focused element before it is in position.
 			this._refreshPosition();
@@ -537,7 +537,7 @@ $.widget("ui.selectmenu", {
 	},
 
 	select: function(event) {
-                if (this._disabled(event.currentTarget)) { return false; }
+		if (this._disabled(event.currentTarget)) { return false; }
 		this._trigger("select", event, this._uiHash());
 	},
 
@@ -576,22 +576,22 @@ $.widget("ui.selectmenu", {
 		var currIndex = parseInt(this._selectedOptionLi().data('index') || 0, 10);
 		var newIndex = currIndex + amt;
 		// do not loop when using up key
-        
-        if (newIndex < 0) {
+
+		if (newIndex < 0) {
 			newIndex = 0;
 		}
 		if (newIndex > this._optionLis.size() - 1) {
 			newIndex = this._optionLis.size() - 1;
 		}
-        //Occurs when a full loop has been made
-        if (newIndex === recIndex) { return false; }
-        
-        if (this._optionLis.eq(newIndex).hasClass( this.namespace + '-state-disabled' )) {
+		//Occurs when a full loop has been made
+		if (newIndex === recIndex) { return false; }
+
+		if (this._optionLis.eq(newIndex).hasClass( this.namespace + '-state-disabled' )) {
 			// if option at newIndex is disabled, call _moveFocus, incrementing amt by one
 			(amt > 0) ? ++amt : --amt;
 			this._moveSelection(amt, newIndex);
 		} else {
-            return this._optionLis.eq(newIndex).trigger('mouseup');
+			return this._optionLis.eq(newIndex).trigger('mouseup');
 		}
 	},
 
@@ -610,14 +610,14 @@ $.widget("ui.selectmenu", {
 		if (newIndex > this._optionLis.size() - 1) {
 			newIndex = this._optionLis.size() - 1;
 		}
-        
-        //Occurs when a full loop has been made
-        if (newIndex === recIndex) { return false; }
-		
+
+		//Occurs when a full loop has been made
+		if (newIndex === recIndex) { return false; }
+
 		var activeID = this.widgetBaseClass + '-item-' + Math.round(Math.random() * 1000);
 
 		this._focusedOptionLi().find('a:eq(0)').attr('id', '');
-		
+
 		if (this._optionLis.eq(newIndex).hasClass( this.namespace + '-state-disabled' )) {
 			// if option at newIndex is disabled, call _moveFocus, incrementing amt by one
 			(amt > 0) ? ++amt : --amt;
@@ -625,7 +625,7 @@ $.widget("ui.selectmenu", {
 		} else {
 			this._optionLis.eq(newIndex).find('a:eq(0)').attr('id',activeID).focus();
 		}
-		
+
 		this.list.attr('aria-activedescendant', activeID);
 	},
 
@@ -637,7 +637,7 @@ $.widget("ui.selectmenu", {
 
 	_setOption: function(key, value) {
 		this.options[key] = value;
-		// set 
+		// set
 		if (key == 'disabled') {
 			this.close();
 			this.element
@@ -678,7 +678,7 @@ $.widget("ui.selectmenu", {
 	_disabled: function(elem) {
 			return $(elem).hasClass( this.namespace + '-state-disabled' );
 	},
-	
+
 
 	_disableOption: function(index) {
 			var optionElem = this._optionLis.eq(index);
@@ -698,7 +698,7 @@ $.widget("ui.selectmenu", {
 			}
 	},
 
-	_disableOptgroup: function(index) {		
+	_disableOptgroup: function(index) {
 			var optGroupElem = this.list.find( 'li.' + this.widgetBaseClass + '-group-' + index );
 			if (optGroupElem) {
 				optGroupElem.addClass(this.namespace + '-state-disabled')
@@ -707,7 +707,7 @@ $.widget("ui.selectmenu", {
 			}
 	},
 
-	_enableOptgroup: function(index) {		
+	_enableOptgroup: function(index) {
 			var optGroupElem = this.list.find( 'li.' + this.widgetBaseClass + '-group-' + index );
 			if (optGroupElem) {
 				optGroupElem.removeClass(this.namespace + '-state-disabled')
@@ -715,7 +715,7 @@ $.widget("ui.selectmenu", {
 				this.element.find("optgroup").eq(index).removeAttr("disabled");
 			}
 	},
-	
+
 	index: function(newValue) {
 		if (arguments.length) {
 			if (!this._disabled($(this._optionLis[newValue]))) {
@@ -754,7 +754,7 @@ $.widget("ui.selectmenu", {
 			.find('a')
 			.attr('aria-selected', 'true')
 			.attr('id', activeID);
-			
+
 		// toggle any class brought in from option
 		var currentOptionClasses = (this.newelement.data('optionClasses') ? this.newelement.data('optionClasses') : "");
 		var newOptionClasses = (this._selectedOptionLi().data('optionClasses') ? this._selectedOptionLi().data('optionClasses') : "");
@@ -763,7 +763,7 @@ $.widget("ui.selectmenu", {
 			.data('optionClasses', newOptionClasses)
 			.addClass( newOptionClasses )
 			.find('.' + this.widgetBaseClass + '-status')
-			.html( 
+			.html(
 				this._selectedOptionLi()
 					.find('a:eq(0)')
 					.html()
