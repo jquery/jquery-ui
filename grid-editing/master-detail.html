@@ -19,12 +19,12 @@
 		key: "grid-editing-movies",
 		initial: "movies.json"
 	});
-	var localMovies = store.load();
+	var movies = store.load();
 
 	$(function() {
 		$(":submit").button();
 		function save() {
-			store.save( localMovies );
+			store.save( movies );
 			$(store).trigger("update");
 			return this;
 		};
@@ -42,11 +42,11 @@
 			editForm.show();
 		});
 		$(store).bind("update", function() {
-			list.empty().append( $("#movie-list-item").tmpl( localMovies ) );
+			list.empty().append( $("#movie-list-item").tmpl( movies ) );
 		});
 
 		$("#addMovie").click(function() {
-			localMovies.push({
+			movies.push({
 				title: "New Movie",
 				alternative_titles: [],
 				languages: [{
