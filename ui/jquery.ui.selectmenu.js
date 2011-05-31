@@ -231,7 +231,10 @@ $.widget("ui.selectmenu", {
 			.bind('keypress.selectmenu', function(event) {
 				self._typeAhead(event.which, 'focus');
 				return true;
-			});
+			})
+			// this allows for using the scrollbar in an overflowed list
+			.bind( 'mousedown.selectmenu mouseup.selectmenu', function() { return false; });
+
 
 		// needed when window is resized
 		$(window).bind( "resize.selectmenu", $.proxy( self._refreshPosition, this ) );
@@ -314,9 +317,6 @@ $.widget("ui.selectmenu", {
 				thisLi.appendTo(this.list);
 			}
 
-			// this allows for using the scrollbar in an overflowed list
-			this.list.bind('mousedown.selectmenu mouseup.selectmenu', function() { return false; });
-
 			// append icon if option is specified
 			if (o.icons) {
 				for (var j in o.icons) {
@@ -383,10 +383,12 @@ $.widget("ui.selectmenu", {
 		this._optionLis = this.list.find('li:not(.' + self.widgetBaseClass + '-group)');
 
 		// transfer disabled state
-		if (this.element.attr('disabled') === true) {
+		if ( this.element.attr( 'disabled' ) === true ) {
 			this.disable();
+		} else {
+			this.enable()
 		}
-
+		
 		// update value
 		this.index(this._selectedIndex());
 
