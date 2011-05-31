@@ -35,7 +35,7 @@
 			store.save( todos );
 		}
 		function updateAllChecked() {
-			var allChecked = $.grep( todos, function( item, index ) {
+			var allChecked = todos.length && $.grep( todos, function( item, index ) {
 				return !item.done
 			} ).length == 0;
 			$( "#markDone" ).find( "input" ).attr( "checked", allChecked );
