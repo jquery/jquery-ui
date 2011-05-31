@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, minimum-scale=1, maximum-scale=1">
+	<title>Grid: Editing, Todo app</title>
+	<link rel="stylesheet" href="../themes/base/jquery.ui.all.css">
+	<link rel="stylesheet" href="../demos/demos.css">
+	<script src="../jquery-1.5.1.js"></script>
+	<script src="../external/jquery.tmpl.js"></script>
+	<script src="../external/jquery.mousewheel-3.0.4.js"></script>
+	<script src="../ui/jquery.ui.core.js"></script>
+	<script src="../ui/jquery.ui.widget.js"></script>
+	<script src="../ui/jquery.ui.button.js"></script>
+	<script src="localstore.js"></script>
+	<script>
+
+	$(function() {
+		var store = $.demos.localstore( {
+			key: "grid-editing-todos",
+			initial: []
+		});
+		var todos = store.load();
+		var ids = todos.length;
+
+		$(":submit").button();
+
+		function save() {
+			store.save( todos );
+			$(store).trigger("update");
+			return this;
+		}
+		function update(index, checked) {
+			todos[index].done = checked;
+			store.save( todos );
+		}
+
+		$("#newTodo").submit(function( event ) {
+			event.preventDefault();
+			var input = $(this).find("input");
+			todos.push( {
+				id: ids++,
+				title: input.val()
+			});
+			input.val("");
+			save();
+		});
+
+		var list = $("#todos-list").delegate("input", "click", function(event) {
+			var checked = $( this ).is( ":checked" );
+			var li = $( this ).closest( "li" ).toggleClass( "done", checked );
+			update( li.index(), checked );
+		});
+		$("#markDone").click(function() {
+			var check = !$(this).find("input").is(":checked");
+			$(this).find("input").attr("checked", check);
+			$.each(todos, function(index, todo) {
+				todo.done = check;
+			});
+			save();
+		});
+		$("#clearCompleted").click(function() {
+			for ( var i = todos.length - 1; i >= 0; i-- ) {
+				if ( todos[i].done ) {
+					todos.splice( i, 1 );
+				}
+			}
+			save();
+		});
+		$(store).bind("update", function() {
+			$("#remaining").text( todos.length + (todos.length === 1 ? " item" : " items") + " remaining" );
+			list.empty().append( $("#todo-list-item").tmpl( todos ) );
+		}).trigger("update");
+	});
+	</script>
+	<style>
+		#app { min-width: 200px; max-width: 600px; margin: auto; margin-top: 2em;  }
+		h1, h2 { padding: .5em; margin: 0; position: relative; }
+		#newTodo { position: relative; height: 60px; }
+		#newTodo input { position: absolute; left: 0; right: 0; font-size: 1.5em; margin: 0.5em; padding: 0.5em; border: 1px solid #999; box-shadow: 0 0 6px rgba(0,0,0,0.5); }
+		#addMovie { right: 1em; position: absolute; font-size: 0.6em; }
+		#overview { position: relative; padding: 1.2em; background: #eee; border: 1px solid #999; border-left: none; border-right: none; }
+		#clearCompleted { position: absolute; right: 1em; top: 0.5em; }
+		#markDone { padding: 0.5em; }
+		#todos-list { margin: 0; list-style: none; padding-left: 0; }
+		#todos-list label { padding: 0.5em; width: 100%; display: inline-block; }
+		#todos-list .done label { text-decoration: line-through; color: #666; }
+		#todos-list li:nth-child(odd) { background-color: #eee };
+	</style>
+</head>
+<body>
+
+<div id="app">
+	<h1 class="ui-widget-header ui-corner-top">
+		Todos
+	</h1>
+	<div class="ui-widget ui-widget-content ui-corner-bottom">
+		<form id="newTodo">
+			<input placeholder="What needs to be done?" class="ui-corner-all" />
+		</form>
+		<div id="overview">
+			<span id="remaining">0 items remaining.</span>
+			<button id="clearCompleted">Clear Completed</button>
+		</div>
+		<div id="markDone">
+			<label>
+				<input type="checkbox" />
+				Mark All as Done
+			</label>
+		</div>
+		<ul id="todos-list">
+		</ul>
+	</div>
+
+</div>
+
+<script id="todo-list-item" type="text/x-jquery-tmpl">
+	<li {{if done}}class="done"{{/if}}>
+		<label>
+			<input type="checkbox" id="todo-${id}" {{if done}}checked="checked"{{/if}} />
+			${title}
+		</label>
+	</li>
+</script>
+
+</body>
+</html>
