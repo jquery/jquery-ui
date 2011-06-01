@@ -1,5 +1,5 @@
  /*
- * jQuery UI selectmenu
+ * jQuery UI selectmenu version 1.1.0
  *
  * Copyright (c) 2009 AUTHORS.txt (http://jqueryui.com/about)
  * Dual licensed under the MIT (MIT-LICENSE.txt)

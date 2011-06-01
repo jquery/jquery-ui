@@ -1,14 +1,17 @@
-A fork of jQuery UI to push development of some plug-ins. Currently you will 
-find: the latest version of Selectmenu (originally by filament group) and a 
-accessible version of jQuery UI Tabs.  Please check branch selectmenu and 
-tabs-accessibility.
+A fork of jQuery UI to push development of some plug-ins. Please check branch selectmenu and tabs-accessibility.
 
 :::SELECTMENU:::
 You are currently in the selectmenu branch.
 
+INFO
 This is an improved version of the jQuery UI selectmenu widget originally developed by Scott (filament group):
 http://filamentgroup.com/lab/jquery_ui_selectmenu_an_aria_accessible_plugin_for_styling_a_html_select/
 
+DOWNLOAD
+Latest version: https://github.com/fnagel/jquery-ui/zipball/selectmenu
+Stable version (v1.1.0): https://github.com/fnagel/jquery-ui/zipball/selectmenu_v1.1.0
+
+SUPPORT
 Please use GitHub issues for bug tracking and take a look at the Wiki at:
 http://github.com/fnagel/jquery-ui/issues/labels/_selectmenu
 http://github.com/fnagel/jquery-ui/wiki/Selectmenu
