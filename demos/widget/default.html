@@ -10,95 +10,108 @@
 	<script src="../../ui/jquery.ui.position.js"></script>
 	<link rel="stylesheet" href="../demos.css">
 	<style>
-	/* this could go into custom.inlineedit.css */
-	/* make it display:block to replace the block element that's being edited */
-	.inlineedit-input { display: block; }
-	/* this would need a few more styles to make it look decent */
+	.colorize {
+		font-size: 25px;
+		width: 75px;
+		height: 75px;
+	}
 	</style>
 	<script>
 	$(function() {
-		// this defines a new widget, in the "custom" namespace
-		$.widget( "custom.inlineedit", {
+		// the widget definition, where 'custom' is the namespace,
+		// 'colorize' the widget name
+		$.widget( 'custom.colorize', {
 			// default options
 			options: {
-				submitOnBlur: true
+				red: 255,
+				green: 0,
+				blue: 0
 			},
-			// this is the constructor
-			_create: function() {
-				// basic event binding to this.element
-				this._bind({
-					// string as value is mapped to instance method
-					click: "start"
-				});
 
-				// creating a new element to show later
-				this.input = $( "<input>" ).addClass("inlineedit-input").hide().insertAfter( this.element );
-				// with events on input, here functions that to do event-specific checks
-				this._bind( this.input, {
-					blur: function( event ) {
-						// ignore blur event if already hidden
-						if (!this.input.is(":visible")) {
-							return;
-						}
-						if ( this.options.submitOnBlur ) {
-							this.submit( event )
-						} else {
-							this.cancel( event );
-						}
-					},
-					keyup: function( event ) {
-						// using $.ui.keyCode to map keyboard input to the right action 
-						if ( event.keyCode === $.ui.keyCode.ENTER || event.keyCode === $.ui.keyCode.NUMPAD_ENTER ) {
-							this.submit( event );
-						} else if ( event.keyCode === $.ui.keyCode.ESCAPE ) {
-							this.cancel( event );
-						}
-					}
+			// the constructor
+			_create: function() {
+				this.element
+					// add a class for themeing
+					.addClass("colorize")
+					// prevent double click to select text
+					.disableSelection();
+				// bind click events to random method
+				this._bind({
+					// _bind won't call random when widget is disabled
+					click: "random"
 				});
+				this._refresh();
 			},
-			// a public method
-			start: function( event ) {
-				this.element.hide();
-				this.input.val( this.element.text() ).show().focus();
-				// trigger a custom event when something changes
-				this._trigger("start", event );
+
+			// called when created, and later when changing options
+			_refresh: function() {
+				this.element.css( 'background-color', 'rgb(' +
+					this.options.red +',' +
+					this.options.green + ',' +
+					this.options.blue + ')'
+				);
+
+				// trigger a callback/event
+				this._trigger( 'change' );
 			},
-			// another custom method
-			_hide: function( event ) {
-				this.input.hide();
-				this.element.show();
-			},
-			submit: function( event ) {
-				var newValue = this.input.val(),
-					ui = {
-						value: newValue
-					};
-				// trigger an event, cancel the default action when event handler returns false
-				if ( this._trigger( "submit", event, ui ) !== false ) {
-					this.element.text( newValue );
+
+			// a public method to change the color to a random value
+			// can be called directly via .colorize( 'random' )
+			random: function( event ) {
+				var colors = {
+					red: Math.floor( Math.random() * 256 ),
+					green: Math.floor( Math.random() * 256 ),
+					blue: Math.floor( Math.random() * 256 )
+				};
+
+				// trigger an event, check if it's canceled
+				if ( this._trigger( 'random', event, colors ) !== false ) {
+					$.extend( this.options, colors );
+					this._refresh();
 				}
-				this._hide();
 			},
-			cancel: function( event ) {
-				this._hide();
-				// trigger an event when something changes
-				this._trigger( "cancel", event );
+
+			// events bound via _bind are removed automatically
+			// revert other modifications here
+			_destroy: function() {
+				this.element
+					.removeClass( 'colorize' )
+					.enableSelection()
+					.css( 'background-color', 'transparent' );
+			},
+
+			// always refresh when changing an option
+			_setOption: function( key, value ) {
+				// _super handles keeping the right this-context
+				this._super( "_setOption", key, value );
+				this._refresh();
 			}
 		});
-		// this is how we can use our custom widget, just like any jQuery plugin
-		$( ".demo h1" ).inlineedit();
-		$( ".demo p" ).inlineedit({
-			// configure an option
-			submitOnBlur: false
+
+		$( '#my-widget1' ).colorize();
+		$( '#my-widget2' ).colorize({
+			red: 60,
+			blue: 60
 		});
-		$( ".demo button" ).click( function() {
-			// call a public method
-			$( ".demo :custom-inlineedit" ).inlineedit( "start" );
+		$( '#my-widget3' ).colorize( {
+			green: 128,
+			random: function( event, ui ) {
+				return ui.green > 128;
+			}
 		});
-		// widget's create a custom selector
-		// triggered events can be used with regular bind, just prepend name
-		$( ".demo :custom-inlineedit" ).bind( "inlineeditstart inlineeditsubmit inlineeditcancel" , function( event, ui ) {
-			$( "<div></div>" ).text( "edit event " + event.type ).appendTo(".demo");
+
+		$( '#disable' ).toggle(function() {
+			$( ':custom-colorize' ).colorize( 'disable' );
+		}, function() {
+			$( ':custom-colorize' ).colorize( 'enable' );
+		});
+
+		$( '#black' ).click( function() {
+			$( ':custom-colorize' ).colorize( 'option', {
+				red: 0,
+				green: 0,
+				blue: 0
+			} );
 		});
 	});
 	</script>
@@ -108,9 +121,11 @@
 <div class="demo">
 
 <div>
-	<h1>This is an editable header</h1>
-	<p>And an editable paragraph</p>
-	<button>Start editing</button>
+	<div id="my-widget1">color me</div>
+	<div id="my-widget2">color me</div>
+	<div id="my-widget3">color me</div>
+	<button id="disable">Toglge disabled option</button>
+	<button id="black">Go black</button>
 </div>
 
 </div><!-- End demo -->
@@ -119,7 +134,7 @@
 
 <div class="demo-description">
 <p>This demo shows a simple custom widget built using the widget factory (jquery.ui.widget.js).</p>
-<p>The header is set to change the element on blur, the paragraph only changes when you submit with Enter.</p>
+<p>The three boxes are initialized in different ways. Clicking them changes their background color. View source to see how it works.</p>
 <p><a href="http://wiki.jqueryui.com/w/page/12138135/Widget-factory">For more details on the widget factory, visit the jQuery UI planning wiki.</a></p>
 </div><!-- End demo-description -->
 
