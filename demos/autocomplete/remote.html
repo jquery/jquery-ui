@@ -12,13 +12,15 @@
 	<script src="../../ui/jquery.ui.autocomplete.js"></script>
 	<link rel="stylesheet" href="../demos.css">
 	<style>
-	.ui-autocomplete-loading { background: white url('images/ui-anim_basic_16x16.gif') right center no-repeat; }
+	.ui-autocomplete-loading {
+		background: white url('images/ui-anim_basic_16x16.gif') right center no-repeat;
+	}
 	</style>
 	<script>
 	$(function() {
 		function log( message ) {
-			$( "<div/>" ).text( message ).prependTo( "#log" );
-			$( "#log" ).attr( "scrollTop", 0 );
+			$( "<div>" ).text( message ).prependTo( "#log" );
+			$( "#log" ).scrollTop( 0 );
 		}
 
 		$( "#birds" ).autocomplete({
@@ -39,7 +41,7 @@
 
 <div class="ui-widget">
 	<label for="birds">Birds: </label>
-	<input id="birds" />
+	<input id="birds">
 </div>
 
 <div class="ui-widget" style="margin-top:2em; font-family:Arial">

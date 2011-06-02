@@ -14,13 +14,14 @@
 (function( $ ) {
 
 $.widget( "ui.spinner", {
+	version: "@VERSION",
 	defaultElement: "<input>",
 	widgetEventPrefix: "spin",
 	options: {
 		incremental: true,
 		max: null,
 		min: null,
-		numberformat: null,
+		numberFormat: null,
 		page: 10,
 		step: null,
 		value: null
@@ -62,6 +63,7 @@ $.widget( "ui.spinner", {
 				// add buttons
 				.append( self._buttonHtml() )
 				// add behaviours
+				.disableSelection()
 				// TODO: user ._hoverable
 				.hover(function() {
 					if ( !options.disabled ) {
@@ -251,7 +253,7 @@ $.widget( "ui.spinner", {
 			this.counter > 20
 				? this.counter > 100
 					? this.counter > 200
-						? 100 
+						? 100
 						: 10
 					: 2
 				: 1);
@@ -318,13 +320,13 @@ $.widget( "ui.spinner", {
 
 	_parse: function( val ) {
 		if ( typeof val === "string" ) {
-			val = $.global && this.options.numberformat ? $.global.parseFloat( val ) : +val;
+			val = $.global && this.options.numberFormat ? $.global.parseFloat( val ) : +val;
 		}
 		return isNaN( val ) ? null : val;
 	},
 
 	_format: function( num ) {
-		this.element.val( $.global && this.options.numberformat ? $.global.format( num, this.options.numberformat ) : num );
+		this.element.val( $.global && this.options.numberFormat ? $.global.format( num, this.options.numberFormat ) : num );
 	},
 
 	destroy: function() {
@@ -367,7 +369,5 @@ $.widget( "ui.spinner", {
 		return this.uiSpinner;
 	}
 });
-
-$.ui.spinner.version = "@VERSION";
 
 }( jQuery ) );

@@ -1,22 +1,57 @@
-/*
- * tooltip_methods.js
- */
-(function($) {
+(function( $ ) {
 
+module( "tooltip: methods" );
 
-module("tooltip: methods");
+test( "destroy", function() {
+	expect( 2 );
+	domEqual( "#tooltipped1", function() {
+		$( "#tooltipped1" ).tooltip().tooltip( "destroy" );
+	});
 
-test("destroy", function() {
-	var beforeHtml = $("#tooltipped1").parent().html();
-	var afterHtml = $("#tooltipped1").tooltip().tooltip("destroy").parent().html();
-	equal( afterHtml, beforeHtml );
+	// make sure that open tooltips are removed on destroy
+	$( "#tooltipped1" ).tooltip().tooltip( "open" ).tooltip( "destroy" );
+	equal( $( ".ui-tooltip" ).length, 0 );
 });
 
-test("open", function() {
-	var e = $("#tooltipped1").tooltip();
-	e.tooltip("open");
-	ok( $(".ui-tooltip").is(":visible") );
-	$(":ui-tooltip").tooltip("destroy");
+test( "open/close", function() {
+	expect( 3 );
+	$.fx.off = true;
+	var element = $( "#tooltipped1" ).tooltip();
+	equal( $( ".ui-tooltip" ).length, 0, "no tooltip on init" );
+
+	element.tooltip( "open" );
+	var tooltip = $( "#" + element.attr( "aria-describedby" ) );
+	ok( tooltip.is( ":visible" ) );
+
+	element.tooltip( "close" );
+	ok( tooltip.is( ":hidden" ) );
+	$.fx.off = false;
+});
+
+test( "enable/disable", function() {
+	expect( 7 );
+	$.fx.off = true;
+	var element = $( "#tooltipped1" ).tooltip();
+	equal( $( ".ui-tooltip" ).length, 0, "no tooltip on init" );
+
+	element.tooltip( "open" );
+	var tooltip = $( "#" + element.attr( "aria-describedby" ) );
+	ok( tooltip.is( ":visible" ) );
+
+	element.tooltip( "disable" );
+	equal( $( ".ui-tooltip" ).length, 0, "no tooltip when disabled" );
+	equal( tooltip.attr( "title" ), "", "title removed on disable" );
+
+	element.tooltip( "open" );
+	equal( $( ".ui-tooltip" ).length, 0, "open does nothing when disabled" );
+
+	element.tooltip( "enable" );
+	equal( element.attr( "title" ), "anchortitle", "title restored on enable" );
+
+	element.tooltip( "open" );
+	tooltip = $( "#" + element.attr( "aria-describedby" ) );
+	ok( tooltip.is( ":visible" ) );
+	$.fx.off = false;
 });
 
 /*
@@ -29,5 +64,4 @@ test("widget", function() {
 });
 */
 
-
-})(jQuery);
+}( jQuery ) );

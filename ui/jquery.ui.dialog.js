@@ -36,6 +36,7 @@ var uiDialogClasses = "ui-dialog ui-widget ui-widget-content ui-corner-all ",
 	};
 
 $.widget("ui.dialog", {
+	version: "@VERSION",
 	options: {
 		autoOpen: true,
 		buttons: {},
@@ -190,6 +191,10 @@ $.widget("ui.dialog", {
 	},
 
 	close: function( event ) {
+		if ( !this._isOpen ) {
+			return self;
+		}
+
 		var self = this,
 			maxZ, thisZ;
 		
@@ -197,12 +202,12 @@ $.widget("ui.dialog", {
 			return;
 		}
 
+		self._isOpen = false;
+
 		if ( self.overlay ) {
 			self.overlay.destroy();
 		}
 		self.uiDialog.unbind( "keypress.ui-dialog" );
-
-		self._isOpen = false;
 
 		if ( self.options.hide ) {
 			self.uiDialog.hide( self.options.hide, function() {
@@ -369,8 +374,7 @@ $.widget("ui.dialog", {
 	_makeDraggable: function() {
 		var self = this,
 			options = self.options,
-			doc = $( document ),
-			heightBeforeDrag;
+			doc = $( document );
 
 		function filteredUi( ui ) {
 			return {
@@ -384,9 +388,7 @@ $.widget("ui.dialog", {
 			handle: ".ui-dialog-titlebar",
 			containment: "document",
 			start: function( event, ui ) {
-				heightBeforeDrag = options.height === "auto" ? "auto" : $( this ).height();
 				$( this )
-					.height( $( this ).height() )
 					.addClass( "ui-dialog-dragging" );
 				self._trigger( "dragStart", event, filteredUi( ui ) );
 			},
@@ -399,8 +401,7 @@ $.widget("ui.dialog", {
 					ui.position.top - doc.scrollTop()
 				];
 				$( this )
-					.removeClass( "ui-dialog-dragging" )
-					.height( heightBeforeDrag );
+					.removeClass( "ui-dialog-dragging" );
 				self._trigger( "dragStop", event, filteredUi( ui ) );
 				$.ui.dialog.overlay.resize();
 			}
@@ -655,8 +656,6 @@ $.widget("ui.dialog", {
 });
 
 $.extend($.ui.dialog, {
-	version: "@VERSION",
-
 	uuid: 0,
 	maxZ: 0,
 

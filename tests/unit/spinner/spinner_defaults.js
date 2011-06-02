@@ -4,7 +4,7 @@ commonWidgetTests( "spinner", {
 		incremental: true,
 		max: null,
 		min: null,
-		numberformat: null,
+		numberFormat: null,
 		page: 10,
 		step: null,
 		value: null,

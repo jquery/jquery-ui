@@ -18,6 +18,7 @@ $(document).mousedown(function(e) {
 });
 
 $.widget("ui.mouse", {
+	version: "@VERSION",
 	options: {
 		cancel: ':input,option',
 		distance: 1,
@@ -58,7 +59,7 @@ $.widget("ui.mouse", {
 
 		var self = this,
 			btnIsLeft = (event.which == 1),
-			elIsCancel = (typeof this.options.cancel == "string" ? $(event.target).parents().add(event.target).filter(this.options.cancel).length : false);
+			elIsCancel = (typeof this.options.cancel == "string" ? $(event.target).closest(this.options.cancel).length : false);
 		if (!btnIsLeft || elIsCancel || !this._mouseCapture(event)) {
 			return true;
 		}

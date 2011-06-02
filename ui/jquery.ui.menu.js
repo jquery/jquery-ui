@@ -16,6 +16,7 @@
 var idIncrement = 0;
 
 $.widget("ui.menu", {
+	version: "@VERSION",
 	defaultElement: "<ul>",
 	delay: 150,
 	options: {
@@ -419,7 +420,5 @@ $.widget("ui.menu", {
 		this._trigger( "select", event, ui );
 	}
 });
-
-$.ui.menu.version = "@VERSION";
 
 }( jQuery ));

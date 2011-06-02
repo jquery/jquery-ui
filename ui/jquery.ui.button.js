@@ -41,6 +41,7 @@ var lastActive, startXPos, startYPos, clickDragged,
 	};
 
 $.widget( "ui.button", {
+	version: "@VERSION",
 	defaultElement: "<button>",
 	options: {
 		disabled: null,
@@ -95,17 +96,20 @@ $.widget( "ui.button", {
 				}
 				$( this ).removeClass( hoverClass );
 			})
-			.bind( "focus.button", function() {
-				// no need to check disabled, focus won't be triggered anyway
-				$( this ).addClass( focusClass );
-			})
-			.bind( "blur.button", function() {
-				$( this ).removeClass( focusClass );
-			})
 			.bind( "click.button", function( event ) {
 				if ( options.disabled ) {
+					event.preventDefault();
 					event.stopImmediatePropagation();
 				}
+			});
+
+		this.element
+			.bind( "focus.button", function() {
+				// no need to check disabled, focus won't be triggered anyway
+				self.buttonElement.addClass( focusClass );
+			})
+			.bind( "blur.button", function() {
+				self.buttonElement.removeClass( focusClass );
 			});
 
 		if ( toggleButton ) {
@@ -408,7 +412,5 @@ $.widget( "ui.buttonset", {
 			.button( "destroy" );
 	}
 });
-
-$.ui.buttonset.version = "@VERSION";
 
 }( jQuery ) );

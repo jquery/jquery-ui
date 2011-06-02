@@ -49,7 +49,7 @@ $.widget = function( name, base, prototype ) {
 		if ( arguments.length ) {
 			this._createWidget( options, element );
 		}
-	}, $[ namespace ][ name ] );
+	}, $[ namespace ][ name ], { version: prototype.version } );
 
 	var basePrototype = new base();
 	// we need to make the options hash a property directly on the new instance
@@ -379,7 +379,7 @@ $.each( { show: "fadeIn", hide: "fadeOut" }, function( method, defaultEffect ) {
 		var hasOptions = !$.isEmptyObject( options ),
 			effectName = options.effect || defaultEffect;
 		options.complete = callback;
-		if (options.delay) {
+		if ( options.delay ) {
 			element.delay( options.delay );
 		}
 		if ( hasOptions && $.effects && ( $.effects.effect[ effectName ] || $.uiBackCompat !== false && $.effects[ effectName ] ) ) {

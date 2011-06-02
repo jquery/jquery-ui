@@ -1,30 +1,29 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8" />
+	<meta charset="utf-8">
 	<title>jQuery UI Tooltip Test Suite</title>
 
-	<link type="text/css" href="../../../themes/base/jquery.ui.tooltip.css" rel="stylesheet" />
+	<link rel="stylesheet" href="../../../themes/base/jquery.ui.tooltip.css">
 
-	<script type="text/javascript" src="../../../jquery-1.5.1.js"></script>
-	<script type="text/javascript" src="../../../ui/jquery.ui.core.js"></script>
-	<script type="text/javascript" src="../../../ui/jquery.ui.widget.js"></script>
-	<script type="text/javascript" src="../../../ui/jquery.ui.position.js"></script>
-	<script type="text/javascript" src="../../../ui/jquery.ui.tooltip.js"></script>
+	<script src="../../../jquery-1.5.1.js"></script>
+	<script src="../../../ui/jquery.ui.core.js"></script>
+	<script src="../../../ui/jquery.ui.widget.js"></script>
+	<script src="../../../ui/jquery.ui.position.js"></script>
+	<script src="../../../ui/jquery.ui.tooltip.js"></script>
 
-	<link rel="stylesheet" href="../../../external/qunit.css" type="text/css"/>
-	<script type="text/javascript" src="../../../external/qunit.js"></script>
-	<script type="text/javascript" src="../../jquery.simulate.js"></script>
-	<script type="text/javascript" src="../testsuite.js"></script>
-	
-	<script type="text/javascript" src="tooltip_core.js"></script>
-	<script type="text/javascript" src="tooltip_defaults.js"></script>
-	<script type="text/javascript" src="tooltip_events.js"></script>
-	<script type="text/javascript" src="tooltip_methods.js"></script>
-	<script type="text/javascript" src="tooltip_options.js"></script>
+	<link rel="stylesheet" href="../../../external/qunit.css">
+	<script src="../../../external/qunit.js"></script>
+	<script src="../../jquery.simulate.js"></script>
+	<script src="../testsuite.js"></script>
 
-	<script type="text/javascript" src="../swarminject.js"></script>
-	
+	<script src="tooltip_defaults.js"></script>
+	<script src="tooltip_core.js"></script>
+	<script src="tooltip_events.js"></script>
+	<script src="tooltip_methods.js"></script>
+	<script src="tooltip_options.js"></script>
+
+	<script src="../swarminject.js"></script>
 </head>
 <body>
 
@@ -32,16 +31,15 @@
 <h2 id="qunit-banner"></h2>
 <div id="qunit-testrunner-toolbar"></div>
 <h2 id="qunit-userAgent"></h2>
-<ol id="qunit-tests">
-</ol>
-
+<ol id="qunit-tests"></ol>
 <div id="qunit-fixture">
-	<div>
-		<a id="tooltipped1" href="#" title="anchortitle">anchor</a>
-		<input title="inputtitle" />
-		<span id="fixture-span" data-tooltip="text">span</span>
-	</div>
+
+<div>
+	<a id="tooltipped1" href="#" title="anchortitle">anchor</a>
+	<input title="inputtitle">
+	<span id="fixture-span" title="title-text">span</span>
 </div>
 
+</div>
 </body>
 </html>

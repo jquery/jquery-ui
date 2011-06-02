@@ -54,7 +54,9 @@ $.effects.effect.scale = function( o ) {
 			origin = o.origin,
 			original = { 
 				height: el.height(), 
-				width: el.width()
+				width: el.width(),
+				outerHeight: el.outerHeight(),
+				outerWidth: el.outerWidth()
 			},
 			factor = {
 				y: direction != 'horizontal' ? (percent / 100) : 1,
@@ -74,7 +76,9 @@ $.effects.effect.scale = function( o ) {
 		options.from = o.from || ( mode == 'show' ? { height: 0, width: 0 } : original ); 
 		options.to = {
 			height: original.height * factor.y, 
-			width: original.width * factor.x
+			width: original.width * factor.x,
+			outerHeight: original.outerHeight * factor.y, 
+			outerWidth: original.outerWidth * factor.x
 		}; 
 
 		if ( options.fade ) { // Fade option to support puff
@@ -122,20 +126,13 @@ $.effects.effect.size = function( o ) {
 		}
 		original = {
 			height: el.height(), 
-			width: el.width()
+			width: el.width(),
+			outerHeight: el.outerHeight(),
+			outerWidth: el.outerWidth()
 		};
 
 		el.from = o.from || original;
 		el.to = o.to || original;
-
-		// Adjust
-		if (origin) { // Calculate baseline shifts
-			baseline = $.effects.getBaseline( origin, original );
-			el.from.top = ( original.height - el.from.height ) * baseline.y;
-			el.from.left = ( original.width - el.from.width ) * baseline.x;
-			el.to.top = ( original.height - el.to.height ) * baseline.y;
-			el.to.left = ( original.width - el.to.width ) * baseline.x;
-		}
 
 		// Set scaling factor
 		factor = {
@@ -182,6 +179,16 @@ $.effects.effect.size = function( o ) {
 		el.show(); 
 		$.effects.createWrapper( el );
 		el.css( 'overflow', 'hidden' ).css( el.from ); 
+
+		// Adjust
+		if (origin) { // Calculate baseline shifts
+			baseline = $.effects.getBaseline( origin, original );
+			el.from.top = ( original.outerHeight - el.outerHeight() ) * baseline.y;
+			el.from.left = ( original.outerWidth - el.outerWidth() ) * baseline.x;
+			el.to.top = ( original.outerHeight - el.to.outerHeight ) * baseline.y;
+			el.to.left = ( original.outerWidth - el.to.outerWidth ) * baseline.x;
+		}
+		el.css( el.from ); // set top & left
 
 		// Animate
 		if ( scale == 'content' || scale == 'both' ) { // Scale the children
