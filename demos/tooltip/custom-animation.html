@@ -26,16 +26,14 @@
 				delay: 250
 			}
 		});
-		$( "#position-option" ).tooltip({
+		$( "#open-event" ).tooltip({
+			show: null,
 			position: {
 				my: "left top",
-				at: "left bottom+10",
-				using: function( pos ) {
-					$( this ).css({
-						left: pos.left,
-						top: pos.top - 10
-					}).animate({ top: pos.top }, "fast" );
-				}
+				at: "left bottom"
+			},
+			open: function( event, ui ) {
+				ui.tooltip.animate({ top: ui.tooltip.position().top + 10 }, "fast" );
 			}
 		});
 	});
@@ -48,16 +46,15 @@
 <p>There are various ways to customize the animation of a tooltip.</p>
 <p>You can use the <a id="show-option" href="http://jqueryui.com/demos/tooltip/#option-show" title="slide down on show">show</a> and
 <a id="hide-option" href="http://jqueryui.com/demos/tooltip/#option-hide" title="explode on hide">hide</a> options.</p>
-<p>You can also use the <a id="position-option" href="http://jqueryui.com/demos/tooltip/#option-position" title="move down on show">position option</a>.</p>
+<p>You can also use the <a id="open-event" href="http://jqueryui.com/demos/tooltip/#event-open" title="move down on show">open event</a>.</p>
 
 </div><!-- End demo -->
 
 
 
 <div class="demo-description">
-<p>This demo shows how to customize animations. The tooltip is shown, after a
-delay of 250ms, using a slide down animation, and hidden, after another delay,
-without an animation.</p>
+<p>This demo shows how to customize animations using the show and hide options,
+as well as the open event.</p>
 </div><!-- End demo-description -->
 
 </body>
