@@ -88,11 +88,17 @@
 			}
 		});
 
+		// initialize with default options
 		$( '#my-widget1' ).colorize();
+
+		// initialize with two customized options
 		$( '#my-widget2' ).colorize({
 			red: 60,
 			blue: 60
 		});
+
+		// initialize with custom green value
+		// and a random callback to allow only colors with enough green
 		$( '#my-widget3' ).colorize( {
 			green: 128,
 			random: function( event, ui ) {
@@ -100,12 +106,14 @@
 			}
 		});
 
+		// click to toggle enabled/disabled
 		$( '#disable' ).toggle(function() {
 			$( ':custom-colorize' ).colorize( 'disable' );
 		}, function() {
 			$( ':custom-colorize' ).colorize( 'enable' );
 		});
 
+		// click to set options after initalization
 		$( '#black' ).click( function() {
 			$( ':custom-colorize' ).colorize( 'option', {
 				red: 0,
