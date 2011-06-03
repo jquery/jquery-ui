@@ -367,8 +367,10 @@ $.widget( "ui.autocomplete", {
 			this._suggest( content );
 			this._trigger( "open" );
 		} else {
+			this._trigger( "empty" );
 			this.close();
 		}
+		this._trigger( "searchcomplete" );
 		this.pending--;
 		if ( !this.pending ) {
 			this.element.removeClass( "ui-autocomplete-loading" );
