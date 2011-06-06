@@ -68,9 +68,9 @@ $.widget("ui.selectmenu", {
 		this.newelement.prepend('<span class="' + self.widgetBaseClass + '-status" />');
 
 		// make associated form label trigger focus
-		$('label[for="' + this.element.attr('id') + '"]')
-			.attr('for', this.ids[0])
-			.bind('click.selectmenu', function() {
+		$( 'label[for="' + selectmenuId + '"]' )
+			.attr( 'for', this.ids[0] )
+			.bind( 'click.selectmenu', function() {
 				self.newelement[0].focus();
 				return false;
 			});
