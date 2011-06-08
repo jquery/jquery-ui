@@ -254,7 +254,7 @@ $.extend(Datepicker.prototype, {
 				date.setDate(findMax(this._get(inst, (dateFormat.match(/DD/) ?
 					'dayNames' : 'dayNamesShort'))) + 20 - date.getDay());
 			}
-			inst.input.attr('size', this._formatDate(inst, date).length);
+			inst.input.prop('size', this._formatDate(inst, date).length);
 		}
 	},
 
@@ -365,7 +365,7 @@ $.extend(Datepicker.prototype, {
 			var inline = $target.children('.' + this._inlineClass);
 			inline.children().removeClass('ui-state-disabled');
 			inline.find("select.ui-datepicker-month, select.ui-datepicker-year").
-				removeAttr("disabled");
+				prop("disabled", false);
 		}
 		this._disabledInputs = $.map(this._disabledInputs,
 			function(value) { return (value == target ? null : value); }); // delete entry
@@ -390,7 +390,7 @@ $.extend(Datepicker.prototype, {
 			var inline = $target.children('.' + this._inlineClass);
 			inline.children().addClass('ui-state-disabled');
 			inline.find("select.ui-datepicker-month, select.ui-datepicker-year").
-				attr("disabled", "disabled");
+				prop("disabled", true);
 		}
 		this._disabledInputs = $.map(this._disabledInputs,
 			function(value) { return (value == target ? null : value); }); // delete entry

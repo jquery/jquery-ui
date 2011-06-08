@@ -39,15 +39,15 @@ test( "accessibility", function () {
 	equals( element.attr( "role" ), "tablist", "main role" );
 	equals( headers.attr( "role" ), "tab", "tab roles" );
 	equals( headers.next().attr( "role" ), "tabpanel", "tabpanel roles" );
-	equals( headers.eq( 1 ).attr( "aria-expanded" ), "true", "active tab has aria-expanded" );
-	equals( headers.eq( 0 ).attr( "aria-expanded" ), "false", "inactive tab has aria-expanded" );
-	equals( headers.eq( 1 ).attr( "aria-selected" ), "true", "active tab has aria-selected" );
-	equals( headers.eq( 0 ).attr( "aria-selected" ), "false", "inactive tab has aria-selected" );
+	equals( headers.eq( 1 ).prop( "aria-expanded" ), true, "active tab has aria-expanded" );
+	equals( headers.eq( 0 ).prop( "aria-expanded" ), false, "inactive tab has aria-expanded" );
+	equals( headers.eq( 1 ).prop( "aria-selected" ), true, "active tab has aria-selected" );
+	equals( headers.eq( 0 ).prop( "aria-selected" ), false, "inactive tab has aria-selected" );
 	element.accordion( "option", "active", 0 );
-	equals( headers.eq( 0 ).attr( "aria-expanded" ), "true", "newly active tab has aria-expanded" );
-	equals( headers.eq( 1 ).attr( "aria-expanded" ), "false", "newly inactive tab has aria-expanded" );
-	equals( headers.eq( 0 ).attr( "aria-selected" ), "true", "active tab has aria-selected" );
-	equals( headers.eq( 1 ).attr( "aria-selected" ), "false", "inactive tab has aria-selected" );
+	equals( headers.eq( 0 ).prop( "aria-expanded" ), true, "newly active tab has aria-expanded" );
+	equals( headers.eq( 1 ).prop( "aria-expanded" ), false, "newly inactive tab has aria-expanded" );
+	equals( headers.eq( 0 ).prop( "aria-selected" ), true, "active tab has aria-selected" );
+	equals( headers.eq( 1 ).prop( "aria-selected" ), false, "inactive tab has aria-selected" );
 });
 
 }( jQuery ) );

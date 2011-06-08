@@ -58,7 +58,7 @@ $.widget( "ui.button", {
 			.bind( "reset.button", formResetHandler );
 
 		if ( typeof this.options.disabled !== "boolean" ) {
-			this.options.disabled = this.element.attr( "disabled" );
+			this.options.disabled = this.element.prop( "disabled" );
 		}
 
 		this._determineButtonType();
@@ -147,7 +147,7 @@ $.widget( "ui.button", {
 					return false;
 				}
 				$( this ).toggleClass( "ui-state-active" );
-				self.buttonElement.attr( "aria-pressed", self.element[0].checked );
+				self.buttonElement.prop( "aria-pressed", self.element[0].checked );
 			});
 		} else if ( this.type === "radio" ) {
 			this.buttonElement.bind( "click.button", function() {
@@ -155,7 +155,7 @@ $.widget( "ui.button", {
 					return false;
 				}
 				$( this ).addClass( "ui-state-active" );
-				self.buttonElement.attr( "aria-pressed", true );
+				self.buttonElement.prop( "aria-pressed", true );
 
 				var radio = self.element[ 0 ];
 				radioGroup( radio )
@@ -164,7 +164,7 @@ $.widget( "ui.button", {
 						return $( this ).button( "widget" )[ 0 ];
 					})
 					.removeClass( "ui-state-active" )
-					.attr( "aria-pressed", false );
+					.prop( "aria-pressed", false );
 			});
 		} else {
 			this.buttonElement
@@ -244,7 +244,7 @@ $.widget( "ui.button", {
 			if ( checked ) {
 				this.buttonElement.addClass( "ui-state-active" );
 			}
-			this.buttonElement.attr( "aria-pressed", checked );
+			this.buttonElement.prop( "aria-pressed", checked );
 		} else {
 			this.buttonElement = this.element;
 		}
@@ -260,7 +260,7 @@ $.widget( "ui.button", {
 		this.buttonElement
 			.removeClass( baseClasses + " " + stateClasses + " " + typeClasses )
 			.removeAttr( "role" )
-			.removeAttr( "aria-pressed" )
+			.removeProp( "aria-pressed" )
 			.html( this.buttonElement.find(".ui-button-text").html() );
 
 		if ( !this.hasTitle ) {
@@ -272,9 +272,9 @@ $.widget( "ui.button", {
 		this._super( "_setOption", key, value );
 		if ( key === "disabled" ) {
 			if ( value ) {
-				this.element.attr( "disabled", true );
+				this.element.prop( "disabled", true );
 			} else {
-				this.element.removeAttr( "disabled" );
+				this.element.prop( "disabled", false );
 			}
 			return;
 		}
@@ -291,22 +291,22 @@ $.widget( "ui.button", {
 				if ( $( this ).is( ":checked" ) ) {
 					$( this ).button( "widget" )
 						.addClass( "ui-state-active" )
-						.attr( "aria-pressed", true );
+						.prop( "aria-pressed", true );
 				} else {
 					$( this ).button( "widget" )
 						.removeClass( "ui-state-active" )
-						.attr( "aria-pressed", false );
+						.prop( "aria-pressed", false );
 				}
 			});
 		} else if ( this.type === "checkbox" ) {
 			if ( this.element.is( ":checked" ) ) {
 				this.buttonElement
 					.addClass( "ui-state-active" )
-					.attr( "aria-pressed", true );
+					.prop( "aria-pressed", true );
 			} else {
 				this.buttonElement
 					.removeClass( "ui-state-active" )
-					.attr( "aria-pressed", false );
+					.prop( "aria-pressed", false );
 			}
 		}
 	},

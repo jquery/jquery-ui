@@ -178,8 +178,8 @@ $.widget("ui.menu", {
 			.removeAttr( "role" )
 			.removeAttr("tabIndex")
 			.removeAttr( "aria-labelledby" )
-			.removeAttr( "aria-expanded" )
-			.removeAttr( "aria-hidden" )
+			.removeProp( "aria-expanded" )
+			.removeProp( "aria-hidden" )
 			.show();
 		
 		//destroy menu items
@@ -191,7 +191,7 @@ $.widget("ui.menu", {
 			.removeClass( "ui-corner-all ui-state-hover" )
 			.removeAttr( "tabIndex" )
 			.removeAttr( "role" )
-			.removeAttr( "aria-haspopup" )
+			.removeProp( "aria-haspopup" )
 			.removeAttr( "id" )
 			.children(".ui-icon").remove();		
 	},
@@ -203,9 +203,10 @@ $.widget("ui.menu", {
 			.addClass( "ui-menu ui-widget ui-widget-content ui-corner-all" )
 			.attr("role", "menu")
 			.hide()
-			.attr("aria-hidden", "true")
-			.attr("aria-expanded", "false")
-			;
+			.prop({
+				"aria-hidden": true,
+				"aria-expanded": false
+			});
 		
 		// don't refresh list items that are already adapted
 		var items = submenus.add(this.element).children( "li:not(.ui-menu-item):has(a)" )
@@ -221,7 +222,7 @@ $.widget("ui.menu", {
 		submenus.each(function() {
 			var menu = $(this);
 			var item = menu.prev("a") 
-			item.attr("aria-haspopup", "true")
+			item.prop("aria-haspopup", true)
 			.prepend('<span class="ui-menu-icon ui-icon ui-icon-carat-1-e"></span>');
 			menu.attr("aria-labelledby", item.attr("id"));
 		});
@@ -289,19 +290,19 @@ $.widget("ui.menu", {
 	
 	_open: function(submenu) {
 		clearTimeout(this.timer);
-		this.element.find(".ui-menu").not(submenu.parents()).hide().attr("aria-hidden", "true");
+		this.element.find(".ui-menu").not(submenu.parents()).hide().prop("aria-hidden", true);
 		var position = $.extend({}, {
 			of: this.active
 		}, $.type(this.options.position) == "function"
 			? this.options.position(this.active)
 			: this.options.position
 		);
-		submenu.show().removeAttr("aria-hidden").attr("aria-expanded", "true").position(position);
+		submenu.show().removeProp("aria-hidden").prop("aria-expanded", true).position(position);
 	},
 	
 	closeAll: function() {
 		this.element
-		 .find("ul").hide().attr("aria-hidden", "true").attr("aria-expanded", "false").end()
+		 .find("ul").hide().prop("aria-hidden", true).prop("aria-expanded", false).end()
 		 .find("a.ui-state-active").removeClass("ui-state-active");
 		this.blur();
 		this.activeMenu = this.element;
@@ -309,14 +310,14 @@ $.widget("ui.menu", {
 	
 	_close: function() {
 		this.active.parent()
-		 .find("ul").hide().attr("aria-hidden", "true").attr("aria-expanded", "false").end()
+		 .find("ul").hide().prop("aria-hidden", true).prop("aria-expanded", false).end()
 		 .find("a.ui-state-active").removeClass("ui-state-active");
 	},
 
 	left: function(event) {
 		var newItem = this.active && this.active.parents("li:not(.ui-menubar-item)").first();
 		if (newItem && newItem.length) {
-			this.active.parent().attr("aria-hidden", "true").attr("aria-expanded", "false").hide();
+			this.active.parent().prop("aria-hidden", true).prop("aria-expanded", false).hide();
 			this.focus(event, newItem);
 			return true;
 		}
@@ -407,8 +408,7 @@ $.widget("ui.menu", {
 	},
 
 	_hasScroll: function() {
-		// TODO: just use .prop() when we drop support for jQuery <1.6
-		return this.element.height() < this.element[ $.fn.prop ? "prop" : "attr" ]( "scrollHeight" );
+		return this.element.height() < this.element.prop( "scrollHeight" );
 	},
 
 	select: function( event ) {
