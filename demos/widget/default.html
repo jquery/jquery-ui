@@ -10,7 +10,7 @@
 	<script src="../../ui/jquery.ui.position.js"></script>
 	<link rel="stylesheet" href="../demos.css">
 	<style>
-	.colorize {
+	.custom-colorize {
 		font-size: 25px;
 		width: 75px;
 		height: 75px;
@@ -28,20 +28,21 @@
 				blue: 0,
 
 				// callbacks
+				change: null,
 				random: null
 			},
 
 			// the constructor
 			_create: function() {
 				this.element
-					// add a class for themeing
-					.addClass("colorize")
+					// add a class for theming
+					.addClass( "custom-colorize" )
 					// prevent double click to select text
 					.disableSelection();
 
 				// bind click events to random method
 				this._bind({
-					// _bind won"t call random when widget is disabled
+					// _bind won't call random when widget is disabled
 					click: "random"
 				});
 				this._refresh();
@@ -68,7 +69,7 @@
 					blue: Math.floor( Math.random() * 256 )
 				};
 
-				// trigger an event, check if it"s canceled
+				// trigger an event, check if it's canceled
 				if ( this._trigger( "random", event, colors ) !== false ) {
 					this.option( colors );
 				}
@@ -78,24 +79,26 @@
 			// revert other modifications here
 			_destroy: function() {
 				this.element
-					.removeClass( "colorize" )
+					.removeClass( "custom-colorize" )
 					.enableSelection()
 					.css( "background-color", "transparent" );
 			},
 
-			_setOption: function( key, value ) {
-				// prevent invalid color values
-				if ( /red|green|blue/.test(key) && value < 0 || value > 255 ) {
-					return;
-				}
-				this._super( "_setOptions", options );
-			},
-
+			// _setOptions is called with a hash of all options that are changing
 			// always refresh when changing options
 			_setOptions: function() {
-				// _super handles keeping the right this-context
+				// _super and _superApply handle keeping the right this-context
 				this._superApply( "_setOptions", arguments );
 				this._refresh();
+			},
+
+			// _setOption is called for each individual option that is changing
+			_setOption: function( key, value ) {
+				// prevent invalid color values
+				if ( /red|green|blue/.test(key) && (value < 0 || value > 255) ) {
+					return;
+				}
+				this._super( "_setOption", key, value );
 			}
 		});
 
@@ -131,7 +134,7 @@
 				red: 0,
 				green: 0,
 				blue: 0
-			} );
+			});
 		});
 	});
 	</script>
