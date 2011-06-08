@@ -301,9 +301,10 @@ $.Widget.prototype = {
 			element = $( element );
 			this.bindings = this.bindings.add( element );
 		}
+
 		var instance = this;
 		$.each( handlers, function( event, handler ) {
-			element.bind( event + "." + instance.widgetName, function() {
+			function handlerProxy() {
 				// allow widgets to customize the disabled handling
 				// - disabled as an array instead of boolean
 				// - disabled class as method for disabling individual parts
@@ -313,7 +314,15 @@ $.Widget.prototype = {
 				}
 				return ( typeof handler === "string" ? instance[ handler ] : handler )
 					.apply( instance, arguments );
-			});
+			}
+	        var match = key.match( /^(\w+)\s*(.*)$/ );
+	        var eventName = match[1] + "." + instance.widgetName,
+				selector = match[2];
+	        if (selector === '') {
+	          element.bind( eventName, handlerProxy );
+	        } else {
+	          element.delegate( selector, eventName, handlerProxy );
+	        }
 		});
 	},
 
