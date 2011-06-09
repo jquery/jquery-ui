@@ -32,6 +32,7 @@ $.widget( "ui.grid", {
 		});
 	},
 	refresh: function() {
+		// TODO this code assumes a single tbody which is not a safe assumption
 		var tbody = this.element.find( "tbody" ).empty(),
 			template = this.options.rowTemplate;
 		// TODO try to replace $.each with passing an array to $.tmpl, produced by this.items.something()
@@ -46,6 +47,7 @@ $.widget( "ui.grid", {
 	
 	_columns: function() {
 		if ( this.options.columns ) {
+			// TODO this code assumes any present th is a column header, but it may be a row header
 			if ( !this.element.find( "th" ).length ) {
 				// TODO improve this
 				var head = this.element.find("thead");
