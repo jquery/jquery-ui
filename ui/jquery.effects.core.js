@@ -397,10 +397,12 @@ $.extend( $.effects, {
 		}
 
 		// wrap the element
-		var props = {
-				width: element.outerWidth(true),
+		var floating = element.css( "float" ),
+			props = {
+				// for margin #px auto;(horizontal center)
+				width: floating === "none" ? "100%" : element.outerWidth(true),
 				height: element.outerHeight(true),
-				"float": element.css( "float" )
+				"float": floating
 			},
 			wrapper = $( "<div></div>" )
 				.addClass( "ui-effects-wrapper" )
