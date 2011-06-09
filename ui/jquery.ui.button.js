@@ -101,6 +101,9 @@ $.widget( "ui.button", {
 					event.preventDefault();
 					event.stopImmediatePropagation();
 				}
+			})
+			.focusout( function() {
+				$( this ).removeClass( focusClass );
 			});
 
 		this.element
