@@ -685,6 +685,7 @@ $.extend( $.ui.dialog.overlay, {
 		}
 	).join( " " ),
 	create: function( dialog ) {
+		var that = this;
 		if ( this.instances.length === 0 ) {
 			// prevent use of anchors and inputs
 			// we use a setTimeout in case the overlay is created from an
@@ -707,7 +708,7 @@ $.extend( $.ui.dialog.overlay, {
 				if ( dialog.options.closeOnEscape && !event.isDefaultPrevented() && event.keyCode &&
 					event.keyCode === $.ui.keyCode.ESCAPE ) {
 					
-					dialog.close( event );
+					that.instances[that.instances.length-1].dialog.close( event );
 					event.preventDefault();
 				}
 			});
@@ -726,6 +727,8 @@ $.extend( $.ui.dialog.overlay, {
 		if ( $.fn.bgiframe ) {
 			$el.bgiframe();
 		}
+		
+		$el.dialog = dialog;
 
 		this.instances.push( $el );
 		return $el;
