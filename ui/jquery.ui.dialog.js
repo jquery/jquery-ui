@@ -95,7 +95,7 @@ $.widget("ui.dialog", {
 				})
 				// setting tabIndex makes the div focusable
 				.attr( "tabIndex", -1)
-				.keydown(function( event ) {
+				.bind( "keydown.dialog-overlay", function( event ) {
 					if ( options.closeOnEscape && !event.isDefaultPrevented() && event.keyCode &&
 							event.keyCode === $.ui.keyCode.ESCAPE ) {
 						self.close( event );
@@ -196,7 +196,7 @@ $.widget("ui.dialog", {
 		}
 
 		var self = this,
-			maxZ, thisZ;
+			maxZ, thisZ, top;
 		
 		if ( false === self._trigger( "beforeClose", event ) ) {
 			return;
@@ -228,9 +228,13 @@ $.widget("ui.dialog", {
 					thisZ = $( this ).css( "z-index" );
 					if ( !isNaN( thisZ ) ) {
 						maxZ = Math.max( maxZ, thisZ );
+						top = $( this );
 					}
 				}
 			});
+			if ( top && top.is( ":visible" ) ) {
+				top.trigger( "focus", event );
+			}
 			$.ui.dialog.maxZ = maxZ;
 		}
 
@@ -239,6 +243,28 @@ $.widget("ui.dialog", {
 
 	isOpen: function() {
 		return this._isOpen;
+	},
+	
+	isOnTop: function() {
+		var _isOnTop = false,
+			isAfter = false,
+			myZ;
+		if( this._isOpen ) {
+			myZ = $( this ).css( "z-index" )
+			$( ".ui-dialog" ).each(function() {
+				if ( this !== that.uiDialog[0] ) {
+					var thisZ = $( this ).css( "z-index" );
+					if ( !isNaN( thisZ ) && ( thisZ > myZ || ( isAfter && thisZ === myZ ) ) ) {
+						return false;
+					}
+				}
+				else {
+					isAfter = true;
+				}
+				_isOnTop = true;
+			});
+		}
+		return _isOnTop;
 	},
 
 	// the force parameter allows us to move modal dialogs to their correct
@@ -685,6 +711,7 @@ $.extend( $.ui.dialog.overlay, {
 		}
 	).join( " " ),
 	create: function( dialog ) {
+		var that = this;
 		if ( this.instances.length === 0 ) {
 			// prevent use of anchors and inputs
 			// we use a setTimeout in case the overlay is created from an
@@ -705,7 +732,7 @@ $.extend( $.ui.dialog.overlay, {
 			// allow closing by pressing the escape key
 			$( document ).bind( "keydown.dialog-overlay", function( event ) {
 				if ( dialog.options.closeOnEscape && !event.isDefaultPrevented() && event.keyCode &&
-					event.keyCode === $.ui.keyCode.ESCAPE ) {
+					event.keyCode === $.ui.keyCode.ESCAPE && that.isOnTop() ) {
 					
 					dialog.close( event );
 					event.preventDefault();
