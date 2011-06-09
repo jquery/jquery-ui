@@ -189,8 +189,8 @@ $.widget("ui.sortable", $.ui.mouse, {
 			this._setContainment();
 
 		if(o.cursor) { // cursor option
-			if ($('body').css("cursor")) this._storedCursor = $('body').css("cursor");
-			$('body').css("cursor", o.cursor);
+			if (this.helper.css("cursor")) this._storedCursor = this.helper.css("cursor");
+			this.helper.css("cursor", o.cursor);
 		}
 
 		if(o.opacity) { // opacity option
@@ -1018,7 +1018,7 @@ $.widget("ui.sortable", $.ui.mouse, {
 		}
 
 		//Do what was originally in plugins
-		if(this._storedCursor) $('body').css("cursor", this._storedCursor); //Reset cursor
+		if(this._storedCursor) this.helper.css("cursor", this._storedCursor); //Reset cursor
 		if(this._storedOpacity) this.helper.css("opacity", this._storedOpacity); //Reset opacity
 		if(this._storedZIndex) this.helper.css("zIndex", this._storedZIndex == 'auto' ? '' : this._storedZIndex); //Reset z-index
 
