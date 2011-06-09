@@ -93,7 +93,8 @@ $.widget("ui.selectable", $.ui.mouse, {
 			"left": event.clientX,
 			"top": event.clientY,
 			"width": 0,
-			"height": 0
+			"height": 0,
+			"zIndex": this.element.zIndex() + 1
 		});
 
 		if (options.autoRefresh) {
