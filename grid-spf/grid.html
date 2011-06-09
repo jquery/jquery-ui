@@ -34,8 +34,7 @@
 				operator = button.data( "filter-operator" ),
 				key = "filter." + field;
 
-			// TODO nested getter support would be nice here
-			if ( datasource.option( "filter" ) && datasource.option( "filter" )[ field ] ) {
+			if ( datasource.option( "filter." + field ) ) {
 				datasource.option( key, null );
 			} else {
 				datasource.option(key, {
