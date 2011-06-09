@@ -267,7 +267,7 @@ if ( $.uiBackCompat !== false ) {
 	(function( $ ) {
 		var _position = $.fn.position;
 		$.fn.position = function( options ) {
-			if ( !options || !( "offset" in options ) || !options["offset"] ) {
+			if ( !options || !options.offset ) {
 				return _position.call( this, options );
 			}
 			var offset = options.offset.split( " " ),
