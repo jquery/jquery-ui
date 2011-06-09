@@ -13,9 +13,10 @@
 	<script src="../../ui/jquery.ui.menubar.js"></script>
 	<script>
 	$(function() {
-		$("td:has(.menubar)").clone().appendTo("tbody tr:not(:first)");
-		
-		$("#bar1, .menubar").menubar({
+		$("#bar1").menubar({
+			position: {
+				within: $("#demo-frame").add(window).first()
+			},
 			select: function(event, ui) {
 				$("<div/>").text("Selected: " + ui.item.text()).appendTo("#log");
 			}
@@ -24,6 +25,9 @@
 		$(".menubar-icons").menubar({
 			menuIcon: true,
 			buttons: true,
+			position: {
+				within: $("#demo-frame").add(window).first()
+			},
 			select: function(event, ui) {
 				$("<div/>").text("Selected: " + ui.item.text()).appendTo("#log");
 			}
@@ -159,63 +163,6 @@
 		</ul>
 	</li>
 </ul>
-
-<!--
-<table id="movies" class="ui-widget">
-	<thead>
-		<tr>
-			<th data-field="Name" class="ui-widget-header">Name</th>
-			<th data-field="ReleaseYear" class="ui-widget-header">Release Year</th>
-			<th data-field="AverageRating" class="ui-widget-header">Average Rating</th>
-			<th class="ui-widget-header"></th>
-		</tr>
-	</thead>
-	<tbody>
-		<tr>
-			<td class="ui-widget-content">Red Hot Chili Peppers: Funky Monks</td>
-			<td class="ui-widget-content">1993</td>
-			<td class="ui-widget-content">3.6</td>
-			<td class="ui-widget-content">
-				<ul class="menubar">
-					<li>
-						<a href="#Options">Options</a>
-						<ul>
-							<li><a href="#Order...">Order...</a></li>
-							<li class="ui-state-disabled">Write a Review...</li>
-							<li><a href="#Find Similar Movies...">Find Similar Movies...</a></li>
-							<li>
-								<a href="#Rate">Rate</a>
-								<ul>
-									<li><a href="#5 stars">5 stars</a></li>
-									<li><a href="#4 stars">4 stars</a></li>
-									<li><a href="#3 stars">3 stars</a></li>
-									<li><a href="#2 stars">2 stars</a></li>
-									<li><a href="#1 stars">1 stars</a></li>
-								</ul>
-							</li>
-						</ul>
-					</li>
-				</ul>
-			</td>
-		</tr>
-		<tr>
-			<td class="ui-widget-content">Rod Stewart: Storyteller 1984-1991</td>
-			<td class="ui-widget-content">1991</td>
-			<td class="ui-widget-content">3.1</td>
-		</tr>
-		<tr>
-			<td class="ui-widget-content">Stevie Ray Vaughan and Double Trouble: Live at the El Mocambo 1983</td>
-			<td class="ui-widget-content">1991</td>
-			<td class="ui-widget-content">3.9</td>
-		</tr>
-		<tr>
-			<td class="ui-widget-content">Spike and Mike's Sick &amp; Twisted Festival of Animation</td>
-			<td class="ui-widget-content">1997</td>
-			<td class="ui-widget-content">2.6</td>
-		</tr>
-	</tbody>
-</table>
--->
 
 <div class="ui-widget" style="margin-top:2em; font-family:Arial">
 	Log:
