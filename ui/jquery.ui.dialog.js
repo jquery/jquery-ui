@@ -33,8 +33,7 @@ var uiDialogClasses = "ui-dialog ui-widget ui-widget-content ui-corner-all ",
 		maxWidth: true,
 		minHeight: true,
 		minWidth: true
-	},
-	_maxZ = 0;
+	};
 
 $.widget("ui.dialog", {
 	options: {
@@ -227,7 +226,7 @@ $.widget("ui.dialog", {
 					}
 				}
 			});
-			_maxZ = maxZ;
+			$.ui.dialog.maxZ = maxZ;
 		}
 
 		return self;
@@ -249,12 +248,12 @@ $.widget("ui.dialog", {
 			return self._trigger( "focus", event );
 		}
 
-		if ( options.zIndex >= _maxZ ) {
-			_maxZ = options.zIndex+1;
+		if ( options.zIndex >= $.ui.dialog.maxZ ) {
+			$.ui.dialog.maxZ = options.zIndex + 1;
 		}
 		if ( self.overlay ) {
-			_maxZ += 1;
-			$.ui.dialog.overlay.maxZ = _maxZ;
+			$.ui.dialog.maxZ += 1;
+			$.ui.dialog.overlay.maxZ = $.ui.dialog.maxZ;
 			self.overlay.$el.css( "z-index", $.ui.dialog.overlay.maxZ );
 		}
 
@@ -265,8 +264,8 @@ $.widget("ui.dialog", {
 			scrollTop: self.element.attr( "scrollTop" ),
 			scrollLeft: self.element.attr( "scrollLeft" )
 		};
-		if( self.uiDialog.css( "z-index" ) < _maxZ )
-			self.uiDialog.css( "z-index", _maxZ += 1 );
+		if( self.uiDialog.css( "z-index" ) < $.ui.dialog.maxZ )
+			self.uiDialog.css( "z-index", $.ui.dialog.maxZ += 1 );
 		self.element.attr( saveScroll );
 		self._trigger( "focus", event );
 
