@@ -1,6 +1,6 @@
 /*
  * jQuery UI Menu @VERSION
- * 
+ *
  * Copyright 2011, AUTHORS.txt (http://jqueryui.com/about)
  * Dual licensed under the MIT or GPL Version 2 licenses.
  * http://jquery.org/license
@@ -12,7 +12,7 @@
  *	jquery.ui.widget.js
  */
 (function($) {
-	
+
 var idIncrement = 0;
 
 $.widget("ui.menu", {
@@ -71,7 +71,7 @@ $.widget("ui.menu", {
 				}
 			});
 		this.refresh();
-		
+
 		this.element.attr( "tabIndex", 0 ).bind( "keydown.menu", function( event ) {
 			if ( self.options.disabled ) {
 				return;
@@ -130,9 +130,11 @@ $.widget("ui.menu", {
 			default:
 				event.stopPropagation();
 				clearTimeout(self.filterTimer);
-				var prev = self.previousFilter || "";
-				var character = String.fromCharCode(event.keyCode);
-				var skip = false;
+				var match,
+					prev = self.previousFilter || "",
+					character = String.fromCharCode( event.keyCode ),
+					skip = false;
+
 				if (character == prev) {
 					skip = true;
 				} else {
@@ -141,10 +143,10 @@ $.widget("ui.menu", {
 				function escape(value) {
 					return value.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
 				}
-				var match = self.activeMenu.children(".ui-menu-item").filter(function() {
+				match = self.activeMenu.children(".ui-menu-item").filter(function() {
 					return new RegExp("^" + escape(character), "i").test($(this).children("a").text());
 				});
-				var match = skip && match.index(self.active.next()) != -1 ? self.active.nextAll(".ui-menu-item") : match;
+				match = skip && match.index(self.active.next()) != -1 ? self.active.nextAll(".ui-menu-item") : match;
 				if (!match.length) {
 					character = String.fromCharCode(event.keyCode);
 					match = self.activeMenu.children(".ui-menu-item").filter(function() {
@@ -167,7 +169,7 @@ $.widget("ui.menu", {
 			}
 		});
 	},
-	
+
 	_destroy: function() {
 		//destroy (sub)menus
 		this.element
@@ -181,7 +183,7 @@ $.widget("ui.menu", {
 			.removeAttr( "aria-expanded" )
 			.removeAttr( "aria-hidden" )
 			.show();
-		
+
 		//destroy menu items
 		this.element.find( ".ui-menu-item" )
 			.unbind( ".menu" )
@@ -193,45 +195,48 @@ $.widget("ui.menu", {
 			.removeAttr( "role" )
 			.removeAttr( "aria-haspopup" )
 			.removeAttr( "id" )
-			.children(".ui-icon").remove();		
+			.children(".ui-icon").remove();
 	},
-	
+
 	refresh: function() {
 		var self = this;
 		// initialize nested menus
-		var submenus = this.element.find("ul:not(.ui-menu)")
+		var submenus = this.element.find( "ul:not(.ui-menu)" )
 			.addClass( "ui-menu ui-widget ui-widget-content ui-corner-all" )
-			.attr("role", "menu")
+			.attr( "role", "menu" )
 			.hide()
-			.attr("aria-hidden", "true")
-			.attr("aria-expanded", "false")
+			.attr( "aria-hidden", "true" )
+			.attr( "aria-expanded", "false" )
 			;
-		
+
 		// don't refresh list items that are already adapted
-		var items = submenus.add(this.element).children( "li:not(.ui-menu-item):has(a)" )
+		var items = submenus.add( this.element ).children( "li:not(.ui-menu-item):has(a)" )
 			.addClass( "ui-menu-item" )
 			.attr( "role", "presentation" );
-		
+
 		items.children( "a" )
 			.addClass( "ui-corner-all" )
 			.attr( "tabIndex", -1 )
 			.attr( "role", "menuitem" )
-			.attr("id", function(i) {return self.element.attr("id") + "-" + i});
-		
-		submenus.each(function() {
-			var menu = $(this);
-			var item = menu.prev("a") 
-			item.attr("aria-haspopup", "true")
-			.prepend('<span class="ui-menu-icon ui-icon ui-icon-carat-1-e"></span>');
-			menu.attr("aria-labelledby", item.attr("id"));
+			.attr( "id", function( i ) {
+				return self.element.attr( "id" ) + "-" + i;
+			});
+
+		submenus.each( function() {
+			var menu = $( this ),
+				item = menu.prev( "a" );
+
+			item.attr( "aria-haspopup", "true" )
+			.prepend( '<span class="ui-menu-icon ui-icon ui-icon-carat-1-e"></span>' );
+			menu.attr( "aria-labelledby", item.attr( "id" ) );
 		});
 	},
 
 	focus: function( event, item ) {
-		var self = this;
-		
+		var nested, self = this;
+
 		this.blur();
-		
+
 		if ( this._hasScroll() ) {
 			var borderTop = parseFloat( $.curCSS( this.element[0], "borderTopWidth", true) ) || 0,
 				paddingTop = parseFloat( $.curCSS( this.element[0], "paddingTop", true) ) || 0,
@@ -245,25 +250,26 @@ $.widget("ui.menu", {
 				this.element.scrollTop( scroll + offset - elementHeight + itemHeight );
 			}
 		}
-		
+
 		this.active = item.first()
 			.children( "a" )
 				.addClass( "ui-state-focus" )
 			.end();
-		self.element.attr("aria-activedescendant", self.active.children("a").attr("id"))
+		self.element.attr( "aria-activedescendant", self.active.children("a").attr("id") );
 
 		// highlight active parent menu item, if any
 		this.active.parent().closest(".ui-menu-item").children("a:first").addClass("ui-state-active");
-		
-		self.timer = setTimeout(function() {
+
+		self.timer = setTimeout( function() {
 			self._close();
-		}, self.delay)
-		var nested = $(">ul", item);
-		if (nested.length && /^mouse/.test(event.type)) {
+		}, self.delay );
+
+		nested = $( ">ul", item );
+		if ( nested.length && ( /^mouse/.test( event.type ) ) ) {
 			self._startOpening(nested);
 		}
 		this.activeMenu = item.parent();
-		
+
 		this._trigger( "focus", event, { item: item } );
 	},
 
@@ -271,9 +277,9 @@ $.widget("ui.menu", {
 		if (!this.active) {
 			return;
 		}
-		
+
 		clearTimeout(this.timer);
-		
+
 		this.active.children( "a" ).removeClass( "ui-state-focus" );
 		this.active = null;
 	},
@@ -286,7 +292,7 @@ $.widget("ui.menu", {
 			self._open(submenu);
 		}, self.delay);
 	},
-	
+
 	_open: function(submenu) {
 		clearTimeout(this.timer);
 		this.element.find(".ui-menu").not(submenu.parents()).hide().attr("aria-hidden", "true");
@@ -298,7 +304,7 @@ $.widget("ui.menu", {
 		);
 		submenu.show().removeAttr("aria-hidden").attr("aria-expanded", "true").position(position);
 	},
-	
+
 	closeAll: function() {
 		this.element
 		 .find("ul").hide().attr("aria-hidden", "true").attr("aria-expanded", "false").end()
@@ -306,7 +312,7 @@ $.widget("ui.menu", {
 		this.blur();
 		this.activeMenu = this.element;
 	},
-	
+
 	_close: function() {
 		this.active.parent()
 		 .find("ul").hide().attr("aria-hidden", "true").attr("aria-expanded", "false").end()
@@ -328,8 +334,11 @@ $.widget("ui.menu", {
 		if (newItem && newItem.length) {
 			this._open(newItem.parent());
 			var current = this.active;
+
 			//timeout so Firefox will not hide activedescendant change in expanding submenu from AT
-			setTimeout(function(){self.focus(event, newItem)}, 20);
+			setTimeout( function() {
+				self.focus( event, newItem );
+			}, 20 );
 			return true;
 		}
 	},
@@ -362,7 +371,7 @@ $.widget("ui.menu", {
 			this.focus( event, this.activeMenu.children(edge)[filter]() );
 		}
 	},
-	
+
 	nextPage: function( event ) {
 		if ( this._hasScroll() ) {
 			if ( !this.active || this.last() ) {
