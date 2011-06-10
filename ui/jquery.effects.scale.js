@@ -252,11 +252,19 @@ $.effects.effect.size = function( o ) {
 				}
 				$.effects.restore( el, restore ? props : props1 );
 
+				// pos : a hash of CSS properties
+				// attr: CSS attribute name (top, bottom, left, right)
 				function setPos( pos, attr ) {
+
+					// copy the parent's attribute which saves the original value
 					pos[ attr ] = parseInt( parent.css( attr ), 10 );
 					if ( isNaN( pos[ attr ] ) ) {
 						pos[ attr ] = "auto";
 					} else {
+
+						// if the position is specified by px
+						// bottom and right should be decreased when relative,
+						// and increased when absolute or fixed
 						switch ( attr ) {
 						case "top":
 							pos[ attr ] += el.to.top;
@@ -274,6 +282,8 @@ $.effects.effect.size = function( o ) {
 					}
 				}
 
+				// called when `position' is not static and top and bottom
+				// (or left and right) are both not specified
 				function setAutoPos( pos, attr ) {
 					switch ( el.css( "position" ) ) {
 					case "relative":
@@ -292,19 +302,28 @@ $.effects.effect.size = function( o ) {
 
 				if (parent.is( ".ui-effects-wrapper" )) {
 					if ( el.css( "position" ) === "static" ) {
+
+						// the same as the final status of animation
 						el.css({
 							position: "relative",
 							top: el.to.top,
 							left: el.to.left
 						});
 					} else {
+
+						// if both auto, you should newly specify the position with px
 						if ( el.css( "top" ) === "auto" &&
 						     el.css( "bottom" ) === "auto" ){
 							setAutoPos( pos, "top" );
 						} else {
+
+							// if not scaling from the top, re-set `top'
 							if ( origin[ 0 ] !== 'top') {
 								setPos( pos, "top" );
 							}
+
+							// if not scaling from the bottom, re-set `bottom'
+							// if relative, always re-set for Chrome
 							if ( origin[ 0 ] !== "bottom" ||
 							     el.css ("position") === "relative" ) {
 								setPos( pos, "bottom" );
