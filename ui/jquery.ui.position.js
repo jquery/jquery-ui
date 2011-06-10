@@ -20,30 +20,35 @@ var rhorizontal = /left|center|right/,
 	_position = $.fn.position;
 
 $.position = {
-	scrollbarWidth : function() {
-	    var div = $( "<div style='display:block;width:50px;height:50px;overflow:hidden;'><div style='height:100px;width:auto;'></div></div>" ),
-		    innerDiv = div.children()[0],
-		    w1, w2;
-	    $( "body" ).append( div );
-	    w1 = innerDiv.offsetWidth; 
-	    div.css( "overflow", "scroll" ); 
-	    
-	    w2 = innerDiv.offsetWidth;
-	    
+	scrollbarWidth: function() {
+		var w1, w2,
+			div = $( "<div style='display:block;width:50px;height:50px;overflow:hidden;'><div style='height:100px;width:auto;'></div></div>" ),
+			innerDiv = div.children()[0];
+
+		$( "body" ).append( div );
+		w1 = innerDiv.offsetWidth;
+		div.css( "overflow", "scroll" );
+
+		w2 = innerDiv.offsetWidth;
+
 		if ( w1 === w2 ) {
 			w2 = div[0].clientWidth;
 		}
 
-	    div.remove();
-	    
-	    return w1 - w2; 
+		div.remove();
+
+		return w1 - w2; 
 	},
-	getScrollInfo : function( within ) {
+	getScrollInfo: function( within ) {
 		var that = within[0],
 			scrollHeight = within.height() < that.scrollHeight,
 			scrollWidth = within.width() < that.scrollWidth,
 			scrollbarWidth = $.position.scrollbarWidth();
-	    return { height : scrollHeight ? scrollbarWidth : 0, width : scrollWidth ? scrollbarWidth : 0 };
+
+		return {
+			height: scrollHeight ? scrollbarWidth : 0,
+			width : scrollWidth ? scrollbarWidth : 0
+		};
 	}
 };
 
@@ -85,7 +90,7 @@ $.fn.position = function( options ) {
 	}
 
 	// force my and at to have valid horizontal and vertical positions
-	// if a value is missing or invalid, it will be converted to center 
+	// if a value is missing or invalid, it will be converted to center
 	$.each( [ "my", "at" ], function() {
 		var pos = ( options[ this ] || "" ).split( " " ),
 			horizontalOffset,
@@ -302,7 +307,7 @@ $.ui.position = {
 					data.targetHeight :
 					-data.targetHeight,
 				offset = -2 * data.offset[ 1 ];
-			if ( overTop < 0 || overBottom > 0) {
+			if ( overTop < 0 || overBottom > 0 ) {
 				position.top += myOffset + atOffset + offset;
 			}
 		}
