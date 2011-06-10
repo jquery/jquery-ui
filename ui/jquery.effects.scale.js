@@ -116,7 +116,7 @@ $.effects.effect.size = function( o ) {
 
 			// Set options
 			mode = $.effects.setMode( el, o.mode || 'effect' ),
-			restore = o.restore || false,
+			restore = o.restore || mode !== "effect",
 			scale = o.scale || 'both',
 			origin = o.origin,
 			original, baseline, factor;

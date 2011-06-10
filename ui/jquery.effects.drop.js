@@ -17,7 +17,7 @@ $.effects.effect.drop = function( o ) {
 	return this.queue( function() {
 
 		var el = $( this ), 
-			props = [ 'position', 'top', 'bottom', 'left', 'right', 'opacity' ],
+			props = [ 'position', 'top', 'bottom', 'left', 'right', 'opacity', "height", "width" ],
 			mode = $.effects.setMode( el, o.mode || 'hide' ),
 			direction = o.direction || 'left',
 			ref = ( direction == 'up' || direction == 'down' ) ? 'top' : 'left',
