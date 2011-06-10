@@ -52,8 +52,8 @@ $.effects.effect.scale = function( o ) {
 			percent = parseInt( o.percent, 10 ) || ( parseInt( o.percent, 10 ) == 0 ? 0 : ( mode == 'hide' ? 0 : 100 ) ),
 			direction = o.direction || 'both',
 			origin = o.origin,
-			original = { 
-				height: el.height(), 
+			original = {
+				height: el.height(),
 				width: el.width(),
 				outerHeight: el.outerHeight(),
 				outerWidth: el.outerWidth()
@@ -75,11 +75,11 @@ $.effects.effect.scale = function( o ) {
 
 		options.from = o.from || ( mode == 'show' ? { height: 0, width: 0 } : original );
 		options.to = {
-			height: original.height * factor.y, 
+			height: original.height * factor.y,
 			width: original.width * factor.x,
-			outerHeight: original.outerHeight * factor.y, 
+			outerHeight: original.outerHeight * factor.y,
 			outerWidth: original.outerWidth * factor.x
-		}; 
+		};
 
 		if ( options.fade ) { // Fade option to support puff
 			if ( mode == 'show' ) {
@@ -125,7 +125,7 @@ $.effects.effect.size = function( o ) {
 			el.show();
 		}
 		original = {
-			height: el.height(), 
+			height: el.height(),
 			width: el.width(),
 			outerHeight: el.outerHeight(),
 			outerWidth: el.outerWidth()
@@ -150,14 +150,14 @@ $.effects.effect.size = function( o ) {
 		if ( scale == 'box' || scale == 'both' ) {
 
 			// Vertical props scaling
-			if ( factor.from.y !== factor.to.y ) { 
+			if ( factor.from.y !== factor.to.y ) {
 				props = props.concat( vProps );
 				el.from = $.effects.setTransition( el, vProps, factor.from.y, el.from );
 				el.to = $.effects.setTransition( el, vProps, factor.to.y, el.to );
 			};
 
 			// Horizontal props scaling
-			if ( factor.from.x !== factor.to.x ) { 
+			if ( factor.from.x !== factor.to.x ) {
 				props = props.concat( hProps );
 				el.from = $.effects.setTransition( el, hProps, factor.from.x, el.from );
 				el.to = $.effects.setTransition( el, hProps, factor.to.x, el.to );
@@ -168,7 +168,7 @@ $.effects.effect.size = function( o ) {
 		if ( scale == 'content' || scale == 'both' ) {
 
 			// Vertical props scaling
-			if ( factor.from.y !== factor.to.y ) { 
+			if ( factor.from.y !== factor.to.y ) {
 				props = props.concat( cProps );
 				el.from = $.effects.setTransition( el, cProps, factor.from.y, el.from );
 				el.to = $.effects.setTransition( el, cProps, factor.to.y, el.to );
