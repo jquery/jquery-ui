@@ -410,7 +410,12 @@ $.extend( $.effects, {
 					border: "none",
 					margin: 0,
 					padding: 0
-				});
+				}),
+			// Store the size in case width/height are defined in % - Fixes #5245
+			size = {
+				width: element.width(),
+				height: element.height()
+			};
 
 		element.wrap( wrapper );
 		wrapper = element.parent(); //Hotfix for jQuery 1.4 since some change in wrap() seems to actually loose the reference to the wrapped element
@@ -438,6 +443,7 @@ $.extend( $.effects, {
 				bottom: "auto"
 			});
 		}
+		element.css(size);
 
 		return wrapper.css( props ).show();
 	},
