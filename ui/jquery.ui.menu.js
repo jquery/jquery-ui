@@ -44,7 +44,7 @@ $.widget("ui.menu", {
 					return false;
 				}
 				if ( !item.length ) {
-					return;
+					return false;
 				}
 				// it's possible to click an item without hovering it (#7085)
 				if ( !self.active || ( self.active[ 0 ] !== item[ 0 ] ) ) {
@@ -144,7 +144,7 @@ $.widget("ui.menu", {
 				var match = self.activeMenu.children(".ui-menu-item").filter(function() {
 					return new RegExp("^" + escape(character), "i").test($(this).children("a").text());
 				});
-				var match = skip && match.index(self.active.next()) != -1 ? self.active.nextAll(".ui-menu-item") : match;
+				match = skip && match.index(self.active.next()) != -1 ? self.active.nextAll(".ui-menu-item") : match;
 				if (!match.length) {
 					character = String.fromCharCode(event.keyCode);
 					match = self.activeMenu.children(".ui-menu-item").filter(function() {
@@ -327,7 +327,6 @@ $.widget("ui.menu", {
 		var newItem = this.active && this.active.children("ul").children("li").first();
 		if (newItem && newItem.length) {
 			this._open(newItem.parent());
-			var current = this.active;
 			//timeout so Firefox will not hide activedescendant change in expanding submenu from AT
 			setTimeout(function(){self.focus(event, newItem)}, 20);
 			return true;
