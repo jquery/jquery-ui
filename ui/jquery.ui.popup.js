@@ -81,21 +81,20 @@ $.widget( "ui.popup", {
 
 		if ( !this.element.is( ":ui-menu" ) ) {
 			//default use case, wrap tab order in popup
-			this.element.bind( "keydown.ui-popup", function( event ) {
-				if ( event.keyCode !== $.ui.keyCode.TAB ) {
-					return;
-				}
-
-				var tabbables = $( ":tabbable", this ),
-					first = tabbables.first(),
-					last  = tabbables.last();
-
-				if ( event.target === last[ 0 ] && !event.shiftKey ) {
-					first.focus( 1 );
-					return false;
-				} else if ( event.target === first[ 0 ] && event.shiftKey ) {
-					last.focus( 1 );
-					return false;
+			this._bind({ keydown : function( event ) {
+					if ( event.keyCode !== $.ui.keyCode.TAB ) {
+						return;
+					}
+					var tabbables = $( ":tabbable", this.element ),
+						first = tabbables.first(),
+						last  = tabbables.last();
+					if ( event.target === last[ 0 ] && !event.shiftKey ) {
+						first.focus( 1 );
+						event.preventDefault();
+					} else if ( event.target === first[ 0 ] && event.shiftKey ) {
+						last.focus( 1 );
+						event.preventDefault();
+					}
 				}
 			});
 		}
@@ -174,11 +173,13 @@ $.widget( "ui.popup", {
 			// set focus to the first tabbable element in the popup container
 			// if there are no tabbable elements, set focus on the popup itself
 			var tabbables = this.element.find( ":tabbable" );
+			this.removeTabIndex = false;
 			if ( !tabbables.length ) {
 				if ( !this.element.is(":tabbable") ) {
 					this.element.attr("tabindex", "0");
+					this.removeTabIndex = true;
 				}
-				tabbables.add(this.element);
+				tabbables = tabbables.add( this.element[ 0 ] );
 			}
 			tabbables.first().focus( 1 );
 		}
@@ -195,8 +196,10 @@ $.widget( "ui.popup", {
 			.attr( "aria-hidden", true )
 			.attr( "aria-expanded", false );
 
-		this.options.trigger.attr("tabindex", 0);
-
+		this.options.trigger.attr( "tabindex" , 0 );
+		if ( this.removeTabIndex ) {
+			this.element.removeAttr( "tabindex" );
+		}
 		this.isOpen = false;
 		this._trigger( "close", event );
 	}
