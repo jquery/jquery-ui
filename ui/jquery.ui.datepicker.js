@@ -66,7 +66,7 @@ function Datepicker() {
 		defaultDate: null, // Used when field is blank: actual date,
 			// +/-number for offset from today, null for today
 		appendText: '', // Display text following the input box, e.g. showing the format
-		buttonText: '...', // Text for trigger button
+		buttonText: 'Pick Date', // Text for trigger button
 		buttonImage: '', // URL for trigger button image
 		buttonImageOnly: false, // True if the image appears alone, false if it appears on a button
 		hideIfNoPrevNext: false, // True to hide next/previous month links
