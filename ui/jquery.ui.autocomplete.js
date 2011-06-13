@@ -32,6 +32,7 @@ $.widget( "ui.autocomplete", {
 			collision: "none"
 		},
 		source: null,
+		observationInterval: 0,
 
 		// callbacks
 		change: null,
@@ -49,9 +50,17 @@ $.widget( "ui.autocomplete", {
 		var self = this,
 			doc = this.element[ 0 ].ownerDocument,
 			suppressKeyPress,
-			suppressInput;
+			suppressInput,
+			lastKeydownEvent;
 
 		this.valueMethod = this.element[ this.element.is( "input" ) ? "val" : "text" ];
+
+		if ( self.options.observationInterval > 0 ) {
+			self._searchTimeout = self._searchInterval;
+			self.inputObservation = setInterval(function() {
+				self._searchTimeout( lastKeydownEvent );
+			}, self.options.observationInterval);
+		}
 
 		this.element
 			.addClass( "ui-autocomplete-input" )
@@ -114,7 +123,11 @@ $.widget( "ui.autocomplete", {
 					self.close( event );
 					break;
 				default:
-					// search timeout should be triggered before the input value is changed
+					self.observationActivated = true;
+					lastKeydownEvent = event;
+					// search timeout should be triggered before the input value is changed.
+					// if observationInterval option is set to greater than 0,
+					// _searchTimeout is changed to point to _searchInterval.
 					self._searchTimeout( event );
 					break;
 				}
@@ -210,6 +223,7 @@ $.widget( "ui.autocomplete", {
 				// custom key handling for now
 				input: $(),
 				focus: function( event, ui ) {
+					self.observationActivated = false;
 					var item = ui.item.data( "item.autocomplete" );
 					if ( false !== self._trigger( "focus", event, { item: item } ) ) {
 						// use value to match what will end up in the input, if it was a key event
@@ -263,6 +277,7 @@ $.widget( "ui.autocomplete", {
 	},
 
 	_destroy: function() {
+		clearInterval( this.inputObservation );
 		this.element
 			.removeClass( "ui-autocomplete-input" )
 			.removeAttr( "autocomplete" )
@@ -331,6 +346,17 @@ $.widget( "ui.autocomplete", {
 				self.search( null, event );
 			}
 		}, self.options.delay );
+	},
+
+	_searchInterval: function( event ) {
+		var self = this;
+		if ( self.observationActivated && self.term != ( self.term = self._value() ) ) {
+			clearTimeout( self.searching );
+			self.searching = setTimeout(function() {
+				self.selectedItem = null;
+				self.search( null, event );
+			}, self.options.delay );
+		}
 	},
 
 	search: function( value, event ) {
