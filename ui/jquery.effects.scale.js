@@ -118,8 +118,11 @@ $.effects.effect.size = function( o ) {
 			mode = $.effects.setMode( el, o.mode || 'effect' ),
 			restore = o.restore || mode !== "effect",
 			scale = o.scale || 'both',
-			origin = o.origin,
-			original, baseline, factor;
+			origin = o.origin || [ "middle", "center" ],
+			original, baseline, factor,
+			position = el.css( "position" ),
+			originalVerticalPositioning = el.css( "bottom" ) !== "auto" ? "bottom" : "top";
+			originalHorizontalPositioning = el.css( "right" ) !== "auto" ? "right" : "left";
 
 		if ( mode === "show" ) {
 			el.show();
@@ -249,7 +252,47 @@ $.effects.effect.size = function( o ) {
 				if( mode == 'hide' ) {
 					el.hide();
 				}
-				$.effects.restore( el, restore ? props : props1 ); 
+				$.effects.restore( el, restore ? props : props1 );
+
+				// we need to recalculate our positioning based on the new scaling
+				if ( position === "static" ) {
+					el.css({
+						position: "relative",
+						top: el.to.top,
+						left: el.to.left
+					});
+				} else {
+					$.each([ originalVerticalPositioning, originalHorizontalPositioning ], function( idx, pos ) {
+						el.css( pos, function( _, str ) {
+							var val = parseInt( str, 10 ),
+								toRef = idx ? el.to.left : el.to.top,
+								delta = idx ? el.to.outerWidth - el.from.outerWidth: el.to.outerHeight - el.from.outerHeight,
+								same = origin[ idx ] === pos,
+								mid = origin[ idx ] === "middle" || origin[ idx ] === "center",
+								direction = pos == "left" || pos == "top";
+
+							// if original was "auto", recalculate the new value from wrapper
+							if ( str === "auto" ) {
+								return toRef + "px";
+							}
+
+							// if not setting left or top
+							if ( !direction ) {
+
+								// if the position is relative, bottom/right are reversed meaning
+								if ( position === "relative" ) {
+									toRef *= -1;
+
+								// otherwise, if its NOT a midpoint origin, compensate for the outerWidth difference
+								} else if ( !mid ) {
+									toRef -= delta * ( same ? -1 : 1 );
+								}
+							}
+							return val + toRef + "px"; 
+						});
+					});
+				}
+
 				$.effects.removeWrapper( el ); 
 				$.isFunction( o.complete ) && o.complete.apply( this, arguments ); // Callback
 				el.dequeue();
