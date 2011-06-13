@@ -4,7 +4,7 @@ module( "accordion: options", accordionSetupTeardown() );
 
 test( "{ active: default }", function() {
 	var element = $( "#list1" ).accordion();
-	equals( element.accordion( "option", "active" ), 0 );
+	equal( element.accordion( "option", "active" ), 0 );
 	accordion_state( element, 1, 0, 0 );
 });
 
@@ -14,12 +14,12 @@ test( "{ active: false }", function() {
 		collapsible: true
 	});
 	accordion_state( element, 0, 0, 0 );
-	equals( element.find( ".ui-accordion-header.ui-state-active" ).size(), 0, "no headers selected" );
-	equals( element.accordion( "option", "active" ), false );
+	equal( element.find( ".ui-accordion-header.ui-state-active" ).size(), 0, "no headers selected" );
+	equal( element.accordion( "option", "active" ), false );
 
 	element.accordion( "option", "collapsible", false );
 	accordion_state( element, 1, 0, 0 );
-	equals( element.accordion( "option", "active" ), 0 );
+	equal( element.accordion( "option", "active" ), 0 );
 
 	element.accordion( "destroy" );
 	element.accordion({
@@ -33,19 +33,19 @@ test( "{ active: Number }", function() {
 	var element = $( "#list1" ).accordion({
 		active: 2
 	});
-	equals( element.accordion( "option", "active" ), 2 );
+	equal( element.accordion( "option", "active" ), 2 );
 	accordion_state( element, 0, 0, 1 );
 
 	element.accordion( "option", "active", 0 );
-	equals( element.accordion( "option", "active" ), 0 );
+	equal( element.accordion( "option", "active" ), 0 );
 	accordion_state( element, 1, 0, 0 );
 
 	element.find( ".ui-accordion-header" ).eq( 1 ).click();
-	equals( element.accordion( "option", "active" ), 1 );
+	equal( element.accordion( "option", "active" ), 1 );
 	accordion_state( element, 0, 1, 0 );
 
 	element.accordion( "option", "active", 10 );
-	equals( element.accordion( "option", "active" ), 1 );
+	equal( element.accordion( "option", "active" ), 1 );
 	accordion_state( element, 0, 1, 0 );
 });
 
@@ -54,19 +54,19 @@ if ( $.uiBackCompat === false ) {
 		var element = $( "#list1" ).accordion({
 			active: -1
 		});
-		equals( element.accordion( "option", "active" ), 2 );
+		equal( element.accordion( "option", "active" ), 2 );
 		accordion_state( element, 0, 0, 1 );
 
 		element.accordion( "option", "active", -2 );
-		equals( element.accordion( "option", "active" ), 1 );
+		equal( element.accordion( "option", "active" ), 1 );
 		accordion_state( element, 0, 1, 0 );
 
 		element.accordion( "option", "active", -10 );
-		equals( element.accordion( "option", "active" ), 1 );
+		equal( element.accordion( "option", "active" ), 1 );
 		accordion_state( element, 0, 1, 0 );
 
 		element.accordion( "option", "active", -3 );
-		equals( element.accordion( "option", "active" ), 0 );
+		equal( element.accordion( "option", "active" ), 0 );
 		accordion_state( element, 1, 0, 0 );
 	});
 }
@@ -101,7 +101,7 @@ test( "{ collapsible: true }", function() {
 	accordion_state( element, 0, 1, 0 );
 
 	element.find( ".ui-accordion-header" ).eq( 1 ).click();
-	equals( element.accordion( "option", "active" ), false );
+	equal( element.accordion( "option", "active" ), false );
 	accordion_state( element, 0, 0, 0 );
 });
 
@@ -238,8 +238,8 @@ test( "{ heightStyle: 'fill' } with multiple siblings", function() {
 test( "{ icons: false }", function() {
 	var element = $( "#list1" );
 	function icons( on ) {
-		same( element.find( "span.ui-icon").length, on ? 3 : 0 );
-		same( element.hasClass( "ui-accordion-icons" ), on );
+		deepEqual( element.find( "span.ui-icon").length, on ? 3 : 0 );
+		deepEqual( element.hasClass( "ui-accordion-icons" ), on );
 	}
 	element.accordion();
 	icons( true );
