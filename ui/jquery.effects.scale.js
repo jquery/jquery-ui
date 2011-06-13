@@ -18,9 +18,9 @@ $.effects.effect.puff = function( o ) {
 			mode = $.effects.setMode( elem, o.mode || 'hide' ),
 			percent = parseInt( o.percent, 10 ) || 150,
 			factor = percent / 100,
-			original = { 
-				height: elem.height(), 
-				width: elem.width() 
+			original = {
+				height: elem.height(),
+				width: elem.width()
 			};
 
 		$.extend(o, {
@@ -52,8 +52,8 @@ $.effects.effect.scale = function( o ) {
 			percent = parseInt( o.percent, 10 ) || ( parseInt( o.percent, 10 ) == 0 ? 0 : ( mode == 'hide' ? 0 : 100 ) ),
 			direction = o.direction || 'both',
 			origin = o.origin,
-			original = { 
-				height: el.height(), 
+			original = {
+				height: el.height(),
 				width: el.width(),
 				outerHeight: el.outerHeight(),
 				outerWidth: el.outerWidth()
@@ -61,33 +61,33 @@ $.effects.effect.scale = function( o ) {
 			factor = {
 				y: direction != 'horizontal' ? (percent / 100) : 1,
 				x: direction != 'vertical' ? (percent / 100) : 1
-			}; 
+			};
 
 		// We are going to pass this effect to the size effect:
 		options.effect = "size";
 		options.queue = false;
 
 		// Set default origin and restore for show/hide
-		if ( mode != 'effect' ) { 
+		if ( mode != 'effect' ) {
 			options.origin = origin || ['middle','center'];
 			options.restore = true;
 		}
 
-		options.from = o.from || ( mode == 'show' ? { height: 0, width: 0 } : original ); 
+		options.from = o.from || ( mode == 'show' ? { height: 0, width: 0 } : original );
 		options.to = {
-			height: original.height * factor.y, 
+			height: original.height * factor.y,
 			width: original.width * factor.x,
-			outerHeight: original.outerHeight * factor.y, 
+			outerHeight: original.outerHeight * factor.y,
 			outerWidth: original.outerWidth * factor.x
-		}; 
+		};
 
 		if ( options.fade ) { // Fade option to support puff
 			if ( mode == 'show' ) {
-				options.from.opacity = 0; 
+				options.from.opacity = 0;
 				options.to.opacity = 1;
 			}
 			if ( mode == 'hide' ) {
-				options.from.opacity = 1; 
+				options.from.opacity = 1;
 				options.to.opacity = 0;
 			}
 		};
@@ -102,7 +102,7 @@ $.effects.effect.size = function( o ) {
 
 	return this[ o.queue === false ? "each" : "queue" ]( function() {
 		// Create element
-		var el = $( this ), 
+		var el = $( this ),
 			props = [ 'position', 'top', 'bottom', 'left', 'right', 'width', 'height', 'overflow', 'opacity' ],
 
 			// Always restore
@@ -125,7 +125,7 @@ $.effects.effect.size = function( o ) {
 			el.show();
 		}
 		original = {
-			height: el.height(), 
+			height: el.height(),
 			width: el.width(),
 			outerHeight: el.outerHeight(),
 			outerWidth: el.outerWidth()
@@ -137,11 +137,11 @@ $.effects.effect.size = function( o ) {
 		// Set scaling factor
 		factor = {
 			from: {
-				y: el.from.height / original.height, 
+				y: el.from.height / original.height,
 				x: el.from.width / original.width
 			},
 			to: {
-				y: el.to.height / original.height, 
+				y: el.to.height / original.height,
 				x: el.to.width / original.width
 			}
 		};
@@ -150,14 +150,14 @@ $.effects.effect.size = function( o ) {
 		if ( scale == 'box' || scale == 'both' ) {
 
 			// Vertical props scaling
-			if ( factor.from.y !== factor.to.y ) { 
+			if ( factor.from.y !== factor.to.y ) {
 				props = props.concat( vProps );
 				el.from = $.effects.setTransition( el, vProps, factor.from.y, el.from );
 				el.to = $.effects.setTransition( el, vProps, factor.to.y, el.to );
 			};
 
 			// Horizontal props scaling
-			if ( factor.from.x !== factor.to.x ) { 
+			if ( factor.from.x !== factor.to.x ) {
 				props = props.concat( hProps );
 				el.from = $.effects.setTransition( el, hProps, factor.from.x, el.from );
 				el.to = $.effects.setTransition( el, hProps, factor.to.x, el.to );
@@ -165,20 +165,20 @@ $.effects.effect.size = function( o ) {
 		};
 
 		// Scale the content
-		if ( scale == 'content' || scale == 'both' ) { 
+		if ( scale == 'content' || scale == 'both' ) {
 
 			// Vertical props scaling
-			if ( factor.from.y !== factor.to.y ) { 
+			if ( factor.from.y !== factor.to.y ) {
 				props = props.concat( cProps );
 				el.from = $.effects.setTransition( el, cProps, factor.from.y, el.from );
 				el.to = $.effects.setTransition( el, cProps, factor.to.y, el.to );
 			};
 		};
-		
-		$.effects.save( el, restore ? props : props1 ); 
-		el.show(); 
+
+		$.effects.save( el, restore ? props : props1 );
+		el.show();
 		$.effects.createWrapper( el );
-		el.css( 'overflow', 'hidden' ).css( el.from ); 
+		el.css( 'overflow', 'hidden' ).css( el.from );
 
 		// Adjust
 		if (origin) { // Calculate baseline shifts
@@ -200,23 +200,23 @@ $.effects.effect.size = function( o ) {
 
 			el.find( "*[width]" ).each( function(){
 				var child = $( this ),
-					c_original = { 
-						height: child.height(), 
+					c_original = {
+						height: child.height(),
 						width: child.width()
 					};
 				if (restore) $.effects.save(child, props2);
-				
+
 				child.from = {
-					height: c_original.height * factor.from.y, 
+					height: c_original.height * factor.from.y,
 					width: c_original.width * factor.from.x
 				};
 				child.to = {
-					height: c_original.height * factor.to.y, 
+					height: c_original.height * factor.to.y,
 					width: c_original.width * factor.to.x
 				};
 
 				// Vertical props scaling
-				if ( factor.from.y != factor.to.y ) { 
+				if ( factor.from.y != factor.to.y ) {
 					child.from = $.effects.setTransition( child, vProps, factor.from.y, child.from );
 					child.to = $.effects.setTransition( child, vProps, factor.to.y, child.to );
 				};
@@ -232,25 +232,119 @@ $.effects.effect.size = function( o ) {
 				child.animate( child.to, o.duration, o.easing, function() {
 
 					// Restore children
-					if (restore) $.effects.restore( child, props2 ); 
+					if (restore) $.effects.restore( child, props2 );
 				});
 			});
 		};
 
 		// Animate
-		el.animate( el.to, { 
-			queue: false, 
-			duration: o.duration, 
-			easing: o.easing, 
+		el.animate( el.to, {
+			queue: false,
+			duration: o.duration,
+			easing: o.easing,
 			complete: function() {
+				var pos = {}, parent = el.parent();
 				if ( el.to.opacity === 0 ) {
 					el.css( 'opacity', el.from.opacity );
 				}
 				if( mode == 'hide' ) {
 					el.hide();
 				}
-				$.effects.restore( el, restore ? props : props1 ); 
-				$.effects.removeWrapper( el ); 
+				$.effects.restore( el, restore ? props : props1 );
+
+				// pos : a hash of CSS properties
+				// attr: CSS attribute name (top, bottom, left, right)
+				function setPos( pos, attr ) {
+
+					// copy the parent's attribute which saves the original value
+					pos[ attr ] = parseInt( parent.css( attr ), 10 );
+					if ( isNaN( pos[ attr ] ) ) {
+						pos[ attr ] = "auto";
+					} else {
+
+						// if the position is specified by px
+						// bottom and right should be decreased when relative,
+						// and increased when absolute or fixed
+						switch ( attr ) {
+						case "top":
+							pos[ attr ] += el.to.top;
+							break;
+						case "bottom":
+							pos[ attr ] -= el.css("position") === "relative" ? el.to.top : - el.to.top;
+							break;
+						case "left":
+							pos[ attr ] += el.to.left;
+							break;
+						case "right":
+							pos[ attr ] -= el.css("position") === "relative" ? el.to.left : - el.to.left;
+							break;
+						}
+					}
+				}
+
+				// called when `position' is not static and top and bottom
+				// (or left and right) are both not specified
+				function setAutoPos( pos, attr ) {
+					switch ( el.css( "position" ) ) {
+					case "relative":
+						pos[ attr ] = el.to[ attr ];
+						break;
+					case "absolute":
+						pos[ attr ] = el.offset()[ attr ] + el.to[ attr ];
+						break;
+					case "fixed":
+						pos[ attr ] = parent.offset()[ attr ] -
+							( attr === "top" ? $( "body" ).scrollTop() : $( "body" ).scrollLeft() ) +
+							el.to[attr];
+						break;
+					}
+				}
+
+				if (parent.is( ".ui-effects-wrapper" )) {
+					if ( el.css( "position" ) === "static" ) {
+
+						// the same as the final status of animation
+						el.css({
+							position: "relative",
+							top: el.to.top,
+							left: el.to.left
+						});
+					} else {
+
+						// if both auto, you should newly specify the position with px
+						if ( el.css( "top" ) === "auto" &&
+						     el.css( "bottom" ) === "auto" ){
+							setAutoPos( pos, "top" );
+						} else {
+
+							// if not scaling from the top, re-set `top'
+							if ( origin[ 0 ] !== 'top') {
+								setPos( pos, "top" );
+							}
+
+							// if not scaling from the bottom, re-set `bottom'
+							// if relative, always re-set for Chrome
+							if ( origin[ 0 ] !== "bottom" ||
+							     el.css ("position") === "relative" ) {
+								setPos( pos, "bottom" );
+							}
+						}
+						if ( el.css( "left" ) === "auto" &&
+						     el.css( "right" ) === "auto" ){
+							setAutoPos( pos, "left" );
+						} else {
+							if ( origin[ 1 ] !== "left" ) {
+								setPos( pos, "left" );
+							}
+							if ( origin[ 1 ] !== "right" ||
+							     el.css ("position") === "relative" ) {
+								setPos( pos, "right" );
+							}
+						}
+						el.css( pos );
+					}
+				}
+				$.effects.removeWrapper( el );
 				$.isFunction( o.complete ) && o.complete.apply( this, arguments ); // Callback
 				el.dequeue();
 			}
