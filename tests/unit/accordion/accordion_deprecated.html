@@ -24,7 +24,7 @@
 		}).get();
 		deepEqual( actual, expected );
 	}
-	function equalHeights( accordion, min, max ) {
+	function accordion_equalHeights( accordion, min, max ) {
 		var sizes = [];
 		accordion.find( ".ui-accordion-content" ).each(function() {
 			sizes.push( $( this ).outerHeight() );
