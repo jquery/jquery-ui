@@ -31,6 +31,17 @@
 			input: localDevelopers,
 			paging: {
 				limit: 8
+			},
+			propertychange: function(event, ui) {
+				console.log("field", ui.path, "changed from", ui.oldValue, "to", ui.newValue);
+			},
+			objectchange: function(event, ui) {
+				console.log("developer at index", ui.index, "changed", ui.object);
+				this.save();
+			},
+			change: function(event, ui) {
+				console.log("developer(s) at index", ui.index, ui.change + "ed", ui.items);
+				this.save().refresh();
 			}
 		});
 		developers.save = function() {
@@ -48,8 +59,16 @@
 						type: th.data( "type" ),
 						submit: function( event, ui ) {
 							var object = $( this ).tmplItem().data;
+							var oldValue = get(object, field);
 							set(object, field, ui.value);
-							developers.save();
+							developers._trigger("propertychange", event, {
+								path: field,
+								oldValue: oldValue,
+								newValue: ui.value
+							});
+							developers._trigger("objectchange", event, {
+								object: object
+							});
 						}
 					});
 				});
@@ -61,15 +80,23 @@
 			+ "<button class='edit'>Edit</button></td>"
 			+ "<td><button class='remove'>Remove</button></td></tr>";
 
-		var developer;
+		var developer, tmplItem;
 		var editForm = $( "#editForm" ).hide().submit( function( event ) {
 			event.preventDefault();
 			serializeForm( this, developer );
-			developers.save().refresh();
+			// TODO the ui-widget class is added after rendering the template by the grid
+			// therefore just rerendering the row looks bad, need to update the template to include the classes
+			// or extend the grid to refresh a single row - need that anyway, as currently the inline editor breaks
+			tmplItem.update();
+			developers._trigger("objectchange", event, {
+				index: localDevelopers.indexOf(developer),
+				object: developer
+			});
 			editForm.hide();
 		});
 		grid.element.delegate( "button.edit", "click", function() {
-			developer = $( this ).tmplItem().data;
+			tmplItem = $( this ).tmplItem();
+			developer = tmplItem.data;
 			deserializeForm( editForm, developer );
 			editForm.show();
 		});
@@ -78,9 +105,13 @@
 			for ( var i = localDevelopers.length - 1; i >= 0; i-- ) {
 				if ( localDevelopers[i] === developer ) {
 					localDevelopers.splice( i, 1 );
+					developers._trigger("change", event, {
+						change: "remove",
+						index: i,
+						items: [developer]
+					});
 				}
 			}
-			developers.save().refresh();
 		});
 
 		$( "#pageDevelopers" ).pager({
@@ -98,7 +129,11 @@
 					value: 0
 				}
 			});
-			developers.save().refresh();
+			developers._trigger("change", event, {
+				change: "insert",
+				index: 0,
+				items: [localDevelopers[0]]
+			});
 		});
 
 		developers.refresh();
