@@ -3,13 +3,15 @@
 module( "accordion: methods", accordionSetupTeardown() );
 
 test( "destroy", function() {
-	domEqual("#list1", function() {
-		$("#list1").accordion().accordion("destroy");
+	expect( 1 );
+	domEqual( "#list1", function() {
+		$( "#list1" ).accordion().accordion( "destroy" );
 	});
 });
 
 test( "enable/disable", function() {
-	var element = $('#list1').accordion();
+	expect( 3 );
+	var element = $( "#list1" ).accordion();
 	accordion_state( element, 1, 0, 0 );
 	element.accordion( "disable" );
 	element.accordion( "option", "active", 1 );
@@ -20,6 +22,7 @@ test( "enable/disable", function() {
 });
 
 test( "refresh", function() {
+	expect( 6 );
 	var element = $( "#navigation" )
 		.parent()
 			.height( 300 )
@@ -27,11 +30,11 @@ test( "refresh", function() {
 		.accordion({
 			heightStyle: "fill"
 		});
-	equalHeights( element, 246, 258 );
+	accordion_equalHeights( element, 246, 258 );
 
 	element.parent().height( 500 );
 	element.accordion( "refresh" );
-	equalHeights( element, 446, 458 );
+	accordion_equalHeights( element, 446, 458 );
 });
 
 }( jQuery ) );

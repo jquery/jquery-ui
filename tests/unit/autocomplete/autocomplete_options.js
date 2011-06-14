@@ -1,247 +1,192 @@
-/*
- * autocomplete_options.js
- */
-(function($) {
+(function( $ ) {
 
-module("autocomplete: options", {
-	teardown: function() {
-		$( ":ui-autocomplete" ).autocomplete( "destroy" );
-	}
-});
+module( "autocomplete: options" );
 
-
-/* disabled until autocomplete actually has built-in support for caching 
-// returns at most 4 items
-function source(request) {
-	ok(true, "handling a request");
-	switch(request.term) {
-	case "cha":
-		return ["Common Pochard", "Common Chiffchaff", "Common Chaffinch", "Iberian Chiffchaff"]
-	case "chaf":
-	case "chaff":
-		return ["Common Chiffchaff", "Common Chaffinch", "Iberian Chiffchaff"]
-	case "chaffi":
-		return ["Common Chaffinch"]
-	case "schi":
-		return ["schifpre"]
-	}
-}
-
-function search(input) {
-	var autocomplete = input.data("autocomplete");
-	autocomplete.search("cha");
-	autocomplete.close();
-	autocomplete.search("chaf");
-	autocomplete.close();
-	autocomplete.search("chaff");
-	autocomplete.close();
-	autocomplete.search("chaffi");
-	autocomplete.close();
-	autocomplete.search("schi");
-}
-	
-test("cache: default", function() {
-	expect(2);
-	search($("#autocomplete").autocomplete({
-		source: source
-	}));
-});
-
-test("cache: {limit:4}", function() {
-	expect(3);
-	search($("#autocomplete").autocomplete({
-		cache: {
-			limit: 4
-		},
-		source: source
-	}));
-});
-
-test("cache: false", function() {
-	expect(5);
-	search($("#autocomplete").autocomplete({
-		cache: false,
-		source: source
-	}));
-});
-*/
-
-var data = ["c++", "java", "php", "coldfusion", "javascript", "asp", "ruby", "python", "c", "scala", "groovy", "haskell", "perl"];
+var data = [ "c++", "java", "php", "coldfusion", "javascript", "asp", "ruby", "python", "c", "scala", "groovy", "haskell", "perl" ];
 
 test( "appendTo", function() {
-	var ac = $( "#autocomplete" ).autocomplete();
-	same( ac.autocomplete( "widget" ).parent()[0], document.body, "defaults to body" );
-	ac.autocomplete( "destroy" );
+	expect( 5 );
+	var element = $( "#autocomplete" ).autocomplete();
+	equal( element.autocomplete( "widget" ).parent()[0], document.body, "defaults to body" );
+	element.autocomplete( "destroy" );
 
-	ac.autocomplete({
-		appendTo: "#ac-wrap2"
-	});
-	same( ac.autocomplete( "widget" ).parent()[0], $( "#ac-wrap2" )[0], "id" );
-	ac.autocomplete( "destroy" );
-
-	ac.autocomplete({
+	element.autocomplete({
 		appendTo: ".ac-wrap"
 	});
-	same( ac.autocomplete( "widget" ).parent()[0], $( "#ac-wrap1" )[0], "class" );
-	same( $( "#ac-wrap2 .ui-autocomplete").length, 0, "class - only appends to one element")
-	ac.autocomplete( "destroy" );
+	equal( element.autocomplete( "widget" ).parent()[0], $( "#ac-wrap1" )[0], "first found element" );
+	equal( $( "#ac-wrap2 .ui-autocomplete" ).length, 0, "only appends to one element" );
+	element.autocomplete( "destroy" );
 
-	ac.autocomplete({
+	element.autocomplete({
 		appendTo: null
 	});
-	same( ac.autocomplete( "widget" ).parent()[0], document.body, "null" );
-	ac.autocomplete( "destroy" );
-	
-	ac.autocomplete().autocomplete( "option", "appendTo", "#ac-wrap1" );
-	same( ac.autocomplete( "widget" ).parent()[0], $( "#ac-wrap1" )[0], "modified after init" );
-	ac.autocomplete( "destroy" );
+	equal( element.autocomplete( "widget" ).parent()[0], document.body, "null" );
+	element.autocomplete( "destroy" );
+
+	element.autocomplete().autocomplete( "option", "appendTo", "#ac-wrap1" );
+	equal( element.autocomplete( "widget" ).parent()[0], $( "#ac-wrap1" )[0], "modified after init" );
+	element.autocomplete( "destroy" );
 });
 
 function autoFocusTest( afValue, focusedLength ) {
-	var ac = $( "#autocomplete" ).autocomplete({
+	var element = $( "#autocomplete" ).autocomplete({
 		autoFocus: afValue,
 		delay: 0,
 		source: data,
 		open: function( event, ui ) {
-			equal( ac.autocomplete( "widget" ).children( ".ui-menu-item:first .ui-state-focus" ).length, focusedLength, "first item is " + afValue ? "" : "not" + " auto focused" );
-			start();			
+			equal( element.autocomplete( "widget" ).children( ".ui-menu-item:first .ui-state-focus" ).length,
+				focusedLength, "first item is " + (afValue ? "" : "not") + " auto focused" );
+			start();
 		}
 	});
-	ac.val( "ja" ).keydown();
+	element.val( "ja" ).keydown();
 	stop();
 }
 
 test( "autoFocus: false", function() {
+	expect( 1 );
 	autoFocusTest( false, 0 );
 });
 
 test( "autoFocus: true", function() {
+	expect( 1 );
 	autoFocusTest( true, 1 );
 });
 
-test("delay", function() {
-	var ac = $("#autocomplete").autocomplete({
-		source: data,
-		delay: 50
-	});
-	ac.val("ja").keydown();
-	
-	same( $(".ui-menu:visible").length, 0 );
-	
-	// wait half a second for the default delay to open the menu
-	stop();
-	setTimeout(function() {
-		same( $(".ui-menu:visible").length, 1 );
-		ac.autocomplete("destroy");
-		start();		
-	}, 100);
-});
+asyncTest( "delay", function() {
+	expect( 2 );
+	var element = $( "#autocomplete" ).autocomplete({
+			source: data,
+			delay: 50
+		}),
+		menu = element.autocomplete( "widget" );
+	element.val( "ja" ).keydown();
 
-test("disabled", function() {
-	var ac = $("#autocomplete").autocomplete({
-		source: data,
-		delay: 0,
-		disabled: true
-	});
-	ac.val("ja").keydown();
-	
-	same( $(".ui-menu:visible").length, 0 );
-	
-	stop();
+	ok( menu.is( ":hidden" ), "menu is closed immediately after search" );
+
 	setTimeout(function() {
-		same( $(".ui-menu:visible").length, 0 );
-		ac.autocomplete("destroy");
+		ok( menu.is( ":visible" ), "menu is open after delay" );
 		start();
-	}, 50);
+	}, 100 );
 });
 
-test("minLength", function() {
-	var ac = $("#autocomplete").autocomplete({
-		source: data
-	});
-	ac.autocomplete("search", "");
-	same( $(".ui-menu:visible").length, 0, "blank not enough for minLength: 1" );
-	
-	ac.autocomplete("option", "minLength", 0);
-	ac.autocomplete("search", "");
-	same( $(".ui-menu:visible").length, 1, "blank enough for minLength: 0" );
-	ac.autocomplete("destroy");
+asyncTest( "disabled", function() {
+	expect( 2 );
+	var element = $( "#autocomplete" ).autocomplete({
+			source: data,
+			delay: 0,
+			disabled: true
+		}),
+		menu = element.autocomplete( "widget" );
+	element.val( "ja" ).keydown();
+
+	ok( menu.is( ":hidden" ) );
+
+	setTimeout(function() {
+		ok( menu.is( ":hidden" ) );
+		start();
+	}, 50 );
 });
 
-test("source, local string array", function() {
-	var ac = $("#autocomplete").autocomplete({
-		source: data
-	});
-	ac.val("ja").autocomplete("search");
-	same( $(".ui-menu .ui-menu-item").text(), "javajavascript" );
-	ac.autocomplete("destroy");
+test( "minLength", function() {
+	expect( 2 );
+	var element = $( "#autocomplete" ).autocomplete({
+			source: data
+		}),
+		menu = element.autocomplete( "widget" );
+	element.autocomplete( "search", "" );
+	ok( menu.is( ":hidden" ), "blank not enough for minLength: 1" );
+
+	element.autocomplete( "option", "minLength", 0 );
+	element.autocomplete( "search", "" );
+	ok( menu.is( ":visible" ), "blank enough for minLength: 0" );
 });
 
-function source_test(source, async) {
-	var ac = $("#autocomplete").autocomplete({
-		source: source
-	});
-	ac.val("ja").autocomplete("search");
-	function result(){
-		same( $(".ui-menu .ui-menu-item").text(), "javajavascript" );
-		ac.autocomplete("destroy");
-		async && start();
+test( "source, local string array", function() {
+	expect( 1 );
+	var element = $( "#autocomplete" ).autocomplete({
+			source: data
+		}),
+		menu = element.autocomplete( "widget" );
+	element.val( "ja" ).autocomplete( "search" );
+	equal( menu.find( ".ui-menu-item" ).text(), "javajavascript" );
+});
+
+function sourceTest( source, async ) {
+	var element = $( "#autocomplete" ).autocomplete({
+			source: source
+		}),
+		menu = element.autocomplete( "widget" );
+	element.val( "ja" ).autocomplete( "search" );
+	function result() {
+		equal( menu.find( ".ui-menu-item" ).text(), "javajavascript" );
+		element.autocomplete( "destroy" );
+		if ( async ) {
+			start();
+		}
 	}
-	if (async) {
+	if ( async ) {
 		stop();
-		$(document).one("ajaxStop", result);
+		$( document ).one( "ajaxStop", result );
 	} else {
 		result();
 	}
 }
 
-test("source, local object array, only label property", function() {
-	source_test([
-		{label:"java"},
-		{label:"php"},
-		{label:"coldfusion"},
-		{label:"javascript"}
+test( "source, local object array, only label property", function() {
+	expect( 1 );
+	sourceTest([
+		{ label: "java" },
+		{ label: "php" },
+		{ label: "coldfusion" },
+		{ label: "javascript" }
 	]);
 });
 
-test("source, local object array, only value property", function() {
-	source_test([
-		{value:"java"},
-		{value:"php"},
-		{value:"coldfusion"},
-		{value:"javascript"}
+test( "source, local object array, only value property", function() {
+	expect( 1 );
+	sourceTest([
+		{ value: "java" },
+		{ value: "php" },
+		{ value: "coldfusion" },
+		{ value: "javascript" }
 	]);
 });
 
-test("source, url string with remote json string array", function() {
-	source_test("remote_string_array.txt", true);
+test( "source, url string with remote json string array", function() {
+	expect( 1 );
+	sourceTest( "remote_string_array.txt", true );
 });
 
-test("source, url string with remote json object array, only value properties", function() {
-	source_test("remote_object_array_values.txt", true);
+test( "source, url string with remote json object array, only value properties", function() {
+	expect( 1 );
+	sourceTest( "remote_object_array_values.txt", true );
 });
 
-test("source, url string with remote json object array, only label properties", function() {
-	source_test("remote_object_array_labels.txt", true);
+test( "source, url string with remote json object array, only label properties", function() {
+	expect( 1 );
+	sourceTest( "remote_object_array_labels.txt", true );
 });
 
-test("source, custom", function() {
-	source_test(function(request, response) {
-		same( request.term, "ja" );
-		response(["java", "javascript"]);
+test( "source, custom", function() {
+	expect( 2 );
+	sourceTest(function( request, response ) {
+		equal( request.term, "ja" );
+		response( ["java", "javascript"] );
 	});
 });
 
-test("source, update after init", function() {
-	var ac = $("#autocomplete").autocomplete({
-		source: ["java", "javascript", "haskell"]
-	});
-	ac.val("ja").autocomplete("search");
-	same( $(".ui-menu .ui-menu-item").text(), "javajavascript" );
-	ac.autocomplete("option", "source", ["php", "asp"]);
-	ac.val("ph").autocomplete("search");
-	same( $(".ui-menu .ui-menu-item").text(), "php" );
-	ac.autocomplete("destroy");
+test( "source, update after init", function() {
+	expect( 2 );
+	var element = $( "#autocomplete" ).autocomplete({
+			source: [ "java", "javascript", "haskell" ]
+		}),
+		menu = element.autocomplete( "widget" );
+	element.val( "ja" ).autocomplete( "search" );
+	equal( menu.find( ".ui-menu-item" ).text(), "javajavascript" );
+	element.autocomplete( "option", "source", [ "php", "asp" ] );
+	element.val( "ph" ).autocomplete( "search" );
+	equal( menu.find( ".ui-menu-item" ).text(), "php" );
 });
 
-})(jQuery);
+}( jQuery ) );
