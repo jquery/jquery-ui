@@ -102,16 +102,13 @@
 		});
 		grid.element.delegate( "button.remove", "click", function() {
 			var developer = $( this ).tmplItem().data;
-			for ( var i = localDevelopers.length - 1; i >= 0; i-- ) {
-				if ( localDevelopers[i] === developer ) {
-					localDevelopers.splice( i, 1 );
-					developers._trigger("change", event, {
-						change: "remove",
-						index: i,
-						items: [developer]
-					});
-				}
-			}
+			var index = localDevelopers.indexOf( developer );
+			localDevelopers.splice( index, 1 );
+			developers._trigger("change", event, {
+				change: "remove",
+				index: index,
+				items: [ developer ]
+			});
 		});
 
 		$( "#pageDevelopers" ).pager({
