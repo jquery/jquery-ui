@@ -8,7 +8,8 @@
 		"bitcoins": 150,
 		"random": {
 			"value": 10
-		}
+		},
+		"favorites": [1, 2, 3]
 	},
 	{
 		"firstName": "Scott",
@@ -19,7 +20,8 @@
 		"bitcoins": 10,
 		"random": {
 			"value": 20
-		}
+		},
+		"favorites": [1, 2, 3]
 	},
 	{
 		"firstName": "Jörn",
@@ -30,7 +32,8 @@
 		"bitcoins": 1,
 		"random": {
 			"value": 30
-		}
+		},
+		"favorites": [1, 2, 3]
 	},
 	{
 		"firstName": "Carl",
@@ -41,7 +44,8 @@
 		"bitcoins": 1500,
 		"random": {
 			"value": 40
-		}
+		},
+		"favorites": [1, 2, 3]
 	},
 	{
 		"firstName": "Adam",
@@ -52,7 +56,8 @@
 		"bitcoins": 1337,
 		"random": {
 			"value": 50
-		}
+		},
+		"favorites": [1, 2, 3]
 	},
 	{
 		"firstName": "Remy",
@@ -63,7 +68,8 @@
 		"bitcoins": 55.5,
 		"random": {
 			"value": 60
-		}
+		},
+		"favorites": [1, 2, 3]
 	},
 	{
 		"firstName": "Benjamin",
@@ -74,7 +80,8 @@
 		"bitcoins": 2501,
 		"random": {
 			"value": 70
-		}
+		},
+		"favorites": [1, 2, 3]
 	},
 	{
 		"firstName": "Haymo",
@@ -85,6 +92,7 @@
 		"bitcoins": 0,
 		"random": {
 			"value": 80
-		}
+		},
+		"favorites": [1, 2, 3]
 	}
 ]

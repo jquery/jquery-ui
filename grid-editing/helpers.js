@@ -19,6 +19,7 @@ function get(object, name) {
 }
 
 function serializeForm(form, target) {
+	// TODO flatten arrays (object.name occuring multiple times)
 	$.each( $( form ).serializeArray(), function( index, object ) {
 		set( target, object.name, object.value );
 	});
@@ -27,6 +28,31 @@ function deserializeForm(form, source) {
 	$(form).find("input:text").each(function() {
 		$(this).val(get(source, this.name));
 	});
+}
+
+function capitalize( value ) {
+	return value.replace(/^(.)(.*)$/, function(match, first, rest) {
+		return first.toUpperCase() + rest.toLowerCase();
+	});
+}
+function meta( input ) {
+	var output = [];
+	for ( key in input ) {
+		var field = {
+			name: key,
+			label: capitalize(key),
+			value: input[ key ]
+		};
+		if ( $.isPlainObject(field.value) ) {
+			for (subkey in field.value) {
+				field.name += "." + subkey;
+				field.value = field.value[ subkey ];
+			}
+		}
+		output.push(field);
+	}
+	console.log(input, output)
+	return output;
 }
 
 // https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/indexOf

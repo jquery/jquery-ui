@@ -12,6 +12,8 @@
 	<script src="../ui/jquery.ui.widget.js"></script>
 	<script src="../ui/jquery.ui.button.js"></script>
 	<script src="../ui/jquery.ui.spinner.js"></script>
+	<script src="../ui/jquery.ui.position.js"></script>
+	<script src="../ui/jquery.ui.tooltip.js"></script>
 	<script src="../grid-spf/datasource.js"></script>
 	<script src="../grid-spf/datasource-local.js"></script>
 	<script src="../grid-spf/grid.js"></script>
@@ -97,7 +99,7 @@
 		grid.element.delegate( "button.edit", "click", function() {
 			tmplItem = $( this ).tmplItem();
 			developer = tmplItem.data;
-			deserializeForm( editForm, developer );
+			$( "#edit-tmpl" ).tmpl( meta(developer) ).appendTo( editForm.find("fieldset").empty() );
 			editForm.show();
 		});
 		grid.element.delegate( "button.remove", "click", function() {
@@ -132,6 +134,8 @@
 				items: [localDevelopers[0]]
 			});
 		});
+
+		$("form").tooltip();
 
 		developers.refresh();
 	});
@@ -176,12 +180,21 @@
 	<button id="addDeveloper">Insert new developer</button>
 </div>
 <form id="editForm">
-	<input type="text" name="firstName" placeholder="Firstname" />
-	<input type="text" name="lastName" placeholder="Lastname" />
-	<input type="text" name="country" placeholder="Country" />
-	<input type="text" name="random.value" placeholder="Random Value" />
+	<fieldset>
+	</fieldset>
 	<input type="submit" value="Save changes" />
 </form>
+<script id="edit-tmpl" type="text/x-jquery-tmpl">
+{{if $.isArray(value)}}
+	<ul>
+		{{each(index, valueX) value}}
+			<li><input type="text" name="${name}" placeholder="${label}" value="${valueX}" title="${label}" /></li>
+		{{/each}}
+	</ul>
+{{else}}
+	<input type="text" name="${name}" placeholder="${label}" value="${value}" title="${label}" />
+{{/if}}
+</script>
 
 </body>
 </html>
