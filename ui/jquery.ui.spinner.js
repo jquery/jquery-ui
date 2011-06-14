@@ -258,10 +258,25 @@ $.widget( "ui.spinner", {
 					: 2
 				: 1);
 
+		// make sure that the new value is not any higher or lower than the max/min 
+		newVal = this._trimValue( newVal );
+
 		if ( this._trigger( "spin", event, { value: newVal } ) !== false) {
 			this.value( newVal );
 			this.counter++;
 		}
+	},
+
+	_trimValue: function( value ) {
+		if ( value > this.options.max) {
+			return this.options.max;
+		}
+		
+		if ( value < this.options.min ) {
+			return this.options.min;
+		}
+		
+		return value;
 	},
 
 	_stop: function( event ) {
@@ -280,13 +295,7 @@ $.widget( "ui.spinner", {
 
 	_setOption: function( key, value ) {
 		if ( key === "value") {
-			value = this._parse( value );
-			if ( value < this.options.min ) {
-				value = this.options.min;
-			}
-			if ( value > this.options.max ) {
-				value = this.options.max;
-			}
+			value = this._trimValue( this._parse(value) );
 		}
 
 		if ( key === "disabled" ) {
