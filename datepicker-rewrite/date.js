@@ -62,6 +62,7 @@ $.date = function ( datestring, formatstring ) {
 		},
 		days: function() {
 			var result = [],
+				today = $.date(),
 				firstDayOfMonth = new Date( this.year(), date.getMonth(), 1 ).getDay(),
 				leadDays = ( firstDayOfMonth - calendar.firstDay + 7 ) % 7,
 				rows = Math.ceil( ( leadDays + this.daysInMonth() ) / 7),
@@ -141,7 +142,5 @@ $.date = function ( datestring, formatstring ) {
 		}
 	}
 }
-
-var today = $.date();
 
 }( jQuery ));
