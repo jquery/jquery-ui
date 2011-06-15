@@ -1,11 +1,11 @@
 /*
  * Calendar math built on jquery-global
- * 
+ *
  * Based on Marc Grabanski's jQuery Date Plugin
  * http://marcgrabanski.com/articles/jquery-date-plugin
  */
 (function( $, undefined ) {
-	
+
 if ( typeof( $.global.culture ) == "undefined" ) {
 	$.global.culture = $.global.cultures[ "default" ];
 }
@@ -23,7 +23,7 @@ $.date = function ( datestring, formatstring ) {
 		setFormat: function( formatstring ) {
 			if ( formatstring ) {
 				format = formatstring;
-			}	
+			}
 			return this;
 		},
 		setDay: function( day ) {
@@ -31,8 +31,8 @@ $.date = function ( datestring, formatstring ) {
 			return this;
 		},
 		adjust: function( period, offset ) {
-			var day = period == "D" ? date.getDate() + offset : date.getDate(), 
-				month = period == "M" ? date.getMonth() + offset : date.getMonth(), 
+			var day = period == "D" ? date.getDate() + offset : date.getDate(),
+				month = period == "M" ? date.getMonth() + offset : date.getMonth(),
 				year = period == "Y" ? date.getFullYear() + offset : date.getFullYear();
 			date = new Date( year, month, day );
 			return this;
