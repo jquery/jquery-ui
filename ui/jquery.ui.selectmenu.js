@@ -337,39 +337,39 @@ $.widget("ui.selectmenu", {
 		}
 
 		// we need to set and unset the CSS classes for dropdown and popup style
-		var isDropDown = (o.style == 'dropdown');
+		var isDropDown = ( o.style == 'dropdown' );
 		this.newelement
-			.toggleClass(self.widgetBaseClass + "-dropdown", isDropDown)
-			.toggleClass(self.widgetBaseClass + "-popup", !isDropDown);
+			.toggleClass( self.widgetBaseClass + '-dropdown', isDropDown )
+			.toggleClass( self.widgetBaseClass + '-popup', !isDropDown );
 		this.list
-			.toggleClass(self.widgetBaseClass + "-menu-dropdown ui-corner-bottom", isDropDown)
-			.toggleClass(self.widgetBaseClass + "-menu-popup ui-corner-all", !isDropDown)
+			.toggleClass( self.widgetBaseClass + '-menu-dropdown ui-corner-bottom', isDropDown )
+			.toggleClass( self.widgetBaseClass + '-menu-popup ui-corner-all', !isDropDown )
 			// add corners to top and bottom menu items
-			.find('li:first')
-			.toggleClass("ui-corner-top", !isDropDown)
-			.end().find('li:last')
-			.addClass("ui-corner-bottom");
+			.find( 'li:first' )
+			.toggleClass( 'ui-corner-top', !isDropDown )
+			.end().find( 'li:last' )
+			.addClass( 'ui-corner-bottom' );
 		this.selectmenuIcon
-			.toggleClass('ui-icon-triangle-1-s', isDropDown)
-			.toggleClass('ui-icon-triangle-2-n-s', !isDropDown);
+			.toggleClass( 'ui-icon-triangle-1-s', isDropDown )
+			.toggleClass( 'ui-icon-triangle-2-n-s', !isDropDown );
 
 		// transfer classes to selectmenu and list
-		if (o.transferClasses) {
-			var transferClasses = this.element.attr('class') || '';
-			this.newelement.add(this.list).addClass(transferClasses);
+		if ( o.transferClasses ) {
+			var transferClasses = this.element.attr( 'class' ) || '';
+			this.newelement.add( this.list ).addClass( transferClasses );
 		}
 
 		// set menu width to either menuWidth option value, width option value, or select width
-		if (o.style == 'dropdown') {
-			this.list.width(o.menuWidth ? o.menuWidth : o.width);
+		if ( o.style == 'dropdown' ) {
+			this.list.width( o.menuWidth ? o.menuWidth : o.width );
 		} else {
-			this.list.width(o.menuWidth ? o.menuWidth : o.width - o.handleWidth);
+			this.list.width( o.menuWidth ? o.menuWidth : o.width - o.handleWidth );
 		}
 
 		// reset height to auto
 		this.list.css("height", "auto");
 		var listH = this.list.height();
-		
+		// calculate default max height
 		if ( o.maxHeight && o.maxHeight < listH) {
 			this.list.height( o.maxHeight );
 		} else {
@@ -378,7 +378,7 @@ $.widget("ui.selectmenu", {
 		}
 		
 		// save reference to actionable li's (not group label li's)
-		this._optionLis = this.list.find('li:not(.' + self.widgetBaseClass + '-group)');
+		this._optionLis = this.list.find( 'li:not(.' + self.widgetBaseClass + '-group)' );
 
 		// transfer disabled state
 		if ( this.element.attr( 'disabled' ) === true ) {
@@ -388,12 +388,12 @@ $.widget("ui.selectmenu", {
 		}
 		
 		// update value
-		this.index(this._selectedIndex());
+		this.index( this._selectedIndex() );
 
 		// needed when selectmenu is placed at the very bottom / top of the page
-		window.setTimeout(function() {
+		window.setTimeout( function() {
 			self._refreshPosition();
-		}, 200);
+		}, 200 );
 	},
 
 	destroy: function() {
