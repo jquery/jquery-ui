@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<title>Demo Page for jQuery UI selectmenu</title>
+	
+	<link type="text/css" href="../../themes/base/jquery.ui.all.css" rel="stylesheet" />
+	<link type="text/css" href="../../themes/base/jquery.ui.selectmenu.css" rel="stylesheet" />
+	<script type="text/javascript" src="../../jquery-1.5.1.js"></script>
+	<script type="text/javascript" src="../../ui/jquery.ui.core.js"></script>
+	<script type="text/javascript" src="../../ui/jquery.ui.widget.js"></script>
+	<script type="text/javascript" src="../../ui/jquery.ui.position.js"></script>
+	
+	<script type="text/javascript" src="../../ui/jquery.ui.selectmenu.js"></script>
+
+	<style type="text/css">
+		/* demo styles */
+		body {font-size: 62.5%; font-family:"Verdana",sans-serif; }
+		fieldset { border:0; }	
+		label,select,.ui-select-menu { float: left; margin-right: 10px; }
+		select { width: 200px; }		
+		input#btn { cursor: pointer; }
+		textarea {
+			width: 500px;
+			height: 200px;
+		}
+	</style>
+	<script type="text/javascript">	
+		$(function() {
+			$('select#speedA').selectmenu();
+			
+			$('#btn').click(function() {
+				$('select#speedA').html($("#add").val());
+				$('select#speedA').selectmenu();
+			});
+		});
+	</script>
+</head>
+<body><form action="#">
+    <br /><br /><br />
+    <fieldset>
+        <label for="speedA">Select a Speed:</label>
+        <select name="speedA" id="speedA">
+            <option value="1">Item 1</option>
+            <option value="2">Item 2</option>
+            <option value="3">Item 3</option>
+            <option value="4">Item 4</option>
+            <option value="5">Item 5</option>
+            <option value="6">Item 6</option>
+            <option value="7">Item 7</option>
+            <option value="8">Item 8</option>
+            <option value="9">Item 9</option>
+            <option value="10">Item 10</option>
+            <option value="11">Item 11</option>
+            <option value="12">Item 12</option>
+            <option value="13">Item 13</option>
+            <option value="14">Item 14</option>
+        </select>
+    </fieldset>
+    <br /><br /><br />
+	<textarea id="add">
+<option value="1">New Item 1</option>
+<option value="2">New Item 2</option>
+<option value="3">New Item 3</option>
+	</textarea>
+	<br />
+    <input type="button" class="ui-state-default ui-widget-content" id="btn" value="Refresh Selectmenu" />
+</form>
+</body>
+</html>

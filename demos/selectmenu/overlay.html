@@ -1,0 +1,86 @@
+﻿<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <title>OpenLayers Google Layer Example</title>
+    <link rel="stylesheet" href="http://openlayers.org/dev/examples/../theme/default/style.css" type="text/css" />
+    <link rel="stylesheet" href="http://openlayers.org/dev/examples/../theme/default/google.css" type="text/css" />
+    <link rel="stylesheet" href="http://openlayers.org/dev/examples/style.css" type="text/css" />
+    <!-- this gmaps key generated for http://openlayers.org/dev/ -->
+
+	<link type="text/css" href="../../themes/base/jquery.ui.all.css" rel="stylesheet" />
+	<link type="text/css" href="../../themes/base/jquery.ui.selectmenu.css" rel="stylesheet" />
+	<script type="text/javascript" src="../../jquery-1.5.1.js"></script>
+	<script type="text/javascript" src="../../ui/jquery.ui.core.js"></script>
+	<script type="text/javascript" src="../../ui/jquery.ui.widget.js"></script>
+	<script type="text/javascript" src="../../ui/jquery.ui.position.js"></script>
+	
+	<script type="text/javascript" src="../../ui/jquery.ui.selectmenu.js"></script>
+
+
+    <script src='http://maps.google.com/maps?file=api'></script>
+    <script src="http://openlayers.org/dev/examples/../OpenLayers.js"></script>
+    <script type="text/javascript">
+        var map;
+
+        function init() {
+            map = new OpenLayers.Map('map');
+            map.addControl(new OpenLayers.Control.LayerSwitcher());
+            
+            var gphy = new OpenLayers.Layer.Google(
+                "Google Physical",
+                {type: G_PHYSICAL_MAP}
+            );
+            var gmap = new OpenLayers.Layer.Google(
+                "Google Streets", // the default
+                {numZoomLevels: 20}
+            );
+            var ghyb = new OpenLayers.Layer.Google(
+                "Google Hybrid",
+                {type: G_HYBRID_MAP, numZoomLevels: 20}
+            );
+            var gsat = new OpenLayers.Layer.Google(
+                "Google Satellite",
+                {type: G_SATELLITE_MAP, numZoomLevels: 22}
+            );
+
+
+            map.addLayers([gphy, gmap, ghyb, gsat]);
+
+            map.setCenter(new OpenLayers.LonLat(10.2, 48.9), 5);
+            
+            $("#Selector").selectmenu({style: 'popup',width: 300,menuWidth:300,maxHeight:240});
+        }
+    </script>
+  </head>
+  <body onload="init()">
+    <h1 id="title">Google Layer Example</h1>
+
+    <div id="tags">
+        Google
+    </div>
+
+    <p id="shortdesc">
+        Demonstrate use of the various types of Google layers.
+    </p>
+    <select  class="selectClass" id="Selector" >
+    <option value="-1">Select one</option>
+<option value="236">a</option>
+<option value="257">b</option>
+<option value="237">c</option>
+<option value="251">d</option>
+<option value="263">e</option>
+<option value="248">f</option>
+<option value="262">g</option>
+<option value="260">h</option>
+<option value="234">i</option>
+<option value="229">j</option>
+<option value="230">k</option>
+<option value="240">m</option>
+<option value="79">n</option>
+
+</select>
+    <div id="map" class="smallmap"></div>
+
+  </body>
+</html>
