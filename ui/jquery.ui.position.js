@@ -182,9 +182,10 @@ $.fn.position = function( options ) {
 		position.left += myOffset[ 0 ];
 		position.top += myOffset[ 1 ];
 
+		// not required using latest jquery core (see #6000)
 		// prevent fractions (see #5280)
-		position.left = Math.round( position.left );
-		position.top = Math.round( position.top );
+		// position.left = Math.round( position.left );
+		// position.top = Math.round( position.top );
 
 		collisionPosition = {
 			left: position.left - marginLeft,
