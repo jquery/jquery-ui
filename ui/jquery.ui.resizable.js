@@ -39,6 +39,12 @@ $.widget("ui.resizable", $.ui.mouse, {
 
 		var self = this, o = this.options;
 		this.element.addClass("ui-resizable");
+		
+		//If position is set to fixed but the browser doesn't support it (IE6), clear position to fix handle placement(see ticket #3628)
+		$.offset.initialize();
+		if( this.element.css( "position" ) === "fixed" && !$.offset.supportsFixedPosition ) {
+			this.element.css( "position", "" );
+		}
 
 		$.extend(this, {
 			_aspectRatio: !!(o.aspectRatio),
@@ -304,10 +310,17 @@ $.widget("ui.resizable", $.ui.mouse, {
 		// plugins callbacks need to be called first
 		this._propagate("resize", event);
 
-		el.css({
-			top: this.position.top + "px", left: this.position.left + "px",
-			width: this.size.width + "px", height: this.size.height + "px"
-		});
+		//If position is fixed, do not adjust the position, just the size (see #3628)
+		if( el.css( "position" ) === "fixed" ) {
+			el.css({
+				width: this.size.width + "px", height: this.size.height + "px"
+			});
+		} else {
+			el.css({
+				top: this.position.top + "px", left: this.position.left + "px",
+				width: this.size.width + "px", height: this.size.height + "px"
+			});
+		}
 
 		if (!this._helper && this._proportionallyResizeElements.length)
 			this._proportionallyResize();
