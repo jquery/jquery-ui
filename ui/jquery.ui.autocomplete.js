@@ -214,7 +214,10 @@ $.widget( "ui.autocomplete", {
 					if ( false !== self._trigger( "focus", event, { item: item } ) ) {
 						// use value to match what will end up in the input, if it was a key event
 						if ( /^key/.test(event.originalEvent.type) ) {
-							self._value( item.value );
+							//berdeter #7483 When keying up/down in the list, the edit box should show the label, not the value
+							//self.element.val( item.value );  <== was buggy in 1.8.13
+							//self._value( item.value );       <== was present in the forked version ??? Can't tell if it is good or bad
+							self.element.val( item.label );//<== my fix !
 						}
 					}
 				},
