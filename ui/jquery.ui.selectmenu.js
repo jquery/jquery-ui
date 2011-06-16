@@ -366,19 +366,29 @@ $.widget("ui.selectmenu", {
 			this.list.width(o.menuWidth ? o.menuWidth : o.width - o.handleWidth);
 		}
 
-		// calculate default max height
-		if (o.maxHeight) {
-			// set max height from option
-			if (o.maxHeight < this.list.height()) {
-				this.list.height(o.maxHeight);
-			}
+		// reset height to auto
+		this.list.css("height", "auto");
+		var listH = this.list.height();
+		
+		if ( o.maxHeight && o.maxHeight < listH) {
+			this.list.height( o.maxHeight );
 		} else {
-			if (!o.format && ($(window).height() / 3) < this.list.height()) {
-				o.maxHeight = $(window).height() / 3;
-				this.list.height(o.maxHeight);
-			}
-		}
-
+			var winH = $( window ).height() / 3;
+			if ( winH < listH ) this.list.height( winH );	
+		}		
+		
+		// if ( o.maxHeight ) {
+			// if (o.maxHeight < listH) {
+				// this.list.height( o.maxHeight );
+			// }
+		// } else {
+			// var winH = $( window ).height() / 3;
+			// if ( winH < listH ) {
+				// this.list.height( winH );
+				// console.log("set height (winH): " + winH);
+			// }
+		// }
+		
 		// save reference to actionable li's (not group label li's)
 		this._optionLis = this.list.find('li:not(.' + self.widgetBaseClass + '-group)');
 
