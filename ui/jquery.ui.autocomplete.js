@@ -169,7 +169,7 @@ $.widget( "ui.autocomplete", {
 				}
 
 				clearTimeout( self.searching );
-				self.cancelSearch = true; // cancel pending search results
+				self.cancelSearch = true;
 				// clicks on the menu (or a button to trigger a search) will cause a blur event
 				self.closing = setTimeout(function() {
 					self.close( event );
@@ -361,17 +361,15 @@ $.widget( "ui.autocomplete", {
 	},
 
 	_response: function( content ) {
-		if (!this.cancelSearch) { 
-			if ( content ) {
-				content = this._normalize( content );
-			}
-			this._trigger( "response", null, { content: content } );
-			if ( !this.options.disabled && content && content.length ) {
-				this._suggest( content );
-				this._trigger( "open" );
-			} else {
-				this.close();
-			}
+		if ( content ) {
+			content = this._normalize( content );
+		}
+		this._trigger( "response", null, { content: content } );
+		if ( !this.options.disabled && content && content.length && !this.cancelSearch) {
+			this._suggest( content );
+			this._trigger( "open" );
+		} else {
+			this.close();
 		}
 		this.pending--;
 		if ( !this.pending ) {
