@@ -319,7 +319,7 @@ $.Widget.prototype = {
 				return ( typeof handler === "string" ? instance[ handler ] : handler )
 					.apply( instance, arguments );
 			}
-	        var match = key.match( /^(\w+)\s*(.*)$/ );
+	        var match = event.match( /^(\w+)\s*(.*)$/ );
 	        var eventName = match[1] + "." + instance.widgetName,
 				selector = match[2];
 	        if (selector === '') {

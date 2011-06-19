@@ -666,6 +666,40 @@ test( "._bind() to descendent", function() {
 		.trigger( "keydown" );
 });
 
+test( "_bind() with delegate", function() {
+	expect( 8 );
+	$.widget( "ui.testWidget", {
+		_create: function() {
+			var that = this;
+			this.element = {
+				bind: function( event, handler ) {
+					equal( event, "click.testWidget" );
+					ok(  $.isFunction(handler) );
+				},
+				delegate: function( selector, event, handler ) {
+					equal( selector, "a" );
+					equal( event, "click.testWidget" );
+					ok(  $.isFunction(handler) );
+				},
+				trigger: $.noop
+			}
+			this._bind({
+				"click": "handler",
+				"click a": "handler",
+			});
+			this.element.delegate = function( selector, event, handler ) {
+				equal( selector, "form fieldset > input" );
+				equal( event, "change.testWidget" );
+				ok(  $.isFunction(handler) );
+			};
+			this._bind({
+				"change form fieldset > input": "handler"
+			});
+		}
+	});
+	$.ui.testWidget();
+})
+
 test( "._hoverable()", function() {
 	$.widget( "ui.testWidget", {
 		_create: function() {
