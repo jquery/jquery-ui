@@ -18,7 +18,7 @@ $.effects.effect.fold = function( o ) {
 
 		// Create element
 		var el = $( this ),
-			props = ['position','top','bottom','left','right'],
+			props = ['position','top','bottom','left','right','height','width'],
 			mode = $.effects.setMode(el, o.mode || 'hide'),
 			size = o.size || 15,
 			percent = /([0-9]+)%/.exec(size),

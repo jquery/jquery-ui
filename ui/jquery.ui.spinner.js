@@ -258,10 +258,27 @@ $.widget( "ui.spinner", {
 					: 2
 				: 1);
 
+		// clamp the new value 
+		newVal = this._trimValue( newVal );
+
 		if ( this._trigger( "spin", event, { value: newVal } ) !== false) {
 			this.value( newVal );
 			this.counter++;
 		}
+	},
+
+	_trimValue: function( value ) {
+		var options = this.options;
+
+		if ( value > options.max) {
+			return options.max;
+		}
+
+		if ( value < options.min ) {
+			return options.min;
+		}
+
+		return value;
 	},
 
 	_stop: function( event ) {
@@ -280,13 +297,7 @@ $.widget( "ui.spinner", {
 
 	_setOption: function( key, value ) {
 		if ( key === "value") {
-			value = this._parse( value );
-			if ( value < this.options.min ) {
-				value = this.options.min;
-			}
-			if ( value > this.options.max ) {
-				value = this.options.max;
-			}
+			value = this._trimValue( this._parse(value) );
 		}
 
 		if ( key === "disabled" ) {

@@ -21,7 +21,11 @@ $.widget( "ui.menubar", {
 	version: "@VERSION",
 	options: {
 		buttons: false,
-		menuIcon: false
+		menuIcon: false,
+		position: {
+			my: "left top",
+			at: "left bottom"
+		}
 	},
 	_create: function() {
 		var that = this;
@@ -39,6 +43,9 @@ $.widget( "ui.menubar", {
 		this._hoverable( items );
 		items.next( "ul" )
 			.menu({
+				position: {
+					within: this.options.position.within
+				},
 				select: function( event, ui ) {
 					ui.item.parents( "ul.ui-menu:last" ).hide();
 					that._trigger( "select", event, ui );
@@ -119,7 +126,7 @@ $.widget( "ui.menubar", {
 				// TODO ui-menubar-link is added above, not needed here?
 				input.addClass( "ui-menubar-link" ).removeClass( "ui-state-default" );
 			};
-			
+
 		});
 		that._bind( {
 			keydown: function( event ) {
@@ -210,11 +217,9 @@ $.widget( "ui.menubar", {
 		var button = menu.prev().addClass( "ui-state-active" ).attr( "tabIndex", -1 );
 		this.active = menu
 			.show()
-			.position( {
-				my: "left top",
-				at: "left bottom",
+			.position( $.extend({
 				of: button
-			})
+			}, this.options.position ) )
 			.removeAttr( "aria-hidden" )
 			.attr( "aria-expanded", "true" )
 			.menu("focus", event, menu.children( "li" ).first() )

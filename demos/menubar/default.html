@@ -3,7 +3,7 @@
 <head>
 	<title>jQuery UI Menubar - Default demo</title>
 	<link rel="stylesheet" href="../demos.css" type="text/css" />
-	<link rel="stylesheet" href="../../themes/base/jquery.ui.all.css" type="text/css" title="ui-theme" />
+	<link rel="stylesheet" href="../../themes/base/jquery.ui.all.css" />
 	<script src="../../jquery-1.5.1.js"></script>
 	<script src="../../ui/jquery.ui.core.js"></script>
 	<script src="../../ui/jquery.ui.widget.js"></script>
@@ -13,56 +13,29 @@
 	<script src="../../ui/jquery.ui.menubar.js"></script>
 	<script>
 	$(function() {
-		$("td:has(.menubar)").clone().appendTo("tbody tr:not(:first)");
-		
-		$("#bar1, .menubar").menubar({
+		$("#bar1").menubar({
+			position: {
+				within: $("#demo-frame").add(window).first()
+			},
 			select: function(event, ui) {
 				$("<div/>").text("Selected: " + ui.item.text()).appendTo("#log");
 			}
 		});
-		
+
 		$(".menubar-icons").menubar({
 			menuIcon: true,
 			buttons: true,
+			position: {
+				within: $("#demo-frame").add(window).first()
+			},
 			select: function(event, ui) {
 				$("<div/>").text("Selected: " + ui.item.text()).appendTo("#log");
 			}
 		});
 	});
 	</script>
-	<style type="text/css">
-		#bar1, #bar2 { margin: 0 0 4em; } /* style for this page only */
-		.ui-menu { width: 200px; position: absolute; outline: none; z-index: 9999; }
-		.ui-menu .ui-icon { float: right; }
-		.ui-menu li.ui-state-disabled {
-			font-weight: bold;
-			padding: .0em .4em;
-			margin: .4em 0 .2em;
-			line-height: 1.5;
-		}
-		
-		/* menubar styles */
-		.ui-menubar .ui-button { float: left; font-weight: normal; border-top-width: 0 !important; border-bottom-width: 0 !important; margin: 0; outline: none; }
-		.ui-menubar .ui-menubar-link { border-right: 1px dashed transparent; border-left: 1px dashed transparent; }
-		
-		.ui-menubar {
-			list-style: none;
-			margin: 0;
-			padding-left: 0;	
-		}
-		
-		.ui-menubar-item {
-			float: left;  		
-		}
-		/*
-		table {
-			border-collapse: collapse;
-		}
-		th, td {
-			padding: 0.5em;
-			border: 1px solid black;
-		}
-		*/
+	<style>
+		#bar1, #bar2 { margin: 0 0 4em; }
  	</style>
 </head>
 <body>
@@ -159,63 +132,6 @@
 		</ul>
 	</li>
 </ul>
-
-<!--
-<table id="movies" class="ui-widget">
-	<thead>
-		<tr>
-			<th data-field="Name" class="ui-widget-header">Name</th>
-			<th data-field="ReleaseYear" class="ui-widget-header">Release Year</th>
-			<th data-field="AverageRating" class="ui-widget-header">Average Rating</th>
-			<th class="ui-widget-header"></th>
-		</tr>
-	</thead>
-	<tbody>
-		<tr>
-			<td class="ui-widget-content">Red Hot Chili Peppers: Funky Monks</td>
-			<td class="ui-widget-content">1993</td>
-			<td class="ui-widget-content">3.6</td>
-			<td class="ui-widget-content">
-				<ul class="menubar">
-					<li>
-						<a href="#Options">Options</a>
-						<ul>
-							<li><a href="#Order...">Order...</a></li>
-							<li class="ui-state-disabled">Write a Review...</li>
-							<li><a href="#Find Similar Movies...">Find Similar Movies...</a></li>
-							<li>
-								<a href="#Rate">Rate</a>
-								<ul>
-									<li><a href="#5 stars">5 stars</a></li>
-									<li><a href="#4 stars">4 stars</a></li>
-									<li><a href="#3 stars">3 stars</a></li>
-									<li><a href="#2 stars">2 stars</a></li>
-									<li><a href="#1 stars">1 stars</a></li>
-								</ul>
-							</li>
-						</ul>
-					</li>
-				</ul>
-			</td>
-		</tr>
-		<tr>
-			<td class="ui-widget-content">Rod Stewart: Storyteller 1984-1991</td>
-			<td class="ui-widget-content">1991</td>
-			<td class="ui-widget-content">3.1</td>
-		</tr>
-		<tr>
-			<td class="ui-widget-content">Stevie Ray Vaughan and Double Trouble: Live at the El Mocambo 1983</td>
-			<td class="ui-widget-content">1991</td>
-			<td class="ui-widget-content">3.9</td>
-		</tr>
-		<tr>
-			<td class="ui-widget-content">Spike and Mike's Sick &amp; Twisted Festival of Animation</td>
-			<td class="ui-widget-content">1997</td>
-			<td class="ui-widget-content">2.6</td>
-		</tr>
-	</tbody>
-</table>
--->
 
 <div class="ui-widget" style="margin-top:2em; font-family:Arial">
 	Log:
