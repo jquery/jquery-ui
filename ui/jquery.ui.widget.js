@@ -19,6 +19,20 @@ $.cleanData = function( elems ) {
 	_cleanData( elems );
 };
 
+$.fn.extend({
+        widget: function (name, options) {
+            var parts = String(name).split('.'), namespace = parts[0], name = parts[1], _widget = $[namespace][name];
+            /// when calling into a namespace in order to set the /*this*/ variable we have to instanciate a new instance of the widget.
+            /// could we pass a reference to the widgets prototype? if we did does it risk corruption of that widget's class?
+            if ($.isFunction(_widget)) {
+                _widget.call(new _widget(), options, this);
+                ///_widget.call(_widget.prototype, options, this);
+            }
+
+            return this;
+        }
+    });
+
 $.widget = function( name, base, prototype ) {
 	var namespace = name.split( "." )[ 0 ],
 		fullName;
