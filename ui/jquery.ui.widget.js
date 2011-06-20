@@ -319,14 +319,14 @@ $.Widget.prototype = {
 				return ( typeof handler === "string" ? instance[ handler ] : handler )
 					.apply( instance, arguments );
 			}
-	        var match = event.match( /^(\w+)\s*(.*)$/ );
-	        var eventName = match[1] + "." + instance.widgetName,
+			var match = event.match( /^(\w+)\s*(.*)$/ ),
+				eventName = match[1] + "." + instance.widgetName,
 				selector = match[2];
-	        if (selector === '') {
-	          element.bind( eventName, handlerProxy );
-	        } else {
-	          element.delegate( selector, eventName, handlerProxy );
-	        }
+			if ( selector === '' ) {
+				element.bind( eventName, handlerProxy );
+			} else {
+				element.delegate( selector, eventName, handlerProxy );
+			}
 		});
 	},
 
