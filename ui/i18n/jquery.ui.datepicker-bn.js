@@ -1,9 +1,9 @@
-/* English/UK initialisation for the jQuery UI date picker plugin. */
-/* Written by Rajib Ahmed  */
+/* Bengali initialisation for the jQuery UI date picker plugin. */
+/* Written by Rajib,Utpol and Shishir  */
 /* http://github.com/rajibahmed */
 jQuery(function($){
 	$.datepicker.regional['bn'] = {
-          closeText: 'েশষ',
+          closeText: 'সমাপ্ত',
           prevText: 'পূর্ববর্তী',
           nextText: 'পরবর্তী',
           currentText: 'আজ',
