@@ -11,7 +11,7 @@
  *	jquery.effects.core.js
  */
 (function( $, undefined ) {
-	
+
 var rvertical = /up|down|vertical/,
 	rpositivemotion = /up|left|vertical|horizontal/;
 
@@ -35,24 +35,24 @@ $.effects.effect.blind = function( o, next ) {
 	} else {
 		$.effects.save( el, props );
 	}
-	el.show(); 
-	wrapper = $.effects.createWrapper( el ).css({ 
+	el.show();
+	wrapper = $.effects.createWrapper( el ).css({
 		overflow: "hidden"
 	});
 
 	distance = wrapper[ ref ]();
 
-	animation[ ref ] = ( mode === "show" ? distance : 0 );
+	animation[ ref ] = show ? distance : 0;
 	if ( !motion ) {
 		el
 			.css( vertical ? "bottom" : "right", 0 )
 			.css( vertical ? "top" : "left", "" )
 			.css({ position: "absolute" });
-		animation[ ref2 ] = ( mode === "show" ) ? 0 : distance;
+		animation[ ref2 ] = show ? 0 : distance;
 	}
 
 	// start at 0 if we are showing
-	if ( mode === "show" ) {
+	if ( show ) {
 		wrapper.css( ref, 0 );
 		if ( ! motion ) {
 			wrapper.css( ref2, distance );
@@ -65,10 +65,10 @@ $.effects.effect.blind = function( o, next ) {
 		easing: o.easing,
 		queue: false,
 		complete: function() {
-			if ( mode == "hide" ) {
+			if ( mode === "hide" ) {
 				el.hide();
 			}
-			$.effects.restore( el, props ); 
+			$.effects.restore( el, props );
 			$.effects.removeWrapper( el );
 			if ( $.isFunction( o.complete ) ) {
 				o.complete.apply( el[ 0 ], arguments );

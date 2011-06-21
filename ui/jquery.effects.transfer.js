@@ -39,7 +39,9 @@ $.effects.effect.transfer = function( o, next ) {
 			})
 			.animate( animation, o.duration, o.easing, function() {
 				transfer.remove();
-				$.isFunction( o.complete ) && o.complete.apply(elem[0], arguments);
+				if ( $.isFunction( o.complete ) ) {
+					o.complete.apply( elem[0], arguments );
+				}
 				next();
 			});
 };

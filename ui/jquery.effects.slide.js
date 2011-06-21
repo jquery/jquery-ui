@@ -18,9 +18,10 @@ $.effects.effect.slide = function( o, next ) {
 	var el = $( this ),
 		props = [ "position", "top", "bottom", "left", "right", "width", "height" ],
 		mode = $.effects.setMode( el, o.mode || "show" ),
+		show = mode === "show",
 		direction = o.direction || "left",
 		ref = (direction == "up" || direction == "down") ? "top" : "left",
-		motion = (direction == "up" || direction == "left") ? "pos" : "neg",
+		positiveMotion = (direction == "up" || direction == "left"),
 		distance,
 		animation = {},
 		size;
@@ -28,7 +29,7 @@ $.effects.effect.slide = function( o, next ) {
 	// Adjust
 	$.effects.save( el, props );
 	el.show();
-	distance = o.distance || el[ ref == "top" ? "outerHeight" : "outerWidth" ]({ 
+	distance = o.distance || el[ ref === "top" ? "outerHeight" : "outerWidth" ]({ 
 		margin: true
 	});
 	
@@ -36,14 +37,14 @@ $.effects.effect.slide = function( o, next ) {
 		overflow: "hidden"
 	});
 	
-	if (mode == "show") {
-		el.css( ref, motion == "pos" ? (isNaN(distance) ? "-" + distance : -distance) : distance );
+	if ( show ) {
+		el.css( ref, positiveMotion ? (isNaN(distance) ? "-" + distance : -distance) : distance );
 	}
 
 	// Animation
-	animation[ ref ] = ( mode == "show" ? 
-		(motion == "pos" ? "+=" : "-=") : 
-		(motion == "pos" ? "-=" : "+=")) 
+	animation[ ref ] = ( show ? 
+		( positiveMotion ? "+=" : "-=") : 
+		( positiveMotion ? "-=" : "+=")) 
 		+ distance;
 
 	// Animate
@@ -52,12 +53,14 @@ $.effects.effect.slide = function( o, next ) {
 		duration: o.duration, 
 		easing: o.easing, 
 		complete: function() {
-			if ( mode == "hide" ) {
+			if ( mode === "hide" ) {
 				el.hide(); 
 			}
 			$.effects.restore( el, props );
 			$.effects.removeWrapper( el );
-			$.isFunction(o.complete) && o.complete.apply( this, arguments ); 
+			if ( $.isFunction( o.complete ) ) {
+				o.complete.apply( this, arguments ); 
+			}
 			next();
 		}
 	});

@@ -24,6 +24,7 @@ function compFunction( el, complete, next ) {
 $.effects.effect.puff = function( o, next ) {
 	var elem = $( this ),
 		mode = $.effects.setMode( elem, o.mode || "hide" ),
+		hide = mode === "hide",
 		percent = parseInt( o.percent, 10 ) || 150,
 		factor = percent / 100,
 		original = { 
@@ -37,8 +38,8 @@ $.effects.effect.puff = function( o, next ) {
 		fade: true,
 		mode: mode,
 		complete: compFunction( this, o.complete, next ),
-		percent: mode == "hide" ? percent : 100,
-		from: mode == "hide"
+		percent: hide ? percent : 100,
+		from: hide
 			? original
 			: {
 				height: original.height * factor,

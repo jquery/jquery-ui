@@ -14,11 +14,11 @@
 
 $.effects.effect.explode = function( o, next ) {
 
-	var rows = o.pieces ? Math.round(Math.sqrt(o.pieces)) : 3,
+	var rows = o.pieces ? Math.round( Math.sqrt( o.pieces ) ) : 3,
 		cells = rows,
 		el = $( this ),
 		mode = $.effects.setMode( el, o.mode || "hide" ),
-		show = ( mode == "show" ),
+		show = mode === "show",
 
 		// show and then visibility:hidden the element before calculating offset
 		offset = el.show().css( "visibility", "hidden" ).offset(),

@@ -23,7 +23,7 @@ $.effects.effect.shake = function( o, next ) {
 		anims = times * 2 + 1,
 		speed = o.duration,
 		ref = (direction == "up" || direction == "down") ? "top" : "left",
-		motion = (direction == "up" || direction == "left") ? "pos" : "neg",
+		positiveMotion = (direction == "up" || direction == "left"),
 		animation = {},
 		animation1 = {},
 		animation2 = {},
@@ -39,9 +39,9 @@ $.effects.effect.shake = function( o, next ) {
 	$.effects.createWrapper( el );
 
 	// Animation
-	animation[ ref ] = ( motion == "pos" ? "-=" : "+=" ) + distance;
-	animation1[ ref ] = ( motion == "pos" ? "+=" : "-=" ) + distance * 2;
-	animation2[ ref ] = ( motion == "pos" ? "-=" : "+=" ) + distance * 2;
+	animation[ ref ] = ( positiveMotion ? "-=" : "+=" ) + distance;
+	animation1[ ref ] = ( positiveMotion ? "+=" : "-=" ) + distance * 2;
+	animation2[ ref ] = ( positiveMotion ? "-=" : "+=" ) + distance * 2;
 
 	// Animate
 	el.animate( animation, speed, o.easing );
@@ -59,7 +59,9 @@ $.effects.effect.shake = function( o, next ) {
 			}
 			$.effects.restore( el, props );
 			$.effects.removeWrapper( el );
-			$.isFunction( o.complete ) && o.complete.apply( this, arguments );
+			if ( $.isFunction( o.complete ) ) {
+				o.complete.apply( this, arguments );
+			}
 			next();
 		});
 

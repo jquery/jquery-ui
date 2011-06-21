@@ -20,7 +20,7 @@ $.effects.effect.highlight = function( o, next ) {
 			backgroundColor: elem.css( "backgroundColor" )
 		};
 
-	if (mode == "hide") {
+	if (mode === "hide") {
 		animation.opacity = 0;
 	}
 
@@ -37,10 +37,13 @@ $.effects.effect.highlight = function( o, next ) {
 			duration: o.duration,
 			easing: o.easing,
 			complete: function() {
-				(mode == "hide" && elem.hide());
+				if ( mode === "hide" ) {
+					elem.hide();
+				}
 				$.effects.restore( elem, props );
-				(mode == "show" && !$.support.opacity && this.style.removeAttribute( "filter" ));
-				jQuery.isFunction(o.complete) && o.complete.apply(this, arguments);
+				if ( $.isFunction( o.complete) ) {
+					o.complete.apply( this, arguments );
+				}
 				next();
 			}
 		});

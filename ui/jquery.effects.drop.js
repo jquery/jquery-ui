@@ -17,11 +17,12 @@ $.effects.effect.drop = function( o, next ) {
 	var el = $( this ), 
 		props = [ "position", "top", "bottom", "left", "right", "opacity", "height", "width" ],
 		mode = $.effects.setMode( el, o.mode || "hide" ),
+		show = mode === "show",
 		direction = o.direction || "left",
-		ref = ( direction == "up" || direction == "down" ) ? "top" : "left",
-		motion = ( direction == "up" || direction == "left" ) ? "pos" : "neg",
+		ref = ( direction === "up" || direction === "down" ) ? "top" : "left",
+		motion = ( direction === "up" || direction === "left" ) ? "pos" : "neg",
 		animation = {
-			opacity: mode == "show" ? 1 : 0
+			opacity: show ? 1 : 0
 		},
 		distance;
 
@@ -32,14 +33,17 @@ $.effects.effect.drop = function( o, next ) {
 
 	distance = o.distance || el[ ref == "top" ? "outerHeight": "outerWidth" ]({ margin: true }) / 2;
 
-	if ( mode == "show" ) {
+	if ( show ) {
 		el
 			.css( "opacity", 0 )
 			.css( ref, motion == "pos" ? -distance : distance );
 	}
 
 	// Animation
-	animation[ ref ] = ((mode == "show") ? (motion == "pos" ? "+=" : "-=") : (motion == "pos" ? "-=" : "+=")) + distance;
+	animation[ ref ] = ( show ? 
+		( motion === "pos" ? "+=" : "-=" ) : 
+		( motion === "pos" ? "-=" : "+=" ) ) 
+		+ distance;
 
 	// Animate
 	el.animate( animation, { 
@@ -50,7 +54,7 @@ $.effects.effect.drop = function( o, next ) {
 			mode == "hide" && el.hide();
 			$.effects.restore( el, props ); 
 			$.effects.removeWrapper( el ); 
-			$.isFunction( o.complete ) && o.complete.apply(this, arguments);
+			$.isFunction( o.complete ) && o.complete.apply( this, arguments );
 			next();
 		}
 	});

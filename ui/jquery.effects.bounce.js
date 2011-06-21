@@ -61,7 +61,7 @@ $.effects.effect.bounce = function( o, next ) {
 		// if we are showing, force opacity 0 and set the initial position
 		// then do the "first" animation
 		el.css( "opacity", 0 )
-			.css( ref, motion ? -distance*2 : distance*2 )
+			.css( ref, motion ? -distance * 2 : distance * 2 )
 			.animate( downAnim, speed, easing );
 	}
 
