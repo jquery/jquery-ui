@@ -12,7 +12,7 @@
  */
 (function( $, undefined ) {
 
-$.effects.effect.explode = function( o, next ) {
+$.effects.effect.explode = function( o, done ) {
 
 	var rows = o.pieces ? Math.round( Math.sqrt( o.pieces ) ) : 3,
 		cells = rows,
@@ -89,10 +89,7 @@ $.effects.effect.explode = function( o, next ) {
 		if ( !show ) {
 			el.hide();
 		}
-		if ( $.isFunction( o.complete ) ) {
-			o.complete.apply( el[ 0 ] );
-		}
-		next();
+		done();
 	}
 };
 

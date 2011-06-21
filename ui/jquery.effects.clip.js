@@ -12,7 +12,7 @@
  */
 (function( $, undefined ) {
 
-$.effects.effect.clip = function( o, next ) {
+$.effects.effect.clip = function( o, done ) {
 	// Create element
 	var el = $( this ),
 		props = [ "position", "top", "bottom", "left", "right", "height", "width" ],
@@ -57,10 +57,7 @@ $.effects.effect.clip = function( o, next ) {
 			}
 			$.effects.restore( el, props );
 			$.effects.removeWrapper( el );
-			if ( $.isFunction( o.complete ) ) {
-				o.complete.apply( el[ 0 ], arguments );
-			}
-			el.dequeue();
+			done();
 		}
 	});
 

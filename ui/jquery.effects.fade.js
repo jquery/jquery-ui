@@ -12,7 +12,7 @@
  */
 (function( $, undefined ) {
 
-$.effects.effect.fade = function( o, next ) {
+$.effects.effect.fade = function( o, done ) {
 	var el = $( this ),
 		mode = $.effects.setMode( el, o.mode || "toggle" ),
 		hide = mode === "hide";
@@ -28,10 +28,7 @@ $.effects.effect.fade = function( o, next ) {
 			if ( hide ) {
 				el.hide();
 			}
-			if ( o.complete ) {
-				o.complete.call( this );
-			}
-			next();
+			done();
 		}
 	});
 };

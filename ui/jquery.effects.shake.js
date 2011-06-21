@@ -12,7 +12,7 @@
  */
 (function( $, undefined ) {
 
-$.effects.effect.shake = function( o, next ) {
+$.effects.effect.shake = function( o, done ) {
 
 	var el = $( this ),
 		props = [ "position", "top", "bottom", "left", "right", "height", "width" ],
@@ -53,16 +53,13 @@ $.effects.effect.shake = function( o, next ) {
 	el
 		.animate( animation1, speed, o.easing )
 		.animate( animation, speed / 2, o.easing )
-		.queue( function( next ) {
+		.queue(function() {
 			if ( mode === "hide" ) {
 				el.hide();
 			}
 			$.effects.restore( el, props );
 			$.effects.removeWrapper( el );
-			if ( $.isFunction( o.complete ) ) {
-				o.complete.apply( this, arguments );
-			}
-			next();
+			done();
 		});
 
 	// inject all the animations we just queued to be first in line (after "inprogress")
@@ -70,7 +67,7 @@ $.effects.effect.shake = function( o, next ) {
 		queue.splice.apply( queue,
 			[ 1, 0 ].concat( queue.splice( queuelen, anims + 1 ) ) );
 	}
-	next();
+	el.dequeue();
 
 };
 

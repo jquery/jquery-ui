@@ -12,7 +12,7 @@
  */
 (function( $, undefined ) {
 
-$.effects.effect.transfer = function( o, next ) {
+$.effects.effect.transfer = function( o, done ) {
 	var elem = $( this ),
 		target = $( o.to ),
 		targetFixed = target.css( "position" ) === "fixed",
@@ -39,10 +39,7 @@ $.effects.effect.transfer = function( o, next ) {
 			})
 			.animate( animation, o.duration, o.easing, function() {
 				transfer.remove();
-				if ( $.isFunction( o.complete ) ) {
-					o.complete.apply( elem[0], arguments );
-				}
-				next();
+				done();
 			});
 };
 

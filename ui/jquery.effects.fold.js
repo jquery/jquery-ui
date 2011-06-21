@@ -12,7 +12,7 @@
  */
 (function( $, undefined ) {
 
-$.effects.effect.fold = function( o, next ) {
+$.effects.effect.fold = function( o, done ) {
 
 	// Create element
 	var el = $( this ),
@@ -66,10 +66,7 @@ $.effects.effect.fold = function( o, next ) {
 			}
 			$.effects.restore( el, props );
 			$.effects.removeWrapper( el );
-			if ( $.isFunction( o.complete ) ) {
-				o.complete.apply( el[ 0 ], arguments );
-			}
-			next();
+			done();
 		});
 
 };

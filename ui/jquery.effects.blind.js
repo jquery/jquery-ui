@@ -15,7 +15,7 @@
 var rvertical = /up|down|vertical/,
 	rpositivemotion = /up|left|vertical|horizontal/;
 
-$.effects.effect.blind = function( o, next ) {
+$.effects.effect.blind = function( o, done ) {
 	// Create element
 	var el = $( this ),
 		props = [ "position", "top", "bottom", "left", "right", "height", "width" ],
@@ -70,10 +70,7 @@ $.effects.effect.blind = function( o, next ) {
 			}
 			$.effects.restore( el, props );
 			$.effects.removeWrapper( el );
-			if ( $.isFunction( o.complete ) ) {
-				o.complete.apply( el[ 0 ], arguments );
-			}
-			next();
+			done();
 		}
 	});
 

@@ -12,7 +12,7 @@
  */
 (function( $, undefined ) {
 
-$.effects.effect.drop = function( o, next ) {
+$.effects.effect.drop = function( o, done ) {
 
 	var el = $( this ), 
 		props = [ "position", "top", "bottom", "left", "right", "opacity", "height", "width" ],
@@ -54,8 +54,7 @@ $.effects.effect.drop = function( o, next ) {
 			mode == "hide" && el.hide();
 			$.effects.restore( el, props ); 
 			$.effects.removeWrapper( el ); 
-			$.isFunction( o.complete ) && o.complete.apply( this, arguments );
-			next();
+			done();
 		}
 	});
 

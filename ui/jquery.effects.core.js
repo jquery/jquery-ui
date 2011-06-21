@@ -556,7 +556,19 @@ $.fn.extend({
 		}
 
 		function run( next ) {
-			effectMethod.call( this, args, $.isFunction( next ) ? next : $.noop );
+			var elem = this,
+				complete = args.complete;
+
+			function done() {
+				if ( $.isFunction( complete ) ) {
+					complete.call( elem );
+				}
+				if ( $.isFunction( next ) ) {
+					next();
+				}
+			}
+
+			effectMethod.call( elem, args, done );
 		}
 
 		// TODO: remove this check in 2.0, effectMethod will always be true

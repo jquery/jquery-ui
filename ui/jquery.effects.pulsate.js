@@ -12,7 +12,7 @@
  */
 (function( $, undefined ) {
 
-$.effects.effect.pulsate = function( o, next ) {
+$.effects.effect.pulsate = function( o, done ) {
 	var elem = $( this ),
 		mode = $.effects.setMode( elem, o.mode || "show" ),
 		show = mode === "show",
@@ -44,14 +44,11 @@ $.effects.effect.pulsate = function( o, next ) {
 		opacity: animateTo
 	}, duration, o.easing);
 
-	elem.queue( function( next ) {
+	elem.queue(function() {
 		if ( hide ) {
 			elem.hide();
 		}
-		if ( o.complete ) {
-			o.complete.apply( this );
-		}
-		next();
+		done();
 	});
 
 	// We just queued up "anims" animations, we need to put them next in the queue
@@ -59,7 +56,7 @@ $.effects.effect.pulsate = function( o, next ) {
 		queue.splice.apply( queue,
 			[ 1, 0 ].concat( queue.splice( queuelen, anims + 1 ) ) );
 	}
-	next();
+	elem.dequeue();
 };
 
 })(jQuery);

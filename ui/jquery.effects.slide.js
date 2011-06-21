@@ -12,7 +12,7 @@
  */
 (function( $, undefined ) {
 
-$.effects.effect.slide = function( o, next ) {
+$.effects.effect.slide = function( o, done ) {
 
 	// Create element
 	var el = $( this ),
@@ -58,10 +58,7 @@ $.effects.effect.slide = function( o, next ) {
 			}
 			$.effects.restore( el, props );
 			$.effects.removeWrapper( el );
-			if ( $.isFunction( o.complete ) ) {
-				o.complete.apply( this, arguments ); 
-			}
-			next();
+			done();
 		}
 	});
 

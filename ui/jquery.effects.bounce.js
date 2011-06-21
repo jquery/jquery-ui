@@ -12,7 +12,7 @@
  */
 (function( $, undefined ) {
 
-$.effects.effect.bounce = function( o, next ) {
+$.effects.effect.bounce = function( o, done ) {
 	var el = $( this ), 
 		props = [ "position", "top", "bottom", "left", "right", "height", "width" ],
 
@@ -91,16 +91,13 @@ $.effects.effect.bounce = function( o, next ) {
 		el.animate( upAnim, speed, easing );
 	}
 	
-	el.queue( function( next ) {
+	el.queue(function() {
 		if ( hide ) {
 			el.hide();
 		}
 		$.effects.restore( el, props );
 		$.effects.removeWrapper( el );
-		if ( o.complete ) {
-			o.complete.apply( el[ 0 ] );
-		}
-		next();
+		done();
 	});
 
 	// inject all the animations we just queued to be first in line (after "inprogress")
@@ -108,7 +105,7 @@ $.effects.effect.bounce = function( o, next ) {
 		queue.splice.apply( queue,
 			[ 1, 0 ].concat( queue.splice( queuelen, anims + 1 ) ) );
 	}
-	next();
+	el.dequeue();
 
 };
 

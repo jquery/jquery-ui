@@ -12,7 +12,7 @@
  */
 (function( $, undefined ) {
 
-$.effects.effect.highlight = function( o, next ) {
+$.effects.effect.highlight = function( o, done ) {
 	var elem = $( this ),
 		props = [ "backgroundImage", "backgroundColor", "opacity" ],
 		mode = $.effects.setMode( elem, o.mode || "show" ),
@@ -41,10 +41,7 @@ $.effects.effect.highlight = function( o, next ) {
 					elem.hide();
 				}
 				$.effects.restore( elem, props );
-				if ( $.isFunction( o.complete) ) {
-					o.complete.apply( this, arguments );
-				}
-				next();
+				done();
 			}
 		});
 };

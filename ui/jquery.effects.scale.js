@@ -12,16 +12,7 @@
  */
 (function( $, undefined ) {
 
-function compFunction( el, complete, next ) {
-	return function() {
-		if ( $.isFunction( complete ) ) {
-			complete.apply( el );
-		}
-		next();
-	};
-};
-
-$.effects.effect.puff = function( o, next ) {
+$.effects.effect.puff = function( o, done ) {
 	var elem = $( this ),
 		mode = $.effects.setMode( elem, o.mode || "hide" ),
 		hide = mode === "hide",
@@ -37,7 +28,7 @@ $.effects.effect.puff = function( o, next ) {
 		queue: false,
 		fade: true,
 		mode: mode,
-		complete: compFunction( this, o.complete, next ),
+		complete: done,
 		percent: hide ? percent : 100,
 		from: hide
 			? original
@@ -50,7 +41,7 @@ $.effects.effect.puff = function( o, next ) {
 	elem.effect( o );
 };
 
-$.effects.effect.scale = function( o, next ) {
+$.effects.effect.scale = function( o, done ) {
 
 	// Create element
 	var el = $( this ),
@@ -73,7 +64,7 @@ $.effects.effect.scale = function( o, next ) {
 	// We are going to pass this effect to the size effect:
 	options.effect = "size";
 	options.queue = false;
-	options.complete = compFunction( this, options.complete, next );
+	options.complete = done;
 
 	// Set default origin and restore for show/hide
 	if ( mode != "effect" ) { 
@@ -105,7 +96,7 @@ $.effects.effect.scale = function( o, next ) {
 
 };
 
-$.effects.effect.size = function( o, next ) {
+$.effects.effect.size = function( o, done ) {
 
 	// Create element
 	var el = $( this ), 
@@ -302,10 +293,7 @@ $.effects.effect.size = function( o, next ) {
 			}
 
 			$.effects.removeWrapper( el );
-			if ( $.isFunction( o.complete ) ) {
-				o.complete.apply( this, arguments );
-			}
-			next();
+			done();
 		}
 	});
 
