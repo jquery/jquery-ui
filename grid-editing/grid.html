@@ -53,31 +53,7 @@
 		}
 
 		var grid = $.ui.grid( {
-			source: developers,
-			refresh: function() {
-				/*
-				$( this ).find( "td:not(:has(button))" ).each( function() {
-					var th = $( this ).parents( "table:first" ).find( "th" ).eq( this.cellIndex ),
-						field = th.data( "field" );
-					$( this ).editor({
-						type: th.data( "type" ),
-						submit: function( event, ui ) {
-							var object = $( this ).tmplItem().data;
-							var oldValue = get(object, field);
-							set(object, field, ui.value);
-							developers._trigger("propertychange", event, {
-								path: field,
-								oldValue: oldValue,
-								newValue: ui.value
-							});
-							developers._trigger("objectchange", event, {
-								object: object
-							});
-						}
-					});
-				});
-				*/
-			}
+			source: developers
 		}, "#developers-local" );
 
 		grid.element.gridEditor({
