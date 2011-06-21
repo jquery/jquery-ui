@@ -19,6 +19,7 @@
 	<script src="../grid-spf/grid.js"></script>
 	<script src="../grid-spf/pager.js"></script>
 	<script src="editor.js"></script>
+	<script src="grid-editor.js"></script>
 	<script src="localstore.js"></script>
 	<script src="helpers.js"></script>
 	<script>
@@ -54,6 +55,7 @@
 		var grid = $.ui.grid( {
 			source: developers,
 			refresh: function() {
+				/*
 				$( this ).find( "td:not(:has(button))" ).each( function() {
 					var th = $( this ).parents( "table:first" ).find( "th" ).eq( this.cellIndex ),
 						field = th.data( "field" );
@@ -74,8 +76,30 @@
 						}
 					});
 				});
+				*/
 			}
 		}, "#developers-local" );
+
+		grid.element.gridEditor({
+			items: "td:not(:has(button))",
+			type: function(cell) {
+				return grid.element.find( "th" ).eq( cell[ 0 ].cellIndex ).data( "type" );
+			},
+			submit: function( event, ui) {
+				var object = ui.item.tmplItem().data,
+					field = grid.element.find( "th" ).eq( ui.item[ 0 ].cellIndex ).data( "field" ),
+					oldValue = get(object, field);
+				set(object, field, ui.value);
+				developers._trigger("propertychange", event, {
+					path: field,
+					oldValue: oldValue,
+					newValue: ui.value
+				});
+				developers._trigger("objectchange", event, {
+					object: object
+				});
+			}
+		});
 
 		// TODO find a better way to add markup to the generated row template
 		grid.options.rowTemplate = grid.options.rowTemplate.substring( 0, grid.options.rowTemplate.length - 35 )
