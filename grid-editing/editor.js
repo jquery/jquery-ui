@@ -42,7 +42,11 @@ $.widget( "ui.editor", {
 					that.submit( event );
 				}, 100 );
 			},
+			keydown: function( event ) {
+				event.stopPropagation();
+			},
 			keyup: function( event ) {
+				event.stopPropagation();
 				if ( event.keyCode === $.ui.keyCode.ENTER || event.keyCode === $.ui.keyCode.NUMPAD_ENTER ) {
 					this.submit( event );
 				} else if ( event.keyCode === $.ui.keyCode.ESCAPE ) {
@@ -58,6 +62,7 @@ $.widget( "ui.editor", {
 		this._trigger("start", event );
 	},
 	_hide: function( event ) {
+		this.input.blur();
 		this.inputWrapper.hide();
 		this.inner.show();
 	},

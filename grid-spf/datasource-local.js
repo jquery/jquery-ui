@@ -10,12 +10,11 @@ $.widget( "ui.localDatasource", $.ui.datasource, {
 			var sortedItems = that._sort( that._filter( that.options.input ) );
 			response( that._page( sortedItems ), sortedItems.length );
 		}
-		this.refresh();
 	},
 	_filter: function( items ) {
 		if ( this.options.filter ) {
 			var that = this;
-			return $.grep( items, function ( item ) { 
+			return $.grep( items, function ( item ) {
 				var property,
 					filter,
 					match = true;

@@ -1,11 +1,9 @@
 /*
- * Inline Editor
+ * Grid Inline Editor
  *
  * Depends on:
  * widget
- *
- * Optional:
- * spinner
+ * editor
  */
 (function( $ ) {
 

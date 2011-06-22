@@ -20,9 +20,19 @@
 	<script src="../grid-spf/pager.js"></script>
 	<script src="editor.js"></script>
 	<script src="grid-editor.js"></script>
+	<script src="navigator.js"></script>
 	<script src="localstore.js"></script>
 	<script src="helpers.js"></script>
 	<script>
+	if ( !window.console ) {
+		window.console = {
+			log: function() {
+				var message = Array.prototype.slice.call( arguments, 1 ).join( ", " );
+				$("<div>").text( message ).appendTo("body");
+			}
+		}
+	}
+
 	var store = $.demos.localstore( {
 		key: "grid-editing-developers",
 		initial: "../grid-spf/developers.json"
@@ -74,8 +84,11 @@
 				developers._trigger("objectchange", event, {
 					object: object
 				});
+				// for the navigator
+				grid.element.focus();
 			}
 		});
+		grid.element.navigator();
 
 		// TODO find a better way to add markup to the generated row template
 		grid.options.rowTemplate = grid.options.rowTemplate.substring( 0, grid.options.rowTemplate.length - 35 )
@@ -141,6 +154,7 @@
 	});
 	</script>
 	<style>
+		.navigator-active { border: 2px solid blue; }
 	</style>
 </head>
 <body>

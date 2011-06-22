@@ -1,10 +1,10 @@
 /*
  * Grid
- * 
+ *
  * Depends on:
  * tmpl
  * datastore
- * 
+ *
  * Optional:
  * extractingDatasource
  */
@@ -17,7 +17,6 @@ $.widget( "ui.grid", {
 	},
 	_create: function() {
 		var that = this;
-		
 		this._columns();
 		this._rowTemplate();
 		this.element.addClass( "ui-widget" );
@@ -27,7 +26,7 @@ $.widget( "ui.grid", {
 				// TODO add item
 			});
 		});
-		$(this.options.source).bind("datasourceresponse", function() {
+		$(this.options.source.element).bind("datasourceresponse", function() {
 			that.refresh();
 		});
 	},
@@ -44,7 +43,7 @@ $.widget( "ui.grid", {
 		tbody.find( "td" ).addClass( "ui-widget-content" );
 		this._trigger("refresh");
 	},
-	
+
 	_columns: function() {
 		if ( this.options.columns ) {
 			// TODO this code assumes any present th is a column header, but it may be a row header

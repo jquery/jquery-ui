@@ -51,7 +51,6 @@ function meta( input ) {
 		}
 		output.push(field);
 	}
-	console.log(input, output)
 	return output;
 }
 
