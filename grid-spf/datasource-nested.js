@@ -16,7 +16,8 @@ $.widget( "ui.nestedDatasource", $.ui.datasource, {
 				tags = request.filter,
 				pageSize = request.paging.limit,
 				page = request.page,
-				start = ( page - 1 ) * pageSize;
+				start = ( page - 1 ) * pageSize,
+				lastPage = start + pageSize === (cache[ tags ] && cache[ tags ].length);
 
 			if ( !cache[ tags ] ) {
 				cache[ tags ] = [];
@@ -29,9 +30,13 @@ $.widget( "ui.nestedDatasource", $.ui.datasource, {
 					break;
 				}
 			}
+
 			if ( cached ) {
 				response( cache[ tags ].slice( start, start + pageSize ), cache[ tags ].total );
-				return;
+				// let through to preload next batch when on last page
+				if ( !lastPage ) {
+					return;
+				}
 			}
 
 			options.remote.refresh(function() {
@@ -40,7 +45,9 @@ $.widget( "ui.nestedDatasource", $.ui.datasource, {
 				for ( i = 0, length = data.length; i < length; i++ ) {
 					cache[ tags ][ start + i ] = data[ i ];
 				}
-				response( data.slice( 0, pageSize ), total );
+				if ( !cached && !lastPage ) {
+					response( data.slice( 0, pageSize ), total );
+				}
 			});
 		};
 		this._super( "_create" );
