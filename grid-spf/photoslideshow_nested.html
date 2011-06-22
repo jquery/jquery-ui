@@ -12,6 +12,7 @@
 	<script src="../ui/jquery.ui.position.js"></script>
 	<script src="../ui/jquery.ui.button.js"></script>
 	<script src="datasource.js"></script>
+	<script src="datasource-nested.js"></script>
 	<script src="slideshow.js"></script>
 	<script src="pager.js"></script>
 	<script type="text/x-kite" id="pager-tmpl">
@@ -64,67 +65,6 @@
 						response( result, data.photos.total );
 					}
 				});
-			}
-		});
-
-		var cache = {};
-		$.widget( "ui.nestedDatasource", $.ui.datasource, {
-			widgetEventPrefix: "datasource",
-			options: {
-				remote: null
-			},
-
-			_create: function() {
-				var options = this.options;
-				options.source = function( request, response ) {
-					var i, length,
-						cached = true,
-						tags = request.filter,
-						pageSize = request.paging.limit,
-						page = request.page,
-						start = ( page - 1 ) * pageSize;
-
-					if ( !cache[ tags ] ) {
-						cache[ tags ] = [];
-					}
-
-					// check if we have cached data
-					for ( i = start; i < start + pageSize; i++ ) {
-						if ( !cache[ tags ][ i ] ) {
-							cached = false;
-							break;
-						}
-					}
-					if ( cached ) {
-						response( cache[ tags ].slice( start, start + pageSize ), cache[ tags ].total );
-						return;
-					}
-
-					options.remote.refresh(function() {
-						var total = cache[ tags ].total = remote.totalCount;
-						var data = remote.toArray();
-						for ( i = 0, length = data.length; i < length; i++ ) {
-							cache[ tags ][ start + i ] = data[ i ];
-						}
-						response( data.slice( 0, pageSize ), total );
-					});
-				};
-				this._super( "_create" );
-			},
-
-			_setOptions: function( options ) {
-				if ( "filter" in options ) {
-					remote.option( filter, options.filter );
-				}
-				if ( "paging" in options ) {
-					remote.option( "paging", {
-						limit: ( "limit" in options.paging ?
-							options.paging.limit : this.options.paging.limit ) * 5,
-						offset: ( "offset" in options.paging ?
-							options.paging.offset : this.options.paging.offset )
-					});
-				}
-				this._super( "_setOptions", options );
 			}
 		});
 
