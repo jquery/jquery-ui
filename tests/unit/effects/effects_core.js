@@ -19,6 +19,18 @@ var minDuration = 15,
 
 module( "effects.core" );
 
+test( "Immediate Return Conditions", function() {
+	var hidden = $( "div.hidden" ),
+		count = 0;
+	expect( 6 );
+	hidden.hide( "blind", function() {
+		equal( ++count, 1, "Hide on hidden returned immediately" );
+	}).show().show( "blind", function() {
+		equal( ++count, 2, "Show on shown returned immediately" );
+	});
+	equal( ++count, 3, "Both Functions worked properly" );
+});
+
 $.each( $.effects.effect, function( effect ) {
 	if ( effect === "transfer" ) {
 		return;

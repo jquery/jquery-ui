@@ -556,19 +556,26 @@ $.fn.extend({
 		}
 
 		function run( next ) {
-			var elem = this,
-				complete = args.complete;
+			var elem = $( this ),
+				complete = args.complete,
+				mode = args.mode;
 
 			function done() {
 				if ( $.isFunction( complete ) ) {
-					complete.call( elem );
+					complete.call( elem[0] );
 				}
 				if ( $.isFunction( next ) ) {
 					next();
 				}
 			}
 
-			effectMethod.call( elem, args, done );
+			// if the element is hiddden and mode is hide,
+			// or element is visible and mode is show
+			if ( elem.is( ":hidden" ) ? mode === "hide" : mode === "show" ) {
+				done();
+			} else {
+				effectMethod.call( elem[0], args, done );
+			}
 		}
 
 		// TODO: remove this check in 2.0, effectMethod will always be true
