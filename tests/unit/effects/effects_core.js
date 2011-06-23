@@ -22,7 +22,7 @@ module( "effects.core" );
 test( "Immediate Return Conditions", function() {
 	var hidden = $( "div.hidden" ),
 		count = 0;
-	expect( 6 );
+	expect( 3 );
 	hidden.hide( "blind", function() {
 		equal( ++count, 1, "Hide on hidden returned immediately" );
 	}).show().show( "blind", function() {
