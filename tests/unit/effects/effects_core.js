@@ -123,4 +123,19 @@ asyncTest( "animateClass works with children", function() {
 	}});
 });
 
+asyncTest( "animateClass clears style properties when stopped", function() {
+	var test = $("div.animateClass"),
+		style = test[0].style,
+		orig = style.cssText;
+	
+	expect( 2 );
+
+	test.addClass( "testChangeBackground", duration );
+	notEqual( orig, style.cssText, "cssText is the not the same after starting animation" );
+
+	test.stop( true, true );
+	equal( orig, style.cssText, "cssText is the same after stopping animation midway" );
+	start();
+});
+
 })(jQuery);
