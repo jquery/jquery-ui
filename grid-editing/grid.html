@@ -90,11 +90,6 @@
 		});
 		grid.element.navigator();
 
-		// TODO find a better way to add markup to the generated row template
-		grid.options.rowTemplate = grid.options.rowTemplate.substring( 0, grid.options.rowTemplate.length - 35 )
-			+ "<button class='edit'>Edit</button></td>"
-			+ "<td><button class='remove'>Remove</button></td></tr>";
-
 		var developer, tmplItem;
 		var editForm = $( "#editForm" ).hide().submit( function( event ) {
 			event.preventDefault();
@@ -182,8 +177,8 @@
 			<th data-field="country">Country</th>
 			<th data-field="bitcoins" data-type="number">Bitcoins</th>
 			<th data-field="random.value" data-type="number">Random</th>
-			<th>Edit</th>
-			<th>Remove</th>
+			<th data-template="#cell-edit-tmpl">Edit</th>
+			<th data-template="#cell-remove-tmpl">Remove</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -208,6 +203,12 @@
 {{else}}
 	<input type="text" name="${name}" placeholder="${label}" value="${value}" title="${label}" />
 {{/if}}
+</script>
+<script id="cell-edit-tmpl" type="text/x-jquery-tmpl">
+	<td><button class='edit'>Edit</button></td>
+</script>
+<script id="cell-remove-tmpl" type="text/x-jquery-tmpl">
+	<td><button class='remove'>Remove</button></td>
 </script>
 
 </body>

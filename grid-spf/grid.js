@@ -70,7 +70,15 @@ $.widget( "ui.grid", {
 		if ( this.options.rowTemplate ) {
 			return;
 		}
-		var template = $.map( this.options.columns, function( field ) {
+		var headers = this.element.find( "th" );
+		var template = $.map( this.options.columns, function( field, index ) {
+			// TODO how to specify a custom template using the columns option?
+			// make columns array-of-objects (optional) to contain all the potential data attributes?
+			// should then output those when generating the columns
+			var customTemplate = headers.eq( index ).data( "template" );
+			if ( customTemplate ) {
+				return $(customTemplate).html();
+			}
 			return "<td>${" + field + "}</td>";
 		}).join( "" );
 		template = "<tr>" + template + "</tr>";
