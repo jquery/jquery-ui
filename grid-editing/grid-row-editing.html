@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Grid: Editing, Inline Grid</title>
+	<link rel="stylesheet" href="../themes/base/jquery.ui.all.css">
+	<link rel="stylesheet" href="../grid-spf/grid.css">
+	<script src="../jquery-1.5.1.js"></script>
+	<script src="../external/jquery.tmpl.js"></script>
+	<script src="../external/jquery.mousewheel-3.0.4.js"></script>
+	<script src="../ui/jquery.ui.core.js"></script>
+	<script src="../ui/jquery.ui.widget.js"></script>
+	<script src="../ui/jquery.ui.button.js"></script>
+	<script src="../ui/jquery.ui.spinner.js"></script>
+	<script src="../ui/jquery.ui.position.js"></script>
+	<script src="../ui/jquery.ui.tooltip.js"></script>
+	<script src="../grid-spf/datasource.js"></script>
+	<script src="../grid-spf/datasource-local.js"></script>
+	<script src="../grid-spf/grid.js"></script>
+	<script src="../grid-spf/pager.js"></script>
+	<script src="editor.js"></script>
+	<script src="grid-editor.js"></script>
+	<script src="navigator.js"></script>
+	<script src="localstore.js"></script>
+	<script src="helpers.js"></script>
+	<script>
+	var store = $.demos.localstore( {
+		key: "grid-editing-developers",
+		initial: "../grid-spf/developers.json"
+	});
+	var localDevelopers = store.load();
+
+	$(function() {
+		var developers = $.ui.localDatasource({
+			input: localDevelopers,
+			paging: {
+				limit: 8
+			},
+			objectchange: function(event, ui) {
+				console.log("developer at index", ui.index, "changed", ui.object);
+				store.save( localDevelopers );
+			}
+		});
+
+		var grid = $.ui.grid( {
+			source: developers
+		}, "#developers-local" );
+
+		// TODO refactor this - there must be a better way to reuse the editor
+		$.widget("ui.rowEditor", $.ui.editor, {
+			start: function() {
+				if (this.input.is(":visible")) {
+					$.ui.editor.prototype.submit.apply(this, arguments);
+					return;
+				}
+				this._super("start");
+			},
+			submit: $.noop,
+			cancel: $.noop
+		});
+
+		grid.element.delegate( "button.edit", "click", function() {
+			// TODO pass through data-type to editor
+			// TODO refactor, see above
+			// TODO update the object when disabling editor, trigger events
+			$(this).parents("tr").find("td:not(:has(button))").rowEditor().rowEditor("start").first().find("input").focus();
+		});
+
+		developers.refresh();
+	});
+	</script>
+	<style>
+	</style>
+</head>
+<body>
+
+<h1>Grids with full row inline editing</h1>
+
+<table id="developers-local">
+	<thead>
+		<tr>
+			<th data-field="firstName">First Name</th>
+			<th data-field="lastName">Last Name</th>
+			<th data-field="country">Country</th>
+			<th data-field="bitcoins" data-type="number">Bitcoins</th>
+			<th data-field="random.value" data-type="number">Random</th>
+			<th data-template="#cell-edit-tmpl">Edit</th>
+		</tr>
+	</thead>
+	<tbody>
+	</tbody>
+</table>
+
+<script id="cell-edit-tmpl" type="text/x-jquery-tmpl">
+	<td><button class='edit'>Toggle Edit</button></td>
+</script>
+
+</body>
+</html>
