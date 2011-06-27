@@ -50,7 +50,7 @@
 			},
 			objectchange: function(event, ui) {
 				console.log("developer at index", ui.index, "changed", ui.object);
-				this.save();
+				this.save().refresh();
 			},
 			change: function(event, ui) {
 				console.log("developer(s) at index", ui.index, ui.change + "ed", ui.items);
@@ -81,9 +81,6 @@
 					oldValue: oldValue,
 					newValue: ui.value
 				});
-				developers._trigger("objectchange", event, {
-					object: object
-				});
 				// for the navigator
 				grid.element.focus();
 			}
@@ -94,10 +91,6 @@
 		var editForm = $( "#editForm" ).hide().submit( function( event ) {
 			event.preventDefault();
 			serializeForm( this, developer );
-			// TODO the ui-widget class is added after rendering the template by the grid
-			// therefore just rerendering the row looks bad, need to update the template to include the classes
-			// or extend the grid to refresh a single row - need that anyway, as currently the inline editor breaks
-			tmplItem.update();
 			developers._trigger("objectchange", event, {
 				index: localDevelopers.indexOf(developer),
 				object: developer
