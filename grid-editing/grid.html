@@ -140,6 +140,17 @@
 		$("form").tooltip();
 
 		developers.refresh();
+
+		$.widget("ui.datalist", {
+			_create: function() {
+				$.ui.datalist.lists.push(this.options);
+			}
+		});
+		$.ui.datalist.lists = [];
+		$.ui.datalist({
+			name: "countries",
+			items: ["USA", "Germany", "China", "Canada", "UK", "Australia", "Austria"]
+		});
 	});
 	</script>
 	<style>
@@ -168,7 +179,7 @@
 		<tr>
 			<th data-field="firstName">First Name</th>
 			<th data-field="lastName">Last Name</th>
-			<th data-field="country">Country</th>
+			<th data-field="country" data-list="countries">Country</th>
 			<th data-field="bitcoins" data-type="number">Bitcoins</th>
 			<th data-field="random.value" data-type="number">Random</th>
 			<th data-template="#cell-edit-tmpl">Edit</th>
