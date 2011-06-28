@@ -289,7 +289,7 @@ $.widget("ui.selectmenu", {
 				})
 				.bind('mouseover.selectmenu focus.selectmenu', function(e) {
 					// no hover if diabled
-					if (!$(e.currentTarget).hasClass(self.namespace + '-state-disabled')) {
+					if (!$(e.currentTarget).hasClass(self.namespace + '-state-disabled') && !$(e.currentTarget).parent("ul").parent("li").hasClass(self.namespace + '-state-disabled')) {
 						self._selectedOptionLi().addClass(activeClass);
 						self._focusedOptionLi().removeClass(self.widgetBaseClass + '-item-focus ui-state-hover');
 						$(this).removeClass('ui-state-active').addClass(self.widgetBaseClass + '-item-focus ui-state-hover');
