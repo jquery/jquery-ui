@@ -1102,7 +1102,10 @@ $.extend(Datepicker.prototype, {
 				}
 		}
 		if (iValue < value.length){
-			throw "Extra/unparsed characters found in date: " + value.substring(iValue);
+			var extra = value.substr(iValue);
+			if (!/^\s+/.test(extra)) {
+				throw "Extra/unparsed characters found in date: " + extra;
+			}
 		}
 		if (year == -1)
 			year = new Date().getFullYear();
