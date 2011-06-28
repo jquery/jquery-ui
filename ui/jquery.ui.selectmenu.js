@@ -573,25 +573,28 @@ $.widget("ui.selectmenu", {
 	},
 
 	_moveSelection: function(amt, recIndex) {
-		var currIndex = parseInt(this._selectedOptionLi().data('index') || 0, 10);
-		var newIndex = currIndex + amt;
-		// do not loop when using up key
+		// do nothing if disabled
+		if (!this.options.disabled) {
+			var currIndex = parseInt(this._selectedOptionLi().data('index') || 0, 10);
+			var newIndex = currIndex + amt;
+			// do not loop when using up key
 
-		if (newIndex < 0) {
-			newIndex = 0;
-		}
-		if (newIndex > this._optionLis.size() - 1) {
-			newIndex = this._optionLis.size() - 1;
-		}
-		//Occurs when a full loop has been made
-		if (newIndex === recIndex) { return false; }
+			if (newIndex < 0) {
+				newIndex = 0;
+			}
+			if (newIndex > this._optionLis.size() - 1) {
+				newIndex = this._optionLis.size() - 1;
+			}
+			// Occurs when a full loop has been made
+			if (newIndex === recIndex) { return false; }
 
-		if (this._optionLis.eq(newIndex).hasClass( this.namespace + '-state-disabled' )) {
-			// if option at newIndex is disabled, call _moveFocus, incrementing amt by one
-			(amt > 0) ? ++amt : --amt;
-			this._moveSelection(amt, newIndex);
-		} else {
-			return this._optionLis.eq(newIndex).trigger('mouseup');
+			if (this._optionLis.eq(newIndex).hasClass( this.namespace + '-state-disabled' )) {
+				// if option at newIndex is disabled, call _moveFocus, incrementing amt by one
+				(amt > 0) ? ++amt : --amt;
+				this._moveSelection(amt, newIndex);
+			} else {
+				return this._optionLis.eq(newIndex).trigger('mouseup');
+			}
 		}
 	},
 
