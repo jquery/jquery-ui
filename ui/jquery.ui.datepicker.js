@@ -1399,6 +1399,12 @@ $.extend(Datepicker.prototype, {
 		if (inst.input) {
 			inst.input.val(clear ? '' : this._formatDate(inst));
 		}
+        
+		var onSelect = this._get(inst, 'onSelect');
+		if (onSelect) {
+			var dateStr = this._formatDate(inst);
+			onSelect.apply((inst.input ? inst.input[0] : null), [dateStr, inst]);  // trigger custom callback
+		}
 	},
 
 	/* Retrieve the date(s) directly. */
