@@ -30,11 +30,21 @@ test('Ticket 6827: formatDate day of year calculation is wrong during day lights
 });
 
 test('Ticket #7244: date parser does not fail when too many numbers are passed into the date function', function() {
-    expect(1);
+    var date;
     try{
-        var date = $.datepicker.parseDate('dd/mm/yy', '18/04/19881');
+        date = $.datepicker.parseDate('dd/mm/yy', '18/04/19881');
+        ok(false, "Did not properly detect an invalid date");
     }catch(e){
         ok("invalid date detected");
+    }
+
+    try {
+      date = $.datepicker.parseDate('dd/mm/yy', '18/04/1988 @ 2:43 pm');
+      equal(date.getDate(), 18);
+      equal(date.getMonth(), 3);
+      equal(date.getFullYear(), 1988);
+    } catch(e) {
+      ok(false, "Did not properly parse date with extra text separated by whitespace");
     }
 });
 
