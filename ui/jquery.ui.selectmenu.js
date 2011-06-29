@@ -267,75 +267,78 @@ $.widget("ui.selectmenu", {
 		this.list.html("");
 
 		// write li's
-		for (var i = 0; i < selectOptionData.length; i++) {
+		if (selectOptionData.length) {
+			for (var i = 0; i < selectOptionData.length; i++) {
 				var thisLi = $('<li role="presentation"' + (selectOptionData[i].disabled ? ' class="' + this.namespace + '-state-disabled' + '"' : '' ) + '><a href="#" tabindex="-1" role="option"' + (selectOptionData[i].disabled ? ' aria-disabled="true"' : '' ) + ' aria-selected="false"' + (selectOptionData[i].typeahead ? ' typeahead="' + selectOptionData[i].typeahead + '"' : '' ) + '>'+ selectOptionData[i].text +'</a></li>')
-				.data('index', i)
-				.addClass(selectOptionData[i].classes)
-				.data('optionClasses', selectOptionData[i].classes || '')
-				.bind("mouseup.selectmenu", function(event) {
-					if (self._safemouseup && !self._disabled(event.currentTarget) && !self._disabled($( event.currentTarget ).parents( "ul>li." + self.widgetBaseClass + "-group " )) ) {
-						var changed = $(this).data('index') != self._selectedIndex();
-						self.index($(this).data('index'));
-						self.select(event);
-						if (changed) {
-							self.change(event);
+					.data('index', i)
+					.addClass(selectOptionData[i].classes)
+					.data('optionClasses', selectOptionData[i].classes || '')
+					.bind("mouseup.selectmenu", function(event) {
+						if (self._safemouseup && !self._disabled(event.currentTarget) && !self._disabled($( event.currentTarget ).parents( "ul>li." + self.widgetBaseClass + "-group " )) ) {
+							var changed = $(this).data('index') != self._selectedIndex();
+							self.index($(this).data('index'));
+							self.select(event);
+							if (changed) {
+								self.change(event);
+							}
+							self.close(event, true);
 						}
-						self.close(event, true);
-					}
-					return false;
-				})
-				.bind("click.selectmenu", function() {
-					return false;
-				})
-				.bind('mouseover.selectmenu focus.selectmenu', function(e) {
-					// no hover if diabled
-					if (!$(e.currentTarget).hasClass(self.namespace + '-state-disabled') && !$(e.currentTarget).parent("ul").parent("li").hasClass(self.namespace + '-state-disabled')) {
-						self._selectedOptionLi().addClass(activeClass);
-						self._focusedOptionLi().removeClass(self.widgetBaseClass + '-item-focus ui-state-hover');
-						$(this).removeClass('ui-state-active').addClass(self.widgetBaseClass + '-item-focus ui-state-hover');
-					}
-				})
-				.bind('mouseout.selectmenu blur.selectmenu', function() {
-					if ($(this).is(self._selectedOptionLi().selector)) {
-						$(this).addClass(activeClass);
-					}
-					$(this).removeClass(self.widgetBaseClass + '-item-focus ui-state-hover');
-				});
+						return false;
+					})
+					.bind("click.selectmenu", function() {
+						return false;
+					})
+					.bind('mouseover.selectmenu focus.selectmenu', function(e) {
+						// no hover if diabled
+						if (!$(e.currentTarget).hasClass(self.namespace + '-state-disabled') && !$(e.currentTarget).parent("ul").parent("li").hasClass(self.namespace + '-state-disabled')) {
+							self._selectedOptionLi().addClass(activeClass);
+							self._focusedOptionLi().removeClass(self.widgetBaseClass + '-item-focus ui-state-hover');
+							$(this).removeClass('ui-state-active').addClass(self.widgetBaseClass + '-item-focus ui-state-hover');
+						}
+					})
+					.bind('mouseout.selectmenu blur.selectmenu', function() {
+						if ($(this).is(self._selectedOptionLi().selector)) {
+							$(this).addClass(activeClass);
+						}
+						$(this).removeClass(self.widgetBaseClass + '-item-focus ui-state-hover');
+					});
 
-			// optgroup or not...
-			if ( selectOptionData[i].parentOptGroup.length ) {
-				var optGroupName = self.widgetBaseClass + '-group-' + this.element.find( 'optgroup' ).index( selectOptionData[i].parentOptGroup );
-				if (this.list.find( 'li.' + optGroupName ).length ) {
-					this.list.find( 'li.' + optGroupName + ':last ul' ).append( thisLi );
+				// optgroup or not...
+				if ( selectOptionData[i].parentOptGroup.length ) {
+					var optGroupName = self.widgetBaseClass + '-group-' + this.element.find( 'optgroup' ).index( selectOptionData[i].parentOptGroup );
+					if (this.list.find( 'li.' + optGroupName ).length ) {
+						this.list.find( 'li.' + optGroupName + ':last ul' ).append( thisLi );
+					} else {
+						$(' <li role="presentation" class="' + self.widgetBaseClass + '-group ' + optGroupName + (selectOptionData[i].parentOptGroup.attr("disabled") ? ' ' + this.namespace + '-state-disabled" aria-disabled="true"' : '"' ) + '><span class="' + self.widgetBaseClass + '-group-label">' + selectOptionData[i].parentOptGroup.attr('label') + '</span><ul></ul></li> ')
+							.appendTo( this.list )
+							.find( 'ul' )
+							.append( thisLi );
+					}
 				} else {
-					$(' <li role="presentation" class="' + self.widgetBaseClass + '-group ' + optGroupName + (selectOptionData[i].parentOptGroup.attr("disabled") ? ' ' + this.namespace + '-state-disabled" aria-disabled="true"' : '"' ) + '><span class="' + self.widgetBaseClass + '-group-label">' + selectOptionData[i].parentOptGroup.attr('label') + '</span><ul></ul></li> ')
-						.appendTo( this.list )
-						.find( 'ul' )
-						.append( thisLi );
+					thisLi.appendTo(this.list);
 				}
-			} else {
-				thisLi.appendTo(this.list);
-			}
 
-			// append icon if option is specified
-			if (o.icons) {
-				for (var j in o.icons) {
-					if (thisLi.is(o.icons[j].find)) {
-						thisLi
-							.data('optionClasses', selectOptionData[i].classes + ' ' + self.widgetBaseClass + '-hasIcon')
-							.addClass(self.widgetBaseClass + '-hasIcon');
-						var iconClass = o.icons[j].icon || "";
-						thisLi
-							.find('a:eq(0)')
-							.prepend('<span class="' + self.widgetBaseClass + '-item-icon ui-icon ' + iconClass + '"></span>');
-						if (selectOptionData[i].bgImage) {
-							thisLi.find('span').css('background-image', selectOptionData[i].bgImage);
+				// append icon if option is specified
+				if (o.icons) {
+					for (var j in o.icons) {
+						if (thisLi.is(o.icons[j].find)) {
+							thisLi
+								.data('optionClasses', selectOptionData[i].classes + ' ' + self.widgetBaseClass + '-hasIcon')
+								.addClass(self.widgetBaseClass + '-hasIcon');
+							var iconClass = o.icons[j].icon || "";
+							thisLi
+								.find('a:eq(0)')
+								.prepend('<span class="' + self.widgetBaseClass + '-item-icon ui-icon ' + iconClass + '"></span>');
+							if (selectOptionData[i].bgImage) {
+								thisLi.find('span').css('background-image', selectOptionData[i].bgImage);
+							}
 						}
 					}
 				}
 			}
+		} else {
+			$('<li role="presentation"><a href="#" tabindex="-1" role="option"></a></li>').appendTo(this.list);
 		}
-
 		// we need to set and unset the CSS classes for dropdown and popup style
 		var isDropDown = ( o.style == 'dropdown' );
 		this.newelement
@@ -504,11 +507,15 @@ $.widget("ui.selectmenu", {
 			}
 
 			this.list.addClass(self.widgetBaseClass + '-open')
-				.attr('aria-hidden', false)
-				.find('li:not(.' + self.widgetBaseClass + '-group):eq(' + this._selectedIndex() + ') a')[0].focus();
+				.attr('aria-hidden', false);
+			
+			selected = this.list.find('li:not(.' + self.widgetBaseClass + '-group):eq(' + this._selectedIndex() + ') a');
+			if (selected.length) selected[0].focus();
+			
 			if ( this.options.style == "dropdown" ) {
 				this.newelement.removeClass('ui-corner-all').addClass('ui-corner-top');
 			}
+			
 			this._refreshPosition();
 			this._trigger("open", event, this._uiHash());
 		}
