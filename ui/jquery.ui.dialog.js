@@ -598,11 +598,14 @@ $.widget("ui.dialog", {
 				break;
 			case "zIndex":
 				if ( value > $.ui.dialog.maxZ ) {
-					$.ui.dialog.maxZ = value;
-					
-					if ( self.overlay ) {
-						$.ui.dialog.maxZ += 1;
-						$.ui.dialog.overlay.maxZ = $.ui.dialog.maxZ;
+					// Increment the 'maxZ' counters when this dialog is currently visible
+					if ( self.isOpen() ) {
+						$.ui.dialog.maxZ = value;
+						
+						if ( self.overlay ) {
+							$.ui.dialog.maxZ += 1;
+							$.ui.dialog.overlay.maxZ = $.ui.dialog.maxZ;
+						}
 					}
 					
 					value = $.ui.dialog.maxZ;
