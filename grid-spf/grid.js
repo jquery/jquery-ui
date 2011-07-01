@@ -32,14 +32,9 @@ $.widget( "ui.grid", {
 	},
 	refresh: function() {
 		// TODO this code assumes a single tbody which is not a safe assumption
-		var tbody = this.element.find( "tbody" ).empty(),
-			template = this.options.rowTemplate;
-		// TODO try to replace $.each with passing an array to $.tmpl, produced by this.items.something()
-		// TODO how to refresh a single row?
-		$.each( this.options.source.toArray(), function( itemId, item ) {
-			// TODO use item.toJSON() or a method like that to compute values to pass to tmpl
-			$.tmpl( template, item ).appendTo( tbody );
-		});
+		var tbody = this.element.find( "tbody" ).empty();
+		// TODO how to refresh a single row? -> tmplItem().update()
+		$.tmpl( this.options.rowTemplate, this.options.source.toArray() ).appendTo( tbody );
 		tbody.find( "td" ).addClass( "ui-widget-content" );
 		this._trigger("refresh");
 	},
@@ -82,7 +77,8 @@ $.widget( "ui.grid", {
 			return "<td>${" + field + "}</td>";
 		}).join( "" );
 		template = "<tr>" + template + "</tr>";
-		this.options.rowTemplate = template;
+		// compile the template
+		this.options.rowTemplate = $.template( template );
 	}
 });
 
