@@ -35,7 +35,6 @@ $.widget( "ui.grid", {
 		var tbody = this.element.find( "tbody" ).empty();
 		// TODO how to refresh a single row? -> tmplItem().update()
 		$.tmpl( this.options.rowTemplate, this.options.source.toArray() ).appendTo( tbody );
-		tbody.find( "td" ).addClass( "ui-widget-content" );
 		this._trigger("refresh");
 	},
 
@@ -74,7 +73,7 @@ $.widget( "ui.grid", {
 			if ( customTemplate ) {
 				return $(customTemplate).html();
 			}
-			return "<td>${" + field + "}</td>";
+			return "<td class=\"ui-widget-content\">${" + field + "}</td>";
 		}).join( "" );
 		template = "<tr>" + template + "</tr>";
 		// compile the template
