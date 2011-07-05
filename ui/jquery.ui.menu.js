@@ -98,20 +98,20 @@ $.widget( "ui.menu", {
 				event.stopImmediatePropagation();
 				break;
 			case $.ui.keyCode.LEFT:
-				if (self.left( event )) {
+				if (self.collapse( event )) {
 					event.stopImmediatePropagation();
 				}
 				event.preventDefault();
 				break;
 			case $.ui.keyCode.RIGHT:
-				if (self.right( event )) {
+				if (self.expand( event )) {
 					event.stopImmediatePropagation();
 				}
 				event.preventDefault();
 				break;
 			case $.ui.keyCode.ENTER:
 				if ( self.active.children( "a[aria-haspopup='true']" ).length ) {
-					if ( self.right( event ) ) {
+					if ( self.expand( event ) ) {
 						event.stopImmediatePropagation();
 					}
 				}
@@ -122,7 +122,7 @@ $.widget( "ui.menu", {
 				event.preventDefault();
 				break;
 			case $.ui.keyCode.ESCAPE:
-				if ( self.left( event ) ) {
+				if ( self.collapse( event ) ) {
 					event.stopImmediatePropagation();
 				}
 				event.preventDefault();
@@ -344,7 +344,7 @@ $.widget( "ui.menu", {
 			.removeClass( "ui-state-active" );
 	},
 
-	left: function( event ) {
+	collapse: function( event ) {
 		var newItem = this.active && this.active.parents("li:not(.ui-menubar-item)").first();
 		if ( newItem && newItem.length ) {
 			this.active.parent()
@@ -356,7 +356,7 @@ $.widget( "ui.menu", {
 		}
 	},
 
-	right: function( event ) {
+	expand: function( event ) {
 		var self = this,
 			newItem = this.active && this.active.children("ul").children("li").first();
 
