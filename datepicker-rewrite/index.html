@@ -19,6 +19,10 @@
 	<style>
 		body { font:62.5% Verdana,Arial,sans-serif; }
 		.ui-datepicker-multi-3 { width: 51em !important; }
+
+		.ui-datepicker-calendar a.ui-state-focus {
+			text-decoration: underline;
+		}
 	</style>
 </head>
 <body>
@@ -79,7 +83,7 @@
 				}
 			});
 			$( "#datepicker, #datepicker2" ).datepicker();
-			
+
 			var input = $("#datepicker3");
 			var button = $("<button>").insertAfter(input);
 			var picker = $("<div>").css( {
@@ -100,31 +104,36 @@
 	</script>
 
 	<script id="ui-datepicker-tmpl" type="text/x-jquery-tmpl">
-		<div class="ui-datepicker ui-widget ui-widget-content ui-helper-clearfix ui-corner-all">
+		<div class="ui-datepicker ui-widget ui-widget-content ui-helper-clearfix ui-corner-all" role="region" aria-labelledby="${instance.id} + "-title"">
 			<div class="ui-datepicker-header ui-widget-header ui-helper-clearfix ui-corner-all">
-				<a class="ui-datepicker-prev ui-corner-all" title="${labels.prevText}"><span class="ui-icon ui-icon-circle-triangle-w">${labels.prevText}</span></a>
-				<a class="ui-datepicker-next ui-corner-all" title="${labels.nextText}"><span class="ui-icon ui-icon-circle-triangle-e">${labels.nextText}</span></a>
-				<div class="ui-datepicker-title">
-					<span class="ui-datepicker-month">${date.monthname()}</span> <span class="ui-datepicker-year">${date.year()}</span>
+				<a href="#" class="ui-datepicker-prev ui-corner-all" title="${labels.prevText}"><span class="ui-icon ui-icon-circle-triangle-w">${labels.prevText}</span></a>
+				<a href="#" class="ui-datepicker-next ui-corner-all" title="${labels.nextText}"><span class="ui-icon ui-icon-circle-triangle-e">${labels.nextText}</span></a>
+				<div role="header" id="${instance.id} + "-title"" class="ui-datepicker-title" aria-live="assertive" aria-atomic="true">
+					<div id="${instance.id}-month-lbl">
+						<span class="ui-datepicker-month">${date.monthname()}</span> <span class="ui-datepicker-year">${date.year()}</span>
+					</div>
+					<span class="ui-helper-hidden-accessible">Date Picker</span>
 				</div>
 			</div>
-			<table class="ui-datepicker-calendar">
-				<thead>
-					<tr>
+			<table class="ui-datepicker-calendar" role="grid" aria-labelledby="${instance.id}-month-lbl" tabindex="0" aria-activedescendant="${instance.id}-${instance.focusedDay}">
+				<thead role="presentation">
+					<tr role="row">
 						{{each(index, day) date.weekdays()}}
-							<th class=""><span title="${day.fullname}">${day.shortname}</span></th>
+							<th class="" role="columnheader" abbr="${day.fullname}" aria-label="${day.fullname}"><span title="${day.fullname}">${day.shortname}</span></th>
 						{{/each}}
 					</tr>
 				</thead>
-				<tbody>
-					{{each(index, week) date.days()}}
-					<tr>
-						{{each(index, day) week.days}}
-							<td>
+				<tbody role="presentation">
+					{{each(weekIndex, week) date.days()}}
+					<tr role="row">
+						{{each(dayIndex, day) week.days}}
+							<td {{if day.render}}id="${instance.id}-${day.date}"{{/if}} role="gridcell" aria-selected="{{if day.current}}true{{else}}false{{/if}}" {{if !day.selectable}}aria-disabled="true"{{/if}}>
 								{{if day.render}}
 									{{if day.selectable}}
-									<a title="${day.title}" class="ui-state-default{{if day.current}} ui-state-active{{/if}}{{if day.today}} ui-state-highlight{{/if}} ${day.extraClasses}" href="#">
+									<a title="${day.title}" class="{{if day.date == instance.focusedDay}}ui-state-focus {{/if}}ui-state-default{{if day.current}} ui-state-active{{/if}}{{if day.today}} ui-state-highlight{{/if}} ${day.extraClasses}" href="#" tabindex="-1" data-day=${day.date}>
 										${day.date}
+										{{if day.today}} <span class="ui-helper-hidden-accessible">, today</span>{{/if}}
+										{{if day.current}}<span class="ui-helper-hidden-accessible">, selected</span>{{/if}}
 									</a>
 									{{/if}}
 									{{if !day.selectable}}
@@ -145,7 +154,7 @@
 			</div>
 		</div>
 	</script>
-	
+
 	<script id="ui-datepicker-weeks-tmpl" type="text/x-jquery-tmpl">
 		<div class="ui-datepicker ui-widget ui-widget-content ui-helper-clearfix ui-corner-all">
 			<div class="ui-datepicker-header ui-widget-header ui-helper-clearfix ui-corner-all">
@@ -193,29 +202,29 @@
 
 	<script id="ui-datepicker-multi-tmpl" type="text/x-jquery-tmpl">
 		<div class="ui-datepicker ui-widget ui-widget-content ui-helper-clearfix ui-corner-all ui-datepicker-multi-3 ui-datepicker-multi">
-			{{each(index, month) date.months(2)}}
+			{{each(index, monthObj) date.months(2)}}
 				<div class="ui-datepicker-group">
-					<div class="ui-datepicker-header ui-widget-header ui-helper-clearfix {{if month.first}}ui-corner-left{{/if}}{{if month.last}}ui-corner-right{{/if}}">
-						{{if month.first}}
+					<div class="ui-datepicker-header ui-widget-header ui-helper-clearfix {{if monthObj.first}}ui-corner-left{{/if}}{{if monthObj.last}}ui-corner-right{{/if}}">
+						{{if monthObj.first}}
 							<a class="ui-datepicker-prev ui-corner-all" title="${labels.prevText}"><span class="ui-icon ui-icon-circle-triangle-w">${labels.prevText}</span></a>
 						{{/if}}
-						{{if month.last}}
+						{{if monthObj.last}}
 							<a class="ui-datepicker-next ui-corner-all" title="${labels.nextText}"><span class="ui-icon ui-icon-circle-triangle-e">${labels.nextText}</span></a>
 						{{/if}}
 						<div class="ui-datepicker-title">
-							<span class="ui-datepicker-month">${month.monthname()}</span> <span class="ui-datepicker-year">${month.year()}</span>
+							<span class="ui-datepicker-month">${monthObj.monthname()}</span> <span class="ui-datepicker-year">${monthObj.year()}</span>
 						</div>
 					</div>
 					<table class="ui-datepicker-calendar">
 						<thead>
 							<tr>
-								{{each(index, day) month.weekdays()}}
+								{{each(index, day) monthObj.weekdays()}}
 									<th class=""><span title="${day.fullname}">${day.shortname}</span></th>
 								{{/each}}
 							</tr>
 						</thead>
 						<tbody>
-							{{each(index, week) month.days()}}
+							{{each(index, week) monthObj.days()}}
 							<tr>
 								{{each(index, day) week.days}}
 									<td>
