@@ -49,7 +49,7 @@ $.widget( "ui.datepicker", {
 			event.preventDefault();
 			// TODO exclude clicks on lead days or handle them correctly
 			// TODO store/read more then just date, also required for multi month picker
-			self.date.setDay( +$( this ).text() ).select();
+			self.date.setDay( +$( this ).data( "day" ) ).select();
 			if ( !self.inline ) {
 				self.element.val( self.date.format() );
 				self.close();
@@ -66,54 +66,59 @@ $.widget( "ui.datepicker", {
 		});
 
 
-		this.picker.delegate(".ui-datepicker-calendar", "keydown", function(event) {
+		this.picker.delegate( ".ui-datepicker-calendar", "keydown", function(event) {
 			if (jQuery.inArray(event.keyCode, [ 13, 33, 34, 35, 36, 37, 38, 39, 40]) == -1) {
-                return; //only interested navigation keys
+				//only interested navigation keys
+				return;
 			}
+			event.stopPropagation();
+			event.preventDefault();
+
 			var noDateChange = false,
 				activeCell = $( "#" + self.grid.attr( "aria-activedescendant" ) )
-				oldMonth = self.date.myMonth();
+				oldMonth = self.date.month();
 				oldYear = self.date.year();
 
 			switch ( event.keyCode ) {
-				case 13: // Enter
-					activeCell.children("a").first().click();
-					self.grid.focus(1);
+				case $.ui.keyCode.ENTER:
+					activeCell.children( "a" ).first().click();
+					self.grid.focus( 1 );
 					return;
 					break;
-				case 33: //PgUp
-					self.date.adjust(event.ctrlKey || event.metaKey ? "Y" : "M", 1);
+				case $.ui.keyCode.PAGE_UP:
+					self.date.adjust( event.ctrlKey || event.metaKey ? "Y" : "M", 1 );
 					break;
-				case 34: //PgDn
-					self.date.adjust(event.ctrlKey || event.metaKey ? "Y" : "M", -1);
+				case $.ui.keyCode.PAGE_DOWN:
+					self.date.adjust( event.ctrlKey || event.metaKey ? "Y" : "M", -1 );
 					break;
-				case 35: //End
-					self.date.setDay(self.date.daysInMonth());
+				case $.ui.keyCode.END:
+					self.date.setDay( self.date.daysInMonth() );
 					break;
-				case 36: //Home
-					self.date.setDay(1);
+				case $.ui.keyCode.HOME:
+					self.date.setDay( 1 );
 					break;
-				case 37: //Left
-					self.date.adjust("D", -1);
+				case $.ui.keyCode.LEFT:
+					self.date.adjust( "D", -1 );
 					break;
-				case 38: //Up
-					self.date.adjust("D", -7);
+				case $.ui.keyCode.UP:
+					self.date.adjust( "D", -7 );
 					break;
-				case 39: //Right
-					self.date.adjust("D", 1);
+				case $.ui.keyCode.RIGHT:
+					self.date.adjust( "D", 1 );
 					break;
-				case 40: //Down
-					self.date.adjust("D", 7);
+				case $.ui.keyCode.DOWN:
+					self.date.adjust( "D", 7 );
 					break;
+				default:
+					return;
 			}
 
-			if ( self.date.myMonth() != oldMonth || self.date.year() != oldYear ) {
+			if ( self.date.month() != oldMonth || self.date.year() != oldYear ) {
 				self.refresh();
 				self.grid.focus(1);
 			}
 			else {
 				var newId = self.id + "-" + self.date.day(),
-
 					newCell = $("#" + newId);
 
 				if ( !newCell.length ) {
@@ -124,8 +129,6 @@ $.widget( "ui.datepicker", {
 				activeCell.children("a").removeClass("ui-state-focus");
 				newCell.children("a").addClass("ui-state-focus");
 			}
-			event.stopPropagation();
-			event.preventDefault();
 		});
 
 		this.refresh();
@@ -154,7 +157,7 @@ $.widget( "ui.datepicker", {
 	},
 	open: function( event ) {
 		this.picker.fadeIn( "fast" );
-		
+
 		this.picker.position( $.extend( {
 			of: this.element
 		}, this.options.position ));

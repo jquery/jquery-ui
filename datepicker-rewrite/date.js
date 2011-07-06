@@ -31,8 +31,8 @@ $.date = function ( datestring, formatstring ) {
 			return this;
 		},
 		adjust: function( period, offset ) {
-			var day = period == "D" ? date.getDate() + offset : date.getDate(), 
-				month = period == "M" ? date.getMonth() + offset : date.getMonth(), 
+			var day = period == "D" ? date.getDate() + offset : date.getDate(),
+				month = period == "M" ? date.getMonth() + offset : date.getMonth(),
 				year = period == "Y" ? date.getFullYear() + offset : date.getFullYear();
 
 			if ( period != "D" ) {
@@ -52,7 +52,7 @@ $.date = function ( datestring, formatstring ) {
 		day: function() {
 			return date.getDate();
 		},
-		myMonth: function() {
+		month: function() {
 			return date.getMonth();
 		},
 		year: function() {
