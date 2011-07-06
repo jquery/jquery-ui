@@ -34,6 +34,10 @@ $.date = function ( datestring, formatstring ) {
 			var day = period == "D" ? date.getDate() + offset : date.getDate(),
 				month = period == "M" ? date.getMonth() + offset : date.getMonth(),
 				year = period == "Y" ? date.getFullYear() + offset : date.getFullYear();
+
+			if ( period != "D" ) {
+				day = Math.max(1, Math.min( day, this.daysInMonth( year, month ) ) );
+			}
 			date = new Date( year, month, day );
 			return this;
 		},
@@ -45,6 +49,12 @@ $.date = function ( datestring, formatstring ) {
 		monthname: function() {
 			return calendar.months.names[ date.getMonth() ];
 		},
+		day: function() {
+			return date.getDate();
+		},
+		month: function() {
+			return date.getMonth();
+		},
 		year: function() {
 			return date.getFullYear();
 		},
@@ -55,7 +65,7 @@ $.date = function ( datestring, formatstring ) {
 				var day = ( dow + calendar.firstDay ) % 7;
 				result.push( {
 					shortname: calendar.days.namesShort[ day ],
-					fullname: calendar.days.names[ day ],
+					fullname: calendar.days.names[ day ]
 				});
 			}
 			return result;
