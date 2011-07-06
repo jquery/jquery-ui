@@ -129,8 +129,7 @@ eventually we should convert the font sizes to ems -- using px for now to minimi
 
 .normal h3.demo-header { font-size:32px; padding:0 0 5px; border-bottom:1px solid #eee; text-transform: capitalize; }
 .normal h4.demo-subheader { font-size:10px; text-transform: uppercase; color:#999; padding:8px 0 3px; border:0; margin:0; }
-.normal a:link,
-.normal a:visited { color:#1b75bb; text-decoration:none; }
+#demo-notes a, #demo-link a, #demo-source a { color:#1b75bb; text-decoration:none; }
 .normal a:hover,
 .normal a:active { color:#0b559b; }
 
@@ -320,10 +319,10 @@ div.demo-description {
 #widget-docs .ui-tabs-nav li a:hover,
 #widget-docs .ui-tabs-nav li a:active { font-size:14px; padding:4px 1.2em 3px; color:#fff; }
 
-#widget-docs .ui-tabs-nav li.ui-tabs-selected a:link,
-#widget-docs .ui-tabs-nav li.ui-tabs-selected a:visited,
-#widget-docs .ui-tabs-nav li.ui-tabs-selected a:hover,
-#widget-docs .ui-tabs-nav li.ui-tabs-selected a:active { color:#e6820E; }
+#widget-docs .ui-tabs-nav li.ui-tabs-active a:link,
+#widget-docs .ui-tabs-nav li.ui-tabs-active a:visited,
+#widget-docs .ui-tabs-nav li.ui-tabs-active a:hover,
+#widget-docs .ui-tabs-nav li.ui-tabs-active a:active { color:#e6820E; }
 
 #widget-docs .ui-tabs-panel { padding:20px 9px; font-size:12px; line-height:1.4; color:#000; }
 

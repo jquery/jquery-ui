@@ -4,7 +4,7 @@
 	<meta charset="UTF-8" />
 	<title>jQuery UI Draggable Test Suite</title>
 
-	<script type="text/javascript" src="../../../jquery-1.4.4.js"></script>
+	<script type="text/javascript" src="../../../jquery-1.5.1.js"></script>
 	<script type="text/javascript" src="../../../ui/jquery.ui.core.js"></script>
 	<script type="text/javascript" src="../../../ui/jquery.ui.widget.js"></script>
 	<script type="text/javascript" src="../../../ui/jquery.ui.mouse.js"></script>
@@ -20,7 +20,6 @@
 	<script type="text/javascript" src="draggable_events.js"></script>
 	<script type="text/javascript" src="draggable_methods.js"></script>
 	<script type="text/javascript" src="draggable_options.js"></script>
-	<script type="text/javascript" src="draggable_tickets.js"></script>
 	
 	<script type="text/javascript">
 	// disable this stale testsuite for testswarm only
@@ -38,11 +37,12 @@
 
 <h1 id="qunit-header">jQuery UI Draggable Test Suite</h1>
 <h2 id="qunit-banner"></h2>
+<div id="qunit-testrunner-toolbar"></div>
 <h2 id="qunit-userAgent"></h2>
 <ol id="qunit-tests">
 </ol>
 
-<div id="main" style="position: absolute; top: -10000px; left: -10000px;">
+<div id="qunit-fixture">
 	<div id="draggable1" style="background: green; width: 200px; height: 100px;">Relative</div>
 	<div id="draggable2" style="background: green; width: 200px; height: 100px; position: absolute; top: 10px; left: 10px;"><span>Absolute</span></div>
 	<div style='width: 1px; height: 1000px;'></div>

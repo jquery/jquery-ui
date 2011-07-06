@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<title>jQuery UI Position - Default functionality</title>
 	<link rel="stylesheet" href="../../themes/base/jquery.ui.all.css">
-	<script src="../../jquery-1.4.4.js"></script>
+	<script src="../../jquery-1.5.1.js"></script>
 	<script src="../../ui/jquery.ui.core.js"></script>
 	<script src="../../ui/jquery.ui.widget.js"></script>
 	<script src="../../ui/jquery.ui.position.js"></script>
@@ -33,16 +33,14 @@
 		$.fn.left = function( using ) {
 			return this.position2({
 				my: "right middle",
-				at: "left middle",
-				offset: "25 0",
+				at: "left+25 middle",
 				using: using
 			});
 		}
 		$.fn.right = function( using ) {
 			return this.position2({
 				my: "left middle",
-				at: "right middle",
-				offset: "-25 0",
+				at: "right-25 middle",
 				using: using
 			});
 		}

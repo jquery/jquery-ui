@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<title>jQuery UI Effects - Easing demo</title>
 	<link rel="stylesheet" href="../../themes/base/jquery.ui.all.css">
-	<script src="../../jquery-1.4.4.js"></script>
+	<script src="../../jquery-1.5.1.js"></script>
 	<script src="../../ui/jquery.effects.core.js"></script>
 	<link rel="stylesheet" href="../demos.css">
 	<style>
@@ -33,7 +33,8 @@
 			}
 			var graph = $( "<div/>" ).addClass( "graph" ).appendTo( "#graphs" ),
 				text = $( "<div/>" ).text( ++i + ". " + name ).appendTo( graph ),
-				canvas = $( "<canvas/>" ).appendTo( graph )[ 0 ];
+				wrap = $( "<div/>" ).appendTo( graph ).css( 'overflow', 'hidden' ),
+				canvas = $( "<canvas/>" ).appendTo( wrap )[ 0 ];
 			canvas.width = width;
 			canvas.height = height;
 			var drawHeight = height * 0.8,
@@ -78,9 +79,9 @@
 			});
 			ctx.stroke();
 			graph.click(function() {
-				$( canvas )
+				wrap
 					.animate( { height: "hide" }, 2000, name )
-					.animate( { left: 0 }, 800 )
+					.delay( 800 )
 					.animate( { height: "show" }, 2000, name );
 			});
 

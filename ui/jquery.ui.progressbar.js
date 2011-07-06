@@ -14,6 +14,7 @@
 (function( $, undefined ) {
 
 $.widget( "ui.progressbar", {
+	version: "@VERSION",
 	options: {
 		value: 0,
 		max: 100
@@ -93,14 +94,11 @@ $.widget( "ui.progressbar", {
 		}
 
 		this.valueDiv
+			.toggle( value > this.min )
 			.toggleClass( "ui-corner-right", value === this.options.max )
 			.width( percentage.toFixed(0) + "%" );
 		this.element.attr( "aria-valuenow", value );
 	}
-});
-
-$.extend( $.ui.progressbar, {
-	version: "@VERSION"
 });
 
 })( jQuery );

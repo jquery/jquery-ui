@@ -1,15 +1,14 @@
-/*
- * button_defaults.js
- */
+commonWidgetTests( "button", {
+	defaults: {
+		disabled: null,
+		icons: {
+			primary: null,
+			secondary: null
+		},
+		label: null,
+		text: true,
 
-var button_defaults = {
-	disabled: null,
-	text: true,
-	label: null,
-	icons: {
-		primary: null,
-		secondary: null
+		// callbacks
+		create: null
 	}
-};
-
-commonWidgetTests('button', { defaults: button_defaults });
+});

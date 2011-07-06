@@ -3,8 +3,8 @@
 jQuery(function($){
 	$.datepicker.regional['uk'] = {
 		closeText: 'Закрити',
-		prevText: '&#x3c;',
-		nextText: '&#x3e;',
+		prevText: '&#x3C;',
+		nextText: '&#x3E;',
 		currentText: 'Сьогодні',
 		monthNames: ['Січень','Лютий','Березень','Квітень','Травень','Червень',
 		'Липень','Серпень','Вересень','Жовтень','Листопад','Грудень'],

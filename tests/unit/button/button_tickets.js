@@ -20,4 +20,34 @@ test( "#6262 - buttonset not applying ui-corner to invisible elements", function
 	ok( set.find( "label:eq(2)" ).is( ".ui-button.ui-corner-right" ) );
 });
 
+test( "#6711 Checkbox/Radiobutton do not Show Focused State when using Keyboard Navigation", function() {
+	var check = $( "#check" ).button(),
+		label = $( "label[for='check']" );
+	ok( !label.is( ".ui-state-focus" ) );
+	check.focus();
+	ok( label.is( ".ui-state-focus" ) );
+});
+
+test( "#7092 - button creation that requires a matching label does not find label in all cases", function() {
+	var group = $( "<span><label for='t7092a'/><input type='checkbox' id='t7092a'/></span>" );
+	group.find( "input:checkbox" ).button();
+	ok( group.find( "label" ).is( ".ui-button" ) );
+
+	group = $( "<input type='checkbox' id='t7092b'/><label for='t7092b'/>" );
+	group.filter( "input:checkbox" ).button();
+	ok( group.filter( "label" ).is( ".ui-button" ) );
+
+	group = $( "<span><input type='checkbox' id='t7092c'/></span><label for='t7092c'/>" );
+	group.find( "input:checkbox" ).button();
+	ok( group.filter( "label" ).is( ".ui-button" ) );
+
+	group = $( "<span><input type='checkbox' id='t7092d'/></span><span><label for='t7092d'/></span>" );
+	group.find( "input:checkbox" ).button();
+	ok( group.find( "label" ).is( ".ui-button" ) );
+
+	group = $( "<input type='checkbox' id='t7092e'/><span><label for='t7092e'/></span>" );
+	group.filter( "input:checkbox" ).button();
+	ok( group.find( "label" ).is( ".ui-button" ) );
+});
+
 })( jQuery );

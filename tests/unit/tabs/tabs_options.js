@@ -1,137 +1,213 @@
-/*
- * tabs_options.js
- */
-(function($) {
+(function( $ ) {
 
-module("tabs: options");
+module( "tabs: options" );
 
-test('ajaxOptions', function() {
-	ok(false, "missing test - untested code is broken code.");
+test( "{ active: default }", function() {
+	expect( 4 );
+
+	var element = $( "#tabs1" ).tabs();
+	equals( element.tabs( "option", "active" ), 0, "should be 0 by default" );
+	tabs_state( element, 1, 0, 0 );
+	element.tabs( "destroy" );
+
+	location.hash = "#fragment-3";
+	element = $( "#tabs1" ).tabs();
+	equals( element.tabs( "option", "active" ), 2, "should be 2 based on URL" );
+	tabs_state( element, 0, 0, 1 );
+	element.tabs( "destroy" );
+	location.hash = "#";
 });
 
-test('cache', function() {
-	ok(false, "missing test - untested code is broken code.");
+test( "{ active: false }", function() {
+	expect( 7 );
+
+	var element = $( "#tabs1" ).tabs({
+		active: false,
+		collapsible: true
+	});
+	tabs_state( element, 0, 0, 0 );
+	equal( element.find( ".ui-tabs-nav .ui-state-active" ).size(), 0, "no tabs selected" );
+	strictEqual( element.tabs( "option", "active" ), false );
+
+	element.tabs( "option", "collapsible", false );
+	tabs_state( element, 1, 0, 0 );
+	equal( element.tabs( "option", "active" ), 0 );
+
+	element.tabs( "destroy" );
+	element.tabs({
+		active: false
+	});
+	tabs_state( element, 1, 0, 0 );
+	strictEqual( element.tabs( "option", "active" ), 0 );
 });
 
-test('collapsible', function() {
-	expect(4);
+test( "{ active: Number }", function() {
+	expect( 8 );
 
-	el = $('#tabs1');
+	var element = $( "#tabs1" ).tabs({
+		active: 2
+	});
+	equals( element.tabs( "option", "active" ), 2 );
+	tabs_state( element, 0, 0, 1 );
 
-	el.tabs({ collapsible: true });
-	equals(el.tabs('option', 'collapsible'), true, 'option set');
-	ok(el.is('.ui-tabs-collapsible'), 'extra class "ui-tabs-collapsible" attached');
-	el.tabs('select', 0);
-	equals($('div.ui-tabs-hide', '#tabs1').length, 3, 'all panels should be hidden');
-	el.tabs('option', 'collapsible', false);
-	ok(el.is(':not(.ui-tabs-collapsible)'), 'extra class "ui-tabs-collapsible" not attached');
+	element.tabs( "option", "active", 0 );
+	equals( element.tabs( "option", "active" ), 0 );
+	tabs_state( element, 1, 0, 0 );
 
+	element.find( ".ui-tabs-nav a" ).eq( 1 ).click();
+	equals( element.tabs( "option", "active" ), 1 );
+	tabs_state( element, 0, 1, 0 );
+
+	element.tabs( "option", "active", 10 );
+	equals( element.tabs( "option", "active" ), 1 );
+	tabs_state( element, 0, 1, 0 );
 });
 
-test('cookie', function() {
-	expect(6);
+if ( $.uiBackCompat === false ) {
+	test( "{ active: -Number }", function() {
+		var element = $( "#tabs1" ).tabs({
+			active: -1
+		});
+		equals( element.tabs( "option", "active" ), 2 );
+		tabs_state( element, 0, 0, 1 );
 
-	el = $('#tabs1');
-	var cookieName = 'tabs_test', cookieObj = { name: cookieName };
-	$.cookie(cookieName, null); // blank state
-	var cookie = function() {
-		return parseInt($.cookie(cookieName), 10);
-	};
+		element.tabs( "option", "active", -2 );
+		equals( element.tabs( "option", "active" ), 1 );
+		tabs_state( element, 0, 1, 0 );
 
-	el.tabs({ cookie: cookieObj });
-	equals(cookie(), 0, 'initial cookie value');
+		element.tabs( "option", "active", -10 );
+		equals( element.tabs( "option", "active" ), 1 );
+		tabs_state( element, 0, 1, 0 );
 
-	el.tabs('destroy');
-	el.tabs({ selected: 1, cookie: cookieObj });
-	equals(cookie(), 1, 'initial cookie value, from selected property');
+		element.tabs( "option", "active", -3 );
+		equals( element.tabs( "option", "active" ), 0 );
+		tabs_state( element, 1, 0, 0 );
+	});
+}
 
-	el.tabs('select', 2);
-	equals(cookie(), 2, 'cookie value updated after select');
+test( "active - mismatched tab/panel order", function() {
+	expect( 3 );
 
-	el.tabs('destroy');
-	$.cookie(cookieName, 1);
-	el.tabs({ cookie: cookieObj });
-	equals(cookie(), 1, 'initial cookie value, from existing cookie');
-
-	el.tabs('destroy');
-	el.tabs({ cookie: cookieObj, collapsible: true });
-	el.tabs('select', 0);
-	equals(cookie(), -1, 'cookie value for all tabs unselected');
-
-	el.tabs('destroy');
-	ok($.cookie(cookieName) === null, 'erase cookie after destroy');
-
+	location.hash = "#tabs7-2";
+	var element = $( "#tabs7" ).tabs();
+	equals( element.tabs( "option", "active" ), 1, "should be 1 based on URL" );
+	tabs_state( element, 0, 1 );
+	element.tabs( "option", "active", 0 );
+	tabs_state( element, 1, 0 );
+	location.hash = "#";
 });
 
-test('disabled', function() {
-	expect(4);
+test( "{ collapsible: false }", function() {
+	expect( 4 );
 
-	el = $('#tabs1').tabs();
-	same(el.tabs('option', 'disabled'), [ ], "should not disable any tab by default");
+	var element = $( "#tabs1" ).tabs({
+		active: 1
+	});
+	element.tabs( "option", "active", false );
+	equal( element.tabs( "option", "active" ), 1 );
+	tabs_state( element, 0, 1, 0 );
 
-	el.tabs('option', 'disabled', [ 1 ]);
-	same(el.tabs('option', 'disabled'), [ 1 ], "should set property"); // everything else is being tested in methods module...
-
-	// FIXME bug... property needs to be [ 1 ], since selected tab cannot be disabled!
-	el.tabs('option', 'disabled', [ 0, 1 ]);
-	same(el.tabs('option', 'disabled'), [ 1 ], "should disable given tabs but not selected one"); // ...
-
-	el.tabs('option', 'disabled', [ ]);
-	same(el.tabs('option', 'disabled'), [ ], "should not disable any tab"); // ...
+	element.find( ".ui-state-active a" ).eq( 1 ).click();
+	equal( element.tabs( "option", "active" ), 1 );
+	tabs_state( element, 0, 1, 0 );
 });
 
-test('event', function() {
-	ok(false, "missing test - untested code is broken code.");
+test( "{ collapsible: true }", function() {
+	expect( 6 );
+
+	var element = $( "#tabs1" ).tabs({
+		active: 1,
+		collapsible: true
+	});
+
+	element.tabs( "option", "active", false );
+	equal( element.tabs( "option", "active" ), false );
+	tabs_state( element, 0, 0, 0 );
+
+	element.tabs( "option", "active", 1 );
+	equal( element.tabs( "option", "active" ), 1 );
+	tabs_state( element, 0, 1, 0 );
+
+	element.find( ".ui-state-active a" ).click();
+	equal( element.tabs( "option", "active" ), false );
+	tabs_state( element, 0, 0, 0 );
 });
 
-test('fx', function() {
-	ok(false, "missing test - untested code is broken code.");
+test( "disabled", function() {
+	expect( 10 );
+
+	// fully enabled by default
+	var element = $( "#tabs1" ).tabs();
+	tabs_disabled( element, false );
+
+	// disable single tab
+	element.tabs( "option", "disabled", [ 1 ] );
+	tabs_disabled( element, [ 1 ] );
+
+	// disabled active tab
+	element.tabs( "option", "disabled", [ 0, 1 ] );
+	tabs_disabled( element, [ 0, 1 ] );
+
+	// disable all tabs
+	element.tabs( "option", "disabled", [ 0, 1, 2 ] );
+	tabs_disabled( element, true );
+
+	// enable all tabs
+	element.tabs( "option", "disabled", [] );
+	tabs_disabled( element, false );
 });
 
-test('idPrefix', function() {
-	ok(false, "missing test - untested code is broken code.");
+test( "{ event: null }", function() {
+	expect( 5 );
+
+	var element = $( "#tabs1" ).tabs({
+		event: null
+	});
+	tabs_state( element, 1, 0, 0 );
+
+	element.tabs( "option", "active", 1 );
+	equal( element.tabs( "option", "active" ), 1 );
+	tabs_state( element, 0, 1, 0 );
+
+	// ensure default click handler isn't bound
+	element.find( ".ui-tabs-nav a" ).eq( 2 ).click();
+	equal( element.tabs( "option", "active" ), 1 );
+	tabs_state( element, 0, 1, 0 );
 });
 
-test('panelTemplate', function() {
-	ok(false, "missing test - untested code is broken code.");
+test( "{ event: custom }", function() {
+	expect( 11 );
+
+	var element = $( "#tabs1" ).tabs({
+		event: "custom1 custom2"
+	});
+	tabs_state( element, 1, 0, 0 );
+
+	element.find( ".ui-tabs-nav a" ).eq( 1 ).trigger( "custom1" );
+	equal( element.tabs( "option", "active" ), 1 );
+	tabs_state( element, 0, 1, 0 );
+
+	// ensure default click handler isn't bound
+	element.find( ".ui-tabs-nav a" ).eq( 2 ).trigger( "click" );
+	equal( element.tabs( "option", "active" ), 1 );
+	tabs_state( element, 0, 1, 0 );
+
+	element.find( ".ui-tabs-nav a" ).eq( 2 ).trigger( "custom2" );
+	equal( element.tabs( "option", "active" ), 2 );
+	tabs_state( element, 0, 0, 1 );
+
+	element.tabs( "option", "event", "custom3" );
+
+	// ensure old event handlers are unbound
+	element.find( ".ui-tabs-nav a" ).eq( 1 ).trigger( "custom1" );
+	equal( element.tabs( "option", "active" ), 2 );
+	tabs_state( element, 0, 0, 1 );
+
+	element.find( ".ui-tabs-nav a" ).eq( 1 ).trigger( "custom3" );
+	equal( element.tabs( "option", "active" ), 1 );
+	tabs_state( element, 0, 1, 0 );
 });
 
-test('selected', function() {
-	expect(8);
+// TODO: add animation tests
 
-	el = $('#tabs1').tabs();
-	equals(el.tabs('option', 'selected'), 0, 'should be 0 by default');
-
-	el.tabs('destroy');
-	el.tabs({ selected: -1 });
-	equals(el.tabs('option', 'selected'), -1, 'should be -1 for all tabs unselected');
-	equals( $('li.ui-tabs-selected', el).length, 0, 'no tab should be selected' );
-	equals( $('div.ui-tabs-hide', '#tabs1').length, 3, 'all panels should be hidden' );
-
-	el.tabs('destroy');
-	el.tabs({ selected: null });
-	equals(el.tabs('option', 'selected'), -1, 'should be -1 for all tabs unselected with value null (deprecated)');
-
-	el.tabs('destroy');
-	el.tabs({ selected: 1 });
-	equals(el.tabs('option', 'selected'), 1, 'should be specified tab');
-
-	el.tabs('destroy');
-	el.tabs({ selected: 99 });
-	equals(el.tabs('option', 'selected'), 0, 'selected should default to zero if given value is out of index');
-
-	el.tabs('destroy');
-	el.tabs({ collapsible: true });
-	el.tabs('option', 'selected', 0);
-	equals(el.tabs('option', 'selected'), 0, 'should not collapse tab if value is same as selected');
-});
-
-test('spinner', function() {
-	ok(false, "missing test - untested code is broken code.");
-});
-
-test('tabTemplate', function() {
-	ok(false, "missing test - untested code is broken code.");
-});
-
-})(jQuery);
+}( jQuery ) );

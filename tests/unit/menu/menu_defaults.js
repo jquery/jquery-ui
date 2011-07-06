@@ -1,11 +1,12 @@
-/*
- * menu_defaults.js
- */
+commonWidgetTests( "menu", {
+	defaults: {
+		disabled: false,
+		position: {
+			my: "left top",
+			at: "right top"
+		},
 
-var menu_defaults = {
-	disabled: false,
-	navigationFilter: function() {}
-	
-};
-
-commonWidgetTests('menu', { defaults: menu_defaults });
+		// callbacks
+		create: null
+	}
+});

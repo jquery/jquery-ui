@@ -19,9 +19,11 @@
 var requestIndex = 0;
 
 $.widget( "ui.autocomplete", {
+	version: "@VERSION",
 	defaultElement: "<input>",
 	options: {
 		appendTo: "body",
+		autoFocus: false,
 		delay: 300,
 		minLength: 1,
 		position: {
@@ -29,7 +31,16 @@ $.widget( "ui.autocomplete", {
 			at: "left bottom",
 			collision: "none"
 		},
-		source: null
+		source: null,
+
+		// callbacks
+		change: null,
+		close: null,
+		focus: null,
+		open: null,
+		response: null,
+		search: null,
+		select: null
 	},
 
 	pending: 0,
@@ -37,7 +48,10 @@ $.widget( "ui.autocomplete", {
 	_create: function() {
 		var self = this,
 			doc = this.element[ 0 ].ownerDocument,
-			suppressKeyPress;
+			suppressKeyPress,
+			suppressInput;
+
+		this.valueMethod = this.element[ this.element.is( "input" ) ? "val" : "text" ];
 
 		this.element
 			.addClass( "ui-autocomplete-input" )
@@ -50,24 +64,31 @@ $.widget( "ui.autocomplete", {
 			})
 			.bind( "keydown.autocomplete", function( event ) {
 				if ( self.options.disabled || self.element.attr( "readonly" ) ) {
+					suppressKeyPress = true;
+					suppressInput = true;
 					return;
 				}
 
 				suppressKeyPress = false;
+				suppressInput = false;
 				var keyCode = $.ui.keyCode;
 				switch( event.keyCode ) {
 				case keyCode.PAGE_UP:
+					suppressKeyPress = true;
 					self._move( "previousPage", event );
 					break;
 				case keyCode.PAGE_DOWN:
+					suppressKeyPress = true;
 					self._move( "nextPage", event );
 					break;
 				case keyCode.UP:
+					suppressKeyPress = true;
 					self._move( "previous", event );
 					// prevent moving cursor to beginning of text field in some browsers
 					event.preventDefault();
 					break;
 				case keyCode.DOWN:
+					suppressKeyPress = true;
 					self._move( "next", event );
 					// prevent moving cursor to end of text field in some browsers
 					event.preventDefault();
@@ -89,19 +110,12 @@ $.widget( "ui.autocomplete", {
 					self.menu.select( event );
 					break;
 				case keyCode.ESCAPE:
-					self.element.val( self.term );
+					self._value( self.term );
 					self.close( event );
 					break;
 				default:
-					// keypress is triggered before the input value is changed
-					clearTimeout( self.searching );
-					self.searching = setTimeout(function() {
-						// only search if the value has changed
-						if ( self.term != self.element.val() ) {
-							self.selectedItem = null;
-							self.search( null, event );
-						}
-					}, self.options.delay );
+					// search timeout should be triggered before the input value is changed
+					self._searchTimeout( event );
 					break;
 				}
 			})
@@ -109,7 +123,37 @@ $.widget( "ui.autocomplete", {
 				if ( suppressKeyPress ) {
 					suppressKeyPress = false;
 					event.preventDefault();
+					return;
 				}
+
+				// replicate some key handlers to allow them to repeat in Firefox and Opera
+				var keyCode = $.ui.keyCode;
+				switch( event.keyCode ) {
+				case keyCode.PAGE_UP:
+					self._move( "previousPage", event );
+					break;
+				case keyCode.PAGE_DOWN:
+					self._move( "nextPage", event );
+					break;
+				case keyCode.UP:
+					self._move( "previous", event );
+					// prevent moving cursor to beginning of text field in some browsers
+					event.preventDefault();
+					break;
+				case keyCode.DOWN:
+					self._move( "next", event );
+					// prevent moving cursor to end of text field in some browsers
+					event.preventDefault();
+					break;
+				}
+			})
+			.bind( "input.autocomplete", function(event) {
+				if ( suppressInput ) {
+					suppressInput = false;
+					event.preventDefault();
+					return;
+				}
+				self._searchTimeout( event );
 			})
 			.bind( "focus.autocomplete", function() {
 				if ( self.options.disabled ) {
@@ -117,7 +161,7 @@ $.widget( "ui.autocomplete", {
 				}
 
 				self.selectedItem = null;
-				self.previous = self.element.val();
+				self.previous = self._value();
 			})
 			.bind( "blur.autocomplete", function( event ) {
 				if ( self.options.disabled ) {
@@ -170,7 +214,7 @@ $.widget( "ui.autocomplete", {
 					if ( false !== self._trigger( "focus", event, { item: item } ) ) {
 						// use value to match what will end up in the input, if it was a key event
 						if ( /^key/.test(event.originalEvent.type) ) {
-							self.element.val( item.value );
+							self._value( item.value );
 						}
 					}
 				},
@@ -192,11 +236,11 @@ $.widget( "ui.autocomplete", {
 					}
 
 					if ( false !== self._trigger( "select", event, { item: item } ) ) {
-						self.element.val( item.value );
+						self._value( item.value );
 					}
 					// reset the term after the select event
 					// this allows custom select handling to work properly
-					self.term = self.element.val();
+					self.term = self._value();
 
 					self.close( event );
 					self.selectedItem = item;
@@ -205,8 +249,8 @@ $.widget( "ui.autocomplete", {
 					// don't set the value of the text field if it's already correct
 					// this prevents moving the cursor unnecessarily
 					if ( self.menu.element.is(":visible") &&
-						( self.element.val() !== self.term ) ) {
-						self.element.val( self.term );
+						( self._value() !== self.term ) ) {
+						self._value( self.term );
 					}
 				}
 			})
@@ -278,11 +322,22 @@ $.widget( "ui.autocomplete", {
 		}
 	},
 
+	_searchTimeout: function( event ) {
+		var self = this;
+		self.searching = setTimeout(function() {
+			// only search if the value has changed
+			if ( self.term != self.element.val() ) {
+				self.selectedItem = null;
+				self.search( null, event );
+			}
+		}, self.options.delay );
+	},
+
 	search: function( value, event ) {
-		value = value != null ? value : this.element.val();
+		value = value != null ? value : this._value();
 
 		// always save the actual value, not the one passed as an argument
-		this.term = this.element.val();
+		this.term = this._value();
 
 		if ( value.length < this.options.minLength ) {
 			return this.close( event );
@@ -304,8 +359,11 @@ $.widget( "ui.autocomplete", {
 	},
 
 	_response: function( content ) {
-		if ( !this.options.disabled && content && content.length ) {
+		if ( content ) {
 			content = this._normalize( content );
+		}
+		this._trigger( "response", null, { content: content } );
+		if ( !this.options.disabled && content && content.length ) {
 			this._suggest( content );
 			this._trigger( "open" );
 		} else {
@@ -321,13 +379,13 @@ $.widget( "ui.autocomplete", {
 		clearTimeout( this.closing );
 		if ( this.menu.element.is(":visible") ) {
 			this.menu.element.hide();
-			this.menu.deactivate();
+			this.menu.blur();
 			this._trigger( "close", event );
 		}
 	},
 	
 	_change: function( event ) {
-		if ( this.previous !== this.element.val() ) {
+		if ( this.previous !== this._value() ) {
 			this._trigger( "change", event, { item: this.selectedItem } );
 		}
 	},
@@ -356,8 +414,8 @@ $.widget( "ui.autocomplete", {
 			.empty()
 			.zIndex( this.element.zIndex() + 1 );
 		this._renderMenu( ul, items );
-		// TODO refresh should check if the active item is still in the dom, removing the need for a manual deactivate
-		this.menu.deactivate();
+		// TODO refresh should check if the active item is still in the dom, removing the need for a manual blur
+		this.menu.blur();
 		this.menu.refresh();
 
 		// size and position menu
@@ -366,6 +424,10 @@ $.widget( "ui.autocomplete", {
 		ul.position( $.extend({
 			of: this.element
 		}, this.options.position ));
+
+		if ( this.options.autoFocus ) {
+			this.menu.next( new $.Event("mouseover") );
+		}
 	},
 
 	_resizeMenu: function() {
@@ -397,8 +459,8 @@ $.widget( "ui.autocomplete", {
 		}
 		if ( this.menu.first() && /^previous/.test(direction) ||
 				this.menu.last() && /^next/.test(direction) ) {
-			this.element.val( this.term );
-			this.menu.deactivate();
+			this._value( this.term );
+			this.menu.blur();
 			return;
 		}
 		this.menu[ direction ]( event );
@@ -406,11 +468,14 @@ $.widget( "ui.autocomplete", {
 
 	widget: function() {
 		return this.menu.element;
+	},
+
+	_value: function( value ) {
+		return this.valueMethod.apply( this.element, arguments );
 	}
 });
 
 $.extend( $.ui.autocomplete, {
-	version: "@VERSION",
 	escapeRegex: function( value ) {
 		return value.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
 	},
