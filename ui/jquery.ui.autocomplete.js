@@ -286,23 +286,25 @@ $.widget( "ui.autocomplete", {
 	},
 
 	_createTrie: function(source) {
-		function Node(value, isWordEnd){
+		function Node(value, isWordEnd) {
 			this.value = value;
 			this.isWordEnd = isWordEnd;
 			this.children = {};
 		}
 
-		var root = new Node('', false);
-		for(var i in source){ 
+		var root = new Node( '', false );
+		for ( var i in source ) {
 			var string = source[i].label || source[i].value || source[i];
 			var node = root;
 
-			for(var j = 1; j <= string.length; j++){
-				var substring = string.substring(0,j);
+			for ( var j = 1; j <= string.length; j++ ) {
+				var substring = string.substring( 0, j );
+				var lower = substring.toLowerCase();
 
-				if(!node.children[substring.toLowerCase()])
-					node.children[substring.toLowerCase()] = new Node(substring, false);
-				node = node.children[substring.toLowerCase()];
+				if ( !node.children[lower] ) {
+					node.children[lower] = new Node(substring, false);
+				}
+				node = node.children[lower];
 			}
 
 			// node will reference the complete string 
@@ -503,32 +505,33 @@ $.widget( "ui.autocomplete", {
 });
 
 $.extend( $.ui.autocomplete, {
-	search: function(node, term) {
-		function valuesInChildren(node){
+	search: function( node, term ) {
+		function valuesInChildren( node ) {
 			var values = [];
 
-			if(node.isWordEnd){
-				values.push(node.value);
+			if ( node.isWordEnd ) {
+				values.push( node.value );
 			}
 
-			for(var c in node.children){
-				values = values.concat(valuesInChildren(node.children[c]));
+			for( var c in node.children ) {
+				values = values.concat( valuesInChildren( node.children[c] ) );
 			}
 
 			return values;
 		}
 
-		for(var i = 1; i <= term.length; i++){
-			var substring = term.substring(0,i);
-			if(node.children) {
-				if(node.children[substring])
+		for ( var i = 1; i <= term.length; i++ ) {
+			var substring = term.substring( 0, i );
+			if ( node.children ) {
+				if ( node.children[substring] ) {
 					node = node.children[substring];
-				else
+				} else {
 					node = false;
+				}
 			}
 		}
 
-		var results = valuesInChildren(node);
+		var results = valuesInChildren( node );
 		return results;
 	}
 });
