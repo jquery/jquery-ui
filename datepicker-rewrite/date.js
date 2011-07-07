@@ -30,6 +30,18 @@ $.date = function ( datestring, formatstring ) {
 			date = new Date( date.getFullYear(), date.getMonth(), day );
 			return this;
 		},
+		setMonth: function( month ) {
+			date = new Date( date.getFullYear(), month, date.getDate());
+			return this;
+		},
+		setYear: function( year ) {
+			date = new Date( year, date.getMonth(), date.getDate() );
+			return this;
+		},
+		setFullDate: function( year, month, day ) {
+			date = new Date( year, month, day );
+			return this;
+		},
 		adjust: function( period, offset ) {
 			var day = period == "D" ? date.getDate() + offset : date.getDate(),
 				month = period == "M" ? date.getMonth() + offset : date.getMonth(),

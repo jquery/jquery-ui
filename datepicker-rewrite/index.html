@@ -2,11 +2,13 @@
 <html>
 <head>
 	<meta charset="utf-8">
-	<script src="../jquery-1.4.4.js"></script>
+	<script src="../jquery-1.5.1.js"></script>
 	<script src="../ui/jquery.ui.core.js"></script>
 	<script src="../ui/jquery.ui.widget.js"></script>
 	<script src="../ui/jquery.ui.button.js"></script>
 	<script src="../ui/jquery.ui.position.js"></script>
+	<script src="../ui/jquery.ui.popup.js"></script>
+	<script src="../ui/jquery.ui.menu.js"></script>
 	<script src="jquery.tmpl.js"></script>
 	<script src="../external/jquery.global.js"></script>
 	<script src="../external/jquery.global.de-DE.js"></script>
@@ -23,6 +25,7 @@
 		.ui-datepicker-calendar a.ui-state-focus {
 			text-decoration: underline;
 		}
+		.ui-popup { position: absolute; z-index: 5000; }
 	</style>
 </head>
 <body>
@@ -45,6 +48,8 @@
 				$.global.preferCulture( $( this ).val() );
 				$( ":ui-datepicker" ).datepicker( "refresh" );
 			})
+
+			$( "#inline-output" ).datepicker();
 			$( "#datepicker-inline-default" ).datepicker( {
 				select: function( event, ui ) {
 					$( "#inline-output" ).val( ui.date );
