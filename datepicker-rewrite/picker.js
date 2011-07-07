@@ -42,7 +42,7 @@ $.widget( "ui.datepicker", {
 			// TODO exclude clicks on lead days or handle them correctly
 			// TODO store/read more then just date, also required for multi month picker
 			self.select( event, $( this ).data( "day" ) );
-			if ( !this.inline ) {
+			if ( !self.inline ) {
 				self.close();
 			} else {
 				self.grid.focus( 1 );
