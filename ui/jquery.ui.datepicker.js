@@ -105,6 +105,7 @@ function Datepicker() {
 		altFormat: '', // The date format to use for the alternate field
 		constrainInput: true, // The input is constrained by the current date format
 		showButtonPanel: false, // True to show button panel, false to not show it
+                
 		autoSize: false, // True to size the input for the date format, false to leave as is
 		disabled: false // The initial disabled state
 	};
@@ -1427,6 +1428,7 @@ $.extend(Datepicker.prototype, {
 			new Date(today.getFullYear(), today.getMonth(), today.getDate())); // clear time
 		var isRTL = this._get(inst, 'isRTL');
 		var showButtonPanel = this._get(inst, 'showButtonPanel');
+		
 		var hideIfNoPrevNext = this._get(inst, 'hideIfNoPrevNext');
 		var navigationAsDateFormat = this._get(inst, 'navigationAsDateFormat');
 		var numMonths = this._getNumberOfMonths(inst);
