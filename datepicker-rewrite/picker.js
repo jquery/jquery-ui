@@ -42,6 +42,11 @@ $.widget( "ui.datepicker", {
 			// TODO exclude clicks on lead days or handle them correctly
 			// TODO store/read more then just date, also required for multi month picker
 			self.select( event, $( this ).data( "day" ) );
+			if ( !this.inline ) {
+				self.close();
+			} else {
+				self.grid.focus( 1 );
+			}
 		});
 
 		this.picker.delegate( ".ui-datepicker-header a, .ui-datepicker-calendar a", "mouseenter.datepicker mouseleave.datepicker", function() {
@@ -65,7 +70,6 @@ $.widget( "ui.datepicker", {
 			switch ( event.keyCode ) {
 				case $.ui.keyCode.ENTER:
 					activeCell.children( "a" ).first().click();
-					self.grid.focus( 1 );
 					return;
 					break;
 				case $.ui.keyCode.PAGE_UP:
@@ -161,7 +165,6 @@ $.widget( "ui.datepicker", {
 		this.date.setDay( day ).select();
 		if ( !this.inline ) {
 			this.element.val( this.date.format() ).focus( 1 );
-			this.close();
 		} else {
 			this.refresh();
 		}
