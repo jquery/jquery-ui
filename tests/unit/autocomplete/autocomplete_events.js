@@ -16,7 +16,6 @@ asyncTest( "all events", function() {
 				},
 				response: function( event, ui ) {
 					deepEqual( ui.content, [
-						{ label: "Clojure", value: "Clojure" },
 						{ label: "Java", value: "Java" },
 						{ label: "JavaScript", value: "JavaScript" }
 					], "response ui.content" );
@@ -27,7 +26,7 @@ asyncTest( "all events", function() {
 				},
 				focus: function( event, ui ) {
 					equal( event.originalEvent.type, "menufocus", "focus originalEvent" );
-					deepEqual( ui.item, { label: "Java", value: "Java" }, "focus ui.item" );
+					deepEqual( ui.item, { label: "JavaScript", value: "JavaScript" }, "focus ui.item" );
 				},
 				close: function( event ) {
 					equal( event.originalEvent.type, "menuselect", "close originalEvent" );
@@ -35,11 +34,11 @@ asyncTest( "all events", function() {
 				},
 				select: function( event, ui ) {
 					equal( event.originalEvent.type, "menuselect", "select originalEvent" );
-					deepEqual( ui.item, { label: "Java", value: "Java" }, "select ui.item" );
+					deepEqual( ui.item, { label: "JavaScript", value: "JavaScript" }, "select ui.item" );
 				},
 				change: function( event, ui ) {
 					equal( event.originalEvent.type, "blur", "change originalEvent" );
-					deepEqual( ui.item, { label: "Java", value: "Java" }, "chnage ui.item" );
+					deepEqual( ui.item, { label: "JavaScript", value: "JavaScript" }, "chnage ui.item" );
 					ok( menu.is( ":hidden" ), "menu closed on change" );
 					start();
 				}
@@ -69,7 +68,6 @@ asyncTest( "all events - contenteditable", function() {
 			},
 			response: function( event, ui ) {
 				deepEqual( ui.content, [
-					{ label: "Clojure", value: "Clojure" },
 					{ label: "Java", value: "Java" },
 					{ label: "JavaScript", value: "JavaScript" }
 				], "response ui.content" );
@@ -80,7 +78,7 @@ asyncTest( "all events - contenteditable", function() {
 			},
 			focus: function( event, ui ) {
 				equal( event.originalEvent.type, "menufocus", "focus originalEvent" );
-				deepEqual( ui.item, { label: "Java", value: "Java" }, "focus ui.item" );
+				deepEqual( ui.item, { label: "JavaScript", value: "JavaScript" }, "focus ui.item" );
 			},
 			close: function( event ) {
 				equal( event.originalEvent.type, "menuselect", "close originalEvent" );
@@ -88,11 +86,11 @@ asyncTest( "all events - contenteditable", function() {
 			},
 			select: function( event, ui ) {
 				equal( event.originalEvent.type, "menuselect", "select originalEvent" );
-				deepEqual( ui.item, { label: "Java", value: "Java" }, "select ui.item" );
+				deepEqual( ui.item, { label: "JavaScript", value: "JavaScript" }, "select ui.item" );
 			},
 			change: function( event, ui ) {
 				equal( event.originalEvent.type, "blur", "change originalEvent" );
-				deepEqual( ui.item, { label: "Java", value: "Java" }, "chnage ui.item" );
+				deepEqual( ui.item, { label: "JavaScript", value: "JavaScript" }, "chnage ui.item" );
 				ok( menu.is( ":hidden" ), "menu closed on change" );
 				start();
 			}

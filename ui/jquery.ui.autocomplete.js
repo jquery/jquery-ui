@@ -285,14 +285,41 @@ $.widget( "ui.autocomplete", {
 		}
 	},
 
+	_createTrie: function(source) {
+		function Node(value, isWordEnd){
+			this.value = value;
+			this.isWordEnd = isWordEnd;
+			this.children = {};
+		}
+
+		var root = new Node('', false);
+		for(var i in source){ 
+			var string = source[i].label || source[i].value || source[i];
+			var node = root;
+
+			for(var j = 1; j <= string.length; j++){
+				var substring = string.substring(0,j);
+
+				if(!node.children[substring.toLowerCase()])
+					node.children[substring.toLowerCase()] = new Node(substring, false);
+				node = node.children[substring.toLowerCase()];
+			}
+
+			// node will reference the complete string 
+			node.isWordEnd = true;
+		}
+
+		return root;
+	},
+
 	_initSource: function() {
 		var self = this,
 			array,
 			url;
 		if ( $.isArray(this.options.source) ) {
-			array = this.options.source;
+			var trie = this._createTrie(this.options.source);
 			this.source = function( request, response ) {
-				response( $.ui.autocomplete.filter(array, request.term) );
+				response( $.ui.autocomplete.search(trie, request.term.toLowerCase()) );
 			};
 		} else if ( typeof this.options.source === "string" ) {
 			url = this.options.source;
@@ -476,14 +503,33 @@ $.widget( "ui.autocomplete", {
 });
 
 $.extend( $.ui.autocomplete, {
-	escapeRegex: function( value ) {
-		return value.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
-	},
-	filter: function(array, term) {
-		var matcher = new RegExp( $.ui.autocomplete.escapeRegex(term), "i" );
-		return $.grep( array, function(value) {
-			return matcher.test( value.label || value.value || value );
-		});
+	search: function(node, term) {
+		function valuesInChildren(node){
+			var values = [];
+
+			if(node.isWordEnd){
+				values.push(node.value);
+			}
+
+			for(var c in node.children){
+				values = values.concat(valuesInChildren(node.children[c]));
+			}
+
+			return values;
+		}
+
+		for(var i = 1; i <= term.length; i++){
+			var substring = term.substring(0,i);
+			if(node.children) {
+				if(node.children[substring])
+					node = node.children[substring];
+				else
+					node = false;
+			}
+		}
+
+		var results = valuesInChildren(node);
+		return results;
 	}
 });
 
