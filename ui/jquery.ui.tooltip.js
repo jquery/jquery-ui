@@ -134,6 +134,12 @@ $.widget( "ui.tooltip", {
 			tooltip = this._tooltip( target );
 			target.attr( "aria-describedby", tooltip.attr( "id" ) );
 		}
+		
+		// attach the target to the tooltip
+		tooltip.data( 'target', target );
+		
+		tooltip.addClass( this.options.tooltipClass || "" )
+		
 		tooltip.find( ".ui-tooltip-content" ).html( content );
 		tooltip
 			.stop( true )
@@ -188,8 +194,7 @@ $.widget( "ui.tooltip", {
 					id: id,
 					role: "tooltip"
 				})
-				.addClass( "ui-tooltip ui-widget ui-corner-all ui-widget-content " +
-					( this.options.tooltipClass || "" ) );
+				.addClass( "ui-tooltip ui-widget ui-corner-all ui-widget-content " );
 		$( "<div>" )
 			.addClass( "ui-tooltip-content" )
 			.appendTo( tooltip );
