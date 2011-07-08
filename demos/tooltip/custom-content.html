@@ -22,19 +22,25 @@
 		width: 350px;
 		height: 350px;
 	}
-	.table{ width:50%; }
-		.table td{ border:1px solid #000; }
-		
-	.ui-tooltip-fromtd{ background:#eaeaea; border:1px solid #333333; }
+	.table {
+		width: 50%;
+	}
+	.table td {
+		border: 1px solid #000;
+	}	
+	.ui-tooltip-fromtd { 
+		background: #eaeaea;
+		border: 1px solid #333333;
+	}
 	</style>
 	<script>
 	$(function() {
 		$( ".demo" ).tooltip({
 			items: "img, [data-geo], [title], .tt",
-			tooltipClass : function(){
-				var el = $( this ).data( 'target' );
+			tooltipClass: function() {
+				var el = $( this ).data( "target" );
 				
-				return ( el.is( 'td' ) ? 'ui-tooltip-fromtd' : '' );
+				return el.is( "td" ) ? "ui-tooltip-fromtd" : "";
 			},
 			content: function() {
 				var element = $( this );
@@ -50,7 +56,7 @@
 					return element.attr( "alt" );
 				}
 				if ( element.is( "td" ) ) {
-					return element.find( '.tt-content' ).html();
+					return element.find( ".tt-content" ).html();
 				}
 			}
 		});
@@ -90,7 +96,7 @@ and are licensed under <a href="http://creativecommons.org/licenses/by-sa/3.0/de
 			<td class="tt">
 				Cell 1
 				
-				<div style="display:none" class="tt-content">
+				<div class="ui-helper-hidden tt-content">
 					<ul>
 					   <li>Morbi in sem quis dui placerat ornare. Pellentesque odio nisi, euismod in, pharetra a, ultricies in, diam. Sed arcu. Cras consequat.</li>
 					   <li>Praesent dapibus, neque id cursus faucibus, tortor neque egestas augue, eu vulputate magna eros eu erat. Aliquam erat volutpat. Nam dui mi, tincidunt quis, accumsan porttitor, facilisis luctus, metus.</li>
@@ -103,7 +109,7 @@ and are licensed under <a href="http://creativecommons.org/licenses/by-sa/3.0/de
 			<td class="tt">
 				Cell 2
 				
-				<div style="display:none" class="tt-content">
+				<div class="ui-helper-hidden tt-content">
 					<dl>
 					   <dt>Definition list</dt>
 					   <dd>Consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna 
@@ -120,7 +126,7 @@ and are licensed under <a href="http://creativecommons.org/licenses/by-sa/3.0/de
 			<td class="tt">
 				Cell 3
 				
-				<div style="display:none" class="tt-content">
+				<div class="ui-helper-hidden tt-content">
 					<ul>
 					   <li>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</li>
 					   <li>Aliquam tincidunt mauris eu risus.</li>

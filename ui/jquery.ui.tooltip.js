@@ -136,9 +136,10 @@ $.widget( "ui.tooltip", {
 		}
 		
 		// attach the target to the tooltip
-		tooltip.data( 'target', target );
-		
-		tooltip.addClass( this.options.tooltipClass || "" )
+		tooltip
+			.data( "target", target )
+			.addClass( this.options.tooltipClass || "" );
+				
 		
 		tooltip.find( ".ui-tooltip-content" ).html( content );
 		tooltip
@@ -194,7 +195,7 @@ $.widget( "ui.tooltip", {
 					id: id,
 					role: "tooltip"
 				})
-				.addClass( "ui-tooltip ui-widget ui-corner-all ui-widget-content " );
+				.addClass( "ui-tooltip ui-widget ui-corner-all ui-widget-content" );
 		$( "<div>" )
 			.addClass( "ui-tooltip-content" )
 			.appendTo( tooltip );
