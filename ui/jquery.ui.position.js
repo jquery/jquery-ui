@@ -204,7 +204,8 @@ $.fn.position = function( options ) {
 					offset: [ atOffset[ 0 ] + myOffset[ 0 ], atOffset [ 1 ] + myOffset[ 1 ] ],
 					my: options.my,
 					at: options.at,
-					within: within
+					within: within,
+					elem : elem
 				});
 			}
 		});
@@ -283,6 +284,11 @@ $.ui.position = {
 					-data.targetWidth,
 				offset = -2 * data.offset[ 0 ];
 			if ( overLeft < 0 || overRight > 0 ) {
+			
+				data.elem
+					.removeClass( 'ui-flipped-left ui-flipped-right' )
+					.addClass( 'ui-flipped-' + ( overLeft < 0 ? 'right' : 'left' ) );
+			
 				position.left += myOffset + atOffset + offset;
 			}
 		},
@@ -308,6 +314,11 @@ $.ui.position = {
 					-data.targetHeight,
 				offset = -2 * data.offset[ 1 ];
 			if ( overTop < 0 || overBottom > 0 ) {
+				
+				data.elem
+					.removeClass( 'ui-flipped-top ui-flipped-bottom' )
+					.addClass( 'ui-flipped-' + ( overTop < 0 ? 'bottom' : 'top' ) );
+				
 				position.top += myOffset + atOffset + offset;
 			}
 		}
