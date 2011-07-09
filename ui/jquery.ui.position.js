@@ -286,8 +286,8 @@ $.ui.position = {
 			if ( overLeft < 0 || overRight > 0 ) {
 			
 				data.elem
-					.removeClass( 'ui-flipped-left ui-flipped-right' )
-					.addClass( 'ui-flipped-' + ( overLeft < 0 ? 'right' : 'left' ) );
+					.removeClass( "ui-flipped-left ui-flipped-right" )
+					.addClass( "ui-flipped-" + ( overLeft < 0 ? "right" : "left" ) );
 			
 				position.left += myOffset + atOffset + offset;
 			}
@@ -316,8 +316,8 @@ $.ui.position = {
 			if ( overTop < 0 || overBottom > 0 ) {
 				
 				data.elem
-					.removeClass( 'ui-flipped-top ui-flipped-bottom' )
-					.addClass( 'ui-flipped-' + ( overTop < 0 ? 'bottom' : 'top' ) );
+					.removeClass( "ui-flipped-top ui-flipped-bottom" )
+					.addClass( "ui-flipped-" + ( overTop < 0 ? "bottom" : "top" ) );
 				
 				position.top += myOffset + atOffset + offset;
 			}
