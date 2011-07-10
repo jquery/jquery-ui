@@ -18,7 +18,10 @@
 var checkboxId = 0;
 
 $.widget( "ui.checkbox", {
-
+	version: "@VERSION",
+	options: {
+		disabled : null
+	},
 	_create: function() {
 
 		var that = this;
@@ -101,7 +104,8 @@ $.widget( "ui.checkbox", {
 	},
 
 	_refresh: function() {
-		this.iconElement.toggleClass( "ui-icon ui-icon-check", this.element.is(":checked") );
+		var checked = this.element.is(":checked");
+		this.iconElement.toggleClass( "ui-icon ui-icon-check", checked ).attr( "aria-checked", checked );
 	},
 
 	widget: function() {
@@ -126,14 +130,10 @@ $.widget( "ui.checkbox", {
 			this.checkboxElement
 				[ value ? "addClass" : "removeClass" ]( "ui-checkbox-disabled" );
 		}
-		
+
 		$.Widget.prototype._setOption.apply( this, arguments );
 	},
 
-});
-
-$.extend( $.ui.checkbox, {
-	version: "@VERSION"
 });
 
 }( jQuery ));
