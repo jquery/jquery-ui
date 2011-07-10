@@ -438,4 +438,99 @@ test( "collision: flip, with margin", function() {
 	}, { top: addTop + 0, left: addLeft + 0 }, "right bottom" );
 });
 
+test( "addClass: flipped left", function() {
+	var within = $("#within-container");
+	
+	var elem = $( "#elx" ).position( {
+		my: "left center",
+		of: within[0],
+		within: within,
+		collision: "flip",
+		at: "right center"
+	});
+
+	same( elem.hasClass( 'ui-flipped-left' ), true, 'Has ui-flipped-left class' );
+
+	elem.position( {
+		my: "right center",
+		of: within[0],
+		within: within,
+		collision: "flip",
+		at: "left center"
+	})
+	
+	same( elem.hasClass( 'ui-flipped-left' ), false, 'Removed ui-flipped-left class' );
+});
+
+test( "addClass: flipped top", function() {
+	var within = $("#within-container");
+	
+	var elem = $( "#elx" ).position( {
+		my: "left top",
+		of: within[0],
+		within: within,
+		collision: "flip",
+		at: "right bottom"
+	});
+
+	same( elem.hasClass( 'ui-flipped-top' ), true, 'Has ui-flipped-top class' );
+	
+	elem.position( {
+		my: "left bottom",
+		of: within[0],
+		within: within,
+		collision: "flip",
+		at: "right top"
+	});
+
+	same( elem.hasClass( 'ui-flipped-top' ), false, 'Removed ui-flipped-top class' );
+});
+
+test( "addClass: flipped right", function() {
+	var within = $("#within-container");
+	
+	var elem = $( "#elx" ).position( {
+		my: "right center",
+		of: within[0],
+		within: within,
+		collision: "flip",
+		at: "left center"
+	});
+
+	same( elem.hasClass( 'ui-flipped-right' ), true, 'Has ui-flipped-right class' );
+
+	elem.position( {
+		my: "left center",
+		of: within[0],
+		within: within,
+		collision: "flip",
+		at: "right center"
+	});
+
+	same( elem.hasClass( 'ui-flipped-right' ), false, 'Removed ui-flipped-right class' );
+
+});
+
+test( "addClass: flipped bottom", function() {
+	var within = $("#within-container");
+	
+	var elem = $( "#elx" ).position( {
+		my: "left bottom",
+		of: window,
+		collision: "flip",
+		at: "right top"
+	});
+
+	same( elem.hasClass( 'ui-flipped-bottom' ), true, 'Has ui-flipped-bottom class' );
+	
+	elem.position( {
+		my: "left top",
+		of: window,
+		collision: "flip",
+		at: "right bottom"
+	});
+
+	same( elem.hasClass( 'ui-flipped-bottom' ), false, 'Removed ui-flipped-bottom class' );
+});
+
 }( jQuery ) );
