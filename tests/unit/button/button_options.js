@@ -5,6 +5,30 @@
 
 module("button: options");
 
+test("disabled, explicity value", function() {
+	$("#radio01").button({ disabled: false });
+	same(false, $("#radio01").button("option", "disabled"),
+		"disabled option set to false");
+	same(false, $("#radio01").attr("disabled"), "element is disabled");
+	
+	$("#radio02").button({ disabled: true });
+	same(true, $("#radio02").button("option", "disabled"),
+		"disabled option set to true");
+	same(true, $("#radio02").attr("disabled"), "element is not disabled");
+});
+
+test("disabled, null", function() {
+	$("#radio01").button({ disabled: null });
+	same(false, $("#radio01").button("option", "disabled"),
+		"disabled option set to false");
+	same(false, $("#radio01").attr("disabled"), "element is disabled");
+	
+	$("#radio02").attr("disabled", "disabled").button({ disabled: null });
+	same(true, $("#radio02").button("option", "disabled"),
+		"disabled option set to true");
+	same(true, $("#radio02").attr("disabled"), "element is not disabled");
+});
+
 test("text false without icon", function() {
 	$("#button").button({
 		text: false

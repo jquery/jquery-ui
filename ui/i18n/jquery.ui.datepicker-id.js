@@ -3,8 +3,8 @@
 jQuery(function($){
 	$.datepicker.regional['id'] = {
 		closeText: 'Tutup',
-		prevText: '&#x3c;mundur',
-		nextText: 'maju&#x3e;',
+		prevText: '&#x3C;mundur',
+		nextText: 'maju&#x3E;',
 		currentText: 'hari ini',
 		monthNames: ['Januari','Februari','Maret','April','Mei','Juni',
 		'Juli','Agustus','September','Oktober','Nopember','Desember'],

@@ -1,27 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8" />
+	<meta charset="utf-8">
 	<title>jQuery UI Draggable - Cursor style</title>
-	<link type="text/css" href="../../themes/base/jquery.ui.all.css" rel="stylesheet" />
-	<script type="text/javascript" src="../../jquery-1.4.2.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.core.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.widget.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.mouse.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.draggable.js"></script>
-	<link type="text/css" href="../demos.css" rel="stylesheet" />
-	<style type="text/css">
+	<link rel="stylesheet" href="../../themes/base/jquery.ui.all.css">
+	<script src="../../jquery-1.5.1.js"></script>
+	<script src="../../ui/jquery.ui.core.js"></script>
+	<script src="../../ui/jquery.ui.widget.js"></script>
+	<script src="../../ui/jquery.ui.mouse.js"></script>
+	<script src="../../ui/jquery.ui.draggable.js"></script>
+	<link rel="stylesheet" href="../demos.css">
+	<style>
 	#draggable, #draggable2, #draggable3 { width: 100px; height: 100px; padding: 0.5em; float: left; margin: 0 10px 10px 0; }
 	</style>
-	<script type="text/javascript">
+	<script>
 	$(function() {
-		$("#draggable").draggable({ cursorAt: { cursor: 'move', top: 56, left: 56 } });
-		$("#draggable2").draggable({ cursorAt: { cursor: 'crosshair', top: -5, left: -5 } });
-		$("#draggable3").draggable({ cursorAt: { bottom: 0 } });
+		$( "#draggable" ).draggable({ cursorAt: { cursor: "move", top: 56, left: 56 } });
+		$( "#draggable2" ).draggable({ cursorAt: { cursor: "crosshair", top: -5, left: -5 } });
+		$( "#draggable3" ).draggable({ cursorAt: { bottom: 0 } });
 	});
 	</script>
 </head>
 <body>
+
 <div class="demo">
 	
 <div id="draggable" class="ui-widget-content">
@@ -38,12 +39,11 @@
 
 </div><!-- End demo -->
 
+
+
 <div class="demo-description">
-
-<p>
-Position the cursor while dragging the object. By default the cursor appears in the center of the dragged object; use the <code>cursorAt</code> option to specify another location relative to the draggable (specify a pixel value from the top, right, bottom, and/or left).  Customize the cursor's appearance by supplying the <code>cursor</code> option with a valid CSS cursor value: default, move, pointer, crosshair, etc.
-</p>
-
+<p>Position the cursor while dragging the object. By default the cursor appears in the center of the dragged object; use the <code>cursorAt</code> option to specify another location relative to the draggable (specify a pixel value from the top, right, bottom, and/or left).  Customize the cursor's appearance by supplying the <code>cursor</code> option with a valid CSS cursor value: default, move, pointer, crosshair, etc.</p>
 </div><!-- End demo-description -->
+
 </body>
 </html>

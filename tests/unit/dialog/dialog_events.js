@@ -6,11 +6,12 @@
 module("dialog: events");
 
 test("open", function() {
-	expect(11);
+	expect(13);
 
 	el = $("<div></div>");
 	el.dialog({
 		open: function(ev, ui) {
+			ok(el.data("dialog")._isOpen, "interal _isOpen flag is set");
 			ok(true, 'autoOpen: true fires open callback');
 			equals(this, el[0], "context of callback");
 			equals(ev.type, 'dialogopen', 'event type in callback');
@@ -29,6 +30,7 @@ test("open", function() {
 			same(ui, {}, 'ui hash in callback');
 		}
 	}).bind('dialogopen', function(ev, ui) {
+		ok(el.data("dialog")._isOpen, "interal _isOpen flag is set");
 		ok(true, 'dialog("open") fires open event');
 		equals(this, el[0], 'context of event');
 		same(ui, {}, 'ui hash in event');
@@ -207,38 +209,6 @@ test("close", function() {
 		same(ui, {}, 'ui hash in event');
 	});
 	el.dialog('close');
-	el.remove();
-});
-
-//handling of deprecated beforeclose (vs beforeClose) option
-//Ticket #4669 http://dev.jqueryui.com/ticket/4669
-//TODO: remove in 1.9pre
-test("beforeclose", function() {
-	expect(10);
-
-	el = $('<div></div>').dialog({
-		beforeclose: function(ev, ui) {
-			ok(true, '.dialog("close") fires beforeClose callback');
-			equals(this, el[0], "context of callback");
-			equals(ev.type, 'dialogbeforeclose', 'event type in callback');
-			same(ui, {}, 'ui hash in callback');
-			return false;
-		}
-	});
-	el.dialog('close');
-	isOpen('beforeclose (deprecated) callback should prevent dialog from closing');
-	el.remove();
-
-	el = $('<div></div>').dialog();
-	el.dialog('option', 'beforeclose', function(ev, ui) {
-		ok(true, '.dialog("close") fires beforeClose callback');
-		equals(this, el[0], "context of callback");
-		equals(ev.type, 'dialogbeforeclose', 'event type in callback');
-		same(ui, {}, 'ui hash in callback');
-		return false;
-	});
-	el.dialog('close');
-	isOpen('beforeclose (deprecated) callback should prevent dialog from closing');
 	el.remove();
 });
 

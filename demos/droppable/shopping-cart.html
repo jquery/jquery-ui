@@ -1,53 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8" />
+	<meta charset="utf-8">
 	<title>jQuery UI Droppable - Shopping Cart Demo</title>
-	<link type="text/css" href="../../themes/base/jquery.ui.all.css" rel="stylesheet" />
-	<script type="text/javascript" src="../../jquery-1.4.2.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.core.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.widget.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.mouse.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.draggable.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.droppable.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.sortable.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.accordion.js"></script>
-	<link type="text/css" href="../demos.css" rel="stylesheet" />
-	<style type="text/css">
+	<link rel="stylesheet" href="../../themes/base/jquery.ui.all.css">
+	<script src="../../jquery-1.5.1.js"></script>
+	<script src="../../ui/jquery.ui.core.js"></script>
+	<script src="../../ui/jquery.ui.widget.js"></script>
+	<script src="../../ui/jquery.ui.mouse.js"></script>
+	<script src="../../ui/jquery.ui.draggable.js"></script>
+	<script src="../../ui/jquery.ui.droppable.js"></script>
+	<script src="../../ui/jquery.ui.sortable.js"></script>
+	<script src="../../ui/jquery.ui.accordion.js"></script>
+	<link rel="stylesheet" href="../demos.css">
+	<style>
 	h1 { padding: .2em; margin: 0; }
 	#products { float:left; width: 500px; margin-right: 2em; }
 	#cart { width: 200px; float: left; }
 	/* style the list to maximize the droppable hitarea */
 	#cart ol { margin: 0; padding: 1em 0 1em 3em; }
 	</style>
-	<script type="text/javascript">
+	<script>
 	$(function() {
-		$("#catalog").accordion();
-		$("#catalog li").draggable({
+		$( "#catalog" ).accordion();
+		$( "#catalog li" ).draggable({
 			appendTo: "body",
 			helper: "clone"
 		});
-		$("#cart ol").droppable({
+		$( "#cart ol" ).droppable({
 			activeClass: "ui-state-default",
 			hoverClass: "ui-state-hover",
 			accept: ":not(.ui-sortable-helper)",
-			drop: function(event, ui) {
-				$(this).find(".placeholder").remove();
-				$("<li></li>").text(ui.draggable.text()).appendTo(this);
+			drop: function( event, ui ) {
+				$( this ).find( ".placeholder" ).remove();
+				$( "<li></li>" ).text( ui.draggable.text() ).appendTo( this );
 			}
 		}).sortable({
 			items: "li:not(.placeholder)",
 			sort: function() {
 				// gets added unintentionally by droppable interacting with sortable
 				// using connectWithSortable fixes this, but doesn't allow you to customize active/hoverClass options
-				$(this).removeClass("ui-state-default");
+				$( this ).removeClass( "ui-state-default" );
 			}
 		});
-
 	});
 	</script>
 </head>
 <body>
+
 <div class="demo">
 	
 <div id="products">
@@ -91,11 +91,11 @@
 
 </div><!-- End demo -->
 
+
+
 <div class="demo-description">
-
-<p>Demonstrate how to use an accordion to structure products into a catalog and make use drag and drop for adding
-them to a shopping cart, where they are sortable.</p>
-
+<p>Demonstrate how to use an accordion to structure products into a catalog and make use drag and drop for adding them to a shopping cart, where they are sortable.</p>
 </div><!-- End demo-description -->
+
 </body>
 </html>

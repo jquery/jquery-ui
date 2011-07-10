@@ -10,7 +10,7 @@ module("dialog: methods", {
 });
 
 test("init", function() {
-	expect(7);
+	expect(6);
 
 	$("<div></div>").appendTo('body').dialog().remove();
 	ok(true, '.dialog() called on element');
@@ -23,9 +23,6 @@ test("init", function() {
 
 	$('<div></div>').appendTo('body').remove().dialog().remove();
 	ok(true, '.dialog() called on disconnected DOMElement - removed');
-
-	$('<div></div>').dialog().dialog("foo").remove();
-	ok(true, 'arbitrary method called after init');
 
 	el = $('<div></div>').dialog();
 	var foo = el.dialog("option", "foo");
@@ -45,9 +42,6 @@ test("destroy", function() {
 
 	$('<div></div>').dialog().dialog("destroy").remove();
 	ok(true, '.dialog("destroy") called on disconnected DOMElement');
-
-	$('<div></div>').dialog().dialog("destroy").dialog("foo").remove();
-	ok(true, 'arbitrary method called after destroy');
 
 	var expected = $('<div></div>').dialog(),
 		actual = expected.dialog('destroy');

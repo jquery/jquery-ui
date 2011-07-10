@@ -1,18 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8" />
+	<meta charset="utf-8">
 	<title>jQuery UI Datepicker - Format date</title>
-	<link type="text/css" href="../../themes/base/jquery.ui.all.css" rel="stylesheet" />
-	<script type="text/javascript" src="../../jquery-1.4.2.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.core.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.widget.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.datepicker.js"></script>
-	<link type="text/css" href="../demos.css" rel="stylesheet" />
-	<script type="text/javascript">
+	<link rel="stylesheet" href="../../themes/base/jquery.ui.all.css">
+	<script src="../../jquery-1.5.1.js"></script>
+	<script src="../../ui/jquery.ui.core.js"></script>
+	<script src="../../ui/jquery.ui.widget.js"></script>
+	<script src="../../ui/jquery.ui.datepicker.js"></script>
+	<link rel="stylesheet" href="../demos.css">
+	<script>
 	$(function() {
-		$("#datepicker").datepicker();
-		$("#format").change(function() { $('#datepicker').datepicker('option', {dateFormat: $(this).val()}); });
+		$( "#datepicker" ).datepicker();
+		$( "#format" ).change(function() {
+			$( "#datepicker" ).datepicker( "option", "dateFormat", $( this ).val() );
+		});
 	});
 	</script>
 </head>
@@ -35,10 +37,10 @@
 
 </div><!-- End demo -->
 
+
+
 <div class="demo-description">
-
 <p>Display date feedback in a variety of ways.  Choose a date format from the dropdown, then click on the input and select a date to see it in that format.</p>
-
 </div><!-- End demo-description -->
 
 </body>

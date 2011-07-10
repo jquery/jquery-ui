@@ -4,28 +4,19 @@
 	<meta charset="UTF-8" />
 	<title>jQuery UI Core Test Suite</title>
 
-	<script type="text/javascript" src="../../../jquery-1.4.2.js"></script>
+	<script type="text/javascript" src="../../../jquery-1.5.1.js"></script>
 	<script type="text/javascript" src="../../../ui/jquery.ui.core.js"></script>
 	<script type="text/javascript" src="../../../ui/jquery.ui.widget.js"></script>
 
 	<link rel="stylesheet" href="../../../external/qunit.css" type="text/css"/>
 	<script type="text/javascript" src="../../../external/qunit.js"></script>
 	<script type="text/javascript" src="../../jquery.simulate.js"></script>
+	<script type="text/javascript" src="../testsuite.js"></script>
 	
 	<script type="text/javascript" src="core.js"></script>
 	<script type="text/javascript" src="selector.js"></script>
 	
-	<script type="text/javascript">
-	// disable this stale testsuite for testswarm only
-	var url = window.location.search;
-	url = decodeURIComponent( url.slice( url.indexOf("swarmURL=") + 9 ) );
-	if ( url && url.indexOf("http") == 0 ) {
-		// reset config to kill previous tests; make sure testsuite.js is loaded afterwards to init the testswarm script
-		QUnit.init();
-		test("core", function() { ok(true, "disabled core testsuite"); });
-	}
-	</script>
-	<script type="text/javascript" src="../testsuite.js"></script>
+	<script type="text/javascript" src="../swarminject.js"></script>
 	
 	<style	type="text/css">
 		.zindex {z-index: 100}
@@ -36,12 +27,24 @@
 
 <h1 id="qunit-header">jQuery UI Core Test Suite</h1>
 <h2 id="qunit-banner"></h2>
+<div id="qunit-testrunner-toolbar"></div>
 <h2 id="qunit-userAgent"></h2>
 <ol id="qunit-tests">
 </ol>
 
-<div id="main" style="position: absolute; top: -10000px; left: -10000px;">
+<div id="qunit-fixture">
 
+	<img src="../images/jqueryui_32x32.png" usemap="#mymap" width="10", height="10">
+	<map name="mymap">
+		<area shape="rect" coords="0,0,1,1" id="areaCoordsNoHref">
+		<area shape="rect" coords="1,1,2,2" href="foo.html" id="areaCoordsHref">
+		<area shape="rect" coords="0,0,0,0" href="foo.html" id="areaCoordsNoSizeHref">
+		<area href="foo.html" id="areaNoCoordsHref">
+	</map>
+	<map name="mymap2">
+		<area shape="rect" coords="1,1,2,2" href="foo.html" id="areaNoImg">
+	</map>
+	
 	<div>
 		<input id="visibleAncestor-inputTypeNone" />
 		<input type="text" id="visibleAncestor-inputTypeText" />
@@ -54,13 +57,9 @@
 			<option>option</option>
 		</select>
 		<textarea id="visibleAncestor-textarea">x</textarea>
-		<object id="visibleAncestor-object">xxx</object>
+		<object id="visibleAncestor-object" codebase="about:blank">xxx</object>
 		<a href="#" id="visibleAncestor-anchorWithHref">anchor</a>
 		<a id="visibleAncestor-anchorWithoutHref">anchor</a>
-		<map>
-			<area href="#" id="visibleAncestor-areaWithHref" alt="" />
-			<area id="visibleAncestor-areaWithoutHref" alt="" />
-		</map>
 		<span id="visibleAncestor-span">x</span>
 		<div id="visibleAncestor-div">x</div>
 		<span id="visibleAncestor-spanWithTabindex" tabindex="1">x</span>
@@ -82,19 +81,19 @@
 	<div>
 		<div id="displayNoneAncestor" style="display: none;">
 			<input id="displayNoneAncestor-input" />
-			<span tabindex="1" id="displayNoneAncestor-span"></span>
+			<span tabindex="1" id="displayNoneAncestor-span">.</span>
 		</div>
 		
 		<div id="visibilityHiddenAncestor" style="visibility: hidden;">
 			<input id="visibilityHiddenAncestor-input" />
-			<span tabindex="1" id="visibilityHiddenAncestor-span"></span>
+			<span tabindex="1" id="visibilityHiddenAncestor-span">.</span>
 		</div>
+		
+		<span tabindex="1" id="displayNone-span" style="display: none;">.</span>
+		<span tabindex="1" id="visibilityHidden-span" style="visibility: hidden;">.</span>
 		
 		<input id="displayNone-input" style="display: none;" />
 		<input id="visibilityHidden-input" style="visibility: hidden;" />
-		
-		<span tabindex="1" id="displayNone-span" style="display: none;"></span>
-		<span tabindex="1" id="visibilityHidden-span" style="visibility: hidden;"></span>
 	</div>
 	
 	<div>
@@ -103,32 +102,32 @@
 		<input id="inputTabindex-1" tabindex="-1" />
 		<input id="inputTabindex-50" tabindex="-50" />
 		
-		<span id="spanTabindex0" tabindex="0"></span>
-		<span id="spanTabindex10" tabindex="10"></span>
-		<span id="spanTabindex-1" tabindex="-1"></span>
-		<span id="spanTabindex-50" tabindex="-50"></span>
+		<span id="spanTabindex0" tabindex="0">.</span>
+		<span id="spanTabindex10" tabindex="10">.</span>
+		<span id="spanTabindex-1" tabindex="-1">.</span>
+		<span id="spanTabindex-50" tabindex="-50">.</span>
 	</div>
 	
 	<div>
 		<input id="inputTabindexfoo" tabindex="foo" />
 		<input id="inputTabindex3foo" tabindex="3foo" />
 		
-		<span id="spanTabindexfoo" tabindex="foo"></span>
-		<span id="spanTabindex3foo" tabindex="3foo"></span>
+		<span id="spanTabindexfoo" tabindex="foo">.</span>
+		<span id="spanTabindex3foo" tabindex="3foo">.</span>
 	</div>
-	
-	<div id="aria"></div>
 	
 	<div id="zIndex100" style="z-index: 100; position: absolute">
-		<div id="zIndexAutoWithParent"></div>
+		<div id="zIndexAutoWithParent">.</div>
 	</div>
 	<div id="zIndex100ViaCSS" class="zindex">
-		<div id="zIndexAutoWithParentViaCSS"></div>
+		<div id="zIndexAutoWithParentViaCSS">.</div>
 	</div>
 	<div id="zIndex100ViaCSSPositioned" class="zindex absolute">
-		<div id="zIndexAutoWithParentViaCSSPositioned"></div>
+		<div id="zIndexAutoWithParentViaCSSPositioned">.</div>
 	</div>
 	<div id="zIndexAutoNoParent"></div>
+	
+	<div id="dimensions" style="float: left; height: 50px; width: 100px; margin: 1px 12px 11px 2px; border-style: solid; border-width: 3px 14px 13px 4px; padding: 5px 16px 15px 6px;"></div>
 </div>
 
 </body>

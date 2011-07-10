@@ -3,10 +3,10 @@
 jQuery(function($){
 	$.datepicker.regional['ca'] = {
 		closeText: 'Tancar',
-		prevText: '&#x3c;Ant',
-		nextText: 'Seg&#x3e;',
+		prevText: '&#x3C;Ant',
+		nextText: 'Seg&#x3E;',
 		currentText: 'Avui',
-		monthNames: ['Gener','Febrer','Mar&ccedil;','Abril','Maig','Juny',
+		monthNames: ['Gener','Febrer','Mar&#xE7;','Abril','Maig','Juny',
 		'Juliol','Agost','Setembre','Octubre','Novembre','Desembre'],
 		monthNamesShort: ['Gen','Feb','Mar','Abr','Mai','Jun',
 		'Jul','Ago','Set','Oct','Nov','Des'],

@@ -1,30 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8" />
+	<meta charset="utf-8">
 	<title>jQuery UI Tabs - Vertical Tabs functionality</title>
-	<link type="text/css" href="../../themes/base/jquery.ui.all.css" rel="stylesheet" />
-	<script type="text/javascript" src="../../jquery-1.4.2.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.core.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.widget.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.tabs.js"></script>
-	<link type="text/css" href="../demos.css" rel="stylesheet" />
-	<script type="text/javascript">
+	<link rel="stylesheet" href="../../themes/base/jquery.ui.all.css">
+	<script src="../../jquery-1.5.1.js"></script>
+	<script src="../../ui/jquery.ui.core.js"></script>
+	<script src="../../ui/jquery.ui.widget.js"></script>
+	<script src="../../ui/jquery.ui.tabs.js"></script>
+	<link rel="stylesheet" href="../demos.css">
+	<script>
 	$(function() {
-		$("#tabs").tabs().addClass('ui-tabs-vertical ui-helper-clearfix');
-		$("#tabs li").removeClass('ui-corner-top').addClass('ui-corner-left');
+		$( "#tabs" ).tabs().addClass( "ui-tabs-vertical ui-helper-clearfix" );
+		$( "#tabs li" ).removeClass( "ui-corner-top" ).addClass( "ui-corner-left" );
 	});
 	</script>
-	<style type="text/css">
-	
-/* Vertical Tabs
-----------------------------------*/
-.ui-tabs-vertical { width: 55em; }
-.ui-tabs-vertical .ui-tabs-nav { padding: .2em .1em .2em .2em; float: left; width: 12em; }
-.ui-tabs-vertical .ui-tabs-nav li { clear: left; width: 100%; border-bottom-width: 1px !important; border-right-width: 0 !important; margin: 0 -1px .2em 0; }
-.ui-tabs-vertical .ui-tabs-nav li a { display:block; }
-.ui-tabs-vertical .ui-tabs-nav li.ui-tabs-selected { padding-bottom: 0; padding-right: .1em; border-right-width: 1px; border-right-width: 1px; }
-.ui-tabs-vertical .ui-tabs-panel { padding: 1em; float: right; width: 40em;}
+	<style>
+	.ui-tabs-vertical { width: 55em; }
+	.ui-tabs-vertical .ui-tabs-nav { padding: .2em .1em .2em .2em; float: left; width: 12em; }
+	.ui-tabs-vertical .ui-tabs-nav li { clear: left; width: 100%; border-bottom-width: 1px !important; border-right-width: 0 !important; margin: 0 -1px .2em 0; }
+	.ui-tabs-vertical .ui-tabs-nav li a { display:block; }
+	.ui-tabs-vertical .ui-tabs-nav li.ui-tabs-active { padding-bottom: 0; padding-right: .1em; border-right-width: 1px; border-right-width: 1px; }
+	.ui-tabs-vertical .ui-tabs-panel { padding: 1em; float: right; width: 40em;}
 	</style>
 </head>
 <body>
@@ -54,10 +51,10 @@
 
 </div><!-- End demo -->
 
+
+
 <div class="demo-description">
-
 <p>Click tabs to swap between content that is broken into logical sections.</p>
-
 </div><!-- End demo-description -->
 
 </body>

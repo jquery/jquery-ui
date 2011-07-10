@@ -1,10 +1,10 @@
-﻿/* Albanian initialisation for the jQuery UI date picker plugin. */
+/* Albanian initialisation for the jQuery UI date picker plugin. */
 /* Written by Flakron Bytyqi (flakron@gmail.com). */
 jQuery(function($){
 	$.datepicker.regional['sq'] = {
 		closeText: 'mbylle',
-		prevText: '&#x3c;mbrapa',
-		nextText: 'Përpara&#x3e;',
+		prevText: '&#x3C;mbrapa',
+		nextText: 'Përpara&#x3E;',
 		currentText: 'sot',
 		monthNames: ['Janar','Shkurt','Mars','Prill','Maj','Qershor',
 		'Korrik','Gusht','Shtator','Tetor','Nëntor','Dhjetor'],

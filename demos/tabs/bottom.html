@@ -1,29 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8" />
+	<meta charset="utf-8">
 	<title>jQuery UI Tabs - Tabs at bottom</title>
-	<link type="text/css" href="../../themes/base/jquery.ui.all.css" rel="stylesheet" />
-	<script type="text/javascript" src="../../jquery-1.4.2.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.core.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.widget.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.tabs.js"></script>
-	<link type="text/css" href="../demos.css" rel="stylesheet" />
-	<script type="text/javascript">
+	<link rel="stylesheet" href="../../themes/base/jquery.ui.all.css">
+	<script src="../../jquery-1.5.1.js"></script>
+	<script src="../../ui/jquery.ui.core.js"></script>
+	<script src="../../ui/jquery.ui.widget.js"></script>
+	<script src="../../ui/jquery.ui.tabs.js"></script>
+	<link rel="stylesheet" href="../demos.css">
+	<script>
 	$(function() {
-		$("#tabs").tabs();
-		$(".tabs-bottom .ui-tabs-nav, .tabs-bottom .ui-tabs-nav > *") 
- 		.removeClass("ui-corner-all ui-corner-top") 
-  		.addClass("ui-corner-bottom");
+		$( "#tabs" ).tabs();
+		$( ".tabs-bottom .ui-tabs-nav, .tabs-bottom .ui-tabs-nav > *" )
+			.removeClass( "ui-corner-all ui-corner-top" )
+			.addClass( "ui-corner-bottom" );
 	});
 	</script>
 	<style>
-		#tabs { height: 200px; } 
-		.tabs-bottom { position: relative; } 
-		.tabs-bottom .ui-tabs-panel { height: 140px; overflow: auto; } 
-		.tabs-bottom .ui-tabs-nav { position: absolute !important; left: 0; bottom: 0; right:0; padding: 0 0.2em 0.2em 0; } 
-		.tabs-bottom .ui-tabs-nav li { margin-top: -2px !important; margin-bottom: 1px !important; border-top: none; border-bottom-width: 1px; }
-		.ui-tabs-selected { margin-top: -3px !important; }
+	#tabs { height: 200px; } 
+	.tabs-bottom { position: relative; } 
+	.tabs-bottom .ui-tabs-panel { height: 140px; overflow: auto; } 
+	.tabs-bottom .ui-tabs-nav { position: absolute !important; left: 0; bottom: 0; right:0; padding: 0 0.2em 0.2em 0; } 
+	.tabs-bottom .ui-tabs-nav li { margin-top: -2px !important; margin-bottom: 1px !important; border-top: none; border-bottom-width: 1px; }
 	</style>
 </head>
 <body>
@@ -50,10 +49,10 @@
 
 </div><!-- End demo -->
 
+
+
 <div class="demo-description">
-
 <p>With some additional CSS (for positioning) and JS (to put the right classes on elements) the tabs can be placed below their content.</p>
-
 </div><!-- End demo-description -->
 
 </body>

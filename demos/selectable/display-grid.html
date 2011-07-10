@@ -1,30 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8" />
+	<meta charset="utf-8">
 	<title>jQuery UI Selectable - Display as grid</title>
-	<link type="text/css" href="../../themes/base/jquery.ui.all.css" rel="stylesheet" />
-	<script type="text/javascript" src="../../jquery-1.4.2.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.core.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.widget.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.mouse.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.selectable.js"></script>
-	<link type="text/css" href="../demos.css" rel="stylesheet" />
+	<link rel="stylesheet" href="../../themes/base/jquery.ui.all.css">
+	<script src="../../jquery-1.5.1.js"></script>
+	<script src="../../ui/jquery.ui.core.js"></script>
+	<script src="../../ui/jquery.ui.widget.js"></script>
+	<script src="../../ui/jquery.ui.mouse.js"></script>
+	<script src="../../ui/jquery.ui.selectable.js"></script>
+	<link rel="stylesheet" href="../demos.css">
 	
-	<style type="text/css">
+	<style>
 	#feedback { font-size: 1.4em; }
 	#selectable .ui-selecting { background: #FECA40; }
 	#selectable .ui-selected { background: #F39814; color: white; }
 	#selectable { list-style-type: none; margin: 0; padding: 0; }
 	#selectable li { margin: 3px; padding: 1px; float: left; width: 100px; height: 80px; font-size: 4em; text-align: center; }
 	</style>
-	<script type="text/javascript">
+	<script>
 	$(function() {
-		$("#selectable").selectable();
+		$( "#selectable" ).selectable();
 	});
 	</script>
 </head>
 <body>
+
 <div class="demo">
 
 <ol id="selectable">
@@ -44,10 +45,11 @@
 
 </div><!-- End demo -->
 
+
+
 <div class="demo-description">
-
 <p>To arrange selectable items as a grid, give them identical dimensions and float them using CSS.</p>
-
 </div><!-- End demo-description -->
+
 </body>
 </html>

@@ -1,31 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8" />
+	<meta charset="utf-8">
 	<title>jQuery UI Sortable - Handle empty lists</title>
-	<link type="text/css" href="../../themes/base/jquery.ui.all.css" rel="stylesheet" />
-	<script type="text/javascript" src="../../jquery-1.4.2.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.core.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.widget.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.mouse.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.sortable.js"></script>
-	<link type="text/css" href="../demos.css" rel="stylesheet" />
-	<style type="text/css">
+	<link rel="stylesheet" href="../../themes/base/jquery.ui.all.css">
+	<script src="../../jquery-1.5.1.js"></script>
+	<script src="../../ui/jquery.ui.core.js"></script>
+	<script src="../../ui/jquery.ui.widget.js"></script>
+	<script src="../../ui/jquery.ui.mouse.js"></script>
+	<script src="../../ui/jquery.ui.sortable.js"></script>
+	<link rel="stylesheet" href="../demos.css">
+	<style>
 	#sortable1, #sortable2, #sortable3 { list-style-type: none; margin: 0; padding: 0; float: left; margin-right: 10px; background: #eee; padding: 5px; width: 143px;}
 	#sortable1 li, #sortable2 li, #sortable3 li { margin: 5px; padding: 5px; font-size: 1.2em; width: 120px; }
 	</style>
-	<script type="text/javascript">
+	<script>
 	$(function() {
-		$("ul.droptrue").sortable({
-			connectWith: 'ul'
+		$( "ul.droptrue" ).sortable({
+			connectWith: "ul"
 		});
 
-		$("ul.dropfalse").sortable({
-			connectWith: 'ul',
+		$( "ul.dropfalse" ).sortable({
+			connectWith: "ul",
 			dropOnEmpty: false
 		});
 
-		$("#sortable1, #sortable2, #sortable3").disableSelection();
+		$( "#sortable1, #sortable2, #sortable3" ).disableSelection();
 	});
 	</script>
 </head>
@@ -55,14 +55,14 @@
 
 </div><!-- End demo -->
 
-<div class="demo-description">
 
+
+<div class="demo-description">
 <p>
 	Prevent all items in a list from being dropped into a separate, empty list
 	using the <code>dropOnEmpty</code> option set to <code>false</code>.  By default,
 	sortable items can be dropped on empty lists.
 </p>
-
 </div><!-- End demo-description -->
 
 </body>

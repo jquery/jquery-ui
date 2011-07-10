@@ -1,9 +1,9 @@
 /*
  * jQuery UI Resizable @VERSION
  *
- * Copyright (c) 2010 AUTHORS.txt (http://jqueryui.com/about)
- * Dual licensed under the MIT (MIT-LICENSE.txt)
- * and GPL (GPL-LICENSE.txt) licenses.
+ * Copyright 2011, AUTHORS.txt (http://jqueryui.com/about)
+ * Dual licensed under the MIT or GPL Version 2 licenses.
+ * http://jquery.org/license
  *
  * http://docs.jquery.com/UI/Resizables
  *
@@ -12,9 +12,10 @@
  *	jquery.ui.mouse.js
  *	jquery.ui.widget.js
  */
-(function($) {
+(function( $, undefined ) {
 
 $.widget("ui.resizable", $.ui.mouse, {
+	version: "@VERSION",
 	widgetEventPrefix: "resize",
 	options: {
 		alsoResize: false,
@@ -176,10 +177,12 @@ $.widget("ui.resizable", $.ui.mouse, {
 			$(this.element)
 				.addClass("ui-resizable-autohide")
 				.hover(function() {
+					if (o.disabled) return;
 					$(this).removeClass("ui-resizable-autohide");
 					self._handles.show();
 				},
 				function(){
+					if (o.disabled) return;
 					if (!self.resizing) {
 						$(this).addClass("ui-resizable-autohide");
 						self._handles.hide();
@@ -291,6 +294,8 @@ $.widget("ui.resizable", $.ui.mouse, {
 		// Calculate the attrs that will be change
 		var data = trigger.apply(this, [event, dx, dy]), ie6 = $.browser.msie && $.browser.version < 7, csdif = this.sizeDiff;
 
+		// Put this in the mouseDrag handler since the user can start pressing shift while resizing
+		this._updateVirtualBoundaries(event.shiftKey);
 		if (this._aspectRatio || event.shiftKey)
 			data = this._updateRatio(data, event);
 
@@ -322,10 +327,10 @@ $.widget("ui.resizable", $.ui.mouse, {
 
 		if(this._helper) {
 			var pr = this._proportionallyResizeElements, ista = pr.length && (/textarea/i).test(pr[0].nodeName),
-						soffseth = ista && $.ui.hasScroll(pr[0], 'left') /* TODO - jump height */ ? 0 : self.sizeDiff.height,
-							soffsetw = ista ? 0 : self.sizeDiff.width;
+				soffseth = ista && $.ui.hasScroll(pr[0], 'left') /* TODO - jump height */ ? 0 : self.sizeDiff.height,
+				soffsetw = ista ? 0 : self.sizeDiff.width;
 
-			var s = { width: (self.size.width - soffsetw), height: (self.size.height - soffseth) },
+			var s = { width: (self.helper.width()  - soffsetw), height: (self.helper.height() - soffseth) },
 				left = (parseInt(self.element.css('left'), 10) + (self.position.left - self.originalPosition.left)) || null,
 				top = (parseInt(self.element.css('top'), 10) + (self.position.top - self.originalPosition.top)) || null;
 
@@ -349,6 +354,32 @@ $.widget("ui.resizable", $.ui.mouse, {
 
 	},
 
+    _updateVirtualBoundaries: function(forceAspectRatio) {
+        var o = this.options, pMinWidth, pMaxWidth, pMinHeight, pMaxHeight, b;
+
+        b = {
+            minWidth: isNumber(o.minWidth) ? o.minWidth : 0,
+            maxWidth: isNumber(o.maxWidth) ? o.maxWidth : Infinity,
+            minHeight: isNumber(o.minHeight) ? o.minHeight : 0,
+            maxHeight: isNumber(o.maxHeight) ? o.maxHeight : Infinity
+        };
+
+        if(this._aspectRatio || forceAspectRatio) {
+            // We want to create an enclosing box whose aspect ration is the requested one
+            // First, compute the "projected" size for each dimension based on the aspect ratio and other dimension
+            pMinWidth = b.minHeight * this.aspectRatio;
+            pMinHeight = b.minWidth / this.aspectRatio;
+            pMaxWidth = b.maxHeight * this.aspectRatio;
+            pMaxHeight = b.maxWidth / this.aspectRatio;
+
+            if(pMinWidth > b.minWidth) b.minWidth = pMinWidth;
+            if(pMinHeight > b.minHeight) b.minHeight = pMinHeight;
+            if(pMaxWidth < b.maxWidth) b.maxWidth = pMaxWidth;
+            if(pMaxHeight < b.maxHeight) b.maxHeight = pMaxHeight;
+        }
+        this._vBoundaries = b;
+    },
+
 	_updateCache: function(data) {
 		var o = this.options;
 		this.offset = this.helper.offset();
@@ -362,8 +393,8 @@ $.widget("ui.resizable", $.ui.mouse, {
 
 		var o = this.options, cpos = this.position, csize = this.size, a = this.axis;
 
-		if (data.height) data.width = (csize.height * this.aspectRatio);
-		else if (data.width) data.height = (csize.width / this.aspectRatio);
+		if (isNumber(data.height)) data.width = (data.height * this.aspectRatio);
+		else if (isNumber(data.width)) data.height = (data.width / this.aspectRatio);
 
 		if (a == 'sw') {
 			data.left = cpos.left + (csize.width - data.width);
@@ -379,7 +410,7 @@ $.widget("ui.resizable", $.ui.mouse, {
 
 	_respectSize: function(data, event) {
 
-		var el = this.helper, o = this.options, pRatio = this._aspectRatio || event.shiftKey, a = this.axis,
+		var el = this.helper, o = this._vBoundaries, pRatio = this._aspectRatio || event.shiftKey, a = this.axis,
 				ismaxw = isNumber(data.width) && o.maxWidth && (o.maxWidth < data.width), ismaxh = isNumber(data.height) && o.maxHeight && (o.maxHeight < data.height),
 					isminw = isNumber(data.width) && o.minWidth && (o.minWidth > data.width), isminh = isNumber(data.height) && o.minHeight && (o.minHeight > data.height);
 
@@ -518,38 +549,35 @@ $.widget("ui.resizable", $.ui.mouse, {
 
 });
 
-$.extend($.ui.resizable, {
-	version: "@VERSION"
-});
-
 /*
  * Resizable Extensions
  */
 
 $.ui.plugin.add("resizable", "alsoResize", {
 
-	start: function(event, ui) {
-
+	start: function (event, ui) {
 		var self = $(this).data("resizable"), o = self.options;
 
-		var _store = function(exp) {
+		var _store = function (exp) {
 			$(exp).each(function() {
-				$(this).data("resizable-alsoresize", {
-					width: parseInt($(this).width(), 10), height: parseInt($(this).height(), 10),
-					left: parseInt($(this).css('left'), 10), top: parseInt($(this).css('top'), 10)
+				var el = $(this);
+				el.data("resizable-alsoresize", {
+					width: parseInt(el.width(), 10), height: parseInt(el.height(), 10),
+					left: parseInt(el.css('left'), 10), top: parseInt(el.css('top'), 10),
+					position: el.css('position') // to reset Opera on stop()
 				});
 			});
 		};
 
 		if (typeof(o.alsoResize) == 'object' && !o.alsoResize.parentNode) {
-			if (o.alsoResize.length) { o.alsoResize = o.alsoResize[0];	_store(o.alsoResize); }
-			else { $.each(o.alsoResize, function(exp, c) { _store(exp); }); }
+			if (o.alsoResize.length) { o.alsoResize = o.alsoResize[0]; _store(o.alsoResize); }
+			else { $.each(o.alsoResize, function (exp) { _store(exp); }); }
 		}else{
 			_store(o.alsoResize);
 		}
 	},
 
-	resize: function(event, ui){
+	resize: function (event, ui) {
 		var self = $(this).data("resizable"), o = self.options, os = self.originalSize, op = self.originalPosition;
 
 		var delta = {
@@ -557,18 +585,19 @@ $.ui.plugin.add("resizable", "alsoResize", {
 			top: (self.position.top - op.top) || 0, left: (self.position.left - op.left) || 0
 		},
 
-		_alsoResize = function(exp, c) {
+		_alsoResize = function (exp, c) {
 			$(exp).each(function() {
-				var el = $(this), start = $(this).data("resizable-alsoresize"), style = {}, css = c && c.length ? c : ['width', 'height', 'top', 'left'];
+				var el = $(this), start = $(this).data("resizable-alsoresize"), style = {}, 
+					css = c && c.length ? c : el.parents(ui.originalElement[0]).length ? ['width', 'height'] : ['width', 'height', 'top', 'left'];
 
-				$.each(css || ['width', 'height', 'top', 'left'], function(i, prop) {
+				$.each(css, function (i, prop) {
 					var sum = (start[prop]||0) + (delta[prop]||0);
 					if (sum && sum >= 0)
 						style[prop] = sum || null;
 				});
 
-				//Opera fixing relative position
-				if (/relative/.test(el.css('position')) && $.browser.opera) {
+				// Opera fixing relative position
+				if ($.browser.opera && /relative/.test(el.css('position'))) {
 					self._revertToRelativePosition = true;
 					el.css({ position: 'absolute', top: 'auto', left: 'auto' });
 				}
@@ -578,22 +607,33 @@ $.ui.plugin.add("resizable", "alsoResize", {
 		};
 
 		if (typeof(o.alsoResize) == 'object' && !o.alsoResize.nodeType) {
-			$.each(o.alsoResize, function(exp, c) { _alsoResize(exp, c); });
+			$.each(o.alsoResize, function (exp, c) { _alsoResize(exp, c); });
 		}else{
 			_alsoResize(o.alsoResize);
 		}
 	},
 
-	stop: function(event, ui){
-		var self = $(this).data("resizable");
+	stop: function (event, ui) {
+		var self = $(this).data("resizable"), o = self.options;
 
-		//Opera fixing relative position
-		if (self._revertToRelativePosition && $.browser.opera) {
+		var _reset = function (exp) {
+			$(exp).each(function() {
+				var el = $(this);
+				// reset position for Opera - no need to verify it was changed
+				el.css({ position: el.data("resizable-alsoresize").position });
+			});
+		};
+
+		if (self._revertToRelativePosition) {
 			self._revertToRelativePosition = false;
-			el.css({ position: 'relative' });
+			if (typeof(o.alsoResize) == 'object' && !o.alsoResize.nodeType) {
+				$.each(o.alsoResize, function (exp) { _reset(exp); });
+			}else{
+				_reset(o.alsoResize);
+			}
 		}
 
-		$(this).removeData("resizable-alsoresize-start");
+		$(this).removeData("resizable-alsoresize");
 	}
 });
 

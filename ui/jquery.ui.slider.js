@@ -1,9 +1,9 @@
 /*
  * jQuery UI Slider @VERSION
  *
- * Copyright (c) 2010 AUTHORS.txt (http://jqueryui.com/about)
- * Dual licensed under the MIT (MIT-LICENSE.txt)
- * and GPL (GPL-LICENSE.txt) licenses.
+ * Copyright 2011, AUTHORS.txt (http://jqueryui.com/about)
+ * Dual licensed under the MIT or GPL Version 2 licenses.
+ * http://jquery.org/license
  *
  * http://docs.jquery.com/UI/Slider
  *
@@ -12,15 +12,14 @@
  *	jquery.ui.mouse.js
  *	jquery.ui.widget.js
  */
-
-(function( $ ) {
+(function( $, undefined ) {
 
 // number of pages in a slider
 // (how many times can you page up/down to go through the whole range)
 var numPages = 5;
 
 $.widget( "ui.slider", $.ui.mouse, {
-
+	version: "@VERSION",
 	widgetEventPrefix: "slide",
 
 	options: {
@@ -37,7 +36,11 @@ $.widget( "ui.slider", $.ui.mouse, {
 
 	_create: function() {
 		var self = this,
-			o = this.options;
+			o = this.options,
+			existingHandles = this.element.find( ".ui-slider-handle" ).addClass( "ui-state-default ui-corner-all" ),
+			handle = "<a class='ui-slider-handle ui-state-default ui-corner-all' href='#'></a>",
+			handleCount = ( o.values && o.values.length ) || 1,
+			handles = [];
 
 		this._keySliding = false;
 		this._mouseSliding = false;
@@ -51,57 +54,35 @@ $.widget( "ui.slider", $.ui.mouse, {
 				" ui-slider-" + this.orientation +
 				" ui-widget" +
 				" ui-widget-content" +
-				" ui-corner-all" );
-		
-		if ( o.disabled ) {
-			this.element.addClass( "ui-slider-disabled ui-disabled" );
-		}
+				" ui-corner-all" +
+				( o.disabled ? " ui-slider-disabled ui-disabled" : "" ) );
 
 		this.range = $([]);
 
 		if ( o.range ) {
 			if ( o.range === true ) {
-				this.range = $( "<div></div>" );
 				if ( !o.values ) {
 					o.values = [ this._valueMin(), this._valueMin() ];
 				}
 				if ( o.values.length && o.values.length !== 2 ) {
 					o.values = [ o.values[0], o.values[0] ];
 				}
-			} else {
-				this.range = $( "<div></div>" );
 			}
 
-			this.range
+			this.range = $( "<div></div>" )
 				.appendTo( this.element )
-				.addClass( "ui-slider-range" );
-
-			if ( o.range === "min" || o.range === "max" ) {
-				this.range.addClass( "ui-slider-range-" + o.range );
-			}
-
-			// note: this isn't the most fittingly semantic framework class for this element,
-			// but worked best visually with a variety of themes
-			this.range.addClass( "ui-widget-header" );
+				.addClass( "ui-slider-range" +
+				// note: this isn't the most fittingly semantic framework class for this element,
+				// but worked best visually with a variety of themes
+				" ui-widget-header" + 
+				( ( o.range === "min" || o.range === "max" ) ? " ui-slider-range-" + o.range : "" ) );
 		}
 
-		if ( $( ".ui-slider-handle", this.element ).length === 0 ) {
-			$( "<a href='#'></a>" )
-				.appendTo( this.element )
-				.addClass( "ui-slider-handle" );
+		for ( var i = existingHandles.length; i < handleCount; i += 1 ) {
+			handles.push( handle );
 		}
 
-		if ( o.values && o.values.length ) {
-			while ( $(".ui-slider-handle", this.element).length < o.values.length ) {
-				$( "<a href='#'></a>" )
-					.appendTo( this.element )
-					.addClass( "ui-slider-handle" );
-			}
-		}
-
-		this.handles = $( ".ui-slider-handle", this.element )
-			.addClass( "ui-state-default" +
-				" ui-corner-all" );
+		this.handles = existingHandles.add( $( handles.join( "" ) ).appendTo( self.element ) );
 
 		this.handle = this.handles.eq( 0 );
 
@@ -181,24 +162,24 @@ $.widget( "ui.slider", $.ui.mouse, {
 						newVal = self._valueMax();
 						break;
 					case $.ui.keyCode.PAGE_UP:
-						newVal = curVal + ( (self._valueMax() - self._valueMin()) / numPages );
+						newVal = self._trimAlignValue( curVal + ( (self._valueMax() - self._valueMin()) / numPages ) );
 						break;
 					case $.ui.keyCode.PAGE_DOWN:
-						newVal = curVal - ( (self._valueMax() - self._valueMin()) / numPages );
+						newVal = self._trimAlignValue( curVal - ( (self._valueMax() - self._valueMin()) / numPages ) );
 						break;
 					case $.ui.keyCode.UP:
 					case $.ui.keyCode.RIGHT:
 						if ( curVal === self._valueMax() ) {
 							return;
 						}
-						newVal = curVal + step;
+						newVal = self._trimAlignValue( curVal + step );
 						break;
 					case $.ui.keyCode.DOWN:
 					case $.ui.keyCode.LEFT:
 						if ( curVal === self._valueMin() ) {
 							return;
 						}
-						newVal = curVal - step;
+						newVal = self._trimAlignValue( curVal - step );
 						break;
 				}
 	
@@ -310,8 +291,9 @@ $.widget( "ui.slider", $.ui.mouse, {
 				( parseInt( closestHandle.css("marginTop"), 10 ) || 0)
 		};
 
-		normValue = this._normValueFromMouse( position );
-		this._slide( event, index, normValue );
+		if ( !this.handles.hasClass( "ui-state-hover" ) ) {
+			this._slide( event, index, normValue );
+		}
 		this._animateOff = true;
 		return true;
 	},
@@ -466,6 +448,7 @@ $.widget( "ui.slider", $.ui.mouse, {
 			this.options.value = this._trimAlignValue( newValue );
 			this._refreshValue();
 			this._change( null, 0 );
+			return;
 		}
 
 		return this._value();
@@ -480,6 +463,7 @@ $.widget( "ui.slider", $.ui.mouse, {
 			this.options.values[ index ] = this._trimAlignValue( newValue );
 			this._refreshValue();
 			this._change( null, index );
+			return;
 		}
 
 		if ( arguments.length ) {
@@ -585,18 +569,18 @@ $.widget( "ui.slider", $.ui.mouse, {
 	
 	// returns the step-aligned value that val is closest to, between (inclusive) min and max
 	_trimAlignValue: function( val ) {
-		if ( val < this._valueMin() ) {
+		if ( val <= this._valueMin() ) {
 			return this._valueMin();
 		}
-		if ( val > this._valueMax() ) {
+		if ( val >= this._valueMax() ) {
 			return this._valueMax();
 		}
-		var step = this.options.step,
-			valModStep = val % step,
+		var step = ( this.options.step > 0 ) ? this.options.step : 1,
+			valModStep = (val - this._valueMin()) % step,
 			alignValue = val - valModStep;
 
-		if ( valModStep >= ( step / 2 ) ) {
-			alignValue += step;
+		if ( Math.abs(valModStep) * 2 >= step ) {
+			alignValue += ( valModStep > 0 ) ? step : ( -step );
 		}
 
 		// Since JavaScript has problems with large floats, round
@@ -673,10 +657,6 @@ $.widget( "ui.slider", $.ui.mouse, {
 		}
 	}
 
-});
-
-$.extend( $.ui.slider, {
-	version: "@VERSION"
 });
 
 }(jQuery));

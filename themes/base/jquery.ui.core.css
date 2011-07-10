@@ -1,13 +1,17 @@
 /*
-* jQuery UI CSS Framework
-* Copyright (c) 2010 AUTHORS.txt (http://jqueryui.com/about)
-* Dual licensed under the MIT (MIT-LICENSE.txt) and GPL (GPL-LICENSE.txt) licenses.
-*/
+ * jQuery UI CSS Framework @VERSION
+ *
+ * Copyright 2011, AUTHORS.txt (http://jqueryui.com/about)
+ * Dual licensed under the MIT or GPL Version 2 licenses.
+ * http://jquery.org/license
+ *
+ * http://docs.jquery.com/UI/Theming/API
+ */
 
 /* Layout helpers
 ----------------------------------*/
 .ui-helper-hidden { display: none; }
-.ui-helper-hidden-accessible { position: absolute; left: -99999999px; }
+.ui-helper-hidden-accessible { position: absolute !important; clip: rect(1px 1px 1px 1px); clip: rect(1px,1px,1px,1px); }
 .ui-helper-reset { margin: 0; padding: 0; border: 0; outline: 0; line-height: 1.3; text-decoration: none; font-size: 100%; list-style: none; }
 .ui-helper-clearfix:after { content: "."; display: block; height: 0; clear: both; visibility: hidden; }
 .ui-helper-clearfix { display: inline-block; }

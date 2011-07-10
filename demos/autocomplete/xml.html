@@ -1,42 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8" />
-	<title>jQuery UI Autocomplete Remote datasource demo</title>
-	<link type="text/css" href="../../themes/base/jquery.ui.all.css" rel="stylesheet" />
-	<script type="text/javascript" src="../../jquery-1.4.2.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.core.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.widget.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.position.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.autocomplete.js"></script>
-	<link type="text/css" href="../demos.css" rel="stylesheet" />
-	<script type="text/javascript">
+	<meta charset="utf-8">
+	<title>jQuery UI Autocomplete - XML data parsed once</title>
+	<link rel="stylesheet" href="../../themes/base/jquery.ui.all.css">
+	<script src="../../jquery-1.5.1.js"></script>
+	<script src="../../ui/jquery.ui.core.js"></script>
+	<script src="../../ui/jquery.ui.widget.js"></script>
+	<script src="../../ui/jquery.ui.position.js"></script>
+	<script src="../../ui/jquery.ui.menu.js"></script>
+	<script src="../../ui/jquery.ui.autocomplete.js"></script>
+	<link rel="stylesheet" href="../demos.css">
+	<style>
+	.ui-autocomplete-loading { background: white url('images/ui-anim_basic_16x16.gif') right center no-repeat; }
+	</style>
+	<script>
 	$(function() {
-		function log(message) {
-			$("<div/>").text(message).prependTo("#log");
-			$("#log").attr("scrollTop", 0);
+		function log( message ) {
+			$( "<div/>" ).text( message ).prependTo( "#log" );
+			$( "#log" ).attr( "scrollTop", 0 );
 		}
-		
+
 		$.ajax({
 			url: "london.xml",
 			dataType: "xml",
-			success: function(xmlResponse) {
-				var data = $("geoname", xmlResponse).map(function() {
+			success: function( xmlResponse ) {
+				var data = $( "geoname", xmlResponse ).map(function() {
 					return {
-						value: $("name", this).text() + ", " + ($.trim($("countryName", this).text()) || "(unknown country)"),
-						id: $("geonameId", this).text()
+						value: $( "name", this ).text() + ", " +
+							( $.trim( $( "countryName", this ).text() ) || "(unknown country)" ),
+						id: $( "geonameId", this ).text()
 					};
 				}).get();
-				$("#birds").autocomplete({
+				$( "#birds" ).autocomplete({
 					source: data,
 					minLength: 0,
-					select: function(event, ui) {
-						log(ui.item ? ("Selected: " + ui.item.value + ", geonameId: " + ui.item.id) : "Nothing selected, input was " + this.value);
+					select: function( event, ui ) {
+						log( ui.item ?
+							"Selected: " + ui.item.value + ", geonameId: " + ui.item.id :
+							"Nothing selected, input was " + this.value );
 					}
 				});
 			}
-		})
-		
+		});
 	});
 	</script>
 </head>
@@ -56,13 +62,11 @@
 
 </div><!-- End demo -->
 
+
+
 <div class="demo-description">
-<p>
-This demo shows how to retrieve some XML data, parse it using jQuery's methods, then provide it to the autocomplete as the datasource.
-</p>
-<p>
-This should also serve as a reference on how to parse a remote XML datasource - the parsing would just happen for each request within the source-callback.
-</p>
+<p>This demo shows how to retrieve some XML data, parse it using jQuery's methods, then provide it to the autocomplete as the datasource.</p>
+<p>This should also serve as a reference on how to parse a remote XML datasource - the parsing would just happen for each request within the source-callback.</p>
 </div><!-- End demo-description -->
 
 </body>

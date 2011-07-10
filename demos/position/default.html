@@ -1,28 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8" />
+	<meta charset="utf-8">
 	<title>jQuery UI Position - Default functionality</title>
-	<link type="text/css" href="../../themes/base/jquery.ui.all.css" rel="stylesheet" />
-	<script type="text/javascript" src="../../jquery-1.4.2.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.core.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.widget.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.mouse.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.draggable.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.position.js"></script>
-	<link type="text/css" href="../demos.css" rel="stylesheet" />
-	<style type="text/css">
-
+	<link rel="stylesheet" href="../../themes/base/jquery.ui.all.css">
+	<script src="../../jquery-1.5.1.js"></script>
+	<script src="../../ui/jquery.ui.core.js"></script>
+	<script src="../../ui/jquery.ui.widget.js"></script>
+	<script src="../../ui/jquery.ui.mouse.js"></script>
+	<script src="../../ui/jquery.ui.draggable.js"></script>
+	<script src="../../ui/jquery.ui.position.js"></script>
+	<link rel="stylesheet" href="../demos.css">
+	<style>
 	div#parent {
 		width: 60%;
 		margin: 10px auto;
 		padding: 5px;
-		
 		border: 1px solid #777;
 		background-color: #fbca93;
 		text-align: center;
 	}
-
 	div.positionable {
 		width: 75px;
 		height: 75px;
@@ -33,49 +30,46 @@
 		background-color: #bcd5e6;
 		text-align: center;
 	}
-
 	select, input {
 		margin-left: 15px;
 	}
-
 	</style>
-	<script type="text/javascript">
+	<script>
 	$(function() {
-		
-		function position(using) {
-			$('.positionable').position({
-				of: $('#parent'),
-				my: $('#my_horizontal').val() + ' ' + $('#my_vertical').val(),
-				at: $('#at_horizontal').val() + ' '+ $('#at_vertical').val(),
-				offset: $('#offset').val(),
+		function position( using ) {
+			$( ".positionable" ).position({
+				of: $( "#parent" ),
+				my: $( "#my_horizontal" ).val() + " " + $( "#my_vertical" ).val(),
+				at: $( "#at_horizontal" ).val() + " " + $( "#at_vertical" ).val(),
+				offset: $( "#offset" ).val(),
 				using: using,
-				collision: $("#collision_horizontal").val() + ' ' + $("#collision_vertical").val()
+				collision: $( "#collision_horizontal" ).val() + ' ' + $( "#collision_vertical" ).val()
 			});
 		}
-		
-		$('.positionable').css("opacity", 0.5);
-		
-		$(':input').bind('click keyup change', function() { position(); });
-		
-		$("#parent").draggable({
+
+		$( ".positionable" ).css( "opacity", 0.5 );
+
+		$( ":input" ).bind( "click keyup change", function() { position(); });
+
+		$( "#parent" ).draggable({
 			drag: function() { position(); }
 		});
-		
-		$('.positionable').draggable({
-			drag: function(event, ui) {
+
+		$( ".positionable" ).draggable({
+			drag: function( event, ui ) {
 				// reset offset before calculating it
-				$("#offset").val("0");
-				position(function(result) {
-					$("#offset").val("" + (ui.offset.left - result.left) + " " + (ui.offset.top - result.top));
+				$( "#offset" ).val( "0" );
+				position(function( result ) {
+					$( "#offset" ).val( "" + ( ui.offset.left - result.left ) +
+						" " + ( ui.offset.top - result.top ) );
 					position();
 				});
 			}
 		});
-		
+
 		position();
 	});
 	</script>
-	
 </head>
 <body>
 
@@ -148,11 +142,11 @@
 
 </div><!-- End demo -->
 
-<div class="demo-description">
 
+
+<div class="demo-description">
 <p>Use the form controls to configure the positioning, or drag the positioned element to modify its offset.
 <br/>Drag around the parent element to see collision detection in action.</p>
-
 </div><!-- End demo-description -->
 
 </body>

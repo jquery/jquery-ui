@@ -9,7 +9,7 @@
 		#toolbar { margin-top: 2em; padding:0.2em; }
 		#ops1, #ops2, #format, #mode { margin-right: 1em }
 	</style>
-	<script type="text/javascript" src="../../../jquery-1.4.2.js"></script>
+	<script type="text/javascript" src="../../../jquery-1.5.1.js"></script>
 	<script type="text/javascript" src="../../../external/jquery.metadata.js"></script>
 	<script type="text/javascript" src="../../../ui/jquery.ui.core.js"></script>
 	<script type="text/javascript" src="../../../ui/jquery.ui.widget.js"></script>
@@ -58,9 +58,10 @@
 	<div>
 		With icon
 		<button class="{button:{icons:{primary:'ui-icon-locked'},text:false}}">Button with icon only</button>
-		<button class="{button:{icons:{primary:'ui-icon-locked'}}}">Button with icon on the left</button>
-		<button class="{button:{icons:{primary:'ui-icon-gear',secondary:'ui-icon-triangle-1-s'}}}">Button with two icons</button>
-		<button class="{button:{icons:{primary:'ui-icon-gear',secondary:'ui-icon-triangle-1-s'},text:false}}">Button with two icons</button>
+		<button class="{button:{icons:{primary:'ui-icon-locked'}}}">Primary icon</button>
+		<button class="{button:{icons:{secondary:'ui-icon-triangle-1-s'}}}">Secondary icon</button>
+		<button class="{button:{icons:{primary:'ui-icon-gear',secondary:'ui-icon-triangle-1-s'}}}">Both icons</button>
+		<button class="{button:{icons:{primary:'ui-icon-gear',secondary:'ui-icon-triangle-1-s'},text:false}}">Button with two icons and no text</button>
 	</div>
 </div>
 

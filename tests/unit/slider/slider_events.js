@@ -72,7 +72,7 @@ test( "programmatic event triggers", function() {
 		})
 		.slider( "value", 0 );
 
-	reset();
+	QUnit.reset();
 	// Test values method
 	el = $( "<div></div>" )
 		.slider({
@@ -83,7 +83,7 @@ test( "programmatic event triggers", function() {
 		})
 		.slider( "values", [80, 90] );
 
-	reset();
+	QUnit.reset();
 	// Test value option
 	el = $( "<div></div>" )
 		.slider({
@@ -93,7 +93,7 @@ test( "programmatic event triggers", function() {
 		})
 		.slider( "option", "value", 0 );
 
-	reset();
+	QUnit.reset();
 	// Test values option
 	el = $( "<div></div>" )
 		.slider({

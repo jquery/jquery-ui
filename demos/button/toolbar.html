@@ -1,86 +1,86 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8" />
-	<title>jQuery UI Button - Toolbar demo</title>
-	<link type="text/css" href="../../themes/base/jquery.ui.all.css" rel="stylesheet" />
-	<script type="text/javascript" src="../../jquery-1.4.2.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.core.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.widget.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.button.js"></script>
-	<link type="text/css" href="../demos.css" rel="stylesheet" />
-	<style type="text/css">
+	<meta charset="utf-8">
+	<title>jQuery UI Button - Toolbar</title>
+	<link rel="stylesheet" href="../../themes/base/jquery.ui.all.css">
+	<script src="../../jquery-1.5.1.js"></script>
+	<script src="../../ui/jquery.ui.core.js"></script>
+	<script src="../../ui/jquery.ui.widget.js"></script>
+	<script src="../../ui/jquery.ui.button.js"></script>
+	<link rel="stylesheet" href="../demos.css">
+	<style>
 	#toolbar {
 		padding: 10px 4px;
 	}
 	</style>
-	<script type="text/javascript">
+	<script>
 	$(function() {
-		$('#beginning').button({
+		$( "#beginning" ).button({
 			text: false,
 			icons: {
-				primary: 'ui-icon-seek-start'
+				primary: "ui-icon-seek-start"
 			}
 		});
-		$('#rewind').button({
+		$( "#rewind" ).button({
 			text: false,
 			icons: {
-				primary: 'ui-icon-seek-prev'
+				primary: "ui-icon-seek-prev"
 			}
 		});
-		$('#play').button({
+		$( "#play" ).button({
 			text: false,
 			icons: {
-				primary: 'ui-icon-play'
+				primary: "ui-icon-play"
 			}
 		})
 		.click(function() {
 			var options;
-			if ($(this).text() == 'play') {
+			if ( $( this ).text() === "play" ) {
 				options = {
-					label: 'pause',
+					label: "pause",
 					icons: {
-						primary: 'ui-icon-pause'
+						primary: "ui-icon-pause"
 					}
 				};
 			} else {
 				options = {
-					label: 'play',
+					label: "play",
 					icons: {
-						primary: 'ui-icon-play'
+						primary: "ui-icon-play"
 					}
 				};
 			}
-			$(this).button('option', options);
+			$( this ).button( "option", options );
 		});
-		$('#stop').button({
+		$( "#stop" ).button({
 			text: false,
 			icons: {
-				primary: 'ui-icon-stop'
+				primary: "ui-icon-stop"
 			}
 		})
 		.click(function() {
-			$('#play').button('option', {
-				label: 'play',
+			$( "#play" ).button( "option", {
+				label: "play",
 				icons: {
-					primary: 'ui-icon-play'
+					primary: "ui-icon-play"
 				}
 			});
 		});
-		$('#forward').button({
+		$( "#forward" ).button({
 			text: false,
 			icons: {
-				primary: 'ui-icon-seek-next'
+				primary: "ui-icon-seek-next"
 			}
 		});
-		$('#end').button({
+		$( "#end" ).button({
 			text: false,
 			icons: {
-				primary: 'ui-icon-seek-end'
+				primary: "ui-icon-seek-end"
 			}
 		});
-		$("#shuffle").button();
-		$("#repeat").buttonset();
+		$( "#shuffle" ).button();
+		$( "#repeat" ).buttonset();
 	});
 	</script>
 </head>
@@ -88,37 +88,33 @@
 
 <div class="demo">
 
-	<span id="toolbar" class="ui-widget-header ui-corner-all">
-		<button id="beginning">go to beginning</button>
-		<button id="rewind">rewind</button>
-		<button id="play">play</button>
-		<button id="stop">stop</button>
-		<button id="forward">fast forward</button>
-		<button id="end">go to end</button>
-		
-		<input type="checkbox" id="shuffle" /><label for="shuffle">Shuffle</label>
-		
-		<span id="repeat">
-			<input type="radio" id="repeat0" name="repeat" checked="checked" /><label for="repeat0">No Repeat</label>
-			<input type="radio" id="repeat1" name="repeat" /><label for="repeat1">Once</label>
-			<input type="radio" id="repeatall" name="repeat" /><label for="repeatall">All</label>
-		</span>
+<span id="toolbar" class="ui-widget-header ui-corner-all">
+	<button id="beginning">go to beginning</button>
+	<button id="rewind">rewind</button>
+	<button id="play">play</button>
+	<button id="stop">stop</button>
+	<button id="forward">fast forward</button>
+	<button id="end">go to end</button>
+	
+	<input type="checkbox" id="shuffle" /><label for="shuffle">Shuffle</label>
+	
+	<span id="repeat">
+		<input type="radio" id="repeat0" name="repeat" checked="checked" /><label for="repeat0">No Repeat</label>
+		<input type="radio" id="repeat1" name="repeat" /><label for="repeat1">Once</label>
+		<input type="radio" id="repeatall" name="repeat" /><label for="repeatall">All</label>
 	</span>
+</span>
 
 </div><!-- End demo -->
 
 
 
 <div class="demo-description">
-
 <p>
 	A mediaplayer toolbar. Take a look at the underlying markup: A few button elements,
 	an input of type checkbox for the Shuffle button, and three inputs of type radio for the Repeat options. 
 </p>
-
 </div><!-- End demo-description -->
-
-
 
 </body>
 </html>

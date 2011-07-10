@@ -1,31 +1,35 @@
 /*
  * jQuery UI Effects Fade @VERSION
  *
- * Copyright (c) 2010 AUTHORS.txt (http://jqueryui.com/about)
- * Dual licensed under the MIT (MIT-LICENSE.txt)
- * and GPL (GPL-LICENSE.txt) licenses.
+ * Copyright 2011, AUTHORS.txt (http://jqueryui.com/about)
+ * Dual licensed under the MIT or GPL Version 2 licenses.
+ * http://jquery.org/license
  *
  * http://docs.jquery.com/UI/Effects/Fade
  *
  * Depends:
  *	jquery.effects.core.js
  */
-(function($) {
+(function( $, undefined ) {
 
-$.effects.fade = function(o) {
-	return this.queue(function() {
-		var elem = $(this),
-			mode = $.effects.setMode(elem, o.options.mode || 'hide');
+$.effects.effect.fade = function( o, done ) {
+	var el = $( this ),
+		mode = $.effects.setMode( el, o.mode || "toggle" ),
+		hide = mode === "hide";
 
-		elem.animate({ opacity: mode }, {
-			queue: false,
-			duration: o.duration,
-			easing: o.options.easing,
-			complete: function() {
-				(o.callback && o.callback.apply(this, arguments));
-				elem.dequeue();
+	el.show();
+	el.animate({ 
+		opacity: hide ? 0 : 1
+	}, {
+		queue: false,
+		duration: o.duration,
+		easing: o.easing,
+		complete: function() {
+			if ( hide ) {
+				el.hide();
 			}
-		});
+			done();
+		}
 	});
 };
 

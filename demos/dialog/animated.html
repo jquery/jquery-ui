@@ -1,34 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8" />
+	<meta charset="utf-8">
 	<title>jQuery UI Dialog - Animation</title>
-	<link type="text/css" href="../../themes/base/jquery.ui.all.css" rel="stylesheet" />
-	<script type="text/javascript" src="../../jquery-1.4.2.js"></script>
-	<script type="text/javascript" src="../../external/jquery.bgiframe-2.1.1.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.core.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.widget.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.mouse.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.draggable.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.position.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.resizable.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.dialog.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.effects.core.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.effects.blind.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.effects.explode.js"></script>
-	<link type="text/css" href="../demos.css" rel="stylesheet" />
-	<script type="text/javascript">
+	<link rel="stylesheet" href="../../themes/base/jquery.ui.all.css">
+	<script src="../../jquery-1.5.1.js"></script>
+	<script src="../../external/jquery.bgiframe-2.1.2.js"></script>
+	<script src="../../ui/jquery.ui.core.js"></script>
+	<script src="../../ui/jquery.ui.widget.js"></script>
+	<script src="../../ui/jquery.ui.mouse.js"></script>
+	<script src="../../ui/jquery.ui.draggable.js"></script>
+	<script src="../../ui/jquery.ui.position.js"></script>
+	<script src="../../ui/jquery.ui.resizable.js"></script>
+	<script src="../../ui/jquery.ui.dialog.js"></script>
+	<script src="../../ui/jquery.effects.core.js"></script>
+	<script src="../../ui/jquery.effects.blind.js"></script>
+	<script src="../../ui/jquery.effects.explode.js"></script>
+	<link rel="stylesheet" href="../demos.css">
+	<script>
 	// increase the default animation speed to exaggerate the effect
 	$.fx.speeds._default = 1000;
 	$(function() {
-		$('#dialog').dialog({
+		$( "#dialog" ).dialog({
 			autoOpen: false,
-			show: 'blind',
-			hide: 'explode'
+			show: "blind",
+			hide: "explode"
 		});
-		
-		$('#opener').click(function() {
-			$('#dialog').dialog('open');
+
+		$( "#opener" ).click(function() {
+			$( "#dialog" ).dialog( "open" );
 			return false;
 		});
 	});
@@ -46,10 +46,10 @@
 
 </div><!-- End demo -->
 
+
+
 <div class="demo-description">
-
 <p>Dialogs may be animated by specifying an effect for the show and/or hide properties.  You must include the individual effects file for any effects you would like to use.</p>
-
 </div><!-- End demo-description -->
 
 </body>

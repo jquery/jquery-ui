@@ -1,18 +1,24 @@
 /*!
  * jQuery UI Mouse @VERSION
  *
- * Copyright (c) 2010 AUTHORS.txt (http://jqueryui.com/about)
- * Dual licensed under the MIT (MIT-LICENSE.txt)
- * and GPL (GPL-LICENSE.txt) licenses.
+ * Copyright 2011, AUTHORS.txt (http://jqueryui.com/about)
+ * Dual licensed under the MIT or GPL Version 2 licenses.
+ * http://jquery.org/license
  *
  * http://docs.jquery.com/UI/Mouse
  *
  * Depends:
  *	jquery.ui.widget.js
  */
-(function($) {
+(function( $, undefined ) {
+
+var mouseHandled = false;
+$(document).mousedown(function(e) {
+	mouseHandled = false;
+});
 
 $.widget("ui.mouse", {
+	version: "@VERSION",
 	options: {
 		cancel: ':input,option',
 		distance: 1,
@@ -26,8 +32,8 @@ $.widget("ui.mouse", {
 				return self._mouseDown(event);
 			})
 			.bind('click.'+this.widgetName, function(event) {
-				if(self._preventClickEvent) {
-					self._preventClickEvent = false;
+				if (true === $.data(event.target, self.widgetName + '.preventClickEvent')) {
+				    $.removeData(event.target, self.widgetName + '.preventClickEvent');
 					event.stopImmediatePropagation();
 					return false;
 				}
@@ -44,9 +50,7 @@ $.widget("ui.mouse", {
 
 	_mouseDown: function(event) {
 		// don't let more than one widget handle mouseStart
-		// TODO: figure out why we have to use originalEvent
-		event.originalEvent = event.originalEvent || {};
-		if (event.originalEvent.mouseHandled) { return; }
+		if(mouseHandled) {return};
 
 		// we may have missed mouseup (out of window)
 		(this._mouseStarted && this._mouseUp(event));
@@ -55,7 +59,7 @@ $.widget("ui.mouse", {
 
 		var self = this,
 			btnIsLeft = (event.which == 1),
-			elIsCancel = (typeof this.options.cancel == "string" ? $(event.target).parents().add(event.target).filter(this.options.cancel).length : false);
+			elIsCancel = (typeof this.options.cancel == "string" ? $(event.target).closest(this.options.cancel).length : false);
 		if (!btnIsLeft || elIsCancel || !this._mouseCapture(event)) {
 			return true;
 		}
@@ -75,6 +79,11 @@ $.widget("ui.mouse", {
 			}
 		}
 
+		// Click event may never have fired (Gecko & Opera)
+		if (true === $.data(event.target, this.widgetName + '.preventClickEvent')) {
+			$.removeData(event.target, this.widgetName + '.preventClickEvent');
+		}
+
 		// these delegates are required to keep context
 		this._mouseMoveDelegate = function(event) {
 			return self._mouseMove(event);
@@ -86,18 +95,15 @@ $.widget("ui.mouse", {
 			.bind('mousemove.'+this.widgetName, this._mouseMoveDelegate)
 			.bind('mouseup.'+this.widgetName, this._mouseUpDelegate);
 
-		// preventDefault() is used to prevent the selection of text here -
-		// however, in Safari, this causes select boxes not to be selectable
-		// anymore, so this fix is needed
-		($.browser.safari || event.preventDefault());
-
-		event.originalEvent.mouseHandled = true;
+		event.preventDefault();
+		
+		mouseHandled = true;
 		return true;
 	},
 
 	_mouseMove: function(event) {
 		// IE mouseup check - mouseup happened when mouse was out of window
-		if ($.browser.msie && !event.button) {
+		if ($.browser.msie && !(document.documentMode >= 9) && !event.button) {
 			return this._mouseUp(event);
 		}
 
@@ -122,7 +128,11 @@ $.widget("ui.mouse", {
 
 		if (this._mouseStarted) {
 			this._mouseStarted = false;
-			this._preventClickEvent = (event.target == this._mouseDownEvent.target);
+
+			if (event.target == this._mouseDownEvent.target) {
+			    $.data(event.target, this.widgetName + '.preventClickEvent', true);
+			}
+
 			this._mouseStop(event);
 		}
 

@@ -1,10 +1,10 @@
-/*
- * progressbar_defaults.js
- */
+commonWidgetTests( "progressbar", {
+	defaults: {
+		disabled: false,
+		value: 0,
+		max: 100,
 
-var progressbar_defaults = {
-	disabled: false,
-	value: 0
-};
-
-commonWidgetTests('progressbar', { defaults: progressbar_defaults });
+		//callbacks
+		create: null
+	}
+});

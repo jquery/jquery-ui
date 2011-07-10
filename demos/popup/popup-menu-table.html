@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>jQuery UI Popup - Menu as Popup in table demo</title>
+	<link rel="stylesheet" href="../demos.css" />
+	<link rel="stylesheet" href="../../themes/base/jquery.ui.all.css" title="ui-theme" />
+	<script src="../../jquery-1.5.1.js"></script>
+	<script src="../../ui/jquery.ui.core.js"></script>
+	<script src="../../ui/jquery.ui.widget.js"></script>
+	<script src="../../ui/jquery.ui.position.js"></script>
+	<script src="../../ui/jquery.ui.button.js"></script>
+	<script src="../../ui/jquery.ui.menu.js"></script>
+	<script src="../../ui/jquery.ui.popup.js"></script>
+	<script>
+	$(function() {
+		var selected = {
+			select: function( event, ui ) {
+				$( "<div/>" ).text( "Selected: " + ui.item.text() ).appendTo( "#log" );
+				$(this).popup("close");
+			}
+		};
+
+		$(".demo td:has(.menubar)").clone().appendTo(".demo tbody tr:not(:first)");
+		$("table .menubar > ul").menu(selected).popup().prev().button();
+	});
+	</script>
+	<style type="text/css">
+		.ui-popup { position: absolute; z-index: 5000; }
+		.ui-menu { width: 200px; }
+
+		.demo table {
+			border-collapse: collapse;
+		}
+		.demo th, .demo td {
+			padding: 0.5em;
+		}
+ 	</style>
+</head>
+<body>
+
+<div class="demo">
+
+	<table id="movies" class="ui-widget">
+		<thead>
+			<tr>
+				<th data-field="Name" class="ui-widget-header">Name</th>
+				<th data-field="ReleaseYear" class="ui-widget-header">Release Year</th>
+				<th data-field="AverageRating" class="ui-widget-header">Average Rating</th>
+				<th class="ui-widget-header"></th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td class="ui-widget-content">Red Hot Chili Peppers: Funky Monks</td>
+				<td class="ui-widget-content">1993</td>
+				<td class="ui-widget-content">3.6</td>
+				<td class="ui-widget-content">
+					<div class="menubar">
+						<a href="#">Options</a>
+						<ul>
+							<li><a href="#">Order...</a></li>
+							<li class="ui-state-disabled">Write a Review...</li>
+							<li><a href="#">Find Similar Movies...</a></li>
+							<li>
+								<a href="#">Rate</a>
+								<ul>
+									<li><a href="#">5 stars</a></li>
+									<li><a href="#">4 stars</a></li>
+									<li><a href="#">3 stars</a></li>
+									<li><a href="#">2 stars</a></li>
+									<li><a href="#">1 stars</a></li>
+								</ul>
+							</li>
+						</ul>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td class="ui-widget-content">Rod Stewart: Storyteller 1984-1991</td>
+				<td class="ui-widget-content">1991</td>
+				<td class="ui-widget-content">3.1</td>
+			</tr>
+			<tr>
+				<td class="ui-widget-content">Stevie Ray Vaughan and Double Trouble: Live at the El Mocambo 1983</td>
+				<td class="ui-widget-content">1991</td>
+				<td class="ui-widget-content">3.9</td>
+			</tr>
+			<tr>
+				<td class="ui-widget-content">Spike and Mike's Sick &amp; Twisted Festival of Animation</td>
+				<td class="ui-widget-content">1997</td>
+				<td class="ui-widget-content">2.6</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<div id="log"></div>
+</div>
+
+
+<div class="demo-description">
+
+<p>Poup menu in a table. Works okay standalone, not so much in the scrolling demo view. For that to work better, position() would have to take the closest scrolled parent into account for collision detection.</p>
+
+</div><!-- End demo-description -->
+
+
+</body>
+</html>

@@ -3,7 +3,7 @@
 jQuery(function($){
 	$.datepicker.regional['tr'] = {
 		closeText: 'kapat',
-		prevText: '&#x3c;geri',
+		prevText: '&#x3C;geri',
 		nextText: 'ileri&#x3e',
 		currentText: 'bugün',
 		monthNames: ['Ocak','Şubat','Mart','Nisan','Mayıs','Haziran',

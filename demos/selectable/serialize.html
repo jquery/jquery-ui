@@ -1,31 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8" />
+	<meta charset="utf-8">
 	<title>jQuery UI Selectable - Serialize</title>
-	<link type="text/css" href="../../themes/base/jquery.ui.all.css" rel="stylesheet" />
-	<script type="text/javascript" src="../../jquery-1.4.2.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.core.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.widget.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.mouse.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.selectable.js"></script>
-	<link type="text/css" href="../demos.css" rel="stylesheet" />
+	<link rel="stylesheet" href="../../themes/base/jquery.ui.all.css">
+	<script src="../../jquery-1.5.1.js"></script>
+	<script src="../../ui/jquery.ui.core.js"></script>
+	<script src="../../ui/jquery.ui.widget.js"></script>
+	<script src="../../ui/jquery.ui.mouse.js"></script>
+	<script src="../../ui/jquery.ui.selectable.js"></script>
+	<link rel="stylesheet" href="../demos.css">
 	
-	<style type="text/css">
+	<style>
 	#feedback { font-size: 1.4em; }
 	#selectable .ui-selecting { background: #FECA40; }
 	#selectable .ui-selected { background: #F39814; color: white; }
 	#selectable { list-style-type: none; margin: 0; padding: 0; width: 60%; }
 	#selectable li { margin: 3px; padding: 0.4em; font-size: 1.4em; height: 18px; }
 	</style>
-	<script type="text/javascript">
+	<script>
 	$(function() {
-		$("#selectable").selectable({
-			stop: function(){
-				var result = $("#select-result").empty();
-				$(".ui-selected", this).each(function(){
-					var index = $("#selectable li").index(this);
-					result.append(" #" + (index + 1));
+		$( "#selectable" ).selectable({
+			stop: function() {
+				var result = $( "#select-result" ).empty();
+				$( ".ui-selected", this ).each(function() {
+					var index = $( "#selectable li" ).index( this );
+					result.append( " #" + ( index + 1 ) );
 				});
 			}
 		});
@@ -33,10 +33,11 @@
 	</script>
 </head>
 <body>
+
 <div class="demo">
 
 <p id="feedback">
-You've selected: <span id="select-result">none</span>.
+<span>You've selected:</span> <span id="select-result">none</span>.
 </p>
 
 <ol id="selectable">
@@ -50,10 +51,11 @@ You've selected: <span id="select-result">none</span>.
 
 </div><!-- End demo -->
 
+
+
 <div class="demo-description">
-
 <p>Write a function that fires on the <code>stop</code> event to collect the index values of selected items.  Present values as feedback, or pass as a data string.</p>
-
 </div><!-- End demo-description -->
+
 </body>
 </html>

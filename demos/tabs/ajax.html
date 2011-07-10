@@ -1,21 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8" />
+	<meta charset="utf-8">
 	<title>jQuery UI Tabs - Content via Ajax</title>
-	<link type="text/css" href="../../themes/base/jquery.ui.all.css" rel="stylesheet" />
-	<script type="text/javascript" src="../../jquery-1.4.2.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.core.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.widget.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.tabs.js"></script>
-	<link type="text/css" href="../demos.css" rel="stylesheet" />
-	<script type="text/javascript">
+	<link rel="stylesheet" href="../../themes/base/jquery.ui.all.css">
+	<script src="../../jquery-1.5.1.js"></script>
+	<script src="../../ui/jquery.ui.core.js"></script>
+	<script src="../../ui/jquery.ui.widget.js"></script>
+	<script src="../../ui/jquery.ui.tabs.js"></script>
+	<link rel="stylesheet" href="../demos.css">
+	<script>
 	$(function() {
-		$("#tabs").tabs({
-			ajaxOptions: {
-				error: function(xhr, status, index, anchor) {
-					$(anchor.hash).html("Couldn't load this tab. We'll try to fix this as soon as possible. If this wouldn't be a demo.");
-				}
+		$( "#tabs" ).tabs({
+			beforeLoad: function( event, ui ) {
+				ui.jqXHR.error(function() {
+					ui.panel.html(
+						"Couldn't load this tab. We'll try to fix this as soon as possible. " +
+						"If this wouldn't be a demo." );
+				});
 			}
 		});
 	});
@@ -40,10 +42,10 @@
 
 </div><!-- End demo -->
 
+
+
 <div class="demo-description">
-
 <p>Fetch external content via Ajax for the tabs by setting an href value in the tab links.  While the Ajax request is waiting for a response, the tab label changes to say "Loading...", then returns to the normal label once loaded.</p>
-
 <p>Tabs 3 and 4 demonstrate slow-loading and broken AJAX tabs, and how to handle serverside errors in those cases. Note: These two require a webserver to interpret PHP. They won't work from the filesystem.</p>
 </div><!-- End demo-description -->
 

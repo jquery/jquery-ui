@@ -1,19 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8" />
-	<title>jQuery UI Accordion - No Auto Height</title>
-	<link type="text/css" href="../../themes/base/jquery.ui.all.css" rel="stylesheet" />
-	<script type="text/javascript" src="../../jquery-1.4.2.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.core.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.widget.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.accordion.js"></script>
-	<link type="text/css" href="../demos.css" rel="stylesheet" />
-	<script type="text/javascript">
+	<meta charset="utf-8">
+	<title>jQuery UI Accordion - No auto height</title>
+	<link rel="stylesheet" href="../../themes/base/jquery.ui.all.css">
+	<script src="../../jquery-1.5.1.js"></script>
+	<script src="../../ui/jquery.ui.core.js"></script>
+	<script src="../../ui/jquery.ui.widget.js"></script>
+	<script src="../../ui/jquery.ui.accordion.js"></script>
+	<link rel="stylesheet" href="../demos.css">
+	<script>
 	$(function() {
-		$("#accordion").accordion({
-			autoHeight: false,
-			navigation: true
+		$( "#accordion" ).accordion({
+			heightStyle: "content"
 		});
 	});
 	</script>
@@ -52,11 +51,7 @@
 
 
 <div class="demo-description">
-
-<p>Setting <code>autoHeight: false</code> allows to accordion panels to keep their native height.</p>
-
-<p>In addition, the <code>navigation</code> option is enabled, opening the panel based on the current location, eg. no-auto-height.html#panel2 would open the second panel on page load. It also finds anchors within the content, so #othercontent will open the third section, as it contains a link with that href.</p>
-
+<p>Setting <code>heightStyle: "content"</code> allows the accordion panels to keep their native height.</p>
 </div><!-- End demo-description -->
 
 </body>

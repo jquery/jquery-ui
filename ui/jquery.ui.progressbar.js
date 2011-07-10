@@ -1,9 +1,9 @@
 /*
  * jQuery UI Progressbar @VERSION
  *
- * Copyright (c) 2010 AUTHORS.txt (http://jqueryui.com/about)
- * Dual licensed under the MIT (MIT-LICENSE.txt)
- * and GPL (GPL-LICENSE.txt) licenses.
+ * Copyright 2011, AUTHORS.txt (http://jqueryui.com/about)
+ * Dual licensed under the MIT or GPL Version 2 licenses.
+ * http://jquery.org/license
  *
  * http://docs.jquery.com/UI/Progressbar
  *
@@ -11,29 +11,35 @@
  *   jquery.ui.core.js
  *   jquery.ui.widget.js
  */
-(function( $ ) {
+(function( $, undefined ) {
 
 $.widget( "ui.progressbar", {
+	version: "@VERSION",
 	options: {
-		value: 0
+		value: 0,
+		max: 100
 	},
+
+	min: 0,
+
 	_create: function() {
 		this.element
 			.addClass( "ui-progressbar ui-widget ui-widget-content ui-corner-all" )
 			.attr({
 				role: "progressbar",
-				"aria-valuemin": this._valueMin(),
-				"aria-valuemax": this._valueMax(),
+				"aria-valuemin": this.min,
+				"aria-valuemax": this.options.max,
 				"aria-valuenow": this._value()
 			});
 
 		this.valueDiv = $( "<div class='ui-progressbar-value ui-widget-header ui-corner-left'></div>" )
 			.appendTo( this.element );
 
+		this.oldValue = this._value();
 		this._refreshValue();
 	},
 
-	destroy: function() {
+	_destroy: function() {
 		this.element
 			.removeClass( "ui-progressbar ui-widget ui-widget-content ui-corner-all" )
 			.removeAttr( "role" )
@@ -42,8 +48,6 @@ $.widget( "ui.progressbar", {
 			.removeAttr( "aria-valuenow" );
 
 		this.valueDiv.remove();
-
-		$.Widget.prototype.destroy.apply( this, arguments );
 	},
 
 	value: function( newValue ) {
@@ -56,15 +60,15 @@ $.widget( "ui.progressbar", {
 	},
 
 	_setOption: function( key, value ) {
-		switch ( key ) {
-			case "value":
-				this.options.value = value;
-				this._refreshValue();
-				this._trigger( "change" );
-				break;
+		if ( key === "value" ) {
+			this.options.value = value;
+			this._refreshValue();
+			if ( this._value() === this.options.max ) {
+				this._trigger( "complete" );
+			}
 		}
 
-		$.Widget.prototype._setOption.apply( this, arguments );
+		this._super( "_setOption", key, value );
 	},
 
 	_value: function() {
@@ -73,35 +77,28 @@ $.widget( "ui.progressbar", {
 		if ( typeof val !== "number" ) {
 			val = 0;
 		}
-		if ( val < this._valueMin() ) {
-			val = this._valueMin();
-		}
-		if ( val > this._valueMax() ) {
-			val = this._valueMax();
-		}
-
-		return val;
+		return Math.min( this.options.max, Math.max( this.min, val ) );
 	},
 
-	_valueMin: function() {
-		return 0;
-	},
-
-	_valueMax: function() {
-		return 100;
+	_percentage: function() {
+		return 100 * this._value() / this.options.max;
 	},
 
 	_refreshValue: function() {
 		var value = this.value();
+		var percentage = this._percentage();
+
+		if ( this.oldValue !== value ) {
+			this.oldValue = value;
+			this._trigger( "change" );
+		}
+
 		this.valueDiv
-			[ value === this._valueMax() ? "addClass" : "removeClass"]( "ui-corner-right" )
-			.width( value + "%" );
+			.toggle( value > this.min )
+			.toggleClass( "ui-corner-right", value === this.options.max )
+			.width( percentage.toFixed(0) + "%" );
 		this.element.attr( "aria-valuenow", value );
 	}
-});
-
-$.extend( $.ui.progressbar, {
-	version: "@VERSION"
 });
 
 })( jQuery );

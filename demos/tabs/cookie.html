@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8" />
+	<meta charset="utf-8">
 	<title>jQuery UI Tabs - Default functionality</title>
-	<link type="text/css" href="../../themes/base/jquery.ui.all.css" rel="stylesheet" />
-	<script type="text/javascript" src="../../jquery-1.4.2.js"></script>
-	<script type="text/javascript" src="../../external/jquery.cookie.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.core.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.widget.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.tabs.js"></script>
-	<link type="text/css" href="../demos.css" rel="stylesheet" />
-	<script type="text/javascript">
+	<link rel="stylesheet" href="../../themes/base/jquery.ui.all.css">
+	<script src="../../jquery-1.5.1.js"></script>
+	<script src="../../external/jquery.cookie.js"></script>
+	<script src="../../ui/jquery.ui.core.js"></script>
+	<script src="../../ui/jquery.ui.widget.js"></script>
+	<script src="../../ui/jquery.ui.tabs.js"></script>
+	<link rel="stylesheet" href="../demos.css">
+	<script>
 	$(function() {
-		$("#tabs").tabs({
+		$( "#tabs" ).tabs({
 			cookie: {
 				// store cookie for a day, without, it would be a session cookie
 				expires: 1
@@ -45,12 +45,12 @@
 
 </div><!-- End demo -->
 
+
+
 <div class="demo-description">
-
 <p>Looks the same as the default demo, but uses cookie to store the selected tab, and restore it when the page (re)loads.
-
 The cookie is stored for a day, so tabs will be restored even after closing the browser. Use cookie: {} for using cookies with default options.</p>
-
+<p>The cookie option requires the cookie plugin, which can be found in the development-bundle > external folder from the download builder.</p>
 </div><!-- End demo-description -->
 
 </body>

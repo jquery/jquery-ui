@@ -1,35 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8" />
+	<meta charset="utf-8">
 	<title>jQuery UI Accordion - Sortable</title>
-	<link type="text/css" href="../../themes/base/jquery.ui.all.css" rel="stylesheet" />
-	<script type="text/javascript" src="../../jquery-1.4.2.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.core.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.widget.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.mouse.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.sortable.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.accordion.js"></script>
-	<link type="text/css" href="../demos.css" rel="stylesheet" />
-	<script type="text/javascript">
+	<link rel="stylesheet" href="../../themes/base/jquery.ui.all.css">
+	<script src="../../jquery-1.5.1.js"></script>
+	<script src="../../ui/jquery.ui.core.js"></script>
+	<script src="../../ui/jquery.ui.widget.js"></script>
+	<script src="../../ui/jquery.ui.mouse.js"></script>
+	<script src="../../ui/jquery.ui.sortable.js"></script>
+	<script src="../../ui/jquery.ui.accordion.js"></script>
+	<link rel="stylesheet" href="../demos.css">
+	<script>
 	$(function() {
 		var stop = false;
-		$("#accordion h3").click(function(event) {
-			if (stop) {
+		$( "#accordion h3" ).click(function( event ) {
+			if ( stop ) {
 				event.stopImmediatePropagation();
 				event.preventDefault();
 				stop = false;
 			}
 		});
-		$("#accordion").accordion({
-			header: "> div > h3"
-		}).sortable({
-			axis: "y",
-			handle: "h3",
-			stop: function(event, ui) {
-				stop = true;
-			}
-		});
+		$( "#accordion" )
+			.accordion({
+				header: "> div > h3"
+			})
+			.sortable({
+				axis: "y",
+				handle: "h3",
+				stop: function() {
+					stop = true;
+				}
+			});
 	});
 	</script>
 </head>
@@ -74,9 +76,7 @@
 
 
 <div class="demo-description">
-
 <p>Drag the header to re-order panels.</p>
-
 </div><!-- End demo-description -->
 
 </body>
