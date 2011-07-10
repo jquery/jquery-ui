@@ -20,6 +20,7 @@
 $.widget( "ui.menubar", {
 	version: "@VERSION",
 	options: {
+		autoExpand: false,
 		buttons: false,
 		menuIcon: false,
 		position: {
@@ -89,7 +90,11 @@ $.widget( "ui.menubar", {
 					that._close();
 					return;
 				}
-				if ( ( that.open && event.type == "mouseenter" ) || event.type == "click" ) {
+				if ( ( that.open && event.type == "mouseenter" ) || event.type == "click" || that.options.autoExpand ) {
+					if( that.options.autoExpand ) {
+						clearTimeout( that.timer );
+					}
+					
 					that._open( event, menu );
 				}
 			})
@@ -115,6 +120,22 @@ $.widget( "ui.menubar", {
 			.attr( "role", "menuitem" )
 			.attr( "aria-haspopup", "true" )
 			.wrapInner( "<span class='ui-button-text'></span>" );
+			
+			if ( that.options.autoExpand ) {
+				input.bind( "mouseleave.menubar", function( event ) {
+					that.timer = setTimeout( function() {
+						that._close();
+					}, 150 );
+				});
+				menu.bind( "mouseleave.menubar", function( event ) {
+					that.timer = setTimeout( function() {
+						that._close();
+					}, 150 );
+				})
+				.bind( "mouseenter.menubar", function( event ) {
+					clearTimeout( that.timer );
+				});
+			}
 
 			// TODO review if these options are a good choice, maybe they can be merged
 			if ( that.options.menuIcon ) {
