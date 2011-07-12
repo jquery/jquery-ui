@@ -78,11 +78,11 @@ $.widget( "ui.accordion", {
 
 		self.headers
 			.not( self.active )
-			.prop({
-				"aria-expanded": false,
-				"aria-selected": false
+			.attr({
+				"aria-expanded": "false",
+				"aria-selected": "false",
+				tabIndex: -1
 			})
-			.attr( "tabIndex", -1 )
 			.next()
 				.hide();
 
@@ -90,12 +90,11 @@ $.widget( "ui.accordion", {
 		if ( !self.active.length ) {
 			self.headers.eq( 0 ).attr( "tabIndex", 0 );
 		} else {
-			self.active
-				.prop({
-					"aria-expanded": true,
-					"aria-selected": true
-				})
-				.attr( "tabIndex", 0 );
+			self.active.attr({
+				"aria-expanded": "true",
+				"aria-selected": "true",
+				tabIndex: 0
+			});
 		}
 
 		// only need links in tab order for Safari
@@ -135,8 +134,8 @@ $.widget( "ui.accordion", {
 			.unbind( ".accordion" )
 			.removeClass( "ui-accordion-header ui-accordion-disabled ui-helper-reset ui-state-default ui-corner-all ui-state-active ui-state-disabled ui-corner-top" )
 			.removeAttr( "role" )
-			.removeProp( "aria-expanded" )
-			.removeProp( "aria-selected" )
+			.removeAttr( "aria-expanded" )
+			.removeAttr( "aria-selected" )
 			.removeAttr( "tabIndex" )
 			.find( "a" )
 				.removeAttr( "tabIndex" )
@@ -393,18 +392,18 @@ $.widget( "ui.accordion", {
 
 		// TODO assert that the blur and focus triggers are really necessary, remove otherwise
 		toHide.prev()
-			.prop({
-				"aria-expanded": false,
-				"aria-selected": false
+			.attr({
+				"aria-expanded": "false",
+				"aria-selected": "false",
+				tabIndex: -1
 			})
-			.attr( "tabIndex", -1 )
 			.blur();
 		toShow.prev()
-			.prop({
-				"aria-expanded": true,
-				"aria-selected": true
+			.attr({
+				"aria-expanded": "true",
+				"aria-selected": "true",
+				tabIndex: 0
 			})
-			.attr( "tabIndex", 0 )
 			.focus();
 	},
 

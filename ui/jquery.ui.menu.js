@@ -178,8 +178,8 @@ $.widget("ui.menu", {
 			.removeAttr( "role" )
 			.removeAttr("tabIndex")
 			.removeAttr( "aria-labelledby" )
-			.removeProp( "aria-expanded" )
-			.removeProp( "aria-hidden" )
+			.removeAttr( "aria-expanded" )
+			.removeAttr( "aria-hidden" )
 			.show();
 		
 		//destroy menu items
@@ -191,7 +191,7 @@ $.widget("ui.menu", {
 			.removeClass( "ui-corner-all ui-state-hover" )
 			.removeAttr( "tabIndex" )
 			.removeAttr( "role" )
-			.removeProp( "aria-haspopup" )
+			.removeAttr( "aria-haspopup" )
 			.removeAttr( "id" )
 			.children(".ui-icon").remove();		
 	},
@@ -203,9 +203,9 @@ $.widget("ui.menu", {
 			.addClass( "ui-menu ui-widget ui-widget-content ui-corner-all" )
 			.attr("role", "menu")
 			.hide()
-			.prop({
-				"aria-hidden": true,
-				"aria-expanded": false
+			.attr({
+				"aria-hidden": "true",
+				"aria-expanded": "false"
 			});
 		
 		// don't refresh list items that are already adapted
@@ -222,7 +222,7 @@ $.widget("ui.menu", {
 		submenus.each(function() {
 			var menu = $(this);
 			var item = menu.prev("a") 
-			item.prop("aria-haspopup", true)
+			item.attr("aria-haspopup", "true")
 			.prepend('<span class="ui-menu-icon ui-icon ui-icon-carat-1-e"></span>');
 			menu.attr("aria-labelledby", item.attr("id"));
 		});
@@ -290,19 +290,19 @@ $.widget("ui.menu", {
 	
 	_open: function(submenu) {
 		clearTimeout(this.timer);
-		this.element.find(".ui-menu").not(submenu.parents()).hide().prop("aria-hidden", true);
+		this.element.find(".ui-menu").not(submenu.parents()).hide().attr("aria-hidden", "true");
 		var position = $.extend({}, {
 			of: this.active
 		}, $.type(this.options.position) == "function"
 			? this.options.position(this.active)
 			: this.options.position
 		);
-		submenu.show().removeProp("aria-hidden").prop("aria-expanded", true).position(position);
+		submenu.show().removeAttr("aria-hidden").attr("aria-expanded", "true").position(position);
 	},
 	
 	closeAll: function() {
 		this.element
-		 .find("ul").hide().prop("aria-hidden", true).prop("aria-expanded", false).end()
+		 .find("ul").hide().attr("aria-hidden", "true").attr("aria-expanded", "false").end()
 		 .find("a.ui-state-active").removeClass("ui-state-active");
 		this.blur();
 		this.activeMenu = this.element;
@@ -310,14 +310,14 @@ $.widget("ui.menu", {
 	
 	_close: function() {
 		this.active.parent()
-		 .find("ul").hide().prop("aria-hidden", true).prop("aria-expanded", false).end()
+		 .find("ul").hide().attr("aria-hidden", "true").attr("aria-expanded", "false").end()
 		 .find("a.ui-state-active").removeClass("ui-state-active");
 	},
 
 	left: function(event) {
 		var newItem = this.active && this.active.parents("li:not(.ui-menubar-item)").first();
 		if (newItem && newItem.length) {
-			this.active.parent().prop("aria-hidden", true).prop("aria-expanded", false).hide();
+			this.active.parent().attr("aria-hidden", "true").attr("aria-expanded", "false").hide();
 			this.focus(event, newItem);
 			return true;
 		}

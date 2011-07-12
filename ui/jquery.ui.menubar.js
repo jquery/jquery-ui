@@ -48,9 +48,9 @@ $.widget( "ui.menubar", {
 				}
 			})
 			.hide()
-			.prop({
-				"aria-hidden": true,
-				"aria-expanded": false
+			.attr({
+				"aria-hidden": "true",
+				"aria-expanded": "false"
 			})
 			.bind( "keydown.menubar", function( event ) {
 				var menu = $( this );
@@ -108,7 +108,7 @@ $.widget( "ui.menubar", {
 			})
 			.addClass( "ui-button ui-widget ui-button-text-only ui-menubar-link" )
 			.attr( "role", "menuitem" )
-			.prop( "aria-haspopup", true )
+			.attr( "aria-haspopup", "true" )
 			.wrapInner( "<span class='ui-button-text'></span>" );
 
 			// TODO review if these options are a good choice, maybe they can be merged
@@ -158,7 +158,7 @@ $.widget( "ui.menubar", {
 			.unbind( ".menubar" )
 			.removeClass( "ui-button ui-widget ui-button-text-only ui-menubar-link ui-state-default" )
 			.removeAttr( "role" )
-			.removeProp( "aria-haspopup" )
+			.removeAttr( "aria-haspopup" )
 			// TODO unwrap?
 			.children( "span.ui-button-text" ).each(function( i, e ) {
 				var item = $( this );
@@ -170,8 +170,8 @@ $.widget( "ui.menubar", {
 		this.element.find( ":ui-menu" )
 			.menu( "destroy" )
 			.show()
-			.removeProp( "aria-hidden" )
-			.removeProp( "aria-expanded" )
+			.removeAttr( "aria-hidden" )
+			.removeAttr( "aria-expanded" )
 			.removeAttr( "tabindex" )
 			.unbind( ".menubar" );
 	},
@@ -182,9 +182,9 @@ $.widget( "ui.menubar", {
 		this.active
 			.menu( "closeAll" )
 			.hide()
-			.prop({
-				"aria-hidden": true,
-				"aria-expanded": false
+			.attr({
+				"aria-hidden": "true",
+				"aria-expanded": "false"
 			});
 		this.active
 			.prev()
@@ -204,9 +204,9 @@ $.widget( "ui.menubar", {
 			this.active
 				.menu( "closeAll" )
 				.hide()
-				.prop({
-					"aria-hidden": true,
-					"aria-expanded": false
+				.attr({
+					"aria-hidden": "true",
+					"aria-expanded": "false"
 				});
 			this.active
 				.prev()
@@ -221,8 +221,8 @@ $.widget( "ui.menubar", {
 				at: "left bottom",
 				of: button
 			})
-			.removeProp( "aria-hidden" )
-			.prop( "aria-expanded", true )
+			.removeAttr( "aria-hidden" )
+			.attr( "aria-expanded", "true" )
 			.menu("focus", event, menu.children( "li" ).first() )
 			// TODO need a comment here why both events are triggered
 			.focus()

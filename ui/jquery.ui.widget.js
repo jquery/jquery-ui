@@ -211,7 +211,7 @@ $.Widget.prototype = {
 			.removeData( this.widgetName );
 		this.widget()
 			.unbind( "." + this.widgetName )
-			.removeProp( "aria-disabled" )
+			.removeAttr( "aria-disabled" )
 			.removeClass(
 				this.widgetBaseClass + "-disabled " +
 				"ui-state-disabled" );
@@ -276,7 +276,7 @@ $.Widget.prototype = {
 		if ( key === "disabled" ) {
 			this.widget()
 				.toggleClass( this.widgetBaseClass + "-disabled ui-state-disabled", !!value )
-				.prop( "aria-disabled", value );
+				.attr( "aria-disabled", value );
 			this.hoverable.removeClass( "ui-state-hover" );
 			this.focusable.removeClass( "ui-state-focus" );
 		}

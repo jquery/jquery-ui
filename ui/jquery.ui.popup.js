@@ -41,7 +41,7 @@ $.widget( "ui.popup", {
 		}
 		
 		this.options.trigger
-			.prop( "aria-haspopup", true )
+			.attr( "aria-haspopup", "true" )
 			.attr( "aria-owns", this.element.attr( "id" ) );
 		
 		this.element
@@ -118,11 +118,11 @@ $.widget( "ui.popup", {
 		this.element
 			.show()
 			.removeClass( "ui-popup" )
-			.removeProp( "aria-hidden" )
-			.removeProp( "aria-expanded" );
+			.removeAttr( "aria-hidden" )
+			.removeAttr( "aria-expanded" );
 
 		this.options.trigger
-			.removeProp( "aria-haspopup" )
+			.removeAttr( "aria-haspopup" )
 			.removeAttr( "aria-owns" );
 			
 		if ( this.generatedId ) {
@@ -140,8 +140,8 @@ $.widget( "ui.popup", {
 
 		this.element
 			.show()
-			.prop( "aria-hidden", false )
-			.prop( "aria-expanded", true )
+			.attr( "aria-hidden", "false" )
+			.attr( "aria-expanded", "true" )
 			.position( position )
 			// TODO find a focussable child, otherwise put focus on element, add tabIndex=0 if not focussable
 			.focus();
@@ -160,8 +160,8 @@ $.widget( "ui.popup", {
 	close: function( event ) {
 		this.element
 			.hide()
-			.prop( "aria-hidden", true )
-			.prop( "aria-expanded", false );
+			.attr( "aria-hidden", "true" )
+			.attr( "aria-expanded", "false" );
 
 		this.options.trigger.attr("tabindex", 0);
 

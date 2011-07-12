@@ -59,9 +59,9 @@ $.widget( "ui.autocomplete", {
 			// TODO verify these actually work as intended
 			.attr({
 				role: "textbox",
-				"aria-autocomplete": "list"
+				"aria-autocomplete": "list",
+				"aria-haspopup": "true"
 			})
-			.prop( "aria-haspopup", true )
 			.bind( "keydown.autocomplete", function( event ) {
 				if ( self.options.disabled || self.element.prop( "readonly" ) ) {
 					suppressKeyPress = true;
@@ -268,7 +268,7 @@ $.widget( "ui.autocomplete", {
 			.removeAttr( "autocomplete" )
 			.removeAttr( "role" )
 			.removeAttr( "aria-autocomplete" )
-			.removeProp( "aria-haspopup" );
+			.removeAttr( "aria-haspopup" );
 		this.menu.element.remove();
 	},
 
