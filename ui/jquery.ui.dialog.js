@@ -108,7 +108,8 @@ $.widget("ui.dialog", {
 				})
 				.mousedown(function( event ) {
 					self.moveToTop( false, event );
-				}),
+				})
+				.appendTo( "body" ),
 
 			uiDialogContent = self.element
 				.show()
@@ -154,8 +155,6 @@ $.widget("ui.dialog", {
 
 		self._createButtons( options.buttons );
 		self._isOpen = false;
-
-		uiDialog.appendTo( document.body );
 
 		if ( $.fn.bgiframe ) {
 			uiDialog.bgiframe();
