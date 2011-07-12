@@ -19,6 +19,18 @@ var minDuration = 15,
 
 module( "effects.core" );
 
+test( "Immediate Return Conditions", function() {
+	var hidden = $( "div.hidden" ),
+		count = 0;
+	expect( 3 );
+	hidden.hide( "blind", function() {
+		equal( ++count, 1, "Hide on hidden returned immediately" );
+	}).show().show( "blind", function() {
+		equal( ++count, 2, "Show on shown returned immediately" );
+	});
+	equal( ++count, 3, "Both Functions worked properly" );
+});
+
 $.each( $.effects.effect, function( effect ) {
 	if ( effect === "transfer" ) {
 		return;
@@ -121,6 +133,21 @@ asyncTest( "animateClass works with children", function() {
 			equal( h2.css("fontSize"), "20px", "Text size unchanged during animate with children: undefined" );
 		}, mid);
 	}});
+});
+
+asyncTest( "animateClass clears style properties when stopped", function() {
+	var test = $("div.animateClass"),
+		style = test[0].style,
+		orig = style.cssText;
+	
+	expect( 2 );
+
+	test.addClass( "testChangeBackground", duration );
+	notEqual( orig, style.cssText, "cssText is the not the same after starting animation" );
+
+	test.stop( true, true );
+	equal( orig, style.cssText, "cssText is the same after stopping animation midway" );
+	start();
 });
 
 })(jQuery);
