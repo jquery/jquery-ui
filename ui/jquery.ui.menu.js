@@ -51,6 +51,10 @@ $.widget( "ui.menu", {
 					self.focus( event, item );
 				}
 				self.select( event );
+				
+				if( !new RegExp(/^a$/i).test(event.target.tagName) ) {
+					event.preventDefault();
+				}
 			})
 			.bind( "mouseover.menu", function( event ) {
 				if ( self.options.disabled ) {
@@ -210,7 +214,7 @@ $.widget( "ui.menu", {
 	},
 
 	refresh: function() {
-		var self = this,
+		var self = this, inputGroupLabeled = false, inputIDCount = 0,
 
 			// initialize nested menus
 			submenus = this.element.find( "ul:not(.ui-menu)" )
@@ -224,14 +228,85 @@ $.widget( "ui.menu", {
 			items = submenus.add( this.element ).children( "li:not(.ui-menu-item):has(a)" )
 				.addClass( "ui-menu-item" )
 				.attr( "role", "presentation" );
+				
+		this.element.find( "input[type='checkbox'], input[type='radio']" ).each( function() {
+			var labelElement = $( this ).closest( "label" );
+			if( labelElement.length ) {
+				$( this ).insertBefore( labelElement );
+				
+				if( !$( this ).attr( "id" ) ) {
+					$( this ).attr( "id", "ui-input-" + inputIDCount++ );
+				}
+				
+				labelElement.attr( "for", $( this ).attr( "id" ) );
+			}
+		});
 
-		items.children( "a" )
-			.addClass( "ui-corner-all" )
-			.attr( "tabIndex", -1 )
-			.attr( "role", "menuitem" )
-			.attr( "id", function( i ) {
-				return self.element.attr( "id" ) + "-" + i;
-			});
+		items.children( "a" ).each( function( index, item ) {
+			var current = $( item ), parent = current.parent();
+			
+			current
+				.addClass( "ui-corner-all" )
+				.attr( "tabIndex", -1 )
+				.attr( "role", "menuitem" )
+				.attr( "id", function( i ) {
+					return self.element.attr( "id" ) + "-" + i;
+				});
+			
+			if( current.children().is( "input[type='checkbox'], input[type='radio']" ) ) {
+				current.closest( "ul" ).addClass( "ui-menu-icons" );
+				
+				if( current.children( "input[type='checkbox']" ).is( ":checked" ) ) {
+					current.prepend( '<span class="ui-icon ui-icon-check"></span>' );
+					parent.attr( "aria-checked", "true" );
+				} else if( current.children( "input[type='radio']" ).is( ":checked" ) ) {
+					current.prepend( '<span class="ui-icon ui-icon-radio-on"></span>' );
+					parent.attr( "aria-checked", "true" );
+				} else if( current.children( "input[type='radio']" ).length ) {
+					current.prepend( '<span class="ui-icon ui-icon-radio-off"></span>' );
+					parent.attr( "aria-checked", "false" );
+				} else {
+					parent.attr( "aria-checked", "false" );
+				}
+				
+				if( current.children().is( "input[type='radio']" ) ) {
+					parent.attr( "radio-group", current.children( "input[type='radio']" ).attr( "name" ) );
+				}
+
+				if( parent.prev().length && !parent.prev().children( "a" ).length ) {
+					parent.prev().before( "<li><hr /></li>" );
+					parent.prev()
+						.addClass( "ui-state-disabled" )
+						.html( "<span class='ui-menu-input-group'>" + parent.prev().text() + "</span>" )
+						.bind( "click.menu", function( event ) {
+							return false;
+						});
+					inputGroupLabeled = true;
+				}
+				else if( parent.prev().length && !parent.prev().children( "a" ).children().is( "input[type='checkbox'], input[type='radio']" ) ) {
+					parent.before( "<li><hr /></li>" );
+				}
+				
+				if( inputGroupLabeled && parent.next().length && !parent.next().children( "a" ).children().is( "input[type='checkbox'], input[type='radio']" ) ) {
+					parent.after( "<li><hr /></li>" );
+					inputGroupLabeled = false;
+				}
+				else if( parent.next().length && !parent.next().children( "a" ).children().is( "input[type='checkbox'], input[type='radio']" ) ) {
+					parent.after( "<li><hr /></li>" );
+				}
+				
+				current.children( "input[type='checkbox'], input[type='radio']" ).hide();
+			}
+		});
+		items.bind( "keydown.menu", function( event ) {
+			if( event.keyCode === $.ui.keyCode.SPACE ) {
+				if ( self.active.children( "a" ).children().is( "input[type='checkbox'], input[type='radio']" ) ) {
+					self.select( event );
+					event.stopImmediatePropagation();
+				}
+				event.preventDefault();
+			}
+		});
 
 		submenus.each( function() {
 			var menu = $( this ),
@@ -461,7 +536,33 @@ $.widget( "ui.menu", {
 		var ui = {
 			item: this.active
 		};
-		this.closeAll();
+
+		if( this.active.children( "a" ).children().is( "input[type='checkbox']" ) ) {
+			if( this.active.attr( "aria-checked" ) === "false" ) {
+				this.active.children( "a" ).prepend( '<span class="ui-icon ui-icon-check"></span>' );
+				this.active.attr( "aria-checked", "true" );
+				this.active.children( "a" ).children( "input[type='checkbox']" ).attr( "checked", "checked" );
+			} else if( this.active.attr( "aria-checked") === "true" ) {
+				this.active.children( "a" ).children( "span.ui-icon-check" ).remove();
+				this.active.attr( "aria-checked", "false" );
+				this.active.children( "a" ).children( "input[type='checkbox']" ).removeAttr( "checked" );
+			}
+		}
+
+		if( this.active.children( "a" ).children().is( "input[type='radio']" ) ) {
+			if( this.active.attr( "aria-checked" ) === "false" ) {
+				this.active.children( "a" ).children( "span.ui-icon-radio-off" ).toggleClass( "ui-icon-radio-on ui-icon-radio-off" );
+				this.active.attr( "aria-checked", "true" );
+				this.active.children( "a" ).children( "input[type='radio']" ).attr( "checked", "checked" );
+				this.active.siblings( "[radio-group=" + $( this.active ).attr( "radio-group" ) + "]" ).each( function() {
+					$( this ).attr( "aria-checked", "false" );
+					$( this ).children( "a" ).children( "span.ui-icon-radio-on" ).toggleClass( "ui-icon-radio-on ui-icon-radio-off" );
+					$( this ).children( "a" ).children( "input[type='radio']" ).removeAttr( "checked" );
+				});
+			}
+		}
+		
+		if( !this.active.children( "a" ).children().is( "input[type='checkbox'], input[type='radio']" ) ) this.closeAll();
 		this._trigger( "select", event, ui );
 	}
 });
