@@ -174,6 +174,14 @@ $.widget( "ui.menu", {
 				}
 			}
 		});
+
+		this._bind( document, {
+			click: function( event ) {
+				if ( !$( event.target ).closest( ".ui-menu" ).length ) {
+					this.closeAll();
+				}
+			}
+		});
 	},
 
 	_destroy: function() {
