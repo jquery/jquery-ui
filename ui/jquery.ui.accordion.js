@@ -162,15 +162,18 @@ $.widget( "ui.accordion", {
 			return;
 		}
 
+		if ( key === "event" ) {
+			if ( this.options.event ) {
+				this.headers.unbind( this.options.event + ".accordion", this._eventHandler );
+			}
+			this._setupEvents( value );
+		}
+
 		this._super( "_setOption", key, value );
 
 		// setting collapsible: false while collapsed; open first panel
 		if ( key === "collapsible" && !value && this.options.active === false ) {
 			this._activate( 0 );
-		}
-
-		if ( key === "event" ) {
-			this._setupEvents( value );
 		}
 
 		if ( key === "icons" ) {
@@ -294,7 +297,6 @@ $.widget( "ui.accordion", {
 	},
 
 	_setupEvents: function( event ) {
-		this.headers.unbind( ".accordion" );
 		if ( event ) {
 			this.headers.bind( event.split( " " ).join( ".accordion " ) + ".accordion",
 				$.proxy( this, "_eventHandler" ) );
