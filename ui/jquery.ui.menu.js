@@ -227,7 +227,7 @@ $.widget( "ui.menu", {
 		// don't refresh list items that are already adapted
 			items = submenus.add( this.element ).children( "li:not(.ui-menu-item):has(a)" )
 				.addClass( "ui-menu-item" )
-				.attr( "role", "presentation" );
+				.attr( "role", "menuitem" );
 				
 		this.element.find( "input[type='checkbox'], input[type='radio']" ).each( function() {
 			var labelElement = $( this ).closest( "label" );
@@ -258,15 +258,27 @@ $.widget( "ui.menu", {
 				
 				if( current.children( "input[type='checkbox']" ).is( ":checked" ) ) {
 					current.prepend( '<span class="ui-icon ui-icon-check"></span>' );
-					parent.attr( "aria-checked", "true" );
+					parent.attr({
+						role: "menuitemcheckbox",
+						"aria-checked": "true"
+					});
 				} else if( current.children( "input[type='radio']" ).is( ":checked" ) ) {
 					current.prepend( '<span class="ui-icon ui-icon-radio-on"></span>' );
-					parent.attr( "aria-checked", "true" );
+					parent.attr({
+						role: "menuitemradio",
+						"aria-checked": "true"
+					});
 				} else if( current.children( "input[type='radio']" ).length ) {
 					current.prepend( '<span class="ui-icon ui-icon-radio-off"></span>' );
-					parent.attr( "aria-checked", "false" );
+					parent.attr({
+						role: "menuitemradio",
+						"aria-checked": "false"
+					});
 				} else {
-					parent.attr( "aria-checked", "false" );
+					parent.attr({
+						role: "menuitemcheckbox",
+						"aria-checked": "false"
+					});
 				}
 				
 				if( current.children().is( "input[type='radio']" ) ) {
