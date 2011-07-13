@@ -236,6 +236,7 @@ $.widget( "ui.autocomplete", {
 					}
 
 					if ( false !== self._trigger( "select", event, { item: item } ) ) {
+                                                self.element.change();
 						self._value( item.value );
 					}
 					// reset the term after the select event
