@@ -301,6 +301,10 @@ $.widget( "ui.menu", {
 
 	_startOpening: function( submenu ) {
 		clearTimeout( this.timer );
+		
+		//Don't open if already open fixes a Firefox bug that caused a .5 pixel shift in the submenu position when mousing over the carat icon
+		if ( submenu.attr( "aria-hidden" ) !== "true" ) return;
+		
 		var self = this;
 		self.timer = setTimeout( function() {
 			self._close();
