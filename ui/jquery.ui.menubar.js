@@ -49,10 +49,10 @@ $.widget( "ui.menubar", {
 				},
 				select: function( event, ui ) {
 					ui.item.parents( "ul.ui-menu:last" ).hide();
-					that._trigger( "select", event, ui );
 					that._close();
 					// TODO what is this targetting? there's probably a better way to access it
 					$(event.target).prev().focus();
+					that._trigger( "select", event, ui );
 				}
 			})
 			.hide()
@@ -94,7 +94,7 @@ $.widget( "ui.menubar", {
 					if( that.options.autoExpand ) {
 						clearTimeout( that.timer );
 					}
-					
+
 					that._open( event, menu );
 				}
 			})
@@ -120,7 +120,7 @@ $.widget( "ui.menubar", {
 			.attr( "role", "menuitem" )
 			.attr( "aria-haspopup", "true" )
 			.wrapInner( "<span class='ui-button-text'></span>" );
-			
+
 			if ( that.options.autoExpand ) {
 				input.bind( "mouseleave.menubar", function( event ) {
 					that.timer = setTimeout( function() {

@@ -13,13 +13,17 @@
 	<script src="../../ui/jquery.ui.menubar.js"></script>
 	<script>
 	$(function() {
+		function select(event, ui) {
+			$("<div/>").text("Selected: " + ui.item.text()).appendTo("#log");
+			if (ui.item.text() == 'Quit') {
+				$(this).menubar('destroy');
+			}
+		}
 		$("#bar1").menubar({
 			position: {
 				within: $("#demo-frame").add(window).first()
 			},
-			select: function(event, ui) {
-				$("<div/>").text("Selected: " + ui.item.text()).appendTo("#log");
-			}
+			select: select
 		});
 
 		$(".menubar-icons").menubar({
@@ -29,9 +33,7 @@
 			position: {
 				within: $("#demo-frame").add(window).first()
 			},
-			select: function(event, ui) {
-				$("<div/>").text("Selected: " + ui.item.text()).appendTo("#log");
-			}
+			select: select
 		});
 	});
 	</script>
