@@ -151,7 +151,7 @@ $.widget( "ui.menubar", {
 		});
 		that._bind( {
 			keydown: function( event ) {
-				if ( event.keyCode == $.ui.keyCode.ESCAPE && that.active && that.active.menu( "left", event ) !== true ) {
+				if ( event.keyCode == $.ui.keyCode.ESCAPE && that.active && that.active.menu( "collapse", event ) !== true ) {
 					var active = that.active;
 					that.active.blur();
 					that._close( event );
@@ -206,7 +206,7 @@ $.widget( "ui.menubar", {
 		if ( !this.active || !this.active.length )
 			return;
 		this.active
-			.menu( "closeAll" )
+			.menu( "collapseAll" )
 			.hide()
 			.attr( "aria-hidden", "true" )
 			.attr( "aria-expanded", "false" );
@@ -226,7 +226,7 @@ $.widget( "ui.menubar", {
 		// TODO refactor, almost the same as _close above, but don't remove tabIndex
 		if ( this.active ) {
 			this.active
-				.menu( "closeAll" )
+				.menu( "collapseAll" )
 				.hide()
 				.attr( "aria-hidden", "true" )
 				.attr( "aria-expanded", "false" );

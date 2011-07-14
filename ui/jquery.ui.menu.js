@@ -176,7 +176,7 @@ $.widget( "ui.menu", {
 		this._bind( document, {
 			click: function( event ) {
 				if ( !$( event.target ).closest( ".ui-menu" ).length ) {
-					this.closeAll();
+					this.collapseAll();
 				}
 			}
 		});
@@ -336,7 +336,7 @@ $.widget( "ui.menu", {
 			.position( position );
 	},
 
-	closeAll: function() {
+	collapseAll: function() {
 		this.element
 			.find( "ul" )
 				.hide()
@@ -466,11 +466,11 @@ $.widget( "ui.menu", {
 	},
 
 	select: function( event ) {
-		// save active reference before closeAll triggers blur
+		// save active reference before collapseAll triggers blur
 		var ui = {
 			item: this.active
 		};
-		this.closeAll();
+		this.collapseAll();
 		this._trigger( "select", event, ui );
 	}
 });
