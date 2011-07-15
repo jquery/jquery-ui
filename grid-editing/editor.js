@@ -11,10 +11,10 @@
 
 $.widget( "ui.editor", {
 	_create: function() {
-		this.inner = this.element.wrapInner("<div class='editor-wrapper'></div>").children();
+		this.inner = this.element.wrapInner( "<div class='editor-wrapper'></div>" ).children();
 		this._bind({
 			click: function( event ) {
-				if (this.input.is(":visible")) {
+				if ( this.input.is(":visible") ) {
 					return;
 				}
 				this.start( event );
@@ -24,8 +24,8 @@ $.widget( "ui.editor", {
 		this.input = this.inputWrapper = $( "<input>" );
 		this.input.width( this.inner.width() );
 		if ( this.options.type === "number" ) {
-			this.input = this.input.spinner();
-			this.inputWrapper = this.input.spinner("widget");
+			this.input.spinner();
+			this.inputWrapper = this.input.spinner( "widget" );
 		}
 		this.inputWrapper.hide().appendTo( this.element );
 
@@ -34,11 +34,11 @@ $.widget( "ui.editor", {
 				clearTimeout( this.timer );
 			},
 			focusout: function( event ) {
-				if (!this.input.is(":visible")) {
-					return;
-				}
 				var that = this;
 				this.timer = setTimeout( function() {
+					if ( !that.input.is(":visible") ) {
+						return;
+					}
 					that.submit( event );
 				}, 100 );
 			},
