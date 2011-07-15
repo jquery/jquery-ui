@@ -51,6 +51,7 @@ $.widget("ui.dialog", {
 		minHeight: 150,
 		minWidth: 150,
 		modal: false,
+		trap: null,
 		position: {
 			my: "center",
 			at: "center",
@@ -80,6 +81,7 @@ $.widget("ui.dialog", {
 		}
 
 		this.options.title = this.options.title || this.originalTitle;
+
 		var self = this,
 			options = self.options,
 
@@ -145,6 +147,10 @@ $.widget("ui.dialog", {
 		uiDialogTitlebar.find( "*" ).add( uiDialogTitlebar ).disableSelection();
 		this._hoverable( uiDialogTitlebarClose );
 		this._focusable( uiDialogTitlebarClose );
+		
+		if (options.trap === null) {
+			options.trap = options.modal;
+		}
 
 		if ( options.draggable && $.fn.draggable ) {
 			self._makeDraggable();
@@ -206,7 +212,8 @@ $.widget("ui.dialog", {
 		if ( self.overlay ) {
 			self.overlay.destroy();
 		}
-		self.uiDialog.unbind( "keypress.ui-dialog" );
+		
+		self._trap( false );
 
 		if ( self.options.hide ) {
 			self.uiDialog.hide( self.options.hide, function() {
@@ -292,24 +299,8 @@ $.widget("ui.dialog", {
 		self.moveToTop( true );
 
 		// prevent tabbing out of modal dialogs
-		if ( options.modal ) {
-			uiDialog.bind( "keypress.ui-dialog", function( event ) {
-				if ( event.keyCode !== $.ui.keyCode.TAB ) {
-					return;
-				}
-
-				var tabbables = $( ":tabbable", this ),
-					first = tabbables.filter( ":first" ),
-					last  = tabbables.filter( ":last" );
-
-				if ( event.target === last[0] && !event.shiftKey ) {
-					first.focus( 1 );
-					return false;
-				} else if ( event.target === first[0] && event.shiftKey ) {
-					last.focus( 1 );
-					return false;
-				}
-			});
+		if ( options.trap ) {
+			self._trap( true );
 		}
 
 		// set focus to the first tabbable element in the content area or the first button
@@ -595,6 +586,9 @@ $.widget("ui.dialog", {
 				$( ".ui-dialog-title", self.uiDialogTitlebar )
 					.html( "" + ( value || "&#160;" ) );
 				break;
+			case "trap":
+				self._trap( value );
+				break;
 		}
 
 		this._super( "_setOption", key, value );
@@ -650,6 +644,29 @@ $.widget("ui.dialog", {
 
 		if (this.uiDialog.is( ":data(resizable)" ) ) {
 			this.uiDialog.resizable( "option", "minHeight", this._minHeight() );
+		}
+	},
+	_trap: function(value) {
+		if (value) {
+			this.uiDialog.bind( "keypress.ui-dialog", function( event ) {
+				if ( event.keyCode !== $.ui.keyCode.TAB ) {
+					return;
+				}
+
+				var tabbables = $( ":tabbable", this ),
+					first = tabbables.filter( ":first" ),
+					last  = tabbables.filter( ":last" );
+
+				if ( event.target === last[0] && !event.shiftKey ) {
+					first.focus( 1 );
+					return false;
+				} else if ( event.target === first[0] && event.shiftKey ) {
+					last.focus( 1 );
+					return false;
+				}
+			});
+		} else {
+			this.uiDialog.unbind( "keypress.ui-dialog" );
 		}
 	}
 });

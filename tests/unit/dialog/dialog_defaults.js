@@ -25,6 +25,7 @@ commonWidgetTests( "dialog", {
 		show: null,
 		stack: true,
 		title: '',
+        trap: false,
 		width: 300,
 		zIndex: 1000,
 
