@@ -86,7 +86,10 @@
 
 		$( "#developers-local" ).grid({
 			columns: [ "firstName", "lastName", "country" ],
-			source: developers
+			source: developers,
+			select: function( event, ui ) {
+				console.log( "Selected " + ui.item.firstName );
+			}
 		});
 
 		$( "#filterDevelopers" ).filterControl( developers );

@@ -23,7 +23,7 @@ $.widget( "ui.grid", {
 		this.element.find( "th" ).addClass( "ui-widget-header" );
 		this.element.delegate( "tbody > tr", "click", function( event ) {
 			that._trigger( "select", event, {
-				// TODO add item
+				item: $( this ).data( "grid-item" )
 			});
 		});
 		$(this.options.source.element).bind("datasourceresponse", function() {
@@ -32,19 +32,21 @@ $.widget( "ui.grid", {
 	},
 	refresh: function() {
 		// TODO this code assumes a single tbody which is not a safe assumption
-		var tbody = this.element.find( "tbody" ).empty();
-		// TODO how to refresh a single row? -> tmplItem().update()
-		$.tmpl( this.options.rowTemplate, this.options.source.toArray() ).appendTo( tbody );
+		var tbody = this.element.find( "tbody" ).empty(),
+			template = this.options.rowTemplate;
+		$.each( this.options.source.toArray(), function( itemId, item ) {
+			$.tmpl( template, item ).data( "grid-item", item ).appendTo( tbody );
+		});
 		this._trigger("refresh");
 	},
 
 	_columns: function() {
 		if ( this.options.columns ) {
 			var head = this.element.find("thead");
-			if ( !thead.find( "th" ).length ) {
+			if ( !head.find( "th" ).length ) {
 				// TODO improve this
 				$.each( this.options.columns, function(index, column) {
-					$("<th>").attr("data-field", column).text(column).appendTo(head)
+					$("<th>").attr("data-field", column).text(column).appendTo(head);
 				});
 			}
 			return;

@@ -50,11 +50,9 @@
 			},
 			objectchange: function(event, ui) {
 				console.log("developer at index", ui.index, "changed", ui.object);
-				this.save().refresh();
 			},
 			change: function(event, ui) {
 				console.log("developer(s) at index", ui.index, ui.change + "ed", ui.items);
-				this.save().refresh();
 			}
 		});
 		developers.save = function() {
@@ -73,7 +71,7 @@
 				return grid.element.find( "th" ).eq( cell[ 0 ].cellIndex ).data( "type" );
 			},
 			submit: function( event, ui) {
-				var object = ui.item.tmplItem().data,
+				var object = ui.item.closest("tr").data( "grid-item" ),
 					field = grid.element.find( "th" ).eq( ui.item[ 0 ].cellIndex ).data( "field" ),
 					oldValue = get(object, field);
 				set(object, field, ui.value);
@@ -82,13 +80,14 @@
 					oldValue: oldValue,
 					newValue: ui.value
 				});
+				developers.save();
 				// for the navigator
 				grid.element.focus();
 			}
 		});
 		grid.element.navigator();
 
-		var developer, tmplItem;
+		var developer;
 		var editForm = $( "#editForm" ).hide().submit( function( event ) {
 			event.preventDefault();
 			serializeForm( this, developer );
@@ -96,16 +95,16 @@
 				index: localDevelopers.indexOf(developer),
 				object: developer
 			});
+			developers.save().refresh();
 			editForm.hide();
 		});
 		grid.element.delegate( "button.edit", "click", function() {
-			tmplItem = $( this ).tmplItem();
-			developer = tmplItem.data;
+			developer = $( this ).closest("tr").data( "grid-item" );
 			$( "#edit-tmpl" ).tmpl( meta(developer) ).appendTo( editForm.find("fieldset").empty() );
 			editForm.show();
 		});
 		grid.element.delegate( "button.remove", "click", function() {
-			var developer = $( this ).tmplItem().data;
+			var developer = $( this ).closest("tr").data( "grid-item" );
 			var index = localDevelopers.indexOf( developer );
 			localDevelopers.splice( index, 1 );
 			developers._trigger("change", event, {
@@ -113,6 +112,7 @@
 				index: index,
 				items: [ developer ]
 			});
+			developers.save().refresh();
 		});
 
 		$( "#pageDevelopers" ).pager({
@@ -135,6 +135,7 @@
 				index: 0,
 				items: [localDevelopers[0]]
 			});
+			developers.save().refresh();
 		});
 
 		$("form").tooltip();

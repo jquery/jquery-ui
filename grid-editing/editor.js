@@ -27,7 +27,7 @@ $.widget( "ui.editor", {
 			this.input = this.input.spinner();
 			this.inputWrapper = this.input.spinner("widget");
 		}
-		this.inputWrapper.hide().appendTo( this.element )
+		this.inputWrapper.hide().appendTo( this.element );
 
 		this._bind( this.inputWrapper, {
 			focusin: function() {
