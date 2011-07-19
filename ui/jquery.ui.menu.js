@@ -176,7 +176,7 @@ $.widget( "ui.menu", {
 		this._bind( document, {
 			click: function( event ) {
 				if ( !$( event.target ).closest( ".ui-menu" ).length ) {
-					this.collapseAll();
+					this.collapseAll( event );
 				}
 			}
 		});
@@ -249,7 +249,7 @@ $.widget( "ui.menu", {
 		var nested,
 			self = this;
 
-		this.blur();
+		this.blur( event );
 
 		if ( this._hasScroll() ) {
 			var borderTop = parseFloat( $.curCSS( this.element[0], "borderTopWidth", true ) ) || 0,
@@ -297,6 +297,8 @@ $.widget( "ui.menu", {
 
 		this.active.children( "a" ).removeClass( "ui-state-focus" );
 		this.active = null;
+
+		this._trigger( "blur", event, { item: this.active } );
 	},
 
 	_startOpening: function( submenu ) {
@@ -336,7 +338,7 @@ $.widget( "ui.menu", {
 			.position( position );
 	},
 
-	collapseAll: function() {
+	collapseAll: function( event ) {
 		this.element
 			.find( "ul" )
 				.hide()
@@ -346,7 +348,7 @@ $.widget( "ui.menu", {
 			.find( "a.ui-state-active" )
 			.removeClass( "ui-state-active" );
 
-		this.blur();
+		this.blur( event );
 		this.activeMenu = this.element;
 	},
 
@@ -470,7 +472,7 @@ $.widget( "ui.menu", {
 		var ui = {
 			item: this.active
 		};
-		this.collapseAll();
+		this.collapseAll( event );
 		this._trigger( "select", event, ui );
 	}
 });
