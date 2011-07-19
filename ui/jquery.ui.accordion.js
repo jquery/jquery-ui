@@ -12,6 +12,8 @@
  *	jquery.ui.widget.js
  */
 (function( $, undefined ) {
+		  
+var toggleQueue = new Array();
 
 // TODO: use ui-accordion-header-active class and fix styling
 $.widget( "ui.accordion", {
@@ -315,14 +317,15 @@ $.widget( "ui.accordion", {
 				oldHeader: active,
 				oldContent: toHide,
 				newHeader: collapsing ? $() : clicked,
-				newContent: toShow
+				newContent: toShow,
+				active: active,
+				clicked: clicked,
+				clickedIsActive: clickedIsActive
 			};
 
 		event.preventDefault();
 
 		if ( options.disabled ||
-				// can't switch during an animation
-				this.running ||
 				// click on active header, but not collapsible
 				( clickedIsActive && !options.collapsible ) ||
 				// allow canceling activation
@@ -335,25 +338,12 @@ $.widget( "ui.accordion", {
 		// when the call to ._toggle() comes after the class changes
 		// it causes a very odd bug in IE 8 (see #6720)
 		this.active = clickedIsActive ? $() : clicked;
-		this._toggle( eventData );
-
-		// switch classes
-		active
-			.removeClass( "ui-state-active ui-corner-top" )
-			.addClass( "ui-state-default ui-corner-all" )
-			.children( ".ui-accordion-header-icon" )
-				.removeClass( options.icons.activeHeader )
-				.addClass( options.icons.header );
-		if ( !clickedIsActive ) {
-			clicked
-				.removeClass( "ui-state-default ui-corner-all" )
-				.addClass( "ui-state-active ui-corner-top" )
-				.children( ".ui-accordion-header-icon" )
-					.removeClass( options.icons.header )
-					.addClass( options.icons.activeHeader );
-			clicked
-				.next()
-				.addClass( "ui-accordion-content-active" );
+		
+		//Queue toggling the panels to improve user experience when quickly transitioning
+		//through animated panels (see ticket #3532)
+		toggleQueue.push( eventData );
+		if( !this.running ) {
+			this._toggle( toggleQueue.shift() );
 		}
 	},
 
@@ -408,6 +398,25 @@ $.widget( "ui.accordion", {
 				tabIndex: 0
 			})
 			.focus();
+			
+		// switch classes
+		data.active
+			.removeClass( "ui-state-active ui-corner-top" )
+			.addClass( "ui-state-default ui-corner-all" )
+			.children( ".ui-accordion-header-icon" )
+				.removeClass( options.icons.activeHeader )
+				.addClass( options.icons.header );
+		if ( !data.clickedIsActive ) {
+			data.clicked
+				.removeClass( "ui-state-default ui-corner-all" )
+				.addClass( "ui-state-active ui-corner-top" )
+				.children( ".ui-accordion-header-icon" )
+					.removeClass( options.icons.header )
+					.addClass( options.icons.activeHeader );
+			data.clicked
+				.next()
+				.addClass( "ui-accordion-content-active" );
+		}
 	},
 
 	_completed: function( data ) {
@@ -415,6 +424,10 @@ $.widget( "ui.accordion", {
 			toHide = data.oldContent;
 
 		this.running = false;
+		if( toggleQueue.length !== 0 ) {
+			this._toggle( toggleQueue.shift() );
+			return;
+		}
 
 		if ( this.options.heightStyle === "content" ) {
 			toShow.add( toHide ).css({
