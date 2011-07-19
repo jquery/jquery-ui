@@ -17,6 +17,7 @@ Bohdan Ganicky
 Scott González
 Marc Grabanski (m@marcgrabanski.com)
 Klaus Hartl (stilbuero.de)
+Hans Hillen (TPG, funded through AEGIS: http://www.aegis-project.eu/)
 Scott Jehl
 Cody Lindley
 Eduardo Lundgren (eduardolundgren@gmail.com)
