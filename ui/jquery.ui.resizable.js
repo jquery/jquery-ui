@@ -13,6 +13,8 @@
  *	jquery.ui.widget.js
  */
 (function( $, undefined ) {
+		  
+var useOffset = false;
 
 $.widget("ui.resizable", $.ui.mouse, {
 	widgetEventPrefix: "resize",
@@ -258,6 +260,24 @@ $.widget("ui.resizable", $.ui.mouse, {
 		if (o.containment) {
 			curleft += $(o.containment).scrollLeft() || 0;
 			curtop += $(o.containment).scrollTop() || 0;
+		} else {
+			//If containment is not set but resizable is in a scrollable container, recalculate position or use offset (see ticket #3815)
+			var lastLeft = lastTop = parentLeft = parentTop = 0;
+			el.parents( ":not(body, html)" ).each( function() {
+				if ( $.ui.hasScroll( this ) ) {
+					if( this === el.parent()[0] ) {
+						curleft += $( this ).scrollLeft() || 0;
+						curtop += $( this ).scrollTop() || 0;
+						useOffset = false;
+						return false;
+					} else {
+						curleft = el.offset().left;
+						curtop = el.offset().top;
+						useOffset = true;
+						return false;
+					}
+				} 
+			});
 		}
 
 		//Store needed variables
@@ -301,9 +321,12 @@ $.widget("ui.resizable", $.ui.mouse, {
 		// plugins callbacks need to be called first
 		this._propagate("resize", event);
 
+		//If the resizable is in a scrollable container that is above its parent, use offset to position (see #3815)
+		el[ useOffset ? "offset" : "css" ]({
+    			top: this.position.top + "px", left: this.position.left + "px"
+		});
 		el.css({
-			top: this.position.top + "px", left: this.position.left + "px",
-			width: this.size.width + "px", height: this.size.height + "px"
+    			width: this.size.width + "px", height: this.size.height + "px"
 		});
 
 		if (!this._helper && this._proportionallyResizeElements.length)
