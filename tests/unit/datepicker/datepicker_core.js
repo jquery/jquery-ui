@@ -116,8 +116,16 @@ test('baseStructure', function() {
 	ok(child.is('div.ui-datepicker-group') && child.is('div.ui-datepicker-group-last'), 'Structure multi [2] - second month division');
 	child = dp.children(':eq(2)');
 	ok(child.is('div.ui-datepicker-row-break'), 'Structure multi [2] - row break');
+	ok(dp.is('.ui-datepicker-multi-2'), 'Structure multi [2] - multi-2');
 	inp.datepicker('hide').datepicker('destroy');
 	
+	// Multi-month 3
+	inp = init('#inp', {numberOfMonths: 3});
+	inp.focus();
+	ok(dp.is('.ui-datepicker-multi-3'), 'Structure multi [3] - multi-3');
+	ok(! dp.is('.ui-datepicker-multi-2'), 'Structure multi [3] - Trac #6704');
+	inp.datepicker('hide').datepicker('destroy');
+
 	// Multi-month [2, 2]
 	inp = init('#inp', {numberOfMonths: [2, 2]});
 	inp.focus();

@@ -1,39 +1,30 @@
-/*
- * autocomplete_methods.js
- */
-(function($) {
+(function( $ ) {
 
+module( "autocomplete: methods" );
 
-module("autocomplete: methods", {
-	teardown: function() {
-		$( ":ui-autocomplete" ).autocomplete( "destroy" );
-	}
+test( "destroy", function() {
+	expect( 1 );
+	domEqual( "#autocomplete", function() {
+		$( "#autocomplete" ).autocomplete().autocomplete( "destroy" );
+	});
 });
 
-test("destroy", function() {
-	domEqual("#autocomplete", function() {
-		$("#autocomplete").autocomplete().autocomplete("destroy");
-	});
-})
+test( "search", function() {
+	expect( 3 );
+	var data = [ "c++", "java", "php", "coldfusion", "javascript", "asp", "ruby", "python", "c", "scala", "groovy", "haskell", "perl" ],
+		element = $( "#autocomplete" ).autocomplete({
+			source: data,
+			minLength: 0
+		}),
+		menu = element.autocomplete( "widget" );
+	element.autocomplete( "search" );
+	equal( menu.find( ".ui-menu-item" ).length, data.length, "all items for a blank search" );
 
-var data = ["c++", "java", "php", "coldfusion", "javascript", "asp", "ruby", "python", "c", "scala", "groovy", "haskell", "perl"];
+	element.val( "has" ).autocomplete( "search" );
+	equal( menu.find( ".ui-menu-item" ).text(), "haskell", "only one item for set input value" );
 
-test("search", function() {
-	var ac = $("#autocomplete").autocomplete({
-		source: data,
-		minLength: 0
-	});
-	ac.autocomplete("search");
-	same( $(".ui-menu .ui-menu-item").length, data.length, "all items for a blank search" );
-	
-	ac.val("has");
-	ac.autocomplete("search")
-	same( $(".ui-menu .ui-menu-item").text(), "haskell", "only one item for set input value" );
-	
-	ac.autocomplete("search", "ja");
-	same( $(".ui-menu .ui-menu-item").length, 2, "only java and javascript for 'ja'" );
-	
-	$("#autocomplete").autocomplete("destroy");
-})
+	element.autocomplete( "search", "ja" );
+	equal( menu.find( ".ui-menu-item" ).length, 2, "only java and javascript for 'ja'" );
+});
 
-})(jQuery);
+}( jQuery ) );

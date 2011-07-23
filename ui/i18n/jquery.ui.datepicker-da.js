@@ -1,4 +1,4 @@
-﻿/* Danish initialisation for the jQuery UI date picker plugin. */
+/* Danish initialisation for the jQuery UI date picker plugin. */
 /* Written by Jan Christensen ( deletestuff@gmail.com). */
 jQuery(function($){
     $.datepicker.regional['da'] = {

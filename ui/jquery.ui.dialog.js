@@ -36,6 +36,7 @@ var uiDialogClasses = "ui-dialog ui-widget ui-widget-content ui-corner-all ",
 	};
 
 $.widget("ui.dialog", {
+	version: "@VERSION",
 	options: {
 		autoOpen: true,
 		buttons: {},
@@ -86,16 +87,14 @@ $.widget("ui.dialog", {
 			titleId = $.ui.dialog.getTitleId( self.element ),
 
 			uiDialog = ( self.uiDialog = $( "<div>" ) )
-				.appendTo( document.body )
-				.hide()
 				.addClass( uiDialogClasses + options.dialogClass )
 				.css({
+					display: "none",
+					outline: 0, // TODO: move to stylesheet
 					zIndex: options.zIndex
 				})
 				// setting tabIndex makes the div focusable
 				.attr( "tabIndex", -1)
-				// TODO: move to stylesheet
-				.css( "outline", 0 )
 				.keydown(function( event ) {
 					if ( options.closeOnEscape && !event.isDefaultPrevented() && event.keyCode &&
 							event.keyCode === $.ui.keyCode.ESCAPE ) {
@@ -109,7 +108,8 @@ $.widget("ui.dialog", {
 				})
 				.mousedown(function( event ) {
 					self.moveToTop( false, event );
-				}),
+				})
+				.appendTo( "body" ),
 
 			uiDialogContent = self.element
 				.show()
@@ -190,6 +190,10 @@ $.widget("ui.dialog", {
 	},
 
 	close: function( event ) {
+		if ( !this._isOpen ) {
+			return self;
+		}
+
 		var self = this,
 			maxZ, thisZ;
 		
@@ -197,12 +201,12 @@ $.widget("ui.dialog", {
 			return;
 		}
 
+		self._isOpen = false;
+
 		if ( self.overlay ) {
 			self.overlay.destroy();
 		}
 		self.uiDialog.unbind( "keypress.ui-dialog" );
-
-		self._isOpen = false;
 
 		if ( self.options.hide ) {
 			self.uiDialog.hide( self.options.hide, function() {
@@ -281,10 +285,10 @@ $.widget("ui.dialog", {
 			options = self.options,
 			uiDialog = self.uiDialog;
 
-		self.overlay = options.modal ? new $.ui.dialog.overlay( self ) : null;
 		self._size();
 		self._position( options.position );
 		uiDialog.show( options.show );
+		self.overlay = options.modal ? new $.ui.dialog.overlay( self ) : null;
 		self.moveToTop( true );
 
 		// prevent tabbing out of modal dialogs
@@ -310,9 +314,14 @@ $.widget("ui.dialog", {
 
 		// set focus to the first tabbable element in the content area or the first button
 		// if there are no tabbable elements, set focus on the dialog itself
-		$( self.element.find( ":tabbable" ).get().concat(
-			uiDialog.find( ".ui-dialog-buttonpane :tabbable" ).get().concat(
-				uiDialog.get() ) ) ).eq( 0 ).focus();
+		var hasFocus = self.element.find( ":tabbable" );
+		if ( !hasFocus.length ) {
+			hasFocus = uiDialog.find( ".ui-dialog-buttonpane :tabbable" );
+			if ( !hasFocus.length ) {
+				hasFocus = uiDialog;
+			}
+		}
+		hasFocus.eq( 0 ).focus();
 
 		self._isOpen = true;
 		self._trigger( "open" );
@@ -322,12 +331,7 @@ $.widget("ui.dialog", {
 
 	_createButtons: function( buttons ) {
 		var self = this,
-			hasButtons = false,
-			uiDialogButtonPane = $( "<div>" )
-				.addClass( "ui-dialog-buttonpane  ui-widget-content ui-helper-clearfix" ),
-			uiButtonSet = $( "<div>" )
-				.addClass( "ui-dialog-buttonset" )
-				.appendTo( uiDialogButtonPane );
+			hasButtons = false;
 
 		// if we already have a button pane, remove it
 		self.uiDialog.find( ".ui-dialog-buttonpane" ).remove();
@@ -338,6 +342,12 @@ $.widget("ui.dialog", {
 			});
 		}
 		if ( hasButtons ) {
+			var uiDialogButtonPane = $( "<div>" )
+					.addClass( "ui-dialog-buttonpane  ui-widget-content ui-helper-clearfix" ),
+				uiButtonSet = $( "<div>" )
+					.addClass( "ui-dialog-buttonset" )
+					.appendTo( uiDialogButtonPane );
+
 			$.each( buttons, function( name, props ) {
 				props = $.isFunction( props ) ?
 					{ click: props, text: name } :
@@ -363,8 +373,7 @@ $.widget("ui.dialog", {
 	_makeDraggable: function() {
 		var self = this,
 			options = self.options,
-			doc = $( document ),
-			heightBeforeDrag;
+			doc = $( document );
 
 		function filteredUi( ui ) {
 			return {
@@ -378,9 +387,7 @@ $.widget("ui.dialog", {
 			handle: ".ui-dialog-titlebar",
 			containment: "document",
 			start: function( event, ui ) {
-				heightBeforeDrag = options.height === "auto" ? "auto" : $( this ).height();
 				$( this )
-					.height( $( this ).height() )
 					.addClass( "ui-dialog-dragging" );
 				self._trigger( "dragStart", event, filteredUi( ui ) );
 			},
@@ -393,8 +400,7 @@ $.widget("ui.dialog", {
 					ui.position.top - doc.scrollTop()
 				];
 				$( this )
-					.removeClass( "ui-dialog-dragging" )
-					.height( heightBeforeDrag );
+					.removeClass( "ui-dialog-dragging" );
 				self._trigger( "dragStop", event, filteredUi( ui ) );
 				$.ui.dialog.overlay.resize();
 			}
@@ -649,8 +655,6 @@ $.widget("ui.dialog", {
 });
 
 $.extend($.ui.dialog, {
-	version: "@VERSION",
-
 	uuid: 0,
 	maxZ: 0,
 
@@ -736,7 +740,7 @@ $.extend( $.ui.dialog.overlay, {
 			$( [ document, window ] ).unbind( ".dialog-overlay" );
 		}
 
-		$el.remove();
+		$el.height( 0 ).width( 0 ).remove();
 
 		// adjust the maxZ to allow other modal dialogs to continue to work (see #4309)
 		var maxZ = 0;
@@ -749,8 +753,8 @@ $.extend( $.ui.dialog.overlay, {
 	height: function() {
 		var scrollHeight,
 			offsetHeight;
-		// handle IE 6
-		if ( $.browser.msie && $.browser.version < 7 ) {
+		// handle IE
+		if ( $.browser.msie ) {
 			scrollHeight = Math.max(
 				document.documentElement.scrollHeight,
 				document.body.scrollHeight
@@ -774,8 +778,8 @@ $.extend( $.ui.dialog.overlay, {
 	width: function() {
 		var scrollWidth,
 			offsetWidth;
-		// handle IE 6
-		if ( $.browser.msie && $.browser.version < 7 ) {
+		// handle IE
+		if ( $.browser.msie ) {
 			scrollWidth = Math.max(
 				document.documentElement.scrollWidth,
 				document.body.scrollWidth

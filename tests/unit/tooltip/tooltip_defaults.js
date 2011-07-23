@@ -1,16 +1,20 @@
-/*
- * tooltip_defaults.js
- */
+commonWidgetTests( "tooltip", {
+	defaults: {
+		content: function() {},
+		disabled: false,
+		hide: true,
+		items: "[title]",
+		position: {
+			my: "left+15 center",
+			at: "right center",
+			collision: "flip fit"
+		},
+		show: true,
+		tooltipClass: null,
 
-var tooltip_defaults = {
-	disabled: false,
-	items: "[title]",
-	content: $.ui.tooltip.prototype.options.content,
-	position: {
-		my: "left center",
-		at: "right center",
-		offset: "15 0"
+		// callbacks
+		close: null,
+		create: null,
+		open: null
 	}
-};
-
-commonWidgetTests('tooltip', { defaults: tooltip_defaults });
+});

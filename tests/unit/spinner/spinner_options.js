@@ -5,26 +5,26 @@
 
 module("spinner: options");
 
-test("numberformat, number", function() {
+test("numberFormat, number", function() {
 	var el = $("#spin").spinner({
 		value: "1",
-		numberformat: "n"
+		numberFormat: "n"
 	});
 	equal(el.val(), "1.00");
 });
 
-test("numberformat, number, simple", function() {
+test("numberFormat, number, simple", function() {
 	var el = $("#spin").spinner({
 		value: "1",
-		numberformat: "n0"
+		numberFormat: "n0"
 	});
 	equal(el.val(), "1");
 });
 
-test("numberformat, currency", function() {
+test("numberFormat, currency", function() {
 	var el = $("#spin").spinner({
 		value: "1",
-		numberformat: "C"
+		numberFormat: "C"
 	});
 	equal(el.val(), "$1.00");
 });
@@ -111,7 +111,7 @@ test("step, 2", function() {
 test("step, 0.7", function() {
 	var el = $("#spin").spinner({
 		step: 0.7,
-		numberformat: "n1"
+		numberFormat: "n1"
 	});
 	equals(el.val(), "0.0", "value initialized to");
 

@@ -202,6 +202,7 @@ test( "merge multiple option arguments", function() {
 	$.widget( "ui.testWidget", {
 		_create: function() {
 			same( this.options, {
+				create: null,
 				disabled: false,
 				option1: "value1",
 				option2: "value2",
@@ -249,6 +250,7 @@ test( "._getCreateOptions()", function() {
 		},
 		_create: function() {
 			same( this.options, {
+				create: null,
 				disabled: false,
 				option1: "override1",
 				option2: "value2",
@@ -286,6 +288,45 @@ test( "re-init", function() {
 	actions = [];
 	div.testWidget({ foo: "bar" });
 	same( actions, [ "optionfoo", "init" ], "correct methods called on re-init with options" );
+});
+
+test( "inheritance - options", function() {
+	// #5830 - Widget: Using inheritance overwrites the base classes options
+	$.widget( "ui.testWidgetBase", {
+		options: {
+			obj: {
+				key1: "foo",
+				key2: "bar"
+			},
+			arr: [ "testing" ]
+		}
+	});
+
+	$.widget( "ui.testWidgetExtension", $.ui.testWidgetBase, {
+		options: {
+			obj: {
+				key1: "baz"
+			},
+			arr: [ "alpha", "beta" ]
+		}
+	});
+
+	same( $.ui.testWidgetBase.prototype.options.obj, {
+		key1: "foo",
+		key2: "bar"
+	}, "base class option object not overridden");
+	same( $.ui.testWidgetBase.prototype.options.arr, [ "testing" ],
+		"base class option array not overridden");
+
+	same( $.ui.testWidgetExtension.prototype.options.obj, {
+		key1: "baz",
+		key2: "bar"
+	}, "extension class option object extends base");
+	same( $.ui.testWidgetExtension.prototype.options.arr, [ "alpha", "beta" ],
+		"extension class option array overwrites base");
+
+	delete $.ui.testWidgetBase;
+	delete $.ui.testWidgetExtension;
 });
 
 test( "._super()", function() {
@@ -372,6 +413,7 @@ test( ".option() - getter", function() {
 		qux: [ "quux", "quuux" ]
 	});
 
+	same( div.testWidget( "option", "x" ), null, "non-existent option" );
 	same( div.testWidget( "option", "foo"), "bar", "single option - string" );
 	same( div.testWidget( "option", "baz"), 5, "single option - number" );
 	same( div.testWidget( "option", "qux"), [ "quux", "quuux" ],
@@ -379,6 +421,7 @@ test( ".option() - getter", function() {
 
 	var options = div.testWidget( "option" );
 	same( options, {
+		create: null,
 		disabled: false,
 		foo: "bar",
 		baz: 5,
@@ -387,6 +430,24 @@ test( ".option() - getter", function() {
 	options.foo = "notbar";
 	same( div.testWidget( "option", "foo"), "bar",
 		"modifying returned options hash does not modify plugin instance" );
+});
+
+test( ".option() - deep option getter", function() {
+	$.widget( "ui.testWidget", {} );
+	var div = $( "<div>" ).testWidget({
+		foo: {
+			bar: "baz",
+			qux: {
+				quux: "xyzzy"
+			}
+		}
+	});
+	equal( div.testWidget( "option", "foo.bar" ), "baz", "one level deep - string" );
+	deepEqual( div.testWidget( "option", "foo.qux" ), { quux: "xyzzy" },
+		"one level deep - object" );
+	equal( div.testWidget( "option", "foo.qux.quux" ), "xyzzy", "two levels deep - string" );
+	equal( div.testWidget( "option", "x.y" ), null, "top level non-existent" );
+	equal( div.testWidget( "option", "foo.x.y" ), null, "one level deep - non-existent" );
 });
 
 test( ".option() - delegate to ._setOptions()", function() {
@@ -439,6 +500,30 @@ test( ".option() - delegate to ._setOption()", function() {
 		{ key: "bar", val: "qux" },
 		{ key: "quux", val: "quuux" }
 	], "_setOption called with multiple options" );
+});
+
+test( ".option() - deep option setter", function() {
+	$.widget( "ui.testWidget", {} );
+	var div = $( "<div>" ).testWidget();
+	function deepOption( from, to, msg ) {
+		div.data( "testWidget" ).options.foo = from;
+		$.ui.testWidget.prototype._setOption = function( key, value ) {
+			same( key, "foo", msg + ": key" );
+			same( value, to, msg + ": value" );
+		};
+	}
+
+	deepOption( { bar: "baz" }, { bar: "qux" }, "one deep" );
+	div.testWidget( "option", "foo.bar", "qux" );
+
+	deepOption( null, { bar: "baz" }, "null" );
+	div.testWidget( "option", "foo.bar", "baz" );
+
+	deepOption(
+		{ bar: "baz", qux: { quux: "quuux" } },
+		{ bar: "baz", qux: { quux: "quuux", newOpt: "newVal" } },
+		"add property" );
+	div.testWidget( "option", "foo.qux.newOpt", "newVal" );
 });
 
 test( ".enable()", function() {
@@ -766,6 +851,55 @@ test( "._trigger() - provide event and ui", function() {
 				}
 			}, "modified ui hash passed" );
 			ui.baz.quux = "jQuery";
+		}
+	})
+	.testWidget( "testEvent" );
+});
+
+test( "._trigger() - array as ui", function() {
+	// #6795 - Widget: handle array arguments to _trigger consistently
+	expect( 4 );
+
+	$.widget( "ui.testWidget", {
+		_create: function() {},
+		testEvent: function() {
+			var ui = {
+					foo: "bar",
+					baz: {
+						qux: 5,
+						quux: 20
+					}
+				};
+			var extra = {
+				bar: 5
+			};
+			this._trigger( "foo", null, [ ui, extra ] );
+		}
+	});
+	$( "#widget" ).bind( "testwidgetfoo", function( event, ui, extra ) {
+		same( ui, {
+			foo: "bar",
+			baz: {
+				qux: 5,
+				quux: 20
+			}
+		}, "event: ui hash passed" );
+		same( extra, {
+			bar: 5
+		}, "event: extra argument passed" );
+	});
+	$( "#widget" ).testWidget({
+		foo: function( event, ui, extra ) {
+			same( ui, {
+				foo: "bar",
+				baz: {
+					qux: 5,
+					quux: 20
+				}
+			}, "callback: ui hash passed" );
+			same( extra, {
+				bar: 5
+			}, "callback: extra argument passed" );
 		}
 	})
 	.testWidget( "testEvent" );

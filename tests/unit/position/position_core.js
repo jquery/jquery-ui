@@ -1,5 +1,10 @@
 (function( $ ) {
 
+function scrollTopSupport() {
+	$( window ).scrollTop( 1 );
+	return $( window ).scrollTop() === 1;
+}
+
 module( "position" );
 
 test( "my, at, of", function() {
@@ -59,7 +64,6 @@ test( "positions", function() {
 		center: 3,
 		right: 6,
 		top: 0,
-		center: 3,
 		bottom: 6
 	};
 	var start = { left: 4, top: 4 };
@@ -161,11 +165,7 @@ test( "of", function() {
 		left: $( window ).width() - 10
 	}, "window as jQuery object" );
 
-	var scrollTopSupport = (function() {
-		$( window ).scrollTop( 1 );
-		return $( window ).scrollTop() === 1;
-	}() );
-	if ( scrollTopSupport ) {
+	if ( scrollTopSupport() ) {
 		$( window ).scrollTop( 500 ).scrollLeft( 200 );
 		$( "#elx" ).position({
 			my: "right bottom",
@@ -311,6 +311,24 @@ test( "collision: fit, with offset", function() {
 	}, { top: 0, left: 0 }, "left top, negative offset" );
 });
 
+test( "collision: fit, window scrolled", function() {
+	if ( scrollTopSupport() ) {
+		var win = $( window );
+		win.scrollTop( 300 ).scrollLeft( 200 );
+
+		collisionTest({
+			collision: "fit",
+			at: "left-100 top-100"
+		}, { top: 300, left: 200 }, "top left" );
+		collisionTest2({
+			collision: "fit",
+			at: "right+100 bottom+100"
+		}, { top: 300 + win.height() - 10, left: 200 + win.width() - 10 }, "right bottom" );
+
+		win.scrollTop( 0 ).scrollLeft( 0 );
+	}
+});
+
 test( "collision: flip, no offset", function() {
 	collisionTest({
 		collision: "flip"
@@ -334,7 +352,7 @@ test( "collision: flip, with offset", function() {
 
 	collisionTest2({
 		collision: "flip",
-		at: "left-2 top-3",
+		at: "left-2 top-3"
 	}, { top: $( window ).height() + 3, left: $( window ).width() + 2 }, "right bottom, negative offset" );
 });
 
@@ -415,6 +433,87 @@ test( "collision: flip, with margin", function() {
 		collision: "flip",
 		at: "right bottom"
 	}, { top: 0, left: 0 }, "right bottom" );
+});
+
+test( "addClass: flipped left", function() {
+	var elem = $( "#elx" ).position( {
+		my: "left center",
+		of: window,
+		collision: "flip",
+		at: "right center"
+	});
+
+	same( elem.hasClass( 'ui-flipped-left' ), true, 'Has ui-flipped-left class' );
+
+	elem.position( {
+		my: "right center",
+		of: window,
+		collision: "flip",
+		at: "left center"
+	})
+	
+	same( elem.hasClass( 'ui-flipped-left' ), false, 'Removed ui-flipped-left class' );
+});
+
+test( "addClass: flipped top", function() {
+	var elem = $( "#elx" ).position( {
+		my: "left top",
+		of: window,
+		collision: "flip",
+		at: "right bottom"
+	});
+
+	same( elem.hasClass( 'ui-flipped-top' ), true, 'Has ui-flipped-top class' );
+	
+	elem.position( {
+		my: "left bottom",
+		of: window,
+		collision: "flip",
+		at: "right top"
+	});
+
+	same( elem.hasClass( 'ui-flipped-top' ), false, 'Removed ui-flipped-top class' );
+});
+
+test( "addClass: flipped right", function() {
+	var elem = $( "#elx" ).position( {
+		my: "right center",
+		of: window,
+		collision: "flip",
+		at: "left center"
+	});
+
+	same( elem.hasClass( 'ui-flipped-right' ), true, 'Has ui-flipped-right class' );
+
+	elem.position( {
+		my: "left center",
+		of: window,
+		collision: "flip",
+		at: "right center"
+	});
+
+	same( elem.hasClass( 'ui-flipped-right' ), false, 'Removed ui-flipped-right class' );
+
+});
+
+test( "addClass: flipped bottom", function() {
+	var elem = $( "#elx" ).position( {
+		my: "left bottom",
+		of: window,
+		collision: "flip",
+		at: "right top"
+	});
+
+	same( elem.hasClass( 'ui-flipped-bottom' ), true, 'Has ui-flipped-bottom class' );
+	
+	elem.position( {
+		my: "left top",
+		of: window,
+		collision: "flip",
+		at: "right bottom"
+	});
+
+	same( elem.hasClass( 'ui-flipped-bottom' ), false, 'Removed ui-flipped-bottom class' );
 });
 
 //test( "bug #5280: consistent results (avoid fractional values)", function() {

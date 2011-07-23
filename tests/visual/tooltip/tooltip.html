@@ -10,7 +10,9 @@
 	<script type="text/javascript" src="../../../ui/jquery.ui.position.js"></script>
 	<script type="text/javascript" src="../../../ui/jquery.ui.button.js"></script>
 	<script type="text/javascript" src="../../../ui/jquery.ui.tooltip.js"></script>
+	<!--
 	<script type="text/javascript" src="http://jqueryui.com/themeroller/themeswitchertool/"></script>
+	-->
 	<script type="text/javascript">
 	$(function() {
 		$.fn.themeswitcher && $('<div/>').css({
@@ -18,20 +20,22 @@
 			right: 10,
 			top: 10
 		}).appendTo(document.body).themeswitcher();
-		
+
 		function enable() {
 			// default
 			$("#context1, form, #childish").tooltip();
 			
 			// custom class, replaces ui-widget-content
-			$("#context2").tooltip().each(function() {
-				$(this).tooltip("widget").addClass("ui-widget-header");
-			})
-			$("#right1").tooltip().tooltip("widget").addClass("ui-state-error");
+			$("#context2").tooltip({
+				tooltipClass: "ui-widget-header"
+			});
+			$("#right1").tooltip({
+				tooltipClass: "ui-state-error"
+			});
 			
 			// synchronous content
 			$("#footnotes").tooltip({
-				items: "[href^=#]",
+				items: "[href^='#']",
 				content: function() {
 					return $($(this).attr("href")).html();
 				}
@@ -64,12 +68,13 @@
 			
 			// custom position
 			$("#right2").tooltip({
+				tooltipClass: "ui-state-highlight",
 				position: {
 					my: "center top",
 					at: "center bottom",
 					offset: "0 10"
 				}
-			}).tooltip("widget").addClass("ui-state-highlight");
+			});
 			
 			$("#button1").button();
 			$("#button2").button({
@@ -94,12 +99,12 @@
 		enable();
 		
 		$("#disable").toggle(function() {
-			$("*").tooltip("disable");
+			$(":ui-tooltip").tooltip("disable");
 		}, function() {
-			$("*").tooltip("enable");
+			$(":ui-tooltip").tooltip("enable");
 		});
 		$("#toggle").toggle(function() {
-			$("*").tooltip("destroy");
+			$(":ui-tooltip").tooltip("destroy");
 		}, function() {
 			enable();
 		});

@@ -12,9 +12,12 @@
  *	jquery.ui.widget.js
  */
 (function( $, undefined ) {
+		  
+var lastToggle = {};
 
 // TODO: use ui-accordion-header-active class and fix styling
 $.widget( "ui.accordion", {
+	version: "@VERSION",
 	options: {
 		active: 0,
 		animated: "slide",
@@ -25,14 +28,16 @@ $.widget( "ui.accordion", {
 		icons: {
 			activeHeader: "ui-icon-triangle-1-s",
 			header: "ui-icon-triangle-1-e"
-		}
+		},
+
+		// callbacks
+		activate: null,
+		beforeActivate: null
 	},
 
 	_create: function() {
 		var self = this,
 			options = self.options;
-
-		self.running = false;
 
 		self.element.addClass( "ui-accordion ui-widget ui-helper-reset" );
 
@@ -157,15 +162,18 @@ $.widget( "ui.accordion", {
 			return;
 		}
 
+		if ( key === "event" ) {
+			if ( this.options.event ) {
+				this.headers.unbind( this.options.event + ".accordion", this._eventHandler );
+			}
+			this._setupEvents( value );
+		}
+
 		this._super( "_setOption", key, value );
 
 		// setting collapsible: false while collapsed; open first panel
 		if ( key === "collapsible" && !value && this.options.active === false ) {
 			this._activate( 0 );
-		}
-
-		if ( key === "event" ) {
-			this._setupEvents( value );
 		}
 
 		if ( key === "icons" ) {
@@ -275,7 +283,7 @@ $.widget( "ui.accordion", {
 		}
 
 		// trying to collapse, simulate a click on the currently active header
-		active = active || this.active;
+		active = active || this.active[ 0 ];
 
 		this._eventHandler({
 			target: active,
@@ -289,7 +297,6 @@ $.widget( "ui.accordion", {
 	},
 
 	_setupEvents: function( event ) {
-		this.headers.unbind( ".accordion" );
 		if ( event ) {
 			this.headers.bind( event.split( " " ).join( ".accordion " ) + ".accordion",
 				$.proxy( this, "_eventHandler" ) );
@@ -314,12 +321,10 @@ $.widget( "ui.accordion", {
 		event.preventDefault();
 
 		if ( options.disabled ||
-				// can't switch during an animation
-				this.running ||
 				// click on active header, but not collapsible
 				( clickedIsActive && !options.collapsible ) ||
 				// allow canceling activation
-				( this._trigger( "beforeActivate", null, eventData ) === false ) ) {
+				( this._trigger( "beforeActivate", event, eventData ) === false ) ) {
 			return;
 		}
 
@@ -356,7 +361,6 @@ $.widget( "ui.accordion", {
 			toShow = data.newContent,
 			toHide = data.oldContent;
 
-		self.running = true;
 		function complete() {
 			self._completed( data );
 		}
@@ -377,6 +381,8 @@ $.widget( "ui.accordion", {
 			animations[ animation ]({
 				toShow: toShow,
 				toHide: toHide,
+				prevShow: lastToggle.toShow,
+				prevHide: lastToggle.toHide,
 				complete: complete,
 				down: toShow.length && ( !toHide.length || ( toShow.index() < toHide.index() ) )
 			}, additional );
@@ -407,8 +413,6 @@ $.widget( "ui.accordion", {
 		var toShow = data.newContent,
 			toHide = data.oldContent;
 
-		this.running = false;
-
 		if ( this.options.heightStyle === "content" ) {
 			toShow.add( toHide ).css({
 				height: "",
@@ -428,9 +432,13 @@ $.widget( "ui.accordion", {
 });
 
 $.extend( $.ui.accordion, {
-	version: "@VERSION",
 	animations: {
 		slide: function( options, additions ) {
+			if ( options.prevShow || options.prevHide ) {
+				options.prevHide.stop( true, true );
+				options.toHide = options.prevShow;
+			}
+			
 			var showOverflow = options.toShow.css( "overflow" ),
 				hideOverflow = options.toHide.css( "overflow" ),
 				percentDone = 0,
@@ -442,6 +450,9 @@ $.extend( $.ui.accordion, {
 				easing: "swing",
 				duration: 300
 			}, options, additions );
+			
+			lastToggle = options;
+
 			if ( !options.toHide.size() ) {
 				originalWidth = options.toShow[0].style.width;
 				options.toShow
@@ -482,9 +493,11 @@ $.extend( $.ui.accordion, {
 			$.each( fxAttrs, function( i, prop ) {
 				hideProps[ prop ] = "hide";
 
-				var parts = ( "" + $.css( options.toShow[0], prop ) ).match( /^([\d+-.]+)(.*)$/ );
+				var parts = ( "" + $.css( options.toShow[0], prop ) ).match( /^([\d+-.]+)(.*)$/ ),
+					// work around bug when a panel has no height - #7335
+					propVal = prop === "height" && parts[ 1 ] === "0" ? 1 : parts[ 1 ];
 				showProps[ prop ] = {
-					value: parts[ 1 ],
+					value: propVal,
 					unit: parts[ 2 ] || "px"
 				};
 			});
@@ -496,10 +509,7 @@ $.extend( $.ui.accordion, {
 				.filter( ":visible" )
 				.animate( hideProps, {
 				step: function( now, settings ) {
-					// only calculate the percent when animating height
-					// IE gets very inconsistent results when animating elements
-					// with small values, which is common for padding
-					if ( settings.prop == "height" ) {
+					if ( settings.prop == "height" || settings.prop == "paddingTop" || settings.prop == "paddingBottom" ) {
 						percentDone = ( settings.end - settings.start === 0 ) ? 0 :
 							( settings.now - settings.start ) / ( settings.end - settings.start );
 					}
@@ -649,6 +659,11 @@ if ( $.uiBackCompat !== false ) {
 
 	// change events
 	(function( $, prototype ) {
+		$.extend( prototype.options, {
+			change: null,
+			changestart: null
+		});
+
 		var _trigger = prototype._trigger;
 		prototype._trigger = function( type, event, data ) {
 			var ret = _trigger.apply( this, arguments );
