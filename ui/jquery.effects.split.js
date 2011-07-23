@@ -15,7 +15,7 @@
 (function( $, undefined ) {
 
 	//Helper function to control the split on each animation
-	function startSplitAnim( el, o, animation, next ) {
+	function startSplitAnim( el, o, animation, done ) {
 		
 		//Support for pieces
 		if ( ( !o.rows || !o.columns ) && o.pieces ) {
@@ -81,10 +81,7 @@
 			
 			container.remove( );
 			
-			if ( $.isFunction( o.complete ) ) {
-				o.complete.apply( el[ 0 ] );
-			}
-			next();
+			done();
 		}
 
 	}
@@ -172,7 +169,7 @@
 		return pieces;
 	}
 
-	$.effects.effect.build = function( o ){
+	$.effects.effect.build = function( o, done ){
 		
 		/*Options:
 		 * 		random,
@@ -190,84 +187,80 @@
 		 * 		show
 		 *		complete
 		 */
-
-		return this.queue( function( next ) {
 	
-			var el = $( this ),
-				opt = splitOptions( el, {
-						direction: "bottom",
-						distance: 1,
-						reverse: false,
-						random: false,
-						interval: false,
-						fade: true,
-						crop: false
-					}, o );
+		var el = $( this ),
+			opt = splitOptions( el, {
+					direction: "bottom",
+					distance: 1,
+					reverse: false,
+					random: false,
+					interval: false,
+					fade: true,
+					crop: false
+				}, o );
 
-			function animate( width, height, interval, duration, row, column, documentCoords, parentCoords, callback ) {	    		
-				var random = opt.random ? Math.abs( opt.random ) : 0, 
-					el = $( this ),
-					randomDelay = Math.random() * ( opt.rows + opt.columns ) * interval, 
-					uniformDelay = ( opt.reverse || opt.distance < 0 ) ? 
-							( ( row + column ) * interval ) : 
-							( ( ( opt.rows + opt.columns ) - ( row + column ) ) * interval ), 
-					delay = randomDelay * random + Math.max( 1 - random, 0 ) * uniformDelay, 
-					properties = el.offset(),   
-					maxTop = documentCoords.height - height,
-					maxLeft = documentCoords.width - width,
-					top, left;
+		function animate( width, height, interval, duration, row, column, documentCoords, parentCoords, callback ) {	    		
+			var random = opt.random ? Math.abs( opt.random ) : 0, 
+				el = $( this ),
+				randomDelay = Math.random() * ( opt.rows + opt.columns ) * interval, 
+				uniformDelay = ( opt.reverse || opt.distance < 0 ) ? 
+						( ( row + column ) * interval ) : 
+						( ( ( opt.rows + opt.columns ) - ( row + column ) ) * interval ), 
+				delay = randomDelay * random + Math.max( 1 - random, 0 ) * uniformDelay, 
+				properties = el.offset(),   
+				maxTop = documentCoords.height - height,
+				maxLeft = documentCoords.width - width,
+				top, left;
 
-				properties.top -= parentCoords.top;
-				properties.left -= parentCoords.left;
+			properties.top -= parentCoords.top;
+			properties.left -= parentCoords.left;
 
-				if ( opt.fade ) {
-					properties.opacity = ( opt.show ? 1 : 0 );
-					el.css( "opacity", opt.show ? 0 : "" );
-				}
-
-
-				if ( opt.direction.indexOf( "bottom" ) !== -1 ) {
-					top = properties.top + parentCoords.height * opt.distance;
-					top = top > maxTop ? maxTop : top;
-				} else if ( opt.direction.indexOf( "top" ) !== -1 ) {
-					top = properties.top - parentCoords.height * opt.distance;
-					top = top < 0 ? 0 : top;
-				}
-
-				if ( opt.direction.indexOf( "right" ) !== -1 ) {
-					left = properties.left + parentCoords.width * opt.distance;
-					left = left > maxLeft ? maxLeft : left;
-				} else if ( opt.direction.indexOf( "left" ) !== -1 ) {
-					left = properties.left - parentCoords.width * opt.distance;
-					left = left < 0 ? 0 : left;
-				}
-
-				if ( opt.direction.indexOf( "right" ) || opt.direction.indexOf( "left" ) ) {
-					if ( opt.show ) {
-						el.css( "left", left );
-					} else {
-						properties.left = left;
-					}
-				}
-
-				if ( opt.direction.indexOf( "top" ) || opt.direction.indexOf( "bottom" ) ) {
-					if ( opt.show ) {
-						el.css( "top", top );
-					} else {
-						properties.top = top;
-					}
-				}
-
-				el.delay( delay ).animate( properties, duration, opt.easing, callback );
+			if ( opt.fade ) {
+				properties.opacity = ( opt.show ? 1 : 0 );
+				el.css( "opacity", opt.show ? 0 : "" );
 			}
-			
-			startSplitAnim( el, opt, animate, next );
 
-		} );
+
+			if ( opt.direction.indexOf( "bottom" ) !== -1 ) {
+				top = properties.top + parentCoords.height * opt.distance;
+				top = top > maxTop ? maxTop : top;
+			} else if ( opt.direction.indexOf( "top" ) !== -1 ) {
+				top = properties.top - parentCoords.height * opt.distance;
+				top = top < 0 ? 0 : top;
+			}
+
+			if ( opt.direction.indexOf( "right" ) !== -1 ) {
+				left = properties.left + parentCoords.width * opt.distance;
+				left = left > maxLeft ? maxLeft : left;
+			} else if ( opt.direction.indexOf( "left" ) !== -1 ) {
+				left = properties.left - parentCoords.width * opt.distance;
+				left = left < 0 ? 0 : left;
+			}
+
+			if ( opt.direction.indexOf( "right" ) || opt.direction.indexOf( "left" ) ) {
+				if ( opt.show ) {
+					el.css( "left", left );
+				} else {
+					properties.left = left;
+				}
+			}
+
+			if ( opt.direction.indexOf( "top" ) || opt.direction.indexOf( "bottom" ) ) {
+				if ( opt.show ) {
+					el.css( "top", top );
+				} else {
+					properties.top = top;
+				}
+			}
+
+			el.delay( delay ).animate( properties, duration, opt.easing, callback );
+		}
+		
+		startSplitAnim( el, opt, animate, done );
 
 	}
 
-	$.effects.effect.pinwheel = function( o ) {
+	$.effects.effect.pinwheel = function( o, done ) {
 		
 		/*Options:
 		 * 		random,
@@ -284,83 +277,80 @@
 		 * 		complete
 		 */
 
-		return this.queue( function( next ) {
+		var el = $( this ),
+			opt = splitOptions ( el, {
+					distance: 1,
+					reverse: false,
+					random: false,
+					interval: 0,
+					fade: true,
+					crop: false
+				}, o );
 
-			var el = $( this ),
-				opt = splitOptions ( el, {
-						distance: 1,
-						reverse: false,
-						random: false,
-						interval: 0,
-						fade: true,
-						crop: false
-					}, o );
+		function animate( width, height, interval, duration, row, column, documentCoords, parentCoords, callback ) {
+			var random = opt.random ? Math.abs( opt.random ) : 0, 
+				el = $( this ),
+				randomDelay = Math.random() * ( opt.rows + opt.columns ) * interval, 
+				uniformDelay = ( opt.reverse ) ? 
+					( ( ( opt.rows + opt.columns ) - ( row + column ) ) * interval ) : 
+					( ( row + column ) * interval ), 
+				delay = randomDelay * random + Math.max( 1 - random, 0 ) * uniformDelay, 
+				startProperties = el.offset(),
+				rowOdd = !( row % 2 ),
+				colOdd = !( column % 2 ),
+				properties, top, left;
 
-			function animate( width, height, interval, duration, row, column, documentCoords, parentCoords, callback ) {
-				var random = opt.random ? Math.abs( opt.random ) : 0, 
-					el = $( this ),
-					randomDelay = Math.random() * ( opt.rows + opt.columns ) * interval, 
-					uniformDelay = ( opt.reverse ) ? 
-						( ( ( opt.rows + opt.columns ) - ( row + column ) ) * interval ) : 
-						( ( row + column ) * interval ), 
-					delay = randomDelay * random + Math.max( 1 - random, 0 ) * uniformDelay, 
-					startProperties = el.offset(),
-					rowOdd = !( row % 2 ),
-					colOdd = !( column % 2 ),
-					properties, top, left;
+			startProperties = {
+					top : startProperties.top - parentCoords.top,
+					left : startProperties.left - parentCoords.left,
+					width : width,
+					height : height
+			};
 
-				startProperties = {
-						top : startProperties.top - parentCoords.top,
-						left : startProperties.left - parentCoords.left,
-						width : width,
-						height : height
-				};
+			//Copy object
+			properties = $.extend( {}, startProperties );
 
-				//Copy object
-				properties = $.extend( {}, startProperties );
-
-				// If we have only rows or columns, ignore the other dimension
-				if ( opt.columns === 1 ) {
-					colOdd = !rowOdd;
-				} else if ( opt.rows === 1 ) {
-					rowOdd = colOdd;
-				}
-
-				if ( opt.fade ) {
-					properties.opacity = ( opt.show ? 1 : 0 );
-					startProperties.opacity = 1;
-				}
-
-				if ( colOdd ) {
-					if ( rowOdd ) {
-						properties.top = properties.top + height * opt.distance;
-					} else {
-						properties.left = properties.left + width * opt.distance;
-					}
-				}
-
-				if ( colOdd != rowOdd ) {
-					properties.width = width * ( 1 - opt.distance );
-				} else {
-					properties.height = height * ( 1 - opt.distance );
-				}
-
-				if ( opt.show ) {
-					el.css( properties );
-					if ( opt.fade ) {
-						el.css( "opacity", 0 );
-					}
-					properties = startProperties;
-				}
-
-				el.delay( delay ).animate( properties, duration, opt.easing, callback );
+			// If we have only rows or columns, ignore the other dimension
+			if ( opt.columns === 1 ) {
+				colOdd = !rowOdd;
+			} else if ( opt.rows === 1 ) {
+				rowOdd = colOdd;
 			}
 
-			startSplitAnim( el, opt, animate, next );
-		} );
+			if ( opt.fade ) {
+				properties.opacity = ( opt.show ? 1 : 0 );
+				startProperties.opacity = 1;
+			}
+
+			if ( colOdd ) {
+				if ( rowOdd ) {
+					properties.top = properties.top + height * opt.distance;
+				} else {
+					properties.left = properties.left + width * opt.distance;
+				}
+			}
+
+			if ( colOdd != rowOdd ) {
+				properties.width = width * ( 1 - opt.distance );
+			} else {
+				properties.height = height * ( 1 - opt.distance );
+			}
+
+			if ( opt.show ) {
+				el.css( properties );
+				if ( opt.fade ) {
+					el.css( "opacity", 0 );
+				}
+				properties = startProperties;
+			}
+
+			el.delay( delay ).animate( properties, duration, opt.easing, callback );
+		}
+
+		startSplitAnim( el, opt, animate, done );
 	}
 	
-	$.effects.effect.blockfade = function( o ) {
+	$.effects.effect.blockfade = function( o, done ) {
 		
 		/*Options:
 		 * 		random,
@@ -374,37 +364,35 @@
 		 * 		show,
 		 * 		complete
 		 */
+	
+		var el = $( this ),
+			opt = splitOptions( el, {
+					distance: 1,						
+					reverse: false,
+					random: false,
+					interval: false
+				}, o );
 
-		return this.queue( function( next ) {
-			var el = $( this ),
-				opt = splitOptions( el, {
-						distance: 1,						
-						reverse: false,
-						random: false,
-						interval: false
-					}, o );
-
-			function animate( width, height, interval, duration, row, column, documentCoords, parentCoords, callback ) {
-				var random = opt.random ? Math.abs( opt.random ) : 0, 
-					el = $( this ),
-					randomDelay = Math.random() * ( opt.rows + opt.columns ) * interval, 
-					uniformDelay = ( opt.reverse ) ? 
-						( ( ( opt.rows + opt.columns ) - ( row + column ) ) * interval ) : 
-						( ( row + column ) * interval ), 
-					delay = randomDelay * random + Math.max( 1 - random, 0 ) * uniformDelay;
-				
-				if ( opt.show ) {
-					el.css( "opacity", 0 );
-				}
-						
-				el.delay( delay ).animate( { opacity: ( opt.show ? 1 : 0 ) }, duration, opt.easing, callback );
+		function animate( width, height, interval, duration, row, column, documentCoords, parentCoords, callback ) {
+			var random = opt.random ? Math.abs( opt.random ) : 0, 
+				el = $( this ),
+				randomDelay = Math.random() * ( opt.rows + opt.columns ) * interval, 
+				uniformDelay = ( opt.reverse ) ? 
+					( ( ( opt.rows + opt.columns ) - ( row + column ) ) * interval ) : 
+					( ( row + column ) * interval ), 
+				delay = randomDelay * random + Math.max( 1 - random, 0 ) * uniformDelay;
+			
+			if ( opt.show ) {
+				el.css( "opacity", 0 );
 			}
+					
+			el.delay( delay ).animate( { opacity: ( opt.show ? 1 : 0 ) }, duration, opt.easing, callback );
+		}
 
-			startSplitAnim( el, opt, animate, next );
-		} );
+		startSplitAnim( el, opt, animate, done );
 	}
 	
-	$.effects.effect.sexplode = function( o ) {
+	$.effects.effect.sexplode = function( o, done ) {
 		
 		/*Options:
 		 * 		random,
@@ -422,76 +410,74 @@
 		 * 		complete,
 		 * 		crop
 		 */
-		
-		return this.queue( function( next ) {
+	
+		var el = $( this ),
+			opt = splitOptions( el, {
+					distance: 1,
+					reverse: false,
+					random: false,
+					sync: false,
+					interval: false,
+					fade: true,
+					crop: false
+				}, o );
+
+		function animate( width, height, interval, duration, row, column, documentCoords, parentCoords, callback ) {
 			var el = $( this ),
-				opt = splitOptions( el, {
-						distance: 1,
-						reverse: false,
-						random: false,
-						sync: false,
-						interval: false,
-						fade: true,
-						crop: false
-					}, o );
-
-			function animate( width, height, interval, duration, row, column, documentCoords, parentCoords, callback ) {
-				var el = $( this ),
-					delay = 0,
-					startProperties = el.offset(),
-					distance = opt.distance,
-					randomX = 0, 
-					randomY = 0, 
-					properties, distanceX, distanceY, distanceXY, seed;
-				
-				startProperties = {
-						top : startProperties.top - parentCoords.top,
-						left : startProperties.left - parentCoords.left
-				};
-				
-				//Copy object
-				properties = $.extend( {}, startProperties );
-				
-				if ( opt.fade ) {
-					properties.opacity = ( opt.show ? 1 : 0 );
-					startProperties.opacity = 1;
-				}
-
-				if ( opt.random ) {
-					seed = ( Math.random() * opt.random ) + Math.max( 1 - opt.random, 0 );
-					distance *= seed;
-					duration *= seed;
-
-					// To syncronize, give each piece an appropriate delay so they end together
-					if ( opt.sync ) {
-						delay = opt.duration - duration;
-					}
-					randomX = Math.random() - 0.5;
-					randomY = Math.random() - 0.5;
-				}
-
-				distanceY = ( parentCoords.height - height ) / 2 - height * row;
-				distanceX = ( parentCoords.width - width ) / 2 - width * column;
-				distanceXY = Math.sqrt( Math.pow( distanceX, 2 ) + Math.pow( distanceY, 2 ) );
-				properties.top -= distanceY * distance + distanceXY * randomY;
-				properties.left -= distanceX * distance + distanceXY * randomX;				
-				
-				if ( opt.show ) {
-					el.css( properties );
-					if ( opt.fade ) {
-						el.css( "opacity", 0 );
-					}
-					properties = startProperties;
-				}
-
-				el.delay( delay ).animate( properties, duration, opt.easing, callback );
+				delay = 0,
+				startProperties = el.offset(),
+				distance = opt.distance,
+				randomX = 0, 
+				randomY = 0, 
+				properties, distanceX, distanceY, distanceXY, seed;
+			
+			startProperties = {
+					top : startProperties.top - parentCoords.top,
+					left : startProperties.left - parentCoords.left
+			};
+			
+			//Copy object
+			properties = $.extend( {}, startProperties );
+			
+			if ( opt.fade ) {
+				properties.opacity = ( opt.show ? 1 : 0 );
+				startProperties.opacity = 1;
 			}
 
-			startSplitAnim( el, opt, animate, next );
-		} );
+			if ( opt.random ) {
+				seed = ( Math.random() * opt.random ) + Math.max( 1 - opt.random, 0 );
+				distance *= seed;
+				duration *= seed;
+
+				// To syncronize, give each piece an appropriate delay so they end together
+				if ( opt.sync ) {
+					delay = opt.duration - duration;
+				}
+				randomX = Math.random() - 0.5;
+				randomY = Math.random() - 0.5;
+			}
+
+			distanceY = ( parentCoords.height - height ) / 2 - height * row;
+			distanceX = ( parentCoords.width - width ) / 2 - width * column;
+			distanceXY = Math.sqrt( Math.pow( distanceX, 2 ) + Math.pow( distanceY, 2 ) );
+			properties.top -= distanceY * distance + distanceXY * randomY;
+			properties.left -= distanceX * distance + distanceXY * randomX;				
+			
+			if ( opt.show ) {
+				el.css( properties );
+				if ( opt.fade ) {
+					el.css( "opacity", 0 );
+				}
+				properties = startProperties;
+			}
+
+			el.delay( delay ).animate( properties, duration, opt.easing, callback );
+		}
+
+		startSplitAnim( el, opt, animate, done );
 	}
 	
-	$.effects.effect.shear = function( o ) {
+	$.effects.effect.shear = function( o, done ) {
 		/*Options:
 		 * 		random,
 		 * 		reverse, 
@@ -509,75 +495,73 @@
 		 * 		crop
 		 */
 
-		return this.queue( function( next ) {
-			var el = $( this ),
-				opt = splitOptions( el, {
-						distance: 1,
-						reverse: false,
-						random: false,
-						interval: false,
-						fade: true,
-						crop: false
-					}, o );
+		var el = $( this ),
+			opt = splitOptions( el, {
+					distance: 1,
+					reverse: false,
+					random: false,
+					interval: false,
+					fade: true,
+					crop: false
+				}, o );
 
-			function animate( width, height, interval, duration, row, column, documentCoords, parentCoords, callback ) {
-				var random = opt.random ? Math.abs( opt.random ) : 0, 
-					el = $( this ),
-					randomDelay = Math.random() * ( opt.rows + opt.columns ) * interval, 
-					uniformDelay = ( opt.reverse ) ? 
-						( ( ( opt.rows + opt.columns ) - ( row + column ) ) * interval ) : 
-						( ( row + column ) * interval ), 
-					delay = randomDelay * random + Math.max( 1 - random, 0 ) * uniformDelay, 
-					startProperties = el.offset(),
-					rowOdd = !( row % 2 ),
-					colOdd = !( column % 2 ),
-					properties, top, left;
-				startProperties = {
-						top : startProperties.top - parentCoords.top,
-						left : startProperties.left - parentCoords.left,
-						width : width,
-						height : height
-				};
+		function animate( width, height, interval, duration, row, column, documentCoords, parentCoords, callback ) {
+			var random = opt.random ? Math.abs( opt.random ) : 0, 
+				el = $( this ),
+				randomDelay = Math.random() * ( opt.rows + opt.columns ) * interval, 
+				uniformDelay = ( opt.reverse ) ? 
+					( ( ( opt.rows + opt.columns ) - ( row + column ) ) * interval ) : 
+					( ( row + column ) * interval ), 
+				delay = randomDelay * random + Math.max( 1 - random, 0 ) * uniformDelay, 
+				startProperties = el.offset(),
+				rowOdd = !( row % 2 ),
+				colOdd = !( column % 2 ),
+				properties, top, left;
+			startProperties = {
+					top : startProperties.top - parentCoords.top,
+					left : startProperties.left - parentCoords.left,
+					width : width,
+					height : height
+			};
 
-				//Copy object
-				properties = $.extend( {}, startProperties );
+			//Copy object
+			properties = $.extend( {}, startProperties );
 
-				// If we have only rows or columns, ignore the other dimension
-				if ( opt.columns === 1 ) {
-					colOdd = rowOdd;
-				} else if ( opt.rows === 1 ) {
-					rowOdd = !colOdd;
-				}
-
-				if ( opt.fade ) {
-					properties.opacity = 0;
-					startProperties.opacity = 1;
-				}
-
-				if ( colOdd === rowOdd ) {
-					if ( !colOdd ) {
-						properties.left -= opt.distance * parentCoords.width;
-					} else {
-						properties.left += opt.distance * parentCoords.width;
-					}
-				} else {
-					if ( !colOdd ){
-						properties.top -= opt.distance * parentCoords.height;
-					} else {
-						properties.top += opt.distance * parentCoords.height;
-					}
-				}
-				
-				if ( opt.show ) {
-					el.css( properties );
-					properties = startProperties;
-				}
-
-				el.delay( delay ).animate( properties, duration, opt.easing, callback );
+			// If we have only rows or columns, ignore the other dimension
+			if ( opt.columns === 1 ) {
+				colOdd = rowOdd;
+			} else if ( opt.rows === 1 ) {
+				rowOdd = !colOdd;
 			}
 
-			startSplitAnim( el, opt, animate, next );
-		} );
+			if ( opt.fade ) {
+				properties.opacity = 0;
+				startProperties.opacity = 1;
+			}
+
+			if ( colOdd === rowOdd ) {
+				if ( !colOdd ) {
+					properties.left -= opt.distance * parentCoords.width;
+				} else {
+					properties.left += opt.distance * parentCoords.width;
+				}
+			} else {
+				if ( !colOdd ){
+					properties.top -= opt.distance * parentCoords.height;
+				} else {
+					properties.top += opt.distance * parentCoords.height;
+				}
+			}
+			
+			if ( opt.show ) {
+				el.css( properties );
+				properties = startProperties;
+			}
+
+			el.delay( delay ).animate( properties, duration, opt.easing, callback );
+		}
+
+		startSplitAnim( el, opt, animate, done );
 	}
 
 })( jQuery );
