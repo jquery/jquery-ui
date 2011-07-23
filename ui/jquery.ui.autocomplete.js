@@ -110,7 +110,9 @@ $.widget( "ui.autocomplete", {
 					self.menu.select( event );
 					break;
 				case keyCode.ESCAPE:
-					self._value( self.term );
+					if (self._value_orig != undefined) {
+						self._value( self._value_orig );
+					}
 					self.close( event );
 					break;
 				default:
@@ -214,6 +216,7 @@ $.widget( "ui.autocomplete", {
 					if ( false !== self._trigger( "focus", event, { item: item } ) ) {
 						// use value to match what will end up in the input, if it was a key event
 						if ( /^key/.test(event.originalEvent.type) ) {
+							self._value_orig = self.value();
 							self._value( item.value );
 						}
 					}
@@ -355,6 +358,7 @@ $.widget( "ui.autocomplete", {
 		this.pending++;
 		this.element.addClass( "ui-autocomplete-loading" );
 
+		this._value_orig = undefined;
 		this.source( { term: value }, this.response );
 	},
 
