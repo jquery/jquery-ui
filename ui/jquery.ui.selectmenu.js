@@ -248,15 +248,16 @@ $.widget("ui.selectmenu", {
 		this.element
 			.find('option')
 			.each(function() {
+				var opt = $(this);
 				selectOptionData.push({
-					value: $(this).attr('value'),
+					value: opt.attr('value'),
 					text: self._formatText($(this).text()),
-					selected: $(this).attr('selected'),
-					disabled: $(this).attr('disabled'),
-					classes: $(this).attr('class'),
-					typeahead: $(this).attr('typeahead'),
-					parentOptGroup: $(this).parent('optgroup'),
-					bgImage: o.bgImage.call($(this))
+					selected: opt.attr('selected'),
+					disabled: opt.attr('disabled'),
+					classes: opt.attr('class'),
+					typeahead: opt.attr('typeahead'),
+					parentOptGroup: opt.parent('optgroup'),
+					bgImage: o.bgImage.call(opt)
 				});
 			});
 
