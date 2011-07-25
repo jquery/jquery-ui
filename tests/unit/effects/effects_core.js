@@ -19,6 +19,18 @@ var minDuration = 15,
 
 module( "effects.core" );
 
+test( "Immediate Return Conditions", function() {
+	var hidden = $( "div.hidden" ),
+		count = 0;
+	expect( 3 );
+	hidden.hide( "blind", function() {
+		equal( ++count, 1, "Hide on hidden returned immediately" );
+	}).show().show( "blind", function() {
+		equal( ++count, 2, "Show on shown returned immediately" );
+	});
+	equal( ++count, 3, "Both Functions worked properly" );
+});
+
 $.each( $.effects.effect, function( effect ) {
 	if ( effect === "transfer" ) {
 		return;
@@ -53,6 +65,21 @@ $.each( $.effects.effect, function( effect ) {
 			deepEqual( hidden.queue(), ["inprogress"], "Only the inprogress sentinel remains");
 			start();
 		}));
+	});
+
+	asyncTest( "relative width & height - properties are preserved", function() {
+		var test = $("div.relWidth.relHeight"),
+			width = test.width(), height = test.height(),
+			cssWidth = test[0].style.width, cssHeight = test[0].style.height;
+
+		expect( 4 );
+		test.toggle( effect, minDuration, function() {
+			equal( test[0].style.width, cssWidth, "Inline CSS Width has been reset after animation ended" );
+			equal( test[0].style.height, cssHeight, "Inline CSS Height has been rest after animation ended" );
+			start();
+		});
+		equal( test.width(), width, "Width is the same px after animation started" );
+		equal( test.height(), height, "Height is the same px after animation started" );
 	});
 });
 
@@ -106,6 +133,21 @@ asyncTest( "animateClass works with children", function() {
 			equal( h2.css("fontSize"), "20px", "Text size unchanged during animate with children: undefined" );
 		}, mid);
 	}});
+});
+
+asyncTest( "animateClass clears style properties when stopped", function() {
+	var test = $("div.animateClass"),
+		style = test[0].style,
+		orig = style.cssText;
+	
+	expect( 2 );
+
+	test.addClass( "testChangeBackground", duration );
+	notEqual( orig, style.cssText, "cssText is the not the same after starting animation" );
+
+	test.stop( true, true );
+	equal( orig, style.cssText, "cssText is the same after stopping animation midway" );
+	start();
 });
 
 })(jQuery);

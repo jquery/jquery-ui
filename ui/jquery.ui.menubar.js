@@ -20,8 +20,13 @@
 $.widget( "ui.menubar", {
 	version: "@VERSION",
 	options: {
+		autoExpand: false,
 		buttons: false,
-		menuIcon: false
+		menuIcon: false,
+		position: {
+			my: "left top",
+			at: "left bottom"
+		}
 	},
 	_create: function() {
 		var that = this;
@@ -39,12 +44,15 @@ $.widget( "ui.menubar", {
 		this._hoverable( items );
 		items.next( "ul" )
 			.menu({
+				position: {
+					within: this.options.position.within
+				},
 				select: function( event, ui ) {
 					ui.item.parents( "ul.ui-menu:last" ).hide();
-					that._trigger( "select", event, ui );
 					that._close();
 					// TODO what is this targetting? there's probably a better way to access it
 					$(event.target).prev().focus();
+					that._trigger( "select", event, ui );
 				}
 			})
 			.hide()
@@ -84,7 +92,11 @@ $.widget( "ui.menubar", {
 					that._close();
 					return;
 				}
-				if ( ( that.open && event.type == "mouseenter" ) || event.type == "click" ) {
+				if ( ( that.open && event.type == "mouseenter" ) || event.type == "click" || that.options.autoExpand ) {
+					if( that.options.autoExpand ) {
+						clearTimeout( that.timer );
+					}
+
 					that._open( event, menu );
 				}
 			})
@@ -111,6 +123,22 @@ $.widget( "ui.menubar", {
 			.attr( "aria-haspopup", "true" )
 			.wrapInner( "<span class='ui-button-text'></span>" );
 
+			if ( that.options.autoExpand ) {
+				input.bind( "mouseleave.menubar", function( event ) {
+					that.timer = setTimeout( function() {
+						that._close();
+					}, 150 );
+				});
+				menu.bind( "mouseleave.menubar", function( event ) {
+					that.timer = setTimeout( function() {
+						that._close();
+					}, 150 );
+				})
+				.bind( "mouseenter.menubar", function( event ) {
+					clearTimeout( that.timer );
+				});
+			}
+
 			// TODO review if these options are a good choice, maybe they can be merged
 			if ( that.options.menuIcon ) {
 				input.addClass( "ui-state-default" ).append( "<span class='ui-button-icon-secondary ui-icon ui-icon-triangle-1-s'></span>" );
@@ -121,11 +149,11 @@ $.widget( "ui.menubar", {
 				// TODO ui-menubar-link is added above, not needed here?
 				input.addClass( "ui-menubar-link" ).removeClass( "ui-state-default" );
 			};
-			
+
 		});
 		that._bind( {
 			keydown: function( event ) {
-				if ( event.keyCode == $.ui.keyCode.ESCAPE && that.active && that.active.menu( "left", event ) !== true ) {
+				if ( event.keyCode == $.ui.keyCode.ESCAPE && that.active && that.active.menu( "collapse", event ) !== true ) {
 					var active = that.active;
 					that.active.blur();
 					that._close( event );
@@ -180,7 +208,7 @@ $.widget( "ui.menubar", {
 		if ( !this.active || !this.active.length )
 			return;
 		this.active
-			.menu( "closeAll" )
+			.menu( "collapseAll" )
 			.hide()
 			.attr({
 				"aria-hidden": "true",
@@ -202,7 +230,7 @@ $.widget( "ui.menubar", {
 		// TODO refactor, almost the same as _close above, but don't remove tabIndex
 		if ( this.active ) {
 			this.active
-				.menu( "closeAll" )
+				.menu( "collapseAll" )
 				.hide()
 				.attr({
 					"aria-hidden": "true",
@@ -216,11 +244,9 @@ $.widget( "ui.menubar", {
 		var button = menu.prev().addClass( "ui-state-active" ).attr( "tabIndex", -1 );
 		this.active = menu
 			.show()
-			.position( {
-				my: "left top",
-				at: "left bottom",
+			.position( $.extend({
 				of: button
-			})
+			}, this.options.position ) )
 			.removeAttr( "aria-hidden" )
 			.attr( "aria-expanded", "true" )
 			.menu("focus", event, menu.children( "li" ).first() )

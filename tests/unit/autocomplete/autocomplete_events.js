@@ -1,206 +1,197 @@
-/*
- * autocomplete_events.js
- */
-(function($) {
+(function( $ ) {
 
-module("autocomplete: events", {
-	teardown: function() {
-		$( ":ui-autocomplete" ).autocomplete( "destroy" );
-	}
-});
+module( "autocomplete: events" );
 
 var data = [ "Clojure", "COBOL", "ColdFusion", "Java", "JavaScript", "Scala", "Scheme" ];
 
-test("all events", function() {
-	expect(14);
-	var ac = $("#autocomplete").autocomplete({
-		autoFocus: false,
-		delay: 0,
-		source: data,
-		search: function(event) {
-			same(event.type, "autocompletesearch");
-		},
-		response: function(event, ui) {
-			same(event.type, "autocompleteresponse");
-			same(ui.content, [
-				{ label: "Clojure", value: "Clojure" },
-				{ label: "Java", value: "Java" },
-				{ label: "JavaScript", value: "JavaScript" }
-			]);
-			ui.content.splice( 0, 1 );
-		},
-		open: function(event) {
-			same(event.type, "autocompleteopen");
-		},
-		focus: function(event, ui) {
-			same(event.type, "autocompletefocus");
-			same(ui.item, {label:"Java", value:"Java"});
-		},
-		close: function(event) {
-			same(event.type, "autocompleteclose");
-			same( $(".ui-menu:visible").length, 0 );
-		},
-		select: function(event, ui) {
-			same(event.type, "autocompleteselect");
-			same(ui.item, {label:"Java", value:"Java"});
-		},
-		change: function(event, ui) {
-			same(event.type, "autocompletechange");
-			same(ui.item, {label:"Java", value:"Java"});
-			same( $(".ui-menu:visible").length, 0 );
-			start();
-		}
-	});
-	stop();
-	ac.focus().val("j").keydown();
+asyncTest( "all events", function() {
+	expect( 13 );
+	var element = $( "#autocomplete" )
+			.autocomplete({
+				autoFocus: false,
+				delay: 0,
+				source: data,
+				search: function( event ) {
+					equal( event.originalEvent.type, "keydown", "search originalEvent" );
+				},
+				response: function( event, ui ) {
+					deepEqual( ui.content, [
+						{ label: "Clojure", value: "Clojure" },
+						{ label: "Java", value: "Java" },
+						{ label: "JavaScript", value: "JavaScript" }
+					], "response ui.content" );
+					ui.content.splice( 0, 1 );
+				},
+				open: function( event ) {
+					ok( menu.is( ":visible" ), "menu open on open" );
+				},
+				focus: function( event, ui ) {
+					equal( event.originalEvent.type, "menufocus", "focus originalEvent" );
+					deepEqual( ui.item, { label: "Java", value: "Java" }, "focus ui.item" );
+				},
+				close: function( event ) {
+					equal( event.originalEvent.type, "menuselect", "close originalEvent" );
+					ok( menu.is( ":hidden" ), "menu closed on close" );
+				},
+				select: function( event, ui ) {
+					equal( event.originalEvent.type, "menuselect", "select originalEvent" );
+					deepEqual( ui.item, { label: "Java", value: "Java" }, "select ui.item" );
+				},
+				change: function( event, ui ) {
+					equal( event.originalEvent.type, "blur", "change originalEvent" );
+					deepEqual( ui.item, { label: "Java", value: "Java" }, "chnage ui.item" );
+					ok( menu.is( ":hidden" ), "menu closed on change" );
+					start();
+				}
+			}),
+		menu = element.autocomplete( "widget" );
+
+	element.focus().val( "j" ).keydown();
 	setTimeout(function() {
-		same( $(".ui-menu:visible").length, 1 );
-		ac.simulate("keydown", { keyCode: $.ui.keyCode.DOWN });
-		ac.simulate("keydown", { keyCode: $.ui.keyCode.ENTER });
+		ok( menu.is( ":visible" ), "menu is visible after delay" );
+		element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
+		element.simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
 		// blurring through jQuery causes a bug in IE 6 which causes the
 		// autocompletechange event to occur twice
-		ac[0].blur();
-	}, 50);
+		element[0].blur();
+	}, 50 );
 });
 
-test("all events - contenteditable", function() {
-	expect(14);
-	var ac = $("#autocomplete-contenteditable").autocomplete({
-		autoFocus: false,
-		delay: 0,
-		source: data,
-		search: function(event) {
-			same(event.type, "autocompletesearch");
-		},
-		response: function(event, ui) {
-			same(event.type, "autocompleteresponse");
-			same(ui.content, [
-				{ label: "Clojure", value: "Clojure" },
-				{ label: "Java", value: "Java" },
-				{ label: "JavaScript", value: "JavaScript" }
-			]);
-			ui.content.splice( 0, 1 );
-		},
-		open: function(event) {
-			same(event.type, "autocompleteopen");
-		},
-		focus: function(event, ui) {
-			same(event.type, "autocompletefocus");
-			same(ui.item, {label:"Java", value:"Java"});
-		},
-		close: function(event) {
-			same(event.type, "autocompleteclose");
-			same( $(".ui-menu:visible").length, 0 );
-		},
-		select: function(event, ui) {
-			same(event.type, "autocompleteselect");
-			same(ui.item, {label:"Java", value:"Java"});
-		},
-		change: function(event, ui) {
-			same(event.type, "autocompletechange");
-			same(ui.item, {label:"Java", value:"Java"});
-			same( $(".ui-menu:visible").length, 0 );
-			start();
-		}
-	});
-	stop();
-	ac.focus().text("j").keydown();
+asyncTest( "all events - contenteditable", function() {
+	expect( 13 );
+	var element = $( "#autocomplete-contenteditable" )
+		.autocomplete({
+			autoFocus: false,
+			delay: 0,
+			source: data,
+			search: function( event ) {
+				equal( event.originalEvent.type, "keydown", "search originalEvent" );
+			},
+			response: function( event, ui ) {
+				deepEqual( ui.content, [
+					{ label: "Clojure", value: "Clojure" },
+					{ label: "Java", value: "Java" },
+					{ label: "JavaScript", value: "JavaScript" }
+				], "response ui.content" );
+				ui.content.splice( 0, 1 );
+			},
+			open: function( event ) {
+				ok( menu.is( ":visible" ), "menu open on open" );
+			},
+			focus: function( event, ui ) {
+				equal( event.originalEvent.type, "menufocus", "focus originalEvent" );
+				deepEqual( ui.item, { label: "Java", value: "Java" }, "focus ui.item" );
+			},
+			close: function( event ) {
+				equal( event.originalEvent.type, "menuselect", "close originalEvent" );
+				ok( menu.is( ":hidden" ), "menu closed on close" );
+			},
+			select: function( event, ui ) {
+				equal( event.originalEvent.type, "menuselect", "select originalEvent" );
+				deepEqual( ui.item, { label: "Java", value: "Java" }, "select ui.item" );
+			},
+			change: function( event, ui ) {
+				equal( event.originalEvent.type, "blur", "change originalEvent" );
+				deepEqual( ui.item, { label: "Java", value: "Java" }, "chnage ui.item" );
+				ok( menu.is( ":hidden" ), "menu closed on change" );
+				start();
+			}
+		}),
+	menu = element.autocomplete( "widget" );
+
+	element.focus().text( "j" ).keydown();
 	setTimeout(function() {
-		same( $(".ui-menu:visible").length, 1 );
-		ac.simulate("keydown", { keyCode: $.ui.keyCode.DOWN });
-		ac.simulate("keydown", { keyCode: $.ui.keyCode.ENTER });
-		// blurring through jQuery causes a bug in IE 6 which causes the
+		ok( menu.is( ":visible" ), "menu is visible after delay" );
+		element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
+		element.simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
+		// TODO: blurring through jQuery causes a bug in IE 6 which causes the
 		// autocompletechange event to occur twice
-		ac[0].blur();
-	}, 50);
+		element[0].blur();
+	}, 50 );
 });
 
-test("change without selection", function() {
-	expect(2);
-	stop();
-	var ac = $("#autocomplete").autocomplete({
+asyncTest( "change without selection", function() {
+	expect( 1 );
+	var element = $( "#autocomplete" ).autocomplete({
 		delay: 0,
 		source: data,
-		change: function(event, ui) {
-			same(event.type, "autocompletechange");
-			same(ui.item, null);
+		change: function( event, ui ) {
+			strictEqual( ui.item, null );
 			start();
 		}
 	});
-	ac.triggerHandler("focus");
-	ac.val("ja").triggerHandler("blur");
+	element.triggerHandler( "focus" );
+	element.val( "ja" ).triggerHandler( "blur" );
 });
 
-test("cancel search", function() {
-	expect(6);
-	var first = true;
-	var ac = $("#autocomplete").autocomplete({
-		delay: 0,
-		source: data,
-		search: function() {
-			if (first) {
-				same( ac.val(), "ja" );
-				first = false;
+asyncTest( "cancel search", function() {
+	expect( 6 );
+	var first = true,
+		element = $( "#autocomplete" ).autocomplete({
+			delay: 0,
+			source: data,
+			search: function() {
+				if ( first ) {
+					equal( element.val(), "ja", "val on first search" );
+					first = false;
+					return false;
+				}
+				equal( element.val(), "java", "val on second search" );
+			},
+			open: function() {
+				ok( true, "menu opened" );
+			}
+		}),
+		menu = element.autocomplete( "widget" );
+	element.val( "ja" ).keydown();
+	setTimeout(function() {
+		ok( menu.is( ":hidden" ), "menu is hidden after first search" );
+		element.val( "java" ).keydown();
+		setTimeout(function() {
+			ok( menu.is( ":visible" ), "menu is visible after second search" );
+			equal( menu.find( ".ui-menu-item" ).length, 2, "# of menu items" );
+			start();
+		}, 50 );
+	}, 50 );
+});
+
+asyncTest( "cancel focus", function() {
+	expect( 1 );
+	var customVal = "custom value";
+		element = $( "#autocomplete" ).autocomplete({
+			delay: 0,
+			source: data,
+			focus: function( event, ui ) {
+				$( this ).val( customVal );
 				return false;
 			}
-			same( ac.val(), "java" );
-		},
-		open: function() {
-			ok(true);
-		}
-	});
-	stop();
-	ac.val("ja").keydown();
+		});
+	element.val( "ja" ).keydown();
 	setTimeout(function() {
-		same( $(".ui-menu:visible").length, 0 );
-		ac.val("java").keydown();
-		setTimeout(function() {
-			same( $(".ui-menu:visible").length, 1 );
-			same( $(".ui-menu .ui-menu-item").length, 2 );
-			start();
-		}, 50);
-	}, 50);
+		element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
+		equal( element.val(), customVal );
+		start();
+	}, 50 );
 });
 
-test("cancel focus", function() {
-	expect(1);
-	var customVal = 'custom value';
-	var ac = $("#autocomplete").autocomplete({
-		delay: 0,
-		source: data,
-		focus: function(event, ui) {
-			$(this).val(customVal);
-			return false;
-		}
-	});
-	stop();
-	ac.val("ja").keydown();
+asyncTest( "cancel select", function() {
+	expect( 1 );
+	var customVal = "custom value",
+		element = $( "#autocomplete" ).autocomplete({
+			delay: 0,
+			source: data,
+			select: function( event, ui ) {
+				$( this ).val( customVal );
+				return false;
+			}
+		});
+	element.val( "ja" ).keydown();
 	setTimeout(function() {
-		ac.simulate("keydown", { keyCode: $.ui.keyCode.DOWN });
-		same( ac.val(), customVal );
+		element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
+		element.simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
+		equal( element.val(), customVal );
 		start();
-	}, 50);
-});
-
-test("cancel select", function() {
-	expect(1);
-	var customVal = 'custom value';
-	var ac = $("#autocomplete").autocomplete({
-		delay: 0,
-		source: data,
-		select: function(event, ui) {
-			$(this).val(customVal);
-			return false;
-		}
-	});
-	stop();
-	ac.val("ja").keydown();
-	setTimeout(function() {
-		ac.simulate("keydown", { keyCode: $.ui.keyCode.DOWN });
-		ac.simulate("keydown", { keyCode: $.ui.keyCode.ENTER });
-		same( ac.val(), customVal );
-		start();
-	}, 50);
+	}, 50 );
 });
 
 /* TODO previous fix broke more than it fixed, disabling this for now - messed up regular menu select event
@@ -215,10 +206,10 @@ test("blur without selection", function() {
 	setTimeout(function() {
 		$( ".ui-menu-item" ).first().simulate("mouseover");
 		ac.simulate("keydown", { keyCode: $.ui.keyCode.TAB });
-		same( ac.val(), "j" );
+		deepEqual( ac.val(), "j" );
 		start();
 	}, 50);
 });
 */
 
-})(jQuery);
+}( jQuery ) );

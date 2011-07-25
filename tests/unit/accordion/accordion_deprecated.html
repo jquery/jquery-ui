@@ -22,17 +22,17 @@
 		var actual = accordion.find( ".ui-accordion-content" ).map(function() {
 			return $( this ).css( "display" ) === "none" ? 0 : 1;
 		}).get();
-		same( actual, expected );
+		deepEqual( actual, expected );
 	}
-	function equalHeights( accordion, min, max ) {
+	function accordion_equalHeights( accordion, min, max ) {
 		var sizes = [];
 		accordion.find( ".ui-accordion-content" ).each(function() {
 			sizes.push( $( this ).outerHeight() );
 		});
 		ok( sizes[ 0 ] >= min && sizes[ 0 ] <= max,
 			"must be within " + min + " and " + max + ", was " + sizes[ 0 ] );
-		same( sizes[ 0 ], sizes[ 1 ] );
-		same( sizes[ 0 ], sizes[ 2 ] );
+		deepEqual( sizes[ 0 ], sizes[ 1 ] );
+		deepEqual( sizes[ 0 ], sizes[ 2 ] );
 	}
 	function accordionSetupTeardown() {
 		var animated = $.ui.accordion.prototype.options.animated;

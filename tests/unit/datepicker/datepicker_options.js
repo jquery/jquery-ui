@@ -469,6 +469,16 @@ test('setDate', function() {
 	var dateAndTimeClone = new Date(2008, 3 - 1, 28, 1, 11, 0);
 	inp.datepicker('setDate', dateAndTimeToSet);
 	equals(dateAndTimeToSet.getTime(), dateAndTimeClone.getTime(), 'Date object passed should not be changed by setDate');
+    // Test onSelect callback is executed when using setDate
+    inp.datepicker('destroy');
+    var testDate = null;
+    inp.datepicker({
+        onSelect: function(dateText, inst) {
+            testDate = new Date(dateText);
+        }
+    });
+    inp.datepicker('setDate', date2);
+    equals(date2.getTime(), testDate.getTime(), 'onSelect is called after setDate');
 });
 
 test('altField', function() {

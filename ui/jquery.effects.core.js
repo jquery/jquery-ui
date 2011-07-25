@@ -410,7 +410,12 @@ $.extend( $.effects, {
 					border: "none",
 					margin: 0,
 					padding: 0
-				});
+				}),
+			// Store the size in case width/height are defined in % - Fixes #5245
+			size = {
+				width: element.width(),
+				height: element.height()
+			};
 
 		element.wrap( wrapper );
 		wrapper = element.parent(); //Hotfix for jQuery 1.4 since some change in wrap() seems to actually loose the reference to the wrapped element
@@ -438,6 +443,7 @@ $.extend( $.effects, {
 				bottom: "auto"
 			});
 		}
+		element.css(size);
 
 		return wrapper.css( props ).show();
 	},
@@ -530,6 +536,7 @@ $.fn.extend({
 	effect: function( effect, options, speed, callback ) {
 		var args = _normalizeArguments.apply( this, arguments ),
 			mode = args.mode,
+			queue = args.queue,
 			effectMethod = $.effects.effect[ args.effect ],
 
 			// DEPRECATED: remove in 2.0 (#7115)
@@ -548,9 +555,32 @@ $.fn.extend({
 			}
 		}
 
+		function run( next ) {
+			var elem = $( this ),
+				complete = args.complete,
+				mode = args.mode;
+
+			function done() {
+				if ( $.isFunction( complete ) ) {
+					complete.call( elem[0] );
+				}
+				if ( $.isFunction( next ) ) {
+					next();
+				}
+			}
+
+			// if the element is hiddden and mode is hide,
+			// or element is visible and mode is show
+			if ( elem.is( ":hidden" ) ? mode === "hide" : mode === "show" ) {
+				done();
+			} else {
+				effectMethod.call( elem[0], args, done );
+			}
+		}
+
 		// TODO: remove this check in 2.0, effectMethod will always be true
 		if ( effectMethod ) {
-			return effectMethod.call( this, args );
+			return queue === false ? this.each( run ) : this.queue( queue || "fx", run );
 		} else {
 			// DEPRECATED: remove in 2.0 (#7115)
 			return oldEffectMethod.call(this, {
