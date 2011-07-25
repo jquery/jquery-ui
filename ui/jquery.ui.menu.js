@@ -89,6 +89,16 @@ $.widget( "ui.menu", {
 				event.preventDefault();
 				event.stopImmediatePropagation();
 				break;
+			case $.ui.keyCode.HOME:
+				self._move( "first", "first", event );
+				event.preventDefault();
+				event.stopImmediatePropagation();
+				break;
+			case $.ui.keyCode.END:
+				self._move( "last", "last", event );
+				event.preventDefault();
+				event.stopImmediatePropagation();
+				break;
 			case $.ui.keyCode.UP:
 				self.previous( event );
 				event.preventDefault();
@@ -252,17 +262,17 @@ $.widget( "ui.menu", {
 		this.blur( event );
 
 		if ( this._hasScroll() ) {
-			var borderTop = parseFloat( $.curCSS( this.element[0], "borderTopWidth", true ) ) || 0,
-				paddingTop = parseFloat( $.curCSS( this.element[0], "paddingTop", true ) ) || 0,
-				offset = item.offset().top - this.element.offset().top - borderTop - paddingTop,
-				scroll = this.element.scrollTop(),
-				elementHeight = this.element.height(),
+			var borderTop = parseFloat( $.curCSS( this.activeMenu[0], "borderTopWidth", true ) ) || 0,
+				paddingTop = parseFloat( $.curCSS( this.activeMenu[0], "paddingTop", true ) ) || 0,
+				offset = item.offset().top - this.activeMenu.offset().top - borderTop - paddingTop,
+				scroll = this.activeMenu.scrollTop(),
+				elementHeight = this.activeMenu.height(),
 				itemHeight = item.height();
 
 			if ( offset < 0 ) {
-				this.element.scrollTop( scroll + offset );
+				this.activeMenu.scrollTop( scroll + offset );
 			} else if ( offset + itemHeight > elementHeight ) {
-				this.element.scrollTop( scroll + offset - elementHeight + itemHeight );
+				this.activeMenu.scrollTop( scroll + offset - elementHeight + itemHeight );
 			}
 		}
 
@@ -391,11 +401,11 @@ $.widget( "ui.menu", {
 	},
 
 	next: function(event) {
-		this._move( "next", ".ui-menu-item", "first", event );
+		this._move( "next", "first", event );
 	},
 
 	previous: function(event) {
-		this._move( "prev", ".ui-menu-item", "last", event );
+		this._move( "prev", "last", event );
 	},
 
 	first: function() {
@@ -406,25 +416,36 @@ $.widget( "ui.menu", {
 		return this.active && !this.active.nextAll( ".ui-menu-item" ).length;
 	},
 
-	_move: function( direction, edge, filter, event ) {
+	_move: function( direction, filter, event ) {
 		if ( !this.active ) {
-			this.focus( event, this.activeMenu.children( edge )[ filter ]() );
+			this.focus( event, this.activeMenu.children( ".ui-menu-item" )[ filter ]() );
 			return;
 		}
-		var next = this.active[ direction + "All" ]( ".ui-menu-item" ).eq( 0 );
+
+		var next;
+		if ( direction === "first" || direction === "last" ) {
+			next = this.active[ direction === "first" ? "prevAll" : "nextAll" ]( ".ui-menu-item" ).eq( -1 );
+		} else {
+			next = this.active[ direction + "All" ]( ".ui-menu-item" ).eq( 0 );
+		}
+
 		if ( next.length ) {
 			this.focus( event, next );
 		} else {
-			this.focus( event, this.activeMenu.children( edge )[ filter ]() );
+			this.focus( event, this.activeMenu.children( ".ui-menu-item" )[ filter ]() );
 		}
 	},
 
 	nextPage: function( event ) {
 		if ( this._hasScroll() ) {
-			if ( !this.active || this.last() ) {
+			if ( !this.active ) {
 				this.focus( event, this.activeMenu.children( ".ui-menu-item" ).first() );
 				return;
 			}
+			if ( this.last() ) {
+				return;
+			}
+
 			var base = this.active.offset().top,
 				height = this.element.height(),
 				result;
@@ -436,14 +457,17 @@ $.widget( "ui.menu", {
 			this.focus( event, result );
 		} else {
 			this.focus( event, this.activeMenu.children( ".ui-menu-item" )
-				[ !this.active || this.last() ? "first" : "last" ]() );
+				[ !this.active ? "first" : "last" ]() );
 		}
 	},
 
 	previousPage: function( event ) {
 		if ( this._hasScroll() ) {
-			if ( !this.active || this.first() ) {
-				this.focus( event, this.activeMenu.children( ".ui-menu-item" ).last() );
+			if ( !this.active ) {
+				this.focus( event, this.activeMenu.children( ".ui-menu-item" ).first() );
+				return;
+			}
+			if ( this.first() ) {
 				return;
 			}
 
@@ -457,8 +481,7 @@ $.widget( "ui.menu", {
 
 			this.focus( event, result );
 		} else {
-			this.focus( event, this.activeMenu.children( ".ui-menu-item" )
-				[ !this.active || this.first() ? ":last" : ":first" ]() );
+			this.focus( event, this.activeMenu.children( ".ui-menu-item" ).first() );
 		}
 	},
 
