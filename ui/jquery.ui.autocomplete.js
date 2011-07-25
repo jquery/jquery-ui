@@ -326,7 +326,7 @@ $.widget( "ui.autocomplete", {
 		var self = this;
 		self.searching = setTimeout(function() {
 			// only search if the value has changed
-			if ( self.term != self.element.val() ) {
+			if ( self.term != self.element.val()  || (self.term == self.element.val() && self.menu.element.is(":hidden")) ) {
 				self.selectedItem = null;
 				self.search( null, event );
 			}
