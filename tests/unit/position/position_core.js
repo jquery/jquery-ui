@@ -64,7 +64,6 @@ test( "positions", function() {
 		center: 3,
 		right: 6,
 		top: 0,
-		center: 3,
 		bottom: 6
 	};
 	var start = { left: 4, top: 4 };
@@ -351,7 +350,7 @@ test( "collision: flip, with offset", function() {
 
 	collisionTest2({
 		collision: "flip",
-		at: "left-2 top-3",
+		at: "left-2 top-3"
 	}, { top: $( window ).height() + 3, left: $( window ).width() + 2 }, "right bottom, negative offset" );
 });
 
