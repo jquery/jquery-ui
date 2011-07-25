@@ -96,7 +96,7 @@ test("step", function() {
 		min: 0,
 		value: 0,
 		step: 10,
-		max: 100,
+		max: 100
 	});
 	equals( el.slider("value"), 0 );
 
@@ -116,7 +116,7 @@ el = $('<div></div>').slider({
 		min: 0,
 		value: 0,
 		step: 20,
-		max: 100,
+		max: 100
 	});
 	el.slider("value", 0);
 

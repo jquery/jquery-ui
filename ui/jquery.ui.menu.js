@@ -58,6 +58,8 @@ $.widget( "ui.menu", {
 				}
 				var target = $( event.target ).closest( ".ui-menu-item" );
 				if ( target.length ) {
+					//Remove ui-state-active class from siblings of the newly focused menu item to avoid a jump caused by adjacent elements both having a class with a border
+					target.siblings().children( ".ui-state-active" ).removeClass( "ui-state-active" );
 					self.focus( event, target );
 				}
 			})
@@ -170,6 +172,14 @@ $.widget( "ui.menu", {
 				}
 			}
 		});
+
+		this._bind( document, {
+			click: function( event ) {
+				if ( !$( event.target ).closest( ".ui-menu" ).length ) {
+					this.collapseAll( event );
+				}
+			}
+		});
 	},
 
 	_destroy: function() {
@@ -239,7 +249,7 @@ $.widget( "ui.menu", {
 		var nested,
 			self = this;
 
-		this.blur();
+		this.blur( event );
 
 		if ( this._hasScroll() ) {
 			var borderTop = parseFloat( $.curCSS( this.element[0], "borderTopWidth", true ) ) || 0,
@@ -287,10 +297,19 @@ $.widget( "ui.menu", {
 
 		this.active.children( "a" ).removeClass( "ui-state-focus" );
 		this.active = null;
+
+		this._trigger( "blur", event, { item: this.active } );
 	},
 
 	_startOpening: function( submenu ) {
 		clearTimeout( this.timer );
+
+		// Don't open if already open fixes a Firefox bug that caused a .5 pixel
+		// shift in the submenu position when mousing over the carat icon
+		if ( submenu.attr( "aria-hidden" ) !== "true" ) {
+			return;
+		}
+
 		var self = this;
 		self.timer = setTimeout( function() {
 			self._close();
@@ -319,7 +338,7 @@ $.widget( "ui.menu", {
 			.position( position );
 	},
 
-	closeAll: function() {
+	collapseAll: function( event ) {
 		this.element
 			.find( "ul" )
 				.hide()
@@ -329,7 +348,7 @@ $.widget( "ui.menu", {
 			.find( "a.ui-state-active" )
 			.removeClass( "ui-state-active" );
 
-		this.blur();
+		this.blur( event );
 		this.activeMenu = this.element;
 	},
 
@@ -444,16 +463,15 @@ $.widget( "ui.menu", {
 	},
 
 	_hasScroll: function() {
-		// TODO: just use .prop() when we drop support for jQuery <1.6
-		return this.element.height() < this.element[ $.fn.prop ? "prop" : "attr" ]( "scrollHeight" );
+		return this.element.height() < this.element.prop( "scrollHeight" );
 	},
 
 	select: function( event ) {
-		// save active reference before closeAll triggers blur
+		// save active reference before collapseAll triggers blur
 		var ui = {
 			item: this.active
 		};
-		this.closeAll();
+		this.collapseAll( event );
 		this._trigger( "select", event, ui );
 	}
 });

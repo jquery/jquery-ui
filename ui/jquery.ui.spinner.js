@@ -302,10 +302,10 @@ $.widget( "ui.spinner", {
 
 		if ( key === "disabled" ) {
 			if ( value ) {
-				this.element.attr( "disabled", true );
+				this.element.prop( "disabled", true );
 				this.buttons.button( "disable" );
 			} else {
-				this.element.removeAttr( "disabled" );
+				this.element.prop( "disabled", false );
 				this.buttons.button( "enable" );
 			}
 		}
@@ -343,7 +343,7 @@ $.widget( "ui.spinner", {
 	destroy: function() {
 		this.element
 			.removeClass( "ui-spinner-input" )
-			.removeAttr( "disabled" )
+			.prop( "disabled", false )
 			.removeAttr( "autocomplete" )
 			.removeAttr( "role" )
 			.removeAttr( "aria-valuemin" )
