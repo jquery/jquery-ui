@@ -254,7 +254,7 @@ $.extend(Datepicker.prototype, {
 				date.setDate(findMax(this._get(inst, (dateFormat.match(/DD/) ?
 					'dayNames' : 'dayNamesShort'))) + 20 - date.getDay());
 			}
-			inst.input.prop('size', this._formatDate(inst, date).length);
+			inst.input.attr('size', this._formatDate(inst, date).length);
 		}
 	},
 
