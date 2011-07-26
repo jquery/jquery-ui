@@ -23,7 +23,8 @@ $.widget( "ui.menu", {
 		position: {
 			my: "left top",
 			at: "right top"
-		}
+		},
+		trigger : null
 	},
 	_create: function() {
 		var self = this;
@@ -37,6 +38,12 @@ $.widget( "ui.menu", {
 			.attr({
 				id: this.menuId,
 				role: "menu"
+			})
+			.bind( "mousedown.menu", function( event ) {
+				if ( $( event.target).is( "a" ) ) {
+					event.preventDefault();
+					$( this ).focus( 1 );
+				}
 			})
 			.bind( "click.menu", function( event ) {
 				var item = $( event.target ).closest( ".ui-menu-item:has(a)" );
@@ -170,6 +177,17 @@ $.widget( "ui.menu", {
 				}
 			}
 		});
+
+		if ( this.options.trigger ) {
+			this.element.popup({
+				trigger : this.options.trigger,
+				managed : true,
+				focusPopup : function( event, ui ) {
+					self.focus( event, self.element.children( "li" ).first() );
+					self.element.focus( 1 );
+				}
+			});
+		}
 	},
 
 	_destroy: function() {
@@ -454,6 +472,10 @@ $.widget( "ui.menu", {
 			item: this.active
 		};
 		this.closeAll();
+		if ( this.options.trigger ) {
+			$( this.options.trigger ).focus( 1 );
+			this.element.popup( "close" );
+		}
 		this._trigger( "select", event, ui );
 	}
 });

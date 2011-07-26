@@ -17,15 +17,17 @@
 			$( "<div/>" ).text( msg ).appendTo( "#log" );
 		}
 		var selected = {
+			trigger: $("#button1"),
 			select: function( event, ui ) {
 				log( "Selected: " + ui.item.text() );
 				$(this).popup("close");
 			}
 		};
 
-		$("#button1").button()
-			.next().menu(selected).popup();
-		
+		$("#button1").button().next().menu(selected);
+
+		selected.trigger = $("#select");
+
 		$( "#rerun" )
 			.button()
 			.click(function() {
@@ -40,9 +42,6 @@
 				})
 				.next()
 					.menu(selected)
-					.popup({
-						trigger: $("#select")
-					})
 				.parent()
 					.buttonset({
 						items: "button"
@@ -69,8 +68,8 @@
 		<li><a href="#">Utrecht</a></li>
 		<li><a href="#">Zurich</a></li>
 	</ul>
-	
-	
+
+
 	<div>
 		<div>
 			<button id="rerun">Run last action</button>

@@ -14,6 +14,11 @@ $.date = function ( datestring, formatstring ) {
 	var calendar = $.global.culture.calendar,
 		format = formatstring ? formatstring : calendar.patterns.d,
 		date = datestring ? $.global.parseDate(datestring, format) : new Date();
+
+	if ( !date ) {
+		date = new Date()
+	}
+
 	return {
 		refresh: function() {
 			calendar = $.global.culture.calendar;
@@ -24,6 +29,10 @@ $.date = function ( datestring, formatstring ) {
 			if ( formatstring ) {
 				format = formatstring;
 			}
+			return this;
+		},
+		setTime: function( time ) {
+			date = new Date( time );
 			return this;
 		},
 		setDay: function( day ) {
@@ -98,6 +107,7 @@ $.date = function ( datestring, formatstring ) {
 					var day = week.days[ week.days.length ] = {
 						lead: printDate.getMonth() != date.getMonth(),
 						date: printDate.getDate(),
+						timeStamp: printDate.getTime(),
 						current: this.selected && this.selected.equal( printDate ),
 						today: today.equal( printDate )
 					};

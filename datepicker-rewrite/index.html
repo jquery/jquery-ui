@@ -8,7 +8,6 @@
 	<script src="../ui/jquery.ui.button.js"></script>
 	<script src="../ui/jquery.ui.position.js"></script>
 	<script src="../ui/jquery.ui.popup.js"></script>
-	<script src="../ui/jquery.ui.menu.js"></script>
 	<script src="jquery.tmpl.js"></script>
 	<script src="../external/jquery.global.js"></script>
 	<script src="../external/jquery.global.de-DE.js"></script>
@@ -108,51 +107,57 @@
 		});
 	</script>
 
+	<script id="ui-datepicker-grid-tmpl" type="text/x-jquery-tmpl">
+		<table class="ui-datepicker-calendar" role="grid" aria-labelledby="${instance.id}-month-lbl" tabindex="0" aria-activedescendant="${instance.id}-${instance.focusedDay}">
+			<thead role="presentation">
+				<tr role="row">
+					{{each(index, day) date.weekdays()}}
+						<th class="" role="columnheader" abbr="${day.fullname}" aria-label="${day.fullname}"><span title="${day.fullname}">${day.shortname}</span></th>
+					{{/each}}
+				</tr>
+			</thead>
+			<tbody role="presentation">
+				{{each(weekIndex, week) date.days()}}
+				<tr role="row">
+					{{each(dayIndex, day) week.days}}
+						<td {{if day.render}}id="${instance.id}-${day.date}"{{/if}} role="gridcell" aria-selected="{{if day.current}}true{{else}}false{{/if}}" {{if !day.selectable}}aria-disabled="true"{{/if}}>
+							{{if day.render}}
+								{{if day.selectable}}
+								<a title="${day.title}" class="{{if day.date == instance.focusedDay}}ui-state-focus {{/if}}ui-state-default{{if day.current}} ui-state-active{{/if}}{{if day.today}} ui-state-highlight{{/if}} ${day.extraClasses}" href="#" tabindex="-1" data-date=${day.timeStamp}>
+									${day.date}
+									{{if day.today}} <span class="ui-helper-hidden-accessible">, today</span>{{/if}}
+								</a>
+								{{/if}}
+								{{if !day.selectable}}
+								<span title="${day.title}" class="{{if day.current}} ui-state-active{{/if}}{{if day.today}} ui-state-highlight{{/if}} ${day.extraClasses}">
+									${day.date}
+								</span>
+								{{/if}}
+							{{/if}}
+						</td>
+					{{/each}}
+				</tr>
+				{{/each}}
+			</tbody>
+		</table>
+	</script>
+
+	<script id="ui-datepicker-title-tmpl" type="text/x-jquery-tmpl">
+		<span class="ui-datepicker-month">${date.monthname()}</span> <span class="ui-datepicker-year">${date.year()}</span>
+	</script>
+
 	<script id="ui-datepicker-tmpl" type="text/x-jquery-tmpl">
-		<div class="ui-datepicker ui-widget ui-widget-content ui-helper-clearfix ui-corner-all" role="region" aria-labelledby="${instance.id} + "-title"">
+		<div class="ui-datepicker ui-widget ui-widget-content ui-helper-clearfix ui-corner-all" role="region" aria-labelledby="${instance.id}-title">
 			<div class="ui-datepicker-header ui-widget-header ui-helper-clearfix ui-corner-all">
 				<a href="#" class="ui-datepicker-prev ui-corner-all" title="${labels.prevText}"><span class="ui-icon ui-icon-circle-triangle-w">${labels.prevText}</span></a>
 				<a href="#" class="ui-datepicker-next ui-corner-all" title="${labels.nextText}"><span class="ui-icon ui-icon-circle-triangle-e">${labels.nextText}</span></a>
-				<div role="header" id="${instance.id} + "-title"" class="ui-datepicker-title" aria-live="assertive" aria-atomic="true">
+				<div role="header" id="${instance.id}-title" class="ui-datepicker-title" aria-live="assertive" aria-atomic="true">
 					<div id="${instance.id}-month-lbl">
-						<span class="ui-datepicker-month">${date.monthname()}</span> <span class="ui-datepicker-year">${date.year()}</span>
+						{{tmpl({date : date}) "#ui-datepicker-title-tmpl"}}
 					</div>
 					<span class="ui-helper-hidden-accessible">Date Picker</span>
 				</div>
 			</div>
-			<table class="ui-datepicker-calendar" role="grid" aria-labelledby="${instance.id}-month-lbl" tabindex="0" aria-activedescendant="${instance.id}-${instance.focusedDay}">
-				<thead role="presentation">
-					<tr role="row">
-						{{each(index, day) date.weekdays()}}
-							<th class="" role="columnheader" abbr="${day.fullname}" aria-label="${day.fullname}"><span title="${day.fullname}">${day.shortname}</span></th>
-						{{/each}}
-					</tr>
-				</thead>
-				<tbody role="presentation">
-					{{each(weekIndex, week) date.days()}}
-					<tr role="row">
-						{{each(dayIndex, day) week.days}}
-							<td {{if day.render}}id="${instance.id}-${day.date}"{{/if}} role="gridcell" aria-selected="{{if day.current}}true{{else}}false{{/if}}" {{if !day.selectable}}aria-disabled="true"{{/if}}>
-								{{if day.render}}
-									{{if day.selectable}}
-									<a title="${day.title}" class="{{if day.date == instance.focusedDay}}ui-state-focus {{/if}}ui-state-default{{if day.current}} ui-state-active{{/if}}{{if day.today}} ui-state-highlight{{/if}} ${day.extraClasses}" href="#" tabindex="-1" data-day=${day.date}>
-										${day.date}
-										{{if day.today}} <span class="ui-helper-hidden-accessible">, today</span>{{/if}}
-										{{if day.current}}<span class="ui-helper-hidden-accessible">, selected</span>{{/if}}
-									</a>
-									{{/if}}
-									{{if !day.selectable}}
-									<span title="${day.title}" class="{{if day.current}} ui-state-active{{/if}}{{if day.today}} ui-state-highlight{{/if}} ${day.extraClasses}">
-										${day.date}
-									</span>
-									{{/if}}
-								{{/if}}
-							</td>
-						{{/each}}
-					</tr>
-					{{/each}}
-				</tbody>
-			</table>
 			<div class="ui-datepicker-buttonpane ui-widget-content">
 				<button class="ui-datepicker-current">${labels.currentText}</button>
 				<button class="ui-datepicker-close">${labels.closeText}</button>
