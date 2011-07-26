@@ -24,6 +24,7 @@ $.widget( "ui.autocomplete", {
 	options: {
 		appendTo: "body",
 		autoFocus: false,
+                mustMatch: false,
 		delay: 300,
 		minLength: 1,
 		position: {
@@ -363,9 +364,17 @@ $.widget( "ui.autocomplete", {
 			content = this._normalize( content );
 		}
 		this._trigger( "response", null, { content: content } );
-		if ( !this.options.disabled && content && content.length ) {
-			this._suggest( content );
-			this._trigger( "open" );
+		if ( !this.options.disabled){
+                        if(content && content.length ) {
+			        this._suggest( content );
+			        this._trigger( "open" );
+                        }else{
+                                if(this.options.mustMatch){
+                                        this.close();
+                                        this.element.val('');
+                                        this.term = '';
+                                }
+                        }
 		} else {
 			this.close();
 		}
