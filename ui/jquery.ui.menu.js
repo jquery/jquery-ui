@@ -71,6 +71,18 @@ $.widget( "ui.menu", {
 				if ( target.length ) {
 					self.blur( event );
 				}
+			})
+			.bind( "focus.menu", function( event ) {
+				if ( self.options.disabled ) {
+					return;
+				}
+				self.focus( event, $( event.target ).children( ".ui-menu-item:first" ) );
+			})
+			.bind( "blur.menu", function( event ) {
+				if ( self.options.disabled ) {
+					return;
+				}
+				self.collapseAll( event );
 			});
 		this.refresh();
 
