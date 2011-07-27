@@ -2,4 +2,4 @@
 
 module( "mask: methods" );
 
-})( jQuery );
+}( jQuery ) );

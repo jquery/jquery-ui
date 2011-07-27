@@ -2,4 +2,4 @@
 
 module( "mask: events" );
 
-})( jQuery );
+}( jQuery ) );

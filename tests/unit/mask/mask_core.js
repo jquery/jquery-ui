@@ -2,4 +2,4 @@
 
 module( "mask: core" );
 
-})( jQuery );
+}( jQuery ) );

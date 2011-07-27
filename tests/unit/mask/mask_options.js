@@ -2,4 +2,4 @@
 
 module( "mask: options" );
 
-})( jQuery );
+}( jQuery ) );
