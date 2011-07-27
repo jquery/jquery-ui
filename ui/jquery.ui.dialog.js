@@ -265,8 +265,8 @@ $.widget("ui.dialog", {
 		// Opera 9.5+ resets when parent z-index is changed.
 		// http://bugs.jqueryui.com/ticket/3193
 		saveScroll = {
-			scrollTop: self.element.attr( "scrollTop" ),
-			scrollLeft: self.element.attr( "scrollLeft" )
+			scrollTop: self.element.scrollTop(),
+			scrollLeft: self.element.scrollLeft()
 		};
 		$.ui.dialog.maxZ += 1;
 		self.uiDialog.css( "z-index", $.ui.dialog.maxZ );

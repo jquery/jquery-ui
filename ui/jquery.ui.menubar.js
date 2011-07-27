@@ -56,8 +56,10 @@ $.widget( "ui.menubar", {
 				}
 			})
 			.hide()
-			.attr( "aria-hidden", "true" )
-			.attr( "aria-expanded", "false" )
+			.attr({
+				"aria-hidden": "true",
+				"aria-expanded": "false"
+			})
 			.bind( "keydown.menubar", function( event ) {
 				var menu = $( this );
 				if ( menu.is( ":hidden" ) )
@@ -172,19 +174,19 @@ $.widget( "ui.menubar", {
 	_destroy : function() {
 		var items = this.element.children( "li" )
 			.removeClass( "ui-menubar-item" )
-			.removeAttr( "role", "presentation" )
+			.removeAttr( "role" )
 			.children( "button, a" );
 
 		this.element
 			.removeClass( "ui-menubar ui-widget-header ui-helper-clearfix" )
-			.removeAttr( "role", "menubar" )
+			.removeAttr( "role" )
 			.unbind( ".menubar" );
 
 		items
 			.unbind( ".menubar" )
 			.removeClass( "ui-button ui-widget ui-button-text-only ui-menubar-link ui-state-default" )
-			.removeAttr( "role", "menuitem" )
-			.removeAttr( "aria-haspopup", "true" )
+			.removeAttr( "role" )
+			.removeAttr( "aria-haspopup" )
 			// TODO unwrap?
 			.children( "span.ui-button-text" ).each(function( i, e ) {
 				var item = $( this );
@@ -196,8 +198,8 @@ $.widget( "ui.menubar", {
 		this.element.find( ":ui-menu" )
 			.menu( "destroy" )
 			.show()
-			.removeAttr( "aria-hidden", "true" )
-			.removeAttr( "aria-expanded", "false" )
+			.removeAttr( "aria-hidden" )
+			.removeAttr( "aria-expanded" )
 			.removeAttr( "tabindex" )
 			.unbind( ".menubar" );
 	},
@@ -208,8 +210,10 @@ $.widget( "ui.menubar", {
 		this.active
 			.menu( "collapseAll" )
 			.hide()
-			.attr( "aria-hidden", "true" )
-			.attr( "aria-expanded", "false" );
+			.attr({
+				"aria-hidden": "true",
+				"aria-expanded": "false"
+			});
 		this.active
 			.prev()
 			.removeClass( "ui-state-active" )
@@ -228,8 +232,10 @@ $.widget( "ui.menubar", {
 			this.active
 				.menu( "collapseAll" )
 				.hide()
-				.attr( "aria-hidden", "true" )
-				.attr( "aria-expanded", "false" );
+				.attr({
+					"aria-hidden": "true",
+					"aria-expanded": "false"
+				});
 			this.active
 				.prev()
 				.removeClass( "ui-state-active" );

@@ -285,7 +285,9 @@ $.extend(Datepicker.prototype, {
 		if( inst.settings.disabled ) {
 			this._disableDatepicker( target );
 		}
-		inst.dpDiv.show();
+		// Set display:block in place of inst.dpDiv.show() which won't work on disconnected elements
+		// http://bugs.jqueryui.com/ticket/7552 - A Datepicker created on a detached div has zero height
+		inst.dpDiv.css( "display", "block" );
 	},
 
 	/* Pop-up the date picker in a "dialog" box.
@@ -377,7 +379,7 @@ $.extend(Datepicker.prototype, {
 			var inline = $target.children('.' + this._inlineClass);
 			inline.children().removeClass('ui-state-disabled');
 			inline.find("select.ui-datepicker-month, select.ui-datepicker-year").
-				removeAttr("disabled");
+				prop("disabled", false);
 		}
 		this._disabledInputs = $.map(this._disabledInputs,
 			function(value) { return (value == target ? null : value); }); // delete entry
@@ -402,7 +404,7 @@ $.extend(Datepicker.prototype, {
 			var inline = $target.children('.' + this._inlineClass);
 			inline.children().addClass('ui-state-disabled');
 			inline.find("select.ui-datepicker-month, select.ui-datepicker-year").
-				attr("disabled", "disabled");
+				prop("disabled", true);
 		}
 		this._disabledInputs = $.map(this._disabledInputs,
 			function(value) { return (value == target ? null : value); }); // delete entry

@@ -12,6 +12,8 @@
  *	jquery.ui.widget.js
  */
 (function( $, undefined ) {
+		  
+var lastToggle = {};
 
 // TODO: use ui-accordion-header-active class and fix styling
 $.widget( "ui.accordion", {
@@ -36,8 +38,6 @@ $.widget( "ui.accordion", {
 	_create: function() {
 		var self = this,
 			options = self.options;
-
-		self.running = false;
 
 		self.element.addClass( "ui-accordion ui-widget ui-helper-reset" );
 
@@ -90,12 +90,11 @@ $.widget( "ui.accordion", {
 		if ( !self.active.length ) {
 			self.headers.eq( 0 ).attr( "tabIndex", 0 );
 		} else {
-			self.active
-				.attr({
-					"aria-expanded": "true",
-					"aria-selected": "true",
-					tabIndex: 0
-				});
+			self.active.attr({
+				"aria-expanded": "true",
+				"aria-selected": "true",
+				tabIndex: 0
+			});
 		}
 
 		// only need links in tab order for Safari
@@ -321,8 +320,6 @@ $.widget( "ui.accordion", {
 		event.preventDefault();
 
 		if ( options.disabled ||
-				// can't switch during an animation
-				this.running ||
 				// click on active header, but not collapsible
 				( clickedIsActive && !options.collapsible ) ||
 				// allow canceling activation
@@ -363,7 +360,6 @@ $.widget( "ui.accordion", {
 			toShow = data.newContent,
 			toHide = data.oldContent;
 
-		self.running = true;
 		function complete() {
 			self._completed( data );
 		}
@@ -384,6 +380,8 @@ $.widget( "ui.accordion", {
 			animations[ animation ]({
 				toShow: toShow,
 				toHide: toHide,
+				prevShow: lastToggle.toShow,
+				prevHide: lastToggle.toHide,
 				complete: complete,
 				down: toShow.length && ( !toHide.length || ( toShow.index() < toHide.index() ) )
 			}, additional );
@@ -414,8 +412,6 @@ $.widget( "ui.accordion", {
 		var toShow = data.newContent,
 			toHide = data.oldContent;
 
-		this.running = false;
-
 		if ( this.options.heightStyle === "content" ) {
 			toShow.add( toHide ).css({
 				height: "",
@@ -437,6 +433,11 @@ $.widget( "ui.accordion", {
 $.extend( $.ui.accordion, {
 	animations: {
 		slide: function( options, additions ) {
+			if ( options.prevShow || options.prevHide ) {
+				options.prevHide.stop( true, true );
+				options.toHide = options.prevShow;
+			}
+			
 			var showOverflow = options.toShow.css( "overflow" ),
 				hideOverflow = options.toHide.css( "overflow" ),
 				percentDone = 0,
@@ -448,6 +449,9 @@ $.extend( $.ui.accordion, {
 				easing: "swing",
 				duration: 300
 			}, options, additions );
+			
+			lastToggle = options;
+
 			if ( !options.toHide.size() ) {
 				originalWidth = options.toShow[0].style.width;
 				options.toShow
@@ -504,10 +508,7 @@ $.extend( $.ui.accordion, {
 				.filter( ":visible" )
 				.animate( hideProps, {
 				step: function( now, settings ) {
-					// only calculate the percent when animating height
-					// IE gets very inconsistent results when animating elements
-					// with small values, which is common for padding
-					if ( settings.prop == "height" ) {
+					if ( settings.prop == "height" || settings.prop == "paddingTop" || settings.prop == "paddingBottom" ) {
 						percentDone = ( settings.end - settings.start === 0 ) ? 0 :
 							( settings.now - settings.start ) / ( settings.end - settings.start );
 					}
