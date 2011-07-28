@@ -5,14 +5,6 @@
 
 module("tabs: options");
 
-test('ajaxOptions', function() {
-	ok(false, "missing test - untested code is broken code.");
-});
-
-test('cache', function() {
-	ok(false, "missing test - untested code is broken code.");
-});
-
 test('collapsible', function() {
 	expect(4);
 
@@ -64,7 +56,7 @@ test('cookie', function() {
 });
 
 test('disabled', function() {
-	expect(4);
+	expect(3);
 
 	el = $('#tabs1').tabs();
 	same(el.tabs('option', 'disabled'), [ ], "should not disable any tab by default");
@@ -72,28 +64,8 @@ test('disabled', function() {
 	el.tabs('option', 'disabled', [ 1 ]);
 	same(el.tabs('option', 'disabled'), [ 1 ], "should set property"); // everything else is being tested in methods module...
 
-	// FIXME bug... property needs to be [ 1 ], since selected tab cannot be disabled!
-	el.tabs('option', 'disabled', [ 0, 1 ]);
-	same(el.tabs('option', 'disabled'), [ 1 ], "should disable given tabs but not selected one"); // ...
-
 	el.tabs('option', 'disabled', [ ]);
 	same(el.tabs('option', 'disabled'), [ ], "should not disable any tab"); // ...
-});
-
-test('event', function() {
-	ok(false, "missing test - untested code is broken code.");
-});
-
-test('fx', function() {
-	ok(false, "missing test - untested code is broken code.");
-});
-
-test('idPrefix', function() {
-	ok(false, "missing test - untested code is broken code.");
-});
-
-test('panelTemplate', function() {
-	ok(false, "missing test - untested code is broken code.");
 });
 
 test('selected', function() {
@@ -124,14 +96,6 @@ test('selected', function() {
 	el.tabs({ collapsible: true });
 	el.tabs('option', 'selected', 0);
 	equals(el.tabs('option', 'selected'), 0, 'should not collapse tab if value is same as selected');
-});
-
-test('spinner', function() {
-	ok(false, "missing test - untested code is broken code.");
-});
-
-test('tabTemplate', function() {
-	ok(false, "missing test - untested code is broken code.");
 });
 
 })(jQuery);

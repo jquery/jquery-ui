@@ -47,11 +47,6 @@ module("datepicker: core", {
 	}
 });
 
-test( "widget method - empty collection", function() {
-	$( "#nonExist" ).datepicker(); // should create nothing
-	ok( !$( "#ui-datepicker-div" ).length, "Non init on empty collection" );
-});
-
 test("widget method", function() {
 	var actual = $("#inp").datepicker().datepicker("widget")[0];
 	same($("body > #ui-datepicker-div:last-child")[0], actual);
