@@ -40,7 +40,7 @@ $.widget( "ui.menu", {
 			})
 			// need to catch all clicks on disabled menu
 			// not possible through _bind
-			.bind("click.menu", function( event ) {
+			.bind( "click.menu", function( event ) {
 				if ( self.options.disabled ) {
 					event.preventDefault();
 				}
