@@ -64,9 +64,7 @@ $.widget( "ui.menu", {
 			"focus": function( event ) {
 				this.focus( event, $( event.target ).children( ".ui-menu-item:first" ) );
 			},
-			"blur": function( event ) {
-				this.collapseAll( event );
-			}
+			"blur": "collapseAll"
 		});
 
 		this.refresh();
