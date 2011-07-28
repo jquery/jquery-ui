@@ -927,68 +927,56 @@ test( "._trigger() - instance as element", function() {
 	instance.testEvent();
 });
 
-test( "auto-destroy - .remove()", function() {
-	expect( 1 );
-	$.widget( "ui.testWidget", {
-		_create: function() {},
-		destroy: function() {
-			ok( true, "destroyed from .remove()" );
-		}
-	});
-	$( "#widget" ).testWidget().remove();
-});
+(function() {
+	function shouldDestroy( expected, callback ) {
+		expect( 1 );
+		var destroyed = false;
+		$.widget( "ui.testWidget", {
+			_create: function() {},
+			destroy: function() {
+				destroyed = true;
+			}
+		});
+		callback();
+		equal( destroyed, expected );
+	}
 
-test( "auto-destroy - .remove() on parent", function() {
-	expect( 1 );
-	$.widget( "ui.testWidget", {
-		_create: function() {},
-		destroy: function() {
-			ok( true, "destroyed from .remove() on parent" );
-		}
+	test( "auto-destroy - .remove()", function() {
+		shouldDestroy( true, function() {
+			$( "#widget" ).testWidget().remove();
+		});
 	});
-	$( "#widget" ).testWidget().parent().remove();
-});
-
-test( "auto-destroy - .remove() on child", function() {
-	$.widget( "ui.testWidget", {
-		_create: function() {},
-		destroy: function() {
-			ok( false, "destroyed from .remove() on child" );
-		}
+	
+	test( "auto-destroy - .remove() on parent", function() {
+		shouldDestroy( true, function() {
+			$( "#widget" ).testWidget().parent().remove();
+		});
 	});
-	$( "#widget" ).testWidget().children().remove();
-});
-
-test( "auto-destroy - .empty()", function() {
-	$.widget( "ui.testWidget", {
-		_create: function() {},
-		destroy: function() {
-			ok( false, "destroyed from .empty()" );
-		}
+	
+	test( "auto-destroy - .remove() on child", function() {
+		shouldDestroy( false, function() {
+			$( "#widget" ).testWidget().children().remove();
+		});
 	});
-	$( "#widget" ).testWidget().empty();
-});
-
-test( "auto-destroy - .empty() on parent", function() {
-	expect( 1 );
-	$.widget( "ui.testWidget", {
-		_create: function() {},
-		destroy: function() {
-			ok( true, "destroyed from .empty() on parent" );
-		}
+	
+	test( "auto-destroy - .empty()", function() {
+		shouldDestroy( false, function() {
+			$( "#widget" ).testWidget().empty();
+		});
 	});
-	$( "#widget" ).testWidget().parent().empty();
-});
-
-test( "auto-destroy - .detach()", function() {
-	$.widget( "ui.testWidget", {
-		_create: function() {},
-		destroy: function() {
-			ok( false, "destroyed from .detach()" );
-		}
+	
+	test( "auto-destroy - .empty() on parent", function() {
+		shouldDestroy( true, function() {
+			$( "#widget" ).testWidget().parent().empty();
+		});
 	});
-	$( "#widget" ).testWidget().detach();
-});
+	
+	test( "auto-destroy - .detach()", function() {
+		shouldDestroy( false, function() {
+			$( "#widget" ).testWidget().detach();
+		});
+	});
+}());
 
 test( "redefine", function() {
 	expect( 4 );
