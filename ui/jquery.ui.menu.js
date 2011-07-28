@@ -60,9 +60,7 @@ $.widget( "ui.menu", {
 				target.siblings().children( ".ui-state-active" ).removeClass( "ui-state-active" );
 				this.focus( event, target );
 			},
-			"mouseout .ui-menu-item": function( event ) {
-				this.blur( event );
-			},
+			"mouseout .ui-menu-item": "blur",
 			"focus": function( event ) {
 				this.focus( event, $( event.target ).children( ".ui-menu-item:first" ) );
 			},
