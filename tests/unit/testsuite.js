@@ -82,7 +82,7 @@ window.domEqual = function( selector, modifier, message ) {
 		var result = {};
 		result.nodeName = value[0].nodeName;
 		$.each(attributes, function(index, attr) {
-			result[attr] = value.attr(attr);
+			result[attr] = value.prop(attr);
 		});
 		result.children = [];
 		var children = value.children();

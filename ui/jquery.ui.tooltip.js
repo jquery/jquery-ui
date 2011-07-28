@@ -148,7 +148,14 @@ $.widget( "ui.tooltip", {
 
 		this._bind( target, {
 			mouseleave: "close",
-			blur: "close"
+			blur: "close",
+			keyup: function( event ) {
+				if ( event.keyCode == $.ui.keyCode.ESCAPE ) {
+					var fakeEvent = $.Event(event);
+					fakeEvent.currentTarget = target[0];
+					this.close( fakeEvent, true );
+				}
+			}
 		});
 	},
 
@@ -176,7 +183,7 @@ $.widget( "ui.tooltip", {
 			delete that.tooltips[ this.id ];
 		});
 
-		target.unbind( "mouseleave.tooltip blur.tooltip" );
+		target.unbind( "mouseleave.tooltip blur.tooltip keyup.tooltip" );
 
 		this._trigger( "close", event, { tooltip: tooltip } );
 	},

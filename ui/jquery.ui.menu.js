@@ -58,6 +58,8 @@ $.widget( "ui.menu", {
 				}
 				var target = $( event.target ).closest( ".ui-menu-item" );
 				if ( target.length ) {
+					//Remove ui-state-active class from siblings of the newly focused menu item to avoid a jump caused by adjacent elements both having a class with a border
+					target.siblings().children( ".ui-state-active" ).removeClass( "ui-state-active" );
 					self.focus( event, target );
 				}
 			})
@@ -69,6 +71,18 @@ $.widget( "ui.menu", {
 				if ( target.length ) {
 					self.blur( event );
 				}
+			})
+			.bind( "focus.menu", function( event ) {
+				if ( self.options.disabled ) {
+					return;
+				}
+				self.focus( event, $( event.target ).children( ".ui-menu-item:first" ) );
+			})
+			.bind( "blur.menu", function( event ) {
+				if ( self.options.disabled ) {
+					return;
+				}
+				self.collapseAll( event );
 			});
 		this.refresh();
 
@@ -87,6 +101,16 @@ $.widget( "ui.menu", {
 				event.preventDefault();
 				event.stopImmediatePropagation();
 				break;
+			case $.ui.keyCode.HOME:
+				self._move( "first", "first", event );
+				event.preventDefault();
+				event.stopImmediatePropagation();
+				break;
+			case $.ui.keyCode.END:
+				self._move( "last", "last", event );
+				event.preventDefault();
+				event.stopImmediatePropagation();
+				break;
 			case $.ui.keyCode.UP:
 				self.previous( event );
 				event.preventDefault();
@@ -98,20 +122,20 @@ $.widget( "ui.menu", {
 				event.stopImmediatePropagation();
 				break;
 			case $.ui.keyCode.LEFT:
-				if (self.left( event )) {
+				if (self.collapse( event )) {
 					event.stopImmediatePropagation();
 				}
 				event.preventDefault();
 				break;
 			case $.ui.keyCode.RIGHT:
-				if (self.right( event )) {
+				if (self.expand( event )) {
 					event.stopImmediatePropagation();
 				}
 				event.preventDefault();
 				break;
 			case $.ui.keyCode.ENTER:
 				if ( self.active.children( "a[aria-haspopup='true']" ).length ) {
-					if ( self.right( event ) ) {
+					if ( self.expand( event ) ) {
 						event.stopImmediatePropagation();
 					}
 				}
@@ -122,7 +146,7 @@ $.widget( "ui.menu", {
 				event.preventDefault();
 				break;
 			case $.ui.keyCode.ESCAPE:
-				if ( self.left( event ) ) {
+				if ( self.collapse( event ) ) {
 					event.stopImmediatePropagation();
 				}
 				event.preventDefault();
@@ -167,6 +191,14 @@ $.widget( "ui.menu", {
 					}
 				} else {
 					delete self.previousFilter;
+				}
+			}
+		});
+
+		this._bind( document, {
+			click: function( event ) {
+				if ( !$( event.target ).closest( ".ui-menu" ).length ) {
+					this.collapseAll( event );
 				}
 			}
 		});
@@ -239,20 +271,20 @@ $.widget( "ui.menu", {
 		var nested,
 			self = this;
 
-		this.blur();
+		this.blur( event );
 
 		if ( this._hasScroll() ) {
-			var borderTop = parseFloat( $.curCSS( this.element[0], "borderTopWidth", true ) ) || 0,
-				paddingTop = parseFloat( $.curCSS( this.element[0], "paddingTop", true ) ) || 0,
-				offset = item.offset().top - this.element.offset().top - borderTop - paddingTop,
-				scroll = this.element.scrollTop(),
-				elementHeight = this.element.height(),
+			var borderTop = parseFloat( $.curCSS( this.activeMenu[0], "borderTopWidth", true ) ) || 0,
+				paddingTop = parseFloat( $.curCSS( this.activeMenu[0], "paddingTop", true ) ) || 0,
+				offset = item.offset().top - this.activeMenu.offset().top - borderTop - paddingTop,
+				scroll = this.activeMenu.scrollTop(),
+				elementHeight = this.activeMenu.height(),
 				itemHeight = item.height();
 
 			if ( offset < 0 ) {
-				this.element.scrollTop( scroll + offset );
+				this.activeMenu.scrollTop( scroll + offset );
 			} else if ( offset + itemHeight > elementHeight ) {
-				this.element.scrollTop( scroll + offset - elementHeight + itemHeight );
+				this.activeMenu.scrollTop( scroll + offset - elementHeight + itemHeight );
 			}
 		}
 
@@ -287,10 +319,19 @@ $.widget( "ui.menu", {
 
 		this.active.children( "a" ).removeClass( "ui-state-focus" );
 		this.active = null;
+
+		this._trigger( "blur", event, { item: this.active } );
 	},
 
 	_startOpening: function( submenu ) {
 		clearTimeout( this.timer );
+
+		// Don't open if already open fixes a Firefox bug that caused a .5 pixel
+		// shift in the submenu position when mousing over the carat icon
+		if ( submenu.attr( "aria-hidden" ) !== "true" ) {
+			return;
+		}
+
 		var self = this;
 		self.timer = setTimeout( function() {
 			self._close();
@@ -319,7 +360,7 @@ $.widget( "ui.menu", {
 			.position( position );
 	},
 
-	closeAll: function() {
+	collapseAll: function( event ) {
 		this.element
 			.find( "ul" )
 				.hide()
@@ -329,7 +370,7 @@ $.widget( "ui.menu", {
 			.find( "a.ui-state-active" )
 			.removeClass( "ui-state-active" );
 
-		this.blur();
+		this.blur( event );
 		this.activeMenu = this.element;
 	},
 
@@ -344,7 +385,7 @@ $.widget( "ui.menu", {
 			.removeClass( "ui-state-active" );
 	},
 
-	left: function( event ) {
+	collapse: function( event ) {
 		var newItem = this.active && this.active.parents("li:not(.ui-menubar-item)").first();
 		if ( newItem && newItem.length ) {
 			this.active.parent()
@@ -356,7 +397,7 @@ $.widget( "ui.menu", {
 		}
 	},
 
-	right: function( event ) {
+	expand: function( event ) {
 		var self = this,
 			newItem = this.active && this.active.children("ul").children("li").first();
 
@@ -372,11 +413,11 @@ $.widget( "ui.menu", {
 	},
 
 	next: function(event) {
-		this._move( "next", ".ui-menu-item", "first", event );
+		this._move( "next", "first", event );
 	},
 
 	previous: function(event) {
-		this._move( "prev", ".ui-menu-item", "last", event );
+		this._move( "prev", "last", event );
 	},
 
 	first: function() {
@@ -387,25 +428,36 @@ $.widget( "ui.menu", {
 		return this.active && !this.active.nextAll( ".ui-menu-item" ).length;
 	},
 
-	_move: function( direction, edge, filter, event ) {
+	_move: function( direction, filter, event ) {
 		if ( !this.active ) {
-			this.focus( event, this.activeMenu.children( edge )[ filter ]() );
+			this.focus( event, this.activeMenu.children( ".ui-menu-item" )[ filter ]() );
 			return;
 		}
-		var next = this.active[ direction + "All" ]( ".ui-menu-item" ).eq( 0 );
+
+		var next;
+		if ( direction === "first" || direction === "last" ) {
+			next = this.active[ direction === "first" ? "prevAll" : "nextAll" ]( ".ui-menu-item" ).eq( -1 );
+		} else {
+			next = this.active[ direction + "All" ]( ".ui-menu-item" ).eq( 0 );
+		}
+
 		if ( next.length ) {
 			this.focus( event, next );
 		} else {
-			this.focus( event, this.activeMenu.children( edge )[ filter ]() );
+			this.focus( event, this.activeMenu.children( ".ui-menu-item" )[ filter ]() );
 		}
 	},
 
 	nextPage: function( event ) {
 		if ( this._hasScroll() ) {
-			if ( !this.active || this.last() ) {
+			if ( !this.active ) {
 				this.focus( event, this.activeMenu.children( ".ui-menu-item" ).first() );
 				return;
 			}
+			if ( this.last() ) {
+				return;
+			}
+
 			var base = this.active.offset().top,
 				height = this.element.height(),
 				result;
@@ -417,14 +469,17 @@ $.widget( "ui.menu", {
 			this.focus( event, result );
 		} else {
 			this.focus( event, this.activeMenu.children( ".ui-menu-item" )
-				[ !this.active || this.last() ? "first" : "last" ]() );
+				[ !this.active ? "first" : "last" ]() );
 		}
 	},
 
 	previousPage: function( event ) {
 		if ( this._hasScroll() ) {
-			if ( !this.active || this.first() ) {
-				this.focus( event, this.activeMenu.children( ".ui-menu-item" ).last() );
+			if ( !this.active ) {
+				this.focus( event, this.activeMenu.children( ".ui-menu-item" ).first() );
+				return;
+			}
+			if ( this.first() ) {
 				return;
 			}
 
@@ -438,22 +493,20 @@ $.widget( "ui.menu", {
 
 			this.focus( event, result );
 		} else {
-			this.focus( event, this.activeMenu.children( ".ui-menu-item" )
-				[ !this.active || this.first() ? ":last" : ":first" ]() );
+			this.focus( event, this.activeMenu.children( ".ui-menu-item" ).first() );
 		}
 	},
 
 	_hasScroll: function() {
-		// TODO: just use .prop() when we drop support for jQuery <1.6
-		return this.element.height() < this.element[ $.fn.prop ? "prop" : "attr" ]( "scrollHeight" );
+		return this.element.height() < this.element.prop( "scrollHeight" );
 	},
 
 	select: function( event ) {
-		// save active reference before closeAll triggers blur
+		// save active reference before collapseAll triggers blur
 		var ui = {
 			item: this.active
 		};
-		this.closeAll();
+		this.collapseAll( event );
 		this._trigger( "select", event, ui );
 	}
 });

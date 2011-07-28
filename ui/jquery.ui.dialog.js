@@ -108,7 +108,8 @@ $.widget("ui.dialog", {
 				})
 				.mousedown(function( event ) {
 					self.moveToTop( false, event );
-				}),
+				})
+				.appendTo( "body" ),
 
 			uiDialogContent = self.element
 				.show()
@@ -154,8 +155,6 @@ $.widget("ui.dialog", {
 
 		self._createButtons( options.buttons );
 		self._isOpen = false;
-
-		uiDialog.appendTo( document.body );
 
 		if ( $.fn.bgiframe ) {
 			uiDialog.bgiframe();
@@ -266,8 +265,8 @@ $.widget("ui.dialog", {
 		// Opera 9.5+ resets when parent z-index is changed.
 		// http://bugs.jqueryui.com/ticket/3193
 		saveScroll = {
-			scrollTop: self.element.attr( "scrollTop" ),
-			scrollLeft: self.element.attr( "scrollLeft" )
+			scrollTop: self.element.scrollTop(),
+			scrollLeft: self.element.scrollLeft()
 		};
 		$.ui.dialog.maxZ += 1;
 		self.uiDialog.css( "z-index", $.ui.dialog.maxZ );

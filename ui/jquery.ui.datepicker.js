@@ -285,7 +285,9 @@ $.extend(Datepicker.prototype, {
 		if( inst.settings.disabled ) {
 			this._disableDatepicker( target );
 		}
-		inst.dpDiv.show();
+		// Set display:block in place of inst.dpDiv.show() which won't work on disconnected elements
+		// http://bugs.jqueryui.com/ticket/7552 - A Datepicker created on a detached div has zero height
+		inst.dpDiv.css( "display", "block" );
 	},
 
 	/* Pop-up the date picker in a "dialog" box.
@@ -377,7 +379,7 @@ $.extend(Datepicker.prototype, {
 			var inline = $target.children('.' + this._inlineClass);
 			inline.children().removeClass('ui-state-disabled');
 			inline.find("select.ui-datepicker-month, select.ui-datepicker-year").
-				removeAttr("disabled");
+				prop("disabled", false);
 		}
 		this._disabledInputs = $.map(this._disabledInputs,
 			function(value) { return (value == target ? null : value); }); // delete entry
@@ -402,7 +404,7 @@ $.extend(Datepicker.prototype, {
 			var inline = $target.children('.' + this._inlineClass);
 			inline.children().addClass('ui-state-disabled');
 			inline.find("select.ui-datepicker-month, select.ui-datepicker-year").
-				attr("disabled", "disabled");
+				prop("disabled", true);
 		}
 		this._disabledInputs = $.map(this._disabledInputs,
 			function(value) { return (value == target ? null : value); }); // delete entry
@@ -529,6 +531,13 @@ $.extend(Datepicker.prototype, {
 									$.datepicker._currentClass + ')', inst.dpDiv);
 						if (sel[0])
 							$.datepicker._selectDay(event.target, inst.selectedMonth, inst.selectedYear, sel[0]);
+							var onSelect = $.datepicker._get(inst, 'onSelect');
+							if (onSelect) {
+								var dateStr = $.datepicker._formatDate(inst);
+
+								// trigger custom callback
+								onSelect.apply((inst.input ? inst.input[0] : null), [dateStr, inst]);
+							}
 						else
 							$.datepicker._hideDatepicker();
 						return false; // don't submit the form
@@ -932,8 +941,7 @@ $.extend(Datepicker.prototype, {
 		else {
 			this._hideDatepicker();
 			this._lastInput = inst.input[0];
-			if (typeof(inst.input[0]) != 'object')
-				inst.input.focus(); // restore focus
+			inst.input.focus(); // restore focus
 			this._lastInput = null;
 		}
 	},
@@ -1096,7 +1104,10 @@ $.extend(Datepicker.prototype, {
 				}
 		}
 		if (iValue < value.length){
-			throw "Extra/unparsed characters found in date: " + value.substring(iValue);
+			var extra = value.substr(iValue);
+			if (!/^\s+/.test(extra)) {
+				throw "Extra/unparsed characters found in date: " + extra;
+			}
 		}
 		if (year == -1)
 			year = new Date().getFullYear();
@@ -1392,6 +1403,14 @@ $.extend(Datepicker.prototype, {
 		this._adjustInstDate(inst);
 		if (inst.input) {
 			inst.input.val(clear ? '' : this._formatDate(inst));
+		}
+
+		var onSelect = this._get(inst, 'onSelect');
+		if (onSelect) {
+			var dateStr = this._formatDate(inst);
+
+			// trigger custom callback
+			onSelect.apply((inst.input ? inst.input[0] : null), [dateStr, inst]);
 		}
 	},
 

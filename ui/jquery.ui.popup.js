@@ -41,7 +41,7 @@ $.widget( "ui.popup", {
 		}
 
 		this.options.trigger
-			.attr( "aria-haspopup", true )
+			.attr( "aria-haspopup", "true" )
 			.attr( "aria-owns", this.element.attr( "id" ) );
 
 		this.element
@@ -163,8 +163,8 @@ $.widget( "ui.popup", {
 
 		this.element
 			.show()
-			.attr( "aria-hidden", false )
-			.attr( "aria-expanded", true )
+			.attr( "aria-hidden", "false" )
+			.attr( "aria-expanded", "true" )
 			.position( position );
 
 		if (this.element.is( ":ui-menu" )) { //popup is a menu
@@ -194,8 +194,8 @@ $.widget( "ui.popup", {
 	close: function( event ) {
 		this.element
 			.hide()
-			.attr( "aria-hidden", true )
-			.attr( "aria-expanded", false );
+			.attr( "aria-hidden", "true" )
+			.attr( "aria-expanded", "false" );
 
 		this.options.trigger.attr( "tabindex" , 0 );
 		if ( this.removeTabIndex ) {
