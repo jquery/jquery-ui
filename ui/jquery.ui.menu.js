@@ -37,12 +37,14 @@ $.widget( "ui.menu", {
 			.attr({
 				id: this.menuId,
 				role: "menu"
+			})
+			// need to catch all clicks on disabled menu
+			// not possible through _bind
+			.bind("click.menu", function( event ) {
+				if ( self.options.disabled ) {
+					event.preventDefault();
+				}
 			});
-		this.element.bind("click.menu", function( event ) {
-			if ( self.options.disabled ) {
-				event.preventDefault();
-			}
-		});
 		this._bind({
 			"click .ui-menu-item:has(a)": function( event ) {
 				event.stopImmediatePropagation();
