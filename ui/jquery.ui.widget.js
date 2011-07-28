@@ -322,10 +322,10 @@ $.Widget.prototype = {
 			var match = event.match( /^(\w+)\s*(.*)$/ ),
 				eventName = match[1] + "." + instance.widgetName,
 				selector = match[2];
-			if ( selector === '' ) {
-				element.bind( eventName, handlerProxy );
-			} else {
+			if ( selector ) {
 				element.delegate( selector, eventName, handlerProxy );
+			} else {
+				element.bind( eventName, handlerProxy );
 			}
 		});
 	},
