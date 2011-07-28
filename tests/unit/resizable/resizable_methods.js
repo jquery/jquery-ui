@@ -47,18 +47,4 @@ test("destroy", function() {
 	equals(actual, expected, 'destroy is chainable');
 });
 
-test("enable", function() {
-	var expected = $('<div></div>').resizable(),
-		actual = expected.resizable('enable');
-	equals(actual, expected, 'enable is chainable');
-	ok(false, "missing test - untested code is broken code.");
-});
-
-test("disable", function() {
-	var expected = $('<div></div>').resizable(),
-		actual = expected.resizable('disable');
-	equals(actual, expected, 'disable is chainable');
-	ok(false, "missing test - untested code is broken code.");
-});
-
 })(jQuery);

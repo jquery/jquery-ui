@@ -24,7 +24,7 @@ function testWidgetDefaults(widget, defaults) {
 
 function testWidgetOverrides(widget) {
 	test('$.widget overrides', function() {
-		$.each(['_widgetInit', 'option', '_trigger'], function(i, method) {
+		$.each(['_widgetInit', 'option'], function(i, method) {
 			ok($.Widget.prototype[method] == $.ui[widget].prototype[method],
 				'should not override ' + method);
 		});

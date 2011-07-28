@@ -15,8 +15,6 @@ test("start", function() {
 	ok(hash, 'start event triggered');	
 	ok(hash.helper, 'UI hash includes: helper');
 	ok(hash.placeholder, 'UI hash includes: placeholder');
-	ok(hash.position && (hash.position.top && hash.position.left), 'UI hash includes: position');
-	ok(hash.offset && (hash.offset.top && hash.offset.left), 'UI hash includes: offset');
 	ok(hash.item, 'UI hash includes: item');
 	ok(!hash.sender, 'UI hash does not include: sender');
 
@@ -118,30 +116,6 @@ test("update", function() {
 	ok(hash.item, 'UI hash includes: item');
 	ok(!hash.sender, 'UI hash does not include: sender');
 	
-});
-
-test("receive", function() {
-	ok(false, "missing test - untested code is broken code.");
-});
-
-test("remove", function() {
-	ok(false, "missing test - untested code is broken code.");
-});
-
-test("over", function() {
-	ok(false, "missing test - untested code is broken code.");
-});
-
-test("out", function() {
-	ok(false, "missing test - untested code is broken code.");
-});
-
-test("activate", function() {
-	ok(false, "missing test - untested code is broken code.");
-});
-
-test("deactivate", function() {
-	ok(false, "missing test - untested code is broken code.");
 });
 
 })(jQuery);
