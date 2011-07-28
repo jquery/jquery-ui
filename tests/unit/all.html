@@ -4,14 +4,15 @@
 	<meta charset="utf-8">
 	<title>jQuery UI Test Suite</title>
 
-	<script src="../../jquery-1.5.1.js"></script>
+	<script src="../jquery-1.5.2.js"></script>
 
 	<link rel="stylesheet" href="../../external/qunit.css">
 	<script src="../../external/qunit.js"></script>
 	<script src="testsuites.js"></script>
 
 	<script>
-	QUnit.testSuites([
+	var params = "";
+	var suites = [
 		"accordion/accordion.html",
 		"autocomplete/autocomplete.html",
 		"button/button.html",
@@ -28,7 +29,16 @@
 		"sortable/sortable.html",
 		"tabs/tabs.html",
 		"widget/widget.html"
-   	]);
+   	];
+	$.each( QUnit.urlParams, function( key, value ) {
+		params += encodeURIComponent( key ) + "=" + encodeURIComponent( value );
+	});
+	if ( params ) {
+		suites = $.map( suites, function( suite ) {
+			return suite + "?" + params;
+		});
+	}
+	QUnit.testSuites( suites );
 	</script>
 </head>
 <body>
