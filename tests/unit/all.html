@@ -13,7 +13,7 @@
 	<script>
 	(function() {
 
-	var params = "",
+	var params = [],
 		suites = [
 			"accordion/accordion.html",
 			"accordion/accordion_deprecated.html",
@@ -41,11 +41,15 @@
 		];
 
 	$.each( QUnit.urlParams, function( key, value ) {
-		params += encodeURIComponent( key ) + "=" + encodeURIComponent( value );
+		if ( key === "filter" ) {
+			return;
+		}
+		params.push( encodeURIComponent( key ) + "=" + encodeURIComponent( value ) );
 	});
-	if ( params ) {
+	if ( params.length ) {
+		params = "?" + params.join( "&" );
 		suites = $.map( suites, function( suite ) {
-			return suite + "?" + params;
+			return suite + params;
 		});
 	}
 	QUnit.testSuites( suites );
