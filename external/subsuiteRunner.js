@@ -1,43 +1,49 @@
-(function( $, QUnit ) {
-
-$.extend( QUnit, {
+(function( QUnit ) {
+var subsuiteFrame;
+QUnit.extend( QUnit, {
 	testSuites: function( suites ) {
-		$.each( suites, function( i, suite ) {
+		for (var i = 0; i < suites.length; i++) {
+			(function(suite){
 			asyncTest( suite, function() {
 				QUnit.runSuite( suite );
 			});
-		});
+			})(suites[i])
+		}
+		QUnit.done = function(){
+			subsuiteFrame.style.display = "none";
+		}
 	},
 
 	testStart: function( data ) {
 		// update the test status to show which test suite is running
-		$( "#qunit-testresult" ).html( "Running " + data.name + "...<br>&nbsp;" );
+		QUnit.id("qunit-testresult").innerHTML = "Running " + data.name + "...<br>&nbsp;";
 	},
 
 	testDone: function() {
+		var current = QUnit.id(this.config.current.id),
+			children = current.children;
+
 		// undo the auto-expansion of failed tests
-		$( "#qunit-tests > li.fail" ).each(function() {
-			var test = $( this );
-			// avoid collapsing test results that the user manually opened
-			if ( test.data( "auto-collapsed" ) ) {
-				return;
+		for (var i = 0; i < children.length; i++) {
+			if (children[i].nodeName == "OL") {
+				children[i].style.display = "none";
 			}
-			test.data( "auto-collapsed", true )
-				.children( "ol" ).hide();
-		});
+		}
 	},
 
 	runSuite: function( suite ) {
-		var body = $( "body" ),
-			iframe = $( "<iframe>", { src: suite, class: "qunit-subsuite" } )
-				.appendTo( body );
+		var body = document.getElementsByTagName( "body" )[0],
+			iframe = subsuiteFrame = document.createElement('iframe'),
+			iframeWin;
 
-		$( iframe ).bind( "load", function() {
+		iframe.className = "qunit-subsuite";
+		body.appendChild(iframe);
+
+		function onIframeLoad() {
 			var module, test,
-			iframeWin = iframe[0].contentWindow,
-			count = 0;
+				count = 0;
 
-			$.extend( iframeWin.QUnit, {
+			QUnit.extend( iframeWin.QUnit, {
 				moduleStart: function( data ) {
 					// capture module name for messages
 					module = data.name;
@@ -56,21 +62,19 @@ $.extend( QUnit, {
 				},
 
 				done: function() {
-					// hide the iframe from the main page once the tests are done
-					// and start the wrapper test from the main page
-					//$( iframe ).hide();
+					// start the wrapper test from the main page
 					start();
 				}
 			});
-		});
-		this.runSuite = function(){
-			iframe.attr('src', suite);
+		}
+		QUnit.addEvent(iframe, 'load', onIframeLoad);
+
+		iframeWin = iframe.contentWindow;
+		iframe.setAttribute('src', suite);
+
+		this.runSuite = function(suite){
+			iframe.setAttribute('src', suite);
 		}
 	}
 });
-
-// generate an iframe to run the test suite and proxy the iframe's QUnit
-// to pass all test info to the main page
-
-
-}( jQuery, QUnit ) );
+}( QUnit ) );
