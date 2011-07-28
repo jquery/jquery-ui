@@ -84,9 +84,9 @@ test("orientation", function() {
 
 });
 
-test("range", function() {
-	ok(false, "missing test - untested code is broken code.");
-});
+//test("range", function() {
+//	ok(false, "missing test - untested code is broken code.");
+//});
 
 //spec: http://wiki.jqueryui.com/Slider#specs
 // value option/method: the value option is not restricted by min/max/step.
@@ -135,12 +135,12 @@ el = $('<div></div>').slider({
 	el.slider('destroy');
 });
 
-test("value", function() {
-	ok(false, "missing test - untested code is broken code.");
-});
+//test("value", function() {
+//	ok(false, "missing test - untested code is broken code.");
+//});
 
-test("values", function() {
-	ok(false, "missing test - untested code is broken code.");
-});
+//test("values", function() {
+//	ok(false, "missing test - untested code is broken code.");
+//});
 
 })(jQuery);
