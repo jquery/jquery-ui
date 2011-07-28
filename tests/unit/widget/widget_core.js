@@ -670,7 +670,6 @@ test( "_bind() with delegate", function() {
 	expect( 8 );
 	$.widget( "ui.testWidget", {
 		_create: function() {
-			var that = this;
 			this.element = {
 				bind: function( event, handler ) {
 					equal( event, "click.testWidget" );
@@ -682,7 +681,7 @@ test( "_bind() with delegate", function() {
 					ok(  $.isFunction(handler) );
 				},
 				trigger: $.noop
-			}
+			};
 			this._bind({
 				"click": "handler",
 				"click a": "handler",
@@ -698,7 +697,7 @@ test( "_bind() with delegate", function() {
 		}
 	});
 	$.ui.testWidget();
-})
+});
 
 test( "._hoverable()", function() {
 	$.widget( "ui.testWidget", {
