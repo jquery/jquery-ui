@@ -449,8 +449,12 @@ $.extend( $.effects, {
 	},
 
 	removeWrapper: function( element ) {
-		if ( element.parent().is( ".ui-effects-wrapper" ) )
-			return element.parent().replaceWith( element );
+		if (element.parent().is('.ui-effects-wrapper')) {
+			var focused = element.find(":focus");
+			element.parent().replaceWith(element);
+			focused.focus();
+		}
+
 		return element;
 	},
 
