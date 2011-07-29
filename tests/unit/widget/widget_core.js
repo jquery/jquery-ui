@@ -89,7 +89,7 @@ test( "jQuery usage", function() {
 				"parameter passed via .pluginName(methodName, param)" );
 			equals( param2, "value2",
 				"multiple parameters passed via .pluginName(methodName, param, param)" );
-			
+
 			return this;
 		},
 		getterSetterMethod: function( val ) {
@@ -153,9 +153,9 @@ test( "direct usage", function() {
 			}
 		}
 	});
-	
+
 	var elem = $( "<div>" )[ 0 ];
-	
+
 	shouldCreate = true;
 	var instance = new $.ui.testWidget( {}, elem );
 	shouldCreate = false;
@@ -163,7 +163,7 @@ test( "direct usage", function() {
 	equals( $( elem ).data( "testWidget" ), instance,
 		"instance stored in .data(pluginName)" );
 	equals( instance.element[ 0 ], elem, "element stored on widget" );
-	
+
 	var ret = instance.methodWithParams( "value1", "value2" );
 	equals( ret, instance, "plugin returned from method call" );
 
@@ -193,7 +193,7 @@ test( "error handling", function() {
 		equal( msg, "no such method '_privateMethod' for testWidget widget instance",
 			"invalid method call on widget instance" );
 	};
-	$( "<div>" ).testWidget().testWidget( "_privateMethod" );		
+	$( "<div>" ).testWidget().testWidget( "_privateMethod" );
 	$.error = error;
 });
 
@@ -463,7 +463,7 @@ test( ".option() - delegate to ._setOptions()", function() {
 	calls = [];
 	div.testWidget( "option", "foo", "bar" );
 	same( calls, [{ foo: "bar" }], "_setOptions called for single option" );
-	
+
 	calls = [];
 	div.testWidget( "option", {
 		bar: "qux",
@@ -490,7 +490,7 @@ test( ".option() - delegate to ._setOption()", function() {
 	div.testWidget( "option", "foo", "bar" );
 	same( calls, [{ key: "foo", val: "bar" }],
 		"_setOption called for single option" );
-	
+
 	calls = [];
 	div.testWidget( "option", {
 		bar: "qux",
@@ -666,6 +666,39 @@ test( "._bind() to descendent", function() {
 		.trigger( "keydown" );
 });
 
+test( "_bind() with delegate", function() {
+	expect( 8 );
+	$.widget( "ui.testWidget", {
+		_create: function() {
+			this.element = {
+				bind: function( event, handler ) {
+					equal( event, "click.testWidget" );
+					ok(  $.isFunction(handler) );
+				},
+				delegate: function( selector, event, handler ) {
+					equal( selector, "a" );
+					equal( event, "click.testWidget" );
+					ok(  $.isFunction(handler) );
+				},
+				trigger: $.noop
+			};
+			this._bind({
+				"click": "handler",
+				"click a": "handler",
+			});
+			this.element.delegate = function( selector, event, handler ) {
+				equal( selector, "form fieldset > input" );
+				equal( event, "change.testWidget" );
+				ok(  $.isFunction(handler) );
+			};
+			this._bind({
+				"change form fieldset > input": "handler"
+			});
+		}
+	});
+	$.ui.testWidget();
+});
+
 test( "._hoverable()", function() {
 	$.widget( "ui.testWidget", {
 		_create: function() {
@@ -703,14 +736,14 @@ test( "._focusable()", function() {
 		this._focusable( this.element.children() );
 	}
 	});
-	
+
 	var div = $( "#widget" ).testWidget().children();
 	ok( !div.hasClass( "ui-state-focus" ), "not focused on init" );
 	div.trigger( "focusin" );
 	ok( div.hasClass( "ui-state-focus" ), "focused after explicit focus" );
 	div.trigger( "focusout" );
 	ok( !div.hasClass( "ui-state-focus" ), "not focused after blur" );
-	
+
 	div.trigger( "focusin" );
 	ok( div.hasClass( "ui-state-focus" ), "focused after explicit focus" );
 	$( "#widget" ).testWidget( "disable" );
@@ -719,7 +752,7 @@ test( "._focusable()", function() {
 	ok( !div.hasClass( "ui-state-focus" ), "can't focus while disabled" );
 	$( "#widget" ).testWidget( "enable" );
 	ok( !div.hasClass( "ui-state-focus" ), "enabling doesn't reset focus" );
-	
+
 	div.trigger( "focusin" );
 	ok( div.hasClass( "ui-state-focus" ), "focused after explicit focus" );
 	$( "#widget" ).testWidget( "destroy" );
@@ -927,68 +960,56 @@ test( "._trigger() - instance as element", function() {
 	instance.testEvent();
 });
 
-test( "auto-destroy - .remove()", function() {
-	expect( 1 );
-	$.widget( "ui.testWidget", {
-		_create: function() {},
-		destroy: function() {
-			ok( true, "destroyed from .remove()" );
-		}
-	});
-	$( "#widget" ).testWidget().remove();
-});
+(function() {
+	function shouldDestroy( expected, callback ) {
+		expect( 1 );
+		var destroyed = false;
+		$.widget( "ui.testWidget", {
+			_create: function() {},
+			destroy: function() {
+				destroyed = true;
+			}
+		});
+		callback();
+		equal( destroyed, expected );
+	}
 
-test( "auto-destroy - .remove() on parent", function() {
-	expect( 1 );
-	$.widget( "ui.testWidget", {
-		_create: function() {},
-		destroy: function() {
-			ok( true, "destroyed from .remove() on parent" );
-		}
+	test( "auto-destroy - .remove()", function() {
+		shouldDestroy( true, function() {
+			$( "#widget" ).testWidget().remove();
+		});
 	});
-	$( "#widget" ).testWidget().parent().remove();
-});
-
-test( "auto-destroy - .remove() on child", function() {
-	$.widget( "ui.testWidget", {
-		_create: function() {},
-		destroy: function() {
-			ok( false, "destroyed from .remove() on child" );
-		}
+	
+	test( "auto-destroy - .remove() on parent", function() {
+		shouldDestroy( true, function() {
+			$( "#widget" ).testWidget().parent().remove();
+		});
 	});
-	$( "#widget" ).testWidget().children().remove();
-});
-
-test( "auto-destroy - .empty()", function() {
-	$.widget( "ui.testWidget", {
-		_create: function() {},
-		destroy: function() {
-			ok( false, "destroyed from .empty()" );
-		}
+	
+	test( "auto-destroy - .remove() on child", function() {
+		shouldDestroy( false, function() {
+			$( "#widget" ).testWidget().children().remove();
+		});
 	});
-	$( "#widget" ).testWidget().empty();
-});
-
-test( "auto-destroy - .empty() on parent", function() {
-	expect( 1 );
-	$.widget( "ui.testWidget", {
-		_create: function() {},
-		destroy: function() {
-			ok( true, "destroyed from .empty() on parent" );
-		}
+	
+	test( "auto-destroy - .empty()", function() {
+		shouldDestroy( false, function() {
+			$( "#widget" ).testWidget().empty();
+		});
 	});
-	$( "#widget" ).testWidget().parent().empty();
-});
-
-test( "auto-destroy - .detach()", function() {
-	$.widget( "ui.testWidget", {
-		_create: function() {},
-		destroy: function() {
-			ok( false, "destroyed from .detach()" );
-		}
+	
+	test( "auto-destroy - .empty() on parent", function() {
+		shouldDestroy( true, function() {
+			$( "#widget" ).testWidget().parent().empty();
+		});
 	});
-	$( "#widget" ).testWidget().detach();
-});
+	
+	test( "auto-destroy - .detach()", function() {
+		shouldDestroy( false, function() {
+			$( "#widget" ).testWidget().detach();
+		});
+	});
+}());
 
 test( "redefine", function() {
 	expect( 4 );

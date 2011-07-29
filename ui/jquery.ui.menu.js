@@ -38,40 +38,37 @@ $.widget( "ui.menu", {
 				id: this.menuId,
 				role: "menu"
 			})
+			// need to catch all clicks on disabled menu
+			// not possible through _bind
 			.bind( "click.menu", function( event ) {
-				var item = $( event.target ).closest( ".ui-menu-item:has(a)" );
 				if ( self.options.disabled ) {
-					return false;
-				}
-				if ( !item.length ) {
-					return;
-				}
-				// it's possible to click an item without hovering it (#7085)
-				if ( !self.active || ( self.active[ 0 ] !== item[ 0 ] ) ) {
-					self.focus( event, item );
-				}
-				self.select( event );
-			})
-			.bind( "mouseover.menu", function( event ) {
-				if ( self.options.disabled ) {
-					return;
-				}
-				var target = $( event.target ).closest( ".ui-menu-item" );
-				if ( target.length ) {
-					//Remove ui-state-active class from siblings of the newly focused menu item to avoid a jump caused by adjacent elements both having a class with a border
-					target.siblings().children( ".ui-state-active" ).removeClass( "ui-state-active" );
-					self.focus( event, target );
-				}
-			})
-			.bind( "mouseout.menu", function( event ) {
-				if ( self.options.disabled ) {
-					return;
-				}
-				var target = $( event.target ).closest( ".ui-menu-item" );
-				if ( target.length ) {
-					self.blur( event );
+					event.preventDefault();
 				}
 			});
+		this._bind({
+			"click .ui-menu-item:has(a)": function( event ) {
+				event.stopImmediatePropagation();
+				var target = $( event.currentTarget );
+				// it's possible to click an item without hovering it (#7085)
+				if ( !this.active || ( this.active[ 0 ] !== target[ 0 ] ) ) {
+					this.focus( event, target );
+				}
+				this.select( event );
+			},
+			"mouseover .ui-menu-item": function( event ) {
+				event.stopImmediatePropagation();
+				var target = $( event.currentTarget );
+				// Remove ui-state-active class from siblings of the newly focused menu item to avoid a jump caused by adjacent elements both having a class with a border
+				target.siblings().children( ".ui-state-active" ).removeClass( "ui-state-active" );
+				this.focus( event, target );
+			},
+			"mouseout .ui-menu-item": "blur",
+			"focus": function( event ) {
+				this.focus( event, $( event.target ).children( ".ui-menu-item:first" ) );
+			},
+			"blur": "collapseAll"
+		});
+
 		this.refresh();
 
 		this.element.attr( "tabIndex", 0 ).bind( "keydown.menu", function( event ) {

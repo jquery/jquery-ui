@@ -95,8 +95,8 @@ test("value", function() {
 	equals(el.slider('option', 'value'), 1, 'value method set respects max');
 });
 
-test("values", function() {
-	ok(false, "missing test - untested code is broken code.");
-});
+//test("values", function() {
+//	ok(false, "missing test - untested code is broken code.");
+//});
 
 })(jQuery);

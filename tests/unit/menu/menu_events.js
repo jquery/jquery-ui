@@ -30,7 +30,6 @@ test( "handle blur: click", function() {
 
 		},
 		blur: function( event, ui ) {
-			console.log( event, ui );
 			equal( event.originalEvent.type, "click", "blur triggered 'click'" );
 			equal( event.type, "menublur", "blur event.type is 'menublur'" );
 		}
