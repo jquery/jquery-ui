@@ -1,31 +1,33 @@
 (function( QUnit ) {
+
 var subsuiteFrame;
+
 QUnit.extend( QUnit, {
 	testSuites: function( suites ) {
-		for (var i = 0; i < suites.length; i++) {
-			(function(suite){
-			asyncTest( suite, function() {
-				QUnit.runSuite( suite );
-			});
-			})(suites[i])
+		for ( var i = 0; i < suites.length; i++ ) {
+			(function( suite ) {
+				asyncTest( suite, function() {
+					QUnit.runSuite( suite );
+				});
+			}( suites[i] ) );
 		}
-		QUnit.done = function(){
+		QUnit.done = function() {
 			subsuiteFrame.style.display = "none";
-		}
+		};
 	},
 
 	testStart: function( data ) {
 		// update the test status to show which test suite is running
-		QUnit.id("qunit-testresult").innerHTML = "Running " + data.name + "...<br>&nbsp;";
+		QUnit.id( "qunit-testresult" ).innerHTML = "Running " + data.name + "...<br>&nbsp;";
 	},
 
 	testDone: function() {
-		var current = QUnit.id(this.config.current.id),
+		var current = QUnit.id( this.config.current.id ),
 			children = current.children;
 
 		// undo the auto-expansion of failed tests
-		for (var i = 0; i < children.length; i++) {
-			if (children[i].nodeName == "OL") {
+		for ( var i = 0; i < children.length; i++ ) {
+			if ( children[i].nodeName === "OL" ) {
 				children[i].style.display = "none";
 			}
 		}
@@ -33,11 +35,11 @@ QUnit.extend( QUnit, {
 
 	runSuite: function( suite ) {
 		var body = document.getElementsByTagName( "body" )[0],
-			iframe = subsuiteFrame = document.createElement('iframe'),
+			iframe = subsuiteFrame = document.createElement( "iframe" ),
 			iframeWin;
 
 		iframe.className = "qunit-subsuite";
-		body.appendChild(iframe);
+		body.appendChild( iframe );
 
 		function onIframeLoad() {
 			var module, test,
@@ -67,14 +69,14 @@ QUnit.extend( QUnit, {
 				}
 			});
 		}
-		QUnit.addEvent(iframe, 'load', onIframeLoad);
+		QUnit.addEvent( iframe, "load", onIframeLoad );
 
 		iframeWin = iframe.contentWindow;
-		iframe.setAttribute('src', suite);
+		iframe.setAttribute( "src", suite );
 
-		this.runSuite = function(suite){
-			iframe.setAttribute('src', suite);
-		}
+		this.runSuite = function( suite ) {
+			iframe.setAttribute( "src", suite );
+		};
 	}
 });
 }( QUnit ) );
