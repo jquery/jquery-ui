@@ -13,11 +13,16 @@ $.widget( "ui.mask", {
 	version: "@VERSION",
 	defaultElement: "<input>",
 	options: {
+		definitions: {
+			'9': /[0-9]/,
+			'a': /[A-Za-z]/,
+			'*': /[A-Za-z0-9]/
+		},
 		mask: null,
 		placeholder: "_"
 	},
 	_create: function() {
-		
+		this._parseMask();
 	},
 
 	// helper function to get or set position of text cursor (caret)
@@ -55,6 +60,41 @@ $.widget( "ui.mask", {
 				begin: begin,
 				end: end
 			};
+		}
+	},
+	_parseMask: function() {
+		var key, x, bufferObject,
+			index = -1,
+			options = this.options,
+			mask = options.mask ;
+
+		this.buffer = [];
+		if ( !mask ) {
+			return;
+		}
+		// search for definied "masks"
+		for ( key in options.definitions ) {
+			while ( ( index = mask.indexOf( key, index + 1 ) ) > -1 ) {
+				bufferObject = {
+					start: index,
+					length: key.length,
+					valid: options.definitions[ key ]
+				};
+				for ( x = index ; x < index + key.length ; x++ ) {
+					this.buffer[ x ] = bufferObject;
+				}
+			}
+		}
+
+		// anything we didn't find is a literal
+		for ( index = 0 ; index < mask.length ; index++ ) {
+			if ( !this.buffer[ index ] ) {
+				this.buffer[ index ] = {
+					start: index,
+					literal: mask.charAt( index ),
+					length: 1
+				};
+			}
 		}
 	}
 });
