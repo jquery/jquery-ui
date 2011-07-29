@@ -18,6 +18,7 @@
 	<script src="../grid-spf/datasource-local.js"></script>
 	<script src="../grid-spf/grid.js"></script>
 	<script src="../grid-spf/pager.js"></script>
+	<script src="observable.js"></script>
 	<script src="editor.js"></script>
 	<script src="grid-editor.js"></script>
 	<script src="navigator.js"></script>
@@ -44,21 +45,25 @@
 			input: localDevelopers,
 			paging: {
 				limit: 8
-			},
-			propertychange: function(event, ui) {
-				console.log("field", ui.path, "changed from", ui.oldValue, "to", ui.newValue);
-			},
-			objectchange: function(event, ui) {
-				console.log("developer at index", ui.index, "changed", ui.object);
-			},
-			change: function(event, ui) {
-				console.log("developer(s) at index", ui.index, ui.change + "ed", ui.items);
 			}
 		});
 		developers.save = function() {
 			store.save( localDevelopers );
 			return this;
 		}
+		// TODO $.observable should support this binding, along with a less intrusive event facility
+		function bindChange(index, developer) {
+			$( [ developer ] ).bind("change", function(event, ui) {
+				developers.refresh().save();
+			});
+		}
+		$( [ localDevelopers] ).bind("insert remove refesh", function(event, ui) {
+			if ( event.type === "insert" ) {
+				$.each( ui.items, bindChange );
+			}
+			developers.refresh().save();
+		})
+		$.each( localDevelopers, bindChange );
 
 		var grid = $.ui.grid( {
 			source: developers
@@ -72,15 +77,8 @@
 			},
 			submit: function( event, ui) {
 				var object = ui.item.closest("tr").data( "grid-item" ),
-					field = grid.element.find( "th" ).eq( ui.item[ 0 ].cellIndex ).data( "field" ),
-					oldValue = get(object, field);
-				set(object, field, ui.value);
-				developers._trigger("propertychange", event, {
-					path: field,
-					oldValue: oldValue,
-					newValue: ui.value
-				});
-				developers.save();
+					field = grid.element.find( "th" ).eq( ui.item[ 0 ].cellIndex ).data( "field" );
+				$.observable(object).property(field, ui.value);
 				// for the navigator
 				grid.element.focus();
 			}
@@ -88,70 +86,44 @@
 		grid.element.navigator();
 
 		var developer;
-		var editForm = $( "#editForm" ).hide().submit( function( event ) {
+		var editForm = $( "#editForm" ).tooltip().hide().submit( function( event ) {
 			event.preventDefault();
-			serializeForm( this, developer );
-			developers._trigger("objectchange", event, {
-				index: localDevelopers.indexOf(developer),
-				object: developer
-			});
-			developers.save().refresh();
+			$.observable(developer).property( serializeForm( this ) );
 			editForm.hide();
 		});
 		grid.element.delegate( "button.edit", "click", function() {
 			developer = $( this ).closest("tr").data( "grid-item" );
 			$( "#edit-tmpl" ).tmpl( meta(developer) ).appendTo( editForm.find("fieldset").empty() );
-			editForm.show();
+			editForm.show().find("input:first").focus();
 		});
 		grid.element.delegate( "button.remove", "click", function() {
 			var developer = $( this ).closest("tr").data( "grid-item" );
-			var index = localDevelopers.indexOf( developer );
-			localDevelopers.splice( index, 1 );
-			developers._trigger("change", event, {
-				change: "remove",
-				index: index,
-				items: [ developer ]
-			});
-			developers.save().refresh();
+			$.observable( localDevelopers ).remove( developer );
 		});
 
 		$( "#pageDevelopers" ).pager({
 			source: developers
 		});
 
-		$( "#addDeveloper" ).click( function() {
-			// add at front so that it becomes visible without paging
-			localDevelopers.unshift({
-				firstName: "Peter",
-				lastName: "Pan",
-				country: "Unknown",
-				bitcoins: 0,
+		function newDeveloper() {
+			return {
+				firstName: [ "Peter", "Unknown", "Carl" ][ Math.floor( Math.random() * 3 ) ],
+				lastName: [ "Pan", "Unkown", "Worth" ][ Math.floor( Math.random() * 3 ) ],
+				country: [ "Unknown", "Pandistan", "Petertan" ][ Math.floor( Math.random() * 3 ) ],
+				bitcoins: Math.floor( Math.random() * 1500 ),
 				random: {
-					value: 0
+					value: Math.floor( Math.random() * 13 )
 				}
-			});
-			developers._trigger("change", event, {
-				change: "insert",
-				index: 0,
-				items: [localDevelopers[0]]
-			});
-			developers.save().refresh();
+			}
+		}
+		$( "#addDeveloper" ).click( function() {
+			$.observable( localDevelopers ).insert( 0, newDeveloper() );
 		});
-
-		$("form").tooltip();
+		$( "#addDeveloperAtEnd" ).click( function() {
+			$.observable( localDevelopers ).insert( newDeveloper() );
+		});
 
 		developers.refresh();
-
-		$.widget("ui.datalist", {
-			_create: function() {
-				$.ui.datalist.lists.push(this.options);
-			}
-		});
-		$.ui.datalist.lists = [];
-		$.ui.datalist({
-			name: "countries",
-			items: ["USA", "Germany", "China", "Canada", "UK", "Australia", "Austria"]
-		});
 	});
 	</script>
 	<style>
@@ -193,6 +165,7 @@
 
 <div>
 	<button id="addDeveloper">Insert new developer</button>
+	<button id="addDeveloperAtEnd">Insert new developer at the end</button>
 </div>
 <form id="editForm">
 	<fieldset>

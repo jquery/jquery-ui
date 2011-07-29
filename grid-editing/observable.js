@@ -1,0 +1,125 @@
+/*
+ * Observable
+ *
+ * Depends on:
+ * widget
+ */
+(function ( $, undefined ) {
+	$.observable = function( data ) {
+		if ( !this.property ) {
+			return new $.observable( data );
+		}
+		this.data = data;
+	};
+
+	var splice = [].splice;
+
+	$.observable.prototype = {
+		data: null,
+
+		_set: function( name, value ) {
+			var fields = name.split( "." ),
+				field = fields.pop();
+			this._get( fields )[ field ] = value;
+		},
+		_get: function( name ) {
+			var fields = $.type( name ) === "string" ? name.split( "." ) : name,
+				field,
+				object = this.data;
+			if ( fields.length === 0 ) {
+				return object;
+			}
+			while ( fields.length > 1 ) {
+				field = fields.shift(),
+				object = object[ field ];
+			}
+			return object[ fields[ 0 ] ];
+		},
+
+		property: function( path, value ) {
+			// TODO update check to use $.type or $.isPlainObject
+			if ( $.type( path ) === "object" ) {
+				var oldValues = {},
+					newValues = {},
+					changed = false;
+				for ( var key in path ) {
+					var oldValue = this._get( key );
+					if (oldValue != path[ key] ) {
+						changed = true;
+						oldValues[ key ] = oldValue;
+						newValues[ key ] = path[ key ];
+						this._set( key, path[ key ] );
+					}
+				}
+				if ( changed ) {
+					$( [ this.data ] ).triggerHandler( "change", {
+						oldValues: oldValues,
+						newValues: newValues
+					});
+				}
+			} else if (arguments.length == 1) {
+				return this._get( path );
+			} else {
+				var oldValue = this._get( path );
+				// TODO should be strict? currently helpers are unaware of data types, don't do parsing, therefore strict comparison wouldn't be good
+				if ( oldValue != value ) {
+					this._set( path, value );
+					var oldValues = {};
+					oldValues[ path ] = oldValue;
+					var newValues = {};
+					newValues[ path ] = value;
+					$( [ this.data ] ).triggerHandler( "change", {
+						oldValues: oldValues,
+						newValues: newValues
+					});
+				}
+
+			}
+			return this;
+		},
+
+		insert: function( index, items) {
+			// insert( object )
+			if ( $.type(index) === "object" ) {
+				items = [ index ];
+				index = this.data.length;
+			// insert( index, object )
+			} else if ( !$.isArray( items ) ) {
+				items = [ items ];
+			}
+			// insert( index, objects )
+			splice.apply( this.data, [ index, 0 ].concat( items ) );
+			$( [ this.data ] ).triggerHandler( "insert", {
+				index: index,
+				items: items
+			});
+		},
+
+		remove: function( index, numToRemove ) {
+			// TODO implement $.type( index ) === "array"
+			if ( $.type( index ) === "object" ) {
+				numToRemove = 1;
+				for ( var i = 0, l = this.data.length; i < l; i++ ) {
+					if ( this.data[i] === index) {
+						index = i;
+						break;
+					}
+				}
+
+			}
+			if (!numToRemove) {
+				numToRemove = 1;
+			}
+			var items = this.data.slice( index, index + numToRemove );
+			this.data.splice( index, numToRemove );
+			// TODO update event data, along with support for removing array of objects
+			$([ this.data ]).triggerHandler( "remove", { index: index, items: items } );
+		},
+
+		refresh: function( newItems ) {
+			$([ this.data ]).triggerHandler( "refresh" );
+			return this;
+		}
+	};
+
+})(jQuery);

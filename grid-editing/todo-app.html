@@ -12,6 +12,7 @@
 	<script src="../ui/jquery.ui.widget.js"></script>
 	<script src="../ui/jquery.ui.button.js"></script>
 	<script src="localstore.js"></script>
+	<script src="observable.js"></script>
 	<script>
 
 	$(function() {
@@ -24,11 +25,10 @@
 
 		$( ":submit" ).button();
 
-		function save() {
+		$( [ todos ] ).bind("insert remove refresh", function() {
 			store.save( todos );
 			$(store).trigger( "update" );
-			return this;
-		}
+		})
 		function update( index, checked ) {
 			todos[ index ].done = checked;
 			updateAllChecked();
@@ -47,12 +47,11 @@
 			if ( !input.val() ) {
 				return;
 			}
-			todos.push( {
+			$.observable( todos ).insert({
 				id: ids++,
 				title: input.val()
 			});
 			input.val( "" );
-			save();
 		});
 
 		var list = $( "#todos-list" ).delegate( "input", "click", function( event ) {
@@ -68,7 +67,7 @@
 				$.each( todos, function( index, todo ) {
 					todo.done = check;
 				});
-				save();
+				$.observable(todos).refresh();
 			}, 1);
 		});
 		$( "#clearCompleted" ).click( function() {
@@ -77,7 +76,7 @@
 					todos.splice( i, 1 );
 				}
 			}
-			save();
+			$.observable(todos).refresh();
 		});
 		$(store).bind( "update", function() {
 			updateAllChecked();

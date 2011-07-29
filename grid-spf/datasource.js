@@ -68,6 +68,7 @@ $.widget( "ui.datasource", {
 			that.totalCount = totalCount;
 			that._trigger( "response" );
 		});
+        return this;
 	}
 });
 
