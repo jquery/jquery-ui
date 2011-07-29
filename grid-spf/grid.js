@@ -42,11 +42,17 @@ $.widget( "ui.grid", {
 
 	_columns: function() {
 		if ( this.options.columns ) {
+			if ( $.type( this.options.columns[ 0 ] ) === "string" ) {
+				this.options.columns = $.map( this.options.columns, function( column ) {
+					return {
+						property: column
+					};
+				});
+			}
 			var head = this.element.find("thead");
 			if ( !head.find( "th" ).length ) {
-				// TODO improve this
-				$.each( this.options.columns, function(index, column) {
-					$("<th>").attr("data-field", column).text(column).appendTo(head);
+				$.each( this.options.columns, function( index, column ) {
+					$( "<th>" ).text(column.property).appendTo(head);
 				});
 			}
 			return;
@@ -57,7 +63,10 @@ $.widget( "ui.grid", {
 				// generate field name if missing
 				field = $( this ).text().toLowerCase().replace(/\s|[^a-z0-9]/g, "_");
 			}
-			return field;
+			return {
+				property: field,
+				type: $( this ).data( "type" )
+			};
 		}).get();
 	},
 
@@ -66,7 +75,7 @@ $.widget( "ui.grid", {
 			return;
 		}
 		var headers = this.element.find( "thead th" );
-		var template = $.map( this.options.columns, function( field, index ) {
+		var template = $.map( this.options.columns, function( column, index ) {
 			// TODO how to specify a custom template using the columns option?
 			// make columns array-of-objects (optional) to contain all the potential data attributes?
 			// should then output those when generating the columns
@@ -74,7 +83,7 @@ $.widget( "ui.grid", {
 			if ( customTemplate ) {
 				return $(customTemplate).html();
 			}
-			return "<td class=\"ui-widget-content\">${" + field + "}</td>";
+			return "<td class=\"ui-widget-content\">${" + column.property + "}</td>";
 		}).join( "" );
 		template = "<tr>" + template + "</tr>";
 		// compile the template

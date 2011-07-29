@@ -71,9 +71,8 @@
 
 		grid.element.gridEditor({
 			items: "td:not(:has(button))",
-			type: function(cell) {
-				// TODO should be possible to retrieve this from grid.options.columns
-				return grid.element.find( "th" ).eq( cell[ 0 ].cellIndex ).data( "type" );
+			type: function( cell ) {
+				return grid.options.columns[ cell[ 0 ].cellIndex ].type;
 			},
 			cancel: function() {
 				// for the navigator
@@ -81,8 +80,8 @@
 			},
 			submit: function( event, ui) {
 				var object = ui.item.closest("tr").data( "grid-item" ),
-					field = grid.element.find( "th" ).eq( ui.item[ 0 ].cellIndex ).data( "field" );
-				$.observable(object).property(field, ui.value);
+					property = grid.options.columns[ ui.item[ 0 ].cellIndex ].property;
+				$.observable( object ).property( property, ui.value );
 				// for the navigator
 				grid.element.focus();
 			}
