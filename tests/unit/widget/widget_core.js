@@ -162,12 +162,12 @@ test( "_getCreateOptions()", function() {
 		options: {
 			option1: "valuex",
 			option2: "valuex",
-			option3: "value3",
+			option3: "value3"
 		},
 		_getCreateOptions: function() {
 			return {
 				option1: "override1",
-				option2: "overideX",
+				option2: "overideX"
 			};
 		},
 		_create: function() {

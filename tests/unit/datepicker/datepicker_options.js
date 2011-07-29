@@ -692,7 +692,7 @@ test('callbacks', function() {
 	ok(day21.is('.ui-datepicker-unselectable'), 'Before show day - unselectable 21');
 	ok(day20.is('.day10'), 'Before show day - CSS 20');
 	ok(!day21.is('.day10'), 'Before show day - CSS 21');
-	ok(day20.attr('title') == '', 'Before show day - title 20');
+	ok(!day20.attr('title'), 'Before show day - title 20');
 	ok(day21.attr('title') == 'Divisble by 3', 'Before show day - title 21');
 	inp.datepicker('hide').datepicker('destroy');
 });
