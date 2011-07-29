@@ -75,6 +75,10 @@
 				// TODO should be possible to retrieve this from grid.options.columns
 				return grid.element.find( "th" ).eq( cell[ 0 ].cellIndex ).data( "type" );
 			},
+			cancel: function() {
+				// for the navigator
+				grid.element.focus();
+			},
 			submit: function( event, ui) {
 				var object = ui.item.closest("tr").data( "grid-item" ),
 					field = grid.element.find( "th" ).eq( ui.item[ 0 ].cellIndex ).data( "field" );

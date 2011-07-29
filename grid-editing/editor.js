@@ -13,7 +13,7 @@ $.widget( "ui.editor", {
 	_create: function() {
 		this.inner = this.element.wrapInner( "<div class='editor-wrapper'></div>" ).children();
 		this._bind({
-			click: function( event ) {
+			dblclick: function( event ) {
 				if ( this.input.is(":visible") ) {
 					return;
 				}

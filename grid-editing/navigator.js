@@ -88,7 +88,7 @@ $.widget( "ui.navigator", {
 		}
 	},
 	click: function() {
-		this.active.trigger("click");
+		this.active.trigger("dblclick");
 	}
 });
 
