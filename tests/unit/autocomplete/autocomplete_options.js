@@ -189,4 +189,19 @@ test( "source, update after init", function() {
 	equal( menu.find( ".ui-menu-item" ).text(), "php" );
 });
 
+test( "renderLabel", function() {
+  expect( 2 );
+  var element = $( "#autocomplete" ).autocomplete({
+    source: [ "java", "javascript", "haskell" ],
+    renderLabel: function(item) {
+      return "<img src='tux.png'>" + item.label;
+    }
+  });
+  var menu = element.autocomplete( "widget" );
+  element.val( "haskell" ).autocomplete( "search" );
+  var anchor = menu.find(".ui-menu-item:first > a");
+  equal( anchor.text(), "haskell" );
+  equal( anchor.find('img').length, 1)
+});
+
 }( jQuery ) );
