@@ -12,6 +12,7 @@
 
 $.widget( "ui.grid", {
 	options: {
+		dataFields: [ "type", "editor", "editorOptions" ],
 		columns: null,
 		rowTemplate: null
 	},
@@ -57,16 +58,21 @@ $.widget( "ui.grid", {
 			}
 			return;
 		}
+		var dataFields = this.options.dataFields;
 		this.options.columns = this.element.find( "th" ).map(function() {
-			var field = $( this ).data( "field" );
+			var th = $( this );
+			var field = th.data( "field" );
 			if ( !field ) {
 				// generate field name if missing
-				field = $( this ).text().toLowerCase().replace(/\s|[^a-z0-9]/g, "_");
+				field = th.text().toLowerCase().replace(/\s|[^a-z0-9]/g, "_");
 			}
-			return {
-				property: field,
-				type: $( this ).data( "type" )
+			var result = {
+				property: field
 			};
+			$.each( dataFields, function(index, dataField) {
+				result[dataField] = th.data( dataField );
+			});
+			return result;
 		}).get();
 	},
 

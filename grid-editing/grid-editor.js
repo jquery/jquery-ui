@@ -15,7 +15,8 @@ $.widget( "ui.gridEditor", {
 				var target = $( event.target ).closest( this.options.items );
 				if ( target.length && !target.data( "editor" ) ) {
 					target.editor({
-						type: this.options.type( target ),
+						editor: this.options.editor( target ),
+						editorOptions: this.options.editorOptions( target ),
 						cancel: function( event, ui) {
 							that._trigger( "cancel", event, ui );
 						},

@@ -69,10 +69,19 @@
 			source: developers
 		}, "#developers-local" );
 
+		$.ui.editor.editors.randomSpinner = function( input, options ) {
+			return $.ui.editor.editors.spinner( input, $.extend({
+				step: Math.floor( Math.random() * 10 ) + 1
+			}, options ) );
+		}
+
 		grid.element.gridEditor({
 			items: "td:not(:has(button))",
-			type: function( cell ) {
-				return grid.options.columns[ cell[ 0 ].cellIndex ].type;
+			editor: function( cell ) {
+				return grid.options.columns[ cell[ 0 ].cellIndex ].editor;
+			},
+			editorOptions: function( cell ) {
+				return grid.options.columns[ cell[ 0 ].cellIndex ].editorOptions;
 			},
 			cancel: function() {
 				// for the navigator
@@ -156,8 +165,8 @@
 			<th data-field="firstName">First Name</th>
 			<th data-field="lastName">Last Name</th>
 			<th data-field="country" data-list="countries">Country</th>
-			<th data-field="bitcoins" data-type="number">Bitcoins</th>
-			<th data-field="random.value" data-type="number">Random</th>
+			<th data-field="bitcoins" data-type="number" data-editor="spinner">Bitcoins</th>
+			<th data-field="random.value" data-type="number" data-editor="randomSpinner" data-editor-options='{"min":-1, "max": 125}'>Random</th>
 			<th data-template="#cell-edit-tmpl">Edit</th>
 			<th data-template="#cell-remove-tmpl">Remove</th>
 		</tr>

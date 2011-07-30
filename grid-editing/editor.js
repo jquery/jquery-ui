@@ -23,9 +23,8 @@ $.widget( "ui.editor", {
 
 		this.input = this.inputWrapper = $( "<input>" );
 		this.input.width( this.inner.width() );
-		if ( this.options.type === "number" ) {
-			this.input.spinner();
-			this.inputWrapper = this.input.spinner( "widget" );
+		if (this.options.editor in $.ui.editor.editors) {
+			this.inputWrapper = $.ui.editor.editors[ this.options.editor ]( this.input, this.options.editorOptions );
 		}
 		this.inputWrapper.hide().appendTo( this.element );
 
@@ -82,5 +81,10 @@ $.widget( "ui.editor", {
 	}
 });
 
+$.ui.editor.editors = {
+	spinner: function( input, options ) {
+		return input.spinner( options ).spinner("widget");
+	}
+};
 
 })( jQuery );
