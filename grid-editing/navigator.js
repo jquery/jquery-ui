@@ -27,10 +27,22 @@ $.widget( "ui.navigator", {
 		}
 	},
 	activate: function() {
-		if ( !this.active.length || !this.active.parents("body").length ) {
-			this.active = this.element.find("td:first");
+		if ( this._noneActive() ) {
+			this.active = this._lookup();
 		}
 		this.active.addClass("navigator-active");
+		this.x = this.active[ 0 ].cellIndex;
+		this.y = this.active.parent().index();
+	},
+	_noneActive: function() {
+		return !this.active.length || !this.active.parents("body").length;
+	},
+	_lookup: function() {
+		var result = this.element.find( "tbody > tr" ).eq( this.y ).find( "td" ).eq( this.x );
+		if ( !result.length ) {
+			return this.element.find("tbody td:first");
+		}
+		return result;
 	},
 	deactivate: function() {
 		this.active.removeClass("navigator-active");
