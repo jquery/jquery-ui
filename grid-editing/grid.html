@@ -14,6 +14,8 @@
 	<script src="../ui/jquery.ui.spinner.js"></script>
 	<script src="../ui/jquery.ui.position.js"></script>
 	<script src="../ui/jquery.ui.tooltip.js"></script>
+	<script src="../ui/jquery.ui.autocomplete.js"></script>
+	<script src="../ui/jquery.ui.menu.js"></script>
 	<script src="../grid-spf/datasource.js"></script>
 	<script src="../grid-spf/datasource-local.js"></script>
 	<script src="../grid-spf/grid.js"></script>
@@ -21,6 +23,8 @@
 	<script src="observable.js"></script>
 	<script src="editor.js"></script>
 	<script src="grid-editor.js"></script>
+	<script src="editor-countrycomplete.js"></script>
+	<script src="editor-randomspinner.js"></script>
 	<script src="navigator.js"></script>
 	<script src="localstore.js"></script>
 	<script src="helpers.js"></script>
@@ -68,12 +72,6 @@
 		var grid = $.ui.grid( {
 			source: developers
 		}, "#developers-local" );
-
-		$.ui.editor.editors.randomSpinner = function( input, options ) {
-			return $.ui.editor.editors.spinner( input, $.extend({
-				step: Math.floor( Math.random() * 10 ) + 1
-			}, options ) );
-		}
 
 		grid.element.gridEditor({
 			items: "td:not(:has(button))",
@@ -140,6 +138,7 @@
 	</script>
 	<style>
 		.navigator-active { background: rgba(0,0,255,0.1); }
+		.ui-autocomplete { width: 200px; max-height: 200px; overflow: auto; }
 	</style>
 </head>
 <body>
@@ -164,7 +163,7 @@
 		<tr>
 			<th data-property="firstName">First Name</th>
 			<th data-property="lastName">Last Name</th>
-			<th data-property="country" data-list="countries">Country</th>
+			<th data-property="country" data-editor="countrycomplete">Country</th>
 			<th data-property="bitcoins" data-type="number" data-editor="spinner">Bitcoins</th>
 			<th data-property="random.value" data-type="number" data-editor="randomSpinner" data-editor-options='{"min":-1, "max": 125}'>Random</th>
 			<th data-template="#cell-edit-tmpl">Edit</th>
