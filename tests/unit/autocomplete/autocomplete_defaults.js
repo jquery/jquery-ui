@@ -11,6 +11,7 @@ commonWidgetTests( "autocomplete", {
 			collision: "none"
 		},
 		source: null,
+		renderLabel: null,
 
 		// callbacks
 		change: null,

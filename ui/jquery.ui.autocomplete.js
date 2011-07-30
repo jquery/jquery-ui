@@ -32,6 +32,8 @@ $.widget( "ui.autocomplete", {
 			collision: "none"
 		},
 		source: null,
+		renderLabel: null,
+
 
 		// callbacks
 		change: null,
@@ -448,9 +450,17 @@ $.widget( "ui.autocomplete", {
 	_renderItem: function( ul, item) {
 		return $( "<li></li>" )
 			.data( "item.autocomplete", item )
-			.append( $( "<a></a>" ).text( item.label ) )
+			.append( this._renderItemLabel( item ) )
 			.appendTo( ul );
 	},
+
+  _renderItemLabel: function( item ) {
+    var anchor = $( "<a></a>" );
+    if ( this.options.renderLabel ) {
+      return anchor.append( this.options.renderLabel( item ) );
+    }
+    return anchor.text( item.label );
+  },
 
 	_move: function( direction, event ) {
 		if ( !this.menu.element.is(":visible") ) {
