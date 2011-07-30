@@ -61,13 +61,13 @@ $.widget( "ui.grid", {
 		var dataFields = this.options.dataFields;
 		this.options.columns = this.element.find( "th" ).map(function() {
 			var th = $( this );
-			var field = th.data( "field" );
-			if ( !field ) {
-				// generate field name if missing
-				field = th.text().toLowerCase().replace(/\s|[^a-z0-9]/g, "_");
+			var property = th.data( "property" );
+			if ( !property ) {
+				// generate property name if missing
+				property = th.text().toLowerCase().replace(/\s|[^a-z0-9]/g, "_");
 			}
 			var result = {
-				property: field
+				property: property
 			};
 			$.each( dataFields, function(index, dataField) {
 				result[dataField] = th.data( dataField );
