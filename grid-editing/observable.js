@@ -37,7 +37,6 @@
 		},
 
 		property: function( path, value ) {
-			// TODO update check to use $.type or $.isPlainObject
 			if ( $.type( path ) === "object" ) {
 				var oldValues = {},
 					newValues = {},
