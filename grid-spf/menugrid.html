@@ -12,6 +12,7 @@
 	<script src="../ui/jquery.ui.button.js"></script>
 	<script src="../ui/jquery.ui.menu.js"></script>
 	<script src="../ui/jquery.ui.position.js"></script>
+	<script src="../ui/jquery.ui.popup.js"></script>
 	<script src="datasource.js"></script>
 	<script src="datasource-odata.js"></script>
 	<script src="grid.js"></script>
@@ -27,29 +28,17 @@
 		grid.find( "th" ).each(function() {
 			var header = $( this ),
 				field = header.data( "field" );
-			// TODO use popup for this
 			var menu = $( "#menu-tmpl" ).tmpl().appendTo( this ).menu({
 				select: function( event, ui ) {
-					event.stopPropagation();
 					movies
 						.option( "sort",
 							ui.item.find( "a" ).data( "sort" ) === "asc" ? field : "-" + field )
 						.refresh();
 					menu.hide();
 				}
-			}).hide();
-			header.click(function( event ) {
-				event.stopPropagation();
-				$( ".ui-menu" ).hide();
-				menu.show().position({
-					my: "left top",
-					at: "right top",
-					of: event
-				});
+			}).popup({
+				trigger: header
 			});
-		});
-		$( document ).click(function() {
-			$( ".ui-menu" ).hide();
 		});
 
 		var thead = grid.find( "thead" );
@@ -57,6 +46,7 @@
 			.clone()
 			.insertAfter( thead )
 			.find( "th" )
+				.removeAttr("tabindex")
 				.each(function() {
 					$( "<input>" ).appendTo( $( this ).empty() );
 				});
@@ -65,24 +55,25 @@
 			var head = $( this ).parent(),
 				field = head.data( "field" ),
 				type = head.data( "type" ),
-				input = this.value;
+				value = this.value,
+				operator;
 
-			if ( /^[<>]=?/.test( input ) ) {
-				var compare = input.replace( /^([<>]=?).+/, "$1" );
-				input = input.substring( compare.length );
-				input = input == null || isNaN( input ) ? "" : input;
+			if ( /^[<>]=?/.test( value ) ) {
+				operator = value.replace( /^([<>]=?).+/, "$1" );
+				value = value.substring( operator.length );
+				value = value == null || isNaN( value ) ? "" : value;
 			}
 			if ( type === "number" ) {
-				input = parseFloat( input );
-				compare = "==";
+				value = parseFloat( value );
+				operator = operator || "==";
 			}
 			if ( type === "string" ) {
-				compare = "like";
+				operator = "like";
 			}
-			if ( input ) {
+			if ( value ) {
 				movies.option( "filter." + field, {
-					operator: compare,
-					value: input
+					operator: operator,
+					value: value
 				});
 			} else {
 				movies.option( "filter." + field, null );
