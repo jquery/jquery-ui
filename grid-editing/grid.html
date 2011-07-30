@@ -69,31 +69,18 @@
 		})
 		$.each( localDevelopers, bindChange );
 
-		var grid = $.ui.grid( {
+		var grid = $( "#developers-local" ).grid({
 			source: developers
-		}, "#developers-local" );
+		});
 
-		grid.element.gridEditor({
+		grid.gridEditor({
 			items: "td:not(:has(button))",
-			editor: function( cell ) {
-				return grid.options.columns[ cell[ 0 ].cellIndex ].editor;
-			},
-			editorOptions: function( cell ) {
-				return grid.options.columns[ cell[ 0 ].cellIndex ].editorOptions;
-			},
-			cancel: function() {
+			done: function() {
 				// for the navigator
-				grid.element.focus();
-			},
-			submit: function( event, ui) {
-				var object = ui.item.closest("tr").data( "grid-item" ),
-					property = grid.options.columns[ ui.item[ 0 ].cellIndex ].property;
-				$.observable( object ).property( property, ui.value );
-				// for the navigator
-				grid.element.focus();
+				grid.focus();
 			}
 		});
-		grid.element.navigator();
+		grid.navigator();
 
 		var developer;
 		var editForm = $( "#editForm" ).tooltip().hide().submit( function( event ) {
@@ -101,12 +88,12 @@
 			$.observable(developer).property( serializeForm( this ) );
 			editForm.hide();
 		});
-		grid.element.delegate( "button.edit", "click", function() {
+		grid.delegate( "button.edit", "click", function() {
 			developer = $( this ).closest("tr").data( "grid-item" );
 			$( "#edit-tmpl" ).tmpl( meta(developer) ).appendTo( editForm.find("fieldset").empty() );
 			editForm.show().find("input:first").focus();
 		});
-		grid.element.delegate( "button.remove", "click", function() {
+		grid.delegate( "button.remove", "click", function() {
 			var developer = $( this ).closest("tr").data( "grid-item" );
 			$.observable( localDevelopers ).remove( developer );
 		});
