@@ -31,6 +31,11 @@ $.widget( "ui.mask", {
 		this._keyBinding();
 	},
 
+	refresh: function() {
+		this._parseValue();
+		this._paint();
+	},
+
 	_setOption: function( key, value ) {
 		this._super( "_setOption", key, value );
 		if ( key === "mask" ) {
@@ -126,7 +131,7 @@ $.widget( "ui.mask", {
 				lastUnsavedValue = elem.val();
 			},
 			keydown: function( event ) {
-				var key = event.which,
+				var key = event.keyCode,
 					position = that._caret();
 
 				if ( key === keyCode.ESCAPE ) {
@@ -136,15 +141,20 @@ $.widget( "ui.mask", {
 				}
 
 				if ( key === keyCode.BACKSPACE || key === keyCode.DELETE ) {
+					event.preventDefault();
 					if ( position.begin == position.end ) {
-						position.begin = position.end = Math.max( that._seekRight( -1 ), that[ key === keyCode.BACKSPACE ? 
-							"_seekLeft" : 
-							"_seekRight" ]( position.begin ));
+						position.begin = position.end = ( key === keyCode.DELETE ?
+							that._seekRight( position.begin - 1) :
+							that._seekLeft( position.begin )
+						);
+						if ( position.begin < 0 ) {
+							that._caret( that.seekLeft( -1 ) );
+							return;
+						}
 					}
 					that._removeValues( position.begin, position.end );
 					that._paint();
 					that._caret( position.begin );
-					event.preventDefault();
 				}
 			},
 			keypress: function( event ) {
@@ -253,7 +263,7 @@ $.widget( "ui.mask", {
 				delete bufferObject.value;
 			}
 		}
-		this._shiftLeft( begin, end );
+		this._shiftLeft( begin, end + 1 );
 		return this;
 	},
 
