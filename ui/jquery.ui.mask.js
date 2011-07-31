@@ -9,6 +9,8 @@
  */
 (function( $, undefined ) {
 
+var keyCode = $.ui.keyCode;
+
 $.widget( "ui.mask", {
 	version: "@VERSION",
 	defaultElement: "<input>",
@@ -23,6 +25,20 @@ $.widget( "ui.mask", {
 	},
 	_create: function() {
 		this._parseMask();
+		this._parseValue();
+		this._paint();
+		this._keyBinding();
+	},
+	_setOption: function( key, value ) {
+		this._super( "_setOption", key, value );
+		if ( key === "mask" ) {
+			this._parseMask();
+			this._parseValue();
+			this._paint();
+		}
+		if ( key === "placeholder" ) {
+			this._paint();
+		}
 	},
 
 	// helper function to get or set position of text cursor (caret)
@@ -96,6 +112,214 @@ $.widget( "ui.mask", {
 				};
 			}
 		}
+	},
+	_keyBinding: function() {
+		var cancelKeypress,
+			lastUnsavedValue,
+			that = this,
+			elem = that.element;
+
+		this._bind({
+			focus: function( event ) {
+				lastUnsavedValue = elem.val();
+			},
+			keydown: function( event ) {
+				var key = event.which,
+					position = that._caret();
+
+				if ( key === keyCode.ESCAPE ) {
+					elem.val( lastUnsavedValue );
+					that._caret( 0, that._parseValue() );
+					event.preventDefault();
+				}
+
+				if ( key === keyCode.BACKSPACE || key === keyCode.DELETE ) {
+					if ( position.begin == position.end ) {
+						position.begin = position.end = Math.max( that._seekRight( -1 ), that[ key === keyCode.BACKSPACE ? 
+							"_seekLeft" : 
+							"_seekRight" ]( position.begin ));
+					}
+					that._removeValues( position.begin, position.end );
+					that._paint();
+					that._caret( position.begin );
+					event.preventDefault();
+				}
+			},
+			keypress: function( event ) {
+				var key = event.which,
+					position = that._caret(),
+					bufferPosition = that._seekRight( position.begin - 1 ),
+					bufferObject = that.buffer[ bufferPosition ];
+
+				// ignore keypresses with special keys, or control characters
+				if ( event.metaKey || event.altKey || event.ctrlKey || key < 32 ) {
+					return;
+				}
+				if ( position.begin != position.end ) {
+					that._removeValues( position.begin, position.end );
+				}
+				if ( bufferObject ) {
+					key = String.fromCharCode( key );
+					if ( $.isFunction( bufferObject.valid ) && bufferObject.valid( key ) ||
+						bufferObject.valid.test && bufferObject.valid.test( key ) ) {
+						that._shiftRight( position.begin );
+						bufferObject.value = key;
+						that._paint();
+						that._caret( that._seekRight( bufferPosition ) );
+					}
+				}
+				event.preventDefault();
+			}
+		});
+	},
+
+	// _seekLeft and _seekRight will tell the next non-literal position in the buffer
+	_seekLeft: function( position ) {
+		while ( --position >= 0 ) {
+			if ( this.buffer[ position ] && !this.buffer[ position ].literal ) {
+				return position;
+			}
+		}
+		return -1;
+	},
+	_seekRight: function( position ) {
+		var length = this.buffer.length;
+		while ( ++position < length ) {
+			if ( this.buffer[ position ] && !this.buffer[ position ].literal ) {
+				return position;
+			}
+		}
+
+		return length;
+	},
+
+	// _shiftLeft and _shiftRight will move values in the buffer over to the left/right
+	_shiftLeft: function( begin, end ) {
+		var bufferPosition,
+			bufferObject,
+			destPosition,
+			destObject,
+			caretPosition = this._seekLeft( begin + 1 ),
+			bufferLength = this.buffer.length;
+
+		for ( destPosition = begin, bufferPosition = this._seekRight( end - 1 );
+			destPosition < bufferLength; 
+			destPosition += destObject.length ) {
+			destObject = this.buffer[ destPosition ];
+			bufferObject = this.buffer[ bufferPosition ];
+			if ( destObject.valid ) {
+				if ( bufferPosition < bufferLength ) {
+					if ( $.isFunction( destObject.valid ) && destObject.valid( bufferObject.value ) ||
+						destObject.valid.test && destObject.valid.test( bufferObject.value ) ) {
+						destObject.value = bufferObject.value;
+						delete bufferObject.value;
+						bufferPosition = this._seekRight( bufferPosition );
+					} else {
+
+						// once we find a value that doesn't fit anymore, we stop this shift
+						break;
+					}
+				}
+			}
+		}
+		this._caret( caretPosition < 0 ? this._seekRight( 0 ) : caretPosition );
+	},
+	_shiftRight: function ( bufferPosition ) {
+		var bufferObject,
+			destPosition = this._seekRight( bufferPosition ),
+			destObject,
+			bufferLength = this.buffer.length;
+
+		for ( ; bufferPosition < bufferLength ; bufferPosition += bufferObject.length ) {
+			bufferObject = this.buffer[ bufferPosition ];
+			if ( bufferObject.valid ) {
+				if ( destPosition < bufferLength ) {
+					destObject = this.buffer[ destPosition ];
+					if ( $.isFunction( destObject.valid ) && destObject.valid( bufferObject.value ) ||
+						destObject.valid.test && destObject.valid.test( bufferObject.value ) ) {
+						destObject.value = bufferObject.value;
+						destPosition = this._seekRight( destPosition );
+					}
+					delete bufferObject.value;
+				}
+			}
+		}
+	},
+	_removeValues: function( begin, end ) {
+		var position,
+			bufferObject;
+		for ( position = begin; position <= end; position++ ) {
+			bufferObject = this.buffer[ position ];
+			if ( bufferObject && bufferObject.value ) {
+				delete bufferObject.value;
+			}
+		}
+		this._shiftLeft( begin, end );
+		return this;
+	},
+
+	// parses the .val() and places it into the buffer
+	// returns the total length of the displayed values in the buffer
+	_parseValue: function() {
+		var bufferPosition,
+			bufferObject,
+			character,
+			valuePosition = 0,
+			value = this.element.val(),
+			bufferLength = this.buffer.length,
+			valueLength = value.length;
+
+		// remove all current values from the buffer
+		this._removeValues( 0, bufferLength );
+
+		// seek through the buffer pulling characters from the value
+		for ( bufferPosition = 0; bufferPosition < bufferLength; bufferPosition += bufferObject.length ) {
+			bufferObject = this.buffer[ bufferPosition ];
+			while ( valuePosition < value.length ) {
+				if ( bufferObject.valid ) {
+					character = value.substr( valuePosition++, bufferObject.length );
+					if ( $.isFunction( bufferObject.valid ) ) {
+						character = bufferObject.valid( character );
+						if ( character !== undefined ) {
+							bufferObject.value = character;
+							break;
+						}
+					} else {
+						if ( bufferObject.valid.test( character ) ) {
+							bufferObject.value = character;
+							break;
+						}
+					}
+				} else {
+					if ( bufferObject.literal === value.charAt( valuePosition ) ) {
+						valuePosition++;
+					}
+
+					// when parsing a literal from a raw .val() if it doesn't match,
+					// assume that the literal is missing from the val()
+					break;
+				}
+			}
+		}
+		return bufferLength;
+	},
+	_paint: function() {
+		var bufferPosition,
+			bufferObject,
+			bufferLength = this.buffer.length,
+			value = "";
+
+		for ( bufferPosition = 0; bufferPosition < bufferLength; bufferPosition += bufferObject.length ) {
+			bufferObject = this.buffer[ bufferPosition ];
+			if ( bufferObject.literal ) {
+				value += bufferObject.literal;
+			} else if ( bufferObject.value ) {
+				value += bufferObject.value;
+			} else {
+				value += this.options.placeholder;
+			}
+		}
+		this.element.val( value );
 	}
 });
 

@@ -5,7 +5,9 @@ module( "mask: core" );
 test( "_caret() can move and read the text cursor", function() {
 	expect( 3 );
 
-	var input = $( "#mask1" ).val("This string is 33 characters long").mask(),
+	var input = $( "#mask1" ).val("1234").mask({
+		mask: "9999"
+	}),
 		instance = input.data( "mask" );
 	input.focus();
 
@@ -15,11 +17,11 @@ test( "_caret() can move and read the text cursor", function() {
 		end: 0
 	}, "Caret position set to 0 results in 0, 0" );
 
-	instance._caret( 34 );
+	instance._caret( 5 );
 	deepEqual( instance._caret(), {
-		begin: 33,
-		end: 33
-	}, "Caret position set beyond bounds (34) results in 33, 33" );
+		begin: 4,
+		end: 4
+	}, "Caret position set beyond bounds (5) results in 4, 4" );
 
 	instance._caret( 0, 2 );
 	deepEqual( instance._caret(), {
@@ -110,6 +112,19 @@ test( "Mask Parsed Properly", function() {
 			length: 1
 		}
 	], "Buffer Calculated correctly" );
+});
+
+test( "Parsing initial value skips literals", function() {
+	expect( 2 );
+	var input = $( "#mask1" );
+	input.val("123456").mask({
+		mask: "99/99/99"
+	});
+	
+	equal( input.val(), "12/34/56", "Literals were inserted into val");
+	input.mask( "option", "mask", "99-99-99" );
+	equal( input.val(), "12-34-56", "Old literals were ignored, and new ones inserted into val");
+	
 });
 
 }( jQuery ) );
