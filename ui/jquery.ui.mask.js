@@ -23,12 +23,14 @@ $.widget( "ui.mask", {
 		mask: null,
 		placeholder: "_"
 	},
+
 	_create: function() {
 		this._parseMask();
 		this._parseValue();
 		this._paint();
 		this._keyBinding();
 	},
+
 	_setOption: function( key, value ) {
 		this._super( "_setOption", key, value );
 		if ( key === "mask" ) {
@@ -160,8 +162,7 @@ $.widget( "ui.mask", {
 				}
 				if ( bufferObject ) {
 					key = String.fromCharCode( key );
-					if ( $.isFunction( bufferObject.valid ) && bufferObject.valid( key ) ||
-						bufferObject.valid.test && bufferObject.valid.test( key ) ) {
+					if ( this._validValue( bufferObject, key ) ) {
 						that._shiftRight( position.begin );
 						bufferObject.value = key;
 						that._paint();
@@ -209,8 +210,7 @@ $.widget( "ui.mask", {
 			bufferObject = this.buffer[ bufferPosition ];
 			if ( destObject.valid ) {
 				if ( bufferPosition < bufferLength ) {
-					if ( $.isFunction( destObject.valid ) && destObject.valid( bufferObject.value ) ||
-						destObject.valid.test && destObject.valid.test( bufferObject.value ) ) {
+					if ( this._validValue( destObject, bufferObject.value ) ) {
 						destObject.value = bufferObject.value;
 						delete bufferObject.value;
 						bufferPosition = this._seekRight( bufferPosition );
@@ -235,8 +235,7 @@ $.widget( "ui.mask", {
 			if ( bufferObject.valid ) {
 				if ( destPosition < bufferLength ) {
 					destObject = this.buffer[ destPosition ];
-					if ( $.isFunction( destObject.valid ) && destObject.valid( bufferObject.value ) ||
-						destObject.valid.test && destObject.valid.test( bufferObject.value ) ) {
+					if ( this._validValue( destObject, bufferObject.value ) ) {
 						destObject.value = bufferObject.value;
 						destPosition = this._seekRight( destPosition );
 					}
@@ -275,29 +274,24 @@ $.widget( "ui.mask", {
 		// seek through the buffer pulling characters from the value
 		for ( bufferPosition = 0; bufferPosition < bufferLength; bufferPosition += bufferObject.length ) {
 			bufferObject = this.buffer[ bufferPosition ];
+
 			while ( valuePosition < value.length ) {
-				if ( bufferObject.valid ) {
-					character = value.substr( valuePosition++, bufferObject.length );
-					if ( $.isFunction( bufferObject.valid ) ) {
-						character = bufferObject.valid( character );
-						if ( character !== undefined ) {
-							bufferObject.value = character;
-							break;
-						}
-					} else {
-						if ( bufferObject.valid.test( character ) ) {
-							bufferObject.value = character;
-							break;
-						}
-					}
-				} else {
-					if ( bufferObject.literal === value.charAt( valuePosition ) ) {
+				character = value.substr( valuePosition, bufferObject.length );
+				if ( bufferObject.literal ) {
+					if ( this._validValue( bufferObject, character ) ) {
 						valuePosition++;
 					}
 
 					// when parsing a literal from a raw .val() if it doesn't match,
 					// assume that the literal is missing from the val()
 					break;
+				} else {
+					valuePosition++;
+					character = this._validValue( bufferObject, character );
+					if ( character ) {
+						bufferObject.value = character;
+						break;
+					}
 				}
 			}
 		}
@@ -320,6 +314,19 @@ $.widget( "ui.mask", {
 			}
 		}
 		this.element.val( value );
+	},
+
+	// returns the value if valid, otherwise returns false
+	_validValue: function( bufferObject, value ) {
+		if ( bufferObject.valid ) {
+			if ( $.isFunction( bufferObject.valid ) ) {
+				return bufferObject.valid( value ) || false;
+			} else {
+				return bufferObject.valid.test( value ) && value;
+			}
+		} else {
+			return ( bufferObject.literal === value ) && value ;
+		}
 	}
 });
 
