@@ -31,7 +31,7 @@ $.widget("ui.selectmenu", {
 		icons: null,
 		format: null,
 		bgImage: function() {},
-		wrapperElement: ""
+		wrapperElement: "<div />"
 	},
 
 	_create: function() {
@@ -47,25 +47,34 @@ $.widget("ui.selectmenu", {
 		this._safemouseup = true;
 
 		// create menu button wrapper
-		this.newelement = $('<a class="' + this.widgetBaseClass + ' ui-widget ui-state-default ui-corner-all" id="' + this.ids[0] + '" role="button" href="#" tabindex="0" aria-haspopup="true" aria-owns="' + this.ids[1] + '"></a>')
-			.insertAfter(this.element);
-		this.newelement.wrap(o.wrapperElement);
-
+		this.newelement = $( '<a />', {
+			'class': this.widgetBaseClass + ' ui-widget ui-state-default ui-corner-all',
+			'id' : this.ids[0],
+			'role': 'button',
+			'href': '#',
+			'tabindex': '0' ,
+			'aria-haspopup': true,
+			'aria-owns': this.ids[1]
+		});
+		this.newelementWrap = $( o.wrapperElement )
+			.append( this.newelement )
+			.insertAfter( this.element );
+		
 		// transfer tabindex
-		var tabindex = this.element.attr('tabindex');
+		var tabindex = this.element.attr( 'tabindex' );
 		if (tabindex) {
-			this.newelement.attr('tabindex', tabindex);
+			this.newelement.attr( 'tabindex', tabindex );
 		}
 
 		// save reference to select in data for ease in calling methods
-		this.newelement.data('selectelement', this.element);
+		this.newelement.data( 'selectelement', this.element );
 
 		// menu icon
-		this.selectmenuIcon = $('<span class="' + this.widgetBaseClass + '-icon ui-icon"></span>')
-			.prependTo(this.newelement);
+		this.selectmenuIcon = $( '<span class="' + this.widgetBaseClass + '-icon ui-icon"></span>' )
+			.prependTo( this.newelement );
 
 		// append status span to button
-		this.newelement.prepend('<span class="' + self.widgetBaseClass + '-status" />');
+		this.newelement.prepend( '<span class="' + self.widgetBaseClass + '-status" />' );
 
 		// make associated form label trigger focus
 		$( 'label[for="' + selectmenuId + '"]' )
@@ -169,10 +178,19 @@ $.widget("ui.selectmenu", {
 		// hide original selectmenu element
 		this.element.hide();
 
-		// create menu portion, append to body
-		this.list = $('<ul class="' + self.widgetBaseClass + '-menu ui-widget ui-widget-content" aria-hidden="true" role="listbox" aria-labelledby="' + this.ids[0] + '" id="' + this.ids[1] + '"></ul>').appendTo('body');
-		this.list.wrap(o.wrapperElement);
-
+		// create menu portion, append to body		
+		this.list = $( '<ul />', {
+			'class': 'ui-widget ui-widget-content',
+			'aria-hidden': true,
+			'role': 'listbox',
+			'aria-labelledby': this.ids[0],
+			'id': this.ids[1]
+		});
+		this.listWrap = $( o.wrapperElement )
+			.addClass( self.widgetBaseClass + '-menu' )
+			.append( this.list )
+			.appendTo( 'body' );
+		
 		// transfer menu click to menu button
 		this.list
 			.bind("keydown.selectmenu", function(event) {
@@ -372,13 +390,13 @@ $.widget("ui.selectmenu", {
 
 		// reset height to auto
 		this.list.css("height", "auto");
-		var listH = this.list.height();
+		var listH = this.listWrap.height();
 		// calculate default max height
-		if ( o.maxHeight && o.maxHeight < listH) {
+		if ( o.maxHeight && o.maxHeight < listH ) {
 			this.list.height( o.maxHeight );
 		} else {
 			var winH = $( window ).height() / 3;
-			if ( winH < listH ) this.list.height( winH );	
+			if ( winH < listH ) this.list.height( winH );
 		}
 		
 		// save reference to actionable li's (not group label li's)
@@ -413,14 +431,10 @@ $.widget("ui.selectmenu", {
 		$( 'label[for=' + this.newelement.attr('id') + ']' )
 			.attr( 'for', this.element.attr( 'id' ) )
 			.unbind( '.selectmenu' );
-
-		if ( this.options.wrapperElement ) {
-			this.newelement.find( this.options.wrapperElement ).remove();
-			this.list.find( this.options.wrapperElement ).remove();
-		} else {
-			this.newelement.remove();
-			this.list.remove();
-		}
+		
+		this.newelementWrap.remove();
+		this.listWrap.remove();
+		
 		this.element.show();
 
 		// call widget destroy function
@@ -496,29 +510,25 @@ $.widget("ui.selectmenu", {
 	},
 
 	open: function(event) {
-		var self = this;
-		if ( this.newelement.attr("aria-disabled") != 'true' ) {
-			this._closeOthers(event);
-			this.newelement
+		var self = this, o = this.options;
+		if ( self.newelement.attr("aria-disabled") != 'true' ) {
+			self._closeOthers(event);
+			self.newelement
 				.addClass('ui-state-active');
-			if (self.options.wrapperElement) {
-				this.list.parent().appendTo('body');
-			} else {
-				this.list.appendTo('body');
-			}
+				
+			self.listWrap.appendTo( o.appendTo );
 
-			this.list.addClass(self.widgetBaseClass + '-open')
-				.attr('aria-hidden', false);
+			self.listWrap.addClass( self.widgetBaseClass + '-open' );
 			
-			selected = this.list.find('li:not(.' + self.widgetBaseClass + '-group):eq(' + this._selectedIndex() + ') a');
+			selected = self.list.attr('aria-hidden', false).find('li:not(.' + self.widgetBaseClass + '-group):eq(' + self._selectedIndex() + ') a');
 			if (selected.length) selected[0].focus();
 			
-			if ( this.options.style == "dropdown" ) {
-				this.newelement.removeClass('ui-corner-all').addClass('ui-corner-top');
+			if ( o.style == "dropdown" ) {
+				self.newelement.removeClass('ui-corner-all').addClass('ui-corner-top');
 			}
 			
-			this._refreshPosition();
-			this._trigger("open", event, this._uiHash());
+			self._refreshPosition();
+			self._trigger("open", event, self._uiHash());
 		}
 	},
 
@@ -526,9 +536,8 @@ $.widget("ui.selectmenu", {
 		if ( this.newelement.is('.ui-state-active') ) {
 			this.newelement
 				.removeClass('ui-state-active');
-			this.list
-				.attr('aria-hidden', true)
-				.removeClass(this.widgetBaseClass + '-open');
+			this.listWrap.removeClass(this.widgetBaseClass + '-open');
+			this.list.attr('aria-hidden', true);
 			if ( this.options.style == "dropdown" ) {
 				this.newelement.removeClass('ui-corner-top').addClass('ui-corner-all');
 			}
@@ -797,7 +806,7 @@ $.widget("ui.selectmenu", {
 				zIndex: zIndexElement
 			});
 		}
-		this.list.position({
+		this.listWrap.position({
 				// set options for position plugin
 				of: o.positionOptions.of || this.newelement,
 				my: o.positionOptions.my,
