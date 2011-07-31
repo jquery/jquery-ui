@@ -126,9 +126,27 @@ $.widget( "ui.mask", {
 			that = this,
 			elem = that.element;
 
+		function handlePaste() {
+			setTimeout( function() {
+				var position = that._parseValue();
+				that._paint();
+				that._caret( that._seekRight( position ) );
+			}, 0 );
+		}
+
 		this._bind({
 			focus: function( event ) {
 				lastUnsavedValue = elem.val();
+			},
+			blur: function( event ) {
+
+				// because we are constantly setting the value of the input, the change event
+				// never fires - we re-introduce the change event here
+				that._parseValue();
+				that._paint();
+				if ( elem.val() !== lastUnsavedValue ) {
+					elem.trigger( "change" );
+				}
 			},
 			keydown: function( event ) {
 				var key = event.keyCode,
@@ -180,7 +198,9 @@ $.widget( "ui.mask", {
 					}
 				}
 				event.preventDefault();
-			}
+			},
+			paste: handlePaste,
+			input: handlePaste
 		});
 	},
 
@@ -268,12 +288,13 @@ $.widget( "ui.mask", {
 	},
 
 	// parses the .val() and places it into the buffer
-	// returns the total length of the displayed values in the buffer
+	// returns the last filled in value position
 	_parseValue: function() {
 		var bufferPosition,
 			bufferObject,
 			character,
 			valuePosition = 0,
+			lastFilledPosition = 0,
 			value = this.element.val(),
 			bufferLength = this.buffer.length,
 			valueLength = value.length;
@@ -291,6 +312,7 @@ $.widget( "ui.mask", {
 					if ( this._validValue( bufferObject, character ) ) {
 						valuePosition++;
 					}
+					lastFilledPosition = bufferPosition;
 
 					// when parsing a literal from a raw .val() if it doesn't match,
 					// assume that the literal is missing from the val()
@@ -300,12 +322,13 @@ $.widget( "ui.mask", {
 					character = this._validValue( bufferObject, character );
 					if ( character ) {
 						bufferObject.value = character;
+						lastFilledPosition = bufferPosition;
 						break;
 					}
 				}
 			}
 		}
-		return bufferLength;
+		return lastFilledPosition;
 	},
 	_paint: function() {
 		var bufferPosition,

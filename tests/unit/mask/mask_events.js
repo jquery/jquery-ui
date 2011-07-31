@@ -3,7 +3,7 @@
 module( "mask: events" );
 
 test( "keydown: delete and backspace behaviors", function() {
-	expect( 11 );
+	expect( 12 );
 	var input = $( "#mask1" ).val( "1234" ).mask({ mask: "99/99/99" }),
 		mask = input.data( "mask" );
 
@@ -24,18 +24,23 @@ test( "keydown: delete and backspace behaviors", function() {
 	
 	input.val( "123456" ).mask( "refresh" );
 	equal( input.val(), "12/34/56", "New Initial Value" );
+	mask._caret( 4 );
+	input.simulate( "keydown", { keyCode: $.ui.keyCode.BACKSPACE });
+	equal( input.val(), "12/45/6_", "Backspaced 3 out of the middle" );
+	
+
 	mask._caret( 2, 4 );
 	input.simulate( "keydown", { keyCode: $.ui.keyCode.BACKSPACE });
-	equal( input.val(), "12/56/__", "Backspaced 34 out of the middle" );
+	equal( input.val(), "12/6_/__", "Backspaced 45 out of the middle" );
 	deepEqual( mask._caret(), { begin: 2, end: 2 }, "Caret position" );
 	
 	mask._caret( 6 );
 	input.simulate( "keydown", { keyCode: $.ui.keyCode.BACKSPACE });
-	equal( input.val(), "12/5_/__", "Backspaced last value" );
+	equal( input.val(), "12/6_/__", "Backspaced last value" );
 
 	mask._caret( 2 );
 	input.simulate( "keydown", { keyCode: $.ui.keyCode.BACKSPACE });
-	equal( input.val(), "15/__/__", "Backspaced value from middle" );
+	equal( input.val(), "16/__/__", "Backspaced value from middle" );
 
 });
 
