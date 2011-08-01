@@ -404,7 +404,7 @@ $.widget("ui.selectmenu", {
 		this._optionLis = this.list.find( 'li:not(.' + self.widgetBaseClass + '-group)' );
 
 		// transfer disabled state
-		if ( this.element.attr( 'disabled' ) === true ) {
+		if ( this.element.attr( 'disabled' ) ) {
 			this.disable();
 		} else {
 			this.enable()
