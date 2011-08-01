@@ -253,9 +253,10 @@ $.widget("ui.selectmenu", {
 			// this allows for using the scrollbar in an overflowed list
 			.bind( 'mousedown.selectmenu mouseup.selectmenu', function() { return false; });
 
-
 		// needed when window is resized
-		$(window).bind( "resize.selectmenu", $.proxy( self._refreshPosition, this ) );
+		// TODO seems to be useless, but causes errors (fnagel 01.08.11)
+		// see: https://github.com/fnagel/jquery-ui/issues/147
+		// $(window).bind( "resize.selectmenu", $.proxy( self._refreshPosition, this ) );
 	},
 
 	_init: function() {
@@ -424,7 +425,8 @@ $.widget("ui.selectmenu", {
 			.removeAttr( 'aria-disabled' )
 			.unbind( ".selectmenu" );
 
-		$( window ).unbind( ".selectmenu" );
+		// TODO unneded as event binding has been disabled
+		// $( window ).unbind( ".selectmenu" );
 		$( document ).unbind( ".selectmenu" );
 
 		// unbind click on label, reset its for attr
@@ -513,21 +515,26 @@ $.widget("ui.selectmenu", {
 		var self = this, o = this.options;
 		if ( self.newelement.attr("aria-disabled") != 'true' ) {
 			self._closeOthers(event);
-			self.newelement
-				.addClass('ui-state-active');
+			self.newelement.addClass('ui-state-active');
 				
 			self.listWrap.appendTo( o.appendTo );
-
-			self.listWrap.addClass( self.widgetBaseClass + '-open' );
-			
-			selected = self.list.attr('aria-hidden', false).find('li:not(.' + self.widgetBaseClass + '-group):eq(' + self._selectedIndex() + ') a');
-			if (selected.length) selected[0].focus();
+			self.list.attr('aria-hidden', false)
 			
 			if ( o.style == "dropdown" ) {
 				self.newelement.removeClass('ui-corner-all').addClass('ui-corner-top');
 			}
 			
-			self._refreshPosition();
+			self.listWrap.addClass( self.widgetBaseClass + '-open' );
+			// positioning needed for IE7 (tested 01.08.11 on MS VPC Image)
+			// see https://github.com/fnagel/jquery-ui/issues/147
+			if ( $.browser.msie && $.browser.version.substr( 0,1 ) == 7 ) {
+				self._refreshPosition();
+			}
+			selected = self.list.attr('aria-hidden', false).find('li:not(.' + self.widgetBaseClass + '-group):eq(' + self._selectedIndex() + ') a');
+			if (selected.length) selected[0].focus();
+			// positioning needed for FF, Chrome, IE8, IE7, IE6 (tested 01.08.11 on MS VPC Image)
+			self._refreshPosition();			
+			
 			self._trigger("open", event, self._uiHash());
 		}
 	},
@@ -794,6 +801,7 @@ $.widget("ui.selectmenu", {
 
 	_refreshPosition: function() {
 		var o = this.options;
+
 		// if its a native pop-up we need to calculate the position of the selected li
 		if (o.style == "popup" && !o.positionOptions.offset) {
 			var selected = this._selectedOptionLi();
@@ -807,13 +815,13 @@ $.widget("ui.selectmenu", {
 			});
 		}
 		this.listWrap.position({
-				// set options for position plugin
-				of: o.positionOptions.of || this.newelement,
-				my: o.positionOptions.my,
-				at: o.positionOptions.at,
-				offset: o.positionOptions.offset || _offset,
-				collision: o.positionOptions.collision || 'flip'
-			});
+			// set options for position plugin
+			of: o.positionOptions.of || this.newelement,
+			my: o.positionOptions.my,
+			at: o.positionOptions.at,
+			offset: o.positionOptions.offset || _offset,
+			collision: o.positionOptions.collision || 'flip'
+		});
 	}
 });
 
