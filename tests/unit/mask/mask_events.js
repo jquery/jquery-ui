@@ -2,46 +2,179 @@
 
 module( "mask: events" );
 
-test( "keydown: delete and backspace behaviors", function() {
-	expect( 12 );
-	var input = $( "#mask1" ).val( "1234" ).mask({ mask: "99/99/99" }),
+/* TODO: Descide behavior of bluring non-valid inputs */
+
+test( "focus: Initial Caret Positioning", function() {
+	var input = $( "#mask1" ).val("").mask({ mask: "9" }),
 		mask = input.data( "mask" );
 
-	equal( input.val(), "12/34/__", "Initial Value" );
+	equal( input.val(), "_", "Initial Value Expected" );
+	input.focus();
+	deepEqual( mask._caret(), { begin: 0, end: 0 }, "Caret position correct");
+
+	input.mask( "option", "mask", "(9)" );
+	equal( input.val(), "(_)", "Initial Value Expected" );
+	input.focus();
+	deepEqual( mask._caret(), { begin: 1, end: 1 }, "Caret position correct");
+
+});
+
+test( "keydown: Backspace pulls values from right", function() {
+	expect( 12 );
+	var input = $( "#mask1" ).val("123").mask({ mask: "999" }),
+		mask = input.data( "mask" );
+
+	equal( input.val(), "123", "Initial Value Expected" );
+
+	mask._caret( 2 );
+	input.simulate( "keydown", { keyCode: $.ui.keyCode.BACKSPACE });
+	equal( input.val(), "13_", "Backspaced the second character");
+	deepEqual( mask._caret(), { begin: 1, end: 1 }, "Caret position correct");
+
+	input.val( "1z" ).mask( "option", "mask", "9a" );
+	equal( input.val(), "1z", "Initial Value Expected" );
+
+	mask._caret( 1 );
+	input.simulate( "keydown", { keyCode: $.ui.keyCode.BACKSPACE });
+	equal( input.val(), "_z", "Backspace did not pull value because it wasn't valid" );
+	deepEqual( mask._caret(), { begin: 0, end: 0 }, "Caret position correct");
+
+	input.val( "12" ).mask( "option", "mask", "9-9" );
+	equal( input.val(), "1-2", "Initial Value Expected" );
+
+	mask._caret( 1 );
+	input.simulate( "keydown", { keyCode: $.ui.keyCode.BACKSPACE });
+	equal( input.val(), "2-_", "Backspace pulled value because it was valid" );
+	deepEqual( mask._caret(), { begin: 0, end: 0 }, "Caret position correct");
+
+
+	input.val( "1z" ).mask( "option", "mask", "9-a" );
+	equal( input.val(), "1-z", "Initial Value Expected" );
+
+	mask._caret( 1 );
+	input.simulate( "keydown", { keyCode: $.ui.keyCode.BACKSPACE });
+	equal( input.val(), "_-z", "Backspace did not pull value because it wasn't valid" );
+	deepEqual( mask._caret(), { begin: 0, end: 0 }, "Caret position correct");
+});
+
+test( "keydown: Backspace with the cursor to the right of a mask literal", function() {
+	expect( 6 );
+	var input = $( "#mask1" ).val("123").mask({ mask: "9-99" }),
+		mask = input.data( "mask" );
+
+	equal( input.val(), "1-23", "Initial Value Expected" );
+
+	mask._caret( 2 );
+	input.simulate( "keydown", { keyCode: $.ui.keyCode.BACKSPACE });
+	equal( input.val(), "2-3_", "Backspaced across the literal -, brought values with");
+	deepEqual( mask._caret(), { begin: 0, end: 0 }, "Caret position correct");
+
+	input.val("z12").mask( "option", "mask", "a-99" );
+	equal( input.val(), "z-12", "New Initial Value Expected");
+
+	mask._caret( 2 );
+	input.simulate( "keydown", { keyCode: $.ui.keyCode.BACKSPACE });
+	equal( input.val(), "_-12", "Backspaced across the literal -, values held position");
+	deepEqual( mask._caret(), { begin: 0, end: 0 }, "Caret position correct");
+});
+
+test( "keydown: Delete pulling values", function() {
+	expect( 18 );
+	var input = $( "#mask1" ).val("123").mask({ mask: "9-99" }),
+		mask = input.data( "mask" );
+	equal( input.val(), "1-23", "Initial value expected" );
+
+	mask._caret( 1 );
+	input.simulate( "keydown", { keyCode: $.ui.keyCode.DELETE });
+	equal( input.val(), "1-3_", "Delete across the literal -, brought values with");
+	deepEqual( mask._caret(), { begin: 2, end: 2 }, "Caret position correct");
+
+	input.val("12z").mask( "option", "mask", "9-9a" );
+	equal( input.val(), "1-2z", "Initial value expected" );
+
+	mask._caret( 1 );
+	input.simulate( "keydown", { keyCode: $.ui.keyCode.DELETE });
+	equal( input.val(), "1-_z", "Deleted across the literal -, z was not pulled");
+	deepEqual( mask._caret(), { begin: 2, end: 2 }, "Caret position correct");
+
+	input.val("12").mask( "option", "mask", "99" );
+	equal( input.val(), "12", "Initial value expected" );
+
 	mask._caret( 0 );
 	input.simulate( "keydown", { keyCode: $.ui.keyCode.DELETE });
-	equal( input.val(), "23/4_/__", "Deleted first value" );
-	mask._caret( 2 );
+	equal( input.val(), "2_", "Deleted value, pulled values from the right");
+	deepEqual( mask._caret(), { begin: 0, end: 0 }, "Caret position correct");
+
+	input.val("1z").mask( "option", "mask", "9a" );
+	equal( input.val(), "1z", "Initial value expected" );
+
+	mask._caret( 0 );
 	input.simulate( "keydown", { keyCode: $.ui.keyCode.DELETE });
-	equal( input.val(), "23/__/__", "Deleted value after literal" );
+	equal( input.val(), "_z", "Deleted value, couldn't pull values from the right");
+	deepEqual( mask._caret(), { begin: 0, end: 0 }, "Caret position correct");
 
-	input.val( "123456" ).mask( "refresh" );
-	equal( input.val(), "12/34/56", "New Initial Value" );
-	mask._caret( 2, 4 );
+	input.val("12").mask( "option", "mask", "9-9" );
+	equal( input.val(), "1-2", "Initial value expected" );
+
+	mask._caret( 0 );
 	input.simulate( "keydown", { keyCode: $.ui.keyCode.DELETE });
-	equal( input.val(), "12/56/__", "Deleted 34 out of the middle" );
-	deepEqual( mask._caret(), { begin: 2, end: 2 }, "Caret position" );
-	
-	input.val( "123456" ).mask( "refresh" );
-	equal( input.val(), "12/34/56", "New Initial Value" );
-	mask._caret( 4 );
-	input.simulate( "keydown", { keyCode: $.ui.keyCode.BACKSPACE });
-	equal( input.val(), "12/45/6_", "Backspaced 3 out of the middle" );
-	
+	equal( input.val(), "2-_", "Deleted value, pulled values from the right across the literal");
+	deepEqual( mask._caret(), { begin: 0, end: 0 }, "Caret position correct");
 
-	mask._caret( 2, 4 );
-	input.simulate( "keydown", { keyCode: $.ui.keyCode.BACKSPACE });
-	equal( input.val(), "12/6_/__", "Backspaced 45 out of the middle" );
-	deepEqual( mask._caret(), { begin: 2, end: 2 }, "Caret position" );
+
+	input.val("1z").mask( "option", "mask", "9-a" );
+	equal( input.val(), "1-z", "Initial value expected" );
+
+	mask._caret( 0 );
+	input.simulate( "keydown", { keyCode: $.ui.keyCode.DELETE });
+	equal( input.val(), "_-z", "Deleted value, couldn't pull values from the right");
+	deepEqual( mask._caret(), { begin: 0, end: 0 }, "Caret position correct");
+});
+
+test( "keydown: escape returns to original value", function() {
+	expect( 3 );
+	var input = $( "#mask1" ).val("6").mask({ mask: "9" }),
+		mask = input.data( "mask" );
+
+	equal( input.val(), "6", "Initial value expected" );
+	input.focus();
+
+	mask._caret( 0 );
+	input.simulate( "keypress", { keyCode: "1".charCodeAt(0) });
+	equal( input.val(), "1", "Typed over" );
+
+	input.simulate( "keydown", { keyCode: $.ui.keyCode.ESCAPE });
+	equal( input.val(), "6", "Reverted value after pressing escape" );
+
+});
+
+test( "keypress: typing behaviors", function() {
+	expect( 8 );
+	var input = $( "#mask1" ).mask({ mask: "9-9" }),
+		mask = input.data( "mask" );
+
+	equal( input.val(), "_-_", "Initial value expected" );
+
+	mask._caret( 0 );
+	input.simulate( "keypress", { keyCode: "1".charCodeAt( 0 ) });
+	equal( input.val(), "1-_", "Typed a 1" );
+
+	mask._caret( 0 );
+	input.simulate( "keypress", { keyCode: "2".charCodeAt( 0 ) });
+	equal( input.val(), "2-1", "Typed a 2 before the 1" );
+	deepEqual( mask._caret(), { begin: 2, end: 2 }, "Caret position correct");
 	
-	mask._caret( 6 );
-	input.simulate( "keydown", { keyCode: $.ui.keyCode.BACKSPACE });
-	equal( input.val(), "12/6_/__", "Backspaced last value" );
+	input.val("").mask( "option", "mask", "9-a" );
+	equal( input.val(), "_-_", "Initial value expected" );
 
-	mask._caret( 2 );
-	input.simulate( "keydown", { keyCode: $.ui.keyCode.BACKSPACE });
-	equal( input.val(), "16/__/__", "Backspaced value from middle" );
+	mask._caret( 0 );
+	input.simulate( "keypress", { keyCode: "1".charCodeAt( 0 ) });
+	equal( input.val(), "1-_", "Typed a 1" );
 
+	mask._caret( 0 );
+	input.simulate( "keypress", { keyCode: "2".charCodeAt( 0 ) });
+	equal( input.val(), "2-_", "Typed a 2 before the 1 - 1 is lost because not valid" );
+	deepEqual( mask._caret(), { begin: 2, end: 2 }, "Caret position correct");
 });
 
 }( jQuery ) );

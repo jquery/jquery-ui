@@ -137,6 +137,7 @@ $.widget( "ui.mask", {
 		this._bind({
 			focus: function( event ) {
 				lastUnsavedValue = elem.val();
+				that._caret( that._seekRight( that._parseValue() - 1 ) );
 			},
 			blur: function( event ) {
 
@@ -176,7 +177,7 @@ $.widget( "ui.mask", {
 				}
 			},
 			keypress: function( event ) {
-				var key = event.which,
+				var key = event.keyCode,
 					position = that._caret(),
 					bufferPosition = that._seekRight( position.begin - 1 ),
 					bufferObject = that.buffer[ bufferPosition ];
@@ -312,8 +313,6 @@ $.widget( "ui.mask", {
 					if ( this._validValue( bufferObject, character ) ) {
 						valuePosition++;
 					}
-					lastFilledPosition = bufferPosition;
-
 					// when parsing a literal from a raw .val() if it doesn't match,
 					// assume that the literal is missing from the val()
 					break;
