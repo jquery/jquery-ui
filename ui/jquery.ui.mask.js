@@ -36,6 +36,16 @@ $.widget( "ui.mask", {
 		this._paint();
 	},
 
+	// returns (or sets) the value without the mask
+	value: function( value ) {
+		if ( value !== undefined ) {
+			this.element.val( value );
+			this.refresh();
+		} else {
+			return this._getValue( true );
+		}
+	},
+
 	_setOption: function( key, value ) {
 		this._super( "_setOption", key, value );
 		if ( key === "mask" ) {
@@ -329,7 +339,7 @@ $.widget( "ui.mask", {
 		}
 		return lastFilledPosition;
 	},
-	_paint: function() {
+	_getValue: function( raw ) {
 		var bufferPosition,
 			bufferObject,
 			bufferLength = this.buffer.length,
@@ -337,15 +347,18 @@ $.widget( "ui.mask", {
 
 		for ( bufferPosition = 0; bufferPosition < bufferLength; bufferPosition += bufferObject.length ) {
 			bufferObject = this.buffer[ bufferPosition ];
-			if ( bufferObject.literal ) {
+			if ( bufferObject.literal && !raw ) {
 				value += bufferObject.literal;
 			} else if ( bufferObject.value ) {
 				value += bufferObject.value;
-			} else {
+			} else if ( !raw ) {
 				value += this.options.placeholder;
 			}
 		}
-		this.element.val( value );
+		return value;
+	},
+	_paint: function() {
+		this.element.val( this._getValue() );
 	},
 
 	// returns the value if valid, otherwise returns false

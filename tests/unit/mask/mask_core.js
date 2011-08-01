@@ -120,11 +120,11 @@ test( "Parsing initial value skips literals", function() {
 	input.val("123456").mask({
 		mask: "99/99/99"
 	});
-	
+
 	equal( input.val(), "12/34/56", "Literals were inserted into val");
 	input.mask( "option", "mask", "99-99-99" );
 	equal( input.val(), "12-34-56", "Old literals were ignored, and new ones inserted into val");
-	
+
 });
 
 }( jQuery ) );
