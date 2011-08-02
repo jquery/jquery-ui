@@ -38,7 +38,7 @@ $.widget("ui.selectmenu", {
 		var self = this, o = this.options;
 
 		// set a default id value, generate a new random one if not set by developer
-		var selectmenuId = this.element.attr('id') || 'ui-selectmenu-' + Math.random().toString(16).slice(2, 10);
+		var selectmenuId = this.element.attr( 'id' ) || 'ui-selectmenu-' + Math.random().toString( 16 ).slice( 2, 10 );
 
 		// quick array of button and menu id's
 		this.ids = [ selectmenuId + '-button', selectmenuId + '-menu' ];
@@ -49,12 +49,12 @@ $.widget("ui.selectmenu", {
 		// create menu button wrapper
 		this.newelement = $( '<a />', {
 			'class': this.widgetBaseClass + ' ui-widget ui-state-default ui-corner-all',
-			'id' : this.ids[0],
+			'id' : this.ids[ 0 ],
 			'role': 'button',
 			'href': '#',
 			'tabindex': '0' ,
 			'aria-haspopup': true,
-			'aria-owns': this.ids[1]
+			'aria-owns': this.ids[ 1 ]
 		});
 		this.newelementWrap = $( o.wrapperElement )
 			.append( this.newelement )
@@ -62,7 +62,7 @@ $.widget("ui.selectmenu", {
 		
 		// transfer tabindex
 		var tabindex = this.element.attr( 'tabindex' );
-		if (tabindex) {
+		if ( tabindex ) {
 			this.newelement.attr( 'tabindex', tabindex );
 		}
 
@@ -390,7 +390,7 @@ $.widget("ui.selectmenu", {
 		}
 
 		// reset height to auto
-		this.list.css("height", "auto");
+		this.list.css( 'height', 'auto' );
 		var listH = this.listWrap.height();
 		// calculate default max height
 		if ( o.maxHeight && o.maxHeight < listH ) {
@@ -443,61 +443,62 @@ $.widget("ui.selectmenu", {
 		$.Widget.prototype.destroy.apply(this, arguments);
 	},
 
-	_typeAhead: function(code, eventType){
+	_typeAhead: function( code, eventType ){
 		var self = this, focusFound = false, C = String.fromCharCode(code).toUpperCase();
 		c = C.toLowerCase();
 
-		if (self.options.typeAhead == 'sequential') {
+		if ( self.options.typeAhead == 'sequential' ) {
 			// clear the timeout so we can use _prevChar
 			window.clearTimeout('ui.selectmenu-' + self.selectmenuId);
 
 			// define our find var
-			var find = typeof(self._prevChar) == 'undefined' ? '' : self._prevChar.join('');
+			var find = typeof( self._prevChar ) == 'undefined' ? '' : self._prevChar.join( '' );
 
-			function focusOptSeq(elem, ind, c){
+			function focusOptSeq( elem, ind, c ){
 				focusFound = true;
-				$(elem).trigger(eventType);
-				typeof(self._prevChar) == 'undefined' ? self._prevChar = [c] : self._prevChar[self._prevChar.length] = c;
+				$( elem ).trigger( eventType );
+				typeof( self._prevChar ) == 'undefined' ? self._prevChar = [ c ] : self._prevChar[ self._prevChar.length ] = c;
 			}
-			this.list.find('li a').each(function(i) {
-				if (!focusFound) {
+			this.list.find( 'li a' ).each( function( i ) {
+				if ( !focusFound ) {
 					// allow the typeahead attribute on the option tag for a more specific lookup
-					var thisText = $(this).attr('typeahead') || $(this).text();
-					if (thisText.indexOf(find+C) == 0) {
-						focusOptSeq(this,i,C)
-					} else if (thisText.indexOf(find+c) == 0) {
-						focusOptSeq(this,i,c)
+					var thisText = $( this ).attr( 'typeahead' ) || $(this).text();
+					if ( thisText.indexOf( find + C ) === 0 ) {
+						focusOptSeq( this, i, C );
+					} else if (thisText.indexOf(find+c) === 0 ) {
+						focusOptSeq( this, i, c );
 					}
 				}
 			});
 			// set a 1 second timeout for sequenctial typeahead
-			//  	keep this set even if we have no matches so it doesnt typeahead somewhere else
-			window.setTimeout(function(el) {
+			// keep this set even if we have no matches so it doesnt typeahead somewhere else
+			window.setTimeout( function( el ) {
 				self._prevChar = undefined;
-			}, 1000, self);
+			}, 1000, self );
 
 		} else {
-			//define self._prevChar if needed
-			if (!self._prevChar){ self._prevChar = ['',0]; }
+			// define self._prevChar if needed
+			if ( !self._prevChar ) { self._prevChar = [ '' , 0 ]; }
 
-			var focusFound = false;
-			function focusOpt(elem, ind){
+			focusFound = false;
+			function focusOpt( elem, ind ){
 				focusFound = true;
-				$(elem).trigger(eventType);
-				self._prevChar[1] = ind;
+				$( elem ).trigger( eventType );
+				self._prevChar[ 1 ] = ind;
 			}
-			this.list.find('li a').each(function(i){
-				if(!focusFound){
+			this.list.find( 'li a' ).each(function( i ){
+				if (!focusFound){
 					var thisText = $(this).text();
-					if( thisText.indexOf(C) == 0 || thisText.indexOf(c) == 0){
-							if(self._prevChar[0] == C){
-								if(self._prevChar[1] < i){ focusOpt(this,i); }
-							}
-							else{ focusOpt(this,i); }
+					if ( thisText.indexOf( C ) === 0 || thisText.indexOf( c ) === 0 ) {
+						if (self._prevChar[0] == C){
+							if ( self._prevChar[ 1 ] < i ){ focusOpt( this, i ); }
+						} else{ 
+							focusOpt( this, i ); 
+						}
 					}
 				}
 			});
-			this._prevChar[0] = C;
+			this._prevChar[ 0 ] = C;
 		}
 	},
 
@@ -518,7 +519,7 @@ $.widget("ui.selectmenu", {
 			self.newelement.addClass('ui-state-active');
 				
 			self.listWrap.appendTo( o.appendTo );
-			self.list.attr('aria-hidden', false)
+			self.list.attr('aria-hidden', false);
 			
 			if ( o.style == "dropdown" ) {
 				self.newelement.removeClass('ui-corner-all').addClass('ui-corner-top');
@@ -530,7 +531,7 @@ $.widget("ui.selectmenu", {
 			if ( $.browser.msie && $.browser.version.substr( 0,1 ) == 7 ) {
 				self._refreshPosition();
 			}
-			selected = self.list.attr('aria-hidden', false).find('li:not(.' + self.widgetBaseClass + '-group):eq(' + self._selectedIndex() + ') a');
+			var selected = self.list.attr('aria-hidden', false).find('li:not(.' + self.widgetBaseClass + '-group):eq(' + self._selectedIndex() + ') a');
 			if (selected.length) selected[0].focus();
 			// positioning needed for FF, Chrome, IE8, IE7, IE6 (tested 01.08.11 on MS VPC Image)
 			self._refreshPosition();			
@@ -626,8 +627,7 @@ $.widget("ui.selectmenu", {
 		if (!isNaN(amt)) {
 			var currIndex = parseInt(this._focusedOptionLi().data('index') || 0, 10);
 			var newIndex = currIndex + amt;
-		}
-		else {
+		} else {
 			var newIndex = parseInt(this._optionLis.filter(amt).data('index'), 10);
 		}
 
@@ -803,13 +803,13 @@ $.widget("ui.selectmenu", {
 		var o = this.options;
 
 		// if its a native pop-up we need to calculate the position of the selected li
-		if (o.style == "popup" && !o.positionOptions.offset) {
+		if ( o.style == "popup" && !o.positionOptions.offset ) {
 			var selected = this._selectedOptionLi();
-			var _offset = "0 -" + (selected.outerHeight() + selected.offset().top - this.list.offset().top);
+			var _offset = "0 -" + ( selected.outerHeight() + selected.offset().top - this.list.offset().top );
 		}
 		// update zIndex if jQuery UI is able to process
 		var zIndexElement = this.element.zIndex();
-		if (zIndexElement) {
+		if ( zIndexElement ) {
 			this.list.css({
 				zIndex: zIndexElement
 			});
