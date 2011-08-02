@@ -25,4 +25,15 @@ test( "value: able to get (and set) raw values", function() {
 	equal( input.mask( "value" ), "123456", "Raw value read correctly" );
 });
 
+test( "valid: returns true when all required placeholders are filled", function() {
+	expect( 2 );
+	var input = $( "#mask1" ).mask({
+		mask: "99/99/99"
+	});
+
+	equal( input.mask( "valid" ), false, "Empty value is invalid" );
+	input.mask( "value", "123456" );
+	equal( input.mask( "valid" ), true, "All placheholders are full" );
+});
+
 }( jQuery ) );

@@ -36,6 +36,20 @@ $.widget( "ui.mask", {
 		this._paint();
 	},
 
+	valid: function() {
+		var bufferPosition,
+			bufferObject,
+			bufferLength = this.buffer.length;
+
+		for ( bufferPosition = 0; bufferPosition < bufferLength; bufferPosition++ ) {
+			bufferObject = this.buffer[ bufferPosition ];
+			if ( !( bufferObject.value || bufferObject.literal ) ) {
+				return false;
+			}
+		}
+		return true;
+	},
+
 	// returns (or sets) the value without the mask
 	value: function( value ) {
 		if ( value !== undefined ) {
