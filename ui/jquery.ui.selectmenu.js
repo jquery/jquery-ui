@@ -270,7 +270,7 @@ $.widget("ui.selectmenu", {
 				var opt = $(this);
 				selectOptionData.push({
 					value: opt.attr('value'),
-					text: self._formatText($(this).text()),
+					text: self._formatText(opt.text()),
 					selected: opt.attr('selected'),
 					disabled: opt.attr('disabled'),
 					classes: opt.attr('class'),
@@ -289,7 +289,26 @@ $.widget("ui.selectmenu", {
 		// write li's
 		if (selectOptionData.length) {
 			for (var i = 0; i < selectOptionData.length; i++) {
-				var thisLi = $('<li role="presentation"' + (selectOptionData[i].disabled ? ' class="' + this.namespace + '-state-disabled' + '"' : '' ) + '><a href="#" tabindex="-1" role="option"' + (selectOptionData[i].disabled ? ' aria-disabled="true"' : '' ) + ' aria-selected="false"' + (selectOptionData[i].typeahead ? ' typeahead="' + selectOptionData[i].typeahead + '"' : '' ) + '>'+ selectOptionData[i].text +'</a></li>')
+				var thisLiAttr = { role : 'presentation' };
+				if ( selectOptionData[ i ].disabled ) {
+					thisLiAttr[ 'class' ] = this.namespace + '-state-disabled';
+				}					
+				var thisAAttr = {
+					html: selectOptionData[i].text,
+					href : '#', 
+					tabindex : -1, 
+					role : 'option',
+					'aria-selected' : false
+				};
+				if ( selectOptionData[ i ].disabled ) {
+					thisAAttr[ 'aria-disabled' ] = selectOptionData[ i ].disabled;
+				}
+				if ( selectOptionData[ i ].typeahead ) {
+					thisAAttr[ 'typeahead' ] = selectOptionData[ i ].typeahead;
+				}				
+				var thisA = $('<a/>', thisAAttr);
+				var thisLi = $('<li/>', thisLiAttr)	
+					.append(thisA)				
 					.data('index', i)
 					.addClass(selectOptionData[i].classes)
 					.data('optionClasses', selectOptionData[i].classes || '')
