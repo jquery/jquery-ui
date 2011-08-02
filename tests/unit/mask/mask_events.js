@@ -4,18 +4,25 @@ module( "mask: events" );
 
 /* TODO: Descide behavior of bluring non-valid inputs */
 
-test( "focus: Initial Caret Positioning", function() {
+asyncTest( "focus: Initial Caret Positioning", function() {
 	var input = $( "#mask1" ).val("").mask({ mask: "9" }),
 		mask = input.data( "mask" );
 
 	equal( input.val(), "_", "Initial Value Expected" );
 	input.focus();
-	deepEqual( mask._caret(), { begin: 0, end: 0 }, "Caret position correct");
+	setTimeout( function() {
+		deepEqual( mask._caret(), { begin: 0, end: 0 }, "Caret position correct");
 
-	input.mask( "option", "mask", "(9)" );
-	equal( input.val(), "(_)", "Initial Value Expected" );
-	input.focus();
-	deepEqual( mask._caret(), { begin: 1, end: 1 }, "Caret position correct");
+		input.mask( "option", "mask", "(9)" );
+		equal( input.val(), "(_)", "Initial Value Expected" );
+		input.focus();
+
+		setTimeout( function() {
+			deepEqual( mask._caret(), { begin: 1, end: 1 }, "Caret position correct");
+			start();
+		}, 0);
+
+	}, 0);
 
 });
 
@@ -169,7 +176,7 @@ test( "keypress: typing behaviors", function() {
 	input.simulate( "keypress", { keyCode: "2".charCodeAt( 0 ) });
 	equal( input.val(), "2-1", "Typed a 2 before the 1" );
 	deepEqual( mask._caret(), { begin: 2, end: 2 }, "Caret position correct");
-	
+
 	input.val("").mask( "option", "mask", "9-a" );
 	equal( input.val(), "_-_", "Initial value expected" );
 

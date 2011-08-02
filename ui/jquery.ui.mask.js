@@ -161,7 +161,9 @@ $.widget( "ui.mask", {
 		this._bind({
 			focus: function( event ) {
 				lastUnsavedValue = elem.val();
-				that._caret( that._seekRight( that._parseValue() - 1 ) );
+				setTimeout( function() {
+					that._caret( that._seekRight( that._parseValue() - 1 ) );
+				}, 0);
 			},
 			blur: function( event ) {
 
