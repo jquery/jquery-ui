@@ -602,15 +602,15 @@ $.widget("ui.dialog", {
 						$.ui.dialog.maxZ = value;
 						
 						if ( self.overlay ) {
-							$.ui.dialog.maxZ += 1;
 							$.ui.dialog.overlay.maxZ = $.ui.dialog.maxZ;
+							$.ui.dialog.maxZ += 1;
 						}
 					}
 					
 					value = $.ui.dialog.maxZ;
 				}
 				
-				self.overlay && self.overlay.$el.css( "z-index", value > 0 ? value : 0 );
+				self.overlay && self.overlay.$el.css( "z-index", value - 1 );
 				uiDialog.css( "z-index", value );
 				
 				break;

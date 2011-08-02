@@ -469,7 +469,7 @@ test("zIndex", function() {
 	// At the moment, an explicit zIndex option lower than $.ui.dialog.maxZ will be ignored since 'open' calls
 	// 'moveToTop'. Is this the desired behavior?
 	el = $('<div></div>').dialog({zIndex: 1584 });
-		equals(dlg().css('zIndex'), $.ui.dialog.maxZ, "explicit zIndex, lower than $.ui.dialog.maxZ, is ignored");
+		equals(dlg().css('zIndex'), $.ui.dialog.maxZ, "explicit zIndex at instantiation below $.ui.dialog.maxZ is ignored");
 	el.remove();
 });
 
