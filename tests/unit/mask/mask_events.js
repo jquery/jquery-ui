@@ -24,6 +24,8 @@ test( "keydown: Backspace pulls values from right", function() {
 	var input = $( "#mask1" ).val("123").mask({ mask: "999" }),
 		mask = input.data( "mask" );
 
+
+	input.focus();
 	equal( input.val(), "123", "Initial Value Expected" );
 
 	mask._caret( 2 );
@@ -62,6 +64,7 @@ test( "keydown: Backspace with the cursor to the right of a mask literal", funct
 	var input = $( "#mask1" ).val("123").mask({ mask: "9-99" }),
 		mask = input.data( "mask" );
 
+	input.focus();
 	equal( input.val(), "1-23", "Initial Value Expected" );
 
 	mask._caret( 2 );
@@ -82,6 +85,8 @@ test( "keydown: Delete pulling values", function() {
 	expect( 18 );
 	var input = $( "#mask1" ).val("123").mask({ mask: "9-99" }),
 		mask = input.data( "mask" );
+
+	input.focus();
 	equal( input.val(), "1-23", "Initial value expected" );
 
 	mask._caret( 1 );
@@ -153,6 +158,7 @@ test( "keypress: typing behaviors", function() {
 	var input = $( "#mask1" ).mask({ mask: "9-9" }),
 		mask = input.data( "mask" );
 
+	input.focus();
 	equal( input.val(), "_-_", "Initial value expected" );
 
 	mask._caret( 0 );

@@ -17,8 +17,8 @@ $.widget( "ui.mask", {
 	options: {
 		definitions: {
 			'9': /[0-9]/,
-			'a': /[A-Za-z]/,
-			'*': /[A-Za-z0-9]/
+			'a': /[A-Za-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]/,
+			'*': /[A-Za-z0-9\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]/
 		},
 		mask: null,
 		placeholder: "_"
@@ -168,10 +168,10 @@ $.widget( "ui.mask", {
 				// because we are constantly setting the value of the input, the change event
 				// never fires - we re-introduce the change event here
 				that._parseValue();
-				that._paint();
 				if ( elem.val() !== lastUnsavedValue ) {
 					elem.trigger( "change" );
 				}
+				return;
 			},
 			keydown: function( event ) {
 				var key = event.keyCode,
@@ -277,7 +277,6 @@ $.widget( "ui.mask", {
 				}
 			}
 		}
-		this._caret( caretPosition < 0 ? this._seekRight( 0 ) : caretPosition );
 	},
 	_shiftRight: function ( bufferPosition ) {
 		var bufferObject,
