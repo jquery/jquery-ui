@@ -212,7 +212,7 @@ $.widget( "ui.mask", {
 				if ( event.metaKey || event.altKey || event.ctrlKey || key < 32 ) {
 					return;
 				}
-				if ( position.begin != position.end ) {
+				if ( position.begin !== position.end ) {
 					that._removeValues( position.begin, position.end );
 				}
 				if ( bufferObject ) {
@@ -282,20 +282,23 @@ $.widget( "ui.mask", {
 	},
 	_shiftRight: function ( bufferPosition ) {
 		var bufferObject,
-			destPosition = this._seekRight( bufferPosition ),
-			destObject,
+			temp,
+			shiftingValue = false,
 			bufferLength = this.buffer.length;
 
-		for ( ; bufferPosition < bufferLength ; bufferPosition += bufferObject.length ) {
+		bufferPosition--;
+		while ( ( bufferPosition = this._seekRight( bufferPosition ) ) < bufferLength )
+		{
 			bufferObject = this.buffer[ bufferPosition ];
-			if ( bufferObject.valid ) {
-				if ( destPosition < bufferLength ) {
-					destObject = this.buffer[ destPosition ];
-					if ( this._validValue( destObject, bufferObject.value ) ) {
-						destObject.value = bufferObject.value;
-						destPosition = this._seekRight( destPosition );
-					}
-					delete bufferObject.value;
+			if ( shiftingValue === false ) {
+				shiftingValue = bufferObject.value;
+			} else {
+				if ( this._validValue( bufferObject, shiftingValue ) ) {
+					temp = bufferObject.value;
+					bufferObject.value = shiftingValue;
+					shiftingValue = temp;
+				} else {
+					return;
 				}
 			}
 		}

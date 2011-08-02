@@ -88,6 +88,34 @@ test( "keydown: Backspace with the cursor to the right of a mask literal", funct
 	deepEqual( mask._caret(), { begin: 0, end: 0 }, "Caret position correct");
 });
 
+test( "keydown: Backspace with multiple values higlighted", function() {
+	expect( 3 );
+	var input = $( "#mask1" ).val("1234567890").mask({ mask: "(999)999-9999" }),
+		mask = input.data( "mask" );
+
+	input.focus();
+	equal( input.val(), "(123)456-7890", "Initial Value Expected" );
+
+	mask._caret( 5, 8 );
+	input.simulate( "keydown", { keyCode: $.ui.keyCode.BACKSPACE });
+	equal( input.val(), "(123)789-0___", "Deleted three highlighted values, pulled values from right" );
+	deepEqual( mask._caret(), { begin: 5, end: 5 }, "Caret position correct");
+});
+
+test( "keypress: Typing with multiple values higlighted", function() {
+	expect( 3 );
+	var input = $( "#mask1" ).val("1234567890").mask({ mask: "(999)999-9999" }),
+		mask = input.data( "mask" );
+
+	input.focus();
+	equal( input.val(), "(123)456-7890", "Initial Value Expected" );
+
+	mask._caret( 5, 8 );
+	input.simulate( "keypress", { keyCode: "0".charCodeAt( 0 ) });
+	equal( input.val(), "(123)078-90__", "Deleted three highlighted values, pulled values from right" );
+	deepEqual( mask._caret(), { begin: 6, end: 6 }, "Caret position correct");
+});
+
 test( "keydown: Delete pulling values", function() {
 	expect( 18 );
 	var input = $( "#mask1" ).val("123").mask({ mask: "9-99" }),
