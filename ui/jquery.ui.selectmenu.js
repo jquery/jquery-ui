@@ -463,10 +463,10 @@ $.widget("ui.selectmenu", {
 				if ( !focusFound ) {
 					// allow the typeahead attribute on the option tag for a more specific lookup
 					var thisText = $( this ).attr( 'typeahead' ) || $(this).text();
-					if ( thisText.indexOf( find + C ) == 0 ) {
-						focusOptSeq( this, i, C )
-					} else if (thisText.indexOf(find+c) == 0 ) {
-						focusOptSeq( this, i, c )
+					if ( thisText.indexOf( find + C ) === 0 ) {
+						focusOptSeq( this, i, C );
+					} else if (thisText.indexOf(find+c) === 0 ) {
+						focusOptSeq( this, i, c );
 					}
 				}
 			});
@@ -480,7 +480,7 @@ $.widget("ui.selectmenu", {
 			// define self._prevChar if needed
 			if ( !self._prevChar ) { self._prevChar = [ '' , 0 ]; }
 
-			var focusFound = false;
+			focusFound = false;
 			function focusOpt( elem, ind ){
 				focusFound = true;
 				$( elem ).trigger( eventType );
@@ -489,7 +489,7 @@ $.widget("ui.selectmenu", {
 			this.list.find( 'li a' ).each(function( i ){
 				if (!focusFound){
 					var thisText = $(this).text();
-					if ( thisText.indexOf( C ) == 0 || thisText.indexOf( c ) == 0 ) {
+					if ( thisText.indexOf( C ) === 0 || thisText.indexOf( c ) === 0 ) {
 						if (self._prevChar[0] == C){
 							if ( self._prevChar[ 1 ] < i ){ focusOpt( this, i ); }
 						} else{ 
@@ -519,7 +519,7 @@ $.widget("ui.selectmenu", {
 			self.newelement.addClass('ui-state-active');
 				
 			self.listWrap.appendTo( o.appendTo );
-			self.list.attr('aria-hidden', false)
+			self.list.attr('aria-hidden', false);
 			
 			if ( o.style == "dropdown" ) {
 				self.newelement.removeClass('ui-corner-all').addClass('ui-corner-top');
@@ -531,7 +531,7 @@ $.widget("ui.selectmenu", {
 			if ( $.browser.msie && $.browser.version.substr( 0,1 ) == 7 ) {
 				self._refreshPosition();
 			}
-			selected = self.list.attr('aria-hidden', false).find('li:not(.' + self.widgetBaseClass + '-group):eq(' + self._selectedIndex() + ') a');
+			var selected = self.list.attr('aria-hidden', false).find('li:not(.' + self.widgetBaseClass + '-group):eq(' + self._selectedIndex() + ') a');
 			if (selected.length) selected[0].focus();
 			// positioning needed for FF, Chrome, IE8, IE7, IE6 (tested 01.08.11 on MS VPC Image)
 			self._refreshPosition();			
@@ -627,8 +627,7 @@ $.widget("ui.selectmenu", {
 		if (!isNaN(amt)) {
 			var currIndex = parseInt(this._focusedOptionLi().data('index') || 0, 10);
 			var newIndex = currIndex + amt;
-		}
-		else {
+		} else {
 			var newIndex = parseInt(this._optionLis.filter(amt).data('index'), 10);
 		}
 
