@@ -14,6 +14,7 @@ $.ui = $.ui || {};
 var horizontalPositions = /left|center|right/,
 	verticalPositions = /top|center|bottom/,
 	center = "center",
+	support = {},
 	_position = $.fn.position,
 	_offset = $.fn.offset;
 
@@ -122,8 +123,10 @@ $.fn.position = function( options ) {
 		}
 
 		// prevent fractions (see #5280)
-		position.left = Math.round( position.left );
-		position.top = Math.round( position.top );
+		if (!support.fractions) {
+			position.left = Math.round( position.left );
+			position.top = Math.round( position.top );
+		}
 
 		collisionPosition = {
 			left: position.left - marginLeft,
@@ -248,5 +251,29 @@ if ( !$.offset.setOffset ) {
 		return _offset.call( this );
 	};
 }
+
+// support fractions (older versions of jquery don't support fractions)
+support.fractions = (function () {
+	var body = document.body, offset,
+	  div = $(body.appendChild( document.createElement( "div" ) ) );
+
+	$.extend( div[0].style, {
+	  position: 'absolute',
+	  left: '10.7432222px',
+	  top: '10.532325px',
+	  height: '30px',
+	  width: '201px'
+	});
+
+	offset = div.offset();
+	div.offset(offset);
+	offset = div.offset();
+
+	// set display to none to avoid a layout bug in IE
+	// http://dev.jquery.com/ticket/4014
+	body.removeChild( div[0] ).style.display = "none";
+
+	return offset.top + offset.left > 20.0;
+})();
 
 }( jQuery ));
