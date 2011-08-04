@@ -17,7 +17,7 @@ function accordion_equalHeights( accordion, min, max ) {
 	deepEqual( sizes[ 0 ], sizes[ 2 ] );
 }
 
-function accordionSetupTeardown() {
+function accordion_setupTeardown() {
 	var animated = $.ui.accordion.prototype.options.animated;
 	return {
 		setup: function() {
