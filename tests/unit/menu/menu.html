@@ -16,30 +16,18 @@
 	<script src="../../jquery.simulate.js"></script>
 	<script src="../testsuite.js"></script>
 
-	<script>
-	function log(message,clear) {
-		if (clear && clear === true) {
-			$("#log").html("");
-		}
-		if ( message === undefined ) {
-			message = $("#log").data("lastItem");
-		}
-		$("#log").prepend( message + "," );
-	}
-	function clickMenu(menu,item) {
-		$("#log").data("lastItem",item);
-		$('li:eq(' + item + ') a',menu).trigger("click");
-	}
-	</script>
+	<script src="menu_test_helpers.js"></script>
 	<script src="menu_core.js"></script>
 	<script src="menu_defaults.js"></script>
 	<script src="menu_events.js"></script>
 	<script src="menu_methods.js"></script>
 	<script src="menu_options.js"></script>
 
-	<script type="text/javascript" src="../swarminject.js"></script>
+	<script src="../swarminject.js"></script>
 	<style>
-	#qunit-fixture { font-size: 10pt; font-family: "trebuchet ms", verdana, arial; }
+	.ui-menu {
+		font-size: 15px;
+	}
 	#menu3 {
 		height: 250px;
 		overflow: auto;
