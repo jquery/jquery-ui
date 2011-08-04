@@ -36,7 +36,7 @@ test( "handle blur: click", function() {
 	});
 
 	$menu.find( "li a:first" ).trigger( "click" );
-	$( "<a/>", { id: "remove"} ).appendTo("body").trigger( "click" );
+	$( "<a>", { id: "remove"} ).appendTo("body").trigger( "click" );
 
 	$("#remove").remove();
 });
