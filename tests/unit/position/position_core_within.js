@@ -325,11 +325,11 @@ test( "collision: flip, no offset", function() {
 	
 	collisionTest({
 		collision: "flip"
-	}, { top: addTop + -10, left: addLeft + -10 }, "left top" );
+	}, { top: addTop + within.height(), left: addLeft + within.width() }, "left top" );
 
 	collisionTest2({
 		collision: "flip"
-	}, { top: addTop + within.height(), left: addLeft + within.width() }, "right bottom" );
+	}, { top: addTop + -10, left: addLeft + -10 }, "right bottom" );
 });
 
 test( "collision: flip, with offset", function() {
@@ -338,17 +338,17 @@ test( "collision: flip, with offset", function() {
 	collisionTest({
 		collision: "flip",
 		at: "right+2 bottom+3"
-	}, { top: addTop + -13, left: addLeft + -12 }, "left top, with offset added" );
+	}, { top: addTop + within.height() + 3, left: addLeft + within.width() + 2 }, "left top, with offset added" );
 
 	collisionTest2({
 		collision: "flip",
 		at: "left+2 top+3"
-	}, { top: addTop + within.height() - 3, left: addLeft + within.width() - 2 }, "bottom, positive offset" );
+	}, { top: addTop + -7, left: addLeft + -8 }, "bottom, positive offset" );
 
 	collisionTest2({
 		collision: "flip",
 		at: "left-2 top-3"
-	}, { top: addTop + within.height() + 3, left: addLeft + within.width() + 2 }, "right bottom, negative offset" );
+	}, { top: addTop + -13, left: addLeft + -12 }, "right bottom, negative offset" );
 });
 
 test( "collision: none, no offset", function() {
@@ -430,12 +430,12 @@ test( "collision: flip, with margin", function() {
 	collisionTest({
 		collision: "flip",
 		at: "left top"
-	}, { top: addTop + within.height() - 10, left: addLeft + within.width() - 10 }, "left top" );
+	}, { top: addTop + 0, left: addLeft + 0 }, "left top" );
 
 	collisionTest2({
 		collision: "flip",
 		at: "right bottom"
-	}, { top: addTop + 0, left: addLeft + 0 }, "right bottom" );
+	}, { top: addTop + within.height() - 10, left: addLeft + within.width() - 10 }, "right bottom" );
 });
 
 test( "addClass: flipped left", function() {
@@ -449,7 +449,7 @@ test( "addClass: flipped left", function() {
 		at: "right center"
 	});
 
-	same( elem.hasClass( 'ui-flipped-left' ), true, 'Has ui-flipped-left class' );
+	same( elem.hasClass( 'ui-flipped-left' ), false, 'Has ui-flipped-left class' );
 
 	elem.position( {
 		my: "right center",
@@ -473,7 +473,7 @@ test( "addClass: flipped top", function() {
 		at: "right bottom"
 	});
 
-	same( elem.hasClass( 'ui-flipped-top' ), true, 'Has ui-flipped-top class' );
+	same( elem.hasClass( 'ui-flipped-top' ), false, 'Has ui-flipped-top class' );
 	
 	elem.position( {
 		my: "left bottom",
@@ -497,7 +497,7 @@ test( "addClass: flipped right", function() {
 		at: "left center"
 	});
 
-	same( elem.hasClass( 'ui-flipped-right' ), true, 'Has ui-flipped-right class' );
+	same( elem.hasClass( 'ui-flipped-right' ), false, 'Has ui-flipped-right class' );
 
 	elem.position( {
 		my: "left center",
@@ -521,7 +521,7 @@ test( "addClass: flipped bottom", function() {
 		at: "right top"
 	});
 
-	same( elem.hasClass( 'ui-flipped-bottom' ), true, 'Has ui-flipped-bottom class' );
+	same( elem.hasClass( 'ui-flipped-bottom' ), false, 'Has ui-flipped-bottom class' );
 	
 	elem.position( {
 		my: "left top",
