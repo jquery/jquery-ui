@@ -50,4 +50,10 @@ test( "#7092 - button creation that requires a matching label does not find labe
 	ok( group.find( "label" ).is( ".ui-button" ) );
 });
 
+test( "#7534 - Button label selector works for ids with \":\"", function() {
+	var group = $( "<span><input type='checkbox' id='check:7534'><label for='check:7534'>Label</label></span>" );
+	group.find( "input" ).button();
+	ok( group.find( "label" ).is( ".ui-button" ), "Found an id with a :" );
+});
+
 })( jQuery );
