@@ -106,7 +106,7 @@ test("title id", function() {
 	equals(titleId, 'ui-dialog-title-2', 'auto-numbered title id');
 	el.remove();
 
-	el = $('<div id="foo"/>').dialog();
+	el = $('<div id="foo">').dialog();
 	titleId = dlg().find('.ui-dialog-title').attr('id');
 	equals(titleId, 'ui-dialog-title-foo', 'carried over title id');
 	el.remove();
@@ -131,7 +131,7 @@ test("ARIA", function() {
 });
 
 test("widget method", function() {
-	var dialog = $("<div/>").appendTo("#main").dialog();
+	var dialog = $("<div>").appendTo("#main").dialog();
 	same(dialog.parent()[0], dialog.dialog("widget")[0]);
 });
 
