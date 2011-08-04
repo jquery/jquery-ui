@@ -358,6 +358,12 @@ $.widget( "ui.autocomplete", {
 		this.source( { term: value }, this.response );
 	},
 
+	_cancelSearch: function( ) {
+		if (this.xhr) {
+			this.xhr.abort();
+		}
+	},
+
 	_response: function( content ) {
 		if ( content ) {
 			content = this._normalize( content );
