@@ -360,7 +360,7 @@ $.widget("ui.dialog", {
 					})
 					.appendTo( uiButtonSet );
 				if ( $.fn.button ) {
-					button.button();
+					button.button({icons: props.icons, text: props.showText});
 				}
 			});
 			self.uiDialog.addClass( "ui-dialog-buttons" );
