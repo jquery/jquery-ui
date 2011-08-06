@@ -94,7 +94,7 @@ test("step, 2", function() {
 	equals(el.val(), "0", "value initialized to");
 	
 	for ( var i = 0 ; i < 5 ; i++ ) {
-		simulateKeyDownUp(el, $.ui.keyCode.UP);
+		spinner_simulateKeyDownUp(el, $.ui.keyCode.UP);
 	}
 	equals(el.val(), "10", "UP 5 times with step: 2");
 
@@ -103,7 +103,7 @@ test("step, 2", function() {
 
 	el.spinner('option', 'step', 2);
 	for ( var i = 0 ; i < 5 ; i++ ) {
-		simulateKeyDownUp(el, $.ui.keyCode.UP);
+		spinner_simulateKeyDownUp(el, $.ui.keyCode.UP);
 	}
 	equals(el.val(), "20.5", "UP 5 times with step: 2");
 });
@@ -115,11 +115,11 @@ test("step, 0.7", function() {
 	});
 	equals(el.val(), "0.0", "value initialized to");
 
-	simulateKeyDownUp(el, $.ui.keyCode.DOWN);
+	spinner_simulateKeyDownUp(el, $.ui.keyCode.DOWN);
 	equals(el.val(), "-0.7", "DOWN 1 time with step: 0.7");
 
 	for ( var i = 0 ; i < 11 ; i++ ) {
-		simulateKeyDownUp(el, $.ui.keyCode.UP);
+		spinner_simulateKeyDownUp(el, $.ui.keyCode.UP);
 	}
 	equals(el.val(), "7.0", "UP 11 times with step: 0.7");
 });

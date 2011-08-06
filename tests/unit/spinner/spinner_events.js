@@ -14,7 +14,7 @@ test("start", function() {
 		}
 	});
 
-	simulateKeyDownUp(el, $.ui.keyCode.UP);
+	spinner_simulateKeyDownUp(el, $.ui.keyCode.UP);
 
 	equals(start, 1, "Start triggered");
 });
@@ -28,7 +28,7 @@ test("spin", function() {
 		}
 	});
 
-	simulateKeyDownUp(el, $.ui.keyCode.UP);
+	spinner_simulateKeyDownUp(el, $.ui.keyCode.UP);
 	
 	equals(spin, 1, "Spin triggered");
 });
@@ -42,7 +42,7 @@ test("stop", function() {
 		}
 	});
 
-	simulateKeyDownUp(el, $.ui.keyCode.DOWN);
+	spinner_simulateKeyDownUp(el, $.ui.keyCode.DOWN);
 	
 	equals(stop, 1, "Stop triggered");
 });
@@ -56,7 +56,7 @@ test("change", function() {
 		}
 	});
 
-	simulateKeyDownUp(el, $.ui.keyCode.UP);
+	spinner_simulateKeyDownUp(el, $.ui.keyCode.UP);
 	el.blur();
 	
 	equals(change, 1, "Change triggered");

@@ -17,16 +17,16 @@ test("disable", function() {
 	ok(wrapper.hasClass("ui-spinner-disabled"), "after: wrapper has ui-spinner-disabled class");
 	ok(el.is(':disabled'), "after: input has disabled attribute");
 		
-	simulateKeyDownUp(el, $.ui.keyCode.UP);	
+	spinner_simulateKeyDownUp(el, $.ui.keyCode.UP);	
 	equals(val, el.val(), "keyboard - value does not change on key UP");
 
-	simulateKeyDownUp(el, $.ui.keyCode.DOWN);
+	spinner_simulateKeyDownUp(el, $.ui.keyCode.DOWN);
 	equals(val, el.val(), "keyboard - value does not change on key DOWN");
 
-	simulateKeyDownUp(el, $.ui.keyCode.PAGE_UP);
+	spinner_simulateKeyDownUp(el, $.ui.keyCode.PAGE_UP);
 	equals(val, el.val(), "keyboard - value does not change on key PGUP");
 
-	simulateKeyDownUp(el, $.ui.keyCode.PAGE_DOWN);
+	spinner_simulateKeyDownUp(el, $.ui.keyCode.PAGE_DOWN);
 	equals(val, el.val(), "keyboard - value does not change on key PGDN");
 	
 	wrapper.find(":ui-button").first().trigger('mousedown').trigger('mouseup');
