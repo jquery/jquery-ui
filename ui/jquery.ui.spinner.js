@@ -234,6 +234,7 @@ $.widget( "ui.spinner", {
 		}
 
 		// TODO refactor, maybe figure out some non-linear math
+		// x*x*x/50000 - x*x/500 + 17*x/200 + 1
 		var newVal = this.value() + step * (this.options.incremental &&
 			this.counter > 20
 				? this.counter > 100
