@@ -89,13 +89,7 @@ $.widget( "ui.spinner", {
 				if ( parsed === null ) {
 					this.element.val( value );
 				}
-				// TODO: is this really correct or just the simplest
-				// way to keep the active class when pressing the buttons?
-				// if the mosue is over the text field and the user tabs out
-				// shouldn't the active class get removed?
-				if ( !uiSpinner.hasClass( "ui-state-hover" ) ) {
-					uiSpinner.removeClass( "ui-state-active" );
-				}
+				uiSpinner.removeClass( "ui-state-active" );
 			}
 		});
 
@@ -139,7 +133,7 @@ $.widget( "ui.spinner", {
 			// TODO: do we really want to consider this a stop?
 			// shouldn't we just stop the repeater and wait until mouseup before
 			// we trigger the stop event?
-			mouseleave: function() {
+			mouseleave: function( event ) {
 				if ( this.spinning ) {
 					this._stop( event );
 					this._change( event );
@@ -284,7 +278,6 @@ $.widget( "ui.spinner", {
 	_stop: function( event ) {
 		clearTimeout( this.timer );
 		this.counter = 0;
-		this.element.focus();
 		this.spinning = false;
 		this._trigger( "stop", event );
 	},
