@@ -10,6 +10,10 @@ commonWidgetTests( "spinner", {
 		value: null,
 
 		// callbacks
-		create: null
+		change: null,
+		create: null,
+		spin: null,
+		start: null,
+		stop: null
 	}
 });

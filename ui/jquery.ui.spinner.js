@@ -24,7 +24,12 @@ $.widget( "ui.spinner", {
 		numberFormat: null,
 		page: 10,
 		step: null,
-		value: null
+		value: null,
+
+		change: null,
+		spin: null,
+		start: null,
+		stop: null
 	},
 
 	_create: function() {
