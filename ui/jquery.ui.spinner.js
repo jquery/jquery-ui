@@ -52,106 +52,87 @@ $.widget( "ui.spinner", {
 	},
 
 	_draw: function() {
-		var self = this,
-			options = self.options;
-
-		var uiSpinner = this.uiSpinner = self.element
+		var uiSpinner = this.uiSpinner = this.element
 			.addClass( "ui-spinner-input" )
 			.attr( "autocomplete", "off" )
-			.wrap( self._uiSpinnerHtml() )
+			.wrap( this._uiSpinnerHtml() )
 			.parent()
 				// add buttons
-				.append( self._buttonHtml() )
-				// add behaviours
-				.disableSelection()
-				// TODO: user ._hoverable
-				.hover(function() {
-					if ( !options.disabled ) {
-						$( this ).addClass( "ui-state-hover" );
-					}
-					self.hovered = true;
-				}, function() {
-					$( this ).removeClass( "ui-state-hover" );
-					self.hovered = false;
-				});
+				.append( this._buttonHtml() )
+				// add behaviors
+				.disableSelection();
+		this._hoverable( uiSpinner );
 
-		// TODO: use ._bind()
-		this.element
-			.attr( "role", "spinbutton" )
-			.bind( "keydown.spinner", function( event ) {
-				if ( options.disabled ) {
-					return;
+		this.element.attr( "role", "spinbutton" );
+		this._bind({
+			keydown: function( event ) {
+				if ( this._start( event ) ) {
+					// TODO: don't stop propagation
+					return this._keydown( event );
 				}
-				if ( self._start( event ) ) {
-					return self._keydown( event );
+			},
+			keyup: function( event ) {
+				if ( this.spinning ) {
+					this._stop( event );
+					this._change( event );
 				}
-				return true;
-			})
-			.bind( "keyup.spinner", function( event ) {
-				if ( options.disabled ) {
-					return;
-				}
-				if ( self.spinning ) {
-					self._stop( event );
-					self._change( event );
-				}
-			})
-			.bind( "focus.spinner", function() {
+			},
+			focus: function() {
 				uiSpinner.addClass( "ui-state-active" );
-				self.focused = true;
-			})
-			.bind( "blur.spinner", function( event ) {
-				self.value( self.element.val() );
-				if ( !self.hovered ) {
+			},
+			blur: function( event ) {
+				this.value( this.element.val() );
+				// TODO: is this really correct or just the simplest
+				// way to keep the active class when pressing the buttons?
+				// if the mosue is over the text field and the user tabs out
+				// shouldn't the active class get removed?
+				if ( !uiSpinner.hasClass( "ui-state-hover" ) ) {
 					uiSpinner.removeClass( "ui-state-active" );
 				}
-				self.focused = false;
-			});
+			}
+		});
 
 		// button bindings
 		this.buttons = uiSpinner.find( ".ui-spinner-button" )
 			.attr( "tabIndex", -1 )
 			.button()
-			.removeClass( "ui-corner-all" )
-			.bind( "mousedown", function( event ) {
-				if ( options.disabled ) {
-					return;
-				}
-				if ( self._start( event ) === false ) {
+			.removeClass( "ui-corner-all" );
+		this._bind( this.buttons, {
+			mousedown: function( event ) {
+				if ( this._start( event ) === false ) {
+					// TODO: do we really want to stop propagation?
 					return false;
 				}
-				self._repeat( null, $( this ).hasClass( "ui-spinner-up" ) ? 1 : -1, event );
-			})
-			.bind( "mouseup", function( event ) {
-				if ( options.disabled ) {
-					return;
+				this._repeat( null, $( event.currentTarget ).hasClass( "ui-spinner-up" ) ? 1 : -1, event );
+			},
+			mouseup: function( event ) {
+				if ( this.spinning ) {
+					this._stop( event );
+					this._change( event );
 				}
-				if ( self.spinning ) {
-					self._stop( event );
-					self._change( event );
-				}
-			})
-			.bind( "mouseenter", function() {
-				if ( self.options.disabled ) {
-					return;
-				}
+			},
+			mouseenter: function( event ) {
 				// button will add ui-state-active if mouse was down while mouseleave and kept down
-				if ( $( this ).hasClass( "ui-state-active" ) ) {
-					if ( self._start( event ) === false ) {
-						return false;
-					}
-					self._repeat( null, $( this ).hasClass( "ui-spinner-up" ) ? 1 : -1, event );
+				if ( !$( event.currentTarget ).hasClass( "ui-state-active" ) ) {
+					return;
 				}
-			})
-			.bind( "mouseleave", function() {
-				if ( self.spinning ) {
-					self._stop( event );
-					self._change( event );
+
+				if ( this._start( event ) === false ) {
+					return false;
 				}
-			});
+				this._repeat( null, $( event.currentTarget ).hasClass( "ui-spinner-up" ) ? 1 : -1, event );
+			},
+			// TODO: we shouldn't trigger any events until mouseup
+			mouseleave: function() {
+				if ( this.spinning ) {
+					this._stop( event );
+					this._change( event );
+				}
+			}
+		});
 
 		// disable spinner if element was already disabled
-		if ( options.disabled ) {
+		if ( this.options.disabled ) {
 			this.disable();
 		}
 	},
@@ -185,23 +166,25 @@ $.widget( "ui.spinner", {
 		if ( !$.fn.mousewheel ) {
 			return;
 		}
-		var self = this;
-		this.element.bind( "mousewheel.spinner", function( event, delta ) {
-			if ( self.options.disabled || !delta ) {
-				return;
-			}
-			if ( !self.spinning && !self._start( event ) ) {
-				return false;
-			}
-			self._spin( (delta > 0 ? 1 : -1) * self.options.step, event );
-			clearTimeout( self.timeout );
-			self.timeout = setTimeout(function() {
-				if ( self.spinning ) {
-					self._stop( event );
-					self._change( event );
+		this._bind({
+			mousewheel: function( event, delta ) {
+				if ( !delta ) {
+					return;
 				}
-			}, 100);
-			event.preventDefault();
+				if ( !this.spinning && !this._start( event ) ) {
+					return false;
+				}
+
+				this._spin( (delta > 0 ? 1 : -1) * this.options.step, event );
+				clearTimeout( this.timeout );
+				this.timeout = setTimeout(function() {
+					if ( this.spinning ) {
+						this._stop( event );
+						this._change( event );
+					}
+				}, 100 );
+				event.preventDefault();
+			}
 		});
 	},
 
@@ -232,15 +215,15 @@ $.widget( "ui.spinner", {
 	},
 
 	_repeat: function( i, steps, event ) {
-		var self = this;
+		var that = this;
 		i = i || 500;
 
 		clearTimeout( this.timer );
 		this.timer = setTimeout(function() {
-			self._repeat( 40, steps, event );
+			that._repeat( 40, steps, event );
 		}, i );
 
-		self._spin( steps * self.options.step, event );
+		this._spin( steps * this.options.step, event );
 	},
 
 	_spin: function( step, event ) {
@@ -282,10 +265,8 @@ $.widget( "ui.spinner", {
 	},
 
 	_stop: function( event ) {
+		clearTimeout( this.timer );
 		this.counter = 0;
-		if ( this.timer ) {
-			clearTimeout( this.timer );
-		}
 		this.element.focus();
 		this.spinning = false;
 		this._trigger( "stop", event );
