@@ -19,40 +19,33 @@ $.widget( "ui.spinner", {
 	widgetEventPrefix: "spin",
 	options: {
 		incremental: true,
-		max: null,
-		min: null,
+		max: Number.MAX_VALUE,
+		min: -Number.MAX_VALUE,
 		numberFormat: null,
 		page: 10,
-		step: null,
+		step: 1,
 		value: null
 	},
 
 	_create: function() {
-		this._markupOptions();
+		this.value( this.options.value !== null ? this.options.value : this.element.val() || 0 );
 		this._draw();
 		this._mousewheel();
 		this._aria();
 	},
 
-	// TODO: should we use _getCreateOptions() now?
-	// would increase overhead of init when options are specified,
-	// but would move the defaults to the right location
-	// and use our API the way it's meant to be used
-	_markupOptions: function() {
-		var that = this;
-		$.each({
-			min: -Number.MAX_VALUE,
-			max: Number.MAX_VALUE,
-			step: 1
-		}, function( attr, defaultValue ) {
-			if ( that.options[ attr ] === null ) {
-				var value = that.element.attr( attr );
-				that.options[ attr ] = typeof value === "string" && value.length > 0 ?
-					that._parse( value ) :
-					defaultValue;
+	_getCreateOptions: function() {
+		var options = {},
+			element = this.element;
+
+		$.each( [ "min", "max", "step" ], function( i, option ) {
+			var value = element.attr( option );
+			if ( value !== undefined ) {
+				options[ option ] = value;
 			}
 		});
-		this.value( this.options.value !== null ? this.options.value : this.element.val() || 0 );
+
+		return options;
 	},
 
 	_draw: function() {
