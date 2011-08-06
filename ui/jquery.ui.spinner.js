@@ -84,7 +84,13 @@ $.widget( "ui.spinner", {
 				uiSpinner.addClass( "ui-state-active" );
 			},
 			blur: function( event ) {
-				this.value( this.element.val() );
+				// don't clear invalid values on blur
+				var value = this.element.val(),
+					parsed = this._parse( value );
+				this.option( "value", parsed );
+				if ( parsed === null ) {
+					this.element.val( value );
+				}
 				// TODO: is this really correct or just the simplest
 				// way to keep the active class when pressing the buttons?
 				// if the mosue is over the text field and the user tabs out
