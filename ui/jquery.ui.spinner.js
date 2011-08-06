@@ -103,14 +103,15 @@ $.widget( "ui.spinner", {
 		this._bind( this.buttons, {
 			mousedown: function( event ) {
 				if ( this._start( event ) === false ) {
-					// TODO: do we really want to stop propagation?
-					return false;
+					return;
 				}
+
 				this._repeat( null, $( event.currentTarget ).hasClass( "ui-spinner-up" ) ? 1 : -1, event );
 			},
 			mouseup: function( event ) {
 				if ( this.spinning ) {
 					this._stop( event );
+					// TODO: don't trigger change until the field is blurred
 					this._change( event );
 				}
 			},
@@ -125,7 +126,9 @@ $.widget( "ui.spinner", {
 				}
 				this._repeat( null, $( event.currentTarget ).hasClass( "ui-spinner-up" ) ? 1 : -1, event );
 			},
-			// TODO: we shouldn't trigger any events until mouseup
+			// TODO: do we really want to consider this a stop?
+			// shouldn't we just stop the repeater and wait until mouseup before
+			// we trigger the stop event?
 			mouseleave: function() {
 				if ( this.spinning ) {
 					this._stop( event );
@@ -183,6 +186,7 @@ $.widget( "ui.spinner", {
 				this.timeout = setTimeout(function() {
 					if ( this.spinning ) {
 						this._stop( event );
+						// TODO: don't trigger change until the field is blurred
 						this._change( event );
 					}
 				}, 100 );
