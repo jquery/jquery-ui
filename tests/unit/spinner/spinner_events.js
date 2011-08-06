@@ -57,6 +57,7 @@ test("change", function() {
 	});
 
 	simulateKeyDownUp(el, $.ui.keyCode.UP);
+	el.blur();
 	
 	equals(change, 1, "Change triggered");
 });

@@ -72,14 +72,10 @@ $.widget( "ui.spinner", {
 					event.preventDefault();
 				}
 			},
-			keyup: function( event ) {
-				if ( this.spinning ) {
-					this._stop( event );
-					this._change( event );
-				}
-			},
+			keyup: "_stop",
 			focus: function() {
 				uiSpinner.addClass( "ui-state-active" );
+				this.previous = this.options.value;
 			},
 			blur: function( event ) {
 				// don't clear invalid values on blur
@@ -90,6 +86,9 @@ $.widget( "ui.spinner", {
 					this.element.val( value );
 				}
 				uiSpinner.removeClass( "ui-state-active" );
+				if ( this.previous !== this.options.value ) {
+					this._trigger( "change", event );
+				}
 			}
 		});
 
@@ -112,13 +111,7 @@ $.widget( "ui.spinner", {
 
 				this._repeat( null, $( event.currentTarget ).hasClass( "ui-spinner-up" ) ? 1 : -1, event );
 			},
-			mouseup: function( event ) {
-				if ( this.spinning ) {
-					this._stop( event );
-					// TODO: don't trigger change until the field is blurred
-					this._change( event );
-				}
-			},
+			mouseup: "_stop",
 			mouseenter: function( event ) {
 				// button will add ui-state-active if mouse was down while mouseleave and kept down
 				if ( !$( event.currentTarget ).hasClass( "ui-state-active" ) ) {
@@ -133,12 +126,7 @@ $.widget( "ui.spinner", {
 			// TODO: do we really want to consider this a stop?
 			// shouldn't we just stop the repeater and wait until mouseup before
 			// we trigger the stop event?
-			mouseleave: function( event ) {
-				if ( this.spinning ) {
-					this._stop( event );
-					this._change( event );
-				}
-			}
+			mouseleave: "_stop"
 		});
 
 		// disable spinner if element was already disabled
@@ -186,12 +174,10 @@ $.widget( "ui.spinner", {
 				}
 
 				this._spin( (delta > 0 ? 1 : -1) * this.options.step, event );
-				clearTimeout( this.timeout );
-				this.timeout = setTimeout(function() {
+				clearTimeout( this.mousewheelTimer );
+				this.mousewheelTimer = setTimeout(function() {
 					if ( this.spinning ) {
 						this._stop( event );
-						// TODO: don't trigger change until the field is blurred
-						this._change( event );
 					}
 				}, 100 );
 				event.preventDefault();
@@ -276,14 +262,15 @@ $.widget( "ui.spinner", {
 	},
 
 	_stop: function( event ) {
+		if ( !this.spinning ) {
+			return;
+		}
+
 		clearTimeout( this.timer );
+		clearTimeout( this.mousewheelTimer );
 		this.counter = 0;
 		this.spinning = false;
 		this._trigger( "stop", event );
-	},
-
-	_change: function( event ) {
-		this._trigger( "change", event );
 	},
 
 	_setOption: function( key, value ) {
