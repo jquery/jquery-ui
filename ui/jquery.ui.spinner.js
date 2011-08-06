@@ -66,9 +66,8 @@ $.widget( "ui.spinner", {
 		this.element.attr( "role", "spinbutton" );
 		this._bind({
 			keydown: function( event ) {
-				if ( this._start( event ) ) {
-					// TODO: don't stop propagation
-					return this._keydown( event );
+				if ( this._start( event ) && this._keydown( event ) ) {
+					event.preventDefault();
 				}
 			},
 			keyup: function( event ) {
@@ -144,21 +143,21 @@ $.widget( "ui.spinner", {
 		switch ( event.keyCode ) {
 		case keyCode.UP:
 			this._repeat( null, 1, event );
-			return false;
+			return true;
 		case keyCode.DOWN:
 			this._repeat( null, -1, event );
-			return false;
+			return true;
 		case keyCode.PAGE_UP:
 			this._repeat( null, options.page, event );
-			return false;
+			return true;
 		case keyCode.PAGE_DOWN:
 			this._repeat( null, -options.page, event );
-			return false;
+			return true;
 		case keyCode.ENTER:
 			this.value( this.element.val() );
 		}
 
-		return true;
+		return false;
 	},
 
 	_mousewheel: function() {
