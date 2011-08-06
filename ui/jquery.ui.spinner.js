@@ -62,9 +62,7 @@ $.widget( "ui.spinner", {
 			.wrap( this._uiSpinnerHtml() )
 			.parent()
 				// add buttons
-				.append( this._buttonHtml() )
-				// add behaviors
-				.disableSelection();
+				.append( this._buttonHtml() );
 		this._hoverable( uiSpinner );
 
 		this.element.attr( "role", "spinbutton" );
@@ -108,6 +106,12 @@ $.widget( "ui.spinner", {
 			.removeClass( "ui-corner-all" );
 		this._bind( this.buttons, {
 			mousedown: function( event ) {
+				// ensure focus is on (or stays on) the text field
+				event.preventDefault();
+				if ( document.activeElement !== this.element[ 0 ] ) {
+					this.element.focus();
+				}
+
 				if ( this._start( event ) === false ) {
 					return;
 				}
