@@ -28,12 +28,16 @@ $.widget( "ui.spinner", {
 	},
 
 	_create: function() {
-		this._draw();
 		this._markupOptions();
+		this._draw();
 		this._mousewheel();
 		this._aria();
 	},
 
+	// TODO: should we use _getCreateOptions() now?
+	// would increase overhead of init when options are specified,
+	// but would move the defaults to the right location
+	// and use our API the way it's meant to be used
 	_markupOptions: function() {
 		var that = this;
 		$.each({
