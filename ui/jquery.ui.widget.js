@@ -306,7 +306,8 @@ $.Widget.prototype = {
 			this.bindings = this.bindings.add( element );
 		}
 
-		var instance = this;
+		var instance = this,
+			widget = this.widget();
 		$.each( handlers, function( event, handler ) {
 			function handlerProxy() {
 				// allow widgets to customize the disabled handling
@@ -323,7 +324,7 @@ $.Widget.prototype = {
 				eventName = match[1] + "." + instance.widgetName,
 				selector = match[2];
 			if ( selector ) {
-				element.delegate( selector, eventName, handlerProxy );
+				widget.delegate( selector, eventName, handlerProxy );
 			} else {
 				element.bind( eventName, handlerProxy );
 			}
