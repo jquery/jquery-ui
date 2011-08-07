@@ -13,6 +13,18 @@
  */
 (function( $ ) {
 
+function modifier( fn ) {
+	return function() {
+		var previous = this.options.value;
+		fn.apply( this, arguments );
+		this._format();
+		this._aria();
+		if ( previous !== this.options.value ) {
+			this._trigger( "change" );
+		}
+	};
+}
+
 $.widget( "ui.spinner", {
 	version: "@VERSION",
 	defaultElement: "<input>",
@@ -33,7 +45,7 @@ $.widget( "ui.spinner", {
 	},
 
 	_create: function() {
-		this.value( this.options.value );
+		this._value( this.options.value );
 		this._draw();
 		this._mousewheel();
 		this._aria();
@@ -73,18 +85,19 @@ $.widget( "ui.spinner", {
 			keyup: "_stop",
 			focus: function() {
 				uiSpinner.addClass( "ui-state-active" );
-				this.previous = this.options.value;
+				this.previous = this.element.val();
 			},
 			blur: function( event ) {
 				// don't clear invalid values on blur
-				var value = this.element.val(),
-					parsed = this._parse( value );
-				this.option( "value", parsed );
-				if ( parsed === null ) {
+				var value = this.element.val();
+				this._value( value );
+				if ( this.element.val() === "" ) {
 					this.element.val( value );
 				}
 				uiSpinner.removeClass( "ui-state-active" );
-				if ( this.previous !== this.options.value ) {
+				// TODO: what should trigger change?
+				// element.val() or options.value?
+				if ( this.previous !== this.element.val() ) {
 					this._trigger( "change", event );
 				}
 			}
@@ -151,7 +164,7 @@ $.widget( "ui.spinner", {
 			this._repeat( null, -options.page, event );
 			return true;
 		case keyCode.ENTER:
-			this.value( this.element.val() );
+			this._value( this.element.val() );
 		}
 
 		return false;
@@ -241,7 +254,7 @@ $.widget( "ui.spinner", {
 		newVal = this._trimValue( newVal );
 
 		if ( this._trigger( "spin", event, { value: newVal } ) !== false) {
-			this.value( newVal );
+			this._value( newVal );
 			this.counter++;
 		}
 	},
@@ -273,9 +286,11 @@ $.widget( "ui.spinner", {
 	},
 
 	_setOption: function( key, value ) {
-		if ( key === "value") {
-			value = this._trimValue( this._parse(value) );
+		if ( key === "value" ) {
+			return this._setOptionValue( value );
 		}
+
+		this._super( "_setOption", key, value );
 
 		if ( key === "disabled" ) {
 			if ( value ) {
@@ -286,17 +301,24 @@ $.widget( "ui.spinner", {
 				this.buttons.button( "enable" );
 			}
 		}
-
-		this._super( "_setOption", key, value );
 	},
 
-	_setOptions: function( options ) {
-		this._super( "_setOptions", options );
-		if ( "value" in options || "numberFormat" in options ) {
-			this._format( this.options.value );
+	_setOptionValue: function( value ) {
+		var previous = this.options.value;
+		this._value( value );
+		if ( previous !== this.options.value ) {
+			this._trigger( "change" );
 		}
-		this._aria();
 	},
+
+	_setOptions: modifier(function( options ) {
+		this._super( "_setOptions", options );
+
+		// handle any options that might cause value to change, e.g., min
+		this._value( this._trimValue( this.options.value ) );
+		this._format();
+		this._aria();
+	}),
 
 	_aria: function() {
 		this.element.attr({
@@ -313,8 +335,15 @@ $.widget( "ui.spinner", {
 		return isNaN( val ) ? null : val;
 	},
 
-	_format: function( num ) {
+	_format: function() {
+		var num = this.options.value;
 		this.element.val( $.global && this.options.numberFormat ? $.global.format( num, this.options.numberFormat ) : num );
+	},
+
+	// update the value without triggering change
+	_value: function( value ) {
+		this.options.value = this._trimValue( this._parse(value) );
+		this._format();
 	},
 
 	destroy: function() {
@@ -330,21 +359,27 @@ $.widget( "ui.spinner", {
 		this.uiSpinner.replaceWith( this.element );
 	},
 
-	stepUp: function( steps ) {
+	stepUp: modifier(function( steps ) {
+		this._stepUp( steps );
+	}),
+	_stepUp: function( steps ) {
 		this._spin( (steps || 1) * this.options.step );
 	},
 
-	stepDown: function( steps ) {
+	stepDown: modifier(function( steps ) {
+		this._stepDown( steps );
+	}),
+	_stepDown: function( steps ) {
 		this._spin( (steps || 1) * -this.options.step );
 	},
 
-	pageUp: function( pages ) {
-		this.stepUp( (pages || 1) * this.options.page );
-	},
+	pageUp: modifier(function( pages ) {
+		this._stepUp( (pages || 1) * this.options.page );
+	}),
 
-	pageDown: function( pages ) {
-		this.stepDown( (pages || 1) * this.options.page );
-	},
+	pageDown: modifier(function( pages ) {
+		this._stepDown( (pages || 1) * this.options.page );
+	}),
 
 	value: function( newVal ) {
 		if ( !arguments.length ) {
