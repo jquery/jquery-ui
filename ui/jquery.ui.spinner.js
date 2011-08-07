@@ -287,7 +287,7 @@ $.widget( "ui.spinner", {
 
 	_setOption: function( key, value ) {
 		if ( key === "value" ) {
-			return this._setOptionValue( value );
+			return this._value( value );
 		}
 
 		this._super( "_setOption", key, value );
@@ -300,14 +300,6 @@ $.widget( "ui.spinner", {
 				this.element.prop( "disabled", false );
 				this.buttons.button( "enable" );
 			}
-		}
-	},
-
-	_setOptionValue: function( value ) {
-		var previous = this.options.value;
-		this._value( value );
-		if ( previous !== this.options.value ) {
-			this._trigger( "change" );
 		}
 	},
 
@@ -342,6 +334,7 @@ $.widget( "ui.spinner", {
 	_value: function( value ) {
 		this.options.value = this._trimValue( this._parse(value) );
 		this._format();
+		this._aria();
 	},
 
 	destroy: function() {
