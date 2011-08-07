@@ -253,7 +253,7 @@ $.widget( "ui.spinner", {
 		// clamp the new value 
 		newVal = this._trimValue( newVal );
 
-		if ( this._trigger( "spin", event, { value: newVal } ) !== false) {
+		if ( !this.spinning || this._trigger( "spin", event, { value: newVal } ) !== false) {
 			this._value( newVal );
 			this.counter++;
 		}

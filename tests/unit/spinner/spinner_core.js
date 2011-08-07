@@ -176,4 +176,13 @@ test( "ARIA attributes", function() {
 	equal( element.attr( "aria-valuemax" ), 10, "max option changed aria-valuemax changes" );
 });
 
+test( "focus text field when pressing button", function() {
+	expect( 2 );
+	var element = $( "#spin" ).spinner();
+	$( "body" ).focus();
+	ok( element[ 0 ] !== document.activeElement, "not focused before" );
+	element.spinner( "widget" ).find( ".ui-spinner-up" ).mousedown();
+	ok( element[ 0 ] === document.activeElement, "focused after" );
+});
+
 })( jQuery );
