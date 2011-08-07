@@ -2,6 +2,13 @@
 
 module( "spinner: methods" );
 
+test( "destroy", function() {
+	expect( 1 );
+	domEqual( "#spin", function() {
+		$( "#spin" ).spinner().spinner( "destroy" );
+	});
+});
+
 test( "disable", function() {
 	expect( 14 );
 	var element = $( "#spin" ).spinner({ value: 2 }),

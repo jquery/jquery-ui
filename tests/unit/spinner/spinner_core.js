@@ -2,17 +2,6 @@
 
 module( "spinner: core" );
 
-// TODO: move to spinner_methods
-test( "destroy", function() {
-	expect( 1 );
-	// TODO: is this cheat still needed?
-	// cheat a bit to get IE6 to pass
-	$( "#spin" ).val( 0 );
-	domEqual( "#spin", function() {
-		$( "#spin" ).spinner().spinner( "destroy" );
-	});
-});
-
 test( "keydown UP on input, increases value not greater than max", function() {
 	expect( 5 );
 	var element = $( "#spin" ).spinner({
