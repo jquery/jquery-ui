@@ -239,16 +239,7 @@ $.widget( "ui.spinner", {
 			this.counter = 1;
 		}
 
-		// TODO refactor, maybe figure out some non-linear math
-		// x*x*x/50000 - x*x/500 + 17*x/200 + 1
-		var newVal = this.value() + step * (this.options.incremental &&
-			this.counter > 20
-				? this.counter > 100
-					? this.counter > 200
-						? 100
-						: 10
-					: 2
-				: 1);
+		var newVal = this.value() + step * this._increment( this.counter );
 
 		// clamp the new value 
 		newVal = this._trimValue( newVal );
@@ -257,6 +248,12 @@ $.widget( "ui.spinner", {
 			this._value( newVal );
 			this.counter++;
 		}
+	},
+
+	_increment: function( i ) {
+		return this.options.incremental ?
+			Math.floor( i*i*i/50000 - i*i/500 + 17*i/200 + 1 ) :
+			1;
 	},
 
 	_trimValue: function( value ) {
