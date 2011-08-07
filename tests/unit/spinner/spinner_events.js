@@ -1,65 +1,50 @@
-/*
- * spinner_events.js
- */
-(function($) {
+(function( $ ) {
 
-module("spinner: events");
+module( "spinner: events" );
 
-test("start", function() {
-	var start = 0;
-	
-	var el = $("#spin").spinner({
-		start: function(){
-			start++;
+test( "start", function() {
+	expect( 1 );
+	var element = $( "#spin" ).spinner({
+		start: function() {
+			ok( true, "start" );
 		}
 	});
 
-	spinner_simulateKeyDownUp(el, $.ui.keyCode.UP);
-
-	equals(start, 1, "Start triggered");
+	spinner_simulateKeyDownUp( element, $.ui.keyCode.UP );
 });
 
-test("spin", function() {
-	var spin = 0;
-	
-	var el = $("#spin").spinner({
+test( "spin", function() {
+	expect( 1 );
+	var element = $( "#spin" ).spinner({
 		spin: function(){
-			spin++;
+			ok( true, "spin" );
 		}
 	});
 
-	spinner_simulateKeyDownUp(el, $.ui.keyCode.UP);
-	
-	equals(spin, 1, "Spin triggered");
+	spinner_simulateKeyDownUp( element, $.ui.keyCode.UP );
 });
 
-test("stop", function() {
-	var stop = 0;
-	
-	var el = $("#spin").spinner({
+test( "stop", function() {
+	expect( 1 );
+	var element = $( "#spin" ).spinner({
 		stop: function(){
-			stop++;
+			ok( true, "stop" );
 		}
 	});
 
-	spinner_simulateKeyDownUp(el, $.ui.keyCode.DOWN);
-	
-	equals(stop, 1, "Stop triggered");
+	spinner_simulateKeyDownUp( element, $.ui.keyCode.DOWN );
 });
 
-test("change", function() {
-	var change = 0;
-	
-	var el = $("#spin").spinner({
+test( "change", function() {
+	expect( 1 );
+	var element = $( "#spin" ).spinner({
 		change: function(){
-			change++;
+			ok( true, "change" );
 		}
 	});
 
-	spinner_simulateKeyDownUp(el, $.ui.keyCode.UP);
-	el.blur();
-	
-	equals(change, 1, "Change triggered");
+	spinner_simulateKeyDownUp( element, $.ui.keyCode.UP );
+	element.blur();
 });
 
-})(jQuery);
+})( jQuery );
