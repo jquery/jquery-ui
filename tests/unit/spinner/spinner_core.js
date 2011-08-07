@@ -11,15 +11,15 @@ test( "keydown UP on input, increases value not greater than max", function() {
 	});
 
 	spinner_simulateKeyDownUp( element, $.ui.keyCode.UP );
-	equals( element.val(), 80 );
+	equal( element.val(), 80 );
 	spinner_simulateKeyDownUp( element, $.ui.keyCode.UP );
-	equals( element.val(), 90 );
+	equal( element.val(), 90 );
 	spinner_simulateKeyDownUp( element, $.ui.keyCode.UP );
-	equals( element.val(), 100 );
+	equal( element.val(), 100 );
 	spinner_simulateKeyDownUp( element, $.ui.keyCode.UP );
-	equals( element.val(), 100 );
+	equal( element.val(), 100 );
 	spinner_simulateKeyDownUp( element, $.ui.keyCode.UP );
-	equals( element.val(), 100 );
+	equal( element.val(), 100 );
 });
 
 test( "keydown DOWN on input, decreases value not less than min", function() {
@@ -31,18 +31,18 @@ test( "keydown DOWN on input, decreases value not less than min", function() {
 	});
 
 	spinner_simulateKeyDownUp( element, $.ui.keyCode.DOWN );
-	equals( element.val(), 40 );
+	equal( element.val(), 40 );
 	spinner_simulateKeyDownUp( element, $.ui.keyCode.DOWN );
-	equals( element.val(), 30 );
+	equal( element.val(), 30 );
 	spinner_simulateKeyDownUp( element, $.ui.keyCode.DOWN );
-	equals( element.val(), 20 );
+	equal( element.val(), 20 );
 	spinner_simulateKeyDownUp( element, $.ui.keyCode.DOWN );
-	equals( element.val(), 20 );
+	equal( element.val(), 20 );
 	spinner_simulateKeyDownUp( element, $.ui.keyCode.DOWN );
-	equals( element.val(), 20 );
+	equal( element.val(), 20 );
 });
 
-test( "keydown PGUP on input, increases value not greater than max", function() {
+test( "keydown PAGE_UP on input, increases value not greater than max", function() {
 	expect( 5 );
 	var element = $( "#spin" ).spinner({
 		max: 100,
@@ -51,18 +51,18 @@ test( "keydown PGUP on input, increases value not greater than max", function() 
 	});
 
 	spinner_simulateKeyDownUp( element, $.ui.keyCode.PAGE_UP );
-	equals( element.val(), 80 );
+	equal( element.val(), 80 );
 	spinner_simulateKeyDownUp( element, $.ui.keyCode.PAGE_UP );
-	equals( element.val(), 90 );
+	equal( element.val(), 90 );
 	spinner_simulateKeyDownUp( element, $.ui.keyCode.PAGE_UP );
-	equals( element.val(), 100 );
+	equal( element.val(), 100 );
 	spinner_simulateKeyDownUp( element, $.ui.keyCode.PAGE_UP );
-	equals( element.val(), 100 );
+	equal( element.val(), 100 );
 	spinner_simulateKeyDownUp( element, $.ui.keyCode.PAGE_UP );
-	equals( element.val(), 100 );
+	equal( element.val(), 100 );
 });
 
-test( "keydown PGDN on input, decreases value not less than min", function() {
+test( "keydown PAGE_DOWN on input, decreases value not less than min", function() {
 	expect( 5 );
 	var element = $( "#spin" ).spinner({
 		min: 20,
@@ -71,70 +71,109 @@ test( "keydown PGDN on input, decreases value not less than min", function() {
 	});
 
 	spinner_simulateKeyDownUp( element, $.ui.keyCode.PAGE_DOWN );
-	equals( element.val(), 40 );
+	equal( element.val(), 40 );
 	spinner_simulateKeyDownUp( element, $.ui.keyCode.PAGE_DOWN );
-	equals( element.val(), 30 );
+	equal( element.val(), 30 );
 	spinner_simulateKeyDownUp( element, $.ui.keyCode.PAGE_DOWN );
-	equals( element.val(), 20 );
+	equal( element.val(), 20 );
 	spinner_simulateKeyDownUp( element, $.ui.keyCode.PAGE_DOWN );
-	equals( element.val(), 20 );
+	equal( element.val(), 20 );
 	spinner_simulateKeyDownUp( element, $.ui.keyCode.PAGE_DOWN );
-	equals( element.val(), 20 );
+	equal( element.val(), 20 );
 });
 
-test( "mouse click on buttons", function() {
-	expect( 2 );
-	var element = $( "#spin" ).spinner(),
-		val = 0;
+test( "mouse click on up button, increases value not greater than max", function() {
+	expect( 3 );
+	var element = $( "#spin" ).spinner({
+			max: 20,
+			value: 18
+		}),
+		button = element.spinner( "widget" ).find( ".ui-spinner-up" );
 
-	$( ".ui-spinner-up" ).trigger( "mousedown" ).trigger( "mouseup" );
-	equals( element.val(), ++val, "mouse click on up" );
-
-	$( ".ui-spinner-down" ).trigger( "mousedown" ).trigger( "mouseup" );
-	equals( element.val(), --val, "mouse click on down");
+	button.trigger( "mousedown" ).trigger( "mouseup" );
+	equal( element.val(), 19 );
+	button.trigger( "mousedown" ).trigger( "mouseup" );
+	equal( element.val(), 20 );
+	button.trigger( "mousedown" ).trigger( "mouseup" );
+	equal( element.val(), 20 );
 });
 
-test( "mouse wheel on input", function() {
-	expect( 4 );
-
-	var element = $( "#spin" ).spinner();
-	equal( element.val(), 0 );
-	element.trigger( "mousewheel", 1 );
+test( "mouse click on up button, increases value not greater than max", function() {
+	expect( 3 );
+	var element = $( "#spin" ).spinner({
+		min: 0,
+		value: 2
+	}),
+	button = element.spinner( "widget" ).find( ".ui-spinner-down" );
+	
+	button.trigger( "mousedown" ).trigger( "mouseup" );
 	equal( element.val(), 1 );
+	button.trigger( "mousedown" ).trigger( "mouseup" );
+	equal( element.val(), 0 );
+	button.trigger( "mousedown" ).trigger( "mouseup" );
+	equal( element.val(), 0 );
+});
 
-	element.trigger( "mousewheel", -1 );
+test( "mousewheel on input", function() {
+	expect( 5 );
+
+	var element = $( "#spin" ).spinner({
+		step: 2
+	});
+
 	equal( element.val(), 0 );
 
-	element.trigger( "mousewheel", -1 );
-	equal(element.val(), -1 );
+	element.trigger( "mousewheel" );
+	equal( element.val(), 0, "mousewheel event without delta does not change value" );
+
+	element.trigger( "mousewheel", 1 );
+	equal( element.val(), 2 );
+
+	element.trigger( "mousewheel", -0.2 );
+	equal( element.val(), 0 );
+
+	element.trigger( "mousewheel", -15 );
+	equal(element.val(), -2 );
 });
 
 test( "reading HTML5 attributes", function() {
-	expect( 4 );
-	var element = $( "<input id='spinner' type='number' min='-100' max='100' value='5' step='2'>" ).spinner();
-	equals( element.spinner( "option", "value" ), 5, "value" );	
-	equals( element.spinner( "option", "max" ), 100, "max" );
-	equals( element.spinner( "option", "min" ), -100, "min" );
-	equals( element.spinner( "option", "step" ), 2, "step" );
+	expect( 8 );
+	var markup = "<input type='number' min='-100' max='100' value='5' step='2'>",
+		element = $( markup ).spinner();
+	equal( element.spinner( "option", "value" ), 5, "value from markup" );	
+	equal( element.spinner( "option", "min" ), -100, "min from markup" );
+	equal( element.spinner( "option", "max" ), 100, "max from markup" );
+	equal( element.spinner( "option", "step" ), 2, "step from markup" );
+
+	element = $( markup ).spinner({
+		min: -200,
+		max: 200,
+		value: 20,
+		step: 5
+	});
+	equal( element.spinner( "option", "value" ), 20, "value from options" );
+	equal( element.spinner( "option", "min" ), -200, "min from options" );
+	equal( element.spinner( "option", "max" ), 200, "max from options" );
+	equal( element.spinner( "option", "step" ), 5, "stop from options" );
 });
 
 test( "ARIA attributes", function() {
 	expect( 7 );
 	var element = $( "#spin" ).spinner({ min: -5, max: 5, value: 2 });
 
-	equals( element.attr( "role" ), "spinbutton", "role" );
-	equals( element.attr( "aria-valuemin" ), -5, "aria-valuemin" );
-	equals( element.attr( "aria-valuemax" ), 5, "aria-valuemax" );
-	equals( element.attr( "aria-valuenow" ), 2, "aria-valuenow" );
+	equal( element.attr( "role" ), "spinbutton", "role" );
+	equal( element.attr( "aria-valuemin" ), -5, "aria-valuemin" );
+	equal( element.attr( "aria-valuemax" ), 5, "aria-valuemax" );
+	equal( element.attr( "aria-valuenow" ), 2, "aria-valuenow" );
 
 	element.spinner( "stepUp" );
 
-	equals( element.attr( "aria-valuenow" ), 3, "stepUp 1 step changes aria-valuenow" );
+	equal( element.attr( "aria-valuenow" ), 3, "stepUp 1 step changes aria-valuenow" );
 
 	element.spinner( "option", { min: -10, max: 10 } );
 
-	equals( element.attr( "aria-valuemin" ), -10, "min option changed aria-valuemin changes" );
-	equals( element.attr( "aria-valuemax" ), 10, "max option changed aria-valuemax changes" );
+	equal( element.attr( "aria-valuemin" ), -10, "min option changed aria-valuemin changes" );
+	equal( element.attr( "aria-valuemax" ), 10, "max option changed aria-valuemax changes" );
 });
 
 })( jQuery );
