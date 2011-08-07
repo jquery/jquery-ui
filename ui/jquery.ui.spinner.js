@@ -316,8 +316,6 @@ $.widget( "ui.spinner", {
 
 		// handle any options that might cause value to change, e.g., min
 		this._value( this._trimValue( this.options.value ) );
-		this._format();
-		this._aria();
 	}),
 
 	_aria: function() {
