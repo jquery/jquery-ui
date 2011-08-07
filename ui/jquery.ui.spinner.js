@@ -292,7 +292,7 @@ $.widget( "ui.spinner", {
 
 	_setOptions: function( options ) {
 		this._super( "_setOptions", options );
-		if ( "value" in options ) {
+		if ( "value" in options || "numberFormat" in options ) {
 			this._format( this.options.value );
 		}
 		this._aria();
