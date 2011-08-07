@@ -24,7 +24,7 @@ $.widget( "ui.spinner", {
 		numberFormat: null,
 		page: 10,
 		step: 1,
-		value: null,
+		value: 0,
 
 		change: null,
 		spin: null,
@@ -33,7 +33,7 @@ $.widget( "ui.spinner", {
 	},
 
 	_create: function() {
-		this.value( this.options.value !== null ? this.options.value : this.element.val() || 0 );
+		this.value( this.options.value );
 		this._draw();
 		this._mousewheel();
 		this._aria();
@@ -43,9 +43,9 @@ $.widget( "ui.spinner", {
 		var options = {},
 			element = this.element;
 
-		$.each( [ "min", "max", "step" ], function( i, option ) {
+		$.each( [ "min", "max", "step", "value" ], function( i, option ) {
 			var value = element.attr( option );
-			if ( value !== undefined ) {
+			if ( value !== undefined && value.length ) {
 				options[ option ] = value;
 			}
 		});

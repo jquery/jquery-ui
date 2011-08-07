@@ -7,7 +7,7 @@ commonWidgetTests( "spinner", {
 		numberFormat: null,
 		page: 10,
 		step: 1,
-		value: null,
+		value: 0,
 
 		// callbacks
 		change: null,
