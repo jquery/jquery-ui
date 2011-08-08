@@ -1,6 +1,6 @@
 (function( $ ) {
 
-module( "accordion: options", accordionSetupTeardown() );
+module( "accordion: options", accordion_setupTeardown() );
 
 test( "{ active: default }", function() {
 	expect( 2 );

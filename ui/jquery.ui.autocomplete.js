@@ -63,7 +63,7 @@ $.widget( "ui.autocomplete", {
 				"aria-haspopup": "true"
 			})
 			.bind( "keydown.autocomplete", function( event ) {
-				if ( self.options.disabled || self.element.prop( "readonly" ) ) {
+				if ( self.options.disabled || self.element.prop( "readOnly" ) ) {
 					suppressKeyPress = true;
 					suppressInput = true;
 					return;

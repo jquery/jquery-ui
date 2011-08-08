@@ -117,7 +117,6 @@ function sourceTest( source, async ) {
 			source: source
 		}),
 		menu = element.autocomplete( "widget" );
-	element.val( "ja" ).autocomplete( "search" );
 	function result() {
 		equal( menu.find( ".ui-menu-item" ).text(), "javajavascript" );
 		element.autocomplete( "destroy" );
@@ -128,7 +127,9 @@ function sourceTest( source, async ) {
 	if ( async ) {
 		stop();
 		$( document ).one( "ajaxStop", result );
-	} else {
+	}
+	element.val( "ja" ).autocomplete( "search" );
+	if ( !async ) {
 		result();
 	}
 }

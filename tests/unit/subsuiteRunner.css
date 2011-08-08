@@ -1,0 +1,8 @@
+iframe.qunit-subsuite {
+	margin: 0;
+	padding: 0;
+	border-width: 1px 0 0;
+	height: 600px;
+	width: 100%;
+	background: #fff;
+}

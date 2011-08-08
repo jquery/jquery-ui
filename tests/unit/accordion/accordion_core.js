@@ -1,6 +1,6 @@
 (function( $ ) {
 
-module( "accordion: core", accordionSetupTeardown() );
+module( "accordion: core", accordion_setupTeardown() );
 
 $.each( { div: "#list1", ul: "#navigation", dl: "#accordion-dl" }, function( type, selector ) {
 	test( "markup structure: " + type, function() {

@@ -1,69 +1,96 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8" />
+	<meta charset="utf-8">
 	<title>jQuery UI Unit Tests</title>
 
-	<link   type="text/css"       href="../../themes/base/jquery.ui.base.css" rel="stylesheet" />
-	<link rel="stylesheet" href="../../external/qunit.css" type="text/css"/>
-	<style type="text/css">
-	ul { font-family: 'trebuchet ms', verdana, arial; }
-	h2, ul {font-size: 10pt; }
-	h2 {
-		background-color:#EEEEEE;
-		color:black;
-		font-size:small;
-		font-weight:normal;
-		margin:0;
-		padding:10px;
+	<link rel="stylesheet" href="../../themes/base/jquery.ui.core.css">
+	<link rel="stylesheet" href="../../themes/base/jquery.ui.theme.css">
+	<style>
+	body {
+		font-size: 62.5%;
+	}
+	.ui-widget-header {
+		padding: 0.2em 0.5em;
+		margin: 0;
+	}
+	.ui-widget-content {
+		padding: 1em;
+		margin-bottom: 1em;
+	}
+	ul {
+		margin: 0;
+		list-style: none;
+	}
+	li {
+		line-height: 2em;
 	}
 	</style>
 
+	<script src="../jquery.js"></script>
+	<script>
+	$(function() {
+		$( "#main" )
+			.addClass( "ui-widget" )
+			.find( "h1, h2" )
+				.addClass( "ui-widget-header ui-corner-top" )
+				.next()
+					.addClass( "ui-widget-content ui-corner-bottom" );
+		
+	});
+	</script>
 </head>
 <body>
 
-<h1 id="qunit-header">jQuery UI Unit Tests</h1>
+<div id="main">
+	<h1>jQuery UI Unit Tests</h1>
+	<div>
+		<h2>Full Test Suite</h2>
+		<ul>
+			<li><a href="all.html">All</a></li>
+		</ul>
 
-<h2>Core</h2>
-<ul>
-	<li><a href="core/core.html">Core</a></li>
-	<li><a href="widget/widget.html">Widget</a></li>
-</ul>
+		<h2>Core</h2>
+		<ul>
+			<li><a href="core/core.html">Core</a></li>
+			<li><a href="widget/widget.html">Widget</a></li>
+		</ul>
 
-<h2>Interactions</h2>
-<ul>
-	<li><a href="draggable/draggable.html">Draggable</a></li>
-	<li><a href="droppable/droppable.html">Droppable</a></li>
-	<li><a href="resizable/resizable.html">Resizable</a></li>
-	<li><a href="selectable/selectable.html">Selectable</a></li>
-	<li><a href="sortable/sortable.html">Sortable</a></li>
-</ul>
+		<h2>Interactions</h2>
+		<ul>
+			<li><a href="draggable/draggable.html">Draggable</a></li>
+			<li><a href="droppable/droppable.html">Droppable</a></li>
+			<li><a href="resizable/resizable.html">Resizable</a></li>
+			<li><a href="selectable/selectable.html">Selectable</a></li>
+			<li><a href="sortable/sortable.html">Sortable</a></li>
+		</ul>
 
-<h2>Widgets</h2>
-<ul>
-	<li><a href="accordion/accordion.html">Accordion</a></li>
-	<li><a href="autocomplete/autocomplete.html">Autocomplete</a></li>
-	<li><a href="button/button.html">Button</a></li>
-	<li><a href="datepicker/datepicker.html">Datepicker</a></li>
-	<li><a href="dialog/dialog.html">Dialog</a></li>
-	<li><a href="menu/menu.html">Menu</a></li>
-	<li><a href="progressbar/progressbar.html">Progressbar</a></li>
-	<li><a href="slider/slider.html">Slider</a></li>
-	<li><a href="spinner/spinner.html">Spinner</a></li>
-	<li><a href="tabs/tabs.html">Tabs</a></li>
-	<li><a href="tooltip/tooltip.html">Tooltip</a></li>
-</ul>
+		<h2>Widgets</h2>
+		<ul>
+			<li><a href="accordion/accordion.html">Accordion</a></li>
+			<li><a href="autocomplete/autocomplete.html">Autocomplete</a></li>
+			<li><a href="button/button.html">Button</a></li>
+			<li><a href="datepicker/datepicker.html">Datepicker</a></li>
+			<li><a href="dialog/dialog.html">Dialog</a></li>
+			<li><a href="menu/menu.html">Menu</a></li>
+			<li><a href="progressbar/progressbar.html">Progressbar</a></li>
+			<li><a href="slider/slider.html">Slider</a></li>
+			<li><a href="spinner/spinner.html">Spinner</a></li>
+			<li><a href="tabs/tabs.html">Tabs</a></li>
+			<li><a href="tooltip/tooltip.html">Tooltip</a></li>
+		</ul>
 
-<h2>Utilities</h2>
-<ul>
-	<li><a href="position/position.html">Position</a></li>
-</ul>
+		<h2>Utilities</h2>
+		<ul>
+			<li><a href="position/position.html">Position</a></li>
+		</ul>
 
-<h2>Effects</h2>
-<ul>
-	<li><a href="effects/effects.html">Effects</a></li>
-</ul>
+		<h2>Effects</h2>
+		<ul>
+			<li><a href="effects/effects.html">Effects</a></li>
+		</ul>
+	</div>
+</div>
 
 </body>
-
 </html>

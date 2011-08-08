@@ -229,7 +229,7 @@ $.widget( "ui.button", {
 			// we don't search against the document in case the element
 			// is disconnected from the DOM
 			var ancestor = this.element.parents().last(),
-				labelSelector = "label[for=" + this.element.attr("id") + "]";
+				labelSelector = "label[for='" + this.element.attr("id") + "']";
 			this.buttonElement = ancestor.find( labelSelector );
 			if ( !this.buttonElement.length ) {
 				ancestor = ancestor.length ? ancestor.siblings() : this.element.siblings();
