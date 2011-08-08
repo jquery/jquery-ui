@@ -51,7 +51,7 @@
 					}
 				}
 				if ( changed ) {
-					$( [ this.data ] ).triggerHandler( "change", {
+					this.trigger( "change", {
 						oldValues: oldValues,
 						newValues: newValues
 					});
@@ -67,7 +67,7 @@
 					oldValues[ path ] = oldValue;
 					var newValues = {};
 					newValues[ path ] = value;
-					$( [ this.data ] ).triggerHandler( "change", {
+					this.trigger( "change", {
 						oldValues: oldValues,
 						newValues: newValues
 					});
@@ -88,7 +88,7 @@
 			}
 			// insert( index, objects )
 			splice.apply( this.data, [ index, 0 ].concat( items ) );
-			$( [ this.data ] ).triggerHandler( "insert", {
+			return this.trigger( "insert", {
 				index: index,
 				items: items
 			});
@@ -112,13 +112,20 @@
 			var items = this.data.slice( index, index + numToRemove );
 			this.data.splice( index, numToRemove );
 			// TODO update event data, along with support for removing array of objects
-			$([ this.data ]).triggerHandler( "remove", { index: index, items: items } );
+			return this.trigger( "remove", { index: index, items: items } );
 		},
 
 		refresh: function( newItems ) {
-			$([ this.data ]).triggerHandler( "refresh" );
-			return this;
+			return this.trigger( "refresh" );
 		}
 	};
+
+	$.each({ bind: "bind", unbind: "unbind", trigger: "triggerHandler" }, function( from, to ) {
+		$.observable.prototype[ from ] = function() {
+			var wrapped = $([ this.data ]);
+			wrapped[ to ].apply( wrapped, arguments );
+			return this;
+		};
+	});
 
 })(jQuery);

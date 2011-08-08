@@ -4,10 +4,6 @@ function serializeForm(form) {
 	var result = {};
 	// TODO flatten arrays (object.name occuring multiple times)
 	$.each( $( form ).serializeArray(), function( index, object ) {
-		// TODO get rid of event handlers props on data objects
-		if ( /jQuery\d+/.test( object.name ) ) {
-			return;
-		}
 		result[ object.name ] = object.value;
 	});
 	return result;
@@ -28,14 +24,15 @@ function capitalize( value ) {
 function meta( input ) {
 	var output = [];
 	for ( key in input ) {
-		// TODO get rid of event handlers props on data objects
-		if ( /jQuery\d+/.test( key ) ) {
+		var value = input[ key ];
+		// replicate behaviour of JSON.stringify to skip entries
+		if ( value && value.toJSON && value.toJSON() === undefined ) {
 			continue;
 		}
 		var field = {
 			name: key,
 			label: capitalize(key),
-			value: input[ key ]
+			value: value
 		};
 		if ( $.isPlainObject(field.value) ) {
 			for (subkey in field.value) {

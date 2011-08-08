@@ -57,11 +57,11 @@
 		}
 		// TODO $.observable should support this binding, along with a less intrusive event facility
 		function bindChange(index, developer) {
-			$( [ developer ] ).bind("change", function(event, ui) {
+			$.observable( developer ).bind("change", function(event, ui) {
 				developers.refresh().save();
 			});
 		}
-		$( [ localDevelopers] ).bind("insert remove refesh", function(event, ui) {
+		$.observable( localDevelopers ).bind("insert remove refesh", function(event, ui) {
 			if ( event.type === "insert" ) {
 				$.each( ui.items, bindChange );
 			}
