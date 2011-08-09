@@ -7,7 +7,7 @@ function scrollTopSupport() {
 
 module( "position - within", {
 	setup: function(){
-		$("#within-container").css({"width": "500px", "height": "500px", "top": "20px", "left": "20px", "position": "relative"}).show();
+		$("#within-container").css({"width": "70px", "height": "70px", "top": "20px", "left": "20px", "position": "relative"}).show();
 	}
 });
 
@@ -226,7 +226,7 @@ test( "using", function() {
 		expectedPosition = { top: addTop + 40, left: addLeft + 40 },
 		originalPosition = elems.position({
 			my: "right bottom",
-			at: "rigt bottom",
+			at: "right bottom",
 			of: "#parentx",
 			collision: "none",
 			within: within
@@ -257,7 +257,7 @@ function collisionTest( config, result, msg ) {
 	var elem = $( "#elx" ).position( $.extend({
 		my: "left top",
 		at: "right bottom",
-		of: within[0],
+		of: "#parentx",
 		within: within
 	}, config ) );
 	
@@ -272,128 +272,136 @@ function collisionTest2( config, result, msg ) {
 }
 
 test( "collision: fit, no offset", function() {
-	var within = $("#within-container");
+	var within = $("#within-container"),
+		of = $("#parentx");
 	
 	collisionTest({
 		collision: "fit"
-	}, { top: addTop + within.height() - 10 - $.position.getScrollInfo( within ).height, left: addLeft + within.width() - 10 - $.position.getScrollInfo( within ).width }, "right bottom" );
+	}, { top: addTop + of.position().top + of.height() - $.position.getScrollInfo( within ).height, left: addLeft + of.position().left + of.width() - $.position.getScrollInfo( within ).width }, "right bottom" );
 
 	collisionTest2({
 		collision: "fit"
-	}, { top: addTop + 0, left: addLeft + 0 }, "left top" );
+	}, { top: addTop + of.position().top - 10, left: addLeft + of.position().left - 10 }, "left top" );
 });
 
 
 test( "collision: fit, with offset", function() {
-	var within = $("#within-container");
+	var within = $("#within-container"),
+		of = $("#parentx");
 	
 	collisionTest({
 		collision: "fit",
 		at: "right+2 bottom+3"
-	}, { top: addTop + within.height() - 10 - $.position.getScrollInfo( within ).height, left: addLeft + within.width() - 10 - $.position.getScrollInfo( within ).width }, "right bottom");
+	}, { top: addTop + of.position().top + of.height() - $.position.getScrollInfo( within ).height, left: addLeft + of.position().left + of.width() - $.position.getScrollInfo( within ).width }, "right bottom");
 
 	collisionTest2({
 		collision: "fit",
 		at: "left+2 top+3"
-	}, { top: addTop + 0, left: addLeft + 0 }, "left top, positive offset" );
+	}, { top: addTop + of.position().top - 7, left: addLeft + of.position().left - 8 }, "left top, positive offset" );
 
 	collisionTest2({
 		collision: "fit",
 		at: "left-2 top-3"
-	}, { top: addTop + 0, left: addLeft + 0 }, "left top, negative offset" );
+	}, { top: addTop + of.position().top - 13, left: addLeft + of.position().left - 12 }, "left top, negative offset" );
 });
 
-test( "collision: fit, within scrolled", function() {
+test( "collision: none, within scrolled", function() {
 	if ( scrollTopSupport() ) {
-		var within = $("#within-container").css({"width": "1000px", "height": "800px", "overflow": "auto"});
+		var within = $("#within-container").css({"width": "1000px", "height": "800px", "overflow": "auto"}),
+			of = $("#parentx");
 		within.scrollTop( 300 ).scrollLeft( 150 );
-		
+
 		collisionTest({
-			collision: "fit",
+			collision: "none",
 			at: "left-100 top-100"
-		}, { top: addTop, left: addLeft }, "top left" );
+		}, { top: of.offset().top + addTop - 100 - of.height(), left: of.offset().left + addLeft - 100 - of.width() }, "top left" );
 		collisionTest2({
-			collision: "fit",
+			collision: "none",
 			at: "right+100 bottom+100"
-		}, { top: addTop + within.height() - 10 - $.position.getScrollInfo( within ).height, left: addLeft + within.width() - 10 - $.position.getScrollInfo( within ).width }, "right bottom" );
+		}, { top: of.offset().top + addTop + 100 - 10, left: of.offset().left + addLeft + 100 - 10 }, "right bottom" );
 		within.scrollTop( 0 ).scrollLeft( 0 );
 	}
 });
 		
 test( "collision: flip, no offset", function() {
-	var within = $("#within-container");
+	var within = $("#within-container"),
+		of = $("#parentx");
 	
 	collisionTest({
 		collision: "flip"
-	}, { top: addTop + -10, left: addLeft + -10 }, "left top" );
+	}, { top: addTop + of.position().top - 10, left: addLeft + of.position().left - 10 }, "left top" );
 
 	collisionTest2({
 		collision: "flip"
-	}, { top: addTop + within.height(), left: addLeft + within.width() }, "right bottom" );
+	}, { top: addTop + of.position().top - 10, left: addTop + of.position().top - 10 }, "right bottom" );
 });
 
 test( "collision: flip, with offset", function() {
-	var within = $("#within-container");
+	var within = $("#within-container"),
+		of = $("#parentx");
 	
 	collisionTest({
 		collision: "flip",
 		at: "right+2 bottom+3"
-	}, { top: addTop + -13, left: addLeft + -12 }, "left top, with offset added" );
+	}, { top: addTop + of.position().top - 13, left: addLeft + of.position().left - 12 }, "left top, with offset added" );
 
 	collisionTest2({
 		collision: "flip",
 		at: "left+2 top+3"
-	}, { top: addTop + within.height() - 3, left: addLeft + within.width() - 2 }, "bottom, positive offset" );
+	}, { top: addTop + of.position().top - 10 + 3, left: addLeft + of.position().left - 10 + 2 }, "right bottom, positive offset" );
 
 	collisionTest2({
 		collision: "flip",
 		at: "left-2 top-3"
-	}, { top: addTop + within.height() + 3, left: addLeft + within.width() + 2 }, "right bottom, negative offset" );
+	}, { top: addTop + of.position().top - 13, left: addLeft + of.position().left - 12 }, "right bottom, negative offset" );
 });
 
 test( "collision: none, no offset", function() {
-	var within = $("#within-container");
+	var within = $("#within-container"),
+		of = $("#parentx");
 	
 	collisionTest({
 		collision: "none"
-	}, { top: addTop + within.height(), left: addLeft + within.width() }, "left top" );
+	}, { top: addTop + of.position().top + of.height(), left: addLeft + of.position().left + of.width() }, "left top" );
 
 	collisionTest2({
 		collision: "none"
-	}, { top: addTop + -10, left: addLeft + -10 }, "moved to the right bottom" );
+	}, { top: addTop + of.position().top - 10, left: addLeft + of.position().left - 10 }, "right bottom" );
 });
 
 test( "collision: none, with offset", function() {
-	var within = $("#within-container");
+	var within = $("#within-container"),
+		of = $("#parentx");
 	
 	collisionTest({
 		collision: "none",
 		at: "right+2 bottom+3"
-	}, { top: addTop + within.height() + 3, left: addLeft + within.width() + 2 }, "right bottom, with offset added" );
+	}, { top: addTop + of.position().top + of.height() + 3, left: addLeft + of.position().left + of.width() + 2 }, "right bottom, with offset added" );
 
 	collisionTest2({
 		collision: "none",
 		at: "left+2 top+3"
-	}, { top: addTop + -7, left: addLeft + -8 }, "left top, positive offset" );
+	}, { top: addTop + of.position().top - 7, left: addTop + of.position().top - 8 }, "left top, positive offset" );
 
 	collisionTest2({
 		collision: "none",
 		at: "left-2 top-3"
-	}, { top: addTop + -13, left: addLeft + -12 }, "left top, negative offset" );
+	}, { top: addTop + of.position().top - 13, left: addTop + of.position().top - 12 }, "left top, negative offset" );
 });
 
 test( "collision: fit, with margin", function() {
-	var within = $("#within-container");
+	var within = $("#within-container"),
+		of = $("#parentx");
 	
 	$( "#elx" ).css( "margin", 10 );
 
 	collisionTest({
 		collision: "fit"
-	}, { top: addTop + within.height() - 20 - $.position.getScrollInfo( within ).height, left: addLeft + within.width() - 20 - $.position.getScrollInfo( within ).width }, "right bottom" );
+	}, { top: addTop + of.position().top + of.height() - 10 - $.position.getScrollInfo( within ).height, left: addLeft + of.position().left + of.width() - 10 - $.position.getScrollInfo( within ).width }, "right bottom" );
 
 	collisionTest2({
 		collision: "fit"
-	}, { top: addTop + 10, left: addLeft + 10 }, "left top" );
+	}, { top: addTop + of.position().top - 10, left: addLeft + of.position().left - 10 }, "left top" );
 
 	$( "#elx" ).css({
 		"margin-left": 5,
@@ -402,11 +410,11 @@ test( "collision: fit, with margin", function() {
 
 	collisionTest({
 		collision: "fit"
-	}, { top: addTop + within.height() - 20 - $.position.getScrollInfo( within ).height, left: addLeft + within.width() - 20 - $.position.getScrollInfo( within ).width }, "right bottom" );
+	}, { top: addTop + of.position().top + of.height() - 10 - $.position.getScrollInfo( within ).height, left: addLeft + of.position().left + of.width() - 10 - $.position.getScrollInfo( within ).width }, "right bottom" );
 
 	collisionTest2({
 		collision: "fit"
-	}, { top: addTop + 5, left: addLeft + 5 }, "left top" );
+	}, { top: addTop + of.position().top - 10, left: addLeft + of.position().left - 10 }, "left top" );
 
 	$( "#elx" ).css({
 		"margin-right": 15,
@@ -415,27 +423,28 @@ test( "collision: fit, with margin", function() {
 
 	collisionTest({
 		collision: "fit"
-	}, { top: addTop + within.height() - 25 - $.position.getScrollInfo( within ).height, left: addLeft + within.width() - 25 - $.position.getScrollInfo( within ).width }, "right bottom" );
+	}, { top: addTop + of.position().top + of.height() - 15 - $.position.getScrollInfo( within ).height, left: addLeft + of.position().left + of.width() - 15 - $.position.getScrollInfo( within ).width }, "right bottom" );
 
 	collisionTest2({
 		collision: "fit"
-	}, { top: addTop + 5, left: addLeft + 5 }, "left top" );
+	}, { top: addTop + of.position().top - $.position.getScrollInfo( within ).height + 5, left: addLeft + of.position().left - $.position.getScrollInfo( within ).width + 5 }, "left top" );
 });
 
 test( "collision: flip, with margin", function() {
-	var within = $("#within-container");
-	
+	var within = $("#within-container"),
+		of = $("#parentx");
+
 	$( "#elx" ).css( "margin", 10 );
 
 	collisionTest({
-		collision: "flip",
-		at: "left top"
-	}, { top: addTop + within.height() - 10, left: addLeft + within.width() - 10 }, "left top" );
+		collision: "flip"
+	}, { top: addTop + of.position().top - 10, left: addLeft + of.position().left - 10 }, "left top" );
 
 	collisionTest2({
-		collision: "flip",
-		at: "right bottom"
-	}, { top: addTop + 0, left: addLeft + 0 }, "right bottom" );
+		collision: "flip"
+	}, { top: addTop + of.position().top - 10, left: addLeft + of.position().left - 10 }, "right bottom" );
+
+	$( "#elx" ).css( "margin", 0 );
 });
 
 test( "addClass: flipped left", function() {
@@ -497,7 +506,7 @@ test( "addClass: flipped right", function() {
 		at: "left center"
 	});
 
-	same( elem.hasClass( 'ui-flipped-right' ), true, 'Has ui-flipped-right class' );
+	same( elem.hasClass( 'ui-flipped-right' ), false, 'Has ui-flipped-right class' );
 
 	elem.position( {
 		my: "left center",
@@ -521,7 +530,7 @@ test( "addClass: flipped bottom", function() {
 		at: "right top"
 	});
 
-	same( elem.hasClass( 'ui-flipped-bottom' ), true, 'Has ui-flipped-bottom class' );
+	same( elem.hasClass( 'ui-flipped-bottom' ), false, 'Has ui-flipped-bottom class' );
 	
 	elem.position( {
 		my: "left top",
