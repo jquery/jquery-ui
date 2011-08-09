@@ -169,11 +169,8 @@ $.widget( "ui.autocomplete", {
 				}
 
 				clearTimeout( self.searching );
-				// clicks on the menu (or a button to trigger a search) will cause a blur event
-				self.closing = setTimeout(function() {
-					self.close( event );
-					self._change( event );
-				}, 150 );
+				self.close( event );
+				self._change( event );
 			});
 		this._initSource();
 		this.response = function() {
@@ -184,6 +181,9 @@ $.widget( "ui.autocomplete", {
 			.appendTo( $( this.options.appendTo || "body", doc )[0] )
 			// prevent the close-on-blur in case of a "slow" click on the menu (long mousedown)
 			.mousedown(function( event ) {
+				// prevent moving focus out of the text field
+				event.preventDefault();
+
 				// clicking on the scrollbar causes focus to shift to the body
 				// but we can't detect a mouseup or a click immediately afterward
 				// so we have to track the next mousedown and close the menu if
@@ -200,11 +200,6 @@ $.widget( "ui.autocomplete", {
 						});
 					}, 1 );
 				}
-
-				// use another timeout to make sure the blur-event-handler on the input was already triggered
-				setTimeout(function() {
-					clearTimeout( self.closing );
-				}, 13);
 			})
 			.menu({
 				// custom key handling for now
@@ -344,7 +339,6 @@ $.widget( "ui.autocomplete", {
 			return this.close( event );
 		}
 
-		clearTimeout( this.closing );
 		if ( this._trigger( "search", event ) === false ) {
 			return;
 		}
@@ -377,7 +371,6 @@ $.widget( "ui.autocomplete", {
 	},
 
 	close: function( event ) {
-		clearTimeout( this.closing );
 		if ( this.menu.element.is(":visible") ) {
 			this.menu.element.hide();
 			this.menu.blur();
