@@ -625,6 +625,7 @@ $.extend(Datepicker.prototype, {
 	},
 
 	/* Pop-up the date picker for a given input field.
+       If false returned from beforeShow event handler do not show. 
 	   @param  input  element - the input field attached to the date picker or
 	                  event - if triggered by focus */
 	_showDatepicker: function(input) {
@@ -641,7 +642,12 @@ $.extend(Datepicker.prototype, {
 			$.datepicker._curInst.dpDiv.stop(true, true);
 		}
 		var beforeShow = $.datepicker._get(inst, 'beforeShow');
-		extendRemove(inst.settings, (beforeShow ? beforeShow.apply(input, [input, inst]) : {}));
+		var beforeShowSettings = beforeShow ? beforeShow.apply(input, [input, inst]) : {};
+		if(beforeShowSettings === false){
+            //false
+			return;
+		}
+		extendRemove(inst.settings, beforeShowSettings);
 		inst.lastVal = null;
 		$.datepicker._lastInput = input;
 		$.datepicker._setDateFromField(inst);
