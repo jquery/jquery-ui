@@ -550,7 +550,7 @@ $.widget("ui.selectmenu", {
 			if ( $.browser.msie && $.browser.version.substr( 0,1 ) == 7 ) {
 				self._refreshPosition();
 			}
-			var selected = self.list.attr('aria-hidden', false).find('li:not(.' + self.widgetBaseClass + '-group):eq(' + self._selectedIndex() + ') a');
+			var selected = self.list.attr('aria-hidden', false).find('li:not(.' + self.widgetBaseClass + '-group):eq(' + self._selectedIndex() + '):visible a');
 			if (selected.length) selected[0].focus();
 			// positioning needed for FF, Chrome, IE8, IE7, IE6 (tested 01.08.11 on MS VPC Image)
 			self._refreshPosition();			
