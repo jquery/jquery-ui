@@ -52,7 +52,7 @@ $.widget("ui.selectmenu", {
 			'id' : this.ids[ 0 ],
 			'role': 'button',
 			'href': '#',
-			'tabindex': '0' ,
+			'tabindex': this.element.attr( 'disabled' ) ? 1 : 0,
 			'aria-haspopup': true,
 			'aria-owns': this.ids[ 1 ]
 		});
