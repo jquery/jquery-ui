@@ -240,7 +240,7 @@ $.widget( "ui.spinner", {
 
 		var newVal = this.value() + step * this._increment( this.counter );
 
-		// clamp the new value 
+		// clamp the new value
 		newVal = this._trimValue( newVal );
 
 		if ( !this.spinning || this._trigger( "spin", event, { value: newVal } ) !== false) {
@@ -308,14 +308,14 @@ $.widget( "ui.spinner", {
 
 	_parse: function( val ) {
 		if ( typeof val === "string" ) {
-			val = $.global && this.options.numberFormat ? $.global.parseFloat( val ) : +val;
+			val = window.Globalize && this.options.numberFormat ? Globalize.parseFloat( val ) : +val;
 		}
 		return isNaN( val ) ? null : val;
 	},
 
 	_format: function() {
 		var num = this.options.value;
-		return $.global && this.options.numberFormat ? $.global.format( num, this.options.numberFormat ) : num;
+		return window.Globalize && this.options.numberFormat ? Globalize.format( num, this.options.numberFormat ) : num;
 	},
 
 	_refresh: function() {
