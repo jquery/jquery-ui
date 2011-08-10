@@ -934,7 +934,8 @@ $.extend(Datepicker.prototype, {
 		else {
 			this._hideDatepicker();
 			this._lastInput = inst.input[0];
-			inst.input.focus(); // restore focus
+			if (typeof(inst.input[0]) != 'object')
+				inst.input.focus(); // restore focus
 			this._lastInput = null;
 		}
 	},
