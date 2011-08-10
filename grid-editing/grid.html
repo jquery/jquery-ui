@@ -61,7 +61,7 @@
 				developers.refresh().save();
 			});
 		}
-		$.observable( localDevelopers ).bind("insert remove refesh", function(event, ui) {
+		$.observable( localDevelopers ).bind("insert remove", function(event, ui) {
 			if ( event.type === "insert" ) {
 				$.each( ui.items, bindChange );
 			}
