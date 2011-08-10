@@ -30,7 +30,7 @@
 		},
 
 		_format: function() {
-			this.element.val( Globalize.format( new Date(this.options.value), "t" ) );
+			return Globalize.format( new Date(this.options.value), "t" );
 		}
 	});
 
