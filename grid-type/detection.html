@@ -5,9 +5,9 @@
 	<meta charset="utf-8">
 	<link rel="stylesheet" href="../themes/base/jquery.ui.all.css" title="ui-theme" />
 	<script src="../jquery-1.6.2.js"></script>
-	<script src="../external/jquery.global.js"></script>
-	<script src="../external/jquery.global.de-DE.js"></script>
-	<script src="../external/jquery.global.ja-JP.js"></script>
+	<script src="../external/globalize.js"></script>
+	<script src="../external/globalize.culture.de-DE.js"></script>
+	<script src="../external/globalize.culture.ja-JP.js"></script>
 	<script>
 	$(function() {
 		var table = $( "table" );
@@ -20,16 +20,16 @@
 
 			tbody.children().each( function() {
 				var cell = $( this.cells[ index ] ).text();
-				if ( $.global.parseDate( cell ) ) {
+				if ( Globalize.parseDate( cell ) ) {
 					type = "date";
-				} else if ( $.global.parseFloat( cell ) ) {
+				} else if ( Globalize.parseFloat( cell ) ) {
 					type = "number"
-					if ( cell.indexOf( $.global.cultures["default"].numberFormat.currency.symbol ) > -1 ) {
+					if ( cell.indexOf( Globalize.cultures["default"].numberFormat.currency.symbol ) > -1 ) {
 						type = "currency";
 					}
 				}
 			});
-			
+
 			$( this ).text( function( index, text ) {
 				return text + " (" + type + ")";
 			})
