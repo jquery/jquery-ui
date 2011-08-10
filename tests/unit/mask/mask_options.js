@@ -12,7 +12,6 @@ test( "placeholder", function() {
 	equal( input.val(), "__/__/__", "Initial value" );
 	input.mask( "option", "placeholder", " " );
 	equal( input.val(), "  /  /  ", "Placeholder changed" );
-	
 });
 
 test( "mask", function() {
@@ -25,8 +24,6 @@ test( "mask", function() {
 	equal( input.val(), "12/34/__", "Initial value" );
 	input.mask( "option", "mask", "(999)999-9999" );
 	equal( input.val(), "(123)4__-____", "Mask changed" );
-	
 });
-
 
 }( jQuery ) );
