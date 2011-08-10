@@ -6,6 +6,7 @@
 	<link rel="stylesheet" href="../themes/base/jquery.ui.all.css">
 	<link rel="stylesheet" href="../grid-spf/grid.css">
 	<script src="../jquery-1.6.2.js"></script>
+	<script src="../external/globalize.js"></script>
 	<script src="../external/jquery.tmpl.js"></script>
 	<script src="../external/jquery.mousewheel-3.0.4.js"></script>
 	<script src="../ui/jquery.ui.core.js"></script>
@@ -152,6 +153,8 @@
 			<th data-property="lastName">Last Name</th>
 			<th data-property="country" data-editor="countrycomplete">Country</th>
 			<th data-property="bitcoins" data-type="number" data-editor="spinner">Bitcoins</th>
+			<th data-template="#cell-date-tmpl">Date</th>
+			<th data-template="#cell-time-tmpl">Time</th>
 			<th data-property="random.value" data-type="number" data-editor="randomSpinner" data-editor-options='{"min":-1, "max": 125}'>Random</th>
 			<th data-template="#cell-edit-tmpl">Edit</th>
 			<th data-template="#cell-remove-tmpl">Remove</th>
@@ -180,6 +183,12 @@
 {{else}}
 	<input type="text" name="${name}" placeholder="${label}" value="${value}" title="${label}" />
 {{/if}}
+</script>
+<script id="cell-date-tmpl" type="text/x-jquery-tmpl">
+	<td class="ui-widget-content">${Globalize.format(new Date(date), "d")}</td>
+</script>
+<script id="cell-time-tmpl" type="text/x-jquery-tmpl">
+	<td class="ui-widget-content">${Globalize.format(new Date(date), "T")}</td>
 </script>
 <script id="cell-edit-tmpl" type="text/x-jquery-tmpl">
 	<td class="ui-widget-content"><button class='edit'>Edit</button></td>

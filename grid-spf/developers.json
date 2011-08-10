@@ -9,7 +9,8 @@
 		"random": {
 			"value": 10
 		},
-		"favorites": [1, 2, 3]
+		"favorites": [1, 2, 3],
+		"date": 174351600000
 	},
 	{
 		"firstName": "Scott",
@@ -21,7 +22,8 @@
 		"random": {
 			"value": 20
 		},
-		"favorites": [1, 2, 3]
+		"favorites": [1, 2, 3],
+		"date": 359468280000
 	},
 	{
 		"firstName": "Jörn",
@@ -33,7 +35,8 @@
 		"random": {
 			"value": 30
 		},
-		"favorites": [1, 2, 3]
+		"favorites": [1, 2, 3],
+		"date": 455083620000
 	},
 	{
 		"firstName": "Carl",
@@ -45,7 +48,8 @@
 		"random": {
 			"value": 40
 		},
-		"favorites": [1, 2, 3]
+		"favorites": [1, 2, 3],
+		"date": 174351700450
 	},
 	{
 		"firstName": "Adam",
@@ -57,7 +61,8 @@
 		"random": {
 			"value": 50
 		},
-		"favorites": [1, 2, 3]
+		"favorites": [1, 2, 3],
+		"date": 358368280045
 	},
 	{
 		"firstName": "Remy",
@@ -69,7 +74,8 @@
 		"random": {
 			"value": 60
 		},
-		"favorites": [1, 2, 3]
+		"favorites": [1, 2, 3],
+		"date": 274351715450
 	},
 	{
 		"firstName": "Benjamin",
@@ -81,7 +87,8 @@
 		"random": {
 			"value": 70
 		},
-		"favorites": [1, 2, 3]
+		"favorites": [1, 2, 3],
+		"date": 374351715450
 	},
 	{
 		"firstName": "Haymo",
@@ -93,6 +100,7 @@
 		"random": {
 			"value": 80
 		},
-		"favorites": [1, 2, 3]
+		"favorites": [1, 2, 3],
+		"date": 474351715450
 	}
 ]
