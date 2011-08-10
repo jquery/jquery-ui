@@ -371,7 +371,7 @@ $.widget( "ui.spinner", {
 
 	value: function( newVal ) {
 		if ( !arguments.length ) {
-			return this._format();
+			return this.options.value;
 		}
 		this.option( "value", newVal );
 	},
