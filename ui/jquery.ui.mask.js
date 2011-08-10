@@ -100,14 +100,24 @@ $.widget( "ui.mask", {
 		}
 	},
 	_parseMask: function() {
-		var key, x, bufferObject,
+		var key, x, bufferObject, originalPosition,
 			index = -1,
 			options = this.options,
-			mask = options.mask ;
+			mask = options.mask;
 
 		this.buffer = [];
 		if ( !mask ) {
 			return;
+		}
+
+		optionalPosition = mask.indexOf( "?" );
+		if ( optionalPosition === -1 ) {
+			this.optionalPosition = mask.length;
+		} else {
+			this.optionalPosition = optionalPosition;
+
+			// remove the ? from the mask
+			mask = mask.substr( 0, optionalPosition ) + mask.substr( optionalPosition + 1 );
 		}
 		// search for definied "masks"
 		for ( key in options.definitions ) {
@@ -367,11 +377,13 @@ $.widget( "ui.mask", {
 				value += bufferObject.value;
 			} else if ( !raw ) {
 				value += this.options.placeholder;
-				this.isValid = false;
+				if ( bufferPosition < this.optionalPosition ) {
+					this.isValid = false;
+				}
 			}
 		}
-		if ( !wasValid && this.isValid ) {
-			this._trigger( "complete", this.currentEvent );
+		if ( this.currentEvent && !wasValid && this.isValid ) {
+			this._trigger( "complete", this.currentEvent, {} );
 		}
 		return value;
 	},

@@ -4,10 +4,10 @@ module( "mask: events" );
 
 /* TODO: Descide behavior of bluring non-valid inputs */
 
-test( "complete: Complete event fires when typing last character of mask", function() {
-	expect( 3 );
+test( "complete: Complete event fires when typing last non-optional character of mask", function() {
+	expect( 2 );
 	var input = $( "#mask1" ).val("").mask({
-			mask: "9",
+			mask: "9?9",
 			complete: function( event, ui ) {
 				equal( this, input[0], "Complete event fired with correct context" );
 			}
@@ -16,9 +16,26 @@ test( "complete: Complete event fires when typing last character of mask", funct
 
 	input.focus();
 	mask._caret( 0 );
-	deepEqual( mask._caret(), { begin: 0, end: 0 }, "Caret position correct" );
 	input.simulate( "keypress", { keyCode: "1".charCodeAt( 0 ) } );
-	equal( input.val(), "1", "Value is valid" );
+	equal( input.val(), "1_", "Value with optional character" );
+});
+
+test( "complete: Complete event fires when typing last character of mask", function() {
+	expect( 3 );
+	var input = $( "#mask1" ).val("").mask({
+			mask: "99",
+			complete: function( event, ui ) {
+				equal( this, input[0], "Complete event fired with correct context" );
+			}
+		}),
+		mask = input.data( "mask" );
+
+	input.focus();
+	mask._caret( 0 );
+	input.simulate( "keypress", { keyCode: "1".charCodeAt( 0 ) } );
+	equal( input.mask( "valid" ), false, "Mask is not yet valid" );
+	input.simulate( "keypress", { keyCode: "2".charCodeAt( 0 ) } );
+	equal( input.val(), "12", "Value with optional character" );
 });
 
 asyncTest( "focus: Initial Caret Positioning", function() {
