@@ -22,6 +22,37 @@
 				"~": /\+|-/
 			}
 		});
+		$( "#mask8" ).mask({
+			mask: "hh:mm:ss pp",
+			definitions: {
+				hh: function( value ) {
+					value = parseInt( value, 10 );
+					if ( value >= 1 || value <= 12 ) {
+						return ( value < 10 ? "0" : "" ) + value;
+					}
+				},
+				mm: sixty,
+				ss: sixty,
+				pp: function( value ) {
+					var character = value.toLowerCase().charAt( 0 );
+					switch ( character ) {
+					case "a":
+					case "A":
+						return "am";
+					case "p":
+					case "P":
+						return "pm";
+					}
+				}
+			}
+		});
+		
+		function sixty( value ) {
+			value = parseInt( value, 10 );
+			if ( value >= 0 || value <= 59 ) {
+				return ( value < 10 ? "0" : "" ) + value;
+			}
+		}
 	});
 	</script>
 	<style>
@@ -34,19 +65,21 @@
 <body>
 	<form>
 		<label for="mask1">Date - 99/99/9999</label>
-		<input type="text" class="masked" id="mask1" data-maskoptions='{"mask":"99/99/9999"}'>
+		<input type="text" class="masked" id="mask1">
 		<label for="mask2">Phone - (999) 999-9999</label>
-		<input type="text" class="masked" id="mask2" data-maskoptions='{"mask":"(999) 999-9999"}'>
+		<input type="text" class="masked" id="mask2">
 		<label for="mask3">Phone - (999) 999-9999?x999999</label>
-		<input type="text" class="masked" id="mask3" data-maskoptions='{"mask":"(999) 999-9999?x999999"}'>
+		<input type="text" class="masked" id="mask3">
 		<label for="mask4">TaxID - 99-9999999</label>
-		<input type="text" class="masked" id="mask4" data-maskoptions='{"mask":"99-9999999"}'>
+		<input type="text" class="masked" id="mask4">
 		<label for="mask5">SSN - 999-99-9999</label>
-		<input type="text" class="masked" id="mask5" data-maskoptions='{"mask":"999-99-9999"}'>
+		<input type="text" class="masked" id="mask5">
 		<label for="mask6">Product Key - a*-999-a999</label>
-		<input type="text" class="masked" id="mask6" data-maskoptions='{"mask":"a*-999-a999"}'>
+		<input type="text" class="masked" id="mask6">
 		<label for="mask7">Eye Script - ~9.99 ~9.99 999</label>
-		<input type="text" class="masked" id="mask7" data-maskoptions='{"mask":"~9.99 ~9.99 999"}'>
+		<input type="text" class="masked" id="mask7">
+		<label for="mask8">Time - hh:mm:ss pp</label>
+		<input type="text" class="masked" id="mask8">
 	</form>
 </body>
 </html>

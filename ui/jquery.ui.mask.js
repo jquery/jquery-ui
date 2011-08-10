@@ -6,6 +6,11 @@
  * http://jquery.org/license
  *
  * http://docs.jquery.com/UI/Mask
+ *
+ * Depends:
+ *	jquery.ui.core.js
+ *	jquery.ui.widget.js
+ *
  */
 (function( $, undefined ) {
 
@@ -99,6 +104,155 @@ $.widget( "ui.mask", {
 			};
 		}
 	},
+	_getValue: function( raw ) {
+		var bufferPosition,
+			bufferObject,
+			counter,
+			wasValid = this.isValid,
+			bufferLength = this.buffer.length,
+			value = "";
+
+		this.isValid = true;
+		for ( bufferPosition = 0; bufferPosition < bufferLength; bufferPosition += bufferObject.length ) {
+			bufferObject = this.buffer[ bufferPosition ];
+			if ( bufferObject.literal && !raw ) {
+				value += bufferObject.literal;
+			} else if ( bufferObject.value ) {
+				value += bufferObject.value;
+				for ( counter = bufferObject.value.length; counter < bufferObject.length; counter++ ) {
+					value += this.options.placeholder;
+				}
+			} else if ( !raw ) {
+				for ( counter = bufferObject.length ; counter; counter-- ) {
+					value += this.options.placeholder;
+				}
+				if ( bufferPosition < this.optionalPosition ) {
+					this.isValid = false;
+				}
+			}
+		}
+		if ( this.currentEvent && !wasValid && this.isValid ) {
+			this._trigger( "complete", this.currentEvent, {} );
+		}
+		return value;
+	},
+	_events: function() {
+		var cancelKeypress,
+			lastUnsavedValue,
+			that = this,
+			elem = that.element;
+
+		function handlePaste() {
+			that.currentEvent = event;
+			setTimeout( function() {
+				var position = that._parseValue();
+				that._paint();
+				that._caret( that._seekRight( position ) );
+				that.currentEvent = false;
+			}, 0 );
+		}
+
+		this._bind({
+			focus: function( event ) {
+				lastUnsavedValue = elem.val();
+				setTimeout( function() {
+					that._caret( that._seekRight( that._parseValue() - 1 ) );
+				}, 0);
+			},
+			blur: function( event ) {
+
+				// because we are constantly setting the value of the input, the change event
+				// never fires - we re-introduce the change event here
+				that._parseValue();
+				if ( elem.val() !== lastUnsavedValue ) {
+					elem.trigger( "change" );
+				}
+				return;
+			},
+			keydown: function( event ) {
+				var bufferObject,
+					key = event.keyCode,
+					position = that._caret();
+
+				switch ( key ) {
+				case keyCode.ESCAPE:
+					elem.val( lastUnsavedValue );
+					that._caret( 0, that._parseValue() );
+					event.preventDefault();
+					return;
+
+				case keyCode.BACKSPACE:
+				case keyCode.DELETE:
+					event.preventDefault();
+					if ( position.begin === position.end ) {
+						position.begin = position.end = ( key === keyCode.DELETE ?
+							that._seekRight( position.begin - 1) :
+							that._seekLeft( position.begin )
+						);
+						if ( position.begin < 0 ) {
+							that._caret( that._seekRight( -1 ) );
+							return;
+						}
+					}
+					that._removeValues( position.begin, position.end );
+					that._paint();
+					that._caret( position.begin );
+					return;
+
+				case keyCode.RIGHT:
+					if ( position.begin === position.end ) {
+						bufferObject = that.buffer[ position.begin ];
+						if ( bufferObject && bufferObject.length > 1 ) {
+							bufferObject.value = this._validValue( bufferObject, bufferObject.value );
+							that._paint();
+							that._caret( that._seekRight( bufferObject.start + bufferObject.length - 1 ) );
+							event.preventDefault();
+							
+						}
+					}
+					return;
+				}
+			},
+			keypress: function( event ) {
+				var tempValue,
+					key = event.keyCode,
+					position = that._caret(),
+					bufferPosition = that._seekRight( position.begin - 1 ),
+					bufferObject = that.buffer[ bufferPosition ];
+
+				that.currentEvent = event;
+				// ignore keypresses with special keys, or control characters
+				if ( event.metaKey || event.altKey || event.ctrlKey || key < 32 ) {
+					return;
+				}
+				if ( position.begin !== position.end ) {
+					that._removeValues( position.begin, position.end );
+				}
+				if ( bufferObject ) {
+					tempValue = String.fromCharCode( key );
+					if ( bufferObject.length > 1 && bufferObject.value ) {
+						tempValue = bufferObject.value.substr( 0, bufferPosition - bufferObject.start ) +
+							tempValue +
+							bufferObject.value.substr( bufferPosition - bufferObject.start + 1 );
+						tempValue = tempValue.substr( 0, bufferObject.length );
+					}
+					if ( this._validValue( bufferObject, tempValue ) ) {
+						that._shiftRight( position.begin );
+						bufferObject.value = tempValue;
+						that._paint();
+						that._caret( that._seekRight( bufferPosition ) );
+					}
+				}
+				event.preventDefault();
+				that.currentEvent = false;
+			},
+			paste: handlePaste,
+			input: handlePaste
+		});
+	},
+	_paint: function() {
+		this.element.val( this._getValue() );
+	},
 	_parseMask: function() {
 		var key, x, bufferObject, originalPosition,
 			index = -1,
@@ -144,95 +298,59 @@ $.widget( "ui.mask", {
 			}
 		}
 	},
-	_events: function() {
-		var cancelKeypress,
-			lastUnsavedValue,
-			that = this,
-			elem = that.element;
 
-		function handlePaste() {
-			that.currentEvent = event;
-			setTimeout( function() {
-				var position = that._parseValue();
-				that._paint();
-				that._caret( that._seekRight( position ) );
-				that.currentEvent = false;
-			}, 0 );
+	// parses the .val() and places it into the buffer
+	// returns the last filled in value position
+	_parseValue: function() {
+		var bufferPosition,
+			bufferObject,
+			character,
+			valuePosition = 0,
+			lastFilledPosition = 0,
+			value = this.element.val(),
+			bufferLength = this.buffer.length,
+			valueLength = value.length;
+
+		// remove all current values from the buffer
+		this._removeValues( 0, bufferLength );
+
+		// seek through the buffer pulling characters from the value
+		for ( bufferPosition = 0; bufferPosition < bufferLength; bufferPosition += bufferObject.length ) {
+			bufferObject = this.buffer[ bufferPosition ];
+
+			while ( valuePosition < value.length ) {
+				character = value.substr( valuePosition, bufferObject.length );
+				if ( bufferObject.literal ) {
+					if ( this._validValue( bufferObject, character ) ) {
+						valuePosition++;
+					}
+					// when parsing a literal from a raw .val() if it doesn't match,
+					// assume that the literal is missing from the val()
+					break;
+				} else {
+					valuePosition++;
+					character = this._validValue( bufferObject, character );
+					if ( character ) {
+						bufferObject.value = character;
+						lastFilledPosition = bufferPosition;
+						break;
+					}
+				}
+			}
 		}
-
-		this._bind({
-			focus: function( event ) {
-				lastUnsavedValue = elem.val();
-				setTimeout( function() {
-					that._caret( that._seekRight( that._parseValue() - 1 ) );
-				}, 0);
-			},
-			blur: function( event ) {
-
-				// because we are constantly setting the value of the input, the change event
-				// never fires - we re-introduce the change event here
-				that._parseValue();
-				if ( elem.val() !== lastUnsavedValue ) {
-					elem.trigger( "change" );
-				}
-				return;
-			},
-			keydown: function( event ) {
-				var key = event.keyCode,
-					position = that._caret();
-
-				if ( key === keyCode.ESCAPE ) {
-					elem.val( lastUnsavedValue );
-					that._caret( 0, that._parseValue() );
-					event.preventDefault();
-				}
-
-				if ( key === keyCode.BACKSPACE || key === keyCode.DELETE ) {
-					event.preventDefault();
-					if ( position.begin == position.end ) {
-						position.begin = position.end = ( key === keyCode.DELETE ?
-							that._seekRight( position.begin - 1) :
-							that._seekLeft( position.begin )
-						);
-						if ( position.begin < 0 ) {
-							that._caret( that.seekLeft( -1 ) );
-							return;
-						}
-					}
-					that._removeValues( position.begin, position.end );
-					that._paint();
-					that._caret( position.begin );
-				}
-			},
-			keypress: function( event ) {
-				var key = event.keyCode,
-					position = that._caret(),
-					bufferPosition = that._seekRight( position.begin - 1 ),
-					bufferObject = that.buffer[ bufferPosition ];
-
-				that.currentEvent = event;
-				// ignore keypresses with special keys, or control characters
-				if ( event.metaKey || event.altKey || event.ctrlKey || key < 32 ) {
-					return;
-				}
-				if ( position.begin !== position.end ) {
-					that._removeValues( position.begin, position.end );
-				}
-				if ( bufferObject ) {
-					key = String.fromCharCode( key );
-					if ( this._validValue( bufferObject, key ) ) {
-						that._shiftRight( position.begin );
-						bufferObject.value = key;
-						that._paint();
-						that._caret( that._seekRight( bufferPosition ) );
-					}
-				}
-				event.preventDefault();
-				that.currentEvent = false;
-			},
-			paste: handlePaste,
-			input: handlePaste
-		});
+		return lastFilledPosition;
+	},
+	_removeValues: function( begin, end ) {
+		var position,
+			bufferObject;
+		for ( position = begin; position <= end; position++ ) {
+			bufferObject = this.buffer[ position ];
+			if ( bufferObject && bufferObject.value ) {
+				delete bufferObject.value;
+			}
+		}
+		this._shiftLeft( begin, end + 1 );
+		return this;
 	},
 
 	// _seekLeft and _seekRight will tell the next non-literal position in the buffer
@@ -297,7 +415,7 @@ $.widget( "ui.mask", {
 			if ( shiftingValue === false ) {
 				shiftingValue = bufferObject.value;
 			} else {
-				if ( this._validValue( bufferObject, shiftingValue ) ) {
+				if ( bufferObject.length === 1 && this._validValue( bufferObject, shiftingValue ) ) {
 					temp = bufferObject.value;
 					bufferObject.value = shiftingValue;
 					shiftingValue = temp;
@@ -307,95 +425,12 @@ $.widget( "ui.mask", {
 			}
 		}
 	},
-	_removeValues: function( begin, end ) {
-		var position,
-			bufferObject;
-		for ( position = begin; position <= end; position++ ) {
-			bufferObject = this.buffer[ position ];
-			if ( bufferObject && bufferObject.value ) {
-				delete bufferObject.value;
-			}
-		}
-		this._shiftLeft( begin, end + 1 );
-		return this;
-	},
-
-	// parses the .val() and places it into the buffer
-	// returns the last filled in value position
-	_parseValue: function() {
-		var bufferPosition,
-			bufferObject,
-			character,
-			valuePosition = 0,
-			lastFilledPosition = 0,
-			value = this.element.val(),
-			bufferLength = this.buffer.length,
-			valueLength = value.length;
-
-		// remove all current values from the buffer
-		this._removeValues( 0, bufferLength );
-
-		// seek through the buffer pulling characters from the value
-		for ( bufferPosition = 0; bufferPosition < bufferLength; bufferPosition += bufferObject.length ) {
-			bufferObject = this.buffer[ bufferPosition ];
-
-			while ( valuePosition < value.length ) {
-				character = value.substr( valuePosition, bufferObject.length );
-				if ( bufferObject.literal ) {
-					if ( this._validValue( bufferObject, character ) ) {
-						valuePosition++;
-					}
-					// when parsing a literal from a raw .val() if it doesn't match,
-					// assume that the literal is missing from the val()
-					break;
-				} else {
-					valuePosition++;
-					character = this._validValue( bufferObject, character );
-					if ( character ) {
-						bufferObject.value = character;
-						lastFilledPosition = bufferPosition;
-						break;
-					}
-				}
-			}
-		}
-		return lastFilledPosition;
-	},
-	_getValue: function( raw ) {
-		var wasValid = this.isValid,
-			bufferPosition,
-			bufferObject,
-			bufferLength = this.buffer.length,
-			value = "";
-
-		this.isValid = true;
-		for ( bufferPosition = 0; bufferPosition < bufferLength; bufferPosition += bufferObject.length ) {
-			bufferObject = this.buffer[ bufferPosition ];
-			if ( bufferObject.literal && !raw ) {
-				value += bufferObject.literal;
-			} else if ( bufferObject.value ) {
-				value += bufferObject.value;
-			} else if ( !raw ) {
-				value += this.options.placeholder;
-				if ( bufferPosition < this.optionalPosition ) {
-					this.isValid = false;
-				}
-			}
-		}
-		if ( this.currentEvent && !wasValid && this.isValid ) {
-			this._trigger( "complete", this.currentEvent, {} );
-		}
-		return value;
-	},
-	_paint: function() {
-		this.element.val( this._getValue() );
-	},
 
 	// returns the value if valid, otherwise returns false
 	_validValue: function( bufferObject, value ) {
 		if ( bufferObject.valid ) {
 			if ( $.isFunction( bufferObject.valid ) ) {
-				return bufferObject.valid( value ) || false;
+				return bufferObject.valid( value || "" ) || false;
 			} else {
 				return bufferObject.valid.test( value ) && value;
 			}
