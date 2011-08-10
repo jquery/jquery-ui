@@ -17,8 +17,7 @@ function modifier( fn ) {
 	return function() {
 		var previous = this.options.value;
 		fn.apply( this, arguments );
-		this._format();
-		this._aria();
+		this._refresh();
 		if ( previous !== this.options.value ) {
 			this._trigger( "change" );
 		}
@@ -48,7 +47,7 @@ $.widget( "ui.spinner", {
 		this._value( this.options.value );
 		this._draw();
 		this._mousewheel();
-		this._aria();
+		this._refresh();
 	},
 
 	_getCreateOptions: function() {
@@ -241,7 +240,7 @@ $.widget( "ui.spinner", {
 
 		var newVal = this.value() + step * this._increment( this.counter );
 
-		// clamp the new value 
+		// clamp the new value
 		newVal = this._trimValue( newVal );
 
 		if ( !this.spinning || this._trigger( "spin", event, { value: newVal } ) !== false) {
@@ -307,31 +306,32 @@ $.widget( "ui.spinner", {
 		this._value( this._trimValue( this.options.value ) );
 	}),
 
-	_aria: function() {
-		this.element.attr({
-			"aria-valuemin": this.options.min,
-			"aria-valuemax": this.options.max,
-			"aria-valuenow": this.options.value
-		});
-	},
-
 	_parse: function( val ) {
 		if ( typeof val === "string" ) {
-			val = $.global && this.options.numberFormat ? $.global.parseFloat( val ) : +val;
+			val = window.Globalize && this.options.numberFormat ? Globalize.parseFloat( val ) : +val;
 		}
 		return isNaN( val ) ? null : val;
 	},
 
 	_format: function() {
 		var num = this.options.value;
-		this.element.val( $.global && this.options.numberFormat ? $.global.format( num, this.options.numberFormat ) : num );
+		return window.Globalize && this.options.numberFormat ? Globalize.format( num, this.options.numberFormat ) : num;
+	},
+
+	_refresh: function() {
+		this.element
+			.val( this._format() )
+			.attr({
+				"aria-valuemin": this.options.min,
+				"aria-valuemax": this.options.max,
+				"aria-valuenow": this.options.value
+			});
 	},
 
 	// update the value without triggering change
 	_value: function( value ) {
 		this.options.value = this._trimValue( this._parse(value) );
-		this._format();
-		this._aria();
+		this._refresh();
 	},
 
 	destroy: function() {
@@ -371,7 +371,7 @@ $.widget( "ui.spinner", {
 
 	value: function( newVal ) {
 		if ( !arguments.length ) {
-			return this._parse( this.element.val() );
+			return this._format();
 		}
 		this.option( "value", newVal );
 	},

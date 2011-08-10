@@ -263,6 +263,7 @@ $.widget( "ui.autocomplete", {
 	},
 
 	_destroy: function() {
+		clearTimeout( this.searching );
 		this.element
 			.removeClass( "ui-autocomplete-input" )
 			.removeAttr( "autocomplete" )
