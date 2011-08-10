@@ -240,6 +240,23 @@ $.widget( "ui.spinner", {
 
 		var newVal = this.value() + step * this._increment( this.counter );
 
+		var stepDecimalLength = 0;
+		if( step.toString().indexOf('.') >= 0 ){
+			stepTrailingLength = step.toString().split('.')[1].length;
+		}
+		var valueDecimalLength = 0;
+		
+		if( this.value().toString().indexOf('.') >= 0 ){
+			valueDecimalLength = this.value().toString().split('.')[1].length;								
+		}
+			
+		if( ( valueDecimalLength > stepDecimalLength ) && ( valueDecimalLength ) ){
+			newVal = newVal.toFixed( valueDecimalLength );
+		}
+		else if( stepDecimalLength ){
+			newVal = newVal.toFixed( stepDecimalLength );
+		}
+		
 		// clamp the new value
 		newVal = this._trimValue( newVal );
 
