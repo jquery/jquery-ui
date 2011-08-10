@@ -28,7 +28,7 @@ $.widget( "ui.mask", {
 		this._parseMask();
 		this._parseValue();
 		this._paint();
-		this._keyBinding();
+		this._events();
 	},
 
 	refresh: function() {
@@ -37,17 +37,7 @@ $.widget( "ui.mask", {
 	},
 
 	valid: function() {
-		var bufferPosition,
-			bufferObject,
-			bufferLength = this.buffer.length;
-
-		for ( bufferPosition = 0; bufferPosition < bufferLength; bufferPosition++ ) {
-			bufferObject = this.buffer[ bufferPosition ];
-			if ( !( bufferObject.value || bufferObject.literal ) ) {
-				return false;
-			}
-		}
-		return true;
+		return this.isValid;
 	},
 
 	// returns (or sets) the value without the mask
@@ -144,17 +134,19 @@ $.widget( "ui.mask", {
 			}
 		}
 	},
-	_keyBinding: function() {
+	_events: function() {
 		var cancelKeypress,
 			lastUnsavedValue,
 			that = this,
 			elem = that.element;
 
 		function handlePaste() {
+			that.currentEvent = event;
 			setTimeout( function() {
 				var position = that._parseValue();
 				that._paint();
 				that._caret( that._seekRight( position ) );
+				that.currentEvent = false;
 			}, 0 );
 		}
 
@@ -208,6 +200,7 @@ $.widget( "ui.mask", {
 					bufferPosition = that._seekRight( position.begin - 1 ),
 					bufferObject = that.buffer[ bufferPosition ];
 
+				that.currentEvent = event;
 				// ignore keypresses with special keys, or control characters
 				if ( event.metaKey || event.altKey || event.ctrlKey || key < 32 ) {
 					return;
@@ -225,6 +218,7 @@ $.widget( "ui.mask", {
 					}
 				}
 				event.preventDefault();
+				that.currentEvent = false;
 			},
 			paste: handlePaste,
 			input: handlePaste
@@ -358,11 +352,13 @@ $.widget( "ui.mask", {
 		return lastFilledPosition;
 	},
 	_getValue: function( raw ) {
-		var bufferPosition,
+		var wasValid = this.isValid,
+			bufferPosition,
 			bufferObject,
 			bufferLength = this.buffer.length,
 			value = "";
 
+		this.isValid = true;
 		for ( bufferPosition = 0; bufferPosition < bufferLength; bufferPosition += bufferObject.length ) {
 			bufferObject = this.buffer[ bufferPosition ];
 			if ( bufferObject.literal && !raw ) {
@@ -371,7 +367,11 @@ $.widget( "ui.mask", {
 				value += bufferObject.value;
 			} else if ( !raw ) {
 				value += this.options.placeholder;
+				this.isValid = false;
 			}
+		}
+		if ( !wasValid && this.isValid ) {
+			this._trigger( "complete", this.currentEvent );
 		}
 		return value;
 	},
