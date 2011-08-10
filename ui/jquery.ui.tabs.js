@@ -354,7 +354,7 @@ $.widget( "ui.tabs", {
 
 		if ( toShow.length ) {
 
-			// TODO make passing in node possible, see also http://dev.jqueryui.com/ticket/3171
+			// TODO make passing in node possible
 			that.load( that.anchors.index( clicked ), event );
 
 			clicked[ 0 ].blur();
@@ -449,12 +449,10 @@ $.widget( "ui.tabs", {
 
 		this.list.removeClass( "ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all" );
 
-		this.anchors.each(function() {
-			var $this = $( this ).unbind( ".tabs" );
-			$.each( [ "href", "load" ], function( i, prefix ) {
-				$this.removeData( prefix + ".tabs" );
-			});
-		});
+		this.anchors
+			.unbind( ".tabs" )
+			.removeData( "href.tabs" )
+			.removeData( "load.tabs" );
 
 		this.lis.unbind( ".tabs" ).add( this.panels ).each(function() {
 			if ( $.data( this, "destroy.tabs" ) ) {
