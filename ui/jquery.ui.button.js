@@ -149,7 +149,7 @@ $.widget( "ui.button", {
 				$( this ).toggleClass( "ui-state-active", !self.element[0].checked );
 				self.buttonElement.attr( "aria-pressed", !self.element[0].checked );
 			});
-			this.buttonElement.bind( "dblclick.buttonElement", function(e) {
+			this.buttonElement.bind( "dblclick.buttonElement", function() {
 				if ( options.disabled || clickDragged ) {
 					return false;
 				}
