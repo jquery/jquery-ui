@@ -142,7 +142,7 @@ $.widget( "ui.button", {
 		}
 
 		if ( this.type === "checkbox" ) {
-			this.buttonElement.bind( "click.button", function() { 
+			this.buttonElement.bind( "click.button", function() {
 				if ( options.disabled || clickDragged ) {
 					return false;
 				}
