@@ -694,7 +694,7 @@ $.extend(Datepicker.prototype, {
 			$.datepicker._datepickerShowing = true;
 
 			// DEPRECATED: after BC for 1.8.x $.effects[ showAnim ] is not needed
-			if ( $.effects && ( $.effects.effect[ showAnim ] || $.effects[ showAnim ] ) )
+			if ( $.effects && && $.effects.effect &&( $.effects.effect[ showAnim ] || $.effects[ showAnim ] ) )
 				inst.dpDiv.show(showAnim, $.datepicker._get(inst, 'showOptions'), duration, postProcess);
 			else
 				inst.dpDiv[showAnim || 'show']((showAnim ? duration : null), postProcess);
@@ -813,7 +813,7 @@ $.extend(Datepicker.prototype, {
 			};
 
 			// DEPRECATED: after BC for 1.8.x $.effects[ showAnim ] is not needed
-			if ( $.effects && ( $.effects.effect[ showAnim ] || $.effects[ showAnim ] ) )
+			if ( $.effects && $.effects.effect && ( $.effects.effect[ showAnim ] || $.effects[ showAnim ] ) )
 				inst.dpDiv.hide(showAnim, $.datepicker._get(inst, 'showOptions'), duration, postProcess);
 			else
 				inst.dpDiv[(showAnim == 'slideDown' ? 'slideUp' :
