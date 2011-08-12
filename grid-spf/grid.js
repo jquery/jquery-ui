@@ -12,7 +12,7 @@
 
 $.widget( "ui.grid", {
 	options: {
-		dataFields: [ "type", "editor", "editorOptions" ],
+		dataFields: [ "type", "editor", "editorOptions", "template" ],
 		columns: null,
 		rowTemplate: null
 	},
@@ -80,14 +80,9 @@ $.widget( "ui.grid", {
 		if ( this.options.rowTemplate ) {
 			return;
 		}
-		var headers = this.element.find( "thead th" );
 		var template = $.map( this.options.columns, function( column, index ) {
-			// TODO how to specify a custom template using the columns option?
-			// make columns array-of-objects (optional) to contain all the potential data attributes?
-			// should then output those when generating the columns
-			var customTemplate = headers.eq( index ).data( "template" );
-			if ( customTemplate ) {
-				return $(customTemplate).html();
+			if ( column.template ) {
+				return $( column.template ).html();
 			}
 			return "<td class=\"ui-widget-content\">${" + column.property + "}</td>";
 		}).join( "" );
