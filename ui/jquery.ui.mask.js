@@ -265,7 +265,7 @@ $.widget( "ui.mask", {
 		}
 	},
 	_parseMask: function() {
-		var key, x, bufferObject, originalPosition,
+		var key, x, bufferObject, originalPosition, optionalPosition,
 			index = -1,
 			options = this.options,
 			mask = options.mask;
