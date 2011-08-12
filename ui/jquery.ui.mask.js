@@ -206,9 +206,13 @@ $.widget( "ui.mask", {
 						if ( bufferObject && bufferObject.length > 1 ) {
 							bufferObject.value = this._validValue( bufferObject, bufferObject.value );
 							that._paint();
-							that._caret( that._seekRight( bufferObject.start + bufferObject.length - 1 ) );
 							event.preventDefault();
-							
+						}
+						position = that._seekRight( bufferObject.start + bufferObject.length - 1 );
+						bufferObject = that.buffer[ position ];
+						if ( bufferObject && bufferObject.length > 1 ) {
+							that._caret( position, position + ( bufferObject && bufferObject.length > 1 ? bufferObject.length : 0 ) );
+							event.preventDefault();
 						}
 					}
 					return;
@@ -398,7 +402,9 @@ $.widget( "ui.mask", {
 			destPosition += destObject.length ) {
 			destObject = this.buffer[ destPosition ];
 			bufferObject = this.buffer[ bufferPosition ];
-			if ( destObject.valid ) {
+
+			// we don't want to shift values into multi character fields
+			if ( destObject.valid && destObject.length === 1 ) {
 				if ( bufferPosition < bufferLength ) {
 					if ( this._validValue( destObject, bufferObject.value ) ) {
 						destObject.value = bufferObject.value;
@@ -426,6 +432,8 @@ $.widget( "ui.mask", {
 			if ( shiftingValue === false ) {
 				shiftingValue = bufferObject.value;
 			} else {
+
+				// we don't want to shift values into multi character fields
 				if ( bufferObject.length === 1 && this._validValue( bufferObject, shiftingValue ) ) {
 					temp = bufferObject.value;
 					bufferObject.value = shiftingValue;
