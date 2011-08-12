@@ -110,13 +110,13 @@ $.widget( "ui.mask", {
 			bufferLength = this.buffer.length,
 			value = "";
 
-		this.empty = this.isValid = true;
+		this.isEmpty = this.isValid = true;
 		for ( bufferPosition = 0; bufferPosition < bufferLength; bufferPosition += bufferObject.length ) {
 			bufferObject = this.buffer[ bufferPosition ];
 			if ( bufferObject.literal && !raw ) {
 				value += bufferObject.literal;
 			} else if ( bufferObject.value ) {
-				this.empty = false;
+				this.isEmpty = false;
 				value += bufferObject.value;
 				for ( counter = bufferObject.value.length; counter < bufferObject.length; counter++ ) {
 					value += this.options.placeholder;
@@ -255,10 +255,10 @@ $.widget( "ui.mask", {
 		if ( focused === undefined ) {
 			focused = this.element[ 0 ] === document.activeElement;
 		}
-		// calling _getValue updates empty
+		// calling _getValue updates isEmpty
 		var value = this._getValue();
 
-		if ( this.options.clearEmpty && this.empty && !focused ) {
+		if ( this.options.clearEmpty && this.isEmpty && !focused ) {
 			this.element.val( "" );
 		} else {
 			this.element.val( value );
