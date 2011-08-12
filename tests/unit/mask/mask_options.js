@@ -2,11 +2,30 @@
 
 module( "mask: options" );
 
+test( "clearEmpty", function() {
+	expect( 4 );
+	var input = $( "#mask1" ).val("").mask({
+			mask: "99/99/99",
+			placeholder: "_",
+			clearEmpty: true
+		}),
+		mask = input.data( "mask" );
+
+	equal( input.val(), "", "Empty value with clearEmpty displays no mask" );
+	input.focus();
+	equal( input.val(), "__/__/__", "Empty value with clearEmpty & element focus displays mask" );
+	input.blur();
+	equal( input.val(), "", "Empty value with clearEmpty displays no mask after blur" );
+	input.mask( "option", "clearEmpty", false );
+	equal( input.val(), "__/__/__", "Disabling clearEmpty displays mask" );
+});
+
 test( "placeholder", function() {
 	expect( 2 );
 	var input = $( "#mask1" ).mask({
 		mask: "99/99/99",
-		placeholder: "_"
+		placeholder: "_",
+		clearEmpty: false
 	});
 
 	equal( input.val(), "__/__/__", "Initial value" );

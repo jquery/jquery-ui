@@ -39,7 +39,10 @@ test( "complete: Complete event fires when typing last character of mask", funct
 });
 
 asyncTest( "focus: Initial Caret Positioning", function() {
-	var input = $( "#mask1" ).val("").mask({ mask: "9" }),
+	var input = $( "#mask1" ).val("").mask({
+			mask: "9",
+			clearEmpty: false
+		}),
 		mask = input.data( "mask" );
 
 	equal( input.val(), "_", "Initial Value Expected" );
@@ -224,7 +227,10 @@ test( "keydown: escape returns to original value", function() {
 
 test( "keypress: typing behaviors", function() {
 	expect( 8 );
-	var input = $( "#mask1" ).mask({ mask: "9-9" }),
+	var input = $( "#mask1" ).mask({
+			mask: "9-9",
+			clearEmpty: false
+		}),
 		mask = input.data( "mask" );
 
 	input.focus();

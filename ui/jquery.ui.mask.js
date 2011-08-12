@@ -20,6 +20,7 @@ $.widget( "ui.mask", {
 	version: "@VERSION",
 	defaultElement: "<input>",
 	options: {
+		clearEmpty: true,
 		definitions: {
 			'9': /[0-9]/,
 			'a': /[A-Za-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]/,
@@ -60,11 +61,8 @@ $.widget( "ui.mask", {
 		if ( key === "mask" ) {
 			this._parseMask();
 			this._parseValue();
-			this._paint();
 		}
-		if ( key === "placeholder" ) {
-			this._paint();
-		}
+		this._paint();
 	},
 
 	// helper function to get or set position of text cursor (caret)
@@ -112,12 +110,13 @@ $.widget( "ui.mask", {
 			bufferLength = this.buffer.length,
 			value = "";
 
-		this.isValid = true;
+		this.empty = this.isValid = true;
 		for ( bufferPosition = 0; bufferPosition < bufferLength; bufferPosition += bufferObject.length ) {
 			bufferObject = this.buffer[ bufferPosition ];
 			if ( bufferObject.literal && !raw ) {
 				value += bufferObject.literal;
 			} else if ( bufferObject.value ) {
+				this.empty = false;
 				value += bufferObject.value;
 				for ( counter = bufferObject.value.length; counter < bufferObject.length; counter++ ) {
 					value += this.options.placeholder;
@@ -155,6 +154,7 @@ $.widget( "ui.mask", {
 		this._bind({
 			focus: function( event ) {
 				lastUnsavedValue = elem.val();
+				that._paint( true );
 				setTimeout( function() {
 					that._caret( that._seekRight( that._parseValue() - 1 ) );
 				}, 0);
@@ -164,6 +164,7 @@ $.widget( "ui.mask", {
 				// because we are constantly setting the value of the input, the change event
 				// never fires - we re-introduce the change event here
 				that._parseValue();
+				that._paint( false );
 				if ( elem.val() !== lastUnsavedValue ) {
 					elem.trigger( "change" );
 				}
@@ -250,8 +251,18 @@ $.widget( "ui.mask", {
 			input: handlePaste
 		});
 	},
-	_paint: function() {
-		this.element.val( this._getValue() );
+	_paint: function( focused ) {
+		if ( focused === undefined ) {
+			focus = this.element[ 0 ] === document.activeElement;
+		}
+		// calling _getValue updates empty
+		var value = this._getValue();
+
+		if ( this.options.clearEmpty && this.empty && !focused ) {
+			this.element.val( "" );
+		} else {
+			this.element.val( value );
+		}
 	},
 	_parseMask: function() {
 		var key, x, bufferObject, originalPosition,
