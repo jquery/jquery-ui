@@ -253,7 +253,7 @@ $.widget( "ui.mask", {
 	},
 	_paint: function( focused ) {
 		if ( focused === undefined ) {
-			focus = this.element[ 0 ] === document.activeElement;
+			focused = this.element[ 0 ] === document.activeElement;
 		}
 		// calling _getValue updates empty
 		var value = this._getValue();
