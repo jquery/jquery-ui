@@ -10,6 +10,14 @@
 (function( $ ) {
 
 $.widget( "ui.editor", {
+	options: {
+		editor: null,
+		editorOptions: null,
+
+		// callbacks
+		cancel: null,
+		submit: null
+	},
 	_create: function() {
 		this.inner = this.element.wrapInner( "<div class='editor-wrapper'></div>" ).children();
 		this._bind({
