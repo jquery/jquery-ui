@@ -73,7 +73,7 @@
 			source: developers
 		});
 
-		developers.element.bind("datasourceresponse", function() {
+		grid.bind("gridrefresh", function() {
 			grid.find("tbody > tr").each(function() {
 				if ( $.inArray( $( this ).data("grid-item"), selected ) !== -1 ) {
 					$( this ).addClass("ui-selected");
