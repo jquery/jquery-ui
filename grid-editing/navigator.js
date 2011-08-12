@@ -57,7 +57,11 @@ $.widget( "ui.navigator", {
 			this.up(); break;
 		case $.ui.keyCode.DOWN:
 			this.down(); break;
+		default:
+			return;
 		}
+		// prevent page from scrolling when a key is matched
+		event.preventDefault();
 	},
 	enter: function( event ) {
 		switch ( event.keyCode ) {
