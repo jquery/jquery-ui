@@ -13,8 +13,8 @@
 		$( "#mask1" ).mask({ mask: "99/99/9999" });
 		$( "#mask2" ).mask({ mask: "(999) 999-9999" });
 		$( "#mask3" ).mask({ mask: "(999) 999-9999?x999999" });
-		$( "#mask4" ).mask({ mask: "99-9999999" });
-		$( "#mask5" ).mask({ mask: "999-99-9999" });
+		$( "#mask4" ).mask({ mask: "99-9999999", clearEmpty: false });
+		$( "#mask5" ).mask({ mask: "999-99-9999", clearEmpty: false });
 		$( "#mask6" ).mask({ mask: "a*-999-a999" });
 		$( "#mask7" ).mask({
 			mask: "~9.99 ~9.99 999",
@@ -34,13 +34,15 @@
 				mm: sixty,
 				ss: sixty,
 				pp: function( value ) {
-					var character = value.toLowerCase().charAt( 0 );
+					var lower = value.toLowerCase(),
+						character = lower.charAt( 0 );
+					if ( lower.length > 1 && lower.charAt( 1 ) !== "m" ) {
+						return false;
+					}
 					switch ( character ) {
 					case "a":
-					case "A":
 						return "am";
 					case "p":
-					case "P":
 						return "pm";
 					}
 				}
@@ -64,21 +66,21 @@
 </head>
 <body>
 	<form>
-		<label for="mask1">Date - 99/99/9999</label>
+		<label for="mask1">Date - <code>{ mask: "99/99/9999" }</code></label>
 		<input type="text" class="masked" id="mask1">
-		<label for="mask2">Phone - (999) 999-9999</label>
+		<label for="mask2">Phone - <code>{ mask: "(999) 999-9999" }</code></label>
 		<input type="text" class="masked" id="mask2">
-		<label for="mask3">Phone - (999) 999-9999?x999999</label>
+		<label for="mask3">Phone - <code>{ mask: "(999) 999-9999?x999999" }</code></label>
 		<input type="text" class="masked" id="mask3">
-		<label for="mask4">TaxID - 99-9999999</label>
+		<label for="mask4">TaxID - <code>{ mask: "99-9999999", clearEmpty: false }</code></label>
 		<input type="text" class="masked" id="mask4">
-		<label for="mask5">SSN - 999-99-9999</label>
+		<label for="mask5">SSN - <code>{ mask: "999-99-9999", clearEmpty: false }</code></label>
 		<input type="text" class="masked" id="mask5">
-		<label for="mask6">Product Key - a*-999-a999</label>
+		<label for="mask6">Product Key - <code>{ mask: "a*-999-a999" }</code></label>
 		<input type="text" class="masked" id="mask6">
-		<label for="mask7">Eye Script - ~9.99 ~9.99 999</label>
+		<label for="mask7">Eye Script - <code>{ mask: "~9.99 ~9.99 999" }</code></label>
 		<input type="text" class="masked" id="mask7">
-		<label for="mask8">Time - hh:mm:ss pp</label>
+		<label for="mask8">Time - <code>{ mask: "hh:mm:ss pp", definitions: .... }</label>
 		<input type="text" class="masked" id="mask8">
 	</form>
 </body>
