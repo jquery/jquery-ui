@@ -46,7 +46,7 @@ $.widget( "ui.spinner", {
 	_create: function() {
 		this._value( this.options.value );
 		this._draw();
-		this._mousewheel();
+		this._bind( this._events );
 		this._refresh();
 	},
 
@@ -64,6 +64,79 @@ $.widget( "ui.spinner", {
 		return options;
 	},
 
+	_events: {
+		keydown: function( event ) {
+			if ( this._start( event ) && this._keydown( event ) ) {
+				event.preventDefault();
+			}
+		},
+		keyup: "_stop",
+		focus: function() {
+			this.uiSpinner.addClass( "ui-state-active" );
+			this.previous = this.element.val();
+		},
+		blur: function( event ) {
+			// don't clear invalid values on blur
+			var value = this.element.val();
+			this._value( value );
+			if ( this.element.val() === "" ) {
+				this.element.val( value );
+			}
+			this.uiSpinner.removeClass( "ui-state-active" );
+			// TODO: what should trigger change?
+			// element.val() or options.value?
+			if ( this.previous !== this.element.val() ) {
+				this._trigger( "change", event );
+			}
+		},
+		mousewheel: function( event, delta ) {
+			if ( !delta ) {
+				return;
+			}
+			if ( !this.spinning && !this._start( event ) ) {
+				return false;
+			}
+
+			this._spin( (delta > 0 ? 1 : -1) * this.options.step, event );
+			clearTimeout( this.mousewheelTimer );
+			this.mousewheelTimer = setTimeout(function() {
+				if ( this.spinning ) {
+					this._stop( event );
+				}
+			}, 100 );
+			event.preventDefault();
+		},
+		"mousedown .ui-spinner-button": function( event ) {
+			// ensure focus is on (or stays on) the text field
+			event.preventDefault();
+			if ( document.activeElement !== this.element[ 0 ] ) {
+				this.element.focus();
+			}
+
+			if ( this._start( event ) === false ) {
+				return;
+			}
+
+			this._repeat( null, $( event.currentTarget ).hasClass( "ui-spinner-up" ) ? 1 : -1, event );
+		},
+		"mouseup .ui-spinner-button": "_stop",
+		"mouseenter .ui-spinner-button": function( event ) {
+			// button will add ui-state-active if mouse was down while mouseleave and kept down
+			if ( !$( event.currentTarget ).hasClass( "ui-state-active" ) ) {
+				return;
+			}
+
+			if ( this._start( event ) === false ) {
+				return false;
+			}
+			this._repeat( null, $( event.currentTarget ).hasClass( "ui-spinner-up" ) ? 1 : -1, event );
+		},
+		// TODO: do we really want to consider this a stop?
+		// shouldn't we just stop the repeater and wait until mouseup before
+		// we trigger the stop event?
+		"mouseleave .ui-spinner-button": "_stop"
+	},
+
 	_draw: function() {
 		var uiSpinner = this.uiSpinner = this.element
 			.addClass( "ui-spinner-input" )
@@ -75,69 +148,12 @@ $.widget( "ui.spinner", {
 		this._hoverable( uiSpinner );
 
 		this.element.attr( "role", "spinbutton" );
-		this._bind({
-			keydown: function( event ) {
-				if ( this._start( event ) && this._keydown( event ) ) {
-					event.preventDefault();
-				}
-			},
-			keyup: "_stop",
-			focus: function() {
-				uiSpinner.addClass( "ui-state-active" );
-				this.previous = this.element.val();
-			},
-			blur: function( event ) {
-				// don't clear invalid values on blur
-				var value = this.element.val();
-				this._value( value );
-				if ( this.element.val() === "" ) {
-					this.element.val( value );
-				}
-				uiSpinner.removeClass( "ui-state-active" );
-				// TODO: what should trigger change?
-				// element.val() or options.value?
-				if ( this.previous !== this.element.val() ) {
-					this._trigger( "change", event );
-				}
-			}
-		});
 
 		// button bindings
 		this.buttons = uiSpinner.find( ".ui-spinner-button" )
 			.attr( "tabIndex", -1 )
 			.button()
 			.removeClass( "ui-corner-all" );
-		this._bind( this.buttons, {
-			mousedown: function( event ) {
-				// ensure focus is on (or stays on) the text field
-				event.preventDefault();
-				if ( document.activeElement !== this.element[ 0 ] ) {
-					this.element.focus();
-				}
-
-				if ( this._start( event ) === false ) {
-					return;
-				}
-
-				this._repeat( null, $( event.currentTarget ).hasClass( "ui-spinner-up" ) ? 1 : -1, event );
-			},
-			mouseup: "_stop",
-			mouseenter: function( event ) {
-				// button will add ui-state-active if mouse was down while mouseleave and kept down
-				if ( !$( event.currentTarget ).hasClass( "ui-state-active" ) ) {
-					return;
-				}
-
-				if ( this._start( event ) === false ) {
-					return false;
-				}
-				this._repeat( null, $( event.currentTarget ).hasClass( "ui-spinner-up" ) ? 1 : -1, event );
-			},
-			// TODO: do we really want to consider this a stop?
-			// shouldn't we just stop the repeater and wait until mouseup before
-			// we trigger the stop event?
-			mouseleave: "_stop"
-		});
 
 		// disable spinner if element was already disabled
 		if ( this.options.disabled ) {
@@ -167,32 +183,6 @@ $.widget( "ui.spinner", {
 		}
 
 		return false;
-	},
-
-	_mousewheel: function() {
-		// need the delta normalization that mousewheel plugin provides
-		if ( !$.fn.mousewheel ) {
-			return;
-		}
-		this._bind({
-			mousewheel: function( event, delta ) {
-				if ( !delta ) {
-					return;
-				}
-				if ( !this.spinning && !this._start( event ) ) {
-					return false;
-				}
-
-				this._spin( (delta > 0 ? 1 : -1) * this.options.step, event );
-				clearTimeout( this.mousewheelTimer );
-				this.mousewheelTimer = setTimeout(function() {
-					if ( this.spinning ) {
-						this._stop( event );
-					}
-				}, 100 );
-				event.preventDefault();
-			}
-		});
 	},
 
 	_uiSpinnerHtml: function() {
