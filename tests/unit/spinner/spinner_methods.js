@@ -132,6 +132,52 @@ test( "stepDown", function() {
 	equals( element.val(), -15, "at min and stepDown 1 step" );
 });
 
+test("stepTrailingDecimal", function() {
+	expect(2);
+
+	el = $('#spin').spinner({ step: .02, page: 5, value: 0.001, min: -.08 });
+
+	el.spinner('stepDown')
+	equals(el.val(), -0.019, "stepDown 1 step");
+
+	el.spinner('stepUp', 2)
+	equals(el.val(), 0.021, "stepDown 5 steps");
+	
+});
+
+test("decimalValueIntegerStep", function() {
+	expect(3);
+
+	el = $('#spin').spinner({ step: 1, page: 5, value: .001 });
+
+	el.spinner('stepUp')
+	equals(el.val(), 1.001, "stepUp 1 step");
+
+	el.spinner('stepUp', 5)
+	equals(el.val(), 6.001, "stepUp 5 steps");
+	
+	el.spinner('stepDown', 7)
+	equals(el.val(), -0.999, "stepDown 7 steps");
+	
+});
+
+test("integerValueDecimalStep", function() {
+	expect(4);
+
+	el = $('#spin').spinner({ step: .01, page: 5, value: 0, min: -.08 });
+
+	el.spinner('stepDown')
+	equals(el.val(), -0.01, "stepDown 1 step");
+
+	el.spinner('stepDown', 5)
+	equals(el.val(), -0.06, "stepDown 5 steps");
+	
+	el.spinner('stepDown', 3);
+	equals(el.val(), -0.08, "close to min and stepDown 3 steps");
+
+	el.spinner('stepDown');
+	equals(el.val(), -0.08, "at min and stepDown 1 step");
+});
 test( "stepUp", function() {
 	expect( 4 );
 	var element = $( "#spin" ).spinner({
