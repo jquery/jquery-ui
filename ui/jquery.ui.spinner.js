@@ -228,10 +228,13 @@ $.widget( "ui.spinner", {
 			this.counter = 1;
 		}
 
-		var newVal = this.value() + step * this._increment( this.counter );
+		var newVal = this.value() + step * this._increment( this.counter ),
+			// fix precision from bad JS floating point math
+			precision = Math.max( this._precision( this.value() ),
+				this._precision( this.options.step ) );
 
 		// clamp the new value
-		newVal = this._trimValue( newVal );
+		newVal = this._trimValue( newVal.toFixed( precision ) );
 
 		if ( !this.spinning || this._trigger( "spin", event, { value: newVal } ) !== false) {
 			this._value( newVal );
@@ -243,6 +246,12 @@ $.widget( "ui.spinner", {
 		return this.options.incremental ?
 			Math.floor( i*i*i/50000 - i*i/500 + 17*i/200 + 1 ) :
 			1;
+	},
+
+	_precision: function( num ) {
+		var str = num.toString(),
+			decimal = str.indexOf( "." );
+		return decimal === -1 ? 0 : str.length - decimal - 1;
 	},
 
 	_trimValue: function( value ) {

@@ -185,4 +185,21 @@ test( "focus text field when pressing button", function() {
 	ok( element[ 0 ] === document.activeElement, "focused after" );
 });
 
+test( "precision", function() {
+	expect( 2 );
+	var element = $( "#spin" ).spinner({
+		value: .05,
+		step: .0001
+	});
+	element.spinner( "stepUp" );
+	equal( element.val(), "0.0501", "precision from step" );
+
+	element.spinner( "option", {
+		value: 1.05,
+		step: 1
+	});
+	element.spinner( "stepDown" );
+	equal( element.val(), "0.05", "precision from value" );
+});
+
 })( jQuery );
