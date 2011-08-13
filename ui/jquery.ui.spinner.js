@@ -15,10 +15,10 @@
 
 function modifier( fn ) {
 	return function() {
-		var previous = this.options.value;
+		var previous = this.element.val();
 		fn.apply( this, arguments );
 		this._refresh();
-		if ( previous !== this.options.value ) {
+		if ( previous !== this.element.val() ) {
 			this._trigger( "change" );
 		}
 	};
@@ -35,7 +35,6 @@ $.widget( "ui.spinner", {
 		numberFormat: null,
 		page: 10,
 		step: 1,
-		value: 0,
 
 		change: null,
 		spin: null,
@@ -44,7 +43,7 @@ $.widget( "ui.spinner", {
 	},
 
 	_create: function() {
-		this._value( this.options.value );
+		this._value( this.element.val(), true );
 		this._draw();
 		this._bind( this._events );
 		this._refresh();
@@ -54,7 +53,7 @@ $.widget( "ui.spinner", {
 		var options = {},
 			element = this.element;
 
-		$.each( [ "min", "max", "step", "value" ], function( i, option ) {
+		$.each( [ "min", "max", "step" ], function( i, option ) {
 			var value = element.attr( option );
 			if ( value !== undefined && value.length ) {
 				options[ option ] = value;
@@ -76,15 +75,8 @@ $.widget( "ui.spinner", {
 			this.previous = this.element.val();
 		},
 		blur: function( event ) {
-			// don't clear invalid values on blur
-			var value = this.element.val();
-			this._value( value );
-			if ( this.element.val() === "" ) {
-				this.element.val( value );
-			}
+			this._refresh();
 			this.uiSpinner.removeClass( "ui-state-active" );
-			// TODO: what should trigger change?
-			// element.val() or options.value?
 			if ( this.previous !== this.element.val() ) {
 				this._trigger( "change", event );
 			}
@@ -178,8 +170,6 @@ $.widget( "ui.spinner", {
 		case keyCode.PAGE_DOWN:
 			this._repeat( null, -options.page, event );
 			return true;
-		case keyCode.ENTER:
-			this._value( this.element.val() );
 		}
 
 		return false;
@@ -228,11 +218,11 @@ $.widget( "ui.spinner", {
 			this.counter = 1;
 		}
 
-		var newVal = this.value() + step * this._increment( this.counter ),
+		var value = this.value(),
+			newVal = value + step * this._increment( this.counter ),
 			// fix precision from bad JS floating point math
-			precision = Math.max( this._precision( this.value() ),
+			precision = Math.max( this._precision( value ),
 				this._precision( this.options.step ) );
-
 		// clamp the new value
 		newVal = this._trimValue( newVal.toFixed( precision ) );
 
@@ -281,10 +271,6 @@ $.widget( "ui.spinner", {
 	},
 
 	_setOption: function( key, value ) {
-		if ( key === "value" ) {
-			return this._value( value );
-		}
-
 		this._super( "_setOption", key, value );
 
 		if ( key === "disabled" ) {
@@ -300,9 +286,7 @@ $.widget( "ui.spinner", {
 
 	_setOptions: modifier(function( options ) {
 		this._super( "_setOptions", options );
-
-		// handle any options that might cause value to change, e.g., min
-		this._value( this._trimValue( this.options.value ) );
+		this._value( this.element.val() );
 	}),
 
 	_parse: function( val ) {
@@ -312,24 +296,37 @@ $.widget( "ui.spinner", {
 		return isNaN( val ) ? null : val;
 	},
 
-	_format: function() {
-		var num = this.options.value;
-		return window.Globalize && this.options.numberFormat ? Globalize.format( num, this.options.numberFormat ) : num;
+	_format: function( value ) {
+		if ( value === "" ) {
+			return "";
+		}
+		return window.Globalize && this.options.numberFormat ?
+			Globalize.format( value, this.options.numberFormat ) :
+			value;
 	},
 
 	_refresh: function() {
-		this.element
-			.val( this._format() )
-			.attr({
-				"aria-valuemin": this.options.min,
-				"aria-valuemax": this.options.max,
-				"aria-valuenow": this.options.value
-			});
+		this.element.attr({
+			"aria-valuemin": this.options.min,
+			"aria-valuemax": this.options.max,
+			// TODO: what should we do with values that can't be parsed?
+			"aria-valuenow": this._parse( this.element.val() )
+		});
 	},
 
 	// update the value without triggering change
-	_value: function( value ) {
-		this.options.value = this._trimValue( this._parse(value) );
+	_value: function( value, ignoreRange ) {
+		var parsed;
+		if ( value !== "" ) {
+			parsed = this._parse( value );
+			if ( parsed !== null ) {
+				if ( !ignoreRange ) {
+					parsed = this._trimValue( parsed );
+				}
+				value = this._format( parsed );
+			}
+		}
+		this.element.val( value );
 		this._refresh();
 	},
 
@@ -370,9 +367,9 @@ $.widget( "ui.spinner", {
 
 	value: function( newVal ) {
 		if ( !arguments.length ) {
-			return this.options.value;
+			return this._parse( this.element.val() );
 		}
-		this.option( "value", newVal );
+		modifier( this._value ).call( this, newVal );
 	},
 
 	widget: function() {
