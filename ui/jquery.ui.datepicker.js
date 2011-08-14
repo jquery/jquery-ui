@@ -855,7 +855,7 @@ $.extend(Datepicker.prototype, {
 	/* Adjust one of the date sub-fields. */
 	_adjustDate: function(id, offset, period) {
 		var target = $(id),
-		    inst = this._getInst(target[0]);
+                    inst = this._getInst(target[0]);
 		if (this._isDisabledDatepicker(target[0])) {
 			return;
 		}
@@ -912,14 +912,14 @@ $.extend(Datepicker.prototype, {
 	/* Erase the input field and hide the date picker. */
 	_clearDate: function(id) {
 		var target = $(id),
-		    inst = this._getInst(target[0]);
+                    inst = this._getInst(target[0]);
 		this._selectDate(target, '');
 	},
 
 	/* Update the input field with the selected date. */
 	_selectDate: function(id, dateStr) {
 		var target = $(id),
-		    inst = this._getInst(target[0]);
+                    inst = this._getInst(target[0]),
                     onSelect = this._get(inst, 'onSelect');
 		dateStr = (dateStr != null ? dateStr : this._formatDate(inst));
 		if (inst.input)
@@ -992,7 +992,7 @@ $.extend(Datepicker.prototype, {
 			return null;
 		var shortYearCutoff = (settings ? settings.shortYearCutoff : null) || this._defaults.shortYearCutoff;
 		shortYearCutoff = (typeof shortYearCutoff != 'string' ? shortYearCutoff :
-				new Date().getFullYear() % 100 + parseInt(shortYearCutoff, 10)),
+				new Date().getFullYear() % 100 + parseInt(shortYearCutoff, 10));
 		var dayNamesShort = (settings ? settings.dayNamesShort : null) || this._defaults.dayNamesShort,
 		    dayNames = (settings ? settings.dayNames : null) || this._defaults.dayNames,
 		    monthNamesShort = (settings ? settings.monthNamesShort : null) || this._defaults.monthNamesShort,
@@ -1197,7 +1197,7 @@ $.extend(Datepicker.prototype, {
 		    },
 		    output = '',
 		    literal = false;
-		 if (date)
+		if (date)
 			for (var iFormat = 0; iFormat < format.length; iFormat++) {
 				if (literal)
 					if (format.charAt(iFormat) == "'" && !lookAhead("'"))
