@@ -52,6 +52,56 @@ $.widget( "ui.button", {
 			secondary: null
 		}
 	},
+	/* begin changes -- support normalized click */
+	_suppressClick: false,
+	_clickEvent: null,
+	_keyDownEventHandlersWired: false,
+
+	_wireKeyDownEventHandlers: function () {
+		if (this._keyDownEventHandlersWired)
+			return;
+
+		this._keyDownEventHandlersWired = true;
+
+		var self = this;
+
+		// Don't allow any click events until we know whether or not to fire them
+		this._suppressClick = true;
+
+		$(document).bind(("mousedown mouseup keydown keyup focus blur ".split(" ")).join(".buttonClickHandler "), function (event) {
+			// capture any activity outside of the button or blur or not keyup in window
+			var _isActivityOutside = !(self.element.find($(event.target))),
+				_eventType = event.type;
+
+			if (_isActivityOutside || !(_eventType === "keyup" || _eventType === "keydown")) {
+				self._unwireKeyDownEventHandlers();
+				self._suppressClick = true;
+				self.element.removeClass( "ui-state-active" );
+			} 
+			// Event is keyup and it is inside
+			else if (_eventType === "keyup") {
+				self._unwireKeyDownEventHandlers();
+				self._suppressClick = false;
+				if (self._clickEvent) {
+					self.buttonElement.trigger("click", self._clickEvent);
+					self._clickEvent = null;
+				}
+			}
+		});
+
+		$(window).bind("blur.buttonClickHandler", function (event) {
+			self._unwireKeyDownEventHandlers();
+			self._suppressClick = true;
+			self.element.removeClass( "ui-state-active" );
+		});
+	},
+
+	_unwireKeyDownEventHandlers: function () {
+		$(document).unbind(("mousedown mouseup keydown keyup focus blur ".split(" ")).join(".buttonClickHandler "));
+		$(window).unbind("blur.buttonClickHandler");
+		this._keyDownEventHandlersWired = false;
+	},
+
 	_create: function() {
 		this.element.closest( "form" )
 			.unbind( "reset.button" )
@@ -97,9 +147,17 @@ $.widget( "ui.button", {
 				$( this ).removeClass( hoverClass );
 			})
 			.bind( "click.button", function( event ) {
-				if ( options.disabled ) {
+				var _suppressClick = self._suppressClick;
+
+				// if the click is to be suppressed then just save it
+				if ( options.disabled || _suppressClick) {
 					event.preventDefault();
 					event.stopImmediatePropagation();
+				}
+				// I only need to suppress click once. If it is suppressed - just save it
+				if (_suppressClick) {
+					self._clickEvent = event;
+					_suppressClick = false;
 				}
 			});
 
@@ -110,6 +168,14 @@ $.widget( "ui.button", {
 			})
 			.bind( "blur.button", function() {
 				self.buttonElement.removeClass( focusClass );
+			});
+
+		// Wire up event handlers for correct click handling. Mouse click is so far handled correctly and unless it is broken in the future browsers no need to change that
+		this.buttonElement
+			.bind("keydown.button", function (event) {
+				if (event.keyCode === $.ui.keyCode.ENTER || event.keyCode === $.ui.keyCode.SPACE) {
+					self._wireKeyDownEventHandlers();
+				}
 			});
 
 		if ( toggleButton ) {
