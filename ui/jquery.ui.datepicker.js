@@ -704,6 +704,7 @@ $.extend(Datepicker.prototype, {
 				inst.input.focus();
 			$.datepicker._curInst = inst;
 		}
+inst.dpDiv.find('select.ui-datepicker-year').find('option[value="' + inst.drawYear + '"]').prop('selected', 'selected');
 	},
 
 	/* Generate the date picker content. */
@@ -1632,7 +1633,7 @@ $.extend(Datepicker.prototype, {
 					'>';
 				for (; year <= endYear; year++) {
 					inst.yearshtml += '<option value="' + year + '"' +
-						(year == drawYear ? ' selected="selected"' : '') +
+						($.datepicker._datepickerShowing && year == drawYear ? ' selected="selected"' : '') +
 						'>' + year + '</option>';
 				}
 				inst.yearshtml += '</select>';
