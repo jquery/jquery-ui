@@ -326,7 +326,7 @@ $.Widget.prototype = {
 				eventName = match[1] + "." + instance.widgetName,
 				selector = match[2];
 			if ( selector ) {
-				element.delegate( selector, eventName, handlerProxy );
+				instance.widget().delegate( selector, eventName, handlerProxy );
 			} else {
 				element.bind( eventName, handlerProxy );
 			}

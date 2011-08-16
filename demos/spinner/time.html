@@ -24,13 +24,17 @@
 
 		_parse: function( value ) {
 			if ( typeof value === "string" ) {
+				// already a timestamp
+				if ( Number( value ) == value ) {
+					return Number( value );
+				}
 				return +Globalize.parseDate( value );
 			}
 			return value;
 		},
 
-		_format: function() {
-			this.element.val( Globalize.format( new Date(this.options.value), "t" ) );
+		_format: function( value ) {
+			return Globalize.format( new Date(value), "t" );
 		}
 	});
 

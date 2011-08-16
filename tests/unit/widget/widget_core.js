@@ -673,23 +673,31 @@ test( "_bind() with delegate", function() {
 			this.element = {
 				bind: function( event, handler ) {
 					equal( event, "click.testWidget" );
-					ok(  $.isFunction(handler) );
-				},
-				delegate: function( selector, event, handler ) {
-					equal( selector, "a" );
-					equal( event, "click.testWidget" );
-					ok(  $.isFunction(handler) );
+					ok( $.isFunction(handler) );
 				},
 				trigger: $.noop
 			};
+			this.widget = function() {
+				return {
+					delegate: function( selector, event, handler ) {
+						equal( selector, "a" );
+						equal( event, "click.testWidget" );
+						ok( $.isFunction(handler) );
+					}
+				};
+			};
 			this._bind({
 				"click": "handler",
-				"click a": "handler",
+				"click a": "handler"
 			});
-			this.element.delegate = function( selector, event, handler ) {
-				equal( selector, "form fieldset > input" );
-				equal( event, "change.testWidget" );
-				ok(  $.isFunction(handler) );
+			this.widget = function() {
+				return {
+					delegate: function( selector, event, handler ) {
+						equal( selector, "form fieldset > input" );
+						equal( event, "change.testWidget" );
+						ok( $.isFunction(handler) );
+					}
+				};
 			};
 			this._bind({
 				"change form fieldset > input": "handler"

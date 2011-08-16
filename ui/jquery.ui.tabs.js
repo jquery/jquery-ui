@@ -18,6 +18,19 @@ function getNextTabId() {
 	return ++tabId;
 }
 
+var isLocal = (function() {
+	var rhash = /#.*$/,
+		currentPage = location.href.replace( rhash, "" );
+
+	return function( anchor ) {
+		// clone the node to work around IE 6 not normalizing the href property
+		// if it's manually set, i.e., a.href = "#foo" kills the normalization
+		anchor = anchor.cloneNode();
+		return anchor.hash.length > 1 &&
+			anchor.href.replace( rhash, "" ) === currentPage;
+	};
+})();
+
 $.widget( "ui.tabs", {
 	version: "@VERSION",
 	options: {
@@ -197,8 +210,7 @@ $.widget( "ui.tabs", {
 	},
 
 	_processTabs: function() {
-		var self = this,
-			fragmentId = /^#.+/; // Safari 2 reports '#' for an empty hash
+		var self = this;
 
 		this.list = this.element.find( "ol,ul" ).eq( 0 );
 		this.lis = $( " > li:has(a[href])", this.list );
@@ -208,30 +220,14 @@ $.widget( "ui.tabs", {
 		this.panels = $( [] );
 
 		this.anchors.each(function( i, a ) {
-			var href = $( a ).attr( "href" ),
-				hrefBase = href.split( "#" )[ 0 ],
-				selector,
-				panel,
-				baseEl;
-
-			// For dynamically created HTML that contains a hash as href IE < 8 expands
-			// such href to the full page url with hash and then misinterprets tab as ajax.
-			// Same consideration applies for an added tab with a fragment identifier
-			// since a[href=#fragment-identifier] does unexpectedly not match.
-			// Thus normalize href attribute...
-			if ( hrefBase && ( hrefBase === location.toString().split( "#" )[ 0 ] ||
-					( baseEl = $( "base" )[ 0 ]) && hrefBase === baseEl.href ) ) {
-				href = a.hash;
-				a.href = href;
-			}
+			var selector, panel;
 
 			// inline tab
-			if ( fragmentId.test( href ) ) {
-				selector = href;
+			if ( isLocal( a ) ) {
+				selector = a.hash;
 				panel = self.element.find( self._sanitizeSelector( selector ) );
 			// remote tab
-			// prevent loading the page itself if href is just "#"
-			} else if ( href && href !== "#" ) {
+			} else {
 				var id = self._tabId( a );
 				selector = "#" + id;
 				panel = self.element.find( selector );
@@ -239,9 +235,6 @@ $.widget( "ui.tabs", {
 					panel = self._createPanel( id );
 					panel.insertAfter( self.panels[ i - 1 ] || self.list );
 				}
-			// invalid tab href
-			} else {
-				self.options.disabled.push( i );
 			}
 
 			if ( panel.length) {
@@ -354,7 +347,7 @@ $.widget( "ui.tabs", {
 
 		if ( toShow.length ) {
 
-			// TODO make passing in node possible, see also http://dev.jqueryui.com/ticket/3171
+			// TODO make passing in node possible
 			that.load( that.anchors.index( clicked ), event );
 
 			clicked[ 0 ].blur();
@@ -449,12 +442,10 @@ $.widget( "ui.tabs", {
 
 		this.list.removeClass( "ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all" );
 
-		this.anchors.each(function() {
-			var $this = $( this ).unbind( ".tabs" );
-			$.each( [ "href", "load" ], function( i, prefix ) {
-				$this.removeData( prefix + ".tabs" );
-			});
-		});
+		this.anchors
+			.unbind( ".tabs" )
+			.removeData( "href.tabs" )
+			.removeData( "load.tabs" );
 
 		this.lis.unbind( ".tabs" ).add( this.panels ).each(function() {
 			if ( $.data( this, "destroy.tabs" ) ) {
@@ -527,21 +518,18 @@ $.widget( "ui.tabs", {
 			options = this.options,
 			anchor = this.anchors.eq( index ),
 			panel = self._getPanelForTab( anchor ),
-			// TODO until #3808 is fixed strip fragment identifier from url
-			// (IE fails to load from such url)
-			url = anchor.attr( "href" ).replace( /#.*$/, "" ),
 			eventData = {
 				tab: anchor,
 				panel: panel
 			};
 
 		// not remote
-		if ( !url ) {
+		if ( isLocal( anchor[ 0 ] ) ) {
 			return;
 		}
 
 		this.xhr = $.ajax({
-			url: url,
+			url: anchor.attr( "href" ),
 			beforeSend: function( jqXHR, settings ) {
 				return self._trigger( "beforeLoad", event,
 					$.extend( { jqXHR : jqXHR, ajaxSettings: settings }, eventData ) );

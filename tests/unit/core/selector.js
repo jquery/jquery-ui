@@ -79,8 +79,10 @@ test("data", function() {
 });
 
 test("focusable - visible, enabled elements", function() {
-	expect(16);
+	expect(18);
 	
+	isNotFocusable('#formNoTabindex', 'form');
+	isFocusable('#formTabindex', 'form with tabindex');
 	isFocusable('#visibleAncestor-inputTypeNone', 'input, no type');
 	isFocusable('#visibleAncestor-inputTypeText', 'input, type text');
 	isFocusable('#visibleAncestor-inputTypeCheckbox', 'input, type checkbox');
@@ -156,8 +158,10 @@ test("focusable - area elements", function() {
 });
 
 test("tabbable - visible, enabled elements", function() {
-	expect(16);
+	expect(18);
 	
+	isNotTabbable('#formNoTabindex', 'form');
+	isTabbable('#formTabindex', 'form with tabindex');
 	isTabbable('#visibleAncestor-inputTypeNone', 'input, no type');
 	isTabbable('#visibleAncestor-inputTypeText', 'input, type text');
 	isTabbable('#visibleAncestor-inputTypeCheckbox', 'input, type checkbox');

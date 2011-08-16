@@ -15,10 +15,10 @@
 
 function modifier( fn ) {
 	return function() {
-		var previous = this.options.value;
+		var previous = this.element.val();
 		fn.apply( this, arguments );
 		this._refresh();
-		if ( previous !== this.options.value ) {
+		if ( previous !== this.element.val() ) {
 			this._trigger( "change" );
 		}
 	};
@@ -35,7 +35,6 @@ $.widget( "ui.spinner", {
 		numberFormat: null,
 		page: 10,
 		step: 1,
-		value: 0,
 
 		change: null,
 		spin: null,
@@ -44,9 +43,9 @@ $.widget( "ui.spinner", {
 	},
 
 	_create: function() {
-		this._value( this.options.value );
+		this._value( this.element.val(), true );
 		this._draw();
-		this._mousewheel();
+		this._bind( this._events );
 		this._refresh();
 	},
 
@@ -54,7 +53,7 @@ $.widget( "ui.spinner", {
 		var options = {},
 			element = this.element;
 
-		$.each( [ "min", "max", "step", "value" ], function( i, option ) {
+		$.each( [ "min", "max", "step" ], function( i, option ) {
 			var value = element.attr( option );
 			if ( value !== undefined && value.length ) {
 				options[ option ] = value;
@@ -62,6 +61,72 @@ $.widget( "ui.spinner", {
 		});
 
 		return options;
+	},
+
+	_events: {
+		keydown: function( event ) {
+			if ( this._start( event ) && this._keydown( event ) ) {
+				event.preventDefault();
+			}
+		},
+		keyup: "_stop",
+		focus: function() {
+			this.uiSpinner.addClass( "ui-state-active" );
+			this.previous = this.element.val();
+		},
+		blur: function( event ) {
+			this._refresh();
+			this.uiSpinner.removeClass( "ui-state-active" );
+			if ( this.previous !== this.element.val() ) {
+				this._trigger( "change", event );
+			}
+		},
+		mousewheel: function( event, delta ) {
+			if ( !delta ) {
+				return;
+			}
+			if ( !this.spinning && !this._start( event ) ) {
+				return false;
+			}
+
+			this._spin( (delta > 0 ? 1 : -1) * this.options.step, event );
+			clearTimeout( this.mousewheelTimer );
+			this.mousewheelTimer = setTimeout(function() {
+				if ( this.spinning ) {
+					this._stop( event );
+				}
+			}, 100 );
+			event.preventDefault();
+		},
+		"mousedown .ui-spinner-button": function( event ) {
+			// ensure focus is on (or stays on) the text field
+			event.preventDefault();
+			if ( document.activeElement !== this.element[ 0 ] ) {
+				this.element.focus();
+			}
+
+			if ( this._start( event ) === false ) {
+				return;
+			}
+
+			this._repeat( null, $( event.currentTarget ).hasClass( "ui-spinner-up" ) ? 1 : -1, event );
+		},
+		"mouseup .ui-spinner-button": "_stop",
+		"mouseenter .ui-spinner-button": function( event ) {
+			// button will add ui-state-active if mouse was down while mouseleave and kept down
+			if ( !$( event.currentTarget ).hasClass( "ui-state-active" ) ) {
+				return;
+			}
+
+			if ( this._start( event ) === false ) {
+				return false;
+			}
+			this._repeat( null, $( event.currentTarget ).hasClass( "ui-spinner-up" ) ? 1 : -1, event );
+		},
+		// TODO: do we really want to consider this a stop?
+		// shouldn't we just stop the repeater and wait until mouseup before
+		// we trigger the stop event?
+		"mouseleave .ui-spinner-button": "_stop"
 	},
 
 	_draw: function() {
@@ -75,69 +140,12 @@ $.widget( "ui.spinner", {
 		this._hoverable( uiSpinner );
 
 		this.element.attr( "role", "spinbutton" );
-		this._bind({
-			keydown: function( event ) {
-				if ( this._start( event ) && this._keydown( event ) ) {
-					event.preventDefault();
-				}
-			},
-			keyup: "_stop",
-			focus: function() {
-				uiSpinner.addClass( "ui-state-active" );
-				this.previous = this.element.val();
-			},
-			blur: function( event ) {
-				// don't clear invalid values on blur
-				var value = this.element.val();
-				this._value( value );
-				if ( this.element.val() === "" ) {
-					this.element.val( value );
-				}
-				uiSpinner.removeClass( "ui-state-active" );
-				// TODO: what should trigger change?
-				// element.val() or options.value?
-				if ( this.previous !== this.element.val() ) {
-					this._trigger( "change", event );
-				}
-			}
-		});
 
 		// button bindings
 		this.buttons = uiSpinner.find( ".ui-spinner-button" )
 			.attr( "tabIndex", -1 )
 			.button()
 			.removeClass( "ui-corner-all" );
-		this._bind( this.buttons, {
-			mousedown: function( event ) {
-				// ensure focus is on (or stays on) the text field
-				event.preventDefault();
-				if ( document.activeElement !== this.element[ 0 ] ) {
-					this.element.focus();
-				}
-
-				if ( this._start( event ) === false ) {
-					return;
-				}
-
-				this._repeat( null, $( event.currentTarget ).hasClass( "ui-spinner-up" ) ? 1 : -1, event );
-			},
-			mouseup: "_stop",
-			mouseenter: function( event ) {
-				// button will add ui-state-active if mouse was down while mouseleave and kept down
-				if ( !$( event.currentTarget ).hasClass( "ui-state-active" ) ) {
-					return;
-				}
-
-				if ( this._start( event ) === false ) {
-					return false;
-				}
-				this._repeat( null, $( event.currentTarget ).hasClass( "ui-spinner-up" ) ? 1 : -1, event );
-			},
-			// TODO: do we really want to consider this a stop?
-			// shouldn't we just stop the repeater and wait until mouseup before
-			// we trigger the stop event?
-			mouseleave: "_stop"
-		});
 
 		// disable spinner if element was already disabled
 		if ( this.options.disabled ) {
@@ -162,37 +170,9 @@ $.widget( "ui.spinner", {
 		case keyCode.PAGE_DOWN:
 			this._repeat( null, -options.page, event );
 			return true;
-		case keyCode.ENTER:
-			this._value( this.element.val() );
 		}
 
 		return false;
-	},
-
-	_mousewheel: function() {
-		// need the delta normalization that mousewheel plugin provides
-		if ( !$.fn.mousewheel ) {
-			return;
-		}
-		this._bind({
-			mousewheel: function( event, delta ) {
-				if ( !delta ) {
-					return;
-				}
-				if ( !this.spinning && !this._start( event ) ) {
-					return false;
-				}
-
-				this._spin( (delta > 0 ? 1 : -1) * this.options.step, event );
-				clearTimeout( this.mousewheelTimer );
-				this.mousewheelTimer = setTimeout(function() {
-					if ( this.spinning ) {
-						this._stop( event );
-					}
-				}, 100 );
-				event.preventDefault();
-			}
-		});
 	},
 
 	_uiSpinnerHtml: function() {
@@ -238,10 +218,13 @@ $.widget( "ui.spinner", {
 			this.counter = 1;
 		}
 
-		var newVal = this.value() + step * this._increment( this.counter );
-
+		var value = this.value(),
+			newVal = value + step * this._increment( this.counter ),
+			// fix precision from bad JS floating point math
+			precision = Math.max( this._precision( value ),
+				this._precision( this.options.step ) );
 		// clamp the new value
-		newVal = this._trimValue( newVal );
+		newVal = this._trimValue( newVal.toFixed( precision ) );
 
 		if ( !this.spinning || this._trigger( "spin", event, { value: newVal } ) !== false) {
 			this._value( newVal );
@@ -253,6 +236,12 @@ $.widget( "ui.spinner", {
 		return this.options.incremental ?
 			Math.floor( i*i*i/50000 - i*i/500 + 17*i/200 + 1 ) :
 			1;
+	},
+
+	_precision: function( num ) {
+		var str = num.toString(),
+			decimal = str.indexOf( "." );
+		return decimal === -1 ? 0 : str.length - decimal - 1;
 	},
 
 	_trimValue: function( value ) {
@@ -282,10 +271,6 @@ $.widget( "ui.spinner", {
 	},
 
 	_setOption: function( key, value ) {
-		if ( key === "value" ) {
-			return this._value( value );
-		}
-
 		this._super( "_setOption", key, value );
 
 		if ( key === "disabled" ) {
@@ -301,9 +286,7 @@ $.widget( "ui.spinner", {
 
 	_setOptions: modifier(function( options ) {
 		this._super( "_setOptions", options );
-
-		// handle any options that might cause value to change, e.g., min
-		this._value( this._trimValue( this.options.value ) );
+		this._value( this.element.val() );
 	}),
 
 	_parse: function( val ) {
@@ -313,24 +296,37 @@ $.widget( "ui.spinner", {
 		return isNaN( val ) ? null : val;
 	},
 
-	_format: function() {
-		var num = this.options.value;
-		return window.Globalize && this.options.numberFormat ? Globalize.format( num, this.options.numberFormat ) : num;
+	_format: function( value ) {
+		if ( value === "" ) {
+			return "";
+		}
+		return window.Globalize && this.options.numberFormat ?
+			Globalize.format( value, this.options.numberFormat ) :
+			value;
 	},
 
 	_refresh: function() {
-		this.element
-			.val( this._format() )
-			.attr({
-				"aria-valuemin": this.options.min,
-				"aria-valuemax": this.options.max,
-				"aria-valuenow": this.options.value
-			});
+		this.element.attr({
+			"aria-valuemin": this.options.min,
+			"aria-valuemax": this.options.max,
+			// TODO: what should we do with values that can't be parsed?
+			"aria-valuenow": this._parse( this.element.val() )
+		});
 	},
 
 	// update the value without triggering change
-	_value: function( value ) {
-		this.options.value = this._trimValue( this._parse(value) );
+	_value: function( value, ignoreRange ) {
+		var parsed;
+		if ( value !== "" ) {
+			parsed = this._parse( value );
+			if ( parsed !== null ) {
+				if ( !ignoreRange ) {
+					parsed = this._trimValue( parsed );
+				}
+				value = this._format( parsed );
+			}
+		}
+		this.element.val( value );
 		this._refresh();
 	},
 
@@ -371,9 +367,9 @@ $.widget( "ui.spinner", {
 
 	value: function( newVal ) {
 		if ( !arguments.length ) {
-			return this._format();
+			return this._parse( this.element.val() );
 		}
-		this.option( "value", newVal );
+		modifier( this._value ).call( this, newVal );
 	},
 
 	widget: function() {

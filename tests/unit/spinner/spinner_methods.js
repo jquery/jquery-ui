@@ -11,7 +11,7 @@ test( "destroy", function() {
 
 test( "disable", function() {
 	expect( 14 );
-	var element = $( "#spin" ).spinner({ value: 2 }),
+	var element = $( "#spin" ).val( 2 ).spinner(),
 		wrapper = $( "#spin" ).spinner( "widget" );
 
 	ok( !wrapper.hasClass( "ui-spinner-disabled" ), "before: wrapper does not have ui-spinner-disabled class" );
@@ -71,9 +71,8 @@ test( "enable", function() {
 
 test( "pageDown", function() {
 	expect( 4 );
-	var element = $( "#spin" ).spinner({
+	var element = $( "#spin" ).val( -12 ).spinner({
 		page: 20,
-		value: -12,
 		min: -100
 	});
 
@@ -92,9 +91,8 @@ test( "pageDown", function() {
 
 test( "pageUp", function() {
 	expect( 4 );
-	var element = $( "#spin" ).spinner({
+	var element = $( "#spin" ).val( 12 ).spinner({
 		page: 20,
-		value: 12,
 		max: 100
 	});
 
@@ -113,9 +111,8 @@ test( "pageUp", function() {
 
 test( "stepDown", function() {
 	expect( 4 );
-	var element = $( "#spin" ).spinner({
+	var element = $( "#spin" ).val( 0 ).spinner({
 		step: 2,
-		value: 0,
 		min: -15
 	});
 
@@ -134,9 +131,8 @@ test( "stepDown", function() {
 
 test( "stepUp", function() {
 	expect( 4 );
-	var element = $( "#spin" ).spinner({
+	var element = $( "#spin" ).val( 0 ).spinner({
 		step: 2,
-		value: 0,
 		max: 15
 	});
 
@@ -155,7 +151,7 @@ test( "stepUp", function() {
 
 test( "value", function() {
 	expect( 2 );
-	var element = $( "#spin" ).spinner({ value: 0 });
+	var element = $( "#spin" ).val( 0 ).spinner();
 
 	element.spinner( "value", 10 );
 	equals( element.val(), 10, "change value via value method" );

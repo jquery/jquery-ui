@@ -129,24 +129,28 @@ test( "change", function() {
 		});
 	}
 
+	element.focus();
 	shouldChange( false, "key UP, before blur" );
 	spinner_simulateKeyDownUp( element, $.ui.keyCode.UP );
 	shouldChange( true, "blur after key UP" );
 	element.blur();
 
+	element.focus();
 	shouldChange( false, "key DOWN, before blur" );
 	spinner_simulateKeyDownUp( element, $.ui.keyCode.DOWN );
 	shouldChange( true, "blur after key DOWN" );
 	element.blur();
 
+	element.focus();
 	shouldChange( false, "key PAGE_UP, before blur" );
 	spinner_simulateKeyDownUp( element, $.ui.keyCode.PAGE_UP );
 	shouldChange( true, "blur after key PAGE_UP" );
 	element.blur();
 
+	element.focus();
 	shouldChange( false, "key PAGE_DOWN, before blur" );
 	spinner_simulateKeyDownUp( element, $.ui.keyCode.PAGE_DOWN );
-	shouldChange( true, "key PAGE_DOWN" );
+	shouldChange( true, "blur after key PAGE_DOWN" );
 	element.blur();
 
 	shouldChange( false, "many keys, before blur" );
