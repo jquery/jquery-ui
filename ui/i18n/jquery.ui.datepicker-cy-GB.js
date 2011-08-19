@@ -1,5 +1,5 @@
 /* Welsh/UK initialisation for the jQuery UI date picker plugin. */
-/* Written by Stuart. */
+/* Written by William Griffiths. */
 jQuery(function($){
 	$.datepicker.regional['cy-GB'] = {
 		closeText: 'Done',
