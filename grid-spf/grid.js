@@ -21,7 +21,7 @@ $.widget( "ui.grid", {
 		this._columns();
 		this._rowTemplate();
 		this.element.addClass( "ui-widget" );
-		this.element.find( "th" ).addClass( "ui-widget-header" );
+		this.element.find( "th" ).addClass( "ui-state-default" );
 		this.element.delegate( "tbody > tr", "click", function( event ) {
 			that._trigger( "select", event, {
 				item: $( this ).data( "grid-item" )

@@ -68,8 +68,18 @@
 	});
 	</script>
 	<style>
-	.ui-menu {
-		position: absolute;
+	thead th {
+		cursor: default;
+	}
+	thead th .ui-icon {
+		display: none;
+		height: 12px;
+	}
+	thead th.sorted .ui-icon-asc {
+		display: inline-block;
+	}
+	thead th.sorted-desc .ui-icon-desc {
+		display: inline-block;
 	}
 	tfoot td {
 		text-align: center;
@@ -80,17 +90,6 @@
 	</style>
 </head>
 <body>
-
-<script type="text/x-jquery-tmpl" id="menu-tmpl">
-	<ul>
-		<li>
-			<a href="#" data-sort="asc">Sort Ascending</a>
-		</li>
-		<li>
-			<a href="#" data-sort="desc">Sort Descending</a>
-		</li>
-	</ul>
-</script>
 
 <h2>Movies! Click header for sort menu, use inputs for filtering, pager for paging</h2>
 <table id="movies">
