@@ -1003,6 +1003,7 @@ $.extend(Datepicker.prototype, {
 		var dayNames = (settings ? settings.dayNames : null) || this._defaults.dayNames;
 		var monthNamesShort = (settings ? settings.monthNamesShort : null) || this._defaults.monthNamesShort;
 		var monthNames = (settings ? settings.monthNames : null) || this._defaults.monthNames;
+    var ordinalSuffixes = [ 'st', 'nd', 'rd', 'th' ];
 		var year = -1;
 		var month = -1;
 		var day = -1;
@@ -1099,6 +1100,9 @@ $.extend(Datepicker.prototype, {
 						else
 							literal = true;
 						break;
+          case 'S':
+            getName('S', ordinalSuffixes, ordinalSuffixes);
+            break;
 					default:
 						checkLiteral();
 				}
@@ -1201,6 +1205,19 @@ $.extend(Datepicker.prototype, {
 		var formatName = function(match, value, shortNames, longNames) {
 			return (lookAhead(match) ? longNames[value] : shortNames[value]);
 		};
+		// Get the ordinal suffix for the given int value
+		var ordinalSuffix = function (val) {
+			var mod = val % 10;
+			if (mod === 1 && val !== 11) {
+				return 'st';
+			} else if (mod === 2 && val !== 12) {
+				return 'nd';
+			} else if (mod === 3 && val !== 13) {
+				return 'rd';
+			} else {
+				return 'th';
+			}
+		};
 		var output = '';
 		var literal = false;
 		if (date)
@@ -1214,6 +1231,9 @@ $.extend(Datepicker.prototype, {
 					switch (format.charAt(iFormat)) {
 						case 'd':
 							output += formatNumber('d', date.getDate(), 2);
+							break;
+						case 'S':
+							output += ordinalSuffix(date.getDate());
 							break;
 						case 'D':
 							output += formatName('D', date.getDay(), dayNamesShort, dayNames);
