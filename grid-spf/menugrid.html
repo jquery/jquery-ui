@@ -24,7 +24,18 @@
 			resource: "http://odata.netflix.com/Catalog/Titles"
 		});
 		var grid = $( "#movies" ).grid({
-			source: movies
+			source: movies,
+			refresh: function() {
+				var paging = movies.options.paging,
+					total = movies.totalCount;
+				$(".paging-from").text( paging.offset + 1 );
+				var to = paging.offset + paging.limit + 1;
+				if (to > total) {
+					to = total;
+				}
+				$(".paging-to").text( to );
+				$(".paging-total").text( total );
+			}
 		}).menugrid();
 
 		$( "#pager" ).pager({
@@ -37,6 +48,9 @@
 	<style>
 	.ui-menu {
 		position: absolute;
+	}
+	tfoot td {
+		text-align: center;
 	}
 	</style>
 </head>
@@ -64,20 +78,21 @@
 	</thead>
 	<tbody>
 	</tbody>
+	<tfoot>
+		<tr>
+			<td id="pager" colspan="2" class="ui-state-default">
+				<button data-page="first">First</button>
+				<button data-page="prev">Prev</button>
+				<span>
+					Page <input class="current" size="4"/> of <span class="total">0</span>
+				</span>
+				<button data-page="next">Next</button>
+				<button data-page="last">Last</button>
+			</td>
+			<td class="ui-state-default">Viewing rows <span class="paging-from">0</span> to <span class="paging-to">0</span> of <span class="paging-total">0</span>
+		</tr>
+	</tfoot>
 </table>
-
-<p id="pager">
-	<button data-page="first">First</button>
-	<button data-page="prev">Prev</button>
-	<button data-page="prevStep">-1</button>
-	<span>
-		Page <input class="current" size="4"/>/<span class="total">0</span>,
-		Total records <span class="totalRecords">0</span>
-	</span>
-	<button data-page="nextStep">+1</button>
-	<button data-page="next">Next</button>
-	<button data-page="last">Last</button>
-</p>
 
 </body>
 </html>

@@ -65,7 +65,7 @@ $.widget( "ui.datasource", {
 		var that = this;
         this.options.source( request, function( data, totalCount ) {
 			that.data = data;
-			that.totalCount = totalCount;
+			that.totalCount = parseInt(totalCount, 10);
 			that._trigger( "response" );
 		});
         return this;

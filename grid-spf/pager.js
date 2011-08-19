@@ -16,6 +16,12 @@ $.widget( "spf.pager", {
 			that.options.source.refresh();
 		}).buttonset().find("button");
 
+		// TODO refactor
+		this.buttons.filter('[data-page="first"]').button("option", "icons.primary", "ui-icon-seek-first");
+		this.buttons.filter('[data-page="prev"]').button("option", "icons.primary", "ui-icon-seek-prev");
+		this.buttons.filter('[data-page="next"]').button("option", "icons.secondary", "ui-icon-seek-next");
+		this.buttons.filter('[data-page="last"]').button("option", "icons.secondary", "ui-icon-seek-end");
+
 		this.element.find(".current").change(function() {
 			that.page( +$(this).val() );
 			that.options.source.refresh();
@@ -26,10 +32,10 @@ $.widget( "spf.pager", {
 
 		var source = this.options.source;
 		if (!source.options.paging.offset) {
-			this.buttons.slice(0, 3).button("disable")
+			this.buttons.filter('[data-page="first"], [data-page="prev"], [data-page="prevStep"]').button("disable");
 		}
 		if (source.options.paging.offset + source.options.paging.limit >= source.totalCount) {
-			this.buttons.slice(3, 6).button("disable")
+			this.buttons.filter('[data-page="last"], [data-page="next"], [data-page="nextStep"]').button("disable");
 		}
 		this.element.find(".current").val(this.page());
 		this.element.find(".total").text(this.totalPages());
