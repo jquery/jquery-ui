@@ -50,11 +50,17 @@
 				limit: 8
 			}
 		});
-		var selected = [];
 		developers.save = function() {
 			store.save( localDevelopers );
 			return this;
 		}
+
+		var selected = [];
+		// update status when selection changes
+		$.observable( selected).bind( "insert remove", function() {
+			$(".selected-status").text(selected.length);
+		});
+
 		// TODO $.observable should support this binding, along with a less intrusive event facility
 		function bindChange(index, developer) {
 			$.observable( developer ).bind("change", function(event, ui) {
@@ -151,6 +157,7 @@
 			var developer = $( this ).closest("tr").data( "grid-item" );
 			$.each( selected, function( index, developer ) {
 				$.observable( localDevelopers ).remove( developer );
+				$.observable( selected ).remove( developer );
 			});
 			developers.refresh();
 		});
@@ -199,6 +206,11 @@
 	</thead>
 	<tbody>
 	</tbody>
+	<tfoot>
+		<tr>
+			<td colspan="5"><span class="selected-status">0</span> row(s) selected</td>
+		</tr>
+	</tfoot>
 </table>
 
 <div>
