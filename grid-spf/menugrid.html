@@ -42,8 +42,26 @@
 			movies.option("paging.limit", +$(this).val()).refresh();
 		});
 
+		$("#refresh").button({
+			icons: {
+				primary: "ui-icon-refresh"
+			}
+		}).click(function() {
+			movies.refresh();
+		})
+
 		$( "#pager" ).pager({
 			source: movies
+		});
+
+		var overlay = $( "<div id='loading-overlay'>" )
+			.addClass( "ui-widget-overlay" )
+			.hide()
+			.appendTo( "body" );
+		$( movies ).bind( "datasourcerequest", function() {
+			overlay.show();
+		}).bind( "datasourceresponse", function() {
+			overlay.hide();
 		});
 
 		movies.refresh();
@@ -87,14 +105,17 @@
 	</tbody>
 	<tfoot>
 		<tr>
-			<td id="pager" class="ui-state-default">
-				<button data-page="first">First</button>
-				<button data-page="prev">Prev</button>
-				<span>
-					Page <input class="current" size="4"/> of <span class="total">0</span>
+			<td class="ui-state-default">
+				<button id="refresh">Refresh</button>
+				<span id="pager">
+					<button data-page="first">First</button>
+					<button data-page="prev">Prev</button>
+					<span>
+						Page <input class="current" size="4"/> of <span class="total">0</span>
+					</span>
+					<button data-page="next">Next</button>
+					<button data-page="last">Last</button>
 				</span>
-				<button data-page="next">Next</button>
-				<button data-page="last">Last</button>
 			</td>
 			<td class="ui-state-default">
 				<label for="pagesize">Pagesize</label>
