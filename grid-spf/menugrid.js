@@ -18,7 +18,7 @@ $.widget("spf.menugrid", {
 		});
 
 		var thead = this.element.find( "thead" );
-		thead.children()
+		var inputs = thead.children()
 			.clone()
 			.insertAfter( thead )
 			.find( "th" )
@@ -27,7 +27,7 @@ $.widget("spf.menugrid", {
 					$( "<input>" ).appendTo( $( this ).empty() );
 				});
 
-		this.element.find( "input" ).bind( "change", function() {
+		inputs.find( "input" ).bind( "change", function() {
 			var head = $( this ).parent(),
 				field = head.data( "field" ),
 				type = head.data( "type" ),

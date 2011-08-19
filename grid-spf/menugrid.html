@@ -38,6 +38,10 @@
 			}
 		}).menugrid();
 
+		$("#pagesize").change(function() {
+			movies.option("paging.limit", +$(this).val()).refresh();
+		});
+
 		$( "#pager" ).pager({
 			source: movies
 		});
@@ -51,6 +55,9 @@
 	}
 	tfoot td {
 		text-align: center;
+	}
+	#movies {
+		width: 800px;
 	}
 	</style>
 </head>
@@ -71,16 +78,16 @@
 <table id="movies">
 	<thead>
 		<tr>
-			<th data-property="Name" data-type="string">Name</th>
-			<th data-property="ReleaseYear" data-type="number">Release Year</th>
-			<th data-property="AverageRating" data-type="number">Average Rating</th>
+			<th width="600" data-property="Name" data-type="string">Name</th>
+			<th width="100" data-property="ReleaseYear" data-type="number">Release Year</th>
+			<th width="100" data-property="AverageRating" data-type="number">Average Rating</th>
 		</tr>
 	</thead>
 	<tbody>
 	</tbody>
 	<tfoot>
 		<tr>
-			<td id="pager" colspan="2" class="ui-state-default">
+			<td id="pager" class="ui-state-default">
 				<button data-page="first">First</button>
 				<button data-page="prev">Prev</button>
 				<span>
@@ -89,7 +96,17 @@
 				<button data-page="next">Next</button>
 				<button data-page="last">Last</button>
 			</td>
-			<td class="ui-state-default">Viewing rows <span class="paging-from">0</span> to <span class="paging-to">0</span> of <span class="paging-total">0</span>
+			<td class="ui-state-default">
+				<label for="pagesize">Pagesize</label>
+				<select id="pagesize">
+					<option>10</option>
+					<option>20</option>
+					<option>30</option>
+				</select>
+			</td>
+			<td class="ui-state-default">
+				Viewing rows <span class="paging-from">0</span> to <span class="paging-to">0</span> of <span class="paging-total">0</span>
+			</td>
 		</tr>
 	</tfoot>
 </table>
