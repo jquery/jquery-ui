@@ -59,11 +59,11 @@ $.widget( "spf.pager", {
 	},
 
 	prev: function() {
-		this.page( this.page() - 1 )
+		this.page( this.page() - 1 );
 	},
 
 	next: function() {
-		this.page( this.page() + 1 )
+		this.page( this.page() + 1 );
 	},
 
 	nextStep: function() {
