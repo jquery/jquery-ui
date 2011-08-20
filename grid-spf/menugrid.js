@@ -15,9 +15,9 @@ $.widget("spf.menugrid", {
 		}).append( '<span class="ui-icon-asc ui-icon ui-icon-carat-1-n"></span><span class="ui-icon-desc ui-icon ui-icon-carat-1-s"></span>' );
 
 		var thead = this.element.find( "thead" );
-		var inputs = thead.children()
+		var inputs = thead.children(":has(th)")
 			.clone()
-			.insertAfter( thead )
+			.appendTo( thead )
 			.find( "th" )
 				.removeAttr("tabindex")
 				.each(function() {

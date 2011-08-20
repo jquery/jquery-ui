@@ -68,6 +68,7 @@
 	});
 	</script>
 	<style>
+	thead td { text-align: center; }
 	thead th {
 		cursor: default;
 	}
@@ -94,6 +95,9 @@
 <h2>Movies! Click headers to sort, use inputs for filtering, pager for paging</h2>
 <table id="movies">
 	<thead>
+		<tr>
+			<td colspan="5" class="ui-widget-header">Developers Grid</td>
+		</tr>
 		<tr>
 			<th width="600" data-property="Name" data-type="string">Name</th>
 			<th width="100" data-property="ReleaseYear" data-type="number">Release Year</th>
