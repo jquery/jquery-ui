@@ -25,9 +25,7 @@ $.widget("spf.menugrid", {
 				});
 
 		inputs.find( "input" ).bind( "change", function() {
-			var head = $( this ).parent(),
-				field = head.data( "field" ),
-				type = head.data( "type" ),
+			var column = grid.options.columns[ this.parentNode.cellIndex ],
 				value = this.value,
 				operator;
 
@@ -36,20 +34,20 @@ $.widget("spf.menugrid", {
 				value = value.substring( operator.length );
 				value = value == null || isNaN( value ) ? "" : value;
 			}
-			if ( type === "number" ) {
+			if ( column.type === "number" ) {
 				value = parseFloat( value );
 				operator = operator || "==";
 			}
-			if ( type === "string" ) {
+			if ( column.type === "string" ) {
 				operator = "like";
 			}
 			if ( value ) {
-				source.option( "filter." + field, {
+				source.option( "filter." + column.property, {
 					operator: operator,
 					value: value
 				});
 			} else {
-				source.option( "filter." + field, null );
+				source.option( "filter." + column.property, null );
 			}
 			source.refresh();
 		});
