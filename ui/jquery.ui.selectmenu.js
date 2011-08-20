@@ -51,7 +51,7 @@ $.widget("ui.selectmenu", {
 			'class': this.widgetBaseClass + ' ui-widget ui-state-default ui-corner-all',
 			'id' : this.ids[ 0 ],
 			'role': 'button',
-			'href': '#',
+			'href': '#nogo',
 			'tabindex': this.element.attr( 'disabled' ) ? 1 : 0,
 			'aria-haspopup': true,
 			'aria-owns': this.ids[ 1 ]
@@ -295,7 +295,7 @@ $.widget("ui.selectmenu", {
 				}					
 				var thisAAttr = {
 					html: selectOptionData[i].text,
-					href : '#', 
+					href : '#nogo', 
 					tabindex : -1, 
 					role : 'option',
 					'aria-selected' : false
@@ -376,7 +376,7 @@ $.widget("ui.selectmenu", {
 				}
 			}
 		} else {
-			$('<li role="presentation"><a href="#" tabindex="-1" role="option"></a></li>').appendTo(this.list);
+			$('<li role="presentation"><a href="#nogo" tabindex="-1" role="option"></a></li>').appendTo(this.list);
 		}
 		// we need to set and unset the CSS classes for dropdown and popup style
 		var isDropDown = ( o.style == 'dropdown' );
