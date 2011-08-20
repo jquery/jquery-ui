@@ -22,9 +22,10 @@ $.widget("spf.menugrid", {
 				.removeAttr("tabindex")
 				.each(function() {
 					$( "<input>" ).appendTo( $( this ).empty() );
-				});
+				})
+				.find( "input" );
 
-		inputs.find( "input" ).bind( "change", function() {
+		inputs.bind( "change", function() {
 			var column = grid.options.columns[ this.parentNode.cellIndex ],
 				value = this.value,
 				operator;
@@ -50,6 +51,29 @@ $.widget("spf.menugrid", {
 				source.option( "filter." + column.property, null );
 			}
 			source.refresh();
-		});
+		})
+
+		function updateFilterValues() {
+			if (source.options.filter) {
+				var filters = source.options.filter;
+				inputs.each( function() {
+					var column = grid.options.columns[ this.parentNode.cellIndex ];
+					for ( property in filters ) {
+						if ( property == column.property ) {
+							var filter = filters[property];
+							var output = filter.value;
+							if ( filter.operator !== "==" ) {
+								output = filter.operator + output;
+							}
+							$( this ).val( output );
+						}
+					}
+				});
+			} else {
+				inputs.val("");
+			}
+		}
+		source.element.bind( "datasourcerequest", updateFilterValues );
+		updateFilterValues();
 	}
 });

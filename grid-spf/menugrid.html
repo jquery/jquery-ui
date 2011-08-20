@@ -21,8 +21,27 @@
 	<script>
 	$(function() {
 		var movies = $.ui.odataDatasource({
-			resource: "http://odata.netflix.com/Catalog/Titles"
+			resource: "http://odata.netflix.com/Catalog/Titles",
+			request: function() {
+				if (this.options.filter) {
+					// JSON is far from optimal for URI-encoding, but easy to implement
+					location.hash = encodeURIComponent( JSON.stringify( this.options.filter ) );
+				} else {
+					location.hash = "";
+				}
+			}
 		});
+
+		function checkHash() {
+			if (location.hash && location.hash.length > 1) {
+				movies.option("filter", JSON.parse( decodeURIComponent( location.hash.substring( 1 ) ) ) ).refresh();
+			} else {
+				movies.option("filter", null).refresh();
+			}
+		}
+		checkHash();
+		$( window ).bind( "hashchange", checkHash );
+
 		var grid = $( "#movies" ).grid({
 			source: movies,
 			refresh: function() {
@@ -134,6 +153,13 @@
 		</tr>
 	</tfoot>
 </table>
+
+<h3>Some fun results</h3>
+<ul>
+	<li><a href="#%7B%22AverageRating%22%3A%7B%22operator%22%3A%22%3C%3D%22%2C%22value%22%3A1%7D%7D">Bad movies</a></li>
+	<li><a href="#%7B%22ReleaseYear%22%3A%7B%22operator%22%3A%22%3D%3D%22%2C%22value%22%3A1997%7D%2C%22AverageRating%22%3A%7B%22operator%22%3A%22%3E%22%2C%22value%22%3A4.1%7D%7D">Party like its 1997</a></li>
+	<li><a href="#">Clear filters</a></li>
+</ul>
 
 </body>
 </html>
