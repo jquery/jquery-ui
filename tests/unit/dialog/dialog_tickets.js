@@ -14,7 +14,7 @@ asyncTest( "#3123: Prevent tabbing out of modal dialogs", function() {
 
 	inputs.eq( 1 ).focus();
 	equal( document.activeElement, inputs[1], "Focus set on second input" );
-	inputs.eq( 1 ).simulate( "keyup", { keyCode: $.ui.keyCode.TAB });
+	inputs.eq( 1 ).simulate( "keydown", { keyCode: $.ui.keyCode.TAB });
 
 	setTimeout( checkTab, 2 );
 
