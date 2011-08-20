@@ -128,6 +128,15 @@
 	<style>
 		.navigator-active { background: rgba(0,0,255,0.1); }
 		.ui-autocomplete { width: 200px; max-height: 200px; overflow: auto; }
+		#developers-local {
+			width: 700px;
+		}
+		thead td { text-align: center; }
+		#pageDevelopers { text-align: center; }
+		.totals { padding-left: 1em; }
+
+		/* TODO make this actually work */
+		tbody { min-height: 264px; }
 	</style>
 </head>
 <body>
@@ -136,34 +145,41 @@
 
 <h2>local data source</h2>
 <p>See also <a href="grid-selectable.html">grid-selectable</a></p>
-<p id="pageDevelopers">
-	<button data-page="first">First</button>
-	<button data-page="prev">Prev</button>
-	<button data-page="prevStep">-1</button>
-	<span>
-		Page <input class="current" size="4"/>/<span class="total">0</span>,
-		Total records <span class="totalRecords">0</span>
-	</span>
-	<button data-page="nextStep">+1</button>
-	<button data-page="next">Next</button>
-	<button data-page="last">Last</button>
-</p>
 <table id="developers-local">
 	<thead>
 		<tr>
-			<th data-property="firstName">First Name</th>
-			<th data-property="lastName">Last Name</th>
-			<th data-property="country" data-editor="countrycomplete">Country</th>
-			<th data-property="bitcoins" data-type="number" data-editor="spinner">Bitcoins</th>
-			<th data-template="#cell-date-tmpl">Date</th>
-			<th data-template="#cell-time-tmpl">Time</th>
-			<th data-property="random.value" data-type="number" data-editor="randomSpinner" data-editor-options='{"min":-1, "max": 125}'>Random</th>
-			<th data-template="#cell-edit-tmpl">Edit</th>
-			<th data-template="#cell-remove-tmpl">Remove</th>
+			<td colspan="9" class="ui-widget-header">Developers Grid</td>
+		</tr>
+		<tr>
+			<th width="70" data-property="firstName">First Name</th>
+			<th width="70" data-property="lastName">Last Name</th>
+			<th width="70" data-property="country" data-editor="countrycomplete">Country</th>
+			<th width="60" data-property="bitcoins" data-type="number" data-editor="spinner">Bitcoins</th>
+			<th width="70" data-template="#cell-date-tmpl">Date</th>
+			<th width="80" data-template="#cell-time-tmpl">Time</th>
+			<th width="60" data-property="random.value" data-type="number" data-editor="randomSpinner" data-editor-options='{"min":-1, "max": 125}'>Random</th>
+			<th width="40" data-template="#cell-edit-tmpl">Edit</th>
+			<th width="60" data-template="#cell-remove-tmpl">Remove</th>
 		</tr>
 	</thead>
 	<tbody>
 	</tbody>
+	<tfoot>
+		<tr>
+			<td id="pageDevelopers" colspan="9" class="ui-state-default">
+				<button data-page="first">First</button>
+				<button data-page="prev">Prev</button>
+				<span>
+					Page <input class="current" size="4"/> of <span class="total">0</span>
+				</span>
+				<button data-page="next">Next</button>
+				<button data-page="last">Last</button>
+				<span class="totals">
+					Total records <span class="totalRecords">0</span>
+				</span>
+			</td>
+		</tr>
+	</tfoot>
 </table>
 
 <div>

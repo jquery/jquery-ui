@@ -30,6 +30,8 @@ $.widget( "ui.editor", {
 		});
 
 		this.input = this.inputWrapper = $( "<input>" );
+		// TODO improve this to match the actual available space
+		// works only so-so for regular inputs, really bad for spinner
 		this.input.width( this.inner.width() );
 		if (this.options.editor in $.ui.editor.editors) {
 			this.inputWrapper = $.ui.editor.editors[ this.options.editor ]( this.input, this.options.editorOptions );
