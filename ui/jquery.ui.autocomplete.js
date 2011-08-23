@@ -84,11 +84,11 @@ $.widget( "ui.autocomplete", {
 					break;
 				case keyCode.UP:
 					suppressKeyPress = true;
-					self._keyEvent( "previous" );
+					self._keyEvent( "previous", event );
 					break;
 				case keyCode.DOWN:
 					suppressKeyPress = true;
-					self._keyEvent( "next" );
+					self._keyEvent( "next", event );
 					break;
 				case keyCode.ENTER:
 				case keyCode.NUMPAD_ENTER:
@@ -133,10 +133,10 @@ $.widget( "ui.autocomplete", {
 					self._move( "nextPage", event );
 					break;
 				case keyCode.UP:
-					self._keyEvent( "previous" );
+					self._keyEvent( "previous", event );
 					break;
 				case keyCode.DOWN:
-					self._keyEvent( "next" );
+					self._keyEvent( "next", event );
 					break;
 				}
 			})
@@ -467,10 +467,10 @@ $.widget( "ui.autocomplete", {
 	_value: function( value ) {
 		return this.valueMethod.apply( this.element, arguments );
 	},
-    
-    _keyEvent: function( keyEvent ) {
-       	if ( self.options.upDownArrows === "always" || ( self.options.upDownArrows === "menu" &&  self.menu.active ) ) {
-			self._move( keyEvent, event );
+
+	_keyEvent: function( keyEvent, event ) {
+		if ( this.options.upDownArrows === "always" || ( this.options.upDownArrows === "menu" &&  this.menu.active ) ) {
+			this._move( keyEvent, event );
 			
 			// prevents moving cursor to beginning/end of the text field in some browsers
 			event.preventDefault();
