@@ -377,7 +377,7 @@ $.widget( "ui.autocomplete", {
 			this._trigger( "close", event );
 		}
 	},
-	
+
 	_change: function( event ) {
 		if ( this.previous !== this._value() ) {
 			this._trigger( "change", event, { item: this.selectedItem } );
@@ -466,15 +466,15 @@ $.widget( "ui.autocomplete", {
 
 	_value: function( value ) {
 		return this.valueMethod.apply( this.element, arguments );
-	}
+	},
     
-    	_keyEvent: function( keyEvent ) {
-        	if ( self.options.upDownArrows === "always" || ( self.options.upDownArrows === "menu" &&  self.menu.active ) ) {
-            		self._move( keyEvent, event );
-            		// prevents moving cursor to beginning/end of the text field in some browsers
-            		event.preventDefault();
+    _keyEvent: function( keyEvent ) {
+       	if ( self.options.upDownArrows === "always" || ( self.options.upDownArrows === "menu" &&  self.menu.active ) ) {
+			self._move( keyEvent, event );
+			
+			// prevents moving cursor to beginning/end of the text field in some browsers
+			event.preventDefault();
 		}
-
 	}
 });
 
