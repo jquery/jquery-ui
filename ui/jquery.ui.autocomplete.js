@@ -469,9 +469,9 @@ $.widget( "ui.autocomplete", {
 	},
 
 	_keyEvent: function( keyEvent, event ) {
-		if ( this.options.upDownArrows === "always" || ( this.options.upDownArrows === "menu" &&  this.menu.active ) ) {
+		if (this.options.upDownArrows === "always" || ( this.options.upDownArrows === "menu" &&  this.menu.active ) ) {
 			this._move( keyEvent, event );
-			
+	
 			// prevents moving cursor to beginning/end of the text field in some browsers
 			event.preventDefault();
 		}

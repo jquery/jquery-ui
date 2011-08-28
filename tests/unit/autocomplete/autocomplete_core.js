@@ -80,4 +80,21 @@ test( "allow form submit on enter when menu is not active", function() {
 	ok( !event.isDefaultPrevented(), "default action is prevented" );
 });
 
+test( "confirm functionality works with a textarea", function() {
+	expect( 1 );
+	
+	var element = $("<textarea id='autoTextArea'></textarea>").autocomplete({
+		source: [ "java", "javascript" ]
+	});
+	
+	menu = element.autocomplete( "widget" );
+	element.val( "ja" ).autocomplete( "search" );
+	
+	var isMenuVisible = menu.is( ":visible" );
+	
+	element.remove();
+
+	ok( !isMenuVisible, "Failing test for bug 7674 - menu should be visible" );
+});
+
 }( jQuery ) );
