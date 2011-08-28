@@ -123,7 +123,7 @@ function upDownOpensMenuTest( isKeyUp, isVisibleAfter, upDownArrowsValue ) {
 	menu = element.autocomplete( "widget" );
 	ok( menu.is( ":hidden" ), "menu is hidden to start with" );
 	element.simulate( "keydown", { keyCode: (isKeyUp ? $.ui.keyCode.UP : $.ui.keyCode.DOWN) } );
-	
+
 	setTimeout(function() {
 		equal( menu.is( ":visible" ), isVisibleAfter, "menu is visible after delay" );
 		start();
@@ -163,7 +163,7 @@ function searchUpDownSelectsItemTest( isKeyUp, itemThatShouldBeSelected, upDownA
 		upDownArrows: upDownArrowsValue
 	});
 	menu = element.autocomplete( "widget" );
-	
+
 	element.autocomplete("search", "a");
 
 	equal( menu.find('a.ui-state-focus').text(), "java", "Java should be initially selected" );
