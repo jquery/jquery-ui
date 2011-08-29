@@ -154,7 +154,6 @@
 				alert( "None selected" );
 				return;
 			}
-			var developer = $( this ).closest("tr").data( "grid-item" );
 			$.each( selected, function( index, developer ) {
 				$.observable( localDevelopers ).remove( developer );
 				$.observable( selected ).remove( developer );
