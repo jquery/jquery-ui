@@ -88,7 +88,7 @@
 		});
 		// TODO clear selection (on other pages) when starting from scratch
 		grid.selectable({
-			filter: "tr",
+			filter: "tbody > tr",
 			selected: function( ev, ui ) {
 				var item = $(ui.selected).data("grid-item");
 				if ( $.inArray( item, selected ) === -1 ) {
