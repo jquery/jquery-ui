@@ -95,18 +95,45 @@
 		},
 
 		remove: function( index, numToRemove ) {
-			// TODO implement $.type( index ) === "array"
+			if ( $.type( index ) === "array" ) {
+				// TODO there's probably a more efficient way to do this
+				var i,
+					j,
+					l,
+					m,
+					removed = [],
+					toRemove = index;
+				for ( i = 0, l = this.data.length; i < l; i++ ) {
+					for ( j = 0, m = toRemove.length; j < m; j++ ) {
+						// TODO use an equal-method to compare objects, to allow custom matching on primary keys etc.
+						if ( toRemove[ j ] === this.data[ i ] ) {
+							removed.push({
+								index: i,
+								item: this.data[ j ]
+							});
+							break;
+						}
+					}
+				}
+				var removals = 0;
+				for ( i = 0, l = removed.length; i < l; i++ ) {
+					this.data.splice( removed[ i ].index - removals, 1 );
+					removals += 1;
+				}
+				return this.trigger( "remove", { items: removed } );
+			}
 			if ( $.type( index ) === "object" ) {
 				numToRemove = 1;
 				for ( var i = 0, l = this.data.length; i < l; i++ ) {
-					if ( this.data[i] === index) {
+					// TODO same as above
+					if ( this.data[ i ] === index) {
 						index = i;
 						break;
 					}
 				}
 
 			}
-			if (!numToRemove) {
+			if ( !numToRemove ) {
 				numToRemove = 1;
 			}
 			var items = this.data.slice( index, index + numToRemove );

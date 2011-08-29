@@ -154,10 +154,8 @@
 				alert( "None selected" );
 				return;
 			}
-			$.each( selected, function( index, developer ) {
-				$.observable( localDevelopers ).remove( developer );
-				$.observable( selected ).remove( developer );
-			});
+			$.observable( localDevelopers ).remove( selected );
+			selected = [];
 			developers.refresh();
 		});
 
