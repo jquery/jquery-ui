@@ -88,6 +88,74 @@ asyncTest( "disabled", function() {
 	}, 50 );
 });
 
+asyncTest( "arrowsActivate is 'true' and pressing up causes the menu to be shown", function() {
+	arrowsActivateOpensMenuTest( true, true );
+});
+
+asyncTest( "arrowsActivate is 'true' and pressing down causes the menu to be shown", function() {
+	arrowsActivateOpensMenuTest( true, false );
+});
+
+asyncTest( "arrowsActivate is 'false' and pressing up doesn't cause the menu to be shown", function() {
+	arrowsActivateOpensMenuTest( false, true );
+});
+
+asyncTest( "arrowsActivate is 'false' and pressing down doesn't cause the menu to be shown", function() {
+	arrowsActivateOpensMenuTest( false, false );
+});
+
+function arrowsActivateOpensMenuTest(  arrowsActivate, isKeyUp ) {
+	expect( 3 );
+	var element = $( "#autocomplete" ).autocomplete({
+		source: data,
+		delay: 0,
+		minLength: 0,
+		arrowsActivate: arrowsActivate
+	});
+	menu = element.autocomplete( "widget" );
+	ok( menu.is( ":hidden" ), "menu is hidden to start with" );
+	element.simulate( "keydown", { keyCode: (isKeyUp ? $.ui.keyCode.UP : $.ui.keyCode.DOWN) } );
+
+	setTimeout(function() {
+		equal( menu.is( ":visible" ), arrowsActivate, "menu is visible after delay" );
+		equal( menu.find('a.ui-state-focus').text(), "", "nothing should be initially selected" );
+		start();
+	}, 50 );
+}
+
+test( "Pressing up selects the previous search item when active", function() {
+	searchUpDownSelectsItemTest( true, true, "" );
+});
+
+test( "Pressing down selects the next search item when active", function() {
+	searchUpDownSelectsItemTest( true, false, "javascript" );
+});
+
+test( "Pressing up selects the previous search item when active", function() {
+	searchUpDownSelectsItemTest( false, true, "" );
+});
+
+test( "Pressing down selects the next search item when active", function() {
+	searchUpDownSelectsItemTest( false, false, "javascript" );
+});
+
+function searchUpDownSelectsItemTest( arrowsActivate, isKeyUp, itemThatShouldBeSelected ) {
+	expect( 2 );
+	var element = $( "#autocomplete" ).autocomplete({
+		source: data,
+		autoFocus: true,
+		delay: 0,
+		arrowsActivate: arrowsActivate
+	});
+	menu = element.autocomplete( "widget" );
+
+	element.autocomplete("search", "a");
+
+	equal( menu.find('a.ui-state-focus').text(), "java", "Java should be initially selected" );
+	element.simulate( "keydown", { keyCode: ( isKeyUp ? $.ui.keyCode.UP : $.ui.keyCode.DOWN ) } );
+	equal( menu.find('a.ui-state-focus').text(), itemThatShouldBeSelected, "Check you've selected the expected value." );
+}
+
 test( "minLength", function() {
 	expect( 2 );
 	var element = $( "#autocomplete" ).autocomplete({
