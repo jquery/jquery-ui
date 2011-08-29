@@ -88,6 +88,89 @@ asyncTest( "disabled", function() {
 	}, 50 );
 });
 
+asyncTest( "upDownArrows is 'always' and pressing up causes the menu to be shown", function() {
+	upDownOpensMenuTest( true, true, "always" );
+});
+
+asyncTest( "upDownArrows is 'always' and pressing down causes the menu to be shown", function() {
+	upDownOpensMenuTest( false, true, "always" );
+});
+
+asyncTest( "upDownArrows is 'never' and pressing up doesn't cause the menu to be shown", function() {
+	upDownOpensMenuTest( true, false, "never" );
+});
+
+asyncTest( "upDownArrows is 'never' and pressing down doesn't cause the menu to be shown", function() {
+	upDownOpensMenuTest( false, false, "never" );
+});
+
+asyncTest( "upDownArrows is 'menu' and pressing up doesn't cause the menu to be shown", function() {
+	upDownOpensMenuTest( true, false, "menu" );
+});
+
+asyncTest( "upDownArrows is 'menu' and pressing down doesn't cause the menu to be shown", function() {
+	upDownOpensMenuTest( false, false, "menu" );
+});
+
+function upDownOpensMenuTest( isKeyUp, isVisibleAfter, upDownArrowsValue ) {
+	expect( 2 );
+	var element = $( "#autocomplete" ).autocomplete({
+		source: data,
+		delay: 0,
+		minLength: 0,
+		upDownArrows: upDownArrowsValue
+	});
+	menu = element.autocomplete( "widget" );
+	ok( menu.is( ":hidden" ), "menu is hidden to start with" );
+	element.simulate( "keydown", { keyCode: (isKeyUp ? $.ui.keyCode.UP : $.ui.keyCode.DOWN) } );
+
+	setTimeout(function() {
+		equal( menu.is( ":visible" ), isVisibleAfter, "menu is visible after delay" );
+		start();
+	}, 50 );
+}
+
+test( "upDownArrows is 'always' and pressing up selects the next search item", function() {
+	searchUpDownSelectsItemTest( true, "", "always" );
+});
+
+test( "upDownArrows is 'always' and pressing down selects the next search item", function() {
+	searchUpDownSelectsItemTest( false, "javascript", "always" );
+});
+
+test( "upDownArrows is 'menu' and pressing up selects the next search item", function() {
+	searchUpDownSelectsItemTest( true, "", "menu" );
+});
+
+test( "upDownArrows is 'menu' and pressing down selects the next search item", function() {
+	searchUpDownSelectsItemTest( false, "javascript", "menu" );
+});
+
+test( "upDownArrows is 'never' and pressing up does nothing", function() {
+	searchUpDownSelectsItemTest( true, "java", "never" );
+});
+
+test( "upDownArrows is 'never' and pressing down does nothing", function() {
+	searchUpDownSelectsItemTest( false, "java", "never" );
+});
+
+function searchUpDownSelectsItemTest( isKeyUp, itemThatShouldBeSelected, upDownArrowsValue ) {
+	expect( 2 );
+	var element = $( "#autocomplete" ).autocomplete({
+		source: data,
+		autoFocus: true,
+		delay: 0,
+		upDownArrows: upDownArrowsValue
+	});
+	menu = element.autocomplete( "widget" );
+
+	element.autocomplete("search", "a");
+
+	equal( menu.find('a.ui-state-focus').text(), "java", "Java should be initially selected" );
+	element.simulate( "keydown", { keyCode: ( isKeyUp ? $.ui.keyCode.UP : $.ui.keyCode.DOWN ) } );
+	equal( menu.find('a.ui-state-focus').text(), itemThatShouldBeSelected, "Check you've selected the expected value." );
+}
+
 test( "minLength", function() {
 	expect( 2 );
 	var element = $( "#autocomplete" ).autocomplete({
