@@ -51,7 +51,7 @@ $.widget( "ui.autocomplete", {
 			suppressKeyPress,
 			suppressInput;
 
-		this.valueMethod = this.element[ this.element.is( "input" ) ? "val" : "text" ];
+		this.valueMethod = this.element[ this.element.is( "input,textarea" ) ? "val" : "text" ];
 
 		this.element
 			.addClass( "ui-autocomplete-input" )
