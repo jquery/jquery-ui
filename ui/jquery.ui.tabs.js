@@ -25,7 +25,7 @@ var isLocal = (function() {
 	return function( anchor ) {
 		// clone the node to work around IE 6 not normalizing the href property
 		// if it's manually set, i.e., a.href = "#foo" kills the normalization
-		anchor = anchor.cloneNode();
+		anchor = anchor.cloneNode( false );
 		return anchor.hash.length > 1 &&
 			anchor.href.replace( rhash, "" ) === currentPage;
 	};
