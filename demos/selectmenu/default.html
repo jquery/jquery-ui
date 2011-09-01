@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>jQuery UI Selectmenu - Default functionality</title>
+	<link rel="stylesheet" href="../../themes/base/jquery.ui.all.css">
+	<script src="../../jquery-1.6.2.js"></script>
+	<script src="../../ui/jquery.ui.core.js"></script>
+	<script src="../../ui/jquery.ui.widget.js"></script>
+	<script src="../../ui/jquery.ui.position.js"></script>
+	<script src="../../ui/jquery.ui.button.js"></script>
+	<script src="../../ui/jquery.ui.menu.js"></script>
+	<script src="../../ui/jquery.ui.selectmenu.js"></script>
+	<link rel="stylesheet" href="../demos.css">
+	<script>
+	$(function() {
+		$('select').selectmenu();
+	});
+	</script>
+	<style>
+		form { margin: 200px 0 0 0; }
+		fieldset { border: 0; }
+		select { width: 200px; }
+	</style>
+</head>
+<body>
+	
+<div class="demo">
+
+<form action="#">
+	<fieldset>
+		<label for="speedA">Select a Speed:</label>
+		<select name="speedA" id="speedA">
+			<option value="Slower">Slower</option>
+			<option value="Slow" selected="selected">Slow</option>
+			<option value="Medium">Medium</option>
+			<option value="Fast">Fast</option>
+			<option value="Faster">Faster</option>
+		</select>
+		<br />
+		<br />
+		<br />
+		<label for="filesC">Select a file:</label>
+		<select name="filesC" id="filesC">
+			<optgroup label="scripts">
+				<option value="jquery">jQuery.js</option>
+				<option value="jqueryui">ui.jQuery.js</option>
+			</optgroup>
+			<optgroup label="Label with space">
+				<option value="somefile">Some unknown file</option>
+				<option value="someotherfile">Some other file</option>
+			</optgroup>
+		</select>
+	</fieldset>
+</form>
+
+</div><!-- End demo -->
+
+
+
+<div class="demo-description">
+<p>The Autocomplete widgets provides suggestions while you type into the field. Here the suggestions are tags for programming languages, give "ja" (for Java or JavaScript) a try.</p>
+<p>The datasource is a simple JavaScript array, provided to the widget using the source-option.</p>
+</div><!-- End demo-description -->
+
+</body>
+</html>
