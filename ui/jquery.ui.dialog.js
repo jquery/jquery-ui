@@ -626,7 +626,7 @@ $.widget("ui.dialog", {
 				height: "auto",
 				width: options.width
 			})
-			.height();
+			.outerHeight();
 		minContentHeight = Math.max( 0, options.minHeight - nonContentHeight );
 		
 		if ( options.height === "auto" ) {
