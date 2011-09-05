@@ -45,13 +45,13 @@ $.widget( "ui.popup", {
 			.attr( "aria-owns", this.element.attr( "id" ) );
 
 		this.element
-			.addClass( "ui-popup" )
+			.addClass( "ui-popup" );
 		this.close();
 
 		this._bind(this.options.trigger, {
 			keydown: function( event ) {
 				// prevent space-to-open to scroll the page, only happens for anchor ui.button
-				if ( this.options.trigger.is( "a:ui-button" ) && event.keyCode == $.ui.keyCode.SPACE ) {
+				if ( $.ui.button && this.options.trigger.is( "a:ui-button" ) && event.keyCode == $.ui.keyCode.SPACE ) {
 					event.preventDefault();
 				}
 				// TODO handle SPACE to open popup? only when not handled by ui.button
