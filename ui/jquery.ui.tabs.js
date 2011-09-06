@@ -792,11 +792,14 @@ if ( $.uiBackCompat !== false ) {
 			index = this._getIndex( index );
 			var options = this.options,
 				tab = this.lis.eq( index ).remove(),
-				panel = this.panels.eq( index ).remove();
+				panel = this._getPanelForTab( tab.find( "a[aria-controls]" ) ).remove();
 
 			// If selected tab was removed focus tab to the right or
 			// in case the last tab was removed the tab to the left.
-			if ( tab.hasClass( "ui-tabs-active" ) && this.anchors.length > 1) {
+			// We check for more than 2 tabs, because if there are only 2,
+			// then when we remove this tab, there will only be one tab left
+			// so we don't need to detect which tab to activate.
+			if ( tab.hasClass( "ui-tabs-active" ) && this.anchors.length > 2 ) {
 				this._activate( index + ( index + 1 < this.anchors.length ? 1 : -1 ) );
 			}
 
