@@ -204,6 +204,10 @@ $.widget( "ui.button", {
 					}
 				});
 			}
+			
+			this.buttonElement.find("img").click(function() {
+				self.buttonElement.click();
+			});
 		}
 
 		// TODO: pull out $.Widget's handling for the disabled option into
