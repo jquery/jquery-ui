@@ -253,11 +253,10 @@ if ( !$.offset.setOffset ) {
 }
 
 // support fractions (older versions of jquery don't support fractions)
-support.fractions = (function () {
-	var body = document.body, offset, div;
+support.fractions = $(function () {
+	var body = document.body, offset,
+		div = $(body.appendChild( document.createElement( "div" ) ) );
 	
-	div = $(body.appendChild( document.createElement( "div" ) ) );
-
 	$.extend( div[0].style, {
 	  position: 'absolute',
 	  left: '10.7432222px',
@@ -265,16 +264,16 @@ support.fractions = (function () {
 	  height: '30px',
 	  width: '201px'
 	});
-
+	
 	offset = div.offset();
 	div.offset(offset);
 	offset = div.offset();
-
+	
 	// set display to none to avoid a layout bug in IE
 	// http://dev.jquery.com/ticket/4014
 	body.removeChild( div[0] ).style.display = "none";
-
+	
 	return offset.top + offset.left > 20.0;
-})();
+});
 
 }( jQuery ));
