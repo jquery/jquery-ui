@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" >
+	<title>jQuery UI Inlineedit - Default functionality</title>
+	<link rel="stylesheet" href="../../themes/base/jquery.ui.all.css">
+	<script src="../../jquery-1.6.2.js"></script>
+	<script src="../../ui/jquery.ui.core.js"></script>
+	<script src="../../ui/jquery.ui.widget.js"></script>
+	<script src="../../ui/jquery.ui.inlineedit.js"></script>
+	<link rel="stylesheet" href="../demos.css">
+	<style>
+    .demo p { font-size: 14px; }
+    .demo p span { display: inline-block; }
+	</style>
+	<script>
+	$(function() {
+		$( "#inlineedit" ).inlineedit();
+	});
+	</script>
+</head>
+<body>
+
+<div class="demo">
+
+<p>
+Name: <b><span id="inlineedit">John Doe</span></b>
+</p>
+
+</div><!-- End demo -->
+
+
+
+<div class="demo-description">
+<p>
+Click at 'John Doe' text to edit it.
+</p>
+<p>
+Save your changes by submiting (pressing Enter or clicking the save button).
+</p>
+<p>
+Abort your changes by losing focus (blur) or clicking the cancel button.
+</p>
+</div><!-- End demo-description -->
+
+</body>
+</html>
