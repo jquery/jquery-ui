@@ -254,8 +254,9 @@ if ( !$.offset.setOffset ) {
 
 // support fractions (older versions of jquery don't support fractions)
 support.fractions = (function () {
-	var body = document.body, offset,
-	  div = $(body.appendChild( document.createElement( "div" ) ) );
+	var body = document.body, offset, div;
+	
+	div = $(body.appendChild( document.createElement( "div" ) ) );
 
 	$.extend( div[0].style, {
 	  position: 'absolute',
