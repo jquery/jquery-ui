@@ -46,6 +46,7 @@ $.widget("ui.dialog", {
 		draggable: true,
 		hide: null,
 		height: "auto",
+		icon:false,
 		maxHeight: false,
 		maxWidth: false,
 		minHeight: 150,
@@ -141,7 +142,14 @@ $.widget("ui.dialog", {
 				.attr( "id", titleId )
 				.html( title )
 				.prependTo( uiDialogTitlebar );
-
+				
+		if (options.icon) {
+			uiDialogTitleIcon = $( "<span>" )
+				.addClass( "ui-icon ui-dialog-title-icon" )
+				.addClass( options.icon )
+				.prependTo( uiDialogTitlebar );		
+		}
+		
 		uiDialogTitlebar.find( "*" ).add( uiDialogTitlebar ).disableSelection();
 		this._hoverable( uiDialogTitlebarClose );
 		this._focusable( uiDialogTitlebarClose );
