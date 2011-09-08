@@ -253,7 +253,7 @@ if ( !$.offset.setOffset ) {
 }
 
 // support fractions (older versions of jquery don't support fractions)
-support.fractions = $(function () {
+$(function () {
 	var body = document.body, offset,
 		div = $(body.appendChild( document.createElement( "div" ) ) );
 	
@@ -273,7 +273,7 @@ support.fractions = $(function () {
 	// http://dev.jquery.com/ticket/4014
 	body.removeChild( div[0] ).style.display = "none";
 	
-	return offset.top + offset.left > 20.0;
+	support.fractions = offset.top + offset.left > 20.0;
 });
 
 }( jQuery ));
