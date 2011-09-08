@@ -14,11 +14,21 @@
 (function( $, undefined ) {
 
 var uiInlineEditClasses = 'ui-inlineedit-content ui-widget ui-widget-content ui-corner-all',
-	highlight = 'ui-state-highlight';
+    buttonClass = 'ui-inlineedit-button',
+    cancelClass = 'ui-inlineedit-cancel',
+    inputClass = 'ui-inlineedit-input',
+	placeholderClass = 'ui-inlineedit-placeholder',
+	saveClass = 'ui-inlineedit-save',
+    cancelIconClass = 'ui-icon ui-icon-cancel',
+    saveIconClass = 'ui-icon ui-icon-disk',
+    defaultStateClass = 'ui-state-default',
+	highlightStateClass = 'ui-state-highlight',
+    hoverStateClass = 'ui-state-hover';
 
 $.widget( "ui.inlineedit", {
     version: "@VERSION",
 	widgetEventPrefix: "edit",
+
 	options: {
 	    value: '',
 	    saveButton: 'Save',
@@ -28,7 +38,7 @@ $.widget( "ui.inlineedit", {
 
 	_init: function() {
         if (!this.value($.trim(this.element.text()) || this.options.value)) {
-			this.element.html($(this._placeholderHtml()));
+            this._show();
 		}
 		this._delegate();
 	},
@@ -40,73 +50,101 @@ $.widget( "ui.inlineedit", {
 			.bind('click', function(event) {
 				var $this = $(event.target);
 	            
-				if ($this.hasClass('ui-inlineedit-save') || $this.parent().hasClass('ui-inlineedit-save')) {
-					self._save(event, self.element.find('.ui-inlineedit-input').val());
+				if ($this.hasClass(saveClass) || $this.parent().hasClass(saveClass)) {
+					self._save(event, self.element.find('.' + inputClass).val());
 					return;
 	            }
 
-				if ($this.hasClass('ui-inlineedit-cancel') || $this.parent().hasClass('ui-inlineedit-cancel')) {
-					self._cancel(event, self.element.find('.ui-inlineedit-input').val());
+				if ($this.hasClass(cancelClass) || $this.parent().hasClass(cancelClass)) {
+					self._cancel(event);
 					return;
 	            }
 								
-				if ($this.hasClass('ui-inlineedit') || $this.hasClass('ui-inlineedit-placeholder')) {
-					self._render();
+				if ($this.hasClass('ui-inlineedit') || $this.hasClass(placeholderClass)) {
+					self._edit();
 					return;
 	            }
 	        })
 			.bind('mouseover', function(event) {
 				var $this = $(event.target);
 				
-				self.element.removeClass(highlight);
-				self.element.find('.ui-inlineedit-button').removeClass('ui-state-hover');
+				self.element.removeClass(highlightStateClass);
+				self.element.find('.' + buttonClass).removeClass(hoverStateClass);
 				
-				if ($this.hasClass('ui-inlineedit-save') || $this.parent().hasClass('ui-inlineedit-save')) {
-					self.element.find('.ui-inlineedit-save').addClass('ui-state-hover');
+				if ($this.hasClass(saveClass) || $this.parent().hasClass(saveClass)) {
+					self.element.find('.' + saveClass).addClass(hoverStateClass);
 					return;
 	            }
 				
-				if ($this.hasClass('ui-inlineedit') || $this.hasClass('ui-inlineedit-placeholder')) {
-					self.element.addClass(highlight);
+				if ($this.hasClass('ui-inlineedit') || $this.hasClass(placeholderClass)) {
+					self.element.addClass(highlightStateClass);
 					return;
 	            }
 			})
 			.bind('mouseout', function(event) {
 				var $this = $(event.target);
 				
-				if ($this.hasClass('ui-inlineedit-save') || $this.parent().hasClass('ui-inlineedit-save')) {
-					self.element.find('.ui-inlineedit-save').removeClass('ui-state-hover');
+				if ($this.hasClass(saveClass) || $this.parent().hasClass(saveClass)) {
+					self.element.find('.' + saveClass).removeClass(hoverStateClass);
 					return;
 	            }
 				
-				if ($this.hasClass('ui-inlineedit') || $this.hasClass('ui-inlineedit-placeholder')) {
-					self.element.removeClass(highlight);
+				if ($this.hasClass('ui-inlineedit') || $this.hasClass(placeholderClass)) {
+					self.element.removeClass(highlightStateClass);
 					return;
 	            }
 			})
-			.addClass('ui-inlineedit');
+			.addClass( 'ui-inlineedit' );
 	},
 
-	_uiInlineEditHtml: function() {
-		return '<form class="'+ uiInlineEditClasses +'">' +
-			'<input class="ui-inlineedit-input" type="text" value="'+ this.value() +'">'+
-			'<a href="#" class="ui-inlineedit-save ui-inlineedit-button ui-state-default" title="'+ this.options.saveButton +'"><span class="ui-icon ui-icon-disk">'+ this.options.saveButton +'</span></a>' +
-			'<a href="#" class="ui-inlineedit-cancel ui-inlineedit-button ui-state-default" title="'+ this.options.cancelButton +'"><span class="ui-icon ui-icon-cancel">'+ this.options.cancelButton +'</span></a>' +
-		'</form>';
-	},
+    _show: function() {
+        this.element.html( this.value() || this._placeholder() );
+    },
 
-	_placeholderHtml: function() {
-		return '<span class="ui-inlineedit-placeholder">'+ this.options.placeholder +'</span>';
-	},
-
-	_render: function() {
+	_edit: function() {
         this.element
-			.html(this._uiInlineEditHtml());
-		this._complete();
-		this._formSubmit();
+			.html( this._form() );
+		this._formDelegate();
 	},
 
-	_formSubmit: function() {
+	_placeholder: function() {
+        return $( "<span></span>" )
+            .addClass( placeholderClass )
+            .html(this.options.placeholder);
+    },
+
+	_form: function() {
+		return $( "<form></form>" )
+            .addClass( uiInlineEditClasses )
+            .append( $( "<input/>" )
+                .attr( "type", "text" )
+                .attr( "value", this.value() )
+                .addClass( inputClass ))
+            .append( this._saveButton() )
+            .append( this._cancelButton() );
+	},
+
+    _saveButton: function() {
+        return $( "<a></a>" )
+            .attr( "href", "#" )
+            .attr( "title", this.options.saveButton )
+            .addClass( saveClass + " " + buttonClass + " " + defaultStateClass )
+            .append( $("<span></span>")
+                .addClass( saveIconClass )
+                .html( this.options.saveButton ));
+    },
+
+    _cancelButton: function() {
+        return $( "<a></a>" )
+            .attr( "href", "#" )
+            .attr( "title", this.options.cancelButton )
+            .addClass( cancelClass + " " + buttonClass + " " + defaultStateClass )
+            .append( $("<span></span>")
+                .addClass( cancelIconClass )
+                .html( this.options.cancelButton ));
+    },
+
+    _formDelegate: function() {
 		var self = this;
 		this.element.find('form')
 			.submit(function(event) {
@@ -114,19 +152,14 @@ $.widget( "ui.inlineedit", {
 				$('input', this).blur();
 				return false;
 			});
-	},
-
-	_complete: function() {
-		var self = this;
-        self.element
-			.find('input')
+        this.element.find('input')
             .bind('blur', function() {
                 if (self.timer) {
                     window.clearTimeout(self.timer);
                 }
                 self.timer = window.setTimeout(function() {
-                    self.element.html(self.value() || self._placeholderHtml());
-                    self.element.removeClass(highlight);
+                    self._show.call(self);
+                    self.element.removeClass(highlightStateClass);
                 }, 200);
             })
             .focus();
@@ -148,7 +181,7 @@ $.widget( "ui.inlineedit", {
 	
 	value: function(newValue) {
 		if (arguments.length) {
-			this.options.value = $(newValue).hasClass('ui-inline-edit-placeholder') ? '' : newValue;
+			this.options.value = $(newValue).hasClass(placeholderClass) ? '' : newValue;
 		}
 		return this.options.value;
 	}
