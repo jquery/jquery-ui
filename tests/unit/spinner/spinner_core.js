@@ -149,22 +149,28 @@ test( "reading HTML5 attributes", function() {
 });
 
 test( "ARIA attributes", function() {
-	expect( 7 );
+	expect( 9 );
 	var element = $( "#spin" ).val( 2 ).spinner({ min: -5, max: 5 });
 
 	equal( element.attr( "role" ), "spinbutton", "role" );
-	equal( element.attr( "aria-valuemin" ), -5, "aria-valuemin" );
-	equal( element.attr( "aria-valuemax" ), 5, "aria-valuemax" );
-	equal( element.attr( "aria-valuenow" ), 2, "aria-valuenow" );
+	equal( element.attr( "aria-valuemin" ), "-5", "aria-valuemin" );
+	equal( element.attr( "aria-valuemax" ), "5", "aria-valuemax" );
+	equal( element.attr( "aria-valuenow" ), "2", "aria-valuenow" );
 
 	element.spinner( "stepUp" );
 
-	equal( element.attr( "aria-valuenow" ), 3, "stepUp 1 step changes aria-valuenow" );
+	equal( element.attr( "aria-valuenow" ), "3", "stepUp 1 step changes aria-valuenow" );
 
 	element.spinner( "option", { min: -10, max: 10 } );
 
-	equal( element.attr( "aria-valuemin" ), -10, "min option changed aria-valuemin changes" );
-	equal( element.attr( "aria-valuemax" ), 10, "max option changed aria-valuemax changes" );
+	equal( element.attr( "aria-valuemin" ), "-10", "min option changed aria-valuemin changes" );
+	equal( element.attr( "aria-valuemax" ), "10", "max option changed aria-valuemax changes" );
+
+	element.spinner( "option", "min", null );
+	equal( element.attr( "aria-valuemin" ), undefined, "aria-valuemin not set when no min" );
+
+	element.spinner( "option", "max", null );
+	equal( element.attr( "aria-valuemax" ), undefined, "aria-valuemax not set when no max" );
 });
 
 test( "focus text field when pressing button", function() {

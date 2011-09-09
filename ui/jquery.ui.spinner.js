@@ -30,8 +30,8 @@ $.widget( "ui.spinner", {
 	widgetEventPrefix: "spin",
 	options: {
 		incremental: true,
-		max: Number.MAX_VALUE,
-		min: -Number.MAX_VALUE,
+		max: null,
+		min: null,
 		numberFormat: null,
 		page: 10,
 		step: 1,
@@ -247,11 +247,11 @@ $.widget( "ui.spinner", {
 	_trimValue: function( value ) {
 		var options = this.options;
 
-		if ( value > options.max) {
+		if ( options.max != null && value > options.max) {
 			return options.max;
 		}
 
-		if ( value < options.min ) {
+		if ( options.min != null && value < options.min ) {
 			return options.min;
 		}
 
