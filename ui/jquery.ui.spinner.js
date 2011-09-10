@@ -233,9 +233,15 @@ $.widget( "ui.spinner", {
 	},
 
 	_increment: function( i ) {
-		return this.options.incremental ?
-			Math.floor( i*i*i/50000 - i*i/500 + 17*i/200 + 1 ) :
-			1;
+		var incremental = this.options.incremental;
+
+		if ( incremental ) {
+			return $.isFunction( incremental ) ?
+				incremental( i ) :
+				Math.floor( i*i*i/50000 - i*i/500 + 17*i/200 + 1 );
+		}
+
+		return 1;
 	},
 
 	_precision: function( num ) {
