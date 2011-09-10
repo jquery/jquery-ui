@@ -143,6 +143,7 @@ $.extend(Datepicker.prototype, {
 	   @param  settings  object - the new settings to use for this date picker instance (anonymous) */
 	_attachDatepicker: function(target, settings) {
 		// check for settings on the control itself - in namespace 'date:'
+    var $target = $(target);
 		var inlineSettings = null;
 		for (var attrName in this._defaults) {
 			var attrValue = target.getAttribute('date:' + attrName);
@@ -155,15 +156,14 @@ $.extend(Datepicker.prototype, {
 				}
 			}
 		}
-		var nodeName = target.nodeName.toLowerCase();
-		var inline = (nodeName == 'div' || nodeName == 'span');
+		var inline = $target.is('div,span');
 		if (!target.id) {
 			this.uuid += 1;
 			target.id = 'dp' + this.uuid;
 		}
 		var inst = this._newInst($(target), inline);
 		inst.settings = $.extend({}, settings || {}, inlineSettings || {});
-		if (nodeName == 'input') {
+		if ($target.is('input')) {
 			this._connectDatepicker(target, inst);
 		} else if (inline) {
 			this._inlineDatepicker(target, inst);
@@ -346,9 +346,8 @@ $.extend(Datepicker.prototype, {
 		if (!$target.hasClass(this.markerClassName)) {
 			return;
 		}
-		var nodeName = target.nodeName.toLowerCase();
 		$.removeData(target, PROP_NAME);
-		if (nodeName == 'input') {
+		if ($target.is('input')) {
 			inst.append.remove();
 			inst.trigger.remove();
 			$target.removeClass(this.markerClassName).
@@ -356,7 +355,7 @@ $.extend(Datepicker.prototype, {
 				unbind('keydown', this._doKeyDown).
 				unbind('keypress', this._doKeyPress).
 				unbind('keyup', this._doKeyUp);
-		} else if (nodeName == 'div' || nodeName == 'span')
+		} else if ($target.is('div,span'))
 			$target.removeClass(this.markerClassName).empty();
 	},
 
@@ -368,14 +367,13 @@ $.extend(Datepicker.prototype, {
 		if (!$target.hasClass(this.markerClassName)) {
 			return;
 		}
-		var nodeName = target.nodeName.toLowerCase();
-		if (nodeName == 'input') {
+		if ($target.is('input')) {
 			target.disabled = false;
 			inst.trigger.filter('button').
 				each(function() { this.disabled = false; }).end().
 				filter('img').css({opacity: '1.0', cursor: ''});
 		}
-		else if (nodeName == 'div' || nodeName == 'span') {
+		else if ($target.is('div,span')) {
 			var inline = $target.children('.' + this._inlineClass);
 			inline.children().removeClass('ui-state-disabled');
 			inline.find("select.ui-datepicker-month, select.ui-datepicker-year").
@@ -393,14 +391,13 @@ $.extend(Datepicker.prototype, {
 		if (!$target.hasClass(this.markerClassName)) {
 			return;
 		}
-		var nodeName = target.nodeName.toLowerCase();
-		if (nodeName == 'input') {
+		if ($target.is('input')) {
 			target.disabled = true;
 			inst.trigger.filter('button').
 				each(function() { this.disabled = true; }).end().
 				filter('img').css({opacity: '0.5', cursor: 'default'});
 		}
-		else if (nodeName == 'div' || nodeName == 'span') {
+		else if ($target.is('div,span')) {
 			var inline = $target.children('.' + this._inlineClass);
 			inline.children().addClass('ui-state-disabled');
 			inline.find("select.ui-datepicker-month, select.ui-datepicker-year").
