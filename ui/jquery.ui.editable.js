@@ -1,11 +1,11 @@
 /*
- * jQuery UI Inlineedit @VERSION
+ * jQuery UI Editable @VERSION
  *
  * Copyright 2011, AUTHORS.txt (http://jqueryui.com/about)
  * Dual licensed under the MIT or GPL Version 2 licenses.
  * http://jquery.org/license
  *
- * http://docs.jquery.com/UI/Inlineedit (to be created)
+ * http://docs.jquery.com/UI/Editable (to be created)
  *
  * Depends:
  *	jquery.ui.core.js
@@ -13,19 +13,19 @@
  */
 (function( $, undefined ) {
 
-var uiInlineEditClasses = 'ui-inlineedit-content ui-widget ui-widget-content ui-corner-all',
-    buttonClass = 'ui-inlineedit-button',
-    cancelClass = 'ui-inlineedit-cancel',
-    inputClass = 'ui-inlineedit-input',
-	placeholderClass = 'ui-inlineedit-placeholder',
-	saveClass = 'ui-inlineedit-save',
+var uiEditableClasses = 'ui-editable-content ui-widget ui-widget-content ui-corner-all',
+    buttonClass = 'ui-editable-button',
+    cancelClass = 'ui-editable-cancel',
+    inputClass = 'ui-editable-input',
+	placeholderClass = 'ui-editable-placeholder',
+	saveClass = 'ui-editable-save',
     cancelIconClass = 'ui-icon ui-icon-cancel',
     saveIconClass = 'ui-icon ui-icon-disk',
     defaultStateClass = 'ui-state-default',
 	highlightStateClass = 'ui-state-highlight',
     hoverStateClass = 'ui-state-hover';
 
-$.widget( "ui.inlineedit", {
+$.widget( "ui.editable", {
     version: "@VERSION",
 	widgetEventPrefix: "edit",
 
@@ -60,7 +60,7 @@ $.widget( "ui.inlineedit", {
 					return;
 	            }
 								
-				if ($this.hasClass('ui-inlineedit') || $this.hasClass(placeholderClass)) {
+				if ($this.hasClass('ui-editable') || $this.hasClass(placeholderClass)) {
 					self._edit();
 					return;
 	            }
@@ -76,7 +76,7 @@ $.widget( "ui.inlineedit", {
 					return;
 	            }
 				
-				if ($this.hasClass('ui-inlineedit') || $this.hasClass(placeholderClass)) {
+				if ($this.hasClass('ui-editable') || $this.hasClass(placeholderClass)) {
 					self.element.addClass(highlightStateClass);
 					return;
 	            }
@@ -89,12 +89,12 @@ $.widget( "ui.inlineedit", {
 					return;
 	            }
 				
-				if ($this.hasClass('ui-inlineedit') || $this.hasClass(placeholderClass)) {
+				if ($this.hasClass('ui-editable') || $this.hasClass(placeholderClass)) {
 					self.element.removeClass(highlightStateClass);
 					return;
 	            }
 			})
-			.addClass( 'ui-inlineedit' );
+			.addClass( 'ui-editable' );
 	},
 
     _show: function() {
@@ -115,7 +115,7 @@ $.widget( "ui.inlineedit", {
 
 	_form: function() {
 		return $( "<form></form>" )
-            .addClass( uiInlineEditClasses )
+            .addClass( uiEditableClasses )
             .append( $( "<input/>" )
                 .attr( "type", "text" )
                 .attr( "value", this.value() )
