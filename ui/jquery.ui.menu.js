@@ -71,111 +71,111 @@ $.widget( "ui.menu", {
 
 		this.refresh();
 
-		this.element.attr( "tabIndex", 0 ).bind( "keydown.menu", function( event ) {
-			if ( self.options.disabled ) {
-				return;
-			}
-			switch ( event.keyCode ) {
-			case $.ui.keyCode.PAGE_UP:
-				self.previousPage( event );
-				event.preventDefault();
-				event.stopImmediatePropagation();
-				break;
-			case $.ui.keyCode.PAGE_DOWN:
-				self.nextPage( event );
-				event.preventDefault();
-				event.stopImmediatePropagation();
-				break;
-			case $.ui.keyCode.HOME:
-				self._move( "first", "first", event );
-				event.preventDefault();
-				event.stopImmediatePropagation();
-				break;
-			case $.ui.keyCode.END:
-				self._move( "last", "last", event );
-				event.preventDefault();
-				event.stopImmediatePropagation();
-				break;
-			case $.ui.keyCode.UP:
-				self.previous( event );
-				event.preventDefault();
-				event.stopImmediatePropagation();
-				break;
-			case $.ui.keyCode.DOWN:
-				self.next( event );
-				event.preventDefault();
-				event.stopImmediatePropagation();
-				break;
-			case $.ui.keyCode.LEFT:
-				if (self.collapse( event )) {
+		this.element.attr( "tabIndex", 0 );
+		this._bind({
+			"keydown": function( event ) {
+				switch ( event.keyCode ) {
+				case $.ui.keyCode.PAGE_UP:
+					self.previousPage( event );
+					event.preventDefault();
 					event.stopImmediatePropagation();
-				}
-				event.preventDefault();
-				break;
-			case $.ui.keyCode.RIGHT:
-				if (self.expand( event )) {
+					break;
+				case $.ui.keyCode.PAGE_DOWN:
+					self.nextPage( event );
+					event.preventDefault();
 					event.stopImmediatePropagation();
-				}
-				event.preventDefault();
-				break;
-			case $.ui.keyCode.ENTER:
-				if ( self.active.children( "a[aria-haspopup='true']" ).length ) {
-					if ( self.expand( event ) ) {
+					break;
+				case $.ui.keyCode.HOME:
+					self._move( "first", "first", event );
+					event.preventDefault();
+					event.stopImmediatePropagation();
+					break;
+				case $.ui.keyCode.END:
+					self._move( "last", "last", event );
+					event.preventDefault();
+					event.stopImmediatePropagation();
+					break;
+				case $.ui.keyCode.UP:
+					self.previous( event );
+					event.preventDefault();
+					event.stopImmediatePropagation();
+					break;
+				case $.ui.keyCode.DOWN:
+					self.next( event );
+					event.preventDefault();
+					event.stopImmediatePropagation();
+					break;
+				case $.ui.keyCode.LEFT:
+					if (self.collapse( event )) {
 						event.stopImmediatePropagation();
 					}
-				}
-				else {
-					self.select( event );
-					event.stopImmediatePropagation();
-				}
-				event.preventDefault();
-				break;
-			case $.ui.keyCode.ESCAPE:
-				if ( self.collapse( event ) ) {
-					event.stopImmediatePropagation();
-				}
-				event.preventDefault();
-				break;
-			default:
-				event.stopPropagation();
-				clearTimeout( self.filterTimer );
-				var match,
-					prev = self.previousFilter || "",
-					character = String.fromCharCode( event.keyCode ),
-					skip = false;
+					event.preventDefault();
+					break;
+				case $.ui.keyCode.RIGHT:
+					if (self.expand( event )) {
+						event.stopImmediatePropagation();
+					}
+					event.preventDefault();
+					break;
+				case $.ui.keyCode.ENTER:
+					if ( self.active.children( "a[aria-haspopup='true']" ).length ) {
+						if ( self.expand( event ) ) {
+							event.stopImmediatePropagation();
+						}
+					}
+					else {
+						self.select( event );
+						event.stopImmediatePropagation();
+					}
+					event.preventDefault();
+					break;
+				case $.ui.keyCode.ESCAPE:
+					if ( self.collapse( event ) ) {
+						event.stopImmediatePropagation();
+					}
+					event.preventDefault();
+					break;
+				default:
+					event.stopPropagation();
+					clearTimeout( self.filterTimer );
+					var match,
+						prev = self.previousFilter || "",
+						character = String.fromCharCode( event.keyCode ),
+						skip = false;
 
-				if (character == prev) {
-					skip = true;
-				} else {
-					character = prev + character;
-				}
-				function escape( value ) {
-					return value.replace( /[-[\]{}()*+?.,\\^$|#\s]/g , "\\$&" );
-				}
-				match = self.activeMenu.children( ".ui-menu-item" ).filter( function() {
-					return new RegExp("^" + escape(character), "i")
-						.test( $( this ).children( "a" ).text() );
-				});
-				match = skip && match.index(self.active.next()) != -1 ? self.active.nextAll(".ui-menu-item") : match;
-				if ( !match.length ) {
-					character = String.fromCharCode(event.keyCode);
-					match = self.activeMenu.children(".ui-menu-item").filter( function() {
+					if (character == prev) {
+						skip = true;
+					} else {
+						character = prev + character;
+					}
+					function escape( value ) {
+						return value.replace( /[-[\]{}()*+?.,\\^$|#\s]/g , "\\$&" );
+					}
+					match = self.activeMenu.children( ".ui-menu-item" ).filter( function() {
 						return new RegExp("^" + escape(character), "i")
 							.test( $( this ).children( "a" ).text() );
 					});
-				}
-				if ( match.length ) {
-					self.focus( event, match );
-					if (match.length > 1) {
-						self.previousFilter = character;
-						self.filterTimer = setTimeout( function() {
+					match = skip && match.index(self.active.next()) != -1 ? self.active.nextAll(".ui-menu-item") : match;
+					if ( !match.length ) {
+						character = String.fromCharCode(event.keyCode);
+						match = self.activeMenu.children(".ui-menu-item").filter( function() {
+							return new RegExp("^" + escape(character), "i")
+								.test( $( this ).children( "a" ).text() );
+						});
+					}
+					if ( match.length ) {
+						self.focus( event, match );
+						if (match.length > 1) {
+							self.previousFilter = character;
+							self.filterTimer = setTimeout( function() {
+								delete self.previousFilter;
+							}, 1000 );
+						} else {
 							delete self.previousFilter;
-						}, 1000 );
+						}
 					} else {
 						delete self.previousFilter;
 					}
-				} else {
-					delete self.previousFilter;
 				}
 			}
 		});
