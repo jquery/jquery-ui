@@ -16,7 +16,7 @@
 			right: 10,
 			top: 10
 		}).appendTo(document.body).themeswitcher();
-		
+
 		function create() {
 			menus.menu({
 				select: function(event, ui) {
@@ -24,8 +24,8 @@
 				}
 			});
 		}
-		
-		var menus = $("#menu1, #menu2, #menu3, #menu4");
+
+		var menus = $("#menu1, #menu2, #menu3, .menu4");
 		create();
 
 		$("#toggle-destroy").toggle(function() {
@@ -41,11 +41,11 @@
 	<style>
 		body { font-size:62.5%; }
 		.ui-menu { width: 200px; margin-bottom: 2em; }
-		#menu4 { height: 200px; overflow: auto; }
+		.menu4 { height: 200px; overflow: auto; }
 	</style>
 </head>
 <body>
-	
+
 <ul id="menu1">
 	<li><a href="#">Aberdeen</a></li>
 	<li><a href="#">Ada</a></li>
@@ -132,7 +132,7 @@
 	</li>
 </ul>
 
-<ul id="menu4">
+<ul class="menu4">
 	<li><a href="#">Aberdeen</a></li>
 	<li><a href="#">Ada</a></li>
 	<li><a href="#">Adamsville</a></li>

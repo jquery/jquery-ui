@@ -220,35 +220,33 @@ $.widget( "ui.menu", {
 	},
 
 	refresh: function() {
-		var that = this,
-
-			// initialize nested menus
-			submenus = this.element.find( "ul:not(.ui-menu)" )
-				.addClass( "ui-menu ui-widget ui-widget-content ui-corner-all" )
-				.attr( "role", "menu" )
-				.hide()
-				.attr( "aria-hidden", "true" )
-				.attr( "aria-expanded", "false" ),
+		// initialize nested menus
+		var submenus = this.element.find( "ul:not(.ui-menu)" )
+			.addClass( "ui-menu ui-widget ui-widget-content ui-corner-all" )
+			.attr( "role", "menu" )
+			.hide()
+			.attr( "aria-hidden", "true" )
+			.attr( "aria-expanded", "false" );
 
 		// don't refresh list items that are already adapted
-			items = submenus.add( this.element ).children( "li:not(.ui-menu-item):has(a)" )
-				.addClass( "ui-menu-item" )
-				.attr( "role", "presentation" );
-
-		items.children( "a" )
-			.addClass( "ui-corner-all" )
-			.attr( "tabIndex", -1 )
-			.attr( "role", "menuitem" )
-			.attr( "id", function( i ) {
-				return that.element.attr( "id" ) + "-" + i;
-			});
+		var menuId = this.menuId;
+		submenus.add( this.element ).children( "li:not(.ui-menu-item):has(a)" )
+			.addClass( "ui-menu-item" )
+			.attr( "role", "presentation" )
+			.children( "a" )
+				.addClass( "ui-corner-all" )
+				.attr( "tabIndex", -1 )
+				.attr( "role", "menuitem" )
+				.attr( "id", function( i ) {
+					return menuId + "-" + i;
+				});
 
 		submenus.each( function() {
 			var menu = $( this ),
 				item = menu.prev( "a" );
 
 			item.attr( "aria-haspopup", "true" )
-			.prepend( '<span class="ui-menu-icon ui-icon ui-icon-carat-1-e"></span>' );
+				.prepend( '<span class="ui-menu-icon ui-icon ui-icon-carat-1-e"></span>' );
 			menu.attr( "aria-labelledby", item.attr( "id" ) );
 		});
 	},
