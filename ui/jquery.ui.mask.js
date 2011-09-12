@@ -34,7 +34,7 @@ $.widget( "ui.mask", {
 		this._parseMask();
 		this._parseValue();
 		this._paint();
-		this._events();
+		this._bind( this._events );
 	},
 
 	refresh: function() {
@@ -135,110 +135,108 @@ $.widget( "ui.mask", {
 		}
 		return value;
 	},
-	_events: function() {
-		this._bind({
-			focus: function( event ) {
-				this.lastUnsavedValue = this.element.val();
-				this._paint( true );
-				this._delay( function() {
-					this._caret( this._seekRight( this._parseValue() - 1 ) );
-				}, 0);
-			},
-			blur: function( event ) {
+	_events: {
+		focus: function( event ) {
+			this.lastUnsavedValue = this.element.val();
+			this._paint( true );
+			this._delay( function() {
+				this._caret( this._seekRight( this._parseValue() - 1 ) );
+			}, 0);
+		},
+		blur: function( event ) {
 
-				// because we are constantly setting the value of the input, the change event
-				// never fires - we re-introduce the change event here
-				this._parseValue();
-				this._paint( false );
-				if ( this.element.val() !== this.lastUnsavedValue ) {
-					this.element.trigger( "change" );
+			// because we are constantly setting the value of the input, the change event
+			// never fires - we re-introduce the change event here
+			this._parseValue();
+			this._paint( false );
+			if ( this.element.val() !== this.lastUnsavedValue ) {
+				this.element.trigger( "change" );
+			}
+			return;
+		},
+		keydown: function( event ) {
+			var bufferObject,
+				key = event.keyCode,
+				position = this._caret();
+
+			switch ( key ) {
+			case keyCode.ESCAPE:
+				this.element.val( this.lastUnsavedValue );
+				this._caret( 0, this._parseValue() );
+				event.preventDefault();
+				return;
+
+			case keyCode.BACKSPACE:
+			case keyCode.DELETE:
+				event.preventDefault();
+				if ( position.begin === position.end ) {
+					position.begin = position.end = ( key === keyCode.DELETE ?
+						this._seekRight( position.begin - 1) :
+						this._seekLeft( position.begin )
+					);
+					if ( position.begin < 0 ) {
+						this._caret( this._seekRight( -1 ) );
+						return;
+					}
+				}
+				this._removeValues( position.begin, position.end );
+				this._paint();
+				this._caret( position.begin );
+				return;
+
+			case keyCode.RIGHT:
+				if ( position.begin === position.end ) {
+					bufferObject = this.buffer[ position.begin ];
+					if ( bufferObject && bufferObject.length > 1 ) {
+						bufferObject.value = this._validValue( bufferObject, bufferObject.value );
+						this._paint();
+						event.preventDefault();
+					}
+					position = this._seekRight( bufferObject.start + bufferObject.length - 1 );
+					bufferObject = this.buffer[ position ];
+					if ( bufferObject && bufferObject.length > 1 ) {
+						this._caret( position, position + ( bufferObject && bufferObject.length > 1 ? bufferObject.length : 0 ) );
+						event.preventDefault();
+					}
 				}
 				return;
-			},
-			keydown: function( event ) {
-				var bufferObject,
-					key = event.keyCode,
-					position = this._caret();
+			}
+		},
+		keypress: function( event ) {
+			var tempValue,
+				key = event.keyCode,
+				position = this._caret(),
+				bufferPosition = this._seekRight( position.begin - 1 ),
+				bufferObject = this.buffer[ bufferPosition ];
 
-				switch ( key ) {
-				case keyCode.ESCAPE:
-					this.element.val( this.lastUnsavedValue );
-					this._caret( 0, this._parseValue() );
-					event.preventDefault();
-					return;
-
-				case keyCode.BACKSPACE:
-				case keyCode.DELETE:
-					event.preventDefault();
-					if ( position.begin === position.end ) {
-						position.begin = position.end = ( key === keyCode.DELETE ?
-							this._seekRight( position.begin - 1) :
-							this._seekLeft( position.begin )
-						);
-						if ( position.begin < 0 ) {
-							this._caret( this._seekRight( -1 ) );
-							return;
-						}
-					}
-					this._removeValues( position.begin, position.end );
+			this.currentEvent = event;
+			// ignore keypresses with special keys, or control characters
+			if ( event.metaKey || event.altKey || event.ctrlKey || key < 32 ) {
+				return;
+			}
+			if ( position.begin !== position.end ) {
+				this._removeValues( position.begin, position.end );
+			}
+			if ( bufferObject ) {
+				tempValue = String.fromCharCode( key );
+				if ( bufferObject.length > 1 && bufferObject.value ) {
+					tempValue = bufferObject.value.substr( 0, bufferPosition - bufferObject.start ) +
+						tempValue +
+						bufferObject.value.substr( bufferPosition - bufferObject.start + 1 );
+					tempValue = tempValue.substr( 0, bufferObject.length );
+				}
+				if ( this._validValue( bufferObject, tempValue ) ) {
+					this._shiftRight( position.begin );
+					bufferObject.value = tempValue;
 					this._paint();
-					this._caret( position.begin );
-					return;
-
-				case keyCode.RIGHT:
-					if ( position.begin === position.end ) {
-						bufferObject = this.buffer[ position.begin ];
-						if ( bufferObject && bufferObject.length > 1 ) {
-							bufferObject.value = this._validValue( bufferObject, bufferObject.value );
-							this._paint();
-							event.preventDefault();
-						}
-						position = this._seekRight( bufferObject.start + bufferObject.length - 1 );
-						bufferObject = this.buffer[ position ];
-						if ( bufferObject && bufferObject.length > 1 ) {
-							this._caret( position, position + ( bufferObject && bufferObject.length > 1 ? bufferObject.length : 0 ) );
-							event.preventDefault();
-						}
-					}
-					return;
+					this._caret( this._seekRight( bufferPosition ) );
 				}
-			},
-			keypress: function( event ) {
-				var tempValue,
-					key = event.keyCode,
-					position = this._caret(),
-					bufferPosition = this._seekRight( position.begin - 1 ),
-					bufferObject = this.buffer[ bufferPosition ];
-
-				this.currentEvent = event;
-				// ignore keypresses with special keys, or control characters
-				if ( event.metaKey || event.altKey || event.ctrlKey || key < 32 ) {
-					return;
-				}
-				if ( position.begin !== position.end ) {
-					this._removeValues( position.begin, position.end );
-				}
-				if ( bufferObject ) {
-					tempValue = String.fromCharCode( key );
-					if ( bufferObject.length > 1 && bufferObject.value ) {
-						tempValue = bufferObject.value.substr( 0, bufferPosition - bufferObject.start ) +
-							tempValue +
-							bufferObject.value.substr( bufferPosition - bufferObject.start + 1 );
-						tempValue = tempValue.substr( 0, bufferObject.length );
-					}
-					if ( this._validValue( bufferObject, tempValue ) ) {
-						this._shiftRight( position.begin );
-						bufferObject.value = tempValue;
-						this._paint();
-						this._caret( this._seekRight( bufferPosition ) );
-					}
-				}
-				event.preventDefault();
-				this.currentEvent = false;
-			},
-			paste: "_paste",
-			input: "_paste"
-		});
+			}
+			event.preventDefault();
+			this.currentEvent = false;
+		},
+		paste: "_paste",
+		input: "_paste"
 	},
 	_paste: function(event) {
 		this.currentEvent = event;
