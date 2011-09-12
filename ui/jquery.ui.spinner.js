@@ -202,12 +202,11 @@ $.widget( "ui.spinner", {
 	},
 
 	_repeat: function( i, steps, event ) {
-		var that = this;
 		i = i || 500;
 
 		clearTimeout( this.timer );
-		this.timer = setTimeout(function() {
-			that._repeat( 40, steps, event );
+		this.timer = this._delay(function() {
+			this._repeat( 40, steps, event );
 		}, i );
 
 		this._spin( steps * this.options.step, event );
