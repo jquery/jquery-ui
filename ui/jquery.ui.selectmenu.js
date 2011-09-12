@@ -593,7 +593,7 @@ $.widget("ui.selectmenu", {
 	},
 
 	_toggle: function(event, retainFocus) {
-		if ( this.list.is('.' + this.widgetBaseClass + '-open') ) {
+		if ( this.list.parent().is('.' + this.widgetBaseClass + '-open') ) {
 			this.close(event, retainFocus);
 		} else {
 			this.open(event);
