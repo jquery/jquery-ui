@@ -1,6 +1,6 @@
 (function( $ ) {
 
-module( "accordion: methods", accordionSetupTeardown() );
+module( "accordion: methods", accordion_setupTeardown() );
 
 test( "destroy", function() {
 	expect( 1 );

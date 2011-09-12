@@ -14,7 +14,10 @@ var slice = Array.prototype.slice;
 var _cleanData = $.cleanData;
 $.cleanData = function( elems ) {
 	for ( var i = 0, elem; (elem = elems[i]) != null; i++ ) {
-		$( elem ).triggerHandler( "remove" );
+		try {
+			$( elem ).triggerHandler( "remove" );
+		// http://bugs.jquery.com/ticket/8235
+		} catch( e ) {}
 	}
 	_cleanData( elems );
 };
@@ -267,9 +270,9 @@ $.Widget.prototype = {
 		return this;
 	},
 	_setOptions: function( options ) {
-		var self = this;
+		var that = this;
 		$.each( options, function( key, value ) {
-			self._setOption( key, value );
+			that._setOption( key, value );
 		});
 
 		return this;
@@ -305,9 +308,10 @@ $.Widget.prototype = {
 			element = $( element );
 			this.bindings = this.bindings.add( element );
 		}
+
 		var instance = this;
 		$.each( handlers, function( event, handler ) {
-			element.bind( event + "." + instance.widgetName, function() {
+			function handlerProxy() {
 				// allow widgets to customize the disabled handling
 				// - disabled as an array instead of boolean
 				// - disabled class as method for disabling individual parts
@@ -317,8 +321,25 @@ $.Widget.prototype = {
 				}
 				return ( typeof handler === "string" ? instance[ handler ] : handler )
 					.apply( instance, arguments );
-			});
+			}
+			var match = event.match( /^(\w+)\s*(.*)$/ ),
+				eventName = match[1] + "." + instance.widgetName,
+				selector = match[2];
+			if ( selector ) {
+				instance.widget().delegate( selector, eventName, handlerProxy );
+			} else {
+				element.bind( eventName, handlerProxy );
+			}
 		});
+	},
+
+	_delay: function( handler, delay ) {
+		function handlerProxy() {
+			return ( typeof handler === "string" ? instance[ handler ] : handler )
+				.apply( instance, arguments );
+		}
+		var instance = this;
+		return setTimeout( handlerProxy, delay || 0 );
 	},
 
 	_hoverable: function( element ) {

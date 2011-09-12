@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<title>Position Visual Test: Fit</title>
+	<link rel="stylesheet" href="../visual.css" type="text/css" />
+	<link rel="stylesheet" href="../../../themes/base/jquery.ui.all.css" type="text/css" title="ui-theme" />
+	<script type="text/javascript" src="../../../jquery-1.6.2.js"></script>
+	<script type="text/javascript" src="../../../ui/jquery.ui.core.js"></script>
+	<script type="text/javascript" src="../../../ui/jquery.ui.widget.js"></script>
+	<script type="text/javascript" src="../../../ui/jquery.ui.position.js"></script>
+	<script type="text/javascript" src="../../../ui/jquery.ui.menu.js"></script>
+	<script type="text/javascript" src="http://jqueryui.com/themeroller/themeswitchertool/"></script>
+	<script type="text/javascript">
+	$(function() {
+		var inputs = $("input");
+		$("ul").insertAfter(inputs);
+		inputs.each(function(index) {
+			$(this).position({
+				my: this.id.replace(/-/, " "),
+				at: this.id.replace(/-/, " "),
+				of: "#container"+index,
+				collision: "none"
+			});
+			if(index < 3) {
+				$(this).next().menu().position({
+					my: "left top",
+					at: "left bottom",
+					of: this,
+					within: "#container"+index,
+					collision: "fit"
+				});
+			}
+			if(index >= 3 && index < 6) {
+				$(this).next().menu().position({
+					my: "right top",
+					at: "right bottom",
+					of: this,
+					within: "#container"+index,
+					collision: "fit"
+				});
+			}
+			if(index >= 6 && index < 9) {
+				$(this).next().menu().position({
+					my: "center top",
+					at: "center bottom",
+					of: this,
+					within: "#container"+index,
+					collision: "fit"
+				});
+			}
+			if(index >= 9 && index < 12) {
+				$(this).next().menu().position({
+					my: "left top",
+					at: "left bottom",
+					of: this,
+					within: "#container"+index,
+					collision: "fit"
+				});
+			}
+			if(index >= 12 && index < 15) {
+				$(this).next().menu().position({
+					my: "center center",
+					at: "center center",
+					of: this,
+					within: "#container"+index,
+					collision: "fit"
+				});
+			}
+			if(index >= 15) {
+				$(this).next().menu().position({
+					my: "left bottom",
+					at: "left top",
+					of: this,
+					within: "#container"+index,
+					collision: "fit"
+				});
+			}
+		});
+	});
+	</script>
+	<style>
+		input, .ui-menu { position: absolute; }
+		.ui-menu { width: 300px; }
+		#ui-menu-9, #ui-menu-10, #ui-menu-11, #ui-menu-12, #ui-menu-13, #ui-menu-14, #ui-menu-15, #ui-menu-16, #ui-menu-17 { width: auto; }
+		html, body { width: 99%; height: 99%; min-height:700px; min-width:700px; }
+		.container { width: 200px; height: 200px; border: 1px solid black; display:inline-block; margin-left: 230px; margin-top: 15px; margin-bottom: 135px; }
+		.container2 { width: 200px; height: 100px; border: 1px solid black; display:inline-block; margin-left: 230px; margin-top: 15px; margin-bottom: 135px; }
+	</style>
+</head>
+<body>
+
+<div id="container0" class="container"></div>
+<div id="container1" class="container"></div>
+<div id="container2" class="container"></div>
+<div style="clear:both;"></div>
+<div id="container3" class="container"></div>
+<div id="container4" class="container"></div>
+<div id="container5" class="container"></div>
+<div style="clear:both;"></div>
+<div id="container6" class="container"></div>
+<div id="container7" class="container"></div>
+<div id="container8" class="container"></div>
+<div style="clear:both;"></div>
+<div id="container9" class="container2"></div>
+<div id="container10" class="container2"></div>
+<div id="container11" class="container2"></div>
+<div style="clear:both;"></div>
+<div id="container12" class="container2"></div>
+<div id="container13" class="container2"></div>
+<div id="container14" class="container2"></div>
+<div style="clear:both;"></div>
+<div id="container15" class="container2"></div>
+<div id="container16" class="container2"></div>
+<div id="container17" class="container2"></div>
+
+<input id="left-top" />
+<input id="center-top" />
+<input id="right-top" />
+<input id="left-top" />
+<input id="center-top" />
+<input id="right-top" />
+<input id="left-top" />
+<input id="center-top" />
+<input id="right-top" />
+
+<input id="left-top" />
+<input id="center-center" />
+<input id="right-bottom" />
+<input id="left-top" />
+<input id="center-center" />
+<input id="right-bottom" />
+<input id="left-top" />
+<input id="center-center" />
+<input id="right-bottom" />
+
+<ul>
+	<li><a href="#">Java</a></li>
+	<li><a href="#">JavaScript</a></li>
+	<li><a href="#">Perl</a></li>
+	<li><a href="#">Ruby</a></li>
+	<li><a href="#">C++</a></li>
+	<li><a href="#">Python</a></li>
+	<li><a href="#">C#</a></li>
+</ul>
+
+</body>
+</html>

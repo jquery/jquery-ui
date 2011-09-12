@@ -6,10 +6,13 @@ commonWidgetTests( "spinner", {
 		min: null,
 		numberFormat: null,
 		page: 10,
-		step: null,
-		value: null,
+		step: 1,
 
 		// callbacks
-		create: null
+		change: null,
+		create: null,
+		spin: null,
+		start: null,
+		stop: null
 	}
 });

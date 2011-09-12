@@ -1,6 +1,6 @@
 (function( $ ) {
 
-module( "accordion (deprecated): expanded active option, activate method", accordionSetupTeardown() );
+module( "accordion (deprecated): expanded active option, activate method", accordion_setupTeardown() );
 
 test( "activate, numeric", function() {
 	expect( 5 );
@@ -101,7 +101,7 @@ test( "{ active: jQuery Object }", function() {
 
 
 
-module( "accordion (deprecated) - height options", accordionSetupTeardown() );
+module( "accordion (deprecated) - height options", accordion_setupTeardown() );
 
 test( "{ autoHeight: true }, default", function() {
 	expect( 3 );
@@ -174,7 +174,7 @@ test( "{ fillSpace: true } with multiple siblings", function() {
 
 
 
-module( "accordion (deprecated) - icons", accordionSetupTeardown() );
+module( "accordion (deprecated) - icons", accordion_setupTeardown() );
 
 test( "icons, headerSelected", function() {
 	expect( 3 );
@@ -191,7 +191,7 @@ test( "icons, headerSelected", function() {
 
 
 
-module( "accordion (deprecated) - resize", accordionSetupTeardown() );
+module( "accordion (deprecated) - resize", accordion_setupTeardown() );
 
 test( "resize", function() {
 	expect( 6 );
@@ -213,7 +213,7 @@ test( "resize", function() {
 
 
 
-module( "accordion (deprecated) - navigation", accordionSetupTeardown() );
+module( "accordion (deprecated) - navigation", accordion_setupTeardown() );
 
 test( "{ navigation: true, navigationFilter: header }", function() {
 	expect( 2 );
@@ -243,7 +243,7 @@ test( "{ navigation: true, navigationFilter: content }", function() {
 
 
 
-module( "accordion (deprecated) - changestart/change events", accordionSetupTeardown() );
+module( "accordion (deprecated) - changestart/change events", accordion_setupTeardown() );
 
 test( "changestart", function() {
 	expect( 26 );

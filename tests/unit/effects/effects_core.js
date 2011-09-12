@@ -150,4 +150,15 @@ asyncTest( "animateClass clears style properties when stopped", function() {
 	start();
 });
 
+test( "createWrapper and removeWrapper retain focused elements (#7595)", function() {
+	expect( 2 );
+	var test = $( "div.hidden" ).show(),
+		input = $( "<input>" ).appendTo( test ).focus();
+
+	$.effects.createWrapper( test );
+	equal( document.activeElement, input[ 0 ], "Active element is still input after createWrapper" );
+	$.effects.removeWrapper( test );
+	equal( document.activeElement, input[ 0 ], "Active element is still input after removeWrapper" );
+})
+
 })(jQuery);

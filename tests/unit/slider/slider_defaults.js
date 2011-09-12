@@ -1,7 +1,7 @@
 commonWidgetTests( "slider", {
 	defaults: {
 		animate: false,
-		cancel: function() {},
+		cancel: ':input,option',
 		delay: 0,
 		disabled: false,
 		distance: 0,

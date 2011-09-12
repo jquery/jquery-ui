@@ -7,35 +7,56 @@
 	<script src="../../jquery-1.6.2.js"></script>
 
 	<link rel="stylesheet" href="../../external/qunit.css">
+	<link rel="stylesheet" href="subsuiteRunner.css">
 	<script src="../../external/qunit.js"></script>
-	<script src="testsuites.js"></script>
+	<script src="subsuiteRunner.js"></script>
 
 	<script>
-	QUnit.testSuites([
-		"accordion/accordion.html",
-		"accordion/accordion_deprecated.html",
-		"autocomplete/autocomplete.html",
-		"button/button.html",
-		"core/core.html",
-		"datepicker/datepicker.html",
-		"dialog/dialog.html",
-		//"draggable/draggable.html",
-		//"droppable/droppable.html",
-		"effects/effects.html",
-		"mask/mask.html",
-		"menu/menu.html",
-		"position/position.html",
-		"progressbar/progressbar.html",
-		//"resizable/resizable.html",
-		//"selectable/selectable.html",
-		"slider/slider.html",
-		//"sortable/sortable.html",
-		"spinner/spinner.html",
-		"tabs/tabs.html",
-		"tabs/tabs_deprecated.html",
-		"tooltip/tooltip.html",
-		"widget/widget.html"
-   	]);
+	(function() {
+
+	var params = [],
+		suites = [
+			"accordion/accordion.html",
+			"accordion/accordion_deprecated.html",
+			"autocomplete/autocomplete.html",
+			"button/button.html",
+			"core/core.html",
+			"datepicker/datepicker.html",
+			"dialog/dialog.html",
+			//"draggable/draggable.html",
+			//"droppable/droppable.html",
+			"effects/effects.html",
+			"mask/mask.html",
+			"menu/menu.html",
+			"position/position.html",
+			"position/position_deprecated.html",
+			"progressbar/progressbar.html",
+			//"resizable/resizable.html",
+			//"selectable/selectable.html",
+			"slider/slider.html",
+			//"sortable/sortable.html",
+			"spinner/spinner.html",
+			"tabs/tabs.html",
+			"tabs/tabs_deprecated.html",
+			"tooltip/tooltip.html",
+			"widget/widget.html"
+		];
+
+	$.each( QUnit.urlParams, function( key, value ) {
+		if ( key === "filter" ) {
+			return;
+		}
+		params.push( encodeURIComponent( key ) + "=" + encodeURIComponent( value ) );
+	});
+	if ( params.length ) {
+		params = "?" + params.join( "&" );
+		suites = $.map( suites, function( suite ) {
+			return suite + params;
+		});
+	}
+	QUnit.testSuites( suites );
+
+	}());
 	</script>
 </head>
 <body>
