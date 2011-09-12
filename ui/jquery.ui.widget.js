@@ -339,7 +339,7 @@ $.Widget.prototype = {
 				.apply( instance, arguments );
 		}
 		var instance = this;
-		setTimeout( handlerProxy, delay || 0 );
+		return setTimeout( handlerProxy, delay || 0 );
 	},
 
 	_hoverable: function( element ) {

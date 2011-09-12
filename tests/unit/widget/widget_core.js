@@ -1041,19 +1041,21 @@ test( "redefine", function() {
 });
 
 asyncTest( "_delay", function() {
-	expect( 4 );
+	expect( 6 );
 	var order = 0,
 		that;
 	$.widget( "ui.testWidget", {
 		defaultElement: null,
 		_create: function() {
 			that = this;
-			this._delay(function() {
+			var timer = this._delay(function() {
 				strictEqual( this, that );
 				equal( order, 1 );
 				start();
 			}, 500);
-			this._delay("callback");
+			ok( timer !== undefined );
+			timer = this._delay("callback");
+			ok( timer !== undefined );
 		},
 		callback: function() {
 			strictEqual( this, that );
