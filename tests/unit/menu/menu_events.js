@@ -41,6 +41,25 @@ test( "handle blur: click", function() {
 	$("#remove").remove();
 });
 
+asyncTest( "handle submenu auto collapse: mouseleave", function() {
+	expect( 4 );
+	var $menu = $( "#menu2" ).menu();
+
+	$menu.find( "li:nth-child(7)" ).trigger( "mouseover" );
+	setTimeout(function() {
+		equal( $menu.find( "ul[aria-expanded='true']" ).length, 1, "first submenu expanded" );
+		$menu.find( "li:nth-child(7) li:first" ).trigger( "mouseover" );
+		setTimeout(function() {
+			equal( $menu.find( "ul[aria-expanded='true']" ).length, 2, "second submenu expanded" );
+			$menu.find( "ul[aria-expanded='true']:first" ).trigger( "mouseleave" );
+			equal( $menu.find( "ul[aria-expanded='true']" ).length, 1, "second submenu collapsed" );
+			$menu.trigger( "mouseleave" );
+			equal( $menu.find( "ul[aria-expanded='true']" ).length, 0, "first submenu collapsed" );
+			start();
+		}, 400);
+	}, 200);
+});
+
 test("handle keyboard navigation on menu without scroll and without submenus", function() {
 	expect(12);
 	var element = $('#menu1').menu({

@@ -62,6 +62,8 @@ $.widget( "ui.menu", {
 				target.siblings().children( ".ui-state-active" ).removeClass( "ui-state-active" );
 				this.focus( event, target );
 			},
+			"mouseleave": "_mouseleave",
+			"mouseleave .ui-menu": "_mouseleave",
 			"mouseout .ui-menu-item": "blur",
 			"focus": function( event ) {
 				this.focus( event, $( event.target ).children( ".ui-menu-item:first" ) );
@@ -346,21 +348,30 @@ $.widget( "ui.menu", {
 	},
 
 	collapseAll: function( event ) {
-		this.element
-			.find( "ul" )
-				.hide()
-				.attr( "aria-hidden", "true" )
-				.attr( "aria-expanded", "false" )
-			.end()
-			.find( "a.ui-state-active" )
-			.removeClass( "ui-state-active" );
+		var currentMenu = false;
+		if ( event ) {
+			var target = $( event.target );
+			if ( target.is( "ui.menu" ) ) {
+				currentMenu = target;
+			} else if ( target.closest( ".ui-menu" ).length ) {
+				currentMenu = target.closest( ".ui-menu" );
+			}
+		}
 
-		this.blur( event );
-		this.activeMenu = this.element;
+		this._close( currentMenu );
+
+		if( !currentMenu ) {
+			this.blur( event );
+			this.activeMenu = this.element;
+		}
 	},
 
-	_close: function() {
-		this.active.parent()
+	_close: function( startMenu ) {
+		if( !startMenu ) {
+			startMenu = this.active ? this.active.parent() : this.element;
+		}
+
+		startMenu
 			.find( "ul" )
 				.hide()
 				.attr( "aria-hidden", "true" )
@@ -373,10 +384,7 @@ $.widget( "ui.menu", {
 	collapse: function( event ) {
 		var newItem = this.active && this.active.parents("li:not(.ui-menubar-item)").first();
 		if ( newItem && newItem.length ) {
-			this.active.parent()
-				.attr("aria-hidden", "true")
-				.attr("aria-expanded", "false")
-				.hide();
+			this._close();
 			this.focus( event, newItem );
 			return true;
 		}
@@ -484,6 +492,11 @@ $.widget( "ui.menu", {
 
 	_hasScroll: function() {
 		return this.element.height() < this.element.prop( "scrollHeight" );
+	},
+
+	_mouseleave: function( event ) {
+		this.collapseAll( event );
+		this.blur();
 	},
 
 	select: function( event ) {
