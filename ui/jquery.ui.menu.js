@@ -26,7 +26,6 @@ $.widget( "ui.menu", {
 		}
 	},
 	_create: function() {
-		var self = this;
 		this.activeMenu = this.element;
 		this.menuId = this.element.attr( "id" ) || "ui-menu-" + idIncrement++;
 		if ( this.element.find( ".ui-icon" ).length ) {
@@ -40,11 +39,11 @@ $.widget( "ui.menu", {
 			})
 			// need to catch all clicks on disabled menu
 			// not possible through _bind
-			.bind( "click.menu", function( event ) {
-				if ( self.options.disabled ) {
+			.bind( "click.menu", $.proxy( function( event ) {
+				if ( this.options.disabled ) {
 					event.preventDefault();
 				}
-			});
+			}, this));
 		this._bind({
 			"click .ui-menu-item:has(a)": function( event ) {
 				event.stopImmediatePropagation();
@@ -76,70 +75,70 @@ $.widget( "ui.menu", {
 			"keydown": function( event ) {
 				switch ( event.keyCode ) {
 				case $.ui.keyCode.PAGE_UP:
-					self.previousPage( event );
+					this.previousPage( event );
 					event.preventDefault();
 					event.stopImmediatePropagation();
 					break;
 				case $.ui.keyCode.PAGE_DOWN:
-					self.nextPage( event );
+					this.nextPage( event );
 					event.preventDefault();
 					event.stopImmediatePropagation();
 					break;
 				case $.ui.keyCode.HOME:
-					self._move( "first", "first", event );
+					this._move( "first", "first", event );
 					event.preventDefault();
 					event.stopImmediatePropagation();
 					break;
 				case $.ui.keyCode.END:
-					self._move( "last", "last", event );
+					this._move( "last", "last", event );
 					event.preventDefault();
 					event.stopImmediatePropagation();
 					break;
 				case $.ui.keyCode.UP:
-					self.previous( event );
+					this.previous( event );
 					event.preventDefault();
 					event.stopImmediatePropagation();
 					break;
 				case $.ui.keyCode.DOWN:
-					self.next( event );
+					this.next( event );
 					event.preventDefault();
 					event.stopImmediatePropagation();
 					break;
 				case $.ui.keyCode.LEFT:
-					if (self.collapse( event )) {
+					if (this.collapse( event )) {
 						event.stopImmediatePropagation();
 					}
 					event.preventDefault();
 					break;
 				case $.ui.keyCode.RIGHT:
-					if (self.expand( event )) {
+					if (this.expand( event )) {
 						event.stopImmediatePropagation();
 					}
 					event.preventDefault();
 					break;
 				case $.ui.keyCode.ENTER:
-					if ( self.active.children( "a[aria-haspopup='true']" ).length ) {
-						if ( self.expand( event ) ) {
+					if ( this.active.children( "a[aria-haspopup='true']" ).length ) {
+						if ( this.expand( event ) ) {
 							event.stopImmediatePropagation();
 						}
 					}
 					else {
-						self.select( event );
+						this.select( event );
 						event.stopImmediatePropagation();
 					}
 					event.preventDefault();
 					break;
 				case $.ui.keyCode.ESCAPE:
-					if ( self.collapse( event ) ) {
+					if ( this.collapse( event ) ) {
 						event.stopImmediatePropagation();
 					}
 					event.preventDefault();
 					break;
 				default:
 					event.stopPropagation();
-					clearTimeout( self.filterTimer );
+					clearTimeout( this.filterTimer );
 					var match,
-						prev = self.previousFilter || "",
+						prev = this.previousFilter || "",
 						character = String.fromCharCode( event.keyCode ),
 						skip = false;
 
@@ -151,30 +150,30 @@ $.widget( "ui.menu", {
 					function escape( value ) {
 						return value.replace( /[-[\]{}()*+?.,\\^$|#\s]/g , "\\$&" );
 					}
-					match = self.activeMenu.children( ".ui-menu-item" ).filter( function() {
+					match = this.activeMenu.children( ".ui-menu-item" ).filter( function() {
 						return new RegExp("^" + escape(character), "i")
 							.test( $( this ).children( "a" ).text() );
 					});
-					match = skip && match.index(self.active.next()) != -1 ? self.active.nextAll(".ui-menu-item") : match;
+					match = skip && match.index(this.active.next()) != -1 ? this.active.nextAll(".ui-menu-item") : match;
 					if ( !match.length ) {
 						character = String.fromCharCode(event.keyCode);
-						match = self.activeMenu.children(".ui-menu-item").filter( function() {
+						match = this.activeMenu.children(".ui-menu-item").filter( function() {
 							return new RegExp("^" + escape(character), "i")
 								.test( $( this ).children( "a" ).text() );
 						});
 					}
 					if ( match.length ) {
-						self.focus( event, match );
+						this.focus( event, match );
 						if (match.length > 1) {
-							self.previousFilter = character;
-							self.filterTimer = setTimeout( function() {
-								delete self.previousFilter;
+							this.previousFilter = character;
+							this.filterTimer = this._delay( function() {
+								delete this.previousFilter;
 							}, 1000 );
 						} else {
-							delete self.previousFilter;
+							delete this.previousFilter;
 						}
 					} else {
-						delete self.previousFilter;
+						delete this.previousFilter;
 					}
 				}
 			}
@@ -219,7 +218,7 @@ $.widget( "ui.menu", {
 	},
 
 	refresh: function() {
-		var self = this,
+		var that = this,
 
 			// initialize nested menus
 			submenus = this.element.find( "ul:not(.ui-menu)" )
@@ -239,7 +238,7 @@ $.widget( "ui.menu", {
 			.attr( "tabIndex", -1 )
 			.attr( "role", "menuitem" )
 			.attr( "id", function( i ) {
-				return self.element.attr( "id" ) + "-" + i;
+				return that.element.attr( "id" ) + "-" + i;
 			});
 
 		submenus.each( function() {
@@ -253,9 +252,6 @@ $.widget( "ui.menu", {
 	},
 
 	focus: function( event, item ) {
-		var nested,
-			self = this;
-
 		this.blur( event );
 
 		if ( this._hasScroll() ) {
@@ -277,18 +273,18 @@ $.widget( "ui.menu", {
 			.children( "a" )
 				.addClass( "ui-state-focus" )
 			.end();
-		self.element.attr( "aria-activedescendant", self.active.children("a").attr("id") );
+		this.element.attr( "aria-activedescendant", this.active.children("a").attr("id") );
 
 		// highlight active parent menu item, if any
 		this.active.parent().closest(".ui-menu-item").children("a:first").addClass("ui-state-active");
 
-		self.timer = setTimeout( function() {
-			self._close();
-		}, self.delay );
+		this.timer = this._delay( function() {
+			this._close();
+		}, this.delay );
 
-		nested = $( ">ul", item );
+		var nested = $( ">ul", item );
 		if ( nested.length && ( /^mouse/.test( event.type ) ) ) {
-			self._startOpening(nested);
+			this._startOpening(nested);
 		}
 		this.activeMenu = item.parent();
 
@@ -317,11 +313,10 @@ $.widget( "ui.menu", {
 			return;
 		}
 
-		var self = this;
-		self.timer = setTimeout( function() {
-			self._close();
-			self._open( submenu );
-		}, self.delay );
+		this.timer = this._delay( function() {
+			this._close();
+			this._open( submenu );
+		}, this.delay );
 	},
 
 	_open: function( submenu ) {
@@ -383,15 +378,14 @@ $.widget( "ui.menu", {
 	},
 
 	expand: function( event ) {
-		var self = this,
-			newItem = this.active && this.active.children("ul").children("li").first();
+		var newItem = this.active && this.active.children("ul").children("li").first();
 
 		if ( newItem && newItem.length ) {
 			this._open( newItem.parent() );
 
 			//timeout so Firefox will not hide activedescendant change in expanding submenu from AT
-			setTimeout( function() {
-				self.focus( event, newItem );
+			this._delay( function() {
+				this.focus( event, newItem );
 			}, 20 );
 			return true;
 		}
