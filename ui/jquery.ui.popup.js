@@ -72,10 +72,9 @@ $.widget( "ui.popup", {
 					// let it propagate to close
 					return;
 				}
-				var that = this;
 				clearTimeout( this.closeTimer );
-				setTimeout(function() {
-					that.open( event );
+				this._delay(function() {
+					this.open( event );
 				}, 1);
 			}
 		});
@@ -102,11 +101,10 @@ $.widget( "ui.popup", {
 
 		this._bind({
 			focusout: function( event ) {
-				var that = this;
 				// use a timer to allow click to clear it and letting that
 				// handle the closing instead of opening again
-				that.closeTimer = setTimeout( function() {
-					that.close( event );
+				this.closeTimer = this._delay( function() {
+					this.close( event );
 				}, 100);
 			},
 			focusin: function( event ) {
