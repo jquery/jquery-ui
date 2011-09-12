@@ -333,6 +333,15 @@ $.Widget.prototype = {
 		});
 	},
 
+	_delay: function( handler, delay ) {
+		function handlerProxy() {
+			return ( typeof handler === "string" ? instance[ handler ] : handler )
+				.apply( instance, arguments );
+		}
+		var instance = this;
+		setTimeout( handlerProxy, delay || 0 );
+	},
+
 	_hoverable: function( element ) {
 		this.hoverable = this.hoverable.add( element );
 		this._bind( element, {

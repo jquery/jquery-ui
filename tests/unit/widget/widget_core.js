@@ -1040,4 +1040,28 @@ test( "redefine", function() {
 	equal( $.ui.testWidget.foo, "bar", "static properties remain" );
 });
 
+asyncTest( "_delay", function() {
+	expect( 4 );
+	var order = 0,
+		that;
+	$.widget( "ui.testWidget", {
+		defaultElement: null,
+		_create: function() {
+			that = this;
+			this._delay(function() {
+				strictEqual( this, that );
+				equal( order, 1 );
+				start();
+			}, 500);
+			this._delay("callback");
+		},
+		callback: function() {
+			strictEqual( this, that );
+			equal( order, 0 );
+			order += 1;
+		}
+	});
+	$( "#widget" ).testWidget();
+});
+
 }( jQuery ) );
