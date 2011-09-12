@@ -136,49 +136,34 @@ $.widget( "ui.mask", {
 		return value;
 	},
 	_events: function() {
-		var cancelKeypress,
-			lastUnsavedValue,
-			that = this,
-			elem = that.element;
-
-		function handlePaste() {
-			that.currentEvent = event;
-			setTimeout( function() {
-				var position = that._parseValue();
-				that._paint();
-				that._caret( that._seekRight( position ) );
-				that.currentEvent = false;
-			}, 0 );
-		}
-
 		this._bind({
 			focus: function( event ) {
-				lastUnsavedValue = elem.val();
-				that._paint( true );
-				setTimeout( function() {
-					that._caret( that._seekRight( that._parseValue() - 1 ) );
+				this.lastUnsavedValue = this.element.val();
+				this._paint( true );
+				this._delay( function() {
+					this._caret( this._seekRight( this._parseValue() - 1 ) );
 				}, 0);
 			},
 			blur: function( event ) {
 
 				// because we are constantly setting the value of the input, the change event
 				// never fires - we re-introduce the change event here
-				that._parseValue();
-				that._paint( false );
-				if ( elem.val() !== lastUnsavedValue ) {
-					elem.trigger( "change" );
+				this._parseValue();
+				this._paint( false );
+				if ( this.element.val() !== this.lastUnsavedValue ) {
+					this.element.trigger( "change" );
 				}
 				return;
 			},
 			keydown: function( event ) {
 				var bufferObject,
 					key = event.keyCode,
-					position = that._caret();
+					position = this._caret();
 
 				switch ( key ) {
 				case keyCode.ESCAPE:
-					elem.val( lastUnsavedValue );
-					that._caret( 0, that._parseValue() );
+					this.element.val( this.lastUnsavedValue );
+					this._caret( 0, this._parseValue() );
 					event.preventDefault();
 					return;
 
@@ -187,31 +172,31 @@ $.widget( "ui.mask", {
 					event.preventDefault();
 					if ( position.begin === position.end ) {
 						position.begin = position.end = ( key === keyCode.DELETE ?
-							that._seekRight( position.begin - 1) :
-							that._seekLeft( position.begin )
+							this._seekRight( position.begin - 1) :
+							this._seekLeft( position.begin )
 						);
 						if ( position.begin < 0 ) {
-							that._caret( that._seekRight( -1 ) );
+							this._caret( this._seekRight( -1 ) );
 							return;
 						}
 					}
-					that._removeValues( position.begin, position.end );
-					that._paint();
-					that._caret( position.begin );
+					this._removeValues( position.begin, position.end );
+					this._paint();
+					this._caret( position.begin );
 					return;
 
 				case keyCode.RIGHT:
 					if ( position.begin === position.end ) {
-						bufferObject = that.buffer[ position.begin ];
+						bufferObject = this.buffer[ position.begin ];
 						if ( bufferObject && bufferObject.length > 1 ) {
 							bufferObject.value = this._validValue( bufferObject, bufferObject.value );
-							that._paint();
+							this._paint();
 							event.preventDefault();
 						}
-						position = that._seekRight( bufferObject.start + bufferObject.length - 1 );
-						bufferObject = that.buffer[ position ];
+						position = this._seekRight( bufferObject.start + bufferObject.length - 1 );
+						bufferObject = this.buffer[ position ];
 						if ( bufferObject && bufferObject.length > 1 ) {
-							that._caret( position, position + ( bufferObject && bufferObject.length > 1 ? bufferObject.length : 0 ) );
+							this._caret( position, position + ( bufferObject && bufferObject.length > 1 ? bufferObject.length : 0 ) );
 							event.preventDefault();
 						}
 					}
@@ -221,17 +206,17 @@ $.widget( "ui.mask", {
 			keypress: function( event ) {
 				var tempValue,
 					key = event.keyCode,
-					position = that._caret(),
-					bufferPosition = that._seekRight( position.begin - 1 ),
-					bufferObject = that.buffer[ bufferPosition ];
+					position = this._caret(),
+					bufferPosition = this._seekRight( position.begin - 1 ),
+					bufferObject = this.buffer[ bufferPosition ];
 
-				that.currentEvent = event;
+				this.currentEvent = event;
 				// ignore keypresses with special keys, or control characters
 				if ( event.metaKey || event.altKey || event.ctrlKey || key < 32 ) {
 					return;
 				}
 				if ( position.begin !== position.end ) {
-					that._removeValues( position.begin, position.end );
+					this._removeValues( position.begin, position.end );
 				}
 				if ( bufferObject ) {
 					tempValue = String.fromCharCode( key );
@@ -242,18 +227,27 @@ $.widget( "ui.mask", {
 						tempValue = tempValue.substr( 0, bufferObject.length );
 					}
 					if ( this._validValue( bufferObject, tempValue ) ) {
-						that._shiftRight( position.begin );
+						this._shiftRight( position.begin );
 						bufferObject.value = tempValue;
-						that._paint();
-						that._caret( that._seekRight( bufferPosition ) );
+						this._paint();
+						this._caret( this._seekRight( bufferPosition ) );
 					}
 				}
 				event.preventDefault();
-				that.currentEvent = false;
+				this.currentEvent = false;
 			},
-			paste: handlePaste,
-			input: handlePaste
+			paste: "_paste",
+			input: "_paste"
 		});
+	},
+	_paste: function(event) {
+		this.currentEvent = event;
+		this._delay( function() {
+			var position = this._parseValue();
+			this._paint();
+			this._caret( this._seekRight( position ) );
+			this.currentEvent = false;
+		}, 0 );
 	},
 	_paint: function( focused ) {
 		if ( focused === undefined ) {
@@ -398,7 +392,7 @@ $.widget( "ui.mask", {
 			bufferLength = this.buffer.length;
 
 		for ( destPosition = begin, bufferPosition = this._seekRight( end - 1 );
-			destPosition < bufferLength; 
+			destPosition < bufferLength;
 			destPosition += destObject.length ) {
 			destObject = this.buffer[ destPosition ];
 			bufferObject = this.buffer[ bufferPosition ];
