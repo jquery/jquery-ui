@@ -261,7 +261,7 @@ $.widget( "ui.mask", {
 		}
 	},
 	_parseMask: function() {
-		var key, x, bufferObject, originalPosition, optionalPosition,
+		var key, x, bufferObject, optionalPosition,
 			index = -1,
 			options = this.options,
 			mask = options.mask;
@@ -315,8 +315,7 @@ $.widget( "ui.mask", {
 			valuePosition = 0,
 			lastFilledPosition = 0,
 			value = this.element.val(),
-			bufferLength = this.buffer.length,
-			valueLength = value.length;
+			bufferLength = this.buffer.length;
 
 		// remove all current values from the buffer
 		this._removeValues( 0, bufferLength );
@@ -334,14 +333,13 @@ $.widget( "ui.mask", {
 					// when parsing a literal from a raw .val() if it doesn't match,
 					// assume that the literal is missing from the val()
 					break;
-				} else {
-					valuePosition++;
-					character = this._validValue( bufferObject, character );
-					if ( character ) {
-						bufferObject.value = character;
-						lastFilledPosition = bufferPosition;
-						break;
-					}
+				}
+				valuePosition++;
+				character = this._validValue( bufferObject, character );
+				if ( character ) {
+					bufferObject.value = character;
+					lastFilledPosition = bufferPosition;
+					break;
 				}
 			}
 		}
@@ -386,7 +384,6 @@ $.widget( "ui.mask", {
 			bufferObject,
 			destPosition,
 			destObject,
-			caretPosition = this._seekLeft( begin + 1 ),
 			bufferLength = this.buffer.length;
 
 		for ( destPosition = begin, bufferPosition = this._seekRight( end - 1 );
@@ -442,12 +439,10 @@ $.widget( "ui.mask", {
 		if ( bufferObject.valid ) {
 			if ( $.isFunction( bufferObject.valid ) ) {
 				return bufferObject.valid( value || "" ) || false;
-			} else {
-				return bufferObject.valid.test( value ) && value;
 			}
-		} else {
-			return ( bufferObject.literal === value ) && value ;
+			return bufferObject.valid.test( value ) && value;
 		}
+		return ( bufferObject.literal === value ) && value ;
 	}
 });
 
