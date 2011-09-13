@@ -14,7 +14,7 @@ jQuery(function($){
 		dayNamesShort: ['Vas', 'Hét', 'Ked', 'Sze', 'Csü', 'Pén', 'Szo'],
 		dayNamesMin: ['V', 'H', 'K', 'Sze', 'Cs', 'P', 'Szo'],
 		weekHeader: 'Hét',
-		dateFormat: 'yyyy.mm.dd.',
+		dateFormat: 'yy.mm.dd.',
 		firstDay: 1,
 		isRTL: false,
 		showMonthAfterYear: true,
