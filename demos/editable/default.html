@@ -7,15 +7,32 @@
 	<script src="../../jquery-1.6.2.js"></script>
 	<script src="../../ui/jquery.ui.core.js"></script>
 	<script src="../../ui/jquery.ui.widget.js"></script>
+	<script src="../../ui/jquery.ui.button.js"></script>
 	<script src="../../ui/jquery.ui.editable.js"></script>
 	<link rel="stylesheet" href="../demos.css">
 	<style>
     .demo p { font-size: 14px; }
     .demo p span { display: inline-block; }
+    .demo .log { width:400px; padding:0.5em; border: 1px solid #000; background: #eee; color: #333; }
 	</style>
 	<script>
 	$(function() {
-		$( "#editable" ).editable();
+        var $log = $( ".log" ).hide();
+        function log( text ) {
+            $log.show().append( text + "<br/>" );
+        }
+
+		$( "#editable" )
+            .bind( "editsubmit", function( ev, ui ) {
+                log( "submit: " + ui.value );
+            })
+            .bind( "editchange", function( ev, ui ) {
+                log( "change: " + ui.value );
+            })
+            .bind( "editcancel", function() {
+                log( "cancel" );
+            })
+            .editable();
 	});
 	</script>
 </head>
@@ -26,6 +43,8 @@
 <p>
 Name: <b><span id="editable">John Doe</span></b>
 </p>
+
+<p class="log ui-corner-all"></p>
 
 </div><!-- End demo -->
 
@@ -39,7 +58,7 @@ Click at 'John Doe' text to edit it.
 Save your changes by submiting (pressing Enter or clicking the save button).
 </p>
 <p>
-Abort your changes by losing focus (blur) or clicking the cancel button.
+Abort your changes by pressing Esc or clicking the cancel button.
 </p>
 </div><!-- End demo-description -->
 

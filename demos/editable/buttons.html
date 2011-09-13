@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" >
+	<title>jQuery UI Editable - Default functionality</title>
+	<link rel="stylesheet" href="../../themes/base/jquery.ui.all.css">
+	<script src="../../jquery-1.6.2.js"></script>
+	<script src="../../ui/jquery.ui.core.js"></script>
+	<script src="../../ui/jquery.ui.widget.js"></script>
+	<script src="../../ui/jquery.ui.button.js"></script>
+	<script src="../../ui/jquery.ui.editable.js"></script>
+	<link rel="stylesheet" href="../demos.css">
+	<style>
+    .demo p span { display: inline-block; }
+    .demo p span.sample { font-size: 14px; }
+    .demo p span.info { font-family:fixed, monospace; white-space:pre; margin-left:2em; padding:0.5em; border: 1px solid #000; background: #eee; color: #333; vertical-align: middle; }
+	</style>
+	<script>
+	$(function() {
+		$( "#default" ).editable();
+		$( "#inside" ).editable({buttons: "inside"});
+		$( "#textual" ).editable({
+            save: {type: "submit", text: "Save"},
+            cancel: {type: "link", text: "Cancel"}
+        });
+		$( "#save-only" ).editable({
+            save: {type: "submit", text: "Save"},
+            cancel: null
+        });
+		$( "#cancel-only" ).editable({
+            save: null,
+            cancel: {type: "link", text: "Cancel"}
+        });
+		$( "#none" ).editable({buttons: null});
+
+		$( "#start-all" )
+            .button()
+            .click(function() {
+                $( ".sample" ).editable("start");
+            });
+		$( "#submit-all" )
+            .button()
+            .click(function() {
+                $( ".sample" ).editable("submit");
+            });
+		$( "#cancel-all" )
+            .button()
+            .click(function() {
+                $( ".sample" ).editable("cancel");
+            });
+	});
+	</script>
+</head>
+<body>
+
+<div class="demo">
+
+<button id="start-all">Edit all</button>
+<button id="submit-all">Submit all changes</button>
+<button id="cancel-all">Skip all changes</button>
+
+<h2>Outside vs. Inside</h2>
+
+<p>
+<span class="sample" id="default">John Doe</span>
+<span class="info">{buttons: "outside"} (default)</span>
+</p>
+
+<p>
+<span class="sample" id="inside">John Doe</span>
+<span class="info">{buttons: "inside"}</span>
+</p>
+
+<h2>Textual buttons</h2>
+
+<p>
+<span class="sample" id="textual">John Doe</span>
+<span class="info">{
+    save: {type: "submit", text: "Save"},
+    cancel: {type: "link", text: "Cancel"}
+}</span>
+</p>
+
+<p>
+<span class="sample" id="save-only">John Doe</span>
+<span class="info">{
+    save: {type: "submit", text: "Save"},
+    cancel: null
+}</span>
+</p>
+
+<p>
+<span class="sample" id="cancel-only">John Doe</span>
+<span class="info">{
+    save: null,
+    cancel: {type: "link", text: "Cancel"}
+}</span>
+</p>
+
+<h2>No buttons</h2>
+
+<p>
+<span class="sample" id="none">John Doe</span>
+<span class="info">{buttons: null}</span>
+</p>
+
+</div><!-- End demo -->
+
+
+
+<div class="demo-description">
+<p>
+Click at 'John Doe' text to edit it.
+</p>
+<p>
+Save your changes by submiting (pressing Enter or clicking the save button).
+</p>
+<p>
+Abort your changes by pressing Esc or clicking the cancel button.
+</p>
+</div><!-- End demo-description -->
+
+</body>
+</html>
