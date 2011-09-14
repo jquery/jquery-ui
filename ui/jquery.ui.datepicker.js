@@ -615,13 +615,45 @@ $.extend(Datepicker.prototype, {
 					$.datepicker._setDateFromField(inst);
 					$.datepicker._updateAlternate(inst);
 					$.datepicker._updateDatepicker(inst);
+					$.datepicker._setPosition(inst,event.target);
+					//because was set display:none and we don't use animation
+					$.datepicker.dpDiv.css({ display: 'block' });
 				}
 			}
 			catch (event) {
+				console.log(event);
 				$.datepicker.log(event);
 			}
 		}
 		return true;
+	},
+	
+	_setPosition: function(inst,input)
+	{
+		if (!$.datepicker._pos) { // position below input
+			$.datepicker._pos = $.datepicker._findPos(input);
+			$.datepicker._pos[1] += input.offsetHeight; // add the height
+		}
+		var isFixed = false;
+		$(input).parents().each(function() {
+			isFixed |= $(this).css('position') == 'fixed';
+			return !isFixed;
+		});
+		if (isFixed && $.browser.opera) { // correction for Opera when fixed and scrolled
+			$.datepicker._pos[0] -= document.documentElement.scrollLeft;
+			$.datepicker._pos[1] -= document.documentElement.scrollTop;
+		}
+		var offset = {left: $.datepicker._pos[0], top: $.datepicker._pos[1]};
+		$.datepicker._pos = null;
+		// determine sizing offscreen
+		inst.dpDiv.css({position: 'absolute', display: 'block', top: '-1000px'});
+		$.datepicker._updateDatepicker(inst);
+		// fix width for dynamic number of date pickers
+		// and adjust position before showing
+		offset = $.datepicker._checkOffset(inst, offset, isFixed);
+		inst.dpDiv.css({position: ($.datepicker._inDialog && $.blockUI ?
+			'static' : (isFixed ? 'fixed' : 'absolute')), display: 'none',
+			left: offset.left + 'px', top: offset.top + 'px'});
 	},
 
 	/* Pop-up the date picker for a given input field.
@@ -653,32 +685,7 @@ $.extend(Datepicker.prototype, {
 		$.datepicker._setDateFromField(inst);
 		if ($.datepicker._inDialog) // hide cursor
 			input.value = '';
-		if (!$.datepicker._pos) { // position below input
-			$.datepicker._pos = $.datepicker._findPos(input);
-			$.datepicker._pos[1] += input.offsetHeight; // add the height
-		}
-		var isFixed = false;
-		$(input).parents().each(function() {
-			isFixed |= $(this).css('position') == 'fixed';
-			return !isFixed;
-		});
-		if (isFixed && $.browser.opera) { // correction for Opera when fixed and scrolled
-			$.datepicker._pos[0] -= document.documentElement.scrollLeft;
-			$.datepicker._pos[1] -= document.documentElement.scrollTop;
-		}
-		var offset = {left: $.datepicker._pos[0], top: $.datepicker._pos[1]};
-		$.datepicker._pos = null;
-		//to avoid flashes on Firefox
-		inst.dpDiv.empty();
-		// determine sizing offscreen
-		inst.dpDiv.css({position: 'absolute', display: 'block', top: '-1000px'});
-		$.datepicker._updateDatepicker(inst);
-		// fix width for dynamic number of date pickers
-		// and adjust position before showing
-		offset = $.datepicker._checkOffset(inst, offset, isFixed);
-		inst.dpDiv.css({position: ($.datepicker._inDialog && $.blockUI ?
-			'static' : (isFixed ? 'fixed' : 'absolute')), display: 'none',
-			left: offset.left + 'px', top: offset.top + 'px'});
+		$.datepicker._setPosition(inst,input);
 		if (!inst.inline) {
 			var showAnim = $.datepicker._get(inst, 'showAnim');
 			var duration = $.datepicker._get(inst, 'duration');
