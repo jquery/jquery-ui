@@ -39,7 +39,7 @@ var maskDefinitions = {
 	},
 	mm: sixty,
 	ss: sixty,
-	pp: function( value ) {
+	tt: function( value ) {
 		var lower = value.toLowerCase(),
 			character = lower.charAt( 0 );
 		if ( lower.length > 1 && lower.charAt( 1 ) !== "m" ) {
@@ -94,7 +94,7 @@ $.widget( "ui.timepicker", {
 			mask += ":ss";
 		}
 		if ( this.options.ampm ) {
-			mask += " pp";
+			mask += " tt";
 		}
 		return mask;
 	},
@@ -131,11 +131,11 @@ $.widget( "ui.timepicker", {
 		this._super( "_setOption", key, value );
 		console.log( key, value );
 		if ( key === "ampm" ) {
-			var i, buffer, currentHour, currentPP;
+			var i, buffer, currentHour, currentTT;
 			buffer = this.mask.buffer;
 			currentHour = parseInt( buffer[ 0 ].value, 10 );
 			for ( i = 0; i < buffer.length; i += 3 ) {
-				if ( buffer[ i ].valid === maskDefinitions.pp ) {
+				if ( buffer[ i ].valid === maskDefinitions.tt ) {
 					currentHour %= 12;
 					if ( buffer[ i ].value === "pm" ) {
 						currentHour += 12;
@@ -143,11 +143,11 @@ $.widget( "ui.timepicker", {
 				}
 			}
 			if ( value ) {
-				currentPP = currentHour > 11 ? "pm" : "am";
+				currentTT = currentHour > 11 ? "pm" : "am";
 				currentHour = ( currentHour % 12 ) || 12;
 				buffer[ 0 ].value = ( currentHour < 10 ? "0" : "" ) + currentHour;
 				this.mask._paint();
-				this.element.val( this.element.val() + " " + currentPP );
+				this.element.val( this.element.val() + " " + currentTT );
 			} else {
 				currentHour = currentHour % 24;
 				buffer[ 0 ].value = ( currentHour < 10 ? "0" : "" ) + currentHour;
