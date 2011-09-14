@@ -184,20 +184,35 @@ $.widget( "ui.mask", {
 				this._caret( position.begin );
 				return;
 
+			case keyCode.LEFT:
+				bufferObject = that.buffer[ position.begin ];
+				if ( bufferObject && bufferObject.length > 1 ) {
+					bufferObject.value = this._validValue( bufferObject, bufferObject.value );
+					this._paint();
+					event.preventDefault();
+				}
+				position = that._seekLeft( bufferObject.start );
+				if ( position < 0 ) {
+					position = that._seekLeft( that.buffer.length );
+				}
+				bufferObject = that.buffer[ position ];
+				if ( bufferObject && bufferObject.length > 1 ) {
+					this._caret( bufferObject.start, bufferObject.start + ( bufferObject && bufferObject.length > 1 ? bufferObject.length : 0 ) );
+					event.preventDefault();
+				}
+				return;
 			case keyCode.RIGHT:
-				if ( position.begin === position.end ) {
-					bufferObject = this.buffer[ position.begin ];
-					if ( bufferObject && bufferObject.length > 1 ) {
-						bufferObject.value = this._validValue( bufferObject, bufferObject.value );
-						this._paint();
-						event.preventDefault();
-					}
-					position = this._seekRight( bufferObject.start + bufferObject.length - 1 );
-					bufferObject = this.buffer[ position ];
-					if ( bufferObject && bufferObject.length > 1 ) {
-						this._caret( position, position + ( bufferObject && bufferObject.length > 1 ? bufferObject.length : 0 ) );
-						event.preventDefault();
-					}
+				bufferObject = this.buffer[ position.begin ];
+				if ( bufferObject && bufferObject.length > 1 ) {
+					bufferObject.value = this._validValue( bufferObject, bufferObject.value );
+					this._paint();
+					event.preventDefault();
+				}
+				position = this._seekRight( bufferObject.start + bufferObject.length - 1 );
+				bufferObject = this.buffer[ position ];
+				if ( bufferObject && bufferObject.length > 1 ) {
+					this._caret( position, position + ( bufferObject && bufferObject.length > 1 ? bufferObject.length : 0 ) );
+					event.preventDefault();
 				}
 				return;
 			}
@@ -339,6 +354,7 @@ $.widget( "ui.mask", {
 				if ( character ) {
 					bufferObject.value = character;
 					lastFilledPosition = bufferPosition;
+					valuePosition += bufferObject.length - 1;
 					break;
 				}
 			}
