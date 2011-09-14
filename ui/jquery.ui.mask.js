@@ -185,22 +185,20 @@ $.widget( "ui.mask", {
 				return;
 
 			case keyCode.LEFT:
-				bufferObject = that.buffer[ position.begin ];
+				bufferObject = this.buffer[ position.begin ];
 				if ( bufferObject && bufferObject.length > 1 ) {
 					bufferObject.value = this._validValue( bufferObject, bufferObject.value );
 					this._paint();
 					event.preventDefault();
 				}
-				position = that._seekLeft( bufferObject.start );
-				if ( position < 0 ) {
-					position = that._seekLeft( that.buffer.length );
-				}
-				bufferObject = that.buffer[ position ];
+				position = this._seekLeft( bufferObject.start );
+				bufferObject = this.buffer[ position ];
 				if ( bufferObject && bufferObject.length > 1 ) {
 					this._caret( bufferObject.start, bufferObject.start + ( bufferObject && bufferObject.length > 1 ? bufferObject.length : 0 ) );
 					event.preventDefault();
 				}
 				return;
+
 			case keyCode.RIGHT:
 				bufferObject = this.buffer[ position.begin ];
 				if ( bufferObject && bufferObject.length > 1 ) {
