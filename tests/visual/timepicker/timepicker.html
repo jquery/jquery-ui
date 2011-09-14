@@ -7,11 +7,13 @@
 	<script src="../../../jquery-1.6.2.js"></script>
 	<script src="../../../ui/jquery.ui.core.js"></script>
 	<script src="../../../ui/jquery.ui.widget.js"></script>
+	<script src="../../../ui/jquery.ui.button.js"></script>
 	<script src="../../../ui/jquery.ui.spinner.js"></script>
 	<script src="../../../ui/jquery.ui.mask.js"></script>
 	<script src="../../../ui/jquery.ui.timepicker.js"></script>
 	<script>
 	$(function() {
+		$("#timepicker").timepicker();
 	});
 	</script>
 	<style>
@@ -23,6 +25,8 @@
 </head>
 <body>
 	<form>
+		<label>Timepicker</label>
+		<input id="timepicker">
 	</form>
 </body>
 </html>
