@@ -191,7 +191,7 @@ $.widget( "ui.mask", {
 					this._paint();
 					event.preventDefault();
 				}
-				position = this._seekLeft( bufferObject.start );
+				position = this._seekLeft( bufferObject ? bufferObject.start : position.begin );
 				bufferObject = this.buffer[ position ];
 				if ( bufferObject && bufferObject.length > 1 ) {
 					this._caret( bufferObject.start, bufferObject.start + ( bufferObject && bufferObject.length > 1 ? bufferObject.length : 0 ) );
@@ -206,7 +206,9 @@ $.widget( "ui.mask", {
 					this._paint();
 					event.preventDefault();
 				}
-				position = this._seekRight( bufferObject.start + bufferObject.length - 1 );
+				position = this._seekRight( bufferObject ?
+					bufferObject.start + bufferObject.length - 1 :
+					position.end );
 				bufferObject = this.buffer[ position ];
 				if ( bufferObject && bufferObject.length > 1 ) {
 					this._caret( position, position + ( bufferObject && bufferObject.length > 1 ? bufferObject.length : 0 ) );
