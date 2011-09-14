@@ -32,22 +32,6 @@ $.widget( "ui.timepicker", {
 		
 	},
 	_create: function() {
-		this.element.spinner();
-		this.spinner = this.element.data( "spinner" );
-		$.extend( this.spinner, {
-			_parse: $.proxy( this, "_spinnerParse" ),
-			_value: $.proxy( this, "_spinnerValue" ),
-			_trimValue: function( value ) {
-				console.log( "trimming", value );
-				if ( value < this.options.min ) {
-					return this.options.max;
-				}
-				if ( value > this.options.max ) {
-					return this.options.min;
-				}
-				return value;
-			}
-		});
 		this.element.mask({
 			mask: "hh:mm:ss pp",
 			clearEmpty: false,
@@ -76,6 +60,21 @@ $.widget( "ui.timepicker", {
 			}
 		});
 		this.mask = this.element.data( "mask" );
+		this.element.spinner();
+		this.spinner = this.element.data( "spinner" );
+		$.extend( this.spinner, {
+			_parse: $.proxy( this, "_spinnerParse" ),
+			_value: $.proxy( this, "_spinnerValue" ),
+			_trimValue: function( value ) {
+				if ( value < this.options.min ) {
+					return this.options.max;
+				}
+				if ( value > this.options.max ) {
+					return this.options.min;
+				}
+				return value;
+			}
+		});
 		this._setField( 0 );
 		this._bind( this._events );
 	},
@@ -118,6 +117,7 @@ $.widget( "ui.timepicker", {
 			val = parseInt( val, 10 ) ? "pm" : "am";
 		}
 		bufferObject.value = bufferObject.valid( val );
+		console.log( "setting", val, this.currentField, bufferObject );
 		this.mask._paint();
 		this.spinner._refresh();
 		this.mask._caret( this.currentField * 3, this.currentField * 3 + 2 );
