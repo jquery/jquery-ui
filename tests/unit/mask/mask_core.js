@@ -127,4 +127,33 @@ test( "Parsing initial value skips literals", function() {
 
 });
 
+test( "Parsing initial value with multi-character fields", function() {
+	expect( 2 );
+	var defs = {
+			hh: function( value ) {
+				value = parseInt( value, 10 );
+				if ( value >= 1 || value <= 12 ) {
+					return ( value < 10 ? "0" : "" ) + value;
+				}
+			},
+			ss: function( value ) {
+				value = parseInt( value, 10 );
+				if ( value >= 0 || value <= 59 ) {
+					return ( value < 10 ? "0" : "" ) + value;
+				}
+			}
+		},
+		input = $( "#mask1" );
+
+	input.val("123456").mask({
+		mask: "hh:ss:ss",
+		definitions: defs
+	});
+
+	equal( input.val(), "12:34:56", "Literals were inserted into val");
+	input.mask( "option", "mask", "99-99-99" );
+	equal( input.val(), "12-34-56", "Old literals were ignored, and new ones inserted into val");
+
+});
+
 }( jQuery ) );
