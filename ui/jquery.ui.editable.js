@@ -92,7 +92,7 @@ $.widget( "ui.editable", {
 
 			this.element.removeClass( highlightStateClass );
 
-			if ( $this.is( this.element ) || $this.hasClass( placeholderClass ) ) {
+			if ( !this.editing && ( $this.is( this.element ) || $this.hasClass( placeholderClass ) ) ) {
 				this.element.addClass( highlightStateClass );
 				return;
 			}
@@ -108,10 +108,12 @@ $.widget( "ui.editable", {
 	},
 
 	_show: function() {
+		this.editing = undefined;
 		this.element.html( this.value() || this._placeholder() );
 	},
 
 	_edit: function() {
+		this.editing = true;
 		this.element.html( this._form() );
 		this._formEvents();
 	},
