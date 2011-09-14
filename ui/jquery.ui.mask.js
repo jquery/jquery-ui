@@ -102,6 +102,15 @@ $.widget( "ui.mask", {
 			};
 		}
 	},
+	_caretSelect: function( bufferPosition ) {
+		var bufferObject = this.buffer[ bufferPosition ];
+		if ( bufferObject && bufferObject.length > 1 ) {
+			this._caret( bufferObject.start, bufferObject.start + bufferObject.length );
+			return true;
+		} else {
+			this._caret( bufferPosition );
+		}
+	},
 	_getValue: function( raw ) {
 		var bufferPosition,
 			bufferObject,
@@ -139,12 +148,12 @@ $.widget( "ui.mask", {
 		focus: function( event ) {
 			this.lastUnsavedValue = this.element.val();
 			this._paint( true );
-			this._delay( function() {
-				this._caret( this._seekRight( this._parseValue() - 1 ) );
+			this.delayedFocus = this._delay( function() {
+				this._caretSelect( this._seekRight( this._parseValue() ) );
 			}, 0);
 		},
 		blur: function( event ) {
-
+			clearTimeout( this.delayedFocus );
 			// because we are constantly setting the value of the input, the change event
 			// never fires - we re-introduce the change event here
 			this._parseValue();
@@ -162,7 +171,7 @@ $.widget( "ui.mask", {
 			switch ( key ) {
 			case keyCode.ESCAPE:
 				this.element.val( this.lastUnsavedValue );
-				this._caret( 0, this._parseValue() );
+				this._caretSelect( 0, this._parseValue() );
 				event.preventDefault();
 				return;
 
@@ -181,7 +190,7 @@ $.widget( "ui.mask", {
 				}
 				this._removeValues( position.begin, position.end );
 				this._paint();
-				this._caret( position.begin );
+				this._caretSelect( position.begin );
 				return;
 
 			case keyCode.LEFT:
@@ -193,8 +202,7 @@ $.widget( "ui.mask", {
 				}
 				position = this._seekLeft( bufferObject ? bufferObject.start : position.begin );
 				bufferObject = this.buffer[ position ];
-				if ( bufferObject && bufferObject.length > 1 ) {
-					this._caret( bufferObject.start, bufferObject.start + ( bufferObject && bufferObject.length > 1 ? bufferObject.length : 0 ) );
+				if ( this._caretSelect( position ) ) {
 					event.preventDefault();
 				}
 				return;
@@ -210,8 +218,7 @@ $.widget( "ui.mask", {
 					bufferObject.start + bufferObject.length - 1 :
 					position.end );
 				bufferObject = this.buffer[ position ];
-				if ( bufferObject && bufferObject.length > 1 ) {
-					this._caret( position, position + ( bufferObject && bufferObject.length > 1 ? bufferObject.length : 0 ) );
+				if ( this._caretSelect( position ) ) {
 					event.preventDefault();
 				}
 				return;
@@ -244,7 +251,12 @@ $.widget( "ui.mask", {
 					this._shiftRight( position.begin );
 					bufferObject.value = tempValue;
 					this._paint();
-					this._caret( this._seekRight( bufferPosition ) );
+					position = this._seekRight( bufferPosition );
+					if ( position <= bufferObject.start + bufferObject.length ) {
+						this._caret( position );
+					} else {
+						this._caretSelect( position );
+					}
 				}
 			}
 			event.preventDefault();
@@ -353,7 +365,7 @@ $.widget( "ui.mask", {
 				character = this._validValue( bufferObject, character );
 				if ( character ) {
 					bufferObject.value = character;
-					lastFilledPosition = bufferPosition;
+					lastFilledPosition = bufferPosition + bufferObject.length - 1;
 					valuePosition += bufferObject.length - 1;
 					break;
 				}
