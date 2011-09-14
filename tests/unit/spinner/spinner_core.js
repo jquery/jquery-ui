@@ -109,13 +109,11 @@ test( "mouse click on up button, increases value not greater than max", function
 });
 
 test( "mousewheel on input", function() {
-	expect( 5 );
+	expect( 4 );
 
-	var element = $( "#spin" ).spinner({
+	var element = $( "#spin" ).val( 0 ).spinner({
 		step: 2
 	});
-
-	equal( element.val(), 0 );
 
 	element.trigger( "mousewheel" );
 	equal( element.val(), 0, "mousewheel event without delta does not change value" );
@@ -198,10 +196,11 @@ test( "precision", function() {
 	equal( element.val(), "0.0501", "precision from step" );
 
 	element.val( 1.05 ).spinner( "option", {
-		step: 1
+		step: 1,
+		min: -9.95
 	});
 	element.spinner( "stepDown" );
-	equal( element.val(), "0.05", "precision from value" );
+	equal( element.val(), "0.05", "precision from min" );
 });
 
 })( jQuery );

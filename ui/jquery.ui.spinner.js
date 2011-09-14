@@ -213,20 +213,16 @@ $.widget( "ui.spinner", {
 	},
 
 	_spin: function( step, event ) {
+		var value = this.value() || 0;
+
 		if ( !this.counter ) {
 			this.counter = 1;
 		}
 
-		var value = this.value(),
-			newVal = value + step * this._increment( this.counter ),
-			// fix precision from bad JS floating point math
-			precision = Math.max( this._precision( value ),
-				this._precision( this.options.step ) );
-		// clamp the new value
-		newVal = this._trimValue( newVal.toFixed( precision ) );
+		value = this._adjustValue( value + step * this._increment( this.counter ) );
 
-		if ( !this.spinning || this._trigger( "spin", event, { value: newVal } ) !== false) {
-			this._value( newVal );
+		if ( !this.spinning || this._trigger( "spin", event, { value: value } ) !== false) {
+			this._value( value );
 			this.counter++;
 		}
 	},
@@ -244,19 +240,40 @@ $.widget( "ui.spinner", {
 	},
 
 	_precision: function( num ) {
+		var precision = this._precisionOf( this.options.step );
+		if ( this.options.min !== null ) {
+			precision = Math.max( precision, this._precisionOf( this.options.min ) );
+		}
+		return precision;
+	},
+
+	_precisionOf: function( num ) {
 		var str = num.toString(),
 			decimal = str.indexOf( "." );
 		return decimal === -1 ? 0 : str.length - decimal - 1;
 	},
 
-	_trimValue: function( value ) {
-		var options = this.options;
+	_adjustValue: function( value ) {
+		var base, aboveMin,
+			options = this.options;
 
-		if ( options.max != null && value > options.max) {
+		// make sure we're at a valid step
+		// - find out where we are relative to the base (min or 0)
+		base = options.min !== null ? options.min : 0;
+		aboveMin = value - base;
+		// - round to the nearest step
+		aboveMin = Math.round(aboveMin / options.step) * options.step;
+		// - rounding is based on 0, so adjust back to our base
+		value = base + aboveMin;
+
+		// fix precision from bad JS floating point math
+		value = parseFloat( value.toFixed( this._precision() ) );
+
+		// clamp the value
+		if ( options.max !== null && value > options.max) {
 			return options.max;
 		}
-
-		if ( options.min != null && value < options.min ) {
+		if ( options.min !== null && value < options.min ) {
 			return options.min;
 		}
 
@@ -295,10 +312,10 @@ $.widget( "ui.spinner", {
 	}),
 
 	_parse: function( val ) {
-		if ( typeof val === "string" ) {
+		if ( typeof val === "string" && val !== "" ) {
 			val = window.Globalize && this.options.numberFormat ? Globalize.parseFloat( val ) : +val;
 		}
-		return isNaN( val ) ? null : val;
+		return val === "" || isNaN( val ) ? null : val;
 	},
 
 	_format: function( value ) {
@@ -320,13 +337,13 @@ $.widget( "ui.spinner", {
 	},
 
 	// update the value without triggering change
-	_value: function( value, ignoreRange ) {
+	_value: function( value, allowAny ) {
 		var parsed;
 		if ( value !== "" ) {
 			parsed = this._parse( value );
 			if ( parsed !== null ) {
-				if ( !ignoreRange ) {
-					parsed = this._trimValue( parsed );
+				if ( !allowAny ) {
+					parsed = this._adjustValue( parsed );
 				}
 				value = this._format( parsed );
 			}
