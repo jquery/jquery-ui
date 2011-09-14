@@ -148,6 +148,12 @@ $.widget( "ui.spinner", {
 			.button()
 			.removeClass( "ui-corner-all" );
 
+		// IE 6 doesn't understand height: 50% for the buttons
+		// unless the wrapper has an explicit height
+		if ( this.buttons.height() === uiSpinner.height() ) {
+			uiSpinner.height( uiSpinner.height() );
+		}
+
 		// disable spinner if element was already disabled
 		if ( this.options.disabled ) {
 			this.disable();
@@ -240,7 +246,7 @@ $.widget( "ui.spinner", {
 		return 1;
 	},
 
-	_precision: function( num ) {
+	_precision: function() {
 		var precision = this._precisionOf( this.options.step );
 		if ( this.options.min !== null ) {
 			precision = Math.max( precision, this._precisionOf( this.options.min ) );
