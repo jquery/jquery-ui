@@ -180,7 +180,7 @@ test( "keypress: Typing with multi-byte fields", function() {
 	deepEqual( mask._caret(), { begin: 1, end: 1 }, "Caret position correct");
 	type( input, "z" );
 	equal( input.val(), "0z-__-__", "typed a z" );
-	deepEqual( mask._caret(), { begin: 3, end: 3 }, "Caret position correct");
+	deepEqual( mask._caret(), { begin: 3, end: 5 }, "Caret position correct");
 });
 
 test( "keydown: Delete pulling values", function() {

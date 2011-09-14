@@ -340,7 +340,7 @@ $.widget( "ui.mask", {
 			bufferObject,
 			character,
 			valuePosition = 0,
-			lastFilledPosition = 0,
+			lastFilledPosition = -1,
 			value = this.element.val(),
 			bufferLength = this.buffer.length;
 
