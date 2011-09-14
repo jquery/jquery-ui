@@ -124,6 +124,38 @@ $.widget( "ui.timepicker", {
 				break;
 		}
 	},
+	_setOption: function( key, value ) {
+		this._super( "_setOption", key, value );
+		console.log( key, value );
+		if ( key === "ampm" ) {
+			var i, buffer, currentHour, currentPP;
+			buffer = this.mask.buffer;
+			currentHour = parseInt( buffer[ 0 ].value, 10 );
+			for ( i = 0; i < buffer.length; i += 3 ) {
+				if ( buffer[ i ].valid === maskDefinitions.pp ) {
+					currentHour %= 12;
+					if ( buffer[ i ].value === "pm" ) {
+						currentHour += 12;
+					}
+				}
+			}
+			if ( value ) {
+				currentPP = currentHour > 11 ? "pm" : "am";
+				currentHour = ( currentHour % 12 ) || 12;
+				buffer[ 0 ].value = ( currentHour < 10 ? "0" : "" ) + currentHour;
+				this.mask._paint();
+				this.element.val( this.element.val() + " " + currentPP );
+			} else {
+				currentHour = currentHour % 24;
+				buffer[ 0 ].value = ( currentHour < 10 ? "0" : "" ) + currentHour;
+				this.mask._paint();
+			}
+			this.element.mask( "option", "mask", this._generateMask() );
+		}
+		if ( key === "seconds" ) {
+			this.element.mask( "option", "mask", this._generateMask() );
+		}
+	},
 	_spinnerParse: function( val ) {
 		val = this.mask.buffer[ this.currentField * 3 ].value;
 		if ( this.currentField === ( this.options.seconds ? 3 : 2 ) ) {
