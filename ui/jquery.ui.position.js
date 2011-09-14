@@ -259,8 +259,8 @@ $(function () {
 	
 	$.extend( div[0].style, {
 	  position: 'absolute',
-	  left: '10.7432222px',
-	  top: '10.532325px',
+	  left: '10.2432222px',
+	  top: '10.432325px',
 	  height: '30px',
 	  width: '201px'
 	});
