@@ -1,8 +1,6 @@
 /*
  * Observable
  *
- * Depends on:
- * widget
  */
 (function ( $, undefined ) {
 	$.observable = function( data ) {
