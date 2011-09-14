@@ -4,6 +4,12 @@ module( "mask: events" );
 
 /* TODO: Descide behavior of bluring non-valid inputs */
 
+function type( input, key ) {
+	var code = key.charCodeAt( 0 );
+
+	input.simulate( "keypress", { charCode: code, which: code });
+}
+
 test( "complete: Complete event fires when typing last non-optional character of mask", function() {
 	expect( 2 );
 	var input = $( "#mask1" ).val("").mask({
@@ -16,7 +22,7 @@ test( "complete: Complete event fires when typing last non-optional character of
 
 	input.focus();
 	mask._caret( 0 );
-	input.simulate( "keypress", { keyCode: "1".charCodeAt( 0 ) } );
+	type( input, "1" );
 	equal( input.val(), "1_", "Value with optional character" );
 });
 
@@ -32,9 +38,9 @@ test( "complete: Complete event fires when typing last character of mask", funct
 
 	input.focus();
 	mask._caret( 0 );
-	input.simulate( "keypress", { keyCode: "1".charCodeAt( 0 ) } );
+	type( input, "1" );
 	equal( input.mask( "valid" ), false, "Mask is not yet valid" );
-	input.simulate( "keypress", { keyCode: "2".charCodeAt( 0 ) } );
+	type( input, "2" );
 	equal( input.val(), "12", "Value with optional character" );
 });
 
@@ -148,9 +154,33 @@ test( "keypress: Typing with multiple values higlighted", function() {
 	equal( input.val(), "(123)456-7890", "Initial Value Expected" );
 
 	mask._caret( 5, 8 );
-	input.simulate( "keypress", { keyCode: "0".charCodeAt( 0 ) });
+	type( input, "0" );
 	equal( input.val(), "(123)078-90__", "Deleted three highlighted values, pulled values from right" );
 	deepEqual( mask._caret(), { begin: 6, end: 6 }, "Caret position correct");
+});
+
+test( "keypress: Typing with multi-byte fields", function() {
+	expect( 5 );
+	var input = $( "#mask1" ).val("").mask({
+			mask: "aa-aa-aa",
+			definitions: {
+				aa: function( value ) {
+					return value;
+				}
+			}
+		}),
+		mask = input.data( "mask" );
+
+	input.focus();
+	equal( input.val(), "__-__-__", "Initial Value Expected" );
+
+	mask._caret( 0 );
+	type( input, "0" );
+	equal( input.val(), "0_-__-__", "typed a 0" );
+	deepEqual( mask._caret(), { begin: 1, end: 1 }, "Caret position correct");
+	type( input, "z" );
+	equal( input.val(), "0z-__-__", "typed a z" );
+	deepEqual( mask._caret(), { begin: 3, end: 3 }, "Caret position correct");
 });
 
 test( "keydown: Delete pulling values", function() {
@@ -217,7 +247,7 @@ test( "keydown: escape returns to original value", function() {
 	input.focus();
 
 	mask._caret( 0 );
-	input.simulate( "keypress", { keyCode: "1".charCodeAt(0) });
+	type( input, "1" );
 	equal( input.val(), "1", "Typed over" );
 
 	input.simulate( "keydown", { keyCode: $.ui.keyCode.ESCAPE });
@@ -237,11 +267,11 @@ test( "keypress: typing behaviors", function() {
 	equal( input.val(), "_-_", "Initial value expected" );
 
 	mask._caret( 0 );
-	input.simulate( "keypress", { keyCode: "1".charCodeAt( 0 ) });
+	type( input, "1" );
 	equal( input.val(), "1-_", "Typed a 1" );
 
 	mask._caret( 0 );
-	input.simulate( "keypress", { keyCode: "2".charCodeAt( 0 ) });
+	type( input, "2" );
 	equal( input.val(), "2-1", "Typed a 2 before the 1" );
 	deepEqual( mask._caret(), { begin: 2, end: 2 }, "Caret position correct");
 
@@ -249,11 +279,11 @@ test( "keypress: typing behaviors", function() {
 	equal( input.val(), "_-_", "Initial value expected" );
 
 	mask._caret( 0 );
-	input.simulate( "keypress", { keyCode: "1".charCodeAt( 0 ) });
+	type( input, "1" );
 	equal( input.val(), "1-_", "Typed a 1" );
 
 	mask._caret( 0 );
-	input.simulate( "keypress", { keyCode: "2".charCodeAt( 0 ) });
+	type( input, "2" );
 	equal( input.val(), "2-_", "Typed a 2 before the 1 - 1 is lost because not valid" );
 	deepEqual( mask._caret(), { begin: 2, end: 2 }, "Caret position correct");
 });

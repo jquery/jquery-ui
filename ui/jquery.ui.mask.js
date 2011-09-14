@@ -219,7 +219,7 @@ $.widget( "ui.mask", {
 		},
 		keypress: function( event ) {
 			var tempValue,
-				key = event.keyCode,
+				key = event.which,
 				position = this._caret(),
 				bufferPosition = this._seekRight( position.begin - 1 ),
 				bufferObject = this.buffer[ bufferPosition ];
