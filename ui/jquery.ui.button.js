@@ -66,10 +66,7 @@ $.widget( "ui.button", {
 
 		var self = this,
 			options = this.options,
-			toggleButton = this.type === "checkbox" || this.type === "radio",
-			hoverClass = "ui-state-hover" + ( !toggleButton ? " ui-state-active" : "" ),
-			focusClass = "ui-state-focus";
-
+			toggleButton = this.type === "checkbox" || this.type === "radio";
 		if ( options.label === null ) {
 			options.label = this.buttonElement.html();
 		}
@@ -78,38 +75,18 @@ $.widget( "ui.button", {
 			options.disabled = true;
 		}
 
+		this._hoverable( this.buttonElement );
+
+		this._focusable( this.buttonElement );
+
 		this.buttonElement
 			.addClass( baseClasses )
 			.attr( "role", "button" )
-			.bind( "mouseenter.button", function() {
-				if ( options.disabled ) {
-					return;
-				}
-				$( this ).addClass( "ui-state-hover" );
-				if ( this === lastActive ) {
-					$( this ).addClass( "ui-state-active" );
-				}
-			})
-			.bind( "mouseleave.button", function() {
-				if ( options.disabled ) {
-					return;
-				}
-				$( this ).removeClass( hoverClass );
-			})
 			.bind( "click.button", function( event ) {
 				if ( options.disabled ) {
 					event.preventDefault();
 					event.stopImmediatePropagation();
 				}
-			});
-
-		this.element
-			.bind( "focus.button", function() {
-				// no need to check disabled, focus won't be triggered anyway
-				self.buttonElement.addClass( focusClass );
-			})
-			.bind( "blur.button", function() {
-				self.buttonElement.removeClass( focusClass );
 			});
 
 		if ( toggleButton ) {
