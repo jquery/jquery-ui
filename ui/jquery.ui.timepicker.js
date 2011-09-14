@@ -99,12 +99,15 @@ $.widget( "ui.timepicker", {
 		return mask;
 	},
 	_events: {
-		keydown: function( event ) {
-			this._delay(function() {
-				var position = this.mask._caret();
-				this._setField( Math.floor( position.begin / 3 ) );
-			}, 0);
-		}
+		keydown: "_checkPosition",
+		focus: "_checkPosition",
+		click: "_checkPosition"
+	},
+	_checkPosition: function( event ) {
+		this._delay(function() {
+			var position = this.mask._caret();
+			this._setField( Math.floor( position.begin / 3 ) );
+		}, 0);
 	},
 	_setField: function( field ) {
 		this.currentField = field;
@@ -171,7 +174,7 @@ $.widget( "ui.timepicker", {
 		bufferObject.value = bufferObject.valid( val );
 		this.mask._paint();
 		this.spinner._refresh();
-		this.mask._caret( this.currentField * 3, this.currentField * 3 + 2 );
+		this.mask._caretSelect( this.currentField * 3 );
 	},
 	destroy: function() {
 		this.element.mask( "destroy" );
