@@ -10,6 +10,7 @@
  * Depends:
  *  jquery.ui.core.js
  *  jquery.ui.widget.js
+ *  jquery.ui.button.js
  */
 (function( $ ) {
 
