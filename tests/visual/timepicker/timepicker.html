@@ -15,6 +15,9 @@
 	$(function() {
 		$("#timepicker").timepicker();
 		$("#timepicker2").timepicker();
+		$("#timepicker3").timepicker({ ampm: false });
+		$("#timepicker4").timepicker({ seconds: false });
+		$("#timepicker5").timepicker({ ampm: false, seconds: false });
 	});
 	</script>
 	<style>
@@ -30,6 +33,12 @@
 		<input id="timepicker">
 		<label>Timepicker - With Initial Value</label>
 		<input id="timepicker2" value="12:00:00 pm">
+		<label>Timepicker - <code>{ ampm: false }</code></label>
+		<input id="timepicker3">
+		<label>Timepicker - <code>{ seconds: false }</code></label>
+		<input id="timepicker4">
+		<label>Timepicker - <code>{ ampm: false, seconds: false }</code></label>
+		<input id="timepicker5">
 	</form>
 </body>
 </html>
