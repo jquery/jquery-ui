@@ -23,6 +23,7 @@ $.widget( "ui.slider", $.ui.mouse, {
 	widgetEventPrefix: "slide",
 
 	options: {
+		allowOverlap: true,
 		animate: false,
 		distance: 0,
 		max: 100,
@@ -381,10 +382,14 @@ $.widget( "ui.slider", $.ui.mouse, {
 		if ( this.options.values && this.options.values.length ) {
 			otherVal = this.values( index ? 0 : 1 );
 
-			if ( ( this.options.values.length === 2 && this.options.range === true ) && 
-					( ( index === 0 && newVal > otherVal) || ( index === 1 && newVal < otherVal ) )
-				) {
-				newVal = otherVal;
+			var stopDistance = this.options.allowOverlap ? 0 : 1;
+
+			if ( ( this.options.values.length === 2 && this.options.range === true ) ) {
+				if ( index === 0 && newVal > otherVal - stopDistance ) {
+					newVal = otherVal - stopDistance;
+				} else if ( index === 1 && newVal < otherVal + stopDistance ) {
+					newVal = otherVal + stopDistance;
+				}
 			}
 
 			if ( newVal !== this.values( index ) ) {
