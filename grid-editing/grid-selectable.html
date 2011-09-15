@@ -131,12 +131,8 @@
 		});
 		var editForm = $( "#editForm" ).tooltip().hide().submit( function( event ) {
 			event.preventDefault();
-<<<<<<< HEAD
 			$.observable( developer, localDevelopers ).property( serializeForm( this ) );
 			// TODO hide tooltip
-=======
-			$.observable(developer).property( serializeForm(this) );
->>>>>>> grid
 			editForm.hide();
 		});
 
