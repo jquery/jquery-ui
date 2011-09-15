@@ -57,17 +57,17 @@
 
 		var selected = [];
 		// update status when selection changes
-		$.observable( selected).bind( "insert remove", function() {
-			$(".selected-status").text(selected.length);
+		$.observable( selected ).bind("insert remove", function() {
+			$( ".selected-status" ).text( selected.length );
 		});
 
 		// TODO $.observable should support this binding, along with a less intrusive event facility
-		function bindChange(index, developer) {
-			$.observable( developer ).bind("change", function(event, ui) {
+		function bindChange( index, developer ) {
+			$.observable( developer ).bind("change", function( event, ui ) {
 				developers.refresh().save();
 			});
 		}
-		$.observable( localDevelopers ).bind("insert remove", function(event, ui) {
+		$.observable( localDevelopers ).bind("insert remove", function( event, ui ) {
 			if ( event.type === "insert" ) {
 				$.each( ui.items, bindChange );
 			}
@@ -80,9 +80,9 @@
 		});
 
 		grid.bind("gridrefresh", function() {
-			grid.find("tbody > tr").each(function() {
-				if ( $.inArray( $( this ).data("grid-item"), selected ) !== -1 ) {
-					$( this ).addClass("ui-selected");
+			grid.find( "tbody > tr" ).each(function() {
+				if ( $.inArray( $(this).data("grid-item"), selected ) !== -1 ) {
+					$( this ).addClass( "ui-selected" );
 				}
 			});
 		});
@@ -90,13 +90,13 @@
 		grid.selectable({
 			filter: "tbody > tr",
 			selected: function( ev, ui ) {
-				var item = $(ui.selected).data("grid-item");
+				var item = $( ui.selected ).data( "grid-item" );
 				if ( $.inArray( item, selected ) === -1 ) {
 					$.observable( selected ).insert( item );
 				}
 			},
 			unselected: function( ev, ui ) {
-				var item = $(ui.selected).data("grid-item");
+				var item = $( ui.selected ).data( "grid-item" );
 				$.observable( selected ).remove( item );
 			}
 		});
@@ -141,15 +141,15 @@
 			}
 			developer = selected[0];
 			$( "#edit-tmpl" ).tmpl( meta(developer) ).appendTo( editForm.find("fieldset").empty() );
-			editForm.show().find("input:first").focus();
+			editForm.show().find( "input:first" ).focus();
 		});
 		var editForm = $( "#editForm" ).tooltip().hide().submit( function( event ) {
 			event.preventDefault();
-			$.observable(developer).property( serializeForm( this ) );
+			$.observable(developer).property( serializeForm(this) );
 			editForm.hide();
 		});
 
-		$( "#removeDeveloper" ).click( function() {
+		$( "#removeDeveloper" ).click(function() {
 			if ( !selected.length ) {
 				alert( "None selected" );
 				return;
