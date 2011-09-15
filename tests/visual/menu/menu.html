@@ -16,16 +16,30 @@
 			right: 10,
 			top: 10
 		}).appendTo(document.body).themeswitcher();
-		
+
 		function create() {
 			menus.menu({
 				select: function(event, ui) {
 					$("<div/>").text("Selected: " + ui.item.text()).appendTo("#log");
 				}
 			});
+
+			$("#menu5").menu({
+				select: function(event, ui) {
+					$("<div/>").text("Selected: " + ui.item.text()).appendTo("#log");
+				},
+				items: "div"
+			});
+
+			$("#menu6").menu({
+				select: function(event, ui) {
+					$("<div/>").text("Selected: " + ui.item.text()).appendTo("#log");
+				},
+				items: ".menuElement"
+			});
 		}
 		
-		var menus = $("#menu1, #menu2, #menu3, #menu4");
+		var menus = $("#menu1, #menu2, #menu3, .menu4");
 		create();
 
 		$("#toggle-destroy").toggle(function() {
@@ -41,11 +55,14 @@
 	<style>
 		body { font-size:62.5%; }
 		.ui-menu { width: 200px; margin-bottom: 2em; }
-		#menu4 { height: 200px; overflow: auto; }
+		.menu4 { height: 200px; overflow: auto; }
+		.address-item { border-bottom: 1px solid #999; }
+		.address-header { display: block; margin-bottom: .2em; font-weight: bold; }
+		.address-content { display: block; margin-bottom: .2em; padding-left: 10px; }
 	</style>
 </head>
 <body>
-	
+
 <ul id="menu1">
 	<li><a href="#">Aberdeen</a></li>
 	<li><a href="#">Ada</a></li>
@@ -132,7 +149,7 @@
 	</li>
 </ul>
 
-<ul id="menu4">
+<ul class="menu4">
 	<li><a href="#">Aberdeen</a></li>
 	<li><a href="#">Ada</a></li>
 	<li><a href="#">Adamsville</a></li>
@@ -172,6 +189,87 @@
 	<li><a href="#">Amelia</a></li>
 	<li><a href="#">Amesville</a></li>
 </ul>
+
+<div id="menu5">
+	<h3><a href="#">Aberdeen</a></h3>
+	<h3><a href="#">Ada</a></h3>
+	<h3><a href="#">Adamsville</a></h3>
+	<h3><a href="#">Addyston</a></h3>
+	<h3>
+		<a href="#">Delphi</a>
+		<div>
+			<h3><a href="#">Ada</a></h3>
+			<h3><a href="#">Saarland</a></h3>
+			<h3><a href="#">Salzburg</a></h3>
+		</div>
+	</h3>
+	<h3><a href="#">Saarland</a></h3>
+	<h3>
+		<a href="#">Salzburg</a>
+		<div>
+			<h3>
+				<a href="#">Delphi</a>
+				<div>
+					<h3><a href="#">Ada</a></h3>
+					<h3><a href="#">Saarland</a></h3>
+					<h3><a href="#">Salzburg</a></h3>
+				</div>
+			</h3>
+			<h3>
+				<a href="#">Delphi</a>
+				<div>
+					<h3><a href="#">Ada</a></h3>
+					<h3><a href="#">Saarland</a></h3>
+					<h3><a href="#">Salzburg</a></h3>
+				</div>
+			</h3>
+			<h3><a href="#">Perch</a></h3>
+		</div>
+	</h3>
+</div>
+
+<div class="menuElement" id="menu6">
+	<div class="menuItemElement address-item">
+		<a href="#">
+			<span class="address-header">John Doe</span>
+			<span class="address-content">78 West Main St Apt 3A</span>
+			<span class="address-content">Bloomsburg, PA 12345</span>
+		</a>
+	</div>
+	<div class="menuItemElement address-item">
+		<a href="#">
+			<span class="address-header">Jane Doe</span>
+			<span class="address-content">78 West Main St Apt 3A</span>
+			<span class="address-content">Bloomsburg, PA 12345</span>
+		</a>
+	</div>
+	<div class="menuItemElement address-item">
+		<a href="#">
+			<span class="address-header">James Doe</span>
+			<span class="address-content">78 West Main St Apt 3A</span>
+			<span class="address-content">Bloomsburg, PA 12345</span>
+		</a>
+	</div>
+	<div class="menuItemElement address-item">
+		<a href="#">
+			<span class="address-header">Jenny Doe</span>
+			<span class="address-content">78 West Main St Apt 3A</span>
+			<span class="address-content">Bloomsburg, PA 12345</span>
+		</a>
+	</div>
+	<div class="menuItemElement address-item">
+		<a href="#">
+			<span class="address-header">John Doe</span>
+			<span class="address-content">78 West Main St Apt 3A</span>
+			<span class="address-content">Bloomsburg, PA 12345</span>
+		</a>
+		<div class="menuElement">
+			<div class="menuItemElement"><a href="#">Ada</a></div>
+			<div class="menuItemElement"><a href="#">Saarland</a></div>
+			<div class="menuItemElement"><a href="#">Salzburg</a></div>
+		</div>
+	</div>
+</div>
 
 <div class="ui-widget" style="clear: left; margin-top:2em; font-family:Arial">
 	Log:

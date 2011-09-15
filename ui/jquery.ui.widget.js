@@ -270,9 +270,9 @@ $.Widget.prototype = {
 		return this;
 	},
 	_setOptions: function( options ) {
-		var self = this;
+		var that = this;
 		$.each( options, function( key, value ) {
-			self._setOption( key, value );
+			that._setOption( key, value );
 		});
 
 		return this;
@@ -331,6 +331,15 @@ $.Widget.prototype = {
 				element.bind( eventName, handlerProxy );
 			}
 		});
+	},
+
+	_delay: function( handler, delay ) {
+		function handlerProxy() {
+			return ( typeof handler === "string" ? instance[ handler ] : handler )
+				.apply( instance, arguments );
+		}
+		var instance = this;
+		return setTimeout( handlerProxy, delay || 0 );
 	},
 
 	_hoverable: function( element ) {

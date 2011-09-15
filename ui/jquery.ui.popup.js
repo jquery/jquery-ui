@@ -45,13 +45,13 @@ $.widget( "ui.popup", {
 			.attr( "aria-owns", this.element.attr( "id" ) );
 
 		this.element
-			.addClass( "ui-popup" )
+			.addClass( "ui-popup" );
 		this.close();
 
 		this._bind(this.options.trigger, {
 			keydown: function( event ) {
 				// prevent space-to-open to scroll the page, only happens for anchor ui.button
-				if ( this.options.trigger.is( "a:ui-button" ) && event.keyCode == $.ui.keyCode.SPACE ) {
+				if ( $.ui.button && this.options.trigger.is( "a:ui-button" ) && event.keyCode == $.ui.keyCode.SPACE ) {
 					event.preventDefault();
 				}
 				// TODO handle SPACE to open popup? only when not handled by ui.button
@@ -72,10 +72,9 @@ $.widget( "ui.popup", {
 					// let it propagate to close
 					return;
 				}
-				var that = this;
 				clearTimeout( this.closeTimer );
-				setTimeout(function() {
-					that.open( event );
+				this._delay(function() {
+					this.open( event );
 				}, 1);
 			}
 		});
@@ -102,11 +101,10 @@ $.widget( "ui.popup", {
 
 		this._bind({
 			focusout: function( event ) {
-				var that = this;
 				// use a timer to allow click to clear it and letting that
 				// handle the closing instead of opening again
-				that.closeTimer = setTimeout( function() {
-					that.close( event );
+				this.closeTimer = this._delay( function() {
+					this.close( event );
 				}, 100);
 			},
 			focusin: function( event ) {

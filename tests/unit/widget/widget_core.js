@@ -571,23 +571,23 @@ test( ".widget() - overriden", function() {
 
 test( "._bind() to element (default)", function() {
 	expect( 12 );
-	var self;
+	var that;
 	$.widget( "ui.testWidget", {
 		_create: function() {
-			self = this;
+			that = this;
 			this._bind({
 				keyup: this.keyup,
 				keydown: "keydown"
 			});
 		},
 		keyup: function( event ) {
-			equals( self, this );
-			equals( self.element[0], event.currentTarget );
+			equals( that, this );
+			equals( that.element[0], event.currentTarget );
 			equals( "keyup", event.type );
 		},
 		keydown: function( event ) {
-			equals( self, this );
-			equals( self.element[0], event.currentTarget );
+			equals( that, this );
+			equals( that.element[0], event.currentTarget );
 			equals( "keydown", event.type );
 		}
 	});
@@ -611,23 +611,23 @@ test( "._bind() to element (default)", function() {
 
 test( "._bind() to descendent", function() {
 	expect( 12 );
-	var self;
+	var that;
 	$.widget( "ui.testWidget", {
 		_create: function() {
-			self = this;
+			that = this;
 			this._bind( this.element.find( "strong" ), {
 				keyup: this.keyup,
 				keydown: "keydown"
 			});
 		},
 		keyup: function( event ) {
-			equals( self, this );
-			equals( self.element.find( "strong" )[0], event.currentTarget );
+			equals( that, this );
+			equals( that.element.find( "strong" )[0], event.currentTarget );
 			equals( "keyup", event.type );
 		},
 		keydown: function(event) {
-			equals( self, this );
-			equals( self.element.find( "strong" )[0], event.currentTarget );
+			equals( that, this );
+			equals( that.element.find( "strong" )[0], event.currentTarget );
 			equals( "keydown", event.type );
 		}
 	});
@@ -987,31 +987,31 @@ test( "._trigger() - instance as element", function() {
 			$( "#widget" ).testWidget().remove();
 		});
 	});
-	
+
 	test( "auto-destroy - .remove() on parent", function() {
 		shouldDestroy( true, function() {
 			$( "#widget" ).testWidget().parent().remove();
 		});
 	});
-	
+
 	test( "auto-destroy - .remove() on child", function() {
 		shouldDestroy( false, function() {
 			$( "#widget" ).testWidget().children().remove();
 		});
 	});
-	
+
 	test( "auto-destroy - .empty()", function() {
 		shouldDestroy( false, function() {
 			$( "#widget" ).testWidget().empty();
 		});
 	});
-	
+
 	test( "auto-destroy - .empty() on parent", function() {
 		shouldDestroy( true, function() {
 			$( "#widget" ).testWidget().parent().empty();
 		});
 	});
-	
+
 	test( "auto-destroy - .detach()", function() {
 		shouldDestroy( false, function() {
 			$( "#widget" ).testWidget().detach();
@@ -1038,6 +1038,32 @@ test( "redefine", function() {
 	var instance = new $.ui.testWidget();
 	instance.method( "foo" );
 	equal( $.ui.testWidget.foo, "bar", "static properties remain" );
+});
+
+asyncTest( "_delay", function() {
+	expect( 6 );
+	var order = 0,
+		that;
+	$.widget( "ui.testWidget", {
+		defaultElement: null,
+		_create: function() {
+			that = this;
+			var timer = this._delay(function() {
+				strictEqual( this, that );
+				equal( order, 1 );
+				start();
+			}, 500);
+			ok( timer !== undefined );
+			timer = this._delay("callback");
+			ok( timer !== undefined );
+		},
+		callback: function() {
+			strictEqual( this, that );
+			equal( order, 0 );
+			order += 1;
+		}
+	});
+	$( "#widget" ).testWidget();
 });
 
 }( jQuery ) );
