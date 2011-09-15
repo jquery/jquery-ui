@@ -4,15 +4,15 @@
  */
 (function ( $, undefined ) {
 	$.observable = function( data ) {
-		if ( !this.property ) {
-			return new $.observable( data );
-		}
-		this.data = data;
+		return new observable( data );
 	};
 
 	var splice = [].splice;
 
-	$.observable.prototype = {
+	function observable( data ) {
+		this.data = data;
+	}
+	observable.prototype = {
 		data: null,
 
 		_set: function( name, value ) {
@@ -146,7 +146,7 @@
 	};
 
 	$.each({ bind: "bind", unbind: "unbind", trigger: "triggerHandler" }, function( from, to ) {
-		$.observable.prototype[ from ] = function() {
+		observable.prototype[ from ] = function() {
 			var wrapped = $([ this.data ]);
 			wrapped[ to ].apply( wrapped, arguments );
 			return this;
