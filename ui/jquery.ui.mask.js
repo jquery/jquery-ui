@@ -115,7 +115,6 @@ $.widget( "ui.mask", {
 		var bufferPosition,
 			bufferObject,
 			counter,
-			wasValid = this.isValid,
 			bufferLength = this.buffer.length,
 			value = "";
 
@@ -138,9 +137,6 @@ $.widget( "ui.mask", {
 					this.isValid = false;
 				}
 			}
-		}
-		if ( this.currentEvent && !wasValid && this.isValid ) {
-			this._trigger( "complete", this.currentEvent, {} );
 		}
 		return value;
 	},
