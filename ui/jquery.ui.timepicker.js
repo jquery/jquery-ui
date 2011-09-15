@@ -5,7 +5,7 @@
  * Dual licensed under the MIT or GPL Version 2 licenses.
  * http://jquery.org/license
  *
- * http://docs.jquery.com/UI/Mask
+ * http://docs.jquery.com/UI/Timepicker
  *
  * Depends:
  *	jquery.ui.core.js
