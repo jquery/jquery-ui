@@ -38,6 +38,10 @@
 						response( result, data.totalResultsCount );
 					}
 				});
+			},
+			// could also include $.observable to get the same effect
+			response: function() {
+				grid.grid('refresh');
 			}
 		});
 
@@ -51,8 +55,8 @@
 		});
 
 		// secondary view
-		$( "table" ).grid({
-			source: cities,
+		var grid = $( "table" ).grid({
+			source: cities.toArray(),
 			columns: [ "name", "adminName1", "adminCode1", "fclName", "adminName2", "population", "countryName" ]
 		});
 	});

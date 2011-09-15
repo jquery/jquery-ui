@@ -24,20 +24,40 @@ $.widget( "ui.grid", {
 				item: $( this ).data( "grid-item" )
 			});
 		});
-		$(this.options.source.element).bind("datasourceresponse", function() {
-			that.refresh();
-		});
+		if ( $.observable ) {
+			$.observable( this.options.source ).bind( "insert remove refresh change", function( event, ui ) {
+				if ( event.type === "change" ) {
+					that.refreshItem( ui.item );
+					return;
+				}
+				that.refresh();
+			});
+		}
+	},
+	_container: function() {
+		// TODO this code assumes a single tbody which is not a safe assumption
+		return this.element.find( "tbody" );
+	},
+	_toArray: function() {
+		return this.options.source;
 	},
 	refresh: function() {
-		// TODO this code assumes a single tbody which is not a safe assumption
-		var tbody = this.element.find( "tbody" ).empty(),
+		var tbody = this._container().empty(),
 			template = this.options.rowTemplate;
-		$.each( this.options.source.toArray(), function( itemId, item ) {
+		$.each( this._toArray(), function( itemId, item ) {
 			$.tmpl( template, item ).data( "grid-item", item ).appendTo( tbody );
 		});
 		this._trigger("refresh");
 	},
-
+	refreshItem: function( item ) {
+		var template = this.options.rowTemplate;
+		this._container().children().each(function() {
+			if ( $( this ).data( "grid-item" ) === item ) {
+				$( this ).replaceWith( $.tmpl( template, item ).data( "grid-item", item ) );
+				return false;
+			}
+		});
+	},
 	_columns: function() {
 		if ( this.options.columns ) {
 			if ( $.type( this.options.columns[ 0 ] ) === "string" ) {

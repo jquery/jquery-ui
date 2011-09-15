@@ -54,14 +54,23 @@ $.widget( "demos.localstore", {
 			stored = this.data;
 		}
 		if (!stored) {
-			return this.options.intial;
+			return this.bind(this.options.intial);
 		}
-		return stored;
+		return this.bind(stored);
 	},
 	save: function( data ) {
 		localStorageSupport
 			? localStorage.setItem( this.options.key, JSON.stringify( data ) )
 			: this.data = data;
+	},
+	bind: function( data ) {
+		if (!data)
+			return;
+		var that = this;
+		$.observable( data ).bind( "insert remove refresh change", function() {
+			that.save(this);
+		});
+		return data;
 	}
 });
 

@@ -3,14 +3,15 @@
  *
  */
 (function ( $, undefined ) {
-	$.observable = function( data ) {
-		return new observable( data );
+	$.observable = function( data, parent ) {
+		return new observable( data, parent );
 	};
 
 	var splice = [].splice;
 
-	function observable( data ) {
+	function observable( data, parent ) {
 		this.data = data;
+		this.parent = parent;
 	}
 	observable.prototype = {
 		data: null,
@@ -49,7 +50,7 @@
 					}
 				}
 				if ( changed ) {
-					this._trigger( "change", {
+					this._propertyTrigger( "change", {
 						oldValues: oldValues,
 						newValues: newValues
 					});
@@ -65,7 +66,7 @@
 					oldValues[ path ] = oldValue;
 					var newValues = {};
 					newValues[ path ] = value;
-					this._trigger( "change", {
+					this._propertyTrigger( "change", {
 						oldValues: oldValues,
 						newValues: newValues
 					});
@@ -73,6 +74,15 @@
 
 			}
 			return this;
+		},
+
+		_propertyTrigger: function( type, data ) {
+			this._trigger( type, data );
+			if ( this.parent ) {
+				$([ this.parent ]).triggerHandler( type, $.extend({
+					item: this.data
+				}, data) );
+			}
 		},
 
 		insert: function( index, items) {

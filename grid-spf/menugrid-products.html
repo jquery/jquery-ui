@@ -23,9 +23,9 @@
 		var products = $.ui.odataDatasource({
 			resource: "http://services.odata.org/Northwind/Northwind.svc/Products_by_Categories"
 		});
-		var grid = $( "#products" ).grid({
+		$( "#products" ).menugrid({
 			source: products
-		}).menugrid();
+		});
 
 		$( "#pager" ).pager({
 			source: products

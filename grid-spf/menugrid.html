@@ -42,7 +42,7 @@
 		checkHash();
 		$( window ).bind( "hashchange", checkHash );
 
-		var grid = $( "#movies" ).grid({
+		$( "#movies" ).menugrid({
 			source: movies,
 			refresh: function() {
 				var paging = movies.options.paging,
@@ -55,7 +55,7 @@
 				$(".paging-to").text( to );
 				$(".paging-total").text( total );
 			}
-		}).menugrid();
+		});
 
 		$("#pagesize").change(function() {
 			movies.option("paging.limit", +$(this).val()).refresh();

@@ -21,6 +21,7 @@
 	<script src="menugrid.js"></script>
 	<script>
 	$(function() {
+		// TODO this doesn't really work
 		var movies = $.ui.nestedDatasource({
 			paging: {
 				limit: 10
@@ -29,9 +30,9 @@
 				resource: "http://odata.netflix.com/Catalog/Titles"
 			})
 		});
-		var grid = $( "#movies" ).grid({
+		var grid = $( "#movies" ).menugrid({
 			source: movies
-		}).menugrid();
+		});
 
 		$( "#pager" ).pager({
 			source: movies

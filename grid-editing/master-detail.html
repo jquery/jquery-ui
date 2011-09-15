@@ -23,18 +23,7 @@
 	var movies = store.load();
 
 	$(function() {
-		// TODO $.observable should support this binding, along with a less intrusive event facility
-		function bindChange(index, movie) {
-			$( [ movie ] ).bind("change", function() {
-				store.save( movies );
-				$(store).trigger("update");
-			});
-		}
-		$.each(movies, bindChange);
-		$( [ movies ] ).bind("insert remove refresh", function(event, ui) {
-			if ( event.type === "insert" ) {
-				$.each( ui.items, bindChange );
-			}
+		$( [ movies ] ).bind("insert remove refresh change", function(event, ui) {
 			store.save( movies );
 			$(store).trigger("update");
 		});
@@ -44,7 +33,7 @@
 		var movie;
 		var editForm = $( "#editForm" ).hide().submit( function( event ) {
 			event.preventDefault();
-			$.observable( movie ).property( serializeForm( this ) );
+			$.observable( movie, movies ).property( serializeForm( this ) );
 			editForm.hide();
 		});
 		var list = $("#movies-list").delegate("li:has(li)", "click", function() {

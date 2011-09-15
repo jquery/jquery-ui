@@ -23,6 +23,7 @@
 	<script src="navigator.js"></script>
 	<script src="localstore.js"></script>
 	<script src="helpers.js"></script>
+	<script src="observable.js"></script>
 	<script>
 	var store = $.demos.localstore( {
 		key: "grid-editing-developers",
@@ -43,7 +44,7 @@
 		});
 
 		var grid = $.ui.grid( {
-			source: developers
+			source: developers.toArray()
 		}, "#developers-local" );
 
 		// TODO refactor this - there must be a better way to reuse the editor

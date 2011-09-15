@@ -61,22 +61,8 @@
 			$(".selected-status").text(selected.length);
 		});
 
-		// TODO $.observable should support this binding, along with a less intrusive event facility
-		function bindChange(index, developer) {
-			$.observable( developer ).bind("change", function(event, ui) {
-				developers.refresh().save();
-			});
-		}
-		$.observable( localDevelopers ).bind("insert remove", function(event, ui) {
-			if ( event.type === "insert" ) {
-				$.each( ui.items, bindChange );
-			}
-			developers.refresh().save();
-		})
-		$.each( localDevelopers, bindChange );
-
 		var grid = $( "#developers-local" ).grid({
-			source: developers
+			source: developers.toArray()
 		});
 
 		grid.bind("gridrefresh", function() {
@@ -145,7 +131,8 @@
 		});
 		var editForm = $( "#editForm" ).tooltip().hide().submit( function( event ) {
 			event.preventDefault();
-			$.observable(developer).property( serializeForm( this ) );
+			$.observable( developer, localDevelopers ).property( serializeForm( this ) );
+			// TODO hide tooltip
 			editForm.hide();
 		});
 

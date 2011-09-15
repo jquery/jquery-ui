@@ -11,6 +11,13 @@ $.widget( "ui.datasource", {
 		filter: null
 	},
 
+	// TODO subwidgets override _create, should we force them to call _super("_create")?
+	// or is there a way to have a constructor along with _create?
+	// _init is probably safe here, as this shouldn't get called as a widget anyway
+	_init: function() {
+		this.data = [];
+	},
+
 	toArray: function() {
 		return this.data;
 	},
@@ -64,9 +71,12 @@ $.widget( "ui.datasource", {
 			page: this.page()
 		});
 		var that = this;
-        this.options.source( request, function( data, totalCount ) {
-			that.data = data;
+		this.options.source( request, function( data, totalCount ) {
+			Array.prototype.splice.apply( that.data, [ 0, that.data.length ].concat( data ) );
 			that.totalCount = parseInt(totalCount, 10);
+			// $.observable
+			$([ that.data ]).triggerHandler( "refresh" );
+			// old school
 			that._trigger( "response" );
 		});
         return this;
