@@ -4,9 +4,6 @@
  * Depends on:
  * tmpl
  * datastore
- *
- * Optional:
- * extractingDatasource
  */
 (function( $ ) {
 
