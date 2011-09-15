@@ -15,17 +15,12 @@
 
 	$(function() {
 		// TODO add another one with local data?
-		$.ajax({
-			dataType: "json",
-			url: "developers.json",
-			async: false,
-			success: function( localDevelopers ) {
-				$( "#developers-ajax" ).grid({
-					source: localDevelopers
-				})
-				// TODO should this happen automatically? need to research how that affects other grids
-				.grid("refresh");
-			}
+		$.getJSON("developers.json", function( localDevelopers ) {
+			$( "#developers-ajax" ).grid({
+				source: localDevelopers
+			})
+			// TODO should this happen automatically? need to research how that affects other grids
+			.grid("refresh");
 		});
 	});
 	</script>
