@@ -23,6 +23,7 @@
 	<script src="../grid-spf/datasource-local.js"></script>
 	<script src="../grid-spf/grid.js"></script>
 	<script src="../grid-spf/pager.js"></script>
+	<script src="grid.selectable.js"></script>
 	<script src="observable.js"></script>
 	<script src="navigator.js"></script>
 	<script src="localstore.js"></script>
@@ -55,12 +56,6 @@
 			return this;
 		}
 
-		var selected = [];
-		// update status when selection changes
-		$.observable( selected ).bind("insert remove", function() {
-			$( ".selected-status" ).text( selected.length );
-		});
-
 		// TODO $.observable should support this binding, along with a less intrusive event facility
 		function bindChange( index, developer ) {
 			$.observable( developer ).bind("change", function( event, ui ) {
@@ -77,6 +72,17 @@
 
 		var grid = $( "#developers-local" ).grid({
 			source: developers
+		})
+		
+		var selected = [];
+		// update status when selection changes
+		$.observable( selected ).bind("insert remove", function() {
+			$( ".selected-status" ).text( selected.length );
+		});
+		// TODO clear selection (on other pages) when starting from scratch
+
+		grid.gridSelectable({
+			selected: selected
 		});
 
 		grid.bind("gridrefresh", function() {
@@ -85,20 +91,6 @@
 					$( this ).addClass( "ui-selected" );
 				}
 			});
-		});
-		// TODO clear selection (on other pages) when starting from scratch
-		grid.selectable({
-			filter: "tbody > tr",
-			selected: function( ev, ui ) {
-				var item = $( ui.selected ).data( "grid-item" );
-				if ( $.inArray( item, selected ) === -1 ) {
-					$.observable( selected ).insert( item );
-				}
-			},
-			unselected: function( ev, ui ) {
-				var item = $( ui.selected ).data( "grid-item" );
-				$.observable( selected ).remove( item );
-			}
 		});
 
 		$( "#pageDevelopers" ).pager({
@@ -143,7 +135,12 @@
 			$( "#edit-tmpl" ).tmpl( meta(developer) ).appendTo( editForm.find("fieldset").empty() );
 			editForm.show().find( "input:first" ).focus();
 		});
-		var editForm = $( "#editForm" ).tooltip().hide().submit( function( event ) {
+		var editForm = $( "#editForm" ).tooltip({
+			position: {
+				my: "left bottom",
+				at: "left top"
+			}
+		}).hide().submit( function( event ) {
 			event.preventDefault();
 			$.observable(developer).property( serializeForm(this) );
 			editForm.hide();
@@ -155,7 +152,7 @@
 				return;
 			}
 			$.observable( localDevelopers ).remove( selected );
-			selected = [];
+			$.observable( selected ).remove( 0, selected.length );
 			developers.refresh();
 		});
 
