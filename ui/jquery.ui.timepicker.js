@@ -179,7 +179,7 @@ $.widget( "ui.timepicker", {
 	destroy: function() {
 		this.element.mask( "destroy" );
 		this.element.spinner( "destroy" );
-		this._super.destroy();
+		this._super( "destroy" );
 	}
 });
 
