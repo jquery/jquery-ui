@@ -10,5 +10,5 @@ function menu_log( message, clear ) {
 
 function menu_click( menu, item ) {
 	$( "#log" ).data( "lastItem", item );
-	menu.find( "li:eq(" + item + ") a" ).trigger( "click" );
+	menu.children( ":eq(" + item + ")" ).find( "a:first" ).trigger( "click" );
 }
