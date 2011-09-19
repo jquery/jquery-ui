@@ -23,6 +23,7 @@
 	<script src="../grid-spf/datasource-local.js"></script>
 	<script src="../grid-spf/grid.js"></script>
 	<script src="../grid-spf/pager.js"></script>
+	<script src="grid.selectable.js"></script>
 	<script src="observable.js"></script>
 	<script src="navigator.js"></script>
 	<script src="localstore.js"></script>
@@ -65,26 +66,17 @@
 			source: developers.toArray()
 		});
 
+		grid.gridSelectable({
+			selected: selected
+		});
+
+		// TODO move into gridSelectable
 		grid.bind("gridrefresh", function() {
 			grid.find( "tbody > tr" ).each(function() {
 				if ( $.inArray( $(this).data("grid-item"), selected ) !== -1 ) {
 					$( this ).addClass( "ui-selected" );
 				}
 			});
-		});
-		// TODO clear selection (on other pages) when starting from scratch
-		grid.selectable({
-			filter: "tbody > tr",
-			selected: function( ev, ui ) {
-				var item = $( ui.selected ).data( "grid-item" );
-				if ( $.inArray( item, selected ) === -1 ) {
-					$.observable( selected ).insert( item );
-				}
-			},
-			unselected: function( ev, ui ) {
-				var item = $( ui.selected ).data( "grid-item" );
-				$.observable( selected ).remove( item );
-			}
 		});
 
 		$( "#pageDevelopers" ).pager({
@@ -129,7 +121,12 @@
 			$( "#edit-tmpl" ).tmpl( meta(developer) ).appendTo( editForm.find("fieldset").empty() );
 			editForm.show().find( "input:first" ).focus();
 		});
-		var editForm = $( "#editForm" ).tooltip().hide().submit( function( event ) {
+		var editForm = $( "#editForm" ).tooltip({
+			position: {
+				my: "left bottom",
+				at: "left top"
+			}
+		}).hide().submit( function( event ) {
 			event.preventDefault();
 			$.observable( developer, localDevelopers ).property( serializeForm( this ) );
 			// TODO hide tooltip
@@ -142,7 +139,7 @@
 				return;
 			}
 			$.observable( localDevelopers ).remove( selected );
-			selected = [];
+			$.observable( selected ).remove( 0, selected.length );
 			developers.refresh();
 		});
 
@@ -167,7 +164,7 @@
 </head>
 <body>
 
-<h1>Grids with editable local datasource</h1>
+<h1>Grids with selectable rows</h1>
 
 <h2>local data source</h2>
 
