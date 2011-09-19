@@ -191,7 +191,7 @@ $.widget( "ui.editable", {
 });
 
 $.ui.editable.saveButtons = {
-	button: function(editable) {
+	button: function( editable ) {
 		return $( "<button></button>" )
 			.html( editable.options.save.text )
 			.button({
@@ -201,7 +201,7 @@ $.ui.editable.saveButtons = {
 				text: false
 			});
 	},
-	submit: function(editable) {
+	submit: function( editable ) {
 		return $( "<input/>" )
 			.attr( "type", "submit" )
 			.val( editable.options.save.text )
@@ -210,7 +210,7 @@ $.ui.editable.saveButtons = {
 };
 
 $.ui.editable.cancelButtons = {
-	button: function(editable) {
+	button: function( editable ) {
 		return $( "<button></button>" )
 			.html( editable.options.cancel.text )
 			.button({
@@ -220,7 +220,7 @@ $.ui.editable.cancelButtons = {
 				text: false
 			});
 	},
-	link: function(editable) {
+	link: function( editable ) {
 		return $( "<a></a>" )
 			.attr( "href", "#" )
 			.attr( "title", editable.options.cancel.text )
@@ -232,7 +232,7 @@ $.ui.editable.cancelButtons = {
 
 $.ui.editable.editors = {
 	text: {
-		element:function(editable) {
+		element:function( editable ) {
 			return $( "<input/>" )
 				.attr( "type", "text" )
 				.val( editable.value() )
@@ -241,10 +241,10 @@ $.ui.editable.editors = {
 		bind: function( editable ) {
             var self = editable;
 			$( "input", editable.element )
-				.focus(function() {
+				.focus( function() {
 					self.frame.addClass( activeStateClass );
 				})
-				.blur(function() {
+				.blur( function() {
 					self.frame.removeClass( activeStateClass );
 				})
 				.bind( "keydown", function( event ) {
