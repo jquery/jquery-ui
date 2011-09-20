@@ -54,7 +54,6 @@ $.widget( "ui.grid", {
 		this._container().children().each(function() {
 			if ( $( this ).data( "grid-item" ) === item ) {
 				$( this ).replaceWith( $.tmpl( template, item ).data( "grid-item", item ) );
-				return false;
 			}
 		});
 	},
