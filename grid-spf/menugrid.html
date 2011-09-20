@@ -13,6 +13,7 @@
 	<script src="../ui/jquery.ui.menu.js"></script>
 	<script src="../ui/jquery.ui.position.js"></script>
 	<script src="../ui/jquery.ui.popup.js"></script>
+	<script src="../grid-editing/observable.js"></script>
 	<script src="datasource.js"></script>
 	<script src="datasource-odata.js"></script>
 	<script src="grid.js"></script>
@@ -42,7 +43,7 @@
 		checkHash();
 		$( window ).bind( "hashchange", checkHash );
 
-		var grid = $( "#movies" ).grid({
+		$( "#movies" ).menugrid({
 			source: movies,
 			refresh: function() {
 				var paging = movies.options.paging,
@@ -55,7 +56,7 @@
 				$(".paging-to").text( to );
 				$(".paging-total").text( total );
 			}
-		}).menugrid();
+		});
 
 		$("#pagesize").change(function() {
 			movies.option("paging.limit", +$(this).val()).refresh();

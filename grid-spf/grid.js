@@ -2,8 +2,9 @@
  * Grid
  *
  * Depends on:
+ * widget
  * tmpl
- * datastore
+ * observable (optional)
  */
 (function( $ ) {
 
@@ -24,20 +25,71 @@ $.widget( "ui.grid", {
 				item: $( this ).data( "grid-item" )
 			});
 		});
-		$(this.options.source.element).bind("datasourceresponse", function() {
-			that.refresh();
+		if ( $.observable ) {
+			that._bindChange( that._toArray() );
+			$.observable( this.options.source ).bind( "insert remove replaceAll", function( event, ui ) {
+				if ( event.type === "insert" ) {
+					that._bindChange( ui.items );
+				} else if (event.type === "replaceAll" ) {
+					that._unbindChange( ui.oldItems );
+					that._bindChange( ui.newItems );
+				} else {
+					that._unbindChange( ui.items );
+				}
+				that.refresh();
+			});
+		}
+	},
+	_destroy: function() {
+		if ( $.observable ) {
+			this._unbindChange( this.options.source );
+			// TODO see below
+			$.observable( this.options.source ).unbind( ".grid");
+		}
+		// TODO implement actually destroying the grid
+	},
+	_bindChange: function( items ) {
+		var that = this;
+		$.each( items, function( index, item ) {
+			// TODO make namespace specific for this instance
+			$.observable( item ).bind( "change.grid", function() {
+				that.refreshItem( item );
+			});
 		});
 	},
-	refresh: function() {
+	_unbindChange: function( items ) {
+		$.each( items, function( index, item ) {
+			// TODO see above
+			$.observable( item ).unbind( "change.grid" );
+		});
+	},
+	_container: function() {
 		// TODO this code assumes a single tbody which is not a safe assumption
-		var tbody = this.element.find( "tbody" ).empty(),
-			template = this.options.rowTemplate;
-		$.each( this.options.source.toArray(), function( itemId, item ) {
-			$.tmpl( template, item ).data( "grid-item", item ).appendTo( tbody );
+		return this.element.find( "tbody" );
+	},
+	_newRow: function( item ) {
+		return $.tmpl( this.options.rowTemplate, item ).data( "grid-item", item );
+	},
+	// can be customized by subwidgets
+	_toArray: function() {
+		return this.options.source;
+	},
+	refresh: function() {
+		var that = this;
+			tbody = this._container().empty();
+		$.each( this._toArray(), function( itemId, item ) {
+			that._newRow( item ).appendTo( tbody );
 		});
 		this._trigger("refresh");
 	},
-
+	refreshItem: function( item ) {
+		var that = this;
+		this._container().children().each(function() {
+			if ( $( this ).data( "grid-item" ) === item ) {
+				$( this ).replaceWith( that._newRow( item ) );
+			}
+		});
+	},
 	_columns: function() {
 		if ( this.options.columns ) {
 			if ( $.type( this.options.columns[ 0 ] ) === "string" ) {

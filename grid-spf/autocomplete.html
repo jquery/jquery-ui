@@ -12,6 +12,7 @@
 	<script src="../ui/jquery.ui.position.js"></script>
 	<script src="../ui/jquery.ui.menu.js"></script>
 	<script src="../ui/jquery.ui.autocomplete.js"></script>
+	<script src="../grid-editing/observable.js"></script>
 	<script src="datasource.js"></script>
 	<script src="grid.js"></script>
 
@@ -45,14 +46,14 @@
 			minLength: 3,
 			source: function( request, response ) {
 				cities.option( "filter", request ).refresh( function() {
-					response( cities.toArray() );
+					response( cities.result );
 				});
 			}
 		});
 
 		// secondary view
-		$( "table" ).grid({
-			source: cities,
+		var grid = $( "table" ).grid({
+			source: cities.result,
 			columns: [ "name", "adminName1", "adminCode1", "fclName", "adminName2", "population", "countryName" ]
 		});
 	});

@@ -9,6 +9,16 @@ $.widget( "ui.localDatasource", $.ui.datasource, {
 		this.options.source = function( request, response) {
 			var sortedItems = that._sort( that._filter( that.options.input ) );
 			response( that._page( sortedItems ), sortedItems.length );
+		};
+		if ( $.observable ) {
+			$.observable( this.options.input ).bind( "insert remove refresh change", function(event, ui) {
+				// forward change event, otherwise do full refresh
+				if ( event.type === "change" ) {
+					$.observable( that.data )._trigger( "change", ui );
+					return;
+				}
+				that.refresh();
+			});
 		}
 	},
 	_filter: function( items ) {
@@ -24,11 +34,10 @@ $.widget( "ui.localDatasource", $.ui.datasource, {
 				}
 				return match;
 	        });
-        } else {
-			// copy input array to avoid sorting original
-			// TODO need this only when actually sorting, not for paging, which slices anyway
-            return $.makeArray( items );
-        }
+		}
+		// copy input array to avoid sorting original
+		// TODO need this only when actually sorting, not for paging, which slices anyway
+		return $.makeArray( items );
 	},
 	_match: function( value, filter ) {
 		var operator = filter.operator || "==",
@@ -40,7 +49,7 @@ $.widget( "ui.localDatasource", $.ui.datasource, {
             case "<=": return value <= operand;
             case ">": return value > operand;
             case ">=": return value >= operand;
-			case "like": return new RegExp( operand.replace( /[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&" ), "i" ).test( value )
+			case "like": return new RegExp( operand.replace( /[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&" ), "i" ).test( value );
             default: throw "Unrecognized filter operator: " + operator + " for operand " + operand;
         }
 	},
@@ -53,22 +62,20 @@ $.widget( "ui.localDatasource", $.ui.datasource, {
                     value2 = item2[ property ];
                 if ( value1 == value2 ) {
 					if ( secondary.length ) {
-						var next = secondary[ 0 ]
+						var next = secondary[ 0 ];
 						return sorter( next, secondary.slice( 1 ) )( item1, item2 );
-					} else {
-						return 0;
 					}
+					return 0;
 				}
 				return order * ( value1 > value2 ? 1 : -1 );
-            }
+            };
 		}
 		if ( this.options.sort.length ) {
 			var sorts = this.options.sort;
 			var first = sorts[ 0 ];
         	return items.sort( sorter( first, sorts.slice( 1 ) ) );
-        } else {
-            return items;
-        }
+		}
+		return items;
 	},
 	_page: function( items ) {
 		var paging = this.options.paging,

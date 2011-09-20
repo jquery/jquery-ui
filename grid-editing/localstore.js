@@ -54,14 +54,33 @@ $.widget( "demos.localstore", {
 			stored = this.data;
 		}
 		if (!stored) {
-			return this.options.intial;
+			return this._bindArray(this.options.intial);
 		}
-		return stored;
+		return this._bindArray(stored);
 	},
-	save: function( data ) {
-		localStorageSupport
-			? localStorage.setItem( this.options.key, JSON.stringify( data ) )
-			: this.data = data;
+	save: function() {
+		if (localStorageSupport) {
+			localStorage.setItem( this.options.key, JSON.stringify( this.data ) );
+		}
+	},
+	_bindObjects: function( items ) {
+		$.each( items, $.proxy(function( index, item ) {
+			$.observable( item ).bind( "change", $.proxy( this.save, this ) );
+		}, this));
+	},
+	_bindArray: function( data ) {
+		if (!data)
+			return;
+		this.data = data;
+		$.observable( data ).bind( "insert remove", $.proxy(function(event, ui) {
+			// TODO unbind on remove?
+			if (event.type == "insert") {
+				this._bindObjects( ui.items );
+			}
+			this.save( this );
+		}, this));
+		this._bindObjects( data );
+		return data;
 	}
 });
 

@@ -20,6 +20,7 @@ $.widget( "ui.gridEditor", {
 	},
 	_create: function() {
 		var grid = this.element.data("grid");
+
 		this._bind({
 			dblclick: function( event ) {
 				var target = $( event.target ).closest( this.options.items );

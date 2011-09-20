@@ -25,6 +25,7 @@
 
 		$( ":submit" ).button();
 
+		// TODO rewrite to do incremental rendering on each todo item
 		$( [ todos ] ).bind("insert remove refresh", function() {
 			store.save( todos );
 			$(store).trigger( "update" );

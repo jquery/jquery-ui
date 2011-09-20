@@ -10,6 +10,7 @@
 	<script src="../ui/jquery.ui.core.js"></script>
 	<script src="../ui/jquery.ui.widget.js"></script>
 	<script src="../ui/jquery.ui.button.js"></script>
+	<script src="../grid-editing/observable.js"></script>
 	<script src="datasource.js"></script>
 	<script src="datasource-local.js"></script>
 	<script src="datasource-odata.js"></script>
@@ -86,7 +87,7 @@
 
 		$( "#developers-local" ).grid({
 			columns: [ "firstName", "lastName", "country" ],
-			source: developers,
+			source: developers.result,
 			select: function( event, ui ) {
 				console.log( "Selected " + ui.item.firstName );
 			}
@@ -105,7 +106,7 @@
 			resource: "http://odata.netflix.com/Catalog/Titles"
 		});
 		$( "#movies" ).grid({
-			source: movies
+			source: movies.result
 		});
 
 		$( "#filterMovies" ).filterControl( movies );

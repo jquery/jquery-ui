@@ -3,14 +3,15 @@
  *
  */
 (function ( $, undefined ) {
-	$.observable = function( data ) {
-		return new observable( data );
+	$.observable = function( data, parent ) {
+		return new observable( data, parent );
 	};
 
 	var splice = [].splice;
 
-	function observable( data ) {
+	function observable( data, parent ) {
 		this.data = data;
+		this.parent = parent;
 	}
 	observable.prototype = {
 		data: null,
@@ -140,8 +141,13 @@
 			return this._trigger( "remove", { index: index, items: items } );
 		},
 
-		refresh: function( newItems ) {
-			return this._trigger( "refresh" );
+		replaceAll: function( newItems ) {
+			var event = {
+				oldItems: this.data.slice(0),
+				newItems: newItems
+			};
+			Array.prototype.splice.apply( this.data, [ 0, this.data.length ].concat( newItems ) );
+			return this._trigger( "replaceAll", event );
 		}
 	};
 

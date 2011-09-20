@@ -1,5 +1,13 @@
+/*
+ * Datasource
+ *
+ * Depends on:
+ * widget
+ * observable
+ */
 (function( $ ) {
 
+// TODO rename to dataview
 $.widget( "ui.datasource", {
 	defaultElement: null,
 	options: {
@@ -11,8 +19,11 @@ $.widget( "ui.datasource", {
 		filter: null
 	},
 
-	toArray: function() {
-		return this.data;
+	// TODO subwidgets override _create, should we force them to call _super("_create")?
+	// or is there a way to have a constructor along with _create?
+	// _init is probably safe here, as this shouldn't get called as a widget anyway
+	_init: function() {
+		this.result = [];
 	},
 
 	// TODO this needs to be applied to init options as well, to work sort: "prop" work
@@ -64,9 +75,9 @@ $.widget( "ui.datasource", {
 			page: this.page()
 		});
 		var that = this;
-        this.options.source( request, function( data, totalCount ) {
-			that.data = data;
+		this.options.source( request, function( data, totalCount ) {
 			that.totalCount = parseInt(totalCount, 10);
+			$.observable( that.result ).replaceAll( data );
 			that._trigger( "response" );
 		});
         return this;

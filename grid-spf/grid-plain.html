@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Grid: Sorting, Paging, Filtering</title>
+	<link rel="stylesheet" href="../themes/base/jquery.ui.all.css">
+	<link rel="stylesheet" href="grid.css">
+	<script src="../jquery-1.6.2.js"></script>
+	<script src="../external/jquery.tmpl.js"></script>
+	<script src="../ui/jquery.ui.core.js"></script>
+	<script src="../ui/jquery.ui.widget.js"></script>
+	<script src="../ui/jquery.ui.button.js"></script>
+	<script src="grid.js"></script>
+	<script>
+
+	$(function() {
+		// TODO add another one with local data?
+		$.getJSON("developers.json", function( localDevelopers ) {
+			$( "#developers-ajax" ).grid({
+				source: localDevelopers
+			})
+			// TODO should this happen automatically? need to research how that affects other grids
+			.grid("refresh");
+		});
+	});
+	</script>
+</head>
+<body>
+
+<h1>Grids with just an array as input</h1>
+<p>features: featureless</p>
+
+<table id="developers-ajax">
+	<thead>
+		<tr>
+			<th data-property="firstName">First Name</th>
+			<th data-property="lastName">Last Name</th>
+			<th data-property="country">Country</th>
+		</tr>
+	</thead>
+	<tbody>
+	</tbody>
+</table>
+
+</body>
+</html>
