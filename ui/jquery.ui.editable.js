@@ -49,7 +49,9 @@ $.widget( "ui.editable", {
 	},
 
 	start: function() {
-		this._edit();
+		if ( !this._editing ) {
+			this._edit();
+		}
 	},
 
 	submit: function() {
@@ -92,7 +94,7 @@ $.widget( "ui.editable", {
 
 			this.element.removeClass( highlightStateClass );
 
-			if ( !this.editing && ( $this.is( this.element ) || $this.hasClass( placeholderClass ) ) ) {
+			if ( !this._editing && ( $this.is( this.element ) || $this.hasClass( placeholderClass ) ) ) {
 				this.element.addClass( highlightStateClass );
 				return;
 			}
@@ -108,12 +110,12 @@ $.widget( "ui.editable", {
 	},
 
 	_show: function() {
-		this.editing = undefined;
+		this._editing = undefined;
 		this.element.html( this.value() || this._placeholder() );
 	},
 
 	_edit: function() {
-		this.editing = true;
+		this._editing = true;
 		this.element.html( this._form() );
 		this._formEvents();
 	},
@@ -126,7 +128,7 @@ $.widget( "ui.editable", {
 
 	_form: function() {
 		var editor = $.ui.editable.editors[ this.options.editor ],
-            form = $( "<form></form>" )
+			form = $( "<form></form>" )
 			.addClass( formClass )
 			.append( $( "<span></span>" )
 				.append( editor.element( this )));
@@ -156,7 +158,7 @@ $.widget( "ui.editable", {
 
 	_formEvents: function() {
 		var self = this,
-            editor = $.ui.editable.editors[ self.options.editor ];
+			editor = $.ui.editable.editors[ self.options.editor ];
 		$( "form", this.element )
 			.submit( function( event ) {
 				self._save.call( self, event, editor.value( self, this ) );
@@ -239,7 +241,7 @@ $.ui.editable.editors = {
 				.addClass( inputClass );
 		},
 		bind: function( editable ) {
-            var self = editable;
+			var self = editable;
 			$( "input", editable.element )
 				.focus( function() {
 					self.frame.addClass( activeStateClass );
