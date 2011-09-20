@@ -5,8 +5,8 @@ $.widget( "spf.pager", {
 	_create: function() {
 		var that = this;
 
-		// TODO add a datasource method for this
-		$( this.options.source ).bind( "datasourceresponse", function() {
+		// TODO add a dataview method for this
+		$( this.options.source ).bind( "dataviewresponse", function() {
 			that.refresh();
 		});
 

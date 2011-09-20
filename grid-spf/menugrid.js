@@ -6,7 +6,7 @@ $.widget("spf.menugrid", $.ui.grid, {
 		var options = this.options;
 		var source = this.options.source;
 		var that = this;
-		source.element.bind("datasourceresponse", function() {
+		source.element.bind("dataviewresponse", function() {
 			that._updateFilterValues();
 			that.refresh();
 		});

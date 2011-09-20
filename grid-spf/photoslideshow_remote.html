@@ -12,7 +12,7 @@
 	<script src="../ui/jquery.ui.position.js"></script>
 	<script src="../ui/jquery.ui.button.js"></script>
 	<script src="../grid-editing/observable.js"></script>
-	<script src="datasource.js"></script>
+	<script src="dataview.js"></script>
 	<script src="slideshow.js"></script>
 	<script src="pager.js"></script>
 	<script type="text/x-kite" id="pager-tmpl">
@@ -36,7 +36,7 @@
 	</script>
 	<script>
 	$(function() {
-		var datasource = $.ui.datasource({
+		var dataview = $.ui.dataview({
 			paging: {
 				limit: 2
 			},
@@ -68,19 +68,19 @@
 		});
 
 		$( "#slideshow" ).slideshow({
-			source: datasource
+			source: dataview
 		});
 
 		$( kite( "#pager-tmpl" )() ).insertBefore( "#slideshow" ).pager({
-			source: datasource
+			source: dataview
 		});
 
 		$( "#page-size" ).change( function() {
-			datasource.option( "paging.limit", +$( this ).val() ).refresh();
+			dataview.option( "paging.limit", +$( this ).val() ).refresh();
 		});
 
 		$( "#filter" ).change(function() {
-			datasource.option( "filter", $( this ).val() ).refresh();
+			dataview.option( "filter", $( this ).val() ).refresh();
 		}).trigger( "change" );
 	});
 	</script>

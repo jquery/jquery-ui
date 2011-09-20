@@ -9,7 +9,7 @@ $.widget( "spf.slideshow", {
 	_create: function() {
 		this.element.addClass( "spf-slideshow" );
 		this._bind( this.options.source, {
-			datasourceresponse: "refresh"
+			dataviewresponse: "refresh"
 		});
 	},
 

@@ -11,9 +11,9 @@
 	<script src="../ui/jquery.ui.widget.js"></script>
 	<script src="../ui/jquery.ui.button.js"></script>
 	<script src="../grid-editing/observable.js"></script>
-	<script src="datasource.js"></script>
-	<script src="datasource-local.js"></script>
-	<script src="datasource-odata.js"></script>
+	<script src="dataview.js"></script>
+	<script src="dataview-local.js"></script>
+	<script src="dataview-odata.js"></script>
 	<script src="grid.js"></script>
 	<script src="pager.js"></script>
 	<script>
@@ -27,7 +27,7 @@
 		}
 	});
 
-	$.fn.filterControl = function( datasource ) {
+	$.fn.filterControl = function( dataview ) {
 		this.addClass( "tool" ).find( "button" ).click(function() {
 			var button = $( this ),
 				field = button.data( "filter-field" ),
@@ -35,22 +35,22 @@
 				operator = button.data( "filter-operator" ),
 				key = "filter." + field;
 
-			if ( datasource.option( "filter." + field ) ) {
-				datasource.option( key, null );
+			if ( dataview.option( "filter." + field ) ) {
+				dataview.option( key, null );
 			} else {
-				datasource.option(key, {
+				dataview.option(key, {
 					value: value,
 					operator: operator
 				});
 			}
-			datasource.refresh();
+			dataview.refresh();
 
 			button.toggleClass( "active" );
 		})
 		return this;
 	};
 
-	$.fn.sorterControl = function( datasource ) {
+	$.fn.sorterControl = function( dataview ) {
 		// TODO see above
 		var sorted = {};
 		this.addClass( "tool" ).find( "button" ).click(function() {
@@ -72,7 +72,7 @@
 			for ( var key in sorted ) {
 				sort.push( sorted[ key ] );
 			}
-			datasource.option( "sort", sort ).refresh();
+			dataview.option( "sort", sort ).refresh();
 		})
 		return this;
 	};
@@ -135,7 +135,7 @@
 </head>
 <body>
 
-<h1>Grids with local and remote datasource</h1>
+<h1>Grids with local and remote dataview</h1>
 <p>features: sorting, filtering, paging</p>
 
 <h2>local data source</h2>

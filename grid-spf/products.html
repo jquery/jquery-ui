@@ -12,7 +12,7 @@
 	<script src="../ui/jquery.ui.position.js"></script>
 	<script src="../ui/jquery.ui.button.js"></script>
 	<script src="../grid-editing/observable.js"></script>
-	<script src="datasource.js"></script>
+	<script src="dataview.js"></script>
 	<script src="grid.js"></script>
 	<script src="pager.js"></script>
 	<script>
@@ -40,7 +40,7 @@
 			.replace( /(?:^|\s)1 ([a-z]+)s/g, " 1 $1" );
 		}
 
-		var ebay = $.ui.datasource({
+		var ebay = $.ui.dataview({
 			paging: {
 				limit: 10
 			},
@@ -100,9 +100,9 @@
 			.addClass( "ui-widget-overlay" )
 			.hide()
 			.appendTo( "body" );
-		$( ebay ).bind( "datasourcerequest", function() {
+		$( ebay ).bind( "dataviewrequest", function() {
 			overlay.show();
-		}).bind( "datasourceresponse", function() {
+		}).bind( "dataviewresponse", function() {
 			overlay.hide();
 		});
 

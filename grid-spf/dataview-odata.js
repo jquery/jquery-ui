@@ -1,8 +1,8 @@
 (function ($, undefined ) {
 
-$.widget( "ui.odataDatasource", $.ui.datasource, {
-	// all datasource implementations share a common event prefix
-	widgetEventPrefix: "datasource",
+$.widget( "ui.odataDatasource", $.ui.dataview, {
+	// all dataview implementations share a common event prefix
+	widgetEventPrefix: "dataview",
 	options: {
 		paging: {
 			limit: 10

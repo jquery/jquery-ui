@@ -13,12 +13,12 @@
 	<script src="../ui/jquery.ui.menu.js"></script>
 	<script src="../ui/jquery.ui.autocomplete.js"></script>
 	<script src="../grid-editing/observable.js"></script>
-	<script src="datasource.js"></script>
+	<script src="dataview.js"></script>
 	<script src="grid.js"></script>
 
 	<script>
 	$(function() {
-		var cities = $.ui.datasource({
+		var cities = $.ui.dataview({
 			source: function( request, response ) {
 				$.ajax({
 					url: "http://ws.geonames.org/searchJSON",
@@ -61,7 +61,7 @@
 </head>
 <body>
 
-<h1>Autocomplete with custom datasource and secondary grid view</h1>
+<h1>Autocomplete with custom dataview and secondary grid view</h1>
 <p>features: filtering</p>
 
 <form>

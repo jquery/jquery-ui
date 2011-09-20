@@ -7,8 +7,7 @@
  */
 (function( $ ) {
 
-// TODO rename to dataview
-$.widget( "ui.datasource", {
+$.widget( "ui.dataview", {
 	defaultElement: null,
 	options: {
 		sort: [],
@@ -26,7 +25,7 @@ $.widget( "ui.datasource", {
 		this.result = [];
 	},
 
-	// TODO this needs to be applied to init options as well, to work sort: "prop" work
+	// TODO this needs to be applied to init options as well, to make sort: "prop" work
 	_setOption: function( key, value ) {
 		// reset offset to 0 when changing limit
 		// TODO actually only necessary when offset > offset + new limit
@@ -67,7 +66,7 @@ $.widget( "ui.datasource", {
 
 	refresh: function( callback ) {
 		if ( callback ) {
-			this.element.one( "datasourceresponse", callback );
+			this.element.one( "dataviewresponse", callback );
 		}
 		this._trigger( "request" );
 
