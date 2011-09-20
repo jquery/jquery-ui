@@ -80,9 +80,8 @@ $.widget( "ui.datasource", {
 		});
 		var that = this;
 		this.options.source( request, function( data, totalCount ) {
-			$.observable( that.data ).replaceAll( data );
 			that.totalCount = parseInt(totalCount, 10);
-			// old school
+			$.observable( that.data ).replaceAll( data );
 			that._trigger( "response" );
 		});
         return this;
