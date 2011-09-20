@@ -1,5 +1,13 @@
+/*
+ * Datasource
+ *
+ * Depends on:
+ * widget
+ * observable
+ */
 (function( $ ) {
 
+// TODO rename to dataview
 $.widget( "ui.datasource", {
 	defaultElement: null,
 	options: {
@@ -72,10 +80,8 @@ $.widget( "ui.datasource", {
 		});
 		var that = this;
 		this.options.source( request, function( data, totalCount ) {
-			Array.prototype.splice.apply( that.data, [ 0, that.data.length ].concat( data ) );
+			$.observable( that.data ).replaceAll( data );
 			that.totalCount = parseInt(totalCount, 10);
-			// $.observable
-			$([ that.data ]).triggerHandler( "refresh" );
 			// old school
 			that._trigger( "response" );
 		});

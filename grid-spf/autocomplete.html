@@ -12,6 +12,7 @@
 	<script src="../ui/jquery.ui.position.js"></script>
 	<script src="../ui/jquery.ui.menu.js"></script>
 	<script src="../ui/jquery.ui.autocomplete.js"></script>
+	<script src="../grid-editing/observable.js"></script>
 	<script src="datasource.js"></script>
 	<script src="grid.js"></script>
 
@@ -38,10 +39,6 @@
 						response( result, data.totalResultsCount );
 					}
 				});
-			},
-			// could also include $.observable to get the same effect
-			response: function() {
-				grid.grid('refresh');
 			}
 		});
 

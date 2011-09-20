@@ -150,8 +150,13 @@
 			return this._trigger( "remove", { index: index, items: items } );
 		},
 
-		refresh: function( newItems ) {
-			return this._trigger( "refresh" );
+		replaceAll: function( newItems ) {
+			var event = {
+				oldItems: this.data.slice(0),
+				newItems: newItems
+			};
+			Array.prototype.splice.apply( this.data, [ 0, this.data.length ].concat( newItems ) );
+			return this._trigger( "replaceAll", event );
 		}
 	};
 

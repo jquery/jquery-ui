@@ -2,8 +2,9 @@
  * Grid
  *
  * Depends on:
+ * widget
  * tmpl
- * datastore
+ * observable (optional)
  */
 (function( $ ) {
 
@@ -25,7 +26,7 @@ $.widget( "ui.grid", {
 			});
 		});
 		if ( $.observable ) {
-			$.observable( this.options.source ).bind( "insert remove refresh change", function( event, ui ) {
+			$.observable( this.options.source ).bind( "insert remove replaceAll change", function( event, ui ) {
 				if ( event.type === "change" ) {
 					that.refreshItem( ui.item );
 					return;
