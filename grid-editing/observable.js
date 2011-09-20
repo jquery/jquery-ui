@@ -50,7 +50,7 @@
 					}
 				}
 				if ( changed ) {
-					this._propertyTrigger( "change", {
+					this._trigger( "change", {
 						oldValues: oldValues,
 						newValues: newValues
 					});
@@ -66,7 +66,7 @@
 					oldValues[ path ] = oldValue;
 					var newValues = {};
 					newValues[ path ] = value;
-					this._propertyTrigger( "change", {
+					this._trigger( "change", {
 						oldValues: oldValues,
 						newValues: newValues
 					});
@@ -74,15 +74,6 @@
 
 			}
 			return this;
-		},
-
-		_propertyTrigger: function( type, data ) {
-			this._trigger( type, data );
-			if ( this.parent ) {
-				$([ this.parent ]).triggerHandler( type, $.extend({
-					item: this.data
-				}, data) );
-			}
 		},
 
 		insert: function( index, items) {
