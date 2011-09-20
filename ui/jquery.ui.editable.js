@@ -34,7 +34,7 @@ $.widget( "ui.editable", {
 	widgetEventPrefix: "edit",
 
 	options: {
-		value: "",
+		value: null,
 		editor: "text",
 		buttons: "outside",
 		save: {
@@ -63,7 +63,7 @@ $.widget( "ui.editable", {
 	},
 
 	_create: function() {
-		if ( !this.value( $.trim( this.element.text() ) || this.options.value ) ) {
+		if ( this.value( this.options.value ) || !this.value( $.trim( this.element.text() ) ) ) {
 			this._show();
 		}
 		this._bind( this._events );
