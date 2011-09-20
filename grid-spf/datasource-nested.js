@@ -41,7 +41,7 @@ $.widget( "ui.nestedDatasource", $.ui.datasource, {
 
 			options.remote.refresh(function() {
 				var total = cache[ tags ].total = options.remote.totalCount;
-				var data = options.remote.toArray();
+				var data = options.remote.result;
 				for ( i = 0, length = data.length; i < length; i++ ) {
 					cache[ tags ][ start + i ] = data[ i ];
 				}

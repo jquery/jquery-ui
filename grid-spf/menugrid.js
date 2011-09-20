@@ -83,6 +83,6 @@ $.widget("spf.menugrid", $.ui.grid, {
 		}
 	},
 	_toArray: function() {
-		return this.options.source.toArray();
+		return this.options.source.result;
 	}
 });

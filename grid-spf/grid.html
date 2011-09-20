@@ -87,7 +87,7 @@
 
 		$( "#developers-local" ).grid({
 			columns: [ "firstName", "lastName", "country" ],
-			source: developers.toArray(),
+			source: developers.result,
 			select: function( event, ui ) {
 				console.log( "Selected " + ui.item.firstName );
 			}
@@ -106,7 +106,7 @@
 			resource: "http://odata.netflix.com/Catalog/Titles"
 		});
 		$( "#movies" ).grid({
-			source: movies.toArray()
+			source: movies.result
 		});
 
 		$( "#filterMovies" ).filterControl( movies );

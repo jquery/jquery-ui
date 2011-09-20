@@ -46,14 +46,14 @@
 			minLength: 3,
 			source: function( request, response ) {
 				cities.option( "filter", request ).refresh( function() {
-					response( cities.toArray() );
+					response( cities.result );
 				});
 			}
 		});
 
 		// secondary view
 		var grid = $( "table" ).grid({
-			source: cities.toArray(),
+			source: cities.result,
 			columns: [ "name", "adminName1", "adminCode1", "fclName", "adminName2", "population", "countryName" ]
 		});
 	});

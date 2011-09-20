@@ -14,7 +14,7 @@ $.widget( "spf.slideshow", {
 	},
 
 	refresh: function() {
-		this.element.html( $.map( this.options.source.toArray(), function( photo ) {
+		this.element.html( $.map( this.options.source.result, function( photo ) {
 			return kite( "#photo-tmpl", photo );
 		}).join( "" ) );
 	}
