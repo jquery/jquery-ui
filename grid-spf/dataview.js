@@ -1,5 +1,5 @@
 /*
- * Datasource
+ * Dataview
  *
  * Depends on:
  * widget

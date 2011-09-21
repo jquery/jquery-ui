@@ -1,3 +1,9 @@
+/*
+ * oData Dataview
+ *
+ * Depends on:
+ * dataview
+ */
 (function ($, undefined ) {
 
 $.widget( "ui.odataDataview", $.ui.dataview, {
@@ -14,14 +20,14 @@ $.widget( "ui.odataDataview", $.ui.dataview, {
 				"$inlinecount": "allpages",
 				"$skip": request.paging.offset,
 				"$top": request.paging.limit
-			}
+			};
 			if (request.sort.length) {
 				var sorts = [];
 				$.each(request.sort, function (index, field) {
 					sorts[sorts.length] = field.replace(/-(.+)/, "$1 desc");
 				});
 				data["$orderby"] = sorts.join(",");
-				
+
 			}
 			if (request.filter) {
 				var filters = [];
@@ -37,10 +43,10 @@ $.widget( "ui.odataDataview", $.ui.dataview, {
 							"==": "eq",
 							"!=": "ne"
 						};
-						filters[filters.length] = property + " " + operators[filter.operator] + " " + 
+						filters[filters.length] = property + " " + operators[filter.operator] + " " +
 							(typeof filter.value === "string" ? ("'" + filter.value + "'") : filter.value);
 					}
-					
+
 				});
 				data["$filter"] = filters.join(" and ");
 			}

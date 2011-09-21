@@ -1,3 +1,9 @@
+/*
+ * Local Dataview
+ *
+ * Depends on:
+ * dataview
+ */
 (function ($, undefined ) {
 
 // custom dataview for local paging/sorting/filter, accepts a input option
@@ -11,12 +17,7 @@ $.widget( "ui.localDataview", $.ui.dataview, {
 			response( that._page( sortedItems ), sortedItems.length );
 		};
 		if ( $.observable ) {
-			$.observable( this.options.input ).bind( "insert remove refresh change", function(event, ui) {
-				// forward change event, otherwise do full refresh
-				if ( event.type === "change" ) {
-					$.observable( that.data )._trigger( "change", ui );
-					return;
-				}
+			$.observable( this.options.input ).bind( "insert remove", function(event, ui) {
 				that.refresh();
 			});
 		}
@@ -35,9 +36,7 @@ $.widget( "ui.localDataview", $.ui.dataview, {
 				return match;
 	        });
 		}
-		// copy input array to avoid sorting original
-		// TODO need this only when actually sorting, not for paging, which slices anyway
-		return $.makeArray( items );
+		return items;
 	},
 	_match: function( value, filter ) {
 		var operator = filter.operator || "==",
@@ -54,7 +53,6 @@ $.widget( "ui.localDataview", $.ui.dataview, {
         }
 	},
 	_sort: function( items ) {
-		// TODO some bug(s) in here, see grid.html and sort on all three columns, then remove the first one
 		function sorter( property, secondary ) {
 			var order = property.charAt( 0 ) == "-" ? -1 : 1;
 			return function ( item1, item2 ) {
@@ -71,6 +69,10 @@ $.widget( "ui.localDataview", $.ui.dataview, {
             };
 		}
 		if ( this.options.sort.length ) {
+			// if unfiltered, make a copy to not sort the input
+			if ( items === this.options.input ) {
+				items = items.slice( 0 );
+			}
 			var sorts = this.options.sort;
 			var first = sorts[ 0 ];
         	return items.sort( sorter( first, sorts.slice( 1 ) ) );
