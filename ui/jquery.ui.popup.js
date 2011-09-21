@@ -22,7 +22,9 @@ $.widget( "ui.popup", {
 		position: {
 			my: "left top",
 			at: "left bottom"
-		}
+		},
+		show: "slideDown",
+		hide: "fadeOut"
 	},
 	_create: function() {
 		if ( !this.options.trigger ) {
@@ -45,8 +47,9 @@ $.widget( "ui.popup", {
 			.attr( "aria-owns", this.element.attr( "id" ) );
 
 		this.element
-			.addClass( "ui-popup" );
-		this.close();
+			.addClass( "ui-popup" )
+		this._beforeClose();
+		this.element.hide();
 
 		this._bind(this.options.trigger, {
 			keydown: function( event ) {
@@ -159,8 +162,8 @@ $.widget( "ui.popup", {
 			of: this.options.trigger
 		}, this.options.position );
 
+		this._show( this.element, this.options.show );
 		this.element
-			.show()
 			.attr( "aria-hidden", "false" )
 			.attr( "aria-expanded", "true" )
 			.position( position );
@@ -190,10 +193,8 @@ $.widget( "ui.popup", {
 	},
 
 	close: function( event ) {
-		this.element
-			.hide()
-			.attr( "aria-hidden", "true" )
-			.attr( "aria-expanded", "false" );
+		this._beforeClose();
+		this._hide( this.element, this.options.hide );
 
 		this.options.trigger.attr( "tabindex" , 0 );
 		if ( this.removeTabIndex ) {
@@ -201,6 +202,12 @@ $.widget( "ui.popup", {
 		}
 		this.isOpen = false;
 		this._trigger( "close", event );
+	},
+	
+	_beforeClose: function() {
+		this.element
+			.attr( "aria-hidden", "true" )
+			.attr( "aria-expanded", "false" );
 	}
 });
 
