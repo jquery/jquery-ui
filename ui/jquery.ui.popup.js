@@ -88,8 +88,8 @@ $.widget( "ui.popup", {
 			}
 		});
 
-		if ( !this.element.is( ":ui-menu" ) ) {
-			//default use case, wrap tab order in popup
+		if ( !$.ui.menu || !this.element.is( ":ui-menu" ) ) {
+			// default use case, wrap tab order in popup
 			this._bind({ keydown : function( event ) {
 					if ( event.keyCode !== $.ui.keyCode.TAB ) {
 						return;
@@ -174,7 +174,8 @@ $.widget( "ui.popup", {
 			.attr( "aria-expanded", "true" )
 			.position( position );
 
-		if (this.element.is( ":ui-menu" )) { //popup is a menu
+		// can't use custom selector when menu isn't loaded
+		if ( $.ui.menu && this.element.is( ":ui-menu" ) ) {
 			this.element.menu( "focus", event, this.element.children( "li" ).first() );
 			this.element.focus();
 		} else {
