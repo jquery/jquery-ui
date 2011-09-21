@@ -12,6 +12,7 @@
  *	jquery.ui.widget.js
  *	jquery.ui.position.js
  *	jquery.ui.menu.js
+ *	jquery.ui.button.js
  */
 (function( $, undefined ) {
 
