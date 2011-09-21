@@ -67,6 +67,7 @@ $.widget("ui.dialog", {
 		resizable: true,
 		show: null,
 		stack: true,
+		toolbox: true,
 		title: "",
 		width: 300,
 		zIndex: 1000
@@ -122,19 +123,19 @@ $.widget("ui.dialog", {
 					"ui-corner-all  ui-helper-clearfix" )
 				.prependTo( uiDialog ),
 
-			uiDialogTitlebarClose = $( "<a href='#'></a>" )
+			uiDialogTitlebarClose = (this.toolbox) ? ($('<a href="#"></a>')
 				.addClass( "ui-dialog-titlebar-close  ui-corner-all" )
 				.attr( "role", "button" )
 				.click(function( event ) {
 					event.preventDefault();
 					self.close( event );
 				})
-				.appendTo( uiDialogTitlebar ),
+				.appendTo( uiDialogTitlebar )) : '',,
 
-			uiDialogTitlebarCloseText = ( self.uiDialogTitlebarCloseText = $( "<span>" ) )
+			uiDialogTitlebarCloseText = (this.toolbox) ? ((self.uiDialogTitlebarCloseText = $('<span></span>'))
 				.addClass( "ui-icon ui-icon-closethick" )
 				.text( options.closeText )
-				.appendTo( uiDialogTitlebarClose ),
+				.appendTo( uiDialogTitlebarClose )) : '',
 
 			uiDialogTitle = $( "<span>" )
 				.addClass( "ui-dialog-title" )
