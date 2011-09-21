@@ -146,7 +146,7 @@
 				oldItems: this.data.slice(0),
 				newItems: newItems
 			};
-			Array.prototype.splice.apply( this.data, [ 0, this.data.length ].concat( newItems ) );
+			splice.apply( this.data, [ 0, this.data.length ].concat( newItems ) );
 			return this._trigger( "replaceAll", event );
 		}
 	};
