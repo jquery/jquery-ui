@@ -1,0 +1,17 @@
+.menugrid thead td { text-align: center; }
+.menugrid thead th {
+	cursor: default;
+}
+.menugrid thead th .ui-icon {
+	display: none;
+	height: 12px;
+}
+.menugrid thead th.sorted .ui-icon-asc {
+	display: inline-block;
+}
+.menugrid thead th.sorted-desc .ui-icon-desc {
+	display: inline-block;
+}
+.menugrid tfoot td {
+	text-align: center;
+}

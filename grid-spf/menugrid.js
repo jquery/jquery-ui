@@ -3,6 +3,7 @@
 $.widget("spf.menugrid", $.ui.grid, {
 	_create: function() {
 		this._superApply("_create", arguments);
+		this.element.addClass("menugrid");
 		var options = this.options;
 		var source = this.options.source;
 		var that = this;
