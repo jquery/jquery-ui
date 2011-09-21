@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Grid: Sorting, Paging, Filtering</title>
+	<link rel="stylesheet" href="../themes/base/jquery.ui.all.css">
+	<link rel="stylesheet" href="grid.css">
+	<script src="../jquery-1.6.2.js"></script>
+	<script src="../external/jquery.tmpl.js"></script>
+	<script src="../ui/jquery.ui.core.js"></script>
+	<script src="../ui/jquery.ui.widget.js"></script>
+	<script src="../ui/jquery.ui.button.js"></script>
+	<script src="../ui/jquery.ui.menu.js"></script>
+	<script src="../ui/jquery.ui.position.js"></script>
+	<script src="../ui/jquery.ui.popup.js"></script>
+	<script src="../grid-editing/observable.js"></script>
+	<script src="dataview.js"></script>
+	<script src="dataview-local.js"></script>
+	<script src="grid.js"></script>
+	<script src="pager.js"></script>
+	<script src="menugrid.js"></script>
+	<script>
+	$(function() {
+		var fields = [ "year", "us_revenue", "eu_revenue", "jp_revenue", "peak_traffic" ];
+		// TODO localDataview needs to take property types into account to do proper sorting
+		// currently it just does string sorting
+		// see grid-type/type.html
+		var yearlyResults = $.ui.localDataview({
+			input: $( "table > tbody > tr" ).map(function() {
+				var item = {};
+				$( this ).children().each(function( i ) {
+					item[ fields[ i ] ] = $( this ).text();
+				});
+				return item;
+			}).get()
+		});
+
+		$( "#yearlyResults" ).menugrid({
+			source: yearlyResults
+		});
+
+		yearlyResults.refresh();
+	});
+	</script>
+	<style>
+	thead td { text-align: center; }
+	thead th {
+		cursor: default;
+	}
+	thead th .ui-icon {
+		display: none;
+		height: 12px;
+	}
+	thead th.sorted .ui-icon-asc {
+		display: inline-block;
+	}
+	thead th.sorted-desc .ui-icon-desc {
+		display: inline-block;
+	}
+	tfoot td {
+		text-align: center;
+	}
+	#yearlyResults {
+		width: 800px;
+	}
+	</style>
+</head>
+<body>
+
+	<table id="yearlyResults">
+		<thead>
+			<tr>
+				<th data-sort-order="-1">Year</th>
+				<th data-type="currency">US Revenue</th>
+				<th data-type="currency" data-culture="de-DE">EU Revenue</th>
+				<th data-type="currency" data-culture="ja-JP">JP Revenue</th>
+				<th data-sort-order="-1" data-type="date" data-format="d">Peak Traffic</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>2005</td>
+				<td>$0.00</td>
+				<td>0,00 €</td>
+				<td>¥0</td>
+				<td>12/1/2005</td>
+			</tr>
+			<tr>
+				<td>2006</td>
+				<td>$0.50</td>
+				<td>10.000,00 €</td>
+				<td>¥1,500</td>
+				<td>5/16/2006</td>
+			</tr>
+			<tr>
+				<td>2007</td>
+				<td>$10,000.00</td>
+				<td>0,50 €</td>
+				<td>-¥115</td>
+				<td>6/3/2007</td>
+			</tr>
+			<tr>
+				<td>2008</td>
+				<td>$-10,000.00</td>
+				<td>0,06 €</td>
+				<td>¥10,000</td>
+				<td>12/1/2008</td>
+			</tr>
+			<tr>
+				<td>2009</td>
+				<td>$-10.00</td>
+				<td>-10,00 €</td>
+				<td>-¥150</td>
+				<td>12/30/2009</td>
+			</tr>
+			<tr>
+				<td>2010</td>
+				<td>$0.06</td>
+				<td>-10.000,00 €</td>
+				<td>¥15</td>
+				<td>2/28/2010</td>
+			</tr>
+		</tbody>
+	</table>
+
+</body>
+</html>
