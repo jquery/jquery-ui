@@ -22,6 +22,14 @@ $.widget( "ui.popup", {
 		position: {
 			my: "left top",
 			at: "left bottom"
+		},
+		show: {
+			effect: "slideDown",
+			duration: "fast"
+		},
+		hide: {
+			effect: "fadeOut",
+			duration: "fast"
 		}
 	},
 	_create: function() {
@@ -46,7 +54,8 @@ $.widget( "ui.popup", {
 
 		this.element
 			.addClass( "ui-popup" );
-		this.close();
+		this._beforeClose();
+		this.element.hide();
 
 		this._bind(this.options.trigger, {
 			keydown: function( event ) {
@@ -79,8 +88,8 @@ $.widget( "ui.popup", {
 			}
 		});
 
-		if ( !this.element.is( ":ui-menu" ) ) {
-			//default use case, wrap tab order in popup
+		if ( !$.ui.menu || !this.element.is( ":ui-menu" ) ) {
+			// default use case, wrap tab order in popup
 			this._bind({ keydown : function( event ) {
 					if ( event.keyCode !== $.ui.keyCode.TAB ) {
 						return;
@@ -131,7 +140,7 @@ $.widget( "ui.popup", {
 					this.close( event );
 				}
 			}
-		})
+		});
 	},
 
 	_destroy: function() {
@@ -159,13 +168,14 @@ $.widget( "ui.popup", {
 			of: this.options.trigger
 		}, this.options.position );
 
+		this._show( this.element, this.options.show );
 		this.element
-			.show()
 			.attr( "aria-hidden", "false" )
 			.attr( "aria-expanded", "true" )
 			.position( position );
 
-		if (this.element.is( ":ui-menu" )) { //popup is a menu
+		// can't use custom selector when menu isn't loaded
+		if ( $.ui.menu && this.element.is( ":ui-menu" ) ) {
 			this.element.menu( "focus", event, this.element.children( "li" ).first() );
 			this.element.focus();
 		} else {
@@ -190,10 +200,8 @@ $.widget( "ui.popup", {
 	},
 
 	close: function( event ) {
-		this.element
-			.hide()
-			.attr( "aria-hidden", "true" )
-			.attr( "aria-expanded", "false" );
+		this._beforeClose();
+		this._hide( this.element, this.options.hide );
 
 		this.options.trigger.attr( "tabindex" , 0 );
 		if ( this.removeTabIndex ) {
@@ -201,6 +209,12 @@ $.widget( "ui.popup", {
 		}
 		this.isOpen = false;
 		this._trigger( "close", event );
+	},
+
+	_beforeClose: function() {
+		this.element
+			.attr( "aria-hidden", "true" )
+			.attr( "aria-expanded", "false" );
 	}
 });
 

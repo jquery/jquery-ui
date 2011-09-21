@@ -376,7 +376,7 @@ $.ui.position = {
 				newOverBottom;
 			if ( overTop < 0 ) {
 				newOverBottom = position.top + myOffset + atOffset + offset + data.collisionHeight - outerHeight - withinOffset;
-				if ( newOverBottom < 0 || newOverBottom < Math.abs( overTop ) ) {
+				if ( ( position.top + myOffset + atOffset + offset) > overTop && ( newOverBottom < 0 || newOverBottom < Math.abs( overTop ) ) ) {
 					data.elem
 						.addClass( "ui-flipped-bottom" );
 
@@ -385,7 +385,7 @@ $.ui.position = {
 			}
 			else if ( overBottom > 0 ) {
 				newOverTop = position.top -  data.collisionPosition.marginTop + myOffset + atOffset + offset - withinOffset;
-				if ( newOverTop > 0 || Math.abs( newOverTop ) < overBottom ) {
+				if ( ( position.top + myOffset + atOffset + offset) > overBottom && ( newOverTop > 0 || Math.abs( newOverTop ) < overBottom ) ) {
 					data.elem
 						.addClass( "ui-flipped-top" );
 
