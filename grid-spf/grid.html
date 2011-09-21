@@ -78,7 +78,7 @@
 	};
 
 	$(function() {
-		var developers = $.ui.localDatasource({
+		var developers = $.ui.localDataview({
 			input: localDevelopers,
 			paging: {
 				limit: 3
@@ -102,7 +102,7 @@
 		developers.refresh();
 
 		// A similar example...but with server integration and remote queries.
-		var movies = $.ui.odataDatasource({
+		var movies = $.ui.odataDataview({
 			resource: "http://odata.netflix.com/Catalog/Titles"
 		});
 		$( "#movies" ).grid({

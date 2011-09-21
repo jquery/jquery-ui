@@ -21,7 +21,7 @@
 	<script src="menugrid.js"></script>
 	<script>
 	$(function() {
-		var products = $.ui.odataDatasource({
+		var products = $.ui.odataDataview({
 			resource: "http://services.odata.org/Northwind/Northwind.svc/Products_by_Categories"
 		});
 		$( "#products" ).menugrid({

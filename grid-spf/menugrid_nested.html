@@ -23,11 +23,11 @@
 	<script>
 	$(function() {
 		// TODO this doesn't really work
-		var movies = $.ui.nestedDatasource({
+		var movies = $.ui.nestedDataview({
 			paging: {
 				limit: 10
 			},
-			remote: $.ui.odataDatasource({
+			remote: $.ui.odataDataview({
 				resource: "http://odata.netflix.com/Catalog/Titles"
 			})
 		});

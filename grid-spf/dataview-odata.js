@@ -1,6 +1,6 @@
 (function ($, undefined ) {
 
-$.widget( "ui.odataDatasource", $.ui.dataview, {
+$.widget( "ui.odataDataview", $.ui.dataview, {
 	// all dataview implementations share a common event prefix
 	widgetEventPrefix: "dataview",
 	options: {

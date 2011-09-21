@@ -2,7 +2,7 @@
 
 // TODO cache should be per-instance?
 var cache = {};
-$.widget( "ui.nestedDatasource", $.ui.dataview, {
+$.widget( "ui.nestedDataview", $.ui.dataview, {
 	widgetEventPrefix: "dataview",
 	options: {
 		remote: null

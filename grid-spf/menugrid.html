@@ -21,7 +21,7 @@
 	<script src="menugrid.js"></script>
 	<script>
 	$(function() {
-		var movies = $.ui.odataDatasource({
+		var movies = $.ui.odataDataview({
 			resource: "http://odata.netflix.com/Catalog/Titles",
 			request: function() {
 				if (this.options.filter) {
