@@ -23,8 +23,14 @@ $.widget( "ui.popup", {
 			my: "left top",
 			at: "left bottom"
 		},
-		show: "slideDown",
-		hide: "fadeOut"
+		show: {
+			effect: "slideDown",
+			duration: "fast"
+		},
+		hide: {
+			effect: "fadeOut",
+			duration: "fast"
+		}
 	},
 	_create: function() {
 		if ( !this.options.trigger ) {
@@ -47,7 +53,7 @@ $.widget( "ui.popup", {
 			.attr( "aria-owns", this.element.attr( "id" ) );
 
 		this.element
-			.addClass( "ui-popup" )
+			.addClass( "ui-popup" );
 		this._beforeClose();
 		this.element.hide();
 
@@ -134,7 +140,7 @@ $.widget( "ui.popup", {
 					this.close( event );
 				}
 			}
-		})
+		});
 	},
 
 	_destroy: function() {
@@ -203,7 +209,7 @@ $.widget( "ui.popup", {
 		this.isOpen = false;
 		this._trigger( "close", event );
 	},
-	
+
 	_beforeClose: function() {
 		this.element
 			.attr( "aria-hidden", "true" )
