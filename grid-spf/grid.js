@@ -11,7 +11,7 @@
 
 $.widget( "ui.grid", {
 	options: {
-		dataFields: [ "type", "editor", "editorOptions", "template" ],
+		dataFields: [ "type", "editor", "editorOptions", "template", "culture", "format" ],
 		columns: null,
 		rowTemplate: null
 	},

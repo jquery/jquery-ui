@@ -53,38 +53,44 @@ $.widget( "ui.localDataview", $.ui.dataview, {
         }
 	},
 	_sort: function( items ) {
-		/*
-		function extract( row ) {
-			var text = $( $( row ).children()[ index ] ).text();
-			if ( type === "currency" ) {
-				return Globalize.parseFloat( text, culture );
-			} else if ( type === "date" ) {
-				return Globalize.parseDate( text, format, culture );
+		// TODO get grid to pass something more useful? do this once on _create/_setOption?
+		// also need better handling for unspecified properties
+		var properties = {};
+		if ( this.options.properties ) {
+			$.each( this.options.properties, function( index, property ) {
+				properties[ property.property ] = property;
+			});
+		}
+		function extract( text, property ) {
+			if ( !property ) {
+				return text;
+			}
+			if ( property.type === "currency" ) {
+				return Globalize.parseFloat( text, property.culture );
+			} else if ( property.type === "date" ) {
+				return Globalize.parseDate( text, property.format, property.culture );
 			} else {
 				return text;
 			}
 		}
 
-		var head = $( this ),
-			culture = head.data( "culture" ),
-			format = head.data( "format" ),
-			type = head.data( "type" ),
-			order = head.data( "sort-order" ) || 1,
-			index = this.cellIndex;
-		*/
 		function sorter( property, secondary ) {
-			var order = property.charAt( 0 ) == "-" ? -1 : 1;
+			var order = 1;
+			if (property.charAt( 0 ) === "-") {
+				order = -1;
+				property = property.slice( 1 );
+			}
 			return function ( item1, item2 ) {
                 var value1 = item1[ property ],
                     value2 = item2[ property ];
-                if ( value1 == value2 ) {
+                if ( value1 === value2 ) {
 					if ( secondary.length ) {
 						var next = secondary[ 0 ];
 						return sorter( next, secondary.slice( 1 ) )( item1, item2 );
 					}
 					return 0;
 				}
-				return order * ( value1 > value2 ? 1 : -1 );
+				return order * ( extract( value1, properties[ property ] ) > extract( value2, properties[ property ] ) ? 1 : -1 );
             };
 		}
 		if ( this.options.sort.length ) {
