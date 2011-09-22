@@ -23,6 +23,7 @@ $.widget( "ui.selectmenu", {
 	version: "@VERSION",
 	defaultElement: "<select>",
 	options: {
+		dropdown: true,
 		wrapperElement: "<div />",
 		appendTo: "body",
 		position: {
@@ -65,18 +66,21 @@ $.widget( "ui.selectmenu", {
 		// create button
 		self.newelement = $( '<a />', {
 				href: '#' + selectmenuId,
-				tabindex: (tabindex ? tabindex : self.element.attr( 'disabled' ) ? 1 : 0),
+				tabindex: ( tabindex ? tabindex : self.element.attr( 'disabled' ) ? 1 : 0 ),
 				'aria-haspopup': true,
 				'aria-owns': self.ids[ 1 ],
 				css: {
 					width: self.element.width()
 				}				
-			}).button({
+			})
+			.addClass( self.widgetBaseClass + '-button' )
+			.button({
 				label: self.items.eq( self.element[0].selectedIndex ).text(),
 				icons: {
-					primary: "ui-icon-triangle-2-n-s"
+					primary: ( options.dropdown ? 'ui-icon-triangle-1-s' : 'ui-icon-triangle-2-n-s' )
 				}
 			});
+						
 		self.newelementWrap = $( options.wrapperElement )
 			.append( self.newelement )
 			.insertAfter( self.element );	
@@ -130,8 +134,7 @@ $.widget( "ui.selectmenu", {
 				}
 				return ret;
 			});
-			
-			
+					
 		// create menu portion, append to body		
 		self.list = $( '<ul />', {
 			'class': 'ui-widget ui-widget-content',
@@ -167,6 +170,12 @@ $.widget( "ui.selectmenu", {
 			}		
 		});
 
+		if ( options.dropdown ) {
+			self.list
+				.addClass( 'ui-corner-bottom' )
+				.removeClass( 'ui-corner-all' );
+		}
+		
 		// document click closes menu
 		$( document ).bind( 'mousedown.selectmenu', function( event ) {
 			if ( self.options.open ) {	
@@ -190,6 +199,14 @@ $.widget( "ui.selectmenu", {
 		var self = this,
 			options = this.options;
 			
+		
+		if ( options.dropdown ) {
+			self.newelement
+				.addClass( 'ui-corner-top' )
+				.removeClass( 'ui-corner-all' );
+		}
+		
+			
 		self.listWrap.addClass( self.widgetBaseClass + '-open' );
 		this.options.open = true;
 	
@@ -203,6 +220,12 @@ $.widget( "ui.selectmenu", {
 		var self = this,
 			options = this.options;
 	
+		if ( options.dropdown ) {
+			self.newelement
+				.addClass( 'ui-corner-all' )
+				.removeClass( 'ui-corner-top' );
+		}
+		
 		self.listWrap.removeClass( self.widgetBaseClass + '-open' );
 		this.options.open = false;
 		

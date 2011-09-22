@@ -10,7 +10,8 @@
  
 .ui-selectmenu-menu { padding: 0; margin: 0; position:absolute; top: 0; display: none; }
 .ui-selectmenu-menu .ui-menu { padding: 0; }
+.ui-selectmenu-menu li.ui-selectmenu-optgroup { font-weight: bold; line-height: 1.5; padding: 2px 0.4em; margin: 0.5em 0 0 0; }
 .ui-selectmenu-open { display: block; }
 
-.ui-button span.ui-icon { right: 0.5em; left: auto; }
-.ui-button span.ui-button-text { text-align: left; padding: 0.4em 2.1em 0.4em 1em }
+.ui-selectmenu-button span.ui-icon { right: 0.5em; left: auto; }
+.ui-selectmenu-button span.ui-button-text { text-align: left; padding: 0.4em 2.1em 0.4em 1em }
