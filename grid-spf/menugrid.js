@@ -42,14 +42,6 @@ $.widget("spf.menugrid", $.ui.grid, {
 			if ( /^[<>]=?/.test( value ) ) {
 				operator = value.replace( /^([<>]=?).+/, "$1" );
 				value = value.substring( operator.length );
-				value = value == null || isNaN( value ) ? "" : value;
-			}
-			if ( column.type === "number" ) {
-				value = parseFloat( value );
-				operator = operator || "==";
-			}
-			if ( column.type === "string" ) {
-				operator = "like";
 			}
 			if ( value != null && value.length ) {
 				source.option( "filter." + column.property, {
