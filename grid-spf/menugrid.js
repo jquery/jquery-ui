@@ -13,7 +13,7 @@ $.widget("spf.menugrid", $.ui.grid, {
 		});
 		var headers = this.element.find( "th" );
 		this._hoverable( headers );
-		headers.click( function() {
+		headers.disableSelection().click( function() {
 			headers.not( this ).removeClass( "sorted sorted-desc" );
 			var column = options.columns[ this.cellIndex ];
 			var sorted = $(this).hasClass("sorted");
