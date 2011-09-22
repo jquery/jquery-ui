@@ -21,6 +21,15 @@ $.widget( "ui.localDataview", $.ui.dataview, {
 				that.refresh();
 			});
 		}
+		// TODO get grid to pass something more useful? do this once on _create/_setOption?
+		// also need better handling for unspecified properties
+		this.properties = {};
+		if ( this.options.properties ) {
+			var properties = this.properties;
+			$.each( this.options.properties, function( index, definition ) {
+				properties[ definition.property ] = definition;
+			});
+		}
 	},
 	_filter: function( items ) {
 		if ( this.options.filter ) {
@@ -52,28 +61,21 @@ $.widget( "ui.localDataview", $.ui.dataview, {
             default: throw "Unrecognized filter operator: " + operator + " for operand " + operand;
         }
 	},
+	_extract: function( text, propertyName ) {
+		var property = this.properties[ propertyName ];
+		if ( !property ) {
+			return text;
+		}
+		if ( property.type === "currency" ) {
+			return Globalize.parseFloat( text, property.culture );
+		} else if ( property.type === "date" ) {
+			return Globalize.parseDate( text, property.format, property.culture );
+		} else {
+			return text;
+		}
+	},
 	_sort: function( items ) {
-		// TODO get grid to pass something more useful? do this once on _create/_setOption?
-		// also need better handling for unspecified properties
-		var properties = {};
-		if ( this.options.properties ) {
-			$.each( this.options.properties, function( index, property ) {
-				properties[ property.property ] = property;
-			});
-		}
-		function extract( text, property ) {
-			if ( !property ) {
-				return text;
-			}
-			if ( property.type === "currency" ) {
-				return Globalize.parseFloat( text, property.culture );
-			} else if ( property.type === "date" ) {
-				return Globalize.parseDate( text, property.format, property.culture );
-			} else {
-				return text;
-			}
-		}
-
+		var that = this;
 		function sorter( property, secondary ) {
 			var order = 1;
 			if (property.charAt( 0 ) === "-") {
@@ -90,7 +92,7 @@ $.widget( "ui.localDataview", $.ui.dataview, {
 					}
 					return 0;
 				}
-				return order * ( extract( value1, properties[ property ] ) > extract( value2, properties[ property ] ) ? 1 : -1 );
+				return order * ( that._extract( value1, property ) > that._extract( value2, property ) ? 1 : -1 );
             };
 		}
 		if ( this.options.sort.length ) {
