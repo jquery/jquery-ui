@@ -19,7 +19,7 @@
 
 function sixty( value ) {
 	value = parseInt( value, 10 );
-	if ( value >= 0 || value <= 59 ) {
+	if ( value >= 0 && value <= 59 ) {
 		return ( value < 10 ? "0" : "" ) + value;
 	}
 }
@@ -27,13 +27,13 @@ function sixty( value ) {
 var maskDefinitions = {
 	hh: function( value ) {
 		value = parseInt( value, 10 );
-		if ( value >= 1 || value <= 12 ) {
+		if ( value >= 1 && value <= 12 ) {
 			return ( value < 10 ? "0" : "" ) + value;
 		}
 	},
 	HH: function( value ) {
 		value = parseInt( value, 10 );
-		if ( value >= 0 || value <= 23 ) {
+		if ( value >= 0 && value <= 23 ) {
 			return ( value < 10 ? "0" : "" ) + value;
 		}
 	},
