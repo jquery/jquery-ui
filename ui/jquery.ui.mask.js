@@ -353,6 +353,7 @@ $.widget( "ui.mask", {
 					if ( this._validValue( bufferObject, character ) ) {
 						valuePosition++;
 					}
+
 					// when parsing a literal from a raw .val() if it doesn't match,
 					// assume that the literal is missing from the val()
 					break;
@@ -365,6 +366,11 @@ $.widget( "ui.mask", {
 					valuePosition += bufferObject.length - 1;
 					break;
 				}
+			}
+
+			// allow "default values" to be passed back from the buffer functions
+			if ( !bufferObject.value && (character = this._validValue( bufferObject, "" )) ) {
+				bufferObject.value = character;
 			}
 		}
 		return lastFilledPosition;

@@ -153,7 +153,25 @@ test( "Parsing initial value with multi-character fields", function() {
 	equal( input.val(), "12:34:56", "Literals were inserted into val");
 	input.mask( "option", "mask", "99-99-99" );
 	equal( input.val(), "12-34-56", "Old literals were ignored, and new ones inserted into val");
+});
 
+test( "Default values provided by function", function() {
+	expect( 1 );
+	var defs = {
+			hh: function( value ) {
+				if ( value === "" ) {
+					return "11";
+				}
+			}
+		},
+		input = $( "#mask1" );
+
+	input.val("").mask({
+		mask: "hh",
+		definitions: defs
+	});
+	equal( input.val(), "11", "No value was accepted, so the 'default' from the mask was provided" );
+	
 });
 
 }( jQuery ) );
