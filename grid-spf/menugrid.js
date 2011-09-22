@@ -51,7 +51,7 @@ $.widget("spf.menugrid", $.ui.grid, {
 			if ( column.type === "string" ) {
 				operator = "like";
 			}
-			if ( value != null ) {
+			if ( value != null && value.length ) {
 				source.option( "filter." + column.property, {
 					operator: operator,
 					value: value
@@ -72,7 +72,7 @@ $.widget("spf.menugrid", $.ui.grid, {
 					if ( property == column.property ) {
 						var filter = filters[property];
 						var output = filter.value;
-						if ( !/like|==/.test(filter.operator) ) {
+						if ( filter.operator && !/like|==/.test(filter.operator) ) {
 							output = filter.operator + output;
 						}
 						$( this ).val( output );
