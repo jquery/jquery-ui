@@ -40,7 +40,7 @@ $.widget( "ui.localDataview", $.ui.dataview, {
 					match = true;
 	            for ( property in that.options.filter ) {
 					filter = that.options.filter[ property ];
-					match &= that._match( item[ property ], filter );
+					match &= that._match( that._extract( item[ property ], property ), filter );
 				}
 				return match;
 	        });
