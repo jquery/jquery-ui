@@ -16,9 +16,6 @@
  */
 (function( $, undefined ) {
 
-// used to prevent race conditions with remote data sources
-var requestIndex = 0;
-
 $.widget( "ui.selectmenu", {
 	version: "@VERSION",
 	defaultElement: "<select>",
@@ -143,8 +140,7 @@ $.widget( "ui.selectmenu", {
 			role: 'listbox',
 			id: self.ids[1],
 			css: {
-				// width: self.element.width() - options.iconWidth
-				width: self.element.width()
+				width: ( options.dropdown ) ? self.element.width() : self.element.width() - options.iconWidth
 			}
 		});
 		
@@ -155,20 +151,22 @@ $.widget( "ui.selectmenu", {
 		
 		self._renderMenu( self.list, self._initSource() );
 		
-		self.list.menu({
-			select: function( event, ui ) {
-				var item = ui.item.data( "item.selectmenu" );
-				console.log(item);
-				
-				self.newelement.children( 'span.ui-button-text' ).text( item.label );					
-				self.value( item.value );
-				self.close( event, true);
-			},
-			focus: function( event, ui ) {
-				var item = ui.item.data( "item.selectmenu" );
-				if ( !options.open ) self.newelement.children( 'span.ui-button-text' ).text( item.label );
-			}		
-		});
+		self.list
+			.data( 'element.selectelemenu', self.element )
+			.menu({
+				select: function( event, ui ) {
+					var item = ui.item.data( "item.selectmenu" );
+					// console.log(item);
+					
+					self.newelement.children( 'span.ui-button-text' ).text( item.label );					
+					self._value( item.value );
+					self.close( event, true);
+				},
+				focus: function( event, ui ) {
+					var item = ui.item.data( "item.selectmenu" );
+					if ( !options.open ) self.newelement.children( 'span.ui-button-text' ).text( item.label );
+				}		
+			});
 
 		if ( options.dropdown ) {
 			self.list
@@ -199,22 +197,36 @@ $.widget( "ui.selectmenu", {
 		var self = this,
 			options = this.options;
 			
-		
+		// close all other selectmenus		
+		$( '.' + self.widgetBaseClass + '-open' ).not( self.newelement ).each( function() {
+			$( this ).children( 'ul.ui-menu' ).data( 'element.selectelemenu' ).selectmenu( 'close' );
+		});
+					
 		if ( options.dropdown ) {
 			self.newelement
 				.addClass( 'ui-corner-top' )
 				.removeClass( 'ui-corner-all' );
-		}
-		
+		}		
 			
 		self.listWrap.addClass( self.widgetBaseClass + '-open' );
 		this.options.open = true;
 	
+		if ( !options.dropdown ) {
+			// var _offset = self.list.outerWidth()
+		
+			$.extend( options.position, {
+				my: "left center",
+				at: "left center",
+				collision: "fit"
+			});
+		}
+		
+		console.log(options.position);
+	
 		self.listWrap.position( $.extend({
 			of: this.newelementWrap
 		}, options.position ));
-	},
-	
+	},	
 	
 	close: function( event, focus ) {		
 		var self = this,
@@ -235,6 +247,7 @@ $.widget( "ui.selectmenu", {
 	_renderMenu: function( ul, items ) {
 		var self = this,
 			currentOptgroup = "";
+			
 		$.each( items, function( index, item ) {
 			if ( item.optgroup != currentOptgroup ) {
 				ul.append( "<li class='ui-selectmenu-optgroup'>" + item.optgroup + "</li>" );
@@ -279,18 +292,7 @@ $.widget( "ui.selectmenu", {
 	},
 	
 	_initSource: function() {
-		var data = [];
-		// data = [
-			// { label: "anders", optgroup: "" },
-			// { label: "andreas", optgroup: "" },
-			// { label: "antal", optgroup: "" },
-			// { label: "annhhx10", optgroup: "Products" },
-			// { label: "annk K12", optgroup: "Products" },
-			// { label: "annttop C13", optgroup: "Products" },
-			// { label: "anders andersson", optgroup: "People" },
-			// { label: "andreas andersson", optgroup: "People" },
-			// { label: "andreas johnson", optgroup: "People" }
-		// ];
+		var data = [];		
 		
 		$.each( this.items, function( index, item ) {
 			var option = $( item );
@@ -299,26 +301,27 @@ $.widget( "ui.selectmenu", {
 				label: option.text(),
 				optgroup: option.parent("optgroup").attr("label") || false
 			});
-		});
+		});		
+		
 		// console.log(data);
 		return data;
 	},
-
-	value: function( newValue ) {
+	
+	_value: function( newValue ) {
 		if (arguments.length) {
 			this.element[0].value = newValue;
 		} else {
 			return this.element[0].value;
 		}
-	}
+	},
 	
-	// index: function( newValue ) {
-		// if ( arguments.length ) {
-				// this.element[0].selectedIndex = newValue;
-		// } else {
-			// return this.element[0].selectedIndex;
-		// }
-	// }
+	_index: function( newIndex ) {
+		if ( arguments.length ) {
+				this.element[0].selectedIndex = newIndex;
+		} else {
+			return this.element[0].selectedIndex;
+		}
+	}
 });
 
 }( jQuery ));

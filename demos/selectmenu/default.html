@@ -14,7 +14,10 @@
 	<link rel="stylesheet" href="../demos.css">
 	<script>
 	$(function() {
-		$('select').selectmenu();
+		$('select#speedA').selectmenu({
+			dropdown: false
+		});
+		$('select#filesC').selectmenu();
 	});
 	</script>
 	<style>
