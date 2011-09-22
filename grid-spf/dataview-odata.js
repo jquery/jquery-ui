@@ -32,6 +32,9 @@ $.widget( "ui.odataDataview", $.ui.dataview, {
 			if (request.filter) {
 				var filters = [];
 				$.each(request.filter, function (property, filter) {
+					if (!filter.operator) {
+						filter.operator = isNaN(filter.value) ? "like" : "==";
+					}
 					if (filter.operator == "like") {
 						filters[filters.length] = "indexof(" + property + ", '" + filter.value + "') ge 0";
 					} else {
@@ -44,7 +47,7 @@ $.widget( "ui.odataDataview", $.ui.dataview, {
 							"!=": "ne"
 						};
 						filters[filters.length] = property + " " + operators[filter.operator] + " " +
-							(typeof filter.value === "string" ? ("'" + filter.value + "'") : filter.value);
+							(isNaN(filter.value) ? ("'" + filter.value + "'") : filter.value);
 					}
 
 				});
