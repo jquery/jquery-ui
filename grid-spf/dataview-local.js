@@ -40,17 +40,18 @@ $.widget( "ui.localDataview", $.ui.dataview, {
 					match = true;
 	            for ( property in that.options.filter ) {
 					filter = that.options.filter[ property ];
-					match &= that._match( that._extract( item[ property ], property ), filter );
+					match &= that._match( item[ property ], filter, property );
 				}
 				return match;
 	        });
 		}
 		return items;
 	},
-	_match: function( value, filter ) {
+	_match: function( value, filter, property ) {
 		var operator = filter.operator || "==",
-			operand = filter.value || filter;
-		switch (operator || "==") {
+			operand = this._extract( filter.value || filter, property );
+		value = this._extract( value, property );
+		switch (operator) {
             case "==": return value == operand;
             case "!=": return value != operand;
             case "<": return value < operand;
@@ -69,7 +70,7 @@ $.widget( "ui.localDataview", $.ui.dataview, {
 		if ( property.type === "currency" ) {
 			return Globalize.parseFloat( text, property.culture );
 		} else if ( property.type === "date" ) {
-			return Globalize.parseDate( text, property.format, property.culture );
+			return +Globalize.parseDate( text, property.format, property.culture );
 		} else {
 			return text;
 		}
