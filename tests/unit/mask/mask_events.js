@@ -149,6 +149,36 @@ test( "keypress: Typing with multi-byte fields", function() {
 	deepEqual( mask._caret(), { begin: 3, end: 5 }, "Caret position correct");
 });
 
+test( "keypress: Typing with multi-byte only accepts valid values", function() {
+	expect( 7 );
+	var input = $( "#mask1" ).val("").mask({
+			mask: "aa-aa-aa",
+			definitions: {
+				aa: function( value ) {
+					if ( value.length < 0 ) return;
+					if ( value.length == 1 ) return value+value;
+					if ( value.charAt( 0 ) == value.charAt( 1 ) ) return value;
+				}
+			}
+		}),
+		mask = input.data( "mask" );
+
+	input.focus();
+	equal( input.val(), "__-__-__", "Initial Value Expected" );
+
+	mask._caret( 0 );
+	type( input, "0" );
+	equal( input.val(), "0_-__-__", "typed a 0" );
+	deepEqual( mask._caret(), { begin: 1, end: 1 }, "Caret position correct");
+	type( input, "z" );
+	equal( input.val(), "0_-__-__", "typed a z, wasn't allowed" );
+	deepEqual( mask._caret(), { begin: 1, end: 1 }, "Caret position correct");
+	type( input, "0" );
+	equal( input.val(), "00-__-__", "typed a 0, was allowed" );
+	deepEqual( mask._caret(), { begin: 3, end: 5 }, "Caret position correct");
+});
+
+
 test( "keydown: Delete pulling values", function() {
 	expect( 18 );
 	var input = $( "#mask1" ).val("123").mask({ mask: "9-99" }),
