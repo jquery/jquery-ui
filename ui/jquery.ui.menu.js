@@ -62,13 +62,19 @@ $.widget( "ui.menu", {
 				target.siblings().children( ".ui-state-active" ).removeClass( "ui-state-active" );
 				this.focus( event, target );
 			},
-			"mouseleave": "_mouseleave",
-			"mouseleave .ui-menu": "_mouseleave",
+			"mouseleave": "collapseAll",
+			"mouseleave .ui-menu": "collapseAll",
 			"mouseout .ui-menu-item": "blur",
 			"focus": function( event ) {
 				this.focus( event, $( event.target ).children( ".ui-menu-item:first" ) );
 			},
-			"blur": "collapseAll"
+			blur: function( event ) {
+				this._delay( function() {
+					if ( ! $.contains( this.element[0], document.activeElement ) ) {
+						this.collapseAll( event );
+					}
+				}, 0);
+			}
 		});
 
 		this.refresh();
@@ -341,25 +347,25 @@ $.widget( "ui.menu", {
 			.position( position );
 	},
 
-	collapseAll: function( event ) {
-		var currentMenu = false;
-		if ( event ) {
-			var target = $( event.target );
-			if ( target.is( "ui.menu" ) ) {
-				currentMenu = target;
-			} else if ( target.closest( ".ui-menu" ).length ) {
-				currentMenu = target.closest( ".ui-menu" );
-			}
+	collapseAll: function( event, all ) {
+
+		// if we were passed an event, look for the submenu that contains the event
+		var currentMenu = all ? this.element :
+			$( event && event.target ).closest( this.element.find( ".ui-menu" ) );
+
+		// if we found no valid submenu ancestor, use the main menu to close all sub menus anyway
+		if ( !currentMenu.length ) {
+			currentMenu = this.element;
 		}
 
 		this._close( currentMenu );
 
-		if ( !currentMenu ) {
-			this.blur( event );
-			this.activeMenu = this.element;
-		}
+		this.blur( event );
+		this.activeMenu = currentMenu;
 	},
 
+	// With no arguments, closes the currently active menu - if nothing is active
+	// it closes all menus.  If passed an argument, it will search for menus BELOW
 	_close: function( startMenu ) {
 		if ( !startMenu ) {
 			startMenu = this.active ? this.active.parent() : this.element;
@@ -487,17 +493,13 @@ $.widget( "ui.menu", {
 		return this.element.height() < this.element.prop( "scrollHeight" );
 	},
 
-	_mouseleave: function( event ) {
-		this.collapseAll( event );
-		this.blur();
-	},
-
 	select: function( event ) {
+
 		// save active reference before collapseAll triggers blur
 		var ui = {
 			item: this.active
 		};
-		this.collapseAll( event );
+		this.collapseAll( event, true );
 		this._trigger( "select", event, ui );
 	}
 });

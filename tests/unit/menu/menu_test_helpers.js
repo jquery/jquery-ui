@@ -5,7 +5,7 @@ function menu_log( message, clear ) {
 	if ( message === undefined ) {
 		message = $( "#log" ).data( "lastItem" );
 	}
-	$( "#log" ).prepend( message + "," );
+	$( "#log" ).prepend( $.trim( message ) + "," );
 }
 
 function menu_click( menu, item ) {
