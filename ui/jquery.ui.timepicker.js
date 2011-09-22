@@ -18,6 +18,9 @@
 (function( $, undefined ) {
 
 function sixty( value ) {
+	if ( !value ) {
+		return "00";
+	}
 	value = parseInt( value, 10 );
 	if ( value >= 0 && value <= 59 ) {
 		return ( value < 10 ? "0" : "" ) + value;
@@ -26,12 +29,18 @@ function sixty( value ) {
 
 var maskDefinitions = {
 	hh: function( value ) {
+		if ( value === "" ) {
+			return "12";
+		}
 		value = parseInt( value, 10 );
 		if ( value >= 1 && value <= 12 ) {
 			return ( value < 10 ? "0" : "" ) + value;
 		}
 	},
 	HH: function( value ) {
+		if ( value === "" ) {
+			return "12";
+		}
 		value = parseInt( value, 10 );
 		if ( value >= 0 && value <= 23 ) {
 			return ( value < 10 ? "0" : "" ) + value;
@@ -40,6 +49,9 @@ var maskDefinitions = {
 	mm: sixty,
 	ss: sixty,
 	tt: function( value ) {
+		if ( value === "" ) {
+			return "pm";
+		}
 		var lower = value.toLowerCase(),
 			character = lower.charAt( 0 );
 		if ( lower.length > 1 && lower.charAt( 1 ) !== "m" ) {
@@ -104,10 +116,17 @@ $.widget( "ui.timepicker", {
 		click: "_checkPosition"
 	},
 	_checkPosition: function( event ) {
-		this._delay(function() {
+
+		function check() {
 			var position = this.mask._caret();
 			this._setField( Math.floor( position.begin / 3 ) );
-		}, 0);
+		}
+
+		if ( event.type == "keydown" ) {
+			check.call( this );
+		} else {
+			this._delay( check, 0 );
+		}
 	},
 	_setField: function( field ) {
 		this.currentField = field;
@@ -128,8 +147,13 @@ $.widget( "ui.timepicker", {
 		}
 	},
 	_setOption: function( key, value ) {
+		var was = this.options[ key ];
 		this._super( "_setOption", key, value );
-		console.log( key, value );
+
+		if ( was === value ) {
+			return;
+		}
+
 		if ( key === "ampm" ) {
 			var i, buffer, currentHour, currentTT;
 			buffer = this.mask.buffer;
@@ -156,6 +180,15 @@ $.widget( "ui.timepicker", {
 			this.element.mask( "option", "mask", this._generateMask() );
 		}
 		if ( key === "seconds" ) {
+			if ( value ) {
+				this.element.val( function( index, value ) {
+					return value.substr( 0, 6 ) + ":00" + value.substr( 6 );
+				});
+			} else {
+				this.element.val( function( index, value ) {
+					return value.substr( 0, 6 ) + value.substr( 9 );
+				});
+			}
 			this.element.mask( "option", "mask", this._generateMask() );
 		}
 	},
