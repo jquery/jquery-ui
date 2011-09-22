@@ -12,7 +12,8 @@
 			selected: []
 		},
 		_create: function() {
-			var selected = this.options.selected;
+			var that = this,
+				selected = this.options.selected;
 			this.element.selectable({
 				filter: "tbody > tr",
 				start: function( event, ui ) {
@@ -30,6 +31,13 @@
 					var item = $( ui.unselecting ).data( "grid-item" );
 					$.observable( selected ).remove( item );
 				}
+			});
+			this.element.bind( "gridrefresh", function() {
+				that.element.find( "tbody > tr" ).each(function() {
+					if ( $.inArray($(this).data("grid-item"), selected) !== -1 ) {
+						$( this ).addClass( "ui-selected" );
+					}
+				});
 			});
 		},
 		destroy: function() {
