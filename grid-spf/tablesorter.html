@@ -22,25 +22,8 @@
 	<script src="menugrid.js"></script>
 	<script>
 	$(function() {
-		var fields = [ "year", "us_revenue", "eu_revenue", "jp_revenue", "peak_traffic" ];
-		// TODO localDataview needs to take property types into account to do proper sorting
-		// currently it just does string sorting
-		// see grid-type/type.html
-		var yearlyResults = $.ui.localDataview({
-			input: $( "table > tbody > tr" ).map(function() {
-				var item = {};
-				$( this ).children().each(function( i ) {
-					item[ fields[ i ] ] = $( this ).text();
-				});
-				return item;
-			}).get()
-		});
-
-		$( "#yearlyResults" ).menugrid({
-			source: yearlyResults
-		});
-
-		yearlyResults.refresh();
+		// TODO get rid of the refresh call
+		$( "#yearlyResults" ).menugrid().data("menugrid").options.source.refresh();
 	});
 	</script>
 	<style>

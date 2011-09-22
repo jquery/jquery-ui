@@ -53,6 +53,25 @@ $.widget( "ui.localDataview", $.ui.dataview, {
         }
 	},
 	_sort: function( items ) {
+		/*
+		function extract( row ) {
+			var text = $( $( row ).children()[ index ] ).text();
+			if ( type === "currency" ) {
+				return Globalize.parseFloat( text, culture );
+			} else if ( type === "date" ) {
+				return Globalize.parseDate( text, format, culture );
+			} else {
+				return text;
+			}
+		}
+
+		var head = $( this ),
+			culture = head.data( "culture" ),
+			format = head.data( "format" ),
+			type = head.data( "type" ),
+			order = head.data( "sort-order" ) || 1,
+			index = this.cellIndex;
+		*/
 		function sorter( property, secondary ) {
 			var order = property.charAt( 0 ) == "-" ? -1 : 1;
 			return function ( item1, item2 ) {

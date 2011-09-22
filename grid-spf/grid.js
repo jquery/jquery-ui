@@ -5,6 +5,7 @@
  * widget
  * tmpl
  * observable (optional)
+ * localDataview (optional, when no source option is specified)
  */
 (function( $ ) {
 
@@ -18,6 +19,7 @@ $.widget( "ui.grid", {
 		var that = this;
 		this._columns();
 		this._rowTemplate();
+		this._source();
 		this.element.addClass( "ui-widget" );
 		this.element.find( "th" ).addClass( "ui-state-default" );
 		this.element.delegate( "tbody > tr", "click", function( event ) {
@@ -138,6 +140,24 @@ $.widget( "ui.grid", {
 		template = "<tr>" + template + "</tr>";
 		// compile the template
 		this.options.rowTemplate = $.template( template );
+	},
+
+	_source: function() {
+		if ( this.options.source ) {
+			return;
+		}
+		var columns = this.options.columns;
+		// TODO source should be dataview.result; fix menugrid to deal with that
+		this.options.source = $.ui.localDataview({
+			properties: columns,
+			input: this._container().children().map(function() {
+				var item = {};
+				$( this ).children().each(function( i ) {
+					item[ columns[ i ].property ] = $( this ).text();
+				});
+				return item;
+			}).get()
+		});
 	}
 });
 
