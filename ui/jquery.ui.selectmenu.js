@@ -104,27 +104,21 @@ $.widget( "ui.selectmenu", {
 						if (event.altKey) {
 							self._toggle( event );
 						} else {
-							self.list.trigger( event );
-							if ( options.open ) self.list.focus();
+							self._previous();
 						}
 						break;
 					case $.ui.keyCode.DOWN:
 						if (event.altKey) {
 							self._toggle( event );
 						} else {
-							self.list.trigger( event );
-							if ( options.open ) self.list.focus();
+							self._next();
 						}
 						break;
 					case $.ui.keyCode.LEFT:
-						// event.which = 40;
-						event.keyCode = 40;
-						self.list.trigger( event );
+						self._previous();
 						break;
 					case $.ui.keyCode.RIGHT:
-						// event.which = 38;
-						event.keyCode = 38;
-						self.list.trigger( event );
+						self._next();
 						break;
 					default:
 						self.list.trigger( event );
@@ -139,13 +133,11 @@ $.widget( "ui.selectmenu", {
 			'aria-labelledby': self.ids[0],
 			role: 'listbox',
 			id: self.ids[1],
-			css: {
-				width: ( options.dropdown ) ? self.element.width() : self.element.width() - options.iconWidth
-			}
 		});
 		
 		self.listWrap = $( options.wrapperElement )
 			.addClass( self.widgetBaseClass + '-menu' )
+			.css("width", ( options.dropdown ) ? self.element.width() : self.element.width() - options.iconWidth)
 			.append( self.list )
 			.appendTo( options.appendTo );
 		
@@ -156,18 +148,27 @@ $.widget( "ui.selectmenu", {
 			.menu({
 				select: function( event, ui ) {
 					var item = ui.item.data( "item.selectmenu" );
-					// console.log(item);
+					console.log(item);
 					
-					self.newelement.children( 'span.ui-button-text' ).text( item.label );					
-					self._value( item.value );
+					self.newelement.children( 'span.ui-button-text' ).text( item.label );
+					self._index( item.index );
 					self.close( event, true);
 				},
 				focus: function( event, ui ) {
 					var item = ui.item.data( "item.selectmenu" );
-					if ( !options.open ) self.newelement.children( 'span.ui-button-text' ).text( item.label );
+					if ( !self.opened ) {
+						self.newelement.children( 'span.ui-button-text' ).text( item.label );
+						self._index( item.index );
+					}
 				}		
+			})			
+			.bind( 'mouseenter.selectelemenu', function() {
+				self.hover = true;
+			})
+			.bind( 'mouseleave .selectelemenu', function() {
+				self.hover = false;
 			});
-
+		
 		if ( options.dropdown ) {
 			self.list
 				.addClass( 'ui-corner-bottom' )
@@ -176,7 +177,7 @@ $.widget( "ui.selectmenu", {
 		
 		// document click closes menu
 		$( document ).bind( 'mousedown.selectmenu', function( event ) {
-			if ( self.options.open ) {	
+			if ( self.opened && !self.hover) {	
 				window.setTimeout( function() {
 					self.close( event );
 				}, 200 );
@@ -185,8 +186,22 @@ $.widget( "ui.selectmenu", {
 			
 	},
 	
+	_previous: function() {
+		this.list.menu( "focus", null, this._getCurrenItem() );	
+		this.list.menu("previous");
+	},
+	
+	_next: function() {
+		this.list.menu( "focus", null, this._getCurrenItem() );	
+		this.list.menu("next");
+	},
+	
+	_getCurrenItem: function() {
+		return this.list.find( "li" ).not( '.ui-selectmenu-optgroup' ).eq( this._index() );	
+	},
+	
 	_toggle: function( event ) {
-		if ( this.options.open ) {	
+		if ( this.opened ) {	
 			this.close( event );
 		} else {	
 			this.open( event );
@@ -207,25 +222,42 @@ $.widget( "ui.selectmenu", {
 				.addClass( 'ui-corner-top' )
 				.removeClass( 'ui-corner-all' );
 		}		
+					
+		var currentItem = self._getCurrenItem();
 			
 		self.listWrap.addClass( self.widgetBaseClass + '-open' );
-		this.options.open = true;
+		
+		// self.newelement.blur();
+		self.list.focus().menu( "focus", null, currentItem )
+		// currentItem.focus();
 	
 		if ( !options.dropdown ) {
-			// var _offset = self.list.outerWidth()
+			if ( self.list.css("overflow") == "auto" ) {
+				self.list.scrollTop( self.list.scrollTop() + currentItem.position().top - self.list.outerHeight()/2 + currentItem.outerHeight()/2 );
+			}
+			// console.log(  self.newelement.offset().top );
+			// console.log(  currentItem.offset().top );
+			var _offset = (self.list.offset().top  - currentItem.offset().top + (self.newelement.outerHeight() - currentItem.outerHeight()) / 2);
+			// console.log(  currentItem );
+			// console.log( currentItem.position().top );
+			// console.log( _offset );
+			
+
 		
 			$.extend( options.position, {
-				my: "left center",
-				at: "left center",
-				collision: "fit"
+				my: "left top",
+				at: "left top",
+				offset: "0 " + _offset
 			});
 		}
 		
-		console.log(options.position);
+		// console.log(options.position);
 	
 		self.listWrap.position( $.extend({
 			of: this.newelementWrap
 		}, options.position ));
+		
+		this.opened = true;
 	},	
 	
 	close: function( event, focus ) {		
@@ -239,7 +271,7 @@ $.widget( "ui.selectmenu", {
 		}
 		
 		self.listWrap.removeClass( self.widgetBaseClass + '-open' );
-		this.options.open = false;
+		this.opened = false;
 		
 		if (focus) self.newelement.focus();
 	},
@@ -262,7 +294,10 @@ $.widget( "ui.selectmenu", {
 			.data( "item.selectmenu", item )
 			.append( $( "<a />", {
 					text: item.label,
-					href: '#nogo'
+					href: '#',
+					click: function( event ) {
+						event.preventDefault();
+					}
 				}) 
 			).appendTo( ul );
 	},
@@ -280,15 +315,9 @@ $.widget( "ui.selectmenu", {
 
 	_setOption: function( key, value ) {
 		this._super( "_setOption", key, value );
-		if ( key === "source" ) {
-			this._initSource();
-		}
 		if ( key === "appendTo" ) {
-			this.listWrap.appendTo( $( value || "body", this.element[0].ownerDocument )[0] )
+			this.listWrap.appendTo( $( value || "body", this.element[0].ownerDocument )[0] );
 		}
-		// if ( key === "disabled" && value && this.xhr ) {
-			// this.xhr.abort();
-		// }
 	},
 	
 	_initSource: function() {
@@ -297,6 +326,7 @@ $.widget( "ui.selectmenu", {
 		$.each( this.items, function( index, item ) {
 			var option = $( item );
 			data.push({
+				index: index,
 				value: option.attr( 'value' ),
 				label: option.text(),
 				optgroup: option.parent("optgroup").attr("label") || false
