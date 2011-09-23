@@ -31,7 +31,8 @@ $.widget("ui.selectmenu", {
 		icons: null,
 		format: null,
 		bgImage: function() {},
-		wrapperElement: "<div />"
+		wrapperElement: "<span />",
+		listWrapperElement: "<div />"
 	},
 
 	_create: function() {
@@ -186,7 +187,7 @@ $.widget("ui.selectmenu", {
 			'aria-labelledby': this.ids[0],
 			'id': this.ids[1]
 		});
-		this.listWrap = $( o.wrapperElement )
+		this.listWrap = $( o.listWrapperElement )
 			.addClass( self.widgetBaseClass + '-menu' )
 			.append( this.list )
 			.appendTo( 'body' );
