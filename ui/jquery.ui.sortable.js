@@ -484,12 +484,16 @@ $.widget("ui.sortable", $.ui.mouse, {
 		var isOverBottomHalf = $.ui.isOverAxis(this.positionAbs.top + this.offset.click.top, item.top + (item.height/2), item.height),
 			isOverRightHalf = $.ui.isOverAxis(this.positionAbs.left + this.offset.click.left, item.left + (item.width/2), item.width),
 			verticalDirection = this._getDragVerticalDirection(),
-			horizontalDirection = this._getDragHorizontalDirection();
+			horizontalDirection = this._getDragHorizontalDirection(),
+			intersectsContainment = false;
 
+		if (!horizontalDirection && !verticalDirection) return false;
 		if (this.floating && horizontalDirection) {
-			return ((horizontalDirection == "right" && isOverRightHalf) || (horizontalDirection == "left" && !isOverRightHalf));
+			if (this.containment) intersectsContainment = ((this.positionAbs.left <= this.containment[0]) || (this.positionAbs.left >= this.containment[2]));
+			return intersectsContainment || ((horizontalDirection == "right" && isOverRightHalf) || (horizontalDirection == "left" && !isOverRightHalf));
 		} else {
-			return verticalDirection && ((verticalDirection == "down" && isOverBottomHalf) || (verticalDirection == "up" && !isOverBottomHalf));
+			if (this.containment) intersectsContainment = ((this.positionAbs.top <= this.containment[1]) || (this.positionAbs.top >= this.containment[3]));
+			return intersectsContainment || (verticalDirection && ((verticalDirection == "down" && isOverBottomHalf) || (verticalDirection == "up" && !isOverBottomHalf)));
 		}
 
 	},
