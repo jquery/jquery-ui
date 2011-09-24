@@ -27,6 +27,7 @@ Presentational
 */
 
 .ui-grid .ui-grid-head caption {
+	padding: 0.4em;
 	border-top-width: 0;
 }
 
