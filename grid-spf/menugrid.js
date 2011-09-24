@@ -3,7 +3,7 @@
 $.widget("spf.menugrid", $.ui.grid, {
 	_create: function() {
 		this._superApply("_create", arguments);
-		this.element.addClass("menugrid");
+		this.uiGrid.addClass("menugrid");
 		var options = this.options;
 		var source = this.options.source;
 		var that = this;
@@ -11,7 +11,7 @@ $.widget("spf.menugrid", $.ui.grid, {
 			that._updateFilterValues();
 			that.refresh();
 		});
-		var headers = this.element.find( "th" );
+		var headers = this.uiGridHeadTable.find( "th" );
 		this._hoverable( headers );
 		headers.disableSelection().click( function() {
 			headers.not( this ).removeClass( "sorted sorted-desc" );
@@ -23,7 +23,7 @@ $.widget("spf.menugrid", $.ui.grid, {
 				.refresh();
 		}).append( '<span class="ui-icon-asc ui-icon ui-icon-carat-1-n"></span><span class="ui-icon-desc ui-icon ui-icon-carat-1-s"></span>' );
 
-		var thead = this.element.find( "thead" );
+		var thead = this.uiGridHeadTable.find( "thead" );
 		var inputs = this.inputs = thead.children(":has(th)")
 			.clone()
 			.appendTo( thead )

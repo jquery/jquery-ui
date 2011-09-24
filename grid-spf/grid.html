@@ -5,6 +5,7 @@
 	<title>Grid: Sorting, Paging, Filtering</title>
 	<link rel="stylesheet" href="../themes/base/jquery.ui.all.css">
 	<link rel="stylesheet" href="grid.css">
+	<link rel="stylesheet" href="../demos/demos.css">
 	<script src="../jquery-1.6.2.js"></script>
 	<script src="../external/jquery.tmpl.js"></script>
 	<script src="../ui/jquery.ui.core.js"></script>
@@ -124,11 +125,11 @@
 	.tool button.active {
 		border: 1px solid black;
 	}
-	.sort-asc:before {
-		content: "/\\"
+	.sort-asc:after {
+		content: " ↑"
 	}
-	.sort-desc:before {
-		content: "\\/"
+	.sort-desc:after {
+		content: " ↓"
 	}
 	</style>
 </head>
