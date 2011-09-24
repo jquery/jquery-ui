@@ -29,13 +29,14 @@ $.widget( "ui.selectmenu", {
 			at: "left bottom",
 			collision: "none"
 		},
-		source: null,	
+		source: null,
+		value: null,
 		// callbacks
 		open: null,
 		focus: null,
 		select: null,
 		close: null,
-		change: null,
+		// change: null,
 	},
 
 	_create: function() {
@@ -142,6 +143,58 @@ $.widget( "ui.selectmenu", {
 			
 	},
 	
+	refresh: function() {		
+		var self = this,
+			options = this.options;
+				
+		// create menu portion, append to body		
+		self.list = $( '<ul />', {
+			'class': 'ui-widget ui-widget-content',
+			'aria-hidden': true,
+			'aria-labelledby': self.ids[0],
+			role: 'listbox',
+			id: self.ids[1],
+		});
+		
+		self.listWrap = $( options.wrapperElement )
+			.addClass( self.widgetBaseClass + '-menu' )
+			.css( "width", ( options.dropdown ) ? self.element.width() : self.element.width() - options.iconWidth )
+			.append( self.list )
+			.appendTo( options.appendTo );
+		
+		self._initSource();
+		self._renderMenu( self.list, options.source );
+		
+		self.list
+			.data( 'element.selectelemenu', self.element )
+			.menu({
+				select: function( event, ui ) {
+					var item = ui.item.data( "item.selectmenu" );				
+					self._setSelected( event, item );
+					item.element = $ ( self.items[ item.index ] );
+					self._trigger( "select", event, { item: item } );
+					self.close( event, true);
+				},
+				focus: function( event, ui ) {	
+					var item = ui.item.data( "item.selectmenu" );
+					if ( !self.opened ) self._setSelected( event, item );
+					self._trigger( "focus", event, { item: item } );
+				}
+			})			
+			.bind( 'mouseenter.selectelemenu', function() {
+				self.hover = true;
+			})
+			.bind( 'mouseleave .selectelemenu', function() {
+				self.hover = false;
+			});
+		
+		if ( options.dropdown ) {
+			self.list
+				.addClass( 'ui-corner-bottom' )
+				.removeClass( 'ui-corner-all' );
+		}
+	},
+	
 	open: function( event ) {		
 		var self = this,
 			options = this.options,
@@ -180,55 +233,8 @@ $.widget( "ui.selectmenu", {
 		}, options.position ));
 		
 		this.opened = true;
+		self._trigger( "open", event );
 	},	
-	
-	refresh: function() {		
-		var self = this,
-			options = this.options;
-				
-		// create menu portion, append to body		
-		self.list = $( '<ul />', {
-			'class': 'ui-widget ui-widget-content',
-			'aria-hidden': true,
-			'aria-labelledby': self.ids[0],
-			role: 'listbox',
-			id: self.ids[1],
-		});
-		
-		self.listWrap = $( options.wrapperElement )
-			.addClass( self.widgetBaseClass + '-menu' )
-			.css( "width", ( options.dropdown ) ? self.element.width() : self.element.width() - options.iconWidth )
-			.append( self.list )
-			.appendTo( options.appendTo );
-		
-		self._initSource();
-		self._renderMenu( self.list, options.source );
-		
-		self.list
-			.data( 'element.selectelemenu', self.element )
-			.menu({
-				select: function( event, ui ) {
-					var item = ui.item.data( "item.selectmenu" );				
-					self._setSelected( item );
-					self.close( event, true);
-				},
-				focus: function( event, ui ) {
-					if ( !self.opened ) self._setSelected( ui.item.data( "item.selectmenu" );
-				}		
-			})			
-			.bind( 'mouseenter.selectelemenu', function() {
-				self.hover = true;
-			})
-			.bind( 'mouseleave .selectelemenu', function() {
-				self.hover = false;
-			});
-		
-		if ( options.dropdown ) {
-			self.list
-				.addClass( 'ui-corner-bottom' )
-				.removeClass( 'ui-corner-all' );
-		}
-	},
 	
 	close: function( event, focus ) {		
 		var self = this,
@@ -244,6 +250,8 @@ $.widget( "ui.selectmenu", {
 		this.opened = false;
 		
 		if (focus) self.newelement.focus();
+		
+		self._trigger( "close", event );
 	},
 	
 	_renderMenu: function( ul, items ) {
@@ -289,7 +297,7 @@ $.widget( "ui.selectmenu", {
 		return this.list.find( "li" ).not( '.ui-selectmenu-optgroup' ).eq( this.element[0].selectedIndex );	
 	},
 	
-	_setSelected: function( item ) {
+	_setSelected: function( event, item ) {				
 		this.newelement.children( '.ui-button-text' ).text( item.label );
 		this.element[0].selectedIndex = item.index;
 		this.options.value = item.value;
@@ -326,8 +334,7 @@ $.widget( "ui.selectmenu", {
 					optgroup: optgroup.attr("label") || false,
 					disabled: optgroup.attr( "disabled" ) || option.attr( "disabled" )
 				});
-			});					
-			console.log( data );
+			});
 			this.options.source = data;
 		}
 	},
