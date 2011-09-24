@@ -150,7 +150,7 @@ $.widget( "ui.spinner", {
 
 		// IE 6 doesn't understand height: 50% for the buttons
 		// unless the wrapper has an explicit height
-		if ( this.buttons.height() === uiSpinner.height() ) {
+		if ( this.buttons.height() === uiSpinner.height() && uiSpinner.height() > 0 ) {
 			uiSpinner.height( uiSpinner.height() );
 		}
 
