@@ -22,6 +22,12 @@
 		var remote = $.ui.flickrDataview({
 			paging: {
 				limit: 10
+			},
+			response: function() {
+				// preload the actual images
+				$.each(this.result, function(index, photo) {
+					new Image().src = photo.src;
+				});
 			}
 		});
 
