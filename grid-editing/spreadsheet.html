@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Grid: Editing, Inline Grid</title>
+	<link rel="stylesheet" href="../themes/base/jquery.ui.all.css">
+	<link rel="stylesheet" href="../grid-spf/grid.css">
+	<script src="../jquery-1.6.2.js"></script>
+	<script src="../external/globalize.js"></script>
+	<script src="../external/jquery.tmpl.js"></script>
+	<script src="../external/jquery.mousewheel-3.0.4.js"></script>
+	<script src="../ui/jquery.ui.core.js"></script>
+	<script src="../ui/jquery.ui.widget.js"></script>
+	<script src="../ui/jquery.ui.button.js"></script>
+	<script src="../ui/jquery.ui.spinner.js"></script>
+	<script src="../ui/jquery.ui.position.js"></script>
+	<script src="../ui/jquery.ui.tooltip.js"></script>
+	<script src="../ui/jquery.ui.autocomplete.js"></script>
+	<script src="../ui/jquery.ui.menu.js"></script>
+	<script src="../grid-spf/dataview.js"></script>
+	<script src="../grid-spf/dataview-local.js"></script>
+	<script src="../grid-spf/grid.js"></script>
+	<script src="../grid-spf/pager.js"></script>
+	<script src="observable.js"></script>
+	<script src="editor.js"></script>
+	<script src="grid-editor.js"></script>
+	<script src="editor-countrycomplete.js"></script>
+	<script src="editor-randomspinner.js"></script>
+	<script src="navigator.js"></script>
+	<script src="localstore.js"></script>
+	<script src="helpers.js"></script>
+	<script>
+	if ( !window.console ) {
+		window.console = {
+			log: function() {
+				var message = Array.prototype.slice.call( arguments, 1 ).join( ", " );
+				$("<div>").text( message ).appendTo("body");
+			}
+		}
+	}
+
+	$(function() {
+		var columns = [],
+			i, j;
+		for (i = 65; i <= 90; i++) {
+			columns.push(String.fromCharCode(i));
+		}
+		var source = [];
+		for (j = 0; j < 50; j++) {
+			source.push({});
+		}
+
+		$( "#spreadsheet" ).grid({
+			columns: columns,
+			source: source
+		})
+			.gridEditor()
+			.navigator()
+			.grid("refresh");
+	});
+	</script>
+	<style>
+		.navigator-active { background: rgba(0,0,255,0.2); }
+		#spreadsheet {
+			width: 100%;
+		}
+		thead td { text-align: center; }
+	</style>
+</head>
+<body>
+
+<h1>Grid based custom spreadsheet (experimental)</h1>
+
+<table id="spreadsheet">
+	<thead>
+		<tr>
+		</tr>
+	</thead>
+	<tbody>
+	</tbody>
+</table>
+
+</body>
+</html>
