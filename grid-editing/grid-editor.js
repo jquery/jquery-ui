@@ -33,10 +33,10 @@ $.widget( "ui.gridEditor", {
 							var object = target.closest("tr").data( "grid-item" ),
 								property = grid.options.columns[ target[ 0 ].cellIndex ].property;
 							$.observable( object ).property( property, ui.value );
-							that._trigger("done");
+							grid.element.focus();
 						},
 						cancel: function() {
-							that._trigger("done");
+							grid.element.focus();
 						}
 					}).editor("start");
 				}
