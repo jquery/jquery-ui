@@ -51,7 +51,7 @@ $.widget( "ui.autocomplete", {
 			suppressKeyPress,
 			suppressInput;
 
-		this.valueMethod = this.element[ this.element.is( "input" ) ? "val" : "text" ];
+		this.valueMethod = this.element[ this.element.is( "input,textarea" ) ? "val" : "text" ];
 
 		this.element
 			.addClass( "ui-autocomplete-input" )
@@ -325,6 +325,7 @@ $.widget( "ui.autocomplete", {
 
 	_searchTimeout: function( event ) {
 		var self = this;
+		clearTimeout( self.searching );
 		self.searching = setTimeout(function() {
 			// only search if the value has changed
 			if ( self.term != self.element.val() ) {
@@ -384,7 +385,7 @@ $.widget( "ui.autocomplete", {
 			this._trigger( "close", event );
 		}
 	},
-	
+
 	_change: function( event ) {
 		if ( this.previous !== this._value() ) {
 			this._trigger( "change", event, { item: this.selectedItem } );
