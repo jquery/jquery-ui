@@ -99,7 +99,7 @@ asyncTest( "handle submenu auto collapse: mouseleave", function() {
 });
 
 asyncTest( "handle custom menu item submenu auto collapse: mouseleave", function() {
-	expect( 4 );
+	expect( 5 );
 	var $menu = $( "#menu5" ).menu( { items: "div" } );
 
 	$menu.children( ":nth-child(7)" ).trigger( "mouseover" );
@@ -110,12 +110,18 @@ asyncTest( "handle custom menu item submenu auto collapse: mouseleave", function
 			equal( $menu.find( "div[aria-expanded='true']" ).length, 2, "second submenu expanded" );
 			$menu.find( "div[aria-expanded='true']:first" ).trigger( "mouseleave" );
 			equal( $menu.find( "div[aria-expanded='true']" ).length, 1, "second submenu collapsed" );
+
+			$menu.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN });
+			ok( $menu.find( ".ui-state-active" ).is( "#menu5 :nth-child(7) a" ),
+				"down keypress selected an item from the first submenu" );
+			
 			$menu.trigger( "mouseleave" );
 			equal( $menu.find( "div[aria-expanded='true']" ).length, 0, "first submenu collapsed" );
 			start();
 		}, 400);
 	}, 200);
 });
+
 
 test("handle keyboard navigation on menu without scroll and without submenus", function() {
 	expect(12);
