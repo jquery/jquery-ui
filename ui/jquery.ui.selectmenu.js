@@ -52,8 +52,9 @@ $.widget( "ui.selectmenu", {
 		// get options
 		self.items = self.element.find( 'option' );
 		
-		// set options value 		
+		// set options 		
 		options.value = self.element[0].value;
+		options.disabled = ( self.element.attr( 'disabled' ) ) ? true : false;
 		
 		// catch click event of the label
 		self.element.bind( 'click.selectmenu',  function() {
@@ -70,6 +71,7 @@ $.widget( "ui.selectmenu", {
 				css: {
 					width: self.element.width()
 				},
+				'aria-disabled': options.disabled,
 				'aria-owns': self.ids[ 1 ],
 				'aria-haspopup': true	
 			})
@@ -80,7 +82,8 @@ $.widget( "ui.selectmenu", {
 					primary: ( options.dropdown ? 'ui-icon-triangle-1-s' : 'ui-icon-triangle-2-n-s' )
 				}
 			});
-						
+					
+		
 		self.newelementWrap = $( options.wrapperElement )
 			.append( self.newelement )
 			.insertAfter( self.element );	
@@ -131,6 +134,13 @@ $.widget( "ui.selectmenu", {
 		
 		// built menu
 		self.refresh();
+		
+		// transfer disabled state
+		if ( self.element.attr( 'disabled' ) ) {
+			self.disable();
+		} else {
+			self.enable()
+		}
 		
 		// document click closes menu
 		$( document ).bind( 'mousedown.selectmenu', function( event ) {
@@ -200,40 +210,43 @@ $.widget( "ui.selectmenu", {
 			options = this.options,
 			currentItem = self._getSelectedItem();
 			
-		// close all other selectmenus		
-		$( '.' + self.widgetBaseClass + '-open' ).not( self.newelement ).each( function() {
-			$( this ).children( 'ul.ui-menu' ).data( 'element.selectelemenu' ).selectmenu( 'close' );
-		});
-					
-		if ( options.dropdown ) {
-			self.newelement
-				.addClass( 'ui-corner-top' )
-				.removeClass( 'ui-corner-all' );
-		}		
-								
-		self.listWrap.addClass( self.widgetBaseClass + '-open' );		
-		self.list.focus().menu( "focus", null, currentItem );
-	
-		if ( !options.dropdown ) {
-			// center current item
-			if ( self.list.css("overflow") == "auto" ) {
-				self.list.scrollTop( self.list.scrollTop() + currentItem.position().top - self.list.outerHeight()/2 + currentItem.outerHeight()/2 );
-			}			
-			// calculate offset
-			var _offset = (self.list.offset().top  - currentItem.offset().top + (self.newelement.outerHeight() - currentItem.outerHeight()) / 2);			
-			$.extend( options.position, {
-				my: "left top",
-				at: "left top",
-				offset: "0 " + _offset
-			});
-		}
+		if ( !options.disabled ) {
 			
-		self.listWrap.position( $.extend({
-			of: this.newelementWrap
-		}, options.position ));
+			// close all other selectmenus		
+			$( '.' + self.widgetBaseClass + '-open' ).not( self.newelement ).each( function() {
+				$( this ).children( 'ul.ui-menu' ).data( 'element.selectelemenu' ).selectmenu( 'close' );
+			});
+						
+			if ( options.dropdown ) {
+				self.newelement
+					.addClass( 'ui-corner-top' )
+					.removeClass( 'ui-corner-all' );
+			}		
+									
+			self.listWrap.addClass( self.widgetBaseClass + '-open' );		
+			self.list.focus().menu( "focus", null, currentItem );
 		
-		this.opened = true;
-		self._trigger( "open", event );
+			if ( !options.dropdown ) {
+				// center current item
+				if ( self.list.css("overflow") == "auto" ) {
+					self.list.scrollTop( self.list.scrollTop() + currentItem.position().top - self.list.outerHeight()/2 + currentItem.outerHeight()/2 );
+				}			
+				// calculate offset
+				var _offset = (self.list.offset().top  - currentItem.offset().top + (self.newelement.outerHeight() - currentItem.outerHeight()) / 2);			
+				$.extend( options.position, {
+					my: "left top",
+					at: "left top",
+					offset: "0 " + _offset
+				});
+			}
+				
+			self.listWrap.position( $.extend({
+				of: this.newelementWrap
+			}, options.position ));
+			
+			this.opened = true;
+			self._trigger( "open", event );
+		}
 	},	
 	
 	close: function( event, focus ) {		
@@ -318,6 +331,11 @@ $.widget( "ui.selectmenu", {
 		}
 		if ( key === "value" && value) {
 			this.element[0].value = value;
+		}
+		if ( key === "disabled" ) {
+			this.newelement.button( "option", "disabled", value );
+			this.list.attr( "aria-disabled", value );
+			this.close();
 		}
 	},
 	
