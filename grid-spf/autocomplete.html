@@ -55,7 +55,7 @@
 		// TODO the table is empty, so let's create it from scratch here
 		var grid = $( "table" ).grid({
 			source: cities.result,
-			columns: [ "name", "adminName1", "adminCode1", "fclName", "adminName2", "population", "countryName" ]
+			columns: [ {property: "name", label: "Name"}, {property: "adminName1", label: "Area"}, {property:"adminName2", label:"Province"}, {property:"population", label:"Population"}, {property:"countryName", label:"Country"} ]
 		});
 	});
 	</script>

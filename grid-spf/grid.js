@@ -104,7 +104,7 @@ $.widget( "ui.grid", {
 			var head = this.element.find("thead");
 			if ( !head.find( "th" ).length ) {
 				$.each( this.options.columns, function( index, column ) {
-					$( "<th>" ).text(column.property).appendTo(head);
+					$( "<th>" ).text(column.label || column.property).appendTo(head);
 				});
 			}
 			return;
@@ -115,10 +115,12 @@ $.widget( "ui.grid", {
 			var property = th.data( "property" );
 			if ( !property ) {
 				// generate property name if missing
+				// replaces whitespace and non-alphanumerics with underscore
 				property = th.text().toLowerCase().replace(/\s|[^a-z0-9]/g, "_");
 			}
 			var result = {
-				property: property
+				property: property,
+				label: th.text()
 			};
 			$.each( dataFields, function(index, dataField) {
 				result[dataField] = th.data( dataField );
