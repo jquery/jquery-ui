@@ -7,7 +7,7 @@
 (function ($, undefined ) {
 
 function format(string, object) {
-	return string.replace(/\$\{(.+?)\}/g, function(match, key) { return object[key] });
+	return string.replace(/\$\{(.+?)\}/g, function(match, key) { return object[key]; });
 }
 
 $.widget( "ui.flickrDataview", $.ui.dataview, {
