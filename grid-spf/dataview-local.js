@@ -49,7 +49,7 @@ $.widget( "ui.localDataview", $.ui.dataview, {
 	},
 	_match: function( value, filter, property ) {
 		var operand = this._extract( filter.value || filter, property ),
-			operator = filter.operator || (typeof operand === "string" ? "line" : "==");
+			operator = filter.operator || (typeof operand === "string" ? "like" : "==");
 		value = this._extract( value, property );
 		switch (operator) {
             case "==": return value == operand;
