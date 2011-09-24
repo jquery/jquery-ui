@@ -23,6 +23,7 @@ $.widget( "ui.gridEditor", {
 
 		this._bind({
 			dblclick: function( event ) {
+				var that = this;
 				var target = $( event.target ).closest( this.options.items );
 				if ( target.length && !target.data( "editor" ) ) {
 					target.editor({
@@ -32,6 +33,10 @@ $.widget( "ui.gridEditor", {
 							var object = target.closest("tr").data( "grid-item" ),
 								property = grid.options.columns[ target[ 0 ].cellIndex ].property;
 							$.observable( object ).property( property, ui.value );
+							that._trigger("done");
+						},
+						cancel: function() {
+							that._trigger("done");
 						}
 					}).editor("start");
 				}
