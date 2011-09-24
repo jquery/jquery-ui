@@ -186,28 +186,6 @@ $.widget( "ui.selectmenu", {
 			
 	},
 	
-	_previous: function() {
-		this.list.menu( "focus", null, this._getCurrenItem() );	
-		this.list.menu("previous");
-	},
-	
-	_next: function() {
-		this.list.menu( "focus", null, this._getCurrenItem() );	
-		this.list.menu("next");
-	},
-	
-	_getCurrenItem: function() {
-		return this.list.find( "li" ).not( '.ui-selectmenu-optgroup' ).eq( this._index() );	
-	},
-	
-	_toggle: function( event ) {
-		if ( this.opened ) {	
-			this.close( event );
-		} else {	
-			this.open( event );
-		}
-	},
-	
 	open: function( event ) {		
 		var self = this,
 			options = this.options;
@@ -227,32 +205,24 @@ $.widget( "ui.selectmenu", {
 			
 		self.listWrap.addClass( self.widgetBaseClass + '-open' );
 		
-		// self.newelement.blur();
-		self.list.focus().menu( "focus", null, currentItem )
-		// currentItem.focus();
+		self.list.focus().menu( "focus", null, currentItem );
 	
 		if ( !options.dropdown ) {
+			// center current item
 			if ( self.list.css("overflow") == "auto" ) {
 				self.list.scrollTop( self.list.scrollTop() + currentItem.position().top - self.list.outerHeight()/2 + currentItem.outerHeight()/2 );
 			}
-			// console.log(  self.newelement.offset().top );
-			// console.log(  currentItem.offset().top );
-			var _offset = (self.list.offset().top  - currentItem.offset().top + (self.newelement.outerHeight() - currentItem.outerHeight()) / 2);
-			// console.log(  currentItem );
-			// console.log( currentItem.position().top );
-			// console.log( _offset );
 			
-
-		
+			// calculate offset
+			var _offset = (self.list.offset().top  - currentItem.offset().top + (self.newelement.outerHeight() - currentItem.outerHeight()) / 2);
+			
 			$.extend( options.position, {
 				my: "left top",
 				at: "left top",
 				offset: "0 " + _offset
 			});
 		}
-		
-		// console.log(options.position);
-	
+			
 		self.listWrap.position( $.extend({
 			of: this.newelementWrap
 		}, options.position ));
@@ -302,17 +272,28 @@ $.widget( "ui.selectmenu", {
 			).appendTo( ul );
 	},
 	
-	_destroy: function() {
-		clearTimeout( this.searching );
-		this.element
-			.removeClass( "ui-autocomplete-input" )
-			.removeAttr( "autocomplete" )
-			.removeAttr( "role" )
-			.removeAttr( "aria-autocomplete" )
-			.removeAttr( "aria-haspopup" );
-		this.menu.element.remove();
+	_previous: function() {
+		this.list.menu( "focus", null, this._getCurrenItem() );	
+		this.list.menu("previous");
 	},
-
+	
+	_next: function() {
+		this.list.menu( "focus", null, this._getCurrenItem() );	
+		this.list.menu("next");
+	},
+	
+	_getCurrenItem: function() {
+		return this.list.find( "li" ).not( '.ui-selectmenu-optgroup' ).eq( this._index() );	
+	},
+	
+	_toggle: function( event ) {
+		if ( this.opened ) {	
+			this.close( event );
+		} else {	
+			this.open( event );
+		}
+	},
+	
 	_setOption: function( key, value ) {
 		this._super( "_setOption", key, value );
 		if ( key === "appendTo" ) {
@@ -335,6 +316,9 @@ $.widget( "ui.selectmenu", {
 		
 		// console.log(data);
 		return data;
+	},
+	
+	_destroy: function() {
 	},
 	
 	_value: function( newValue ) {
