@@ -773,21 +773,16 @@ $.ui.plugin.add("resizable", "ghost", {
 
 	start: function(event, ui) {
 
-		var self = $(this).data("resizable"), o = self.options, cs = self.size;
+		var self = $(this).data("resizable"), o = self.options;
 
 		self.ghost = self.originalElement.clone();
 		self.ghost
-			.css({ opacity: .25, display: 'block', position: 'relative', height: cs.height, width: cs.width, margin: 0, left: 0, top: 0 })
+			.css({ opacity: .25, display: 'block', position: 'relative', height: '100%', width: '100%', margin: 0, left: 0, top: 0 })
 			.addClass('ui-resizable-ghost')
 			.addClass(typeof o.ghost == 'string' ? o.ghost : '');
 
 		self.ghost.appendTo(self.helper);
 
-	},
-
-	resize: function(event, ui){
-		var self = $(this).data("resizable"), o = self.options;
-		if (self.ghost) self.ghost.css({ position: 'relative', height: self.size.height, width: self.size.width });
 	},
 
 	stop: function(event, ui){
