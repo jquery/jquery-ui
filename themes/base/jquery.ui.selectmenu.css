@@ -12,6 +12,7 @@
 .ui-selectmenu-menu .ui-menu { padding: 0; }
 .ui-selectmenu-menu .ui-menu .ui-menu-item a { padding: 0.3em 1em 0.3em 1em;  }
 .ui-selectmenu-menu .ui-menu .ui-menu-item a.ui-state-focus { margin: -1px 0 -1px -1px; }
+.ui-selectmenu-menu .ui-menu li.ui-state-disabled { margin: 0; padding: 0; }
 .ui-selectmenu-menu .ui-menu li.ui-selectmenu-optgroup { font-weight: bold; line-height: 1.5; padding: 2px 0.4em; margin: 0.5em 0 0 0; }
 .ui-selectmenu-open { display: block; }
 

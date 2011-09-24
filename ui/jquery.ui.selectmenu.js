@@ -74,7 +74,7 @@ $.widget( "ui.selectmenu", {
 			})
 			.addClass( self.widgetBaseClass + '-button' )
 			.button({
-				label: self.items.eq( self.element[ 0 ].selectedIndex ).text(),
+				label: self.items.eq( this.element[0].selectedIndex ).text(),
 				icons: {
 					primary: ( options.dropdown ? 'ui-icon-triangle-1-s' : 'ui-icon-triangle-2-n-s' )
 				}
@@ -128,6 +128,7 @@ $.widget( "ui.selectmenu", {
 				return ret;
 			});
 		
+		// built menu
 		self.refresh();
 		
 		// document click closes menu
@@ -143,7 +144,8 @@ $.widget( "ui.selectmenu", {
 	
 	open: function( event ) {		
 		var self = this,
-			options = this.options;
+			options = this.options,
+			currentItem = self._getSelectedItem();
 			
 		// close all other selectmenus		
 		$( '.' + self.widgetBaseClass + '-open' ).not( self.newelement ).each( function() {
@@ -155,9 +157,7 @@ $.widget( "ui.selectmenu", {
 				.addClass( 'ui-corner-top' )
 				.removeClass( 'ui-corner-all' );
 		}		
-					
-		var currentItem = self._getCurrenItem();
-			
+								
 		self.listWrap.addClass( self.widgetBaseClass + '-open' );		
 		self.list.focus().menu( "focus", null, currentItem );
 	
@@ -197,7 +197,7 @@ $.widget( "ui.selectmenu", {
 		
 		self.listWrap = $( options.wrapperElement )
 			.addClass( self.widgetBaseClass + '-menu' )
-			.css("width", ( options.dropdown ) ? self.element.width() : self.element.width() - options.iconWidth)
+			.css( "width", ( options.dropdown ) ? self.element.width() : self.element.width() - options.iconWidth )
 			.append( self.list )
 			.appendTo( options.appendTo );
 		
@@ -208,19 +208,12 @@ $.widget( "ui.selectmenu", {
 			.data( 'element.selectelemenu', self.element )
 			.menu({
 				select: function( event, ui ) {
-					var item = ui.item.data( "item.selectmenu" );
-					console.log(item);
-					
-					self.newelement.children( 'span.ui-button-text' ).text( item.label );
-					self._index( item.index );
+					var item = ui.item.data( "item.selectmenu" );				
+					self._setSelected( item );
 					self.close( event, true);
 				},
 				focus: function( event, ui ) {
-					var item = ui.item.data( "item.selectmenu" );
-					if ( !self.opened ) {
-						self.newelement.children( 'span.ui-button-text' ).text( item.label );
-						self._index( item.index );
-					}
+					if ( !self.opened ) self._setSelected( ui.item.data( "item.selectmenu" );
 				}		
 			})			
 			.bind( 'mouseenter.selectelemenu', function() {
@@ -259,7 +252,9 @@ $.widget( "ui.selectmenu", {
 			
 		$.each( items, function( index, item ) {
 			if ( item.optgroup != currentOptgroup ) {
-				ul.append( "<li class='ui-selectmenu-optgroup'>" + item.optgroup + "</li>" );
+				var optgroup = $( '<li class="ui-selectmenu-optgroup">' + item.optgroup + '</li>' );
+				if ( $( self.items[ item.index ] ).parent( "optgroup" ).attr( "disabled" ) ) optgroup.addClass( 'ui-state-disabled' );
+				ul.append( optgroup );
 				currentOptgroup = item.optgroup;
 			}
 			self._renderItem( ul, item );
@@ -268,6 +263,7 @@ $.widget( "ui.selectmenu", {
 	
 	_renderItem: function( ul, item) {
 		return $( "<li />" )
+			.addClass( ( item.disabled ) ? 'ui-state-disabled' : '' )
 			.data( "item.selectmenu", item )
 			.append( $( "<a />", {
 					text: item.label,
@@ -280,17 +276,23 @@ $.widget( "ui.selectmenu", {
 	},
 	
 	_previous: function() {
-		this.list.menu( "focus", null, this._getCurrenItem() );	
+		this.list.menu( "focus", null, this._getSelectedItem() );	
 		this.list.menu("previous");
 	},
 	
 	_next: function() {
-		this.list.menu( "focus", null, this._getCurrenItem() );	
+		this.list.menu( "focus", null, this._getSelectedItem() );	
 		this.list.menu("next");
 	},
 	
-	_getCurrenItem: function() {
-		return this.list.find( "li" ).not( '.ui-selectmenu-optgroup' ).eq( this._index() );	
+	_getSelectedItem: function() {
+		return this.list.find( "li" ).not( '.ui-selectmenu-optgroup' ).eq( this.element[0].selectedIndex );	
+	},
+	
+	_setSelected: function( item ) {
+		this.newelement.children( '.ui-button-text' ).text( item.label );
+		this.element[0].selectedIndex = item.index;
+		this.options.value = item.value;
 	},
 	
 	_toggle: function( event ) {
@@ -315,28 +317,22 @@ $.widget( "ui.selectmenu", {
 		if ( !$.isArray( this.options.source ) ) {
 			var data = [];		
 			$.each( this.items, function( index, item ) {
-				var option = $( item );
+				var option = $( item ),
+					optgroup = option.parent( "optgroup" );
 				data.push({
 					index: index,
 					value: option.attr( 'value' ),
 					label: option.text(),
-					optgroup: option.parent("optgroup").attr("label") || false
+					optgroup: optgroup.attr("label") || false,
+					disabled: optgroup.attr( "disabled" ) || option.attr( "disabled" )
 				});
 			});					
+			console.log( data );
 			this.options.source = data;
 		}
 	},
 	
 	_destroy: function() {
-	},
-	
-	_index: function( newIndex ) {
-		if ( arguments.length ) {
-				this.element[0].selectedIndex = newIndex;
-				self.options.value = this._getCurrenItem().attr( "value" );
-		} else {
-			return this.element[0].selectedIndex;
-		}
 	}
 });
 
