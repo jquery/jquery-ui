@@ -340,6 +340,10 @@ $.widget( "ui.selectmenu", {
 	},
 	
 	_destroy: function() {
+		this.listWrap.remove();
+		this.newelementWrap.remove();
+		this.element.show().unbind( '.selectmenu' );
+		$( document ).unbind( '.selectmenu' );
 	}
 });
 
