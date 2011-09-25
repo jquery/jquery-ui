@@ -19,7 +19,7 @@
 		});
 		$('select#speedB').selectmenu({
 			dropdown: false,			
-			wrapperElement: '<div class="overflow"/>',
+			wrapperElement: '<div class="overflow"/>'
 		});
 		$('select#filesC').selectmenu();
 	});
@@ -38,7 +38,7 @@
 <form action="#">
 	<fieldset>
 		<label for="speedA">Select a Speed:</label>
-		<select disabled="disabled" name="speedA" id="speedA">
+		<select name="speedA" id="speedA">
 			<option value="Slower">Slower</option>
 			<option value="Slow">Slow</option>
 			<option value="Medium" selected="selected">Medium</option>
@@ -60,8 +60,8 @@
 			<option value="8">8</option>
 			<option value="9">9</option>
 			<option value="10">10</option>
-			<option disabled="disabled" value="11">11</option>
-			<option disabled="disabled" value="12">12</option>
+			<option value="11">11</option>
+			<option value="12">12</option>
 			<option value="13">13</option>
 			<option value="14">14</option>
 			<option value="15">15</option>
@@ -75,7 +75,7 @@
 		<br />
 		<label for="filesC">Select a file:</label>
 		<select name="filesC" id="filesC">
-			<optgroup disabled="disabled" label="scripts">
+			<optgroup label="scripts">
 				<option value="jquery">jQuery.js</option>
 				<option value="jqueryui">ui.jQuery.js</option>
 			</optgroup>
