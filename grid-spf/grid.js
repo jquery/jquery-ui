@@ -22,7 +22,7 @@ $.widget( "ui.grid", {
 		var that = this,
 			totalWidth = 0,
 			colWidths = this.element.find( "tr:first" ).children().map(function() {
-				var width = $(this).outerWidth();
+				var width = $( this ).outerWidth();
 				totalWidth += width;
 				return width;
 			});
@@ -71,7 +71,7 @@ $.widget( "ui.grid", {
 			$( this ).css( "width", ( colWidths[i] / totalWidth * 100 ) + '%' );
 		});
 
-		// Copy table COLGROUP to grid head
+		// Copy table COLGROUP to grid head and grid foot
 		uiGridBodyTable.find( "colgroup" )
 			.clone()
 			.appendTo( uiGridHeadTable )
@@ -173,7 +173,7 @@ $.widget( "ui.grid", {
 		var gridHeight, headHeight, footHeight,
 			that = this,
 			tbody = this._container().empty();
-			
+
 		$.each( this._toArray(), function( itemId, item ) {
 			that._newRow( item ).appendTo( tbody );
 		});
@@ -195,7 +195,7 @@ $.widget( "ui.grid", {
 		// Adjust body height to fill
 		this.uiGridBody.height( gridHeight - headHeight - footHeight );
 
-		// Adjust head in case of visible scrollbar on body to keep columns aligned
+		// Adjust head and foot in case of visible scrollbar on body to keep columns aligned
 		var paddingRight,
 			vertScrollbar = ( this.uiGridBody[0].scrollHeight !== this.uiGridBody[0].clientHeight );
 		if ( vertScrollbar ) {
@@ -203,29 +203,33 @@ $.widget( "ui.grid", {
 			this.uiGridHead.css( "padding-right", paddingRight + "px" );
 			this.uiGridHeadTable.css( "padding-right", "1px" );
 			this.uiGridFoot.css( "padding-right", paddingRight + "px" );
-			this.uiGridFootTable.css( "padding-right", paddingRight + "px" );
+			this.uiGridFootTable.css( "padding-right", "1px" );
 		} else {
 			this.uiGridHead.css( "padding-right", 0 );
 			this.uiGridHeadTable.css( "padding-right", 0 );
 			this.uiGridFoot.css( "padding-right", 0 );
 			this.uiGridFootTable.css( "padding-right", 0 );
+			this.uiGridHead.css( "padding-right", null );
+			this.uiGridHeadTable.css( "padding-right", null );
+			this.uiGridFoot.css( "padding-right", null );
+			this.uiGridFootTable.css( "padding-right", null );
 		}
-		
-		this._trigger("refresh");
+
+		this._trigger( "refresh" );
 	},
 
 	refreshItem: function( item ) {
 		var that = this;
 		this._container().children().each(function() {
-			if ( $( this ).data( "grid-item" ) === item ) {
-				$( this ).replaceWith( that._newRow( item ) );
+			if ( $(this).data("grid-item") === item ) {
+				$( this ).replaceWith( that._newRow(item) );
 			}
 		});
 	},
 
 	_columns: function() {
 		if ( this.options.columns ) {
-			if ( $.type( this.options.columns[ 0 ] ) === "string" ) {
+			if ( $.type( this.options.columns[0] ) === "string" ) {
 				this.options.columns = $.map( this.options.columns, function( column ) {
 					return {
 						property: column
@@ -233,9 +237,11 @@ $.widget( "ui.grid", {
 				});
 			}
 			var head = this.uiGridHeadTable.find( "thead" );
-			if ( !head.find( "th" ).length ) {
+			if ( !head.find("th").length ) {
 				$.each( this.options.columns, function( index, column ) {
-					$( "<th>" ).text(column.label || column.property).appendTo(head);
+					$( "<th class='ui-state-default'>" )
+						.text( column.label || column.property )
+						.appendTo( head );
 				});
 			}
 			return;
@@ -247,14 +253,16 @@ $.widget( "ui.grid", {
 			if ( !property ) {
 				// generate property name if missing
 				// replaces whitespace and non-alphanumerics with underscore
-				property = th.text().toLowerCase().replace(/\s|[^a-z0-9]/g, "_");
+				property = th.text()
+					.toLowerCase()
+					.replace( /\s|[^a-z0-9]/g, "_" );
 			}
 			var result = {
 				property: property,
 				label: th.text()
 			};
-			$.each( dataFields, function(index, dataField) {
-				result[dataField] = th.data( dataField );
+			$.each( dataFields, function( index, dataField ) {
+				result[ dataField ] = th.data( dataField );
 			});
 			return result;
 		}).get();
@@ -286,7 +294,7 @@ $.widget( "ui.grid", {
 			input: this._container().children().map(function() {
 				var item = {};
 				$( this ).children().each(function( i ) {
-					item[ columns[ i ].property ] = $( this ).text();
+					item[ columns[i].property ] = $( this ).text();
 				});
 				return item;
 			}).get()

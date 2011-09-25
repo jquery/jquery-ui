@@ -57,18 +57,26 @@
 </script>
 
 <h2>products! Click header for sort menu, use inputs for filtering, pager for paging</h2>
+<div style="width:80em;">
 <table id="products">
+	<colgroup>
+		<col width="25%">
+		<col width="35%">
+		<col width="20%">
+		<col width="20%">
+	</colgroup>
 	<thead>
 		<tr>
 			<th data-property="CategoryName" data-type="string">Category</th>
 			<th data-property="ProductName" data-type="string">Product</th>
 			<th data-property="QuantityPerUnit" data-type="string">Quantity Per Unit</th>
-			<th data-property="UnitsInStock" data-type="number">UnitsInStock</th>
+			<th data-property="UnitsInStock" data-type="number">Units In Stock</th>
 		</tr>
 	</thead>
 	<tbody>
 	</tbody>
 </table>
+</div>
 
 <p id="pager">
 	<button data-page="first">First</button>

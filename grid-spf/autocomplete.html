@@ -5,6 +5,7 @@
 	<title>Grid: Filtering</title>
 	<link rel="stylesheet" href="../themes/base/jquery.ui.all.css">
 	<link rel="stylesheet" href="grid.css">
+	<link rel="stylesheet" href="../demos/demos.css">
 	<script src="../jquery-1.6.2.js"></script>
 	<script src="../external/jquery.tmpl.js"></script>
 	<script src="../ui/jquery.ui.core.js"></script>
@@ -53,9 +54,15 @@
 
 		// secondary view
 		// TODO the table is empty, so let's create it from scratch here
-		var grid = $( "table" ).grid({
+		var grid = $( "#table1" ).grid({
 			source: cities.result,
-			columns: [ {property: "name", label: "Name"}, {property: "adminName1", label: "Area"}, {property:"adminName2", label:"Province"}, {property:"population", label:"Population"}, {property:"countryName", label:"Country"} ]
+			columns: [
+				{ property: "name", label: "Name" },
+				{ property: "adminName1", label: "Area" },
+				{ property: "adminName2", label: "Province" },
+				{ property: "population", label: "Population" },
+				{ property: "countryName", label: "Country" }
+			]
 		});
 	});
 	</script>
@@ -69,12 +76,14 @@
 	<label for="city">City</label><input id="city">
 </form>
 
-<table>
+<div style="width:70em;">
+<table id="table1">
 	<thead>
 	</thead>
 	<tbody>
 	</tbody>
 </table>
+</div>
 
 </body>
 </html>
