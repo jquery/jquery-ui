@@ -135,7 +135,6 @@ $.widget( "ui.selectmenu", {
 						break;
 					default:
 						self.list.trigger( event );
-						ret = false;
 				}
 				return ret;
 			}
@@ -361,7 +360,7 @@ $.widget( "ui.selectmenu", {
 					index: index,
 					value: option.attr( 'value' ),
 					label: option.text(),
-					optgroup: optgroup.attr("label") || false,
+					optgroup: optgroup.attr( "label" ) || false,
 					disabled: optgroup.attr( "disabled" ) || option.attr( "disabled" )
 				});
 			});
