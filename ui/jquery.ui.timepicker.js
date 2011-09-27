@@ -17,54 +17,42 @@
  */
 (function( $, undefined ) {
 
-function sixty( value ) {
-	if ( !value ) {
-		return "00";
-	}
-	value = parseInt( value, 10 );
-	if ( value >= 0 && value <= 59 ) {
-		return ( value < 10 ? "0" : "" ) + value;
+function makeBetweenMaskFunction( min, max, def, pad ) {
+	return function( value ) {
+		if ( !value ) {
+			return def;
+		}
+		value = parseInt( value, 10 );
+		if ( value >= min && value <= max ) {
+			return ( value < 10 ? pad : "" ) + value;
+		}
 	}
 }
 
 var maskDefinitions = {
-	hh: function( value ) {
-		if ( value === "" ) {
-			return "12";
+		_h: makeBetweenMaskFunction( 1, 12, "12", " " ),
+		hh: makeBetweenMaskFunction( 1, 12, "12", "0" ),
+		_H: makeBetweenMaskFunction( 0, 23, "12", " " ),
+		HH: makeBetweenMaskFunction( 0, 23, "12", "0" ),
+		mm: makeBetweenMaskFunction( 0, 59, "00", "0" ),
+		ss: makeBetweenMaskFunction( 0, 59, "00", "0" ),
+		tt: function( value ) {
+			if ( value === "" ) {
+				return "pm";
+			}
+			var lower = value.toLowerCase(),
+				character = lower.charAt( 0 );
+			if ( lower.length > 1 && lower.charAt( 1 ) !== "m" ) {
+				return false;
+			}
+			switch ( character ) {
+			case "a":
+				return "am";
+			case "p":
+				return "pm";
+			}
 		}
-		value = parseInt( value, 10 );
-		if ( value >= 1 && value <= 12 ) {
-			return ( value < 10 ? "0" : "" ) + value;
-		}
-	},
-	HH: function( value ) {
-		if ( value === "" ) {
-			return "12";
-		}
-		value = parseInt( value, 10 );
-		if ( value >= 0 && value <= 23 ) {
-			return ( value < 10 ? "0" : "" ) + value;
-		}
-	},
-	mm: sixty,
-	ss: sixty,
-	tt: function( value ) {
-		if ( value === "" ) {
-			return "pm";
-		}
-		var lower = value.toLowerCase(),
-			character = lower.charAt( 0 );
-		if ( lower.length > 1 && lower.charAt( 1 ) !== "m" ) {
-			return false;
-		}
-		switch ( character ) {
-		case "a":
-			return "am";
-		case "p":
-			return "pm";
-		}
-	}
-};
+	};
 
 $.widget( "ui.timepicker", {
 	version: "@VERSION",
@@ -74,6 +62,7 @@ $.widget( "ui.timepicker", {
 		seconds: true
 	},
 	_create: function() {
+		// handles globalization options
 		this.element.mask({
 			mask: this._generateMask(),
 			clearEmpty: false,
@@ -100,6 +89,7 @@ $.widget( "ui.timepicker", {
 	},
 	_generateMask: function() {
 		var mask = "";
+
 		mask += this.options.ampm ? "hh" : "HH";
 		mask += ":mm";
 		if ( this.options.seconds ) {
