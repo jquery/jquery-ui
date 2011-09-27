@@ -351,6 +351,11 @@ $.widget( "ui.selectmenu", {
 		}
 		if ( key === "disabled" ) {
 			this.newelement.button( "option", "disabled", value );
+			if ( value ) {
+				this.element.attr( "disabled", "disabled" );
+			} else {
+				this.element.removeAttr( "disabled" );
+			}
 			this.list.attr( "aria-disabled", value );
 			this.close();
 		}

@@ -14,18 +14,18 @@
 	<link rel="stylesheet" href="../demos.css">
 	<script>
 	$(function() {
-		$('select#speedA').selectmenu({
+		$('select#speed').selectmenu({
 			dropdown: false
 		});
-		$('select#speedB').selectmenu({
+		$('select#number').selectmenu({
 			dropdown: false,			
 			wrapperElement: '<div class="overflow"/>'
 		});
-		$('select#filesC').selectmenu();
+		$('select#files').selectmenu();
 	});
 	</script>
 	<style>
-		form { margin: 200px 0 0 0; }
+		form { margin: 100px 0 0 0 }
 		fieldset { border: 0; }
 		select { width: 200px; }
 		.overflow ul { height: 200px; overflow: auto; }
@@ -37,8 +37,8 @@
 
 <form action="#">
 	<fieldset>
-		<label for="speedA">Select a Speed:</label>
-		<select name="speedA" id="speedA">
+		<label for="speed">Select a speed:</label>
+		<select name="speed" id="speed">
 			<option value="Slower">Slower</option>
 			<option value="Slow">Slow</option>
 			<option value="Medium" selected="selected">Medium</option>
@@ -48,8 +48,8 @@
 		<br />
 		<br />
 		<br />
-		<label for="speedB">Select a Speed:</label>
-		<select name="speedB" id="speedB">
+		<label for="number">Select a number:</label>
+		<select name="number" id="number">
 			<option value="1">1</option>
 			<option value="2" selected="selected">2</option>
 			<option value="3">3</option>
@@ -73,14 +73,14 @@
 		<br />
 		<br />
 		<br />
-		<label for="filesC">Select a file:</label>
-		<select name="filesC" id="filesC">
-			<optgroup label="scripts">
+		<label for="files">Select a file:</label>
+		<select name="files" id="files">
+			<optgroup label="Scripts">
 				<option value="jquery">jQuery.js</option>
 				<option value="jqueryui">ui.jQuery.js</option>
 			</optgroup>
-			<optgroup label="Label with space">
-				<option disabled="disabled" value="somefile">Some unknown file</option>
+			<optgroup label="Other files">
+				<option value="somefile">Some unknown file</option>
 				<option value="someotherfile">Some other file</option>
 			</optgroup>
 		</select>
@@ -92,8 +92,8 @@
 
 
 <div class="demo-description">
-<p>The Autocomplete widgets provides suggestions while you type into the field. Here the suggestions are tags for programming languages, give "ja" (for Java or JavaScript) a try.</p>
-<p>The datasource is a simple JavaScript array, provided to the widget using the source-option.</p>
+<p>The Selectmenu widgets provides a styleable select element replacement. It will act as a proxy back to the original select element, controlling its state for form submission or serialization </p>
+<p>The datasource is a native select element or a simple JavaScript array, provided to the widget using the source-option.</p>
 </div><!-- End demo-description -->
 
 </body>
