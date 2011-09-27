@@ -189,9 +189,9 @@ $.widget( "ui.selectmenu", {
 					item.element = self.items[ item.index ];
 					self._trigger( "select", event, { item: item } );
 					
-					self.close( event, true);
-					
 					if ( flag ) self._trigger( "change", event, { item: item } );
+					
+					self.close( event, true);
 				},
 				focus: function( event, ui ) {	
 					self._trigger( "focus", event, { item: ui.item.data( "item.selectmenu" ) } );
@@ -269,19 +269,21 @@ $.widget( "ui.selectmenu", {
 	close: function( event, focus ) {		
 		var self = this,
 			options = this.options;
-	
-		if ( options.dropdown ) {
-			self.newelement
-				.addClass( 'ui-corner-all' )
-				.removeClass( 'ui-corner-top' );
+			
+		if ( self.opened ) {
+			if ( options.dropdown ) {
+				self.newelement
+					.addClass( 'ui-corner-all' )
+					.removeClass( 'ui-corner-top' );
+			}
+			
+			self.listWrap.removeClass( self.widgetBaseClass + '-open' );
+			this.opened = false;
+			
+			if (focus) self.newelement.focus();
+			
+			self._trigger( "close", event );
 		}
-		
-		self.listWrap.removeClass( self.widgetBaseClass + '-open' );
-		this.opened = false;
-		
-		if (focus) self.newelement.focus();
-		
-		self._trigger( "close", event );
 	},
 	
 	_renderMenu: function( ul, items ) {
@@ -314,6 +316,8 @@ $.widget( "ui.selectmenu", {
 	},
 	
 	_move: function( key, event ) {
+		// TODO this focus is needed to make the select below work, 
+		// but should be removed as its fires an unwanted focus event
 		if ( !this.opened ) {
 			this.list.menu( "focus", event, this._getSelectedItem() );	
 		}
