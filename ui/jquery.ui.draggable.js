@@ -127,6 +127,9 @@ $.widget("ui.draggable", $.ui.mouse, {
 			top: this.offset.top - this.margins.top,
 			left: this.offset.left - this.margins.left
 		};
+		
+		//reset offset scroll chache
+		this.offset.scroll = false;
 
 		$.extend(this.offset, {
 			click: { //Where the click happened, relative to the element
@@ -394,19 +397,25 @@ $.widget("ui.draggable", $.ui.mouse, {
 		if(!pos) pos = this.position;
 		var mod = d == "absolute" ? 1 : -1;
 		var o = this.options, scroll = this.cssPosition == 'absolute' && !(this.scrollParent[0] != document && $.contains(this.scrollParent[0], this.offsetParent[0])) ? this.offsetParent : this.scrollParent, scrollIsRootNode = (/(html|body)/i).test(scroll[0].tagName);
+		
+		//cache scroll
+		if (!this.offset.scroll)
+        	{
+            		this.offset.scroll = {top : scroll.scrollTop(), left : scroll.scrollLeft()};
+        	}
 
 		return {
 			top: (
 				pos.top																	// The absolute mouse position
 				+ this.offset.relative.top * mod										// Only for relative positioned nodes: Relative offset from element to offset parent
 				+ this.offset.parent.top * mod											// The offsetParent's offset without borders (offset + border)
-				- ($.browser.safari && $.browser.version < 526 && this.cssPosition == 'fixed' ? 0 : ( this.cssPosition == 'fixed' ? -this.scrollParent.scrollTop() : ( scrollIsRootNode ? 0 : scroll.scrollTop() ) ) * mod)
+				- ($.browser.safari && $.browser.version < 526 && this.cssPosition == 'fixed' ? 0 : ( this.cssPosition == 'fixed' ? -this.scrollParent.scrollTop() : ( scrollIsRootNode ? 0 : this.offset.scroll.top ) ) * mod)
 			),
 			left: (
 				pos.left																// The absolute mouse position
 				+ this.offset.relative.left * mod										// Only for relative positioned nodes: Relative offset from element to offset parent
 				+ this.offset.parent.left * mod											// The offsetParent's offset without borders (offset + border)
-				- ($.browser.safari && $.browser.version < 526 && this.cssPosition == 'fixed' ? 0 : ( this.cssPosition == 'fixed' ? -this.scrollParent.scrollLeft() : scrollIsRootNode ? 0 : scroll.scrollLeft() ) * mod)
+				- ($.browser.safari && $.browser.version < 526 && this.cssPosition == 'fixed' ? 0 : ( this.cssPosition == 'fixed' ? -this.scrollParent.scrollLeft() : scrollIsRootNode ? 0 : this.offset.scroll.left ) * mod)
 			)
 		};
 
@@ -453,6 +462,12 @@ $.widget("ui.draggable", $.ui.mouse, {
 			}
 
 		}
+		
+		//cache scroll
+		if (!this.offset.scroll)
+        	{
+            		this.offset.scroll = {top : scroll.scrollTop(), left : scroll.scrollLeft()};
+        	}
 
 		return {
 			top: (
@@ -460,14 +475,14 @@ $.widget("ui.draggable", $.ui.mouse, {
 				- this.offset.click.top													// Click offset (relative to the element)
 				- this.offset.relative.top												// Only for relative positioned nodes: Relative offset from element to offset parent
 				- this.offset.parent.top												// The offsetParent's offset without borders (offset + border)
-				+ ($.browser.safari && $.browser.version < 526 && this.cssPosition == 'fixed' ? 0 : ( this.cssPosition == 'fixed' ? -this.scrollParent.scrollTop() : ( scrollIsRootNode ? 0 : scroll.scrollTop() ) ))
+				+ ($.browser.safari && $.browser.version < 526 && this.cssPosition == 'fixed' ? 0 : ( this.cssPosition == 'fixed' ? -this.scrollParent.scrollTop() : ( scrollIsRootNode ? 0 : this.offset.scroll.top ) ))
 			),
 			left: (
 				pageX																// The absolute mouse position
 				- this.offset.click.left												// Click offset (relative to the element)
 				- this.offset.relative.left												// Only for relative positioned nodes: Relative offset from element to offset parent
 				- this.offset.parent.left												// The offsetParent's offset without borders (offset + border)
-				+ ($.browser.safari && $.browser.version < 526 && this.cssPosition == 'fixed' ? 0 : ( this.cssPosition == 'fixed' ? -this.scrollParent.scrollLeft() : scrollIsRootNode ? 0 : scroll.scrollLeft() ))
+				+ ($.browser.safari && $.browser.version < 526 && this.cssPosition == 'fixed' ? 0 : ( this.cssPosition == 'fixed' ? -this.scrollParent.scrollLeft() : scrollIsRootNode ? 0 : this.offset.scroll.left ))
 			)
 		};
 
