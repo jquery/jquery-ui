@@ -49,12 +49,15 @@ $.widget( "ui.selectmenu", {
 		// quick array of button and menu id's
 		self.ids = [ selectmenuId + '-button', selectmenuId + '-menu' ];
 		
-		// get options
+		// save options
 		self.items = self.element.find( 'option' );
 		
-		// set options 		
-		options.value = self.element[0].value;
-		options.disabled = ( self.element.attr( 'disabled' ) ) ? true : false;
+		// set current value 
+		if ( options.value ) {
+			self.element[0].value = options.value;
+		} else {
+			options.value = self.element[0].value;
+		}
 		
 		// catch click event of the label
 		self.element.bind( 'click.selectmenu',  function() {
@@ -82,7 +85,8 @@ $.widget( "ui.selectmenu", {
 					primary: ( options.dropdown ? 'ui-icon-triangle-1-s' : 'ui-icon-triangle-2-n-s' )
 				}
 			});
-		
+			
+		// wrap and insert new button
 		self.newelementWrap = $( options.wrapperElement )
 			.append( self.newelement )
 			.insertAfter( self.element );	
@@ -167,6 +171,7 @@ $.widget( "ui.selectmenu", {
 			id: self.ids[1]
 		});
 		
+		// wrap list
 		self.listWrap = $( options.wrapperElement )
 			.addClass( self.widgetBaseClass + '-menu' )
 			.css( "width", ( options.dropdown ) ? self.element.width() : self.element.width() - options.iconWidth )
@@ -176,6 +181,7 @@ $.widget( "ui.selectmenu", {
 		self._initSource();
 		self._renderMenu( self.list, options.source );
 		
+		// init menu widget
 		self.list
 			.data( 'element.selectelemenu', self.element )
 			.menu({
@@ -185,7 +191,7 @@ $.widget( "ui.selectmenu", {
 						
 					if ( item.index != self.element[0].selectedIndex ) flag = true;	
 					
-					self._setSelected( event, item );
+					self._setOption( "value", item.value );
 					item.element = self.items[ item.index ];
 					self._trigger( "select", event, { item: item } );
 					
@@ -331,12 +337,6 @@ $.widget( "ui.selectmenu", {
 		return this.list.find( "li" ).not( '.ui-selectmenu-optgroup' ).eq( this.element[0].selectedIndex );	
 	},
 	
-	_setSelected: function( event, item ) {				
-		this.newelement.children( '.ui-button-text' ).text( item.label );
-		this.element[0].selectedIndex = item.index;
-		this.options.value = item.value;
-	},
-	
 	_toggle: function( event ) {
 		if ( this.opened ) {	
 			this.close( event );
@@ -347,11 +347,13 @@ $.widget( "ui.selectmenu", {
 	
 	_setOption: function( key, value ) {
 		this._super( "_setOption", key, value );
+		
 		if ( key === "appendTo" ) {
 			this.listWrap.appendTo( $( value || "body", this.element[0].ownerDocument )[0] );
 		}
-		if ( key === "value" && value) {
+		if ( key === "value" && value !== undefined ) {
 			this.element[0].value = value;
+			this.newelement.children( '.ui-button-text' ).text( this.items.eq( this.element[0].selectedIndex ).text() );
 		}
 		if ( key === "disabled" ) {
 			this.newelement.button( "option", "disabled", value );
