@@ -42,7 +42,7 @@ $.widget( "ui.selectmenu", {
 	_create: function() {
 		var self = this,
 			options = this.options,
-			tabindex = this.element.attr( 'tabindex' )
+			tabindex = this.element.attr( 'tabindex' ),
 			// set a default id value, generate a new random one if not set by developer
 			selectmenuId = self.element.attr( 'id' ) || 'ui-selectmenu-' + Math.random().toString( 16 ).slice( 2, 10 );
 			
@@ -72,7 +72,7 @@ $.widget( "ui.selectmenu", {
 				tabindex: ( tabindex ? tabindex : self.element.attr( 'disabled' ) ? 1 : 0 ),
 				id: self.ids[ 0 ],
 				css: {
-					width: self.element.width()
+					width: self.element.outerWidth()
 				},
 				'aria-disabled': options.disabled,
 				'aria-owns': self.ids[ 1 ],
@@ -172,9 +172,10 @@ $.widget( "ui.selectmenu", {
 		});
 		
 		// wrap list
+		var newelementWidth = self.newelement.outerWidth();
 		self.listWrap = $( options.wrapperElement )
 			.addClass( self.widgetBaseClass + '-menu' )
-			.css( "width", ( options.dropdown ) ? self.element.width() : self.element.width() - options.iconWidth )
+			.width( ( options.dropdown ) ? newelementWidth : newelementWidth - options.iconWidth )
 			.append( self.list )
 			.appendTo( options.appendTo );
 		
