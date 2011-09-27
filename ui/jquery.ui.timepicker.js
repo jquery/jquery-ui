@@ -47,6 +47,20 @@ function getAmPmArrays() {
 }
 
 function validAmPm( value ) {
+	var i, j, l,
+		valid = getAmPmArrays();
+
+	if ( value === "" ) {
+		return valid.pm && valid.pm[0];
+	}
+
+	for ( i in valid ) {
+		for ( j = 0, l = valid[ i ].length; j < l; j++ ) {
+			if ( valid[ i ][ j ].substr( 0, value.length ) === value ) {
+				return valid[ i ][ 0 ];
+			}
+		}
+	}
 }
 
 var rsingleh = /\b(h)(?=:)/i,
@@ -58,22 +72,7 @@ var rsingleh = /\b(h)(?=:)/i,
 		HH: makeBetweenMaskFunction( 0, 23, "12", "0" ),
 		mm: makeBetweenMaskFunction( 0, 59, "00", "0" ),
 		ss: makeBetweenMaskFunction( 0, 59, "00", "0" ),
-		tt: function( value ) {
-			var i, j, l,
-				valid = getAmPmArrays();
-
-			if ( value === "" ) {
-				return valid.pm && valid.pm[0];
-			}
-
-			for ( i in valid ) {
-				for ( j = 0, l = valid[ i ].length; j < l; j++ ) {
-					if ( valid[ i ][ j ].substr( 0, value.length ) === value ) {
-						return valid[ i ][ 0 ];
-					}
-				}
-			}
-		}
+		tt: validAmPm
 	};
 
 $.widget( "ui.timepicker", {
