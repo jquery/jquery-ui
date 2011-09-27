@@ -60,8 +60,8 @@ $.widget( "ui.selectmenu", {
 		self.element.bind( 'click.selectmenu',  function() {
 			self.newelement.focus();			
 			return false;
-		})
-		.hide();
+		});
+		// .hide();
 		
 		// create button
 		self.newelement = $( '<a />', {
@@ -187,7 +187,6 @@ $.widget( "ui.selectmenu", {
 				},
 				focus: function( event, ui ) {	
 					var item = ui.item.data( "item.selectmenu" );
-					if ( !self.opened ) self._setSelected( event, item );
 					self._trigger( "focus", event, { item: item } );
 				}
 			})			
