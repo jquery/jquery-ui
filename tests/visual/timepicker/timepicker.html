@@ -5,6 +5,9 @@
 	<link rel="stylesheet" href="../visual.css" type="text/css" />
 	<link rel="stylesheet" href="../../../themes/base/jquery.ui.all.css" type="text/css" title="ui-theme" />
 	<script src="../../../jquery-1.6.2.js"></script>
+	<script src="../../../external/globalize.js"></script>
+	<script src="../../../external/globalize.culture.de-DE.js"></script>
+	<script src="../../../external/globalize.culture.ja-JP.js"></script>
 	<script src="../../../ui/jquery.ui.core.js"></script>
 	<script src="../../../ui/jquery.ui.widget.js"></script>
 	<script src="../../../ui/jquery.ui.button.js"></script>
@@ -13,11 +16,19 @@
 	<script src="../../../ui/jquery.ui.timepicker.js"></script>
 	<script>
 	$(function() {
-		$("#timepicker").timepicker();
-		$("#timepicker2").timepicker();
-		$("#timepicker3").timepicker({ ampm: false });
-		$("#timepicker4").timepicker({ seconds: false });
-		$("#timepicker5").timepicker({ ampm: false, seconds: false });
+		$("#culture").change(function() {
+			Globalize.culture( $( this ).val() );
+			$( "input" ).timepicker( "destroy" );
+			setup();
+		});
+		function setup() {
+			$("#timepicker").timepicker();
+			$("#timepicker2").timepicker();
+			$("#timepicker3").timepicker({ ampm: false });
+			$("#timepicker4").timepicker({ seconds: false });
+			$("#timepicker5").timepicker({ ampm: false, seconds: false });
+		}
+		setup();
 	});
 	</script>
 	<style>
@@ -32,13 +43,19 @@
 		<label>Timepicker</label>
 		<input id="timepicker">
 		<label>Timepicker - With Initial Value</label>
-		<input id="timepicker2" value="12:00:00 pm">
+		<input id="timepicker2" value="01:30:45 am">
 		<label>Timepicker - <code>{ ampm: false }</code></label>
 		<input id="timepicker3">
 		<label>Timepicker - <code>{ seconds: false }</code></label>
 		<input id="timepicker4">
 		<label>Timepicker - <code>{ ampm: false, seconds: false }</code></label>
 		<input id="timepicker5">
+		<label>Globalize Culture Selector</label>
+		<select id="culture" name="culture">
+			<option value="en-US">en-US</option>
+			<option value="de-DE">de-DE</option>
+			<option value="ja-JP">ja-JP</option>
+		</select>
 	</form>
 </body>
 </html>

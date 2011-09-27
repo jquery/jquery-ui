@@ -5,30 +5,30 @@ module( "timepicker: options" );
 test( "seconds", function() {
 	expect( 3 );
 
-	var input = $( "#timepicker1" ).val("12:30 am").timepicker({
+	var input = $( "#timepicker1" ).val("12:30 AM").timepicker({
 		seconds: false
 	});
 
-	equal( input.val(), "12:30 am", "Seconds: false startup option" );
+	equal( input.val(), "12:30 AM", "Seconds: false startup option" );
 
 	input.timepicker( "option", "seconds", true );
 
-	equal( input.val(), "12:30:00 am", "Seconds: enabled seconds via option method" );
+	equal( input.val(), "12:30:00 AM", "Seconds: enabled seconds via option method" );
 
 	input.timepicker( "option", "seconds", false );
 
-	equal( input.val(), "12:30 am", "Seconds: disabled seconds via option method" );
+	equal( input.val(), "12:30 AM", "Seconds: disabled seconds via option method" );
 
 });
 
 test( "ampm", function() {
 	expect( 3 );
 
-	var input = $( "#timepicker1" ).val("01:30:00 pm").timepicker({
+	var input = $( "#timepicker1" ).val(" 1:30:00 PM").timepicker({
 		ampm: true
 	});
 
-	equal( input.val(), "01:30:00 pm", "Sanity Check" );
+	equal( input.val(), " 1:30:00 PM", "Sanity Check" );
 
 	input.timepicker( "option", "ampm", false );
 
@@ -36,7 +36,7 @@ test( "ampm", function() {
 
 	input.timepicker( "option", "ampm", true );
 
-	equal( input.val(), "01:30:00 pm", "Enabled ampm option via method" );
+	equal( input.val(), " 1:30:00 PM", "Enabled ampm option via method" );
 
 });
 

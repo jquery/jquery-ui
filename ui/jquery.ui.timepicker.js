@@ -26,10 +26,32 @@ function makeBetweenMaskFunction( min, max, def, pad ) {
 		if ( value >= min && value <= max ) {
 			return ( value < 10 ? pad : "" ) + value;
 		}
+	};
+}
+
+// a wrapper function for Globalize integration
+function getAmPmArrays() {
+	if ( window.Globalize ) {
+		var calendar = Globalize.culture().calendars.standard;
+		
+		return {
+			am: calendar.AM,
+			pm: calendar.PM
+		};
+	} else {
+		return {
+			am: [ "AM", "am" ],
+			pm: [ "PM", "pm" ]
+		};
 	}
 }
 
-var maskDefinitions = {
+function validAmPm( value ) {
+}
+
+var rsingleh = /\b(h)(?=:)/i,
+	rlowerhg = /h/g,
+	maskDefinitions = {
 		_h: makeBetweenMaskFunction( 1, 12, "12", " " ),
 		hh: makeBetweenMaskFunction( 1, 12, "12", "0" ),
 		_H: makeBetweenMaskFunction( 0, 23, "12", " " ),
@@ -37,19 +59,19 @@ var maskDefinitions = {
 		mm: makeBetweenMaskFunction( 0, 59, "00", "0" ),
 		ss: makeBetweenMaskFunction( 0, 59, "00", "0" ),
 		tt: function( value ) {
+			var i, j, l,
+				valid = getAmPmArrays();
+
 			if ( value === "" ) {
-				return "pm";
+				return valid.pm && valid.pm[0];
 			}
-			var lower = value.toLowerCase(),
-				character = lower.charAt( 0 );
-			if ( lower.length > 1 && lower.charAt( 1 ) !== "m" ) {
-				return false;
-			}
-			switch ( character ) {
-			case "a":
-				return "am";
-			case "p":
-				return "pm";
+
+			for ( i in valid ) {
+				for ( j = 0, l = valid[ i ].length; j < l; j++ ) {
+					if ( valid[ i ][ j ].substr( 0, value.length ) === value ) {
+						return valid[ i ][ 0 ];
+					}
+				}
 			}
 		}
 	};
@@ -89,6 +111,20 @@ $.widget( "ui.timepicker", {
 	},
 	_generateMask: function() {
 		var mask = "";
+
+		if ( window.Globalize ) {
+			mask = Globalize.culture().calendars.standard.patterns[ this.options.seconds ? "T" : "t" ];
+			mask = mask.replace( rsingleh, "_$1" );
+
+			// if the culture doesn't understand AM/PM - don't let timepickers understand it either.
+			if ( mask.indexOf( "tt" ) == -1 ) {
+				this.options.ampm = false;
+			} else if ( !this.options.ampm ) {
+				mask = mask.replace( rlowerhg, "H" ).replace( " tt", "" );
+			}
+
+			return mask;
+		}
 
 		mask += this.options.ampm ? "hh" : "HH";
 		mask += ":mm";
@@ -145,19 +181,27 @@ $.widget( "ui.timepicker", {
 		}
 
 		if ( key === "ampm" ) {
-			var i, buffer, currentHour, currentTT;
-			buffer = this.mask.buffer;
+			var i, currentHour, currentTT,
+				ampm = getAmPmArrays(),
+				buffer = this.mask.buffer,
+				newMask = this._generateMask();
+
+			// in the event that ampm was forced off due to locale, we need to check this again
+			if ( this.options.ampm === was ) {
+				return;
+			}
+
 			currentHour = parseInt( buffer[ 0 ].value, 10 );
 			for ( i = 0; i < buffer.length; i += 3 ) {
 				if ( buffer[ i ].valid === maskDefinitions.tt ) {
 					currentHour %= 12;
-					if ( buffer[ i ].value === "pm" ) {
+					if ( jQuery.inArray( buffer[ i ].value, ampm.pm ) > -1 ) {
 						currentHour += 12;
 					}
 				}
 			}
-			if ( value ) {
-				currentTT = currentHour > 11 ? "pm" : "am";
+			if ( this.options.ampm ) {
+				currentTT = currentHour > 11 ? ampm.pm[0] : ampm.am[0];
 				currentHour = ( currentHour % 12 ) || 12;
 				buffer[ 0 ].value = ( currentHour < 10 ? "0" : "" ) + currentHour;
 				this.mask._paint();
@@ -185,14 +229,14 @@ $.widget( "ui.timepicker", {
 	_spinnerParse: function( val ) {
 		val = this.mask.buffer[ this.currentField * 3 ].value;
 		if ( this.currentField === ( this.options.seconds ? 3 : 2 ) ) {
-			return val === "am" ? 0 : 1;
+			return jQuery.inArray( val, getAmPmArrays().am ) > -1 ? 0 : 1;
 		}
 		return parseInt( val, 10 ) || 0;
 	},
 	_spinnerValue: function( val ) {
 		var bufferObject = this.mask.buffer[ this.currentField * 3 ];
 		if ( this.currentField === ( this.options.seconds ? 3 : 2 ) ) {
-			val = parseInt( val, 10 ) ? "pm" : "am";
+			val = getAmPmArrays()[ parseInt( val, 10 ) ? "pm" : "am" ][ 0 ];
 		}
 		bufferObject.value = bufferObject.valid( val );
 		this.mask._paint();
