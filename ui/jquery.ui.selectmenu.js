@@ -262,12 +262,14 @@ $.widget( "ui.selectmenu", {
 					offset: "0 " + _offset
 				});
 			}
-				
-			self.listWrap.position( $.extend({
-				of: this.newelementWrap
-			}, options.position ));
 			
-			this.opened = true;
+			self.listWrap				
+				.zIndex( self.element.zIndex() + 1 )
+				.position( $.extend({
+					of: self.newelementWrap
+				}, options.position ));
+			
+			self.opened = true;
 			self._trigger( "open", event );
 		}
 	},	
