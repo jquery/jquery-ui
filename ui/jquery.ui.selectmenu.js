@@ -60,8 +60,8 @@ $.widget( "ui.selectmenu", {
 		self.element.bind( 'click.selectmenu',  function() {
 			self.newelement.focus();			
 			return false;
-		});
-		// .hide();
+		})
+		.hide();
 		
 		// create button
 		self.newelement = $( '<a />', {
@@ -153,7 +153,8 @@ $.widget( "ui.selectmenu", {
 		});			
 	},
 	
-	refresh: function() {		
+	// TODO update the value option
+	refresh: function() {
 		var self = this,
 			options = this.options;
 				
@@ -179,15 +180,21 @@ $.widget( "ui.selectmenu", {
 			.data( 'element.selectelemenu', self.element )
 			.menu({
 				select: function( event, ui ) {
-					var item = ui.item.data( "item.selectmenu" );
+					var flag = false,
+						item = ui.item.data( "item.selectmenu" );
+						
+					if ( item.index != self.element[0].selectedIndex ) flag = true;	
+					
 					self._setSelected( event, item );
-					item.element = $ ( self.items[ item.index ] );
+					item.element = self.items[ item.index ];
 					self._trigger( "select", event, { item: item } );
+					
 					self.close( event, true);
+					
+					if ( flag ) self._trigger( "change", event, { item: item } );
 				},
 				focus: function( event, ui ) {	
-					var item = ui.item.data( "item.selectmenu" );
-					self._trigger( "focus", event, { item: item } );
+					self._trigger( "focus", event, { item: ui.item.data( "item.selectmenu" ) } );
 				}
 			})			
 			.bind({
