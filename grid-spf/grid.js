@@ -19,8 +19,34 @@ $.widget( "ui.grid", {
 	},
 
 	_create: function() {
-		var that = this,
-			totalWidth = 0,
+		var that = this;
+		this._draw();
+		this._columns();
+		this._rowTemplate();
+		this._source();
+		this.element.delegate( "tbody > tr", "click", function( event ) {
+			that._trigger( "select", event, {
+				item: $( this ).data( "grid-item" )
+			});
+		});
+		if ( $.observable ) {
+			that._bindChange( that._toArray() );
+			$.observable( this.options.source ).bind( "insert remove replaceAll", function( event, ui ) {
+				if ( event.type === "insert" ) {
+					that._bindChange( ui.items );
+				} else if (event.type === "replaceAll" ) {
+					that._unbindChange( ui.oldItems );
+					that._bindChange( ui.newItems );
+				} else {
+					that._unbindChange( ui.items );
+				}
+				that.refresh();
+			});
+		}
+	},
+	
+	_draw: function() {
+		var totalWidth = 0,
 			colWidths = this.element.find( "tr:first" ).children().map(function() {
 				var width = $( this ).outerWidth();
 				totalWidth += width;
@@ -50,6 +76,11 @@ $.widget( "ui.grid", {
 			
 			uiGridFootTable = ( this.uiGridFootTable = $("<table class='ui-widget-content ui-grid-foot-table'></table>") )
 				.appendTo( uiGridFoot );
+		
+		// These are used in refresh when needed for scrollbar padding
+		this.uiGridHeadAndFoot = this.uiGridHead.add( this.uiGridFoot );
+		this.uiGridHeadTableAndFootTable = this.uiGridHeadTable.add( this.uiGridFootTable );
+		this.uiGridHeadAndFootAndTables = this.uiGridHeadAndFoot.add( this.uiGridHeadTableAndFootTable );
 
 		// Move table CAPTION to grid head
 		uiGridBodyTable.find( "caption" ).addClass( "ui-widget-header" )
@@ -100,29 +131,6 @@ $.widget( "ui.grid", {
 
 		// Give foot cells a clickable state
 		uiGridFootTable.find( "td" ).addClass( "ui-state-default" );
-
-		this._columns();
-		this._rowTemplate();
-		this._source();
-		this.element.delegate( "tbody > tr", "click", function( event ) {
-			that._trigger( "select", event, {
-				item: $( this ).data( "grid-item" )
-			});
-		});
-		if ( $.observable ) {
-			that._bindChange( that._toArray() );
-			$.observable( this.options.source ).bind( "insert remove replaceAll", function( event, ui ) {
-				if ( event.type === "insert" ) {
-					that._bindChange( ui.items );
-				} else if (event.type === "replaceAll" ) {
-					that._unbindChange( ui.oldItems );
-					that._bindChange( ui.newItems );
-				} else {
-					that._unbindChange( ui.items );
-				}
-				that.refresh();
-			});
-		}
 	},
 
 	widget: function() {
@@ -200,19 +208,11 @@ $.widget( "ui.grid", {
 			vertScrollbar = ( this.uiGridBody[0].scrollHeight !== this.uiGridBody[0].clientHeight );
 		if ( vertScrollbar ) {
 			paddingRight = this.uiGridBody.width() - this.uiGridBodyTable.outerWidth();
-			this.uiGridHead.css( "padding-right", paddingRight + "px" );
-			this.uiGridHeadTable.css( "padding-right", "1px" );
-			this.uiGridFoot.css( "padding-right", paddingRight + "px" );
-			this.uiGridFootTable.css( "padding-right", "1px" );
+			this.uiGridHeadAndFoot.css( "padding-right", paddingRight + "px" );
+			this.uiGridHeadTableAndFootTable.css( "padding-right", "1px");
 		} else {
-			this.uiGridHead.css( "padding-right", 0 );
-			this.uiGridHeadTable.css( "padding-right", 0 );
-			this.uiGridFoot.css( "padding-right", 0 );
-			this.uiGridFootTable.css( "padding-right", 0 );
-			this.uiGridHead.css( "padding-right", null );
-			this.uiGridHeadTable.css( "padding-right", null );
-			this.uiGridFoot.css( "padding-right", null );
-			this.uiGridFootTable.css( "padding-right", null );
+			this.uiGridHeadAndFootAndTables.css( "padding-right", 0 );
+			this.uiGridHeadAndFootAndTables.css( "padding-right", null );
 		}
 
 		this._trigger( "refresh" );
@@ -221,7 +221,7 @@ $.widget( "ui.grid", {
 	refreshItem: function( item ) {
 		var that = this;
 		this._container().children().each(function() {
-			if ( $(this).data("grid-item") === item ) {
+			if ( $( this ).data( "grid-item" ) === item ) {
 				$( this ).replaceWith( that._newRow(item) );
 			}
 		});
@@ -294,7 +294,7 @@ $.widget( "ui.grid", {
 			input: this._container().children().map(function() {
 				var item = {};
 				$( this ).children().each(function( i ) {
-					item[ columns[i].property ] = $( this ).text();
+					item[ columns[ i ].property ] = $( this ).text();
 				});
 				return item;
 			}).get()
