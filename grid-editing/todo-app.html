@@ -27,10 +27,13 @@
 		// TODO rewrite to do incremental rendering on each todo item
 		$.observable( todos ).bind("insert remove replaceAll", function() {
 			store.save();
+			renderList();
+		});
+		function renderList() {
 			updateAllChecked();
 			$( "#remaining" ).text( todos.length + (todos.length === 1 ? " item" : " items") + " remaining" );
 			list.empty().append( $( "#todo-list-item" ).tmpl( todos ) );
-		})
+		}
 		function update( index, checked ) {
 			todos[ index ].done = checked;
 			updateAllChecked();
@@ -80,8 +83,7 @@
 			}
 			$.observable(todos).replaceAll(todos);
 		});
-		// TODO fix this
-		$.observable( todos ).replaceAll( todos );
+		renderList();
 	});
 	</script>
 	<style>

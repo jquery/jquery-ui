@@ -23,26 +23,38 @@
 	var movies = store.load();
 
 	$(function() {
-		$( [ movies ] ).bind("insert remove refresh change", function(event, ui) {
-			store.save( movies );
-			$(store).trigger("update");
+		function renderList() {
+			list.empty().append( $( "#movie-list-item" ).tmpl( movies ) );
+		}
+		function bindChange( items ) {
+			$.each( items, function( index, item ) {
+				$.observable( item ).bind( "change", function() {
+					renderList();
+				});
+			});
+		}
+		$.observable( movies ).bind("insert remove replaceAll", function( event, ui ) {
+			if ( event.type === "insert" ) {
+				bindChange( ui.items );
+			}
+			store.save();
+			renderList();
 		});
+		bindChange( movies );
 
 		$(":submit").button();
 
-		var movie;
 		var editForm = $( "#editForm" ).hide().submit( function( event ) {
 			event.preventDefault();
+			var movie = $( this ).data( "movie" );
 			$.observable( movie, movies ).property( serializeForm( this ) );
 			editForm.hide();
 		});
 		var list = $("#movies-list").delegate("li:has(li)", "click", function() {
-			movie = $( this ).tmplItem().data;
+			var movie = $( this ).tmplItem().data;
+			editForm.data( "movie", movie );
 			deserializeForm( editForm, movie );
 			editForm.show();
-		});
-		$(store).bind("update", function() {
-			list.empty().append( $("#movie-list-item").tmpl( movies ) );
 		});
 
 		$("#addMovie").click(function() {
@@ -57,7 +69,7 @@
 
 		$("#editForm").hide();
 
-		$(store).trigger("update");
+		renderList();
 	});
 	</script>
 	<style>
