@@ -14,215 +14,225 @@
 (function( $, undefined ) {
 
 $.widget("ui.draggable", {
+
 	widgetEventPrefix: "drag",
+
 	options: {
 
-    helper : false
+		helper : false
 
 	},
 
-  drag_el : false, // either element or the helper
+	// Either initialized element or the helper
+	dragEl : false,
 
-  position : {},
-  offset   : {},
+	position : {},
+	offset	 : {},
 
-  _start_coords    : {}, // start X/Y coords of mouse before drag
-  _start_position  : {}, // start position of element before drag
-  _start_offset    : {}, // start offset of element before drag
+	// Start X/Y coords of mouse before drag
+	startCoords		: {},
+
+	// Start position of element before drag
+	startPosition	: {},
+
+	// Start offset of element before drag
+	startOffset		: {},
+
+	// TODO: actually remove data
+	destroy: function() {
+	return this;
+	},
 
 	_create: function() {
 
-    this.scrollParent = this.element.scrollParent();
+		this.scrollParent = this.element.scrollParent();
 
-    // Static position elements can't be moved with top/left
-    if ( this.element.css( "position" ) === "static" ) {
-      this.element.css( "position", "relative" );
-    }
+		// Static position elements can"t be moved with top/left
+		if ( this.element.css( "position" ) === "static" ) {
+			this.element.css( "position", "relative" );
+		}
 
-    // Prevent browser from hijacking drag
-    this.element.disableSelection();
+		// Prevent browser from hijacking drag
+		this.element.disableSelection();
 
-    // Using proxy to avoid anon functions using self to pass "this" along
-    this.element.bind( "mousedown." + this.widgetName, $.proxy( this._mouseDown, this ) );
+		// Using proxy to avoid anon functions using self to pass "this" along
+		this.element.bind( "mousedown." + this.widgetName, $.proxy( this._mouseDown, this ) );
 
-	}, // _create
+	},
 
-	destroy: function() {
-		return this;
-	}, // destroy
+	_setPosition : function() {
 
-  _setPosition : function() {
+		var left, top, position, cssPosition;
 
-    var left, top, position, css_position;
+		// Helper is appended to body so offset of element is all that"s needed
+		if ( this.options.helper === true ) {
+			return this.element.offset();
+		}
 
-    // Helper is appended to body so offset of element is all that's needed
-    if ( this.options.helper === true ) {
-      return this.element.offset();
-    }
+		cssPosition = this.dragEl.css( "position" );;
 
-    css_position = this.drag_el.css( "position" );;
+		// If fixed or absolute
+		if ( cssPosition !== "relative" ) {
 
-    // If fixed or absolute
-    if ( css_position !== "relative" ) {
+			position = this.dragEl.position();
 
-      position = this.drag_el.position();
+			if ( cssPosition === "absolute" ) {
+				return position;
+			}
 
-      if ( css_position === "absolute" ) {
-        return position;
-      }
+			// Take into account scrollbar for fixed position
+			position.top  = position.top - this.scrollParent.scrollTop();
+			position.left = position.left - this.scrollParent.scrollLeft();
 
-      // Take into account scrollbar for fixed position
-      position.top  = position.top - this.scrollParent.scrollTop();
-      position.left = position.left - this.scrollParent.scrollLeft();
+			return position;
 
-      return position;
+		} // cssPosition !+== absolute
 
-    } // css_position !+== absolute
+		/** When using relative, css values are checked **/
 
-    /** When using relative, css values are checked **/
+		left = this.dragEl.css( "left" );
+		top	= this.dragEl.css( "top" );
 
-    left = this.drag_el.css( "left" );
-    top  = this.drag_el.css( "top" );
+		// Webkit will give back auto if there is nothing inline yet
+		left = ( left === "auto" ) ? 0 : parseInt( left, 10 );
+		top	 = ( top === "auto" ) ? 0 : parseInt( top, 10 );
 
-    // Webkit will give back auto if there is nothing inline yet
-    left = ( left === "auto" ) ? 0 : parseInt( left, 10 );
-    top  = ( top === "auto" ) ? 0 : parseInt( top, 10 );
+		return {
 
-    return {
+			left : left,
+			top	: top
 
-      left : left,
-      top  : top
+		};
 
-    };
+	},
 
-  }, // _setPosition
+	_mouseDown : function( event ) {
 
-  _mouseDown : function( event ) {
+		this.dragEl = this.element;
 
-    var el_position;
-    
-    this.drag_el = this.element;
+		// Helper required, so clone, hide, and set reference
+		if ( this.options.helper === true ) {
 
-    // Helper required, so clone, hide, and set reference
-    if ( this.options.helper === true ) {
+			this.dragEl = this.element.clone();
 
-      this.drag_el = this.element.clone();
+			// If source element has an ID, change ID of helper to avoid overlap
+			if ( this.element.attr( "id" ) ) {
 
-      // If source element has an ID, change ID of helper to avoid overlap
-      if ( this.element.attr( 'id' ) ) {
+				this.dragEl
+					.css({
+						position : "absolute",
+						display	: "none"
+					})
+					.disableSelection()
+					.attr( "id", this.element.attr( "id" ) + "-" + this.widgetName );
 
-        this.drag_el
-          .css({
-            position : 'absolute',
-            display  : 'none'
-          })
-          .disableSelection()
-          .attr( 'id', this.element.attr( 'id' ) + '-' + this.widgetName );
+			} // id
 
-      } // id
+			$( "body" ).append( this.dragEl );
 
-      $('body').append( this.drag_el );
+		} // if this.options.helper = true
 
-    } // if this.options.helper = true
+		// Cache starting absolute and relative positions
+		this.startPosition = this._setPosition();
+		this.startOffset   = this.dragEl.offset();
 
-    // Cache starting absolute and relative positions
-    this._start_position = this._setPosition();
-    this._start_offset   = this.drag_el.offset();
+		// Cache current position and offset
+		this.position = $.extend( {}, this.startPosition );
+		this.offset	  = $.extend( {}, this.startOffset );
 
-    // Cache current position and offset
-    this.position = $.extend( {}, this._start_position );
-    this.offset   = $.extend( {}, this._start_offset );
+		this.startCoords = {
+			left : event.clientX,
+			top	 : event.clientY
+		};
 
-    this._start_coords = {
-      left : event.clientX,
-      top  : event.clientY
-    };
+		this._trigger( "start", event );
 
-    this._trigger( "start", event );
-
-    $(document).bind( "mousemove." + this.widgetName, $.proxy( this._mouseMove, this ) );
-    $(document).bind( "mouseup." + this.widgetName, $.proxy( this._mouseUp, this ) );
+		$(document).bind( "mousemove." + this.widgetName, $.proxy( this._mouseMove, this ) );
+		$(document).bind( "mouseup." + this.widgetName, $.proxy( this._mouseUp, this ) );
 
 
-    // Set the helper up by actual element
-    if ( this.options.helper === true ) {
+		// Set the helper up by actual element
+		if ( this.options.helper === true ) {
 
-      // get the absolute position of element so that helper will know where to go
-      el_offset = this.element.offset();
+			// get the absolute position of element so that helper will know where to go
+			elOffset = this.element.offset();
 
-      this.drag_el.css({
-        display : 'block',
-        top     : el_offset.top + 'px',
-        left    : el_offset.left + 'px'
-      });
+			this.dragEl.css({
+				display : "block",
+				top     : elOffset.top + "px",
+				left    : elOffset.left + "px"
+			});
 
-    } // this.options.height = true
+		} // this.options.height = true
 
-  }, // _mouseDown
+	},
 
-  _mouseMove : function( event ) {
+	_mouseMove : function( event ) {
 
-    var left_diff = event.clientX - this._start_coords.left,
-        top_diff  = event.clientY - this._start_coords.top,
-        new_left  = left_diff  + this._start_position.left,
-        new_top   = top_diff  + this._start_position.top;
+		var leftDiff = event.clientX - this.startCoords.left,
+			topDiff	 = event.clientY - this.startCoords.top,
+			newLeft  = leftDiff	+ this.startPosition.left,
+			newTop	 = topDiff + this.startPosition.top;
 
-    this.position = {
-      left : new_left,
-      top  : new_top
-    };
+		this.position = {
+			left : newLeft,
+			top	 : newTop
+		};
 
-    // Refresh offset cache with new positions
-    this.offset.left   = this._start_offset.left + new_left;
-    this.offset.top    = this._start_offset.top + new_top;
+		// Refresh offset cache with new positions
+		this.offset.left = this.startOffset.left + newLeft;
+		this.offset.top	 = this.startOffset.top + newTop;
 
-    this._trigger( "drag", event );
+		this._trigger( "drag", event );
 
-    // User overriding left/top so shortcut math is no longer valid
-    if ( new_left !== this.position.left || new_top !== this.position.top ) {
+		// User overriding left/top so shortcut math is no longer valid
+		if ( newLeft !== this.position.left || newTop !== this.position.top ) {
 
-      // refresh offset using slower functions
-      this.offset   = this.drag_el.offset();
+			// refresh offset using slower functions
+			this.offset	 = this.dragEl.offset();
 
-    }
+		}
 
-    this.drag_el.css({
+		this.dragEl.css({
 
-      left : this.position.left + 'px',
-      top  : this.position.top + 'px'
+			left : this.position.left + "px",
+			top	: this.position.top + "px"
 
-    });
+		});
 
-  }, // _mouseMove
+	},
 
 	_mouseUp : function( event ) {
 
-    this._trigger( "stop", event );
+		this._trigger( "stop", event );
 
-    this._start_coords = {};
+		this.startCoords = {};
 
-    if ( this.options.helper === true ) {
-      this.drag_el.remove();
-    }
+		if ( this.options.helper === true ) {
+			this.dragEl.remove();
+		}
 
-    $(document).unbind( "mousemove." + this.widgetName );
-    $(document).unbind( "mouseup." + this.widgetName );
+		$(document).unbind( "mousemove." + this.widgetName );
+		$(document).unbind( "mouseup." + this.widgetName );
 
-  }, // _mouseUp
+	},
 
-	_trigger: function(type, event, ui) {
+	_trigger: function( type, event, ui ) {
 
 		ui = ui || this._uiHash();
 
-		return $.Widget.prototype._trigger.call(this, type, event, ui);
-	}, // _trigger
+		return $.Widget.prototype._trigger.call( this, type, event, ui );
+
+	},
 
 	_uiHash: function(event) {
+
 		return {
 			position : this.position,
-			offset   : this.offset
+			offset	 : this.offset
 		};
-	} // _uiHash
+
+	}
 
 });
 
