@@ -25,9 +25,11 @@
 		$( ":submit" ).button();
 
 		// TODO rewrite to do incremental rendering on each todo item
-		$( [ todos ] ).bind("insert remove replaceAll", function() {
+		$.observable( todos ).bind("insert remove replaceAll", function() {
 			store.save();
-			$(store).trigger( "update" );
+			updateAllChecked();
+			$( "#remaining" ).text( todos.length + (todos.length === 1 ? " item" : " items") + " remaining" );
+			list.empty().append( $( "#todo-list-item" ).tmpl( todos ) );
 		})
 		function update( index, checked ) {
 			todos[ index ].done = checked;
@@ -78,11 +80,8 @@
 			}
 			$.observable(todos).replaceAll(todos);
 		});
-		$(store).bind( "update", function() {
-			updateAllChecked();
-			$( "#remaining" ).text( todos.length + (todos.length === 1 ? " item" : " items") + " remaining" );
-			list.empty().append( $( "#todo-list-item" ).tmpl( todos ) );
-		}).trigger( "update" );
+		// TODO fix this
+		$.observable( todos ).replaceAll( todos );
 	});
 	</script>
 	<style>
