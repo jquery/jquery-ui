@@ -30,6 +30,7 @@ $.widget( "ui.spinner", {
 	defaultElement: "<input>",
 	widgetEventPrefix: "spin",
 	options: {
+		culture: null,
 		incremental: true,
 		max: null,
 		min: null,
@@ -320,7 +321,8 @@ $.widget( "ui.spinner", {
 
 	_parse: function( val ) {
 		if ( typeof val === "string" && val !== "" ) {
-			val = window.Globalize && this.options.numberFormat ? Globalize.parseFloat( val ) : +val;
+			val = window.Globalize && this.options.numberFormat ?
+				Globalize.parseFloat( val, 10, this.options.culture ) : +val;
 		}
 		return val === "" || isNaN( val ) ? null : val;
 	},
@@ -330,7 +332,7 @@ $.widget( "ui.spinner", {
 			return "";
 		}
 		return window.Globalize && this.options.numberFormat ?
-			Globalize.format( value, this.options.numberFormat ) :
+			Globalize.format( value, this.options.numberFormat, this.options.culture ) :
 			value;
 	},
 
