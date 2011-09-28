@@ -5,6 +5,7 @@
 	<title>Grid: Sorting, Paging, Filtering</title>
 	<link rel="stylesheet" href="../themes/base/jquery.ui.all.css">
 	<link rel="stylesheet" href="grid.css">
+	<link rel="stylesheet" href="../demos/demos.css">
 	<link rel="stylesheet" href="menugrid.css">
 	<script src="../jquery-1.6.2.js"></script>
 	<script src="../external/jquery.tmpl.js"></script>
@@ -88,31 +89,24 @@
 		movies.refresh();
 	});
 	</script>
-	<style>
-	#movies {
-		width: 800px;
-	}
-	</style>
 </head>
 <body>
 
 <h2>Movies! Click headers to sort, use inputs for filtering, pager for paging</h2>
 <table id="movies">
+	<caption>Movies Grid</caption>
 	<thead>
 		<tr>
-			<td colspan="5" class="ui-widget-header">Movies Grid</td>
-		</tr>
-		<tr>
-			<th width="600" data-property="Name" data-type="string">Name</th>
-			<th width="100" data-property="ReleaseYear" data-type="number">Release Year</th>
-			<th width="100" data-property="AverageRating" data-type="number">Average Rating</th>
+			<th data-property="Name" data-type="string">Name</th>
+			<th data-property="ReleaseYear" data-type="number">Release Year</th>
+			<th data-property="AverageRating" data-type="number">Average Rating</th>
 		</tr>
 	</thead>
 	<tbody>
 	</tbody>
 	<tfoot>
 		<tr>
-			<td class="ui-state-default">
+			<td>
 				<button id="refresh">Refresh</button>
 				<span id="pager">
 					<button data-page="first">First</button>
@@ -124,7 +118,7 @@
 					<button data-page="last">Last</button>
 				</span>
 			</td>
-			<td class="ui-state-default">
+			<td>
 				<label for="pagesize">Pagesize</label>
 				<select id="pagesize">
 					<option>10</option>
@@ -132,7 +126,7 @@
 					<option>30</option>
 				</select>
 			</td>
-			<td class="ui-state-default">
+			<td>
 				Viewing rows <span class="paging-from">0</span> to <span class="paging-to">0</span> of <span class="paging-total">0</span>
 			</td>
 		</tr>
