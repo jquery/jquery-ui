@@ -150,7 +150,7 @@ $.widget("ui.resizable", $.ui.mouse, {
 
 				//TODO: What's that good for? There's not anything to be executed left
 				if(!$(this.handles[i]).length)
-                 continue;
+					continue;
 			}
 		};
 
