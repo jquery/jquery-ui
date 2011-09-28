@@ -13,7 +13,7 @@
  */
 (function( $, undefined ) {
 
-$.widget("ui.draggable", {
+$.widget( "ui.draggable", {
 
 	widgetEventPrefix: "drag",
 
