@@ -4290,7 +4290,7 @@ var Expr = Sizzle.selectors = {
 					match[3] = Sizzle(match[3], null, null, curLoop);
 
 				} else {
-					var ret = Sizzle.filter(match[3], curLoop, inplace, true ^ not);
+					var ret = Sizzle.filter(match[3], curLoop, inplace, !not);
 
 					if ( !inplace ) {
 						result.push.apply( result, ret );
