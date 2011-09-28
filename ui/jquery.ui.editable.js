@@ -74,38 +74,29 @@ $.widget( "ui.editable", {
 		click: function( event ) {
 			var $this = $( event.target );
 			
-			if ( $this.hasClass( saveClass ) || $this.parent().hasClass( saveClass ) ) {
+			if ( !this._editing ) {
+				this.element.removeClass( highlightStateClass );
+				this._edit();
+				return;
+			}
+
+			else if ( $this.hasClass( saveClass ) || $this.parent().hasClass( saveClass ) ) {
 				this.submit();
 				return;
 			}
 
-			if ( $this.hasClass( cancelClass ) || $this.parent().hasClass( cancelClass ) ) {
+			else if ( $this.hasClass( cancelClass ) || $this.parent().hasClass( cancelClass ) ) {
 				this._cancel( event );
 				return false;
 			}
-
-			if ( $this.is( this.element ) || $this.hasClass( placeholderClass ) ) {
-				this._edit();
-				return;
-			}
 		},
-		mouseover: function( event ) {
-			var $this = $( event.target );
-
-			this.element.removeClass( highlightStateClass );
-
-			if ( !this._editing && ( $this.is( this.element ) || $this.hasClass( placeholderClass ) ) ) {
+		mouseenter: function( event ) {
+			if ( !this._editing ) {
 				this.element.addClass( highlightStateClass );
-				return;
 			}
 		},
-		mouseout: function( event ) {
-			var $this = $( event.target );
-
-			if ( $this.is( this.element ) || $this.hasClass( placeholderClass ) ) {
-				this.element.removeClass( highlightStateClass );
-				return;
-			}
+		mouseleave: function( event ) {
+			this.element.removeClass( highlightStateClass );
 		}
 	},
 
