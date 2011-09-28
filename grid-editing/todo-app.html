@@ -21,7 +21,6 @@
 			initial: []
 		});
 		var todos = store.load();
-		var ids = todos.length;
 
 		$( ":submit" ).button();
 
@@ -49,7 +48,7 @@
 				return;
 			}
 			$.observable( todos ).insert({
-				id: ids++,
+				id: todos.length + 1,
 				title: input.val()
 			});
 			input.val( "" );
