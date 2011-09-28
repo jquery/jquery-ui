@@ -313,17 +313,21 @@ $.widget( "ui.selectmenu", {
 	},
 	
 	_renderItem: function( ul, item) {
-		return $( "<li />" )
-			.addClass( ( item.disabled ) ? 'ui-state-disabled' : '' )
-			.data( "item.selectmenu", item )
-			.append( $( "<a />", {
+		var li = $( "<li />" ).data( "item.selectmenu", item );
+		if ( item.disabled ) {
+			li.addClass( 'ui-state-disabled' ).text( item.label );
+		} else {
+			li.append( $( "<a />", {
 					text: item.label,
 					href: '#',
 					click: function( event ) {
 						event.preventDefault();
 					}
 				}) 
-			).appendTo( ul );
+			);
+		}			
+			
+		return li.appendTo( ul );
 	},
 	
 	_move: function( key, event ) {
@@ -364,8 +368,10 @@ $.widget( "ui.selectmenu", {
 			this.newelement.button( "option", "disabled", value );
 			if ( value ) {
 				this.element.attr( "disabled", "disabled" );
+				this.newelement.attr( "tabindex", -1 );
 			} else {
 				this.element.removeAttr( "disabled" );
+				this.newelement.attr( "tabindex", 1 );
 			}
 			this.list.attr( "aria-disabled", value );
 			this.close();
