@@ -540,12 +540,8 @@ function standardSpeed( speed ) {
 	// invalid strings - treat as "normal" speed
 	if ( typeof speed === "string" && !$.effects.effect[ speed ] ) {
 		// TODO: remove in 2.0 (#7115)
-		if ( backCompat && $.effects[ speed ] ) {
-			return false;
-		}
-		return true;
+		return !(backCompat && $.effects[ speed ]);
 	}
-
 	return false;
 }
 
