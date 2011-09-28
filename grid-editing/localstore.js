@@ -31,11 +31,13 @@ $.widget( "demos.localstore", {
 					url: this.options.initial,
 					async: false,
 					success: function( result ) {
-						that.save( result );
+						that.data = result;
+						that.save();
 					}
 				});
 			} else {
-				this.save( this.options.initial );
+				this.data = this.options.initial;
+				this.save();
 			}
 		}
 	},
