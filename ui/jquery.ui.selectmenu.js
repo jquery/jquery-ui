@@ -21,7 +21,6 @@ $.widget( "ui.selectmenu", {
 	defaultElement: "<select>",
 	options: {
 		dropdown: true,
-		iconWidth: 26,
 		wrapperElement: "<div />",
 		appendTo: "body",
 		position: {
@@ -169,11 +168,16 @@ $.widget( "ui.selectmenu", {
 			id: self.ids[1]
 		});
 		
-		// wrap list
-		var newelementWidth = self.newelement.outerWidth();
+		// wrap list	
+		if ( options.dropdown ) {
+			var setWidth = self.newelement.outerWidth();
+		} else {
+			var text = self.newelement.find( "span.ui-button-text");
+			var setWidth = text.width() + parseFloat( text.css( "padding-left" ) ) + parseFloat( text.css( "margin-left" ) );
+		}		
 		self.listWrap = $( options.wrapperElement )
 			.addClass( self.widgetBaseClass + '-menu' )
-			.width( ( options.dropdown ) ? newelementWidth : newelementWidth - options.iconWidth )
+			.width( setWidth )
 			.append( self.list )
 			.appendTo( options.appendTo );
 		
