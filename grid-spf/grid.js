@@ -211,8 +211,8 @@ $.widget( "ui.grid", {
 			this.uiGridHeadAndFoot.css( "padding-right", paddingRight + "px" );
 			this.uiGridHeadTableAndFootTable.css( "padding-right", "1px");
 		} else {
-			this.uiGridHeadAndFootAndTables.css( "padding-right", 0 );
-			this.uiGridHeadAndFootAndTables.css( "padding-right", null );
+			// Have to set to 0 before removing property or it "sticks"
+			this.uiGridHeadAndFootAndTables.css( "padding-right", 0 ).css( "padding-right", null );
 		}
 
 		this._trigger( "refresh" );
