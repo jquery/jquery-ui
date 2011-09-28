@@ -27,13 +27,13 @@
 
 		// TODO rewrite to do incremental rendering on each todo item
 		$( [ todos ] ).bind("insert remove replaceAll", function() {
-			store.save( todos );
+			store.save();
 			$(store).trigger( "update" );
 		})
 		function update( index, checked ) {
 			todos[ index ].done = checked;
 			updateAllChecked();
-			store.save( todos );
+			store.save();
 		}
 		function updateAllChecked() {
 			var allChecked = todos.length && $.grep( todos, function( item, index ) {
