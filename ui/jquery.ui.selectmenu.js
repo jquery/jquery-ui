@@ -100,18 +100,17 @@ $.widget( "ui.selectmenu", {
 				return false;
 			},
 			'keydown.selectmenu': function( event ) {
-				var ret = true;
 				switch (event.keyCode) {
 					case $.ui.keyCode.TAB:
 						if ( self.opened ) self.close();
 						break;
 					case $.ui.keyCode.ENTER:
 						if ( self.opened ) self.list.menu( "select", self._getSelectedItem() );
-						ret = false;
+						event.preventDefault();
 						break;
 					case $.ui.keyCode.SPACE:
 						self._toggle(event);
-						ret = false;
+						event.preventDefault();
 						break;
 					case $.ui.keyCode.UP:
 						if ( event.altKey ) {
@@ -119,7 +118,7 @@ $.widget( "ui.selectmenu", {
 						} else {
 							self._move( "previous", event );
 						}
-						ret = false;
+						event.preventDefault();
 						break;
 					case $.ui.keyCode.DOWN:
 						if ( event.altKey ) {
@@ -127,20 +126,19 @@ $.widget( "ui.selectmenu", {
 						} else {
 							self._move( "next", event );
 						}
-						ret = false;
+						event.preventDefault();
 						break;
 					case $.ui.keyCode.LEFT:
 						self._move( "previous", event );
-						ret = false;
+						event.preventDefault();
 						break;
 					case $.ui.keyCode.RIGHT:
 						self._move( "next", event );
-						ret = false;
+						event.preventDefault();
 						break;
 					default:
 						self.list.trigger( event );
 				}
-				return ret;
 			}
 		});
 		
