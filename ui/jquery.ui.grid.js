@@ -44,7 +44,7 @@ $.widget( "ui.grid", {
 			});
 		}
 	},
-	
+
 	_draw: function() {
 		var totalWidth = 0,
 			colWidths = this.element.find( "tr:first" ).children().map(function() {
@@ -73,10 +73,10 @@ $.widget( "ui.grid", {
 			uiGridBodyTable = ( this.uiGridBodyTable = this.element )
 				.addClass( "ui-grid-body-table" )
 				.appendTo( uiGridBody ),
-			
+
 			uiGridFootTable = ( this.uiGridFootTable = $("<table class='ui-widget-content ui-grid-foot-table'></table>") )
 				.appendTo( uiGridFoot );
-		
+
 		// These are used in refresh when needed for scrollbar padding
 		this.uiGridHeadAndFoot = this.uiGridHead.add( this.uiGridFoot );
 		this.uiGridHeadTableAndFootTable = this.uiGridHeadTable.add( this.uiGridFootTable );
@@ -112,7 +112,7 @@ $.widget( "ui.grid", {
 		// Move table THEAD to grid head for fixed column headers
 		uiGridBodyTable.find( "thead" )
 			.appendTo( uiGridHeadTable );
-		
+
 		// Move table TFOOT to grid foot for fixed footer
 		uiGridBodyTable.find( "tfoot" )
 			.appendTo( uiGridFootTable );

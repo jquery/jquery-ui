@@ -43,21 +43,35 @@
 	$(function() {
 		var columns = [],
 			i, j;
-		for (i = 65; i <= 90; i++) {
+		for (i = 65; i <= 70; i++) {
 			columns.push(String.fromCharCode(i));
 		}
-		var source = [];
-		for (j = 0; j < 50; j++) {
-			source.push({});
-		}
+		var source = [{}];
 
-		$( "#spreadsheet" ).grid({
+		$( "#csvEditor" ).grid({
 			columns: columns,
 			source: source
 		})
 			.gridEditor()
 			.navigator()
 			.grid("refresh");
+
+		$( "#addRow" ).click( function() {
+			$.observable( source ).insert( {} );
+		});
+
+		$( "#export" ).click(function() {
+			var result = "";
+			for (j = 0; j < source.length; j++) {
+				var row = [];
+				for (i = 0; i < columns.length; i++) {
+					// TODO proper CSV editor would escape values here
+					row.push(source[j][columns[i]] || "");
+				}
+				result += row.join(",") + "\n";
+			}
+			console.log(result);
+		});
 	});
 	</script>
 	<style>
@@ -67,9 +81,9 @@
 </head>
 <body>
 
-<h1>Grid based custom spreadsheet (experimental)</h1>
+<h1>Grid based custom csv editor (experimental)</h1>
 
-<table id="spreadsheet">
+<table id="csvEditor">
 	<thead>
 		<tr>
 		</tr>
@@ -77,6 +91,9 @@
 	<tbody>
 	</tbody>
 </table>
+
+<button id="addRow">Add row</button>
+<button id="export">Export as CSV (on console for now)</button>
 
 </body>
 </html>
