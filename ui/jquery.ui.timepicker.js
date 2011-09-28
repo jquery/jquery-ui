@@ -237,7 +237,7 @@ $.widget( "ui.timepicker", {
 		if ( this.currentField === ( this.options.seconds ? 3 : 2 ) ) {
 			val = getAmPmArrays()[ parseInt( val, 10 ) ? "pm" : "am" ][ 0 ];
 		}
-		bufferObject.value = bufferObject.valid( val );
+		bufferObject.value = bufferObject.valid( val + "" );
 		this.mask._paint();
 		this.spinner._refresh();
 		this.mask._caretSelect( this.currentField * 3 );

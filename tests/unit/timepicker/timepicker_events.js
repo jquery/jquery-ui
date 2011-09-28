@@ -9,7 +9,7 @@ function downup( elem, key ) {
 }
 
 test( "keydown: Up/Down/Left/Right behaviors", function() {
-	expect( 11 );
+	expect( 12 );
 
 	var i,
 		input = $( "#timepicker1" ).val( "12:00:00 PM" ).timepicker(),
@@ -17,7 +17,8 @@ test( "keydown: Up/Down/Left/Right behaviors", function() {
 		mask = timepicker.mask;
 
 	mask._caret( 0, 0 );
-	equal( input.val(), "12:00:00 PM", "Sanity Check" );
+	mask._caret( 0, 0 );
+	timepicker._setField( 0 );
 	deepEqual( mask._caret(), { begin: 0, end: 0 }, "Caret position correct" );
 
 	downup( input, $.ui.keyCode.UP );
@@ -46,6 +47,14 @@ test( "keydown: Up/Down/Left/Right behaviors", function() {
 
 	downup( input, $.ui.keyCode.DOWN );
 	equal( input.val(), "11:50:00 AM", "After down keypress in am/pm field, value went to proper value" );
+
+	input.timepicker( "destroy" ).val( "23:00:00" ).timepicker({ ampm: false });
+	timepicker = input.data( "timepicker" );
+	timepicker._setField( 0 );
+	equal( input.val(), "23:00:00", "Sanity Check" );
+
+	downup( input, $.ui.keyCode.UP );
+	equal( input.val(), " 0:00:00", "After up keypress in hours field, value went to proper value" );
 
 
 });
