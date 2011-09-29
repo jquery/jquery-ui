@@ -94,7 +94,7 @@ $.widget( "ui.menubar", {
 				}
 				if ( ( that.open && event.type == "mouseenter" ) || event.type == "click" || that.options.autoExpand ) {
 					if( that.options.autoExpand ) {
-						clearTimeout( that.timer );
+						clearTimeout( that.closeTimer );
 					}
 
 					that._open( event, menu );
@@ -151,6 +151,13 @@ $.widget( "ui.menubar", {
 				that.closeTimer = setTimeout( function() {
 					that._close( event );
 				}, 100);
+			},
+			mouseleave: function( event ) {
+				if ( that.options.autoExpand ) {
+					that.closeTimer = setTimeout( function() {
+						that._close( event );
+					}, 100);
+				}
 			}
 		});
 		if ( that.options.autoExpand ) {
