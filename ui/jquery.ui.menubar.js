@@ -94,7 +94,7 @@ $.widget( "ui.menubar", {
 				}
 				if ( ( that.open && event.type == "mouseenter" ) || event.type == "click" || that.options.autoExpand ) {
 					if( that.options.autoExpand ) {
-						clearTimeout( that.timer );
+						clearTimeout( that.closeTimer );
 					}
 
 					that._open( event, menu );
