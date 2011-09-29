@@ -123,14 +123,6 @@ $.widget( "ui.menubar", {
 			.attr( "aria-haspopup", "true" )
 			.wrapInner( "<span class='ui-button-text'></span>" );
 
-			if ( that.options.autoExpand ) {
-				input.parent().bind("mouseleave", function() {
-					that.timer = setTimeout( function() {
-						that._close();
-					}, 150 );
-				});
-			}
-
 			// TODO review if these options are a good choice, maybe they can be merged
 			if ( that.options.menuIcon ) {
 				input.addClass( "ui-state-default" ).append( "<span class='ui-button-icon-secondary ui-icon ui-icon-triangle-1-s'></span>" );
@@ -159,6 +151,13 @@ $.widget( "ui.menubar", {
 				that.closeTimer = setTimeout( function() {
 					that._close( event );
 				}, 100);
+			},
+			mouseleave: function( event ) {
+				if ( that.options.autoExpand ) {
+					that.closeTimer = setTimeout( function() {
+						that._close( event );
+					}, 100);
+				}
 			}
 		});
 	},
