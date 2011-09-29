@@ -161,7 +161,7 @@ var classAnimationActions = [ "add", "remove", "toggle" ],
 	// prefix used for storing data on .data()
 	dataSpace = "ec.storage.";
 
-$.each([ "borderLeftStyle", "borderRightStyle", "borderBottomStyle", "borderTopStyle" ], function(_, prop) {
+$.each([ "borderLeftStyle", "borderRightStyle", "borderBottomStyle", "borderTopStyle" ], function( _, prop ) {
 	$.fx.step[ prop ] = function( fx ) {
 		if ( fx.end !== "none" && !fx.setAttr || fx.pos === 1 && !fx.setAttr ) {
 			jQuery.style( fx.elem, prop, fx.end );
@@ -171,8 +171,8 @@ $.each([ "borderLeftStyle", "borderRightStyle", "borderBottomStyle", "borderTopS
 });
 
 function getElementStyles() {
-	var style = document.defaultView
-			? document.defaultView.getComputedStyle(this, null)
+	var style = this.ownerDocument.defaultView
+			? this.ownerDocument.defaultView.getComputedStyle( this, null )
 			: this.currentStyle,
 		newStyle = {},
 		key,
