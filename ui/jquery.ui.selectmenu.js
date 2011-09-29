@@ -59,11 +59,14 @@ $.widget( "ui.selectmenu", {
 		}
 		
 		// catch click event of the label
-		self.element.bind( 'click.selectmenu',  function() {
-			self.newelement.focus();			
-			return false;
-		})
-		.hide();
+		self._bind({
+			'click': function( event ) {
+				event.preventDefault();
+				self.newelement.focus();
+			}
+		});
+
+		self.element.hide();
 		
 		// create button
 		self.newelement = $( '<a />', {
@@ -90,15 +93,15 @@ $.widget( "ui.selectmenu", {
 			.append( self.newelement )
 			.insertAfter( self.element );	
 			
-		self.newelement.bind({ 
-			'mousedown.selectmenu': function( event ) {
+		this._bind( self.newelement, {
+			'mousedown': function( event ) {
+				event.stopImmediatePropagation();
 				self._toggle( event );
-				return false;
 			},
-			'click.selectmenu': function() {
-				return false;
+			'click': function( event ) {
+				event.stopImmediatePropagation();
 			},
-			'keydown.selectmenu': function( event ) {
+			'keydown': function( event ) {
 				switch (event.keyCode) {
 					case $.ui.keyCode.TAB:
 						if ( self.opened ) self.close();
@@ -145,13 +148,15 @@ $.widget( "ui.selectmenu", {
 		self.refresh();
 		
 		// document click closes menu
-		$( document ).bind( 'mousedown.selectmenu', function( event ) {
-			if ( self.opened && !self.hover) {	
-				window.setTimeout( function() {
-					self.close( event );
-				}, 200 );
+		this._bind( document, {
+			'mousedown': function( event ) {
+				if ( self.opened && !self.hover) {
+					window.setTimeout( function() {
+						self.close( event );
+					}, 200 );
+				}
 			}
-		});			
+		});
 	},
 	
 	// TODO update the value option
@@ -205,15 +210,16 @@ $.widget( "ui.selectmenu", {
 				focus: function( event, ui ) {	
 					self._trigger( "focus", event, { item: ui.item.data( "item.selectmenu" ) } );
 				}
-			})			
-			.bind({
-				'mouseenter.selectelemenu': function() {
-					self.hover = true;
-				},
-				'mouseleave .selectelemenu': function() {
-					self.hover = false;
-				}
 			});
+
+		self._bind( self.list, {
+			'mouseenter': function() {
+				self.hover = true;
+			},
+			'mouseleave': function() {
+				self.hover = false;
+			}
+		});
 			
 		// adjust ARIA			
 		self.list.find( "li" ).not( '.ui-selectmenu-optgroup' ).find( 'a' ).attr( 'role', 'option' );
@@ -393,7 +399,7 @@ $.widget( "ui.selectmenu", {
 	_destroy: function() {
 		this.listWrap.remove();
 		this.newelementWrap.remove();
-		this.element.show().unbind( '.selectmenu' );
+		this.element.show();
 		$( document ).unbind( '.selectmenu' );
 	}
 });
