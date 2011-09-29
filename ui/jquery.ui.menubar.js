@@ -124,18 +124,10 @@ $.widget( "ui.menubar", {
 			.wrapInner( "<span class='ui-button-text'></span>" );
 
 			if ( that.options.autoExpand ) {
-				input.bind( "mouseleave.menubar", function( event ) {
+				input.parent().bind("mouseleave", function() {
 					that.timer = setTimeout( function() {
 						that._close();
 					}, 150 );
-				});
-				menu.bind( "mouseleave.menubar", function( event ) {
-					that.timer = setTimeout( function() {
-						that._close();
-					}, 150 );
-				})
-				.bind( "mouseenter.menubar", function( event ) {
-					clearTimeout( that.timer );
 				});
 			}
 
