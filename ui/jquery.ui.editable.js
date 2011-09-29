@@ -165,9 +165,8 @@ $.widget( "ui.editable", {
 
 		if ( this._trigger( "submit", event, hash ) !== false && this.value() !== newValue && this._trigger( "change", event, hash ) !== false ) {
 			this.value( newValue );
+			this._show();
 		}
-
-		this._show();
 	},
 
 	_cancel: function( event ) {
