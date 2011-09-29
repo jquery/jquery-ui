@@ -86,6 +86,7 @@
 		});
 
 		$( "#developers-local" ).grid({
+			heightStyle: "fill",
 			source: developers.result,
 			select: function( event, ui ) {
 				console.log( "Selected " + ui.item.firstName );

@@ -13,8 +13,9 @@
 $.widget( "ui.grid", {
 
 	options: {
-		dataFields: [ "type", "editor", "editorOptions", "template", "culture", "format" ],
 		columns: null,
+		dataFields: [ "type", "editor", "editorOptions", "template", "culture", "format" ],
+		heightStyle: "auto",
 		rowTemplate: null
 	},
 
@@ -200,8 +201,10 @@ $.widget( "ui.grid", {
 			this.uiGrid.removeClass( "ui-grid-resizable" );
 		}
 
-		// Adjust body height to fill
-		this.uiGridBody.height( gridHeight - headHeight - footHeight );
+		if ( this.options.heightStyle === "fill" ) {
+			// Adjust body height to fill
+			this.uiGridBody.height( gridHeight - headHeight - footHeight );
+		}
 
 		// Adjust head and foot in case of visible scrollbar on body to keep columns aligned
 		var paddingRight,
