@@ -50,7 +50,7 @@ $.widget("ui.mouse", {
 
 	_mouseDown: function(event) {
 		// don't let more than one widget handle mouseStart
-		if( mouseHandled ) { return };
+		if( this._mouseHandled() ) { return };
 
 		// we may have missed mouseup (out of window)
 		(this._mouseStarted && this._mouseUp(event));
@@ -99,7 +99,7 @@ $.widget("ui.mouse", {
 
 		event.preventDefault();
 		
-		mouseHandled = true;
+		this._mouseHandled(true);
 		return true;
 	},
 
@@ -151,6 +151,11 @@ $.widget("ui.mouse", {
 
 	_mouseDelayMet: function(event) {
 		return this.mouseDelayMet;
+	},
+
+	_mouseHandled: function(handled) {
+		if (typeof handled != 'undefined') { mouseHandled = handled; }
+		return mouseHandled;
 	},
 
 	// These are placeholder methods, to be overriden by extending plugin
