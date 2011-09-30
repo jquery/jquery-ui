@@ -223,7 +223,7 @@ $.effects.animateClass = function( value, duration, easing, callback ) {
 
 	return this.queue( function() {
 		var animated = $( this ),
-			baseClass = animated.attr( "class" ),
+			baseClass = animated.attr( "class" ) || "",
 			finalClass,
 			allAnimations = o.children ? animated.find( "*" ).andSelf() : animated;
 
