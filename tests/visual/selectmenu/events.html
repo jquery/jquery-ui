@@ -24,13 +24,13 @@
 				$("<div/>").text( index++ + " Closed").prependTo(log);
 			},		
 			focus : function(event, ui) {
-				$("<div/>").text( index++ + " Focused: " + ui.item.label).prependTo(log);
+				$("<div/>").text( index++ + " Focused: " + ui.item.label + " #" + ui.item.index ).prependTo(log);
 			},		
 			select: function(event, ui) {
-				$("<div/>").text( index++ + " Selected: " + ui.item.label).prependTo(log);
+				$("<div/>").text( index++ + " Selected: " + ui.item.label + " #" + ui.item.index ).prependTo(log);
 			},		
 			change: function(event, ui) {
-				$("<div/>").text( index++ + " Changed to: " + ui.item.label).prependTo(log);
+				$("<div/>").text( index++ + " Changed to: " + ui.item.label + " #" + ui.item.index ).prependTo(log);
 			}
 		});
 	});
