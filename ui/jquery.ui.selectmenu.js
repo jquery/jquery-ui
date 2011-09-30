@@ -297,10 +297,6 @@ $.widget( "ui.selectmenu", {
 			li.append( $( "<a />", {
 					text: item.label,
 					href: '#'
-					,
-					// click: function( event ) {
-						// event.preventDefault();
-					// }
 				}) 
 			);
 		}			
