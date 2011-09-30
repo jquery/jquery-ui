@@ -137,6 +137,10 @@ $.widget( "ui.selectmenu", {
 		}
 		
 		that._bind( that.list, {
+			'click': function( event ) {
+				event.preventDefault();
+			},
+			// namespacing is needed (_bind should do the trick, but it doesnt)
 			'mouseenter.selectmenu': function() {
 				that.hover = true;
 			},
@@ -292,10 +296,11 @@ $.widget( "ui.selectmenu", {
 		} else {
 			li.append( $( "<a />", {
 					text: item.label,
-					href: '#',
-					click: function( event ) {
-						event.preventDefault();
-					}
+					href: '#'
+					,
+					// click: function( event ) {
+						// event.preventDefault();
+					// }
 				}) 
 			);
 		}			
@@ -333,7 +338,8 @@ $.widget( "ui.selectmenu", {
 			event.stopImmediatePropagation();
 		},
 		click: function( event ) {
-			event.stopImmediatePropagation();
+			// needed to prevent browser from following the anchor
+			return false;
 		},
 		keydown: function( event ) {
 			switch (event.keyCode) {
