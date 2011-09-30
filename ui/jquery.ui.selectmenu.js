@@ -21,7 +21,6 @@ $.widget( "ui.selectmenu", {
 	defaultElement: "<select>",
 	options: {
 		dropdown: true,
-		wrapperElement: "<div />",
 		appendTo: "body",
 		position: {
 			my: "left top",
@@ -46,7 +45,7 @@ $.widget( "ui.selectmenu", {
 		// quick array of button and menu id's
 		that.ids = [ selectmenuId, selectmenuId + '-button', selectmenuId + '-menu' ];
 				
-		// set current value 
+		// set current value
 		if ( options.value ) {
 			that.element[0].value = options.value;
 		} else {
@@ -110,7 +109,7 @@ $.widget( "ui.selectmenu", {
 			});
 			
 		// wrap and insert new button
-		that.newelementWrap = $( options.wrapperElement )
+		that.newelementWrap = $( '<div />' )
 			.append( that.newelement )
 			.insertAfter( that.element );	
 	},
@@ -150,7 +149,7 @@ $.widget( "ui.selectmenu", {
 		});
 
 		// wrap list	
-		that.listWrap = $( options.wrapperElement )
+		that.listWrap = $( '<div />' )
 			.addClass( that.widgetBaseClass + '-menu' )
 			.width( setWidth )
 			.append( that.list )
@@ -297,7 +296,7 @@ $.widget( "ui.selectmenu", {
 			li.append( $( "<a />", {
 					text: item.label,
 					href: '#'
-				}) 
+				})
 			);
 		}			
 			
@@ -305,7 +304,7 @@ $.widget( "ui.selectmenu", {
 	},
 	
 	_move: function( key, event ) {
-		// TODO this focus is needed to make the select below work, 
+		// TODO this focus is needed to make the select below work,
 		// but should be removed as its fires an unwanted focus event
 		if ( !this.opened ) {
 			this.list.menu( "focus", event, this._getSelectedItem() );	
@@ -405,6 +404,10 @@ $.widget( "ui.selectmenu", {
 		}
 	},
 	
+	widget: function() {
+		return this.newelementWrap.add( this.listWrap );
+	},
+
 	_initSource: function() {
 		var data = [];	
 		$.each( this.element.find( 'option' ), function( index, item ) {

@@ -17,11 +17,13 @@
 		$('select#speed').selectmenu({
 			dropdown: false
 		});
-		$('select#number').selectmenu({
-			dropdown: false,			
-			wrapperElement: '<div class="overflow"/>'
+		var withOverflow = $('select#number').selectmenu({
+			dropdown: false
 		});
+		withOverflow.selectmenu("widget").addClass("overflow");
+		
 		$('select#files').selectmenu();
+		
 	});
 	</script>
 	<style>
