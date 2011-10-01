@@ -64,7 +64,7 @@ $.widget("ui.draggable", $.ui.mouse, {
 				+ " ui-draggable-dragging"
 				+ " ui-draggable-disabled");
 		//Removes unique identifier from original element
-		$(".ui-draggable-dragging-originall").removeClass("ui-draggable-dragging-original");
+		$(".ui-draggable-dragging-original").removeClass("ui-draggable-dragging-original");
 		this._mouseDestroy();
 
 		return this;
