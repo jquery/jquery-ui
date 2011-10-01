@@ -142,7 +142,7 @@ $.widget("ui.dialog", {
 				.html( title )
 				.prependTo( uiDialogTitlebar );
 
-		uiDialogTitlebar.find( "*" ).add( uiDialogTitlebar ).disableSelection();
+		uiDialogTitlebar.find( "*" ).add( uiDialogTitlebar );
 		this._hoverable( uiDialogTitlebarClose );
 		this._focusable( uiDialogTitlebarClose );
 
