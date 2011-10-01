@@ -63,6 +63,8 @@ $.widget("ui.draggable", $.ui.mouse, {
 			.removeClass("ui-draggable"
 				+ " ui-draggable-dragging"
 				+ " ui-draggable-disabled");
+		//Removes unique identifier from original element
+		$(".ui-draggable-dragging-originall").removeClass("ui-draggable-dragging-original");
 		this._mouseDestroy();
 
 		return this;
@@ -96,6 +98,8 @@ $.widget("ui.draggable", $.ui.mouse, {
 	},
 
 	_mouseStart: function(event) {
+		//Add's unique class to original html element
+		this.element.addClass('ui-draggable-dragging-original');
 
 		var o = this.options;
 
@@ -475,6 +479,7 @@ $.widget("ui.draggable", $.ui.mouse, {
 
 	_clear: function() {
 		this.helper.removeClass("ui-draggable-dragging");
+		$(".ui-draggable-dragging-original").removeClass("ui-draggable-dragging-original");
 		if(this.helper[0] != this.element[0] && !this.cancelHelperRemoval) this.helper.remove();
 		//if($.ui.ddmanager) $.ui.ddmanager.current = null;
 		this.helper = null;
