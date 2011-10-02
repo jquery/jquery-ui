@@ -66,6 +66,10 @@
 			selected: selected
 		});
 
+		$( "#developers-selected" ).grid({
+			source: selected
+		});
+
 		$( "#pageDevelopers" ).pager({
 			source: developers
 		});
@@ -180,6 +184,21 @@
 			</td>
 		</tr>
 	</tfoot>
+</table>
+
+<table id="developers-selected">
+	<caption>Selected Developers</caption>
+	<thead>
+		<tr>
+			<th data-property="firstName">First Name</th>
+			<th data-property="lastName">Last Name</th>
+			<th data-property="country">Country</th>
+			<th data-property="bitcoins" data-type="number">Bitcoins</th>
+			<th data-property="random.value" data-type="number">Random</th>
+		</tr>
+	</thead>
+	<tbody>
+	</tbody>
 </table>
 </div>
 
