@@ -260,33 +260,32 @@ $.widget( "ui.spinner", {
 			decimal = str.indexOf( "." );
 		return decimal === -1 ? 0 : str.length - decimal - 1;
 	},
-
-	_adjustValue: function( value ) {
+	
+	_adjustValue: function (value) {
 		var base, aboveMin,
 			options = this.options;
 
 		// make sure we're at a valid step
 		// - find out where we are relative to the base (min or 0)
 		base = options.min !== null ? options.min : 0;
-		aboveMin = value - base;
+
 		// - round to the nearest step
-		aboveMin = Math.round(aboveMin / options.step) * options.step;
-		// - rounding is based on 0, so adjust back to our base
-		value = base + aboveMin;
+		value = Math.round(value / options.step) * options.step;
+
 
 		// fix precision from bad JS floating point math
-		value = parseFloat( value.toFixed( this._precision() ) );
+		value = parseFloat(value.toFixed(this._precision()));
 
 		// clamp the value
-		if ( options.max !== null && value > options.max) {
-			return options.max;
+		if (options.max !== null && value > options.max) {
+		return options.max;
 		}
-		if ( options.min !== null && value < options.min ) {
-			return options.min;
+		if (options.min !== null && value < options.min) {
+		return options.min;
 		}
 
 		return value;
-	},
+        },
 
 	_stop: function( event ) {
 		if ( !this.spinning ) {
