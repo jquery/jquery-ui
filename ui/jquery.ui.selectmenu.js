@@ -333,7 +333,7 @@ $.widget( "ui.selectmenu", {
 			event.stopImmediatePropagation();
 		},
 		click: function( event ) {
-			// needed to prevent browser from following the anchor
+			// return false needed to prevent browser from following the anchor
 			return false;
 		},
 		keydown: function( event ) {
@@ -342,8 +342,10 @@ $.widget( "ui.selectmenu", {
 					if ( this.opened ) this.close();
 					break;
 				case $.ui.keyCode.ENTER:
-					if ( this.opened ) this.list.menu( "select", this._getSelectedItem() );
-					event.preventDefault();
+					if ( this.opened ) {
+						this.list.menu( "select", this._getSelectedItem() );					
+						event.preventDefault();
+					}
 					break;
 				case $.ui.keyCode.SPACE:
 					this._toggle(event);
@@ -377,8 +379,7 @@ $.widget( "ui.selectmenu", {
 					this.list.trigger( event );
 			}
 		}
-	},
-	
+	},	
 	
 	_setOption: function( key, value ) {
 		this._super( "_setOption", key, value );
