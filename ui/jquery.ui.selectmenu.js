@@ -109,7 +109,7 @@ $.widget( "ui.selectmenu", {
 			});
 			
 		// wrap and insert new button
-		that.newelementWrap = $( '<div />' )
+		that.newelementWrap = $( '<span />' )
 			.append( that.newelement )
 			.insertAfter( that.element );	
 	},
