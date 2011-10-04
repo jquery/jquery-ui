@@ -268,11 +268,8 @@ $.widget( "ui.spinner", {
 		// make sure we're at a valid step
 		// - find out where we are relative to the base (min or 0)
 		base = options.min !== null ? options.min : 0;
-		aboveMin = value - base;
 		// - round to the nearest step
-		aboveMin = Math.round(aboveMin / options.step) * options.step;
-		// - rounding is based on 0, so adjust back to our base
-		value = base + aboveMin;
+		value = Math.round(value / options.step) * options.step;
 
 		// fix precision from bad JS floating point math
 		value = parseFloat( value.toFixed( this._precision() ) );
