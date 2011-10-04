@@ -100,7 +100,6 @@ $.widget( "ui.selectmenu", {
 				'aria-owns': that.ids[ 2 ],
 				'aria-haspopup': true	
 			})
-			.addClass( that.widgetBaseClass + '-button' )
 			.button({
 				label: this.element.find( "option:selected" ).text(),
 				icons: {
@@ -110,6 +109,7 @@ $.widget( "ui.selectmenu", {
 			
 		// wrap and insert new button
 		that.newelementWrap = $( '<span />' )
+			.addClass( that.widgetBaseClass + '-button' )
 			.append( that.newelement )
 			.insertAfter( that.element );	
 	},
