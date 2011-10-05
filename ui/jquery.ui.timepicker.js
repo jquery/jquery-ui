@@ -33,7 +33,7 @@ function makeBetweenMaskFunction( min, max, def, pad ) {
 function getAmPmArrays() {
 	if ( window.Globalize ) {
 		var calendar = Globalize.culture().calendars.standard;
-		
+
 		return {
 			am: calendar.AM,
 			pm: calendar.PM
@@ -83,6 +83,7 @@ $.widget( "ui.timepicker", {
 		seconds: true
 	},
 	_create: function() {
+
 		// handles globalization options
 		this.element.mask({
 			mask: this._generateMask(),
@@ -137,21 +138,45 @@ $.widget( "ui.timepicker", {
 	},
 	_events: {
 		keydown: "_checkPosition",
-		focus: "_checkPosition",
-		click: "_checkPosition"
+		mousedown: function( event ) {
+			if ( document.activeElement !== this.element[0] ) {
+				this._focusing = true;
+			}
+		},
+		click: function() {
+			if ( this._focusing ) {
+				this._focusing = false;
+				this._setPosition( this.currentField );
+			} else {
+				this._checkPosition();
+				this._setPosition();
+			}
+		},
+		blur: function() {
+			this._focusing = false;
+		}
 	},
 	_checkPosition: function( event ) {
+		var position = this.mask._caret(),
+			field = Math.floor( position.begin / 3 );
 
-		function check() {
-			var position = this.mask._caret();
-			this._setField( Math.floor( position.begin / 3 ) );
+		if ( !this._focusing ) {
+			this._setField( field );
 		}
 
-		if ( event.type == "keydown" ) {
-			check.call( this );
+		// if they ever select the first slot only, ensure that the caret
+		// covers the first field to make overtyping make more sense
+		if ( position.begin === position.end && position.begin === 0 ) {
+			this.mask._caret( 0, 2 );
+		}
+	},
+	_setPosition: function( field ) {
+		if ( field == null ) {
+			field = this.currentField;
 		} else {
-			this._delay( check, 0 );
+			this._setField( field );
 		}
+		this.mask._caret( field * 3, field * 3 + 2 );
 	},
 	_setField: function( field ) {
 		this.currentField = field;
