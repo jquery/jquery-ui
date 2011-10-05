@@ -178,7 +178,6 @@ $.widget( "ui.selectmenu", {
 			});
 	},
 	
-	// TODO update the value option
 	refresh: function() {
 		var that = this,
 			options = this.options;		
