@@ -17,7 +17,8 @@ $.widget( "ui.progressbar", {
 	version: "@VERSION",
 	options: {
 		value: false,
-		max: 100
+		max: 100,
+		indeterminateSpeed : 6000
 	},
 
 	min: 0,
@@ -121,7 +122,7 @@ $.widget( "ui.progressbar", {
 		this.valueDiv.animate({
 			left: end +'px'
 		}, {
-			duration: 6000,
+			duration: self.options.indeterminateSpeed,
 			complete: function() {
 				// self.valueDiv.css('left', '0px');
 				self._startIndeterminateAnimation(!reverse);
