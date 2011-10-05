@@ -187,7 +187,6 @@ $.widget( "ui.selectmenu", {
 		that._initSource();
 		that._renderMenu( that.list, that.items );
 		
-		// this.menu.blur();
 		that.list.menu( "refresh" );
 					
 		// adjust ARIA			
