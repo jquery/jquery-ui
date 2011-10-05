@@ -16,7 +16,7 @@
 $.widget( "ui.progressbar", {
 	version: "@VERSION",
 	options: {
-		value: 0,
+		value: false,
 		max: 100
 	},
 
@@ -73,10 +73,15 @@ $.widget( "ui.progressbar", {
 
 	_value: function() {
 		var val = this.options.value;
+		
+		// false for indeterminate progress bar
+		if (val === false) {
+			return false;
 		// normalize invalid value
-		if ( typeof val !== "number" ) {
+		} else if( typeof val !== "number" ) {
 			val = 0;
 		}
+		
 		return Math.min( this.options.max, Math.max( this.min, val ) );
 	},
 
@@ -86,18 +91,42 @@ $.widget( "ui.progressbar", {
 
 	_refreshValue: function() {
 		var value = this.value();
-		var percentage = this._percentage();
+		if (value !== false ) {
+			var percentage = this._percentage();
 
-		if ( this.oldValue !== value ) {
-			this.oldValue = value;
-			this._trigger( "change" );
+			if ( this.oldValue !== value ) {
+				this.oldValue = value;
+				this._trigger( "change" );
+			}
+
+			this.valueDiv
+				.toggle( value > this.min )
+				.toggleClass( "ui-corner-right", value === this.options.max )
+				.width( percentage.toFixed(0) + "%" )
+			    .stop()
+				.css('left', '0px');
+			this.element.attr( "aria-valuenow", value );
+		} else {
+			this.valueDiv
+				.width('15%')
+				.addClass("ui-corner-right")
+			this._startIndeterminateAnimation();
 		}
-
-		this.valueDiv
-			.toggle( value > this.min )
-			.toggleClass( "ui-corner-right", value === this.options.max )
-			.width( percentage.toFixed(0) + "%" );
-		this.element.attr( "aria-valuenow", value );
+	},
+	
+	_startIndeterminateAnimation: function(reverse){
+		var self = this;
+		var end = ( reverse ) ? 0 : ( this.element.width() - this.valueDiv.width() );
+		
+		this.valueDiv.animate({
+			left: end +'px'
+		}, {
+			duration: 6000,
+			complete: function() {
+				// self.valueDiv.css('left', '0px');
+				self._startIndeterminateAnimation(!reverse);
+			}
+		});
 	}
 });
 
