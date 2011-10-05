@@ -16,7 +16,7 @@
 $.widget( "ui.progressbar", {
 	version: "@VERSION",
 	options: {
-		value: false,
+		value: 0,
 		max: 100,
 		indeterminateSpeed : 6000
 	},
