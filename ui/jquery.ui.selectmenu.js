@@ -244,7 +244,7 @@ $.widget( "ui.selectmenu", {
 			that.listWrap				
 				.zIndex( that.element.zIndex() + 1 )
 				.position( $.extend({
-					of: that.newelementWrap
+					of: that.newelement
 				}, options.position ));
 			
 			that.opened = true;
