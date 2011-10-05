@@ -172,8 +172,10 @@ $.widget( "ui.selectmenu", {
 					
 					that.close( event, true);
 				},
-				focus: function( event, ui ) {	
-					that._trigger( "focus", event, { item: ui.item.data( "item.selectmenu" ) } );
+				focus: function( event, ui ) {
+					var item = ui.item.data( "item.selectmenu" );
+					if ( that.focus !== undefined && item.index != that.focus ) that._trigger( "focus", event, { item: item } );
+					that.focus = item.index;
 				}
 			});
 	},
@@ -302,15 +304,9 @@ $.widget( "ui.selectmenu", {
 	},
 	
 	_move: function( key, event ) {
-		// TODO this focus is needed to make the select below work,
-		// but should be removed as its fires an unwanted focus event
-		if ( !this.opened ) {
-			this.list.menu( "focus", event, this._getSelectedItem() );	
-		}
+		if ( !this.opened )	this.list.menu( "focus", event, this._getSelectedItem() );
 		this.list.menu( key, event );
-		if ( !this.opened ) {
-			this.list.menu( "select", event  );
-		}
+		if ( !this.opened ) this.list.menu( "select", event  );
 	},
 	
 	_getSelectedItem: function() {
