@@ -97,7 +97,7 @@ $.widget( "ui.selectmenu", {
 			
 		// wrap and insert new button
 		that.newelementWrap = $( '<span />' )
-			.addClass( that.widgetBaseClass + '-button' )
+			.addClass( 'ui-selectmenu-button' )
 			.append( that.newelement )
 			.insertAfter( that.element );	
 	},
@@ -125,7 +125,7 @@ $.widget( "ui.selectmenu", {
 
 		// wrap list	
 		that.listWrap = $( '<div />' )
-			.addClass( that.widgetBaseClass + '-menu' )
+			.addClass( 'ui-selectmenu-menu' )
 			.width( setWidth )
 			.append( that.list )
 			.appendTo( options.appendTo );
@@ -207,7 +207,7 @@ $.widget( "ui.selectmenu", {
 			
 		if ( !options.disabled ) {			
 			// close all other selectmenus		
-			$( '.' + that.widgetBaseClass + '-open' ).not( that.newelement ).each( function() {
+			$( '.ui-selectmenu-open' ).not( that.newelement ).each( function() {
 				$( this ).children( 'ul.ui-menu' ).data( 'element.selectelemenu' ).selectmenu( 'close' );
 			});
 						
@@ -217,7 +217,7 @@ $.widget( "ui.selectmenu", {
 					.removeClass( 'ui-corner-all' );
 			}		
 									
-			that.listWrap.addClass( that.widgetBaseClass + '-open' );		
+			that.listWrap.addClass( 'ui-selectmenu-open' );		
 			that.list.menu( "focus", null, currentItem );
 		
 			if ( !options.dropdown ) {
@@ -255,7 +255,7 @@ $.widget( "ui.selectmenu", {
 					.removeClass( 'ui-corner-top' );
 			}
 			
-			that.listWrap.removeClass( that.widgetBaseClass + '-open' );
+			that.listWrap.removeClass( 'ui-selectmenu-open' );
 			this.opened = false;
 			
 			if (focus) that.newelement.focus();
