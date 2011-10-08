@@ -139,11 +139,10 @@ $.widget( "ui.selectmenu", {
 			'click': function( event ) {
 				event.preventDefault();
 			},
-			// namespacing is needed (_bind should do the trick, but it doesnt)
-			'mouseenter.selectmenu': function() {
+			mouseenter: function() {
 				that.hover = true;
 			},
-			'mouseleave.selectmenu': function() {
+			mouseleave: function() {
 				that.hover = false;
 			}
 		});
