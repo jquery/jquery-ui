@@ -52,31 +52,6 @@ $.widget( "ui.selectmenu", {
 			options.value = that.element[0].value;
 		}
 		
-		that._addNewelement();		
-		that._addList();
-		
-		// built menu
-		that.refresh();		
-			
-		that._bind( that.newelement, that._newelementEvents );
-		
-		// document click closes menu
-		that._bind( document, {
-			'mousedown': function( event ) {
-				if ( that.opened && !that.hover) {	
-					window.setTimeout( function() {
-						that.close( event );
-					}, 200 );
-				}
-			}
-		});			
-	},
-	
-	_addNewelement: function() {
-		var that = this,
-			options = this.options,
-			tabindex = this.element.attr( 'tabindex' );		
-		
 		// catch click event of the label
 		that._bind({
 			'click':  function( event ) {
@@ -85,6 +60,19 @@ $.widget( "ui.selectmenu", {
 			}
 		});
 		
+		that._addNewelement();		
+		that._bind( that.newelement, that._newelementEvents );
+				
+		that._addList();
+		that.refresh();		
+			
+	},
+	
+	_addNewelement: function() {
+		var that = this,
+			options = this.options,
+			tabindex = this.element.attr( 'tabindex' );		
+				
 		// hide original select tag
 		that.element.hide();
 		
@@ -134,18 +122,6 @@ $.widget( "ui.selectmenu", {
 			var text = that.newelement.find( "span.ui-button-text");
 			var setWidth = text.width() + parseFloat( text.css( "padding-left" ) ) + parseFloat( text.css( "margin-left" ) );
 		}
-		
-		that._bind( that.list, {
-			'click': function( event ) {
-				event.preventDefault();
-			},
-			mouseenter: function() {
-				that.hover = true;
-			},
-			mouseleave: function() {
-				that.hover = false;
-			}
-		});
 
 		// wrap list	
 		that.listWrap = $( '<div />' )
@@ -177,6 +153,23 @@ $.widget( "ui.selectmenu", {
 					that.focus = item.index;
 				}
 			});
+			
+		that._bind( that.list, {
+			'click': function( event ) {
+				event.preventDefault();
+			}
+		});
+		
+		// document click closes menu
+		that._bind( document, {
+			'mousedown': function( event ) {
+				if ( that.opened && !$( event.target ).is( that.list ) ) {	
+					window.setTimeout( function() {
+						that.close( event );
+					}, 200 );
+				}
+			}
+		});			
 	},
 	
 	refresh: function() {
@@ -255,7 +248,6 @@ $.widget( "ui.selectmenu", {
 	close: function( event, focus ) {		
 		var that = this,
 			options = this.options;
-			
 		if ( that.opened ) {
 			if ( options.dropdown ) {
 				that.newelement
@@ -332,7 +324,7 @@ $.widget( "ui.selectmenu", {
 		keydown: function( event ) {
 			switch (event.keyCode) {
 				case $.ui.keyCode.TAB:
-					if ( this.opened ) this.close();
+					if ( this.opened ) this.close( event );
 					break;
 				case $.ui.keyCode.ENTER:
 					if ( this.opened ) {
