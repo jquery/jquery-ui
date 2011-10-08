@@ -2,6 +2,8 @@
 
 module( "spinner: options" );
 
+// culture is tested after numberFormat, since it depends on numberFormat
+
 test( "incremental, false", function() {
 	expect( 100 );
 
@@ -89,6 +91,29 @@ test( "numberFormat, currency", function() {
 	equal( element.val(), "$0.00", "formatted on init" );
 	element.spinner( "stepUp" );
 	equal( element.val(), "$1.00", "formatted after step" );
+});
+
+test( "culture, null", function() {
+	expect( 2 );
+	Globalize.culture( "ja-JP" );
+	var element = $( "#spin" ).val( 0 ).spinner({ numberFormat: "C" });
+	equal( element.val(), "¥0", "formatted on init" );
+	element.spinner( "stepUp" );
+	equal( element.val(), "¥1", "formatted after step" );
+
+	// reset culture
+	Globalize.culture( "default" );
+});
+
+test( "currency, ja-JP", function() {
+	expect( 2 );
+	var element = $( "#spin" ).val( 0 ).spinner({
+		numberFormat: "C",
+		culture: "ja-JP"
+	});
+	equal( element.val(), "¥0", "formatted on init" );
+	element.spinner( "stepUp" );
+	equal( element.val(), "¥1", "formatted after step" );
 });
 
 test( "max", function() {

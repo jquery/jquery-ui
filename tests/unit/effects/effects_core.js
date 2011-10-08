@@ -143,10 +143,10 @@ asyncTest( "animateClass clears style properties when stopped", function() {
 	expect( 2 );
 
 	test.addClass( "testChangeBackground", duration );
-	notEqual( orig, style.cssText, "cssText is the not the same after starting animation" );
+	notEqual( orig, style.cssText, "cssText is not the same after starting animation" );
 
 	test.stop( true, true );
-	equal( orig, style.cssText, "cssText is the same after stopping animation midway" );
+	equal( orig, $.trim( style.cssText ), "cssText is the same after stopping animation midway" );
 	start();
 });
 
