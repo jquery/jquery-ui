@@ -19,6 +19,8 @@ $.widget( "ui.draggable", {
 
 	options: {
 
+		scrollSpeed: 20,
+		scrollSensitivity:20,
 		helper: false
 
 	},
@@ -47,43 +49,48 @@ $.widget( "ui.draggable", {
 
 		this.scrollParent = this.element.scrollParent();
 
+    // Offset of scrollParent, used for auto-scrolling
+    this.overflowOffset = {};
+
+		// Height of scrollParent, used for auto-scrolling
+		this.overflowHeight = 0;
+
+		// Width of scrollParent, used for auto-scrolling
+		this.overflowWidth = 0;
+
 		// Static position elements can"t be moved with top/left
 		if ( this.element.css( "position" ) === "static" ) {
 			this.element.css( "position", "relative" );
 		}
-
+		
 		// Using proxy to avoid anon functions using self to pass "this" along
 		this.element.bind( "mousedown." + this.widgetName, $.proxy( this._mouseDown, this ) );
 
 	},
-	
+
 	_usingHelper : function() {
 		return ( this.options.helper === true || typeof this.options.helper === 'function' );
 	},
 
 	_setPosition: function() {
 
-		var left, top, position, cssPosition;
+		var left, top, position,
+				scrollTop = this.scrollParent.scrollTop(),
+				scrollLeft = this.scrollParent.scrollLeft();
 
 		// Helper is appended to body so offset of element is all that's needed
 		if ( this._usingHelper() ) {
 			return this.element.offset();
 		}
 
-		cssPosition = this.dragEl.css( "position" );;
-
 		// If fixed or absolute
-		if ( cssPosition !== "relative" ) {
+		if ( this.cssPosition !== "relative" ) {
 
 			position = this.dragEl.position();
 
-			if ( cssPosition === "absolute" ) {
-				return position;
-			}
-
-			// Take into account scrollbar for fixed position
-			position.top = position.top - this.scrollParent.scrollTop();
-			position.left = position.left - this.scrollParent.scrollLeft();
+			// Take into account scrollbar
+			position.top = position.top - scrollTop;
+			position.left = position.left - scrollLeft
 
 			return position;
 
@@ -100,20 +107,22 @@ $.widget( "ui.draggable", {
 
 		return {
 
-			left: left,
-			top: top
+			left: left - scrollLeft,
+			top: top - scrollTop
 
 		};
 
 	},
 
 	_mouseDown: function( event ) {
-  
+
     // Stop browser from highlighting, among other things
     event.preventDefault();
 
 		// The actual dragging element, should always be a jQuery object
 		this.dragEl = this.element;
+		
+		this.cssPosition = this.dragEl.css( "position" );
 
 		// Helper required, so clone, hide, and set reference
 		if ( this._usingHelper() ) {
@@ -131,16 +140,16 @@ $.widget( "ui.draggable", {
 				}
 
 			} else {
-			
+
 				this.dragEl = this.options.helper();
-				
+
 				// If function was passed, it should return a DOMElement
 				if ( typeof this.dragEl.nodeType !== 'number' ) {
 					throw "Helper function must return a DOMElement";
 				}
-				
+
 				this.dragEl = $( this.dragEl );
-			
+
 			}
 
 			// Automatically make helper absolute
@@ -166,10 +175,15 @@ $.widget( "ui.draggable", {
 			top: event.clientY
 		};
 
+		// Cache the offset of scrollParent
+		this.overflowOffset = this.scrollParent.offset();
+		this.overflowHeight = ( this.scrollParent[0] === document ) ? $(window).height() : this.scrollParent.height();
+		this.overflowWidth = ( this.scrollParent[0] === document ) ? $(window).width() : this.scrollParent.width();
+
 		this._trigger( "start", event );
 
-		$(document).bind( "mousemove." + this.widgetName, $.proxy( this._mouseMove, this ) );
-		$(document).bind( "mouseup." + this.widgetName, $.proxy( this._mouseUp, this ) );
+		$(document).bind( "mousemove." + this.widgetName, $.proxy( this._mouseMove, this ) )
+			.bind( "mouseup." + this.widgetName, $.proxy( this._mouseUp, this ) );
 
 
 		// Set the helper up by actual element
@@ -189,11 +203,11 @@ $.widget( "ui.draggable", {
 	},
 
 	_mouseMove: function( event ) {
-
+	
 		var leftDiff = event.clientX - this.startCoords.left,
-			topDiff = event.clientY - this.startCoords.top,
-			newLeft = leftDiff	+ this.startPosition.left,
-			newTop = topDiff + this.startPosition.top;
+				topDiff = event.clientY - this.startCoords.top,
+				newLeft = leftDiff	+ this.startPosition.left,
+				newTop = topDiff + this.startPosition.top;
 
 		this.position = {
 			left: newLeft,
@@ -213,17 +227,50 @@ $.widget( "ui.draggable", {
 			this.offset = this.dragEl.offset();
 
 		}
+		
+		newLeft = this.position.left;
+		newTop = this.position.top;
+		
+		if ( this.cssPosition !== 'fixed' ) {
+		
+			newLeft = newLeft + this.scrollParent.scrollLeft();
+			newTop = newTop + this.scrollParent.scrollTop();
+		
+		}
 
 		this.dragEl.css({
 
-			left: this.position.left + "px",
-			top: this.position.top + "px"
+			left: newLeft + "px",
+			top: newTop + "px"
 
 		});
+		
+		// Scroll the scrollParent, if needed
+		this._handleScrolling( event );
+
+	},
+
+	_handleScrolling: function( event ) {
+
+		var doc = $(document),
+				scrollTop = doc.scrollTop(),
+				scrollLeft = doc.scrollLeft();
+
+		// Handle vertical scrolling
+		if ( ( ( this.overflowHeight + scrollTop ) - event.pageY ) < this.options.scrollSensitivity ) {
+			doc.scrollTop( scrollTop + this.options.scrollSpeed );
+		}
+		
+		// Handle horizontal scrolling
+		if ( ( ( this.overflowWidth + scrollLeft ) - event.pageX ) < this.options.scrollSensitivity ) {
+			doc.scrollLeft( scrollLeft + this.options.scrollSpeed );
+		}
 
 	},
 
 	_mouseUp: function( event ) {
+
+		var doc = $(document);
 
 		this._trigger( "stop", event );
 
@@ -233,8 +280,8 @@ $.widget( "ui.draggable", {
 			this.dragEl.remove();
 		}
 
-		$(document).unbind( "mousemove." + this.widgetName );
-		$(document).unbind( "mouseup." + this.widgetName );
+		doc.unbind( "mousemove." + this.widgetName );
+		doc.unbind( "mouseup." + this.widgetName );
 
 	},
 
