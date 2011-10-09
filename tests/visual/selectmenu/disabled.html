@@ -39,10 +39,10 @@
 		});
 		$("#disable_optgroup").toggle( function() {
 			files2.find("optgroup:eq(0)").attr("disabled", "disabled");
-			//files2.selectmenu("refresh");
+			files2.selectmenu("refresh");
 		}, function() {
-			files2.find("option:eq(0)").removeAttr("disabled");
-			//files2.selectmenu("refresh");
+			files2.find("optgroup:eq(0)").removeAttr("disabled");
+			files2.selectmenu("refresh");
 		
 		});
 	});
