@@ -238,14 +238,6 @@ $.widget( "ui.draggable", {
 
 	},
 
-	_trigger: function( type, event, ui ) {
-
-		ui = ui || this._uiHash();
-
-		return $.Widget.prototype._trigger.call( this, type, event, ui );
-
-	},
-
 	_uiHash: function(event) {
 
 		return {
