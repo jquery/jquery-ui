@@ -78,6 +78,7 @@ function Datepicker() {
 		yearRange: 'c-10:c+10', // Range of years to display in drop-down,
 			// either relative to today's year (-nn:+nn), relative to currently displayed year
 			// (c-nn:c+nn), absolute (nnnn:nnnn), or a combination of the above (nnnn:-n)
+		writableYear: false, // User can directly write the year instead of selecting it
 		showOtherMonths: false, // True to show dates in other months, false to leave blank
 		selectOtherMonths: false, // True to allow selection of dates in other months, false for unselectable
 		showWeek: false, // True to show week of the year, false to not show it
@@ -887,9 +888,15 @@ $.extend(Datepicker.prototype, {
 	_selectMonthYear: function(id, select, period) {
 		var target = $(id);
 		var inst = this._getInst(target[0]);
-		inst['selected' + (period == 'M' ? 'Month' : 'Year')] =
-		inst['draw' + (period == 'M' ? 'Month' : 'Year')] =
-			parseInt(select.options[select.selectedIndex].value,10);
+		if (!this._get(inst, 'writableYear')) {
+			inst['selected' + (period == 'M' ? 'Month' : 'Year')] =
+			inst['draw' + (period == 'M' ? 'Month' : 'Year')] =
+				parseInt(select.options[select.selectedIndex].value,10);
+		} else {
+			inst['selected' + (period == 'M' ? 'Month' : 'Year')] =
+			inst['draw' + (period == 'M' ? 'Month' : 'Year')] =
+				parseInt(select.value,10);
+		}
 		this._notifyChange(inst);
 		this._adjustDate(target);
 	},
@@ -1613,30 +1620,35 @@ $.extend(Datepicker.prototype, {
 			if (secondary || !changeYear)
 				html += '<span class="ui-datepicker-year">' + drawYear + '</span>';
 			else {
-				// determine range of years to display
-				var years = this._get(inst, 'yearRange').split(':');
-				var thisYear = new Date().getFullYear();
-				var determineYear = function(value) {
-					var year = (value.match(/c[+-].*/) ? drawYear + parseInt(value.substring(1), 10) :
-						(value.match(/[+-].*/) ? thisYear + parseInt(value, 10) :
-						parseInt(value, 10)));
-					return (isNaN(year) ? thisYear : year);
-				};
-				var year = determineYear(years[0]);
-				var endYear = Math.max(year, determineYear(years[1] || ''));
-				year = (minDate ? Math.max(year, minDate.getFullYear()) : year);
-				endYear = (maxDate ? Math.min(endYear, maxDate.getFullYear()) : endYear);
-				inst.yearshtml += '<select class="ui-datepicker-year" ' +
-					'onchange="DP_jQuery_' + dpuuid + '.datepicker._selectMonthYear(\'#' + inst.id + '\', this, \'Y\');" ' +
-					'>';
-				for (; year <= endYear; year++) {
-					inst.yearshtml += '<option value="' + year + '"' +
-						(year == drawYear ? ' selected="selected"' : '') +
-						'>' + year + '</option>';
+				if ( !this._get(inst, 'writableYear') ) {
+					// determine range of years to display
+					var years = this._get(inst, 'yearRange').split(':');
+					var thisYear = new Date().getFullYear();
+					var determineYear = function(value) {
+						var year = (value.match(/c[+-].*/) ? drawYear + parseInt(value.substring(1), 10) :
+							(value.match(/[+-].*/) ? thisYear + parseInt(value, 10) :
+							parseInt(value, 10)));
+						return (isNaN(year) ? thisYear : year);
+					};
+					var year = determineYear(years[0]);
+					var endYear = Math.max(year, determineYear(years[1] || ''));
+					year = (minDate ? Math.max(year, minDate.getFullYear()) : year);
+					endYear = (maxDate ? Math.min(endYear, maxDate.getFullYear()) : endYear);
+					inst.yearshtml += '<select class="ui-datepicker-year" ' +
+						'onchange="DP_jQuery_' + dpuuid + '.datepicker._selectMonthYear(\'#' + inst.id + '\', this, \'Y\');" ' +
+						'>';
+					for (; year <= endYear; year++) {
+						inst.yearshtml += '<option value="' + year + '"' +
+							(year == drawYear ? ' selected="selected"' : '') +
+							'>' + year + '</option>';
+					}
+					inst.yearshtml += '</select>';
+					html += inst.yearshtml;
+				} else {
+					html += '<input type="text" size="4" maxlength="4" class="ui-datepicker-year" value="' + drawYear + '" ' +
+						'onchange="DP_jQuery_' + dpuuid + '.datepicker._selectMonthYear(\'#' + inst.id + '\', this, \'Y\');" ' +
+						'>';
 				}
-				inst.yearshtml += '</select>';
-				
-				html += inst.yearshtml;
 				inst.yearshtml = null;
 			}
 		}
