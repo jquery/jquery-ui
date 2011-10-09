@@ -52,9 +52,6 @@ $.widget( "ui.draggable", {
 			this.element.css( "position", "relative" );
 		}
 
-		// Prevent browser from hijacking drag
-		this.element.disableSelection();
-
 		// Using proxy to avoid anon functions using self to pass "this" along
 		this.element.bind( "mousedown." + this.widgetName, $.proxy( this._mouseDown, this ) );
 
@@ -111,6 +108,9 @@ $.widget( "ui.draggable", {
 	},
 
 	_mouseDown: function( event ) {
+  
+    // Stop browser from highlighting, among other things
+    event.preventDefault();
 
 		// The actual dragging element, should always be a jQuery object
 		this.dragEl = this.element;
@@ -147,8 +147,7 @@ $.widget( "ui.draggable", {
 			this.dragEl
 					.css({
 						position: "absolute"
-					})
-					.disableSelection();
+					});
 
 			$( "body" ).append( this.dragEl );
 
