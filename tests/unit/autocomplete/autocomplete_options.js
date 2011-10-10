@@ -190,4 +190,29 @@ test( "source, update after init", function() {
 	equal( menu.find( ".ui-menu-item" ).text(), "php" );
 });
 
+test( "renderMenu", function() {
+	expect( 2 );
+	var element = $( "#autocomplete" ).autocomplete({
+			source: [
+				{ label: "java", category: "Procedural" },
+				{ label: "javascript", category: "Functional" },
+				{ label: "haskell", category: "Functional" }
+			],
+			renderMenu: function( ul, items, buildListItem ) {
+				var category = undefined;
+				$.each(items, function( index, item ) {
+					if (item.category != category)
+						ul.append( "<li class='ui-autocomplete-category'>" + item.category
+							+ "</li>" );
+					ul.append( buildListItem( item ));
+				});
+			}
+		}),
+		menu = element.autocomplete( "widget" );
+	element.val( "ja" ).autocomplete( "search" );
+	equal( menu.find( "li" ).text(), "ProceduraljavaFunctionaljavascript" );
+	element.val( "ha" ).autocomplete( "search" );
+	equal( menu.find( "li" ).text(), "Functionalhaskell" );
+});
+
 }( jQuery ) );
