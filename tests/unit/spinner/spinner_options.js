@@ -20,6 +20,7 @@ test( "incremental, false", function() {
 	for ( i = 0; i < 100; i++ ) {
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.UP } );
 	}
+	element.simulate( "keyup", { keyCode: $.ui.keyCode.UP } );
 });
 
 test( "incremental, true", function() {
@@ -47,6 +48,7 @@ test( "incremental, true", function() {
 	for ( i = 0; i < 100; i++ ) {
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.UP } );
 	}
+	element.simulate( "keyup", { keyCode: $.ui.keyCode.UP } );
 });
 
 test( "incremental, function", function() {
@@ -67,6 +69,7 @@ test( "incremental, function", function() {
 	for ( i = 0; i < 100; i++ ) {
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.UP } );
 	}
+	element.simulate( "keyup", { keyCode: $.ui.keyCode.UP } );
 });
 
 test( "numberFormat, number", function() {
