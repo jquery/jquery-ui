@@ -4,7 +4,7 @@
 	<meta charset="UTF-8" />
 	<title>jQuery UI Position Test Suite</title>
 
-	<script type="text/javascript" src="../../../jquery-1.5.1.js"></script>
+	<script src="../../jquery.js"></script>
 	<script type="text/javascript" src="../../../ui/jquery.ui.position.js"></script>
 
 	<link rel="stylesheet" href="../../../external/qunit.css" type="text/css"/>
@@ -29,7 +29,7 @@ elements smaller than 10px have a line-height set on them to avoid a bug in IE6
 .height() returns the greater of the height and line-height
 -->
 
-<div id="main" style="position: absolute; top: 0; left: 0;">
+<div id="qunit-fixtures">
 	<div id="el1" style="position: absolute; width: 6px; height: 6px; line-height: 6px;"></div>
 	<div id="el2" style="position: absolute; width: 6px; height: 6px; line-height: 6px;"></div>
 	<div id="parent" style="position: absolute; width: 6px; height: 6px; top: 4px; left: 4px; line-height: 6px;"></div>

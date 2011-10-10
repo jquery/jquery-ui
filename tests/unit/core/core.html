@@ -4,7 +4,7 @@
 	<meta charset="UTF-8" />
 	<title>jQuery UI Core Test Suite</title>
 
-	<script type="text/javascript" src="../../../jquery-1.5.1.js"></script>
+	<script src="../../jquery.js"></script>
 	<script type="text/javascript" src="../../../ui/jquery.ui.core.js"></script>
 	<script type="text/javascript" src="../../../ui/jquery.ui.widget.js"></script>
 
@@ -31,7 +31,7 @@
 <ol id="qunit-tests">
 </ol>
 
-<div id="main" style="position: absolute; top: -10000px; left: -10000px;">
+<div id="qunit-fixture">
 
 	<img src="../images/jqueryui_32x32.png" usemap="#mymap" width="10", height="10">
 	<map name="mymap">
@@ -105,14 +105,6 @@
 		<span id="spanTabindex10" tabindex="10">.</span>
 		<span id="spanTabindex-1" tabindex="-1">.</span>
 		<span id="spanTabindex-50" tabindex="-50">.</span>
-	</div>
-	
-	<div>
-		<input id="inputTabindexfoo" tabindex="foo" />
-		<input id="inputTabindex3foo" tabindex="3foo" />
-		
-		<span id="spanTabindexfoo" tabindex="foo">.</span>
-		<span id="spanTabindex3foo" tabindex="3foo">.</span>
 	</div>
 	
 	<div id="zIndex100" style="z-index: 100; position: absolute">

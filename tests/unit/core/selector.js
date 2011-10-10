@@ -147,15 +147,6 @@ test("focusable - not natively focusable with various tabindex", function() {
 	isFocusable('#spanTabindex-50', 'span, tabindex -50');
 });
 
-test("focusable - invalid tabindex", function() {
-	expect(4);
-	
-	isFocusable('#inputTabindexfoo', 'input, tabindex foo');
-	isFocusable('#inputTabindex3foo', 'input, tabindex 3foo');
-	isNotFocusable('#spanTabindexfoo', 'span tabindex foo');
-	isNotFocusable('#spanTabindex3foo', 'span, tabindex 3foo');
-});
-
 test("focusable - area elements", function() {
 	isNotFocusable('#areaCoordsNoHref', 'coords but no href');
 	isFocusable('#areaCoordsHref', 'coords and href');
@@ -231,15 +222,6 @@ test("tabbable -  not natively tabbable with various tabindex", function() {
 	isTabbable('#spanTabindex10', 'span, tabindex 10');
 	isNotTabbable('#spanTabindex-1', 'span, tabindex -1');
 	isNotTabbable('#spanTabindex-50', 'span, tabindex -50');
-});
-
-test("tabbable - invalid tabindex", function() {
-	expect(4);
-	
-	isTabbable('#inputTabindexfoo', 'input, tabindex foo');
-	isTabbable('#inputTabindex3foo', 'input, tabindex 3foo');
-	isNotTabbable('#spanTabindexfoo', 'span tabindex foo');
-	isNotTabbable('#spanTabindex3foo', 'span, tabindex 3foo');
 });
 
 test("tabbable - area elements", function() {

@@ -97,7 +97,7 @@ test('disable', function() {
 });
 
 test('add', function() {
-	expect(4);
+	expect(3);
 
 	el = $('#tabs1').tabs();
 	el.tabs('add', '#new', 'New');
@@ -110,8 +110,6 @@ test('add', function() {
 	other.simulate('mouseout');
 
 	equals($('a', added).attr('href'), '#new', 'should not expand href to full url of current page');
-
-	ok(false, "missing test - untested code is broken code.");
 });
 
 test('remove', function() {
@@ -161,23 +159,11 @@ test('select', function() {
 	equals(el.tabs('option', 'selected'), 1, 'should select tab by id');
 });
 
-test('load', function() {
-	ok(false, "missing test - untested code is broken code.");
-});
-
-test('url', function() {
-	ok(false, "missing test - untested code is broken code.");
-});
-
 test('length', function() {
 	expect(1);
 
 	el = $('#tabs1').tabs();
 	equals(el.tabs('length'), $('ul a', el).length, ' should return length');
-});
-
-test('rotate', function() {
-	ok(false, "missing test - untested code is broken code.");
 });
 
 })(jQuery);

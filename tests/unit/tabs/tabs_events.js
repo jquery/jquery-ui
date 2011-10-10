@@ -20,10 +20,6 @@ test('select', function() {
 	el.tabs('select', 1);
 });
 
-test('load', function() {
-	ok(false, "missing test - untested code is broken code.");
-});
-
 test('show', function() {
 	expect(4);
 
@@ -53,10 +49,6 @@ test('add', function() {
 	el.tabs('add', '#test2', 'Test 2');
 	equals(el.tabs('option', 'selected'), 0, 'Second tab added should not be auto selected');
 
-});
-
-test('remove', function() {
-	ok(false, "missing test - untested code is broken code.");
 });
 
 test('enable', function() {

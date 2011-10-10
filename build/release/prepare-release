@@ -132,11 +132,11 @@ git whatchanged $version... \
 | grep -i thank \
 >> $base_dir/thankyou
 
-echo
-echo "Find contributors from duplicates of fixed tickets and add them to:"
-echo "$base_dir/thankyou"
-echo "Press enter when done."
-read
+#echo
+#echo "Find contributors from duplicates of fixed tickets and add them to:"
+#echo "$base_dir/thankyou"
+#echo "Press enter when done."
+#read
 
 echo
 echo "Contributors list complete."
@@ -214,8 +214,9 @@ echo
 
 # Create new milestrone and version
 echo "$version_new was tagged at $version_new_time."
-echo "Create and close the $version_new Milestone with the above date and time."
+echo "Close the $version_new Milestone with the above date and time."
 echo "Create the $version_new Version with the above date and time."
+echo "Create a Milestone for the next minor release."
 echo "Press enter when done."
 read
 
@@ -332,4 +333,4 @@ echo
 
 
 
-# ruby -e 'puts File.read("thankyou").split("\n").join(", ")' > thankyou2
+# ruby -e 'puts File.read("thankyou").split("\n").join(", ")' | pbcopy
