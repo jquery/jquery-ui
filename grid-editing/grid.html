@@ -72,8 +72,8 @@
 		var editForm = $( "#editForm" ).tooltip().hide().submit( function( event ) {
 			event.preventDefault();
 			$.observable( developer ).property( serializeForm( this ) );
-			// TODO make the tooltip disappear when hiding the form
 			editForm.hide();
+			grid.focus();
 		});
 		grid.delegate( "button.edit", "click", function() {
 			developer = $( this ).closest("tr").data( "grid-item" );
