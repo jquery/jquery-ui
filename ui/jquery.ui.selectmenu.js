@@ -60,12 +60,11 @@ $.widget( "ui.selectmenu", {
 			}
 		});
 		
-		that._addNewelement();		
+		that._addNewelement();
 		that._bind( that.newelement, that._newelementEvents );
 				
 		that._addList();
-		that.refresh();		
-			
+		that.refresh();			
 	},
 	
 	_addNewelement: function() {
@@ -414,6 +413,7 @@ $.widget( "ui.selectmenu", {
 	_destroy: function() {
 		this.listWrap.remove();
 		this.newelementWrap.remove();
+		this.element.show();
 	}
 });
 
