@@ -1,0 +1,15 @@
+/*
+ * jQuery UI Editable @VERSION
+ *
+ * Copyright 2011, AUTHORS.txt (http://jqueryui.com/about)
+ * Dual licensed under the MIT or GPL Version 2 licenses.
+ * http://jquery.org/license
+ *
+ * http://docs.jquery.com/UI/Tooltip#theming
+ */
+.ui-editable .ui-widget-content.ui-state-default {background: none !important;}
+.ui-editable-form { display: inline-block; overflow: hidden; padding: 0; vertical-align: middle; }
+.ui-editable-placeholder { color: #555; font-style: italic; }
+.ui-editable-input { border: none; padding: 0; margin: .2em 0;
+vertical-align: middle; margin-left: .4em; margin-right: .4em; }
+.ui-editable-save, .ui-editable-cancel { font-size:0.74em !important; }
