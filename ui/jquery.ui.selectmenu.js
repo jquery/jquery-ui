@@ -254,9 +254,7 @@ $.widget("ui.selectmenu", {
 			.bind( 'mousedown.selectmenu mouseup.selectmenu', function() { return false; });
 
 		// needed when window is resized
-		// TODO seems to be useless, but causes errors (fnagel 01.08.11)
-		// see: https://github.com/fnagel/jquery-ui/issues/147
-		// $(window).bind( "resize.selectmenu", $.proxy( self._refreshPosition, this ) );
+		$(window).bind( "resize.selectmenu", $.proxy( self.close, this ) );
 	},
 
 	_init: function() {
