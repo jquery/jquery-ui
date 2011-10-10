@@ -206,7 +206,8 @@ test( "beforeLoad", function() {
 	});
 	element.find( ".ui-tabs-nav a" ).eq( 3 ).click();
 	tabs_state( element, 0, 0, 0, 1, 0 );
-	equals( panel.html(), "<p>testing</p>", "panel html after" );
+	// .toLowerCase() is needed to convert <P> to <p> in old IEs
+	equals( panel.html().toLowerCase(), "<p>testing</p>", "panel html after" );
 });
 
 if ( $.uiBackCompat === false ) {
