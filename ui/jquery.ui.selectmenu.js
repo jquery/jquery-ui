@@ -144,7 +144,10 @@ $.widget( "ui.selectmenu", {
 					
 					if ( flag ) that._trigger( "change", event, { item: item } );
 					
-					that.close( event, true);
+					if ( that.opened ) {
+						event.preventDefault();
+						that.close( event, true);
+					}
 				},
 				focus: function( event, ui ) {
 					var item = ui.item.data( "item.selectmenu" );
@@ -152,12 +155,6 @@ $.widget( "ui.selectmenu", {
 					that.focus = item.index;
 				}
 			});
-			
-		that._bind( that.list, {
-			'click': function( event ) {
-				event.preventDefault();
-			}
-		});
 		
 		// document click closes menu
 		that._bind( document, {
