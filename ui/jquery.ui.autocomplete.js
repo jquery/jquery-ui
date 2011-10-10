@@ -40,7 +40,8 @@ $.widget( "ui.autocomplete", {
 		open: null,
 		response: null,
 		search: null,
-		select: null
+		select: null,
+		renderMenu: function() { this._renderMenu.apply(this, arguments) }
 	},
 
 	pending: 0,
@@ -412,10 +413,12 @@ $.widget( "ui.autocomplete", {
 	},
 
 	_suggest: function( items ) {
+		var self = this;
 		var ul = this.menu.element
 			.empty()
 			.zIndex( this.element.zIndex() + 1 );
-		this._renderMenu( ul, items );
+		this.options.renderMenu.call(this, ul, items,
+			function() { return self._buildListItem.apply(self, arguments) });
 		// TODO refresh should check if the active item is still in the dom, removing the need for a manual blur
 		this.menu.blur();
 		this.menu.refresh();
@@ -440,18 +443,22 @@ $.widget( "ui.autocomplete", {
 		) );
 	},
 
-	_renderMenu: function( ul, items ) {
-		var self = this;
+	_renderMenu: function( ul, items, buildListItem ) {
 		$.each( items, function( index, item ) {
-			self._renderItem( ul, item );
+			ul.append( buildListItem( item ) );
 		});
 	},
 
+	// need to preserve for backward compatability as overriding this
+	// method was a documented technique for customization
 	_renderItem: function( ul, item) {
+		return this._buildListItem( item ).appendTo( ul );
+	},
+
+	_buildListItem: function( item ) {
 		return $( "<li></li>" )
 			.data( "item.autocomplete", item )
-			.append( $( "<a></a>" ).text( item.label ) )
-			.appendTo( ul );
+			.append( $( "<a></a>" ).text( item.label ) );
 	},
 
 	_move: function( direction, event ) {

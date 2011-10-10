@@ -20,6 +20,7 @@ commonWidgetTests( "autocomplete", {
 		open: null,
 		response: null,
 		search: null,
-		select: null
+		select: null,
+		renderMenu: function() {}
 	}
 });
