@@ -18,14 +18,9 @@
 			}
 		});
 
-		$( "#info-link" ).hover(
-			function( event ) {
-				$("#more-info").popup( "open" );
-			},
-			function( event ) {
-				$("#more-info").popup( "close" );
-			}
-		);
+		$( "#info-link" ).mouseover( function( event ) {
+			$("#more-info").popup( "open" );
+		});
 	});
 	</script>
 	<style type="text/css">
@@ -50,9 +45,9 @@
 
 <div class="demo">
 	<div>
-		<textarea>More info about me to the right -></textarea> <span id="info-link" class="ui-icon ui-icon-info" />
+		<textarea>More info about me to the right -></textarea> <span id="info-link" class="ui-icon ui-icon-info"></span>
+		<div id="more-info">This is some more info and there is even more info on <a href="#">this page</a>.</div>
 	</div>
-	<div id="more-info">This is some more info</div>
 </div>
 
 <div class="demo-description">

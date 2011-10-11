@@ -109,19 +109,6 @@ $.widget( "ui.popup", {
 		}
 
 		this._bind({
-			focusout: function( event ) {
-				// use a timer to allow click to clear it and letting that
-				// handle the closing instead of opening again
-				this.closeTimer = this._delay( function() {
-					this.close( event );
-				}, 100);
-			},
-			focusin: function( event ) {
-				clearTimeout( this.closeTimer );
-			}
-		});
-
-		this._bind({
 			// TODO only triggered on element if it can receive focus
 			// bind to document instead?
 			// either element itself or a child should be focusable
