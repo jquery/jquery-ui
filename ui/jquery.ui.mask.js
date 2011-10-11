@@ -5,8 +5,6 @@
  * Dual licensed under the MIT or GPL Version 2 licenses.
  * http://jquery.org/license
  *
- * http://docs.jquery.com/UI/Mask
- *
  * Depends:
  *	jquery.ui.core.js
  *	jquery.ui.widget.js
@@ -32,9 +30,13 @@ $.widget( "ui.mask", {
 
 	_create: function() {
 		this._parseMask();
-		this._parseValue();
-		this._paint();
+		this.refresh();
+		this.element.addClass( "ui-mask" );
 		this._bind( this._events );
+	},
+
+	_destroy: function() {
+		this.element.removeClass( "ui-mask" );
 	},
 
 	refresh: function() {
@@ -62,6 +64,9 @@ $.widget( "ui.mask", {
 			this._parseMask();
 			this._parseValue();
 		}
+	},
+	_setOptions: function( options ) {
+		this._super( "_setOptions", options );
 		this._paint();
 	},
 
@@ -150,6 +155,7 @@ $.widget( "ui.mask", {
 		},
 		blur: function( event ) {
 			clearTimeout( this.delayedFocus );
+
 			// because we are constantly setting the value of the input, the change event
 			// never fires - we re-introduce the change event here
 			this._parseValue();
@@ -157,7 +163,6 @@ $.widget( "ui.mask", {
 			if ( this.element.val() !== this.lastUnsavedValue ) {
 				this.element.trigger( "change" );
 			}
-			return;
 		},
 		keydown: function( event ) {
 			var bufferObject,
@@ -190,19 +195,6 @@ $.widget( "ui.mask", {
 				return;
 
 			case keyCode.LEFT:
-				bufferObject = this.buffer[ position.begin ];
-				if ( bufferObject && bufferObject.length > 1 ) {
-					bufferObject.value = this._validValue( bufferObject, bufferObject.value );
-					this._paint();
-					event.preventDefault();
-				}
-				position = this._seekLeft( bufferObject ? bufferObject.start : position.begin );
-				bufferObject = this.buffer[ position ];
-				if ( this._caretSelect( position ) ) {
-					event.preventDefault();
-				}
-				return;
-
 			case keyCode.RIGHT:
 				bufferObject = this.buffer[ position.begin ];
 				if ( bufferObject && bufferObject.length > 1 ) {
@@ -210,13 +202,15 @@ $.widget( "ui.mask", {
 					this._paint();
 					event.preventDefault();
 				}
-				position = this._seekRight( bufferObject ?
-					bufferObject.start + bufferObject.length - 1 :
-					position.end );
-				bufferObject = this.buffer[ position ];
-				if ( this._caretSelect( position ) ) {
-					event.preventDefault();
+				if ( key === keyCode.LEFT ) {
+					position = this._seekLeft( bufferObject ? bufferObject.start : position.begin );
+				} else {
+					position = this._seekRight( bufferObject ?
+						bufferObject.start + bufferObject.length - 1 :
+						position.end );
 				}
+				this._caretSelect( position );
+				event.preventDefault();
 				return;
 			}
 		},
@@ -227,7 +221,6 @@ $.widget( "ui.mask", {
 				bufferPosition = this._seekRight( position.begin - 1 ),
 				bufferObject = this.buffer[ bufferPosition ];
 
-			this.currentEvent = event;
 			// ignore keypresses with special keys, or control characters
 			if ( event.metaKey || event.altKey || event.ctrlKey || key < 32 ) {
 				return;
@@ -256,18 +249,15 @@ $.widget( "ui.mask", {
 				}
 			}
 			event.preventDefault();
-			this.currentEvent = false;
 		},
 		paste: "_paste",
 		input: "_paste"
 	},
 	_paste: function(event) {
-		this.currentEvent = event;
 		this._delay( function() {
 			var position = this._parseValue();
 			this._paint();
 			this._caret( this._seekRight( position ) );
-			this.currentEvent = false;
 		}, 0 );
 	},
 	_paint: function( focused ) {
@@ -472,7 +462,7 @@ $.widget( "ui.mask", {
 			}
 			return bufferObject.valid.test( value ) && value;
 		}
-		return ( bufferObject.literal === value ) && value ;
+		return ( bufferObject.literal === value ) && value;
 	}
 });
 
