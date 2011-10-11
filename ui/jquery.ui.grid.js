@@ -16,7 +16,8 @@ $.widget( "ui.grid", {
 		columns: null,
 		dataFields: [ "type", "editor", "editorOptions", "template", "culture", "format" ],
 		heightStyle: "auto",
-		rowTemplate: null
+		rowTemplate: null,
+		source: null
 	},
 
 	_create: function() {
