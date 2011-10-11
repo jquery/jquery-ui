@@ -37,101 +37,96 @@ $.widget( "ui.selectmenu", {
 	},
 
 	_create: function() {
-		var that = this,
-			options = this.options,
-			// set a default id value, generate a new random one if not set by developer
-			selectmenuId = that.element.attr( 'id' ) || 'ui-selectmenu-' + Math.random().toString( 16 ).slice( 2, 10 );
+		// set a default id value, generate a new random one if not set by developer
+		var selectmenuId = this.element.attr( 'id' ) || 'ui-selectmenu-' + Math.random().toString( 16 ).slice( 2, 10 );
 			
 		// quick array of button and menu id's
-		that.ids = [ selectmenuId, selectmenuId + '-button', selectmenuId + '-menu' ];
+		this.ids = [ selectmenuId, selectmenuId + '-button', selectmenuId + '-menu' ];
 				
 		// set current value
-		if ( options.value ) {
-			that.element[0].value = options.value;
+		if ( this.options.value ) {
+			this.element[0].value = this.options.value;
 		} else {
-			options.value = that.element[0].value;
+			this.options.value = this.element[0].value;
 		}
 		
 		// catch click event of the label
-		that._bind({
+		this._bind({
 			'click':  function( event ) {
-				that.newelement.focus();
+				this.newelement.focus();
 				event.preventDefault();
 			}
 		});
 		
-		that._addNewelement();
-		that._bind( that.newelement, that._newelementEvents );
+		this._addNewelement();
+		this._bind( this.newelement, this._newelementEvents );
 				
-		that._addList();
-		that.refresh();			
+		this._addList();
+		this.refresh();			
 	},
 	
 	_addNewelement: function() {
-		var that = this,
-			options = this.options,
-			tabindex = this.element.attr( 'tabindex' );		
+		var tabindex = this.element.attr( 'tabindex' );		
 				
 		// hide original select tag
-		that.element.hide();
+		this.element.hide();
 		
 		// create button
-		that.newelement = $( '<a />', {
-				href: '#' + that.ids[ 0 ],
-				tabindex: ( tabindex ? tabindex : that.element.attr( 'disabled' ) ? 1 : 0 ),
-				id: that.ids[ 1 ],
+		this.newelement = $( '<a />', {
+				href: '#' + this.ids[ 0 ],
+				tabindex: ( tabindex ? tabindex : this.element.attr( 'disabled' ) ? 1 : 0 ),
+				id: this.ids[ 1 ],
 				css: {
-					width: that.element.outerWidth()
+					width: this.element.outerWidth()
 				},
-				'aria-disabled': options.disabled,
-				'aria-owns': that.ids[ 2 ],
+				'aria-disabled': this.options.disabled,
+				'aria-owns': this.ids[ 2 ],
 				'aria-haspopup': true	
 			})
 			.button({
 				label: this.element.find( "option:selected" ).text(),
 				icons: {
-					primary: ( options.dropdown ? 'ui-icon-triangle-1-s' : 'ui-icon-triangle-2-n-s' )
+					primary: ( this.options.dropdown ? 'ui-icon-triangle-1-s' : 'ui-icon-triangle-2-n-s' )
 				}
 			});
 			
 		// wrap and insert new button
-		that.newelementWrap = $( '<span />' )
+		this.newelementWrap = $( '<span />' )
 			.addClass( 'ui-selectmenu-button' )
-			.append( that.newelement )
-			.insertAfter( that.element );	
+			.append( this.newelement )
+			.insertAfter( this.element );	
 	},
 	
 	_addList: function() {
-		var that = this,
-			options = this.options;
+		var that = this;
 			
 		// create menu portion, append to body		
-		that.list = $( '<ul />', {
+		this.list = $( '<ul />', {
 			'class': 'ui-widget ui-widget-content',
 			'aria-hidden': true,
-			'aria-labelledby': that.ids[1],
+			'aria-labelledby': this.ids[1],
 			role: 'listbox',
-			id: that.ids[2]
+			id: this.ids[2]
 		});
 		
 		// set width
-		if ( options.dropdown ) {
-			var setWidth = that.newelement.outerWidth();
+		if ( this.options.dropdown ) {
+			var setWidth = this.newelement.outerWidth();
 		} else {
-			var text = that.newelement.find( "span.ui-button-text");
+			var text = this.newelement.find( "span.ui-button-text");
 			var setWidth = text.width() + parseFloat( text.css( "padding-left" ) ) + parseFloat( text.css( "margin-left" ) );
 		}
 
 		// wrap list	
-		that.listWrap = $( '<div />' )
+		this.listWrap = $( '<div />' )
 			.addClass( 'ui-selectmenu-menu' )
 			.width( setWidth )
-			.append( that.list )
-			.appendTo( options.appendTo );
+			.append( this.list )
+			.appendTo( this.options.appendTo );
 				
 		// init menu widget
-		that.list
-			.data( 'element.selectelemenu', that.element )
+		this.list
+			.data( 'element.selectelemenu', this.element )
 			.menu({
 				select: function( event, ui ) {
 					var flag = false,
@@ -157,11 +152,11 @@ $.widget( "ui.selectmenu", {
 			});
 		
 		// document click closes menu
-		that._bind( document, {
+		this._bind( document, {
 			'mousedown': function( event ) {
-				if ( that.opened && !$( event.target ).is( that.list ) ) {	
+				if ( this.opened && !$( event.target ).is( this.list ) ) {	
 					window.setTimeout( function() {
-						that.close( event );
+						this.close( event );
 					}, 200 );
 				}
 			}
@@ -169,94 +164,87 @@ $.widget( "ui.selectmenu", {
 	},
 	
 	refresh: function() {
-		var that = this,
-			options = this.options;		
+		this.list.empty();
 		
-		that.list.empty();
+		this._initSource();
+		this._renderMenu( this.list, this.items );
 		
-		that._initSource();
-		that._renderMenu( that.list, that.items );
-		
-		that.list.menu( "refresh" );
+		this.list.menu( "refresh" );
 					
 		// adjust ARIA			
-		that.list.find( "li" ).not( '.ui-selectmenu-optgroup' ).find( 'a' ).attr( 'role', 'option' );
+		this.list.find( "li" ).not( '.ui-selectmenu-optgroup' ).find( 'a' ).attr( 'role', 'option' );
 		
-		if ( options.dropdown ) {
-			that.list
+		if ( this.options.dropdown ) {
+			this.list
 				.addClass( 'ui-corner-bottom' )
 				.removeClass( 'ui-corner-all' );
 		}
 		
 		// transfer disabled state
-		if ( that.element.attr( 'disabled' ) ) {
-			that.disable();
+		if ( this.element.attr( 'disabled' ) ) {
+			this.disable();
 		} else {
-			that.enable()
+			this.enable()
 		}
 	},	
 	
 	open: function( event ) {		
-		var that = this,
-			options = this.options,
-			currentItem = that._getSelectedItem();
+		var currentItem = this._getSelectedItem();
 			
-		if ( !options.disabled ) {			
+		if ( !this.options.disabled ) {			
 			// close all other selectmenus		
-			$( '.ui-selectmenu-open' ).not( that.newelement ).each( function() {
+			$( '.ui-selectmenu-open' ).not( this.newelement ).each( function() {
 				$( this ).children( 'ul.ui-menu' ).data( 'element.selectelemenu' ).selectmenu( 'close' );
 			});
 						
-			if ( options.dropdown ) {
-				that.newelement
+			if ( this.options.dropdown ) {
+				this.newelement
 					.addClass( 'ui-corner-top' )
 					.removeClass( 'ui-corner-all' );
 			}		
 									
-			that.listWrap.addClass( 'ui-selectmenu-open' );		
-			that.list.menu( "focus", null, currentItem );
+			this.listWrap.addClass( 'ui-selectmenu-open' );		
+			this.list.menu( "focus", null, currentItem );
 		
-			if ( !options.dropdown ) {
+			if ( !this.options.dropdown ) {
 				// center current item
-				if ( that.list.css("overflow") == "auto" ) {
-					that.list.scrollTop( that.list.scrollTop() + currentItem.position().top - that.list.outerHeight()/2 + currentItem.outerHeight()/2 );
+				if ( this.list.css("overflow") == "auto" ) {
+					this.list.scrollTop( this.list.scrollTop() + currentItem.position().top - this.list.outerHeight()/2 + currentItem.outerHeight()/2 );
 				}			
 				// calculate offset
-				var _offset = (that.list.offset().top  - currentItem.offset().top + (that.newelement.outerHeight() - currentItem.outerHeight()) / 2);			
-				$.extend( options.position, {
+				var _offset = ( this.list.offset().top  - currentItem.offset().top + ( this.newelement.outerHeight() - currentItem.outerHeight() ) / 2);			
+				$.extend( this.options.position, {
 					my: "left top",
 					at: "left top",
 					offset: "0 " + _offset
 				});
 			}
 			
-			that.listWrap				
-				.zIndex( that.element.zIndex() + 1 )
+			this.listWrap				
+				.zIndex( this.element.zIndex() + 1 )
 				.position( $.extend({
-					of: that.newelement
-				}, options.position ));
+					of: this.newelement
+				}, this.options.position ));
 			
-			that.opened = true;
-			that._trigger( "open", event );
+			this.opened = true;
+			this._trigger( "open", event );
 		}
 	},	
 	
-	close: function( event, focus ) {		
-		var that = this,
-			options = this.options;
-		if ( that.opened ) {
-			if ( options.dropdown ) {
-				that.newelement
+	close: function( event, focus ) {
+		if ( this.opened ) {
+			if ( this.options.dropdown ) {
+				this.newelement
 					.addClass( 'ui-corner-all' )
 					.removeClass( 'ui-corner-top' );
 			}
 			
-			that.listWrap.removeClass( 'ui-selectmenu-open' );
+			this.listWrap.removeClass( 'ui-selectmenu-open' );
 			this.opened = false;
 			
-			if (focus) that.newelement.focus();
+			if (focus) this.newelement.focus();
 			
-			that._trigger( "close", event );
+			this._trigger( "close", event );
 		}
 	},
 	
