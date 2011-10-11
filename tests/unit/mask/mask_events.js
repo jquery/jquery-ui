@@ -20,8 +20,8 @@ asyncTest( "focus: Initial Caret Positioning", function() {
 	equal( input.val(), "_", "Initial Value Expected" );
 	input.focus();
 	setTimeout( function() {
-		input.blur();
 		deepEqual( mask._caret(), { begin: 0, end: 0 }, "Caret position correct");
+		input.blur();
 
 		input.mask( "option", "mask", "(9)" );
 		equal( input.val(), "(_)", "Initial Value Expected" );
