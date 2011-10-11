@@ -74,7 +74,7 @@ $.widget( "ui.selectmenu", {
 		// create button
 		this.newelement = $( '<a />', {
 				href: '#' + this.ids[ 0 ],
-				tabindex: ( tabindex ? tabindex : this.element.attr( 'disabled' ) ? 1 : 0 ),
+				tabindex: ( tabindex ? tabindex : this.element.attr( 'disabled' ) ? -1 : 0 ),
 				id: this.ids[ 1 ],
 				css: {
 					width: this.element.outerWidth()
