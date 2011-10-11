@@ -117,9 +117,7 @@ $.widget( "ui.mask", {
 		}
 	},
 	_getValue: function( raw ) {
-		var bufferPosition,
-			bufferObject,
-			counter,
+		var bufferPosition, bufferObject, counter,
 			bufferLength = this.buffer.length,
 			value = "";
 
@@ -170,48 +168,48 @@ $.widget( "ui.mask", {
 				position = this._caret();
 
 			switch ( key ) {
-			case keyCode.ESCAPE:
-				this.element.val( this.lastUnsavedValue );
-				this._caretSelect( 0, this._parseValue() );
-				event.preventDefault();
-				return;
-
-			case keyCode.BACKSPACE:
-			case keyCode.DELETE:
-				event.preventDefault();
-				if ( position.begin === position.end ) {
-					position.begin = position.end = ( key === keyCode.DELETE ?
-						this._seekRight( position.begin - 1) :
-						this._seekLeft( position.begin )
-					);
-					if ( position.begin < 0 ) {
-						this._caret( this._seekRight( -1 ) );
-						return;
-					}
-				}
-				this._removeValues( position.begin, position.end );
-				this._paint();
-				this._caretSelect( position.begin );
-				return;
-
-			case keyCode.LEFT:
-			case keyCode.RIGHT:
-				bufferObject = this.buffer[ position.begin ];
-				if ( bufferObject && bufferObject.length > 1 ) {
-					bufferObject.value = this._validValue( bufferObject, bufferObject.value );
-					this._paint();
+				case keyCode.ESCAPE:
+					this.element.val( this.lastUnsavedValue );
+					this._caretSelect( 0, this._parseValue() );
 					event.preventDefault();
-				}
-				if ( key === keyCode.LEFT ) {
-					position = this._seekLeft( bufferObject ? bufferObject.start : position.begin );
-				} else {
-					position = this._seekRight( bufferObject ?
-						bufferObject.start + bufferObject.length - 1 :
-						position.end );
-				}
-				this._caretSelect( position );
-				event.preventDefault();
-				return;
+					return;
+
+				case keyCode.BACKSPACE:
+				case keyCode.DELETE:
+					event.preventDefault();
+					if ( position.begin === position.end ) {
+						position.begin = position.end = ( key === keyCode.DELETE ?
+							this._seekRight( position.begin - 1) :
+							this._seekLeft( position.begin )
+						);
+						if ( position.begin < 0 ) {
+							this._caret( this._seekRight( -1 ) );
+							return;
+						}
+					}
+					this._removeValues( position.begin, position.end );
+					this._paint();
+					this._caretSelect( position.begin );
+					return;
+
+				case keyCode.LEFT:
+				case keyCode.RIGHT:
+					bufferObject = this.buffer[ position.begin ];
+					if ( bufferObject && bufferObject.length > 1 ) {
+						bufferObject.value = this._validValue( bufferObject, bufferObject.value );
+						this._paint();
+						event.preventDefault();
+					}
+					if ( key === keyCode.LEFT ) {
+						position = this._seekLeft( bufferObject ? bufferObject.start : position.begin );
+					} else {
+						position = this._seekRight( bufferObject ?
+							bufferObject.start + bufferObject.length - 1 :
+							position.end );
+					}
+					this._caretSelect( position );
+					event.preventDefault();
+					return;
 			}
 		},
 		keypress: function( event ) {
@@ -322,9 +320,7 @@ $.widget( "ui.mask", {
 	// parses the .val() and places it into the buffer
 	// returns the last filled in value position
 	_parseValue: function() {
-		var bufferPosition,
-			bufferObject,
-			character,
+		var bufferPosition, bufferObject, character,
 			valuePosition = 0,
 			lastFilledPosition = -1,
 			value = this.element.val(),
@@ -366,8 +362,7 @@ $.widget( "ui.mask", {
 		return lastFilledPosition;
 	},
 	_removeValues: function( begin, end ) {
-		var position,
-			bufferObject;
+		var position, bufferObject;
 		for ( position = begin; position <= end; position++ ) {
 			bufferObject = this.buffer[ position ];
 			if ( bufferObject && bufferObject.value ) {
