@@ -111,7 +111,6 @@ $.widget( "ui.mask", {
 		var bufferObject = this.buffer[ bufferPosition ];
 		if ( bufferObject && bufferObject.length > 1 ) {
 			this._caret( bufferObject.start, bufferObject.start + bufferObject.length );
-			return true;
 		} else {
 			this._caret( bufferPosition );
 		}
@@ -177,11 +176,17 @@ $.widget( "ui.mask", {
 				case keyCode.BACKSPACE:
 				case keyCode.DELETE:
 					event.preventDefault();
+
+					// if the caret is not "selecting" values, we need to find the proper
+					// character in the buffer to delete/backspace over.
 					if ( position.begin === position.end ) {
-						position.begin = position.end = ( key === keyCode.DELETE ?
-							this._seekRight( position.begin - 1) :
-							this._seekLeft( position.begin )
-						);
+						if ( key === keyCode.DELETE ) {
+							position.begin = position.end = this._seekRight( position.begin - 1 );
+						} else {
+							position.begin = position.end = this._seekLeft( position.begin );
+						}
+
+						// nothing to backspace
 						if ( position.begin < 0 ) {
 							this._caret( this._seekRight( -1 ) );
 							return;

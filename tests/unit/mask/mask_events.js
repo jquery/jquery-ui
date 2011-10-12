@@ -126,7 +126,7 @@ test( "keypress: Typing with multiple values higlighted", function() {
 	deepEqual( mask._caret(), { begin: 6, end: 6 }, "Caret position correct");
 });
 
-test( "keypress: Typing with multi-byte fields", function() {
+test( "keypress: Typing with multi-character fields", function() {
 	expect( 5 );
 	var input = $( "#mask1" ).val("").mask({
 			mask: "aa-aa-aa",
@@ -150,7 +150,7 @@ test( "keypress: Typing with multi-byte fields", function() {
 	deepEqual( mask._caret(), { begin: 3, end: 5 }, "Caret position correct");
 });
 
-test( "keypress: Typing with multi-byte only accepts valid values", function() {
+test( "keypress: Typing with multi-character only accepts valid values", function() {
 	expect( 7 );
 	var input = $( "#mask1" ).val("").mask({
 			mask: "aa-aa-aa",
