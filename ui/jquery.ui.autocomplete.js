@@ -244,14 +244,6 @@ $.widget( "ui.autocomplete", {
 
 					self.close( event );
 					self.selectedItem = item;
-				},
-				blur: function( event, ui ) {
-					// don't set the value of the text field if it's already correct
-					// this prevents moving the cursor unnecessarily
-					if ( self.menu.element.is(":visible") &&
-						( self._value() !== self.term ) ) {
-						self._value( self.term );
-					}
 				}
 			})
 			.zIndex( this.element.zIndex() + 1 )
