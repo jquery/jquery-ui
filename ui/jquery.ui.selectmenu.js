@@ -302,8 +302,7 @@ $.widget( "ui.selectmenu", {
 			event.stopImmediatePropagation();
 		},
 		click: function( event ) {
-			// return false needed to prevent browser from following the anchor
-			return false;
+			event.preventDefault();
 		},
 		keydown: function( event ) {
 			switch (event.keyCode) {
@@ -367,7 +366,7 @@ $.widget( "ui.selectmenu", {
 				this.button.attr( "tabindex", -1 );
 			} else {
 				this.element.removeAttr( "disabled" );
-				this.button.attr( "tabindex", 1 );
+				this.button.attr( "tabindex", 0 );
 			}
 			this.menu.attr( "aria-disabled", value );
 			this.close();
