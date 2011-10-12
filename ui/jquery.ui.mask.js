@@ -118,14 +118,18 @@ $.widget( "ui.mask", {
 	_getValue: function( raw ) {
 		var bufferPosition, bufferObject, counter,
 			bufferLength = this.buffer.length,
-			value = "";
+			value = "",
+			lastValue = 0;
 
 		this.isEmpty = this.isValid = true;
 		for ( bufferPosition = 0; bufferPosition < bufferLength; bufferPosition += bufferObject.length ) {
 			bufferObject = this.buffer[ bufferPosition ];
 			if ( bufferObject.literal && !raw ) {
-				value += bufferObject.literal;
+				if ( bufferPosition < this.optionalPosition || this.isValid ) {
+					value += bufferObject.literal;
+				}
 			} else if ( bufferObject.value ) {
+				lastValue = bufferObject.start + bufferObject.length;
 				this.isEmpty = false;
 				value += bufferObject.value;
 				for ( counter = bufferObject.value.length; counter < bufferObject.length; counter++ ) {
@@ -139,6 +143,12 @@ $.widget( "ui.mask", {
 					this.isValid = false;
 				}
 			}
+		}
+
+		// don't display the "optional" portion until the input is "valid" or there are
+		// values past the optional position
+		if ( lastValue < this.optionalPosition && !this.isValid ) {
+			value = value.substr( 0, this.optionalPosition );
 		}
 		return value;
 	},
