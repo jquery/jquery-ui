@@ -41,7 +41,7 @@ $.widget( "ui.selectmenu", {
 		var selectmenuId = this.element.attr( 'id' ) || 'ui-selectmenu-' + Math.random().toString( 16 ).slice( 2, 10 );
 			
 		// quick array of button and menu id's
-		this.ids = [ selectmenuId, selectmenuId + '-button', selectmenuId + '-menu' ];
+		this.ids = { id: selectmenuId, button: selectmenuId + '-button', menu: selectmenuId + '-menu' };
 				
 		// set current value
 		if ( this.options.value ) {
@@ -73,14 +73,14 @@ $.widget( "ui.selectmenu", {
 		
 		// create button
 		this.button = $( '<a />', {
-				href: '#' + this.ids[ 0 ],
+				href: '#' + this.ids.id,
 				tabindex: ( tabindex ? tabindex : this.element.attr( 'disabled' ) ? -1 : 0 ),
-				id: this.ids[ 1 ],
+				id: this.ids.button,
 				css: {
 					width: this.element.outerWidth()
 				},
 				'aria-disabled': this.options.disabled,
-				'aria-owns': this.ids[ 2 ],
+				'aria-owns': this.ids.menu,
 				'aria-haspopup': true	
 			})
 			.button({
@@ -104,9 +104,9 @@ $.widget( "ui.selectmenu", {
 		this.menu = $( '<ul />', {
 			'class': 'ui-widget ui-widget-content',
 			'aria-hidden': true,
-			'aria-labelledby': this.ids[1],
+			'aria-labelledby': this.ids.button,
 			role: 'menubox',
-			id: this.ids[2]
+			id: this.ids.menu
 		});
 		
 		// set width
