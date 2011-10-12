@@ -110,8 +110,10 @@ $.widget( "ui.autocomplete", {
 					self.menu.select( event );
 					break;
 				case keyCode.ESCAPE:
-					self._value( self.term );
-					self.close( event );
+					if ( self.menu.element.is(":visible") ) {
+						self._value( self.term );
+						self.close( event );
+					}
 					break;
 				default:
 					// search timeout should be triggered before the input value is changed
