@@ -115,7 +115,7 @@ $.widget( "ui.mask", {
 			this._caret( bufferPosition );
 		}
 	},
-	_getValue: function( raw ) {
+	_getValue: function( raw, focused ) {
 		var bufferPosition, bufferObject, counter,
 			bufferLength = this.buffer.length,
 			value = "",
@@ -147,7 +147,13 @@ $.widget( "ui.mask", {
 
 		// don't display the "optional" portion until the input is "valid" or there are
 		// values past the optional position
-		if ( lastValue < this.optionalPosition && !this.isValid ) {
+		if ( this.options.clearEmpty && this.isEmpty && focused === false ) {
+			return "";
+		}
+
+		// strip the optional parts off if we haven't gotten there yet, or there are no values past it
+		// and we aren't focused
+		if ( lastValue <= this.optionalPosition && !( this.isValid && focused ) ) {
 			value = value.substr( 0, this.optionalPosition );
 		}
 		return value;
@@ -277,14 +283,7 @@ $.widget( "ui.mask", {
 		if ( focused === undefined ) {
 			focused = this.element[ 0 ] === document.activeElement;
 		}
-		// calling _getValue updates isEmpty
-		var value = this._getValue();
-
-		if ( this.options.clearEmpty && this.isEmpty && !focused ) {
-			this.element.val( "" );
-		} else {
-			this.element.val( value );
-		}
+		this.element.val( this._getValue( false, focused ) );
 	},
 	_parseMask: function() {
 		var key, x, bufferObject, optionalPosition,
