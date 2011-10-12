@@ -130,14 +130,15 @@ $.widget( "ui.selectmenu", {
 			.menu({
 				select: function( event, ui ) {
 					var flag = false,
-						item = ui.item.data( "item.selectmenu" );
-						
-					if ( item.index != that.element[0].selectedIndex ) flag = true;	
-					
+						item = ui.item.data( "item.selectmenu" ),
+						oldIndex = that.element[0].selectedIndex;
+											
 					that._setOption( "value", item.value );
 					that._trigger( "select", event, { item: item } );
 					
-					if ( flag ) that._trigger( "change", event, { item: item } );
+					if ( item.index != oldIndex ) {
+						that._trigger( "change", event, { item: item } );
+					}
 					
 					if ( that.opened ) {
 						event.preventDefault();
@@ -146,7 +147,11 @@ $.widget( "ui.selectmenu", {
 				},
 				focus: function( event, ui ) {
 					var item = ui.item.data( "item.selectmenu" );
-					if ( that.focus !== undefined && item.index != that.focus ) that._trigger( "focus", event, { item: item } );
+					
+					if ( that.focus !== undefined && item.index != that.focus ) {
+						that._trigger( "focus", event, { item: item } );
+					}
+					
 					that.focus = item.index;
 				}
 			});
@@ -242,7 +247,9 @@ $.widget( "ui.selectmenu", {
 			this.menuWrap.removeClass( 'ui-selectmenu-open' );
 			this.opened = false;
 			
-			if (focus) this.button.focus();
+			if ( focus ) {
+				this.button.focus();
+			}
 			
 			this._trigger( "close", event );
 		}
@@ -279,9 +286,15 @@ $.widget( "ui.selectmenu", {
 	},
 	
 	_move: function( key, event ) {
-		if ( !this.opened )	this.menu.menu( "focus", event, this._getSelectedItem() );
-		this.menu.menu( key, event );
-		if ( !this.opened ) this.menu.menu( "select", event  );
+		if ( !this.opened )	{
+			this.menu.menu( "focus", event, this._getSelectedItem() );
+		}
+		
+		this.menu.menu( key, event );		
+		
+		if ( !this.opened ) {
+			this.menu.menu( "select", event  );
+		}
 	},
 	
 	_getSelectedItem: function() {
@@ -307,7 +320,9 @@ $.widget( "ui.selectmenu", {
 		keydown: function( event ) {
 			switch (event.keyCode) {
 				case $.ui.keyCode.TAB:
-					if ( this.opened ) this.close( event );
+					if ( this.opened ) {
+						this.close( event );
+					}
 					break;
 				case $.ui.keyCode.ENTER:
 					if ( this.opened ) {
