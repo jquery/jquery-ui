@@ -271,7 +271,7 @@ $.widget( "ui.autocomplete", {
 			this._initSource();
 		}
 		if ( key === "appendTo" ) {
-			this.menu.element.appendTo( $( value || "body", this.element[0].ownerDocument )[0] )
+			this.menu.element.appendTo( $( value || "body", this.element[0].ownerDocument )[0] );
 		}
 		if ( key === "disabled" && value && this.xhr ) {
 			this.xhr.abort();
