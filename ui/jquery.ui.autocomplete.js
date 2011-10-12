@@ -320,7 +320,7 @@ $.widget( "ui.autocomplete", {
 		clearTimeout( self.searching );
 		self.searching = setTimeout(function() {
 			// only search if the value has changed
-			if ( self.term != self._value() ) {
+			if ( self.term !== self._value() ) {
 				self.selectedItem = null;
 				self.search( null, event );
 			}
