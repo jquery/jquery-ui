@@ -257,6 +257,10 @@ $.widget( "ui.autocomplete", {
 			.zIndex( this.element.zIndex() + 1 )
 			.hide()
 			.data( "menu" );
+
+		// Tell Menu that we want focus to remain with the autocomplete
+		self.menu.focusFromMenu = false;
+
 		if ( $.fn.bgiframe ) {
 			 this.menu.element.bgiframe();
 		}
