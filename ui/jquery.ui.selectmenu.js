@@ -155,9 +155,9 @@ $.widget( "ui.selectmenu", {
 		this._bind( document, {
 			'mousedown': function( event ) {
 				if ( this.opened && !$( event.target ).is( this.menu ) ) {	
-					window.setTimeout( function() {
+					this._delay( function() {
 						this.close( event );
-					}, 200 );
+					}, 200);
 				}
 			}
 		});			
