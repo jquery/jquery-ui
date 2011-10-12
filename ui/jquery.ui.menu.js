@@ -28,6 +28,7 @@ $.widget( "ui.menu", {
 	},
 	_create: function() {
 		this.activeMenu = this.element;
+		this.focusFromMenu = true;
 		this.menuId = this.element.attr( "id" ) || "ui-menu-" + idIncrement++;
 		if ( this.element.find( ".ui-icon" ).length ) {
 			this.element.addClass( "ui-menu-icons" );
@@ -60,6 +61,9 @@ $.widget( "ui.menu", {
 				var target = $( event.currentTarget );
 				// Remove ui-state-active class from siblings of the newly focused menu item to avoid a jump caused by adjacent elements both having a class with a border
 				target.siblings().children( ".ui-state-active" ).removeClass( "ui-state-active" );
+				if ( this.focusFromMenu ) {
+					this.element.focus();
+				}
 				this.focus( event, target );
 			},
 			"mouseleave": "collapseAll",
@@ -404,11 +408,11 @@ $.widget( "ui.menu", {
 		}
 	},
 
-	next: function(event) {
+	next: function( event ) {
 		this._move( "next", "first", event );
 	},
 
-	previous: function(event) {
+	previous: function( event ) {
 		this._move( "prev", "last", event );
 	},
 
