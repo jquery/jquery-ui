@@ -28,6 +28,7 @@ $.widget( "ui.menu", {
 	},
 	_create: function() {
 		this.activeMenu = this.element;
+		this.isScrolling = false;
 		this.menuId = this.element.attr( "id" ) || "ui-menu-" + idIncrement++;
 		if ( this.element.find( ".ui-icon" ).length ) {
 			this.element.addClass( "ui-menu-icons" );
@@ -57,10 +58,13 @@ $.widget( "ui.menu", {
 			},
 			"mouseover .ui-menu-item": function( event ) {
 				event.stopImmediatePropagation();
-				var target = $( event.currentTarget );
-				// Remove ui-state-active class from siblings of the newly focused menu item to avoid a jump caused by adjacent elements both having a class with a border
-				target.siblings().children( ".ui-state-active" ).removeClass( "ui-state-active" );
-				this.focus( event, target );
+				if ( !this.isScrolling ) {
+					var target = $( event.currentTarget );
+					// Remove ui-state-active class from siblings of the newly focused menu item to avoid a jump caused by adjacent elements both having a class with a border
+					target.siblings().children( ".ui-state-active" ).removeClass( "ui-state-active" );
+					this.focus( event, target );
+				}
+				this.isScrolling = false;
 			},
 			"mouseleave": "collapseAll",
 			"mouseleave .ui-menu": "collapseAll",
@@ -74,6 +78,10 @@ $.widget( "ui.menu", {
 						this.collapseAll( event );
 					}
 				}, 0);
+			},
+			scroll: function( event ) {
+				// Keep track of scrolling to prevent mouseover from firing inadvertently when scrolling the menu
+				this.isScrolling = true;
 			}
 		});
 
