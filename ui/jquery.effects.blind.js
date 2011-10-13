@@ -27,7 +27,7 @@ $.effects.effect.blind = function( o, done ) {
 		motion = rpositivemotion.test( direction ),
 		animation = {},
 		show = mode === "show",
-		wrapper, distance;
+		wrapper, distance, top;
 
 	// if already wrapped, the wrapper's properties are my property. #6245
 	if ( el.parent().is( ".ui-effects-wrapper" ) ) {
@@ -36,11 +36,12 @@ $.effects.effect.blind = function( o, done ) {
 		$.effects.save( el, props );
 	}
 	el.show();
+	top = parseInt(el.css('top'), 10);
 	wrapper = $.effects.createWrapper( el ).css({
 		overflow: "hidden"
 	});
 
-	distance = wrapper[ ref ]();
+	distance = vertical ? wrapper[ ref ]() + top : wrapper[ ref ]();
 
 	animation[ ref ] = show ? distance : 0;
 	if ( !motion ) {
