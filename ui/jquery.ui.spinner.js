@@ -93,7 +93,7 @@ $.widget( "ui.spinner", {
 
 			this._spin( (delta > 0 ? 1 : -1) * this.options.step, event );
 			clearTimeout( this.mousewheelTimer );
-			this.mousewheelTimer = setTimeout(function() {
+			this.mousewheelTimer = this._delay(function() {
 				if ( this.spinning ) {
 					this._stop( event );
 				}
