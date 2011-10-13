@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>jQuery UI Popup - Default demo</title>
+	<title>jQuery UI Popup - Animation demo</title>
 	<link rel="stylesheet" href="../demos.css" />
 	<link rel="stylesheet" href="../../themes/base/jquery.ui.all.css" title="ui-theme" />
 	<script src="../../jquery-1.6.2.js"></script>
@@ -9,6 +9,9 @@
 	<script src="../../ui/jquery.ui.widget.js"></script>
 	<script src="../../ui/jquery.ui.position.js"></script>
 	<script src="../../ui/jquery.ui.button.js"></script>
+	<script src="../../ui/jquery.effects.core.js"></script>
+	<script src="../../ui/jquery.effects.blind.js"></script>
+	<script src="../../ui/jquery.effects.scale.js"></script>
 	<script src="../../ui/jquery.ui.popup.js"></script>
 	<script>
 	$(function() {
@@ -19,10 +22,22 @@
 			}
 		};
 
-		$("#login-form").popup()
-			.find(":submit").button().click(function(event) {
-				event.preventDefault();
-			});
+		$("#login-form").popup({
+			show: {
+				effect: "blind",
+				direction: "up",
+				mode: "show",
+				duration: "fast"
+			},
+			hide: {
+				effect: "scale",
+				percent: 0,
+				duration: "fast"
+			}
+		})
+		.find(":submit").button().click(function(event) {
+			event.preventDefault();
+		});
 	});
 	</script>
 	<style type="text/css">
@@ -60,7 +75,7 @@
 
 <div class="demo-description">
 
-<p>A link to a login form that opens as a popup.</p>
+<p>A link to a login form that opens as a popup. Open and close animations have been used.</p>
 
 </div><!-- End demo-description -->
 

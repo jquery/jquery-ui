@@ -123,10 +123,11 @@ test( "step, 2", function() {
 	equals( element.val(), "2", "stepUp" );
 
 	element.spinner( "value", "10.5" );
-	equals( element.val(), "10.5", "value reset to 10.5" );
+	equals( element.val(), "10", "value reset to 10" );
 
+	element.val( "4.5" );
 	element.spinner( "stepUp" );
-	equals( element.val(), "12.5", "stepUp" );
+	equals( element.val(), "6", "stepUp" );
 });
 
 test( "step, 0.7", function() {
