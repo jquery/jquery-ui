@@ -5,12 +5,9 @@
  * Dual licensed under the MIT or GPL Version 2 licenses.
  * http://jquery.org/license
  *
- * http://docs.jquery.com/UI/Timepicker
- *
  * Depends:
  *	jquery.ui.core.js
  *	jquery.ui.widget.js
- *	jquery.ui.button.js
  *	jquery.ui.spinner.js
  *	jquery.ui.mask.js
  *
@@ -96,7 +93,9 @@ $.widget( "ui.timepicker", {
 		$.extend( this.spinner, {
 			_parse: $.proxy( this, "_spinnerParse" ),
 			_value: $.proxy( this, "_spinnerValue" ),
-			_trimValue: function( value ) {
+			_adjustValue: function( value ) {
+
+				// if under min, return max - if over max, return min
 				if ( value < this.options.min ) {
 					return this.options.max;
 				}
@@ -109,39 +108,13 @@ $.widget( "ui.timepicker", {
 		this._setField( 0 );
 		this._bind( this._events );
 	},
-	_generateMask: function() {
-		var mask = "";
-
-		if ( window.Globalize ) {
-			mask = Globalize.culture().calendars.standard.patterns[ this.options.seconds ? "T" : "t" ];
-			mask = mask.replace( rsingleh, "_$1" );
-
-			// if the culture doesn't understand AM/PM - don't let timepickers understand it either.
-			if ( mask.indexOf( "tt" ) == -1 ) {
-				this.options.ampm = false;
-			} else if ( !this.options.ampm ) {
-				mask = mask.replace( rlowerhg, "H" ).replace( " tt", "" );
-			}
-
-			return mask;
-		}
-
-		mask += this.options.ampm ? "hh" : "HH";
-		mask += ":mm";
-		if ( this.options.seconds ) {
-			mask += ":ss";
-		}
-		if ( this.options.ampm ) {
-			mask += " tt";
-		}
-		return mask;
+	_destroy: function() {
+		this.element.mask( "destroy" );
+		this.element.spinner( "destroy" );
 	},
 	_events: {
-		keydown: "_checkPosition",
-		mousedown: function( event ) {
-			if ( document.activeElement !== this.element[0] ) {
-				this._focusing = true;
-			}
+		blur: function() {
+			this._focusing = false;
 		},
 		click: function() {
 			if ( this._focusing ) {
@@ -152,8 +125,11 @@ $.widget( "ui.timepicker", {
 				this._setPosition();
 			}
 		},
-		blur: function() {
-			this._focusing = false;
+		keydown: "_checkPosition",
+		mousedown: function( event ) {
+			if ( document.activeElement !== this.element[0] ) {
+				this._focusing = true;
+			}
 		}
 	},
 	_checkPosition: function( event ) {
@@ -170,20 +146,41 @@ $.widget( "ui.timepicker", {
 			this.mask._caret( 0, 2 );
 		}
 	},
-	_setPosition: function( field ) {
-		if ( field == null ) {
-			field = this.currentField;
-		} else {
-			this._setField( field );
+	_generateMask: function() {
+		var mask = "";
+
+		if ( window.Globalize ) {
+			mask = Globalize.culture().calendars.standard.patterns[ this.options.seconds ? "T" : "t" ];
+			mask = mask.replace( rsingleh, "_$1" );
+
+			if ( !this.options.ampm ) {
+				mask = mask.replace( rlowerhg, "H" ).replace( " tt", "" );
+			}
+
+			return mask;
 		}
-		this.mask._caret( field * 3, field * 3 + 2 );
+
+		mask += this.options.ampm ? "hh" : "HH";
+		mask += ":mm";
+		if ( this.options.seconds ) {
+			mask += ":ss";
+		}
+		if ( this.options.ampm ) {
+			mask += " tt";
+		}
+		return mask;
 	},
 	_setField: function( field ) {
 		this.currentField = field;
 		switch( field ) {
 			case 0:
-				this.spinner.options.min = this.options.ampm ? 1 : 0;
-				this.spinner.options.max = this.options.ampm ? 12 : 23;
+				if ( this.options.ampm && this.mask.options.mask.indexOf( "h" ) ) {
+					this.spinner.options.min = 1;
+					this.spinner.options.max = 12;
+				} else {
+					this.spinner.options.min = 0;
+					this.spinner.options.max = 23;
+				}
 				break;
 			case 1:
 			case this.options.seconds ? 2 : -1 :
@@ -250,6 +247,14 @@ $.widget( "ui.timepicker", {
 			this.element.mask( "option", "mask", this._generateMask() );
 		}
 	},
+	_setPosition: function( field ) {
+		if ( field == null ) {
+			field = this.currentField;
+		} else {
+			this._setField( field );
+		}
+		this.mask._caretSelect( field * 3 );
+	},
 	_spinnerParse: function( val ) {
 		val = this.mask.buffer[ this.currentField * 3 ].value;
 		if ( this.currentField === ( this.options.seconds ? 3 : 2 ) ) {
@@ -266,11 +271,6 @@ $.widget( "ui.timepicker", {
 		this.mask._paint();
 		this.spinner._refresh();
 		this.mask._caretSelect( this.currentField * 3 );
-	},
-	destroy: function() {
-		this.element.mask( "destroy" );
-		this.element.spinner( "destroy" );
-		this._super( "destroy" );
 	}
 });
 
