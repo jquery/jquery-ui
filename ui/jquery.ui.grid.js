@@ -292,7 +292,10 @@ $.widget( "ui.grid", {
 			return;
 		}
 		var columns = this.options.columns;
-		// TODO source should be dataview.result; fix menugrid to deal with that
+		
+        // Using localDataview.result allows for grids with no source.
+        // If no options.source is given, using localDataview as the
+        // source results in 5 empty rows.
 		this.options.source = $.ui.localDataview({
 			properties: columns,
 			input: this._container().children().map(function() {
@@ -302,7 +305,7 @@ $.widget( "ui.grid", {
 				});
 				return item;
 			}).get()
-		});
+		}).result;
 	}
 });
 
