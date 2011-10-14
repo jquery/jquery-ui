@@ -70,12 +70,13 @@ $.widget( "ui.popup", {
 						if ( this.options.trigger.is( "a:ui-button" ) ) {
 							event.preventDefault();
 						}
-						// TODO handle SPACE to open popup? only when not handled by ui.button
+
 						else if (this.options.trigger.is( "a:not(:ui-button)" ) ) {
 							this.options.trigger.trigger( "click", event );
 						}
 						break;
 					case $.ui.keyCode.DOWN:
+					case $.ui.keyCode.UP:
 						// prevent scrolling
 						event.preventDefault();
 						var that = this;
@@ -87,23 +88,21 @@ $.widget( "ui.popup", {
 						break;
 				}
 			},
-			click: function( event ) {
-				event.preventDefault();
+			mousedown: function( event ) {
 				var noFocus = false;
 				/* TODO: Determine in which cases focus should stay on the trigger after the popup opens
-				(should apply for any trigger that has other interaction besides opening the popup) */
+				(should apply for any trigger that has other interaction besides opening the popup, e.g. a text field) */
 				if ( $( event.target ).is( "input" ) ) {
 					noFocus = true;
 				}
-
 				if (this.isOpen) {
-					// let it propagate to close
+					this.close();
 					return;
 				}
+				this.open( event );
 				var that = this;
 				clearTimeout( this.closeTimer );
 				setTimeout(function() {
-					that.open( event );
 					if ( !noFocus ) {
 						that.focusPopup();
 					}
@@ -114,10 +113,12 @@ $.widget( "ui.popup", {
 		if ( this.options.expandOnFocus ) {
 			this._bind( this.options.trigger, {
 				focus : function( event ) {
-					if ( !this.isOpen && !suppressExpandOnFocus) {
+					if ( !suppressExpandOnFocus ) {
 						var that = this;
 						setTimeout(function() {
-							that.open( event );
+							if ( !that.isOpen ) {
+								that.open( event );
+							}
 						}, 1);
 					}
 					setTimeout(function() {
@@ -174,7 +175,7 @@ $.widget( "ui.popup", {
 
 		this._bind(document, {
 			click: function( event ) {
-				if ( this.isOpen && !$(event.target).closest(".ui-popup").length ) {
+				if ( this.isOpen && !$(event.target).closest(".ui-popup").length && this.options.trigger[0] != event.target ) {
 					this.close( event );
 				}
 			}

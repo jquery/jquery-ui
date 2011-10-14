@@ -24,7 +24,7 @@ $.widget( "ui.menu", {
 			my: "left top",
 			at: "right top"
 		},
-		trigger : null
+		trigger: null
 	},
 	_create: function() {
 		var self = this;
@@ -180,10 +180,10 @@ $.widget( "ui.menu", {
 
 		if ( this.options.trigger ) {
 			this.element.popup({
-				trigger : this.options.trigger,
-				managed : true,
-				focusPopup : function( event, ui ) {
-					self.focus( event, self.element.children( "li" ).first() );
+				trigger: this.options.trigger,
+				managed: true,
+				focusPopup: function( event, ui ) {
+					self.focus( event, self.element.children( ".ui-menu-item" ).first() );
 					self.element.focus( 1 );
 				}
 			});
@@ -194,6 +194,7 @@ $.widget( "ui.menu", {
 		//destroy (sub)menus
 		this.element
 			.removeAttr( "aria-activedescendant" )
+			.popup("destroy")			
 			.find( "ul" )
 			.andSelf()
 			.removeClass( "ui-menu ui-widget ui-widget-content ui-corner-all" )

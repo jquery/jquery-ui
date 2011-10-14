@@ -16,17 +16,12 @@
 		function log( msg ) {
 			$( "<div/>" ).text( msg ).appendTo( "#log" );
 		}
-		var selected = {
-			trigger: $("#button1"),
-			select: function( event, ui ) {
-				log( "Selected: " + ui.item.text() );
-				$(this).popup("close");
-			}
-		};
+		var selected = function( event, ui ) {
+			log( "Selected: " + ui.item.text() );
+			$(this).popup("close");
+		}
 
-		$("#button1").button().next().menu(selected);
-
-		selected.trigger = $("#select");
+		$("#button1").button().next().menu({select: selected, trigger: $("#button1")});
 
 		$( "#rerun" )
 			.button()
@@ -41,7 +36,7 @@
 					}
 				})
 				.next()
-					.menu(selected)
+					.menu({select: selected, trigger: $("#select")})
 				.parent()
 					.buttonset({
 						items: "button"
