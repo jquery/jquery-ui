@@ -161,7 +161,7 @@ $.widget( "ui.datepicker", {
 				focusedDay: this.date.day()
 			}
 		});
-		this.grid = this.grid.replaceWith(newGrid);
+		this.grid = this.grid.replaceWith( newGrid );
 		this.grid = newGrid;
 	},
 	open: function( event ) {

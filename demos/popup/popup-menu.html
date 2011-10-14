@@ -18,10 +18,10 @@
 		}
 		var selected = function( event, ui ) {
 			log( "Selected: " + ui.item.text() );
-			$(this).popup("close");
+			$(this).popup( "close" );
 		}
 
-		$("#button1").button().next().menu({select: selected, trigger: $("#button1")});
+		$("#button1").button().next().menu( {select: selected, trigger: $("#button1")} );
 
 		$( "#rerun" )
 			.button()
@@ -36,7 +36,7 @@
 					}
 				})
 				.next()
-					.menu({select: selected, trigger: $("#select")})
+					.menu( {select: selected, trigger: $("#select")} )
 				.parent()
 					.buttonset({
 						items: "button"

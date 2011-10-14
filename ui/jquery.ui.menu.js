@@ -194,7 +194,7 @@ $.widget( "ui.menu", {
 		//destroy (sub)menus
 		this.element
 			.removeAttr( "aria-activedescendant" )
-			.popup("destroy")			
+			.popup( "destroy" )
 			.find( "ul" )
 			.andSelf()
 			.removeClass( "ui-menu ui-widget ui-widget-content ui-corner-all" )
