@@ -45,8 +45,7 @@ $.widget( "ui.draggable", {
 			this.element.css( "position", "relative" );
 		}
 
-		// TODO: use _bind()
-		this.element.bind( "mousedown." + this.widgetName, $.proxy( this, "_mouseDown" ) );
+		this._bind({ mousedown: "_mouseDown" });
 	},
 
 	// TODO: why is relative handled differently than fixed/absolute?
@@ -133,11 +132,10 @@ $.widget( "ui.draggable", {
 		// TODO: allow modifying position, just like during drag
 		this._trigger( "start", event, this._uiHash() );
 
-		// TODO: use ._bind()
-		// TODO: rename _bind() to _on(); add _off()
-		this.doc
-			.bind( "mousemove." + this.widgetName, $.proxy( this, "_mouseMove" ) )
-			.bind( "mouseup." + this.widgetName, $.proxy( this, "_mouseUp" ) );
+		this._bind( this.doc, {
+			mousemove: "_mouseMove",
+			mouseup: "_mouseUp"
+		});
 	},
 
 	_mouseMove: function( event ) {
@@ -205,9 +203,7 @@ $.widget( "ui.draggable", {
 			this.dragEl.remove();
 		}
 
-		this.doc
-			.unbind( "mousemove." + this.widgetName )
-			.unbind( "mouseup." + this.widgetName );
+		this.doc.unbind( "." + this.widgetName );
 	},
 
 	_uiHash: function( event ) {
