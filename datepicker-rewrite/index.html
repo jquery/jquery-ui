@@ -2,7 +2,7 @@
 <html>
 <head>
 	<meta charset="utf-8">
-	<script src="../jquery-1.5.1.js"></script>
+	<script src="../jquery-1.6.2.js"></script>
 	<script src="../ui/jquery.ui.core.js"></script>
 	<script src="../ui/jquery.ui.widget.js"></script>
 	<script src="../ui/jquery.ui.button.js"></script>
@@ -54,7 +54,8 @@
 			$( "#culture" ).change( function() {
 				$.global.preferCulture( $( this ).val() );
 				$( ":ui-datepicker" ).datepicker( "refresh" );
-			})
+			});
+
 
 			$( "#datepicker-inline-default" ).datepicker( {
 				select: function( event, ui ) {
@@ -66,7 +67,7 @@
 				select: function( event, ui ) {
 					$( "#inline-output" ).val( ui.date );
 				}
-			})
+			});
 			$( "#datepicker-inline" ).datepicker( {
 				tmpl: "#ui-datepicker-weeks-tmpl",
 				select: function( event, ui ) {

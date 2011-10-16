@@ -88,6 +88,10 @@ $.widget( "ui.popup", {
 						break;
 				}
 			},
+			click: function( event ) {
+				event.stopPropagation();
+				event.preventDefault();
+			},
 			mousedown: function( event ) {
 				var noFocus = false;
 				/* TODO: Determine in which cases focus should stay on the trigger after the popup opens
@@ -96,6 +100,7 @@ $.widget( "ui.popup", {
 					noFocus = true;
 				}
 				if (this.isOpen) {
+					suppressExpandOnFocus = true;
 					this.close();
 					return;
 				}
@@ -124,6 +129,9 @@ $.widget( "ui.popup", {
 					setTimeout(function() {
 						suppressExpandOnFocus = false;
 					}, 100);
+				},
+				blur: function( event ) {
+					suppressExpandOnFocus = false;
 				}
 			});
 		}
@@ -175,7 +183,7 @@ $.widget( "ui.popup", {
 
 		this._bind(document, {
 			click: function( event ) {
-				if ( this.isOpen && !$(event.target).closest(".ui-popup").length && this.options.trigger[0] != event.target ) {
+				if ( this.isOpen && !$( event.target ).closest( this.element.add( this.options.trigger ) ).length ) {
 					this.close( event );
 				}
 			}

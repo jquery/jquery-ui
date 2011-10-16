@@ -151,7 +151,7 @@ $.widget( "ui.datepicker", {
 		this.date.refresh();
 		$(".ui-datepicker-title", this.picker).html(
 			$("#ui-datepicker-title-tmpl").tmpl( {
-				date: this.date,
+				date: this.date
 		}));
 		var newGrid = $( this.options.gridTmpl ).tmpl( {
 			date: this.date,
@@ -166,7 +166,7 @@ $.widget( "ui.datepicker", {
 	},
 	open: function( event ) {
 		if ( !this.inline ) {
-			this.date = $.date(this.element.val());
+			this.date = $.date( this.element.val() );
 			this.date.eachDay = this.options.eachDay;
 			this.date.select();
 			this.refresh();
