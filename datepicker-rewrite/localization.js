@@ -6,7 +6,8 @@ var regions = {
         "nextText": "Next",
         "currentText": "Today",
         "weekHeader": "Wk",
-        "dateFormat": "d"
+        "dateFormat": "d",
+        "datePickerRole": "date picker"
     },
     "af": {
         "closeText": "Selekteer",
