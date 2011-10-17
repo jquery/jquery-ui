@@ -91,11 +91,11 @@ $.widget( "ui.draggable", {
 		if ( this.options.helper ) {
 			// clone
 			if ( this.options.helper === true ) {
-				// If source element has an ID, change ID of helper to avoid overlap
-				this.dragEl = this.element.clone();
-				if ( this.element.attr( "id" ) ) {
-					this.dragEl.attr( "id", this.element.attr( "id" ) + "-" + this.widgetName );
-				}
+				this.dragEl = this.element.clone()
+					.removeAttr( "id" )
+					.find( "[id]" )
+						.removeAttr( "id" )
+					.end();
 			} else {
 				// TODO: figure out the signature for this; see #4957
 				this.dragEl = $( this.options.helper() );
