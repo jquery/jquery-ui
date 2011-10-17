@@ -38,8 +38,8 @@ $.widget("ui.selectmenu", {
 		var self = this, o = this.options;
 
 		// set a default id value, generate a new random one if not set by developer
-		var selectmenuId = this.element.attr( 'id' ).replace(':', '\\:') || 'ui-selectmenu-' + Math.random().toString( 16 ).slice( 2, 10 );
-
+		var selectmenuId = (this.element.attr( 'id' ) || 'ui-selectmenu-' + Math.random().toString( 16 ).slice( 2, 10 )).replace(':', '\\:');
+		
 		// quick array of button and menu id's
 		this.ids = [ selectmenuId, selectmenuId + '-button', selectmenuId + '-menu' ];
 
