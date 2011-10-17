@@ -151,7 +151,7 @@ $.widget("ui.selectmenu", {
 			});
 
 		// document click closes menu
-		$(document).bind("mousedown.selectmenu", function(event) {
+		$(document).bind("mousedown.selectmenu-" + this.ids[0], function(event) {
 			self.close(event);
 		});
 
@@ -254,7 +254,7 @@ $.widget("ui.selectmenu", {
 			.bind( 'mousedown.selectmenu mouseup.selectmenu', function() { return false; });
 
 		// needed when window is resized
-		$(window).bind( "resize.selectmenu", $.proxy( self.close, this ) );
+		$(window).bind( "resize.selectmenu-" + this.ids[0], $.proxy( self.close, this ) );
 	},
 
 	_init: function() {
@@ -442,8 +442,8 @@ $.widget("ui.selectmenu", {
 			.removeAttr( 'aria-disabled' )
 			.unbind( ".selectmenu" );
 
-		$( window ).unbind( ".selectmenu" );
-		$( document ).unbind( ".selectmenu" );
+		$( window ).unbind( ".selectmenu-" + this.ids[0] );
+		$( document ).unbind( ".selectmenu-" + this.ids[0] );
 
 		// unbind click on label, reset its for attr
 		$( 'label[for=' + this.ids[0] + ']' )
