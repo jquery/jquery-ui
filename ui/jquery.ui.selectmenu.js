@@ -442,8 +442,7 @@ $.widget("ui.selectmenu", {
 			.removeAttr( 'aria-disabled' )
 			.unbind( ".selectmenu" );
 
-		// TODO unneded as event binding has been disabled
-		// $( window ).unbind( ".selectmenu" );
+		$( window ).unbind( ".selectmenu" );
 		$( document ).unbind( ".selectmenu" );
 
 		// unbind click on label, reset its for attr
