@@ -361,17 +361,15 @@
 			<fileset dir="${dist.dir}/themes/base/minified" includes="*.css" />
 		</copy>
 		<echo message="GZipping Minified" />
-		<parallel threadsperprocessor="2">
-			<apply executable="gzip">
-				<fileset dir="${size.dir}" includes="*.min.js" />
-				<fileset dir="${size.dir}" includes="*.min.css" />
-				<arg value="-c" />
-				<srcfile />
-				<redirector>
-					<outputmapper id="out" type="glob" from="*" to="${size.dir}/*.gz"/>
-				</redirector>
-			</apply>
-		</parallel>
+		<apply executable="gzip">
+			<fileset dir="${size.dir}" includes="*.min.js" />
+			<fileset dir="${size.dir}" includes="*.min.css" />
+			<arg value="-c" />
+			<srcfile />
+			<redirector>
+				<outputmapper id="out" type="glob" from="*" to="${size.dir}/*.gz"/>
+			</redirector>
+		</apply>
 		<echo message="Comparing file size with previous build" />
 		<exec executable="bash">
 			<arg value="-c" />
