@@ -251,6 +251,10 @@ $.widget( "ui.selectmenu", {
 		}
 	},
 	
+	widget: function() {
+		return this.buttonWrap.add( this.menuWrap );
+	},
+	
 	_renderMenu: function( ul, items ) {
 		var that = this,
 			currentOptgroup = "";
@@ -378,10 +382,6 @@ $.widget( "ui.selectmenu", {
 			}
 			this.menu.attr( "aria-disabled", value );
 		}
-	},
-	
-	widget: function() {
-		return this.buttonWrap.add( this.menuWrap );
 	},
 
 	_readOptions: function() {

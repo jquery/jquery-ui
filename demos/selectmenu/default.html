@@ -17,6 +17,7 @@
 		$('select#speed').selectmenu({
 			dropdown: false
 		});
+		
 		var withOverflow = $('select#number').selectmenu({
 			dropdown: false
 		});
@@ -31,7 +32,7 @@
 		fieldset { border: 0; }
 		label { display: block; }
 		select { width: 200px; }
-		.overflow ul { height: 200px; overflow: auto; }
+		.overflow ul { height: 200px; overflow: auto; overflow-y: auto; overflow-x: hidden;}
 	</style>
 </head>
 <body>
