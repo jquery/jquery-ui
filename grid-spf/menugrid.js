@@ -7,10 +7,10 @@ $.widget("spf.menugrid", $.ui.grid, {
 		var options = this.options;
 		var source = this.options.source;
 		var that = this;
-		source.element.bind("dataviewresponse", function() {
-			that._updateFilterValues();
-			that.refresh();
-		});
+        source.element.bind("dataviewresponse", function() {
+            that._updateFilterValues();
+            that.refresh();
+        });
 		var headers = this.uiGridHeadTable.find( "th" );
 		this._hoverable( headers );
 		headers.disableSelection().click( function() {
@@ -75,7 +75,7 @@ $.widget("spf.menugrid", $.ui.grid, {
 			this.inputs.val("");
 		}
 	},
-	_toArray: function() {
-		return this.options.source.result;
-	}
+	//_toArray: function() {
+	//	return this.options.source.result;
+	//}
 });

@@ -176,7 +176,7 @@ $.widget( "ui.grid", {
 
 	// can be customized by subwidgets
 	_toArray: function() {
-		return this.options.source;
+		return this.options.source.result;
 	},
 
 	refresh: function() {
@@ -302,7 +302,7 @@ $.widget( "ui.grid", {
 				});
 				return item;
 			}).get()
-		}).refresh().result;
+		}).refresh();
 	}
 });
 
