@@ -371,6 +371,7 @@ $.widget( "ui.selectmenu", {
 			if ( value ) {
 				this.element.attr( "disabled", "disabled" );
 				this.button.attr( "tabindex", -1 );
+				this.close();
 			} else {
 				this.element.removeAttr( "disabled" );
 				this.button.attr( "tabindex", 0 );
