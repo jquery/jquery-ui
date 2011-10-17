@@ -49,6 +49,15 @@ $.widget( "ui.spinner", {
 		this._draw();
 		this._bind( this._events );
 		this._refresh();
+
+		// turning off autocomplete prevents the browser from remembering the
+		// value when navigating through history, so we re-enable autocomplete
+		// if the page is unloaded before the widget is destroyed. #7790
+		this._bind( this.element[0].ownerDocument.defaultView, {
+			beforeunload: function() {
+				this.element.removeAttr( "autocomplete" );
+			}
+		});
 	},
 
 	_getCreateOptions: function() {
