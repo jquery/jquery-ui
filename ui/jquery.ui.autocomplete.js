@@ -48,7 +48,15 @@ $.widget( "ui.autocomplete", {
 	_create: function() {
 		var self = this,
 			doc = this.element[ 0 ].ownerDocument,
+			// Some browsers only repeat keydown events, not keypress events,
+			// so we use the suppressKeyPress flag to determine if we've already
+			// handled the keydown event. #7269
+			// Unfortunately the code for & in keypress is the same as the up arrow,
+			// so we use the suppressKeyPressRepeat flag to avoid handling keypress
+			// events when we know the keydown event was used to modify the
+			// search term. #7799
 			suppressKeyPress,
+			suppressKeyPressRepeat,
 			suppressInput;
 
 		this.valueMethod = this.element[ this.element.is( "input,textarea" ) ? "val" : "text" ];
@@ -66,11 +74,13 @@ $.widget( "ui.autocomplete", {
 				if ( self.options.disabled || self.element.prop( "readOnly" ) ) {
 					suppressKeyPress = true;
 					suppressInput = true;
+					suppressKeyPressRepeat = true;
 					return;
 				}
 
 				suppressKeyPress = false;
 				suppressInput = false;
+				suppressKeyPressRepeat = false;
 				var keyCode = $.ui.keyCode;
 				switch( event.keyCode ) {
 				case keyCode.PAGE_UP:
@@ -116,6 +126,7 @@ $.widget( "ui.autocomplete", {
 					}
 					break;
 				default:
+					suppressKeyPressRepeat = true;
 					// search timeout should be triggered before the input value is changed
 					self._searchTimeout( event );
 					break;
@@ -125,6 +136,9 @@ $.widget( "ui.autocomplete", {
 				if ( suppressKeyPress ) {
 					suppressKeyPress = false;
 					event.preventDefault();
+					return;
+				}
+				if ( suppressKeyPressRepeat ) {
 					return;
 				}
 
