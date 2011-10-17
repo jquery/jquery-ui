@@ -24,6 +24,16 @@
 			mySelectmenu.append('<option value="fastsound">Faster than sound</option>');
 			mySelectmenu.selectmenu("refresh");
 		});
+		
+		$("#open").click( function() {
+			mySelectmenu.selectmenu("open");
+			return false;
+		});
+		
+		$("#close").click( function() {
+			mySelectmenu.selectmenu("close");
+			return false;
+		});
 	});
 	</script>
 	<style>
@@ -53,6 +63,8 @@
 <br />
 <button id="destroy">Destroy</button>
 <button id="refresh">Add item and refresh</button>
+<button id="open">Open</button>
+<button id="close">Close</button>
 
 </div><!-- End demo -->
 
