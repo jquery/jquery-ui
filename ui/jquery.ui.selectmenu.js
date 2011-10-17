@@ -114,10 +114,10 @@ $.widget( "ui.selectmenu", {
 			var setWidth = this.button.outerWidth();
 		} else {
 			var text = this.button.find( "span.ui-button-text");
-			var setWidth = text.width() + parseFloat( text.css( "padding-left" ) ) + parseFloat( text.css( "margin-left" ) );
+			var setWidth = text.width() + parseFloat( text.css( "padding-left" ) ) || 0 + parseFloat( text.css( "margin-left" ) || 0 );
 		}
 
-		// wrap menu	
+		// wrap menu
 		this.menuWrap = $( '<div />' )
 			.addClass( 'ui-selectmenu-menu' )
 			.width( setWidth )
