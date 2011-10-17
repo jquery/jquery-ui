@@ -1,0 +1,12 @@
+<project name="remove-trailing-spaces">
+    <macrodef name="remove-trailing-spaces">
+        <attribute name="dir" />
+        <attribute name="includes" />
+
+        <sequential>
+            <replaceregexp match="[\t ]+$" replace="" flags="g" byline="true">
+                <fileset dir="@{dir}" includes="@{includes}"/>
+            </replaceregexp>
+        </sequential>
+    </macrodef>
+</project>

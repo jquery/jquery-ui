@@ -1,0 +1,63 @@
+<project name="docs-download">
+
+    <macrodef name="docs-download">
+        <attribute name="url" />
+        <attribute name="dest" />
+
+        <sequential>
+            <mkdir dir="@{dest}"/>
+
+            <parallel threadsperprocessor="4">
+                <get src="@{url}Draggable" dest="@{dest}draggable.html"/>
+                <get src="@{url}Droppable" dest="@{dest}droppable.html"/>
+                <get src="@{url}Resizable" dest="@{dest}resizable.html"/>
+                <get src="@{url}Selectable" dest="@{dest}selectable.html"/>
+                <get src="@{url}Sortable" dest="@{dest}sortable.html"/>
+
+                <get src="@{url}Accordion" dest="@{dest}accordion.html"/>
+                <get src="@{url}Autocomplete" dest="@{dest}autocomplete.html"/>
+                <get src="@{url}Button" dest="@{dest}button.html"/>
+                <get src="@{url}Datepicker" dest="@{dest}datepicker.html"/>
+                <get src="@{url}Dialog" dest="@{dest}dialog.html"/>
+                <get src="@{url}Menu" dest="@{dest}menu.html"/>
+                <get src="@{url}Progressbar" dest="@{dest}progressbar.html"/>
+                <get src="@{url}Slider" dest="@{dest}slider.html"/>
+                <get src="@{url}Spinner" dest="@{dest}spinner.html"/>
+                <get src="@{url}Tooltip" dest="@{dest}tooltip.html"/>
+                <get src="@{url}Tabs" dest="@{dest}tabs.html"/>
+
+                <get src="@{url}Position" dest="@{dest}position.html"/>
+
+                <get src="http://docs.jquery.com/action/render/UI/Effects/animate" dest="@{dest}animate.html"/>
+                <get src="http://docs.jquery.com/action/render/UI/Effects/addClass" dest="@{dest}addClass.html"/>
+                <get src="http://docs.jquery.com/action/render/UI/Effects/effect" dest="@{dest}effect.html"/>
+                <get src="http://docs.jquery.com/action/render/UI/Effects/hide" dest="@{dest}hide.html"/>
+                <get src="http://docs.jquery.com/action/render/UI/Effects/removeClass" dest="@{dest}removeClass.html"/>
+                <get src="http://docs.jquery.com/action/render/UI/Effects/show" dest="@{dest}show.html"/>
+                <get src="http://docs.jquery.com/action/render/UI/Effects/switchClass" dest="@{dest}switchClass.html"/>
+                <get src="http://docs.jquery.com/action/render/UI/Effects/toggle" dest="@{dest}toggle.html"/>
+                <get src="http://docs.jquery.com/action/render/UI/Effects/toggleClass" dest="@{dest}toggleClass.html"/>
+
+                <get src="http://docs.jquery.com/action/render/UI/Effects/Blind" dest="@{dest}effect-blind.html"/>
+                <get src="http://docs.jquery.com/action/render/UI/Effects/Clip" dest="@{dest}effect-clip.html"/>
+                <get src="http://docs.jquery.com/action/render/UI/Effects/Drop" dest="@{dest}effect-drop.html"/>
+                <get src="http://docs.jquery.com/action/render/UI/Effects/Explode"
+                     dest="@{dest}effect-explode.html"/>
+                <get src="http://docs.jquery.com/action/render/UI/Effects/Fade" dest="@{dest}effect-fade.html"/>
+                <get src="http://docs.jquery.com/action/render/UI/Effects/Fold" dest="@{dest}effect-fold.html"/>
+                <get src="http://docs.jquery.com/action/render/UI/Effects/Puff" dest="@{dest}effect-puff.html"/>
+                <get src="http://docs.jquery.com/action/render/UI/Effects/Slide" dest="@{dest}effect-slide.html"/>
+                <get src="http://docs.jquery.com/action/render/UI/Effects/Scale" dest="@{dest}effect-scale.html"/>
+
+                <get src="http://docs.jquery.com/action/render/UI/Effects/Bounce" dest="@{dest}effect-bounce.html"/>
+                <get src="http://docs.jquery.com/action/render/UI/Effects/Highlight" dest="@{dest}effect-highlight.html"/>
+                <get src="http://docs.jquery.com/action/render/UI/Effects/Pulsate" dest="@{dest}effect-pulsate.html"/>
+                <get src="http://docs.jquery.com/action/render/UI/Effects/Shake" dest="@{dest}effect-shake.html"/>
+                <get src="http://docs.jquery.com/action/render/UI/Effects/Size" dest="@{dest}effect-size.html"/>
+                <get src="http://docs.jquery.com/action/render/UI/Effects/Transfer" dest="@{dest}effect-transfer.html"/>
+            </parallel>
+        </sequential>
+
+    </macrodef>
+
+</project>

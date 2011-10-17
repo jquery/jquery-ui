@@ -1,0 +1,24 @@
+<project name="closure-compiler">
+
+    <property description="Google Closure" name="closure-jar" value="build/google-compiler-20110320.jar" />
+
+    <macrodef name="closure-compiler">
+
+        <attribute name="inputDir" />
+        <attribute name="outputDir" />
+
+        <sequential>
+            <apply executable="java" parallel="false">
+                <fileset dir="@{inputDir}" includes="*.js" />
+                <arg line="-jar" />
+                <arg path="${closure-jar}" />
+                <arg value="--warning_level" />
+                <arg value="QUIET" />
+                <arg value="--js_output_file" />
+                <targetfile />
+                <arg value="--js" />
+                <mapper type="glob" from="*.js" to="@{outputDir}/*.min.js" />
+            </apply>
+        </sequential>
+    </macrodef>
+</project>

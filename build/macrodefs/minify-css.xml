@@ -1,0 +1,27 @@
+<project name="minify-css">
+
+    <import file="yui-compressor-css.xml" />
+
+    <macrodef name="minify-css">
+
+        <attribute name="inputDir" />
+        <attribute name="outputDir" />
+        <attribute name="inputImagesDir" />
+        <attribute name="outputImagesDir" />
+
+        <sequential>
+            <yui-compressor-css inputDir="@{inputDir}" outputDir="@{outputDir}" />
+            <replaceregexp match=".css" replace=".min.css" flags="g">
+                <fileset dir="@{outputDir}/">
+                    <include name="*.base.min.css"/>
+                    <include name="*.all.min.css"/>
+                </fileset>
+            </replaceregexp>
+
+            <!-- make a copy of all theme images to ensure that relative paths in minified css files work -->
+            <copy todir="@{outputImagesDir}" >
+                <fileset dir="@{inputImagesDir}" />
+            </copy>
+        </sequential>
+    </macrodef>
+</project>

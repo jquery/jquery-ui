@@ -1,0 +1,110 @@
+<project name="prepend-header">
+    
+	<taskdef resource="net/sf/antcontrib/antcontrib.properties">
+		<classpath>
+			<pathelement location="../build/ant-contrib-0.6.jar"/>
+		</classpath>
+	</taskdef>
+
+    <!-- TODO: Below are 3 big chunks of dupe. Refactor into a macrodef. -->
+    
+    <macrodef name="prepend-header-js">
+        <attribute name="dist.dir" />
+        <attribute name="min.dir" />
+        
+        <sequential>
+            <copy todir="@{dist.dir}/headers/">
+                <fileset dir="@{dist.dir}/ui/" includes="*.js" />
+            </copy>
+            <replaceregexp match="^(\/\*.*?\*\/\s).+" replace="\1" flags="s">
+                <fileset dir="@{dist.dir}/headers/" includes="*.js"/>
+            </replaceregexp>
+            <for param="file">
+                <path><fileset dir="@{min.dir}/" includes="*.js" /></path>
+                <sequential>
+                    <propertyregex override="yes" property="target" input="@{file}" regexp=".*[\\/](.+)\.min\.js$" replace="\1"/>
+                    <concat destfile="@{dist.dir}/ui-headered/${target}.min.js">
+                        <header file="@{dist.dir}/headers/${target}.js" />
+                        <fileset file="@{file}" />
+                    </concat>
+                </sequential>
+            </for>
+            <copy todir="@{min.dir}" overwrite="true">
+                <fileset dir="@{dist.dir}/ui-headered/" includes="*.js" />
+            </copy>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="prepend-header-css">
+        <attribute name="dist.dir" />
+        <attribute name="min.dir" />
+
+        <sequential>
+            <copy todir="@{dist.dir}/headers/">
+                <fileset dir="@{dist.dir}/themes/base" includes="*.css" />
+            </copy>
+            <replaceregexp match="^(\/\*.*?\*\/\s).+" replace="\1" flags="s">
+                <fileset dir="@{dist.dir}/headers/" includes="*.css"/>
+            </replaceregexp>
+            <for param="file">
+                <path><fileset dir="@{dist.dir}/themes/base/minified" includes="*.css" /></path>
+                <sequential>
+                    <propertyregex override="yes" property="target" input="@{file}" regexp=".*[\\/](.+)\.min\.css$" replace="\1"/>
+                    <concat destfile="@{dist.dir}/ui-headered/${target}.min.css">
+                        <header file="@{dist.dir}/headers/${target}.css" />
+                        <fileset file="@{file}" />
+                    </concat>
+                </sequential>
+            </for>
+            <copy todir="@{dist.dir}/themes/base/minified" overwrite="true">
+                <fileset dir="@{dist.dir}/ui-headered/" includes="*.css" />
+            </copy>
+            <delete dir="@{dist.dir}/ui-headered/" />
+
+        </sequential>
+    </macrodef>
+
+    <macrodef name="prepend-header-i18n">
+        <attribute name="dist.dir" />
+        <attribute name="min.dir" />
+
+        <sequential>
+            <!-- TODO what's going on with this bit... -->
+
+            <!-- once more for the i18n files -->
+            <!-- need to clean up headers in those files first
+            <copy todir="@{dist.dir}/headers/i18n/">
+                <fileset dir="@{dist.dir}/ui/i18n/" includes="*.js" />
+            </copy>
+            <replaceregexp match="^(\/\*.*?\*\/\s).+" replace="\1" flags="s">
+                <fileset dir="@{dist.dir}/headers/i18n/" includes="*.js"/>
+            </replaceregexp>
+            <for param="file">
+                <path><fileset dir="@{min.dir}/i18n/" includes="*.js" /></path>
+                <sequential>
+                    <propertyregex override="yes" property="target" input="@{file}" regexp=".*[\\/](.+)\.min\.js$" replace="\1"/>
+                    <concat destfile="@{dist.dir}/ui-headered/i18n/${target}.min.js">
+                        <header file="@{dist.dir}/headers/i18n/${target}.js" />
+                        <fileset file="@{file}" />
+                    </concat>
+                </sequential>
+            </for>
+            <copy todir="@{min.dir}/i18n/">
+                <fileset dir="@{dist.dir}/ui-headered/i18n/" includes="*.js" />
+            </copy>
+            -->
+            
+        </sequential>
+    </macrodef>
+
+    <macrodef name="prepend-headers-cleanup">
+        <!-- TODO: This macrodef should not be needed. The individual prepend-header steps should clean up their own directories -->
+
+        <attribute name="dist.dir" />
+        <sequential>
+            <delete dir="@{dist.dir}/ui-headered/" />
+            <delete dir="@{dist.dir}/headers/" />
+        </sequential>
+    </macrodef>
+
+</project>

@@ -1,0 +1,47 @@
+<project name="copy-files">
+    <macrodef name="copy-files">
+        <attribute name="dist.dir" />
+        <attribute name="src.dir" />
+        <attribute name="ui.dir" />
+        
+        <sequential>
+            <echo message="Copying files" />
+        
+            <mkdir dir="@{dist.dir}" />
+    
+            <copy overwrite="true" todir="@{dist.dir}/">
+                <fileset dir="@{ui.dir}/" includes="jquery-*.js" />
+            </copy>
+    
+            <copy overwrite="true" todir="@{dist.dir}/ui/">
+                <fileset dir="@{src.dir}/" includes="jquery.ui.*.js, jquery.effects.*.js" />
+            </copy>
+    
+            <copy overwrite="true" todir="@{dist.dir}/ui/i18n/" >
+                <fileset dir="@{src.dir}/i18n/" />
+            </copy>
+    
+            <copy overwrite="true" todir="@{dist.dir}/">
+                <fileset dir="@{ui.dir}/" includes="*.txt" />
+            </copy>
+    
+            <copy overwrite="true" todir="@{dist.dir}/demos/" >
+                <fileset dir="@{ui.dir}/demos/" />
+            </copy>
+    
+            <copy overwrite="true" todir="@{dist.dir}/external/" >
+                <fileset dir="@{ui.dir}/external/" />
+            </copy>
+    
+            <copy overwrite="true" todir="@{dist.dir}/tests/" >
+                <fileset dir="@{ui.dir}/tests/" />
+            </copy>
+    
+            <copy overwrite="true" todir="@{dist.dir}/themes/" >
+                <fileset dir="@{ui.dir}/themes/" />
+            </copy>
+
+            <echo message="Files copied." />
+        </sequential>
+    </macrodef>    
+</project>
