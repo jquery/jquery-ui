@@ -221,4 +221,23 @@ test("blur without selection", function() {
 });
 */
 
+test("blur during remote search", function() {
+	var ac = $("#autocomplete").autocomplete({
+		delay: 0,
+		source: "http://jqueryui.com/demos/autocomplete/search.php",
+		open: function() {
+			ok(false, "Should not open after a blur");
+		}
+	});	
+	stop();
+	ac.val("ro").keydown();
+	setTimeout(function() {
+		$.browser.msie ? ac.simulate("blur") : ac.blur();
+		setTimeout(function() {
+			start();
+		}, 500);
+	}, 50);
+
+});
+
 })(jQuery);
