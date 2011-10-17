@@ -40,7 +40,7 @@ $.widget( "ui.selectmenu", {
 		// set a default id value, generate a new random one if not set by developer
 		var selectmenuId = this.element.attr( 'id' ) || 'ui-selectmenu-' + Math.random().toString( 16 ).slice( 2, 10 );
 			
-		// quick array of button and menu id's
+		// array of button and menu id's
 		this.ids = { id: selectmenuId, button: selectmenuId + '-button', menu: selectmenuId + '-menu' };
 				
 		// set current value
@@ -125,44 +125,40 @@ $.widget( "ui.selectmenu", {
 			.appendTo( this.options.appendTo );
 				
 		// init menu widget
-		this.menu
-			.data( 'element.selectelemenu', this.element )
-			.menu({
-				select: function( event, ui ) {
-					var flag = false,
-						item = ui.item.data( "item.selectmenu" ),
-						oldIndex = that.element[0].selectedIndex;
-											
-					that._setOption( "value", item.value );
-					that._trigger( "select", event, { item: item } );
-					
-					if ( item.index != oldIndex ) {
-						that._trigger( "change", event, { item: item } );
-					}
-					
-					if ( that.opened ) {
-						event.preventDefault();
-						that.close( event, true);
-					}
-				},
-				focus: function( event, ui ) {
-					var item = ui.item.data( "item.selectmenu" );
-					
-					if ( that.focus !== undefined && item.index != that.focus ) {
-						that._trigger( "focus", event, { item: item } );
-					}
-					
-					that.focus = item.index;
+		this.menu.menu({
+			select: function( event, ui ) {
+				var flag = false,
+					item = ui.item.data( "item.selectmenu" ),
+					oldIndex = that.element[0].selectedIndex;
+										
+				that._setOption( "value", item.value );
+				that._trigger( "select", event, { item: item } );
+				
+				if ( item.index != oldIndex ) {
+					that._trigger( "change", event, { item: item } );
 				}
-			});
+				
+				if ( that.opened ) {
+					event.preventDefault();
+					that.close( event, true);
+				}
+			},
+			focus: function( event, ui ) {
+				var item = ui.item.data( "item.selectmenu" );
+				
+				if ( that.focus !== undefined && item.index != that.focus ) {
+					that._trigger( "focus", event, { item: item } );
+				}
+				
+				that.focus = item.index;
+			}
+		});
 		
 		// document click closes menu
 		this._bind( document, {
-			'mousedown': function( event ) {
-				if ( this.opened && !$( event.target ).is( this.menu ) ) {	
-					this._delay( function() {
-						this.close( event );
-					}, 200);
+			'click': function( event ) {
+				if ( this.opened && !$( event.target ).closest( "#" + this.ids.button).length ) {
+					this.close( event );
 				}
 			}
 		});			
@@ -195,21 +191,21 @@ $.widget( "ui.selectmenu", {
 	
 	open: function( event ) {		
 		var currentItem = this._getSelectedItem();
-			
-		if ( !this.options.disabled ) {			
-			// close all other selectmenus		
-			$( '.ui-selectmenu-open' ).not( this.button ).each( function() {
-				$( this ).children( 'ul.ui-menu' ).data( 'element.selectelemenu' ).selectmenu( 'close' );
-			});
-						
+		
+		if ( !this.options.disabled ) {	
 			if ( this.options.dropdown ) {
 				this.button
 					.addClass( 'ui-corner-top' )
 					.removeClass( 'ui-corner-all' );
 			}		
 									
-			this.menuWrap.addClass( 'ui-selectmenu-open' );		
-			this.menu.menu( "focus", null, currentItem );
+			this.menuWrap.addClass( 'ui-selectmenu-open' );
+			// needs to be fired after the document click event has closed all other Selectmenus
+			// otherwise the current item is not indicated
+			// TODO check if this should be handled by Menu
+			this._delay( function(){
+				this.menu.menu( "focus", event, currentItem );
+			}, 1);
 		
 			if ( !this.options.dropdown ) {
 				// center current item
@@ -309,12 +305,9 @@ $.widget( "ui.selectmenu", {
 		}
 	},
 	
-	_buttonEvents: {		
-		mousedown: function( event ) {
-			this._toggle( event );
-			event.stopImmediatePropagation();
-		},
+	_buttonEvents: {
 		click: function( event ) {
+			this._toggle( event );
 			event.preventDefault();
 		},
 		keydown: function( event ) {
@@ -326,12 +319,11 @@ $.widget( "ui.selectmenu", {
 					break;
 				case $.ui.keyCode.ENTER:
 					if ( this.opened ) {
-						this.menu.menu( "select", this._getSelectedItem() );					
-						event.preventDefault();
-					}
+						this.menu.menu( "select", this._getSelectedItem() );
+					}			
+					event.preventDefault();
 					break;
 				case $.ui.keyCode.SPACE:
-					this._toggle(event);
 					event.preventDefault();
 					break;
 				case $.ui.keyCode.UP:
@@ -384,7 +376,6 @@ $.widget( "ui.selectmenu", {
 				this.button.attr( "tabindex", 0 );
 			}
 			this.menu.attr( "aria-disabled", value );
-			this.close();
 		}
 	},
 	
