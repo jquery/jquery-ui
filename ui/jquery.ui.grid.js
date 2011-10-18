@@ -176,14 +176,15 @@ $.widget( "ui.grid", {
 
 	// can be customized by subwidgets
 	_toArray: function() {
-		return this.options.source;
+		var source = this.options.source;
+		return $.isArray(source.result) ? source.result : source;
 	},
 
 	refresh: function() {
 		var gridHeight, headHeight, footHeight,
 			that = this,
 			tbody = this._container().empty();
-
+            
 		$.each( this._toArray(), function( itemId, item ) {
 			that._newRow( item ).appendTo( tbody );
 		});
@@ -291,8 +292,9 @@ $.widget( "ui.grid", {
 		if ( this.options.source ) {
 			return;
 		}
+        
 		var columns = this.options.columns;
-		// TODO source should be dataview.result; fix menugrid to deal with that
+        
 		this.options.source = $.ui.localDataview({
 			properties: columns,
 			input: this._container().children().map(function() {
@@ -302,8 +304,8 @@ $.widget( "ui.grid", {
 				});
 				return item;
 			}).get()
-		});
+		}).refresh();
 	}
 });
 
-}( jQuery ));
+}( jQuery ));	
