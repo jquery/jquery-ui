@@ -74,8 +74,5 @@ $.widget("spf.menugrid", $.ui.grid, {
 		} else {
 			this.inputs.val("");
 		}
-	},
-	//_toArray: function() {
-	//	return this.options.source.result;
-	//}
+	}
 });

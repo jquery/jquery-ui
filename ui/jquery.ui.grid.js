@@ -167,6 +167,7 @@ $.widget( "ui.grid", {
 
 	_container: function() {
 		// TODO this code assumes a single tbody which is not a safe assumption
+		// SEE: _containerChildren() for multiple tbody support
 		return this.element.find( "tbody" );
 	},
 
@@ -176,13 +177,17 @@ $.widget( "ui.grid", {
 
 	// can be customized by subwidgets
 	_toArray: function() {
-		return this.options.source.result;
+		var source = this.options.source;
+		return $.isArray(source) ? source : source.result;
 	},
 
 	refresh: function() {
 		var gridHeight, headHeight, footHeight,
 			that = this,
-			tbody = this._container().empty();
+			tbody = this.element.find( "tbody:first" ).empty();
+            
+		//Remove secondary tbody elements.
+		this.element.find( "tbody:not(:first)" ).remove();
 
 		$.each( this._toArray(), function( itemId, item ) {
 			that._newRow( item ).appendTo( tbody );
@@ -224,7 +229,7 @@ $.widget( "ui.grid", {
 
 	refreshItem: function( item ) {
 		var that = this;
-		this._container().children().each(function() {
+		this._containerChildren().each(function() {
 			if ( $( this ).data( "grid-item" ) === item ) {
 				$( this ).replaceWith( that._newRow(item) );
 			}
@@ -291,11 +296,12 @@ $.widget( "ui.grid", {
 		if ( this.options.source ) {
 			return;
 		}
+        
 		var columns = this.options.columns;
-		
+        
 		this.options.source = $.ui.localDataview({
 			properties: columns,
-			input: this._container().children().map(function() {
+			input: this._containerChildren().map(function() {
 				var item = {};
 				$( this ).children().each(function( i ) {
 					item[ columns[ i ].property ] = $( this ).text();
@@ -303,7 +309,15 @@ $.widget( "ui.grid", {
 				return item;
 			}).get()
 		}).refresh();
+	},
+
+	_containerChildren: function() {
+		var children = [];
+		this._container().each(function( i ) {
+			$.merge(children, $(this).children());
+		});
+		return $(children);
 	}
 });
 
-}( jQuery ));
+}( jQuery ));	
