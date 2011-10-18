@@ -5,6 +5,8 @@ var fs = require( "fs" ),
 	sizes = {},
 	input = "";
 
+stdin.setEncoding( "utf8" );
+
 try {
 	oldsizes = JSON.parse( fs.readFileSync(  __dirname + "/.sizecache.json", "utf8" ) );
 } catch(e) {
@@ -33,5 +35,7 @@ stdin.on( "end", function() {
 		}
 		console.log( "%s %s %s", lpad( sizes[ key ], 8 ), lpad( oldsizes[key] ? "(" + diff + ")" : "(-)", 8 ), key );
 	}
-	process.exit();
+	process.nextTick(function() {
+		process.exit();
+	});
 });
