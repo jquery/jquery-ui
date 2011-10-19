@@ -89,11 +89,10 @@ $.widget( "ui.popup", {
 					case $.ui.keyCode.UP:
 						// prevent scrolling
 						event.preventDefault();
-						var that = this;
 						clearTimeout( this.closeTimer );
-						setTimeout(function() {
-							that.open( event );
-							that.focusPopup( event );
+						this._delay(function() {
+							this.open( event );
+							this.focusPopup( event );
 						}, 1);
 						break;
 				}
@@ -115,13 +114,12 @@ $.widget( "ui.popup", {
 					return;
 				}
 				this.open( event );
-				var that = this;
 				clearTimeout( this.closeTimer );
-				this._delay(function() {
+				this._delay( function() {
 					if ( !noFocus ) {
-						that.focusPopup();
+						this.focusPopup();
 					}
-				}, 1);
+				}, 1 );
 			}
 		});
 
@@ -129,14 +127,13 @@ $.widget( "ui.popup", {
 			this._bind( this.options.trigger, {
 				focus : function( event ) {
 					if ( !suppressExpandOnFocus ) {
-						var that = this;
-						setTimeout(function() {
-							if ( !that.isOpen ) {
-								that.open( event );
+						this._delay( function() {
+							if ( !this.isOpen ) {
+								this.open( event );
 							}
 						}, 1);
 					}
-					setTimeout(function() {
+					this._delay( function() {
 						suppressExpandOnFocus = false;
 					}, 100);
 				},
@@ -167,11 +164,10 @@ $.widget( "ui.popup", {
 
 		this._bind({
 			focusout: function( event ) {
-				var that = this;
 				// use a timer to allow click to clear it and letting that
 				// handle the closing instead of opening again
-				that.closeTimer = setTimeout( function() {
-					that.close( event );
+				this.closeTimer = this._delay( function() {
+					this.close( event );
 				}, 100);
 			},
 			focusin: function( event ) {
