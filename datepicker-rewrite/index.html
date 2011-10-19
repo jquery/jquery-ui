@@ -2,15 +2,16 @@
 <html>
 <head>
 	<meta charset="utf-8">
-	<script src="../jquery-1.4.4.js"></script>
+	<script src="../jquery-1.6.4.js"></script>
 	<script src="../ui/jquery.ui.core.js"></script>
 	<script src="../ui/jquery.ui.widget.js"></script>
 	<script src="../ui/jquery.ui.button.js"></script>
 	<script src="../ui/jquery.ui.position.js"></script>
+	<script src="../ui/jquery.ui.popup.js"></script>
 	<script src="jquery.tmpl.js"></script>
-	<script src="../external/jquery.global.js"></script>
-	<script src="../external/jquery.global.de-DE.js"></script>
-	<script src="../external/jquery.global.ja-JP.js"></script>
+	<script src="../external/globalize.js"></script>
+	<script src="../external/globalize.culture.de-DE.js"></script>
+	<script src="../external/globalize.culture.ja-JP.js"></script>
 	<script src="localization.js"></script>
 	<script src="date.js"></script>
 	<script src="picker.js"></script>
@@ -23,17 +24,25 @@
 		.ui-datepicker-calendar a.ui-state-focus {
 			text-decoration: underline;
 		}
+		/* TODO: This needs to go into a popup specific stylesheet */
+		.ui-popup { position: absolute; z-index: 5000; }
 	</style>
 </head>
 <body>
-	<a href="alternative-template.html">Alternative templating example</a>
 	<select id="culture">
-		<option value="en-US">en-US</option>
+		<option value="en">en</option>
 		<option value="de-DE">de-DE</option>
 		<option value="ja-JP">ja-JP</option>
 	</select>
 	<input id="inline-output" />
+	<h2>Accessibility Enabled Template:</h2>
+	<p>Inline Date Picker:</p>
 	<div id="datepicker-inline-default"></div>
+	<p>Popup Datepicker:</p>
+	<label for="datepickerPopup1">Date of Birth</label> <input id="datepickerPopup1" type="text" aria-describedby="datepickerPopupInstruction" />
+	<p id="datepickerPopupInstruction">Press up or down to move focus to date picker grid. Cusor up/down/left/right to navigate days. Page up/down to switch months, hold alt key to switch years. Enter to select.</p>
+
+	<h2>Older Templates:</h2>
 	<div id="datepicker-inline-multi"></div>
 	<div id="datepicker-inline"></div>
 	<input id="datepicker" type="text" />
@@ -42,9 +51,11 @@
 	<script>
 		$( function() {
 			$( "#culture" ).change( function() {
-				$.global.preferCulture( $( this ).val() );
+				Globalize.culture( $( this ).val() );
 				$( ":ui-datepicker" ).datepicker( "refresh" );
-			})
+			});
+
+
 			$( "#datepicker-inline-default" ).datepicker( {
 				select: function( event, ui ) {
 					$( "#inline-output" ).val( ui.date );
@@ -55,7 +66,7 @@
 				select: function( event, ui ) {
 					$( "#inline-output" ).val( ui.date );
 				}
-			})
+			});
 			$( "#datepicker-inline" ).datepicker( {
 				tmpl: "#ui-datepicker-weeks-tmpl",
 				select: function( event, ui ) {
@@ -82,7 +93,7 @@
 					}
 				}
 			});
-			$( "#datepicker, #datepicker2" ).datepicker();
+			$( "#datepicker, #datepicker2, #datepickerPopup1" ).datepicker();
 
 			var input = $("#datepicker3");
 			var button = $("<button>").insertAfter(input);
@@ -102,52 +113,66 @@
 			});
 		});
 	</script>
+	<!--
+	Reason for separating templates: Refreshing the entire datepicker during interaction confuses screen readers, specfically because
+	the grid heading is marked up as a live region and will often not update if it's destroyed and recreated instead of just having its
+	text change. Additionally, interacting with the prev and next links would cause loss of focus issues because the links being interacted
+	with will disappear while focused. With this approach there are 3 templates: the outer template (#ui-datepicker-tmpl), The grid template
+	(#ui-datepicker-grid-tmpl) and the title template (#ui-datepicker-title-tmpl). This gets rid of the accessibility problems mentioned, and
+	also allows developers to modify parts of the datepicker without having to duplicate the entire template.
+	 -->
+	<script id="ui-datepicker-grid-tmpl" type="text/x-jquery-tmpl">
+		<table class="ui-datepicker-calendar" role="grid" aria-readonly="true" aria-labelledby="${instance.id}-month-lbl" tabindex="0" aria-activedescendant="${instance.id}-${instance.focusedDay}">
+			<thead role="presentation">
+				<tr role="row">
+					{{each(index, day) date.weekdays()}}
+						<th class="" role="columnheader" abbr="${day.fullname}" aria-label="${day.fullname}"><span title="${day.fullname}">${day.shortname}</span></th>
+					{{/each}}
+				</tr>
+			</thead>
+			<tbody role="presentation">
+				{{each(weekIndex, week) date.days()}}
+				<tr role="row">
+					{{each(dayIndex, day) week.days}}
+						<td {{if day.render}}id="${instance.id}-${day.date}"{{/if}} role="gridcell" aria-selected="{{if day.current}}true{{else}}false{{/if}}" {{if !day.selectable}}aria-disabled="true"{{/if}}>
+							{{if day.render}}
+								{{if day.selectable}}
+								<a class="{{if day.date == instance.focusedDay}}ui-state-focus {{/if}}ui-state-default{{if day.current}} ui-state-active{{/if}}{{if day.today}} ui-state-highlight{{/if}} ${day.extraClasses}" href="#" tabindex="-1" data-timestamp=${day.timestamp}>
+									${day.date}
+									{{if day.today}} <span class="ui-helper-hidden-accessible">, ${labels.currentText}</span>{{/if}}
+								</a>
+								{{/if}}
+								{{if !day.selectable}}
+								<span class="{{if day.current}} ui-state-active{{/if}}{{if day.today}} ui-state-highlight{{/if}} ${day.extraClasses}">
+									${day.date}
+								</span>
+								{{/if}}
+							{{/if}}
+						</td>
+					{{/each}}
+				</tr>
+				{{/each}}
+			</tbody>
+		</table>
+	</script>
+
+	<script id="ui-datepicker-title-tmpl" type="text/x-jquery-tmpl">
+		<span class="ui-datepicker-month">${date.monthname()}</span> <span class="ui-datepicker-year">${date.year()}</span>
+	</script>
 
 	<script id="ui-datepicker-tmpl" type="text/x-jquery-tmpl">
-		<div class="ui-datepicker ui-widget ui-widget-content ui-helper-clearfix ui-corner-all" role="region" aria-labelledby="${instance.id} + "-title"">
+		<div class="ui-datepicker ui-widget ui-widget-content ui-helper-clearfix ui-corner-all" role="region" aria-labelledby="${instance.id}-title">
 			<div class="ui-datepicker-header ui-widget-header ui-helper-clearfix ui-corner-all">
 				<a href="#" class="ui-datepicker-prev ui-corner-all" title="${labels.prevText}"><span class="ui-icon ui-icon-circle-triangle-w">${labels.prevText}</span></a>
 				<a href="#" class="ui-datepicker-next ui-corner-all" title="${labels.nextText}"><span class="ui-icon ui-icon-circle-triangle-e">${labels.nextText}</span></a>
-				<div role="header" id="${instance.id} + "-title"" class="ui-datepicker-title" aria-live="assertive" aria-atomic="true">
-					<div id="${instance.id}-month-lbl">
-						<span class="ui-datepicker-month">${date.monthname()}</span> <span class="ui-datepicker-year">${date.year()}</span>
+				<div role="header" id="${instance.id}-title">
+					<div id="${instance.id}-month-lbl" class="ui-datepicker-title">
+						{{tmpl({date : date}) "#ui-datepicker-title-tmpl"}}
 					</div>
-					<span class="ui-helper-hidden-accessible">Date Picker</span>
+					<span class="ui-helper-hidden-accessible">, ${labels.datePickerRole}</span>
 				</div>
 			</div>
-			<table class="ui-datepicker-calendar" role="grid" aria-labelledby="${instance.id}-month-lbl" tabindex="0" aria-activedescendant="${instance.id}-${instance.focusedDay}">
-				<thead role="presentation">
-					<tr role="row">
-						{{each(index, day) date.weekdays()}}
-							<th class="" role="columnheader" abbr="${day.fullname}" aria-label="${day.fullname}"><span title="${day.fullname}">${day.shortname}</span></th>
-						{{/each}}
-					</tr>
-				</thead>
-				<tbody role="presentation">
-					{{each(weekIndex, week) date.days()}}
-					<tr role="row">
-						{{each(dayIndex, day) week.days}}
-							<td {{if day.render}}id="${instance.id}-${day.date}"{{/if}} role="gridcell" aria-selected="{{if day.current}}true{{else}}false{{/if}}" {{if !day.selectable}}aria-disabled="true"{{/if}}>
-								{{if day.render}}
-									{{if day.selectable}}
-									<a title="${day.title}" class="{{if day.date == instance.focusedDay}}ui-state-focus {{/if}}ui-state-default{{if day.current}} ui-state-active{{/if}}{{if day.today}} ui-state-highlight{{/if}} ${day.extraClasses}" href="#" tabindex="-1" data-day=${day.date}>
-										${day.date}
-										{{if day.today}} <span class="ui-helper-hidden-accessible">, today</span>{{/if}}
-										{{if day.current}}<span class="ui-helper-hidden-accessible">, selected</span>{{/if}}
-									</a>
-									{{/if}}
-									{{if !day.selectable}}
-									<span title="${day.title}" class="{{if day.current}} ui-state-active{{/if}}{{if day.today}} ui-state-highlight{{/if}} ${day.extraClasses}">
-										${day.date}
-									</span>
-									{{/if}}
-								{{/if}}
-							</td>
-						{{/each}}
-					</tr>
-					{{/each}}
-				</tbody>
-			</table>
+			{{tmpl({date : date, labels : labels, instance : instance}) "#ui-datepicker-grid-tmpl"}}
 			<div class="ui-datepicker-buttonpane ui-widget-content">
 				<button class="ui-datepicker-current">${labels.currentText}</button>
 				<button class="ui-datepicker-close">${labels.closeText}</button>

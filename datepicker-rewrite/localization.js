@@ -6,7 +6,8 @@ var regions = {
         "nextText": "Next",
         "currentText": "Today",
         "weekHeader": "Wk",
-        "dateFormat": "d"
+        "dateFormat": "d",
+        "datePickerRole": "date picker"
     },
     "af": {
         "closeText": "Selekteer",
@@ -425,6 +426,11 @@ var regions = {
         "dateFormat": "d"
     }
 };
-$.each(regions, function(name, value) {
-    $.global.localize('datepicker', name, value);
+$.each( regions, function( name, value ) {
+	var culture = Globalize.findClosestCulture( name );
+	Globalize.addCultureInfo( culture && culture.name || name, {
+		messages : {
+			datepicker : value
+		}
+	});
 });
