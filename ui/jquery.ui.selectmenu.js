@@ -77,13 +77,13 @@ $.widget("ui.selectmenu", {
 		this.newelement.prepend( '<span class="' + self.widgetBaseClass + '-status" />' );
 
 		// make associated form label trigger focus
-		$( 'label[for="' + selectmenuId + '"]' )
-			.attr( 'for', this.ids[1] )
-			.bind( 'click.selectmenu', function() {
-				self.newelement[0].focus();
-				return false;
-			});
-
+		this.element.bind({
+			'click.selectmenu':  function( event ) {
+				self.newelement.focus();
+				event.preventDefault();
+			}
+		});
+		
 		// click toggle for menu visibility
 		this.newelement
 			.bind('mousedown.selectmenu', function(event) {
@@ -444,16 +444,14 @@ $.widget("ui.selectmenu", {
 
 		$( window ).unbind( ".selectmenu-" + this.ids[0] );
 		$( document ).unbind( ".selectmenu-" + this.ids[0] );
-
-		// unbind click on label, reset its for attr
-		$( 'label[for=' + this.ids[0] + ']' )
-			.attr( 'for', this.ids[0] )
-			.unbind( '.selectmenu' );
 		
 		this.newelementWrap.remove();
 		this.listWrap.remove();
 		
-		this.element.show();
+		// unbind click event and show original select
+		this.element
+			.unbind(".selectmenu")
+			.show();
 
 		// call widget destroy function
 		$.Widget.prototype.destroy.apply(this, arguments);
