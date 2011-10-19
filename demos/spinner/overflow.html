@@ -1,25 +1,25 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<title>jQuery UI Spinner - Default functionality</title>
-	<link type="text/css" href="../../themes/base/jquery.ui.all.css" rel="stylesheet" />
-	<script type="text/javascript" src="../../jquery-1.5.1.js"></script>
-	<script type="text/javascript" src="../../external/jquery.mousewheel-3.0.4.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.core.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.widget.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.button.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.spinner.js"></script>
-	<link type="text/css" href="../demos.css" rel="stylesheet" />
-	<script type="text/javascript">
+	<title>jQuery UI Spinner - Overflow</title>
+	<link rel="stylesheet" href="../../themes/base/jquery.ui.all.css">
+	<script src="../../jquery-1.6.4.js"></script>
+	<script src="../../external/jquery.mousewheel-3.0.4.js"></script>
+	<script src="../../ui/jquery.ui.core.js"></script>
+	<script src="../../ui/jquery.ui.widget.js"></script>
+	<script src="../../ui/jquery.ui.button.js"></script>
+	<script src="../../ui/jquery.ui.spinner.js"></script>
+	<link rel="stylesheet" href="../demos.css">
+	<script>
 	$(function() {
-		$("#spinner").spinner({
-			spin: function(event, ui) {
-				if (ui.value > 10) {
-					$(this).spinner("value", -10);
+		$( "#spinner" ).spinner({
+			spin: function( event, ui ) {
+				if ( ui.value > 10 ) {
+					$( this ).spinner( "value", -10 );
 					return false;
-				} else if (ui.value < -10) {
-					$(this).spinner("value", 10);
+				} else if ( ui.value < -10 ) {
+					$( this ).spinner( "value", 10 );
 					return false;
 				}
 			}
@@ -30,18 +30,22 @@
 <body>
 
 <div class="demo">
-	<p>
-		<label for="spinner">Select a value:</label>
-		<input id="spinner" name="value" />
-	</p>
-</div>
+
+<p>
+	<label for="spinner">Select a value:</label>
+	<input id="spinner" name="value" />
+</p>
+
+</div><!-- End demo -->
+
+
 
 <div class="demo-description">
-	<p>
-		Overflowing spinner restricted to a range of -10 to 10.
-		For anything above 10, it'll overflow to -10, and the other way round.
-	</p>
-</div>
+<p>
+Overflowing spinner restricted to a range of -10 to 10.
+For anything above 10, it'll overflow to -10, and the other way round.
+</p>
+</div><!-- End demo-description -->
 
 </body>
 </html>

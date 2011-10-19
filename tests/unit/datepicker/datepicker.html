@@ -1,32 +1,33 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8" />
+	<meta charset="utf-8">
 	<title>jQuery UI Datepicker Test Suite</title>
 
-	<link type="text/css" href="../../../themes/base/jquery.ui.datepicker.css" rel="stylesheet" />
+	<link rel="stylesheet" href="../../../themes/base/jquery.ui.core.css">
+	<link rel="stylesheet" href="../../../themes/base/jquery.ui.datepicker.css">
 
-	<script type="text/javascript" src="../../../jquery-1.5.1.js"></script>
-	<script type="text/javascript" src="../../../ui/jquery.ui.core.js"></script>
-	<script type="text/javascript" src="../../../ui/jquery.ui.widget.js"></script>
-	<script type="text/javascript" src="../../../ui/jquery.ui.datepicker.js"></script>
-	<script type="text/javascript" src="../../../ui/i18n/jquery.ui.datepicker-fr.js"></script>
-	<script type="text/javascript" src="../../../ui/i18n/jquery.ui.datepicker-he.js"></script>
-	<script type="text/javascript" src="../../../ui/i18n/jquery.ui.datepicker-zh-CN.js"></script>
+	<script src="../../jquery.js"></script>
+	<script src="../../../ui/jquery.ui.core.js"></script>
+	<script src="../../../ui/jquery.ui.widget.js"></script>
+	<script src="../../../ui/jquery.ui.datepicker.js"></script>
+	<script src="../../../ui/i18n/jquery.ui.datepicker-fr.js"></script>
+	<script src="../../../ui/i18n/jquery.ui.datepicker-he.js"></script>
+	<script src="../../../ui/i18n/jquery.ui.datepicker-zh-CN.js"></script>
 
-	<link rel="stylesheet" href="../../../external/qunit.css" type="text/css"/>
-	<script type="text/javascript" src="../../../external/qunit.js"></script>
-	<script type="text/javascript" src="../../jquery.simulate.js"></script>
-	<script type="text/javascript" src="../testsuite.js"></script>
-	
-	<script type="text/javascript" src="datepicker_core.js"></script>
-	<script type="text/javascript" src="datepicker_defaults.js"></script>
-	<script type="text/javascript" src="datepicker_events.js"></script>
-	<script type="text/javascript" src="datepicker_methods.js"></script>
-	<script type="text/javascript" src="datepicker_options.js"></script>
-	<script type="text/javascript" src="datepicker_tickets.js"></script>
-	
-	<script type="text/javascript">
+	<link rel="stylesheet" href="../../../external/qunit.css">
+	<script src="../../../external/qunit.js"></script>
+	<script src="../../jquery.simulate.js"></script>
+	<script src="../testsuite.js"></script>
+
+	<script src="datepicker_core.js"></script>
+	<script src="datepicker_defaults.js"></script>
+	<script src="datepicker_events.js"></script>
+	<script src="datepicker_methods.js"></script>
+	<script src="datepicker_options.js"></script>
+	<script src="datepicker_tickets.js"></script>
+
+	<script>
 	// disable this stale testsuite for testswarm only
 	var url = window.location.search;
 	url = decodeURIComponent( url.slice( url.indexOf("swarmURL=") + 9 ) );
@@ -36,7 +37,7 @@
 		test("datepicker", function() { ok(true, "disabled datepicker testsuite"); });
 	}
 	</script>
-	<script type="text/javascript" src="../swarminject.js"></script>
+	<script src="../swarminject.js"></script>
 </head>
 <body>
 
@@ -44,13 +45,12 @@
 <h2 id="qunit-banner"></h2>
 <div id="qunit-testrunner-toolbar"></div>
 <h2 id="qunit-userAgent"></h2>
-<ol id="qunit-tests">
-</ol>
-
+<ol id="qunit-tests"></ol>
 <div id="qunit-fixture">
-	<p><input type="text" id="inp"/><input type="text" id="alt"/><div id="inl"></div></p>
-	<p><input type="text" id="inp2"/></p>
-</div>
 
+<div><input type="text" id="inp"><input type="text" id="alt"><div id="inl"></div></div>
+<p><input type="text" id="inp2"></p>
+
+</div>
 </body>
 </html>

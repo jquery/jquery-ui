@@ -1,15 +1,19 @@
 commonWidgetTests( "spinner", {
 	defaults: {
+		culture: null,
 		disabled: false,
 		incremental: true,
 		max: null,
 		min: null,
 		numberFormat: null,
 		page: 10,
-		step: null,
-		value: null,
+		step: 1,
 
 		// callbacks
-		create: null
+		change: null,
+		create: null,
+		spin: null,
+		start: null,
+		stop: null
 	}
 });

@@ -10,148 +10,163 @@
  * Depends:
  *  jquery.ui.core.js
  *  jquery.ui.widget.js
+ *  jquery.ui.button.js
  */
 (function( $ ) {
+
+function modifier( fn ) {
+	return function() {
+		var previous = this.element.val();
+		fn.apply( this, arguments );
+		this._refresh();
+		if ( previous !== this.element.val() ) {
+			this._trigger( "change" );
+		}
+	};
+}
 
 $.widget( "ui.spinner", {
 	version: "@VERSION",
 	defaultElement: "<input>",
 	widgetEventPrefix: "spin",
 	options: {
+		culture: null,
 		incremental: true,
 		max: null,
 		min: null,
 		numberFormat: null,
 		page: 10,
-		step: null,
-		value: null
+		step: 1,
+
+		change: null,
+		spin: null,
+		start: null,
+		stop: null
 	},
 
 	_create: function() {
+		this._value( this.element.val(), true );
 		this._draw();
-		this._markupOptions();
-		this._mousewheel();
-		this._aria();
-	},
+		this._bind( this._events );
+		this._refresh();
 
-	_markupOptions: function() {
-		var that = this;
-		$.each({
-			min: -Number.MAX_VALUE,
-			max: Number.MAX_VALUE,
-			step: 1
-		}, function( attr, defaultValue ) {
-			if ( that.options[ attr ] === null ) {
-				var value = that.element.attr( attr );
-				that.options[ attr ] = typeof value === "string" && value.length > 0 ?
-					that._parse( value ) :
-					defaultValue;
+		// turning off autocomplete prevents the browser from remembering the
+		// value when navigating through history, so we re-enable autocomplete
+		// if the page is unloaded before the widget is destroyed. #7790
+		this._bind( this.element[0].ownerDocument.defaultView, {
+			beforeunload: function() {
+				this.element.removeAttr( "autocomplete" );
 			}
 		});
-		this.value( this.options.value !== null ? this.options.value : this.element.val() || 0 );
+	},
+
+	_getCreateOptions: function() {
+		var options = {},
+			element = this.element;
+
+		$.each( [ "min", "max", "step" ], function( i, option ) {
+			var value = element.attr( option );
+			if ( value !== undefined && value.length ) {
+				options[ option ] = value;
+			}
+		});
+
+		return options;
+	},
+
+	_events: {
+		keydown: function( event ) {
+			if ( this._start( event ) && this._keydown( event ) ) {
+				event.preventDefault();
+			}
+		},
+		keyup: "_stop",
+		focus: function() {
+			this.uiSpinner.addClass( "ui-state-active" );
+			this.previous = this.element.val();
+		},
+		blur: function( event ) {
+			this._refresh();
+			this.uiSpinner.removeClass( "ui-state-active" );
+			if ( this.previous !== this.element.val() ) {
+				this._trigger( "change", event );
+			}
+		},
+		mousewheel: function( event, delta ) {
+			if ( !delta ) {
+				return;
+			}
+			if ( !this.spinning && !this._start( event ) ) {
+				return false;
+			}
+
+			this._spin( (delta > 0 ? 1 : -1) * this.options.step, event );
+			clearTimeout( this.mousewheelTimer );
+			this.mousewheelTimer = this._delay(function() {
+				if ( this.spinning ) {
+					this._stop( event );
+				}
+			}, 100 );
+			event.preventDefault();
+		},
+		"mousedown .ui-spinner-button": function( event ) {
+			// ensure focus is on (or stays on) the text field
+			event.preventDefault();
+			if ( document.activeElement !== this.element[ 0 ] ) {
+				this.element.focus();
+			}
+
+			if ( this._start( event ) === false ) {
+				return;
+			}
+
+			this._repeat( null, $( event.currentTarget ).hasClass( "ui-spinner-up" ) ? 1 : -1, event );
+		},
+		"mouseup .ui-spinner-button": "_stop",
+		"mouseenter .ui-spinner-button": function( event ) {
+			// button will add ui-state-active if mouse was down while mouseleave and kept down
+			if ( !$( event.currentTarget ).hasClass( "ui-state-active" ) ) {
+				return;
+			}
+
+			if ( this._start( event ) === false ) {
+				return false;
+			}
+			this._repeat( null, $( event.currentTarget ).hasClass( "ui-spinner-up" ) ? 1 : -1, event );
+		},
+		// TODO: do we really want to consider this a stop?
+		// shouldn't we just stop the repeater and wait until mouseup before
+		// we trigger the stop event?
+		"mouseleave .ui-spinner-button": "_stop"
 	},
 
 	_draw: function() {
-		var self = this,
-			options = self.options;
-
-		var uiSpinner = this.uiSpinner = self.element
+		var uiSpinner = this.uiSpinner = this.element
 			.addClass( "ui-spinner-input" )
 			.attr( "autocomplete", "off" )
-			.wrap( self._uiSpinnerHtml() )
+			.wrap( this._uiSpinnerHtml() )
 			.parent()
 				// add buttons
-				.append( self._buttonHtml() )
-				// add behaviours
-				.disableSelection()
-				// TODO: user ._hoverable
-				.hover(function() {
-					if ( !options.disabled ) {
-						$( this ).addClass( "ui-state-hover" );
-					}
-					self.hovered = true;
-				}, function() {
-					$( this ).removeClass( "ui-state-hover" );
-					self.hovered = false;
-				});
+				.append( this._buttonHtml() );
+		this._hoverable( uiSpinner );
 
-		// TODO: use ._bind()
-		this.element
-			.attr( "role", "spinbutton" )
-			.bind( "keydown.spinner", function( event ) {
-				if ( options.disabled ) {
-					return;
-				}
-				if ( self._start( event ) ) {
-					return self._keydown( event );
-				}
-				return true;
-			})
-			.bind( "keyup.spinner", function( event ) {
-				if ( options.disabled ) {
-					return;
-				}
-				if ( self.spinning ) {
-					self._stop( event );
-					self._change( event );
-				}
-			})
-			.bind( "focus.spinner", function() {
-				uiSpinner.addClass( "ui-state-active" );
-				self.focused = true;
-			})
-			.bind( "blur.spinner", function( event ) {
-				self.value( self.element.val() );
-				if ( !self.hovered ) {
-					uiSpinner.removeClass( "ui-state-active" );
-				}
-				self.focused = false;
-			});
+		this.element.attr( "role", "spinbutton" );
 
 		// button bindings
 		this.buttons = uiSpinner.find( ".ui-spinner-button" )
 			.attr( "tabIndex", -1 )
 			.button()
-			.removeClass( "ui-corner-all" )
-			.bind( "mousedown", function( event ) {
-				if ( options.disabled ) {
-					return;
-				}
-				if ( self._start( event ) === false ) {
-					return false;
-				}
-				self._repeat( null, $( this ).hasClass( "ui-spinner-up" ) ? 1 : -1, event );
-			})
-			.bind( "mouseup", function( event ) {
-				if ( options.disabled ) {
-					return;
-				}
-				if ( self.spinning ) {
-					self._stop( event );
-					self._change( event );
-				}
-			})
-			.bind( "mouseenter", function() {
-				if ( self.options.disabled ) {
-					return;
-				}
-				// button will add ui-state-active if mouse was down while mouseleave and kept down
-				if ( $( this ).hasClass( "ui-state-active" ) ) {
-					if ( self._start( event ) === false ) {
-						return false;
-					}
-					self._repeat( null, $( this ).hasClass( "ui-spinner-up" ) ? 1 : -1, event );
-				}
-			})
-			.bind( "mouseleave", function() {
-				if ( self.spinning ) {
-					self._stop( event );
-					self._change( event );
-				}
-			});
+			.removeClass( "ui-corner-all" );
+
+		// IE 6 doesn't understand height: 50% for the buttons
+		// unless the wrapper has an explicit height
+		if ( this.buttons.height() > Math.ceil( uiSpinner.height() * 0.5 ) &&
+				uiSpinner.height() > 0 ) {
+			uiSpinner.height( uiSpinner.height() );
+		}
 
 		// disable spinner if element was already disabled
-		if ( options.disabled ) {
+		if ( this.options.disabled ) {
 			this.disable();
 		}
 	},
@@ -163,46 +178,19 @@ $.widget( "ui.spinner", {
 		switch ( event.keyCode ) {
 		case keyCode.UP:
 			this._repeat( null, 1, event );
-			return false;
+			return true;
 		case keyCode.DOWN:
 			this._repeat( null, -1, event );
-			return false;
+			return true;
 		case keyCode.PAGE_UP:
 			this._repeat( null, options.page, event );
-			return false;
+			return true;
 		case keyCode.PAGE_DOWN:
 			this._repeat( null, -options.page, event );
-			return false;
-		case keyCode.ENTER:
-			this.value( this.element.val() );
+			return true;
 		}
 
-		return true;
-	},
-
-	_mousewheel: function() {
-		// need the delta normalization that mousewheel plugin provides
-		if ( !$.fn.mousewheel ) {
-			return;
-		}
-		var self = this;
-		this.element.bind( "mousewheel.spinner", function( event, delta ) {
-			if ( self.options.disabled || !delta ) {
-				return;
-			}
-			if ( !self.spinning && !self._start( event ) ) {
-				return false;
-			}
-			self._spin( (delta > 0 ? 1 : -1) * self.options.step, event );
-			clearTimeout( self.timeout );
-			self.timeout = setTimeout(function() {
-				if ( self.spinning ) {
-					self._stop( event );
-					self._change( event );
-				}
-			}, 100);
-			event.preventDefault();
-		});
+		return false;
 	},
 
 	_uiSpinnerHtml: function() {
@@ -232,49 +220,78 @@ $.widget( "ui.spinner", {
 	},
 
 	_repeat: function( i, steps, event ) {
-		var self = this;
 		i = i || 500;
 
 		clearTimeout( this.timer );
-		this.timer = setTimeout(function() {
-			self._repeat( 40, steps, event );
+		this.timer = this._delay(function() {
+			this._repeat( 40, steps, event );
 		}, i );
 
-		self._spin( steps * self.options.step, event );
+		this._spin( steps * this.options.step, event );
 	},
 
 	_spin: function( step, event ) {
+		var value = this.value() || 0;
+
 		if ( !this.counter ) {
 			this.counter = 1;
 		}
 
-		// TODO refactor, maybe figure out some non-linear math
-		var newVal = this.value() + step * (this.options.incremental &&
-			this.counter > 20
-				? this.counter > 100
-					? this.counter > 200
-						? 100
-						: 10
-					: 2
-				: 1);
+		value = this._adjustValue( value + step * this._increment( this.counter ) );
 
-		// clamp the new value 
-		newVal = this._trimValue( newVal );
-
-		if ( this._trigger( "spin", event, { value: newVal } ) !== false) {
-			this.value( newVal );
+		if ( !this.spinning || this._trigger( "spin", event, { value: value } ) !== false) {
+			this._value( value );
 			this.counter++;
 		}
 	},
 
-	_trimValue: function( value ) {
-		var options = this.options;
+	_increment: function( i ) {
+		var incremental = this.options.incremental;
 
-		if ( value > options.max) {
-			return options.max;
+		if ( incremental ) {
+			return $.isFunction( incremental ) ?
+				incremental( i ) :
+				Math.floor( i*i*i/50000 - i*i/500 + 17*i/200 + 1 );
 		}
 
-		if ( value < options.min ) {
+		return 1;
+	},
+
+	_precision: function() {
+		var precision = this._precisionOf( this.options.step );
+		if ( this.options.min !== null ) {
+			precision = Math.max( precision, this._precisionOf( this.options.min ) );
+		}
+		return precision;
+	},
+
+	_precisionOf: function( num ) {
+		var str = num.toString(),
+			decimal = str.indexOf( "." );
+		return decimal === -1 ? 0 : str.length - decimal - 1;
+	},
+
+	_adjustValue: function( value ) {
+		var base, aboveMin,
+			options = this.options;
+
+		// make sure we're at a valid step
+		// - find out where we are relative to the base (min or 0)
+		base = options.min !== null ? options.min : 0;
+		aboveMin = value - base;
+		// - round to the nearest step
+		aboveMin = Math.round(aboveMin / options.step) * options.step;
+		// - rounding is based on 0, so adjust back to our base
+		value = base + aboveMin;
+
+		// fix precision from bad JS floating point math
+		value = parseFloat( value.toFixed( this._precision() ) );
+
+		// clamp the value
+		if ( options.max !== null && value > options.max) {
+			return options.max;
+		}
+		if ( options.min !== null && value < options.min ) {
 			return options.min;
 		}
 
@@ -282,68 +299,82 @@ $.widget( "ui.spinner", {
 	},
 
 	_stop: function( event ) {
-		this.counter = 0;
-		if ( this.timer ) {
-			clearTimeout( this.timer );
+		if ( !this.spinning ) {
+			return;
 		}
-		this.element.focus();
+
+		clearTimeout( this.timer );
+		clearTimeout( this.mousewheelTimer );
+		this.counter = 0;
 		this.spinning = false;
 		this._trigger( "stop", event );
 	},
 
-	_change: function( event ) {
-		this._trigger( "change", event );
-	},
-
 	_setOption: function( key, value ) {
-		if ( key === "value") {
-			value = this._trimValue( this._parse(value) );
-		}
+		this._super( "_setOption", key, value );
 
 		if ( key === "disabled" ) {
 			if ( value ) {
-				this.element.attr( "disabled", true );
+				this.element.prop( "disabled", true );
 				this.buttons.button( "disable" );
 			} else {
-				this.element.removeAttr( "disabled" );
+				this.element.prop( "disabled", false );
 				this.buttons.button( "enable" );
 			}
 		}
-
-		this._super( "_setOption", key, value );
 	},
 
-	_setOptions: function( options ) {
+	_setOptions: modifier(function( options ) {
 		this._super( "_setOptions", options );
-		if ( "value" in options ) {
-			this._format( this.options.value );
+		this._value( this.element.val() );
+	}),
+
+	_parse: function( val ) {
+		if ( typeof val === "string" && val !== "" ) {
+			val = window.Globalize && this.options.numberFormat ?
+				Globalize.parseFloat( val, 10, this.options.culture ) : +val;
 		}
-		this._aria();
+		return val === "" || isNaN( val ) ? null : val;
 	},
 
-	_aria: function() {
+	_format: function( value ) {
+		if ( value === "" ) {
+			return "";
+		}
+		return window.Globalize && this.options.numberFormat ?
+			Globalize.format( value, this.options.numberFormat, this.options.culture ) :
+			value;
+	},
+
+	_refresh: function() {
 		this.element.attr({
 			"aria-valuemin": this.options.min,
 			"aria-valuemax": this.options.max,
-			"aria-valuenow": this.options.value
+			// TODO: what should we do with values that can't be parsed?
+			"aria-valuenow": this._parse( this.element.val() )
 		});
 	},
 
-	_parse: function( val ) {
-		if ( typeof val === "string" ) {
-			val = $.global && this.options.numberFormat ? $.global.parseFloat( val ) : +val;
+	// update the value without triggering change
+	_value: function( value, allowAny ) {
+		var parsed;
+		if ( value !== "" ) {
+			parsed = this._parse( value );
+			if ( parsed !== null ) {
+				if ( !allowAny ) {
+					parsed = this._adjustValue( parsed );
+				}
+				value = this._format( parsed );
+			}
 		}
-		return isNaN( val ) ? null : val;
-	},
-
-	_format: function( num ) {
-		this.element.val( $.global && this.options.numberFormat ? $.global.format( num, this.options.numberFormat ) : num );
+		this.element.val( value );
+		this._refresh();
 	},
 
 	destroy: function() {
 		this.element
 			.removeClass( "ui-spinner-input" )
-			.removeAttr( "disabled" )
+			.prop( "disabled", false )
 			.removeAttr( "autocomplete" )
 			.removeAttr( "role" )
 			.removeAttr( "aria-valuemin" )
@@ -353,27 +384,33 @@ $.widget( "ui.spinner", {
 		this.uiSpinner.replaceWith( this.element );
 	},
 
-	stepUp: function( steps ) {
+	stepUp: modifier(function( steps ) {
+		this._stepUp( steps );
+	}),
+	_stepUp: function( steps ) {
 		this._spin( (steps || 1) * this.options.step );
 	},
 
-	stepDown: function( steps ) {
+	stepDown: modifier(function( steps ) {
+		this._stepDown( steps );
+	}),
+	_stepDown: function( steps ) {
 		this._spin( (steps || 1) * -this.options.step );
 	},
 
-	pageUp: function( pages ) {
-		this.stepUp( (pages || 1) * this.options.page );
-	},
+	pageUp: modifier(function( pages ) {
+		this._stepUp( (pages || 1) * this.options.page );
+	}),
 
-	pageDown: function( pages ) {
-		this.stepDown( (pages || 1) * this.options.page );
-	},
+	pageDown: modifier(function( pages ) {
+		this._stepDown( (pages || 1) * this.options.page );
+	}),
 
 	value: function( newVal ) {
 		if ( !arguments.length ) {
 			return this._parse( this.element.val() );
 		}
-		this.option( "value", newVal );
+		modifier( this._value ).call( this, newVal );
 	},
 
 	widget: function() {

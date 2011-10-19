@@ -4,9 +4,10 @@
 	<meta charset="utf-8">
 	<title>jQuery UI Accordion Test Suite</title>
 
+	<link rel="stylesheet" href="../../../themes/base/jquery.ui.core.css">
 	<link rel="stylesheet" href="../../../themes/base/jquery.ui.accordion.css">
 
-	<script src="../../../jquery-1.5.1.js"></script>
+	<script src="../../jquery.js"></script>
 	<script src="../../../ui/jquery.ui.core.js"></script>
 	<script src="../../../ui/jquery.ui.widget.js"></script>
 	<script src="../../../ui/jquery.ui.accordion.js"></script>
@@ -16,36 +17,7 @@
 	<script src="../../jquery.simulate.js"></script>
 	<script src="../testsuite.js"></script>
 
-	<script>
-	function accordion_state( accordion ) {
-		var expected = $.makeArray( arguments ).slice( 1 );
-		var actual = accordion.find( ".ui-accordion-content" ).map(function() {
-			return $( this ).css( "display" ) === "none" ? 0 : 1;
-		}).get();
-		deepEqual( actual, expected );
-	}
-	function accordion_equalHeights( accordion, min, max ) {
-		var sizes = [];
-		accordion.find( ".ui-accordion-content" ).each(function() {
-			sizes.push( $( this ).outerHeight() );
-		});
-		ok( sizes[ 0 ] >= min && sizes[ 0 ] <= max,
-			"must be within " + min + " and " + max + ", was " + sizes[ 0 ] );
-		deepEqual( sizes[ 0 ], sizes[ 1 ] );
-		deepEqual( sizes[ 0 ], sizes[ 2 ] );
-	}
-	function accordionSetupTeardown() {
-		var animated = $.ui.accordion.prototype.options.animated;
-		return {
-			setup: function() {
-				$.ui.accordion.prototype.options.animated = false;
-			},
-			teardown: function() {
-				$.ui.accordion.prototype.options.animated = animated;
-			}
-		};
-	}
-	</script>
+	<script src="accordion_test_helpers.js"></script>
 	<script src="accordion_defaults_deprecated.js"></script>
 	<script src="accordion_core.js"></script>
 	<script src="accordion_events.js"></script>
@@ -55,8 +27,12 @@
 
 	<script src="../swarminject.js"></script>
 	<style>
-	#qunit-fixture { font-size: 10pt; font-family: "trebuchet ms", verdana, arial; }
-	#list, #list1 *, #navigation, #navigation * { margin: 0; padding: 0; font-size: 12px; line-height: 15px; }
+	#list, #list1 *, #navigation, #navigation * {
+		margin: 0;
+		padding: 0;
+		font-size: 12px;
+		line-height: 15px;
+	}
 	</style>
 </head>
 <body>
@@ -72,9 +48,9 @@
 	<div class="foo">
 		<p>
 			You've seen it coming!
-			<br/>
+			<br>
 			Buy now and get nothing for free!
-			<br/>
+			<br>
 			Well, at least no free beer. Perhaps a bear, if you can afford it.
 		</p>
 	</div>
@@ -82,7 +58,7 @@
 	<div class="foo">
 		<p>
 			your bear, you have to admit it!
-			<br/>
+			<br>
 			No, we aren't selling bears.
 		</p>
 		<p>

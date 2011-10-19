@@ -1,10 +1,10 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
 	<meta charset="utf-8">
 	<title>jQuery UI Position Test Suite</title>
 
-	<script src="../../../jquery-1.5.1.js"></script>
+	<script src="../../jquery.js"></script>
 	<script src="../../../ui/jquery.ui.position.js"></script>
 
 	<link rel="stylesheet" href="../../../external/qunit.css">
@@ -23,8 +23,7 @@
 <h2 id="qunit-banner"></h2>
 <div id="qunit-testrunner-toolbar"></div>
 <h2 id="qunit-userAgent"></h2>
-<ol id="qunit-tests">
-</ol>
+<ol id="qunit-tests"></ol>
 
 <!--
 elements smaller than 10px have a line-height set on them to avoid a bug in IE6
@@ -54,6 +53,10 @@ elements smaller than 10px have a line-height set on them to avoid a bug in IE6
 
 <div id="bug-5280" style="height: 30px; width: 201px;">
 	<div style="width: 50px; height: 10px;"></div>
+</div>
+
+<div id="fractions-parent" style="position: absolute; left: 10.7432222px; top: 10.532325px; height: 30px; width: 201px;">
+	<div id="fractions-element"></div>
 </div>
 
 </body>

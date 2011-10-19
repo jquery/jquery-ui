@@ -1,27 +1,27 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8" />
+	<meta charset="utf-8">
 	<title>jQuery UI Selectable Test Suite</title>
 
-	<script type="text/javascript" src="../../../jquery-1.5.1.js"></script>
-	<script type="text/javascript" src="../../../ui/jquery.ui.core.js"></script>
-	<script type="text/javascript" src="../../../ui/jquery.ui.widget.js"></script>
-	<script type="text/javascript" src="../../../ui/jquery.ui.mouse.js"></script>
-	<script type="text/javascript" src="../../../ui/jquery.ui.selectable.js"></script>
+	<script src="../../jquery.js"></script>
+	<script src="../../../ui/jquery.ui.core.js"></script>
+	<script src="../../../ui/jquery.ui.widget.js"></script>
+	<script src="../../../ui/jquery.ui.mouse.js"></script>
+	<script src="../../../ui/jquery.ui.selectable.js"></script>
 
-	<link rel="stylesheet" href="../../../external/qunit.css" type="text/css"/>
-	<script type="text/javascript" src="../../../external/qunit.js"></script>
-	<script type="text/javascript" src="../../jquery.simulate.js"></script>
-	<script type="text/javascript" src="../testsuite.js"></script>
+	<link rel="stylesheet" href="../../../external/qunit.css">
+	<script src="../../../external/qunit.js"></script>
+	<script src="../../jquery.simulate.js"></script>
+	<script src="../testsuite.js"></script>
 
-	<script type="text/javascript" src="selectable_core.js"></script>
-	<script type="text/javascript" src="selectable_defaults.js"></script>
-	<script type="text/javascript" src="selectable_events.js"></script>
-	<script type="text/javascript" src="selectable_methods.js"></script>
-	<script type="text/javascript" src="selectable_options.js"></script>
-	
-	<script type="text/javascript">
+	<script src="selectable_core.js"></script>
+	<script src="selectable_defaults.js"></script>
+	<script src="selectable_events.js"></script>
+	<script src="selectable_methods.js"></script>
+	<script src="selectable_options.js"></script>
+
+	<script>
 	// disable this stale testsuite for testswarm only
 	var url = window.location.search;
 	url = decodeURIComponent( url.slice( url.indexOf("swarmURL=") + 9 ) );
@@ -31,7 +31,7 @@
 		test("selectable", function() { ok(true, "disabled selectable testsuite"); });
 	}
 	</script>
-	<script type="text/javascript" src="../swarminject.js"></script>
+	<script src="../swarminject.js"></script>
 </head>
 <body>
 
@@ -39,18 +39,17 @@
 <h2 id="qunit-banner"></h2>
 <div id="qunit-testrunner-toolbar"></div>
 <h2 id="qunit-userAgent"></h2>
-<ol id="qunit-tests">
-</ol>
-
+<ol id="qunit-tests"></ol>
 <div id="qunit-fixture">
-	<ul id="selectable1">
-		<li>Item 1</li>
-		<li>Item 2</li>
-		<li class="special">Item 3</li>
-		<li>Item 4</li>
-		<li>Item 5</li>
-	</ul>
-</div>
 
+<ul id="selectable1">
+	<li>Item 1</li>
+	<li>Item 2</li>
+	<li class="special">Item 3</li>
+	<li>Item 4</li>
+	<li>Item 5</li>
+</ul>
+
+</div>
 </body>
 </html>

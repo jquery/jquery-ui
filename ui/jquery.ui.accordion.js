@@ -12,7 +12,7 @@
  *	jquery.ui.widget.js
  */
 (function( $, undefined ) {
-
+		  
 // TODO: use ui-accordion-header-active class and fix styling
 $.widget( "ui.accordion", {
 	version: "@VERSION",
@@ -37,8 +37,7 @@ $.widget( "ui.accordion", {
 		var self = this,
 			options = self.options;
 
-		self.running = false;
-
+		self.lastToggle = {};
 		self.element.addClass( "ui-accordion ui-widget ui-helper-reset" );
 
 		self.headers = self.element.find( options.header )
@@ -90,12 +89,11 @@ $.widget( "ui.accordion", {
 		if ( !self.active.length ) {
 			self.headers.eq( 0 ).attr( "tabIndex", 0 );
 		} else {
-			self.active
-				.attr({
-					"aria-expanded": "true",
-					"aria-selected": "true",
-					tabIndex: 0
-				});
+			self.active.attr({
+				"aria-expanded": "true",
+				"aria-selected": "true",
+				tabIndex: 0
+			});
 		}
 
 		// only need links in tab order for Safari
@@ -162,15 +160,18 @@ $.widget( "ui.accordion", {
 			return;
 		}
 
+		if ( key === "event" ) {
+			if ( this.options.event ) {
+				this.headers.unbind( this.options.event + ".accordion", this._eventHandler );
+			}
+			this._setupEvents( value );
+		}
+
 		this._super( "_setOption", key, value );
 
 		// setting collapsible: false while collapsed; open first panel
 		if ( key === "collapsible" && !value && this.options.active === false ) {
 			this._activate( 0 );
-		}
-
-		if ( key === "event" ) {
-			this._setupEvents( value );
 		}
 
 		if ( key === "icons" ) {
@@ -294,7 +295,6 @@ $.widget( "ui.accordion", {
 	},
 
 	_setupEvents: function( event ) {
-		this.headers.unbind( ".accordion" );
 		if ( event ) {
 			this.headers.bind( event.split( " " ).join( ".accordion " ) + ".accordion",
 				$.proxy( this, "_eventHandler" ) );
@@ -319,8 +319,6 @@ $.widget( "ui.accordion", {
 		event.preventDefault();
 
 		if ( options.disabled ||
-				// can't switch during an animation
-				this.running ||
 				// click on active header, but not collapsible
 				( clickedIsActive && !options.collapsible ) ||
 				// allow canceling activation
@@ -361,7 +359,6 @@ $.widget( "ui.accordion", {
 			toShow = data.newContent,
 			toHide = data.oldContent;
 
-		self.running = true;
 		function complete() {
 			self._completed( data );
 		}
@@ -380,8 +377,11 @@ $.widget( "ui.accordion", {
 			}
 
 			animations[ animation ]({
+				widget: self,
 				toShow: toShow,
 				toHide: toHide,
+				prevShow: self.lastToggle.toShow,
+				prevHide: self.lastToggle.toHide,
 				complete: complete,
 				down: toShow.length && ( !toHide.length || ( toShow.index() < toHide.index() ) )
 			}, additional );
@@ -412,8 +412,6 @@ $.widget( "ui.accordion", {
 		var toShow = data.newContent,
 			toHide = data.oldContent;
 
-		this.running = false;
-
 		if ( this.options.heightStyle === "content" ) {
 			toShow.add( toHide ).css({
 				height: "",
@@ -435,6 +433,11 @@ $.widget( "ui.accordion", {
 $.extend( $.ui.accordion, {
 	animations: {
 		slide: function( options, additions ) {
+			if ( options.prevShow || options.prevHide ) {
+				options.prevHide.stop( true, true );
+				options.toHide = options.prevShow;
+			}
+			
 			var showOverflow = options.toShow.css( "overflow" ),
 				hideOverflow = options.toHide.css( "overflow" ),
 				percentDone = 0,
@@ -446,6 +449,9 @@ $.extend( $.ui.accordion, {
 				easing: "swing",
 				duration: 300
 			}, options, additions );
+			
+			options.widget.lastToggle = options;
+
 			if ( !options.toHide.size() ) {
 				originalWidth = options.toShow[0].style.width;
 				options.toShow
@@ -502,10 +508,7 @@ $.extend( $.ui.accordion, {
 				.filter( ":visible" )
 				.animate( hideProps, {
 				step: function( now, settings ) {
-					// only calculate the percent when animating height
-					// IE gets very inconsistent results when animating elements
-					// with small values, which is common for padding
-					if ( settings.prop == "height" ) {
+					if ( settings.prop == "height" || settings.prop == "paddingTop" || settings.prop == "paddingBottom" ) {
 						percentDone = ( settings.end - settings.start === 0 ) ? 0 :
 							( settings.now - settings.start ) / ( settings.end - settings.start );
 					}

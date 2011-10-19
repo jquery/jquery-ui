@@ -161,7 +161,7 @@ var classAnimationActions = [ "add", "remove", "toggle" ],
 	// prefix used for storing data on .data()
 	dataSpace = "ec.storage.";
 
-$.each([ "borderLeftStyle", "borderRightStyle", "borderBottomStyle", "borderTopStyle" ], function(_, prop) {
+$.each([ "borderLeftStyle", "borderRightStyle", "borderBottomStyle", "borderTopStyle" ], function( _, prop ) {
 	$.fx.step[ prop ] = function( fx ) {
 		if ( fx.end !== "none" && !fx.setAttr || fx.pos === 1 && !fx.setAttr ) {
 			jQuery.style( fx.elem, prop, fx.end );
@@ -171,8 +171,8 @@ $.each([ "borderLeftStyle", "borderRightStyle", "borderBottomStyle", "borderTopS
 });
 
 function getElementStyles() {
-	var style = document.defaultView
-			? document.defaultView.getComputedStyle(this, null)
+	var style = this.ownerDocument.defaultView
+			? this.ownerDocument.defaultView.getComputedStyle( this, null )
 			: this.currentStyle,
 		newStyle = {},
 		key,
@@ -223,7 +223,7 @@ $.effects.animateClass = function( value, duration, easing, callback ) {
 
 	return this.queue( function() {
 		var animated = $( this ),
-			baseClass = animated.attr( "class" ),
+			baseClass = animated.attr( "class" ) || "",
 			finalClass,
 			allAnimations = o.children ? animated.find( "*" ).andSelf() : animated;
 
@@ -415,9 +415,16 @@ $.extend( $.effects, {
 			size = {
 				width: element.width(),
 				height: element.height()
-			};
+			},
+			active = document.activeElement;
 
 		element.wrap( wrapper );
+
+		// Fixes #7595 - Elements lose focus when wrapped.
+		if ( element[ 0 ] === active || $.contains( element[ 0 ], active ) ) {
+			$( active ).focus();
+		}
+
 		wrapper = element.parent(); //Hotfix for jQuery 1.4 since some change in wrap() seems to actually loose the reference to the wrapped element
 
 		// transfer positioning properties to the wrapper
@@ -449,8 +456,18 @@ $.extend( $.effects, {
 	},
 
 	removeWrapper: function( element ) {
-		if ( element.parent().is( ".ui-effects-wrapper" ) )
-			return element.parent().replaceWith( element );
+		var active = document.activeElement;
+
+		if ( element.parent().is( ".ui-effects-wrapper" ) ) {
+			element.parent().replaceWith( element );
+
+			// Fixes #7595 - Elements lose focus when wrapped.
+			if ( element[ 0 ] === active || $.contains( element[ 0 ], active ) ) {
+				$( active ).focus();
+			}
+		}
+
+
 		return element;
 	},
 

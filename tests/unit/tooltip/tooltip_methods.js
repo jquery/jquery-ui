@@ -40,7 +40,7 @@ test( "enable/disable", function() {
 
 	element.tooltip( "disable" );
 	equal( $( ".ui-tooltip" ).length, 0, "no tooltip when disabled" );
-	equal( tooltip.attr( "title" ), "", "title removed on disable" );
+	equal( tooltip.attr( "title" ), undefined, "title removed on disable" );
 
 	element.tooltip( "open" );
 	equal( $( ".ui-tooltip" ).length, 0, "open does nothing when disabled" );

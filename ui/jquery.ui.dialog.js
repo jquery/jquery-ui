@@ -108,7 +108,8 @@ $.widget("ui.dialog", {
 				})
 				.mousedown(function( event ) {
 					self.moveToTop( false, event );
-				}),
+				})
+				.appendTo( "body" ),
 
 			uiDialogContent = self.element
 				.show()
@@ -154,8 +155,6 @@ $.widget("ui.dialog", {
 
 		self._createButtons( options.buttons );
 		self._isOpen = false;
-
-		uiDialog.appendTo( document.body );
 
 		if ( $.fn.bgiframe ) {
 			uiDialog.bgiframe();
@@ -266,8 +265,8 @@ $.widget("ui.dialog", {
 		// Opera 9.5+ resets when parent z-index is changed.
 		// http://bugs.jqueryui.com/ticket/3193
 		saveScroll = {
-			scrollTop: self.element.attr( "scrollTop" ),
-			scrollLeft: self.element.attr( "scrollLeft" )
+			scrollTop: self.element.scrollTop(),
+			scrollLeft: self.element.scrollLeft()
 		};
 		$.ui.dialog.maxZ += 1;
 		self.uiDialog.css( "z-index", $.ui.dialog.maxZ );
@@ -294,7 +293,7 @@ $.widget("ui.dialog", {
 
 		// prevent tabbing out of modal dialogs
 		if ( options.modal ) {
-			uiDialog.bind( "keypress.ui-dialog", function( event ) {
+			uiDialog.bind( "keydown.ui-dialog", function( event ) {
 				if ( event.keyCode !== $.ui.keyCode.TAB ) {
 					return;
 				}
@@ -716,12 +715,11 @@ $.extend( $.ui.dialog.overlay, {
 			$( window ).bind( "resize.dialog-overlay", $.ui.dialog.overlay.resize );
 		}
 
-		var $el = ( this.oldInstances.pop() || $( "<div>" ).addClass( "ui-widget-overlay" ) )
-			.appendTo( document.body )
-			.css({
-				width: this.width(),
-				height: this.height()
-			});
+		var $el = ( this.oldInstances.pop() || $( "<div>" ).addClass( "ui-widget-overlay" ) );
+		$el.appendTo( document.body ).css({
+			width: this.width(),
+			height: this.height()
+		});
 
 		if ( $.fn.bgiframe ) {
 			$el.bgiframe();

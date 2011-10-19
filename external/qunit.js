@@ -625,7 +625,7 @@ extend(QUnit, {
 			var source = sourceFromStacktrace();
 			if (source) {
 				details.source = source;
-				output += '<tr class="test-source"><th>Source: </th><td><pre>' + source +'</pre></td></tr>';
+				output += '<tr class="test-source"><th>Source: </th><td><pre>' + escapeHtml(source) + '</pre></td></tr>';
 			}
 		}
 		output += "</table>";
@@ -648,6 +648,10 @@ extend(QUnit, {
 		}
 		return window.location.pathname + querystring.slice( 0, -1 );
 	},
+
+	extend: extend,
+	id: id,
+	addEvent: addEvent,
 
 	// Logging callbacks; all receive a single argument with the listed properties
 	// run test/logs.html for any related changes
@@ -779,7 +783,7 @@ function done() {
 	}
 
 	if ( typeof document !== "undefined" && document.title ) {
-		// show ✖ for good, ✔ for bad suite result in title
+		// show ✖ for bad, ✔ for good suite result in title
 		// use escape sequences in case file gets loaded with non-utf-8-charset
 		document.title = (config.stats.bad ? "\u2716" : "\u2714") + " " + document.title;
 	}

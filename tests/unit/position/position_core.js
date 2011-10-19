@@ -332,28 +332,28 @@ test( "collision: fit, window scrolled", function() {
 test( "collision: flip, no offset", function() {
 	collisionTest({
 		collision: "flip"
-	}, { top: -10, left: -10 }, "left top" );
+	}, { top: $( window ).height(), left: $( window ).width() }, "left top" );
 
 	collisionTest2({
 		collision: "flip"
-	}, { top: $( window ).height(), left: $( window ).width() }, "right bottom" );
+	}, { top: -10, left: -10 }, "right bottom" );
 });
 
 test( "collision: flip, with offset", function() {
 	collisionTest({
 		collision: "flip",
 		at: "right+2 bottom+3"
-	}, { top: -13, left: -12 }, "left top, with offset added" );
+	}, { top: $( window ).height() + 3, left: $( window ).width() + 2 }, "left top, with offset added" );
 
 	collisionTest2({
 		collision: "flip",
 		at: "left+2 top+3"
-	}, { top: $( window ).height() - 3, left: $( window ).width() - 2 }, "bottom, positive offset" );
+	}, { top: -7, left: -8 }, "bottom, positive offset" );
 
 	collisionTest2({
 		collision: "flip",
 		at: "left-2 top-3"
-	}, { top: $( window ).height() + 3, left: $( window ).width() + 2 }, "right bottom, negative offset" );
+	}, { top: -13, left: -12 }, "right bottom, negative offset" );
 });
 
 test( "collision: none, no offset", function() {
@@ -427,30 +427,121 @@ test( "collision: flip, with margin", function() {
 	collisionTest({
 		collision: "flip",
 		at: "left top"
-	}, { top: $( window ).height() - 10, left: $( window ).width() - 10 }, "left top" );
+	}, { top: 0, left: 0 }, "left top" );
 
 	collisionTest2({
 		collision: "flip",
 		at: "right bottom"
-	}, { top: 0, left: 0 }, "right bottom" );
+	}, { top: $( window ).height() - 10, left: $( window ).width() - 10 }, "right bottom" );
 });
 
-//test( "bug #5280: consistent results (avoid fractional values)", function() {
-//	var wrapper = $( "#bug-5280" ),
-//		elem = wrapper.children(),
-//		offset1 = elem.position({
-//			my: "center",
-//			at: "center",
-//			of: wrapper,
-//			collision: "none"
-//		}).offset(),
-//		offset2 = elem.position({
-//			my: "center",
-//			at: "center",
-//			of: wrapper,
-//			collision: "none"
-//		}).offset();
-//	same( offset1, offset2 );
-//});
+test( "addClass: flipped left", function() {
+	var elem = $( "#elx" ).position( {
+		my: "left center",
+		of: window,
+		collision: "flip",
+		at: "right center"
+	});
+
+	same( elem.hasClass( 'ui-flipped-left' ), false, 'Has ui-flipped-left class' );
+
+	elem.position( {
+		my: "right center",
+		of: window,
+		collision: "flip",
+		at: "left center"
+	})
+
+	same( elem.hasClass( 'ui-flipped-left' ), false, 'Removed ui-flipped-left class' );
+});
+
+test( "addClass: flipped top", function() {
+	var elem = $( "#elx" ).position( {
+		my: "left top",
+		of: window,
+		collision: "flip",
+		at: "right bottom"
+	});
+
+	same( elem.hasClass( 'ui-flipped-top' ), false, 'Has ui-flipped-top class' );
+
+	elem.position( {
+		my: "left bottom",
+		of: window,
+		collision: "flip",
+		at: "right top"
+	});
+
+	same( elem.hasClass( 'ui-flipped-top' ), false, 'Removed ui-flipped-top class' );
+});
+
+test( "addClass: flipped right", function() {
+	var elem = $( "#elx" ).position( {
+		my: "right center",
+		of: window,
+		collision: "flip",
+		at: "left center"
+	});
+
+	same( elem.hasClass( 'ui-flipped-right' ), false, 'Has ui-flipped-right class' );
+
+	elem.position( {
+		my: "left center",
+		of: window,
+		collision: "flip",
+		at: "right center"
+	});
+
+	same( elem.hasClass( 'ui-flipped-right' ), false, 'Removed ui-flipped-right class' );
+
+});
+
+test( "addClass: flipped bottom", function() {
+	var elem = $( "#elx" ).position( {
+		my: "left bottom",
+		of: window,
+		collision: "flip",
+		at: "right top"
+	});
+
+	same( elem.hasClass( 'ui-flipped-bottom' ), false, 'Has ui-flipped-bottom class' );
+
+	elem.position( {
+		my: "left top",
+		of: window,
+		collision: "flip",
+		at: "right bottom"
+	});
+
+	same( elem.hasClass( 'ui-flipped-bottom' ), false, 'Removed ui-flipped-bottom class' );
+});
+
+test( "fractions", function() {
+	$( "#fractions-element" ).position({
+		my: "left top",
+		at: "left top",
+		of: "#fractions-parent",
+		collision: "none"
+	});
+	same( $( "#fractions-element" ).offset(), $( "#fractions-parent" ).offset(), "left top, left top" );
+});
+
+test( "bug #5280: consistent results (avoid fractional values)", function() {
+	var wrapper = $( "#bug-5280" ),
+		elem = wrapper.children(),
+		offset1 = elem.position({
+			my: "center",
+			at: "center",
+			of: wrapper,
+			collision: "none"
+		}).offset(),
+		offset2 = elem.position({
+			my: "center",
+			at: "center",
+			of: wrapper,
+			collision: "none"
+		}).offset();
+	same( offset1, offset2 );
+});
 
 }( jQuery ) );
