@@ -16,16 +16,13 @@
 		function log( msg ) {
 			$( "<div/>" ).text( msg ).appendTo( "#log" );
 		}
-		var selected = {
-			select: function( event, ui ) {
-				log( "Selected: " + ui.item.text() );
-				$(this).popup("close");
-			}
-		};
+		var selected = function( event, ui ) {
+			log( "Selected: " + ui.item.text() );
+			$(this).popup( "close" );
+		}
 
-		$("#button1").button()
-			.next().menu(selected).popup();
-		
+		$("#button1").button().next().menu( {select: selected, trigger: $("#button1")} );
+
 		$( "#rerun" )
 			.button()
 			.click(function() {
@@ -39,10 +36,7 @@
 					}
 				})
 				.next()
-					.menu(selected)
-					.popup({
-						trigger: $("#select")
-					})
+					.menu( {select: selected, trigger: $("#select")} )
 				.parent()
 					.buttonset({
 						items: "button"
@@ -69,8 +63,8 @@
 		<li><a href="#">Utrecht</a></li>
 		<li><a href="#">Zurich</a></li>
 	</ul>
-	
-	
+
+
 	<div>
 		<div>
 			<button id="rerun">Run last action</button>

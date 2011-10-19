@@ -24,7 +24,8 @@ $.widget( "ui.menu", {
 		position: {
 			my: "left top",
 			at: "right top"
-		}
+		},
+		trigger: null
 	},
 	_create: function() {
 		this.activeMenu = this.element;
@@ -38,6 +39,16 @@ $.widget( "ui.menu", {
 			.attr({
 				id: this.menuId,
 				role: "menu"
+			})
+			// Prevent focus from sticking to links inside menu after clicking
+			// them (focus should always stay on UL during navigation).
+			// If the link is clicked, redirect focus to the menu.
+			// TODO move to _bind below
+			.bind( "mousedown.menu", function( event ) {
+				if ( $( event.target).is( "a" ) ) {
+					event.preventDefault();
+					$( this ).focus( 1 );
+				}
 			})
 			// need to catch all clicks on disabled menu
 			// not possible through _bind
@@ -203,10 +214,24 @@ $.widget( "ui.menu", {
 				}
 			}
 		});
+
+		if ( this.options.trigger ) {
+			this.element.popup({
+				trigger: this.options.trigger,
+				managed: true,
+				focusPopup: $.proxy( function( event, ui ) {
+					this.focus( event, this.element.children( ".ui-menu-item" ).first() );
+					this.element.focus( 1 );
+				}, this)
+			});
+		}
 	},
 
 	_destroy: function() {
 		//destroy (sub)menus
+		if ( this.options.trigger ) {
+			this.element.popup( "destroy" );
+		}
 		this.element
 			.removeAttr( "aria-activedescendant" )
 			.find( ".ui-menu" )
@@ -508,6 +533,10 @@ $.widget( "ui.menu", {
 			item: this.active
 		};
 		this.collapseAll( event, true );
+		if ( this.options.trigger ) {
+			$( this.options.trigger ).focus( 1 );
+			this.element.popup( "close" );
+		}
 		this._trigger( "select", event, ui );
 	}
 });
