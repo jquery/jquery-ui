@@ -22,6 +22,8 @@ $.widget( "ui.menubar", {
 	options: {
 		autoExpand: false,
 		buttons: false,
+		items: "li",
+		menuElement: "ul",
 		menuIcon: false,
 		position: {
 			my: "left top",
@@ -30,7 +32,7 @@ $.widget( "ui.menubar", {
 	},
 	_create: function() {
 		var that = this;
-		var items = this.items = this.element.children( "li" )
+		var items = this.items = this.element.children( this.options.items )
 			.addClass( "ui-menubar-item" )
 			.attr( "role", "presentation" )
 			.children( "button, a" );
@@ -42,7 +44,7 @@ $.widget( "ui.menubar", {
 			.attr( "role", "menubar" );
 		this._focusable( items );
 		this._hoverable( items );
-		items.next( "ul" )
+		items.siblings( this.options.menuElement )
 			.menu({
 				position: {
 					within: this.options.position.within
@@ -53,7 +55,8 @@ $.widget( "ui.menubar", {
 					// TODO what is this targetting? there's probably a better way to access it
 					$(event.target).prev().focus();
 					that._trigger( "select", event, ui );
-				}
+				},
+				items: that.options.menuElement
 			})
 			.hide()
 			.attr({
@@ -78,7 +81,7 @@ $.widget( "ui.menubar", {
 		items.each(function() {
 			var input = $(this),
 				// TODO menu var is only used on two places, doesn't quite justify the .each
-				menu = input.next( "ul" );
+				menu = input.next( that.options.menuElement );
 
 			input.bind( "click.menubar focus.menubar mouseenter.menubar", function( event ) {
 				// ignore triggered focus event
@@ -166,7 +169,7 @@ $.widget( "ui.menubar", {
 	},
 
 	_destroy : function() {
-		var items = this.element.children( "li" )
+		var items = this.element.children( this.options.items )
 			.removeClass( "ui-menubar-item" )
 			.removeAttr( "role" )
 			.children( "button, a" );
@@ -243,7 +246,7 @@ $.widget( "ui.menubar", {
 			}, this.options.position ) )
 			.removeAttr( "aria-hidden" )
 			.attr( "aria-expanded", "true" )
-			.menu("focus", event, menu.children( "li" ).first() )
+			.menu("focus", event, menu.children( ".ui-menu-item" ).first() )
 			// TODO need a comment here why both events are triggered
 			.focus()
 			.focusin();
@@ -253,44 +256,44 @@ $.widget( "ui.menubar", {
 	// TODO refactor this and the next three methods
 	_prev: function( event, button ) {
 		button.attr( "tabIndex", -1 );
-		var prev = button.parent().prevAll( "li" ).children( ".ui-button" ).eq( 0 );
+		var prev = button.parent().prevAll( this.options.items ).children( ".ui-button" ).eq( 0 );
 		if ( prev.length ) {
 			prev.removeAttr( "tabIndex" )[0].focus();
 		} else {
-			var lastItem = this.element.children( "li:last" ).children( ".ui-button:last" );
+			var lastItem = this.element.children( this.options.items ).last().children( ".ui-button:last" );
 			lastItem.removeAttr( "tabIndex" )[0].focus();
 		}
 	},
 
 	_next: function( event, button ) {
 		button.attr( "tabIndex", -1 );
-		var next = button.parent().nextAll( "li" ).children( ".ui-button" ).eq( 0 );
+		var next = button.parent().nextAll( this.options.items ).children( ".ui-button" ).eq( 0 );
 		if ( next.length ) {
 			next.removeAttr( "tabIndex")[0].focus();
 		} else {
-			var firstItem = this.element.children( "li:first" ).children( ".ui-button:first" );
+			var firstItem = this.element.children( this.options.items ).first().children( ".ui-button:first" );
 			firstItem.removeAttr( "tabIndex" )[0].focus();
 		}
 	},
 
 	// TODO rename to parent
 	_left: function( event ) {
-		var prev = this.active.parent().prevAll( "li:eq(0)" ).children( ".ui-menu" ).eq( 0 );
+		var prev = this.active.parent().prevAll( this.options.items ).first().children( ".ui-menu" ).eq( 0 );
 		if ( prev.length ) {
 			this._open( event, prev );
 		} else {
-			var lastItem = this.element.children( "li:last" ).children( ".ui-menu:first" );
+			var lastItem = this.element.children( this.options.items ).last().children( ".ui-menu:first" );
 			this._open( event, lastItem );
 		}
 	},
 
 	// TODO rename to child (or something like that)
 	_right: function( event ) {
-		var next = this.active.parent().nextAll( "li:eq(0)" ).children( ".ui-menu" ).eq( 0 );
+		var next = this.active.parent().nextAll( this.options.items ).first().children( ".ui-menu" ).eq( 0 );
 		if ( next.length ) {
 			this._open( event, next );
 		} else {
-			var firstItem = this.element.children( "li:first" ).children( ".ui-menu:first" );
+			var firstItem = this.element.children( this.options.items ).first().children( ".ui-menu:first" );
 			this._open( event, firstItem );
 		}
 	}
