@@ -319,7 +319,7 @@ $.widget( "ui.button", {
 			return;
 		}
 		var buttonElement = this.buttonElement.removeClass( typeClasses ),
-			buttonText = $( "<span></span>" )
+			buttonText = $( "<span></span>", this.element[0].ownerDocument )
 				.addClass( "ui-button-text" )
 				.html( this.options.label )
 				.appendTo( buttonElement.empty() )
