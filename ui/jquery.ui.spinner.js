@@ -53,7 +53,7 @@ $.widget( "ui.spinner", {
 		// turning off autocomplete prevents the browser from remembering the
 		// value when navigating through history, so we re-enable autocomplete
 		// if the page is unloaded before the widget is destroyed. #7790
-		this._bind( this.element[0].ownerDocument.defaultView, {
+		this._bind( this.window, {
 			beforeunload: function() {
 				this.element.removeAttr( "autocomplete" );
 			}
@@ -112,7 +112,7 @@ $.widget( "ui.spinner", {
 		"mousedown .ui-spinner-button": function( event ) {
 			// ensure focus is on (or stays on) the text field
 			event.preventDefault();
-			if ( document.activeElement !== this.element[ 0 ] ) {
+			if ( this.document[0].activeElement !== this.element[ 0 ] ) {
 				this.element.focus();
 			}
 

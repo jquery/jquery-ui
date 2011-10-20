@@ -372,8 +372,7 @@ $.widget("ui.dialog", {
 
 	_makeDraggable: function() {
 		var self = this,
-			options = self.options,
-			doc = $( document );
+			options = self.options;
 
 		function filteredUi( ui ) {
 			return {
@@ -396,8 +395,8 @@ $.widget("ui.dialog", {
 			},
 			stop: function( event, ui ) {
 				options.position = [
-					ui.position.left - doc.scrollLeft(),
-					ui.position.top - doc.scrollTop()
+					ui.position.left - self.document.scrollLeft(),
+					ui.position.top - self.document.scrollTop()
 				];
 				$( this )
 					.removeClass( "ui-dialog-dragging" );

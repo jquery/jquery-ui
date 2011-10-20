@@ -187,7 +187,7 @@ $.widget( "ui.popup", {
 			}
 		});
 
-		this._bind(document, {
+		this._bind( this.document, {
 			click: function( event ) {
 				if ( this.isOpen && !$( event.target ).closest( this.element.add( this.options.trigger ) ).length ) {
 					this.close( event );

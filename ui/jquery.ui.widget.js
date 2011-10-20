@@ -195,6 +195,8 @@ $.Widget.prototype = {
 		if ( element !== this ) {
 			$.data( element, this.widgetName, this );
 			this._bind({ remove: "destroy" });
+			this.document = $( element.ownerDocument );
+			this.window = $( this.document[0].defaultView );
 		}
 
 		this._create();
