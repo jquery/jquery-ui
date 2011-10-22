@@ -159,6 +159,14 @@ test( "createWrapper and removeWrapper retain focused elements (#7595)", functio
 	equal( document.activeElement, input[ 0 ], "Active element is still input after createWrapper" );
 	$.effects.removeWrapper( test );
 	equal( document.activeElement, input[ 0 ], "Active element is still input after removeWrapper" );
-})
+});
+
+asyncTest( "animateClass: css and class changes during animation are not lost (#7106)", function() {
+	$( "div.ticket7106" ).addClass( "animate", 300, function() {
+		equal( $(this).css( "opacity" ), "0.5", "css change during animateClass was lost" );
+		ok( $(this).hasClass( "testClass" ), "class change during animateClass was lost" );
+		start();
+	}).addClass( "testClass" ).css( { opacity: "0.5" } );
+});
 
 })(jQuery);
