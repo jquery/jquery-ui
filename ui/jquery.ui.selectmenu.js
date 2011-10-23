@@ -680,7 +680,7 @@ $.widget("ui.selectmenu", {
 		this.options[key] = value;
 		// set
 		if (key == 'disabled') {
-			this.close();
+			if (value) this.close();
 			this.element
 				.add(this.newelement)
 				.add(this.list)[value ? 'addClass' : 'removeClass'](
