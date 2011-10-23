@@ -822,18 +822,16 @@ $.widget("ui.selectmenu", {
 			var _offset = "0 -" + ( selected.outerHeight() + selected.offset().top - this.list.offset().top );
 		}
 		// update zIndex if jQuery UI is able to process
-		var zIndexElement = this.element.zIndex();
-		if ( zIndexElement ) {
-			this.listWrap.css( 'zIndex', zIndexElement );
-		}
-		this.listWrap.position({
-			// set options for position plugin
-			of: o.positionOptions.of || this.newelement,
-			my: o.positionOptions.my,
-			at: o.positionOptions.at,
-			offset: o.positionOptions.offset || _offset,
-			collision: o.positionOptions.collision || 'flip'
-		});
+		this.listWrap
+			.zIndex( this.element.zIndex() + 1 )
+			.position({
+				// set options for position plugin
+				of: o.positionOptions.of || this.newelement,
+				my: o.positionOptions.my,
+				at: o.positionOptions.at,
+				offset: o.positionOptions.offset || _offset,
+				collision: o.positionOptions.collision || 'flip'
+			});
 	}
 });
 
