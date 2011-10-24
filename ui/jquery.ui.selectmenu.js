@@ -45,6 +45,7 @@ $.widget("ui.selectmenu", {
 
 		// define safe mouseup for future toggling
 		this._safemouseup = true;
+		this.isOpen = false;
 
 		// create menu button wrapper
 		this.newelement = $( '<a />', {
@@ -152,7 +153,9 @@ $.widget("ui.selectmenu", {
 
 		// document click closes menu
 		$(document).bind("mousedown.selectmenu-" + this.ids[0], function(event) {
-			self.close(event);
+			if ( self.isOpen ) {
+				self.close( event );
+			}
 		});
 
 		// change event on original selectmenu
@@ -535,21 +538,21 @@ $.widget("ui.selectmenu", {
 			self.listWrap.appendTo( o.appendTo );
 			self.list.attr('aria-hidden', false);
 			
+			var selected = this._selectedOptionLi();
 			if ( o.style == "dropdown" ) {
 				self.newelement.removeClass('ui-corner-all').addClass('ui-corner-top');
+				// center overflow
+				this.list.scrollTop( this.list.scrollTop() + selected.position().top - this.list.outerHeight()/2 + selected.outerHeight()/2 );
 			}
 			
 			self.listWrap.addClass( self.widgetBaseClass + '-open' );
-			// positioning needed for IE7 (tested 01.08.11 on MS VPC Image)
-			// see https://github.com/fnagel/jquery-ui/issues/147
-			if ( $.browser.msie && $.browser.version.substr( 0,1 ) == 7 ) {
-				self._refreshPosition();
-			}
-			var selected = self.list.attr('aria-hidden', false).find('li:not(.' + self.widgetBaseClass + '-group):eq(' + self._selectedIndex() + '):visible a');
-			if (selected.length) selected[0].focus();
-			// positioning needed for FF, Chrome, IE8, IE7, IE6 (tested 01.08.11 on MS VPC Image)
-			self._refreshPosition();			
+			self.list.attr('aria-hidden', false);
+			self._refreshPosition();	
 			
+			var link = selected.find("a");
+			if (link.length) link[0].focus();		
+			
+			self.isOpen = true;
 			self._trigger("open", event, self._uiHash());
 		}
 	},
@@ -566,6 +569,7 @@ $.widget("ui.selectmenu", {
 			if ( retainFocus ) {
 				this.newelement.focus();
 			}
+			this.isOpen = false;
 			this._trigger("close", event, this._uiHash());
 		}
 	},
@@ -588,7 +592,7 @@ $.widget("ui.selectmenu", {
 	},
 
 	_toggle: function(event, retainFocus) {
-		if ( this.listWrap.is('.' + this.widgetBaseClass + '-open') ) {
+		if ( this.isOpen ) {
 			this.close(event, retainFocus);
 		} else {
 			this.open(event);
@@ -816,10 +820,10 @@ $.widget("ui.selectmenu", {
 	_refreshPosition: function() {
 		var o = this.options;
 
-		// if its a native pop-up we need to calculate the position of the selected li
+		// if its a pop-up we need to calculate the position of the selected li
 		if ( o.style == "popup" && !o.positionOptions.offset ) {
 			var selected = this._selectedOptionLi();
-			var _offset = "0 -" + ( selected.outerHeight() + selected.offset().top - this.list.offset().top );
+			var _offset = "0 " + ( this.list.offset().top  - selected.offset().top - ( this.newelement.outerHeight() + selected.outerHeight() ) / 2);
 		}
 		// update zIndex if jQuery UI is able to process
 		this.listWrap
