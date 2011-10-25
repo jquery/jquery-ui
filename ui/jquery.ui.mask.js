@@ -162,9 +162,7 @@ $.widget( "ui.mask", {
 		focus: function( event ) {
 			this.lastUnsavedValue = this.element.val();
 			this._paint( true );
-			this.delayedFocus = this._delay( function() {
-				this._caretSelect( this._seekRight( this._parseValue() ) );
-			}, 0);
+			this._caretSelect( this._seekRight( this._parseValue() ) );
 		},
 		blur: function( event ) {
 			clearTimeout( this.delayedFocus );

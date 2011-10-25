@@ -16,10 +16,11 @@ test( "_caret() can move and read the text cursor", function() {
 	expect( 3 );
 
 	var input = $( "#mask1" ).val("1234").mask({
-		mask: "9999"
-	}),
+			mask: "9999"
+		}),
 		instance = input.data( "mask" );
-	input.focus();
+
+	focus( input );
 
 	instance._caret( 0 );
 	deepEqual( instance._caret(), {

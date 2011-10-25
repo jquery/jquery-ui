@@ -12,9 +12,9 @@ test( "clearEmpty", function() {
 		mask = input.data( "mask" );
 
 	equal( input.val(), "", "Empty value with clearEmpty displays no mask" );
-	input.focus();
+	focus( input );
 	equal( input.val(), "__/__/__", "Empty value with clearEmpty & element focus displays mask" );
-	input.blur();
+	blur( input );
 	equal( input.val(), "", "Empty value with clearEmpty displays no mask after blur" );
 	input.mask( "option", "clearEmpty", false );
 	equal( input.val(), "__/__/__", "Disabling clearEmpty displays mask" );
