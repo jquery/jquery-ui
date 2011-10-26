@@ -165,14 +165,13 @@ $.widget( "ui.mask", {
 			this._caretSelect( this._seekRight( this._parseValue() ) );
 		},
 		blur: function( event ) {
-			clearTimeout( this.delayedFocus );
 
 			// because we are constantly setting the value of the input, the change event
 			// never fires - we re-introduce the change event here
 			this._parseValue();
 			this._paint( false );
 			if ( this.element.val() !== this.lastUnsavedValue ) {
-				this.element.trigger( "change" );
+				this.element.change();
 			}
 		},
 		keydown: function( event ) {
