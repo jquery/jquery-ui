@@ -63,6 +63,12 @@ $.widget( "ui.preloaderDataview", $.ui.dataview, {
 		if ( "filter" in options ) {
 			this.options.remote.option( "filter", options.filter );
 		}
+		if ( "sort" in options ) {
+			this.options.remote.option( "sort", options.sort );
+			// throw away the cache and start over
+			cache = {};
+			this.option( "paging.offset", 0 );
+		}
 		if ( "paging" in options ) {
 			this.options.remote.option( "paging", {
 				limit: ( "limit" in options.paging ?

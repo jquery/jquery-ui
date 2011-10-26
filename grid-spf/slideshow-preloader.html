@@ -35,6 +35,7 @@
 			paging: {
 				limit: 2
 			},
+			sort: "relevance",
 			remote: remote
 		});
 
@@ -44,6 +45,10 @@
 
 		$( ".controls" ).pager({
 			source: dataview
+		});
+
+		$( "#sort" ).change( function() {
+			dataview.option( "sort", $( this ).val() ).refresh();
 		});
 
 		$( "#page-size" ).change( function() {
@@ -64,10 +69,20 @@
 <hr>
 
 <p>
-	Per page: <input id="page-size" value="2">
+	<label for="page-size">Per page: </label>
+	<input id="page-size" value="2">
 </p>
 <p>
-	Tags to look for (comma seperated): <input id="filter" value="jquery">
+	<label for="filter">Tags to look for (comma seperated): </label>
+	<input id="filter" value="jquery">
+</p>
+<p>
+	<label for="sort">Sort by: </label>
+	<select id="sort">
+		<option>relevance</option>
+		<option>date-posted-desc</option>
+		<option>interestingness-desc</option>
+	</select>
 </p>
 
 <div class="controls">
