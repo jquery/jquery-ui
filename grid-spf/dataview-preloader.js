@@ -1,5 +1,5 @@
 /*
- * Nested Dataview
+ * Preloader Dataview
  *
  * Depends on:
  * dataview
@@ -8,7 +8,7 @@
 
 // TODO cache should be per-instance?
 var cache = {};
-$.widget( "ui.nestedDataview", $.ui.dataview, {
+$.widget( "ui.preloaderDataview", $.ui.dataview, {
 	widgetEventPrefix: "dataview",
 	options: {
 		remote: null

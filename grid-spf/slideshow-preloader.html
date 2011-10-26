@@ -13,7 +13,7 @@
 	<script src="../ui/jquery.ui.button.js"></script>
 	<script src="../ui/jquery.ui.observable.js"></script>
 	<script src="../ui/jquery.ui.dataview.js"></script>
-	<script src="dataview-nested.js"></script>
+	<script src="dataview-preloader.js"></script>
 	<script src="slideshow-dataview.js"></script>
 	<script src="slideshow.js"></script>
 	<script src="pager.js"></script>
@@ -31,7 +31,7 @@
 			}
 		});
 
-		var dataview = $.ui.nestedDataview({
+		var dataview = $.ui.preloaderDataview({
 			paging: {
 				limit: 2
 			},

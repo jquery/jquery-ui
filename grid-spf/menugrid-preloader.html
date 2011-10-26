@@ -18,13 +18,13 @@
 	<script src="../ui/jquery.ui.dataview.js"></script>
 	<script src="../ui/jquery.ui.grid.js"></script>
 	<script src="dataview-odata.js"></script>
-	<script src="dataview-nested.js"></script>
+	<script src="dataview-preloader.js"></script>
 	<script src="pager.js"></script>
 	<script src="menugrid.js"></script>
 	<script>
 	$(function() {
 		// TODO this doesn't really work
-		var movies = $.ui.nestedDataview({
+		var movies = $.ui.preloaderDataview({
 			paging: {
 				limit: 10
 			},
