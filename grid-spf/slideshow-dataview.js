@@ -28,7 +28,7 @@ $.widget( "ui.flickrDataview", $.ui.dataview, {
 					api_key: "d86848d57cb3f7ad94f2ee9a3c90eff1",
 					method: "flickr.photos.search",
 					tags: request.filter,
-					sort: "relevance",
+					sort: request.sort[0],
 					per_page: request.paging.limit,
 					page: request.page
 				},
