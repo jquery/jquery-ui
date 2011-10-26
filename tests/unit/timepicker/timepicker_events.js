@@ -2,12 +2,6 @@
 
 module( "timepicker: events" );
 
-// helper funciton to quick "press" a key - keydown/keyup
-function downup( elem, key ) {
-	elem.simulate( "keydown", { keyCode: key } );
-	elem.simulate( "keyup", { keyCode: key } );
-}
-
 test( "keydown: Up/Down/Left/Right behaviors", function() {
 	expect( 12 );
 

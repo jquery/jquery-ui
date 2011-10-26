@@ -113,37 +113,24 @@ $.widget( "ui.timepicker", {
 		this.element.spinner( "destroy" );
 	},
 	_events: {
-		blur: function() {
-			this._focusing = false;
-		},
-		click: function() {
-			if ( this._focusing ) {
-				this._focusing = false;
-				this._setPosition( this.currentField );
-			} else {
-				this._checkPosition();
-				this._setPosition();
-			}
-		},
-		keydown: "_checkPosition",
-		mousedown: function( event ) {
-			if ( document.activeElement !== this.element[0] ) {
-				this._focusing = true;
-			}
-		}
+		click: "_checkPosition",
+		keydown: "_checkPosition"
 	},
 	_checkPosition: function( event ) {
 		var position = this.mask._caret(),
 			field = Math.floor( position.begin / 3 );
 
-		if ( !this._focusing ) {
-			this._setField( field );
-		}
+		this._setField( field );
 
-		// if they ever select the first slot only, ensure that the caret
+		// if the cursor is left of the first field, ensure that the selection
 		// covers the first field to make overtyping make more sense
 		if ( position.begin === position.end && position.begin === 0 ) {
 			this.mask._caret( 0, 2 );
+		}
+
+		// after detecting the new position on a click, we should highlight the new field
+		if ( event.type === "click" ) {
+			this._highlightField();
 		}
 	},
 	_generateMask: function() {
@@ -169,6 +156,9 @@ $.widget( "ui.timepicker", {
 			mask += " tt";
 		}
 		return mask;
+	},
+	_highlightField: function( field ) {
+		this.mask._caretSelect( this.currentField * 3 );
 	},
 	_setField: function( field ) {
 		this.currentField = field;
@@ -246,14 +236,6 @@ $.widget( "ui.timepicker", {
 			}
 			this.element.mask( "option", "mask", this._generateMask() );
 		}
-	},
-	_setPosition: function( field ) {
-		if ( field == null ) {
-			field = this.currentField;
-		} else {
-			this._setField( field );
-		}
-		this.mask._caretSelect( field * 3 );
 	},
 	_spinnerParse: function( val ) {
 		val = this.mask.buffer[ this.currentField * 3 ].value;
