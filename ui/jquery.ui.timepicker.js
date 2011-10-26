@@ -112,6 +112,71 @@ $.widget( "ui.timepicker", {
 		this.element.mask( "destroy" );
 		this.element.spinner( "destroy" );
 	},
+
+	refresh: function() {
+		this.mask.refresh();
+	},
+
+	// getter/setter for the current state of the input as a "valid time string"
+	// http://dev.w3.org/html5/spec/common-microsyntaxes.html#times
+	value: function( value ) {
+		var bufferIndex, bufferObject,
+			buffer = this.mask.buffer,
+			bufferLength = buffer.length,
+			ampm = getAmPmArrays();
+
+		if ( value == null ) {
+
+			// storing the hours as a number until the very end
+			value = [ 0, "00", "00" ];
+			for ( bufferIndex = 0; bufferIndex < bufferLength; bufferIndex += 3 ) {
+				bufferObject = buffer[ bufferIndex ];
+				if (
+					bufferObject.valid == maskDefinitions._h || bufferObject.valid == maskDefinitions.hh ||
+					bufferObject.valid == maskDefinitions._H || bufferObject.valid == maskDefinitions.HH
+				) {
+					value[ 0 ] = parseInt( bufferObject.value, 10 );
+				} else if ( bufferObject.valid == maskDefinitions.mm ) {
+					value[ 1 ] = bufferObject.value;
+				} else if ( bufferObject.valid == maskDefinitions.ss ) {
+					value[ 2 ] = bufferObject.value;
+				} else if ( bufferObject.valid == maskDefinitions.tt ) {
+					value[ 0 ] %= 12;
+					if ( jQuery.inArray( bufferObject.value, ampm.pm ) > -1 ) {
+						value[ 0 ] += 12;
+					}
+				}
+			}
+
+			// pads with zeros
+			value[ 0 ] = maskDefinitions.HH( "" + value[ 0 ] );
+			return value.join( ":" );
+		} else {
+
+			// setter for values
+			value = value.split( ":" );
+			for ( bufferIndex = 0; bufferIndex < bufferLength; bufferIndex += 3 ) {
+				bufferObject = buffer[ bufferIndex ];
+				if ( bufferObject.valid == maskDefinitions._h || bufferObject.valid == maskDefinitions.hh ) {
+
+					// 12 hr mode
+					bufferObject.value = bufferObject.valid( parseInt( value[0], 10 ) % 12 || 12 );
+				} else if ( bufferObject.valid == maskDefinitions.tt ) {
+
+					// am/pm
+					bufferObject.value = ampm[ parseInt( value[0], 10 ) < 12 ? "am" : "pm" ][ 0 ];
+				} else {
+
+					// minutes/seconds
+					bufferObject.value = bufferObject.valid( value[ bufferIndex / 3 ] );
+				}
+			}
+
+			// repaint the values
+			this.mask._paint();
+		}
+	},
+
 	_events: {
 		click: "_checkPosition",
 		keydown: "_checkPosition"
@@ -184,45 +249,14 @@ $.widget( "ui.timepicker", {
 		}
 	},
 	_setOption: function( key, value ) {
-		var was = this.options[ key ];
 		this._super( "_setOption", key, value );
 
-		if ( was === value ) {
-			return;
-		}
-
 		if ( key === "ampm" ) {
-			var i, currentHour, currentTT,
-				ampm = getAmPmArrays(),
-				buffer = this.mask.buffer,
+			var currentValue = this.value(),
 				newMask = this._generateMask();
 
-			// in the event that ampm was forced off due to locale, we need to check this again
-			if ( this.options.ampm === was ) {
-				return;
-			}
-
-			currentHour = parseInt( buffer[ 0 ].value, 10 );
-			for ( i = 0; i < buffer.length; i += 3 ) {
-				if ( buffer[ i ].valid === maskDefinitions.tt ) {
-					currentHour %= 12;
-					if ( jQuery.inArray( buffer[ i ].value, ampm.pm ) > -1 ) {
-						currentHour += 12;
-					}
-				}
-			}
-			if ( this.options.ampm ) {
-				currentTT = currentHour > 11 ? ampm.pm[0] : ampm.am[0];
-				currentHour = ( currentHour % 12 ) || 12;
-				buffer[ 0 ].value = ( currentHour < 10 ? "0" : "" ) + currentHour;
-				this.mask._paint();
-				this.element.val( this.element.val() + " " + currentTT );
-			} else {
-				currentHour = currentHour % 24;
-				buffer[ 0 ].value = ( currentHour < 10 ? "0" : "" ) + currentHour;
-				this.mask._paint();
-			}
 			this.element.mask( "option", "mask", this._generateMask() );
+			this.value( currentValue );
 		}
 		if ( key === "seconds" ) {
 			if ( value ) {
