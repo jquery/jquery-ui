@@ -1,5 +1,7 @@
 /*
- * oData Dataview
+ * OData Dataview
+ *
+ * Partial implementation of the Open Data Protocol (http://www.odata.org/)
  *
  * Depends on:
  * dataview
