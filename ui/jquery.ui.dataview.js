@@ -22,6 +22,8 @@ $.widget( "ui.dataview", {
 	// or is there a way to have a constructor along with _create?
 	// _init is probably safe here, as this shouldn't get called as a widget anyway
 	_init: function() {
+		// normalize options
+		this.option(this.options);
 		this.result = [];
 	},
 
