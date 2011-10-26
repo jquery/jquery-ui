@@ -24,20 +24,16 @@ $.widget( "ui.draggable", {
 	},
 
 	// dragEl: element being dragged (original or helper)
-	// position: CSS position of dragEl
+	// position: final CSS position of dragEl
 	// offset: offset of dragEl
 	// startCoords: clientX/Y of the mousedown (offset of pointer)
 	// startPosition: CSS position prior to drag start
 	// startOffset: offset prior to drag start
+	// tempPosition: overridable CSS position of dragEl
 	// overflowOffset: offset of scroll parent
-	// overflowHeight: height of scroll parent
-	// overflowWidth: width of scroll parent
+	// overflow: object containing width and height keys of scroll parent
 
 	_create: function() {
-		// TODO: add these to the base widget
-		this.doc = $( this.element[0].ownerDocument );
-		this.win = $( this.doc[0].defaultView );
-
 		this.scrollParent = this.element.scrollParent();
 
 		// Static position elements can't be moved with top/left
@@ -79,13 +75,62 @@ $.widget( "ui.draggable", {
 		};
 	},
 
+	_handleScrolling: function( event ) {
+		// TODO: what is expected behavior of absolute/fixed draggable inside a div having overflow:scroll?
+		var scrollTop = this.scrollParent.scrollTop(),
+			scrollLeft = this.scrollParent.scrollLeft();
+	
+		// overflowOffset is only set when scrollParent is not doc/html
+		if ( !this.overflowOffset ) {
+	
+			// Handle vertical scrolling
+			if ( ( ( this.overflow.height + scrollTop ) - event.pageY ) < this.options.scrollSensitivity ) {
+				this.scrollParent.scrollTop( scrollTop + this.options.scrollSpeed );
+			}
+			else if ( event.pageY < ( scrollTop + this.options.scrollSensitivity ) ) {
+				this.scrollParent.scrollTop( scrollTop - this.options.scrollSpeed );
+			}
+			
+			// Handle horizontal scrolling
+			if ( ( ( this.overflow.width + scrollLeft ) - event.pageX ) < this.options.scrollSensitivity ) {
+				this.scrollParent.scrollLeft( scrollLeft + this.options.scrollSpeed );
+			}
+			else if ( event.pageX < ( scrollLeft + this.options.scrollSensitivity ) ) {
+				this.scrollParent.scrollLeft( scrollLeft - this.options.scrollSpeed );
+			}
+		
+		} else {
+			
+			
+			// Handle vertical scrolling
+			if ( ( event.pageY + this.options.scrollSensitivity ) > ( this.overflow.height + this.overflowOffset.top ) ) {
+				this.scrollParent.scrollTop( scrollTop + this.options.scrollSpeed );
+			}
+			else if ( ( event.pageY - this.options.scrollSensitivity ) < this.overflowOffset.top ) {
+				this.scrollParent.scrollTop( scrollTop - this.options.scrollSpeed );
+			}
+			
+			// Handle horizontal scrolling
+			if ( ( event.pageX + this.options.scrollSensitivity ) > ( this.overflow.width + this.overflowOffset.left ) ) {
+				this.scrollParent.scrollLeft( scrollLeft + this.options.scrollSpeed );
+			}
+			else if ( ( event.pageX - this.options.scrollSensitivity ) < this.overflowOffset.left ) {
+				this.scrollParent.scrollLeft( scrollLeft - this.options.scrollSpeed );
+			}
+		
+		
+		}
+		
+	},
+
 	_mouseDown: function( event ) {
+		var newLeft, newTop;
+
 		// Prevent text selection, among other things
 		event.preventDefault();
 
 		// The actual dragging element, should always be a jQuery object
 		this.dragEl = this.element;
-		this.cssPosition = this.dragEl.css( "position" );
 
 		// Helper required
 		if ( this.options.helper ) {
@@ -107,6 +152,8 @@ $.widget( "ui.draggable", {
 				.appendTo( this.doc[0].body )
 				.offset( this.element.offset() );
 		}
+		
+		this.cssPosition = this.dragEl.css( "position" );
 
 		// Cache starting absolute and relative positions
 		this.startPosition = this._getPosition();
@@ -121,16 +168,31 @@ $.widget( "ui.draggable", {
 			top: event.clientY
 		};
 
-		// Cache the offset of scrollParent
-		// TODO: store overflow height/width in a hash instead of separate properties
-		this.overflowOffset = this.scrollParent.offset();
-		this.overflowHeight = ( this.scrollParent[0] === this.doc[0] ) ?
+		// Cache the offset of scrollParent, if required for _handleScrolling
+		if ( this.scrollParent[0] != this.doc[0] && this.scrollParent[0].tagName != 'HTML') {
+			this.overflowOffset = this.scrollParent.offset();
+		}
+
+		this.overflow = {};
+
+		this.overflow.height = ( this.scrollParent[0] === this.doc[0] ) ?
 			this.win.height() : this.scrollParent.height();
-		this.overflowWidth = ( this.scrollParent[0] === this.doc[0] ) ?
+
+		this.overflow.width = ( this.scrollParent[0] === this.doc[0] ) ?
 			this.win.width() : this.scrollParent.width();
 
-		// TODO: allow modifying position, just like during drag
+		this._preparePosition( event );
+
 		this._trigger( "start", event, this._uiHash() );
+		
+		// TODO: should user be able to change position of draggable, if event stopped?
+		// If user stops propagation, leave helper there ( if there's one ), disallow any CSS changes
+		if ( event.cancelBubble === true ) {
+			this.doc.unbind( "." + this.widgetName );
+			return;
+		}
+
+		this._setCss( event );
 
 		this._bind( this.doc, {
 			mousemove: "_mouseMove",
@@ -139,24 +201,76 @@ $.widget( "ui.draggable", {
 	},
 
 	_mouseMove: function( event ) {
+		var newLeft, newTop;
+
+		this._preparePosition( event );
+
+		this._trigger( "drag", event, this._uiHash() );
+
+		// TODO: should user be able to change position of draggable, if event stopped?
+		// If user stops propagation, leave helper there ( if there's one ), disallow any CSS changes
+		if ( event.cancelBubble === true ) {
+			this.doc.unbind( "." + this.widgetName );
+			return;
+		}
+
+		this._setCss( event );
+
+		// Scroll the scrollParent, if needed
+		this._handleScrolling( event );
+	},
+
+	_mouseUp: function( event ) {
+
+		this._preparePosition( event );
+
+		this._trigger( "stop", event, this._uiHash() );
+
+		// TODO: should user be able to change position of draggable, if event stopped?
+		// If user stops propagation, leave helper there, disallow any CSS changes
+		if ( event.cancelBubble !== true ) {
+
+			this._setCss( event );
+
+			if ( this.options.helper ) {
+				this.dragEl.remove();
+			}
+
+		}
+
+		this.doc.unbind( "." + this.widgetName );
+	},
+
+	// Uses event to determine new position of draggable, before any override from callbacks
+	_preparePosition: function( event ) {
 		var leftDiff = event.clientX - this.startCoords.left,
 			topDiff = event.clientY - this.startCoords.top,
 			newLeft = leftDiff + this.startPosition.left,
 			newTop = topDiff + this.startPosition.top;
 
+		// Save off new values for .css() in various callbacks using this function
 		this.position = {
 			left: newLeft,
 			top: newTop
 		};
 
+		// Save off values to compare user override against automatic coordinates
+		this.tempPosition = {
+			left: newLeft,
+			top: newTop
+		}
+
 		// Refresh offset cache with new positions
 		this.offset.left = this.startOffset.left + newLeft;
 		this.offset.top = this.startOffset.top + newTop;
+	},
 
-		this._trigger( "drag", event, this._uiHash() );
+	// Places draggable where mouse or user from callback indicates
+	_setCss: function( event ) {
+		var newLeft, newTop;
 
 		// User overriding left/top so shortcut math is no longer valid
-		if ( newLeft !== this.position.left || newTop !== this.position.top ) {
+		if ( this.tempPosition.left !== this.position.left || this.tempPosition.top !== this.position.top ) {
 			// TODO: can we just store the previous offset values
 			// and not go through .offset()?
 			// refresh offset using slower functions
@@ -176,34 +290,6 @@ $.widget( "ui.draggable", {
 			left: newLeft + "px",
 			top: newTop + "px"
 		});
-
-		// Scroll the scrollParent, if needed
-		this._handleScrolling( event );
-	},
-
-	_handleScrolling: function( event ) {
-		var scrollTop = this.doc.scrollTop(),
-			scrollLeft = this.doc.scrollLeft();
-
-		// Handle vertical scrolling
-		if ( ( ( this.overflowHeight + scrollTop ) - event.pageY ) < this.options.scrollSensitivity ) {
-			this.doc.scrollTop( scrollTop + this.options.scrollSpeed );
-		}
-
-		// Handle horizontal scrolling
-		if ( ( ( this.overflowWidth + scrollLeft ) - event.pageX ) < this.options.scrollSensitivity ) {
-			this.doc.scrollLeft( scrollLeft + this.options.scrollSpeed );
-		}
-	},
-
-	_mouseUp: function( event ) {
-		this._trigger( "stop", event, this._uiHash() );
-
-		if ( this.options.helper ) {
-			this.dragEl.remove();
-		}
-
-		this.doc.unbind( "." + this.widgetName );
 	},
 
 	_uiHash: function( event ) {

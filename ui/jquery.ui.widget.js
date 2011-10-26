@@ -183,6 +183,9 @@ $.Widget.prototype = {
 	_createWidget: function( options, element ) {
 		element = $( element || this.defaultElement || this )[ 0 ];
 		this.element = $( element );
+		this.doc = $( this.element[0].ownerDocument );
+		this.win = $( this.doc[0].defaultView );
+		this.body = this.doc.body;
 		this.options = $.widget.extend( {},
 			this.options,
 			this._getCreateOptions(),
