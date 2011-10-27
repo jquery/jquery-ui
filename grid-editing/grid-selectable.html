@@ -16,6 +16,7 @@
 	<script src="../ui/jquery.ui.position.js"></script>
 	<script src="../ui/jquery.ui.tooltip.js"></script>
 	<script src="../ui/jquery.ui.autocomplete.js"></script>
+	<script src="../ui/jquery.ui.dialog.js"></script>
 	<script src="../ui/jquery.ui.menu.js"></script>
 	<script src="../ui/jquery.ui.mouse.js"></script>
 	<script src="../ui/jquery.ui.selectable.js"></script>
@@ -110,18 +111,16 @@
 			}
 			developer = selected[0];
 			$( "#edit-tmpl" ).tmpl( meta(developer) ).appendTo( editForm.find("fieldset").empty() );
-			editForm.show().find( "input:first" ).focus();
+			editForm.dialog( "open" );
 		});
-		var editForm = $( "#editForm" ).tooltip({
-			position: {
-				my: "left bottom",
-				at: "left top"
-			}
-		}).hide().submit( function( event ) {
+		$("[type=submit]").button();
+		var editForm = $( "#editForm" ).dialog({
+			autoOpen: false
+		}).tooltip().hide().submit( function( event ) {
 			event.preventDefault();
 			$.observable( developer, localDevelopers ).property( serializeForm( this ) );
 			// TODO hide tooltip
-			editForm.hide();
+			editForm.dialog( "close" );
 		});
 
 		$( "#removeDeveloper" ).click(function() {
@@ -148,6 +147,7 @@
 		.navigator-active { background: rgba(0,0,255,0.5) !important; }
 		.ui-autocomplete { width: 200px; max-height: 200px; overflow: auto; }
 		thead td { text-align: center; }
+		form label { display: inline-block; width: 75px; }
 	</style>
 </head>
 <body>
@@ -211,21 +211,14 @@
 	<button id="removeDeveloper">Remove selected developer</button>
 	<button id="clearSelection">Clear selection</button>
 </div>
-<form id="editForm">
+<form id="editForm" title="Edit Developer">
 	<fieldset>
 	</fieldset>
 	<input type="submit" value="Save changes" />
 </form>
 <script id="edit-tmpl" type="text/x-jquery-tmpl">
-{{if $.isArray(value)}}
-	<ul>
-		{{each(index, valueX) value}}
-			<li><input type="text" name="${name}" placeholder="${label}" value="${valueX}" title="${label}" /></li>
-		{{/each}}
-	</ul>
-{{else}}
-	<input type="text" name="${name}" placeholder="${label}" value="${value}" title="${label}" />
-{{/if}}
+	<label for="${name}">${label}</label>
+	<input type="text" id="${name}" name="${name}" placeholder="${label}" value="${value}" title="${label}" />
 </script>
 
 </body>

@@ -230,6 +230,7 @@ $.widget( "ui.grid", {
 				$( this ).replaceWith( that._newRow(item) );
 			}
 		});
+		this._trigger( "refresh" );
 	},
 
 	_columns: function() {
