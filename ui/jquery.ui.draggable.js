@@ -41,6 +41,7 @@ $.widget( "ui.draggable", {
 			this.element.css( "position", "relative" );
 		}
 
+		this.element.addClass( "ui-draggable" );
 		this._bind({ mousedown: "_mouseDown" });
 	},
 
@@ -56,7 +57,7 @@ $.widget( "ui.draggable", {
 
 			// Take into account scrollbar
 			position.top -= scrollTop;
-			position.left -= scrollLeft
+			position.left -= scrollLeft;
 
 			return position;
 		}
@@ -258,7 +259,7 @@ $.widget( "ui.draggable", {
 		this.tempPosition = {
 			left: newLeft,
 			top: newTop
-		}
+		};
 
 		// Refresh offset cache with new positions
 		this.offset.left = this.startOffset.left + newLeft;
@@ -297,6 +298,10 @@ $.widget( "ui.draggable", {
 			position: this.position,
 			offset: this.offset
 		};
+	},
+
+	_destroy: function() {
+		this.element.removeClass( "ui-draggable" );
 	}
 });
 
