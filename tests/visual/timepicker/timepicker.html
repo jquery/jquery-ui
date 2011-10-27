@@ -18,9 +18,7 @@
 	<script>
 	$(function() {
 		$("#culture").change(function() {
-			Globalize.culture( $( this ).val() );
-			$( "input" ).timepicker( "destroy" );
-			setup();
+			$( "input" ).timepicker( "option", "culture", $( this ).val() );
 		});
 		function setup() {
 			$("#timepicker").timepicker();
