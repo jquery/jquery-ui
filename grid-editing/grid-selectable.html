@@ -15,7 +15,6 @@
 	<script src="../ui/jquery.ui.spinner.js"></script>
 	<script src="../ui/jquery.ui.position.js"></script>
 	<script src="../ui/jquery.ui.tooltip.js"></script>
-	<script src="../ui/jquery.ui.autocomplete.js"></script>
 	<script src="../ui/jquery.ui.dialog.js"></script>
 	<script src="../ui/jquery.ui.menu.js"></script>
 	<script src="../ui/jquery.ui.mouse.js"></script>
@@ -115,8 +114,10 @@
 		});
 		$("[type=submit]").button();
 		var editForm = $( "#editForm" ).dialog({
-			autoOpen: false
-		}).tooltip().hide().submit( function( event ) {
+			autoOpen: false,
+			width: 350,
+			modal: true
+		}).hide().submit( function( event ) {
 			event.preventDefault();
 			$.observable( developer, localDevelopers ).property( serializeForm( this ) );
 			// TODO hide tooltip
@@ -144,10 +145,10 @@
 	<style>
 		.ui-grid .ui-selecting td { background: #eef; }
 		.ui-grid .ui-selected td { background: #ddf; }
-		.navigator-active { background: rgba(0,0,255,0.5) !important; }
-		.ui-autocomplete { width: 200px; max-height: 200px; overflow: auto; }
 		thead td { text-align: center; }
-		form label { display: inline-block; width: 75px; }
+		form label { display: block; }
+		form input { width: 95%; }
+		fieldset { border: none; }
 	</style>
 </head>
 <body>
