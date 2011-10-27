@@ -32,10 +32,10 @@ $.widget( "spf.pager", {
 
 		var source = this.options.source;
 		if (!source.options.paging.offset) {
-			this.buttons.filter('[data-page="first"], [data-page="prev"], [data-page="prevStep"]').button("disable");
+			this.buttons.filter('[data-page="first"], [data-page="prev"]').button("disable");
 		}
 		if (source.options.paging.offset + source.options.paging.limit >= source.totalCount) {
-			this.buttons.filter('[data-page="last"], [data-page="next"], [data-page="nextStep"]').button("disable");
+			this.buttons.filter('[data-page="last"], [data-page="next"]').button("disable");
 		}
 		this.element.find(".current").val(this.page());
 		this.element.find(".total").text(this.totalPages());
@@ -54,20 +54,12 @@ $.widget( "spf.pager", {
 		this.page(1);
 	},
 
-	prevStep: function() {
-		this.options.source.options.paging.offset -= 1;
-	},
-
 	prev: function() {
 		this.page( this.page() - 1 );
 	},
 
 	next: function() {
 		this.page( this.page() + 1 );
-	},
-
-	nextStep: function() {
-		this.options.source.options.paging.offset += 1;
 	},
 
 	last: function() {
