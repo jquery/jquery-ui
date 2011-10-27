@@ -536,17 +536,20 @@ $.widget("ui.selectmenu", {
 			self.newelement.addClass('ui-state-active');
 				
 			self.listWrap.appendTo( o.appendTo );
-			self.list.attr('aria-hidden', false);
-			
+			self.list.attr('aria-hidden', false);			
+			self.listWrap.addClass( self.widgetBaseClass + '-open' );
+						
 			var selected = this._selectedOptionLi();
 			if ( o.style == "dropdown" ) {
 				self.newelement.removeClass('ui-corner-all').addClass('ui-corner-top');
-				// center overflow
-				this.list.scrollTop( this.list.scrollTop() + selected.position().top - this.list.outerHeight()/2 + selected.outerHeight()/2 );
+			} else {				
+				// center overflow and avoid flickering
+				this.list
+					.css("left", -5000)
+					.scrollTop( this.list.scrollTop() + selected.position().top - this.list.outerHeight()/2 + selected.outerHeight()/2 )
+					.css("left","auto");
 			}
 			
-			self.listWrap.addClass( self.widgetBaseClass + '-open' );
-			self.list.attr('aria-hidden', false);
 			self._refreshPosition();	
 			
 			var link = selected.find("a");
