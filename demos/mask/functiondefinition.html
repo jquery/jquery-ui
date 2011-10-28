@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<title>jQuery UI Mask - Function Definition Demo</title>
+	<link type="text/css" href="../../themes/base/jquery.ui.all.css" rel="stylesheet" />
+	<script src="../../jquery-1.6.4.js"></script>
+	<script src="../../ui/jquery.ui.core.js"></script>
+	<script src="../../ui/jquery.ui.widget.js"></script>
+	<script src="../../ui/jquery.ui.mask.js"></script>
+	<link href="../demos.css" rel="stylesheet" />
+	<script>
+	$(function() {
+		
+		function createTwoDigitDefinition( maximum ) {
+			return function( value ) {
+				var number = parseInt( value, 10 );
+				
+				if ( value === "" || /\D/.test( value ) ) {
+					return;
+				}
+
+				// allow "0" if it is the only character in the value,
+				// otherwise allow anything from 1 to maximum
+				if ( !number && value.length === 2 ) {
+					return;
+				}
+
+				// pad to 2 characters
+				number = ( number < 10 ? "0" : "" ) + number;
+				if ( number <= maximum ) {
+					return number;
+				}
+			}
+		}
+
+		function yearsDefinition( value ) {
+			var temp;
+
+			// if the value is empty, or contains a non-digit, it is invalid
+			if ( value === "" || /\D/.test( value ) ) {
+				return false;
+			}
+
+			// convert 2 digit years to 4 digits, this allows us to type 80 <right>
+			if ( value.length <= 2 ) {
+				temp = parseInt( value, 10 );
+				// before "32" we assume 2000's otherwise 1900's
+				if ( temp < 10 ) {
+					return "200" + temp;
+				} else if ( temp < 32 ) {
+					return "20" + temp;
+				} else {
+					return "19" + temp;
+				}
+			}
+			if ( value.length === 3 ) {
+				return "0"+value;
+			}
+			if ( value.length === 4 ) {
+				return value;
+			}
+		}		
+		$("#date").mask({
+			mask: "yyyy/mm/dd",
+			definitions: {
+				"mm": createTwoDigitDefinition( 12 ),
+				"dd": createTwoDigitDefinition( 31 ),
+				"yyyy": yearsDefinition
+			}
+		});
+	});
+	</script>
+	<style>
+		
+	</style>
+</head>
+<body>
+
+<div class="demo">
+	Date: <input id="date"> Format: yyyy/mm/dd<br>
+</div><!-- End demo -->
+
+<div class="demo-description">
+
+<p>An example of using functions to define new mask definitions. These definitions are "multiple character" fields that allow us to have a date formatted input that validates.</p>
+
+</div><!-- End demo-description -->
+
+
+
+</body>
+</html>
