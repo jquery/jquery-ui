@@ -26,7 +26,8 @@
 			resource: "http://services.odata.org/Northwind/Northwind.svc/Products_by_Categories"
 		});
 		$( "#products" ).menugrid({
-			source: products
+			source: products,
+			heightStyle: "fill"
 		});
 
 		$( "#pager" ).pager({
