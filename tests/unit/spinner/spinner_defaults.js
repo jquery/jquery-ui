@@ -1,5 +1,6 @@
 commonWidgetTests( "spinner", {
 	defaults: {
+		culture: null,
 		disabled: false,
 		incremental: true,
 		max: null,

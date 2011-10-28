@@ -1,6 +1,6 @@
 (function() {
 
-var versions = [ "1.6", "1.6.1", "1.6.2", "git" ];
+var versions = [ "1.6", "1.6.1", "1.6.2", "1.6.3", "1.6.4", "git" ];
 
 var additionalTests = {
 	accordion: [ "accordion_deprecated.html" ],
