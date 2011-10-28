@@ -179,6 +179,11 @@ $.widget( "ui.mask", {
 				key = event.keyCode,
 				position = this._caret();
 
+			if ( event.shiftKey || event.metaKey || event.altKey || event.ctrlKey ) {
+				return;
+			}
+
+
 			switch ( key ) {
 				case keyCode.ESCAPE:
 					this.element.val( this.lastUnsavedValue );
