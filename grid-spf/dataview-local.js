@@ -1,8 +1,8 @@
 /*
  * Local Dataview
  *
- * Depends on:
- * dataview
+ * Depends:
+ *  jquery.ui.dataview.js
  */
 (function ($, undefined ) {
 
