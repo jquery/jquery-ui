@@ -95,6 +95,11 @@
 <h2>Movies! Click headers to sort, use inputs for filtering, pager for paging</h2>
 <table id="movies">
 	<caption>Movies Grid</caption>
+	<colgroup>
+		<col width="60%">
+		<col width="20%">
+		<col width="20%">
+	</colgroup>
 	<thead>
 		<tr>
 			<th data-property="Name" data-type="string">Name</th>
@@ -108,15 +113,7 @@
 		<tr>
 			<td>
 				<button id="refresh">Refresh</button>
-				<span id="pager">
-					<button data-page="first">First</button>
-					<button data-page="prev">Prev</button>
-					<span>
-						Page <input class="current" size="4"/> of <span class="total">0</span>
-					</span>
-					<button data-page="next">Next</button>
-					<button data-page="last">Last</button>
-				</span>
+				<span id="pager"></span>
 			</td>
 			<td>
 				<label for="pagesize">Pagesize</label>

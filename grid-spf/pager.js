@@ -1,6 +1,16 @@
 $.widget( "spf.pager", {
+	defaultElement: "<span>",
 	options: {
-		source: null
+		source: null,
+		template: '<span id="pager">' +
+					'<button data-page="first">First</button>' +
+					'<button data-page="prev">Prev</button>' +
+					'<span>' +
+						'Page <input class="current" size="4"/> of <span class="total">0</span>' +
+					'</span>' +
+					'<button data-page="next">Next</button>' +
+					'<button data-page="last">Last</button>' +
+				'</span>'
 	},
 	_create: function() {
 		var that = this;
@@ -9,6 +19,10 @@ $.widget( "spf.pager", {
 		$( this.options.source ).bind( "dataviewresponse", function() {
 			that.refresh();
 		});
+
+		if ( this.options.template ) {
+			this.element.html( this.options.template );
+		}
 
 		this.buttons = this.element.delegate("button", "click", function() {
 			var method = $(this).data("page");

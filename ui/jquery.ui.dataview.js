@@ -58,6 +58,7 @@ $.widget( "ui.dataview", {
 		var limit = this.options.paging.limit;
 		if ( pageIndex !== undefined ) {
 			this.option( "paging.offset", pageIndex * limit - limit );
+			return this;
 		}
 		return Math.ceil( this.options.paging.offset / limit + 1 );
 	},
