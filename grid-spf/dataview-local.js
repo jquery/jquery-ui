@@ -10,6 +10,9 @@
 $.widget( "ui.localDataview", $.ui.dataview, {
 	// all dataview implementations share a common event prefix
 	widgetEventPrefix: "dataview",
+	options: {
+		input: null
+	},
 	_create: function() {
 		var that = this;
 		this.options.source = function( request, response) {
