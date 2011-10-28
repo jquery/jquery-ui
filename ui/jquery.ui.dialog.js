@@ -591,8 +591,11 @@ $.widget("ui.dialog", {
 				break;
 			case "title":
 				// convert whatever was passed in o a string, for html() to not throw up
-				$( ".ui-dialog-title", self.uiDialogTitlebar )
-					.html( "" + ( value || "&#160;" ) );
+				$( ".ui-dialog-title", self.uiDialogTitlebar ).html( value
+                        		? ( $(value).size()
+                            			? value
+                            			: value.toString() )
+                        		: "&#160;" );
 				break;
 		}
 
