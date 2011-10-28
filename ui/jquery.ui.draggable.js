@@ -150,7 +150,7 @@ $.widget( "ui.draggable", {
 			this.dragEl
 				// TODO: should we move this to the stylesheet and use a class?
 				.css( "position", "absolute" )
-				.appendTo( this.doc[0].body )
+				.appendTo( this.document[0].body )
 				.offset( this.element.offset() );
 		}
 		
@@ -170,17 +170,17 @@ $.widget( "ui.draggable", {
 		};
 
 		// Cache the offset of scrollParent, if required for _handleScrolling
-		if ( this.scrollParent[0] != this.doc[0] && this.scrollParent[0].tagName != 'HTML') {
+		if ( this.scrollParent[0] != this.document[0] && this.scrollParent[0].tagName != 'HTML') {
 			this.overflowOffset = this.scrollParent.offset();
 		}
 
 		this.overflow = {};
 
-		this.overflow.height = ( this.scrollParent[0] === this.doc[0] ) ?
-			this.win.height() : this.scrollParent.height();
+		this.overflow.height = ( this.scrollParent[0] === this.document[0] ) ?
+			this.window.height() : this.scrollParent.height();
 
-		this.overflow.width = ( this.scrollParent[0] === this.doc[0] ) ?
-			this.win.width() : this.scrollParent.width();
+		this.overflow.width = ( this.scrollParent[0] === this.document[0] ) ?
+			this.window.width() : this.scrollParent.width();
 
 		this._preparePosition( event );
 
@@ -189,13 +189,13 @@ $.widget( "ui.draggable", {
 		// TODO: should user be able to change position of draggable, if event stopped?
 		// If user stops propagation, leave helper there ( if there's one ), disallow any CSS changes
 		if ( event.cancelBubble === true ) {
-			this.doc.unbind( "." + this.widgetName );
+			this.document.unbind( "." + this.widgetName );
 			return;
 		}
 
 		this._setCss( event );
 
-		this._bind( this.doc, {
+		this._bind( this.document, {
 			mousemove: "_mouseMove",
 			mouseup: "_mouseUp"
 		});
@@ -211,7 +211,7 @@ $.widget( "ui.draggable", {
 		// TODO: should user be able to change position of draggable, if event stopped?
 		// If user stops propagation, leave helper there ( if there's one ), disallow any CSS changes
 		if ( event.cancelBubble === true ) {
-			this.doc.unbind( "." + this.widgetName );
+			this.document.unbind( "." + this.widgetName );
 			return;
 		}
 
@@ -239,7 +239,7 @@ $.widget( "ui.draggable", {
 
 		}
 
-		this.doc.unbind( "." + this.widgetName );
+		this.document.unbind( "." + this.widgetName );
 	},
 
 	// Uses event to determine new position of draggable, before any override from callbacks
