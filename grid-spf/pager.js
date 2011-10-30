@@ -5,7 +5,7 @@ $.widget( "spf.pager", {
 		template: '<span id="pager">' +
 					'<button data-page="first">First</button>' +
 					'<button data-page="prev">Prev</button>' +
-					'<span>' +
+					'<span style="margin: 0px 10px;">' +
 						'Page <input class="current" size="4"/> of <span class="total">0</span>' +
 					'</span>' +
 					'<button data-page="next">Next</button>' +
