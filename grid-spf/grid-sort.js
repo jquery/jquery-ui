@@ -1,6 +1,6 @@
 $.widget( "ui.gridSort", {
 	_create: function() {
-		var grid = this.element.data("menugrid");
+		var grid = this.element.data("grid");
 		var headers = grid.uiGridHeadTable.find( "tr:first th" );
 		this._hoverable( headers );
 		headers.disableSelection().click( function() {

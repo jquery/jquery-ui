@@ -25,10 +25,10 @@
 		var products = $.ui.odataDataview({
 			resource: "http://services.odata.org/Northwind/Northwind.svc/Products_by_Categories"
 		});
-		$( "#products" ).menugrid({
+		$( "#products" ).grid({
 			source: products,
 			heightStyle: "fill"
-		}).gridSort();
+		}).menugrid().gridSort();
 
 		$( "#pager" ).pager({
 			source: products

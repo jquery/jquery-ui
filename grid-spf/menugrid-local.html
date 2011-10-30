@@ -38,10 +38,10 @@
 			}
 		});
 
-		$( "#developers" ).menugrid({
+		$( "#developers" ).grid({
 			source: developers,
 			heightStyle: "fill"
-		}).gridSort();
+		}).menugrid().gridSort();
 
 		$( "#pager" ).pager({
 			source: developers

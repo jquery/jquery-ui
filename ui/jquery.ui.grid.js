@@ -33,7 +33,7 @@ $.widget( "ui.grid", {
 		});
 		if ( $.observable ) {
 			that._bindChange( that._toArray() );
-			$.observable( this.options.source ).bind( "insert remove replaceAll", function( event, ui ) {
+			$.observable( this._toArray( this.options.source ) ).bind( "insert remove replaceAll", function( event, ui ) {
 				if ( event.type === "insert" ) {
 					that._bindChange( ui.items );
 				} else if (event.type === "replaceAll" ) {

@@ -1,16 +1,13 @@
-$.widget("spf.menugrid", $.ui.grid, {
+$.widget("spf.menugrid", {
 	_create: function() {
-		this._superApply("_create", arguments);
-		this.uiGrid.addClass("menugrid");
-		var options = this.options;
-		var source = this.options.source;
-		var that = this;
-		source.element.bind("dataviewresponse", function() {
-			that._updateFilterValues();
-			that.refresh();
+		var grid = this.grid = this.element.data("grid");
+		var options = grid.options;
+		var source = grid.options.source;
+		this._bind( source, {
+			dataviewresponse: "_updateFilterValues"
 		});
 
-		var thead = this.uiGridHeadTable.find( "thead" );
+		var thead = grid.uiGridHeadTable.find( "thead" );
 		var inputs = this.inputs = thead.children(":has(th)")
 			.clone()
 			.appendTo( thead )
@@ -42,7 +39,7 @@ $.widget("spf.menugrid", $.ui.grid, {
 		});
 	},
 	_updateFilterValues: function() {
-		var options = this.options;
+		var options = this.grid.options;
 		if (options.source.options.filter) {
 			var filters = options.source.options.filter;
 			this.inputs.each( function() {

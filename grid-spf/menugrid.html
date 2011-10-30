@@ -44,7 +44,7 @@
 		checkHash();
 		$( window ).bind( "hashchange", checkHash );
 
-		$( "#movies" ).menugrid({
+		$( "#movies" ).grid({
 			source: movies,
 			refresh: function() {
 				var paging = movies.options.paging,
@@ -58,7 +58,7 @@
 				$(".paging-total").text( total );
 			},
 			heightStyle: "fill"
-		}).gridSort();
+		}).menugrid().gridSort();
 
 		$("#pagesize").change(function() {
 			movies.option("paging.limit", +$(this).val()).refresh();
