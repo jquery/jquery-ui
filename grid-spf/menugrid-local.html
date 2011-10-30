@@ -20,6 +20,7 @@
 	<script src="../ui/jquery.ui.grid.js"></script>
 	<script src="pager.js"></script>
 	<script src="menugrid.js"></script>
+	<script src="grid-sort.js"></script>
 	<script>
 	$(function() {
 		var localDevelopers;
@@ -41,7 +42,7 @@
 		$( "#developers" ).menugrid({
 			source: developers,
 			heightStyle: "fill"
-		});
+		}).gridSort();
 
 		$( "#pager" ).pager({
 			source: developers

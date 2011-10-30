@@ -21,6 +21,7 @@
 	<script src="dataview-preloader.js"></script>
 	<script src="pager.js"></script>
 	<script src="menugrid.js"></script>
+	<script src="grid-sort.js"></script>
 	<script>
 	$(function() {
 		// TODO this doesn't really work
@@ -34,7 +35,7 @@
 		});
 		var grid = $( "#movies" ).menugrid({
 			source: movies
-		});
+		}).gridSort();
 
 		$( "#pager" ).pager({
 			source: movies

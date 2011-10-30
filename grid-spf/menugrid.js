@@ -11,17 +11,6 @@ $.widget("spf.menugrid", $.ui.grid, {
 			that._updateFilterValues();
 			that.refresh();
 		});
-		var headers = this.uiGridHeadTable.find( "th" );
-		this._hoverable( headers );
-		headers.disableSelection().click( function() {
-			headers.not( this ).removeClass( "sorted sorted-desc" );
-			var column = options.columns[ this.cellIndex ];
-			var sorted = $(this).hasClass("sorted");
-			$( this ).toggleClass("sorted", !sorted).toggleClass("sorted-desc", sorted);
-			source
-				.option( "sort", ( sorted ? "-" : "" ) + column.property )
-				.refresh();
-		}).append( '<span class="ui-icon-asc ui-icon ui-icon-carat-1-n"></span><span class="ui-icon-desc ui-icon ui-icon-carat-1-s"></span>' );
 
 		var thead = this.uiGridHeadTable.find( "thead" );
 		var inputs = this.inputs = thead.children(":has(th)")
