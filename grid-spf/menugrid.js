@@ -1,5 +1,3 @@
-// TODO cleanup/refactor!
-// fix string-filter, don't show "like[filter]"
 $.widget("spf.menugrid", $.ui.grid, {
 	_create: function() {
 		this._superApply("_create", arguments);
