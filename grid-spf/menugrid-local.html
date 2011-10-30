@@ -18,7 +18,7 @@
 	<script src="../ui/jquery.ui.dataviewlocal.js"></script>
 	<script src="../ui/jquery.ui.grid.js"></script>
 	<script src="pager.js"></script>
-	<script src="menugrid.js"></script>
+	<script src="grid-filter.js"></script>
 	<script src="grid-sort.js"></script>
 	<script>
 	$(function() {
@@ -41,7 +41,7 @@
 		$( "#developers" ).grid({
 			source: developers,
 			heightStyle: "fill"
-		}).menugrid().gridSort();
+		}).gridFilter().gridSort();
 
 		$( "#pager" ).pager({
 			source: developers

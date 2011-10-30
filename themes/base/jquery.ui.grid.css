@@ -114,7 +114,7 @@ Presentational
 	bottom: 10px;
 }
 
-/* from menugrid.css, may move elsewhere */
+/* specific for sort extension */
 .ui-grid thead th {
 	cursor: default;
 }

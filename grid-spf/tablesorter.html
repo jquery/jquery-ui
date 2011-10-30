@@ -16,12 +16,12 @@
 	<script src="../ui/jquery.ui.dataview.js"></script>
 	<script src="../ui/jquery.ui.grid.js"></script>
 	<script src="../ui/jquery.ui.dataviewlocal.js"></script>
-	<script src="menugrid.js"></script>
+	<script src="grid-filter.js"></script>
 	<script src="grid-sort.js"></script>
 	<script>
 	$(function() {
 		// TODO get rid of the refresh call
-		$( "#yearlyResults" ).grid().menugrid().gridSort().data("grid").options.source.refresh();
+		$( "#yearlyResults" ).grid().gridFilter().gridSort().data("grid").options.source.refresh();
 	});
 	</script>
 </head>

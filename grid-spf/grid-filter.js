@@ -1,4 +1,4 @@
-$.widget("spf.menugrid", {
+$.widget("spf.gridFilter", {
 	_create: function() {
 		var grid = this.grid = this.element.data("grid");
 		var options = grid.options;
