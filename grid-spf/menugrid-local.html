@@ -32,7 +32,10 @@
 			}
 		});
 		var developers = $.ui.dataviewlocal({
-			input: localDevelopers
+			input: localDevelopers,
+			paging: {
+				limit: 5
+			}
 		});
 
 		$( "#developers" ).menugrid({
@@ -43,7 +46,6 @@
 		$( "#pager" ).pager({
 			source: developers
 		});
-
 
 		developers.refresh();
 	});
