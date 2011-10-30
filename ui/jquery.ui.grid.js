@@ -5,7 +5,7 @@
  * widget
  * tmpl
  * observable (optional)
- * localDataview (optional, when no source option is specified)
+ * dataviewlocal (optional, when no source option is specified)
  * resizable (optional)
  */
 (function( $ ) {
@@ -296,7 +296,7 @@ $.widget( "ui.grid", {
 
 		var columns = this.options.columns;
 
-		this.options.source = $.ui.localDataview({
+		this.options.source = $.ui.dataviewlocal({
 			properties: columns,
 			input: this._container().children().map(function() {
 				var item = {};

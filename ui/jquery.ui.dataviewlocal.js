@@ -7,7 +7,7 @@
 (function ($, undefined ) {
 
 // custom dataview for local paging/sorting/filter, accepts a input option
-$.widget( "ui.localDataview", $.ui.dataview, {
+$.widget( "ui.dataviewlocal", $.ui.dataview, {
 	// all dataview implementations share a common event prefix
 	widgetEventPrefix: "dataview",
 	options: {

@@ -21,7 +21,7 @@
 	<script src="../ui/jquery.ui.dataview.js"></script>
 	<script src="../ui/jquery.ui.grid.js"></script>
 	<script src="../ui/jquery.ui.observable.js"></script>
-	<script src="../grid-spf/dataview-local.js"></script>
+	<script src="../ui/jquery.ui.dataviewlocal.js"></script>
 	<script src="../grid-spf/pager.js"></script>
 	<script src="editor.js"></script>
 	<script src="grid-editor.js"></script>
@@ -51,7 +51,7 @@
 	});
 	var localDevelopers = store.load();
 	$(function() {
-		var developers = $.ui.localDataview({
+		var developers = $.ui.dataviewlocal({
 			input: localDevelopers,
 			paging: {
 				limit: 8

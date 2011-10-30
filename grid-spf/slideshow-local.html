@@ -13,7 +13,7 @@
 	<script src="../ui/jquery.ui.button.js"></script>
 	<script src="../ui/jquery.ui.observable.js"></script>
 	<script src="../ui/jquery.ui.dataview.js"></script>
-	<script src="dataview-local.js"></script>
+	<script src="../ui/jquery.ui.dataviewlocal.js"></script>
 	<script src="pager.js"></script>
 	<script src="slideshow.js"></script>
 	<script>
@@ -29,7 +29,7 @@
 		}).get();
 		$( "#gal1" ).hide();
 
-		var dataview = $.ui.localDataview( {
+		var dataview = $.ui.dataviewlocal( {
 			input: photos,
 			paging: {
 				limit: 2,
