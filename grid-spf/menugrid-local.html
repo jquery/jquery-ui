@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Grid: Sorting, Paging, Filtering</title>
+	<link rel="stylesheet" href="../themes/base/jquery.ui.all.css">
+	<link rel="stylesheet" href="../demos/demos.css">
+	<link rel="stylesheet" href="menugrid.css">
+	<script src="../jquery-1.6.2.js"></script>
+	<script src="../external/jquery.tmpl.js"></script>
+	<script src="../ui/jquery.ui.core.js"></script>
+	<script src="../ui/jquery.ui.widget.js"></script>
+	<script src="../ui/jquery.ui.button.js"></script>
+	<script src="../ui/jquery.ui.menu.js"></script>
+	<script src="../ui/jquery.ui.position.js"></script>
+	<script src="../ui/jquery.ui.popup.js"></script>
+	<script src="../ui/jquery.ui.observable.js"></script>
+	<script src="../ui/jquery.ui.dataview.js"></script>
+	<script src="../ui/jquery.ui.dataviewlocal.js"></script>
+	<script src="../ui/jquery.ui.grid.js"></script>
+	<script src="pager.js"></script>
+	<script src="menugrid.js"></script>
+	<script>
+	$(function() {
+		var localDevelopers;
+		$.ajax({
+			dataType: "json",
+			url: "developers.json",
+			async: false,
+			success: function( result ) {
+				localDevelopers = result;
+			}
+		});
+		var developers = $.ui.dataviewlocal({
+			input: localDevelopers
+		});
+
+		$( "#developers" ).menugrid({
+			source: developers,
+			heightStyle: "fill"
+		});
+
+		$( "#pager" ).pager({
+			source: developers
+		});
+
+
+		developers.refresh();
+	});
+	</script>
+</head>
+<body>
+
+<h2>...</h2>
+<table id="developers">
+	<caption>Developers Grid</caption>
+	<colgroup>
+		<col width="25%">
+		<col width="25%">
+		<col width="25%">
+		<col width="25%">
+	</colgroup>
+	<thead>
+		<tr>
+			<th data-property="firstName">First Name</th>
+			<th data-property="lastName">Last Name</th>
+			<th data-property="country">Country</th>
+			<th data-property="bitcoins" data-type="number">Bitcoins</th>
+		</tr>
+	</thead>
+	<tbody>
+	</tbody>
+	<tfoot>
+		<tr>
+			<td colspan="4"id="pager"></td>
+		</tr>
+	</tfoot>
+</table>
+
+</body>
+</html>
