@@ -2,7 +2,7 @@
 .menugrid thead th {
 	cursor: default;
 }
-.menugrid thead th .ui-icon {
+.menugrid thead th .ui-icon-asc, .menugrid thead th .ui-icon-desc {
 	visibility: hidden;
 	display: inline-block;
 	height: 12px;
