@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Grid: Sorting, Paging, Filtering</title>
+	<link rel="stylesheet" href="../themes/base/jquery.ui.all.css">
+	<link rel="stylesheet" href="../demos/demos.css">
+	<link rel="stylesheet" href="menugrid.css">
+	<script src="../jquery-1.6.2.js"></script>
+	<script src="../external/jquery.tmpl.js"></script>
+	<script src="../ui/jquery.ui.core.js"></script>
+	<script src="../ui/jquery.ui.widget.js"></script>
+	<script src="../ui/jquery.ui.observable.js"></script>
+	<script src="../ui/jquery.ui.dataview.js"></script>
+	<script>
+	$.widget( "products.infinite", $.ui.dataview, {
+		widgetEventPrefix: "dataview",
+		options: {
+			paging: {
+				limit: 10
+			},
+			source: function(request, response) {
+				var products = ["Miller's Lite", "Coka Cola", "Snickers"],
+					categories = ["Beer", "Softdrink", "Snacks"],
+					result = [];
+				for (var i = 0; i < request.paging.limit; i++) {
+					result.push({
+						ProductName: products[i % products.length],
+						CategoryName: products[i % categories.length],
+						QuantityPerUnit: 6 * request.paging.offset + i,
+						UnitsInStock: 120 * request.paging.offset * i
+					});
+				}
+				response(result);
+			}
+		}
+	});
+	$.widget( "products.listing", {
+		options: {
+			preloadAt: 500,
+			source: null,
+			template: null
+		},
+
+		_create: function() {
+			this.element.addClass( "products-listing" );
+			this._bind( this.options.source, {
+				dataviewresponse: "refresh"
+			});
+			this.scrollParent = this._scrollParent();
+			this._bind( this.scrollParent, {
+				scroll: this._debounce( this._scroll )
+			});
+			this.options.source.refresh();
+		},
+
+		_scrollParent: function() {
+			var element = this.element;
+			while ( element[ 0 ] !== document && element.css( "overflow" ) !== "scroll" && element.css( "overflow" ) !== "auto" ) {
+				element = element.parent();
+			}
+			return element;
+		},
+
+		_debounce: function( method ) {
+			var timeout;
+			return function() {
+				var obj = this,
+					args = arguments;
+				clearTimeout( timeout );
+				timeout = setTimeout( function() {
+					method.apply( obj, args );
+				}, 100 );
+			};
+		},
+
+		_scroll: function(event) {
+			var scrolled = this.scrollParent.scrollTop() + $(this.scrollParent[0] === document ? window : this.scrollParent).height();
+			// TODO this doesn't work properly for anything besides document, causes too many pages to load after the second
+			var endOfList = this.element.find('li:last').position().top;
+			if (scrolled + this.options.preloadAt > endOfList) {
+				this.options.source.page( this.options.source.page() + 1 ).refresh();
+			}
+		},
+
+		refresh : function() {
+			this.element.append( $.tmpl( this.options.template, this.options.source.result ) );
+		}
+	});
+	$(function() {
+		$( "#listing1" ).listing({
+			source : $.products.infinite(),
+			template: $( "#product-tmpl" ).template()
+		});
+		$( "#listing2" ).listing({
+			source : $.products.infinite(),
+			template: $( "#product-tmpl" ).template()
+		});
+	});
+	</script>
+	<style>
+		.products-listing { list-style: none; padding-left: 0; }
+		.products-listing li { margin: 0; padding: 7px; }
+		.products-listing li:not(:last-child) { border-bottom: none; }
+		.products-listing h3 { margin: 0; padding: 14px; }
+	</style>
+</head>
+<body>
+
+<script type="text/x-jquery-tmpl" id="product-tmpl">
+	<li class="ui-widget-content">
+		<h3 class="ui-widget-header">${ProductName}</h3>
+		<h4>Category: ${CategoryName}</h3>
+		<p>Quantity Per Unit: ${QuantityPerUnit}</p>
+		<p>Units In Stock: ${UnitsInStock}</p>
+	</li>
+</script>
+
+<h2>Products listing with scroll-based paging. Scroll down to load more items.</h2>
+<div style="overflow:auto; height: 300px; width: 90%;">
+	<ul id="listing1"></ul>
+</div>
+<ul id="listing2"></ul>
+
+
+</body>
+</html>
