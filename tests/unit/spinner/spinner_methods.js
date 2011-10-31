@@ -11,7 +11,7 @@ test( "destroy", function() {
 
 test( "disable", function() {
 	expect( 14 );
-	var element = $( "#spin" ).spinner({ value: 2 }),
+	var element = $( "#spin" ).val( 2 ).spinner(),
 		wrapper = $( "#spin" ).spinner( "widget" );
 
 	ok( !wrapper.hasClass( "ui-spinner-disabled" ), "before: wrapper does not have ui-spinner-disabled class" );
@@ -54,7 +54,7 @@ test( "disable", function() {
 
 test( "enable", function() {
 	expect( 5 );
-	var element = $( "#spin" ).spinner({ disabled: true })
+	var element = $( "#spin" ).val( 1 ).spinner({ disabled: true })
 		wrapper = element.spinner( "widget" );
 
 	ok( wrapper.hasClass( "ui-spinner-disabled" ), "before: wrapper has ui-spinner-disabled class" );
@@ -66,14 +66,13 @@ test( "enable", function() {
 	ok( !element.is( ":disabled" ), "after: input does not have disabled attribute" );
 
 	spinner_simulateKeyDownUp( element, $.ui.keyCode.UP );
-	equals( 1, element.val(), "keyboard - value does not change on key UP" );
+	equals( 2, element.val(), "keyboard - value changes on key UP" );
 });
 
 test( "pageDown", function() {
 	expect( 4 );
-	var element = $( "#spin" ).spinner({
+	var element = $( "#spin" ).val( -12 ).spinner({
 		page: 20,
-		value: -12,
 		min: -100
 	});
 
@@ -92,9 +91,8 @@ test( "pageDown", function() {
 
 test( "pageUp", function() {
 	expect( 4 );
-	var element = $( "#spin" ).spinner({
+	var element = $( "#spin" ).val( 12 ).spinner({
 		page: 20,
-		value: 12,
 		max: 100
 	});
 
@@ -113,31 +111,29 @@ test( "pageUp", function() {
 
 test( "stepDown", function() {
 	expect( 4 );
-	var element = $( "#spin" ).spinner({
+	var element = $( "#spin" ).val( 0 ).spinner({
 		step: 2,
-		value: 0,
 		min: -15
 	});
 
 	element.spinner( "stepDown" );
-	equals( element.val(), -2, "stepDown 1 step" );
+	equals( element.val(), "-1", "stepDown 1 step" );
 
 	element.spinner( "stepDown", 5 );
-	equals( element.val(), -12, "stepDown 5 steps" );
+	equals( element.val(), "-11", "stepDown 5 steps" );
 
 	element.spinner( "stepDown", 4 );
-	equals( element.val(), -15, "close to min and stepDown 4 steps" );
+	equals( element.val(), "-15", "close to min and stepDown 4 steps" );
 
 	element.spinner( "stepDown" );
-	equals( element.val(), -15, "at min and stepDown 1 step" );
+	equals( element.val(), "-15", "at min and stepDown 1 step" );
 });
 
 test( "stepUp", function() {
 	expect( 4 );
-	var element = $( "#spin" ).spinner({
+	var element = $( "#spin" ).val( 0 ).spinner({
 		step: 2,
-		value: 0,
-		max: 15
+		max: 16
 	});
 
 	element.spinner( "stepUp" );
@@ -147,20 +143,22 @@ test( "stepUp", function() {
 	equals( element.val(), 12, "stepUp 5 steps" );
 
 	element.spinner( "stepUp", 4 );
-	equals( element.val(), 15, "close to min and stepUp 4 steps" );
+	equals( element.val(), 16, "close to min and stepUp 4 steps" );
 
 	element.spinner( "stepUp" );
-	equals( element.val(), 15, "at max and stepUp 1 step" );
+	equals( element.val(), 16, "at max and stepUp 1 step" );
 });
 
 test( "value", function() {
 	expect( 2 );
-	var element = $( "#spin" ).spinner({ value: 0 });
+	var element = $( "#spin" ).val( 0 ).spinner({
+		step: 3
+	});
 
 	element.spinner( "value", 10 );
-	equals( element.val(), 10, "change value via value method" );
+	equals( element.val(), 9, "change value via value method" );
 
-	equals( element.spinner( "value" ), 10, "get value via value method" );
+	equals( element.spinner( "value" ), 9, "get value via value method" );
 });
 
 })( jQuery );

@@ -195,6 +195,8 @@ $.Widget.prototype = {
 		if ( element !== this ) {
 			$.data( element, this.widgetName, this );
 			this._bind({ remove: "destroy" });
+			this.document = $( element.ownerDocument );
+			this.window = $( this.document[0].defaultView || this.document[0].parentWindow );
 		}
 
 		this._create();
@@ -270,10 +272,11 @@ $.Widget.prototype = {
 		return this;
 	},
 	_setOptions: function( options ) {
-		var self = this;
-		$.each( options, function( key, value ) {
-			self._setOption( key, value );
-		});
+		var key;
+
+		for ( key in options ) {
+			this._setOption( key, options[ key ] );
+		}
 
 		return this;
 	},
@@ -326,11 +329,20 @@ $.Widget.prototype = {
 				eventName = match[1] + "." + instance.widgetName,
 				selector = match[2];
 			if ( selector ) {
-				element.delegate( selector, eventName, handlerProxy );
+				instance.widget().delegate( selector, eventName, handlerProxy );
 			} else {
 				element.bind( eventName, handlerProxy );
 			}
 		});
+	},
+
+	_delay: function( handler, delay ) {
+		function handlerProxy() {
+			return ( typeof handler === "string" ? instance[ handler ] : handler )
+				.apply( instance, arguments );
+		}
+		var instance = this;
+		return setTimeout( handlerProxy, delay || 0 );
 	},
 
 	_hoverable: function( element ) {

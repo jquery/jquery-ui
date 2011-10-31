@@ -174,7 +174,7 @@ $.widget( "ui.button", {
 					}
 					$( this ).addClass( "ui-state-active" );
 					lastActive = this;
-					$( document ).one( "mouseup", function() {
+					self.document.one( "mouseup", function() {
 						lastActive = null;
 					});
 				})
@@ -319,7 +319,7 @@ $.widget( "ui.button", {
 			return;
 		}
 		var buttonElement = this.buttonElement.removeClass( typeClasses ),
-			buttonText = $( "<span></span>" )
+			buttonText = $( "<span></span>", this.document[0] )
 				.addClass( "ui-button-text" )
 				.html( this.options.label )
 				.appendTo( buttonElement.empty() )
@@ -379,7 +379,7 @@ $.widget( "ui.buttonset", {
 	},
 	
 	refresh: function() {
-		var ltr = this.element.css( "direction" ) === "ltr";
+		var rtl = this.element.css( "direction" ) === "rtl";
 		
 		this.buttons = this.element.find( this.options.items )
 			.filter( ":ui-button" )
@@ -393,10 +393,10 @@ $.widget( "ui.buttonset", {
 			})
 				.removeClass( "ui-corner-all ui-corner-left ui-corner-right" )
 				.filter( ":first" )
-					.addClass( ltr ? "ui-corner-left" : "ui-corner-right" )
+					.addClass( rtl ? "ui-corner-right" : "ui-corner-left" )
 				.end()
 				.filter( ":last" )
-					.addClass( ltr ? "ui-corner-right" : "ui-corner-left" )
+					.addClass( rtl ? "ui-corner-left" : "ui-corner-right" )
 				.end()
 			.end();
 	},

@@ -94,7 +94,7 @@ $.widget( "ui.menubar", {
 				}
 				if ( ( that.open && event.type == "mouseenter" ) || event.type == "click" || that.options.autoExpand ) {
 					if( that.options.autoExpand ) {
-						clearTimeout( that.timer );
+						clearTimeout( that.closeTimer );
 					}
 
 					that._open( event, menu );
@@ -123,22 +123,6 @@ $.widget( "ui.menubar", {
 			.attr( "aria-haspopup", "true" )
 			.wrapInner( "<span class='ui-button-text'></span>" );
 
-			if ( that.options.autoExpand ) {
-				input.bind( "mouseleave.menubar", function( event ) {
-					that.timer = setTimeout( function() {
-						that._close();
-					}, 150 );
-				});
-				menu.bind( "mouseleave.menubar", function( event ) {
-					that.timer = setTimeout( function() {
-						that._close();
-					}, 150 );
-				})
-				.bind( "mouseenter.menubar", function( event ) {
-					clearTimeout( that.timer );
-				});
-			}
-
 			// TODO review if these options are a good choice, maybe they can be merged
 			if ( that.options.menuIcon ) {
 				input.addClass( "ui-state-default" ).append( "<span class='ui-button-icon-secondary ui-icon ui-icon-triangle-1-s'></span>" );
@@ -166,7 +150,17 @@ $.widget( "ui.menubar", {
 			focusout: function( event ) {
 				that.closeTimer = setTimeout( function() {
 					that._close( event );
-				}, 100);
+				}, 150);
+			},
+			"mouseleave .ui-menubar-item": function( event ) {
+				if ( that.options.autoExpand ) {
+					that.closeTimer = setTimeout( function() {
+						that._close( event );
+					}, 150);
+				}
+			},
+			"mouseenter .ui-menubar-item": function( event ) {
+				clearTimeout( that.closeTimer );
 			}
 		});
 	},

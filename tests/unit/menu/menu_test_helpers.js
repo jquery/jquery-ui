@@ -5,10 +5,10 @@ function menu_log( message, clear ) {
 	if ( message === undefined ) {
 		message = $( "#log" ).data( "lastItem" );
 	}
-	$( "#log" ).prepend( message + "," );
+	$( "#log" ).prepend( $.trim( message ) + "," );
 }
 
 function menu_click( menu, item ) {
 	$( "#log" ).data( "lastItem", item );
-	menu.find( "li:eq(" + item + ") a" ).trigger( "click" );
+	menu.children( ":eq(" + item + ")" ).find( "a:first" ).trigger( "click" );
 }
