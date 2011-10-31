@@ -168,6 +168,11 @@ $.widget( "ui.autocomplete", {
 					return;
 				}
 
+				if ( self.cancelBlur ) {
+					delete self.cancelBlur;
+					return;
+				}
+
 				clearTimeout( self.searching );
 				self.close( event );
 				self._change( event );
@@ -183,6 +188,13 @@ $.widget( "ui.autocomplete", {
 			.mousedown(function( event ) {
 				// prevent moving focus out of the text field
 				event.preventDefault();
+
+				// IE doesn't prevent moving focus even with event.preventDefault()
+				// so we set a flag to know when we should ignore the blur event
+				self.cancelBlur = true;
+				setTimeout(function() {
+					delete self.cancelBlur;
+				}, 1 );
 
 				// clicking on the scrollbar causes focus to shift to the body
 				// but we can't detect a mouseup or a click immediately afterward
