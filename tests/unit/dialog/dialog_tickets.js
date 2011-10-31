@@ -37,9 +37,9 @@ asyncTest( "#3123: Prevent tabbing out of modal dialogs", function() {
 test("#5388: Don't change z-index when already at the top", function() {
 	expect(8);
 
-	d1 = $('<div></div>').appendTo(document.body).dialog({ modal: true, autoOpen: false });
-    d2 = $('<div></div>').appendTo(document.body).dialog({ modal: true, autoOpen: false });
-    d3 = $('<div></div>').appendTo(document.body).dialog({ modal: true, autoOpen: false });
+	var d1 = $('<div></div>').appendTo(document.body).dialog({ modal: true, autoOpen: false }),
+		d2 = $('<div></div>').appendTo(document.body).dialog({ modal: true, autoOpen: false }),
+		d3 = $('<div></div>').appendTo(document.body).dialog({ modal: true, autoOpen: false });
     
     for (var i=0; i < 10; i++) {
         d1.dialog('open').dialog('close');
