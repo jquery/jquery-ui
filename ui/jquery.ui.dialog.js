@@ -36,21 +36,6 @@ var uiDialogClasses = "ui-dialog ui-widget ui-widget-content ui-corner-all ",
 	},
 	dialogs = {};
 
-	function updateMaxZ($currentDialog) {
-		var self = this,
-			maxZ = self.options.zIndex;
-
-		$.each(dialogs, function() {
-			if (this.uiDialog[0] !== self.uiDialog[0] && this._isOpen) {
-				thisZ = this.uiDialog.css('z-index');
-				if(!isNaN(thisZ)) {
-					maxZ = Math.max(maxZ, thisZ);
-				}
-			}
-		});
-		$.ui.dialog.maxZ = maxZ;
-	}
-
 $.widget("ui.dialog", {
 	version: "@VERSION",
 	options: {
@@ -243,10 +228,25 @@ $.widget("ui.dialog", {
 
 		// adjust the maxZ to allow other modal dialogs to continue to work (see #4309)
 		if (self.options.modal) {
-			updateMaxZ.call(self);
+			self._updateMaxZ();
 		}
 
 		return self;
+	},
+	
+	_updateMaxZ: function() {
+		var self = this,
+			maxZ = self.options.zIndex;
+
+		$.each(dialogs, function() {
+			if (this.uiDialog[0] !== self.uiDialog[0] && this._isOpen) {
+				thisZ = this.uiDialog.css('z-index');
+				if(!isNaN(thisZ)) {
+					maxZ = Math.max(maxZ, thisZ);
+				}
+			}
+		});
+		$.ui.dialog.maxZ = maxZ;
 	},
 
 	isOpen: function() {
@@ -267,7 +267,7 @@ $.widget("ui.dialog", {
 
 		//moveToTop method does not have a true/false passed down from dialog('moveToTop')
 		if (force || force === undefined) {
-			updateMaxZ.call(self);
+			self._updateMaxZ();
 
 			if (self.overlay) {
 				$.ui.dialog.maxZ += 1;
