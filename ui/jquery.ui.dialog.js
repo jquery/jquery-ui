@@ -36,16 +36,12 @@ var uiDialogClasses = "ui-dialog ui-widget ui-widget-content ui-corner-all ",
 	},
 	dialogs = {};
 
-	function getUIDialogUUID($uiDialog) {
-		return $uiDialog.attr('aria-labelledby');
-	}
-
 	function updateMaxZ($currentDialog) {
 		var self = this,
 			maxZ = self.options.zIndex;
 
 		$.each(dialogs, function() {
-			if (this.uiDialog[0] !== self.uiDialog[0] && this.isOpen) {
+			if (this.uiDialog[0] !== self.uiDialog[0] && this._isOpen) {
 				thisZ = this.uiDialog.css('z-index');
 				if(!isNaN(thisZ)) {
 					maxZ = Math.max(maxZ, thisZ);
@@ -162,6 +158,8 @@ $.widget("ui.dialog", {
 				.html( title )
 				.prependTo( uiDialogTitlebar );
 
+		self.titleId = titleId;
+
 		uiDialogTitlebar.find( "*" ).add( uiDialogTitlebar ).disableSelection();
 		this._hoverable( uiDialogTitlebarClose );
 		this._focusable( uiDialogTitlebarClose );
@@ -180,10 +178,7 @@ $.widget("ui.dialog", {
 			uiDialog.bgiframe();
 		}
 
-		dialogs[titleId] = { 
-			'uiDialog': uiDialog,
-			isOpen: false
-		};
+		dialogs[self.titleId] = this;
 	},
 
 	_init: function() {
@@ -199,7 +194,7 @@ $.widget("ui.dialog", {
 			self.overlay.destroy();
 		}
 		self.uiDialog.hide();
-		delete dialogs[getUIDialogUUID(self.uiDialog)];
+		delete dialogs[self.titleId];
 
 		self.element
 			.removeClass( "ui-dialog-content ui-widget-content" )
@@ -229,7 +224,6 @@ $.widget("ui.dialog", {
 		}
 
 		self._isOpen = false;
-		dialogs[getUIDialogUUID(self.uiDialog)].isOpen = false;
 
 		if ( self.overlay ) {
 			self.overlay.destroy();
@@ -341,7 +335,6 @@ $.widget("ui.dialog", {
 		hasFocus.eq( 0 ).focus();
 
 		self._isOpen = true;
-		dialogs[getUIDialogUUID(uiDialog)].isOpen = true;
 		self._trigger('open');
 
 		return self;
