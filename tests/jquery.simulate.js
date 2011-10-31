@@ -24,6 +24,8 @@ $.simulate = function( el, type, options ) {
 
 	if ( type === "drag" ) {
 		this[ type ].apply( this, [ this.target, options ] );
+	} else if ( type === "focus" || type === "blur" ) {
+		this[ type ]();
 	} else {
 		this.simulateEvent( el, type, options );
 	}
@@ -157,6 +159,53 @@ $.extend( $.simulate.prototype, {
 			x: o.left + el.outerWidth() / 2 - d.scrollLeft(),
 			y: o.top + el.outerHeight() / 2 - d.scrollTop()
 		};
+	},
+
+	focus: function() {
+		var focusinEvent,
+			triggered = false,
+			element = $( this.target );
+
+		function trigger() {
+			triggered = true;
+		}
+
+		element.bind( "focus", trigger );
+		element[ 0 ].focus();
+
+		if ( !triggered ) {
+			focusinEvent = $.Event( "focusin" );
+			focusinEvent.preventDefault();
+			element.trigger( focusinEvent );
+			element.triggerHandler( "focus" );
+		}
+		element.unbind( "focus", trigger );
+	},
+
+	blur: function() {
+		var focusoutEvent,
+			triggered = false,
+			element = $( this.target );
+
+		function trigger() {
+			triggered = true;
+		}
+
+		element.bind( "blur", trigger );
+		element[ 0 ].blur();
+
+		// Some versions of IE don't actually .blur() on an element - so we focus the body
+		if ( element[ 0 ].ownerDocument.activeElement === element[ 0 ] ) {
+			element[ 0 ].ownerDocument.body.focus();
+		}
+
+		if ( !triggered ) {
+			focusoutEvent = $.Event( "focusout" );
+			focusoutEvent.preventDefault();
+			element.trigger( focusoutEvent );
+			element.triggerHandler( "blur" );
+		}
+		element.unbind( "blur", trigger );
 	}
 });
 

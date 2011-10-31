@@ -62,15 +62,13 @@ $.each([
 					}
 				}),
 			menu = element.autocomplete( "widget" );
-	
-		element.focus()[ settings.valueMethod ]( "j" ).keydown();
+
+		element.simulate( "focus" )[ settings.valueMethod ]( "j" ).keydown();
 		setTimeout(function() {
 			ok( menu.is( ":visible" ), "menu is visible after delay" );
 			element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
 			element.simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
-			// blurring through jQuery causes a bug in IE 6 which causes the
-			// autocompletechange event to occur twice
-			element[0].blur();
+			element.simulate( "blur" );
 		}, 50 );
 	});
 });
