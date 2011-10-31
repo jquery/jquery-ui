@@ -49,7 +49,23 @@ var uiDialogClasses =
 		height: true,
 		offset: true,
 		click: true
-	};
+	},
+	dialogs = {};
+
+	function updateMaxZ($currentDialog) {
+		var self = this,
+			maxZ = self.options.zIndex;
+
+		$.each(dialogs, function() {
+			if (this.uiDialog[0] !== self.uiDialog[0] && this._isOpen) {
+				thisZ = this.uiDialog.css('z-index');
+				if(!isNaN(thisZ)) {
+					maxZ = Math.max(maxZ, thisZ);
+				}
+			}
+		});
+		$.ui.dialog.maxZ = maxZ;
+	}
 
 $.widget("ui.dialog", {
 	options: {
@@ -182,6 +198,8 @@ $.widget("ui.dialog", {
 				.html(title)
 				.prependTo(uiDialogTitlebar);
 
+		self.titleId = titleId;
+		
 		//handling of deprecated beforeclose (vs beforeClose) option
 		//Ticket #4669 http://dev.jqueryui.com/ticket/4669
 		//TODO: remove in 1.9pre
@@ -204,6 +222,8 @@ $.widget("ui.dialog", {
 		if ($.fn.bgiframe) {
 			uiDialog.bgiframe();
 		}
+
+		dialogs[self.titleId] = this;
 	},
 
 	_init: function() {
@@ -219,6 +239,8 @@ $.widget("ui.dialog", {
 			self.overlay.destroy();
 		}
 		self.uiDialog.hide();
+		delete dialogs[self.titleId];
+
 		self.element
 			.unbind('.dialog')
 			.removeData('dialog')
@@ -251,7 +273,7 @@ $.widget("ui.dialog", {
 		self.uiDialog.unbind('keypress.ui-dialog');
 
 		self._isOpen = false;
-
+		
 		if (self.options.hide) {
 			self.uiDialog.hide(self.options.hide, function() {
 				self._trigger('close', event);
@@ -265,16 +287,7 @@ $.widget("ui.dialog", {
 
 		// adjust the maxZ to allow other modal dialogs to continue to work (see #4309)
 		if (self.options.modal) {
-			maxZ = 0;
-			$('.ui-dialog').each(function() {
-				if (this !== self.uiDialog[0]) {
-					thisZ = $(this).css('z-index');
-					if(!isNaN(thisZ)) {
-						maxZ = Math.max(maxZ, thisZ);
-					}
-				}
-			});
-			$.ui.dialog.maxZ = maxZ;
+			updateMaxZ.call(self);
 		}
 
 		return self;
@@ -296,20 +309,23 @@ $.widget("ui.dialog", {
 			return self._trigger('focus', event);
 		}
 
-		if (options.zIndex > $.ui.dialog.maxZ) {
-			$.ui.dialog.maxZ = options.zIndex;
-		}
-		if (self.overlay) {
-			$.ui.dialog.maxZ += 1;
-			self.overlay.$el.css('z-index', $.ui.dialog.overlay.maxZ = $.ui.dialog.maxZ);
-		}
+		//moveToTop method does not have a true/false passed down from dialog('moveToTop')
+		if (force || force === undefined) {
+			updateMaxZ.call(self);
 
-		//Save and then restore scroll since Opera 9.5+ resets when parent z-Index is changed.
-		//  http://ui.jquery.com/bugs/ticket/3193
-		saveScroll = { scrollTop: self.element.scrollTop(), scrollLeft: self.element.scrollLeft() };
-		$.ui.dialog.maxZ += 1;
-		self.uiDialog.css('z-index', $.ui.dialog.maxZ);
-		self.element.attr(saveScroll);
+			if (self.overlay) {
+				$.ui.dialog.maxZ += 1;
+				self.overlay.$el.css('z-index', $.ui.dialog.overlay.maxZ = $.ui.dialog.maxZ);
+			}
+
+			//Save and then restore scroll since Opera 9.5+ resets when parent z-Index is changed.
+			//  http://ui.jquery.com/bugs/ticket/3193
+			saveScroll = { scrollTop: self.element.scrollTop(), scrollLeft: self.element.scrollLeft() };
+			$.ui.dialog.maxZ += 1;
+			self.uiDialog.css('z-index', $.ui.dialog.maxZ);
+			self.element.attr(saveScroll);
+		}
+		
 		self._trigger('focus', event);
 
 		return self;
