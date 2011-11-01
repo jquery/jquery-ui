@@ -56,7 +56,7 @@ $.each([
 					},
 					change: function( event, ui ) {
 						equal( event.originalEvent.type, "blur", "change originalEvent" );
-						deepEqual( ui.item, { label: "Java", value: "Java" }, "chnage ui.item" );
+						deepEqual( ui.item, { label: "Java", value: "Java" }, "change ui.item" );
 						ok( menu.is( ":hidden" ), "menu closed on change" );
 						start();
 					}
