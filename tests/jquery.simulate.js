@@ -194,18 +194,23 @@ $.extend( $.simulate.prototype, {
 		element.bind( "blur", trigger );
 		element[ 0 ].blur();
 
-		// Some versions of IE don't actually .blur() on an element - so we focus the body
-		if ( element[ 0 ].ownerDocument.activeElement === element[ 0 ] ) {
-			element[ 0 ].ownerDocument.body.focus();
-		}
+		// blur events are async in IE
+		setTimeout(function() {
+			// IE won't let the blur occur if the window is inactive
+			if ( element[ 0 ].ownerDocument.activeElement === element[ 0 ] ) {
+				element[ 0 ].ownerDocument.body.focus();
+			}
 
-		if ( !triggered ) {
-			focusoutEvent = $.Event( "focusout" );
-			focusoutEvent.preventDefault();
-			element.trigger( focusoutEvent );
-			element.triggerHandler( "blur" );
-		}
-		element.unbind( "blur", trigger );
+			// Firefox won't trigger events if the window is inactive
+			// IE doesn't trigger events if we had to manually focus the body
+			if ( !triggered ) {
+				focusoutEvent = $.Event( "focusout" );
+				focusoutEvent.preventDefault();
+				element.trigger( focusoutEvent );
+				element.triggerHandler( "blur" );
+			}
+			element.unbind( "blur", trigger );
+		}, 1 );
 	}
 });
 
