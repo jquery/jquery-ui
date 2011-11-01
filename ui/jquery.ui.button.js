@@ -47,10 +47,7 @@ $.widget( "ui.button", {
 		disabled: null,
 		text: true,
 		label: null,
-		icons: {
-			primary: null,
-			secondary: null
-		}
+		icons: null,
 	},
 	_create: function() {
 		this.element.closest( "form" )
@@ -327,7 +324,11 @@ $.widget( "ui.button", {
 			icons = this.options.icons,
 			multipleIcons = icons.primary && icons.secondary,
 			buttonClasses = [];  
-
+		if (typeof icons == "string") {
+			var string = icons;
+			icons = {};
+			icons.primary = string;
+		}
 		if ( icons.primary || icons.secondary ) {
 			if ( this.options.text ) {
 				buttonClasses.push( "ui-button-text-icon" + ( multipleIcons ? "s" : ( icons.primary ? "-primary" : "-secondary" ) ) );
