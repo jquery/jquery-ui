@@ -194,12 +194,7 @@ $.Widget.prototype = {
 
 		if ( element !== this ) {
 			$.data( element, this.widgetName, this );
-			// bugfix memory leak http://bugs.jqueryui.com/ticket/7808
-			//this._bind({ remove: "destroy" });
-			this.element.bind( "remove." + this.widgetName,
-				{widgetName: this.widgetName},
-				this.__destroy);
-
+			this._bind({ remove: "destroy" });
 			this.document = $( element.ownerDocument );
 			this.window = $( this.document[0].defaultView || this.document[0].parentWindow );
 		}
@@ -207,11 +202,6 @@ $.Widget.prototype = {
 		this._create();
 		this._trigger( "create" );
 		this._init();
-	},
-	// bugfix memory leak http://bugs.jqueryui.com/ticket/7808
-	__destroy: function(e){
-		var self = $(this).data(e.data.widgetName);
-		self.destroy();
 	},
 	_getCreateOptions: $.noop,
 	_create: $.noop,
@@ -332,8 +322,13 @@ $.Widget.prototype = {
 						$( this ).hasClass( "ui-state-disabled" ) ) {
 					return;
 				}
-				return ( typeof handler === "string" ? instance[ handler ] : handler )
-					.apply( instance, arguments );
+				//return ( typeof handler === "string" ? instance[ handler ] : handler )
+				//	.apply( instance, arguments );
+        // bugfix memory leak http://bugs.jqueryui.com/ticket/7808
+				var ret = ( typeof handler === "string" ? instance[ handler ] : handler )
+                    .apply( instance, arguments );
+        instance = null;
+        return ret;
 			}
 			var match = event.match( /^(\w+)\s*(.*)$/ ),
 				eventName = match[1] + "." + instance.widgetName,
@@ -343,6 +338,8 @@ $.Widget.prototype = {
 			} else {
 				element.bind( eventName, handlerProxy );
 			}
+			// bugfix memory leak http://bugs.jqueryui.com/ticket/7808
+			element = null;
 		});
 	},
 
