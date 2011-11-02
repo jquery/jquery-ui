@@ -138,7 +138,7 @@ $.widget( "ui.selectmenu", {
 					that._trigger( "change", event, { item: item } );
 				}
 				
-				if ( that.opened ) {
+				if ( that.isOpen ) {
 					event.preventDefault();
 					that.close( event, true);
 				}
@@ -157,7 +157,7 @@ $.widget( "ui.selectmenu", {
 		// document click closes menu
 		this._bind( document, {
 			'click': function( event ) {
-				if ( this.opened && !$( event.target ).closest( "#" + this.ids.button).length ) {
+				if ( this.isOpen && !$( event.target ).closest( "#" + this.ids.button).length ) {
 					this.close( event );
 				}
 			}
@@ -227,13 +227,13 @@ $.widget( "ui.selectmenu", {
 					of: this.button
 				}, this.options.position ));
 			
-			this.opened = true;
+			this.isOpen = true;
 			this._trigger( "open", event );
 		}
 	},	
 	
 	close: function( event, focus ) {
-		if ( this.opened ) {
+		if ( this.isOpen ) {
 			if ( this.options.dropdown ) {
 				this.button
 					.addClass( 'ui-corner-all' )
@@ -241,7 +241,7 @@ $.widget( "ui.selectmenu", {
 			}
 			
 			this.menuWrap.removeClass( 'ui-selectmenu-open' );
-			this.opened = false;
+			this.isOpen = false;
 			
 			if ( focus ) {
 				this.button.focus();
@@ -286,13 +286,13 @@ $.widget( "ui.selectmenu", {
 	},
 	
 	_move: function( key, event ) {
-		if ( !this.opened )	{
+		if ( !this.isOpen )	{
 			this.menu.menu( "focus", event, this._getSelectedItem() );
 		}
 		
 		this.menu.menu( key, event );		
 		
-		if ( !this.opened ) {
+		if ( !this.isOpen ) {
 			this.menu.menu( "select", event  );
 		}
 	},
@@ -302,7 +302,7 @@ $.widget( "ui.selectmenu", {
 	},
 	
 	_toggle: function( event ) {
-		if ( this.opened ) {	
+		if ( this.isOpen ) {	
 			this.close( event );
 		} else {	
 			this.open( event );
@@ -317,12 +317,12 @@ $.widget( "ui.selectmenu", {
 		keydown: function( event ) {
 			switch (event.keyCode) {
 				case $.ui.keyCode.TAB:
-					if ( this.opened ) {
+					if ( this.isOpen ) {
 						this.close( event );
 					}
 					break;
 				case $.ui.keyCode.ENTER:
-					if ( this.opened ) {
+					if ( this.isOpen ) {
 						this.menu.menu( "select", this._getSelectedItem() );
 					}			
 					event.preventDefault();
