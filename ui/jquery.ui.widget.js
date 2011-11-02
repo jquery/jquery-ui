@@ -194,8 +194,8 @@ $.Widget.prototype = {
 
 		if ( element !== this ) {
 			$.data( element, this.widgetName, this );
-			this._bind({ remove: "destroy" });
 			// bugfix memory leak http://bugs.jqueryui.com/ticket/7808
+			//this._bind({ remove: "destroy" });
 			this.element.bind( "remove." + this.widgetName,
 				{widgetName: this.widgetName},
 				this.__destroy);
