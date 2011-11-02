@@ -322,13 +322,13 @@ $.Widget.prototype = {
 						$( this ).hasClass( "ui-state-disabled" ) ) {
 					return;
 				}
-				return ( typeof handler === "string" ? instance[ handler ] : handler )
-					.apply( instance, arguments );
-        // bugfix memory leak http://bugs.jqueryui.com/ticket/7808
+	//			return ( typeof handler === "string" ? instance[ handler ] : handler )
+	//				.apply( instance, arguments );
+         bugfix memory leak http://bugs.jqueryui.com/ticket/7808
 				//var ret = ( typeof handler === "string" ? instance[ handler ] : handler )
-        //            .apply( instance, arguments );
-        //instance = null;
-        //return ret;
+                    .apply( instance, arguments );
+        instance = null;
+        return ret;
 			}
 			var match = event.match( /^(\w+)\s*(.*)$/ ),
 				eventName = match[1] + "." + instance.widgetName,
@@ -339,7 +339,6 @@ $.Widget.prototype = {
 				element.bind( eventName, handlerProxy );
 			}
 			// bugfix memory leak http://bugs.jqueryui.com/ticket/7808
-			instance = null;
 			element = null;
 		});
 	},
