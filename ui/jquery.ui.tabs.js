@@ -561,7 +561,7 @@ $.widget( "ui.tabs", {
 						if ( jqXHR === self.xhr ) {
 							delete self.xhr;
 						}
-					});
+					}, 1 );
 				});
 		}
 
