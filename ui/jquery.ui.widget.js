@@ -195,6 +195,11 @@ $.Widget.prototype = {
 		if ( element !== this ) {
 			$.data( element, this.widgetName, this );
 			this._bind({ remove: "destroy" });
+			// bugfix memory leak http://bugs.jqueryui.com/ticket/7808
+			this.element.bind( "remove." + this.widgetName,
+      	{widgetName: this.widgetName},
+      	this.__destroy);
+
 			this.document = $( element.ownerDocument );
 			this.window = $( this.document[0].defaultView || this.document[0].parentWindow );
 		}
@@ -203,6 +208,11 @@ $.Widget.prototype = {
 		this._trigger( "create" );
 		this._init();
 	},
+	// bugfix memory leak http://bugs.jqueryui.com/ticket/7808
+  $.Widget.prototype.__destroy = function(e){
+  	var self = $(this).data(e.data.widgetName);
+  	self.destroy();
+  },
 	_getCreateOptions: $.noop,
 	_create: $.noop,
 	_init: $.noop,
