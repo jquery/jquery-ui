@@ -209,10 +209,10 @@ $.Widget.prototype = {
 		this._init();
 	},
 	// bugfix memory leak http://bugs.jqueryui.com/ticket/7808
-	__destroy = function(e){
-  	var self = $(this).data(e.data.widgetName);
-  	self.destroy();
-  },
+	__destroy: function(e){
+		var self = $(this).data(e.data.widgetName);
+		self.destroy();
+	},
 	_getCreateOptions: $.noop,
 	_create: $.noop,
 	_init: $.noop,
