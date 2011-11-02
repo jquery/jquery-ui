@@ -325,7 +325,7 @@ $.Widget.prototype = {
 	//			return ( typeof handler === "string" ? instance[ handler ] : handler )
 	//				.apply( instance, arguments );
         // bugfix memory leak http://bugs.jqueryui.com/ticket/7808
-				//var ret = ( typeof handler === "string" ? instance[ handler ] : handler )
+				var ret = ( typeof handler === "string" ? instance[ handler ] : handler )
                     .apply( instance, arguments );
         instance = null;
         return ret;
