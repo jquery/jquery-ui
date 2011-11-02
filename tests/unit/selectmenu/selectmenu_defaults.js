@@ -9,7 +9,8 @@ commonWidgetTests( "selectmenu", {
 			collision: "none"
 		},
 		value: null,
-		// callbacks
+		// callbacks,
+		create: null,
 		open: null,
 		focus: null,
 		select: null,
