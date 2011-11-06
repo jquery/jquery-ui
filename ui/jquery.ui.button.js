@@ -14,7 +14,7 @@
 (function( $, undefined ) {
 
 var lastActive, startXPos, startYPos, clickDragged,
-	baseClasses = "ui-button ui-widget ui-state-default ui-corner-all",
+	baseClasses = "ui-widget ui-state-default ui-corner-all",
 	stateClasses = "ui-state-hover ui-state-active ",
 	typeClasses = "ui-button-icons-only ui-button-icon-only ui-button-text-icons ui-button-text-icon-primary ui-button-text-icon-secondary ui-button-text-only",
 	formResetHandler = function() {
@@ -76,6 +76,12 @@ $.widget( "ui.button", {
 
 		if ( this.element.is( ":disabled" ) ) {
 			options.disabled = true;
+		}
+
+		if ( this.element.is( ":hidden" ) ) {
+			baseClasses += " ui-button-hidden";
+		} else {
+			baseClasses += " ui-button";
 		}
 
 		this.buttonElement
