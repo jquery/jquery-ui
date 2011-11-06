@@ -303,8 +303,8 @@ $.widget("ui.selectmenu", {
 				}					
 				var thisAAttr = {
 					html: selectOptionData[i].text,
-					href : '#nogo', 
-					tabindex : -1, 
+					href : '#nogo',
+					tabindex : -1,
 					role : 'option',
 					'aria-selected' : false
 				};
@@ -434,7 +434,7 @@ $.widget("ui.selectmenu", {
 		if ( this.element.attr( 'disabled' ) ) {
 			this.disable();
 		} else {
-			this.enable()
+			this.enable();
 		}
 		
 		// update value
@@ -504,7 +504,7 @@ $.widget("ui.selectmenu", {
 		// selected index, if it's in the menu, just the focused one
 		// I copied this code from _moveSelection() and _moveFocus()
 		// respectively --thg2k
-		var selectedIndex = (eventType !== 'focus' ? 
+		var selectedIndex = (eventType !== 'focus' ?
 			this._selectedOptionLi().data('index') :
 			this._focusedOptionLi().data('index')) || 0;
 
