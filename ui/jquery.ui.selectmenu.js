@@ -17,7 +17,7 @@ $.widget("ui.selectmenu", {
 	eventPrefix: "selectmenu",
 	options: {
 		transferClasses: true,
-		typeAhead: "sequential",
+		typeAhead: 1000,
 		style: 'dropdown',
 		positionOptions: {
 			my: "left top",
@@ -131,13 +131,18 @@ $.widget("ui.selectmenu", {
 					case $.ui.keyCode.TAB:
 						ret = true;
 						break;
+					case $.ui.keyCode.HOME:
+						self.index(0);
+						break;
 					default:
 						ret = true;
 				}
 				return ret;
 			})
 			.bind('keypress.selectmenu', function(event) {
-				self._typeAhead(event.which, 'mouseup');
+				if (event.which > 0) {
+					self._typeAhead(event.which, 'mouseup');
+				}
 				return true;
 			})
 			.bind('mouseover.selectmenu focus.selectmenu', function() {
@@ -250,7 +255,9 @@ $.widget("ui.selectmenu", {
 				return ret;
 			})
 			.bind('keypress.selectmenu', function(event) {
-				self._typeAhead(event.which, 'focus');
+				if (event.which > 0) {
+					self._typeAhead(event.which, 'focus');
+				}
 				return true;
 			})
 			// this allows for using the scrollbar in an overflowed list
@@ -460,63 +467,79 @@ $.widget("ui.selectmenu", {
 		$.Widget.prototype.destroy.apply(this, arguments);
 	},
 
-	_typeAhead: function( code, eventType ){
-		var self = this, focusFound = false, C = String.fromCharCode(code).toUpperCase();
-		c = C.toLowerCase();
+	_typeAhead: function( code, eventType ) {
+		var self = this,
+			c = String.fromCharCode(code).toLowerCase(),
+			items = this.list.find( 'li a' ),
+			matchee = null,
+			nextIndex = null;
 
-		if ( self.options.typeAhead == 'sequential' ) {
-			// clear the timeout so we can use _prevChar
-			window.clearTimeout('ui.selectmenu-' + self.selectmenuId);
-
-			// define our find var
-			var find = typeof( self._prevChar ) == 'undefined' ? '' : self._prevChar.join( '' );
-
-			function focusOptSeq( elem, ind, c ){
-				focusFound = true;
-				$( elem ).trigger( eventType );
-				typeof( self._prevChar ) == 'undefined' ? self._prevChar = [ c ] : self._prevChar[ self._prevChar.length ] = c;
-			}
-			this.list.find( 'li a' ).each( function( i ) {
-				if ( !focusFound ) {
-					// allow the typeahead attribute on the option tag for a more specific lookup
-					var thisText = $( this ).attr( 'typeahead' ) || $(this).text();
-					if ( thisText.indexOf( find + C ) === 0 ) {
-						focusOptSeq( this, i, C );
-					} else if (thisText.indexOf(find+c) === 0 ) {
-						focusOptSeq( this, i, c );
-					}
-				}
-			});
-			// set a 1 second timeout for sequenctial typeahead
-			// keep this set even if we have no matches so it doesnt typeahead somewhere else
-			window.setTimeout( function( el ) {
-				self._prevChar = undefined;
-			}, 1000, self );
-
-		} else {
-			// define self._prevChar if needed
-			if ( !self._prevChar ) { self._prevChar = [ '' , 0 ]; }
-
-			focusFound = false;
-			function focusOpt( elem, ind ){
-				focusFound = true;
-				$( elem ).trigger( eventType );
-				self._prevChar[ 1 ] = ind;
-			}
-			this.list.find( 'li a' ).each(function( i ){
-				if (!focusFound){
-					var thisText = $(this).text();
-					if ( thisText.indexOf( C ) === 0 || thisText.indexOf( c ) === 0 ) {
-						if (self._prevChar[0] == C){
-							if ( self._prevChar[ 1 ] < i ){ focusOpt( this, i ); }
-						} else{ 
-							focusOpt( this, i ); 
-						}
-					}
-				}
-			});
-			this._prevChar[ 0 ] = C;
+		// Clear any previous timer if present
+		if ( self._typeAhead_timer ) {
+			window.clearTimeout( self._typeAhead_timer );
+			self._typeAhead_timer = undefined;
 		}
+
+		// Store the character typed
+		self._typeAhead_chars = (self._typeAhead_chars === undefined ? "" : self._typeAhead_chars).concat(c);
+
+		// Detect if we are in cyciling mode or direct selection mode
+		if ( self._typeAhead_chars.length < 2 ||
+		     (self._typeAhead_chars.substr(-2, 1) === c && self._typeAhead_cycling) ) {
+			self._typeAhead_cycling = true;
+
+			// Match only the first character and loop
+			matchee = c;
+		}
+		else {
+			// We won't be cycling anymore until the timer expires
+			self._typeAhead_cycling = false;
+
+			// Match all the characters typed
+			matchee = self._typeAhead_chars;
+		}
+
+		// We need to determine the currently active index, but it depends on
+		// the used context: if it's in the element, we want the actual
+		// selected index, if it's in the menu, just the focused one
+		// I copied this code from _moveSelection() and _moveFocus()
+		// respectively --thg2k
+		var selectedIndex = (eventType !== 'focus' ? 
+			this._selectedOptionLi().data('index') :
+			this._focusedOptionLi().data('index')) || 0;
+
+		for (var i = 0; i < items.length; i++) {
+			var thisText = items.eq(i).text().substr(0, matchee.length).toLowerCase();
+
+			if ( thisText === matchee ) {
+
+				if ( self._typeAhead_cycling ) {
+					if ( nextIndex === null )
+						nextIndex = i;
+
+					if ( i > selectedIndex ) {
+						nextIndex = i;
+						break;
+					}
+				} else {
+					nextIndex = i;
+				}
+			}
+		}
+
+		if ( nextIndex !== null ) {
+			// Why using trigger() instead of a direct method to select the
+			// index? Because we don't what is the exact action to do, it
+			// depends if the user is typing on the element or on the popped
+			// up menu
+			items.eq(nextIndex).trigger( eventType );
+		}
+
+		self._typeAhead_timer = window.setTimeout(function() {
+			self._typeAhead_timer = undefined;
+			self._typeAhead_chars = undefined;
+			self._typeAhead_cycling = undefined;
+		}, self.options.typeAhead);
 	},
 
 	// returns some usefull information, called by callbacks only
