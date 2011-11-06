@@ -6,6 +6,7 @@ commonWidgetTests( "menu", {
 			at: "right top"
 		},
 		items: "ul",
+		trigger: null,
 
 		// callbacks
 		create: null

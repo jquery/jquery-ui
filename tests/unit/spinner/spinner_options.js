@@ -2,6 +2,8 @@
 
 module( "spinner: options" );
 
+// culture is tested after numberFormat, since it depends on numberFormat
+
 test( "incremental, false", function() {
 	expect( 100 );
 
@@ -18,6 +20,7 @@ test( "incremental, false", function() {
 	for ( i = 0; i < 100; i++ ) {
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.UP } );
 	}
+	element.simulate( "keyup", { keyCode: $.ui.keyCode.UP } );
 });
 
 test( "incremental, true", function() {
@@ -45,6 +48,7 @@ test( "incremental, true", function() {
 	for ( i = 0; i < 100; i++ ) {
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.UP } );
 	}
+	element.simulate( "keyup", { keyCode: $.ui.keyCode.UP } );
 });
 
 test( "incremental, function", function() {
@@ -65,6 +69,7 @@ test( "incremental, function", function() {
 	for ( i = 0; i < 100; i++ ) {
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.UP } );
 	}
+	element.simulate( "keyup", { keyCode: $.ui.keyCode.UP } );
 });
 
 test( "numberFormat, number", function() {
@@ -89,6 +94,29 @@ test( "numberFormat, currency", function() {
 	equal( element.val(), "$0.00", "formatted on init" );
 	element.spinner( "stepUp" );
 	equal( element.val(), "$1.00", "formatted after step" );
+});
+
+test( "culture, null", function() {
+	expect( 2 );
+	Globalize.culture( "ja-JP" );
+	var element = $( "#spin" ).val( 0 ).spinner({ numberFormat: "C" });
+	equal( element.val(), "¥0", "formatted on init" );
+	element.spinner( "stepUp" );
+	equal( element.val(), "¥1", "formatted after step" );
+
+	// reset culture
+	Globalize.culture( "default" );
+});
+
+test( "currency, ja-JP", function() {
+	expect( 2 );
+	var element = $( "#spin" ).val( 0 ).spinner({
+		numberFormat: "C",
+		culture: "ja-JP"
+	});
+	equal( element.val(), "¥0", "formatted on init" );
+	element.spinner( "stepUp" );
+	equal( element.val(), "¥1", "formatted after step" );
 });
 
 test( "max", function() {

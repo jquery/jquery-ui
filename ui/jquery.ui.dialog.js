@@ -372,8 +372,7 @@ $.widget("ui.dialog", {
 
 	_makeDraggable: function() {
 		var self = this,
-			options = self.options,
-			doc = $( document );
+			options = self.options;
 
 		function filteredUi( ui ) {
 			return {
@@ -396,8 +395,8 @@ $.widget("ui.dialog", {
 			},
 			stop: function( event, ui ) {
 				options.position = [
-					ui.position.left - doc.scrollLeft(),
-					ui.position.top - doc.scrollTop()
+					ui.position.left - self.document.scrollLeft(),
+					ui.position.top - self.document.scrollTop()
 				];
 				$( this )
 					.removeClass( "ui-dialog-dragging" );
@@ -715,12 +714,11 @@ $.extend( $.ui.dialog.overlay, {
 			$( window ).bind( "resize.dialog-overlay", $.ui.dialog.overlay.resize );
 		}
 
-		var $el = ( this.oldInstances.pop() || $( "<div>" ).addClass( "ui-widget-overlay" ) )
-			.appendTo( document.body )
-			.css({
-				width: this.width(),
-				height: this.height()
-			});
+		var $el = ( this.oldInstances.pop() || $( "<div>" ).addClass( "ui-widget-overlay" ) );
+		$el.appendTo( document.body ).css({
+			width: this.width(),
+			height: this.height()
+		});
 
 		if ( $.fn.bgiframe ) {
 			$el.bgiframe();

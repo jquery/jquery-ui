@@ -183,9 +183,6 @@ $.Widget.prototype = {
 	_createWidget: function( options, element ) {
 		element = $( element || this.defaultElement || this )[ 0 ];
 		this.element = $( element );
-		this.doc = $( this.element[0].ownerDocument );
-		this.win = $( this.doc[0].defaultView );
-		this.body = this.doc.body;
 		this.options = $.widget.extend( {},
 			this.options,
 			this._getCreateOptions(),
@@ -198,6 +195,8 @@ $.Widget.prototype = {
 		if ( element !== this ) {
 			$.data( element, this.widgetName, this );
 			this._bind({ remove: "destroy" });
+			this.document = $( element.ownerDocument );
+			this.window = $( this.document[0].defaultView || this.document[0].parentWindow );
 		}
 
 		this._create();
@@ -273,10 +272,11 @@ $.Widget.prototype = {
 		return this;
 	},
 	_setOptions: function( options ) {
-		var that = this;
-		$.each( options, function( key, value ) {
-			that._setOption( key, value );
-		});
+		var key;
+
+		for ( key in options ) {
+			this._setOption( key, options[ key ] );
+		}
 
 		return this;
 	},
