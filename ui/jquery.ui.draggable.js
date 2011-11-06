@@ -76,7 +76,6 @@ $.widget( "ui.draggable", {
 	},
 
 	_handleScrolling: function( event ) {
-		// TODO: what is expected behavior of absolute/fixed draggable inside a div having overflow:scroll?
 		var scrollTop = this.scrollParent.scrollTop(),
 			scrollLeft = this.scrollParent.scrollLeft();
 	
