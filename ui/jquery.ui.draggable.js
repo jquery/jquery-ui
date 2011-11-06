@@ -46,7 +46,7 @@ $.widget( "ui.draggable", {
 
 	// TODO: why is relative handled differently than fixed/absolute?
 	_getPosition: function() {
-		var left, top, position,
+		var left, top, position, offset,
 			scrollTop = this.scrollParent.scrollTop(),
 			scrollLeft = this.scrollParent.scrollLeft();
 
@@ -56,7 +56,7 @@ $.widget( "ui.draggable", {
 
 			// Take into account scrollbar
 			position.top -= scrollTop;
-			position.left -= scrollLeft
+			position.left -= scrollLeft;
 
 			return position;
 		}
@@ -148,7 +148,7 @@ $.widget( "ui.draggable", {
 			this.dragEl
 				// TODO: should we move this to the stylesheet and use a class?
 				.css( "position", "absolute" )
-				.appendTo( this.doc[0].body )
+				.appendTo( this.document[0].body )
 				.offset( this.element.offset() );
 		}
 		
@@ -168,17 +168,17 @@ $.widget( "ui.draggable", {
 		};
 
 		// Cache the offset of scrollParent, if required for _handleScrolling
-		if ( this.scrollParent[0] != this.doc[0] && this.scrollParent[0].tagName != 'HTML') {
+		if ( this.scrollParent[0] !== this.document[0] && this.scrollParent[0].tagName !== 'HTML') {
 			this.overflowOffset = this.scrollParent.offset();
 		}
 
 		this.overflow = {};
 
-		this.overflow.height = ( this.scrollParent[0] === this.doc[0] ) ?
-			this.win.height() : this.scrollParent.height();
+		this.overflow.height = ( this.scrollParent[0] === this.document[0] ) ?
+			this.window.height() : this.scrollParent.height();
 
-		this.overflow.width = ( this.scrollParent[0] === this.doc[0] ) ?
-			this.win.width() : this.scrollParent.width();
+		this.overflow.width = ( this.scrollParent[0] === this.document[0] ) ?
+			this.window.width() : this.scrollParent.width();
 
 		this._preparePosition( event );
 
@@ -186,13 +186,13 @@ $.widget( "ui.draggable", {
 		
 		// If user stops propagation, leave helper there ( if there's one ), disallow any CSS changes
 		if ( allowed !== true ) {
-			this.doc.unbind( "." + this.widgetName );
+			this.document.unbind( "." + this.widgetName );
 			return;
 		}
 
 		this._setCss( event );
 
-		this._bind( this.doc, {
+		this._bind( this.document, {
 			mousemove: "_mouseMove",
 			mouseup: "_mouseUp"
 		});
@@ -208,7 +208,7 @@ $.widget( "ui.draggable", {
 		
 		// If user stops propagation, leave helper there ( if there's one ), disallow any CSS changes
 		if ( allowed !== true ) {
-			this.doc.unbind( "." + this.widgetName );
+			this.document.unbind( "." + this.widgetName );
 			return;
 		}
 
@@ -237,7 +237,7 @@ $.widget( "ui.draggable", {
 
 		}
 
-		this.doc.unbind( "." + this.widgetName );
+		this.document.unbind( "." + this.widgetName );
 	},
 
 	// Uses event to determine new position of draggable, before any override from callbacks
@@ -257,7 +257,7 @@ $.widget( "ui.draggable", {
 		this.tempPosition = {
 			left: newLeft,
 			top: newTop
-		}
+		};
 
 		// Refresh offset cache with new positions
 		this.offset.left = this.startOffset.left + newLeft;
