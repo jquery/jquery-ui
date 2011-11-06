@@ -20,7 +20,8 @@ $.widget( "ui.draggable", {
 	options: {
 		helper: false,
 		scrollSensitivity: 20,
-		scrollSpeed: 20
+		scrollSpeed: 20,
+		iframeFix: false
 	},
 
 	// dragEl: element being dragged (original or helper)
@@ -32,6 +33,36 @@ $.widget( "ui.draggable", {
 	// tempPosition: overridable CSS position of dragEl
 	// overflowOffset: offset of scroll parent
 	// overflow: object containing width and height keys of scroll parent
+
+	_blockFrames: function() {
+
+		var iframes = $('iframe'),
+			widget = this;
+
+		this.iframeBlocks = $('');
+
+		iframes.each( function() {
+
+			var iframe = $(this),
+				width = iframe.outerWidth(),
+				height = iframe.outerHeight(),
+				iframeOffset = iframe.offset(),
+				block = $('<div />');
+
+		  block.css({
+				position: 'absolute',
+				width: width+'px',
+				height: height+'px',
+				top: iframeOffset.top+'px',
+				left: iframeOffset.left+'px'
+			})
+			.appendTo( widget.document[0].body );
+
+			widget.iframeBlocks = widget.iframeBlocks.add( block );
+			
+		});
+		
+	},
 
 	_create: function() {
 		this.scrollParent = this.element.scrollParent();
@@ -78,10 +109,10 @@ $.widget( "ui.draggable", {
 	_handleScrolling: function( event ) {
 		var scrollTop = this.scrollParent.scrollTop(),
 			scrollLeft = this.scrollParent.scrollLeft();
-	
+
 		// overflowOffset is only set when scrollParent is not doc/html
 		if ( !this.overflowOffset ) {
-	
+
 			// Handle vertical scrolling
 			if ( ( ( this.overflow.height + scrollTop ) - event.pageY ) < this.options.scrollSensitivity ) {
 				this.scrollParent.scrollTop( scrollTop + this.options.scrollSpeed );
@@ -89,7 +120,7 @@ $.widget( "ui.draggable", {
 			else if ( event.pageY < ( scrollTop + this.options.scrollSensitivity ) ) {
 				this.scrollParent.scrollTop( scrollTop - this.options.scrollSpeed );
 			}
-			
+
 			// Handle horizontal scrolling
 			if ( ( ( this.overflow.width + scrollLeft ) - event.pageX ) < this.options.scrollSensitivity ) {
 				this.scrollParent.scrollLeft( scrollLeft + this.options.scrollSpeed );
@@ -97,10 +128,10 @@ $.widget( "ui.draggable", {
 			else if ( event.pageX < ( scrollLeft + this.options.scrollSensitivity ) ) {
 				this.scrollParent.scrollLeft( scrollLeft - this.options.scrollSpeed );
 			}
-		
+
 		} else {
-			
-			
+
+
 			// Handle vertical scrolling
 			if ( ( event.pageY + this.options.scrollSensitivity ) > ( this.overflow.height + this.overflowOffset.top ) ) {
 				this.scrollParent.scrollTop( scrollTop + this.options.scrollSpeed );
@@ -108,7 +139,7 @@ $.widget( "ui.draggable", {
 			else if ( ( event.pageY - this.options.scrollSensitivity ) < this.overflowOffset.top ) {
 				this.scrollParent.scrollTop( scrollTop - this.options.scrollSpeed );
 			}
-			
+
 			// Handle horizontal scrolling
 			if ( ( event.pageX + this.options.scrollSensitivity ) > ( this.overflow.width + this.overflowOffset.left ) ) {
 				this.scrollParent.scrollLeft( scrollLeft + this.options.scrollSpeed );
@@ -116,10 +147,10 @@ $.widget( "ui.draggable", {
 			else if ( ( event.pageX - this.options.scrollSensitivity ) < this.overflowOffset.left ) {
 				this.scrollParent.scrollLeft( scrollLeft - this.options.scrollSpeed );
 			}
-		
-		
+
+
 		}
-		
+
 	},
 
 	_mouseDown: function( event ) {
@@ -130,6 +161,10 @@ $.widget( "ui.draggable", {
 
 		// The actual dragging element, should always be a jQuery object
 		this.dragEl = this.element;
+
+		if ( this.options.iframeFix === true ) {
+			this._blockFrames();
+		}
 
 		// Helper required
 		if ( this.options.helper ) {
@@ -151,7 +186,7 @@ $.widget( "ui.draggable", {
 				.appendTo( this.document[0].body )
 				.offset( this.element.offset() );
 		}
-		
+
 		this.cssPosition = this.dragEl.css( "position" );
 
 		// Cache starting absolute and relative positions
@@ -183,7 +218,7 @@ $.widget( "ui.draggable", {
 		this._preparePosition( event );
 
 		allowed = this._trigger( "start", event, this._uiHash() );
-		
+
 		// If user stops propagation, leave helper there ( if there's one ), disallow any CSS changes
 		if ( allowed !== true ) {
 			this.document.unbind( "." + this.widgetName );
@@ -200,12 +235,12 @@ $.widget( "ui.draggable", {
 
 	_mouseMove: function( event ) {
 		var newLeft, newTop, allowed;
-		
+
 		this._preparePosition( event );
 
 		allowed = this._trigger( "drag", event, this._uiHash() );
-		
-		
+
+
 		// If user stops propagation, leave helper there ( if there's one ), disallow any CSS changes
 		if ( allowed !== true ) {
 			this.document.unbind( "." + this.widgetName );
@@ -219,7 +254,7 @@ $.widget( "ui.draggable", {
 	},
 
 	_mouseUp: function( event ) {
-	
+
 		var allowed;
 
 		this._preparePosition( event );
@@ -238,6 +273,11 @@ $.widget( "ui.draggable", {
 		}
 
 		this.document.unbind( "." + this.widgetName );
+
+		if ( this.options.iframeFix === true ) {
+			this._unblockFrames();
+		}
+
 	},
 
 	// Uses event to determine new position of draggable, before any override from callbacks
@@ -296,13 +336,27 @@ $.widget( "ui.draggable", {
 			position: this.position
 			// offset: this.offset
 		};
-		
+
 		if ( this.options.helper ) {
 			ret.helper = this.dragEl;
 		}
-		
+
 		return ret;
+
+	},
+
+	_unblockFrames: function() {
+	
+		if ( !this.iframeBlocks || !this.iframeBlocks.length ) {
+			return;
+		}
 		
+		this.iframeBlocks.each( function() {
+
+			$(this).remove();
+
+		});
+
 	}
 });
 
