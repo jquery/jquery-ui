@@ -1,5 +1,5 @@
  /*
- * jQuery UI selectmenu dev version
+ * jQuery UI selectmenu version 1.2.0
  *
  * Copyright (c) 2009 AUTHORS.txt (http://jqueryui.com/about)
  * Dual licensed under the MIT (MIT-LICENSE.txt)
@@ -13,7 +13,7 @@
 
 $.widget("ui.selectmenu", {
 	getter: "value",
-	version: "1.8",
+	version: "1.9",
 	eventPrefix: "selectmenu",
 	options: {
 		transferClasses: true,
