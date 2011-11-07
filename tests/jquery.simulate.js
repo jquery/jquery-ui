@@ -90,7 +90,7 @@ $.extend( $.simulate.prototype, {
 			shiftKey: false,
 			metaKey: false,
 			keyCode: 0,
-			charCode: 0
+			charCode: undefined
 		}, options );
 
 		if ( $.isFunction( document.createEvent ) ) {
