@@ -53,7 +53,8 @@ $.widget( "ui.button", {
 		}
 	},
 	_create: function() {
-		this.element.closest( "form" )
+		this.element.toggle( this.element.css( "display" ) !== "none" )
+			.closest( "form" )
 			.unbind( "reset.button" )
 			.bind( "reset.button", formResetHandler );
 
@@ -76,10 +77,6 @@ $.widget( "ui.button", {
 
 		if ( this.element.is( ":disabled" ) ) {
 			options.disabled = true;
-		}
-
-		if ( this.element.is( ":hidden" ) ) {
-			baseClasses += " ui-button-hidden";
 		}
 
 		this.buttonElement
