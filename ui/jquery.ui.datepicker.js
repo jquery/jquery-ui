@@ -1433,8 +1433,7 @@ $.extend(Datepicker.prototype, {
 		}
 		if (yearRange) {
 			var years = this._getYearRange(yearRange, minDate, maxDate);
-			maxDate = maxDate ? maxDate : currentDate;
-			maxDate = new Date(years[1], maxDate.getMonth() + 1, maxDate.getDate());
+			drawYear = years[1];
 		}
 		if (maxDate) {
 			var maxDraw = this._daylightSavingAdjust(new Date(maxDate.getFullYear(),
