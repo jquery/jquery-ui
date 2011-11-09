@@ -103,7 +103,7 @@ function autoFocusTest( afValue, focusedLength ) {
 		delay: 0,
 		source: data,
 		open: function( event, ui ) {
-			equal( ac.autocomplete( "widget" ).children( ".ui-menu-item:first .ui-state-hover" ).length, focusedLength, "first item is " + afValue ? "" : "not" + " auto focused" );
+			equal( ac.autocomplete( "widget" ).children( ".ui-menu-item:first" ).find( ".ui-state-hover" ).length, focusedLength, "first item is " + afValue ? "" : "not" + " auto focused" );
 			start();			
 		}
 	});
