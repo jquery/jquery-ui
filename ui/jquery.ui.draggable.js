@@ -102,6 +102,9 @@ $.widget("ui.draggable", $.ui.mouse, {
 		//Create and append the visible helper
 		this.helper = this._createHelper(event);
 
+		//Cache the element's size
+		this._cacheElementProportions();
+
 		//Cache the helper size
 		this._cacheHelperProportions();
 
@@ -351,6 +354,13 @@ $.widget("ui.draggable", $.ui.mouse, {
 		};
 	},
 
+	_cacheElementProportions: function() {
+		this.elementProportions = {
+			width: this.element.outerWidth(),
+			height: this.element.outerHeight()
+		};
+	},
+
 	_cacheHelperProportions: function() {
 		this.helperProportions = {
 			width: this.helper.outerWidth(),
@@ -417,6 +427,17 @@ $.widget("ui.draggable", $.ui.mouse, {
 		var o = this.options, scroll = this.cssPosition == 'absolute' && !(this.scrollParent[0] != document && $.contains(this.scrollParent[0], this.offsetParent[0])) ? this.offsetParent : this.scrollParent, scrollIsRootNode = (/(html|body)/i).test(scroll[0].tagName);
 		var pageX = event.pageX;
 		var pageY = event.pageY;
+
+		// Correct for cloned element dimension differences
+		if ( this.helper.options == 'clone' && !this.helperProportions.width && !this.helperProportions.height ) {
+			this._cacheHelperProportions();
+			var xAspect = this.helperProportions.width / this.elementProportions.width,
+			    yAspect = this.helperProportions.height / this.elementProportions.height;
+			if ( xAspect && yAspect ) {
+				this.offset.click.left *= xAspect;
+				this.offset.click.top *= yAspect;
+			}
+		}
 
 		/*
 		 * - Position constraining -
