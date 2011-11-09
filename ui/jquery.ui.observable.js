@@ -3,15 +3,14 @@
  *
  */
 (function ( $, undefined ) {
-	$.observable = function( data, parent ) {
-		return new observable( data, parent );
+	$.observable = function ( data ) {
+		return new observable( data );
 	};
 
 	var splice = [].splice;
 
-	function observable( data, parent ) {
+	function observable( data ) {
 		this.data = data;
-		this.parent = parent;
 	}
 	observable.prototype = {
 		data: null,
@@ -46,14 +45,10 @@
 						changed = true;
 						oldValues[ key ] = oldValue;
 						newValues[ key ] = path[ key ];
-						this._set( key, path[ key ] );
 					}
 				}
 				if ( changed ) {
-					this._trigger( "change", {
-						oldValues: oldValues,
-						newValues: newValues
-					});
+					return this._property( oldValues, newValues );
 				}
 			} else if (arguments.length == 1) {
 				return this._get( path );
@@ -61,19 +56,27 @@
 				var oldValue = this._get( path );
 				// TODO should be strict? currently helpers are unaware of data types, don't do parsing, therefore strict comparison wouldn't be good
 				if ( oldValue != value ) {
-					this._set( path, value );
 					var oldValues = {};
 					oldValues[ path ] = oldValue;
 					var newValues = {};
 					newValues[ path ] = value;
-					this._trigger( "change", {
-						oldValues: oldValues,
-						newValues: newValues
-					});
+					return this._property( oldValues, newValues );
 				}
 
 			}
 			return this;
+		},
+
+		_property: function( oldValues, newValues ) {
+			var that = this;
+			$.each( newValues, function( path, value ) {
+				that._set( path, value );
+			} );
+
+			return this._trigger( "change", {
+				oldValues: oldValues,
+				newValues: newValues
+			} );
 		},
 
 		insert: function( index, items) {
@@ -85,6 +88,11 @@
 			} else if ( !$.isArray( items ) ) {
 				items = [ items ];
 			}
+
+			return this._insert( index, items );
+		},
+
+		_insert: function( index, items ) {
 			// insert( index, objects )
 			splice.apply( this.data, [ index, 0 ].concat( items ) );
 			return this._trigger( "insert", {
@@ -135,6 +143,11 @@
 			if ( !numToRemove ) {
 				numToRemove = 1;
 			}
+
+			return this._remove( index, numToRemove );
+		},
+
+		_remove: function( index, numToRemove ) {
 			var items = this.data.slice( index, index + numToRemove );
 			this.data.splice( index, numToRemove );
 			// TODO update event data, along with support for removing array of objects
@@ -150,6 +163,8 @@
 			return this._trigger( "replaceAll", event );
 		}
 	};
+
+	$.observable.Observable = observable;
 
 	$.each({ bind: "bind", unbind: "unbind", _trigger: "triggerHandler" }, function( from, to ) {
 		observable.prototype[ from ] = function() {

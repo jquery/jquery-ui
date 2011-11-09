@@ -227,7 +227,8 @@ $.widget( "ui.grid", {
 		var that = this;
 		this._container().children().each(function() {
 			if ( $( this ).data( "grid-item" ) === item ) {
-				$( this ).replaceWith( that._newRow(item) );
+				// TODO Client code may rely on stable TRs for simple property updates.  This was: $(  this  ).replaceWith(  that._newRow( item )  );
+				$( this ).html( that._newRow( item ).html() );
 			}
 		});
 		this._trigger( "refresh" );
