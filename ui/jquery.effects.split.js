@@ -13,7 +13,7 @@
  */
 
 (function( $, undefined ) {
- 
+
 	//Helper function to control the split on each animation
 	function startSplitAnim( el, o, animation, done ) {
 		
@@ -78,7 +78,9 @@
 			} else {
 				el.hide();
 			}
+			
 			container.remove( );
+			
 			done();
 		}
 
