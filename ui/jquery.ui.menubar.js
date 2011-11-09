@@ -56,8 +56,10 @@ $.widget( "ui.menubar", {
 				}
 			})
 			.hide()
-			.attr( "aria-hidden", "true" )
-			.attr( "aria-expanded", "false" )
+			.attr({
+				"aria-hidden": "true",
+				"aria-expanded": "false"
+			})
 			.bind( "keydown.menubar", function( event ) {
 				var menu = $( this );
 				if ( menu.is( ":hidden" ) )
@@ -92,7 +94,7 @@ $.widget( "ui.menubar", {
 				}
 				if ( ( that.open && event.type == "mouseenter" ) || event.type == "click" || that.options.autoExpand ) {
 					if( that.options.autoExpand ) {
-						clearTimeout( that.timer );
+						clearTimeout( that.closeTimer );
 					}
 
 					that._open( event, menu );
@@ -121,22 +123,6 @@ $.widget( "ui.menubar", {
 			.attr( "aria-haspopup", "true" )
 			.wrapInner( "<span class='ui-button-text'></span>" );
 
-			if ( that.options.autoExpand ) {
-				input.bind( "mouseleave.menubar", function( event ) {
-					that.timer = setTimeout( function() {
-						that._close();
-					}, 150 );
-				});
-				menu.bind( "mouseleave.menubar", function( event ) {
-					that.timer = setTimeout( function() {
-						that._close();
-					}, 150 );
-				})
-				.bind( "mouseenter.menubar", function( event ) {
-					clearTimeout( that.timer );
-				});
-			}
-
 			// TODO review if these options are a good choice, maybe they can be merged
 			if ( that.options.menuIcon ) {
 				input.addClass( "ui-state-default" ).append( "<span class='ui-button-icon-secondary ui-icon ui-icon-triangle-1-s'></span>" );
@@ -164,7 +150,17 @@ $.widget( "ui.menubar", {
 			focusout: function( event ) {
 				that.closeTimer = setTimeout( function() {
 					that._close( event );
-				}, 100);
+				}, 150);
+			},
+			"mouseleave .ui-menubar-item": function( event ) {
+				if ( that.options.autoExpand ) {
+					that.closeTimer = setTimeout( function() {
+						that._close( event );
+					}, 150);
+				}
+			},
+			"mouseenter .ui-menubar-item": function( event ) {
+				clearTimeout( that.closeTimer );
 			}
 		});
 	},
@@ -172,19 +168,19 @@ $.widget( "ui.menubar", {
 	_destroy : function() {
 		var items = this.element.children( "li" )
 			.removeClass( "ui-menubar-item" )
-			.removeAttr( "role", "presentation" )
+			.removeAttr( "role" )
 			.children( "button, a" );
 
 		this.element
 			.removeClass( "ui-menubar ui-widget-header ui-helper-clearfix" )
-			.removeAttr( "role", "menubar" )
+			.removeAttr( "role" )
 			.unbind( ".menubar" );
 
 		items
 			.unbind( ".menubar" )
 			.removeClass( "ui-button ui-widget ui-button-text-only ui-menubar-link ui-state-default" )
-			.removeAttr( "role", "menuitem" )
-			.removeAttr( "aria-haspopup", "true" )
+			.removeAttr( "role" )
+			.removeAttr( "aria-haspopup" )
 			// TODO unwrap?
 			.children( "span.ui-button-text" ).each(function( i, e ) {
 				var item = $( this );
@@ -196,8 +192,8 @@ $.widget( "ui.menubar", {
 		this.element.find( ":ui-menu" )
 			.menu( "destroy" )
 			.show()
-			.removeAttr( "aria-hidden", "true" )
-			.removeAttr( "aria-expanded", "false" )
+			.removeAttr( "aria-hidden" )
+			.removeAttr( "aria-expanded" )
 			.removeAttr( "tabindex" )
 			.unbind( ".menubar" );
 	},
@@ -208,8 +204,10 @@ $.widget( "ui.menubar", {
 		this.active
 			.menu( "collapseAll" )
 			.hide()
-			.attr( "aria-hidden", "true" )
-			.attr( "aria-expanded", "false" );
+			.attr({
+				"aria-hidden": "true",
+				"aria-expanded": "false"
+			});
 		this.active
 			.prev()
 			.removeClass( "ui-state-active" )
@@ -228,8 +226,10 @@ $.widget( "ui.menubar", {
 			this.active
 				.menu( "collapseAll" )
 				.hide()
-				.attr( "aria-hidden", "true" )
-				.attr( "aria-expanded", "false" );
+				.attr({
+					"aria-hidden": "true",
+					"aria-expanded": "false"
+				});
 			this.active
 				.prev()
 				.removeClass( "ui-state-active" );

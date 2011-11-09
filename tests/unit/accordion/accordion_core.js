@@ -1,10 +1,10 @@
 (function( $ ) {
 
-module( "accordion: core", accordionSetupTeardown() );
+module( "accordion: core", accordion_setupTeardown() );
 
 $.each( { div: "#list1", ul: "#navigation", dl: "#accordion-dl" }, function( type, selector ) {
-	expect( 4 );
 	test( "markup structure: " + type, function() {
+		expect( 4 );
 		var element = $( selector ).accordion();
 		ok( element.hasClass( "ui-accordion" ), "main element is .ui-accordion" );
 		equal( element.find( ".ui-accordion-header" ).length, 3,

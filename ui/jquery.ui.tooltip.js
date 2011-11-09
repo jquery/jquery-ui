@@ -27,7 +27,7 @@ $.widget( "ui.tooltip", {
 		position: {
 			my: "left+15 center",
 			at: "right center",
-			collision: "flip fit"
+			collision: "flipfit flipfit"
 		},
 		show: true,
 		tooltipClass: null,
@@ -166,7 +166,7 @@ $.widget( "ui.tooltip", {
 
 		// don't close if the element has focus
 		// this prevents the tooltip from closing if you hover while focused
-		if ( !force && document.activeElement === target[0] ) {
+		if ( !force && this.document[0].activeElement === target[0] ) {
 			return;
 		}
 
@@ -200,7 +200,7 @@ $.widget( "ui.tooltip", {
 		$( "<div>" )
 			.addClass( "ui-tooltip-content" )
 			.appendTo( tooltip );
-		tooltip.appendTo( document.body );
+		tooltip.appendTo( this.document[0].body );
 		if ( $.fn.bgiframe ) {
 			tooltip.bgiframe();
 		}

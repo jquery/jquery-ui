@@ -469,16 +469,6 @@ test('setDate', function() {
 	var dateAndTimeClone = new Date(2008, 3 - 1, 28, 1, 11, 0);
 	inp.datepicker('setDate', dateAndTimeToSet);
 	equals(dateAndTimeToSet.getTime(), dateAndTimeClone.getTime(), 'Date object passed should not be changed by setDate');
-    // Test onSelect callback is executed when using setDate
-    inp.datepicker('destroy');
-    var testDate = null;
-    inp.datepicker({
-        onSelect: function(dateText, inst) {
-            testDate = new Date(dateText);
-        }
-    });
-    inp.datepicker('setDate', date2);
-    equals(date2.getTime(), testDate.getTime(), 'onSelect is called after setDate');
 });
 
 test('altField', function() {
@@ -541,40 +531,37 @@ test('altField', function() {
 
 test('autoSize', function() {
 	var inp = init('#inp');
-	equals(inp.attr('size'), 20, 'Auto size - default');
+	equals(inp.prop('size'), 20, 'Auto size - default');
 	inp.datepicker('option', 'autoSize', true);
-	equals(inp.attr('size'), 10, 'Auto size - mm/dd/yy');
+	equals(inp.prop('size'), 10, 'Auto size - mm/dd/yy');
 	inp.datepicker('option', 'dateFormat', 'm/d/yy');
-	equals(inp.attr('size'), 10, 'Auto size - m/d/yy');
+	equals(inp.prop('size'), 10, 'Auto size - m/d/yy');
 	inp.datepicker('option', 'dateFormat', 'D M d yy');
-	equals(inp.attr('size'), 15, 'Auto size - D M d yy');
+	equals(inp.prop('size'), 15, 'Auto size - D M d yy');
 	inp.datepicker('option', 'dateFormat', 'DD, MM dd, yy');
-	equals(inp.attr('size'), 29, 'Auto size - DD, MM dd, yy');
-	inp.removeAttr('size');
+	equals(inp.prop('size'), 29, 'Auto size - DD, MM dd, yy');
 	// French
 	inp.datepicker('option', $.extend({autoSize: false}, $.datepicker.regional['fr']));
-	equals(inp.attr('size'), 20, 'Auto size - fr - default');
+	equals(inp.prop('size'), 29, 'Auto size - fr - default');
 	inp.datepicker('option', 'autoSize', true);
-	equals(inp.attr('size'), 10, 'Auto size - fr - dd/mm/yy');
+	equals(inp.prop('size'), 10, 'Auto size - fr - dd/mm/yy');
 	inp.datepicker('option', 'dateFormat', 'm/d/yy');
-	equals(inp.attr('size'), 10, 'Auto size - fr - m/d/yy');
+	equals(inp.prop('size'), 10, 'Auto size - fr - m/d/yy');
 	inp.datepicker('option', 'dateFormat', 'D M d yy');
-	equals(inp.attr('size'), 18, 'Auto size - fr - D M d yy');
+	equals(inp.prop('size'), 18, 'Auto size - fr - D M d yy');
 	inp.datepicker('option', 'dateFormat', 'DD, MM dd, yy');
-	equals(inp.attr('size'), 28, 'Auto size - fr - DD, MM dd, yy');
-	inp.removeAttr('size');
+	equals(inp.prop('size'), 28, 'Auto size - fr - DD, MM dd, yy');
 	// Hebrew
 	inp.datepicker('option', $.extend({autoSize: false}, $.datepicker.regional['he']));
-	equals(inp.attr('size'), 20, 'Auto size - he - default');
+	equals(inp.prop('size'), 28, 'Auto size - he - default');
 	inp.datepicker('option', 'autoSize', true);
-	equals(inp.attr('size'), 10, 'Auto size - he - dd/mm/yy');
+	equals(inp.prop('size'), 10, 'Auto size - he - dd/mm/yy');
 	inp.datepicker('option', 'dateFormat', 'm/d/yy');
-	equals(inp.attr('size'), 10, 'Auto size - he - m/d/yy');
+	equals(inp.prop('size'), 10, 'Auto size - he - m/d/yy');
 	inp.datepicker('option', 'dateFormat', 'D M d yy');
-	equals(inp.attr('size'), 14, 'Auto size - he - D M d yy');
+	equals(inp.prop('size'), 14, 'Auto size - he - D M d yy');
 	inp.datepicker('option', 'dateFormat', 'DD, MM dd, yy');
-	equals(inp.attr('size'), 23, 'Auto size - he - DD, MM dd, yy');
-	inp.removeAttr('size');
+	equals(inp.prop('size'), 23, 'Auto size - he - DD, MM dd, yy');
 });
 
 test('daylightSaving', function() {
@@ -712,7 +699,7 @@ test('callbacks', function() {
 	ok(day21.is('.ui-datepicker-unselectable'), 'Before show day - unselectable 21');
 	ok(day20.is('.day10'), 'Before show day - CSS 20');
 	ok(!day21.is('.day10'), 'Before show day - CSS 21');
-	ok(day20.attr('title') == '', 'Before show day - title 20');
+	ok(!day20.attr('title'), 'Before show day - title 20');
 	ok(day21.attr('title') == 'Divisble by 3', 'Before show day - title 21');
 	inp.datepicker('hide').datepicker('destroy');
 });

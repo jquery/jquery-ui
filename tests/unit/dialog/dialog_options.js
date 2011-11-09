@@ -407,7 +407,7 @@ test("title", function() {
 		equals(el.dialog("option", "title"), "", "option not changed");
 	el.remove();
 
-	el = $('<div title="foo"/>').dialog();
+	el = $('<div title="foo">').dialog();
 		equals(titleText(), "foo", "title in element attribute");
 		equals(el.dialog("option", "title"), "foo", "option updated from attribute");
 	el.remove();
@@ -417,7 +417,7 @@ test("title", function() {
 		equals(el.dialog("option", "title"), "foo", "opiton set from options hash");
 	el.remove();
 
-	el = $('<div title="foo"/>').dialog({ title: 'bar' });
+	el = $('<div title="foo">').dialog({ title: 'bar' });
 		equals(titleText(), "bar", "title in init options should override title in element attribute");
 		equals(el.dialog("option", "title"), "bar", "opiton set from options hash");
 	el.remove();

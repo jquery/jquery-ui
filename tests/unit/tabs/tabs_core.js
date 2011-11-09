@@ -48,7 +48,7 @@ test( "aria-controls", function() {
 		tabs = element.find( ".ui-tabs-nav a" );
 	tabs.each(function() {
 		var tab = $( this );
-		equal( tab.attr( "href" ).substring( 1 ), tab.attr( "aria-controls" ) );
+		equal( tab.prop( "hash" ).substring( 1 ), tab.attr( "aria-controls" ) );
 	});
 
 	element = $( "#tabs2" ).tabs();

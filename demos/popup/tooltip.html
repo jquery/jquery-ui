@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>jQuery UI Popup - Tooltip style demo</title>
+	<link rel="stylesheet" href="../demos.css" />
+	<link rel="stylesheet" href="../../themes/base/jquery.ui.all.css" title="ui-theme" />
+	<script src="../../jquery-1.7.js"></script>
+	<script src="../../ui/jquery.ui.core.js"></script>
+	<script src="../../ui/jquery.ui.widget.js"></script>
+	<script src="../../ui/jquery.ui.position.js"></script>
+	<script src="../../ui/jquery.ui.button.js"></script>
+	<script src="../../ui/jquery.ui.popup.js"></script>
+	<script>
+	$(function() {
+		$("#more-info").popup({
+			position: {
+				of: "#info-link"
+			}
+		});
+
+		$( "#info-link" ).mouseover( function( event ) {
+			$("#more-info").popup( "open" );
+		});
+	});
+	</script>
+	<style type="text/css">
+		.ui-icon {
+			display: inline-block;
+		}
+		#more-info {
+			width: 11em; 
+			border: 1px solid gray; 
+			border-radius: 5px;
+			padding: 1em;
+			box-shadow: 3px 3px 5px -1px rgba(0, 0, 0, 0.5);
+			background: lightgray; background-image: -webkit-gradient(linear, left top, left bottom, from(#eee), to(#ddd));
+			font-size: 1.3em; outline: none;
+			position: absolute;
+			z-index: 5000;
+			display: none;
+		}
+ 	</style>
+</head>
+<body>
+
+<div class="demo">
+	<div>
+		<textarea>More info about me to the right -></textarea> <span id="info-link" class="ui-icon ui-icon-info"></span>
+		<div id="more-info">This is some more info and there is even more info on <a href="#">this page</a>.</div>
+	</div>
+</div>
+
+<div class="demo-description">
+
+<p>A "more info" popup that works on mouseover (tooltip).</p>
+
+</div><!-- End demo-description -->
+
+
+</body>
+</html>

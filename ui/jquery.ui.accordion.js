@@ -13,8 +13,6 @@
  */
 (function( $, undefined ) {
 		  
-var lastToggle = {};
-
 // TODO: use ui-accordion-header-active class and fix styling
 $.widget( "ui.accordion", {
 	version: "@VERSION",
@@ -39,6 +37,7 @@ $.widget( "ui.accordion", {
 		var self = this,
 			options = self.options;
 
+		self.lastToggle = {};
 		self.element.addClass( "ui-accordion ui-widget ui-helper-reset" );
 
 		self.headers = self.element.find( options.header )
@@ -90,12 +89,11 @@ $.widget( "ui.accordion", {
 		if ( !self.active.length ) {
 			self.headers.eq( 0 ).attr( "tabIndex", 0 );
 		} else {
-			self.active
-				.attr({
-					"aria-expanded": "true",
-					"aria-selected": "true",
-					tabIndex: 0
-				});
+			self.active.attr({
+				"aria-expanded": "true",
+				"aria-selected": "true",
+				tabIndex: 0
+			});
 		}
 
 		// only need links in tab order for Safari
@@ -379,10 +377,11 @@ $.widget( "ui.accordion", {
 			}
 
 			animations[ animation ]({
+				widget: self,
 				toShow: toShow,
 				toHide: toHide,
-				prevShow: lastToggle.toShow,
-				prevHide: lastToggle.toHide,
+				prevShow: self.lastToggle.toShow,
+				prevHide: self.lastToggle.toHide,
 				complete: complete,
 				down: toShow.length && ( !toHide.length || ( toShow.index() < toHide.index() ) )
 			}, additional );
@@ -451,7 +450,7 @@ $.extend( $.ui.accordion, {
 				duration: 300
 			}, options, additions );
 			
-			lastToggle = options;
+			options.widget.lastToggle = options;
 
 			if ( !options.toHide.size() ) {
 				originalWidth = options.toShow[0].style.width;
@@ -484,11 +483,11 @@ $.extend( $.ui.accordion, {
 			// fix width before calculating height of hidden element
 			var s = options.toShow;
 			originalWidth = s[0].style.width;
-			s.width( parseInt( s.parent().width(), 10 )
-				- parseInt( s.css( "paddingLeft" ), 10 )
-				- parseInt( s.css( "paddingRight" ), 10 )
-				- ( parseInt( s.css( "borderLeftWidth" ), 10 ) || 0 )
-				- ( parseInt( s.css( "borderRightWidth" ), 10) || 0 ) );
+			s.width( s.parent().width()
+				- parseFloat( s.css( "paddingLeft" ) )
+				- parseFloat( s.css( "paddingRight" ) )
+				- ( parseFloat( s.css( "borderLeftWidth" ) ) || 0 )
+				- ( parseFloat( s.css( "borderRightWidth" ) ) || 0 ) );
 
 			$.each( fxAttrs, function( i, prop ) {
 				hideProps[ prop ] = "hide";

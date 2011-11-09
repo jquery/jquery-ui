@@ -5,28 +5,28 @@
 
 module("button: options");
 
-test("disabled, explicity value", function() {
+test("disabled, explicit value", function() {
 	$("#radio01").button({ disabled: false });
 	same(false, $("#radio01").button("option", "disabled"),
 		"disabled option set to false");
-	same(false, $("#radio01").attr("disabled"), "element is disabled");
+	same(false, $("#radio01").prop("disabled"), "element is disabled");
 	
 	$("#radio02").button({ disabled: true });
 	same(true, $("#radio02").button("option", "disabled"),
 		"disabled option set to true");
-	same(true, $("#radio02").attr("disabled"), "element is not disabled");
+	same(true, $("#radio02").prop("disabled"), "element is not disabled");
 });
 
 test("disabled, null", function() {
 	$("#radio01").button({ disabled: null });
 	same(false, $("#radio01").button("option", "disabled"),
 		"disabled option set to false");
-	same(false, $("#radio01").attr("disabled"), "element is disabled");
+	same(false, $("#radio01").prop("disabled"), "element is disabled");
 	
-	$("#radio02").attr("disabled", "disabled").button({ disabled: null });
+	$("#radio02").prop("disabled", true).button({ disabled: null });
 	same(true, $("#radio02").button("option", "disabled"),
 		"disabled option set to true");
-	same(true, $("#radio02").attr("disabled"), "element is not disabled");
+	same(true, $("#radio02").prop("disabled"), "element is not disabled");
 });
 
 test("text false without icon", function() {
