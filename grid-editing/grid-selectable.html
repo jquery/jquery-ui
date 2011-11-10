@@ -58,6 +58,8 @@
 			$( ".selected-status" ).text( selected.length );
 		});
 
+		$(".tools button").button();
+
 		var grid = $( "#developers-local" ).grid({
 			source: developers.result
 		});
@@ -147,7 +149,7 @@
 		.ui-grid .ui-selected td { background: #ddf; }
 		thead td { text-align: center; }
 		form label { display: block; }
-		form input { width: 95%; }
+		form input { width: 95%; margin-bottom: 8px; padding: .4em; }
 		fieldset { border: none; }
 	</style>
 </head>
@@ -203,13 +205,13 @@
 </table>
 </div>
 
-<div>
+<div class="tools">
 	<button id="addDeveloper">Insert new developer before selection (start if none selected)</button>
 	<button id="addDeveloperAfter">Insert new developer after selection (end if none selected)</button>
 </div>
-<div>
-	<button id="editDeveloper">Edit selected developer</button>
-	<button id="removeDeveloper">Remove selected developer</button>
+<div class="tools">
+	<button id="editDeveloper">Edit first selected developer</button>
+	<button id="removeDeveloper">Remove selected developers</button>
 	<button id="clearSelection">Clear selection</button>
 </div>
 <form id="editForm" title="Edit Developer">
@@ -219,7 +221,7 @@
 </form>
 <script id="edit-tmpl" type="text/x-jquery-tmpl">
 	<label for="${name}">${label}</label>
-	<input type="text" id="${name}" name="${name}" placeholder="${label}" value="${value}" title="${label}" />
+	<input type="text" class="ui-widget-content ui-corner-all" id="${name}" name="${name}" placeholder="${label}" value="${value}" title="${label}" />
 </script>
 
 </body>
