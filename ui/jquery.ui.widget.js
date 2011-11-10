@@ -393,6 +393,10 @@ $.Widget.prototype = {
 			}
 		}
 
+		// the original event may come from any element
+		// so we need to reset the target on the new event
+		event.target = this.element[0];
+
 		this.element.trigger( event, data );
 
 		args = $.isArray( data ) ?
