@@ -24,8 +24,6 @@ $.widget( "ui.dataviewlocal", $.ui.dataview, {
 				that.refresh();
 			});
 		}
-		// TODO get grid to pass something more useful? do this once on _create/_setOption?
-		// also need better handling for unspecified properties
 		this.properties = {};
 		if ( this.options.properties ) {
 			var properties = this.properties;
