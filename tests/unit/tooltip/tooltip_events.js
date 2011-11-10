@@ -52,14 +52,14 @@ test( "focus events", function() {
 	element.trigger( "blur" );
 });
 
-test( "mixed events", function() {
+asyncTest( "mixed events", function() {
 	expect( 2 );
 	var element = $( "#tooltipped1" ).tooltip();
 
 	element.one( "tooltipopen", function( event ) {
 		same( event.originalEvent.type, "focusin" );
 	});
-	element[0].focus();
+	element.simulate( "focus" );
 
 	element.one( "tooltipopen", function() {
 		ok( false, "open triggered while already open" );
@@ -72,10 +72,12 @@ test( "mixed events", function() {
 	element.trigger( "mouseleave" );
 	element.unbind( "tooltipclose" );
 
+	// blurring is async in IE
 	element.one( "tooltipclose", function( event ) {
 		same( event.originalEvent.type, "blur" );
+		start();
 	});
-	element[0].blur();
+	element.simulate( "blur" );
 });
 
 }( jQuery ) );

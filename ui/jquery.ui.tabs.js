@@ -541,19 +541,27 @@ $.widget( "ui.tabs", {
 
 			this.xhr
 				.success(function( response ) {
-					panel.html( response );
-					self._trigger( "load", event, eventData );
+					// TODO: IE resolves cached XHRs immediately
+					// remove when core #10467 is fixed
+					setTimeout(function() {
+						panel.html( response );
+						self._trigger( "load", event, eventData );
+					}, 1 );
 				})
 				.complete(function( jqXHR, status ) {
-					if ( status === "abort" ) {
-						self.panels.stop( false, true );
-					}
-
-					self.lis.eq( index ).removeClass( "ui-tabs-loading" );
-
-					if ( jqXHR === self.xhr ) {
-						delete self.xhr;
-					}
+					// TODO: IE resolves cached XHRs immediately
+					// remove when core #10467 is fixed
+					setTimeout(function() {
+						if ( status === "abort" ) {
+							self.panels.stop( false, true );
+						}
+	
+						self.lis.eq( index ).removeClass( "ui-tabs-loading" );
+	
+						if ( jqXHR === self.xhr ) {
+							delete self.xhr;
+						}
+					}, 1 );
 				});
 		}
 

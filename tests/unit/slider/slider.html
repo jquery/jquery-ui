@@ -4,13 +4,19 @@
 	<meta charset="utf-8">
 	<title>jQuery UI Slider Test Suite</title>
 
-	<link rel="stylesheet" href="../../../themes/base/jquery.ui.slider.css">
-
 	<script src="../../jquery.js"></script>
-	<script src="../../../ui/jquery.ui.core.js"></script>
-	<script src="../../../ui/jquery.ui.widget.js"></script>
-	<script src="../../../ui/jquery.ui.mouse.js"></script>
-	<script src="../../../ui/jquery.ui.slider.js"></script>
+	<script src="../../resource_loader.js"></script>
+	<script>
+	loadResources({
+		css: [ "ui.core", "ui.slider" ],
+		js: [
+			"ui/jquery.ui.core.js",
+			"ui/jquery.ui.widget.js",
+			"ui/jquery.ui.mouse.js",
+			"ui/jquery.ui.slider.js"
+		]
+	});
+	</script>
 
 	<link rel="stylesheet" href="../../../external/qunit.css">
 	<script src="../../../external/qunit.js"></script>

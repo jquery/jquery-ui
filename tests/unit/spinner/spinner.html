@@ -4,15 +4,22 @@
 	<meta charset="utf-8">
 	<title>jQuery UI Spinner Test Suite</title>
 	
-	<link rel="stylesheet" href="../../../themes/base/jquery.ui.spinner.css">
-
 	<script src="../../jquery.js"></script>
 	<script src="../../../external/jquery.mousewheel-3.0.4.js"></script>
 	<script src="../../../external/globalize.js"></script>
-	<script src="../../../ui/jquery.ui.core.js"></script>
-	<script src="../../../ui/jquery.ui.widget.js"></script>
-	<script src="../../../ui/jquery.ui.button.js"></script>
-	<script src="../../../ui/jquery.ui.spinner.js"></script>
+	<script src="../../../external/globalize.culture.ja-JP.js"></script>
+	<script src="../../resource_loader.js"></script>
+	<script>
+	loadResources({
+		css: [ "ui.core", "ui.button", "ui.spinner" ],
+		js: [
+			"ui/jquery.ui.core.js",
+			"ui/jquery.ui.widget.js",
+			"ui/jquery.ui.button.js",
+			"ui/jquery.ui.spinner.js"
+		]
+	});
+	</script>
 
 	<link rel="stylesheet" href="../../../external/qunit.css">
 	<script src="../../../external/qunit.js"></script>
