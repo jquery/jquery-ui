@@ -26,6 +26,9 @@ $.widget("spf.gridFilter", {
 			if ( /^[<>]=?/.test( value ) ) {
 				operator = value.replace( /^([<>]=?).+/, "$1" );
 				value = value.substring( operator.length );
+			} else if ( column.type === "number" ) {
+				// avoid Like operator for numbers
+				operator = "==";
 			}
 			if ( value != null && value.length ) {
 				source.option( "filter." + column.property, {
