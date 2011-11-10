@@ -2,9 +2,15 @@
 
 function serializeForm(form) {
 	var result = {};
-	// TODO flatten arrays (object.name occuring multiple times)
 	$.each( $( form ).serializeArray(), function( index, object ) {
-		result[ object.name ] = object.value;
+		if ( result[ object.name ] ) {
+			if ( $.type( result[ object.name ] ) !== "array" ) {
+				result[ object.name ] = [ result[ object.name ] ];
+			}
+			result[ object.name ].push( object.value );
+		} else {
+			result[ object.name ] = object.value;
+		}
 	});
 	return result;
 }
