@@ -18,20 +18,14 @@ $.widget( "ui.dataview", {
 		filter: null
 	},
 
-	// TODO subwidgets override _create, should we force them to call _super("_create")?
-	// or is there a way to have a constructor along with _create?
-	// _init is probably safe here, as this shouldn't get called as a widget anyway
 	_init: function() {
 		// normalize options
 		this.option(this.options);
 		this.result = [];
 	},
 
-	// TODO this needs to be applied to init options as well, to make sort: "prop" work
 	_setOption: function( key, value ) {
 		// reset offset to 0 when changing limit
-		// TODO actually only necessary when offset > offset + new limit
-		// in other words, when on a page that won't exist anymore after the limit change
 		if ( key === "paging" && value.limit !== this.options.paging.limit ) {
 			value.offset = 0;
 		}
