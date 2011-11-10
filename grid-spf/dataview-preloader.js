@@ -6,8 +6,6 @@
  */
 (function ($, undefined ) {
 
-// TODO cache should be per-instance?
-var cache = {};
 $.widget( "ui.preloaderDataview", $.ui.dataview, {
 	widgetEventPrefix: "dataview",
 	options: {
@@ -16,6 +14,7 @@ $.widget( "ui.preloaderDataview", $.ui.dataview, {
 
 	_create: function() {
 		var options = this.options;
+		var cache = {};
 		options.source = function( request, response ) {
 			var i, length,
 				cached = true,
