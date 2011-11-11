@@ -29,7 +29,6 @@
 			$( this ).unbind( "mouseover", jQuery.event.special.hoverintent.handler );
 		},
 		handler: function( event ) {
-			event.type = "hoverintent";
 			var self = this,
 				args = arguments,
 				target = $( event.target ),
@@ -50,6 +49,7 @@
 			function handler() {
 				if ( ( Math.abs( pX - cX ) + Math.abs( pY - cY ) ) < cfg.sensitivity ) {
 					clear();
+					event.type = "hoverintent";
 					jQuery.event.handle.apply( self, args );
 				} else {
 					pX = cX;
