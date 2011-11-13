@@ -17,7 +17,7 @@
 $.widget("ui.droppable", {
 	version: "@VERSION",
 	widgetEventPrefix: "drop",
-	allowedTolerance: ['touch'],
+	allowedTolerance: ["touch","intersect"],
 	options: {
 		// accept: '*',
 		// activeClass: false,
