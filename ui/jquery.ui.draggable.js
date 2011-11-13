@@ -298,10 +298,10 @@ $.widget( "ui.draggable", {
 			left: newLeft,
 			top: newTop
 		};
-
+		
 		// Refresh offset cache with new positions
-		this.offset.left = this.startOffset.left + newLeft;
-		this.offset.top = this.startOffset.top + newTop;
+		this.offset.left = this.startOffset.left + leftDiff;
+		this.offset.top = this.startOffset.top + topDiff;
 	},
 
 	// Places draggable where mouse or user from callback indicates
@@ -333,8 +333,8 @@ $.widget( "ui.draggable", {
 
 	_uiHash: function( event ) {
 		var ret = {
-			position: this.position
-			// offset: this.offset
+			position: this.position,
+			offset: this.offset
 		};
 
 		if ( this.options.helper ) {
