@@ -32,13 +32,20 @@ $.widget("ui.droppable", {
 	// over: whether or not a draggable is currently over droppable
 	// proportions: width and height of droppable
 	
-	_create: function() {
-
+	
+	refreshPosition: function() {
+	
 		// Store current location
 		this.offset = this.element.offset();
 
 		//Store the droppable's proportions
 		this.proportions = { width: this.element[0].offsetWidth, height: this.element[0].offsetHeight };
+	
+	},
+	
+	_create: function() {
+
+		this.refreshPosition();
 
 		// TODO: Use $.Callbacks or .on from 1.7
 		$('*').live( "drag", $.proxy( this._drag, this ) );
