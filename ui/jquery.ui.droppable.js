@@ -29,6 +29,7 @@ $.widget("ui.droppable", {
 	},
 	
 	// draggableProportions: width and height of currently dragging draggable
+	// over: whether or not a draggable is currently over droppable
 	// proportions: width and height of droppable
 	
 	_create: function() {
@@ -42,6 +43,10 @@ $.widget("ui.droppable", {
 		// TODO: Use $.Callbacks or .on from 1.7
 		$('*').live( "drag", $.proxy( this._drag, this ) );
 		$('*').live( "dragstart", $.proxy( this._dragStart, this ) );
+		
+		this._bind( this.document, {
+			mouseup: "_mouseUp"
+		});
 
 	},
 
@@ -59,9 +64,15 @@ $.widget("ui.droppable", {
 				xOverlap = ( draggableRightEdge >= this.offset.left && ui.offset.left <= rightEdge ),
 				yOverlap = ( draggableBottomEdge >= this.offset.top && ui.offset.top <= bottomEdge );
 				
+				
 				if ( xOverlap && yOverlap ) {
-					// TODO: properly fill out uiHash
-					this._trigger( "over", event, {} );
+					this._trigger( "over", event, this._uiHash() );
+					this.over = true;
+				}
+				else if ( this.over ) {
+					this.over = false;
+					this._trigger( "out", event, this._uiHash() );
+				
 				}
 				
 				break;
@@ -77,11 +88,29 @@ $.widget("ui.droppable", {
 	_dragStart: function( event, ui ) {
 	
 		var draggable = $( event.target );
-				
+	
+		// TODO: Possibly move into draggable hash, so if there are multiple droppables, it's not recalculating all the time
 		this.draggableProportions = { width: draggable[0].offsetWidth, height: draggable[0].offsetHeight };
 		
 
 
+	},
+	
+	_mouseUp: function( event ) {
+	
+		if ( this.over ) {
+			this._trigger( "drop", event, this._uiHash() );
+		}
+		
+		this.over = false;
+	
+	},
+	
+	// TODO: fill me out
+	_uiHash: function() {
+	
+		return {};
+	
 	}
 
 
