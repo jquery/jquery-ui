@@ -121,7 +121,7 @@ $.widget( "ui.accordion", {
 
 	_destroyIcons: function() {
 		this.headers.children( ".ui-accordion-header-icon" ).remove();
-		this.element.removeClass( "ui-accordion-icons" );
+		this.element.removeClass( "ui-accordion-icons ui-accordion-noicons" );
 	},
 
 	_destroy: function() {
