@@ -311,6 +311,13 @@ $.widget( "ui.spinner", {
 	},
 
 	_setOption: function( key, value ) {
+		if ( key === "culture" || key === "numberFormat" ) {
+			var prevValue = this._parse( this.element.val() );
+			this.options[ key ] = value;
+			this.element.val( this._format( prevValue ) );
+			return;
+		}
+
 		this._super( "_setOption", key, value );
 
 		if ( key === "disabled" ) {
