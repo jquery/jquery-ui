@@ -628,8 +628,10 @@ if ( $.uiBackCompat !== false ) {
 
 		var _createIcons = prototype._createIcons;
 		prototype._createIcons = function() {
-			this.options.icons.activeHeader = this.options.icons.activeHeader ||
-				this.options.icons.headerSelected;
+			if ( this.options.icons ) {
+				this.options.icons.activeHeader = this.options.icons.activeHeader ||
+					this.options.icons.headerSelected;
+			}
 			_createIcons.call( this );
 		};
 	}( jQuery, jQuery.ui.accordion.prototype ) );
