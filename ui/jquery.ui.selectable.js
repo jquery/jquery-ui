@@ -116,7 +116,7 @@ $.widget("ui.selectable", $.ui.mouse, {
 			}
 		});
 
-		$(event.target).parents().andSelf().each(function() {
+		$(event.target).closest(options.filter).andSelf().each(function() {
 			var selectee = $.data(this, "selectable-item");
 			if (selectee) {
 				var doSelect = !event.metaKey || !selectee.$element.hasClass('ui-selected');
