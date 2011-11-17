@@ -37,14 +37,14 @@ $.widget("ui.selectable", $.ui.mouse, {
 			selectees.addClass("ui-selectee");
 			selectees.each(function() {
 				var $this = $(this);
-				var pos = $this.offset();
 				$.data(this, "selectable-item", {
 					element: this,
 					$element: $this,
-					left: pos.left,
-					top: pos.top,
-					right: pos.left + $this.outerWidth(),
-					bottom: pos.top + $this.outerHeight(),
+					wasRefreshed: true,
+					left: 0,
+					top: 0,
+					right: 0,
+					bottom: 0,
 					startselected: false,
 					selected: $this.hasClass('ui-selected'),
 					selecting: $this.hasClass('ui-selecting'),
@@ -100,6 +100,18 @@ $.widget("ui.selectable", $.ui.mouse, {
 		if (options.autoRefresh) {
 			this.refresh();
 		}
+
+		this.selectees.each(function() {
+			var selectee = $.data(this, "selectable-item");
+			if (selectee.wasRefreshed) {
+				var pos = selectee.$element.offset();
+				selectee.wasRefreshed = false;
+				selectee.left = pos.left;
+				selectee.top = pos.top;
+				selectee.right = pos.left + selectee.$element.outerWidth();
+				selectee.bottom = pos.top + selectee.$element.outerHeight();
+			}
+		});
 
 		this.selectees.filter('.ui-selected').each(function() {
 			var selectee = $.data(this, "selectable-item");
