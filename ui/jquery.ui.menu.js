@@ -21,6 +21,7 @@ $.widget( "ui.menu", {
 	delay: 150,
 	options: {
 		items: "ul",
+		menuItems: "li",
 		position: {
 			my: "left top",
 			at: "right top"
@@ -81,7 +82,7 @@ $.widget( "ui.menu", {
 			"mouseleave .ui-menu": "collapseAll",
 			"mouseout .ui-menu-item": "blur",
 			"focus": function( event ) {
-				this.focus( event, $( event.target ).children( ".ui-menu-item:first" ) );
+				this.focus( event, $( event.target ).findFirst( ".ui-menu-item" ) );
 			},
 			blur: function( event ) {
 				this._delay( function() {
@@ -168,7 +169,8 @@ $.widget( "ui.menu", {
 					var match,
 						prev = this.previousFilter || "",
 						character = String.fromCharCode( event.keyCode ),
-						skip = false;
+						skip = false,
+						activeMenu = this.activeMenu;
 
 					if (character == prev) {
 						skip = true;
@@ -178,16 +180,14 @@ $.widget( "ui.menu", {
 					function escape( value ) {
 						return value.replace( /[-[\]{}()*+?.,\\^$|#\s]/g , "\\$&" );
 					}
-					match = this.activeMenu.children( ".ui-menu-item" ).filter( function() {
-						return new RegExp("^" + escape(character), "i")
-							.test( $( this ).children( "a" ).text() );
+					match = activeMenu.findUntil( ".ui-menu-item", ".ui-menu" ).filter( function() {
+						return new RegExp("^" + escape(character), "i").test( $( this ).children( "a" ).text() );
 					});
 					match = skip && match.index(this.active.next()) != -1 ? this.active.nextAll(".ui-menu-item") : match;
 					if ( !match.length ) {
 						character = String.fromCharCode(event.keyCode);
-						match = this.activeMenu.children(".ui-menu-item").filter( function() {
-							return new RegExp("^" + escape(character), "i")
-								.test( $( this ).children( "a" ).text() );
+						match = activeMenu.findUntil( ".ui-menu-item", ".ui-menu" ).filter( function() {
+							return new RegExp("^" + escape(character), "i").test( $( this ).children( "a" ).text() );
 						});
 					}
 					if ( match.length ) {
@@ -220,7 +220,7 @@ $.widget( "ui.menu", {
 				trigger: this.options.trigger,
 				managed: true,
 				focusPopup: $.proxy( function( event, ui ) {
-					this.focus( event, this.element.children( ".ui-menu-item" ).first() );
+					this.focus( event, this.element.findFirst( ".ui-menu-item" ) );
 					this.element.focus( 1 );
 				}, this)
 			});
@@ -270,7 +270,7 @@ $.widget( "ui.menu", {
 
 		// don't refresh list items that are already adapted
 		var menuId = this.menuId;
-		submenus.add( this.element ).children( ":not( .ui-menu-item ):has( a )" )
+		submenus.add( this.element ).find( this.options.menuItems + ":not( .ui-menu-item ):has( a )" )
 			.addClass( "ui-menu-item" )
 			.attr( "role", "presentation" )
 			.children( "a" )
@@ -309,14 +309,14 @@ $.widget( "ui.menu", {
 			}
 		}
 
-		this.active = item.first()
+		this.active = item.eq( 0 )
 			.children( "a" )
 				.addClass( "ui-state-focus" )
 			.end();
 		this.element.attr( "aria-activedescendant", this.active.children( "a" ).attr( "id" ) );
 
 		// highlight active parent menu item, if any
-		this.active.parent().closest( ".ui-menu-item" ).children( "a:first" ).addClass( "ui-state-active" );
+		this.active.closest( ".ui-menu" ).closest( ".ui-menu-item" ).children( "a:first" ).addClass( "ui-state-active" );
 
 		this.timer = this._delay( function() {
 			this._close();
@@ -326,7 +326,7 @@ $.widget( "ui.menu", {
 		if ( nested.length && ( /^mouse/.test( event.type ) ) ) {
 			this._startOpening(nested);
 		}
-		this.activeMenu = item.parent();
+		this.activeMenu = item.closest( ".ui-menu" );
 
 		this._trigger( "focus", event, { item: item } );
 	},
@@ -401,7 +401,7 @@ $.widget( "ui.menu", {
 	// it closes all menus.  If passed an argument, it will search for menus BELOW
 	_close: function( startMenu ) {
 		if ( !startMenu ) {
-			startMenu = this.active ? this.active.parent() : this.element;
+			startMenu = this.active ? this.active.closest( ".ui-menu" ) : this.element;
 		}
 
 		startMenu
@@ -415,7 +415,7 @@ $.widget( "ui.menu", {
 	},
 
 	collapse: function( event ) {
-		var newItem = this.active && this.active.parent().closest( ".ui-menu-item", this.element );
+		var newItem = this.active && this.active.closest( ".ui-menu" ).closest( ".ui-menu-item", this.element );
 		if ( newItem && newItem.length ) {
 			this._close();
 			this.focus( event, newItem );
@@ -424,7 +424,7 @@ $.widget( "ui.menu", {
 	},
 
 	expand: function( event ) {
-		var newItem = this.active && this.active.children( ".ui-menu " ).children( ".ui-menu-item" ).first();
+		var newItem = this.active && this.active.findFirst( ".ui-menu " ).findFirst( ".ui-menu-item" );
 
 		if ( newItem && newItem.length ) {
 			this._open( newItem.parent() );
@@ -446,16 +446,18 @@ $.widget( "ui.menu", {
 	},
 
 	first: function() {
-		return this.active && !this.active.prevAll( ".ui-menu-item" ).length;
+		var firstItem = this.activeMenu.findFirst( ".ui-menu-item" );
+		return this.active && this.active.is( firstItem );
 	},
 
 	last: function() {
-		return this.active && !this.active.nextAll( ".ui-menu-item" ).length;
+		var lastItem = this.activeMenu.findUntil( ".ui-menu-item", ".ui-menu" ).last();
+		return this.active && this.active.is( lastItem );
 	},
 
 	_move: function( direction, filter, event ) {
 		if ( !this.active ) {
-			this.focus( event, this.activeMenu.children( ".ui-menu-item" )[ filter ]() );
+			this.focus( event, this.activeMenu.find( ".ui-menu-item" )[ filter ]() );
 			return;
 		}
 
@@ -463,20 +465,32 @@ $.widget( "ui.menu", {
 		if ( direction === "first" || direction === "last" ) {
 			next = this.active[ direction === "first" ? "prevAll" : "nextAll" ]( ".ui-menu-item" ).eq( -1 );
 		} else {
-			next = this.active[ direction + "All" ]( ".ui-menu-item" ).eq( 0 );
+			next = this.active[ direction ]( ".ui-menu-item" ).eq( 0 );
+			if ( !next.length ) {
+				if ( this.active[ direction ]().length ) {
+					next = this.active[ direction ]().findFirst( ".ui-menu-item" );
+				} else if ( !this.active.parent().is( ".ui-menu" ) ) {
+					next = this.active.parentsUntil( ".ui-menu" ).last()[ direction + "All" ]().eq( 0 );
+					if ( !next.is( ".ui-menu-item" ) ) {
+						next = next.findFirst( ".ui-menu-item" );
+					}
+				}
+			}
 		}
 
 		if ( next.length ) {
 			this.focus( event, next );
 		} else {
-			this.focus( event, this.activeMenu.children( ".ui-menu-item" )[ filter ]() );
+			this.focus( event, this.activeMenu.findUntil( ".ui-menu-item", ".ui-menu" )[ filter ]() );
 		}
 	},
 
 	nextPage: function( event ) {
+		var activeMenu = this.activeMenu,
+			activeItems = activeMenu.findUntil( ".ui-menu-item", ".ui-menu" );
 		if ( this._hasScroll() ) {
 			if ( !this.active ) {
-				this.focus( event, this.activeMenu.children( ".ui-menu-item" ).first() );
+				this.focus( event, activeMenu.findFirst( ".ui-menu-item" ) );
 				return;
 			}
 			if ( this.last() ) {
@@ -484,46 +498,48 @@ $.widget( "ui.menu", {
 			}
 
 			var base = this.active.offset().top,
-				height = this.element.height(),
+				height = activeMenu.outerHeight(),
 				result;
-			this.active.nextAll( ".ui-menu-item" ).each( function() {
+			activeItems.each( function() {
 				result = $( this );
 				return $( this ).offset().top - base - height < 0;
 			});
 
 			this.focus( event, result );
 		} else {
-			this.focus( event, this.activeMenu.children( ".ui-menu-item" )
-				[ !this.active ? "first" : "last" ]() );
+			this.focus( event, activeItems[ !this.active ? "first" : "last" ]() );
 		}
 	},
 
 	previousPage: function( event ) {
+		var activeItem = this.active,
+			activeMenu = this.activeMenu;
 		if ( this._hasScroll() ) {
-			if ( !this.active ) {
-				this.focus( event, this.activeMenu.children( ".ui-menu-item" ).first() );
+			if ( !activeItem ) {
+				this.focus( event, activeMenu.findFirst( ".ui-menu-item" ) );
 				return;
 			}
 			if ( this.first() ) {
 				return;
 			}
 
-			var base = this.active.offset().top,
-				height = this.element.height(),
-				result;
-			this.active.prevAll( ".ui-menu-item" ).each( function() {
+			var base = activeItem.offset().top,
+				height = activeMenu.outerHeight(),
+				result,
+				items = activeMenu.findUntil( ".ui-menu-item", ".ui-menu" ).get().reverse();
+			$.each( items, function() {
 				result = $( this );
 				return $(this).offset().top - base + height > 0;
 			});
 
 			this.focus( event, result );
 		} else {
-			this.focus( event, this.activeMenu.children( ".ui-menu-item" ).first() );
+			this.focus( event, activeMenu.findFirst( ".ui-menu-item" ) );
 		}
 	},
 
 	_hasScroll: function() {
-		return this.element.height() < this.element.prop( "scrollHeight" );
+		return this.element.outerHeight() < this.element.prop( "scrollHeight" );
 	},
 
 	select: function( event ) {
@@ -538,6 +554,52 @@ $.widget( "ui.menu", {
 			this.element.popup( "close" );
 		}
 		this._trigger( "select", event, ui );
+	}
+});
+
+$.fn.extend( {
+	findFirst: function( selector, levelIndicator ) {
+		var elements = this.children();
+
+		for ( var i = 0; i < elements.length; i++ ) {
+			var cur = $( elements[ i ] );
+			if ( cur.is( selector ) ) {
+				return cur;
+			}
+			if ( cur.children().length ) {
+				for ( var j = 0; j < cur.children().length; j++ ) {
+					if ( cur.is( levelIndicator ) ) {
+						elements.push( cur.children()[ j ] );
+					} else {
+						elements.splice( i + j + 1, 0, cur.children()[ j ] );
+					}
+				}
+			}
+		}
+
+		return $();
+	},
+	findUntil: function( elementSelector, untilSelector ) {
+		var elements = this.children(),
+			found = $(),
+			foundUntil = false;
+
+		for ( var i = 0; i < elements.length; i++ ) {
+			var cur = $( elements[ i ] );
+			if ( cur.is( untilSelector ) ) {
+				foundUntil = true;
+			}
+			if ( cur.is( elementSelector ) ) {
+				found.push( cur[ 0 ] );
+			}
+			if ( cur.children().length && !foundUntil ) {
+				for ( var j = 0; j < cur.children().length; j++ ) {
+					elements.splice( i + j + 1, 0, cur.children()[ j ] );
+				}
+			}
+		}
+
+		return found;
 	}
 });
 

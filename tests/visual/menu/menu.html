@@ -28,14 +28,16 @@
 				select: function(event, ui) {
 					$("<div/>").text("Selected: " + ui.item.text()).appendTo("#log");
 				},
-				items: "div"
+				items: "div:not('.ignoredWrapper, .ignoredWrapper2, .anotherIgnoredWrapper')",
+				menuItems: "blockquote"
 			});
 
 			$("#menu6").menu({
 				select: function(event, ui) {
 					$("<div/>").text("Selected: " + ui.item.text()).appendTo("#log");
 				},
-				items: ".menuElement"
+				items: ".menuElement",
+				menuItems: "> *"
 			});
 		}
 		
@@ -56,6 +58,9 @@
 		body { font-size:62.5%; }
 		.ui-menu { width: 200px; margin-bottom: 2em; }
 		.menu4 { height: 200px; overflow-y: auto; overflow-x: hidden; }
+		.ignoredWrapper a, .ignoredWrapper a.ui-state-focus { color: #F00; }
+		.ignoredWrapper2 a, .ignoredWrapper2 a.ui-state-focus { color: #00F; }
+		.anotherIgnoredWrapper a, .anotherIgnoredWrapper a.ui-state-focus { font-size: 125%; }
 		.address-item { border-bottom: 1px solid #999; }
 		.address-header { display: block; margin-bottom: .2em; font-weight: bold; }
 		.address-content { display: block; margin-bottom: .2em; padding-left: 10px; }
@@ -160,7 +165,9 @@
 	<li><a href="#">Akron</a></li>
 	<li><a href="#">Albany</a></li>
 	<li><a href="#">Alexandria</a></li>
-	<li><a href="#">Alger</a></li>
+	<div class="ignoredWrapper">
+		<li><a href="#">Alger</a></li>
+	</div>
 	<li><a href="#">Alledonia</a></li>
 	<li><a href="#">Alliance</a></li>
 	<li><a href="#">Alpha</a></li>
@@ -191,15 +198,23 @@
 </ul>
 
 <div id="menu5">
-	<blockquote><a href="#">Aberdeen</a></blockquote>
-	<blockquote><a href="#">Ada</a></blockquote>
+	<div class="ignoredWrapper">
+		<blockquote><a href="#">Aberdeen</a></blockquote>
+	</div>
+	<div class="ignoredWrapper2">
+		<blockquote><a href="#">Ada</a></blockquote>
+	</div>
 	<blockquote><a href="#">Adamsville</a></blockquote>
 	<blockquote><a href="#">Addyston</a></blockquote>
 	<blockquote>
 		<a href="#">Delphi</a>
 		<div>
 			<blockquote><a href="#">Ada</a></blockquote>
-			<blockquote><a href="#">Saarland</a></blockquote>
+			<div class="ignoredWrapper">
+				<div class="anotherIgnoredWrapper">
+					<blockquote><a href="#">Saarland</a></blockquote>
+				</div>
+			</div>
 			<blockquote><a href="#">Salzburg</a></blockquote>
 		</div>
 	</blockquote>
