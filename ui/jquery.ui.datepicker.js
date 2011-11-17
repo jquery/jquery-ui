@@ -347,17 +347,22 @@ $.extend(Datepicker.prototype, {
 			return;
 		}
 		var nodeName = target.nodeName.toLowerCase();
-		$.removeData(target, PROP_NAME);
 		if (nodeName == 'input') {
-			inst.append.remove();
-			inst.trigger.remove();
+		        if (inst) {
+                            if (inst.append) {
+			        inst.append.remove();
+                            }
+			    inst.trigger.remove();
+		        }
 			$target.removeClass(this.markerClassName).
 				unbind('focus', this._showDatepicker).
 				unbind('keydown', this._doKeyDown).
 				unbind('keypress', this._doKeyPress).
 				unbind('keyup', this._doKeyUp);
-		} else if (nodeName == 'div' || nodeName == 'span')
+		} else if (nodeName == 'div' || nodeName == 'span') {
 			$target.removeClass(this.markerClassName).empty();
+		}
+	    	$.removeData(target, PROP_NAME);
 	},
 
 	/* Enable the date picker to a jQuery selection.
@@ -694,7 +699,7 @@ $.extend(Datepicker.prototype, {
 			$.datepicker._datepickerShowing = true;
 
 			// DEPRECATED: after BC for 1.8.x $.effects[ showAnim ] is not needed
-			if ( $.effects && ( $.effects.effect[ showAnim ] || $.effects[ showAnim ] ) )
+			if ( $.effects && $.effects.effect && ( $.effects.effect[ showAnim ] || $.effects[ showAnim ] ) )
 				inst.dpDiv.show(showAnim, $.datepicker._get(inst, 'showOptions'), duration, postProcess);
 			else
 				inst.dpDiv[showAnim || 'show']((showAnim ? duration : null), postProcess);
@@ -805,7 +810,7 @@ $.extend(Datepicker.prototype, {
 			};
 
 			// DEPRECATED: after BC for 1.8.x $.effects[ showAnim ] is not needed
-			if ( $.effects && ( $.effects.effect[ showAnim ] || $.effects[ showAnim ] ) )
+			if ( $.effects && $.effects.effect && ( $.effects.effect[ showAnim ] || $.effects[ showAnim ] ) )
 				inst.dpDiv.hide(showAnim, $.datepicker._get(inst, 'showOptions'), duration, postProcess);
 			else
 				inst.dpDiv[(showAnim == 'slideDown' ? 'slideUp' :
