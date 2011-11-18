@@ -59,14 +59,14 @@ $.widget( "ui.mask", {
 	},
 
 	_setOption: function( key, value ) {
-		this._super( "_setOption", key, value );
+		this._super( key, value );
 		if ( key === "mask" ) {
 			this._parseMask();
 			this._parseValue();
 		}
 	},
 	_setOptions: function( options ) {
-		this._super( "_setOptions", options );
+		this._super( options );
 		this._paint();
 	},
 

@@ -224,7 +224,7 @@ $.widget( "ui.timepicker", {
 		var currentValue = this.value();
 
 		// change the option
-		this._super( "_setOptions", options );
+		this._super( options );
 
 		// update the mask, all of the option changes have a chance of changing it
 		this.element.mask( "option", "mask", this._generateMask() );
