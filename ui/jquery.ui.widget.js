@@ -62,11 +62,11 @@ $.widget = function( name, base, prototype ) {
 	$.each( prototype, function( prop, value ) {
 		if ( $.isFunction( value ) ) {
 			prototype[ prop ] = (function() {
-				var _super = function( method ) {
-					return base.prototype[ method ].apply( this, slice.call( arguments, 1 ) );
+				var _super = function() {
+					return base.prototype[ prop ].apply( this, arguments );
 				};
-				var _superApply = function( method, args ) {
-					return base.prototype[ method ].apply( this, args );
+				var _superApply = function( args ) {
+					return base.prototype[ prop ].apply( this, args );
 				};
 				return function() {
 					var __super = this._super,
