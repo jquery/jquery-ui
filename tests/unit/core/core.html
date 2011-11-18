@@ -5,8 +5,12 @@
 	<title>jQuery UI Core Test Suite</title>
 
 	<script src="../../jquery.js"></script>
-	<script src="../../../ui/jquery.ui.core.js"></script>
-	<script src="../../../ui/jquery.ui.widget.js"></script>
+	<script src="../../resource_loader.js"></script>
+	<script>
+	loadResources({
+		js: [ "ui/jquery.ui.core.js" ]
+	});
+	</script>
 
 	<link rel="stylesheet" href="../../../external/qunit.css">
 	<script src="../../../external/qunit.js"></script>

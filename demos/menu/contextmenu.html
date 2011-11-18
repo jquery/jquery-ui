@@ -4,7 +4,7 @@
 	<meta charset="UTF-8" />
 	<title>jQuery UI Menu - Contextmenu demo</title>
 	<link href="../../themes/base/jquery.ui.all.css" rel="stylesheet" />
-	<script src="../../jquery-1.6.2.js"></script>
+	<script src="../../jquery-1.7.js"></script>
 	<script src="../../ui/jquery.ui.core.js"></script>
 	<script src="../../ui/jquery.ui.position.js"></script>
 	<script src="../../ui/jquery.ui.widget.js"></script>
@@ -14,17 +14,17 @@
 	<link href="../demos.css" rel="stylesheet" />
 	<script>
 	$(function() {
-		$(".demo button").button({
+		var btn = $(".demo button").button({
 			icons: {
 				primary: "ui-icon-home",
 				secondary: "ui-icon-triangle-1-s"
 			}
-		}).next().menu({
+		});
+		$("#cities").menu({
 			select: function(event, ui) {
-				$(this).hide();
 				$("#log").append("<div>Selected " + ui.item.text() + "</div>");
-			}
-		}).popup();
+			},
+			trigger : btn});
 	});
 	</script>
 	<style>
@@ -36,7 +36,7 @@
 <div class="demo">
 
 	<button>Select a city</button>
-	<ul>
+	<ul id="cities">
 		<li><a href="#Amsterdam">Amsterdam</a></li>
 		<li><a href="#Anaheim">Anaheim</a></li>
 		<li><a href="#Cologne">Cologne</a></li>

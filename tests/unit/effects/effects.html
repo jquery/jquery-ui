@@ -8,20 +8,27 @@
 	<script>
 	$.uiBackCompat = false;
 	</script>
-	<script src="../../../ui/jquery.effects.core.js"></script>
-	<script src="../../../ui/jquery.effects.blind.js"></script>
-	<script src="../../../ui/jquery.effects.bounce.js"></script>
-	<script src="../../../ui/jquery.effects.clip.js"></script>
-	<script src="../../../ui/jquery.effects.drop.js"></script>
-	<script src="../../../ui/jquery.effects.explode.js"></script>
-	<script src="../../../ui/jquery.effects.fade.js"></script>
-	<script src="../../../ui/jquery.effects.fold.js"></script>
-	<script src="../../../ui/jquery.effects.highlight.js"></script>
-	<script src="../../../ui/jquery.effects.pulsate.js"></script>
-	<script src="../../../ui/jquery.effects.scale.js"></script>
-	<script src="../../../ui/jquery.effects.shake.js"></script>
-	<script src="../../../ui/jquery.effects.slide.js"></script>
-	<script src="../../../ui/jquery.effects.transfer.js"></script>
+	<script src="../../resource_loader.js"></script>
+	<script>
+	loadResources({
+		js: [
+			"ui/jquery.effects.core.js",
+			"ui/jquery.effects.blind.js",
+			"ui/jquery.effects.bounce.js",
+			"ui/jquery.effects.clip.js",
+			"ui/jquery.effects.drop.js",
+			"ui/jquery.effects.explode.js",
+			"ui/jquery.effects.fade.js",
+			"ui/jquery.effects.fold.js",
+			"ui/jquery.effects.highlight.js",
+			"ui/jquery.effects.pulsate.js",
+			"ui/jquery.effects.scale.js",
+			"ui/jquery.effects.shake.js",
+			"ui/jquery.effects.slide.js",
+			"ui/jquery.effects.transfer.js"
+		]
+	});
+	</script>
 
 	<link rel="stylesheet" href="../../../external/qunit.css">
 	<script src="../../../external/qunit.js"></script>
@@ -75,6 +82,14 @@
 		height: 50px;
 	}
 
+	.ticket7106 {
+		width: 50px;
+		height: 50px;
+	}
+	.ticket7106.animate {
+		width: 100px;
+	}
+
 	</style>
 </head>
 <body>
@@ -93,6 +108,8 @@
 	<h2>Slide with relative width</h2>
 </div>
 <div class="testScale">
+</div>
+<div class="ticket7106">
 </div>
 
 </div>
