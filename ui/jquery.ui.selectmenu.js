@@ -361,7 +361,7 @@ $.widget( "ui.selectmenu", {
 	},
 
 	_setOption: function( key, value ) {
-		this._super( "_setOption", key, value );
+		this._super( key, value );
 
 		if ( key === "appendTo" ) {
 			this.menuWrap.appendTo( $( value || "body", this.element[0].ownerDocument )[0] );
