@@ -59,7 +59,7 @@ asyncTest( "mixed events", function() {
 	element.one( "tooltipopen", function( event ) {
 		same( event.originalEvent.type, "focusin" );
 	});
-	element[0].focus();
+	element.simulate( "focus" );
 
 	element.one( "tooltipopen", function() {
 		ok( false, "open triggered while already open" );
@@ -77,7 +77,7 @@ asyncTest( "mixed events", function() {
 		same( event.originalEvent.type, "blur" );
 		start();
 	});
-	element[0].blur();
+	element.simulate( "blur" );
 });
 
 }( jQuery ) );

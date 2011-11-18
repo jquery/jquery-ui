@@ -4,16 +4,20 @@
 	<meta charset="utf-8">
 	<title>jQuery UI Datepicker Test Suite</title>
 
-	<link rel="stylesheet" href="../../../themes/base/jquery.ui.core.css">
-	<link rel="stylesheet" href="../../../themes/base/jquery.ui.datepicker.css">
-
 	<script src="../../jquery.js"></script>
-	<script src="../../../ui/jquery.ui.core.js"></script>
-	<script src="../../../ui/jquery.ui.widget.js"></script>
-	<script src="../../../ui/jquery.ui.datepicker.js"></script>
-	<script src="../../../ui/i18n/jquery.ui.datepicker-fr.js"></script>
-	<script src="../../../ui/i18n/jquery.ui.datepicker-he.js"></script>
-	<script src="../../../ui/i18n/jquery.ui.datepicker-zh-CN.js"></script>
+	<script src="../../resource_loader.js"></script>
+	<script>
+	loadResources({
+		css: [ "ui.core", "ui.datepicker" ],
+		js: [
+			"ui/jquery.ui.core.js",
+			"ui/jquery.ui.datepicker.js",
+			"ui/i18n/jquery.ui.datepicker-fr.js",
+			"ui/i18n/jquery.ui.datepicker-he.js",
+			"ui/i18n/jquery.ui.datepicker-zh-CN.js"
+		]
+	});
+	</script>
 
 	<link rel="stylesheet" href="../../../external/qunit.css">
 	<script src="../../../external/qunit.js"></script>

@@ -47,7 +47,6 @@ $.widget( "ui.autocomplete", {
 
 	_create: function() {
 		var self = this,
-			doc = this.element[ 0 ].ownerDocument,
 			// Some browsers only repeat keydown events, not keypress events,
 			// so we use the suppressKeyPress flag to determine if we've already
 			// handled the keydown event. #7269
@@ -197,7 +196,7 @@ $.widget( "ui.autocomplete", {
 		};
 		this.menu = $( "<ul></ul>" )
 			.addClass( "ui-autocomplete" )
-			.appendTo( $( this.options.appendTo || "body", doc )[0] )
+			.appendTo( this.document.find( this.options.appendTo || "body" )[0] )
 			// prevent the close-on-blur in case of a "slow" click on the menu (long mousedown)
 			.mousedown(function( event ) {
 				// clicking on the scrollbar causes focus to shift to the body
@@ -207,7 +206,7 @@ $.widget( "ui.autocomplete", {
 				var menuElement = self.menu.element[ 0 ];
 				if ( !$( event.target ).closest( ".ui-menu-item" ).length ) {
 					setTimeout(function() {
-						$( document ).one( 'mousedown', function( event ) {
+						self.document.one( 'mousedown', function( event ) {
 							if ( event.target !== self.element[ 0 ] &&
 								event.target !== menuElement &&
 								!$.contains( menuElement, event.target ) ) {
@@ -239,7 +238,7 @@ $.widget( "ui.autocomplete", {
 						previous = self.previous;
 
 					// only trigger when focus was lost (click on menu)
-					if ( self.element[0] !== doc.activeElement ) {
+					if ( self.element[0] !== self.document[0].activeElement ) {
 						self.element.focus();
 						self.previous = previous;
 						// #6109 - IE triggers two focus events and the second
@@ -273,7 +272,7 @@ $.widget( "ui.autocomplete", {
 		// turning off autocomplete prevents the browser from remembering the
 		// value when navigating through history, so we re-enable autocomplete
 		// if the page is unloaded before the widget is destroyed. #7790
-		this._bind( doc.defaultView, {
+		this._bind( this.window, {
 			beforeunload: function() {
 				this.element.removeAttr( "autocomplete" );
 			}
@@ -292,12 +291,12 @@ $.widget( "ui.autocomplete", {
 	},
 
 	_setOption: function( key, value ) {
-		this._super( "_setOption", key, value );
+		this._super( key, value );
 		if ( key === "source" ) {
 			this._initSource();
 		}
 		if ( key === "appendTo" ) {
-			this.menu.element.appendTo( $( value || "body", this.element[0].ownerDocument )[0] );
+			this.menu.element.appendTo( this.document.find( value || "body" )[0] );
 		}
 		if ( key === "disabled" && value && this.xhr ) {
 			this.xhr.abort();
@@ -453,7 +452,9 @@ $.widget( "ui.autocomplete", {
 	_resizeMenu: function() {
 		var ul = this.menu.element;
 		ul.outerWidth( Math.max(
-			ul.width( "" ).outerWidth(),
+			// Firefox wraps long text (possibly a rounding bug)
+			// so we add 1px to avoid the wrapping (#7513)
+			ul.width( "" ).outerWidth() + 1,
 			this.element.outerWidth()
 		) );
 	},

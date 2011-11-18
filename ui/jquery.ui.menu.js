@@ -85,7 +85,7 @@ $.widget( "ui.menu", {
 			},
 			blur: function( event ) {
 				this._delay( function() {
-					if ( ! $.contains( this.element[0], document.activeElement ) ) {
+					if ( ! $.contains( this.element[0], this.document[0].activeElement ) ) {
 						this.collapseAll( event );
 					}
 				}, 0);
@@ -207,7 +207,7 @@ $.widget( "ui.menu", {
 			}
 		});
 
-		this._bind( document, {
+		this._bind( this.document, {
 			click: function( event ) {
 				if ( !$( event.target ).closest( ".ui-menu" ).length ) {
 					this.collapseAll( event );
