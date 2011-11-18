@@ -17,9 +17,7 @@
 	<script>
 	$(function() {
 		$( "#currency" ).change(function() {
-			var current = $( "#spinner" ).spinner( "value" );
-			Globalize.culture( $(this).val() );
-			$( "#spinner" ).spinner( "value", current );
+			$( "#spinner" ).spinner( "option", "culture", $( this ).val() );
 		});
 
 		$( "#spinner" ).spinner({

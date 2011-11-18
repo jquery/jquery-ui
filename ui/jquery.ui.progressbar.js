@@ -68,7 +68,7 @@ $.widget( "ui.progressbar", {
 			}
 		}
 
-		this._super( "_setOption", key, value );
+		this._super( key, value );
 	},
 
 	_value: function() {

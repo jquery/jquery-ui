@@ -320,7 +320,7 @@
 		<echo message="Comparing file size with previous build" />
 		<exec executable="bash">
 			<arg value="-c" />
-			<arg value="wc -c ${size.dir}/* | `which node nodejs` build/sizer.js" />
+			<arg value="wc -c ${size.dir}/* | `which node nodejs 2>/dev/null` build/sizer.js" />
 		</exec>
 		<delete dir="${size.dir}" />
 	</target>
