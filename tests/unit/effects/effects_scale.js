@@ -54,8 +54,13 @@ function suite( position ) {
 $(function() {
 	suite( "absolute" );
 	suite( "relative" );
-	$.offset.initialize();
-	if ( $.offset.supportsFixedPosition ) {
+	var fixed = $.support.fixedPosition;
+	// jQuery < 1.7 uses $.offset.supportsFixedPosition
+	if ( fixed === undefined ) {
+		$.offset.initialize();
+		fixed = $.offset.supportsFixedPosition;
+	}
+	if ( fixed ) {
 		suite( "fixed" );
 	}
 });

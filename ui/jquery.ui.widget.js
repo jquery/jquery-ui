@@ -62,11 +62,11 @@ $.widget = function( name, base, prototype ) {
 	$.each( prototype, function( prop, value ) {
 		if ( $.isFunction( value ) ) {
 			prototype[ prop ] = (function() {
-				var _super = function( method ) {
-					return base.prototype[ method ].apply( this, slice.call( arguments, 1 ) );
+				var _super = function() {
+					return base.prototype[ prop ].apply( this, arguments );
 				};
-				var _superApply = function( method, args ) {
-					return base.prototype[ method ].apply( this, args );
+				var _superApply = function( args ) {
+					return base.prototype[ prop ].apply( this, args );
 				};
 				return function() {
 					var __super = this._super,
@@ -195,7 +195,11 @@ $.Widget.prototype = {
 		if ( element !== this ) {
 			$.data( element, this.widgetName, this );
 			this._bind({ remove: "destroy" });
-			this.document = $( element.ownerDocument );
+			this.document = $( element.style ?
+				// element within the document
+				element.ownerDocument :
+				// element is window or document
+				element.document || element );
 			this.window = $( this.document[0].defaultView || this.document[0].parentWindow );
 		}
 
@@ -388,6 +392,10 @@ $.Widget.prototype = {
 				event[ prop ] = event.originalEvent[ prop ];
 			}
 		}
+
+		// the original event may come from any element
+		// so we need to reset the target on the new event
+		event.target = this.element[0];
 
 		this.element.trigger( event, data );
 

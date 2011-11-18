@@ -34,6 +34,7 @@ $.widget("ui.selectable", $.ui.mouse, {
 		var selectees;
 		this.refresh = function() {
 			selectees = $(self.options.filter, self.element[0]);
+			selectees.addClass("ui-selectee");
 			selectees.each(function() {
 				var $this = $(this);
 				var pos = $this.offset();

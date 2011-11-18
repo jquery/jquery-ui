@@ -4,18 +4,23 @@
 	<meta charset="utf-8">
 	<title>jQuery UI Dialog Test Suite</title>
 
-	<link rel="stylesheet" href="../../../themes/base/jquery.ui.core.css">
-	<link rel="stylesheet" href="../../../themes/base/jquery.ui.dialog.css">
-
 	<script src="../../jquery.js"></script>
 	<script src="../../../external/jquery.bgiframe-2.1.2.js"></script>
-	<script src="../../../ui/jquery.ui.core.js"></script>
-	<script src="../../../ui/jquery.ui.widget.js"></script>
-	<script src="../../../ui/jquery.ui.mouse.js"></script>
-	<script src="../../../ui/jquery.ui.draggable.js"></script>
-	<script src="../../../ui/jquery.ui.position.js"></script>
-	<script src="../../../ui/jquery.ui.resizable.js"></script>
-	<script src="../../../ui/jquery.ui.dialog.js"></script>
+	<script src="../../resource_loader.js"></script>
+	<script>
+	loadResources({
+		css: [ "ui.core", "ui.dialog" ],
+		js: [
+			"ui/jquery.ui.core.js",
+			"ui/jquery.ui.widget.js",
+			"ui/jquery.ui.position.js",
+			"ui/jquery.ui.mouse.js",
+			"ui/jquery.ui.draggable.js",
+			"ui/jquery.ui.resizable.js",
+			"ui/jquery.ui.dialog.js"
+		]
+	});
+	</script>
 
 	<link rel="stylesheet" href="../../../external/qunit.css">
 	<script src="../../../external/qunit.js"></script>

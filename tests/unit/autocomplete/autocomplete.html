@@ -4,15 +4,20 @@
 	<meta charset="utf-8">
 	<title>jQuery UI Autocomplete Test Suite</title>
 
-	<link rel="stylesheet" href="../../../themes/base/jquery.ui.core.css">
-	<link rel="stylesheet" href="../../../themes/base/jquery.ui.autocomplete.css">
-
 	<script src="../../jquery.js"></script>
-	<script src="../../../ui/jquery.ui.core.js"></script>
-	<script src="../../../ui/jquery.ui.widget.js"></script>
-	<script src="../../../ui/jquery.ui.position.js"></script>
-	<script src="../../../ui/jquery.ui.menu.js"></script>
-	<script src="../../../ui/jquery.ui.autocomplete.js"></script>
+	<script src="../../resource_loader.js"></script>
+	<script>
+	loadResources({
+		css: [ "ui.core", "ui.menu", "ui.autocomplete" ],
+		js: [
+			"ui/jquery.ui.core.js",
+			"ui/jquery.ui.widget.js",
+			"ui/jquery.ui.position.js",
+			"ui/jquery.ui.menu.js",
+			"ui/jquery.ui.autocomplete.js"
+		]
+	});
+	</script>
 
 	<link rel="stylesheet" href="../../../external/qunit.css">
 	<script src="../../../external/qunit.js"></script>

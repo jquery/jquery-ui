@@ -311,7 +311,14 @@ $.widget( "ui.spinner", {
 	},
 
 	_setOption: function( key, value ) {
-		this._super( "_setOption", key, value );
+		if ( key === "culture" || key === "numberFormat" ) {
+			var prevValue = this._parse( this.element.val() );
+			this.options[ key ] = value;
+			this.element.val( this._format( prevValue ) );
+			return;
+		}
+
+		this._super( key, value );
 
 		if ( key === "disabled" ) {
 			if ( value ) {
@@ -325,7 +332,7 @@ $.widget( "ui.spinner", {
 	},
 
 	_setOptions: modifier(function( options ) {
-		this._super( "_setOptions", options );
+		this._super( options );
 		this._value( this.element.val() );
 	}),
 
@@ -380,7 +387,7 @@ $.widget( "ui.spinner", {
 			.removeAttr( "aria-valuemin" )
 			.removeAttr( "aria-valuemax" )
 			.removeAttr( "aria-valuenow" );
-		this._super( "destroy" );
+		this._super();
 		this.uiSpinner.replaceWith( this.element );
 	},
 
