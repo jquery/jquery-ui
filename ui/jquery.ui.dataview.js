@@ -45,7 +45,7 @@ $.widget( "ui.dataview", {
 				value = null;
 			}
 		}
-		this._super( "_setOption", key, value );
+		this._super( key, value );
 	},
 
 	page: function( pageIndex ) {

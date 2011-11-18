@@ -55,7 +55,7 @@ $.widget( "ui.preloaderDataview", $.ui.dataview, {
 				}
 			});
 		};
-		this._super( "_create" );
+		this._super();
 	},
 
 	_setOptions: function( options ) {
@@ -76,7 +76,7 @@ $.widget( "ui.preloaderDataview", $.ui.dataview, {
 					options.paging.offset : this.options.paging.offset )
 			});
 		}
-		this._super( "_setOptions", options );
+		this._super( options );
 	}
 });
 
