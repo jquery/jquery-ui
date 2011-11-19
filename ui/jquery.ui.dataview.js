@@ -67,6 +67,7 @@ $.widget( "ui.dataview", {
 		return Math.ceil( this.totalCount / this.options.paging.limit );
 	},
 
+    // TODO need reasonable signatures/names for callback and error.
 	refresh: function( callback, error ) {
 		this._trigger( "request" );
 

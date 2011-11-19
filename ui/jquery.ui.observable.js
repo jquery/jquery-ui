@@ -9,9 +9,10 @@
 
 	var splice = [].splice;
 
-	function observable( data ) {
+	var observable = $.observable.Observable = function ( data ) {
 		this.data = data;
 	}
+
 	observable.prototype = {
 		data: null,
 
@@ -163,8 +164,6 @@
 			return this._trigger( "replaceAll", event );
 		}
 	};
-
-	$.observable.Observable = observable;
 
 	$.each({ bind: "bind", unbind: "unbind", _trigger: "triggerHandler" }, function( from, to ) {
 		observable.prototype[ from ] = function() {
