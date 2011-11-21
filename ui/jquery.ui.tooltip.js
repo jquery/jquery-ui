@@ -54,7 +54,7 @@ $.widget( "ui.tooltip", {
 			// disable element style changes
 			return;
 		}
-		this._super( "_setOption", key, value );
+		this._super( key, value );
 	},
 
 	_disable: function() {
@@ -166,7 +166,7 @@ $.widget( "ui.tooltip", {
 
 		// don't close if the element has focus
 		// this prevents the tooltip from closing if you hover while focused
-		if ( !force && document.activeElement === target[0] ) {
+		if ( !force && this.document[0].activeElement === target[0] ) {
 			return;
 		}
 
@@ -200,7 +200,7 @@ $.widget( "ui.tooltip", {
 		$( "<div>" )
 			.addClass( "ui-tooltip-content" )
 			.appendTo( tooltip );
-		tooltip.appendTo( document.body );
+		tooltip.appendTo( this.document[0].body );
 		if ( $.fn.bgiframe ) {
 			tooltip.bgiframe();
 		}

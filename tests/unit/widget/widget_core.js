@@ -346,7 +346,7 @@ test( "._super()", function() {
 			same( this, instance, "this is correct in testWidget2" );
 			same( a, 5, "parameter passed to testWidget2" );
 			same( b, 10, "parameter passed to testWidget2" );
-			return this._super( "method", a, b*2 );
+			return this._super( a, b*2 );
 		}
 	});
 
@@ -354,7 +354,7 @@ test( "._super()", function() {
 		method: function( a ) {
 			same( this, instance, "this is correct in testWidget3" );
 			same( a, 5, "parameter passed to testWidget3" );
-			var ret = this._super( "method", a, a*2 );
+			var ret = this._super( a, a*2 );
 			same( ret, 25, "super returned value" );
 		}
 	});
@@ -382,7 +382,7 @@ test( "._superApply()", function() {
 			same( this, instance, "this is correct in testWidget2" );
 			same( a, 5, "parameter passed to testWidget2" );
 			same( b, 10, "second parameter passed to testWidget2" );
-			return this._superApply( "method", arguments );
+			return this._superApply( arguments );
 		}
 	});
 
@@ -391,7 +391,7 @@ test( "._superApply()", function() {
 			same( this, instance, "this is correct in testWidget3" );
 			same( a, 5, "parameter passed to testWidget3" );
 			same( b, 10, "second parameter passed to testWidget3" );
-			var ret = this._superApply( "method", arguments );
+			var ret = this._superApply( arguments );
 			same( ret, 15, "super returned value" );
 		}
 	});
@@ -571,23 +571,23 @@ test( ".widget() - overriden", function() {
 
 test( "._bind() to element (default)", function() {
 	expect( 12 );
-	var self;
+	var that;
 	$.widget( "ui.testWidget", {
 		_create: function() {
-			self = this;
+			that = this;
 			this._bind({
 				keyup: this.keyup,
 				keydown: "keydown"
 			});
 		},
 		keyup: function( event ) {
-			equals( self, this );
-			equals( self.element[0], event.currentTarget );
+			equals( that, this );
+			equals( that.element[0], event.currentTarget );
 			equals( "keyup", event.type );
 		},
 		keydown: function( event ) {
-			equals( self, this );
-			equals( self.element[0], event.currentTarget );
+			equals( that, this );
+			equals( that.element[0], event.currentTarget );
 			equals( "keydown", event.type );
 		}
 	});
@@ -611,23 +611,23 @@ test( "._bind() to element (default)", function() {
 
 test( "._bind() to descendent", function() {
 	expect( 12 );
-	var self;
+	var that;
 	$.widget( "ui.testWidget", {
 		_create: function() {
-			self = this;
+			that = this;
 			this._bind( this.element.find( "strong" ), {
 				keyup: this.keyup,
 				keydown: "keydown"
 			});
 		},
 		keyup: function( event ) {
-			equals( self, this );
-			equals( self.element.find( "strong" )[0], event.currentTarget );
+			equals( that, this );
+			equals( that.element.find( "strong" )[0], event.currentTarget );
 			equals( "keyup", event.type );
 		},
 		keydown: function(event) {
-			equals( self, this );
-			equals( self.element.find( "strong" )[0], event.currentTarget );
+			equals( that, this );
+			equals( that.element.find( "strong" )[0], event.currentTarget );
 			equals( "keydown", event.type );
 		}
 	});
@@ -987,31 +987,31 @@ test( "._trigger() - instance as element", function() {
 			$( "#widget" ).testWidget().remove();
 		});
 	});
-	
+
 	test( "auto-destroy - .remove() on parent", function() {
 		shouldDestroy( true, function() {
 			$( "#widget" ).testWidget().parent().remove();
 		});
 	});
-	
+
 	test( "auto-destroy - .remove() on child", function() {
 		shouldDestroy( false, function() {
 			$( "#widget" ).testWidget().children().remove();
 		});
 	});
-	
+
 	test( "auto-destroy - .empty()", function() {
 		shouldDestroy( false, function() {
 			$( "#widget" ).testWidget().empty();
 		});
 	});
-	
+
 	test( "auto-destroy - .empty() on parent", function() {
 		shouldDestroy( true, function() {
 			$( "#widget" ).testWidget().parent().empty();
 		});
 	});
-	
+
 	test( "auto-destroy - .detach()", function() {
 		shouldDestroy( false, function() {
 			$( "#widget" ).testWidget().detach();
@@ -1031,13 +1031,39 @@ test( "redefine", function() {
 	$.widget( "ui.testWidget", $.ui.testWidget, {
 		method: function( str ) {
 			equal( str, "foo", "new invoked with correct parameter" );
-			this._super( "method", "bar" );
+			this._super( "bar" );
 		}
 	});
 
 	var instance = new $.ui.testWidget();
 	instance.method( "foo" );
 	equal( $.ui.testWidget.foo, "bar", "static properties remain" );
+});
+
+asyncTest( "_delay", function() {
+	expect( 6 );
+	var order = 0,
+		that;
+	$.widget( "ui.testWidget", {
+		defaultElement: null,
+		_create: function() {
+			that = this;
+			var timer = this._delay(function() {
+				strictEqual( this, that );
+				equal( order, 1 );
+				start();
+			}, 500);
+			ok( timer !== undefined );
+			timer = this._delay("callback");
+			ok( timer !== undefined );
+		},
+		callback: function() {
+			strictEqual( this, that );
+			equal( order, 0 );
+			order += 1;
+		}
+	});
+	$( "#widget" ).testWidget();
 });
 
 }( jQuery ) );

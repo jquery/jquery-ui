@@ -169,7 +169,7 @@ $.widget("ui.dialog", {
 
 	_destroy: function() {
 		var self = this;
-		
+
 		if ( self.overlay ) {
 			self.overlay.destroy();
 		}
@@ -196,7 +196,7 @@ $.widget("ui.dialog", {
 
 		var self = this,
 			maxZ, thisZ;
-		
+
 		if ( false === self._trigger( "beforeClose", event ) ) {
 			return;
 		}
@@ -372,8 +372,7 @@ $.widget("ui.dialog", {
 
 	_makeDraggable: function() {
 		var self = this,
-			options = self.options,
-			doc = $( document );
+			options = self.options;
 
 		function filteredUi( ui ) {
 			return {
@@ -396,8 +395,8 @@ $.widget("ui.dialog", {
 			},
 			stop: function( event, ui ) {
 				options.position = [
-					ui.position.left - doc.scrollLeft(),
-					ui.position.top - doc.scrollTop()
+					ui.position.left - self.document.scrollLeft(),
+					ui.position.top - self.document.scrollTop()
 				];
 				$( this )
 					.removeClass( "ui-dialog-dragging" );
@@ -494,7 +493,7 @@ $.widget("ui.dialog", {
 					at: myAt.join( " " ),
 					offset: offset.join( " " )
 				};
-			} 
+			}
 
 			position = $.extend( {}, $.ui.dialog.prototype.options.position, position );
 		} else {
@@ -519,7 +518,7 @@ $.widget("ui.dialog", {
 
 		$.each( options, function( key, value ) {
 			self._setOption( key, value );
-			
+
 			if ( key in sizeRelatedOptions ) {
 				resize = true;
 			}
@@ -565,7 +564,7 @@ $.widget("ui.dialog", {
 				if ( isDraggable && !value ) {
 					uiDialog.draggable( "destroy" );
 				}
-				
+
 				if ( !isDraggable && value ) {
 					self._makeDraggable();
 				}
@@ -597,7 +596,7 @@ $.widget("ui.dialog", {
 				break;
 		}
 
-		this._super( "_setOption", key, value );
+		this._super( key, value );
 	},
 
 	_size: function() {
@@ -628,7 +627,7 @@ $.widget("ui.dialog", {
 			})
 			.height();
 		minContentHeight = Math.max( 0, options.minHeight - nonContentHeight );
-		
+
 		if ( options.height === "auto" ) {
 			// only needed for IE6 support
 			if ( $.support.minHeight ) {
@@ -705,7 +704,7 @@ $.extend( $.ui.dialog.overlay, {
 			$( document ).bind( "keydown.dialog-overlay", function( event ) {
 				if ( dialog.options.closeOnEscape && !event.isDefaultPrevented() && event.keyCode &&
 					event.keyCode === $.ui.keyCode.ESCAPE ) {
-					
+
 					dialog.close( event );
 					event.preventDefault();
 				}
@@ -715,12 +714,11 @@ $.extend( $.ui.dialog.overlay, {
 			$( window ).bind( "resize.dialog-overlay", $.ui.dialog.overlay.resize );
 		}
 
-		var $el = ( this.oldInstances.pop() || $( "<div>" ).addClass( "ui-widget-overlay" ) )
-			.appendTo( document.body )
-			.css({
-				width: this.width(),
-				height: this.height()
-			});
+		var $el = ( this.oldInstances.pop() || $( "<div>" ).addClass( "ui-widget-overlay" ) );
+		$el.appendTo( document.body ).css({
+			width: this.width(),
+			height: this.height()
+		});
 
 		if ( $.fn.bgiframe ) {
 			$el.bgiframe();

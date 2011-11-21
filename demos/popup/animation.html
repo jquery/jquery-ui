@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>jQuery UI Popup - Animation demo</title>
+	<link rel="stylesheet" href="../demos.css" />
+	<link rel="stylesheet" href="../../themes/base/jquery.ui.all.css" title="ui-theme" />
+	<script src="../../jquery-1.7.js"></script>
+	<script src="../../ui/jquery.ui.core.js"></script>
+	<script src="../../ui/jquery.ui.widget.js"></script>
+	<script src="../../ui/jquery.ui.position.js"></script>
+	<script src="../../ui/jquery.ui.button.js"></script>
+	<script src="../../ui/jquery.effects.core.js"></script>
+	<script src="../../ui/jquery.effects.blind.js"></script>
+	<script src="../../ui/jquery.effects.scale.js"></script>
+	<script src="../../ui/jquery.ui.popup.js"></script>
+	<script>
+	$(function() {
+		var selected = {
+			select: function( event, ui ) {
+				$( "<div/>" ).text( "Selected: " + ui.item.text() ).appendTo( "#log" );
+				$(this).popup("close");
+			}
+		};
+
+		$("#login-form").popup({
+			show: {
+				effect: "blind",
+				direction: "up",
+				mode: "show",
+				duration: "fast"
+			},
+			hide: {
+				effect: "scale",
+				percent: 0,
+				duration: "fast"
+			}
+		})
+		.find(":submit").button().click(function(event) {
+			event.preventDefault();
+		});
+	});
+	</script>
+	<style type="text/css">
+		.ui-popup { position: absolute; z-index: 5000; }
+
+		#login-form {
+			width: 16em; border: 1px solid gray; border-radius: 5px;
+			padding: 1em;
+			box-shadow: 3px 3px 5px -1px rgba(0, 0, 0, 0.5);
+			background: lightgray; background-image: -webkit-gradient(linear, left top, left bottom, from(#eee), to(#ddd));
+			font-size: 1.3em; outline: none;
+		}
+		#login-form label { display: inline-block; width: 5em; }
+		#login-form .submit { margin-left: 5em; }
+ 	</style>
+</head>
+<body>
+
+<div class="demo">
+	<a href="#login-form">Log In</a>
+	<div class="ui-widget-content" id="login-form" aria-label="Login options">
+		<div>
+			<label for="un">Username</label>
+			<input type="text" id="un" />
+		</div>
+		<div>
+			<label for="pw">Password</label>
+			<input type="password" id="pw" />
+		</div>
+		<div>
+			<input type="submit" value="Login" class="submit" />
+		</div>
+	</div>
+</div>
+
+<div class="demo-description">
+
+<p>A link to a login form that opens as a popup. Open and close animations have been used.</p>
+
+</div><!-- End demo-description -->
+
+
+</body>
+</html>

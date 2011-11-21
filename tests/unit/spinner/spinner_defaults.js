@@ -1,9 +1,10 @@
 commonWidgetTests( "spinner", {
 	defaults: {
+		culture: null,
 		disabled: false,
 		incremental: true,
-		max: Number.MAX_VALUE,
-		min: -Number.MAX_VALUE,
+		max: null,
+		min: null,
 		numberFormat: null,
 		page: 10,
 		step: 1,

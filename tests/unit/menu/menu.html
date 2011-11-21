@@ -4,12 +4,18 @@
 	<meta charset="utf-8">
 	<title>jQuery UI Menu Test Suite</title>
 
-	<link rel="stylesheet" href="../../../themes/base/jquery.ui.all.css">
-
 	<script src="../../jquery.js"></script>
-	<script src="../../../ui/jquery.ui.core.js"></script>
-	<script src="../../../ui/jquery.ui.widget.js"></script>
-	<script src="../../../ui/jquery.ui.menu.js"></script>
+	<script src="../../resource_loader.js"></script>
+	<script>
+	loadResources({
+		css: [ "ui.core", "ui.menu" ],
+		js: [
+			"ui/jquery.ui.core.js",
+			"ui/jquery.ui.widget.js",
+			"ui/jquery.ui.menu.js"
+		]
+	});
+	</script>
 
 	<link rel="stylesheet" href="../../../external/qunit.css">
 	<script src="../../../external/qunit.js"></script>
@@ -206,6 +212,44 @@
 	<li class="foo"><a class="foo" href="#">Amelia</a></li>
 	<li class="foo"><a class="foo" href="#">Amesville</a></li>
 </ul>
+
+<div id="menu5">
+	<blockquote><a href="#">Aberdeen</a></blockquote>
+	<blockquote><a href="#">Ada</a></blockquote>
+	<blockquote><a href="#">Adamsville</a></blockquote>
+	<blockquote><a href="#">Addyston</a></blockquote>
+	<blockquote>
+		<a href="#">Delphi</a>
+		<div>
+			<blockquote><a href="#">Ada</a></blockquote>
+			<blockquote><a href="#">Saarland</a></blockquote>
+			<blockquote><a href="#">Salzburg</a></blockquote>
+		</div>
+	</blockquote>
+	<blockquote><a href="#">Saarland</a></blockquote>
+	<blockquote>
+		<a href="#">Salzburg</a>
+		<div>
+			<blockquote>
+				<a href="#">Delphi</a>
+				<div>
+					<blockquote><a href="#">Ada</a></blockquote>
+					<blockquote><a href="#">Saarland</a></blockquote>
+					<blockquote><a href="#">Salzburg</a></blockquote>
+				</div>
+			</blockquote>
+			<blockquote>
+				<a href="#">Delphi</a>
+				<div>
+					<blockquote><a href="#">Ada</a></blockquote>
+					<blockquote><a href="#">Saarland</a></blockquote>
+					<blockquote><a href="#">Salzburg</a></blockquote>
+				</div>
+			</blockquote>
+			<blockquote><a href="#">Perch</a></blockquote>
+		</div>
+	</blockquote>
+</div>
 
 <div id="log"></div>
 

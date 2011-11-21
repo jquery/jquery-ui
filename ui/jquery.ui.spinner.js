@@ -10,6 +10,7 @@
  * Depends:
  *  jquery.ui.core.js
  *  jquery.ui.widget.js
+ *  jquery.ui.button.js
  */
 (function( $ ) {
 
@@ -29,9 +30,10 @@ $.widget( "ui.spinner", {
 	defaultElement: "<input>",
 	widgetEventPrefix: "spin",
 	options: {
+		culture: null,
 		incremental: true,
-		max: Number.MAX_VALUE,
-		min: -Number.MAX_VALUE,
+		max: null,
+		min: null,
 		numberFormat: null,
 		page: 10,
 		step: 1,
@@ -47,6 +49,15 @@ $.widget( "ui.spinner", {
 		this._draw();
 		this._bind( this._events );
 		this._refresh();
+
+		// turning off autocomplete prevents the browser from remembering the
+		// value when navigating through history, so we re-enable autocomplete
+		// if the page is unloaded before the widget is destroyed. #7790
+		this._bind( this.window, {
+			beforeunload: function() {
+				this.element.removeAttr( "autocomplete" );
+			}
+		});
 	},
 
 	_getCreateOptions: function() {
@@ -91,7 +102,7 @@ $.widget( "ui.spinner", {
 
 			this._spin( (delta > 0 ? 1 : -1) * this.options.step, event );
 			clearTimeout( this.mousewheelTimer );
-			this.mousewheelTimer = setTimeout(function() {
+			this.mousewheelTimer = this._delay(function() {
 				if ( this.spinning ) {
 					this._stop( event );
 				}
@@ -101,7 +112,7 @@ $.widget( "ui.spinner", {
 		"mousedown .ui-spinner-button": function( event ) {
 			// ensure focus is on (or stays on) the text field
 			event.preventDefault();
-			if ( document.activeElement !== this.element[ 0 ] ) {
+			if ( this.document[0].activeElement !== this.element[ 0 ] ) {
 				this.element.focus();
 			}
 
@@ -146,6 +157,13 @@ $.widget( "ui.spinner", {
 			.attr( "tabIndex", -1 )
 			.button()
 			.removeClass( "ui-corner-all" );
+
+		// IE 6 doesn't understand height: 50% for the buttons
+		// unless the wrapper has an explicit height
+		if ( this.buttons.height() > Math.ceil( uiSpinner.height() * 0.5 ) &&
+				uiSpinner.height() > 0 ) {
+			uiSpinner.height( uiSpinner.height() );
+		}
 
 		// disable spinner if element was already disabled
 		if ( this.options.disabled ) {
@@ -202,56 +220,78 @@ $.widget( "ui.spinner", {
 	},
 
 	_repeat: function( i, steps, event ) {
-		var that = this;
 		i = i || 500;
 
 		clearTimeout( this.timer );
-		this.timer = setTimeout(function() {
-			that._repeat( 40, steps, event );
+		this.timer = this._delay(function() {
+			this._repeat( 40, steps, event );
 		}, i );
 
 		this._spin( steps * this.options.step, event );
 	},
 
 	_spin: function( step, event ) {
+		var value = this.value() || 0;
+
 		if ( !this.counter ) {
 			this.counter = 1;
 		}
 
-		var value = this.value(),
-			newVal = value + step * this._increment( this.counter ),
-			// fix precision from bad JS floating point math
-			precision = Math.max( this._precision( value ),
-				this._precision( this.options.step ) );
-		// clamp the new value
-		newVal = this._trimValue( newVal.toFixed( precision ) );
+		value = this._adjustValue( value + step * this._increment( this.counter ) );
 
-		if ( !this.spinning || this._trigger( "spin", event, { value: newVal } ) !== false) {
-			this._value( newVal );
+		if ( !this.spinning || this._trigger( "spin", event, { value: value } ) !== false) {
+			this._value( value );
 			this.counter++;
 		}
 	},
 
 	_increment: function( i ) {
-		return this.options.incremental ?
-			Math.floor( i*i*i/50000 - i*i/500 + 17*i/200 + 1 ) :
-			1;
+		var incremental = this.options.incremental;
+
+		if ( incremental ) {
+			return $.isFunction( incremental ) ?
+				incremental( i ) :
+				Math.floor( i*i*i/50000 - i*i/500 + 17*i/200 + 1 );
+		}
+
+		return 1;
 	},
 
-	_precision: function( num ) {
+	_precision: function() {
+		var precision = this._precisionOf( this.options.step );
+		if ( this.options.min !== null ) {
+			precision = Math.max( precision, this._precisionOf( this.options.min ) );
+		}
+		return precision;
+	},
+
+	_precisionOf: function( num ) {
 		var str = num.toString(),
 			decimal = str.indexOf( "." );
 		return decimal === -1 ? 0 : str.length - decimal - 1;
 	},
 
-	_trimValue: function( value ) {
-		var options = this.options;
+	_adjustValue: function( value ) {
+		var base, aboveMin,
+			options = this.options;
 
-		if ( value > options.max) {
+		// make sure we're at a valid step
+		// - find out where we are relative to the base (min or 0)
+		base = options.min !== null ? options.min : 0;
+		aboveMin = value - base;
+		// - round to the nearest step
+		aboveMin = Math.round(aboveMin / options.step) * options.step;
+		// - rounding is based on 0, so adjust back to our base
+		value = base + aboveMin;
+
+		// fix precision from bad JS floating point math
+		value = parseFloat( value.toFixed( this._precision() ) );
+
+		// clamp the value
+		if ( options.max !== null && value > options.max) {
 			return options.max;
 		}
-
-		if ( value < options.min ) {
+		if ( options.min !== null && value < options.min ) {
 			return options.min;
 		}
 
@@ -271,7 +311,14 @@ $.widget( "ui.spinner", {
 	},
 
 	_setOption: function( key, value ) {
-		this._super( "_setOption", key, value );
+		if ( key === "culture" || key === "numberFormat" ) {
+			var prevValue = this._parse( this.element.val() );
+			this.options[ key ] = value;
+			this.element.val( this._format( prevValue ) );
+			return;
+		}
+
+		this._super( key, value );
 
 		if ( key === "disabled" ) {
 			if ( value ) {
@@ -285,15 +332,16 @@ $.widget( "ui.spinner", {
 	},
 
 	_setOptions: modifier(function( options ) {
-		this._super( "_setOptions", options );
+		this._super( options );
 		this._value( this.element.val() );
 	}),
 
 	_parse: function( val ) {
-		if ( typeof val === "string" ) {
-			val = window.Globalize && this.options.numberFormat ? Globalize.parseFloat( val ) : +val;
+		if ( typeof val === "string" && val !== "" ) {
+			val = window.Globalize && this.options.numberFormat ?
+				Globalize.parseFloat( val, 10, this.options.culture ) : +val;
 		}
-		return isNaN( val ) ? null : val;
+		return val === "" || isNaN( val ) ? null : val;
 	},
 
 	_format: function( value ) {
@@ -301,7 +349,7 @@ $.widget( "ui.spinner", {
 			return "";
 		}
 		return window.Globalize && this.options.numberFormat ?
-			Globalize.format( value, this.options.numberFormat ) :
+			Globalize.format( value, this.options.numberFormat, this.options.culture ) :
 			value;
 	},
 
@@ -315,13 +363,13 @@ $.widget( "ui.spinner", {
 	},
 
 	// update the value without triggering change
-	_value: function( value, ignoreRange ) {
+	_value: function( value, allowAny ) {
 		var parsed;
 		if ( value !== "" ) {
 			parsed = this._parse( value );
 			if ( parsed !== null ) {
-				if ( !ignoreRange ) {
-					parsed = this._trimValue( parsed );
+				if ( !allowAny ) {
+					parsed = this._adjustValue( parsed );
 				}
 				value = this._format( parsed );
 			}
@@ -339,7 +387,7 @@ $.widget( "ui.spinner", {
 			.removeAttr( "aria-valuemin" )
 			.removeAttr( "aria-valuemax" )
 			.removeAttr( "aria-valuenow" );
-		this._super( "destroy" );
+		this._super();
 		this.uiSpinner.replaceWith( this.element );
 	},
 

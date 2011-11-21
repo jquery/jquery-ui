@@ -31,59 +31,19 @@ test( "Immediate Return Conditions", function() {
 	equal( ++count, 3, "Both Functions worked properly" );
 });
 
-$.each( $.effects.effect, function( effect ) {
-	if ( effect === "transfer" ) {
-		return;
-	}
-	module( "effect."+effect );
-	asyncTest( "show/hide", function() {
-		var hidden = $( "div.hidden" );
-		expect( 8 );
+test( "createWrapper and removeWrapper retain focused elements (#7595)", function() {
+	expect( 2 );
+	var test = $( "div.hidden" ).show(),
+		input = $( "<input type='text'>" ).appendTo( test ).focus();
 
-		var count = 0,
-			test = 0;
-
-		function queueTest( fn ) {
-			count++;
-			var point = count;
-			return function( next ) {
-				test++;
-				equal( point, test, "Queue function fired in order" );
-				if ( fn ) {
-					fn();
-				} else {
-					setTimeout( next, minDuration );
-				}
-			};
-		}
-
-		hidden.queue( queueTest() ).show( effect, minDuration, queueTest(function() {
-			equal( hidden.css("display"), "block", "Hidden is shown after .show(\"" +effect+ "\", time)" );
-		})).queue( queueTest() ).hide( effect, minDuration, queueTest(function() {
-			equal( hidden.css("display"), "none", "Back to hidden after .hide(\"" +effect+ "\", time)" );
-		})).queue( queueTest(function(next) {
-			deepEqual( hidden.queue(), ["inprogress"], "Only the inprogress sentinel remains");
-			start();
-		}));
-	});
-
-	asyncTest( "relative width & height - properties are preserved", function() {
-		var test = $("div.relWidth.relHeight"),
-			width = test.width(), height = test.height(),
-			cssWidth = test[0].style.width, cssHeight = test[0].style.height;
-
-		expect( 4 );
-		test.toggle( effect, minDuration, function() {
-			equal( test[0].style.width, cssWidth, "Inline CSS Width has been reset after animation ended" );
-			equal( test[0].style.height, cssHeight, "Inline CSS Height has been rest after animation ended" );
-			start();
-		});
-		equal( test.width(), width, "Width is the same px after animation started" );
-		equal( test.height(), height, "Height is the same px after animation started" );
-	});
+	$.effects.createWrapper( test );
+	equal( document.activeElement, input[ 0 ], "Active element is still input after createWrapper" );
+	$.effects.removeWrapper( test );
+	equal( document.activeElement, input[ 0 ], "Active element is still input after removeWrapper" );
 });
 
-module("animateClass");
+
+module( "effects.core: animateClass" );
 
 asyncTest( "animateClass works with borderStyle", function() {
 	var test = $("div.animateClass"),
@@ -143,22 +103,80 @@ asyncTest( "animateClass clears style properties when stopped", function() {
 	expect( 2 );
 
 	test.addClass( "testChangeBackground", duration );
-	notEqual( orig, style.cssText, "cssText is the not the same after starting animation" );
+	notEqual( orig, style.cssText, "cssText is not the same after starting animation" );
 
 	test.stop( true, true );
-	equal( orig, style.cssText, "cssText is the same after stopping animation midway" );
+	equal( orig, $.trim( style.cssText ), "cssText is the same after stopping animation midway" );
 	start();
 });
 
-test( "createWrapper and removeWrapper retain focused elements (#7595)", function() {
-	expect( 2 );
-	var test = $( "div.hidden" ).show(),
-		input = $( "<input>" ).appendTo( test ).focus();
+asyncTest( "animateClass: css and class changes during animation are not lost (#7106)", function() {
+	var test = $( "div.ticket7106" );
 
-	$.effects.createWrapper( test );
-	equal( document.activeElement, input[ 0 ], "Active element is still input after createWrapper" );
-	$.effects.removeWrapper( test );
-	equal( document.activeElement, input[ 0 ], "Active element is still input after removeWrapper" );
-})
+	// add a class and change a style property after starting an animated class
+	test.addClass( "animate", minDuration, animationComplete )
+		.addClass( "testClass" )
+		.height( 100 );
+
+	// ensure the class stays and that the css property stays
+	function animationComplete() {
+		ok( test.hasClass( "testClass" ), "class change during animateClass was not lost" );
+		equal( test.height(), 100, "css change during animateClass was not lost" );
+		start();
+	}
+});
+
+
+$.each( $.effects.effect, function( effect ) {
+	if ( effect === "transfer" ) {
+		return;
+	}
+	module( "effect."+effect );
+	asyncTest( "show/hide", function() {
+		var hidden = $( "div.hidden" );
+		expect( 8 );
+
+		var count = 0,
+			test = 0;
+
+		function queueTest( fn ) {
+			count++;
+			var point = count;
+			return function( next ) {
+				test++;
+				equal( point, test, "Queue function fired in order" );
+				if ( fn ) {
+					fn();
+				} else {
+					setTimeout( next, minDuration );
+				}
+			};
+		}
+
+		hidden.queue( queueTest() ).show( effect, minDuration, queueTest(function() {
+			equal( hidden.css("display"), "block", "Hidden is shown after .show(\"" +effect+ "\", time)" );
+		})).queue( queueTest() ).hide( effect, minDuration, queueTest(function() {
+			equal( hidden.css("display"), "none", "Back to hidden after .hide(\"" +effect+ "\", time)" );
+		})).queue( queueTest(function(next) {
+			deepEqual( hidden.queue(), ["inprogress"], "Only the inprogress sentinel remains");
+			start();
+		}));
+	});
+
+	asyncTest( "relative width & height - properties are preserved", function() {
+		var test = $("div.relWidth.relHeight"),
+			width = test.width(), height = test.height(),
+			cssWidth = test[0].style.width, cssHeight = test[0].style.height;
+
+		expect( 4 );
+		test.toggle( effect, minDuration, function() {
+			equal( test[0].style.width, cssWidth, "Inline CSS Width has been reset after animation ended" );
+			equal( test[0].style.height, cssHeight, "Inline CSS Height has been rest after animation ended" );
+			start();
+		});
+		equal( test.width(), width, "Width is the same px after animation started" );
+		equal( test.height(), height, "Height is the same px after animation started" );
+	});
+});
 
 })(jQuery);

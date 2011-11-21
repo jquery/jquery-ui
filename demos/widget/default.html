@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<title>jQuery UI Widget - Default functionality</title>
 	<link rel="stylesheet" href="../../themes/base/jquery.ui.all.css">
-	<script src="../../jquery-1.6.2.js"></script>
+	<script src="../../jquery-1.7.js"></script>
 	<script src="../../ui/jquery.ui.core.js"></script>
 	<script src="../../ui/jquery.ui.position.js"></script>
 	<script src="../../ui/jquery.ui.widget.js"></script>
@@ -106,7 +106,7 @@
 			// always refresh when changing options
 			_setOptions: function() {
 				// _super and _superApply handle keeping the right this-context
-				this._superApply( "_setOptions", arguments );
+				this._superApply( arguments );
 				this._refresh();
 			},
 
@@ -116,7 +116,7 @@
 				if ( /red|green|blue/.test(key) && (value < 0 || value > 255) ) {
 					return;
 				}
-				this._super( "_setOption", key, value );
+				this._super( key, value );
 			}
 		});
 

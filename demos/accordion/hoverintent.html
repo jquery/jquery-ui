@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<title>jQuery UI Accordion - Open on hoverintent</title>
 	<link rel="stylesheet" href="../../themes/base/jquery.ui.all.css">
-	<script src="../../jquery-1.6.2.js"></script>
+	<script src="../../jquery-1.7.js"></script>
 	<script src="../../ui/jquery.ui.core.js"></script>
 	<script src="../../ui/jquery.ui.widget.js"></script>
 	<script src="../../ui/jquery.ui.accordion.js"></script>
@@ -29,7 +29,6 @@
 			$( this ).unbind( "mouseover", jQuery.event.special.hoverintent.handler );
 		},
 		handler: function( event ) {
-			event.type = "hoverintent";
 			var self = this,
 				args = arguments,
 				target = $( event.target ),
@@ -50,6 +49,7 @@
 			function handler() {
 				if ( ( Math.abs( pX - cX ) + Math.abs( pY - cY ) ) < cfg.sensitivity ) {
 					clear();
+					event.type = "hoverintent";
 					jQuery.event.handle.apply( self, args );
 				} else {
 					pX = cX;

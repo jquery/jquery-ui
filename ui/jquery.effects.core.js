@@ -161,7 +161,7 @@ var classAnimationActions = [ "add", "remove", "toggle" ],
 	// prefix used for storing data on .data()
 	dataSpace = "ec.storage.";
 
-$.each([ "borderLeftStyle", "borderRightStyle", "borderBottomStyle", "borderTopStyle" ], function(_, prop) {
+$.each([ "borderLeftStyle", "borderRightStyle", "borderBottomStyle", "borderTopStyle" ], function( _, prop ) {
 	$.fx.step[ prop ] = function( fx ) {
 		if ( fx.end !== "none" && !fx.setAttr || fx.pos === 1 && !fx.setAttr ) {
 			jQuery.style( fx.elem, prop, fx.end );
@@ -171,8 +171,8 @@ $.each([ "borderLeftStyle", "borderRightStyle", "borderBottomStyle", "borderTopS
 });
 
 function getElementStyles() {
-	var style = document.defaultView
-			? document.defaultView.getComputedStyle(this, null)
+	var style = this.ownerDocument.defaultView
+			? this.ownerDocument.defaultView.getComputedStyle( this, null )
 			: this.currentStyle,
 		newStyle = {},
 		key,
@@ -223,8 +223,8 @@ $.effects.animateClass = function( value, duration, easing, callback ) {
 
 	return this.queue( function() {
 		var animated = $( this ),
-			baseClass = animated.attr( "class" ),
-			finalClass,
+			baseClass = animated.attr( "class" ) || "",
+			applyClassChange,
 			allAnimations = o.children ? animated.find( "*" ).andSelf() : animated;
 
 		// map the animated objects to store the original styles.
@@ -232,18 +232,19 @@ $.effects.animateClass = function( value, duration, easing, callback ) {
 			var el = $( this );
 			return {
 				el: el,
-				originalStyleAttr: el.attr( "style" ) || " ",
 				start: getElementStyles.call( this )
 			};
 		});
 
 		// apply class change
-		$.each( classAnimationActions, function(i, action) {
-			if ( value[ action ] ) {
-				animated[ action + "Class" ]( value[ action ] );
-			}
-		});
-		finalClass = animated.attr( "class" );
+		applyClassChange = function() {
+			$.each( classAnimationActions, function(i, action) {
+				if ( value[ action ] ) {
+					animated[ action + "Class" ]( value[ action ] );
+				}
+			});
+		};
+		applyClassChange();
 
 		// map all animated objects again - calculate new styles and diff
 		allAnimations = allAnimations.map(function() {
@@ -275,16 +276,15 @@ $.effects.animateClass = function( value, duration, easing, callback ) {
 		$.when.apply( $, allAnimations.get() ).done(function() {
 
 			// set the final class
-			animated.attr( "class", finalClass );
+			applyClassChange();
 
-			// for each animated element
+			// for each animated element,
+			// clear all css properties that were animated
 			$.each( arguments, function() {
-				if ( typeof this.el.attr( "style" ) === "object" ) {
-					this.el.attr( "style" ).cssText = "";
-					this.el.attr( "style" ).cssText = this.originalStyleAttr;
-				} else {
-					this.el.attr( "style", this.originalStyleAttr );
-				}
+				var el = this.el;
+				$.each( this.diff, function(key) {
+					el.css( key, '' );
+				});
 			});
 
 			// this is guarnteed to be there if you use jQuery.speed()
@@ -425,7 +425,7 @@ $.extend( $.effects, {
 			$( active ).focus();
 		}
 
-		wrapper = element.parent(); //Hotfix for jQuery 1.4 since some change in wrap() seems to actually loose the reference to the wrapped element
+		wrapper = element.parent(); //Hotfix for jQuery 1.4 since some change in wrap() seems to actually lose the reference to the wrapped element
 
 		// transfer positioning properties to the wrapper
 		if ( element.css( "position" ) === "static" ) {
