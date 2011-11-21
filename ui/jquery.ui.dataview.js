@@ -61,20 +61,26 @@ $.widget( "ui.dataview", {
 		return Math.ceil( this.totalCount / this.options.paging.limit );
 	},
 
-	refresh: function( callback ) {
-		if ( callback ) {
-			this.element.one( "dataviewresponse", callback );
-		}
+	// TODO need reasonable signatures/names for callback and error.
+	refresh: function( callback, error ) {
 		this._trigger( "request" );
 
 		var request = $.extend( {}, this.options, {
 			page: this.page()
 		});
+
 		var that = this;
 		this.options.source( request, function( data, totalCount ) {
 			that.totalCount = parseInt(totalCount, 10);
 			$.observable( that.result ).replaceAll( data );
 			that._trigger( "response" );
+			if (callback) {
+				callback.apply(that, arguments);
+			}
+		}, function () {
+			if (error) {
+				error.apply(that, arguments);
+			}
 		});
         return this;
 	}

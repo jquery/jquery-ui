@@ -227,7 +227,9 @@ $.widget( "ui.grid", {
 		var that = this;
 		this._container().children().each(function() {
 			if ( $( this ).data( "grid-item" ) === item ) {
-				$( this ).replaceWith( that._newRow(item) );
+				// Don't replace here.  Clients may be storing state relative to the element and 
+				// will be surprised if the element is replaced due to, for instance, a property change.
+				$( this ).html( that._newRow( item ) );
 			}
 		});
 		this._trigger( "refresh" );
