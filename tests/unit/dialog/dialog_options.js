@@ -191,6 +191,11 @@ test("height", function() {
 		el.dialog('option', 'height', 238);
 		equals(dlg().height(), 238, "explicit height set after init");
 	el.remove();
+	
+	el = $('<div></div>').css("padding", "20px")
+		.dialog({ height: 240 });
+		equals(dlg().height(), 240, "explicit height with padding");
+	el.remove();
 });
 
 test("maxHeight", function() {
