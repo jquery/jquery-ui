@@ -374,7 +374,7 @@ $.Widget.prototype = {
 	},
 
 	_trigger: function( type, event, data ) {
-		var args, prop, orig,
+		var prop, orig,
 			callback = this.options[ type ];
 
 		data = data || {};
@@ -397,13 +397,8 @@ $.Widget.prototype = {
 		}
 
 		this.element.trigger( event, data );
-
-		args = $.isArray( data ) ?
-			[ event ].concat( data ) :
-			[ event, data ];
-
 		return !( $.isFunction( callback ) &&
-			callback.apply( this.element[0], args ) === false ||
+			callback.apply( this.element[0], [ event ].concat( data ) ) === false ||
 			event.isDefaultPrevented() );
 	}
 };
