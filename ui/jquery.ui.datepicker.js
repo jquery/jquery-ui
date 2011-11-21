@@ -764,7 +764,7 @@ $.extend(Datepicker.prototype, {
 		var inputWidth = inst.input ? inst.input.outerWidth() : 0;
 		var inputHeight = inst.input ? inst.input.outerHeight() : 0;
 		var viewWidth = document.documentElement.clientWidth + $(document).scrollLeft();
-		var viewHeight = document.documentElement.clientHeight + $(document).scrollTop();
+		var viewHeight = document.body.clientHeight + $(document).scrollTop();
 
 		offset.left -= (this._get(inst, 'isRTL') ? (dpWidth - inputWidth) : 0);
 		offset.left -= (isFixed && offset.left == inst.input.offset().left) ? $(document).scrollLeft() : 0;
