@@ -28,13 +28,11 @@ test("accessibility", function () {
 $.each([
 	{
 		type: "default",
-		selector: "#speed",
-		valueMethod: "val"
+		selector: "#speed"
 	},
 	{
 		type: "optgroups",
-		selector: "#files",
-		valueMethod: "text"
+		selector: "#files"
 	}
 ], function( i, settings ) {
 	test("state synchronization - " + settings.type, function () {
