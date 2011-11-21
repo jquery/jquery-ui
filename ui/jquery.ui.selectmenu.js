@@ -200,6 +200,7 @@ $.widget( "ui.selectmenu", {
 			}
 
 			this.menuWrap.addClass( 'ui-selectmenu-open' );
+			this.menu.attr("aria-hidden", false);
 			// needs to be fired after the document click event has closed all other Selectmenus
 			// otherwise the current item is not indicated
 			// TODO check if this should be handled by Menu
@@ -241,6 +242,7 @@ $.widget( "ui.selectmenu", {
 			}
 
 			this.menuWrap.removeClass( 'ui-selectmenu-open' );
+			this.menu.attr("aria-hidden", true);
 			this.isOpen = false;
 
 			if ( focus ) {
