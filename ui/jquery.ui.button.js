@@ -228,6 +228,26 @@ $.widget( "ui.button", {
 		if ( this.type === "checkbox" || this.type === "radio" ) {
 			// we don't search against the document in case the element
 			// is disconnected from the DOM
+			
+			//if the <input>'s parent is <label>( ie. implicit label), convert into explicit label.
+			if ( this.element.parent( "label" ).length ) {
+				//used when destroy -> convert back to implicit label.
+				this.isImplicit = true;
+				var id = this.element.attr( "id" );
+				if ( !id ) {
+					//get the idList of :ui-button and :not([id])( we haven't built yet)
+					var idList=$( ":ui-button" ).filter( "[id^='ui-button-'], :not([id])" ).map(function(){
+						return this.id.substr(10);
+					}).get();
+					var max=Math.max.apply(Math,idList);
+					id = "ui-button-" + (max+1);
+					//set new_id = current_max+1, in case of duplicated
+					this.element.attr( "id", id);
+				}
+				this.element.parent( "label" ).attr( "for", id);
+				this.element.insertBefore(this.element.parent( "label" ));
+			}
+
 			var ancestor = this.element.parents().last(),
 				labelSelector = "label[for='" + this.element.attr("id") + "']";
 			this.buttonElement = ancestor.find( labelSelector );
@@ -262,6 +282,19 @@ $.widget( "ui.button", {
 			.removeAttr( "role" )
 			.removeAttr( "aria-pressed" )
 			.html( this.buttonElement.find(".ui-button-text").html() );
+		if ( this.isImplicit ) {
+			if ( this.buttonElement.attr( "for" ).indexOf( "ui-button-" ) !== -1 ) {
+				this.buttonElement.removeAttr( "for" );
+				this.element.removeAttr( "id" );
+			}
+			this.element.prependTo(this.buttonElement);
+		}
+		if ( this.buttonElement.attr( "class" ) === "") {
+			this.buttonElement.removeAttr( "class" );
+		}
+		if ( this.element.attr( "class" ) === "") {
+			this.element.removeAttr( "class" );
+		}
 
 		if ( !this.hasTitle ) {
 			this.buttonElement.removeAttr( "title" );
