@@ -1,0 +1,109 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+    <head>
+        <meta http-equiv="Expires" content="Fri, Jan 01 1900 00:00:00 GMT">
+        <meta http-equiv="Pragma" content="no-cache">
+        <meta http-equiv="Cache-Control" content="no-cache">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+        <title>field 2(bare)</title>
+
+        <!-- main jquery and ui dependencies  -->
+        <!--link rel="stylesheet" type="text/css" href="jquery.ui.base.css"-->
+        
+         <link rel="stylesheet" href="../../themes/base/jquery.ui.all.css">       
+    <script src="../../jquery-1.7.1.js"></script>
+
+
+
+        <!-- plugin specific dependencies  -->     
+        <link rel="stylesheet" type="text/css" href="../../themes/base/jquery.ui.carousel.css">               
+        <script type="text/javascript" src="../../ui/jquery.ui.widget.js"></script>       
+            <!-- the plugin -->
+        <script type="text/javascript" src="../../ui/jquery.ui.carousel.js"></script>
+
+
+        <script type="text/javascript">
+            $(document).ready(function(){
+               $('.sl:lt(2)').carousel({orientation:'horizontal'});
+                $('.sl:eq(2)').carousel({click:function(event,data){debugger;alert($(data.target).text())}});
+                $('.sl:eq(3)').carousel({height:300,width:100});
+            $('.act1').click(function(){
+                   $('.sl:eq(1)').carousel('option','focusItem',12);
+            });
+            });
+
+        </script>
+    </head>
+    <body>
+    <span class='act1'>act1</span>
+        <ul class='sl'>
+
+            <li><a href='#'>Охранителни надписи</a></li> 
+            <li><a href='#'>Животни</a></li> 
+            <li><a href='#'>Авто &amp; Мото</a></li> 
+            <li><a href='#'>Други</a></li>
+            <li><a href='#'>Фирмени Лога</a></li>
+            <li><a href='#'>Спортни</a></li>
+            <li><a href='#'>Празници</a></li>
+            <li><a href='#'>Мостри</a></li> 
+            <li><a href='#'>Знаци</a></li>
+            <li><a href='#'>Анимационни</a></li>
+            <li><a href='#'>Забавни</a></li>
+            <li><a href='#'>Черепи и скелети</a></li> 
+            <li><a href='#'>Птици и цветя</a></li> 
+        </ul>
+        <div style="height: 100px;"></div>
+        <ul class='sl'>
+
+            <li><a href='stamps.php?category=4'>Охранителни надписи</a></li> 
+            <li><a href='stamps.php?category=5'>Животни</a></li> 
+            <li><a href='stamps.php?category=6'>Авто &amp; Мото</a></li> 
+            <li><a href='stamps.php?category=7'>Други</a></li>
+            <li><a href='stamps.php?category=8'>Фирмени Лога</a></li>
+            <li><a href='stamps.php?category=9'>Спортни</a></li>
+            <li><a href='stamps.php?category=22'>Празници</a></li>
+            <li><a href='stamps.php?category=23'>Мостри</a></li> 
+            <li><a href='stamps.php?category=26'>Знаци</a></li>
+            <li><a href='stamps.php?category=27'>Анимационни</a></li>
+            <li><a href='stamps.php?category=28'>Забавни</a></li>
+            <li><a href='stamps.php?category=29'>Черепи и скелети</a></li> 
+            <li><a href='stamps.php?category=30'>Птици и цветя</a></li> 
+        </ul>
+         <div style="height: 10px;"></div>
+        
+        <ul class='sl'>
+
+            <li><a href='stamps.php?category=4'>Охранителни надписи</a></li> 
+            <li><a href='stamps.php?category=5'>Животни</a></li> 
+            <li><a href='stamps.php?category=6'>Авто &amp; Мото</a></li> 
+            <li><a href='stamps.php?category=7'>Други</a></li>
+            <li><a href='stamps.php?category=8'>Фирмени Лога</a></li>
+            <li><a href='stamps.php?category=9'>Спортни</a></li>
+            <li><a href='stamps.php?category=22'>Празници</a></li>
+            <li><a href='stamps.php?category=23'>Мостри</a></li> 
+            <li><a href='stamps.php?category=26'>Знаци</a></li>
+            <li><a href='stamps.php?category=27'>Анимационни</a></li>
+            <li><a href='stamps.php?category=28'>Забавни</a></li>
+            <li><a href='stamps.php?category=29'>Черепи и скелети</a></li> 
+            <li><a href='stamps.php?category=30'>Птици и цветя</a></li> 
+        </ul>
+          <div style="height: 10px;"></div>
+        <ul class='sl'>
+
+            <li><a href='stamps.php?category=4'>Охранителни надписи</a></li> 
+            <li><a href='stamps.php?category=5'>Животни</a></li> 
+            <li><a href='stamps.php?category=6'>Авто &amp; Мото</a></li> 
+            <li><a href='stamps.php?category=7'>Други</a></li>
+            <li><a href='stamps.php?category=8'>Фирмени Лога</a></li>
+            <li><a href='stamps.php?category=9'>Спортни</a></li>
+            <li><a href='stamps.php?category=22'>Празници</a></li>
+            <li><a href='stamps.php?category=23'>Мостри</a></li> 
+            <li><a href='stamps.php?category=26'>Знаци</a></li>
+            <li><a href='stamps.php?category=27'>Анимационни</a></li>
+            <li><a href='stamps.php?category=28'>Забавни</a></li>
+            <li><a href='stamps.php?category=29'>Черепи и скелети</a></li> 
+            <li><a href='stamps.php?category=30'>Птици и цветя</a></li> 
+        </ul>
+    </body>
+</html>
