@@ -6,6 +6,7 @@
 }   
 li.ui-carousel-item{
     float:left;
+    width:60px;
 }
 .ui-carousel li{
     overflow:hidden;    
@@ -20,9 +21,4 @@ ul.ui-carousel-items{
 li.ui-carousel-item > a{
     width:100%;
     display:block;
-}
-
-li.ui-carousel-cap-1 span,li.ui-carousel-cap-2 span{
-    margin: 2px auto;
-
 }

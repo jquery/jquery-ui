@@ -103,9 +103,6 @@
                         if(this.options.uiRoundedCaps) this.element.children('li.'+classBase+'-cap-1').addClass('ui-corner-left');
 
                     }
-
-
-
                     // adding hover handler to cap
                     this.element.children('li.'+classBase+'-cap-1').hover(  $.proxy(function(eventobject){
 
@@ -125,8 +122,7 @@
                         this.element.append($('<li>').addClass(classBase +'-cap-2 '+this.options.classCapDefault).append($('<span class="ui-icon ui-icon-circle-triangle-e">')));   
                         if(this.options.uiRoundedCaps) this.element.children('li.'+classBase+'-cap-2').addClass('ui-corner-right');
 
-                    }
-
+                    } 
                     // adding hover handler to cap 
                     this.element.children('li.'+classBase+'-cap-2').hover(  $.proxy(function(eventobject){
 
@@ -183,6 +179,16 @@
 
                     this.element.children('li.'+classBase+'-cap-1,li.'+classBase+'-cap-2').height(capHeight).width(capWidth); 
                 }
+                // centering the icon on cap1
+                var marginX = (this.element.children('li.'+classBase+'-cap-1').width()-this.element.children('li.'+classBase+'-cap-1').children('span').outerWidth())/2; 
+                var marginY =(this.element.children('li.'+classBase+'-cap-1').height()-this.element.children('li.'+classBase+'-cap-1').children('span').outerHeight())/2; 
+                this.element.children('li.'+classBase+'-cap-1').children('span').css({'margin-top':marginY,'margin-left':marginX});
+                
+                // centering the icon on cap2
+                var marginX = (this.element.children('li.'+classBase+'-cap-2').width()-this.element.children('li.'+classBase+'-cap-2').children('span').outerWidth())/2; 
+                var marginY =(this.element.children('li.'+classBase+'-cap-2').height()-this.element.children('li.'+classBase+'-cap-2').children('span').outerHeight())/2; 
+                this.element.children('li.'+classBase+'-cap-2').children('span').css({'margin-top':marginY,'margin-left':marginX});
+
                 //adding click handler to caps
                 this.element.children('li.'+classBase+'-cap-1').click(  $.proxy(function(eventobject){
                     this._viewback(eventobject);      
@@ -198,12 +204,14 @@
 
         },
         _viewback:function(event){ 
-            if(this.options.focusItem > 0)this.options.focusItem-=1;
+            this.options.focusItem-=this.options.focusStep;        
+            if(this.options.focusItem < 0)this.options.focusItem =0;
             this._setview();
 
         },
         _viewforward:function(event){ 
-            if(this.options.focusItem <  (this.element.find('ul.'+this.options.classBase+'-items').children().length-1)) this.options.focusItem+=1;
+            this.options.focusItem+=this.options.focusStep;
+            if(this.options.focusItem >  (this.element.find('ul.'+this.options.classBase+'-items').children().length-1)) this.options.focusItem =this.element.find('ul.'+this.options.classBase+'-items').children().length-1 ;
             this._setview();     
         },
         //the actual hover methods
