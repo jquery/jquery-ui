@@ -13,7 +13,7 @@
  */
 (function( $, undefined ) {
 
-$.widget( "ui.draggable", {
+$.widget( "ui.draggable", $.ui.interaction, {
 	version: "@VERSION",
 	widgetEventPrefix: "drag",
 
@@ -35,12 +35,11 @@ $.widget( "ui.draggable", {
 	// overflow: object containing width and height keys of scroll parent
 
 	_create: function() {
+		this._super( "_create" );
 		// Static position elements can't be moved with top/left
 		if ( this.element.css( "position" ) === "static" ) {
 			this.element.css( "position", "relative" );
 		}
-
-		this._bind({ mousedown: "_mouseDown" });
 	},
 
 	_getPosition: function() {
@@ -115,11 +114,8 @@ $.widget( "ui.draggable", {
 		}
 	},
 
-	_mouseDown: function( event ) {
+	_start: function( event ) {
 		var newLeft, newTop;
-
-		// Prevent text selection, among other things
-		event.preventDefault();
 
 		// The actual dragging element, should always be a jQuery object
 		this.dragEl = this.element;
@@ -178,27 +174,20 @@ $.widget( "ui.draggable", {
 
 		// If user stops propagation, leave helper there ( if there's one ), disallow any CSS changes
 		if ( this._trigger( "start", event, this._uiHash() ) === false ) {
-			this.document.unbind( "." + this.widgetName );
-			return;
+			return false;
 		}
 
 		this._blockFrames();
 		this._setCss( event );
-
-		this._bind( this.document, {
-			mousemove: "_mouseMove",
-			mouseup: "_mouseUp"
-		});
 	},
 
-	_mouseMove: function( event ) {
+	_move: function( event ) {
 		var newLeft, newTop;
 
 		this._preparePosition( event );
 
 		// If user stops propagation, leave helper there ( if there's one ), disallow any CSS changes
 		if ( this._trigger( "drag", event, this._uiHash() ) === false ) {
-			this.document.unbind( "." + this.widgetName );
 			return;
 		}
 
@@ -208,7 +197,7 @@ $.widget( "ui.draggable", {
 		this._handleScrolling( event );
 	},
 
-	_mouseUp: function( event ) {
+	_stop: function( event ) {
 		this._preparePosition( event );
 
 		// If user stops propagation, leave helper there, disallow any CSS changes
@@ -219,7 +208,6 @@ $.widget( "ui.draggable", {
 			}
 		}
 
-		this.document.unbind( "." + this.widgetName );
 		this._unblockFrames();
 	},
 
