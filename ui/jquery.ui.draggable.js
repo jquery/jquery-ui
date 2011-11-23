@@ -34,30 +34,7 @@ $.widget( "ui.draggable", {
 	// overflowOffset: offset of scroll parent
 	// overflow: object containing width and height keys of scroll parent
 
-	// TODO: move next to _unblockFrames()
-	_blockFrames: function() {
-		var body = this.document[0].body;
-
-		this.iframeBlocks = this.document.find( "iframe" ).map(function() {
-			var iframe = $( this ),
-				iframeOffset = iframe.offset();
-
-			return $( "<div>" )
-				.css({
-					position: "absolute",
-					width: iframe.outerWidth(),
-					height: iframe.outerHeight(),
-					top: iframeOffset.top,
-					left: iframeOffset.left
-				})
-				.appendTo( body )[0];
-		});
-	},
-
 	_create: function() {
-		// TODO: move to drag start in case DOM changes
-		this.scrollParent = this.element.scrollParent();
-
 		// Static position elements can't be moved with top/left
 		if ( this.element.css( "position" ) === "static" ) {
 			this.element.css( "position", "relative" );
@@ -66,7 +43,6 @@ $.widget( "ui.draggable", {
 		this._bind({ mousedown: "_mouseDown" });
 	},
 
-	// TODO: why is relative handled differently than fixed/absolute?
 	_getPosition: function() {
 		var left, top, position, offset,
 			scrollTop = this.scrollParent.scrollTop(),
@@ -84,10 +60,11 @@ $.widget( "ui.draggable", {
 		}
 
 		// When using relative, css values are checked
+		// Otherwise the position wouldn't account for padding on ancestors
 		left = this.dragEl.css( "left" );
 		top = this.dragEl.css( "top" );
 
-		// Webkit will give back auto if there is nothing inline yet
+		// Webkit will give back auto if there is no explicit value
 		left = ( left === "auto" ) ? 0: parseInt( left, 10 );
 		top = ( top === "auto" ) ? 0: parseInt( top, 10 );
 
@@ -169,6 +146,7 @@ $.widget( "ui.draggable", {
 		}
 
 		this.cssPosition = this.dragEl.css( "position" );
+		this.scrollParent = this.element.scrollParent();
 
 		// Cache starting absolute and relative positions
 		this.startPosition = this._getPosition();
@@ -308,6 +286,25 @@ $.widget( "ui.draggable", {
 		}
 
 		return ret;
+	},
+
+	_blockFrames: function() {
+		var body = this.document[0].body;
+
+		this.iframeBlocks = this.document.find( "iframe" ).map(function() {
+			var iframe = $( this ),
+				iframeOffset = iframe.offset();
+
+			return $( "<div>" )
+				.css({
+					position: "absolute",
+					width: iframe.outerWidth(),
+					height: iframe.outerHeight(),
+					top: iframeOffset.top,
+					left: iframeOffset.left
+				})
+				.appendTo( body )[0];
+		});
 	},
 
 	_unblockFrames: function() {
