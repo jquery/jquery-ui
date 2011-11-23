@@ -195,12 +195,6 @@
             $(target).addClass(this.options.classCapDefault);                         
             this._trigger( "hoverCapOut", null,  {'target':target} );      
 
-        },
-
-
-
-
-
-
+        }
     });
 }( jQuery ));

@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Expires" content="Fri, Jan 01 1900 00:00:00 GMT">
@@ -26,8 +26,8 @@
         <script type="text/javascript">
             $(document).ready(function(){
                $('.sl:lt(2)').carousel({orientation:'horizontal'});
-                $('.sl:eq(2)').carousel({click:function(event,data){debugger;alert($(data.target).text())}});
-                $('.sl:eq(3)').carousel({height:300,width:100});
+                $('.sl:eq(2)').carousel({'click':function(event,data){debugger;alert($(data.target).text())}});
+                $('.sl:eq(3)').carousel({'height':200,'width':100});
             $('.act1').click(function(){
                    $('.sl:eq(1)').carousel('option','focusItem',12);
             });
