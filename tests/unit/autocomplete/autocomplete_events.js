@@ -157,6 +157,25 @@ asyncTest( "cancel select", function() {
 	}, 50 );
 });
 
+asyncTest( "blur during remote search", function() {
+	expect( 1 );
+	var ac = $( "#autocomplete" ).autocomplete({
+		delay: 0,
+		source: function( request, response ) {
+			ok( true, "trigger request" );
+			ac.simulate( "blur" );
+			setTimeout(function() {
+				response([ "result" ]);
+				start();
+			}, 100 );
+		},
+		open: function() {
+			ok( false, "opened after a blur" );
+		}
+	});
+	ac.val( "ro" ).keydown();
+});
+
 /* TODO previous fix broke more than it fixed, disabling this for now - messed up regular menu select event
 test("blur without selection", function() {
 	expect(1);
