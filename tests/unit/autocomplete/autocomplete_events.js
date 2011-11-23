@@ -176,22 +176,4 @@ asyncTest( "blur during remote search", function() {
 	ac.val( "ro" ).keydown();
 });
 
-/* TODO previous fix broke more than it fixed, disabling this for now - messed up regular menu select event
-test("blur without selection", function() {
-	expect(1);
-	var ac = $("#autocomplete").autocomplete({
-		delay: 0,
-		source: data
-	});
-	stop();
-	ac.val("j").keydown();
-	setTimeout(function() {
-		$( ".ui-menu-item" ).first().simulate("mouseover");
-		ac.simulate("keydown", { keyCode: $.ui.keyCode.TAB });
-		deepEqual( ac.val(), "j" );
-		start();
-	}, 50);
-});
-*/
-
 }( jQuery ) );
