@@ -1,15 +1,15 @@
-.ui-carousel > li{
-    list-style-type:none;
-}   
-  
-* {
+.ui-carousel, .ui-carousel ul{
     margin: 0px;   
     padding: 0px; 
     border: none;  
     outline: 0px;  
+}   
+li.ui-carousel-item{
+    float:left;
 }
-.ui-carousel > li{
-overflow:hidden;
+.ui-carousel li{
+    overflow:hidden;    
+    list-style-type:none;     
 }
 .ui-carousel li.ui-carousel-cap-1,.ui-carousel li.ui-carousel-cap-2{
     text-align: center;
@@ -23,6 +23,6 @@ li.ui-carousel-item > a{
 }
 
 li.ui-carousel-cap-1 span,li.ui-carousel-cap-2 span{
-     margin: 2px auto;
+    margin: 2px auto;
 
 }

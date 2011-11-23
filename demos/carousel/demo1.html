@@ -25,7 +25,7 @@
 
         <script type="text/javascript">
             $(document).ready(function(){
-               $('.sl:lt(2)').carousel({orientation:'horizontal'});
+               $('.sl:lt(2)').carousel({orientation:'horizontal',width:200,height:100});
                 $('.sl:eq(2)').carousel({'click':function(event,data){debugger;alert($(data.target).text())}});
                 $('.sl:eq(3)').carousel({'height':200,'width':100});
             $('.act1').click(function(){
