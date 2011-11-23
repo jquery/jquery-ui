@@ -96,6 +96,14 @@ test( "numberFormat, currency", function() {
 	equal( element.val(), "$1.00", "formatted after step" );
 });
 
+test( "numberFormat, change", function() {
+	expect( 2 );
+	var element = $( "#spin" ).val( 5 ).spinner({ numberFormat: "n1" });
+	equal( element.val(), "5.0", "formatted on init" );
+	element.spinner( "option", "numberFormat", "c" );
+	equal( element.val(), "$5.00", "formatted after change" );
+});
+
 test( "culture, null", function() {
 	expect( 2 );
 	Globalize.culture( "ja-JP" );
@@ -117,6 +125,17 @@ test( "currency, ja-JP", function() {
 	equal( element.val(), "¥0", "formatted on init" );
 	element.spinner( "stepUp" );
 	equal( element.val(), "¥1", "formatted after step" );
+});
+
+test( "currency, change", function() {
+	expect( 2 );
+	var element = $( "#spin" ).val( 5 ).spinner({
+		numberFormat: "C",
+		culture: "ja-JP"
+	});
+	equal( element.val(), "¥5", "formatted on init" );
+	element.spinner( "option", "culture", "en" );
+	equal( element.val(), "$5.00", "formatted after change" );
 });
 
 test( "max", function() {

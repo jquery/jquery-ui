@@ -35,7 +35,7 @@ $.widget( "ui.draggable", $.ui.interaction, {
 	// overflow: object containing width and height keys of scroll parent
 
 	_create: function() {
-		this._super( "_create" );
+		this._super();
 		// Static position elements can't be moved with top/left
 		if ( this.element.css( "position" ) === "static" ) {
 			this.element.css( "position", "relative" );

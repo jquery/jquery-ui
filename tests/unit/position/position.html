@@ -8,7 +8,12 @@
 	<script>
 	$.uiBackCompat = false;
 	</script>
-	<script src="../../../ui/jquery.ui.position.js"></script>
+	<script src="../../resource_loader.js"></script>
+	<script>
+	loadResources({
+		js: [ "ui/jquery.ui.position.js" ]
+	});
+	</script>
 
 	<link rel="stylesheet" href="../../../external/qunit.css">
 	<script src="../../../external/qunit.js"></script>
@@ -56,13 +61,13 @@ elements smaller than 10px have a line-height set on them to avoid a bug in IE6
 
 		<div style="position: absolute; height: 5000px; width: 5000px;"></div>
 
-		<div id="bug-5280" style="height: 30px; width: 201px;">
-			<div style="width: 50px; height: 10px;"></div>
-		</div>
-
 		<div id="fractions-parent" style="position: absolute; left: 10.7432222px; top: 10.532325px; height: 30px; width: 201px;">
 			<div id="fractions-element"></div>
 		</div>
+	</div>
+
+	<div id="bug-5280" style="height: 30px; width: 201px;">
+		<div style="width: 50px; height: 10px;"></div>
 	</div>
 </div>
 

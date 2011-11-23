@@ -34,7 +34,7 @@ test( "Immediate Return Conditions", function() {
 test( "createWrapper and removeWrapper retain focused elements (#7595)", function() {
 	expect( 2 );
 	var test = $( "div.hidden" ).show(),
-		input = $( "<input>" ).appendTo( test ).focus();
+		input = $( "<input type='text'>" ).appendTo( test ).focus();
 
 	$.effects.createWrapper( test );
 	equal( document.activeElement, input[ 0 ], "Active element is still input after createWrapper" );

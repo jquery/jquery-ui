@@ -168,7 +168,7 @@ $.widget( "ui.popup", {
 				// handle the closing instead of opening again
 				this.closeTimer = this._delay( function() {
 					this.close( event );
-				}, 100);
+				}, 150);
 			},
 			focusin: function( event ) {
 				clearTimeout( this.closeTimer );

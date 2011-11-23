@@ -346,7 +346,7 @@ test( "._super()", function() {
 			same( this, instance, "this is correct in testWidget2" );
 			same( a, 5, "parameter passed to testWidget2" );
 			same( b, 10, "parameter passed to testWidget2" );
-			return this._super( "method", a, b*2 );
+			return this._super( a, b*2 );
 		}
 	});
 
@@ -354,7 +354,7 @@ test( "._super()", function() {
 		method: function( a ) {
 			same( this, instance, "this is correct in testWidget3" );
 			same( a, 5, "parameter passed to testWidget3" );
-			var ret = this._super( "method", a, a*2 );
+			var ret = this._super( a, a*2 );
 			same( ret, 25, "super returned value" );
 		}
 	});
@@ -382,7 +382,7 @@ test( "._superApply()", function() {
 			same( this, instance, "this is correct in testWidget2" );
 			same( a, 5, "parameter passed to testWidget2" );
 			same( b, 10, "second parameter passed to testWidget2" );
-			return this._superApply( "method", arguments );
+			return this._superApply( arguments );
 		}
 	});
 
@@ -391,7 +391,7 @@ test( "._superApply()", function() {
 			same( this, instance, "this is correct in testWidget3" );
 			same( a, 5, "parameter passed to testWidget3" );
 			same( b, 10, "second parameter passed to testWidget3" );
-			var ret = this._superApply( "method", arguments );
+			var ret = this._superApply( arguments );
 			same( ret, 15, "super returned value" );
 		}
 	});
@@ -1031,7 +1031,7 @@ test( "redefine", function() {
 	$.widget( "ui.testWidget", $.ui.testWidget, {
 		method: function( str ) {
 			equal( str, "foo", "new invoked with correct parameter" );
-			this._super( "method", "bar" );
+			this._super( "bar" );
 		}
 	});
 

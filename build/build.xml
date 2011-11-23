@@ -148,6 +148,13 @@
 			<fileset dir="${ui.dir}/themes/base/images" />
 		</copy>
 
+		<!-- make a copy of the minified files for use in tests -->
+		<copy todir="dist" file="${min.dir}/jquery-ui.min.js" />
+		<copy todir="dist/theme" file="${dist.dir}/themes/base/minified/jquery-ui.min.css" />
+		<copy todir="dist/theme/images" >
+			<fileset dir="${ui.dir}/themes/base/images" />
+		</copy>
+
 		<echo message="Minified ui/ built." />
 	</target>
 
@@ -313,7 +320,7 @@
 		<echo message="Comparing file size with previous build" />
 		<exec executable="bash">
 			<arg value="-c" />
-			<arg value="wc -c ${size.dir}/* | `which node nodejs` build/sizer.js" />
+			<arg value="wc -c ${size.dir}/* | `which node nodejs 2>/dev/null` build/sizer.js" />
 		</exec>
 		<delete dir="${size.dir}" />
 	</target>
