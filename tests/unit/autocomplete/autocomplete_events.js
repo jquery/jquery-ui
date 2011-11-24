@@ -157,22 +157,23 @@ asyncTest( "cancel select", function() {
 	}, 50 );
 });
 
-/* TODO previous fix broke more than it fixed, disabling this for now - messed up regular menu select event
-test("blur without selection", function() {
-	expect(1);
-	var ac = $("#autocomplete").autocomplete({
+asyncTest( "blur during remote search", function() {
+	expect( 1 );
+	var ac = $( "#autocomplete" ).autocomplete({
 		delay: 0,
-		source: data
+		source: function( request, response ) {
+			ok( true, "trigger request" );
+			ac.simulate( "blur" );
+			setTimeout(function() {
+				response([ "result" ]);
+				start();
+			}, 100 );
+		},
+		open: function() {
+			ok( false, "opened after a blur" );
+		}
 	});
-	stop();
-	ac.val("j").keydown();
-	setTimeout(function() {
-		$( ".ui-menu-item" ).first().simulate("mouseover");
-		ac.simulate("keydown", { keyCode: $.ui.keyCode.TAB });
-		deepEqual( ac.val(), "j" );
-		start();
-	}, 50);
+	ac.val( "ro" ).keydown();
 });
-*/
 
 }( jQuery ) );
