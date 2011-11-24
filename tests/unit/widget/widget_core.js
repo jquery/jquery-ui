@@ -1031,7 +1031,7 @@ test( "redefine", function() {
 	$.widget( "ui.testWidget", $.ui.testWidget, {
 		method: function( str ) {
 			equal( str, "foo", "new invoked with correct parameter" );
-			this._super();
+			this._super( "bar" );
 		}
 	});
 
