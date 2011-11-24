@@ -32,6 +32,7 @@ $.widget( "ui.autocomplete", {
 			collision: "none"
 		},
 		source: null,
+		closeOnRefresh: true,
 
 		// callbacks
 		change: null,
@@ -387,7 +388,7 @@ $.widget( "ui.autocomplete", {
 		if ( !this.options.disabled && content && content.length && !this.cancelSearch ) {
 			this._suggest( content );
 			this._trigger( "open" );
-		} else {
+		} else if(this.options.closeOnRefresh || !content.length) {
 			this.close();
 		}
 		this.pending--;
