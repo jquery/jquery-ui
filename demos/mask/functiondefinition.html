@@ -4,18 +4,18 @@
 	<meta charset="UTF-8" />
 	<title>jQuery UI Mask - Function Definition Demo</title>
 	<link type="text/css" href="../../themes/base/jquery.ui.all.css" rel="stylesheet" />
-	<script src="../../jquery-1.6.4.js"></script>
+	<script src="../../jquery-1.7.1.js"></script>
 	<script src="../../ui/jquery.ui.core.js"></script>
 	<script src="../../ui/jquery.ui.widget.js"></script>
 	<script src="../../ui/jquery.ui.mask.js"></script>
 	<link href="../demos.css" rel="stylesheet" />
 	<script>
 	$(function() {
-		
+
 		function createTwoDigitDefinition( maximum ) {
 			return function( value ) {
 				var number = parseInt( value, 10 );
-				
+
 				if ( value === "" || /\D/.test( value ) ) {
 					return;
 				}
@@ -60,7 +60,7 @@
 			if ( value.length === 4 ) {
 				return value;
 			}
-		}		
+		}
 		$("#date").mask({
 			mask: "yyyy/mm/dd",
 			definitions: {
@@ -72,7 +72,7 @@
 	});
 	</script>
 	<style>
-		
+
 	</style>
 </head>
 <body>
