@@ -26,6 +26,7 @@ $.widget( "ui.autocomplete", {
 		autoFocus: false,
 		delay: 300,
 		minLength: 1,
+		closeOnRefresh: true,
 		position: {
 			my: "left top",
 			at: "left bottom",
@@ -387,7 +388,7 @@ $.widget( "ui.autocomplete", {
 		if ( !this.options.disabled && content && content.length && !this.cancelSearch ) {
 			this._suggest( content );
 			this._trigger( "open" );
-		} else {
+		} else if(this.options.closeOnRefresh) {
 			this.close();
 		}
 		this.pending--;
