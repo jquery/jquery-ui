@@ -12,7 +12,7 @@
  *	jquery.ui.widget.js
  */
 (function( $, undefined ) {
-		  
+
 // TODO: use ui-accordion-header-active class and fix styling
 $.widget( "ui.accordion", {
 	version: "@VERSION",
@@ -169,7 +169,7 @@ $.widget( "ui.accordion", {
 			this._setupEvents( value );
 		}
 
-		this._super( "_setOption", key, value );
+		this._super( key, value );
 
 		// setting collapsible: false while collapsed; open first panel
 		if ( key === "collapsible" && !value && this.options.active === false ) {
@@ -246,7 +246,7 @@ $.widget( "ui.accordion", {
 				if ( position === "absolute" || position === "fixed" ) {
 					return;
 				}
-				maxHeight -= elem.outerHeight( true );	
+				maxHeight -= elem.outerHeight( true );
 			});
 			if ( overflow ) {
 				parent.css( "overflow", overflow );
@@ -439,7 +439,7 @@ $.extend( $.ui.accordion, {
 				options.prevHide.stop( true, true );
 				options.toHide = options.prevShow;
 			}
-			
+
 			var showOverflow = options.toShow.css( "overflow" ),
 				hideOverflow = options.toHide.css( "overflow" ),
 				percentDone = 0,
@@ -451,7 +451,7 @@ $.extend( $.ui.accordion, {
 				easing: "swing",
 				duration: 300
 			}, options, additions );
-			
+
 			options.widget.lastToggle = options;
 
 			if ( !options.toHide.size() ) {
@@ -630,8 +630,10 @@ if ( $.uiBackCompat !== false ) {
 
 		var _createIcons = prototype._createIcons;
 		prototype._createIcons = function() {
-			this.options.icons.activeHeader = this.options.icons.activeHeader ||
-				this.options.icons.headerSelected;
+			if ( this.options.icons ) {
+				this.options.icons.activeHeader = this.options.icons.activeHeader ||
+					this.options.icons.headerSelected;
+			}
 			_createIcons.call( this );
 		};
 	}( jQuery, jQuery.ui.accordion.prototype ) );

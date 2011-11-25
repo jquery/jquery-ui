@@ -1,19 +1,19 @@
-/* Inicialització en català per a l'extenció 'calendar' per jQuery. */
+/* Inicialització en català per a l'extensió 'UI date picker' per jQuery. */
 /* Writers: (joan.leon@gmail.com). */
 jQuery(function($){
 	$.datepicker.regional['ca'] = {
-		closeText: 'Tancar',
-		prevText: '&#x3C;Ant',
-		nextText: 'Seg&#x3E;',
+		closeText: 'Tanca',
+		prevText: 'Anterior',
+		nextText: 'Següent',
 		currentText: 'Avui',
-		monthNames: ['Gener','Febrer','Mar&#xE7;','Abril','Maig','Juny',
-		'Juliol','Agost','Setembre','Octubre','Novembre','Desembre'],
-		monthNamesShort: ['Gen','Feb','Mar','Abr','Mai','Jun',
-		'Jul','Ago','Set','Oct','Nov','Des'],
-		dayNames: ['Diumenge','Dilluns','Dimarts','Dimecres','Dijous','Divendres','Dissabte'],
-		dayNamesShort: ['Dug','Dln','Dmt','Dmc','Djs','Dvn','Dsb'],
-		dayNamesMin: ['Dg','Dl','Dt','Dc','Dj','Dv','Ds'],
-		weekHeader: 'Sm',
+		monthNames: ['gener','febrer','març','abril','maig','juny',
+		'juliol','agost','setembre','octubre','novembre','desembre'],
+		monthNamesShort: ['gen','feb','març','abr','maig','juny',
+		'jul','ag','set','oct','nov','des'],
+		dayNames: ['diumenge','dilluns','dimarts','dimecres','dijous','divendres','dissabte'],
+		dayNamesShort: ['dg','dl','dt','dc','dj','dv','ds'],
+		dayNamesMin: ['dg','dl','dt','dc','dj','dv','ds'],
+		weekHeader: 'Set',
 		dateFormat: 'dd/mm/yy',
 		firstDay: 1,
 		isRTL: false,
