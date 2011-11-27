@@ -32,7 +32,6 @@ $.widget( "ui.autocomplete", {
 			collision: "none"
 		},
 		source: null,
-		arrowsActivate: true,
 
 		// callbacks
 		change: null,
@@ -491,7 +490,8 @@ $.widget( "ui.autocomplete", {
 	},
 
 	_keyEvent: function( keyEvent, event ) {
-		if ( this.options.arrowsActivate || this.menu.active ) {
+		var target = $( event.target );
+		if ( this.menu.activeMenu.is( ":visible" ) || !target.is( "textarea" ) && (typeof target.attr( "contenteditable" ) === "undefined" || target.attr( "contenteditable" ) === false )) {
 			this._move( keyEvent, event );
 
 			// prevents moving cursor to beginning/end of the text field in some browsers

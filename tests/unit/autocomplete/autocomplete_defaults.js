@@ -11,7 +11,6 @@ commonWidgetTests( "autocomplete", {
 			collision: "none"
 		},
 		source: null,
-		arrowsActivate: true,
 
 		// callbacks
 		change: null,
