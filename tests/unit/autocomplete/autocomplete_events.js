@@ -176,4 +176,86 @@ asyncTest( "blur during remote search", function() {
 	ac.val( "ro" ).keydown();
 });
 
+asyncTest( "With an input pressing up causes the menu to be shown", function() {
+	arrowsActivateOpensMenuTest( "#autocomplete", true, true );
+});
+
+asyncTest( "With an input pressing down causes the menu to be shown", function() {
+	arrowsActivateOpensMenuTest( "#autocomplete", false, true );
+});
+
+asyncTest( "With a textarea pressing up doesn't cause the menu to be shown", function() {
+	arrowsActivateOpensMenuTest( "#autocomplete-textarea", true, false );
+});
+
+asyncTest( "With a textarea pressing down doesn't cause the menu to be shown", function() {
+	arrowsActivateOpensMenuTest( "#autocomplete-textarea", false, false );
+});
+
+asyncTest( "With a contenteditable pressing up doesn't cause the menu to be shown", function() {
+	arrowsActivateOpensMenuTest( "#autocomplete-contenteditable", true, false );
+});
+
+asyncTest( "With a contenteditable pressing down doesn't cause the menu to be shown", function() {
+	arrowsActivateOpensMenuTest( "#autocomplete-contenteditable", false, false );
+});
+
+function arrowsActivateOpensMenuTest( id, isKeyUp, isMenuVisible ) {
+	expect( 3 );
+	var element = $( id ).autocomplete({
+		source: data,
+		delay: 0,
+		minLength: 0
+	});
+	menu = element.autocomplete( "widget" );
+	ok( menu.is( ":hidden" ), "menu is hidden to start with" );
+	element.simulate( "keydown", { keyCode: ( isKeyUp ? $.ui.keyCode.UP : $.ui.keyCode.DOWN ) } );
+
+	setTimeout(function() {
+		equal( menu.is( ":visible" ), isMenuVisible, "menu is visible after delay" );
+		equal( menu.find( "a.ui-state-focus" ).text(), "", "nothing should be initially selected" );
+		start();
+	}, 50 );
+}
+
+test( "Pressing up selects the previous search item when active with input", function() {
+	searchUpDownSelectsItemTest( "#autocomplete", true, "" );
+});
+
+test( "Pressing down selects the next search item when active with input", function() {
+	searchUpDownSelectsItemTest( "#autocomplete", false, "JavaScript" );
+});
+
+test( "Pressing up selects the previous search item when active with textarea", function() {
+	searchUpDownSelectsItemTest( "#autocomplete-textarea", true, "" );
+});
+
+test( "Pressing down selects the next search item when active with textarea", function() {
+	searchUpDownSelectsItemTest( "#autocomplete-textarea", false, "JavaScript" );
+});
+
+test( "Pressing up selects the previous search item when active with contenteditable", function() {
+	searchUpDownSelectsItemTest( "#autocomplete-contenteditable", true, "" );
+});
+
+test( "Pressing down selects the next search item when active with contenteditable", function() {
+	searchUpDownSelectsItemTest( "#autocomplete-contenteditable", false, "JavaScript" );
+});
+
+function searchUpDownSelectsItemTest( id, isKeyUp, itemThatShouldBeSelected ) {
+	expect( 2 );
+	var element = $( id ).autocomplete({
+		source: data,
+		autoFocus: true,
+		delay: 0
+	});
+	menu = element.autocomplete( "widget" );
+
+	element.autocomplete( "search", "a" );
+
+	equal( menu.find( "a.ui-state-focus" ).text(), "Java", "Java should be initially selected" );
+	element.simulate( "keydown", { keyCode: ( isKeyUp ? $.ui.keyCode.UP : $.ui.keyCode.DOWN ) } );
+	equal( menu.find( "a.ui-state-focus" ).text(), itemThatShouldBeSelected, "Check you've selected the expected value." );
+}
+
 }( jQuery ) );
