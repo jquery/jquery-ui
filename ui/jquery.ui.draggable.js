@@ -135,7 +135,7 @@ $.widget( "ui.draggable", $.ui.interaction, {
 			}
 
 			this.dragEl
-				// TODO: should we move this to the stylesheet and use a class?
+				// Helper must be absolute to function properly
 				.css( "position", "absolute" )
 				.appendTo( this.document[0].body )
 				.offset( this.element.offset() );
