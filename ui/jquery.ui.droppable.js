@@ -63,7 +63,7 @@ $.widget( "ui.droppable", {
 				draggableRight: ui.offset.left + this.draggableProportions.width,
 				draggableBottom: ui.offset.top + this.draggableProportions.height
 			},
-			over = this[ handleFunc ]( edges, ui );
+			over = this[ handleFunc ]( event, edges, ui );
 
 		// If there is sufficient overlap as deemed by tolerance
 		if ( over ) {
@@ -89,7 +89,7 @@ $.widget( "ui.droppable", {
 	// Determines if draggable is over droppable based on intersect tolerance
 	// TODO: move all tolerance methods into a hash
 	// $.ui.droppable.tolerance.intersect
-	_handleIntersect: function( edges, ui ) {
+	_handleIntersect: function( event, edges, ui ) {
 		var xDiff = edges.draggableRight - this.offset.left,
 			yDiff = edges.draggableBottom - this.offset.top,
 			// TODO: is there really any need to round here?
@@ -112,13 +112,25 @@ $.widget( "ui.droppable", {
 	},
 
 	// Determines if draggable is over droppable based on touch tolerance
-	_handleTouch: function( edges, ui ) {
+	_handleTouch: function( event, edges, ui ) {
 		var xOverlap = edges.draggableRight >= this.offset.left &&
 				ui.offset.left <= edges.right,
 			yOverlap = edges.draggableBottom >= this.offset.top &&
 				ui.offset.top <= edges.bottom;
 
 		return xOverlap && yOverlap;
+	},
+	
+	// Determines if draggable is over droppable based on touch tolerance
+	_handlePointer: function( event, edges, ui ) {
+	
+		var xOverlap = event.pageX >= this.offset.left &&
+				event.pageX <= edges.right,
+			yOverlap = event.pageY >= this.offset.top &&
+				event.pageY <= edges.bottom;
+
+		return xOverlap && yOverlap;
+
 	},
 
 	// TODO: shouldn't this be dragStop?
