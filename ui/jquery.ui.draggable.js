@@ -18,10 +18,7 @@ $.widget( "ui.draggable", $.ui.interaction, {
 	widgetEventPrefix: "drag",
 
 	options: {
-		helper: null,
-		// TODO: remove scroll options
-		scrollSensitivity: 20,
-		scrollSpeed: 20
+		helper: null
 	},
 
 	// dragEl: element being dragged (original or helper)
@@ -74,42 +71,51 @@ $.widget( "ui.draggable", $.ui.interaction, {
 	},
 
 	_handleScrolling: function( event ) {
-		var scrollTop = this.scrollParent.scrollTop(),
-			scrollLeft = this.scrollParent.scrollLeft();
+		var distances = {},
+			scrollTop = this.scrollParent.scrollTop(),
+			scrollLeft = this.scrollParent.scrollLeft(),
+			scrollSensitivity = 20,
+			xScrollSpeed = 20,
+			yScrollSpeed = 20;
 
 		// overflowOffset is only set when scrollParent is not doc/html
 		if ( !this.overflowOffset ) {
 
 			// Handle vertical scrolling
-			if ( ( ( this.overflow.height + scrollTop ) - event.pageY ) < this.options.scrollSensitivity ) {
-				this.scrollParent.scrollTop( scrollTop + this.options.scrollSpeed );
+			if ( ( ( this.overflow.height + scrollTop ) - event.pageY ) < scrollSensitivity ) {
+				this.scrollParent.scrollTop( scrollTop + yScrollSpeed );
 			}
-			else if ( event.pageY < ( scrollTop + this.options.scrollSensitivity ) ) {
-				this.scrollParent.scrollTop( scrollTop - this.options.scrollSpeed );
+			else if ( event.pageY < ( scrollTop + scrollSensitivity ) ) {
+				this.scrollParent.scrollTop( scrollTop - yScrollSpeed );
 			}
+			
+			distances.xRight = ( this.overflow.width + scrollLeft ) - event.pageX;
+			distances.xLeft  = event.pageX - scrollLeft;
+			
+			
 
 			// Handle horizontal scrolling
-			if ( ( ( this.overflow.width + scrollLeft ) - event.pageX ) < this.options.scrollSensitivity ) {
-				this.scrollParent.scrollLeft( scrollLeft + this.options.scrollSpeed );
+			if ( distances.xRight < scrollSensitivity ) {
+				this.scrollParent.scrollLeft( scrollLeft + xScrollSpeed );
 			}
-			else if ( event.pageX < ( scrollLeft + this.options.scrollSensitivity ) ) {
-				this.scrollParent.scrollLeft( scrollLeft - this.options.scrollSpeed );
+			else if ( distances.xLeft < scrollSensitivity  ) {
+				this.scrollParent.scrollLeft( scrollLeft - xScrollSpeed );
 			}
 		} else {
 			// Handle vertical scrolling
-			if ( ( event.pageY + this.options.scrollSensitivity ) > ( this.overflow.height + this.overflowOffset.top ) ) {
-				this.scrollParent.scrollTop( scrollTop + this.options.scrollSpeed );
+			if ( ( event.pageY + scrollSensitivity ) > ( this.overflow.height + this.overflowOffset.top ) ) {
+				this.scrollParent.scrollTop( scrollTop + yScrollSpeed );
 			}
-			else if ( ( event.pageY - this.options.scrollSensitivity ) < this.overflowOffset.top ) {
-				this.scrollParent.scrollTop( scrollTop - this.options.scrollSpeed );
+			else if ( ( event.pageY - scrollSensitivity ) < this.overflowOffset.top ) {
+				this.scrollParent.scrollTop( scrollTop - yScrollSpeed );
 			}
 
 			// Handle horizontal scrolling
-			if ( ( event.pageX + this.options.scrollSensitivity ) > ( this.overflow.width + this.overflowOffset.left ) ) {
-				this.scrollParent.scrollLeft( scrollLeft + this.options.scrollSpeed );
+			if ( ( event.pageX + scrollSensitivity ) > ( this.overflow.width + this.overflowOffset.left ) ) {
+				this.scrollParent.scrollLeft( scrollLeft + xScrollSpeed );
 			}
-			else if ( ( event.pageX - this.options.scrollSensitivity ) < this.overflowOffset.left ) {
-				this.scrollParent.scrollLeft( scrollLeft - this.options.scrollSpeed );
+			else if ( ( event.pageX - scrollSensitivity ) < this.overflowOffset.left ) {
+				this.scrollParent.scrollLeft( scrollLeft - xScrollSpeed );
 			}
 		}
 	},

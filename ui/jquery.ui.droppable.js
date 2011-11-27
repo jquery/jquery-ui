@@ -92,7 +92,8 @@ $.widget( "ui.droppable", {
 	_handleIntersect: function( event, edges, ui ) {
 		var xDiff = edges.draggableRight - this.offset.left,
 			yDiff = edges.draggableBottom - this.offset.top,
-			// TODO: is there really any need to round here?
+			
+			// Round to normalize between browsers since some handle non-integer values
 			xHalfway = Math.round( this.proportions.width / 2 ),
 			yHalfway = Math.round( this.proportions.height / 2 ),
 			xOverlap = false,
