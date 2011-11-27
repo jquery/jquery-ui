@@ -1,7 +1,7 @@
 /*
  * jQuery UI Draggable @VERSION
  *
- * Copyright 2011, AUTHORS.txt (http://jqueryui.com/about)
+ * CopyBottom 2011, AUTHORS.txt (http://jqueryui.com/about)
  * Dual licensed under the MIT or GPL Version 2 licenses.
  * http://jquery.org/license
  *
@@ -71,53 +71,66 @@ $.widget( "ui.draggable", $.ui.interaction, {
 	},
 
 	_handleScrolling: function( event ) {
-		var distances = {},
+		var xScrollSpeed, yScrollSpeed,
+			distances = {},
 			scrollTop = this.scrollParent.scrollTop(),
 			scrollLeft = this.scrollParent.scrollLeft(),
 			scrollSensitivity = 20,
-			xScrollSpeed = 20,
-			yScrollSpeed = 20;
+			baseSpeed = 5,
+			speed = function( distance ) {
+
+				return baseSpeed + Math.round( distance / 2 );
+
+			};
 
 		// overflowOffset is only set when scrollParent is not doc/html
 		if ( !this.overflowOffset ) {
 
-			// Handle vertical scrolling
-			if ( ( ( this.overflow.height + scrollTop ) - event.pageY ) < scrollSensitivity ) {
-				this.scrollParent.scrollTop( scrollTop + yScrollSpeed );
-			}
-			else if ( event.pageY < ( scrollTop + scrollSensitivity ) ) {
-				this.scrollParent.scrollTop( scrollTop - yScrollSpeed );
-			}
-			
 			distances.xRight = ( this.overflow.width + scrollLeft ) - event.pageX;
-			distances.xLeft  = event.pageX - scrollLeft;
-			
-			
+			distances.xLeft = event.pageX - scrollLeft;
+			distances.yBottom = ( this.overflow.height + scrollTop ) - event.pageY;
+			distances.yTop = event.pageY - scrollTop;
 
-			// Handle horizontal scrolling
-			if ( distances.xRight < scrollSensitivity ) {
-				this.scrollParent.scrollLeft( scrollLeft + xScrollSpeed );
-			}
-			else if ( distances.xLeft < scrollSensitivity  ) {
-				this.scrollParent.scrollLeft( scrollLeft - xScrollSpeed );
-			}
 		} else {
-			// Handle vertical scrolling
-			if ( ( event.pageY + scrollSensitivity ) > ( this.overflow.height + this.overflowOffset.top ) ) {
-				this.scrollParent.scrollTop( scrollTop + yScrollSpeed );
-			}
-			else if ( ( event.pageY - scrollSensitivity ) < this.overflowOffset.top ) {
-				this.scrollParent.scrollTop( scrollTop - yScrollSpeed );
-			}
 
-			// Handle horizontal scrolling
-			if ( ( event.pageX + scrollSensitivity ) > ( this.overflow.width + this.overflowOffset.left ) ) {
-				this.scrollParent.scrollLeft( scrollLeft + xScrollSpeed );
-			}
-			else if ( ( event.pageX - scrollSensitivity ) < this.overflowOffset.left ) {
-				this.scrollParent.scrollLeft( scrollLeft - xScrollSpeed );
-			}
+			distances.xRight = ( this.overflow.width + this.overflowOffset.left ) - event.pageX;
+			distances.xLeft = event.pageX - this.overflowOffset.left;
+			distances.yBottom = ( this.overflow.height + this.overflowOffset.top ) - event.pageY;
+			distances.yTop = event.pageY - this.overflowOffset.top;
+
 		}
+
+		// Handle vertical scrolling
+		if ( distances.yBottom < scrollSensitivity ) {
+
+			yScrollSpeed = speed( scrollSensitivity - distances.yBottom );
+
+			this.scrollParent.scrollTop( scrollTop + yScrollSpeed );
+
+		}
+		else if ( distances.yTop < scrollSensitivity ) {
+
+			yScrollSpeed = speed( scrollSensitivity - distances.yTop );
+
+			this.scrollParent.scrollTop( scrollTop - yScrollSpeed );
+		}
+
+		// Handle horizontal scrolling
+		if ( distances.xRight < scrollSensitivity ) {
+
+			xScrollSpeed = speed( scrollSensitivity - distances.xRight );
+
+			this.scrollParent.scrollLeft( scrollLeft + xScrollSpeed );
+
+		}
+		else if ( distances.xLeft < scrollSensitivity ) {
+
+			xScrollSpeed = speed( scrollSensitivity - distances.xLeft );
+
+			this.scrollParent.scrollLeft( scrollLeft - xScrollSpeed );
+
+		}
+
 	},
 
 	_start: function( event ) {
@@ -253,13 +266,13 @@ $.widget( "ui.draggable", $.ui.interaction, {
 			// Get the difference of automatic coordinates vs what user overrode
 			oTop = this.position.top - this.tempPosition.top;
 			oLeft = this.position.left - this.tempPosition.left;
-			
+
 			// Reset offset based on math
 			this.offset.top = this.offset.top + oTop;
 			this.offset.left = this.offset.left + oLeft;
-			
+
 			this.offset = this.dragEl.offset();
-			
+
 		}
 
 		newLeft = this.position.left;
