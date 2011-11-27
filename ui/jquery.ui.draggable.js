@@ -212,6 +212,8 @@ $.widget( "ui.draggable", $.ui.interaction, {
 	},
 
 	// Uses event to determine new position of draggable, before any override from callbacks
+	// TODO: handle absolute element inside relative parent like a relative element
+	// possibly have user set flag to avoid DOM lookup
 	_preparePosition: function( event ) {
 		var leftDiff = event.clientX - this.startCoords.left,
 			topDiff = event.clientY - this.startCoords.top,
@@ -237,14 +239,21 @@ $.widget( "ui.draggable", $.ui.interaction, {
 
 	// Places draggable where mouse or user from callback indicates
 	_setCss: function( event ) {
-		var newLeft, newTop;
+		var newLeft, newTop, oTop, oLeft;
 
 		// User overriding left/top so shortcut math is no longer valid
 		if ( this.tempPosition.left !== this.position.left || this.tempPosition.top !== this.position.top ) {
-			// TODO: can we just store the previous offset values
-			// and not go through .offset()?
-			// refresh offset using slower functions
+
+			// Get the difference of automatic coordinates vs what user overrode
+			oTop = this.position.top - this.tempPosition.top;
+			oLeft = this.position.left - this.tempPosition.left;
+			
+			// Reset offset based on math
+			this.offset.top = this.offset.top + oTop;
+			this.offset.left = this.offset.left + oLeft;
+			
 			this.offset = this.dragEl.offset();
+			
 		}
 
 		newLeft = this.position.left;
@@ -296,7 +305,7 @@ $.widget( "ui.draggable", $.ui.interaction, {
 	},
 
 	_unblockFrames: function() {
-		if ( this.iframeBlocks ) { 
+		if ( this.iframeBlocks ) {
 			this.iframeBlocks.remove();
 			delete this.iframeBlocks;
 		}
