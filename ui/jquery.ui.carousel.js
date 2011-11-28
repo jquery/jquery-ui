@@ -43,6 +43,20 @@
             // and reloading
             this.refresh();  
         },
+        recenter: function(){  
+         debugger;     
+            this.element.find('li.'+this.options.classBase+'-item').each(function(){
+                
+                var h = $(this).height(),
+                w = $(this).width(),
+                ch =  $(this).children(':eq(0)').outerHeight(),         
+                cw =  $(this).children(':eq(0)').outerWidth();         
+                $(this).children(':eq(0)').css({'margin-left':(w-cw)/2,'margin-top':(h-ch)/2});
+
+
+
+            });
+        },
         refresh: function(){
             // if width is already set
             if(this.options.width == 'none'){ 
@@ -183,7 +197,7 @@
                 var marginX = (this.element.children('li.'+classBase+'-cap-1').width()-this.element.children('li.'+classBase+'-cap-1').children('span').outerWidth())/2; 
                 var marginY =(this.element.children('li.'+classBase+'-cap-1').height()-this.element.children('li.'+classBase+'-cap-1').children('span').outerHeight())/2; 
                 this.element.children('li.'+classBase+'-cap-1').children('span').css({'margin-top':marginY,'margin-left':marginX});
-                
+
                 // centering the icon on cap2
                 var marginX = (this.element.children('li.'+classBase+'-cap-2').width()-this.element.children('li.'+classBase+'-cap-2').children('span').outerWidth())/2; 
                 var marginY =(this.element.children('li.'+classBase+'-cap-2').height()-this.element.children('li.'+classBase+'-cap-2').children('span').outerHeight())/2; 
@@ -241,6 +255,7 @@
                 this.element.find('ul.'+this.options.classBase+'-items').animate({'left':animationTarget},this.options.animationSpeed,this.options.animationEasing);
 
             }
+            this.recenter();
         },
         _onClick:function(event){
 
