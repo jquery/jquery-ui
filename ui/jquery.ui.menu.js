@@ -40,16 +40,6 @@ $.widget( "ui.menu", {
 				id: this.menuId,
 				role: "menu"
 			})
-			// Prevent focus from sticking to links inside menu after clicking
-			// them (focus should always stay on UL during navigation).
-			// If the link is clicked, redirect focus to the menu.
-			// TODO move to _bind below
-			.bind( "mousedown.menu", function( event ) {
-				if ( $( event.target).is( "a" ) ) {
-					event.preventDefault();
-					$( this ).focus( 1 );
-				}
-			})
 			// need to catch all clicks on disabled menu
 			// not possible through _bind
 			.bind( "click.menu", $.proxy( function( event ) {
@@ -58,6 +48,11 @@ $.widget( "ui.menu", {
 				}
 			}, this));
 		this._bind({
+			// Prevent focus from sticking to links inside menu after clicking
+			// them (focus should always stay on UL during navigation).
+			"mousedown .ui-menu-item > a": function( event ) {
+				event.preventDefault();
+			},
 			"click .ui-menu-item:has(a)": function( event ) {
 				event.stopImmediatePropagation();
 				var target = $( event.currentTarget );
@@ -66,6 +61,8 @@ $.widget( "ui.menu", {
 					this.focus( event, target );
 				}
 				this.select( event );
+				// Redirect focus to the menu.
+				this.element.focus();
 			},
 			"mouseover .ui-menu-item": function( event ) {
 				event.stopImmediatePropagation();
