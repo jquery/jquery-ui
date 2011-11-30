@@ -217,6 +217,11 @@ $.widget( "ui.menubar", {
 	},
 
 	_open: function( event, menu ) {
+		// If menubar has no submenu options, there is nothing to open
+		if(menu[0] == undefined)
+        	{
+            		return;
+                }
 		// on a single-button menubar, ignore reopening the same menu
 		if ( this.active && this.active[0] == menu[0] ) {
 			return;
