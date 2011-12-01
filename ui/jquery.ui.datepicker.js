@@ -1792,10 +1792,14 @@ $.fn.datepicker = function(options){
 	}
 	
 	/* Initialise the date picker. */
-	if (!$.datepicker.initialized || $($.datepicker._mainDivId).length == 0) {
-		$(document).mousedown($.datepicker._checkExternalClick).
-			find('body').append($.datepicker.dpDiv);
+	if (!$.datepicker.initialized) {
+		$(document).mousedown($.datepicker._checkExternalClick);
 		$.datepicker.initialized = true;
+	}
+	
+	/* Append datepicker main container to body if not exist. */
+	if ($($.datepicker._mainDivId).length == 0) {
+		$(document).find('body').append($.datepicker.dpDiv);
 	}
 
 	var otherArgs = Array.prototype.slice.call(arguments, 1);
