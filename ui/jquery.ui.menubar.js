@@ -58,7 +58,7 @@ $.widget( "ui.menubar", {
 					$(event.target).prev().focus();
 					that._trigger( "select", event, ui );
 				},
-				items: that.options.menuElement
+				menus: that.options.menuElement
 			})
 			.hide()
 			.attr({
