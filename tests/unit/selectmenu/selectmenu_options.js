@@ -8,9 +8,10 @@
     });
 
     test("appendTo another element", function () {
-        expect(1);
+        expect(2);
 
         ok(this.element.selectmenu("option", "appendTo", "#qunit-fixture"), "appendTo accepts selector");
+        ok($("#qunit-fixture").find(".ui-selectmenu-menu").length, "selectmenu appendedTo other element");
     });
 
     test("dropdown false", function () {
@@ -19,15 +20,12 @@
         ok(this.element.selectmenu("option", "dropdown", false), "accepts false");
     });
 
-    test("value in sync with selected item", function () {
+    test("value option", function () {
         expect(1);
 
-        var widget = this.element.selectmenu("widget"),
-            menu = widget.filter(".ui-selectmenu-menu");
+        this.element.selectmenu("option", "value", "jQuery UI");
 
-        menu.find(".ui-menu-item").eq(0).simulate("click");
-
-        equals(this.element.selectmenu("option", "value"), "Slower", "should be set to first option");
+        equals(this.element.selectmenu("option", "value"), "jQuery UI", "should be set to 'jQuery UI'");
     });
 
 })(jQuery);

@@ -7,7 +7,7 @@
     });
 
     test("change", function () {
-        expect(4);
+        expect(5);
 
         this.element.selectmenu({
             change: function (event, ui) {
@@ -22,6 +22,8 @@
             menu = widget.filter(".ui-selectmenu-menu");
 
         menu.find(".ui-menu-item").eq(0).simulate("click");
+
+        equals(this.element.selectmenu("option", "value"), "Slower", "should be set to first option");
     });
 
     test("close", function () {
