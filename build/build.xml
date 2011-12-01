@@ -123,6 +123,12 @@
 				<mapper type="glob" from="*.js" to="${min.dir}/*.min.js" />
 				<targetfile/>
 			</apply>
+			<apply executable="build/minify-js.sh">
+				<fileset dir="${dist.dir}/ui/i18n" includes="**.js" />
+				<srcfile />
+				<mapper type="glob" from="*.js" to="${min.dir}/i18n/*.min.js" />
+				<targetfile/>
+			</apply>
 			<apply executable="java" parallel="false">
 				<fileset dir="${dist.dir}/themes/base" includes="*.css" />
 				<arg line="-jar" />
