@@ -136,7 +136,7 @@ $.widget( "ui.tabs", {
 			return;
 		}
 
-		this._super( "_setOption", key, value);
+		this._super( key, value);
 
 		// setting collapsible: false while collapsed; open first panel
 		if ( key === "collapsible" && !value && this.options.active === false ) {
@@ -323,7 +323,7 @@ $.widget( "ui.tabs", {
 
 		if ( tab.hasClass( "ui-state-disabled" ) ||
 				// tab is already loading
-				tab.hasClass( "ui-tabs-loading" ) || 
+				tab.hasClass( "ui-tabs-loading" ) ||
 				// can't switch durning an animation
 				that.running ||
 				// click on active header, but not collapsible
@@ -555,13 +555,13 @@ $.widget( "ui.tabs", {
 						if ( status === "abort" ) {
 							self.panels.stop( false, true );
 						}
-	
+
 						self.lis.eq( index ).removeClass( "ui-tabs-loading" );
-	
+
 						if ( jqXHR === self.xhr ) {
 							delete self.xhr;
 						}
-					});
+					}, 1 );
 				});
 		}
 
@@ -674,13 +674,13 @@ if ( $.uiBackCompat !== false ) {
 			spinner: "<em>Loading&#8230;</em>"
 		},
 		_create: function() {
-			this._super( "_create" );
+			this._super();
 			this._bind({
 				tabsbeforeload: function( event, ui ) {
 					if ( !this.options.spinner ) {
 						return;
 					}
-	
+
 					var span = ui.tab.find( "span" ),
 						html = span.html();
 					span.html( this.options.spinner );
@@ -973,7 +973,7 @@ if ( $.uiBackCompat !== false ) {
 				}
 				options.active = active;
 			}
-			this._super( "_create" );
+			this._super();
 		},
 		_cookie: function( active ) {
 			var cookie = [ this.cookie ||
@@ -985,19 +985,19 @@ if ( $.uiBackCompat !== false ) {
 			return $.cookie.apply( null, cookie );
 		},
 		_refresh: function() {
-			this._super( "_refresh" );
+			this._super();
 			if ( this.options.cookie ) {
 				this._cookie( this.options.active, this.options.cookie );
 			}
 		},
 		_eventHandler: function( event ) {
-			this._superApply( "_eventHandler", arguments );
+			this._superApply( arguments );
 			if ( this.options.cookie ) {
 				this._cookie( this.options.active, this.options.cookie );
 			}
 		},
 		_destroy: function() {
-			this._super( "_destroy" );
+			this._super();
 			if ( this.options.cookie ) {
 				this._cookie( null, this.options.cookie );
 			}
@@ -1012,7 +1012,7 @@ if ( $.uiBackCompat !== false ) {
 				_data.panel = _data.panel[ 0 ];
 				_data.tab = _data.tab[ 0 ];
 			}
-			return this._super( "_trigger", type, event, _data );
+			return this._super( type, event, _data );
 		}
 	});
 }

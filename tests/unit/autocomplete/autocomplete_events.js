@@ -56,21 +56,19 @@ $.each([
 					},
 					change: function( event, ui ) {
 						equal( event.originalEvent.type, "blur", "change originalEvent" );
-						deepEqual( ui.item, { label: "Java", value: "Java" }, "chnage ui.item" );
+						deepEqual( ui.item, { label: "Java", value: "Java" }, "change ui.item" );
 						ok( menu.is( ":hidden" ), "menu closed on change" );
 						start();
 					}
 				}),
 			menu = element.autocomplete( "widget" );
-	
-		element.focus()[ settings.valueMethod ]( "j" ).keydown();
+
+		element.simulate( "focus" )[ settings.valueMethod ]( "j" ).keydown();
 		setTimeout(function() {
 			ok( menu.is( ":visible" ), "menu is visible after delay" );
 			element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
 			element.simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
-			// blurring through jQuery causes a bug in IE 6 which causes the
-			// autocompletechange event to occur twice
-			element[0].blur();
+			element.simulate( "blur" );
 		}, 50 );
 	});
 });
@@ -159,22 +157,23 @@ asyncTest( "cancel select", function() {
 	}, 50 );
 });
 
-/* TODO previous fix broke more than it fixed, disabling this for now - messed up regular menu select event
-test("blur without selection", function() {
-	expect(1);
-	var ac = $("#autocomplete").autocomplete({
+asyncTest( "blur during remote search", function() {
+	expect( 1 );
+	var ac = $( "#autocomplete" ).autocomplete({
 		delay: 0,
-		source: data
+		source: function( request, response ) {
+			ok( true, "trigger request" );
+			ac.simulate( "blur" );
+			setTimeout(function() {
+				response([ "result" ]);
+				start();
+			}, 100 );
+		},
+		open: function() {
+			ok( false, "opened after a blur" );
+		}
 	});
-	stop();
-	ac.val("j").keydown();
-	setTimeout(function() {
-		$( ".ui-menu-item" ).first().simulate("mouseover");
-		ac.simulate("keydown", { keyCode: $.ui.keyCode.TAB });
-		deepEqual( ac.val(), "j" );
-		start();
-	}, 50);
+	ac.val( "ro" ).keydown();
 });
-*/
 
 }( jQuery ) );

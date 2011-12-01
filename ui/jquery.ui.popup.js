@@ -14,7 +14,8 @@
  */
 (function($) {
 
-var idIncrement = 0;
+var idIncrement = 0,
+	suppressExpandOnFocus = false;
 
 $.widget( "ui.popup", {
 	version: "@VERSION",
@@ -23,6 +24,8 @@ $.widget( "ui.popup", {
 			my: "left top",
 			at: "left bottom"
 		},
+		managed: false,
+		expandOnFocus: false,
 		show: {
 			effect: "slideDown",
 			duration: "fast"
@@ -43,9 +46,10 @@ $.widget( "ui.popup", {
 		}
 
 		if ( !this.element.attr( "role" ) ) {
-			// TODO alternatives to tooltip are dialog and menu, all three aren't generic popups
-			this.element.attr( "role", "dialog" );
-			this.generatedRole = true;
+			if ( !this.options.managed  ) {
+				this.element.attr( "role", "dialog" );
+				this.generatedRole = true;
+			}
 		}
 
 		this.options.trigger
@@ -59,37 +63,87 @@ $.widget( "ui.popup", {
 
 		this._bind(this.options.trigger, {
 			keydown: function( event ) {
-				// prevent space-to-open to scroll the page, only happens for anchor ui.button
-				if ( $.ui.button && this.options.trigger.is( "a:ui-button" ) && event.keyCode == $.ui.keyCode.SPACE ) {
-					event.preventDefault();
-				}
-				// TODO handle SPACE to open popup? only when not handled by ui.button
-				if ( event.keyCode == $.ui.keyCode.SPACE && this.options.trigger.is( "a:not(:ui-button)" ) ) {
-					this.options.trigger.trigger( "click", event );
-				}
-				// translate keydown to click
-				// opens popup and let's tooltip hide itself
-				if ( event.keyCode == $.ui.keyCode.DOWN ) {
-					// prevent scrolling
-					event.preventDefault();
-					this.options.trigger.trigger( "click", event );
+				switch ( event.keyCode ) {
+					case $.ui.keyCode.TAB:
+						// Waiting for close() will make popup hide too late, which breaks tab key behavior
+						this.element.hide();
+						this.close( event );
+						break;
+					case $.ui.keyCode.ESCAPE:
+						if ( this.isOpen ) {
+							this.close( event );
+						}
+						break;
+					case $.ui.keyCode.SPACE:
+						// prevent space-to-open to scroll the page, only happens for anchor ui.button
+						// TODO check for $.ui.button before using custom selector, once more below
+						if ( this.options.trigger.is( "a:ui-button" ) ) {
+							event.preventDefault();
+						}
+
+						else if (this.options.trigger.is( "a:not(:ui-button)" ) ) {
+							this.options.trigger.trigger( "click", event );
+						}
+						break;
+					case $.ui.keyCode.DOWN:
+					case $.ui.keyCode.UP:
+						// prevent scrolling
+						event.preventDefault();
+						clearTimeout( this.closeTimer );
+						this._delay(function() {
+							this.open( event );
+							this.focusPopup( event );
+						}, 1);
+						break;
 				}
 			},
 			click: function( event ) {
+				event.stopPropagation();
 				event.preventDefault();
+			},
+			mousedown: function( event ) {
+				var noFocus = false;
+				/* TODO: Determine in which cases focus should stay on the trigger after the popup opens
+				(should apply for any trigger that has other interaction besides opening the popup, e.g. a text field) */
+				if ( $( event.target ).is( "input" ) ) {
+					noFocus = true;
+				}
 				if (this.isOpen) {
-					// let it propagate to close
+					suppressExpandOnFocus = true;
+					this.close();
 					return;
 				}
+				this.open( event );
 				clearTimeout( this.closeTimer );
-				this._delay(function() {
-					this.open( event );
-				}, 1);
+				this._delay( function() {
+					if ( !noFocus ) {
+						this.focusPopup();
+					}
+				}, 1 );
 			}
 		});
 
-		if ( !$.ui.menu || !this.element.is( ":ui-menu" ) ) {
-			// default use case, wrap tab order in popup
+		if ( this.options.expandOnFocus ) {
+			this._bind( this.options.trigger, {
+				focus : function( event ) {
+					if ( !suppressExpandOnFocus ) {
+						this._delay( function() {
+							if ( !this.isOpen ) {
+								this.open( event );
+							}
+						}, 1);
+					}
+					this._delay( function() {
+						suppressExpandOnFocus = false;
+					}, 100);
+				},
+				blur: function( event ) {
+					suppressExpandOnFocus = false;
+				}
+			});
+		}
+		if ( !this.options.managed ) {
+			//default use case, wrap tab order in popup
 			this._bind({ keydown : function( event ) {
 					if ( event.keyCode !== $.ui.keyCode.TAB ) {
 						return;
@@ -109,21 +163,33 @@ $.widget( "ui.popup", {
 		}
 
 		this._bind({
-			// TODO only triggered on element if it can receive focus
-			// bind to document instead?
-			// either element itself or a child should be focusable
+			focusout: function( event ) {
+				// use a timer to allow click to clear it and letting that
+				// handle the closing instead of opening again
+				this.closeTimer = this._delay( function() {
+					this.close( event );
+				}, 150);
+			},
+			focusin: function( event ) {
+				clearTimeout( this.closeTimer );
+			},
+			mouseup: function( event ) {
+				clearTimeout( this.closeTimer );
+			}
+		});
+
+		this._bind({
 			keyup: function( event ) {
 				if ( event.keyCode == $.ui.keyCode.ESCAPE && this.element.is( ":visible" ) ) {
 					this.close( event );
-					// TODO move this to close()? would allow menu.select to call popup.close, and get focus back to trigger
-					this.options.trigger.focus();
+					this.focusTrigger();
 				}
 			}
 		});
 
-		this._bind(document, {
+		this._bind( this.document, {
 			click: function( event ) {
-				if ( this.isOpen && !$(event.target).closest(".ui-popup").length ) {
+				if ( this.isOpen && !$( event.target ).closest( this.element.add( this.options.trigger ) ).length ) {
 					this.close( event );
 				}
 			}
@@ -161,11 +227,14 @@ $.widget( "ui.popup", {
 			.attr( "aria-expanded", "true" )
 			.position( position );
 
-		// can't use custom selector when menu isn't loaded
-		if ( $.ui.menu && this.element.is( ":ui-menu" ) ) {
-			this.element.menu( "focus", event, this.element.children( "li" ).first() );
-			this.element.focus();
-		} else {
+		// take trigger out of tab order to allow shift-tab to skip trigger
+		this.options.trigger.attr( "tabindex", -1 );
+		this.isOpen = true;
+		this._trigger( "open", event );
+	},
+
+	focusPopup: function( event ) {
+		if ( !this.options.managed ) {
 			// set focus to the first tabbable element in the popup container
 			// if there are no tabbable elements, set focus on the popup itself
 			var tabbables = this.element.find( ":tabbable" );
@@ -179,11 +248,13 @@ $.widget( "ui.popup", {
 			}
 			tabbables.first().focus( 1 );
 		}
+		this._trigger( "focusPopup", event );
+	},
 
-		// take trigger out of tab order to allow shift-tab to skip trigger
-		this.options.trigger.attr( "tabindex", -1 );
-		this.isOpen = true;
-		this._trigger( "open", event );
+	focusTrigger: function( event ) {
+		suppressExpandOnFocus = true;
+		this.options.trigger.focus();
+		this._trigger( "focusTrigger", event );
 	},
 
 	close: function( event ) {

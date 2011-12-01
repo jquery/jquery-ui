@@ -255,7 +255,7 @@ $.extend( $.ui, {
 		},
 		call: function( instance, name, args ) {
 			var set = instance.plugins[ name ];
-			if ( !set || !instance.element[ 0 ].parentNode ) {
+			if ( !set || !instance.element[ 0 ].parentNode || instance.element[ 0 ].parentNode.nodeType === 11 ) {
 				return;
 			}
 	
