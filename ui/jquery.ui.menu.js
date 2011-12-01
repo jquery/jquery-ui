@@ -20,7 +20,7 @@ $.widget( "ui.menu", {
 	defaultElement: "<ul>",
 	delay: 150,
 	options: {
-		items: "ul",
+		menus: "ul",
 		position: {
 			my: "left top",
 			at: "right top"
@@ -250,7 +250,7 @@ $.widget( "ui.menu", {
 
 	refresh: function() {
 		// initialize nested menus
-		var submenus = this.element.find( this.options.items + ":not( .ui-menu )" )
+		var submenus = this.element.find( this.options.menus + ":not( .ui-menu )" )
 			.addClass( "ui-menu ui-widget ui-widget-content ui-corner-all" )
 			.attr( "role", "menu" )
 			.hide()
