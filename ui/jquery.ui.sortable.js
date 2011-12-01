@@ -619,7 +619,10 @@ $.widget("ui.sortable", $.ui.mouse, {
 				continue;
 
 			var t = this.options.toleranceElement ? $(this.options.toleranceElement, item.item) : item.item;
-
+			if (t.offset() == null || t.offset() == 0) {
+    				t = item.item;
+			}
+			
 			if (!fast) {
 				item.width = t.outerWidth();
 				item.height = t.outerHeight();
