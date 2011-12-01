@@ -9,25 +9,19 @@
     test("change", function () {
         expect(4);
 
-        var counter = 0;
-
         this.element.selectmenu({
             change: function (event, ui) {
-                counter++;
-
-                if (counter === 1) {
-                    ok(event, "change event fired on change");
-                    equals(event.type, "selectmenuchange", "event type set to selectmenuchange");
-                    ok(ui, "ui object is passed as second argument to event handler");
-                    equals(ui.item.element[0].nodeName, "OPTION", "ui points to original option element");
-                }
+                ok(event, "change event fired on change");
+                equals(event.type, "selectmenuchange", "event type set to selectmenuchange");
+                ok(ui, "ui object is passed as second argument to event handler");
+                equals(ui.item.element[0].nodeName, "OPTION", "ui points to original option element");
             }
         });
 
         var widget = this.element.selectmenu("widget"),
             menu = widget.filter(".ui-selectmenu-menu");
 
-        menu.find(".ui-menu-item").simulate("click");
+        menu.find(".ui-menu-item").eq(0).simulate("click");
     });
 
     test("close", function () {
@@ -85,25 +79,19 @@
     test("select", function () {
         expect(4);
 
-        var counter = 0;
-
         this.element.selectmenu({
             select: function (event, ui) {
-                counter++;
-
-                if (counter === 1) {
-                    ok(event, "select event fired on item select");
-                    equals(event.type, "selectmenuselect", "event type set to selectmenuselect");
-                    ok(ui, "ui object is passed as second argument to event handler");
-                    equals(ui.item.element[0].nodeName, "OPTION", "ui points to original option element");
-                }
+                ok(event, "select event fired on item select");
+                equals(event.type, "selectmenuselect", "event type set to selectmenuselect");
+                ok(ui, "ui object is passed as second argument to event handler");
+                equals(ui.item.element[0].nodeName, "OPTION", "ui points to original option element");
             }
         });
 
         var widget = this.element.selectmenu("widget"),
             menu = widget.filter(".ui-selectmenu-menu");
 
-        menu.find(".ui-menu-item").simulate("click");
+        menu.find(".ui-menu-item").eq(0).simulate("click");
     });
 
 })(jQuery);
