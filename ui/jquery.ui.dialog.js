@@ -44,6 +44,7 @@ $.widget("ui.dialog", {
 		closeText: "close",
 		dialogClass: "",
 		draggable: true,
+		leaveFocus: true,
 		hide: null,
 		height: "auto",
 		maxHeight: false,
@@ -312,17 +313,19 @@ $.widget("ui.dialog", {
 			});
 		}
 
-		// set focus to the first tabbable element in the content area or the first button
+		// if specified, set focus to the first tabbable element in the content area or the first button
 		// if there are no tabbable elements, set focus on the dialog itself
-		var hasFocus = self.element.find( ":tabbable" );
-		if ( !hasFocus.length ) {
-			hasFocus = uiDialog.find( ".ui-dialog-buttonpane :tabbable" );
+		// otherwise, leave focus intact
+		if( options.leaveFocus ){
+			var hasFocus = self.element.find( ":tabbable" );
 			if ( !hasFocus.length ) {
-				hasFocus = uiDialog;
+				hasFocus = uiDialog.find( ".ui-dialog-buttonpane :tabbable" );
+				if ( !hasFocus.length ) {
+					hasFocus = uiDialog;
+				}
 			}
+			hasFocus.eq( 0 ).focus();
 		}
-		hasFocus.eq( 0 ).focus();
-
 		self._isOpen = true;
 		self._trigger( "open" );
 
@@ -568,6 +571,10 @@ $.widget("ui.dialog", {
 				if ( !isDraggable && value ) {
 					self._makeDraggable();
 				}
+				break;
+			case "leaveFocus":
+				if ( typeof value === "boolean" )
+					options.leaveFocus = value;
 				break;
 			case "position":
 				self._position( value );
