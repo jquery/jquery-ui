@@ -14,7 +14,7 @@ jQuery(function($){
 		dayNamesShort: ['Нед','Пон','Вто','Сре','Чет','Пет','Саб'],
 		dayNamesMin: ['Не','По','Вт','Ср','Че','Пе','Са'],
 		weekHeader: 'Сед',
-		dateFormat: 'dd/mm/yy',
+		dateFormat: 'dd.mm.yy',
 		firstDay: 1,
 		isRTL: false,
 		showMonthAfterYear: false,
