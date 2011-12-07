@@ -29,6 +29,7 @@ $.widget( "ui.slider", $.ui.mouse, {
 		min: 0,
 		orientation: "horizontal",
 		range: false,
+    rangeDrag: true,
 		step: 1,
 		value: 0,
 		values: null
@@ -45,6 +46,8 @@ $.widget( "ui.slider", $.ui.mouse, {
 		this._keySliding = false;
 		this._mouseSliding = false;
 		this._animateOff = true;
+    this._rangeCapture = false;
+    this._rangeCaptureStart = null;
 		this._handleIndex = null;
 		this._detectOrientation();
 		this._mouseInit();
@@ -240,6 +243,14 @@ $.widget( "ui.slider", $.ui.mouse, {
 		if ( o.disabled ) {
 			return false;
 		}
+    
+    if( event.target == this.range.get(0) && o.rangeDrag == true && o.range == true ) {
+      this._rangeCapture = true;
+      this._rangeCaptureStart = null;
+    }
+    else {
+      this._rangeCapture = false;
+    }
 
 		this.elementSize = {
 			width: this.element.outerWidth(),
@@ -290,12 +301,18 @@ $.widget( "ui.slider", $.ui.mouse, {
 				( parseInt( closestHandle.css("borderBottomWidth"), 10 ) || 0) +
 				( parseInt( closestHandle.css("marginTop"), 10 ) || 0)
 		};
+    
+    if(this._rangeCapture == true) {
+      closestHandle.removeClass("ui-state-active").blur();
+    }
 
 		if ( !this.handles.hasClass( "ui-state-hover" ) ) {
 			this._slide( event, index, normValue );
 		}
 		this._animateOff = true;
 		return true;
+    
+    
 	},
 
 	_mouseStart: function( event ) {
@@ -321,6 +338,8 @@ $.widget( "ui.slider", $.ui.mouse, {
 		this._handleIndex = null;
 		this._clickOffset = null;
 		this._animateOff = false;
+    
+    this._rangeCaptureStart = null;
 
 		return false;
 	},
@@ -377,8 +396,63 @@ $.widget( "ui.slider", $.ui.mouse, {
 		var otherVal,
 			newValues,
 			allowed;
+      
+    var oldValLeft,
+        oldValRight,
+        slideDist,
+        newValueLeft,
+        newValueRight;
+    
+    
+    if(this._rangeCapture == true) {      
+      
+      if(this._rangeCaptureStart == null) {
+        this._rangeCaptureStart = newVal;
+      }
 
-		if ( this.options.values && this.options.values.length ) {
+      var oldValLeft = this.options.values[0],
+          oldValRight = this.options.values[1],
+          slideDist = newVal - this._rangeCaptureStart,
+          newValueLeft = oldValLeft + slideDist,
+          newValueRight = oldValRight + slideDist;
+      
+      if(this.options.values && this.options.values.length) {
+        if(newValueRight > this._valueMax() && slideDist > 0) {
+          slideDist -= (newValueRight-this._valueMax());
+          newValueLeft = oldValLeft + slideDist;
+          newValueRight = oldValRight + slideDist;
+        }
+        
+        if(newValueLeft < this._valueMin()) {
+          slideDist += (this._valueMin()-newValueLeft);
+          newValueLeft = oldValLeft + slideDist;
+          newValueRight = oldValRight + slideDist;
+        }
+        
+        if ( slideDist != 0 ) {
+          newValues = this.values();
+          newValues[ 0 ] = newValueLeft;
+          newValues[ 1 ] = newValueRight;
+          
+          // A slide can be canceled by returning false from the slide callback
+          allowed = this._trigger( "slide", event, {
+            handle: this.handles[ index ],
+            value: slideDist,
+            values: newValues
+          } );
+          
+          if ( allowed !== false ) {
+            this.values( 0, newValueLeft, true );
+            this.values( 1, newValueRight, true );
+          }
+          this._rangeCaptureStart = newVal;
+        }
+      }
+      
+      
+      return;
+    } else if( this.options.values && this.options.values.length ) {
+      
 			otherVal = this.values( index ? 0 : 1 );
 
 			if ( ( this.options.values.length === 2 && this.options.range === true ) && 
@@ -413,6 +487,8 @@ $.widget( "ui.slider", $.ui.mouse, {
 				}
 			}
 		}
+    
+    
 	},
 
 	_stop: function( event, index ) {
