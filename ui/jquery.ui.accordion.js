@@ -33,14 +33,6 @@ $.widget( "ui.accordion", {
 		activate: null,
 		beforeActivate: null
 	},
-	nextTo:function(element, selctor){
-		var result = element.next();
-		while(result.length>0 && !result.is(selctor)){
-			result = result.next();
-		}
-		return result;
-	},
-
 	_create: function() {
 		var self = this,
 			options = self.options;
