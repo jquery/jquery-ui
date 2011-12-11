@@ -22,6 +22,7 @@ $.widget( "ui.accordion", {
 		collapsible: false,
 		event: "click",
 		header: "> li > :first-child,> :not(li):even",
+		body: "*",
 		heightStyle: "auto",
 		icons: {
 			activeHeader: "ui-icon-triangle-1-s",
@@ -32,7 +33,6 @@ $.widget( "ui.accordion", {
 		activate: null,
 		beforeActivate: null
 	},
-
 	_create: function() {
 		var self = this,
 			options = self.options;
@@ -46,7 +46,7 @@ $.widget( "ui.accordion", {
 		self._focusable( self.headers );
 		self.headers.find( ":first-child" ).addClass( "ui-accordion-heading" );
 
-		self.headers.next()
+		self.headers.nextAt(self.options.body)
 			.addClass( "ui-accordion-content ui-helper-reset ui-widget-content ui-corner-bottom" );
 
 		// don't allow collapsible: false and active: false
@@ -61,7 +61,7 @@ $.widget( "ui.accordion", {
 			.addClass( "ui-state-default ui-state-active" )
 			.toggleClass( "ui-corner-all" )
 			.toggleClass( "ui-corner-top" );
-		self.active.next().addClass( "ui-accordion-content-active" );
+		self.active.nextAt(self.options.body).addClass( "ui-accordion-content-active" );
 
 		self._createIcons();
 		self.refresh();
@@ -72,7 +72,7 @@ $.widget( "ui.accordion", {
 		self.headers
 			.attr( "role", "tab" )
 			.bind( "keydown.accordion", $.proxy( self, "_keydown" ) )
-			.next()
+			.nextAt(self.options.body)
 				.attr( "role", "tabpanel" );
 
 		self.headers
@@ -82,7 +82,7 @@ $.widget( "ui.accordion", {
 				"aria-selected": "false",
 				tabIndex: -1
 			})
-			.next()
+			.nextAt(self.options.body)
 				.hide();
 
 		// make sure at least one header is in the tab order
@@ -144,7 +144,7 @@ $.widget( "ui.accordion", {
 		this._destroyIcons();
 
 		// clean up content panels
-		var contents = this.headers.next()
+		var contents = this.headers.nextAt(this.options.body)
 			.css( "display", "" )
 			.removeAttr( "role" )
 			.removeClass( "ui-helper-reset ui-widget-content ui-corner-bottom ui-accordion-content ui-accordion-content-active ui-accordion-disabled ui-state-disabled" );
@@ -184,7 +184,7 @@ $.widget( "ui.accordion", {
 		// #5332 - opacity doesn't cascade to positioned elements in IE
 		// so we need to add the disabled class to the headers and panels
 		if ( key === "disabled" ) {
-			this.headers.add(this.headers.next())
+			this.headers.add(this.headers.nextAt(this.options.body))
 				.toggleClass( "ui-accordion-disabled ui-state-disabled", !!value );
 		}
 	},
@@ -254,7 +254,7 @@ $.widget( "ui.accordion", {
 				maxHeight -= $( this ).outerHeight( true );
 			});
 
-			this.headers.next()
+			this.headers.nextAt(this.options.body)
 				.each(function() {
 					$( this ).height( Math.max( 0, maxHeight -
 						$( this ).innerHeight() + $( this ).height() ) );
@@ -262,7 +262,7 @@ $.widget( "ui.accordion", {
 				.css( "overflow", "auto" );
 		} else if ( options.heightStyle === "auto" ) {
 			maxHeight = 0;
-			this.headers.next()
+			this.headers.nextAt(this.options.body)
 				.each(function() {
 					maxHeight = Math.max( maxHeight, $( this ).height( "" ).height() );
 				})
@@ -307,8 +307,8 @@ $.widget( "ui.accordion", {
 			clicked = $( event.currentTarget ),
 			clickedIsActive = clicked[ 0 ] === active[ 0 ],
 			collapsing = clickedIsActive && options.collapsible,
-			toShow = collapsing ? $() : clicked.next(),
-			toHide = active.next(),
+			toShow = collapsing ? $() : clicked.nextAt(this.options.body),
+			toHide = active.nextAt(this.options.body),
 			eventData = {
 				oldHeader: active,
 				oldContent: toHide,
@@ -348,7 +348,7 @@ $.widget( "ui.accordion", {
 					.removeClass( options.icons.header )
 					.addClass( options.icons.activeHeader );
 			clicked
-				.next()
+				.nextAt(this.options.body)
 				.addClass( "ui-accordion-content-active" );
 		}
 	},
@@ -556,7 +556,7 @@ if ( $.uiBackCompat !== false ) {
 			if ( this.options.navigation ) {
 				var self = this,
 					headers = this.element.find( this.options.header ),
-					content = headers.next(),
+					content = headers.nextAt(self.options.body),
 					current = headers.add( content )
 						.find( "a" )
 						.filter( this.options.navigationFilter )
