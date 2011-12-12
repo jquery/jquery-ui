@@ -14,16 +14,16 @@
                 ok(event, "change event fired on change");
                 equals(event.type, "selectmenuchange", "event type set to selectmenuchange");
                 ok(ui, "ui object is passed as second argument to event handler");
-                equals(ui.item.element[0].nodeName, "OPTION", "ui points to original option element");
+                equals(ui.item.element[0].nodeName, "OPTION", "ui.item.element[0] points to original option element");
+                equals(ui.item.value, value, "ui.item.value property updated correctly");                
             }
         });
 
         var widget = this.element.selectmenu("widget"),
-            menu = widget.filter(".ui-selectmenu-menu");
+            menu = widget.filter(".ui-selectmenu-menu"),
+            value = this.element.find("option").eq(0).text();
 
         menu.find(".ui-menu-item").eq(0).simulate("click");
-
-        equals(this.element.selectmenu("option", "value"), "Slower", "should be set to first option");
     });
 
     test("close", function () {
