@@ -78,6 +78,8 @@ $.widget("ui.dialog", {
 		if ( typeof this.originalTitle !== "string" ) {
 			this.originalTitle = "";
 		}
+		
+		this.element.data('oldPosition', { parent: this.element.parent(), index: this.element.parent().children().index(this.element) });
 
 		this.options.title = this.options.title || this.originalTitle;
 		var self = this,
@@ -169,6 +171,8 @@ $.widget("ui.dialog", {
 
 	_destroy: function() {
 		var self = this;
+		
+		var oldPosition = this.element.data('oldPosition');
 
 		if ( self.overlay ) {
 			self.overlay.destroy();
@@ -176,13 +180,21 @@ $.widget("ui.dialog", {
 		self.uiDialog.hide();
 		self.element
 			.removeClass( "ui-dialog-content ui-widget-content" )
-			.hide()
-			.appendTo( "body" );
+			.hide();
 		self.uiDialog.remove();
 
 		if ( self.originalTitle ) {
 			self.element.attr( "title", self.originalTitle );
 		}
+		
+		var next = oldPosition.parent.children().eq(oldPosition.index);
+		if(next.length) {
+			next.before(self.element);
+		}
+		else {
+			oldPosition.parent.append(self.element);
+		}
+		
 	},
 
 	widget: function() {
