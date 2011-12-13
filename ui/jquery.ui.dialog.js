@@ -180,7 +180,8 @@ $.widget("ui.dialog", {
 		self.uiDialog.hide();
 		self.element
 			.removeClass( "ui-dialog-content ui-widget-content" )
-			.hide();
+			.hide()
+			.appendTo("body");
 		self.uiDialog.remove();
 
 		if ( self.originalTitle ) {
