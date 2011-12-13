@@ -79,7 +79,7 @@ $.widget("ui.dialog", {
 			this.originalTitle = "";
 		}
 		
-		this.element.data('oldPosition', { parent: this.element.parent(), index: this.element.parent().children().index(this.element) });
+		this.oldPosition = { parent: this.element.parent(), index: this.element.parent().children().index(this.element) };
 
 		this.options.title = this.options.title || this.originalTitle;
 		var self = this,
@@ -172,7 +172,7 @@ $.widget("ui.dialog", {
 	_destroy: function() {
 		var self = this;
 		
-		var oldPosition = this.element.data('oldPosition');
+		var oldPosition = this.oldPosition;
 
 		if ( self.overlay ) {
 			self.overlay.destroy();
