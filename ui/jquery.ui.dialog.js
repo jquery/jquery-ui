@@ -79,6 +79,8 @@ $.widget("ui.dialog", {
 			this.originalTitle = "";
 		}
 
+		this.options.parent = $(this.element).parent();
+		this.options.indexInParent = $(this.element).parent().find('*').index($(this.element));
 		this.options.title = this.options.title || this.originalTitle;
 		var self = this,
 			options = self.options,
@@ -169,6 +171,21 @@ $.widget("ui.dialog", {
 
 	_destroy: function() {
 		var self = this;
+		
+		var parent = $(this.options.parent);
+		var neighbor = null;
+		var iWasFirstChild = false;
+		var parentHaveChildrens = parent.find('*').length > 0;
+		
+		if(parentHaveChildrens) {
+			iWasFirstChild = this.options.indexInParent == 0;
+			if (iWasFirstChild) {
+				neighbor = parent.find('*').eq(this.options.indexInParent);        
+			}
+			else {
+				neighbor = parent.find('*').eq(this.options.indexInParent - 1);      
+			}
+		}
 
 		if ( self.overlay ) {
 			self.overlay.destroy();
@@ -176,13 +193,25 @@ $.widget("ui.dialog", {
 		self.uiDialog.hide();
 		self.element
 			.removeClass( "ui-dialog-content ui-widget-content" )
-			.hide()
-			.appendTo( "body" );
+			.hide();
 		self.uiDialog.remove();
 
 		if ( self.originalTitle ) {
 			self.element.attr( "title", self.originalTitle );
 		}
+	    	
+	    	if (!parentHaveChildrens) {
+            		parent.append($(this.element));
+        	}
+	    	else {
+	        	if (iWasFirstChild) {
+	            		neighbor.before($(this.element));
+	        	}
+	        	else {
+	            		neighbor.after($(this.element));
+	        	}
+	    	}		
+	    	
 	},
 
 	widget: function() {
