@@ -24,6 +24,8 @@
             value = this.element.find("option").eq(0).text();
 
         menu.find(".ui-menu-item").eq(0).simulate("click");
+
+        equals(this.element.selectmenu("option", "value"), "Slower", "should be set to first option");
     });
 
     test("close", function () {
