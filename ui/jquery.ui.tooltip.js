@@ -99,9 +99,7 @@ $.widget( "ui.tooltip", {
 			return;
 		}
 
-		if ( !target.data( "tooltip-title" ) ) {
-			target.data( "tooltip-title", target.attr( "title" ) );
-		}
+		target.data( "tooltip-title", target.attr( "title" ) );
 
 		content = this.options.content.call( target[0], function( response ) {
 			// IE may instantly serve a cached response for ajax requests
