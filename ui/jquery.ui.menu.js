@@ -294,6 +294,21 @@ $.widget( "ui.menu", {
 	focus: function( event, item ) {
 		this.blur( event );
 
+		if ( this._hasScroll() ) {
+			var borderTop = parseFloat( $.curCSS( this.activeMenu[0], "borderTopWidth", true ) ) || 0,
+				paddingTop = parseFloat( $.curCSS( this.activeMenu[0], "paddingTop", true ) ) || 0,
+				offset = item.offset().top - this.activeMenu.offset().top - borderTop - paddingTop,
+				scroll = this.activeMenu.scrollTop(),
+				elementHeight = this.activeMenu.height(),
+				itemHeight = item.height();
+
+			if ( offset < 0 ) {
+				this.activeMenu.scrollTop( scroll + offset );
+			} else if ( offset + itemHeight > elementHeight ) {
+				this.activeMenu.scrollTop( scroll + offset - elementHeight + itemHeight );
+			}
+		}
+
 		this.active = item.first()
 			.children( "a" )
 				.addClass( "ui-state-focus" )
