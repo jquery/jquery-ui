@@ -20,7 +20,7 @@ $.widget( "ui.menu", {
 	defaultElement: "<ul>",
 	delay: 150,
 	options: {
-		items: "ul",
+		menus: "ul",
 		position: {
 			my: "left top",
 			at: "right top"
@@ -29,7 +29,6 @@ $.widget( "ui.menu", {
 	},
 	_create: function() {
 		this.activeMenu = this.element;
-		this.isScrolling = false;
 		this.menuId = this.element.attr( "id" ) || "ui-menu-" + idIncrement++;
 		if ( this.element.find( ".ui-icon" ).length ) {
 			this.element.addClass( "ui-menu-icons" );
@@ -55,30 +54,38 @@ $.widget( "ui.menu", {
 			},
 			"click .ui-menu-item:has(a)": function( event ) {
 				event.stopImmediatePropagation();
-				var target = $( event.currentTarget );
-				// it's possible to click an item without hovering it (#7085)
-				if ( !this.active || ( this.active[ 0 ] !== target[ 0 ] ) ) {
-					this.focus( event, target );
-				}
 				this.select( event );
-				// Redirect focus to the menu.
-				this.element.focus();
+				// Redirect focus to the menu with a delay for firefox
+				this._delay( function() {
+					if ( !this.element.is(":focus") ) {
+						this.element.focus();
+					}
+				}, 20);
 			},
 			"mouseover .ui-menu-item": function( event ) {
 				event.stopImmediatePropagation();
-				if ( !this.isScrolling ) {
-					var target = $( event.currentTarget );
-					// Remove ui-state-active class from siblings of the newly focused menu item to avoid a jump caused by adjacent elements both having a class with a border
-					target.siblings().children( ".ui-state-active" ).removeClass( "ui-state-active" );
-					this.focus( event, target );
-				}
-				this.isScrolling = false;
+				var target = $( event.currentTarget );
+				// Remove ui-state-active class from siblings of the newly focused menu item to avoid a jump caused by adjacent elements both having a class with a border
+				target.siblings().children( ".ui-state-active" ).removeClass( "ui-state-active" );
+				this.focus( event, target );
 			},
 			"mouseleave": "collapseAll",
 			"mouseleave .ui-menu": "collapseAll",
-			"mouseout .ui-menu-item": "blur",
 			"focus": function( event ) {
-				this.focus( event, $( event.target ).children( ".ui-menu-item:first" ) );
+				var firstItem = this.element.children( ".ui-menu-item" ).eq( 0 );
+				if ( this._hasScroll() && !this.active ) {
+					var menu = this.element;
+					menu.children().each( function() {
+						var currentItem = $( this );
+						if ( currentItem.offset().top - menu.offset().top >= 0 ) {
+							firstItem = currentItem;
+							return false;
+						}
+					});
+				} else if ( this.active ) {
+					firstItem = this.active;
+				}
+				this.focus( event, firstItem );
 			},
 			blur: function( event ) {
 				this._delay( function() {
@@ -86,10 +93,6 @@ $.widget( "ui.menu", {
 						this.collapseAll( event );
 					}
 				}, 0);
-			},
-			scroll: function( event ) {
-				// Keep track of scrolling to prevent mouseover from firing inadvertently when scrolling the menu
-				this.isScrolling = true;
 			}
 		});
 
@@ -258,7 +261,7 @@ $.widget( "ui.menu", {
 
 	refresh: function() {
 		// initialize nested menus
-		var submenus = this.element.find( this.options.items + ":not( .ui-menu )" )
+		var submenus = this.element.find( this.options.menus + ":not( .ui-menu )" )
 			.addClass( "ui-menu ui-widget ui-widget-content ui-corner-all" )
 			.attr( "role", "menu" )
 			.hide()
@@ -471,15 +474,14 @@ $.widget( "ui.menu", {
 	},
 
 	nextPage: function( event ) {
+		if ( !this.active ) {
+			this.focus( event, this.activeMenu.children( ".ui-menu-item" ).first() );
+			return;
+		}
+		if ( this.last() ) {
+			return;
+		}
 		if ( this._hasScroll() ) {
-			if ( !this.active ) {
-				this.focus( event, this.activeMenu.children( ".ui-menu-item" ).first() );
-				return;
-			}
-			if ( this.last() ) {
-				return;
-			}
-
 			var base = this.active.offset().top,
 				height = this.element.height(),
 				result;
@@ -496,15 +498,14 @@ $.widget( "ui.menu", {
 	},
 
 	previousPage: function( event ) {
+		if ( !this.active ) {
+			this.focus( event, this.activeMenu.children( ".ui-menu-item" ).first() );
+			return;
+		}
+		if ( this.first() ) {
+			return;
+		}
 		if ( this._hasScroll() ) {
-			if ( !this.active ) {
-				this.focus( event, this.activeMenu.children( ".ui-menu-item" ).first() );
-				return;
-			}
-			if ( this.first() ) {
-				return;
-			}
-
 			var base = this.active.offset().top,
 				height = this.element.height(),
 				result;
@@ -520,7 +521,7 @@ $.widget( "ui.menu", {
 	},
 
 	_hasScroll: function() {
-		return this.element.height() < this.element.prop( "scrollHeight" );
+		return this.element.outerHeight() < this.element.prop( "scrollHeight" );
 	},
 
 	select: function( event ) {
