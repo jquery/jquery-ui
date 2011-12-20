@@ -18,7 +18,7 @@ var idIncrement = 0;
 $.widget( "ui.menu", {
 	version: "@VERSION",
 	defaultElement: "<ul>",
-	delay: 150,
+	delay: 300,
 	options: {
 		menus: "ul",
 		position: {
@@ -332,11 +332,11 @@ $.widget( "ui.menu", {
 	},
 
 	blur: function( event ) {
+		clearTimeout( this.timer );
+
 		if ( !this.active ) {
 			return;
 		}
-
-		clearTimeout( this.timer );
 
 		this.active.children( "a" ).removeClass( "ui-state-focus" );
 		this.active = null;
@@ -381,20 +381,22 @@ $.widget( "ui.menu", {
 	},
 
 	collapseAll: function( event, all ) {
+		clearTimeout( this.timer );
+		this.timer = this._delay( function() {
+			// if we were passed an event, look for the submenu that contains the event
+			var currentMenu = all ? this.element :
+				$( event && event.target ).closest( this.element.find( ".ui-menu" ) );
 
-		// if we were passed an event, look for the submenu that contains the event
-		var currentMenu = all ? this.element :
-			$( event && event.target ).closest( this.element.find( ".ui-menu" ) );
+			// if we found no valid submenu ancestor, use the main menu to close all sub menus anyway
+			if ( !currentMenu.length ) {
+				currentMenu = this.element;
+			}
 
-		// if we found no valid submenu ancestor, use the main menu to close all sub menus anyway
-		if ( !currentMenu.length ) {
-			currentMenu = this.element;
-		}
+			this._close( currentMenu );
 
-		this._close( currentMenu );
-
-		this.blur( event );
-		this.activeMenu = currentMenu;
+			this.blur( event );
+			this.activeMenu = currentMenu;
+		}, this.delay);
 	},
 
 	// With no arguments, closes the currently active menu - if nothing is active
