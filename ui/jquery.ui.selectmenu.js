@@ -287,16 +287,14 @@ $.widget( "ui.selectmenu", {
 		return li.appendTo( ul );
 	},
 
-	_move: function( key, event ) {
-		if ( !this.isOpen )	{
+	_move: function( event, direction, focusFirst ) {
+		// focus is needed otherwise this.active is not set correctly in Menu
+		if ( focusFirst ) {
 			this.menu.menu( "focus", event, this._getSelectedItem() );
 		}
-
-		this.menu.menu( key, event );
-
-		if ( !this.isOpen ) {
-			this.menu.menu( "select", event  );
-		}
+		// without this.active set, first and last item are triggered
+		this.menu.menu( direction, event );
+		this.menu.menu( "select", event  );
 	},
 
 	_getSelectedItem: function() {
@@ -317,47 +315,55 @@ $.widget( "ui.selectmenu", {
 			event.preventDefault();
 		},
 		keydown: function( event ) {
+			var prevDef = true;
 			switch (event.keyCode) {
 				case $.ui.keyCode.TAB:
 					if ( this.isOpen ) {
 						this.close( event );
 					}
+					prevDef = false;
 					break;
 				case $.ui.keyCode.ENTER:
 					if ( this.isOpen ) {
 						this.menu.menu( "select", this._getSelectedItem() );
 					}
-					event.preventDefault();
 					break;
 				case $.ui.keyCode.SPACE:
-					event.preventDefault();
 					break;
 				case $.ui.keyCode.UP:
 					if ( event.altKey ) {
 						this._toggle( event );
 					} else {
-						this._move( "previous", event );
+						this._move( event, "previous", true );
 					}
-					event.preventDefault();
 					break;
 				case $.ui.keyCode.DOWN:
 					if ( event.altKey ) {
 						this._toggle( event );
 					} else {
-						this._move( "next", event );
+						this._move( event, "next", true );
 					}
-					event.preventDefault();
 					break;
 				case $.ui.keyCode.LEFT:
-					this._move( "previous", event );
-					event.preventDefault();
+					this._move( event, "previous", true );
 					break;
 				case $.ui.keyCode.RIGHT:
-					this._move( "next", event );
-					event.preventDefault();
+					this._move( event, "next", true );
+					break;				
+				case $.ui.keyCode.HOME:		  
+				case $.ui.keyCode.PAGE_UP:
+					this._move( event, "next" );
+					break;
+				case $.ui.keyCode.END:
+				case $.ui.keyCode.PAGE_DOWN:
+					this._move( event, "previous" );
 					break;
 				default:
 					this.menu.trigger( event );
+					prevDef = false;
+			}
+			if ( prevDef ) {
+				event.preventDefault();
 			}
 		}
 	},
