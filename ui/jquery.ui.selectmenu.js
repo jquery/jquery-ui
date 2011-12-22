@@ -102,10 +102,8 @@ $.widget( "ui.selectmenu", {
 
 		// create menu portion, append to body
 		this.menu = $( '<ul />', {
-			'class': 'ui-widget ui-widget-content',
 			'aria-hidden': true,
 			'aria-labelledby': this.ids.button,
-			role: 'menubox',
 			id: this.ids.menu
 		});
 
@@ -152,7 +150,9 @@ $.widget( "ui.selectmenu", {
 
 				that.focus = item.index;
 			}
-		});
+		})
+		// change ARIA role
+		.attr( 'role', 'menubox' );
 
 		// document click closes menu
 		this._bind( document, {
@@ -171,6 +171,7 @@ $.widget( "ui.selectmenu", {
 		this._renderMenu( this.menu, this.items );
 
 		this.menu.menu( "refresh" );
+		this.menu.menu( "focus", null, this._getSelectedItem() );
 
 		// adjust ARIA
 		this.menu.find( "li" ).not( '.ui-selectmenu-optgroup' ).find( 'a' ).attr( 'role', 'option' );
