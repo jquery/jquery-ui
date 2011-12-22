@@ -16,5 +16,3 @@
 
 .ui-selectmenu-button span.ui-icon { right: 0.5em; left: auto; }
 .ui-selectmenu-button span.ui-button-text { text-align: left; padding: 0.4em 2.1em 0.4em 1em }
-
-.ui-selectmenu-menu .ui-menu .ui-menu-item { width: auto; } /* IE7 fix */
