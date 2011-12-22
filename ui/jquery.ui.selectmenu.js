@@ -210,10 +210,6 @@ $.widget( "ui.selectmenu", {
 			}, 1);
 
 			if ( !this.options.dropdown ) {
-				// center current item
-				if ( this.menu.css("overflow") == "auto" ) {
-					this.menu.scrollTop( this.menu.scrollTop() + currentItem.position().top - this.menu.outerHeight()/2 + currentItem.outerHeight()/2 );
-				}
 				// calculate offset
 				var _offset = ( this.menu.offset().top  - currentItem.offset().top + ( this.button.outerHeight() - currentItem.outerHeight() ) / 2);
 				$.extend( this.options.position, {
