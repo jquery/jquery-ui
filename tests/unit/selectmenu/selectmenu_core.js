@@ -10,17 +10,24 @@ test("accessibility", function () {
 	var link = button.children("a");
 	var ul = menu.children("ul")
 	var links = ul.find("li.ui-menu-item a");
-	expect(6 + links.length);
+	expect(12 + links.length * 2);
 				
 	equals( button.attr("aria-disabled"), "false", "button aria-disabled" );
 	equals( link.attr("aria-disabled"), "false", "button link aria-disabled" );
 	equals( link.attr("aria-haspopup"), "true", "button link aria-haspopup" );
 	equals( link.attr("role"), "button", "button link role" );
 	equals( link.attr("aria-owns"), ul.attr("id"), "button link aria-owns" );
-	equals( link.attr("tabindex"), 0, "button link tabindex" );
-		
+	equals( link.attr("tabindex"), 0, "button link tabindex" );		
+	
+	equals( ul.attr("aria-hidden"), "true", "menu aria-hidden" );
+	equals( ul.attr("aria-disabled"), "false", "menu aria-disabled" );
+	equals( ul.attr("aria-labelledby"), link.attr("id"), "menu aria-labelledby" );
+	equals( ul.attr("role"), "menubox", "menu role" );
+	equals( ul.attr("tabindex"), 0, "menu tabindex" );
+	equals( ul.attr("aria-activedescendant"), links.eq(element[0].selectedIndex).attr("id"), "menu aria-activedescendant" );
 	$.each( links, function(index){
 		equals( $(this).attr("role"), "option", "menu link #" + index +" role" );
+		equals( $(this).attr("tabindex"), -1, "menu link #" + index +" tabindex" );
 	});
 });
 
