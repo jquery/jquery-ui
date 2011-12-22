@@ -171,10 +171,10 @@ $.widget( "ui.selectmenu", {
 		this._renderMenu( this.menu, this.items );
 
 		this.menu.menu( "refresh" );
-		this.menu.menu( "focus", null, this._getSelectedItem() );
 
 		// adjust ARIA
 		this.menu.find( "li" ).not( '.ui-selectmenu-optgroup' ).find( 'a' ).attr( 'role', 'option' );
+		this.menu.attr( "aria-activedescendant" , this.menu.find( "li.ui-menu-item a" ).eq( this.element[0].selectedIndex ).attr( "id" ) );
 
 		if ( this.options.dropdown ) {
 			this.menu
