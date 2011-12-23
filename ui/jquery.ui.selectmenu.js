@@ -284,14 +284,23 @@ $.widget( "ui.selectmenu", {
 		return li.appendTo( ul );
 	},
 
-	_move: function( event, direction, focusFirst ) {
-		// focus is needed otherwise this.active is not set correctly in Menu
-		if ( focusFirst ) {
-			this.menu.menu( "focus", event, this._getSelectedItem() );
+	_move: function( direction, event ) {
+		if ( direction == "first" || direction == "last" ) {
+			// set focus manually for first or last item
+			this.menu.menu( "focus", event, this.menu.find( "li" ).not( '.ui-selectmenu-optgroup' )[ direction ]() );
+		} else {
+			// if menu is closed we need to focus the element first to indicate correct element
+			if ( !this.isOpen ) {
+				this.menu.menu( "focus", event, this._getSelectedItem() );
+			}
+			// move to and focus next or prev item
+			this.menu.menu( direction, event );		
 		}
-		// without this.active set, first and last item are triggered
-		this.menu.menu( direction, event );
-		this.menu.menu( "select", event  );
+		
+		// select if selectmenu is closed
+		if ( !this.isOpen ) {
+			this.menu.menu( "select", event );
+		}
 	},
 
 	_getSelectedItem: function() {
@@ -322,7 +331,7 @@ $.widget( "ui.selectmenu", {
 					break;
 				case $.ui.keyCode.ENTER:
 					if ( this.isOpen ) {
-						this.menu.menu( "select", this._getSelectedItem() );
+						this.menu.menu( "select", event );
 					}
 					break;
 				case $.ui.keyCode.SPACE:
@@ -331,29 +340,29 @@ $.widget( "ui.selectmenu", {
 					if ( event.altKey ) {
 						this._toggle( event );
 					} else {
-						this._move( event, "previous", true );
+						this._move( "previous", event );
 					}
 					break;
 				case $.ui.keyCode.DOWN:
 					if ( event.altKey ) {
 						this._toggle( event );
 					} else {
-						this._move( event, "next", true );
+						this._move( "next", event );
 					}
 					break;
 				case $.ui.keyCode.LEFT:
-					this._move( event, "previous", true );
+					this._move( "previous", event );
 					break;
 				case $.ui.keyCode.RIGHT:
-					this._move( event, "next", true );
+					this._move( "next", event );
 					break;				
 				case $.ui.keyCode.HOME:		  
 				case $.ui.keyCode.PAGE_UP:
-					this._move( event, "next" );
+					this._move( "first", event );
 					break;
 				case $.ui.keyCode.END:
 				case $.ui.keyCode.PAGE_DOWN:
-					this._move( event, "previous" );
+					this._move( "last", event );
 					break;
 				default:
 					this.menu.trigger( event );
