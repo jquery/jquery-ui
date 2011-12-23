@@ -447,11 +447,11 @@ $.widget( "ui.menu", {
 		this._move( "prev", "last", event );
 	},
 
-	first: function() {
+	isFirstItem: function() {
 		return this.active && !this.active.prevAll( ".ui-menu-item" ).length;
 	},
 
-	last: function() {
+	isLastItem: function() {
 		return this.active && !this.active.nextAll( ".ui-menu-item" ).length;
 	},
 
@@ -480,7 +480,7 @@ $.widget( "ui.menu", {
 			this.focus( event, this.activeMenu.children( ".ui-menu-item" ).first() );
 			return;
 		}
-		if ( this.last() ) {
+		if ( this.isLastItem() ) {
 			return;
 		}
 		if ( this._hasScroll() ) {
@@ -504,7 +504,7 @@ $.widget( "ui.menu", {
 			this.focus( event, this.activeMenu.children( ".ui-menu-item" ).first() );
 			return;
 		}
-		if ( this.first() ) {
+		if ( this.isFirstItem() ) {
 			return;
 		}
 		if ( this._hasScroll() ) {
