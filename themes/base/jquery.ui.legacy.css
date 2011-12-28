@@ -1,0 +1,24 @@
+/*
+ * jQuery UI CSS for non-latest browsers @VERSION
+ *
+ * Copyright 2011, AUTHORS.txt (http://jqueryui.com/about)
+ * Dual licensed under the MIT or GPL Version 2 licenses.
+ * http://jquery.org/license
+ */
+
+/* IE 6-8 fixes */
+
+.ui-priority-secondary,
+.ui-widget-content .ui-priority-secondary,
+.ui-widget-header .ui-priority-secondary {
+    filter: Alpha(Opacity=70);
+}
+.ui-state-disabled,
+.ui-widget-content .ui-state-disabled,
+.ui-widget-header .ui-state-disabled {
+    filter: Alpha(Opacity=35);
+}
+
+.ui-widget-shadow {
+    filter: Alpha(Opacity=30)/*{opacityShadow}*/;
+}
