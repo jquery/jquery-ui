@@ -132,8 +132,13 @@ $.widget("ui.selectmenu", {
 					case $.ui.keyCode.TAB:
 						ret = true;
 						break;
+					case $.ui.keyCode.PAGE_UP:
 					case $.ui.keyCode.HOME:
 						self.index(0);
+						break;
+					case $.ui.keyCode.PAGE_DOWN:
+					case $.ui.keyCode.END:
+						self.index(self._optionLis.length);
 						break;
 					default:
 						ret = true;
@@ -146,15 +151,17 @@ $.widget("ui.selectmenu", {
 				}
 				return true;
 			})
-			.bind('mouseover.selectmenu focus.selectmenu', function() {
-				if (!o.disabled) {
-					$(this).addClass(self.widgetBaseClass + '-focus ui-state-hover');
-				}
+			.bind('mouseover.selectmenu', function() {
+				if (!o.disabled) $(this).addClass('ui-state-hover');
 			})
-			.bind('mouseout.selectmenu blur.selectmenu', function() {
-				if (!o.disabled) {
-					$(this).removeClass(self.widgetBaseClass + '-focus ui-state-hover');
-				}
+			.bind('mouseout.selectmenu', function() {
+				if (!o.disabled) $(this).removeClass('ui-state-hover');
+			})
+			.bind('focus.selectmenu', function() {
+				if (!o.disabled) $(this).addClass('ui-state-focus');
+			})
+			.bind('blur.selectmenu', function() {
+				if (!o.disabled) $(this).removeClass('ui-state-focus');
 			});
 
 		// document click closes menu
@@ -437,6 +444,9 @@ $.widget("ui.selectmenu", {
 		
 		// update value
 		this.index( this._selectedIndex() );
+		
+		// set selected item so movefocus has intial state
+		this._selectedOptionLi().addClass(this.widgetBaseClass + '-item-focus');
 
 		// needed when selectmenu is placed at the very bottom / top of the page
 		window.setTimeout( function() {
@@ -665,7 +675,7 @@ $.widget("ui.selectmenu", {
 				(amt > 0) ? ++amt : --amt;
 				this._moveSelection(amt, newIndex);
 			} else {
-				return this._optionLis.eq(newIndex).trigger('mouseup');
+				this._optionLis.eq(newIndex).trigger('mouseover').trigger('mouseup');
 			}
 		}
 	},
