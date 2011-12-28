@@ -280,21 +280,19 @@ $.widget("ui.selectmenu", {
 
 		// serialize selectmenu element options
 		var selectOptionData = [];
-		this.element
-			.find('option')
-			.each(function() {
-				var opt = $(this);
-				selectOptionData.push({
-					value: opt.attr('value'),
-					text: self._formatText(opt.text()),
-					selected: opt.attr('selected'),
-					disabled: opt.attr('disabled'),
-					classes: opt.attr('class'),
-					typeahead: opt.attr('typeahead'),
-					parentOptGroup: opt.parent('optgroup'),
-					bgImage: o.bgImage.call(opt)
-				});
+		this.element.find('option').each(function() {
+			var opt = $(this);
+			selectOptionData.push({
+				value: opt.attr('value'),
+				text: self._formatText(opt.text()),
+				selected: opt.attr('selected'),
+				disabled: opt.attr('disabled'),
+				classes: opt.attr('class'),
+				typeahead: opt.attr('typeahead'),
+				parentOptGroup: opt.parent('optgroup'),
+				bgImage: o.bgImage.call(opt)
 			});
+		});
 
 		// active state class is only used in popup style
 		var activeClass = (self.options.style == "popup") ? " ui-state-active" : "";
@@ -478,7 +476,6 @@ $.widget("ui.selectmenu", {
 	_typeAhead: function( code, eventType ) {
 		var self = this,
 			c = String.fromCharCode(code).toLowerCase(),
-			items = this.list.find( 'li a' ),
 			matchee = null,
 			nextIndex = null;
 
@@ -516,11 +513,10 @@ $.widget("ui.selectmenu", {
 			this._selectedOptionLi().data('index') :
 			this._focusedOptionLi().data('index')) || 0;
 
-		for (var i = 0; i < items.length; i++) {
-			var thisText = items.eq(i).text().substr(0, matchee.length).toLowerCase();
+		for (var i = 0; i < this._optionLis.length; i++) {
+			var thisText = this._optionLis.eq(i).text().substr(0, matchee.length).toLowerCase();
 
 			if ( thisText === matchee ) {
-
 				if ( self._typeAhead_cycling ) {
 					if ( nextIndex === null )
 						nextIndex = i;
@@ -540,7 +536,7 @@ $.widget("ui.selectmenu", {
 			// index? Because we don't what is the exact action to do, it
 			// depends if the user is typing on the element or on the popped
 			// up menu
-			items.eq(nextIndex).trigger( eventType );
+			this._optionLis.eq(nextIndex).find("a").trigger( eventType );
 		}
 
 		self._typeAhead_timer = window.setTimeout(function() {
@@ -714,7 +710,7 @@ $.widget("ui.selectmenu", {
 	},
 
 	_scrollPage: function(direction) {
-		var numPerPage = Math.floor(this.list.outerHeight() / this.list.find('li:first').outerHeight());
+		var numPerPage = Math.floor(this.list.outerHeight() / this._optionLis.first().outerHeight());
 		numPerPage = (direction == 'up' ? -numPerPage : numPerPage);
 		this._moveFocus(numPerPage);
 	},
