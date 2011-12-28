@@ -420,13 +420,10 @@ $.widget("ui.selectmenu", {
 		// reset height to auto
 		this.list.css( 'height', 'auto' );
 		var listH = this.listWrap.height();
-		// calculate default max height
-		if ( o.maxHeight && o.maxHeight < listH ) {
-			this.list.height( o.maxHeight );
-		} else {
-			var winH = $( window ).height() / 3;
-			if ( winH < listH ) this.list.height( winH );
-		}
+		var winH = $( window ).height();
+		// calculate default max height		
+		var maxH = o.maxHeight ? Math.min( o.maxHeight, winH ) : winH / 3;
+		if ( listH > maxH ) this.list.height( maxH );		
 		
 		// save reference to actionable li's (not group label li's)
 		this._optionLis = this.list.find( 'li:not(.' + self.widgetBaseClass + '-group)' );
@@ -857,7 +854,6 @@ $.widget("ui.selectmenu", {
 			var selected = this._selectedOptionLi();
 			var _offset = "0 " + ( this.list.offset().top  - selected.offset().top - ( this.newelement.outerHeight() + selected.outerHeight() ) / 2);
 		}
-		// update zIndex if jQuery UI is able to process
 		this.listWrap
 			.zIndex( this.element.zIndex() + 1 )
 			.position({
@@ -866,7 +862,7 @@ $.widget("ui.selectmenu", {
 				my: o.positionOptions.my,
 				at: o.positionOptions.at,
 				offset: o.positionOptions.offset || _offset,
-				collision: o.positionOptions.collision || 'flip'
+				collision: o.positionOptions.collision || o.style == "popup" ? 'fit' :'flip'
 			});
 	}
 });
