@@ -99,7 +99,8 @@ input.ui-button {
 }
 
 /* workarounds */
+input.ui-button::-moz-focus-inner,
 button.ui-button::-moz-focus-inner {
     border: 0;
     padding: 0;
-} /* reset extra padding in Firefox */
+} /* reset extra padding in Firefox, see h5bp.com/l */
