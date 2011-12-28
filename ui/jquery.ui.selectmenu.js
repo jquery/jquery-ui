@@ -30,6 +30,7 @@ $.widget("ui.selectmenu", {
 		maxHeight: null,
 		icons: null,
 		format: null,
+		escapeHtml: false,
 		bgImage: function() {},
 		wrapperElement: "<div />"
 	},
@@ -624,9 +625,14 @@ $.widget("ui.selectmenu", {
 			this.open(event);
 		}
 	},
-
+	
 	_formatText: function(text) {
-		return (this.options.format ? this.options.format(text) : text);
+		if (this.options.format) {
+			text = this.options.format(text);
+		} else if (this.options.escapeHtml) {
+			text = $('<div />').text(text).html();
+		}
+		return text;
 	},
 
 	_selectedIndex: function() {
