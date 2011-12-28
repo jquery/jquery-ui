@@ -29,3 +29,50 @@
     /* the overflow property removes extra width in IE */
 }
 
+
+/* vendor-specific prefixes (which are supported without prefixes in latest browsers) */
+
+.ui-corner-all,
+.ui-corner-top,
+.ui-corner-left,
+.ui-corner-tl {
+    -moz-border-radius-topleft: 4px/*{cornerRadius}*/;
+    -webkit-border-top-left-radius: 4px/*{cornerRadius}*/;
+    -khtml-border-top-left-radius: 4px/*{cornerRadius}*/;
+    border-top-left-radius: 4px/*{cornerRadius}*/;
+}
+.ui-corner-all,
+.ui-corner-top,
+.ui-corner-right,
+.ui-corner-tr {
+    -moz-border-radius-topright: 4px/*{cornerRadius}*/;
+    -webkit-border-top-right-radius: 4px/*{cornerRadius}*/;
+    -khtml-border-top-right-radius: 4px/*{cornerRadius}*/;
+    border-top-right-radius: 4px/*{cornerRadius}*/;
+}
+.ui-corner-all,
+.ui-corner-bottom,
+.ui-corner-left,
+.ui-corner-bl {
+    -moz-border-radius-bottomleft: 4px/*{cornerRadius}*/;
+    -webkit-border-bottom-left-radius: 4px/*{cornerRadius}*/;
+    -khtml-border-bottom-left-radius: 4px/*{cornerRadius}*/;
+    border-bottom-left-radius: 4px/*{cornerRadius}*/;
+}
+.ui-corner-all,
+.ui-corner-bottom,
+.ui-corner-right,
+.ui-corner-br {
+    -moz-border-radius-bottomright: 4px/*{cornerRadius}*/;
+    -webkit-border-bottom-right-radius: 4px/*{cornerRadius}*/;
+    -khtml-border-bottom-right-radius: 4px/*{cornerRadius}*/;
+    border-bottom-right-radius: 4px/*{cornerRadius}*/;
+}
+
+.ui-widget-shadow {
+    -moz-border-radius: 8px/*{cornerRadiusShadow}*/;
+    -khtml-border-radius: 8px/*{cornerRadiusShadow}*/;
+    -webkit-border-radius: 8px/*{cornerRadiusShadow}*/;
+    border-radius: 8px/*{cornerRadiusShadow}*/;
+}
+
