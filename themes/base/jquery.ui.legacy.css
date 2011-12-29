@@ -22,3 +22,9 @@
 .ui-widget-shadow {
     filter: Alpha(Opacity=30)/*{opacityShadow}*/;
 }
+
+* html .ui-button,
+*+html .ui-button {
+    overflow: visible;
+    /* the overflow property removes extra width in IE */
+}
