@@ -13,6 +13,7 @@
 
 /* Component containers
 ----------------------------------*/
+.ui-widget,
 .ui-widget .ui-widget {
     font-size: 1em;
 }
@@ -21,6 +22,7 @@
 .ui-widget textarea,
 .ui-widget button {
     font: inherit;
+    font-size: 1em;
 }
 .ui-widget-content {
     border: 1px solid #aaaaaa/*{borderColorContent}*/;
