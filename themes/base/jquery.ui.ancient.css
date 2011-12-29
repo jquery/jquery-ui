@@ -43,6 +43,11 @@
     width: 1px;
 } /* without this, the menu expands to 100% in IE6 */
 
+* html .ui-button {
+    overflow: visible;
+    /* the overflow property removes extra width in IE */
+}
+
 /* Fades and background-images don't work well together in IE6, drop the image */
 * html .ui-tooltip {
     background-image: none;
