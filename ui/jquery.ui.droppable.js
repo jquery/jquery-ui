@@ -120,7 +120,7 @@ $.widget("ui.droppable", {
 				&& !inst.options.disabled
 				&& inst.options.scope == draggable.options.scope
 				&& inst.accept.call(inst.element[0], (draggable.currentItem || draggable.element))
-				&& $.ui.intersect(draggable, $.extend(inst, { offset: inst.element.offset() }), inst.options.tolerance)
+				&& $.ui.intersect(draggable, inst, inst.options.tolerance)
 			) { childrenIntersection = true; return false; }
 		});
 		if(childrenIntersection) return false;
@@ -198,6 +198,33 @@ $.ui.ddmanager = {
 	current: null,
 	droppables: { 'default': [] },
 	prepareOffsets: function(t, event) {
+		var getOwnerWindow = function (node) {
+			return node.ownerDocument.defaultView || node.parentWindow;
+		};
+		var getOffsetInWindow = function (node, win) {
+			var myWin = getOwnerWindow(node);
+			if ( myWin === win)
+				return $(node).offset();
+			else if (myWin === top) {
+				// win s a child of myWin(top), so we caculate the offset of win
+				//in related to myWin and substract it.
+				var offset = $(node).offset();
+				var winOffSet = getOffsetInWindow(win.document.documentElement, myWin);
+				return { left: offset.left - winOffSet.left, top: offset.top - winOffSet.top};
+			}
+			else {
+				//find myWin in its parent as an frame element and get the offset
+				var parentFrames = $('iframe, frame', myWin.parent.document);
+				for ( var frame in parentFrames) {
+					if (parentFrames[frame].contentWindow === myWin) {
+						var offset = $(node).offset();
+						var frameTagOffset = $(parentFrames[frame]).offset();
+						var parentOffsetInWindow = getOffsetInWindow(myWin.parent.document.documentElement, win);
+						return { left: offset.left + frameTagOffset.left + parentOffsetInWindow.left, top: offset.top + frameTagOffset.top + parentOffsetInWindow.top };
+					}
+				}
+			}
+		};
 
 		var m = $.ui.ddmanager.droppables[t.options.scope] || [];
 		var type = event ? event.type : null; // workaround for #2317
@@ -211,7 +238,7 @@ $.ui.ddmanager = {
 
 			if(type == "mousedown") m[i]._activate.call(m[i], event); //Activate the droppable if used directly from draggables
 
-			m[i].offset = m[i].element.offset();
+			m[i].offset = getOffsetInWindow(m[i].element[0], getOwnerWindow((t.currentItem || t.element)[0]));
 			m[i].proportions = { width: m[i].element[0].offsetWidth, height: m[i].element[0].offsetHeight };
 
 		}
