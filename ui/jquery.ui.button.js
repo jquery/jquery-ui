@@ -67,7 +67,7 @@ $.widget( "ui.button", {
 		var self = this,
 			options = this.options,
 			toggleButton = this.type === "checkbox" || this.type === "radio",
-			hoverClass = "ui-state-hover" + ( !toggleButton ? " ui-state-active" : "" ),
+			activeClass = !toggleButton ? "ui-state-active" : "",
 			focusClass = "ui-state-focus";
 
 		if ( options.label === null ) {
@@ -78,6 +78,8 @@ $.widget( "ui.button", {
 			options.disabled = true;
 		}
 
+		this._hoverable( this.buttonElement );
+
 		this.buttonElement
 			.addClass( baseClasses )
 			.attr( "role", "button" )
@@ -85,7 +87,6 @@ $.widget( "ui.button", {
 				if ( options.disabled ) {
 					return;
 				}
-				$( this ).addClass( "ui-state-hover" );
 				if ( this === lastActive ) {
 					$( this ).addClass( "ui-state-active" );
 				}
@@ -94,7 +95,7 @@ $.widget( "ui.button", {
 				if ( options.disabled ) {
 					return;
 				}
-				$( this ).removeClass( hoverClass );
+				$( this ).removeClass( activeClass );
 			})
 			.bind( "click.button", function( event ) {
 				if ( options.disabled ) {
