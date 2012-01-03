@@ -32,55 +32,57 @@ test("data", function() {
 		ok(!el.is(':data(test)'), msg);
 	}
 	
-	el = $('<div/>');
+	el = $('<div>');
 	shouldNotHaveData('data never set');
 	
-	el = $('<div/>').data('test', null);
+	el = $('<div>').data('test', null);
 	shouldNotHaveData('data is null');
 	
-	el = $('<div/>').data('test', true);
+	el = $('<div>').data('test', true);
 	shouldHaveData('data set to true');
 	
-	el = $('<div/>').data('test', false);
+	el = $('<div>').data('test', false);
 	shouldNotHaveData('data set to false');
 	
-	el = $('<div/>').data('test', 0);
+	el = $('<div>').data('test', 0);
 	shouldNotHaveData('data set to 0');
 	
-	el = $('<div/>').data('test', 1);
+	el = $('<div>').data('test', 1);
 	shouldHaveData('data set to 1');
 	
-	el = $('<div/>').data('test', '');
+	el = $('<div>').data('test', '');
 	shouldNotHaveData('data set to empty string');
 	
-	el = $('<div/>').data('test', 'foo');
+	el = $('<div>').data('test', 'foo');
 	shouldHaveData('data set to string');
 	
-	el = $('<div/>').data('test', []);
+	el = $('<div>').data('test', []);
 	shouldHaveData('data set to empty array');
 	
-	el = $('<div/>').data('test', [1]);
+	el = $('<div>').data('test', [1]);
 	shouldHaveData('data set to array');
 	
-	el = $('<div/>').data('test', {});
+	el = $('<div>').data('test', {});
 	shouldHaveData('data set to empty object');
 	
-	el = $('<div/>').data('test', {foo: 'bar'});
+	el = $('<div>').data('test', {foo: 'bar'});
 	shouldHaveData('data set to object');
 	
-	el = $('<div/>').data('test', new Date());
+	el = $('<div>').data('test', new Date());
 	shouldHaveData('data set to date');
 	
-	el = $('<div/>').data('test', /test/);
+	el = $('<div>').data('test', /test/);
 	shouldHaveData('data set to regexp');
 	
-	el = $('<div/>').data('test', function() {});
+	el = $('<div>').data('test', function() {});
 	shouldHaveData('data set to function');
 });
 
 test("focusable - visible, enabled elements", function() {
-	expect(16);
+	expect(18);
 	
+	isNotFocusable('#formNoTabindex', 'form');
+	isFocusable('#formTabindex', 'form with tabindex');
 	isFocusable('#visibleAncestor-inputTypeNone', 'input, no type');
 	isFocusable('#visibleAncestor-inputTypeText', 'input, type text');
 	isFocusable('#visibleAncestor-inputTypeCheckbox', 'input, type checkbox');
@@ -156,8 +158,10 @@ test("focusable - area elements", function() {
 });
 
 test("tabbable - visible, enabled elements", function() {
-	expect(16);
+	expect(18);
 	
+	isNotTabbable('#formNoTabindex', 'form');
+	isTabbable('#formTabindex', 'form with tabindex');
 	isTabbable('#visibleAncestor-inputTypeNone', 'input, no type');
 	isTabbable('#visibleAncestor-inputTypeText', 'input, type text');
 	isTabbable('#visibleAncestor-inputTypeCheckbox', 'input, type checkbox');

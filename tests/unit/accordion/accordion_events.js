@@ -1,6 +1,6 @@
 (function( $ ) {
 
-module( "accordion: events", accordionSetupTeardown() );
+module( "accordion: events", accordion_setupTeardown() );
 
 test( "beforeActivate", function() {
 	expect( 38 );
