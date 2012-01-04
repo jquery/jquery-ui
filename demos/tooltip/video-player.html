@@ -11,6 +11,7 @@
 	<script src="../../ui/jquery.ui.tooltip.js"></script>
 	<script src="../../ui/jquery.ui.button.js"></script>
 	<script src="../../ui/jquery.ui.menu.js"></script>
+	<script src="../../ui/jquery.ui.popup.js"></script>
 	<script src="../../ui/jquery.effects.core.js"></script>
 	<script src="../../ui/jquery.effects.blind.js"></script>
 	<link rel="stylesheet" href="../demos.css">
@@ -68,6 +69,14 @@
 					$( this ).remove();
 				});
 		}
+		$( "ul" ).menu({
+			select: function( event, ui ) {
+				// TODO should probably be handled by popup, see ESCAPE key handler
+				// affects key handling
+				$( this ).prev().focus();
+				notify( ui.item );
+			}
+		}).popup();
 
 		$( "button" ).each(function() {
 			var button = $( this ).button({
@@ -76,9 +85,15 @@
 				},
 				text: !!$( this ).attr( "title" )
 			});
-			button.click(function() {
-				notify( button );
-			});
+			if ( button.next().is( ":ui-popup" ) ) {
+				button.click(function( event ) {
+					$( ".demo" ).tooltip( "close", event );
+				});
+			} else {
+				button.click(function() {
+					notify( button );
+				});
+			}
 		});
 		$( ".set" ).buttonset({
 			items: "button"
@@ -112,6 +127,17 @@
 	<div class="set">
 		<button data-icon="ui-icon-circle-plus" title="Add to Watch Later">Add to</button>
 		<button class="menu" data-icon="ui-icon-triangle-1-s">Add to favorites or playlist</button>
+		<ul>
+			<li>
+				<a href="#">Favorites</a>
+			</li>
+			<li>
+				<a href="#">Watch Later</a>
+			</li>
+			<li>
+				<a href="#">New Playlist...</a>
+			</li>
+		</ul>
 	</div>
 	<button title="Share this video">Share</button>
 	<button data-icon="ui-icon-alert">Flag as inappropiate</button>

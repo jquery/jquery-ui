@@ -214,10 +214,24 @@ $.widget( "ui.menu", {
 				}
 			}
 		});
+
+		if ( this.options.trigger ) {
+			this.element.popup({
+				trigger: this.options.trigger,
+				managed: true,
+				focusPopup: $.proxy( function( event, ui ) {
+					this.focus( event, this.element.children( ".ui-menu-item" ).first() );
+					this.element.focus( 1 );
+				}, this)
+			});
+		}
 	},
 
 	_destroy: function() {
 		//destroy (sub)menus
+		if ( this.options.trigger ) {
+			this.element.popup( "destroy" );
+		}
 		this.element
 			.removeAttr( "aria-activedescendant" )
 			.find( ".ui-menu" )
@@ -519,6 +533,10 @@ $.widget( "ui.menu", {
 			item: this.active
 		};
 		this.collapseAll( event, true );
+		if ( this.options.trigger ) {
+			$( this.options.trigger ).focus( 1 );
+			this.element.popup( "close" );
+		}
 		this._trigger( "select", event, ui );
 	}
 });
