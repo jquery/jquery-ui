@@ -41,7 +41,7 @@ $.effects.effect.blind = function( o, done ) {
 	});
 
 	distance = wrapper[ ref ]();
-  margin = parseInt(wrapper.css(ref2));
+	margin = parseFloat( wrapper.css( ref2 ) );
 
 	animation[ ref ] = show ? distance : 0;
 	if ( !motion ) {
