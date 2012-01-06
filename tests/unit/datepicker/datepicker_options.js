@@ -99,6 +99,7 @@ test('invocation', function() {
 	button.click();
 	ok(!dp.is(':visible'), 'Button - hidden on second button click');
 	inp.datepicker('hide').datepicker('destroy');
+
 	// On image button
 	inp = init('#inp', {showOn: 'button', buttonImageOnly: true,
 		buttonImage: 'img/calendar.gif', buttonText: 'Cal'});
@@ -116,6 +117,7 @@ test('invocation', function() {
 	image.click();
 	ok(!dp.is(':visible'), 'Image button - hidden on second image click');
 	inp.datepicker('hide').datepicker('destroy');
+
 	// On both
 	inp = init('#inp', {showOn: 'both', buttonImage: 'img/calendar.gif'});
 	ok(!dp.is(':visible'), 'Both - initially hidden');
@@ -134,6 +136,26 @@ test('invocation', function() {
 	button.click();
 	ok(!dp.is(':visible'), 'Both - hidden on second button click');
 	inp.datepicker('hide').datepicker('destroy');
+
+    // No image
+    inp = init('#inp', {showOn: 'both', buttonImage: '', buttonImageOnly: true});
+    ok(!dp.is(':visible'), 'Both - initially hidden');
+    button = inp.siblings('button');
+    ok(button.length == 0, 'Both - button absent');
+    image = inp.siblings('img');
+    ok(!image.attr('src'), 'Image source absent');
+    ok(image.length == 1, 'Both - image present');
+    image = button.children('img');
+    ok(image.length == 0, 'Both - button image absent');
+    inp.focus();
+    ok(dp.is(':visible'), 'Both - rendered on focus');
+    body.simulate('mousedown', {});
+    ok(!dp.is(':visible'), 'Both - hidden on external click');
+    button.click();
+    ok(!dp.is(':visible'), 'Both - not rendered on button click');
+    button.click();
+    ok(!dp.is(':visible'), 'Both - hidden on second button click');
+    inp.datepicker('hide').datepicker('destroy');
 });
 
 test('otherMonths', function() {
@@ -265,7 +287,7 @@ test('miscellaneous', function() {
 	var curYear = new Date().getFullYear();
 	inp.val('02/04/2008').datepicker('show');
 	equals(dp.find('.ui-datepicker-year').text(), '2008', 'Year range - read-only default');
-	inp.datepicker('hide').datepicker('option', {changeYear: true}).datepicker('show');		
+	inp.datepicker('hide').datepicker('option', {changeYear: true}).datepicker('show');
 	equals(dp.find('.ui-datepicker-year').text(), genRange(2008 - 10, 21), 'Year range - changeable default');
 	inp.datepicker('hide').datepicker('option', {yearRange: 'c-6:c+2', changeYear: true}).datepicker('show');
 	equals(dp.find('.ui-datepicker-year').text(), genRange(2008 - 6, 9), 'Year range - c-6:c+2');
@@ -507,11 +529,11 @@ test('altField', function() {
 	inp.simulate('keydown', {ctrlKey: true, keyCode: $.simulate.VK_END});
 	equals(inp.val(), '', 'Alt field - dp - ctrl+end');
 	equals(alt.val(), '', 'Alt field - alt - ctrl+end');
-	
+
 	return
 	// TODO manual entry impl works (see altField demo) but this test doesn't
 	// probably something the rewrite won't cover anymore anyway
-	
+
 	// Verify alt field is updated on keyup
 	alt.val('');
 	inp.val('06/04/200').datepicker('show');
