@@ -1,7 +1,7 @@
 /*
  * jQuery UI Draggable @VERSION
  *
- * CopyBottom 2011, AUTHORS.txt (http://jqueryui.com/about)
+ * Copyright 2011, AUTHORS.txt (http://jqueryui.com/about)
  * Dual licensed under the MIT or GPL Version 2 licenses.
  * http://jquery.org/license
  *
@@ -71,71 +71,45 @@ $.widget( "ui.draggable", $.ui.interaction, {
 	},
 
 	_handleScrolling: function( event ) {
-		var xScrollSpeed, yScrollSpeed,
-			distances = {},
-			scrollTop = this.scrollParent.scrollTop(),
+		var scrollTop = this.scrollParent.scrollTop(),
 			scrollLeft = this.scrollParent.scrollLeft(),
 			scrollSensitivity = 20,
 			baseSpeed = 5,
 			speed = function( distance ) {
-
 				return baseSpeed + Math.round( distance / 2 );
-
-			};
-
-		// overflowOffset is only set when scrollParent is not doc/html
-		if ( !this.overflowOffset ) {
-
-			distances.xRight = ( this.overflow.width + scrollLeft ) - event.pageX;
-			distances.xLeft = event.pageX - scrollLeft;
-			distances.yBottom = ( this.overflow.height + scrollTop ) - event.pageY;
-			distances.yTop = event.pageY - scrollTop;
-
-		} else {
-
-			distances.xRight = ( this.overflow.width + this.overflowOffset.left ) - event.pageX;
-			distances.xLeft = event.pageX - this.overflowOffset.left;
-			distances.yBottom = ( this.overflow.height + this.overflowOffset.top ) - event.pageY;
-			distances.yTop = event.pageY - this.overflowOffset.top;
-
-		}
+			},
+			// overflowOffset is only set when scrollParent is not doc/html
+			overflowLeft = this.overflowOffset ?
+				this.overflowOffset.left :
+				scrollLeft,
+			overflowTop = this.overflowOffset ?
+				this.overflowOffset.top :
+				scrollTop,
+			xRight = this.overflow.width + overflowLeft - event.pageX,
+			xLeft = event.pageX - overflowLeft,
+			yBottom = this.overflow.height + overflowTop - event.pageY,
+			yTop = event.pageY - overflowTop;
 
 		// Handle vertical scrolling
-		if ( distances.yBottom < scrollSensitivity ) {
-
-			yScrollSpeed = speed( scrollSensitivity - distances.yBottom );
-
-			this.scrollParent.scrollTop( scrollTop + yScrollSpeed );
-
-		}
-		else if ( distances.yTop < scrollSensitivity ) {
-
-			yScrollSpeed = speed( scrollSensitivity - distances.yTop );
-
-			this.scrollParent.scrollTop( scrollTop - yScrollSpeed );
+		if ( yBottom < scrollSensitivity ) {
+			this.scrollParent.scrollTop( scrollTop +
+				speed( scrollSensitivity - yBottom ) );
+		} else if ( yTop < scrollSensitivity ) {
+			this.scrollParent.scrollTop( scrollTop -
+				speed( scrollSensitivity - yTop ) );
 		}
 
 		// Handle horizontal scrolling
-		if ( distances.xRight < scrollSensitivity ) {
-
-			xScrollSpeed = speed( scrollSensitivity - distances.xRight );
-
-			this.scrollParent.scrollLeft( scrollLeft + xScrollSpeed );
-
+		if ( xRight < scrollSensitivity ) {
+			this.scrollParent.scrollLeft( scrollLeft +
+				speed( scrollSensitivity - xRight ) );
+		} else if ( xLeft < scrollSensitivity ) {
+			this.scrollParent.scrollLeft( scrollLeft -
+				speed( scrollSensitivity - xLeft ) );
 		}
-		else if ( distances.xLeft < scrollSensitivity ) {
-
-			xScrollSpeed = speed( scrollSensitivity - distances.xLeft );
-
-			this.scrollParent.scrollLeft( scrollLeft - xScrollSpeed );
-
-		}
-
 	},
 
 	_start: function( event ) {
-		var newLeft, newTop;
-
 		// The actual dragging element, should always be a jQuery object
 		this.dragEl = this.element;
 
@@ -177,17 +151,16 @@ $.widget( "ui.draggable", $.ui.interaction, {
 		};
 
 		// Cache the offset of scrollParent, if required for _handleScrolling
-		if ( this.scrollParent[0] !== this.document[0] && this.scrollParent[0].tagName !== 'HTML') {
+		if ( this.scrollParent[0] !== this.document[0] && this.scrollParent[0].tagName !== "HTML" ) {
 			this.overflowOffset = this.scrollParent.offset();
 		}
 
-		this.overflow = {};
-
-		this.overflow.height = ( this.scrollParent[0] === this.document[0] ) ?
-			this.window.height() : this.scrollParent.height();
-
-		this.overflow.width = ( this.scrollParent[0] === this.document[0] ) ?
-			this.window.width() : this.scrollParent.width();
+		this.overflow = {
+			height: this.scrollParent[0] === this.document[0] ?
+				this.window.height() : this.scrollParent.height(),
+			width: this.scrollParent[0] === this.document[0] ?
+				this.window.width() : this.scrollParent.width()
+		};
 
 		this._preparePosition( event );
 
@@ -201,8 +174,6 @@ $.widget( "ui.draggable", $.ui.interaction, {
 	},
 
 	_move: function( event ) {
-		var newLeft, newTop;
-
 		this._preparePosition( event );
 
 		// If user stops propagation, leave helper there ( if there's one ), disallow any CSS changes
@@ -232,7 +203,6 @@ $.widget( "ui.draggable", $.ui.interaction, {
 
 	// Uses event to determine new position of draggable, before any override from callbacks
 	// TODO: handle absolute element inside relative parent like a relative element
-	// possibly have user set flag to avoid DOM lookup
 	_preparePosition: function( event ) {
 		var leftDiff = event.clientX - this.startCoords.left,
 			topDiff = event.clientY - this.startCoords.top,
@@ -258,21 +228,17 @@ $.widget( "ui.draggable", $.ui.interaction, {
 
 	// Places draggable where mouse or user from callback indicates
 	_setCss: function( event ) {
-		var newLeft, newTop, oTop, oLeft;
+		var newLeft, newTop;
 
 		// User overriding left/top so shortcut math is no longer valid
 		if ( this.tempPosition.left !== this.position.left || this.tempPosition.top !== this.position.top ) {
-
-			// Get the difference of automatic coordinates vs what user overrode
-			oTop = this.position.top - this.tempPosition.top;
-			oLeft = this.position.left - this.tempPosition.left;
-
-			// Reset offset based on math
-			this.offset.top = this.offset.top + oTop;
-			this.offset.left = this.offset.left + oLeft;
+			// Reset offset based on difference of expected and overridden values
+			this.offset.top = this.offset.top +
+				this.position.top - this.tempPosition.top;
+			this.offset.left = this.offset.left +
+				this.position.left - this.tempPosition.left;
 
 			this.offset = this.dragEl.offset();
-
 		}
 
 		newLeft = this.position.left;
