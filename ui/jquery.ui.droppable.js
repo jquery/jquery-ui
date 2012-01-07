@@ -92,10 +92,8 @@ $.widget( "ui.droppable", {
 	_handleIntersect: function( event, edges, ui ) {
 		var xDiff = edges.draggableRight - this.offset.left,
 			yDiff = edges.draggableBottom - this.offset.top,
-			
-			// Round to normalize between browsers since some handle non-integer values
-			xHalfway = Math.round( this.proportions.width / 2 ),
-			yHalfway = Math.round( this.proportions.height / 2 ),
+			xHalfway = this.proportions.width / 2,
+			yHalfway = this.proportions.height / 2,
 			xOverlap = false,
 			yOverlap = false;
 
@@ -121,17 +119,15 @@ $.widget( "ui.droppable", {
 
 		return xOverlap && yOverlap;
 	},
-	
-	// Determines if draggable is over droppable based on touch tolerance
+
+	// Determines if draggable is over droppable based on pointer tolerance
 	_handlePointer: function( event, edges, ui ) {
-	
 		var xOverlap = event.pageX >= this.offset.left &&
 				event.pageX <= edges.right,
 			yOverlap = event.pageY >= this.offset.top &&
 				event.pageY <= edges.bottom;
 
 		return xOverlap && yOverlap;
-
 	},
 
 	// TODO: shouldn't this be dragStop?
