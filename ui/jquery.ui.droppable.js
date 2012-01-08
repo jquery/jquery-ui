@@ -28,20 +28,6 @@ $.widget( "ui.droppable", {
 	// over: whether or not a draggable is currently over droppable
 	// proportions: width and height of droppable
 
-	// TODO: move below _create()
-	// TODO: rename to refresh()?
-	refreshPosition: function() {
-		// Store current location
-		this.offset = this.element.offset();
-
-		// Store the droppable's proportions
-		// TODO: should this delegate to core?
-		this.proportions = {
-			width: this.element[0].offsetWidth,
-			height: this.element[0].offsetHeight
-		};
-	},
-
 	_create: function() {
 		this.refreshPosition();
 
@@ -55,16 +41,28 @@ $.widget( "ui.droppable", {
 		});
 	},
 
+	// TODO: rename to refresh()?
+	refreshPosition: function() {
+		// Store current location
+		this.offset = this.element.offset();
+
+		// Store the droppable's proportions
+		// TODO: should this delegate to core?
+		this.proportions = {
+			width: this.element[0].offsetWidth,
+			height: this.element[0].offsetHeight
+		};
+	},
+
 	_drag: function( event, ui ) {
-		var tolerance = this.options.tolerance,
-			handleFunc = "_handle" + tolerance.substr( 0, 1 ).toUpperCase() + tolerance.substr( 1 ),
-			edges = {
+		var edges = {
 				right: this.offset.left + this.proportions.width,
 				bottom: this.offset.top + this.proportions.height,
 				draggableRight: ui.offset.left + this.draggableProportions.width,
 				draggableBottom: ui.offset.top + this.draggableProportions.height
 			},
-			over = this[ handleFunc ]( event, edges, ui );
+			over = $.ui.droppable.tolerance[ this.options.tolerance ]
+				.call( this, event, edges, ui );
 
 		// If there is sufficient overlap as deemed by tolerance
 		if ( over ) {
@@ -80,17 +78,34 @@ $.widget( "ui.droppable", {
 	_dragStart: function( event, ui ) {
 		var draggable = $( event.target );
 
-		// TODO: Possibly move into draggable hash, so if there are multiple droppables, it's not recalculating all the time
+		// TODO: Possibly move into draggable hash
+		// so if there are multiple droppables, it's not recalculating all the time
 		this.draggableProportions = {
 			width: draggable[0].offsetWidth,
 			height: draggable[0].offsetHeight
 		};
 	},
 
+	// TODO: shouldn't this be dragStop?
+	_mouseUp: function( event ) {
+		if ( this.over ) {
+			this._trigger( "drop", event, this._uiHash() );
+		}
+
+		this.over = false;
+	},
+
+	// TODO: fill me out
+	_uiHash: function() {
+		return {};
+	}
+});
+
+$.ui.droppable.tolerance = {
 	// Determines if draggable is over droppable based on intersect tolerance
 	// TODO: move all tolerance methods into a hash
 	// $.ui.droppable.tolerance.intersect
-	_handleIntersect: function( event, edges, ui ) {
+	intersect: function( event, edges, ui ) {
 		var xDiff = edges.draggableRight - this.offset.left,
 			yDiff = edges.draggableBottom - this.offset.top,
 			xHalfway = this.proportions.width / 2,
@@ -112,7 +127,7 @@ $.widget( "ui.droppable", {
 	},
 
 	// Determines if draggable is over droppable based on touch tolerance
-	_handleTouch: function( event, edges, ui ) {
+	touch: function( event, edges, ui ) {
 		var xOverlap = edges.draggableRight >= this.offset.left &&
 				ui.offset.left <= edges.right,
 			yOverlap = edges.draggableBottom >= this.offset.top &&
@@ -122,28 +137,14 @@ $.widget( "ui.droppable", {
 	},
 
 	// Determines if draggable is over droppable based on pointer tolerance
-	_handlePointer: function( event, edges, ui ) {
+	pointer: function( event, edges, ui ) {
 		var xOverlap = event.pageX >= this.offset.left &&
 				event.pageX <= edges.right,
 			yOverlap = event.pageY >= this.offset.top &&
 				event.pageY <= edges.bottom;
 
 		return xOverlap && yOverlap;
-	},
-
-	// TODO: shouldn't this be dragStop?
-	_mouseUp: function( event ) {
-		if ( this.over ) {
-			this._trigger( "drop", event, this._uiHash() );
-		}
-
-		this.over = false;
-	},
-
-	// TODO: fill me out
-	_uiHash: function() {
-		return {};
 	}
-});
+};
 
 })( jQuery );
