@@ -25,7 +25,7 @@ $.widget( "ui.draggable", $.ui.interaction, {
 	// dragEl: element being dragged (original or helper)
 	// position: final CSS position of dragEl
 	// offset: offset of dragEl
-	// startCoords: clientX/Y of the mousedown (offset of pointer)
+	// startCoords: pageX/Y of the mousedown (offset of pointer)
 	// startPosition: CSS position prior to drag start
 	// startOffset: offset prior to drag start
 	// tempPosition: overridable CSS position of dragEl
@@ -147,8 +147,8 @@ $.widget( "ui.draggable", $.ui.interaction, {
 		this.offset = $.extend( {}, this.startOffset );
 
 		this.startCoords = {
-			left: event.clientX,
-			top: event.clientY
+			left: event.pageX,
+			top: event.pageY
 		};
 
 		// Cache the offset of scrollParent, if required for _handleScrolling
@@ -205,8 +205,8 @@ $.widget( "ui.draggable", $.ui.interaction, {
 	// Uses event to determine new position of draggable, before any override from callbacks
 	// TODO: handle absolute element inside relative parent like a relative element
 	_preparePosition: function( event ) {
-		var leftDiff = event.clientX - this.startCoords.left,
-			topDiff = event.clientY - this.startCoords.top,
+		var leftDiff = event.pageX - this.startCoords.left,
+			topDiff = event.pageY - this.startCoords.top,
 			newLeft = leftDiff + this.startPosition.left,
 			newTop = topDiff + this.startPosition.top;
 
