@@ -58,6 +58,7 @@ $.widget( "ui.autocomplete", {
 			suppressKeyPressRepeat,
 			suppressInput;
 
+		this.isMultiLine = this.element.is( "textarea,[contenteditable]" );
 		this.valueMethod = this.element[ this.element.is( "input,textarea" ) ? "val" : "text" ];
 
 		this.element
@@ -92,15 +93,11 @@ $.widget( "ui.autocomplete", {
 					break;
 				case keyCode.UP:
 					suppressKeyPress = true;
-					self._move( "previous", event );
-					// prevent moving cursor to beginning of text field in some browsers
-					event.preventDefault();
+					self._keyEvent( "previous", event );
 					break;
 				case keyCode.DOWN:
 					suppressKeyPress = true;
-					self._move( "next", event );
-					// prevent moving cursor to end of text field in some browsers
-					event.preventDefault();
+					self._keyEvent( "next", event );
 					break;
 				case keyCode.ENTER:
 				case keyCode.NUMPAD_ENTER:
@@ -151,14 +148,10 @@ $.widget( "ui.autocomplete", {
 					self._move( "nextPage", event );
 					break;
 				case keyCode.UP:
-					self._move( "previous", event );
-					// prevent moving cursor to beginning of text field in some browsers
-					event.preventDefault();
+					self._keyEvent( "previous", event );
 					break;
 				case keyCode.DOWN:
-					self._move( "next", event );
-					// prevent moving cursor to end of text field in some browsers
-					event.preventDefault();
+					self._keyEvent( "next", event );
 					break;
 				}
 			})
@@ -184,6 +177,7 @@ $.widget( "ui.autocomplete", {
 				}
 
 				clearTimeout( self.searching );
+				self.cancelSearch = true;
 				// clicks on the menu (or a button to trigger a search) will cause a blur event
 				self.closing = setTimeout(function() {
 					self.close( event );
@@ -373,6 +367,7 @@ $.widget( "ui.autocomplete", {
 	_search: function( value ) {
 		this.pending++;
 		this.element.addClass( "ui-autocomplete-loading" );
+		this.cancelSearch = false;
 
 		this.source( { term: value }, this.response );
 	},
@@ -382,7 +377,7 @@ $.widget( "ui.autocomplete", {
 			content = this._normalize( content );
 		}
 		this._trigger( "response", null, { content: content } );
-		if ( !this.options.disabled && content && content.length ) {
+		if ( !this.options.disabled && content && content.length && !this.cancelSearch ) {
 			this._suggest( content );
 			this._trigger( "open" );
 		} else {
@@ -478,8 +473,8 @@ $.widget( "ui.autocomplete", {
 			this.search( null, event );
 			return;
 		}
-		if ( this.menu.first() && /^previous/.test(direction) ||
-				this.menu.last() && /^next/.test(direction) ) {
+		if ( this.menu.isFirstItem() && /^previous/.test(direction) ||
+				this.menu.isLastItem() && /^next/.test(direction) ) {
 			this._value( this.term );
 			this.menu.blur();
 			return;
@@ -493,6 +488,15 @@ $.widget( "ui.autocomplete", {
 
 	_value: function( value ) {
 		return this.valueMethod.apply( this.element, arguments );
+	},
+
+	_keyEvent: function( keyEvent, event ) {
+		if ( !this.isMultiLine || this.menu.element.is( ":visible" ) ) {
+			this._move( keyEvent, event );
+
+			// prevents moving cursor to beginning/end of the text field in some browsers
+			event.preventDefault();
+		}
 	}
 });
 

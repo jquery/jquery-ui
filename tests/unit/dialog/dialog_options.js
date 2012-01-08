@@ -177,19 +177,24 @@ test("draggable", function() {
 });
 
 test("height", function() {
-	expect(3);
+	expect(4);
 
 	el = $('<div></div>').dialog();
-		equals(dlg().height(), 150, "default height");
+		equals(dlg().outerHeight(), 150, "default height");
 	el.remove();
 
 	el = $('<div></div>').dialog({ height: 237 });
-		equals(dlg().height(), 237, "explicit height");
+		equals(dlg().outerHeight(), 237, "explicit height");
 	el.remove();
 
 	el = $('<div></div>').dialog();
 		el.dialog('option', 'height', 238);
-		equals(dlg().height(), 238, "explicit height set after init");
+		equals(dlg().outerHeight(), 238, "explicit height set after init");
+	el.remove();
+	
+	el = $('<div></div>').css("padding", "20px")
+		.dialog({ height: 240 });
+		equals(dlg().outerHeight(), 240, "explicit height with padding");
 	el.remove();
 });
 

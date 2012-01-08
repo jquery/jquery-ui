@@ -14,7 +14,7 @@
 .ui-menu .ui-menu-item a.ui-state-focus,
 .ui-menu .ui-menu-item a.ui-state-active { font-weight: normal; margin: -1px; }
 
-.ui-menu li.ui-state-disabled { font-weight: normal; padding: .0em .4em; margin: .4em 0 .2em; line-height: 1.5; }
+.ui-menu .ui-state-disabled { font-weight: normal; padding: .0em .4em; margin: .4em 0 .2em; line-height: 1.5; }
 
 /* icon support */
 .ui-menu-icons { position: relative; }

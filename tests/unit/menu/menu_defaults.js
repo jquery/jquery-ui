@@ -5,7 +5,7 @@ commonWidgetTests( "menu", {
 			my: "left top",
 			at: "right top"
 		},
-		items: "ul",
+		menus: "ul",
 		trigger: null,
 
 		// callbacks
