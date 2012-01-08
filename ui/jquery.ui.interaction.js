@@ -53,15 +53,21 @@ interaction.hooks.mouse = {
 	},
 
 	handle: function( widget ) {
+		function mousemove( event ) {
+			event.preventDefault();
+			widget._interactionMove( event );
+		}
+
+		function mouseup( event ) {
+			widget._interactionStop( event );
+			widget.document
+				.unbind( "mousemove", mousemove )
+				.unbind( "mouseup", mouseup );
+		}
+
 		widget._bind( widget.document, {
-			"mousemove": function( event ) {
-				event.preventDefault();
-				widget._interactionMove( event );
-			},
-			"mouseup": function( event ) {
-				widget._interactionStop( event );
-				widget.document.unbind( "mousemove mouseup" );
-			}
+			"mousemove": mousemove,
+			"mouseup": mouseup
 		});
 	}
 };
