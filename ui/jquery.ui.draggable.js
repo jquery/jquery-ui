@@ -165,7 +165,7 @@ $.widget( "ui.draggable", $.ui.interaction, {
 
 		this._preparePosition( event );
 
-		// If user stops propagation, leave helper there ( if there's one ), disallow any CSS changes
+		// If user cancels start, don't allow dragging
 		if ( this._trigger( "start", event, this._uiHash() ) === false ) {
 			return false;
 		}
@@ -177,7 +177,7 @@ $.widget( "ui.draggable", $.ui.interaction, {
 	_move: function( event ) {
 		this._preparePosition( event );
 
-		// If user stops propagation, leave helper there ( if there's one ), disallow any CSS changes
+		// If user cancels drag, don't move the element
 		if ( this._trigger( "drag", event, this._uiHash() ) === false ) {
 			return;
 		}
@@ -191,7 +191,7 @@ $.widget( "ui.draggable", $.ui.interaction, {
 	_stop: function( event ) {
 		this._preparePosition( event );
 
-		// If user stops propagation, leave helper there, disallow any CSS changes
+		// If user cancels stop, leave helper there, disallow any CSS changes
 		if ( this._trigger( "stop", event, this._uiHash() ) === false ) {
 			this._setCss( event );
 			if ( this.options.helper ) {
