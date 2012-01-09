@@ -81,4 +81,76 @@ interaction.hooks.mouse = {
 	}
 };
 
+// WebKit doesn't support TouchList.identifiedTouch()
+function getTouch( event ) {
+	var touch,
+		touches = event.originalEvent.changedTouches,
+		i = 0, length = touches.length;
+	
+	for ( ; i < length; i++ ) {
+		if ( touches[ i ].identifier === touchHook.id ) {
+			return touches[ i ];
+		}
+	}
+}
+
+var touchHook = interaction.hooks.touch = {
+	setup: function( widget, start ) {
+		widget._bind({
+			"touchstart": function( event ) {
+				var touch;
+
+				if ( touchHook.id ) {
+					return;
+				}
+
+				touch = event.originalEvent.changedTouches.item( 0 );
+				touchHook.id = touch.identifier;
+
+				event.preventDefault();
+				start( event, {
+					left: touch.pageX,
+					top: touch.pageY
+				});
+			}
+		});
+	},
+
+	handle: function( widget ) {
+		function touchmove( event ) {
+			var touch = getTouch( event );
+			if ( !touch ) {
+				return;
+			}
+
+			event.preventDefault();
+			widget._interactionMove( event, {
+				left: touch.pageX,
+				top: touch.pageY
+			});
+		}
+
+		function touchend( event ) {
+			var touch = getTouch( event );
+			if ( !touch ) {
+				return;
+			}
+
+			widget._interactionStop( event, {
+				left: touch.pageX,
+				top: touch.pageY
+			});
+			touchHook.id = null;
+			widget.document
+				.unbind( "touchmove", touchmove )
+				.unbind( "touchend", touchend );
+		}
+
+		widget._bind( widget.document, {
+			"touchmove": touchmove,
+			"touchend": touchend
+		});
+	}
+};
+
 })( jQuery );
