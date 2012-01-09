@@ -12,24 +12,24 @@ $.widget( "ui.interaction", {
 
 	_startProxy: function( hook ) {
 		var that = this;
-		return function( event ) {
-			that._interactionStart( event, hook );
+		return function( event, position ) {
+			that._interactionStart( event, position, hook );
 		}
 	},
 
-	_interactionStart: function( event, hook ) {
-		if ( false !== this._start( event ) ) {
+	_interactionStart: function( event, position, hook ) {
+		if ( false !== this._start( event, position ) ) {
 			interaction.started = true;
 			interaction.hooks[ hook ].handle( this );
 		}
 	},
 
-	_interactionMove: function( event ) {
-		this._move( event );
+	_interactionMove: function( event, position ) {
+		this._move( event, position );
 	},
 
-	_interactionStop: function( event ) {
-		this._stop( event );
+	_interactionStop: function( event, position ) {
+		this._stop( event, position );
 		interaction.started = false;
 	}
 });
@@ -46,7 +46,10 @@ interaction.hooks.mouse = {
 			"mousedown": function( event ) {
 				if ( event.which === 1 ) {
 					event.preventDefault();
-					start( event );
+					start( event, {
+						left: event.pageX,
+						top: event.pageY
+					});
 				}
 			}
 		});
@@ -55,11 +58,17 @@ interaction.hooks.mouse = {
 	handle: function( widget ) {
 		function mousemove( event ) {
 			event.preventDefault();
-			widget._interactionMove( event );
+			widget._interactionMove( event, {
+				left: event.pageX,
+				top: event.pageY
+			});
 		}
 
 		function mouseup( event ) {
-			widget._interactionStop( event );
+			widget._interactionStop( event, {
+				left: event.pageX,
+				top: event.pageY
+			});
 			widget.document
 				.unbind( "mousemove", mousemove )
 				.unbind( "mouseup", mouseup );

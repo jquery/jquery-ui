@@ -71,7 +71,7 @@ $.widget( "ui.draggable", $.ui.interaction, {
 		};
 	},
 
-	_handleScrolling: function( event ) {
+	_handleScrolling: function( position ) {
 		var scrollTop = this.scrollParent.scrollTop(),
 			scrollLeft = this.scrollParent.scrollLeft(),
 			scrollSensitivity = 20,
@@ -86,10 +86,10 @@ $.widget( "ui.draggable", $.ui.interaction, {
 			overflowTop = this.overflowOffset ?
 				this.overflowOffset.top :
 				scrollTop,
-			xRight = this.overflow.width + overflowLeft - event.pageX,
-			xLeft = event.pageX - overflowLeft,
-			yBottom = this.overflow.height + overflowTop - event.pageY,
-			yTop = event.pageY - overflowTop;
+			xRight = this.overflow.width + overflowLeft - position.left,
+			xLeft = position.left - overflowLeft,
+			yBottom = this.overflow.height + overflowTop - position.top,
+			yTop = position.top - overflowTop;
 
 		// Handle vertical scrolling
 		if ( yBottom < scrollSensitivity ) {
@@ -110,7 +110,7 @@ $.widget( "ui.draggable", $.ui.interaction, {
 		}
 	},
 
-	_start: function( event ) {
+	_start: function( event, position ) {
 		// The actual dragging element, should always be a jQuery object
 		this.dragEl = this.element;
 
@@ -146,10 +146,7 @@ $.widget( "ui.draggable", $.ui.interaction, {
 		this.position = $.extend( {}, this.startPosition );
 		this.offset = $.extend( {}, this.startOffset );
 
-		this.startCoords = {
-			left: event.pageX,
-			top: event.pageY
-		};
+		this.startCoords = position;
 
 		// Cache the offset of scrollParent, if required for _handleScrolling
 		if ( this.scrollParent[0] !== this.document[0] && this.scrollParent[0].tagName !== "HTML" ) {
@@ -163,7 +160,7 @@ $.widget( "ui.draggable", $.ui.interaction, {
 				this.window.width() : this.scrollParent.width()
 		};
 
-		this._preparePosition( event );
+		this._preparePosition( position );
 
 		// If user cancels start, don't allow dragging
 		if ( this._trigger( "start", event, this._uiHash() ) === false ) {
@@ -171,29 +168,29 @@ $.widget( "ui.draggable", $.ui.interaction, {
 		}
 
 		this._blockFrames();
-		this._setCss( event );
+		this._setCss();
 	},
 
-	_move: function( event ) {
-		this._preparePosition( event );
+	_move: function( event, position ) {
+		this._preparePosition( position );
 
 		// If user cancels drag, don't move the element
 		if ( this._trigger( "drag", event, this._uiHash() ) === false ) {
 			return;
 		}
 
-		this._setCss( event );
+		this._setCss();
 
 		// Scroll the scrollParent, if needed
-		this._handleScrolling( event );
+		this._handleScrolling( position );
 	},
 
-	_stop: function( event ) {
-		this._preparePosition( event );
+	_stop: function( event, position ) {
+		this._preparePosition( position );
 
 		// If user cancels stop, leave helper there, disallow any CSS changes
 		if ( this._trigger( "stop", event, this._uiHash() ) === false ) {
-			this._setCss( event );
+			this._setCss();
 			if ( this.options.helper ) {
 				this.dragEl.remove();
 			}
@@ -204,9 +201,9 @@ $.widget( "ui.draggable", $.ui.interaction, {
 
 	// Uses event to determine new position of draggable, before any override from callbacks
 	// TODO: handle absolute element inside relative parent like a relative element
-	_preparePosition: function( event ) {
-		var leftDiff = event.pageX - this.startCoords.left,
-			topDiff = event.pageY - this.startCoords.top,
+	_preparePosition: function( position ) {
+		var leftDiff = position.left - this.startCoords.left,
+			topDiff = position.top - this.startCoords.top,
 			newLeft = leftDiff + this.startPosition.left,
 			newTop = topDiff + this.startPosition.top;
 
@@ -227,8 +224,8 @@ $.widget( "ui.draggable", $.ui.interaction, {
 		this.offset.top = this.startOffset.top + topDiff;
 	},
 
-	// Places draggable where mouse or user from callback indicates
-	_setCss: function( event ) {
+	// Places draggable where event, or user via event/callback, indicates
+	_setCss: function() {
 		var newLeft, newTop;
 
 		// User overriding left/top so shortcut math is no longer valid
@@ -257,7 +254,7 @@ $.widget( "ui.draggable", $.ui.interaction, {
 		});
 	},
 
-	_uiHash: function( event ) {
+	_uiHash: function() {
 		var ret = {
 			position: this.position,
 			offset: this.offset
