@@ -118,6 +118,8 @@ var touchHook = interaction.hooks.touch = {
 
 	handle: function( widget ) {
 		function touchmove( event ) {
+			// TODO: test non-Apple WebKits to see if they allow
+			// zooming/scrolling if we don't preventDefault()
 			var touch = getTouch( event );
 			if ( !touch ) {
 				return;
@@ -149,6 +151,62 @@ var touchHook = interaction.hooks.touch = {
 		widget._bind( widget.document, {
 			"touchmove": touchmove,
 			"touchend": touchend
+		});
+	}
+};
+
+// TODO: test mouse, pen
+var pointerHook = interaction.hooks.msPointer = {
+	setup: function( widget, start ) {
+		widget._bind({
+			"MSPointerDown": function( event ) {
+				if ( pointerHook.id ) {
+					return;
+				}
+
+				pointerHook.id = event.originalEvent.pointerId;
+				event.originalEvent.preventManipulation();
+				start( event, {
+					left: event.pageX,
+					top: event.pageY
+				});
+			}
+		});
+	},
+
+	handle: function( widget ) {
+		function pointermove( event ) {
+			// always prevent manipulation to avoid zooming/scrolling
+			event.originalEvent.preventManipulation();
+
+			if ( event.originalEvent.pointerId !== pointerHook.id ) {
+				return;
+			}
+
+			widget._interactionMove( event, {
+				left: event.pageX,
+				top: event.pageY
+			});
+		}
+
+		function pointerup( event ) {
+			if ( event.originalEvent.pointerId !== pointerHook.id ) {
+				return;
+			}
+
+			widget._interactionStop( event, {
+				left: event.pageX,
+				top: event.pageY
+			});
+			pointerHook.id = null;
+			widget.document
+				.unbind( "MSPointerMove", pointermove )
+				.unbind( "MSPointerUp", pointerup );
+		}
+
+		widget._bind( widget.document, {
+			"MSPointerMove": pointermove,
+			"MSPointerUp": pointerup
 		});
 	}
 };
