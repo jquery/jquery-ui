@@ -10,7 +10,6 @@
  * Depends:
  *	jquery.ui.core.js
  *	jquery.ui.widget.js
- *	jquery.ui.interaction.js
  *	jquery.ui.draggable.js
  */
 (function( $, undefined ) {
