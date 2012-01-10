@@ -187,9 +187,6 @@ $.widget( "ui.autocomplete", {
 			});
 
 		this.liveRegion = this.element.after("<span role='status' class='ui-helper-hidden-accessible' aria-live='polite'></span>").next();
-		var elementApplicationWrapper = $("<span role='application'></span>");
-//		this.element.replaceWith(elementApplicationWrapper).appendTo(elementApplicationWrapper);
-		this.element.parent().attr("role", "application");
 		this._initSource();
 		this.response = function() {
 			return self._response.apply( self, arguments );
