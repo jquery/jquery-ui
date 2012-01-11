@@ -62,7 +62,6 @@ $.widget( "ui.selectmenu", {
 		this._bind( this.button, this._buttonEvents );
 
 		this._drawMenu();
-		this.refresh();
 	},
 
 	_drawButton: function() {
@@ -191,6 +190,12 @@ $.widget( "ui.selectmenu", {
 	},
 
 	open: function( event ) {
+		// init menu when initial opened
+		if ( !this.wasOpen ) {
+			this.refresh();
+			this.wasOpen = true;
+		}
+		
 		var currentItem = this._getSelectedItem();
 
 		if ( !this.options.disabled ) {
