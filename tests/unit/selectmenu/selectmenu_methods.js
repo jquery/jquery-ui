@@ -33,21 +33,22 @@ test("enable / disable", function () {
 	var element = $("#speed").selectmenu();
 	var widget = element.selectmenu("widget");
 	var button = widget.filter(".ui-selectmenu-button");
+	var link = button.children("a");
 	var menu = widget.filter(".ui-selectmenu-menu");
 	
 	element.selectmenu("disable")	
 	ok( element.selectmenu("option", "disabled"), "disable: widget option" );
 	equals( button.attr("aria-disabled"), "true", "disable: button wrapper ARIA" );
-	equals( button.children("a").attr("aria-disabled"), "true", "disable: button ARIA" );
-	equals( button.children("a").attr("tabindex"), -1, "disable: button tabindex" );
+	equals( link.attr("aria-disabled"), "true", "disable: button ARIA" );
+	equals( link.attr("tabindex"), -1, "disable: button tabindex" );
 	equals( menu.attr("aria-disabled"), "true", "disable: menu wrapper ARIA" );
 	equals( menu.children("ul").attr("aria-disabled"), "true", "disable: menu ARIA" );
 	
 	element.selectmenu("enable")
 	ok( !element.selectmenu("option", "disabled"), "enable: widget option" );
 	equals( button.attr("aria-disabled"), "false", "enable: button wrapper ARIA" );
-	equals( button.children("a").attr("aria-disabled"), "false", "enable: button ARIA" );
-	equals( button.children("a").attr("tabindex"), 0, "enable: button tabindex" );
+	equals( link.attr("aria-disabled"), "false", "enable: button ARIA" );
+	equals( link.attr("tabindex"), 0, "enable: button tabindex" );
 	equals( menu.attr("aria-disabled"), "false", "enable: menu wrapper ARIA" );
 	equals( menu.children("ul").attr("aria-disabled"), "false", "enable: menu ARIA" );
 });

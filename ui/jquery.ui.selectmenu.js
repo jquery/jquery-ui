@@ -62,6 +62,10 @@ $.widget( "ui.selectmenu", {
 		this._bind( this.button, this._buttonEvents );
 
 		this._drawMenu();
+		
+		if ( this.element.attr( 'disabled' ) ) {
+			this.disable();
+		}
 	},
 
 	_drawButton: function() {
@@ -78,7 +82,6 @@ $.widget( "ui.selectmenu", {
 				css: {
 					width: this.element.outerWidth()
 				},
-				'aria-disabled': this.options.disabled,
 				'aria-owns': this.ids.menu,
 				'aria-haspopup': true
 			})
@@ -391,6 +394,7 @@ $.widget( "ui.selectmenu", {
 		}
 		if ( key === "disabled" ) {
 			this.button.button( "option", "disabled", value );
+			this.menu.menu( "option", "disabled", value );
 			if ( value ) {
 				this.element.attr( "disabled", "disabled" );
 				this.button.attr( "tabindex", -1 );
@@ -399,7 +403,6 @@ $.widget( "ui.selectmenu", {
 				this.element.removeAttr( "disabled" );
 				this.button.attr( "tabindex", 0 );
 			}
-			this.menu.attr( "aria-disabled", value );
 		}
 	},
 
