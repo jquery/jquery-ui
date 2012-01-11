@@ -329,6 +329,13 @@ $.Widget.prototype = {
 				return ( typeof handler === "string" ? instance[ handler ] : handler )
 					.apply( instance, arguments );
 			}
+
+			// copy the guid so direct unbinding works
+			if ( typeof handler !== "string" ) {
+				handlerProxy.guid = handler.guid =
+					handler.guid || handlerProxy.guid || jQuery.guid++;
+			}
+
 			var match = event.match( /^(\w+)\s*(.*)$/ ),
 				eventName = match[1] + "." + instance.widgetName,
 				selector = match[2];
