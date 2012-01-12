@@ -293,6 +293,11 @@ $.widget( "ui.selectmenu", {
 	},
 
 	_move: function( direction, event ) {
+		// init menu when not done yet
+		if ( !this.wasOpen ) {
+			this.refresh();
+			this.wasOpen = true;
+		}
 		if ( direction == "first" || direction == "last" ) {
 			// set focus manually for first or last item
 			this.menu.menu( "focus", event, this.menu.find( "li" ).not( '.ui-selectmenu-optgroup' )[ direction ]() );
@@ -352,6 +357,7 @@ $.widget( "ui.selectmenu", {
 					}
 					break;
 				case $.ui.keyCode.DOWN:
+					console.log("test");
 					if ( event.altKey ) {
 						this._toggle( event );
 					} else {
