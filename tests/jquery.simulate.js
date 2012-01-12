@@ -45,7 +45,7 @@ $.extend( $.simulate.prototype, {
 		}
 	},
 	mouseEvent: function( type, options ) {
-		var evt;
+		var evt, eventDoc, doc, body;
 		var e = $.extend({
 			bubbles: true,
 			cancelable: (type !== "mousemove"),
@@ -71,6 +71,30 @@ $.extend( $.simulate.prototype, {
 				e.screenX, e.screenY, e.clientX, e.clientY,
 				e.ctrlKey, e.altKey, e.shiftKey, e.metaKey,
 				e.button, e.relatedTarget || document.body.parentNode );
+			
+			// IE 9+ creates events with pageX and pageY set to 0.
+			// Trying to modify the properties throws an error,
+			// so we define getters to return the correct values.
+			if ( evt.pageX === 0 && evt.pageY === 0 && Object.defineProperty ) {
+				eventDoc = evt.relatedTarget.ownerDocument || document;
+				doc = eventDoc.documentElement;
+				body = eventDoc.body;
+
+				Object.defineProperty( evt, "pageX", {
+					get: function() {
+						return e.clientX +
+							( doc && doc.scrollLeft || body && body.scrollLeft || 0 ) -
+							( doc && doc.clientLeft || body && body.clientLeft || 0 );
+					}
+				});
+				Object.defineProperty( evt, "pageY", {
+					get: function() {
+						return e.clientY +
+							( doc && doc.scrollTop || body && body.scrollTop || 0 ) -
+							( doc && doc.clientTop || body && body.clientTop || 0 );
+					}
+				});
+			}
 		} else if ( document.createEventObject ) {
 			evt = document.createEventObject();
 			$.extend( evt, e );
