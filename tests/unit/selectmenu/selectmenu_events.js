@@ -21,11 +21,11 @@
 
         var widget = this.element.selectmenu("widget"),
             menu = widget.filter(".ui-selectmenu-menu"),
-            value = this.element.find("option").eq(0).text();
+			button = widget.filter(".ui-selectmenu-button"),
+            value = this.element.find("option").first().text();
 
-        menu.find(".ui-menu-item").eq(0).simulate("click");
-
-        equals(this.element.selectmenu("option", "value"), "Slower", "should be set to first option");
+		button.find("a").simulate( "click" );
+        menu.find("a").first().simulate( "mouseover" ).simulate( "click" );
     });
 
     test("close", function () {
@@ -61,8 +61,10 @@
         });
 
         var widget = this.element.selectmenu("widget"),
+			button = widget.filter(".ui-selectmenu-button"),
             menu = widget.filter(".ui-selectmenu-menu");
 
+		button.find("a").simulate( "click" );
         menu.find(".ui-menu-item").simulate("mouseover");
     });
 
@@ -93,9 +95,11 @@
         });
 
         var widget = this.element.selectmenu("widget"),
+			button = widget.filter(".ui-selectmenu-button"),
             menu = widget.filter(".ui-selectmenu-menu");
 
-        menu.find(".ui-menu-item").eq(0).simulate("click");
+		button.find("a").simulate( "click" );
+        menu.find("a").first().simulate( "mouseover" ).simulate("click");
     });
 
 })(jQuery);
