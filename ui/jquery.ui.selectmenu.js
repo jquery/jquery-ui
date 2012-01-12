@@ -27,7 +27,6 @@ $.widget( "ui.selectmenu", {
 			at: "left bottom",
 			collision: "none"
 		},
-		value: null,
 		// callbacks
 		open: null,
 		focus: null,
@@ -42,13 +41,6 @@ $.widget( "ui.selectmenu", {
 
 		// array of button and menu id's
 		this.ids = { id: selectmenuId, button: selectmenuId + '-button', menu: selectmenuId + '-menu' };
-
-		// set current value
-		if ( this.options.value ) {
-			this.element[0].value = this.options.value;
-		} else {
-			this.options.value = this.element[0].value;
-		}
 
 		// catch click event of the label
 		this._bind({
@@ -131,7 +123,7 @@ $.widget( "ui.selectmenu", {
 					item = ui.item.data( "item.selectmenu" ),
 					oldIndex = that.element[0].selectedIndex;
 
-				that._setOption( "value", item.value );
+				that._setIndex( item.index );
 				that._trigger( "select", event, { item: item } );
 
 				if ( item.index != oldIndex ) {
@@ -173,6 +165,8 @@ $.widget( "ui.selectmenu", {
 		this._renderMenu( this.menu, this.items );
 
 		this.menu.menu( "refresh" );
+		// button option label wont work here
+		this.button.children( '.ui-button-text' ).text( this.items[ this.element[0].selectedIndex ].label );
 
 		// adjust ARIA
 		this.menu.find( "li" ).not( '.ui-selectmenu-optgroup' ).find( 'a' ).attr( 'role', 'option' );
@@ -386,16 +380,17 @@ $.widget( "ui.selectmenu", {
 			}
 		}
 	},
+	
+	_setIndex: function( index ) {
+		this.element[0].selectedIndex = index;
+		this.button.button( "option", "label", this.items[ index ].label );
+	},
 
 	_setOption: function( key, value ) {
 		this._super( key, value );
 
 		if ( key === "appendTo" ) {
 			this.menuWrap.appendTo( $( value || "body", this.element[0].ownerDocument )[0] );
-		}
-		if ( key === "value" && value !== undefined ) {
-			this.element[0].value = value;
-			this.button.children( '.ui-button-text' ).text( this.items[ this.element[0].selectedIndex ].label );
 		}
 		if ( key === "disabled" ) {
 			this.button.button( "option", "disabled", value );

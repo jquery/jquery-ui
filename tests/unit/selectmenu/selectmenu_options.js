@@ -33,14 +33,4 @@
         ok(this.element.selectmenu("option", "dropdown", false), "accepts false");
     });
 
-    test("value option", function () {
-        expect(1);
-
-        var value = this.element.find("option").eq(0).text();
-
-        this.element.selectmenu("option", "value", value);
-
-        equals(this.element.selectmenu("option", "value"), value, "should be set to " + value);
-    });
-
 })(jQuery);

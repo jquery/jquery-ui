@@ -15,13 +15,20 @@
 	<script>
 	$(function() {
 		var mySelectmenu = $('select').selectmenu();
+		
+		$('select').show();
 
 		$("#destroy").click( function() {
 			mySelectmenu.selectmenu("destroy");
 		});
 
-		$("#refresh").click( function() {
+		$("#refresh_add").click( function() {
 			mySelectmenu.append('<option value="fastsound">Faster than sound</option>');
+			mySelectmenu.selectmenu("refresh");
+		});
+
+		$("#refresh_selected").click( function() {
+			mySelectmenu[0].selectedIndex = 0;
 			mySelectmenu.selectmenu("refresh");
 		});
 
@@ -62,7 +69,8 @@
 </form>
 <br />
 <button id="destroy">Destroy</button>
-<button id="refresh">Add item and refresh</button>
+<button id="refresh_add">Add item and refresh</button>
+<button id="refresh_selected">Change to first item</button>
 <button id="open">Open</button>
 <button id="close">Close</button>
 

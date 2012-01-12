@@ -8,7 +8,6 @@ commonWidgetTests( "selectmenu", {
 			at: "left bottom",
 			collision: "none"
 		},
-		value: null,
 		// callbacks,
 		create: null,
 		open: null,
