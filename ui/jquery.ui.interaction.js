@@ -188,7 +188,9 @@ var pointerHook = interaction.hooks.msPointer = {
 
 	handle: function( widget ) {
 		function move( _event ) {
-			var event = _event.originalEvent;
+			var event = _event.originalEvent,
+				pageX = event.pageX,
+				pageY = event.pageY;
 
 			// always prevent manipulation to avoid panning/zooming
 			event.preventManipulation();
@@ -197,9 +199,17 @@ var pointerHook = interaction.hooks.msPointer = {
 				return;
 			}
 
+			// MS streams events constantly, even if there is no movement
+			// so we optimize by ignoring repeat events
+			if ( pointerHook.x === pageX && pointerHook.y === pageY ) {
+				return;
+			}
+
+			pointerHook.x = pageX;
+			pointerHook.y = pageY;
 			widget._interactionMove( event, {
-				left: event.pageX,
-				top: event.pageY
+				left: pageX,
+				top: pageY
 			});
 		}
 
@@ -214,7 +224,9 @@ var pointerHook = interaction.hooks.msPointer = {
 				left: event.pageX,
 				top: event.pageY
 			});
-			pointerHook.id = null;
+			pointerHook.id = undefined;
+			pointerHook.x = undefined;
+			pointerHook.y = undefined;
 			widget.document
 				.unbind( "MSPointerMove", move )
 				.unbind( "MSPointerUp", stop )
