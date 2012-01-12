@@ -357,7 +357,6 @@ $.widget( "ui.selectmenu", {
 					}
 					break;
 				case $.ui.keyCode.DOWN:
-					console.log("test");
 					if ( event.altKey ) {
 						this._toggle( event );
 					} else {
