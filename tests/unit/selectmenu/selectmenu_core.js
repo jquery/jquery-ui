@@ -62,4 +62,14 @@ $.each([
 });
 
 
+// test("mass", function () {
+	// for (var i = 0; i < 100; i++) {
+		// var element = $('#speed').selectmenu();
+		// var widget = element.selectmenu("destroy");
+		// expect(0);
+	// }
+// });
+
+
+
 })( jQuery );
