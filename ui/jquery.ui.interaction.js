@@ -161,6 +161,7 @@ var touchHook = interaction.hooks.touch = {
 };
 
 // TODO: test mouse
+// TODO: how can we detect a "right click" with a pen?
 var pointerHook = interaction.hooks.msPointer = {
 	setup: function( widget, start ) {
 		widget._bind({
