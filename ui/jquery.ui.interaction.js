@@ -224,9 +224,7 @@ var pointerHook = interaction.hooks.msPointer = {
 				left: event.pageX,
 				top: event.pageY
 			});
-			pointerHook.id = undefined;
-			pointerHook.x = undefined;
-			pointerHook.y = undefined;
+			pointerHook.id = pointerHook.x = pointerHook.y = undefined;
 			widget.document
 				.unbind( "MSPointerMove", move )
 				.unbind( "MSPointerUp", stop )
