@@ -13,10 +13,10 @@ test( "destroy", function() {
 test( "open / close", function() {
 	expect( 4 );
 	
-	var element = $("#speed").selectmenu();
-	var widget = element.selectmenu("widget");
-	var button = widget.filter(".ui-selectmenu-button");
-	var menu = widget.filter(".ui-selectmenu-menu");
+	var element = $('#speed').selectmenu(),
+		widget = element.selectmenu("widget"),
+		button = widget.filter(".ui-selectmenu-button"),
+		menu = widget.filter(".ui-selectmenu-menu");
 	
 	element.selectmenu("open");
 	ok( menu.is( ":visible" ), "menu visible" );
@@ -30,11 +30,12 @@ test( "open / close", function() {
 
 test("enable / disable", function () {
 	expect(12);
-	var element = $("#speed").selectmenu();
-	var widget = element.selectmenu("widget");
-	var button = widget.filter(".ui-selectmenu-button");
-	var link = button.children("a");
-	var menu = widget.filter(".ui-selectmenu-menu");
+	
+	var element = $('#speed').selectmenu(),
+		widget = element.selectmenu("widget"),
+		button = widget.filter(".ui-selectmenu-button"),
+		menu = widget.filter(".ui-selectmenu-menu"),
+		link = button.find("a");
 	
 	element.selectmenu("disable")	
 	ok( element.selectmenu("option", "disabled"), "disable: widget option" );
@@ -56,10 +57,11 @@ test("enable / disable", function () {
 
 test("refresh - structure", function () {
 	expect(3);
-	var element = $("#number").selectmenu();
-	var widget = element.selectmenu("widget");
-	var button = widget.filter(".ui-selectmenu-button");
-	var menu = widget.filter(".ui-selectmenu-menu");
+	
+	var element = $('#speed').selectmenu(),
+		widget = element.selectmenu("widget"),
+		button = widget.filter(".ui-selectmenu-button"),
+		menu = widget.filter(".ui-selectmenu-menu");
 	
 	element.find("option").eq(2).remove();
 	element.find("option").eq(3).remove();
@@ -77,10 +79,11 @@ test("refresh - structure", function () {
 
 test("refresh - disabled select", function () {
 	expect(6);
-	var element = $("#speed").selectmenu();
-	var widget = element.selectmenu("widget");
-	var button = widget.filter(".ui-selectmenu-button");
-	var menu = widget.filter(".ui-selectmenu-menu");
+	
+	var element = $('#speed').selectmenu(),
+		widget = element.selectmenu("widget"),
+		button = widget.filter(".ui-selectmenu-button"),
+		menu = widget.filter(".ui-selectmenu-menu");
 	
 	element.attr("disabled", "disabled");
 	element.selectmenu("refresh");
@@ -95,10 +98,11 @@ test("refresh - disabled select", function () {
 
 test("refresh - disabled option", function () {
 	expect(2);
-	var element = $("#speed").selectmenu();
-	var widget = element.selectmenu("widget");
-	var button = widget.filter(".ui-selectmenu-button");
-	var menu = widget.filter(".ui-selectmenu-menu");
+	
+	var element = $('#speed').selectmenu(),
+		widget = element.selectmenu("widget"),
+		button = widget.filter(".ui-selectmenu-button"),
+		menu = widget.filter(".ui-selectmenu-menu");
 	
 	element.attr("disabled", "disabled");
 	element.find("option").eq(2).attr("disabled", "disabled");
@@ -110,13 +114,14 @@ test("refresh - disabled option", function () {
 });
 	
 test("refresh - disabled optgroup", function () {
-	var element = $("#files").selectmenu();
-	var widget = element.selectmenu("widget");
-	var button = widget.filter(".ui-selectmenu-button");
-	var menu = widget.filter(".ui-selectmenu-menu");
 	
-	var originalDisabledOptgroup = element.find("optgroup").first();
-	var originalDisabledOptions = originalDisabledOptgroup.find("option");
+	var element = $('#files').selectmenu(),
+		widget = element.selectmenu("widget"),
+		button = widget.filter(".ui-selectmenu-button"),
+		menu = widget.filter(".ui-selectmenu-menu");
+		originalDisabledOptgroup = element.find("optgroup").first(),
+		originalDisabledOptions = originalDisabledOptgroup.find("option");
+	
 	expect(2 + originalDisabledOptions.length * 2);
 	
 	originalDisabledOptgroup.attr("disabled", "disabled");

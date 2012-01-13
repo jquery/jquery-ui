@@ -3,13 +3,15 @@
 module( "selectmenu: core" );
 
 test("accessibility", function () {
-	var element = $('#speed').selectmenu();
-	var widget = element.selectmenu("widget");
-	var button = widget.filter(".ui-selectmenu-button");
-	var menu = widget.filter(".ui-selectmenu-menu");
-	var link = button.children("a");
-	var ul = menu.children("ul")
-	var links = ul.find("li.ui-menu-item a");
+	var element = $('#speed').selectmenu(),
+		widget = element.selectmenu("widget"),
+		button = widget.filter(".ui-selectmenu-button"),
+		menu = widget.filter(".ui-selectmenu-menu"),
+		link = button.find("a"),
+		selected = element.find("option:selected"),
+		ul = menu.children("ul"),
+		links = ul.find("li.ui-menu-item a");
+		
 	expect(9 + links.length * 2);
 	
 	equals( "true", link.attr("aria-haspopup"), "button link aria-haspopup" );
@@ -41,12 +43,13 @@ $.each([
 ], function( i, settings ) {
 	test("state synchronization - " + settings.type, function () {
 		expect(5);
-		var element = $(settings.selector).selectmenu();
-		var widget = element.selectmenu("widget");
-		var button = widget.filter(".ui-selectmenu-button");
-		var menu = widget.filter(".ui-selectmenu-menu");
-		var link = button.find("a");
-		var selected = element.find("option:selected");
+		
+		var element = $(settings.selector).selectmenu(),
+			widget = element.selectmenu("widget"),
+			button = widget.filter(".ui-selectmenu-button"),
+			menu = widget.filter(".ui-selectmenu-menu"),
+			link = button.find("a"),
+			selected = element.find("option:selected");
 		
 		equals( button.text(), selected.text(), "inital button text" );		
 		

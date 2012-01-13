@@ -1,36 +1,31 @@
 (function ($) {
 
-    module("selectmenu: options", {
-        setup: function () {
-            this.element = $("#speed");
-            this.element.selectmenu();
-        }
-    });
+module("selectmenu: options", {
+	setup: function () {
+		this.element = $("#speed").selectmenu();
+	}
+});
 
-    test("appendTo another element", function () {
-        expect(2);
+test("appendTo another element", function () {
+	expect(2);
 
-        ok(this.element.selectmenu("option", "appendTo", "#qunit-fixture"), "appendTo accepts selector");
-        ok($("#qunit-fixture").find(".ui-selectmenu-menu").length, "selectmenu appendedTo other element");
-    });
+	ok(this.element.selectmenu("option", "appendTo", "#qunit-fixture"), "appendTo accepts selector");
+	ok($("#qunit-fixture").find(".ui-selectmenu-menu").length, "selectmenu appendedTo other element");
+});
 
-    test("dropdown", function () {
-        expect(2);
+test("dropdown: CSS styles", function () {
+	expect(2);
+	
+	var widget = this.element.selectmenu("widget"),
+		button = widget.filter(".ui-selectmenu-button"),
+		link = button.find("a"),
+		menu = widget.filter(".ui-selectmenu-menu"),
+		ul = widget.find("ul");
 
-        var button = $("#speed-button"),
-            widget = this.element.selectmenu("widget"),
-            buttonPos = {
-                l: button.offset().top,
-                t: button.offset().left
-            },
-            menuPos = {
-                l: widget.offset().top,
-                t: widget.offset().left
-            };
-
-        equals(menuPos.t, buttonPos.t, "menu positioned below button in dropdown mode"); //button has no height
-
-        ok(this.element.selectmenu("option", "dropdown", false), "accepts false");
-    });
+	this.element.selectmenu("open");
+	
+	ok( link.hasClass("ui-corner-top") && !link.hasClass("ui-corner-all"), "button styles");		
+	ok( ul.hasClass("ui-corner-bottom") && !ul.hasClass("ui-corner-all"), "menu styles");		
+});
 
 })(jQuery);
