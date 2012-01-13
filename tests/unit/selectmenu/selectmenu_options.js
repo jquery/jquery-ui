@@ -13,8 +13,9 @@ test("appendTo another element", function () {
 	ok($("#qunit-fixture").find(".ui-selectmenu-menu").length, "selectmenu appendedTo other element");
 });
 
+
 test("dropdown: CSS styles", function () {
-	expect(2);
+	expect(4);
 	
 	var widget = this.element.selectmenu("widget"),
 		button = widget.filter(".ui-selectmenu-button"),
@@ -22,10 +23,15 @@ test("dropdown: CSS styles", function () {
 		menu = widget.filter(".ui-selectmenu-menu"),
 		ul = widget.find("ul");
 
-	this.element.selectmenu("open");
+	this.element.selectmenu("open");	
+	ok( link.hasClass("ui-corner-top") && !link.hasClass("ui-corner-all"), "button styles dropdown");		
+	ok( ul.hasClass("ui-corner-bottom") && !ul.hasClass("ui-corner-all"), "menu styles dropdown");		
 	
-	ok( link.hasClass("ui-corner-top") && !link.hasClass("ui-corner-all"), "button styles");		
-	ok( ul.hasClass("ui-corner-bottom") && !ul.hasClass("ui-corner-all"), "menu styles");		
+	this.element.selectmenu("close");
+	this.element.selectmenu("option", "dropdown", false);
+	this.element.selectmenu("open");
+	ok( !link.hasClass("ui-corner-top") && link.hasClass("ui-corner-all"), "button styles pop-up");		
+	ok( !ul.hasClass("ui-corner-bottom") && ul.hasClass("ui-corner-all"), "menu styles pop-up");		
 });
 
 })(jQuery);

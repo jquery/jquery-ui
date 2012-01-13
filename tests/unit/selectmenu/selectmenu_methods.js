@@ -96,6 +96,7 @@ test("refresh - disabled select", function () {
 	equals( menu.children("ul").attr("aria-disabled"), "true", "mene ARIA" );
 });
 
+
 test("refresh - disabled option", function () {
 	expect(2);
 	
@@ -112,6 +113,7 @@ test("refresh - disabled option", function () {
 	ok( disabledItem.hasClass("ui-state-disabled"), "class" );
 	ok( disabledItem.children("a").length <= 0, "has no link" );
 });
+	
 	
 test("refresh - disabled optgroup", function () {
 	
