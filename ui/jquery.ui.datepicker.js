@@ -1425,7 +1425,7 @@ $.extend(Datepicker.prototype, {
 			new Date(inst.currentYear, inst.currentMonth, inst.currentDay)));
 		var minDate = this._getMinMaxDate(inst, 'min');
 		var maxDate = this._getMinMaxDate(inst, 'max');
-		var drawMonth = inst.drawMonth - showCurrentAtPos;
+		var drawMonth = showCurrentAtPos ? inst.currentMonth - showCurrentAtPos : inst.drawMonth;
 		var drawYear = inst.drawYear;
 		if (drawMonth < 0) {
 			drawMonth += 12;
