@@ -93,12 +93,16 @@ asyncTest( "handle submenu auto collapse: mouseleave", function() {
 		setTimeout(function() {
 			equal( $menu.find( "ul[aria-expanded='true']" ).length, 2, "second submenu expanded" );
 			$menu.find( "ul[aria-expanded='true']:first" ).trigger( "mouseleave" );
-			equal( $menu.find( "ul[aria-expanded='true']" ).length, 1, "second submenu collapsed" );
-			$menu.trigger( "mouseleave" );
-			equal( $menu.find( "ul[aria-expanded='true']" ).length, 0, "first submenu collapsed" );
-			start();
-		}, 400);
-	}, 200);
+			setTimeout(function() {
+				equal( $menu.find( "ul[aria-expanded='true']" ).length, 1, "second submenu collapsed" );
+				$menu.trigger( "mouseleave" );
+				setTimeout(function() {
+					equal( $menu.find( "ul[aria-expanded='true']" ).length, 0, "first submenu collapsed" );
+					start();
+				}, 1400);
+			}, 1050);
+		}, 700);
+	}, 350);
 });
 
 asyncTest( "handle custom menu item submenu auto collapse: mouseleave", function() {
@@ -112,17 +116,19 @@ asyncTest( "handle custom menu item submenu auto collapse: mouseleave", function
 		setTimeout(function() {
 			equal( $menu.find( "div[aria-expanded='true']" ).length, 2, "second submenu expanded" );
 			$menu.find( "div[aria-expanded='true']:first" ).trigger( "mouseleave" );
-			equal( $menu.find( "div[aria-expanded='true']" ).length, 1, "second submenu collapsed" );
-
-			$menu.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN });
-			ok( $menu.find( ".ui-state-active" ).is( "#menu5 :nth-child(7) a" ),
-				"down keypress selected an item from the first submenu" );
-			
-			$menu.trigger( "mouseleave" );
-			equal( $menu.find( "div[aria-expanded='true']" ).length, 0, "first submenu collapsed" );
-			start();
-		}, 400);
-	}, 200);
+			setTimeout(function() {
+				equal( $menu.find( "div[aria-expanded='true']" ).length, 1, "second submenu collapsed" );
+				$menu.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN });
+				ok( $menu.find( ".ui-state-active" ).is( "#menu5 :nth-child(7) a" ),
+					"down keypress selected an item from the first submenu" );
+				$menu.trigger( "mouseleave" );
+				setTimeout(function() {
+					equal( $menu.find( "div[aria-expanded='true']" ).length, 0, "first submenu collapsed" );
+					start();
+				}, 1400);
+			}, 1050);
+		}, 700);
+	}, 350);
 });
 
 
