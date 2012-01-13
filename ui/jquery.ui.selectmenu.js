@@ -171,12 +171,9 @@ $.widget( "ui.selectmenu", {
 		// adjust ARIA
 		this.menu.find( "li" ).not( '.ui-selectmenu-optgroup' ).find( 'a' ).attr( 'role', 'option' );
 		this.menu.attr( "aria-activedescendant" , this.menu.find( "li.ui-menu-item a" ).eq( this.element[0].selectedIndex ).attr( "id" ) );
-
-		if ( this.options.dropdown ) {
-			this.menu
-				.addClass( 'ui-corner-bottom' )
-				.removeClass( 'ui-corner-all' );
-		}
+		
+		// change styles?
+		this._setOption( "dropdown", this.options.dropdown );
 
 		// transfer disabled state
 		if ( this.element.attr( 'disabled' ) ) {
@@ -391,6 +388,9 @@ $.widget( "ui.selectmenu", {
 
 		if ( key === "appendTo" ) {
 			this.menuWrap.appendTo( $( value || "body", this.element[0].ownerDocument )[0] );
+		}
+		if ( key === "dropdown" ) {
+			this.menu.toggleClass( 'ui-corner-bottom', value ).toggleClass( 'ui-corner-all', !value );
 		}
 		if ( key === "disabled" ) {
 			this.button.button( "option", "disabled", value );
