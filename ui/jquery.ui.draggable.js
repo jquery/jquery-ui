@@ -40,8 +40,102 @@ $.widget( "ui.draggable", $.ui.interaction, {
 		}
 	},
 
+	/** interaction interface **/
+
+	_start: function( event, position ) {
+		// The actual dragging element, should always be a jQuery object
+		this.dragEl = this.element;
+
+		// Helper required
+		if ( this.options.helper ) {
+			// clone
+			if ( this.options.helper === true ) {
+				this.dragEl = this.element.clone()
+					.removeAttr( "id" )
+					.find( "[id]" )
+						.removeAttr( "id" )
+					.end();
+			} else {
+				// TODO: figure out the signature for this; see #4957
+				this.dragEl = $( this.options.helper() );
+			}
+
+			this.dragEl
+				// Helper must be absolute to function properly
+				.css( "position", "absolute" )
+				// TODO: add appendTo option
+				.appendTo( this.document[0].body )
+				.offset( this.element.offset() );
+		}
+
+		this.cssPosition = this.dragEl.css( "position" );
+		this.scrollParent = this.element.scrollParent();
+
+		// Cache starting absolute and relative positions
+		this.startPosition = this._getPosition();
+		this.startOffset = this.dragEl.offset();
+
+		// Cache current position and offset
+		this.position = $.extend( {}, this.startPosition );
+		this.offset = $.extend( {}, this.startOffset );
+
+		this.startCoords = position;
+
+		// Cache the offset of scrollParent, if required for _handleScrolling
+		if ( this.scrollParent[0] !== this.document[0] && this.scrollParent[0].tagName !== "HTML" ) {
+			this.overflowOffset = this.scrollParent.offset();
+		}
+
+		this.overflow = {
+			height: this.scrollParent[0] === this.document[0] ?
+				this.window.height() : this.scrollParent.height(),
+			width: this.scrollParent[0] === this.document[0] ?
+				this.window.width() : this.scrollParent.width()
+		};
+
+		this._preparePosition( position );
+
+		// If user cancels start, don't allow dragging
+		if ( this._trigger( "start", event, this._uiHash() ) === false ) {
+			return false;
+		}
+
+		this._blockFrames();
+		this._setCss();
+	},
+
+	_move: function( event, position ) {
+		this._preparePosition( position );
+
+		// If user cancels drag, don't move the element
+		if ( this._trigger( "drag", event, this._uiHash() ) === false ) {
+			return;
+		}
+
+		this._setCss();
+
+		// Scroll the scrollParent, if needed
+		this._handleScrolling( position );
+	},
+
+	_stop: function( event, position ) {
+		this._preparePosition( position );
+
+		// If user cancels stop, leave helper there, disallow any CSS changes
+		if ( this._trigger( "stop", event, this._uiHash() ) !== false ) {
+			this._setCss();
+			if ( this.options.helper ) {
+				this.dragEl.remove();
+			}
+		}
+
+		this._unblockFrames();
+	},
+
+	/** internal **/
+
 	_getPosition: function() {
-		var left, top, position, offset,
+		var left, top, position,
 			scrollTop = this.scrollParent.scrollTop(),
 			scrollLeft = this.scrollParent.scrollLeft();
 
@@ -110,95 +204,6 @@ $.widget( "ui.draggable", $.ui.interaction, {
 		}
 	},
 
-	_start: function( event, position ) {
-		// The actual dragging element, should always be a jQuery object
-		this.dragEl = this.element;
-
-		// Helper required
-		if ( this.options.helper ) {
-			// clone
-			if ( this.options.helper === true ) {
-				this.dragEl = this.element.clone()
-					.removeAttr( "id" )
-					.find( "[id]" )
-						.removeAttr( "id" )
-					.end();
-			} else {
-				// TODO: figure out the signature for this; see #4957
-				this.dragEl = $( this.options.helper() );
-			}
-
-			this.dragEl
-				// Helper must be absolute to function properly
-				.css( "position", "absolute" )
-				.appendTo( this.document[0].body )
-				.offset( this.element.offset() );
-		}
-
-		this.cssPosition = this.dragEl.css( "position" );
-		this.scrollParent = this.element.scrollParent();
-
-		// Cache starting absolute and relative positions
-		this.startPosition = this._getPosition();
-		this.startOffset = this.dragEl.offset();
-
-		// Cache current position and offset
-		this.position = $.extend( {}, this.startPosition );
-		this.offset = $.extend( {}, this.startOffset );
-
-		this.startCoords = position;
-
-		// Cache the offset of scrollParent, if required for _handleScrolling
-		if ( this.scrollParent[0] !== this.document[0] && this.scrollParent[0].tagName !== "HTML" ) {
-			this.overflowOffset = this.scrollParent.offset();
-		}
-
-		this.overflow = {
-			height: this.scrollParent[0] === this.document[0] ?
-				this.window.height() : this.scrollParent.height(),
-			width: this.scrollParent[0] === this.document[0] ?
-				this.window.width() : this.scrollParent.width()
-		};
-
-		this._preparePosition( position );
-
-		// If user cancels start, don't allow dragging
-		if ( this._trigger( "start", event, this._uiHash() ) === false ) {
-			return false;
-		}
-
-		this._blockFrames();
-		this._setCss();
-	},
-
-	_move: function( event, position ) {
-		this._preparePosition( position );
-
-		// If user cancels drag, don't move the element
-		if ( this._trigger( "drag", event, this._uiHash() ) === false ) {
-			return;
-		}
-
-		this._setCss();
-
-		// Scroll the scrollParent, if needed
-		this._handleScrolling( position );
-	},
-
-	_stop: function( event, position ) {
-		this._preparePosition( position );
-
-		// If user cancels stop, leave helper there, disallow any CSS changes
-		if ( this._trigger( "stop", event, this._uiHash() ) === false ) {
-			this._setCss();
-			if ( this.options.helper ) {
-				this.dragEl.remove();
-			}
-		}
-
-		this._unblockFrames();
-	},
-
 	// Uses event to determine new position of draggable, before any override from callbacks
 	// TODO: handle absolute element inside relative parent like a relative element
 	_preparePosition: function( position ) {
@@ -226,26 +231,21 @@ $.widget( "ui.draggable", $.ui.interaction, {
 
 	// Places draggable where event, or user via event/callback, indicates
 	_setCss: function() {
-		var newLeft, newTop;
+		var newLeft = this.position.left,
+			newTop = this.position.top;
 
 		// User overriding left/top so shortcut math is no longer valid
-		if ( this.tempPosition.left !== this.position.left || this.tempPosition.top !== this.position.top ) {
+		if ( this.tempPosition.left !== this.position.left ||
+				this.tempPosition.top !== this.position.top ) {
 			// Reset offset based on difference of expected and overridden values
-			this.offset.top = this.offset.top +
-				this.position.top - this.tempPosition.top;
-			this.offset.left = this.offset.left +
-				this.position.left - this.tempPosition.left;
-
-			this.offset = this.dragEl.offset();
+			this.offset.left += newLeft - this.tempPosition.left;
+			this.offset.top += newTop - this.tempPosition.top;
 		}
-
-		newLeft = this.position.left;
-		newTop = this.position.top;
 
 		// TODO: does this work with nested scrollable parents?
 		if ( this.cssPosition !== "fixed" ) {
-			newLeft = newLeft + this.scrollParent.scrollLeft();
-			newTop = newTop + this.scrollParent.scrollTop();
+			newLeft += this.scrollParent.scrollLeft();
+			newTop += this.scrollParent.scrollTop();
 		}
 
 		this.dragEl.css({
@@ -255,12 +255,12 @@ $.widget( "ui.draggable", $.ui.interaction, {
 	},
 
 	_uiHash: function() {
+		// TODO: add originalPosition
 		var ret = {
 			position: this.position,
 			offset: this.offset
 		};
 
-		// TODO: should we always set the helper?
 		if ( this.options.helper ) {
 			ret.helper = this.dragEl;
 		}
