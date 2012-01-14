@@ -12,21 +12,30 @@ $.widget( "ui.interaction", {
 
 	_startProxy: function( hook ) {
 		var that = this;
-		return function( event, position ) {
-			that._interactionStart( event, position, hook );
+		return function( event, target, position ) {
+			return that._interactionStart( event, target, position, hook );
 		}
 	},
 
-	_interactionStart: function( event, position, hook ) {
+	_interactionStart: function( event, target, position, hook ) {
+		var started;
+
 		// only one interaction can happen at a time
 		if ( interaction.started ) {
-			return;
+			return false;
 		}
 
-		if ( false !== this._start( event, position ) ) {
+		if ( false === this._isValidTarget( $( target ) ) ) {
+			return false;
+		}
+
+		started = this._start( event, position );
+		if ( started ) {
 			interaction.started = true;
 			interaction.hooks[ hook ].handle( this );
 		}
+
+		return started;
 	},
 
 	_interactionMove: function( event, position ) {
@@ -36,6 +45,10 @@ $.widget( "ui.interaction", {
 	_interactionStop: function( event, position ) {
 		this._stop( event, position );
 		interaction.started = false;
+	},
+
+	_isValidTarget: function( target ) {
+		return true;
 	}
 });
 
@@ -50,11 +63,14 @@ interaction.hooks.mouse = {
 		widget._bind({
 			"mousedown": function( event ) {
 				if ( event.which === 1 ) {
-					event.preventDefault();
-					start( event, {
+					var started = start( event, event.target, {
 						left: event.pageX,
 						top: event.pageY
 					});
+
+					if ( started ) {
+						event.preventDefault();
+					}
 				}
 			}
 		});
@@ -103,20 +119,24 @@ var touchHook = interaction.hooks.touch = {
 	setup: function( widget, start ) {
 		widget._bind({
 			"touchstart": function( event ) {
-				var touch;
+				var touch, started;
 
 				if ( touchHook.id ) {
 					return;
 				}
 
 				touch = event.originalEvent.changedTouches.item( 0 );
-				touchHook.id = touch.identifier;
-
-				event.preventDefault();
-				start( event, {
+				started = start( event, touch.target, {
 					left: touch.pageX,
 					top: touch.pageY
 				});
+
+				if ( started ) {
+					// track which finger is performing the interaction
+					touchHook.id = touch.identifier;
+					// prevent panning/zooming
+					event.preventDefault();
+				}
 			}
 		});
 	},
@@ -164,7 +184,8 @@ var pointerHook = interaction.hooks.msPointer = {
 	setup: function( widget, start ) {
 		widget._bind({
 			"MSPointerDown": function( _event ) {
-				var event = _event.originalEvent;
+				var started,
+					event = _event.originalEvent;
 
 				if ( pointerHook.id ) {
 					return;
@@ -178,17 +199,19 @@ var pointerHook = interaction.hooks.msPointer = {
 					return;
 				}
 
-				// track which pointer is performing the interaction
-				pointerHook.id = event.pointerId;
-				// prevent panning/zooming
-				event.preventManipulation();
-				// prevent promoting pointer events to mouse events
-				event.preventMouseEvent();
-
-				start( event, {
+				started = start( event, event.target, {
 					left: event.pageX,
 					top: event.pageY
 				});
+
+				if ( started ) {
+					// track which pointer is performing the interaction
+					pointerHook.id = event.pointerId;
+					// prevent panning/zooming
+					event.preventManipulation();
+					// prevent promoting pointer events to mouse events
+					event.preventMouseEvent();
+				}
 			}
 		});
 	},
