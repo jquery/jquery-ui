@@ -7,7 +7,7 @@
 	<script src="../../jquery-1.7.1.js"></script>
 	<script src="../../ui/jquery.ui.core.js"></script>
 	<script src="../../ui/jquery.ui.widget.js"></script>
-	<script src="../../ui/jquery.ui.mouse.js"></script>
+	<script src="../../ui/jquery.ui.interaction.js"></script>
 	<script src="../../ui/jquery.ui.draggable.js"></script>
 	<link rel="stylesheet" href="../demos.css">
 	<style>
@@ -18,7 +18,6 @@
 	$(function() {
 		$( "#draggable" ).draggable({ handle: "p" });
 		$( "#draggable2" ).draggable({ cancel: "p.ui-widget-header" });
-		$( "div, p" ).disableSelection();
 	});
 	</script>
 </head>
