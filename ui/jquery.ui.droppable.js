@@ -32,6 +32,7 @@ var guid = 0,
 $.widget( "ui.droppable", {
 	version: "@VERSION",
 	widgetEventPrefix: "drop",
+
 	options: {
 		// accept: null,
 		// greedy: false,
@@ -48,6 +49,8 @@ $.widget( "ui.droppable", {
 		droppables[ this.guid ] = this;
 	},
 
+	/** public **/
+
 	// TODO: rename to refresh()?
 	refreshPosition: function() {
 		// Store current location
@@ -60,6 +63,8 @@ $.widget( "ui.droppable", {
 			height: this.element[0].offsetHeight
 		};
 	},
+
+	/** draggable integration **/
 
 	_draggableStart: function( event, ui ) {
 		var draggable = $( event.target );
@@ -102,6 +107,8 @@ $.widget( "ui.droppable", {
 		this.over = false;
 	},
 
+	/** internal **/
+
 	// TODO: fill me out
 	_uiHash: function() {
 		return {};
@@ -113,28 +120,13 @@ $.widget( "ui.droppable", {
 });
 
 $.ui.droppable.tolerance = {
-	// Determines if draggable is over droppable based on intersect tolerance
-	// TODO: move all tolerance methods into a hash
-	// $.ui.droppable.tolerance.intersect
+	// Half of the draggable is over the droppable, horizontally and vertically
 	intersect: function( event, edges, ui ) {
-		var xDiff = edges.draggableRight - this.offset.left,
-			yDiff = edges.draggableBottom - this.offset.top,
-			xHalfway = this.proportions.width / 2,
-			yHalfway = this.proportions.height / 2,
-			xOverlap = false,
-			yOverlap = false;
+		var xHalf = ui.offset.left + this.draggableProportions.width / 2,
+			yHalf = ui.offset.top + this.draggableProportions.height / 2;
 
-		// If Coming from left or right
-		xOverlap = ui.offset.left < this.offset.left ?
-			xDiff >= xHalfway :
-			xDiff <= xHalfway + this.proportions.width;
-
-		// If Coming from top or bottom
-		yOverlap = ui.offset.top < this.offset.top ?
-			yDiff >= yHalfway :
-			yDiff <= yHalfway + this.proportions.height;
-
-		return xOverlap && yOverlap;
+		return this.offset.left < xHalf && edges.right > xHalf &&
+			this.offset.top < yHalf && edges.bottom > yHalf;
 	},
 
 	// Determines if draggable is over droppable based on touch tolerance
