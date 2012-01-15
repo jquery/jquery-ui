@@ -120,7 +120,7 @@ $.widget( "ui.droppable", {
 });
 
 $.ui.droppable.tolerance = {
-	// Half of the draggable is over the droppable, horizontally and vertically
+	// Half of the draggable overlaps the droppable, horizontally and vertically
 	intersect: function( event, edges, ui ) {
 		var xHalf = ui.offset.left + this.draggableProportions.width / 2,
 			yHalf = ui.offset.top + this.draggableProportions.height / 2;
@@ -129,17 +129,15 @@ $.ui.droppable.tolerance = {
 			this.offset.top < yHalf && edges.bottom > yHalf;
 	},
 
-	// Determines if draggable is over droppable based on touch tolerance
+	// Draggable overlaps droppable by at least one pixel
 	touch: function( event, edges, ui ) {
-		var xOverlap = edges.draggableRight >= this.offset.left &&
-				ui.offset.left <= edges.right,
-			yOverlap = edges.draggableBottom >= this.offset.top &&
-				ui.offset.top <= edges.bottom;
-
-		return xOverlap && yOverlap;
+		return this.offset.left < edges.draggableRight &&
+			edges.right > ui.offset.left &&
+			this.offset.top < edges.draggableBottom &&
+			edges.bottom > ui.offset.top;
 	},
 
-	// Determines if draggable is over droppable based on pointer tolerance
+	// Pointer overlaps droppable
 	pointer: function( event, edges, ui ) {
 		var xOverlap = event.pageX >= this.offset.left &&
 				event.pageX <= edges.right,
