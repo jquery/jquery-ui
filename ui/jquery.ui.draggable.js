@@ -47,7 +47,7 @@ $.widget( "ui.draggable", $.ui.interaction, {
 		return this.options.handle ? element.is( this.options.handle ) : true;
 	},
 
-	_start: function( event, position ) {
+	_start: function( event, pointerPosition ) {
 		// The actual dragging element, should always be a jQuery object
 		this.dragEl = this.element;
 
@@ -84,7 +84,7 @@ $.widget( "ui.draggable", $.ui.interaction, {
 		this.position = $.extend( {}, this.startPosition );
 		this.offset = $.extend( {}, this.startOffset );
 
-		this.startCoords = position;
+		this.startCoords = pointerPosition;
 
 		// Cache the offset of scrollParent, if required for _handleScrolling
 		if ( this.scrollParent[0] !== this.document[0] && this.scrollParent[0].tagName !== "HTML" ) {
@@ -98,7 +98,7 @@ $.widget( "ui.draggable", $.ui.interaction, {
 				this.window.width() : this.scrollParent.width()
 		};
 
-		this._preparePosition( position );
+		this._preparePosition( pointerPosition );
 
 		// If user cancels start, don't allow dragging
 		if ( this._trigger( "start", event, this._uiHash() ) === false ) {
@@ -111,8 +111,8 @@ $.widget( "ui.draggable", $.ui.interaction, {
 		return true;
 	},
 
-	_move: function( event, position ) {
-		this._preparePosition( position );
+	_move: function( event, pointerPosition ) {
+		this._preparePosition( pointerPosition );
 
 		// If user cancels drag, don't move the element
 		if ( this._trigger( "drag", event, this._uiHash() ) === false ) {
@@ -122,11 +122,11 @@ $.widget( "ui.draggable", $.ui.interaction, {
 		this._setCss();
 
 		// Scroll the scrollParent, if needed
-		this._handleScrolling( position );
+		this._handleScrolling( pointerPosition );
 	},
 
-	_stop: function( event, position ) {
-		this._preparePosition( position );
+	_stop: function( event, pointerPosition ) {
+		this._preparePosition( pointerPosition );
 
 		// If user cancels stop, leave helper there, disallow any CSS changes
 		if ( this._trigger( "stop", event, this._uiHash() ) !== false ) {
@@ -172,7 +172,7 @@ $.widget( "ui.draggable", $.ui.interaction, {
 		};
 	},
 
-	_handleScrolling: function( position ) {
+	_handleScrolling: function( pointerPosition ) {
 		var scrollTop = this.scrollParent.scrollTop(),
 			scrollLeft = this.scrollParent.scrollLeft(),
 			scrollSensitivity = 20,
@@ -187,10 +187,10 @@ $.widget( "ui.draggable", $.ui.interaction, {
 			overflowTop = this.overflowOffset ?
 				this.overflowOffset.top :
 				scrollTop,
-			xRight = this.overflow.width + overflowLeft - position.left,
-			xLeft = position.left - overflowLeft,
-			yBottom = this.overflow.height + overflowTop - position.top,
-			yTop = position.top - overflowTop;
+			xRight = this.overflow.width + overflowLeft - pointerPosition.x,
+			xLeft = pointerPosition.x- overflowLeft,
+			yBottom = this.overflow.height + overflowTop - pointerPosition.y,
+			yTop = pointerPosition.y - overflowTop;
 
 		// Handle vertical scrolling
 		if ( yBottom < scrollSensitivity ) {
@@ -213,9 +213,9 @@ $.widget( "ui.draggable", $.ui.interaction, {
 
 	// Uses event to determine new position of draggable, before any override from callbacks
 	// TODO: handle absolute element inside relative parent like a relative element
-	_preparePosition: function( position ) {
-		var leftDiff = position.left - this.startCoords.left,
-			topDiff = position.top - this.startCoords.top,
+	_preparePosition: function( pointerPosition ) {
+		var leftDiff = pointerPosition.x - this.startCoords.x,
+			topDiff = pointerPosition.y - this.startCoords.y,
 			newLeft = leftDiff + this.startPosition.left,
 			newTop = topDiff + this.startPosition.top;
 

@@ -12,12 +12,12 @@ $.widget( "ui.interaction", {
 
 	_startProxy: function( hook ) {
 		var that = this;
-		return function( event, target, position ) {
-			return that._interactionStart( event, target, position, hook );
+		return function( event, target, pointerPosition ) {
+			return that._interactionStart( event, target, pointerPosition, hook );
 		}
 	},
 
-	_interactionStart: function( event, target, position, hook ) {
+	_interactionStart: function( event, target, pointerPosition, hook ) {
 		var started;
 
 		// only one interaction can happen at a time
@@ -29,7 +29,7 @@ $.widget( "ui.interaction", {
 			return false;
 		}
 
-		started = this._start( event, position );
+		started = this._start( event, pointerPosition );
 		if ( started ) {
 			interaction.started = true;
 			interaction.hooks[ hook ].handle( this );
@@ -38,12 +38,12 @@ $.widget( "ui.interaction", {
 		return started;
 	},
 
-	_interactionMove: function( event, position ) {
-		this._move( event, position );
+	_interactionMove: function( event, pointerPosition ) {
+		this._move( event, pointerPosition );
 	},
 
-	_interactionStop: function( event, position ) {
-		this._stop( event, position );
+	_interactionStop: function( event, pointerPosition ) {
+		this._stop( event, pointerPosition );
 		interaction.started = false;
 	},
 
@@ -64,8 +64,8 @@ interaction.hooks.mouse = {
 			"mousedown": function( event ) {
 				if ( event.which === 1 ) {
 					var started = start( event, event.target, {
-						left: event.pageX,
-						top: event.pageY
+						x: event.pageX,
+						y: event.pageY
 					});
 
 					if ( started ) {
@@ -80,15 +80,15 @@ interaction.hooks.mouse = {
 		function mousemove( event ) {
 			event.preventDefault();
 			widget._interactionMove( event, {
-				left: event.pageX,
-				top: event.pageY
+				x: event.pageX,
+				y: event.pageY
 			});
 		}
 
 		function mouseup( event ) {
 			widget._interactionStop( event, {
-				left: event.pageX,
-				top: event.pageY
+				x: event.pageX,
+				y: event.pageY
 			});
 			widget.document
 				.unbind( "mousemove", mousemove )
@@ -127,8 +127,8 @@ var touchHook = interaction.hooks.touch = {
 
 				touch = event.originalEvent.changedTouches.item( 0 );
 				started = start( event, touch.target, {
-					left: touch.pageX,
-					top: touch.pageY
+					x: touch.pageX,
+					y: touch.pageY
 				});
 
 				if ( started ) {
@@ -152,8 +152,8 @@ var touchHook = interaction.hooks.touch = {
 
 			event.preventDefault();
 			widget._interactionMove( event, {
-				left: touch.pageX,
-				top: touch.pageY
+				x: touch.pageX,
+				y: touch.pageY
 			});
 		}
 
@@ -164,8 +164,8 @@ var touchHook = interaction.hooks.touch = {
 			}
 
 			widget._interactionStop( event, {
-				left: touch.pageX,
-				top: touch.pageY
+				x: touch.pageX,
+				y: touch.pageY
 			});
 			touchHook.id = null;
 			widget.document
@@ -200,8 +200,8 @@ var pointerHook = interaction.hooks.msPointer = {
 				}
 
 				started = start( event, event.target, {
-					left: event.pageX,
-					top: event.pageY
+					x: event.pageX,
+					y: event.pageY
 				});
 
 				if ( started ) {
@@ -238,8 +238,8 @@ var pointerHook = interaction.hooks.msPointer = {
 			pointerHook.x = pageX;
 			pointerHook.y = pageY;
 			widget._interactionMove( event, {
-				left: pageX,
-				top: pageY
+				x: pageX,
+				y: pageY
 			});
 		}
 
@@ -251,8 +251,8 @@ var pointerHook = interaction.hooks.msPointer = {
 			}
 
 			widget._interactionStop( event, {
-				left: event.pageX,
-				top: event.pageY
+				x: event.pageX,
+				y: event.pageY
 			});
 			pointerHook.id = pointerHook.x = pointerHook.y = undefined;
 			widget.document
