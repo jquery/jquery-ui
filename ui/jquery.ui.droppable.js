@@ -14,7 +14,8 @@
  */
 (function( $, undefined ) {
 
-var droppables = {};
+var guid = 0,
+	droppables = {};
 
 (function() {
 	var orig = $.ui.draggable.prototype._trigger;
@@ -43,7 +44,7 @@ $.widget( "ui.droppable", {
 
 	_create: function() {
 		this.refreshPosition();
-		this.guid = $.guid++;
+		this.guid = guid++;
 		droppables[ this.guid ] = this;
 	},
 
