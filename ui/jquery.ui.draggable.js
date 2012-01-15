@@ -49,29 +49,9 @@ $.widget( "ui.draggable", $.ui.interaction, {
 
 	_start: function( event, pointerPosition ) {
 		// The actual dragging element, should always be a jQuery object
-		this.dragEl = this.element;
-
-		// Helper required
-		if ( this.options.helper ) {
-			// clone
-			if ( this.options.helper === true ) {
-				this.dragEl = this.element.clone()
-					.removeAttr( "id" )
-					.find( "[id]" )
-						.removeAttr( "id" )
-					.end();
-			} else {
-				// TODO: figure out the signature for this; see #4957
-				this.dragEl = $( this.options.helper() );
-			}
-
-			this.dragEl
-				// Helper must be absolute to function properly
-				.css( "position", "absolute" )
-				// TODO: add appendTo option
-				.appendTo( this.document[0].body )
-				.offset( this.element.offset() );
-		}
+		this.dragEl = this.options.helper ?
+			this._createHelper( pointerPosition ) :
+			this.element;
 
 		this.cssPosition = this.dragEl.css( "position" );
 		this.scrollParent = this.element.scrollParent();
@@ -140,6 +120,35 @@ $.widget( "ui.draggable", $.ui.interaction, {
 	},
 
 	/** internal **/
+
+	_createHelper: function( pointerPosition ) {
+		var helper,
+			offset = this.element.offset(),
+			xPos = (pointerPosition.x - offset.left) / this.element.outerWidth(),
+			yPos = (pointerPosition.y - offset.top) / this.element.outerHeight();
+
+		// clone
+		if ( this.options.helper === true ) {
+			helper = this.element.clone()
+				.removeAttr( "id" )
+				.find( "[id]" )
+					.removeAttr( "id" )
+				.end();
+		} else {
+			// TODO: figure out the signature for this; see #4957
+			helper = $( this.options.helper() );
+		}
+
+		return helper
+			// Helper must be absolute to function properly
+			.css( "position", "absolute" )
+			// TODO: add appendTo option
+			.appendTo( this.document[0].body )
+			.offset({
+				left: pointerPosition.x - helper.outerWidth() * xPos,
+				top: pointerPosition.y - helper.outerHeight() * yPos
+			});
+	},
 
 	_getPosition: function() {
 		var left, top, position,
