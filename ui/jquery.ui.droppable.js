@@ -18,17 +18,19 @@ var guid = 0,
 	droppables = {};
 
 (function() {
-	// TODO: we need to react after the event, in case an event handler changes the position
-	// TODO: don't react if the event is canceled
-	// TODO: we need access to pointerPosition
 	var orig = $.ui.draggable.prototype._trigger;
 	$.ui.draggable.prototype._trigger = function( type, event, ui ) {
 		var droppable,
-			method = "_draggable" + type.substr( 0, 1 ).toUpperCase() + type.substr( 1 );
-		for ( droppable in droppables ) {
-			droppables[ droppable ][ method ].call( droppables[ droppable ], event, ui );
+			method = "_draggable" + type.substr( 0, 1 ).toUpperCase() + type.substr( 1 ),
+			allowed = orig.apply( this, arguments );
+
+		if ( allowed ) {
+			for ( droppable in droppables ) {
+				droppables[ droppable ][ method ]( event, ui );
+			}
 		}
-		orig.apply( this, arguments );
+
+		return allowed;
 	};
 })();
 
@@ -141,14 +143,9 @@ $.ui.droppable.tolerance = {
 	},
 
 	// Pointer overlaps droppable
-	// TODO: this has to use pointerPosition, not event
 	pointer: function( event, edges, ui ) {
-		var xOverlap = event.pageX >= this.offset.left &&
-				event.pageX <= edges.right,
-			yOverlap = event.pageY >= this.offset.top &&
-				event.pageY <= edges.bottom;
-
-		return xOverlap && yOverlap;
+		return ui.pointer.x >= this.offset.left && ui.pointer.x <= edges.right &&
+			ui.pointer.y >= this.offset.top && ui.pointer.y <= edges.bottom;
 	}
 };
 
