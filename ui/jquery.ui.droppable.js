@@ -72,14 +72,13 @@ $.widget( "ui.droppable", {
 	/** draggable integration **/
 
 	_draggableStart: function( event, ui ) {
-		var draggable = $( event.target );
+		var draggable = ui.helper ? ui.helper[0] : event.target;
 
 		// TODO: Possibly move into draggable hash
 		// so if there are multiple droppables, it's not recalculating all the time
-		// TODO: Should this use the helper if it exists?
 		this.draggableProportions = {
-			width: draggable[0].offsetWidth,
-			height: draggable[0].offsetHeight
+			width: draggable.offsetWidth,
+			height: draggable.offsetHeight
 		};
 	},
 
