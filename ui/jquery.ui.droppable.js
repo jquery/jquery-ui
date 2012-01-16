@@ -24,6 +24,7 @@ $.widget("ui.droppable", {
 		addClasses: true,
 		greedy: false,
 		hoverClass: false,
+		hoverable: false, 
 		scope: 'default',
 		tolerance: 'intersect'
 	},
@@ -88,7 +89,7 @@ $.widget("ui.droppable", {
 		var draggable = $.ui.ddmanager.current;
 		if (!draggable || (draggable.currentItem || draggable.element)[0] == this.element[0]) return; // Bail if draggable and droppable are same element
 
-		if (this.accept.call(this.element[0],(draggable.currentItem || draggable.element))) {
+		if (this.accept.call(this.element[0],(draggable.currentItem || draggable.element)) || this.hoverable == true) {
 			if(this.options.hoverClass) this.element.addClass(this.options.hoverClass);
 			this._trigger('over', event, this.ui(draggable));
 		}
