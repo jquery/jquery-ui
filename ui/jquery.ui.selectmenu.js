@@ -308,7 +308,7 @@ $.widget("ui.selectmenu", {
 					thisLiAttr[ 'class' ] = this.namespace + '-state-disabled';
 				}					
 				var thisAAttr = {
-					html: selectOptionData[i].text,
+					html: selectOptionData[i].text || '&nbsp;',
 					href : '#nogo',
 					tabindex : -1,
 					role : 'option',
