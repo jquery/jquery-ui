@@ -8,7 +8,7 @@
 	<script src="../../resource_loader.js"></script>
 	<script>
 	loadResources({
-		css: [ "ui.core", "ui.button" ],
+		css: [ "ui.core", "ui.button", "ui.theme" ],
 		js: [
 			"ui/jquery.ui.core.js",
 			"ui/jquery.ui.widget.js",
@@ -65,6 +65,13 @@
 <input type="checkbox" id="check"><label for="check">Toggle</label>
 
 <div><input id="submit" type="submit" value="Label"></div>
+
+<!-- Markup for #7966 -->
+<div>
+	<input type="submit" id="submitButtonNode" value="A" />
+	<button id="buttonNode">A</button>
+	<a id="anchorNode" href="#">A</a>
+</div>
 
 </div>
 </body>
