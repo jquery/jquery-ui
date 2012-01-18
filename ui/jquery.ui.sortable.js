@@ -986,7 +986,7 @@ $.widget("ui.sortable", $.ui.mouse, {
 		if(!this._noFinalSort && this.currentItem.parent().length)
 		
 		// We use javascript instead of jquery to insert item, because jquery before() first execute the script and then remove the <script> tag, and for sorting we dont need the js to be evaluated (see #6951)
-		this.currentItem.insertBefore(this.placeholder, this.currentItem);
+		this.placeholder[0].parentNode.insertBefore(this.currentItem[0], this.placeholder[0]);
 		
 		this._noFinalSort = null;
 
