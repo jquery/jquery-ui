@@ -220,22 +220,24 @@ $.extend( $.expr[ ":" ], {
 
 // support
 $(function() {
-	var body = document.body,
-		div = body.appendChild( div = document.createElement( "div" ) );
+	if ( $.browser.msie && $.browser.version.substr( 0, 1 ) < 7 ) {
+		var body = document.body,
+			div = body.appendChild( div = document.createElement( "div" ) );
 
-	$.extend( div.style, {
-		minHeight: "100px",
-		height: "auto",
-		padding: 0,
-		borderWidth: 0
-	});
+		$.extend( div.style, {
+			minHeight: "100px",
+			height: "auto",
+			padding: 0,
+			borderWidth: 0
+		});
 
-	$.support.minHeight = div.offsetHeight === 100;
-	$.support.selectstart = "onselectstart" in div;
+		$.support.minHeight = div.offsetHeight === 100;
+		$.support.selectstart = "onselectstart" in div;
 
-	// set display to none to avoid a layout bug in IE
-	// http://dev.jquery.com/ticket/4014
-	body.removeChild( div ).style.display = "none";
+		// set display to none to avoid a layout bug in IE
+		// http://dev.jquery.com/ticket/4014
+		body.removeChild( div ).style.display = "none";
+	}
 });
 
 
