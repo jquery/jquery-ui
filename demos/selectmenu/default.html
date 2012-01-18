@@ -18,9 +18,8 @@
 		body {font-size: 62.5%; font-family:"Verdana",sans-serif; }
 		fieldset { border:0; }	
 		label,select,.ui-select-menu { float: left; margin-right: 10px; }
-		select { width: 200px; }		
-		.wrap span.ui-selectmenu-item-header,
-		.wrap ul.ui-selectmenu-menu li a { text-decoration: underline !important; }
+		select { width: 200px; }
+		.wrap ul.ui-selectmenu-menu-popup li a { font-weight: bold; }
 	</style>
 	<script type="text/javascript">	
 		$(function(){			
@@ -28,9 +27,9 @@
 						
 			$('select#speedAa').selectmenu({
 				style:'popup', 
-				maxHeight: 150,
-				wrapperElement: "<div class='wrap' />"
+				maxHeight: 150
 			});
+			$('select#speedAa').selectmenu("widget").addClass("wrap");
 			
 			$('select#speedB').selectmenu({
 				style:'popup', 

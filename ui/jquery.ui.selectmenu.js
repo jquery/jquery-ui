@@ -31,9 +31,7 @@ $.widget("ui.selectmenu", {
 		icons: null,
 		format: null,
 		escapeHtml: false,
-		bgImage: function() {},
-		wrapperElement: "<span />",
-		listWrapperElement: "<div />"
+		bgImage: function() {}
 	},
 
 	_create: function() {
@@ -59,7 +57,7 @@ $.widget("ui.selectmenu", {
 			'aria-haspopup': true,
 			'aria-owns': this.ids[ 2 ]
 		});
-		this.newelementWrap = $( o.wrapperElement )
+		this.newelementWrap = $( "<span />" )
 			.append( this.newelement )
 			.insertAfter( this.element );
 		
@@ -203,10 +201,9 @@ $.widget("ui.selectmenu", {
 			'aria-labelledby': this.ids[1],
 			'id': this.ids[2]
 		});
-		this.listWrap = $( o.listWrapperElement )
-			.addClass( self.widgetBaseClass + '-menu' )
-			.append( this.list )
-			.appendTo( 'body' );
+		this.listWrap = $( "<div />", {
+			'class': self.widgetBaseClass + '-menu'
+		}).append( this.list ).appendTo( 'body' );
 		
 		// transfer menu click to menu button
 		this.list
@@ -613,6 +610,10 @@ $.widget("ui.selectmenu", {
 	select: function(event) {
 		if (this._disabled(event.currentTarget)) { return false; }
 		this._trigger("select", event, this._uiHash());
+	},
+	
+	widget: function() {
+		return this.listWrap.add( this.newelementWrap );
 	},
 
 	_closeOthers: function(event) {
