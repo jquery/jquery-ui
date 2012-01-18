@@ -17,6 +17,7 @@ $.widget("ui.selectmenu", {
 	eventPrefix: "selectmenu",
 	options: {
 		transferClasses: true,
+		appendTo: "body",
 		typeAhead: 1000,
 		style: 'dropdown',
 		positionOptions: {
@@ -203,7 +204,7 @@ $.widget("ui.selectmenu", {
 		});
 		this.listWrap = $( "<div />", {
 			'class': self.widgetBaseClass + '-menu'
-		}).append( this.list ).appendTo( 'body' );
+		}).append( this.list ).appendTo( o.appendTo );
 		
 		// transfer menu click to menu button
 		this.list
