@@ -446,9 +446,10 @@ $.widget("ui.selectmenu", {
 		this._selectedOptionLi().addClass(this.widgetBaseClass + '-item-focus');
 
 		// needed when selectmenu is placed at the very bottom / top of the page
-		window.setTimeout( function() {
+		clearTimeout(this.refreshTimeout);
+		this.refreshTimeout = window.setTimeout(function () {
 			self._refreshPosition();
-		}, 200 );
+		}, 200);
 	},
 
 	destroy: function() {
