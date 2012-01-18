@@ -58,7 +58,9 @@ $.widget( "ui.button", {
 			.bind( "reset.button", formResetHandler );
 
 		if ( typeof this.options.disabled !== "boolean" ) {
-			this.options.disabled = this.element.prop( "disabled" );
+			this.options.disabled = !!this.element.prop( "disabled" );
+		} else {
+			this.element.prop( "disabled", this.options.disabled );
 		}
 
 		this._determineButtonType();
@@ -72,10 +74,6 @@ $.widget( "ui.button", {
 
 		if ( options.label === null ) {
 			options.label = this.buttonElement.html();
-		}
-
-		if ( this.element.is( ":disabled" ) ) {
-			options.disabled = true;
 		}
 
 		this.buttonElement
