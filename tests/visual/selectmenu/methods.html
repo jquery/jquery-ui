@@ -32,6 +32,11 @@
 			mySelectmenu.selectmenu("refresh");
 		});
 
+		$("#refresh").click( function() {
+			mySelectmenu.selectmenu("refresh");
+			return false;
+		});
+
 		$("#open").click( function() {
 			mySelectmenu.selectmenu("open");
 			return false;
@@ -69,7 +74,8 @@
 </form>
 <br />
 <button id="destroy">Destroy</button>
-<button id="refresh_add">Add item and refresh</button>
+<button id="refresh_add">Add item</button>
+<button id="refresh">Refresh</button>
 <button id="refresh_selected">Change to first item</button>
 <button id="open">Open</button>
 <button id="close">Close</button>
