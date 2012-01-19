@@ -269,7 +269,7 @@ if ( !$.offset.setOffset ) {
 		background: "none"
 	};
 	if ( body ) {
-		jQuery.extend( testElementStyle, {
+		$.extend( testElementStyle, {
 			position: "absolute",
 			left: "-1000px",
 			top: "-1000px"
