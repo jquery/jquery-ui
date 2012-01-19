@@ -218,7 +218,7 @@ $.widget( "ui.popup", {
 
 	open: function( event ) {
 		var position = $.extend( {}, {
-			of: this.options.trigger
+			of: $( event.target )
 		}, this.options.position );
 
 		this._show( this.element, this.options.show );
