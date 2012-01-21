@@ -120,6 +120,13 @@ $.widget( "ui.tabs", {
 		}
 	},
 
+	_getCreateEventData: function() {
+		return {
+			tab: this.active,
+			panel: !this.active.length ? $() : this._getPanelForTab( this.active )
+		};
+	},
+
 	_setOption: function( key, value ) {
 		if ( key == "active" ) {
 			// _activate() will handle invalid values and update this.options
