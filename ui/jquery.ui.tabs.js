@@ -209,7 +209,7 @@ $.widget( "ui.tabs", {
 	_processTabs: function() {
 		var self = this;
 
-		this.list = this.element.find( "ol,ul" ).eq( 0 );
+		this.list = this._getList();
 		this.lis = $( " > li:has(a[href])", this.list );
 		this.anchors = this.lis.map(function() {
 			return $( "a", this )[ 0 ];
@@ -239,6 +239,11 @@ $.widget( "ui.tabs", {
 			}
 			$( a ).attr( "aria-controls", selector.substring( 1 ) );
 		});
+	},
+
+	// allow overriding how to find the list for rare usage scenarios (#7715)
+	_getList: function() {
+		return this.element.find( "ol,ul" ).eq( 0 );
 	},
 
 	_createPanel: function( id ) {
