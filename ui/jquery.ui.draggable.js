@@ -26,7 +26,7 @@ $.widget( "ui.draggable", $.ui.interaction, {
 	// dragEl: element being dragged (original or helper)
 	// position: final CSS position of dragEl
 	// offset: offset of dragEl
-	// startCoords: pageX/Y of the mousedown (offset of pointer)
+	// startPointer: pageX/Y of the mousedown (offset of pointer)
 	// startPosition: CSS position prior to drag start
 	// startOffset: offset prior to drag start
 	// tempPosition: overridable CSS position of dragEl
@@ -56,15 +56,14 @@ $.widget( "ui.draggable", $.ui.interaction, {
 		this.cssPosition = this.dragEl.css( "position" );
 		this.scrollParent = this.element.scrollParent();
 
-		// Cache starting absolute and relative positions
+		// Cache starting positions
+		this.startPointer = pointerPosition;
 		this.startPosition = this._getPosition();
 		this.startOffset = this.dragEl.offset();
 
 		// Cache current position and offset
 		this.position = $.extend( {}, this.startPosition );
 		this.offset = $.extend( {}, this.startOffset );
-
-		this.startCoords = pointerPosition;
 
 		// Cache the offset of scrollParent, if required for _handleScrolling
 		if ( this.scrollParent[0] !== this.document[0] && this.scrollParent[0].tagName !== "HTML" ) {
@@ -223,8 +222,8 @@ $.widget( "ui.draggable", $.ui.interaction, {
 	// Uses event to determine new position of draggable, before any override from callbacks
 	// TODO: handle absolute element inside relative parent like a relative element
 	_preparePosition: function( pointerPosition ) {
-		var leftDiff = pointerPosition.x - this.startCoords.x,
-			topDiff = pointerPosition.y - this.startCoords.y,
+		var leftDiff = pointerPosition.x - this.startPointer.x,
+			topDiff = pointerPosition.y - this.startPointer.y,
 			newLeft = leftDiff + this.startPosition.left,
 			newTop = topDiff + this.startPosition.top;
 
@@ -271,8 +270,10 @@ $.widget( "ui.draggable", $.ui.interaction, {
 	},
 
 	_uiHash: function( pointerPosition ) {
-		// TODO: add originalPosition
 		var ret = {
+			startPosition: $.extend( {}, this.startPosition ),
+			startOffset: $.extend( {}, this.startOffset ),
+			startPointer: $.extend( {}, this.startPointer ),
 			position: this.position,
 			offset: this.offset,
 			pointer: pointerPosition
