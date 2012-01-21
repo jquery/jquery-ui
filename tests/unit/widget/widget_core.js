@@ -261,6 +261,21 @@ test( "._getCreateOptions()", function() {
 	$( "<div>" ).testWidget({ option2: "value2" });
 });
 
+test( "._getCreateEventData()", function() {
+	expect( 1 );
+	var data = { foo: "bar" };
+	$.widget( "ui.testWidget", {
+		_getCreateEventData: function() {
+			return data;
+		}
+	});
+	$( "<div>" ).testWidget({
+		create: function( event, ui ) {
+			strictEqual( ui, data, "event data" );
+		}
+	});
+});
+
 test( "re-init", function() {
 	var div = $( "<div>" ),
 		actions = [];
