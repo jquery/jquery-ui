@@ -107,9 +107,8 @@ $.widget( "ui.draggable", $.ui.interaction, {
 	_stop: function( event, pointerPosition ) {
 		this._preparePosition( pointerPosition );
 
-		// If user cancels stop, leave helper there, disallow any CSS changes
+		// If user cancels stop, leave helper there
 		if ( this._trigger( "stop", event, this._uiHash( pointerPosition ) ) !== false ) {
-			this._setCss();
 			if ( this.options.helper ) {
 				this.dragEl.remove();
 			}
