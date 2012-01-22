@@ -204,10 +204,11 @@ $.Widget.prototype = {
 		}
 
 		this._create();
-		this._trigger( "create" );
+		this._trigger( "create", null, this._getCreateEventData() );
 		this._init();
 	},
 	_getCreateOptions: $.noop,
+	_getCreateEventData: $.noop,
 	_create: $.noop,
 	_init: $.noop,
 
