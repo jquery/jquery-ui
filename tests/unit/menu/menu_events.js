@@ -7,7 +7,7 @@ module("menu: events");
 
 test("handle click on menu", function() {
 	expect(1);
-	var ac = $('#menu1').menu({
+	var menu = $('#menu1').menu({
 		select: function(event, ui) {
 			menu_log();
 		}
@@ -15,15 +15,15 @@ test("handle click on menu", function() {
 	menu_log("click",true);
 	menu_click($('#menu1'),"1");
 	menu_log("afterclick");
-	menu_click( ac,"2");
+	menu_click( menu,"2");
 	menu_click($('#menu1'),"3");
-	menu_click( ac,"1");
+	menu_click( menu,"1");
 	equals( $("#log").html(), "1,3,2,afterclick,1,click,", "Click order not valid.");
 });
 
 test("handle click on custom item menu", function() {
 	expect(1);
-	var ac = $('#menu5').menu({
+	var menu = $('#menu5').menu({
 		select: function(event, ui) {
 			menu_log();
 		},
@@ -32,9 +32,9 @@ test("handle click on custom item menu", function() {
 	menu_log("click",true);
 	menu_click($('#menu5'),"1");
 	menu_log("afterclick");
-	menu_click( ac,"2");
+	menu_click( menu,"2");
 	menu_click($('#menu5'),"3");
-	menu_click( ac,"1");
+	menu_click( menu,"1");
 	equals( $("#log").html(), "1,3,2,afterclick,1,click,", "Click order not valid.");
 });
 
