@@ -58,7 +58,7 @@ $.each([
 		equals( button.text(), selected.next("option").text(), "after keydown button text" );
 		
 		link.simulate( "click" );
-		menu.find("a").last().simulate( "mouseover" ).simulate( "click" );
+		menu.find("a").last().simulate( "mouseover" ).trigger( "click" );
 		equals( element.find("option:selected").val(), element.find("option").last().val(), "after click original select state" );	
 		equals( button.text(), element.find("option").last().text(), "after click button text" );
 	});

@@ -25,7 +25,7 @@ test("change", function () {
 		value = this.element.find("option").first().text();
 
 	button.find("a").simulate( "click" );
-	menu.find("a").first().simulate( "mouseover" ).simulate( "click" );
+	menu.find("a").first().simulate( "mouseover" ).trigger( "click" );
 });
 
 
@@ -102,7 +102,7 @@ test("select", function () {
 		menu = widget.filter(".ui-selectmenu-menu");
 
 	button.find("a").simulate( "click" );
-	menu.find("a").first().simulate( "mouseover" ).simulate("click");
+	menu.find("a").first().simulate( "mouseover" ).trigger("click");
 });
 
 })(jQuery);
