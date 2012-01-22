@@ -29,7 +29,7 @@ test( "open / close", function() {
 
 
 test("enable / disable", function () {
-	expect(12);
+	expect(14);
 	
 	var element = $('#speed').selectmenu(),
 		widget = element.selectmenu("widget"),
@@ -39,6 +39,7 @@ test("enable / disable", function () {
 	
 	element.selectmenu("disable")	
 	ok( element.selectmenu("option", "disabled"), "disable: widget option" );
+	equals( element.attr("disabled"), "disabled", "disable: native select disabled" );
 	equals( button.attr("aria-disabled"), "true", "disable: button wrapper ARIA" );
 	equals( link.attr("aria-disabled"), "true", "disable: button ARIA" );
 	equals( link.attr("tabindex"), -1, "disable: button tabindex" );
@@ -47,6 +48,7 @@ test("enable / disable", function () {
 	
 	element.selectmenu("enable")
 	ok( !element.selectmenu("option", "disabled"), "enable: widget option" );
+	equals( element.attr("disabled"), undefined, "enable: native select disabled" );
 	equals( button.attr("aria-disabled"), "false", "enable: button wrapper ARIA" );
 	equals( link.attr("aria-disabled"), "false", "enable: button ARIA" );
 	equals( link.attr("tabindex"), 0, "enable: button tabindex" );

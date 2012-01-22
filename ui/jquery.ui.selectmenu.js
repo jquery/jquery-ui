@@ -54,6 +54,7 @@ $.widget( "ui.selectmenu", {
 		this._bind( this.button, this._buttonEvents );
 
 		this._drawMenu();
+		this.refresh();
 		
 		if ( this.options.disabled ) {
 			this.disable();
@@ -74,15 +75,18 @@ $.widget( "ui.selectmenu", {
 				css: {
 					width: this.element.outerWidth()
 				},
+				'aria-expanded': false,
+				'aria-autocomplete': 'list',
 				'aria-owns': this.ids.menu,
 				'aria-haspopup': true
 			})
 			.button({
-				label: this.element.find( "option:selected" ).text(),
 				icons: {
 					primary: ( this.options.dropdown ? 'ui-icon-triangle-1-s' : 'ui-icon-triangle-2-n-s' )
 				}
-			});
+			})
+			// change ARIA role
+			.attr( 'role', 'combobox' );
 
 		// wrap and insert new button
 		this.buttonWrap = $( '<span />' )
@@ -122,7 +126,9 @@ $.widget( "ui.selectmenu", {
 				var item = ui.item.data( "item.selectmenu" ),
 					oldIndex = that.element[0].selectedIndex;
 
-				that._setIndex( item.index );
+				// change native select element
+				that.element[0].selectedIndex = item.index;
+				that._setSelected();
 				that._trigger( "select", event, { item: item } );
 
 				if ( item.index != oldIndex ) {
@@ -145,7 +151,7 @@ $.widget( "ui.selectmenu", {
 			}
 		})
 		// change ARIA role
-		.attr( 'role', 'menubox' );
+		.attr( 'role', 'listbox' );
 		
 		// change menu styles?
 		this._setOption( "dropdown", this.options.dropdown );
@@ -165,38 +171,27 @@ $.widget( "ui.selectmenu", {
 
 		this._readOptions();
 		this._renderMenu( this.menu, this.items );
-
+		
 		this.menu.menu( "refresh" );
-		// button option label wont work here
-		this.button.children( '.ui-button-text' ).text( this.items[ this.element[0].selectedIndex ].label );
 
 		// adjust ARIA
-		this.menu.find( "li" ).not( '.ui-selectmenu-optgroup' ).find( 'a' ).attr( 'role', 'option' );
-		this.menu.attr( "aria-activedescendant" , this.menu.find( "li.ui-menu-item a" ).eq( this.element[0].selectedIndex ).attr( "id" ) );
+		this._getItems().find( 'a' ).attr( 'role', 'option' );
+		this._setSelected();
 		
 		// set and transfer disabled state
 		this._getCreateOptions();
-		if ( this.options.disabled ) {
-			this.disable();
-		} else {
-			this.enable()
-		}
+		this._setOption( "disabled", this.options.disabled );
 	},
 
 	open: function( event ) {
 		if ( !this.options.disabled ) {
-			// init menu when initial opened
-			if ( !this.wasOpen ) {
-				this.refresh();
-				this.wasOpen = true;
-			}		
-		
 			var currentItem = this._getSelectedItem();
 			
 			this._toggleButtonStyle();
 
 			this.menuWrap.addClass( 'ui-selectmenu-open' );
 			this.menu.attr("aria-hidden", false);
+			this.button.attr("aria-expanded", true);
 			// needs to be fired after the document click event has closed all other Selectmenus
 			// otherwise the current item is not indicated
 			// TODO check if this should be handled by Menu
@@ -236,7 +231,8 @@ $.widget( "ui.selectmenu", {
 			this._toggleButtonStyle();
 
 			this.menuWrap.removeClass( 'ui-selectmenu-open' );
-			this.menu.attr("aria-hidden", true);
+			this.menu.attr( "aria-hidden", true );
+			this.button.attr( "aria-expanded", false );
 			this.isOpen = false;
 
 			if ( focus ) {
@@ -282,14 +278,9 @@ $.widget( "ui.selectmenu", {
 	},
 
 	_move: function( direction, event ) {
-		// init menu when not done yet
-		if ( !this.wasOpen ) {
-			this.refresh();
-			this.wasOpen = true;
-		}
 		if ( direction == "first" || direction == "last" ) {
 			// set focus manually for first or last item
-			this.menu.menu( "focus", event, this.menu.find( "li" ).not( '.ui-selectmenu-optgroup' )[ direction ]() );
+			this.menu.menu( "focus", event, this._getItems()[ direction ]() );
 		} else {
 			// if menu is closed we need to focus the element first to indicate correct element
 			if ( !this.isOpen ) {
@@ -306,7 +297,11 @@ $.widget( "ui.selectmenu", {
 	},
 
 	_getSelectedItem: function() {
-		return this.menu.find( "li" ).not( '.ui-selectmenu-optgroup' ).eq( this.element[0].selectedIndex );
+		return this._getItems().eq( this.element[0].selectedIndex );
+	},
+	
+	_getItems: function() {
+		return this.menu.find( "li" ).not( '.ui-selectmenu-optgroup' );
 	},
 
 	_toggle: function( event ) {
@@ -360,6 +355,7 @@ $.widget( "ui.selectmenu", {
 					break;				
 				case $.ui.keyCode.HOME:		  
 				case $.ui.keyCode.PAGE_UP:
+					console.log("test");
 					this._move( "first", event );
 					break;
 				case $.ui.keyCode.END:
@@ -376,9 +372,14 @@ $.widget( "ui.selectmenu", {
 		}
 	},
 	
-	_setIndex: function( index ) {
-		this.element[0].selectedIndex = index;
-		this.button.button( "option", "label", this.items[ index ].label );
+	_setSelected: function() {
+		var item = this._getSelectedItem().find("a");
+		// update button text
+		this.button.button( "option", "label", item.text() );
+		// change ARIA attr
+		this.button.add( this.menu ).attr( "aria-activedescendant" , item.attr( "id" ) );
+		this._getItems().find("a").attr( "aria-selected", false );
+		item.attr( "aria-selected", true );
 	},
 
 	_setOption: function( key, value ) {

@@ -12,22 +12,26 @@ test("accessibility", function () {
 		ul = menu.children("ul"),
 		links = ul.find("li.ui-menu-item a");
 		
-	expect(9 + links.length * 2);
+	expect(13 + links.length * 2);
 	
-	equals( "true", link.attr("aria-haspopup"), "button link aria-haspopup" );
-	equals( "button", link.attr("role"), "button link role" );
-	equals( ul.attr("id"), link.attr("aria-owns"), "button link aria-owns" );
-	equals( 0, link.attr("tabindex"), "button link tabindex" );		
+	equals( link.attr("role"), "combobox", "button link role" );
+	equals( link.attr("aria-haspopup"), "true", "button link aria-haspopup" );
+	equals( link.attr("aria-expanded"), "false", "button link  aria-expanded" );
+	equals( link.attr("aria-autocomplete"), "list", "button link  aria-autocomplete" );
+	equals( link.attr("aria-activedescendant"), links.eq(element[0].selectedIndex).attr("id"), "button link aria-activedescendant" );
+	equals( link.attr("aria-owns"), ul.attr("id"), "button link aria-owns" );
+	equals( link.attr("tabindex"), 0, "button link tabindex" );			
 	
-	equals( "true", ul.attr("aria-hidden"), "menu aria-hidden" );
-	equals( link.attr("id"), ul.attr("aria-labelledby"), "menu aria-labelledby" );
-	equals( "menubox", ul.attr("role"), "menu role" );
-	equals( 0, ul.attr("tabindex"), "menu tabindex" );
-	equals( links.eq(element[0].selectedIndex).attr("id"), ul.attr("aria-activedescendant"), "menu aria-activedescendant" );
+	equals( ul.attr("role"), "listbox", "menu role" );
+	equals( ul.attr("aria-labelledby"), link.attr("id"), "menu aria-labelledby" );
+	equals( ul.attr("aria-hidden"), "true", "menu aria-hidden" );
+	equals( ul.attr("tabindex"), 0, "menu tabindex" );
+	equals( ul.attr("aria-activedescendant"), links.eq(element[0].selectedIndex).attr("id"), "menu aria-activedescendant" );
 	$.each( links, function(index){
-		equals( "option", $(this).attr("role"), "menu link #" + index +" role" );
-		equals( -1, $(this).attr("tabindex"), "menu link #" + index +" tabindex" );
+		equals( $(this).attr("role"), "option", "menu link #" + index +" role" );
+		equals( $(this).attr("tabindex"), -1, "menu link #" + index +" tabindex" );
 	});
+	equals( links.eq(element[0].selectedIndex).attr("aria-selected"), "true", "selected menu link aria-selected" );
 });
 
 
@@ -42,23 +46,29 @@ $.each([
 	}
 ], function( i, settings ) {
 	test("state synchronization - " + settings.type, function () {
-		expect(5);
+		expect(10);
 		
 		var element = $(settings.selector).selectmenu(),
 			widget = element.selectmenu("widget"),
 			button = widget.filter(".ui-selectmenu-button"),
 			menu = widget.filter(".ui-selectmenu-menu"),
 			link = button.find("a"),
+			ul = menu.children("ul"),
+			links = ul.find("li.ui-menu-item a"),
 			selected = element.find("option:selected");
 		
-		equals( button.text(), selected.text(), "inital button text" );		
-		
 		link.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );			
+		equals( ul.attr("aria-activedescendant"), links.eq(element[0].selectedIndex).attr("id"), "after keydown menu aria-activedescendant" );
+		equals( link.attr("aria-activedescendant"), links.eq(element[0].selectedIndex).attr("id"), "after keydown button link aria-activedescendant" );
+		equals( links.eq(element[0].selectedIndex).attr("aria-selected"), "true", "after keydown selected menu link aria-selected" );
 		equals( element.find("option:selected").val(), selected.next("option").val() , "after keydown original select state" );	
 		equals( button.text(), selected.next("option").text(), "after keydown button text" );
 		
 		link.simulate( "click" );
 		menu.find("a").last().simulate( "mouseover" ).trigger( "click" );
+		equals( ul.attr("aria-activedescendant"), links.eq(element[0].selectedIndex).attr("id"), "after click menu aria-activedescendant" );
+		equals( link.attr("aria-activedescendant"), links.eq(element[0].selectedIndex).attr("id"), "after click button link aria-activedescendant" );
+		equals( links.eq(element[0].selectedIndex).attr("aria-selected"), "true", "after click selected menu link aria-selected" );
 		equals( element.find("option:selected").val(), element.find("option").last().val(), "after click original select state" );	
 		equals( button.text(), element.find("option").last().text(), "after click button text" );
 	});
