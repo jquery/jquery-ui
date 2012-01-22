@@ -22,9 +22,11 @@ test("change", function () {
 	var widget = this.element.selectmenu("widget"),
 		menu = widget.filter(".ui-selectmenu-menu"),
 		button = widget.filter(".ui-selectmenu-button"),
+		link = button.find("a"),
 		value = this.element.find("option").first().text();
-
-	button.find("a").simulate( "click" );
+		
+	link.simulate( "focus" );
+	link.simulate( "click" );
 	menu.find("a").first().simulate( "mouseover" ).simulate( "click" );
 });
 
@@ -40,6 +42,11 @@ test("close", function () {
 		}
 	});
 
+	var widget = this.element.selectmenu("widget"),
+		button = widget.filter(".ui-selectmenu-button"),
+		link = button.find("a");
+		
+	link.simulate( "focus" );
 	this.element.selectmenu("open").selectmenu("close");
 });
 
@@ -63,9 +70,11 @@ test("focus", function () {
 
 	var widget = this.element.selectmenu("widget"),
 		button = widget.filter(".ui-selectmenu-button"),
+		link = button.find("a"),
 		menu = widget.filter(".ui-selectmenu-menu");
 
-	button.find("a").simulate( "click" );
+	link.simulate( "focus" );
+	link.simulate( "click" );
 	menu.find(".ui-menu-item").simulate("mouseover");
 });
 
@@ -81,6 +90,11 @@ test("open", function () {
 		}
 	});
 
+	var widget = this.element.selectmenu("widget"),
+		button = widget.filter(".ui-selectmenu-button"),
+		link = button.find("a");
+		
+	link.simulate( "focus" );
 	this.element.selectmenu("open");
 });
 
@@ -99,9 +113,11 @@ test("select", function () {
 
 	var widget = this.element.selectmenu("widget"),
 		button = widget.filter(".ui-selectmenu-button"),
+		link = button.find("a"),
 		menu = widget.filter(".ui-selectmenu-menu");
 
-	button.find("a").simulate( "click" );
+	link.simulate( "focus" );
+	link.simulate( "click" );
 	menu.find("a").first().simulate( "mouseover" ).simulate("click");
 });
 

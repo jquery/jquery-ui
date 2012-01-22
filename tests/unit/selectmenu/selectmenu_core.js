@@ -53,6 +53,7 @@ $.each([
 		
 		equals( button.text(), selected.text(), "inital button text" );		
 		
+		link.simulate( "focus" );			
 		link.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );			
 		equals( element.find("option:selected").val(), selected.next("option").val() , "after keydown original select state" );	
 		equals( button.text(), selected.next("option").text(), "after keydown button text" );
