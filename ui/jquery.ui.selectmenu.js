@@ -204,7 +204,14 @@ $.widget( "ui.selectmenu", {
 				this.menu.menu( "focus", event, currentItem );
 			}, 1);
 
-			if ( !this.options.dropdown ) {
+			if ( !this.options.dropdown ) {				
+				// center current item
+				if ( this.menu.outerHeight() < this.menu.prop( "scrollHeight" ) ) {
+					this.menuWrap.css( "left" , -10000 );
+					this.menu.scrollTop( this.menu.scrollTop() + currentItem.position().top - this.menu.outerHeight()/2 + currentItem.outerHeight()/2 );
+					this.menuWrap.css( "left" , "auto" );
+				}			
+				
 				$.extend( this.options.position, {
 					my: "left top",
 					at: "left top",
