@@ -23,7 +23,6 @@ test("dropdown: CSS styles", function () {
 		menu = widget.filter(".ui-selectmenu-menu"),
 		ul = widget.find("ul");
 
-	link.simulate( "focus" );
 	this.element.selectmenu("open");	
 	ok( link.hasClass("ui-corner-top") && !link.hasClass("ui-corner-all"), "button styles dropdown");		
 	ok( ul.hasClass("ui-corner-bottom") && !ul.hasClass("ui-corner-all"), "menu styles dropdown");		

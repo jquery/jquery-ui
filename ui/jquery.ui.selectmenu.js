@@ -185,6 +185,12 @@ $.widget( "ui.selectmenu", {
 
 	open: function( event ) {
 		if ( !this.options.disabled ) {
+			// init menu when initial opened
+			if ( !this.wasOpen ) {
+				this.refresh();
+				this.wasOpen = true;
+			}		
+		
 			var currentItem = this._getSelectedItem();
 			
 			this._toggleButtonStyle();
@@ -269,6 +275,11 @@ $.widget( "ui.selectmenu", {
 	},
 
 	_move: function( direction, event ) {
+		// init menu when not done yet
+		if ( !this.wasOpen ) {
+			this.refresh();
+			this.wasOpen = true;
+		}
 		if ( direction == "first" || direction == "last" ) {
 			// set focus manually for first or last item
 			this.menu.menu( "focus", event, this.menu.find( "li" ).not( '.ui-selectmenu-optgroup' )[ direction ]() );
@@ -300,11 +311,6 @@ $.widget( "ui.selectmenu", {
 	},
 
 	_buttonEvents: {
-		focus: function( event ) {
-			// init Menu on first focus
-			this.refresh();
-			this.button.unbind( "focus." + this.widgetName )
-		},
 		click: function( event ) {
 			this._toggle( event );
 			event.preventDefault();
