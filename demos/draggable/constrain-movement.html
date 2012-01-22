@@ -71,8 +71,8 @@
 		bottom = top + container.height();
 
 		function drag( event, ui ) {
-			var leftDiff = ui.startOffset.left + ui.startPosition.left,
-				topDiff = ui.startOffset.top + ui.startPosition.top;
+			var leftDiff = ui.startOffset.left - ui.startPosition.left,
+				topDiff = ui.startOffset.top - ui.startPosition.top;
 
 			ui.position.left = Math.max( ui.position.left, left - leftDiff );
 			ui.position.left = Math.min( ui.position.left,
@@ -87,7 +87,7 @@
 			.bind( "drag", drag )
 			.one( "dragstop", function() {
 				draggable.element.unbind( "drag", drag );
-			});	
+			});
 	});
 
 	$(function() {
@@ -105,7 +105,7 @@
 <div class="demo">
 
 <h3 class="docs">Constrain movement along an axis:</h3>
-	
+
 <div id="draggable" class="draggable ui-widget-content">
 	<p>I can be dragged only vertically</p>
 </div>
