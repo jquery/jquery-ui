@@ -55,7 +55,7 @@ $.widget( "ui.selectmenu", {
 
 		this._drawMenu();
 		
-		if ( this.element.attr( 'disabled' ) ) {
+		if ( this.options.disabled ) {
 			this.disable();
 		}
 	},
@@ -69,7 +69,7 @@ $.widget( "ui.selectmenu", {
 		// create button
 		this.button = $( '<a />', {
 				href: '#' + this.ids.id,
-				tabindex: ( tabindex ? tabindex : this.element.attr( 'disabled' ) ? -1 : 0 ),
+				tabindex: ( tabindex ? tabindex : this.options.disabled ? -1 : 0 ),
 				id: this.ids.button,
 				css: {
 					width: this.element.outerWidth()
@@ -174,8 +174,9 @@ $.widget( "ui.selectmenu", {
 		this.menu.find( "li" ).not( '.ui-selectmenu-optgroup' ).find( 'a' ).attr( 'role', 'option' );
 		this.menu.attr( "aria-activedescendant" , this.menu.find( "li.ui-menu-item a" ).eq( this.element[0].selectedIndex ).attr( "id" ) );
 		
-		// transfer disabled state
-		if ( this.element.attr( 'disabled' ) ) {
+		// set and transfer disabled state
+		this._getCreateOptions();
+		if ( this.options.disabled ) {
 			this.disable();
 		} else {
 			this.enable()
@@ -393,6 +394,14 @@ $.widget( "ui.selectmenu", {
 	_toggleButtonStyle: function() {
 		if ( this.options.dropdown ) {
 			this.button.toggleClass( 'ui-corner-top', !this.isOpen ).toggleClass( 'ui-corner-all', this.isOpen );
+		}
+	},
+	
+	_getCreateOptions: function() {
+		if ( this.element.attr( 'disabled' ) ) {
+			this.options.disabled = true;
+		} else {
+			this.options.disabled = false;
 		}
 	},
 
