@@ -45,6 +45,9 @@ $.widget( "ui.menu", {
 					event.preventDefault();
 				}
 			}, this));
+		if ( this.options.disabled ) {
+			this.element.addClass( "ui-state-disabled" );
+		}
 		this._bind({
 			// Prevent focus from sticking to links inside menu after clicking
 			// them (focus should always stay on UL during navigation).
