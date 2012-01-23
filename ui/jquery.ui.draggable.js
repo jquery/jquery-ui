@@ -19,6 +19,7 @@ $.widget( "ui.draggable", $.ui.interaction, {
 	widgetEventPrefix: "drag",
 
 	options: {
+		appendTo: null,
 		handle: null,
 		helper: null
 	},
@@ -32,6 +33,8 @@ $.widget( "ui.draggable", $.ui.interaction, {
 	// tempPosition: overridable CSS position of dragEl
 	// overflowOffset: offset of scroll parent
 	// overflow: object containing width and height keys of scroll parent
+	// domPosition: object containing original parent and index when using
+	//   appendTo option without a helper
 
 	_create: function() {
 		this._super();
@@ -48,10 +51,25 @@ $.widget( "ui.draggable", $.ui.interaction, {
 	},
 
 	_start: function( event, pointerPosition ) {
+		var offset;
+
 		// The actual dragging element, should always be a jQuery object
 		this.dragEl = this.options.helper ?
 			this._createHelper( pointerPosition ) :
 			this.element;
+
+		// _createHelper() ensures that helpers are in the correct position
+		// in the DOM, but we need to handle appendTo when there is no helper
+		if ( this.options.appendTo && this.dragEl === this.element ) {
+			this.domPosition = {
+				parent: this.element.parent(),
+				index: this.element.index()
+			};
+			offset = this.dragEl.offset();
+			this.dragEl
+				.appendTo( this.options.appendTo )
+				.offset( offset );
+		}
 
 		this.cssPosition = this.dragEl.css( "position" );
 		this.scrollParent = this.element.scrollParent();
@@ -105,12 +123,24 @@ $.widget( "ui.draggable", $.ui.interaction, {
 	},
 
 	_stop: function( event, pointerPosition ) {
+		var parent, next;
+
 		this._preparePosition( pointerPosition );
 
 		// If user cancels stop, leave helper there
 		if ( this._trigger( "stop", event, this._uiHash( pointerPosition ) ) !== false ) {
 			if ( this.options.helper ) {
 				this.dragEl.remove();
+			}
+			if ( this.domPosition ) {
+				parent = this.domPosition.parent;
+				next = parent.children().eq( this.domPosition.index );
+				if ( next.length ) {
+					next.before( this.element );
+				} else {
+					parent.append( this.element );
+				}
+				this.element.offset( this.offset );
 			}
 		}
 
@@ -137,11 +167,14 @@ $.widget( "ui.draggable", $.ui.interaction, {
 			helper = $( this.options.helper() );
 		}
 
+		// Ensure the helper is in the DOM; obey the appendTo option if it exists
+		if ( this.options.appendTo || !helper.closest( "body" ).length ) {
+			helper.appendTo( this.options.appendTo || this.document[0].body );
+		}
+
 		return helper
 			// Helper must be absolute to function properly
 			.css( "position", "absolute" )
-			// TODO: add appendTo option
-			.appendTo( this.document[0].body )
 			.offset({
 				left: pointerPosition.x - helper.outerWidth() * xPos,
 				top: pointerPosition.y - helper.outerHeight() * yPos
