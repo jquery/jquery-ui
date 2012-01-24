@@ -102,15 +102,18 @@ $.widget( "ui.popup", {
 				event.preventDefault();
 			},
 			mousedown: function( event ) {
-				var noFocus = false;
+				var noFocus = false,
+                    target = $( event.target );
 				/* TODO: Determine in which cases focus should stay on the trigger after the popup opens
 				(should apply for any trigger that has other interaction besides opening the popup, e.g. a text field) */
-				if ( $( event.target ).is( "input" ) ) {
+				if ( target.is( "input" ) ) {
 					noFocus = true;
 				}
-				if (this.isOpen) {
+                
+                //clicking on the same trigger twice should close the popup
+				if (this.isOpen && target.is( this.triggeredBy ) ) {
 					suppressExpandOnFocus = true;
-					this.close();
+					this.close();                    
 					return;
 				}
 				this.open( event );
@@ -217,10 +220,17 @@ $.widget( "ui.popup", {
 	},
 
 	open: function( event ) {
+        //keep state of the target that triggered this event - required in the case of a shared popup element
+        this.triggeredBy = event ? event.target : this.options.trigger;
 		var position = $.extend( {}, {
-			of: this.options.trigger
+			of: this.triggeredBy
 		}, this.options.position );
-
+        
+        //in the case this is a shared popup (aka has more than one trigger) we need to hide this so the following _show() effect will appear
+        if( this.isOpen ){
+            this.element.css('display','none');
+        }
+        
 		this._show( this.element, this.options.show );
 		this.element
 			.attr( "aria-hidden", "false" )
