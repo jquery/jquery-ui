@@ -141,9 +141,9 @@ $.widget( "ui.selectmenu", {
 					}
 					if ( !that.isOpen ) {
 						that._select( item, event );
-					}					
-				}				
-				that.focus = item.index;			
+					}			
+					that.focus = item.index;		
+				}							
 			}
 		})
 		// change ARIA role
