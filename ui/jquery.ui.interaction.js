@@ -29,7 +29,7 @@ $.widget( "ui.interaction", {
 			return false;
 		}
 
-		started = this._start( event, pointerPosition );
+		started = ( this._start( event, pointerPosition ) !== false );
 		if ( started ) {
 			interaction.started = true;
 			interaction.hooks[ hook ].handle( this );

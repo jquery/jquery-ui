@@ -104,8 +104,6 @@ $.widget( "ui.draggable", $.ui.interaction, {
 
 		this._blockFrames();
 		this._setCss();
-
-		return true;
 	},
 
 	_move: function( event, pointerPosition ) {
