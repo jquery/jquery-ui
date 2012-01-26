@@ -148,7 +148,7 @@ $.widget.bridge = function( name, object ) {
 				if ( instance ) {
 					instance.option( options || {} )._init();
 				} else {
-					object( options, this );
+					object.call( this, options, this );
 				}
 			});
 		}
