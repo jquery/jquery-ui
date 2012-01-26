@@ -123,18 +123,10 @@ $.widget( "ui.selectmenu", {
 		// init menu widget
 		this.menu.menu({
 			select: function( event, ui ) {
-				var item = ui.item.data( "item.selectmenu" ),
-					oldIndex = that.element[0].selectedIndex;
-
-				// change native select element
-				that.element[0].selectedIndex = item.index;
-				that._setSelected();
-				that._trigger( "select", event, { item: item } );
-
-				if ( item.index != oldIndex ) {
-					that._trigger( "change", event, { item: item } );
-				}
-
+				var item = ui.item.data( "item.selectmenu" );
+				
+				that._select( item, event );
+				
 				if ( that.isOpen ) {
 					event.preventDefault();
 					that.close( event, true);
@@ -143,10 +135,15 @@ $.widget( "ui.selectmenu", {
 			focus: function( event, ui ) {
 				var item = ui.item.data( "item.selectmenu" );
 
-				if ( that.focus !== undefined && item.index != that.focus ) {
-					that._trigger( "focus", event, { item: item } );
-				}
-				that.focus = item.index;
+				if ( that.focus !== undefined ) {
+					if ( item.index != that.focus ) {
+						that._trigger( "focus", event, { item: item } );
+					}
+					if ( !that.isOpen ) {
+						that._select( item, event );
+					}					
+				}				
+				that.focus = item.index;			
 			}
 		})
 		// change ARIA role
@@ -176,6 +173,9 @@ $.widget( "ui.selectmenu", {
 
 		// adjust ARIA
 		this.menuItems.find( 'a' ).attr( 'role', 'option' );
+		
+		// select current item
+		this.menu.menu( "focus", null, this._getSelectedItem() );
 		this._setSelected();
 		
 		// set and transfer disabled state
@@ -277,22 +277,13 @@ $.widget( "ui.selectmenu", {
 		return li.appendTo( ul );
 	},
 
-	_move: function( direction, event ) {
+	_move: function( direction, event ) {	
 		if ( direction == "first" || direction == "last" ) {
 			// set focus manually for first or last item
 			this.menu.menu( "focus", event, this.menuItems[ direction ]() );
 		} else {
-			// if menu is closed we need to focus the element first to indicate correct element
-			if ( !this.isOpen ) {
-				this.menu.menu( "focus", event, this._getSelectedItem() );
-			}
 			// move to and focus next or prev item
 			this.menu.menu( direction, event );		
-		}
-		
-		// select if selectmenu is closed
-		if ( !this.isOpen ) {
-			this.menu.menu( "select", event );
 		}
 	},
 
@@ -364,6 +355,19 @@ $.widget( "ui.selectmenu", {
 			if ( prevDef ) {
 				event.preventDefault();
 			}
+		}
+	},
+	
+	_select: function( item, event ) {		
+		var oldIndex = this.element[0].selectedIndex;
+
+		// change native select element
+		this.element[0].selectedIndex = item.index;
+		this._setSelected();
+		this._trigger( "select", event, { item: item } );
+
+		if ( item.index != oldIndex ) {
+			this._trigger( "change", event, { item: item } );
 		}
 	},
 	
