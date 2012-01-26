@@ -253,7 +253,13 @@ $.widget( "ui.selectmenu", {
 
 		$.each( items, function( index, item ) {
 			if ( item.optgroup != currentOptgroup ) {
-				var optgroup = $( '<li class="ui-selectmenu-optgroup">' + item.optgroup + '</li>' );
+				var optgroup = $( '<li />', {
+					'class': 'ui-selectmenu-optgroup',
+					html: item.optgroup,
+					click: function( event ){
+						event.stopPropagation();
+					}
+				});
 				if ( item.element.parent( "optgroup" ).attr( "disabled" ) ) optgroup.addClass( 'ui-state-disabled' );
 				ul.append( optgroup );
 				currentOptgroup = item.optgroup;
