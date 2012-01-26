@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>jQuery UI Interaction - Default functionality</title>
+	<link rel="stylesheet" href="../../themes/base/jquery.ui.all.css">
+	<script src="../../jquery-1.7.1.js"></script>
+	<script src="../../ui/jquery.ui.core.js"></script>
+	<script src="../../ui/jquery.ui.widget.js"></script>
+	<script src="../../ui/jquery.ui.interaction.js"></script>
+	<link rel="stylesheet" href="../demos.css">
+	<style>
+	#startmovestop { width: 200px; height: 100px; background: lightBlue; }
+	</style>
+	<script>
+	$(function() {
+		$.widget( "my.startmovestop", $.ui.interaction, {
+			_start: function() {
+				$("#startcount").text(function() {
+					return parseInt( $(this).text(), 10 ) + 1;
+				});
+			},
+			_move: function() {
+				$("#movecount").text(function() {
+					return parseInt( $(this).text(), 10 ) + 1;
+				});
+			},
+			_stop: function() {
+				$("#stopcount").text(function() {
+					return parseInt( $(this).text(), 10 ) + 1;
+				});
+			}
+		});
+		
+		$( "#startmovestop" ).startmovestop();
+	});
+	</script>
+</head>
+<body>
+
+<div class="demo">
+
+<div id="startmovestop"></div>
+
+<dl>
+	<dt>Start:</dt>
+		<dd id="startcount">0</dd>
+	<dt>Move:</dt>
+		<dd id="movecount">0</dd>
+	<dt>Stop:</dt>
+		<dd id="stopcount">0</dd>
+</dl>
+
+</div><!-- End demo -->
+
+
+<div class="demo-description">
+<p>This demo shows a simple interaction built using the interaction utility (jquery.ui.interaction.js).</p>
+<p>Make a down-move-up motion starting on the blue box above using the mouse or a touch input device to see the interaction events</p>
+</div><!-- End demo-description -->
+
+</body>
+</html>
