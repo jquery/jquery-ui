@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>jQuery UI Interaction - Box</title>
+	<link rel="stylesheet" href="../../themes/base/jquery.ui.all.css">
+	<script src="../../jquery-1.7.1.js"></script>
+	<script src="../../ui/jquery.ui.core.js"></script>
+	<script src="../../ui/jquery.ui.widget.js"></script>
+	<script src="../../ui/jquery.ui.interaction.js"></script>
+	<link rel="stylesheet" href="../demos.css">
+	<style>
+	#canvas { width: 300px; height: 200px; border: 1px solid black; }
+	</style>
+	<script>
+	$(function() {
+		$.widget( "my.box", $.ui.interaction, {
+			_start: function( event, pos ) {
+				this.startPos = pos;
+
+				this.box = $( "<div></div>" )
+					.appendTo( this.element.empty() )
+					.css({
+						"border": "1px dotted black",
+						"width": 0,
+						"height": 0
+					})
+					.offset({
+						left: pos.x,
+						top: pos.y
+					});
+			},
+			_move: function( event, pos ) {
+				var x1 = this.startPos.x,
+					y1 = this.startPos.y,
+					x2 = pos.x,
+					y2 = pos.y;
+
+				this.box.offset({
+					left: Math.min( x1, x2 ),
+					top: Math.min( y1, y2 )
+				});
+				this.box.css({
+					"width": x1 > x2 ? x1 - x2 : x2 - x1,
+					"height": y1 > y2 ? y1 - y2 : y2 - y1
+				});
+			},
+			_stop: function() {
+				this.box.css({
+					border: "1px solid gray",
+					background: "lightBlue"
+				});
+			}
+		});
+
+		$( "#canvas" ).box();
+	});
+	</script>
+</head>
+<body>
+
+<div class="demo">
+
+<div id="canvas"></div>
+
+</div><!-- End demo -->
+
+
+<div class="demo-description">
+<p>This demo shows how you can create a simple box-drawing (aka lasso) interaction built on top of the interaction utility (jquery.ui.interaction.js).</p>
+<p>Draw a box by starting in the box above using the mouse or a touch input device.</p>
+</div><!-- End demo-description -->
+
+</body>
+</html>
