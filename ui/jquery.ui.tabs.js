@@ -870,12 +870,6 @@ if ( $.uiBackCompat !== false ) {
 					.data( "destroy.tabs", true );
 		};
 	}( jQuery, jQuery.ui.tabs.prototype ) );
-	
-	// cookie option
-	var listId = 0;
-	(function getNextListId() {
-		return ++listId;
-	});
 
 	// selected option
 	(function( $, prototype ) {
@@ -969,6 +963,9 @@ if ( $.uiBackCompat !== false ) {
 		};
 	}( jQuery, jQuery.ui.tabs.prototype ) );
 
+	// cookie option
+	var listId = 0;
+
 	$.widget( "ui.tabs", $.ui.tabs, {
 		options: {
 			cookie: null // e.g. { expires: 7, path: '/', domain: 'jquery.com', secure: true }
@@ -987,7 +984,7 @@ if ( $.uiBackCompat !== false ) {
 		},
 		_cookie: function( active ) {
 			var cookie = [ this.cookie ||
-				( this.cookie = this.options.cookie.name || "ui-tabs-" + getNextListId() ) ];
+				( this.cookie = this.options.cookie.name || "ui-tabs-" + ++listId ) ];
 			if ( arguments.length ) {
 				cookie.push( active === false ? -1 : active );
 				cookie.push( this.options.cookie );
