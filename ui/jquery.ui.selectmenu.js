@@ -130,7 +130,7 @@ $.widget( "ui.selectmenu", {
 				
 				if ( that.isOpen ) {
 					event.preventDefault();
-					that.close( event, true);
+					that.close( event );
 				}
 			},
 			focus: function( event, ui ) {
@@ -178,8 +178,9 @@ $.widget( "ui.selectmenu", {
 			this.menuItems.find( 'a' ).attr( 'role', 'option' );
 			
 			// select current item
-			this.menu.menu( "focus", null, this._getSelectedItem() );
-			this._setSelected();
+			var item = this._getSelectedItem();
+			this.menu.menu( "focus", null, item );
+			this._setSelected( item.data( "item.selectmenu" ) );
 			
 			// set and transfer disabled state
 			this._getCreateOptions();
@@ -234,19 +235,15 @@ $.widget( "ui.selectmenu", {
 		}
 	},
 
-	close: function( event, focus ) {
+	close: function( event ) {
 		if ( this.isOpen ) {
 			this._toggleButtonStyle();
 
 			this.menuWrap.removeClass( 'ui-selectmenu-open' );
 			this.menu.attr( "aria-hidden", true );
 			this.button.attr( "aria-expanded", false );
+			
 			this.isOpen = false;
-
-			if ( focus ) {
-				this.button.focus();
-			}
-
 			this._trigger( "close", event );
 		}
 	},
@@ -374,10 +371,9 @@ $.widget( "ui.selectmenu", {
 	
 	_select: function( item, event ) {		
 		var oldIndex = this.element[0].selectedIndex;
-
 		// change native select element
 		this.element[0].selectedIndex = item.index;
-		this._setSelected();
+		this._setSelected( item );
 		this._trigger( "select", event, { item: item } );
 
 		if ( item.index != oldIndex ) {
@@ -385,11 +381,10 @@ $.widget( "ui.selectmenu", {
 		}
 	},
 	
-	_setSelected: function() {
-		var item = this._getSelectedItem(),
-			link = item.find("a");
+	_setSelected: function( item ) {
+		var link = item.element.find("a");
 		// update button text
-		this.button.button( "option", "label", item.text() );
+		this.button.button( "option", "label", item.label );
 		// change ARIA attr
 		this.button.add( this.menu ).attr( "aria-activedescendant" , link.attr( "id" ) );
 		this.menuItems.find("a").attr( "aria-selected", false );
