@@ -70,6 +70,7 @@ $.widget( "ui.selectmenu", {
 		// create button
 		this.button = $( '<a />', {
 				href: '#' + this.ids.id,
+				html: '&nbsp;',
 				tabindex: ( tabindex ? tabindex : this.options.disabled ? -1 : 0 ),
 				id: this.ids.button,
 				width: this.element.outerWidth(),
@@ -141,9 +142,9 @@ $.widget( "ui.selectmenu", {
 					}
 					if ( !that.isOpen ) {
 						that._select( item, event );
-					}					
-				}				
-				that.focus = item.index;			
+					}
+				}
+				that.focus = item.index;
 			}
 		})
 		// change ARIA role
@@ -165,54 +166,61 @@ $.widget( "ui.selectmenu", {
 	refresh: function() {
 		this.menu.empty();
 
-		this._readOptions();
-		this._renderMenu( this.menu, this.items );
-		
-		this.menu.menu( "refresh" );
-		this.menuItems = this.menu.find( "li" ).not( '.ui-selectmenu-optgroup' );
+		var options = this.element.find( 'option' );
+		if ( options.length ) {
+			this._readOptions( options );
+			this._renderMenu( this.menu, this.items );
+			
+			this.menu.menu( "refresh" );
+			this.menuItems = this.menu.find( "li" ).not( '.ui-selectmenu-optgroup' );
 
-		// adjust ARIA
-		this.menuItems.find( 'a' ).attr( 'role', 'option' );
-		
-		// select current item
-		this.menu.menu( "focus", null, this._getSelectedItem() );
-		this._setSelected();
-		
-		// set and transfer disabled state
-		this._getCreateOptions();
-		this._setOption( "disabled", this.options.disabled );
+			// adjust ARIA
+			this.menuItems.find( 'a' ).attr( 'role', 'option' );
+			
+			// select current item
+			this.menu.menu( "focus", null, this._getSelectedItem() );
+			this._setSelected();
+			
+			// set and transfer disabled state
+			this._getCreateOptions();
+			this._setOption( "disabled", this.options.disabled );
+		}
 	},
 
 	open: function( event ) {
 		if ( !this.options.disabled ) {
-			var currentItem = this._getSelectedItem();
 			
 			this._toggleButtonStyle();
 
 			this.menuWrap.addClass( 'ui-selectmenu-open' );
 			this.menu.attr("aria-hidden", false);
 			this.button.attr("aria-expanded", true);
-			// needs to be fired after the document click event has closed all other Selectmenus
-			// otherwise the current item is not indicated
-			// TODO check if this should be handled by Menu
-			this._delay( function(){
-				this.menu.menu( "focus", event, currentItem );
-			}, 1);
+			
+			// check if menu has items
+			if ( this.items ) {
+				var currentItem = this._getSelectedItem();
+				// needs to be fired after the document click event has closed all other Selectmenus
+				// otherwise the current item is not indicated
+				// TODO check if this should be handled by Menu
+				this._delay( function(){
+					this.menu.menu( "focus", event, currentItem );
+				}, 1);
 
-			if ( !this.options.dropdown ) {				
-				// center current item
-				if ( this.menu.outerHeight() < this.menu.prop( "scrollHeight" ) ) {
-					this.menuWrap.css( "left" , -10000 );
-					this.menu.scrollTop( this.menu.scrollTop() + currentItem.position().top - this.menu.outerHeight()/2 + currentItem.outerHeight()/2 );
-					this.menuWrap.css( "left" , "auto" );
-				}			
-				
-				$.extend( this.options.position, {
-					my: "left top",
-					at: "left top",
-					// calculate offset
-					offset: "0 " + ( this.menu.offset().top  - currentItem.offset().top + ( this.button.outerHeight() - currentItem.outerHeight() ) / 2 )
-				});
+				if ( !this.options.dropdown ) {				
+					// center current item
+					if ( this.menu.outerHeight() < this.menu.prop( "scrollHeight" ) ) {
+						this.menuWrap.css( "left" , -10000 );
+						this.menu.scrollTop( this.menu.scrollTop() + currentItem.position().top - this.menu.outerHeight()/2 + currentItem.outerHeight()/2 );
+						this.menuWrap.css( "left" , "auto" );
+					}			
+					
+					$.extend( this.options.position, {
+						my: "left top",
+						at: "left top",
+						// calculate offset
+						offset: "0 " + ( this.menu.offset().top  - currentItem.offset().top + ( this.button.outerHeight() - currentItem.outerHeight() ) / 2 )
+					});
+				}
 			}
 
 			this.menuWrap
@@ -271,10 +279,10 @@ $.widget( "ui.selectmenu", {
 	_renderItem: function( ul, item) {
 		var li = $( "<li />" ).data( "item.selectmenu", item );
 		if ( item.disabled ) {
-			li.addClass( 'ui-state-disabled' ).text( item.label );
+			li.addClass( 'ui-state-disabled' ).html( item.label );
 		} else {
 			li.append( $( "<a />", {
-					text: item.label,
+					html: item.label,
 					href: '#'
 				})
 			);
@@ -346,7 +354,7 @@ $.widget( "ui.selectmenu", {
 				case $.ui.keyCode.RIGHT:
 					this._move( "next", event );
 					break;				
-				case $.ui.keyCode.HOME:		  
+				case $.ui.keyCode.HOME:		
 				case $.ui.keyCode.PAGE_UP:
 					this._move( "first", event );
 					break;
@@ -421,16 +429,16 @@ $.widget( "ui.selectmenu", {
 		this.options.disabled = ( this.element.attr( 'disabled' ) ) ? true : false;
 	},
 
-	_readOptions: function() {
+	_readOptions: function( options ) {
 		var data = [];
-		$.each( this.element.find( 'option' ), function( index, item ) {
+		$.each( options, function( index, item ) {
 			var option = $( item ),
 				optgroup = option.parent( "optgroup" );
 			data.push({
 				element: option,
 				index: index,
 				value: option.attr( 'value' ),
-				label: option.text(),
+				label: option.text() || '&nbsp;',
 				optgroup: optgroup.attr( "label" ) || false,
 				disabled: optgroup.attr( "disabled" ) || option.attr( "disabled" )
 			});
