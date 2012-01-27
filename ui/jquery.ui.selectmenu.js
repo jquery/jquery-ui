@@ -55,7 +55,7 @@ $.widget( "ui.selectmenu", {
 
 		this._drawMenu();
 		this.refresh();
-		
+
 		if ( this.options.disabled ) {
 			this.disable();
 		}
@@ -125,9 +125,9 @@ $.widget( "ui.selectmenu", {
 		this.menu.menu({
 			select: function( event, ui ) {
 				var item = ui.item.data( "item.selectmenu" );
-				
+
 				that._select( item, event );
-				
+
 				if ( that.isOpen ) {
 					event.preventDefault();
 					that.close( event );
@@ -149,7 +149,7 @@ $.widget( "ui.selectmenu", {
 		})
 		// change ARIA role
 		.attr( 'role', 'listbox' );
-		
+
 		// change menu styles?
 		this._setOption( "dropdown", this.options.dropdown );
 
@@ -170,18 +170,18 @@ $.widget( "ui.selectmenu", {
 		if ( options.length ) {
 			this._readOptions( options );
 			this._renderMenu( this.menu, this.items );
-			
+
 			this.menu.menu( "refresh" );
 			this.menuItems = this.menu.find( "li" ).not( '.ui-selectmenu-optgroup' );
 
 			// adjust ARIA
 			this.menuItems.find( 'a' ).attr( 'role', 'option' );
-			
+
 			// select current item
 			var item = this._getSelectedItem();
 			this.menu.menu( "focus", null, item );
 			this._setSelected( item.data( "item.selectmenu" ) );
-			
+
 			// set and transfer disabled state
 			this._getCreateOptions();
 			this._setOption( "disabled", this.options.disabled );
@@ -190,13 +190,13 @@ $.widget( "ui.selectmenu", {
 
 	open: function( event ) {
 		if ( !this.options.disabled ) {
-			
+
 			this._toggleButtonStyle();
 
 			this.menuWrap.addClass( 'ui-selectmenu-open' );
 			this.menu.attr("aria-hidden", false);
 			this.button.attr("aria-expanded", true);
-			
+
 			// check if menu has items
 			if ( this.items ) {
 				var currentItem = this._getSelectedItem();
@@ -207,14 +207,14 @@ $.widget( "ui.selectmenu", {
 					this.menu.menu( "focus", event, currentItem );
 				}, 1);
 
-				if ( !this.options.dropdown ) {				
+				if ( !this.options.dropdown ) {
 					// center current item
 					if ( this.menu.outerHeight() < this.menu.prop( "scrollHeight" ) ) {
 						this.menuWrap.css( "left" , -10000 );
 						this.menu.scrollTop( this.menu.scrollTop() + currentItem.position().top - this.menu.outerHeight()/2 + currentItem.outerHeight()/2 );
 						this.menuWrap.css( "left" , "auto" );
-					}			
-					
+					}
+
 					$.extend( this.options.position, {
 						my: "left top",
 						at: "left top",
@@ -242,7 +242,7 @@ $.widget( "ui.selectmenu", {
 			this.menuWrap.removeClass( 'ui-selectmenu-open' );
 			this.menu.attr( "aria-hidden", true );
 			this.button.attr( "aria-expanded", false );
-			
+
 			this.isOpen = false;
 			this._trigger( "close", event );
 		}
@@ -288,13 +288,13 @@ $.widget( "ui.selectmenu", {
 		return li.appendTo( ul );
 	},
 
-	_move: function( direction, event ) {	
+	_move: function( direction, event ) {
 		if ( direction == "first" || direction == "last" ) {
 			// set focus manually for first or last item
 			this.menu.menu( "focus", event, this.menuItems[ direction ]() );
 		} else {
 			// move to and focus next or prev item
-			this.menu.menu( direction, event );		
+			this.menu.menu( direction, event );
 		}
 	},
 
@@ -350,8 +350,8 @@ $.widget( "ui.selectmenu", {
 					break;
 				case $.ui.keyCode.RIGHT:
 					this._move( "next", event );
-					break;				
-				case $.ui.keyCode.HOME:		
+					break;
+				case $.ui.keyCode.HOME:
 				case $.ui.keyCode.PAGE_UP:
 					this._move( "first", event );
 					break;
@@ -368,8 +368,8 @@ $.widget( "ui.selectmenu", {
 			}
 		}
 	},
-	
-	_select: function( item, event ) {		
+
+	_select: function( item, event ) {
 		var oldIndex = this.element[0].selectedIndex;
 		// change native select element
 		this.element[0].selectedIndex = item.index;
@@ -380,7 +380,7 @@ $.widget( "ui.selectmenu", {
 			this._trigger( "change", event, { item: item } );
 		}
 	},
-	
+
 	_setSelected: function( item ) {
 		var link = item.element.find("a");
 		// update button text
@@ -413,13 +413,13 @@ $.widget( "ui.selectmenu", {
 			}
 		}
 	},
-	
+
 	_toggleButtonStyle: function() {
 		if ( this.options.dropdown ) {
 			this.button.toggleClass( 'ui-corner-top', !this.isOpen ).toggleClass( 'ui-corner-all', this.isOpen );
 		}
 	},
-	
+
 	_getCreateOptions: function() {
 		this.options.disabled = ( this.element.attr( 'disabled' ) ) ? true : false;
 	},
