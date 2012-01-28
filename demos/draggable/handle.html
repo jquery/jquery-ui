@@ -15,6 +15,19 @@
 	#draggable p { cursor: move; }
 	</style>
 	<script>
+	$.widget( "ui.draggable", $.ui.draggable, {
+		options: {
+			cancel: null
+		},
+		_isValidTarget: function( element ) {
+			var valid = this._super( element );
+			if ( valid && this.options.cancel ) {
+				valid = !element.is( this.options.cancel );
+			}
+			return valid;
+		}
+	});
+
 	$(function() {
 		$( "#draggable" ).draggable({ handle: "p" });
 		$( "#draggable2" ).draggable({ cancel: "p.ui-widget-header" });
@@ -24,24 +37,22 @@
 <body>
 
 <div class="demo">
-	
+
 <div id="draggable" class="ui-widget-content">
 	<p class="ui-widget-header">I can be dragged only by this handle</p>
 </div>
 
 <div id="draggable2" class="ui-widget-content">
 	<p>You can drag me around&hellip;</p>
-	<p class="ui-widget-header">&hellip;but you can't drag me by this handle.</p>
+	<p class="ui-widget-header">&hellip;but you can't drag me by this element.</p>
 </div>
-
-<!-- ADD CANCEL DEMO -->
 
 </div><!-- End demo -->
 
 
 
 <div class="demo-description">
-<p>Allow dragging only when the cursor is over a specific part of the draggable.  Use the <code>handle</code> option to specify the jQuery selector of an element (or group of elements) used to drag the object.</p>
+<p>Allow dragging only when the cursor is over a specific part of the draggable. Use the <code>handle</code> option to specify the jQuery selector of an element (or group of elements) used to drag the object.</p>
 <p>Or prevent dragging when the cursor is over a specific element (or group of elements) within the draggable.  Use the <code>cancel</code> option to specify a jQuery selector over which to "cancel" draggable functionality.</p>
 </div><!-- End demo-description -->
 
