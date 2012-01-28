@@ -15,7 +15,17 @@
 	</style>
 	<script>
 	$(function() {
-		$( "#draggable" ).draggable();
+		$( "#draggable" ).draggable({
+			beforeStart: function( event, ui ) {
+				ui.position.left += ui.pointer.x - ui.offset.left;
+				ui.position.top += ui.pointer.y - ui.offset.top;
+			},
+			stop: function( event, ui ) {
+				event.preventDefault();
+				$( this ).animate( ui.originalPosition );
+				//$( this ).animate( ui.startPosition );
+			}
+		});
 	});
 	</script>
 </head>

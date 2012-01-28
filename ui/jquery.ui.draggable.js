@@ -14,6 +14,16 @@
  */
 (function( $, undefined ) {
 
+// create a shallow copy of an object
+function copy( obj ) {
+	var prop,
+		ret = {};
+	for ( prop in obj ) {
+		ret[ prop ] = obj[ prop ];
+	}
+	return ret;
+}
+
 $.widget( "ui.draggable", $.ui.interaction, {
 	version: "@VERSION",
 	widgetEventPrefix: "drag",
@@ -27,9 +37,11 @@ $.widget( "ui.draggable", $.ui.interaction, {
 	// dragEl: element being dragged (original or helper)
 	// position: final CSS position of dragEl
 	// offset: offset of dragEl
+	// originalPosition: CSS position before drag start
+	// originalOffset: offset before drag start
 	// startPointer: pageX/Y of the mousedown (offset of pointer)
-	// startPosition: CSS position prior to drag start
-	// startOffset: offset prior to drag start
+	// startPosition: CSS position at drag start (after beforeStart)
+	// startOffset: offset at drag start (after beforeStart)
 	// tempPosition: overridable CSS position of dragEl
 	// overflowOffset: offset of scroll parent
 	// overflow: object containing width and height keys of scroll parent
@@ -76,12 +88,12 @@ $.widget( "ui.draggable", $.ui.interaction, {
 
 		// Cache starting positions
 		this.startPointer = pointerPosition;
-		this.startPosition = this._getPosition();
-		this.startOffset = this.dragEl.offset();
+		this.originalPosition = this.startPosition = this._getPosition();
+		this.originalOffset = this.startOffset = this.dragEl.offset();
 
 		// Cache current position and offset
-		this.position = $.extend( {}, this.startPosition );
-		this.offset = $.extend( {}, this.startOffset );
+		this.position = copy( this.startPosition );
+		this.offset = copy( this.startOffset );
 
 		// Cache the offset of scrollParent, if required for _handleScrolling
 		if ( this.scrollParent[0] !== this.document[0] && this.scrollParent[0].tagName !== "HTML" ) {
@@ -97,13 +109,21 @@ $.widget( "ui.draggable", $.ui.interaction, {
 
 		this._preparePosition( pointerPosition );
 
-		// If user cancels start, don't allow dragging
-		if ( this._trigger( "start", event, this._uiHash( pointerPosition ) ) === false ) {
+		// If user cancels beforeStart, don't allow dragging
+		if ( this._trigger( "beforeStart", event, {
+			position: this.position,
+			offset: copy( this.offset ),
+			pointer: copy( pointerPosition )
+		}) === false ) {
 			return false;
 		}
 
-		this._blockFrames();
 		this._setCss();
+		this.startPosition = this._getPosition();
+		this.startOffset = this.dragEl.offset();
+
+		this._trigger( "start", event, this._uiHash( pointerPosition ) );
+		this._blockFrames();
 	},
 
 	_move: function( event, pointerPosition ) {
@@ -139,6 +159,7 @@ $.widget( "ui.draggable", $.ui.interaction, {
 					parent.append( this.element );
 				}
 				this.element.offset( this.offset );
+				this.domPosition = null;
 			}
 		}
 
@@ -301,12 +322,14 @@ $.widget( "ui.draggable", $.ui.interaction, {
 
 	_uiHash: function( pointerPosition ) {
 		var ret = {
-			startPosition: $.extend( {}, this.startPosition ),
-			startOffset: $.extend( {}, this.startOffset ),
-			startPointer: $.extend( {}, this.startPointer ),
+			originalPosition: copy( this.originalPosition ),
+			originalOffset: copy( this.originalOffset ),
+			startPosition: copy( this.startPosition ),
+			startOffset: copy( this.startOffset ),
+			startPointer: copy( this.startPointer ),
 			position: this.position,
-			offset: this.offset,
-			pointer: pointerPosition
+			offset: copy( this.offset ),
+			pointer: copy( pointerPosition )
 		};
 
 		if ( this.options.helper ) {
