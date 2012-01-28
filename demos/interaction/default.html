@@ -14,24 +14,24 @@
 	</style>
 	<script>
 	$(function() {
-		$.widget( "my.startmovestop", $.ui.interaction, {
+		$.widget( "demo.startmovestop", $.ui.interaction, {
 			_start: function() {
-				$("#startcount").text(function() {
-					return parseInt( $(this).text(), 10 ) + 1;
+				$( "#startcount" ).text(function( i, current ) {
+					return parseInt( current, 10 ) + 1;
 				});
 			},
 			_move: function() {
-				$("#movecount").text(function() {
-					return parseInt( $(this).text(), 10 ) + 1;
+				$( "#movecount" ).text(function( i, current ) {
+					return parseInt( current, 10 ) + 1;
 				});
 			},
 			_stop: function() {
-				$("#stopcount").text(function() {
-					return parseInt( $(this).text(), 10 ) + 1;
+				$( "#stopcount" ).text(function( i, current ) {
+					return parseInt( current, 10 ) + 1;
 				});
 			}
 		});
-		
+
 		$( "#startmovestop" ).startmovestop();
 	});
 	</script>

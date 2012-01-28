@@ -11,45 +11,43 @@
 	<link rel="stylesheet" href="../demos.css">
 	<style>
 	#canvas { width: 300px; height: 200px; border: 1px solid black; }
+	.demo-box { border: 1px dotted black; width: 0; height: 0; }
+	.demo-box-complete { border-color: gray; background: lightBlue; }
 	</style>
 	<script>
 	$(function() {
-		$.widget( "my.box", $.ui.interaction, {
-			_start: function( event, pos ) {
-				this.startPos = pos;
+		$.widget( "demo.box", $.ui.interaction, {
+			_start: function( event, pointerPosition ) {
+				this.startPosition = pointerPosition;
 
-				this.box = $( "<div></div>" )
+				this.box = $( "<div>" )
 					.appendTo( this.element.empty() )
-					.css({
-						"border": "1px dotted black",
-						"width": 0,
-						"height": 0
-					})
+					.addClass( "demo-box" )
 					.offset({
-						left: pos.x,
-						top: pos.y
+						left: pointerPosition.x,
+						top: pointerPosition.y
 					});
 			},
-			_move: function( event, pos ) {
-				var x1 = this.startPos.x,
-					y1 = this.startPos.y,
-					x2 = pos.x,
-					y2 = pos.y;
 
-				this.box.offset({
-					left: Math.min( x1, x2 ),
-					top: Math.min( y1, y2 )
-				});
-				this.box.css({
-					"width": x1 > x2 ? x1 - x2 : x2 - x1,
-					"height": y1 > y2 ? y1 - y2 : y2 - y1
-				});
+			_move: function( event, pointerPosition ) {
+				var x1 = this.startPosition.x,
+					y1 = this.startPosition.y,
+					x2 = pointerPosition.x,
+					y2 = pointerPosition.y;
+
+				this.box
+					.offset({
+						left: Math.min( x1, x2 ),
+						top: Math.min( y1, y2 )
+					})
+					.css({
+						width: x1 > x2 ? x1 - x2 : x2 - x1,
+						height: y1 > y2 ? y1 - y2 : y2 - y1
+					});
 			},
+
 			_stop: function() {
-				this.box.css({
-					border: "1px solid gray",
-					background: "lightBlue"
-				});
+				this.box.addClass( "demo-box-complete" );
 			}
 		});
 
