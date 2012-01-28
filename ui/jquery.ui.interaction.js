@@ -17,11 +17,17 @@ var interaction; // = $.ui.interaction
 $.widget( "ui.interaction", {
 	version: "@VERSION",
 	_create: function() {
+		// force the context so we can pass these methods to the hooks
+		this._interactionMove = $.proxy( this, "_interactionMove" );
+		this._interactionStop = $.proxy( this, "_interactionStop" );
+
+		// initialize all hooks for this widget
 		for ( var hook in interaction.hooks ) {
 			interaction.hooks[ hook ].setup( this, this._startProxy( hook ) );
 		}
 	},
 
+	// a pass through to _interactionStart() which tracks the hook that was used
 	_startProxy: function( hook ) {
 		var that = this;
 		return function( event, target, pointerPosition ) {
@@ -37,16 +43,20 @@ $.widget( "ui.interaction", {
 			return false;
 		}
 
+		// check if the event occurred on a valid target
 		if ( false === this._isValidTarget( $( target ) ) ) {
 			return false;
 		}
 
+		// check if the widget wants the event to start an interaction
 		started = ( this._start( event, pointerPosition ) !== false );
 		if ( started ) {
 			interaction.started = true;
-			interaction.hooks[ hook ].handle( this );
+			interaction.hooks[ hook ].handle( this,
+				this._interactionMove, this._interactionStop );
 		}
 
+		// let the hook know if the interaction was started
 		return started;
 	},
 
@@ -88,17 +98,17 @@ interaction.hooks.mouse = {
 		});
 	},
 
-	handle: function( widget ) {
+	handle: function( widget, move, stop ) {
 		function mousemove( event ) {
 			event.preventDefault();
-			widget._interactionMove( event, {
+			move( event, {
 				x: event.pageX,
 				y: event.pageY
 			});
 		}
 
 		function mouseup( event ) {
-			widget._interactionStop( event, {
+			stop( event, {
 				x: event.pageX,
 				y: event.pageY
 			});
@@ -153,8 +163,8 @@ var touchHook = interaction.hooks.touch = {
 		});
 	},
 
-	handle: function( widget ) {
-		function touchmove( event ) {
+	handle: function( widget, move, stop ) {
+		function moveHandler( event ) {
 			// TODO: test non-Apple WebKits to see if they allow
 			// zooming/scrolling if we don't preventDefault()
 			var touch = getTouch( event );
@@ -163,31 +173,31 @@ var touchHook = interaction.hooks.touch = {
 			}
 
 			event.preventDefault();
-			widget._interactionMove( event, {
+			move( event, {
 				x: touch.pageX,
 				y: touch.pageY
 			});
 		}
 
-		function touchend( event ) {
+		function stopHandler( event ) {
 			var touch = getTouch( event );
 			if ( !touch ) {
 				return;
 			}
 
-			widget._interactionStop( event, {
+			stop( event, {
 				x: touch.pageX,
 				y: touch.pageY
 			});
 			touchHook.id = null;
 			widget.document
-				.unbind( "touchmove", touchmove )
-				.unbind( "touchend", touchend );
+				.unbind( "touchmove", moveHandler )
+				.unbind( "touchend", stopHandler );
 		}
 
 		widget._bind( widget.document, {
-			"touchmove": touchmove,
-			"touchend": touchend
+			"touchmove": moveHandler,
+			"touchend": stopHandler
 		});
 	}
 };
@@ -228,8 +238,8 @@ var pointerHook = interaction.hooks.msPointer = {
 		});
 	},
 
-	handle: function( widget ) {
-		function move( _event ) {
+	handle: function( widget, move, stop ) {
+		function moveHandler( _event ) {
 			var event = _event.originalEvent,
 				pageX = event.pageX,
 				pageY = event.pageY;
@@ -249,34 +259,34 @@ var pointerHook = interaction.hooks.msPointer = {
 
 			pointerHook.x = pageX;
 			pointerHook.y = pageY;
-			widget._interactionMove( event, {
+			move( event, {
 				x: pageX,
 				y: pageY
 			});
 		}
 
-		function stop( _event ) {
+		function stopHandler( _event ) {
 			var event = _event.originalEvent;
 
 			if ( event.pointerId !== pointerHook.id ) {
 				return;
 			}
 
-			widget._interactionStop( event, {
+			stop( event, {
 				x: event.pageX,
 				y: event.pageY
 			});
 			pointerHook.id = pointerHook.x = pointerHook.y = undefined;
 			widget.document
-				.unbind( "MSPointerMove", move )
-				.unbind( "MSPointerUp", stop )
-				.unbind( "MSPointerCancel", stop );
+				.unbind( "MSPointerMove", moveHandler )
+				.unbind( "MSPointerUp", stopHandler )
+				.unbind( "MSPointerCancel", stopHandler );
 		}
 
 		widget._bind( widget.document, {
-			"MSPointerMove": move,
-			"MSPointerUp": stop,
-			"MSPointerCancel": stop
+			"MSPointerMove": moveHandler,
+			"MSPointerUp": stopHandler,
+			"MSPointerCancel": stopHandler
 		});
 	}
 };
