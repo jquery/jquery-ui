@@ -110,11 +110,8 @@ $.widget( "ui.draggable", $.ui.interaction, {
 		this._preparePosition( pointerPosition );
 
 		// If user cancels beforeStart, don't allow dragging
-		if ( this._trigger( "beforeStart", event, {
-			position: this.position,
-			offset: copy( this.offset ),
-			pointer: copy( pointerPosition )
-		}) === false ) {
+		if ( this._trigger( "beforeStart", event,
+				this._originalHash( pointerPosition ) ) === false ) {
 			return false;
 		}
 
@@ -122,7 +119,7 @@ $.widget( "ui.draggable", $.ui.interaction, {
 		this.startPosition = this._getPosition();
 		this.startOffset = this.dragEl.offset();
 
-		this._trigger( "start", event, this._uiHash( pointerPosition ) );
+		this._trigger( "start", event, this._startHash( pointerPosition ) );
 		this._blockFrames();
 	},
 
@@ -130,7 +127,7 @@ $.widget( "ui.draggable", $.ui.interaction, {
 		this._preparePosition( pointerPosition );
 
 		// If user cancels drag, don't move the element
-		if ( this._trigger( "drag", event, this._uiHash( pointerPosition ) ) === false ) {
+		if ( this._trigger( "drag", event, this._fullHash( pointerPosition ) ) === false ) {
 			return;
 		}
 
@@ -146,7 +143,7 @@ $.widget( "ui.draggable", $.ui.interaction, {
 		this._preparePosition( pointerPosition );
 
 		// If user cancels stop, leave helper there
-		if ( this._trigger( "stop", event, this._uiHash( pointerPosition ) ) !== false ) {
+		if ( this._trigger( "stop", event, this._fullHash( pointerPosition ) ) !== false ) {
 			if ( this.options.helper ) {
 				this.dragEl.remove();
 			}
@@ -320,13 +317,8 @@ $.widget( "ui.draggable", $.ui.interaction, {
 		});
 	},
 
-	_uiHash: function( pointerPosition ) {
+	_originalHash: function( pointerPosition ) {
 		var ret = {
-			originalPosition: copy( this.originalPosition ),
-			originalOffset: copy( this.originalOffset ),
-			startPosition: copy( this.startPosition ),
-			startOffset: copy( this.startOffset ),
-			startPointer: copy( this.startPointer ),
 			position: this.position,
 			offset: copy( this.offset ),
 			pointer: copy( pointerPosition )
@@ -337,6 +329,21 @@ $.widget( "ui.draggable", $.ui.interaction, {
 		}
 
 		return ret;
+	},
+
+	_startHash: function( pointerPosition ) {
+		return $.extend( this._originalHash( pointerPosition ), {
+			originalPosition: copy( this.originalPosition ),
+			originalOffset: copy( this.originalOffset )
+		});
+	},
+
+	_fullHash: function( pointerPosition ) {
+		return $.extend( this._startHash( pointerPosition ), {
+			startPosition: copy( this.startPosition ),
+			startOffset: copy( this.startOffset ),
+			startPointer: copy( this.startPointer )
+		});
 	},
 
 	_blockFrames: function() {
