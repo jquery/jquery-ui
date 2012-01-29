@@ -39,7 +39,7 @@ $.widget( "ui.draggable", $.ui.interaction, {
 	// offset: offset of dragEl
 	// originalPosition: CSS position before drag start
 	// originalOffset: offset before drag start
-	// startPointer: pageX/Y of the mousedown (offset of pointer)
+	// originalPointer: pageX/Y at drag start (offset of pointer)
 	// startPosition: CSS position at drag start (after beforeStart)
 	// startOffset: offset at drag start (after beforeStart)
 	// tempPosition: overridable CSS position of dragEl
@@ -90,9 +90,9 @@ $.widget( "ui.draggable", $.ui.interaction, {
 		this.scrollParent = this.element.scrollParent();
 
 		// Cache starting positions
-		this.startPointer = pointerPosition;
 		this.originalPosition = this.startPosition = this._getPosition();
 		this.originalOffset = this.startOffset = this.dragEl.offset();
+		this.originalPointer = pointerPosition;
 
 		// Cache current position and offset
 		this.position = copy( this.startPosition );
@@ -122,7 +122,7 @@ $.widget( "ui.draggable", $.ui.interaction, {
 		this.startPosition = this._getPosition();
 		this.startOffset = this.dragEl.offset();
 
-		this._trigger( "start", event, this._startHash( pointerPosition ) );
+		this._trigger( "start", event, this._fullHash( pointerPosition ) );
 		this._blockFrames();
 	},
 
@@ -273,8 +273,8 @@ $.widget( "ui.draggable", $.ui.interaction, {
 	// Uses event to determine new position of draggable, before any override from callbacks
 	// TODO: handle absolute element inside relative parent like a relative element
 	_preparePosition: function( pointerPosition ) {
-		var leftDiff = pointerPosition.x - this.startPointer.x,
-			topDiff = pointerPosition.y - this.startPointer.y,
+		var leftDiff = pointerPosition.x - this.originalPointer.x,
+			topDiff = pointerPosition.y - this.originalPointer.y,
 			newLeft = leftDiff + this.startPosition.left,
 			newTop = topDiff + this.startPosition.top;
 
@@ -334,18 +334,11 @@ $.widget( "ui.draggable", $.ui.interaction, {
 		return ret;
 	},
 
-	_startHash: function( pointerPosition ) {
+	_fullHash: function( pointerPosition ) {
 		return $.extend( this._originalHash( pointerPosition ), {
 			originalPosition: copy( this.originalPosition ),
-			originalOffset: copy( this.originalOffset )
-		});
-	},
-
-	_fullHash: function( pointerPosition ) {
-		return $.extend( this._startHash( pointerPosition ), {
-			startPosition: copy( this.startPosition ),
-			startOffset: copy( this.startOffset ),
-			startPointer: copy( this.startPointer )
+			originalOffset: copy( this.originalOffset ),
+			originalPointer: copy( this.originalPointer )
 		});
 	},
 

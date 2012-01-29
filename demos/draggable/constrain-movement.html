@@ -31,9 +31,9 @@
 
 		function drag( event, ui ) {
 			if ( axis === "x" ) {
-				ui.position.top = ui.startPosition.top;
+				ui.position.top = ui.originalPosition.top;
 			} else {
-				ui.position.left = ui.startPosition.left;
+				ui.position.left = ui.originalPosition.left;
 			}
 		}
 
@@ -71,8 +71,8 @@
 		bottom = top + container.height();
 
 		function drag( event, ui ) {
-			var leftDiff = ui.startOffset.left - ui.startPosition.left,
-				topDiff = ui.startOffset.top - ui.startPosition.top;
+			var leftDiff = ui.originalOffset.left - ui.originalPosition.left,
+				topDiff = ui.originalOffset.top - ui.originalPosition.top;
 
 			ui.position.left = Math.max( ui.position.left, left - leftDiff );
 			ui.position.left = Math.min( ui.position.left,
