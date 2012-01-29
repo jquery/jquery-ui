@@ -167,7 +167,7 @@ $.widget( "ui.accordion", {
 			this._setupEvents( value );
 		}
 
-		this._super( key, value );
+		this._super( "_setOption", key, value );
 
 		// setting collapsible: false while collapsed; open first panel
 		if ( key === "collapsible" && !value && this.options.active === false ) {

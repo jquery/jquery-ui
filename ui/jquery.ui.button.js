@@ -267,7 +267,7 @@ $.widget( "ui.button", {
 	},
 
 	_setOption: function( key, value ) {
-		this._super( key, value );
+		this._super( "_setOption", key, value );
 		if ( key === "disabled" ) {
 			if ( value ) {
 				this.element.prop( "disabled", true );
@@ -373,7 +373,7 @@ $.widget( "ui.buttonset", {
 			this.buttons.button( "option", key, value );
 		}
 
-		this._super( key, value );
+		this._super( "_setOption", key, value );
 	},
 
 	refresh: function() {

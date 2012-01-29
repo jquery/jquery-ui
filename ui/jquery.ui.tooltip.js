@@ -54,7 +54,7 @@ $.widget( "ui.tooltip", {
 			// disable element style changes
 			return;
 		}
-		this._super( key, value );
+		this._super( "_setOption", key, value );
 	},
 
 	_disable: function() {

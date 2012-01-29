@@ -23,8 +23,9 @@ $.cleanData = function( elems ) {
 };
 
 $.widget = function( name, base, prototype ) {
-	var namespace = name.split( "." )[ 0 ],
-		fullName;
+	var fullName, existingConstructor, constructor, basePrototype,
+		namespace = name.split( "." )[ 0 ];
+
 	name = name.split( "." )[ 1 ];
 	fullName = namespace + "-" + name;
 
@@ -39,12 +40,11 @@ $.widget = function( name, base, prototype ) {
 	};
 
 	$[ namespace ] = $[ namespace ] || {};
-	// create the constructor using $.extend() so we can carry over any
-	// static properties stored on the existing constructor (if there is one)
-	$[ namespace ][ name ] = $.extend( function( options, element ) {
+	existingConstructor = $[ namespace ][ name ];
+	constructor = $[ namespace ][ name ] = function( options, element ) {
 		// allow instantiation without "new" keyword
 		if ( !this._createWidget ) {
-			return new $[ namespace ][ name ]( options, element );
+			return new constructor( options, element );
 		}
 
 		// allow instantiation without initializing for simple inheritance
@@ -52,48 +52,59 @@ $.widget = function( name, base, prototype ) {
 		if ( arguments.length ) {
 			this._createWidget( options, element );
 		}
-	}, $[ namespace ][ name ], { version: prototype.version } );
+	};
+	// extend with the existing constructor to carry over any static properties
+	$.extend( constructor, existingConstructor, {
+		version: prototype.version,
+		// store the base widget so we can walk up the prototype chain in _super()
+		base: base,
+		// track widgets that inherit from this widget in case this widget is
+		// redefined after a widget inherits from it
+		_childConstructors: []
+	});
 
-	var basePrototype = new base();
+	basePrototype = new base();
 	// we need to make the options hash a property directly on the new instance
 	// otherwise we'll modify the options hash on the prototype that we're
 	// inheriting from
 	basePrototype.options = $.widget.extend( {}, basePrototype.options );
-	$.each( prototype, function( prop, value ) {
-		if ( $.isFunction( value ) ) {
-			prototype[ prop ] = (function() {
-				var _super = function() {
-					return base.prototype[ prop ].apply( this, arguments );
-				};
-				var _superApply = function( args ) {
-					return base.prototype[ prop ].apply( this, args );
-				};
-				return function() {
-					var __super = this._super,
-						__superApply = this._superApply,
-						returnValue;
-
-					this._super = _super;
-					this._superApply = _superApply;
-
-					returnValue = value.apply( this, arguments );
-
-					this._super = __super;
-					this._superApply = __superApply;
-
-					return returnValue;
-				};
-			}());
-		}
-	});
-	$[ namespace ][ name ].prototype = $.widget.extend( basePrototype, {
+	constructor.prototype = $.widget.extend( basePrototype, {
+		// TODO: remove
+		widgetEventPrefix: name
+	}, prototype, {
+		constructor: constructor,
 		namespace: namespace,
 		widgetName: name,
-		widgetEventPrefix: name,
 		widgetBaseClass: fullName
-	}, prototype );
+	});
 
-	$.widget.bridge( name, $[ namespace ][ name ] );
+	// If this widget is being redefined then we need to find all widgets that
+	// are inheriting from it and redefine all of them so that they inherit from
+	// the new version of this widget. We're essentially trying to replace one
+	// level in the prototype chain.
+	if ( existingConstructor ) {
+		$.each( existingConstructor._childConstructors, function( i, child ) {
+			var prop,
+				prototype = {},
+				childPrototype = child.prototype;
+			// find all the properties/methods that were defined at the child level
+			for ( prop in childPrototype ) {
+				if ( childPrototype.hasOwnProperty( prop ) ) {
+					prototype[ prop ] = childPrototype[ prop ];
+				}
+			}
+			// redefine the child widget using the same prototype that was
+			// originally used, but inherit from the new version of the base
+			$.widget( childPrototype.namespace + "." + childPrototype.widgetName, constructor, prototype );
+		});
+		// remove the list of existing child constructors from the old constructor
+		// so the old child constructors can be garbage collected
+		delete existingConstructor._childConstructors;
+	} else {
+		base._childConstructors.push( constructor );
+	}
+
+	$.widget.bridge( name, constructor );
 };
 
 $.widget.extend = function( target ) {
@@ -157,18 +168,8 @@ $.widget.bridge = function( name, object ) {
 	};
 };
 
-$.Widget = function( options, element ) {
-	// allow instantiation without "new" keyword
-	if ( !this._createWidget ) {
-		return new $[ namespace ][ name ]( options, element );
-	}
-
-	// allow instantiation without initializing for simple inheritance
-	// must use "new" keyword (the code above always passes args)
-	if ( arguments.length ) {
-		this._createWidget( options, element );
-	}
-};
+$.Widget = function( options, element ) {};
+$.Widget._childConstructors = [];
 
 $.Widget.prototype = {
 	widgetName: "widget",
@@ -181,6 +182,7 @@ $.Widget.prototype = {
 		create: null
 	},
 	_createWidget: function( options, element ) {
+		this._base = {};
 		element = $( element || this.defaultElement || this )[ 0 ];
 		this.element = $( element );
 		this.options = $.widget.extend( {},
@@ -232,6 +234,30 @@ $.Widget.prototype = {
 		this.focusable.removeClass( "ui-state-focus" );
 	},
 	_destroy: $.noop,
+
+	_super: function( method ) {
+		return this._superApply( method, slice.call( arguments, 1 ) );
+	},
+	_superApply: function( method, args ) {
+		var ret,
+			// to find the super method, we walk up the prototype chain looking
+			// for a level that has the method defined; we track which level
+			// we're on based on the method name so that if a super method calls
+			// a normal method, which in turn calls a super method, we start
+			// back at the top of the chain
+			currentBase = this._base[ method ] || this.constructor.base,
+			base = currentBase;
+		while ( !base.prototype.hasOwnProperty( method ) ||
+				// make sure we catch the case where the topmost definition of
+				// the method is not the topmost level of the prototype chain
+				base.prototype[ method ] === this[ method ] ) {
+			base = base.base;
+		}
+		this._base[ method ] = base.base;
+		ret = base.prototype[ method ].apply( this, args );
+		this._base[ method ] = currentBase;
+		return ret;
+	},
 
 	widget: function() {
 		return this.element;
