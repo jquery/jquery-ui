@@ -25,8 +25,13 @@ var guid = 0,
 			allowed = orig.apply( this, arguments );
 
 		if ( allowed ) {
-			for ( droppable in droppables ) {
-				droppables[ droppable ][ method ]( event, ui );
+			if ( $.ui.droppable[ method ] ) {
+				$.ui.droppable[ method ]( event, ui );
+			}
+			if ( $.ui.droppable.prototype[ method ] ) {
+				for ( droppable in droppables ) {
+					droppables[ droppable ][ method ]( event, ui );
+				}
 			}
 		}
 
@@ -44,7 +49,6 @@ $.widget( "ui.droppable", {
 		tolerance: "intersect"
 	},
 
-	// draggableProportions: width and height of currently dragging draggable
 	// over: whether or not a draggable is currently over droppable
 	// proportions: width and height of droppable
 
@@ -71,23 +75,13 @@ $.widget( "ui.droppable", {
 
 	/** draggable integration **/
 
-	_draggableStart: function( event, ui ) {
-		var draggable = ui.helper ? ui.helper[0] : event.target;
-
-		// TODO: Possibly move into draggable hash
-		// so if there are multiple droppables, it's not recalculating all the time
-		this.draggableProportions = {
-			width: draggable.offsetWidth,
-			height: draggable.offsetHeight
-		};
-	},
-
 	_draggableDrag: function( event, ui ) {
-		var edges = {
+		var draggableProportions = $.ui.droppable.draggableProportions,
+			edges = {
 				right: this.offset.left + this.proportions.width,
 				bottom: this.offset.top + this.proportions.height,
-				draggableRight: ui.offset.left + this.draggableProportions.width,
-				draggableBottom: ui.offset.top + this.draggableProportions.height
+				draggableRight: ui.offset.left + draggableProportions.width,
+				draggableBottom: ui.offset.top + draggableProportions.height
 			},
 			over = $.ui.droppable.tolerance[ this.options.tolerance ]
 				.call( this, event, edges, ui );
@@ -123,29 +117,43 @@ $.widget( "ui.droppable", {
 	}
 });
 
-$.ui.droppable.tolerance = {
-	// Half of the draggable overlaps the droppable, horizontally and vertically
-	intersect: function( event, edges, ui ) {
-		var xHalf = ui.offset.left + this.draggableProportions.width / 2,
-			yHalf = ui.offset.top + this.draggableProportions.height / 2;
+$.extend( $.ui.droppable, {
+	// draggableProportions: width and height of currently dragging draggable
 
-		return this.offset.left < xHalf && edges.right > xHalf &&
-			this.offset.top < yHalf && edges.bottom > yHalf;
+	tolerance: {
+		// Half of the draggable overlaps the droppable, horizontally and vertically
+		intersect: function( event, edges, ui ) {
+			var draggableProportions = $.ui.droppable.draggableProportions,
+				xHalf = ui.offset.left + draggableProportions.width / 2,
+				yHalf = ui.offset.top + draggableProportions.height / 2;
+	
+			return this.offset.left < xHalf && edges.right > xHalf &&
+				this.offset.top < yHalf && edges.bottom > yHalf;
+		},
+	
+		// Draggable overlaps droppable by at least one pixel
+		touch: function( event, edges, ui ) {
+			return this.offset.left < edges.draggableRight &&
+				edges.right > ui.offset.left &&
+				this.offset.top < edges.draggableBottom &&
+				edges.bottom > ui.offset.top;
+		},
+	
+		// Pointer overlaps droppable
+		pointer: function( event, edges, ui ) {
+			return ui.pointer.x >= this.offset.left && ui.pointer.x <= edges.right &&
+				ui.pointer.y >= this.offset.top && ui.pointer.y <= edges.bottom;
+		}
 	},
 
-	// Draggable overlaps droppable by at least one pixel
-	touch: function( event, edges, ui ) {
-		return this.offset.left < edges.draggableRight &&
-			edges.right > ui.offset.left &&
-			this.offset.top < edges.draggableBottom &&
-			edges.bottom > ui.offset.top;
-	},
+	_draggableStart: function( event, ui ) {
+		var element = ui.helper || $( event.target );
 
-	// Pointer overlaps droppable
-	pointer: function( event, edges, ui ) {
-		return ui.pointer.x >= this.offset.left && ui.pointer.x <= edges.right &&
-			ui.pointer.y >= this.offset.top && ui.pointer.y <= edges.bottom;
+		this.draggableProportions = {
+			width: element.outerWidth(),
+			height: element.outerHeight()
+		};
 	}
-};
+});
 
 })( jQuery );
