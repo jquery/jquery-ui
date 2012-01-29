@@ -62,14 +62,10 @@ $.widget( "ui.droppable", {
 
 	// TODO: rename to refresh()?
 	refreshPosition: function() {
-		// Store current location
 		this.offset = this.element.offset();
-
-		// Store the droppable's proportions
-		// TODO: should this delegate to core?
 		this.proportions = {
-			width: this.element[0].offsetWidth,
-			height: this.element[0].offsetHeight
+			width: this.element.outerWidth(),
+			height: this.element.outerHeight()
 		};
 	},
 
