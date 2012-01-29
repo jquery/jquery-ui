@@ -12,41 +12,34 @@
 	<link rel="stylesheet" href="../demos.css">
 	<style>
 	#draggable { width: 16em; padding: 0 1em; }
-	#draggable ul li { margin: 1em 0; padding: 0.5em 0; } * html #draggable ul li { height: 1%; }
-	#draggable ul li span.ui-icon { float: left; }
-	#draggable ul li span.count { font-weight: bold; }
+	#draggable li { margin: 1em 0; padding: 0.5em 0; }
+	* html #draggable ul li { height: 1%; }
+	#draggable li .ui-icon { float: left; }
+	#draggable li .count { font-weight: bold; }
 	</style>
 	<script>
 	$(function() {
-		var $start_counter = $( "#event-start" ),
-			$drag_counter = $( "#event-drag" ),
-			$stop_counter = $( "#event-stop" ),
-			counts = [ 0, 0, 0 ];
+		var startCount = $( "#event-start .count" ),
+			dragCount = $( "#event-drag .count" ),
+			stopCount = $( "#event-stop .count" );
 
 		$( "#draggable" ).draggable({
 			start: function() {
-				counts[ 0 ]++;
-				updateCounterStatus( $start_counter, counts[ 0 ] );
+				startCount.text(function( i, current ) {
+					return parseInt( current, 10 ) + 1;
+				});
 			},
 			drag: function() {
-				counts[ 1 ]++;
-				updateCounterStatus( $drag_counter, counts[ 1 ] );
+				dragCount.text(function( i, current ) {
+					return parseInt( current, 10 ) + 1;
+				});
 			},
 			stop: function() {
-				counts[ 2 ]++;
-				updateCounterStatus( $stop_counter, counts[ 2 ] );
+				stopCount.text(function( i, current ) {
+					return parseInt( current, 10 ) + 1;
+				});
 			}
 		});
-
-		function updateCounterStatus( $event_counter, new_count ) {
-			// first update the status visually...
-			if ( !$event_counter.hasClass( "ui-state-hover" ) ) {
-				$event_counter.addClass( "ui-state-hover" )
-					.siblings().removeClass( "ui-state-hover" );
-			}
-			// ...then update the numbers
-			$( "span.count", $event_counter ).text( new_count );
-		}
 	});
 	</script>
 </head>
