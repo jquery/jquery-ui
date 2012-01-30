@@ -140,4 +140,13 @@ test("#6966: Escape key closes all dialogs, not the top one", function(){
     d1.remove();
 });
 
+test("#4980: Destroy should place element back in original DOM position", function(){
+    container = $('<div id="container"><div id="modal">Content</div></div>');
+	modal = container.find('#modal');
+	modal.dialog();
+	ok(!$.contains(container[0], modal[0]), 'dialog should move modal element to outside container element');
+	modal.dialog('destroy');
+	ok($.contains(container[0], modal[0]), 'dialog(destroy) should place element back in original DOM position');
+});
+
 })(jQuery);

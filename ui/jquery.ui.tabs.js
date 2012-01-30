@@ -13,23 +13,20 @@
  */
 (function( $, undefined ) {
 
-var tabId = 0;
+var tabId = 0,
+	rhash = /#.*$/;
+	
 function getNextTabId() {
 	return ++tabId;
 }
 
-var isLocal = (function() {
-	var rhash = /#.*$/,
-		currentPage = location.href.replace( rhash, "" );
-
-	return function( anchor ) {
-		// clone the node to work around IE 6 not normalizing the href property
-		// if it's manually set, i.e., a.href = "#foo" kills the normalization
-		anchor = anchor.cloneNode( false );
-		return anchor.hash.length > 1 &&
-			anchor.href.replace( rhash, "" ) === currentPage;
-	};
-})();
+var isLocal = function( anchor ) {
+	// clone the node to work around IE 6 not normalizing the href property
+	// if it's manually set, i.e., a.href = "#foo" kills the normalization
+	anchor = anchor.cloneNode( false );
+	return anchor.hash.length > 1 && 
+			anchor.href.replace( rhash, "" ) === location.href.replace( rhash, "" );
+};
 
 $.widget( "ui.tabs", {
 	version: "@VERSION",
@@ -123,6 +120,13 @@ $.widget( "ui.tabs", {
 		}
 	},
 
+	_getCreateEventData: function() {
+		return {
+			tab: this.active,
+			panel: !this.active.length ? $() : this._getPanelForTab( this.active )
+		};
+	},
+
 	_setOption: function( key, value ) {
 		if ( key == "active" ) {
 			// _activate() will handle invalid values and update this.options
@@ -212,7 +216,7 @@ $.widget( "ui.tabs", {
 	_processTabs: function() {
 		var self = this;
 
-		this.list = this.element.find( "ol,ul" ).eq( 0 );
+		this.list = this._getList();
 		this.lis = $( " > li:has(a[href])", this.list );
 		this.anchors = this.lis.map(function() {
 			return $( "a", this )[ 0 ];
@@ -242,6 +246,11 @@ $.widget( "ui.tabs", {
 			}
 			$( a ).attr( "aria-controls", selector.substring( 1 ) );
 		});
+	},
+
+	// allow overriding how to find the list for rare usage scenarios (#7715)
+	_getList: function() {
+		return this.element.find( "ol,ul" ).eq( 0 );
 	},
 
 	_createPanel: function( id ) {

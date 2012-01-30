@@ -473,8 +473,8 @@ $.widget( "ui.autocomplete", {
 			this.search( null, event );
 			return;
 		}
-		if ( this.menu.first() && /^previous/.test(direction) ||
-				this.menu.last() && /^next/.test(direction) ) {
+		if ( this.menu.isFirstItem() && /^previous/.test(direction) ||
+				this.menu.isLastItem() && /^next/.test(direction) ) {
 			this._value( this.term );
 			this.menu.blur();
 			return;

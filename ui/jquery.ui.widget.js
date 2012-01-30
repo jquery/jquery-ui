@@ -204,10 +204,11 @@ $.Widget.prototype = {
 		}
 
 		this._create();
-		this._trigger( "create" );
+		this._trigger( "create", null, this._getCreateEventData() );
 		this._init();
 	},
 	_getCreateOptions: $.noop,
+	_getCreateEventData: $.noop,
 	_create: $.noop,
 	_init: $.noop,
 
@@ -329,6 +330,13 @@ $.Widget.prototype = {
 				return ( typeof handler === "string" ? instance[ handler ] : handler )
 					.apply( instance, arguments );
 			}
+
+			// copy the guid so direct unbinding works
+			if ( typeof handler !== "string" ) {
+				handlerProxy.guid = handler.guid =
+					handler.guid || handlerProxy.guid || jQuery.guid++;
+			}
+
 			var match = event.match( /^(\w+)\s*(.*)$/ ),
 				eventName = match[1] + "." + instance.widgetName,
 				selector = match[2];

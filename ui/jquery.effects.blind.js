@@ -27,7 +27,7 @@ $.effects.effect.blind = function( o, done ) {
 		motion = rpositivemotion.test( direction ),
 		animation = {},
 		show = mode === "show",
-		wrapper, distance;
+		wrapper, distance, margin;
 
 	// if already wrapped, the wrapper's properties are my property. #6245
 	if ( el.parent().is( ".ui-effects-wrapper" ) ) {
@@ -41,21 +41,23 @@ $.effects.effect.blind = function( o, done ) {
 	});
 
 	distance = wrapper[ ref ]();
+	margin = parseFloat( wrapper.css( ref2 ) );
 
 	animation[ ref ] = show ? distance : 0;
 	if ( !motion ) {
 		el
 			.css( vertical ? "bottom" : "right", 0 )
-			.css( vertical ? "top" : "left", "" )
+			.css( vertical ? "top" : "left", "auto" )
 			.css({ position: "absolute" });
-		animation[ ref2 ] = show ? 0 : distance;
+
+    animation[ ref2 ] = show ? margin : distance + margin;
 	}
 
 	// start at 0 if we are showing
 	if ( show ) {
 		wrapper.css( ref, 0 );
 		if ( ! motion ) {
-			wrapper.css( ref2, distance );
+			wrapper.css( ref2, margin + distance );
 		}
 	}
 
