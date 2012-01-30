@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>jQuery UI Popup - Popup Menu</title>
+	<link rel="stylesheet" href="../demos.css" />
+	<link rel="stylesheet" href="../../themes/base/jquery.ui.all.css" title="ui-theme" />
+	<script src="../../jquery-1.7.1.js"></script>
+	<script src="../../ui/jquery.ui.core.js"></script>
+	<script src="../../ui/jquery.ui.widget.js"></script>
+	<script src="../../ui/jquery.ui.position.js"></script>
+	<script src="../../ui/jquery.ui.button.js"></script>
+	<script src="../../ui/jquery.ui.menu.js"></script>
+	<script src="../../ui/jquery.ui.popup.js"></script>
+	<script>
+	$(function() {
+		function log( msg ) {
+			$( "<div/>" ).text( msg ).appendTo( "#log" );
+		}
+		var selected = function( event, ui ) {
+			log( "Selected: " + ui.item.text() );
+			$(this).popup( "close" );
+		}
+
+		$("#button1").button().next().menu( {select: selected, trigger: $("#button1")} );
+
+		$( "#rerun" )
+			.button()
+			.click(function() {
+				log( "Selected: " + $( this ).text() );
+			})
+			.next()
+				.button({
+					text: false,
+					icons: {
+						primary: "ui-icon-triangle-1-s"
+					}
+				})
+				.next()
+					.menu( {select: selected, trigger: $("#select")} )
+				.parent()
+					.buttonset({
+						items: "button"
+					});
+	});
+	</script>
+	<style type="text/css">
+		.ui-popup { position: absolute; z-index: 5000; }
+		.ui-menu { width: 200px; }
+ 	</style>
+</head>
+<body>
+
+<div class="demo">
+
+	<button id="button1">Show context menu 1</button>
+	<ul>
+		<li><a href="#">Amsterdam</a></li>
+		<li><a href="#">Anaheim</a></li>
+		<li><a href="#">Cologne</a></li>
+		<li><a href="#">Frankfurt</a></li>
+		<li><a href="#">Magdeburg</a></li>
+		<li><a href="#">Munich</a></li>
+		<li><a href="#">Utrecht</a></li>
+		<li><a href="#">Zurich</a></li>
+	</ul>
+
+
+	<div>
+		<div>
+			<button id="rerun">Run last action</button>
+			<button id="select">Select an action</button>
+			<ul>
+				<li><a href="#">Open...</a></li>
+				<li><a href="#">Save</a></li>
+				<li><a href="#">Delete</a></li>
+			</ul>
+		</div>
+	</div>
+
+	<div id="log"></div>
+</div>
+
+
+<div class="demo-description">
+
+<p>Make the popup a menu (or the menu a popup) and you get context menus.</p>
+
+</div><!-- End demo-description -->
+
+
+</body>
+</html>
