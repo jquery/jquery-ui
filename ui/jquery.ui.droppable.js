@@ -45,7 +45,7 @@ $.widget( "ui.droppable", {
 	// proportions: width and height of droppable
 
 	_create: function() {
-		this.refreshPosition();
+		this.refresh();
 		this.guid = guid++;
 		droppables[ this.guid ] = this;
 	},
