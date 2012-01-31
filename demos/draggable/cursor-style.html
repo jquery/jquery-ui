@@ -40,9 +40,17 @@
 	});
 
 	$(function() {
-		$( "#draggable" ).draggable({ cursorAt: { top: 56, left: 56 } });
-		$( "#draggable2" ).draggable({ cursorAt: { top: -5, left: -5 } });
-		$( "#draggable3" ).draggable({ cursorAt: { bottom: 0 } });
+		$( "#draggable" ).draggable({
+			beforeStart: function( event, ui ) {
+				ui.position.top += ui.pointer.y - ui.offset.top - $( event.target ).outerHeight() / 2;
+				ui.position.left += ui.pointer.x - ui.offset.left - $( event.target ).outerWidth() / 2;
+			}
+		});
+		$( "#draggable2" ).draggable({
+			beforeStart: function( event, ui ) {
+				ui.position.top += ui.pointer.y - ui.offset.top;
+			}
+		});
 	});
 	</script>
 </head>
@@ -55,11 +63,7 @@
 </div>
 
 <div id="draggable2" class="ui-widget-content">
-	<p>My cursor is at left -5 and top -5</p>
-</div>
-
-<div id="draggable3" class="ui-widget-content">
-	<p>My cursor position is only controlled for the 'bottom' value</p>
+	<p>My cursor position is always at the top</p>
 </div>
 
 </div><!-- End demo -->
@@ -67,7 +71,7 @@
 
 
 <div class="demo-description">
-<p>Position the cursor while dragging the object. By default the cursor appears wherever the user started the drag; use the <code>cursorAt</code> option to specify another location relative to the draggable (specify a pixel value from the top, right, bottom, and/or left).</p>
+<p>The <code>beforeStart</code> callback allows you to position the draggable element in order to adjust where the draggable movements will be calculated from. In this example, we adjust the position to control where the element is relative to the pointer during the drag.</p>
 </div><!-- End demo-description -->
 
 </body>
