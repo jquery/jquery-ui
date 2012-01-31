@@ -18,81 +18,17 @@
 	#containment-wrapper { width: 95%; height:150px; border:2px solid #ccc; padding: 10px; }
 	</style>
 	<script>
-	$.ui.draggable.prototype.options.axis = null;
-	$( document ).bind( "dragstart", function( event, ui ) {
-		var axis,
-			draggable = $( event.target ).data( "draggable" );
-
-		if ( !draggable || !draggable.options.axis ) {
-			return;
-		}
-
-		axis = draggable.options.axis;
-
-		function drag( event, ui ) {
-			if ( axis === "x" ) {
-				ui.position.top = ui.originalPosition.top;
-			} else {
+	$(function() {
+		$( "#draggable" ).draggable({
+			drag: function( event, ui ) {
 				ui.position.left = ui.originalPosition.left;
 			}
-		}
-
-		draggable.element
-			.bind( "drag", drag )
-			.one( "dragstop", function() {
-				draggable.element.unbind( "drag", drag );
-			});
-	});
-
-	$.ui.draggable.prototype.options.containment = null;
-	$.ui.draggable.prototype._getContainment = function() {
-		return this.options.containment === "parent" ?
-			this.element.parent() :
-			$( this.options.containment );
-	};
-	$( document ).bind( "dragstart", function( event, ui ) {
-		var elem, container, offset, left, top, right, bottom,
-			draggable = $( event.target ).data( "draggable" );
-
-		if ( !draggable || !draggable.options.containment ) {
-			return;
-		}
-
-		elem = ui.helper || draggable.element;
-		container = draggable._getContainment();
-		offset = container.offset();
-		left = offset.left +
-			(parseFloat( $.curCSS( container[0], "borderLeftWidth", true ) ) || 0) +
-			(parseFloat( $.curCSS( container[0], "paddingLeft", true ) ) || 0);
-		top = offset.top +
-			(parseFloat( $.curCSS( container[0], "borderTopWidth", true ) ) || 0) +
-			(parseFloat( $.curCSS( container[0], "paddingTop", true ) ) || 0);
-		right = left + container.width();
-		bottom = top + container.height();
-
-		function drag( event, ui ) {
-			var leftDiff = ui.originalOffset.left - ui.originalPosition.left,
-				topDiff = ui.originalOffset.top - ui.originalPosition.top;
-
-			ui.position.left = Math.max( ui.position.left, left - leftDiff );
-			ui.position.left = Math.min( ui.position.left,
-				right - elem.outerWidth() - leftDiff );
-
-			ui.position.top = Math.max( ui.position.top, top - topDiff );
-			ui.position.top = Math.min( ui.position.top,
-				bottom - elem.outerHeight() - topDiff );
-		}
-
-		draggable.element
-			.bind( "drag", drag )
-			.one( "dragstop", function() {
-				draggable.element.unbind( "drag", drag );
-			});
-	});
-
-	$(function() {
-		$( "#draggable" ).draggable({ axis: "y" });
-		$( "#draggable2" ).draggable({ axis: "x" });
+		});
+		$( "#draggable2" ).draggable({
+			drag: function( event, ui ) {
+				ui.position.top = ui.originalPosition.top;
+			}
+		});
 
 		$( "#draggable3" ).draggable({ containment: "#containment-wrapper" });
 		$( "#draggable4" ).draggable({ containment: "#demo-frame" });
@@ -134,7 +70,8 @@
 
 
 <div class="demo-description">
-<p>Constrain the movement of each draggable by defining the boundaries of the draggable area. Set the <code>axis</code> option to limit the draggable's path to the x- or y-axis, or use the <code>containment</code> option to specify a parent DOM element or a jQuery selector, like 'document.'</p>
+<p>Constrain the movement of each draggable by defining the boundaries of the draggable area. The <code>containment</code> option allows you to specify any element to use as a containing box; you can pass any selector or the string "parent".</p>
+<p>The draggable element can also be constrained with custom logic inside a drag event handler. Modifying the <code>ui.position</code> object's <code>left</code> and/or <code>top</code> properties will change where the element will be positioned. In this example, we're forcing the top or left to always be the same as where it started, resulting in the element being confined to a specific axis.</p>
 </div><!-- End demo-description -->
 
 </body>

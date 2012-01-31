@@ -374,4 +374,87 @@ $.widget( "ui.draggable", $.ui.interaction, {
 	}
 });
 
+$.widget( "ui.draggable", $.ui.draggable, {
+	// $.widget doesn't know how to handle redefinitions with a custom prefix
+	// custom prefixes are going away anyway, so it's not worth fixing right now
+	widgetEventPrefix: "drag",
+
+	options: {
+		containment: null
+	},
+
+	_create: function() {
+		this._super();
+		this._bind({
+			dragstart: "_setContainment",
+			drag: "_contain"
+		});
+	},
+
+	_setContainment: function( event, ui ) {
+		var offset, left, top,
+			container = this._getContainer();
+
+		if ( !container ) {
+			this.containment = null;
+			return;
+		}
+
+		offset = container.offset(),
+		left = offset.left +
+			(parseFloat( $.curCSS( container[0], "borderLeftWidth", true ) ) || 0) +
+			(parseFloat( $.curCSS( container[0], "paddingLeft", true ) ) || 0);
+		top = offset.top +
+			(parseFloat( $.curCSS( container[0], "borderTopWidth", true ) ) || 0) +
+			(parseFloat( $.curCSS( container[0], "paddingTop", true ) ) || 0);
+
+		this.containment = {
+			left: left,
+			top: top,
+			right: left + container.width(),
+			bottom: top + container.height(),
+			leftDiff: ui.originalOffset.left - ui.originalPosition.left,
+			topDiff: ui.originalOffset.top - ui.originalPosition.top,
+			width: this.dragEl.outerWidth(),
+			height: this.dragEl.outerHeight()
+		};
+	},
+
+	_contain: function( event, ui ) {
+		var containment = this.containment;
+
+		if ( !containment ) {
+			return;
+		}
+
+		ui.position.left = Math.max( ui.position.left,
+			containment.left - containment.leftDiff );
+		ui.position.left = Math.min( ui.position.left,
+			containment.right - containment.width - containment.leftDiff );
+
+		ui.position.top = Math.max( ui.position.top,
+			containment.top - containment.topDiff );
+		ui.position.top = Math.min( ui.position.top,
+			containment.bottom - containment.height - containment.topDiff );
+	},
+
+	_getContainer: function() {
+		var container,
+			containment = this.options.containment;
+
+		if ( !containment ) {
+			container = null;
+		} else if ( containment === "parent" ) {
+			container = this.element.parent();
+		} else {
+			container = $( containment );
+			if ( !container.length ) {
+				container = null;
+			}
+		}
+
+		return container;
+	}
+});
+
 })( jQuery );
