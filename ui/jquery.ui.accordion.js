@@ -438,7 +438,11 @@ $.extend( $.ui.accordion, {
 			}
 
 			var showOverflow = options.toShow.css( "overflow" ),
+				showOverflowX = options.toHide.css( "overflowX" ),
+				showOverflowY = options.toHide.css( "overflowY" ),
 				hideOverflow = options.toHide.css( "overflow" ),
+				hideOverflowX = options.toHide.css( "overflowX" ),
+				hideOverflowY = options.toHide.css( "overflowY" ),
 				percentDone = 0,
 				showProps = {},
 				hideProps = {},
@@ -521,9 +525,15 @@ $.extend( $.ui.accordion, {
 				complete: function() {
 					options.toShow.css({
 						width: originalWidth,
-						overflow: showOverflow
+						overflow: showOverflow,
+						overflowX: showOverflowX,
+						overflowY: showOverflowY
 					});
-					options.toHide.css( "overflow", hideOverflow );
+					options.toHide.css({
+						overflow: hideOverflow,
+						overflowX: hideOverflowX,
+						overflowY: hideOverflowY
+					});
 					options.complete();
 				}
 			});
