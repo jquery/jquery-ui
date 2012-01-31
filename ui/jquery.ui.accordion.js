@@ -433,17 +433,11 @@ $.extend( $.ui.accordion, {
 	animations: {
 		slide: function( options, additions ) {
 			if ( options.prevShow || options.prevHide ) {
+				options.prevShow.stop( true, true );
 				options.prevHide.stop( true, true );
 				options.toHide = options.prevShow;
 			}
 
-			var showOverflow = options.toShow.css( "overflow" ),
-				hideOverflow = options.toHide.css( "overflow" ),
-				percentDone = 0,
-				showProps = {},
-				hideProps = {},
-				fxAttrs = [ "height", "paddingTop", "paddingBottom" ],
-				originalWidth;
 			options = $.extend({
 				easing: "swing",
 				duration: 300
@@ -452,23 +446,12 @@ $.extend( $.ui.accordion, {
 			options.widget.lastToggle = options;
 
 			if ( !options.toHide.size() ) {
-				originalWidth = options.toShow[0].style.width;
 				options.toShow
-					.show()
-					.width( options.toShow.width() )
-					.hide()
 					.animate({
 						height: "show",
 						paddingTop: "show",
 						paddingBottom: "show"
-					}, {
-						duration: options.duration,
-						easing: options.easing,
-						complete: function() {
-							options.toShow.width( originalWidth );
-							options.complete();
-						}
-					});
+					}, options );
 				return;
 			}
 			if ( !options.toShow.size() ) {
@@ -479,61 +462,35 @@ $.extend( $.ui.accordion, {
 				}, options );
 				return;
 			}
-			// fix width before calculating height of hidden element
-			var s = options.toShow;
-			originalWidth = s[0].style.width;
-			s.width( s.parent().width()
-				- parseFloat( s.css( "paddingLeft" ) )
-				- parseFloat( s.css( "paddingRight" ) )
-				- ( parseFloat( s.css( "borderLeftWidth" ) ) || 0 )
-				- ( parseFloat( s.css( "borderRightWidth" ) ) || 0 ) );
 
-			$.each( fxAttrs, function( i, prop ) {
-				hideProps[ prop ] = "hide";
-
-				var parts = ( "" + $.css( options.toShow[0], prop ) ).match( /^([\d+-.]+)(.*)$/ ),
-					// work around bug when a panel has no height - #7335
-					propVal = prop === "height" && parts[ 1 ] === "0" ? 1 : parts[ 1 ];
-				showProps[ prop ] = {
-					value: propVal,
-					unit: parts[ 2 ] || "px"
-				};
-			});
-			options.toShow.css({ height: 0, overflow: "hidden" }).show();
-			options.toHide
-				.filter( ":hidden" )
-					.each( options.complete )
-				.end()
-				.filter( ":visible" )
-				.animate( hideProps, {
-				step: function( now, settings ) {
-					if ( settings.prop == "height" || settings.prop == "paddingTop" || settings.prop == "paddingBottom" ) {
-						percentDone = ( settings.end - settings.start === 0 ) ? 0 :
-							( settings.now - settings.start ) / ( settings.end - settings.start );
-					}
-
-					options.toShow[ 0 ].style[ settings.prop ] =
-						( percentDone * showProps[ settings.prop ].value )
-						+ showProps[ settings.prop ].unit;
-				},
+			var total = options.toShow.show().outerHeight();
+			options.toHide.animate( hideProps, {
 				duration: options.duration,
-				easing: options.easing,
-				complete: function() {
-					options.toShow.css({
-						width: originalWidth,
-						overflow: showOverflow
-					});
-					options.toHide.css( "overflow", hideOverflow );
-					options.complete();
-				}
+				easing: options.easing
 			});
-		},
-		bounceslide: function( options ) {
-			this.slide( options, {
-				easing: options.down ? "easeOutBounce" : "swing",
-				duration: options.down ? 1000 : 200
-			});
-		}
+			options.toShow
+				.hide()
+				.data( "togglePair", {
+					total: total,
+					toHide: options.toHide
+				})
+				.animate( showProps, {
+					duration: options.duration,
+					easing: options.easing,
+					complete: function() {
+						setTimeout(function() {
+							options.toShow.removeData( "togglePair" );
+							options.complete();
+						}, 1 );
+					}
+				});
+			},
+			bounceslide: function( options ) {
+				this.slide( options, {
+					easing: options.down ? "easeOutBounce" : "swing",
+					duration: options.down ? 1000 : 200
+				});
+			}
 	}
 });
 
@@ -680,5 +637,18 @@ if ( $.uiBackCompat !== false ) {
 		};
 	}( jQuery, jQuery.ui.accordion.prototype ) );
 }
+
+$.fx.step._height = function( fx ) {
+	var elem = $( fx.elem ),
+		data = elem.data( "togglePair" );
+	elem.height( data.total - elem.outerHeight() - data.toHide.outerHeight() + elem.height() );
+};
+var showProps = {},
+	hideProps = {};
+showProps._height = showProps.height =
+	showProps.paddingTop = showProps.paddingBottom =
+	showProps.borderTopWidth = showProps.borderBottomWidth = "show";
+hideProps.height = hideProps.paddingTop = hideProps.paddingBottom =
+	hideProps.borderTopWidth = hideProps.borderBottomWidth = "hide";
 
 })( jQuery );
