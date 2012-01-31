@@ -13,7 +13,6 @@
  */
 (function( $, undefined ) {
 
-// TODO: use ui-accordion-header-active class and fix styling
 $.widget( "ui.accordion", {
 	version: "@VERSION",
 	options: {
@@ -58,7 +57,7 @@ $.widget( "ui.accordion", {
 			options.active += this.headers.length;
 		}
 		self.active = self._findActive( options.active )
-			.addClass( "ui-state-default ui-state-active" )
+			.addClass( "ui-accordion-header-active ui-state-active" )
 			.toggleClass( "ui-corner-all" )
 			.toggleClass( "ui-corner-top" );
 		self.active.next().addClass( "ui-accordion-content-active" );
@@ -104,6 +103,13 @@ $.widget( "ui.accordion", {
 		this._setupEvents( options.event );
 	},
 
+	_getCreateEventData: function() {
+		return {
+			header: this.active,
+			content: !this.active.length ? $() : this.active.next()
+		};
+	},
+
 	_createIcons: function() {
 		var icons = this.options.icons;
 		if ( icons ) {
@@ -113,13 +119,15 @@ $.widget( "ui.accordion", {
 			this.active.children( ".ui-accordion-header-icon" )
 				.removeClass( icons.header )
 				.addClass( icons.activeHeader );
-			this.element.addClass( "ui-accordion-icons" );
+			this.headers.addClass( "ui-accordion-icons" );
 		}
 	},
 
 	_destroyIcons: function() {
-		this.headers.children( ".ui-accordion-header-icon" ).remove();
-		this.element.removeClass( "ui-accordion-icons" );
+		this.headers
+			.removeClass( "ui-accordion-icons" )
+			.children( ".ui-accordion-header-icon" )
+				.remove();
 	},
 
 	_destroy: function() {
@@ -131,7 +139,7 @@ $.widget( "ui.accordion", {
 		// clean up headers
 		this.headers
 			.unbind( ".accordion" )
-			.removeClass( "ui-accordion-header ui-accordion-disabled ui-helper-reset ui-state-default ui-corner-all ui-state-active ui-state-disabled ui-corner-top" )
+			.removeClass( "ui-accordion-header ui-accordion-header-active ui-accordion-disabled ui-helper-reset ui-state-default ui-corner-all ui-state-active ui-state-disabled ui-corner-top" )
 			.removeAttr( "role" )
 			.removeAttr( "aria-expanded" )
 			.removeAttr( "aria-selected" )
@@ -335,15 +343,15 @@ $.widget( "ui.accordion", {
 
 		// switch classes
 		active
-			.removeClass( "ui-state-active ui-corner-top" )
-			.addClass( "ui-state-default ui-corner-all" )
+			.removeClass( "ui-accordion-header-active ui-state-active ui-corner-top" )
+			.addClass( "ui-corner-all" )
 			.children( ".ui-accordion-header-icon" )
 				.removeClass( options.icons.activeHeader )
 				.addClass( options.icons.header );
 		if ( !clickedIsActive ) {
 			clicked
-				.removeClass( "ui-state-default ui-corner-all" )
-				.addClass( "ui-state-active ui-corner-top" )
+				.removeClass( "ui-corner-all" )
+				.addClass( "ui-accordion-header-active ui-state-active ui-corner-top" )
 				.children( ".ui-accordion-header-icon" )
 					.removeClass( options.icons.header )
 					.addClass( options.icons.activeHeader );
@@ -439,7 +447,11 @@ $.extend( $.ui.accordion, {
 			}
 
 			var showOverflow = options.toShow.css( "overflow" ),
+				showOverflowX = options.toHide.css( "overflowX" ),
+				showOverflowY = options.toHide.css( "overflowY" ),
 				hideOverflow = options.toHide.css( "overflow" ),
+				hideOverflowX = options.toHide.css( "overflowX" ),
+				hideOverflowY = options.toHide.css( "overflowY" ),
 				percentDone = 0,
 				showProps = {},
 				hideProps = {},
@@ -522,9 +534,15 @@ $.extend( $.ui.accordion, {
 				complete: function() {
 					options.toShow.css({
 						width: originalWidth,
-						overflow: showOverflow
+						overflow: showOverflow,
+						overflowX: showOverflowX,
+						overflowY: showOverflowY
 					});
-					options.toHide.css( "overflow", hideOverflow );
+					options.toHide.css({
+						overflow: hideOverflow,
+						overflowX: hideOverflowX,
+						overflowY: hideOverflowY
+					});
 					options.complete();
 				}
 			});

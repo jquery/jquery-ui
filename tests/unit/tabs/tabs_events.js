@@ -2,6 +2,45 @@
 
 module( "tabs: events" );
 
+test( "create", function() {
+	expect( 10 );
+
+	var element = $( "#tabs1" ),
+		tabs = element.find( "ul a" ),
+		panels = element.children( "div" );
+
+	element.tabs({
+		create: function( event, ui ) {
+			equals( ui.tab.size(), 1, "tab size" );
+			strictEqual( ui.tab[ 0 ], tabs[ 0 ], "tab" );
+			equals( ui.panel.size(), 1, "panel size" );
+			strictEqual( ui.panel[ 0 ], panels[ 0 ], "panel" );
+		}
+	});
+	element.tabs( "destroy" );
+
+	element.tabs({
+		active: 2,
+		create: function( event, ui ) {
+			equals( ui.tab.size(), 1, "tab size" );
+			strictEqual( ui.tab[ 0 ], tabs[ 2 ], "tab" );
+			equals( ui.panel.size(), 1, "panel size" );
+			strictEqual( ui.panel[ 0 ], panels[ 2 ], "panel" );
+		}
+	});
+	element.tabs( "destroy" );
+
+	element.tabs({
+		active: false,
+		collapsible: true,
+		create: function( event, ui ) {
+			equals( ui.tab.size(), 0, "tab size" );
+			equals( ui.panel.size(), 0, "panel size" );
+		}
+	});
+	element.tabs( "destroy" );
+});
+
 test( "beforeActivate", function() {
 	expect( 38 );
 

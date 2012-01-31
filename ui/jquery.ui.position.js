@@ -37,7 +37,7 @@ $.position = {
 
 		div.remove();
 
-		return w1 - w2; 
+		return w1 - w2;
 	},
 	getScrollInfo: function(within) {
 		var notWindow = within[0] !== window,
@@ -401,12 +401,12 @@ $.ui.position = {
 		}
 	},
 	flipfit: {
-		left: function() { 
-			$.ui.position.flip.left.apply( this, arguments ); 
+		left: function() {
+			$.ui.position.flip.left.apply( this, arguments );
 			$.ui.position.fit.left.apply( this, arguments );
 		},
-		top: function() { 
-			$.ui.position.flip.top.apply( this, arguments ); 
+		top: function() {
+			$.ui.position.flip.top.apply( this, arguments );
 			$.ui.position.fit.top.apply( this, arguments );
 		}
 	}
@@ -415,7 +415,7 @@ $.ui.position = {
 // fraction support test
 (function () {
 	var testElement, testElementParent, testElementStyle, offsetLeft, i
-		body = document.getElementsByTagName( "body" )[ 0 ], 
+		body = document.getElementsByTagName( "body" )[ 0 ],
 		div = document.createElement( "div" );
 
 	//Create a "fake body" for testing based on method used in jQuery.support
@@ -429,7 +429,7 @@ $.ui.position = {
 		background: "none"
 	};
 	if ( body ) {
-		jQuery.extend( testElementStyle, {
+		$.extend( testElementStyle, {
 			position: "absolute",
 			left: "-1000px",
 			top: "-1000px"
