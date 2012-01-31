@@ -50,6 +50,10 @@
 				if ( ( Math.abs( pX - cX ) + Math.abs( pY - cY ) ) < cfg.sensitivity ) {
 					clear();
 					event.type = "hoverintent";
+					// prevent accessing the original event since the new event
+					// is fired asynchronously and the old event is no longer
+					// usable (#6028)
+					event.originalEvent = {};
 					jQuery.event.handle.apply( self, args );
 				} else {
 					pX = cX;
