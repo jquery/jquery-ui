@@ -103,6 +103,13 @@ $.widget( "ui.accordion", {
 		this._setupEvents( options.event );
 	},
 
+	_getCreateEventData: function() {
+		return {
+			header: this.active,
+			content: !this.active.length ? $() : this.active.next()
+		};
+	},
+
 	_createIcons: function() {
 		var icons = this.options.icons;
 		if ( icons ) {
