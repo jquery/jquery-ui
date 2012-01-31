@@ -203,7 +203,6 @@ $.Widget.prototype = {
 		create: null
 	},
 	_createWidget: function( options, element ) {
-		this._base = {};
 		element = $( element || this.defaultElement || this )[ 0 ];
 		this.element = $( element );
 		this.options = $.widget.extend( {},
