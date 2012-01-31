@@ -12,7 +12,9 @@
 .ui-accordion .ui-accordion-header { cursor: pointer; position: relative; margin-top: 2px; zoom: 1; }
 .ui-accordion .ui-accordion-header-active { border-bottom: 0; }
 .ui-accordion .ui-accordion-heading { display: block; font-size: 1em; padding: .5em .5em .5em .7em; }
-.ui-accordion-icons .ui-accordion-heading { padding-left: 2.2em; }
+.ui-accordion-icons a.ui-accordion-heading { padding-left: 2.2em; }
+.ui-accordion-noicons a.ui-accordion-heading { padding-left: .7em; }
+.ui-accordion-icons .ui-accordion-icons a.ui-accordion-heading { padding-left: 2.2em; }
 .ui-accordion .ui-accordion-header .ui-accordion-header-icon { position: absolute; left: .5em; top: 50%; margin-top: -8px; }
 .ui-accordion .ui-accordion-content { padding: 1em 2.2em; overflow: auto; display: none; zoom: 1; }
 .ui-accordion .ui-accordion-content-active { display: block; }
