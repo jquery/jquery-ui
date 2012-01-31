@@ -121,11 +121,13 @@ $.widget( "ui.accordion", {
 				.addClass( icons.activeHeader );
 			this.element.addClass( "ui-accordion-icons" );
 		}
+		else
+			this.element.addClass( "ui-accordion-noicons" );
 	},
 
 	_destroyIcons: function() {
 		this.headers.children( ".ui-accordion-header-icon" ).remove();
-		this.element.removeClass( "ui-accordion-icons" );
+		this.element.removeClass( "ui-accordion-icons ui-accordion-noicons" );
 	},
 
 	_destroy: function() {
