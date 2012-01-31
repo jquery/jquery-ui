@@ -140,7 +140,7 @@ $.widget( "ui.tabs", {
 			return;
 		}
 
-		this._super( "_setOption", key, value);
+		this._super( key, value);
 
 		// setting collapsible: false while collapsed; open first panel
 		if ( key === "collapsible" && !value && this.options.active === false ) {
@@ -610,7 +610,7 @@ if ( $.uiBackCompat !== false ) {
 		},
 
 		_create: function() {
-			this._super( "_create" );
+			this._super();
 
 			var self = this;
 
@@ -647,17 +647,17 @@ if ( $.uiBackCompat !== false ) {
 			if ( key === "cache" && value === false ) {
 				this.anchors.removeData( "cache.tabs" );
 			}
-			this._super( "_setOption", key, value );
+			this._super( key, value );
 		},
 
 		_destroy: function() {
 			this.anchors.removeData( "cache.tabs" );
-			this._super( "_destroy" );
+			this._super();
 		},
 
 		url: function( index, url ){
 			this.anchors.eq( index ).removeData( "cache.tabs" );
-			this._superApply( "url", arguments );
+			this._superApply( arguments );
 		}
 	});
 
@@ -676,7 +676,7 @@ if ( $.uiBackCompat !== false ) {
 			spinner: "<em>Loading&#8230;</em>"
 		},
 		_create: function() {
-			this._super( "_create" );
+			this._super();
 			this._bind({
 				tabsbeforeload: function( event, ui ) {
 					if ( !this.options.spinner ) {
@@ -710,7 +710,7 @@ if ( $.uiBackCompat !== false ) {
 				trigger = true;
 			}
 
-			this._superApply( "enable", arguments );
+			this._superApply( arguments );
 
 			if ( trigger ) {
 				this._trigger( "enable", null, this._ui( this.anchors[ index ], this.panels[ index ] ) );
@@ -726,7 +726,7 @@ if ( $.uiBackCompat !== false ) {
 				trigger = true;
 			}
 
-			this._superApply( "disable", arguments );
+			this._superApply( arguments );
 
 			if ( trigger ) {
 				this._trigger( "disable", null, this._ui( this.anchors[ index ], this.panels[ index ] ) );
@@ -866,7 +866,7 @@ if ( $.uiBackCompat !== false ) {
 			if ( options.active === null && options.selected !== undefined ) {
 				options.active = options.selected === -1 ? false : options.selected;
 			}
-			this._super( "_create" );
+			this._super();
 			options.selected = options.active;
 			if ( options.selected === false ) {
 				options.selected = -1;
@@ -875,11 +875,11 @@ if ( $.uiBackCompat !== false ) {
 
 		_setOption: function( key, value ) {
 			if ( key !== "selected" ) {
-				return this._super( "_setOption", key, value );
+				return this._super( key, value );
 			}
 
 			var options = this.options;
-			this._super( "_setOption", "active", value === -1 ? false : value );
+			this._super( "active", value === -1 ? false : value );
 			options.selected = options.active;
 			if ( options.selected === false ) {
 				options.selected = -1;
@@ -887,7 +887,7 @@ if ( $.uiBackCompat !== false ) {
 		},
 
 		_eventHandler: function( event ) {
-			this._superApply( "_eventHandler", arguments );
+			this._superApply( arguments );
 			this.options.selected = this.options.active;
 			if ( this.options.selected === false ) {
 				this.options.selected = -1;
@@ -902,25 +902,25 @@ if ( $.uiBackCompat !== false ) {
 			select: null
 		},
 		_create: function() {
-			this._super( "_create" );
+			this._super();
 			if ( this.options.active !== false ) {
 				this._trigger( "show", null, this._ui(
 					this.active[ 0 ], this._getPanelForTab( this.active )[ 0 ] ) );
 			}
 		},
 		_trigger: function( type, event, data ) {
-			var ret = this._superApply( "_trigger", arguments );
+			var ret = this._superApply( arguments );
 			if ( !ret ) {
 				return false;
 			}
 			if ( type === "beforeActivate" && data.newTab.length ) {
-				ret = this._super( "_trigger", "select", event, {
+				ret = this._super( "select", event, {
 					tab: data.newTab[ 0],
 					panel: data.newPanel[ 0 ],
 					index: data.newTab.closest( "li" ).index()
 				});
 			} else if ( type === "activate" && data.newTab.length ) {
-				ret = this._super( "_trigger", "show", event, {
+				ret = this._super( "show", event, {
 					tab: data.newTab[ 0 ],
 					panel: data.newPanel[ 0 ],
 					index: data.newTab.closest( "li" ).index()
@@ -964,7 +964,7 @@ if ( $.uiBackCompat !== false ) {
 				}
 				options.active = active;
 			}
-			this._super( "_create" );
+			this._super();
 		},
 		_cookie: function( active ) {
 			var cookie = [ this.cookie ||
@@ -976,19 +976,19 @@ if ( $.uiBackCompat !== false ) {
 			return $.cookie.apply( null, cookie );
 		},
 		_refresh: function() {
-			this._super( "_refresh" );
+			this._super();
 			if ( this.options.cookie ) {
 				this._cookie( this.options.active, this.options.cookie );
 			}
 		},
 		_eventHandler: function( event ) {
-			this._superApply( "_eventHandler", arguments );
+			this._superApply( arguments );
 			if ( this.options.cookie ) {
 				this._cookie( this.options.active, this.options.cookie );
 			}
 		},
 		_destroy: function() {
-			this._super( "_destroy" );
+			this._super();
 			if ( this.options.cookie ) {
 				this._cookie( null, this.options.cookie );
 			}
@@ -1003,7 +1003,7 @@ if ( $.uiBackCompat !== false ) {
 				_data.panel = _data.panel[ 0 ];
 				_data.tab = _data.tab[ 0 ];
 			}
-			return this._super( "_trigger", type, event, _data );
+			return this._super( type, event, _data );
 		}
 	});
 }

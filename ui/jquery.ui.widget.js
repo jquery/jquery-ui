@@ -56,8 +56,9 @@ $.widget = function( name, base, prototype ) {
 	// extend with the existing constructor to carry over any static properties
 	$.extend( constructor, existingConstructor, {
 		version: prototype.version,
-		// store the base widget so we can walk up the prototype chain in _super()
-		base: base,
+		// copy the object used to create the prototype in case we need to
+		// redefine the widget later
+		proto: $.extend( {}, prototype ),
 		// track widgets that inherit from this widget in case this widget is
 		// redefined after a widget inherits from it
 		_childConstructors: []
@@ -68,6 +69,33 @@ $.widget = function( name, base, prototype ) {
 	// otherwise we'll modify the options hash on the prototype that we're
 	// inheriting from
 	basePrototype.options = $.widget.extend( {}, basePrototype.options );
+	$.each( prototype, function( prop, value ) {
+		if ( $.isFunction( value ) ) {
+			prototype[ prop ] = (function() {
+				var _super = function() {
+					return base.prototype[ prop ].apply( this, arguments );
+				};
+				var _superApply = function( args ) {
+					return base.prototype[ prop ].apply( this, args );
+				};
+				return function() {
+					var __super = this._super,
+						__superApply = this._superApply,
+						returnValue;
+
+					this._super = _super;
+					this._superApply = _superApply;
+
+					returnValue = value.apply( this, arguments );
+
+					this._super = __super;
+					this._superApply = __superApply;
+
+					return returnValue;
+				};
+			})();
+		}
+	});
 	constructor.prototype = $.widget.extend( basePrototype, {
 		// TODO: remove
 		widgetEventPrefix: name
@@ -84,18 +112,11 @@ $.widget = function( name, base, prototype ) {
 	// level in the prototype chain.
 	if ( existingConstructor ) {
 		$.each( existingConstructor._childConstructors, function( i, child ) {
-			var prop,
-				prototype = {},
-				childPrototype = child.prototype;
-			// find all the properties/methods that were defined at the child level
-			for ( prop in childPrototype ) {
-				if ( childPrototype.hasOwnProperty( prop ) ) {
-					prototype[ prop ] = childPrototype[ prop ];
-				}
-			}
+			var childPrototype = child.prototype;
+
 			// redefine the child widget using the same prototype that was
 			// originally used, but inherit from the new version of the base
-			$.widget( childPrototype.namespace + "." + childPrototype.widgetName, constructor, prototype );
+			$.widget( childPrototype.namespace + "." + childPrototype.widgetName, constructor, child.proto );
 		});
 		// remove the list of existing child constructors from the old constructor
 		// so the old child constructors can be garbage collected
@@ -234,30 +255,6 @@ $.Widget.prototype = {
 		this.focusable.removeClass( "ui-state-focus" );
 	},
 	_destroy: $.noop,
-
-	_super: function( method ) {
-		return this._superApply( method, slice.call( arguments, 1 ) );
-	},
-	_superApply: function( method, args ) {
-		var ret,
-			// to find the super method, we walk up the prototype chain looking
-			// for a level that has the method defined; we track which level
-			// we're on based on the method name so that if a super method calls
-			// a normal method, which in turn calls a super method, we start
-			// back at the top of the chain
-			currentBase = this._base[ method ] || this.constructor.base,
-			base = currentBase;
-		while ( !base.prototype.hasOwnProperty( method ) ||
-				// make sure we catch the case where the topmost definition of
-				// the method is not the topmost level of the prototype chain
-				base.prototype[ method ] === this[ method ] ) {
-			base = base.base;
-		}
-		this._base[ method ] = base.base;
-		ret = base.prototype[ method ].apply( this, args );
-		this._base[ method ] = currentBase;
-		return ret;
-	},
 
 	widget: function() {
 		return this.element;

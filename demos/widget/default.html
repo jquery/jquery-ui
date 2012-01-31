@@ -106,7 +106,7 @@
 			// always refresh when changing options
 			_setOptions: function() {
 				// _super and _superApply handle keeping the right this-context
-				this._superApply( "_setOptions", arguments );
+				this._superApply( arguments );
 				this._refresh();
 			},
 
@@ -116,7 +116,7 @@
 				if ( /red|green|blue/.test(key) && (value < 0 || value > 255) ) {
 					return;
 				}
-				this._super( "_setOption", key, value );
+				this._super( key, value );
 			}
 		});
 

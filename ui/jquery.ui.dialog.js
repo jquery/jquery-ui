@@ -607,7 +607,7 @@ $.widget("ui.dialog", {
 				break;
 		}
 
-		this._super( "_setOption", key, value );
+		this._super( key, value );
 	},
 
 	_size: function() {
