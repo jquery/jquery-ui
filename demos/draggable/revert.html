@@ -11,31 +11,25 @@
 	<script src="../../ui/jquery.ui.draggable.js"></script>
 	<link rel="stylesheet" href="../demos.css">
 	<style>
-	#draggable, #draggable2 { width: 100px; height: 100px; padding: 0.5em; float: left; margin: 0 10px 10px 0; }
+	.ui-draggable { width: 100px; height: 100px; padding: 0.5em; float: left; margin: 0 10px 10px 0; }
 	</style>
 	<script>
-	$.ui.draggable.prototype.options.revert = false;
-	$( document ).bind( "dragstop", function( event, ui ) {
-		var elem,
-			helper = ui.helper,
-			draggable = $( event.target ).data( "draggable" );
-
-		if ( !draggable || !draggable.options.revert ) {
-			return;
-		}
-
-		elem = helper || draggable.element;
-		(helper || draggable.element).animate( ui.originalPosition, function() {
-			if ( helper ) {
-				helper.remove();
+	$(function() {
+		$( "#draggable" ).draggable({
+			stop: function( event, ui ) {
+				$( event.target ).animate( ui.originalPosition );
 			}
 		});
-		event.preventDefault();
-	});
-
-	$(function() {
-		$( "#draggable" ).draggable({ revert: true });
-		$( "#draggable2" ).draggable({ revert: true, helper: true });
+		$( "#draggable2" ).draggable({
+			helper: true,
+			stop: function( event, ui ) {
+				ui.helper.animate( ui.originalPosition, function() {
+					ui.helper.remove();
+				});
+				// prevent the draggable plugin from removing the helper
+				event.preventDefault();
+			}
+		});
 	});
 	</script>
 </head>
@@ -56,7 +50,7 @@
 
 
 <div class="demo-description">
-<p>Return the draggable (or it's helper) to its original location when dragging stops with the boolean <code>revert</code> option.</p>
+<p>The <code>stop</code> callback can be used to perform an action after the user finishing dragging the element. For example, if you want to return the draggable (or it's helper) to its original location when dragging stops, you can do so in the <code>stop</code> callback.</p>
 </div><!-- End demo-description -->
 
 </body>
