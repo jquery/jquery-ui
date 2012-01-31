@@ -13,7 +13,6 @@
  */
 (function( $, undefined ) {
 
-// TODO: use ui-accordion-header-active class and fix styling
 $.widget( "ui.accordion", {
 	version: "@VERSION",
 	options: {
@@ -58,7 +57,7 @@ $.widget( "ui.accordion", {
 			options.active += this.headers.length;
 		}
 		self.active = self._findActive( options.active )
-			.addClass( "ui-state-default ui-state-active" )
+			.addClass( "ui-accordion-header-active ui-state-active" )
 			.toggleClass( "ui-corner-all" )
 			.toggleClass( "ui-corner-top" );
 		self.active.next().addClass( "ui-accordion-content-active" );
@@ -131,7 +130,7 @@ $.widget( "ui.accordion", {
 		// clean up headers
 		this.headers
 			.unbind( ".accordion" )
-			.removeClass( "ui-accordion-header ui-accordion-disabled ui-helper-reset ui-state-default ui-corner-all ui-state-active ui-state-disabled ui-corner-top" )
+			.removeClass( "ui-accordion-header ui-accordion-header-active ui-accordion-disabled ui-helper-reset ui-state-default ui-corner-all ui-state-active ui-state-disabled ui-corner-top" )
 			.removeAttr( "role" )
 			.removeAttr( "aria-expanded" )
 			.removeAttr( "aria-selected" )
@@ -335,15 +334,15 @@ $.widget( "ui.accordion", {
 
 		// switch classes
 		active
-			.removeClass( "ui-state-active ui-corner-top" )
-			.addClass( "ui-state-default ui-corner-all" )
+			.removeClass( "ui-accordion-header-active ui-state-active ui-corner-top" )
+			.addClass( "ui-corner-all" )
 			.children( ".ui-accordion-header-icon" )
 				.removeClass( options.icons.activeHeader )
 				.addClass( options.icons.header );
 		if ( !clickedIsActive ) {
 			clicked
-				.removeClass( "ui-state-default ui-corner-all" )
-				.addClass( "ui-state-active ui-corner-top" )
+				.removeClass( "ui-corner-all" )
+				.addClass( "ui-accordion-header-active ui-state-active ui-corner-top" )
 				.children( ".ui-accordion-header-icon" )
 					.removeClass( options.icons.header )
 					.addClass( options.icons.activeHeader );
