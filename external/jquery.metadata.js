@@ -18,34 +18,34 @@
  * There are three supported types of metadata storage:
  *
  *   attr:  Inside an attribute. The name parameter indicates *which* attribute.
- *          
+ *
  *   class: Inside the class attribute, wrapped in curly braces: { }
- *   
+ *
  *   elem:  Inside a child element (e.g. a script tag). The
  *          name parameter indicates *which* element.
- *          
+ *
  * The metadata for an element is loaded the first time the element is accessed via jQuery.
  *
  * As a result, you can define the metadata type, use $(expr) to load the metadata into the elements
  * matched by expr, then redefine the metadata type and run another $(expr) for other elements.
- * 
+ *
  * @name $.metadata.setType
  *
  * @example <p id="one" class="some_class {item_id: 1, item_label: 'Label'}">This is a p</p>
  * @before $.metadata.setType("class")
  * @after $("#one").metadata().item_id == 1; $("#one").metadata().item_label == "Label"
  * @desc Reads metadata from the class attribute
- * 
+ *
  * @example <p id="one" class="some_class" data="{item_id: 1, item_label: 'Label'}">This is a p</p>
  * @before $.metadata.setType("attr", "data")
  * @after $("#one").metadata().item_id == 1; $("#one").metadata().item_label == "Label"
  * @desc Reads metadata from a "data" attribute
- * 
+ *
  * @example <p id="one" class="some_class"><script>{item_id: 1, item_label: 'Label'}</script>This is a p</p>
  * @before $.metadata.setType("elem", "script")
  * @after $("#one").metadata().item_id == 1; $("#one").metadata().item_label == "Label"
  * @desc Reads metadata from a nested script element
- * 
+ *
  * @param String type The encoding type
  * @param String name The name of the attribute to be used to get metadata (optional)
  * @cat Plugins/Metadata

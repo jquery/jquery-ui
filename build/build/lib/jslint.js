@@ -3525,7 +3525,7 @@ loop:   for (;;) {
                         warning("ADSAFE violation: bad id.");
                     }
                 }
-            }  
+            } 
             x = v.search(dx);
             if (x >= 0) {
                 warning("Unexpected character '{a}' in {b}.", token, v.charAt(x), a);

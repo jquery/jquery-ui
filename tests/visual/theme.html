@@ -39,12 +39,12 @@
 					autoOpen: false,
 					width: 600,
 					buttons: {
-						"Ok": function() { 
-							$(this).dialog("close"); 
-						}, 
-						"Cancel": function() { 
-							$(this).dialog("close"); 
-						} 
+						"Ok": function() {
+							$(this).dialog("close");
+						},
+						"Cancel": function() {
+							$(this).dialog("close");
+						}
 					}
 				});
 				
@@ -85,12 +85,12 @@
 				
 				// Progressbar
 				$("#progressbar").progressbar({
-					value: 20 
+					value: 20
 				});
 				
 				//hover states on the static widgets
 				$('#dialog_link, ul#icons li').hover(
-					function() { $(this).addClass('ui-state-hover'); }, 
+					function() { $(this).addClass('ui-state-hover'); },
 					function() { $(this).removeClass('ui-state-hover'); }
 				);
 				
@@ -480,15 +480,15 @@
 		<!-- Highlight / Error -->
 		<h2 class="demoHeaders">Highlight / Error</h2>
 		<div class="ui-widget">
-			<div class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0 .7em;"> 
+			<div class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0 .7em;">
 				<p><span class="ui-icon ui-icon-info" style="float: left; margin-right: .3em;"></span>
 				<strong>Hey!</strong> Sample ui-state-highlight style.</p>
 			</div>
 		</div>
 		<br/>
 		<div class="ui-widget">
-			<div class="ui-state-error ui-corner-all" style="padding: 0 .7em;"> 
-				<p><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span> 
+			<div class="ui-state-error ui-corner-all" style="padding: 0 .7em;">
+				<p><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span>
 				<strong>Alert:</strong> Sample ui-state-error style.</p>
 			</div>
 		</div>

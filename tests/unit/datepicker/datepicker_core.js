@@ -331,7 +331,7 @@ test('keystrokes', function() {
 	inp.val('01/30/2008').datepicker('show').
 		simulate('keydown', {keyCode: $.simulate.VK_PGDN}).
 		simulate('keydown', {keyCode: $.simulate.VK_ENTER});
-	equalsDate(inp.datepicker('getDate'), new Date(2008, 2 - 1, 29), 
+	equalsDate(inp.datepicker('getDate'), new Date(2008, 2 - 1, 29),
 		'Keystroke pgdn - Feb');
 	inp.val('02/29/2008').datepicker('show').
 		simulate('keydown', {ctrlKey: true, keyCode: $.simulate.VK_PGUP}).

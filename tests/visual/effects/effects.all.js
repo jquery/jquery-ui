@@ -19,8 +19,8 @@ $(function() {
 				.delay( 10 )
 				.hide( n, o, duration )
 				.delay( wait )
-				.show( n, o, duration, function() { 
-					$( this ).removeClass("current"); 
+				.show( n, o, duration, function() {
+					$( this ).removeClass("current");
 				});
 		});
 

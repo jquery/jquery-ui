@@ -44,7 +44,7 @@ test('events', function() {
     var dateStr = '02/04/2008';
     inp.val(dateStr).datepicker('show').
         simulate('keydown', {keyCode: $.simulate.VK_ENTER});
-    equals(dateStr, selectedDate, 
+    equals(dateStr, selectedDate,
         'onSelect is called after enter keydown');
 	// onChangeMonthYear
 	inp.datepicker('option', {onChangeMonthYear: callback2, onSelect: null}).

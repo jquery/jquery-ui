@@ -14,7 +14,7 @@ var drag = function(el, dx, dy, complete) {
 	$(el).simulate("mouseover");
 
 	return $(el).simulate("drag", {
-		dx: dx||0, dy: dy||0, speed: 'sync', complete: complete 
+		dx: dx||0, dy: dy||0, speed: 'sync', complete: complete
 	});
 };
 

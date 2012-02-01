@@ -18,7 +18,7 @@ $.effects.effect.fade = function( o, done ) {
 		hide = mode === "hide";
 
 	el.show();
-	el.animate({ 
+	el.animate({
 		opacity: hide ? 0 : 1
 	}, {
 		queue: false,
