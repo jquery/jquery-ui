@@ -58,7 +58,7 @@ $.widget = function( name, base, prototype ) {
 		version: prototype.version,
 		// copy the object used to create the prototype in case we need to
 		// redefine the widget later
-		proto: $.extend( {}, prototype ),
+		_proto: $.extend( {}, prototype ),
 		// track widgets that inherit from this widget in case this widget is
 		// redefined after a widget inherits from it
 		_childConstructors: []
@@ -97,7 +97,9 @@ $.widget = function( name, base, prototype ) {
 		}
 	});
 	constructor.prototype = $.widget.extend( basePrototype, {
-		// TODO: remove
+		// TODO: remove support for widgetEventPrefix
+		// always use the name + a colon as the prefix, e.g., draggable:start
+		// don't prefix for widgets that aren't DOM-based
 		widgetEventPrefix: name
 	}, prototype, {
 		constructor: constructor,
@@ -116,7 +118,7 @@ $.widget = function( name, base, prototype ) {
 
 			// redefine the child widget using the same prototype that was
 			// originally used, but inherit from the new version of the base
-			$.widget( childPrototype.namespace + "." + childPrototype.widgetName, constructor, child.proto );
+			$.widget( childPrototype.namespace + "." + childPrototype.widgetName, constructor, child._proto );
 		});
 		// remove the list of existing child constructors from the old constructor
 		// so the old child constructors can be garbage collected
