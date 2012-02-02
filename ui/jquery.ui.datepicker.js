@@ -74,6 +74,7 @@ function Datepicker() {
 		navigationAsDateFormat: false, // True if date formatting applied to prev/today/next links
 		gotoCurrent: false, // True if today link goes back to current selection instead
 		changeMonth: false, // True if month can be selected directly, false if only prev/next
+		changeMonthUseLongNames: false, // True if month select uses monthNames, false monthNamesShort
 		changeYear: false, // True if year can be selected directly, false if only prev/next
 		yearRange: 'c-10:c+10', // Range of years to display in drop-down,
 			// either relative to today's year (-nn:+nn), relative to currently displayed year
@@ -1597,6 +1598,8 @@ $.extend(Datepicker.prototype, {
 		else {
 			var inMinYear = (minDate && minDate.getFullYear() == drawYear);
 			var inMaxYear = (maxDate && maxDate.getFullYear() == drawYear);
+			var changeMonthUseLongNames = this._get(inst, 'changeMonthUseLongNames');
+			var monthList = changeMonthUseLongNames ? monthNames : monthNamesShort;
 			monthHtml += '<select class="ui-datepicker-month" ' +
 				'onchange="DP_jQuery_' + dpuuid + '.datepicker._selectMonthYear(\'#' + inst.id + '\', this, \'M\');" ' +
 			 	'>';
@@ -1605,7 +1608,7 @@ $.extend(Datepicker.prototype, {
 						(!inMaxYear || month <= maxDate.getMonth()))
 					monthHtml += '<option value="' + month + '"' +
 						(month == drawMonth ? ' selected="selected"' : '') +
-						'>' + monthNamesShort[month] + '</option>';
+						'>' + monthList[month] + '</option>';
 			}
 			monthHtml += '</select>';
 		}
