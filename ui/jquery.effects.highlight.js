@@ -17,7 +17,7 @@ $.effects.effect.highlight = function( o, done ) {
 		props = [ "backgroundImage", "backgroundColor", "opacity" ],
 		mode = $.effects.setMode( elem, o.mode || "show" ),
 		animation = {
-			backgroundColor: elem.css( "backgroundColor" )
+			backgroundColor: o.options.backgroundColor || elem.css( "backgroundColor" )
 		};
 
 	if (mode === "hide") {
