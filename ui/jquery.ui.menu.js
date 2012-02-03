@@ -56,13 +56,17 @@ $.widget( "ui.menu", {
 			},
 			"click .ui-menu-item:has(a)": function( event ) {
 				event.stopImmediatePropagation();
-				this.select( event );
-				// Redirect focus to the menu with a delay for firefox
-				this._delay( function() {
-					if ( !this.element.is(":focus") ) {
-						this.element.focus();
-					}
-				}, 20);
+				//Don't select disabled menu items
+				if ( !$( event.target ).closest( ".ui-menu-item" ).is( ".ui-state-disabled" ) ) {
+					console.log(event.target);
+					this.select( event );
+					// Redirect focus to the menu with a delay for firefox
+					this._delay( function() {
+						if ( !this.element.is(":focus") ) {
+							this.element.focus();
+						}
+					}, 20);
+				}
 			},
 			"mouseover .ui-menu-item": function( event ) {
 				event.stopImmediatePropagation();
