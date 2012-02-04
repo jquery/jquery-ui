@@ -58,7 +58,6 @@ $.widget( "ui.menu", {
 				event.stopImmediatePropagation();
 				//Don't select disabled menu items
 				if ( !$( event.target ).closest( ".ui-menu-item" ).is( ".ui-state-disabled" ) ) {
-					console.log(event.target);
 					this.select( event );
 					// Redirect focus to the menu with a delay for firefox
 					this._delay( function() {
