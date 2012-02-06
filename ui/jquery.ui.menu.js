@@ -455,7 +455,7 @@ $.widget( "ui.menu", {
 				next = this.active[ direction + "All" ]( ".ui-menu-item" ).not( ".ui-state-disabled" ).eq( 0 );
 			}
 		}
-		if ( !next.length || !this.active ) {
+		if ( !next || !next.length || !this.active ) {
 			next = this.activeMenu.children( ".ui-menu-item" )[ filter ]();
 		}
 
