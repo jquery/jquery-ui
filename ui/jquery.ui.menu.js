@@ -430,11 +430,11 @@ $.widget( "ui.menu", {
 		}
 	},
 
-	next: function(event) {
+	next: function( event ) {
 		this._move( "next", "first", event );
 	},
 
-	previous: function(event) {
+	previous: function( event ) {
 		this._move( "prev", "last", event );
 	},
 
