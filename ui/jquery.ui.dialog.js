@@ -728,7 +728,10 @@ $.extend( $.ui.dialog.overlay, {
 		var $el = ( this.oldInstances.pop() || $( "<div>" ).addClass( "ui-widget-overlay" ) );
 		$el.appendTo( document.body ).css({
 			width: this.width(),
-			height: this.height()
+			height: this.height(),
+			position: 'absolute',
+			top: 0,
+			left: 0
 		});
 
 		if ( $.fn.bgiframe ) {
