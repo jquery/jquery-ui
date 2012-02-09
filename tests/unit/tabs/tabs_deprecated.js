@@ -281,7 +281,7 @@ test( "enable", function() {
 
 	var element = $( "#tabs1" ).tabs({
 		disabled: [ 0, 1 ],
-		enable: function ( event, ui ) {
+		enable: function( event, ui ) {
 			equals( ui.tab, element.find( ".ui-tabs-nav a" )[ 1 ], "ui.tab" );
 			equals( ui.panel, element.find( ".ui-tabs-panel" )[ 1 ], "ui.panel" );
 			equals( ui.index, 1, "ui.index" );
@@ -296,10 +296,10 @@ test( "disable", function() {
 	expect( 3 );
 
 	var element = $( "#tabs1" ).tabs({
-		disable: function ( event, ui ) {
-		equals( ui.tab, element.find( ".ui-tabs-nav a" )[ 1 ], "ui.tab" );
-		equals( ui.panel, element.find( ".ui-tabs-panel" )[ 1 ], "ui.panel" );
-		equals( ui.index, 1, "ui.index" );
+		disable: function( event, ui ) {
+			equals( ui.tab, element.find( ".ui-tabs-nav a" )[ 1 ], "ui.tab" );
+			equals( ui.panel, element.find( ".ui-tabs-panel" )[ 1 ], "ui.panel" );
+			equals( ui.index, 1, "ui.index" );
 		}
 	});
 	element.tabs( "disable", 1 );

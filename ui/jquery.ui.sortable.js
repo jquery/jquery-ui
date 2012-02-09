@@ -65,7 +65,7 @@ $.widget("ui.sortable", $.ui.mouse, {
 
 	},
 
-	destroy: function() {
+	_destroy: function() {
 		this.element
 			.removeClass("ui-sortable ui-sortable-disabled");
 		this._mouseDestroy();

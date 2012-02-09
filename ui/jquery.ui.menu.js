@@ -56,13 +56,16 @@ $.widget( "ui.menu", {
 			},
 			"click .ui-menu-item:has(a)": function( event ) {
 				event.stopImmediatePropagation();
-				this.select( event );
-				// Redirect focus to the menu with a delay for firefox
-				this._delay( function() {
-					if ( !this.element.is(":focus") ) {
-						this.element.focus();
-					}
-				}, 20);
+				//Don't select disabled menu items
+				if ( !$( event.target ).closest( ".ui-menu-item" ).is( ".ui-state-disabled" ) ) {
+					this.select( event );
+					// Redirect focus to the menu with a delay for firefox
+					this._delay( function() {
+						if ( !this.element.is(":focus") ) {
+							this.element.focus();
+						}
+					}, 20);
+				}
 			},
 			"mouseover .ui-menu-item": function( event ) {
 				event.stopImmediatePropagation();
@@ -74,7 +77,7 @@ $.widget( "ui.menu", {
 			"mouseleave": "collapseAll",
 			"mouseleave .ui-menu": "collapseAll",
 			"focus": function( event ) {
-				var firstItem = this.element.children( ".ui-menu-item" ).eq( 0 );
+				var firstItem = this.element.children( ".ui-menu-item" ).not( ".ui-state-disabled" ).eq( 0 );
 				if ( this._hasScroll() && !this.active ) {
 					var menu = this.element;
 					menu.children().each( function() {
@@ -414,7 +417,7 @@ $.widget( "ui.menu", {
 	},
 
 	expand: function( event ) {
-		var newItem = this.active && this.active.children( ".ui-menu " ).children( ".ui-menu-item" ).first();
+		var newItem = this.active && this.active.children( ".ui-menu " ).children( ".ui-menu-item" ).not( ".ui-state-disabled" ).first();
 
 		if ( newItem && newItem.length ) {
 			this._open( newItem.parent() );
@@ -427,11 +430,11 @@ $.widget( "ui.menu", {
 		}
 	},
 
-	next: function(event) {
+	next: function( event ) {
 		this._move( "next", "first", event );
 	},
 
-	previous: function(event) {
+	previous: function( event ) {
 		this._move( "prev", "last", event );
 	},
 
@@ -444,28 +447,27 @@ $.widget( "ui.menu", {
 	},
 
 	_move: function( direction, filter, event ) {
-		if ( !this.active ) {
-			this.focus( event, this.activeMenu.children( ".ui-menu-item" )[ filter ]() );
-			return;
-		}
-
 		var next;
-		if ( direction === "first" || direction === "last" ) {
-			next = this.active[ direction === "first" ? "prevAll" : "nextAll" ]( ".ui-menu-item" ).eq( -1 );
-		} else {
-			next = this.active[ direction + "All" ]( ".ui-menu-item" ).eq( 0 );
+		if ( this.active ) {
+			if ( direction === "first" || direction === "last" ) {
+				next = this.active[ direction === "first" ? "prevAll" : "nextAll" ]( ".ui-menu-item" ).not( ".ui-state-disabled" ).eq( -1 );
+			} else {
+				next = this.active[ direction + "All" ]( ".ui-menu-item" ).not( ".ui-state-disabled" ).eq( 0 );
+			}
+		}
+		if ( !next || !next.length || !this.active ) {
+			next = this.activeMenu.children( ".ui-menu-item" )[ filter ]();
 		}
 
-		if ( next.length ) {
-			this.focus( event, next );
-		} else {
-			this.focus( event, this.activeMenu.children( ".ui-menu-item" )[ filter ]() );
+		this.focus( event, next );
+		if ( next.is( ".ui-state-disabled" ) ) {
+			this._move( direction, filter, event );
 		}
 	},
 
 	nextPage: function( event ) {
 		if ( !this.active ) {
-			this.focus( event, this.activeMenu.children( ".ui-menu-item" ).first() );
+			this._move( "next", "first", event );
 			return;
 		}
 		if ( this.isLastItem() ) {
@@ -475,21 +477,21 @@ $.widget( "ui.menu", {
 			var base = this.active.offset().top,
 				height = this.element.height(),
 				result;
-			this.active.nextAll( ".ui-menu-item" ).each( function() {
+			this.active.nextAll( ".ui-menu-item" ).not( ".ui-state-disabled" ).each( function() {
 				result = $( this );
 				return $( this ).offset().top - base - height < 0;
 			});
 
 			this.focus( event, result );
 		} else {
-			this.focus( event, this.activeMenu.children( ".ui-menu-item" )
+			this.focus( event, this.activeMenu.children( ".ui-menu-item" ).not( ".ui-state-disabled" )
 				[ !this.active ? "first" : "last" ]() );
 		}
 	},
 
 	previousPage: function( event ) {
 		if ( !this.active ) {
-			this.focus( event, this.activeMenu.children( ".ui-menu-item" ).first() );
+			this._move( "next", "first", event );
 			return;
 		}
 		if ( this.isFirstItem() ) {
@@ -499,14 +501,14 @@ $.widget( "ui.menu", {
 			var base = this.active.offset().top,
 				height = this.element.height(),
 				result;
-			this.active.prevAll( ".ui-menu-item" ).each( function() {
+			this.active.prevAll( ".ui-menu-item" ).not( ".ui-state-disabled" ).each( function() {
 				result = $( this );
 				return $(this).offset().top - base + height > 0;
 			});
 
 			this.focus( event, result );
 		} else {
-			this.focus( event, this.activeMenu.children( ".ui-menu-item" ).first() );
+			this.focus( event, this.activeMenu.children( ".ui-menu-item" ).not( ".ui-state-disabled" ).first() );
 		}
 	},
 

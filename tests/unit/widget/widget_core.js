@@ -1050,9 +1050,52 @@ test( "redefine", function() {
 		}
 	});
 
-	var instance = new $.ui.testWidget();
+	var instance = new $.ui.testWidget({});
 	instance.method( "foo" );
 	equal( $.ui.testWidget.foo, "bar", "static properties remain" );
+});
+
+test( "redefine deep prototype chain", function() {
+	expect( 8 );
+	$.widget( "ui.testWidget", {
+		method: function( str ) {
+			strictEqual( this, instance, "original invoked with correct this" );
+			equal( str, "level 4", "original invoked with correct parameter" );
+		}
+	});
+	$.widget( "ui.testWidget2", $.ui.testWidget, {
+		method: function( str ) {
+			strictEqual( this, instance, "testWidget2 invoked with correct this" );
+			equal( str, "level 2", "testWidget2 invoked with correct parameter" );
+			this._super( "level 3" );
+		}
+	});
+	$.widget( "ui.testWidget3", $.ui.testWidget2, {
+		method: function( str ) {
+			strictEqual( this, instance, "testWidget3 invoked with correct this" );
+			equal( str, "level 1", "testWidget3 invoked with correct parameter" );
+			this._super( "level 2" );
+		}
+	});
+	// redefine testWidget after other widgets have inherited from it
+	// this tests whether the inheriting widgets get updated prototype chains
+	$.widget( "ui.testWidget", $.ui.testWidget, {
+		method: function( str ) {
+			strictEqual( this, instance, "new invoked with correct this" );
+			equal( str, "level 3", "new invoked with correct parameter" );
+			this._super( "level 4" );
+		}
+	});
+	// redefine testWidget3 after it has been automatically redefined
+	// this tests whether we properly handle _super() when the topmost prototype
+	// doesn't have the method defined
+	$.widget( "ui.testWidget3", $.ui.testWidget3, {} );
+
+	var instance = new $.ui.testWidget3({});
+	instance.method( "level 1" );
+
+	delete $.ui.testWidget3;
+	delete $.ui.testWidget2;
 });
 
 asyncTest( "_delay", function() {

@@ -162,8 +162,4 @@ test( "allow form submit on enter when menu is not active", function() {
 	}
 })();
 
-(function() {
-
-})();
-
 }( jQuery ) );
