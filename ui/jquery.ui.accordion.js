@@ -36,7 +36,7 @@ $.widget( "ui.accordion", {
 		var self = this,
 			options = self.options;
 
-		self.lastToggle = {};
+		self.prevShow = self.prevHide = $();
 		self.element.addClass( "ui-accordion ui-widget ui-helper-reset" );
 
 		self.headers = self.element.find( options.header )
@@ -363,36 +363,27 @@ $.widget( "ui.accordion", {
 
 	_toggle: function( data ) {
 		var self = this,
-			options = self.options,
 			toShow = data.newContent,
-			toHide = data.oldContent;
+			toHide = this.prevShow.length ? this.prevShow : data.oldContent;
 
 		function complete() {
 			self._completed( data );
 		}
 
-		if ( options.animated ) {
-			var animations = $.ui.accordion.animations,
-				animation = options.animated,
-				additional;
+		// handle activating a panel during the animation for another activation
+		this.prevShow.add( this.prevHide ).stop( true, true );
+		this.prevShow = toShow;
+		this.prevHide = toHide;
 
-			if ( !animations[ animation ] ) {
-				additional = {
-					easing: $.easing[ animation ] ? animation : "slide",
-					duration: 700
-				};
-				animation = "slide";
-			}
-
-			animations[ animation ]({
-				widget: self,
+		if ( this.options.animated ) {
+			// TODO: support specifying an easing and a duration
+			// TODO: back compat for speciying just an easing
+			$.ui.accordion.animations[ this.options.animated ]({
 				toShow: toShow,
 				toHide: toHide,
-				prevShow: self.lastToggle.toShow,
-				prevHide: self.lastToggle.toHide,
 				complete: complete,
 				down: toShow.length && ( !toHide.length || ( toShow.index() < toHide.index() ) )
-			}, additional );
+			});
 		} else {
 			toHide.hide();
 			toShow.show();
@@ -440,50 +431,23 @@ $.widget( "ui.accordion", {
 
 $.extend( $.ui.accordion, {
 	animations: {
-		slide: function( options, additions ) {
-			if ( options.prevShow || options.prevHide ) {
-				options.prevShow.stop( true, true );
-				options.prevHide.stop( true, true );
-				options.toHide = options.prevShow;
-			}
-
-			options = $.extend({
-				easing: "swing",
-				duration: 300
-			}, options, additions );
-
-			options.widget.lastToggle = options;
-
+		slide: function( options ) {
 			if ( !options.toHide.size() ) {
-				options.toShow
-					.animate({
-						height: "show",
-						paddingTop: "show",
-						paddingBottom: "show"
-					}, options );
-				return;
+				return options.toShow.animate( showProps, options );
 			}
 			if ( !options.toShow.size() ) {
-				options.toHide.animate({
-					height: "hide",
-					paddingTop: "hide",
-					paddingBottom: "hide"
-				}, options );
-				return;
+				return options.toHide.animate( hideProps, options );
 			}
 
 			var total = options.toShow.show().outerHeight();
-			options.toHide.animate( hideProps, {
-				duration: options.duration,
-				easing: options.easing
-			});
+			options.toHide.animate( hideProps, options );
 			options.toShow
 				.hide()
 				.data( "togglePair", {
 					total: total,
 					toHide: options.toHide
 				})
-				.animate( showProps, {
+				.animate( showPropsAdjust, {
 					duration: options.duration,
 					easing: options.easing,
 					complete: function() {
@@ -495,10 +459,10 @@ $.extend( $.ui.accordion, {
 				});
 			},
 			bounceslide: function( options ) {
-				this.slide( options, {
+				this.slide( $.extend( options, {
 					easing: options.down ? "easeOutBounce" : "swing",
 					duration: options.down ? 1000 : 200
-				});
+				}));
 			}
 	}
 });
@@ -652,12 +616,13 @@ $.fx.step._height = function( fx ) {
 		data = elem.data( "togglePair" );
 	elem.height( data.total - elem.outerHeight() - data.toHide.outerHeight() + elem.height() );
 };
-var showProps = {},
-	hideProps = {};
-showProps._height = showProps.height =
-	showProps.paddingTop = showProps.paddingBottom =
-	showProps.borderTopWidth = showProps.borderBottomWidth = "show";
+var hideProps = {},
+	showProps = {},
+	showPropsAdjust = {};
 hideProps.height = hideProps.paddingTop = hideProps.paddingBottom =
 	hideProps.borderTopWidth = hideProps.borderBottomWidth = "hide";
+showProps.height = showProps.paddingTop = showProps.paddingBottom =
+	showProps.borderTopWidth = showProps.borderBottomWidth = "show";
+$.extend( showPropsAdjust, showProps, { _height: "show" } );
 
 })( jQuery );
