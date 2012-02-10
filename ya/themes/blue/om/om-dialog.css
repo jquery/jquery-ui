@@ -1,0 +1,26 @@
+/*
+ * $Id: om-dialog.css,v 1.10 2011/12/16 05:54:47 licongping Exp $
+ * operamasks-ui dialog @VERSION
+ *
+ * Copyright 2011, AUTHORS.txt (http://ui.operamasks.org/about)
+ * Dual licensed under the MIT or GPL Version 2 licenses.
+ * http://ui.operamasks.org/license
+ *
+ * http://ui.operamasks.org/docs/
+ */
+.om-dialog { position: absolute; width: 300px; overflow: hidden; }
+.om-dialog .om-dialog-titlebar { height: 29px; position: relative;  background: url("images/dialog/title-bg.png") repeat-x scroll 0 0 transparent; border: none;border-radius: 8px 8px 0 0;border-bottom: 1px solid #86A3C4;}
+.om-dialog .om-dialog-title { float: left; margin: 0.7em 16px 0.1em 0.5em; } 
+.om-dialog .om-dialog-titlebar-close { position: absolute; right: .3em; top: 50%; width: 25px; margin: -12px 0 0 0; padding: 1px; height: 18px; }
+.om-dialog .om-dialog-titlebar-close span { display: block; margin: 1px; }
+.om-dialog .om-dialog-titlebar-close:hover, .om-dialog .om-dialog-titlebar-close:focus {border:none; color: #222222; background-color: transparent}
+
+.om-dialog .om-icon-closethick {background-image: url("images/ui-toolbar-btn.png") !important;_background-image: url("images/ui-toolbar-btn.gif") !important;background-position: -88px 0!important;width: 22px; height: 18px;text-indent:-9999px}
+.om-dialog .om-icon-closethick:hover{background-position: -88px -36px!important;}
+
+.om-dialog .om-dialog-content { position: relative; border: 0; padding: .5em 1em; background: none; overflow: auto; zoom: 1; }
+.om-dialog .om-dialog-buttonpane { text-align: left; border-width: 1px 0 0 0; background-image: none; margin: .5em 0 0 0; padding: .3em 1em .5em .4em; border-color: #86A3C4;}
+.om-dialog .om-dialog-buttonpane .om-dialog-buttonset { float: right; }
+.om-dialog .om-resizable-se { width: 14px; height: 14px; right: 3px; bottom: 3px; }
+.ui-draggable .om-dialog-titlebar { cursor: move; }
+.om-dialog.om-widget-content {border-radius: 8px 8px 0 0;}

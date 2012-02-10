@@ -1,0 +1,31 @@
+/*
+ * operamasks-ui button @VERSION
+ *
+ * Copyright 2011, AUTHORS.txt (http://ui.operamasks.org/about)
+ * Dual licensed under the MIT or GPL Version 2 licenses.
+ * http://ui.operamasks.org/license
+ *
+ * http://ui.operamasks.org/docs/
+ */
+.om-btn {display: inline-block;text-align: center;vertical-align: middle;background: transparent !important;white-space: nowrap;overflow: visible;height: 24px;cursor: pointer;padding: 0 2px;}
+.om-btn-txt {color: #555555;line-height: 24px;height:24px;display: inline-block;text-decoration: none;background : none transparent;margin: 0;padding: 0;border: 0;overflow:visible;vertical-align: text-bottom;cursor: pointer;}
+.om-btn.om-btn-bg {overflow: hidden;}
+.om-btn-icon {padding-left: 20px;}
+.om-btn-only-icon{height: 24px;width: 20px;}
+.om-btn .om-btn-left, .om-btn .om-btn-center, .om-btn .om-btn-right {border: none;display: inline-block;height:24px;}
+.om-btn .om-btn-left {width: 5px;}
+.om-btn .om-btn-right {width: 5px;}
+.om-btn .om-btn-center {vertical-align: top;text-align: center;line-height: 24px;}
+a.om-btn-only-icon{display: block;}
+*a.om-btn-txt{margin-top:2px;}
+
+/* From theme.css  */
+.om-state-default .om-btn-bg {background: url(images/button/button-nomal-bg.png);}
+.om-state-hover .om-btn-bg {background: url(images/button/button-hover-bg.png);}
+.om-state-focus .om-btn-bg {background: url(images/button/button-focus-bg.png);}
+.om-state-active .om-btn-bg {background: url(images/button/button-mousedown-bg.png);}
+.om-btn .om-btn-left {background-position: 100% 0px;background-repeat: no-repeat;}
+.om-btn {border: none !important;}
+.om-btn .om-btn-center {background-position: 100% -24px;background-repeat: repeat-x;}
+.om-btn .om-btn-right {background-position: 100% -48px;background-repeat: no-repeat;}
+ 

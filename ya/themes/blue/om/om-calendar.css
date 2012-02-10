@@ -1,0 +1,109 @@
+/*
+ * $Id: om-calendar.css,v 1.11 2012/01/04 06:47:19 wangfan Exp $
+ * operamasks-ui calendar @VERSION
+ *
+ * Copyright 2011, AUTHORS.txt (http://ui.operamasks.org/about)
+ * Dual licensed under the MIT or GPL Version 2 licenses.
+ * http://ui.operamasks.org/license
+ *
+ * http://ui.operamasks.org/docs/
+ */
+/* 清除浮动 */
+.om-clearfix:after {content: '\20';display: block;height: 0;clear: both;}
+.om-clearfix { *zoom: 1; }
+.hidden {display:none;}
+
+/*--日历--*/
+.om-calendar-list-wrapper {height:auto;}
+.om-calendar-list-wrapper.multi-1 {width:184px !important;_width:186px;}
+.om-calendar-list-wrapper.multi-2 {width:368px !important;_width:376px}
+.om-calendar-list-wrapper.multi-3 {width:552px !important;_width:564px}
+
+.om-calendar-list-wrapper {-moz-box-shadow: 2px 2px 0px #ccc;-webkit-box-shadow: 2px 2px 0px #ccc;-khtml-box-shadow: 2px 2px 0px #ccc;-ms-box-shadow: 2px 2px 0px #ccc;filter: progid:DXImageTransform.Microsoft.Shadow(direction = 155, Color = #dadada, Strength = 3), progid:DXImageTransform.Microsoft.DropShadow(Color = #22aaaaaa, OffX = 0, OffY = 0);    }
+
+.om-calendar-list-wrapper .om-cal-box {height:auto;width:auto;float:left;*padding-bottom:5px;_padding-bottom:3px;position:relative;border-right:1px solid #C2D9EF;}
+.om-calendar-list-wrapper .om-cal-hd.om-widget-header{width:183px;_width:185px;height:26px;position:relative;border:none;}
+.om-calendar-list-wrapper .om-cal-hd a {}
+.om-calendar-list-wrapper .om-cal-hd a.om-prev {overflow:hidden;text-indent:-100em;float:left;position:absolute;left:8px;top:5px;text-decoration:none;}
+.om-calendar-list-wrapper .om-cal-hd a.om-next {overflow:hidden;text-indent:-100em;position:absolute;right:8px;top:5px;text-decoration:none;}
+
+.om-calendar-list-wrapper .om-cal-hd a.om-title:link,
+.om-calendar-list-wrapper .om-cal-hd a.om-title:visited {text-decoration:none;position:relative;margin-left:auto;margin-right:auto;width:85px;height:17px;line-height:17px;display:block;top:4px;text-align:center;}
+
+.om-calendar-list-wrapper .om-cal-bd {width:183px;}
+.om-calendar-list-wrapper .om-cal-bd .om-whd {width:auto;height:19px;overflow:hidden;*padding-left:2px;*width:179px;border-top:1px solid #C2D9EF;}
+.om-calendar-list-wrapper .om-cal-bd .om-whd span {float:left;width:25.857px;text-align:center;line-height:19px;}
+
+/*--hack for ff2 {{ --*/
+.om-calendar-list-wrapper .om-cal-bd .om-whd span, x:-moz-any-link {width:25px;}
+.om-calendar-list-wrapper .om-cal-bd .om-whd span, x:-moz-any-link, x:default {width:25.857px;}
+/*--hack for ff2 }} --*/
+
+.om-calendar-list-wrapper .om-cal-bd .om-dbd {width:181px;height:auto;margin-top:4px;*padding-left:2px;*width:179px;}
+.om-calendar-list-wrapper .om-cal-bd .om-dbd a,
+.om-calendar-list-wrapper .om-cal-bd .om-dbd a:link,
+.om-calendar-list-wrapper .om-cal-bd .om-dbd a:visited {float:left;width:25.857px;text-align:center;line-height:22px;text-decoration:none;}
+
+/*--hack for ff2 {{ --*/
+.om-calendar-list-wrapper .om-cal-bd .om-dbd a, x:-moz-any-link {width:25px;}
+.om-calendar-list-wrapper .om-cal-bd .om-dbd a:link, x:-moz-any-link {width:25px;}
+.om-calendar-list-wrapper .om-cal-bd .om-dbd a:visited, x:-moz-any-link {width:25px;}
+.om-calendar-list-wrapper .om-cal-bd .om-dbd a,
+.om-calendar-list-wrapper .om-cal-bd .om-dbd a:link,
+.om-calendar-list-wrapper .om-cal-bd .om-dbd a:visited, x:-moz-any-link, x:default {width:25.857px;}
+/*--hack for ff2 }} --*/
+
+/*--日期的状态--*/
+.om-calendar-list-wrapper .om-cal-bd .om-dbd a.om-null,
+.om-calendar-list-wrapper .om-cal-bd .om-dbd a.om-null:link,
+.om-calendar-list-wrapper .om-cal-bd .om-dbd a.om-null:visited {background:white;color:white;cursor:default;}
+.om-calendar-list-wrapper .om-cal-bd .om-dbd a.om-today,
+.om-calendar-list-wrapper .om-cal-bd .om-dbd a.om-today:link,
+.om-calendar-list-wrapper .om-cal-bd .om-dbd a.om-today:visited {font-weight:bold;}
+
+.om-calendar-list-wrapper .om-cal-ft {text-align:center;width:180px;margin:0 0 3px 3px;}
+
+/*--时间控件--*/
+.om-calendar-list-wrapper .om-cal-ft .om-cal-time {float:left;height: 17px;display:inline-block;*display:inline;*zoom:1;padding:3px 5px;*padding:2px 5px;_padding:4px 5px;width:95px;position:relative;padding-right:18px}
+.om-calendar-list-wrapper .om-cal-ft .ct-ok {padding: 1px;width: 50px;line-height: 18px;float:left;margin-left: 1px;}
+.om-cal-time .cta {width:16px;height:22px;position:absolute;right:0;top:0;line-height:0;}
+/*hack for Opera*/
+@media all and (-webkit-min-device-pixel-ratio:10000), not all and (-webkit-min-device-pixel-ratio:0){
+	head~body .om-calendar-list-wrapper .om-cal-ft .om-cal-time {padding:2px 5px 2px 0px;display:block;float:left;width:110px;margin-left:13px;}
+	head~body .om-calendar-list-wrapper .om-cal-ft .ct-ok {margin-left:0px;}
+	head~body .om-cal-time .cta{}
+}
+.om-cal-time button {width:16px;height:11px;border:0;overflow:hidden;cursor:pointer;}
+.om-cal-time span {cursor:pointer;}
+.om-cal-time span.on {padding:0 0px;}
+
+/*--选择月份容器--*/
+.om-setime {position:absolute;left:0px;top:28px;right:0px;width:181px;text-align:center;vertical-align:middle;height:auto;padding-top:10px;padding-bottom:10px;}
+.om-setime p {height:30px;margin:0;padding:0;}
+.om-setime select,.om-setime input {width:80px;}
+
+/*--选择时间的容器--*/
+.om-selectime {position:absolute;left:0px;bottom:28px;*bottom:32px;right:0px;width:180px;text-align:center;vertical-align:middle;height:auto;padding-top:10px;padding-bottom:10px;}
+.om-selectime a,
+.om-selectime a:link,
+.om-selectime a:visited {margin-left:10px;display:inline-block;*display:inline;float:left;text-decoration:none;}
+.om-selectime a:hover {text-decoration:underline;}
+.om-selectime a.x {position:absolute;right:3px;bottom:2px;font-weight:bold;font-family:"comic Sans MS"}
+.om-selectime select,.om-selectime input {width:80px;}
+
+.om-calendar {white-space: nowrap;display: inline-block;height: 20px;}
+.om-calendar input {margin:0px; border: 0px solid;height: 18px;line-height: 20px;padding-top: 1px;*vertical-align: top;}
+.om-calendar .om-calendar-trigger {cursor: pointer;display: inline-block;height: 20px;*height:21px;vertical-align: top;width: 19px;}
+.om-calendar-list-wrapper .om-cal-bd a.om-state-disabled {color: #8C8C8C; filter:none;}
+
+
+/* from theme.css */
+.om-calendar-trigger {background: url("images/calendar/calendar-trigger.png") no-repeat scroll 0px 50% transparent;}
+.om-calendar-list-wrapper .om-cal-hd {background:url('images/calendar/year_head_bkgd.gif') repeat-x ;background-color:#40a6ff;border:1px solid #8391b4;}
+.om-calendar-list-wrapper .om-cal-hd a.om-title:hover {color:#000000;border: 1px solid #8EA9D5;top:2px;background-color: #DCE8FF;border-radius: 2px 2px 2px 2px;}
+.om-calendar-list-wrapper .om-cal-bd .om-whd {background:url('images/calendar/week_day_bkgd.gif') repeat-x;}
+.om-cal-time button.om-icon {background:url("images/calendar/time_up_down.gif") no-repeat;}
+.om-cal-time button.u {background-position:0 1px;}
+.om-cal-time button.d {background-position:0 -10px;}
+
+.om-cal-box a {color:#222222}

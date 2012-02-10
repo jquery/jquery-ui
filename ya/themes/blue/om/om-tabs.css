@@ -1,0 +1,116 @@
+/*
+ * $Id: om-tabs.css,v 1.13 2011/12/14 06:02:36 licongping Exp $
+ * operamasks-ui tabs @VERSION
+ *
+ * Copyright 2011, AUTHORS.txt (http://ui.operamasks.org/about)
+ * Dual licensed under the MIT or GPL Version 2 licenses.
+ * http://ui.operamasks.org/license
+ *
+ * http://ui.operamasks.org/docs/
+ */
+.om-tabs .om-tabs-headers {
+    overflow: hidden;
+    padding: 2px 0 0;
+    position: relative;
+    border-width: 0;
+    _width: 100%;
+}
+.om-tabs .om-tabs-headers .om-state-default a{
+	color: #23466D;
+}
+.om-tabs .om-tabs-scroll-left {
+	background : url(images/tabs/om-tabs-scroll-left.gif) no-repeat;
+	height: 27px;
+    left: 0;
+    position: absolute;
+    top: 1px;
+    width: 18px;
+    cursor: pointer;
+    z-index: 1000;
+}
+.om-tabs .om-tabs-scroll-right {
+	background : url(images/tabs/om-tabs-scroll-right.gif) no-repeat;
+	height: 27px;
+    right: 0;
+    position: absolute;
+    top: 1px;
+    width: 18px;
+    cursor: pointer;
+    z-index: 1000;
+}
+.om-tabs .om-tabs-scroll-right:hover {
+	background-position: -18px 0;
+}
+.om-tabs .om-tabs-scroll-left:hover {
+	background-position: -18px 0;
+}
+.om-tabs .om-tabs-scroll-disabled {
+	background-position: 0 0 !important;
+    cursor: default;
+    filter:alpha(opacity=50);
+    -moz-opacity:0.5;
+    opacity: 0.5;
+}
+.om-tabs .om-tabs-headers ul {
+    width: 5000px;
+    font-size: 12px;
+    margin: 0 ;
+    padding: 0 0 0 4px;
+    border-bottom: 1px solid #86A3C4;
+}
+.om-tabs .om-tabs-headers ul.om-tabs-scrollable {
+	padding : 0 23px;
+	position: relative;
+}
+.om-tabs .om-tabs-headers ul li {
+	background: url("images/tabs/om-tabs-bg-d.png") repeat-x scroll 0 0 #DCF0FB;
+    display: inline-block;
+    margin: 0 4px -1px 0;
+    padding: 0;
+    position : relative;
+    -moz-user-select: none;
+    float: left;
+    
+}
+.om-tabs .om-tabs-headers ul li.om-state-hover{
+	background: url("images/tabs/om-tabs-bg-h.png") repeat-x scroll 0 0 #DAEAFA;
+}
+.om-tabs .om-tabs-headers ul li.om-tabs-activated {
+	border-color: #8DB2E3 #8DB2E3 #FFFFFF;
+	background: url("images/tabs/om-tabs-bg-a.png") repeat-x scroll 0 0 #FFFFFF;
+	font-weight: bold;
+}
+.om-tabs .om-tabs-headers ul li a.om-tabs-inner {
+    text-align: center;
+    text-decoration: none;
+    outline: none;
+    white-space: nowrap;
+    float: left;
+    padding: 0 10px;
+}
+.om-tabs .om-icon-close {
+	float: left;
+	margin: 0.4em 0.2em 0 0;
+	cursor: pointer;
+}
+.om-tabs .om-tabs-headers ul li a.om-icon-close{
+	background: url("images/tabs/om-tabs-closebtn.gif") no-repeat;
+    display: block;
+    height: 10px;
+    width: 10px;
+    margin: 7px 6px 0 0;
+}
+.om-tabs .om-tabs-headers ul li.om-state-hover a.om-icon-close{
+	background-position: 0 -9px;
+}
+
+.om-tabs .om-tabs-panels {
+    overflow: auto;
+    margin: 0;
+    padding: 0;
+    border-width: 0;
+}
+.om-tabs .om-panel-body-noborder {
+	border-width: 0;
+}
+

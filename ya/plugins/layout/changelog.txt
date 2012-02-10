@@ -1,0 +1,60 @@
+1.2.0
+* ADDED maskIframesOnResize option: true=ALL -OR- a selector string
+* ADDED options to set different animations on open and close
+* ADDED new callback events, ie: onshow, onhide
+* ADDED start/end callbacks, eg: onopen_start, onopen_end, etc.
+* ADDED ability to cancel events using callbacks, eg: onopen_start
+* CHANGED Layout.config.fxDefaults to Layout.effects (internal use)
+* FIXED missing semi-colon so minified version works in IE
+
+1.1.3
+* FIXED typo in cursor-hotkeys code
+* ADDED scrollToBookmarkOnLoad options - enables use of URL hash:
+    o www.site.com/page.html#myBookmark
+    o AFTER layout is created, attempts to scroll to bookmark
+    o default = true - otherwise bookmarks are non-functional
+
+1.1.2
+* UPDATED paneSelector rules to handle FORMS and pane-nesting
+    o automatically looks for panes inside 'first form' in container
+    o if using an ID as paneSelector, pane can be 'deeply nested'
+* ADDED auto-CSS for 'containers' other than BODY
+    o overflow: hidden   - ensures no scrollbars on container
+    o position: relative - IF NOT: fixed, absolute or relative
+    o height:   100%     - IF NOT specified or is 'auto'
+* ADDED noAnimation param to open() and close() - not used internally
+
+1.1.1
+* CHANGED toggler element from a SPAN to a DIV
+* CHANGED auto-generated custom-buttons classes for better consistency
+    o [buttonClass]-[pane]-[buttonType] ==> [buttonClass]-[buttonType]-[pane]
+    o ui-layout-button-west-open ==> ui-layout-button-open-west
+    o ui-layout-button-west-pin-up ==> ui-layout-button-pin-west-up
+* CHANGED default for hideTogglerOnSlide to false
+* CHANGED internal 'cDims' hash to alias for state.container
+* CHANGED internal aliases: s = state[pane] and o = options[pane]
+* UPDATED toggler-text to auto-show correct spans (content-open/closed)
+* FIXED toggler-text - now centers text span correctly
+* FIXED bug affecting IE6 when layout has no north or south pane
+* ADDED new layout property 'state' - eg: myLayout.state.west.size
+* REMOVED layout.containerDimensions property - USE: layout.state.container
+* CHANGED data returned to callbacks - added pane-state as 3rd param
+
+1.1.0
+* RENAMED raisePaneZindexOnHover ==> showOverflowOnHover
+* REMOVED "overflow: auto" from base-styles. Overflow must now be set by 
+    CSS - unless applyDefaultStyles==true. No longer need "!important" to 
+	set pane overflow in your stylesheet.
+* CHANGED minSize default from 50 to 0 (still auto-limited to 'css size')
+* FIXED bug in allowOverflow - now works with 'custom paneClass'
+* EXPOSED two CSS utility methods
+    o myLayout.cssWidth( elem )
+    o myLayout.cssHeight( elem )
+* NEW auto-resize for ALL layouts on windows.resize 
+* UPDATED auto-resizing of panes after a container-resize
+* NEW flow-code to prevent simultaneous pane animations
+* NEW options to add text inside toggler-buttons
+* NEW options for hotkeys - standard (cursors) and user-defined 
+
+1.0
+* Initial release

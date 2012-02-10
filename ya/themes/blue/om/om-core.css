@@ -1,0 +1,41 @@
+/*
+ * operamasks-ui CSS Framework @VERSION
+ *
+ * Copyright 2011, AUTHORS.txt (http://ui.operamasks.org/about)
+ * Dual licensed under the MIT or GPL Version 2 licenses.
+ * http://ui.operamasks.org/license
+ *
+ * http://ui.operamasks.org/docs/
+ */
+
+/* Layout helpers
+----------------------------------*/
+.om-helper-hidden { display: none; }
+.om-helper-hidden-accessible { position: absolute !important; clip: rect(1px 1px 1px 1px); clip: rect(1px,1px,1px,1px); }
+.om-helper-reset { margin: 0; padding: 0; border: 0; outline: 0; line-height: 1.3; text-decoration: none; font-size: 100%; list-style: none; }
+.om-helper-clearfix:after { content: "."; display: block; height: 0; clear: both; visibility: hidden; }
+.om-helper-clearfix { display: inline-block; }
+/* required comment for clearfix to work in Opera \*/
+* html .om-helper-clearfix { height:1%; }
+.om-helper-clearfix { display:block; }
+/* end clearfix */
+.om-helper-zfix { width: 100%; height: 100%; top: 0; left: 0; position: absolute; opacity: 0; filter:Alpha(Opacity=0); }
+
+
+/* Interaction Cues
+----------------------------------*/
+.om-state-disabled { cursor: default !important; }
+
+
+/* Icons
+----------------------------------*/
+
+/* states and images */
+.om-icon { display: block; text-indent: -99999px; overflow: hidden; background-repeat: no-repeat; }
+
+
+/* Misc visuals
+----------------------------------*/
+
+/* Overlays */
+.om-widget-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }

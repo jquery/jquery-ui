@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+
+  <!-- Always force latest IE rendering engine (even in intranet) & Chrome Frame 
+       Remove this if you use the .htaccess -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+  <title>default</title>
+  <meta name="description" content="" />
+  <meta name="author" content="13" />
+  <link rel="stylesheet" href="../../external/reset-fonts-base.css">
+	<link rel="stylesheet" href="../../../themes/base/jquery.ui.all.css">
+	<style>
+		#list{
+			position: relative;
+			width:80%;
+			margin:0 auto;
+			border:3px solid green;
+		}
+		.ui-waterfall-item{
+			/*border:1px solid red;*/
+		}
+  	</style>
+	<script src="../../../jquery-1.7.1.js"></script>
+	<script src="../../../ui/jquery.ui.core.js"></script>
+	<script src="../../../ui/jquery.ui.widget.js"></script>
+	<script src="../../lib/jquery.tmpl.min.js"></script>
+	<script src="../../ui/jquery.ya.waterfall0.js"></script>
+  	<script>
+  		jQuery(function(){
+  			var imgs=[];
+  			window.jsonFlickrFeed=function(data){
+  				var imgJq;
+  				for(var i=0,item;item=data.items[i++];){
+  					imgJq=$(item.description).find('img');
+  					imgs[i-1]={
+  						"src":imgJq.attr('src'),
+  						"width":imgJq.attr('width'),
+  						"height":imgJq.attr('height')
+  					};
+  				}
+  				imgs=imgs.concat(imgs.slice(0));	//他娘的数量不够
+  				$('#list').waterfall0({
+	  				itemTpl:'<div class="ui-waterfall-item"><img src="${src}" style="width:${width}px;height:${height}px;" /></div>',
+					initData:imgs,
+					onWinScroll:function(){
+						var self=this;
+						var winJq=$(window),
+							docJq=$(document);
+						if(docJq.height()==(winJq.height()+winJq.scrollTop())){
+							self.append();
+						}
+					}
+	  			});
+  			};
+  			//flicker源
+  			$.getJSON('http://api.flickr.com/services/feeds/photos_public.gne?format=json&callback=?');
+  			
+  		});
+  	</script>
+  
+</head>
+
+<body>
+  <div id="list">
+    
+  </div>
+</body>
+</html>

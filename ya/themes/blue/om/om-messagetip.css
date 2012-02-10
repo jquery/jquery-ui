@@ -1,0 +1,31 @@
+/*
+ * $Id: om-messagetip.css,v 1.9 2011/12/19 02:22:23 licongping Exp $
+ * operamasks-ui messagetip @VERSION
+ *
+ * Copyright 2011, AUTHORS.txt (http://ui.operamasks.org/about)
+ * Dual licensed under the MIT or GPL Version 2 licenses.
+ * http://ui.operamasks.org/license
+ *
+ * http://ui.operamasks.org/docs/
+ */
+body {/*解决IE6不支持position:fixed的问题*/ _background-image: url(about:blank);/*用浏览器空白页面作为背景*/_background-attachment: fixed;     /* prevent screen flash in IE6 确保滚动条滚动时，元素不闪动*/}
+.om-messageTip { position: fixed; right:5px; bottom:5px;width: 200px; overflow: hidden; outline:0; border-bottom-right-radius: 0px; border-bottom-left-radius: 0px;_position:absolute;_left:expression(eval(document.documentElement.scrollLeft+document.documentElement.clientWidth-this.offsetWidth)-(parseInt(this.currentStyle.marginLeft,10)||0)-(parseInt(this.currentStyle.marginRight,10)||0)-5);_top:expression(eval(document.documentElement.scrollTop+document.documentElement.clientHeight-this.offsetHeight-(parseInt(this.currentStyle.marginTop,10)||0)-(parseInt(this.currentStyle.marginBottom,10)||0))-5);}
+.om-messageTip .om-widget-header { height: 29px; position: relative; border-radius: 4px 4px 0 0; border:1px solid #86A3C4;border-bottom-width: 0}
+.om-messageTip-title { float: left; margin: 0.7em 16px 0.1em 0.5em; }
+
+.om-messageTip-titlebar-close { position: absolute; right: .3em; top: 50%; width: 22px; margin: -12px 0 0 0; padding: 1px; height: 18px; }
+.om-messageTip-titlebar-close span { display: block; margin: 1px; }
+.om-messageTip .om-icon-closethick {background-image: url("images/ui-toolbar-btn.png") !important;_background-image: url("images/ui-toolbar-btn.gif") !important;background-position: -88px 0!important;width: 22px; height: 18px;text-indent:-9999px}
+.om-messageTip .om-icon-closethick:hover{background-position: -88px -36px!important;}
+.om-messageTip .om-state-mousedown .om-icon-closethick{background-position: -88px -18px!important;}
+.om-messageTip a.om-state-hover,.om-messageTip a.om-state-focus,.om-messageTip a.om-state-mousedown{background-color: transparent;border: none}
+
+.om-messageTip-content { padding: 10px; overflow: auto; zoom: 1; border-bottom-left-radius: 4px;border-bottom-right-radius: 4px;}
+.om-messageTip-content-body{ word-wrap: break-word; word-break: break-all;float:left;width:136px;margin-left: 10px;}
+.om-messageTip-image{ background: none no-repeat scroll 0 0 transparent;height: 32px;width: 32px;overflow: hidden;float: left;}
+.om-messageTip-image-alert{ background-image: url("images/messagebox/alert.gif"); }
+.om-messageTip-image-warning{ background-image: url("images/messagebox/warning.gif"); }
+.om-messageTip-image-question{ background-image: url("images/messagebox/question.gif"); }
+.om-messageTip-image-success{ background-image: url("images/messagebox/success.gif"); }
+.om-messageTip-image-error{ background-image: url("images/messagebox/error.gif"); }
+.om-messageTip-image-waiting{ background-image: url("images/messagebox/waiting.gif"); }

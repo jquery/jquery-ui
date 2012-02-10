@@ -1,0 +1,19 @@
+/*
+ * $Id: om-accordion.css,v 1.16 2011/12/15 01:57:58 chentianzhen Exp $
+ * operamasks-ui Accordion @VERSION
+ *
+ * Copyright 2011, AUTHORS.txt (http://ui.operamasks.org/about)
+ * Dual licensed under the MIT or GPL Version 2 licenses.
+ * http://ui.operamasks.org/license
+ *
+ * http://ui.operamasks.org/docs/
+ */
+/* "width:100%" IE/Win - Fix animation bug - #4615 */
+.om-accordion { width: 100%;}
+.om-accordion .om-panel .om-panel-header{border-width: 0 1px 1px;}
+.om-accordion .om-panel .om-panel-body{border-top-width: 0;}
+.om-accordion .om-state-disabled{cursor:not-allowed!important;}
+.om-accordion .om-panel-tool-collapse{
+	background : url(images/ui-toolbar-btn.png) no-repeat -20px 0 transparent;_background : url(images/ui-toolbar-btn.gif) no-repeat -20px 0 transparent;}
+.om-accordion .om-panel-tool-expand{
+	background : url(images/ui-toolbar-btn.png) no-repeat 0 0 transparent;_background : url(images/ui-toolbar-btn.gif) no-repeat 0 0 transparent;}
