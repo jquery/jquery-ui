@@ -268,7 +268,9 @@ $.widget( "ui.autocomplete", {
 					url: url,
 					data: request,
 					dataType: "json",
-					autocompleteRequest: ++requestIndex,
+					context: {
+						autocompleteRequest: ++requestIndex
+					},
 					success: function( data, status ) {
 						if ( this.autocompleteRequest === requestIndex ) {
 							response( data );
