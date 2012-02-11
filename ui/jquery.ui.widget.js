@@ -23,8 +23,9 @@ $.cleanData = function( elems ) {
 };
 
 $.widget = function( name, base, prototype ) {
-	var namespace = name.split( "." )[ 0 ],
-		fullName;
+	var fullName, existingConstructor, constructor, basePrototype,
+		namespace = name.split( "." )[ 0 ];
+
 	name = name.split( "." )[ 1 ];
 	fullName = namespace + "-" + name;
 
@@ -39,12 +40,11 @@ $.widget = function( name, base, prototype ) {
 	};
 
 	$[ namespace ] = $[ namespace ] || {};
-	// create the constructor using $.extend() so we can carry over any
-	// static properties stored on the existing constructor (if there is one)
-	$[ namespace ][ name ] = $.extend( function( options, element ) {
+	existingConstructor = $[ namespace ][ name ];
+	constructor = $[ namespace ][ name ] = function( options, element ) {
 		// allow instantiation without "new" keyword
 		if ( !this._createWidget ) {
-			return new $[ namespace ][ name ]( options, element );
+			return new constructor( options, element );
 		}
 
 		// allow instantiation without initializing for simple inheritance
@@ -52,9 +52,19 @@ $.widget = function( name, base, prototype ) {
 		if ( arguments.length ) {
 			this._createWidget( options, element );
 		}
-	}, $[ namespace ][ name ], { version: prototype.version } );
+	};
+	// extend with the existing constructor to carry over any static properties
+	$.extend( constructor, existingConstructor, {
+		version: prototype.version,
+		// copy the object used to create the prototype in case we need to
+		// redefine the widget later
+		_proto: $.extend( {}, prototype ),
+		// track widgets that inherit from this widget in case this widget is
+		// redefined after a widget inherits from it
+		_childConstructors: []
+	});
 
-	var basePrototype = new base();
+	basePrototype = new base();
 	// we need to make the options hash a property directly on the new instance
 	// otherwise we'll modify the options hash on the prototype that we're
 	// inheriting from
@@ -62,11 +72,11 @@ $.widget = function( name, base, prototype ) {
 	$.each( prototype, function( prop, value ) {
 		if ( $.isFunction( value ) ) {
 			prototype[ prop ] = (function() {
-				var _super = function( method ) {
-					return base.prototype[ method ].apply( this, slice.call( arguments, 1 ) );
+				var _super = function() {
+					return base.prototype[ prop ].apply( this, arguments );
 				};
-				var _superApply = function( method, args ) {
-					return base.prototype[ method ].apply( this, args );
+				var _superApply = function( args ) {
+					return base.prototype[ prop ].apply( this, args );
 				};
 				return function() {
 					var __super = this._super,
@@ -83,17 +93,41 @@ $.widget = function( name, base, prototype ) {
 
 					return returnValue;
 				};
-			}());
+			})();
 		}
 	});
-	$[ namespace ][ name ].prototype = $.widget.extend( basePrototype, {
+	constructor.prototype = $.widget.extend( basePrototype, {
+		// TODO: remove support for widgetEventPrefix
+		// always use the name + a colon as the prefix, e.g., draggable:start
+		// don't prefix for widgets that aren't DOM-based
+		widgetEventPrefix: name
+	}, prototype, {
+		constructor: constructor,
 		namespace: namespace,
 		widgetName: name,
-		widgetEventPrefix: name,
 		widgetBaseClass: fullName
-	}, prototype );
+	});
 
-	$.widget.bridge( name, $[ namespace ][ name ] );
+	// If this widget is being redefined then we need to find all widgets that
+	// are inheriting from it and redefine all of them so that they inherit from
+	// the new version of this widget. We're essentially trying to replace one
+	// level in the prototype chain.
+	if ( existingConstructor ) {
+		$.each( existingConstructor._childConstructors, function( i, child ) {
+			var childPrototype = child.prototype;
+
+			// redefine the child widget using the same prototype that was
+			// originally used, but inherit from the new version of the base
+			$.widget( childPrototype.namespace + "." + childPrototype.widgetName, constructor, child._proto );
+		});
+		// remove the list of existing child constructors from the old constructor
+		// so the old child constructors can be garbage collected
+		delete existingConstructor._childConstructors;
+	} else {
+		base._childConstructors.push( constructor );
+	}
+
+	$.widget.bridge( name, constructor );
 };
 
 $.widget.extend = function( target ) {
@@ -157,18 +191,8 @@ $.widget.bridge = function( name, object ) {
 	};
 };
 
-$.Widget = function( options, element ) {
-	// allow instantiation without "new" keyword
-	if ( !this._createWidget ) {
-		return new $[ namespace ][ name ]( options, element );
-	}
-
-	// allow instantiation without initializing for simple inheritance
-	// must use "new" keyword (the code above always passes args)
-	if ( arguments.length ) {
-		this._createWidget( options, element );
-	}
-};
+$.Widget = function( options, element ) {};
+$.Widget._childConstructors = [];
 
 $.Widget.prototype = {
 	widgetName: "widget",
@@ -195,15 +219,20 @@ $.Widget.prototype = {
 		if ( element !== this ) {
 			$.data( element, this.widgetName, this );
 			this._bind({ remove: "destroy" });
-			this.document = $( element.ownerDocument );
+			this.document = $( element.style ?
+				// element within the document
+				element.ownerDocument :
+				// element is window or document
+				element.document || element );
 			this.window = $( this.document[0].defaultView || this.document[0].parentWindow );
 		}
 
 		this._create();
-		this._trigger( "create" );
+		this._trigger( "create", null, this._getCreateEventData() );
 		this._init();
 	},
 	_getCreateOptions: $.noop,
+	_getCreateEventData: $.noop,
 	_create: $.noop,
 	_init: $.noop,
 
@@ -325,6 +354,13 @@ $.Widget.prototype = {
 				return ( typeof handler === "string" ? instance[ handler ] : handler )
 					.apply( instance, arguments );
 			}
+
+			// copy the guid so direct unbinding works
+			if ( typeof handler !== "string" ) {
+				handlerProxy.guid = handler.guid =
+					handler.guid || handlerProxy.guid || jQuery.guid++;
+			}
+
 			var match = event.match( /^(\w+)\s*(.*)$/ ),
 				eventName = match[1] + "." + instance.widgetName,
 				selector = match[2];
@@ -370,33 +406,31 @@ $.Widget.prototype = {
 	},
 
 	_trigger: function( type, event, data ) {
-		var callback = this.options[ type ],
-			args;
+		var prop, orig,
+			callback = this.options[ type ];
 
+		data = data || {};
 		event = $.Event( event );
 		event.type = ( type === this.widgetEventPrefix ?
 			type :
 			this.widgetEventPrefix + type ).toLowerCase();
-		data = data || {};
+		// the original event may come from any element
+		// so we need to reset the target on the new event
+		event.target = this.element[ 0 ];
 
 		// copy original event properties over to the new event
-		// this would happen if we could call $.event.fix instead of $.Event
-		// but we don't have a way to force an event to be fixed multiple times
-		if ( event.originalEvent ) {
-			for ( var i = $.event.props.length, prop; i; ) {
-				prop = $.event.props[ --i ];
-				event[ prop ] = event.originalEvent[ prop ];
+		orig = event.originalEvent;
+		if ( orig ) {
+			for ( prop in orig ) {
+				if ( !( prop in event ) ) {
+					event[ prop ] = orig[ prop ];
+				}
 			}
 		}
 
 		this.element.trigger( event, data );
-
-		args = $.isArray( data ) ?
-			[ event ].concat( data ) :
-			[ event, data ];
-
 		return !( $.isFunction( callback ) &&
-			callback.apply( this.element[0], args ) === false ||
+			callback.apply( this.element[0], [ event ].concat( data ) ) === false ||
 			event.isDefaultPrevented() );
 	}
 };

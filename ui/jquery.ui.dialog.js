@@ -77,8 +77,11 @@ $.widget("ui.dialog", {
 		// #5742 - .attr() might return a DOMElement
 		if ( typeof this.originalTitle !== "string" ) {
 			this.originalTitle = "";
-		}
-
+		}		
+		this.oldPosition = { 
+			parent: this.element.parent(), 
+			index: this.element.parent().children().index( this.element ) 
+		};
 		this.options.title = this.options.title || this.originalTitle;
 		var self = this,
 			options = self.options,
@@ -168,8 +171,9 @@ $.widget("ui.dialog", {
 	},
 
 	_destroy: function() {
-		var self = this;
-		
+		var self = this, next, 
+			oldPosition = this.oldPosition;
+
 		if ( self.overlay ) {
 			self.overlay.destroy();
 		}
@@ -183,6 +187,13 @@ $.widget("ui.dialog", {
 		if ( self.originalTitle ) {
 			self.element.attr( "title", self.originalTitle );
 		}
+		
+		next = oldPosition.parent.children().eq( oldPosition.index );
+		if ( next.length ) {
+			next.before( self.element );
+		} else {
+			oldPosition.parent.append( self.element );
+		}		
 	},
 
 	widget: function() {
@@ -196,7 +207,7 @@ $.widget("ui.dialog", {
 
 		var self = this,
 			maxZ, thisZ;
-		
+
 		if ( false === self._trigger( "beforeClose", event ) ) {
 			return;
 		}
@@ -493,7 +504,7 @@ $.widget("ui.dialog", {
 					at: myAt.join( " " ),
 					offset: offset.join( " " )
 				};
-			} 
+			}
 
 			position = $.extend( {}, $.ui.dialog.prototype.options.position, position );
 		} else {
@@ -518,7 +529,7 @@ $.widget("ui.dialog", {
 
 		$.each( options, function( key, value ) {
 			self._setOption( key, value );
-			
+
 			if ( key in sizeRelatedOptions ) {
 				resize = true;
 			}
@@ -564,7 +575,7 @@ $.widget("ui.dialog", {
 				if ( isDraggable && !value ) {
 					uiDialog.draggable( "destroy" );
 				}
-				
+
 				if ( !isDraggable && value ) {
 					self._makeDraggable();
 				}
@@ -596,7 +607,7 @@ $.widget("ui.dialog", {
 				break;
 		}
 
-		this._super( "_setOption", key, value );
+		this._super( key, value );
 	},
 
 	_size: function() {
@@ -625,9 +636,9 @@ $.widget("ui.dialog", {
 				height: "auto",
 				width: options.width
 			})
-			.height();
+			.outerHeight();
 		minContentHeight = Math.max( 0, options.minHeight - nonContentHeight );
-		
+
 		if ( options.height === "auto" ) {
 			// only needed for IE6 support
 			if ( $.support.minHeight ) {
@@ -704,7 +715,7 @@ $.extend( $.ui.dialog.overlay, {
 			$( document ).bind( "keydown.dialog-overlay", function( event ) {
 				if ( dialog.options.closeOnEscape && !event.isDefaultPrevented() && event.keyCode &&
 					event.keyCode === $.ui.keyCode.ESCAPE ) {
-					
+
 					dialog.close( event );
 					event.preventDefault();
 				}

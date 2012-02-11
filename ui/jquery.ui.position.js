@@ -37,7 +37,7 @@ $.position = {
 
 		div.remove();
 
-		return w1 - w2; 
+		return w1 - w2;
 	},
 	getScrollInfo: function(within) {
 		var notWindow = within[0] !== window,
@@ -182,6 +182,12 @@ $.fn.position = function( options ) {
 
 		position.left += myOffset[ 0 ];
 		position.top += myOffset[ 1 ];
+
+		// if the browser doesn't support fractions, then round for consistent results
+		if ( !$.support.offsetFractions ) {
+			position.left = Math.round( position.left );
+			position.top = Math.round( position.top );
+		}
 
 		collisionPosition = {
 			marginLeft: marginLeft,
@@ -395,16 +401,55 @@ $.ui.position = {
 		}
 	},
 	flipfit: {
-		left: function() { 
-			$.ui.position.flip.left.apply( this, arguments ); 
+		left: function() {
+			$.ui.position.flip.left.apply( this, arguments );
 			$.ui.position.fit.left.apply( this, arguments );
 		},
-		top: function() { 
-			$.ui.position.flip.top.apply( this, arguments ); 
+		top: function() {
+			$.ui.position.flip.top.apply( this, arguments );
 			$.ui.position.fit.top.apply( this, arguments );
 		}
 	}
 };
+
+// fraction support test
+(function () {
+	var testElement, testElementParent, testElementStyle, offsetLeft, i
+		body = document.getElementsByTagName( "body" )[ 0 ],
+		div = document.createElement( "div" );
+
+	//Create a "fake body" for testing based on method used in jQuery.support
+	testElement = document.createElement( body ? "div" : "body" );
+	testElementStyle = {
+		visibility: "hidden",
+		width: 0,
+		height: 0,
+		border: 0,
+		margin: 0,
+		background: "none"
+	};
+	if ( body ) {
+		$.extend( testElementStyle, {
+			position: "absolute",
+			left: "-1000px",
+			top: "-1000px"
+		});
+	}
+	for ( i in testElementStyle ) {
+		testElement.style[ i ] = testElementStyle[ i ];
+	}
+	testElement.appendChild( div );
+	testElementParent = body || document.documentElement;
+	testElementParent.insertBefore( testElement, testElementParent.firstChild );
+
+	div.style.cssText = "position: absolute; left: 10.7432222px;";
+
+	offsetLeft = $( div ).offset().left;
+	$.support.offsetFractions = offsetLeft > 10 && offsetLeft < 11;
+
+	testElement.innerHTML = "";
+	testElementParent.removeChild( testElement );
+})();
 
 // DEPRECATED
 if ( $.uiBackCompat !== false ) {
