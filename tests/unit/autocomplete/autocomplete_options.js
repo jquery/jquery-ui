@@ -102,6 +102,39 @@ test( "minLength", function() {
 	ok( menu.is( ":visible" ), "blank enough for minLength: 0" );
 });
 
+asyncTest( "minLength, exceed then drop below", function() {
+	expect( 4 );
+	var element = $( "#autocomplete" ).autocomplete({
+			minLength: 2,
+			source: function( req, res ) {
+				equal( req.term, "12", "correct search term" );
+				setTimeout(function() {
+					res([ "item" ]);
+				}, 1 );
+			}
+		}),
+		menu = element.autocomplete( "widget" );
+
+	ok( menu.is( ":hidden" ), "menu is hidden before first search" );
+	element.autocomplete( "search", "12" );
+
+	ok( menu.is( ":hidden" ), "menu is hidden before second search" );
+	element.autocomplete( "search", "1" );
+
+	setTimeout(function() {
+		ok( menu.is( ":hidden" ), "menu is hidden after searches" );
+		start();
+	}, 50 );
+});
+
+// TODO: figure out how to implement this test
+// When fixing #7523, I couldn't figure out a test that would fail when
+// calling .close() (instead of ._close()) from ._response().
+// Use the remote demo and type "je", delete, "a", you should get results for "ja"
+// but if we call .close() from ._response() the results are ignored.
+//asyncTest( "minLength, exceed then drop below", function() {
+//});
+
 test( "source, local string array", function() {
 	expect( 1 );
 	var element = $( "#autocomplete" ).autocomplete({

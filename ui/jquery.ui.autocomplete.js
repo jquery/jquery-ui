@@ -383,7 +383,8 @@ $.widget( "ui.autocomplete", {
 			this._suggest( content );
 			this._trigger( "open" );
 		} else {
-			this.close();
+			// use ._close() instad of .close() so we don't cancel future searches
+			this._close();
 		}
 		this.pending--;
 		if ( !this.pending ) {
@@ -392,6 +393,11 @@ $.widget( "ui.autocomplete", {
 	},
 
 	close: function( event ) {
+		this.cancelSearch = true;
+		this._close( event );
+	},
+
+	_close: function( event ) {
 		clearTimeout( this.closing );
 		if ( this.menu.element.is(":visible") ) {
 			this.menu.element.hide();
