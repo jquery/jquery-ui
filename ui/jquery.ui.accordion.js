@@ -432,6 +432,8 @@ $.widget( "ui.accordion", {
 $.extend( $.ui.accordion, {
 	animations: {
 		slide: function( options ) {
+			var total;
+
 			if ( !options.toHide.size() ) {
 				return options.toShow.animate( showProps, options );
 			}
@@ -439,11 +441,11 @@ $.extend( $.ui.accordion, {
 				return options.toHide.animate( hideProps, options );
 			}
 
-			var total = options.toShow.show().outerHeight();
+			total = options.toShow.show().outerHeight();
 			options.toHide.animate( hideProps, options );
 			options.toShow
 				.hide()
-				.data( "togglePair", {
+				.data( "accordionHeight", {
 					total: total,
 					toHide: options.toHide
 				})
@@ -452,20 +454,34 @@ $.extend( $.ui.accordion, {
 					easing: options.easing,
 					complete: function() {
 						setTimeout(function() {
-							options.toShow.removeData( "togglePair" );
+							options.toShow.removeData( "accordionHeight" );
 							options.complete();
 						}, 1 );
 					}
 				});
-			},
-			bounceslide: function( options ) {
-				this.slide( $.extend( options, {
-					easing: options.down ? "easeOutBounce" : "swing",
-					duration: options.down ? 1000 : 200
-				}));
-			}
+		},
+		bounceslide: function( options ) {
+			this.slide( $.extend( options, {
+				easing: options.down ? "easeOutBounce" : "swing",
+				duration: options.down ? 1000 : 200
+			}));
+		}
 	}
 });
+
+$.fx.step.accordionHeight = function( fx ) {
+	var elem = $( fx.elem ),
+		data = elem.data( "accordionHeight" );
+	elem.height( data.total - elem.outerHeight() - data.toHide.outerHeight() + elem.height() );
+};
+var hideProps = {},
+	showProps = {},
+	showPropsAdjust = {};
+hideProps.height = hideProps.paddingTop = hideProps.paddingBottom =
+	hideProps.borderTopWidth = hideProps.borderBottomWidth = "hide";
+showProps.height = showProps.paddingTop = showProps.paddingBottom =
+	showProps.borderTopWidth = showProps.borderBottomWidth = "show";
+$.extend( showPropsAdjust, showProps, { accordionHeight: "show" } );
 
 
 
@@ -610,19 +626,5 @@ if ( $.uiBackCompat !== false ) {
 		};
 	}( jQuery, jQuery.ui.accordion.prototype ) );
 }
-
-$.fx.step._height = function( fx ) {
-	var elem = $( fx.elem ),
-		data = elem.data( "togglePair" );
-	elem.height( data.total - elem.outerHeight() - data.toHide.outerHeight() + elem.height() );
-};
-var hideProps = {},
-	showProps = {},
-	showPropsAdjust = {};
-hideProps.height = hideProps.paddingTop = hideProps.paddingBottom =
-	hideProps.borderTopWidth = hideProps.borderBottomWidth = "hide";
-showProps.height = showProps.paddingTop = showProps.paddingBottom =
-	showProps.borderTopWidth = showProps.borderBottomWidth = "show";
-$.extend( showPropsAdjust, showProps, { _height: "show" } );
 
 })( jQuery );
