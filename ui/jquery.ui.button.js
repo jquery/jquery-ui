@@ -144,9 +144,15 @@ $.widget( "ui.button", {
 				if ( options.disabled || clickDragged ) {
 					return false;
 				}
-				$( this ).toggleClass( "ui-state-active" );
-				self.buttonElement.attr( "aria-pressed", self.element[0].checked );
+				$( this ).toggleClass( "ui-state-active", !self.element[0].checked );
+				self.buttonElement.attr( "aria-pressed", !self.element[0].checked );
 			});
+			this.buttonElement.bind( "dblclick.buttonElement", function() {
+				if ( options.disabled || clickDragged ) {
+					return false;
+				}
+				self.refresh();
+			}); 
 		} else if ( this.type === "radio" ) {
 			this.buttonElement.bind( "click.button", function() {
 				if ( options.disabled || clickDragged ) {
