@@ -77,11 +77,11 @@ $.fn.extend({
 		var scrollParent;
 		if (($.browser.msie && (/(static|relative)/).test(this.css('position'))) || (/absolute/).test(this.css('position'))) {
 			scrollParent = this.parents().filter(function() {
-				return (/(relative|absolute|fixed)/).test($.curCSS(this,'position',1)) && (/(auto|scroll)/).test($.curCSS(this,'overflow',1)+$.curCSS(this,'overflow-y',1)+$.curCSS(this,'overflow-x',1));
+				return (/(relative|absolute|fixed)/).test($.css(this,'position')) && (/(auto|scroll)/).test($.css(this,'overflow')+$.css(this,'overflow-y')+$.css(this,'overflow-x'));
 			}).eq(0);
 		} else {
 			scrollParent = this.parents().filter(function() {
-				return (/(auto|scroll)/).test($.curCSS(this,'overflow',1)+$.curCSS(this,'overflow-y',1)+$.curCSS(this,'overflow-x',1));
+				return (/(auto|scroll)/).test($.css(this,'overflow')+$.css(this,'overflow-y')+$.css(this,'overflow-x'));
 			}).eq(0);
 		}
 
@@ -141,12 +141,12 @@ $.each( [ "Width", "Height" ], function( i, name ) {
 
 	function reduce( elem, size, border, margin ) {
 		$.each( side, function() {
-			size -= parseFloat( $.curCSS( elem, "padding" + this, true ) ) || 0;
+			size -= parseFloat( $.css( elem, "padding" + this ) ) || 0;
 			if ( border ) {
-				size -= parseFloat( $.curCSS( elem, "border" + this + "Width", true ) ) || 0;
+				size -= parseFloat( $.css( elem, "border" + this + "Width" ) ) || 0;
 			}
 			if ( margin ) {
-				size -= parseFloat( $.curCSS( elem, "margin" + this, true ) ) || 0;
+				size -= parseFloat( $.css( elem, "margin" + this ) ) || 0;
 			}
 		});
 		return size;
@@ -197,7 +197,7 @@ function focusable( element, isTabIndexNotNaN ) {
 
 function visible( element ) {
 	return !$( element ).parents().andSelf().filter(function() {
-		return $.curCSS( this, "visibility" ) === "hidden" ||
+		return $.css( this, "visibility" ) === "hidden" ||
 			$.expr.filters.hidden( this );
 	}).length;
 }

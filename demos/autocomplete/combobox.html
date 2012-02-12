@@ -29,7 +29,7 @@
 	(function( $ ) {
 		$.widget( "ui.combobox", {
 			_create: function() {
-				var self = this,
+				var that = this,
 					select = this.element.hide(),
 					selected = select.children( ":selected" ),
 					value = selected.val() ? selected.text() : "";
@@ -85,7 +85,7 @@
 						},
 						select: function( event, ui ) {
 							ui.item.option.selected = true;
-							self._trigger( "selected", event, {
+							that._trigger( "selected", event, {
 								item: ui.item.option
 							});
 						},
