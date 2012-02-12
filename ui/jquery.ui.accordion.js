@@ -17,6 +17,7 @@ $.widget( "ui.accordion", {
 	version: "@VERSION",
 	options: {
 		active: 0,
+		// TODO: animation option
 		animated: "slide",
 		collapsible: false,
 		event: "click",
@@ -362,13 +363,8 @@ $.widget( "ui.accordion", {
 	},
 
 	_toggle: function( data ) {
-		var self = this,
-			toShow = data.newContent,
+		var toShow = data.newContent,
 			toHide = this.prevShow.length ? this.prevShow : data.oldContent;
-
-		function complete() {
-			self._completed( data );
-		}
 
 		// handle activating a panel during the animation for another activation
 		this.prevShow.add( this.prevHide ).stop( true, true );
@@ -376,18 +372,13 @@ $.widget( "ui.accordion", {
 		this.prevHide = toHide;
 
 		if ( this.options.animated ) {
-			// TODO: support specifying an easing and a duration
-			// TODO: back compat for speciying just an easing
-			$.ui.accordion.animations[ this.options.animated ]({
-				toShow: toShow,
-				toHide: toHide,
-				complete: complete,
-				down: toShow.length && ( !toHide.length || ( toShow.index() < toHide.index() ) )
-			});
+			// TODO: back compat for animated option
+			// TODO: back compat for bounceslide
+			this._animate( toShow, toHide, data );
 		} else {
 			toHide.hide();
 			toShow.show();
-			complete();
+			this._completed( data );
 		}
 
 		// TODO assert that the blur and focus triggers are really necessary, remove otherwise
@@ -405,6 +396,46 @@ $.widget( "ui.accordion", {
 				tabIndex: 0
 			})
 			.focus();
+	},
+
+	_animate: function( toShow, toHide, data ) {
+		var total, easing, duration,
+			that = this,
+			down = toShow.length &&
+				( !toHide.length || ( toShow.index() < toHide.index() ) ),
+			animation = this.options.animation || {},
+			options = down && animation.down || animation,
+			complete = function() {
+				toShow.removeData( "accordionHeight" );
+				that._completed( data );
+			};
+
+		if ( typeof options === "number" ) {
+			duration = options;
+		}
+		if ( typeof options === "string" ) {
+			easing = options;
+		}
+		// fall back from options to animation in case of partial down settings
+		easing = easing || options.easing || animation.easing;
+		duration = duration || options.duration || animation.duration;
+
+		if ( !toHide.size() ) {
+			return toShow.animate( showProps, duration, easing, complete );
+		}
+		if ( !toShow.size() ) {
+			return toHide.animate( hideProps, duration, easing, complete );
+		}
+
+		total = toShow.show().outerHeight();
+		toHide.animate( hideProps, duration, easing );
+		toShow
+			.hide()
+			.data( "accordionHeight", {
+				total: total,
+				toHide: toHide
+			})
+			.animate( showPropsAdjust, duration, easing, complete );
 	},
 
 	_completed: function( data ) {
@@ -426,46 +457,6 @@ $.widget( "ui.accordion", {
 		}
 
 		this._trigger( "activate", null, data );
-	}
-});
-
-$.extend( $.ui.accordion, {
-	animations: {
-		slide: function( options ) {
-			var total;
-
-			if ( !options.toHide.size() ) {
-				return options.toShow.animate( showProps, options );
-			}
-			if ( !options.toShow.size() ) {
-				return options.toHide.animate( hideProps, options );
-			}
-
-			total = options.toShow.show().outerHeight();
-			options.toHide.animate( hideProps, options );
-			options.toShow
-				.hide()
-				.data( "accordionHeight", {
-					total: total,
-					toHide: options.toHide
-				})
-				.animate( showPropsAdjust, {
-					duration: options.duration,
-					easing: options.easing,
-					complete: function() {
-						setTimeout(function() {
-							options.toShow.removeData( "accordionHeight" );
-							options.complete();
-						}, 1 );
-					}
-				});
-		},
-		bounceslide: function( options ) {
-			this.slide( $.extend( options, {
-				easing: options.down ? "easeOutBounce" : "swing",
-				duration: options.down ? 1000 : 200
-			}));
-		}
 	}
 });
 
