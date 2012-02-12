@@ -33,19 +33,18 @@ $.widget( "ui.accordion", {
 	},
 
 	_create: function() {
-		var self = this,
-			options = self.options;
+		var options = this.options;
 
-		self.lastToggle = {};
-		self.element.addClass( "ui-accordion ui-widget ui-helper-reset" );
+		this.lastToggle = {};
+		this.element.addClass( "ui-accordion ui-widget ui-helper-reset" );
 
-		self.headers = self.element.find( options.header )
+		this.headers = this.element.find( options.header )
 			.addClass( "ui-accordion-header ui-helper-reset ui-state-default ui-corner-all" );
-		self._hoverable( self.headers );
-		self._focusable( self.headers );
-		self.headers.find( ":first-child" ).addClass( "ui-accordion-heading" );
+		this._hoverable( this.headers );
+		this._focusable( this.headers );
+		this.headers.find( ":first-child" ).addClass( "ui-accordion-heading" );
 
-		self.headers.next()
+		this.headers.next()
 			.addClass( "ui-accordion-content ui-helper-reset ui-widget-content ui-corner-bottom" );
 
 		// don't allow collapsible: false and active: false
@@ -56,26 +55,26 @@ $.widget( "ui.accordion", {
 		if ( options.active < 0 ) {
 			options.active += this.headers.length;
 		}
-		self.active = self._findActive( options.active )
+		this.active = this._findActive( options.active )
 			.addClass( "ui-accordion-header-active ui-state-active" )
 			.toggleClass( "ui-corner-all" )
 			.toggleClass( "ui-corner-top" );
-		self.active.next().addClass( "ui-accordion-content-active" );
+		this.active.next().addClass( "ui-accordion-content-active" );
 
-		self._createIcons();
-		self.refresh();
+		this._createIcons();
+		this.refresh();
 
 		// ARIA
-		self.element.attr( "role", "tablist" );
+		this.element.attr( "role", "tablist" );
 
-		self.headers
+		this.headers
 			.attr( "role", "tab" )
-			.bind( "keydown.accordion", $.proxy( self, "_keydown" ) )
+			.bind( "keydown.accordion", $.proxy( this, "_keydown" ) )
 			.next()
 				.attr( "role", "tabpanel" );
 
-		self.headers
-			.not( self.active )
+		this.headers
+			.not( this.active )
 			.attr({
 				"aria-expanded": "false",
 				"aria-selected": "false",
@@ -85,10 +84,10 @@ $.widget( "ui.accordion", {
 				.hide();
 
 		// make sure at least one header is in the tab order
-		if ( !self.active.length ) {
-			self.headers.eq( 0 ).attr( "tabIndex", 0 );
+		if ( !this.active.length ) {
+			this.headers.eq( 0 ).attr( "tabIndex", 0 );
 		} else {
-			self.active.attr({
+			this.active.attr({
 				"aria-expanded": "true",
 				"aria-selected": "true",
 				tabIndex: 0
@@ -97,7 +96,7 @@ $.widget( "ui.accordion", {
 
 		// only need links in tab order for Safari
 		if ( !$.browser.safari ) {
-			self.headers.find( "a" ).attr( "tabIndex", -1 );
+			this.headers.find( "a" ).attr( "tabIndex", -1 );
 		}
 
 		this._setupEvents( options.event );
@@ -362,13 +361,13 @@ $.widget( "ui.accordion", {
 	},
 
 	_toggle: function( data ) {
-		var self = this,
-			options = self.options,
+		var that = this,
+			options = this.options,
 			toShow = data.newContent,
 			toHide = data.oldContent;
 
 		function complete() {
-			self._completed( data );
+			that._completed( data );
 		}
 
 		if ( options.animated ) {
@@ -385,11 +384,11 @@ $.widget( "ui.accordion", {
 			}
 
 			animations[ animation ]({
-				widget: self,
+				widget: this,
 				toShow: toShow,
 				toHide: toHide,
-				prevShow: self.lastToggle.toShow,
-				prevHide: self.lastToggle.toHide,
+				prevShow: this.lastToggle.toShow,
+				prevHide: this.lastToggle.toHide,
 				complete: complete,
 				down: toShow.length && ( !toHide.length || ( toShow.index() < toHide.index() ) )
 			}, additional );
@@ -572,7 +571,7 @@ if ( $.uiBackCompat !== false ) {
 		var _create = prototype._create;
 		prototype._create = function() {
 			if ( this.options.navigation ) {
-				var self = this,
+				var that = this,
 					headers = this.element.find( this.options.header ),
 					content = headers.next(),
 					current = headers.add( content )
@@ -582,7 +581,7 @@ if ( $.uiBackCompat !== false ) {
 				if ( current ) {
 					headers.add( content ).each( function( index ) {
 						if ( $.contains( this, current ) ) {
-							self.options.active = Math.floor( index / 2 );
+							that.options.active = Math.floor( index / 2 );
 							return false;
 						}
 					});
