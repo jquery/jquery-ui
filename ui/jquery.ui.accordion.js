@@ -63,6 +63,7 @@ $.widget( "ui.accordion", {
 		this.active.next().addClass( "ui-accordion-content-active" );
 
 		this._createIcons();
+		this.originalHeight = this.element[0].style.height;
 		this.refresh();
 
 		// ARIA
@@ -157,6 +158,7 @@ $.widget( "ui.accordion", {
 			.removeAttr( "role" )
 			.removeClass( "ui-helper-reset ui-widget-content ui-corner-bottom ui-accordion-content ui-accordion-content-active ui-accordion-disabled ui-state-disabled" );
 		if ( this.options.heightStyle !== "content" ) {
+			this.element.css( "height", this.originalHeight );
 			contents.css( "height", "" );
 		}
 	},
@@ -230,12 +232,12 @@ $.widget( "ui.accordion", {
 	},
 
 	refresh: function() {
-		var options = this.options,
+		var heightStyle = this.options.heightStyle,
 			parent = this.element.parent(),
 			maxHeight,
 			overflow;
 
-		if ( options.heightStyle === "fill" ) {
+		if ( heightStyle === "fill" ) {
 			// IE 6 treats height like minHeight, so we need to turn off overflow
 			// in order to get a reliable height
 			// we use the minHeight support test because we assume that only
@@ -268,7 +270,7 @@ $.widget( "ui.accordion", {
 						$( this ).innerHeight() + $( this ).height() ) );
 				})
 				.css( "overflow", "auto" );
-		} else if ( options.heightStyle === "auto" ) {
+		} else if ( heightStyle === "auto" ) {
 			maxHeight = 0;
 			this.headers.next()
 				.each(function() {
@@ -277,7 +279,9 @@ $.widget( "ui.accordion", {
 				.height( maxHeight );
 		}
 
-		return this;
+		if ( heightStyle !== "content" ) {
+			this.element.height( this.element.height() );
+		}
 	},
 
 	_activate: function( index ) {
@@ -434,19 +438,13 @@ $.widget( "ui.accordion", {
 				total: total,
 				toHide: toHide
 			})
-			.animate( showPropsAdjust, duration, easing, complete );
+			.animate( this.options.heightStyle === "content" ? showProps : showPropsAdjust,
+				duration, easing, complete );
 	},
 
 	_completed: function( data ) {
 		var toShow = data.newContent,
 			toHide = data.oldContent;
-
-		if ( this.options.heightStyle === "content" ) {
-			toShow.add( toHide ).css({
-				height: "",
-				overflow: ""
-			});
-		}
 
 		// other classes are removed before the animation; this one needs to stay until completed
 		toHide.removeClass( "ui-accordion-content-active" );
