@@ -26,6 +26,9 @@ $.widget("ui.mouse", {
 	},
 	_mouseInit: function() {
 		var self = this;
+		this.document.mouseup( function( e ) {
+			mouseHandled = false;
+		});
 
 		this.element
 			.bind('mousedown.'+this.widgetName, function(event) {
@@ -93,7 +96,7 @@ $.widget("ui.mouse", {
 		this._mouseUpDelegate = function(event) {
 			return self._mouseUp(event);
 		};
-		$(document)
+		$(this.document)
 			.bind('mousemove.'+this.widgetName, this._mouseMoveDelegate)
 			.bind('mouseup.'+this.widgetName, this._mouseUpDelegate);
 
@@ -124,7 +127,7 @@ $.widget("ui.mouse", {
 	},
 
 	_mouseUp: function(event) {
-		$(document)
+		$(this.document)
 			.unbind('mousemove.'+this.widgetName, this._mouseMoveDelegate)
 			.unbind('mouseup.'+this.widgetName, this._mouseUpDelegate);
 
