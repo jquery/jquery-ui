@@ -93,7 +93,9 @@ $.widget( "ui.tooltip", {
 			that = this,
 			target = $( event ? event.target : this.element )
 				.closest( this.options.items );
-
+		
+		this.current = target;
+		
 		// if aria-describedby exists, then the tooltip is already open
 		if ( !target.length || target.attr( "aria-describedby" ) ) {
 			return;
@@ -107,7 +109,10 @@ $.widget( "ui.tooltip", {
 			// IE may instantly serve a cached response for ajax requests
 			// delay this call to _open so the other call to _open runs first
 			setTimeout(function() {
-				that._open( event, target, response );
+				// ignore async responses that come in after the tooltip is already hidden
+				if(that.current == target) {
+					that._open( event, target, response );
+				}
 			}, 1 );
 		});
 		if ( content ) {
@@ -163,6 +168,8 @@ $.widget( "ui.tooltip", {
 		var that = this,
 			target = $( event ? event.currentTarget : this.element ),
 			tooltip = this._find( target );
+			
+		this.current = null;
 
 		// don't close if the element has focus
 		// this prevents the tooltip from closing if you hover while focused
