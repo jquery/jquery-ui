@@ -182,7 +182,7 @@ $.widget.bridge = function( name, object ) {
 				if ( instance ) {
 					instance.option( options || {} )._init();
 				} else {
-					object( options, this );
+					new object( options, this );
 				}
 			});
 		}
