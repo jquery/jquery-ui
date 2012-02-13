@@ -414,7 +414,7 @@ $.ui.position = {
 
 // fraction support test
 (function () {
-	var testElement, testElementParent, testElementStyle, offsetLeft, i
+	var testElement, testElementParent, testElementStyle, offsetLeft, i,
 		body = document.getElementsByTagName( "body" )[ 0 ],
 		div = document.createElement( "div" );
 
