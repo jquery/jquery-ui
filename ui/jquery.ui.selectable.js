@@ -232,12 +232,14 @@ $.widget("ui.selectable", $.ui.mouse, {
 		this.dragged = false;
 
 		var options = this.options;
+		var ret = {selected: [], unselected:[]};
 
 		$('.ui-unselecting', this.element[0]).each(function() {
 			var selectee = $.data(this, "selectable-item");
 			selectee.$element.removeClass('ui-unselecting');
 			selectee.unselecting = false;
 			selectee.startselected = false;
+			ret.unselected.push(selectee.element);
 			self._trigger("unselected", event, {
 				unselected: selectee.element
 			});
@@ -248,11 +250,12 @@ $.widget("ui.selectable", $.ui.mouse, {
 			selectee.selecting = false;
 			selectee.selected = true;
 			selectee.startselected = true;
+			ret.selected.push(selectee.element);
 			self._trigger("selected", event, {
 				selected: selectee.element
 			});
 		});
-		this._trigger("stop", event);
+		this._trigger("stop", event, ret);
 
 		this.helper.remove();
 
