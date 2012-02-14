@@ -11,6 +11,13 @@
 	  <meta name="description" content="" />
 	  <meta name="author" content="13" />
 	   <link rel="stylesheet" href="../../lib/base.css" />
+	   <style type="text/css">
+	   		.ui-tabs .ui-icon-close { 
+	   			position:absolute;
+	   			right:0px;
+	   			top:0px;
+	   		}
+	   </style>
 	<link rel="stylesheet" href="../../jqui/css/jquery-ui.css" />
 	
 	<script src="../../jqui/js/jquery.min.js"></script>
@@ -19,7 +26,9 @@
 	<script src="../../ui/jquery.ya.tabs0.js"></script>
 	<script>
 	$(function() {
-		$( "#tabs" ).tabs0();
+		$( "#tabs" ).tabs0({
+			closable:true	//添加删除按钮
+		});
 	});
 	</script>
 </head>
@@ -29,9 +38,9 @@
 
 <div id="tabs">
 	<ul>
-		<li><a href="#tabs-1">Nunc tincidunt</a></li>
-		<li><a href="#tabs-2">Proin dolor</a></li>
-		<li><a href="#tabs-3">Aenean lacinia</a></li>
+		<li><a href="#tabs-1">Nunc tincidunt</a><span class='ui-icon ui-icon-close'>Remove Tab</span></li>
+		<li><a href="#tabs-2">Proin dolor</a><span class='ui-icon ui-icon-close'>Remove Tab</span></li>
+		<li><a href="#tabs-3">Aenean lacinia</a><span class='ui-icon ui-icon-close'>Remove Tab</span></li>
 	</ul>
 	<div id="tabs-1">
 		<p>Proin elit arcu, rutrum commodo, vehicula tempus, commodo a, risus. Curabitur nec arcu. Donec sollicitudin mi sit amet mauris. Nam elementum quam ullamcorper ante. Etiam aliquet massa et lorem. Mauris dapibus lacus auctor risus. Aenean tempor ullamcorper leo. Vivamus sed magna quis ligula eleifend adipiscing. Duis orci. Aliquam sodales tortor vitae ipsum. Aliquam nulla. Duis aliquam molestie erat. Ut et mauris vel pede varius sollicitudin. Sed ut dolor nec orci tincidunt interdum. Phasellus ipsum. Nunc tristique tempus lectus.</p>

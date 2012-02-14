@@ -12,7 +12,11 @@
 	<script src="../../ui/jquery.ya.dialog0.js"></script>
 	<script>
 	$(function() {
-		$( "#dialog" ).dialog0();	
+		$( "#dialog" ).dialog0({
+			"modal":true,	//是否显示遮罩
+			"width":300,	//宽高建议用css控制
+			"height":200
+		});	
 	});
 	</script>
 </head>

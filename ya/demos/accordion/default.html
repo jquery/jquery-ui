@@ -20,7 +20,17 @@
 	<script src="../../ui/jquery.ya.accordion0.js"></script>
 	<script>
 	jQuery(function($) {
-		$( "#accordion" ).accordion0();
+		$( "#accordion" ).accordion0({
+			//collapsible: true,	//控制面板是否可折叠
+			active:false,	//设置为false开始时不打开面板
+			header:'h3.nav',	//设置header选择符
+			changestart:function(event, ui){
+				var newContentJq=ui.newContent;
+				if(newContentJq.hasClass('nothing')){
+					console.log(1);
+				}
+			}
+		});
 	});
 	</script>
 </head>
@@ -29,16 +39,10 @@
  <div class="demo">
 
 <div id="accordion">
-	<h3><a href="#">Section 1</a></h3>
-	<div>
-		<p>
-		Mauris mauris ante, blandit et, ultrices a, suscipit eget, quam. Integer
-		ut neque. Vivamus nisi metus, molestie vel, gravida in, condimentum sit
-		amet, nunc. Nam a nibh. Donec suscipit eros. Nam mi. Proin viverra leo ut
-		odio. Curabitur malesuada. Vestibulum a velit eu ante scelerisque vulputate.
-		</p>
+	<h3 class="nav"><a href="#">Section 1</a></h3>
+	<div class="nothing">
 	</div>
-	<h3><a href="#">Section 2</a></h3>
+	<h3 class="nav"><a href="#">Section 2</a></h3>
 	<div>
 		<p>
 		Sed non urna. Donec et ante. Phasellus eu ligula. Vestibulum sit amet
@@ -47,7 +51,7 @@
 		suscipit faucibus urna.
 		</p>
 	</div>
-	<h3><a href="#">Section 3</a></h3>
+	<h3 class="nav"><a href="#">Section 3</a></h3>
 	<div>
 		<p>
 		Nam enim risus, molestie et, porta ac, aliquam ac, risus. Quisque lobortis.
@@ -61,7 +65,7 @@
 			<li>List item three</li>
 		</ul>
 	</div>
-	<h3><a href="#">Section 4</a></h3>
+	<h3 class="nav"><a href="#">Section 4</a></h3>
 	<div>
 		<p>
 		Cras dictum. Pellentesque habitant morbi tristique senectus et netus
