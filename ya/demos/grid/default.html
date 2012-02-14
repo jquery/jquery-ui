@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+
+  <!-- Always force latest IE rendering engine (even in intranet) & Chrome Frame 
+       Remove this if you use the .htaccess -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+  <title>default</title>
+  <meta name="description" content="" />
+  <meta name="author" content="13" />
+
+  <link rel="stylesheet" href="../../lib/base.css" />
+	<link rel="stylesheet" href="../../jqui/css/jquery-ui.css" />
+	<link rel="stylesheet" href="../../themes/default/jquery.ui.grid.css" />
+	
+	<style type="text/css">
+	</style>
+	
+	<script src="../../jqui/js/jquery.min.js"></script>
+  	<script src="../../jqui/js/jquery-ui.min.js"></script>
+  	  	
+	<script src="../../ui/jquery.ya.grid0.js"></script>
+	<script type="text/javascript">
+		jQuery(function($){
+			$('#grid').grid0({
+				width:500,
+                dataSource : 'data.json',
+                colModel : [ {header : 'ID', name : 'id', width : 100, align : 'center'}, 
+                             {header : '地区', name : 'city', width : 120, align : 'left'}, 
+                             {header : '地址', name : 'address', align : 'left', width : 'autoExpand'} ]
+            });
+		});
+	</script>
+</head>
+
+<body>
+  <table id="grid"></table>
+</body>
+</html>

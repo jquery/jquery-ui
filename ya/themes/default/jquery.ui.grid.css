@@ -1,0 +1,563 @@
+.ui-grid {position: relative; overflow: hidden;}
+
+.ui-grid.hideBody {height: 26px !important;border-bottom: 1px solid #ccc;}
+
+.ie6fullwidthbug {
+	border-right: 0px solid #ccc;
+	padding-right: 2px;
+}
+
+.ui-grid div.nDiv {
+	background: #eee url(images/grid/line.gif) repeat-y -1px top;
+	border: 1px solid #ccc;
+	border-top: 0px;
+	overflow: auto;
+	left: 0px;
+	position: absolute;
+	z-index: 999;
+	float: left;
+}
+
+.ui-grid div.nDiv table {
+	margin: 2px;
+}
+
+.ui-grid div.gBlock {
+	position: absolute;
+	z-index: 100;
+}
+
+.ui-grid div.hDivBox {
+	float: left;
+	padding-right: 40px;
+}
+
+
+.ui-grid div.bDiv table.autoht {
+	border-bottom: 0px;
+	margin-bottom: 0px;
+}
+
+.ui-grid div.nDiv td {
+	padding: 2px 3px;
+	border: 1px solid #eee;
+	cursor: default;
+}
+
+.ui-grid div.nDiv tr:hover td,.ui-grid div.nDiv tr.ndcolover td {
+	background: #d5effc url(images/grid/hl.png) repeat-x top;
+	border: 1px solid #a8d8eb;
+}
+
+.ui-grid div.nDiv td.ndcol1 {
+	border-right: 1px solid #ccc;
+}
+
+.ui-grid div.nDiv td.ndcol2 {
+	border-left: 1px solid #fff;
+	padding-right: 10px;
+}
+
+.ui-grid div.nDiv tr:hover td.ndcol1,.ui-grid div.nDiv tr.ndcolover td.ndcol1
+	{
+	border-right: 1px solid #d2e3ec;
+}
+
+.ui-grid div.nDiv tr:hover td.ndcol2,.ui-grid div.nDiv tr.ndcolover td.ndcol2
+	{
+	border-left: 1px solid #eef8ff;
+}
+
+.ui-grid div.nBtn {
+	position: absolute;
+	height: 22px;
+	width: 14px;
+	z-index: 900;
+	background: #fafafa url(images/grid/fhbg.gif) repeat-x bottom;
+	border: 0px solid #ccc;
+	border-left: 1px solid #ccc;
+	top: 0px;
+	left: 0px;
+	margin-top: 1px;
+	cursor: pointer;
+	display: none;
+}
+
+.ui-grid div.nBtn div {
+	height: 24px;
+	width: 12px;
+	border-left: 1px solid #fff;
+	float: left;
+	background: url(images/grid/ddn.png) no-repeat center;
+}
+
+.ui-grid div.nBtn.srtd {
+	background: url(images/grid/wbg.gif) repeat-x 0px -1px;
+}
+
+/* title */
+.ui-grid div.mDiv {border-left: 0px; border-right: 0px; border-top: 0px;font-weight: bold;display: block;overflow: hidden; white-space: nowrap; position: relative;}
+.ui-grid div.mDiv div {padding: 6px; white-space: nowrap;}
+.ui-grid div.mDiv div.ptogtitle {position: absolute; top: 4px; right: 3px; padding: 0px; overflow: hidden; cursor: pointer;}
+.ui-grid div.mDiv div.ptogtitle span {display: block;}
+
+/* toolbar */
+.ui-grid div.tDiv {position: relative; overflow: hidden; height: 32px; border-left: 0px; border-right: 0px; border-top: 0px;}
+.ui-grid div.tDiv2 {float: left; clear: both; padding: 5px;}
+.ui-grid div.sDiv {position: relative; border: 1px solid #ccc; border-top: 0px; overflow: hidden; display: none;}
+.ui-grid div.sDiv2 {float: left; clear: both; padding: 5px; padding-left: 5px; width: 1024px;}
+.ui-grid div.sDiv2 input,.ui-grid div.sDiv2 select {vertical-align: middle;}
+
+.ui-grid div.btnseparator {float: left; height: 22px; width: 2px; background: url("images/grid/space-bg.png") no-repeat; margin: 3px 1px;}
+
+.ui-grid div.fbutton {float: left; display: block; height: 22px;}
+
+.ui-grid div.fbutton div {
+    border: 1px solid transparent;
+    line-height: 20px;
+    cursor: pointer;
+    float: left;
+    padding: 0px 4px;
+}
+
+.ui-grid div.fbutton span {
+	float: left;
+	display: block;
+}
+
+.ui-grid div.fbutton div:hover,.ui-grid div.fbutton div.fbOver {
+	background-color : #dce8ff;
+	border-radius : 2px;
+	border: 1px solid #8ea9d5;
+}
+
+/* end toolbar*/
+/* column title */
+.ui-grid div.hDiv {
+	position: relative;
+	border-top: 0px;
+	border-left: 0px;
+	border-right: 0px;
+	overflow: hidden;
+}
+
+.ui-grid div.cDrag {
+	float: left;
+	position: absolute;
+	z-index: 2;
+	overflow: visible;
+}
+
+.ui-grid div.cDrag div {
+	float: left;
+	background: none;
+	display: block;
+	position: absolute;
+	height: 24px;
+	width: 5px;
+	cursor: col-resize;
+}
+
+.ui-grid div.cDrag div:hover,.ui-grid div.cDrag div.dragging {
+	background: url(images/grid/line.gif) repeat-y 2px center;
+}
+
+.ui-grid div.cDrag div.checkboxcol:hover{
+	background: none;
+	cursor: default;
+}
+
+.ui-grid div.cDrag div.indexcol:hover{
+    background: none;
+    cursor: default;
+}
+
+.ui-grid div.iDiv {
+	border: 1px solid #316ac5;
+	position: absolute;
+	overflow: visible;
+	background: none;
+}
+
+.ui-grid div.iDiv input,.ui-grid div.iDiv select,.ui-grid div.iDiv textarea
+	{
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 0.9em;
+}
+
+.ui-grid div.iDiv input.tb {
+	border: 0px;
+	padding: 0px;
+	width: 100%;
+	height: 100%;
+	padding: 0px;
+	background: none;
+}
+
+.ui-grid div.bDiv {
+	border-top: 0px;
+	background: #fff;
+	overflow: auto;
+	position: relative;
+}
+
+.ui-grid div.bDiv table {
+	margin-bottom: 10px;
+	border-bottom: 1px solid #d0daee;
+}
+
+.ui-grid div.hGrip {
+	position: absolute;
+	top: 0px;
+	right: 0px;
+	height: 5px;
+	width: 5px;
+	background: url(images/grid/line.gif) repeat-x center;
+	margin-right: 1px;
+	cursor: col-resize;
+}
+
+.ui-grid div.hGrip:hover,.ui-grid div.hGrip.hgOver {
+	border-right: 1px solid #999;
+	margin-right: 0px;
+}
+
+.ui-grid div.vGrip {
+	height: 5px;
+	overflow: hidden;
+	position: relative;
+	background: #fafafa url(images/grid/wbg.gif) repeat-x 0px -1px;
+	border: 1px solid #ccc;
+	border-top: 0px;
+	text-align: center;
+	cursor: row-resize;
+}
+
+.ui-grid div.vGrip span {
+	display: block;
+	margin: 1px auto;
+	width: 20px;
+	height: 1px;
+	overflow: hidden;
+	border-top: 1px solid #aaa;
+	border-bottom: 1px solid #aaa;
+	background: none;
+}
+
+.ui-grid div.hDiv th,.ui-grid  div.bDiv td
+	/* common cell properties*/ {
+	text-align: left;
+	border:0px;
+	border-right: 1px solid #BDCBE8;
+	overflow: hidden;
+	vertical-align: top !important;
+	padding-left: 0;
+	padding-right: 0;
+}
+
+.ui-grid div.hDiv th div,.ui-grid  div.bDiv td  div,div.colCopy div
+	/* common inner cell properties*/ {
+	padding: 5px;
+	border-left: 0px solid #fff;
+}
+
+.ui-grid div.hDiv th div.checkboxheader {
+	padding: 4px 5px;
+}
+
+.ui-grid div.hDiv th,div.colCopy {
+	font-weight: normal;
+	height: 24px;
+	cursor: default;
+	white-space: nowrap;
+	overflow: hidden;
+}
+
+div.colCopy {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 0.9em;
+	background: #fafafa url(images/grid/fhbg.gif) repeat-x bottom;
+	border: 1px solid #ccc;
+	border-bottom: 0px;
+	overflow: hidden;
+}
+
+.ui-grid div.hDiv th.sorted {
+	background: url(images/grid/wbg.gif) repeat-x 0px -1px;
+	border-bottom: 0px solid #ccc;
+}
+
+.ui-grid div.hDiv th.thOver {
+	
+}
+
+.ui-grid div.hDiv th.thOver div,.ui-grid div.hDiv th.sorted.thOver div
+{
+	border-bottom: 1px solid orange;
+	padding-bottom: 3px;
+} 
+
+.ui-grid div.hDiv th.sorted div {
+	border-bottom: 0px solid #ccc;
+}
+
+.ui-grid div.hDiv th.thMove {
+	background: #fff;
+	color: #fff;
+}
+
+.ui-grid div.hDiv th.sorted.thMove div {
+	border-bottom: 1px solid #fff;
+	padding-bottom: 4px
+}
+
+.ui-grid div.hDiv th.thMove div {
+	background: #fff !important;
+}
+
+.ui-grid div.hDiv th div.sdesc {
+	background: url(images/grid/dn.png) no-repeat center top;
+}
+
+.ui-grid div.hDiv th div.sasc {
+	background: url(images/grid/up.png) no-repeat center top;
+}
+
+.ui-grid div.bDiv td {
+	border-bottom: 1px solid #fff;
+	vertical-align: top;
+	white-space: nowrap;
+}
+
+.ui-grid span.cdropleft {
+	display: block;
+	background: url(images/grid/prev.png) no-repeat -4px center;
+	width: 24px;
+	height: 24px;
+	position: relative;
+	top: -24px;
+	margin-bottom: -24px;
+	z-index: 3;
+}
+
+.ui-grid div.hDiv span.cdropright {
+	display: block;
+	background: url(images/grid/next.png) no-repeat 12px center;
+	width: 24px;
+	height: 24px;
+	float: right;
+	position: relative;
+	top: -24px;
+	margin-bottom: -24px;
+}
+
+.ui-grid div.bDiv td div {
+	border-top: 0px solid #fff;
+	padding-bottom: 4px;
+}
+
+.ui-grid tr td.sorted {
+	background: #f3f3f3;
+	border-right: 1px solid #ddd;
+	border-bottom: 1px solid #f3f3f3;
+}
+
+.ui-grid tr td.sorted div {
+	
+}
+
+.ui-grid tr.erow td {
+	background: #e8eef7;
+	border-bottom: 1px solid #e8eef7;
+}
+
+.ui-grid tr.erow td.sorted {
+	background: #e3e3e3;
+	border-bottom: 1px solid #e3e3e3;
+}
+
+.ui-grid div.bDiv tr.trOver td
+	{
+	background: #d9ebf5;
+}
+
+.ui-grid div.bDiv tr.ui-state-highlight:hover td,.ui-grid div.bDiv tr.ui-state-highlight:hover td.sorted,.ui-grid div.bDiv tr.trOver.ui-state-highlight td.sorted,.ui-grid div.bDiv tr.trOver.ui-state-highlight td,.ui-grid tr.ui-state-highlight td.sorted,.ui-grid tr.ui-state-highlight td
+	{
+	background: #F9EAC8;
+}
+
+/* novstripe adjustments */
+.ui-grid.novstripe .bDiv table {
+	border-bottom: 1px solid #ccc;
+	border-right: 1px solid #ccc;
+}
+
+.ui-grid.novstripe  div.bDiv td {
+	border-right-color: #fff;
+}
+
+.ui-grid.novstripe div.bDiv tr.erow td.sorted {
+	border-right-color: #e3e3e3;
+}
+
+.ui-grid.novstripe div.bDiv tr td.sorted {
+	border-right-color: #f3f3f3;
+}
+
+.ui-grid.novstripe  div.bDiv tr.erow td {
+	border-right-color: #f7f7f7;
+	border-left-color: #f7f7f7;
+}
+
+.ui-grid.novstripe div.bDiv tr.ui-state-highlight:hover td,.ui-grid.novstripe div.bDiv tr.ui-state-highlight:hover td.sorted,.ui-grid.novstripe div.bDiv tr.trOver.ui-state-highlight td.sorted,.ui-grid.novstripe div.bDiv tr.trOver.ui-state-highlight td,.ui-grid.novstripe tr.ui-state-highlight td.sorted,.ui-grid.novstripe tr.ui-state-highlight td
+	{
+	border-right: 1px solid #0066FF;
+	border-left: 1px solid #0066FF;
+}
+
+.ui-grid.novstripe div.bDiv tr.trOver td,.ui-grid.novstripe div.bDiv tr:hover td
+	{
+	border-left-color: #d9ebf5;
+	border-right-color: #d9ebf5;
+}
+
+/* end novstripe */
+.ui-grid div.pDiv {
+	border-bottom: 0px;
+	border-left: 0px;
+	border-right: 0px;
+	overflow: hidden;
+	height: 32px;
+	white-space: nowrap;
+	position: relative;
+}
+
+.ui-grid div.pDiv div.pDiv2 {
+	margin :3px 3px 3px -2px;
+	text-align:center;
+	float: left;
+	width: 1024px;
+	line-height: 26px;
+}
+
+div.pGroup {
+	float: left; 
+	background: none;
+	height: 24px;
+	margin: 0px 5px;
+}
+
+.ui-grid div.pDiv .pPageStat, .ui-grid div.pDiv .pcontrol, .ui-grid div.pDiv .pageLink {
+	position: relative;
+	overflow: visible;
+}
+
+.ui-grid div.pDiv .pageLink a {
+	color: #000;
+	margin-left: 3px;
+	margin-right: 3px;
+	font-size: 13px;
+	text-decoration: none;
+}
+
+.ui-grid div.pDiv a.now-page-link {
+	color: #FF0000;
+}
+
+.ui-grid div.pDiv .pageLink a:HOVER {
+	text-decoration: underline;
+}
+
+.ui-grid div.pDiv input {
+	position: relative;
+	text-align: center;
+    padding: 0;
+	width: 30px;
+	height: 15px;
+	margin: 0px 2px 0px 2px;
+}
+
+.ui-grid div.pDiv  div.pButton {
+	float: left;
+	width: 16px; 
+	height: 16px;
+	border: 1px solid transparent;
+	cursor: pointer;
+	overflow: hidden;
+	margin : 2px 0;
+}
+
+.ui-grid div.pDiv  div.pButton span {
+	width: 20px;
+	height: 20px;
+	display: block;
+	float: left;
+}
+
+.ui-grid .pSearch {
+	background: url(images/grid/magnifier.png) no-repeat center;
+}
+
+.ui-grid .pReload.loading {
+	background: url(images/load.gif) no-repeat center;
+}
+
+/* ie adjustments */
+.ui-grid.ie div.hDiv th div,.ui-grid.ie  div.bDiv td  div,div.colCopy.ie div
+	/* common inner cell properties*/ {
+	overflow: hidden;
+}
+
+.ui-grid div.hDiv span.checkbox {
+	background: url("images/grid/cb-sel-not.png");
+	width: 16px;
+	height: 16px;
+	display: block;
+	cursor: pointer;
+}
+
+.ui-grid div.hDiv span.selected {
+	background: url("images/grid/cb-sel.png");
+	width: 16px;
+	height: 16px;
+	display: block;
+	cursor: pointer;
+}
+
+.ui-grid span.checkbox {
+	background: url("images/grid/cb-sel-not.png");
+	width: 16px;
+	height: 16px;
+	display: block;
+	cursor: pointer;
+}
+
+.ui-grid .ui-state-highlight span.checkbox {
+	background: url("images/grid/cb-sel.png");
+	width: 16px;
+	height: 16px;
+	display: block;
+	cursor: pointer;
+}
+
+/* @chenjie,for toolbar */
+
+.ui-grid .tDiv .tDiv2 .fbutton div .tbText {
+	margin-left: 4px;
+}
+.ui-grid .tDiv .tDiv2 .fbutton div .tbIcon {
+	display:block;
+	width:16px;
+	height:16px;
+	margin: 2px 0;
+	float:left;
+}
+.ui-grid .tDiv .tDiv2 .fbutton {
+	margin-left: 10px;
+}
+
+.ui-grid .loadingImg {
+	background: url('images/load.gif');
+	height:16px;
+	width:16px;
+} 
