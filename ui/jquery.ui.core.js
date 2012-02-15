@@ -245,7 +245,9 @@ $.extend( $.ui, {
 			var proto = $.ui[ module ].prototype;
 			for ( var i in set ) {
 				proto.plugins[ i ] = proto.plugins[ i ] || [];
-				proto.plugins[ i ].push( [ option, set[ i ] ] );
+				if( $.isArray( proto.plugins[ i ] ) ) {
+					proto.plugins[ i ].push( [ option, set[ i ] ] );
+				}
 			}
 		},
 		call: function( instance, name, args ) {
