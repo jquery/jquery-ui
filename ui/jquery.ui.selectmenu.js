@@ -182,9 +182,8 @@ $.widget( "ui.selectmenu", {
 			this.menu.menu( "focus", null, item );
 			this._setSelected( item.data( "item.selectmenu" ) );
 
-			// set and transfer disabled state
-			this._getCreateOptions();
-			this._setOption( "disabled", this.options.disabled );
+			// set disabled state
+			this._setOption( "disabled", this._getCreateOptions()[ 'disabled' ] );
 		}
 	},
 
@@ -421,7 +420,7 @@ $.widget( "ui.selectmenu", {
 	},
 
 	_getCreateOptions: function() {
-		this.options.disabled = ( this.element.attr( 'disabled' ) ) ? true : false;
+		return { disabled: ( this.element.attr( 'disabled' ) ) ? true : false };
 	},
 
 	_readOptions: function( options ) {
