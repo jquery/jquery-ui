@@ -947,9 +947,7 @@ if ( $.uiBackCompat !== false ) {
 
 	// cookie option
 	var listId = 0;
-	function getNextListId() {
-		return ++listId;
-	}
+
 	$.widget( "ui.tabs", $.ui.tabs, {
 		options: {
 			cookie: null // e.g. { expires: 7, path: '/', domain: 'jquery.com', secure: true }
@@ -968,7 +966,7 @@ if ( $.uiBackCompat !== false ) {
 		},
 		_cookie: function( active ) {
 			var cookie = [ this.cookie ||
-				( this.cookie = this.options.cookie.name || "ui-tabs-" + getNextListId() ) ];
+				( this.cookie = this.options.cookie.name || "ui-tabs-" + ++listId ) ];
 			if ( arguments.length ) {
 				cookie.push( active === false ? -1 : active );
 				cookie.push( this.options.cookie );

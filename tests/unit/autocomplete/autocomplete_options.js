@@ -127,13 +127,34 @@ asyncTest( "minLength, exceed then drop below", function() {
 	}, 50 );
 });
 
-// TODO: figure out how to implement this test
-// When fixing #7523, I couldn't figure out a test that would fail when
-// calling .close() (instead of ._close()) from ._response().
-// Use the remote demo and type "je", delete, "a", you should get results for "ja"
-// but if we call .close() from ._response() the results are ignored.
-//asyncTest( "minLength, exceed then drop below", function() {
-//});
+test( "minLength, exceed then drop below then exceed", function() {
+	expect( 3 );
+	var _res = [],
+		element = $( "#autocomplete" ).autocomplete({
+			minLength: 2,
+			source: function( req, res ) {
+				_res.push( res );
+			}
+		}),
+		menu = element.autocomplete( "widget" );
+
+	// trigger a valid search
+	ok( menu.is( ":hidden" ), "menu is hidden before first search" );
+	element.autocomplete( "search", "12" );
+
+	// trigger a search below the minLength, to turn on cancelSearch flag
+	ok( menu.is( ":hidden" ), "menu is hidden before second search" );
+	element.autocomplete( "search", "1" );
+
+	// trigger a valid search
+	element.autocomplete( "search", "13" );
+	// react as if the first search was cancelled (default ajax behavior)
+	_res[ 0 ]([]);
+	// react to second search
+	_res[ 1 ]([ "13" ]);
+
+	ok( menu.is( ":visible" ), "menu is visible after searches" );
+});
 
 test( "source, local string array", function() {
 	expect( 1 );

@@ -383,7 +383,7 @@ $.widget( "ui.autocomplete", {
 			this._suggest( content );
 			this._trigger( "open" );
 		} else {
-			// use ._close() instad of .close() so we don't cancel future searches
+			// use ._close() instead of .close() so we don't cancel future searches
 			this._close();
 		}
 		this.pending--;
