@@ -17,8 +17,7 @@ $.widget( "ui.accordion", {
 	version: "@VERSION",
 	options: {
 		active: 0,
-		// TODO: animation option
-		animated: "slide",
+		animate: {},
 		collapsible: false,
 		event: "click",
 		header: "> li > :first-child,> :not(li):even",
@@ -374,9 +373,7 @@ $.widget( "ui.accordion", {
 		this.prevShow = toShow;
 		this.prevHide = toHide;
 
-		if ( this.options.animated ) {
-			// TODO: back compat for animated option
-			// TODO: back compat for bounceslide
+		if ( this.options.animate ) {
 			this._animate( toShow, toHide, data );
 		} else {
 			toHide.hide();
@@ -406,8 +403,8 @@ $.widget( "ui.accordion", {
 			that = this,
 			down = toShow.length &&
 				( !toHide.length || ( toShow.index() < toHide.index() ) ),
-			animation = this.options.animation || {},
-			options = down && animation.down || animation,
+			animate = this.options.animate || {},
+			options = down && animate.down || animate,
 			complete = function() {
 				toShow.removeData( "accordionHeight" );
 				that._completed( data );
@@ -420,8 +417,8 @@ $.widget( "ui.accordion", {
 			easing = options;
 		}
 		// fall back from options to animation in case of partial down settings
-		easing = easing || options.easing || animation.easing;
-		duration = duration || options.duration || animation.duration;
+		easing = easing || options.easing || animate.easing;
+		duration = duration || options.duration || animate.duration;
 
 		if ( !toHide.size() ) {
 			return toShow.animate( showProps, duration, easing, complete );
@@ -611,6 +608,40 @@ if ( $.uiBackCompat !== false ) {
 				ret = _trigger.call( this, "change", event, data );
 			}
 			return ret;
+		};
+	}( jQuery, jQuery.ui.accordion.prototype ) );
+
+	// animated option
+	// NOTE: this only provides support for "slide", "bounceslide", and easings
+	// not the full $.ui.accordion.animations API
+	(function( $, prototype ) {
+		$.extend( prototype.options, {
+			animate: null,
+			animated: "slide"
+		});
+
+		var _create = prototype._create;
+		prototype._create = function() {
+			var options = this.options;
+			if ( options.animate === null ) {
+				if ( !options.animated ) {
+					options.animate = false;
+				} else if ( options.animated === "slide" ) {
+					options.animate = 300;
+				} else if ( options.animated === "bounceslide" ) {
+					options.animate = {
+						duration: 200,
+						down: {
+							easing: "easeOutBounce",
+							duration: 1000
+						}
+					}
+				} else {
+					options.animate = options.animated;
+				}
+			}
+
+			_create.call( this );
 		};
 	}( jQuery, jQuery.ui.accordion.prototype ) );
 }
