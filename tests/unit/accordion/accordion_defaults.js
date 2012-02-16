@@ -1,7 +1,7 @@
 commonWidgetTests( "accordion", {
 	defaults: {
 		active: 0,
-		animated: "slide",
+		animate: {},
 		collapsible: false,
 		disabled: false,
 		event: "click",

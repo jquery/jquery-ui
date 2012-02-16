@@ -18,13 +18,13 @@ function accordion_equalHeights( accordion, min, max ) {
 }
 
 function accordion_setupTeardown() {
-	var animated = $.ui.accordion.prototype.options.animated;
+	var animate = $.ui.accordion.prototype.options.animate;
 	return {
 		setup: function() {
-			$.ui.accordion.prototype.options.animated = false;
+			$.ui.accordion.prototype.options.animate = false;
 		},
 		teardown: function() {
-			$.ui.accordion.prototype.options.animated = animated;
+			$.ui.accordion.prototype.options.animate = animate;
 		}
 	};
 }
