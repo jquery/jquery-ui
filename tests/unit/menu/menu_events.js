@@ -87,48 +87,55 @@ asyncTest( "handle submenu auto collapse: mouseleave", function() {
 	var $menu = $( "#menu2" ).menu();
 
 	$menu.find( "li:nth-child(7)" ).trigger( "mouseover" );
-	setTimeout(function() {
+	setTimeout( menumouseleave1, 350 );
+
+	function menumouseleave1() {
 		equal( $menu.find( "ul[aria-expanded='true']" ).length, 1, "first submenu expanded" );
 		$menu.find( "li:nth-child(7) li:first" ).trigger( "mouseover" );
-		setTimeout(function() {
-			equal( $menu.find( "ul[aria-expanded='true']" ).length, 2, "second submenu expanded" );
-			$menu.find( "ul[aria-expanded='true']:first" ).trigger( "mouseleave" );
-			setTimeout(function() {
-				equal( $menu.find( "ul[aria-expanded='true']" ).length, 1, "second submenu collapsed" );
-				$menu.trigger( "mouseleave" );
-				setTimeout(function() {
-					equal( $menu.find( "ul[aria-expanded='true']" ).length, 0, "first submenu collapsed" );
-					start();
-				}, 1400);
-			}, 1050);
-		}, 700);
-	}, 350);
+		setTimeout( menumouseleave2, 350 );
+	}
+	function menumouseleave2() {
+		equal( $menu.find( "ul[aria-expanded='true']" ).length, 2, "second submenu expanded" );
+		$menu.find( "ul[aria-expanded='true']:first" ).trigger( "mouseleave" );
+		setTimeout( menumouseleave3, 350 );
+	}
+	function menumouseleave3() {
+		equal( $menu.find( "ul[aria-expanded='true']" ).length, 1, "second submenu collapsed" );
+		$menu.trigger( "mouseleave" );
+		setTimeout( menumouseleave4, 350 );
+	}
+	function menumouseleave4() {
+		equal( $menu.find( "ul[aria-expanded='true']" ).length, 0, "first submenu collapsed" );
+		start();
+	}
 });
 
-asyncTest( "handle custom menu item submenu auto collapse: mouseleave", function() {
-	expect( 5 );
+asyncTest( "handle submenu auto collapse: mouseleave", function() {
+	expect( 4 );
 	var $menu = $( "#menu5" ).menu( { menus: "div" } );
 
-	$menu.children( ":nth-child(7)" ).trigger( "mouseover" );
-	setTimeout(function() {
+	$menu.find( ":nth-child(7)" ).trigger( "mouseover" );
+	setTimeout( menumouseleave1, 350 );
+
+	function menumouseleave1() {
 		equal( $menu.find( "div[aria-expanded='true']" ).length, 1, "first submenu expanded" );
-		$menu.children( ":nth-child(7)" ).find( "div:first" ).children( ":first" ).trigger( "mouseover" );
-		setTimeout(function() {
-			equal( $menu.find( "div[aria-expanded='true']" ).length, 2, "second submenu expanded" );
-			$menu.find( "div[aria-expanded='true']:first" ).trigger( "mouseleave" );
-			setTimeout(function() {
-				equal( $menu.find( "div[aria-expanded='true']" ).length, 1, "second submenu collapsed" );
-				$menu.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN });
-				ok( $menu.find( ".ui-state-active" ).is( "#menu5 :nth-child(7) a" ),
-					"down keypress selected an item from the first submenu" );
-				$menu.trigger( "mouseleave" );
-				setTimeout(function() {
-					equal( $menu.find( "div[aria-expanded='true']" ).length, 0, "first submenu collapsed" );
-					start();
-				}, 1400);
-			}, 1050);
-		}, 700);
-	}, 350);
+		$menu.find( ":nth-child(7)" ).find( "div" ).eq( 0 ).children().eq( 0 ).trigger( "mouseover" );
+		setTimeout( menumouseleave2, 350 );
+	}
+	function menumouseleave2() {
+		equal( $menu.find( "div[aria-expanded='true']" ).length, 2, "second submenu expanded" );
+		$menu.find( "div[aria-expanded='true']:first" ).trigger( "mouseleave" );
+		setTimeout( menumouseleave3, 350 );
+	}
+	function menumouseleave3() {
+		equal( $menu.find( "div[aria-expanded='true']" ).length, 1, "second submenu collapsed" );
+		$menu.trigger( "mouseleave" );
+		setTimeout( menumouseleave4, 350 );
+	}
+	function menumouseleave4() {
+		equal( $menu.find( "div[aria-expanded='true']" ).length, 0, "first submenu collapsed" );
+		start();
+	}
 });
 
 
@@ -206,12 +213,15 @@ asyncTest("handle keyboard navigation on menu without scroll and with submenus",
 	});
 
 	menu_log("keydown",true);
+	element.one( "menufocus", function( event, ui ) {
+		element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
+		element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
+		equals( $("#log").html(), "2,1,keydown,", "Keydown DOWN");
+		setTimeout( menukeyboard1, 50 );
+	});
 	element.focus();
-	element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
-	element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
-	equals( $("#log").html(), "2,1,0,keydown,", "Keydown DOWN");
 
-	setTimeout(function() {
+	function menukeyboard1() {
 		menu_log("keydown",true);
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.UP } );
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.UP } );
@@ -231,59 +241,62 @@ asyncTest("handle keyboard navigation on menu without scroll and with submenus",
 		setTimeout( function() {
 			equals( $("#log").html(), "0,4,3,2,1,keydown,", "Keydown RIGHT (open submenu)");
 		}, 50);
+		setTimeout( menukeyboard2, 50 );
+	}
 
-		setTimeout( function() {
-			menu_log("keydown",true);
-			element.simulate( "keydown", { keyCode: $.ui.keyCode.LEFT } );
-			equals( $("#log").html(), "4,keydown,", "Keydown LEFT (close submenu)");
+	function menukeyboard2() {
+		menu_log("keydown",true);
+		element.simulate( "keydown", { keyCode: $.ui.keyCode.LEFT } );
+		equals( $("#log").html(), "4,keydown,", "Keydown LEFT (close submenu)");
 
-			//re-open submenu
-			element.simulate( "keydown", { keyCode: $.ui.keyCode.RIGHT } );
+		//re-open submenu
+		element.simulate( "keydown", { keyCode: $.ui.keyCode.RIGHT } );
+		setTimeout( menukeyboard3, 50 );
+	}
 
-			setTimeout( function() {
-				menu_log("keydown",true);
-				element.simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_DOWN } );
-				equals( $("#log").html(), "2,keydown,", "Keydown PAGE_DOWN");
+	function menukeyboard3() {
+		menu_log("keydown",true);
+		element.simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_DOWN } );
+		equals( $("#log").html(), "2,keydown,", "Keydown PAGE_DOWN");
 
-				menu_log("keydown",true);
-				element.simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_DOWN } );
-				equals( $("#log").html(), "keydown,", "Keydown PAGE_DOWN (no effect)");
+		menu_log("keydown",true);
+		element.simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_DOWN } );
+		equals( $("#log").html(), "keydown,", "Keydown PAGE_DOWN (no effect)");
 
-				menu_log("keydown",true);
-				element.simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_UP } );
-				equals( $("#log").html(), "0,keydown,", "Keydown PAGE_UP");
+		menu_log("keydown",true);
+		element.simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_UP } );
+		equals( $("#log").html(), "0,keydown,", "Keydown PAGE_UP");
 
-				menu_log("keydown",true);
-				element.simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_UP } );
-				equals( $("#log").html(), "keydown,", "Keydown PAGE_UP (no effect)");
+		menu_log("keydown",true);
+		element.simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_UP } );
+		equals( $("#log").html(), "keydown,", "Keydown PAGE_UP (no effect)");
 
-				menu_log("keydown",true);
-				element.simulate( "keydown", { keyCode: $.ui.keyCode.END } );
-				equals( $("#log").html(), "2,keydown,", "Keydown END");
+		menu_log("keydown",true);
+		element.simulate( "keydown", { keyCode: $.ui.keyCode.END } );
+		equals( $("#log").html(), "2,keydown,", "Keydown END");
 
-				menu_log("keydown",true);
-				element.simulate( "keydown", { keyCode: $.ui.keyCode.HOME } );
-				equals( $("#log").html(), "0,keydown,", "Keydown HOME");
+		menu_log("keydown",true);
+		element.simulate( "keydown", { keyCode: $.ui.keyCode.HOME } );
+		equals( $("#log").html(), "0,keydown,", "Keydown HOME");
 
-				menu_log("keydown",true);
-				element.simulate( "keydown", { keyCode: $.ui.keyCode.ESCAPE } );
-				equals( $("#log").html(), "4,keydown,", "Keydown ESCAPE (close submenu)");
+		menu_log("keydown",true);
+		element.simulate( "keydown", { keyCode: $.ui.keyCode.ESCAPE } );
+		equals( $("#log").html(), "4,keydown,", "Keydown ESCAPE (close submenu)");
 
-				menu_log("keydown",true);
-				element.simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
+		menu_log("keydown",true);
+		element.simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
+		setTimeout( menukeyboard4, 50 );
+	}
 
-				setTimeout( function() {
-					equals( $("#log").html(), "0,keydown,", "Keydown ENTER (open submenu)");
+	function menukeyboard4() {
+		equals( $("#log").html(), "0,keydown,", "Keydown ENTER (open submenu)");
 
-					menu_log("keydown",true);
-					element.simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
-					equals( $("#log").html(), "Ada,keydown,", "Keydown ENTER (select item)");
+		menu_log("keydown",true);
+		element.simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
+		equals( $("#log").html(), "Ada,keydown,", "Keydown ENTER (select item)");
 
-					start();
-				}, 200);
-			}, 150);
-		}, 100);
-	}, 50);
+		start();
+	}
 });
 
 test("handle keyboard navigation on menu with scroll and without submenus", function() {
@@ -369,12 +382,16 @@ asyncTest("handle keyboard navigation on menu with scroll and with submenus", fu
 	});
 
 	menu_log("keydown",true);
+	element.one( "menufocus", function( event, ui ) {
+		element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
+		element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
+		equals( $("#log").html(), "2,1,keydown,", "Keydown DOWN");
+		setTimeout( menukeyboard1, 50 );
+	});
 	element.focus();
-	element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
-	element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
-	equals( $("#log").html(), "2,1,0,keydown,", "Keydown DOWN");
+	
 
-	setTimeout(function() {
+	function menukeyboard1() {
 		menu_log("keydown",true);
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.UP } );
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.UP } );
@@ -391,59 +408,62 @@ asyncTest("handle keyboard navigation on menu with scroll and with submenus", fu
 		setTimeout( function() {
 			equals( $("#log").html(), "0,1,keydown,", "Keydown RIGHT (open submenu)");
 		}, 50);
+		setTimeout( menukeyboard2, 50 );
+	}
 
-		setTimeout( function() {
-			menu_log("keydown",true);
-			element.simulate( "keydown", { keyCode: $.ui.keyCode.LEFT } );
-			equals( $("#log").html(), "1,keydown,", "Keydown LEFT (close submenu)");
+	function menukeyboard2() {
+		menu_log("keydown",true);
+		element.simulate( "keydown", { keyCode: $.ui.keyCode.LEFT } );
+		equals( $("#log").html(), "1,keydown,", "Keydown LEFT (close submenu)");
 
-			//re-open submenu
-			element.simulate( "keydown", { keyCode: $.ui.keyCode.RIGHT } );
+		//re-open submenu
+		element.simulate( "keydown", { keyCode: $.ui.keyCode.RIGHT } );
+		setTimeout( menukeyboard3, 50 );
+	}
 
-			setTimeout( function() {
-				menu_log("keydown",true);
-				element.simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_DOWN } );
-				equals( $("#log").html(), "10,keydown,", "Keydown PAGE_DOWN");
+	function menukeyboard3() {
+		menu_log("keydown",true);
+		element.simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_DOWN } );
+		equals( $("#log").html(), "10,keydown,", "Keydown PAGE_DOWN");
 
-				menu_log("keydown",true);
-				element.simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_DOWN } );
-				equals( $("#log").html(), "20,keydown,", "Keydown PAGE_DOWN");
+		menu_log("keydown",true);
+		element.simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_DOWN } );
+		equals( $("#log").html(), "20,keydown,", "Keydown PAGE_DOWN");
 
-				menu_log("keydown",true);
-				element.simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_UP } );
-				equals( $("#log").html(), "10,keydown,", "Keydown PAGE_UP");
+		menu_log("keydown",true);
+		element.simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_UP } );
+		equals( $("#log").html(), "10,keydown,", "Keydown PAGE_UP");
 
-				menu_log("keydown",true);
-				element.simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_UP } );
-				equals( $("#log").html(), "0,keydown,", "Keydown PAGE_UP");
+		menu_log("keydown",true);
+		element.simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_UP } );
+		equals( $("#log").html(), "0,keydown,", "Keydown PAGE_UP");
 
-				menu_log("keydown",true);
-				element.simulate( "keydown", { keyCode: $.ui.keyCode.END } );
-				equals( $("#log").html(), "27,keydown,", "Keydown END");
+		menu_log("keydown",true);
+		element.simulate( "keydown", { keyCode: $.ui.keyCode.END } );
+		equals( $("#log").html(), "27,keydown,", "Keydown END");
 
-				menu_log("keydown",true);
-				element.simulate( "keydown", { keyCode: $.ui.keyCode.HOME } );
-				equals( $("#log").html(), "0,keydown,", "Keydown HOME");
+		menu_log("keydown",true);
+		element.simulate( "keydown", { keyCode: $.ui.keyCode.HOME } );
+		equals( $("#log").html(), "0,keydown,", "Keydown HOME");
 
-				menu_log("keydown",true);
-				element.simulate( "keydown", { keyCode: $.ui.keyCode.ESCAPE } );
-				equals( $("#log").html(), "1,keydown,", "Keydown ESCAPE (close submenu)");
+		menu_log("keydown",true);
+		element.simulate( "keydown", { keyCode: $.ui.keyCode.ESCAPE } );
+		equals( $("#log").html(), "1,keydown,", "Keydown ESCAPE (close submenu)");
 
-				menu_log("keydown",true);
-				element.simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
+		menu_log("keydown",true);
+		element.simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
+		setTimeout( menukeyboard4, 50 );
+	}
 
-				setTimeout( function() {
-					equals( $("#log").html(), "0,keydown,", "Keydown ENTER (open submenu)");
+	function menukeyboard4() {
+		equals( $("#log").html(), "0,keydown,", "Keydown ENTER (open submenu)");
 
-					menu_log("keydown",true);
-					element.simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
-					equals( $("#log").html(), "Aberdeen,keydown,", "Keydown ENTER (select item)");
+		menu_log("keydown",true);
+		element.simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
+		equals( $("#log").html(), "Aberdeen,keydown,", "Keydown ENTER (select item)");
 
-					start();
-				}, 200);
-			}, 150);
-		}, 100);
-	}, 50);
+		start();
+	}
 });
 
 })(jQuery);
