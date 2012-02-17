@@ -1632,10 +1632,19 @@ $.extend(Datepicker.prototype, {
 				inst.yearshtml += '<select class="ui-datepicker-year" ' +
 					'onchange="DP_jQuery_' + dpuuid + '.datepicker._selectMonthYear(\'#' + inst.id + '\', this, \'Y\');" ' +
 					'>';
-				for (; year <= endYear; year++) {
-					inst.yearshtml += '<option value="' + year + '"' +
-						(year == drawYear ? ' selected="selected"' : '') +
-						'>' + year + '</option>';
+					
+				if (year<=endYear) {
+					for (; year <= endYear; year++) {
+						inst.yearshtml += '<option value="' + year + '"' +
+							(year == drawYear ? ' selected="selected"' : '') +
+							'>' + year + '</option>';
+					}
+				} else {
+					for (; year >= endYear; year--) {
+						inst.yearshtml += '<option value="' + year + '"' +
+							(year == drawYear ? ' selected="selected"' : '') +
+							'>' + year + '</option>';
+					}
 				}
 				inst.yearshtml += '</select>';
 				
