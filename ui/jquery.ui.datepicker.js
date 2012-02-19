@@ -923,14 +923,18 @@ $.extend(Datepicker.prototype, {
 		var target = $(id);
 		var inst = this._getInst(target[0]);
 		dateStr = (dateStr != null ? dateStr : this._formatDate(inst));
-		if (inst.input)
-			inst.input.val(dateStr);
-		this._updateAlternate(inst);
+		
 		var onSelect = this._get(inst, 'onSelect');
-		if (onSelect)
-			onSelect.apply((inst.input ? inst.input[0] : null), [dateStr, inst]);  // trigger custom callback
-		else if (inst.input)
+		if (onSelect && false === onSelect.apply((inst.input ? inst.input[0] : null), [dateStr, inst])){
+			return;
+		}
+		
+		if (inst.input){
+			inst.input.val(dateStr);
 			inst.input.trigger('change'); // fire the change event
+		}
+		this._updateAlternate(inst);
+		
 		if (inst.inline)
 			this._updateDatepicker(inst);
 		else {
