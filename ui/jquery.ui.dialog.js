@@ -361,8 +361,11 @@ $.widget("ui.dialog", {
 
 			$.each( buttons, function( name, props ) {
 				props = $.isFunction( props ) ?
-					{ click: props, text: name } :
+					{ click: props } :
 					props;
+				if (props.text == null) {
+					props.text = name;
+				}
 				var button = $( "<button type='button'>" )
 					.attr( props, true )
 					.unbind( "click" )
@@ -370,6 +373,13 @@ $.widget("ui.dialog", {
 						props.click.apply( self.element[0], arguments );
 					})
 					.appendTo( uiButtonSet );
+				if (props.isDefault) {
+					self.uiDialog.keyup(function(e) {
+						if (e.which === 13) {
+							button.click();
+						}
+					});
+				}
 				if ( $.fn.button ) {
 					button.button();
 				}
