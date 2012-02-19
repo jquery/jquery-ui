@@ -295,7 +295,7 @@ $.widget("ui.dialog", {
 		var self = this,
 			options = self.options,
 			uiDialog = self.uiDialog;
-
+		$(":focus").blur();  // requires jquery 1.6 but is a more general fix for ticket #5265
 		self._size();
 		self._position( options.position );
 		uiDialog.show( options.show );

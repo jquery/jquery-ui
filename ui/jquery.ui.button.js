@@ -99,6 +99,7 @@ $.widget( "ui.button", {
 					event.preventDefault();
 					event.stopImmediatePropagation();
 				}
+				$(this).blur();
 			});
 
 		this.element
