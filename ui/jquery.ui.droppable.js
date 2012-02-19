@@ -27,6 +27,7 @@ $.widget("ui.droppable", {
 		scope: 'default',
 		tolerance: 'intersect'
 	},
+	scrolling: false,
 	_create: function() {
 
 		var o = this.options, accept = o.accept;
@@ -44,7 +45,6 @@ $.widget("ui.droppable", {
 		$.ui.ddmanager.droppables[o.scope].push(this);
 
 		(o.addClasses && this.element.addClass("ui-droppable"));
-
 	},
 
 	destroy: function() {
@@ -81,6 +81,18 @@ $.widget("ui.droppable", {
 		var draggable = $.ui.ddmanager.current;
 		if(this.options.activeClass) this.element.removeClass(this.options.activeClass);
 		(draggable && this._trigger('deactivate', event, this.ui(draggable)));
+	},
+	
+	_dragStart: function(event) {
+		//Listen for scrolling so that if the dragging causes scrolling the position of the droppables can be recalculated (see #5003)
+		this.element.parentsUntil("body").scroll(function() {
+			this.scrolling = true;
+			setTimeout(function() { this.scrolling = false; }, 1);
+		});
+	},
+	
+	_dragStop: function(event) {
+		this.element.parentsUntil("body").unbind( "scroll" );
 	},
 
 	_over: function(event) {
@@ -244,7 +256,10 @@ $.ui.ddmanager = {
 	drag: function(draggable, event) {
 
 		//If you have a highly dynamic page, you might try this option. It renders positions every time you move the mouse.
-		if(draggable.options.refreshPositions) $.ui.ddmanager.prepareOffsets(draggable, event);
+		//If the drag causes scrolling, recalculate the positions of the droppables (see #5003)
+		if(draggable.options.refreshPositions || this.scrolling) {
+			$.ui.ddmanager.prepareOffsets(draggable, event);
+		}
 
 		//Run through all droppables and check their positions based on specific tolerance options
 		$.each($.ui.ddmanager.droppables[draggable.options.scope] || [], function() {
