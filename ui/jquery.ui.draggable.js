@@ -191,6 +191,10 @@ $.widget("ui.draggable", $.ui.mouse, {
 		if(!this.options.axis || this.options.axis != "x") this.helper[0].style.top = this.position.top+'px';
 		if($.ui.ddmanager) $.ui.ddmanager.drag(this, event);
 
+		if (!noPropagation) {
+			this._trigger('afterdrag', event, ui);
+		}
+
 		return false;
 	},
 

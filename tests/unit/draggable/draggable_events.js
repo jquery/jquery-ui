@@ -7,12 +7,13 @@ module("draggable: events");
 
 test("callbacks occurance count", function() {
 
-	expect(3);
+	expect(4);
 
-	var start = 0, stop = 0, dragc = 0;
+	var start = 0, stop = 0, dragc = 0, afterdragc = 0;
 	el = $("#draggable2").draggable({
 		start: function() { start++; },
 		drag: function() { dragc++; },
+		afterdrag: function() { afterdragc++; },
 		stop: function() { stop++; }
 	});
 
@@ -20,6 +21,7 @@ test("callbacks occurance count", function() {
 
 	equals(start, 1, "start callback should happen exactly once");
 	equals(dragc, 3, "drag callback should happen exactly once per mousemove");
+	equals(afterdragc, 3, "afterdrag callback should happen exactly once per drag");
 	equals(stop, 1, "stop callback should happen exactly once");
 
 });
