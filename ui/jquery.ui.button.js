@@ -50,7 +50,8 @@ $.widget( "ui.button", {
 		icons: {
 			primary: null,
 			secondary: null
-		}
+		},
+		css_class: null
 	},
 	_create: function() {
 		this.element.closest( "form" )
@@ -109,6 +110,12 @@ $.widget( "ui.button", {
 			.bind( "blur.button", function() {
 				that.buttonElement.removeClass( focusClass );
 			});
+
+		if ( options.css_class !== null ) {
+			this.buttonElement
+				.addClass( options.css_class );
+		}
+
 
 		if ( toggleButton ) {
 			this.element.bind( "change.button", function() {
