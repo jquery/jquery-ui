@@ -123,7 +123,10 @@ $.widget( "ui.tooltip", {
 		// if we have a title, clear it to prevent the native tooltip
 		// we have to check first to avoid defining a title if none exists
 		// (we don't want to cause an element to start matching [title])
-		// TODO: document why we don't use .removeAttr()
+
+		// We don't use removeAttr as that causes the native tooltip to show
+		// up in IE (9 and below, didn't yet test 10). Happens only when removing
+		// inside the mouseover handler.
 		if ( target.is( "[title]" ) ) {
 			target.attr( "title", "" );
 		}
