@@ -26,6 +26,7 @@ $.widget( "ui.autocomplete", {
 		autoFocus: false,
 		delay: 300,
 		minLength: 1,
+                selectFirst: false,
 		position: {
 			my: "left top",
 			at: "left bottom",
@@ -111,7 +112,12 @@ $.widget( "ui.autocomplete", {
 					//passthrough - ENTER and TAB both select the current element
 				case keyCode.TAB:
 					if ( !self.menu.active ) {
-						return;
+		                                if ( self.options.selectFirst && self.menu.element.is(":visible") ) {
+                                                        self._move("next", event);
+                                                }
+                                                else {
+                                                        return;
+                                                }
 					}
 					self.menu.select( event );
 					break;
