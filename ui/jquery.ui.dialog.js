@@ -364,7 +364,7 @@ $.widget("ui.dialog", {
 					{ click: props, text: name } :
 					props;
 				var button = $( "<button type='button'>" )
-					.attr( props, true )
+					.html(name)
 					.unbind( "click" )
 					.click(function() {
 						props.click.apply( self.element[0], arguments );
