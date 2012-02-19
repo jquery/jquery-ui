@@ -286,8 +286,9 @@ $.widget("ui.dialog", {
 
 		return self;
 	},
-
-	open: function() {
+	
+	//Passing arguments to callback
+	open: function(arg) {
 		if ( this._isOpen ) {
 			return;
 		}
@@ -335,7 +336,7 @@ $.widget("ui.dialog", {
 		hasFocus.eq( 0 ).focus();
 
 		self._isOpen = true;
-		self._trigger( "open" );
+		self._trigger( "open" , null, arg);
 
 		return self;
 	},
