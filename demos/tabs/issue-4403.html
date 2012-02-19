@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>jQuery UI Tabs - Default functionality</title>
+	<link rel="stylesheet" href="../../themes/base/jquery.ui.all.css">
+	<script src="../../jquery-1.5.1.js"></script>
+	<script src="../../ui/jquery.ui.core.js"></script>
+	<script src="../../ui/jquery.ui.widget.js"></script>
+	<script src="../../ui/jquery.ui.tabs.js"></script>
+	<link rel="stylesheet" href="../demos.css">
+	<script>
+	$(function() {
+		var opts = {
+		    // comment out this line - bug goes away
+		    fx: {
+		        opacity: 'toggle'
+		    }
+		};
+		var tabs = $("#example").tabs(opts);
+
+
+		$("button").click(function() {
+		    var id = tabs.tabs('option', 'selected');
+		    log("Removing " + id);
+		    tabs.tabs("remove", id);
+		    log("Selected After " + tabs.tabs('option', 'selected'));
+		});
+
+		function log(str) {
+		    $("body").append("<div>" + str + "</div>")
+		}
+	});
+	</script>
+</head>
+<body>
+	
+	<button>delete selected tab</button>
+	<div id="example">
+	    <ul>
+	        <li><a href="#content"><span>Content</span></a></li>
+	        <li><a href="/gnarf/Pug4a/show"><span>Content 2</span></a></li>
+	        <li><a href="/gnarf/Pug4a/1/show"><span>Content 3</span></a></li>
+	        <li><a href="/gnarf/Pug4a/2/show"><span>Content 4</span></a></li>
+	        <li><a href="/gnarf/Pug4a/999/show"><span>Error Content</span></a></li>
+	    </ul>
+	    <div id="content">Static Content</div>
+	</div>
+	
+</body>
+</html>
