@@ -326,18 +326,19 @@ $.widget( "ui.slider", $.ui.mouse, {
 	},
 
 	_normValueFromMouse: function( position ) {
-		var pixelTotal,
+		var o = this.options,
+			pixelTotal,
 			pixelMouse,
 			percentMouse,
 			valueTotal,
 			valueMouse;
 
 		if ( this.orientation === "horizontal" ) {
-			pixelTotal = this.elementSize.width;
-			pixelMouse = position.x - this.elementOffset.left - ( this._clickOffset ? this._clickOffset.left : 0 );
+			pixelTotal = this.elementSize.width - (o.paddingMin + o.paddingMax);
+			pixelMouse = position.x - this.elementOffset.left - o.paddingMin - ( this._clickOffset ? this._clickOffset.left : 0 );
 		} else {
-			pixelTotal = this.elementSize.height;
-			pixelMouse = position.y - this.elementOffset.top - ( this._clickOffset ? this._clickOffset.top : 0 );
+			pixelTotal = this.elementSize.height - (o.paddingMin + o.paddingMax);
+			pixelMouse = position.y - this.elementOffset.top - o.paddingMin - ( this._clickOffset ? this._clickOffset.top : 0 );
 		}
 
 		percentMouse = ( pixelMouse / pixelTotal );
@@ -599,14 +600,34 @@ $.widget( "ui.slider", $.ui.mouse, {
 			animate = ( !this._animateOff ) ? o.animate : false,
 			valPercent,
 			_set = {},
+			elementWidth,
+			elementHeight,
+			paddingMinPercent,
+			paddingMaxPercent,
+			paddedBarPercent,
 			lastValPercent,
 			value,
 			valueMin,
 			valueMax;
-
+	
+		if (self.orientation === "horizontal")
+		{
+			elementWidth = this.element.outerWidth();
+			paddingMinPercent = o.paddingMin * 100 / elementWidth;
+			paddedBarPercent = ( elementWidth - ( o.paddingMin + o.paddingMax) ) * 100 / elementWidth;
+		}
+		else
+		{
+			elementHeight = this.element.outerHeight();
+			paddingMinPercent = o.paddingMin * 100 / elementHeight;
+			paddedBarPercent = ( elementHeight - ( o.paddingMin + o.paddingMax) ) * 100 / elementHeight;
+		}
+	
 		if ( this.options.values && this.options.values.length ) {
 			this.handles.each(function( i, j ) {
-				valPercent = ( self.values(i) - self._valueMin() ) / ( self._valueMax() - self._valueMin() ) * 100;
+				valPercent =
+					( ( self.values(i) - self._valueMin() ) / ( self._valueMax() - self._valueMin() ) * 100 )
+					* paddedBarPercent / 100 + paddingMinPercent;
 				_set[ self.orientation === "horizontal" ? "left" : "bottom" ] = valPercent + "%";
 				$( this ).stop( 1, 1 )[ animate ? "animate" : "css" ]( _set, o.animate );
 				if ( self.options.range === true ) {
@@ -632,12 +653,16 @@ $.widget( "ui.slider", $.ui.mouse, {
 			value = this.value();
 			valueMin = this._valueMin();
 			valueMax = this._valueMax();
-			valPercent = ( valueMax !== valueMin ) ?
-					( value - valueMin ) / ( valueMax - valueMin ) * 100 :
-					0;
+			valPercent =
+				( ( valueMax !== valueMin )
+				? ( value - valueMin ) / ( valueMax - valueMin ) * 100
+				: 0 )
+				* paddedBarPercent / 100 + paddingMinPercent;
+	
 			_set[ self.orientation === "horizontal" ? "left" : "bottom" ] = valPercent + "%";
+	
 			this.handle.stop( 1, 1 )[ animate ? "animate" : "css" ]( _set, o.animate );
-
+	
 			if ( oRange === "min" && this.orientation === "horizontal" ) {
 				this.range.stop( 1, 1 )[ animate ? "animate" : "css" ]( { width: valPercent + "%" }, o.animate );
 			}
