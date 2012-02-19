@@ -317,6 +317,33 @@ $.widget("ui.resizable", $.ui.mouse, {
 		this.resizing = false;
 		var o = this.options, self = this;
 
+                if(this.options.grid && this.options.ghost){
+			var o = self.options, cs = self.size, os = self.originalSize, op = self.originalPosition, a = self.axis, ratio = o._aspectRatio || event.shiftKey;
+			o.grid = typeof o.grid == "number" ? [o.grid, o.grid] : o.grid;
+			var ox = Math.round((cs.width - os.width) / (o.grid[0]||1)) * (o.grid[0]||1), oy = Math.round((cs.height - os.height) / (o.grid[1]||1)) * (o.grid[1]||1);
+		
+			if (/^(se|s|e)$/.test(a)) {
+				self.size.width = os.width + ox;
+				self.size.height = os.height + oy;
+			}
+			else if (/^(ne)$/.test(a)) {
+				self.size.width = os.width + ox;
+				self.size.height = os.height + oy;
+				self.position.top = op.top - oy;
+			}
+			else if (/^(sw)$/.test(a)) {
+				self.size.width = os.width + ox;
+				self.size.height = os.height + oy;
+				self.position.left = op.left - ox;
+			}
+			else {
+				self.size.width = os.width + ox;
+				self.size.height = os.height + oy;
+				self.position.top = op.top - oy;
+				self.position.left = op.left - ox;
+			}
+		}
+
 		if(this._helper) {
 			var pr = this._proportionallyResizeElements, ista = pr.length && (/textarea/i).test(pr[0].nodeName),
 				soffseth = ista && $.ui.hasScroll(pr[0], 'left') /* TODO - jump height */ ? 0 : self.sizeDiff.height,
