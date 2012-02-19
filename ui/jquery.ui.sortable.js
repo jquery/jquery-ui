@@ -13,6 +13,8 @@
  *	jquery.ui.widget.js
  */
 (function( $, undefined ) {
+		  
+var maxItemHeight = 0;
 
 $.widget("ui.sortable", $.ui.mouse, {
 	version: "@VERSION",
@@ -603,9 +605,11 @@ $.widget("ui.sortable", $.ui.mouse, {
 					width: 0, height: 0,
 					left: 0, top: 0
 				});
+
+				//Calculate the height of the largest item to be added to the intersectable height of the container (see ticket #4428)
+				maxItemHeight = item.outerHeight() > maxItemHeight ? item.outerHeight() : maxItemHeight;
 			};
 		};
-
 	},
 
 	refreshPositions: function(fast) {
@@ -642,7 +646,9 @@ $.widget("ui.sortable", $.ui.mouse, {
 				this.containers[i].containerCache.left = p.left;
 				this.containers[i].containerCache.top = p.top;
 				this.containers[i].containerCache.width	= this.containers[i].element.outerWidth();
-				this.containers[i].containerCache.height = this.containers[i].element.outerHeight();
+				//Add height to the intersectable area of the sortable (this does not affect the visible height of the container)
+				//This provides more accurate intersection tracking at the bottom of the container (see ticket #4428)
+				this.containers[i].containerCache.height = this.containers[i].element.outerHeight() + maxItemHeight;
 			};
 		}
 
