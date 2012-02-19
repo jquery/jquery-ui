@@ -87,7 +87,7 @@ $.fn.position = function( options ) {
 	} else {
 		targetWidth = target.outerWidth();
 		targetHeight = target.outerHeight();
-		basePosition = target.offset();
+		basePosition = { top:target.offset().top, left: target.offset().left};
 	}
 
 	// force my and at to have valid horizontal and vertical positions
