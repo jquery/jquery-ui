@@ -90,9 +90,10 @@ $.widget("ui.selectable", $.ui.mouse, {
 
 		$(options.appendTo).append(this.helper);
 		// position helper (lasso)
+		// position it outside the window to prevent click-event issues. #4219
 		this.helper.css({
-			"left": event.clientX,
-			"top": event.clientY,
+			"left": -1,
+			"top": -1,
 			"width": 0,
 			"height": 0
 		});
