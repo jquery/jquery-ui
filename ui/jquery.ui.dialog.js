@@ -757,6 +757,11 @@ $.extend( $.ui.dialog.overlay, {
 			maxZ = Math.max( maxZ, this.css( "z-index" ) );
 		});
 		this.maxZ = maxZ;
+		
+		// reset old overlay dimensions to prevent oversized overlay in a window that was downsized between modal dialog opens (see #5637)
+		$.each( this.oldInstances, function() {
+			$(this).css({height: "0px", width: "0px"});
+		});
 	},
 
 	height: function() {
