@@ -279,9 +279,8 @@ $.widget( "ui.slider", $.ui.mouse, {
 		offset = closestHandle.offset();
 		mouseOverHandle = !$( event.target ).parents().andSelf().is( ".ui-slider-handle" );
 		this._clickOffset = mouseOverHandle ? { left: 0, top: 0 } : {
-			left: event.pageX - offset.left - ( closestHandle.width() / 2 ),
+			left: event.pageX - offset.left,
 			top: event.pageY - offset.top -
-				( closestHandle.height() / 2 ) -
 				( parseInt( closestHandle.css("borderTopWidth"), 10 ) || 0 ) -
 				( parseInt( closestHandle.css("borderBottomWidth"), 10 ) || 0) +
 				( parseInt( closestHandle.css("marginTop"), 10 ) || 0)
