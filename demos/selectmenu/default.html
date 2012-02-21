@@ -16,17 +16,16 @@
 	$(function() {
 		$('#speed').selectmenu();
 
+		$('#files').selectmenu();
+
 		var withOverflow = $('#number').selectmenu({
 			dropdown: false
 		});
 		withOverflow.selectmenu("widget").addClass("overflow");
-
-		$('#files').selectmenu();
-
 	});
 	</script>
 	<style>
-		form { margin: 100px 0 0 0 }
+		form { margin: 50px 0 0 0 }
 		fieldset { border: 0; }
 		label { display: block; }
 		select { width: 200px; }
@@ -46,6 +45,20 @@
 			<option value="Medium" selected="selected">Medium</option>
 			<option value="Fast">Fast</option>
 			<option value="Faster">Faster</option>
+		</select>
+		<br />
+		<br />
+		<br />
+		<label for="files">Select a file:</label>
+		<select name="files" id="files">
+			<optgroup label="Scripts">
+				<option value="jquery">jQuery.js</option>
+				<option value="jqueryui">ui.jQuery.js</option>
+			</optgroup>
+			<optgroup label="Other files">
+				<option value="somefile">Some unknown file</option>
+				<option value="someotherfile">Some other file</option>
+			</optgroup>
 		</select>
 		<br />
 		<br />
@@ -71,20 +84,6 @@
 			<option value="17">17</option>
 			<option value="18">18</option>
 			<option value="19">19</option>
-		</select>
-		<br />
-		<br />
-		<br />
-		<label for="files">Select a file:</label>
-		<select name="files" id="files">
-			<optgroup label="Scripts">
-				<option value="jquery">jQuery.js</option>
-				<option value="jqueryui">ui.jQuery.js</option>
-			</optgroup>
-			<optgroup label="Other files">
-				<option value="somefile">Some unknown file</option>
-				<option value="someotherfile">Some other file</option>
-			</optgroup>
 		</select>
 	</fieldset>
 </form>
