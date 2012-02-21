@@ -14,9 +14,8 @@ test( "open / close", function() {
 	expect( 4 );
 
 	var element = $('#speed').selectmenu(),
-		widget = element.selectmenu("widget"),
-		button = widget.filter(".ui-selectmenu-button"),
-		menu = widget.filter(".ui-selectmenu-menu");
+		button = element.selectmenu("widget").parent(),
+		menu = element.selectmenu("menuWidget").parent();
 
 	element.selectmenu("open");
 	ok( menu.is( ":visible" ), "menu visible" );
@@ -29,31 +28,26 @@ test( "open / close", function() {
 
 
 test("enable / disable", function () {
-	expect(14);
+	expect(10);
 
 	var element = $('#speed').selectmenu(),
-		widget = element.selectmenu("widget"),
-		button = widget.filter(".ui-selectmenu-button"),
-		menu = widget.filter(".ui-selectmenu-menu"),
+		button = element.selectmenu("widget"),
+		menu = element.selectmenu("menuWidget"),
 		link = button.find("a");
 
 	element.selectmenu("disable");
 	ok( element.selectmenu("option", "disabled"), "disable: widget option" );
 	equals( element.attr("disabled"), "disabled", "disable: native select disabled" );
 	equals( button.attr("aria-disabled"), "true", "disable: button wrapper ARIA" );
-	equals( link.attr("aria-disabled"), "true", "disable: button ARIA" );
-	equals( link.attr("tabindex"), -1, "disable: button tabindex" );
+	equals( button.attr("tabindex"), -1, "disable: button tabindex" );
 	equals( menu.attr("aria-disabled"), "true", "disable: menu wrapper ARIA" );
-	equals( menu.children("ul").attr("aria-disabled"), "true", "disable: menu ARIA" );
 
 	element.selectmenu("enable");
 	ok( !element.selectmenu("option", "disabled"), "enable: widget option" );
 	equals( element.attr("disabled"), undefined, "enable: native select disabled" );
 	equals( button.attr("aria-disabled"), "false", "enable: button wrapper ARIA" );
-	equals( link.attr("aria-disabled"), "false", "enable: button ARIA" );
-	equals( link.attr("tabindex"), 0, "enable: button tabindex" );
+	equals( button.attr("tabindex"), 0, "enable: button tabindex" );
 	equals( menu.attr("aria-disabled"), "false", "enable: menu wrapper ARIA" );
-	equals( menu.children("ul").attr("aria-disabled"), "false", "enable: menu ARIA" );
 });
 
 
@@ -61,9 +55,7 @@ test("refresh - structure", function () {
 	expect(3);
 
 	var element = $('#speed').selectmenu(),
-		widget = element.selectmenu("widget"),
-		button = widget.filter(".ui-selectmenu-button"),
-		menu = widget.filter(".ui-selectmenu-menu");
+		menu = element.selectmenu("menuWidget").parent();
 
 	element.find("option").eq(2).remove();
 	element.find("option").eq(3).remove();
@@ -80,22 +72,19 @@ test("refresh - structure", function () {
 
 
 test("refresh - disabled select", function () {
-	expect(6);
+	expect(4);
 
 	var element = $('#speed').selectmenu(),
-		widget = element.selectmenu("widget"),
-		button = widget.filter(".ui-selectmenu-button"),
-		menu = widget.filter(".ui-selectmenu-menu");
+		button = element.selectmenu("widget"),
+		menu = element.selectmenu("menuWidget");
 
 	element.attr("disabled", "disabled");
 	element.selectmenu("refresh");
 
 	ok( element.selectmenu("option", "disabled"), "widget option" );
 	equals( button.attr("aria-disabled"), "true", "button wrapper ARIA" );
-	equals( button.children("a").attr("aria-disabled"), "true", "button ARIA" );
-	equals( button.children("a").attr("tabindex"), -1, "button tabindex" );
+	equals( button.attr("tabindex"), -1, "button tabindex" );
 	equals( menu.attr("aria-disabled"), "true", "menu wrapper ARIA" );
-	equals( menu.children("ul").attr("aria-disabled"), "true", "mene ARIA" );
 });
 
 
@@ -103,9 +92,8 @@ test("refresh - disabled option", function () {
 	expect(2);
 
 	var element = $('#speed').selectmenu(),
-		widget = element.selectmenu("widget"),
-		button = widget.filter(".ui-selectmenu-button"),
-		menu = widget.filter(".ui-selectmenu-menu");
+		button = element.selectmenu("widget").parent(),
+		menu = element.selectmenu("menuWidget").parent();
 
 	element.attr("disabled", "disabled");
 	element.find("option").eq(2).attr("disabled", "disabled");
@@ -120,9 +108,8 @@ test("refresh - disabled option", function () {
 test("refresh - disabled optgroup", function () {
 
 	var element = $('#files').selectmenu(),
-		widget = element.selectmenu("widget"),
-		button = widget.filter(".ui-selectmenu-button"),
-		menu = widget.filter(".ui-selectmenu-menu"),
+		button = element.selectmenu("widget").parent(),
+		menu = element.selectmenu("menuWidget").parent(),
 		originalDisabledOptgroup = element.find("optgroup").first(),
 		originalDisabledOptions = originalDisabledOptgroup.find("option");
 

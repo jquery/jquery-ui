@@ -19,9 +19,8 @@ test("change", function () {
 		}
 	});
 
-	var widget = this.element.selectmenu("widget"),
-		menu = widget.filter(".ui-selectmenu-menu"),
-		button = widget.filter(".ui-selectmenu-button"),
+	var button = this.element.selectmenu("widget").parent(),
+		menu = this.element.selectmenu("menuWidget").parent(),
 		value = this.element.find("option").first().text();
 
 	button.find("a").simulate( "click" );
@@ -61,9 +60,8 @@ test("focus", function () {
 		}
 	});
 
-	var widget = this.element.selectmenu("widget"),
-		button = widget.filter(".ui-selectmenu-button"),
-		menu = widget.filter(".ui-selectmenu-menu");
+	var button = this.element.selectmenu("widget").parent(),
+		menu = this.element.selectmenu("menuWidget").parent();
 
 	button.find("a").simulate( "click" );
 	menu.find(".ui-menu-item").simulate("mouseover");
@@ -97,9 +95,8 @@ test("select", function () {
 		}
 	});
 
-	var widget = this.element.selectmenu("widget"),
-		button = widget.filter(".ui-selectmenu-button"),
-		menu = widget.filter(".ui-selectmenu-menu");
+	var button = this.element.selectmenu("widget").parent(),
+		menu = this.element.selectmenu("menuWidget").parent();
 
 	button.find("a").simulate( "click" );
 	menu.find("a").first().simulate( "mouseover" ).trigger("click");

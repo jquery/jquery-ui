@@ -20,7 +20,7 @@
 		var withOverflow = $('select#number').selectmenu({
 			dropdown: false
 		});
-		withOverflow.selectmenu("widget").addClass("overflow");
+		withOverflow.selectmenu("menuWidget").addClass("overflow");
 		$('select#files').selectmenu();
 		var files2 = $('select#files2').selectmenu();
 
@@ -43,7 +43,6 @@
 		}, function() {
 			files2.find("optgroup:eq(0)").removeAttr("disabled");
 			files2.selectmenu("refresh");
-
 		});
 	});
 	</script>
@@ -52,7 +51,7 @@
 		fieldset { border: 0; }
 		label { display: block; }
 		select { width: 200px; }
-		.overflow ul { height: 200px; overflow: auto; }
+		.overflow { height: 200px; overflow: auto; }
 	</style>
 </head>
 <body>

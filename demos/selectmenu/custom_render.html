@@ -36,15 +36,15 @@
 		var files = $('select#files').iconselectmenu({
 			dropdown: false
 		});
-		files.iconselectmenu("widget").children("ul").addClass("ui-menu-icons");
+		files.iconselectmenu("menuWidget").addClass("ui-menu-icons");
 
 		var filesB = $('select#filesB').iconselectmenu({
 			dropdown: false
 		});
-		filesB.iconselectmenu("widget").children("ul").addClass("ui-menu-icons customicons");
+		filesB.iconselectmenu("menuWidget").addClass("ui-menu-icons customicons");
 
 		var peopleA = $('select#peopleA').iconselectmenu();
-		peopleA.iconselectmenu("widget").children("ul").addClass("ui-menu-icons avatar");
+		peopleA.iconselectmenu("menuWidget").addClass("ui-menu-icons avatar");
 	});
 	</script>
 	<style>

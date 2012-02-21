@@ -17,11 +17,9 @@ test("appendTo another element", function () {
 test("dropdown: CSS styles", function () {
 	expect(4);
 
-	var widget = this.element.selectmenu("widget"),
-		button = widget.filter(".ui-selectmenu-button"),
-		link = button.find("a"),
-		menu = widget.filter(".ui-selectmenu-menu"),
-		ul = widget.find("ul");
+	var button = this.element.selectmenu("widget").parent(),
+		ul = this.element.selectmenu("menuWidget"),
+		link = button.find("a");
 
 	this.element.selectmenu("open");
 	ok( link.hasClass("ui-corner-top") && !link.hasClass("ui-corner-all"), "button styles dropdown");

@@ -248,7 +248,11 @@ $.widget( "ui.selectmenu", {
 	},
 
 	widget: function() {
-		return this.buttonWrap.add( this.menuWrap );
+		return this.button;
+	},
+
+	menuWidget: function() {
+		return this.menu;
 	},
 
 	_renderMenu: function( ul, items ) {
@@ -260,6 +264,8 @@ $.widget( "ui.selectmenu", {
 				var optgroup = $( '<li />', {
 					'class': 'ui-selectmenu-optgroup',
 					html: item.optgroup,
+					// prevents clicks on this header to close the menu
+					// TODO try to improve this, check how autocomplete handles it
 					click: function( event ){
 						event.stopPropagation();
 					}
