@@ -328,6 +328,7 @@ $.widget( "ui.selectmenu", {
 			var prevDef = true;
 			switch (event.keyCode) {
 				case $.ui.keyCode.TAB:
+				case $.ui.keyCode.ESCAPE:
 					if ( this.isOpen ) {
 						this.close( event );
 					}
