@@ -420,7 +420,7 @@ $.widget( "ui.selectmenu", {
 	},
 
 	_getCreateOptions: function() {
-		return { disabled: ( this.element.attr( 'disabled' ) ) ? true : false };
+		return { disabled: !!this.element.attr( 'disabled' ) };
 	},
 
 	_readOptions: function( options ) {
