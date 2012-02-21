@@ -23,7 +23,7 @@ test("change", function () {
 		menu = this.element.selectmenu("menuWidget").parent(),
 		value = this.element.find("option").first().text();
 
-	button.find("a").simulate( "click" );
+	button.find("a").simulate( "focus" ).simulate( "click" );
 	menu.find("a").first().simulate( "mouseover" ).trigger( "click" );
 });
 
@@ -63,7 +63,7 @@ test("focus", function () {
 	var button = this.element.selectmenu("widget").parent(),
 		menu = this.element.selectmenu("menuWidget").parent();
 
-	button.find("a").simulate( "click" );
+	button.find("a").simulate( "focus" ).simulate( "click" );
 	menu.find(".ui-menu-item").simulate("mouseover");
 });
 
@@ -98,7 +98,7 @@ test("select", function () {
 	var button = this.element.selectmenu("widget").parent(),
 		menu = this.element.selectmenu("menuWidget").parent();
 
-	button.find("a").simulate( "click" );
+	button.find("a").simulate( "focus" ).simulate( "click" );
 	menu.find("a").first().simulate( "mouseover" ).trigger("click");
 });
 

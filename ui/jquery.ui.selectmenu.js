@@ -54,7 +54,6 @@ $.widget( "ui.selectmenu", {
 		this._bind( this.button, this._buttonEvents );
 
 		this._drawMenu();
-		this.refresh();
 
 		if ( this.options.disabled ) {
 			this.disable();
@@ -70,7 +69,7 @@ $.widget( "ui.selectmenu", {
 		// create button
 		this.button = $( '<a />', {
 				href: '#' + this.ids.id,
-				html: '&nbsp;',
+				html: this.element.find( "option:selected" ).text() || '&nbsp;',
 				tabindex: ( tabindex ? tabindex : this.options.disabled ? -1 : 0 ),
 				id: this.ids.button,
 				width: this.element.outerWidth(),
@@ -316,6 +315,11 @@ $.widget( "ui.selectmenu", {
 	},
 
 	_buttonEvents: {
+		focus: function( event ) {
+			// init Menu on first focus
+			this.refresh();
+			this.button.unbind( "focus." + this.widgetName );
+		},
 		click: function( event ) {
 			this._toggle( event );
 			event.preventDefault();
@@ -389,7 +393,7 @@ $.widget( "ui.selectmenu", {
 	_setSelected: function( item ) {
 		var link = this._getSelectedItem().find("a");
 		// update button text
-		this.button.button( "option", "label", item.label );
+		this.button.find( "span.ui-button-text" ).html( item.label );
 		// change ARIA attr
 		this.button.add( this.menu ).attr( "aria-activedescendant" , link.attr( "id" ) );
 		this.menuItems.find("a").attr( "aria-selected", false );

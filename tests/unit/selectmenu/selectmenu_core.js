@@ -8,8 +8,10 @@ test("accessibility", function () {
 		menu = element.selectmenu("menuWidget").parent(),
 		link = button.find("a"),
 		selected = element.find("option:selected"),
-		ul = menu.children("ul"),
-		links = ul.find("li.ui-menu-item a");
+		ul = menu.children("ul");
+
+	link.simulate( "focus" );
+	var links = ul.find("li.ui-menu-item a");
 
 	expect(12 + links.length * 2);
 
@@ -51,8 +53,10 @@ $.each([
 			menu = element.selectmenu("menuWidget").parent(),
 			link = button.find("a"),
 			ul = menu.children("ul"),
-			links = ul.find("li.ui-menu-item a"),
 			selected = element.find("option:selected");
+
+		link.simulate( "focus" )
+		var links = ul.find("li.ui-menu-item a");
 
 		link.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
 		equals( ul.attr("aria-activedescendant"), links.eq(element[0].selectedIndex).attr("id"), "after keydown menu aria-activedescendant" );
