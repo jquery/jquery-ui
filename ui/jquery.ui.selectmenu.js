@@ -387,7 +387,7 @@ $.widget( "ui.selectmenu", {
 	},
 
 	_setSelected: function( item ) {
-		var link = item.element.find("a");
+		var link = this._getSelectedItem().find("a");
 		// update button text
 		this.button.button( "option", "label", item.label );
 		// change ARIA attr
