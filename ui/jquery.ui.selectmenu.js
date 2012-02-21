@@ -391,13 +391,11 @@ $.widget( "ui.selectmenu", {
 	},
 
 	_setSelected: function( item ) {
-		var link = this._getSelectedItem().find("a");
 		// update button text
 		this.button.find( "span.ui-button-text" ).html( item.label );
 		// change ARIA attr
-		this.button.add( this.menu ).attr( "aria-activedescendant" , link.attr( "id" ) );
 		this.menuItems.find("a").attr( "aria-selected", false );
-		link.attr( "aria-selected", true );
+		this._getSelectedItem().find("a").attr( "aria-selected", true );
 	},
 
 	_setOption: function( key, value ) {
