@@ -777,7 +777,7 @@
             for(var i=0;i<len;i++){
                 var c=colModel[i],v=rowData[c.name],r=c.renderer;
                 if(typeof r === 'function'){
-                    v=r(v,rowIndex);
+                    v=r(v,rowData,rowIndex);
                 }
                 values[i]=v;
             }
