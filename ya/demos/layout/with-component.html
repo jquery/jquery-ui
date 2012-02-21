@@ -17,11 +17,13 @@
   <script src="../../jqui/js/jquery.min.js"></script>
   <script src="../../jqui/js/jquery-ui.min.js"></script>
   
-  <script src="../../plugins/layout/jquery.layout.min.js"></script>
+  <script src="../../plugins/layout/jquery.layout.js"></script>
   <script type="text/javascript">
   	jQuery(function($){
-  		$('body').layout({ 
-  			applyDefaultStyles: true
+  		$('body').layout({
+  			defaults:{
+  				applyDefaultStyles: true
+  			}
   		});
   	});
   </script>
@@ -35,7 +37,6 @@
 </div>
 <div class="ui-layout-north">North</div>
 <div class="ui-layout-south">South</div>
-<div class="ui-layout-east">East</div>
 <div class="ui-layout-west">
 	<div id="accordion">
 		<h3 class="nav"><a href="#">Section 1</a></h3>
