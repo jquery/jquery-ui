@@ -27,7 +27,9 @@
 			$('#grid').grid0({
 				width:500,
                 dataSource : 'data.json',
-                colModel : [ {header : 'ID', name : 'id', width : 100, align : 'center'}, 
+                colModel : [ {header : 'ID', name : 'id', width : 100, align : 'center',renderer:function(v,record,rowIndex){	//record为对应行记录
+                	return v;
+                }}, 
                              {header : '地区', name : 'city', width : 120, align : 'left'}, 
                              {header : '地址', name : 'address', align : 'left', width : 'autoExpand'} ]
             });
