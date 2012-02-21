@@ -29,7 +29,7 @@
 			$( this ).unbind( "mouseover", jQuery.event.special.hoverintent.handler );
 		},
 		handler: function( event ) {
-			var self = this,
+			var that = this,
 				args = arguments,
 				target = $( event.target ),
 				cX, cY, pX, pY;
@@ -50,7 +50,11 @@
 				if ( ( Math.abs( pX - cX ) + Math.abs( pY - cY ) ) < cfg.sensitivity ) {
 					clear();
 					event.type = "hoverintent";
-					jQuery.event.handle.apply( self, args );
+					// prevent accessing the original event since the new event
+					// is fired asynchronously and the old event is no longer
+					// usable (#6028)
+					event.originalEvent = {};
+					jQuery.event.handle.apply( that, args );
 				} else {
 					pX = cX;
 					pY = cY;

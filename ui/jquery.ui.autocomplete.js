@@ -176,13 +176,14 @@ $.widget( "ui.autocomplete", {
 					return;
 				}
 
+				if ( self.cancelBlur ) {
+					delete self.cancelBlur;
+					return;
+				}
+
 				clearTimeout( self.searching );
-				self.cancelSearch = true;
-				// clicks on the menu (or a button to trigger a search) will cause a blur event
-				self.closing = setTimeout(function() {
-					self.close( event );
-					self._change( event );
-				}, 150 );
+				self.close( event );
+				self._change( event );
 			});
 		this._initSource();
 		this.response = function() {
@@ -193,6 +194,16 @@ $.widget( "ui.autocomplete", {
 			.appendTo( this.document.find( this.options.appendTo || "body" )[0] )
 			// prevent the close-on-blur in case of a "slow" click on the menu (long mousedown)
 			.mousedown(function( event ) {
+				// prevent moving focus out of the text field
+				event.preventDefault();
+
+				// IE doesn't prevent moving focus even with event.preventDefault()
+				// so we set a flag to know when we should ignore the blur event
+				self.cancelBlur = true;
+				setTimeout(function() {
+					delete self.cancelBlur;
+				}, 1 );
+
 				// clicking on the scrollbar causes focus to shift to the body
 				// but we can't detect a mouseup or a click immediately afterward
 				// so we have to track the next mousedown and close the menu if
@@ -209,11 +220,6 @@ $.widget( "ui.autocomplete", {
 						});
 					}, 1 );
 				}
-
-				// use another timeout to make sure the blur-event-handler on the input was already triggered
-				setTimeout(function() {
-					clearTimeout( self.closing );
-				}, 13);
 			})
 			.menu({
 				// custom key handling for now
@@ -316,7 +322,9 @@ $.widget( "ui.autocomplete", {
 					url: url,
 					data: request,
 					dataType: "json",
-					autocompleteRequest: ++requestIndex,
+					context: {
+						autocompleteRequest: ++requestIndex
+					},
 					success: function( data, status ) {
 						if ( this.autocompleteRequest === requestIndex ) {
 							response( data );
@@ -356,7 +364,6 @@ $.widget( "ui.autocomplete", {
 			return this.close( event );
 		}
 
-		clearTimeout( this.closing );
 		if ( this._trigger( "search", event ) === false ) {
 			return;
 		}
@@ -381,7 +388,8 @@ $.widget( "ui.autocomplete", {
 			this._suggest( content );
 			this._trigger( "open" );
 		} else {
-			this.close();
+			// use ._close() instead of .close() so we don't cancel future searches
+			this._close();
 		}
 		this.pending--;
 		if ( !this.pending ) {
@@ -390,6 +398,11 @@ $.widget( "ui.autocomplete", {
 	},
 
 	close: function( event ) {
+		this.cancelSearch = true;
+		this._close( event );
+	},
+
+	_close: function( event ) {
 		clearTimeout( this.closing );
 		if ( this.menu.element.is(":visible") ) {
 			this.menu.element.hide();

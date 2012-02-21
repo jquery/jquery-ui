@@ -596,86 +596,79 @@ if ( $.uiBackCompat !== false ) {
 	};
 
 	// url method
-	(function( $, prototype ) {
-		prototype.url = function( index, url ) {
+	$.widget( "ui.tabs", $.ui.tabs, {
+		url: function( index, url ) {
 			this.anchors.eq( index ).attr( "href", url );
-		};
-	}( jQuery, jQuery.ui.tabs.prototype ) );
+		}
+	});
 
 	// ajaxOptions and cache options
-	(function( $, prototype ) {
-		$.extend( prototype.options, {
+	$.widget( "ui.tabs", $.ui.tabs, {
+		options: {
 			ajaxOptions: null,
 			cache: false
-		});
+		},
 
-		var _create = prototype._create,
-			_setOption = prototype._setOption,
-			_destroy = prototype._destroy,
-			oldurl = prototype.url || $.noop;
+		_create: function() {
+			this._super();
 
-		$.extend( prototype, {
-			_create: function() {
-				_create.call( this );
+			var self = this;
 
-				var self = this;
-
-				this.element.bind( "tabsbeforeload.tabs", function( event, ui ) {
-					// tab is already cached
-					if ( $.data( ui.tab[ 0 ], "cache.tabs" ) ) {
-						event.preventDefault();
-						return;
-					}
-
-					$.extend( ui.ajaxSettings, self.options.ajaxOptions, {
-						error: function( xhr, s, e ) {
-							try {
-								// Passing index avoid a race condition when this method is
-								// called after the user has selected another tab.
-								// Pass the anchor that initiated this request allows
-								// loadError to manipulate the tab content panel via $(a.hash)
-								self.options.ajaxOptions.error( xhr, s, ui.tab.closest( "li" ).index(), ui.tab[ 0 ] );
-							}
-							catch ( e ) {}
-						}
-					});
-
-					ui.jqXHR.success(function() {
-						if ( self.options.cache ) {
-							$.data( ui.tab[ 0 ], "cache.tabs", true );
-						}
-					});
-				});
-			},
-
-			_setOption: function( key, value ) {
-				// reset cache if switching from cached to not cached
-				if ( key === "cache" && value === false ) {
-					this.anchors.removeData( "cache.tabs" );
+			this.element.bind( "tabsbeforeload.tabs", function( event, ui ) {
+				// tab is already cached
+				if ( $.data( ui.tab[ 0 ], "cache.tabs" ) ) {
+					event.preventDefault();
+					return;
 				}
-				_setOption.apply( this, arguments );
-			},
 
-			_destroy: function() {
+				$.extend( ui.ajaxSettings, self.options.ajaxOptions, {
+					error: function( xhr, s, e ) {
+						try {
+							// Passing index avoid a race condition when this method is
+							// called after the user has selected another tab.
+							// Pass the anchor that initiated this request allows
+							// loadError to manipulate the tab content panel via $(a.hash)
+							self.options.ajaxOptions.error( xhr, s, ui.tab.closest( "li" ).index(), ui.tab[ 0 ] );
+						}
+						catch ( e ) {}
+					}
+				});
+
+				ui.jqXHR.success(function() {
+					if ( self.options.cache ) {
+						$.data( ui.tab[ 0 ], "cache.tabs", true );
+					}
+				});
+			});
+		},
+
+		_setOption: function( key, value ) {
+			// reset cache if switching from cached to not cached
+			if ( key === "cache" && value === false ) {
 				this.anchors.removeData( "cache.tabs" );
-				_destroy.call( this );
-			},
-
-			url: function( index, url ){
-				this.anchors.eq( index ).removeData( "cache.tabs" );
-				oldurl.apply( this, arguments );
 			}
-		});
-	}( jQuery, jQuery.ui.tabs.prototype ) );
+			this._super( key, value );
+		},
+
+		_destroy: function() {
+			this.anchors.removeData( "cache.tabs" );
+			this._super();
+		},
+
+		url: function( index, url ){
+			this.anchors.eq( index ).removeData( "cache.tabs" );
+			this._superApply( arguments );
+		}
+	});
 
 	// abort method
-	(function( $, prototype ) {
-		prototype.abort = function() {
+	$.widget( "ui.tabs", $.ui.tabs, {
+		abort: function() {
 			if ( this.xhr ) {
 				this.xhr.abort();
 			}
-		};
-	}( jQuery, jQuery.ui.tabs.prototype ) );
+		}
+	});
 
 	// spinner
 	$.widget( "ui.tabs", $.ui.tabs, {
@@ -702,16 +695,13 @@ if ( $.uiBackCompat !== false ) {
 	});
 
 	// enable/disable events
-	(function( $, prototype ) {
-		$.extend( prototype.options, {
+	$.widget( "ui.tabs", $.ui.tabs, {
+		options: {
 			enable: null,
 			disable: null
-		});
+		},
 
-		var enable = prototype.enable,
-			disable = prototype.disable;
-
-		prototype.enable = function( index ) {
+		enable: function( index ) {
 			var options = this.options,
 				trigger;
 
@@ -720,14 +710,14 @@ if ( $.uiBackCompat !== false ) {
 				trigger = true;
 			}
 
-			enable.apply( this, arguments );
+			this._superApply( arguments );
 
 			if ( trigger ) {
 				this._trigger( "enable", null, this._ui( this.anchors[ index ], this.panels[ index ] ) );
 			}
-		};
+		},
 
-		prototype.disable = function( index ) {
+		disable: function( index ) {
 			var options = this.options,
 				trigger;
 
@@ -736,23 +726,23 @@ if ( $.uiBackCompat !== false ) {
 				trigger = true;
 			}
 
-			disable.apply( this, arguments );
+			this._superApply( arguments );
 
 			if ( trigger ) {
 				this._trigger( "disable", null, this._ui( this.anchors[ index ], this.panels[ index ] ) );
 			}
-		};
-	}( jQuery, jQuery.ui.tabs.prototype ) );
+		}
+	});
 
 	// add/remove methods and events
-	(function( $, prototype ) {
-		$.extend( prototype.options, {
+	$.widget( "ui.tabs", $.ui.tabs, {
+		options: {
 			add: null,
 			remove: null,
 			tabTemplate: "<li><a href='#{href}'><span>#{label}</span></a></li>"
-		});
+		},
 
-		prototype.add = function( url, label, index ) {
+		add: function( url, label, index ) {
 			if ( index === undefined ) {
 				index = this.anchors.length;
 			}
@@ -803,9 +793,9 @@ if ( $.uiBackCompat !== false ) {
 
 			this._trigger( "add", null, this._ui( this.anchors[ index ], this.panels[ index ] ) );
 			return this;
-		};
+		},
 
-		prototype.remove = function( index ) {
+		remove: function( index ) {
 			index = this._getIndex( index );
 			var options = this.options,
 				tab = this.lis.eq( index ).remove(),
@@ -832,125 +822,117 @@ if ( $.uiBackCompat !== false ) {
 
 			this._trigger( "remove", null, this._ui( tab.find( "a" )[ 0 ], panel[ 0 ] ) );
 			return this;
-		};
-	}( jQuery, jQuery.ui.tabs.prototype ) );
+		}
+	});
 
 	// length method
-	(function( $, prototype ) {
-		prototype.length = function() {
+	$.widget( "ui.tabs", $.ui.tabs, {
+		length: function() {
 			return this.anchors.length;
-		};
-	}( jQuery, jQuery.ui.tabs.prototype ) );
+		}
+	});
 
 	// panel ids (idPrefix option + title attribute)
-	(function( $, prototype ) {
-		$.extend( prototype.options, {
+	$.widget( "ui.tabs", $.ui.tabs, {
+		options: {
 			idPrefix: "ui-tabs-"
-		});
+		},
 
-		var _tabId = prototype._tabId;
-		prototype._tabId = function( a ) {
+		_tabId: function( a ) {
 			return $( a ).attr( "aria-controls" ) ||
 				a.title && a.title.replace( /\s/g, "_" ).replace( /[^\w\u00c0-\uFFFF-]/g, "" ) ||
 				this.options.idPrefix + getNextTabId();
-		};
-	}( jQuery, jQuery.ui.tabs.prototype ) );
+		}
+	});
 
 	// _createPanel method
-	(function( $, prototype ) {
-		$.extend( prototype.options, {
+	$.widget( "ui.tabs", $.ui.tabs, {
+		options: {
 			panelTemplate: "<div></div>"
-		});
+		},
 
-		var _createPanel = prototype._createPanel;
-		prototype._createPanel = function( id ) {
+		_createPanel: function( id ) {
 			return $( this.options.panelTemplate )
-					.attr( "id", id )
-					.addClass( "ui-tabs-panel ui-widget-content ui-corner-bottom" )
-					.data( "destroy.tabs", true );
-		};
-	}( jQuery, jQuery.ui.tabs.prototype ) );
+				.attr( "id", id )
+				.addClass( "ui-tabs-panel ui-widget-content ui-corner-bottom" )
+				.data( "destroy.tabs", true );
+		}
+	});
 
 	// selected option
-	(function( $, prototype ) {
-		var _create = prototype._create,
-			_setOption = prototype._setOption,
-			_eventHandler = prototype._eventHandler;
-
-		prototype._create = function() {
+	$.widget( "ui.tabs", $.ui.tabs, {
+		_create: function() {
 			var options = this.options;
 			if ( options.active === null && options.selected !== undefined ) {
 				options.active = options.selected === -1 ? false : options.selected;
 			}
-			_create.call( this );
+			this._super();
 			options.selected = options.active;
 			if ( options.selected === false ) {
 				options.selected = -1;
 			}
-		};
+		},
 
-		prototype._setOption = function( key, value ) {
+		_setOption: function( key, value ) {
 			if ( key !== "selected" ) {
-				return _setOption.apply( this, arguments );
+				return this._super( key, value );
 			}
 
 			var options = this.options;
-			_setOption.call( this, "active", value === -1 ? false : value );
+			this._super( "active", value === -1 ? false : value );
 			options.selected = options.active;
 			if ( options.selected === false ) {
 				options.selected = -1;
 			}
-		};
+		},
 
-		prototype._eventHandler = function( event ) {
-			_eventHandler.apply( this, arguments );
+		_eventHandler: function( event ) {
+			this._superApply( arguments );
 			this.options.selected = this.options.active;
 			if ( this.options.selected === false ) {
 				this.options.selected = -1;
 			}
-		};
-	}( jQuery, jQuery.ui.tabs.prototype ) );
+		}
+	});
 
 	// show and select event
-	(function( $, prototype ) {
-		$.extend( prototype.options, {
+	$.widget( "ui.tabs", $.ui.tabs, {
+		options: {
 			show: null,
 			select: null
-		});
-		var _create = prototype._create,
-			_trigger = prototype._trigger;
-
-		prototype._create = function() {
-			_create.call( this );
+		},
+		_create: function() {
+			this._super();
 			if ( this.options.active !== false ) {
 				this._trigger( "show", null, this._ui(
 					this.active[ 0 ], this._getPanelForTab( this.active )[ 0 ] ) );
 			}
-		};
-		prototype._trigger = function( type, event, data ) {
-			var ret = _trigger.apply( this, arguments );
+		},
+		_trigger: function( type, event, data ) {
+			var ret = this._superApply( arguments );
 			if ( !ret ) {
 				return false;
 			}
 			if ( type === "beforeActivate" && data.newTab.length ) {
-				ret = _trigger.call( this, "select", event, {
+				ret = this._super( "select", event, {
 					tab: data.newTab[ 0],
 					panel: data.newPanel[ 0 ],
 					index: data.newTab.closest( "li" ).index()
 				});
 			} else if ( type === "activate" && data.newTab.length ) {
-				ret = _trigger.call( this, "show", event, {
+				ret = this._super( "show", event, {
 					tab: data.newTab[ 0 ],
 					panel: data.newPanel[ 0 ],
 					index: data.newTab.closest( "li" ).index()
 				});
 			}
-		};
-	}( jQuery, jQuery.ui.tabs.prototype ) );
+			return ret;
+		}
+	});
 
 	// select method
-	(function( $, prototype ) {
-		prototype.select = function( index ) {
+	$.widget( "ui.tabs", $.ui.tabs, {
+		select: function( index ) {
 			index = this._getIndex( index );
 			if ( index === -1 ) {
 				if ( this.options.collapsible && this.options.selected !== -1 ) {
@@ -960,14 +942,12 @@ if ( $.uiBackCompat !== false ) {
 				}
 			}
 			this.anchors.eq( index ).trigger( this.options.event + ".tabs" );
-		};
-	}( jQuery, jQuery.ui.tabs.prototype ) );
+		}
+	});
 
 	// cookie option
 	var listId = 0;
-	function getNextListId() {
-		return ++listId;
-	}
+
 	$.widget( "ui.tabs", $.ui.tabs, {
 		options: {
 			cookie: null // e.g. { expires: 7, path: '/', domain: 'jquery.com', secure: true }
@@ -986,7 +966,7 @@ if ( $.uiBackCompat !== false ) {
 		},
 		_cookie: function( active ) {
 			var cookie = [ this.cookie ||
-				( this.cookie = this.options.cookie.name || "ui-tabs-" + getNextListId() ) ];
+				( this.cookie = this.options.cookie.name || "ui-tabs-" + ++listId ) ];
 			if ( arguments.length ) {
 				cookie.push( active === false ? -1 : active );
 				cookie.push( this.options.cookie );

@@ -102,6 +102,60 @@ test( "minLength", function() {
 	ok( menu.is( ":visible" ), "blank enough for minLength: 0" );
 });
 
+asyncTest( "minLength, exceed then drop below", function() {
+	expect( 4 );
+	var element = $( "#autocomplete" ).autocomplete({
+			minLength: 2,
+			source: function( req, res ) {
+				equal( req.term, "12", "correct search term" );
+				setTimeout(function() {
+					res([ "item" ]);
+				}, 1 );
+			}
+		}),
+		menu = element.autocomplete( "widget" );
+
+	ok( menu.is( ":hidden" ), "menu is hidden before first search" );
+	element.autocomplete( "search", "12" );
+
+	ok( menu.is( ":hidden" ), "menu is hidden before second search" );
+	element.autocomplete( "search", "1" );
+
+	setTimeout(function() {
+		ok( menu.is( ":hidden" ), "menu is hidden after searches" );
+		start();
+	}, 50 );
+});
+
+test( "minLength, exceed then drop below then exceed", function() {
+	expect( 3 );
+	var _res = [],
+		element = $( "#autocomplete" ).autocomplete({
+			minLength: 2,
+			source: function( req, res ) {
+				_res.push( res );
+			}
+		}),
+		menu = element.autocomplete( "widget" );
+
+	// trigger a valid search
+	ok( menu.is( ":hidden" ), "menu is hidden before first search" );
+	element.autocomplete( "search", "12" );
+
+	// trigger a search below the minLength, to turn on cancelSearch flag
+	ok( menu.is( ":hidden" ), "menu is hidden before second search" );
+	element.autocomplete( "search", "1" );
+
+	// trigger a valid search
+	element.autocomplete( "search", "13" );
+	// react as if the first search was cancelled (default ajax behavior)
+	_res[ 0 ]([]);
+	// react to second search
+	_res[ 1 ]([ "13" ]);
+
+	ok( menu.is( ":visible" ), "menu is visible after searches" );
+});
+
 test( "source, local string array", function() {
 	expect( 1 );
 	var element = $( "#autocomplete" ).autocomplete({

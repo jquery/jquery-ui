@@ -23,8 +23,9 @@ $.cleanData = function( elems ) {
 };
 
 $.widget = function( name, base, prototype ) {
-	var namespace = name.split( "." )[ 0 ],
-		fullName;
+	var fullName, existingConstructor, constructor, basePrototype,
+		namespace = name.split( "." )[ 0 ];
+
 	name = name.split( "." )[ 1 ];
 	fullName = namespace + "-" + name;
 
@@ -39,12 +40,11 @@ $.widget = function( name, base, prototype ) {
 	};
 
 	$[ namespace ] = $[ namespace ] || {};
-	// create the constructor using $.extend() so we can carry over any
-	// static properties stored on the existing constructor (if there is one)
-	$[ namespace ][ name ] = $.extend( function( options, element ) {
+	existingConstructor = $[ namespace ][ name ];
+	constructor = $[ namespace ][ name ] = function( options, element ) {
 		// allow instantiation without "new" keyword
 		if ( !this._createWidget ) {
-			return new $[ namespace ][ name ]( options, element );
+			return new constructor( options, element );
 		}
 
 		// allow instantiation without initializing for simple inheritance
@@ -52,9 +52,19 @@ $.widget = function( name, base, prototype ) {
 		if ( arguments.length ) {
 			this._createWidget( options, element );
 		}
-	}, $[ namespace ][ name ], { version: prototype.version } );
+	};
+	// extend with the existing constructor to carry over any static properties
+	$.extend( constructor, existingConstructor, {
+		version: prototype.version,
+		// copy the object used to create the prototype in case we need to
+		// redefine the widget later
+		_proto: $.extend( {}, prototype ),
+		// track widgets that inherit from this widget in case this widget is
+		// redefined after a widget inherits from it
+		_childConstructors: []
+	});
 
-	var basePrototype = new base();
+	basePrototype = new base();
 	// we need to make the options hash a property directly on the new instance
 	// otherwise we'll modify the options hash on the prototype that we're
 	// inheriting from
@@ -83,17 +93,41 @@ $.widget = function( name, base, prototype ) {
 
 					return returnValue;
 				};
-			}());
+			})();
 		}
 	});
-	$[ namespace ][ name ].prototype = $.widget.extend( basePrototype, {
+	constructor.prototype = $.widget.extend( basePrototype, {
+		// TODO: remove support for widgetEventPrefix
+		// always use the name + a colon as the prefix, e.g., draggable:start
+		// don't prefix for widgets that aren't DOM-based
+		widgetEventPrefix: name
+	}, prototype, {
+		constructor: constructor,
 		namespace: namespace,
 		widgetName: name,
-		widgetEventPrefix: name,
 		widgetBaseClass: fullName
-	}, prototype );
+	});
 
-	$.widget.bridge( name, $[ namespace ][ name ] );
+	// If this widget is being redefined then we need to find all widgets that
+	// are inheriting from it and redefine all of them so that they inherit from
+	// the new version of this widget. We're essentially trying to replace one
+	// level in the prototype chain.
+	if ( existingConstructor ) {
+		$.each( existingConstructor._childConstructors, function( i, child ) {
+			var childPrototype = child.prototype;
+
+			// redefine the child widget using the same prototype that was
+			// originally used, but inherit from the new version of the base
+			$.widget( childPrototype.namespace + "." + childPrototype.widgetName, constructor, child._proto );
+		});
+		// remove the list of existing child constructors from the old constructor
+		// so the old child constructors can be garbage collected
+		delete existingConstructor._childConstructors;
+	} else {
+		base._childConstructors.push( constructor );
+	}
+
+	$.widget.bridge( name, constructor );
 };
 
 $.widget.extend = function( target ) {
@@ -148,7 +182,7 @@ $.widget.bridge = function( name, object ) {
 				if ( instance ) {
 					instance.option( options || {} )._init();
 				} else {
-					object( options, this );
+					new object( options, this );
 				}
 			});
 		}
@@ -157,18 +191,8 @@ $.widget.bridge = function( name, object ) {
 	};
 };
 
-$.Widget = function( options, element ) {
-	// allow instantiation without "new" keyword
-	if ( !this._createWidget ) {
-		return new $[ namespace ][ name ]( options, element );
-	}
-
-	// allow instantiation without initializing for simple inheritance
-	// must use "new" keyword (the code above always passes args)
-	if ( arguments.length ) {
-		this._createWidget( options, element );
-	}
-};
+$.Widget = function( options, element ) {};
+$.Widget._childConstructors = [];
 
 $.Widget.prototype = {
 	widgetName: "widget",

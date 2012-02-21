@@ -103,7 +103,13 @@ $.widget( "ui.tooltip", {
 			target.data( "tooltip-title", target.attr( "title" ) );
 		}
 
+		target.data( "tooltip-open", true );
+
 		content = this.options.content.call( target[0], function( response ) {
+			// ignore async response if tooltip was closed already
+			if ( !target.data( "tooltip-open" ) ) {
+				return;
+			}
 			// IE may instantly serve a cached response for ajax requests
 			// delay this call to _open so the other call to _open runs first
 			setTimeout(function() {
@@ -123,7 +129,10 @@ $.widget( "ui.tooltip", {
 		// if we have a title, clear it to prevent the native tooltip
 		// we have to check first to avoid defining a title if none exists
 		// (we don't want to cause an element to start matching [title])
-		// TODO: document why we don't use .removeAttr()
+
+		// We don't use removeAttr as that causes the native tooltip to show
+		// up in IE (9 and below, didn't yet test 10). Happens only when removing
+		// inside the mouseover handler.
 		if ( target.is( "[title]" ) ) {
 			target.attr( "title", "" );
 		}
@@ -183,6 +192,7 @@ $.widget( "ui.tooltip", {
 			delete that.tooltips[ this.id ];
 		});
 
+		target.removeData( "tooltip-open" );
 		target.unbind( "mouseleave.tooltip blur.tooltip keyup.tooltip" );
 
 		this._trigger( "close", event, { tooltip: tooltip } );

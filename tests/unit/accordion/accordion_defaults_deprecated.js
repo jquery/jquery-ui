@@ -1,6 +1,7 @@
 commonWidgetTests( "accordion", {
 	defaults: {
 		active: 0,
+		animate: null,
 		animated: "slide",
 		autoHeight: true,
 		clearStyle: false,
