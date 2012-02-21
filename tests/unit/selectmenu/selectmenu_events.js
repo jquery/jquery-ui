@@ -15,7 +15,7 @@ test("change", function () {
 			equals(event.type, "selectmenuchange", "event type set to selectmenuchange");
 			ok(ui, "ui object is passed as second argument to event handler");
 			equals(ui.item.element[0].nodeName, "OPTION", "ui.item.element[0] points to original option element");
-			equals(ui.item.value, value, "ui.item.value property updated correctly");                
+			equals(ui.item.value, value, "ui.item.value property updated correctly");
 		}
 	});
 
