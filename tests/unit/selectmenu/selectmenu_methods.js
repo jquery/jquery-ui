@@ -32,8 +32,7 @@ test("enable / disable", function () {
 
 	var element = $('#speed').selectmenu(),
 		button = element.selectmenu("widget"),
-		menu = element.selectmenu("menuWidget"),
-		link = button.find("a");
+		menu = element.selectmenu("menuWidget");
 
 	element.selectmenu("disable");
 	ok( element.selectmenu("option", "disabled"), "disable: widget option" );
