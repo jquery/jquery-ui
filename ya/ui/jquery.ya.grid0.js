@@ -35,7 +35,7 @@
              * header : 表头文字。<br/>
              * name : 与数据模型对应的字段。<br/>
              * align : 列文字对齐方式，可以为'left'、'center'、'right'之中的一个。<br/>
-             * renderer : 列的渲染函数，接受2个参数，v表示当前值，row表示当前行号。<br/>
+             * renderer : 列的渲染函数，接受3个参数，v表示当前值，record表示当前行记录，row表示当前行号。<br/>
              * width : 列的宽度，取值为Number或者'autoExpand'。注意只能有一个列被设置为'autoExpand'属性。<br/>
              * wrap : 是否自动换行，取值为true或者false。<br/>
              * @type Array[JSON]
@@ -48,7 +48,7 @@
              *              name : 'city',          //与数据模型对应的字段
              *              width : 120,            //列宽,可设置具体数字，也可设置为'autoExpand'，表示自动扩展
              *              align : 'left',         //列文字对齐
-             *              renderer : function(v, row) {   //列渲染函数，接受2个参数，v表示当前值，row表示当前行号
+             *              renderer : function(v, record, row) {   //列渲染函数，接受2个参数，v表示当前值，record表示当前行记录，row表示当前行号
              *                  return '&lt;b>'+v+'&lt;/b>';  //地区这一列的文字加粗显示
              *              }
              *          }, {
@@ -96,6 +96,14 @@
              * $('.selector').grid0({method : 'POST'});
              */
             method:'GET',
+            /**
+             * 附加请求参数。
+             * @type Object
+             * @default null
+             * @example
+             * $('.selector').grid0({ajaxParams : {'keyword':'13'}});
+             */
+            ajaxParams:null,
             /**
              * 正在取数时显示在分页条上的提示。
              * @type String
@@ -665,6 +673,16 @@
                 name : '_time_stamp_',
                 value : new Date().getTime()
             } ];
+            //附加额外请求参数
+            var ajaxParams=op.ajaxParams;
+            for(var n in ajaxParams){
+            	if(ajaxParams.hasOwnProperty(n)){
+            		param.push({
+            			name:n,
+            			value:ajaxParams[n]
+            		});
+            	}
+            }
             $.ajax({
                 type : op.method,
                 url : op.dataSource,
