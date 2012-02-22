@@ -32,6 +32,7 @@ $.widget( "ui.autocomplete", {
 			collision: "none"
 		},
 		source: null,
+		searchFromBeginning: false,
 
 		// callbacks
 		change: null,
@@ -310,7 +311,7 @@ $.widget( "ui.autocomplete", {
 		if ( $.isArray(this.options.source) ) {
 			array = this.options.source;
 			this.source = function( request, response ) {
-				response( $.ui.autocomplete.filter(array, request.term) );
+				response( $.ui.autocomplete.filter(array, request.term, this.options.searchFromBeginning) );
 			};
 		} else if ( typeof this.options.source === "string" ) {
 			url = this.options.source;
@@ -517,8 +518,10 @@ $.extend( $.ui.autocomplete, {
 	escapeRegex: function( value ) {
 		return value.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
 	},
-	filter: function(array, term) {
-		var matcher = new RegExp( $.ui.autocomplete.escapeRegex(term), "i" );
+	filter: function(array, term, searchFromBeginning) {
+		var escapedTerm = $.ui.autocomplete.escapeRegex(term);
+		if (searchFromBeginning) escapedTerm = "^" + escapedTerm;
+		var matcher = new RegExp( escapedTerm, "i" );
 		return $.grep( array, function(value) {
 			return matcher.test( value.label || value.value || value );
 		});
