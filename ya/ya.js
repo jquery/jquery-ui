@@ -11,86 +11,59 @@
 		$=root.jQuery;
 	//定义命名空间
 	var ya={},
-		util={},
-		ui={},
-		uiHelper={};
-	//ui helper
-	_.extend(uiHelper,{
+		util={},	//工具箱
+		sl={},	//solutions
+		regx={};	//通用正则表达式容器
+	//接口定义
+	(function(){
 		/**
-		 * 创建dialog的附加背景层,
-		 * class='ui-'+组件名+'-bg'
-		 * 
-		 * @param uiYa {Object}
-		 * @param uiBgCss {Object}
+		 * 接口
+		 * @param {String} name 接口名称
+		 * @param {Array} methods 方法
 		 */
-		createBgH:function(uiYa,uiBgCss){
-			var uiName="dialog",
-				hostJq=uiYa.hostJq;
-			return function(){
-				var wrapperJq=hostJq.data('dialog')['ui'+_.str.capitalize(uiName)];
-				$('<div class="ui-'+uiName+'-bg"></div>').css(_.extend({
-					width:"100%",
-					height:"100%",
-					position:"absolute",
-					top:"0px",
-					left:"0px"
-				},uiBgCss||{})).prependTo(wrapperJq);
-			}
-		},
-		/**
-		 * 为低能浏览器创建兼容css3，具备pie能干的一切(圆角、渐变色、阴影)
-		 */
-		pieH:function(uiYa){
-			var hostJq=uiYa.hostJq;
-			return function(){
-				if(window.PIE){
-					hostJq.find('pie-fixed').each(function(){
-						PIE.attach(this);
-					});
-					if(hostJq.hasClass('pie-fixed')){
-						PIE.attach(hostJq[0]);
-					}
-				}	
-			};	
-		}
-	});
+		var Interface=function(name,methods){
+			 if(arguments.length != 2) {  
+		        throw new Error("Interface constructor called with " + arguments.length + "arguments, but expected exactly 2.");  
+		    }  
+		      
+		    this.name = name;  
+		    this.methods = [];  
+		    for(var i = 0, len = methods.length; i < len; i++) {  
+		        if(typeof methods[i] !== "string") {  
+		            throw new Error("Interface constructor expects method names to be passed in as a string.");  
+		        }  
+		        this.methods.push(methods[i]);          
+		    }      
+		};
+		Interface.ensureImplements = function(obj) {  
+		    if(arguments.length < 2) {  
+		        throw new Error("Function Interface.ensureImplements called with " +   
+		          arguments.length  + "arguments, but expected at least 2.");  
+		    }  
+		  
+		    for(var i = 1, len = arguments.length; i < len; i++) {  
+		        var interfaceObj = arguments[i];  
+		        if(interfaceObj.constructor !== Interface) {  
+		            throw new Error("Function Interface.ensureImplements expects arguments "     
+		              + "two and above to be instances of Interface.");  
+		        }  
+		        for(var j = 0, methodsLen = interfaceObj.methods.length; j < methodsLen; j++) {  
+		            var method = interfaceObj.methods[j];  
+		            if(!obj[method] || typeof obj[method] !== "function") {  
+		                throw new Error("Function Interface.ensureImplements: object "   
+		                  + "does not implement the " + interfaceObj.name   
+		                  + " interface. Method " + method + " was not found.");  
+		            }  
+		        }  
+		    }   
+		};
+		_.extend(ya,{
+			"Interface":Interface
+		}); 
+	}());
 	_.extend(ya,{
-		util:util,
-		ui:ui,
-		uiHelper:uiHelper,
-		/**
-		 * 工厂函数
-		 */
-		define:function(){},
-		doUi:function(){
-			var uiName=arguments[0];
-			var uiConstructor=arguments[1];
-			_.extend(uiConstructor.prototype,{
-				_applyParams:function(opts){
-					_.extend(this,opts||{});
-				}
-			});
-			ui[_.str.capitalize(uiName)]=uiConstructor;
-		},
-		/**
-		 * ui组件构造器
-		 * @param type {Boolean} true返回jquery对象，默认为false
-		 */
-		newUi:function(opts,type){
-			var defaultOpts=_.extend({
-				hostSelector:null,
-				uiName:null,
-				opts:null
-			},opts);
-			var defaultType=!!type;
-			var uiConstructorName=_.str.capitalize(defaultOpts.uiName);
-			var uiYa=new ui[uiConstructorName](defaultOpts.hostSelector,defaultOpts.opts); 
-			if(!defaultType){
-				return uiYa; 
-			}else{
-				return uiYa.hostJq;
-			}
-		}
+		"util":util,
+		"sl":sl
 	});
 	//注册到全局空间
 	root.ya=ya;
