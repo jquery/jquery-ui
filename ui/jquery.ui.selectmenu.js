@@ -339,8 +339,6 @@ $.widget( "ui.selectmenu", {
 						this.menu.menu( "select", event );
 					}
 					break;
-				case $.ui.keyCode.SPACE:
-					break;
 				case $.ui.keyCode.UP:
 					if ( event.altKey ) {
 						this._toggle( event );
