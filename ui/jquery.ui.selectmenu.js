@@ -12,7 +12,6 @@
  *	jquery.ui.widget.js
  *	jquery.ui.position.js
  *	jquery.ui.menu.js
- *	jquery.ui.button.js
  */
 (function( $, undefined ) {
 
@@ -68,23 +67,25 @@ $.widget( "ui.selectmenu", {
 
 		// create button
 		this.button = $( '<a />', {
-				href: '#' + this.ids.id,
-				html: this.element.find( "option:selected" ).text() || '&nbsp;',
-				tabindex: ( tabindex ? tabindex : this.options.disabled ? -1 : 0 ),
-				id: this.ids.button,
-				width: this.element.outerWidth(),
-				'aria-expanded': false,
-				'aria-autocomplete': 'list',
-				'aria-owns': this.ids.menu,
-				'aria-haspopup': true
+			'class': 'ui-button ui-widget ui-state-default ui-corner-all',
+			href: '#' + this.ids.id,
+			tabindex: ( tabindex ? tabindex : this.options.disabled ? -1 : 0 ),
+			id: this.ids.button,
+			width: this.element.outerWidth(),
+			role: 'combobox',
+			'aria-expanded': false,
+			'aria-autocomplete': 'list',
+			'aria-owns': this.ids.menu,
+			'aria-haspopup': true
+		});			
+			
+		this.button.prepend( $( '<span class="ui-icon ' + ( this.options.dropdown ? 'ui-icon-triangle-1-s' : 'ui-icon-triangle-2-n-s' ) + '"/>' ) );
+	
+		this.buttonText = $( '<span />', {
+				'class': 'ui-selectmenu-text' ,
+				html: this.element.find( "option:selected" ).text() || '&nbsp;'			
 			})
-			.button({
-				icons: {
-					primary: ( this.options.dropdown ? 'ui-icon-triangle-1-s' : 'ui-icon-triangle-2-n-s' )
-				}
-			})
-			// change ARIA role
-			.attr( 'role', 'combobox' );
+			.appendTo( this.button );
 
 		// wrap and insert new button
 		this.buttonWrap = $( '<span />', {
@@ -108,8 +109,7 @@ $.widget( "ui.selectmenu", {
 		if ( this.options.dropdown ) {
 			var setWidth = this.button.outerWidth();
 		} else {
-			var text = this.button.find( "span.ui-button-text"),
-				setWidth = text.width() + parseFloat( text.css( "padding-left" ) ) || 0 + parseFloat( text.css( "margin-left" ) || 0 );
+			var setWidth = this.buttonText.width() + parseFloat( this.buttonText.css( "padding-left" ) ) || 0 + parseFloat( this.buttonText.css( "margin-left" ) || 0 );
 		}
 
 		// wrap menu
@@ -391,7 +391,7 @@ $.widget( "ui.selectmenu", {
 
 	_setSelected: function( item ) {
 		// update button text
-		this.button.find( "span.ui-button-text" ).html( item.label );
+		this.buttonText.html( item.label );
 		// change ARIA attr
 		this.menuItems.find("a").attr( "aria-selected", false );
 		this._getSelectedItem().find("a").attr( "aria-selected", true );
@@ -407,7 +407,6 @@ $.widget( "ui.selectmenu", {
 			this.menu.toggleClass( 'ui-corner-bottom', value ).toggleClass( 'ui-corner-all', !value );
 		}
 		if ( key === "disabled" ) {
-			this.button.button( "option", "disabled", value );
 			this.menu.menu( "option", "disabled", value );
 			if ( value ) {
 				this.element.attr( "disabled", "disabled" );
