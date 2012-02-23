@@ -51,6 +51,8 @@ $.widget( "ui.selectmenu", {
 
 		this._drawButton();
 		this._bind( this.button, this._buttonEvents );
+		this._hoverable( this.button );
+		this._focusable( this.button );
 
 		this._drawMenu();
 
@@ -77,13 +79,13 @@ $.widget( "ui.selectmenu", {
 			'aria-autocomplete': 'list',
 			'aria-owns': this.ids.menu,
 			'aria-haspopup': true
-		});			
-			
+		});
+
 		this.button.prepend( $( '<span class="ui-icon ' + ( this.options.dropdown ? 'ui-icon-triangle-1-s' : 'ui-icon-triangle-2-n-s' ) + '"/>' ) );
-	
+
 		this.buttonText = $( '<span />', {
 				'class': 'ui-selectmenu-text' ,
-				html: this.element.find( "option:selected" ).text() || '&nbsp;'			
+				html: this.element.find( "option:selected" ).text() || '&nbsp;'
 			})
 			.appendTo( this.button );
 
