@@ -17,6 +17,7 @@
     </style>
 	<script>
 	$(function() {
+		// TODO refactor into a widget and get rid of these plugin methods
 		$.fn.position2 = function( options ) {
 			return this.position( $.extend({
 				of: window,
@@ -54,10 +55,6 @@
 			});
 		};
 
-		$( "img:eq(0)" ).left();
-		$( "img:eq(1)" ).center();
-		$( "img:eq(2)" ).right();
-
 		$( "body" ).css({
 			overflow: "hidden"
 		})
@@ -68,15 +65,21 @@
 			position: "absolute",
 		});
 
+		$( "img:eq(0)" ).left();
+		$( "img:eq(1)" ).center();
+		$( "img:eq(2)" ).right();
+
 		function animate( to ) {
-			$(this).animate( to );
+			$(this).stop( true, false ).animate( to );
 		}
-		function next() {
+		function next( event ) {
+			event.preventDefault();
 			$( "img:eq(2)" ).center( animate );
 			$( "img:eq(1)" ).left( animate )
 			$( "img:eq(0)" ).right().appendTo( ".demo" );
 		}
-		function previous() {
+		function previous( event ) {
+			event.preventDefault();
 			$( "img:eq(0)" ).center( animate );
 			$( "img:eq(1)" ).right( animate );
 			$( "img:eq(2)" ).left().prependTo( ".demo" );
@@ -84,8 +87,8 @@
 		$( "#previous" ).click( previous );
 		$( "#next" ).click( next );
 
-		$( ".demo img" ).click(function() {
-			$( ".demo img" ).index( this ) === 0 ? previous() : next();
+		$( ".demo img" ).click(function( event ) {
+			$( ".demo img" ).index( this ) === 0 ? previous( event ) : next( event );
 		});
 
 		$( window ).resize(function() {
@@ -100,9 +103,9 @@
 
 <div class="demo">
 
-<img src="images/earth.jpg" />
-<img src="images/flight.jpg" />
-<img src="images/rocket.jpg" />
+<img src="images/earth.jpg" width="458" height="308" />
+<img src="images/flight.jpg" width="512" height="307" />
+<img src="images/rocket.jpg" width="300" height="353" />
 
 <a id="previous" href="#">Previous</a>
 <a id="next" href="#">Next</a>
