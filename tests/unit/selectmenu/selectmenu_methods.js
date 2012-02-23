@@ -66,7 +66,7 @@ test("refresh - structure", function () {
 
 	equals( element.find("option").length, menu.find("li").not(".ui-selectmenu-optgroup").length, "menu item length" );
 	equals( element.find("option").last().text(), menu.find("li").not(".ui-selectmenu-optgroup").last().text(), "added item" );
-	equals( element.find("option").first().text(), menu.find("li").not(".ui-selectmenu-optgroup").first().text(), "chnaged item" );
+	equals( element.find("option").first().text(), menu.find("li").not(".ui-selectmenu-optgroup").first().text(), "changed item" );
 });
 
 
