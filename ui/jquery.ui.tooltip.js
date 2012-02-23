@@ -157,7 +157,7 @@ $.widget( "ui.tooltip", {
 
 		this._bind( target, {
 			mouseleave: "close",
-			blur: "close",
+			focusout: "close",
 			keyup: function( event ) {
 				if ( event.keyCode == $.ui.keyCode.ESCAPE ) {
 					var fakeEvent = $.Event(event);
@@ -193,7 +193,7 @@ $.widget( "ui.tooltip", {
 		});
 
 		target.removeData( "tooltip-open" );
-		target.unbind( "mouseleave.tooltip blur.tooltip keyup.tooltip" );
+		target.unbind( "mouseleave.tooltip focusout.tooltip keyup.tooltip" );
 
 		this._trigger( "close", event, { tooltip: tooltip } );
 	},

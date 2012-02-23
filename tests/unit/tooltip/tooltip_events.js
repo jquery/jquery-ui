@@ -47,9 +47,9 @@ test( "focus events", function() {
 	element.trigger( "focusin" );
 
 	element.one( "tooltipclose", function( event ) {
-		same( event.originalEvent.type, "blur" );
+		same( event.originalEvent.type, "focusout" );
 	});
-	element.trigger( "blur" );
+	element.trigger( "focusout" );
 });
 
 asyncTest( "mixed events", function() {
@@ -74,7 +74,7 @@ asyncTest( "mixed events", function() {
 
 	// blurring is async in IE
 	element.one( "tooltipclose", function( event ) {
-		same( event.originalEvent.type, "blur" );
+		same( event.originalEvent.type, "focusout" );
 		start();
 	});
 	element.simulate( "blur" );
