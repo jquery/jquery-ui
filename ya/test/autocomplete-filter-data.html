@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+
+  <!-- Always force latest IE rendering engine (even in intranet) & Chrome Frame 
+       Remove this if you use the .htaccess -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+  <title>autocomplete-filter-data</title>
+  <meta name="description" content="" />
+  <meta name="author" content="13" />
+
+  <link rel="stylesheet" href="../themes/base.css" />
+  <link rel="stylesheet" href="../jqui/css/jquery-ui.css" />
+  <script src="../jqui/js/jquery.min.js"></script>
+  <script src="../jqui/js/jquery-ui.min.js"></script>
+  
+  <script src="../ui/jquery.ya.autocomplete0.js"></script>
+<script type="text/javascript">
+  	jQuery(function($){
+		var formatData=function(data){
+			var readyArr=[],
+				innerArr,
+				i,
+				j,
+				k,
+				tempNameStr,
+				tempPyStr,
+				tempItem,	
+				lastItem,
+				parentItem,
+				parentId;
+			for(i=0;lastItem=data[i++];){
+				innerArr=[lastItem];
+				readyArr[i-1]={
+					"lastId":lastItem.merchantId,
+					"dataArr":innerArr
+				};
+				parentId=-1;
+				while(parentId!=0){
+					parentId=lastItem.parentId;
+					for(j=0;parentItem=data[j++];){
+						if(parentId==parentItem.merchantId){
+							innerArr.unshift(parentItem);	//向前插
+							lastItem=parentItem;
+							break;
+						}
+					}
+				}
+				tempNameStr="";
+				tempPyStr="";
+				for(k=0;tempItem=readyArr[i-1].dataArr[k++];){
+					tempNameStr+=(tempItem.merchantName+'/');
+					tempPyStr+=(tempItem.shortPinyin+'/');
+				}
+				readyArr[i-1].nameStr=tempNameStr.slice(0,-1);
+				readyArr[i-1].pyStr=tempPyStr.slice(0,-1);
+			}
+			return readyArr;
+		};
+		$.ajax({
+			url:'data.json',
+			type:'post',
+			dataType:'json',
+			success:function(data){
+				var readyArr=formatData(data);
+				$( "#tags" ).autocomplete0({
+					source: function( request, response ) {
+						var fArr=[],
+							term=request.term;
+						for(var i=0,item;item=readyArr[i++];){
+							if($.ui.autocomplete.filter([item.nameStr,item.pyStr], term).length>0){
+								fArr.push({
+									label:item.nameStr,
+									value:item.lastId
+								});
+							}
+						}
+						response(fArr);
+					}
+				});
+			}
+		});
+		
+  	});
+  </script>
+</head>
+
+<body>
+    <div class="ui-widget">
+		<label for="tags">Tags: </label>
+		<input id="tags" />
+	</div>
+</body>
+</html>

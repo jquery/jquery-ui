@@ -1,0 +1,31 @@
+[{
+	"merchantId":4,
+	"merchantName":"清河店",
+	"shortPinyin":"QHD1",
+	"parentId":6
+},{
+	"merchantId":3,
+	"merchantName":"清河店2",
+	"shortPinyin":"QHD2",
+	"parentId":4
+},{
+	"merchantId":2,
+	"merchantName":"清河店3",
+	"shortPinyin":"QHD3",
+	"parentId":4
+},{
+	"merchantId":1,
+	"merchantName":"清河店4",
+	"shortPinyin":"QHD4",
+	"parentId":3
+},{
+	"merchantId":5,
+	"merchantName":"权金城",
+	"shortPinyin":"QJC",
+	"parentId":6
+},{
+	"merchantId":6,
+	"merchantName":"雅座",
+	"shortPinyin":"YZ",
+	"parentId":0
+}]
