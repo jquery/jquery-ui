@@ -40,7 +40,11 @@
 			     "text": "国外",
 			     "expanded": true,
 			     "children":[{
-			         "text":"澳大利亚"
+			         "text":"澳大利亚",
+			         "expanded": true,
+			         "children":[{
+			         	"text": "test"
+			         }]
 			     },{
 			         "text":"印度"
 			     },{
@@ -55,7 +59,9 @@
                 }
 
             });
-  			
+            var target = $('#navtree').tree0("findNode", "text", "test","",true);
+            var parentNodes=$("#navtree").tree0('getParents',target);
+  			console.dir(parentNodes);
   		});
   	</script>
   

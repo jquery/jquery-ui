@@ -664,7 +664,7 @@
                 return this;
                 if(this.children && this.children.length && deep) {
                     for(var i in this.children){
-                        var temp=_searchNode.apply(this.children[i],[key,value,_searchNode,[],true]);
+                        var temp=_searchNode.apply(this.children[i],[key,value,_searchNode,[],true,deep]);	//fixed,缺少deep参数
                         if(temp) return temp;
                     }
                 }
@@ -692,6 +692,26 @@
         getParent: function(target) {
             var pid = this.element.data("nodes")["pid" + target.nid];
             return pid?this.findByNId(pid):null;
+        },
+        /**
+         * 获取指定节点的所有父节点。
+         * @name tree0#getParents
+         * @function
+         * @param target 指定节点的JSON数据对象，并且该节点数据中包括了nid属性
+         * @returns {Array} 返回所有父节点组成的数据
+         * @example
+         * //查找target的父节点的JSON数据对象
+         * var target = $('#myTree').tree0("findNode", "text", "node1");
+         * $('#myTree').tree0('getParents',target);
+         */  
+        getParents: function(target) {
+        	var parentNodes=[],
+        		parentNode=this.getParent(target);
+        	while(parentNode){
+        		parentNodes.push(parentNode);
+        		parentNode=this.getParent(parentNode);
+        	}
+            return parentNodes;
         },
         /**
          * 获取指定节点的所有子节点的JSON数据对象集合。
