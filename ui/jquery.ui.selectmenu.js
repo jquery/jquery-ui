@@ -154,6 +154,9 @@ $.widget( "ui.selectmenu", {
 		// change menu styles?
 		this._setOption( "dropdown", this.options.dropdown );
 
+		// unbind Menu document event
+		$( document ).unbind( "click.menu" );
+		
 		// document click closes menu
 		this._bind( document, {
 			click: function( event ) {
@@ -204,15 +207,8 @@ $.widget( "ui.selectmenu", {
 
 			// check if menu has items
 			if ( this.items ) {
-				var currentItem = this._getSelectedItem();
-				// needs to be fired after the document click event has closed all other Selectmenus
-				// otherwise the current item is not indicated
-				// TODO check if this should be handled by Menu
-				this._delay( function(){
-					this.menu.menu( "focus", event, currentItem );
-				}, 1);
-
 				if ( !this.options.dropdown ) {
+					var currentItem = this._getSelectedItem();
 					// center current item
 					if ( this.menu.outerHeight() < this.menu.prop( "scrollHeight" ) ) {
 						this.menuWrap.css( "left" , -10000 );
