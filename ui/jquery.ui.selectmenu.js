@@ -140,9 +140,9 @@ $.widget( "ui.selectmenu", {
 				if ( that.focus !== undefined ) {
 					if ( item.index != that.focus ) {
 						that._trigger( "focus", event, { item: item } );
-					}
-					if ( !that.isOpen ) {
-						that._select( item, event );
+						if ( !that.isOpen ) {
+							that._select( item, event );
+						}
 					}
 				}
 				that.focus = item.index;
