@@ -620,8 +620,8 @@ $.extend(Datepicker.prototype, {
 					$.datepicker._updateDatepicker(inst);
 				}
 			}
-			catch (event) {
-				$.datepicker.log(event);
+			catch (err) {
+				$.datepicker.log(err);
 			}
 		}
 		return true;
