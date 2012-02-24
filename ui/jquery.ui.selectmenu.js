@@ -193,6 +193,11 @@ $.widget( "ui.selectmenu", {
 
 			this._toggleButtonStyle();
 
+			// make sure menu is refreshed on first init (needed at least for IE9)
+			if ( this.isOpen === undefined ) {
+				this.button.trigger( "focus" );
+			}
+
 			this.menuWrap.addClass( 'ui-selectmenu-open' );
 			this.menu.attr("aria-hidden", false);
 			this.button.attr("aria-expanded", true);
