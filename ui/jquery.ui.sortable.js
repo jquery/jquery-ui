@@ -661,7 +661,7 @@ $.widget("ui.sortable", $.ui.mouse, {
 
 					var el = $(document.createElement(self.currentItem[0].nodeName))
 						.addClass(className || self.currentItem[0].className+" ui-sortable-placeholder")
-						.removeClass("ui-sortable-helper")[0];
+						.removeClass("ui-sortable-helper").html("&nbsp;")[0];
 
 					if(!className)
 						el.style.visibility = "hidden";
