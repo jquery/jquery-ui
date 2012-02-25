@@ -161,7 +161,9 @@ $.widget( "ui.selectmenu", {
 		.attr( 'role', 'listbox' );
 
 		// change menu styles?
-		this._setOption( "dropdown", this.options.dropdown );
+		if ( this.options.dropdown ) {
+			this.menu.addClass( 'ui-corner-bottom' ).removeClass( 'ui-corner-all' );
+		}		
 
 		// unbind Menu document event
 		$( document ).unbind( "click.menu" );
@@ -193,8 +195,6 @@ $.widget( "ui.selectmenu", {
 
 	open: function( event ) {
 		if ( !this.options.disabled ) {
-			this._toggleButtonStyle();
-
 			// make sure menu is refreshed on first init (needed at least for IE9)
 			if ( this.isOpen === undefined ) {
 				this.button.trigger( "focus" );
@@ -232,7 +232,6 @@ $.widget( "ui.selectmenu", {
 
 	close: function( event ) {
 		if ( this.isOpen ) {
-			this._toggleButtonStyle();
 			this._toggleAttr();
 			this.isOpen = false;
 			this._trigger( "close", event );
@@ -389,9 +388,6 @@ $.widget( "ui.selectmenu", {
 		if ( key === "appendTo" ) {
 			this.menuWrap.appendTo( $( value || "body", this.element[0].ownerDocument )[0] );
 		}
-		if ( key === "dropdown" ) {
-			this.menu.toggleClass( 'ui-corner-bottom', value ).toggleClass( 'ui-corner-all', !value );
-		}
 		if ( key === "disabled" ) {
 			this.menu.menu( "option", "disabled", value );
 			if ( value ) {
@@ -406,17 +402,14 @@ $.widget( "ui.selectmenu", {
 	},
 
 	_toggleAttr: function(){
+		if ( this.options.dropdown ) {
+			this.button.toggleClass( 'ui-corner-top', !this.isOpen ).toggleClass( 'ui-corner-all', this.isOpen );
+		}
 		this.menuWrap.toggleClass( 'ui-selectmenu-open', !this.isOpen );
 		this.menu.attr("aria-hidden", this.isOpen);
 		this.button.attr("aria-expanded", !this.isOpen);
 	},
-
-	_toggleButtonStyle: function() {
-		if ( this.options.dropdown ) {
-			this.button.toggleClass( 'ui-corner-top', !this.isOpen ).toggleClass( 'ui-corner-all', this.isOpen );
-		}
-	},
-
+	
 	_getCreateOptions: function() {
 		return { disabled: !!this.element.attr( 'disabled' ) };
 	},
