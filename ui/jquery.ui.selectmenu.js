@@ -35,7 +35,7 @@ $.widget( "ui.selectmenu", {
 	},
 
 	_create: function() {
-		// set a default id value, generate a new random one if not set by developer
+		// get / make unique id
 		var selectmenuId = this.element.attr( 'id' ) || 'ui-selectmenu-' + Math.random().toString( 16 ).slice( 2, 10 );
 
 		// array of button and menu id's
@@ -55,6 +55,15 @@ $.widget( "ui.selectmenu", {
 		this._focusable( this.button );
 
 		this._drawMenu();
+
+		// document click closes menu
+		this._bind( document, {
+			click: function( event ) {
+				if ( this.isOpen && !$( event.target ).closest( "li.ui-state-disabled, li.ui-selectmenu-optgroup, #" + this.ids.button, this.buttonWrap ).length ) {
+					this.close( event );
+				}
+			}
+		});
 
 		if ( this.options.disabled ) {
 			this.disable();
@@ -156,15 +165,6 @@ $.widget( "ui.selectmenu", {
 
 		// unbind Menu document event
 		$( document ).unbind( "click.menu" );
-		
-		// document click closes menu
-		this._bind( document, {
-			click: function( event ) {
-				if ( this.isOpen && !$( event.target ).closest( "#" + this.ids.button).length ) {
-					this.close( event );
-				}
-			}
-		});
 	},
 
 	refresh: function() {
@@ -193,7 +193,6 @@ $.widget( "ui.selectmenu", {
 
 	open: function( event ) {
 		if ( !this.options.disabled ) {
-
 			this._toggleButtonStyle();
 
 			// make sure menu is refreshed on first init (needed at least for IE9)
@@ -201,28 +200,23 @@ $.widget( "ui.selectmenu", {
 				this.button.trigger( "focus" );
 			}
 
-			this.menuWrap.addClass( 'ui-selectmenu-open' );
-			this.menu.attr("aria-hidden", false);
-			this.button.attr("aria-expanded", true);
+			this._toggleAttr();
 
-			// check if menu has items
-			if ( this.items ) {
-				if ( !this.options.dropdown ) {
-					var currentItem = this._getSelectedItem();
-					// center current item
-					if ( this.menu.outerHeight() < this.menu.prop( "scrollHeight" ) ) {
-						this.menuWrap.css( "left" , -10000 );
-						this.menu.scrollTop( this.menu.scrollTop() + currentItem.position().top - this.menu.outerHeight()/2 + currentItem.outerHeight()/2 );
-						this.menuWrap.css( "left" , "auto" );
-					}
-
-					$.extend( this.options.position, {
-						my: "left top",
-						at: "left top",
-						// calculate offset
-						offset: "0 " + ( this.menu.offset().top  - currentItem.offset().top + ( this.button.outerHeight() - currentItem.outerHeight() ) / 2 )
-					});
+			if ( this.items && !this.options.dropdown ) {
+				var currentItem = this._getSelectedItem();
+				// center current item
+				if ( this.menu.outerHeight() < this.menu.prop( "scrollHeight" ) ) {
+					this.menuWrap.css( "left" , -10000 );
+					this.menu.scrollTop( this.menu.scrollTop() + currentItem.position().top - this.menu.outerHeight()/2 + currentItem.outerHeight()/2 );
+					this.menuWrap.css( "left" , "auto" );
 				}
+
+				$.extend( this.options.position, {
+					my: "left top",
+					at: "left top",
+					// calculate offset
+					offset: "0 " + ( this.menu.offset().top  - currentItem.offset().top + ( this.button.outerHeight() - currentItem.outerHeight() ) / 2 )
+				});
 			}
 
 			this.menuWrap
@@ -239,11 +233,7 @@ $.widget( "ui.selectmenu", {
 	close: function( event ) {
 		if ( this.isOpen ) {
 			this._toggleButtonStyle();
-
-			this.menuWrap.removeClass( 'ui-selectmenu-open' );
-			this.menu.attr( "aria-hidden", true );
-			this.button.attr( "aria-expanded", false );
-
+			this._toggleAttr();
 			this.isOpen = false;
 			this._trigger( "close", event );
 		}
@@ -263,17 +253,10 @@ $.widget( "ui.selectmenu", {
 
 		$.each( items, function( index, item ) {
 			if ( item.optgroup != currentOptgroup ) {
-				var optgroup = $( '<li />', {
-					'class': 'ui-selectmenu-optgroup',
-					html: item.optgroup,
-					// prevents clicks on this header to close the menu
-					// TODO try to improve this, check how autocomplete handles it
-					click: function( event ){
-						event.stopPropagation();
-					}
-				});
-				if ( item.element.parent( "optgroup" ).attr( "disabled" ) ) optgroup.addClass( 'ui-state-disabled' );
-				ul.append( optgroup );
+				$( '<li />', {
+					'class': 'ui-selectmenu-optgroup' + ( item.element.parent( "optgroup" ).attr( "disabled" ) ? ' ui-state-disabled' : '' ),
+					html: item.optgroup
+				}).appendTo( ul );
 				currentOptgroup = item.optgroup;
 			}
 			that._renderItem( ul, item );
@@ -420,6 +403,12 @@ $.widget( "ui.selectmenu", {
 				this.button.attr( "tabindex", 0 );
 			}
 		}
+	},
+
+	_toggleAttr: function(){
+		this.menuWrap.toggleClass( 'ui-selectmenu-open', !this.isOpen );
+		this.menu.attr("aria-hidden", this.isOpen);
+		this.button.attr("aria-expanded", !this.isOpen);
 	},
 
 	_toggleButtonStyle: function() {
