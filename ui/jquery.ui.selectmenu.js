@@ -163,9 +163,10 @@ $.widget( "ui.selectmenu", {
 		// change menu styles?
 		if ( this.options.dropdown ) {
 			this.menu.addClass( 'ui-corner-bottom' ).removeClass( 'ui-corner-all' );
-		}		
+		}
 
-		// unbind Menu document event
+		// unbind uneeded Menu events
+		this.menu.unbind ( "mouseleave.menu" );
 		$( document ).unbind( "click.menu" );
 	},
 
@@ -409,7 +410,7 @@ $.widget( "ui.selectmenu", {
 		this.menu.attr("aria-hidden", !this.isOpen);
 		this.button.attr("aria-expanded", this.isOpen);
 	},
-	
+
 	_getCreateOptions: function() {
 		return { disabled: !!this.element.attr( 'disabled' ) };
 	},
