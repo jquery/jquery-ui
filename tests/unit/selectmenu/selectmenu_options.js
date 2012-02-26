@@ -1,35 +1,41 @@
 (function ($) {
 
-module("selectmenu: options", {
-	setup: function () {
-		this.element = $("#speed").selectmenu();
-	}
-});
+module("selectmenu: options");
 
 test("appendTo another element", function () {
 	expect(2);
-
-	ok(this.element.selectmenu("option", "appendTo", "#qunit-fixture"), "appendTo accepts selector");
+	
+	element = $("#speed").selectmenu();
+	
+	ok(element.selectmenu("option", "appendTo", "#qunit-fixture"), "appendTo accepts selector");
 	ok($("#qunit-fixture").find(".ui-selectmenu-menu").length, "selectmenu appendedTo other element");
 });
 
 
 test("dropdown: CSS styles", function () {
-	expect(4);
+	expect(2);
 
-	var button = this.element.selectmenu("widget").parent(),
-		ul = this.element.selectmenu("menuWidget"),
-		link = button.find("a");
+	var element = $("#speed").selectmenu(),
+		button = element.selectmenu("widget"),
+		menu = element.selectmenu("menuWidget");
 
-	this.element.selectmenu("open");
-	ok( link.hasClass("ui-corner-top") && !link.hasClass("ui-corner-all"), "button styles dropdown");
-	ok( ul.hasClass("ui-corner-bottom") && !ul.hasClass("ui-corner-all"), "menu styles dropdown");
+	element.selectmenu("open");
+	ok( button.hasClass("ui-corner-top") && !button.hasClass("ui-corner-all") && button.find("span.ui-icon").hasClass("ui-icon-triangle-1-s"), "button styles dropdown");
+	ok( menu.hasClass("ui-corner-bottom") && !menu.hasClass("ui-corner-all"), "menu styles dropdown");
+});
 
-	this.element.selectmenu("close");
-	this.element.selectmenu("option", "dropdown", false);
-	this.element.selectmenu("open");
-	ok( !link.hasClass("ui-corner-top") && link.hasClass("ui-corner-all"), "button styles pop-up");
-	ok( !ul.hasClass("ui-corner-bottom") && ul.hasClass("ui-corner-all"), "menu styles pop-up");
+test("pop-up: CSS styles", function () {
+	expect(2);
+
+	var element = $("#speed").selectmenu({
+			dropdown: false
+		}),
+		button = element.selectmenu("widget"),
+		menu = element.selectmenu("menuWidget");
+
+	element.selectmenu("close");
+	ok( !button.hasClass("ui-corner-top") && button.hasClass("ui-corner-all") && button.find("span.ui-icon").hasClass("ui-icon-triangle-2-n-s"), "button styles pop-up");
+	ok( !menu.hasClass("ui-corner-bottom") && menu.hasClass("ui-corner-all"), "menu styles pop-up");
 });
 
 })(jQuery);

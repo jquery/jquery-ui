@@ -14,16 +14,15 @@ test( "open / close", function() {
 	expect( 4 );
 
 	var element = $('#speed').selectmenu(),
-		button = element.selectmenu("widget").parent(),
-		menu = element.selectmenu("menuWidget").parent();
+		menu = element.selectmenu("menuWidget");
 
 	element.selectmenu("open");
-	ok( menu.is( ":visible" ), "menu visible" );
-	equals( menu.find("ul").attr("aria-hidden"), "false", "menu aria-disabled" );
+	ok( menu.is( ":visible" ), "open: menu visible" );
+	equals( menu.attr("aria-hidden"), "false", "open: menu aria-disabled" );
 
 	element.selectmenu("close");
-	ok( menu.is( ":hidden" ), "menu hidden" );
-	equals( menu.find("ul").attr("aria-hidden"), "true", "menu aria-disabled" );
+	ok( menu.is( ":hidden" ), "close: menu hidden" );
+	equals( menu.attr("aria-hidden"), "true", "close: menu aria-disabled" );
 });
 
 
