@@ -59,7 +59,7 @@ $.widget( "ui.selectmenu", {
 		// document click closes menu
 		this._bind( document, {
 			click: function( event ) {
-				if ( this.isOpen && !$( event.target ).closest( "li.ui-state-disabled, li.ui-selectmenu-optgroup, #" + this.ids.button, this.buttonWrap ).length ) {
+				if ( this.isOpen && !$( event.target ).closest( "li.ui-state-disabled, li.ui-selectmenu-optgroup, #" + this.ids.button ).length ) {
 					this.close( event );
 				}
 			}
