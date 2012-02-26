@@ -116,17 +116,10 @@ $.widget( "ui.selectmenu", {
 			id: this.ids.menu
 		});
 
-		// set width
-		if ( this.options.dropdown ) {
-			var setWidth = this.button.outerWidth();
-		} else {
-			var setWidth = this.buttonText.width() + parseFloat( this.buttonText.css( "padding-left" ) ) || 0 + parseFloat( this.buttonText.css( "margin-left" ) || 0 );
-		}
-
 		// wrap menu
 		this.menuWrap = $( '<div />', {
 				'class': 'ui-selectmenu-menu',
-				width: setWidth
+				width: ( this.options.dropdown ) ? this.button.outerWidth() : this.buttonText.width() + parseFloat( this.buttonText.css( "padding-left" ) ) || 0 + parseFloat( this.buttonText.css( "margin-left" ) ) || 0
 			})
 			.append( this.menu )
 			.appendTo( this.options.appendTo );
@@ -147,7 +140,7 @@ $.widget( "ui.selectmenu", {
 				var item = ui.item.data( "item.selectmenu" );
 
 				if ( that.focus !== undefined ) {
-					if ( item.index != that.focus ) {
+					if ( item.index !== that.focus ) {
 						that._trigger( "focus", event, { item: item } );
 						if ( !that.isOpen ) {
 							that._select( item, event );
@@ -209,7 +202,7 @@ $.widget( "ui.selectmenu", {
 				// center current item
 				if ( this.menu.outerHeight() < this.menu.prop( "scrollHeight" ) ) {
 					this.menuWrap.css( "left" , -10000 );
-					this.menu.scrollTop( this.menu.scrollTop() + currentItem.position().top - this.menu.outerHeight()/2 + currentItem.outerHeight()/2 );
+					this.menu.scrollTop( this.menu.scrollTop() + currentItem.position().top - this.menu.outerHeight() / 2 + currentItem.outerHeight() / 2 );
 					this.menuWrap.css( "left" , "auto" );
 				}
 
@@ -220,12 +213,11 @@ $.widget( "ui.selectmenu", {
 					offset: "0 " + ( this.menu.offset().top  - currentItem.offset().top + ( this.button.outerHeight() - currentItem.outerHeight() ) / 2 )
 				});
 			}
-
+			
+			this.options.position.of = this.button;
 			this.menuWrap
 				.zIndex( this.element.zIndex() + 1 )
-				.position( $.extend({
-					of: this.button
-				}, this.options.position ));
+				.position( this.options.position );
 
 			this._trigger( "open", event );
 		}
@@ -252,7 +244,7 @@ $.widget( "ui.selectmenu", {
 			currentOptgroup = "";
 
 		$.each( items, function( index, item ) {
-			if ( item.optgroup != currentOptgroup ) {
+			if ( item.optgroup !== currentOptgroup ) {
 				$( '<li />', {
 					'class': 'ui-selectmenu-optgroup' + ( item.element.parent( "optgroup" ).attr( "disabled" ) ? ' ui-state-disabled' : '' ),
 					html: item.optgroup
@@ -289,7 +281,7 @@ $.widget( "ui.selectmenu", {
 	},
 
 	_getSelectedItem: function() {
-		return this.menuItems.eq( this.element[0].selectedIndex );
+		return this.menuItems.eq( this.element[ 0 ].selectedIndex );
 	},
 
 	_toggle: function( event ) {
@@ -312,7 +304,7 @@ $.widget( "ui.selectmenu", {
 		},
 		keydown: function( event ) {
 			var prevDef = true;
-			switch (event.keyCode) {
+			switch ( event.keyCode ) {
 				case $.ui.keyCode.TAB:
 				case $.ui.keyCode.ESCAPE:
 					if ( this.isOpen ) {
@@ -364,9 +356,9 @@ $.widget( "ui.selectmenu", {
 	},
 
 	_select: function( item, event ) {
-		var oldIndex = this.element[0].selectedIndex;
+		var oldIndex = this.element[ 0 ].selectedIndex;
 		// change native select element
-		this.element[0].selectedIndex = item.index;
+		this.element[ 0 ].selectedIndex = item.index;
 		this._setSelected( item );
 		this._trigger( "select", event, { item: item } );
 
@@ -379,15 +371,15 @@ $.widget( "ui.selectmenu", {
 		// update button text
 		this.buttonText.html( item.label );
 		// change ARIA attr
-		this.menuItems.find("a").attr( "aria-selected", false );
-		this._getSelectedItem().find("a").attr( "aria-selected", true );
+		this.menuItems.find( "a" ).attr( "aria-selected", false );
+		this._getSelectedItem().find( "a" ).attr( "aria-selected", true );
 	},
 
 	_setOption: function( key, value ) {
 		this._super( key, value );
 
 		if ( key === "appendTo" ) {
-			this.menuWrap.appendTo( $( value || "body", this.element[0].ownerDocument )[0] );
+			this.menuWrap.appendTo( $( value || "body", this.element[ 0 ].ownerDocument )[ 0 ] );
 		}
 		if ( key === "disabled" ) {
 			this.menu.menu( "option", "disabled", value );
