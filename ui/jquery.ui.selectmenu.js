@@ -200,6 +200,7 @@ $.widget( "ui.selectmenu", {
 				this.button.trigger( "focus" );
 			}
 
+			this.isOpen = true;
 			this._toggleAttr();
 
 			if ( this.items && !this.options.dropdown ) {
@@ -225,15 +226,14 @@ $.widget( "ui.selectmenu", {
 					of: this.button
 				}, this.options.position ));
 
-			this.isOpen = true;
 			this._trigger( "open", event );
 		}
 	},
 
 	close: function( event ) {
 		if ( this.isOpen ) {
-			this._toggleAttr();
 			this.isOpen = false;
+			this._toggleAttr();
 			this._trigger( "close", event );
 		}
 	},
@@ -403,11 +403,11 @@ $.widget( "ui.selectmenu", {
 
 	_toggleAttr: function(){
 		if ( this.options.dropdown ) {
-			this.button.toggleClass( 'ui-corner-top', !this.isOpen ).toggleClass( 'ui-corner-all', this.isOpen );
+			this.button.toggleClass( 'ui-corner-top', this.isOpen ).toggleClass( 'ui-corner-all', !this.isOpen );
 		}
-		this.menuWrap.toggleClass( 'ui-selectmenu-open', !this.isOpen );
-		this.menu.attr("aria-hidden", this.isOpen);
-		this.button.attr("aria-expanded", !this.isOpen);
+		this.menuWrap.toggleClass( 'ui-selectmenu-open', this.isOpen );
+		this.menu.attr("aria-hidden", !this.isOpen);
+		this.button.attr("aria-expanded", this.isOpen);
 	},
 	
 	_getCreateOptions: function() {
