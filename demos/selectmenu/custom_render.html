@@ -21,11 +21,10 @@
 					li.addClass( 'ui-state-disabled' ).text( item.label );
 				} else {
 					el = item.element;
-					var link = $( "<a />", {
+					$( "<a />", {
 							html: icon = '<span style="' + el.attr("style") + '" class="ui-icon ' + el.attr("class") + '"></span>' + item.label,
 							href: '#'
-						});
-					li.append( link );
+					}).appendTo( li );
 				}
 
 				return li.appendTo( ul );
