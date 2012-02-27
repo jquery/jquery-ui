@@ -236,6 +236,8 @@ $.widget( "ui.accordion", {
 			maxHeight,
 			overflow;
 
+		this.element.css( "height", this.originalHeight );
+
 		if ( heightStyle === "fill" ) {
 			// IE 6 treats height like minHeight, so we need to turn off overflow
 			// in order to get a reliable height
