@@ -67,7 +67,7 @@ window.commonWidgetTests = function( widget, settings ) {
 
 /*
  * Experimental assertion for comparing DOM objects.
- * 
+ *
  * Serializes an element and some attributes and it's children if any, otherwise the text.
  * Then compares the result using deepEqual.
  */

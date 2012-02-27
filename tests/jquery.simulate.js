@@ -160,7 +160,7 @@ $.extend( $.simulate.prototype, {
 		var center = this.findCenter(this.target),
 			options = this.options,
 			x = Math.floor( center.x ),
-			y = Math.floor( center.y ), 
+			y = Math.floor( center.y ),
 			dx = options.dx || 0,
 			dy = options.dy || 0,
 			target = this.target,

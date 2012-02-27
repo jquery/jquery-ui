@@ -709,7 +709,7 @@ var when_constant = (function(){
                                                 (expr[1] == "||" && (lval ? lval    : expr[3])) ||
                                                 expr);
                                     } catch(ex2) {
-                                        // IGNORE... lval is not constant 
+                                        // IGNORE... lval is not constant
                                     }
                                 }
                                 return no ? no.call(expr, expr) : null;

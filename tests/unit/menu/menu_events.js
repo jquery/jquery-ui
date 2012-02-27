@@ -38,7 +38,7 @@ test("handle click on custom item menu", function() {
 	equals( $("#log").html(), "1,3,2,afterclick,1,click,", "Click order not valid.");
 });
 
-/*	Commenting out these tests until a way to handle the extra focus and blur events 
+/*	Commenting out these tests until a way to handle the extra focus and blur events
 	fired by IE is found
 test( "handle blur: click", function() {
 	expect( 4 );

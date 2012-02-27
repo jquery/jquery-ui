@@ -34,7 +34,7 @@ test('Ticket 7602: Stop datepicker from appearing with beforeShow event handler'
     inp.datepicker('show');
     equals(dp.css('display'), 'none',"beforeShow returns false");
     inp.datepicker('destroy');
-    
+   
     inp = init('#inp',{
         beforeShow: function(){
         }
@@ -44,7 +44,7 @@ test('Ticket 7602: Stop datepicker from appearing with beforeShow event handler'
     equal(dp.css('display'), 'block',"beforeShow returns nothing");
 	inp.datepicker('hide');
     inp.datepicker('destroy');
-    
+   
     inp = init('#inp',{
         beforeShow: function(){
             return true;
@@ -58,7 +58,7 @@ test('Ticket 7602: Stop datepicker from appearing with beforeShow event handler'
 });
 
 test('Ticket 6827: formatDate day of year calculation is wrong during day lights savings time', function(){
-    var time = $.datepicker.formatDate("oo", new Date("2010/03/30 12:00:00 CDT")); 
+    var time = $.datepicker.formatDate("oo", new Date("2010/03/30 12:00:00 CDT"));
     equals(time, "089");
 });
 
