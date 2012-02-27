@@ -42,7 +42,6 @@ $.widget( "ui.accordion", {
 			.addClass( "ui-accordion-header ui-helper-reset ui-state-default ui-corner-all" );
 		this._hoverable( this.headers );
 		this._focusable( this.headers );
-		this.headers.find( ":first-child" ).addClass( "ui-accordion-heading" );
 
 		this.headers.next()
 			.addClass( "ui-accordion-content ui-helper-reset ui-widget-content ui-corner-bottom" );
@@ -95,11 +94,6 @@ $.widget( "ui.accordion", {
 			});
 		}
 
-		// only need links in tab order for Safari
-		if ( !$.browser.safari ) {
-			this.headers.find( "a" ).attr( "tabIndex", -1 );
-		}
-
 		this._setupEvents( options.event );
 	},
 
@@ -146,9 +140,6 @@ $.widget( "ui.accordion", {
 			.removeAttr( "tabIndex" )
 			.find( "a" )
 				.removeAttr( "tabIndex" )
-			.end()
-			.find( ".ui-accordion-heading" )
-				.removeClass( "ui-accordion-heading" );
 		this._destroyIcons();
 
 		// clean up content panels
