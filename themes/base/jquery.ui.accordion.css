@@ -1,4 +1,4 @@
-/*
+/*!
  * jQuery UI Accordion @VERSION
  *
  * Copyright 2012, AUTHORS.txt (http://jqueryui.com/about)
