@@ -1,4 +1,4 @@
-/*
+/*!
  * jQuery UI Effects Slide @VERSION
  *
  * Copyright 2011, AUTHORS.txt (http://jqueryui.com/about)
