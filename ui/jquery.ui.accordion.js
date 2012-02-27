@@ -347,17 +347,23 @@ $.widget( "ui.accordion", {
 		// switch classes
 		active
 			.removeClass( "ui-accordion-header-active ui-state-active ui-corner-top" )
-			.addClass( "ui-corner-all" )
-			.children( ".ui-accordion-header-icon" )
+			.addClass( "ui-corner-all" );
+		if ( options.icons ) {
+			active.children( ".ui-accordion-header-icon" )
 				.removeClass( options.icons.activeHeader )
 				.addClass( options.icons.header );
+		}
+
 		if ( !clickedIsActive ) {
 			clicked
 				.removeClass( "ui-corner-all" )
-				.addClass( "ui-accordion-header-active ui-state-active ui-corner-top" )
-				.children( ".ui-accordion-header-icon" )
+				.addClass( "ui-accordion-header-active ui-state-active ui-corner-top" );
+			if ( options.icons ) {
+				clicked.children( ".ui-accordion-header-icon" )
 					.removeClass( options.icons.header )
 					.addClass( options.icons.activeHeader );
+			}
+
 			clicked
 				.next()
 				.addClass( "ui-accordion-content-active" );
