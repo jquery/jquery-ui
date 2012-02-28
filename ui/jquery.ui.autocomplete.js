@@ -225,7 +225,8 @@ $.widget( "ui.autocomplete", {
 				// custom key handling for now
 				input: $(),
 				focus: function( event, ui ) {
-					var item = ui.item.data( "item.autocomplete" );
+					// back compat for _renderItem using item.autocomplete
+					var item = ui.item.data( "ui-autocomplete-item" ) || ui.item.data( "item.autocomplete" );
 					if ( false !== self._trigger( "focus", event, { item: item } ) ) {
 						// use value to match what will end up in the input, if it was a key event
 						if ( /^key/.test(event.originalEvent.type) ) {
@@ -234,7 +235,8 @@ $.widget( "ui.autocomplete", {
 					}
 				},
 				select: function( event, ui ) {
-					var item = ui.item.data( "item.autocomplete" ),
+					// back compat for _renderItem using item.autocomplete
+					var item = ui.item.data( "ui-autocomplete-item" ) || ui.item.data( "item.autocomplete" );
 						previous = self.previous;
 
 					// only trigger when focus was lost (click on menu)
@@ -470,13 +472,16 @@ $.widget( "ui.autocomplete", {
 	_renderMenu: function( ul, items ) {
 		var self = this;
 		$.each( items, function( index, item ) {
-			self._renderItem( ul, item );
+			self._renderItemData( ul, item );
 		});
 	},
 
-	_renderItem: function( ul, item) {
+	_renderItemData: function( ul, item ) {
+		return this._renderItem( ul, item ).data( "ui-autocomplete-item", item );
+	},
+
+	_renderItem: function( ul, item ) {
 		return $( "<li></li>" )
-			.data( "item.autocomplete", item )
 			.append( $( "<a></a>" ).text( item.label ) )
 			.appendTo( ul );
 	},
