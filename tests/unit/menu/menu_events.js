@@ -18,7 +18,7 @@ test("handle click on menu", function() {
 	menu_click( menu,"2");
 	menu_click($('#menu1'),"3");
 	menu_click( menu,"1");
-	equals( $("#log").html(), "1,3,2,afterclick,1,click,", "Click order not valid.");
+	equal( $("#log").html(), "1,3,2,afterclick,1,click,", "Click order not valid.");
 });
 
 test("handle click on custom item menu", function() {
@@ -35,10 +35,10 @@ test("handle click on custom item menu", function() {
 	menu_click( menu,"2");
 	menu_click($('#menu5'),"3");
 	menu_click( menu,"1");
-	equals( $("#log").html(), "1,3,2,afterclick,1,click,", "Click order not valid.");
+	equal( $("#log").html(), "1,3,2,afterclick,1,click,", "Click order not valid.");
 });
 
-/*	Commenting out these tests until a way to handle the extra focus and blur events 
+/*	Commenting out these tests until a way to handle the extra focus and blur events
 	fired by IE is found
 test( "handle blur: click", function() {
 	expect( 4 );
@@ -154,51 +154,51 @@ test("handle keyboard navigation on menu without scroll and without submenus", f
 	element.focus();
 	element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
 	element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
-	equals( $("#log").html(), "2,1,0,keydown,", "Keydown DOWN");
+	equal( $("#log").html(), "2,1,0,keydown,", "Keydown DOWN");
 
 	menu_log("keydown",true);
 	element.simulate( "keydown", { keyCode: $.ui.keyCode.UP } );
-	equals( $("#log").html(), "1,keydown,", "Keydown UP");
+	equal( $("#log").html(), "1,keydown,", "Keydown UP");
 
 	menu_log("keydown",true);
 	element.simulate( "keydown", { keyCode: $.ui.keyCode.LEFT } );
-	equals( $("#log").html(), "keydown,", "Keydown LEFT (no effect)");
+	equal( $("#log").html(), "keydown,", "Keydown LEFT (no effect)");
 
 	menu_log("keydown",true);
 	element.simulate( "keydown", { keyCode: $.ui.keyCode.RIGHT } );
-	equals( $("#log").html(), "keydown,", "Keydown RIGHT (no effect)");
+	equal( $("#log").html(), "keydown,", "Keydown RIGHT (no effect)");
 
 	menu_log("keydown",true);
 	element.simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_DOWN } );
-	equals( $("#log").html(), "4,keydown,", "Keydown PAGE_DOWN");
+	equal( $("#log").html(), "4,keydown,", "Keydown PAGE_DOWN");
 
 	menu_log("keydown",true);
 	element.simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_DOWN } );
-	equals( $("#log").html(), "keydown,", "Keydown PAGE_DOWN (no effect)");
+	equal( $("#log").html(), "keydown,", "Keydown PAGE_DOWN (no effect)");
 
 	menu_log("keydown",true);
 	element.simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_UP } );
-	equals( $("#log").html(), "0,keydown,", "Keydown PAGE_UP");
+	equal( $("#log").html(), "0,keydown,", "Keydown PAGE_UP");
 
 	menu_log("keydown",true);
 	element.simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_UP } );
-	equals( $("#log").html(), "keydown,", "Keydown PAGE_UP (no effect)");
+	equal( $("#log").html(), "keydown,", "Keydown PAGE_UP (no effect)");
 
 	menu_log("keydown",true);
 	element.simulate( "keydown", { keyCode: $.ui.keyCode.END } );
-	equals( $("#log").html(), "4,keydown,", "Keydown END");
+	equal( $("#log").html(), "4,keydown,", "Keydown END");
 
 	menu_log("keydown",true);
 	element.simulate( "keydown", { keyCode: $.ui.keyCode.HOME } );
-	equals( $("#log").html(), "0,keydown,", "Keydown HOME");
+	equal( $("#log").html(), "0,keydown,", "Keydown HOME");
 
 	menu_log("keydown",true);
 	element.simulate( "keydown", { keyCode: $.ui.keyCode.ESCAPE } );
-	equals( $("#log").html(), "keydown,", "Keydown ESCAPE (no effect)");
+	equal( $("#log").html(), "keydown,", "Keydown ESCAPE (no effect)");
 
 	menu_log("keydown",true);
 	element.simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
-	equals( $("#log").html(), "Aberdeen,keydown,", "Keydown ENTER");
+	equal( $("#log").html(), "Aberdeen,keydown,", "Keydown ENTER");
 });
 
 asyncTest("handle keyboard navigation on menu without scroll and with submenus", function() {
@@ -216,7 +216,7 @@ asyncTest("handle keyboard navigation on menu without scroll and with submenus",
 	element.one( "menufocus", function( event, ui ) {
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
-		equals( $("#log").html(), "2,1,keydown,", "Keydown DOWN");
+		equal( $("#log").html(), "2,1,keydown,", "Keydown DOWN");
 		setTimeout( menukeyboard1, 50 );
 	});
 	element.focus();
@@ -225,11 +225,11 @@ asyncTest("handle keyboard navigation on menu without scroll and with submenus",
 		menu_log("keydown",true);
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.UP } );
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.UP } );
-		equals( $("#log").html(), "0,1,keydown,", "Keydown UP");
+		equal( $("#log").html(), "0,1,keydown,", "Keydown UP");
 
 		menu_log("keydown",true);
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.LEFT } );
-		equals( $("#log").html(), "keydown,", "Keydown LEFT (no effect)");
+		equal( $("#log").html(), "keydown,", "Keydown LEFT (no effect)");
 
 		menu_log("keydown",true);
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
@@ -239,7 +239,7 @@ asyncTest("handle keyboard navigation on menu without scroll and with submenus",
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.RIGHT } );
 
 		setTimeout( function() {
-			equals( $("#log").html(), "0,4,3,2,1,keydown,", "Keydown RIGHT (open submenu)");
+			equal( $("#log").html(), "0,4,3,2,1,keydown,", "Keydown RIGHT (open submenu)");
 		}, 50);
 		setTimeout( menukeyboard2, 50 );
 	}
@@ -247,7 +247,7 @@ asyncTest("handle keyboard navigation on menu without scroll and with submenus",
 	function menukeyboard2() {
 		menu_log("keydown",true);
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.LEFT } );
-		equals( $("#log").html(), "4,keydown,", "Keydown LEFT (close submenu)");
+		equal( $("#log").html(), "4,keydown,", "Keydown LEFT (close submenu)");
 
 		//re-open submenu
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.RIGHT } );
@@ -257,31 +257,31 @@ asyncTest("handle keyboard navigation on menu without scroll and with submenus",
 	function menukeyboard3() {
 		menu_log("keydown",true);
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_DOWN } );
-		equals( $("#log").html(), "2,keydown,", "Keydown PAGE_DOWN");
+		equal( $("#log").html(), "2,keydown,", "Keydown PAGE_DOWN");
 
 		menu_log("keydown",true);
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_DOWN } );
-		equals( $("#log").html(), "keydown,", "Keydown PAGE_DOWN (no effect)");
+		equal( $("#log").html(), "keydown,", "Keydown PAGE_DOWN (no effect)");
 
 		menu_log("keydown",true);
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_UP } );
-		equals( $("#log").html(), "0,keydown,", "Keydown PAGE_UP");
+		equal( $("#log").html(), "0,keydown,", "Keydown PAGE_UP");
 
 		menu_log("keydown",true);
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_UP } );
-		equals( $("#log").html(), "keydown,", "Keydown PAGE_UP (no effect)");
+		equal( $("#log").html(), "keydown,", "Keydown PAGE_UP (no effect)");
 
 		menu_log("keydown",true);
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.END } );
-		equals( $("#log").html(), "2,keydown,", "Keydown END");
+		equal( $("#log").html(), "2,keydown,", "Keydown END");
 
 		menu_log("keydown",true);
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.HOME } );
-		equals( $("#log").html(), "0,keydown,", "Keydown HOME");
+		equal( $("#log").html(), "0,keydown,", "Keydown HOME");
 
 		menu_log("keydown",true);
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.ESCAPE } );
-		equals( $("#log").html(), "4,keydown,", "Keydown ESCAPE (close submenu)");
+		equal( $("#log").html(), "4,keydown,", "Keydown ESCAPE (close submenu)");
 
 		menu_log("keydown",true);
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
@@ -289,11 +289,11 @@ asyncTest("handle keyboard navigation on menu without scroll and with submenus",
 	}
 
 	function menukeyboard4() {
-		equals( $("#log").html(), "0,keydown,", "Keydown ENTER (open submenu)");
+		equal( $("#log").html(), "0,keydown,", "Keydown ENTER (open submenu)");
 
 		menu_log("keydown",true);
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
-		equals( $("#log").html(), "Ada,keydown,", "Keydown ENTER (select item)");
+		equal( $("#log").html(), "Ada,keydown,", "Keydown ENTER (select item)");
 
 		start();
 	}
@@ -314,60 +314,60 @@ test("handle keyboard navigation on menu with scroll and without submenus", func
 	element.focus();
 	element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
 	element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
-	equals( $("#log").html(), "2,1,0,keydown,", "Keydown DOWN");
+	equal( $("#log").html(), "2,1,0,keydown,", "Keydown DOWN");
 
 	menu_log("keydown",true);
 	element.simulate( "keydown", { keyCode: $.ui.keyCode.UP } );
 	element.simulate( "keydown", { keyCode: $.ui.keyCode.UP } );
-	equals( $("#log").html(), "0,1,keydown,", "Keydown UP");
+	equal( $("#log").html(), "0,1,keydown,", "Keydown UP");
 
 	menu_log("keydown",true);
 	element.simulate( "keydown", { keyCode: $.ui.keyCode.LEFT } );
-	equals( $("#log").html(), "keydown,", "Keydown LEFT (no effect)");
+	equal( $("#log").html(), "keydown,", "Keydown LEFT (no effect)");
 
 	menu_log("keydown",true);
 	element.simulate( "keydown", { keyCode: $.ui.keyCode.RIGHT } );
-	equals( $("#log").html(), "keydown,", "Keydown RIGHT (no effect)");
+	equal( $("#log").html(), "keydown,", "Keydown RIGHT (no effect)");
 
 	menu_log("keydown",true);
 	element.simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_DOWN } );
-	equals( $("#log").html(), "10,keydown,", "Keydown PAGE_DOWN");
+	equal( $("#log").html(), "10,keydown,", "Keydown PAGE_DOWN");
 
 	menu_log("keydown",true);
 	element.simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_DOWN } );
-	equals( $("#log").html(), "20,keydown,", "Keydown PAGE_DOWN");
+	equal( $("#log").html(), "20,keydown,", "Keydown PAGE_DOWN");
 
 	menu_log("keydown",true);
 	element.simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_UP } );
-	equals( $("#log").html(), "10,keydown,", "Keydown PAGE_UP");
+	equal( $("#log").html(), "10,keydown,", "Keydown PAGE_UP");
 
 	menu_log("keydown",true);
 	element.simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_UP } );
-	equals( $("#log").html(), "0,keydown,", "Keydown PAGE_UP");
+	equal( $("#log").html(), "0,keydown,", "Keydown PAGE_UP");
 
 	menu_log("keydown",true);
 	element.simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_UP } );
-	equals( $("#log").html(), "keydown,", "Keydown PAGE_UP (no effect)");
+	equal( $("#log").html(), "keydown,", "Keydown PAGE_UP (no effect)");
 
 	menu_log("keydown",true);
 	element.simulate( "keydown", { keyCode: $.ui.keyCode.END } );
-	equals( $("#log").html(), "37,keydown,", "Keydown END");
+	equal( $("#log").html(), "37,keydown,", "Keydown END");
 
 	menu_log("keydown",true);
 	element.simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_DOWN } );
-	equals( $("#log").html(), "keydown,", "Keydown PAGE_DOWN (no effect)");
+	equal( $("#log").html(), "keydown,", "Keydown PAGE_DOWN (no effect)");
 
 	menu_log("keydown",true);
 	element.simulate( "keydown", { keyCode: $.ui.keyCode.HOME } );
-	equals( $("#log").html(), "0,keydown,", "Keydown HOME");
+	equal( $("#log").html(), "0,keydown,", "Keydown HOME");
 
 	menu_log("keydown",true);
 	element.simulate( "keydown", { keyCode: $.ui.keyCode.ESCAPE } );
-	equals( $("#log").html(), "keydown,", "Keydown ESCAPE (no effect)");
+	equal( $("#log").html(), "keydown,", "Keydown ESCAPE (no effect)");
 
 	menu_log("keydown",true);
 	element.simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
-	equals( $("#log").html(), "Aberdeen,keydown,", "Keydown ENTER");
+	equal( $("#log").html(), "Aberdeen,keydown,", "Keydown ENTER");
 });
 
 asyncTest("handle keyboard navigation on menu with scroll and with submenus", function() {
@@ -385,28 +385,28 @@ asyncTest("handle keyboard navigation on menu with scroll and with submenus", fu
 	element.one( "menufocus", function( event, ui ) {
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
-		equals( $("#log").html(), "2,1,keydown,", "Keydown DOWN");
+		equal( $("#log").html(), "2,1,keydown,", "Keydown DOWN");
 		setTimeout( menukeyboard1, 50 );
 	});
 	element.focus();
-	
+
 
 	function menukeyboard1() {
 		menu_log("keydown",true);
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.UP } );
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.UP } );
-		equals( $("#log").html(), "0,1,keydown,", "Keydown UP");
+		equal( $("#log").html(), "0,1,keydown,", "Keydown UP");
 
 		menu_log("keydown",true);
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.LEFT } );
-		equals( $("#log").html(), "keydown,", "Keydown LEFT (no effect)");
+		equal( $("#log").html(), "keydown,", "Keydown LEFT (no effect)");
 
 		menu_log("keydown",true);
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.RIGHT } );
 
 		setTimeout( function() {
-			equals( $("#log").html(), "0,1,keydown,", "Keydown RIGHT (open submenu)");
+			equal( $("#log").html(), "0,1,keydown,", "Keydown RIGHT (open submenu)");
 		}, 50);
 		setTimeout( menukeyboard2, 50 );
 	}
@@ -414,7 +414,7 @@ asyncTest("handle keyboard navigation on menu with scroll and with submenus", fu
 	function menukeyboard2() {
 		menu_log("keydown",true);
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.LEFT } );
-		equals( $("#log").html(), "1,keydown,", "Keydown LEFT (close submenu)");
+		equal( $("#log").html(), "1,keydown,", "Keydown LEFT (close submenu)");
 
 		//re-open submenu
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.RIGHT } );
@@ -424,31 +424,31 @@ asyncTest("handle keyboard navigation on menu with scroll and with submenus", fu
 	function menukeyboard3() {
 		menu_log("keydown",true);
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_DOWN } );
-		equals( $("#log").html(), "10,keydown,", "Keydown PAGE_DOWN");
+		equal( $("#log").html(), "10,keydown,", "Keydown PAGE_DOWN");
 
 		menu_log("keydown",true);
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_DOWN } );
-		equals( $("#log").html(), "20,keydown,", "Keydown PAGE_DOWN");
+		equal( $("#log").html(), "20,keydown,", "Keydown PAGE_DOWN");
 
 		menu_log("keydown",true);
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_UP } );
-		equals( $("#log").html(), "10,keydown,", "Keydown PAGE_UP");
+		equal( $("#log").html(), "10,keydown,", "Keydown PAGE_UP");
 
 		menu_log("keydown",true);
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_UP } );
-		equals( $("#log").html(), "0,keydown,", "Keydown PAGE_UP");
+		equal( $("#log").html(), "0,keydown,", "Keydown PAGE_UP");
 
 		menu_log("keydown",true);
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.END } );
-		equals( $("#log").html(), "27,keydown,", "Keydown END");
+		equal( $("#log").html(), "27,keydown,", "Keydown END");
 
 		menu_log("keydown",true);
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.HOME } );
-		equals( $("#log").html(), "0,keydown,", "Keydown HOME");
+		equal( $("#log").html(), "0,keydown,", "Keydown HOME");
 
 		menu_log("keydown",true);
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.ESCAPE } );
-		equals( $("#log").html(), "1,keydown,", "Keydown ESCAPE (close submenu)");
+		equal( $("#log").html(), "1,keydown,", "Keydown ESCAPE (close submenu)");
 
 		menu_log("keydown",true);
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
@@ -456,11 +456,11 @@ asyncTest("handle keyboard navigation on menu with scroll and with submenus", fu
 	}
 
 	function menukeyboard4() {
-		equals( $("#log").html(), "0,keydown,", "Keydown ENTER (open submenu)");
+		equal( $("#log").html(), "0,keydown,", "Keydown ENTER (open submenu)");
 
 		menu_log("keydown",true);
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
-		equals( $("#log").html(), "Aberdeen,keydown,", "Keydown ENTER (select item)");
+		equal( $("#log").html(), "Aberdeen,keydown,", "Keydown ENTER (select item)");
 
 		start();
 	}

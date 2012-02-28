@@ -45,36 +45,36 @@ test("destroy", function() {
 
 	var expected = $('<div></div>').dialog(),
 		actual = expected.dialog('destroy');
-	equals(actual, expected, 'destroy is chainable');
+	equal(actual, expected, 'destroy is chainable');
 });
 
 test("enable", function() {
 	var expected = $('<div></div>').dialog(),
 		actual = expected.dialog('enable');
-	equals(actual, expected, 'enable is chainable');
-	
+	equal(actual, expected, 'enable is chainable');
+
 	el = $('<div></div>').dialog({ disabled: true });
 	el.dialog('enable');
-	equals(el.dialog('option', 'disabled'), false, 'enable method sets disabled option to false');
+	equal(el.dialog('option', 'disabled'), false, 'enable method sets disabled option to false');
 	ok(!dlg().hasClass('ui-dialog-disabled'), 'enable method removes ui-dialog-disabled class from ui-dialog element');
 });
 
 test("disable", function() {
 	var expected = $('<div></div>').dialog(),
 		actual = expected.dialog('disable');
-	equals(actual, expected, 'disable is chainable');
-	
+	equal(actual, expected, 'disable is chainable');
+
 	el = $('<div></div>').dialog({ disabled: false });
 	el.dialog('disable');
-	equals(el.dialog('option', 'disabled'), true, 'disable method sets disabled option to true');
+	equal(el.dialog('option', 'disabled'), true, 'disable method sets disabled option to true');
 	ok(dlg().hasClass('ui-dialog-disabled'), 'disable method adds ui-dialog-disabled class to ui-dialog element');
 });
 
 test("close", function() {
 	var expected = $('<div></div>').dialog(),
 		actual = expected.dialog('close');
-	equals(actual, expected, 'close is chainable');
-	
+	equal(actual, expected, 'close is chainable');
+
 	el = $('<div></div>').dialog();
 	ok(dlg().is(':visible') && !dlg().is(':hidden'), 'dialog visible before close method called');
 	el.dialog('close');
@@ -85,22 +85,22 @@ test("isOpen", function() {
 	expect(4);
 
 	el = $('<div></div>').dialog();
-	equals(el.dialog('isOpen'), true, "dialog is open after init");
+	equal(el.dialog('isOpen'), true, "dialog is open after init");
 	el.dialog('close');
-	equals(el.dialog('isOpen'), false, "dialog is closed");
+	equal(el.dialog('isOpen'), false, "dialog is closed");
 	el.remove();
 
 	el = $('<div></div>').dialog({autoOpen: false});
-	equals(el.dialog('isOpen'), false, "dialog is closed after init");
+	equal(el.dialog('isOpen'), false, "dialog is closed after init");
 	el.dialog('open');
-	equals(el.dialog('isOpen'), true, "dialog is open");
+	equal(el.dialog('isOpen'), true, "dialog is open");
 	el.remove();
 });
 
 test("moveToTop", function() {
 	var expected = $('<div></div>').dialog(),
 		actual = expected.dialog('moveToTop');
-	equals(actual, expected, 'moveToTop is chainable');
+	equal(actual, expected, 'moveToTop is chainable');
 
 	var d1 = $('<div></div>').dialog(), dlg1 = d1.parents('.ui-dialog');
 	d1.dialog('close');
@@ -116,7 +116,7 @@ test("moveToTop", function() {
 test("open", function() {
 	var expected = $('<div></div>').dialog(),
 		actual = expected.dialog('open');
-	equals(actual, expected, 'open is chainable');
+	equal(actual, expected, 'open is chainable');
 
 	el = $('<div></div>').dialog({ autoOpen: false });
 	ok(dlg().is(':hidden') && !dlg().is(':visible'), 'dialog hidden before open method called');

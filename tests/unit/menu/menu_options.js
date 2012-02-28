@@ -17,7 +17,7 @@ test( "{ disabled: true }", function() {
 	menu_log("click",true);
 	menu_click(menu,"1");
 	menu_log("afterclick");
-	equals( $("#log").html(), "afterclick,click,", "Click order not valid.");
+	equal( $("#log").html(), "afterclick,click,", "Click order not valid.");
 });
 
 test( "{ disabled: false }", function() {
@@ -32,7 +32,7 @@ test( "{ disabled: false }", function() {
 	menu_log("click",true);
 	menu_click(menu,"1");
 	menu_log("afterclick");
-	equals( $("#log").html(), "afterclick,1,click,", "Click order not valid.");
+	equal( $("#log").html(), "afterclick,1,click,", "Click order not valid.");
 });
 
 })(jQuery);
