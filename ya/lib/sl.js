@@ -87,6 +87,30 @@
 				}
 			};
 			return Cls;
+		}()),
+		"Shadow":(function(){
+			var Cls=function(hostSelector,opts){
+				this.hostJq=$(hostSelector);
+				this.slClsName=opts.slClsName||'';
+			};
+			Cls.prototype.doSolution=function(){
+				var slClsName=this.slClsName,
+					hostJq=this.hostJq;
+				hostJq.addClass('sl-shadow '+slClsName);
+			};
+			return Cls;
+		}()),
+		"Corner":(function(){
+			var Cls=function(hostSelector,opts){
+				this.hostJq=$(hostSelector);
+				this.slClsName=opts.slClsName||'';
+			};
+			Cls.prototype.doSolution=function(){
+				var slClsName=this.slClsName,
+					hostJq=this.hostJq;
+				hostJq.addClass('sl-npx-round-corner '+slClsName);
+			};
+			return Cls;
 		}())
 	});
 	sl.Solution=Solution;

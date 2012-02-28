@@ -1,0 +1,69 @@
+<div id="accordion">
+        	<!--href的值即为右边加载的 页面-->
+            <h3 class="noList"><a href="../merchant/toMerchant.htm" >商户管理</a></h3>
+            <div></div>
+            <h3><a href="#">会员卡管理</a></h3>
+            <div>
+                <ul>
+                    <li><a href="../card/toCardBatch.htm" >开卡取磁</a></li>
+                    <li><a href="../card/toTransfersAmount.htm">卡转账</a></li>
+                    <li><a href="../card/toChangeCard.htm">换卡</a></li>
+                    <li><a href="../card/toTransferCard.htm">卡转让</a></li>
+                    <li><a href="../card/toDelayCard.htm">卡延期</a></li>
+                    <li><a href="../card/toCardStatus.htm">卡状态</a></li>
+                    <li><a href="../card/toResetPassword.htm">重置卡密码</a></li>
+                    <li><a href="../card/toCardActive.htm">卡激活</a></li>
+                    <li><a href="../card/toCardType.htm">修改卡类型</a></li>
+                </ul>
+            </div>
+            <h3><a href="#">券管理</a></h3>
+            <div>
+                <ul>
+                    <li>注券</li>
+                    <li>消券</li>
+                    <li>延期</li>
+                    <li>删除</li>
+                    <li>券规则设置</li>
+                </ul>
+            </div>
+            <h3><a href="#">POS机管理</a></h3>
+            <div>
+            	<ul>
+                    <li ><a href="../terminal/toTerminal.htm">登记</a></li>
+                    <li>关联</li>
+                    <li><a href="../terminal/toSoftVersion.htm">软件版本管理</a></li>
+                    <li><a href="../terminal/toParameter.htm">参数管理</a></li>
+                    <li><a href="../terminal/toSofUpgrade.htm">软件升级</a></li>
+                    <li><a href="../terminal/toParameterUpgrade.htm">参数升级</a></li>
+                </ul>
+            </div>
+            <h3><a href="#">短信管理</a></h3>
+            <div>
+            	<ul>
+                    <li>短信审核</li>
+                    <li>短信费用</li>
+                </ul>
+            </div>
+            <h3><a href="#">调账</a></h3>
+            <div>
+            	<ul>
+                    <li>卡调账</li>
+                    <li>交易调账</li>
+                    <li>充值</li>
+                    <li>注积分</li>
+                    <li>积分清零</li>
+                    <li>调账记录查询</li>
+                </ul>
+            </div>
+            <h3 class="noList"><a href="#">综合查询</a></h3>
+            <div></div>
+            <h3><a href="#">对账平台</a></h3>
+            <div>
+            	<ul>
+                    <li>储值对账</li>
+                    <li>积分对账</li>
+                </ul>
+            </div>
+            <h3><a href="#">产品登记</a></h3>
+            <div></div>
+        </div>

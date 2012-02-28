@@ -1,0 +1,52 @@
+/* 圆角 start 默认为4像素圆角*/
+.sl-npx-round-corner{
+	-moz-border-radius: 4px ! important;
+	-webkit-border-radius: 4px ! important;
+	border-radius: 4px ! important;
+	overflow: hidden;
+	/*behavior: url(../../external/PIE.htc);*/
+}
+/* 圆角 end */
+
+/* 阴影 start */
+.sl-shadow{
+	/* 一定要设置background, 不然 ie 会显示在字体上 */
+	background: #fff;
+	/* modern web browsers */ 
+	-moz-box-shadow:1px 3px 12px #bbb;
+	-webkit-box-shadow:1px 3px 12px #bbb;
+	box-shadow:1px 3px 12px #bbb;
+	
+	
+
+	/* gte=ie8 */
+	filter:"progid:DXImageTransform.Microsoft.Glow(color=#aaaaaa,strength=3) progid:DXImageTransform.Microsoft.Shadow(color=#eeeeee,direction=0,strength=6) progid:DXImageTransform.Microsoft.Shadow(color=#dddddd,direction=90,strength=10) progid:DXImageTransform.Microsoft.Shadow(color=#dddddd,direction=180,strength=6) progid:DXImageTransform.Microsoft.Shadow(color=#eeeeee,direction=270,strength=6)"\0;
+	
+	
+	
+	
+	/* lte=ie7 */
+	*filter: 
+    progid:DXImageTransform.Microsoft.Shadow(color=#eeeeee,direction=0,strength=7)
+    progid:DXImageTransform.Microsoft.Shadow(color=#dddddd,direction=90,strength=10)
+    progid:DXImageTransform.Microsoft.Shadow(color=#dddddd,direction=180,strength=10)
+    progid:DXImageTransform.Microsoft.Shadow(color=#eeeeee,direction=270,strength=7);
+    
+    
+    
+}
+:root .sl-shadow{
+	filter:none\9\0;
+}
+/* 阴影 end */
+
+/* outline start */
+/* for Firefox */
+input[type=submit]::-moz-focus-inner,input[type=button]::-moz-focus-inner{    
+	border : 0px; 
+}
+/* for IE8 */
+input[type=submit]:focus, input[type=button]:focus{      
+	outline : none;  
+}
+/* outline end */

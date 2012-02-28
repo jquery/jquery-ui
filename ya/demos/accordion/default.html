@@ -11,19 +11,45 @@
   <meta name="description" content="" />
   <meta name="author" content="13" />
 
-   <link rel="stylesheet" href="../../lib/base.css" />
+   <link rel="stylesheet" href="../../themes/base.css" />
+	<link rel="stylesheet" href="../../lib/sl.css" />
 	<link rel="stylesheet" href="../../jqui/css/jquery-ui.css" />
+	<link rel="stylesheet" href="../../themes/default/jquery.ui.override.css" />
+	<link rel="stylesheet" href="../../themes/default/jquery.ui.accordion.css" />
+	<style type="text/css">
+		#accordion{
+			position:absolute;
+			top:130px;
+			left:130px;
+			width:180px;
+		}
+	</style>
 	
 	<script src="../../jqui/js/jquery.min.js"></script>
   	<script src="../../jqui/js/jquery-ui.min.js"></script>
+  	
+  	<script src="../../external/underscore-min.js"></script>
+  	<script src="../../external/underscore.string.min.js"></script>
+ 	<script src="../../external/modernizr.js"></script>
+ 	
+	
+  	<script src="../../ya.js"></script>
+  	<script src="../../lib/regx.js"></script>
+  	<script src="../../lib/sl.js"></script>
+  	<script src="../../lib/uihelper.js"></script>
   	
 	<script src="../../ui/jquery.ya.accordion0.js"></script>
 	<script>
 	jQuery(function($) {
 		$( "#accordion" ).accordion0({
+			width:180,
 			//collapsible: true,	//控制面板是否可折叠
 			active:false,	//设置为false开始时不打开面板
-			header:'h3.nav',	//设置header选择符
+			header:'h3',	//设置header选择符
+			advancedTheme:{
+				shadow:false,
+				corner:false
+			},
 			changestart:function(event, ui){
 				var newContentJq=ui.newContent;
 				if(newContentJq.hasClass('nothing')){
@@ -39,59 +65,73 @@
  <div class="demo">
 
 <div id="accordion">
-	<h3 class="nav"><a href="#">Section 1</a></h3>
-	<div class="nothing">
-	</div>
-	<h3 class="nav"><a href="#">Section 2</a></h3>
-	<div>
-		<p>
-		Sed non urna. Donec et ante. Phasellus eu ligula. Vestibulum sit amet
-		purus. Vivamus hendrerit, dolor at aliquet laoreet, mauris turpis porttitor
-		velit, faucibus interdum tellus libero ac justo. Vivamus non quam. In
-		suscipit faucibus urna.
-		</p>
-	</div>
-	<h3 class="nav"><a href="#">Section 3</a></h3>
-	<div>
-		<p>
-		Nam enim risus, molestie et, porta ac, aliquam ac, risus. Quisque lobortis.
-		Phasellus pellentesque purus in massa. Aenean in pede. Phasellus ac libero
-		ac tellus pellentesque semper. Sed ac felis. Sed commodo, magna quis
-		lacinia ornare, quam ante aliquam nisi, eu iaculis leo purus venenatis dui.
-		</p>
-		<ul>
-			<li>List item one</li>
-			<li>List item two</li>
-			<li>List item three</li>
-		</ul>
-	</div>
-	<h3 class="nav"><a href="#">Section 4</a></h3>
-	<div>
-		<p>
-		Cras dictum. Pellentesque habitant morbi tristique senectus et netus
-		et malesuada fames ac turpis egestas. Vestibulum ante ipsum primis in
-		faucibus orci luctus et ultrices posuere cubilia Curae; Aenean lacinia
-		mauris vel est.
-		</p>
-		<p>
-		Suspendisse eu nisl. Nullam ut libero. Integer dignissim consequat lectus.
-		Class aptent taciti sociosqu ad litora torquent per conubia nostra, per
-		inceptos himenaeos.
-		</p>
-	</div>
+	<!--href的值即为右边加载的 页面-->
+    <h3 class="noList"><a href="../merchant/toMerchant.htm" >商户管理</a></h3>
+    <div></div>
+    <h3><a href="#">会员卡管理</a></h3>
+    <div>
+        <ul>
+            <li><a href="../card/toCardBatch.htm" >开卡取磁</a></li>
+            <li><a href="../card/toTransfersAmount.htm">卡转账</a></li>
+            <li><a href="../card/toChangeCard.htm">换卡</a></li>
+            <li><a href="../card/toTransferCard.htm">卡转让</a></li>
+            <li><a href="../card/toDelayCard.htm">卡延期</a></li>
+            <li><a href="../card/toCardStatus.htm">卡状态</a></li>
+            <li><a href="../card/toResetPassword.htm">重置卡密码</a></li>
+            <li><a href="../card/toCardActive.htm">卡激活</a></li>
+            <li><a href="../card/toCardType.htm">修改卡类型</a></li>
+        </ul>
+    </div>
+    <h3><a href="#">券管理</a></h3>
+    <div>
+        <ul>
+            <li>注券</li>
+            <li>消券</li>
+            <li>延期</li>
+            <li>删除</li>
+            <li>券规则设置</li>
+        </ul>
+    </div>
+    <h3><a href="#">POS机管理</a></h3>
+    <div>
+    	<ul>
+            <li ><a href="../terminal/toTerminal.htm">登记</a></li>
+            <li>关联</li>
+            <li><a href="../terminal/toSoftVersion.htm">软件版本管理</a></li>
+            <li><a href="../terminal/toParameter.htm">参数管理</a></li>
+            <li><a href="../terminal/toSofUpgrade.htm">软件升级</a></li>
+            <li><a href="../terminal/toParameterUpgrade.htm">参数升级</a></li>
+        </ul>
+    </div>
+    <h3><a href="#">短信管理</a></h3>
+    <div>
+    	<ul>
+            <li>短信审核</li>
+            <li>短信费用</li>
+        </ul>
+    </div>
+    <h3><a href="#">调账</a></h3>
+    <div>
+    	<ul>
+            <li>卡调账</li>
+            <li>交易调账</li>
+            <li>充值</li>
+            <li>注积分</li>
+            <li>积分清零</li>
+            <li>调账记录查询</li>
+        </ul>
+    </div>
+    <h3 class="noList"><a href="#">综合查询</a></h3>
+    <div></div>
+    <h3><a href="#">对账平台</a></h3>
+    <div>
+    	<ul>
+            <li>储值对账</li>
+            <li>积分对账</li>
+        </ul>
+    </div>
+    <h3><a href="#">产品登记</a></h3>
+    <div></div>
 </div>
-
-</div><!-- End demo -->
-
-<div class="demo-description">
-<p>
-Click headers to expand/collapse content that is broken into logical sections, much like tabs.
-Optionally, toggle sections open/closed on mouseover.
-</p>
-<p>
-The underlying HTML markup is a series of headers (H3 tags) and content divs so the content is
-usable without JavaScript.
-</p>
-</div><!-- End demo-description -->
 </body>
 </html>

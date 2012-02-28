@@ -1,0 +1,54 @@
+/*
+ * jQuery UI Accordion @VERSION
+ *
+ * Copyright 2011, AUTHORS.txt (http://jqueryui.com/about)
+ * Dual licensed under the MIT or GPL Version 2 licenses.
+ * http://jquery.org/license
+ *
+ * http://docs.jquery.com/UI/Accordion#theming
+ */
+/* IE/Win - Fix animation bug - #4615 */
+.ui-accordion { width: 100%; }
+.ui-accordion .ui-accordion-header { 
+	cursor: pointer; 
+	position: relative; 
+	margin-top: -1px; 
+	zoom: 1; 
+	
+	background: -webkit-gradient(linear, left top, left bottom, from(#f1f1f1), to(#ededed));
+	background: -moz-linear-gradient(top,  #f1f1f1,  #ededed);
+	background: -o-linear-gradient(top, #f1f1f1, #ededed);
+	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#f1f1f1', endColorstr='#ededed');
+	border:1px solid #d2d2d2;
+}
+.ui-accordion .ui-accordion-li-fix { display: inline; }
+.ui-accordion .ui-accordion-header-active { border-bottom: 0 !important; }
+.ui-accordion .ui-accordion-header a { 
+	display: block; 
+	font-size: 1em; 
+	padding: .5em .5em .5em .7em; 
+	color:#3c4a5c;
+	font-weight: bold;
+}
+.ui-accordion-icons .ui-accordion-header a { padding-left: 2.2em; }
+.ui-accordion .ui-accordion-header .ui-icon { position: absolute; left: .5em; top: 50%; margin-top: -8px; }
+.ui-accordion .ui-accordion-content { 
+	padding: 0px; 
+	border: 0px; 
+	margin-top: 0px; 
+	position: relative; 
+	top: 0px; 
+	margin-bottom: 0px; 
+	overflow: auto; 
+	display: none; 
+	zoom: 1; 
+	background: #e9edf2;
+}
+.ui-accordion .ui-accordion-content-active { display: block; }
+
+.ui-accordion-header .ui-icon-triangle-1-e{
+	background: url(images/ui-icon-triangle-1-e.png) no-repeat center center;
+}
+.ui-accordion-header .ui-icon-triangle-1-s{
+	background: url(images/ui-icon-triangle-1-s.png) no-repeat center center;
+}

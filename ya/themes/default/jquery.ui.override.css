@@ -1,0 +1,80 @@
+/* Corner radius */
+.ui-corner-all, .ui-corner-top, .ui-corner-left, .ui-corner-tl { -moz-border-radius-topleft: 0px/*{cornerRadius}*/; -webkit-border-top-left-radius: 0px/*{cornerRadius}*/; -khtml-border-top-left-radius: 0px/*{cornerRadius}*/; border-top-left-radius: 0px/*{cornerRadius}*/; }
+.ui-corner-all, .ui-corner-top, .ui-corner-right, .ui-corner-tr { -moz-border-radius-topright: 0px/*{cornerRadius}*/; -webkit-border-top-right-radius: 0px/*{cornerRadius}*/; -khtml-border-top-right-radius: 0px/*{cornerRadius}*/; border-top-right-radius: 0px/*{cornerRadius}*/; }
+.ui-corner-all, .ui-corner-bottom, .ui-corner-left, .ui-corner-bl { -moz-border-radius-bottomleft: 0px/*{cornerRadius}*/; -webkit-border-bottom-left-radius: 0px/*{cornerRadius}*/; -khtml-border-bottom-left-radius: 0px/*{cornerRadius}*/; border-bottom-left-radius: 0px/*{cornerRadius}*/; }
+.ui-corner-all, .ui-corner-bottom, .ui-corner-right, .ui-corner-br { -moz-border-radius-bottomright: 0px/*{cornerRadius}*/; -webkit-border-bottom-right-radius: 0px/*{cornerRadius}*/; -khtml-border-bottom-right-radius: 0px/*{cornerRadius}*/; border-bottom-right-radius: 0px/*{cornerRadius}*/; }
+/* states */
+.ui-state-hover, 
+.ui-widget-content .ui-state-hover, 
+.ui-widget-header .ui-state-hover, 
+.ui-state-focus, 
+.ui-widget-content .ui-state-focus, 
+.ui-widget-header .ui-state-focus { 
+	border: none; 
+	background: none; 
+	font-weight: normal; 
+	color: #000000; 
+}
+.ui-state-default, 
+.ui-widget-content .ui-state-default, 
+.ui-widget-header .ui-state-default {
+    color: #000000;
+    font-weight: normal;
+    background: none;
+    border: none;
+}
+.ui-state-active, 
+.ui-widget-content .ui-state-active, 
+.ui-widget-header .ui-state-active {
+    background: none;
+    border: none;
+    color: #000000;
+    font-weight: normal;
+}
+/* buttons */
+.ui-button-text-only .ui-button-text {
+    line-height: 28px;
+    height:28px;
+    padding: 0px 20px;
+}
+.ui-button .ui-button-text{
+	background: -webkit-gradient(linear, left top, left bottom, from(#ffffff), to(#efefef));
+	background: -moz-linear-gradient(top,  #ffffff,  #efefef);
+	background: -o-linear-gradient(top, #ffffff, #efefef);
+	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#efefef');
+	border:1px solid #d7d7d7;
+}
+.ui-state-hover .ui-button-text{
+	background: -webkit-gradient(linear, left top, left bottom, from(#ffffff), to(#f5f5f5));
+	background: -moz-linear-gradient(top,  #ffffff,  #f5f5f5);
+	background: -o-linear-gradient(top, #ffffff, #f5f5f5);
+	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#f5f5f5');
+	border:1px solid #a8e4a3;
+}
+/* icons */
+
+.ui-widget-content .ui-icon-closethick{
+	background: url(images/ui-icon-close.png) no-repeat 3px 3px;
+}
+.ui-state-hover .ui-icon-closethick{
+	background: url(images/ui-icon-close.png) no-repeat 3px 3px;
+}
+/* widget */
+.ui-widget-shadow{   
+    border-radius: 0px;
+    margin: 0px;
+    opacity: 1;
+    padding: 0px;
+}
+.ui-widget-header{
+	background: -webkit-gradient(linear, left top, left bottom, from(#abcde8), to(#97bddd));
+	background: -moz-linear-gradient(top,  #abcde8,  #97bddd);
+	background: -o-linear-gradient(top, #abcde8, #97bddd);
+	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#abcde8', endColorstr='#97bddd');
+	border:none;
+	border-bottom: 1px solid #6e93b5;
+}
+.ui-widget-content{
+	border: 1px solid #9d9fa2;
+	background: #ffffff;
+}
