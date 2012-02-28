@@ -66,7 +66,8 @@
 			success:function(data){
 				var readyArr=formatData(data);
 				$( "#tags" ).autocomplete0({
-					source: function( request, response ) {
+					"displayField":"label",
+					"source": function( request, response ) {
 						var fArr=[],
 							term=request.term;
 						for(var i=0,item;item=readyArr[i++];){
@@ -78,6 +79,10 @@
 							}
 						}
 						response(fArr);
+					},
+					select:function(ui,data){
+						alert(data.item.value);
+						return true;
 					}
 				});
 			}
