@@ -60,8 +60,8 @@ $.each([
 		equals( element.find("option:selected").val(), selected.next("option").val() , "after keydown original select state" );
 		equals( button.text(), selected.next("option").text(), "after keydown button text" );
 
-		button.simulate( "click" );
-		menu.find("a").last().simulate( "mouseover" ).trigger( "click" );
+		button.simulate( "click", { clientX: 1, clientY: 1 } );
+		menu.find("a").last().simulate( "mouseover", { clientX: 1, clientY: 1 } ).trigger( "click" );
 		equals( menu.attr("aria-activedescendant"), links.eq(element[0].selectedIndex).attr("id"), "after click menu aria-activedescendant" );
 		equals( links.eq(element[0].selectedIndex).attr("aria-selected"), "true", "after click selected menu link aria-selected" );
 		equals( element.find("option:selected").val(), element.find("option").last().val(), "after click original select state" );
