@@ -103,8 +103,10 @@
 					hostJq=this.hostJq;
 				hostJq.addClass('sl-shadow '+slClsName);
 				if(type=="pie"&&!hostJq.data('pied')&&window.PIE){
-					hostJq.get(0).style.filter='';
-					PIE.attach(hostJq.get(0));
+					hostJq.each(function(){
+						this.style.filter='';
+						PIE.attach(this);
+					});
 					hostJq.data('pied',false);
 				}
 			};
@@ -125,8 +127,10 @@
 					hostJq=this.hostJq;
 				hostJq.addClass('sl-npx-round-corner '+slClsName);
 				if(type=="pie"&&!hostJq.data('pied')&&window.PIE){
-					hostJq.get(0).style.filter='';
-					PIE.attach(hostJq.get(0));
+					hostJq.each(function(){
+						this.style.filter='';
+						PIE.attach(this);
+					});
 					hostJq.data('pied',false);
 				}
 			};

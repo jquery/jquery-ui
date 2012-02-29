@@ -31,6 +31,18 @@
     color: #000000;
     font-weight: normal;
 }
+.ui-state-default a, 
+.ui-state-default a:link, 
+.ui-state-default a:visited {
+    color: #000000;
+    text-decoration: none;
+}
+.ui-state-active a, 
+.ui-state-active a:link, 
+.ui-state-active a:visited {
+    color: #000000;
+    text-decoration: none;
+}
 /* buttons */
 .ui-button-text-only .ui-button-text {
     line-height: 28px;

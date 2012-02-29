@@ -10,18 +10,35 @@
 	  <title>default</title>
 	  <meta name="description" content="" />
 	  <meta name="author" content="13" />
-	   <link rel="stylesheet" href="../../lib/base.css" />
+	   <link rel="stylesheet" href="../../themes/base.css" />
+	   <link rel="stylesheet" href="../../lib/sl.css" />
+	<link rel="stylesheet" href="../../jqui/css/jquery-ui.css" />
+	<link rel="stylesheet" href="../../themes/default/jquery.ui.override.css" />
+	<link rel="stylesheet" href="../../themes/default/jquery.ui.tabs.css" />
+	
 	   <style type="text/css">
-	   		.ui-tabs .ui-icon-close { 
+	   		#tabs{
 	   			position:absolute;
-	   			right:0px;
-	   			top:0px;
+	   			top:130px;
+	   			left:130px;
+	   			width:600px;
 	   		}
 	   </style>
-	<link rel="stylesheet" href="../../jqui/css/jquery-ui.css" />
 	
 	<script src="../../jqui/js/jquery.min.js"></script>
   	<script src="../../jqui/js/jquery-ui.min.js"></script>
+  	
+  	<script src="../../external/underscore-min.js"></script>
+  	<script src="../../external/underscore.string.min.js"></script>
+ 	<script src="../../external/modernizr.js"></script>
+ 	<!--[if lt IE 10]>
+ 		<script src="../../external/PIE.js"></script>
+ 	<![endif]-->
+	
+  	<script src="../../ya.js"></script>
+  	<script src="../../lib/regx.js"></script>
+  	<script src="../../lib/sl.js"></script>
+  	<script src="../../lib/uihelper.js"></script>  	
   	
 	<script src="../../ui/jquery.ya.tabs0.js"></script>
 	<script>
@@ -38,9 +55,10 @@
 
 <div id="tabs">
 	<ul>
-		<li><a href="#tabs-1">Nunc tincidunt</a><span class='ui-icon ui-icon-close'>Remove Tab</span></li>
-		<li><a href="#tabs-2">Proin dolor</a><span class='ui-icon ui-icon-close'>Remove Tab</span></li>
-		<li><a href="#tabs-3">Aenean lacinia</a><span class='ui-icon ui-icon-close'>Remove Tab</span></li>
+		<li><a href="#tabs-1">基本信息</a><span class='ui-icon ui-icon-close'>Remove Tab</span></li>
+		<li><a href="#tabs-2">短信</a><span class='ui-icon ui-icon-close'>Remove Tab</span></li>
+		<li><a href="#tabs-3">规则</a><span class='ui-icon ui-icon-close'>Remove Tab</span></li>
+		<li><a href="#tabs-4">卡信息</a><span class='ui-icon ui-icon-close'>Remove Tab</span></li>
 	</ul>
 	<div id="tabs-1">
 		<p>Proin elit arcu, rutrum commodo, vehicula tempus, commodo a, risus. Curabitur nec arcu. Donec sollicitudin mi sit amet mauris. Nam elementum quam ullamcorper ante. Etiam aliquet massa et lorem. Mauris dapibus lacus auctor risus. Aenean tempor ullamcorper leo. Vivamus sed magna quis ligula eleifend adipiscing. Duis orci. Aliquam sodales tortor vitae ipsum. Aliquam nulla. Duis aliquam molestie erat. Ut et mauris vel pede varius sollicitudin. Sed ut dolor nec orci tincidunt interdum. Phasellus ipsum. Nunc tristique tempus lectus.</p>
@@ -51,6 +69,8 @@
 	<div id="tabs-3">
 		<p>Mauris eleifend est et turpis. Duis id erat. Suspendisse potenti. Aliquam vulputate, pede vel vehicula accumsan, mi neque rutrum erat, eu congue orci lorem eget lorem. Vestibulum non ante. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Fusce sodales. Quisque eu urna vel enim commodo pellentesque. Praesent eu risus hendrerit ligula tempus pretium. Curabitur lorem enim, pretium nec, feugiat nec, luctus a, lacus.</p>
 		<p>Duis cursus. Maecenas ligula eros, blandit nec, pharetra at, semper at, magna. Nullam ac lacus. Nulla facilisi. Praesent viverra justo vitae neque. Praesent blandit adipiscing velit. Suspendisse potenti. Donec mattis, pede vel pharetra blandit, magna ligula faucibus eros, id euismod lacus dolor eget odio. Nam scelerisque. Donec non libero sed nulla mattis commodo. Ut sagittis. Donec nisi lectus, feugiat porttitor, tempor ac, tempor vitae, pede. Aenean vehicula velit eu tellus interdum rutrum. Maecenas commodo. Pellentesque nec elit. Fusce in lacus. Vivamus a libero vitae lectus hendrerit hendrerit.</p>
+	</div>
+	<div id="tabs-4">
 	</div>
 </div>
 
