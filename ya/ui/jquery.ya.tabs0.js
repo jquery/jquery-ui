@@ -11,8 +11,8 @@
 		options: {
 			closable:false,
 			advancedTheme:{	//设置widget的高级主题效果
-				shadow:true,	//设置背景阴影，默认存在
-				corner:true
+				shadow:false,	//设置背景阴影，默认不存在
+				corner:false
 			}
 		},
 		_create:function(){
