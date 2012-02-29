@@ -22,6 +22,9 @@
   	<script src="../../external/underscore-min.js"></script>
   	<script src="../../external/underscore.string.min.js"></script>
  	<script src="../../external/modernizr.js"></script>
+ 	<!--[if lt IE 10]>
+	 	<script src="../../external/PIE.js"></script>
+	 <![endif]-->
  	<script src="../../external/jquery.bgiframe-2.1.2.js"></script>
  	
 	
@@ -38,7 +41,7 @@
 			"width":545,	//宽高建议用css控制
 			"height":280,
 			resizable:false,
-			draggable:false,
+			draggable:true,
 			buttons: [{
 				"text":'确定',
 				"class":"ui-button-submit",

@@ -91,24 +91,44 @@
 		"Shadow":(function(){
 			var Cls=function(hostSelector,opts){
 				this.hostJq=$(hostSelector);
-				this.slClsName=opts.slClsName||'';
+				this.opts=_.extend({
+					slClsName:'',
+					type:'pie'	//pie or filter
+				},opts||{});
 			};
 			Cls.prototype.doSolution=function(){
-				var slClsName=this.slClsName,
+				var opts=this.opts,
+					slClsName=opts.slClsName,
+					type=opts.type,
 					hostJq=this.hostJq;
 				hostJq.addClass('sl-shadow '+slClsName);
+				if(type=="pie"&&!hostJq.data('pied')&&window.PIE){
+					hostJq.get(0).style.filter='';
+					PIE.attach(hostJq.get(0));
+					hostJq.data('pied',false);
+				}
 			};
 			return Cls;
 		}()),
 		"Corner":(function(){
 			var Cls=function(hostSelector,opts){
 				this.hostJq=$(hostSelector);
-				this.slClsName=opts.slClsName||'';
+				this.opts=_.extend({
+					slClsName:'',
+					type:'pie'	//pie or filter
+				},opts||{});
 			};
 			Cls.prototype.doSolution=function(){
-				var slClsName=this.slClsName,
+				var opts=this.opts,
+					slClsName=opts.slClsName,
+					type=opts.type,
 					hostJq=this.hostJq;
 				hostJq.addClass('sl-npx-round-corner '+slClsName);
+				if(type=="pie"&&!hostJq.data('pied')&&window.PIE){
+					hostJq.get(0).style.filter='';
+					PIE.attach(hostJq.get(0));
+					hostJq.data('pied',false);
+				}
 			};
 			return Cls;
 		}())

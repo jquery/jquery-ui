@@ -1,3 +1,6 @@
+/**
+ * 命名不规范，待整改
+ */
 .ui-grid {position: relative; overflow: hidden;}
 
 .ui-grid.hideBody {height: 26px !important;border-bottom: 1px solid #ccc;}
@@ -139,6 +142,7 @@
 	border-left: 0px;
 	border-right: 0px;
 	overflow: hidden;
+	border-bottom:2px solid #dce3eb;
 }
 
 .ui-grid div.cDrag {
@@ -199,6 +203,7 @@
 	background: #fff;
 	overflow: auto;
 	position: relative;
+	border-bottom:2px solid #dce3eb;
 }
 
 .ui-grid div.bDiv table {
@@ -248,7 +253,6 @@
 	/* common cell properties*/ {
 	text-align: left;
 	border:0px;
-	border-right: 1px solid #BDCBE8;
 	overflow: hidden;
 	vertical-align: top !important;
 	padding-left: 0;
@@ -271,6 +275,9 @@
 	cursor: default;
 	white-space: nowrap;
 	overflow: hidden;
+}
+.ui-grid div.hDiv th{
+	background: #f3f6f9;
 }
 
 div.colCopy {
@@ -328,7 +335,18 @@ div.colCopy {
 	vertical-align: top;
 	white-space: nowrap;
 }
-
+.ui-grid div.bDiv .oddRow td{
+	background: #ffffff;
+} 
+.ui-grid div.bDiv .evenRow td{
+	background: #f7f7f7;
+}
+.ui-grid div.bDiv .ui-state-highlight{
+	border:none;
+}
+.ui-grid div.bDiv .ui-state-highlight td{
+	background: #f2f7d5;
+}
 .ui-grid span.cdropleft {
 	display: block;
 	background: url(images/grid/prev.png) no-repeat -4px center;
@@ -427,16 +445,15 @@ div.colCopy {
 	border-left: 0px;
 	border-right: 0px;
 	overflow: hidden;
-	height: 32px;
+	height: 40px;
 	white-space: nowrap;
 	position: relative;
 }
 
 .ui-grid div.pDiv div.pDiv2 {
-	margin :3px 3px 3px -2px;
+	margin-top :10px;
 	text-align:center;
-	float: left;
-	width: 1024px;
+	float: right;
 	line-height: 26px;
 }
 

@@ -7,6 +7,22 @@
               {"address":"CZ88.NET ","city":"泰国","id":"5"},
               {"address":"CZ88.NET ","city":"日本","id":"6"},
               {"address":"电信","city":"广东省","id":"7"},
-              {"address":"CZ88.NET ","city":"日本","id":"8"}
+              {"address":"CZ88.NET ","city":"日本","id":"8"},
+              {"address":"CZ88.NET ","city":"IANA保留地址","id":"9"},
+              {"address":"CZ88.NET ","city":"澳大利亚","id":"10"},
+              {"address":"电信","city":"福建省","id":"12"},
+              {"address":"CZ88.NET ","city":"澳大利亚","id":"13"},
+              {"address":"CZ88.NET ","city":"泰国","id":"14"},
+              {"address":"CZ88.NET ","city":"日本","id":"15"},
+              {"address":"电信","city":"广东省","id":"16"},
+              {"address":"CZ88.NET ","city":"日本","id":"17"},
+              {"address":"CZ88.NET ","city":"IANA保留地址","id":"18"},
+              {"address":"CZ88.NET ","city":"澳大利亚","id":"19"},
+              {"address":"电信","city":"福建省","id":"20"},
+              {"address":"CZ88.NET ","city":"澳大利亚","id":"21"},
+              {"address":"CZ88.NET ","city":"泰国","id":"22"},
+              {"address":"CZ88.NET ","city":"日本","id":"23"},
+              {"address":"电信","city":"广东省","id":"24"},
+              {"address":"CZ88.NET ","city":"日本","id":"25"}
           ]
       }

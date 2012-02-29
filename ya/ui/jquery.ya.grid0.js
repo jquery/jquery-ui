@@ -1,7 +1,11 @@
 /**
  * @author 13
  */
-(function($) {
+(function($,root) {
+	var ya=root.ya,
+		sl=ya.sl,
+		uihelper=ya.uihelper,
+		Solution=sl.Solution;
     $.grid0={
         lang:{
             loadingMsg:'正在加载数据，请稍候...',
@@ -13,6 +17,10 @@
     };
     $.widget('ya.grid0', {
         options:/** @lends grid0#*/{
+        	advancedTheme:{	//设置widget的高级主题效果
+				shadow:true,	//设置背景阴影，默认存在
+				corner:true
+			},
             //外观
             /**
              * 表格高度，单位为px。
@@ -349,7 +357,17 @@
                 })
                 .empty()
                 .append('<tbody></tbody>');
-            el.wrap('<div class="ui-grid ui-widget ui-widget-content"><div class="bDiv"></div></div>').closest('.ui-grid').width(options.width).height(options.height);
+            var uiGridJq=el.wrap('<div class="ui-grid ui-widget ui-widget-content"><div class="bDiv"></div></div>').closest('.ui-grid');
+            	uiGridJq.width(options.width).height(options.height);
+            //高级主题化
+            var advancedTheme=options.advancedTheme;
+            if(advancedTheme){
+				for(var n in advancedTheme){
+					if(advancedTheme[n]){
+						uihelper.advancedThemeH(self,n,uiGridJq);
+					}		
+				}
+			}
             var colModel=options.colModel;
             if(!$.isArray(colModel)){
                 return; //如果colModel没设置或值不对，什么也不做
@@ -1059,4 +1077,4 @@
             return result;
         }
     });
-})(jQuery);
+})(jQuery,this);

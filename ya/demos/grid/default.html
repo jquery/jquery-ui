@@ -12,19 +12,42 @@
   <meta name="author" content="13" />
 
   <link rel="stylesheet" href="../../themes/base.css" />
+	<link rel="stylesheet" href="../../lib/sl.css" />
 	<link rel="stylesheet" href="../../jqui/css/jquery-ui.css" />
+	<link rel="stylesheet" href="../../themes/default/jquery.ui.override.css" />
+	
 	<link rel="stylesheet" href="../../themes/default/jquery.ui.grid.css" />
 	
 	<style type="text/css">
+		.ui-grid{
+			top:130px;
+			left:130px;
+		}
 	</style>
 	
 	<script src="../../jqui/js/jquery.min.js"></script>
   	<script src="../../jqui/js/jquery-ui.min.js"></script>
+  	
+  	<script src="../../external/underscore-min.js"></script>
+  	<script src="../../external/underscore.string.min.js"></script>
+ 	<script src="../../external/modernizr.js"></script>
+ 	<!--[if lt IE 10]>
+ 		<script src="../../external/PIE.js"></script>
+ 	<![endif]-->
+	
+  	<script src="../../ya.js"></script>
+  	<script src="../../lib/regx.js"></script>
+  	<script src="../../lib/sl.js"></script>
+  	<script src="../../lib/uihelper.js"></script>  	
   	  	
 	<script src="../../ui/jquery.ya.grid0.js"></script>
 	<script type="text/javascript">
 		jQuery(function($){
 			$('#grid').grid0({
+				advancedTheme:{
+					shadow:true,
+					corner:false
+				},
 				width:800,
                 dataSource : 'data.json',
                 ajaxParams:{	//附加ajax请求参数，可通过$('#grid').grid0('option','ajaxParams',{'keyword':14})即时更改
@@ -33,8 +56,8 @@
                 colModel : [ {header : 'ID', name : 'id', width : 100, align : 'center',renderer:function(v,record,rowIndex){	//record为对应行记录
                 	return v;
                 }}, 
-                             {header : '地区', name : 'city', width : 120, align : 'left'}, 
-                             {header : '地址', name : 'address', align : 'left', width : 'autoExpand'} ]
+                 {header : '地区', name : 'city', width : 120, align : 'left'}, 
+                 {header : '地址', name : 'address', align : 'left', width : 'autoExpand'} ]
             });
 		});
 	</script>
