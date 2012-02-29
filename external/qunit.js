@@ -1,5 +1,5 @@
 /**
- * QUnit v1.3.0 - A JavaScript Unit Testing Framework
+ * QUnit v1.4.0pre - A JavaScript Unit Testing Framework
  *
  * http://docs.jquery.com/QUnit
  *
@@ -579,15 +579,15 @@ extend(QUnit, {
 	/**
 	 * Resets the test setup. Useful for tests that modify the DOM.
 	 *
-	 * If jQuery is available, uses jQuery's replaceWith(), otherwise use replaceChild
+	 * If jQuery is available, uses jQuery's html(), otherwise just innerHTML.
 	 */
 	reset: function() {
-		var main = id( 'qunit-fixture' );
-		if ( main ) {
-			if ( window.jQuery ) {
-				jQuery( main ).replaceWith( config.fixture.cloneNode(true) );
-			} else {
-				main.parentNode.replaceChild(config.fixture.cloneNode(true), main);
+		if ( window.jQuery ) {
+			jQuery( "#qunit-fixture" ).html( config.fixture );
+		} else {
+			var main = id( 'qunit-fixture' );
+			if ( main ) {
+				main.innerHTML = config.fixture;
 			}
 		}
 	},
@@ -798,7 +798,7 @@ QUnit.load = function() {
 
 	var main = id('qunit-fixture');
 	if ( main ) {
-		config.fixture = main.cloneNode(true);
+		config.fixture = main.innerHTML;
 	}
 
 	if (config.autostart) {
