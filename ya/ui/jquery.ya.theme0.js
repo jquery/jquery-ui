@@ -159,6 +159,7 @@
 				height:wrapperJq.outerHeight(),
 				"z-index":10000
 			}).addClass('ui-state-disabled').show();
+			self._trigger( "disable", null);
 		}
 		
 	});
