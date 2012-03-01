@@ -154,7 +154,7 @@
 						clearInterval(tid);
 						tid=setInterval(function(){
 							me.reSetIframe(frame);
-						},600);
+						},300);
 					});
 				},
 				reSetIframe:function(frame){
