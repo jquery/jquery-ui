@@ -82,7 +82,7 @@ test( "custom selector expression", function() {
 });
 
 test( "jQuery usage", function() {
-	expect( 15 );
+	expect( 16 );
 
 	var shouldCreate = false;
 
@@ -140,6 +140,9 @@ test( "jQuery usage", function() {
 	ret = elem.testWidget( "jQueryObject" );
 	equal( ret[ 0 ], document.body, "returned jQuery object" );
 	equal( ret.end(), elem, "stack preserved" );
+
+	elem.testWidget( "destroy" );
+	equal( elem.data( "ui-testWidget" ), null );
 });
 
 test( "direct usage", function() {

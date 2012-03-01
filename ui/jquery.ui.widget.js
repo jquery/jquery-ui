@@ -163,9 +163,7 @@ $.widget.bridge = function( name, object ) {
 
 		if ( isMethodCall ) {
 			this.each(function() {
-				// 1.9 BC for #7810
-				// TODO remove fallback to name
-				var instance = $.data( this, fullName ) || $.data( this, name );
+				var instance = $.data( this, fullName );
 				if ( !instance ) {
 					return $.error( "cannot call methods on " + name + " prior to initialization; " +
 						"attempted to call method '" + options + "'" );
@@ -183,9 +181,7 @@ $.widget.bridge = function( name, object ) {
 			});
 		} else {
 			this.each(function() {
-				// 1.9 BC for #7810
-				// TODO remove fallback to name
-				var instance = $.data( this, fullName ) || $.data( this, name );
+				var instance = $.data( this, fullName );
 				if ( instance ) {
 					instance.option( options || {} )._init();
 				} else {
@@ -252,7 +248,7 @@ $.Widget.prototype = {
 		// all event bindings should go through this._bind()
 		this.element
 			.unbind( "." + this.widgetName )
-			.removeData( this.widgetName );
+			.removeData( this.widgetFullName );
 		this.widget()
 			.unbind( "." + this.widgetName )
 			.removeAttr( "aria-disabled" )
