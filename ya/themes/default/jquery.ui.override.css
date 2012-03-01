@@ -31,6 +31,14 @@
     color: #000000;
     font-weight: normal;
 }
+.ui-state-disabled, 
+.ui-widget-content .ui-state-disabled, 
+.ui-widget-header .ui-state-disabled { 
+	opacity: .35; 
+	filter:Alpha(Opacity=35); 
+	background: #f7f7f7; 
+}
+
 .ui-state-default a, 
 .ui-state-default a:link, 
 .ui-state-default a:visited {
