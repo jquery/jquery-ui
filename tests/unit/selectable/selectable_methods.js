@@ -44,7 +44,7 @@ test("destroy", function() {
 
 	var expected = $('<div></div>').selectable(),
 		actual = expected.selectable('destroy');
-	equals(actual, expected, 'destroy is chainable');
+	equal(actual, expected, 'destroy is chainable');
 });
 
 test("enable", function() {
@@ -57,15 +57,15 @@ test("enable", function() {
 		start: function() { fired = true; }
 	});
 	el.simulate("drag", 20, 20);
-	equals(fired, false, "start fired");
+	equal(fired, false, "start fired");
 	el.selectable("enable");
 	el.simulate("drag", 20, 20);
-	equals(fired, true, "start fired");
+	equal(fired, true, "start fired");
 	el.selectable("destroy");
-	
+
 	var expected = $('<div></div>').selectable(),
 		actual = expected.selectable('enable');
-	equals(actual, expected, 'enable is chainable');
+	equal(actual, expected, 'enable is chainable');
 });
 
 test("disable", function() {
@@ -78,16 +78,16 @@ test("disable", function() {
 		start: function() { fired = true; }
 	});
 	el.simulate("drag", 20, 20);
-	equals(fired, true, "start fired");
+	equal(fired, true, "start fired");
 	el.selectable("disable");
 	fired = false;
 	el.simulate("drag", 20, 20);
-	equals(fired, false, "start fired");
+	equal(fired, false, "start fired");
 	el.selectable("destroy");
-	
+
 	var expected = $('<div></div>').selectable(),
 		actual = expected.selectable('disable');
-	equals(actual, expected, 'disable is chainable');
+	equal(actual, expected, 'disable is chainable');
 });
 
 })(jQuery);

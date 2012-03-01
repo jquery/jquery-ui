@@ -22,17 +22,17 @@ test( "enable/disable", function() {
 	menu_log("click");
 	menu_click(menu,"1");
 	menu_log("afterclick");
-	equals( $("#log").html(), "afterclick,1,click,afterclick,click,", "Click order not valid.");
+	equal( $("#log").html(), "afterclick,1,click,afterclick,click,", "Click order not valid.");
 });
 
 test( "refresh", function() {
 	expect( 3 );
 	var menu = $( "#menu1" ).menu();
-	equals(menu.find(".ui-menu-item").length,5,"Incorrect number of menu items");
+	equal(menu.find(".ui-menu-item").length,5,"Incorrect number of menu items");
 	menu.append("<li><a href='#'>test item</a></li>").menu("refresh");
-	equals(menu.find(".ui-menu-item").length,6,"Incorrect number of menu items");
+	equal(menu.find(".ui-menu-item").length,6,"Incorrect number of menu items");
 	menu.find(".ui-menu-item:last").remove().end().menu("refresh");
-	equals(menu.find(".ui-menu-item").length,5,"Incorrect number of menu items");
+	equal(menu.find(".ui-menu-item").length,5,"Incorrect number of menu items");
 });
 
 test("destroy", function() {
