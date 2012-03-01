@@ -105,7 +105,9 @@ $.widget = function( name, base, prototype ) {
 		constructor: constructor,
 		namespace: namespace,
 		widgetName: name,
-		widgetBaseClass: fullName
+		// TODO remove widgetBaseClass, see #8155
+		widgetBaseClass: fullName,
+		widgetFullName: fullName
 	});
 
 	// If this widget is being redefined then we need to find all widgets that
@@ -148,7 +150,7 @@ $.widget.extend = function( target ) {
 };
 
 $.widget.bridge = function( name, object ) {
-	var fullName = object.prototype.widgetBaseClass;
+	var fullName = object.prototype.widgetFullName;
 	$.fn[ name ] = function( options ) {
 		var isMethodCall = typeof options === "string",
 			args = slice.call( arguments, 1 ),
@@ -225,7 +227,7 @@ $.Widget.prototype = {
 			// 1.9 BC for #7810
 			// TODO remove dual storage
 			$.data( element, this.widgetName, this );
-			$.data( element, this.widgetBaseClass, this );
+			$.data( element, this.widgetFullName, this );
 			this._bind({ remove: "destroy" });
 			this.document = $( element.style ?
 				// element within the document
@@ -255,7 +257,7 @@ $.Widget.prototype = {
 			.unbind( "." + this.widgetName )
 			.removeAttr( "aria-disabled" )
 			.removeClass(
-				this.widgetBaseClass + "-disabled " +
+				this.widgetFullName + "-disabled " +
 				"ui-state-disabled" );
 
 		// clean up events and states
@@ -322,7 +324,7 @@ $.Widget.prototype = {
 
 		if ( key === "disabled" ) {
 			this.widget()
-				.toggleClass( this.widgetBaseClass + "-disabled ui-state-disabled", !!value )
+				.toggleClass( this.widgetFullName + "-disabled ui-state-disabled", !!value )
 				.attr( "aria-disabled", value );
 			this.hoverable.removeClass( "ui-state-hover" );
 			this.focusable.removeClass( "ui-state-focus" );
