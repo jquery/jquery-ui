@@ -8,6 +8,9 @@ commonWidgetTests( "menu", {
 		},
 
 		// callbacks
-		create: null
+		blur: null,
+		create: null,
+		focus: null,
+		select: null
 	}
 });

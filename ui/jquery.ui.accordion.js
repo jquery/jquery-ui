@@ -42,7 +42,6 @@ $.widget( "ui.accordion", {
 			.addClass( "ui-accordion-header ui-helper-reset ui-state-default ui-corner-all" );
 		this._hoverable( this.headers );
 		this._focusable( this.headers );
-		this.headers.find( ":first-child" ).addClass( "ui-accordion-heading" );
 
 		this.headers.next()
 			.addClass( "ui-accordion-content ui-helper-reset ui-widget-content ui-corner-bottom" );
@@ -95,11 +94,6 @@ $.widget( "ui.accordion", {
 			});
 		}
 
-		// only need links in tab order for Safari
-		if ( !$.browser.safari ) {
-			this.headers.find( "a" ).attr( "tabIndex", -1 );
-		}
-
 		this._setupEvents( options.event );
 	},
 
@@ -146,9 +140,6 @@ $.widget( "ui.accordion", {
 			.removeAttr( "tabIndex" )
 			.find( "a" )
 				.removeAttr( "tabIndex" )
-			.end()
-			.find( ".ui-accordion-heading" )
-				.removeClass( "ui-accordion-heading" );
 		this._destroyIcons();
 
 		// clean up content panels
@@ -235,6 +226,8 @@ $.widget( "ui.accordion", {
 			parent = this.element.parent(),
 			maxHeight,
 			overflow;
+
+		this.element.css( "height", this.originalHeight );
 
 		if ( heightStyle === "fill" ) {
 			// IE 6 treats height like minHeight, so we need to turn off overflow
@@ -347,17 +340,23 @@ $.widget( "ui.accordion", {
 		// switch classes
 		active
 			.removeClass( "ui-accordion-header-active ui-state-active ui-corner-top" )
-			.addClass( "ui-corner-all" )
-			.children( ".ui-accordion-header-icon" )
+			.addClass( "ui-corner-all" );
+		if ( options.icons ) {
+			active.children( ".ui-accordion-header-icon" )
 				.removeClass( options.icons.activeHeader )
 				.addClass( options.icons.header );
+		}
+
 		if ( !clickedIsActive ) {
 			clicked
 				.removeClass( "ui-corner-all" )
-				.addClass( "ui-accordion-header-active ui-state-active ui-corner-top" )
-				.children( ".ui-accordion-header-icon" )
+				.addClass( "ui-accordion-header-active ui-state-active ui-corner-top" );
+			if ( options.icons ) {
+				clicked.children( ".ui-accordion-header-icon" )
 					.removeClass( options.icons.header )
 					.addClass( options.icons.activeHeader );
+			}
+
 			clicked
 				.next()
 				.addClass( "ui-accordion-content-active" );

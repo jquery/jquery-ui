@@ -21,16 +21,16 @@ test("destroy", function() {
 
 	var expected = $('<div></div>').progressbar(),
 		actual = expected.progressbar('destroy');
-	equals(actual, expected, 'destroy is chainable');
+	equal(actual, expected, 'destroy is chainable');
 });
 
 test('value', function() {
 	expect(3);
-	
+
 	var el = $('<div></div>').progressbar({ value: 20 });
-	equals(el.progressbar('value'), 20, 'correct value as getter');
-	equals(el.progressbar('value', 30), el, 'chainable as setter');
-	equals(el.progressbar('option', 'value'), 30, 'correct value after setter');
+	equal(el.progressbar('value'), 20, 'correct value as getter');
+	equal(el.progressbar('value', 30), el, 'chainable as setter');
+	equal(el.progressbar('option', 'value'), 30, 'correct value after setter');
 });
 
 })(jQuery);

@@ -50,7 +50,7 @@ $.effects.effect.blind = function( o, done ) {
 			.css( vertical ? "top" : "left", "auto" )
 			.css({ position: "absolute" });
 
-    animation[ ref2 ] = show ? margin : distance + margin;
+	animation[ ref2 ] = show ? margin : distance + margin;
 	}
 
 	// start at 0 if we are showing

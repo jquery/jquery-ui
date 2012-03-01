@@ -11,9 +11,9 @@ test( "create", function() {
 
 	element.accordion({
 		create: function( event, ui ) {
-			equals( ui.header.size(), 1, "header size" );
+			equal( ui.header.size(), 1, "header size" );
 			strictEqual( ui.header[ 0 ], headers[ 0 ], "header" );
-			equals( ui.content.size(), 1, "content size" );
+			equal( ui.content.size(), 1, "content size" );
 			strictEqual( ui.content[ 0 ], contents[ 0 ], "content" );
 		}
 	});
@@ -22,9 +22,9 @@ test( "create", function() {
 	element.accordion({
 		active: 2,
 		create: function( event, ui ) {
-			equals( ui.header.size(), 1, "header size" );
+			equal( ui.header.size(), 1, "header size" );
 			strictEqual( ui.header[ 0 ], headers[ 2 ], "header" );
-			equals( ui.content.size(), 1, "content size" );
+			equal( ui.content.size(), 1, "content size" );
 			strictEqual( ui.content[ 0 ], contents[ 2 ], "content" );
 		}
 	});
@@ -34,8 +34,8 @@ test( "create", function() {
 		active: false,
 		collapsible: true,
 		create: function( event, ui ) {
-			equals( ui.header.size(), 0, "header size" );
-			equals( ui.content.size(), 0, "content size" );
+			equal( ui.header.size(), 0, "header size" );
+			equal( ui.content.size(), 0, "content size" );
 		}
 	});
 	element.accordion( "destroy" );

@@ -33,7 +33,7 @@ $.widget("ui.mouse", {
 			})
 			.bind('click.'+this.widgetName, function(event) {
 				if (true === $.data(event.target, that.widgetName + '.preventClickEvent')) {
-				    $.removeData(event.target, that.widgetName + '.preventClickEvent');
+					$.removeData(event.target, that.widgetName + '.preventClickEvent');
 					event.stopImmediatePropagation();
 					return false;
 				}
@@ -132,7 +132,7 @@ $.widget("ui.mouse", {
 			this._mouseStarted = false;
 
 			if (event.target == this._mouseDownEvent.target) {
-			    $.data(event.target, this.widgetName + '.preventClickEvent', true);
+				$.data(event.target, this.widgetName + '.preventClickEvent', true);
 			}
 
 			this._mouseStop(event);

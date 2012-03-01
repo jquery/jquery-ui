@@ -620,15 +620,15 @@ $.extend(Datepicker.prototype, {
 					$.datepicker._updateDatepicker(inst);
 				}
 			}
-			catch (event) {
-				$.datepicker.log(event);
+			catch (err) {
+				$.datepicker.log(err);
 			}
 		}
 		return true;
 	},
 
 	/* Pop-up the date picker for a given input field.
-       If false returned from beforeShow event handler do not show. 
+	   If false returned from beforeShow event handler do not show. 
 	   @param  input  element - the input field attached to the date picker or
 	                  event - if triggered by focus */
 	_showDatepicker: function(input) {
@@ -647,7 +647,7 @@ $.extend(Datepicker.prototype, {
 		var beforeShow = $.datepicker._get(inst, 'beforeShow');
 		var beforeShowSettings = beforeShow ? beforeShow.apply(input, [input, inst]) : {};
 		if(beforeShowSettings === false){
-            //false
+			//false
 			return;
 		}
 		extendRemove(inst.settings, beforeShowSettings);
@@ -785,11 +785,11 @@ $.extend(Datepicker.prototype, {
 	_findPos: function(obj) {
 		var inst = this._getInst(obj);
 		var isRTL = this._get(inst, 'isRTL');
-        while (obj && (obj.type == 'hidden' || obj.nodeType != 1 || $.expr.filters.hidden(obj))) {
-            obj = obj[isRTL ? 'previousSibling' : 'nextSibling'];
-        }
-        var position = $(obj).offset();
-	    return [position.left, position.top];
+		while (obj && (obj.type == 'hidden' || obj.nodeType != 1 || $.expr.filters.hidden(obj))) {
+			obj = obj[isRTL ? 'previousSibling' : 'nextSibling'];
+		}
+		var position = $(obj).offset();
+		return [position.left, position.top];
 	},
 
 	/* Hide the date picker from view.
@@ -1784,7 +1784,7 @@ function isArray(a) {
 
 /* Invoke the datepicker functionality.
    @param  options  string - a command, optionally followed by additional parameters or
-                    Object - settings for attaching new datepicker functionality
+	                Object - settings for attaching new datepicker functionality
    @return  jQuery object */
 $.fn.datepicker = function(options){
 	

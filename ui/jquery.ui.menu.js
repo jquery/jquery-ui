@@ -24,7 +24,12 @@ $.widget( "ui.menu", {
 		position: {
 			my: "left top",
 			at: "right top"
-		}
+		},
+
+		// callbacks
+		blur: null,
+		focus: null,
+		select: null
 	},
 	_create: function() {
 		this.activeMenu = this.element;
