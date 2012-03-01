@@ -15,7 +15,7 @@
 
 var tabId = 0,
 	rhash = /#.*$/;
-	
+
 function getNextTabId() {
 	return ++tabId;
 }
@@ -24,7 +24,7 @@ var isLocal = function( anchor ) {
 	// clone the node to work around IE 6 not normalizing the href property
 	// if it's manually set, i.e., a.href = "#foo" kills the normalization
 	anchor = anchor.cloneNode( false );
-	return anchor.hash.length > 1 && 
+	return anchor.hash.length > 1 &&
 			anchor.href.replace( rhash, "" ) === location.href.replace( rhash, "" );
 };
 
