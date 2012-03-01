@@ -405,7 +405,7 @@ $.widget( "ui.accordion", {
 			animate = this.options.animate || {},
 			options = down && animate.down || animate,
 			complete = function() {
-				toShow.removeData( "accordionHeight" );
+				toShow.removeData( "ui-accordion-height" );
 				that._completed( data );
 			};
 
@@ -430,7 +430,7 @@ $.widget( "ui.accordion", {
 		toHide.animate( hideProps, duration, easing );
 		toShow
 			.hide()
-			.data( "accordionHeight", {
+			.data( "ui-accordion-height", {
 				total: total,
 				toHide: toHide
 			})
@@ -455,7 +455,7 @@ $.widget( "ui.accordion", {
 
 $.fx.step.accordionHeight = function( fx ) {
 	var elem = $( fx.elem ),
-		data = elem.data( "accordionHeight" );
+		data = elem.data( "ui-accordion-height" );
 	elem.height( data.total - elem.outerHeight() - data.toHide.outerHeight() + elem.height() );
 };
 var hideProps = {},

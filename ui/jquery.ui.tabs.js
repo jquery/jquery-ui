@@ -15,7 +15,7 @@
 
 var tabId = 0,
 	rhash = /#.*$/;
-	
+
 function getNextTabId() {
 	return ++tabId;
 }
@@ -24,7 +24,7 @@ var isLocal = function( anchor ) {
 	// clone the node to work around IE 6 not normalizing the href property
 	// if it's manually set, i.e., a.href = "#foo" kills the normalization
 	anchor = anchor.cloneNode( false );
-	return anchor.hash.length > 1 && 
+	return anchor.hash.length > 1 &&
 			anchor.href.replace( rhash, "" ) === location.href.replace( rhash, "" );
 };
 
@@ -257,7 +257,7 @@ $.widget( "ui.tabs", {
 		return $( "<div></div>" )
 					.attr( "id", id )
 					.addClass( "ui-tabs-panel ui-widget-content ui-corner-bottom" )
-					.data( "destroy.tabs", true );
+					.data( "ui-tabs-destroy", true );
 	},
 
 	_setupDisabled: function( disabled ) {
@@ -457,7 +457,7 @@ $.widget( "ui.tabs", {
 			.removeData( "load.tabs" );
 
 		this.lis.unbind( ".tabs" ).add( this.panels ).each(function() {
-			if ( $.data( this, "destroy.tabs" ) ) {
+			if ( $.data( this, "ui-tabs-destroy" ) ) {
 				$( this ).remove();
 			} else {
 				$( this ).removeClass([
@@ -755,7 +755,7 @@ if ( $.uiBackCompat !== false ) {
 					url.replace( "#", "" ) :
 					this._tabId( li.find( "a" )[ 0 ] );
 
-			li.addClass( "ui-state-default ui-corner-top" ).data( "destroy.tabs", true );
+			li.addClass( "ui-state-default ui-corner-top" ).data( "ui-tabs-destroy", true );
 			li.find( "a" ).attr( "aria-controls", id );
 
 			var doInsertAfter = index >= this.lis.length;
@@ -855,7 +855,7 @@ if ( $.uiBackCompat !== false ) {
 			return $( this.options.panelTemplate )
 				.attr( "id", id )
 				.addClass( "ui-tabs-panel ui-widget-content ui-corner-bottom" )
-				.data( "destroy.tabs", true );
+				.data( "ui-tabs-destroy", true );
 		}
 	});
 
