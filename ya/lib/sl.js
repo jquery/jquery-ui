@@ -36,6 +36,16 @@
 	};
 	Solution.types={};
 	_.extend(Solution.types,{
+		/**
+		 * 最大最小宽度/高度解决方案
+		 * 
+		 * @param {Number} minWidth 最小宽度
+		 * @param {Number} maxWidth 最大宽度
+		 * @param {Number} minHeight 最小高度
+		 * @param {Number} maxHeight 最大高度
+		 * 
+		 * @return {Function} Minmax class 
+		 */
 		"Minmax":(function(){
 			var Cls=function(hostSelector,opts){
 				this.hostJq=$(hostSelector);
@@ -88,6 +98,14 @@
 			};
 			return Cls;
 		}()),
+		/**
+		 * 阴影解决方案
+		 * 
+		 * @param {String} slClsName
+		 * @param {String} type
+		 * 
+		 * @return {Function} Shadow class
+		 */
 		"Shadow":(function(){
 			var Cls=function(hostSelector,opts){
 				this.hostJq=$(hostSelector);
@@ -112,6 +130,14 @@
 			};
 			return Cls;
 		}()),
+		/**
+		 * 圆角解决方案
+		 * 
+		 * @param {String} slClsName
+		 * @param {String} type
+		 * 
+		 * @return {Function} Corner class
+		 */
 		"Corner":(function(){
 			var Cls=function(hostSelector,opts){
 				this.hostJq=$(hostSelector);
@@ -136,6 +162,13 @@
 			};
 			return Cls;
 		}()),
+		/**
+		 * iframe自适应内部body高度
+		 * 
+		 * @param {String} autoHeight
+		 * 
+		 * @return {Function} Iframeautoheight class
+		 */
 		"Iframeautoheight":(function(){
 			var Cls=function(hostSelector,opts){
 				this.hostJq=$(hostSelector);
