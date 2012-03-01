@@ -225,7 +225,8 @@ $.widget( "ui.autocomplete", {
 				// custom key handling for now
 				input: $(),
 				focus: function( event, ui ) {
-					// back compat for _renderItem using item.autocomplete
+					// back compat for _renderItem using item.autocomplete, via #7810
+					// TODO remove the fallback, see #8156
 					var item = ui.item.data( "ui-autocomplete-item" ) || ui.item.data( "item.autocomplete" );
 					if ( false !== self._trigger( "focus", event, { item: item } ) ) {
 						// use value to match what will end up in the input, if it was a key event
@@ -235,7 +236,8 @@ $.widget( "ui.autocomplete", {
 					}
 				},
 				select: function( event, ui ) {
-					// back compat for _renderItem using item.autocomplete
+					// back compat for _renderItem using item.autocomplete, via #7810
+					// TODO remove the fallback, see #8156
 					var item = ui.item.data( "ui-autocomplete-item" ) || ui.item.data( "item.autocomplete" );
 						previous = self.previous;
 
