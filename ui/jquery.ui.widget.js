@@ -248,6 +248,9 @@ $.Widget.prototype = {
 		// all event bindings should go through this._bind()
 		this.element
 			.unbind( "." + this.widgetName )
+			// 1.9 BC for #7810
+			// TODO remove dual storage
+			.removeData( this.widgetName )
 			.removeData( this.widgetFullName );
 		this.widget()
 			.unbind( "." + this.widgetName )
