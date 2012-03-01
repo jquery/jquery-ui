@@ -18,11 +18,11 @@ test( "open / close", function() {
 
 	element.selectmenu("open");
 	ok( menu.is( ":visible" ), "open: menu visible" );
-	equals( menu.attr("aria-hidden"), "false", "open: menu aria-disabled" );
+	equal( menu.attr("aria-hidden"), "false", "open: menu aria-disabled" );
 
 	element.selectmenu("close");
 	ok( menu.is( ":hidden" ), "close: menu hidden" );
-	equals( menu.attr("aria-hidden"), "true", "close: menu aria-disabled" );
+	equal( menu.attr("aria-hidden"), "true", "close: menu aria-disabled" );
 });
 
 
@@ -35,17 +35,17 @@ test("enable / disable", function () {
 
 	element.selectmenu("disable");
 	ok( element.selectmenu("option", "disabled"), "disable: widget option" );
-	equals( element.attr("disabled"), "disabled", "disable: native select disabled" );
-	equals( button.attr("aria-disabled"), "true", "disable: button wrapper ARIA" );
-	equals( button.attr("tabindex"), -1, "disable: button tabindex" );
-	equals( menu.attr("aria-disabled"), "true", "disable: menu wrapper ARIA" );
+	equal( element.attr("disabled"), "disabled", "disable: native select disabled" );
+	equal( button.attr("aria-disabled"), "true", "disable: button wrapper ARIA" );
+	equal( button.attr("tabindex"), -1, "disable: button tabindex" );
+	equal( menu.attr("aria-disabled"), "true", "disable: menu wrapper ARIA" );
 
 	element.selectmenu("enable");
 	ok( !element.selectmenu("option", "disabled"), "enable: widget option" );
-	equals( element.attr("disabled"), undefined, "enable: native select disabled" );
-	equals( button.attr("aria-disabled"), "false", "enable: button wrapper ARIA" );
-	equals( button.attr("tabindex"), 0, "enable: button tabindex" );
-	equals( menu.attr("aria-disabled"), "false", "enable: menu wrapper ARIA" );
+	equal( element.attr("disabled"), undefined, "enable: native select disabled" );
+	equal( button.attr("aria-disabled"), "false", "enable: button wrapper ARIA" );
+	equal( button.attr("tabindex"), 0, "enable: button tabindex" );
+	equal( menu.attr("aria-disabled"), "false", "enable: menu wrapper ARIA" );
 });
 
 
@@ -63,9 +63,9 @@ test("refresh - structure", function () {
 		.text("Changed value");
 	element.selectmenu("refresh");
 
-	equals( element.find("option").length, menu.find("li").not(".ui-selectmenu-optgroup").length, "menu item length" );
-	equals( element.find("option").last().text(), menu.find("li").not(".ui-selectmenu-optgroup").last().text(), "added item" );
-	equals( element.find("option").first().text(), menu.find("li").not(".ui-selectmenu-optgroup").first().text(), "changed item" );
+	equal( element.find("option").length, menu.find("li").not(".ui-selectmenu-optgroup").length, "menu item length" );
+	equal( element.find("option").last().text(), menu.find("li").not(".ui-selectmenu-optgroup").last().text(), "added item" );
+	equal( element.find("option").first().text(), menu.find("li").not(".ui-selectmenu-optgroup").first().text(), "changed item" );
 });
 
 
@@ -80,9 +80,9 @@ test("refresh - disabled select", function () {
 	element.selectmenu("refresh");
 
 	ok( element.selectmenu("option", "disabled"), "widget option" );
-	equals( button.attr("aria-disabled"), "true", "button wrapper ARIA" );
-	equals( button.attr("tabindex"), -1, "button tabindex" );
-	equals( menu.attr("aria-disabled"), "true", "menu wrapper ARIA" );
+	equal( button.attr("aria-disabled"), "true", "button wrapper ARIA" );
+	equal( button.attr("tabindex"), -1, "button tabindex" );
+	equal( menu.attr("aria-disabled"), "true", "menu wrapper ARIA" );
 });
 
 
@@ -119,7 +119,7 @@ test("refresh - disabled optgroup", function () {
 	var item = menu.find("li.ui-selectmenu-optgroup").first();
 	ok( item.hasClass("ui-state-disabled"), "class" );
 
-	equals( menu.find("li").not(".ui-selectmenu-optgroup").filter(".ui-state-disabled").length, originalDisabledOptions.length, "disabled options" );
+	equal( menu.find("li").not(".ui-selectmenu-optgroup").filter(".ui-state-disabled").length, originalDisabledOptions.length, "disabled options" );
 	for ( var i = 0; i < originalDisabledOptions.length; i++ ) {
 		item = item.next("li");
 		ok( item.hasClass("ui-state-disabled"), "item #" + i + ": class" );

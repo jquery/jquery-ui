@@ -13,23 +13,23 @@ test("accessibility", function () {
 
 	expect(12 + links.length * 2);
 
-	equals( button.attr("role"), "combobox", "button link role" );
-	equals( button.attr("aria-haspopup"), "true", "button link aria-haspopup" );
-	equals( button.attr("aria-expanded"), "false", "button link  aria-expanded" );
-	equals( button.attr("aria-autocomplete"), "list", "button link  aria-autocomplete" );
-	equals( button.attr("aria-owns"), menu.attr("id"), "button link aria-owns" );
-	equals( button.attr("tabindex"), 0, "button link tabindex" );
+	equal( button.attr("role"), "combobox", "button link role" );
+	equal( button.attr("aria-haspopup"), "true", "button link aria-haspopup" );
+	equal( button.attr("aria-expanded"), "false", "button link  aria-expanded" );
+	equal( button.attr("aria-autocomplete"), "list", "button link  aria-autocomplete" );
+	equal( button.attr("aria-owns"), menu.attr("id"), "button link aria-owns" );
+	equal( button.attr("tabindex"), 0, "button link tabindex" );
 
-	equals( menu.attr("role"), "listbox", "menu role" );
-	equals( menu.attr("aria-labelledby"), button.attr("id"), "menu aria-labelledby" );
-	equals( menu.attr("aria-hidden"), "true", "menu aria-hidden" );
-	equals( menu.attr("tabindex"), 0, "menu tabindex" );
-	equals( menu.attr("aria-activedescendant"), links.eq(element[0].selectedIndex).attr("id"), "menu aria-activedescendant" );
+	equal( menu.attr("role"), "listbox", "menu role" );
+	equal( menu.attr("aria-labelledby"), button.attr("id"), "menu aria-labelledby" );
+	equal( menu.attr("aria-hidden"), "true", "menu aria-hidden" );
+	equal( menu.attr("tabindex"), 0, "menu tabindex" );
+	equal( menu.attr("aria-activedescendant"), links.eq(element[0].selectedIndex).attr("id"), "menu aria-activedescendant" );
 	$.each( links, function(index){
-		equals( $(this).attr("role"), "option", "menu link #" + index +" role" );
-		equals( $(this).attr("tabindex"), -1, "menu link #" + index +" tabindex" );
+		equal( $(this).attr("role"), "option", "menu link #" + index +" role" );
+		equal( $(this).attr("tabindex"), -1, "menu link #" + index +" tabindex" );
 	});
-	equals( links.eq(element[0].selectedIndex).attr("aria-selected"), "true", "selected menu link aria-selected" );
+	equal( links.eq(element[0].selectedIndex).attr("aria-selected"), "true", "selected menu link aria-selected" );
 });
 
 
@@ -55,17 +55,17 @@ $.each([
 		var links = menu.find("li.ui-menu-item a");
 
 		button.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
-		equals( menu.attr("aria-activedescendant"), links.eq(element[0].selectedIndex).attr("id"), "after keydown menu aria-activedescendant" );
-		equals( links.eq(element[0].selectedIndex).attr("aria-selected"), "true", "after keydown selected menu link aria-selected" );
-		equals( element.find("option:selected").val(), selected.next("option").val() , "after keydown original select state" );
-		equals( button.text(), selected.next("option").text(), "after keydown button text" );
+		equal( menu.attr("aria-activedescendant"), links.eq(element[0].selectedIndex).attr("id"), "after keydown menu aria-activedescendant" );
+		equal( links.eq(element[0].selectedIndex).attr("aria-selected"), "true", "after keydown selected menu link aria-selected" );
+		equal( element.find("option:selected").val(), selected.next("option").val() , "after keydown original select state" );
+		equal( button.text(), selected.next("option").text(), "after keydown button text" );
 
 		button.simulate( "click" );
 		menu.find("a").last().simulate( "mouseover" ).trigger( "click" );
-		equals( menu.attr("aria-activedescendant"), links.eq(element[0].selectedIndex).attr("id"), "after click menu aria-activedescendant" );
-		equals( links.eq(element[0].selectedIndex).attr("aria-selected"), "true", "after click selected menu link aria-selected" );
-		equals( element.find("option:selected").val(), element.find("option").last().val(), "after click original select state" );
-		equals( button.text(), element.find("option").last().text(), "after click button text" );
+		equal( menu.attr("aria-activedescendant"), links.eq(element[0].selectedIndex).attr("id"), "after click menu aria-activedescendant" );
+		equal( links.eq(element[0].selectedIndex).attr("aria-selected"), "true", "after click selected menu link aria-selected" );
+		equal( element.find("option:selected").val(), element.find("option").last().val(), "after click original select state" );
+		equal( button.text(), element.find("option").last().text(), "after click button text" );
 	});
 });
 
