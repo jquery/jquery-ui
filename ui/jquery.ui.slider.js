@@ -110,12 +110,12 @@ $.widget( "ui.slider", $.ui.mouse, {
 			});
 
 		this.handles.each(function( i ) {
-			$( this ).data( "index.ui-slider-handle", i );
+			$( this ).data( "ui-slider-handle-index", i );
 		});
 
 		this.handles
 			.keydown(function( event ) {
-				var index = $( this ).data( "index.ui-slider-handle" ),
+				var index = $( this ).data( "ui-slider-handle-index" ),
 					allowed,
 					curVal,
 					newVal,
@@ -185,7 +185,7 @@ $.widget( "ui.slider", $.ui.mouse, {
 				self._slide( event, index, newVal );
 			})
 			.keyup(function( event ) {
-				var index = $( this ).data( "index.ui-slider-handle" );
+				var index = $( this ).data( "ui-slider-handle-index" );
 
 				if ( self._keySliding ) {
 					self._keySliding = false;
