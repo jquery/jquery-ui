@@ -21,7 +21,8 @@ $.widget("ui.selectable", $.ui.mouse, {
 		autoRefresh: true,
 		distance: 0,
 		filter: '*',
-		tolerance: 'touch'
+		tolerance: 'touch',
+		triggerOnce: false
 	},
 	_create: function() {
 		var self = this;
@@ -252,7 +253,14 @@ $.widget("ui.selectable", $.ui.mouse, {
 				selected: selectee.element
 			});
 		});
-		this._trigger("stop", event);
+		
+		
+	//Cases where the ctrl button is not pressed
+        if (!event.metaKey && !event.ctrlKey) { this._trigger("stop", event);}
+
+        //Cases where the ctrl button is pressed
+        if (options.triggerOnce == false) {$(document).keyup(function() {self._trigger("stop", event); }); options.triggerOnce = true;}
+
 
 		this.helper.remove();
 
