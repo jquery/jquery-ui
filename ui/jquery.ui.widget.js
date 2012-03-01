@@ -36,7 +36,7 @@ $.widget = function( name, base, prototype ) {
 
 	// create selector for plugin
 	$.expr[ ":" ][ fullName ] = function( elem ) {
-		return !!$.data( elem, name );
+		return !!$.data( elem, fullName );
 	};
 
 	$[ namespace ] = $[ namespace ] || {};
@@ -148,6 +148,7 @@ $.widget.extend = function( target ) {
 };
 
 $.widget.bridge = function( name, object ) {
+	var fullName = object.prototype.widgetBaseClass;
 	$.fn[ name ] = function( options ) {
 		var isMethodCall = typeof options === "string",
 			args = slice.call( arguments, 1 ),
@@ -160,7 +161,9 @@ $.widget.bridge = function( name, object ) {
 
 		if ( isMethodCall ) {
 			this.each(function() {
-				var instance = $.data( this, name );
+				// 1.9 BC for #7810
+				// TODO remove fallback to name
+				var instance = $.data( this, fullName ) || $.data( this, name );
 				if ( !instance ) {
 					return $.error( "cannot call methods on " + name + " prior to initialization; " +
 						"attempted to call method '" + options + "'" );
@@ -178,7 +181,9 @@ $.widget.bridge = function( name, object ) {
 			});
 		} else {
 			this.each(function() {
-				var instance = $.data( this, name );
+				// 1.9 BC for #7810
+				// TODO remove fallback to name
+				var instance = $.data( this, fullName ) || $.data( this, name );
 				if ( instance ) {
 					instance.option( options || {} )._init();
 				} else {
@@ -217,7 +222,10 @@ $.Widget.prototype = {
 		this.focusable = $();
 
 		if ( element !== this ) {
+			// 1.9 BC for #7810
+			// TODO remove dual storage
 			$.data( element, this.widgetName, this );
+			$.data( element, this.widgetBaseClass, this );
 			this._bind({ remove: "destroy" });
 			this.document = $( element.style ?
 				// element within the document
