@@ -105,6 +105,14 @@
 	border: 1px solid #9d9fa2;
 	background: #ffffff;
 }
-.ui-textfield{
-	
+
+input.ui-state-default{
+	height:28px;
+	line-height: 28px;
+	border:1px solid #cccccc;
+	padding:0px 5px;
+}
+textarea.ui-state-default{
+	border:1px solid #cccccc;
+	padding:0px 5px;
 }
