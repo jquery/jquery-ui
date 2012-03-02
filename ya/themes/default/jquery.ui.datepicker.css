@@ -1,0 +1,14 @@
+.ui-datepicker{
+	background: -webkit-gradient(linear, left top, left bottom, from(#f8f8f8), to(#eeeeee));
+	background: -moz-linear-gradient(top,  #f8f8f8,  #eeeeee);
+	background: -o-linear-gradient(top, #f8f8f8, #eeeeee);
+	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#f8f8f8', endColorstr='#eeeeee');
+}
+.ui-datepicker td span, 
+.ui-datepicker td a.ui-state-default{
+	border:1px solid #cccccc;
+	background: #f6f6f6;
+}
+.ui-datepicker td.ui-datepicker-current-day a{
+	background: #f1f3e3;
+}
