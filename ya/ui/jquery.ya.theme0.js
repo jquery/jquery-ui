@@ -20,6 +20,7 @@
 			},
 			triggerType:"click",	//触发事件类型(click/hover)
 			themeType:null,	//模拟控件类型
+			cls:'',	//主题控件css类名
 			width:'auto',
 			height:'auto'
 		},
@@ -37,7 +38,7 @@
 			if(advancedTheme){
 				for(var n in advancedTheme){
 					if(advancedTheme[n]){
-						uihelper.advancedThemeH(self,n,self.wrapperJq);
+						uihelper.advancedThemeH(self,n,self.themeJq);
 					}		
 				}
 			}
@@ -95,19 +96,19 @@
 				selectedIndex=0;
 			var clickState='hidden';	//hidden or shown
 			
-			var wrapperJq=$('<div class="ui-combo ui-widget ui-helper-reset"></div>');	//包裹元素
-			$('<div class="ui-combo-header"><div class="ui-combo-header-content"></div><span class="ui-icon ui-icon-triangle-1-s"></span></div><ul class="ui-combo-options ui-widget-content ui-helper-reset" style="display:none;"></ul>').appendTo(wrapperJq);
+			var themeJq=$('<div class="'+options.cls+' ui-combo ui-widget ui-helper-reset"></div>');	//包裹元素
+			$('<div class="ui-combo-header"><div class="ui-combo-header-content"></div><span class="ui-icon ui-icon-triangle-1-s"></span></div><ul class="ui-combo-options ui-widget-content ui-helper-reset" style="display:none;"></ul>').appendTo(themeJq);
 			//预定义的几个css属性
 			cssPropertys.replace(regx.rword,function(cssPropertyName){
-				wrapperJq.css(cssPropertyName,self.element.css(cssPropertyName));
+				themeJq.css(cssPropertyName,self.element.css(cssPropertyName));
 			});
-			wrapperJq.css({
+			themeJq.css({
 				width:options.width
 			}).insertAfter(self.element.hide());
 			//设置引用
-			self.wrapperJq=wrapperJq;
-			listJq=$('.ui-combo-options',wrapperJq);
-			headerJq=$('.ui-combo-header-content',wrapperJq);
+			self.themeJq=themeJq;
+			listJq=$('.ui-combo-options',themeJq);
+			headerJq=$('.ui-combo-header-content',themeJq);
 			
 			$('option',element).each(function(i){
 				var thisJq=$(this);
@@ -123,7 +124,7 @@
 			
 			//绑定事件
 			if(options.triggerType=="click"){			
-				wrapperJq.click(function(e){				
+				themeJq.click(function(e){				
 					//控制显示
 					if(clickState=="hidden"){
 						listJq.show();
@@ -134,13 +135,13 @@
 					}
 				});
 			}else if(options.triggerType=="hover"){
-				wrapperJq.hover(function(){
+				themeJq.hover(function(){
 					listJq.show();
 				},function(){
 					listJq.hide();
 				});
 			}
-			wrapperJq.on('click','.ui-combo-option',function(){
+			themeJq.on('click','.ui-combo-option',function(){
 				//选中
 				var targetJq=$(this);
 				targetJq.addClass('ui-combo-option-selected').siblings().removeClass('ui-combo-option-selected');
@@ -163,30 +164,30 @@
 			var self=this,
 				element=self.element,
 				options=self.options,
-				wrapperJq,
+				themeJq,
 				unselectedJq,
 				selectedJq,
 				actionJq,
 				htmlArr=[];
-			wrapperJq=$('<div class="ui-itemselect ui-widget ui-helper-reset"></div>').css({
+			themeJq=$('<div class="'+options.cls+' ui-itemselect ui-widget ui-helper-reset"></div>').css({
 				width:options.width,
 				height:options.height
 			});	//包裹元素
-			//$('<div class="ui-itemselect-unselected"><ul class="ui-itemselect-options"></ul></div><div class="ui-itemselect-action"><span class="ui-itemselect-selected-handler">&rArr;</span><span class="ui-itemselect-unselected-handler">&lArr;</span></div><div class="ui-itemselect-selected"><ul class="ui-itemselect-options"></ul></div>').appendTo(wrapperJq);
-			$('<ul class="ui-itemselect-options ui-itemselect-unselected"></ul><div class="ui-itemselect-action"><div class="ui-itemselect-handlers"><span class="ui-itemselect-selected-handler">&rArr;</span><span class="ui-itemselect-unselected-handler">&lArr;</span></div></div><ul class="ui-itemselect-selected ui-itemselect-options"></ul>').appendTo(wrapperJq);
-			unselectedJq=$('.ui-itemselect-unselected',wrapperJq);
-			selectedJq=$('.ui-itemselect-selected',wrapperJq);
-			actionJq=$('.ui-itemselect-action',wrapperJq);
+			//$('<div class="ui-itemselect-unselected"><ul class="ui-itemselect-options"></ul></div><div class="ui-itemselect-action"><span class="ui-itemselect-selected-handler">&rArr;</span><span class="ui-itemselect-unselected-handler">&lArr;</span></div><div class="ui-itemselect-selected"><ul class="ui-itemselect-options"></ul></div>').appendTo(themeJq);
+			$('<ul class="ui-itemselect-options ui-itemselect-unselected"></ul><div class="ui-itemselect-action"><div class="ui-itemselect-handlers"><span class="ui-itemselect-selected-handler">&rArr;</span><span class="ui-itemselect-unselected-handler">&lArr;</span></div></div><ul class="ui-itemselect-selected ui-itemselect-options"></ul>').appendTo(themeJq);
+			unselectedJq=$('.ui-itemselect-unselected',themeJq);
+			selectedJq=$('.ui-itemselect-selected',themeJq);
+			actionJq=$('.ui-itemselect-action',themeJq);
 			
-			wrapperJq.insertAfter(element.hide());
-			//设置wrapperJq引用
-			self.wrapperJq=wrapperJq;
+			themeJq.insertAfter(element.hide());
+			//设置themeJq引用
+			self.themeJq=themeJq;
 			
 			//功能按钮区绝对定位
 			actionJq.css({
 				"position":"absolute",
 				"top":"0px",
-				"left":(wrapperJq.width()-actionJq.outerWidth())/2
+				"left":(themeJq.width()-actionJq.outerWidth())/2
 			});
 			//设置select的multiple属性，可多选
 			element.attr('multiple','multiple');
@@ -200,16 +201,16 @@
 				}
 			});
 			//可拖拽排序
-			$('.ui-itemselect-options',wrapperJq).sortable({
+			$('.ui-itemselect-options',themeJq).sortable({
 				connectWith: ".ui-itemselect-options",
 				update:function(event, ui){
 					self._itemselectTheme_sort();
 				}
 			}).disableSelection();	//使文字不被选中便于拖拽
 			//可选中
-			$('.ui-itemselect-option',wrapperJq).click(function(){
+			$('.ui-itemselect-option',themeJq).click(function(){
 				//同一时刻有且只有一个被选中
-				$('.ui-itemselect-option',wrapperJq).removeClass('ui-itemselect-option-selected');
+				$('.ui-itemselect-option',themeJq).removeClass('ui-itemselect-option-selected');
 				$(this).addClass('ui-itemselect-option-selected');
 			});
 			
@@ -220,9 +221,9 @@
 			var self=this,
 				element=self.element,
 				options=self.options,
-				wrapperJq=self.wrapperJq,
-				unselectedJq=$('.ui-itemselect-unselected',wrapperJq),
-				selectedJq=$('.ui-itemselect-selected',wrapperJq);
+				themeJq=self.themeJq,
+				unselectedJq=$('.ui-itemselect-unselected',themeJq),
+				selectedJq=$('.ui-itemselect-selected',themeJq);
 			//清空非disabled状态下的所有option
 			//$('option[disabled!="disabled"]',element).remove();
 			//先排未选中的再排选中的
@@ -240,9 +241,9 @@
 		_itemselectTheme_action:function(){
 			var self=this,
 				element=self.element,
-				wrapperJq=self.wrapperJq,
-				selectedJq=$('.ui-itemselect-selected',wrapperJq),
-				unselectedJq=$('.ui-itemselect-unselected',wrapperJq),
+				themeJq=self.themeJq,
+				selectedJq=$('.ui-itemselect-selected',themeJq),
+				unselectedJq=$('.ui-itemselect-unselected',themeJq),
 				options=self.options;
 			//选择区鼠标划上显示action icons
 			/*$('.ui-itemselect-option-action',selectedJq).hover(function(){
@@ -255,7 +256,7 @@
 			}).on('mouseleave','.ui-itemselect-option',function(){
 				$('.ui-itemselect-option-action',this).hide();
 			});
-			$('.ui-itemselect-option-action',wrapperJq).on('click','span',function(){
+			$('.ui-itemselect-option-action',themeJq).on('click','span',function(){
 				var thisJq=$(this),
 					targetJq=thisJq.parent().parent('.ui-itemselect-option');
 				if(thisJq.hasClass('ui-itemselect-icon-up')){
@@ -271,7 +272,7 @@
 				self._itemselectTheme_sort();
 				return false;	//阻止回溯
 			});
-			$('.ui-itemselect-handlers',wrapperJq).on('click','span',function(){
+			$('.ui-itemselect-handlers',themeJq).on('click','span',function(){
 				var thisJq=$(this),
 					optionSelectedJq=self._itemselectTheme_getSelect();
 				if(thisJq.hasClass('ui-itemselect-selected-handler')){	//移到选择区
@@ -291,14 +292,14 @@
 			});
 		},
 		_itemselectTheme_getSelect:function(){
-			return $('.ui-itemselect-option-selected',this.wrapperJq);
+			return $('.ui-itemselect-option-selected',this.themeJq);
 		},
 		disable:function(){
 			var self=this,
-				wrapperJq=self.wrapperJq,
+				themeJq=self.themeJq,
 				options=self.options,
-				disabledWJq=wrapperJq.data('disabledWrapper');
-			var offsetSize=wrapperJq.offset();
+				disabledWJq=themeJq.data('disabledWrapper');
+			var offsetSize=themeJq.offset();
 			if(_.isUndefined(disabledWJq)){
 				disabledWJq=$('<div class="ui-state-disabled-wrapper"></div>').css({
 					"position":"absolute",
@@ -306,13 +307,13 @@
 					"left":"0px",
 					"display":"none"
 				}).appendTo('body');
-				wrapperJq.data('disabledWrapper',disabledWJq);
+				themeJq.data('disabledWrapper',disabledWJq);
 			}
 			disabledWJq.css({
 				left:offsetSize.left,
 				top:offsetSize.top,
-				width:wrapperJq.outerWidth(),
-				height:wrapperJq.outerHeight(),
+				width:themeJq.outerWidth(),
+				height:themeJq.outerHeight(),
 				"z-index":10000
 			}).addClass('ui-state-disabled').show();
 			self._trigger( "disable", null);

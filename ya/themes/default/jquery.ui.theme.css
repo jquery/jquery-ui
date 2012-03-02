@@ -8,6 +8,10 @@
 	padding:0px 30px 0px 10px;
 	position: relative;
 }
+.ui-combo-header-content{
+	height:28px;
+	line-height: 28px;
+}
 .ui-combo-header .ui-icon-triangle-1-s{
 	top:5px;
 	right:10px;
