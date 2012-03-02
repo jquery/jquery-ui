@@ -1,23 +1,85 @@
-.ui-select{
+.ui-combo{
 	cursor:pointer;
 }
-.ui-select-header{
+.ui-combo-header{
 	height:28px;
 	line-height: 28px;
 	border:1px solid #cccccc;
 	padding:0px 30px 0px 10px;
 	position: relative;
 }
-.ui-select-header .ui-icon-triangle-1-s{
+.ui-combo-header .ui-icon-triangle-1-s{
 	top:5px;
 	right:10px;
 	position:absolute;
 }
-.ui-select-options{
+.ui-combo-options{
 	border:1px solid #cccccc;
 	border-top:none;
 	text-indent: 10px;
 }
-.ui-select-options .ui-state-hover{
+.ui-combo-options .ui-state-hover{
 	background: #f1f3e3;
+}
+
+.ui-itemselect{
+	border:1px solid #cccccc;
+	position: relative;
+	overflow:hidden;
+}
+.ui-itemselect-action{
+	width:30px;
+	height:100%;
+	overflow:hidden;
+	border-left:1px solid #cccccc;
+	border-right:1px solid #cccccc;
+	position: relative;
+}
+.ui-itemselect-action .ui-itemselect-handlers{
+	position: absolute;
+	top:50%;
+	left:50%;
+	margin-left:-15px;
+	margin-top:-37.5px;;
+}
+.ui-itemselect-action .ui-itemselect-selected-handler,
+.ui-itemselect-action .ui-itemselect-unselected-handler{
+	display:block;
+	height:30px;
+	width:30px;
+	margin:5px 0px;
+	background: #cccccc;
+	cursor:pointer;
+	line-height: 30px;
+	text-align: center;
+}
+.ui-itemselect-unselected{
+	float:left;
+}
+.ui-itemselect-selected{
+	float:right;
+}
+.ui-itemselect-options{
+	width:50%;
+	height:100%;
+}
+.ui-itemselect-option{
+	border:1px solid #cccccc;
+	line-height: 28px;
+	height:28px;
+	width:60px;
+	margin:10px;
+	position:relative;
+}
+.ui-itemselect-option-action{
+	position:absolute;
+	right:0px;
+	top:0px;
+}
+.ui-itemselect-option-action span{
+	cursor:pointer;
+}
+.ui-itemselect .ui-itemselect-option-selected {
+    background: #F39814;
+    color: white;
 }

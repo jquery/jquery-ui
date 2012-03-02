@@ -26,6 +26,9 @@
 		.select-wrapper{
 			margin-bottom: 30px;
 		}
+		.select-wrapper3 .ui-itemselect-options{
+			width:80px;
+		}
 	</style>
 	
 	<script src="../../jqui/js/jquery.min.js"></script>
@@ -56,6 +59,16 @@
 				shadow:true,
 				corner:true
 			},
+			width:300,
+			triggerType:'click'			
+		});
+		$( "#select3" ).theme0({
+			advancedTheme:{
+				shadow:true,
+				corner:true
+			},
+			width:600,
+			height:300,
 			triggerType:'click'			
 		});
 		$('#select1').theme0('disable');
@@ -67,18 +80,29 @@
   <form action="#" method="post">
   	<div class="select-wrapper">
 	  	<select id="select1">
-	  		<option>a</option>
-	  		<option>b</option>
-	  		<option>c</option>
-	  		<option>d</option>
+	  		<option value="a">a</option>
+	  		<option value="b">b</option>
+	  		<option value="c">c</option>
+	  		<option value="d">d</option>
 	  	</select>
   	</div>
   	<div class="select-wrapper">
-	  	<select id="select2">
-	  		<option>e</option>
-	  		<option>f</option>
-	  		<option>g</option>
-	  		<option>h</option>
+	  	<select id="select2" themetype="combo">
+	  		<option value="e">e</option>
+	  		<option value="f">f</option>
+	  		<option value="g">g</option>
+	  		<option value="h">h</option>
+	  	</select>
+  	</div>
+  	<div class="select-wrapper select-wrapper3">
+	  	<select id="select3" multiple="multiple" themetype="itemselect" >
+	  		<option disabled="disabled">请选择</option>
+	  		<option value="i">i</option>
+	  		<option value="j">j</option>
+	  		<option value="k">k</option>
+	  		<option value="l">l</option>
+	  		<option value="m">m</option>
+	  		<option value="n">n</option>
 	  	</select>
   	</div>
   </form>
