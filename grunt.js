@@ -1,21 +1,26 @@
 /*global config:true, task:true*/
 var coreFiles = 'jquery.ui.core.js, jquery.ui.widget.js, jquery.ui.mouse.js, jquery.ui.draggable.js, jquery.ui.droppable.js, jquery.ui.resizable.js, jquery.ui.selectable.js, jquery.ui.sortable.js, jquery.effects.core.js'.split(', ');
+var allFiles = coreFiles.map(function(file) {
+  return 'ui/' + file;
+}).concat(file.expand('ui/*.js').filter(function(file) {
+  return coreFiles.indexOf(file.substring(3)) === -1;
+}));
+var rawList = allFiles.map(function(file) {
+  return file.substring(3);
+});
 config.init({
   pkg: '<json:package.json>',
   meta: {
     banner: '/*! <%= pkg.title || pkg.name %> - v<%= pkg.version %> - ' +
       '<%= template.today("m/d/yyyy") %>\n' +
       '<%= pkg.homepage ? "* " + pkg.homepage + "\n" : "" %>' +
+      // TODO makes this banner only useful for the min-all task below...
+      '* Includes: ' + rawList.join(', ') + '\n' +
       '* Copyright (c) <%= template.today("yyyy") %> <%= pkg.author.name %>;' +
       ' Licensed <%= _.pluck(pkg.licenses, "type").join(", ") %> */'
   },
   concat: {
-    // 'dist/ui/jquery-ui.js': ['<banner>', '<file_strip_banner:ui/*.js>']
-    'dist/jquery-ui.js': coreFiles.map(function(file) {
-      return 'ui/' + file;
-    }).concat(file.expand('ui/*.js').filter(function(file) {
-      return coreFiles.indexOf(file.substring(3)) === -1;
-    }))
+    'dist/jquery-ui.js': allFiles
   },
   min: {
     'dist/jquery-ui.min.js': ['<banner>', 'dist/jquery-ui.js']
