@@ -502,14 +502,33 @@ div.pGroup {
 	overflow: hidden;
 	margin : 2px 0;
 }
-
+.ui-grid div.pDiv .ui-icon{
+	background: url(images/grid/ui-icon-pagination.png) no-repeat;
+}
+.ui-grid div.pDiv  div.pFirst{
+	background-position: 0px 0px;
+}
+.ui-grid div.pDiv  div.pPrev{
+	background-position: -20px 0px;
+}
+.ui-grid div.pDiv  div.pNext{
+	background-position: -135px 0px;
+}
+.ui-grid div.pDiv  div.pLast{
+	background-position: -155px 0px;
+}
+.ui-grid div.pDiv  div.pReload{
+	background-position: -180px 0px;
+}
+.ui-grid div.pDiv  div.btnseparator{
+	background: url(images/grid/ui-icon-pagination.png) no-repeat -39px 0px;
+}
 .ui-grid div.pDiv  div.pButton span {
 	width: 20px;
 	height: 20px;
 	display: block;
 	float: left;
 }
-
 .ui-grid .pSearch {
 	background: url(images/grid/magnifier.png) no-repeat center;
 }

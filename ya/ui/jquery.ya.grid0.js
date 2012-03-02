@@ -8,11 +8,13 @@
 		Solution=sl.Solution;
     $.grid0={
         lang:{
-            loadingMsg:'正在加载数据，请稍候...',
+            //loadingMsg:'正在加载数据，请稍候...',
+            loadingMsg:'加载中...',
             emptyMsg:'没有数据',
             errorMsg:'取数出错',
-            pageText:'第{index}页，共{totalPage}页',
-            pageStat:'共{total}条数据，显示{from}-{to}条'
+            pageText:'{index}/{totalPage}页',
+           // pageStat:'共{total}条数据，显示{from}-{to}条'
+            pageStat:'共{total}条'
         }
     };
     $.widget('ya.grid0', {
@@ -542,7 +544,7 @@
                             '<div class="btnseparator"></div>'+
                             '<div class="pGroup"><span class="pPageStat"></span></div>'+
                        '</div></div>');
-            var pageText = op.pageText.replace(/{totalPage}/, '<span>1</span>').replace(/{index}/, '<input type="text" size="4" value="1" />');
+            var pageText = op.pageText.replace(/{totalPage}/, '<span>1</span>').replace(/{index}/, '<input readonly="readonly" type="text" size="4" value="1" />');
             $('.pControl',pDiv).html(pageText);
             el.parent().after(pDiv);
             $('.pReload', pDiv).click(function() {
