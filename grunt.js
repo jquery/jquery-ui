@@ -12,7 +12,7 @@ config.init({
   pkg: '<json:package.json>',
   meta: {
     banner: '/*! <%= pkg.title || pkg.name %> - v<%= pkg.version %> - ' +
-      '<%= template.today("m/d/yyyy") %>\n' +
+      '<%= template.today("isoDate") %>\n' +
       '<%= pkg.homepage ? "* " + pkg.homepage + "\n" : "" %>' +
       // TODO makes this banner only useful for the min-all task below...
       '* Includes: ' + rawList.join(', ') + '\n' +
