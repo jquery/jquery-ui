@@ -496,38 +496,44 @@ div.pGroup {
 .ui-grid div.pDiv  div.pButton {
 	float: left;
 	width: 16px; 
-	height: 16px;
+	height: 18px;
 	border: 1px solid transparent;
 	cursor: pointer;
 	overflow: hidden;
 	margin : 2px 0;
 }
 .ui-grid div.pDiv .ui-icon{
+	background: none;
+}
+.ui-grid div.pDiv .ui-icon span{
 	background: url(images/grid/ui-icon-pagination.png) no-repeat;
 }
-.ui-grid div.pDiv  div.pFirst{
+.ui-grid div.pDiv .ui-state-hover span{
+	background: url(images/grid/ui-icon-pagination-hover.png) no-repeat;
+}
+.ui-grid div.pDiv  div.pFirst .ui-icon-seek-start{
 	background-position: 0px 0px;
 }
-.ui-grid div.pDiv  div.pPrev{
+.ui-grid div.pDiv  div.pPrev .ui-icon-seek-prev{
 	background-position: -20px 0px;
 }
-.ui-grid div.pDiv  div.pNext{
-	background-position: -135px 0px;
+.ui-grid div.pDiv  div.pNext .ui-icon-seek-next{
+	background-position: -133px 0px;
 }
-.ui-grid div.pDiv  div.pLast{
-	background-position: -155px 0px;
+.ui-grid div.pDiv  div.pLast .ui-icon-seek-end{
+	background-position: -153px 0px;
 }
-.ui-grid div.pDiv  div.pReload{
-	background-position: -180px 0px;
+.ui-grid div.pDiv  div.pReload .ui-icon-refresh{
+	background-position: -179px 0px;
 }
 .ui-grid div.pDiv  div.btnseparator{
 	background: url(images/grid/ui-icon-pagination.png) no-repeat -39px 0px;
 }
 .ui-grid div.pDiv  div.pButton span {
-	width: 20px;
-	height: 20px;
+	width: 16px;
+	height: 18px;
 	display: block;
-	float: left;
+	
 }
 .ui-grid .pSearch {
 	background: url(images/grid/magnifier.png) no-repeat center;
