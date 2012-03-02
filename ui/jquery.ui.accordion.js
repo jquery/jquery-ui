@@ -56,8 +56,7 @@ $.widget( "ui.accordion", {
 		}
 		this.active = this._findActive( options.active )
 			.addClass( "ui-accordion-header-active ui-state-active" )
-			.toggleClass( "ui-corner-all" )
-			.toggleClass( "ui-corner-top" );
+			.toggleClass( "ui-corner-all ui-corner-top" )
 		this.active.next().addClass( "ui-accordion-content-active" );
 
 		this._createIcons();
@@ -69,6 +68,7 @@ $.widget( "ui.accordion", {
 
 		this.headers
 			.attr( "role", "tab" )
+			// TODO: use _bind()
 			.bind( "keydown.accordion", $.proxy( this, "_keydown" ) )
 			.next()
 				.attr( "role", "tabpanel" );
@@ -76,6 +76,7 @@ $.widget( "ui.accordion", {
 		this.headers
 			.not( this.active )
 			.attr({
+				// TODO: document support for each of these
 				"aria-expanded": "false",
 				"aria-selected": "false",
 				tabIndex: -1
@@ -137,9 +138,7 @@ $.widget( "ui.accordion", {
 			.removeAttr( "role" )
 			.removeAttr( "aria-expanded" )
 			.removeAttr( "aria-selected" )
-			.removeAttr( "tabIndex" )
-			.find( "a" )
-				.removeAttr( "tabIndex" )
+			.removeAttr( "tabIndex" );
 		this._destroyIcons();
 
 		// clean up content panels
@@ -162,6 +161,7 @@ $.widget( "ui.accordion", {
 
 		if ( key === "event" ) {
 			if ( this.options.event ) {
+				// TODO: this is incorrect for multiple events (see _setupEvents)
 				this.headers.unbind( this.options.event + ".accordion", this._eventHandler );
 			}
 			this._setupEvents( value );
@@ -184,12 +184,15 @@ $.widget( "ui.accordion", {
 		// #5332 - opacity doesn't cascade to positioned elements in IE
 		// so we need to add the disabled class to the headers and panels
 		if ( key === "disabled" ) {
-			this.headers.add(this.headers.next())
+			this.headers.add( this.headers.next() )
+				// TODO: why do we have an accordion-specific disabled class?
+				// widget-specific classes seem to exist in a lot of plugins
 				.toggleClass( "ui-accordion-disabled ui-state-disabled", !!value );
 		}
 	},
 
 	_keydown: function( event ) {
+		// TODO: remove disabled check when using _bind()
 		if ( this.options.disabled || event.altKey || event.ctrlKey ) {
 			return;
 		}
@@ -300,6 +303,7 @@ $.widget( "ui.accordion", {
 
 	_setupEvents: function( event ) {
 		if ( event ) {
+			// TODO: use _bind()
 			this.headers.bind( event.split( " " ).join( ".accordion " ) + ".accordion",
 				$.proxy( this, "_eventHandler" ) );
 		}
@@ -377,7 +381,7 @@ $.widget( "ui.accordion", {
 		} else {
 			toHide.hide();
 			toShow.show();
-			this._completed( data );
+			this._toggleComplete( data );
 		}
 
 		// TODO assert that the blur and focus triggers are really necessary, remove otherwise
@@ -406,7 +410,7 @@ $.widget( "ui.accordion", {
 			options = down && animate.down || animate,
 			complete = function() {
 				toShow.removeData( "ui-accordion-height" );
-				that._completed( data );
+				that._toggleComplete( data );
 			};
 
 		if ( typeof options === "number" ) {
@@ -438,7 +442,7 @@ $.widget( "ui.accordion", {
 				duration, easing, complete );
 	},
 
-	_completed: function( data ) {
+	_toggleComplete: function( data ) {
 		var toShow = data.newContent,
 			toHide = data.oldContent;
 
