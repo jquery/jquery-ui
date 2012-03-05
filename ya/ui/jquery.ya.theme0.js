@@ -152,6 +152,10 @@
 				$('option',element).eq(self.selectedIndex).attr('selected','selected').siblings().removeAttr('selected');
 				//隐藏options
 				listJq.hide();
+				//触发change事件
+				self._trigger('change',null,{
+					value:element.val()
+				});
 			});
 			//option state控制
 			$('.ui-combo-option',listJq).hover(function(){
