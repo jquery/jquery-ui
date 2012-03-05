@@ -53,13 +53,7 @@
 	margin:0px;
 	margin-right: 20px; 
 	cursor: pointer; 
-}
-.ui-dialog .ui-dialog-buttonpane .ui-button-submit span{
-	background: -webkit-gradient(linear, left top, left bottom, from(#e5e695), to(#d2d461));
-	background: -moz-linear-gradient(top,  #e5e695,  #d2d461);
-	background: -o-linear-gradient(top, #e5e695, #d2d461);
-	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#e5e695', endColorstr='#d2d461');
-	border:1px solid #acae3f;
+	vertical-align: middle;
 }
 .ui-dialog .ui-resizable-se { width: 14px; height: 14px; right: 3px; bottom: 3px; }
 .ui-draggable .ui-dialog-titlebar { cursor: move; }

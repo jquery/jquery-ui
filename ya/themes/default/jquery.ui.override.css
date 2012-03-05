@@ -78,6 +78,21 @@
 	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#f5f5f5');
 	border:1px solid #a8e4a3;
 }
+/* 确定按钮 */
+.ui-button .ui-button-submit-text{
+	background: -webkit-gradient(linear, left top, left bottom, from(#e5e695), to(#d2d461));
+	background: -moz-linear-gradient(top,  #e5e695,  #d2d461);
+	background: -o-linear-gradient(top, #e5e695, #d2d461);
+	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#e5e695', endColorstr='#d2d461');
+	border:1px solid #acae3f;
+}
+.ui-state-hover .ui-button-submit-text{
+	background: -webkit-gradient(linear, left top, left bottom, from(#edeeaa), to(#dee082));
+	background: -moz-linear-gradient(top,  #edeeaa,  #dee082);
+	background: -o-linear-gradient(top, #edeeaa, #dee082);
+	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#edeeaa', endColorstr='#dee082');
+	border:1px solid #acae3f;
+}
 /* icons */
 
 .ui-widget-content .ui-icon-closethick{

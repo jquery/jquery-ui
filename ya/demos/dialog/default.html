@@ -32,7 +32,8 @@
   	<script src="../../lib/regx.js"></script>
   	<script src="../../lib/sl.js"></script>
   	<script src="../../lib/uihelper.js"></script>
-  
+  	
+  	<script src="../../ui/jquery.ya.button0.js"></script>
 	<script src="../../ui/jquery.ya.dialog0.js"></script>
 	<script>
 	$(function() {
@@ -44,13 +45,22 @@
 			draggable:true,
 			buttons: [{
 				"text":'确定',
-				"class":"ui-button-submit",
+				"options":{
+					advancedTheme:{	//设置widget的高级主题效果
+						shadow:false,	//设置背景阴影，默认存在
+						corner:true
+					},
+					cls:'ui-button-submit'
+				},
 				"click": function() {
 					$( this ).dialog( "close" );
 				}
 			},{
 				"text":"取消",
 				"class":"ui-button-cancel",
+				"options":{
+					cls:'ui-button-cancel'
+				},
 				"click": function() {
 					$( this ).dialog( "close" );
 				}
