@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, minimum-scale=1, maximum-scale=1">
+	<title>jQuery UI Draggable - Draggable Map</title>
+	<link rel="stylesheet" href="../../themes/base/jquery.ui.all.css">
+	<script src="../../jquery-1.7.1.js"></script>
+	<script src="../../ui/jquery.ui.core.js"></script>
+	<script src="../../ui/jquery.ui.widget.js"></script>
+	<script src="../../ui/jquery.ui.interaction.js"></script>
+	<script src="../../ui/jquery.ui.draggable.js"></script>
+	<link rel="stylesheet" href="../demos.css">
+	<style>
+	html, body, .demo { height: 90%; }
+	#map { width: 100%; height: 100%; max-width: 640px; overflow: hidden; position: relative; }
+	#map img { position: absolute; }
+	</style>
+	<script>
+	$(window).load(function() {
+		var viewport = $("#map");
+		var img = viewport.find("img");
+		var viewWidth = viewport.width();
+        var viewHeight = viewport.height();
+        var imgWidth = img.width();
+        var imgHeight = img.height();
+        var leftMax = imgWidth - viewWidth;
+        var topMax = imgHeight - viewHeight;
+		img.draggable({
+			drag: function(event, ui) {
+				if (viewWidth > imgWidth) {
+					// center when there's just one image
+					ui.position.left = viewWidth / 2 - imgWidth / 2;
+				} else {
+					if (ui.position.left > 0) {
+						ui.position.left = 0;
+					} else if (ui.position.left + imgWidth < viewWidth) {
+						ui.position.left = -leftMax;
+					}
+				}
+				if (viewHeight > imgHeight) {
+					// center when the view is bigger then the image
+					ui.position.top = viewHeight / 2 - imgHeight / 2;
+				} else {
+					if (ui.position.top > 0) {
+						ui.position.top = 0;
+					} else if (ui.position.top + imgHeight < viewHeight) {
+						ui.position.top = -topMax;
+					}
+				}
+			}
+		});
+	});
+	</script>
+</head>
+<body>
+
+<div class="demo">
+
+	<div id="map" class="ui-widget-content">
+		<img src="http://maps.google.com/maps/api/staticmap?zoom=11&size=640x640&maptype=terrain&sensor=false&center=Vienna">
+	</div>
+
+</div><!-- End demo -->
+
+
+
+<div class="demo-description">
+<p>Drag the map around inside the viewport. Works with touch devices.</p>
+</div><!-- End demo-description -->
+
+</body>
+</html>
