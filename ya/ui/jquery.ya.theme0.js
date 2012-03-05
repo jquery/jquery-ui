@@ -143,18 +143,19 @@
 			}
 			themeJq.on('click','.ui-combo-option',function(){
 				//选中
-				var targetJq=$(this);
+				var targetJq=$(this),
+					selectedValue=targetJq.attr('val');
 				targetJq.addClass('ui-combo-option-selected').siblings().removeClass('ui-combo-option-selected');
 				headerJq.text(targetJq.text());
 				self.selectedIndex=$('.ui-combo-option',listJq).index(targetJq);
 				//设置隐藏控件值
-				element.val(targetJq.attr('val'));
+				element.val(selectedValue);
 				$('option',element).eq(self.selectedIndex).attr('selected','selected').siblings().removeAttr('selected');
 				//隐藏options
 				listJq.hide();
 				//触发change事件
 				self._trigger('change',null,{
-					value:element.val()
+					value:selectedValue
 				});
 			});
 			//option state控制
