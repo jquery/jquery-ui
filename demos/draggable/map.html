@@ -14,7 +14,8 @@
 	<style>
 	html, body, .demo { height: 90%; }
 	#map { width: 100%; height: 100%; max-width: 640px; overflow: hidden; position: relative; }
-	#map img { position: absolute; }
+	#map img { position: absolute; cursor: pointer; }
+	#map .ui-draggable-dragging { cursor: url('closedhand.cur'), move; }
 	</style>
 	<script>
 	$(window).load(function() {
@@ -27,6 +28,12 @@
         var leftMax = imgWidth - viewWidth;
         var topMax = imgHeight - viewHeight;
 		img.draggable({
+			start: function() {
+				$(this).addClass("ui-draggable-dragging");
+			},
+			stop: function() {
+				$(this).removeClass("ui-draggable-dragging");
+			},
 			drag: function(event, ui) {
 				if (viewWidth > imgWidth) {
 					// center when there's just one image
