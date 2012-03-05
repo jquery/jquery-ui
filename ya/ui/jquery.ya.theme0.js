@@ -173,8 +173,8 @@
 				width:options.width,
 				height:options.height
 			});	//包裹元素
-			//$('<div class="ui-itemselect-unselected"><ul class="ui-itemselect-options"></ul></div><div class="ui-itemselect-action"><span class="ui-itemselect-selected-handler">&rArr;</span><span class="ui-itemselect-unselected-handler">&lArr;</span></div><div class="ui-itemselect-selected"><ul class="ui-itemselect-options"></ul></div>').appendTo(themeJq);
-			$('<ul class="ui-itemselect-options ui-itemselect-unselected"></ul><div class="ui-itemselect-action"><div class="ui-itemselect-handlers"><span class="ui-itemselect-selected-handler">&rArr;</span><span class="ui-itemselect-unselected-handler">&lArr;</span></div></div><ul class="ui-itemselect-selected ui-itemselect-options"></ul>').appendTo(themeJq);
+			//$('<div class="ui-itemselect-unselected"><ul class="ui-itemselect-options"></ul></div><div class="ui-itemselect-action"><button class="ui-itemselect-selected-handler">&rArr;</button><button class="ui-itemselect-unselected-handler">&lArr;</button></div><div class="ui-itemselect-selected"><ul class="ui-itemselect-options"></ul></div>').appendTo(themeJq);
+			$('<ul class="ui-itemselect-options ui-itemselect-unselected"></ul><div class="ui-itemselect-action"><div class="ui-itemselect-handlers"><button class="ui-itemselect-selected-handler">&raquo;</button><button class="ui-itemselect-unselected-handler">&laquo;</button></div></div><ul class="ui-itemselect-selected ui-itemselect-options"></ul>').appendTo(themeJq);
 			unselectedJq=$('.ui-itemselect-unselected',themeJq);
 			selectedJq=$('.ui-itemselect-selected',themeJq);
 			actionJq=$('.ui-itemselect-action',themeJq);
@@ -184,21 +184,33 @@
 			self.themeJq=themeJq;
 			
 			//功能按钮区绝对定位
+			var leftSize=(themeJq.width()-actionJq.outerWidth())/2;
 			actionJq.css({
 				"position":"absolute",
 				"top":"0px",
-				"left":(themeJq.width()-actionJq.outerWidth())/2
+				"left":leftSize
 			});
+			//选择区与为选择区宽度设置
+			unselectedJq.width(leftSize);
+			selectedJq.width(leftSize);
+			
 			//设置select的multiple属性，可多选
 			element.attr('multiple','multiple');
 			//初始化
 			$('option',element).each(function(){
 				var thisJq=$(this);
 				if(thisJq.attr('selected')){
-					$('<li class="ui-itemselect-option ui-state-highlight">'+thisJq.text()+'<div class="ui-itemselect-option-action" style="display:none;"><span class="ui-itemselect-icon-up">&uArr;</span>&nbsp;&nbsp;<span class="ui-itemselect-icon-down">&dArr;</span>&nbsp;&nbsp;<span class="ui-itemselect-icon-close">&chi;</span></div></li>').data('refoption',thisJq).appendTo(selectedJq);
+					$('<li class="ui-itemselect-option ui-state-highlight">'+thisJq.text()+'<div class="ui-itemselect-option-action" style="display:none;"><span class="ui-itemselect-icon-up"></span>&nbsp;&nbsp;<span class="ui-itemselect-icon-down"></span>&nbsp;&nbsp;<span class="ui-itemselect-icon-close"></span></div></li>').data('refoption',thisJq).appendTo(selectedJq);
 				}else{
-					$('<li class="ui-itemselect-option ui-state-default"'+(thisJq.attr('disabled')?'style="display:none;"':'')+'>'+thisJq.text()+'<div class="ui-itemselect-option-action" style="display:none;"><span class="ui-itemselect-icon-up">&uArr;</span>&nbsp;&nbsp;<span class="ui-itemselect-icon-down">&dArr;</span>&nbsp;&nbsp;<span class="ui-itemselect-icon-close">&chi;</span></div></li>').data('refoption',thisJq).appendTo(unselectedJq);
+					$('<li class="ui-itemselect-option ui-state-default"'+(thisJq.attr('disabled')?'style="display:none;"':'')+'>'+thisJq.text()+'<div class="ui-itemselect-option-action" style="display:none;"><span class="ui-itemselect-icon-up"></span>&nbsp;&nbsp;<span class="ui-itemselect-icon-down"></span>&nbsp;&nbsp;<span class="ui-itemselect-icon-close"></span></div></li>').data('refoption',thisJq).appendTo(unselectedJq);
 				}
+			});
+			//功能按钮主题化
+			$('.ui-itemselect-selected-handler,.ui-itemselect-unselected-handler').button0({
+				advancedTheme:{	
+					corner:true
+				},
+				'cls':'ui-button-submit'
 			});
 			//可拖拽排序
 			$('.ui-itemselect-options',themeJq).sortable({
@@ -251,6 +263,12 @@
 			},function(){
 				$(this).hide();
 			});*/
+			//鼠标划上option
+			$('.ui-itemselect-option',themeJq).hover(function(){
+				$(this).addClass('ui-state-hover');
+			},function(){
+				$(this).removeClass('ui-state-hover');
+			});
 			selectedJq.on('mouseenter','.ui-itemselect-option',function(){
 				$('.ui-itemselect-option-action',this).show();
 			}).on('mouseleave','.ui-itemselect-option',function(){
@@ -271,8 +289,12 @@
 				//重排
 				self._itemselectTheme_sort();
 				return false;	//阻止回溯
+			}).on('mouseenter','span',function(){
+				$(this).addClass('ui-state-hover');
+			}).on('mouseleave','span',function(){
+				$(this).removeClass('ui-state-hover');
 			});
-			$('.ui-itemselect-handlers',themeJq).on('click','span',function(){
+			$('.ui-itemselect-handlers',themeJq).on('click','button',function(){
 				var thisJq=$(this),
 					optionSelectedJq=self._itemselectTheme_getSelect();
 				if(thisJq.hasClass('ui-itemselect-selected-handler')){	//移到选择区
@@ -289,6 +311,7 @@
 						self._itemselectTheme_sort();
 					}
 				}
+				return false;
 			});
 		},
 		_itemselectTheme_getSelect:function(){

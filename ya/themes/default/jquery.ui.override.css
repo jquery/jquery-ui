@@ -34,9 +34,9 @@
 .ui-state-highlight, 
 .ui-widget-content .ui-state-highlight, 
 .ui-widget-header .ui-state-highlight {
-    background: url("images/ui-bg_highlight-soft_75_ffe45c_1x100.png") repeat-x scroll 50% top #FFE45C;
-    border: 1px solid #FED22F;
-    color: #363636;
+    background: none;
+    border: none;
+    color: #000000;
 }
 .ui-state-disabled, 
 .ui-widget-content .ui-state-disabled, 

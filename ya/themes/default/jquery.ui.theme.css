@@ -32,30 +32,39 @@
 	overflow:hidden;
 }
 .ui-itemselect-action{
-	width:30px;
+	width:42px;
 	height:100%;
 	overflow:hidden;
 	border-left:1px solid #cccccc;
 	border-right:1px solid #cccccc;
 	position: relative;
+	background: #ffffff;
+	z-index: 10;
 }
 .ui-itemselect-action .ui-itemselect-handlers{
 	position: absolute;
 	top:50%;
 	left:50%;
-	margin-left:-15px;
-	margin-top:-37.5px;;
+	margin-left:-10px;
+	margin-top:-40px;;
 }
 .ui-itemselect-action .ui-itemselect-selected-handler,
 .ui-itemselect-action .ui-itemselect-unselected-handler{
 	display:block;
-	height:30px;
-	width:30px;
-	margin:5px 0px;
-	background: #cccccc;
+	height:20px;
+	width:20px;
+	margin:20px 0px;
 	cursor:pointer;
-	line-height: 30px;
+	line-height: 20px;
 	text-align: center;
+}
+.ui-itemselect-action .ui-itemselect-selected-handler .ui-button-text,
+.ui-itemselect-action .ui-itemselect-unselected-handler .ui-button-text{
+	padding:0px;
+	height:18px;
+	line-height:18px;
+	font-size:24px;
+	color:#ffffff;
 }
 .ui-itemselect-unselected{
 	float:left;
@@ -68,12 +77,17 @@
 	height:100%;
 }
 .ui-itemselect-option{
-	border:1px solid #cccccc;
 	line-height: 28px;
 	height:28px;
-	width:60px;
-	margin:10px;
+	width:100%;
 	position:relative;
+	text-indent: 1em;
+}
+.ui-itemselect-options .ui-state-highlight{
+	background: #ffffff;
+}
+.ui-itemselect-options .ui-state-hover{
+	background: #f7f7f7;
 }
 .ui-itemselect-option-action{
 	position:absolute;
@@ -82,6 +96,18 @@
 }
 .ui-itemselect-option-action span{
 	cursor:pointer;
+	padding:0 7px;
+	font-size:8px;
+	background: url(images/theme/ui-icon-actions.png) no-repeat;
+}
+.ui-itemselect-option-action .ui-itemselect-icon-up{
+	background-position:0px -11px;
+}
+.ui-itemselect-option-action .ui-itemselect-icon-down{
+	background-position:-22px 1px;
+}
+.ui-itemselect-option-action .ui-itemselect-icon-close{
+	background-position:-45px 1px;
 }
 .ui-itemselect .ui-itemselect-option-selected {
     background: #F39814;
