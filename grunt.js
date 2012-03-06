@@ -75,29 +75,15 @@ task.registerBasicTask('zip', 'Create a zip file for release', function(data) {
   var files = file.expand(data.src);
   log.writeln("Creating zip file " + data.dest);
 
-  var done = this.async();
-
-  var zipstream = require('zipstream');
   var fs = require('fs');
-
-  var out = fs.createWriteStream(data.dest);
-  var zip = zipstream.createZip({ level: 1 });
-
-  zip.pipe(out);
-
-  function addFile() {
-    if (!files.length) {
-      zip.finalize(function(written) {
-        log.writeln(written + ' total bytes written');
-        done();
-      });
-      return;
-    }
-    var file = files.shift();
+  var AdmZip = require('adm-zip');
+  var zip = new AdmZip();
+  files.forEach(function(file) {
     log.verbose.writeln('Zipping ' + file);
-    zip.addFile(fs.createReadStream(file), { name: file }, addFile);
-  }
-  addFile();
+    zip.addFile(file, fs.readFileSync(file));
+  });
+  zip.writeZip(data.dest);
+  log.writeln("Wrote " + files.length + " files to " + data.dest);
 });
 
 task.registerTask('default', 'lint qunit');

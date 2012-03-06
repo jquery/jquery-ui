@@ -27,7 +27,7 @@
   "dependencies": {},
   "devDependencies": {
     "grunt": "0.2.x",
-    "zipstream": "0.2.x"
+    "adm-zip": "0.1.x"
   },
   "keywords": []
 }
