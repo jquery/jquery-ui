@@ -8,6 +8,19 @@ var allFiles = coreFiles.map(function(file) {
 var rawList = allFiles.map(function(file) {
   return file.substring(3);
 });
+
+var minify = {
+  'dist/ui/minified/jquery-ui.min.js': ['<banner>', 'dist/ui/jquery-ui.js'],
+  // TODO adjust banner to get access to the list of included files
+  'dist/ui/minified/i18n/jquery-ui-i18n.min.js': ['<banner>', 'dist/ui/i18n/jquery-ui-i18n.js']
+};
+function minFile(file) {
+  // TODO adjust banner to get access to the list of included files
+  minify['dist/' + file.replace(/\.js$/, '.min.js').replace(/ui\//, 'ui/minified/')] = ['<banner>', file];
+}
+allFiles.forEach(minFile);
+file.expand('ui/i18n/*.js').forEach(minFile);
+
 config.init({
   pkg: '<json:package.json>',
   meta: {
@@ -20,11 +33,10 @@ config.init({
       ' Licensed <%= _.pluck(pkg.licenses, "type").join(", ") %> */'
   },
   concat: {
-    'dist/jquery-ui.js': allFiles
+    'dist/ui/jquery-ui.js': allFiles,
+    'dist/ui/i18n/jquery-ui-i18n.js': 'ui/i18n/*.js'
   },
-  min: {
-    'dist/jquery-ui.min.js': ['<banner>', 'dist/jquery-ui.js']
-  },
+  min: minify,
   zip: {
     dist: {
       src: [
@@ -80,11 +92,12 @@ task.registerBasicTask('zip', 'Create a zip file for release', function(data) {
   var zip = new AdmZip();
   files.forEach(function(file) {
     log.verbose.writeln('Zipping ' + file);
-    zip.addFile(file, fs.readFileSync(file));
+    // rewrite file names from dist folder (created by build), drop the /dist part
+    zip.addFile(file.replace(/^dist/, ''), fs.readFileSync(file));
   });
   zip.writeZip(data.dest);
   log.writeln("Wrote " + files.length + " files to " + data.dest);
 });
 
 task.registerTask('default', 'lint qunit');
-task.registerTask('release', 'default concat min zip');
+task.registerTask('release', 'concat min zip');
