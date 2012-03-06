@@ -94,7 +94,7 @@
 			var listJq,
 				headerJq,
 				selectedIndex=0;
-			var clickState='hidden';	//hidden or shown
+			//var clickState='hidden';	//hidden or shown
 			
 			var themeJq=$('<div class="'+options.cls+' ui-combo ui-widget ui-helper-reset"></div>');	//包裹元素
 			$('<div class="ui-combo-header"><div class="ui-combo-header-content"></div><span class="ui-icon ui-icon-triangle-1-s"></span></div><ul class="ui-combo-options ui-widget-content ui-helper-reset" style="display:none;"></ul>').appendTo(themeJq);
@@ -126,22 +126,26 @@
 			if(options.triggerType=="click"){			
 				themeJq.click(function(e){				
 					//控制显示
-					if(clickState=="hidden"){
+					/*if(clickState=="hidden"){
 						listJq.show();
 						clickState="shown";
 					}else if(clickState=="shown"){
 						listJq.hide();
 						clickState="hidden";
-					}
+					}*/
+					listJq.show();
 				});
 			}else if(options.triggerType=="hover"){
-				themeJq.hover(function(){
+				themeJq.on('mouseenter',function(){
 					listJq.show();
-				},function(){
-					listJq.hide();
 				});
 			}
-			themeJq.on('click','.ui-combo-option',function(){
+			//鼠标离开隐藏combobox下拉
+			themeJq.on('mouseleave',function(){
+				listJq.hide();
+			});
+			
+			themeJq.on('click','.ui-combo-option',function(e){
 				//选中
 				var targetJq=$(this),
 					selectedValue=targetJq.attr('val'),
@@ -159,6 +163,7 @@
 					value:selectedValue,
 					label:selectedLabel
 				});
+				e.stopPropagation();
 			});
 			//option state控制
 			$('.ui-combo-option',listJq).hover(function(){
