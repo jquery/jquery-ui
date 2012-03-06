@@ -149,8 +149,8 @@
 				headerJq.text(targetJq.text());
 				self.selectedIndex=$('.ui-combo-option',listJq).index(targetJq);
 				//设置隐藏控件值
-				element.val(selectedValue);
 				$('option',element).eq(self.selectedIndex).attr('selected','selected').siblings().removeAttr('selected');
+				element.val(selectedValue);
 				//隐藏options
 				listJq.hide();
 				//触发change事件
