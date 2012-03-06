@@ -10,27 +10,38 @@ var rawList = allFiles.map(function(file) {
 });
 
 var minify = {
-  'dist/ui/minified/jquery-ui.min.js': ['<banner>', 'dist/ui/jquery-ui.js'],
+  'dist/ui/minified/jquery-ui.min.js': ['<banner:meta.bannerAll>', 'dist/ui/jquery-ui.js'],
   // TODO adjust banner to get access to the list of included files
-  'dist/ui/minified/i18n/jquery-ui-i18n.min.js': ['<banner>', 'dist/ui/i18n/jquery-ui-i18n.js']
+  'dist/ui/minified/i18n/jquery-ui-i18n.min.js': ['<banner:meta.bannerI18n>', 'dist/ui/i18n/jquery-ui-i18n.js']
 };
 function minFile(file) {
   // TODO adjust banner to get access to the list of included files
   minify['dist/' + file.replace(/\.js$/, '.min.js').replace(/ui\//, 'ui/minified/')] = ['<banner>', file];
 }
 allFiles.forEach(minFile);
-file.expand('ui/i18n/*.js').forEach(minFile);
+
+var allI18nFiles = file.expand('ui/i18n/*.js');
+allI18nFiles.forEach(minFile);
+var i18nfiles = allI18nFiles.map(function(file) {
+  return file.substring(8);
+});
+
+function createBanner(files) {
+  return '/*! <%= pkg.title || pkg.name %> - v<%= pkg.version %> - ' +
+      '<%= template.today("isoDate") %>\n' +
+      '<%= pkg.homepage ? "* " + pkg.homepage + "\n" : "" %>' +
+      // TODO makes this banner only useful for the min-all task below...
+      (files ? '* Includes: ' + files.join(', ') + '\n' : '') +
+      '* Copyright (c) <%= template.today("yyyy") %> <%= pkg.author.name %>;' +
+      ' Licensed <%= _.pluck(pkg.licenses, "type").join(", ") %> */';
+}
 
 config.init({
   pkg: '<json:package.json>',
   meta: {
-    banner: '/*! <%= pkg.title || pkg.name %> - v<%= pkg.version %> - ' +
-      '<%= template.today("isoDate") %>\n' +
-      '<%= pkg.homepage ? "* " + pkg.homepage + "\n" : "" %>' +
-      // TODO makes this banner only useful for the min-all task below...
-      '* Includes: ' + rawList.join(', ') + '\n' +
-      '* Copyright (c) <%= template.today("yyyy") %> <%= pkg.author.name %>;' +
-      ' Licensed <%= _.pluck(pkg.licenses, "type").join(", ") %> */'
+    banner: createBanner(),
+    bannerAll: createBanner(rawList),
+    bannerI18n: createBanner(i18nfiles)
   },
   concat: {
     'dist/ui/jquery-ui.js': allFiles,
