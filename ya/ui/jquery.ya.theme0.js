@@ -144,9 +144,10 @@
 			themeJq.on('click','.ui-combo-option',function(){
 				//选中
 				var targetJq=$(this),
-					selectedValue=targetJq.attr('val');
+					selectedValue=targetJq.attr('val'),
+					selectedLabel=targetJq.text();
 				targetJq.addClass('ui-combo-option-selected').siblings().removeClass('ui-combo-option-selected');
-				headerJq.text(targetJq.text());
+				headerJq.text(selectedLabel);
 				self.selectedIndex=$('.ui-combo-option',listJq).index(targetJq);
 				//设置隐藏控件值
 				$('option',element).eq(self.selectedIndex).attr('selected','selected').siblings().removeAttr('selected');
@@ -155,7 +156,8 @@
 				listJq.hide();
 				//触发change事件
 				self._trigger('change',null,{
-					value:selectedValue
+					value:selectedValue,
+					label:selectedLabel
 				});
 			});
 			//option state控制
