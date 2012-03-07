@@ -76,12 +76,36 @@
 			triggerType:'click'			
 		});
 		$('#select1').theme0('disable');
+		
+		$('#action1').click(function(){
+			$( "#select2" ).theme0('addItems','138');
+			$( "#select2" ).theme0('addItems',{
+				value:'100'
+			});
+			$( "#select2" ).theme0('addItems',{
+				value:'13',
+				label:'字面量'
+			});
+			return false;
+		});
+		$('#action2').click(function(){
+			var data=$( "#select2" ).theme0('getSelection');
+			alert(data);
+			return false;
+		});
+		$('#action3').click(function(){
+			$( "#select2" ).theme0('select',3);
+			return false;
+		});
 	});
 	</script>
 </head>
 
 <body>
   <form action="#" method="post">
+  	<button id="action1">给第2个select添加选项</button>
+  	<button id="action2">获得第2个select选中区</button>
+  	<button id="action3">设置第2个select选中项</button>
   	<div class="select-wrapper">
 	  	<select id="select1">
 	  		<option value="a">a</option>

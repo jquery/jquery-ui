@@ -120,7 +120,7 @@
 			headerJq.text($('option',element).eq(selectedIndex).text());
 			listJq.html(htmlArr.join(''));
 			//设置初始化被选中的option索引
-			self.selectedIndex=selectedIndex;
+			//self.selectedIndex=selectedIndex;
 			
 			//绑定事件
 			if(options.triggerType=="click"){			
@@ -149,12 +149,13 @@
 				//选中
 				var targetJq=$(this),
 					selectedValue=targetJq.attr('val'),
-					selectedLabel=targetJq.text();
+					selectedLabel=targetJq.text(),
+					selectedIndex;
 				targetJq.addClass('ui-combo-option-selected').siblings().removeClass('ui-combo-option-selected');
 				headerJq.text(selectedLabel);
-				self.selectedIndex=$('.ui-combo-option',listJq).index(targetJq);
+				selectedIndex=$('.ui-combo-option',listJq).index(targetJq);
 				//设置隐藏控件值
-				$('option',element).eq(self.selectedIndex).attr('selected','selected').siblings().removeAttr('selected');
+				$('option',element).eq(selectedIndex).attr('selected','selected').siblings().removeAttr('selected');
 				element.val(selectedValue);
 				//隐藏options
 				listJq.hide();
@@ -163,14 +164,82 @@
 					value:selectedValue,
 					label:selectedLabel
 				});
+				//触发select事件
+				self._trigger('select',null,{
+					value:selectedValue,
+					label:selectedLabel
+				});
 				e.stopPropagation();
 			});
 			//option state控制
-			$('.ui-combo-option',listJq).hover(function(){
+			listJq.on('mouseenter','.ui-combo-option',function(){
 				$(this).addClass('ui-state-hover');
-			},function(){
+			}).on('mouseleave','.ui-combo-option',function(){
 				$(this).removeClass('ui-state-hover');
 			});
+		},
+		_comboTheme_getSelection:function(){
+			var self=this,
+				element=self.element,
+				selection=[];
+			$('option',element).each(function(){
+				var thisJq=$(this);
+				if(thisJq.attr('selected')){
+					selection.push({
+						label:thisJq.text(),
+						value:thisJq.val()
+					});
+				}
+			});
+			return selection;
+		},
+		_comboTheme_addItems:function(mix){
+			var self=this,
+				element=self.element,
+				listJq=$('.ui-combo-options',self.themeJq),
+				data=[],
+				htmlArr1=[],
+				htmlArr2=[];
+			if(_.isString(mix)){	//字符串
+				data[0]={
+					value:mix,
+					label:mix
+				};
+			}else if(_.isArray(mix)){	//数组
+				data=_.map(mix,function(v){
+					if(!v.hasOwnProperty('label')){
+						v.label=v.value;
+					}
+					return v;
+				});
+			}else{	//object
+				data=_.map([mix],function(v){
+					if(!v.hasOwnProperty('label')){
+						v.label=v.value;
+					}
+					return v;
+				});
+			}
+			_.each(data,function(v,i){
+				htmlArr1[i]='<option value="'+v.value+'">'+v.label+'</option>';
+				htmlArr2[i]='<li class="ui-combo-option ui-state-default" val="'+v.value+'">'+v.label+'</li>';;
+			});
+			element.append(htmlArr1.join(''));
+			listJq.append(htmlArr2.join(''));
+		},
+		_comboTheme_select:function(mix){
+			var self=this,
+				listJq=$('.ui-combo-options',self.themeJq),
+				optionsJq=$('.ui-combo-option',listJq);
+			if(_.isNumber(mix)){
+				optionsJq.eq(mix).click();
+			}else{
+				optionsJq.each(function(){
+					if(this===$(mix).get(0)){
+						$(this).click();
+					}
+				});
+			}
 		},
 		_itemselectTheme:function(){
 			var self=this,
@@ -328,6 +397,39 @@
 		},
 		_itemselectTheme_getSelect:function(){
 			return $('.ui-itemselect-option-selected',this.themeJq);
+		},
+		getSelection:function(){
+			var self=this,
+				themeType=self.themeType;
+			switch(themeType){
+				case "combo":
+					return self._comboTheme_getSelection();
+					break;
+				default:
+					break;
+			}
+		},
+		addItems:function(mix){
+			var self=this,
+				themeType=self.themeType;
+			switch(themeType){
+				case "combo":
+					self._comboTheme_addItems(mix);
+					break;
+				default:
+					break;
+			}
+		},
+		select:function(mix){
+			var self=this,
+				themeType=self.themeType;
+			switch(themeType){
+				case "combo":
+					self._comboTheme_select(mix);
+					break;
+				default:
+					break;
+			}
 		},
 		disable:function(){
 			var self=this,
