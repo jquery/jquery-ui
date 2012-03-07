@@ -162,8 +162,7 @@ $.widget( "ui.accordion", {
 
 		if ( key === "event" ) {
 			if ( this.options.event ) {
-				// TODO: this is incorrect for multiple events (see _setupEvents)
-				this.headers.unbind( this.options.event + ".accordion", this._eventHandler );
+				this.headers.unbind( this.options.event.split( " " ).join( ".accordion " ) + ".accordion", this._eventHandler );
 			}
 			this._setupEvents( value );
 		}
