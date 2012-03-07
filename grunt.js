@@ -1,4 +1,20 @@
 /*global config:true, task:true*/
+function stripDirectory(file) {
+  return file.replace(/.+\/(.+)$/, '$1');
+}
+function createBanner(files) {
+  // strip folders
+  var fileNames = files && files.map(stripDirectory);
+  return '/*! <%= pkg.title || pkg.name %> - v<%= pkg.version %> - ' +
+      '<%= template.today("isoDate") %>\n' +
+      '<%= pkg.homepage ? "* " + pkg.homepage + "\n" : "" %>' +
+      '* Includes: ' + (files ? fileNames.join(', ') : '<%= stripDirectory(task.current.data.src[1]) %>') + '\n' +
+      '* Copyright (c) <%= template.today("yyyy") %> <%= pkg.author.name %>;' +
+      ' Licensed <%= _.pluck(pkg.licenses, "type").join(", ") %> */';
+}
+// allow access from banner template
+global.stripDirectory = stripDirectory;
+
 var coreFiles = 'jquery.ui.core.js, jquery.ui.widget.js, jquery.ui.mouse.js, jquery.ui.draggable.js, jquery.ui.droppable.js, jquery.ui.resizable.js, jquery.ui.selectable.js, jquery.ui.sortable.js, jquery.effects.core.js'.split(', ');
 var uiFiles = coreFiles.map(function(file) {
   return 'ui/' + file;
@@ -20,19 +36,6 @@ allI18nFiles.forEach(minFile);
 
 // TODO move core to the front, theme to the end, exclude all and base
 var cssFiles = file.expand('themes/base/*.css');
-
-function createBanner(files) {
-  // strip folders
-  var fileNames = files && files.map(function(file) {
-    return file.replace(/.+\/(.+)$/, '$1');
-  });
-  return '/*! <%= pkg.title || pkg.name %> - v<%= pkg.version %> - ' +
-      '<%= template.today("isoDate") %>\n' +
-      '<%= pkg.homepage ? "* " + pkg.homepage + "\n" : "" %>' +
-      (files ? '* Includes: ' + fileNames.join(', ') + '\n' : '') +
-      '* Copyright (c) <%= template.today("yyyy") %> <%= pkg.author.name %>;' +
-      ' Licensed <%= _.pluck(pkg.licenses, "type").join(", ") %> */';
-}
 
 config.init({
   pkg: '<json:package.json>',
