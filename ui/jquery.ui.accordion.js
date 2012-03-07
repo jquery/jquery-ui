@@ -42,6 +42,9 @@ $.widget( "ui.accordion", {
 			.addClass( "ui-accordion-header ui-helper-reset ui-state-default ui-corner-all" );
 		this._hoverable( this.headers );
 		this._focusable( this.headers );
+		this._bind( this.headers, {
+			keydown: "_keydown"
+		});
 
 		this.headers.next()
 			.addClass( "ui-accordion-content ui-helper-reset ui-widget-content ui-corner-bottom" );
@@ -68,8 +71,6 @@ $.widget( "ui.accordion", {
 
 		this.headers
 			.attr( "role", "tab" )
-			// TODO: use _bind()
-			.bind( "keydown.accordion", $.proxy( this, "_keydown" ) )
 			.next()
 				.attr( "role", "tabpanel" );
 
