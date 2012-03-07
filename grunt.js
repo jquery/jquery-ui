@@ -37,6 +37,23 @@ allI18nFiles.forEach(minFile);
 // TODO move core to the front, theme to the end, exclude all and base
 var cssFiles = file.expand('themes/base/*.css');
 
+var cdnFiles = [
+  'AUTHORS.txt',
+  'GPL-LICENSE.txt',
+  'MIT-LICENSE.txt',
+  'dist/i18n/jquery-ui-i18n.js',
+  'dist/i18n/jquery-ui-i18n.min.js',
+  'ui/i18n/jquery.ui.datepicker-*.js',
+  'dist/ui/i18n/jquery.ui.datepicker-*.min.js',
+  'dist/ui/jquery-ui.js',
+  'dist/ui/minified/jquery-ui.min.js',
+  'themes/base/images/*.png',
+  'dist/themes/base/jquery-ui.css',
+  'themes/base/jquery.ui.*.css',
+  'dist/themes/base/minified/*.css',
+  'version.txt'
+];
+
 config.init({
   pkg: '<json:package.json>',
   meta: {
@@ -70,7 +87,14 @@ config.init({
         'tests/**/*'
       ],
       dest: 'dist/<%= pkg.name %>-<%= pkg.version %>.zip'
+    },
+    cdn: {
+      src: cdnFiles,
+      dest: 'dist/<%= pkg.name %>-<%= pkg.version %>-cdn.zip'
     }
+  },
+  md5: {
+    'dist/MANIFEST': cdnFiles
   },
   qunit: {
     files: file.expand('tests/unit/**/*.html').filter(function(file) {
@@ -139,5 +163,17 @@ task.registerBasicTask( 'css_min', 'Minify CSS files with Sqwish.', function( da
   task.helper( 'min_max_info', min, max );
 });
 
+task.registerBasicTask('md5', 'Create list of md5 hashes for CDN uploads', function(data) {
+  var crypto = require('crypto');
+  var hashes = [];
+  file.expand(data.src).forEach(function(fileName) {
+    var hash = crypto.createHash('md5');
+    hash.update(file.read(fileName));
+    hashes.push(fileName + ' ' + hash.digest('hex'));
+  });
+  file.write(data.dest, hashes.join('\n') + '\n');
+});
+
 task.registerTask('default', 'lint qunit');
-task.registerTask('release', 'concat min zip');
+task.registerTask('release', 'concat min zip:dist');
+task.registerTask('release_cdn', 'concat min md5 zip:cdn');
