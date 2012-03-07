@@ -42,9 +42,6 @@ $.widget( "ui.accordion", {
 			.addClass( "ui-accordion-header ui-helper-reset ui-state-default ui-corner-all" );
 		this._hoverable( this.headers );
 		this._focusable( this.headers );
-		this._bind( this.headers, {
-			keydown: "_keydown"
-		});
 
 		this.headers.next()
 			.addClass( "ui-accordion-content ui-helper-reset ui-widget-content ui-corner-bottom" );
@@ -59,7 +56,7 @@ $.widget( "ui.accordion", {
 		}
 		this.active = this._findActive( options.active )
 			.addClass( "ui-accordion-header-active ui-state-active" )
-			.toggleClass( "ui-corner-all ui-corner-top" )
+			.toggleClass( "ui-corner-all ui-corner-top" );
 		this.active.next().addClass( "ui-accordion-content-active" );
 
 		this._createIcons();
@@ -162,7 +159,7 @@ $.widget( "ui.accordion", {
 
 		if ( key === "event" ) {
 			if ( this.options.event ) {
-				this.headers.unbind( this.options.event.split( " " ).join( ".accordion " ) + ".accordion", this._eventHandler );
+				this.headers.unbind( ".accordion" );
 			}
 			this._setupEvents( value );
 		}
@@ -301,11 +298,15 @@ $.widget( "ui.accordion", {
 	},
 
 	_setupEvents: function( event ) {
+		var events = {
+			keydown: "_keydown"
+		};
 		if ( event ) {
-			// TODO: use _bind()
-			this.headers.bind( event.split( " " ).join( ".accordion " ) + ".accordion",
-				$.proxy( this, "_eventHandler" ) );
+			$.each( event.split(" "), function( index, eventName ) {
+				events[ eventName ] = "_eventHandler";
+			});
 		}
+		this._bind( this.headers, events );
 	},
 
 	_eventHandler: function( event ) {
@@ -325,7 +326,7 @@ $.widget( "ui.accordion", {
 
 		event.preventDefault();
 
-		if ( options.disabled ||
+		if (
 				// click on active header, but not collapsible
 				( clickedIsActive && !options.collapsible ) ||
 				// allow canceling activation
