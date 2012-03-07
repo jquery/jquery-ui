@@ -56,7 +56,7 @@ $.widget( "ui.accordion", {
 		}
 		this.active = this._findActive( options.active )
 			.addClass( "ui-accordion-header-active ui-state-active" )
-			.toggleClass( "ui-corner-all ui-corner-top" )
+			.toggleClass( "ui-corner-all ui-corner-top" );
 		this.active.next().addClass( "ui-accordion-content-active" );
 
 		this._createIcons();
