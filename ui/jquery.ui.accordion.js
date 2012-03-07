@@ -192,8 +192,7 @@ $.widget( "ui.accordion", {
 	},
 
 	_keydown: function( event ) {
-		// TODO: remove disabled check when using _bind()
-		if ( this.options.disabled || event.altKey || event.ctrlKey ) {
+		if ( event.altKey || event.ctrlKey ) {
 			return;
 		}
 
