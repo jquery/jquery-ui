@@ -82,10 +82,13 @@
 			$( "#select2" ).theme0('addItems',{
 				value:'100'
 			});
-			$( "#select2" ).theme0('addItems',{
+			$( "#select2" ).theme0('addItems',[{
 				value:'13',
 				label:'字面量'
-			});
+			},{
+				value:'14',
+				label:'字面量2'
+			}]);
 			return false;
 		});
 		$('#action2').click(function(){
@@ -94,7 +97,7 @@
 			return false;
 		});
 		$('#action3').click(function(){
-			$( "#select2" ).theme0('select',3);
+			$( "#select2" ).theme0('select','h');
 			return false;
 		});
 	});

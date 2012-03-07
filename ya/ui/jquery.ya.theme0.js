@@ -231,8 +231,15 @@
 			var self=this,
 				listJq=$('.ui-combo-options',self.themeJq),
 				optionsJq=$('.ui-combo-option',listJq);
-			if(_.isNumber(mix)){
+			if(_.isNumber(mix)){	//option索引过滤
 				optionsJq.eq(mix).click();
+			}else if(_.isString(mix)){	//value过滤
+				optionsJq.each(function(){
+					var thisJq=$(this);
+					if(thisJq.attr('val')==mix){
+						thisJq.click();
+					}
+				});
 			}else{
 				optionsJq.each(function(){
 					if(this===$(mix).get(0)){
