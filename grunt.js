@@ -49,8 +49,10 @@ config.init({
   files: {
     distFolder: 'dist/<%= pkg.name %>-<%= pkg.version %>',
     cdnDistFolder: 'dist/<%= pkg.name %>-<%= pkg.version %>-cdn',
+    themesDistFolder: 'dist/<%= pkg.name %>-themes-<%= pkg.version %>',
     zip: 'dist/<%= pkg.name %>-<%= pkg.version %>.zip',
-    cdnZip: 'dist/<%= pkg.name %>-<%= pkg.version %>-cdn.zip'
+    cdnZip: 'dist/<%= pkg.name %>-<%= pkg.version %>-cdn.zip',
+    themesZip: 'dist/<%= pkg.name %>-themes-<%= pkg.version %>.zip'
   },
   meta: {
     banner: createBanner(),
@@ -62,7 +64,7 @@ config.init({
     // TODO replace banners, both for JS and CSS
     ui: {
       src: ['<banner:meta.bannerAll>'].concat(uiFiles.map(function(file) {
-        // TODO why doesn't this work?
+        // TODO why doesn't this work? because its a protected banner, and template.stripBanner skips that m(
         return '<file_strip_banner:' + file + '>';
       })),
       dest: 'dist/jquery-ui.js'
@@ -159,10 +161,14 @@ config.init({
       strip: /^dist/,
       dest: '<%= files.cdnDistFolder %>'
     },
-    dist_min_images: {
+    cdn_min_images: {
       src: 'themes/base/images/*',
       strip: /^themes\/base\//,
       dest: '<%= files.cdnDistFolder %>/themes/base/minified'
+    },
+    themes: {
+      // copy development-bundle/themes/**/*.js (excluding themes/base)
+      // rename jquery-ui-.*custom.css to jquery-ui.css
     }
   },
   zip: {
@@ -173,6 +179,10 @@ config.init({
     cdn: {
       src: '<%= files.cdnDistFolder %>/**/*',
       dest: '<%= files.cdnZip %>'
+    },
+    themes: {
+      src: '<%= files.themesDistFolder %>/**/*',
+      dest: '<%= files.themesZip %>'
     }
   },
   md5: {
@@ -300,16 +310,16 @@ task.registerBasicTask('md5', 'Create list of md5 hashes for CDN uploads', funct
 task.registerTask('default', 'lint qunit');
 task.registerTask('build', 'concat min css_min');
 task.registerTask('release', 'build copy:dist copy:dist_min copy:dist_min_images copy:dist_css_min zip:dist');
-task.registerTask('release_themes', 'build download_themes zip:themes');
+task.registerTask('release_themes', 'build download_themes copy:themes zip:themes');
 // TODO include other themes in cdn release
-task.registerTask('release_cdn', 'build copy:cdn copy:cdn_min copy:cdn_i18n copy:cdn_i18n_min copy:cdn_css_min md5 zip:cdn');
+task.registerTask('release_cdn', 'build copy:cdn copy:cdn_min copy:cdn_i18n copy:cdn_i18n_min copy:cdn_css_min copy:cdn_min_images md5 zip:cdn');
 
 task.registerTask('download_themes', function() {
-  var AdmZip = require('adm-zip');
-  var done = this.async();
+  // var AdmZip = require('adm-zip');
   var fs = require('fs');
   var request = require('request');
-  var themes = file.read('build/themes').split(',').slice(0, 1);
+  var done = this.async();
+  var themes = file.read('build/themes').split(',');
   var requests = 0;
   file.mkdir('dist/tmp');
   themes.forEach(function(theme, index) {
@@ -319,12 +329,22 @@ task.registerTask('download_themes', function() {
     var out = fs.createWriteStream(zipFileName);
     out.on('close', function() {
       log.writeln("done downloading " + zipFileName);
-      var zip = new AdmZip(zipFileName);
-      zip.extractAllTo('dist/tmp/' + index + '/');
-      requests -= 1;
-      if (requests === 0) {
-        done();
-      }
+      // TODO AdmZip produces "crc32 checksum failed", need to figure out why
+      // var zip = new AdmZip(zipFileName);
+      // zip.extractAllTo('dist/tmp/' + index + '/');
+      // until then, using cli unzip...
+      task.helper("child_process", {
+        cmd: "unzip",
+        args: ["-d", "dist/tmp/" + index, zipFileName]
+      }, function(err, result) {
+        log.writeln("Unzipped " + zipFileName + ", deleting it now");
+        fs.unlinkSync(zipFileName);
+        requests -= 1;
+        if (requests === 0) {
+          done();
+        }
+      });
+
     });
     request('http://ui-dev.jquery.com/download/?' + theme).pipe(out);
   });
