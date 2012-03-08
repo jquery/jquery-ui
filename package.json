@@ -28,7 +28,8 @@
   "devDependencies": {
     "grunt": "0.2.x",
     "adm-zip": "0.1.x",
-    "sqwish": "0.2.x"
+    "sqwish": "0.2.x",
+    "request": "0.2.x"
   },
   "keywords": []
 }

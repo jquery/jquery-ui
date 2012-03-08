@@ -301,12 +301,33 @@ task.registerTask('default', 'lint qunit');
 task.registerTask('build', 'concat min css_min');
 task.registerTask('release', 'build copy:dist copy:dist_min copy:dist_min_images copy:dist_css_min zip:dist');
 task.registerTask('release_themes', 'build download_themes zip:themes');
-// TODO includes other themes in cdn release
+// TODO include other themes in cdn release
 task.registerTask('release_cdn', 'build copy:cdn copy:cdn_min copy:cdn_i18n copy:cdn_i18n_min copy:cdn_css_min md5 zip:cdn');
 
 task.registerTask('download_themes', function() {
-  // TODO use request.get to download the files specified in build/themes
+  var AdmZip = require('adm-zip');
+  var done = this.async();
+  var fs = require('fs');
+  var request = require('request');
+  var themes = file.read('build/themes').split(',').slice(0, 1);
+  var requests = 0;
+  file.mkdir('dist/tmp');
+  themes.forEach(function(theme, index) {
+    requests += 1;
+    file.mkdir('dist/tmp/' + index);
+    var zipFileName = 'dist/tmp/' + index + '.zip';
+    var out = fs.createWriteStream(zipFileName);
+    out.on('close', function() {
+      log.writeln("done downloading " + zipFileName);
+      var zip = new AdmZip(zipFileName);
+      zip.extractAllTo('dist/tmp/' + index + '/');
+      requests -= 1;
+      if (requests === 0) {
+        done();
+      }
+    });
+    request('http://ui-dev.jquery.com/download/?' + theme).pipe(out);
+  });
 });
 
 // TODO add size task, see also build/sizer.js - copy from core grunt.js
-// TODO add themes download task, part of release_cdn task
