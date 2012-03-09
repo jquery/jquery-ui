@@ -1,7 +1,7 @@
 /*global config:true, task:true*/
 function stripBanner(files) {
   return files.map(function(file) {
-    return '<file_strip_banner:' + file + '>';
+    return '<strip_all_banners:' + file + '>';
   });
 }
 function stripDirectory(file) {
@@ -19,6 +19,9 @@ function createBanner(files) {
 }
 // allow access from banner template
 global.stripDirectory = stripDirectory;
+task.registerHelper('strip_all_banners', function(filepath) {
+  return file.read(filepath).replace(/^\s*\/\*[\s\S]*?\*\/\s*/g, '');
+});
 
 var coreFiles = 'jquery.ui.core.js, jquery.ui.widget.js, jquery.ui.mouse.js, jquery.ui.draggable.js, jquery.ui.droppable.js, jquery.ui.resizable.js, jquery.ui.selectable.js, jquery.ui.sortable.js, jquery.effects.core.js'.split(', ');
 var uiFiles = coreFiles.map(function(file) {
