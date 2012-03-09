@@ -66,7 +66,6 @@ config.init({
     bannerCSS: createBanner(cssFiles)
   },
   concat: {
-    // TODO replace banners, both for JS and CSS
     ui: {
       src: ['<banner:meta.bannerAll>', stripBanner(uiFiles)],
       dest: 'dist/jquery-ui.js'
@@ -383,7 +382,6 @@ task.registerTask('copy_themes', function() {
 task.registerTask('default', 'lint qunit');
 task.registerTask('build', 'concat min css_min');
 task.registerTask('release', 'build copy:dist copy:dist_min copy:dist_min_images copy:dist_css_min md5:dist zip:dist');
-// TODO also include (minified) base theme, share with regular dist, maybe just copy from release target
 task.registerTask('release_themes', 'release download_themes copy_themes copy:themes md5:themes zip:themes');
 // TODO include other themes in cdn release
 task.registerTask('release_cdn', 'build copy:cdn copy:cdn_min copy:cdn_i18n copy:cdn_i18n_min copy:cdn_css_min copy:cdn_min_images md5:cdn zip:cdn');
