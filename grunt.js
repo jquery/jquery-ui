@@ -134,8 +134,6 @@ config.init({
         'GPL-LICENSE.txt',
         'MIT-LICENSE.txt',
         'ui/*.js',
-        'themes/base/images/*.png',
-        'themes/base/jquery.ui.*.css',
         'package.json'
       ],
       renames: {
@@ -163,15 +161,15 @@ config.init({
       strip: /^dist\/minified/,
       dest: 'dist/<%= files.cdn %>/ui'
     },
-    cdn_css_min: {
-      src: 'dist/themes/base/minified/*.css',
-      strip: /^dist/,
-      dest: 'dist/<%= files.cdn %>'
-    },
     cdn_min_images: {
       src: 'themes/base/images/*',
       strip: /^themes\/base\//,
       dest: 'dist/<%= files.cdn %>/themes/base/minified'
+    },
+    cdn_themes: {
+      src: 'dist/<%= files.themes %>/themes/**/*',
+      strip: 'dist/<%= files.themes %>',
+      dest: 'dist/<%= files.cdn %>'
     },
     themes: {
       src: [
@@ -255,8 +253,12 @@ task.registerBasicTask('copy', 'Copy files to destination folder and replace @VE
   }
   var files = file.expand(data.src);
   var target = data.dest + '/';
+  var strip = data.strip;
+  if (typeof strip === 'string') {
+    strip = new RegExp('^' + template.process(strip, config()).replace(/[-\[\]{}()*+?.,\\\^$|#\s]/g, "\\$&"));
+  }
   files.forEach(function(fileName) {
-    var targetFile = data.strip ? fileName.replace(data.strip, '') : fileName;
+    var targetFile = strip ? fileName.replace(strip, '') : fileName;
     file.copy(fileName, target + targetFile, replaceVersion);
   });
   log.writeln('Copyied ' + files.length + ' files.');
@@ -385,14 +387,14 @@ task.registerTask('copy_themes', function() {
   var files = file.expand('dist/tmp/*/development-bundle/themes/**/*').filter(function(file) {
     return !filter.test(file);
   });
-  var target = config('files.themesDistFolder') + '/';
+  var target = 'dist/' + config('files.themes') + '/';
   files.forEach(function(fileName) {
     var targetFile = fileName.replace(/dist\/tmp\/\d+\/development-bundle\//, '').replace("jquery-ui-.custom", "jquery-ui.css");
     file.copy(fileName, target + targetFile);
   });
 
   // copy minified base theme from regular release
-  var distFolder = config('files.distFolder');
+  var distFolder = 'dist/' + config('files.dist');
   files = file.expand(distFolder + '/themes/base/**/*');
   files.forEach(function(fileName) {
     file.copy(fileName, target + fileName.replace(distFolder, ''));
@@ -475,5 +477,4 @@ task.registerTask('sizer', 'concat:ui min:dist/jquery-ui.min.js compare_size');
 task.registerTask('build', 'concat min css_min');
 task.registerTask('release', 'build copy:dist copy:dist_min copy:dist_min_images copy:dist_css_min md5:dist zip:dist');
 task.registerTask('release_themes', 'release download_themes copy_themes copy:themes md5:themes zip:themes');
-// TODO include other themes in cdn release
-task.registerTask('release_cdn', 'build copy:cdn copy:cdn_min copy:cdn_i18n copy:cdn_i18n_min copy:cdn_css_min copy:cdn_min_images md5:cdn zip:cdn');
+task.registerTask('release_cdn', 'release_themes copy:cdn copy:cdn_min copy:cdn_i18n copy:cdn_i18n_min copy:cdn_min_images copy:cdn_themes md5:cdn zip:cdn');
