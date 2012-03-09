@@ -217,8 +217,9 @@ config.init({
     })
   },
   lint: {
-    // TODO extend this to tests
-    files: ['ui/*']
+    ui: 'ui/*',
+    grunt: 'grunt.js',
+    tests: 'tests/unit/**/*.js'
   },
   jshint: {
     options: {
@@ -230,11 +231,38 @@ config.init({
       noarg: true,
       sub: true,
       undef: true,
-      eqnull: true,
-      browser: true
+      eqnull: true
     },
-    globals: {
-      jQuery: true
+    grunt: {
+      options: {
+        node: true
+      },
+      globals: {
+        file: true,
+        log: true,
+        template: true
+      }
+    },
+    ui: {
+      options: {
+        browser: true
+      },
+      globals: {
+        jQuery: true
+      }
+    },
+    tests: {
+      options: {
+        jquery: true
+      },
+      globals: {
+        module: true,
+        test: true,
+        ok: true,
+        equal: true,
+        deepEqual: true,
+        QUnit: true
+      }
     }
   }
 });
@@ -255,7 +283,7 @@ task.registerBasicTask('copy', 'Copy files to destination folder and replace @VE
   var target = data.dest + '/';
   var strip = data.strip;
   if (typeof strip === 'string') {
-    strip = new RegExp('^' + template.process(strip, config()).replace(/[-\[\]{}()*+?.,\\\^$|#\s]/g, "\\$&"));
+    strip = new RegExp('^' + template.process(strip, config()).replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, "\\$&"));
   }
   files.forEach(function(fileName) {
     var targetFile = strip ? fileName.replace(strip, '') : fileName;
