@@ -254,7 +254,7 @@ config('files', files);
 
 task.registerBasicTask('copy', 'Copy files to destination folder and replace @VERSION with pkg.version', function(data) {
   function replaceVersion(source) {
-      return source.replace("@VERSION", config("pkg").version);
+      return source.replace("@VERSION", config("pkg.version"));
   }
   var files = file.expand(data.src);
   var target = data.dest + '/';
