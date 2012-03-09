@@ -55,12 +55,9 @@ cssFiles.forEach(function(file) {
 config.init({
   pkg: '<json:package.json>',
   files: {
-    distFolder: 'dist/<%= pkg.name %>-<%= pkg.version %>',
-    cdnDistFolder: 'dist/<%= pkg.name %>-<%= pkg.version %>-cdn',
-    themesDistFolder: 'dist/<%= pkg.name %>-themes-<%= pkg.version %>',
-    zip: 'dist/<%= pkg.name %>-<%= pkg.version %>.zip',
-    cdnZip: 'dist/<%= pkg.name %>-<%= pkg.version %>-cdn.zip',
-    themesZip: 'dist/<%= pkg.name %>-themes-<%= pkg.version %>.zip'
+    dist: '<%= pkg.name %>-<%= pkg.version %>',
+    cdn: '<%= pkg.name %>-<%= pkg.version %>-cdn',
+    themes: '<%= pkg.name %>-themes-<%= pkg.version %>'
   },
   meta: {
     banner: createBanner(),
@@ -114,22 +111,22 @@ config.init({
         'dist/jquery-ui.css': 'themes/base/jquery-ui.css',
         'dist/jquery-ui.min.css': 'themes/base/minified/jquery-ui.min.css'
       },
-      dest: '<%= files.distFolder %>'
+      dest: 'dist/<%= files.dist %>'
     },
     dist_min: {
       src: 'dist/minified/**/*',
       strip: /^dist/,
-      dest: '<%= files.distFolder %>/ui'
+      dest: 'dist/<%= files.dist %>/ui'
     },
     dist_css_min: {
       src: 'dist/themes/base/minified/*.css',
       strip: /^dist/,
-      dest: '<%= files.distFolder %>'
+      dest: 'dist/<%= files.dist %>'
     },
     dist_min_images: {
       src: 'themes/base/images/*',
       strip: /^themes\/base\//,
-      dest: '<%= files.distFolder %>/themes/base/minified'
+      dest: 'dist/<%= files.dist %>/themes/base/minified'
     },
     cdn: {
       src: [
@@ -149,32 +146,32 @@ config.init({
         'dist/jquery-ui.css': 'themes/base/jquery-ui.css',
         'dist/jquery-ui.min.css': 'themes/base/minified/jquery-ui.min.css'
       },
-      dest: '<%= files.cdnDistFolder %>'
+      dest: 'dist/<%= files.cdn %>'
     },
     cdn_i18n: {
       src: 'ui/i18n/jquery.ui.datepicker-*.js',
       strip: 'ui/',
-      dest: '<%= files.cdnDistFolder %>'
+      dest: 'dist/<%= files.cdn %>'
     },
     cdn_i18n_min: {
       src: 'dist/minified/i18n/jquery.ui.datepicker-*.js',
       strip: 'dist/minified',
-      dest: '<%= files.cdnDistFolder %>'
+      dest: 'dist/<%= files.cdn %>'
     },
     cdn_min: {
       src: 'dist/minified/*.js',
       strip: /^dist\/minified/,
-      dest: '<%= files.cdnDistFolder %>/ui'
+      dest: 'dist/<%= files.cdn %>/ui'
     },
     cdn_css_min: {
       src: 'dist/themes/base/minified/*.css',
       strip: /^dist/,
-      dest: '<%= files.cdnDistFolder %>'
+      dest: 'dist/<%= files.cdn %>'
     },
     cdn_min_images: {
       src: 'themes/base/images/*',
       strip: /^themes\/base\//,
-      dest: '<%= files.cdnDistFolder %>/themes/base/minified'
+      dest: 'dist/<%= files.cdn %>/themes/base/minified'
     },
     themes: {
       src: [
@@ -183,35 +180,35 @@ config.init({
         'MIT-LICENSE.txt',
         'package.json'
       ],
-      dest: '<%= files.themesDistFolder %>'
+      dest: 'dist/<%= files.themes %>'
     }
   },
   zip: {
     dist: {
-      src: '<%= files.distFolder %>/**/*',
-      dest: '<%= files.zip %>'
+      src: '<%= files.dist %>',
+      dest: '<%= files.dist %>.zip'
     },
     cdn: {
-      src: '<%= files.cdnDistFolder %>/**/*',
-      dest: '<%= files.cdnZip %>'
+      src: '<%= files.cdn %>',
+      dest: '<%= files.cdn %>.zip'
     },
     themes: {
-      src: '<%= files.themesDistFolder %>/**/*',
-      dest: '<%= files.themesZip %>'
+      src: '<%= files.themes %>',
+      dest: '<%= files.themes %>.zip'
     }
   },
   md5: {
     dist: {
-      dir: '<%= files.distFolder %>',
-      dest: '<%= files.distFolder %>/MANIFEST'
+      dir: 'dist/<%= files.dist %>',
+      dest: 'dist/<%= files.dist %>/MANIFEST'
     },
     cdn: {
-      dir: '<%= files.cdnDistFolder %>',
-      dest: '<%= files.cdnDistFolder %>/MANIFEST'
+      dir: 'dist/<%= files.cdn %>',
+      dest: 'dist/<%= files.cdn %>/MANIFEST'
     },
     themes: {
-      dir: '<%= files.themesDistFolder %>',
-      dest: '<%= files.themesDistFolder %>/MANIFEST'
+      dir: 'dist/<%= files.themes %>',
+      dest: 'dist/<%= files.themes %>/MANIFEST'
     }
   },
   qunit: {
@@ -266,26 +263,47 @@ task.registerBasicTask('copy', 'Copy files to destination folder and replace @VE
   for (var fileName in data.renames) {
     file.copy(fileName, target + template.process(data.renames[fileName], config()));
   }
-  if (data.renames) {
+  if (data.renames && data.renames.length) {
     log.writeln('Renamed ' + data.renames.length + ' files.');
   }
 });
 
 
 task.registerBasicTask('zip', 'Create a zip file for release', function(data) {
-  var files = file.expand(data.src);
-  log.writeln("Creating zip file " + data.dest);
+  var done = this.async();
+  // TODO switch back to adm-zip for better cross-platform compability once it actually works
+  // 0.1.2 doesn't compress properly (or at all)
 
-  var fs = require('fs');
-  var AdmZip = require('adm-zip');
-  var zip = new AdmZip();
-  files.forEach(function(file) {
-    log.verbose.writeln('Zipping ' + file);
-    // rewrite file names from dist folder (created by build), drop the /dist part
-    zip.addFile(file.replace(/^dist/, ''), fs.readFileSync(file));
+  // var files = file.expand(data.src);
+  // log.writeln("Creating zip file " + data.dest);
+
+  // var fs = require('fs');
+  // var AdmZip = require('adm-zip');
+  // var zip = new AdmZip();
+  // files.forEach(function(file) {
+  //   log.verbose.writeln('Zipping ' + file);
+  //   // rewrite file names from dist folder (created by build), drop the /dist part
+  //   zip.addFile(file.replace(/^dist/, ''), fs.readFileSync(file));
+  // });
+  // zip.writeZip(data.dest);
+  // log.writeln("Wrote " + files.length + " files to " + data.dest);
+
+  var src = template.process(data.src, config());
+  task.helper("child_process", {
+    cmd: "zip",
+    args: ["-r", data.dest, src],
+    opts: {
+      cwd: 'dist'
+    }
+  }, function(err, result) {
+    if (err) {
+      log.error(err);
+      done();
+      return;
+    }
+    log.writeln("Zipped " + data.dest);
+    done();
   });
-  zip.writeZip(data.dest);
-  log.writeln("Wrote " + files.length + " files to " + data.dest);
 });
 
 task.registerBasicTask( 'css_min', 'Minify CSS files with Sqwish.', function( data ) {
