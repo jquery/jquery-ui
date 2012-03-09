@@ -1,4 +1,3 @@
-/*global config:true, task:true*/
 function stripBanner(files) {
   return files.map(function(file) {
     return '<strip_all_banners:' + file + '>';
@@ -238,6 +237,8 @@ config.init({
         node: true
       },
       globals: {
+        task: true,
+        config: true,
         file: true,
         log: true,
         template: true
