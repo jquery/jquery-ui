@@ -1,4 +1,9 @@
 /*global config:true, task:true*/
+function stripBanner(files) {
+  return files.map(function(file) {
+    return '<file_strip_banner:' + file + '>';
+  });
+}
 function stripDirectory(file) {
   return file.replace(/.+\/(.+)$/, '$1');
 }
@@ -63,10 +68,7 @@ config.init({
   concat: {
     // TODO replace banners, both for JS and CSS
     ui: {
-      src: ['<banner:meta.bannerAll>'].concat(uiFiles.map(function(file) {
-        // TODO why doesn't this work? because its a protected banner, and template.stripBanner skips that m(
-        return '<file_strip_banner:' + file + '>';
-      })),
+      src: ['<banner:meta.bannerAll>', stripBanner(uiFiles)],
       dest: 'dist/jquery-ui.js'
     },
     i18n: {
@@ -74,7 +76,7 @@ config.init({
       dest: 'dist/i18n/jquery-ui-i18n.js'
     },
     css: {
-      src: ['<banner:meta.bannerCSS>'].concat(cssFiles),
+      src: ['<banner:meta.bannerCSS>', stripBanner(cssFiles)],
       dest: 'dist/jquery-ui.css'
     }
   },
@@ -167,8 +169,13 @@ config.init({
       dest: '<%= files.cdnDistFolder %>/themes/base/minified'
     },
     themes: {
-      // copy development-bundle/themes/**/*.js (excluding themes/base)
-      // rename jquery-ui-.*custom.css to jquery-ui.css
+      src: [
+        'AUTHORS.txt',
+        'GPL-LICENSE.txt',
+        'MIT-LICENSE.txt',
+        'package.json'
+      ],
+      dest: '<%= files.themesDistFolder %>'
     }
   },
   zip: {
@@ -186,9 +193,17 @@ config.init({
     }
   },
   md5: {
+    dist: {
+      dir: '<%= files.distFolder %>',
+      dest: '<%= files.distFolder %>/MANIFEST'
+    },
     cdn: {
       dir: '<%= files.cdnDistFolder %>',
       dest: '<%= files.cdnDistFolder %>/MANIFEST'
+    },
+    themes: {
+      dir: '<%= files.themesDistFolder %>',
+      dest: '<%= files.themesDistFolder %>/MANIFEST'
     }
   },
   qunit: {
@@ -307,13 +322,6 @@ task.registerBasicTask('md5', 'Create list of md5 hashes for CDN uploads', funct
   file.write(data.dest, hashes.join('\n') + '\n');
 });
 
-task.registerTask('default', 'lint qunit');
-task.registerTask('build', 'concat min css_min');
-task.registerTask('release', 'build copy:dist copy:dist_min copy:dist_min_images copy:dist_css_min zip:dist');
-task.registerTask('release_themes', 'build download_themes copy:themes zip:themes');
-// TODO include other themes in cdn release
-task.registerTask('release_cdn', 'build copy:cdn copy:cdn_min copy:cdn_i18n copy:cdn_i18n_min copy:cdn_css_min copy:cdn_min_images md5 zip:cdn');
-
 task.registerTask('download_themes', function() {
   // var AdmZip = require('adm-zip');
   var fs = require('fs');
@@ -350,4 +358,32 @@ task.registerTask('download_themes', function() {
   });
 });
 
+task.registerTask('copy_themes', function() {
+  // each package includes the base theme, ignore that
+  var filter = /themes\/base/;
+  var files = file.expand('dist/tmp/*/development-bundle/themes/**/*').filter(function(file) {
+    return !filter.test(file);
+  });
+  var target = config('files.themesDistFolder') + '/';
+  files.forEach(function(fileName) {
+    var targetFile = fileName.replace(/dist\/tmp\/\d+\/development-bundle\//, '').replace("jquery-ui-.custom", "jquery-ui.css");
+    file.copy(fileName, target + targetFile);
+  });
+
+  // copy minified base theme from regular release
+  var distFolder = config('files.distFolder');
+  files = file.expand(distFolder + '/themes/base/**/*');
+  files.forEach(function(fileName) {
+    file.copy(fileName, target + fileName.replace(distFolder, ''));
+  });
+});
+
 // TODO add size task, see also build/sizer.js - copy from core grunt.js
+
+task.registerTask('default', 'lint qunit');
+task.registerTask('build', 'concat min css_min');
+task.registerTask('release', 'build copy:dist copy:dist_min copy:dist_min_images copy:dist_css_min md5:dist zip:dist');
+// TODO also include (minified) base theme, share with regular dist, maybe just copy from release target
+task.registerTask('release_themes', 'release download_themes copy_themes copy:themes md5:themes zip:themes');
+// TODO include other themes in cdn release
+task.registerTask('release_cdn', 'build copy:cdn copy:cdn_min copy:cdn_i18n copy:cdn_i18n_min copy:cdn_css_min copy:cdn_min_images md5:cdn zip:cdn');
