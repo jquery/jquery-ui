@@ -65,6 +65,12 @@ config.init({
     bannerI18n: createBanner(allI18nFiles),
     bannerCSS: createBanner(cssFiles)
   },
+  compare_size: {
+    files: [
+      "dist/jquery-ui.js",
+      "dist/jquery-ui.min.js"
+    ]
+  },
   concat: {
     ui: {
       src: ['<banner:meta.bannerAll>', stripBanner(uiFiles)],
@@ -242,11 +248,6 @@ for (var key in files) {
   files[key] = template.process(files[key], config());
 }
 config('files', files);
-// log.writeln(require('util').inspect(config().files))
-
-task.registerTask('x', function() {
-  log.writeln(task.helper('concat', ['<file_strip_banner:ui/jquery.ui.core.js>']));
-});
 
 task.registerBasicTask('copy', 'Copy files to destination folder and replace @VERSION with pkg.version', function(data) {
   function replaceVersion(source) {
@@ -377,9 +378,79 @@ task.registerTask('copy_themes', function() {
   });
 });
 
-// TODO add size task, see also build/sizer.js - copy from core grunt.js
+// TODO merge with code in jQuery Core, share as grunt plugin/npm
+// this here actually uses the provided filenames in the output
+// the helpers should just be regular functions, no need to share those with the world
+task.registerBasicTask("compare_size", "Compare size of this branch to master", function(data) {
+  var files = file.expand(data.src),
+      done = this.async(),
+      sizecache = __dirname + "/dist/.sizecache.json",
+      sources = {
+        min: file.read(files[1]),
+        max: file.read(files[0])
+      },
+      oldsizes = {},
+      sizes = {};
 
-task.registerTask('default', 'lint qunit');
+  try {
+    oldsizes = JSON.parse(file.read(sizecache));
+  } catch(e) {
+    oldsizes = {};
+  }
+
+  // Obtain the current branch and continue...
+  task.helper("git_current_branch", function(err, branch) {
+    var key, diff;
+
+    // Derived and adapted from Corey Frang's original `sizer`
+    log.writeln( "sizes - compared to master" );
+
+    sizes[files[0]] = sources.max.length;
+    sizes[files[1]] = sources.min.length;
+    sizes[files[1] + '.gz'] = task.helper("gzip", sources.min).length;
+
+    for ( key in sizes ) {
+      diff = oldsizes[ key ] && ( sizes[ key ] - oldsizes[ key ] );
+      if ( diff > 0 ) {
+        diff = "+" + diff;
+      }
+      console.log( "%s %s %s",
+        task.helper("lpad",  sizes[ key ], 8 ),
+        task.helper("lpad",  diff ? "(" + diff + ")" : "(-)", 8 ),
+        key
+      );
+    }
+
+    if ( branch === "master" ) {
+      // If master, write to file - this makes it easier to compare
+      // the size of your current code state to the master branch,
+      // without returning to the master to reset the cache
+      file.write( sizecache, JSON.stringify(sizes) );
+    }
+    done();
+  });
+});
+task.registerHelper("git_current_branch", function(done) {
+  task.helper("child_process", {
+    cmd: "git",
+    args: ["branch", "--no-color"]
+  }, function(err, result) {
+    var branch;
+
+    result.split("\n").forEach(function(branch) {
+      var matches = /^\* (.*)/.exec( branch );
+      if ( matches !== null && matches.length && matches[ 1 ] ) {
+        done( null, matches[ 1 ] );
+      }
+    });
+  });
+});
+task.registerHelper("lpad", function(str, len, chr) {
+  return ( Array( len + 1 ).join( chr || " " ) + str ).substr( -len );
+});
+
+task.registerTask('default', 'lint qunit build compare_size');
+task.registerTask('sizer', 'concat:ui min:dist/jquery-ui.min.js compare_size');
 task.registerTask('build', 'concat min css_min');
 task.registerTask('release', 'build copy:dist copy:dist_min copy:dist_min_images copy:dist_css_min md5:dist zip:dist');
 task.registerTask('release_themes', 'release download_themes copy_themes copy:themes md5:themes zip:themes');
