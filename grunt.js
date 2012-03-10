@@ -375,22 +375,9 @@ task.registerBasicTask('csslint', 'Lint CSS files with csslint', function() {
 });
 
 task.registerBasicTask( 'css_min', 'Minify CSS files with Sqwish.', function() {
-  var files = file.expand( this.file.src );
-  // Get banner, if specified. It would be nice if UglifyJS supported ignoring
-  // all comments matching a certain pattern, like /*!...*/, but it doesn't.
-  var banner = task.directive(files[0], function() { return null; });
-  if (banner === null) {
-    banner = '';
-  } else {
-    files.shift();
-  }
-  var max = task.helper( 'concat', files );
-  // Concat banner + minified source.
-  var min = banner + require('sqwish').minify( max, false );
+  var max = task.helper( 'concat', file.expand( this.file.src ) );
+  var min = require('sqwish').minify( max, false );
   file.write( this.file.dest, min );
-  if ( task.hadErrors() ) {
-    return false;
-  }
   log.writeln( 'File "' + this.file.dest + '" created.' );
   task.helper( 'min_max_info', min, max );
 });
