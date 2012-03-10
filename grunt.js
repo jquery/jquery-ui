@@ -441,7 +441,8 @@ task.registerTask('copy_themes', function() {
   var files = file.expand('dist/tmp/*/development-bundle/themes/**/*').filter(function(file) {
     return !filter.test(file);
   });
-  var target = 'dist/' + config('files.themes') + '/';
+  // TODO the template.process call shouldn't be necessary
+  var target = 'dist/' + template.process(config('files.themes'), config()) + '/';
   files.forEach(function(fileName) {
     var targetFile = fileName.replace(/dist\/tmp\/\d+\/development-bundle\//, '').replace("jquery-ui-.custom", "jquery-ui.css");
     file.copy(fileName, target + targetFile);
