@@ -12,7 +12,7 @@ function createBanner(files) {
   return '/*! <%= pkg.title || pkg.name %> - v<%= pkg.version %> - ' +
       '<%= template.today("isoDate") %>\n' +
       '<%= pkg.homepage ? "* " + pkg.homepage + "\n" : "" %>' +
-      '* Includes: ' + (files ? fileNames.join(', ') : '<%= stripDirectory(task.current.data.src[1]) %>') + '\n' +
+      '* Includes: ' + (files ? fileNames.join(', ') : '<%= stripDirectory(task.current.file.src[1]) %>') + '\n' +
       '* Copyright (c) <%= template.today("yyyy") %> <%= pkg.author.name %>;' +
       ' Licensed <%= _.pluck(pkg.licenses, "type").join(", ") %> */';
 }
@@ -21,6 +21,7 @@ global.stripDirectory = stripDirectory;
 task.registerHelper('strip_all_banners', function(filepath) {
   return file.read(filepath).replace(/^\s*\/\*[\s\S]*?\*\/\s*/g, '');
 });
+var inspect = require('util').inspect;
 
 var coreFiles = 'jquery.ui.core.js, jquery.ui.widget.js, jquery.ui.mouse.js, jquery.ui.draggable.js, jquery.ui.droppable.js, jquery.ui.resizable.js, jquery.ui.selectable.js, jquery.ui.sortable.js, jquery.effects.core.js'.split(', ');
 var uiFiles = coreFiles.map(function(file) {
@@ -196,15 +197,15 @@ config.init({
   },
   md5: {
     dist: {
-      dir: 'dist/<%= files.dist %>',
+      src: 'dist/<%= files.dist %>',
       dest: 'dist/<%= files.dist %>/MANIFEST'
     },
     cdn: {
-      dir: 'dist/<%= files.cdn %>',
+      src: 'dist/<%= files.cdn %>',
       dest: 'dist/<%= files.cdn %>/MANIFEST'
     },
     themes: {
-      dir: 'dist/<%= files.themes %>',
+      src: 'dist/<%= files.themes %>',
       dest: 'dist/<%= files.themes %>/MANIFEST'
     }
   },
@@ -268,21 +269,13 @@ config.init({
   }
 });
 
-// grunt doesn't know about this files object, so need to process that manually once
-// before any other variable is resolved, otherwise it would just include the templates
-var files = config().files;
-for (var key in files) {
-  files[key] = template.process(files[key], config());
-}
-config('files', files);
-
-task.registerBasicTask('copy', 'Copy files to destination folder and replace @VERSION with pkg.version', function(data) {
+task.registerBasicTask('copy', 'Copy files to destination folder and replace @VERSION with pkg.version', function() {
   function replaceVersion(source) {
       return source.replace("@VERSION", config("pkg.version"));
   }
-  var files = file.expand(data.src);
-  var target = data.dest + '/';
-  var strip = data.strip;
+  var files = file.expand(this.file.src);
+  var target = this.file.dest + '/';
+  var strip = this.data.strip;
   if (typeof strip === 'string') {
     strip = new RegExp('^' + template.process(strip, config()).replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, "\\$&"));
   }
@@ -291,22 +284,24 @@ task.registerBasicTask('copy', 'Copy files to destination folder and replace @VE
     file.copy(fileName, target + targetFile, replaceVersion);
   });
   log.writeln('Copyied ' + files.length + ' files.');
-  for (var fileName in data.renames) {
-    file.copy(fileName, target + template.process(data.renames[fileName], config()));
+  var renameCount = 0;
+  for (var fileName in this.data.renames) {
+    renameCount += 1;
+    file.copy(fileName, target + template.process(this.data.renames[fileName], config()));
   }
-  if (data.renames && data.renames.length) {
-    log.writeln('Renamed ' + data.renames.length + ' files.');
+  if (renameCount) {
+    log.writeln('Renamed ' + renameCount + ' files.');
   }
 });
 
 
-task.registerBasicTask('zip', 'Create a zip file for release', function(data) {
+task.registerBasicTask('zip', 'Create a zip file for release', function() {
   var done = this.async();
   // TODO switch back to adm-zip for better cross-platform compability once it actually works
   // 0.1.2 doesn't compress properly (or at all)
 
-  // var files = file.expand(data.src);
-  // log.writeln("Creating zip file " + data.dest);
+  // var files = file.expand(this.file.src);
+  // log.writeln("Creating zip file " + this.file.dest);
 
   // var fs = require('fs');
   // var AdmZip = require('adm-zip');
@@ -316,13 +311,14 @@ task.registerBasicTask('zip', 'Create a zip file for release', function(data) {
   //   // rewrite file names from dist folder (created by build), drop the /dist part
   //   zip.addFile(file.replace(/^dist/, ''), fs.readFileSync(file));
   // });
-  // zip.writeZip(data.dest);
-  // log.writeln("Wrote " + files.length + " files to " + data.dest);
+  // zip.writeZip(this.file.dest);
+  // log.writeln("Wrote " + files.length + " files to " + this.file.dest);
 
-  var src = template.process(data.src, config());
+  var dest = this.file.dest;
+  var src = template.process(this.file.src, config());
   task.helper("child_process", {
     cmd: "zip",
-    args: ["-r", data.dest, src],
+    args: ["-r", dest, src],
     opts: {
       cwd: 'dist'
     }
@@ -332,13 +328,13 @@ task.registerBasicTask('zip', 'Create a zip file for release', function(data) {
       done();
       return;
     }
-    log.writeln("Zipped " + data.dest);
+    log.writeln("Zipped " + dest);
     done();
   });
 });
 
-task.registerBasicTask( 'css_min', 'Minify CSS files with Sqwish.', function( data ) {
-  var files = file.expand( data.src );
+task.registerBasicTask( 'css_min', 'Minify CSS files with Sqwish.', function() {
+  var files = file.expand( this.file.src );
   // Get banner, if specified. It would be nice if UglifyJS supported ignoring
   // all comments matching a certain pattern, like /*!...*/, but it doesn't.
   var banner = task.directive(files[0], function() { return null; });
@@ -350,28 +346,29 @@ task.registerBasicTask( 'css_min', 'Minify CSS files with Sqwish.', function( da
   var max = task.helper( 'concat', files );
   // Concat banner + minified source.
   var min = banner + require('sqwish').minify( max, false );
-  file.write( data.dest, min );
+  file.write( this.file.dest, min );
   if ( task.hadErrors() ) {
     return false;
   }
-  log.writeln( 'File "' + data.dest + '" created.' );
+  log.writeln( 'File "' + this.file.dest + '" created.' );
   task.helper( 'min_max_info', min, max );
 });
 
-task.registerBasicTask('md5', 'Create list of md5 hashes for CDN uploads', function(data) {
+task.registerBasicTask('md5', 'Create list of md5 hashes for CDN uploads', function() {
   // remove dest file before creating it, to make sure itself is not included
-  if (require('path').existsSync(data.dest)) {
-    require('fs').unlinkSync(data.dest);
+  if (require('path').existsSync(this.file.dest)) {
+    require('fs').unlinkSync(this.file.dest);
   }
   var crypto = require('crypto');
-  var dir = template.process(data.dir, config()) + '/';
+  var dir = this.file.src + '/';
   var hashes = [];
   file.expand(dir + '**/*').forEach(function(fileName) {
     var hash = crypto.createHash('md5');
     hash.update(file.read(fileName));
     hashes.push(fileName.replace(dir, '') + ' ' + hash.digest('hex'));
   });
-  file.write(data.dest, hashes.join('\n') + '\n');
+  file.write(this.file.dest, hashes.join('\n') + '\n');
+  log.writeln('Wrote ' + this.file.dest + ' with ' + hashes.length + ' hashes');
 });
 
 task.registerTask('download_themes', function() {
@@ -433,8 +430,8 @@ task.registerTask('copy_themes', function() {
 // TODO merge with code in jQuery Core, share as grunt plugin/npm
 // this here actually uses the provided filenames in the output
 // the helpers should just be regular functions, no need to share those with the world
-task.registerBasicTask("compare_size", "Compare size of this branch to master", function(data) {
-  var files = file.expand(data.src),
+task.registerBasicTask("compare_size", "Compare size of this branch to master", function() {
+  var files = file.expand(this.file.src),
       done = this.async(),
       sizecache = __dirname + "/dist/.sizecache.json",
       sources = {
