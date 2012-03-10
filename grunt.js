@@ -221,6 +221,15 @@ config.init({
     grunt: 'grunt.js',
     tests: 'tests/unit/**/*.js'
   },
+  csslint: {
+    base_theme: {
+      src: 'themes/base/*.css',
+      rules: {
+        'import': false,
+        'overqualified-elements': 2
+      }
+    }
+  },
   jshint: {
     options: {
       curly: true,
@@ -331,6 +340,38 @@ task.registerBasicTask('zip', 'Create a zip file for release', function() {
     log.writeln("Zipped " + dest);
     done();
   });
+});
+
+task.registerBasicTask('csslint', 'Lint CSS files with csslint', function() {
+  var csslint = require('csslint').CSSLint;
+  var files = file.expand(this.file.src);
+  var ruleset = {};
+  csslint.getRules().forEach(function(rule) {
+    ruleset[rule.id] = 1;
+  });
+  for (var rule in this.data.rules) {
+    if (!this.data.rules[rule]) {
+      delete ruleset[rule];
+    } else {
+      ruleset[rule] = this.data.rules[rule];
+    }
+  }
+  var hadErrors = 0;
+  files.forEach(function(filepath) {
+    log.writeln('Linting ' + filepath);
+    var result = csslint.verify(file.read(filepath), ruleset);
+    result.messages.forEach(function(message) {
+      log.writeln('['.red + ('L' + message.line).yellow + ':'.red + ('C' + message.col).yellow + ']'.red);
+      log[message.type === 'error' ? 'error' : 'writeln'](message.message + ' ' + message.rule.desc + ' (' + message.rule.id + ')');
+    });
+    if (result.messages.length) {
+      hadErrors += 1;
+    }
+  });
+  if (hadErrors) {
+    return false;
+  }
+  log.writeln('Lint free');
 });
 
 task.registerBasicTask( 'css_min', 'Minify CSS files with Sqwish.', function() {
@@ -498,7 +539,7 @@ task.registerHelper("lpad", function(str, len, chr) {
   return ( Array( len + 1 ).join( chr || " " ) + str ).substr( -len );
 });
 
-task.registerTask('default', 'lint qunit build compare_size');
+task.registerTask('default', 'lint csslint qunit build compare_size');
 task.registerTask('sizer', 'concat:ui min:dist/jquery-ui.min.js compare_size');
 task.registerTask('build', 'concat min css_min');
 task.registerTask('release', 'build copy:dist copy:dist_min copy:dist_min_images copy:dist_css_min md5:dist zip:dist');
