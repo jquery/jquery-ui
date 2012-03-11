@@ -325,7 +325,7 @@ task.registerBasicTask('zip', 'Create a zip file for release', function() {
 
   var dest = this.file.dest;
   var src = template.process(this.file.src, config());
-  task.helper("child_process", {
+  utils.spawn({
     cmd: "zip",
     args: ["-r", dest, src],
     opts: {
@@ -418,7 +418,7 @@ task.registerTask('download_themes', function() {
       // var zip = new AdmZip(zipFileName);
       // zip.extractAllTo('dist/tmp/' + index + '/');
       // until then, using cli unzip...
-      task.helper("child_process", {
+      utils.spawn({
         cmd: "unzip",
         args: ["-d", "dist/tmp/" + index, zipFileName]
       }, function(err, result) {
@@ -509,7 +509,7 @@ task.registerBasicTask("compare_size", "Compare size of this branch to master", 
   });
 });
 task.registerHelper("git_current_branch", function(done) {
-  task.helper("child_process", {
+  utils.spawn({
     cmd: "git",
     args: ["branch", "--no-color"]
   }, function(err, result) {
