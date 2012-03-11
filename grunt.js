@@ -449,7 +449,8 @@ task.registerTask('copy_themes', function() {
   });
 
   // copy minified base theme from regular release
-  var distFolder = 'dist/' + config('files.dist');
+  // TODO same as the one above
+  var distFolder = 'dist/' + template.process(config('files.dist'), config());
   files = file.expand(distFolder + '/themes/base/**/*');
   files.forEach(function(fileName) {
     file.copy(fileName, target + fileName.replace(distFolder, ''));
