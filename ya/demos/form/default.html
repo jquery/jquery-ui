@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+
+  <!-- Always force latest IE rendering engine (even in intranet) & Chrome Frame 
+       Remove this if you use the .htaccess -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+  <title>default</title>
+  <meta name="description" content="" />
+  <meta name="author" content="13" />
+
+  <link rel="stylesheet" href="../../themes/base.css" />
+	<link rel="stylesheet" href="../../lib/sl.css" />
+	<link rel="stylesheet" href="../../jqui/css/jquery-ui.css" />
+	<link rel="stylesheet" href="../../themes/default/jquery.ui.override.css" />
+	<link rel="stylesheet" href="../../themes/default/jquery.ui.theme.css" />
+	<link rel="stylesheet" href="../../themes/default/jquery.ui.form.css" />
+	<style type="text/css">
+		form{
+			position:absolute;
+			top:130px;
+			left:130px;
+			width:180px;
+		}
+		.select-wrapper{
+			margin-bottom: 30px;
+		}
+		.select-wrapper3 .ui-itemselect-options{
+			
+		}
+	</style>
+	
+	<script src="../../jqui/js/jquery.min.js"></script>
+  	<script src="../../jqui/js/jquery-ui.min.js"></script>
+  	
+  	<script src="../../external/underscore-min.js"></script>
+  	<script src="../../external/underscore.string.min.js"></script>
+ 	<script src="../../external/modernizr.js"></script>
+ 	
+	
+  	<script src="../../ya.js"></script>
+  	<script src="../../lib/regx.js"></script>
+  	<script src="../../lib/sl.js"></script>
+  	<script src="../../lib/uihelper.js"></script>
+  	
+  	<script src="../../ui/jquery.ya.button0.js"></script>
+	<script src="../../ui/jquery.ya.theme0.js"></script>
+	<script src="../../ui/jquery.ya.form0.js"></script>
+	<script>
+		jQuery(function($) {
+			$( "#select1" ).theme0({
+				advancedTheme:{
+					shadow:false,
+					corner:false
+				},
+				triggerType:'hover'			
+			});
+			$( "#select2" ).theme0({
+				advancedTheme:{
+					shadow:true,
+					corner:true
+				},
+				width:300,
+				triggerType:'click'			
+			}).theme0('option','change',function(e,data){
+				//alert(data.value);	//value
+				//alert(data.label);	//text显示值
+			});
+			$( "#select3" ).theme0({
+				advancedTheme:{
+					shadow:true,
+					corner:true
+				},
+				width:600,
+				height:300,
+				triggerType:'click'			
+			});
+			$('#select1').theme0('disable');
+			
+			$('#f').form0({
+				items:[{
+					"selector":'#inputenter',
+			  		"vtype":'trim',
+			  		"defaultValue":"2",
+			  		"errorMsg":'不能为空'
+				},{
+					"selector":'.cb',
+			  		"vtype":'trim',
+			  		"defaultValue":"0",
+			  		"errorMsg":'不能为空'
+				},{
+					"selector":'.rd',
+			  		"vtype":'trim',
+			  		"defaultValue":"1",
+			  		"errorMsg":'不能为空'
+				},{
+					"selector":'textarea',
+			  		"vtype":'email',
+			  		"defaultValue":"test@admin.com",
+			  		"errorMsg":'请填写合法的邮箱地址'
+				},{
+					"selector":'#select2',
+			  		"vtype":'trim',
+			  		"defaultValue":"f",
+			  		"errorMsg":'不能为空'
+				},{
+					"selector":'#sub-btn',
+			  		"handler":function(e){
+			  			var fJq=$('#f');
+			  			if(!fJq.form0('vForm')){
+			  				alert('error');
+			  			}
+			  			e.preventDefault();
+			  			//e.stopPropagation();
+			  		}
+				},{
+					"selector":'#reset-btn',
+			  		"handler":function(e){
+			  			var fJq=$('#f');
+			  			fJq.form0('reset');	//重置
+			  			//针对主题化控件进行特殊处理
+			  			$('#select2 option').each(function(i){
+			  				if($(this).attr('selected')){
+			  					$('#select2').theme0('select',i);
+			  				}
+			  			});
+			  			e.preventDefault();
+			  		}
+				}]
+			});
+		}); 
+	</script>
+</head>
+
+<body>
+  <form id="f" action="#" method="post">
+  	<div class="ff-wrapper">
+  		<input id="inputenter" type="text" name="name0" />
+  	</div>
+  	<div class="ff-wrapper">
+  		<input class="cb" type="checkbox" name="name1" value="0" />
+  		<input class="cb" type="checkbox" name="name1" value="1" />
+  	</div>
+  	<div class="ff-wrapper">
+  		<input class="rd" type="radio" name="name2" value="0" />
+  		<input class="rd" type="radio" name="name2" value="1" />
+  	</div>
+  	<div class="ff-wrapper">
+  		<textarea name="name3"></textarea>
+  	</div>
+  	<div class="select-wrapper">
+	  	<select id="select1">
+	  		<option value="a">a</option>
+	  		<option value="b">b</option>
+	  		<option value="c">c</option>
+	  		<option value="d">d</option>
+	  	</select>
+  	</div>
+  	<div class="select-wrapper">
+	  	<select id="select2" themetype="combo">
+	  		<option value="e">e</option>
+	  		<option value="f">f</option>
+	  		<option value="g">g</option>
+	  		<option value="h">h</option>
+	  	</select>
+  	</div>
+  	<div class="select-wrapper select-wrapper3">
+	  	<select id="select3" multiple="multiple" themetype="itemselect" >
+	  		<option disabled="disabled">请选择</option>
+	  		<option value="i">i</option>
+	  		<option value="j">j</option>
+	  		<option value="k">k</option>
+	  		<option value="l">l</option>
+	  		<option value="m">m</option>
+	  		<option value="n">n</option>
+	  	</select>
+  	</div>
+  	<div class="btns">
+  		<button id="sub-btn" type="submit">提交</button>
+  		<button id="reset-btn" type="reset">重置</button>
+  	</div>
+  </form>
+</body>
+</html>

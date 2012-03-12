@@ -87,11 +87,11 @@
 	background: #ffffff;
 }
 .ui-itemselect-options .ui-state-hover{
-	background: #f7f7f7;
+	background-color: #f7f7f7;
 }
 .ui-itemselect-option-action{
 	position:absolute;
-	right:0px;
+	right:5px;
 	top:0px;
 }
 .ui-itemselect-option-action span{
@@ -100,16 +100,21 @@
 	font-size:8px;
 	background: url(images/theme/ui-icon-actions.png) no-repeat;
 }
+.ui-itemselect-option-action .ui-state-hover{
+	background-color: transparent;
+}
 .ui-itemselect-option-action .ui-itemselect-icon-up{
-	background-position:0px -11px;
+	/*background-position:0px -11px;*/
+	background-position:0px 1px;
 }
 .ui-itemselect-option-action .ui-itemselect-icon-down{
-	background-position:-22px 1px;
+	/*background-position:-22px 1px;*/
+	background-position:-22px -11px;
 }
 .ui-itemselect-option-action .ui-itemselect-icon-close{
-	background-position:-45px 1px;
+	/*background-position:-45px 1px;*/
+	background-position:-45px -11px;
 }
 .ui-itemselect .ui-itemselect-option-selected {
-    background: #F39814;
-    color: white;
+    background: #f7f7f7;
 }
