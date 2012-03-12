@@ -18,6 +18,7 @@
 			/**
 			 * items=[{
 			 * 	"selector":{selector},	//jquery选择符
+			 * 	"name":{String},	//提交给后台的变量名
 			 * 	"vtype":{mix},	//验证类型
 			 * 	"errorMsg":{String},	//验证失败提示信息
 			 *  "defaultValue":{String|Array},	//默认值
@@ -76,8 +77,9 @@
 		vField:function(selector){
 			var self=this,
 				item=self.getItem(selector),
-				v=item.element.val(),
+				v=item.element.get(0).value,
 				vtypeFn=uihelper.vtype(self,item.vtype,item);
+			//取值过程value>data('value')>attr('val')
 			if(_.isUndefined(v)){
 				v=item.element.data('value');
 				if(_.isUndefined(v)){
@@ -105,6 +107,42 @@
 				}
 			});
 			return noError;
+		},
+		getValues:function(){
+			var self=this,
+				element=self.element,
+				items=self.items;
+			var values={};
+			_.each(items,function(v){
+				var itemJq=v.element;
+				if(itemJq.is(':text,textarea')){
+					values[v.name||itemJq.attr('name')]=itemJq.val();	//首选配置项中的name,然后才是dom的name属性
+				}else if(itemJq.is(':radio,:checkbox')){
+					values[v.name||itemJq.attr('name')]=[];	//radio和checkbox以数组形式提交
+					itemJq.each(function(){
+						var thisJq=$(this);
+						if(thisJq.attr('checked')){
+							values[v.name||itemJq.attr('name')].push(thisJq.val());
+						}
+					});
+				}else if(itemJq.is('select')){	//select以数组形式提交
+					values[v.name||itemJq.attr('name')]=[];
+					$('option',itemJq).each(function(i){
+						var thisJq=$(this);
+						if(thisJq.attr('selected')){
+							values[v.name||itemJq.attr('name')].push(thisJq.val());
+						}
+					});
+				}else{
+					//普通dom
+					if(!_.isUndefined(itemJq.data('value'))){
+						values[v.name]=itemJq.data('value');
+					}else{
+						values[v.name]=itemJq.attr('val');
+					}
+				}
+			});
+			return values;
 		},
 		reset:function(){
 			var self=this,

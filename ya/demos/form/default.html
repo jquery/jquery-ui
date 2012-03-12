@@ -38,6 +38,7 @@
   	<script src="../../external/underscore-min.js"></script>
   	<script src="../../external/underscore.string.min.js"></script>
  	<script src="../../external/modernizr.js"></script>
+ 	<script src="../../external/json2.js"></script>
  	
 	
   	<script src="../../ya.js"></script>
@@ -81,6 +82,12 @@
 			
 			$('#f').form0({
 				items:[{
+					"selector":'#plain-dom',
+			  		"vtype":'trim',
+			  		"name":"text",
+			  		"defaultValue":"text",
+			  		"errorMsg":'不能为空'
+				},{
 					"selector":'#inputenter',
 			  		"vtype":'trim',
 			  		"defaultValue":"2",
@@ -103,15 +110,19 @@
 				},{
 					"selector":'#select2',
 			  		"vtype":'trim',
+			  		"name":"select_name",
 			  		"defaultValue":"f",
 			  		"errorMsg":'不能为空'
 				},{
 					"selector":'#sub-btn',
 			  		"handler":function(e){
-			  			var fJq=$('#f');
-			  			if(!fJq.form0('vForm')){
-			  				alert('error');
+			  			var fJq=$('#f'),
+			  				values;
+			  			if(!fJq.form0('vForm')){	
+			  				alert('error');	//未通过验证
 			  			}
+			  			values=fJq.form0('getValues');
+			  			alert(JSON.stringify(values));
 			  			e.preventDefault();
 			  			//e.stopPropagation();
 			  		}
@@ -136,6 +147,9 @@
 
 <body>
   <form id="f" action="#" method="post">
+  	<div class="ff-wrapper">
+  		<span id="plain-dom" data-value="text">text</span>
+  	</div>
   	<div class="ff-wrapper">
   		<input id="inputenter" type="text" name="name0" />
   	</div>
