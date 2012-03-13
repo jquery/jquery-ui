@@ -1,0 +1,9 @@
+.ui-overlay{
+	position: absolute;
+	top:0px;
+	left:0px;
+	z-index:10000;
+	background: black;
+	opacity: 0.5;
+	filter:alpha(opacity=60);
+}

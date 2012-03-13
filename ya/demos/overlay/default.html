@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+
+  <!-- Always force latest IE rendering engine (even in intranet) & Chrome Frame 
+       Remove this if you use the .htaccess -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+  <title>default</title>
+  <meta name="description" content="" />
+  <meta name="author" content="13" />
+
+   <link rel="stylesheet" href="../../themes/base.css" />
+	<link rel="stylesheet" href="../../lib/sl.css" />
+	<link rel="stylesheet" href="../../jqui/css/jquery-ui.css" />
+	<link rel="stylesheet" href="../../themes/default/jquery.ui.override.css" />
+	<link rel="stylesheet" href="../../themes/default/jquery.ui.overlay.css" />
+	<style type="text/css">
+		body{
+			height:1000px;
+		}
+		form{
+			position:absolute;
+			top:130px;
+			left:130px;
+			width:180px;
+		}
+		.select-wrapper{
+			margin-bottom: 30px;
+		}
+		.select-wrapper3 .ui-itemselect-options{
+			
+		}
+	</style>
+	
+	<script src="../../jqui/js/jquery.min.js"></script>
+  	<script src="../../jqui/js/jquery-ui.min.js"></script>
+  	
+  	<script src="../../external/underscore-min.js"></script>
+  	<script src="../../external/underscore.string.min.js"></script>
+ 	<script src="../../external/modernizr.js"></script>
+ 	
+ 	<script src="../../external/jquery.bgiframe-2.1.2.js"></script>
+ 	
+	
+  	<script src="../../ya.js"></script>
+  	<script src="../../lib/regx.js"></script>
+  	<script src="../../lib/sl.js"></script>
+  	<script src="../../lib/uihelper.js"></script>
+  	
+	<script src="../../ui/jquery.ya.overlay0.js"></script>
+	<script type="text/javascript">
+		jQuery(function($){
+			var bodyJq=$('body').overlay0();
+			$('#action1').click(function(){
+				bodyJq.overlay0('show');	//显示overlay
+				return false;
+			});
+			$('#action2').click(function(){
+				bodyJq.overlay0('hide');	//隐藏overlay
+				return false;
+			});
+			//监听resize事件，重新调整overlay的大小和位置
+			$(window).resize(function(){
+				bodyJq.overlay0('updateOverlay');
+			});
+		});
+	</script>
+</head>
+
+<body>
+  <form action="#" method="post">
+  	<button id="action1">显示遮罩</button>
+  	<button id="action2">隐藏遮罩</button>
+  	<div class="select-wrapper">
+	  	<select id="select1">
+	  		<option value="a">a</option>
+	  		<option value="b">b</option>
+	  		<option value="c">c</option>
+	  		<option value="d">d</option>
+	  	</select>
+  	</div>
+  	<div class="select-wrapper">
+	  	<select id="select2" themetype="combo">
+	  		<option value="e">e</option>
+	  		<option value="f">f</option>
+	  		<option value="g">g</option>
+	  		<option value="h">h</option>
+	  	</select>
+  	</div>
+  	<div class="select-wrapper select-wrapper3">
+  		<button id="reset-btn-0">reset</button>
+  		<button id="commit-btn-0">commit</button>
+	  	<select id="select3" multiple="multiple" themetype="itemselect" >
+	  		<option disabled="disabled">请选择</option>
+	  		<option value="i" selected="selected">i</option>
+	  		<option value="j">j</option>
+	  		<option value="k">k</option>
+	  		<option value="l">l</option>
+	  		<option value="m">m</option>
+	  		<option value="n">n</option>
+	  	</select>
+  	</div>
+  </form>
+</body>
+</html>
