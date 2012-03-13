@@ -188,6 +188,8 @@
 						tid=setInterval(function(){
 							me.reSetIframe(frame);
 						},300);
+					}).unload(function(){	//卸载清除时间句柄
+						clearInterval(tid);
 					});
 				},
 				reSetIframe:function(frame){
