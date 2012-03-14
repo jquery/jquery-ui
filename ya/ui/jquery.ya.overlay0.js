@@ -22,17 +22,18 @@
 			var element=self.element,
 				options=self.options,
 				advancedTheme=options.advancedTheme;
-			//设置overlay
-			var overlayJq=$('<div class="ui-overlay '+options.cls+'"></div>').css(options.styles||{}).hide().appendTo(element);
-			overlayJq.bgiframe();	//ie6 select遮不住fixed
-			self.overlayJq=overlayJq;
+							
 			//区分全局遮罩和局部遮罩
-			if(element.is(window)||element.is(document)||element.is('body')){
+			if(element.get(0)===window||element.get(0)===document||element.is('body')){
 				self.element=$(window);
+				overlayJq=$('<div class="ui-overlay ui-overlay-global '+options.cls+'"></div>').css(options.styles||{}).hide().appendTo('body');
 				self.type="screen";
 			}else{
+				overlayJq=$('<div class="ui-overlay ui-overlay-part '+options.cls+'"></div>').css(options.styles||{}).hide().appendTo(element);
 				self.type="part";
 			}
+			overlayJq.bgiframe();	//ie6 select遮不住fixed
+			self.overlayJq=overlayJq;
 			
 			self.updateOverlay(false);
 			
@@ -119,6 +120,22 @@
 				overlayJq=self.overlayJq;
 			overlayJq.hide();
 			self._trigger('hide',null);
+		}
+	});
+	//loadding global overlay
+	var winJq;
+	$(function($){
+		winJq=$(window).overlay0();
+		var overlayJq=winJq.data('overlay0').overlayJq;
+		$('<div class="loading"></div>').appendTo(overlayJq);
+		overlayJq.addClass('ui-overlay-loading');
+	});
+	_.extend($.ya,{
+		showLoading:function(){
+			winJq.overlay0('show');
+		},
+		hideLoading:function(){
+			winJq.overlay0('hide');
 		}
 	});
 }(jQuery,this));

@@ -3,7 +3,16 @@
 	top:0px;
 	left:0px;
 	z-index:10000;
-	background: black;
-	opacity: 0.5;
-	filter:alpha(opacity=60);
+	background-color:rgba(0, 0, 0, 0.3);
+    *filter:progid:DXImageTransform.Microsoft.Gradient(GradientType=0, StartColorStr='#4c000000', EndColorStr='#4c000000');
+}
+.ui-overlay-global .loading{
+	width:16px;
+	height:16px;
+	position:absolute;
+	top:50%;
+	left:50%;
+	margin-left:-8px;
+	margin-top:-8px;
+	background: url(images/loading.gif) no-repeat center center;
 }

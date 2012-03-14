@@ -52,18 +52,14 @@
 	<script src="../../ui/jquery.ya.overlay0.js"></script>
 	<script type="text/javascript">
 		jQuery(function($){
-			var bodyJq=$('body').overlay0();
+			ya=$.ya;
 			$('#action1').click(function(){
-				bodyJq.overlay0('show');	//显示overlay
+				ya.showLoading();
 				return false;
 			});
 			$('#action2').click(function(){
-				bodyJq.overlay0('hide');	//隐藏overlay
+				ya.hideLoading();
 				return false;
-			});
-			//监听resize事件，重新调整overlay的大小和位置
-			$(window).resize(function(){
-				bodyJq.overlay0('updateOverlay');
 			});
 		});
 	</script>
