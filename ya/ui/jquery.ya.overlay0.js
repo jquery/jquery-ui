@@ -2,10 +2,10 @@
  * @author 13
  */
 (function($,root){
-	var ya=root.ya,
-		sl=ya.sl,
-		regx=ya.regx,
-		uihelper=ya.uihelper,
+	var yawrap=root.yawrap,
+		sl=yawrap.sl,
+		regx=yawrap.regx,
+		uihelper=yawrap.uihelper,
 		Solution=sl.Solution;
 		
 	$.widget('ya.overlay0',{
@@ -26,7 +26,17 @@
 			var overlayJq=$('<div class="ui-overlay '+options.cls+'"></div>').css(options.styles||{}).hide().appendTo(element);
 			overlayJq.bgiframe();	//ie6 select遮不住fixed
 			self.overlayJq=overlayJq;
-			self.updateOverlay(true);
+			//区分全局遮罩和局部遮罩
+			if(element.is(window)||element.is(document)||element.is('body')){
+				self.element=$(window);
+				self.type="screen";
+			}else{
+				self.type="part";
+			}
+			
+			self.updateOverlay(false);
+			
+			self._action();
 			
 			//控件高级主题渲染
 			if(advancedTheme){
@@ -38,21 +48,63 @@
 			}
 			
 		},
-		updateOverlay:function(hidden){
+		updateOverlay:function(callShowFn){
 			var self=this,
 				element=self.element,
 				overlayJq=self.overlayJq;
 			var boxSize={
-				width:element.outerWidth(),
-				height:element.outerHeight()
+				width:element.width(),
+				height:element.height()
 			},offsetSize=element.offset();
+			if(!offsetSize){
+				offsetSize={
+					top:0,
+					left:0
+				};
+			}
 			overlayJq.css({
 				width:boxSize.width,
 				height:boxSize.height,
 				top:offsetSize.top,
 				left:offsetSize.left
 			});
-			!hidden&&self.show();	//update后立即显示
+			!!callShowFn&&self.show();	//update后立即显示
+		},
+		_action:function(){
+			var self=this,
+				element=self.element,
+				overlayJq=self.overlayJq,
+				winJq=$(window);
+			if(self.type=="screen"){
+				//var posSize=overlayJq.position(),
+				var resizeTid;
+				if($.browser.msie&&$.browser.version<=6){
+					overlayJq.css({
+						"position":"absolute"
+					});
+					winJq.scroll(function(){
+						var winJq=$(this);
+						overlayJq.css({
+							top:winJq.scrollTop(),
+							left:winJq.scrollLeft()
+						});
+					}).scroll();
+				}else{
+					overlayJq.css({
+						"position":"fixed"
+					});
+				}
+				winJq.resize(function(){
+					var winJq=$(this);
+					clearTimeout(resizeTid);
+					resizeTid=setTimeout(function(){		
+						self.updateOverlay(false);
+						if($.browser.msie&&$.browser.version<=6){
+							winJq.scroll();
+						}
+					},80);
+				});
+			}
 		},
 		show:function(){
 			var self=this,

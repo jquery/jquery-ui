@@ -39,7 +39,7 @@
  	<script src="../../external/modernizr.js"></script>
  	
 	
-  	<script src="../../ya.js"></script>
+  	<script src="../../core.js"></script>
   	<script src="../../lib/regx.js"></script>
   	<script src="../../lib/sl.js"></script>
   	<script src="../../lib/uihelper.js"></script>
@@ -100,6 +100,14 @@
 			$( "#select2" ).theme0('select','h');
 			return false;
 		});
+		$('#reset-btn-0').click(function(){
+			$( "#select3" ).theme0('reset');
+			return false;
+		});
+		$('#commit-btn-0').click(function(){
+			$( "#select3" ).theme0('commit');
+			return false;
+		});
 	});
 	</script>
 </head>
@@ -126,9 +134,11 @@
 	  	</select>
   	</div>
   	<div class="select-wrapper select-wrapper3">
+  		<button id="reset-btn-0">reset</button>
+  		<button id="commit-btn-0">commit</button>
 	  	<select id="select3" multiple="multiple" themetype="itemselect" >
 	  		<option disabled="disabled">请选择</option>
-	  		<option value="i">i</option>
+	  		<option value="i" selected="selected">i</option>
 	  		<option value="j">j</option>
 	  		<option value="k">k</option>
 	  		<option value="l">l</option>

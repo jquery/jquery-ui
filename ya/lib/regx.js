@@ -2,8 +2,8 @@
  * @author 13
  */
 (function($,root){
-	var ya=root.ya,
-		regx=ya.regx||{};
+	var yawrap=root.yawrap,
+		regx=yawrap.regx||{};
 	_.extend(regx,{
 		"rword":/[^, ]+/g,
 		"email":/^(?:\w+\.?)*\w+@(?:\w+\.?)*\w+$/,
@@ -12,5 +12,5 @@
 		"mobile":/^0{0,1}(13[0-9]|15[7-9]|153|156|18[7-9])[0-9]{8}$/
 	});
 	
-	ya.regx=regx;
+	yawrap.regx=regx;
 }(jQuery,this));

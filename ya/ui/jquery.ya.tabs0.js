@@ -2,9 +2,9 @@
  * @author 13
  */
 (function($,root){
-	var ya=root.ya,
-		sl=ya.sl,
-		uihelper=ya.uihelper,
+	var yawrap=root.yawrap,
+		sl=yawrap.sl,
+		uihelper=yawrap.uihelper,
 		Solution=sl.Solution;
 	var Base=$.ui.tabs;
 	$.widget('ya.tabs0',Base,{

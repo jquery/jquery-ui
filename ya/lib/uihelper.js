@@ -4,11 +4,17 @@
  * @author 13
  */
 (function($,root){
-	var ya=root.ya,
-		sl=ya.sl,
-		regx=ya.regx,
-		uihelper=ya.uihelper||{},
+	var yawrap=root.yawrap,
+		sl=yawrap.sl,
+		regx=yawrap.regx,
+		uihelper=yawrap.uihelper||{},
 		Solution=sl.Solution;
+	//浏览器特征检测
+	(function(){
+		/*Modernizr.testStyles(' #modernizr { position: fixed; } ', function(elem, rule){ 
+			Modernizr.addTest('posfixed', $(elem).css('position') == 'fixed');
+		});*/
+	}());
 	_.extend(uihelper,{
 		vtypes:{
 			"trim":"trim",
@@ -117,5 +123,5 @@
 		}
 	});
 	
-	ya.uihelper=uihelper;
+	yawrap.uihelper=uihelper;
 }(jQuery,this));

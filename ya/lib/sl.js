@@ -6,15 +6,15 @@
  *     underscore.js
  * 	   underscore.string.js
  *     modernizr.js
- *     ya.js
+ *     core.js
  *     regex.js
  */
 //简单工厂模式
 (function($,root){
-	var ya=root.ya,
-		sl=ya.sl||{},
-		regx=ya.regx,
-		Interface=ya.Interface;
+	var yawrap=root.yawrap,
+		sl=yawrap.sl||{},
+		regx=yawrap.regx,
+		Interface=yawrap.Interface;
 	//定义接口
 	var slInterface=new Interface('slInterface',['doSolution']);
 	var Solution=function(name,opts){
@@ -211,5 +211,5 @@
 		}())
 	});
 	sl.Solution=Solution;
-	ya.sl=sl;	//重新指向
+	yawrap.sl=sl;	//重新指向
 }(jQuery,this));

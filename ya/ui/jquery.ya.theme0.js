@@ -3,10 +3,10 @@
  * @author 13
  */
 (function($,root){
-	var ya=root.ya,
-		sl=ya.sl,
-		regx=ya.regx,
-		uihelper=ya.uihelper,
+	var yawrap=root.yawrap,
+		sl=yawrap.sl,
+		regx=yawrap.regx,
+		uihelper=yawrap.uihelper,
 		Solution=sl.Solution;
 		
 	//var cssPropertys='width height float position top left';
@@ -125,14 +125,6 @@
 			//绑定事件
 			if(options.triggerType=="click"){			
 				themeJq.click(function(e){				
-					//控制显示
-					/*if(clickState=="hidden"){
-						listJq.show();
-						clickState="shown";
-					}else if(clickState=="shown"){
-						listJq.hide();
-						clickState="hidden";
-					}*/
 					listJq.show();
 				});
 			}else if(options.triggerType=="hover"){
@@ -285,7 +277,7 @@
 			//设置select的multiple属性，可多选
 			element.attr('multiple','multiple');
 			//初始化
-			$('option',element).each(function(){
+			$('option',element).each(function(i){
 				var thisJq=$(this);
 				if(thisJq.attr('selected')){
 					$('<li class="ui-itemselect-option ui-state-highlight">'+thisJq.text()+'<div class="ui-itemselect-option-action" style="display:none;"><span class="ui-itemselect-icon-up"></span>&nbsp;&nbsp;<span class="ui-itemselect-icon-down"></span>&nbsp;&nbsp;<span class="ui-itemselect-icon-close"></span></div></li>').data('refoption',thisJq).appendTo(selectedJq);
@@ -293,6 +285,8 @@
 					$('<li class="ui-itemselect-option ui-state-default"'+(thisJq.attr('disabled')?'style="display:none;"':'')+'>'+thisJq.text()+'<div class="ui-itemselect-option-action" style="display:none;"><span class="ui-itemselect-icon-up"></span>&nbsp;&nbsp;<span class="ui-itemselect-icon-down"></span>&nbsp;&nbsp;<span class="ui-itemselect-icon-close"></span></div></li>').data('refoption',thisJq).appendTo(unselectedJq);
 				}
 			});
+			//更新选中状态
+			self._itemselectTheme_updateState();
 			//功能按钮主题化
 			$('.ui-itemselect-selected-handler,.ui-itemselect-unselected-handler').button0({
 				advancedTheme:{	
@@ -316,6 +310,30 @@
 			
 			//功能按钮事件绑定
 			self._itemselectTheme_action();
+		},
+		_itemselectTheme_updateState:function(){
+			var self=this,
+				element=self.element,
+				themeJq=self.themeJq;
+			var state=self.state;
+			if(!state){
+				//设置初始状态下selected项索引，为回滚做准备
+				state={
+					selected:[],
+					unselected:[]
+				};
+			}else{
+				state.selected.length=0;
+				state.unselected.length=0;
+			}
+			$('.ui-itemselect-unselected .ui-itemselect-option',themeJq).each(function(){
+				state.unselected.push(this);
+			});
+			$('.ui-itemselect-selected .ui-itemselect-option',themeJq).each(function(){
+				state.selected.push(this);
+			});
+			//保存状态
+			self.state=state;
 		},
 		_itemselectTheme_sort:function(){
 			var self=this,
@@ -384,7 +402,7 @@
 			});
 			$('.ui-itemselect-handlers',themeJq).on('click','button',function(){
 				var thisJq=$(this),
-					optionSelectedJq=self._itemselectTheme_getSelect();
+					optionSelectedJq=self._itemselectTheme_getActive();
 				if(thisJq.hasClass('ui-itemselect-selected-handler')){	//移到选择区
 					if(optionSelectedJq.parent().hasClass('ui-itemselect-unselected')){	//如果option在非选择区，可以移动
 						optionSelectedJq.removeClass('ui-itemselect-option-selected').appendTo(selectedJq);
@@ -402,8 +420,33 @@
 				return false;
 			});
 		},
-		_itemselectTheme_getSelect:function(){
+		_itemselectTheme_getActive:function(){
 			return $('.ui-itemselect-option-selected',this.themeJq);
+		},
+		/**
+		 * 调用此接口后select选中状态最终确定，再次调用reset将不会回滚
+		 */
+		_itemselectTheme_commit:function(){
+			var self=this;
+			//更新当前状态
+			self._itemselectTheme_updateState();
+		},
+		_itemselectTheme_reset:function(){
+			var self=this,
+				themeJq=self.themeJq,
+				unselectedJq=$('.ui-itemselect-unselected',themeJq),
+				selectedJq=$('.ui-itemselect-selected',themeJq),
+				state=self.state;
+			_.each(state.selected,function(itemDom){
+				$(itemDom).appendTo(selectedJq);
+			});
+			_.each(state.unselected,function(itemDom){
+				$(itemDom).appendTo(unselectedJq);
+			});
+			//清除激活状态
+			$('.ui-itemselect-option-selected',themeJq).removeClass('ui-itemselect-option-selected');
+			//重排
+			self._itemselectTheme_sort();
 		},
 		getSelection:function(){
 			var self=this,
@@ -433,6 +476,28 @@
 			switch(themeType){
 				case "combo":
 					self._comboTheme_select(mix);
+					break;
+				default:
+					break;
+			}
+		},
+		commit:function(){
+			var self=this,
+				themeType=self.themeType;
+			switch(themeType){
+				case "itemselect":
+					self._itemselectTheme_commit();
+					break;
+				default:
+					break;
+			}
+		},
+		reset:function(){
+			var self=this,
+				themeType=self.themeType;
+			switch(themeType){
+				case "itemselect":
+					self._itemselectTheme_reset();
 					break;
 				default:
 					break;

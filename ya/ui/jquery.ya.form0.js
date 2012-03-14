@@ -2,10 +2,10 @@
  * @author 13
  */
 (function($,root){
-	var ya=root.ya,
-		sl=ya.sl,
-		regx=ya.regx,
-		uihelper=ya.uihelper,
+	var yawrap=root.yawrap,
+		sl=yawrap.sl,
+		regx=yawrap.regx,
+		uihelper=yawrap.uihelper,
 		Solution=sl.Solution;
 		
 	$.widget('ya.form0',{
