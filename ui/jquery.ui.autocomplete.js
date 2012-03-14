@@ -1,7 +1,7 @@
 /*
  * jQuery UI Autocomplete @VERSION
  *
- * Copyright 2011, AUTHORS.txt (http://jqueryui.com/about)
+ * Copyright 2012, AUTHORS.txt (http://jqueryui.com/about)
  * Dual licensed under the MIT or GPL Version 2 licenses.
  * http://jquery.org/license
  *
@@ -47,11 +47,19 @@ $.widget( "ui.autocomplete", {
 
 	_create: function() {
 		var self = this,
-			doc = this.element[ 0 ].ownerDocument,
+			// Some browsers only repeat keydown events, not keypress events,
+			// so we use the suppressKeyPress flag to determine if we've already
+			// handled the keydown event. #7269
+			// Unfortunately the code for & in keypress is the same as the up arrow,
+			// so we use the suppressKeyPressRepeat flag to avoid handling keypress
+			// events when we know the keydown event was used to modify the
+			// search term. #7799
 			suppressKeyPress,
+			suppressKeyPressRepeat,
 			suppressInput;
 
-		this.valueMethod = this.element[ this.element.is( "input" ) ? "val" : "text" ];
+		this.isMultiLine = this.element.is( "textarea,[contenteditable]" );
+		this.valueMethod = this.element[ this.element.is( "input,textarea" ) ? "val" : "text" ];
 
 		this.element
 			.addClass( "ui-autocomplete-input" )
@@ -63,14 +71,16 @@ $.widget( "ui.autocomplete", {
 				"aria-haspopup": "true"
 			})
 			.bind( "keydown.autocomplete", function( event ) {
-				if ( self.options.disabled || self.element.attr( "readonly" ) ) {
+				if ( self.options.disabled || self.element.prop( "readOnly" ) ) {
 					suppressKeyPress = true;
 					suppressInput = true;
+					suppressKeyPressRepeat = true;
 					return;
 				}
 
 				suppressKeyPress = false;
 				suppressInput = false;
+				suppressKeyPressRepeat = false;
 				var keyCode = $.ui.keyCode;
 				switch( event.keyCode ) {
 				case keyCode.PAGE_UP:
@@ -83,15 +93,11 @@ $.widget( "ui.autocomplete", {
 					break;
 				case keyCode.UP:
 					suppressKeyPress = true;
-					self._move( "previous", event );
-					// prevent moving cursor to beginning of text field in some browsers
-					event.preventDefault();
+					self._keyEvent( "previous", event );
 					break;
 				case keyCode.DOWN:
 					suppressKeyPress = true;
-					self._move( "next", event );
-					// prevent moving cursor to end of text field in some browsers
-					event.preventDefault();
+					self._keyEvent( "next", event );
 					break;
 				case keyCode.ENTER:
 				case keyCode.NUMPAD_ENTER:
@@ -110,10 +116,13 @@ $.widget( "ui.autocomplete", {
 					self.menu.select( event );
 					break;
 				case keyCode.ESCAPE:
-					self._value( self.term );
-					self.close( event );
+					if ( self.menu.element.is(":visible") ) {
+						self._value( self.term );
+						self.close( event );
+					}
 					break;
 				default:
+					suppressKeyPressRepeat = true;
 					// search timeout should be triggered before the input value is changed
 					self._searchTimeout( event );
 					break;
@@ -123,6 +132,9 @@ $.widget( "ui.autocomplete", {
 				if ( suppressKeyPress ) {
 					suppressKeyPress = false;
 					event.preventDefault();
+					return;
+				}
+				if ( suppressKeyPressRepeat ) {
 					return;
 				}
 
@@ -136,14 +148,10 @@ $.widget( "ui.autocomplete", {
 					self._move( "nextPage", event );
 					break;
 				case keyCode.UP:
-					self._move( "previous", event );
-					// prevent moving cursor to beginning of text field in some browsers
-					event.preventDefault();
+					self._keyEvent( "previous", event );
 					break;
 				case keyCode.DOWN:
-					self._move( "next", event );
-					// prevent moving cursor to end of text field in some browsers
-					event.preventDefault();
+					self._keyEvent( "next", event );
 					break;
 				}
 			})
@@ -168,12 +176,14 @@ $.widget( "ui.autocomplete", {
 					return;
 				}
 
+				if ( self.cancelBlur ) {
+					delete self.cancelBlur;
+					return;
+				}
+
 				clearTimeout( self.searching );
-				// clicks on the menu (or a button to trigger a search) will cause a blur event
-				self.closing = setTimeout(function() {
-					self.close( event );
-					self._change( event );
-				}, 150 );
+				self.close( event );
+				self._change( event );
 			});
 		this._initSource();
 		this.response = function() {
@@ -181,9 +191,19 @@ $.widget( "ui.autocomplete", {
 		};
 		this.menu = $( "<ul></ul>" )
 			.addClass( "ui-autocomplete" )
-			.appendTo( $( this.options.appendTo || "body", doc )[0] )
+			.appendTo( this.document.find( this.options.appendTo || "body" )[0] )
 			// prevent the close-on-blur in case of a "slow" click on the menu (long mousedown)
 			.mousedown(function( event ) {
+				// prevent moving focus out of the text field
+				event.preventDefault();
+
+				// IE doesn't prevent moving focus even with event.preventDefault()
+				// so we set a flag to know when we should ignore the blur event
+				self.cancelBlur = true;
+				setTimeout(function() {
+					delete self.cancelBlur;
+				}, 1 );
+
 				// clicking on the scrollbar causes focus to shift to the body
 				// but we can't detect a mouseup or a click immediately afterward
 				// so we have to track the next mousedown and close the menu if
@@ -191,7 +211,7 @@ $.widget( "ui.autocomplete", {
 				var menuElement = self.menu.element[ 0 ];
 				if ( !$( event.target ).closest( ".ui-menu-item" ).length ) {
 					setTimeout(function() {
-						$( document ).one( 'mousedown', function( event ) {
+						self.document.one( 'mousedown', function( event ) {
 							if ( event.target !== self.element[ 0 ] &&
 								event.target !== menuElement &&
 								!$.contains( menuElement, event.target ) ) {
@@ -200,17 +220,14 @@ $.widget( "ui.autocomplete", {
 						});
 					}, 1 );
 				}
-
-				// use another timeout to make sure the blur-event-handler on the input was already triggered
-				setTimeout(function() {
-					clearTimeout( self.closing );
-				}, 13);
 			})
 			.menu({
 				// custom key handling for now
 				input: $(),
 				focus: function( event, ui ) {
-					var item = ui.item.data( "item.autocomplete" );
+					// back compat for _renderItem using item.autocomplete, via #7810
+					// TODO remove the fallback, see #8156
+					var item = ui.item.data( "ui-autocomplete-item" ) || ui.item.data( "item.autocomplete" );
 					if ( false !== self._trigger( "focus", event, { item: item } ) ) {
 						// use value to match what will end up in the input, if it was a key event
 						if ( /^key/.test(event.originalEvent.type) ) {
@@ -219,11 +236,13 @@ $.widget( "ui.autocomplete", {
 					}
 				},
 				select: function( event, ui ) {
-					var item = ui.item.data( "item.autocomplete" ),
+					// back compat for _renderItem using item.autocomplete, via #7810
+					// TODO remove the fallback, see #8156
+					var item = ui.item.data( "ui-autocomplete-item" ) || ui.item.data( "item.autocomplete" );
 						previous = self.previous;
 
 					// only trigger when focus was lost (click on menu)
-					if ( self.element[0] !== doc.activeElement ) {
+					if ( self.element[0] !== self.document[0].activeElement ) {
 						self.element.focus();
 						self.previous = previous;
 						// #6109 - IE triggers two focus events and the second
@@ -244,25 +263,28 @@ $.widget( "ui.autocomplete", {
 
 					self.close( event );
 					self.selectedItem = item;
-				},
-				blur: function( event, ui ) {
-					// don't set the value of the text field if it's already correct
-					// this prevents moving the cursor unnecessarily
-					if ( self.menu.element.is(":visible") &&
-						( self._value() !== self.term ) ) {
-						self._value( self.term );
-					}
 				}
 			})
 			.zIndex( this.element.zIndex() + 1 )
 			.hide()
 			.data( "menu" );
+
 		if ( $.fn.bgiframe ) {
 			 this.menu.element.bgiframe();
 		}
+
+		// turning off autocomplete prevents the browser from remembering the
+		// value when navigating through history, so we re-enable autocomplete
+		// if the page is unloaded before the widget is destroyed. #7790
+		this._bind( this.window, {
+			beforeunload: function() {
+				this.element.removeAttr( "autocomplete" );
+			}
+		});
 	},
 
 	_destroy: function() {
+		clearTimeout( this.searching );
 		this.element
 			.removeClass( "ui-autocomplete-input" )
 			.removeAttr( "autocomplete" )
@@ -273,12 +295,12 @@ $.widget( "ui.autocomplete", {
 	},
 
 	_setOption: function( key, value ) {
-		this._super( "_setOption", key, value );
+		this._super( key, value );
 		if ( key === "source" ) {
 			this._initSource();
 		}
 		if ( key === "appendTo" ) {
-			this.menu.element.appendTo( $( value || "body", this.element[0].ownerDocument )[0] )
+			this.menu.element.appendTo( this.document.find( value || "body" )[0] );
 		}
 		if ( key === "disabled" && value && this.xhr ) {
 			this.xhr.abort();
@@ -304,7 +326,9 @@ $.widget( "ui.autocomplete", {
 					url: url,
 					data: request,
 					dataType: "json",
-					autocompleteRequest: ++requestIndex,
+					context: {
+						autocompleteRequest: ++requestIndex
+					},
 					success: function( data, status ) {
 						if ( this.autocompleteRequest === requestIndex ) {
 							response( data );
@@ -324,9 +348,10 @@ $.widget( "ui.autocomplete", {
 
 	_searchTimeout: function( event ) {
 		var self = this;
+		clearTimeout( self.searching );
 		self.searching = setTimeout(function() {
 			// only search if the value has changed
-			if ( self.term != self.element.val() ) {
+			if ( self.term !== self._value() ) {
 				self.selectedItem = null;
 				self.search( null, event );
 			}
@@ -343,7 +368,6 @@ $.widget( "ui.autocomplete", {
 			return this.close( event );
 		}
 
-		clearTimeout( this.closing );
 		if ( this._trigger( "search", event ) === false ) {
 			return;
 		}
@@ -354,6 +378,7 @@ $.widget( "ui.autocomplete", {
 	_search: function( value ) {
 		this.pending++;
 		this.element.addClass( "ui-autocomplete-loading" );
+		this.cancelSearch = false;
 
 		this.source( { term: value }, this.response );
 	},
@@ -363,11 +388,12 @@ $.widget( "ui.autocomplete", {
 			content = this._normalize( content );
 		}
 		this._trigger( "response", null, { content: content } );
-		if ( !this.options.disabled && content && content.length ) {
+		if ( !this.options.disabled && content && content.length && !this.cancelSearch ) {
 			this._suggest( content );
 			this._trigger( "open" );
 		} else {
-			this.close();
+			// use ._close() instead of .close() so we don't cancel future searches
+			this._close();
 		}
 		this.pending--;
 		if ( !this.pending ) {
@@ -376,6 +402,11 @@ $.widget( "ui.autocomplete", {
 	},
 
 	close: function( event ) {
+		this.cancelSearch = true;
+		this._close( event );
+	},
+
+	_close: function( event ) {
 		clearTimeout( this.closing );
 		if ( this.menu.element.is(":visible") ) {
 			this.menu.element.hide();
@@ -383,7 +414,7 @@ $.widget( "ui.autocomplete", {
 			this._trigger( "close", event );
 		}
 	},
-	
+
 	_change: function( event ) {
 		if ( this.previous !== this._value() ) {
 			this._trigger( "change", event, { item: this.selectedItem } );
@@ -433,7 +464,9 @@ $.widget( "ui.autocomplete", {
 	_resizeMenu: function() {
 		var ul = this.menu.element;
 		ul.outerWidth( Math.max(
-			ul.width( "" ).outerWidth(),
+			// Firefox wraps long text (possibly a rounding bug)
+			// so we add 1px to avoid the wrapping (#7513)
+			ul.width( "" ).outerWidth() + 1,
 			this.element.outerWidth()
 		) );
 	},
@@ -441,13 +474,16 @@ $.widget( "ui.autocomplete", {
 	_renderMenu: function( ul, items ) {
 		var self = this;
 		$.each( items, function( index, item ) {
-			self._renderItem( ul, item );
+			self._renderItemData( ul, item );
 		});
 	},
 
-	_renderItem: function( ul, item) {
+	_renderItemData: function( ul, item ) {
+		return this._renderItem( ul, item ).data( "ui-autocomplete-item", item );
+	},
+
+	_renderItem: function( ul, item ) {
 		return $( "<li></li>" )
-			.data( "item.autocomplete", item )
 			.append( $( "<a></a>" ).text( item.label ) )
 			.appendTo( ul );
 	},
@@ -457,8 +493,8 @@ $.widget( "ui.autocomplete", {
 			this.search( null, event );
 			return;
 		}
-		if ( this.menu.first() && /^previous/.test(direction) ||
-				this.menu.last() && /^next/.test(direction) ) {
+		if ( this.menu.isFirstItem() && /^previous/.test(direction) ||
+				this.menu.isLastItem() && /^next/.test(direction) ) {
 			this._value( this.term );
 			this.menu.blur();
 			return;
@@ -472,6 +508,15 @@ $.widget( "ui.autocomplete", {
 
 	_value: function( value ) {
 		return this.valueMethod.apply( this.element, arguments );
+	},
+
+	_keyEvent: function( keyEvent, event ) {
+		if ( !this.isMultiLine || this.menu.element.is( ":visible" ) ) {
+			this._move( keyEvent, event );
+
+			// prevents moving cursor to beginning/end of the text field in some browsers
+			event.preventDefault();
+		}
 	}
 });
 

@@ -1,46 +1,52 @@
 <!doctype html>
 <html lang="en">
 <head>
+	<meta charset="utf-8">
 	<title>jQuery UI Spinner Test Suite</title>
 	
-	<link type="text/css" href="../../../themes/base/jquery.ui.spinner.css" rel="stylesheet" />
-	
-	<script type="text/javascript" src="../../../jquery-1.5.1.js"></script>
-	<script type="text/javascript" src="../../../external/jquery.mousewheel-3.0.4.js"></script>
-	<script type="text/javascript" src="../../../external/jquery.global.js"></script>
-	<script type="text/javascript" src="../../../ui/jquery.ui.core.js"></script>
-	<script type="text/javascript" src="../../../ui/jquery.ui.widget.js"></script>
-	<script type="text/javascript" src="../../../ui/jquery.ui.button.js"></script>
-	<script type="text/javascript" src="../../../ui/jquery.ui.spinner.js"></script>
+	<script src="../../jquery.js"></script>
+	<script src="../../../external/jquery.mousewheel-3.0.4.js"></script>
+	<script src="../../../external/globalize.js"></script>
+	<script src="../../../external/globalize.culture.ja-JP.js"></script>
+	<script src="../../resource_loader.js"></script>
+	<script>
+	loadResources({
+		css: [ "ui.core", "ui.button", "ui.spinner" ],
+		js: [
+			"ui/jquery.ui.core.js",
+			"ui/jquery.ui.widget.js",
+			"ui/jquery.ui.button.js",
+			"ui/jquery.ui.spinner.js"
+		]
+	});
+	</script>
 
-	<link rel="stylesheet" href="../../../external/qunit.css" type="text/css"/>
-	<script type="text/javascript" src="../../../external/qunit.js"></script>
-	<script type="text/javascript" src="../../jquery.simulate.js"></script>
-	<script type="text/javascript" src="../testsuite.js"></script>
+	<link rel="stylesheet" href="../../../external/qunit.css">
+	<script src="../../../external/qunit.js"></script>
+	<script src="../../jquery.simulate.js"></script>
+	<script src="../testsuite.js"></script>
 
-	<script type="text/javascript" src="spinner_core.js"></script>
-	<script type="text/javascript" src="spinner_defaults.js"></script>
-	<script type="text/javascript" src="spinner_events.js"></script>
-	<script type="text/javascript" src="spinner_methods.js"></script>
-	<script type="text/javascript" src="spinner_options.js"></script>
+	<script src="spinner_test_helpers.js"></script>
+	<script src="spinner_core.js"></script>
+	<script src="spinner_defaults.js"></script>
+	<script src="spinner_events.js"></script>
+	<script src="spinner_methods.js"></script>
+	<script src="spinner_options.js"></script>
 
-	<script type="text/javascript" src="../swarminject.js"></script>
-
+	<script src="../swarminject.js"></script>
 </head>
 <body>
-
 
 <h1 id="qunit-header">jQuery UI Spinner Test Suite</h1>
 <h2 id="qunit-banner"></h2>
 <div id="qunit-testrunner-toolbar"></div>
 <h2 id="qunit-userAgent"></h2>
-<ol id="qunit-tests">
-</ol>
-
+<ol id="qunit-tests"></ol>
 <div id="qunit-fixture">
-	<input id="spin" class="foo">
-	<input id="spin2" value="2">
-</div>
 
+<input id="spin" class="foo">
+<input id="spin2" value="2">
+
+</div>
 </body>
 </html>

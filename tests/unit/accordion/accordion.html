@@ -4,51 +4,28 @@
 	<meta charset="utf-8">
 	<title>jQuery UI Accordion Test Suite</title>
 
-	<link rel="stylesheet" href="../../../themes/base/jquery.ui.accordion.css">
-
-	<script src="../../../jquery-1.5.1.js"></script>
+	<script src="../../jquery.js"></script>
 	<script>
 	$.uiBackCompat = false;
 	</script>
-	<script src="../../../ui/jquery.ui.core.js"></script>
-	<script src="../../../ui/jquery.ui.widget.js"></script>
-	<script src="../../../ui/jquery.ui.accordion.js"></script>
+	<script src="../../resource_loader.js"></script>
+	<script>
+	loadResources({
+		css: [ "ui.core", "ui.accordion" ],
+		js: [
+			"ui/jquery.ui.core.js",
+			"ui/jquery.ui.widget.js",
+			"ui/jquery.ui.accordion.js"
+		]
+	});
+	</script>
 
 	<link rel="stylesheet" href="../../../external/qunit.css">
 	<script src="../../../external/qunit.js"></script>
 	<script src="../../jquery.simulate.js"></script>
 	<script src="../testsuite.js"></script>
 
-	<script>
-	function accordion_state( accordion ) {
-		var expected = $.makeArray( arguments ).slice( 1 );
-		var actual = accordion.find( ".ui-accordion-content" ).map(function() {
-			return $( this ).css( "display" ) === "none" ? 0 : 1;
-		}).get();
-		deepEqual( actual, expected );
-	}
-	function accordion_equalHeights( accordion, min, max ) {
-		var sizes = [];
-		accordion.find( ".ui-accordion-content" ).each(function() {
-			sizes.push( $( this ).outerHeight() );
-		});
-		ok( sizes[ 0 ] >= min && sizes[ 0 ] <= max,
-			"must be within " + min + " and " + max + ", was " + sizes[ 0 ] );
-		deepEqual( sizes[ 0 ], sizes[ 1 ] );
-		deepEqual( sizes[ 0 ], sizes[ 2 ] );
-	}
-	function accordionSetupTeardown() {
-		var animated = $.ui.accordion.prototype.options.animated;
-		return {
-			setup: function() {
-				$.ui.accordion.prototype.options.animated = false;
-			},
-			teardown: function() {
-				$.ui.accordion.prototype.options.animated = animated;
-			}
-		};
-	}
-	</script>
+	<script src="accordion_test_helpers.js"></script>
 	<script src="accordion_defaults.js"></script>
 	<script src="accordion_core.js"></script>
 	<script src="accordion_events.js"></script>
@@ -57,8 +34,12 @@
 
 	<script src="../swarminject.js"></script>
 	<style>
-	#qunit-fixture { font-size: 10pt; font-family: "trebuchet ms", verdana, arial; }
-	#list, #list1 *, #navigation, #navigation * { margin: 0; padding: 0; font-size: 12px; line-height: 15px; }
+	#list, #list1 *, #navigation, #navigation * {
+		margin: 0;
+		padding: 0;
+		font-size: 12px;
+		line-height: 15px;
+	}
 	</style>
 </head>
 <body>
@@ -70,28 +51,28 @@
 <div id="qunit-fixture">
 
 <div id="list1" class="foo">
-	<h3 class="bar"><a class="anchor">There is one obvious advantage:</a></h3>
+	<h3 class="bar">There is one obvious advantage:</h3>
 	<div class="foo">
 		<p>
 			You've seen it coming!
-			<br/>
+			<br>
 			Buy now and get nothing for free!
-			<br/>
+			<br>
 			Well, at least no free beer. Perhaps a bear, if you can afford it.
 		</p>
 	</div>
-	<h3 class="bar"><a class="anchor">Now that you've got...</a></h3>
+	<h3 class="bar">Now that you've got...</h3>
 	<div class="foo">
 		<p>
 			your bear, you have to admit it!
-			<br/>
+			<br>
 			No, we aren't selling bears.
 		</p>
 		<p>
 			We could talk about renting one.
 		</p>
 	</div>
-	<h3 class="bar"><a class="anchor">Rent one bear, ...</a></h3>
+	<h3 class="bar">Rent one bear, ...</h3>
 	<div class="foo">
 		<p>
 			get two for three beer.
@@ -139,19 +120,19 @@
 
 <dl id="accordion-dl">
 	<dt>
-		<a href="#">Accordion Header 1</a>
+		Accordion Header 1
 	</dt>
 	<dd>
 		Accordion Content 1
 	</dd>
 	<dt>
-		<a href="#">Accordion Header 2</a>
+		Accordion Header 2
 	</dt>
 	<dd>
 		Accordion Content 2
 	</dd>
 	<dt>
-		<a href="#">Accordion Header 3</a>
+		Accordion Header 3
 	</dt>
 	<dd>
 		Accordion Content 3

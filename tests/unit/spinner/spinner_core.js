@@ -1,171 +1,206 @@
-/*
- * spinner_core.js
- */
+(function( $ ) {
 
-var simulateKeyDownUp = function(el, kCode, shift) {
-	el.simulate("keydown",{keyCode:kCode, shiftKey: shift || false })
-		.simulate("keyup",{keyCode:kCode, shiftKey: shift || false });
-};
+module( "spinner: core" );
 
-(function($) {
-
-// Spinner Tests
-module("spinner: core");
-
-test("destroy", function() {
-	// cheat a bit to get IE6 to pass
-	$("#spin").val(0);
-	var beforeHtml = $("#spin").parent().html();
-	var afterHtml = $("#spin").spinner().spinner("destroy").parent().html();
-	equal( afterHtml, beforeHtml, "before/after html should be the same" );
-});
-
-test("keydown UP on input, increases value not greater than max", function() {
-	var el = $("#spin").spinner({
-		max:100,
-		value:50,
-		step:10
-	});
-	
-	simulateKeyDownUp(el, $.ui.keyCode.UP);
-	equals(el.val(), 60);
-	
-	for (i = 0; i<11; i++) {
-		simulateKeyDownUp(el, $.ui.keyCode.UP);	
-	}
-	equals(el.val(), 100);
-	
-	el.spinner("value", 50);
-	simulateKeyDownUp(el, $.ui.keyCode.UP);
-	equals(el.val(), 60);
-});
-
-test("keydown DOWN on input, decreases value not less than min", function() {
-	var el = $("#spin").spinner({
-		min:-100,
-		value:50,
-		step:10
-	});
-
-	simulateKeyDownUp(el, $.ui.keyCode.DOWN);
-	equals(el.val(), 40);
-	
-	for (i = 0; i<21; i++) {
-		simulateKeyDownUp(el, $.ui.keyCode.DOWN);	
-	}
-	equals(el.val(), -100);
-	
-	el.spinner("value", 50);
-	simulateKeyDownUp(el, $.ui.keyCode.DOWN);
-	equals(el.val(), 40);
-});
-
-test("keydown PGUP on input, increases value not greater than max", function() {
-	var el = $("#spin").spinner({
-		max: 500,
-		value: 0,
+test( "keydown UP on input, increases value not greater than max", function() {
+	expect( 5 );
+	var element = $( "#spin" ).val( 70 ).spinner({
+		max: 100,
 		step: 10
 	});
-	
-	simulateKeyDownUp(el, $.ui.keyCode.PAGE_UP);
-	equal(el.val(), 100);
-	
-	for (i = 0; i<5; i++) {
-		simulateKeyDownUp(el, $.ui.keyCode.PAGE_UP);	
-	}
-	equal(el.val(), 500);
-	
-	el.spinner("value", 0);
-	simulateKeyDownUp(el, $.ui.keyCode.PAGE_UP);
-	equals(el.val(), 100);
+
+	spinner_simulateKeyDownUp( element, $.ui.keyCode.UP );
+	equal( element.val(), 80 );
+	spinner_simulateKeyDownUp( element, $.ui.keyCode.UP );
+	equal( element.val(), 90 );
+	spinner_simulateKeyDownUp( element, $.ui.keyCode.UP );
+	equal( element.val(), 100 );
+	spinner_simulateKeyDownUp( element, $.ui.keyCode.UP );
+	equal( element.val(), 100 );
+	spinner_simulateKeyDownUp( element, $.ui.keyCode.UP );
+	equal( element.val(), 100 );
 });
 
-test("keydown PGDN on input, decreases value not less than min", function() {
-	var el = $("#spin").spinner({
-		min:-500,
-		value:0,
-		step:10
+test( "keydown DOWN on input, decreases value not less than min", function() {
+	expect( 5 );
+	var element = $( "#spin" ).val( 50 ).spinner({
+		min: 20,
+		step: 10
 	});
-		
-	simulateKeyDownUp(el, $.ui.keyCode.PAGE_DOWN);
-	equals(el.val(), -100);
-	
-	for (i = 0; i<5; i++) {
-		simulateKeyDownUp(el, $.ui.keyCode.PAGE_DOWN);	
-	}
-	equals(el.val(), -500);
-	
-	el.spinner("value", 0);
-	simulateKeyDownUp(el, $.ui.keyCode.PAGE_DOWN);
-	equals(el.val(), -100);
+
+	spinner_simulateKeyDownUp( element, $.ui.keyCode.DOWN );
+	equal( element.val(), 40 );
+	spinner_simulateKeyDownUp( element, $.ui.keyCode.DOWN );
+	equal( element.val(), 30 );
+	spinner_simulateKeyDownUp( element, $.ui.keyCode.DOWN );
+	equal( element.val(), 20 );
+	spinner_simulateKeyDownUp( element, $.ui.keyCode.DOWN );
+	equal( element.val(), 20 );
+	spinner_simulateKeyDownUp( element, $.ui.keyCode.DOWN );
+	equal( element.val(), 20 );
 });
 
-test("mouse click on buttons", function() {
-	var el = $("#spin").spinner(),
-		val = 0;
-	
-	$(".ui-spinner-up").trigger("mousedown").trigger("mouseup");
-	equals(el.val(), ++val, "mouse click to up");
+test( "keydown PAGE_UP on input, increases value not greater than max", function() {
+	expect( 5 );
+	var element = $( "#spin" ).val( 70 ).spinner({
+		max: 100,
+		page: 10
+	});
 
-	$(".ui-spinner-down").trigger("mousedown").trigger("mouseup");
-	equals(el.val(), --val, "mouse click to down");
-	
-	el.spinner("value", 50);
-	$(".ui-spinner-up").trigger("mousedown").trigger("mouseup");
-	equals(el.val(), 51);
-
-	el.spinner("value", 50);
-	$(".ui-spinner-down").trigger("mousedown").trigger("mouseup");
-	equals(el.val(), 49);
+	spinner_simulateKeyDownUp( element, $.ui.keyCode.PAGE_UP );
+	equal( element.val(), 80 );
+	spinner_simulateKeyDownUp( element, $.ui.keyCode.PAGE_UP );
+	equal( element.val(), 90 );
+	spinner_simulateKeyDownUp( element, $.ui.keyCode.PAGE_UP );
+	equal( element.val(), 100 );
+	spinner_simulateKeyDownUp( element, $.ui.keyCode.PAGE_UP );
+	equal( element.val(), 100 );
+	spinner_simulateKeyDownUp( element, $.ui.keyCode.PAGE_UP );
+	equal( element.val(), 100 );
 });
 
-test("mouse wheel on input", function() {
-	expect(4);
-	stop();
-	
-	var el = $("#spin").spinner();
-	equal(el.val(), 0);
-	el.trigger("mousewheel", 1);
-	equal(el.val(), 1);
-	
-	// mousewheel handler uses a timeout, need to accomodate that
-	setTimeout(function() {
-		el.trigger("mousewheel", -1);
-		equal(el.val(), 0);
-		
-		setTimeout(function() {
-			el.trigger("mousewheel", -1);
-			equal(el.val(), -1);
-			start();
-		}, 100);
-	}, 100);
-	
+test( "keydown PAGE_DOWN on input, decreases value not less than min", function() {
+	expect( 5 );
+	var element = $( "#spin" ).val( 50 ).spinner({
+		min: 20,
+		page: 10
+	});
+
+	spinner_simulateKeyDownUp( element, $.ui.keyCode.PAGE_DOWN );
+	equal( element.val(), 40 );
+	spinner_simulateKeyDownUp( element, $.ui.keyCode.PAGE_DOWN );
+	equal( element.val(), 30 );
+	spinner_simulateKeyDownUp( element, $.ui.keyCode.PAGE_DOWN );
+	equal( element.val(), 20 );
+	spinner_simulateKeyDownUp( element, $.ui.keyCode.PAGE_DOWN );
+	equal( element.val(), 20 );
+	spinner_simulateKeyDownUp( element, $.ui.keyCode.PAGE_DOWN );
+	equal( element.val(), 20 );
 });
 
-test("reading HTML5 attributes", function() {
-	var el = $('<input id="spinner" type="number" min="-100" max="100" value="5" step="2">').spinner();
-	equals(el.spinner('option', 'value'), 5, 'value');	
-	equals(el.spinner('option', 'max'), 100, 'max');
-	equals(el.spinner('option', 'min'), -100, 'min');
-	equals(el.spinner('option', 'step'), 2, 'step');
+test( "mouse click on up button, increases value not greater than max", function() {
+	expect( 3 );
+	var element = $( "#spin" ).val( 18 ).spinner({
+			max: 20
+		}),
+		button = element.spinner( "widget" ).find( ".ui-spinner-up" );
+
+	button.trigger( "mousedown" ).trigger( "mouseup" );
+	equal( element.val(), 19 );
+	button.trigger( "mousedown" ).trigger( "mouseup" );
+	equal( element.val(), 20 );
+	button.trigger( "mousedown" ).trigger( "mouseup" );
+	equal( element.val(), 20 );
 });
 
-test("ARIA attributes", function() {
-	var el = $('#spin').spinner({ min: -5, max: 5, value: 2 });;
+test( "mouse click on up button, increases value not greater than max", function() {
+	expect( 3 );
+	var element = $( "#spin" ).val( 2 ).spinner({
+		min: 0
+	}),
+	button = element.spinner( "widget" ).find( ".ui-spinner-down" );
 	
-	equals(el.attr('role'), 'spinbutton', 'role');
-	equals(el.attr('aria-valuemin'), -5, 'aria-valuemin');
-	equals(el.attr('aria-valuemax'), 5, 'aria-valuemax');
-	equals(el.attr('aria-valuenow'), 2, 'aria-valuenow');
-	
-	el.spinner('stepUp');
-	
-	equals(el.attr('aria-valuenow'), 3, 'stepUp 1 step changes aria-valuenow');
-	
-	el.spinner('option', { min: -10, max: 10 });
-	
-	equals(el.attr('aria-valuemin'), -10, 'min option changed aria-valuemin changes');
-	equals(el.attr('aria-valuemax'), 10, 'max option changed aria-valuemax changes');
+	button.trigger( "mousedown" ).trigger( "mouseup" );
+	equal( element.val(), 1 );
+	button.trigger( "mousedown" ).trigger( "mouseup" );
+	equal( element.val(), 0 );
+	button.trigger( "mousedown" ).trigger( "mouseup" );
+	equal( element.val(), 0 );
 });
 
-})(jQuery);
+test( "mousewheel on input", function() {
+	expect( 4 );
+
+	var element = $( "#spin" ).val( 0 ).spinner({
+		step: 2
+	});
+
+	element.trigger( "mousewheel" );
+	equal( element.val(), 0, "mousewheel event without delta does not change value" );
+
+	element.trigger( "mousewheel", 1 );
+	equal( element.val(), 2 );
+
+	element.trigger( "mousewheel", -0.2 );
+	equal( element.val(), 0 );
+
+	element.trigger( "mousewheel", -15 );
+	equal(element.val(), -2 );
+});
+
+test( "reading HTML5 attributes", function() {
+	expect( 6 );
+	var markup = "<input type='number' min='-100' max='100' value='5' step='2'>",
+		element = $( markup ).spinner();
+	equal( element.spinner( "option", "min" ), -100, "min from markup" );
+	equal( element.spinner( "option", "max" ), 100, "max from markup" );
+	equal( element.spinner( "option", "step" ), 2, "step from markup" );
+
+	element = $( markup ).spinner({
+		min: -200,
+		max: 200,
+		step: 5
+	});
+	equal( element.spinner( "option", "min" ), -200, "min from options" );
+	equal( element.spinner( "option", "max" ), 200, "max from options" );
+	equal( element.spinner( "option", "step" ), 5, "stop from options" );
+});
+
+test( "ARIA attributes", function() {
+	expect( 9 );
+	var element = $( "#spin" ).val( 2 ).spinner({ min: -5, max: 5 });
+
+	equal( element.attr( "role" ), "spinbutton", "role" );
+	equal( element.attr( "aria-valuemin" ), "-5", "aria-valuemin" );
+	equal( element.attr( "aria-valuemax" ), "5", "aria-valuemax" );
+	equal( element.attr( "aria-valuenow" ), "2", "aria-valuenow" );
+
+	element.spinner( "stepUp" );
+
+	equal( element.attr( "aria-valuenow" ), "3", "stepUp 1 step changes aria-valuenow" );
+
+	element.spinner( "option", { min: -10, max: 10 } );
+
+	equal( element.attr( "aria-valuemin" ), "-10", "min option changed aria-valuemin changes" );
+	equal( element.attr( "aria-valuemax" ), "10", "max option changed aria-valuemax changes" );
+
+	element.spinner( "option", "min", null );
+	equal( element.attr( "aria-valuemin" ), undefined, "aria-valuemin not set when no min" );
+
+	element.spinner( "option", "max", null );
+	equal( element.attr( "aria-valuemax" ), undefined, "aria-valuemax not set when no max" );
+});
+
+test( "focus text field when pressing button", function() {
+	expect( 2 );
+	var element = $( "#spin" ).spinner();
+	$( "body" ).focus();
+	ok( element[ 0 ] !== document.activeElement, "not focused before" );
+	element.spinner( "widget" ).find( ".ui-spinner-up" ).mousedown();
+	ok( element[ 0 ] === document.activeElement, "focused after" );
+});
+
+test( "don't clear invalid value on blur", function() {
+	expect( 1 );
+	var element = $( "#spin" ).spinner();
+	element.focus().val( "a" ).blur();
+	equal( element.val(), "a" );
+});
+
+test( "precision", function() {
+	expect( 2 );
+	var element = $( "#spin" ).val( .05 ).spinner({
+		step: .0001
+	});
+	element.spinner( "stepUp" );
+	equal( element.val(), "0.0501", "precision from step" );
+
+	element.val( 1.05 ).spinner( "option", {
+		step: 1,
+		min: -9.95
+	});
+	element.spinner( "stepDown" );
+	equal( element.val(), "0.05", "precision from min" );
+});
+
+})( jQuery );

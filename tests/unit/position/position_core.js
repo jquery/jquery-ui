@@ -14,7 +14,7 @@ test( "my, at, of", function() {
 		of: "#parentx",
 		collision: "none"
 	});
-	same( $( "#elx" ).offset(), { top: 40, left: 40 }, "left top, left top" );
+	deepEqual( $( "#elx" ).offset(), { top: 40, left: 40 }, "left top, left top" );
 
 	$( "#elx" ).position({
 		my: "left top",
@@ -22,7 +22,7 @@ test( "my, at, of", function() {
 		of: "#parentx",
 		collision: "none"
 	});
-	same( $( "#elx" ).offset(), { top: 60, left: 40 }, "left top, left bottom" );
+	deepEqual( $( "#elx" ).offset(), { top: 60, left: 40 }, "left top, left bottom" );
 
 	$( "#elx" ).position({
 		my: "left",
@@ -30,7 +30,7 @@ test( "my, at, of", function() {
 		of: "#parentx",
 		collision: "none"
 	});
-	same( $( "#elx" ).offset(), { top: 55, left: 50 }, "left, bottom" );
+	deepEqual( $( "#elx" ).offset(), { top: 55, left: 50 }, "left, bottom" );
 
 	$( "#elx" ).position({
 		my: "left foo",
@@ -38,7 +38,7 @@ test( "my, at, of", function() {
 		of: "#parentx",
 		collision: "none"
 	});
-	same( $( "#elx" ).offset(), { top: 45, left: 50 }, "left foo, bar baz" );
+	deepEqual( $( "#elx" ).offset(), { top: 45, left: 50 }, "left foo, bar baz" );
 });
 
 test( "multiple elements", function() {
@@ -50,10 +50,10 @@ test( "multiple elements", function() {
 		collision: "none"
 	});
 
-	same( result, elements );
+	deepEqual( result, elements );
 	var expected = { top: 10, left: 4 };
 	elements.each(function() {
-		same( $( this ).offset(), expected );
+		deepEqual( $( this ).offset(), expected );
 	});
 });
 
@@ -89,7 +89,7 @@ test( "positions", function() {
 			of: "#parent",
 			collision: "none"
 		});
-		same( el.offset(), definition.result,
+		deepEqual( el.offset(), definition.result,
 			"Position via " + QUnit.jsDump.parse({ my:definition.my, at:definition.at }) );
 	});
 });
@@ -101,7 +101,7 @@ test( "of", function() {
 		of: "#parentx",
 		collision: "none"
 	});
-	same( $( "#elx" ).offset(), { top: 40, left: 40 }, "selector" );
+	deepEqual( $( "#elx" ).offset(), { top: 40, left: 40 }, "selector" );
 
 	$( "#elx" ).position({
 		my: "left top",
@@ -109,7 +109,7 @@ test( "of", function() {
 		of: $( "#parentx"),
 		collision: "none"
 	});
-	same( $( "#elx" ).offset(), { top: 60, left: 40 }, "jQuery object" );
+	deepEqual( $( "#elx" ).offset(), { top: 60, left: 40 }, "jQuery object" );
 
 	$( "#elx" ).position({
 		my: "left top",
@@ -117,7 +117,7 @@ test( "of", function() {
 		of: $( "#parentx" )[ 0 ],
 		collision: "none"
 	});
-	same( $( "#elx" ).offset(), { top: 40, left: 40 }, "DOM element" );
+	deepEqual( $( "#elx" ).offset(), { top: 40, left: 40 }, "DOM element" );
 
 	$( "#elx" ).position({
 		my: "right bottom",
@@ -125,7 +125,7 @@ test( "of", function() {
 		of: document,
 		collision: "none"
 	});
-	same( $( "#elx" ).offset(), {
+	deepEqual( $( "#elx" ).offset(), {
 		top: $( document ).height() - 10,
 		left: $( document ).width() - 10
 	}, "document" );
@@ -136,7 +136,7 @@ test( "of", function() {
 		of: $( document ),
 		collision: "none"
 	});
-	same( $( "#elx" ).offset(), {
+	deepEqual( $( "#elx" ).offset(), {
 		top: $( document ).height() - 10,
 		left: $( document ).width() - 10
 	}, "document as jQuery object" );
@@ -149,7 +149,7 @@ test( "of", function() {
 		of: window,
 		collision: "none"
 	});
-	same( $( "#elx" ).offset(), {
+	deepEqual( $( "#elx" ).offset(), {
 		top: $( window ).height() - 10,
 		left: $( window ).width() - 10
 	}, "window" );
@@ -160,7 +160,7 @@ test( "of", function() {
 		of: $( window ),
 		collision: "none"
 	});
-	same( $( "#elx" ).offset(), {
+	deepEqual( $( "#elx" ).offset(), {
 		top: $( window ).height() - 10,
 		left: $( window ).width() - 10
 	}, "window as jQuery object" );
@@ -173,7 +173,7 @@ test( "of", function() {
 			of: window,
 			collision: "none"
 		});
-		same( $( "#elx" ).offset(), {
+		deepEqual( $( "#elx" ).offset(), {
 			top: $( window ).height() + 500 - 10,
 			left: $( window ).width() + 200 - 10
 		}, "window, scrolled" );
@@ -187,7 +187,7 @@ test( "of", function() {
 		of: event,
 		collision: "none"
 	});
-	same( $( "#elx" ).offset(), {
+	deepEqual( $( "#elx" ).offset(), {
 		top: 300,
 		left: 200
 	}, "event - left top, left top" );
@@ -199,7 +199,7 @@ test( "of", function() {
 		of: event,
 		collision: "none"
 	});
-	same( $( "#elx" ).offset(), {
+	deepEqual( $( "#elx" ).offset(), {
 		top: 600,
 		left: 400
 	}, "event - left top, right bottom" );
@@ -212,7 +212,7 @@ test( "offsets", function() {
 		of: "#parentx",
 		collision: "none"
 	});
-	same( $( "#elx" ).offset(), { top: 70, left: 50 }, "offsets in at" );
+	deepEqual( $( "#elx" ).offset(), { top: 70, left: 50 }, "offsets in at" );
 
 	$( "#elx" ).position({
 		my: "left+10 top-10",
@@ -220,7 +220,7 @@ test( "offsets", function() {
 		of: "#parentx",
 		collision: "none"
 	});
-	same( $( "#elx" ).offset(), { top: 50, left: 50 }, "offsets in my" );
+	deepEqual( $( "#elx" ).offset(), { top: 50, left: 50 }, "offsets in my" );
 
 	$( "#elx" ).position({
 		my: "left top",
@@ -228,7 +228,7 @@ test( "offsets", function() {
 		of: "#parentx",
 		collision: "none"
 	});
-	same( $( "#elx" ).offset(), { top: 58, left: 50 }, "percentage offsets in at" );
+	deepEqual( $( "#elx" ).offset(), { top: 58, left: 50 }, "percentage offsets in at" );
 
 	$( "#elx" ).position({
 		my: "left-30% top+50%",
@@ -236,7 +236,7 @@ test( "offsets", function() {
 		of: "#parentx",
 		collision: "none"
 	});
-	same( $( "#elx" ).offset(), { top: 65, left: 37 }, "percentage offsets in my" );
+	deepEqual( $( "#elx" ).offset(), { top: 65, left: 37 }, "percentage offsets in my" );
 });
 
 test( "using", function() {
@@ -257,14 +257,14 @@ test( "using", function() {
 		at: "left top",
 		of: "#parentx",
 		using: function( position ) {
-			same( this, elems[ count ], "correct context for call #" + count );
-			same( position, expectedPosition, "correct position for call #" + count );
+			deepEqual( this, elems[ count ], "correct context for call #" + count );
+			deepEqual( position, expectedPosition, "correct position for call #" + count );
 			count++;
 		}
 	});
 
 	elems.each(function() {
-		same( $( this ).offset(), originalPosition, "elements not moved" );
+		deepEqual( $( this ).offset(), originalPosition, "elements not moved" );
 	});
 });
 
@@ -274,7 +274,7 @@ function collisionTest( config, result, msg ) {
 		at: "right bottom",
 		of: window
 	}, config ) );
-	same( elem.offset(), result, msg );
+	deepEqual( elem.offset(), result, msg );
 }
 
 function collisionTest2( config, result, msg ) {
@@ -332,28 +332,28 @@ test( "collision: fit, window scrolled", function() {
 test( "collision: flip, no offset", function() {
 	collisionTest({
 		collision: "flip"
-	}, { top: -10, left: -10 }, "left top" );
+	}, { top: $( window ).height(), left: $( window ).width() }, "left top" );
 
 	collisionTest2({
 		collision: "flip"
-	}, { top: $( window ).height(), left: $( window ).width() }, "right bottom" );
+	}, { top: -10, left: -10 }, "right bottom" );
 });
 
 test( "collision: flip, with offset", function() {
 	collisionTest({
 		collision: "flip",
 		at: "right+2 bottom+3"
-	}, { top: -13, left: -12 }, "left top, with offset added" );
+	}, { top: $( window ).height() + 3, left: $( window ).width() + 2 }, "left top, with offset added" );
 
 	collisionTest2({
 		collision: "flip",
 		at: "left+2 top+3"
-	}, { top: $( window ).height() - 3, left: $( window ).width() - 2 }, "bottom, positive offset" );
+	}, { top: -7, left: -8 }, "bottom, positive offset" );
 
 	collisionTest2({
 		collision: "flip",
 		at: "left-2 top-3"
-	}, { top: $( window ).height() + 3, left: $( window ).width() + 2 }, "right bottom, negative offset" );
+	}, { top: -13, left: -12 }, "right bottom, negative offset" );
 });
 
 test( "collision: none, no offset", function() {
@@ -427,30 +427,121 @@ test( "collision: flip, with margin", function() {
 	collisionTest({
 		collision: "flip",
 		at: "left top"
-	}, { top: $( window ).height() - 10, left: $( window ).width() - 10 }, "left top" );
+	}, { top: 0, left: 0 }, "left top" );
 
 	collisionTest2({
 		collision: "flip",
 		at: "right bottom"
-	}, { top: 0, left: 0 }, "right bottom" );
+	}, { top: $( window ).height() - 10, left: $( window ).width() - 10 }, "right bottom" );
 });
 
-//test( "bug #5280: consistent results (avoid fractional values)", function() {
-//	var wrapper = $( "#bug-5280" ),
-//		elem = wrapper.children(),
-//		offset1 = elem.position({
-//			my: "center",
-//			at: "center",
-//			of: wrapper,
-//			collision: "none"
-//		}).offset(),
-//		offset2 = elem.position({
-//			my: "center",
-//			at: "center",
-//			of: wrapper,
-//			collision: "none"
-//		}).offset();
-//	same( offset1, offset2 );
-//});
+test( "addClass: flipped left", function() {
+	var elem = $( "#elx" ).position( {
+		my: "left center",
+		of: window,
+		collision: "flip",
+		at: "right center"
+	});
+
+	deepEqual( elem.hasClass( 'ui-flipped-left' ), false, 'Has ui-flipped-left class' );
+
+	elem.position( {
+		my: "right center",
+		of: window,
+		collision: "flip",
+		at: "left center"
+	})
+
+	deepEqual( elem.hasClass( 'ui-flipped-left' ), false, 'Removed ui-flipped-left class' );
+});
+
+test( "addClass: flipped top", function() {
+	var elem = $( "#elx" ).position( {
+		my: "left top",
+		of: window,
+		collision: "flip",
+		at: "right bottom"
+	});
+
+	deepEqual( elem.hasClass( 'ui-flipped-top' ), false, 'Has ui-flipped-top class' );
+
+	elem.position( {
+		my: "left bottom",
+		of: window,
+		collision: "flip",
+		at: "right top"
+	});
+
+	deepEqual( elem.hasClass( 'ui-flipped-top' ), false, 'Removed ui-flipped-top class' );
+});
+
+test( "addClass: flipped right", function() {
+	var elem = $( "#elx" ).position( {
+		my: "right center",
+		of: window,
+		collision: "flip",
+		at: "left center"
+	});
+
+	deepEqual( elem.hasClass( 'ui-flipped-right' ), false, 'Has ui-flipped-right class' );
+
+	elem.position( {
+		my: "left center",
+		of: window,
+		collision: "flip",
+		at: "right center"
+	});
+
+	deepEqual( elem.hasClass( 'ui-flipped-right' ), false, 'Removed ui-flipped-right class' );
+
+});
+
+test( "addClass: flipped bottom", function() {
+	var elem = $( "#elx" ).position( {
+		my: "left bottom",
+		of: window,
+		collision: "flip",
+		at: "right top"
+	});
+
+	deepEqual( elem.hasClass( 'ui-flipped-bottom' ), false, 'Has ui-flipped-bottom class' );
+
+	elem.position( {
+		my: "left top",
+		of: window,
+		collision: "flip",
+		at: "right bottom"
+	});
+
+	deepEqual( elem.hasClass( 'ui-flipped-bottom' ), false, 'Removed ui-flipped-bottom class' );
+});
+
+test( "fractions", function() {
+	$( "#fractions-element" ).position({
+		my: "left top",
+		at: "left top",
+		of: "#fractions-parent",
+		collision: "none"
+	});
+	deepEqual( $( "#fractions-element" ).offset(), $( "#fractions-parent" ).offset(), "left top, left top" );
+});
+
+test( "bug #5280: consistent results (avoid fractional values)", function() {
+	var wrapper = $( "#bug-5280" ),
+		elem = wrapper.children(),
+		offset1 = elem.position({
+			my: "center",
+			at: "center",
+			of: wrapper,
+			collision: "none"
+		}).offset(),
+		offset2 = elem.position({
+			my: "center",
+			at: "center",
+			of: wrapper,
+			collision: "none"
+		}).offset();
+	deepEqual( offset1, offset2 );
+});
 
 }( jQuery ) );

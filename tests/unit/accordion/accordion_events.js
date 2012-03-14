@@ -1,6 +1,45 @@
 (function( $ ) {
 
-module( "accordion: events", accordionSetupTeardown() );
+module( "accordion: events", accordion_setupTeardown() );
+
+test( "create", function() {
+	expect( 10 );
+
+	var element = $( "#list1" ),
+		headers = element.children( "h3" ),
+		contents = headers.next();
+
+	element.accordion({
+		create: function( event, ui ) {
+			equal( ui.header.size(), 1, "header size" );
+			strictEqual( ui.header[ 0 ], headers[ 0 ], "header" );
+			equal( ui.content.size(), 1, "content size" );
+			strictEqual( ui.content[ 0 ], contents[ 0 ], "content" );
+		}
+	});
+	element.accordion( "destroy" );
+
+	element.accordion({
+		active: 2,
+		create: function( event, ui ) {
+			equal( ui.header.size(), 1, "header size" );
+			strictEqual( ui.header[ 0 ], headers[ 2 ], "header" );
+			equal( ui.content.size(), 1, "content size" );
+			strictEqual( ui.content[ 0 ], contents[ 2 ], "content" );
+		}
+	});
+	element.accordion( "destroy" );
+
+	element.accordion({
+		active: false,
+		collapsible: true,
+		create: function( event, ui ) {
+			equal( ui.header.size(), 0, "header size" );
+			equal( ui.content.size(), 0, "content size" );
+		}
+	});
+	element.accordion( "destroy" );
+});
 
 test( "beforeActivate", function() {
 	expect( 38 );

@@ -4,15 +4,21 @@
 	<meta charset="utf-8">
 	<title>jQuery UI Tabs Test Suite</title>
 
-	<link rel="stylesheet" href="../../../themes/base/jquery.ui.tabs.css">
-
-	<script src="../../../jquery-1.5.1.js"></script>
+	<script src="../../jquery.js"></script>
 	<script>
 	$.uiBackCompat = false;
 	</script>
-	<script src="../../../ui/jquery.ui.core.js"></script>
-	<script src="../../../ui/jquery.ui.widget.js"></script>
-	<script src="../../../ui/jquery.ui.tabs.js"></script>
+	<script src="../../resource_loader.js"></script>
+	<script>
+	loadResources({
+		css: [ "ui.core", "ui.tabs" ],
+		js: [
+			"ui/jquery.ui.core.js",
+			"ui/jquery.ui.widget.js",
+			"ui/jquery.ui.tabs.js"
+		]
+	});
+	</script>
 
 	<link rel="stylesheet" href="../../../external/qunit.css">
 	<script src="../../../external/qunit.js"></script>
@@ -43,7 +49,7 @@
 			}
 			return -1; // mixed state - invalid
 		}).get();
-		same( actual, expected );
+		deepEqual( actual, expected );
 	}
 
 	function tabs_disabled( tabs, state ) {
@@ -77,8 +83,8 @@
 			}
 			return -1; // mixed state - invalid
 		}).get();
-		same( tabs.tabs( "option", "disabled" ), state );
-		same( actual, expected );
+		deepEqual( tabs.tabs( "option", "disabled" ), state );
+		deepEqual( actual, expected );
 	}
 	</script>
 	<script src="../swarminject.js"></script>

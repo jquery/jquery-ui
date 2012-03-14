@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<title>jQuery UI Autocomplete - Combobox</title>
 	<link rel="stylesheet" href="../../themes/base/jquery.ui.all.css">
-	<script src="../../jquery-1.5.1.js"></script>
+	<script src="../../jquery-1.7.1.js"></script>
 	<script src="../../ui/jquery.ui.core.js"></script>
 	<script src="../../ui/jquery.ui.widget.js"></script>
 	<script src="../../ui/jquery.ui.button.js"></script>
@@ -29,7 +29,7 @@
 	(function( $ ) {
 		$.widget( "ui.combobox", {
 			_create: function() {
-				var self = this,
+				var that = this,
 					select = this.element.hide(),
 					selected = select.children( ":selected" ),
 					value = selected.val() ? selected.text() : "";
@@ -85,7 +85,7 @@
 						},
 						select: function( event, ui ) {
 							ui.item.option.selected = true;
-							self._trigger( "selected", event, {
+							that._trigger( "selected", event, {
 								item: ui.item.option
 							});
 						},

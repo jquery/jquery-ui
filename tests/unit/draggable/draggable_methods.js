@@ -52,7 +52,7 @@ test("destroy", function() {
 
 	var expected = $('<div></div>').draggable(),
 		actual = expected.draggable('destroy');
-	equals(actual, expected, 'destroy is chainable');
+	equal(actual, expected, 'destroy is chainable');
 });
 
 test("enable", function() {
@@ -61,18 +61,18 @@ test("enable", function() {
 	shouldnotmove('.draggable({ disabled: true })');
 	el.draggable("enable");
 	shouldmove('.draggable("enable")');
-	equals(el.draggable("option", "disabled"), false, "disabled option getter");
+	equal(el.draggable("option", "disabled"), false, "disabled option getter");
 
 	el.draggable("destroy");
 	el.draggable({ disabled: true });
 	shouldnotmove('.draggable({ disabled: true })');
 	el.draggable("option", "disabled", false);
-	equals(el.draggable("option", "disabled"), false, "disabled option setter");
+	equal(el.draggable("option", "disabled"), false, "disabled option setter");
 	shouldmove('.draggable("option", "disabled", false)');
-	
+
 	var expected = $('<div></div>').draggable(),
 		actual = expected.draggable('enable');
-	equals(actual, expected, 'enable is chainable');
+	equal(actual, expected, 'enable is chainable');
 });
 
 test("disable", function() {
@@ -81,19 +81,19 @@ test("disable", function() {
 	shouldmove('.draggable({ disabled: false })');
 	el.draggable("disable");
 	shouldnotmove('.draggable("disable")');
-	equals(el.draggable("option", "disabled"), true, "disabled option getter");
+	equal(el.draggable("option", "disabled"), true, "disabled option getter");
 
 	el.draggable("destroy");
 
 	el.draggable({ disabled: false });
 	shouldmove('.draggable({ disabled: false })');
 	el.draggable("option", "disabled", true);
-	equals(el.draggable("option", "disabled"), true, "disabled option setter");
+	equal(el.draggable("option", "disabled"), true, "disabled option setter");
 	shouldnotmove('.draggable("option", "disabled", true)');
-	
+
 	var expected = $('<div></div>').draggable(),
 		actual = expected.draggable('disable');
-	equals(actual, expected, 'disable is chainable');
+	equal(actual, expected, 'disable is chainable');
 });
 
 })(jQuery);

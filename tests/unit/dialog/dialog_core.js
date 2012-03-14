@@ -42,7 +42,7 @@ function moved(dx, dy, msg) {
 	msg = msg ? msg + "." : "";
 	var actual = { left: Math.round(offsetAfter.left), top: Math.round(offsetAfter.top) };
 	var expected = { left: Math.round(offsetBefore.left + dx), top: Math.round(offsetBefore.top + dy) };
-	same(actual, expected, 'dragged[' + dragged.dx + ', ' + dragged.dy + '] ' + msg);
+	deepEqual(actual, expected, 'dragged[' + dragged.dx + ', ' + dragged.dy + '] ' + msg);
 }
 
 function shouldmove(why) {
@@ -61,7 +61,7 @@ function resized(dw, dh, msg) {
 	msg = msg ? msg + "." : "";
 	var actual = { width: widthAfter, height: heightAfter };
 	var expected = { width: widthBefore + dw, height: heightBefore + dh };
-	same(actual, expected, 'resized[' + dragged.dx + ', ' + dragged.dy + '] ' + msg);
+	deepEqual(actual, expected, 'resized[' + dragged.dx + ', ' + dragged.dy + '] ' + msg);
 }
 
 function shouldresize(why) {
@@ -98,17 +98,17 @@ test("title id", function() {
 
 	el = $('<div></div>').dialog();
 	titleId = dlg().find('.ui-dialog-title').attr('id');
-	equals(titleId, 'ui-dialog-title-1', 'auto-numbered title id');
+	equal(titleId, 'ui-dialog-title-1', 'auto-numbered title id');
 	el.remove();
 
 	el = $('<div></div>').dialog();
 	titleId = dlg().find('.ui-dialog-title').attr('id');
-	equals(titleId, 'ui-dialog-title-2', 'auto-numbered title id');
+	equal(titleId, 'ui-dialog-title-2', 'auto-numbered title id');
 	el.remove();
 
-	el = $('<div id="foo"/>').dialog();
+	el = $('<div id="foo">').dialog();
 	titleId = dlg().find('.ui-dialog-title').attr('id');
-	equals(titleId, 'ui-dialog-title-foo', 'carried over title id');
+	equal(titleId, 'ui-dialog-title-foo', 'carried over title id');
 	el.remove();
 });
 
@@ -117,22 +117,22 @@ test("ARIA", function() {
 
 	el = $('<div></div>').dialog();
 
-	equals(dlg().attr('role'), 'dialog', 'dialog role');
+	equal(dlg().attr('role'), 'dialog', 'dialog role');
 
 	var labelledBy = dlg().attr('aria-labelledby');
 	ok(labelledBy.length > 0, 'has aria-labelledby attribute');
-	equals(dlg().find('.ui-dialog-title').attr('id'), labelledBy,
+	equal(dlg().find('.ui-dialog-title').attr('id'), labelledBy,
 		'proper aria-labelledby attribute');
 
-	equals(dlg().find('.ui-dialog-titlebar-close').attr('role'), 'button',
+	equal(dlg().find('.ui-dialog-titlebar-close').attr('role'), 'button',
 		'close link role');
 
 	el.remove();
 });
 
 test("widget method", function() {
-	var dialog = $("<div/>").appendTo("#main").dialog();
-	same(dialog.parent()[0], dialog.dialog("widget")[0]);
+	var dialog = $("<div>").appendTo("#main").dialog();
+	deepEqual(dialog.parent()[0], dialog.dialog("widget")[0]);
 });
 
 })(jQuery);

@@ -6,7 +6,6 @@ test( "$.widget.extend()", function() {
 		optionsCopy = { xnumber2: 1, xstring2: "x", xxx: "newstring" },
 		merged = { xnumber1: 5, xnumber2: 1, xstring1: "peter", xstring2: "x", xxx: "newstring" },
 		deep1 = { foo: { bar: true } },
-		deep1copy = { foo: { bar: true } },
 		deep2 = { foo: { baz: true }, foo2: document },
 		deep2copy = { foo: { baz: true }, foo2: document },
 		deepmerged = { foo: { bar: true, baz: true }, foo2: document },
@@ -93,10 +92,10 @@ test( "$.widget.extend()", function() {
 	deepEqual( defaults, defaultsCopy, "Check if not modified: options1 must not be modified" );
 	deepEqual( options1, options1Copy, "Check if not modified: options1 must not be modified" );
 	deepEqual( options2, options2Copy, "Check if not modified: options2 must not be modified" );
-	
+
 	var input = {
 		key: [ 1, 2, 3 ]
-	}
+	};
 	var output = $.widget.extend( {}, input );
 	deepEqual( input, output, "don't clone arrays" );
 	input.key[0] = 10;

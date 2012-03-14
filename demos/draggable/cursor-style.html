@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<title>jQuery UI Draggable - Cursor style</title>
 	<link rel="stylesheet" href="../../themes/base/jquery.ui.all.css">
-	<script src="../../jquery-1.5.1.js"></script>
+	<script src="../../jquery-1.7.1.js"></script>
 	<script src="../../ui/jquery.ui.core.js"></script>
 	<script src="../../ui/jquery.ui.widget.js"></script>
 	<script src="../../ui/jquery.ui.mouse.js"></script>
@@ -15,8 +15,8 @@
 	</style>
 	<script>
 	$(function() {
-		$( "#draggable" ).draggable({ cursorAt: { cursor: "move", top: 56, left: 56 } });
-		$( "#draggable2" ).draggable({ cursorAt: { cursor: "crosshair", top: -5, left: -5 } });
+		$( "#draggable" ).draggable({ cursor: "move", cursorAt: { top: 56, left: 56 } });
+		$( "#draggable2" ).draggable({ cursor: "crosshair", cursorAt: { top: -5, left: -5 } });
 		$( "#draggable3" ).draggable({ cursorAt: { bottom: 0 } });
 	});
 	</script>

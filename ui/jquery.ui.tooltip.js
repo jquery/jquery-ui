@@ -1,7 +1,7 @@
 /*
  * jQuery UI Tooltip @VERSION
  *
- * Copyright 2011, AUTHORS.txt (http://jqueryui.com/about)
+ * Copyright 2012, AUTHORS.txt (http://jqueryui.com/about)
  * Dual licensed under the MIT or GPL Version 2 licenses.
  * http://jquery.org/license
  *
@@ -27,7 +27,7 @@ $.widget( "ui.tooltip", {
 		position: {
 			my: "left+15 center",
 			at: "right center",
-			collision: "flip fit"
+			collision: "flipfit flipfit"
 		},
 		show: true,
 		tooltipClass: null,
@@ -54,7 +54,7 @@ $.widget( "ui.tooltip", {
 			// disable element style changes
 			return;
 		}
-		this._super( "_setOption", key, value );
+		this._super( key, value );
 	},
 
 	_disable: function() {
@@ -72,7 +72,7 @@ $.widget( "ui.tooltip", {
 			var element = $( this );
 			if ( element.is( "[title]" ) ) {
 				element
-					.data( "tooltip-title", element.attr( "title" ) )
+					.data( "ui-tooltip-title", element.attr( "title" ) )
 					.attr( "title", "" );
 			}
 		});
@@ -82,8 +82,8 @@ $.widget( "ui.tooltip", {
 		// restore title attributes
 		this.element.find( this.options.items ).andSelf().each(function() {
 			var element = $( this );
-			if ( element.data( "tooltip-title" ) ) {
-				element.attr( "title", element.data( "tooltip-title" ) );
+			if ( element.data( "ui-tooltip-title" ) ) {
+				element.attr( "title", element.data( "ui-tooltip-title" ) );
 			}
 		});
 	},
@@ -99,11 +99,17 @@ $.widget( "ui.tooltip", {
 			return;
 		}
 
-		if ( !target.data( "tooltip-title" ) ) {
-			target.data( "tooltip-title", target.attr( "title" ) );
+		if ( !target.data( "ui-tooltip-title" ) ) {
+			target.data( "ui-tooltip-title", target.attr( "title" ) );
 		}
 
+		target.data( "tooltip-open", true );
+
 		content = this.options.content.call( target[0], function( response ) {
+			// ignore async response if tooltip was closed already
+			if ( !target.data( "tooltip-open" ) ) {
+				return;
+			}
 			// IE may instantly serve a cached response for ajax requests
 			// delay this call to _open so the other call to _open runs first
 			setTimeout(function() {
@@ -123,7 +129,10 @@ $.widget( "ui.tooltip", {
 		// if we have a title, clear it to prevent the native tooltip
 		// we have to check first to avoid defining a title if none exists
 		// (we don't want to cause an element to start matching [title])
-		// TODO: document why we don't use .removeAttr()
+
+		// We don't use removeAttr as that causes the native tooltip to show
+		// up in IE (9 and below, didn't yet test 10). Happens only when removing
+		// inside the mouseover handler.
 		if ( target.is( "[title]" ) ) {
 			target.attr( "title", "" );
 		}
@@ -148,7 +157,14 @@ $.widget( "ui.tooltip", {
 
 		this._bind( target, {
 			mouseleave: "close",
-			blur: "close"
+			focusout: "close",
+			keyup: function( event ) {
+				if ( event.keyCode == $.ui.keyCode.ESCAPE ) {
+					var fakeEvent = $.Event(event);
+					fakeEvent.currentTarget = target[0];
+					this.close( fakeEvent, true );
+				}
+			}
 		});
 	},
 
@@ -159,13 +175,13 @@ $.widget( "ui.tooltip", {
 
 		// don't close if the element has focus
 		// this prevents the tooltip from closing if you hover while focused
-		if ( !force && document.activeElement === target[0] ) {
+		if ( !force && this.document[0].activeElement === target[0] ) {
 			return;
 		}
 
 		// only set title if we had one before (see comment in _open())
-		if ( target.data( "tooltip-title" ) ) {
-			target.attr( "title", target.data( "tooltip-title" ) );
+		if ( target.data( "ui-tooltip-title" ) ) {
+			target.attr( "title", target.data( "ui-tooltip-title" ) );
 		}
 
 		target.removeAttr( "aria-describedby" );
@@ -176,7 +192,8 @@ $.widget( "ui.tooltip", {
 			delete that.tooltips[ this.id ];
 		});
 
-		target.unbind( "mouseleave.tooltip blur.tooltip" );
+		target.removeData( "tooltip-open" );
+		target.unbind( "mouseleave.tooltip focusout.tooltip keyup.tooltip" );
 
 		this._trigger( "close", event, { tooltip: tooltip } );
 	},
@@ -193,7 +210,7 @@ $.widget( "ui.tooltip", {
 		$( "<div>" )
 			.addClass( "ui-tooltip-content" )
 			.appendTo( tooltip );
-		tooltip.appendTo( document.body );
+		tooltip.appendTo( this.document[0].body );
 		if ( $.fn.bgiframe ) {
 			tooltip.bgiframe();
 		}

@@ -4,110 +4,76 @@ module( "autocomplete: events" );
 
 var data = [ "Clojure", "COBOL", "ColdFusion", "Java", "JavaScript", "Scala", "Scheme" ];
 
-asyncTest( "all events", function() {
-	expect( 13 );
-	var element = $( "#autocomplete" )
-			.autocomplete({
-				autoFocus: false,
-				delay: 0,
-				source: data,
-				search: function( event ) {
-					equal( event.originalEvent.type, "keydown", "search originalEvent" );
-				},
-				response: function( event, ui ) {
-					deepEqual( ui.content, [
-						{ label: "Clojure", value: "Clojure" },
-						{ label: "Java", value: "Java" },
-						{ label: "JavaScript", value: "JavaScript" }
-					], "response ui.content" );
-					ui.content.splice( 0, 1 );
-				},
-				open: function( event ) {
-					ok( menu.is( ":visible" ), "menu open on open" );
-				},
-				focus: function( event, ui ) {
-					equal( event.originalEvent.type, "menufocus", "focus originalEvent" );
-					deepEqual( ui.item, { label: "Java", value: "Java" }, "focus ui.item" );
-				},
-				close: function( event ) {
-					equal( event.originalEvent.type, "menuselect", "close originalEvent" );
-					ok( menu.is( ":hidden" ), "menu closed on close" );
-				},
-				select: function( event, ui ) {
-					equal( event.originalEvent.type, "menuselect", "select originalEvent" );
-					deepEqual( ui.item, { label: "Java", value: "Java" }, "select ui.item" );
-				},
-				change: function( event, ui ) {
-					equal( event.originalEvent.type, "blur", "change originalEvent" );
-					deepEqual( ui.item, { label: "Java", value: "Java" }, "chnage ui.item" );
-					ok( menu.is( ":hidden" ), "menu closed on change" );
-					start();
-				}
-			}),
-		menu = element.autocomplete( "widget" );
+$.each([
+	{
+		type: "input",
+		selector: "#autocomplete",
+		valueMethod: "val"
+	},
+	{
+		type: "textarea",
+		selector: "#autocomplete-textarea",
+		valueMethod: "val"
+	},
+	{
+		type: "contenteditable",
+		selector: "#autocomplete-contenteditable",
+		valueMethod: "text"
+	}
+], function( i, settings ) {
+	asyncTest( "all events - " + settings.type, function() {
+		expect( 13 );
+		var element = $( settings.selector )
+				.autocomplete({
+					autoFocus: false,
+					delay: 0,
+					source: data,
+					search: function( event ) {
+						equal( event.originalEvent.type, "keydown", "search originalEvent" );
+					},
+					response: function( event, ui ) {
+						deepEqual( ui.content, [
+							{ label: "Clojure", value: "Clojure" },
+							{ label: "Java", value: "Java" },
+							{ label: "JavaScript", value: "JavaScript" }
+						], "response ui.content" );
+						ui.content.splice( 0, 1 );
+					},
+					open: function( event ) {
+						ok( menu.is( ":visible" ), "menu open on open" );
+					},
+					focus: function( event, ui ) {
+						equal( event.originalEvent.type, "menufocus", "focus originalEvent" );
+						deepEqual( ui.item, { label: "Java", value: "Java" }, "focus ui.item" );
+					},
+					close: function( event ) {
+						equal( event.originalEvent.type, "menuselect", "close originalEvent" );
+						ok( menu.is( ":hidden" ), "menu closed on close" );
+					},
+					select: function( event, ui ) {
+						equal( event.originalEvent.type, "menuselect", "select originalEvent" );
+						deepEqual( ui.item, { label: "Java", value: "Java" }, "select ui.item" );
+					},
+					change: function( event, ui ) {
+						equal( event.originalEvent.type, "blur", "change originalEvent" );
+						deepEqual( ui.item, { label: "Java", value: "Java" }, "change ui.item" );
+						ok( menu.is( ":hidden" ), "menu closed on change" );
+						start();
+					}
+				}),
+			menu = element.autocomplete( "widget" );
 
-	element.focus().val( "j" ).keydown();
-	setTimeout(function() {
-		ok( menu.is( ":visible" ), "menu is visible after delay" );
-		element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
-		element.simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
-		// blurring through jQuery causes a bug in IE 6 which causes the
-		// autocompletechange event to occur twice
-		element[0].blur();
-	}, 50 );
-});
-
-asyncTest( "all events - contenteditable", function() {
-	expect( 13 );
-	var element = $( "#autocomplete-contenteditable" )
-		.autocomplete({
-			autoFocus: false,
-			delay: 0,
-			source: data,
-			search: function( event ) {
-				equal( event.originalEvent.type, "keydown", "search originalEvent" );
-			},
-			response: function( event, ui ) {
-				deepEqual( ui.content, [
-					{ label: "Clojure", value: "Clojure" },
-					{ label: "Java", value: "Java" },
-					{ label: "JavaScript", value: "JavaScript" }
-				], "response ui.content" );
-				ui.content.splice( 0, 1 );
-			},
-			open: function( event ) {
-				ok( menu.is( ":visible" ), "menu open on open" );
-			},
-			focus: function( event, ui ) {
-				equal( event.originalEvent.type, "menufocus", "focus originalEvent" );
-				deepEqual( ui.item, { label: "Java", value: "Java" }, "focus ui.item" );
-			},
-			close: function( event ) {
-				equal( event.originalEvent.type, "menuselect", "close originalEvent" );
-				ok( menu.is( ":hidden" ), "menu closed on close" );
-			},
-			select: function( event, ui ) {
-				equal( event.originalEvent.type, "menuselect", "select originalEvent" );
-				deepEqual( ui.item, { label: "Java", value: "Java" }, "select ui.item" );
-			},
-			change: function( event, ui ) {
-				equal( event.originalEvent.type, "blur", "change originalEvent" );
-				deepEqual( ui.item, { label: "Java", value: "Java" }, "chnage ui.item" );
-				ok( menu.is( ":hidden" ), "menu closed on change" );
-				start();
-			}
-		}),
-	menu = element.autocomplete( "widget" );
-
-	element.focus().text( "j" ).keydown();
-	setTimeout(function() {
-		ok( menu.is( ":visible" ), "menu is visible after delay" );
-		element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
-		element.simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
-		// TODO: blurring through jQuery causes a bug in IE 6 which causes the
-		// autocompletechange event to occur twice
-		element[0].blur();
-	}, 50 );
+		element.simulate( "focus" )[ settings.valueMethod ]( "j" ).keydown();
+		setTimeout(function() {
+			ok( menu.is( ":visible" ), "menu is visible after delay" );
+			element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
+			element.simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
+			// blur must be async for IE to handle it properly
+			setTimeout(function() {
+				element.simulate( "blur" );
+			}, 1 );
+		}, 50 );
+	});
 });
 
 asyncTest( "change without selection", function() {
@@ -194,22 +160,23 @@ asyncTest( "cancel select", function() {
 	}, 50 );
 });
 
-/* TODO previous fix broke more than it fixed, disabling this for now - messed up regular menu select event
-test("blur without selection", function() {
-	expect(1);
-	var ac = $("#autocomplete").autocomplete({
+asyncTest( "blur during remote search", function() {
+	expect( 1 );
+	var ac = $( "#autocomplete" ).autocomplete({
 		delay: 0,
-		source: data
+		source: function( request, response ) {
+			ok( true, "trigger request" );
+			ac.simulate( "blur" );
+			setTimeout(function() {
+				response([ "result" ]);
+				start();
+			}, 100 );
+		},
+		open: function() {
+			ok( false, "opened after a blur" );
+		}
 	});
-	stop();
-	ac.val("j").keydown();
-	setTimeout(function() {
-		$( ".ui-menu-item" ).first().simulate("mouseover");
-		ac.simulate("keydown", { keyCode: $.ui.keyCode.TAB });
-		deepEqual( ac.val(), "j" );
-		start();
-	}, 50);
+	ac.val( "ro" ).keydown();
 });
-*/
 
 }( jQuery ) );

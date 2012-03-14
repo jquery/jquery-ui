@@ -10,7 +10,7 @@ function testWidgetDefaults( widget, defaults ) {
 				ok( $.isFunction( pluginDefaults[ key ] ), key );
 				return;
 			}
-			same( pluginDefaults[ key ], val, key );
+			deepEqual( pluginDefaults[ key ], val, key );
 		});
 	});
 
@@ -67,13 +67,13 @@ window.commonWidgetTests = function( widget, settings ) {
 
 /*
  * Experimental assertion for comparing DOM objects.
- * 
+ *
  * Serializes an element and some attributes and it's children if any, otherwise the text.
  * Then compares the result using deepEqual.
  */
 window.domEqual = function( selector, modifier, message ) {
 	var attributes = ["class", "role", "id", "tabIndex", "aria-activedescendant"];
-	
+
 	function extract(value) {
 		if (!value || !value.length) {
 			QUnit.push( false, actual, expected, "domEqual failed, can't extract " + selector + ", message was: " + message );
@@ -82,7 +82,7 @@ window.domEqual = function( selector, modifier, message ) {
 		var result = {};
 		result.nodeName = value[0].nodeName;
 		$.each(attributes, function(index, attr) {
-			result[attr] = value.attr(attr);
+			result[attr] = value.prop(attr);
 		});
 		result.children = [];
 		var children = value.children();
@@ -97,7 +97,7 @@ window.domEqual = function( selector, modifier, message ) {
 	}
 	var expected = extract($(selector));
 	modifier($(selector));
-	
+
 	var actual = extract($(selector));
 	QUnit.push( QUnit.equiv(actual, expected), actual, expected, message );
 }

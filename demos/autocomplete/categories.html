@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<title>jQuery UI Autocomplete - Categories</title>
 	<link rel="stylesheet" href="../../themes/base/jquery.ui.all.css">
-	<script src="../../jquery-1.5.1.js"></script>
+	<script src="../../jquery-1.7.1.js"></script>
 	<script src="../../ui/jquery.ui.core.js"></script>
 	<script src="../../ui/jquery.ui.widget.js"></script>
 	<script src="../../ui/jquery.ui.position.js"></script>
@@ -22,14 +22,14 @@
 	<script>
 	$.widget( "custom.catcomplete", $.ui.autocomplete, {
 		_renderMenu: function( ul, items ) {
-			var self = this,
+			var that = this,
 				currentCategory = "";
 			$.each( items, function( index, item ) {
 				if ( item.category != currentCategory ) {
 					ul.append( "<li class='ui-autocomplete-category'>" + item.category + "</li>" );
 					currentCategory = item.category;
 				}
-				self._renderItem( ul, item );
+				that._renderItem( ul, item );
 			});
 		}
 	});

@@ -1,7 +1,7 @@
 /*
  * jQuery UI CSS Framework @VERSION
  *
- * Copyright 2011, AUTHORS.txt (http://jqueryui.com/about)
+ * Copyright 2012, AUTHORS.txt (http://jqueryui.com/about)
  * Dual licensed under the MIT or GPL Version 2 licenses.
  * http://jquery.org/license
  *
@@ -16,7 +16,6 @@
 @import url("jquery.ui.datepicker.css");
 @import url("jquery.ui.dialog.css");
 @import url("jquery.ui.menu.css");
-@import url("jquery.ui.menubar.css");
 @import url("jquery.ui.progressbar.css");
 @import url("jquery.ui.resizable.css");
 @import url("jquery.ui.selectable.css");

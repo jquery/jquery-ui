@@ -1,7 +1,7 @@
 /*
  * jQuery UI Effects @VERSION
  *
- * Copyright 2011, AUTHORS.txt (http://jqueryui.com/about)
+ * Copyright 2012, AUTHORS.txt (http://jqueryui.com/about)
  * Dual licensed under the MIT or GPL Version 2 licenses.
  * http://jquery.org/license
  *
@@ -77,7 +77,7 @@ function getColor(elem, attr) {
 		var color;
 
 		do {
-				color = $.curCSS(elem, attr);
+				color = $.css(elem, attr);
 
 				// Keep going until we find an element that has color, or we hit the body
 				if ( color != "" && color !== "transparent" || $.nodeName(elem, "body") )
@@ -159,9 +159,9 @@ var classAnimationActions = [ "add", "remove", "toggle" ],
 		padding: 1
 	},
 	// prefix used for storing data on .data()
-	dataSpace = "ec.storage.";
+	dataSpace = "ui-effects-";
 
-$.each([ "borderLeftStyle", "borderRightStyle", "borderBottomStyle", "borderTopStyle" ], function(_, prop) {
+$.each([ "borderLeftStyle", "borderRightStyle", "borderBottomStyle", "borderTopStyle" ], function( _, prop ) {
 	$.fx.step[ prop ] = function( fx ) {
 		if ( fx.end !== "none" && !fx.setAttr || fx.pos === 1 && !fx.setAttr ) {
 			jQuery.style( fx.elem, prop, fx.end );
@@ -171,8 +171,8 @@ $.each([ "borderLeftStyle", "borderRightStyle", "borderBottomStyle", "borderTopS
 });
 
 function getElementStyles() {
-	var style = document.defaultView
-			? document.defaultView.getComputedStyle(this, null)
+	var style = this.ownerDocument.defaultView
+			? this.ownerDocument.defaultView.getComputedStyle( this, null )
 			: this.currentStyle,
 		newStyle = {},
 		key,
@@ -223,8 +223,8 @@ $.effects.animateClass = function( value, duration, easing, callback ) {
 
 	return this.queue( function() {
 		var animated = $( this ),
-			baseClass = animated.attr( "class" ),
-			finalClass,
+			baseClass = animated.attr( "class" ) || "",
+			applyClassChange,
 			allAnimations = o.children ? animated.find( "*" ).andSelf() : animated;
 
 		// map the animated objects to store the original styles.
@@ -232,18 +232,19 @@ $.effects.animateClass = function( value, duration, easing, callback ) {
 			var el = $( this );
 			return {
 				el: el,
-				originalStyleAttr: el.attr( "style" ) || " ",
 				start: getElementStyles.call( this )
 			};
 		});
 
 		// apply class change
-		$.each( classAnimationActions, function(i, action) {
-			if ( value[ action ] ) {
-				animated[ action + "Class" ]( value[ action ] );
-			}
-		});
-		finalClass = animated.attr( "class" );
+		applyClassChange = function() {
+			$.each( classAnimationActions, function(i, action) {
+				if ( value[ action ] ) {
+					animated[ action + "Class" ]( value[ action ] );
+				}
+			});
+		};
+		applyClassChange();
 
 		// map all animated objects again - calculate new styles and diff
 		allAnimations = allAnimations.map(function() {
@@ -275,16 +276,15 @@ $.effects.animateClass = function( value, duration, easing, callback ) {
 		$.when.apply( $, allAnimations.get() ).done(function() {
 
 			// set the final class
-			animated.attr( "class", finalClass );
+			applyClassChange();
 
-			// for each animated element
+			// for each animated element,
+			// clear all css properties that were animated
 			$.each( arguments, function() {
-				if ( typeof this.el.attr( "style" ) === "object" ) {
-					this.el.attr( "style" ).cssText = "";
-					this.el.attr( "style" ).cssText = this.originalStyleAttr;
-				} else {
-					this.el.attr( "style", this.originalStyleAttr );
-				}
+				var el = this.el;
+				$.each( this.diff, function(key) {
+					el.css( key, '' );
+				});
 			});
 
 			// this is guarnteed to be there if you use jQuery.speed()
@@ -415,10 +415,17 @@ $.extend( $.effects, {
 			size = {
 				width: element.width(),
 				height: element.height()
-			};
+			},
+			active = document.activeElement;
 
 		element.wrap( wrapper );
-		wrapper = element.parent(); //Hotfix for jQuery 1.4 since some change in wrap() seems to actually loose the reference to the wrapped element
+
+		// Fixes #7595 - Elements lose focus when wrapped.
+		if ( element[ 0 ] === active || $.contains( element[ 0 ], active ) ) {
+			$( active ).focus();
+		}
+
+		wrapper = element.parent(); //Hotfix for jQuery 1.4 since some change in wrap() seems to actually lose the reference to the wrapped element
 
 		// transfer positioning properties to the wrapper
 		if ( element.css( "position" ) === "static" ) {
@@ -449,8 +456,18 @@ $.extend( $.effects, {
 	},
 
 	removeWrapper: function( element ) {
-		if ( element.parent().is( ".ui-effects-wrapper" ) )
-			return element.parent().replaceWith( element );
+		var active = document.activeElement;
+
+		if ( element.parent().is( ".ui-effects-wrapper" ) ) {
+			element.parent().replaceWith( element );
+
+			// Fixes #7595 - Elements lose focus when wrapped.
+			if ( element[ 0 ] === active || $.contains( element[ 0 ], active ) ) {
+				$( active ).focus();
+			}
+		}
+
+
 		return element;
 	},
 
@@ -645,229 +662,49 @@ $.fn.extend({
 /*********************************** EASING ***********************************/
 /******************************************************************************/
 
-/*
- * jQuery Easing v1.3 - http://gsgd.co.uk/sandbox/jquery/easing/
- *
- * Uses the built in easing capabilities added In jQuery 1.1
- * to offer multiple easing options
- *
- * TERMS OF USE - jQuery Easing
- *
- * Open source under the BSD License.
- *
- * Copyright 2008 George McGinley Smith
- * All rights reserved.
- *
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted provided that the following conditions are met:
- *
- * Redistributions of source code must retain the above copyright notice, this list of
- * conditions and the following disclaimer.
- * Redistributions in binary form must reproduce the above copyright notice, this list
- * of conditions and the following disclaimer in the documentation and/or other materials
- * provided with the distribution.
- *
- * Neither the name of the author nor the names of contributors may be used to endorse
- * or promote products derived from this software without specific prior written permission.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
- * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
- * COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
- * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE
- * GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED
- * AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
- * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
- * OF THE POSSIBILITY OF SUCH DAMAGE.
- *
-*/
+// based on easing equations from Robert Penner (http://www.robertpenner.com/easing)
 
-// t: current time, b: begInnIng value, c: change In value, d: duration
-$.easing.jswing = $.easing.swing;
+var baseEasings = {};
 
-$.extend( $.easing, {
-	def: "easeOutQuad",
-	swing: function ( x, t, b, c, d ) {
-		return $.easing[ $.easing.def ]( x, t, b, c, d );
+$.each( [ "Quad", "Cubic", "Quart", "Quint", "Expo" ], function( i, name ) {
+	baseEasings[ name ] = function( p ) {
+		return Math.pow( p, i + 2 );
+	};
+});
+
+$.extend( baseEasings, {
+	Sine: function ( p ) {
+		return 1 - Math.cos( p * Math.PI / 2 );
 	},
-	easeInQuad: function ( x, t, b, c, d ) {
-		return c * ( t /= d ) * t + b;
+	Circ: function ( p ) {
+		return 1 - Math.sqrt( 1 - p * p );
 	},
-	easeOutQuad: function ( x, t, b, c, d ) {
-		return -c * ( t /= d ) * ( t - 2 ) + b;
+	Elastic: function( p ) {
+		return p === 0 || p === 1 ? p :
+			-Math.pow( 2, 8 * (p - 1) ) * Math.sin( ( (p - 1) * 80 - 7.5 ) * Math.PI / 15 );
 	},
-	easeInOutQuad: function ( x, t, b, c, d ) {
-		if ( ( t /= d / 2 ) < 1 ) return c / 2 * t * t + b;
-		return -c / 2 * ( ( --t ) * ( t-2 ) - 1) + b;
+	Back: function( p ) {
+		return p * p * ( 3 * p - 2 );
 	},
-	easeInCubic: function ( x, t, b, c, d ) {
-		return c * ( t /= d ) * t * t + b;
-	},
-	easeOutCubic: function ( x, t, b, c, d ) {
-		return c * ( ( t = t / d - 1 ) * t * t + 1 ) + b;
-	},
-	easeInOutCubic: function ( x, t, b, c, d ) {
-		if ( ( t /= d / 2 ) < 1 ) return c / 2 * t * t * t + b;
-		return c / 2 * ( ( t -= 2 ) * t * t + 2) + b;
-	},
-	easeInQuart: function ( x, t, b, c, d ) {
-		return c * ( t /= d ) * t * t * t + b;
-	},
-	easeOutQuart: function ( x, t, b, c, d ) {
-		return -c * ( ( t = t / d - 1 ) * t * t * t - 1) + b;
-	},
-	easeInOutQuart: function ( x, t, b, c, d ) {
-		if ( (t /= d / 2 ) < 1 ) return c / 2 * t * t * t * t + b;
-		return -c / 2 * ( ( t -= 2 ) * t * t * t - 2) + b;
-	},
-	easeInQuint: function ( x, t, b, c, d ) {
-		return c * ( t /= d ) * t * t * t * t + b;
-	},
-	easeOutQuint: function ( x, t, b, c, d ) {
-		return c * ( ( t = t / d - 1 ) * t * t * t * t + 1) + b;
-	},
-	easeInOutQuint: function ( x, t, b, c, d ) {
-		if ( ( t /= d / 2 ) < 1 ) return c / 2 * t * t  * t * t * t + b;
-		return c / 2 * ( ( t -= 2 ) * t * t * t * t + 2) + b;
-	},
-	easeInSine: function ( x, t, b, c, d ) {
-		return -c * Math.cos( t / d * ( Math.PI / 2 ) ) + c + b;
-	},
-	easeOutSine: function ( x, t, b, c, d ) {
-		return c * Math.sin( t / d * ( Math.PI /2 ) ) + b;
-	},
-	easeInOutSine: function ( x, t, b, c, d ) {
-		return -c / 2 * ( Math.cos( Math.PI * t / d ) - 1 ) + b;
-	},
-	easeInExpo: function ( x, t, b, c, d ) {
-		return ( t==0 ) ? b : c * Math.pow( 2, 10 * ( t / d - 1) ) + b;
-	},
-	easeOutExpo: function ( x, t, b, c, d ) {
-		return ( t==d ) ? b + c : c * ( -Math.pow( 2, -10 * t / d) + 1) + b;
-	},
-	easeInOutExpo: function ( x, t, b, c, d ) {
-		if ( t==0 ) return b;
-		if ( t==d ) return b + c;
-		if ( ( t /= d / 2) < 1) return c / 2 * Math.pow( 2, 10 * (t - 1) ) + b;
-		return c / 2 * ( -Math.pow( 2, -10 * --t ) + 2 ) + b;
-	},
-	easeInCirc: function ( x, t, b, c, d ) {
-		return -c * ( Math.sqrt( 1 - ( t /= d ) * t ) - 1 ) + b;
-	},
-	easeOutCirc: function ( x, t, b, c, d ) {
-		return c * Math.sqrt( 1 - ( t = t / d - 1 ) * t ) + b;
-	},
-	easeInOutCirc: function ( x, t, b, c, d ) {
-		if ( ( t /= d / 2) < 1 ) return -c / 2 * ( Math.sqrt( 1 - t * t ) - 1 ) + b;
-		return c / 2 * ( Math.sqrt( 1 - ( t -= 2 ) * t ) + 1 ) + b;
-	},
-	easeInElastic: function ( x, t, b, c, d ) {
-		var s = 1.70158,
-			p = d * 0.3,
-			a = c;
-		if ( t == 0 ) return b;
-		if ( ( t /= d ) == 1 ) return b+c;
-		if ( a < Math.abs( c ) ) {
-			a = c;
-			s = p / 4;
-		} else {
-			s = p / ( 2 * Math.PI ) * Math.asin( c / a );
-		}
-		return - ( a * Math.pow( 2, 10 * ( t -= 1 ) ) * Math.sin( ( t * d - s) * ( 2 * Math.PI ) / p ) ) + b;
-	},
-	easeOutElastic: function ( x, t, b, c, d ) {
-		var s = 1.70158,
-			p = d * 0.3,
-			a = c;
-		if ( t == 0 ) return b;
-		if ( ( t /= d ) == 1 ) return b+c;
-		if ( a < Math.abs( c ) ) {
-			a = c;
-			s = p / 4;
-		} else {
-			s = p / ( 2 * Math.PI ) * Math.asin( c / a );
-		}
-		return a * Math.pow( 2, -10 * t ) * Math.sin( ( t * d - s ) * ( 2 * Math.PI ) / p ) + c + b;
-	},
-	easeInOutElastic: function ( x, t, b, c, d ) {
-		var s = 1.70158,
-			p = d * ( 0.3 * 1.5 ),
-			a = c;
-		if ( t == 0 ) return b;
-		if ( ( t /= d / 2 ) == 2 ) return b+c;
-		if ( a < Math.abs( c ) ) {
-			a = c;
-			s = p / 4;
-		} else {
-			s = p / ( 2 * Math.PI ) * Math.asin( c / a );
-		}
-		if ( t < 1 ) return -.5 * ( a * Math.pow( 2, 10 * ( t -= 1 ) ) * Math.sin( ( t * d - s ) * ( 2 * Math.PI ) / p ) ) + b;
-		return a * Math.pow( 2, -10 * ( t -= 1 ) ) * Math.sin( ( t * d - s ) * ( 2 * Math.PI ) / p ) *.5 + c + b;
-	},
-	easeInBack: function ( x, t, b, c, d, s ) {
-		if ( s == undefined ) s = 1.70158;
-		return c * ( t /= d ) * t * ( ( s+1 ) * t - s ) + b;
-	},
-	easeOutBack: function ( x, t, b, c, d, s ) {
-		if ( s == undefined ) s = 1.70158;
-		return c * ( ( t = t / d - 1 ) * t * ( ( s + 1 ) * t + s) + 1) + b;
-	},
-	easeInOutBack: function ( x, t, b, c, d, s ) {
-		if ( s == undefined ) s = 1.70158;
-		if ( ( t /= d / 2 ) < 1 ) return c / 2 * ( t * t * ( ( ( s *= 1.525 ) + 1 ) * t - s ) ) + b;
-		return c / 2 * ( ( t -= 2 ) * t * ( ( ( s *= 1.525 ) + 1 ) * t + s) + 2) + b;
-	},
-	easeInBounce: function ( x, t, b, c, d ) {
-		return c - $.easing.easeOutBounce( x, d - t, 0, c, d ) + b;
-	},
-	easeOutBounce: function ( x, t, b, c, d ) {
-		if ( ( t /= d ) < ( 1 / 2.75 ) ) {
-			return c * ( 7.5625 * t * t ) + b;
-		} else if ( t < ( 2 / 2.75 ) ) {
-			return c * ( 7.5625 * ( t -= ( 1.5 / 2.75 ) ) * t + .75 ) + b;
-		} else if ( t < ( 2.5 / 2.75 ) ) {
-			return c * ( 7.5625 * ( t -= ( 2.25/ 2.75 ) ) * t + .9375 ) + b;
-		} else {
-			return c * ( 7.5625 * ( t -= ( 2.625 / 2.75 ) ) * t + .984375 ) + b;
-		}
-	},
-	easeInOutBounce: function ( x, t, b, c, d ) {
-		if ( t < d / 2 ) return $.easing.easeInBounce( x, t * 2, 0, c, d ) * .5 + b;
-		return $.easing.easeOutBounce( x, t * 2 - d, 0, c, d ) * .5 + c * .5 + b;
+	Bounce: function ( p ) {
+		var pow2,
+			bounce = 4;
+
+		while ( p < ( ( pow2 = Math.pow( 2, --bounce ) ) - 1 ) / 11 ) {}
+		return 1 / Math.pow( 4, 3 - bounce ) - 7.5625 * Math.pow( ( pow2 * 3 - 2 ) / 22 - p, 2 );
 	}
 });
 
-/*
- *
- * TERMS OF USE - EASING EQUATIONS
- *
- * Open source under the BSD License.
- *
- * Copyright 2001 Robert Penner
- * All rights reserved.
- *
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted provided that the following conditions are met:
- *
- * Redistributions of source code must retain the above copyright notice, this list of
- * conditions and the following disclaimer.
- * Redistributions in binary form must reproduce the above copyright notice, this list
- * of conditions and the following disclaimer in the documentation and/or other materials
- * provided with the distribution.
- *
- * Neither the name of the author nor the names of contributors may be used to endorse
- * or promote products derived from this software without specific prior written permission.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
- * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
- * COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
- * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE
- * GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED
- * AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
- * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
- * OF THE POSSIBILITY OF SUCH DAMAGE.
- *
- */
+$.each( baseEasings, function( name, easeIn ) {
+	$.easing[ "easeIn" + name ] = easeIn;
+	$.easing[ "easeOut" + name ] = function( p ) {
+		return 1 - easeIn( 1 - p );
+	};
+	$.easing[ "easeInOut" + name ] = function( p ) {
+		return p < .5 ?
+			easeIn( p * 2 ) / 2 :
+			easeIn( p * -2 + 2 ) / -2 + 1;
+	};
+});
 
 })(jQuery);

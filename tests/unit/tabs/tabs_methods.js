@@ -94,14 +94,14 @@ test( "refresh", function() {
 	element.tabs( "refresh" );
 	tabs_state( element, 1, 0, 0, 0 );
 	tabs_disabled( element, [ 1 ] );
-	equals( element.find( "#" + $( "#newTab a" ).attr( "aria-controls" ) ).length, 1,
+	equal( element.find( "#" + $( "#newTab a" ).attr( "aria-controls" ) ).length, 1,
 		"panel added for remote tab" );
 
 	// remove all tabs
 	element.find( ".ui-tabs-nav li, .ui-tabs-panel" ).remove();
 	element.tabs( "refresh" );
 	tabs_state( element );
-	equals( element.tabs( "option", "active" ), false, "no active tab" );
+	equal( element.tabs( "option", "active" ), false, "no active tab" );
 
 	// add tabs
 	element.find( ".ui-tabs-nav" )
@@ -136,7 +136,7 @@ test( "refresh", function() {
 	element.tabs( "refresh" );
 	tabs_state( element, 0, 1 );
 	tabs_disabled( element, [ 0 ] );
-	
+
 	// remove first tab, previously active tab (now first) should stay active
 	element.find( ".ui-tabs-nav li" ).eq( 0 ).remove();
 	element.find( ".ui-tabs-panel" ).eq( 0 ).remove();
@@ -158,9 +158,9 @@ asyncTest( "load", function() {
 			panel = $( "#" + panelId );
 
 		ok( !( "originalEvent" in event ), "originalEvent" );
-		equals( ui.tab.size(), 1, "tab size" );
+		equal( ui.tab.size(), 1, "tab size" );
 		strictEqual( ui.tab[ 0 ], tab[ 0 ], "tab" );
-		equals( ui.panel.size(), 1, "panel size" );
+		equal( ui.panel.size(), 1, "panel size" );
 		strictEqual( ui.panel[ 0 ], panel[ 0 ], "panel" );
 		tabs_state( element, 1, 0, 0, 0, 0 );
 	});
@@ -172,15 +172,15 @@ asyncTest( "load", function() {
 		var tab = element.find( ".ui-tabs-nav a" ).eq( 3 ),
 			panelId = tab.attr( "aria-controls" ),
 			panel = $( "#" + panelId );
-		
+
 		ok( !( "originalEvent" in event ), "originalEvent" );
-		equals( uiTab.size(), 1, "tab size" );
+		equal( uiTab.size(), 1, "tab size" );
 		strictEqual( uiTab[ 0 ], tab[ 0 ], "tab" );
-		equals( uiPanel.size(), 1, "panel size" );
+		equal( uiPanel.size(), 1, "panel size" );
 		strictEqual( uiPanel[ 0 ], panel[ 0 ], "panel" );
-		equals( uiPanel.find( "p" ).length, 1, "panel html" );
+		equal( uiPanel.find( "p" ).length, 1, "panel html" );
 		tabs_state( element, 1, 0, 0, 0, 0 );
-		setTimeout( tabsload1, 1 );
+		setTimeout( tabsload1, 100 );
 	});
 	element.tabs( "load", 3 );
 	tabs_state( element, 1, 0, 0, 0, 0 );
@@ -192,7 +192,7 @@ asyncTest( "load", function() {
 		});
 		element.one( "tabsload", function() {
 			ok( true, "tabsload invoked" );
-			setTimeout( tabsload2, 1 );
+			setTimeout( tabsload2, 100 );
 		});
 		element.tabs( "option", "active", 3 );
 		tabs_state( element, 0, 0, 0, 1, 0 );
@@ -206,9 +206,9 @@ asyncTest( "load", function() {
 				panel = $( "#" + panelId );
 
 			ok( !( "originalEvent" in event ), "originalEvent" );
-			equals( ui.tab.size(), 1, "tab size" );
+			equal( ui.tab.size(), 1, "tab size" );
 			strictEqual( ui.tab[ 0 ], tab[ 0 ], "tab" );
-			equals( ui.panel.size(), 1, "panel size" );
+			equal( ui.panel.size(), 1, "panel size" );
 			strictEqual( ui.panel[ 0 ], panel[ 0 ], "panel" );
 			tabs_state( element, 0, 0, 0, 1, 0 );
 		});
@@ -220,11 +220,11 @@ asyncTest( "load", function() {
 			var tab = element.find( ".ui-tabs-nav a" ).eq( 3 ),
 				panelId = tab.attr( "aria-controls" ),
 				panel = $( "#" + panelId );
-			
+
 			ok( !( "originalEvent" in event ), "originalEvent" );
-			equals( uiTab.size(), 1, "tab size" );
+			equal( uiTab.size(), 1, "tab size" );
 			strictEqual( uiTab[ 0 ], tab[ 0 ], "tab" );
-			equals( uiPanel.size(), 1, "panel size" );
+			equal( uiPanel.size(), 1, "panel size" );
 			strictEqual( uiPanel[ 0 ], panel[ 0 ], "panel" );
 			tabs_state( element, 0, 0, 0, 1, 0 );
 			start();

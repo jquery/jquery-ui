@@ -4,7 +4,7 @@
 	<title>Menu Visual Test: Default</title>
 	<link rel="stylesheet" href="../visual.css" type="text/css" />
 	<link rel="stylesheet" href="../../../themes/base/jquery.ui.all.css" type="text/css" title="ui-theme" />
-	<script type="text/javascript" src="../../../jquery-1.5.1.js"></script>
+	<script type="text/javascript" src="../../../jquery-1.7.1.js"></script>
 	<script type="text/javascript" src="../../../ui/jquery.ui.core.js"></script>
 	<script type="text/javascript" src="../../../ui/jquery.ui.widget.js"></script>
 	<script type="text/javascript" src="../../../ui/jquery.ui.position.js"></script>
@@ -21,7 +21,7 @@
 		
 		$.widget("ui.drilldown", {
 			_init: function() {
-				var self = this;
+				var that = this;
 				this.active = this.element.find(">ul").attr("tabindex", 0);
 				
 				// hide submenus and create indicator icons
@@ -31,18 +31,18 @@
 					// disable built-in key handling
 					input: $(),
 					focus: function(event, ui) {
-						self.activeItem = ui.item;
+						that.activeItem = ui.item;
 					},
 					select: function(event, ui) {
-						if (this != self.active[0]) {
+						if (this != that.active[0]) {
 							return;
 						}
 						var nested = $(">ul", ui.item);
 						if (nested.length) {
-							self._open(nested);
+							that._open(nested);
 						} else {
-							self.element.find("h3").text(ui.item.text());
-							self.options.select.apply(this, arguments);
+							that.element.find("h3").text(ui.item.text());
+							that.options.select.apply(this, arguments);
 						}
 					}
 				});
@@ -52,7 +52,7 @@
 						primary: "ui-icon-carat-1-w"
 					}
 				}).click(function() {
-					self.up();
+					that.up();
 					return false;
 				}).hide();
 			},

@@ -8,62 +8,62 @@ module("datepicker: options");
 
 test('setDefaults', function() {
 	var inp = init('#inp');
-	equals($.datepicker._defaults.showOn, 'focus', 'Initial showOn');
+	equal($.datepicker._defaults.showOn, 'focus', 'Initial showOn');
 	$.datepicker.setDefaults({showOn: 'button'});
-	equals($.datepicker._defaults.showOn, 'button', 'Change default showOn');
+	equal($.datepicker._defaults.showOn, 'button', 'Change default showOn');
 	$.datepicker.setDefaults({showOn: 'focus'});
-	equals($.datepicker._defaults.showOn, 'focus', 'Restore showOn');
+	equal($.datepicker._defaults.showOn, 'focus', 'Restore showOn');
 });
 
 test('option', function() {
 	var inp = init('#inp');
 	var inst = $.data(inp[0], PROP_NAME);
 	// Set option
-	equals(inst.settings.showOn, null, 'Initial setting showOn');
-	equals($.datepicker._get(inst, 'showOn'), 'focus', 'Initial instance showOn');
-	equals($.datepicker._defaults.showOn, 'focus', 'Initial default showOn');
+	equal(inst.settings.showOn, null, 'Initial setting showOn');
+	equal($.datepicker._get(inst, 'showOn'), 'focus', 'Initial instance showOn');
+	equal($.datepicker._defaults.showOn, 'focus', 'Initial default showOn');
 	inp.datepicker('option', 'showOn', 'button');
-	equals(inst.settings.showOn, 'button', 'Change setting showOn');
-	equals($.datepicker._get(inst, 'showOn'), 'button', 'Change instance showOn');
-	equals($.datepicker._defaults.showOn, 'focus', 'Retain default showOn');
+	equal(inst.settings.showOn, 'button', 'Change setting showOn');
+	equal($.datepicker._get(inst, 'showOn'), 'button', 'Change instance showOn');
+	equal($.datepicker._defaults.showOn, 'focus', 'Retain default showOn');
 	inp.datepicker('option', {showOn: 'both'});
-	equals(inst.settings.showOn, 'both', 'Change setting showOn');
-	equals($.datepicker._get(inst, 'showOn'), 'both', 'Change instance showOn');
-	equals($.datepicker._defaults.showOn, 'focus', 'Retain default showOn');
+	equal(inst.settings.showOn, 'both', 'Change setting showOn');
+	equal($.datepicker._get(inst, 'showOn'), 'both', 'Change instance showOn');
+	equal($.datepicker._defaults.showOn, 'focus', 'Retain default showOn');
 	inp.datepicker('option', 'showOn', undefined);
-	equals(inst.settings.showOn, null, 'Clear setting showOn');
-	equals($.datepicker._get(inst, 'showOn'), 'focus', 'Restore instance showOn');
-	equals($.datepicker._defaults.showOn, 'focus', 'Retain default showOn');
+	equal(inst.settings.showOn, null, 'Clear setting showOn');
+	equal($.datepicker._get(inst, 'showOn'), 'focus', 'Restore instance showOn');
+	equal($.datepicker._defaults.showOn, 'focus', 'Retain default showOn');
 	// Get option
 	inp = init('#inp');
-	equals(inp.datepicker('option', 'showOn'), 'focus', 'Initial setting showOn');
+	equal(inp.datepicker('option', 'showOn'), 'focus', 'Initial setting showOn');
 	inp.datepicker('option', 'showOn', 'button');
-	equals(inp.datepicker('option', 'showOn'), 'button', 'Change instance showOn');
+	equal(inp.datepicker('option', 'showOn'), 'button', 'Change instance showOn');
 	inp.datepicker('option', 'showOn', undefined);
-	equals(inp.datepicker('option', 'showOn'), 'focus', 'Reset instance showOn');
-	same(inp.datepicker('option', 'all'), {showAnim: ''}, 'Get instance settings');
-	same(inp.datepicker('option', 'defaults'), $.datepicker._defaults,
+	equal(inp.datepicker('option', 'showOn'), 'focus', 'Reset instance showOn');
+	deepEqual(inp.datepicker('option', 'all'), {showAnim: ''}, 'Get instance settings');
+	deepEqual(inp.datepicker('option', 'defaults'), $.datepicker._defaults,
 		'Get default settings');
 });
 
 test('change', function() {
 	var inp = init('#inp');
 	var inst = $.data(inp[0], PROP_NAME);
-	equals(inst.settings.showOn, null, 'Initial setting showOn');
-	equals($.datepicker._get(inst, 'showOn'), 'focus', 'Initial instance showOn');
-	equals($.datepicker._defaults.showOn, 'focus', 'Initial default showOn');
+	equal(inst.settings.showOn, null, 'Initial setting showOn');
+	equal($.datepicker._get(inst, 'showOn'), 'focus', 'Initial instance showOn');
+	equal($.datepicker._defaults.showOn, 'focus', 'Initial default showOn');
 	inp.datepicker('change', 'showOn', 'button');
-	equals(inst.settings.showOn, 'button', 'Change setting showOn');
-	equals($.datepicker._get(inst, 'showOn'), 'button', 'Change instance showOn');
-	equals($.datepicker._defaults.showOn, 'focus', 'Retain default showOn');
+	equal(inst.settings.showOn, 'button', 'Change setting showOn');
+	equal($.datepicker._get(inst, 'showOn'), 'button', 'Change instance showOn');
+	equal($.datepicker._defaults.showOn, 'focus', 'Retain default showOn');
 	inp.datepicker('change', {showOn: 'both'});
-	equals(inst.settings.showOn, 'both', 'Change setting showOn');
-	equals($.datepicker._get(inst, 'showOn'), 'both', 'Change instance showOn');
-	equals($.datepicker._defaults.showOn, 'focus', 'Retain default showOn');
+	equal(inst.settings.showOn, 'both', 'Change setting showOn');
+	equal($.datepicker._get(inst, 'showOn'), 'both', 'Change instance showOn');
+	equal($.datepicker._defaults.showOn, 'focus', 'Retain default showOn');
 	inp.datepicker('change', 'showOn', undefined);
-	equals(inst.settings.showOn, null, 'Clear setting showOn');
-	equals($.datepicker._get(inst, 'showOn'), 'focus', 'Restore instance showOn');
-	equals($.datepicker._defaults.showOn, 'focus', 'Retain default showOn');
+	equal(inst.settings.showOn, null, 'Clear setting showOn');
+	equal($.datepicker._get(inst, 'showOn'), 'focus', 'Restore instance showOn');
+	equal($.datepicker._defaults.showOn, 'focus', 'Retain default showOn');
 });
 
 test('invocation', function() {
@@ -91,7 +91,7 @@ test('invocation', function() {
 	image = inp.siblings('img');
 	ok(button.length == 1, 'Button - button present');
 	ok(image.length == 0, 'Button - image absent');
-	equals(button.text(), 'Popup', 'Button - button text');
+	equal(button.text(), 'Popup', 'Button - button text');
 	inp.focus();
 	ok(!dp.is(':visible'), 'Button - not rendered on focus');
 	button.click();
@@ -107,8 +107,8 @@ test('invocation', function() {
 	ok(button.length == 0, 'Image button - button absent');
 	image = inp.siblings('img');
 	ok(image.length == 1, 'Image button - image present');
-	equals(image.attr('src'), 'img/calendar.gif', 'Image button - image source');
-	equals(image.attr('title'), 'Cal', 'Image button - image text');
+	equal(image.attr('src'), 'img/calendar.gif', 'Image button - image source');
+	equal(image.attr('title'), 'Cal', 'Image button - image text');
 	inp.focus();
 	ok(!dp.is(':visible'), 'Image button - not rendered on focus');
 	image.click();
@@ -140,19 +140,19 @@ test('otherMonths', function() {
 	var inp = init('#inp');
 	var pop = $('#ui-datepicker-div');
 	inp.val('06/01/2009').datepicker('show');
-	equals(pop.find('tbody').text(), '\u00a0123456789101112131415161718192021222324252627282930\u00a0\u00a0\u00a0\u00a0',
+	equal(pop.find('tbody').text(), '\u00a0123456789101112131415161718192021222324252627282930\u00a0\u00a0\u00a0\u00a0',
 		'Other months - none');
 	ok(pop.find('td:last *').length == 0, 'Other months - no content');
 	inp.datepicker('hide').datepicker('option', 'showOtherMonths', true).datepicker('show');
-	equals(pop.find('tbody').text(), '311234567891011121314151617181920212223242526272829301234',
+	equal(pop.find('tbody').text(), '311234567891011121314151617181920212223242526272829301234',
 		'Other months - show');
 	ok(pop.find('td:last span').length == 1, 'Other months - span content');
 	inp.datepicker('hide').datepicker('option', 'selectOtherMonths', true).datepicker('show');
-	equals(pop.find('tbody').text(), '311234567891011121314151617181920212223242526272829301234',
+	equal(pop.find('tbody').text(), '311234567891011121314151617181920212223242526272829301234',
 		'Other months - select');
 	ok(pop.find('td:last a').length == 1, 'Other months - link content');
 	inp.datepicker('hide').datepicker('option', 'showOtherMonths', false).datepicker('show');
-	equals(pop.find('tbody').text(), '\u00a0123456789101112131415161718192021222324252627282930\u00a0\u00a0\u00a0\u00a0',
+	equal(pop.find('tbody').text(), '\u00a0123456789101112131415161718192021222324252627282930\u00a0\u00a0\u00a0\u00a0',
 		'Other months - none');
 	ok(pop.find('td:last *').length == 0, 'Other months - no content');
 });
@@ -264,49 +264,49 @@ test('miscellaneous', function() {
 	};
 	var curYear = new Date().getFullYear();
 	inp.val('02/04/2008').datepicker('show');
-	equals(dp.find('.ui-datepicker-year').text(), '2008', 'Year range - read-only default');
-	inp.datepicker('hide').datepicker('option', {changeYear: true}).datepicker('show');		
-	equals(dp.find('.ui-datepicker-year').text(), genRange(2008 - 10, 21), 'Year range - changeable default');
+	equal(dp.find('.ui-datepicker-year').text(), '2008', 'Year range - read-only default');
+	inp.datepicker('hide').datepicker('option', {changeYear: true}).datepicker('show');
+	equal(dp.find('.ui-datepicker-year').text(), genRange(2008 - 10, 21), 'Year range - changeable default');
 	inp.datepicker('hide').datepicker('option', {yearRange: 'c-6:c+2', changeYear: true}).datepicker('show');
-	equals(dp.find('.ui-datepicker-year').text(), genRange(2008 - 6, 9), 'Year range - c-6:c+2');
+	equal(dp.find('.ui-datepicker-year').text(), genRange(2008 - 6, 9), 'Year range - c-6:c+2');
 	inp.datepicker('hide').datepicker('option', {yearRange: '2000:2010', changeYear: true}).datepicker('show');
-	equals(dp.find('.ui-datepicker-year').text(), genRange(2000, 11), 'Year range - 2000:2010');
+	equal(dp.find('.ui-datepicker-year').text(), genRange(2000, 11), 'Year range - 2000:2010');
 	inp.datepicker('hide').datepicker('option', {yearRange: '-5:+3', changeYear: true}).datepicker('show');
-	equals(dp.find('.ui-datepicker-year').text(), genRange(curYear - 5, 9), 'Year range - -5:+3');
+	equal(dp.find('.ui-datepicker-year').text(), genRange(curYear - 5, 9), 'Year range - -5:+3');
 	inp.datepicker('hide').datepicker('option', {yearRange: '2000:-5', changeYear: true}).datepicker('show');
-	equals(dp.find('.ui-datepicker-year').text(), genRange(2000, curYear - 2004), 'Year range - 2000:-5');
+	equal(dp.find('.ui-datepicker-year').text(), genRange(2000, curYear - 2004), 'Year range - 2000:-5');
 	inp.datepicker('hide').datepicker('option', {yearRange: '', changeYear: true}).datepicker('show');
-	equals(dp.find('.ui-datepicker-year').text(), genRange(curYear, 1), 'Year range - -6:+2');
+	equal(dp.find('.ui-datepicker-year').text(), genRange(curYear, 1), 'Year range - -6:+2');
 
 	// Navigation as date format
 	inp.datepicker('option', {showButtonPanel: true});
-	equals(dp.find('.ui-datepicker-prev').text(), 'Prev', 'Navigation prev - default');
-	equals(dp.find('.ui-datepicker-current').text(), 'Today', 'Navigation current - default');
-	equals(dp.find('.ui-datepicker-next').text(), 'Next', 'Navigation next - default');
+	equal(dp.find('.ui-datepicker-prev').text(), 'Prev', 'Navigation prev - default');
+	equal(dp.find('.ui-datepicker-current').text(), 'Today', 'Navigation current - default');
+	equal(dp.find('.ui-datepicker-next').text(), 'Next', 'Navigation next - default');
 	inp.datepicker('hide').datepicker('option', {navigationAsDateFormat: true, prevText: '< M', currentText: 'MM', nextText: 'M >'}).
 		val('02/04/2008').datepicker('show');
 	var longNames = $.datepicker.regional[''].monthNames;
 	var shortNames = $.datepicker.regional[''].monthNamesShort;
 	var date = new Date();
-	equals(dp.find('.ui-datepicker-prev').text(), '< ' + shortNames[0], 'Navigation prev - as date format');
-	equals(dp.find('.ui-datepicker-current').text(),
+	equal(dp.find('.ui-datepicker-prev').text(), '< ' + shortNames[0], 'Navigation prev - as date format');
+	equal(dp.find('.ui-datepicker-current').text(),
 		longNames[date.getMonth()], 'Navigation current - as date format');
-	equals(dp.find('.ui-datepicker-next').text(),
+	equal(dp.find('.ui-datepicker-next').text(),
 		shortNames[2] + ' >', 'Navigation next - as date format');
 	inp.simulate('keydown', {keyCode: $.simulate.VK_PGDN});
-	equals(dp.find('.ui-datepicker-prev').text(),
+	equal(dp.find('.ui-datepicker-prev').text(),
 		'< ' + shortNames[1], 'Navigation prev - as date format + pgdn');
-	equals(dp.find('.ui-datepicker-current').text(),
+	equal(dp.find('.ui-datepicker-current').text(),
 		longNames[date.getMonth()], 'Navigation current - as date format + pgdn');
-	equals(dp.find('.ui-datepicker-next').text(),
+	equal(dp.find('.ui-datepicker-next').text(),
 		shortNames[3] + ' >', 'Navigation next - as date format + pgdn');
 	inp.datepicker('hide').datepicker('option', {gotoCurrent: true}).
 		val('02/04/2008').datepicker('show');
-	equals(dp.find('.ui-datepicker-prev').text(),
+	equal(dp.find('.ui-datepicker-prev').text(),
 		'< ' + shortNames[0], 'Navigation prev - as date format + goto current');
-	equals(dp.find('.ui-datepicker-current').text(),
+	equal(dp.find('.ui-datepicker-current').text(),
 		longNames[1], 'Navigation current - as date format + goto current');
-	equals(dp.find('.ui-datepicker-next').text(),
+	equal(dp.find('.ui-datepicker-next').text(),
 		shortNames[2] + ' >', 'Navigation next - as date format + goto current');
 });
 
@@ -445,8 +445,8 @@ test('setDate', function() {
 	inp.datepicker('option', {altField: '#alt', altFormat: 'yy-mm-dd'});
 	date1 = new Date(2008, 6 - 1, 4);
 	inp.datepicker('setDate', date1);
-	equals(inp.val(), '06/04/2008', 'Set date alternate - 06/04/2008');
-	equals(alt.val(), '2008-06-04', 'Set date alternate - 2008-06-04');
+	equal(inp.val(), '06/04/2008', 'Set date alternate - 06/04/2008');
+	equal(alt.val(), '2008-06-04', 'Set date alternate - 2008-06-04');
 	// With minimum/maximum
 	inp = init('#inp');
 	date1 = new Date(2008, 1 - 1, 4);
@@ -468,17 +468,7 @@ test('setDate', function() {
 	var dateAndTimeToSet = new Date(2008, 3 - 1, 28, 1, 11, 0);
 	var dateAndTimeClone = new Date(2008, 3 - 1, 28, 1, 11, 0);
 	inp.datepicker('setDate', dateAndTimeToSet);
-	equals(dateAndTimeToSet.getTime(), dateAndTimeClone.getTime(), 'Date object passed should not be changed by setDate');
-    // Test onSelect callback is executed when using setDate
-    inp.datepicker('destroy');
-    var testDate = null;
-    inp.datepicker({
-        onSelect: function(dateText, inst) {
-            testDate = new Date(dateText);
-        }
-    });
-    inp.datepicker('setDate', date2);
-    equals(date2.getTime(), testDate.getTime(), 'onSelect is called after setDate');
+	equal(dateAndTimeToSet.getTime(), dateAndTimeClone.getTime(), 'Date object passed should not be changed by setDate');
 });
 
 test('altField', function() {
@@ -488,93 +478,90 @@ test('altField', function() {
 	alt.val('');
 	inp.val('06/04/2008').datepicker('show');
 	inp.simulate('keydown', {keyCode: $.simulate.VK_ENTER});
-	equals(inp.val(), '06/04/2008', 'Alt field - dp - enter');
-	equals(alt.val(), '', 'Alt field - alt not set');
+	equal(inp.val(), '06/04/2008', 'Alt field - dp - enter');
+	equal(alt.val(), '', 'Alt field - alt not set');
 	// Alternate field set
 	alt.val('');
 	inp.datepicker('option', {altField: '#alt', altFormat: 'yy-mm-dd'}).
 		val('06/04/2008').datepicker('show');
 	inp.simulate('keydown', {keyCode: $.simulate.VK_ENTER});
-	equals(inp.val(), '06/04/2008', 'Alt field - dp - enter');
-	equals(alt.val(), '2008-06-04', 'Alt field - alt - enter');
+	equal(inp.val(), '06/04/2008', 'Alt field - dp - enter');
+	equal(alt.val(), '2008-06-04', 'Alt field - alt - enter');
 	// Move from initial date
 	alt.val('');
 	inp.val('06/04/2008').datepicker('show');
 	inp.simulate('keydown', {keyCode: $.simulate.VK_PGDN}).
 		simulate('keydown', {keyCode: $.simulate.VK_ENTER});
-	equals(inp.val(), '07/04/2008', 'Alt field - dp - pgdn');
-	equals(alt.val(), '2008-07-04', 'Alt field - alt - pgdn');
+	equal(inp.val(), '07/04/2008', 'Alt field - dp - pgdn');
+	equal(alt.val(), '2008-07-04', 'Alt field - alt - pgdn');
 	// Alternate field set - closed
 	alt.val('');
 	inp.val('06/04/2008').datepicker('show');
 	inp.simulate('keydown', {keyCode: $.simulate.VK_PGDN}).
 		simulate('keydown', {keyCode: $.simulate.VK_ESC});
-	equals(inp.val(), '06/04/2008', 'Alt field - dp - pgdn/esc');
-	equals(alt.val(), '', 'Alt field - alt - pgdn/esc');
+	equal(inp.val(), '06/04/2008', 'Alt field - dp - pgdn/esc');
+	equal(alt.val(), '', 'Alt field - alt - pgdn/esc');
 	// Clear date and alternate
 	alt.val('');
 	inp.val('06/04/2008').datepicker('show');
 	inp.simulate('keydown', {ctrlKey: true, keyCode: $.simulate.VK_END});
-	equals(inp.val(), '', 'Alt field - dp - ctrl+end');
-	equals(alt.val(), '', 'Alt field - alt - ctrl+end');
-	
+	equal(inp.val(), '', 'Alt field - dp - ctrl+end');
+	equal(alt.val(), '', 'Alt field - alt - ctrl+end');
+
 	return
 	// TODO manual entry impl works (see altField demo) but this test doesn't
 	// probably something the rewrite won't cover anymore anyway
-	
+
 	// Verify alt field is updated on keyup
 	alt.val('');
 	inp.val('06/04/200').datepicker('show');
 	inp.simulate('keydown', {charCode: '8'.charCodeAt(0)});
 	inp.simulate('keypress', {charCode: '8'.charCodeAt(0)});
 	inp.simulate('keyup', {charCode: '8'.charCodeAt(0)});
-	equals(inp.val(), '06/04/2008', 'Alt field - dp - manual entry');
-	equals(alt.val(), '2008-06-04', 'Alt field - manual entry');
+	equal(inp.val(), '06/04/2008', 'Alt field - dp - manual entry');
+	equal(alt.val(), '2008-06-04', 'Alt field - manual entry');
 	// Verify alt field is not updated on keyup if date is invalid
 	inp.val('12/04');
 	inp.simulate('keydown', {charCode: '/'.charCodeAt(0)});
 	inp.simulate('keypress', {charCode: '/'.charCodeAt(0)});
 	inp.simulate('keyup', {charCode: '/'.charCodeAt(0)});
-	equals(inp.val(), '12/04/', 'Alt field - dp - manual entry incomplete');
-	equals(alt.val(), '2008-06-04', 'Alt field - manual entry - not updated');
+	equal(inp.val(), '12/04/', 'Alt field - dp - manual entry incomplete');
+	equal(alt.val(), '2008-06-04', 'Alt field - manual entry - not updated');
 });
 
 test('autoSize', function() {
 	var inp = init('#inp');
-	equals(inp.attr('size'), 20, 'Auto size - default');
+	equal(inp.prop('size'), 20, 'Auto size - default');
 	inp.datepicker('option', 'autoSize', true);
-	equals(inp.attr('size'), 10, 'Auto size - mm/dd/yy');
+	equal(inp.prop('size'), 10, 'Auto size - mm/dd/yy');
 	inp.datepicker('option', 'dateFormat', 'm/d/yy');
-	equals(inp.attr('size'), 10, 'Auto size - m/d/yy');
+	equal(inp.prop('size'), 10, 'Auto size - m/d/yy');
 	inp.datepicker('option', 'dateFormat', 'D M d yy');
-	equals(inp.attr('size'), 15, 'Auto size - D M d yy');
+	equal(inp.prop('size'), 15, 'Auto size - D M d yy');
 	inp.datepicker('option', 'dateFormat', 'DD, MM dd, yy');
-	equals(inp.attr('size'), 29, 'Auto size - DD, MM dd, yy');
-	inp.removeAttr('size');
+	equal(inp.prop('size'), 29, 'Auto size - DD, MM dd, yy');
 	// French
 	inp.datepicker('option', $.extend({autoSize: false}, $.datepicker.regional['fr']));
-	equals(inp.attr('size'), 20, 'Auto size - fr - default');
+	equal(inp.prop('size'), 29, 'Auto size - fr - default');
 	inp.datepicker('option', 'autoSize', true);
-	equals(inp.attr('size'), 10, 'Auto size - fr - dd/mm/yy');
+	equal(inp.prop('size'), 10, 'Auto size - fr - dd/mm/yy');
 	inp.datepicker('option', 'dateFormat', 'm/d/yy');
-	equals(inp.attr('size'), 10, 'Auto size - fr - m/d/yy');
+	equal(inp.prop('size'), 10, 'Auto size - fr - m/d/yy');
 	inp.datepicker('option', 'dateFormat', 'D M d yy');
-	equals(inp.attr('size'), 18, 'Auto size - fr - D M d yy');
+	equal(inp.prop('size'), 18, 'Auto size - fr - D M d yy');
 	inp.datepicker('option', 'dateFormat', 'DD, MM dd, yy');
-	equals(inp.attr('size'), 28, 'Auto size - fr - DD, MM dd, yy');
-	inp.removeAttr('size');
+	equal(inp.prop('size'), 28, 'Auto size - fr - DD, MM dd, yy');
 	// Hebrew
 	inp.datepicker('option', $.extend({autoSize: false}, $.datepicker.regional['he']));
-	equals(inp.attr('size'), 20, 'Auto size - he - default');
+	equal(inp.prop('size'), 28, 'Auto size - he - default');
 	inp.datepicker('option', 'autoSize', true);
-	equals(inp.attr('size'), 10, 'Auto size - he - dd/mm/yy');
+	equal(inp.prop('size'), 10, 'Auto size - he - dd/mm/yy');
 	inp.datepicker('option', 'dateFormat', 'm/d/yy');
-	equals(inp.attr('size'), 10, 'Auto size - he - m/d/yy');
+	equal(inp.prop('size'), 10, 'Auto size - he - m/d/yy');
 	inp.datepicker('option', 'dateFormat', 'D M d yy');
-	equals(inp.attr('size'), 14, 'Auto size - he - D M d yy');
+	equal(inp.prop('size'), 16, 'Auto size - he - D M d yy');
 	inp.datepicker('option', 'dateFormat', 'DD, MM dd, yy');
-	equals(inp.attr('size'), 23, 'Auto size - he - DD, MM dd, yy');
-	inp.removeAttr('size');
+	equal(inp.prop('size'), 23, 'Auto size - he - DD, MM dd, yy');
 });
 
 test('daylightSaving', function() {
@@ -584,79 +571,79 @@ test('daylightSaving', function() {
 	// Australia, Sydney - AM change, southern hemisphere
 	inp.val('04/01/2008').datepicker('show');
 	$('.ui-datepicker-calendar td:eq(6) a', dp).simulate('click');
-	equals(inp.val(), '04/05/2008', 'Daylight saving - Australia 04/05/2008');
+	equal(inp.val(), '04/05/2008', 'Daylight saving - Australia 04/05/2008');
 	inp.val('04/01/2008').datepicker('show');
 	$('.ui-datepicker-calendar td:eq(7) a', dp).simulate('click');
-	equals(inp.val(), '04/06/2008', 'Daylight saving - Australia 04/06/2008');
+	equal(inp.val(), '04/06/2008', 'Daylight saving - Australia 04/06/2008');
 	inp.val('04/01/2008').datepicker('show');
 	$('.ui-datepicker-calendar td:eq(8) a', dp).simulate('click');
-	equals(inp.val(), '04/07/2008', 'Daylight saving - Australia 04/07/2008');
+	equal(inp.val(), '04/07/2008', 'Daylight saving - Australia 04/07/2008');
 	inp.val('10/01/2008').datepicker('show');
 	$('.ui-datepicker-calendar td:eq(6) a', dp).simulate('click');
-	equals(inp.val(), '10/04/2008', 'Daylight saving - Australia 10/04/2008');
+	equal(inp.val(), '10/04/2008', 'Daylight saving - Australia 10/04/2008');
 	inp.val('10/01/2008').datepicker('show');
 	$('.ui-datepicker-calendar td:eq(7) a', dp).simulate('click');
-	equals(inp.val(), '10/05/2008', 'Daylight saving - Australia 10/05/2008');
+	equal(inp.val(), '10/05/2008', 'Daylight saving - Australia 10/05/2008');
 	inp.val('10/01/2008').datepicker('show');
 	$('.ui-datepicker-calendar td:eq(8) a', dp).simulate('click');
-	equals(inp.val(), '10/06/2008', 'Daylight saving - Australia 10/06/2008');
+	equal(inp.val(), '10/06/2008', 'Daylight saving - Australia 10/06/2008');
 	// Brasil, Brasilia - midnight change, southern hemisphere
 	inp.val('02/01/2008').datepicker('show');
 	$('.ui-datepicker-calendar td:eq(20) a', dp).simulate('click');
-	equals(inp.val(), '02/16/2008', 'Daylight saving - Brasil 02/16/2008');
+	equal(inp.val(), '02/16/2008', 'Daylight saving - Brasil 02/16/2008');
 	inp.val('02/01/2008').datepicker('show');
 	$('.ui-datepicker-calendar td:eq(21) a', dp).simulate('click');
-	equals(inp.val(), '02/17/2008', 'Daylight saving - Brasil 02/17/2008');
+	equal(inp.val(), '02/17/2008', 'Daylight saving - Brasil 02/17/2008');
 	inp.val('02/01/2008').datepicker('show');
 	$('.ui-datepicker-calendar td:eq(22) a', dp).simulate('click');
-	equals(inp.val(), '02/18/2008', 'Daylight saving - Brasil 02/18/2008');
+	equal(inp.val(), '02/18/2008', 'Daylight saving - Brasil 02/18/2008');
 	inp.val('10/01/2008').datepicker('show');
 	$('.ui-datepicker-calendar td:eq(13) a', dp).simulate('click');
-	equals(inp.val(), '10/11/2008', 'Daylight saving - Brasil 10/11/2008');
+	equal(inp.val(), '10/11/2008', 'Daylight saving - Brasil 10/11/2008');
 	inp.val('10/01/2008').datepicker('show');
 	$('.ui-datepicker-calendar td:eq(14) a', dp).simulate('click');
-	equals(inp.val(), '10/12/2008', 'Daylight saving - Brasil 10/12/2008');
+	equal(inp.val(), '10/12/2008', 'Daylight saving - Brasil 10/12/2008');
 	inp.val('10/01/2008').datepicker('show');
 	$('.ui-datepicker-calendar td:eq(15) a', dp).simulate('click');
-	equals(inp.val(), '10/13/2008', 'Daylight saving - Brasil 10/13/2008');
+	equal(inp.val(), '10/13/2008', 'Daylight saving - Brasil 10/13/2008');
 	// Lebanon, Beirut - midnight change, northern hemisphere
 	inp.val('03/01/2008').datepicker('show');
 	$('.ui-datepicker-calendar td:eq(34) a', dp).simulate('click');
-	equals(inp.val(), '03/29/2008', 'Daylight saving - Lebanon 03/29/2008');
+	equal(inp.val(), '03/29/2008', 'Daylight saving - Lebanon 03/29/2008');
 	inp.val('03/01/2008').datepicker('show');
 	$('.ui-datepicker-calendar td:eq(35) a', dp).simulate('click');
-	equals(inp.val(), '03/30/2008', 'Daylight saving - Lebanon 03/30/2008');
+	equal(inp.val(), '03/30/2008', 'Daylight saving - Lebanon 03/30/2008');
 	inp.val('03/01/2008').datepicker('show');
 	$('.ui-datepicker-calendar td:eq(36) a', dp).simulate('click');
-	equals(inp.val(), '03/31/2008', 'Daylight saving - Lebanon 03/31/2008');
+	equal(inp.val(), '03/31/2008', 'Daylight saving - Lebanon 03/31/2008');
 	inp.val('10/01/2008').datepicker('show');
 	$('.ui-datepicker-calendar td:eq(27) a', dp).simulate('click');
-	equals(inp.val(), '10/25/2008', 'Daylight saving - Lebanon 10/25/2008');
+	equal(inp.val(), '10/25/2008', 'Daylight saving - Lebanon 10/25/2008');
 	inp.val('10/01/2008').datepicker('show');
 	$('.ui-datepicker-calendar td:eq(28) a', dp).simulate('click');
-	equals(inp.val(), '10/26/2008', 'Daylight saving - Lebanon 10/26/2008');
+	equal(inp.val(), '10/26/2008', 'Daylight saving - Lebanon 10/26/2008');
 	inp.val('10/01/2008').datepicker('show');
 	$('.ui-datepicker-calendar td:eq(29) a', dp).simulate('click');
-	equals(inp.val(), '10/27/2008', 'Daylight saving - Lebanon 10/27/2008');
+	equal(inp.val(), '10/27/2008', 'Daylight saving - Lebanon 10/27/2008');
 	// US, Eastern - AM change, northern hemisphere
 	inp.val('03/01/2008').datepicker('show');
 	$('.ui-datepicker-calendar td:eq(13) a', dp).simulate('click');
-	equals(inp.val(), '03/08/2008', 'Daylight saving - US 03/08/2008');
+	equal(inp.val(), '03/08/2008', 'Daylight saving - US 03/08/2008');
 	inp.val('03/01/2008').datepicker('show');
 	$('.ui-datepicker-calendar td:eq(14) a', dp).simulate('click');
-	equals(inp.val(), '03/09/2008', 'Daylight saving - US 03/09/2008');
+	equal(inp.val(), '03/09/2008', 'Daylight saving - US 03/09/2008');
 	inp.val('03/01/2008').datepicker('show');
 	$('.ui-datepicker-calendar td:eq(15) a', dp).simulate('click');
-	equals(inp.val(), '03/10/2008', 'Daylight saving - US 03/10/2008');
+	equal(inp.val(), '03/10/2008', 'Daylight saving - US 03/10/2008');
 	inp.val('11/01/2008').datepicker('show');
 	$('.ui-datepicker-calendar td:eq(6) a', dp).simulate('click');
-	equals(inp.val(), '11/01/2008', 'Daylight saving - US 11/01/2008');
+	equal(inp.val(), '11/01/2008', 'Daylight saving - US 11/01/2008');
 	inp.val('11/01/2008').datepicker('show');
 	$('.ui-datepicker-calendar td:eq(7) a', dp).simulate('click');
-	equals(inp.val(), '11/02/2008', 'Daylight saving - US 11/02/2008');
+	equal(inp.val(), '11/02/2008', 'Daylight saving - US 11/02/2008');
 	inp.val('11/01/2008').datepicker('show');
 	$('.ui-datepicker-calendar td:eq(8) a', dp).simulate('click');
-	equals(inp.val(), '11/03/2008', 'Daylight saving - US 11/03/2008');
+	equal(inp.val(), '11/03/2008', 'Daylight saving - US 11/03/2008');
 });
 
 var beforeShowThis = null;
@@ -693,9 +680,9 @@ test('callbacks', function() {
 	// Before show
 	var inp = init('#inp', {beforeShow: beforeAll});
 	var inst = $.data(inp[0], 'datepicker');
-	equals($.datepicker._get(inst, 'currentText'), 'Today', 'Before show - initial');
+	equal($.datepicker._get(inst, 'currentText'), 'Today', 'Before show - initial');
 	inp.val('02/04/2008').datepicker('show');
-	equals($.datepicker._get(inst, 'currentText'), 'Current', 'Before show - changed');
+	equal($.datepicker._get(inst, 'currentText'), 'Current', 'Before show - changed');
 	ok(beforeShowThis.id == inp[0].id, 'Before show - this OK');
 	ok(beforeShowInput.id == inp[0].id, 'Before show - input OK');
 	deepEqual(beforeShowInst, inst, 'Before show - inst OK');
@@ -712,7 +699,7 @@ test('callbacks', function() {
 	ok(day21.is('.ui-datepicker-unselectable'), 'Before show day - unselectable 21');
 	ok(day20.is('.day10'), 'Before show day - CSS 20');
 	ok(!day21.is('.day10'), 'Before show day - CSS 21');
-	ok(day20.attr('title') == '', 'Before show day - title 20');
+	ok(!day20.attr('title'), 'Before show day - title 20');
 	ok(day21.attr('title') == 'Divisble by 3', 'Before show day - title 21');
 	inp.datepicker('hide').datepicker('destroy');
 });
@@ -721,26 +708,26 @@ test('localisation', function() {
 	var inp = init('#inp', $.datepicker.regional['fr']);
 	inp.datepicker('option', {dateFormat: 'DD, d MM yy', showButtonPanel:true, changeMonth:true, changeYear:true}).val('').datepicker('show');
 	var dp = $('#ui-datepicker-div');
-	equals($('.ui-datepicker-close', dp).text(), 'Fermer', 'Localisation - close');
+	equal($('.ui-datepicker-close', dp).text(), 'Fermer', 'Localisation - close');
 	$('.ui-datepicker-close', dp).simulate('mouseover');
-	equals($('.ui-datepicker-prev', dp).text(), 'Précédent', 'Localisation - previous');
-	equals($('.ui-datepicker-current', dp).text(), 'Aujourd\'hui', 'Localisation - current');
-	equals($('.ui-datepicker-next', dp).text(), 'Suivant', 'Localisation - next');
+	equal($('.ui-datepicker-prev', dp).text(), 'Précédent', 'Localisation - previous');
+	equal($('.ui-datepicker-current', dp).text(), 'Aujourd\'hui', 'Localisation - current');
+	equal($('.ui-datepicker-next', dp).text(), 'Suivant', 'Localisation - next');
 	var month = 0;
 	$('.ui-datepicker-month option', dp).each(function() {
-		equals($(this).text(), $.datepicker.regional['fr'].monthNamesShort[month],
+		equal($(this).text(), $.datepicker.regional['fr'].monthNamesShort[month],
 			'Localisation - month ' + month);
 		month++;
 	});
 	var day = 1;
 	$('.ui-datepicker-calendar th', dp).each(function() {
-		equals($(this).text(), $.datepicker.regional['fr'].dayNamesMin[day],
+		equal($(this).text(), $.datepicker.regional['fr'].dayNamesMin[day],
 			'Localisation - day ' + day);
 		day = (day + 1) % 7;
 	});
 	inp.simulate('keydown', {keyCode: $.simulate.VK_ENTER});
 	var date = new Date();
-	equals(inp.val(), $.datepicker.regional['fr'].dayNames[date.getDay()] + ', ' +
+	equal(inp.val(), $.datepicker.regional['fr'].dayNames[date.getDay()] + ', ' +
 		date.getDate() + ' ' + $.datepicker.regional['fr'].monthNames[date.getMonth()] +
 		' ' + date.getFullYear(), 'Localisation - formatting');
 });
@@ -755,29 +742,29 @@ test('noWeekends', function() {
 
 test('iso8601Week', function() {
 	var date = new Date(2000, 12 - 1, 31);
-	equals($.datepicker.iso8601Week(date), 52, 'ISO 8601 week ' + date);
+	equal($.datepicker.iso8601Week(date), 52, 'ISO 8601 week ' + date);
 	date = new Date(2001, 1 - 1, 1);
-	equals($.datepicker.iso8601Week(date), 1, 'ISO 8601 week ' + date);
+	equal($.datepicker.iso8601Week(date), 1, 'ISO 8601 week ' + date);
 	date = new Date(2001, 1 - 1, 7);
-	equals($.datepicker.iso8601Week(date), 1, 'ISO 8601 week ' + date);
+	equal($.datepicker.iso8601Week(date), 1, 'ISO 8601 week ' + date);
 	date = new Date(2001, 1 - 1, 8);
-	equals($.datepicker.iso8601Week(date), 2, 'ISO 8601 week ' + date);
+	equal($.datepicker.iso8601Week(date), 2, 'ISO 8601 week ' + date);
 	date = new Date(2003, 12 - 1, 28);
-	equals($.datepicker.iso8601Week(date), 52, 'ISO 8601 week ' + date);
+	equal($.datepicker.iso8601Week(date), 52, 'ISO 8601 week ' + date);
 	date = new Date(2003, 12 - 1, 29);
-	equals($.datepicker.iso8601Week(date), 1, 'ISO 8601 week ' + date);
+	equal($.datepicker.iso8601Week(date), 1, 'ISO 8601 week ' + date);
 	date = new Date(2004, 1 - 1, 4);
-	equals($.datepicker.iso8601Week(date), 1, 'ISO 8601 week ' + date);
+	equal($.datepicker.iso8601Week(date), 1, 'ISO 8601 week ' + date);
 	date = new Date(2004, 1 - 1, 5);
-	equals($.datepicker.iso8601Week(date), 2, 'ISO 8601 week ' + date);
+	equal($.datepicker.iso8601Week(date), 2, 'ISO 8601 week ' + date);
 	date = new Date(2009, 12 - 1, 28);
-	equals($.datepicker.iso8601Week(date), 53, 'ISO 8601 week ' + date);
+	equal($.datepicker.iso8601Week(date), 53, 'ISO 8601 week ' + date);
 	date = new Date(2010, 1 - 1, 3);
-	equals($.datepicker.iso8601Week(date), 53, 'ISO 8601 week ' + date);
+	equal($.datepicker.iso8601Week(date), 53, 'ISO 8601 week ' + date);
 	date = new Date(2010, 1 - 1, 4);
-	equals($.datepicker.iso8601Week(date), 1, 'ISO 8601 week ' + date);
+	equal($.datepicker.iso8601Week(date), 1, 'ISO 8601 week ' + date);
 	date = new Date(2010, 1 - 1, 10);
-	equals($.datepicker.iso8601Week(date), 1, 'ISO 8601 week ' + date);
+	equal($.datepicker.iso8601Week(date), 1, 'ISO 8601 week ' + date);
 });
 
 test('parseDate', function() {
@@ -851,7 +838,7 @@ test('parseDateErrors', function() {
 			ok(false, 'Parsed error ' + value);
 		}
 		catch (e) {
-			equals(e, error, 'Parsed error ' + value);
+			equal(e, error, 'Parsed error ' + value);
 		}
 	};
 	expectError(function() { $.datepicker.parseDate(null, 'Sat 2 01'); },
@@ -896,41 +883,41 @@ test('parseDateErrors', function() {
 
 test('formatDate', function() {
 	init('#inp');
-	equals($.datepicker.formatDate('d m y', new Date(2001, 2 - 1, 3)),
+	equal($.datepicker.formatDate('d m y', new Date(2001, 2 - 1, 3)),
 		'3 2 01', 'Format date d m y');
-	equals($.datepicker.formatDate('dd mm yy', new Date(2001, 2 - 1, 3)),
+	equal($.datepicker.formatDate('dd mm yy', new Date(2001, 2 - 1, 3)),
 		'03 02 2001', 'Format date dd mm yy');
-	equals($.datepicker.formatDate('d m y', new Date(2001, 12 - 1, 13)),
+	equal($.datepicker.formatDate('d m y', new Date(2001, 12 - 1, 13)),
 		'13 12 01', 'Format date d m y');
-	equals($.datepicker.formatDate('dd mm yy', new Date(2001, 12 - 1, 13)),
+	equal($.datepicker.formatDate('dd mm yy', new Date(2001, 12 - 1, 13)),
 		'13 12 2001', 'Format date dd mm yy');
-	equals($.datepicker.formatDate('yy-o', new Date(2001, 2 - 1, 3)),
+	equal($.datepicker.formatDate('yy-o', new Date(2001, 2 - 1, 3)),
 		'2001-34', 'Format date yy-o');
-	equals($.datepicker.formatDate('yy-oo', new Date(2001, 2 - 1, 3)),
+	equal($.datepicker.formatDate('yy-oo', new Date(2001, 2 - 1, 3)),
 		'2001-034', 'Format date yy-oo');
-	equals($.datepicker.formatDate('D M y', new Date(2001, 2 - 1, 3)),
+	equal($.datepicker.formatDate('D M y', new Date(2001, 2 - 1, 3)),
 		'Sat Feb 01', 'Format date D M y');
-	equals($.datepicker.formatDate('DD MM yy', new Date(2001, 2 - 1, 3)),
+	equal($.datepicker.formatDate('DD MM yy', new Date(2001, 2 - 1, 3)),
 		'Saturday February 2001', 'Format date DD MM yy');
-	equals($.datepicker.formatDate('DD, MM d, yy', new Date(2001, 2 - 1, 3)),
+	equal($.datepicker.formatDate('DD, MM d, yy', new Date(2001, 2 - 1, 3)),
 		'Saturday, February 3, 2001', 'Format date DD, MM d, yy');
-	equals($.datepicker.formatDate('\'day\' d \'of\' MM (\'\'DD\'\'), yy',
+	equal($.datepicker.formatDate('\'day\' d \'of\' MM (\'\'DD\'\'), yy',
 		new Date(2001, 2 - 1, 3)), 'day 3 of February (\'Saturday\'), 2001',
 		'Format date \'day\' d \'of\' MM (\'\'DD\'\'), yy');
 	var gmtDate = new Date(2001, 2 - 1, 3);
 	gmtDate.setMinutes(gmtDate.getMinutes() - gmtDate.getTimezoneOffset());
-	equals($.datepicker.formatDate('@', gmtDate), '981158400000', 'Format date @');
-	equals($.datepicker.formatDate('!', gmtDate), '631167552000000000', 'Format date !');
+	equal($.datepicker.formatDate('@', gmtDate), '981158400000', 'Format date @');
+	equal($.datepicker.formatDate('!', gmtDate), '631167552000000000', 'Format date !');
 	var fr = $.datepicker.regional['fr'];
 	var settings = {dayNamesShort: fr.dayNamesShort, dayNames: fr.dayNames,
 		monthNamesShort: fr.monthNamesShort, monthNames: fr.monthNames};
-	equals($.datepicker.formatDate('D M y', new Date(2001, 4 - 1, 9), settings),
+	equal($.datepicker.formatDate('D M y', new Date(2001, 4 - 1, 9), settings),
 		'Lun. Avril 01', 'Format date D M y with settings');
-	equals($.datepicker.formatDate('DD MM yy', new Date(2001, 4 - 1, 9), settings),
+	equal($.datepicker.formatDate('DD MM yy', new Date(2001, 4 - 1, 9), settings),
 		'Lundi Avril 2001', 'Format date DD MM yy with settings');
-	equals($.datepicker.formatDate('DD, MM d, yy', new Date(2001, 4 - 1, 9), settings),
+	equal($.datepicker.formatDate('DD, MM d, yy', new Date(2001, 4 - 1, 9), settings),
 		'Lundi, Avril 9, 2001', 'Format date DD, MM d, yy with settings');
-	equals($.datepicker.formatDate('\'jour\' d \'de\' MM (\'\'DD\'\'), yy',
+	equal($.datepicker.formatDate('\'jour\' d \'de\' MM (\'\'DD\'\'), yy',
 		new Date(2001, 4 - 1, 9), settings), 'jour 9 de Avril (\'Lundi\'), 2001',
 		'Format date \'jour\' d \'de\' MM (\'\'DD\'\'), yy with settings');
 });

@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<title>jQuery UI Accordion - Open on hoverintent</title>
 	<link rel="stylesheet" href="../../themes/base/jquery.ui.all.css">
-	<script src="../../jquery-1.5.1.js"></script>
+	<script src="../../jquery-1.7.1.js"></script>
 	<script src="../../ui/jquery.ui.core.js"></script>
 	<script src="../../ui/jquery.ui.widget.js"></script>
 	<script src="../../ui/jquery.ui.accordion.js"></script>
@@ -29,8 +29,7 @@
 			$( this ).unbind( "mouseover", jQuery.event.special.hoverintent.handler );
 		},
 		handler: function( event ) {
-			event.type = "hoverintent";
-			var self = this,
+			var that = this,
 				args = arguments,
 				target = $( event.target ),
 				cX, cY, pX, pY;
@@ -50,7 +49,12 @@
 			function handler() {
 				if ( ( Math.abs( pX - cX ) + Math.abs( pY - cY ) ) < cfg.sensitivity ) {
 					clear();
-					jQuery.event.handle.apply( self, args );
+					event.type = "hoverintent";
+					// prevent accessing the original event since the new event
+					// is fired asynchronously and the old event is no longer
+					// usable (#6028)
+					event.originalEvent = {};
+					jQuery.event.handle.apply( that, args );
 				} else {
 					pX = cX;
 					pY = cY;
@@ -69,7 +73,7 @@
 <div class="demo">
 
 <div id="accordion">
-	<h3><a href="#">Section 1</a></h3>
+	<h3>Section 1</h3>
 	<div>
 		<p>
 		Mauris mauris ante, blandit et, ultrices a, suscipit eget, quam. Integer
@@ -78,7 +82,7 @@
 		odio. Curabitur malesuada. Vestibulum a velit eu ante scelerisque vulputate.
 		</p>
 	</div>
-	<h3><a href="#">Section 2</a></h3>
+	<h3>Section 2</h3>
 	<div>
 		<p>
 		Sed non urna. Donec et ante. Phasellus eu ligula. Vestibulum sit amet
@@ -87,7 +91,7 @@
 		suscipit faucibus urna.
 		</p>
 	</div>
-	<h3><a href="#">Section 3</a></h3>
+	<h3>Section 3</h3>
 	<div>
 		<p>
 		Nam enim risus, molestie et, porta ac, aliquam ac, risus. Quisque lobortis.
@@ -101,7 +105,7 @@
 			<li>List item three</li>
 		</ul>
 	</div>
-	<h3><a href="#">Section 4</a></h3>
+	<h3>Section 4</h3>
 	<div>
 		<p>
 		Cras dictum. Pellentesque habitant morbi tristique senectus et netus

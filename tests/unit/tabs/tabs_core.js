@@ -31,15 +31,15 @@ test( "nested list", function() {
 	expect( 1 );
 
 	var element = $( "#tabs6" ).tabs();
-	equals( element.data( "tabs" ).anchors.length, 2, "should contain 2 tab" );
+	equal( element.data( "tabs" ).anchors.length, 2, "should contain 2 tab" );
 });
 
 test( "disconnected from DOM", function() {
 	expect( 2 );
 
 	var element = $( "#tabs1" ).remove().tabs();
-	equals( element.find( ".ui-tabs-nav" ).length, 1, "should initialize nav" );
-	equals( element.find( ".ui-tabs-panel" ).length, 3, "should initialize panels" );
+	equal( element.find( ".ui-tabs-nav" ).length, 1, "should initialize nav" );
+	equal( element.find( ".ui-tabs-panel" ).length, 3, "should initialize panels" );
 });
 
 test( "aria-controls", function() {
@@ -48,7 +48,7 @@ test( "aria-controls", function() {
 		tabs = element.find( ".ui-tabs-nav a" );
 	tabs.each(function() {
 		var tab = $( this );
-		equal( tab.attr( "href" ).substring( 1 ), tab.attr( "aria-controls" ) );
+		equal( tab.prop( "hash" ).substring( 1 ), tab.attr( "aria-controls" ) );
 	});
 
 	element = $( "#tabs2" ).tabs();
@@ -61,6 +61,7 @@ test( "aria-controls", function() {
 
 test( "accessibility", function() {
 	// TODO: add tests
+	expect( 0 );
 });
 
 test( "#3627 - Ajax tab with url containing a fragment identifier fails to load", function() {
@@ -87,7 +88,7 @@ test( "#4033 - IE expands hash to full url and misinterprets tab as ajax", funct
 		}
 	});
 
-	equals( element.find( ".ui-tabs-nav a" ).attr( "aria-controls" ), "tab", "aria-contorls attribute is correct" );
+	equal( element.find( ".ui-tabs-nav a" ).attr( "aria-controls" ), "tab", "aria-contorls attribute is correct" );
 	tabs_state( element, 1 );
 });
 

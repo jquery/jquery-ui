@@ -1,10 +1,10 @@
 (function( $ ) {
 
-module( "accordion: core", accordionSetupTeardown() );
+module( "accordion: core", accordion_setupTeardown() );
 
 $.each( { div: "#list1", ul: "#navigation", dl: "#accordion-dl" }, function( type, selector ) {
-	expect( 4 );
 	test( "markup structure: " + type, function() {
+		expect( 4 );
 		var element = $( selector ).accordion();
 		ok( element.hasClass( "ui-accordion" ), "main element is .ui-accordion" );
 		equal( element.find( ".ui-accordion-header" ).length, 3,
@@ -22,13 +22,6 @@ test( "handle click on header-descendant", function() {
 	var element = $( "#navigation" ).accordion();
 	$( "#navigation h2:eq(1) a" ).click();
 	accordion_state( element, 0, 1, 0 );
-});
-
-test( "ui-accordion-heading class added to headers anchor", function() {
-	expect( 1 );
-	var element = $( "#list1" ).accordion();
-	var anchors = element.find( ".ui-accordion-heading" );
-	equal( anchors.length, 3 );
 });
 
 test( "accessibility", function () {

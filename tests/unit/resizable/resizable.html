@@ -1,29 +1,35 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8" />
+	<meta charset="utf-8">
 	<title>jQuery UI Resizable Test Suite</title>
 
-	<link type="text/css" href="../../../themes/base/jquery.ui.resizable.css" rel="stylesheet" />
+	<script src="../../jquery.js"></script>
+	<script src="../../resource_loader.js"></script>
+	<script>
+	loadResources({
+		css: [ "ui.core", "ui.resizable" ],
+		js: [
+			"ui/jquery.ui.core.js",
+			"ui/jquery.ui.widget.js",
+			"ui/jquery.ui.mouse.js",
+			"ui/jquery.ui.resizable.js"
+		]
+	});
+	</script>
 
-	<script type="text/javascript" src="../../../jquery-1.5.1.js"></script>
-	<script type="text/javascript" src="../../../ui/jquery.ui.core.js"></script>
-	<script type="text/javascript" src="../../../ui/jquery.ui.widget.js"></script>
-	<script type="text/javascript" src="../../../ui/jquery.ui.mouse.js"></script>
-	<script type="text/javascript" src="../../../ui/jquery.ui.resizable.js"></script>
+	<link rel="stylesheet" href="../../../external/qunit.css">
+	<script src="../../../external/qunit.js"></script>
+	<script src="../../jquery.simulate.js"></script>
+	<script src="../testsuite.js"></script>
 
-	<link rel="stylesheet" href="../../../external/qunit.css" type="text/css"/>
-	<script type="text/javascript" src="../../../external/qunit.js"></script>
-	<script type="text/javascript" src="../../jquery.simulate.js"></script>
-	<script type="text/javascript" src="../testsuite.js"></script>
+	<script src="resizable_core.js"></script>
+	<script src="resizable_defaults.js"></script>
+	<script src="resizable_events.js"></script>
+	<script src="resizable_methods.js"></script>
+	<script src="resizable_options.js"></script>
 
-	<script type="text/javascript" src="resizable_core.js"></script>
-	<script type="text/javascript" src="resizable_defaults.js"></script>
-	<script type="text/javascript" src="resizable_events.js"></script>
-	<script type="text/javascript" src="resizable_methods.js"></script>
-	<script type="text/javascript" src="resizable_options.js"></script>
-	
-	<script type="text/javascript">
+	<script>
 	// disable this stale testsuite for testswarm only
 	var url = window.location.search;
 	url = decodeURIComponent( url.slice( url.indexOf("swarmURL=") + 9 ) );
@@ -33,7 +39,7 @@
 		test("resizable", function() { ok(true, "disabled resizable testsuite"); });
 	}
 	</script>
-	<script type="text/javascript" src="../swarminject.js"></script>
+	<script src="../swarminject.js"></script>
 </head>
 <body>
 
@@ -41,13 +47,12 @@
 <h2 id="qunit-banner"></h2>
 <div id="qunit-testrunner-toolbar"></div>
 <h2 id="qunit-userAgent"></h2>
-<ol id="qunit-tests">
-</ol>
-
+<ol id="qunit-tests"></ol>
 <div id="qunit-fixture">
-	<div id="resizable1" style="background: green; width: 100px; height: 100px;">I'm a resizable.</div>
-	<img src="images/test.jpg" id="resizable2" style="width: 100px; height: 100px;"/>
-</div>
 
+<div id="resizable1" style="background: green; width: 100px; height: 100px;">I'm a resizable.</div>
+<img src="images/test.jpg" id="resizable2" style="width: 100px; height: 100px;">
+
+</div>
 </body>
 </html>

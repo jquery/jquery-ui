@@ -23,58 +23,58 @@ test("buttons", function() {
 	var buttons = {
 		"Ok": function(ev, ui) {
 			ok(true, "button click fires callback");
-			equals(this, el[0], "context of callback");
-			equals(ev.target, btn[0], "event target");
+			equal(this, el[0], "context of callback");
+			equal(ev.target, btn[0], "event target");
 		},
 		"Cancel": function(ev, ui) {
 			ok(true, "button click fires callback");
-			equals(this, el[0], "context of callback");
-			equals(ev.target, btn[1], "event target");
+			equal(this, el[0], "context of callback");
+			equal(ev.target, btn[1], "event target");
 		}
 	};
 
 	el = $('<div></div>').dialog({ buttons: buttons });
 	var btn = $("button", dlg());
-	equals(btn.length, 2, "number of buttons");
+	equal(btn.length, 2, "number of buttons");
 
 	var i = 0;
 	$.each(buttons, function(key, val) {
-		equals(btn.eq(i).text(), key, "text of button " + (i+1));
+		equal(btn.eq(i).text(), key, "text of button " + (i+1));
 		i++;
 	});
 
 	ok(btn.parent().hasClass('ui-dialog-buttonset'), "buttons in container");
 	ok(el.parent().hasClass('ui-dialog-buttons'), "dialog wrapper adds class about having buttons");
-	
+
 	btn.trigger("click");
 
 	var newButtons = {
 		"Close": function(ev, ui) {
 			ok(true, "button click fires callback");
-			equals(this, el[0], "context of callback");
-			equals(ev.target, btn[0], "event target");
+			equal(this, el[0], "context of callback");
+			equal(ev.target, btn[0], "event target");
 		}
 	};
 
-	same(el.dialog("option", "buttons"), buttons, '.dialog("option", "buttons") getter');
+	deepEqual(el.dialog("option", "buttons"), buttons, '.dialog("option", "buttons") getter');
 	el.dialog("option", "buttons", newButtons);
-	same(el.dialog("option", "buttons"), newButtons, '.dialog("option", "buttons", ...) setter');
+	deepEqual(el.dialog("option", "buttons"), newButtons, '.dialog("option", "buttons", ...) setter');
 
 	btn = $("button", dlg());
-	equals(btn.length, 1, "number of buttons after setter");
+	equal(btn.length, 1, "number of buttons after setter");
 	btn.trigger('click');
 
 	i = 0;
 	$.each(newButtons, function(key, val) {
-		equals(btn.eq(i).text(), key, "text of button " + (i+1));
+		equal(btn.eq(i).text(), key, "text of button " + (i+1));
 		i += 1;
 	});
-	
+
 	el.dialog("option", "buttons", null);
 	btn = $("button", dlg());
-	equals(btn.length, 0, "all buttons have been removed");
-	equals(el.find(".ui-dialog-buttonset").length, 0, "buttonset has been removed");
-	equals(el.parent().hasClass('ui-dialog-buttons'), false, "dialog wrapper removes class about having buttons");
+	equal(btn.length, 0, "all buttons have been removed");
+	equal(el.find(".ui-dialog-buttonset").length, 0, "buttonset has been removed");
+	equal(el.parent().hasClass('ui-dialog-buttons'), false, "dialog wrapper removes class about having buttons");
 
 	el.remove();
 });
@@ -89,15 +89,15 @@ test("buttons - advanced", function() {
 				"class": "additional-class",
 				id: "my-button-id",
 				click: function() {
-					equals(this, el[0], "correct context");
+					equal(this, el[0], "correct context");
 				}
 			}
 		]
 	});
 	var buttons = dlg().find("button");
-	equals(buttons.length, 1, "correct number of buttons");
-	equals(buttons.attr("id"), "my-button-id", "correct id");
-	equals(buttons.text(), "a button", "correct label");
+	equal(buttons.length, 1, "correct number of buttons");
+	equal(buttons.attr("id"), "my-button-id", "correct id");
+	equal(buttons.text(), "a button", "correct label");
 	ok(buttons.hasClass("additional-class"), "additional classes added");
 	buttons.click();
 
@@ -112,9 +112,9 @@ test("closeOnEscape", function() {
 		.simulate('keypress', { keyCode: $.ui.keyCode.ESCAPE })
 		.simulate('keyup', { keyCode: $.ui.keyCode.ESCAPE });
 	ok(dlg().is(':visible') && !dlg().is(':hidden'), 'dialog is open after ESC');
-	
+
 	el.remove();
-	
+
 	el = $('<div></div>').dialog({ closeOnEscape: true });
 	ok(true, 'closeOnEscape: true');
 	ok(dlg().is(':visible') && !dlg().is(':hidden'), 'dialog is open before ESC');
@@ -128,17 +128,17 @@ test("closeText", function() {
 	expect(3);
 
 	el = $('<div></div>').dialog();
-		equals(dlg().find('.ui-dialog-titlebar-close span').text(), 'close',
+		equal(dlg().find('.ui-dialog-titlebar-close span').text(), 'close',
 			'default close text');
 	el.remove();
 
 	el = $('<div></div>').dialog({ closeText: "foo" });
-		equals(dlg().find('.ui-dialog-titlebar-close span').text(), 'foo',
+		equal(dlg().find('.ui-dialog-titlebar-close span').text(), 'foo',
 			'closeText on init');
 	el.remove();
 
 	el = $('<div></div>').dialog().dialog('option', 'closeText', 'bar');
-		equals(dlg().find('.ui-dialog-titlebar-close span').text(), 'bar',
+		equal(dlg().find('.ui-dialog-titlebar-close span').text(), 'bar',
 			'closeText via option method');
 	el.remove();
 });
@@ -147,16 +147,16 @@ test("dialogClass", function() {
 	expect(4);
 
 	el = $('<div></div>').dialog();
-		equals(dlg().is(".foo"), false, 'dialogClass not specified. foo class added');
+		equal(dlg().is(".foo"), false, 'dialogClass not specified. foo class added');
 	el.remove();
 
 	el = $('<div></div>').dialog({ dialogClass: "foo" });
-		equals(dlg().is(".foo"), true, 'dialogClass in init. foo class added');
+		equal(dlg().is(".foo"), true, 'dialogClass in init. foo class added');
 	el.remove();
 
 	el = $('<div></div>').dialog({ dialogClass: "foo bar" });
-		equals(dlg().is(".foo"), true, 'dialogClass in init, two classes. foo class added');
-		equals(dlg().is(".bar"), true, 'dialogClass in init, two classes. bar class added');
+		equal(dlg().is(".foo"), true, 'dialogClass in init, two classes. foo class added');
+		equal(dlg().is(".bar"), true, 'dialogClass in init, two classes. bar class added');
 	el.remove();
 });
 
@@ -177,19 +177,24 @@ test("draggable", function() {
 });
 
 test("height", function() {
-	expect(3);
+	expect(4);
 
 	el = $('<div></div>').dialog();
-		equals(dlg().height(), 150, "default height");
+		equal(dlg().outerHeight(), 150, "default height");
 	el.remove();
 
 	el = $('<div></div>').dialog({ height: 237 });
-		equals(dlg().height(), 237, "explicit height");
+		equal(dlg().outerHeight(), 237, "explicit height");
 	el.remove();
 
 	el = $('<div></div>').dialog();
 		el.dialog('option', 'height', 238);
-		equals(dlg().height(), 238, "explicit height set after init");
+		equal(dlg().outerHeight(), 238, "explicit height set after init");
+	el.remove();
+
+	el = $('<div></div>').css("padding", "20px")
+		.dialog({ height: 240 });
+		equal(dlg().outerHeight(), 240, "explicit height with padding");
 	el.remove();
 });
 
@@ -198,17 +203,17 @@ test("maxHeight", function() {
 
 	el = $('<div></div>').dialog({ maxHeight: 200 });
 		drag('.ui-resizable-s', 1000, 1000);
-		equals(heightAfter, 200, "maxHeight");
+		equal(heightAfter, 200, "maxHeight");
 	el.remove();
 
 	el = $('<div></div>').dialog({ maxHeight: 200 });
 		drag('.ui-resizable-n', -1000, -1000);
-		equals(heightAfter, 200, "maxHeight");
+		equal(heightAfter, 200, "maxHeight");
 	el.remove();
 
 	el = $('<div></div>').dialog({ maxHeight: 200 }).dialog('option', 'maxHeight', 300);
 		drag('.ui-resizable-s', 1000, 1000);
-		equals(heightAfter, 300, "maxHeight");
+		equal(heightAfter, 300, "maxHeight");
 	el.remove();
 });
 
@@ -217,17 +222,17 @@ test("maxWidth", function() {
 
 	el = $('<div></div>').dialog({ maxWidth: 200 });
 		drag('.ui-resizable-e', 1000, 1000);
-		equals(widthAfter, 200, "maxWidth");
+		equal(widthAfter, 200, "maxWidth");
 	el.remove();
 
 	el = $('<div></div>').dialog({ maxWidth: 200 });
 		drag('.ui-resizable-w', -1000, -1000);
-		equals(widthAfter, 200, "maxWidth");
+		equal(widthAfter, 200, "maxWidth");
 	el.remove();
 
 	el = $('<div></div>').dialog({ maxWidth: 200 }).dialog('option', 'maxWidth', 300);
 		drag('.ui-resizable-w', -1000, -1000);
-		equals(widthAfter, 300, "maxWidth");
+		equal(widthAfter, 300, "maxWidth");
 	el.remove();
 });
 
@@ -236,17 +241,17 @@ test("minHeight", function() {
 
 	el = $('<div></div>').dialog({ minHeight: 10 });
 		drag('.ui-resizable-s', -1000, -1000);
-		equals(heightAfter, 10, "minHeight");
+		equal(heightAfter, 10, "minHeight");
 	el.remove();
 
 	el = $('<div></div>').dialog({ minHeight: 10 });
 		drag('.ui-resizable-n', 1000, 1000);
-		equals(heightAfter, 10, "minHeight");
+		equal(heightAfter, 10, "minHeight");
 	el.remove();
 
 	el = $('<div></div>').dialog({ minHeight: 10 }).dialog('option', 'minHeight', 30);
 		drag('.ui-resizable-n', 1000, 1000);
-		equals(heightAfter, 30, "minHeight");
+		equal(heightAfter, 30, "minHeight");
 	el.remove();
 });
 
@@ -255,17 +260,17 @@ test("minWidth", function() {
 
 	el = $('<div></div>').dialog({ minWidth: 10 });
 		drag('.ui-resizable-e', -1000, -1000);
-		equals(widthAfter, 10, "minWidth");
+		equal(widthAfter, 10, "minWidth");
 	el.remove();
 
 	el = $('<div></div>').dialog({ minWidth: 10 });
 		drag('.ui-resizable-w', 1000, 1000);
-		equals(widthAfter, 10, "minWidth");
+		equal(widthAfter, 10, "minWidth");
 	el.remove();
 
 	el = $('<div></div>').dialog({ minWidth: 30 }).dialog('option', 'minWidth', 30);
 		drag('.ui-resizable-w', 1000, 1000);
-		equals(widthAfter, 30, "minWidth");
+		equal(widthAfter, 30, "minWidth");
 	el.remove();
 });
 
@@ -273,8 +278,8 @@ test("position, default center on window", function() {
 	var el = $('<div></div>').dialog();
 	var dialog = el.dialog('widget');
 	var offset = dialog.offset();
-	same(offset.left, Math.round($(window).width() / 2 - dialog.outerWidth() / 2) + $(window).scrollLeft());
-	same(offset.top, Math.round($(window).height() / 2 - dialog.outerHeight() / 2) + $(window).scrollTop());
+	deepEqual(offset.left, Math.round($(window).width() / 2 - dialog.outerWidth() / 2) + $(window).scrollLeft());
+	deepEqual(offset.top, Math.round($(window).height() / 2 - dialog.outerHeight() / 2) + $(window).scrollTop());
 	el.remove();
 });
 
@@ -282,8 +287,8 @@ test("position, top on window", function() {
 	var el = $('<div></div>').dialog({ position: "top" });
 	var dialog = el.dialog('widget');
 	var offset = dialog.offset();
-	same(offset.left, Math.round($(window).width() / 2 - dialog.outerWidth() / 2) + $(window).scrollLeft());
-	same(offset.top, $(window).scrollTop());
+	deepEqual(offset.left, Math.round($(window).width() / 2 - dialog.outerWidth() / 2) + $(window).scrollLeft());
+	deepEqual(offset.top, $(window).scrollTop());
 	el.remove();
 });
 
@@ -291,8 +296,8 @@ test("position, left on window", function() {
 	var el = $('<div></div>').dialog({ position: "left" });
 	var dialog = el.dialog('widget');
 	var offset = dialog.offset();
-	same(offset.left, 0);
-	same(offset.top, Math.round($(window).height() / 2 - dialog.outerHeight() / 2) + $(window).scrollTop());
+	deepEqual(offset.left, 0);
+	deepEqual(offset.top, Math.round($(window).height() / 2 - dialog.outerHeight() / 2) + $(window).scrollTop());
 	el.remove();
 });
 
@@ -300,8 +305,8 @@ test("position, right bottom on window", function() {
 	var el = $('<div></div>').dialog({ position: "right bottom" });
 	var dialog = el.dialog('widget');
 	var offset = dialog.offset();
-	same(offset.left, $(window).width() - dialog.outerWidth() + $(window).scrollLeft());
-	same(offset.top, $(window).height() - dialog.outerHeight() + $(window).scrollTop());
+	deepEqual(offset.left, $(window).width() - dialog.outerWidth() + $(window).scrollLeft());
+	deepEqual(offset.top, $(window).height() - dialog.outerHeight() + $(window).scrollTop());
 	el.remove();
 });
 
@@ -309,8 +314,8 @@ test("position, right bottom on window w/array", function() {
 	var el = $('<div></div>').dialog({ position: ["right", "bottom"] });
 	var dialog = el.dialog('widget');
 	var offset = dialog.offset();
-	same(offset.left, $(window).width() - dialog.outerWidth() + $(window).scrollLeft());
-	same(offset.top, $(window).height() - dialog.outerHeight() + $(window).scrollTop());
+	deepEqual(offset.left, $(window).width() - dialog.outerWidth() + $(window).scrollLeft());
+	deepEqual(offset.top, $(window).height() - dialog.outerHeight() + $(window).scrollTop());
 	el.remove();
 });
 
@@ -318,8 +323,8 @@ test("position, offset from top left w/array", function() {
 	var el = $('<div></div>').dialog({ position: [10, 10] });
 	var dialog = el.dialog('widget');
 	var offset = dialog.offset();
-	same(offset.left, 10 + $(window).scrollLeft());
-	same(offset.top, 10 + $(window).scrollTop());
+	deepEqual(offset.left, 10 + $(window).scrollLeft());
+	deepEqual(offset.top, 10 + $(window).scrollTop());
 	el.remove();
 });
 
@@ -334,8 +339,8 @@ test("position, right bottom at right bottom via ui.position args", function() {
 	var dialog = el.dialog('widget');
 	var offset = dialog.offset();
 
-	same(offset.left, $(window).width() - dialog.outerWidth() + $(window).scrollLeft());
-	same(offset.top, $(window).height() - dialog.outerHeight() + $(window).scrollTop());
+	deepEqual(offset.left, $(window).width() - dialog.outerWidth() + $(window).scrollLeft());
+	deepEqual(offset.top, $(window).height() - dialog.outerHeight() + $(window).scrollTop());
 	el.remove();
 });
 
@@ -359,8 +364,8 @@ test("position, at another element", function() {
 	var dialog = el.dialog('widget');
 	var offset = dialog.offset();
 
-	same(offset.left, 600);
-	same(offset.top, 400);
+	deepEqual(offset.left, 600);
+	deepEqual(offset.top, 400);
 
 	el.dialog('option', 'position', {
 			my: "left top",
@@ -370,8 +375,8 @@ test("position, at another element", function() {
 
 	var offset = dialog.offset();
 
-	same(offset.left, 610);
-	same(offset.top, 410);
+	deepEqual(offset.left, 610);
+	deepEqual(offset.top, 410);
 
 	el.remove();
 	parent.remove();
@@ -403,27 +408,27 @@ test("title", function() {
 	el = $('<div></div>').dialog();
 		// some browsers return a non-breaking space and some return "&nbsp;"
 		// so we get the text to normalize to the actual non-breaking space
-		equals(dlg().find(".ui-dialog-title").text(), " ", "[default]");
-		equals(el.dialog("option", "title"), "", "option not changed");
+		equal(dlg().find(".ui-dialog-title").text(), " ", "[default]");
+		equal(el.dialog("option", "title"), "", "option not changed");
 	el.remove();
 
-	el = $('<div title="foo"/>').dialog();
-		equals(titleText(), "foo", "title in element attribute");
-		equals(el.dialog("option", "title"), "foo", "option updated from attribute");
+	el = $('<div title="foo">').dialog();
+		equal(titleText(), "foo", "title in element attribute");
+		equal(el.dialog("option", "title"), "foo", "option updated from attribute");
 	el.remove();
 
 	el = $('<div></div>').dialog({ title: 'foo' });
-		equals(titleText(), "foo", "title in init options");
-		equals(el.dialog("option", "title"), "foo", "opiton set from options hash");
+		equal(titleText(), "foo", "title in init options");
+		equal(el.dialog("option", "title"), "foo", "opiton set from options hash");
 	el.remove();
 
-	el = $('<div title="foo"/>').dialog({ title: 'bar' });
-		equals(titleText(), "bar", "title in init options should override title in element attribute");
-		equals(el.dialog("option", "title"), "bar", "opiton set from options hash");
+	el = $('<div title="foo">').dialog({ title: 'bar' });
+		equal(titleText(), "bar", "title in init options should override title in element attribute");
+		equal(el.dialog("option", "title"), "bar", "opiton set from options hash");
 	el.remove();
 
 	el = $('<div></div>').dialog().dialog('option', 'title', 'foo');
-		equals(titleText(), 'foo', 'title after init');
+		equal(titleText(), 'foo', 'title after init');
 	el.remove();
 });
 
@@ -431,13 +436,13 @@ test("width", function() {
 	expect(3);
 
 	el = $('<div></div>').dialog();
-		equals(dlg().width(), 300, "default width");
+		equal(dlg().width(), 300, "default width");
 	el.remove();
 
 	el = $('<div></div>').dialog({width: 437 });
-		equals(dlg().width(), 437, "explicit width");
+		equal(dlg().width(), 437, "explicit width");
 		el.dialog('option', 'width', 438);
-		equals(dlg().width(), 438, 'explicit width after init');
+		equal(dlg().width(), 438, 'explicit width after init');
 	el.remove();
 });
 
