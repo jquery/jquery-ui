@@ -27,24 +27,24 @@ test('events', function() {
 	// onSelect
 	inp.val('').datepicker('show').
 		simulate('keydown', {keyCode: $.simulate.VK_ENTER});
-	equals(selectedThis, inp[0], 'Callback selected this');
-	equals(selectedInst, $.data(inp[0], PROP_NAME), 'Callback selected inst');
-	equals(selectedDate, $.datepicker.formatDate('mm/dd/yy', date),
+	equal(selectedThis, inp[0], 'Callback selected this');
+	equal(selectedInst, $.data(inp[0], PROP_NAME), 'Callback selected inst');
+	equal(selectedDate, $.datepicker.formatDate('mm/dd/yy', date),
 		'Callback selected date');
 	inp.val('').datepicker('show').
 		simulate('keydown', {ctrlKey: true, keyCode: $.simulate.VK_DOWN}).
 		simulate('keydown', {keyCode: $.simulate.VK_ENTER});
 	date.setDate(date.getDate() + 7);
-	equals(selectedDate, $.datepicker.formatDate('mm/dd/yy', date),
+	equal(selectedDate, $.datepicker.formatDate('mm/dd/yy', date),
 		'Callback selected date - ctrl+down');
 	inp.val('').datepicker('show').
 		simulate('keydown', {keyCode: $.simulate.VK_ESC});
-	equals(selectedDate, $.datepicker.formatDate('mm/dd/yy', date),
+	equal(selectedDate, $.datepicker.formatDate('mm/dd/yy', date),
 		'Callback selected date - esc');
     var dateStr = '02/04/2008';
     inp.val(dateStr).datepicker('show').
         simulate('keydown', {keyCode: $.simulate.VK_ENTER});
-    equals(dateStr, selectedDate, 
+    equal(dateStr, selectedDate,
         'onSelect is called after enter keydown');
 	// onChangeMonthYear
 	inp.datepicker('option', {onChangeMonthYear: callback2, onSelect: null}).
@@ -56,28 +56,28 @@ test('events', function() {
 	date.setDate(1);
 	inp.simulate('keydown', {keyCode: $.simulate.VK_PGUP});
 	date.setMonth(date.getMonth() - 1);
-	equals(selectedThis, inp[0], 'Callback change month/year this');
-	equals(selectedInst, $.data(inp[0], PROP_NAME), 'Callback change month/year inst');
-	equals(selectedDate, newMonthYear(date),
+	equal(selectedThis, inp[0], 'Callback change month/year this');
+	equal(selectedInst, $.data(inp[0], PROP_NAME), 'Callback change month/year inst');
+	equal(selectedDate, newMonthYear(date),
 		'Callback change month/year date - pgup');
 	inp.simulate('keydown', {keyCode: $.simulate.VK_PGDN});
 	date.setMonth(date.getMonth() + 1);
-	equals(selectedDate, newMonthYear(date),
+	equal(selectedDate, newMonthYear(date),
 		'Callback change month/year date - pgdn');
 	inp.simulate('keydown', {ctrlKey: true, keyCode: $.simulate.VK_PGUP});
 	date.setFullYear(date.getFullYear() - 1);
-	equals(selectedDate, newMonthYear(date),
+	equal(selectedDate, newMonthYear(date),
 		'Callback change month/year date - ctrl+pgup');
 	inp.simulate('keydown', {ctrlKey: true, keyCode: $.simulate.VK_HOME});
 	date.setFullYear(date.getFullYear() + 1);
-	equals(selectedDate, newMonthYear(date),
+	equal(selectedDate, newMonthYear(date),
 		'Callback change month/year date - ctrl+home');
 	inp.simulate('keydown', {ctrlKey: true, keyCode: $.simulate.VK_PGDN});
 	date.setFullYear(date.getFullYear() + 1);
-	equals(selectedDate, newMonthYear(date),
+	equal(selectedDate, newMonthYear(date),
 		'Callback change month/year date - ctrl+pgdn');
 	inp.datepicker('setDate', new Date(2007, 1 - 1, 26));
-	equals(selectedDate, '2007/1', 'Callback change month/year date - setDate');
+	equal(selectedDate, '2007/1', 'Callback change month/year date - setDate');
 	selectedDate = null;
 	inp.datepicker('setDate', new Date(2007, 1 - 1, 12));
 	ok(selectedDate == null, 'Callback change month/year date - setDate no change');
@@ -86,42 +86,42 @@ test('events', function() {
 		datepicker('hide').val('').datepicker('show').
 		simulate('keydown', {keyCode: $.simulate.VK_PGUP});
 	date.setMonth(date.getMonth() - 14);
-	equals(selectedDate, newMonthYear(date),
+	equal(selectedDate, newMonthYear(date),
 		'Callback change month/year by 2 date - pgup');
 	inp.simulate('keydown', {ctrlKey: true, keyCode: $.simulate.VK_PGUP});
 	date.setMonth(date.getMonth() - 12);
-	equals(selectedDate, newMonthYear(date),
+	equal(selectedDate, newMonthYear(date),
 		'Callback change month/year by 2 date - ctrl+pgup');
 	inp.simulate('keydown', {keyCode: $.simulate.VK_PGDN});
 	date.setMonth(date.getMonth() + 2);
-	equals(selectedDate, newMonthYear(date),
+	equal(selectedDate, newMonthYear(date),
 		'Callback change month/year by 2 date - pgdn');
 	inp.simulate('keydown', {ctrlKey: true, keyCode: $.simulate.VK_PGDN});
 	date.setMonth(date.getMonth() + 12);
-	equals(selectedDate, newMonthYear(date),
+	equal(selectedDate, newMonthYear(date),
 		'Callback change month/year by 2 date - ctrl+pgdn');
 	// onClose
 	inp.datepicker('option', {onClose: callback, onChangeMonthYear: null, stepMonths: 1}).
 		val('').datepicker('show').
 		simulate('keydown', {keyCode: $.simulate.VK_ESC});
-	equals(selectedThis, inp[0], 'Callback close this');
-	equals(selectedInst, $.data(inp[0], PROP_NAME), 'Callback close inst');
-	equals(selectedDate, '', 'Callback close date - esc');
+	equal(selectedThis, inp[0], 'Callback close this');
+	equal(selectedInst, $.data(inp[0], PROP_NAME), 'Callback close inst');
+	equal(selectedDate, '', 'Callback close date - esc');
 	inp.val('').datepicker('show').
 		simulate('keydown', {keyCode: $.simulate.VK_ENTER});
-	equals(selectedDate, $.datepicker.formatDate('mm/dd/yy', new Date()),
+	equal(selectedDate, $.datepicker.formatDate('mm/dd/yy', new Date()),
 		'Callback close date - enter');
 	inp.val('02/04/2008').datepicker('show').
 		simulate('keydown', {keyCode: $.simulate.VK_ESC});
-	equals(selectedDate, '02/04/2008', 'Callback close date - preset');
+	equal(selectedDate, '02/04/2008', 'Callback close date - preset');
 	inp.val('02/04/2008').datepicker('show').
 		simulate('keydown', {ctrlKey: true, keyCode: $.simulate.VK_END});
-	equals(selectedDate, '', 'Callback close date - ctrl+end');
+	equal(selectedDate, '', 'Callback close date - ctrl+end');
 
 	var inp2 = init('#inp2');
 	inp2.datepicker().datepicker('option', {onClose: callback}).datepicker('show');
 	inp.datepicker('show');
-	equals(selectedThis, inp2[0], 'Callback close this');
+	equal(selectedThis, inp2[0], 'Callback close this');
 });
 
 })(jQuery);

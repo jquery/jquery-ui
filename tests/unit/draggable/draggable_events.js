@@ -18,9 +18,9 @@ test("callbacks occurance count", function() {
 
 	drag(el, 10, 10);
 
-	equals(start, 1, "start callback should happen exactly once");
-	equals(dragc, 3, "drag callback should happen exactly once per mousemove");
-	equals(stop, 1, "stop callback should happen exactly once");
+	equal(start, 1, "start callback should happen exactly once");
+	equal(dragc, 3, "drag callback should happen exactly once per mousemove");
+	equal(stop, 1, "stop callback should happen exactly once");
 
 });
 
@@ -37,9 +37,9 @@ test("stopping the start callback", function() {
 
 	drag(el, 10, 10);
 
-	equals(start, 1, "start callback should happen exactly once");
-	equals(dragc, 0, "drag callback should not happen at all");
-	equals(stop, 0, "stop callback should not happen if there wasnt even a start");
+	equal(start, 1, "start callback should happen exactly once");
+	equal(dragc, 0, "drag callback should not happen at all");
+	equal(stop, 0, "stop callback should not happen if there wasnt even a start");
 
 });
 
@@ -56,9 +56,9 @@ test("stopping the drag callback", function() {
 
 	drag(el, 10, 10);
 
-	equals(start, 1, "start callback should happen exactly once");
-	equals(dragc, 1, "drag callback should happen exactly once");
-	equals(stop, 1, "stop callback should happen, as we need to actively stop the drag");
+	equal(start, 1, "start callback should happen exactly once");
+	equal(dragc, 1, "drag callback should happen exactly once");
+	equal(stop, 1, "stop callback should happen, as we need to actively stop the drag");
 
 });
 
