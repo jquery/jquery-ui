@@ -152,6 +152,7 @@ test( "{ event: custom }", function() {
 
 	// ensure old event handlers are unbound
 	element.find( ".ui-accordion-header" ).eq( 1 ).trigger( "custom1" );
+	element.find( ".ui-accordion-header" ).eq( 1 ).trigger( "custom2" );
 	equal( element.accordion( "option", "active" ), 2 );
 	accordion_state( element, 0, 0, 1 );
 
