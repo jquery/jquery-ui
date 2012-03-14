@@ -35,6 +35,9 @@
 			if(options.closable){
 				listJq.addClass('ui-tabs-nav-closable');
 			}
+			//设置panels的父元素引用,提供新面板的插入位置
+			self.panelsWrapperJq=$(self.panels[ 0 ].parentNode);
+			
 			if(advancedTheme){
 				for(var n in advancedTheme){
 					if(advancedTheme[n]){
@@ -73,7 +76,7 @@
 	
 			if ( index >= this.lis.length ) {
 				$li.appendTo( this.list );
-				$panel.appendTo( this.panels[ 0 ].parentNode );		//this.list改为this.panels
+				$panel.appendTo( this.panelsWrapperJq );		//new panel追加到面板父元素里
 			} else {
 				$li.insertBefore( this.lis[ index ] );
 				$panel.insertBefore( this.panels[ index ] );
