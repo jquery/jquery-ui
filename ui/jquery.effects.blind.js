@@ -1,7 +1,7 @@
 /*
  * jQuery UI Effects Blind @VERSION
  *
- * Copyright 2011, AUTHORS.txt (http://jqueryui.com/about)
+ * Copyright 2012, AUTHORS.txt (http://jqueryui.com/about)
  * Dual licensed under the MIT or GPL Version 2 licenses.
  * http://jquery.org/license
  *
@@ -50,7 +50,7 @@ $.effects.effect.blind = function( o, done ) {
 			.css( vertical ? "top" : "left", "auto" )
 			.css({ position: "absolute" });
 
-    animation[ ref2 ] = show ? margin : distance + margin;
+	animation[ ref2 ] = show ? margin : distance + margin;
 	}
 
 	// start at 0 if we are showing

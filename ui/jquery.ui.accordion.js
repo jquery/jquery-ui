@@ -1,7 +1,7 @@
 /*
  * jQuery UI Accordion @VERSION
  *
- * Copyright 2011, AUTHORS.txt (http://jqueryui.com/about)
+ * Copyright 2012, AUTHORS.txt (http://jqueryui.com/about)
  * Dual licensed under the MIT or GPL Version 2 licenses.
  * http://jquery.org/license
  *
@@ -17,7 +17,7 @@ $.widget( "ui.accordion", {
 	version: "@VERSION",
 	options: {
 		active: 0,
-		animated: "slide",
+		animate: {},
 		collapsible: false,
 		event: "click",
 		header: "> li > :first-child,> :not(li):even",
@@ -33,19 +33,17 @@ $.widget( "ui.accordion", {
 	},
 
 	_create: function() {
-		var self = this,
-			options = self.options;
+		var options = this.options;
 
-		self.lastToggle = {};
-		self.element.addClass( "ui-accordion ui-widget ui-helper-reset" );
+		this.prevShow = this.prevHide = $();
+		this.element.addClass( "ui-accordion ui-widget ui-helper-reset" );
 
-		self.headers = self.element.find( options.header )
+		this.headers = this.element.find( options.header )
 			.addClass( "ui-accordion-header ui-helper-reset ui-state-default ui-corner-all" );
-		self._hoverable( self.headers );
-		self._focusable( self.headers );
-		self.headers.find( ":first-child" ).addClass( "ui-accordion-heading" );
+		this._hoverable( this.headers );
+		this._focusable( this.headers );
 
-		self.headers.next()
+		this.headers.next()
 			.addClass( "ui-accordion-content ui-helper-reset ui-widget-content ui-corner-bottom" );
 
 		// don't allow collapsible: false and active: false
@@ -56,27 +54,29 @@ $.widget( "ui.accordion", {
 		if ( options.active < 0 ) {
 			options.active += this.headers.length;
 		}
-		self.active = self._findActive( options.active )
+		this.active = this._findActive( options.active )
 			.addClass( "ui-accordion-header-active ui-state-active" )
-			.toggleClass( "ui-corner-all" )
-			.toggleClass( "ui-corner-top" );
-		self.active.next().addClass( "ui-accordion-content-active" );
+			.toggleClass( "ui-corner-all ui-corner-top" );
+		this.active.next().addClass( "ui-accordion-content-active" );
 
-		self._createIcons();
-		self.refresh();
+		this._createIcons();
+		this.originalHeight = this.element[0].style.height;
+		this.refresh();
 
 		// ARIA
-		self.element.attr( "role", "tablist" );
+		this.element.attr( "role", "tablist" );
 
-		self.headers
+		this.headers
 			.attr( "role", "tab" )
-			.bind( "keydown.accordion", $.proxy( self, "_keydown" ) )
+			// TODO: use _bind()
+			.bind( "keydown.accordion", $.proxy( this, "_keydown" ) )
 			.next()
 				.attr( "role", "tabpanel" );
 
-		self.headers
-			.not( self.active )
+		this.headers
+			.not( this.active )
 			.attr({
+				// TODO: document support for each of these
 				"aria-expanded": "false",
 				"aria-selected": "false",
 				tabIndex: -1
@@ -85,19 +85,14 @@ $.widget( "ui.accordion", {
 				.hide();
 
 		// make sure at least one header is in the tab order
-		if ( !self.active.length ) {
-			self.headers.eq( 0 ).attr( "tabIndex", 0 );
+		if ( !this.active.length ) {
+			this.headers.eq( 0 ).attr( "tabIndex", 0 );
 		} else {
-			self.active.attr({
+			this.active.attr({
 				"aria-expanded": "true",
 				"aria-selected": "true",
 				tabIndex: 0
 			});
-		}
-
-		// only need links in tab order for Safari
-		if ( !$.browser.safari ) {
-			self.headers.find( "a" ).attr( "tabIndex", -1 );
 		}
 
 		this._setupEvents( options.event );
@@ -139,24 +134,20 @@ $.widget( "ui.accordion", {
 		// clean up headers
 		this.headers
 			.unbind( ".accordion" )
-			.removeClass( "ui-accordion-header ui-accordion-header-active ui-accordion-disabled ui-helper-reset ui-state-default ui-corner-all ui-state-active ui-state-disabled ui-corner-top" )
+			.removeClass( "ui-accordion-header ui-accordion-header-active ui-helper-reset ui-state-default ui-corner-all ui-state-active ui-state-disabled ui-corner-top" )
 			.removeAttr( "role" )
 			.removeAttr( "aria-expanded" )
 			.removeAttr( "aria-selected" )
-			.removeAttr( "tabIndex" )
-			.find( "a" )
-				.removeAttr( "tabIndex" )
-			.end()
-			.find( ".ui-accordion-heading" )
-				.removeClass( "ui-accordion-heading" );
+			.removeAttr( "tabIndex" );
 		this._destroyIcons();
 
 		// clean up content panels
 		var contents = this.headers.next()
 			.css( "display", "" )
 			.removeAttr( "role" )
-			.removeClass( "ui-helper-reset ui-widget-content ui-corner-bottom ui-accordion-content ui-accordion-content-active ui-accordion-disabled ui-state-disabled" );
+			.removeClass( "ui-helper-reset ui-widget-content ui-corner-bottom ui-accordion-content ui-accordion-content-active ui-state-disabled" );
 		if ( this.options.heightStyle !== "content" ) {
+			this.element.css( "height", this.originalHeight );
 			contents.css( "height", "" );
 		}
 	},
@@ -170,6 +161,7 @@ $.widget( "ui.accordion", {
 
 		if ( key === "event" ) {
 			if ( this.options.event ) {
+				// TODO: this is incorrect for multiple events (see _setupEvents)
 				this.headers.unbind( this.options.event + ".accordion", this._eventHandler );
 			}
 			this._setupEvents( value );
@@ -192,12 +184,13 @@ $.widget( "ui.accordion", {
 		// #5332 - opacity doesn't cascade to positioned elements in IE
 		// so we need to add the disabled class to the headers and panels
 		if ( key === "disabled" ) {
-			this.headers.add(this.headers.next())
-				.toggleClass( "ui-accordion-disabled ui-state-disabled", !!value );
+			this.headers.add( this.headers.next() )
+				.toggleClass( "ui-state-disabled", !!value );
 		}
 	},
 
 	_keydown: function( event ) {
+		// TODO: remove disabled check when using _bind()
 		if ( this.options.disabled || event.altKey || event.ctrlKey ) {
 			return;
 		}
@@ -230,12 +223,14 @@ $.widget( "ui.accordion", {
 	},
 
 	refresh: function() {
-		var options = this.options,
+		var heightStyle = this.options.heightStyle,
 			parent = this.element.parent(),
 			maxHeight,
 			overflow;
 
-		if ( options.heightStyle === "fill" ) {
+		this.element.css( "height", this.originalHeight );
+
+		if ( heightStyle === "fill" ) {
 			// IE 6 treats height like minHeight, so we need to turn off overflow
 			// in order to get a reliable height
 			// we use the minHeight support test because we assume that only
@@ -268,7 +263,7 @@ $.widget( "ui.accordion", {
 						$( this ).innerHeight() + $( this ).height() ) );
 				})
 				.css( "overflow", "auto" );
-		} else if ( options.heightStyle === "auto" ) {
+		} else if ( heightStyle === "auto" ) {
 			maxHeight = 0;
 			this.headers.next()
 				.each(function() {
@@ -277,7 +272,9 @@ $.widget( "ui.accordion", {
 				.height( maxHeight );
 		}
 
-		return this;
+		if ( heightStyle !== "content" ) {
+			this.element.height( this.element.height() );
+		}
 	},
 
 	_activate: function( index ) {
@@ -304,6 +301,7 @@ $.widget( "ui.accordion", {
 
 	_setupEvents: function( event ) {
 		if ( event ) {
+			// TODO: use _bind()
 			this.headers.bind( event.split( " " ).join( ".accordion " ) + ".accordion",
 				$.proxy( this, "_eventHandler" ) );
 		}
@@ -344,17 +342,23 @@ $.widget( "ui.accordion", {
 		// switch classes
 		active
 			.removeClass( "ui-accordion-header-active ui-state-active ui-corner-top" )
-			.addClass( "ui-corner-all" )
-			.children( ".ui-accordion-header-icon" )
+			.addClass( "ui-corner-all" );
+		if ( options.icons ) {
+			active.children( ".ui-accordion-header-icon" )
 				.removeClass( options.icons.activeHeader )
 				.addClass( options.icons.header );
+		}
+
 		if ( !clickedIsActive ) {
 			clicked
 				.removeClass( "ui-corner-all" )
-				.addClass( "ui-accordion-header-active ui-state-active ui-corner-top" )
-				.children( ".ui-accordion-header-icon" )
+				.addClass( "ui-accordion-header-active ui-state-active ui-corner-top" );
+			if ( options.icons ) {
+				clicked.children( ".ui-accordion-header-icon" )
 					.removeClass( options.icons.header )
 					.addClass( options.icons.activeHeader );
+			}
+
 			clicked
 				.next()
 				.addClass( "ui-accordion-content-active" );
@@ -362,41 +366,20 @@ $.widget( "ui.accordion", {
 	},
 
 	_toggle: function( data ) {
-		var self = this,
-			options = self.options,
-			toShow = data.newContent,
-			toHide = data.oldContent;
+		var toShow = data.newContent,
+			toHide = this.prevShow.length ? this.prevShow : data.oldContent;
 
-		function complete() {
-			self._completed( data );
-		}
+		// handle activating a panel during the animation for another activation
+		this.prevShow.add( this.prevHide ).stop( true, true );
+		this.prevShow = toShow;
+		this.prevHide = toHide;
 
-		if ( options.animated ) {
-			var animations = $.ui.accordion.animations,
-				animation = options.animated,
-				additional;
-
-			if ( !animations[ animation ] ) {
-				additional = {
-					easing: $.easing[ animation ] ? animation : "slide",
-					duration: 700
-				};
-				animation = "slide";
-			}
-
-			animations[ animation ]({
-				widget: self,
-				toShow: toShow,
-				toHide: toHide,
-				prevShow: self.lastToggle.toShow,
-				prevHide: self.lastToggle.toHide,
-				complete: complete,
-				down: toShow.length && ( !toHide.length || ( toShow.index() < toHide.index() ) )
-			}, additional );
+		if ( this.options.animate ) {
+			this._animate( toShow, toHide, data );
 		} else {
 			toHide.hide();
 			toShow.show();
-			complete();
+			this._toggleComplete( data );
 		}
 
 		// TODO assert that the blur and focus triggers are really necessary, remove otherwise
@@ -416,16 +399,50 @@ $.widget( "ui.accordion", {
 			.focus();
 	},
 
-	_completed: function( data ) {
+	_animate: function( toShow, toHide, data ) {
+		var total, easing, duration,
+			that = this,
+			down = toShow.length &&
+				( !toHide.length || ( toShow.index() < toHide.index() ) ),
+			animate = this.options.animate || {},
+			options = down && animate.down || animate,
+			complete = function() {
+				toShow.removeData( "ui-accordion-height" );
+				that._toggleComplete( data );
+			};
+
+		if ( typeof options === "number" ) {
+			duration = options;
+		}
+		if ( typeof options === "string" ) {
+			easing = options;
+		}
+		// fall back from options to animation in case of partial down settings
+		easing = easing || options.easing || animate.easing;
+		duration = duration || options.duration || animate.duration;
+
+		if ( !toHide.size() ) {
+			return toShow.animate( showProps, duration, easing, complete );
+		}
+		if ( !toShow.size() ) {
+			return toHide.animate( hideProps, duration, easing, complete );
+		}
+
+		total = toShow.show().outerHeight();
+		toHide.animate( hideProps, duration, easing );
+		toShow
+			.hide()
+			.data( "ui-accordion-height", {
+				total: total,
+				toHide: toHide
+			})
+			.animate( this.options.heightStyle === "content" ? showProps : showPropsAdjust,
+				duration, easing, complete );
+	},
+
+	_toggleComplete: function( data ) {
 		var toShow = data.newContent,
 			toHide = data.oldContent;
-
-		if ( this.options.heightStyle === "content" ) {
-			toShow.add( toHide ).css({
-				height: "",
-				overflow: ""
-			});
-		}
 
 		// other classes are removed before the animation; this one needs to stay until completed
 		toHide.removeClass( "ui-accordion-content-active" );
@@ -438,123 +455,19 @@ $.widget( "ui.accordion", {
 	}
 });
 
-$.extend( $.ui.accordion, {
-	animations: {
-		slide: function( options, additions ) {
-			if ( options.prevShow || options.prevHide ) {
-				options.prevHide.stop( true, true );
-				options.toHide = options.prevShow;
-			}
-
-			var showOverflow = options.toShow.css( "overflow" ),
-				showOverflowX = options.toHide.css( "overflowX" ),
-				showOverflowY = options.toHide.css( "overflowY" ),
-				hideOverflow = options.toHide.css( "overflow" ),
-				hideOverflowX = options.toHide.css( "overflowX" ),
-				hideOverflowY = options.toHide.css( "overflowY" ),
-				percentDone = 0,
-				showProps = {},
-				hideProps = {},
-				fxAttrs = [ "height", "paddingTop", "paddingBottom" ],
-				originalWidth;
-			options = $.extend({
-				easing: "swing",
-				duration: 300
-			}, options, additions );
-
-			options.widget.lastToggle = options;
-
-			if ( !options.toHide.size() ) {
-				originalWidth = options.toShow[0].style.width;
-				options.toShow
-					.show()
-					.width( options.toShow.width() )
-					.hide()
-					.animate({
-						height: "show",
-						paddingTop: "show",
-						paddingBottom: "show"
-					}, {
-						duration: options.duration,
-						easing: options.easing,
-						complete: function() {
-							options.toShow.width( originalWidth );
-							options.complete();
-						}
-					});
-				return;
-			}
-			if ( !options.toShow.size() ) {
-				options.toHide.animate({
-					height: "hide",
-					paddingTop: "hide",
-					paddingBottom: "hide"
-				}, options );
-				return;
-			}
-			// fix width before calculating height of hidden element
-			var s = options.toShow;
-			originalWidth = s[0].style.width;
-			s.width( s.parent().width()
-				- parseFloat( s.css( "paddingLeft" ) )
-				- parseFloat( s.css( "paddingRight" ) )
-				- ( parseFloat( s.css( "borderLeftWidth" ) ) || 0 )
-				- ( parseFloat( s.css( "borderRightWidth" ) ) || 0 ) );
-
-			$.each( fxAttrs, function( i, prop ) {
-				hideProps[ prop ] = "hide";
-
-				var parts = ( "" + $.css( options.toShow[0], prop ) ).match( /^([\d+-.]+)(.*)$/ ),
-					// work around bug when a panel has no height - #7335
-					propVal = prop === "height" && parts[ 1 ] === "0" ? 1 : parts[ 1 ];
-				showProps[ prop ] = {
-					value: propVal,
-					unit: parts[ 2 ] || "px"
-				};
-			});
-			options.toShow.css({ height: 0, overflow: "hidden" }).show();
-			options.toHide
-				.filter( ":hidden" )
-					.each( options.complete )
-				.end()
-				.filter( ":visible" )
-				.animate( hideProps, {
-				step: function( now, settings ) {
-					if ( settings.prop == "height" || settings.prop == "paddingTop" || settings.prop == "paddingBottom" ) {
-						percentDone = ( settings.end - settings.start === 0 ) ? 0 :
-							( settings.now - settings.start ) / ( settings.end - settings.start );
-					}
-
-					options.toShow[ 0 ].style[ settings.prop ] =
-						( percentDone * showProps[ settings.prop ].value )
-						+ showProps[ settings.prop ].unit;
-				},
-				duration: options.duration,
-				easing: options.easing,
-				complete: function() {
-					options.toShow.css({
-						width: originalWidth,
-						overflow: showOverflow,
-						overflowX: showOverflowX,
-						overflowY: showOverflowY
-					});
-					options.toHide.css({
-						overflow: hideOverflow,
-						overflowX: hideOverflowX,
-						overflowY: hideOverflowY
-					});
-					options.complete();
-				}
-			});
-		},
-		bounceslide: function( options ) {
-			this.slide( options, {
-				easing: options.down ? "easeOutBounce" : "swing",
-				duration: options.down ? 1000 : 200
-			});
-		}
-	}
-});
+$.fx.step.accordionHeight = function( fx ) {
+	var elem = $( fx.elem ),
+		data = elem.data( "ui-accordion-height" );
+	elem.height( data.total - elem.outerHeight() - data.toHide.outerHeight() + elem.height() );
+};
+var hideProps = {},
+	showProps = {},
+	showPropsAdjust = {};
+hideProps.height = hideProps.paddingTop = hideProps.paddingBottom =
+	hideProps.borderTopWidth = hideProps.borderBottomWidth = "hide";
+showProps.height = showProps.paddingTop = showProps.paddingBottom =
+	showProps.borderTopWidth = showProps.borderBottomWidth = "show";
+$.extend( showPropsAdjust, showProps, { accordionHeight: "show" } );
 
 
 
@@ -572,7 +485,7 @@ if ( $.uiBackCompat !== false ) {
 		var _create = prototype._create;
 		prototype._create = function() {
 			if ( this.options.navigation ) {
-				var self = this,
+				var that = this,
 					headers = this.element.find( this.options.header ),
 					content = headers.next(),
 					current = headers.add( content )
@@ -582,7 +495,7 @@ if ( $.uiBackCompat !== false ) {
 				if ( current ) {
 					headers.add( content ).each( function( index ) {
 						if ( $.contains( this, current ) ) {
-							self.options.active = Math.floor( index / 2 );
+							that.options.active = Math.floor( index / 2 );
 							return false;
 						}
 					});
@@ -696,6 +609,40 @@ if ( $.uiBackCompat !== false ) {
 				ret = _trigger.call( this, "change", event, data );
 			}
 			return ret;
+		};
+	}( jQuery, jQuery.ui.accordion.prototype ) );
+
+	// animated option
+	// NOTE: this only provides support for "slide", "bounceslide", and easings
+	// not the full $.ui.accordion.animations API
+	(function( $, prototype ) {
+		$.extend( prototype.options, {
+			animate: null,
+			animated: "slide"
+		});
+
+		var _create = prototype._create;
+		prototype._create = function() {
+			var options = this.options;
+			if ( options.animate === null ) {
+				if ( !options.animated ) {
+					options.animate = false;
+				} else if ( options.animated === "slide" ) {
+					options.animate = 300;
+				} else if ( options.animated === "bounceslide" ) {
+					options.animate = {
+						duration: 200,
+						down: {
+							easing: "easeOutBounce",
+							duration: 1000
+						}
+					}
+				} else {
+					options.animate = options.animated;
+				}
+			}
+
+			_create.call( this );
 		};
 	}( jQuery, jQuery.ui.accordion.prototype ) );
 }

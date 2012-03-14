@@ -8,7 +8,7 @@ test( "offset", function() {
 		offset: "10",
 		collision: "none"
 	});
-	same( $( "#elx" ).offset(), { top: 70, left: 50 }, "single value" );
+	deepEqual( $( "#elx" ).offset(), { top: 70, left: 50 }, "single value" );
 
 	$( "#elx" ).position({
 		my: "left top",
@@ -17,7 +17,7 @@ test( "offset", function() {
 		offset: "5 -3",
 		collision: "none"
 	});
-	same( $( "#elx" ).offset(), { top: 57, left: 45 }, "two values" );
+	deepEqual( $( "#elx" ).offset(), { top: 57, left: 45 }, "two values" );
 
 	$( "#elx" ).position({
 		my: "left top",
@@ -26,7 +26,7 @@ test( "offset", function() {
 		offset: "5px -3px",
 		collision: "none"
 	});
-	same( $( "#elx" ).offset(), { top: 57, left: 45 }, "with units" );
+	deepEqual( $( "#elx" ).offset(), { top: 57, left: 45 }, "with units" );
 });
 
 }( jQuery ) );

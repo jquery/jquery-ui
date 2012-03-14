@@ -1,7 +1,7 @@
 /*
  * jQuery UI Position @VERSION
  *
- * Copyright 2011, AUTHORS.txt (http://jqueryui.com/about)
+ * Copyright 2012, AUTHORS.txt (http://jqueryui.com/about)
  * Dual licensed under the MIT or GPL Version 2 licenses.
  * http://jquery.org/license
  *
@@ -152,13 +152,13 @@ $.fn.position = function( options ) {
 		var elem = $( this ),
 			elemWidth = elem.outerWidth(),
 			elemHeight = elem.outerHeight(),
-			marginLeft = parseInt( $.curCSS( this, "marginLeft", true ) ) || 0,
-			marginTop = parseInt( $.curCSS( this, "marginTop", true ) ) || 0,
+			marginLeft = parseInt( $.css( this, "marginLeft" ) ) || 0,
+			marginTop = parseInt( $.css( this, "marginTop" ) ) || 0,
 			scrollInfo = $.position.getScrollInfo( within ),
 			collisionWidth = elemWidth + marginLeft +
-				( parseInt( $.curCSS( this, "marginRight", true ) ) || 0 ) + scrollInfo.width,
+				( parseInt( $.css( this, "marginRight" ) ) || 0 ) + scrollInfo.width,
 			collisionHeight = elemHeight + marginTop +
-				( parseInt( $.curCSS( this, "marginBottom", true ) ) || 0 ) + scrollInfo.height,
+				( parseInt( $.css( this, "marginBottom" ) ) || 0 ) + scrollInfo.height,
 			position = $.extend( {}, basePosition ),
 			myOffset = [
 				parseInt( offsets.my[ 0 ], 10 ) *
@@ -414,7 +414,7 @@ $.ui.position = {
 
 // fraction support test
 (function () {
-	var testElement, testElementParent, testElementStyle, offsetLeft, i
+	var testElement, testElementParent, testElementStyle, offsetLeft, i,
 		body = document.getElementsByTagName( "body" )[ 0 ],
 		div = document.createElement( "div" );
 

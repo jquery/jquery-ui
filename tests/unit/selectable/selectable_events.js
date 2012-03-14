@@ -11,7 +11,7 @@ test("start", function() {
 	el.selectable({
 		start: function(ev, ui) {
 			ok(true, "drag fired start callback");
-			equals(this, el[0], "context of callback");
+			equal(this, el[0], "context of callback");
 		}
 	});
 	el.simulate("drag", 20, 20);
@@ -23,7 +23,7 @@ test("stop", function() {
 	el.selectable({
 		start: function(ev, ui) {
 			ok(true, "drag fired stop callback");
-			equals(this, el[0], "context of callback");
+			equal(this, el[0], "context of callback");
 		}
 	});
 	el.simulate("drag", 20, 20);

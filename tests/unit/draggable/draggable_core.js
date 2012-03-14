@@ -19,7 +19,7 @@ var moved = function (dx, dy, msg) {
 	msg = msg ? msg + "." : "";
 	var actual = { left: offsetAfter.left, top: offsetAfter.top };
 	var expected = { left: offsetBefore.left + dx, top: offsetBefore.top + dy };
-	same(actual, expected, 'dragged[' + dragged.dx + ', ' + dragged.dy + '] ' + msg);
+	deepEqual(actual, expected, 'dragged[' + dragged.dx + ', ' + dragged.dy + '] ' + msg);
 }
 
 function restoreScroll(what) {

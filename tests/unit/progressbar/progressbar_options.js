@@ -7,7 +7,7 @@ module("progressbar: options");
 
 test("{ value : 0 }, default", function() {
 	$("#progressbar").progressbar();
-	same( 0, $("#progressbar").progressbar("value") );
+	deepEqual( 0, $("#progressbar").progressbar("value") );
 });
 
 // Ticket #7231 - valueDiv should be hidden when value is at 0%
@@ -31,21 +31,21 @@ test("{ value : 5 }", function() {
 	$("#progressbar").progressbar({
 		value: 5
 	});
-	same( 5, $("#progressbar").progressbar("value") );
+	deepEqual( 5, $("#progressbar").progressbar("value") );
 });
 
 test("{ value : -5 }", function() {
 	$("#progressbar").progressbar({
 		value: -5
 	});
-	same( 0, $("#progressbar").progressbar("value") );
+	deepEqual( 0, $("#progressbar").progressbar("value") );
 });
 
 test("{ value : 105 }", function() {
 	$("#progressbar").progressbar({
 		value: 105
 	});
-	same( 100, $("#progressbar").progressbar("value") );
+	deepEqual( 100, $("#progressbar").progressbar("value") );
 });
 
 test("{ max : 5, value : 10 }", function() {
@@ -53,7 +53,7 @@ test("{ max : 5, value : 10 }", function() {
 		max: 5,
 		value: 10
 	});
-	same( 5, $("#progressbar").progressbar("value") );
+	deepEqual( 5, $("#progressbar").progressbar("value") );
 });
 
 })(jQuery);
