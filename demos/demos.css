@@ -2,6 +2,10 @@ body {
 	font-size: 62.5%;
 }
 
+.ui-widget {
+	font-size: 1.1em;
+}
+
 table {
 	font-size: 1em;
 }
