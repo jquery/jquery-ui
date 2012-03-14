@@ -4,7 +4,7 @@ module( "tooltip: options" );
 
 test( "content: default", function() {
 	var element = $( "#tooltipped1" ).tooltip().tooltip( "open" );
-	same( $( "#" + element.attr( "aria-describedby" ) ).text(), "anchortitle" );
+	deepEqual( $( "#" + element.attr( "aria-describedby" ) ).text(), "anchortitle" );
 });
 
 test( "content: return string", function() {
@@ -13,7 +13,7 @@ test( "content: return string", function() {
 			return "customstring";
 		}
 	}).tooltip( "open" );
-	same( $( "#" + element.attr( "aria-describedby" ) ).text(), "customstring" );
+	deepEqual( $( "#" + element.attr( "aria-describedby" ) ).text(), "customstring" );
 });
 
 test( "content: return jQuery", function() {
@@ -22,7 +22,7 @@ test( "content: return jQuery", function() {
 			return $( "<div>" ).html( "cu<b>s</b>tomstring" );
 		}
 	}).tooltip( "open" );
-	same( $( "#" + element.attr( "aria-describedby" ) ).text(), "customstring" );
+	deepEqual( $( "#" + element.attr( "aria-describedby" ) ).text(), "customstring" );
 });
 
 asyncTest( "content: sync + async callback", function() {
@@ -30,11 +30,11 @@ asyncTest( "content: sync + async callback", function() {
 	var element = $( "#tooltipped1" ).tooltip({
 		content: function( response ) {
 			setTimeout(function() {
-				same( $( "#" + element.attr("aria-describedby") ).text(), "loading..." );
+				deepEqual( $( "#" + element.attr("aria-describedby") ).text(), "loading..." );
 
 				response( "customstring2" );
 				setTimeout(function() {
-					same( $( "#" + element.attr("aria-describedby") ).text(), "customstring2" );
+					deepEqual( $( "#" + element.attr("aria-describedby") ).text(), "customstring2" );
 					start();
 				}, 13 );
 			}, 13 );
@@ -52,12 +52,12 @@ test( "items", function() {
 	var event = $.Event( "mouseenter" );
 	event.target = $( "#fixture-span" )[ 0 ];
 	element.tooltip( "open", event );
-	same( $( "#" + $( "#fixture-span" ).attr( "aria-describedby" ) ).text(), "title-text" );
+	deepEqual( $( "#" + $( "#fixture-span" ).attr( "aria-describedby" ) ).text(), "title-text" );
 
 	// make sure default [title] doesn't get used
 	event.target = $( "#tooltipped1" )[ 0 ];
 	element.tooltip( "open", event );
-	same( $( "#tooltipped1" ).attr( "aria-describedby" ), undefined );
+	deepEqual( $( "#tooltipped1" ).attr( "aria-describedby" ), undefined );
 
 	element.tooltip( "destroy" );
 });

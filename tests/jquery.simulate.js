@@ -1,60 +1,63 @@
 /*
  * jquery.simulate - simulate browser mouse and keyboard events
  *
- * Copyright 2011, AUTHORS.txt (http://jqueryui.com/about)
+ * Copyright 2012, AUTHORS.txt (http://jqueryui.com/about)
  * Dual licensed under the MIT or GPL Version 2 licenses.
  * http://jquery.org/license
- *
  */
 
 ;(function( $ ) {
 
-$.fn.extend({
-	simulate: function( type, options ) {
-		return this.each(function() {
-			var opt = $.extend( {}, $.simulate.defaults, options );
-			new $.simulate( this, type, opt );
-		});
-	}
-});
+var rkeyEvent = /^key/,
+	rmouseEvent = /^(?:mouse|contextmenu)|click/;
 
-$.simulate = function( el, type, options ) {
-	this.target = el;
+$.fn.simulate = function( type, options ) {
+	return this.each(function() {
+		new $.simulate( this, type, options );
+	});
+};
+
+$.simulate = function( elem, type, options ) {
+	var method = $.camelCase( "simulate-" + type );
+
+	this.target = elem;
 	this.options = options;
 
-	if ( type === "drag" ) {
-		this[ type ].apply( this, [ this.target, options ] );
-	} else if ( type === "focus" || type === "blur" ) {
-		this[ type ]();
+	if ( this[ method ] ) {
+		this[ method ]();
 	} else {
-		this.simulateEvent( el, type, options );
+		this.simulateEvent( elem, type, options );
 	}
 };
 
 $.extend( $.simulate.prototype, {
-	simulateEvent: function( el, type, options ) {
-		var evt = this.createEvent( type, options );
-		this.dispatchEvent( el, type, evt, options );
-		return evt;
+	simulateEvent: function( elem, type, options ) {
+		var event = this.createEvent( type, options );
+		this.dispatchEvent( elem, type, event, options );
 	},
+
 	createEvent: function( type, options ) {
-		if ( /^mouse(over|out|down|up|move)|(dbl)?click$/.test( type ) ) {
+		if ( rkeyEvent.test( type ) ) {
+			return this.keyEvent( type, options );
+		}
+
+		if ( rmouseEvent.test( type ) ) {
 			return this.mouseEvent( type, options );
-		} else if ( /^key(up|down|press)$/.test( type ) ) {
-			return this.keyboardEvent( type, options );
 		}
 	},
+
 	mouseEvent: function( type, options ) {
-		var evt;
-		var e = $.extend({
+		var event, eventDoc, doc, body;
+		options = $.extend({
 			bubbles: true,
 			cancelable: (type !== "mousemove"),
 			view: window,
 			detail: 0,
 			screenX: 0,
 			screenY: 0,
-			clientX: 0,
-			clientY: 0,
+			// TODO: default clientX/Y to a position within the target element
+			clientX: 1,
+			clientY: 1,
 			ctrlKey: false,
 			altKey: false,
 			shiftKey: false,
@@ -63,25 +66,50 @@ $.extend( $.simulate.prototype, {
 			relatedTarget: undefined
 		}, options );
 
-		var relatedTarget = $( e.relatedTarget )[0];
+		if ( document.createEvent ) {
+			event = document.createEvent( "MouseEvents" );
+			event.initMouseEvent( type, options.bubbles, options.cancelable,
+				options.view, options.detail,
+				options.screenX, options.screenY, options.clientX, options.clientY,
+				options.ctrlKey, options.altKey, options.shiftKey, options.metaKey,
+				options.button, options.relatedTarget || document.body.parentNode );
 
-		if ( $.isFunction( document.createEvent ) ) {
-			evt = document.createEvent( "MouseEvents" );
-			evt.initMouseEvent( type, e.bubbles, e.cancelable, e.view, e.detail,
-				e.screenX, e.screenY, e.clientX, e.clientY,
-				e.ctrlKey, e.altKey, e.shiftKey, e.metaKey,
-				e.button, e.relatedTarget || document.body.parentNode );
+			// IE 9+ creates events with pageX and pageY set to 0.
+			// Trying to modify the properties throws an error,
+			// so we define getters to return the correct values.
+			if ( event.pageX === 0 && event.pageY === 0 && Object.defineProperty ) {
+				eventDoc = event.relatedTarget.ownerDocument || document;
+				doc = eventDoc.documentElement;
+				body = eventDoc.body;
+
+				Object.defineProperty( event, "pageX", {
+					get: function() {
+						return options.clientX +
+							( doc && doc.scrollLeft || body && body.scrollLeft || 0 ) -
+							( doc && doc.clientLeft || body && body.clientLeft || 0 );
+					}
+				});
+				Object.defineProperty( event, "pageY", {
+					get: function() {
+						return options.clientY +
+							( doc && doc.scrollTop || body && body.scrollTop || 0 ) -
+							( doc && doc.clientTop || body && body.clientTop || 0 );
+					}
+				});
+			}
 		} else if ( document.createEventObject ) {
-			evt = document.createEventObject();
-			$.extend( evt, e );
-			evt.button = { 0:1, 1:4, 2:2 }[evt.button] || evt.button;
+			event = document.createEventObject();
+			$.extend( event, options );
+			// TODO: what is this mapping for?
+			event.button = { 0:1, 1:4, 2:2 }[ event.button ] || event.button;
 		}
-		return evt;
-	},
-	keyboardEvent: function( type, options ) {
-		var evt;
 
-		var e = $.extend({
+		return event;
+	},
+
+	keyEvent: function( type, options ) {
+		var event;
+		options = $.extend({
 			bubbles: true,
 			cancelable: true,
 			view: window,
@@ -93,75 +121,51 @@ $.extend( $.simulate.prototype, {
 			charCode: undefined
 		}, options );
 
-		if ( $.isFunction( document.createEvent ) ) {
+		if ( document.createEvent ) {
 			try {
-				evt = document.createEvent( "KeyEvents" );
-				evt.initKeyEvent( type, e.bubbles, e.cancelable, e.view,
-					e.ctrlKey, e.altKey, e.shiftKey, e.metaKey,
-					e.keyCode, e.charCode );
+				event = document.createEvent( "KeyEvents" );
+				event.initKeyEvent( type, options.bubbles, options.cancelable, options.view,
+					options.ctrlKey, options.altKey, options.shiftKey, options.metaKey,
+					options.keyCode, options.charCode );
+			// TODO: what is this supporting?
 			} catch( err ) {
-				evt = document.createEvent( "Events" );
-				evt.initEvent( type, e.bubbles, e.cancelable );
-				$.extend(evt, {
-					view: e.view,
-					ctrlKey: e.ctrlKey,
-					altKey: e.altKey,
-					shiftKey: e.shiftKey,
-					metaKey: e.metaKey,
-					keyCode: e.keyCode,
-					charCode: e.charCode
+				event = document.createEvent( "Events" );
+				event.initEvent( type, options.bubbles, options.cancelable );
+				$.extend( event, {
+					view: options.view,
+					ctrlKey: options.ctrlKey,
+					altKey: options.altKey,
+					shiftKey: options.shiftKey,
+					metaKey: options.metaKey,
+					keyCode: options.keyCode,
+					charCode: options.charCode
 				});
 			}
 		} else if ( document.createEventObject ) {
-			evt = document.createEventObject();
-			$.extend( evt, e );
+			event = document.createEventObject();
+			$.extend( event, options );
 		}
+
+		// TODO: can we hook into core's logic?
 		if ( $.browser.msie || $.browser.opera ) {
-			evt.keyCode = (e.charCode > 0) ? e.charCode : e.keyCode;
-			evt.charCode = undefined;
+			// TODO: is charCode ever <0 ? Can we just use charCode || keyCode?
+			event.keyCode = (options.charCode > 0) ? options.charCode : options.keyCode;
+			event.charCode = undefined;
 		}
-		return evt;
+
+		return event;
 	},
 
-	dispatchEvent: function( el, type, evt ) {
-		if ( el.dispatchEvent ) {
-			el.dispatchEvent( evt );
-		} else if ( el.fireEvent ) {
-			el.fireEvent( "on" + type, evt );
+	// TODO: does this need type? Can't we just check event.type?
+	dispatchEvent: function( elem, type, event ) {
+		if ( elem.dispatchEvent ) {
+			elem.dispatchEvent( event );
+		} else if ( elem.fireEvent ) {
+			elem.fireEvent( "on" + type, event );
 		}
-		return evt;
 	},
 
-	drag: function( el ) {
-		var self = this,
-			center = this.findCenter(this.target),
-			options = this.options,
-			x = Math.floor( center.x ),
-			y = Math.floor( center.y ), 
-			dx = options.dx || 0,
-			dy = options.dy || 0,
-			target = this.target,
-			coord = { clientX: x, clientY: y };
-		this.simulateEvent( target, "mousedown", coord );
-		coord = { clientX: x + 1, clientY: y + 1 };
-		this.simulateEvent( document, "mousemove", coord );
-		coord = { clientX: x + dx, clientY: y + dy };
-		this.simulateEvent( document, "mousemove", coord );
-		this.simulateEvent( document, "mousemove", coord );
-		this.simulateEvent( target, "mouseup", coord );
-		this.simulateEvent( target, "click", coord );
-	},
-	findCenter: function( el ) {
-		var el = $( this.target ),
-			o = el.offset(),
-			d = $( document );
-		return {
-			x: o.left + el.outerWidth() / 2 - d.scrollLeft(),
-			y: o.top + el.outerHeight() / 2 - d.scrollTop()
-		};
-	},
-
-	focus: function() {
+	simulateFocus: function() {
 		var focusinEvent,
 			triggered = false,
 			element = $( this.target );
@@ -182,7 +186,7 @@ $.extend( $.simulate.prototype, {
 		element.unbind( "focus", trigger );
 	},
 
-	blur: function() {
+	simulateBlur: function() {
 		var focusoutEvent,
 			triggered = false,
 			element = $( this.target );
@@ -214,21 +218,42 @@ $.extend( $.simulate.prototype, {
 	}
 });
 
-$.extend( $.simulate, {
-	defaults: {
-		speed: "sync"
-	},
-	VK_TAB: 9,
-	VK_ENTER: 13,
-	VK_ESC: 27,
-	VK_PGUP: 33,
-	VK_PGDN: 34,
-	VK_END: 35,
-	VK_HOME: 36,
-	VK_LEFT: 37,
-	VK_UP: 38,
-	VK_RIGHT: 39,
-	VK_DOWN: 40
+
+
+/** complex events **/
+
+function findCenter( elem ) {
+	var offset,
+		document = $( elem.ownerDocument );
+	elem = $( elem );
+	offset = elem.offset();
+	
+	return {
+		x: offset.left + elem.outerWidth() / 2 - document.scrollLeft(),
+		y: offset.top + elem.outerHeight() / 2 - document.scrollTop()
+	};
+}
+
+$.extend( $.simulate.prototype, {
+	simulateDrag: function() {
+		var target = this.target,
+			options = this.options,
+			center = findCenter( target ),
+			x = Math.floor( center.x ),
+			y = Math.floor( center.y ), 
+			dx = options.dx || 0,
+			dy = options.dy || 0,
+			target = this.target,
+			coord = { clientX: x, clientY: y };
+		this.simulateEvent( target, "mousedown", coord );
+		coord = { clientX: x + 1, clientY: y + 1 };
+		this.simulateEvent( document, "mousemove", coord );
+		coord = { clientX: x + dx, clientY: y + dy };
+		this.simulateEvent( document, "mousemove", coord );
+		this.simulateEvent( document, "mousemove", coord );
+		this.simulateEvent( target, "mouseup", coord );
+		this.simulateEvent( target, "click", coord );
+	}
 });
 
 })( jQuery );

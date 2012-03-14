@@ -68,7 +68,10 @@ $.each([
 			ok( menu.is( ":visible" ), "menu is visible after delay" );
 			element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
 			element.simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
-			element.simulate( "blur" );
+			// blur must be async for IE to handle it properly
+			setTimeout(function() {
+				element.simulate( "blur" );
+			}, 1 );
 		}, 50 );
 	});
 });

@@ -1,7 +1,7 @@
 /*
  * jQuery UI Dialog @VERSION
  *
- * Copyright 2011, AUTHORS.txt (http://jqueryui.com/about)
+ * Copyright 2012, AUTHORS.txt (http://jqueryui.com/about)
  * Dual licensed under the MIT or GPL Version 2 licenses.
  * http://jquery.org/license
  *
@@ -77,8 +77,11 @@ $.widget("ui.dialog", {
 		// #5742 - .attr() might return a DOMElement
 		if ( typeof this.originalTitle !== "string" ) {
 			this.originalTitle = "";
-		}
-
+		}		
+		this.oldPosition = { 
+			parent: this.element.parent(), 
+			index: this.element.parent().children().index( this.element ) 
+		};
 		this.options.title = this.options.title || this.originalTitle;
 		var self = this,
 			options = self.options,
@@ -168,7 +171,8 @@ $.widget("ui.dialog", {
 	},
 
 	_destroy: function() {
-		var self = this;
+		var self = this, next, 
+			oldPosition = this.oldPosition;
 
 		if ( self.overlay ) {
 			self.overlay.destroy();
@@ -183,6 +187,13 @@ $.widget("ui.dialog", {
 		if ( self.originalTitle ) {
 			self.element.attr( "title", self.originalTitle );
 		}
+		
+		next = oldPosition.parent.children().eq( oldPosition.index );
+		if ( next.length ) {
+			next.before( self.element );
+		} else {
+			oldPosition.parent.append( self.element );
+		}		
 	},
 
 	widget: function() {
@@ -625,7 +636,7 @@ $.widget("ui.dialog", {
 				height: "auto",
 				width: options.width
 			})
-			.height();
+			.outerHeight();
 		minContentHeight = Math.max( 0, options.minHeight - nonContentHeight );
 
 		if ( options.height === "auto" ) {

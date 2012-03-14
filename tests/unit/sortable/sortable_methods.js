@@ -17,7 +17,7 @@ var drag = function(handle, dx, dy) {
 
 var sort = function(handle, dx, dy, index, msg) {
 	drag(handle, dx, dy);
-	equals($(handle).parent().children().index(handle), index, msg);
+	equal($(handle).parent().children().index(handle), index, msg);
 }
 
 module("sortable: methods");
@@ -59,7 +59,7 @@ test("destroy", function() {
 
 	var expected = $('<div></div>').sortable(),
 		actual = expected.sortable('destroy');
-	equals(actual, expected, 'destroy is chainable');
+	equal(actual, expected, 'destroy is chainable');
 });
 
 test("enable", function() {
@@ -69,18 +69,18 @@ test("enable", function() {
 	sort($("li", el)[0], 0, 40, 0, '.sortable({ disabled: true })');
 
 	el.sortable("enable");
-	equals(el.sortable("option", "disabled"), false, "disabled option getter");
+	equal(el.sortable("option", "disabled"), false, "disabled option getter");
 
 	el.sortable("destroy");
 	el.sortable({ disabled: true });
 	el.sortable("option", "disabled", false);
-	equals(el.sortable("option", "disabled"), false, "disabled option setter");
+	equal(el.sortable("option", "disabled"), false, "disabled option setter");
 
 	sort($("li", el)[0], 0, 40, 2, '.sortable("option", "disabled", false)');
-	
+
 	var expected = $('<div></div>').sortable(),
 		actual = expected.sortable('enable');
-	equals(actual, expected, 'enable is chainable');
+	equal(actual, expected, 'enable is chainable');
 });
 
 test("disable", function() {
@@ -96,13 +96,13 @@ test("disable", function() {
 	el.sortable({ disabled: false });
 	sort($("li", el)[0], 0, 40, 2, '.sortable({ disabled: false })');
 	el.sortable("option", "disabled", true);
-	equals(el.sortable("option", "disabled"), true, "disabled option setter");
+	equal(el.sortable("option", "disabled"), true, "disabled option setter");
 	ok(el.sortable("widget").is(":not(.ui-state-disabled)"), "sortable element does not get ui-state-disabled since it's an interaction");
 	sort($("li", el)[0], 0, 40, 0, '.sortable("option", "disabled", true)');
-	
+
 	var expected = $('<div></div>').sortable(),
 		actual = expected.sortable('disable');
-	equals(actual, expected, 'disable is chainable');
+	equal(actual, expected, 'disable is chainable');
 });
 
 })(jQuery);

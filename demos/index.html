@@ -21,8 +21,6 @@
 	<script src="../ui/jquery.ui.droppable.js"></script>
 	<script src="../ui/jquery.ui.mask.js"></script>
 	<script src="../ui/jquery.ui.menu.js"></script>
-	<script src="../ui/jquery.ui.menubar.js"></script>
-	<script src="../ui/jquery.ui.popup.js"></script>
 	<script src="../ui/jquery.ui.position.js"></script>
 	<script src="../ui/jquery.ui.progressbar.js"></script>
 	<script src="../ui/jquery.ui.resizable.js"></script>
@@ -72,6 +70,7 @@
 	<script src="../ui/i18n/jquery.ui.datepicker-fr-CH.js"></script>
 	<script src="../ui/i18n/jquery.ui.datepicker-gl.js"></script>
 	<script src="../ui/i18n/jquery.ui.datepicker-he.js"></script>
+	<script src="../ui/i18n/jquery.ui.datepicker-hi.js"></script>
 	<script src="../ui/i18n/jquery.ui.datepicker-hr.js"></script>
 	<script src="../ui/i18n/jquery.ui.datepicker-hu.js"></script>
 	<script src="../ui/i18n/jquery.ui.datepicker-hy.js"></script>
@@ -80,6 +79,7 @@
 	<script src="../ui/i18n/jquery.ui.datepicker-it.js"></script>
 	<script src="../ui/i18n/jquery.ui.datepicker-ja.js"></script>
 	<script src="../ui/i18n/jquery.ui.datepicker-kk.js"></script>
+	<script src="../ui/i18n/jquery.ui.datepicker-km.js"></script>
 	<script src="../ui/i18n/jquery.ui.datepicker-ko.js"></script>
 	<script src="../ui/i18n/jquery.ui.datepicker-lb.js"></script>
 	<script src="../ui/i18n/jquery.ui.datepicker-lt.js"></script>
@@ -113,7 +113,7 @@
 	<script src="../ui/i18n/jquery.ui.datepicker-zh-TW.js"></script>
 	<script>
 	$(function() {
-		
+
 		$('.left-nav a').click(function(ev) {
 			window.location.hash = this.href.replace(/.+\/([^\/]+)\/index\.html/,'$1') + '|default';
 			loadPage(this.href);
@@ -121,20 +121,20 @@
 			$(this).addClass('selected');
 			ev.preventDefault();
 		});
-		
+
 		if (window.location.hash) {
 			if (window.location.hash.indexOf('|') === -1) {
-				window.location.hash += '|default';	
-			}			
+				window.location.hash += '|default';
+			}
 			var path = window.location.href.replace(/(index\.html)?#/,'');
 			path = path.replace('\|','/') + '.html';
 			loadPage(path);
-		}		
+		}
 
-		function loadPage(path) {			
+		function loadPage(path) {
 			var section = path.replace(/\/[^\/]+\.html/,'');
 			var header = section.replace(/.+\/([^\/]+)/,'$1').replace(/_/, ' ');
-			
+
 			$('td.normal div.normal')
 				.empty()
 				.append('<h4 class="demo-subheader">Functional demo:</h4>')
@@ -150,7 +150,7 @@
 								$(this).click(function() {
 
 									resetDemos();
-									
+
 									$(this).parents('ul').find('li').removeClass('demo-config-on');
 									$(this).parent().addClass('demo-config-on');
 									$('#demo-notes').fadeOut();
@@ -169,8 +169,8 @@
 								$('#demo-config-menu a').each(function(){
 									if (this.href.indexOf(demo + '.html') !== -1) {
 										$(this).parents('ul').find('li').removeClass('demo-config-on');
-										$(this).parent().addClass('demo-config-on');									
-										loadDemo(this.href);										
+										$(this).parent().addClass('demo-config-on');
+										loadDemo(this.href);
 									}
 								});
 							}
@@ -186,10 +186,10 @@
 					.end()
 				.end()
 			;
-			
+
 			resetDemos();
 		}
-				
+
 		function loadDemo(path) {
 			var directory = path.match(/([^\/]+)\/[^\/\.]+\.html$/)[1];
 			$.get(path, function(data) {
@@ -209,7 +209,7 @@
 				$('#demo-link a').attr('href', path);
 				updateDemoNotes();
 				updateDemoSource(source);
-				
+
 				if (/default.html$/.test(path)) {
 					$.get("documentation/docs-" + path.match(/demos\/(.+)\//)[1] + ".html", function(html) {
 						$("#demo-source").after(html);
@@ -229,9 +229,9 @@
 								return false;
 							});
 						});
-					});
+					}, "html" );
 				}
-			});
+			}, "html" );
 		}
 
 		function updateDemoNotes() {
@@ -243,7 +243,7 @@
 			$('#demo-notes').show();
 			notes.hide();
 		}
-		
+
 		function updateDemoSource(source) {
 			if ($('#demo-source').length == 0) {
 				$('<div id="demo-source"><a href="#" class="source-closed">View Source</a><div><pre><code></code></pre></div></div>').insertAfter('#demo-notes');
@@ -259,12 +259,12 @@
 
 			$('#demo-source code').empty().text(cleanedSource);
 		}
-		
+
 		function resetDemos() {
 			$.datepicker.setDefaults($.extend({showMonthAfterYear: false}, $.datepicker.regional['']));
-			$(".ui-dialog-content").remove();			
+			$(".ui-dialog-content").remove();
 		}
-				
+
 	});
 	</script>
 </head>
@@ -288,8 +288,6 @@
 					<dd><a href="dialog/index.html">Dialog</a></dd>
 					<dd><a href="mask/index.html">Mask</a></dd>
 					<dd><a href="menu/index.html">Menu</a></dd>
-					<dd><a href="menubar/index.html">Menubar</a></dd>
-					<dd><a href="popup/index.html">Popup</a></dd>
 					<dd><a href="progressbar/index.html">Progressbar</a></dd>
 					<dd><a href="slider/index.html">Slider</a></dd>
 					<dd><a href="spinner/index.html">Spinner</a></dd>
@@ -311,7 +309,7 @@
                     <dd><a href="widget/index.html">Widget</a></dd>
 				<dt>About jQuery UI</dt>
 					<dd><a href="http://jqueryui.com/docs/Getting_Started">Getting Started</a></dd>
-					<dd><a href="http://jqueryui.com/docs/Upgrade_Guide">Upgrade Guide</a></dd>					
+					<dd><a href="http://jqueryui.com/docs/Upgrade_Guide">Upgrade Guide</a></dd>
 					<dd><a href="http://jqueryui.com/docs/Changelog">Changelog</a></dd>
 					<dd><a href="http://jqueryui.com/docs/Roadmap">Roadmap</a></dd>
 					<dd><a href="http://jqueryui.com/docs/Subversion">Subversion Access</a></dd>
@@ -332,7 +330,7 @@
 					<p>
 						These demos showcase some common uses of each jQuery UI plugin. Simply copy and paste code from the demos to get started. Have fun playing with them.
 					</p>
-				
+
 			</div>
 
 		</td>

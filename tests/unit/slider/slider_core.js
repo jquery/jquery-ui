@@ -28,9 +28,9 @@ test("keydown HOME on handle sets value to min", function() {
 	el.slider("value", 0);
 
 	handle().simulate("keydown", { keyCode: $.ui.keyCode.HOME });
-	equals(el.slider("value"), options.min);
+	equal(el.slider("value"), options.min);
 
-	el.slider('destroy');	
+	el.slider('destroy');
 
 	el = $('<div></div>');
 	options = {
@@ -44,7 +44,7 @@ test("keydown HOME on handle sets value to min", function() {
 	el.slider("value", 0);
 
 	handle().simulate("keydown", { keyCode: $.ui.keyCode.HOME });
-	equals(el.slider("value"), options.min);
+	equal(el.slider("value"), options.min);
 
 	el.slider('destroy');
 });
@@ -62,9 +62,9 @@ test("keydown END on handle sets value to max", function() {
 	el.slider("value", 0);
 
 	handle().simulate("keydown", { keyCode: $.ui.keyCode.END });
-	equals(el.slider("value"), options.max);
+	equal(el.slider("value"), options.max);
 
-	el.slider('destroy');	
+	el.slider('destroy');
 
 	el = $('<div></div>');
 	options = {
@@ -78,7 +78,7 @@ test("keydown END on handle sets value to max", function() {
 	el.slider("value", 0);
 
 	handle().simulate("keydown", { keyCode: $.ui.keyCode.END });
-	equals(el.slider("value"), options.max);
+	equal(el.slider("value"), options.max);
 
 	el.slider('destroy');
 });
@@ -97,10 +97,10 @@ test("keydown PAGE_UP on handle increases value by 1/5 range, not greater than m
 		el.slider("value", 70);
 
 		handle().simulate("keydown", { keyCode: $.ui.keyCode.PAGE_UP });
-		equals(el.slider("value"), 90);
+		equal(el.slider("value"), 90);
 
 		handle().simulate("keydown", { keyCode: $.ui.keyCode.PAGE_UP });
-		equals(el.slider("value"), 100);
+		equal(el.slider("value"), 100);
 
 		el.slider("destroy");
 	});
@@ -120,10 +120,10 @@ test("keydown PAGE_DOWN on handle decreases value by 1/5 range, not less than mi
 		el.slider("value", 30);
 
 		handle().simulate("keydown", { keyCode: $.ui.keyCode.PAGE_DOWN });
-		equals(el.slider("value"), 10);
+		equal(el.slider("value"), 10);
 
 		handle().simulate("keydown", { keyCode: $.ui.keyCode.PAGE_DOWN });
-		equals(el.slider("value"), 0);
+		equal(el.slider("value"), 0);
 
 		el.slider("destroy");
 	});
@@ -142,12 +142,12 @@ test("keydown UP on handle increases value by step, not greater than max", funct
 	el.slider("value", options.max - options.step);
 
 	handle().simulate("keydown", { keyCode: $.ui.keyCode.UP });
-	equals(el.slider("value"), options.max);
+	equal(el.slider("value"), options.max);
 
 	handle().simulate("keydown", { keyCode: $.ui.keyCode.UP });
-	equals(el.slider("value"), options.max);
+	equal(el.slider("value"), options.max);
 
-	el.slider("destroy");	
+	el.slider("destroy");
 
 	el = $('<div></div>');
 	options = {
@@ -161,12 +161,12 @@ test("keydown UP on handle increases value by step, not greater than max", funct
 	el.slider("value", options.max - options.step);
 
 	handle().simulate("keydown", { keyCode: $.ui.keyCode.UP });
-	equals(el.slider("value"), options.max);
+	equal(el.slider("value"), options.max);
 
 	handle().simulate("keydown", { keyCode: $.ui.keyCode.UP });
-	equals(el.slider("value"), options.max);
+	equal(el.slider("value"), options.max);
 
-	el.slider("destroy");	
+	el.slider("destroy");
 });
 
 test("keydown RIGHT on handle increases value by step, not greater than max", function() {
@@ -182,12 +182,12 @@ test("keydown RIGHT on handle increases value by step, not greater than max", fu
 	el.slider("value", options.max - options.step);
 
 	handle().simulate("keydown", { keyCode: $.ui.keyCode.RIGHT });
-	equals(el.slider("value"), options.max);
+	equal(el.slider("value"), options.max);
 
 	handle().simulate("keydown", { keyCode: $.ui.keyCode.RIGHT });
-	equals(el.slider("value"), options.max);
+	equal(el.slider("value"), options.max);
 
-	el.slider("destroy");	
+	el.slider("destroy");
 
 	el = $('<div></div>');
 	options = {
@@ -201,12 +201,12 @@ test("keydown RIGHT on handle increases value by step, not greater than max", fu
 	el.slider("value", options.max - options.step);
 
 	handle().simulate("keydown", { keyCode: $.ui.keyCode.RIGHT });
-	equals(el.slider("value"), options.max);
+	equal(el.slider("value"), options.max);
 
 	handle().simulate("keydown", { keyCode: $.ui.keyCode.RIGHT });
-	equals(el.slider("value"), options.max);
+	equal(el.slider("value"), options.max);
 
-	el.slider("destroy");	
+	el.slider("destroy");
 });
 
 test("keydown DOWN on handle decreases value by step, not less than min", function() {
@@ -222,12 +222,12 @@ test("keydown DOWN on handle decreases value by step, not less than min", functi
 	el.slider("value", options.min + options.step);
 
 	handle().simulate("keydown", { keyCode: $.ui.keyCode.DOWN });
-	equals(el.slider("value"), options.min);
+	equal(el.slider("value"), options.min);
 
 	handle().simulate("keydown", { keyCode: $.ui.keyCode.DOWN });
-	equals(el.slider("value"), options.min);
+	equal(el.slider("value"), options.min);
 
-	el.slider("destroy");	
+	el.slider("destroy");
 
 	el = $('<div></div>');
 	options = {
@@ -241,12 +241,12 @@ test("keydown DOWN on handle decreases value by step, not less than min", functi
 	el.slider("value", options.min + options.step);
 
 	handle().simulate("keydown", { keyCode: $.ui.keyCode.DOWN });
-	equals(el.slider("value"), options.min);
+	equal(el.slider("value"), options.min);
 
 	handle().simulate("keydown", { keyCode: $.ui.keyCode.DOWN });
-	equals(el.slider("value"), options.min);
+	equal(el.slider("value"), options.min);
 
-	el.slider("destroy");	
+	el.slider("destroy");
 });
 
 test("keydown LEFT on handle decreases value by step, not less than min", function() {
@@ -262,12 +262,12 @@ test("keydown LEFT on handle decreases value by step, not less than min", functi
 	el.slider("value", options.min + options.step);
 
 	handle().simulate("keydown", { keyCode: $.ui.keyCode.LEFT });
-	equals(el.slider("value"), options.min);
+	equal(el.slider("value"), options.min);
 
 	handle().simulate("keydown", { keyCode: $.ui.keyCode.LEFT });
-	equals(el.slider("value"), options.min);
+	equal(el.slider("value"), options.min);
 
-	el.slider("destroy");	
+	el.slider("destroy");
 
 	el = $('<div></div>');
 	options = {
@@ -281,12 +281,12 @@ test("keydown LEFT on handle decreases value by step, not less than min", functi
 	el.slider("value", options.min + options.step);
 
 	handle().simulate("keydown", { keyCode: $.ui.keyCode.LEFT });
-	equals(el.slider("value"), options.min);
+	equal(el.slider("value"), options.min);
 
 	handle().simulate("keydown", { keyCode: $.ui.keyCode.LEFT });
-	equals(el.slider("value"), options.min);
+	equal(el.slider("value"), options.min);
 
-	el.slider("destroy");	
+	el.slider("destroy");
 });
 
 })(jQuery);
