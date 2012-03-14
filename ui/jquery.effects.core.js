@@ -1,7 +1,7 @@
 /*
  * jQuery UI Effects @VERSION
  *
- * Copyright 2011, AUTHORS.txt (http://jqueryui.com/about)
+ * Copyright 2012, AUTHORS.txt (http://jqueryui.com/about)
  * Dual licensed under the MIT or GPL Version 2 licenses.
  * http://jquery.org/license
  *
@@ -159,7 +159,7 @@ var classAnimationActions = [ "add", "remove", "toggle" ],
 		padding: 1
 	},
 	// prefix used for storing data on .data()
-	dataSpace = "ec.storage.";
+	dataSpace = "ui-effects-";
 
 $.each([ "borderLeftStyle", "borderRightStyle", "borderBottomStyle", "borderTopStyle" ], function( _, prop ) {
 	$.fx.step[ prop ] = function( fx ) {
@@ -689,7 +689,7 @@ $.extend( baseEasings, {
 	Bounce: function ( p ) {
 		var pow2,
 			bounce = 4;
-		
+
 		while ( p < ( ( pow2 = Math.pow( 2, --bounce ) ) - 1 ) / 11 ) {}
 		return 1 / Math.pow( 4, 3 - bounce ) - 7.5625 * Math.pow( ( pow2 * 3 - 2 ) / 22 - p, 2 );
 	}

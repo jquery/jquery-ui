@@ -1,7 +1,7 @@
 /*
  * jQuery UI Tooltip @VERSION
  *
- * Copyright 2011, AUTHORS.txt (http://jqueryui.com/about)
+ * Copyright 2012, AUTHORS.txt (http://jqueryui.com/about)
  * Dual licensed under the MIT or GPL Version 2 licenses.
  * http://jquery.org/license
  *
@@ -72,7 +72,7 @@ $.widget( "ui.tooltip", {
 			var element = $( this );
 			if ( element.is( "[title]" ) ) {
 				element
-					.data( "tooltip-title", element.attr( "title" ) )
+					.data( "ui-tooltip-title", element.attr( "title" ) )
 					.attr( "title", "" );
 			}
 		});
@@ -82,8 +82,8 @@ $.widget( "ui.tooltip", {
 		// restore title attributes
 		this.element.find( this.options.items ).andSelf().each(function() {
 			var element = $( this );
-			if ( element.data( "tooltip-title" ) ) {
-				element.attr( "title", element.data( "tooltip-title" ) );
+			if ( element.data( "ui-tooltip-title" ) ) {
+				element.attr( "title", element.data( "ui-tooltip-title" ) );
 			}
 		});
 	},
@@ -99,8 +99,8 @@ $.widget( "ui.tooltip", {
 			return;
 		}
 
-		if ( !target.data( "tooltip-title" ) ) {
-			target.data( "tooltip-title", target.attr( "title" ) );
+		if ( !target.data( "ui-tooltip-title" ) ) {
+			target.data( "ui-tooltip-title", target.attr( "title" ) );
 		}
 
 		target.data( "tooltip-open", true );
@@ -180,8 +180,8 @@ $.widget( "ui.tooltip", {
 		}
 
 		// only set title if we had one before (see comment in _open())
-		if ( target.data( "tooltip-title" ) ) {
-			target.attr( "title", target.data( "tooltip-title" ) );
+		if ( target.data( "ui-tooltip-title" ) ) {
+			target.attr( "title", target.data( "ui-tooltip-title" ) );
 		}
 
 		target.removeAttr( "aria-describedby" );

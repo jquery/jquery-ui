@@ -61,6 +61,7 @@ test( "aria-controls", function() {
 
 test( "accessibility", function() {
 	// TODO: add tests
+	expect( 0 );
 });
 
 test( "#3627 - Ajax tab with url containing a fragment identifier fails to load", function() {
