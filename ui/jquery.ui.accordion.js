@@ -134,7 +134,7 @@ $.widget( "ui.accordion", {
 		// clean up headers
 		this.headers
 			.unbind( ".accordion" )
-			.removeClass( "ui-accordion-header ui-accordion-header-active ui-accordion-disabled ui-helper-reset ui-state-default ui-corner-all ui-state-active ui-state-disabled ui-corner-top" )
+			.removeClass( "ui-accordion-header ui-accordion-header-active ui-helper-reset ui-state-default ui-corner-all ui-state-active ui-state-disabled ui-corner-top" )
 			.removeAttr( "role" )
 			.removeAttr( "aria-expanded" )
 			.removeAttr( "aria-selected" )
@@ -145,7 +145,7 @@ $.widget( "ui.accordion", {
 		var contents = this.headers.next()
 			.css( "display", "" )
 			.removeAttr( "role" )
-			.removeClass( "ui-helper-reset ui-widget-content ui-corner-bottom ui-accordion-content ui-accordion-content-active ui-accordion-disabled ui-state-disabled" );
+			.removeClass( "ui-helper-reset ui-widget-content ui-corner-bottom ui-accordion-content ui-accordion-content-active ui-state-disabled" );
 		if ( this.options.heightStyle !== "content" ) {
 			this.element.css( "height", this.originalHeight );
 			contents.css( "height", "" );
@@ -185,9 +185,7 @@ $.widget( "ui.accordion", {
 		// so we need to add the disabled class to the headers and panels
 		if ( key === "disabled" ) {
 			this.headers.add( this.headers.next() )
-				// TODO: why do we have an accordion-specific disabled class?
-				// widget-specific classes seem to exist in a lot of plugins
-				.toggleClass( "ui-accordion-disabled ui-state-disabled", !!value );
+				.toggleClass( "ui-state-disabled", !!value );
 		}
 	},
 
