@@ -186,7 +186,10 @@
 						me.reSetIframe(frame);
 						clearInterval(tid);
 						tid=setInterval(function(){
-							me.reSetIframe(frame);
+							//有几率的出现不能捕获iframe.contentWindow的错误，未查找到具体原因
+							try{
+								me.reSetIframe(frame);
+							}catch(e){}	
 						},300);
 					}).unload(function(){	//卸载清除时间句柄
 						clearInterval(tid);
