@@ -59,6 +59,23 @@
 			}
 			return readyArr;
 		};
+		var bubblingFn=function(data){
+			var i,
+				j,
+				l,
+				temp;
+			l=data.length;
+			for(i=0;i<l-2;i++){
+				for(j=l-1;j>i;j--){
+					if(data[j].label.split('/').length<data[j-1].label.split('/').length){
+						temp=data[j];
+						data[j]=data[j-1];
+						data[j-1]=temp;
+					}
+				}
+			}
+			return data;
+		};
 		$.ajax({
 			url:'data.json',
 			type:'post',
@@ -78,6 +95,7 @@
 								});
 							}
 						}
+						fArr=bubblingFn(fArr);
 						response(fArr);
 					},
 					select:function(ui,data){
