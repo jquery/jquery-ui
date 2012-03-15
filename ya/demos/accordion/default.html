@@ -15,7 +15,7 @@
 	<link rel="stylesheet" href="../../lib/sl.css" />
 	<link rel="stylesheet" href="../../jqui/css/jquery-ui.css" />
 	<link rel="stylesheet" href="../../themes/default/jquery.ui.override.css" />
-	<link rel="stylesheet" href="../../themes/default/jquery.ui.datepicker.css" />
+	<link rel="stylesheet" href="../../themes/default/jquery.ui.accordion.css" />
 	<style type="text/css">
 		#accordion{
 			position:absolute;
@@ -38,13 +38,14 @@
   	<script src="../../lib/sl.js"></script>
   	<script src="../../lib/uihelper.js"></script>
   	
-	<script src="../../ui/jquery.ya.datepicker0.js"></script>
+	<script src="../../ui/jquery.ya.accordion0.js"></script>
 	<script>
 	jQuery(function($) {
 		$( "#accordion" ).accordion0({
 			width:180,
 			//collapsible: true,	//控制面板是否可折叠
 			active:false,	//设置为false开始时不打开面板
+			autoHeight:false,	//取消自动设置高度
 			header:'h3',	//设置header选择符
 			advancedTheme:{
 				shadow:false,
