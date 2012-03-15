@@ -24,13 +24,6 @@ test( "handle click on header-descendant", function() {
 	accordion_state( element, 0, 1, 0 );
 });
 
-test( "ui-accordion-heading class added to headers anchor", function() {
-	expect( 1 );
-	var element = $( "#list1" ).accordion();
-	var anchors = element.find( ".ui-accordion-heading" );
-	equal( anchors.length, 3 );
-});
-
 test( "accessibility", function () {
 	expect( 13 );
 	var element = $( "#list1" ).accordion().accordion( "option", "active", 1 );

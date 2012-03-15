@@ -1,7 +1,7 @@
 /*
  * jQuery UI Position @VERSION
  *
- * Copyright 2011, AUTHORS.txt (http://jqueryui.com/about)
+ * Copyright 2012, AUTHORS.txt (http://jqueryui.com/about)
  * Dual licensed under the MIT or GPL Version 2 licenses.
  * http://jquery.org/license
  *
@@ -37,7 +37,7 @@ $.position = {
 
 		div.remove();
 
-		return w1 - w2; 
+		return w1 - w2;
 	},
 	getScrollInfo: function(within) {
 		var notWindow = within[0] !== window,
@@ -152,13 +152,13 @@ $.fn.position = function( options ) {
 		var elem = $( this ),
 			elemWidth = elem.outerWidth(),
 			elemHeight = elem.outerHeight(),
-			marginLeft = parseInt( $.curCSS( this, "marginLeft", true ) ) || 0,
-			marginTop = parseInt( $.curCSS( this, "marginTop", true ) ) || 0,
+			marginLeft = parseInt( $.css( this, "marginLeft" ) ) || 0,
+			marginTop = parseInt( $.css( this, "marginTop" ) ) || 0,
 			scrollInfo = $.position.getScrollInfo( within ),
 			collisionWidth = elemWidth + marginLeft +
-				( parseInt( $.curCSS( this, "marginRight", true ) ) || 0 ) + scrollInfo.width,
+				( parseInt( $.css( this, "marginRight" ) ) || 0 ) + scrollInfo.width,
 			collisionHeight = elemHeight + marginTop +
-				( parseInt( $.curCSS( this, "marginBottom", true ) ) || 0 ) + scrollInfo.height,
+				( parseInt( $.css( this, "marginBottom" ) ) || 0 ) + scrollInfo.height,
 			position = $.extend( {}, basePosition ),
 			myOffset = [
 				parseInt( offsets.my[ 0 ], 10 ) *
@@ -401,12 +401,12 @@ $.ui.position = {
 		}
 	},
 	flipfit: {
-		left: function() { 
-			$.ui.position.flip.left.apply( this, arguments ); 
+		left: function() {
+			$.ui.position.flip.left.apply( this, arguments );
 			$.ui.position.fit.left.apply( this, arguments );
 		},
-		top: function() { 
-			$.ui.position.flip.top.apply( this, arguments ); 
+		top: function() {
+			$.ui.position.flip.top.apply( this, arguments );
 			$.ui.position.fit.top.apply( this, arguments );
 		}
 	}
@@ -414,8 +414,8 @@ $.ui.position = {
 
 // fraction support test
 (function () {
-	var testElement, testElementParent, testElementStyle, offsetLeft, i
-		body = document.getElementsByTagName( "body" )[ 0 ], 
+	var testElement, testElementParent, testElementStyle, offsetLeft, i,
+		body = document.getElementsByTagName( "body" )[ 0 ],
 		div = document.createElement( "div" );
 
 	//Create a "fake body" for testing based on method used in jQuery.support
@@ -429,7 +429,7 @@ $.ui.position = {
 		background: "none"
 	};
 	if ( body ) {
-		jQuery.extend( testElementStyle, {
+		$.extend( testElementStyle, {
 			position: "absolute",
 			left: "-1000px",
 			top: "-1000px"

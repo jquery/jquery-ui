@@ -6,9 +6,11 @@ commonWidgetTests( "menu", {
 			at: "right top"
 		},
 		menus: "ul",
-		trigger: null,
 
 		// callbacks
-		create: null
+		blur: null,
+		create: null,
+		focus: null,
+		select: null
 	}
 });

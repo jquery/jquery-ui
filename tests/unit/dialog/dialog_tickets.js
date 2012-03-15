@@ -41,7 +41,7 @@ test("#4826: setting resizable false toggles resizable on dialog", function() {
 	shouldnotresize("[default]");
 	for (var i=0; i<2; i++) {
 		el.dialog('close').dialog('open');
-		shouldnotresize('initialized with resizable false toggle ('+ (i+1) +')');		
+		shouldnotresize('initialized with resizable false toggle ('+ (i+1) +')');
 	}
 	el.remove();
 
@@ -49,10 +49,10 @@ test("#4826: setting resizable false toggles resizable on dialog", function() {
 	shouldresize("[default]");
 	for (var i=0; i<2; i++) {
 		el.dialog('close').dialog('option', 'resizable', false).dialog('open');
-		shouldnotresize('set option resizable false toggle ('+ (i+1) +')');		
+		shouldnotresize('set option resizable false toggle ('+ (i+1) +')');
 	}
 	el.remove();
-	
+
 });
 
 test("#5184: isOpen in dialogclose event is true", function() {
@@ -75,11 +75,11 @@ test("#5531: dialog width should be at least minWidth on creation", function () 
             minWidth: 300
         });
 
-    equals(el.dialog('option', 'width'), 300, "width is minWidth");
+    equal(el.dialog('option', 'width'), 300, "width is minWidth");
     el.dialog('option', 'width', 200);
-    equals(el.dialog('option', 'width'), 300, "width unchanged when set to < minWidth");
+    equal(el.dialog('option', 'width'), 300, "width unchanged when set to < minWidth");
     el.dialog('option', 'width', 320);
-    equals(el.dialog('option', 'width'), 320, "width changed if set to > minWidth");
+    equal(el.dialog('option', 'width'), 320, "width changed if set to > minWidth");
     el.remove();
 
     el = $('<div></div>').dialog({
@@ -109,9 +109,9 @@ test("#6645: Missing element not found check in overlay", function(){
     expect(2);
     d1 = $('<div title="dialog 1">Dialog 1</div>').dialog({modal: true});
     d2 = $('<div title="dialog 2">Dialog 2</div>').dialog({modal: true, close: function(){ d2.remove()}});
-    equals($.ui.dialog.overlay.instances.length, 2, 'two overlays created');
+    equal($.ui.dialog.overlay.instances.length, 2, 'two overlays created');
     d2.dialog('close');
-    equals($.ui.dialog.overlay.instances.length, 1, 'one overlay remains after closing the 2nd overlay');
+    equal($.ui.dialog.overlay.instances.length, 1, 'one overlay remains after closing the 2nd overlay');
     d1.add(d2).remove();
 });
 

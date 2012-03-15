@@ -59,8 +59,8 @@ TODO currently tooltip doesn't override widget
 can't return anything useful if no element is kept around and there's no useful reference
 test("widget", function() {
 	var tooltip = $("#tooltipped1").tooltip();
-	same(tooltip.tooltip("widget")[0], $(".ui-tooltip")[0]);
-	same(tooltip.tooltip("widget").end()[0], tooltip[0]);
+	deepEqual(tooltip.tooltip("widget")[0], $(".ui-tooltip")[0]);
+	deepEqual(tooltip.tooltip("widget").end()[0], tooltip[0]);
 });
 */
 

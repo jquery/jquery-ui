@@ -21,6 +21,7 @@ test( "markup structure", function() {
 
 test( "accessibility", function() {
 	// TODO: add tests
+	expect( 0 );
 });
 
 }( jQuery ) );
