@@ -486,11 +486,11 @@
             }
             var node = $("#" + target.nid);
             var a = $(" >span >a", node);
-            a.addClass("selected");
+            a.addClass("ui-state-selected");
             var oldSelected = self.element.data("selected");
             var curSelected = node.attr("id");
             if(oldSelected != "" && !(oldSelected == curSelected)) {
-                $("#" + oldSelected + " >span >a").removeClass("selected");
+                $("#" + oldSelected + " >span >a").removeClass("ui-state-selected");
             }
             self.element.data("selected", curSelected);
             onSelect && onSelect.call(self, target);
@@ -509,7 +509,7 @@
             var self = this;
             var node = $("#" + target.nid);
             var a = $(" >span >a", node);
-            a.removeClass("selected");
+            a.removeClass("ui-state-selected");
             var oldSelected = self.element.data("selected");
             var curSelected = node.attr("id");
             if( oldSelected == curSelected) {

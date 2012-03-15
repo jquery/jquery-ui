@@ -40,6 +40,7 @@
 .treeview .ui-tree-node a:link {
     color: black;
     text-decoration: none;
+    display: block;
 }
 
 
@@ -48,7 +49,7 @@
     text-decoration: none;
 }
 
-.treeview .ui-tree-node a.selected {
+.treeview .ui-tree-node a.ui-state-selected {
 	padding-top: 0px;
     background-color: #D9E8FB;
     color: black;
