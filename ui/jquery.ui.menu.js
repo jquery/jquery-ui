@@ -282,9 +282,8 @@ $.widget( "ui.menu", {
 		menus.children( ":not( .ui-menu-item )" ).each( function() {
 			var item = $( this );
 			item
-				.addClass( "ui-menu-category" )
+				.addClass( "ui-widget-header" )
 				.attr( "role", "group" );
-			item.contents().wrapAll( "<span>" );
 		});
 
 		submenus.each( function() {
