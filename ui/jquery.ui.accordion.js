@@ -68,8 +68,6 @@ $.widget( "ui.accordion", {
 
 		this.headers
 			.attr( "role", "tab" )
-			// TODO: use _bind()
-			.bind( "keydown.accordion", $.proxy( this, "_keydown" ) )
 			.next()
 				.attr( "role", "tabpanel" );
 
@@ -161,8 +159,7 @@ $.widget( "ui.accordion", {
 
 		if ( key === "event" ) {
 			if ( this.options.event ) {
-				// TODO: this is incorrect for multiple events (see _setupEvents)
-				this.headers.unbind( this.options.event + ".accordion", this._eventHandler );
+				this.headers.unbind( ".accordion" );
 			}
 			this._setupEvents( value );
 		}
@@ -190,8 +187,7 @@ $.widget( "ui.accordion", {
 	},
 
 	_keydown: function( event ) {
-		// TODO: remove disabled check when using _bind()
-		if ( this.options.disabled || event.altKey || event.ctrlKey ) {
+		if ( event.altKey || event.ctrlKey ) {
 			return;
 		}
 
@@ -300,11 +296,15 @@ $.widget( "ui.accordion", {
 	},
 
 	_setupEvents: function( event ) {
+		var events = {
+			keydown: "_keydown"
+		};
 		if ( event ) {
-			// TODO: use _bind()
-			this.headers.bind( event.split( " " ).join( ".accordion " ) + ".accordion",
-				$.proxy( this, "_eventHandler" ) );
+			$.each( event.split(" "), function( index, eventName ) {
+				events[ eventName ] = "_eventHandler";
+			});
 		}
+		this._bind( this.headers, events );
 	},
 
 	_eventHandler: function( event ) {
@@ -324,7 +324,7 @@ $.widget( "ui.accordion", {
 
 		event.preventDefault();
 
-		if ( options.disabled ||
+		if (
 				// click on active header, but not collapsible
 				( clickedIsActive && !options.collapsible ) ||
 				// allow canceling activation

@@ -3,7 +3,7 @@ function accordion_state( accordion ) {
 	var actual = accordion.find( ".ui-accordion-content" ).map(function() {
 		return $( this ).css( "display" ) === "none" ? 0 : 1;
 	}).get();
-	deepEqual( actual, expected );
+	QUnit.push( QUnit.equiv(actual, expected), actual, expected );
 }
 
 function accordion_equalHeights( accordion, min, max ) {
