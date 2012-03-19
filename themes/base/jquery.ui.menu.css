@@ -15,6 +15,7 @@
 .ui-menu .ui-menu-item a.ui-state-active { font-weight: normal; margin: -1px; }
 
 .ui-menu .ui-state-disabled { font-weight: normal; margin: .4em 0 .2em; line-height: 1.5; }
+.ui-menu .ui-state-disabled a { cursor: default; }
 
 /* icon support */
 .ui-menu-icons { position: relative; }
