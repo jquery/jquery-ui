@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>jQuery UI Menubar - Default demo</title>
+	<link rel="stylesheet" href="../demos.css" type="text/css" />
+	<link rel="stylesheet" href="../../themes/base/jquery.ui.all.css" />
+	<script src="../../jquery-1.7.1.js"></script>
+	<script src="../../ui/jquery.ui.core.js"></script>
+	<script src="../../ui/jquery.ui.widget.js"></script>
+	<script src="../../ui/jquery.ui.position.js"></script>
+	<script src="../../ui/jquery.ui.button.js"></script>
+	<script src="../../ui/jquery.ui.menu.js"></script>
+	<script src="../../ui/jquery.ui.menubar.js"></script>
+	<script>
+	$(function() {
+		function select(event, ui) {
+			$("<div/>").text("Selected: " + ui.item.text()).appendTo("#log");
+			if (ui.item.text() == 'Quit') {
+				$(this).menubar('destroy');
+			}
+		}
+		$("#bar1").menubar({
+			position: {
+				within: $("#demo-frame").add(window).first()
+			},
+			select: select
+		});
+
+		$(".menubar-icons").menubar({
+			autoExpand: true,
+			menuIcon: true,
+			buttons: true,
+			position: {
+				within: $("#demo-frame").add(window).first()
+			},
+			select: select
+		});
+
+		$("#bar3").menubar({
+			position: {
+				within: $("#demo-frame").add(window).first()
+			},
+			select: select,
+			items: ".menubarItem",
+			menuElement: ".menuElement"
+		});
+	});
+	</script>
+	<style>
+		#bar1, #bar2 { margin: 0 0 4em; }
+ 	</style>
+</head>
+<body>
+
+<div class="demo">
+<ul id="bar1" class="menubar">
+	<li>
+		<a href="#File">File</a>
+		<ul>
+			<li><a href="#Open...">Open...</a></li>
+			<li class="ui-state-disabled">Open recent...</li>
+			<li><a href="#Save">Save</a></li>
+			<li><a href="#Save as...">Save as...</a></li>
+			<li><a href="#Close">Close</a></li>
+			<li><a href="#Quit">Quit</a></li>
+		</ul>
+	</li>
+	<li>
+		<a href="#Edit">Edit</a>
+		<ul>
+			<li><a href="#Copy">Copy</a></li>
+			<li><a href="#Cut">Cut</a></li>
+			<li class="ui-state-disabled">Paste</li>
+		</ul>
+	</li>
+	<li>
+		<a href="#View">View</a>
+		<ul>
+			<li><a href="#Fullscreen">Fullscreen</a></li>
+			<li><a href="#Fit into view">Fit into view</a></li>
+			<li>
+				<a href="#Encoding">Encoding</a>
+				<ul>
+					<li><a href="#Auto-detect">Auto-detect</a></li>
+					<li><a href="#UTF-8">UTF-8</a></li>
+					<li>
+					  <a href="#UTF-16">UTF-16</a>
+				      <ul>
+				         <li><a href="#Option 1">Option 1</a></li>
+				         <li><a href="#Option 2">Option 2</a></li>
+				         <li><a href="#Option 3">Option 3</a></li>
+				         <li><a href="#Option 4">Option 4</a></li>
+				      </ul>
+				   </li>
+				</ul>
+			</li>
+			<li><a href="#Customize...">Customize...</a></li>
+		</ul>
+	</li>
+</ul>
+
+<ul id="bar2" class="menubar-icons">
+	<li>
+		<a href="#File">File</a>
+		<ul>
+			<li><a href="#Open...">Open...</a></li>
+			<li class="ui-state-disabled">Open recent...</li>
+			<li><a href="#Save">Save</a></li>
+			<li><a href="#Save as...">Save as...</a></li>
+			<li><a href="#Close">Close</a></li>
+			<li><a href="#Quit">Quit</a></li>
+		</ul>
+	</li>
+	<li>
+		<a href="#Edit">Edit</a>
+		<ul>
+			<li><a href="#Copy">Copy</a></li>
+			<li><a href="#Cut">Cut</a></li>
+			<li class="ui-state-disabled">Paste</li>
+		</ul>
+	</li>
+	<li>
+		<a href="#View">View</a>
+		<ul>
+			<li><a href="#Fullscreen">Fullscreen</a></li>
+			<li><a href="#Fit into view">Fit into view</a></li>
+			<li>
+				<a href="#Encoding">Encoding</a>
+				<ul>
+					<li><a href="#Auto-detect">Auto-detect</a></li>
+					<li><a href="#UTF-8">UTF-8</a></li>
+					<li>
+					  <a href="#UTF-16">UTF-16</a>
+				      <ul>
+				         <li><a href="#Option 1">Option 1</a></li>
+				         <li><a href="#Option 2">Option 2</a></li>
+				         <li><a href="#Option 3">Option 3</a></li>
+				         <li><a href="#Option 4">Option 4</a></li>
+				      </ul>
+				   </li>
+				</ul>
+			</li>
+			<li><a href="#Customize...">Customize...</a></li>
+		</ul>
+	</li>
+</ul>
+
+<div id="bar3" class="menubar">
+	<div class="menubarItem">
+		<a href="#File">File</a>
+		<div class="menuElement">
+			<div><a href="#Open...">Open...</a></div>
+			<div class="ui-state-disabled">Open recent...</div>
+			<div><a href="#Save">Save</a></div>
+			<div><a href="#Save as...">Save as...</a></div>
+			<div><a href="#Close">Close</a></div>
+			<div><a href="#Quit">Quit</a></div>
+		</div>
+	</div>
+	<div class="menubarItem">
+		<a href="#Edit">Edit</a>
+		<div class="menuElement">
+			<div><a href="#Copy">Copy</a></div>
+			<div><a href="#Cut">Cut</a></div>
+			<div class="ui-state-disabled">Paste</div>
+		</div>
+	</div>
+	<div class="menubarItem">
+		<a href="#View">View</a>
+		<div class="menuElement">
+			<div><a href="#Fullscreen">Fullscreen</a></div>
+			<div><a href="#Fit into view">Fit into view</a></div>
+			<div>
+				<a href="#Encoding">Encoding</a>
+				<div class="menuElement">
+					<div class="ui-state-disabled">Auto-detect</div>
+					<div><a href="#UTF-8">UTF-8</a></div>
+					<div>
+					  <a href="#UTF-16">UTF-16</a>
+				      <div class="menuElement">
+				         <div><a href="#Option 1">Option 1</a></div>
+				         <div><a href="#Option 2">Option 2</a></div>
+				         <div class="ui-state-disabled">Option 3</div>
+				         <div><a href="#Option 4">Option 4</a></div>
+				      </div>
+				   </div>
+				</div>
+			</div>
+			<div><a href="#Customize...">Customize...</a></div>
+		</div>
+	</div>
+</div>
+
+<div class="ui-widget" style="margin-top:2em; font-family:Arial">
+	Log:
+	<div id="log" style="height: 100px; width: 300px; overflow: auto;" class="ui-widget-content"></div>
+</div>
+</div>
+
+<div class="demo-description">
+
+<p>TODO</p>
+
+</div><!-- End demo-description -->
+
+
+</body>
+</html>

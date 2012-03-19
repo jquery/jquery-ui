@@ -1,11 +1,12 @@
 commonWidgetTests( "menu", {
 	defaults: {
 		disabled: false,
-		menus: "ul",
 		position: {
 			my: "left top",
 			at: "right top"
 		},
+		menus: "ul",
+		trigger: null,
 
 		// callbacks
 		blur: null,
