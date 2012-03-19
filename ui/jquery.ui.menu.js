@@ -59,6 +59,9 @@ $.widget( "ui.menu", {
 			"mousedown .ui-menu-item > a": function( event ) {
 				event.preventDefault();
 			},
+			"click .ui-state-disabled > a": function( event ) {
+				event.preventDefault();
+			},
 			"click .ui-menu-item:has(a)": function( event ) {
 				event.stopImmediatePropagation();
 				//Don't select disabled menu items
