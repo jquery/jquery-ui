@@ -459,6 +459,14 @@ task.registerTask( "copy_themes", function() {
 	});
 });
 
+task.registerTask( "clean", function() {
+	// TODO use node methods and keep the dir, only delete its content
+	utils.spawn({
+		cmd: "rm",
+		args: [ "-rf", "dist" ]
+	}, this.async());
+});
+
 // TODO merge with code in jQuery Core, share as grunt plugin/npm
 // this here actually uses the provided filenames in the output
 // the helpers should just be regular functions, no need to share those with the world
