@@ -308,24 +308,24 @@ task.registerMultiTask( "copy", "Copy files to destination folder and replace @V
 
 
 task.registerMultiTask( "zip", "Create a zip file for release", function() {
-	var done = this.async();
 	// TODO switch back to adm-zip for better cross-platform compability once it actually works
-	// 0.1.2 doesn't compress properly (or at all)
+	// 0.1.3 works, but result can't be unzipped
+	// its also a lot slower then zip program, probably due to how its used...
+	// var files = file.expand( "dist/" + this.file.src + "/**/*" );
+	// log.writeln( "Creating zip file " + this.file.dest );
 
-	// var files = file.expand(this.file.src);
-	// log.writeln("Creating zip file " + this.file.dest);
-
-	// var fs = require('fs');
-	// var AdmZip = require('adm-zip');
+	// var fs = require( "fs" );
+	// var AdmZip = require( "adm-zip" );
 	// var zip = new AdmZip();
-	// files.forEach(function(file) {
-	//   log.verbose.writeln('Zipping ' + file);
-	//   // rewrite file names from dist folder (created by build), drop the /dist part
-	//   zip.addFile(file.replace(/^dist/, ''), fs.readFileSync(file));
+	// files.forEach(function( file ) {
+	// 	log.verbose.writeln( "Zipping " + file );
+	// 	// rewrite file names from dist folder (created by build), drop the /dist part
+	// 	zip.addFile(file.replace(/^dist/, "" ), fs.readFileSync( file ) );
 	// });
-	// zip.writeZip(this.file.dest);
-	// log.writeln("Wrote " + files.length + " files to " + this.file.dest);
+	// zip.writeZip( "dist/" + this.file.dest );
+	// log.writeln( "Wrote " + files.length + " files to " + this.file.dest );
 
+	var done = this.async();
 	var dest = this.file.dest;
 	var src = template.process( this.file.src, config() );
 	utils.spawn({
