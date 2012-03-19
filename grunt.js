@@ -281,7 +281,7 @@ config.init({
 	}
 });
 
-task.registerBasicTask( "copy", "Copy files to destination folder and replace @VERSION with pkg.version", function() {
+task.registerMultiTask( "copy", "Copy files to destination folder and replace @VERSION with pkg.version", function() {
 	function replaceVersion( source ) {
 		return source.replace( "@VERSION", config( "pkg.version" ) );
 	}
@@ -307,7 +307,7 @@ task.registerBasicTask( "copy", "Copy files to destination folder and replace @V
 });
 
 
-task.registerBasicTask( "zip", "Create a zip file for release", function() {
+task.registerMultiTask( "zip", "Create a zip file for release", function() {
 	var done = this.async();
 	// TODO switch back to adm-zip for better cross-platform compability once it actually works
 	// 0.1.2 doesn't compress properly (or at all)
@@ -345,7 +345,7 @@ task.registerBasicTask( "zip", "Create a zip file for release", function() {
 	});
 });
 
-task.registerBasicTask( "csslint", "Lint CSS files with csslint", function() {
+task.registerMultiTask( "csslint", "Lint CSS files with csslint", function() {
 	var csslint = require( "csslint" ).CSSLint;
 	var files = file.expand( this.file.src );
 	var ruleset = {};
@@ -377,7 +377,7 @@ task.registerBasicTask( "csslint", "Lint CSS files with csslint", function() {
 	log.writeln( "Lint free" );
 });
 
-task.registerBasicTask( "css_min", "Minify CSS files with Sqwish.", function() {
+task.registerMultiTask( "css_min", "Minify CSS files with Sqwish.", function() {
 	var max = task.helper( "concat", file.expand( this.file.src ) );
 	var min = require( "sqwish" ).minify( max, false );
 	file.write( this.file.dest, min );
@@ -385,7 +385,7 @@ task.registerBasicTask( "css_min", "Minify CSS files with Sqwish.", function() {
 	task.helper( "min_max_info", min, max );
 });
 
-task.registerBasicTask( "md5", "Create list of md5 hashes for CDN uploads", function() {
+task.registerMultiTask( "md5", "Create list of md5 hashes for CDN uploads", function() {
 	// remove dest file before creating it, to make sure itself is not included
 	if ( require( "path" ).existsSync( this.file.dest ) ) {
 		require( "fs" ).unlinkSync( this.file.dest );
@@ -462,7 +462,7 @@ task.registerTask( "copy_themes", function() {
 // TODO merge with code in jQuery Core, share as grunt plugin/npm
 // this here actually uses the provided filenames in the output
 // the helpers should just be regular functions, no need to share those with the world
-task.registerBasicTask( "compare_size", "Compare size of this branch to master", function() {
+task.registerMultiTask( "compare_size", "Compare size of this branch to master", function() {
 	var files = file.expand( this.file.src ),
 		done = this.async(),
 		sizecache = __dirname + "/dist/.sizecache.json",
