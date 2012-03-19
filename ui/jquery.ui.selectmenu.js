@@ -258,14 +258,13 @@ $.widget( "ui.selectmenu", {
 	_renderItem: function( ul, item) {
 		var li = $( "<li />" ).data( "item.selectmenu", item );
 		if ( item.disabled ) {
-			li.addClass( 'ui-state-disabled' ).html( item.label );
-		} else {
-			li.append( $( "<a />", {
-					html: item.label,
-					href: '#'
-				})
-			);
+			li.addClass( 'ui-state-disabled' );
 		}
+		li.append( $( "<a />", {
+				html: item.label,
+				href: '#'
+			})
+		);
 
 		return li.appendTo( ul );
 	},
