@@ -90,10 +90,18 @@
 					if(e.target!==editInputJq.get(0)){
 						editInputJq.get(0).select();
 					}
+					//隐藏handlerSelector
+					if(options.handlerSelector){
+						$(options.handlerSelector).hide();
+					}
 				}else{
 					if(options.themeType==0){
 						element.text(editInputJq.val()).show();
 						editJq.hide();
+					}
+					//显示handlerSelector
+					if(options.handlerSelector){
+						$(options.handlerSelector).show();
 					}
 				}
 			});		
