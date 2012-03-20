@@ -15,7 +15,7 @@
 	<link rel="stylesheet" href="../../lib/sl.css" />
 	<link rel="stylesheet" href="../../jqui/css/jquery-ui.css" />
 	<link rel="stylesheet" href="../../themes/default/jquery.ui.override.css" />
-	<link rel="stylesheet" href="../../themes/default/jquery.ui.editor.css" />
+	<link rel="stylesheet" href="../../themes/default/jquery.ui.ieditor.css" />
 	<style type="text/css">
 		.editor-wrapper{
 			position:absolute;
@@ -41,28 +41,26 @@
   	<script src="../../lib/sl.js"></script>
   	<script src="../../lib/uihelper.js"></script>
   	
-	<script src="../../ui/jquery.ya.editor0.js"></script>
+  	<script src="../../ui/jquery.ya.button0.js"></script>
+	<script src="../../ui/jquery.ya.ieditor0.js"></script>
 	<script>
 	jQuery(function($) {
-		$( ".edit-text0" ).editor0({
+		$( ".edit-text0" ).ieditor0({
 			advancedTheme:{
 				shadow:false,
 				corner:false
 			},
 			handlerSelector:'.edit-h'		
 		});
-		$( ".edit-text1" ).editor0({
+		$( ".edit-text1" ).ieditor0({
 			advancedTheme:{
 				shadow:false,
 				corner:false
 			}		
 		});
-		$( ".edit-text2" ).editor0({
-			advancedTheme:{
-				shadow:true,
-				corner:true
-			},
-			editType:'textfield'		
+		$( ".edit-text2" ).ieditor0({
+			editType:'textfield',
+			themeType:1		
 		});
 	});
 	</script>
