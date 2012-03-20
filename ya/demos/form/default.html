@@ -51,6 +51,12 @@
 	<script src="../../ui/jquery.ya.form0.js"></script>
 	<script>
 		jQuery(function($) {
+			var yawrap=window.yawrap,
+				uihelper=yawrap.uihelper,
+				vtypes=uihelper.vtypes;
+			$.extend(vtypes,{
+				"num":/^[0-9]*$/
+			});
 			$( "#select1" ).theme0({
 				advancedTheme:{
 					shadow:false,
@@ -89,9 +95,9 @@
 			  		"errorMsg":'不能为空'
 				},{
 					"selector":'#inputenter',
-			  		"vtype":'trim',
+			  		"vtype":['trim','num'],
 			  		"defaultValue":"2",
-			  		"errorMsg":'不能为空'
+			  		"errorMsg":['不能为空','只能是数字']
 				},{
 					"selector":'.cb',
 			  		"vtype":'trim',

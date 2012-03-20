@@ -58,6 +58,12 @@
 				items[i-1]=_.extend({
 					"element":$(item.selector,element)
 				},item);
+				if(items[i-1].vtype){
+					items[i-1].vtype=[].concat(item.vtype);
+				}
+				if(items[i-1].errorMsg){
+					items[i-1].errorMsg=[].concat(item.errorMsg);
+				}
 			}
 			self.items=items;
 		},
@@ -74,11 +80,22 @@
 				}
 			});
 		},
+		/**
+		 * 可定义多个vtype，对应相应个数的errorMsg
+		 */
 		vField:function(selector){
 			var self=this,
 				item=self.getItem(selector),
 				v=item.element.get(0).value,
-				vtypeFn=uihelper.vtype(self,item.vtype,item);
+				vtype=item.vtype;
+				vtypeFn=[],
+				passed=true;
+			_.each(vtype,function(everyVtype,i){
+				vtypeFn[i]=uihelper.vtype(self,everyVtype,{
+					element:item.element,
+					errorMsg:item.errorMsg[i]||"error"
+				});
+			});
 			//取值过程value>data('value')>attr('val')
 			if(_.isUndefined(v)){
 				v=item.element.data('value');
@@ -90,9 +107,14 @@
 				alert('大爷给点值吧');
 				return false;
 			}
-			if(vtypeFn!==false){
-				return vtypeFn.call(self,v);
+			if(vtypeFn.length>0){
+				_.any(vtypeFn,function(fn){
+					passed=fn.call(self,v);
+					return !passed;
+				});
+				return passed;
 			}
+			return true;
 		},
 		vForm:function(){
 			var self=this,
