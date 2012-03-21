@@ -34,6 +34,7 @@ $.widget("ui.sortable", $.ui.mouse, {
 		items: '> *',
 		opacity: false,
 		placeholder: false,
+		placeholderContent: false,
 		revert: false,
 		scroll: true,
 		scrollSensitivity: 20,
@@ -653,25 +654,29 @@ $.widget("ui.sortable", $.ui.mouse, {
 
 		var self = that || this, o = self.options;
 
-		if(!o.placeholder || o.placeholder.constructor == String) {
-			var className = o.placeholder;
+		if ( ! o.placeholder || o.placeholder.constructor === String ) {
+			var className = o.placeholder,
+				placeholderContent = o.placeholderContent || "&nbsp;";
 			o.placeholder = {
 				element: function() {
 
 					var el = $(document.createElement(self.currentItem[0].nodeName))
 						.addClass(className || self.currentItem[0].className+" ui-sortable-placeholder")
-						.removeClass("ui-sortable-helper").html("&nbsp;")[0];
+						.removeClass("ui-sortable-helper").html( placeholderContent )[0];
 
-					if(!className)
+					if ( ! className ) {
 						el.style.visibility = "hidden";
+					}
 
 					return el;
 				},
-				update: function(container, p) {
+				update: function( container, p ) {
 
 					// 1. If a className is set as 'placeholder option, we don't force sizes - the class is responsible for that
 					// 2. The option 'forcePlaceholderSize can be enabled to force it even if a class name is specified
-					if(className && !o.forcePlaceholderSize) return;
+					if( className && ! o.forcePlaceholderSize ) {
+						return;
+					}
 
 					//If the element doesn't have a actual height by itself (without styles coming from a stylesheet), it receives the inline height from the dragged item
 					if(!p.height()) { p.height(self.currentItem.innerHeight() - parseInt(self.currentItem.css('paddingTop')||0, 10) - parseInt(self.currentItem.css('paddingBottom')||0, 10)); };
