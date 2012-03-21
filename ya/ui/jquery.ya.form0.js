@@ -91,10 +91,11 @@
 				vtypeFn=[],
 				passed=true;
 			_.each(vtype,function(everyVtype,i){
-				vtypeFn[i]=uihelper.vtype(self,everyVtype,{
-					element:item.element,
-					errorMsg:item.errorMsg[i]||"error"
-				});
+				vtypeFn[i]=uihelper.vtype(self,everyVtype,$.extend({
+					//element:item.element,
+					//errorMsg:item.errorMsg[i]||"error",
+					vtypeIndex:i
+				},item));
 			});
 			//取值过程value>data('value')>attr('val')
 			if(_.isUndefined(v)){

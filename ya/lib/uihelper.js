@@ -82,7 +82,7 @@
 				vtype=vtypes[vtypeName],
 				validateFn,
 				elJq=opts.element,	//待验证的dom
-				errorMsg=opts.errorMsg;	//验证失败提示信息
+				errorMsg=opts.errorMsg[opts.vtypeIndex]||'error';	//验证失败提示信息
 			if(!!vtype){
 				if(_.isFunction(vtype)){
 					validateFn=function(v){

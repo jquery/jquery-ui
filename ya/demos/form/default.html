@@ -55,7 +55,14 @@
 				uihelper=yawrap.uihelper,
 				vtypes=uihelper.vtypes;
 			$.extend(vtypes,{
-				"num":/^[0-9]*$/
+				"num":/^[0-9]*$/,
+				"maxlength":function(v,opts){
+					var maxLength=opts.maxLength;
+					if(v.length>maxLength){
+						return false;
+					}
+					return true;
+				}
 			});
 			$( "#select1" ).theme0({
 				advancedTheme:{
@@ -95,9 +102,16 @@
 			  		"errorMsg":'不能为空'
 				},{
 					"selector":'#inputenter',
-			  		"vtype":['trim','num'],
+			  		"vtype":['trim','num','maxlength'],
+			  		"maxLength":10,
 			  		"defaultValue":"2",
-			  		"errorMsg":['不能为空','只能是数字']
+			  		"errorMsg":['不能为空','只能是数字','最大字符限制为10']
+				},{
+					"selector":'#inputenter2',
+			  		"vtype":'maxlength',
+			  		"maxLength":5,
+			  		"defaultValue":"2",
+			  		"errorMsg":'最大字符限制为5'
 				},{
 					"selector":'.cb',
 			  		"vtype":'trim',
@@ -158,6 +172,9 @@
   	</div>
   	<div class="ff-wrapper">
   		<input id="inputenter" type="text" name="name0" />
+  	</div>
+  		<div class="ff-wrapper">
+  		<input id="inputenter2" type="text" name="name00" />
   	</div>
   	<div class="ff-wrapper">
   		<input class="cb" type="checkbox" name="name1" value="0" />
