@@ -4,6 +4,7 @@
 	-webkit-border-radius: 4px ! important;
 	border-radius: 4px ! important;
 	overflow: hidden;
+	position: relative;
 	/*behavior: url(../../external/PIE.htc);*/
 }
 /* 圆角 end */
