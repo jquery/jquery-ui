@@ -446,7 +446,7 @@ task.registerTask( "copy_themes", function() {
 	// TODO the template.process call shouldn't be necessary
 	var target = "dist/" + template.process( config( "files.themes" ), config() ) + "/";
 	files.forEach(function( fileName ) {
-		var targetFile = fileName.replace( /dist\/tmp\/\d+\/development-bundle\//, "" ).replace( "jquery-ui-.custom", "jquery-ui.css" );
+		var targetFile = fileName.replace( /dist\/tmp\/\d+\/development-bundle\//, "" ).replace( "jquery-ui-.custom", "jquery-ui" );
 		file.copy( fileName, target + targetFile );
 	});
 
@@ -460,11 +460,7 @@ task.registerTask( "copy_themes", function() {
 });
 
 task.registerTask( "clean", function() {
-	// TODO use node methods and keep the dir, only delete its content
-	utils.spawn({
-		cmd: "rm",
-		args: [ "-rf", "dist" ]
-	}, this.async());
+	require( "rimraf" ).sync( "dist" );
 });
 
 // TODO merge with code in jQuery Core, share as grunt plugin/npm

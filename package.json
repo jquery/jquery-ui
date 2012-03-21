@@ -30,7 +30,8 @@
     "sqwish": "0.2.x",
     "request": "2.9.x",
     "csslint": "0.9.x",
-    "adm-zip": "0.1.x"
+    "adm-zip": "0.1.x",
+    "rimraf": "2.0.1"
   },
   "keywords": []
 }
