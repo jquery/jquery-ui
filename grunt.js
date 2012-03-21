@@ -537,6 +537,6 @@ task.registerHelper( "lpad", function( str, len, chr ) {
 task.registerTask("default", "lint csslint qunit build compare_size" );
 task.registerTask("sizer", "concat:ui min:dist/jquery-ui.min.js compare_size" );
 task.registerTask("build", "concat min css_min" );
-task.registerTask("release", "build copy:dist copy:dist_min copy:dist_min_images copy:dist_css_min md5:dist zip:dist" );
+task.registerTask("release", "clean build copy:dist copy:dist_min copy:dist_min_images copy:dist_css_min md5:dist zip:dist" );
 task.registerTask("release_themes", "release download_themes copy_themes copy:themes md5:themes zip:themes" );
 task.registerTask("release_cdn", "release_themes copy:cdn copy:cdn_min copy:cdn_i18n copy:cdn_i18n_min copy:cdn_min_images copy:cdn_themes md5:cdn zip:cdn" );
