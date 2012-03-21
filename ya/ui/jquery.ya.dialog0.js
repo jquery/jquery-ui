@@ -96,5 +96,57 @@
 		}
 		
 	});
+	//alert单体弹框
+	(function(){
+		var alertJq=$('#ui-alert'),
+			alertCls='ui-alert-error ui-alert-success ui-alert-info';
+		_.extend($.ya,{
+			alert:function(title,content,type,callback,opts){
+				var uiDialogJq;
+				type=type||'error'
+				if(alertJq.length==0){
+					alertJq=$('<div id="ui-alert"><div class="ui-alert-content-wrapper"><span class="ui-icon-alert"></span><span class="ui-alert-content-inner"></span></div></div></div>').appendTo('body');
+					alertJq.dialog0($.extend({
+						modal:true,
+						resizable:false,
+						hide:true,
+						autoOpen:false,
+						minHeight:22,
+						minWidth:285,
+						advancedTheme:{	
+							shadow:true,	
+							corner:true
+						}
+					},opts||{}));
+					alertJq.data('dialog0').uiDialog.addClass('ui-dialog-alert');
+				}
+				//设置title
+				alertJq.dialog0('option',"title",title);
+				//设置内容
+				$('.ui-alert-content-inner',alertJq).html(content);
+				uiDialogJq=alertJq.data('dialog0').uiDialog;
+				if(!title){
+					uiDialogJq.addClass('ui-alert-notitle');
+				}else{
+					uiDialogJq.removeClass('ui-alert-notitle');
+				}
+				switch(type){
+					case 'error':
+						uiDialogJq.removeClass(alertCls).addClass('ui-alert-error');
+						break;
+					case 'success':
+						uiDialogJq.removeClass(alertCls).addClass('ui-alert-success');
+						break;
+					case 'info':
+						uiDialogJq.removeClass(alertCls).addClass('ui-alert-info');
+						break;
+					default:
+						break;
+				}
+				//显示提示框
+				alertJq.dialog0('open');
+			}
+		});
+	}());
 }(jQuery,this));
 

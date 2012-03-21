@@ -58,6 +58,18 @@
     color: #000000;
     text-decoration: none;
 }
+
+input.ui-state-default{
+	height:28px;
+	line-height: 28px;
+	border:1px solid #cccccc;
+	padding:0px 5px;
+}
+textarea.ui-state-default{
+	border:1px solid #cccccc;
+	padding:0px 5px;
+}
+
 /* buttons */
 .ui-button-text-only .ui-button-text {
     line-height: 28px;
@@ -120,14 +132,8 @@
 	border: 1px solid #9d9fa2;
 	background: #ffffff;
 }
-
-input.ui-state-default{
-	height:28px;
-	line-height: 28px;
-	border:1px solid #cccccc;
-	padding:0px 5px;
-}
-textarea.ui-state-default{
-	border:1px solid #cccccc;
-	padding:0px 5px;
+.ui-widget-overlay{
+	background-image:none;
+	background-color:rgba(0, 0, 0, 0.3);
+    *filter:progid:DXImageTransform.Microsoft.Gradient(GradientType=0, StartColorStr='#4c000000', EndColorStr='#4c000000');
 }

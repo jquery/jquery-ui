@@ -58,3 +58,61 @@
 .ui-dialog .ui-resizable-se { width: 14px; height: 14px; right: 3px; bottom: 3px; }
 .ui-draggable .ui-dialog-titlebar { cursor: move; }
 
+
+.ui-dialog-alert .ui-alert-content-wrapper{
+	position: relative;
+}
+.ui-dialog-alert .ui-dialog-content{
+	font-family:"微软雅黑","Microsoft YaHei";
+	font-size:18px;
+	color:#2e2e2e;
+	text-indent: 30px;
+}
+.ui-dialog-alert .ui-icon-alert{
+	width:20px;
+	height:20px;
+	display: block;
+	position: absolute;
+	top:5px;
+	left:0px;
+	background: url(images/dialog/ui-icon-alert.png) no-repeat;
+}
+.ui-dialog-alert .ui-widget-header{
+	background: transparent;
+	border:none;
+}
+.ui-alert-notitle .ui-widget-header{
+	height:0px;
+	padding:0px;
+	margin:0px;	
+}
+.ui-alert-notitle .ui-dialog-titlebar-close{
+	top:10px;
+	right:10px;
+	margin:0px;
+	padding:0px;
+}
+.ui-alert-notitle .ui-dialog-title{
+	display: none;
+}
+.ui-alert-error{
+	border:1px solid #f17668;
+	background:#fbb4b4;
+}
+.ui-alert-error .ui-icon-alert{
+	background-position: -21px 0px;
+}
+.ui-alert-success{
+	border:1px solid #95b630;
+	background:#e9fbb4;
+}
+.ui-alert-success .ui-icon-alert{
+	background-position: 0px 0px;
+}
+.ui-alert-info{
+	border:1px solid #bebb3c;
+	background:#f2edb7;
+}
+.ui-alert-info .ui-icon-alert{
+	background-position: -41px 0px;
+}
