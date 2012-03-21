@@ -23,15 +23,15 @@
 	</loadfile>
 	<property name="release.filename" value="jquery-ui-${release.version}" />
 
-	<property name="dist.dir" value="dist/${release.filename}/" />
-	<property name="cdndist.dir" value="dist/${release.filename}-cdn" />
-	<property name="build.dir" value="build" />
-	<property name="ui.dir" value="../" />
+	<property name="dist.dir" value="${basedir}/dist/${release.filename}/" />
+	<property name="cdndist.dir" value="${basedir}/dist/${release.filename}-cdn" />
+	<property name="build.dir" value="${basedir}/build" />
+	<property name="ui.dir" value="${basedir}/../" />
 	<property name="src.dir" value="${ui.dir}/ui/" />
 	<property name="theme.dir" value="${ui.dir}/themes/base/" />
 	<property name="docs.dir" value="${dist.dir}/docs/" />
 	<property name="min.dir" value="${dist.dir}/ui/minified" />
-	<property name="size.dir" value="size" />
+	<property name="size.dir" value="${basedir}/size" />
 
 	<property name="concatenated" value="jquery-ui" />
 	<property name="concatenated.i18n" value="jquery-ui-i18n" />
