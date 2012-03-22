@@ -438,6 +438,7 @@ task.registerTask( "download_themes", function() {
 });
 
 task.registerTask( "copy_themes", function() {
+	var fs = require( "fs" );
 	// each package includes the base theme, ignore that
 	var filter = /themes\/base/;
 	var files = file.expand( "dist/tmp/*/development-bundle/themes/**/*" ).filter(function( file ) {
@@ -447,7 +448,7 @@ task.registerTask( "copy_themes", function() {
 	var target = "dist/" + template.process( config( "files.themes" ), config() ) + "/";
 	files.forEach(function( fileName ) {
 		var targetFile = fileName.replace( /dist\/tmp\/\d+\/development-bundle\//, "" ).replace( "jquery-ui-.custom", "jquery-ui" );
-		file.copy( fileName, target + targetFile );
+		file.write( target + targetFile, fs.readFileSync( fileName ) );
 	});
 
 	// copy minified base theme from regular release
