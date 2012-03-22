@@ -395,7 +395,7 @@ task.registerMultiTask( "md5", "Create list of md5 hashes for CDN uploads", func
 	var hashes = [];
 	file.expand( dir + "**/*" ).forEach(function( fileName ) {
 		var hash = crypto.createHash( "md5" );
-		hash.update( file.read( fileName ) );
+		hash.update( file.read( fileName, 'ascii' ) );
 		hashes.push( fileName.replace( dir, "" ) + " " + hash.digest( "hex" ) );
 	});
 	file.write( this.file.dest, hashes.join( "\n" ) + "\n" );
