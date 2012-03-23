@@ -35,7 +35,7 @@ $.widget( "ui.accordion", {
 
 	_create: function() {
 		this.accordionId = this.element.attr( "id" ) || "ui-accordion-" + idIncrement++;
-		accordionId = this.accordionId;
+		var accordionId = this.accordionId;
 		var options = this.options;
 
 		this.prevShow = this.prevHide = $();
@@ -70,25 +70,21 @@ $.widget( "ui.accordion", {
 		this.element.attr( "role", "tablist" );
 
 		this.headers
-			.attr( {
-				"role": "tab",
-				"id": function( i ) {
-					return accordionId + "-hdr-" + i;
-				},
-				"aria-controls": function( i ) {
-					return accordionId + "-pnl-" + i;
-				},
+			.attr( "role", "tab" )
+			.each(function( i ){
+				var hdr = $( this );
+				var pnl = hdr.next();
+				if ( !hdr.attr( "id" ) ) {
+					hdr.attr( "id", accordionId + "-hdr-" + i );
+				}
+				if ( !pnl.attr( "id" ) ) {
+					pnl.attr( "id", accordionId + "-pnl-" + i );
+				}
+				hdr.attr( "aria-controls", pnl.attr( "id" ))
+				pnl.attr( "aria-labelledby", hdr.attr( "id" ))
 			})
 			.next()
-				.attr( {
-					"role": "tabpanel",
-					"id": function( i ) {
-						return accordionId + "-pnl-" + i;
-					},
-					"aria-labelledby": function( i ) {
-						return accordionId + "-hdr-" + i;
-					},
-				});
+				.attr( "role", "tabpanel" );
 
 		this.headers
 			.not( this.active )
@@ -146,6 +142,7 @@ $.widget( "ui.accordion", {
 	},
 
 	_destroy: function() {
+		var accordionId = this.accordionId;
 		// clean up main element
 		this.element
 			.removeClass( "ui-accordion ui-widget ui-helper-reset" )
@@ -158,17 +155,28 @@ $.widget( "ui.accordion", {
 			.removeAttr( "role" )
 			.removeAttr( "aria-selected" )
 			.removeAttr( "aria-controls" )
-			.removeAttr( "tabIndex" );
+			.removeAttr( "tabIndex" )
+			.each(function(){
+				if ( this.id.indexOf( accordionId + "-hdr-" ) === 0 ) {
+					this.removeAttribute( "id" );
+				}
+			});
 		this._destroyIcons();
 
 		// clean up content panels
 		var contents = this.headers.next()
+			.unbind( ".accordion" )
 			.css( "display", "" )
 			.removeAttr( "role" )
 			.removeAttr( "aria-expanded" )
 			.removeAttr( "aria-hidden" )
 			.removeAttr( "aria-labelledby" )
-			.removeClass( "ui-helper-reset ui-widget-content ui-corner-bottom ui-accordion-content ui-accordion-content-active ui-state-disabled" );
+			.removeClass( "ui-helper-reset ui-widget-content ui-corner-bottom ui-accordion-content ui-accordion-content-active ui-state-disabled" )
+			.each(function(){
+				if ( this.id.indexOf( accordionId + "-pnl-" ) === 0 ) {
+					this.removeAttribute( "id" );
+				}
+			});
 		if ( this.options.heightStyle !== "content" ) {
 			this.element.css( "height", this.originalHeight );
 			contents.css( "height", "" );
