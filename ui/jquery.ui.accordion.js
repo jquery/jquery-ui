@@ -233,6 +233,12 @@ $.widget( "ui.accordion", {
 			case keyCode.SPACE:
 			case keyCode.ENTER:
 				this._eventHandler( event );
+			case keyCode.HOME:
+				toFocus = this.headers[ 0 ];
+				break;
+			case keyCode.END:
+				toFocus = this.headers[ length - 1 ];
+				break;
 		}
 
 		if ( toFocus ) {
@@ -240,6 +246,17 @@ $.widget( "ui.accordion", {
 			$( toFocus ).attr( "tabIndex", 0 );
 			toFocus.focus();
 			event.preventDefault();
+		}
+	},
+
+	_panelKeyDown : function( event ) {
+		var keyCode = $.ui.keyCode;
+		switch ( event.keyCode ) {
+			case keyCode.UP:
+				if ( event.ctrlKey ) {
+					$( event.currentTarget ).prev().focus();
+				}
+				break;
 		}
 	},
 
@@ -330,6 +347,9 @@ $.widget( "ui.accordion", {
 			});
 		}
 		this._bind( this.headers, events );
+		this._bind( this.headers.next(), {
+			keydown : "_panelKeyDown"
+		} );
 	},
 
 	_eventHandler: function( event ) {
