@@ -1,3 +1,5 @@
+module.exports = function( grunt ) {
+
 function stripBanner( files ) {
 	return files.map(function( file ) {
 		return "<strip_all_banners:" + file + ">";
@@ -12,24 +14,24 @@ function createBanner( files ) {
 	// strip folders
 	var fileNames = files && files.map( stripDirectory );
 	return "/*! <%= pkg.title || pkg.name %> - v<%= pkg.version %> - " +
-		"<%= template.today('isoDate') %>\n" +
+		"<%= grunt.template.today('isoDate') %>\n" +
 		"<%= pkg.homepage ? '* ' + pkg.homepage + '\n' : '' %>" +
-		"* Includes: " + (files ? fileNames.join(", ") : "<%= stripDirectory(task.current.file.src[1]) %>") + "\n" +
-		"* Copyright (c) <%= template.today('yyyy') %> <%= pkg.author.name %>;" +
+		"* Includes: " + (files ? fileNames.join(", ") : "<%= stripDirectory(grunt.task.current.file.src[1]) %>") + "\n" +
+		"* Copyright (c) <%= grunt.template.today('yyyy') %> <%= pkg.author.name %>;" +
 		" Licensed <%= _.pluck(pkg.licenses, 'type').join(', ') %> */";
 }
 
 // allow access from banner template
 global.stripDirectory = stripDirectory;
-task.registerHelper( "strip_all_banners", function( filepath ) {
-	return file.read( filepath ).replace( /^\s*\/\*[\s\S]*?\*\/\s*/g, "" );
+grunt.registerHelper( "strip_all_banners", function( filepath ) {
+	return grunt.file.read( filepath ).replace( /^\s*\/\*[\s\S]*?\*\/\s*/g, "" );
 });
 var inspect = require( "util" ).inspect;
 
 var coreFiles = "jquery.ui.core.js, jquery.ui.widget.js, jquery.ui.mouse.js, jquery.ui.draggable.js, jquery.ui.droppable.js, jquery.ui.resizable.js, jquery.ui.selectable.js, jquery.ui.sortable.js, jquery.effects.core.js".split( ", " );
 var uiFiles = coreFiles.map(function( file ) {
 	return "ui/" + file;
-}).concat( file.expand( "ui/*.js" ).filter(function( file ) {
+}).concat( grunt.file.expandFiles( "ui/*.js" ).filter(function( file ) {
 	return coreFiles.indexOf( file.substring(3) ) === -1;
 }));
 
@@ -42,7 +44,7 @@ function minFile( file ) {
 }
 uiFiles.forEach( minFile );
 
-var allI18nFiles = file.expand( "ui/i18n/*.js" );
+var allI18nFiles = grunt.file.expandFiles( "ui/i18n/*.js" );
 allI18nFiles.forEach( minFile );
 
 var cssFiles = "core accordion autocomplete button datepicker dialog menu progressbar resizable selectable slider spinner tabs tooltip theme".split( " " ).map(function( component ) {
@@ -55,7 +57,7 @@ cssFiles.forEach(function( file ) {
 	minifyCSS[ "dist/" + file.replace( /\.css$/, ".min.css" ).replace( /themes\/base\//, "themes/base/minified/" ) ] = [ "<banner>", file ];
 });
 
-config.init({
+grunt.initConfig({
 	pkg: "<json:package.json>",
 	files: {
 		dist: "<%= pkg.name %>-<%= pkg.version %>",
@@ -213,7 +215,7 @@ config.init({
 		}
 	},
 	qunit: {
-		files: file.expand( "tests/unit/**/*.html" ).filter(function( file ) {
+		files: grunt.file.expandFiles( "tests/unit/**/*.html" ).filter(function( file ) {
 			// disabling everything that doesn't (quite) work with PhantomJS for now
 			// except for all|index|test, try to include more as we go
 			return !( /(all|index|test|draggable|droppable|selectable|resizable|sortable|dialog|slider|datepicker|tabs|tabs_deprecated)\.html/ ).test( file );
@@ -281,58 +283,58 @@ config.init({
 	}
 });
 
-task.registerMultiTask( "copy", "Copy files to destination folder and replace @VERSION with pkg.version", function() {
+grunt.registerMultiTask( "copy", "Copy files to destination folder and replace @VERSION with pkg.version", function() {
 	function replaceVersion( source ) {
-		return source.replace( "@VERSION", config( "pkg.version" ) );
+		return source.replace( "@VERSION", grunt.config( "pkg.version" ) );
 	}
-	var files = file.expand( this.file.src );
+	var files = grunt.file.expandFiles( this.file.src );
 	var target = this.file.dest + "/";
 	var strip = this.data.strip;
 	if ( typeof strip === "string" ) {
-		strip = new RegExp( "^" + template.process( strip, config() ).replace( /[\-\[\]{}()*+?.,\\\^$|#\s]/g, "\\$&" ) );
+		strip = new RegExp( "^" + grunt.template.process( strip, grunt.config() ).replace( /[\-\[\]{}()*+?.,\\\^$|#\s]/g, "\\$&" ) );
 	}
 	files.forEach(function( fileName ) {
 		var targetFile = strip ? fileName.replace( strip, "" ) : fileName;
 		if ( /png$/.test( fileName ) ) {
-			file.copy( fileName, target + targetFile );
+			grunt.file.copy( fileName, target + targetFile );
 		} else {
-			file.copy( fileName, target + targetFile, replaceVersion );
+			grunt.file.copy( fileName, target + targetFile, replaceVersion );
 		}
 	});
-	log.writeln( "Copied " + files.length + " files." );
+	grunt.log.writeln( "Copied " + files.length + " files." );
 	var renameCount = 0;
 	for ( var fileName in this.data.renames ) {
 		renameCount += 1;
-		file.copy( fileName, target + template.process( this.data.renames[ fileName ], config() ) );
+		grunt.file.copy( fileName, target + grunt.template.process( this.data.renames[ fileName ], grunt.config() ) );
 	}
 	if ( renameCount ) {
-		log.writeln( "Renamed " + renameCount + " files." );
+		grunt.log.writeln( "Renamed " + renameCount + " files." );
 	}
 });
 
 
-task.registerMultiTask( "zip", "Create a zip file for release", function() {
+grunt.registerMultiTask( "zip", "Create a zip file for release", function() {
 	// TODO switch back to adm-zip for better cross-platform compability once it actually works
 	// 0.1.3 works, but result can't be unzipped
 	// its also a lot slower then zip program, probably due to how its used...
-	// var files = file.expand( "dist/" + this.file.src + "/**/*" );
-	// log.writeln( "Creating zip file " + this.file.dest );
+	// var files = grunt.file.expandFiles( "dist/" + this.file.src + "/**/*" );
+	// grunt.log.writeln( "Creating zip file " + this.file.dest );
 
 	// var fs = require( "fs" );
 	// var AdmZip = require( "adm-zip" );
 	// var zip = new AdmZip();
 	// files.forEach(function( file ) {
-	// 	log.verbose.writeln( "Zipping " + file );
+	// 	grunt.verbose.writeln( "Zipping " + file );
 	// 	// rewrite file names from dist folder (created by build), drop the /dist part
 	// 	zip.addFile(file.replace(/^dist/, "" ), fs.readFileSync( file ) );
 	// });
 	// zip.writeZip( "dist/" + this.file.dest );
-	// log.writeln( "Wrote " + files.length + " files to " + this.file.dest );
+	// grunt.log.writeln( "Wrote " + files.length + " files to " + this.file.dest );
 
 	var done = this.async();
 	var dest = this.file.dest;
-	var src = template.process( this.file.src, config() );
-	utils.spawn({
+	var src = grunt.template.process( this.file.src, grunt.config() );
+	grunt.utils.spawn({
 		cmd: "zip",
 		args: [ "-r", dest, src ],
 		opts: {
@@ -340,18 +342,18 @@ task.registerMultiTask( "zip", "Create a zip file for release", function() {
 		}
 	}, function( err, result ) {
 		if ( err ) {
-			log.error( err );
+			grunt.log.error( err );
 			done();
 			return;
 		}
-		log.writeln( "Zipped " + dest );
+		grunt.log.writeln( "Zipped " + dest );
 		done();
 	});
 });
 
-task.registerMultiTask( "csslint", "Lint CSS files with csslint", function() {
+grunt.registerMultiTask( "csslint", "Lint CSS files with csslint", function() {
 	var csslint = require( "csslint" ).CSSLint;
-	var files = file.expand( this.file.src );
+	var files = grunt.file.expandFiles( this.file.src );
 	var ruleset = {};
 	csslint.getRules().forEach(function( rule ) {
 		ruleset[ rule.id ] = 1;
@@ -365,10 +367,10 @@ task.registerMultiTask( "csslint", "Lint CSS files with csslint", function() {
 	}
 	var hadErrors = 0;
 	files.forEach(function( filepath ) {
-		log.writeln( "Linting " + filepath );
-		var result = csslint.verify( file.read( filepath ), ruleset );
+		grunt.log.writeln( "Linting " + filepath );
+		var result = csslint.verify( grunt.file.read( filepath ), ruleset );
 		result.messages.forEach(function( message ) {
-			log.writeln( "[".red + ( "L" + message.line ).yellow + ":".red + ( "C" + message.col ).yellow + "]".red );
+			grunt.log.writeln( "[".red + ( "L" + message.line ).yellow + ":".red + ( "C" + message.col ).yellow + "]".red );
 			log[ message.type === "error" ? "error" : "writeln" ]( message.message + " " + message.rule.desc + " (" + message.rule.id + ")" );
 		});
 		if ( result.messages.length ) {
@@ -378,18 +380,18 @@ task.registerMultiTask( "csslint", "Lint CSS files with csslint", function() {
 	if (hadErrors) {
 		return false;
 	}
-	log.writeln( "Lint free" );
+	grunt.log.writeln( "Lint free" );
 });
 
-task.registerMultiTask( "css_min", "Minify CSS files with Sqwish.", function() {
-	var max = task.helper( "concat", file.expand( this.file.src ) );
+grunt.registerMultiTask( "css_min", "Minify CSS files with Sqwish.", function() {
+	var max = grunt.helper( "concat", grunt.file.expandFiles( this.file.src ) );
 	var min = require( "sqwish" ).minify( max, false );
-	file.write( this.file.dest, min );
-	log.writeln( "File '" + this.file.dest + "' created." );
-	task.helper( "min_max_info", min, max );
+	grunt.file.write( this.file.dest, min );
+	grunt.log.writeln( "File '" + this.file.dest + "' created." );
+	grunt.helper( "min_max_info", min, max );
 });
 
-task.registerMultiTask( "md5", "Create list of md5 hashes for CDN uploads", function() {
+grunt.registerMultiTask( "md5", "Create list of md5 hashes for CDN uploads", function() {
 	// remove dest file before creating it, to make sure itself is not included
 	if ( require( "path" ).existsSync( this.file.dest ) ) {
 		require( "fs" ).unlinkSync( this.file.dest );
@@ -397,39 +399,39 @@ task.registerMultiTask( "md5", "Create list of md5 hashes for CDN uploads", func
 	var crypto = require( "crypto" );
 	var dir = this.file.src + "/";
 	var hashes = [];
-	file.expand( dir + "**/*" ).forEach(function( fileName ) {
+	grunt.file.expandFiles( dir + "**/*" ).forEach(function( fileName ) {
 		var hash = crypto.createHash( "md5" );
-		hash.update( file.read( fileName, "ascii" ) );
+		hash.update( grunt.file.read( fileName, "ascii" ) );
 		hashes.push( fileName.replace( dir, "" ) + " " + hash.digest( "hex" ) );
 	});
-	file.write( this.file.dest, hashes.join( "\n" ) + "\n" );
-	log.writeln( "Wrote " + this.file.dest + " with " + hashes.length + " hashes" );
+	grunt.file.write( this.file.dest, hashes.join( "\n" ) + "\n" );
+	grunt.log.writeln( "Wrote " + this.file.dest + " with " + hashes.length + " hashes" );
 });
 
-task.registerTask( "download_themes", function() {
+grunt.registerTask( "download_themes", function() {
 	// var AdmZip = require('adm-zip');
 	var fs = require( "fs" );
 	var request = require( "request" );
 	var done = this.async();
-	var themes = file.read( "build/themes" ).split(",");
+	var themes = grunt.file.read( "build/themes" ).split(",");
 	var requests = 0;
-	file.mkdir( "dist/tmp" );
+	grunt.file.mkdir( "dist/tmp" );
 	themes.forEach(function( theme, index ) {
 		requests += 1;
-		file.mkdir( "dist/tmp/" + index );
+		grunt.file.mkdir( "dist/tmp/" + index );
 		var zipFileName = "dist/tmp/" + index + ".zip";
 		var out = fs.createWriteStream( zipFileName );
 		out.on( "close", function() {
-			log.writeln( "done downloading " + zipFileName );
+			grunt.log.writeln( "done downloading " + zipFileName );
 			// TODO AdmZip produces "crc32 checksum failed", need to figure out why
 			// var zip = new AdmZip(zipFileName);
 			// zip.extractAllTo('dist/tmp/' + index + '/');
 			// until then, using cli unzip...
-			utils.spawn({
+			grunt.utils.spawn({
 				cmd: "unzip",
 				args: [ "-d", "dist/tmp/" + index, zipFileName ]
 			}, function( err, result ) {
-				log.writeln( "Unzipped " + zipFileName + ", deleting it now" );
+				grunt.log.writeln( "Unzipped " + zipFileName + ", deleting it now" );
 				fs.unlinkSync( zipFileName );
 				requests -= 1;
 				if (requests === 0) {
@@ -441,62 +443,62 @@ task.registerTask( "download_themes", function() {
 	});
 });
 
-task.registerTask( "copy_themes", function() {
+grunt.registerTask( "copy_themes", function() {
 	// each package includes the base theme, ignore that
 	var filter = /themes\/base/;
-	var files = file.expand( "dist/tmp/*/development-bundle/themes/**/*" ).filter(function( file ) {
+	var files = grunt.file.expandFiles( "dist/tmp/*/development-bundle/themes/**/*" ).filter(function( file ) {
 		return !filter.test( file );
 	});
-	// TODO the template.process call shouldn't be necessary
-	var target = "dist/" + template.process( config( "files.themes" ), config() ) + "/";
+	// TODO the grunt.template.process call shouldn't be necessary
+	var target = "dist/" + grunt.template.process( grunt.config( "files.themes" ), grunt.config() ) + "/";
 	files.forEach(function( fileName ) {
 		var targetFile = fileName.replace( /dist\/tmp\/\d+\/development-bundle\//, "" ).replace( "jquery-ui-.custom", "jquery-ui" );
-		file.copy( fileName, target + targetFile );
+		grunt.file.copy( fileName, target + targetFile );
 	});
 
 	// copy minified base theme from regular release
 	// TODO same as the one above
-	var distFolder = "dist/" + template.process( config( "files.dist" ), config() );
-	files = file.expand( distFolder + "/themes/base/**/*" );
+	var distFolder = "dist/" + grunt.template.process( grunt.config( "files.dist" ), grunt.config() );
+	files = grunt.file.expandFiles( distFolder + "/themes/base/**/*" );
 	files.forEach(function( fileName ) {
-		file.copy( fileName, target + fileName.replace( distFolder, "" ) );
+		grunt.file.copy( fileName, target + fileName.replace( distFolder, "" ) );
 	});
 });
 
-task.registerTask( "clean", function() {
+grunt.registerTask( "clean", function() {
 	require( "rimraf" ).sync( "dist" );
 });
 
 // TODO merge with code in jQuery Core, share as grunt plugin/npm
 // this here actually uses the provided filenames in the output
 // the helpers should just be regular functions, no need to share those with the world
-task.registerMultiTask( "compare_size", "Compare size of this branch to master", function() {
-	var files = file.expand( this.file.src ),
+grunt.registerMultiTask( "compare_size", "Compare size of this branch to master", function() {
+	var files = grunt.file.expandFiles( this.file.src ),
 		done = this.async(),
 		sizecache = __dirname + "/dist/.sizecache.json",
 		sources = {
-			min: file.read( files[1] ),
-			max: file.read( files[0] )
+			min: grunt.file.read( files[1] ),
+			max: grunt.file.read( files[0] )
 		},
 		oldsizes = {},
 		sizes = {};
 
 	try {
-		oldsizes = JSON.parse( file.read( sizecache ) );
+		oldsizes = JSON.parse( grunt.file.read( sizecache ) );
 	} catch( e ) {
 		oldsizes = {};
 	}
 
 	// Obtain the current branch and continue...
-	task.helper( "git_current_branch", function( err, branch ) {
+	grunt.helper( "git_current_branch", function( err, branch ) {
 		var key, diff;
 
 		// Derived and adapted from Corey Frang's original `sizer`
-		log.writeln( "sizes - compared to master" );
+		grunt.log.writeln( "sizes - compared to master" );
 
 		sizes[ files[0] ] = sources.max.length;
 		sizes[ files[1] ] = sources.min.length;
-		sizes[ files[1] + ".gz" ] = task.helper( "gzip", sources.min ).length;
+		sizes[ files[1] + ".gz" ] = grunt.helper( "gzip", sources.min ).length;
 
 		for ( key in sizes ) {
 			diff = oldsizes[ key ] && ( sizes[ key ] - oldsizes[ key ] );
@@ -504,8 +506,8 @@ task.registerMultiTask( "compare_size", "Compare size of this branch to master",
 				diff = "+" + diff;
 			}
 			console.log( "%s %s %s",
-				task.helper("lpad",  sizes[ key ], 8 ),
-				task.helper("lpad",  diff ? "(" + diff + ")" : "(-)", 8 ),
+				grunt.helper("lpad",  sizes[ key ], 8 ),
+				grunt.helper("lpad",  diff ? "(" + diff + ")" : "(-)", 8 ),
 				key
 			);
 		}
@@ -514,13 +516,13 @@ task.registerMultiTask( "compare_size", "Compare size of this branch to master",
 			// If master, write to file - this makes it easier to compare
 			// the size of your current code state to the master branch,
 			// without returning to the master to reset the cache
-			file.write( sizecache, JSON.stringify(sizes) );
+			grunt.file.write( sizecache, JSON.stringify(sizes) );
 		}
 		done();
 	});
 });
-task.registerHelper( "git_current_branch", function( done ) {
-	utils.spawn({
+grunt.registerHelper( "git_current_branch", function( done ) {
+	grunt.utils.spawn({
 		cmd: "git",
 		args: [ "branch", "--no-color" ]
 	}, function( err, result ) {
@@ -534,13 +536,15 @@ task.registerHelper( "git_current_branch", function( done ) {
 		});
 	});
 });
-task.registerHelper( "lpad", function( str, len, chr ) {
+grunt.registerHelper( "lpad", function( str, len, chr ) {
 	return ( Array( len + 1 ).join( chr || " " ) + str ).substr( -len );
 });
 
-task.registerTask( "default", "lint csslint qunit build compare_size" );
-task.registerTask( "sizer", "concat:ui min:dist/jquery-ui.min.js compare_size" );
-task.registerTask( "build", "concat min css_min" );
-task.registerTask( "release", "clean build copy:dist copy:dist_min copy:dist_min_images copy:dist_css_min md5:dist zip:dist" );
-task.registerTask( "release_themes", "release download_themes copy_themes copy:themes md5:themes zip:themes" );
-task.registerTask( "release_cdn", "release_themes copy:cdn copy:cdn_min copy:cdn_i18n copy:cdn_i18n_min copy:cdn_min_images copy:cdn_themes md5:cdn zip:cdn" );
+grunt.registerTask( "default", "lint csslint qunit build compare_size" );
+grunt.registerTask( "sizer", "concat:ui min:dist/jquery-ui.min.js compare_size" );
+grunt.registerTask( "build", "concat min css_min" );
+grunt.registerTask( "release", "clean build copy:dist copy:dist_min copy:dist_min_images copy:dist_css_min md5:dist zip:dist" );
+grunt.registerTask( "release_themes", "release download_themes copy_themes copy:themes md5:themes zip:themes" );
+grunt.registerTask( "release_cdn", "release_themes copy:cdn copy:cdn_min copy:cdn_i18n copy:cdn_i18n_min copy:cdn_min_images copy:cdn_themes md5:cdn zip:cdn" );
+
+};
