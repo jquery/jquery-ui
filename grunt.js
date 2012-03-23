@@ -293,7 +293,11 @@ task.registerMultiTask( "copy", "Copy files to destination folder and replace @V
 	}
 	files.forEach(function( fileName ) {
 		var targetFile = strip ? fileName.replace( strip, "" ) : fileName;
-		file.copy( fileName, target + targetFile, replaceVersion );
+		if ( /png$/.test( fileName ) ) {
+			file.copy( fileName, target + targetFile );
+		} else {
+			file.copy( fileName, target + targetFile, replaceVersion );
+		}
 	});
 	log.writeln( "Copied " + files.length + " files." );
 	var renameCount = 0;
@@ -438,7 +442,6 @@ task.registerTask( "download_themes", function() {
 });
 
 task.registerTask( "copy_themes", function() {
-	var fs = require( "fs" );
 	// each package includes the base theme, ignore that
 	var filter = /themes\/base/;
 	var files = file.expand( "dist/tmp/*/development-bundle/themes/**/*" ).filter(function( file ) {
@@ -448,7 +451,7 @@ task.registerTask( "copy_themes", function() {
 	var target = "dist/" + template.process( config( "files.themes" ), config() ) + "/";
 	files.forEach(function( fileName ) {
 		var targetFile = fileName.replace( /dist\/tmp\/\d+\/development-bundle\//, "" ).replace( "jquery-ui-.custom", "jquery-ui" );
-		file.write( target + targetFile, fs.readFileSync( fileName ) );
+		file.copy( fileName, target + targetFile );
 	});
 
 	// copy minified base theme from regular release
