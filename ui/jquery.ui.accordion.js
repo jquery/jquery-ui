@@ -407,7 +407,6 @@ $.widget( "ui.accordion", {
 			this._toggleComplete( data );
 		}
 
-		// TODO assert that the blur and focus triggers are really necessary, remove otherwise
 		toHide
 			.attr({
 				"aria-expanded": "false",
@@ -416,8 +415,7 @@ $.widget( "ui.accordion", {
 				.attr({
 					"aria-selected": "false",
 					tabIndex: -1
-				})
-				.blur();
+				});
 		toShow
 			.attr({
 				"aria-expanded": "true",
@@ -426,8 +424,7 @@ $.widget( "ui.accordion", {
 				.attr({
 					"aria-selected": "true",
 					tabIndex: 0
-				})
-				.focus();
+				});
 	},
 
 	_animate: function( toShow, toHide, data ) {
