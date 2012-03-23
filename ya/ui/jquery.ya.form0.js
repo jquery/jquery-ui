@@ -173,6 +173,7 @@
 				items=self.items;
 			_.each(items,function(v){
 				var itemJq=v.element,
+				    validMsgJq=itemJq.data('validmsg'),
 					defaultValue;
 				if(v.defaultValue){
 					defaultValue=[].concat(v.defaultValue);
@@ -199,6 +200,11 @@
 						itemJq.text(defaultValue[0]).data('value',defaultValue[0]);
 					}
 				}
+				//清空error
+				if(validMsgJq){
+				    validMsgJq.removeClass('ui-state-error').empty();
+				}
+				
 			});
 		},
 		addItem:function(items){
