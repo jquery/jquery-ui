@@ -12,6 +12,7 @@
  *	jquery.ui.widget.js
  */
 (function( $, undefined ) {
+	var idIncrement = 0;
 
 $.widget( "ui.accordion", {
 	version: "@VERSION",
@@ -33,6 +34,8 @@ $.widget( "ui.accordion", {
 	},
 
 	_create: function() {
+		this.accordionId = this.element.attr( "id" ) || "ui-accordion-" + idIncrement++;
+		accordionId = this.accordionId;
 		var options = this.options;
 
 		this.prevShow = this.prevHide = $();
@@ -67,19 +70,36 @@ $.widget( "ui.accordion", {
 		this.element.attr( "role", "tablist" );
 
 		this.headers
-			.attr( "role", "tab" )
+			.attr( {
+				"role": "tab",
+				"id": function( i ) {
+					return accordionId + "-hdr-" + i;
+				},
+				"aria-controls": function( i ) {
+					return accordionId + "-pnl-" + i;
+				},
+			})
 			.next()
-				.attr( "role", "tabpanel" );
+				.attr( {
+					"role": "tabpanel",
+					"id": function( i ) {
+						return accordionId + "-pnl-" + i;
+					},
+					"aria-labelledby": function( i ) {
+						return accordionId + "-hdr-" + i;
+					},
+				});
 
 		this.headers
 			.not( this.active )
 			.attr({
 				// TODO: document support for each of these
-				"aria-expanded": "false",
 				"aria-selected": "false",
 				tabIndex: -1
 			})
 			.next()
+				.attr( "aria-expanded", "false" )
+				.attr( "aria-hidden", "true" )
 				.hide();
 
 		// make sure at least one header is in the tab order
@@ -87,10 +107,12 @@ $.widget( "ui.accordion", {
 			this.headers.eq( 0 ).attr( "tabIndex", 0 );
 		} else {
 			this.active.attr({
-				"aria-expanded": "true",
 				"aria-selected": "true",
 				tabIndex: 0
-			});
+			})
+			.next()
+				.attr( "aria-expanded", "true" )
+				.attr( "aria-hidden", "false" );
 		}
 
 		this._setupEvents( options.event );
@@ -134,8 +156,8 @@ $.widget( "ui.accordion", {
 			.unbind( ".accordion" )
 			.removeClass( "ui-accordion-header ui-accordion-header-active ui-helper-reset ui-state-default ui-corner-all ui-state-active ui-state-disabled ui-corner-top" )
 			.removeAttr( "role" )
-			.removeAttr( "aria-expanded" )
 			.removeAttr( "aria-selected" )
+			.removeAttr( "aria-controls" )
 			.removeAttr( "tabIndex" );
 		this._destroyIcons();
 
@@ -143,6 +165,9 @@ $.widget( "ui.accordion", {
 		var contents = this.headers.next()
 			.css( "display", "" )
 			.removeAttr( "role" )
+			.removeAttr( "aria-expanded" )
+			.removeAttr( "aria-hidden" )
+			.removeAttr( "aria-labelledby" )
 			.removeClass( "ui-helper-reset ui-widget-content ui-corner-bottom ui-accordion-content ui-accordion-content-active ui-state-disabled" );
 		if ( this.options.heightStyle !== "content" ) {
 			this.element.css( "height", this.originalHeight );
@@ -383,20 +408,26 @@ $.widget( "ui.accordion", {
 		}
 
 		// TODO assert that the blur and focus triggers are really necessary, remove otherwise
-		toHide.prev()
+		toHide
 			.attr({
 				"aria-expanded": "false",
-				"aria-selected": "false",
-				tabIndex: -1
-			})
-			.blur();
-		toShow.prev()
+				"aria-hidden": "true"
+			}).prev()
+				.attr({
+					"aria-selected": "false",
+					tabIndex: -1
+				})
+				.blur();
+		toShow
 			.attr({
 				"aria-expanded": "true",
-				"aria-selected": "true",
-				tabIndex: 0
-			})
-			.focus();
+				"aria-hidden": "false"
+			}).prev()
+				.attr({
+					"aria-selected": "true",
+					tabIndex: 0
+				})
+				.focus();
 	},
 
 	_animate: function( toShow, toHide, data ) {
