@@ -241,6 +241,7 @@ $.widget( "ui.accordion", {
 			case keyCode.SPACE:
 			case keyCode.ENTER:
 				this._eventHandler( event );
+				break;
 			case keyCode.HOME:
 				toFocus = this.headers[ 0 ];
 				break;
