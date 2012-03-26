@@ -19,8 +19,10 @@
 			name:'',
 			cls:'',	//编辑器css类名
 			handlerSelector:null,
-			editType:null,
-			themeType:0	//编辑器显示方式 0-不带操作按钮；1-带操作按钮
+			editType:null,   //textfield,textarea,combo,datepicker
+			themeType:0,	//编辑器显示方式 0-不带操作按钮；1-带操作按钮
+			selectValues:null,    //for combobox,提供可选值
+			dateFormat:'mm/dd/yy'    //for datepicker
 		},
 		_create:function(){
 			var self=this;
@@ -71,24 +73,44 @@
 				//设置操作按钮
 				var actionJq=$('<span class="ui-ieditor-actions"></span>').appendTo(editJq);
 				$('<button>保存</button>').click(function(){
-					element.text(editInputJq.val()).show();
+					//element.text(editInputJq.val()).show();
+					if(!_.isUndefined(editInputJq.data('label'))){
+                        element.text(editInputJq.data('label'));
+                        element.data('value',editInputJq.val());
+                    }else{
+                        element.text(editInputJq.val());
+                    }
+                    element.show();
 					editJq.hide();
+					return false;
 				}).button0().appendTo(actionJq);
 				
 				$('<button>取消</button>').click(function(){
-					var originVal=editInputJq.data('originval');
-					element.text(originVal).show();
+					var originVal=editInputJq.data('originval'),
+					   originLabel=editInputJq.data('originlabel');
+					if(!_.isUndefined(originLabel)){
+                        element.text(originLabel);
+                        element.data('value',originVal);
+                    }else{
+                        element.text(originVal);
+                    }
+                    element.show();
+					//element.text(originVal).show();
 					editJq.hide();
+					return false;
 				}).button0().appendTo(actionJq);
 			}
 			//绑定事件
 			$(document).click(function(e){
-				if(e.target===element.get(0)||e.target===$(options.handlerSelector).get(0)||e.target===editInputJq.get(0)){
+				if(e.target===element.get(0)||e.target===$(options.handlerSelector).get(0)||editInputJq.parent('.ui-ieditor').find(e.target).length!=0){ //如果点击dom是element 或 handler 或 编辑器本身
 					element.hide();
-					editInputJq.val(element.text()).data('originval',element.text());
+					var value=element.data('value')||element.attr('val')||element.text();
+					editInputJq.val(value).data('originval',value).data('originlabel',editInputJq.data('label'));
 					editJq.show();
 					if(e.target!==editInputJq.get(0)){
-						editInputJq.get(0).select();
+						try{
+						    editInputJq.get(0).select();
+						}catch(e){}
 					}
 					//隐藏handlerSelector
 					if(options.handlerSelector){
@@ -96,7 +118,14 @@
 					}
 				}else{
 					if(options.themeType==0){
-						element.text(editInputJq.val()).show();
+						//element.text(editInputJq.val()).show();
+						if(!_.isUndefined(editInputJq.data('label'))){
+						    element.text(editInputJq.data('label'));
+						    element.data('value',editInputJq.val());
+						}else{
+						    element.text(editInputJq.val());
+						}
+						element.show();
 						editJq.hide();
 					}
 					//显示handlerSelector
@@ -116,6 +145,12 @@
 				case "textarea":
 					self._textareaEditor();
 					break;
+				case "combo":
+                    self._comboEditor();
+                    break;
+                case "datepicker":
+                    self._dpEditor();
+                    break;
 				default:
 					break;
 			}
@@ -125,8 +160,8 @@
 				element=self.element,
 				options=self.options;
 			
-			var editJq=$('<span class="'+options.cls+' ui-ieditor ui-ieditor-textfield ui-widget ui-helper-reset" style="display:none;"></span>');	//编辑控件
-			var editInputJq=$('<input class="ui-textfield ui-ieditor-input ui-state-default" type="text" name="'+options.name+'" />').val(element.text()).appendTo(editJq);
+			var editJq=$('<span class="'+options.cls+' ui-ieditor ui-ieditor-textfield-wrapper ui-widget ui-helper-reset" style="display:none;"></span>');	//编辑控件
+			var editInputJq=$('<input class="ui-ieditor-textfield ui-ieditor-input ui-state-default" type="text" name="'+options.name+'" />').val(element.text()).appendTo(editJq);
 			editJq.insertAfter(self.element);	
 			//设置引用
 			self.editJq=editJq;
@@ -136,11 +171,64 @@
 				element=self.element,
 				options=self.options;
 			
-			var editJq=$('<span class="'+options.cls+' ui-ieditor ui-ieditor-textarea ui-widget ui-helper-reset" style="display:none;"></span>');	//编辑控件
-			var editInputJq=$('<textarea class="ui-textarea ui-ieditor-input ui-state-default" name="'+options.name+'" /></textarea>').val(element.text()).appendTo(editJq);
+			var editJq=$('<span class="'+options.cls+' ui-ieditor ui-ieditor-textarea-wrapper ui-widget ui-helper-reset" style="display:none;"></span>');	//编辑控件
+			var editInputJq=$('<textarea class="ui-ieditor-textarea ui-ieditor-input ui-state-default" name="'+options.name+'" /></textarea>').val(element.text()).appendTo(editJq);
 			editJq.insertAfter(self.element);	
 			//设置引用
 			self.editJq=editJq;
+		},
+		_comboEditor:function(){
+		    var self=this,
+                element=self.element,
+                options=self.options,
+                selectValues=options.selectValues; 
+            var htmlArr=[]; 
+            var value=element.data('value')||element.attr('val')||element.text(),   //初始值
+                label=element.text();   //初始display值
+
+            var editJq=$('<span class="'+options.cls+' ui-ieditor ui-ieditor-combo-wrapper ui-widget ui-helper-reset" style="display:none;"></span>');   //编辑控件
+            var editInputJq=$('<select class="ui-ieditor-combo ui-ieditor-input ui-state-default" name="'+options.name+'" /></select>').appendTo(editJq);
+            if(_.isString(selectValues)){
+                selectValues.replace(regx.rword,function(v){
+                    htmlArr.push('<option value="'+v+'"'+(v==value?' selected="selected"':'')+'>'+v+'</option>');
+                });
+            }else if(_.isArray(selectValues)){
+                _.each(selectValues,function(v,i){
+                    htmlArr[i]='<option value="'+v.value+'"'+(v.value==value?' selected="selected"':'')+'>'+(v.label||v.value)+'</option>';
+                });
+            }
+            editInputJq.html(htmlArr.join(''));
+            editJq.insertAfter(self.element);  
+            editInputJq.data('label',label);
+            //主题化
+            if($.ya.theme0){
+                editInputJq.theme0({
+                    themeType:'combo',
+                    select:function(e,data){
+                        editInputJq.data('label',data.label);
+                    }
+                });
+            }
+            //设置引用
+            self.editJq=editJq;
+		},
+		_dpEditor:function(){
+		     var self=this,
+                element=self.element,
+                options=self.options,
+                dateFormat=options.dateFormat;
+                
+            var editJq=$('<span class="'+options.cls+' ui-ieditor ui-ieditor-datepicker-wrapper ui-widget ui-helper-reset" style="display:none;"></span>');  //编辑控件
+            var editInputJq=$('<input class="ui-ieditor-datepicker ui-ieditor-input ui-state-default" type="text" name="'+options.name+'" />').val(element.text()).appendTo(editJq);
+            editJq.insertAfter(self.element);
+            //设置datepicker
+            if($.ya.datepicker0){
+                editInputJq.datepicker0({
+                    "dateFormat":dateFormat
+                });
+            }
+            //设置引用
+            self.editJq=editJq;
 		}
 	});
 }(jQuery,this));

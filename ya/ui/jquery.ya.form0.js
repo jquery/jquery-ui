@@ -121,11 +121,15 @@
 			var self=this,
 				noError=true,
 				items=self.items;
-			_.each(items,function(v){
-				if(v.vtype){
-					var validV=self.vField(v.selector);
-					if(!validV){
+			_.each(items,function(item){
+				if(item.vtype){
+					var validV=self.vField(item.selector);
+					if(!validV&&noError){
 						noError=false;
+						try{
+						    item.element.get(0).select(); //试着将焦点定位到第一个出错地
+						}catch(e){}
+						
 					}
 				}
 			});

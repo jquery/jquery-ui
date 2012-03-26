@@ -113,7 +113,7 @@
 					}
 					validMsgJq.removeClass('ui-state-error').empty();
 					validV=validateFn.apply(ui,[v,opts]);
-					if(!validV&&errorMsg){
+					if(!validV&&errorMsg){ //如果未通过验证并且有错误信息
 						validMsgJq.addClass('ui-state-error').html(errorMsg);
 					}
 					return validV;

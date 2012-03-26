@@ -515,7 +515,7 @@
 					"top":"0px",
 					"left":"0px",
 					"display":"none"
-				}).appendTo('body');
+				}).addClass('ui-state-disabled').appendTo('body');
 				themeJq.data('disabledWrapper',disabledWJq);
 			}
 			disabledWJq.css({
@@ -524,8 +524,16 @@
 				width:themeJq.outerWidth(),
 				height:themeJq.outerHeight(),
 				"z-index":10000
-			}).addClass('ui-state-disabled').show();
+			}).show();
 			self._trigger( "disable", null);
+		},
+		enable:function(){
+		    var self=this,
+                themeJq=self.themeJq,
+                options=self.options,
+                disabledWJq=themeJq.data('disabledWrapper');
+           disabledWJq.hide(); 
+           self._trigger( "enable", null);
 		}
 		
 	});
