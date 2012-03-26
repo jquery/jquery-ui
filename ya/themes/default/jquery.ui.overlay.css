@@ -4,7 +4,10 @@
 	left:0px;
 	z-index:10000;
 	background-color:rgba(0, 0, 0, 0.3);
-    *filter:progid:DXImageTransform.Microsoft.Gradient(GradientType=0, StartColorStr='#4c000000', EndColorStr='#4c000000');
+    filter:progid:DXImageTransform.Microsoft.Gradient(GradientType=0, StartColorStr='#4c000000', EndColorStr='#4c000000');
+}
+:root .ui-overlay{
+    filter:progid:DXImageTransform.Microsoft.Gradient(GradientType=0, StartColorStr='#00000000', EndColorStr='#00000000');
 }
 .ui-overlay-global .loading{
 	width:16px;

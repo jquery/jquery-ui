@@ -24,13 +24,16 @@
 			advancedTheme:{	//设置widget的高级主题效果
 				shadow:false,	//设置背景阴影，默认存在
 				corner:false
-			}
+			},
+			closeText:'&#10005'
 		},
 		_create:function(){
 			var self=this,
 				options=self.options,
 				advancedTheme=options.advancedTheme;
 			Base.prototype._create.call(this);
+			//设置closeText(html方式)
+			self.uiDialogTitlebarCloseText.html(options.closeText);
 			
 			if(advancedTheme){
 				for(var n in advancedTheme){
@@ -99,13 +102,27 @@
 	//alert单体弹框
 	(function(){
 		var alertJq=$('#ui-alert'),
-			alertCls='ui-alert-error ui-alert-success ui-alert-info';
+			alertCls='ui-alert-error ui-alert-success ui-alert-info',
+			resizeTid;
+		//保证window resize/scroll时居中显示
+		var fixedCenter=function(){
+		    clearTimeout(resizeTid);
+            resizeTid=setTimeout(function(){
+               alertJq.dialog0('option','position','center'); 
+            },300);
+		};
+		$(window).resize(function(){
+		    fixedCenter();
+		}).scroll(function(){
+		    fixedCenter();
+		});
 		_.extend($.ya,{
 			alert:function(title,content,type,callback,opts){
 				var uiDialogJq;
 				type=type||'error'
 				if(alertJq.length==0){
-					alertJq=$('<div id="ui-alert"><div class="ui-alert-content-wrapper"><span class="ui-icon-alert"></span><span class="ui-alert-content-inner"></span></div></div></div>').appendTo('body');
+					//$('<div id="ui-alert"><div class="ui-alert-content-wrapper"><span class="ui-icon-alert"></span><span class="ui-alert-content-inner"></span></div></div></div>').appendTo('body');
+					alertJq=$('<div id="ui-alert"></div>').html('<div class="ui-alert-content-wrapper"><span class="ui-icon-alert"></span><span class="ui-alert-content-inner"></span></div></div>').appendTo('body');
 					alertJq.dialog0($.extend({
 						modal:true,
 						resizable:false,
@@ -116,6 +133,15 @@
 						advancedTheme:{	
 							shadow:true,	
 							corner:true
+						},
+						open:function(){
+						   //保证ie8的高级效果层有一个正确的z-index
+						   $(window).scroll(); 
+						   if(opts.autoHide){
+						       setTimeout(function(){
+						           alertJq.dialog0('close');
+						       },opts.autoHide);
+						   }
 						}
 					},opts||{}));
 					alertJq.data('dialog0').uiDialog.addClass('ui-dialog-alert');
@@ -146,7 +172,7 @@
 				//显示提示框
 				alertJq.dialog0('open');
 			}
-		});
+		});		
 	}());
 }(jQuery,this));
 

@@ -18,7 +18,11 @@
 	
   	<link rel="stylesheet" href="../../themes/default/jquery.ui.dialog.css" />
   	
-  
+    <style>
+        .page{
+            height:1600px;
+        }
+    </style>
   	<script src="../../jqui/js/jquery.min.js"></script>
   	<script src="../../jqui/js/jquery-ui.min.js"></script>  	
   	
@@ -43,7 +47,9 @@
 		jQuery(function($){
 			$('#alert1').click(function(){
 				var ya=$.ya;
-				ya.alert('','这是一段信息提示','info');
+				ya.alert('','这是一段信息提示','error',null,{    //error,info,success
+				    autoHide:0  //多长时间后自动隐藏，单位ms
+				});
 				return false;
 			});
 		});
@@ -51,6 +57,8 @@
 </head>
 
 <body>
+    <div class="page">
   <button id="alert1">单体alert</button>
+  </div>
 </body>
 </html>
