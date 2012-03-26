@@ -210,8 +210,9 @@
 		addItem:function(items){
 			var self=this,
 				element=self.element;
-			items=_.map([].concat(items),function(v){
-				return v.element=$(item.selector,element);
+			items=_.map([].concat(items),function(item){
+				item.element=$(item.selector,element);
+				return item;
 			});
 			self.items=self.items.concat(items);
 		},
