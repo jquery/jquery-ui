@@ -187,7 +187,7 @@
                 label=element.text();   //初始display值
 
             var editJq=$('<span class="'+options.cls+' ui-ieditor ui-ieditor-combo-wrapper ui-widget ui-helper-reset" style="display:none;"></span>');   //编辑控件
-            var editInputJq=$('<select class="ui-ieditor-combo ui-ieditor-input ui-state-default" name="'+options.name+'" /></select>').appendTo(editJq);
+            var editInputJq=$('<select class="ui-ieditor-combo ui-ieditor-input ui-state-default" name="'+options.name+'"></select>').appendTo(editJq);
             if(_.isString(selectValues)){
                 selectValues.replace(regx.rword,function(v){
                     htmlArr.push('<option value="'+v+'"'+(v==value?' selected="selected"':'')+'>'+v+'</option>');
@@ -198,7 +198,7 @@
                 });
             }
             editInputJq.html(htmlArr.join(''));
-            editJq.insertAfter(self.element);  
+            editJq.insertAfter(self.element);   
             editInputJq.data('label',label);
             //主题化
             if($.ya.theme0){
