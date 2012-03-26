@@ -25,6 +25,11 @@
 			left:130px;
 			width:600px;
 		}
+		.edit-wrapper{
+		    margin-bottom: 30px;
+		    border:1px solid #cccccc;
+		    padding:10px;
+		}
 		.editor-wrapper span{
 			margin: 0px 30px;
 		}
@@ -91,11 +96,21 @@
 
 <body>
   <div class="editor-wrapper">
-  	<span><span class="edit-text0" edittype="textfield">测试</span><a href="#" class="edit-h">编辑</a></span>
-  	<span class="edit-text1" edittype="textarea">测试测试测试</span>
+    <div class="edit-wrapper">
+  	 <span><span class="edit-text0" edittype="textfield">测试</span><a href="#" class="edit-h">编辑</a></span>
+  	</div>
+  	<div class="edit-wrapper">
+  	 <span class="edit-text1" edittype="textarea">测试测试测试</span>
+  	</div>
+  	<div class="edit-wrapper">
   	<span class="edit-text2">测试测试测试测试测试测试</span>
+  	</div>
+  	<div class="edit-wrapper">
   	<span class="edit-text3" val="2">二</span>
+  	</div>
+  	<div class="edit-wrapper">
   	<span class="edit-text4" edittype="datepicker">2012-01-01</span>
+  	</div>
   </div>
 </body>
 </html>
