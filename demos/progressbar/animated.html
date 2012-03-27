@@ -9,14 +9,11 @@
 	<script src="../../ui/jquery.ui.widget.js"></script>
 	<script src="../../ui/jquery.ui.progressbar.js"></script>
 	<link rel="stylesheet" href="../demos.css">
-	<style>
-	.ui-progressbar .ui-progressbar-value { background-image: url(images/pbar-ani.gif); }
-	</style>
 	<script>
 	$(function() {
 		$( "#progressbar" ).progressbar({
 			value: 59
-		});
+		}).find( ".ui-progressbar-value div" ).addClass( "ui-progressbar-overlay" );
 	});
 	</script>
 </head>
@@ -27,10 +24,10 @@
 <div class="demo-description">
 <p>
 This progressbar has an animated fill by setting the
-<code>background-image</code>
+<code>ui-progressbar-overlay</code> class
 on the
 <code>.ui-progressbar-value</code>
-element, using css.
+element's overlay div.
 </p>
 </div>
 </body>

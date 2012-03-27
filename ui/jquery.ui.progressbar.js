@@ -29,11 +29,10 @@ $.widget( "ui.progressbar", {
 			.attr({
 				role: "progressbar",
 				"aria-valuemin": this.min,
-				"aria-valuemax": this.options.max,
-				"aria-valuenow": this._value()
+				"aria-valuemax": this.options.max
 			});
 
-		this.valueDiv = $( "<div class='ui-progressbar-value ui-widget-header ui-corner-left'></div>" )
+		this.valueDiv = $( "<div class='ui-progressbar-value ui-widget-header ui-corner-left'><div></div></div>" )
 			.appendTo( this.element );
 
 		this.oldValue = this._value();
@@ -62,7 +61,7 @@ $.widget( "ui.progressbar", {
 
 	_setOption: function( key, value ) {
 		if ( key === "value" ) {
-			this.options.value = value;
+			this.options[ key ] = value;
 			this._refreshValue();
 			if ( this._value() === this.options.max ) {
 				this._trigger( "complete" );
@@ -74,20 +73,27 @@ $.widget( "ui.progressbar", {
 
 	_value: function() {
 		var val = this.options.value;
+		this.indeterminate = val === false;
+
 		// normalize invalid value
-		if ( typeof val !== "number" ) {
+		if ( typeof val !== "number" && val !== false ) {
 			val = 0;
 		}
-		return Math.min( this.options.max, Math.max( this.min, val ) );
+		return this.indeterminate ? false : Math.min( this.options.max, Math.max( this.min, val ) );
 	},
 
 	_percentage: function() {
-		return 100 * this._value() / this.options.max;
+		var val = this._value();
+		return this.indeterminate ? 100 : 100 * val / this.options.max;
 	},
 
 	_refreshValue: function() {
 		var value = this.value(),
-			percentage = this._percentage();
+			percentage = this._percentage(),
+			overlay = this.valueDiv.children().eq( 0 );
+
+		overlay.toggleClass( "ui-progressbar-overlay", this.indeterminate );
+		this.valueDiv.toggleClass( "ui-progressbar-indeterminate", this.indeterminate );
 
 		if ( this.oldValue !== value ) {
 			this.oldValue = value;
@@ -95,10 +101,14 @@ $.widget( "ui.progressbar", {
 		}
 
 		this.valueDiv
-			.toggle( value > this.min )
+			.toggle( this.indeterminate || value > this.min )
 			.toggleClass( "ui-corner-right", value === this.options.max )
 			.width( percentage.toFixed(0) + "%" );
-		this.element.attr( "aria-valuenow", value );
+		if ( this.indeterminate ) {
+			this.element.removeAttr( "aria-valuenow" );
+		} else {
+			this.element.attr( "aria-valuenow", value );
+		}
 	}
 });
 
