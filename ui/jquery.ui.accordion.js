@@ -118,6 +118,8 @@ $.widget( "ui.accordion", {
 				});
 		}
 
+		this._bind( this.headers, { keydown: "_keydown" });
+		this._bind( this.headers.next(), { keydown: "_panelKeyDown" });
 		this._setupEvents( options.event );
 	},
 
@@ -198,7 +200,8 @@ $.widget( "ui.accordion", {
 
 		if ( key === "event" ) {
 			if ( this.options.event ) {
-				this.headers.unbind( ".accordion" );
+				this.headers.unbind(
+					this.options.event.split( " " ).join( ".accordion " ) + ".accordion" );
 			}
 			this._setupEvents( value );
 		}
@@ -348,18 +351,14 @@ $.widget( "ui.accordion", {
 	},
 
 	_setupEvents: function( event ) {
-		var events = {
-			keydown: "_keydown"
-		};
-		if ( event ) {
-			$.each( event.split(" "), function( index, eventName ) {
-				events[ eventName ] = "_eventHandler";
-			});
+		var events = {};
+		if ( !event ) {
+			return;
 		}
-		this._bind( this.headers, events );
-		this._bind( this.headers.next(), {
-			keydown: "_panelKeyDown"
+		$.each( event.split(" "), function( index, eventName ) {
+			events[ eventName ] = "_eventHandler";
 		});
+		this._bind( this.headers, events );
 	},
 
 	_eventHandler: function( event ) {
