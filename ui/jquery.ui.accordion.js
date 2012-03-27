@@ -12,6 +12,7 @@
  *	jquery.ui.widget.js
  */
 (function( $, undefined ) {
+	var uid = 0;
 
 $.widget( "ui.accordion", {
 	version: "@VERSION",
@@ -33,7 +34,9 @@ $.widget( "ui.accordion", {
 	},
 
 	_create: function() {
-		var options = this.options;
+		var accordionId = this.accordionId = "ui-accordion-" +
+				(this.element.attr( "id" ) || ++uid),
+			options = this.options;
 
 		this.prevShow = this.prevHide = $();
 		this.element.addClass( "ui-accordion ui-widget ui-helper-reset" );
@@ -68,18 +71,36 @@ $.widget( "ui.accordion", {
 
 		this.headers
 			.attr( "role", "tab" )
+			.each(function( i ) {
+				var header = $( this ),
+					headerId = header.attr( "id" ),
+					panel = header.next(),
+					panelId = panel.attr( "id" );
+				if ( !headerId ) {
+					headerId = accordionId + "-header-" + i;
+					header.attr( "id", headerId );
+				}
+				if ( !panelId ) {
+					panelId = accordionId + "-panel-" + i;
+					panel.attr( "id", panelId );
+				}
+				header.attr( "aria-controls", panelId );
+				panel.attr( "aria-labelledby", headerId );
+			})
 			.next()
 				.attr( "role", "tabpanel" );
 
 		this.headers
 			.not( this.active )
 			.attr({
-				// TODO: document support for each of these
-				"aria-expanded": "false",
 				"aria-selected": "false",
 				tabIndex: -1
 			})
 			.next()
+				.attr({
+					"aria-expanded": "false",
+					"aria-hidden": "true"
+				})
 				.hide();
 
 		// make sure at least one header is in the tab order
@@ -87,10 +108,14 @@ $.widget( "ui.accordion", {
 			this.headers.eq( 0 ).attr( "tabIndex", 0 );
 		} else {
 			this.active.attr({
-				"aria-expanded": "true",
 				"aria-selected": "true",
 				tabIndex: 0
-			});
+			})
+			.next()
+				.attr({
+					"aria-expanded": "true",
+					"aria-hidden": "false"
+				});
 		}
 
 		this._setupEvents( options.event );
@@ -124,6 +149,8 @@ $.widget( "ui.accordion", {
 	},
 
 	_destroy: function() {
+		var accordionId = this.accordionId;
+
 		// clean up main element
 		this.element
 			.removeClass( "ui-accordion ui-widget ui-helper-reset" )
@@ -131,19 +158,31 @@ $.widget( "ui.accordion", {
 
 		// clean up headers
 		this.headers
-			.unbind( ".accordion" )
 			.removeClass( "ui-accordion-header ui-accordion-header-active ui-helper-reset ui-state-default ui-corner-all ui-state-active ui-state-disabled ui-corner-top" )
 			.removeAttr( "role" )
-			.removeAttr( "aria-expanded" )
 			.removeAttr( "aria-selected" )
-			.removeAttr( "tabIndex" );
+			.removeAttr( "aria-controls" )
+			.removeAttr( "tabIndex" )
+			.each(function() {
+				if ( /^ui-accordion/.test( this.id ) ) {
+					this.removeAttribute( "id" );
+				}
+			});
 		this._destroyIcons();
 
 		// clean up content panels
 		var contents = this.headers.next()
 			.css( "display", "" )
 			.removeAttr( "role" )
-			.removeClass( "ui-helper-reset ui-widget-content ui-corner-bottom ui-accordion-content ui-accordion-content-active ui-state-disabled" );
+			.removeAttr( "aria-expanded" )
+			.removeAttr( "aria-hidden" )
+			.removeAttr( "aria-labelledby" )
+			.removeClass( "ui-helper-reset ui-widget-content ui-corner-bottom ui-accordion-content ui-accordion-content-active ui-state-disabled" )
+			.each(function() {
+				if ( /^ui-accordion/.test( this.id ) ) {
+					this.removeAttribute( "id" );
+				}
+			});
 		if ( this.options.heightStyle !== "content" ) {
 			this.element.css( "height", this.originalHeight );
 			contents.css( "height", "" );
@@ -208,6 +247,13 @@ $.widget( "ui.accordion", {
 			case keyCode.SPACE:
 			case keyCode.ENTER:
 				this._eventHandler( event );
+				break;
+			case keyCode.HOME:
+				toFocus = this.headers[ 0 ];
+				break;
+			case keyCode.END:
+				toFocus = this.headers[ length - 1 ];
+				break;
 		}
 
 		if ( toFocus ) {
@@ -215,6 +261,12 @@ $.widget( "ui.accordion", {
 			$( toFocus ).attr( "tabIndex", 0 );
 			toFocus.focus();
 			event.preventDefault();
+		}
+	},
+
+	_panelKeyDown : function( event ) {
+		if ( event.keyCode === $.ui.keyCode.UP && event.ctrlKey ) {
+			$( event.currentTarget ).prev().focus();
 		}
 	},
 
@@ -305,6 +357,9 @@ $.widget( "ui.accordion", {
 			});
 		}
 		this._bind( this.headers, events );
+		this._bind( this.headers.next(), {
+			keydown: "_panelKeyDown"
+		});
 	},
 
 	_eventHandler: function( event ) {
@@ -382,21 +437,26 @@ $.widget( "ui.accordion", {
 			this._toggleComplete( data );
 		}
 
-		// TODO assert that the blur and focus triggers are really necessary, remove otherwise
-		toHide.prev()
+		toHide
 			.attr({
 				"aria-expanded": "false",
-				"aria-selected": "false",
-				tabIndex: -1
+				"aria-hidden": "true"
 			})
-			.blur();
-		toShow.prev()
+			.prev()
+				.attr({
+					"aria-selected": "false",
+					tabIndex: -1
+				});
+		toShow
 			.attr({
 				"aria-expanded": "true",
-				"aria-selected": "true",
-				tabIndex: 0
+				"aria-hidden": "false"
 			})
-			.focus();
+			.prev()
+				.attr({
+					"aria-selected": "true",
+					tabIndex: 0
+				});
 	},
 
 	_animate: function( toShow, toHide, data ) {

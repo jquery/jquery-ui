@@ -25,24 +25,50 @@ test( "handle click on header-descendant", function() {
 });
 
 test( "accessibility", function () {
-	expect( 13 );
-	var element = $( "#list1" ).accordion().accordion( "option", "active", 1 );
+	expect( 37 );
+	var element = $( "#list1" ).accordion({
+		active: 1
+	});
 	var headers = element.find( ".ui-accordion-header" );
 
-	equal( headers.eq( 1 ).attr( "tabindex" ), 0, "active header should have tabindex=0" );
-	equal( headers.eq( 0 ).attr( "tabindex" ), -1, "inactive header should have tabindex=-1" );
-	equal( element.attr( "role" ), "tablist", "main role" );
-	equal( headers.attr( "role" ), "tab", "tab roles" );
-	equal( headers.next().attr( "role" ), "tabpanel", "tabpanel roles" );
-	equal( headers.eq( 1 ).attr( "aria-expanded" ), "true", "active tab has aria-expanded" );
-	equal( headers.eq( 0 ).attr( "aria-expanded" ), "false", "inactive tab has aria-expanded" );
-	equal( headers.eq( 1 ).attr( "aria-selected" ), "true", "active tab has aria-selected" );
-	equal( headers.eq( 0 ).attr( "aria-selected" ), "false", "inactive tab has aria-selected" );
+	equal( element.attr( "role" ), "tablist", "element role" );
+	headers.each(function( i ) {
+		var header = headers.eq( i ),
+			panel = header.next();
+		equal( header.attr( "role" ), "tab", "header " + i + " role" );
+		equal( header.attr( "aria-controls" ), panel.attr( "id" ), "header " + i + " aria-controls" );
+		equal( panel.attr( "role" ), "tabpanel", "panel " + i + " role" );
+		equal( panel.attr( "aria-labelledby" ), header.attr( "id" ), "panel " + i + " aria-labelledby" );
+	});
+
+	equal( headers.eq( 1 ).attr( "tabindex" ), 0, "active header has tabindex=0" );
+	equal( headers.eq( 1 ).attr( "aria-selected" ), "true", "active tab has aria-selected=true" );
+	equal( headers.eq( 1 ).next().attr( "aria-expanded" ), "true", "active tabpanel has aria-expanded=true" );
+	equal( headers.eq( 1 ).next().attr( "aria-hidden" ), "false", "active tabpanel has aria-hidden=false" );
+	equal( headers.eq( 0 ).attr( "tabindex" ), -1, "active header has tabindex=-1" );
+	equal( headers.eq( 0 ).attr( "aria-selected" ), "false", "active tab has aria-selected=false" );
+	equal( headers.eq( 0 ).next().attr( "aria-expanded" ), "false", "active tabpanel has aria-expanded=false" );
+	equal( headers.eq( 0 ).next().attr( "aria-hidden" ), "true", "active tabpanel has aria-hidden=true" );
+	equal( headers.eq( 2 ).attr( "tabindex" ), -1, "active header has tabindex=-1" );
+	equal( headers.eq( 2 ).attr( "aria-selected" ), "false", "active tab has aria-selected=false" );
+	equal( headers.eq( 2 ).next().attr( "aria-expanded" ), "false", "active tabpanel has aria-expanded=false" );
+	equal( headers.eq( 2 ).next().attr( "aria-hidden" ), "true", "active tabpanel has aria-hidden=true" );
+
 	element.accordion( "option", "active", 0 );
-	equal( headers.eq( 0 ).attr( "aria-expanded" ), "true", "newly active tab has aria-expanded" );
-	equal( headers.eq( 1 ).attr( "aria-expanded" ), "false", "newly inactive tab has aria-expanded" );
-	equal( headers.eq( 0 ).attr( "aria-selected" ), "true", "active tab has aria-selected" );
-	equal( headers.eq( 1 ).attr( "aria-selected" ), "false", "inactive tab has aria-selected" );
+	equal( headers.eq( 0 ).attr( "tabindex" ), 0, "active header has tabindex=0" );
+	equal( headers.eq( 0 ).attr( "aria-selected" ), "true", "active tab has aria-selected=true" );
+	equal( headers.eq( 0 ).next().attr( "aria-expanded" ), "true", "active tabpanel has aria-expanded=true" );
+	equal( headers.eq( 0 ).next().attr( "aria-hidden" ), "false", "active tabpanel has aria-hidden=false" );
+	equal( headers.eq( 1 ).attr( "tabindex" ), -1, "active header has tabindex=-1" );
+	equal( headers.eq( 1 ).attr( "aria-selected" ), "false", "active tab has aria-selected=false" );
+	equal( headers.eq( 1 ).next().attr( "aria-expanded" ), "false", "active tabpanel has aria-expanded=false" );
+	equal( headers.eq( 1 ).next().attr( "aria-hidden" ), "true", "active tabpanel has aria-hidden=true" );
+	equal( headers.eq( 2 ).attr( "tabindex" ), -1, "active header has tabindex=-1" );
+	equal( headers.eq( 2 ).attr( "aria-selected" ), "false", "active tab has aria-selected=false" );
+	equal( headers.eq( 2 ).next().attr( "aria-expanded" ), "false", "active tabpanel has aria-expanded=false" );
+	equal( headers.eq( 2 ).next().attr( "aria-hidden" ), "true", "active tabpanel has aria-hidden=true" );
 });
+
+// TODO: keyboard support
 
 }( jQuery ) );
