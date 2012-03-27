@@ -72,7 +72,7 @@
 			if(options.themeType==1){
 				//设置操作按钮
 				var actionJq=$('<span class="ui-ieditor-actions"></span>').appendTo(editJq);
-				$('<button>保存</button>').click(function(){
+				$('<button class="ui-button-submit">保存</button>').click(function(){
 					//element.text(editInputJq.val()).show();
 					if(!_.isUndefined(editInputJq.data('label'))){
                         element.text(editInputJq.data('label'));
@@ -83,7 +83,9 @@
                     element.show();
 					editJq.hide();
 					return false;
-				}).button0().appendTo(actionJq);
+				}).button0({
+				    cls:"ui-button-submit"
+				}).appendTo(actionJq);
 				
 				$('<button>取消</button>').click(function(){
 					var originVal=editInputJq.data('originval'),
@@ -98,7 +100,9 @@
 					//element.text(originVal).show();
 					editJq.hide();
 					return false;
-				}).button0().appendTo(actionJq);
+				}).button0({
+				    cls:"ui-button-cancel"
+				}).appendTo(actionJq);
 			}
 			//绑定事件
 			$(document).click(function(e){
