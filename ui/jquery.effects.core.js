@@ -236,7 +236,7 @@ $.effects.animateClass = function(value, duration, easing, callback) {
 			originalStyleAttr = that.attr('style') || ' ',
 			originalStyle = filterStyles(getElementStyles.call(this)),
 			newStyle,
-			className = that.attr('class');
+			className = that.attr('class') || "";
 
 		$.each(classAnimationActions, function(i, action) {
 			if (value[action]) {
