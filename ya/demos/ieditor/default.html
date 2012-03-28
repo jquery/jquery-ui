@@ -30,9 +30,16 @@
 		    border:1px solid #cccccc;
 		    padding:10px;
 		}
-		.editor-wrapper span{
-			margin: 0px 30px;
+		.edit-combo-wrapper .edit-text{
+		    
 		}
+		.edit-combo-wrapper .ui-ieditor-actions{
+		    
+		}
+		.edit-combo-wrapper .ui-combo{
+		    float:left;
+		}
+		
 	</style>
 	
 	<script src="../../jqui/js/jquery.min.js"></script>
@@ -85,7 +92,25 @@
             },{
                 value:'4',
                 label:'四'
-            }]
+            }],
+            themeType:1,
+            handlerSelector:'.edit-h-2',
+            buttonHandler:{  //针对themeType==1的按钮调用句柄配置
+                /**
+                 * @param {Jquery} element 被编辑domJq
+                 * @param {Jquery} editInputJq 编辑器包裹domJq
+                 */
+                saveHandler:function(element,editJq){
+                    var editInputJq=$('.ui-ieditor-input',editJq);  //编辑器domJq
+                    //做ajax请求，请求成功后保存
+                    //$.ajax();
+                    element.text('自定义值').data('value','customvalue').attr('val','customvalue').show();
+                    editJq.hide();
+                    //显示编辑按钮
+                    $('.edit-h-2').show();
+                },    //点击成功按钮的调用句柄
+                cancelHandler:null//点击取消按钮的调用句柄
+            } 
         });
         $( ".edit-text4" ).ieditor0({
             dateFormat:'yy-mm-dd',
@@ -105,8 +130,8 @@
   	<div class="edit-wrapper">
   	<span class="edit-text2">测试测试测试测试测试测试</span>
   	</div>
-  	<div class="edit-wrapper">
-  	<span class="edit-text3" val="2">二</span>
+  	<div class="edit-wrapper edit-combo-wrapper">
+  	<div class="edit-text"><span class="edit-text3" val="2">二</span><a href="#" class="edit-h-2">编辑</a></div>
   	</div>
   	<div class="edit-wrapper">
   	<span class="edit-text4" edittype="datepicker">2012-01-01</span>

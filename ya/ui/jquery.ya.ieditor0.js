@@ -21,6 +21,10 @@
 			handlerSelector:null,
 			editType:null,   //textfield,textarea,combo,datepicker
 			themeType:0,	//编辑器显示方式 0-不带操作按钮；1-带操作按钮
+			buttonHandler:{  //针对themeType==1的按钮调用句柄配置
+			    saveHandler:null,    //点击成功按钮的调用句柄
+			    cancelHandler:null   //点击取消按钮的调用句柄
+			},
 			selectValues:null,    //for combobox,提供可选值
 			dateFormat:'mm/dd/yy'    //for datepicker
 		},
@@ -67,13 +71,17 @@
 			var self=this,
 				element=self.element,
 				options=self.options,
+				buttonHandler=options.buttonHandler,
 				editJq=self.editJq,
 				editInputJq=$('.ui-ieditor-input',editJq);
 			if(options.themeType==1){
 				//设置操作按钮
 				var actionJq=$('<span class="ui-ieditor-actions"></span>').appendTo(editJq);
 				$('<button class="ui-button-submit">保存</button>').click(function(){
-					//element.text(editInputJq.val()).show();
+					if(buttonHandler.saveHandler){ //如果有自定义save调用句柄
+					    buttonHandler.saveHandler.apply(element,[element,editJq]);
+					    return false;
+					}
 					if(!_.isUndefined(editInputJq.data('label'))){
                         element.text(editInputJq.data('label'));
                         element.data('value',editInputJq.val());
@@ -82,6 +90,10 @@
                     }
                     element.show();
 					editJq.hide();
+					//显示handlerSelector
+                    if(options.handlerSelector){
+                        $(options.handlerSelector).show();
+                    }
 					return false;
 				}).button0({
 				    cls:"ui-button-submit"
@@ -90,6 +102,10 @@
 				$('<button>取消</button>').click(function(){
 					var originVal=editInputJq.data('originval'),
 					   originLabel=editInputJq.data('originlabel');
+					if(buttonHandler.cancelHandler){ //如果有自定义cancel调用句柄
+                        buttonHandler.cancelHandler.apply(element,[element,editJq]);
+                        return false;
+                    }
 					if(!_.isUndefined(originLabel)){
                         element.text(originLabel);
                         element.data('value',originVal);
@@ -99,6 +115,10 @@
                     element.show();
 					//element.text(originVal).show();
 					editJq.hide();
+					//显示handlerSelector
+                    if(options.handlerSelector){
+                        $(options.handlerSelector).show();
+                    }
 					return false;
 				}).button0({
 				    cls:"ui-button-cancel"
@@ -131,10 +151,10 @@
 						}
 						element.show();
 						editJq.hide();
-					}
-					//显示handlerSelector
-					if(options.handlerSelector){
-						$(options.handlerSelector).show();
+						//显示handlerSelector
+                        if(options.handlerSelector){
+                            $(options.handlerSelector).show();
+                        }
 					}
 				}
 			});		
