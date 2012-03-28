@@ -21,6 +21,10 @@ function createBanner( files ) {
 		" Licensed <%= _.pluck(pkg.licenses, 'type').join(', ') %> */";
 }
 
+// a working grunt.loadNpmTasks replacement
+// gets us csslint and cssmin tasks
+require('grunt-css')(grunt);
+
 // allow access from banner template
 global.stripDirectory = stripDirectory;
 grunt.registerHelper( "strip_all_banners", function( filepath ) {
@@ -91,7 +95,7 @@ grunt.initConfig({
 		}
 	},
 	min: minify,
-	css_min: minifyCSS,
+	cssmin: minifyCSS,
 	copy: {
 		dist: {
 			src: [
@@ -351,46 +355,6 @@ grunt.registerMultiTask( "zip", "Create a zip file for release", function() {
 	});
 });
 
-grunt.registerMultiTask( "csslint", "Lint CSS files with csslint", function() {
-	var csslint = require( "csslint" ).CSSLint;
-	var files = grunt.file.expandFiles( this.file.src );
-	var ruleset = {};
-	csslint.getRules().forEach(function( rule ) {
-		ruleset[ rule.id ] = 1;
-	});
-	for ( var rule in this.data.rules ) {
-		if ( !this.data.rules[ rule ] ) {
-			delete ruleset[rule];
-		} else {
-			ruleset[ rule ] = this.data.rules[ rule ];
-		}
-	}
-	var hadErrors = 0;
-	files.forEach(function( filepath ) {
-		grunt.log.writeln( "Linting " + filepath );
-		var result = csslint.verify( grunt.file.read( filepath ), ruleset );
-		result.messages.forEach(function( message ) {
-			grunt.log.writeln( "[".red + ( "L" + message.line ).yellow + ":".red + ( "C" + message.col ).yellow + "]".red );
-			log[ message.type === "error" ? "error" : "writeln" ]( message.message + " " + message.rule.desc + " (" + message.rule.id + ")" );
-		});
-		if ( result.messages.length ) {
-			hadErrors += 1;
-		}
-	});
-	if (hadErrors) {
-		return false;
-	}
-	grunt.log.writeln( "Lint free" );
-});
-
-grunt.registerMultiTask( "css_min", "Minify CSS files with Sqwish.", function() {
-	var max = grunt.helper( "concat", grunt.file.expandFiles( this.file.src ) );
-	var min = require( "sqwish" ).minify( max, false );
-	grunt.file.write( this.file.dest, min );
-	grunt.log.writeln( "File '" + this.file.dest + "' created." );
-	grunt.helper( "min_max_info", min, max );
-});
-
 grunt.registerMultiTask( "md5", "Create list of md5 hashes for CDN uploads", function() {
 	// remove dest file before creating it, to make sure itself is not included
 	if ( require( "path" ).existsSync( this.file.dest ) ) {
@@ -542,7 +506,7 @@ grunt.registerHelper( "lpad", function( str, len, chr ) {
 
 grunt.registerTask( "default", "lint csslint qunit build compare_size" );
 grunt.registerTask( "sizer", "concat:ui min:dist/jquery-ui.min.js compare_size" );
-grunt.registerTask( "build", "concat min css_min" );
+grunt.registerTask( "build", "concat min cssmin" );
 grunt.registerTask( "release", "clean build copy:dist copy:dist_min copy:dist_min_images copy:dist_css_min md5:dist zip:dist" );
 grunt.registerTask( "release_themes", "release download_themes copy_themes copy:themes md5:themes zip:themes" );
 grunt.registerTask( "release_cdn", "release_themes copy:cdn copy:cdn_min copy:cdn_i18n copy:cdn_i18n_min copy:cdn_min_images copy:cdn_themes md5:cdn zip:cdn" );
