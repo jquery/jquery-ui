@@ -115,6 +115,22 @@
         $( ".edit-text4" ).ieditor0({
             dateFormat:'yy-mm-dd',
         });
+        $( ".edit-text5" ).ieditor0({
+            selectValues:[{
+                value:true,
+                label:'男'
+            },{
+                value:false,
+                label:'女'
+            }],
+            handlerSelector:'.edit-h-3'
+        });
+        
+        //rest
+        $('.reset-h').click(function(){
+            $('.edit-field').ieditor0('reset');
+            return false;
+        });
 	});
 	</script>
 </head>
@@ -122,21 +138,25 @@
 <body>
   <div class="editor-wrapper">
     <div class="edit-wrapper">
-  	 <span><span class="edit-text0" edittype="textfield">测试</span><a href="#" class="edit-h">编辑</a></span>
+  	 <span><span class="edit-text0 edit-field" edittype="textfield">测试</span><a href="#" class="edit-h">编辑</a></span>
   	</div>
   	<div class="edit-wrapper">
-  	 <span class="edit-text1" edittype="textarea">测试测试测试</span>
+  	 <span class="edit-text1 edit-field" edittype="textarea">测试测试测试</span>
   	</div>
   	<div class="edit-wrapper">
-  	<span class="edit-text2">测试测试测试测试测试测试</span>
+  	<span class="edit-text2 edit-field">测试测试测试测试测试测试</span>
   	</div>
   	<div class="edit-wrapper edit-combo-wrapper">
-  	<div class="edit-text"><span class="edit-text3" val="2">二</span><a href="#" class="edit-h-2">编辑</a></div>
+  	<div class="edit-text"><span class="edit-text3 edit-field" val="2">二</span><a href="#" class="edit-h-2">编辑</a></div>
   	</div>
   	<div class="edit-wrapper">
-  	<span class="edit-text4" edittype="datepicker">2012-01-01</span>
+  	 <span class="edit-text4 edit-field" edittype="datepicker">2012-01-01</span>
   	</div>
+  	<div class="edit-wrapper">
+     <span class="edit-text5 edit-field" edittype="singlecheckbox">男</span><a href="#" class="edit-h-3">编辑</a>
+    </div>
   </div>
+  <div class="actions"><button class="reset-h">reset</button></div>
 </body>
 </html>
 

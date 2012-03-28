@@ -19,7 +19,7 @@
 			name:'',
 			cls:'',	//编辑器css类名
 			handlerSelector:null,
-			editType:null,   //textfield,textarea,combo,datepicker
+			editType:null,   //textfield,textarea,combo,datepicker,checkbox
 			themeType:0,	//编辑器显示方式 0-不带操作按钮；1-带操作按钮
 			buttonHandler:{  //针对themeType==1的按钮调用句柄配置
 			    saveHandler:null,    //点击成功按钮的调用句柄
@@ -175,6 +175,9 @@
                 case "datepicker":
                     self._dpEditor();
                     break;
+                case "singlecheckbox":
+                    self._singleCbEditor();
+                    break;
 				default:
 					break;
 			}
@@ -253,6 +256,49 @@
             }
             //设置引用
             self.editJq=editJq;
+		},
+		_singleCbEditor:function(){
+		     var self=this,
+                element=self.element,
+                options=self.options,
+                selectValues=options.selectValues; 
+                
+             var value=element.data('value')||element.attr('val')||element.text(),   //初始值
+                label=element.text();   //初始display值 
+                
+            var editJq=$('<span class="'+options.cls+' ui-ieditor ui-ieditor-checkbox-wrapper ui-widget ui-helper-reset" style="display:none;"></span>');  //编辑控件
+            var editInputJq=$('<input class="ui-ieditor-checkbox ui-ieditor-input ui-state-default" type="checkbox" name="'+options.name+'" />').val('1').appendTo(editJq);
+            
+            _.each(selectValues,function(item){
+                if(item.label==label&&item.value){
+                    editInputJq.attr('checked',true);
+                }
+            });
+            
+            editJq.insertAfter(self.element);
+            //label控制
+            editInputJq.click(function(e){
+                var thisJq=$(this),
+                    checked=thisJq.attr('checked'),
+                    curItem=_.filter(selectValues,function(item){
+                        return !!(item.value)==!!checked;
+                    })[0];
+                thisJq.data('label',curItem.label);
+                e.stopPropagation();
+            });
+            editInputJq.data('label',label);
+            //设置引用
+            self.editJq=editJq;
+		},
+		reset:function(){
+		    var self=this,
+                options=self.options,
+                editJq=self.editJq;
+           if(options.themeType==1){
+               $('.ui-button-cancel',editJq).click();
+           }else{
+               $(document).click();
+           } 
 		}
 	});
 }(jQuery,this));
