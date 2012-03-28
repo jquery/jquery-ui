@@ -131,6 +131,11 @@
             $('.edit-field').ieditor0('reset');
             return false;
         });
+        
+        
+        //第二个编辑器从不可用切换到可用
+        $('.edit-text1').ieditor0('disable');
+        $('.edit-text1').ieditor0('enable');
 	});
 	</script>
 </head>
@@ -138,7 +143,8 @@
 <body>
   <div class="editor-wrapper">
     <div class="edit-wrapper">
-  	 <span><span class="edit-text0 edit-field" edittype="textfield">测试</span><a href="#" class="edit-h">编辑</a></span>
+    <!-- 添加ui-state-disabled class,初始状态下编辑器不可用 -->
+  	 <span><span class="edit-text0 edit-field ui-state-disabled" edittype="textfield">测试</span><a href="#" class="edit-h">编辑</a></span>
   	</div>
   	<div class="edit-wrapper">
   	 <span class="edit-text1 edit-field" edittype="textarea">测试测试测试</span>

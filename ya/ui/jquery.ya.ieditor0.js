@@ -126,36 +126,38 @@
 			}
 			//绑定事件
 			$(document).click(function(e){
-				if(e.target===element.get(0)||e.target===$(options.handlerSelector).get(0)||editInputJq.parent('.ui-ieditor').find(e.target).length!=0){ //如果点击dom是element 或 handler 或 编辑器本身
-					element.hide();
-					var value=element.data('value')||element.attr('val')||element.text();
-					editInputJq.val(value).data('originval',value).data('originlabel',editInputJq.data('label'));
-					editJq.show();
-					if(e.target!==editInputJq.get(0)){
-						try{
-						    editInputJq.get(0).select();
-						}catch(e){}
-					}
-					//隐藏handlerSelector
-					if(options.handlerSelector){
-						$(options.handlerSelector).hide();
-					}
-				}else{
-					if(options.themeType==0){
-						//element.text(editInputJq.val()).show();
-						if(!_.isUndefined(editInputJq.data('label'))){
-						    element.text(editInputJq.data('label'));
-						    element.data('value',editInputJq.val());
-						}else{
-						    element.text(editInputJq.val());
-						}
-						element.show();
-						editJq.hide();
-						//显示handlerSelector
-                        if(options.handlerSelector){
-                            $(options.handlerSelector).show();
-                        }
-					}
+			    if(!element.hasClass('ui-state-disabled')){  //如果element可用
+    				if(e.target===element.get(0)||e.target===$(options.handlerSelector).get(0)||editInputJq.parent('.ui-ieditor').find(e.target).length!=0){ //如果点击dom是element 或 handler 或 编辑器本身
+    					element.hide();
+    					var value=element.data('value')||element.attr('val')||element.text();
+    					editInputJq.val(value).data('originval',value).data('originlabel',editInputJq.data('label'));
+    					editJq.show();
+    					if(e.target!==editInputJq.get(0)){
+    						try{
+    						    editInputJq.get(0).select();
+    						}catch(e){}
+    					}
+    					//隐藏handlerSelector
+    					if(options.handlerSelector){
+    						$(options.handlerSelector).hide();
+    					}
+    				}else{
+    					if(options.themeType==0){
+    						//element.text(editInputJq.val()).show();
+    						if(!_.isUndefined(editInputJq.data('label'))){
+    						    element.text(editInputJq.data('label'));
+    						    element.data('value',editInputJq.val());
+    						}else{
+    						    element.text(editInputJq.val());
+    						}
+    						element.show();
+    						editJq.hide();
+    						//显示handlerSelector
+                            if(options.handlerSelector){
+                                $(options.handlerSelector).show();
+                            }
+    					}
+    				}
 				}
 			});		
 		},
