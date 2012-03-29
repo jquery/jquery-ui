@@ -173,6 +173,12 @@ $.widget( "ui.tooltip", {
 			target = $( event ? event.currentTarget : this.element ),
 			tooltip = this._find( target );
 
+		// disabling closes the tooltip, so we need to track when we're closing
+		// to avoid an infinite loop in case the tooltip becomes disabled on close
+		if ( this.closing ) {
+			return;
+		}
+
 		// don't close if the element has focus
 		// this prevents the tooltip from closing if you hover while focused
 		if ( !force && this.document[0].activeElement === target[0] ) {
@@ -195,7 +201,9 @@ $.widget( "ui.tooltip", {
 		target.removeData( "tooltip-open" );
 		target.unbind( "mouseleave.tooltip focusout.tooltip keyup.tooltip" );
 
+		this.closing = true;
 		this._trigger( "close", event, { tooltip: tooltip } );
+		this.closing = false;
 	},
 
 	_tooltip: function( element ) {
