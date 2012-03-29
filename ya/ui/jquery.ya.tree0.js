@@ -977,7 +977,14 @@
             }
             return false;
         },
-        
+        /**
+         * 清空所有节点
+         */
+        removeAll:function(){
+            var self=this;
+            self.setData([]);
+            self.refresh();
+        },
         _findChildrenId: function(target, ids){
             if(target.children){
                 for(var i = 0, children = target.children, len = children.length; i < len; i++){

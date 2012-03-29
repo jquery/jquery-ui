@@ -62,6 +62,11 @@
             var target = $('#navtree').tree0("findNode", "text", "test","",true);
             var parentNodes=$("#navtree").tree0('getParents',target);
   			console.dir(parentNodes);
+  			//清空所有节点
+  			$('#navtree').tree0("removeAll");
+  			//装入国内树
+  			$('#navtree').tree0("setData",[citydata[0]]);
+  			$('#navtree').tree0("refresh");
   		});
   	</script>
   
