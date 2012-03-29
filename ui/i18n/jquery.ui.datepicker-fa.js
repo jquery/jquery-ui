@@ -2,15 +2,6 @@
 /* Javad Mowlanezhad -- jmowla@gmail.com */
 /* Jalali calendar should supported soon! (Its implemented but I have to test it) */
 jQuery(function($) {
-	var dayNamesShort = [
-		'ی',
-		'د',
-		'س',
-		'چ',
-		'پ',
-		'ج', 
-		'ش'
-	];
 	$.datepicker.regional['fa'] = {
 		closeText: 'بستن',
 		prevText: '&#x3C;قبلی',
@@ -40,8 +31,24 @@ jQuery(function($) {
 			'جمعه',
 			'شنبه'
 		],
-		dayNamesShort: dayNamesShort,
-		dayNamesMin: dayNamesShort,
+		dayNamesShort: [
+			'ی',
+			'د',
+			'س',
+			'چ',
+			'پ',
+			'ج', 
+			'ش'
+		],
+		dayNamesMin: [
+			'ی',
+			'د',
+			'س',
+			'چ',
+			'پ',
+			'ج', 
+			'ش'
+		],
 		weekHeader: 'هف',
 		dateFormat: 'yy/mm/dd',
 		firstDay: 6,
