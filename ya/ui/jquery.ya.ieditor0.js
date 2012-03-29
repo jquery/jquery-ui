@@ -129,9 +129,7 @@
 			    if(!element.hasClass('ui-state-disabled')){  //如果element可用
     				if(e.target===element.get(0)||e.target===$(options.handlerSelector).get(0)||editInputJq.parent('.ui-ieditor').find(e.target).length!=0){ //如果点击dom是element 或 handler 或 编辑器本身
     					element.hide();
-    					var value=element.data('value')||element.attr('val')||element.text();
-    					editInputJq.val(value).data('originval',value).data('originlabel',editInputJq.data('label'));
-    					editJq.show();
+    					self.show();
     					if(e.target!==editInputJq.get(0)){
     						try{
     						    editInputJq.get(0).select();
@@ -291,6 +289,27 @@
             editInputJq.data('label',label);
             //设置引用
             self.editJq=editJq;
+		},
+		/**
+		 * 显示编辑器，特定类型编辑器显示前要进行初始化
+		 */
+		show:function(){
+		    var self=this,
+		        element=self.element,
+                editJq=self.editJq,
+                editType=self.editType,
+                editInputJq=$('.ui-ieditor-input',editJq);
+                
+            var value=element.data('value')||element.attr('val')||element.text();
+            switch(editType){
+                case "combo":
+                    editInputJq.theme0('select',value);
+                    break;
+                default:
+                    editInputJq.val(value).data('originval',value).data('originlabel',editInputJq.data('label'));
+                    break;
+            }
+            editJq.show();
 		},
 		reset:function(){
 		    var self=this,

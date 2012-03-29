@@ -126,6 +126,7 @@
 			if(options.triggerType=="click"){			
 				themeJq.click(function(e){				
 					listJq.show();
+					e.stopPropagation();
 				});
 			}else if(options.triggerType=="hover"){
 				themeJq.on('mouseenter',function(){
