@@ -105,16 +105,25 @@
 				}
 				return function(v){
 					var validV,
-						validMsgJq=elJq.data('validmsg');
+						validMsgJq=elJq.data('validmsg'),
+						validMsgContentJq;
 					v=$.trim(v);	//v trim过滤
 					if(!validMsgJq){
 						validMsgJq=$('<div class="ui-form-field-message"></div>').insertAfter(elJq);
+						validMsgContentJq=$('<span class="message-content"></span>').appendTo(validMsgJq);
 						elJq.data('validmsg',validMsgJq);
+						//关闭按钮
+						$('<span class="ui-form-field-message-close">&#10005</span>').click(function(){
+						    $(this).closest('.ui-form-field-message').hide();
+						    return false;
+						}).appendTo(validMsgJq);
 					}
-					validMsgJq.removeClass('ui-state-error').empty();
+					validMsgJq.removeClass('ui-state-error');
+					validMsgContentJq.empty();
 					validV=validateFn.apply(ui,[v,opts]);
 					if(!validV&&errorMsg){ //如果未通过验证并且有错误信息
-						validMsgJq.addClass('ui-state-error').html(errorMsg);
+						validMsgJq.addClass('ui-state-error');
+						validMsgContentJq.html(errorMsg);
 					}
 					return validV;
 				};
