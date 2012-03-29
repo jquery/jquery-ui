@@ -9,7 +9,7 @@ jQuery(function($) {
 		'چ',
 		'پ',
 		'ج', 
-		'ق'
+		'ش'
 	];
 	$.datepicker.regional['fa'] = {
 		closeText: 'بستن',
@@ -26,7 +26,7 @@ jQuery(function($) {
 			'مهر',
 			'آبان',
 			'آذر',
-			'دي',
+			'دی',
 			'بهمن',
 			'اسفند'
 		],
