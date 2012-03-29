@@ -21,6 +21,7 @@
 			 * 	"name":{String},	//提交给后台的变量名
 			 * 	"vtype":{mix},	//验证类型
 			 * 	"errorMsg":{String},	//验证失败提示信息
+			 *  "errorTpl":{String}, //错误提示信息模板
 			 *  "defaultValue":{String|Array},	//默认值
 			 * 	"handler":{Function}	//点击后触发
 			 * }]
@@ -56,7 +57,8 @@
 			var items=[];
 			for(i=0;item=options.items[i++];){
 				items[i-1]=_.extend({
-					"element":$(item.selector,element)
+					"element":$(item.selector,element),
+					"errorTpl":'<span class="ui-icon-error"></span><div class="message-content">${content}</div><div class="pointy-tip-shadow"></div><div class="pointy-tip"></div>'
 				},item);
 				if(items[i-1].vtype){
 					items[i-1].vtype=[].concat(item.vtype);

@@ -1,3 +1,48 @@
 .ui-form-field-message{
 	position: absolute;
+	width:220px;
+	height: 32px;
+	line-height: 32px;
+	top:-42px;
+	background: #fbb4b4;
+	border:1px solid #f67979;
+	overflow: visible;
+}
+.ui-form-field-message-close{
+    position: absolute;
+    right:5px;
+    top:0px;
+    cursor:pointer;
+}
+.ui-form-field-message .message-content{
+    margin:0px 10px 0px 43px;
+    color:#2e2e2e;
+}
+.ui-form-field-message .ui-icon-error{
+    position: absolute;
+    left:15px;
+    top:7px;
+    width:20px;
+    height:20px;
+    background: url(images/ui-icon-alert.png) no-repeat -21px 0px;
+}
+.ui-form-field-message .pointy-tip-shadow,
+.ui-form-field-message .pointy-tip{
+    position:absolute;
+    border:7px solid; 
+    border-color:#f67979 transparent transparent transparent;
+    border-style:solid dashed dashed dashed;
+    bottom:-14px;
+    width:0;
+    height:0;
+    left:10px;
+    overflow:hidden;
+}
+.ui-form-field-message .pointy-tip{
+    border-top-color:#fbb4b4;
+}
+.ui-form-field-message .pointy-tip-shadow{
+    border-width:8px !important;
+    bottom:-16px;
+    left:9px;
 }

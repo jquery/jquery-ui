@@ -81,7 +81,7 @@
 	position: absolute;
 	top:5px;
 	left:0px;
-	background: url(images/dialog/ui-icon-alert.png) no-repeat;
+	background: url(images/ui-icon-alert.png) no-repeat;
 }
 .ui-dialog-alert .ui-widget-header{
 	background: transparent;

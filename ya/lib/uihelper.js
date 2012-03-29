@@ -82,7 +82,8 @@
 				vtype=vtypes[vtypeName],
 				validateFn,
 				elJq=opts.element,	//待验证的dom
-				errorMsg=opts.errorMsg[opts.vtypeIndex]||'error';	//验证失败提示信息
+				errorMsg=opts.errorMsg[opts.vtypeIndex]||'error',	//验证失败提示信息
+				errorTpl=opts.errorTpl; //错误信息模板
 			if(!!vtype){
 				if(_.isFunction(vtype)){
 					validateFn=function(v){
@@ -106,25 +107,33 @@
 				return function(v){
 					var validV,
 						validMsgJq=elJq.data('validmsg'),
-						validMsgContentJq=$('.message-content',validMsgJq),
-						validMsgContentJq;
+						validMsgContentWJq=$('.message-content-wrapper',validMsgJq);
 					v=$.trim(v);	//v trim过滤
 					if(!validMsgJq){
 						validMsgJq=$('<div class="ui-form-field-message"></div>').insertAfter(elJq);
-						validMsgContentJq=$('<span class="message-content"></span>').appendTo(validMsgJq);
+						validMsgContentWJq=$('<div class="message-content-wrapper"></div>').appendTo(validMsgJq);
 						elJq.data('validmsg',validMsgJq);
 						//关闭按钮
 						$('<span class="ui-form-field-message-close">&#10005</span>').click(function(){
 						    $(this).closest('.ui-form-field-message').hide();
 						    return false;
 						}).appendTo(validMsgJq);
+						
+						//圆角设置
+						new Solution('corner',{
+                            hostSelector:validMsgJq
+                        }).doSolution();
 					}
 					validMsgJq.removeClass('ui-state-error').hide();
-					validMsgContentJq.empty();
+					validMsgContentWJq.empty();
 					validV=validateFn.apply(ui,[v,opts]);
 					if(!validV&&errorMsg){ //如果未通过验证并且有错误信息
 						validMsgJq.addClass('ui-state-error');
-						validMsgContentJq.html(errorMsg);
+						if($.tmpl){
+						    $.tmpl( errorTpl, { "content" : errorMsg }).appendTo(validMsgContentWJq);
+						}else{
+						    validMsgContentWJq.html(errorMsg);
+						}
 						validMsgJq.show();
 					}
 					return validV;
