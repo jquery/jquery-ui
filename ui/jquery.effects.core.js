@@ -419,7 +419,7 @@ $.extend($.effects, {
 	setTransition: function(element, list, factor, value) {
 		value = value || {};
 		$.each(list, function(i, x){
-			unit = element.cssUnit(x);
+			var unit = element.cssUnit(x);
 			if (unit[0] > 0) value[x] = unit[0] * factor + unit[1];
 		});
 		return value;

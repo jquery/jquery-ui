@@ -594,7 +594,7 @@ $.widget("ui.menu", {
 			}
 
 			var base = this.active.offset().top,
-				height = this.element.height();
+				height = this.element.height(),
 				result = this.element.children(".ui-menu-item").filter(function() {
 					var close = $(this).offset().top - base + height - $(this).height();
 					// TODO improve approximation
