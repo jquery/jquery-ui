@@ -733,7 +733,6 @@ $.extend( $.ui.tabs.prototype, {
 				}
 			}
 			: function( e ) {
-				t = o.selected;
 				rotate();
 			});
 
