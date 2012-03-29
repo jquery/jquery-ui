@@ -372,6 +372,43 @@ grunt.registerMultiTask( "md5", "Create list of md5 hashes for CDN uploads", fun
 	grunt.log.writeln( "Wrote " + this.file.dest + " with " + hashes.length + " hashes" );
 });
 
+// only needed for 1.8
+grunt.registerTask( "download_docs", function() {
+	function capitalize(value) {
+		return value[0].toUpperCase() + value.slice(1);
+	}
+	// should be grunt.config("pkg.version")?
+	var version = "1.8";
+	var docsDir = "dist/docs";
+	var files = "draggable droppable resizable selectable sortable accordion autocomplete button datepicker dialog progressbar slider tabs position"
+	.split(" ").map(function(widget) {
+		return {
+			url: "http://docs.jquery.com/action/render/UI/API/" + version + "/" + capitalize(widget),
+			dest: docsDir + '/' + widget + '.html'
+		};
+	});
+	files = files.concat("animate addClass effect hide removeClass show switchClass toggle toggleClass".split(" ").map(function(widget) {
+		return {
+			url: "http://docs.jquery.com/action/render/UI/Effects/" + widget,
+			dest: docsDir + '/' + widget + '.html'
+		};
+	}));
+	files = files.concat("Blind Clip Drop Explode Fade Fold Puff Slide Scale Bounce Highlight Pulsate Shake Size Transfer".split(" ").map(function(widget) {
+		return {
+			url: "http://docs.jquery.com/action/render/UI/Effects/" + widget,
+			dest: docsDir + '/effect-' + widget.toLowerCase() + '.html'
+		};
+	}));
+	var fs = require( "fs" );
+	var request = require( "request" );
+	grunt.file.mkdir( "dist/docs" );
+	grunt.utils.async.forEach( files, function( file, done ) {
+		var out = fs.createWriteStream( file.dest );
+		out.on( "close", done );
+		request( file.url ).pipe( out );
+	}, this.async() );
+});
+
 grunt.registerTask( "download_themes", function() {
 	// var AdmZip = require('adm-zip');
 	var fs = require( "fs" );
