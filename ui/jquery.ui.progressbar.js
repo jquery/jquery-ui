@@ -35,6 +35,7 @@ $.widget( "ui.progressbar", {
 		this.valueDiv = $( "<div class='ui-progressbar-value ui-widget-header ui-corner-left'></div>" )
 			.appendTo( this.element );
 
+		this.oldValue = this._value();
 		this._refreshValue();
 	},
 
@@ -61,7 +62,6 @@ $.widget( "ui.progressbar", {
 	_setOption: function( key, value ) {
 		if ( key === "value" ) {
 			this.options.value = value;
-
 			this._refreshValue();
 			if ( this._value() === this.options.max ) {
 				this._trigger( "complete" );
@@ -93,7 +93,7 @@ $.widget( "ui.progressbar", {
 
 		this.valueDiv.toggleClass( "ui-progressbar-indeterminate", isNaN( value ) );
 
-		if ( this.oldValue !== value ) {
+		if ( this.oldValue !== value && ( !isNaN( this.oldValue ) || !isNaN( value ) ) ) {
 			this.oldValue = value;
 			this._trigger( "change" );
 		}
