@@ -206,7 +206,8 @@
 				}
 				//清空error
 				if(validMsgJq){
-				    validMsgJq.removeClass('ui-state-error').empty();
+				    validMsgJq.removeClass('ui-state-error').hide();
+				    $('.message-content',validMsgJq).empty();
 				}
 				
 			});
