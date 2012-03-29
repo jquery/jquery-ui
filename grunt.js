@@ -23,7 +23,7 @@ function createBanner( files ) {
 
 // a working grunt.loadNpmTasks replacement
 // gets us csslint and cssmin tasks
-require('grunt-css')(grunt);
+grunt.loadNpmTasks('grunt-css');
 
 // allow access from banner template
 global.stripDirectory = stripDirectory;
