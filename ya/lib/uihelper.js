@@ -106,6 +106,7 @@
 				return function(v){
 					var validV,
 						validMsgJq=elJq.data('validmsg'),
+						validMsgContentJq=$('.message-content',validMsgJq),
 						validMsgContentJq;
 					v=$.trim(v);	//v trim过滤
 					if(!validMsgJq){
@@ -118,12 +119,13 @@
 						    return false;
 						}).appendTo(validMsgJq);
 					}
-					validMsgJq.removeClass('ui-state-error');
+					validMsgJq.removeClass('ui-state-error').hide();
 					validMsgContentJq.empty();
 					validV=validateFn.apply(ui,[v,opts]);
 					if(!validV&&errorMsg){ //如果未通过验证并且有错误信息
 						validMsgJq.addClass('ui-state-error');
 						validMsgContentJq.html(errorMsg);
+						validMsgJq.show();
 					}
 					return validV;
 				};
