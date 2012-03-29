@@ -13,6 +13,8 @@
     right:5px;
     top:0px;
     cursor:pointer;
+    color:#d11919;
+    font-weight: bold;
 }
 .ui-form-field-message .message-content{
     margin:0px 10px 0px 43px;
