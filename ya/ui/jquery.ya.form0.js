@@ -53,10 +53,10 @@
 			var element=self.element,
 				options=self.options,
 				i,
-				item;
+				itemConfig;
 			var items=[];
-			for(i=0;item=options.items[i++];){
-				items[i-1]=_.extend({
+			for(i=0;itemConfig=options.items[i++];){
+				/*items[i-1]=_.extend({
 					"element":$(item.selector,element),
 					"errorTpl":'<span class="ui-icon-error"></span><div class="message-content">${content}</div><div class="pointy-tip-shadow"></div><div class="pointy-tip"></div>'
 				},item);
@@ -65,9 +65,25 @@
 				}
 				if(items[i-1].errorMsg){
 					items[i-1].errorMsg=[].concat(item.errorMsg);
-				}
+				}*/
+				items[i-1]=self._initItem(itemConfig);
 			}
 			self.items=items;
+		},
+		_initItem:function(itemConfig){
+		    var self=this,
+		        element=self.element;
+		    var item=_.extend({
+                "element":$(itemConfig.selector,element),
+                "errorTpl":'<span class="ui-icon-error"></span><div class="message-content">${content}</div><div class="pointy-tip-shadow"></div><div class="pointy-tip"></div>'
+            },itemConfig);
+            if(item.vtype){
+                item.vtype=[].concat(item.vtype);
+            }
+            if(item.errorMsg){
+                item.errorMsg=[].concat(item.errorMsg);
+            }
+            return item;
 		},
 		_actions:function(){
 			var self=this,
@@ -214,14 +230,21 @@
 				
 			});
 		},
-		addItem:function(items){
+		addItem:function(itemsConfig){
 			var self=this,
-				element=self.element;
-			items=_.map([].concat(items),function(item){
-				item.element=$(item.selector,element);
-				return item;
+				element=self.element,
+				items=[];
+			items=_.map([].concat(itemsConfig),function(itemConfig){
+				return self._initItem(itemConfig);
 			});
 			self.items=self.items.concat(items);
+		},
+		removeItem:function(itemSelector){
+		  var self=this,
+		      items=self.items;
+		  self.items=_.filter(items,function(item){
+		      return !(item.element.get(0)===$(itemSelector).get(0));
+		  });  
 		},
 		/**
 		 * 推荐用注册selector筛选效率高
