@@ -99,7 +99,7 @@ $.widget( "ui.tooltip", {
 			return;
 		}
 
-		if ( !target.data( "ui-tooltip-title" ) ) {
+		if ( target.attr( "title" ) ) {
 			target.data( "ui-tooltip-title", target.attr( "title" ) );
 		}
 
