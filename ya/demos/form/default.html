@@ -172,11 +172,24 @@
 			  			e.preventDefault();
 			  		}
 				},{
-                    "selector":'#remove-btn',
+                    "selector":'#remove-btn',   //删除验证item，但不删除item本身
                     "handler":function(e){
                         var fJq=$('#f');
-                        fJq.form0('removeItem','textarea'); //删除
+                        fJq.form0('removeItemVtype','textarea'); 
                        
+                        e.preventDefault();
+                    }
+                },{
+                    "selector":'#add-btn',  //添加验证
+                    "handler":function(e){
+                        var fJq=$('#f');
+                        fJq.form0('addItemVtype',{
+                            "selector":'textarea',
+                            "vtype":'email',
+                            "defaultValue":"test@admin.com",
+                            "errorMsg":'请填写合法的邮箱地址',
+                            "errorTpl":'<span class="ui-icon-error"></span><div class="message-content">${content}</div>'   //自定义错误信息提示摸板样式
+                        }); 
                         e.preventDefault();
                     }
                 }]
@@ -207,6 +220,15 @@
   	<div class="ff-wrapper error-right">
   		<textarea name="name3"></textarea>
   	</div>
+  	<div class="ff-wrapper error-right">
+        <textarea name="name3"></textarea>
+    </div>
+    <div class="ff-wrapper error-right">
+        <textarea name="name3"></textarea>
+    </div>
+    <div class="ff-wrapper error-right">
+        <textarea name="name3"></textarea>
+    </div>
   	<div class="select-wrapper">
 	  	<select id="select1">
 	  		<option value="a">a</option>
@@ -235,9 +257,10 @@
 	  	</select>
   	</div>
   	<div class="btns">
-  		<button id="sub-btn" type="submit">提交</button>
+  		<a id="sub-btn" type="submit">提交</a>
   		<button id="reset-btn" type="reset">重置</button>
   		<button id="remove-btn" type="reset">remove</button>
+  		<button id="add-btn" type="reset">add</button>
   	</div>
   </form>
 </body>

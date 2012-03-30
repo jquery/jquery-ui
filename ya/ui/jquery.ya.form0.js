@@ -74,7 +74,7 @@
 		    var self=this,
 		        element=self.element;
 		    var item=_.extend({
-                "element":$(itemConfig.selector,element),
+                //"element":$(itemConfig.selector,element), //修改为即时验证，不对item进行缓存
                 "errorTpl":'<span class="ui-icon-error"></span><div class="message-content">${content}</div><div class="pointy-tip-shadow"></div><div class="pointy-tip"></div>'
             },itemConfig);
             if(item.vtype){
@@ -104,31 +104,18 @@
 		vField:function(selector){
 			var self=this,
 				item=self.getItem(selector),
-				v=item.element.get(0).value,
 				vtype=item.vtype;
 				vtypeFn=[],
 				passed=true;
 			_.each(vtype,function(everyVtype,i){
 				vtypeFn[i]=uihelper.vtype(self,everyVtype,$.extend({
-					//element:item.element,
-					//errorMsg:item.errorMsg[i]||"error",
 					vtypeIndex:i
 				},item));
 			});
-			//取值过程value>data('value')>attr('val')
-			if(_.isUndefined(v)){
-				v=item.element.data('value');
-				if(_.isUndefined(v)){
-					v=item.element.attr('val');
-				}
-			}
-			if(_.isUndefined(v)){
-				alert('大爷给点值吧');
-				return false;
-			}
+			//开始逐个vtype验证
 			if(vtypeFn.length>0){
 				_.any(vtypeFn,function(fn){
-					passed=fn.call(self,v);
+					passed=fn.call(self);
 					return !passed;
 				});
 				return passed;
@@ -159,32 +146,40 @@
 				items=self.items;
 			var values={};
 			_.each(items,function(v){
-				var itemJq=v.element;
-				if(itemJq.is(':text,textarea')){
-					values[v.name||itemJq.attr('name')]=itemJq.val();	//首选配置项中的name,然后才是dom的name属性
+				var itemJq=$(v.selector,element),
+				    name=v.name||itemJq.attr('name');
+				values[name]=[];
+				if(itemJq.is(':text,textarea')){	    
+				    itemJq.each(function(){
+				        values[name].push($(this).val());
+				    });
 				}else if(itemJq.is(':radio,:checkbox')){
-					values[v.name||itemJq.attr('name')]=[];	//radio和checkbox以数组形式提交
 					itemJq.each(function(){
 						var thisJq=$(this);
 						if(thisJq.attr('checked')){
-							values[v.name||itemJq.attr('name')].push(thisJq.val());
+							values[name].push(thisJq.val());
 						}
 					});
 				}else if(itemJq.is('select')){	//select以数组形式提交
-					values[v.name||itemJq.attr('name')]=[];
 					$('option',itemJq).each(function(i){
 						var thisJq=$(this);
 						if(thisJq.attr('selected')){
-							values[v.name||itemJq.attr('name')].push(thisJq.val());
+							values[name].push(thisJq.val());
 						}
 					});
 				}else{
-					//普通dom
-					if(!_.isUndefined(itemJq.data('value'))){
-						values[v.name]=itemJq.data('value');
-					}else{
-						values[v.name]=itemJq.attr('val');
-					}
+				    itemJq.each(function(){
+				        var thisJq=$(this);
+                        //普通dom
+                        if(!_.isUndefined(thisJq.data('value'))){
+                            values[v.name].push(thisJq.data('value'));
+                        }else{
+                            values[v.name].push(thisJq.attr('val'));
+                        }
+                    });
+				}
+				if(values[name].length==1){
+				    values[name]=values[name][0];
 				}
 			});
 			return values;
@@ -194,7 +189,7 @@
 				element=self.element,
 				items=self.items;
 			_.each(items,function(v){
-				var itemJq=v.element,
+				var itemJq=$(v.selector,element),
 				    validMsgJq=itemJq.data('validmsg'),
 					defaultValue;
 				if(v.defaultValue){
@@ -223,13 +218,19 @@
 					}
 				}
 				//清空error
-				if(validMsgJq){
-				    validMsgJq.removeClass('ui-state-error').hide();
-				    $('.message-content',validMsgJq).empty();
-				}
-				
+				itemJq.each(function(){
+				    var thisJq=$(this),
+				        validMsgJq=thisJq.data('validmsg');
+				    if(validMsgJq){
+				        validMsgJq.removeClass('ui-state-error').hide();
+                        $('.message-content',validMsgJq).empty();
+				    }
+				});
 			});
 		},
+		/**
+		 * 不推荐使用，参见addItemVtype
+		 */
 		addItem:function(itemsConfig){
 			var self=this,
 				element=self.element,
@@ -239,29 +240,41 @@
 			});
 			self.items=self.items.concat(items);
 		},
+		/**
+         * 不推荐使用，参见removeItemVtype
+         */
 		removeItem:function(itemSelector){
 		  var self=this,
 		      element=self.element,
 		      items=self.items;
 		  self.items=_.filter(items,function(item){
-		      var matched=item.element.get(0)===$(itemSelector,element).get(0);
+		      var itemElJq=$(item.selector,element),  //可能length>1
+		          matched=itemElJq.is(itemSelector);
 		      if(matched){
-		          item.element.data('validmsg').remove();
+		          itemElJq.each(function(){
+		              $(this).data('validmsg').remove();
+		              $(this).removeData('validmsg')
+		          });
 		      }
 		      return !matched;
 		  });  
 		},
+		addItemVtype:function(){
+		  self.addItem.apply(this,arguments);
+		},
+		removeItemVtype:function(){
+          self.removeItem.apply(this,arguments);
+        },
 		/**
 		 * 推荐用注册selector筛选效率高
 		 */
 		getItem:function(selector){
 			var self=this,
+			     element=self.element,
 				items=self.items;
-			return _.find(items,function(v){
-				if(_.isString(selector)&&v.selector==selector){
-					return v;
-				}else if($(selector).get(0)===v.element.get(0)){
-					return v;
+			return _.find(items,function(item){
+				if($(item.selector,element).is(selector)){
+				    return item;
 				}
 			});
 		}

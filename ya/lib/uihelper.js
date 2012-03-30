@@ -81,7 +81,6 @@
 			var vtypes=uihelper.vtypes,
 				vtype=vtypes[vtypeName],
 				validateFn,
-				elJq=opts.element,	//待验证的dom
 				errorMsg=opts.errorMsg[opts.vtypeIndex]||'error',	//验证失败提示信息
 				errorTpl=opts.errorTpl; //错误信息模板
 			if(!!vtype){
@@ -104,39 +103,65 @@
 						};
 					}
 				}
-				return function(v){
-					var validV,
-						validMsgJq=elJq.data('validmsg'),
-						validMsgContentWJq=$('.message-content-wrapper',validMsgJq);
-					v=$.trim(v);	//v trim过滤
-					if(!validMsgJq){
-						validMsgJq=$('<div class="ui-form-field-message"></div>').insertAfter(elJq);
-						validMsgContentWJq=$('<div class="message-content-wrapper"></div>').appendTo(validMsgJq);
-						elJq.data('validmsg',validMsgJq);
-						//关闭按钮
-						$('<span class="ui-form-field-message-close">&#10005</span>').click(function(){
-						    $(this).closest('.ui-form-field-message').hide();
-						    return false;
-						}).appendTo(validMsgJq);
-						
-						//圆角设置
-						new Solution('corner',{
-                            hostSelector:validMsgJq
-                        }).doSolution();
-					}
-					validMsgJq.removeClass('ui-state-error').hide();
-					validMsgContentWJq.empty();
-					validV=validateFn.apply(ui,[v,opts]);
-					if(!validV&&errorMsg){ //如果未通过验证并且有错误信息
-						validMsgJq.addClass('ui-state-error');
-						if($.tmpl){
-						    $.tmpl( errorTpl, { "content" : errorMsg }).appendTo(validMsgContentWJq);
-						}else{
-						    validMsgContentWJq.html(errorMsg);
-						}
-						validMsgJq.show();
-					}
-					return validV;
+				return function(){
+				    var passed=true;
+				    $(opts.selector,ui.element).each(function(){
+				        var validV,
+				            elJq=$(this),   //待验证的dom
+                            validMsgJq=elJq.data('validmsg'),
+                            validMsgContentWJq;
+                        //取值过程value>data('value')>attr('val')
+                        var v=elJq.get(0).value;
+                        
+                        if(_.isUndefined(v)){
+                            v=elJq.data('value');
+                            if(_.isUndefined(v)){
+                                v=elJq.attr('val');
+                            }
+                        }
+                        if(_.isUndefined(v)){
+                            alert('大爷给点值吧');
+                            passed=false;   //value不存在设置为未通过验证
+                            return false;
+                        }
+                        //error content wrapper
+                        if(validMsgJq){
+                            validMsgContentWJq=validMsgJq.find('.message-content-wrapper');
+                        }
+                        v=$.trim(v);    //v trim过滤
+                        if(!validMsgJq){
+                            validMsgJq=$('<div class="ui-form-field-message"></div>').insertAfter(elJq);
+                            validMsgContentWJq=$('<div class="message-content-wrapper"></div>').appendTo(validMsgJq);
+                            elJq.data('validmsg',validMsgJq);
+                            //关闭按钮
+                            $('<span class="ui-form-field-message-close">&#10005</span>').click(function(){
+                                $(this).closest('.ui-form-field-message').hide();
+                                return false;
+                            }).appendTo(validMsgJq);
+                            
+                            //圆角设置
+                            new Solution('corner',{
+                                hostSelector:validMsgJq
+                            }).doSolution();
+                        }
+                        validMsgJq.removeClass('ui-state-error').hide();
+                        validMsgContentWJq.empty();
+                        validV=validateFn.apply(ui,[v,opts]);
+                        if(!validV&&errorMsg){ //如果未通过验证并且有错误信息
+                            validMsgJq.addClass('ui-state-error');
+                            if($.tmpl){
+                                $.tmpl( errorTpl, { "content" : errorMsg }).appendTo(validMsgContentWJq);
+                            }else{
+                                validMsgContentWJq.html(errorMsg);
+                            }
+                            validMsgJq.show();
+                        }
+                        if(!validV){    //如果配置项items中有一个未通过验证，则不让通过，验证函数返回false
+                            passed=false;
+                        }
+                        //return validV;
+				    });
+					return passed;
 				};
 			}
 			return false;
