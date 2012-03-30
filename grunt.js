@@ -1,5 +1,80 @@
 module.exports = function( grunt ) {
 
+var // modules
+	fs = require( "fs" ),
+	path = require( "path" ),
+	request = require( "request" ),
+	util = require( "util" ),
+	inspect = util.inspect,
+
+	// files
+	coreFiles = [
+		"jquery.ui.core.js",
+		"jquery.ui.widget.js",
+		"jquery.ui.mouse.js",
+		"jquery.ui.draggable.js",
+		"jquery.ui.droppable.js",
+		"jquery.ui.resizable.js",
+		"jquery.ui.selectable.js",
+		"jquery.ui.sortable.js",
+		"jquery.effects.core.js"
+	],
+
+	uiFiles = coreFiles.map(function( file ) {
+		return "ui/" + file;
+	}).concat( grunt.file.expandFiles( "ui/*.js" ).filter(function( file ) {
+		return coreFiles.indexOf( file.substring(3) ) === -1;
+	})),
+
+	allI18nFiles = grunt.file.expandFiles( "ui/i18n/*.js" ),
+
+	cssFiles = [
+		"core",
+		"accordion",
+		"autocomplete",
+		"button",
+		"datepicker",
+		"dialog",
+		"menu",
+		"progressbar",
+		"resizable",
+		"selectable",
+		"slider",
+		"spinner",
+		"tabs",
+		"tooltip",
+		"theme"
+	].map(function( component ) {
+		return "themes/base/jquery.ui." + component + ".css";
+	}),
+
+	// minified files
+	minify = {
+		"dist/jquery-ui.min.js": [ "<banner:meta.bannerAll>", "dist/jquery-ui.js" ],
+		"dist/i18n/jquery-ui-i18n.min.js": [ "<banner:meta.bannerI18n>", "dist/i18n/jquery-ui-i18n.js" ]
+	},
+
+	minifyCSS = {
+		"dist/jquery-ui.min.css": "dist/jquery-ui.css"
+	};
+
+
+uiFiles.concat( allI18nFiles ).forEach(function( file ) {
+	minify[ "dist/" + file.replace( /\.js$/, ".min.js" ).replace( /ui\//, "minified/" ) ] = [ "<banner>", file ];
+});
+
+cssFiles.forEach(function( file ) {
+	minifyCSS[ "dist/" + file.replace( /\.css$/, ".min.css" ).replace( /themes\/base\//, "themes/base/minified/" ) ] = [ "<banner>", file ];
+});
+
+
+// csslint and cssmin tasks
+grunt.loadNpmTasks( "grunt-css" );
+
+grunt.registerHelper( "strip_all_banners", function( filepath ) {
+	return grunt.file.read( filepath ).replace( /^\s*\/\*[\s\S]*?\*\/\s*/g, "" );
+});
+
 function stripBanner( files ) {
 	return files.map(function( file ) {
 		return "<strip_all_banners:" + file + ">";
@@ -9,6 +84,8 @@ function stripBanner( files ) {
 function stripDirectory( file ) {
 	return file.replace( /.+\/(.+)$/, "$1" );
 }
+// allow access from banner template
+global.stripDirectory = stripDirectory;
 
 function createBanner( files ) {
 	// strip folders
@@ -20,46 +97,6 @@ function createBanner( files ) {
 		"* Copyright (c) <%= grunt.template.today('yyyy') %> <%= pkg.author.name %>;" +
 		" Licensed <%= _.pluck(pkg.licenses, 'type').join(', ') %> */";
 }
-
-// a working grunt.loadNpmTasks replacement
-// gets us csslint and cssmin tasks
-grunt.loadNpmTasks('grunt-css');
-
-// allow access from banner template
-global.stripDirectory = stripDirectory;
-grunt.registerHelper( "strip_all_banners", function( filepath ) {
-	return grunt.file.read( filepath ).replace( /^\s*\/\*[\s\S]*?\*\/\s*/g, "" );
-});
-var inspect = require( "util" ).inspect;
-
-var coreFiles = "jquery.ui.core.js, jquery.ui.widget.js, jquery.ui.mouse.js, jquery.ui.draggable.js, jquery.ui.droppable.js, jquery.ui.resizable.js, jquery.ui.selectable.js, jquery.ui.sortable.js, jquery.effects.core.js".split( ", " );
-var uiFiles = coreFiles.map(function( file ) {
-	return "ui/" + file;
-}).concat( grunt.file.expandFiles( "ui/*.js" ).filter(function( file ) {
-	return coreFiles.indexOf( file.substring(3) ) === -1;
-}));
-
-var minify = {
-	"dist/jquery-ui.min.js": [ "<banner:meta.bannerAll>", "dist/jquery-ui.js" ],
-	"dist/i18n/jquery-ui-i18n.min.js": [ "<banner:meta.bannerI18n>", "dist/i18n/jquery-ui-i18n.js" ]
-};
-function minFile( file ) {
-	minify[ "dist/" + file.replace( /\.js$/, ".min.js" ).replace( /ui\//, "minified/" ) ] = [ "<banner>", file ];
-}
-uiFiles.forEach( minFile );
-
-var allI18nFiles = grunt.file.expandFiles( "ui/i18n/*.js" );
-allI18nFiles.forEach( minFile );
-
-var cssFiles = "core accordion autocomplete button datepicker dialog menu progressbar resizable selectable slider spinner tabs tooltip theme".split( " " ).map(function( component ) {
-	return "themes/base/jquery.ui." + component + ".css";
-});
-var minifyCSS = {
-		"dist/jquery-ui.min.css": "dist/jquery-ui.css"
-};
-cssFiles.forEach(function( file ) {
-	minifyCSS[ "dist/" + file.replace( /\.css$/, ".min.css" ).replace( /themes\/base\//, "themes/base/minified/" ) ] = [ "<banner>", file ];
-});
 
 grunt.initConfig({
 	pkg: "<json:package.json>",
@@ -324,16 +361,15 @@ grunt.registerMultiTask( "zip", "Create a zip file for release", function() {
 	// var files = grunt.file.expandFiles( "dist/" + this.file.src + "/**/*" );
 	// grunt.log.writeln( "Creating zip file " + this.file.dest );
 
-	// var fs = require( "fs" );
-	// var AdmZip = require( "adm-zip" );
-	// var zip = new AdmZip();
-	// files.forEach(function( file ) {
-	// 	grunt.verbose.writeln( "Zipping " + file );
-	// 	// rewrite file names from dist folder (created by build), drop the /dist part
-	// 	zip.addFile(file.replace(/^dist/, "" ), fs.readFileSync( file ) );
-	// });
-	// zip.writeZip( "dist/" + this.file.dest );
-	// grunt.log.writeln( "Wrote " + files.length + " files to " + this.file.dest );
+	//var AdmZip = require( "adm-zip" );
+	//var zip = new AdmZip();
+	//files.forEach(function( file ) {
+	//	grunt.verbose.writeln( "Zipping " + file );
+	//	// rewrite file names from dist folder (created by build), drop the /dist part
+	//	zip.addFile(file.replace(/^dist/, "" ), fs.readFileSync( file ) );
+	//});
+	//zip.writeZip( "dist/" + this.file.dest );
+	//grunt.log.writeln( "Wrote " + files.length + " files to " + this.file.dest );
 
 	var done = this.async();
 	var dest = this.file.dest;
@@ -357,8 +393,8 @@ grunt.registerMultiTask( "zip", "Create a zip file for release", function() {
 
 grunt.registerMultiTask( "md5", "Create list of md5 hashes for CDN uploads", function() {
 	// remove dest file before creating it, to make sure itself is not included
-	if ( require( "path" ).existsSync( this.file.dest ) ) {
-		require( "fs" ).unlinkSync( this.file.dest );
+	if ( path.existsSync( this.file.dest ) ) {
+		fs.unlinkSync( this.file.dest );
 	}
 	var crypto = require( "crypto" );
 	var dir = this.file.src + "/";
@@ -399,8 +435,6 @@ grunt.registerTask( "download_docs", function() {
 			dest: docsDir + '/effect-' + widget.toLowerCase() + '.html'
 		};
 	}));
-	var fs = require( "fs" );
-	var request = require( "request" );
 	grunt.file.mkdir( "dist/docs" );
 	grunt.utils.async.forEach( files, function( file, done ) {
 		var out = fs.createWriteStream( file.dest );
@@ -411,8 +445,6 @@ grunt.registerTask( "download_docs", function() {
 
 grunt.registerTask( "download_themes", function() {
 	// var AdmZip = require('adm-zip');
-	var fs = require( "fs" );
-	var request = require( "request" );
 	var done = this.async();
 	var themes = grunt.file.read( "build/themes" ).split(",");
 	var requests = 0;
