@@ -260,10 +260,10 @@
 		  });  
 		},
 		addItemVtype:function(){
-		  self.addItem.apply(this,arguments);
+		  this.addItem.apply(this,arguments);
 		},
 		removeItemVtype:function(){
-          self.removeItem.apply(this,arguments);
+          this.removeItem.apply(this,arguments);
         },
 		/**
 		 * 推荐用注册selector筛选效率高
