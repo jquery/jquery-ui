@@ -241,9 +241,14 @@
 		},
 		removeItem:function(itemSelector){
 		  var self=this,
+		      element=self.element,
 		      items=self.items;
 		  self.items=_.filter(items,function(item){
-		      return !(item.element.get(0)===$(itemSelector).get(0));
+		      var matched=item.element.get(0)===$(itemSelector,element).get(0);
+		      if(matched){
+		          item.element.data('validmsg').remove();
+		      }
+		      return !matched;
 		  });  
 		},
 		/**

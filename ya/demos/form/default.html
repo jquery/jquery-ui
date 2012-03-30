@@ -47,6 +47,9 @@
  	<script src="../../external/modernizr.js"></script>
  	<script src="../../external/json2.js"></script>
  	<script src="../../external/jquery.tmpl.min.js"></script>
+ 	<!--[if lt IE 10]>
+        <script src="../../external/PIE.js"></script>
+     <![endif]-->
  	
 	
   	<script src="../../core.js"></script>
@@ -168,7 +171,15 @@
 			  			});
 			  			e.preventDefault();
 			  		}
-				}]
+				},{
+                    "selector":'#remove-btn',
+                    "handler":function(e){
+                        var fJq=$('#f');
+                        fJq.form0('removeItem','textarea'); //删除
+                       
+                        e.preventDefault();
+                    }
+                }]
 			});
 		}); 
 	</script>
@@ -226,6 +237,7 @@
   	<div class="btns">
   		<button id="sub-btn" type="submit">提交</button>
   		<button id="reset-btn" type="reset">重置</button>
+  		<button id="remove-btn" type="reset">remove</button>
   	</div>
   </form>
 </body>
