@@ -141,6 +141,79 @@ var colors = {
 };
 
 
+/******************************************************************************/
+/****************************** CLIP ANIMATIONS *******************************/
+/******************************************************************************/
+
+// jQuery css clip animation support
+// Idea borrowed (and mangled) from the clip plugin by Jim Palmer
+// http://www.overset.com/2008/08/07/jquery-css-clip-animation-plugin/
+
+$.fx.step.clip = function(fx) {
+   var getClip = function(elem) {
+      // IE refuses to return 'clip'
+      // but has no problem with 'clipTop' and the likes
+      // This unpleasantness reconstructs what a "good" browser would return
+      var cs = elem.currentStyle;
+      return (!elem.style.clip && cs) ?
+        'rect(' + [cs.clipTop, cs.clipRight, cs.clipBottom, cs.clipLeft].join(', ') + ')'
+      : elem.style.clip;
+   }
+
+   if (fx.state == 0) {
+      var $elem = $(fx.elem);
+      fx.start = getClip(fx.elem);
+      
+      var sUnits;
+      $.each(['start', 'end'],
+         function(i, attr) {
+            if (typeof fx[attr] === 'object') return;
+            
+            var cRE  = (typeof fx[attr] === 'string') ? fx[attr].match(/^rect\(([\w\s\.\,]+)\)$/) : [];
+            var quad = (cRE && cRE[1]) ? cRE[1].split(/[\s\,]+/) : [];  // default of auto would also hit []
+            
+            // check units & convert numbers
+            var units = [];
+            for (var i = 0; i <= 3; i++) {
+               if (quad[i] === 'auto') {
+                  quad[i]  = parseInt('NaN');
+                  units[i] = 'auto';
+               }
+               else {
+                  var parts = quad[i].match(/([\d\.]+)(\%|em|p[xt])/);
+                  quad[i]  = parseInt(parts ? parts[1] : quad[i]);
+                  units[i] = parts ? parts[2] : 'px';
+               }
+               
+               // convert units if necessary
+               if (attr === 'end' && units[i] != sUnits[i] && units[i] !== 'auto')
+                  fx.start[i] = $elem.cssUnitConvert($elem, fx.start[i], sUnits[i], units[i], i % 2);
+            }
+            if (attr === 'end') fx.unit = units;
+            else                sUnits  = units;
+            
+            // defaults, per CSS2.1 11.1.2
+            // 'auto' means the same as '0' for <top> and <left>
+            if (isNaN(quad[0]) || typeof quad[0] === 'undefined') quad[0] = 0;                    // top
+            if (isNaN(quad[3]) || typeof quad[3] === 'undefined') quad[3] = 0;                    // left
+            // width plus the sum of the horizontal padding and border widths for <right>
+            if (isNaN(quad[1]) || typeof quad[1] === 'undefined') quad[1] = $elem.outerWidth();   // right
+            // height plus the sum of vertical padding and border widths for <bottom>
+            if (isNaN(quad[2]) || typeof quad[2] === 'undefined') quad[2] = $elem.outerHeight();  // bottom
+            
+            fx[attr] = quad;
+         }
+      );
+   }
+   
+   var rectArr = [];
+   for (var i = 0; i <= 3; i++) {
+      rectArr[i] = (fx.unit[i] === 'auto') ? fx.unit[i] : parseInt((fx.pos * (fx.end[i] - fx.start[i])) + fx.start[i]) + fx.unit[i];
+   }
+   fx.elem.style.clip = 'rect(' + rectArr.join(', ') + ')';
+   fx.now = fx.elem.style.clip;
+};
+
 
 /******************************************************************************/
 /****************************** CLASS ANIMATIONS ******************************/
@@ -653,6 +726,43 @@ $.fn.extend({
 				val = [ parseFloat( style ), unit ];
 		});
 		return val;
+	}
+   
+   // conversion of units
+   cssUnitConvert: function(n, fUnit, sUnit, isHoriz) {
+		var elem = $(this);
+      n = parseFloat(n);
+      var dpi = 96;  // not a totally accurate assumption, but it'll work for now...
+      
+      // convert n to px
+      switch (fUnit) {
+         case 'px': break;
+         case 'pt': n *= 72/dpi;    break;
+         case 'pc': n *= 72/dpi*12; break;
+         case 'in': n *= dpi;       break;
+         case 'cm': n *= dpi/2.54;  break;
+         case 'mm': n *= dpi/25.4;  break;
+         case 'em': n *= 72/dpi * elem.css('fontSize');     break;
+         case 'ex': n *= 72/dpi * elem.css('fontSize') / 2; break;
+         case '%' : n *= (isHoriz ? elem.outerWidth() : elem.outerHeight()) / 100; break;
+         default  : break;  // assume px
+      }
+      
+      // convert n to sUnit
+      switch (sUnit) {
+         case 'px': break;
+         case 'pt': n /= 72/dpi;    break;
+         case 'pc': n /= 72/dpi*12; break;
+         case 'in': n /= dpi;       break;
+         case 'cm': n /= dpi/2.54;  break;
+         case 'mm': n /= dpi/25.4;  break;
+         case 'em': n /= 72/dpi * elem.css('fontSize');     break;
+         case 'ex': n /= 72/dpi * elem.css('fontSize') / 2; break;
+         case '%' : n /= (isHoriz ? elem.outerWidth() : elem.outerHeight()) / 100; break;
+         default  : break;  // assume px
+      }
+      
+		return n;
 	}
 });
 
