@@ -24,8 +24,9 @@
 			"pwd":regx.pwd,
 			/**
 			 * @param {Object} opts 额外配置
+			 * @param {Jquery} elJq 被验证的dom的jquery对象
 			 */
-			"confirmpwd":function(v,opts){
+			"confirmpwd":function(v,opts,elJq){
 				var pwdJq=$(opts.pwdSelector,this.element),
 					pwdValue=$.trim(pwdJq.val());
 				if(v==pwdValue){
@@ -146,7 +147,7 @@
                         }
                         validMsgJq.removeClass('ui-state-error').hide();
                         validMsgContentWJq.empty();
-                        validV=validateFn.apply(ui,[v,opts]);
+                        validV=validateFn.apply(ui,[v,opts,elJq]);
                         if(!validV&&errorMsg){ //如果未通过验证并且有错误信息
                             validMsgJq.addClass('ui-state-error');
                             if($.tmpl){

@@ -311,6 +311,20 @@
             }
             editJq.show();
 		},
+		setValue:function(v){
+		    var self=this,
+                options=self.options,
+                editJq=self.editJq,
+                editInputJq=$('.ui-ieditor-input',editJq);
+           if(options.themeType==1){
+               $('.ui-button-cancel',editJq).click();
+           }else{
+               $(document).click();
+           } 
+		},
+		/**
+		 * 不推荐使用，参见cancel
+		 */
 		reset:function(){
 		    var self=this,
                 options=self.options,
@@ -320,6 +334,10 @@
            }else{
                $(document).click();
            } 
+		},
+		hide:function(v){
+		    
+		    return this.reset.apply(this,arugments);
 		}
 	});
 }(jQuery,this));
