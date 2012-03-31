@@ -9,4 +9,27 @@
  */
 .ui-progressbar { height:2em; text-align: left; overflow: hidden; }
 .ui-progressbar .ui-progressbar-value { margin: -1px; height:100%; }
-.ui-progressbar .ui-progressbar-indeterminate { background: url("images/pbar-ani.gif"); }
+@-webkit-keyframes bg-anim {
+    from { background-position: 0 0 }
+    to { background-position: 40px 0 }
+}
+@-moz-keyframes bg-anim {
+    from { background-position: 0 0 }
+    to { background-position: 40px 0 }
+}
+@-ms-keyframes bg-anim {
+    from { background-position: 0 0 }
+    to { background-position: 40px 0 }
+}
+@keyframes bg-anim {
+    from { background-position: 0 0 }
+    to { background-position: 40px 0 }
+}
+
+.ui-progressbar .ui-progressbar-indeterminate {
+    background: url("images/ui-bg_diagonals-thick_20_666666_40x40.png");
+    -webkit-animation: bg-anim 1s linear infinite;
+    -moz-animation: bg-anim 1s linear infinite;
+    -ms-animation: bg-anim 1s linear infinite;
+    animation: bg-anim 1s linear infinite;
+}
