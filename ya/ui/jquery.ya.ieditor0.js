@@ -294,10 +294,10 @@
 		    var self=this,
                 element=self.element;
            if(_.isString(v)){
-               element.text(v);
+               element.text(v||"");
            }else{
-               element.text(v.label||v.value);
-               element.data('value',v.value);
+               element.text(v.label||v.value||"");
+               element.data('value',v.value||"");
            } 
 		},
 		/**
