@@ -126,12 +126,19 @@
             handlerSelector:'.edit-h-3'
         });
         
-        //rest
-        $('.reset-h').click(function(){
-            $('.edit-field').ieditor0('reset');
+        //hide
+        $('.hide-h').click(function(){
+            $('.edit-field').ieditor0('hide');
             return false;
         });
-        
+        //set 手动设置text3值
+        $('.set-h').click(function(){
+            $('.edit-text3').ieditor0('setValue',{
+                value:'4',
+                label:"四"
+            });
+            return false;
+        });
         
         //第二个编辑器从不可用切换到可用
         $('.edit-text1').ieditor0('disable');
@@ -162,7 +169,7 @@
      <span class="edit-text5 edit-field" edittype="singlecheckbox">男</span><a href="#" class="edit-h-3">编辑</a>
     </div>
   </div>
-  <div class="actions"><button class="reset-h">reset</button></div>
+  <div class="actions"><button class="hide-h">hide</button><button class="set-h">set</button></div>
 </body>
 </html>
 

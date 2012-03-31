@@ -290,12 +290,22 @@
             //设置引用
             self.editJq=editJq;
 		},
-		/**
-		 * 显示编辑器，特定类型编辑器显示前要进行初始化
-		 */
-		show:function(){
+		setValue:function(v){
 		    var self=this,
-		        element=self.element,
+                element=self.element;
+           if(_.isString(v)){
+               element.text(v);
+           }else{
+               element.text(v.label||v.value);
+               element.data('value',v.value);
+           } 
+		},
+		/**
+         * 显示编辑器，特定类型编辑器显示前要进行初始化
+         */
+        show:function(){
+            var self=this,
+                element=self.element,
                 editJq=self.editJq,
                 editType=self.editType,
                 editInputJq=$('.ui-ieditor-input',editJq);
@@ -310,22 +320,8 @@
                     break;
             }
             editJq.show();
-		},
-		setValue:function(v){
-		    var self=this,
-                options=self.options,
-                editJq=self.editJq,
-                editInputJq=$('.ui-ieditor-input',editJq);
-           if(options.themeType==1){
-               $('.ui-button-cancel',editJq).click();
-           }else{
-               $(document).click();
-           } 
-		},
-		/**
-		 * 不推荐使用，参见cancel
-		 */
-		reset:function(){
+        },
+		hide:function(){
 		    var self=this,
                 options=self.options,
                 editJq=self.editJq;
@@ -334,10 +330,6 @@
            }else{
                $(document).click();
            } 
-		},
-		hide:function(v){
-		    
-		    return this.reset.apply(this,arugments);
 		}
 	});
 }(jQuery,this));
