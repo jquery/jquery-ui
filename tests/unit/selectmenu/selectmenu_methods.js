@@ -87,7 +87,7 @@ test("refresh - disabled select", function () {
 
 
 test("refresh - disabled option", function () {
-	expect(2);
+	expect(1);
 
 	var element = $('#speed').selectmenu(),
 		button = element.selectmenu("widget").parent(),
@@ -99,7 +99,6 @@ test("refresh - disabled option", function () {
 
 	var disabledItem = menu.find("li").not(".ui-selectmenu-optgroup").eq(2);
 	ok( disabledItem.hasClass("ui-state-disabled"), "class" );
-	ok( disabledItem.children("a").length <= 0, "has no link" );
 });
 
 
@@ -111,7 +110,7 @@ test("refresh - disabled optgroup", function () {
 		originalDisabledOptgroup = element.find("optgroup").first(),
 		originalDisabledOptions = originalDisabledOptgroup.find("option");
 
-	expect(2 + originalDisabledOptions.length * 2);
+	expect(2 + originalDisabledOptions.length);
 
 	originalDisabledOptgroup.attr("disabled", "disabled");
 	element.selectmenu("refresh");
@@ -123,7 +122,6 @@ test("refresh - disabled optgroup", function () {
 	for ( var i = 0; i < originalDisabledOptions.length; i++ ) {
 		item = item.next("li");
 		ok( item.hasClass("ui-state-disabled"), "item #" + i + ": class" );
-		ok( item.children("a").length <= 0, "item #" + i + ": has no link" );
 	}
 });
 
