@@ -244,7 +244,7 @@ $.widget( "ui.selectmenu", {
 			currentOptgroup = "";
 
 		$.each( items, function( index, item ) {
-			if ( item.optgroup !== currentOptgroup ) {
+			if ( item.optgroup != currentOptgroup ) {
 				$( '<li />', {
 					'class': 'ui-selectmenu-optgroup' + ( item.element.parent( "optgroup" ).attr( "disabled" ) ? ' ui-state-disabled' : '' ),
 					html: item.optgroup
