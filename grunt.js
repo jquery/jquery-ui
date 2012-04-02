@@ -339,7 +339,9 @@ grunt.registerMultiTask( "copy", "Copy files to destination folder and replace @
 		if ( /png$/.test( fileName ) ) {
 			grunt.file.copy( fileName, target + targetFile );
 		} else {
-			grunt.file.copy( fileName, target + targetFile, replaceVersion );
+			grunt.file.copy( fileName, target + targetFile, {
+				process: replaceVersion
+			});
 		}
 	});
 	grunt.log.writeln( "Copied " + files.length + " files." );
