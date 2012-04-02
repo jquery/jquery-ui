@@ -82,7 +82,9 @@ function stripBanner( files ) {
 }
 
 function stripDirectory( file ) {
-	return file.replace( /.+\/(.+)$/, "$1" );
+	// TODO: we're receiving the directive, so we need to strip the trailing >
+	// we should be receving a clean path without the directive
+	return file.replace( /.+\/(.+?)>?$/, "$1" );
 }
 // allow access from banner template
 global.stripDirectory = stripDirectory;
@@ -138,7 +140,7 @@ grunt.initConfig({
 			src: [
 				"AUTHORS.txt",
 				"GPL-LICENSE.txt",
-				"jquery-1.7.1.js",
+				"jquery-*.js",
 				"MIT-LICENSE.txt",
 				"README.md",
 				"grunt.js",
