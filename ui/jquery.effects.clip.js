@@ -1,4 +1,4 @@
-/*
+/*!
  * jQuery UI Effects Clip @VERSION
  *
  * Copyright 2012, AUTHORS.txt (http://jqueryui.com/about)
