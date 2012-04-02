@@ -268,8 +268,10 @@ $.widget( "ui.menu", {
 			.attr( "aria-expanded", "false" );
 
 		// don't refresh list items that are already adapted
-		var menuId = this.menuId;
-		submenus.add( this.element ).children( ":not( .ui-menu-item ):has( a )" )
+		var menuId = this.menuId,
+			menus = submenus.add( this.element );
+
+		menus.children( ":not( .ui-menu-item ):has( a )" )
 			.addClass( "ui-menu-item" )
 			.attr( "role", "presentation" )
 			.children( "a" )
@@ -279,6 +281,14 @@ $.widget( "ui.menu", {
 				.attr( "id", function( i ) {
 					return menuId + "-" + i;
 				});
+
+		// initialize unlinked menu-items used like optgroup
+		menus.children( ":not( .ui-menu-item )" ).each( function() {
+			var item = $( this );
+			item
+				.addClass( "ui-widget-header" )
+				.attr( "role", "group" );
+		});
 
 		submenus.each( function() {
 			var menu = $( this ),
