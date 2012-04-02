@@ -338,12 +338,12 @@ grunt.registerMultiTask( "copy", "Copy files to destination folder and replace @
 	}
 	files.forEach(function( fileName ) {
 		var targetFile = strip ? fileName.replace( strip, "" ) : fileName;
-		if ( /png$/.test( fileName ) ) {
-			grunt.file.copy( fileName, target + targetFile );
-		} else {
+		if ( /(js|css)$/.test( fileName ) ) {
 			grunt.file.copy( fileName, target + targetFile, {
 				process: replaceVersion
 			});
+		} else {
+			grunt.file.copy( fileName, target + targetFile );
 		}
 	});
 	grunt.log.writeln( "Copied " + files.length + " files." );
