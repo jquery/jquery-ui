@@ -44,8 +44,8 @@ $.effects.effect.slide = function( o, done ) {
 	// Animation
 	animation[ ref ] = ( show ? 
 		( positiveMotion ? "+=" : "-=") : 
-		( positiveMotion ? "-=" : "+=")) 
-		+ distance;
+		( positiveMotion ? "-=" : "+=")) +
+		distance;
 
 	// Animate
 	el.animate( animation, { 
@@ -61,7 +61,6 @@ $.effects.effect.slide = function( o, done ) {
 			done();
 		}
 	});
-
 };
 
 })(jQuery);

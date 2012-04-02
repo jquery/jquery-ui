@@ -152,13 +152,13 @@ $.fn.position = function( options ) {
 		var elem = $( this ),
 			elemWidth = elem.outerWidth(),
 			elemHeight = elem.outerHeight(),
-			marginLeft = parseInt( $.css( this, "marginLeft" ) ) || 0,
-			marginTop = parseInt( $.css( this, "marginTop" ) ) || 0,
+			marginLeft = parseInt( $.css( this, "marginLeft" ), 10 ) || 0,
+			marginTop = parseInt( $.css( this, "marginTop" ), 10 ) || 0,
 			scrollInfo = $.position.getScrollInfo( within ),
 			collisionWidth = elemWidth + marginLeft +
-				( parseInt( $.css( this, "marginRight" ) ) || 0 ) + scrollInfo.width,
+				( parseInt( $.css( this, "marginRight" ), 10 ) || 0 ) + scrollInfo.width,
 			collisionHeight = elemHeight + marginTop +
-				( parseInt( $.css( this, "marginBottom" ) ) || 0 ) + scrollInfo.height,
+				( parseInt( $.css( this, "marginBottom" ), 10 ) || 0 ) + scrollInfo.height,
 			position = $.extend( {}, basePosition ),
 			myOffset = [
 				parseInt( offsets.my[ 0 ], 10 ) *
@@ -483,7 +483,7 @@ if ( $.uiBackCompat !== false ) {
 				at: at[ 0 ] + offset[ 0 ] + " " + at[ 1 ] + offset[ 1 ],
 				offset: undefined
 			} ) );
-		}
+		};
 	}( jQuery ) );
 }
 

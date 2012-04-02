@@ -108,7 +108,7 @@ $.widget( "ui.autocomplete", {
 						suppressKeyPress = true;
 						event.preventDefault();
 					}
-					//passthrough - ENTER and TAB both select the current element
+					// passthrough - ENTER and TAB both select the current element
 				case keyCode.TAB:
 					if ( !self.menu.active ) {
 						return;
@@ -270,7 +270,7 @@ $.widget( "ui.autocomplete", {
 			.data( "menu" );
 
 		if ( $.fn.bgiframe ) {
-			 this.menu.element.bgiframe();
+			this.menu.element.bgiframe();
 		}
 
 		// turning off autocomplete prevents the browser from remembering the

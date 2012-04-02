@@ -695,7 +695,7 @@ if ( $.uiBackCompat !== false ) {
 							easing: "easeOutBounce",
 							duration: 1000
 						}
-					}
+					};
 				} else {
 					options.animate = options.animated;
 				}

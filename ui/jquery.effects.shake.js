@@ -49,7 +49,7 @@ $.effects.effect.shake = function( o, done ) {
 	// Shakes
 	for ( i = 1; i < times; i++ ) {
 		el.animate( animation1, speed, o.easing ).animate( animation2, speed, o.easing );
-	};
+	}
 	el
 		.animate( animation1, speed, o.easing )
 		.animate( animation, speed / 2, o.easing )

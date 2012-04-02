@@ -30,9 +30,9 @@ $.effects.effect.puff = function( o, done ) {
 		mode: mode,
 		complete: done,
 		percent: hide ? percent : 100,
-		from: hide
-			? original
-			: {
+		from: hide ?
+			original :
+			{
 				height: original.height * factor,
 				width: original.width * factor
 			}
@@ -47,7 +47,7 @@ $.effects.effect.scale = function( o, done ) {
 	var el = $( this ),
 		options = $.extend( true, {}, o ),
 		mode = $.effects.setMode( el, o.mode || "effect" ),
-		percent = parseInt( o.percent, 10 ) || ( parseInt( o.percent, 10 ) == 0 ? 0 : ( mode == "hide" ? 0 : 100 ) ),
+		percent = parseInt( o.percent, 10 ) || ( parseInt( o.percent, 10 ) === 0 ? 0 : ( mode == "hide" ? 0 : 100 ) ),
 		direction = o.direction || "both",
 		origin = o.origin,
 		original = { 
@@ -80,7 +80,8 @@ $.effects.effect.scale = function( o, done ) {
 		outerWidth: original.outerWidth * factor.x
 	}; 
 
-	if ( options.fade ) { // Fade option to support puff
+	// Fade option to support puff
+	if ( options.fade ) {
 		if ( mode == "show" ) {
 			options.from.opacity = 0; 
 			options.to.opacity = 1;
@@ -89,7 +90,7 @@ $.effects.effect.scale = function( o, done ) {
 			options.from.opacity = 1; 
 			options.to.opacity = 0;
 		}
-	};
+	}
 
 	// Animate
 	el.effect( options );
@@ -152,15 +153,15 @@ $.effects.effect.size = function( o, done ) {
 			props = props.concat( vProps );
 			el.from = $.effects.setTransition( el, vProps, factor.from.y, el.from );
 			el.to = $.effects.setTransition( el, vProps, factor.to.y, el.to );
-		};
+		}
 
 		// Horizontal props scaling
 		if ( factor.from.x !== factor.to.x ) { 
 			props = props.concat( hProps );
 			el.from = $.effects.setTransition( el, hProps, factor.from.x, el.from );
 			el.to = $.effects.setTransition( el, hProps, factor.to.x, el.to );
-		};
-	};
+		}
+	}
 
 	// Scale the content
 	if ( scale == "content" || scale == "both" ) { 
@@ -170,9 +171,9 @@ $.effects.effect.size = function( o, done ) {
 			props = props.concat( cProps );
 			el.from = $.effects.setTransition( el, cProps, factor.from.y, el.from );
 			el.to = $.effects.setTransition( el, cProps, factor.to.y, el.to );
-		};
-	};
-	
+		}
+	}
+
 	$.effects.save( el, restore ? props : props1 ); 
 	el.show(); 
 	$.effects.createWrapper( el );
@@ -217,13 +218,13 @@ $.effects.effect.size = function( o, done ) {
 			if ( factor.from.y != factor.to.y ) { 
 				child.from = $.effects.setTransition( child, vProps, factor.from.y, child.from );
 				child.to = $.effects.setTransition( child, vProps, factor.to.y, child.to );
-			};
+			}
 
 			// Horizontal props scaling
 			if ( factor.from.x != factor.to.x ) {
 				child.from = $.effects.setTransition( child, hProps, factor.from.x, child.from );
 				child.to = $.effects.setTransition( child, hProps, factor.to.x, child.to );
-			};
+			}
 
 			// Animate children
 			child.css( child.from );
@@ -233,7 +234,7 @@ $.effects.effect.size = function( o, done ) {
 				if (restore) $.effects.restore( child, props2 ); 
 			});
 		});
-	};
+	}
 
 	// Animate
 	el.animate( el.to, { 

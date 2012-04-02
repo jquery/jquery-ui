@@ -171,9 +171,9 @@ $.each([ "borderLeftStyle", "borderRightStyle", "borderBottomStyle", "borderTopS
 });
 
 function getElementStyles() {
-	var style = this.ownerDocument.defaultView
-			? this.ownerDocument.defaultView.getComputedStyle( this, null )
-			: this.currentStyle,
+	var style = this.ownerDocument.defaultView ?
+			this.ownerDocument.defaultView.getComputedStyle( this, null ) :
+			this.currentStyle,
 		newStyle = {},
 		key,
 		camelCase,
@@ -375,13 +375,13 @@ $.extend( $.effects, {
 			case "middle": y = 0.5; break;
 			case "bottom": y = 1; break;
 			default: y = origin[ 0 ] / original.height;
-		};
+		}
 		switch ( origin[ 1 ] ) {
 			case "left": x = 0; break;
 			case "center": x = 0.5; break;
 			case "right": x = 1; break;
 			default: x = origin[ 1 ] / original.width;
-		};
+		}
 		return {
 			x: x,
 			y: y
@@ -523,8 +523,10 @@ function _normalizeArguments( effect, options, speed, callback ) {
 	}
 
 	speed = speed || options.duration;
-	effect.duration = $.fx.off ? 0 : typeof speed === "number"
-		? speed : speed in $.fx.speeds ? $.fx.speeds[ speed ] : $.fx.speeds._default;
+	effect.duration = $.fx.off ? 0 :
+		typeof speed === "number" ? speed :
+		speed in $.fx.speeds ? $.fx.speeds[ speed ] :
+		$.fx.speeds._default;
 
 	effect.complete = callback || options.complete;
 
@@ -701,7 +703,7 @@ $.each( baseEasings, function( name, easeIn ) {
 		return 1 - easeIn( 1 - p );
 	};
 	$.easing[ "easeInOut" + name ] = function( p ) {
-		return p < .5 ?
+		return p < 0.5 ?
 			easeIn( p * 2 ) / 2 :
 			easeIn( p * -2 + 2 ) / -2 + 1;
 	};
