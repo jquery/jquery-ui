@@ -1,5 +1,5 @@
 /**
- * QUnit v1.4.0 - A JavaScript Unit Testing Framework
+ * QUnit v1.5.0pre - A JavaScript Unit Testing Framework
  *
  * http://docs.jquery.com/QUnit
  *
@@ -370,7 +370,7 @@ var QUnit = {
 		}
 
 		try {
-			block();
+			block.call(config.current.testEnvironment);
 		} catch (e) {
 			actual = e;
 		}
@@ -873,9 +873,11 @@ function done() {
 
 	// clear own sessionStorage items if all tests passed
 	if ( config.reorder && defined.sessionStorage && config.stats.bad === 0 ) {
-		for (var key in sessionStorage) {
-			if (sessionStorage.hasOwnProperty(key) && key.indexOf("qunit-test-") === 0 ) {
-				sessionStorage.removeItem(key);
+		var key;
+		for ( var i = 0; i < sessionStorage.length; i++ ) {
+			key = sessionStorage.key( i++ );
+			if ( key.indexOf("qunit-test-") === 0 ) {
+				sessionStorage.removeItem( key );
 			}
 		}
 	}
@@ -912,8 +914,9 @@ function validTest( name ) {
 	return run;
 }
 
-// so far supports only Firefox, Chrome and Opera (buggy)
-// could be extended in the future to use something like https://github.com/csnover/TraceKit
+// so far supports only Firefox, Chrome and Opera (buggy), Safari (for real exceptions)
+// Later Safari and IE10 are supposed to support error.stack as well
+// See also https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Error/Stack
 function extractStacktrace( e, offset ) {
 	offset = offset || 3;
 	if (e.stacktrace) {

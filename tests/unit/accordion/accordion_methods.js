@@ -10,15 +10,19 @@ test( "destroy", function() {
 });
 
 test( "enable/disable", function() {
-	expect( 3 );
+	expect( 4 );
 	var element = $( "#list1" ).accordion();
 	accordion_state( element, 1, 0, 0 );
 	element.accordion( "disable" );
-	element.accordion( "option", "active", 1 );
+	// event does nothing
+	element.find( ".ui-accordion-header" ).eq( 1 ).trigger( "click" );
 	accordion_state( element, 1, 0, 0 );
-	element.accordion( "enable" );
+	// option still works
 	element.accordion( "option", "active", 1 );
 	accordion_state( element, 0, 1, 0 );
+	element.accordion( "enable" );
+	element.accordion( "option", "active", 2 );
+	accordion_state( element, 0, 0, 1 );
 });
 
 test( "refresh", function() {

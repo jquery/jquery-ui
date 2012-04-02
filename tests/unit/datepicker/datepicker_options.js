@@ -77,7 +77,7 @@ test('invocation', function() {
 	ok(image.length == 0, 'Focus - image absent');
 	inp.focus();
 	ok(dp.is(':visible'), 'Focus - rendered on focus');
-	inp.simulate('keydown', {keyCode: $.simulate.VK_ESC});
+	inp.simulate('keydown', {keyCode: $.ui.keyCode.ESCAPE});
 	ok(!dp.is(':visible'), 'Focus - hidden on exit');
 	inp.focus();
 	ok(dp.is(':visible'), 'Focus - rendered on focus');
@@ -161,93 +161,93 @@ test('defaultDate', function() {
 	var inp = init('#inp');
 	var date = new Date();
 	inp.val('').datepicker('show').
-		simulate('keydown', {keyCode: $.simulate.VK_ENTER});
+		simulate('keydown', {keyCode: $.ui.keyCode.ENTER});
 	equalsDate(inp.datepicker('getDate'), date, 'Default date null');
 	// Numeric values
 	inp.datepicker('option', {defaultDate: -2}).
 		datepicker('hide').val('').datepicker('show').
-		simulate('keydown', {keyCode: $.simulate.VK_ENTER});
+		simulate('keydown', {keyCode: $.ui.keyCode.ENTER});
 	date.setDate(date.getDate() - 2);
 	equalsDate(inp.datepicker('getDate'), date, 'Default date -2');
 	inp.datepicker('option', {defaultDate: 3}).
 		datepicker('hide').val('').datepicker('show').
-		simulate('keydown', {keyCode: $.simulate.VK_ENTER});
+		simulate('keydown', {keyCode: $.ui.keyCode.ENTER});
 	date.setDate(date.getDate() + 5);
 	equalsDate(inp.datepicker('getDate'), date, 'Default date 3');
 	inp.datepicker('option', {defaultDate: 1 / 0}).
 		datepicker('hide').val('').datepicker('show').
-		simulate('keydown', {keyCode: $.simulate.VK_ENTER});
+		simulate('keydown', {keyCode: $.ui.keyCode.ENTER});
 	date.setDate(date.getDate() - 3);
 	equalsDate(inp.datepicker('getDate'), date, 'Default date Infinity');
 	inp.datepicker('option', {defaultDate: 1 / 'a'}).
 		datepicker('hide').val('').datepicker('show').
-		simulate('keydown', {keyCode: $.simulate.VK_ENTER});
+		simulate('keydown', {keyCode: $.ui.keyCode.ENTER});
 	equalsDate(inp.datepicker('getDate'), date, 'Default date NaN');
 	// String offset values
 	inp.datepicker('option', {defaultDate: '-1d'}).
 		datepicker('hide').val('').datepicker('show').
-		simulate('keydown', {keyCode: $.simulate.VK_ENTER});
+		simulate('keydown', {keyCode: $.ui.keyCode.ENTER});
 	date.setDate(date.getDate() - 1);
 	equalsDate(inp.datepicker('getDate'), date, 'Default date -1d');
 	inp.datepicker('option', {defaultDate: '+3D'}).
 		datepicker('hide').val('').datepicker('show').
-		simulate('keydown', {keyCode: $.simulate.VK_ENTER});
+		simulate('keydown', {keyCode: $.ui.keyCode.ENTER});
 	date.setDate(date.getDate() + 4);
 	equalsDate(inp.datepicker('getDate'), date, 'Default date +3D');
 	inp.datepicker('option', {defaultDate: ' -2 w '}).
 		datepicker('hide').val('').datepicker('show').
-		simulate('keydown', {keyCode: $.simulate.VK_ENTER});
+		simulate('keydown', {keyCode: $.ui.keyCode.ENTER});
 	date = new Date();
 	date.setDate(date.getDate() - 14);
 	equalsDate(inp.datepicker('getDate'), date, 'Default date -2 w');
 	inp.datepicker('option', {defaultDate: '+1 W'}).
 		datepicker('hide').val('').datepicker('show').
-		simulate('keydown', {keyCode: $.simulate.VK_ENTER});
+		simulate('keydown', {keyCode: $.ui.keyCode.ENTER});
 	date.setDate(date.getDate() + 21);
 	equalsDate(inp.datepicker('getDate'), date, 'Default date +1 W');
 	inp.datepicker('option', {defaultDate: ' -1 m '}).
 		datepicker('hide').val('').datepicker('show').
-		simulate('keydown', {keyCode: $.simulate.VK_ENTER});
+		simulate('keydown', {keyCode: $.ui.keyCode.ENTER});
 	date = addMonths(new Date(), -1);
 	equalsDate(inp.datepicker('getDate'), date, 'Default date -1 m');
 	inp.datepicker('option', {defaultDate: '+2M'}).
 		datepicker('hide').val('').datepicker('show').
-		simulate('keydown', {keyCode: $.simulate.VK_ENTER});
+		simulate('keydown', {keyCode: $.ui.keyCode.ENTER});
 	date = addMonths(new Date(), 2);
 	equalsDate(inp.datepicker('getDate'), date, 'Default date +2M');
 	inp.datepicker('option', {defaultDate: '-2y'}).
 		datepicker('hide').val('').datepicker('show').
-		simulate('keydown', {keyCode: $.simulate.VK_ENTER});
+		simulate('keydown', {keyCode: $.ui.keyCode.ENTER});
 	date = new Date();
 	date.setFullYear(date.getFullYear() - 2);
 	equalsDate(inp.datepicker('getDate'), date, 'Default date -2y');
 	inp.datepicker('option', {defaultDate: '+1 Y '}).
 		datepicker('hide').val('').datepicker('show').
-		simulate('keydown', {keyCode: $.simulate.VK_ENTER});
+		simulate('keydown', {keyCode: $.ui.keyCode.ENTER});
 	date.setFullYear(date.getFullYear() + 3);
 	equalsDate(inp.datepicker('getDate'), date, 'Default date +1 Y');
 	inp.datepicker('option', {defaultDate: '+1M +10d'}).
 		datepicker('hide').val('').datepicker('show').
-		simulate('keydown', {keyCode: $.simulate.VK_ENTER});
+		simulate('keydown', {keyCode: $.ui.keyCode.ENTER});
 	date = addMonths(new Date(), 1);
 	date.setDate(date.getDate() + 10);
 	equalsDate(inp.datepicker('getDate'), date, 'Default date +1M +10d');
 	// String date values
 	inp.datepicker('option', {defaultDate: '07/04/2007'}).
 		datepicker('hide').val('').datepicker('show').
-		simulate('keydown', {keyCode: $.simulate.VK_ENTER});
+		simulate('keydown', {keyCode: $.ui.keyCode.ENTER});
 	date = new Date(2007, 7 - 1, 4);
 	equalsDate(inp.datepicker('getDate'), date, 'Default date 07/04/2007');
 	inp.datepicker('option', {dateFormat: 'yy-mm-dd', defaultDate: '2007-04-02'}).
 		datepicker('hide').val('').datepicker('show').
-		simulate('keydown', {keyCode: $.simulate.VK_ENTER});
+		simulate('keydown', {keyCode: $.ui.keyCode.ENTER});
 	date = new Date(2007, 4 - 1, 2);
 	equalsDate(inp.datepicker('getDate'), date, 'Default date 2007-04-02');
 	// Date value
 	date = new Date(2007, 1 - 1, 26);
 	inp.datepicker('option', {dateFormat: 'mm/dd/yy', defaultDate: date}).
 		datepicker('hide').val('').datepicker('show').
-		simulate('keydown', {keyCode: $.simulate.VK_ENTER});
+		simulate('keydown', {keyCode: $.ui.keyCode.ENTER});
 	equalsDate(inp.datepicker('getDate'), date, 'Default date 01/26/2007');
 });
 
@@ -293,7 +293,7 @@ test('miscellaneous', function() {
 		longNames[date.getMonth()], 'Navigation current - as date format');
 	equal(dp.find('.ui-datepicker-next').text(),
 		shortNames[2] + ' >', 'Navigation next - as date format');
-	inp.simulate('keydown', {keyCode: $.simulate.VK_PGDN});
+	inp.simulate('keydown', {keyCode: $.ui.keyCode.PAGE_DOWN});
 	equal(dp.find('.ui-datepicker-prev').text(),
 		'< ' + shortNames[1], 'Navigation prev - as date format + pgdn');
 	equal(dp.find('.ui-datepicker-current').text(),
@@ -317,46 +317,46 @@ test('minMax', function() {
 	var minDate = new Date(2008, 2 - 1, 29);
 	var maxDate = new Date(2008, 12 - 1, 7);
 	inp.val('06/04/2008').datepicker('show');
-	inp.simulate('keydown', {ctrlKey: true, keyCode: $.simulate.VK_PGUP}).
-		simulate('keydown', {keyCode: $.simulate.VK_ENTER});
+	inp.simulate('keydown', {ctrlKey: true, keyCode: $.ui.keyCode.PAGE_UP}).
+		simulate('keydown', {keyCode: $.ui.keyCode.ENTER});
 	equalsDate(inp.datepicker('getDate'), lastYear,
 		'Min/max - null, null - ctrl+pgup');
 	inp.val('06/04/2008').datepicker('show');
-	inp.simulate('keydown', {ctrlKey: true, keyCode: $.simulate.VK_PGDN}).
-		simulate('keydown', {keyCode: $.simulate.VK_ENTER});
+	inp.simulate('keydown', {ctrlKey: true, keyCode: $.ui.keyCode.PAGE_DOWN}).
+		simulate('keydown', {keyCode: $.ui.keyCode.ENTER});
 	equalsDate(inp.datepicker('getDate'), nextYear,
 		'Min/max - null, null - ctrl+pgdn');
 	inp.datepicker('option', {minDate: minDate}).
 		datepicker('hide').val('06/04/2008').datepicker('show');
-	inp.simulate('keydown', {ctrlKey: true, keyCode: $.simulate.VK_PGUP}).
-		simulate('keydown', {keyCode: $.simulate.VK_ENTER});
+	inp.simulate('keydown', {ctrlKey: true, keyCode: $.ui.keyCode.PAGE_UP}).
+		simulate('keydown', {keyCode: $.ui.keyCode.ENTER});
 	equalsDate(inp.datepicker('getDate'), minDate,
 		'Min/max - 02/29/2008, null - ctrl+pgup');
 	inp.val('06/04/2008').datepicker('show');
-	inp.simulate('keydown', {ctrlKey: true, keyCode: $.simulate.VK_PGDN}).
-		simulate('keydown', {keyCode: $.simulate.VK_ENTER});
+	inp.simulate('keydown', {ctrlKey: true, keyCode: $.ui.keyCode.PAGE_DOWN}).
+		simulate('keydown', {keyCode: $.ui.keyCode.ENTER});
 	equalsDate(inp.datepicker('getDate'), nextYear,
 		'Min/max - 02/29/2008, null - ctrl+pgdn');
 	inp.datepicker('option', {maxDate: maxDate}).
 		datepicker('hide').val('06/04/2008').datepicker('show');
-	inp.simulate('keydown', {ctrlKey: true, keyCode: $.simulate.VK_PGUP}).
-		simulate('keydown', {keyCode: $.simulate.VK_ENTER});
+	inp.simulate('keydown', {ctrlKey: true, keyCode: $.ui.keyCode.PAGE_UP}).
+		simulate('keydown', {keyCode: $.ui.keyCode.ENTER});
 	equalsDate(inp.datepicker('getDate'), minDate,
 		'Min/max - 02/29/2008, 12/07/2008 - ctrl+pgup');
 	inp.val('06/04/2008').datepicker('show');
-	inp.simulate('keydown', {ctrlKey: true, keyCode: $.simulate.VK_PGDN}).
-		simulate('keydown', {keyCode: $.simulate.VK_ENTER});
+	inp.simulate('keydown', {ctrlKey: true, keyCode: $.ui.keyCode.PAGE_DOWN}).
+		simulate('keydown', {keyCode: $.ui.keyCode.ENTER});
 	equalsDate(inp.datepicker('getDate'), maxDate,
 		'Min/max - 02/29/2008, 12/07/2008 - ctrl+pgdn');
 	inp.datepicker('option', {minDate: null}).
 		datepicker('hide').val('06/04/2008').datepicker('show');
-	inp.simulate('keydown', {ctrlKey: true, keyCode: $.simulate.VK_PGUP}).
-		simulate('keydown', {keyCode: $.simulate.VK_ENTER});
+	inp.simulate('keydown', {ctrlKey: true, keyCode: $.ui.keyCode.PAGE_UP}).
+		simulate('keydown', {keyCode: $.ui.keyCode.ENTER});
 	equalsDate(inp.datepicker('getDate'), lastYear,
 		'Min/max - null, 12/07/2008 - ctrl+pgup');
 	inp.val('06/04/2008').datepicker('show');
-	inp.simulate('keydown', {ctrlKey: true, keyCode: $.simulate.VK_PGDN}).
-		simulate('keydown', {keyCode: $.simulate.VK_ENTER});
+	inp.simulate('keydown', {ctrlKey: true, keyCode: $.ui.keyCode.PAGE_DOWN}).
+		simulate('keydown', {keyCode: $.ui.keyCode.ENTER});
 	equalsDate(inp.datepicker('getDate'), maxDate,
 		'Min/max - null, 12/07/2008 - ctrl+pgdn');
 	// Relative dates
@@ -364,15 +364,15 @@ test('minMax', function() {
 	date.setDate(date.getDate() - 7);
 	inp.datepicker('option', {minDate: '-1w', maxDate: '+1 M +10 D '}).
 		datepicker('hide').val('').datepicker('show');
-	inp.simulate('keydown', {ctrlKey: true, keyCode: $.simulate.VK_PGUP}).
-		simulate('keydown', {keyCode: $.simulate.VK_ENTER});
+	inp.simulate('keydown', {ctrlKey: true, keyCode: $.ui.keyCode.PAGE_UP}).
+		simulate('keydown', {keyCode: $.ui.keyCode.ENTER});
 	equalsDate(inp.datepicker('getDate'), date,
 		'Min/max - -1w, +1 M +10 D - ctrl+pgup');
 	date = addMonths(new Date(), 1);
 	date.setDate(date.getDate() + 10);
 	inp.val('').datepicker('show');
-	inp.simulate('keydown', {ctrlKey: true, keyCode: $.simulate.VK_PGDN}).
-		simulate('keydown', {keyCode: $.simulate.VK_ENTER});
+	inp.simulate('keydown', {ctrlKey: true, keyCode: $.ui.keyCode.PAGE_DOWN}).
+		simulate('keydown', {keyCode: $.ui.keyCode.ENTER});
 	equalsDate(inp.datepicker('getDate'), date,
 		'Min/max - -1w, +1 M +10 D - ctrl+pgdn');
 	// With existing date
@@ -477,34 +477,34 @@ test('altField', function() {
 	// No alternate field set
 	alt.val('');
 	inp.val('06/04/2008').datepicker('show');
-	inp.simulate('keydown', {keyCode: $.simulate.VK_ENTER});
+	inp.simulate('keydown', {keyCode: $.ui.keyCode.ENTER});
 	equal(inp.val(), '06/04/2008', 'Alt field - dp - enter');
 	equal(alt.val(), '', 'Alt field - alt not set');
 	// Alternate field set
 	alt.val('');
 	inp.datepicker('option', {altField: '#alt', altFormat: 'yy-mm-dd'}).
 		val('06/04/2008').datepicker('show');
-	inp.simulate('keydown', {keyCode: $.simulate.VK_ENTER});
+	inp.simulate('keydown', {keyCode: $.ui.keyCode.ENTER});
 	equal(inp.val(), '06/04/2008', 'Alt field - dp - enter');
 	equal(alt.val(), '2008-06-04', 'Alt field - alt - enter');
 	// Move from initial date
 	alt.val('');
 	inp.val('06/04/2008').datepicker('show');
-	inp.simulate('keydown', {keyCode: $.simulate.VK_PGDN}).
-		simulate('keydown', {keyCode: $.simulate.VK_ENTER});
+	inp.simulate('keydown', {keyCode: $.ui.keyCode.PAGE_DOWN}).
+		simulate('keydown', {keyCode: $.ui.keyCode.ENTER});
 	equal(inp.val(), '07/04/2008', 'Alt field - dp - pgdn');
 	equal(alt.val(), '2008-07-04', 'Alt field - alt - pgdn');
 	// Alternate field set - closed
 	alt.val('');
 	inp.val('06/04/2008').datepicker('show');
-	inp.simulate('keydown', {keyCode: $.simulate.VK_PGDN}).
-		simulate('keydown', {keyCode: $.simulate.VK_ESC});
+	inp.simulate('keydown', {keyCode: $.ui.keyCode.PAGE_DOWN}).
+		simulate('keydown', {keyCode: $.ui.keyCode.ESCAPE});
 	equal(inp.val(), '06/04/2008', 'Alt field - dp - pgdn/esc');
 	equal(alt.val(), '', 'Alt field - alt - pgdn/esc');
 	// Clear date and alternate
 	alt.val('');
 	inp.val('06/04/2008').datepicker('show');
-	inp.simulate('keydown', {ctrlKey: true, keyCode: $.simulate.VK_END});
+	inp.simulate('keydown', {ctrlKey: true, keyCode: $.ui.keyCode.END});
 	equal(inp.val(), '', 'Alt field - dp - ctrl+end');
 	equal(alt.val(), '', 'Alt field - alt - ctrl+end');
 
@@ -725,7 +725,7 @@ test('localisation', function() {
 			'Localisation - day ' + day);
 		day = (day + 1) % 7;
 	});
-	inp.simulate('keydown', {keyCode: $.simulate.VK_ENTER});
+	inp.simulate('keydown', {keyCode: $.ui.keyCode.ENTER});
 	var date = new Date();
 	equal(inp.val(), $.datepicker.regional['fr'].dayNames[date.getDay()] + ', ' +
 		date.getDate() + ' ' + $.datepicker.regional['fr'].monthNames[date.getMonth()] +

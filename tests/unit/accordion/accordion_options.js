@@ -75,7 +75,175 @@ if ( $.uiBackCompat === false ) {
 	});
 }
 
-// TODO: add animation tests
+test( "{ animate: false }", function() {
+	expect( 3 );
+	var element = $( "#list1" ).accordion({
+			animate: false
+		}),
+		panels = element.find( ".ui-accordion-content" );
+		animate = $.fn.animate;
+	$.fn.animate = function() {
+		ok( false, ".animate() called" );
+	};
+
+	ok( panels.eq( 0 ).is( ":visible" ), "first panel visible" );
+	element.accordion( "option", "active", 1 );
+	ok( panels.eq( 0 ).is( ":hidden" ), "first panel hidden" );
+	ok( panels.eq( 1 ).is( ":visible" ), "second panel visible" );
+	$.fn.animate = animate;
+});
+
+asyncTest( "{ animate: Number }", function() {
+	expect( 7 );
+	var element = $( "#list1" ).accordion({
+			animate: 100
+		}),
+		panels = element.find( ".ui-accordion-content" );
+		animate = $.fn.animate;
+	// called twice (both panels)
+	$.fn.animate = function( props, duration, easing ) {
+		equal( duration, 100, "correct duration" );
+		equal( easing, undefined, "default easing" );
+		animate.apply( this, arguments );
+	};
+
+	ok( panels.eq( 0 ).is( ":visible" ), "first panel visible" );
+	element.accordion( "option", "active", 1 );
+	panels.promise().done(function() {
+		ok( panels.eq( 0 ).is( ":hidden" ), "first panel hidden" );
+		ok( panels.eq( 1 ).is( ":visible" ), "second panel visible" );
+		$.fn.animate = animate;
+		start();
+	});
+});
+
+asyncTest( "{ animate: String }", function() {
+	expect( 7 );
+	var element = $( "#list1" ).accordion({
+		animate: "linear"
+	}),
+	panels = element.find( ".ui-accordion-content" );
+	animate = $.fn.animate;
+	// called twice (both panels)
+	$.fn.animate = function( props, duration, easing ) {
+		equal( duration, undefined, "default duration" );
+		equal( easing, "linear", "correct easing" );
+		animate.apply( this, arguments );
+	};
+
+	ok( panels.eq( 0 ).is( ":visible" ), "first panel visible" );
+	element.accordion( "option", "active", 1 );
+	panels.promise().done(function() {
+		ok( panels.eq( 0 ).is( ":hidden" ), "first panel hidden" );
+		ok( panels.eq( 1 ).is( ":visible" ), "second panel visible" );
+		$.fn.animate = animate;
+		start();
+	});
+});
+
+asyncTest( "{ animate: {} }", function() {
+	expect( 7 );
+	var element = $( "#list1" ).accordion({
+		animate: {}
+	}),
+	panels = element.find( ".ui-accordion-content" );
+	animate = $.fn.animate;
+	// called twice (both panels)
+	$.fn.animate = function( props, duration, easing ) {
+		equal( duration, undefined, "default duration" );
+		equal( easing, undefined, "default easing" );
+		animate.apply( this, arguments );
+	};
+
+	ok( panels.eq( 0 ).is( ":visible" ), "first panel visible" );
+	element.accordion( "option", "active", 1 );
+	panels.promise().done(function() {
+		ok( panels.eq( 0 ).is( ":hidden" ), "first panel hidden" );
+		ok( panels.eq( 1 ).is( ":visible" ), "second panel visible" );
+		$.fn.animate = animate;
+		start();
+	});
+});
+
+asyncTest( "{ animate: { duration, easing } }", function() {
+	expect( 7 );
+	var element = $( "#list1" ).accordion({
+		animate: { duration: 100, easing: "linear" }
+	}),
+	panels = element.find( ".ui-accordion-content" );
+	animate = $.fn.animate;
+	// called twice (both panels)
+	$.fn.animate = function( props, duration, easing ) {
+		equal( duration, 100, "correct duration" );
+		equal( easing, "linear", "correct easing" );
+		animate.apply( this, arguments );
+	};
+
+	ok( panels.eq( 0 ).is( ":visible" ), "first panel visible" );
+	element.accordion( "option", "active", 1 );
+	panels.promise().done(function() {
+		ok( panels.eq( 0 ).is( ":hidden" ), "first panel hidden" );
+		ok( panels.eq( 1 ).is( ":visible" ), "second panel visible" );
+		$.fn.animate = animate;
+		start();
+	});
+});
+
+asyncTest( "{ animate: { duration, easing } }, animate down", function() {
+	expect( 7 );
+	var element = $( "#list1" ).accordion({
+		active: 1,
+		animate: { duration: 100, easing: "linear" }
+	}),
+	panels = element.find( ".ui-accordion-content" );
+	animate = $.fn.animate;
+	// called twice (both panels)
+	$.fn.animate = function( props, duration, easing ) {
+		equal( duration, 100, "correct duration" );
+		equal( easing, "linear", "correct easing" );
+		animate.apply( this, arguments );
+	};
+
+	ok( panels.eq( 1 ).is( ":visible" ), "first panel visible" );
+	element.accordion( "option", "active", 0 );
+	panels.promise().done(function() {
+		ok( panels.eq( 1 ).is( ":hidden" ), "first panel hidden" );
+		ok( panels.eq( 0 ).is( ":visible" ), "second panel visible" );
+		$.fn.animate = animate;
+		start();
+	});
+});
+
+asyncTest( "{ animate: { duration, easing, down } }, animate down", function() {
+	expect( 7 );
+	var element = $( "#list1" ).accordion({
+		active: 1,
+		animate: {
+			duration: 100,
+			easing: "linear",
+			down: {
+				easing: "swing"
+			}
+		}
+	}),
+	panels = element.find( ".ui-accordion-content" );
+	animate = $.fn.animate;
+	// called twice (both panels)
+	$.fn.animate = function( props, duration, easing ) {
+		equal( duration, 100, "correct duration" );
+		equal( easing, "swing", "correct easing" );
+		animate.apply( this, arguments );
+	};
+
+	ok( panels.eq( 1 ).is( ":visible" ), "first panel visible" );
+	element.accordion( "option", "active", 0 );
+	panels.promise().done(function() {
+		ok( panels.eq( 1 ).is( ":hidden" ), "first panel hidden" );
+		ok( panels.eq( 0 ).is( ":visible" ), "second panel visible" );
+		$.fn.animate = animate;
+		start();
+	});
+});
 
 test( "{ collapsible: false }", function() {
 	expect( 4 );
@@ -152,6 +320,7 @@ test( "{ event: custom }", function() {
 
 	// ensure old event handlers are unbound
 	element.find( ".ui-accordion-header" ).eq( 1 ).trigger( "custom1" );
+	element.find( ".ui-accordion-header" ).eq( 1 ).trigger( "custom2" );
 	equal( element.accordion( "option", "active" ), 2 );
 	accordion_state( element, 0, 0, 1 );
 
