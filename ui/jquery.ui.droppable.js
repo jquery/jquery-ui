@@ -1,4 +1,4 @@
-/*
+/*!
  * jQuery UI Droppable @VERSION
  *
  * Copyright 2012, AUTHORS.txt (http://jqueryui.com/about)
