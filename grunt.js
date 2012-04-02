@@ -64,7 +64,7 @@ uiFiles.concat( allI18nFiles ).forEach(function( file ) {
 });
 
 cssFiles.forEach(function( file ) {
-	minifyCSS[ "dist/" + file.replace( /\.css$/, ".min.css" ).replace( /themes\/base\//, "themes/base/minified/" ) ] = [ "<banner>", file ];
+	minifyCSS[ "dist/" + file.replace( /\.css$/, ".min.css" ).replace( /themes\/base\//, "themes/base/minified/" ) ] = [ "<banner>", "<strip_all_banners:" + file + ">" ];
 });
 
 
