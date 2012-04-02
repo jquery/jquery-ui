@@ -26,10 +26,9 @@
   ],
   "dependencies": {},
   "devDependencies": {
-    "grunt": "0.3.x",
-    "grunt-css": "0.1.x",
-    "request": "2.9.x",
-    "adm-zip": "0.1.x",
+    "grunt": "0.3.7",
+    "grunt-css": "0.1.1",
+    "request": "2.9.153",
     "rimraf": "2.0.1"
   },
   "keywords": []
