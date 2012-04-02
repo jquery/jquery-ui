@@ -278,52 +278,71 @@ grunt.initConfig({
 			}
 		}
 	},
-	jshint: {
-		options: {
+	jshint: (function() {
+		var defaults = {
 			curly: true,
+			eqnull: true,
 			eqeqeq: true,
-			immed: true,
+			expr: true,
 			latedef: true,
 			newcap: true,
 			noarg: true,
-			sub: true,
-			undef: true,
-			eqnull: true
-		},
-		grunt: {
-			options: {
-				node: true
-			},
-			globals: {
-				task: true,
-				config: true,
-				file: true,
-				log: true,
-				template: true
+			onevar: true,
+			// TODO: limit to multi-line comments https://github.com/jshint/jshint/issues/503
+			smarttabs: true,
+			// TODO: use "faux strict mode" https://github.com/jshint/jshint/issues/504
+			// strict: true,
+			// TODO: enable trailing
+			// trailing: true,
+			undef: true
+		};
+
+		function extend( a, b ) {
+			for ( var prop in b ) {
+				a[ prop ] = b[ prop ];
 			}
-		},
-		ui: {
-			options: {
-				browser: true
-			},
-			globals: {
-				jQuery: true
-			}
-		},
-		tests: {
-			options: {
-				jquery: true
-			},
-			globals: {
-				module: true,
-				test: true,
-				ok: true,
-				equal: true,
-				deepEqual: true,
-				QUnit: true
-			}
+			return a;
 		}
-	}
+
+		return {
+			options: defaults,
+			grunt: {
+				options: extend({
+					node: true
+				}, defaults ),
+				globals: {
+					task: true,
+					config: true,
+					file: true,
+					log: true,
+					template: true
+				}
+			},
+			ui: {
+				options: extend({
+					browser: true,
+					jquery: true
+				}, defaults ),
+				globals: {
+					Globalize: true
+				}
+			},
+			tests: {
+				options: extend({
+					browser: true,
+					jquery: true
+				}, defaults ),
+				globals: {
+					module: true,
+					test: true,
+					ok: true,
+					equal: true,
+					deepEqual: true,
+					QUnit: true
+				}
+			}
+		};
+	})()
 });
 
 grunt.registerMultiTask( "copy", "Copy files to destination folder and replace @VERSION with pkg.version", function() {
