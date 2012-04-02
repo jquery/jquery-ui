@@ -20,8 +20,8 @@ $.effects.effect.slide = function( o, done ) {
 		mode = $.effects.setMode( el, o.mode || "show" ),
 		show = mode === "show",
 		direction = o.direction || "left",
-		ref = (direction == "up" || direction == "down") ? "top" : "left",
-		positiveMotion = (direction == "up" || direction == "left"),
+		ref = (direction === "up" || direction === "down") ? "top" : "left",
+		positiveMotion = (direction === "up" || direction === "left"),
 		distance,
 		animation = {},
 		size;

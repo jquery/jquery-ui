@@ -20,13 +20,13 @@ function getNextTabId() {
 	return ++tabId;
 }
 
-var isLocal = function( anchor ) {
+function isLocal( anchor ) {
 	// clone the node to work around IE 6 not normalizing the href property
 	// if it's manually set, i.e., a.href = "#foo" kills the normalization
 	anchor = anchor.cloneNode( false );
 	return anchor.hash.length > 1 &&
 			anchor.href.replace( rhash, "" ) === location.href.replace( rhash, "" );
-};
+}
 
 $.widget( "ui.tabs", {
 	version: "@VERSION",
@@ -44,7 +44,8 @@ $.widget( "ui.tabs", {
 	},
 
 	_create: function() {
-		var that = this,
+		var panel,
+			that = this,
 			options = that.options,
 			active = options.active;
 
@@ -110,7 +111,7 @@ $.widget( "ui.tabs", {
 		// check for length avoids error when initializing empty list
 		if ( options.active !== false && this.anchors.length ) {
 			this.active = this._findActive( options.active );
-			var panel = that._getPanelForTab( this.active );
+			panel = that._getPanelForTab( this.active );
 
 			panel.show();
 			this.lis.eq( options.active ).addClass( "ui-tabs-active ui-state-active" );
@@ -128,7 +129,7 @@ $.widget( "ui.tabs", {
 	},
 
 	_setOption: function( key, value ) {
-		if ( key == "active" ) {
+		if ( key === "active" ) {
 			// _activate() will handle invalid values and update this.options
 			this._activate( value );
 			return;
@@ -166,7 +167,8 @@ $.widget( "ui.tabs", {
 	},
 
 	refresh: function() {
-		var self = this,
+		var next,
+			self = this,
 			options = this.options,
 			lis = this.list.children( ":has(a[href])" );
 
@@ -187,7 +189,7 @@ $.widget( "ui.tabs", {
 		// was active, but active tab is gone
 		} else if ( this.active.length && !$.contains( this.list[ 0 ], this.active[ 0 ] ) ) {
 			// activate previous tab
-			var next = options.active - 1;
+			next = options.active - 1;
 			this._activate( next >= 0 ? next : 0 );
 		// was active, active tab still exists
 		} else {
@@ -224,7 +226,7 @@ $.widget( "ui.tabs", {
 		this.panels = $( [] );
 
 		this.anchors.each(function( i, a ) {
-			var selector, panel;
+			var selector, panel, id;
 
 			// inline tab
 			if ( isLocal( a ) ) {
@@ -232,7 +234,7 @@ $.widget( "ui.tabs", {
 				panel = self.element.find( self._sanitizeSelector( selector ) );
 			// remote tab
 			} else {
-				var id = self._tabId( a );
+				id = self._tabId( a );
 				selector = "#" + id;
 				panel = self.element.find( selector );
 				if ( !panel.length ) {
@@ -433,7 +435,7 @@ $.widget( "ui.tabs", {
 	_getIndex: function( index ) {
 		// meta-function to give users option to provide a href string instead of a numerical index.
 		// also sanitizes numerical indexes to valid values.
-		if ( typeof index == "string" ) {
+		if ( typeof index === "string" ) {
 			index = this.anchors.index( this.anchors.filter( "[href$='" + index + "']" ) );
 		}
 
@@ -747,7 +749,8 @@ if ( $.uiBackCompat !== false ) {
 				index = this.anchors.length;
 			}
 
-			var options = this.options,
+			var doInsertAfter, panel,
+				options = this.options,
 				li = $( options.tabTemplate
 					.replace( /#\{href\}/g, url )
 					.replace( /#\{label\}/g, label ) ),
@@ -758,10 +761,10 @@ if ( $.uiBackCompat !== false ) {
 			li.addClass( "ui-state-default ui-corner-top" ).data( "ui-tabs-destroy", true );
 			li.find( "a" ).attr( "aria-controls", id );
 
-			var doInsertAfter = index >= this.lis.length;
+			doInsertAfter = index >= this.lis.length;
 
 			// try to find an existing element before creating a new one
-			var panel = this.element.find( "#" + id );
+			panel = this.element.find( "#" + id );
 			if ( !panel.length ) {
 				panel = this._createPanel( id );
 				if ( doInsertAfter ) {
@@ -946,6 +949,8 @@ if ( $.uiBackCompat !== false ) {
 	});
 
 	// cookie option
+	(function() {
+
 	var listId = 0;
 
 	$.widget( "ui.tabs", $.ui.tabs, {
@@ -992,6 +997,8 @@ if ( $.uiBackCompat !== false ) {
 			}
 		}
 	});
+
+	})();
 
 	// load event
 	$.widget( "ui.tabs", $.ui.tabs, {

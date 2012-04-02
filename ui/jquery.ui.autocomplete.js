@@ -1,4 +1,4 @@
-/*!
+/*
  * jQuery UI Autocomplete @VERSION
  *
  * Copyright 2012, AUTHORS.txt (http://jqueryui.com/about)
@@ -108,7 +108,7 @@ $.widget( "ui.autocomplete", {
 						suppressKeyPress = true;
 						event.preventDefault();
 					}
-					// passthrough - ENTER and TAB both select the current element
+					//passthrough - ENTER and TAB both select the current element
 				case keyCode.TAB:
 					if ( !self.menu.active ) {
 						return;
@@ -238,7 +238,7 @@ $.widget( "ui.autocomplete", {
 				select: function( event, ui ) {
 					// back compat for _renderItem using item.autocomplete, via #7810
 					// TODO remove the fallback, see #8156
-					var item = ui.item.data( "ui-autocomplete-item" ) || ui.item.data( "item.autocomplete" );
+					var item = ui.item.data( "ui-autocomplete-item" ) || ui.item.data( "item.autocomplete" ),
 						previous = self.previous;
 
 					// only trigger when focus was lost (click on menu)
@@ -270,7 +270,7 @@ $.widget( "ui.autocomplete", {
 			.data( "menu" );
 
 		if ( $.fn.bgiframe ) {
-			this.menu.element.bgiframe();
+			 this.menu.element.bgiframe();
 		}
 
 		// turning off autocomplete prevents the browser from remembering the

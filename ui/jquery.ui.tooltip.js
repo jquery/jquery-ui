@@ -159,7 +159,7 @@ $.widget( "ui.tooltip", {
 			mouseleave: "close",
 			focusout: "close",
 			keyup: function( event ) {
-				if ( event.keyCode == $.ui.keyCode.ESCAPE ) {
+				if ( event.keyCode === $.ui.keyCode.ESCAPE ) {
 					var fakeEvent = $.Event(event);
 					fakeEvent.currentTarget = target[0];
 					this.close( fakeEvent, true );

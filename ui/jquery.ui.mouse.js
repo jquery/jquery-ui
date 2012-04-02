@@ -61,10 +61,10 @@ $.widget("ui.mouse", {
 		this._mouseDownEvent = event;
 
 		var that = this,
-			btnIsLeft = (event.which == 1),
+			btnIsLeft = (event.which === 1),
 			// event.target.nodeName works around a bug in IE 8 with
 			// disabled inputs (#7620)
-			elIsCancel = (typeof this.options.cancel == "string" && event.target.nodeName ? $(event.target).closest(this.options.cancel).length : false);
+			elIsCancel = (typeof this.options.cancel === "string" && event.target.nodeName ? $(event.target).closest(this.options.cancel).length : false);
 		if (!btnIsLeft || elIsCancel || !this._mouseCapture(event)) {
 			return true;
 		}
@@ -134,7 +134,7 @@ $.widget("ui.mouse", {
 		if (this._mouseStarted) {
 			this._mouseStarted = false;
 
-			if (event.target == this._mouseDownEvent.target) {
+			if (event.target === this._mouseDownEvent.target) {
 				$.data(event.target, this.widgetName + '.preventClickEvent', true);
 			}
 

@@ -12,7 +12,22 @@
  *	jquery.ui.widget.js
  */
 (function( $, undefined ) {
-	var uid = 0;
+	var uid = 0,
+		hideProps = {},
+		showProps = {},
+		showPropsAdjust = {};
+
+hideProps.height = hideProps.paddingTop = hideProps.paddingBottom =
+	hideProps.borderTopWidth = hideProps.borderBottomWidth = "hide";
+showProps.height = showProps.paddingTop = showProps.paddingBottom =
+	showProps.borderTopWidth = showProps.borderBottomWidth = "show";
+$.extend( showPropsAdjust, showProps, { accordionHeight: "show" } );
+
+$.fx.step.accordionHeight = function( fx ) {
+	var elem = $( fx.elem ),
+		data = elem.data( "ui-accordion-height" );
+	elem.height( data.total - elem.outerHeight() - data.toHide.outerHeight() + elem.height() );
+};
 
 $.widget( "ui.accordion", {
 	version: "@VERSION",
@@ -151,7 +166,8 @@ $.widget( "ui.accordion", {
 	},
 
 	_destroy: function() {
-		var accordionId = this.accordionId;
+		var contents,
+			accordionId = this.accordionId;
 
 		// clean up main element
 		this.element
@@ -173,7 +189,7 @@ $.widget( "ui.accordion", {
 		this._destroyIcons();
 
 		// clean up content panels
-		var contents = this.headers.next()
+		contents = this.headers.next()
 			.css( "display", "" )
 			.removeAttr( "role" )
 			.removeAttr( "aria-expanded" )
@@ -513,20 +529,6 @@ $.widget( "ui.accordion", {
 		this._trigger( "activate", null, data );
 	}
 });
-
-$.fx.step.accordionHeight = function( fx ) {
-	var elem = $( fx.elem ),
-		data = elem.data( "ui-accordion-height" );
-	elem.height( data.total - elem.outerHeight() - data.toHide.outerHeight() + elem.height() );
-};
-var hideProps = {},
-	showProps = {},
-	showPropsAdjust = {};
-hideProps.height = hideProps.paddingTop = hideProps.paddingBottom =
-	hideProps.borderTopWidth = hideProps.borderBottomWidth = "hide";
-showProps.height = showProps.paddingTop = showProps.paddingBottom =
-	showProps.borderTopWidth = showProps.borderBottomWidth = "show";
-$.extend( showPropsAdjust, showProps, { accordionHeight: "show" } );
 
 
 
