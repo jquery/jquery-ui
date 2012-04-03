@@ -24,9 +24,9 @@
 					collision: "none"
 				});
 				$(this).next().menu().position({
-					my: "left top",
+					my: "left top+20",
 					at: "left bottom",
-					of: this
+					of: this,
 				});
 			});
 		}).resize();
@@ -37,6 +37,22 @@
 		.ui-menu { width: 200px; }
 		html, body { width: 99%; height: 99%; min-height:700px; min-width:700px; }
 		#container { width: 95%; height: 95%; border: 1px solid black; margin: auto; }
+		.ui-menu:before {
+			font-size: 12pt;
+			content: "↑";
+			position: absolute;
+			top: -22px;
+			left: 5px;
+		}
+		.ui-flipped-left:before {
+			left: auto;
+			right: 5px;
+		}
+		.ui-flipped-top:before {
+			content: "↓";
+			top: auto;
+			bottom: -19px;
+		}
 	</style>
 </head>
 <body>
