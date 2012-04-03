@@ -123,4 +123,33 @@ test( "allow form submit on enter when menu is not active", function() {
 	}
 })();
 
+asyncTest( "handle race condition", function() {
+	expect( 3 );
+	var count = 0,
+		element = $( "#autocomplete" ).autocomplete({
+		source: function( request, response ) {
+			count++;
+			if ( request.term.length === 1 ) {
+				equal( count, 1, "request with 1 character is first" );
+				setTimeout(function() {
+					response([ "one" ]);
+					setTimeout( checkResults, 1 );
+				}, 1 );
+				return;
+			}
+			equal( count, 2, "request with 2 characters is second" );
+			response([ "two" ]);
+		}
+	});
+
+	element.autocomplete( "search", "a" );
+	element.autocomplete( "search", "ab" );
+
+	function checkResults() {
+		equal( element.autocomplete( "widget" ).find( ".ui-menu-item" ).text(), "two",
+			"correct results displayed" );
+		start();
+	}
+});
+
 }( jQuery ) );
