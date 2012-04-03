@@ -497,9 +497,10 @@ $.extend( $.effects, {
 // return an effect options object for the given parameters:
 function _normalizeArguments( effect, options, speed, callback ) {
 
-	// short path for passing an effect options object:
+	// allow passing all optinos as the first parameter
 	if ( $.isPlainObject( effect ) ) {
-		return effect;
+		options = effect;
+		effect = effect.effect;
 	}
 
 	// convert to an object
@@ -518,7 +519,7 @@ function _normalizeArguments( effect, options, speed, callback ) {
 	}
 
 	// catch (effect, speed, ?)
-	if ( $.type( options ) === "number" || $.fx.speeds[ options ]) {
+	if ( typeof options === "number" || $.fx.speeds[ options ] ) {
 		callback = speed;
 		speed = options;
 		options = {};
