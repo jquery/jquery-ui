@@ -95,8 +95,8 @@ $.widget( "ui.tabs", {
 		// into account and update option properly.
 		if ( $.isArray( options.disabled ) ) {
 			options.disabled = $.unique( options.disabled.concat(
-				$.map( this.lis.filter( ".ui-state-disabled" ), function( n, i ) {
-					return that.lis.index( n );
+				$.map( this.lis.filter( ".ui-state-disabled" ), function( li ) {
+					return that.lis.index( li );
 				})
 			) ).sort();
 		}
@@ -162,13 +162,12 @@ $.widget( "ui.tabs", {
 	},
 
 	_sanitizeSelector: function( hash ) {
-		// we need this because an id may contain a ":"
 		return hash ? hash.replace( /[!"$%&'()*+,.\/:;<=>?@[\]^`{|}~]/g, "\\$&" ) : "";
 	},
 
 	refresh: function() {
 		var next,
-			self = this,
+			that = this,
 			options = this.options,
 			lis = this.list.children( ":has(a[href])" );
 
@@ -216,14 +215,14 @@ $.widget( "ui.tabs", {
 	},
 
 	_processTabs: function() {
-		var self = this;
+		var that = this;
 
 		this.list = this._getList();
-		this.lis = $( " > li:has(a[href])", this.list );
+		this.lis = this.list.find( "> li:has(a[href])" );
 		this.anchors = this.lis.map(function() {
 			return $( "a", this )[ 0 ];
 		});
-		this.panels = $( [] );
+		this.panels = $();
 
 		this.anchors.each(function( i, a ) {
 			var selector, panel, id;
@@ -231,20 +230,20 @@ $.widget( "ui.tabs", {
 			// inline tab
 			if ( isLocal( a ) ) {
 				selector = a.hash;
-				panel = self.element.find( self._sanitizeSelector( selector ) );
+				panel = that.element.find( that._sanitizeSelector( selector ) );
 			// remote tab
 			} else {
-				id = self._tabId( a );
+				id = that._tabId( a );
 				selector = "#" + id;
-				panel = self.element.find( selector );
+				panel = that.element.find( selector );
 				if ( !panel.length ) {
-					panel = self._createPanel( id );
-					panel.insertAfter( self.panels[ i - 1 ] || self.list );
+					panel = that._createPanel( id );
+					panel.insertAfter( that.panels[ i - 1 ] || that.list );
 				}
 			}
 
 			if ( panel.length) {
-				self.panels = self.panels.add( panel );
+				that.panels = that.panels.add( panel );
 			}
 			$( a ).attr( "aria-controls", selector.substring( 1 ) );
 		});
@@ -256,10 +255,10 @@ $.widget( "ui.tabs", {
 	},
 
 	_createPanel: function( id ) {
-		return $( "<div></div>" )
-					.attr( "id", id )
-					.addClass( "ui-tabs-panel ui-widget-content ui-corner-bottom" )
-					.data( "ui-tabs-destroy", true );
+		return $( "<div>" )
+			.attr( "id", id )
+			.addClass( "ui-tabs-panel ui-widget-content ui-corner-bottom" )
+			.data( "ui-tabs-destroy", true );
 	},
 
 	_setupDisabled: function( disabled ) {
@@ -273,7 +272,8 @@ $.widget( "ui.tabs", {
 
 		// disable tabs
 		for ( var i = 0, li; ( li = this.lis[ i ] ); i++ ) {
-			$( li ).toggleClass( "ui-state-disabled", ( disabled === true || $.inArray( i, disabled ) !== -1 ) );
+			$( li ).toggleClass( "ui-state-disabled",
+				( disabled === true || $.inArray( i, disabled ) !== -1 ) );
 		}
 
 		this.options.disabled = disabled;
@@ -302,11 +302,13 @@ $.widget( "ui.tabs", {
 		// attach tab event handler, unbind to avoid duplicates from former tabifying...
 		this.anchors.unbind( ".tabs" );
 
+		// TODO: use event delegation via _bind()
 		if ( event ) {
 			this.anchors.bind( event.split( " " ).join( ".tabs " ) + ".tabs",
 				$.proxy( this, "_eventHandler" ) );
 		}
 
+		// TODO: use event delegation via _bind()
 		// disable click in any case
 		this.anchors.bind( "click.tabs", function( event ){
 			event.preventDefault();
@@ -353,14 +355,12 @@ $.widget( "ui.tabs", {
 		}
 
 		if ( !toHide.length && !toShow.length ) {
-			throw "jQuery UI Tabs: Mismatching fragment identifier.";
+			jQuery.error( "jQuery UI Tabs: Mismatching fragment identifier." );
 		}
 
 		if ( toShow.length ) {
-
 			// TODO make passing in node possible
 			that.load( that.anchors.index( clicked ), event );
-
 			clicked[ 0 ].blur();
 		}
 		that._toggle( event, eventData );
@@ -429,7 +429,7 @@ $.widget( "ui.tabs", {
 
 	_findActive: function( selector ) {
 		return typeof selector === "number" ? this.anchors.eq( selector ) :
-				typeof selector === "string" ? this.anchors.filter( "[href$='" + selector + "']" ) : $();
+			typeof selector === "string" ? this.anchors.filter( "[href$='" + selector + "']" ) : $();
 	},
 
 	_getIndex: function( index ) {
@@ -525,10 +525,10 @@ $.widget( "ui.tabs", {
 
 	load: function( index, event ) {
 		index = this._getIndex( index );
-		var self = this,
+		var that = this,
 			options = this.options,
 			anchor = this.anchors.eq( index ),
-			panel = self._getPanelForTab( anchor ),
+			panel = that._getPanelForTab( anchor ),
 			eventData = {
 				tab: anchor,
 				panel: panel
@@ -542,7 +542,7 @@ $.widget( "ui.tabs", {
 		this.xhr = $.ajax({
 			url: anchor.attr( "href" ),
 			beforeSend: function( jqXHR, settings ) {
-				return self._trigger( "beforeLoad", event,
+				return that._trigger( "beforeLoad", event,
 					$.extend( { jqXHR : jqXHR, ajaxSettings: settings }, eventData ) );
 			}
 		});
@@ -556,7 +556,7 @@ $.widget( "ui.tabs", {
 					// remove when core #10467 is fixed
 					setTimeout(function() {
 						panel.html( response );
-						self._trigger( "load", event, eventData );
+						that._trigger( "load", event, eventData );
 					}, 1 );
 				})
 				.complete(function( jqXHR, status ) {
@@ -564,19 +564,17 @@ $.widget( "ui.tabs", {
 					// remove when core #10467 is fixed
 					setTimeout(function() {
 						if ( status === "abort" ) {
-							self.panels.stop( false, true );
+							that.panels.stop( false, true );
 						}
 
-						self.lis.eq( index ).removeClass( "ui-tabs-loading" );
+						that.lis.eq( index ).removeClass( "ui-tabs-loading" );
 
-						if ( jqXHR === self.xhr ) {
-							delete self.xhr;
+						if ( jqXHR === that.xhr ) {
+							delete that.xhr;
 						}
 					}, 1 );
 				});
 		}
-
-		return this;
 	},
 
 	_getPanelForTab: function( tab ) {
@@ -614,7 +612,7 @@ if ( $.uiBackCompat !== false ) {
 		_create: function() {
 			this._super();
 
-			var self = this;
+			var that = this;
 
 			this.element.bind( "tabsbeforeload.tabs", function( event, ui ) {
 				// tab is already cached
@@ -623,21 +621,21 @@ if ( $.uiBackCompat !== false ) {
 					return;
 				}
 
-				$.extend( ui.ajaxSettings, self.options.ajaxOptions, {
+				$.extend( ui.ajaxSettings, that.options.ajaxOptions, {
 					error: function( xhr, s, e ) {
 						try {
 							// Passing index avoid a race condition when this method is
 							// called after the user has selected another tab.
 							// Pass the anchor that initiated this request allows
 							// loadError to manipulate the tab content panel via $(a.hash)
-							self.options.ajaxOptions.error( xhr, s, ui.tab.closest( "li" ).index(), ui.tab[ 0 ] );
+							that.options.ajaxOptions.error( xhr, s, ui.tab.closest( "li" ).index(), ui.tab[ 0 ] );
 						}
 						catch ( e ) {}
 					}
 				});
 
 				ui.jqXHR.success(function() {
-					if ( self.options.cache ) {
+					if ( that.options.cache ) {
 						$.data( ui.tab[ 0 ], "cache.tabs", true );
 					}
 				});
