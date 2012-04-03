@@ -285,7 +285,6 @@ grunt.initConfig({
 			eqeqeq: true,
 			expr: true,
 			latedef: true,
-			newcap: true,
 			noarg: true,
 			onevar: true,
 			// TODO: limit to multi-line comments https://github.com/jshint/jshint/issues/503
