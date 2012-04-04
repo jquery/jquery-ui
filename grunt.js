@@ -260,24 +260,34 @@ grunt.initConfig({
 	qunit: {
 		files: grunt.file.expandFiles( "tests/unit/**/*.html" ).filter(function( file ) {
 			// disabling everything that doesn't (quite) work with PhantomJS for now
-			// except for all|index|test, try to include more as we go
-			return !( /(all|all-active|index|test|draggable|droppable|selectable|resizable|sortable|dialog|slider|datepicker|tabs|tabs_deprecated)\.html/ ).test( file );
+			// TODO except for all|index|test, try to include more as we go
+			return !( /(all|all-active|index|test|draggable|droppable|selectable|resizable|sortable|dialog|slider|datepicker|tabs|tabs_deprecated)\.html$/ ).test( file );
 		})
 	},
 	lint: {
 		ui: grunt.file.expandFiles( "ui/*.js" ).filter(function( file ) {
-			// remove items from this list once rewritten
+			// TODO remove items from this list once rewritten
 			return !( /(effects.core|mouse|datepicker|draggable|droppable|resizable|selectable|sortable)\.js$/ ).test( file );
 		}),
-		grunt: "grunt.js",
-		tests: "tests/unit/**/*.js"
+		grunt: "grunt.js"
+		// TODO enabled once fixed up
+		// tests: "tests/unit/**/*.js"
 	},
 	csslint: {
+		// nothing: []
+		// TODO figure out what to check for, then fix and enable
 		base_theme: {
-			src: "themes/base/*.css",
+			src: grunt.file.expandFiles( "themes/base/*.css" ).filter(function( file ) {
+				// TODO remove items from this list once rewritten
+				return !( /(button|datepicker|core|dialog|theme)\.css$/ ).test( file );
+			}),
+			// TODO consider reenabling some of these rules
 			rules: {
 				"import": false,
-				"overqualified-elements": 2
+				"important": false,
+				"outline-none": false,
+				// especially this one
+				"overqualified-elements": false
 			}
 		}
 	},
@@ -351,9 +361,11 @@ grunt.registerMultiTask( "copy", "Copy files to destination folder and replace @
 	function replaceVersion( source ) {
 		return source.replace( "@VERSION", grunt.config( "pkg.version" ) );
 	}
-	var files = grunt.file.expandFiles( this.file.src );
-	var target = this.file.dest + "/";
-	var strip = this.data.strip;
+	var files = grunt.file.expandFiles( this.file.src ),
+		target = this.file.dest + "/",
+		strip = this.data.strip,
+		renameCount = 0,
+		fileName;
 	if ( typeof strip === "string" ) {
 		strip = new RegExp( "^" + grunt.template.process( strip, grunt.config() ).replace( /[\-\[\]{}()*+?.,\\\^$|#\s]/g, "\\$&" ) );
 	}
@@ -368,8 +380,7 @@ grunt.registerMultiTask( "copy", "Copy files to destination folder and replace @
 		}
 	});
 	grunt.log.writeln( "Copied " + files.length + " files." );
-	var renameCount = 0;
-	for ( var fileName in this.data.renames ) {
+	for ( fileName in this.data.renames ) {
 		renameCount += 1;
 		grunt.file.copy( fileName, target + grunt.template.process( this.data.renames[ fileName ], grunt.config() ) );
 	}
@@ -396,9 +407,9 @@ grunt.registerMultiTask( "zip", "Create a zip file for release", function() {
 	//zip.writeZip( "dist/" + this.file.dest );
 	//grunt.log.writeln( "Wrote " + files.length + " files to " + this.file.dest );
 
-	var done = this.async();
-	var dest = this.file.dest;
-	var src = grunt.template.process( this.file.src, grunt.config() );
+	var done = this.async(),
+		dest = this.file.dest,
+		src = grunt.template.process( this.file.src, grunt.config() );
 	grunt.utils.spawn({
 		cmd: "zip",
 		args: [ "-r", dest, src ],
@@ -421,9 +432,9 @@ grunt.registerMultiTask( "md5", "Create list of md5 hashes for CDN uploads", fun
 	if ( path.existsSync( this.file.dest ) ) {
 		fs.unlinkSync( this.file.dest );
 	}
-	var crypto = require( "crypto" );
-	var dir = this.file.src + "/";
-	var hashes = [];
+	var crypto = require( "crypto" ),
+		dir = this.file.src + "/",
+		hashes = [];
 	grunt.file.expandFiles( dir + "**/*" ).forEach(function( fileName ) {
 		var hash = crypto.createHash( "md5" );
 		hash.update( grunt.file.read( fileName, "ascii" ) );
@@ -439,15 +450,15 @@ grunt.registerTask( "download_docs", function() {
 		return value[0].toUpperCase() + value.slice(1);
 	}
 	// should be grunt.config("pkg.version")?
-	var version = "1.8";
-	var docsDir = "dist/docs";
-	var files = "draggable droppable resizable selectable sortable accordion autocomplete button datepicker dialog progressbar slider tabs position"
-	.split(" ").map(function(widget) {
-		return {
-			url: "http://docs.jquery.com/action/render/UI/API/" + version + "/" + capitalize(widget),
-			dest: docsDir + '/' + widget + '.html'
-		};
-	});
+	var version = "1.8",
+		docsDir = "dist/docs",
+		files = "draggable droppable resizable selectable sortable accordion autocomplete button datepicker dialog progressbar slider tabs position"
+		.split(" ").map(function(widget) {
+			return {
+				url: "http://docs.jquery.com/action/render/UI/API/" + version + "/" + capitalize(widget),
+				dest: docsDir + '/' + widget + '.html'
+			};
+		});
 	files = files.concat("animate addClass effect hide removeClass show switchClass toggle toggleClass".split(" ").map(function(widget) {
 		return {
 			url: "http://docs.jquery.com/action/render/UI/Effects/" + widget,
@@ -470,15 +481,15 @@ grunt.registerTask( "download_docs", function() {
 
 grunt.registerTask( "download_themes", function() {
 	// var AdmZip = require('adm-zip');
-	var done = this.async();
-	var themes = grunt.file.read( "build/themes" ).split(",");
-	var requests = 0;
+	var done = this.async(),
+		themes = grunt.file.read( "build/themes" ).split(","),
+		requests = 0;
 	grunt.file.mkdir( "dist/tmp" );
 	themes.forEach(function( theme, index ) {
 		requests += 1;
 		grunt.file.mkdir( "dist/tmp/" + index );
-		var zipFileName = "dist/tmp/" + index + ".zip";
-		var out = fs.createWriteStream( zipFileName );
+		var zipFileName = "dist/tmp/" + index + ".zip",
+			out = fs.createWriteStream( zipFileName );
 		out.on( "close", function() {
 			grunt.log.writeln( "done downloading " + zipFileName );
 			// TODO AdmZip produces "crc32 checksum failed", need to figure out why
@@ -503,20 +514,19 @@ grunt.registerTask( "download_themes", function() {
 
 grunt.registerTask( "copy_themes", function() {
 	// each package includes the base theme, ignore that
-	var filter = /themes\/base/;
-	var files = grunt.file.expandFiles( "dist/tmp/*/development-bundle/themes/**/*" ).filter(function( file ) {
-		return !filter.test( file );
-	});
-	// TODO the grunt.template.process call shouldn't be necessary
-	var target = "dist/" + grunt.template.process( grunt.config( "files.themes" ), grunt.config() ) + "/";
+	var filter = /themes\/base/,
+		files = grunt.file.expandFiles( "dist/tmp/*/development-bundle/themes/**/*" ).filter(function( file ) {
+			return !filter.test( file );
+		}),
+		// TODO the grunt.template.process call shouldn't be necessary
+		target = "dist/" + grunt.template.process( grunt.config( "files.themes" ), grunt.config() ) + "/",
+		distFolder = "dist/" + grunt.template.process( grunt.config( "files.dist" ), grunt.config() );
 	files.forEach(function( fileName ) {
 		var targetFile = fileName.replace( /dist\/tmp\/\d+\/development-bundle\//, "" ).replace( "jquery-ui-.custom", "jquery-ui" );
 		grunt.file.copy( fileName, target + targetFile );
 	});
 
 	// copy minified base theme from regular release
-	// TODO same as the one above
-	var distFolder = "dist/" + grunt.template.process( grunt.config( "files.dist" ), grunt.config() );
 	files = grunt.file.expandFiles( distFolder + "/themes/base/**/*" );
 	files.forEach(function( fileName ) {
 		grunt.file.copy( fileName, target + fileName.replace( distFolder, "" ) );
