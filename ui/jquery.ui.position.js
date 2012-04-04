@@ -317,9 +317,10 @@ $.ui.position = {
 				isWindow = $.isWindow( data.within[0] ),
 				withinOffset = ( isWindow ? 0 : within.offset().left ) + within.scrollLeft(),
 				outerWidth = isWindow ? within.width() : within.outerWidth(),
+				offsetLeft = isWindow ? 0 : within.offset().left,
 				collisionPosLeft = position.left - data.collisionPosition.marginLeft,
-				overLeft = collisionPosLeft - withinOffset,
-				overRight = collisionPosLeft + data.collisionWidth - outerWidth - withinOffset,
+				overLeft = collisionPosLeft - offsetLeft,
+				overRight = collisionPosLeft + data.collisionWidth - outerWidth - offsetLeft,
 				left = data.my[ 0 ] === "left",
 				myOffset = data.my[ 0 ] === "left" ?
 					-data.elemWidth :
@@ -343,7 +344,7 @@ $.ui.position = {
 				}
 			}
 			else if ( overRight > 0 ) {
-				newOverLeft = position.left - data.collisionPosition.marginLeft + myOffset + atOffset + offset - withinOffset;
+				newOverLeft = position.left - data.collisionPosition.marginLeft + myOffset + atOffset + offset - offsetLeft;
 				if ( newOverLeft > 0 || Math.abs( newOverLeft ) < overRight ) {
 					data.elem
 						.addClass( "ui-flipped-left" );
@@ -365,9 +366,10 @@ $.ui.position = {
 				isWindow = $.isWindow( data.within[0] ),
 				withinOffset = ( isWindow ? 0 : within.offset().top ) + within.scrollTop(),
 				outerHeight = isWindow ? within.height() : within.outerHeight(),
+				offsetTop = isWindow ? 0 : within.offset().top,
 				collisionPosTop = position.top - data.collisionPosition.marginTop,
-				overTop = collisionPosTop - withinOffset,
-				overBottom = collisionPosTop + data.collisionHeight - outerHeight - withinOffset,
+				overTop = collisionPosTop - offsetTop,
+				overBottom = collisionPosTop + data.collisionHeight - outerHeight - offsetTop,
 				top = data.my[ 1 ] === "top",
 				myOffset = top ?
 					-data.elemHeight :
@@ -390,7 +392,7 @@ $.ui.position = {
 				}
 			}
 			else if ( overBottom > 0 ) {
-				newOverTop = position.top -  data.collisionPosition.marginTop + myOffset + atOffset + offset - withinOffset;
+				newOverTop = position.top -  data.collisionPosition.marginTop + myOffset + atOffset + offset - offsetTop;
 				if ( ( position.top + myOffset + atOffset + offset) > overBottom && ( newOverTop > 0 || Math.abs( newOverTop ) < overBottom ) ) {
 					data.elem
 						.addClass( "ui-flipped-top" );
