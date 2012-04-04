@@ -189,7 +189,7 @@ $.widget( "ui.menu", {
 						character = prev + character;
 					}
 					function escape( value ) {
-						return value.replace( /[-[\]{}()*+?.,\\^$|#\s]/g , "\\$&" );
+						return value.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, "\\$&");
 					}
 					match = this.activeMenu.children( ".ui-menu-item" ).filter( function() {
 						return new RegExp("^" + escape(character), "i")

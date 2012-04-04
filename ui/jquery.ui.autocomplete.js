@@ -107,13 +107,13 @@ $.widget( "ui.autocomplete", {
 						// which causes forms to submit
 						suppressKeyPress = true;
 						event.preventDefault();
+						self.menu.select( event );
 					}
-					//passthrough - ENTER and TAB both select the current element
+					break;
 				case keyCode.TAB:
-					if ( !self.menu.active ) {
-						return;
+					if ( self.menu.active ) {
+						self.menu.select( event );
 					}
-					self.menu.select( event );
 					break;
 				case keyCode.ESCAPE:
 					if ( self.menu.element.is(":visible") ) {
@@ -524,7 +524,7 @@ $.widget( "ui.autocomplete", {
 
 $.extend( $.ui.autocomplete, {
 	escapeRegex: function( value ) {
-		return value.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+		return value.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, "\\$&");
 	},
 	filter: function(array, term) {
 		var matcher = new RegExp( $.ui.autocomplete.escapeRegex(term), "i" );

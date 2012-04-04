@@ -13,7 +13,7 @@ $.ui = $.ui || {};
 
 var rhorizontal = /left|center|right/,
 	rvertical = /top|center|bottom/,
-	roffset = /[+-]\d+%?/,
+	roffset = /[\+\-]\d+%?/,
 	rposition = /^\w+/,
 	rpercent = /%$/,
 	center = "center",
