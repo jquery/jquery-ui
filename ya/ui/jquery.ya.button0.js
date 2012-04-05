@@ -24,8 +24,8 @@
 			Base.prototype._create.call(this);
 			
 			//为buttonElement提供特殊的class
-			if(cls){
-				var textCls="";
+			var textCls="";
+			if(cls){	
 				cls.replace(regx.rword,function(v){
 					textCls+=v+"-text ";
 				});
