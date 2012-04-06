@@ -291,13 +291,6 @@ $.widget( "ui.tabs", {
 		}
 	},
 
-	// TODO: remove once jQuery core properly removes filters - see #4621
-	_resetStyle: function ( $el, fx ) {
-		if ( !$.support.opacity && fx.opacity ) {
-			$el[ 0 ].style.removeAttribute( "filter" );
-		}
-	},
-
 	_setupEvents: function( event ) {
 		// attach tab event handler, unbind to avoid duplicates from former tabifying...
 		this.anchors.unbind( ".tabs" );
@@ -386,7 +379,6 @@ $.widget( "ui.tabs", {
 			if ( toShow.length && that.showFx ) {
 				toShow
 					.animate( that.showFx, that.showFx.duration || "normal", function() {
-						that._resetStyle( $( this ), that.showFx );
 						complete();
 					});
 			} else {
@@ -399,7 +391,6 @@ $.widget( "ui.tabs", {
 		if ( toHide.length && that.hideFx ) {
 			toHide.animate( that.hideFx, that.hideFx.duration || "normal", function() {
 				eventData.oldTab.closest( "li" ).removeClass( "ui-tabs-active ui-state-active" );
-				that._resetStyle( $( this ), that.hideFx );
 				show();
 			});
 		} else {
