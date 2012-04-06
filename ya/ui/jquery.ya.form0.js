@@ -223,7 +223,7 @@
 				        validMsgJq=thisJq.data('validmsg');
 				    if(validMsgJq){
 				        validMsgJq.removeClass('ui-state-error').hide();
-                        $('.message-content',validMsgJq).empty();
+                        $('.message-content-wrapper',validMsgJq).empty();
 				    }
 				});
 			});
