@@ -113,14 +113,6 @@ test( "down arrow invokes search - textarea", function() {
 	arrowsInvokeSearch( "#autocomplete-textarea", false, false );
 });
 
-test( "up arrow invokes search - contenteditable", function() {
-	arrowsInvokeSearch( "#autocomplete-contenteditable", true, false );
-});
-
-test( "down arrow invokes search - contenteditable", function() {
-	arrowsInvokeSearch( "#autocomplete-contenteditable", false, false );
-});
-
 test( "up arrow moves focus - input", function() {
 	arrowsMoveFocus( "#autocomplete", true );
 });
@@ -135,14 +127,6 @@ test( "up arrow moves focus - textarea", function() {
 
 test( "down arrow moves focus - textarea", function() {
 	arrowsMoveFocus( "#autocomplete-textarea", false );
-});
-
-test( "up arrow moves focus - contenteditable", function() {
-	arrowsMoveFocus( "#autocomplete-contenteditable", true );
-});
-
-test( "down arrow moves focus - contenteditable", function() {
-	arrowsMoveFocus( "#autocomplete-contenteditable", false );
 });
 
 function arrowsInvokeSearch( id, isKeyUp, shouldMove ) {
