@@ -260,7 +260,8 @@ $.widget( "ui.menu", {
 
 	refresh: function() {
 		// initialize nested menus
-		var menuId,
+		var menus,
+			menuId = this.menuId,
 			submenus = this.element.find( this.options.menus + ":not( .ui-menu )" )
 				.addClass( "ui-menu ui-widget ui-widget-content ui-corner-all" )
 				.hide()
@@ -271,8 +272,9 @@ $.widget( "ui.menu", {
 				});
 
 		// don't refresh list items that are already adapted
-		menuId = this.menuId;
-		submenus.add( this.element ).children( ":not( .ui-menu-item ):has( a )" )
+		menus = submenus.add( this.element );
+
+		menus.children( ":not( .ui-menu-item ):has( a )" )
 			.addClass( "ui-menu-item" )
 			.attr( "role", "presentation" )
 			.children( "a" )
@@ -282,6 +284,9 @@ $.widget( "ui.menu", {
 				.attr( "id", function( i ) {
 					return menuId + "-" + i;
 				});
+
+		// initialize unlinked menu-items as dividers
+        menus.children( ":not( .ui-menu-item )" ).addClass( "ui-widget-content ui-menu-divider" );
 
 		submenus.each( function() {
 			var menu = $( this ),
