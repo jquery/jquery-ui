@@ -37,6 +37,7 @@ $.widget( "ui.autocomplete", {
 		var self = this,
 			doc = this.element[ 0 ].ownerDocument,
 			suppressKeyPress;
+		this.isMultiLine = this.element.is( "textarea,[contenteditable]" );
 
 		this.element
 			.addClass( "ui-autocomplete-input" )
@@ -62,14 +63,10 @@ $.widget( "ui.autocomplete", {
 					self._move( "nextPage", event );
 					break;
 				case keyCode.UP:
-					self._move( "previous", event );
-					// prevent moving cursor to beginning of text field in some browsers
-					event.preventDefault();
+					self._keyEvent( "previous", event );
 					break;
 				case keyCode.DOWN:
-					self._move( "next", event );
-					// prevent moving cursor to end of text field in some browsers
-					event.preventDefault();
+					self._keyEvent( "next", event );
 					break;
 				case keyCode.ENTER:
 				case keyCode.NUMPAD_ENTER:
@@ -424,6 +421,14 @@ $.widget( "ui.autocomplete", {
 
 	widget: function() {
 		return this.menu.element;
+	},
+	_keyEvent: function( keyEvent, event ) {
+		if ( !this.isMultiLine || this.menu.element.is( ":visible" ) ) {
+			this._move( keyEvent, event );
+
+			// prevents moving cursor to beginning/end of the text field in some browsers
+			event.preventDefault();
+		}
 	}
 });
 
