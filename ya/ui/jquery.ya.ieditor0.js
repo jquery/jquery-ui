@@ -297,7 +297,7 @@
                element.text(v||"");
            }else{
                element.text(v.label||v.value||"");
-               element.data('value',v.value||"");
+               element.data('value',v.value||"").attr('val',v.value||"");
            } 
 		},
 		/**
