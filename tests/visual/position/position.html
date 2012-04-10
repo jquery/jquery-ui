@@ -28,12 +28,12 @@
 					my: "left top+20",
 					at: "left bottom",
 					of: this,
-					using: function( position ) {
-						input.val(position.horizontal + " " + position.vertical)
+					using: function( position, feedback ) {
+						input.val(feedback.horizontal + " " + feedback.vertical)
 						$(this).offset( position )
 							.removeClass("left right top bottom")
-							.addClass(position.horizontal)
-							.addClass(position.vertical);
+							.addClass(feedback.horizontal)
+							.addClass(feedback.vertical);
 					}
 				});
 			});

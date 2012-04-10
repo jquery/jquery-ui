@@ -37,14 +37,14 @@
 				my: "center",
 				at: direction,
 				of: target,
-				using: function( position ) {
+				using: function( position, feedback ) {
 					$(this).offset( position );
-					$(this).text(position.horizontal + " " + position.vertical + " " + position.important)
+					$(this).text(feedback.horizontal + " " + feedback.vertical + " " + feedback.important)
 					$(this)
 						.removeClass("left right top bottom")
-						.addClass(position.horizontal)
-						.addClass(position.vertical)
-						.addClass(position.important);
+						.addClass(feedback.horizontal)
+						.addClass(feedback.vertical)
+						.addClass(feedback.important);
 				}
 			})
 		});

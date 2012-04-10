@@ -226,14 +226,15 @@ $.fn.position = function( options ) {
 					right = (targetOffset.left + targetWidth) - (props.left + elemWidth),
 					top = targetOffset.top - props.top,
 					bottom = (targetOffset.top + targetHeight) - (props.top + elemHeight);
-				props.horizontal = right < 0 ? "left" : left > 0 ? "right" : "center";
-				props.vertical = bottom < 0 ? "top" : top > 0 ? "bottom" : "middle";
+				var feedback = {};
+				feedback.horizontal = right < 0 ? "left" : left > 0 ? "right" : "center";
+				feedback.vertical = bottom < 0 ? "top" : top > 0 ? "bottom" : "middle";
 				if (Math.max(Math.abs(left), Math.abs(right)) > Math.max(Math.abs(top), Math.abs(bottom))) {
-					props.important = "horizontal";
+					feedback.important = "horizontal";
 				} else {
-					props.important = "vertical";
+					feedback.important = "vertical";
 				}
-				using.apply( this, arguments );
+				using.call( this, props, feedback );
 			};
 		}
 		elem.offset( $.extend( position, { using: options.using } ) );
