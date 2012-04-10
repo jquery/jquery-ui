@@ -170,7 +170,7 @@ $.fn.position = function( options ) {
 					( rpercent.test( offsets.my[ 1 ] ) ? elem.outerHeight() / 100 : 1 )
 			],
 			collisionPosition,
-			using = options.using;
+			using;
 
 		if ( options.my[ 0 ] === "right" ) {
 			position.left -= elemWidth;
@@ -221,9 +221,9 @@ $.fn.position = function( options ) {
 			elem.bgiframe();
 		}
 
-		if ( using ) {
-			// we have to proxy, as jQuery.offset.setOffset throws away props other than left/top
-			options.using = function( props ) {
+		if ( options.using ) {
+			// adds feedback as second argument to using callback, if present
+			using = function( props ) {
 				var left = targetOffset.left - props.left,
 					right = (targetOffset.left + targetWidth) - (props.left + elemWidth),
 					top = targetOffset.top - props.top,
@@ -237,11 +237,11 @@ $.fn.position = function( options ) {
 				} else {
 					feedback.important = "vertical";
 				}
-				using.call( this, props, feedback );
+				options.using.call( this, props, feedback );
 			};
 		}
 
-		elem.offset( $.extend( position, { using: options.using } ) );
+		elem.offset( $.extend( position, { using: using } ) );
 	});
 };
 
