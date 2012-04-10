@@ -216,6 +216,26 @@ $.fn.position = function( options ) {
 		if ( $.fn.bgiframe ) {
 			elem.bgiframe();
 		}
+		var using = options.using;
+		if ( using ) {
+			// we have to proxy, as jQuery.offset.setOffset throws away other props then left/top
+			options.using = function( props ) {
+				// can't use basePosition, as that gets modified
+				var targetOffset = target.offset(),
+					left = targetOffset.left - props.left,
+					right = (targetOffset.left + targetWidth) - (props.left + elemWidth),
+					top = targetOffset.top - props.top,
+					bottom = (targetOffset.top + targetHeight) - (props.top + elemHeight);
+				props.horizontal = right < 0 ? "left" : left > 0 ? "right" : "center";
+				props.vertical = bottom < 0 ? "top" : top > 0 ? "bottom" : "middle";
+				if (Math.max(Math.abs(left), Math.abs(right)) > Math.max(Math.abs(top), Math.abs(bottom))) {
+					props.important = "horizontal";
+				} else {
+					props.important = "vertical";
+				}
+				using.apply( this, arguments );
+			};
+		}
 		elem.offset( $.extend( position, { using: options.using } ) );
 	});
 };
@@ -309,9 +329,6 @@ $.ui.position = {
 				return;
 			}
 
-			data.elem
-				.removeClass( "ui-flipped-left ui-flipped-right" );
-
 			var within = data.within,
 				win = $( window ),
 				isWindow = $.isWindow( data.within[0] ),
@@ -337,18 +354,12 @@ $.ui.position = {
 			if ( overLeft < 0 ) {
 				newOverRight = position.left + myOffset + atOffset + offset + data.collisionWidth - outerWidth - withinOffset;
 				if ( newOverRight < 0 || newOverRight < Math.abs( overLeft ) ) {
-					data.elem
-						.addClass( "ui-flipped-right" );
-
 					position.left += myOffset + atOffset + offset;
 				}
 			}
 			else if ( overRight > 0 ) {
 				newOverLeft = position.left - data.collisionPosition.marginLeft + myOffset + atOffset + offset - offsetLeft;
 				if ( newOverLeft > 0 || Math.abs( newOverLeft ) < overRight ) {
-					data.elem
-						.addClass( "ui-flipped-left" );
-
 					position.left += myOffset + atOffset + offset;
 				}
 			}
@@ -357,9 +368,6 @@ $.ui.position = {
 			if ( data.at[ 1 ] === center ) {
 				return;
 			}
-
-			data.elem
-				.removeClass( "ui-flipped-top ui-flipped-bottom" );
 
 			var within = data.within,
 				win = $( window ),
@@ -385,18 +393,12 @@ $.ui.position = {
 			if ( overTop < 0 ) {
 				newOverBottom = position.top + myOffset + atOffset + offset + data.collisionHeight - outerHeight - withinOffset;
 				if ( ( position.top + myOffset + atOffset + offset) > overTop && ( newOverBottom < 0 || newOverBottom < Math.abs( overTop ) ) ) {
-					data.elem
-						.addClass( "ui-flipped-bottom" );
-
 					position.top += myOffset + atOffset + offset;
 				}
 			}
 			else if ( overBottom > 0 ) {
 				newOverTop = position.top -  data.collisionPosition.marginTop + myOffset + atOffset + offset - offsetTop;
 				if ( ( position.top + myOffset + atOffset + offset) > overBottom && ( newOverTop > 0 || Math.abs( newOverTop ) < overBottom ) ) {
-					data.elem
-						.addClass( "ui-flipped-top" );
-
 					position.top += myOffset + atOffset + offset;
 				}
 			}
