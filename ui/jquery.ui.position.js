@@ -69,26 +69,29 @@ $.fn.position = function( options ) {
 		atOffset,
 		targetWidth,
 		targetHeight,
+		targetOffset,
 		basePosition;
 
 	if ( targetElem.nodeType === 9 ) {
 		targetWidth = target.width();
 		targetHeight = target.height();
-		basePosition = { top: 0, left: 0 };
+		targetOffset = { top: 0, left: 0 };
 	} else if ( $.isWindow( targetElem ) ) {
 		targetWidth = target.width();
 		targetHeight = target.height();
-		basePosition = { top: target.scrollTop(), left: target.scrollLeft() };
+		targetOffset = { top: target.scrollTop(), left: target.scrollLeft() };
 	} else if ( targetElem.preventDefault ) {
 		// force left top to allow flipping
 		options.at = "left top";
 		targetWidth = targetHeight = 0;
-		basePosition = { top: options.of.pageY, left: options.of.pageX };
+		targetOffset = { top: options.of.pageY, left: options.of.pageX };
 	} else {
 		targetWidth = target.outerWidth();
 		targetHeight = target.outerHeight();
-		basePosition = target.offset();
+		targetOffset = target.offset();
 	}
+	// clone to reuse original targetOffset later
+	basePosition = $.extend( {}, targetOffset );
 
 	// force my and at to have valid horizontal and vertical positions
 	// if a value is missing or invalid, it will be converted to center
@@ -166,7 +169,8 @@ $.fn.position = function( options ) {
 				parseInt( offsets.my[ 1 ], 10 ) *
 					( rpercent.test( offsets.my[ 1 ] ) ? elem.outerHeight() / 100 : 1 )
 			],
-			collisionPosition;
+			collisionPosition,
+			using = options.using;
 
 		if ( options.my[ 0 ] === "right" ) {
 			position.left -= elemWidth;
@@ -216,20 +220,19 @@ $.fn.position = function( options ) {
 		if ( $.fn.bgiframe ) {
 			elem.bgiframe();
 		}
-		var using = options.using;
+
 		if ( using ) {
-			// we have to proxy, as jQuery.offset.setOffset throws away other props then left/top
+			// we have to proxy, as jQuery.offset.setOffset throws away props other than left/top
 			options.using = function( props ) {
-				// can't use basePosition, as that gets modified
-				var targetOffset = target.offset(),
-					left = targetOffset.left - props.left,
+				var left = targetOffset.left - props.left,
 					right = (targetOffset.left + targetWidth) - (props.left + elemWidth),
 					top = targetOffset.top - props.top,
-					bottom = (targetOffset.top + targetHeight) - (props.top + elemHeight);
-				var feedback = {};
-				feedback.horizontal = right < 0 ? "left" : left > 0 ? "right" : "center";
-				feedback.vertical = bottom < 0 ? "top" : top > 0 ? "bottom" : "middle";
-				if (Math.max(Math.abs(left), Math.abs(right)) > Math.max(Math.abs(top), Math.abs(bottom))) {
+					bottom = (targetOffset.top + targetHeight) - (props.top + elemHeight),
+					feedback = {
+						horizontal: right < 0 ? "left" : left > 0 ? "right" : "center",
+						vertical: bottom < 0 ? "top" : top > 0 ? "bottom" : "middle"
+					};
+				if ( Math.max( Math.abs( left ), Math.abs( right ) ) > Math.max( Math.abs( top ), Math.abs( bottom ) ) ) {
 					feedback.important = "horizontal";
 				} else {
 					feedback.important = "vertical";
@@ -237,6 +240,7 @@ $.fn.position = function( options ) {
 				using.call( this, props, feedback );
 			};
 		}
+
 		elem.offset( $.extend( position, { using: options.using } ) );
 	});
 };
