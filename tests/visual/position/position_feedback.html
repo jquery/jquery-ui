@@ -13,6 +13,15 @@
 	<script type="text/javascript" src="http://jqueryui.com/themeroller/themeswitchertool/"></script>
 	<script type="text/javascript">
 	$(function() {
+		function using( position, feedback ) {
+			$(this).offset( position );
+			$(this).text(feedback.horizontal + " " + feedback.vertical + " " + feedback.important)
+			$(this)
+				.removeClass("left right top bottom center middle vertical horizontal")
+				.addClass(feedback.horizontal)
+				.addClass(feedback.vertical)
+				.addClass(feedback.important);
+		}
 		var target = $("#target").position({
 			my: "center",
 			at: "center",
@@ -37,18 +46,29 @@
 				my: "center",
 				at: direction,
 				of: target,
-				using: function( position, feedback ) {
-					$(this).offset( position );
-					$(this).text(feedback.horizontal + " " + feedback.vertical + " " + feedback.important)
-					$(this)
-						.removeClass("left right top bottom")
-						.addClass(feedback.horizontal)
-						.addClass(feedback.vertical)
-						.addClass(feedback.important);
-				}
+				using: using
 			})
 		});
-		element.remove();
+
+		var targetOffset = target.offset();
+		var oppositeElement = element.clone().width(50).appendTo('body');
+		element.width(150);
+		$(document).on( "mousemove", function(event) {
+			element.position({
+				my: "left top",
+				at: "left top",
+				of: target,
+				offset: (event.pageX - targetOffset.left) + " " + (event.pageY - targetOffset.top),
+				using: using
+			});
+			oppositeElement.position({
+				my: "left top",
+				at: "left top",
+				of: target,
+				offset: (-1 * (event.pageX - targetOffset.left)) + " " + (-1 * (event.pageY - targetOffset.top)),
+				using: using
+			});
+		} )
 	});
 	</script>
 	<style>
