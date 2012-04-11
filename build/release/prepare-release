@@ -45,7 +45,7 @@ echo "------------------------"
 echo
 
 # NOTE: this will be different for minor and major releases
-version_new=`cat version.txt`
+version_new=`node -e "console.log(require(\"${repo_dir}/package\").version)"`
 version_new=${version_new:0:$((${#version_new} - 3))}
 major_minor=${version_new%.*}
 point=${version_new##*.}
@@ -154,21 +154,23 @@ echo "| UPDATING VERSION |"
 echo "--------------------"
 echo
 
-echo "Updating version.txt to $version_new..."
-echo $version_new > version.txt
+echo "Updating package.json to $version_new..."
+sed "s/\(version\": \"\)\([^\"]*\)/\1${version_new}/" < package.json > _package.json
+mv _package.json package.json
 
 git commit -a -m "Tagging the $version_new release."
 version_new_time=`git log -1 --pretty=format:"%ad"`
-echo "Committed version.txt at $version_new_time..."
+echo "Committed package.json at $version_new_time..."
 
 echo "Tagging $version_new..."
 git tag $version_new
 
-echo "Updating version.txt to $version_next..."
-echo $version_next > version.txt
+echo "Updating package.json to $version_next..."
+sed "s/\(version\": \"\)\([^\"]*\)/\1${version_next}/" < package.json > _package.json
+mv _package.json package.json
 
 git commit -a -m "Updating the $git_branch version to $version_next"
-echo "Committed version.txt..."
+echo "Committed package.json..."
 
 echo
 echo "Version update complete."
@@ -239,16 +241,14 @@ echo
 # check out the tagged version
 echo "Checking out $version_new..."
 git checkout $version_new
-cd build
 
-# Update the link to the docs (never contains the patch version)
-echo "Updating URL for API docs..."
-sed "s/UI\/API\/\${release\.version}/UI\/API\/$major_minor/" build.xml >build.xml.tmp
-mv build.xml.tmp build.xml
+# install dependencies
+echo "Installing dependencies..."
+npm install
 
 # Run the build
 echo "Running build..."
-ant
+grunt release
 
 echo
 echo "Build complete."
@@ -300,7 +300,7 @@ svn co --depth immediates https://jquery-ui.googlecode.com/svn/tags
 cd tags
 
 echo "Unzipping build into tags/$version_new..."
-unzip $repo_dir/build/dist/jquery-ui-$version_new.zip
+unzip $repo_dir/dist/jquery-ui-$version_new.zip
 mv jquery-ui-$version_new $version_new
 
 echo "Adding files to SVN..."
@@ -328,7 +328,7 @@ echo
 
 #
 # Generate themes
-# 
+#
 
 
 
