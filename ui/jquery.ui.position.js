@@ -232,6 +232,12 @@ $.fn.position = function( options ) {
 						horizontal: right < 0 ? "left" : left > 0 ? "right" : "center",
 						vertical: bottom < 0 ? "top" : top > 0 ? "bottom" : "middle"
 					};
+				if ( Math.abs( left + right ) < targetWidth ) {
+					feedback.horizontal = "center";
+				}
+				if ( Math.abs( top + bottom ) < targetHeight ) {
+					feedback.vertical = "middle";
+				}
 				if ( Math.max( Math.abs( left ), Math.abs( right ) ) > Math.max( Math.abs( top ), Math.abs( bottom ) ) ) {
 					feedback.important = "horizontal";
 				} else {
