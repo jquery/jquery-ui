@@ -795,11 +795,11 @@ test('parseDate', function() {
 		'Parse date \'day\' d \'of\' MM (\'\'DD\'\'), yy');
 	var currentYear = new Date().getFullYear();
 	equalsDate($.datepicker.parseDate('y-m-d', (currentYear - 2000) + '-02-03'),
-			new Date(currentYear, 2 - 1, 3), 'Parse date y-m-d - default cutuff');
+			new Date(currentYear, 2 - 1, 3), 'Parse date y-m-d - default cutoff');
 	equalsDate($.datepicker.parseDate('y-m-d', (currentYear - 2000 + 10) + '-02-03'),
-			new Date(currentYear+10, 2 - 1, 3), 'Parse date y-m-d - default cutuff');
+			new Date(currentYear+10, 2 - 1, 3), 'Parse date y-m-d - default cutoff');
 	equalsDate($.datepicker.parseDate('y-m-d', (currentYear - 2000 + 11) + '-02-03'),
-			new Date(currentYear-89, 2 - 1, 3), 'Parse date y-m-d - default cutuff');
+			new Date(currentYear-89, 2 - 1, 3), 'Parse date y-m-d - default cutoff');
 	equalsDate($.datepicker.parseDate('y-m-d', '80-02-03', {shortYearCutoff: 80}),
 		new Date(2080, 2 - 1, 3), 'Parse date y-m-d - cutoff 80');
 	equalsDate($.datepicker.parseDate('y-m-d', '81-02-03', {shortYearCutoff: 80}),
