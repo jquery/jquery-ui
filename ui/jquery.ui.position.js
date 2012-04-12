@@ -70,8 +70,17 @@ $.fn.position = function( options ) {
 	options = $.extend( {}, options );
 
 	var target = $( options.of ),
-		within  = $( options.within || window ),
-		scrollInfo = $.position.getScrollInfo( within ),
+		withinElement  = $( options.within || window ),
+		isWindow = $.isWindow( withinElement[0] ),
+		withinOffset = withinElement.offset(),
+		within = {
+			element: withinElement,
+			left: isWindow ? withinElement.scrollLeft() : withinOffset.left,
+			top: isWindow ? withinElement.scrollTop() : withinOffset.top,
+			width: isWindow ? withinElement.width() : withinElement.outerWidth(),
+			height: isWindow ? withinElement.height() : withinElement.outerHeight()
+		},
+		scrollInfo = $.position.getScrollInfo( withinElement ),
 		targetElem = target[0],
 		collision = ( options.collision || "flip" ).split( " " ),
 		offsets = {},
@@ -253,11 +262,8 @@ $.fn.position = function( options ) {
 $.ui.position = {
 	fit: {
 		left: function( position, data ) {
-			var within = data.within,
-				win = $( window ),
-				isWindow = $.isWindow( data.within[0] ),
-				withinOffset = isWindow ? win.scrollLeft() : within.offset().left,
-				outerWidth = isWindow ? win.width() : within.outerWidth(),
+			var withinOffset = data.within.left,
+				outerWidth = data.within.width,
 				collisionPosLeft = position.left - data.collisionPosition.marginLeft,
 				overLeft = withinOffset - collisionPosLeft,
 				overRight = collisionPosLeft + data.collisionWidth - outerWidth - withinOffset,
@@ -293,11 +299,8 @@ $.ui.position = {
 			}
 		},
 		top: function( position, data ) {
-			var within = data.within,
-				win = $( window ),
-				isWindow = $.isWindow( data.within[0] ),
-				withinOffset = isWindow ? win.scrollTop() : within.offset().top,
-				outerHeight = isWindow ? win.height() : within.outerHeight(),
+			var withinOffset = data.within.top,
+				outerHeight = data.within.height,
 				collisionPosTop = position.top - data.collisionPosition.marginTop,
 				overTop = withinOffset - collisionPosTop,
 				overBottom = collisionPosTop + data.collisionHeight - outerHeight - withinOffset,
@@ -339,11 +342,11 @@ $.ui.position = {
 				return;
 			}
 
-			var within = data.within,
-				win = $( window ),
-				isWindow = $.isWindow( data.within[0] ),
+			// TODO refactor the offset/scrollLeft calls
+			var within = data.within.element,
+				isWindow = $.isWindow( within[0] ),
 				withinOffset = ( isWindow ? 0 : within.offset().left ) + within.scrollLeft(),
-				outerWidth = isWindow ? within.width() : within.outerWidth(),
+				outerWidth = data.within.width,
 				offsetLeft = isWindow ? 0 : within.offset().left,
 				collisionPosLeft = position.left - data.collisionPosition.marginLeft,
 				overLeft = collisionPosLeft - offsetLeft,
@@ -379,11 +382,11 @@ $.ui.position = {
 				return;
 			}
 
-			var within = data.within,
-				win = $( window ),
-				isWindow = $.isWindow( data.within[0] ),
+			// TODO refactor the offset/scrollLeft calls
+			var within = data.within.element,
+				isWindow = $.isWindow( within[0] ),
 				withinOffset = ( isWindow ? 0 : within.offset().top ) + within.scrollTop(),
-				outerHeight = isWindow ? within.height() : within.outerHeight(),
+				outerHeight = data.within.height,
 				offsetTop = isWindow ? 0 : within.offset().top,
 				collisionPosTop = position.top - data.collisionPosition.marginTop,
 				overTop = collisionPosTop - offsetTop,
