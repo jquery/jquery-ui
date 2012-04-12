@@ -50,6 +50,12 @@ $.position = {
 			height: within.height() < within[0].scrollHeight ? scrollbarHeight : 0,
 			width: within.width() < within[0].scrollWidth ? scrollbarWidth : 0
 		};
+	},
+	getOffsets: function( offsets, width, height ) {
+		return [
+			parseInt( offsets[ 0 ], 10 ) * ( rpercent.test( offsets[ 0 ] ) ? width / 100 : 1 ),
+			parseInt( offsets[ 1 ], 10 ) * ( rpercent.test( offsets[ 1 ] ) ? height / 100 : 1 )
+		];
 	}
 };
 
@@ -142,12 +148,7 @@ $.fn.position = function( options ) {
 		basePosition.top += targetHeight / 2;
 	}
 
-	atOffset = [
-		parseInt( offsets.at[ 0 ], 10 ) *
-			( rpercent.test( offsets.at[ 0 ] ) ? targetWidth / 100 : 1 ),
-		parseInt( offsets.at[ 1 ], 10 ) *
-			( rpercent.test( offsets.at[ 1 ] ) ? targetHeight / 100 : 1 )
-	];
+	atOffset = $.position.getOffsets( offsets.at, targetWidth, targetHeight );
 	basePosition.left += atOffset[ 0 ];
 	basePosition.top += atOffset[ 1 ];
 
@@ -163,12 +164,7 @@ $.fn.position = function( options ) {
 			collisionHeight = elemHeight + marginTop +
 				( parseInt( $.css( this, "marginBottom" ), 10 ) || 0 ) + scrollInfo.height,
 			position = $.extend( {}, basePosition ),
-			myOffset = [
-				parseInt( offsets.my[ 0 ], 10 ) *
-					( rpercent.test( offsets.my[ 0 ] ) ? elem.outerWidth() / 100 : 1 ),
-				parseInt( offsets.my[ 1 ], 10 ) *
-					( rpercent.test( offsets.my[ 1 ] ) ? elem.outerHeight() / 100 : 1 )
-			],
+			myOffset = $.position.getOffsets( offsets.my, elem.outerWidth(), elem.outerHeight() ),
 			collisionPosition,
 			using;
 
