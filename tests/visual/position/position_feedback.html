@@ -55,38 +55,24 @@
 		var rightElement = element.clone().height(150).width(150).appendTo('body');
 		element.width(150);
 		$(document).on( "mousemove", function(event) {
-			// TODO explore allowing multiple option sets as argument to position
-			// .position(base, custom)
-			// should be pretty useful for plugins, which always have base options and user overrides
-			// first arg is required, if it looks good, look for argmuments.length > 1
-			element.position({
+			var base = {
 				my: "left top",
 				at: "left top",
 				of: target,
-				offset: (event.pageX - targetOffset.left) + " " + (event.pageY - targetOffset.top),
 				using: using
-			});
-			oppositeElement.position({
-				my: "left top",
-				at: "left top",
-				of: target,
-				offset: (-1 * (event.pageX - targetOffset.left)) + " " + (-1 * (event.pageY - targetOffset.top)),
-				using: using
-			});
-			leftElement.position({
-				my: "left top",
-				at: "left top",
-				of: target,
-				offset: (-0.9 * (event.pageX - targetOffset.left)) + " " + (0.9 * (event.pageY - targetOffset.top)),
-				using: using
-			});
-			rightElement.position({
-				my: "left top",
-				at: "left top",
-				of: target,
-				offset: (0.9 * (event.pageX - targetOffset.left)) + " " + (-0.9 * (event.pageY - targetOffset.top)),
-				using: using
-			});
+			}
+			element.position( $.extend({
+				offset: (event.pageX - targetOffset.left) + " " + (event.pageY - targetOffset.top)
+			}, base));
+			oppositeElement.position( $.extend({
+				offset: (-1 * (event.pageX - targetOffset.left)) + " " + (-1 * (event.pageY - targetOffset.top))
+			}, base));
+			leftElement.position( $.extend({
+				offset: (-0.9 * (event.pageX - targetOffset.left)) + " " + (0.9 * (event.pageY - targetOffset.top))
+			}, base));
+			rightElement.position( $.extend({
+				offset: (0.9 * (event.pageX - targetOffset.left)) + " " + (-0.9 * (event.pageY - targetOffset.top))
+			}, base));
 		});
 	});
 	</script>
