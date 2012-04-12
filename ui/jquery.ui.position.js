@@ -56,6 +56,9 @@ $.position = {
 			parseInt( offsets[ 0 ], 10 ) * ( rpercent.test( offsets[ 0 ] ) ? width / 100 : 1 ),
 			parseInt( offsets[ 1 ], 10 ) * ( rpercent.test( offsets[ 1 ] ) ? height / 100 : 1 )
 		];
+	},
+	parseCss: function( element, property ) {
+		return parseInt( $.css( element, property ), 10 ) || 0;
 	}
 };
 
@@ -157,12 +160,10 @@ $.fn.position = function( options ) {
 		var elem = $( this ),
 			elemWidth = elem.outerWidth(),
 			elemHeight = elem.outerHeight(),
-			marginLeft = parseInt( $.css( this, "marginLeft" ), 10 ) || 0,
-			marginTop = parseInt( $.css( this, "marginTop" ), 10 ) || 0,
-			collisionWidth = elemWidth + marginLeft +
-				( parseInt( $.css( this, "marginRight" ), 10 ) || 0 ) + scrollInfo.width,
-			collisionHeight = elemHeight + marginTop +
-				( parseInt( $.css( this, "marginBottom" ), 10 ) || 0 ) + scrollInfo.height,
+			marginLeft = $.position.parseCss( this, "marginLeft" ),
+			marginTop = $.position.parseCss( this, "marginTop" ),
+			collisionWidth = elemWidth + marginLeft + $.position.parseCss( this, "marginRight" ) + scrollInfo.width,
+			collisionHeight = elemHeight + marginTop + $.position.parseCss( this, "marginBottom" ) + scrollInfo.height,
 			position = $.extend( {}, basePosition ),
 			myOffset = $.position.getOffsets( offsets.my, elem.outerWidth(), elem.outerHeight() ),
 			collisionPosition,
