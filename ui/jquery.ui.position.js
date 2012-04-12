@@ -227,7 +227,8 @@ $.fn.position = function( options ) {
 					bottom = (targetOffset.top + targetHeight) - (props.top + elemHeight),
 					feedback = {
 						horizontal: right < 0 ? "left" : left > 0 ? "right" : "center",
-						vertical: bottom < 0 ? "top" : top > 0 ? "bottom" : "middle"
+						vertical: bottom < 0 ? "top" : top > 0 ? "bottom" : "middle",
+						target: target
 					},
 					max = Math.max,
 					abs = Math.abs;
