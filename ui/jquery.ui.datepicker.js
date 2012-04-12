@@ -1170,6 +1170,9 @@ $.extend(Datepicker.prototype, {
 	                     monthNames       string[12] - names of the months (optional)
 	   @return  string - the date in the above format */
 	formatDate: function (format, date, settings) {
+		if (!format) {
+			format = this._defaults.dateFormat;
+		}		
 		if (!date)
 			return '';
 		var dayNamesShort = (settings ? settings.dayNamesShort : null) || this._defaults.dayNamesShort;
