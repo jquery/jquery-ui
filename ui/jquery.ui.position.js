@@ -228,14 +228,16 @@ $.fn.position = function( options ) {
 					feedback = {
 						horizontal: right < 0 ? "left" : left > 0 ? "right" : "center",
 						vertical: bottom < 0 ? "top" : top > 0 ? "bottom" : "middle"
-					};
-				if ( targetWidth < elemWidth && Math.abs( left + right ) < targetWidth ) {
+					},
+					max = Math.max,
+					abs = Math.abs;
+				if ( targetWidth < elemWidth && abs( left + right ) < targetWidth ) {
 					feedback.horizontal = "center";
 				}
-				if ( targetHeight < elemHeight && Math.abs( top + bottom ) < targetHeight ) {
+				if ( targetHeight < elemHeight && abs( top + bottom ) < targetHeight ) {
 					feedback.vertical = "middle";
 				}
-				if ( Math.max( Math.abs( left ), Math.abs( right ) ) > Math.max( Math.abs( top ), Math.abs( bottom ) ) ) {
+				if ( max( abs( left ), abs( right ) ) > max( abs( top ), abs( bottom ) ) ) {
 					feedback.important = "horizontal";
 				} else {
 					feedback.important = "vertical";
