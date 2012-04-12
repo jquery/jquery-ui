@@ -69,6 +69,7 @@ $.fn.position = function( options ) {
 
 	var target = $( options.of ),
 		within  = $( options.within || window ),
+		scrollInfo = $.position.getScrollInfo( within ),
 		targetElem = target[0],
 		collision = ( options.collision || "flip" ).split( " " ),
 		offsets = {},
@@ -158,7 +159,6 @@ $.fn.position = function( options ) {
 			elemHeight = elem.outerHeight(),
 			marginLeft = parseInt( $.css( this, "marginLeft" ), 10 ) || 0,
 			marginTop = parseInt( $.css( this, "marginTop" ), 10 ) || 0,
-			scrollInfo = $.position.getScrollInfo( within ),
 			collisionWidth = elemWidth + marginLeft +
 				( parseInt( $.css( this, "marginRight" ), 10 ) || 0 ) + scrollInfo.width,
 			collisionHeight = elemHeight + marginTop +
