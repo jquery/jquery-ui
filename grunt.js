@@ -70,6 +70,8 @@ cssFiles.forEach(function( file ) {
 
 // csslint and cssmin tasks
 grunt.loadNpmTasks( "grunt-css" );
+// file size comparison tasks
+grunt.loadNpmTasks( "grunt-compare-size" );
 
 grunt.registerHelper( "strip_all_banners", function( filepath ) {
 	return grunt.file.read( filepath ).replace( /^\s*\/\*[\s\S]*?\*\/\s*/g, "" );
@@ -535,77 +537,6 @@ grunt.registerTask( "copy_themes", function() {
 
 grunt.registerTask( "clean", function() {
 	require( "rimraf" ).sync( "dist" );
-});
-
-// TODO merge with code in jQuery Core, share as grunt plugin/npm
-// this here actually uses the provided filenames in the output
-// the helpers should just be regular functions, no need to share those with the world
-grunt.registerMultiTask( "compare_size", "Compare size of this branch to master", function() {
-	var files = grunt.file.expandFiles( this.file.src ),
-		done = this.async(),
-		sizecache = __dirname + "/dist/.sizecache.json",
-		sources = {
-			min: grunt.file.read( files[1] ),
-			max: grunt.file.read( files[0] )
-		},
-		oldsizes = {},
-		sizes = {};
-
-	try {
-		oldsizes = JSON.parse( grunt.file.read( sizecache ) );
-	} catch( e ) {
-		oldsizes = {};
-	}
-
-	// Obtain the current branch and continue...
-	grunt.helper( "git_current_branch", function( err, branch ) {
-		var key, diff;
-
-		// Derived and adapted from Corey Frang's original `sizer`
-		grunt.log.writeln( "sizes - compared to master" );
-
-		sizes[ files[0] ] = sources.max.length;
-		sizes[ files[1] ] = sources.min.length;
-		sizes[ files[1] + ".gz" ] = grunt.helper( "gzip", sources.min ).length;
-
-		for ( key in sizes ) {
-			diff = oldsizes[ key ] && ( sizes[ key ] - oldsizes[ key ] );
-			if ( diff > 0 ) {
-				diff = "+" + diff;
-			}
-			console.log( "%s %s %s",
-				grunt.helper("lpad",  sizes[ key ], 8 ),
-				grunt.helper("lpad",  diff ? "(" + diff + ")" : "(-)", 8 ),
-				key
-			);
-		}
-
-		if ( branch === "master" ) {
-			// If master, write to file - this makes it easier to compare
-			// the size of your current code state to the master branch,
-			// without returning to the master to reset the cache
-			grunt.file.write( sizecache, JSON.stringify(sizes) );
-		}
-		done();
-	});
-});
-grunt.registerHelper( "git_current_branch", function( done ) {
-	grunt.utils.spawn({
-		cmd: "git",
-		args: [ "branch", "--no-color" ]
-	}, function( err, result ) {
-		var branch;
-
-		result.split( "\n" ).forEach(function( branch ) {
-			var matches = /^\* (.*)/.exec( branch );
-			if ( matches !== null && matches.length && matches[ 1 ] ) {
-				done( null, matches[ 1 ] );
-			}
-		});
-	});
-});
-grunt.registerHelper( "lpad", function( str, len, chr ) {
-	return ( Array( len + 1 ).join( chr || " " ) + str ).substr( -len );
 });
 
 grunt.registerTask( "default", "lint csslint qunit build compare_size" );
