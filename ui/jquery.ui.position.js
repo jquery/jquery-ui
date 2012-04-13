@@ -16,10 +16,14 @@ var rhorizontal = /left|center|right/,
 	roffset = /[\+\-]\d+%?/,
 	rposition = /^\w+/,
 	rpercent = /%$/,
-	_position = $.fn.position;
+	_position = $.fn.position,
+	cachedScrollbarWidth;
 
 $.position = {
 	scrollbarWidth: function() {
+		if ( cachedScrollbarWidth !== undefined ) {
+			return cachedScrollbarWidth;
+		}
 		var w1, w2,
 			div = $( "<div style='display:block;width:50px;height:50px;overflow:hidden;'><div style='height:100px;width:auto;'></div></div>" ),
 			innerDiv = div.children()[0];
@@ -36,7 +40,7 @@ $.position = {
 
 		div.remove();
 
-		return w1 - w2;
+		return (cachedScrollbarWidth = w1 - w2);
 	},
 	getScrollInfo: function( within ) {
 		var overflowX = within.isWindow ? "" : within.element.css( "overflow-x" ),
