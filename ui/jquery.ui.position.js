@@ -241,9 +241,22 @@ $.fn.position = function( options ) {
 					top = targetOffset.top - props.top,
 					bottom = (targetOffset.top + targetHeight) - (props.top + elemHeight),
 					feedback = {
+						target: {
+							element: target,
+							left: targetOffset.left,
+							top: targetOffset.top,
+							width: targetWidth,
+							height: targetHeight
+						},
+						element: {
+							element: elem,
+							left: props.left,
+							top: props.top,
+							width: elemWidth,
+							height: elemHeight
+						},
 						horizontal: right < 0 ? "left" : left > 0 ? "right" : "center",
-						vertical: bottom < 0 ? "top" : top > 0 ? "bottom" : "middle",
-						target: target
+						vertical: bottom < 0 ? "top" : top > 0 ? "bottom" : "middle"
 					},
 					max = Math.max,
 					abs = Math.abs;

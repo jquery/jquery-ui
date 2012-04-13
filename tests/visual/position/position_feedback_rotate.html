@@ -13,13 +13,18 @@
 	<script type="text/javascript">
 	$(function() {
 		function using( position, feedback ) {
+			var angleRad = Math.atan2( feedback.target.top + feedback.target.height / 2 - feedback.element.top - feedback.element.height / 2, feedback.target.left + feedback.target.width / 2 - feedback.element.left - feedback.element.width / 2 ) * 180 / Math.PI;
+			var angle = (Math.round( angleRad * 100) / 100 );
 			$(this)
 				.offset( position )
-				.text( feedback.horizontal + " " + feedback.vertical + " " + feedback.important )
-				.removeClass( "left right top bottom center middle vertical horizontal" )
-				.addClass( feedback.horizontal )
-				.addClass( feedback.vertical )
-				.addClass( feedback.important );
+				.text( feedback.horizontal + " " + feedback.vertical + " " + feedback.important + " " + angle + "°" )
+				.css({
+					"-webkit-transform": "rotate(" + angle + "deg)",
+					"-moz-transform": "rotate(" + angle + "deg)",
+					"-ms-transform": "rotate(" + angle + "deg)",
+					"-o-transform": "rotate(" + angle + "deg)",
+					"transform": "rotate(" + angle + "deg)"
+				});
 		}
 		var target = $("#target").position({
 			my: "center",
@@ -87,51 +92,6 @@
 		}
 		#target {
 			height: 75px;
-		}
-		.element:before {
-			font-size: 12pt;
-			content: "↑";
-			position: absolute;
-			top: -19px;
-			left: 5px;
-		}
-		.right:before {
-			left: auto;
-			right: 5px;
-		}
-		.bottom:before {
-			content: "↓";
-			top: auto;
-			bottom: -19px;
-		}
-		.center:before {
-			left: 50%;
-			right: auto;
-		}
-		.middle:before {
-			top: 50%;
-			bottom: auto;
-		}
-		.horizontal:before {
-			height: 10px;
-			top: 50%;
-			margin-top: -8px;
-			bottom: auto;
-			left: -18px;
-			right: auto;
-			content: "←";
-		}
-		.right.horizontal:before {
-			left: auto;
-			right: -18px;
-			content: "→";
-		}
-		.bottom.horizontal:before {
-			top: auto;
-			bottom: 5px;
-		}
-		.top.horizontal:before {
-			top: 5px;
 		}
 	</style>
 </head>
