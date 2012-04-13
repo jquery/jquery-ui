@@ -38,16 +38,28 @@ $.position = {
 
 		return w1 - w2;
 	},
-	getScrollInfo: function(within) {
-		var notWindow = within[0] !== window,
-			overflowX = notWindow ? within.css( "overflow-x" ) : "",
-			overflowY = notWindow ? within.css( "overflow-y" ) : "",
+	getScrollInfo: function( within ) {
+		var overflowX = within.isWindow ? "" : within.element.css( "overflow-x" ),
+			overflowY = within.isWindow ? "" : within.element.css( "overflow-y" ),
 			scrollbarWidth = overflowX === "auto" || overflowX === "scroll" ? $.position.scrollbarWidth() : 0,
 			scrollbarHeight = overflowY === "auto" || overflowY === "scroll" ? $.position.scrollbarWidth() : 0;
 
 		return {
-			height: within.height() < within[0].scrollHeight ? scrollbarHeight : 0,
-			width: within.width() < within[0].scrollWidth ? scrollbarWidth : 0
+			height: within.height < within.element[0].scrollHeight ? scrollbarHeight : 0,
+			width: within.width < within.element[0].scrollWidth ? scrollbarWidth : 0
+		};
+	},
+	getWithinInfo: function( element ) {
+		var withinElement = $( element || window ),
+			isWindow = $.isWindow( withinElement[0] );
+		return {
+			element: withinElement,
+			isWindow: isWindow,
+			offset: withinElement.offset(),
+			scrollLeft: withinElement.scrollLeft(),
+			scrollTop: withinElement.scrollTop(),
+			width: isWindow ? withinElement.width() : withinElement.outerWidth(),
+			height: isWindow ? withinElement.height() : withinElement.outerHeight()
 		};
 	},
 	getOffsets: function( offsets, width, height ) {
@@ -70,18 +82,8 @@ $.fn.position = function( options ) {
 	options = $.extend( {}, options );
 
 	var target = $( options.of ),
-		withinElement  = $( options.within || window ),
-		isWindow = $.isWindow( withinElement[0] ),
-		within = {
-			element: withinElement,
-			isWindow: isWindow,
-			offset: withinElement.offset(),
-			scrollLeft: withinElement.scrollLeft(),
-			scrollTop: withinElement.scrollTop(),
-			width: isWindow ? withinElement.width() : withinElement.outerWidth(),
-			height: isWindow ? withinElement.height() : withinElement.outerHeight()
-		},
-		scrollInfo = $.position.getScrollInfo( withinElement ),
+		within = $.position.getWithinInfo( options.within ),
+		scrollInfo = $.position.getScrollInfo( within ),
 		targetElem = target[0],
 		collision = ( options.collision || "flip" ).split( " " ),
 		offsets = {},

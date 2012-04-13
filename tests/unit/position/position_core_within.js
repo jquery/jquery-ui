@@ -277,7 +277,7 @@ test( "collision: fit, no offset", function() {
 
 	collisionTest({
 		collision: "fit"
-	}, { top: addTop + of.position().top + of.height() - $.position.getScrollInfo( within ).height, left: addLeft + of.position().left + of.width() - $.position.getScrollInfo( within ).width }, "right bottom" );
+	}, { top: addTop + of.position().top + of.height() - $.position.getScrollInfo( $.position.getWithinInfo( within ) ).height, left: addLeft + of.position().left + of.width() - $.position.getScrollInfo( $.position.getWithinInfo( within ) ).width }, "right bottom" );
 
 	collisionTest2({
 		collision: "fit"
@@ -292,7 +292,7 @@ test( "collision: fit, with offset", function() {
 	collisionTest({
 		collision: "fit",
 		at: "right+2 bottom+3"
-	}, { top: addTop + of.position().top + of.height() - $.position.getScrollInfo( within ).height, left: addLeft + of.position().left + of.width() - $.position.getScrollInfo( within ).width }, "right bottom");
+	}, { top: addTop + of.position().top + of.height() - $.position.getScrollInfo( $.position.getWithinInfo( within ) ).height, left: addLeft + of.position().left + of.width() - $.position.getScrollInfo( $.position.getWithinInfo( within ) ).width }, "right bottom");
 
 	collisionTest2({
 		collision: "fit",
@@ -397,7 +397,7 @@ test( "collision: fit, with margin", function() {
 
 	collisionTest({
 		collision: "fit"
-	}, { top: addTop + of.position().top + of.height() - 10 - $.position.getScrollInfo( within ).height, left: addLeft + of.position().left + of.width() - 10 - $.position.getScrollInfo( within ).width }, "right bottom" );
+	}, { top: addTop + of.position().top + of.height() - 10 - $.position.getScrollInfo( $.position.getWithinInfo( within ) ).height, left: addLeft + of.position().left + of.width() - 10 - $.position.getScrollInfo( $.position.getWithinInfo( within ) ).width }, "right bottom" );
 
 	collisionTest2({
 		collision: "fit"
@@ -410,7 +410,7 @@ test( "collision: fit, with margin", function() {
 
 	collisionTest({
 		collision: "fit"
-	}, { top: addTop + of.position().top + of.height() - 10 - $.position.getScrollInfo( within ).height, left: addLeft + of.position().left + of.width() - 10 - $.position.getScrollInfo( within ).width }, "right bottom" );
+	}, { top: addTop + of.position().top + of.height() - 10 - $.position.getScrollInfo( $.position.getWithinInfo( within ) ).height, left: addLeft + of.position().left + of.width() - 10 - $.position.getScrollInfo( $.position.getWithinInfo( within ) ).width }, "right bottom" );
 
 	collisionTest2({
 		collision: "fit"
@@ -423,7 +423,7 @@ test( "collision: fit, with margin", function() {
 
 	collisionTest({
 		collision: "fit"
-	}, { top: addTop + of.position().top + of.height() - 15 - $.position.getScrollInfo( within ).height, left: addLeft + of.position().left + of.width() - 15 - $.position.getScrollInfo( within ).width }, "right bottom" );
+	}, { top: addTop + of.position().top + of.height() - 15 - $.position.getScrollInfo( $.position.getWithinInfo( within ) ).height, left: addLeft + of.position().left + of.width() - 15 - $.position.getScrollInfo( $.position.getWithinInfo( within ) ).width }, "right bottom" );
 
 	collisionTest2({
 		collision: "fit"
