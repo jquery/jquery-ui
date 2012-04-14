@@ -13,7 +13,8 @@
  */
 (function($) {
 
-var idIncrement = 0;
+var idIncrement = 0,
+	currentEventTarget;
 
 $.widget( "ui.menu", {
 	version: "@VERSION",
@@ -66,16 +67,22 @@ $.widget( "ui.menu", {
 				event.preventDefault();
 			},
 			"click .ui-menu-item:has(a)": function( event ) {
-				event.stopImmediatePropagation();
-				// Don't select disabled menu items
-				if ( !$( event.target ).closest( ".ui-menu-item" ).is( ".ui-state-disabled" ) ) {
-					this.select( event );
-					// Redirect focus to the menu with a delay for firefox
-					this._delay(function() {
-						if ( !this.element.is(":focus") ) {
-							this.element.focus();
-						}
-					}, 20 );
+				var target = $( event.target );
+				if ( target[0] != currentEventTarget ) {
+					currentEventTarget = target[0];
+					target.one( "click", function( event ) {
+						currentEventTarget = "";
+					});
+					// Don't select disabled menu items
+					if ( !target.closest( ".ui-menu-item" ).is( ".ui-state-disabled" ) ) {
+						this.select( event );
+						// Redirect focus to the menu with a delay for firefox
+						this._delay(function() {
+							if ( !this.element.is(":focus") ) {
+								this.element.focus();
+							}
+						}, 20 );
+					}
 				}
 			},
 			"mouseover .ui-menu-item": function( event ) {
@@ -158,65 +165,49 @@ $.widget( "ui.menu", {
 		case $.ui.keyCode.PAGE_UP:
 			this.previousPage( event );
 			event.preventDefault();
-			event.stopImmediatePropagation();
 			break;
 		case $.ui.keyCode.PAGE_DOWN:
 			this.nextPage( event );
 			event.preventDefault();
-			event.stopImmediatePropagation();
 			break;
 		case $.ui.keyCode.HOME:
 			this._move( "first", "first", event );
 			event.preventDefault();
-			event.stopImmediatePropagation();
 			break;
 		case $.ui.keyCode.END:
 			this._move( "last", "last", event );
 			event.preventDefault();
-			event.stopImmediatePropagation();
 			break;
 		case $.ui.keyCode.UP:
 			this.previous( event );
 			event.preventDefault();
-			event.stopImmediatePropagation();
 			break;
 		case $.ui.keyCode.DOWN:
 			this.next( event );
 			event.preventDefault();
-			event.stopImmediatePropagation();
 			break;
 		case $.ui.keyCode.LEFT:
-			if (this.collapse( event )) {
-				event.stopImmediatePropagation();
-			}
+			this.collapse( event );
 			event.preventDefault();
 			break;
 		case $.ui.keyCode.RIGHT:
-			if (this.expand( event )) {
-				event.stopImmediatePropagation();
-			}
+			this.expand( event );
 			event.preventDefault();
 			break;
 		case $.ui.keyCode.ENTER:
 			if ( this.active.children( "a[aria-haspopup='true']" ).length ) {
-				if ( this.expand( event ) ) {
-					event.stopImmediatePropagation();
-				}
+				this.expand( event );
 			}
 			else {
 				this.select( event );
-				event.stopImmediatePropagation();
 			}
 			event.preventDefault();
 			break;
 		case $.ui.keyCode.ESCAPE:
-			if ( this.collapse( event ) ) {
-				event.stopImmediatePropagation();
-			}
+			this.collapse( event );
 			event.preventDefault();
 			break;
 		default:
-			event.stopPropagation();
 			clearTimeout( this.filterTimer );
 			var match,
 				prev = this.previousFilter || "",
@@ -303,7 +294,7 @@ $.widget( "ui.menu", {
 
 	focus: function( event, item ) {
 		var nested, borderTop, paddingTop, offset, scroll, elementHeight, itemHeight;
-		this.blur( event );
+		this.blur( event, event.type == "focus" );
 
 		if ( this._hasScroll() ) {
 			borderTop = parseFloat( $.css( this.activeMenu[0], "borderTopWidth" ) ) || 0;
@@ -342,8 +333,10 @@ $.widget( "ui.menu", {
 		this._trigger( "focus", event, { item: item } );
 	},
 
-	blur: function( event ) {
-		clearTimeout( this.timer );
+	blur: function( event, fromFocus ) {
+		if ( !fromFocus ) {
+			clearTimeout( this.timer );
+		}
 
 		if ( !this.active ) {
 			return;
