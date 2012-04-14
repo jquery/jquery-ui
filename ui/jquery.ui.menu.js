@@ -294,7 +294,7 @@ $.widget( "ui.menu", {
 
 	focus: function( event, item ) {
 		var nested, borderTop, paddingTop, offset, scroll, elementHeight, itemHeight;
-		this.blur( event, event.type == "focus" );
+		this.blur( event, event && event.type == "focus" );
 
 		if ( this._hasScroll() ) {
 			borderTop = parseFloat( $.css( this.activeMenu[0], "borderTopWidth" ) ) || 0;
