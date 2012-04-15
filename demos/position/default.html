@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
 	<meta charset="utf-8">
@@ -36,35 +36,22 @@
 	</style>
 	<script>
 	$(function() {
-		function position( using ) {
+		function position() {
 			$( ".positionable" ).position({
 				of: $( "#parent" ),
 				my: $( "#my_horizontal" ).val() + " " + $( "#my_vertical" ).val(),
 				at: $( "#at_horizontal" ).val() + " " + $( "#at_vertical" ).val(),
 				offset: $( "#offset" ).val(),
-				using: using,
-				collision: $( "#collision_horizontal" ).val() + ' ' + $( "#collision_vertical" ).val()
+				collision: $( "#collision_horizontal" ).val() + " " + $( "#collision_vertical" ).val()
 			});
 		}
 
 		$( ".positionable" ).css( "opacity", 0.5 );
 
-		$( ":input" ).bind( "click keyup change", function() { position(); });
+		$( ":input" ).bind( "click keyup change", position );
 
 		$( "#parent" ).draggable({
-			drag: function() { position(); }
-		});
-
-		$( ".positionable" ).draggable({
-			drag: function( event, ui ) {
-				// reset offset before calculating it
-				$( "#offset" ).val( "0" );
-				position(function( result ) {
-					$( "#offset" ).val( "" + ( ui.offset.left - result.left ) +
-						" " + ( ui.offset.top - result.top ) );
-					position();
-				});
-			}
+			drag: position
 		});
 
 		position();
@@ -101,7 +88,7 @@
 			<option value="left">left</option>
 			<option value="center">center</option>
 			<option value="right">right</option>
-		</select> 
+		</select>
 		<select id="my_vertical">
 			<option value="top">top</option>
 			<option value="middle">center</option>
@@ -123,7 +110,7 @@
 	</div>
 	<div style="padding-bottom: 20px;">
 		<b>offset:</b>
-		<input id="offset" type="text" size="15"/>
+		<input id="offset">
 	</div>
 	<div style="padding-bottom: 20px;">
 		<b>collision:</b>
