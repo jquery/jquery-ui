@@ -14,7 +14,7 @@
 (function($) {
 
 var idIncrement = 0,
-	currentEventTarget;
+	currentEventTarget = null;
 
 $.widget( "ui.menu", {
 	version: "@VERSION",
@@ -54,7 +54,9 @@ $.widget( "ui.menu", {
 			}, this ));
 
 		if ( this.options.disabled ) {
-			this.element.addClass( "ui-state-disabled" );
+			this.element
+				.addClass( "ui-state-disabled" )
+				.attr( "aria-disabled", "true" );
 		}
 
 		this._bind({
@@ -70,8 +72,8 @@ $.widget( "ui.menu", {
 				var target = $( event.target );
 				if ( target[0] != currentEventTarget ) {
 					currentEventTarget = target[0];
-					target.one( "click", function( event ) {
-						currentEventTarget = "";
+					target.one( "click.menu", function( event ) {
+						currentEventTarget = null;
 					});
 					// Don't select disabled menu items
 					if ( !target.closest( ".ui-menu-item" ).is( ".ui-state-disabled" ) ) {
@@ -158,6 +160,9 @@ $.widget( "ui.menu", {
 				.removeAttr( "id" )
 				.children( ".ui-icon" )
 					.remove();
+
+		// unbind currentEventTarget click event handler
+		$( currentEventTarget ).unbind( "click.menu" );
 	},
 
 	_keydown: function( event ) {
@@ -281,6 +286,9 @@ $.widget( "ui.menu", {
 
 		// initialize unlinked menu-items as dividers
 		menus.children( ":not(.ui-menu-item)" ).addClass( "ui-widget-content ui-menu-divider" );
+
+		// add aria-disabled attribut to any disabled menu item
+		menus.children( ".ui-state-disabled" ).attr( "aria-disabled", "true" );
 
 		submenus.each(function() {
 			var menu = $( this ),
