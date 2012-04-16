@@ -287,7 +287,7 @@ $.widget( "ui.menu", {
 		// initialize unlinked menu-items as dividers
 		menus.children( ":not(.ui-menu-item)" ).addClass( "ui-widget-content ui-menu-divider" );
 
-		// add aria-disabled attribut to any disabled menu item
+		// add aria-disabled attribute to any disabled menu item
 		menus.children( ".ui-state-disabled" ).attr( "aria-disabled", "true" );
 
 		submenus.each(function() {
