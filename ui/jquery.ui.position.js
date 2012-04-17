@@ -19,6 +19,16 @@ var rhorizontal = /left|center|right/,
 	_position = $.fn.position,
 	cachedScrollbarWidth;
 
+function getOffsets( offsets, width, height ) {
+	return [
+		parseInt( offsets[ 0 ], 10 ) * ( rpercent.test( offsets[ 0 ] ) ? width / 100 : 1 ),
+		parseInt( offsets[ 1 ], 10 ) * ( rpercent.test( offsets[ 1 ] ) ? height / 100 : 1 )
+	];
+}
+function parseCss( element, property ) {
+	return parseInt( $.css( element, property ), 10 ) || 0;
+}
+
 $.position = {
 	scrollbarWidth: function() {
 		if ( cachedScrollbarWidth !== undefined ) {
@@ -65,15 +75,6 @@ $.position = {
 			width: isWindow ? withinElement.width() : withinElement.outerWidth(),
 			height: isWindow ? withinElement.height() : withinElement.outerHeight()
 		};
-	},
-	getOffsets: function( offsets, width, height ) {
-		return [
-			parseInt( offsets[ 0 ], 10 ) * ( rpercent.test( offsets[ 0 ] ) ? width / 100 : 1 ),
-			parseInt( offsets[ 1 ], 10 ) * ( rpercent.test( offsets[ 1 ] ) ? height / 100 : 1 )
-		];
-	},
-	parseCss: function( element, property ) {
-		return parseInt( $.css( element, property ), 10 ) || 0;
 	}
 };
 
@@ -167,7 +168,7 @@ $.fn.position = function( options ) {
 		basePosition.top += targetHeight / 2;
 	}
 
-	atOffset = $.position.getOffsets( offsets.at, targetWidth, targetHeight );
+	atOffset = getOffsets( offsets.at, targetWidth, targetHeight );
 	basePosition.left += atOffset[ 0 ];
 	basePosition.top += atOffset[ 1 ];
 
@@ -175,12 +176,12 @@ $.fn.position = function( options ) {
 		var elem = $( this ),
 			elemWidth = elem.outerWidth(),
 			elemHeight = elem.outerHeight(),
-			marginLeft = $.position.parseCss( this, "marginLeft" ),
-			marginTop = $.position.parseCss( this, "marginTop" ),
-			collisionWidth = elemWidth + marginLeft + $.position.parseCss( this, "marginRight" ) + scrollInfo.width,
-			collisionHeight = elemHeight + marginTop + $.position.parseCss( this, "marginBottom" ) + scrollInfo.height,
+			marginLeft = parseCss( this, "marginLeft" ),
+			marginTop = parseCss( this, "marginTop" ),
+			collisionWidth = elemWidth + marginLeft + parseCss( this, "marginRight" ) + scrollInfo.width,
+			collisionHeight = elemHeight + marginTop + parseCss( this, "marginBottom" ) + scrollInfo.height,
 			position = $.extend( {}, basePosition ),
-			myOffset = $.position.getOffsets( offsets.my, elem.outerWidth(), elem.outerHeight() ),
+			myOffset = getOffsets( offsets.my, elem.outerWidth(), elem.outerHeight() ),
 			collisionPosition,
 			using;
 
