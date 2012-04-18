@@ -19,9 +19,15 @@
 				$(this).popup("close");
 			}
 		};
-
-		$(".demo td:has(.menubar)").clone().appendTo(".demo tbody tr:not(:first)");
-		$("table .menubar > ul").menu(selected).popup().prev().button();
+		
+		$(".myMenu").menu(selected).popup({ trigger: $(".myButtons").button() });
+		
+		$('#openButton').on('click', function(event){
+			$(".myMenu").popup('open');
+			event.preventDefault();
+			event.stopPropagation();
+		}).button();
+		
 	});
 	</script>
 	<style type="text/css">
@@ -34,7 +40,9 @@
 		.demo th, .demo td {
 			padding: 0.5em;
 		}
- 	</style>
+		
+		#openButton{margin-top:20px;}
+	</style>
 </head>
 <body>
 
@@ -56,22 +64,7 @@
 				<td class="ui-widget-content">3.6</td>
 				<td class="ui-widget-content">
 					<div class="menubar">
-						<a href="#">Options</a>
-						<ul>
-							<li><a href="#">Order...</a></li>
-							<li class="ui-state-disabled">Write a Review...</li>
-							<li><a href="#">Find Similar Movies...</a></li>
-							<li>
-								<a href="#">Rate</a>
-								<ul>
-									<li><a href="#">5 stars</a></li>
-									<li><a href="#">4 stars</a></li>
-									<li><a href="#">3 stars</a></li>
-									<li><a href="#">2 stars</a></li>
-									<li><a href="#">1 stars</a></li>
-								</ul>
-							</li>
-						</ul>
+						<a href="#" class="myButtons">Options</a>
 					</div>
 				</td>
 			</tr>
@@ -79,19 +72,52 @@
 				<td class="ui-widget-content">Rod Stewart: Storyteller 1984-1991</td>
 				<td class="ui-widget-content">1991</td>
 				<td class="ui-widget-content">3.1</td>
+				<td class="ui-widget-content">
+					<div class="menubar">
+						<a href="#" class="myButtons">Options</a>
+					</div>
+				</td>
 			</tr>
 			<tr>
 				<td class="ui-widget-content">Stevie Ray Vaughan and Double Trouble: Live at the El Mocambo 1983</td>
 				<td class="ui-widget-content">1991</td>
 				<td class="ui-widget-content">3.9</td>
+				<td class="ui-widget-content">
+					<div class="menubar">
+						<a href="#" class="myButtons">Options</a>
+					</div>
+				</td>
 			</tr>
 			<tr>
 				<td class="ui-widget-content">Spike and Mike's Sick &amp; Twisted Festival of Animation</td>
 				<td class="ui-widget-content">1997</td>
 				<td class="ui-widget-content">2.6</td>
+				<td class="ui-widget-content">
+					<div class="menubar">
+						<a href="#" class="myButtons">Options</a>
+					</div>
+				</td>
 			</tr>
 		</tbody>
 	</table>
+	
+	<a href="#" id="openButton">Programtically open popup()</a>
+	
+	<ul class="myMenu">
+		<li><a href="#">Order...</a></li>
+		<li class="ui-state-disabled">Write a Review...</li>
+		<li><a href="#">Find Similar Movies...</a></li>
+		<li>
+			<a href="#">Rate</a>
+			<ul>
+				<li><a href="#">5 stars</a></li>
+				<li><a href="#">4 stars</a></li>
+				<li><a href="#">3 stars</a></li>
+				<li><a href="#">2 stars</a></li>
+				<li><a href="#">1 stars</a></li>
+			</ul>
+		</li>
+	</ul>
 
 	<div id="log"></div>
 </div>
@@ -99,7 +125,7 @@
 
 <div class="demo-description">
 
-<p>Poup menu in a table. Works okay standalone, not so much in the scrolling demo view. For that to work better, position() would have to take the closest scrolled parent into account for collision detection.</p>
+<p>Poup menu in a table. Demonstrates using popup with multiple triggers. Works okay standalone, not so much in the scrolling demo view. For that to work better, position() would have to take the closest scrolled parent into account for collision detection.</p>
 
 </div><!-- End demo-description -->
 
