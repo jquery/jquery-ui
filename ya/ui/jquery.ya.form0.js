@@ -94,7 +94,7 @@
 				var targetJq=$(e.target),
 					item=self.getItem(targetJq);
 				if(item&&item.handler){
-					item.handler.call(item.element,e);
+					item.handler.call($(item.selector,element),e);
 				}
 			});
 		},
@@ -129,7 +129,7 @@
 			_.each(items,function(item){
 				if(item.vtype){
 					var validV=self.vField(item.selector);
-					if(!validV&&noError){
+					if(validV===false&&noError){
 						noError=false;
 						try{
 						    item.element.get(0).select(); //试着将焦点定位到第一个出错地
@@ -274,7 +274,7 @@
 				items=self.items;
 			return _.find(items,function(item){
 				if($(item.selector,element).is(selector)){
-				    return item;
+				    return true; 
 				}
 			});
 		}

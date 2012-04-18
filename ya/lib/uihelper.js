@@ -148,7 +148,7 @@
                         validMsgJq.removeClass('ui-state-error').hide();
                         validMsgContentWJq.empty();
                         validV=validateFn.apply(ui,[v,opts,elJq]);
-                        if(!validV&&errorMsg){ //如果未通过验证并且有错误信息
+                        if(validV===false&&errorMsg){ //如果未通过验证并且有错误信息
                             validMsgJq.addClass('ui-state-error');
                             if($.tmpl){
                                 $.tmpl( errorTpl, { "content" : errorMsg }).appendTo(validMsgContentWJq);
@@ -158,7 +158,7 @@
                             validMsgJq.show();
                         }
                         if(!validV){    //如果配置项items中有一个未通过验证，则不让通过，验证函数返回false
-                            passed=false;
+                            passed=validV;
                         }
                         //return validV;
 				    });
