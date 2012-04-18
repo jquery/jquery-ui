@@ -361,7 +361,16 @@ grunt.initConfig({
 
 grunt.registerMultiTask( "copy", "Copy files to destination folder and replace @VERSION with pkg.version", function() {
 	function replaceVersion( source ) {
-		return source.replace( "@VERSION", grunt.config( "pkg.version" ) );
+		return source.replace( /@VERSION/g, grunt.config( "pkg.version" ) );
+	}
+	function copyFile( src, dest ) {
+		if ( /(js|css)$/.test( src ) ) {
+			grunt.file.copy( src, dest, {
+				process: replaceVersion
+			});
+		} else {
+			grunt.file.copy( src, dest );
+		}
 	}
 	var files = grunt.file.expandFiles( this.file.src ),
 		target = this.file.dest + "/",
@@ -373,18 +382,12 @@ grunt.registerMultiTask( "copy", "Copy files to destination folder and replace @
 	}
 	files.forEach(function( fileName ) {
 		var targetFile = strip ? fileName.replace( strip, "" ) : fileName;
-		if ( /(js|css)$/.test( fileName ) ) {
-			grunt.file.copy( fileName, target + targetFile, {
-				process: replaceVersion
-			});
-		} else {
-			grunt.file.copy( fileName, target + targetFile );
-		}
+		copyFile( fileName, target + targetFile );
 	});
 	grunt.log.writeln( "Copied " + files.length + " files." );
 	for ( fileName in this.data.renames ) {
 		renameCount += 1;
-		grunt.file.copy( fileName, target + grunt.template.process( this.data.renames[ fileName ], grunt.config() ) );
+		copyFile( fileName, target + grunt.template.process( this.data.renames[ fileName ], grunt.config() ) );
 	}
 	if ( renameCount ) {
 		grunt.log.writeln( "Renamed " + renameCount + " files." );
