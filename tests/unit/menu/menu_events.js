@@ -466,4 +466,56 @@ asyncTest("handle keyboard navigation on menu with scroll and with submenus", fu
 	}
 });
 
+asyncTest("handle keyboard navigation and mouse click on menu with disabled items", function() {
+	expect(6);
+	var element = $('#menu6').menu({
+		select: function(event, ui) {
+			menu_log($(ui.item[0]).text());
+		},
+		focus: function( event, ui ) {
+			menu_log($(event.target).find(".ui-state-focus").parent().index());
+		}
+	});
+
+	menu_log("keydown",true);
+	element.one( "menufocus", function( event, ui ) {
+		element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
+		element.simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
+		equal( $("#log").html(), "1,keydown,", "Keydown focus but not select disabled item");
+		setTimeout( menukeyboard1, 50 );
+	});
+	element.focus();
+
+
+	function menukeyboard1() {
+		menu_log("keydown",true);
+		element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
+		element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
+		element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
+		equal( $("#log").html(), "4,3,2,keydown,", "Keydown focus disabled item with submenu");
+
+		menu_log("keydown",true);
+		element.simulate( "keydown", { keyCode: $.ui.keyCode.LEFT } );
+		equal( $("#log").html(), "keydown,", "Keydown LEFT (no effect)");
+
+		menu_log("keydown",true);
+		element.simulate( "keydown", { keyCode: $.ui.keyCode.RIGHT } );
+
+		setTimeout( function() {
+			equal( $("#log").html(), "keydown,", "Keydown RIGHT (no effect on disabled sub-menu)");
+
+			menu_log("keydown",true);
+			element.simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
+
+			setTimeout( function() {
+				equal( $("#log").html(), "keydown,", "Keydown ENTER (no effect on disabled sub-menu)");
+				menu_log("click",true);
+				menu_click( element, "1" );
+				equal( $("#log").html(), "click,", "Click disabled item (no effect)");
+				start();
+			}, 50);
+		}, 50);
+	}
+});
+
 })(jQuery);
