@@ -99,7 +99,7 @@ $.widget( "ui.menu", {
 			"mouseleave .ui-menu": "collapseAll",
 			"focus": function( event ) {
 				var menu = this.element,
-					firstItem = menu.children( ".ui-menu-item" ).not( ".ui-state-disabled" ).eq( 0 );
+					firstItem = menu.children( ".ui-menu-item" ).eq( 0 );
 				if ( this._hasScroll() && !this.active ) {
 					menu.children().each(function() {
 						var currentItem = $( this );
@@ -196,15 +196,18 @@ $.widget( "ui.menu", {
 			event.preventDefault();
 			break;
 		case $.ui.keyCode.RIGHT:
-			this.expand( event );
+			if ( !this.active.is( ".ui-state-disabled" ) ) {
+				this.expand( event );
+			}
 			event.preventDefault();
 			break;
 		case $.ui.keyCode.ENTER:
-			if ( this.active.children( "a[aria-haspopup='true']" ).length ) {
-				this.expand( event );
-			}
-			else {
-				this.select( event );
+			if ( !this.active.is( ".ui-state-disabled" ) ) {
+				if ( this.active.children( "a[aria-haspopup='true']" ).length ) {
+					this.expand( event );
+				} else {
+					this.select( event );
+				}
 			}
 			event.preventDefault();
 			break;
@@ -442,7 +445,6 @@ $.widget( "ui.menu", {
 			this.active
 				.children( ".ui-menu " )
 				.children( ".ui-menu-item" )
-				.not( ".ui-state-disabled" )
 				.first();
 
 		if ( newItem && newItem.length ) {
@@ -478,12 +480,10 @@ $.widget( "ui.menu", {
 			if ( direction === "first" || direction === "last" ) {
 				next = this.active
 					[ direction === "first" ? "prevAll" : "nextAll" ]( ".ui-menu-item" )
-					.not( ".ui-state-disabled" )
 					.eq( -1 );
 			} else {
 				next = this.active
 					[ direction + "All" ]( ".ui-menu-item" )
-					.not( ".ui-state-disabled" )
 					.eq( 0 );
 			}
 		}
@@ -492,9 +492,6 @@ $.widget( "ui.menu", {
 		}
 
 		this.focus( event, next );
-		if ( next.is( ".ui-state-disabled" ) ) {
-			this._move( direction, filter, event );
-		}
 	},
 
 	nextPage: function( event ) {
@@ -509,14 +506,14 @@ $.widget( "ui.menu", {
 			var base = this.active.offset().top,
 				height = this.element.height(),
 				result;
-			this.active.nextAll( ".ui-menu-item" ).not( ".ui-state-disabled" ).each(function() {
+			this.active.nextAll( ".ui-menu-item" ).each(function() {
 				result = $( this );
 				return $( this ).offset().top - base - height < 0;
 			});
 
 			this.focus( event, result );
 		} else {
-			this.focus( event, this.activeMenu.children( ".ui-menu-item" ).not( ".ui-state-disabled" )
+			this.focus( event, this.activeMenu.children( ".ui-menu-item" )
 				[ !this.active ? "first" : "last" ]() );
 		}
 	},
@@ -533,14 +530,14 @@ $.widget( "ui.menu", {
 			var base = this.active.offset().top,
 				height = this.element.height(),
 				result;
-			this.active.prevAll( ".ui-menu-item" ).not( ".ui-state-disabled" ).each(function() {
+			this.active.prevAll( ".ui-menu-item" ).each(function() {
 				result = $( this );
 				return $(this).offset().top - base + height > 0;
 			});
 
 			this.focus( event, result );
 		} else {
-			this.focus( event, this.activeMenu.children( ".ui-menu-item" ).not( ".ui-state-disabled" ).first() );
+			this.focus( event, this.activeMenu.children( ".ui-menu-item" ).first() );
 		}
 	},
 
