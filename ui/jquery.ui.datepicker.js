@@ -1116,11 +1116,11 @@ $.extend(Datepicker.prototype, {
 		}
 		if (year == -1) {
 			year = new Date().getFullYear();
-			var curMonth = new Date().getMonth();
 			if (doy > -1) doyCalc.call(this);
 			// If no year was given, guess the year by the closest month
-			if (curMonth - month > 6) year++;
-			else if (month - curMonth > 6) year--;
+			var thisMonth = new Date().getMonth() + 1;
+			if      (thisMonth - month > 6) year++; // Next year
+			else if (month - thisMonth > 6) year--; // Last year
 		}
 		else if (year < 100)
 			year += new Date().getFullYear() - new Date().getFullYear() % 100 +
