@@ -674,9 +674,8 @@ $.widget("ui.sortable", $.ui.mouse, {
 					// 2. The option 'forcePlaceholderSize can be enabled to force it even if a class name is specified
 					if(className && !o.forcePlaceholderSize) return;
 
-					//If the element doesn't have a actual height by itself (without styles coming from a stylesheet), it receives the inline height from the dragged item
-					if(!p.height()) { p.height(self.currentItem.innerHeight() - parseInt(self.currentItem.css('paddingTop')||0, 10) - parseInt(self.currentItem.css('paddingBottom')||0, 10)); };
-					if(!p.width()) { p.width(self.currentItem.innerWidth() - parseInt(self.currentItem.css('paddingLeft')||0, 10) - parseInt(self.currentItem.css('paddingRight')||0, 10)); };
+					p.height(self.currentItem.height());
+					p.width(self.currentItem.width());
 				}
 			};
 		}
