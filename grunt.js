@@ -271,9 +271,8 @@ grunt.initConfig({
 			// TODO remove items from this list once rewritten
 			return !( /(effects.core|mouse|datepicker|draggable|droppable|resizable|selectable|sortable)\.js$/ ).test( file );
 		}),
-		grunt: "grunt.js"
-		// TODO enabled once fixed up
-		// tests: "tests/unit/**/*.js"
+		grunt: "grunt.js",
+		tests: "tests/unit/**/*.js"
 	},
 	csslint: {
 		// nothing: []
@@ -343,7 +342,9 @@ grunt.initConfig({
 			tests: {
 				options: extend({
 					browser: true,
-					jquery: true
+					jquery: true,
+					// TODO: this is only for document.write()
+					evil: true
 				}, defaults ),
 				// TODO: don't create so many globals in tests
 				globals: {

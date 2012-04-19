@@ -12,7 +12,14 @@ test( "$.widget.extend()", function() {
 		deep2copy = { foo: { baz: true }, foo2: document },
 		deepmerged = { foo: { bar: true, baz: true }, foo2: document },
 		arr = [1, 2, 3],
-		nestedarray = { arr: arr };
+		nestedarray = { arr: arr },
+		defaults = { xnumber1: 5, xnumber2: 7, xstring1: "peter", xstring2: "pan" },
+		defaultsCopy = { xnumber1: 5, xnumber2: 7, xstring1: "peter", xstring2: "pan" },
+		options1 = { xnumber2: 1, xstring2: "x" },
+		options1Copy = { xnumber2: 1, xstring2: "x" },
+		options2 = { xstring2: "xx", xxx: "newstringx" },
+		options2Copy = { xstring2: "xx", xxx: "newstringx" },
+		merged2 = { xnumber1: 5, xnumber2: 1, xstring1: "peter", xstring2: "xx", xxx: "newstringx" };
 
 	$.widget.extend( settings, options );
 	deepEqual( settings, merged, "Check if extended: settings must be extended" );
@@ -78,14 +85,6 @@ test( "$.widget.extend()", function() {
 	obj = { foo:null };
 	$.widget.extend( obj, { foo:"notnull" } );
 	equal( obj.foo, "notnull", "Make sure a null value can be overwritten" );
-
-	var defaults = { xnumber1: 5, xnumber2: 7, xstring1: "peter", xstring2: "pan" },
-		defaultsCopy = { xnumber1: 5, xnumber2: 7, xstring1: "peter", xstring2: "pan" },
-		options1 = { xnumber2: 1, xstring2: "x" },
-		options1Copy = { xnumber2: 1, xstring2: "x" },
-		options2 = { xstring2: "xx", xxx: "newstringx" },
-		options2Copy = { xstring2: "xx", xxx: "newstringx" },
-		merged2 = { xnumber1: 5, xnumber2: 1, xstring1: "peter", xstring2: "xx", xxx: "newstringx" };
 
 	settings = $.widget.extend( {}, defaults, options1, options2 );
 	deepEqual( settings, merged2, "Check if extended: settings must be extended" );
