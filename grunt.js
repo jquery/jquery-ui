@@ -306,8 +306,7 @@ grunt.initConfig({
 			smarttabs: true,
 			// TODO: use "faux strict mode" https://github.com/jshint/jshint/issues/504
 			// strict: true,
-			// TODO: enable trailing
-			// trailing: true,
+			trailing: true,
 			undef: true
 		};
 
