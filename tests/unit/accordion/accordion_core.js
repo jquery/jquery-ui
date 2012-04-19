@@ -27,9 +27,9 @@ test( "handle click on header-descendant", function() {
 test( "accessibility", function () {
 	expect( 37 );
 	var element = $( "#list1" ).accordion({
-		active: 1
-	});
-	var headers = element.find( ".ui-accordion-header" );
+			active: 1
+		}),
+		headers = element.find( ".ui-accordion-header" );
 
 	equal( element.attr( "role" ), "tablist", "element role" );
 	headers.each(function( i ) {
@@ -85,22 +85,22 @@ asyncTest( "keybaord support", function() {
 		ok( headers.eq( 2 ).is( ".ui-state-focus" ), "RIGHT moves focus to next header" );
 		headers.eq( 2 ).simulate( "keydown", { keyCode: keyCode.DOWN } );
 		ok( headers.eq( 0 ).is( ".ui-state-focus" ), "DOWN wraps focus to first header" );
-	
+
 		headers.eq( 0 ).simulate( "keydown", { keyCode: keyCode.UP } );
 		ok( headers.eq( 2 ).is( ".ui-state-focus" ), "UP wraps focus to last header" );
 		headers.eq( 2 ).simulate( "keydown", { keyCode: keyCode.LEFT } );
 		ok( headers.eq( 1 ).is( ".ui-state-focus" ), "LEFT moves focus to previous header" );
-	
+
 		headers.eq( 1 ).simulate( "keydown", { keyCode: keyCode.HOME } );
 		ok( headers.eq( 0 ).is( ".ui-state-focus" ), "HOME moves focus to first header" );
 		headers.eq( 0 ).simulate( "keydown", { keyCode: keyCode.END } );
 		ok( headers.eq( 2 ).is( ".ui-state-focus" ), "END moves focus to last header" );
-	
+
 		headers.eq( 2 ).simulate( "keydown", { keyCode: keyCode.ENTER } );
 		equal( element.accordion( "option", "active" ) , 2, "ENTER activates panel" );
 		headers.eq( 1 ).simulate( "keydown", { keyCode: keyCode.SPACE } );
 		equal( element.accordion( "option", "active" ), 1, "SPACE activates panel" );
-	
+
 		anchor.simulate( "focus" );
 		setTimeout(function() {
 			ok( !headers.eq( 1 ).is( ".ui-state-focus" ), "header loses focus when focusing inside the panel" );

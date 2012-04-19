@@ -44,11 +44,11 @@ test( "create", function() {
 test( "beforeActivate", function() {
 	expect( 38 );
 	var element = $( "#list1" ).accordion({
-		active: false,
-		collapsible: true
-	});
-	var headers = element.find( ".ui-accordion-header" );
-	var content = element.find( ".ui-accordion-content" );
+			active: false,
+			collapsible: true
+		}),
+		headers = element.find( ".ui-accordion-header" ),
+		content = element.find( ".ui-accordion-content" );
 
 	element.one( "accordionbeforeactivate", function( event, ui ) {
 		ok( !( "originalEvent" in event ) );
@@ -109,11 +109,11 @@ test( "beforeActivate", function() {
 test( "activate", function() {
 	expect( 21 );
 	var element = $( "#list1" ).accordion({
-		active: false,
-		collapsible: true
-	});
-	var headers = element.find( ".ui-accordion-header" );
-	var content = element.find( ".ui-accordion-content" );
+			active: false,
+			collapsible: true
+		}),
+		headers = element.find( ".ui-accordion-header" ),
+		content = element.find( ".ui-accordion-content" );
 
 	element.one( "accordionactivate", function( event, ui ) {
 		equal( ui.oldHeader.size(), 0 );

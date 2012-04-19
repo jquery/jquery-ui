@@ -110,8 +110,8 @@ test( "{ autoHeight: true }, default", function() {
 
 test( "{ autoHeight: false }", function() {
 	expect( 3 );
-	var element = $( "#navigation" ).accordion({ autoHeight: false });
-	var sizes = [];
+	var element = $( "#navigation" ).accordion({ autoHeight: false }),
+		sizes = [];
 	element.find( ".ui-accordion-content" ).each(function() {
 		sizes.push( $(this).height() );
 	});
@@ -220,7 +220,7 @@ test( "{ navigation: true, navigationFilter: header }", function() {
 	var element = $( "#navigation" ).accordion({
 		navigation: true,
 		navigationFilter: function() {
-			return /\?p=1\.1\.3$/.test( this.href );
+			return (/\?p=1\.1\.3$/).test( this.href );
 		}
 	});
 	equal( element.accordion( "option", "active" ), 2 );
@@ -232,7 +232,7 @@ test( "{ navigation: true, navigationFilter: content }", function() {
 	var element = $( "#navigation" ).accordion({
 		navigation: true,
 		navigationFilter: function() {
-			return /\?p=1\.1\.3\.2$/.test( this.href );
+			return (/\?p=1\.1\.3\.2$/).test( this.href );
 		}
 	});
 	equal( element.accordion( "option", "active" ), 2 );
@@ -248,11 +248,11 @@ module( "accordion (deprecated) - changestart/change events", accordion_setupTea
 test( "changestart", function() {
 	expect( 26 );
 	var element = $( "#list1" ).accordion({
-		active: false,
-		collapsible: true
-	});
-	var headers = element.find( ".ui-accordion-header" );
-	var content = element.find( ".ui-accordion-content" );
+			active: false,
+			collapsible: true
+		}),
+		headers = element.find( ".ui-accordion-header" ),
+		content = element.find( ".ui-accordion-content" );
 
 	element.one( "accordionchangestart", function( event, ui ) {
 		equal( ui.oldHeader.size(), 0 );
@@ -296,11 +296,11 @@ test( "changestart", function() {
 test( "change", function() {
 	expect( 20 );
 	var element = $( "#list1" ).accordion({
-		active: false,
-		collapsible: true
-	});
-	var headers = element.find( ".ui-accordion-header" );
-	var content = element.find( ".ui-accordion-content" );
+			active: false,
+			collapsible: true
+		}),
+		headers = element.find( ".ui-accordion-header" ),
+		content = element.find( ".ui-accordion-content" );
 
 	element.one( "accordionchange", function( event, ui ) {
 		equal( ui.oldHeader.size(), 0 );

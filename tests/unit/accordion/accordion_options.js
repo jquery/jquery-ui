@@ -80,7 +80,7 @@ test( "{ animate: false }", function() {
 	var element = $( "#list1" ).accordion({
 			animate: false
 		}),
-		panels = element.find( ".ui-accordion-content" );
+		panels = element.find( ".ui-accordion-content" ),
 		animate = $.fn.animate;
 	$.fn.animate = function() {
 		ok( false, ".animate() called" );
@@ -98,7 +98,7 @@ asyncTest( "{ animate: Number }", function() {
 	var element = $( "#list1" ).accordion({
 			animate: 100
 		}),
-		panels = element.find( ".ui-accordion-content" );
+		panels = element.find( ".ui-accordion-content" ),
 		animate = $.fn.animate;
 	// called twice (both panels)
 	$.fn.animate = function( props, duration, easing ) {
@@ -120,10 +120,10 @@ asyncTest( "{ animate: Number }", function() {
 asyncTest( "{ animate: String }", function() {
 	expect( 7 );
 	var element = $( "#list1" ).accordion({
-		animate: "linear"
-	}),
-	panels = element.find( ".ui-accordion-content" );
-	animate = $.fn.animate;
+			animate: "linear"
+		}),
+		panels = element.find( ".ui-accordion-content" ),
+		animate = $.fn.animate;
 	// called twice (both panels)
 	$.fn.animate = function( props, duration, easing ) {
 		equal( duration, undefined, "default duration" );
@@ -144,10 +144,10 @@ asyncTest( "{ animate: String }", function() {
 asyncTest( "{ animate: {} }", function() {
 	expect( 7 );
 	var element = $( "#list1" ).accordion({
-		animate: {}
-	}),
-	panels = element.find( ".ui-accordion-content" );
-	animate = $.fn.animate;
+			animate: {}
+		}),
+		panels = element.find( ".ui-accordion-content" ),
+		animate = $.fn.animate;
 	// called twice (both panels)
 	$.fn.animate = function( props, duration, easing ) {
 		equal( duration, undefined, "default duration" );
@@ -168,10 +168,10 @@ asyncTest( "{ animate: {} }", function() {
 asyncTest( "{ animate: { duration, easing } }", function() {
 	expect( 7 );
 	var element = $( "#list1" ).accordion({
-		animate: { duration: 100, easing: "linear" }
-	}),
-	panels = element.find( ".ui-accordion-content" );
-	animate = $.fn.animate;
+			animate: { duration: 100, easing: "linear" }
+		}),
+		panels = element.find( ".ui-accordion-content" ),
+		animate = $.fn.animate;
 	// called twice (both panels)
 	$.fn.animate = function( props, duration, easing ) {
 		equal( duration, 100, "correct duration" );
@@ -192,11 +192,11 @@ asyncTest( "{ animate: { duration, easing } }", function() {
 asyncTest( "{ animate: { duration, easing } }, animate down", function() {
 	expect( 7 );
 	var element = $( "#list1" ).accordion({
-		active: 1,
-		animate: { duration: 100, easing: "linear" }
-	}),
-	panels = element.find( ".ui-accordion-content" );
-	animate = $.fn.animate;
+			active: 1,
+			animate: { duration: 100, easing: "linear" }
+		}),
+		panels = element.find( ".ui-accordion-content" ),
+		animate = $.fn.animate;
 	// called twice (both panels)
 	$.fn.animate = function( props, duration, easing ) {
 		equal( duration, 100, "correct duration" );
@@ -217,17 +217,17 @@ asyncTest( "{ animate: { duration, easing } }, animate down", function() {
 asyncTest( "{ animate: { duration, easing, down } }, animate down", function() {
 	expect( 7 );
 	var element = $( "#list1" ).accordion({
-		active: 1,
-		animate: {
-			duration: 100,
-			easing: "linear",
-			down: {
-				easing: "swing"
+			active: 1,
+			animate: {
+				duration: 100,
+				easing: "linear",
+				down: {
+					easing: "swing"
+				}
 			}
-		}
-	}),
-	panels = element.find( ".ui-accordion-content" );
-	animate = $.fn.animate;
+		}),
+		panels = element.find( ".ui-accordion-content" ),
+		animate = $.fn.animate;
 	// called twice (both panels)
 	$.fn.animate = function( props, duration, easing ) {
 		equal( duration, 100, "correct duration" );
@@ -360,10 +360,10 @@ test( "{ heightStyle: 'auto' }", function() {
 
 test( "{ heightStyle: 'content' }", function() {
 	expect( 3 );
-	var element = $( "#navigation" ).accordion({ heightStyle: "content" });
-	var sizes = element.find( ".ui-accordion-content" ).map(function() {
-		return $( this ).height();
-	}).get();
+	var element = $( "#navigation" ).accordion({ heightStyle: "content" }),
+		sizes = element.find( ".ui-accordion-content" ).map(function() {
+			return $( this ).height();
+		}).get();
 	ok( sizes[ 0 ] >= 70 && sizes[ 0 ] <= 105, "was " + sizes[ 0 ] );
 	ok( sizes[ 1 ] >= 98 && sizes[ 1 ] <= 126, "was " + sizes[ 1 ] );
 	ok( sizes[ 2 ] >= 42 && sizes[ 2 ] <= 54, "was " + sizes[ 2 ] );

@@ -123,7 +123,7 @@ asyncTest( "cancel search", function() {
 
 asyncTest( "cancel focus", function() {
 	expect( 1 );
-	var customVal = "custom value";
+	var customVal = "custom value",
 		element = $( "#autocomplete" ).autocomplete({
 			delay: 0,
 			source: data,
