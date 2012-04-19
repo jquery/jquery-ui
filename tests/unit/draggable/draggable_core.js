@@ -4,7 +4,7 @@
 
 var el, offsetBefore, offsetAfter, dragged;
 
-var drag = function(handle, dx, dy) {
+function drag(handle, dx, dy) {
 	var element = el.data("draggable").element;
 	offsetBefore = el.offset();
 	$(handle).simulate("drag", {
@@ -15,10 +15,10 @@ var drag = function(handle, dx, dy) {
 	offsetAfter = el.offset();
 }
 
-var moved = function (dx, dy, msg) {
+function moved(dx, dy, msg) {
 	msg = msg ? msg + "." : "";
-	var actual = { left: offsetAfter.left, top: offsetAfter.top };
-	var expected = { left: offsetBefore.left + dx, top: offsetBefore.top + dy };
+	var actual = { left: offsetAfter.left, top: offsetAfter.top },
+		expected = { left: offsetBefore.left + dx, top: offsetBefore.top + dy };
 	deepEqual(actual, expected, 'dragged[' + dragged.dx + ', ' + dragged.dy + '] ' + msg);
 }
 
@@ -35,15 +35,15 @@ function restoreScroll(what) {
 module("draggable");
 
 test("element types", function() {
-	var typeNames = ('p,h1,h2,h3,h4,h5,h6,blockquote,ol,ul,dl,div,form'
-		+ ',table,fieldset,address,ins,del,em,strong,q,cite,dfn,abbr'
-		+ ',acronym,code,samp,kbd,var,img,object,hr'
-		+ ',input,button,label,select,iframe').split(',');
+	var typeNames = ('p,h1,h2,h3,h4,h5,h6,blockquote,ol,ul,dl,div,form' +
+		',table,fieldset,address,ins,del,em,strong,q,cite,dfn,abbr' +
+		',acronym,code,samp,kbd,var,img,object,hr' +
+		',input,button,label,select,iframe').split(',');
 
 	$.each(typeNames, function(i) {
 		var typeName = typeNames[i];
 		el = $(document.createElement(typeName)).appendTo('body');
-		(typeName == 'table' && el.append("<tr><td>content</td></tr>"));
+		(typeName === 'table' && el.append("<tr><td>content</td></tr>"));
 		el.draggable({ cancel: '' });
 		drag(el, 50, 50);
 		moved(50, 50, "&lt;" + typeName + "&gt;");
