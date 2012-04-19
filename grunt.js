@@ -368,8 +368,6 @@ grunt.initConfig({
 					init: true,
 					isNotOpen: true,
 					isOpen: true,
-					menu_click: true,
-					menu_log: true,
 					modal: true,
 					module: true,
 					moved: true,
