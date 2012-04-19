@@ -324,12 +324,23 @@
 		hide:function(){
 		    var self=this,
                 options=self.options,
-                editJq=self.editJq;
+                editJq=self.editJq,
+                editType=self.editType,
+                editInputJq=$('.ui-ieditor-input',editJq);
+            
            if(options.themeType==1){
                $('.ui-button-cancel',editJq).click();
            }else{
                $(document).click();
            } 
+
+           switch(editType){
+                case "datepicker":
+                    editInputJq.datepicker0('close');   //关闭datepicker选择器
+                    break;
+                default:
+                    break;
+            }
 		}
 	});
 }(jQuery,this));
