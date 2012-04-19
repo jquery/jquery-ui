@@ -388,8 +388,6 @@ grunt.initConfig({
 					start: true,
 					strictEqual: true,
 					stop: true,
-					tabs_state: true,
-					tabs_disabled: true,
 					test: true,
 					TestHelpers: true,
 					widthAfter: true
