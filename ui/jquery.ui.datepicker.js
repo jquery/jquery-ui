@@ -1048,6 +1048,17 @@ $.extend(Datepicker.prototype, {
 				throw 'Unexpected literal at position ' + iValue;
 			iValue++;
 		};
+		var doyCalc = function() {
+			month = 1;
+			day = doy;
+			do {
+				var dim = this._getDaysInMonth(year, month - 1);
+				if (day <= dim)
+					break;
+				month++;
+				day -= dim;
+			} while (true);
+		};
 		var iValue = 0;
 		for (var iFormat = 0; iFormat < format.length; iFormat++) {
 			if (literal)
@@ -1103,22 +1114,18 @@ $.extend(Datepicker.prototype, {
 				throw "Extra/unparsed characters found in date: " + extra;
 			}
 		}
-		if (year == -1)
+		if (year == -1) {
 			year = new Date().getFullYear();
+			if (doy > -1) doyCalc.call(this);
+			// If no year was given, guess the year by the closest month
+			var thisMonth = new Date().getMonth() + 1;
+			if      (thisMonth - month > 6) year++; // Next year
+			else if (month - thisMonth > 6) year--; // Last year
+		}
 		else if (year < 100)
 			year += new Date().getFullYear() - new Date().getFullYear() % 100 +
 				(year <= shortYearCutoff ? 0 : -100);
-		if (doy > -1) {
-			month = 1;
-			day = doy;
-			do {
-				var dim = this._getDaysInMonth(year, month - 1);
-				if (day <= dim)
-					break;
-				month++;
-				day -= dim;
-			} while (true);
-		}
+		if (doy > -1) doyCalc.call(this);
 		var date = this._daylightSavingAdjust(new Date(year, month - 1, day));
 		if (date.getFullYear() != year || date.getMonth() + 1 != month || date.getDate() != day)
 			throw 'Invalid date'; // E.g. 31/02/00

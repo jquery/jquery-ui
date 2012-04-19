@@ -376,6 +376,7 @@ test('minMax', function() {
 	equalsDate(inp.datepicker('getDate'), date,
 		'Min/max - -1w, +1 M +10 D - ctrl+pgdn');
 	// With existing date
+	inp.datepicker('destroy');
 	inp = init('#inp');
 	inp.val('06/04/2008').datepicker('option', {minDate: minDate});
 	equalsDate(inp.datepicker('getDate'), new Date(2008, 6 - 1, 4), 'Min/max - setDate > min');
@@ -795,11 +796,11 @@ test('parseDate', function() {
 		'Parse date \'day\' d \'of\' MM (\'\'DD\'\'), yy');
 	var currentYear = new Date().getFullYear();
 	equalsDate($.datepicker.parseDate('y-m-d', (currentYear - 2000) + '-02-03'),
-			new Date(currentYear, 2 - 1, 3), 'Parse date y-m-d - default cutuff');
+			new Date(currentYear, 2 - 1, 3), 'Parse date y-m-d - default cutoff');
 	equalsDate($.datepicker.parseDate('y-m-d', (currentYear - 2000 + 10) + '-02-03'),
-			new Date(currentYear+10, 2 - 1, 3), 'Parse date y-m-d - default cutuff');
+			new Date(currentYear+10, 2 - 1, 3), 'Parse date y-m-d - default cutoff');
 	equalsDate($.datepicker.parseDate('y-m-d', (currentYear - 2000 + 11) + '-02-03'),
-			new Date(currentYear-89, 2 - 1, 3), 'Parse date y-m-d - default cutuff');
+			new Date(currentYear-89, 2 - 1, 3), 'Parse date y-m-d - default cutoff');
 	equalsDate($.datepicker.parseDate('y-m-d', '80-02-03', {shortYearCutoff: 80}),
 		new Date(2080, 2 - 1, 3), 'Parse date y-m-d - cutoff 80');
 	equalsDate($.datepicker.parseDate('y-m-d', '81-02-03', {shortYearCutoff: 80}),
@@ -808,6 +809,21 @@ test('parseDate', function() {
 			new Date(currentYear + 60, 2 - 1, 3), 'Parse date y-m-d - cutoff +60');
 	equalsDate($.datepicker.parseDate('y-m-d', (currentYear - 2000 + 61) + '-02-03', {shortYearCutoff: '+60'}),
 			new Date(currentYear - 39, 2 - 1, 3), 'Parse date y-m-d - cutoff +60');
+	var currentMonth = new Date().getMonth() + 1;
+	var lastYear = currentMonth < 6 ? 1 : 0;
+	var nextYear = currentMonth > 7 ? 1 : 0;
+	equalsDate($.datepicker.parseDate('d/m', '3/1'),
+			new Date(currentYear + nextYear, 1 - 1, 3), 'Parse date d/m (next year?)');
+	equalsDate($.datepicker.parseDate('dd/mm', '03/01'),
+			new Date(currentYear + nextYear, 1 - 1, 3), 'Parse date dd/mm (next year?)');
+	equalsDate($.datepicker.parseDate('o', '3'),
+			new Date(currentYear + nextYear, 1 - 1, 3), 'Parse date o (next year?)');
+	equalsDate($.datepicker.parseDate('d/m', '13/12'),
+			new Date(currentYear - lastYear, 12 - 1, 13), 'Parse date d/m (last year?)');
+	equalsDate($.datepicker.parseDate('dd/mm', '13/12'),
+			new Date(currentYear - lastYear, 12 - 1, 13), 'Parse date dd/mm (last year?)');
+	equalsDate($.datepicker.parseDate('oo', 319 + $.datepicker._getDaysInMonth(currentYear - lastYear, 2 - 1)),
+			new Date(currentYear - lastYear, 12 - 1, 13), 'Parse date oo (last year?)');
 	var gmtDate = new Date(2001, 2 - 1, 3);
 	gmtDate.setMinutes(gmtDate.getMinutes() - gmtDate.getTimezoneOffset());
 	equalsDate($.datepicker.parseDate('@', '981158400000'), gmtDate, 'Parse date @');
