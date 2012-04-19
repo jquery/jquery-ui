@@ -70,7 +70,7 @@ $.widget( "ui.menu", {
 			},
 			"click .ui-menu-item:has(a)": function( event ) {
 				var target = $( event.target );
-				if ( target[0] != currentEventTarget ) {
+				if ( target[0] !== currentEventTarget ) {
 					currentEventTarget = target[0];
 					target.one( "click.menu", function( event ) {
 						currentEventTarget = null;
@@ -305,7 +305,7 @@ $.widget( "ui.menu", {
 
 	focus: function( event, item ) {
 		var nested, borderTop, paddingTop, offset, scroll, elementHeight, itemHeight;
-		this.blur( event, event && event.type == "focus" );
+		this.blur( event, event && event.type === "focus" );
 
 		if ( this._hasScroll() ) {
 			borderTop = parseFloat( $.css( this.activeMenu[0], "borderTopWidth" ) ) || 0;
