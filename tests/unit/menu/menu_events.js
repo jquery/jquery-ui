@@ -86,9 +86,6 @@ asyncTest( "handle submenu auto collapse: mouseleave", function() {
 	expect( 4 );
 	var $menu = $( "#menu2" ).menu();
 
-	$menu.find( "li:nth-child(7)" ).trigger( "mouseover" );
-	setTimeout( menumouseleave1, 350 );
-
 	function menumouseleave1() {
 		equal( $menu.find( "ul[aria-expanded='true']" ).length, 1, "first submenu expanded" );
 		$menu.find( "li:nth-child(7) li:first" ).trigger( "mouseover" );
@@ -108,14 +105,14 @@ asyncTest( "handle submenu auto collapse: mouseleave", function() {
 		equal( $menu.find( "ul[aria-expanded='true']" ).length, 0, "first submenu collapsed" );
 		start();
 	}
+
+	$menu.find( "li:nth-child(7)" ).trigger( "mouseover" );
+	setTimeout( menumouseleave1, 350 );
 });
 
 asyncTest( "handle submenu auto collapse: mouseleave", function() {
 	expect( 4 );
 	var $menu = $( "#menu5" ).menu( { menus: "div" } );
-
-	$menu.find( ":nth-child(7)" ).trigger( "mouseover" );
-	setTimeout( menumouseleave1, 350 );
 
 	function menumouseleave1() {
 		equal( $menu.find( "div[aria-expanded='true']" ).length, 1, "first submenu expanded" );
@@ -136,6 +133,10 @@ asyncTest( "handle submenu auto collapse: mouseleave", function() {
 		equal( $menu.find( "div[aria-expanded='true']" ).length, 0, "first submenu collapsed" );
 		start();
 	}
+
+	$menu.find( ":nth-child(7)" ).trigger( "mouseover" );
+	setTimeout( menumouseleave1, 350 );
+
 });
 
 

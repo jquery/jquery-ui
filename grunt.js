@@ -361,6 +361,7 @@ grunt.initConfig({
 					menu_click: true,
 					menu_log: true,
 					module: true,
+					notEqual: true,
 					ok: true,
 					QUnit: true,
 					spinner_simulateKeyDownUp: true,

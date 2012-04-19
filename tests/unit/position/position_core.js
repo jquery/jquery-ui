@@ -42,31 +42,32 @@ test( "my, at, of", function() {
 });
 
 test( "multiple elements", function() {
-	var elements = $( "#el1, #el2" );
-	var result = elements.position({
-		my: "left top",
-		at: "left bottom",
-		of: "#parent",
-		collision: "none"
-	});
+	var elements = $( "#el1, #el2" ),
+		result = elements.position({
+			my: "left top",
+			at: "left bottom",
+			of: "#parent",
+			collision: "none"
+		}),
+		expected = { top: 10, left: 4 };
 
 	deepEqual( result, elements );
-	var expected = { top: 10, left: 4 };
 	elements.each(function() {
 		deepEqual( $( this ).offset(), expected );
 	});
 });
 
 test( "positions", function() {
-	var definitions = [];
-	var offsets = {
-		left: 0,
-		center: 3,
-		right: 6,
-		top: 0,
-		bottom: 6
-	};
-	var start = { left: 4, top: 4 };
+	var definitions = [],
+		offsets = {
+			left: 0,
+			center: 3,
+			right: 6,
+			top: 0,
+			bottom: 6
+		},
+		start = { left: 4, top: 4 },
+		el = $( "#el1" );
 	$.each( [ 0, 1 ], function( my ) {
 		$.each( [ "top", "center", "bottom" ], function( vindex, vertical ) {
 			$.each( [ "left", "center", "right" ], function( hindex, horizontal ) {
@@ -81,7 +82,6 @@ test( "positions", function() {
 			});
 		});
 	});
-	var el = $( "#el1" );
 	$.each( definitions, function( index, definition ) {
 		el.position({
 			my: definition.my,
@@ -445,12 +445,12 @@ test( "addClass: flipped left", function() {
 
 	deepEqual( elem.hasClass( 'ui-flipped-left' ), false, 'Has ui-flipped-left class' );
 
-	elem.position( {
+	elem.position({
 		my: "right center",
 		of: window,
 		collision: "flip",
 		at: "left center"
-	})
+	});
 
 	deepEqual( elem.hasClass( 'ui-flipped-left' ), false, 'Removed ui-flipped-left class' );
 });
