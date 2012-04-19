@@ -383,7 +383,6 @@ grunt.initConfig({
 					shouldnotmove: true,
 					shouldnotresize: true,
 					shouldresize: true,
-					spinner_simulateKeyDownUp: true,
 					start: true,
 					strictEqual: true,
 					stop: true,

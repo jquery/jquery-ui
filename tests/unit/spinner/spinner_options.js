@@ -1,5 +1,7 @@
 (function( $ ) {
 
+var simulateKeyDownUp = TestHelpers.spinner.simulateKeyDownUp;
+
 module( "spinner: options" );
 
 // culture is tested after numberFormat, since it depends on numberFormat
