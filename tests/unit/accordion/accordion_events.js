@@ -1,6 +1,9 @@
 (function( $ ) {
 
-module( "accordion: events", accordion_setupTeardown() );
+var setupTeardown = TestHelpers.accordion.setupTeardown,
+	state = TestHelpers.accordion.state;
+
+module( "accordion: events", setupTeardown() );
 
 test( "create", function() {
 	expect( 10 );
@@ -58,10 +61,10 @@ test( "beforeActivate", function() {
 		strictEqual( ui.newHeader[ 0 ], headers[ 0 ] );
 		equal( ui.newContent.size(), 1 );
 		strictEqual( ui.newContent[ 0 ], content[ 0 ] );
-		accordion_state( element, 0, 0, 0 );
+		state( element, 0, 0, 0 );
 	});
 	element.accordion( "option", "active", 0 );
-	accordion_state( element, 1, 0, 0 );
+	state( element, 1, 0, 0 );
 
 	element.one( "accordionbeforeactivate", function( event, ui ) {
 		equal( event.originalEvent.type, "click" );
@@ -73,10 +76,10 @@ test( "beforeActivate", function() {
 		strictEqual( ui.newHeader[ 0 ], headers[ 1 ] );
 		equal( ui.newContent.size(), 1 );
 		strictEqual( ui.newContent[ 0 ], content[ 1 ] );
-		accordion_state( element, 1, 0, 0 );
+		state( element, 1, 0, 0 );
 	});
 	headers.eq( 1 ).click();
-	accordion_state( element, 0, 1, 0 );
+	state( element, 0, 1, 0 );
 
 	element.one( "accordionbeforeactivate", function( event, ui ) {
 		ok( !( "originalEvent" in event ) );
@@ -86,10 +89,10 @@ test( "beforeActivate", function() {
 		strictEqual( ui.oldContent[ 0 ], content[ 1 ] );
 		equal( ui.newHeader.size(), 0 );
 		equal( ui.newContent.size(), 0 );
-		accordion_state( element, 0, 1, 0 );
+		state( element, 0, 1, 0 );
 	});
 	element.accordion( "option", "active", false );
-	accordion_state( element, 0, 0, 0 );
+	state( element, 0, 0, 0 );
 
 	element.one( "accordionbeforeactivate", function( event, ui ) {
 		ok( !( "originalEvent" in event ) );
@@ -100,10 +103,10 @@ test( "beforeActivate", function() {
 		equal( ui.newContent.size(), 1 );
 		strictEqual( ui.newContent[ 0 ], content[ 2 ] );
 		event.preventDefault();
-		accordion_state( element, 0, 0, 0 );
+		state( element, 0, 0, 0 );
 	});
 	element.accordion( "option", "active", 2 );
-	accordion_state( element, 0, 0, 0 );
+	state( element, 0, 0, 0 );
 });
 
 test( "activate", function() {

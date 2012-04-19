@@ -1,6 +1,9 @@
 (function( $ ) {
 
-module( "accordion: core", accordion_setupTeardown() );
+var setupTeardown = TestHelpers.accordion.setupTeardown,
+	state = TestHelpers.accordion.state;
+
+module( "accordion: core", setupTeardown() );
 
 $.each( { div: "#list1", ul: "#navigation", dl: "#accordion-dl" }, function( type, selector ) {
 	test( "markup structure: " + type, function() {
@@ -21,7 +24,7 @@ test( "handle click on header-descendant", function() {
 	expect( 1 );
 	var element = $( "#navigation" ).accordion();
 	$( "#navigation h2:eq(1) a" ).click();
-	accordion_state( element, 0, 1, 0 );
+	state( element, 0, 1, 0 );
 });
 
 test( "accessibility", function () {

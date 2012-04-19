@@ -348,9 +348,6 @@ grunt.initConfig({
 				}, defaults ),
 				// TODO: don't create so many globals in tests
 				globals: {
-					accordion_equalHeights: true,
-					accordion_setupTeardown: true,
-					accordion_state: true,
 					addMonths: true,
 					asyncTest: true,
 					commonWidgetTests: true,
@@ -396,6 +393,7 @@ grunt.initConfig({
 					tabs_state: true,
 					tabs_disabled: true,
 					test: true,
+					TestHelpers: true,
 					widthAfter: true
 				}
 			}

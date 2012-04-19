@@ -1,5 +1,7 @@
 (function() {
 
+window.TestHelpers = {};
+
 function testWidgetDefaults( widget, defaults ) {
 	var pluginDefaults = $.ui[ widget ].prototype.options;
 
