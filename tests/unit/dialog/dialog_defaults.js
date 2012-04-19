@@ -1,4 +1,4 @@
-commonWidgetTests( "dialog", {
+TestHelpers.commonWidgetTests( "dialog", {
 	defaults: {
 		autoOpen: true,
 		buttons: {},

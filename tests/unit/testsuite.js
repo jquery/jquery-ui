@@ -56,7 +56,7 @@ function testBasicUsage( widget ) {
 	});
 }
 
-window.commonWidgetTests = function( widget, settings ) {
+TestHelpers.commonWidgetTests = function( widget, settings ) {
 	module( widget + ": common widget" );
 
 	testWidgetDefaults( widget, settings.defaults );

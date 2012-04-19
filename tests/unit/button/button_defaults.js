@@ -1,4 +1,4 @@
-commonWidgetTests( "button", {
+TestHelpers.commonWidgetTests( "button", {
 	defaults: {
 		disabled: null,
 		icons: {

@@ -1,4 +1,4 @@
-commonWidgetTests( "droppable", {
+TestHelpers.commonWidgetTests( "droppable", {
 	defaults: {
 		accept: "*",
 		activeClass: false,

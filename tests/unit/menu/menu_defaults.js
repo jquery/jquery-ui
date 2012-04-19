@@ -1,4 +1,4 @@
-commonWidgetTests( "menu", {
+TestHelpers.commonWidgetTests( "menu", {
 	defaults: {
 		disabled: false,
 		menus: "ul",

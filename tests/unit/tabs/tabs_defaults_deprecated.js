@@ -1,4 +1,4 @@
-commonWidgetTests( "tabs", {
+TestHelpers.commonWidgetTests( "tabs", {
 	defaults: {
 		active: null,
 		ajaxOptions: null,

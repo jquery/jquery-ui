@@ -350,7 +350,6 @@ grunt.initConfig({
 				globals: {
 					addMonths: true,
 					asyncTest: true,
-					commonWidgetTests: true,
 					container: true,
 					deepEqual: true,
 					d1: true,

@@ -1,4 +1,4 @@
-commonWidgetTests( "slider", {
+TestHelpers.commonWidgetTests( "slider", {
 	defaults: {
 		animate: false,
 		cancel: ':input,option',
