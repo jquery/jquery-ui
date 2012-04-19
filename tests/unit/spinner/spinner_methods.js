@@ -54,7 +54,7 @@ test( "disable", function() {
 
 test( "enable", function() {
 	expect( 5 );
-	var element = $( "#spin" ).val( 1 ).spinner({ disabled: true })
+	var element = $( "#spin" ).val( 1 ).spinner({ disabled: true }),
 		wrapper = element.spinner( "widget" );
 
 	ok( wrapper.hasClass( "ui-spinner-disabled" ), "before: wrapper has ui-spinner-disabled class" );

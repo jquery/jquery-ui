@@ -4,13 +4,16 @@ var subsuiteFrame;
 
 QUnit.extend( QUnit, {
 	testSuites: function( suites ) {
-		for ( var i = 0; i < suites.length; i++ ) {
-			(function( suite ) {
-				asyncTest( suite, function() {
-					QUnit.runSuite( suite );
-				});
-			}( suites[i] ) );
+		function generateSuite( suite ) {
+			asyncTest( suite, function() {
+				QUnit.runSuite( suite );
+			});
 		}
+
+		for ( var i = 0; i < suites.length; i++ ) {
+			generateSuite( suites[ i ] );
+		}
+
 		QUnit.done = function() {
 			subsuiteFrame.style.display = "none";
 		};
@@ -23,10 +26,12 @@ QUnit.extend( QUnit, {
 
 	testDone: function() {
 		var current = QUnit.id( this.config.current.id ),
-			children = current.children;
+			children = current.children,
+			i = 0,
+			length = children.length;
 
 		// undo the auto-expansion of failed tests
-		for ( var i = 0; i < children.length; i++ ) {
+		for ( ; i < length; i++ ) {
 			if ( children[i].nodeName === "OL" ) {
 				children[i].style.display = "none";
 			}
@@ -34,10 +39,11 @@ QUnit.extend( QUnit, {
 	},
 
 	runSuite: function( suite ) {
-		var body = document.getElementsByTagName( "body" )[0],
-			iframe = subsuiteFrame = document.createElement( "iframe" ),
-			iframeWin;
+		var iframeWin,
+			body = document.getElementsByTagName( "body" )[0],
+			iframe = document.createElement( "iframe" );
 
+		subsuiteFrame = iframe;
 		iframe.className = "qunit-subsuite";
 		body.appendChild( iframe );
 

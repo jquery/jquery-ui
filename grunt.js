@@ -345,13 +345,31 @@ grunt.initConfig({
 					browser: true,
 					jquery: true
 				}, defaults ),
+				// TODO: don't create so many globals in tests
 				globals: {
-					module: true,
-					test: true,
-					ok: true,
-					equal: true,
+					accordion_state: true,
+					asyncTest: true,
+					commonWidgetTests: true,
 					deepEqual: true,
-					QUnit: true
+					dlg: true,
+					domEqual: true,
+					drag: true,
+					el: true,
+					equal: true,
+					expect: true,
+					Globalize: true,
+					menu_click: true,
+					menu_log: true,
+					module: true,
+					ok: true,
+					QUnit: true,
+					spinner_simulateKeyDownUp: true,
+					start: true,
+					strictEqual: true,
+					stop: true,
+					tabs_state: true,
+					tabs_disabled: true,
+					test: true
 				}
 			}
 		};

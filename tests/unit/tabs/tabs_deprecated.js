@@ -89,10 +89,11 @@ test( "tabTemplate + panelTemplate", function() {
 	// defaults are tested in the add method test
 	expect( 11 );
 
-	var element = $( "#tabs2" ).tabs({
-		tabTemplate: "<li class='customTab'><a href='http://example.com/#{href}'>#{label}</a></li>",
-		panelTemplate: "<div class='customPanel'></div>"
-	});
+	var tab, anchor,
+		element = $( "#tabs2" ).tabs({
+			tabTemplate: "<li class='customTab'><a href='http://example.com/#{href}'>#{label}</a></li>",
+			panelTemplate: "<div class='customPanel'></div>"
+		});
 	element.one( "tabsadd", function( event, ui ) {
 		var anchor = $( ui.tab );
 		equal( ui.index, 5, "ui.index" );
@@ -103,8 +104,8 @@ test( "tabTemplate + panelTemplate", function() {
 		ok( $( ui.panel ).hasClass( "customPanel" ), "panel custom class" );
 	});
 	element.tabs( "add", "#new", "New" );
-	var tab = element.find( ".ui-tabs-nav li" ).last(),
-		anchor = tab.find( "a" );
+	tab = element.find( ".ui-tabs-nav li" ).last();
+	anchor = tab.find( "a" );
 	equal( tab.text(), "New", "label" );
 	ok( tab.hasClass( "customTab" ), "tab custom class" );
 	equal( anchor.attr( "href" ), "http://example.com/#new", "href" );
@@ -393,7 +394,8 @@ module( "tabs (deprecated): methods" );
 test( "add", function() {
 	expect( 27 );
 
-	var element = $( "#tabs1" ).tabs();
+	var tab, anchor,
+		element = $( "#tabs1" ).tabs();
 	tabs_state( element, 1, 0, 0 );
 
 	// add without index
@@ -404,8 +406,8 @@ test( "add", function() {
 	});
 	element.tabs( "add", "#new", "New" );
 	tabs_state( element, 1, 0, 0, 0 );
-	var tab = element.find( ".ui-tabs-nav li" ).last(),
-		anchor = tab.find( "a" );
+	tab = element.find( ".ui-tabs-nav li" ).last();
+	anchor = tab.find( "a" );
 	equal( tab.text(), "New", "label" );
 	equal( anchor.attr( "href" ), "#new", "href" );
 	equal( anchor.attr( "aria-controls" ), "new", "aria-controls" );

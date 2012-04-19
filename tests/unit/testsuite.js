@@ -63,7 +63,7 @@ window.commonWidgetTests = function( widget, settings ) {
 	test( "version", function() {
 		ok( "version" in $.ui[ widget ].prototype, "version property exists" );
 	});
-}
+};
 
 /*
  * Experimental assertion for comparing DOM objects.
@@ -72,20 +72,22 @@ window.commonWidgetTests = function( widget, settings ) {
  * Then compares the result using deepEqual.
  */
 window.domEqual = function( selector, modifier, message ) {
-	var attributes = ["class", "role", "id", "tabIndex", "aria-activedescendant"];
+	var expected, actual,
+		attributes = ["class", "role", "id", "tabIndex", "aria-activedescendant"];
 
 	function extract(value) {
 		if (!value || !value.length) {
 			QUnit.push( false, actual, expected, "domEqual failed, can't extract " + selector + ", message was: " + message );
 			return;
 		}
-		var result = {};
+		var children,
+			result = {};
 		result.nodeName = value[0].nodeName;
 		$.each(attributes, function(index, attr) {
 			result[attr] = value.prop(attr);
 		});
 		result.children = [];
-		var children = value.children();
+		children = value.children();
 		if (children.length) {
 			children.each(function() {
 				result.children.push(extract($(this)));
@@ -95,11 +97,11 @@ window.domEqual = function( selector, modifier, message ) {
 		}
 		return result;
 	}
-	var expected = extract($(selector));
-	modifier($(selector));
+	expected = extract( $( selector ) );
+	modifier( $( selector ) );
 
-	var actual = extract($(selector));
+	actual = extract( $( selector ) );
 	QUnit.push( QUnit.equiv(actual, expected), actual, expected, message );
-}
+};
 
 }());

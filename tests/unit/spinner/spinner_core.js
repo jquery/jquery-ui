@@ -99,7 +99,7 @@ test( "mouse click on up button, increases value not greater than max", function
 		min: 0
 	}),
 	button = element.spinner( "widget" ).find( ".ui-spinner-down" );
-	
+
 	button.trigger( "mousedown" ).trigger( "mouseup" );
 	equal( element.val(), 1 );
 	button.trigger( "mousedown" ).trigger( "mouseup" );
@@ -189,8 +189,8 @@ test( "don't clear invalid value on blur", function() {
 
 test( "precision", function() {
 	expect( 2 );
-	var element = $( "#spin" ).val( .05 ).spinner({
-		step: .0001
+	var element = $( "#spin" ).val( 0.05 ).spinner({
+		step: 0.0001
 	});
 	element.spinner( "stepUp" );
 	equal( element.val(), "0.0501", "precision from step" );

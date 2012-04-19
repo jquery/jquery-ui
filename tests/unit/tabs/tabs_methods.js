@@ -167,9 +167,8 @@ asyncTest( "load", function() {
 	element.one( "tabsload", function( event, ui ) {
 		// TODO: remove wrapping in 2.0
 		var uiTab = $( ui.tab ),
-			uiPanel = $( ui.panel );
-
-		var tab = element.find( ".ui-tabs-nav a" ).eq( 3 ),
+			uiPanel = $( ui.panel ),
+			tab = element.find( ".ui-tabs-nav a" ).eq( 3 ),
 			panelId = tab.attr( "aria-controls" ),
 			panel = $( "#" + panelId );
 
@@ -215,9 +214,8 @@ asyncTest( "load", function() {
 		element.one( "tabsload", function( event, ui ) {
 			// TODO: remove wrapping in 2.0
 			var uiTab = $( ui.tab ),
-				uiPanel = $( ui.panel );
-
-			var tab = element.find( ".ui-tabs-nav a" ).eq( 3 ),
+				uiPanel = $( ui.panel ),
+				tab = element.find( ".ui-tabs-nav a" ).eq( 3 ),
 				panelId = tab.attr( "aria-controls" ),
 				panel = $( "#" + panelId );
 

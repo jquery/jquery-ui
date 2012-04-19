@@ -191,7 +191,7 @@ test( "min, string", function() {
 	equal( element.spinner( "option", "min" ), -100, "option converted to number" );
 
 	element.spinner( "value", -1000 );
-	equal( element.val(), "($100.00)", "min constrained in value method")
+	equal( element.val(), "($100.00)", "min constrained in value method" );
 });
 
 test( "step, 2", function() {
