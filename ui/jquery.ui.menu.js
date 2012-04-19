@@ -196,15 +196,16 @@ $.widget( "ui.menu", {
 			event.preventDefault();
 			break;
 		case $.ui.keyCode.RIGHT:
-			!this.active.is(".ui-state-disabled") && this.expand( event );
+			if ( !this.active.is( ".ui-state-disabled" ) ) {
+				this.expand( event );
+			}
 			event.preventDefault();
 			break;
 		case $.ui.keyCode.ENTER:
-			if ( !this.active.is(".ui-state-disabled") ) {
+			if ( !this.active.is( ".ui-state-disabled" ) ) {
 				if ( this.active.children( "a[aria-haspopup='true']" ).length ) {
 					this.expand( event );
-				}
-				else {
+				} else {
 					this.select( event );
 				}
 			}
