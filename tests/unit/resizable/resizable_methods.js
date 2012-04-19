@@ -20,7 +20,7 @@ test("init", function() {
 	$('<div></div>').resizable().resizable("foo").remove();
 	ok(true, 'arbitrary method called after init');
 
-	el = $('<div></div>').resizable()
+	el = $('<div></div>').resizable();
 	var foo = el.resizable("option", "foo");
 	el.remove();
 	ok(true, 'arbitrary option getter after init');
