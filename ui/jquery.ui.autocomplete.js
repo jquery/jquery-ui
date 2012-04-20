@@ -22,6 +22,7 @@ $.widget( "ui.autocomplete", {
 	version: "@VERSION",
 	defaultElement: "<input>",
 	options: {
+		accessiblePopupText: "Autocomplete popup",
 		appendTo: "body",
 		autoFocus: false,
 		delay: 300,
@@ -185,6 +186,8 @@ $.widget( "ui.autocomplete", {
 				self.close( event );
 				self._change( event );
 			});
+
+		this.liveRegion = this.element.after("<span role='status' class='ui-helper-hidden-accessible' aria-live='polite'></span>").next();
 		this._initSource();
 		this.menu = $( "<ul></ul>" )
 			.addClass( "ui-autocomplete" )
@@ -231,6 +234,7 @@ $.widget( "ui.autocomplete", {
 							self._value( item.value );
 						}
 					}
+					self.liveRegion.text(item.value);
 				},
 				select: function( event, ui ) {
 					// back compat for _renderItem using item.autocomplete, via #7810
@@ -265,6 +269,7 @@ $.widget( "ui.autocomplete", {
 			.zIndex( this.element.zIndex() + 1 )
 			.hide()
 			.data( "menu" );
+			this.menu.element.removeAttr("role");
 
 		if ( $.fn.bgiframe ) {
 			 this.menu.element.bgiframe();
@@ -411,6 +416,7 @@ $.widget( "ui.autocomplete", {
 	_close: function( event ) {
 		clearTimeout( this.closing );
 		if ( this.menu.element.is(":visible") ) {
+			this.liveRegion.text("");
 			this.menu.element.hide();
 			this.menu.blur();
 			this._trigger( "close", event );
@@ -461,6 +467,7 @@ $.widget( "ui.autocomplete", {
 		if ( this.options.autoFocus ) {
 			this.menu.next( new $.Event("mouseover") );
 		}
+		this.liveRegion.text(this.options.accessiblePopupText);
 	},
 
 	_resizeMenu: function() {
