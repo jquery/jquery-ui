@@ -236,9 +236,9 @@ $.fn.position = function( options ) {
 			// adds feedback as second argument to using callback, if present
 			using = function( props ) {
 				var left = targetOffset.left - props.left,
-					right = (targetOffset.left + targetWidth) - (props.left + elemWidth),
+					right = left + targetWidth - elemWidth,
 					top = targetOffset.top - props.top,
-					bottom = (targetOffset.top + targetHeight) - (props.top + elemHeight),
+					bottom = top + targetHeight - elemHeight,
 					feedback = {
 						target: {
 							element: target,
