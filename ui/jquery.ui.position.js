@@ -71,7 +71,7 @@ $.position = {
 		return {
 			element: withinElement,
 			isWindow: isWindow,
-			offset: withinElement.offset(),
+			offset: withinElement.offset() || { left: 0, top: 0 },
 			scrollLeft: withinElement.scrollLeft(),
 			scrollTop: withinElement.scrollTop(),
 			width: isWindow ? withinElement.width() : withinElement.outerWidth(),
@@ -361,7 +361,7 @@ $.ui.position = {
 			}
 
 			var within = data.within,
-				withinOffset = ( within.isWindow ? 0 : within.offset.left ) + within.scrollLeft,
+				withinOffset = within.offset.left + within.scrollLeft,
 				outerWidth = within.width,
 				offsetLeft = within.isWindow ? 0 : within.offset.left,
 				collisionPosLeft = position.left - data.collisionPosition.marginLeft,
@@ -399,7 +399,7 @@ $.ui.position = {
 			}
 
 			var within = data.within,
-				withinOffset = ( within.isWindow ? 0 : within.offset.top ) + within.scrollTop,
+				withinOffset = within.offset.top + within.scrollTop,
 				outerHeight = within.height,
 				offsetTop = within.isWindow ? 0 : within.offset.top,
 				collisionPosTop = position.top - data.collisionPosition.marginTop,
