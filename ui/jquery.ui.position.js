@@ -11,13 +11,15 @@
 
 $.ui = $.ui || {};
 
-var rhorizontal = /left|center|right/,
+var cachedScrollbarWidth,
+	max = Math.max,
+	abs = Math.abs,
+	rhorizontal = /left|center|right/,
 	rvertical = /top|center|bottom/,
 	roffset = /[\+\-]\d+%?/,
 	rposition = /^\w+/,
 	rpercent = /%$/,
-	_position = $.fn.position,
-	cachedScrollbarWidth;
+	_position = $.fn.position;
 
 function getOffsets( offsets, width, height ) {
 	return [
@@ -253,9 +255,7 @@ $.fn.position = function( options ) {
 						},
 						horizontal: right < 0 ? "left" : left > 0 ? "right" : "center",
 						vertical: bottom < 0 ? "top" : top > 0 ? "bottom" : "middle"
-					},
-					max = Math.max,
-					abs = Math.abs;
+					};
 				if ( targetWidth < elemWidth && abs( left + right ) < targetWidth ) {
 					feedback.horizontal = "center";
 				}
