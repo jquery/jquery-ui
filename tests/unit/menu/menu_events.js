@@ -87,11 +87,12 @@ test( "handle blur on custom item menu: click", function() {
 
 asyncTest( "handle submenu auto collapse: mouseleave", function() {
 	expect( 4 );
-	var $menu = $( "#menu2" ).menu();
+	var $menu = $( "#menu2" ).menu(),
+		event = $.Event( "mouseenter" );
 
 	function menumouseleave1() {
 		equal( $menu.find( "ul[aria-expanded='true']" ).length, 1, "first submenu expanded" );
-		$menu.find( "li:nth-child(7) li:first" ).trigger( "mouseover" );
+		$menu.menu( "focus", event, $menu.find( "li:nth-child(7) li:first" ) );
 		setTimeout( menumouseleave2, 350 );
 	}
 	function menumouseleave2() {
@@ -109,17 +110,18 @@ asyncTest( "handle submenu auto collapse: mouseleave", function() {
 		start();
 	}
 
-	$menu.find( "li:nth-child(7)" ).trigger( "mouseover" );
+	$menu.find( "li:nth-child(7)" ).trigger( "mouseenter" );
 	setTimeout( menumouseleave1, 350 );
 });
 
 asyncTest( "handle submenu auto collapse: mouseleave", function() {
 	expect( 4 );
-	var $menu = $( "#menu5" ).menu( { menus: "div" } );
+	var $menu = $( "#menu5" ).menu( { menus: "div" } ),
+		event = $.Event( "mouseenter" );
 
 	function menumouseleave1() {
 		equal( $menu.find( "div[aria-expanded='true']" ).length, 1, "first submenu expanded" );
-		$menu.find( ":nth-child(7)" ).find( "div" ).eq( 0 ).children().eq( 0 ).trigger( "mouseover" );
+		$menu.menu( "focus", event, $menu.find( ":nth-child(7)" ).find( "div" ).eq( 0 ).children().eq( 0 ) );
 		setTimeout( menumouseleave2, 350 );
 	}
 	function menumouseleave2() {
@@ -137,7 +139,7 @@ asyncTest( "handle submenu auto collapse: mouseleave", function() {
 		start();
 	}
 
-	$menu.find( ":nth-child(7)" ).trigger( "mouseover" );
+	$menu.find( ":nth-child(7)" ).trigger( "mouseenter" );
 	setTimeout( menumouseleave1, 350 );
 
 });
