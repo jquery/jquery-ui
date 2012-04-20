@@ -704,9 +704,13 @@ $.extend( $.ui.dialog.overlay, {
 				// handle $(el).dialog().dialog('close') (see #4065)
 				if ( $.ui.dialog.overlay.instances.length ) {
 					$( document ).bind( $.ui.dialog.overlay.events, function( event ) {
-						// stop events if the z-index of the target is < the z-index of the overlay
-						// we cannot return true when we don't want to cancel the event (#3523)
-						if ( $( event.target ).zIndex() < $.ui.dialog.overlay.maxZ ) {
+					  // we cannot return true when we don't want to cancel the event (#3523)
+
+            // explicitly permit mouse events on the browser UI, such as clicking the scrollbar
+						if ( ( event.target.parentNode != document ) &&
+
+						  // stop events if the z-index of the target is < the z-index of the overlay
+              $( event.target ).zIndex() < $.ui.dialog.overlay.maxZ ) {
 							return false;
 						}
 					});
