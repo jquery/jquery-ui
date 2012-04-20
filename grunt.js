@@ -343,7 +343,7 @@ grunt.initConfig({
 				options: extend({
 					browser: true,
 					jquery: true,
-					// TODO: this is only for document.write()
+					// TODO: this is only for document.write() https://github.com/jshint/jshint/issues/519
 					evil: true
 				}, defaults ),
 				// TODO: don't create so many globals in tests
