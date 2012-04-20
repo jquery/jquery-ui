@@ -87,8 +87,7 @@ $.widget( "ui.menu", {
 					}
 				}
 			},
-			"mouseover .ui-menu-item": function( event ) {
-				event.stopImmediatePropagation();
+			"mouseenter .ui-menu-item": function( event ) {
 				var target = $( event.currentTarget );
 				// Remove ui-state-active class from siblings of the newly focused menu item
 				// to avoid a jump caused by adjacent elements both having a class with a border
