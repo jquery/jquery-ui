@@ -196,4 +196,13 @@ test("zIndex, applied to all handles", function() {
 	});
 });
 
+test("zIndex, applied to all handles", function() {
+	expect(8);
+	
+	var target = $('<div></div>').resizable({ handles: 'all', zIndex: 100 });
+	target.children( '.ui-resizable-handle' ).each( function( index, handle ) {
+		equals( $( handle ).css( 'zIndex' ), 100, 'compare zIndex' );
+	});
+});
+
 })(jQuery);
