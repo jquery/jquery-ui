@@ -89,7 +89,7 @@ function getColor(elem, attr) {
 				color = $.css(elem, attr);
 
 				// Keep going until we find an element that has color, or we hit the body
-				if ( color && color !== "transparent" || $.nodeName(elem, "body") ) {
+				if ( color && color !== "transparent" || $.nodeName(elem, document.body) ) {
 					break;
 				}
 

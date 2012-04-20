@@ -88,7 +88,7 @@ $.widget("ui.draggable", $.ui.mouse, {
 				position: "absolute", opacity: "0.001", zIndex: 1000
 			})
 			.css($(this).offset())
-			.appendTo("body");
+			.appendTo(document.body);
 		});
 
 		return true;

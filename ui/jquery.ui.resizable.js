@@ -482,7 +482,7 @@ $.widget("ui.resizable", $.ui.mouse, {
 			});
 
 			this.helper
-				.appendTo("body")
+				.appendTo(document.body)
 				.disableSelection();
 
 		} else {

@@ -52,7 +52,7 @@ $.effects.effect.explode = function( o, done ) {
 			// within a wrapper div off the -left and -top equal to size of our pieces
 			el
 				.clone()
-				.appendTo( "body" )
+				.appendTo( document.body )
 				.wrap( "<div></div>" )
 				.css({
 					position: "absolute",
