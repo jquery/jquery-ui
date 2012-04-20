@@ -1,3 +1,4 @@
+/*jshint node: true */
 module.exports = function( grunt ) {
 
 var // modules
@@ -293,104 +294,29 @@ grunt.initConfig({
 		}
 	},
 	jshint: (function() {
-		var defaults = {
-			curly: true,
-			eqnull: true,
-			eqeqeq: true,
-			expr: true,
-			latedef: true,
-			noarg: true,
-			onevar: true,
-			// TODO: limit to multi-line comments https://github.com/jshint/jshint/issues/503
-			smarttabs: true,
-			// TODO: use "faux strict mode" https://github.com/jshint/jshint/issues/504
-			// strict: true,
-			trailing: true,
-			undef: true
-		};
+		function parserc( path ) {
+			var rc = grunt.file.readJSON( (path || "") + ".jshintrc" ),
+				settings = {
+					options: rc,
+					globals: {}
+				};
 
-		function extend( a, b ) {
-			for ( var prop in b ) {
-				a[ prop ] = b[ prop ];
-			}
-			return a;
+			(rc.predef || []).forEach(function( prop ) {
+				settings.globals[ prop ] = true;
+			});
+			delete rc.predef;
+
+			return settings;
 		}
 
 		return {
-			options: defaults,
-			grunt: {
-				options: extend({
-					node: true
-				}, defaults ),
-				globals: {
-					task: true,
-					config: true,
-					file: true,
-					log: true,
-					template: true
-				}
-			},
-			ui: {
-				options: extend({
-					browser: true,
-					jquery: true
-				}, defaults ),
-				globals: {
-					Globalize: true
-				}
-			},
-			tests: {
-				options: extend({
-					browser: true,
-					jquery: true,
-					// TODO: this is only for document.write() https://github.com/jshint/jshint/issues/519
-					evil: true
-				}, defaults ),
-				// TODO: don't create so many globals in tests
-				globals: {
-					addMonths: true,
-					asyncTest: true,
-					container: true,
-					deepEqual: true,
-					d1: true,
-					d2: true,
-					dlg: true,
-					domEqual: true,
-					drag: true,
-					dragged: true,
-					el: true,
-					equal: true,
-					equalsDate: true,
-					expect: true,
-					Globalize: true,
-					heightAfter: true,
-					init: true,
-					isNotOpen: true,
-					isOpen: true,
-					modal: true,
-					module: true,
-					moved: true,
-					notEqual: true,
-					offsetAfter: true,
-					offsetBefore: true,
-					ok: true,
-					PROP_NAME: true,
-					QUnit: true,
-					restoreScroll: true,
-					shouldBeDroppable: true,
-					shouldmove: true,
-					shouldNotBeDroppable: true,
-					shouldnotmove: true,
-					shouldnotresize: true,
-					shouldresize: true,
-					start: true,
-					strictEqual: true,
-					stop: true,
-					test: true,
-					TestHelpers: true,
-					widthAfter: true
-				}
-			}
+			// TODO: use "faux strict mode" https://github.com/jshint/jshint/issues/504
+			// TODO: limit `smarttabs` to multi-line comments https://github.com/jshint/jshint/issues/503
+			options: parserc(),
+			ui: parserc( "ui/" ),
+			// TODO: `evil: true` is only for document.write() https://github.com/jshint/jshint/issues/519
+			// TODO: don't create so many globals in tests
+			tests: parserc( "tests/" )
 		};
 	})()
 });
