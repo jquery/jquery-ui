@@ -229,7 +229,7 @@ $.widget( "ui.autocomplete", {
 							self._value( item.value );
 						}
 					}
-					self.liveRegion.html(item.value);
+					self.liveRegion.text(item.value);
 				},
 				select: function( event, ui ) {
 					var item = ui.item.data( "item.autocomplete" ),
@@ -397,7 +397,7 @@ $.widget( "ui.autocomplete", {
 	close: function( event ) {
 		clearTimeout( this.closing );
 		if ( this.menu.element.is(":visible") ) {
-			this.liveRegion.html("");
+			this.liveRegion.text("");
 			this.menu.element.hide();
 			this.menu.blur();
 			this._trigger( "close", event );
@@ -448,7 +448,7 @@ $.widget( "ui.autocomplete", {
 		if ( this.options.autoFocus ) {
 			this.menu.next( new $.Event("mouseover") );
 		}
-		this.liveRegion.html(this.options.accessiblePopupText);
+		this.liveRegion.text(this.options.accessiblePopupText);
 	},
 
 	_resizeMenu: function() {
