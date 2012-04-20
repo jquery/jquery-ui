@@ -1,4 +1,4 @@
-commonWidgetTests( "progressbar", {
+TestHelpers.commonWidgetTests( "progressbar", {
 	defaults: {
 		disabled: false,
 		value: 0,

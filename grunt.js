@@ -70,6 +70,8 @@ cssFiles.forEach(function( file ) {
 
 // csslint and cssmin tasks
 grunt.loadNpmTasks( "grunt-css" );
+// file size comparison tasks
+grunt.loadNpmTasks( "grunt-compare-size" );
 
 grunt.registerHelper( "strip_all_banners", function( filepath ) {
 	return grunt.file.read( filepath ).replace( /^\s*\/\*[\s\S]*?\*\/\s*/g, "" );
@@ -269,9 +271,8 @@ grunt.initConfig({
 			// TODO remove items from this list once rewritten
 			return !( /(effects.core|mouse|datepicker|draggable|droppable|resizable|selectable|sortable)\.js$/ ).test( file );
 		}),
-		grunt: "grunt.js"
-		// TODO enabled once fixed up
-		// tests: "tests/unit/**/*.js"
+		grunt: "grunt.js",
+		tests: "tests/unit/**/*.js"
 	},
 	csslint: {
 		// nothing: []
@@ -304,8 +305,7 @@ grunt.initConfig({
 			smarttabs: true,
 			// TODO: use "faux strict mode" https://github.com/jshint/jshint/issues/504
 			// strict: true,
-			// TODO: enable trailing
-			// trailing: true,
+			trailing: true,
 			undef: true
 		};
 
@@ -342,15 +342,53 @@ grunt.initConfig({
 			tests: {
 				options: extend({
 					browser: true,
-					jquery: true
+					jquery: true,
+					// TODO: this is only for document.write() https://github.com/jshint/jshint/issues/519
+					evil: true
 				}, defaults ),
+				// TODO: don't create so many globals in tests
 				globals: {
-					module: true,
-					test: true,
-					ok: true,
-					equal: true,
+					addMonths: true,
+					asyncTest: true,
+					container: true,
 					deepEqual: true,
-					QUnit: true
+					d1: true,
+					d2: true,
+					dlg: true,
+					domEqual: true,
+					drag: true,
+					dragged: true,
+					el: true,
+					equal: true,
+					equalsDate: true,
+					expect: true,
+					Globalize: true,
+					heightAfter: true,
+					init: true,
+					isNotOpen: true,
+					isOpen: true,
+					modal: true,
+					module: true,
+					moved: true,
+					notEqual: true,
+					offsetAfter: true,
+					offsetBefore: true,
+					ok: true,
+					PROP_NAME: true,
+					QUnit: true,
+					restoreScroll: true,
+					shouldBeDroppable: true,
+					shouldmove: true,
+					shouldNotBeDroppable: true,
+					shouldnotmove: true,
+					shouldnotresize: true,
+					shouldresize: true,
+					start: true,
+					strictEqual: true,
+					stop: true,
+					test: true,
+					TestHelpers: true,
+					widthAfter: true
 				}
 			}
 		};
@@ -359,7 +397,16 @@ grunt.initConfig({
 
 grunt.registerMultiTask( "copy", "Copy files to destination folder and replace @VERSION with pkg.version", function() {
 	function replaceVersion( source ) {
-		return source.replace( "@VERSION", grunt.config( "pkg.version" ) );
+		return source.replace( /@VERSION/g, grunt.config( "pkg.version" ) );
+	}
+	function copyFile( src, dest ) {
+		if ( /(js|css)$/.test( src ) ) {
+			grunt.file.copy( src, dest, {
+				process: replaceVersion
+			});
+		} else {
+			grunt.file.copy( src, dest );
+		}
 	}
 	var files = grunt.file.expandFiles( this.file.src ),
 		target = this.file.dest + "/",
@@ -371,18 +418,12 @@ grunt.registerMultiTask( "copy", "Copy files to destination folder and replace @
 	}
 	files.forEach(function( fileName ) {
 		var targetFile = strip ? fileName.replace( strip, "" ) : fileName;
-		if ( /(js|css)$/.test( fileName ) ) {
-			grunt.file.copy( fileName, target + targetFile, {
-				process: replaceVersion
-			});
-		} else {
-			grunt.file.copy( fileName, target + targetFile );
-		}
+		copyFile( fileName, target + targetFile );
 	});
 	grunt.log.writeln( "Copied " + files.length + " files." );
 	for ( fileName in this.data.renames ) {
 		renameCount += 1;
-		grunt.file.copy( fileName, target + grunt.template.process( this.data.renames[ fileName ], grunt.config() ) );
+		copyFile( fileName, target + grunt.template.process( this.data.renames[ fileName ], grunt.config() ) );
 	}
 	if ( renameCount ) {
 		grunt.log.writeln( "Renamed " + renameCount + " files." );
@@ -535,77 +576,6 @@ grunt.registerTask( "copy_themes", function() {
 
 grunt.registerTask( "clean", function() {
 	require( "rimraf" ).sync( "dist" );
-});
-
-// TODO merge with code in jQuery Core, share as grunt plugin/npm
-// this here actually uses the provided filenames in the output
-// the helpers should just be regular functions, no need to share those with the world
-grunt.registerMultiTask( "compare_size", "Compare size of this branch to master", function() {
-	var files = grunt.file.expandFiles( this.file.src ),
-		done = this.async(),
-		sizecache = __dirname + "/dist/.sizecache.json",
-		sources = {
-			min: grunt.file.read( files[1] ),
-			max: grunt.file.read( files[0] )
-		},
-		oldsizes = {},
-		sizes = {};
-
-	try {
-		oldsizes = JSON.parse( grunt.file.read( sizecache ) );
-	} catch( e ) {
-		oldsizes = {};
-	}
-
-	// Obtain the current branch and continue...
-	grunt.helper( "git_current_branch", function( err, branch ) {
-		var key, diff;
-
-		// Derived and adapted from Corey Frang's original `sizer`
-		grunt.log.writeln( "sizes - compared to master" );
-
-		sizes[ files[0] ] = sources.max.length;
-		sizes[ files[1] ] = sources.min.length;
-		sizes[ files[1] + ".gz" ] = grunt.helper( "gzip", sources.min ).length;
-
-		for ( key in sizes ) {
-			diff = oldsizes[ key ] && ( sizes[ key ] - oldsizes[ key ] );
-			if ( diff > 0 ) {
-				diff = "+" + diff;
-			}
-			console.log( "%s %s %s",
-				grunt.helper("lpad",  sizes[ key ], 8 ),
-				grunt.helper("lpad",  diff ? "(" + diff + ")" : "(-)", 8 ),
-				key
-			);
-		}
-
-		if ( branch === "master" ) {
-			// If master, write to file - this makes it easier to compare
-			// the size of your current code state to the master branch,
-			// without returning to the master to reset the cache
-			grunt.file.write( sizecache, JSON.stringify(sizes) );
-		}
-		done();
-	});
-});
-grunt.registerHelper( "git_current_branch", function( done ) {
-	grunt.utils.spawn({
-		cmd: "git",
-		args: [ "branch", "--no-color" ]
-	}, function( err, result ) {
-		var branch;
-
-		result.split( "\n" ).forEach(function( branch ) {
-			var matches = /^\* (.*)/.exec( branch );
-			if ( matches !== null && matches.length && matches[ 1 ] ) {
-				done( null, matches[ 1 ] );
-			}
-		});
-	});
-});
-grunt.registerHelper( "lpad", function( str, len, chr ) {
-	return ( Array( len + 1 ).join( chr || " " ) + str ).substr( -len );
 });
 
 grunt.registerTask( "default", "lint csslint qunit build compare_size" );

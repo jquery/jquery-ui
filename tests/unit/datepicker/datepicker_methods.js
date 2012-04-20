@@ -6,7 +6,8 @@
 module("datepicker: methods");
 
 test('destroy', function() {
-	var inp = init('#inp');
+	var inl,
+		inp = init('#inp');
 	ok(inp.is('.hasDatepicker'), 'Default - marker class set');
 	ok($.data(inp[0], PROP_NAME), 'Default - instance present');
 	ok(inp.next().is('#alt'), 'Default - button absent');
@@ -19,7 +20,7 @@ test('destroy', function() {
 	inp= init('#inp', {showOn: 'both'});
 	ok(inp.is('.hasDatepicker'), 'Button - marker class set');
 	ok($.data(inp[0], PROP_NAME), 'Button - instance present');
-	ok(inp.next().text() == '...', 'Button - button added');
+	ok(inp.next().text() === '...', 'Button - button added');
 	inp.datepicker('destroy');
 	inp = $('#inp');
 	ok(!inp.is('.hasDatepicker'), 'Button - marker class cleared');
@@ -29,7 +30,7 @@ test('destroy', function() {
 	inp = init('#inp', {appendText: 'Testing'});
 	ok(inp.is('.hasDatepicker'), 'Append - marker class set');
 	ok($.data(inp[0], PROP_NAME), 'Append - instance present');
-	ok(inp.next().text() == 'Testing', 'Append - append text added');
+	ok(inp.next().text() === 'Testing', 'Append - append text added');
 	inp.datepicker('destroy');
 	inp = $('#inp');
 	ok(!inp.is('.hasDatepicker'), 'Append - marker class cleared');
@@ -40,29 +41,30 @@ test('destroy', function() {
 		buttonImage: 'img/calendar.gif', appendText: 'Testing'});
 	ok(inp.is('.hasDatepicker'), 'Both - marker class set');
 	ok($.data(inp[0], PROP_NAME), 'Both - instance present');
-	ok(inp.next()[0].nodeName.toLowerCase() == 'img', 'Both - button added');
-	ok(inp.next().next().text() == 'Testing', 'Both - append text added');
+	ok(inp.next()[0].nodeName.toLowerCase() === 'img', 'Both - button added');
+	ok(inp.next().next().text() === 'Testing', 'Both - append text added');
 	inp.datepicker('destroy');
 	inp = $('#inp');
 	ok(!inp.is('.hasDatepicker'), 'Both - marker class cleared');
 	ok(!$.data(inp[0], PROP_NAME), 'Both - instance absent');
 	ok(inp.next().is('#alt'), 'Both - button and append text absent');
 	// Inline
-	var inl = init('#inl');
+	inl = init('#inl');
 	ok(inl.is('.hasDatepicker'), 'Inline - marker class set');
-	ok(inl.html() != '', 'Inline - datepicker present');
+	ok(inl.html() !== '', 'Inline - datepicker present');
 	ok($.data(inl[0], PROP_NAME), 'Inline - instance present');
-	ok(inl.next().length == 0 || inl.next().is('p'), 'Inline - button absent');
+	ok(inl.next().length === 0 || inl.next().is('p'), 'Inline - button absent');
 	inl.datepicker('destroy');
 	inl = $('#inl');
 	ok(!inl.is('.hasDatepicker'), 'Inline - marker class cleared');
-	ok(inl.html() == '', 'Inline - datepicker absent');
+	ok(inl.html() === '', 'Inline - datepicker absent');
 	ok(!$.data(inl[0], PROP_NAME), 'Inline - instance absent');
-	ok(inl.next().length == 0 || inl.next().is('p'), 'Inline - button absent');
+	ok(inl.next().length === 0 || inl.next().is('p'), 'Inline - button absent');
 });
 
 test('enableDisable', function() {
-	var inp = init('#inp');
+	var inl, dp,
+		inp = init('#inp');
 	ok(!inp.datepicker('isDisabled'), 'Enable/disable - initially marked as enabled');
 	ok(!inp[0].disabled, 'Enable/disable - field initially enabled');
 	inp.datepicker('disable');
@@ -91,19 +93,19 @@ test('enableDisable', function() {
 		buttonImage: 'img/calendar.gif'});
 	ok(!inp.datepicker('isDisabled'), 'Enable/disable image - initially marked as enabled');
 	ok(!inp[0].disabled, 'Enable/disable image - field initially enabled');
-	ok(inp.next('img').css('opacity') == 1, 'Enable/disable image - image initially enabled');
+	ok(parseFloat(inp.next('img').css('opacity')) === 1, 'Enable/disable image - image initially enabled');
 	inp.datepicker('disable');
 	ok(inp.datepicker('isDisabled'), 'Enable/disable image - now marked as disabled');
 	ok(inp[0].disabled, 'Enable/disable image - field now disabled');
-	ok(inp.next('img').css('opacity') != 1, 'Enable/disable image - image now disabled');
+	ok(parseFloat(inp.next('img').css('opacity')) !== 1, 'Enable/disable image - image now disabled');
 	inp.datepicker('enable');
 	ok(!inp.datepicker('isDisabled'), 'Enable/disable image - now marked as enabled');
 	ok(!inp[0].disabled, 'Enable/disable image - field now enabled');
-	ok(inp.next('img').css('opacity') == 1, 'Enable/disable image - image now enabled');
+	ok(parseFloat(inp.next('img').css('opacity')) === 1, 'Enable/disable image - image now enabled');
 	inp.datepicker('destroy');
 	// Inline
-	var inl = init('#inl', {changeYear: true});
-	var dp = $('.ui-datepicker-inline', inl);
+	inl = init('#inl', {changeYear: true});
+	dp = $('.ui-datepicker-inline', inl);
 	ok(!inl.datepicker('isDisabled'), 'Enable/disable inline - initially marked as enabled');
 	ok(!dp.children().is('.ui-state-disabled'), 'Enable/disable inline - not visually disabled initially');
 	ok(!dp.find('select').prop('disabled'), 'Enable/disable inline - form element enabled initially');

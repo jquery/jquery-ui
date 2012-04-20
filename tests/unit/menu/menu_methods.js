@@ -3,25 +3,28 @@
  */
 (function($) {
 
+var log = TestHelpers.menu.log,
+	click = TestHelpers.menu.click;
+
 module("menu: methods");
 
 test( "enable/disable", function() {
 	expect( 3 );
 	var menu = $( "#menu1" ).menu({
 		select: function(event, ui) {
-			menu_log();
+			log();
 		}
 	});
 	menu.menu("disable");
 	ok(menu.is(".ui-state-disabled"),"Missing ui-state-disabled class");
-	menu_log("click",true);
-	menu_click(menu,"1");
-	menu_log("afterclick");
+	log("click",true);
+	click(menu,"1");
+	log("afterclick");
 	menu.menu("enable");
 	ok(menu.not(".ui-state-disabled"),"Has ui-state-disabled class");
-	menu_log("click");
-	menu_click(menu,"1");
-	menu_log("afterclick");
+	log("click");
+	click(menu,"1");
+	log("afterclick");
 	equal( $("#log").html(), "afterclick,1,click,afterclick,click,", "Click order not valid.");
 });
 

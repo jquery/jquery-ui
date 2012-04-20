@@ -1,5 +1,7 @@
 (function( $ ) {
 
+var state = TestHelpers.tabs.state;
+
 module( "tabs: events" );
 
 test( "create", function() {
@@ -60,10 +62,10 @@ test( "beforeActivate", function() {
 		strictEqual( ui.newTab[ 0 ], tabs[ 0 ], "newTab" );
 		equal( ui.newPanel.size(), 1, "newPanel size" );
 		strictEqual( ui.newPanel[ 0 ], panels[ 0 ], "newPanel" );
-		tabs_state( element, 0, 0, 0 );
+		state( element, 0, 0, 0 );
 	});
 	element.tabs( "option", "active", 0 );
-	tabs_state( element, 1, 0, 0 );
+	state( element, 1, 0, 0 );
 
 	// switching tabs
 	element.one( "tabsbeforeactivate", function( event, ui ) {
@@ -76,10 +78,10 @@ test( "beforeActivate", function() {
 		strictEqual( ui.newTab[ 0 ], tabs[ 1 ], "newTab" );
 		equal( ui.newPanel.size(), 1, "newPanel size" );
 		strictEqual( ui.newPanel[ 0 ], panels[ 1 ], "newPanel" );
-		tabs_state( element, 1, 0, 0 );
+		state( element, 1, 0, 0 );
 	});
 	tabs.eq( 1 ).click();
-	tabs_state( element, 0, 1, 0 );
+	state( element, 0, 1, 0 );
 
 	// collapsing
 	element.one( "tabsbeforeactivate", function( event, ui ) {
@@ -90,10 +92,10 @@ test( "beforeActivate", function() {
 		strictEqual( ui.oldPanel[ 0 ], panels[ 1 ], "oldPanel" );
 		equal( ui.newTab.size(), 0, "newTab size" );
 		equal( ui.newPanel.size(), 0, "newPanel size" );
-		tabs_state( element, 0, 1, 0 );
+		state( element, 0, 1, 0 );
 	});
 	element.tabs( "option", "active", false );
-	tabs_state( element, 0, 0, 0 );
+	state( element, 0, 0, 0 );
 
 	// prevent activation
 	element.one( "tabsbeforeactivate", function( event, ui ) {
@@ -105,10 +107,10 @@ test( "beforeActivate", function() {
 		equal( ui.newPanel.size(), 1, "newPanel size" );
 		strictEqual( ui.newPanel[ 0 ], panels[ 1 ], "newPanel" );
 		event.preventDefault();
-		tabs_state( element, 0, 0, 0 );
+		state( element, 0, 0, 0 );
 	});
 	element.tabs( "option", "active", 1 );
-	tabs_state( element, 0, 0, 0 );
+	state( element, 0, 0, 0 );
 });
 
 test( "activate", function() {
@@ -130,10 +132,10 @@ test( "activate", function() {
 		strictEqual( ui.newTab[ 0 ], tabs[ 0 ], "newTab" );
 		equal( ui.newPanel.size(), 1, "newPanel size" );
 		strictEqual( ui.newPanel[ 0 ], panels[ 0 ], "newPanel" );
-		tabs_state( element, 1, 0, 0 );
+		state( element, 1, 0, 0 );
 	});
 	element.tabs( "option", "active", 0 );
-	tabs_state( element, 1, 0, 0 );
+	state( element, 1, 0, 0 );
 
 	// switching tabs
 	element.one( "tabsactivate", function( event, ui ) {
@@ -146,10 +148,10 @@ test( "activate", function() {
 		strictEqual( ui.newTab[ 0 ], tabs[ 1 ], "newTab" );
 		equal( ui.newPanel.size(), 1, "newPanel size" );
 		strictEqual( ui.newPanel[ 0 ], panels[ 1 ], "newPanel" );
-		tabs_state( element, 0, 1, 0 );
+		state( element, 0, 1, 0 );
 	});
 	tabs.eq( 1 ).click();
-	tabs_state( element, 0, 1, 0 );
+	state( element, 0, 1, 0 );
 
 	// collapsing
 	element.one( "tabsactivate", function( event, ui ) {
@@ -160,10 +162,10 @@ test( "activate", function() {
 		strictEqual( ui.oldPanel[ 0 ], panels[ 1 ], "oldPanel" );
 		equal( ui.newTab.size(), 0, "newTab size" );
 		equal( ui.newPanel.size(), 0, "newPanel size" );
-		tabs_state( element, 0, 0, 0 );
+		state( element, 0, 0, 0 );
 	});
 	element.tabs( "option", "active", false );
-	tabs_state( element, 0, 0, 0 );
+	state( element, 0, 0, 0 );
 
 	// prevent activation
 	element.one( "tabsbeforeactivate", function( event ) {
@@ -197,10 +199,10 @@ test( "beforeLoad", function() {
 		strictEqual( ui.panel[ 0 ], panel[ 0 ], "panel" );
 		equal( ui.panel.html(), "", "panel html" );
 		event.preventDefault();
-		tabs_state( element, 0, 0, 1, 0, 0 );
+		state( element, 0, 0, 1, 0, 0 );
 	});
 	element.tabs({ active: 2 });
-	tabs_state( element, 0, 0, 1, 0, 0 );
+	state( element, 0, 0, 1, 0, 0 );
 	equal( panel.html(), "", "panel html after" );
 	element.tabs( "destroy" );
 
@@ -219,11 +221,11 @@ test( "beforeLoad", function() {
 		strictEqual( ui.panel[ 0 ], panel[ 0 ], "panel" );
 		equal( ui.panel.html(), "", "panel html" );
 		event.preventDefault();
-		tabs_state( element, 1, 0, 0, 0, 0 );
+		state( element, 1, 0, 0, 0, 0 );
 	});
 	element.tabs();
 	element.tabs( "option", "active", 2 );
-	tabs_state( element, 0, 0, 1, 0, 0 );
+	state( element, 0, 0, 1, 0, 0 );
 	equal( panel.html(), "", "panel html after" );
 
 	// click, change panel content
@@ -241,10 +243,10 @@ test( "beforeLoad", function() {
 		strictEqual( ui.panel[ 0 ], panel[ 0 ], "panel" );
 		ui.panel.html( "<p>testing</p>" );
 		event.preventDefault();
-		tabs_state( element, 0, 0, 1, 0, 0 );
+		state( element, 0, 0, 1, 0, 0 );
 	});
 	element.find( ".ui-tabs-nav a" ).eq( 3 ).click();
-	tabs_state( element, 0, 0, 0, 1, 0 );
+	state( element, 0, 0, 0, 1, 0 );
 	// .toLowerCase() is needed to convert <P> to <p> in old IEs
 	equal( panel.html().toLowerCase(), "<p>testing</p>", "panel html after" );
 });
@@ -268,7 +270,7 @@ if ( $.uiBackCompat === false ) {
 			equal( ui.panel.size(), 1, "panel size" );
 			strictEqual( ui.panel[ 0 ], panel[ 0 ], "panel" );
 			equal( ui.panel.find( "p" ).length, 1, "panel html" );
-			tabs_state( element, 0, 0, 1, 0, 0 );
+			state( element, 0, 0, 1, 0, 0 );
 			tabsload1();
 		});
 		element.tabs({ active: 2 });
@@ -286,7 +288,7 @@ if ( $.uiBackCompat === false ) {
 				equal( ui.panel.size(), 1, "panel size" );
 				strictEqual( ui.panel[ 0 ], panel[ 0 ], "panel" );
 				equal( ui.panel.find( "p" ).length, 1, "panel html" );
-				tabs_state( element, 0, 0, 0, 1, 0 );
+				state( element, 0, 0, 0, 1, 0 );
 				tabsload2();
 			});
 			element.tabs( "option", "active", 3 );
@@ -305,7 +307,7 @@ if ( $.uiBackCompat === false ) {
 				equal( ui.panel.size(), 1, "panel size" );
 				strictEqual( ui.panel[ 0 ], panel[ 0 ], "panel" );
 				equal( ui.panel.find( "p" ).length, 1, "panel html" );
-				tabs_state( element, 0, 0, 0, 0, 1 );
+				state( element, 0, 0, 0, 0, 1 );
 				start();
 			});
 			element.find( ".ui-tabs-nav a" ).eq( 4 ).click();

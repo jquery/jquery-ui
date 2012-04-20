@@ -1,5 +1,7 @@
 (function( $ ) {
 
+var simulateKeyDownUp = TestHelpers.spinner.simulateKeyDownUp;
+
 module( "spinner: events" );
 
 test( "start", function() {
@@ -13,14 +15,14 @@ test( "start", function() {
 	}
 
 	shouldStart( true, "key UP" );
-	spinner_simulateKeyDownUp( element, $.ui.keyCode.UP );
+	simulateKeyDownUp( element, $.ui.keyCode.UP );
 	shouldStart( true, "key DOWN" );
-	spinner_simulateKeyDownUp( element, $.ui.keyCode.DOWN );
+	simulateKeyDownUp( element, $.ui.keyCode.DOWN );
 
 	shouldStart( true, "key PAGE_UP" );
-	spinner_simulateKeyDownUp( element, $.ui.keyCode.PAGE_UP );
+	simulateKeyDownUp( element, $.ui.keyCode.PAGE_UP );
 	shouldStart( true, "key PAGE_DOWN" );
-	spinner_simulateKeyDownUp( element, $.ui.keyCode.PAGE_DOWN );
+	simulateKeyDownUp( element, $.ui.keyCode.PAGE_DOWN );
 
 	shouldStart( true, "button up" );
 	element.spinner( "widget" ).find( ".ui-spinner-up" ).mousedown().mouseup();
@@ -52,14 +54,14 @@ test( "spin", function() {
 	}
 
 	shouldSpin( true, "key UP" );
-	spinner_simulateKeyDownUp( element, $.ui.keyCode.UP );
+	simulateKeyDownUp( element, $.ui.keyCode.UP );
 	shouldSpin( true, "key DOWN" );
-	spinner_simulateKeyDownUp( element, $.ui.keyCode.DOWN );
+	simulateKeyDownUp( element, $.ui.keyCode.DOWN );
 
 	shouldSpin( true, "key PAGE_UP" );
-	spinner_simulateKeyDownUp( element, $.ui.keyCode.PAGE_UP );
+	simulateKeyDownUp( element, $.ui.keyCode.PAGE_UP );
 	shouldSpin( true, "key PAGE_DOWN" );
-	spinner_simulateKeyDownUp( element, $.ui.keyCode.PAGE_DOWN );
+	simulateKeyDownUp( element, $.ui.keyCode.PAGE_DOWN );
 
 	shouldSpin( true, "button up" );
 	element.spinner( "widget" ).find( ".ui-spinner-up" ).mousedown().mouseup();
@@ -91,14 +93,14 @@ test( "stop", function() {
 	}
 
 	shouldStop( true, "key UP" );
-	spinner_simulateKeyDownUp( element, $.ui.keyCode.UP );
+	simulateKeyDownUp( element, $.ui.keyCode.UP );
 	shouldStop( true, "key DOWN" );
-	spinner_simulateKeyDownUp( element, $.ui.keyCode.DOWN );
+	simulateKeyDownUp( element, $.ui.keyCode.DOWN );
 
 	shouldStop( true, "key PAGE_UP" );
-	spinner_simulateKeyDownUp( element, $.ui.keyCode.PAGE_UP );
+	simulateKeyDownUp( element, $.ui.keyCode.PAGE_UP );
 	shouldStop( true, "key PAGE_DOWN" );
-	spinner_simulateKeyDownUp( element, $.ui.keyCode.PAGE_DOWN );
+	simulateKeyDownUp( element, $.ui.keyCode.PAGE_DOWN );
 
 	shouldStop( true, "button up" );
 	element.spinner( "widget" ).find( ".ui-spinner-up" ).mousedown().mouseup();
@@ -131,42 +133,42 @@ test( "change", function() {
 
 	element.focus();
 	shouldChange( false, "key UP, before blur" );
-	spinner_simulateKeyDownUp( element, $.ui.keyCode.UP );
+	simulateKeyDownUp( element, $.ui.keyCode.UP );
 	shouldChange( true, "blur after key UP" );
 	element.blur();
 
 	element.focus();
 	shouldChange( false, "key DOWN, before blur" );
-	spinner_simulateKeyDownUp( element, $.ui.keyCode.DOWN );
+	simulateKeyDownUp( element, $.ui.keyCode.DOWN );
 	shouldChange( true, "blur after key DOWN" );
 	element.blur();
 
 	element.focus();
 	shouldChange( false, "key PAGE_UP, before blur" );
-	spinner_simulateKeyDownUp( element, $.ui.keyCode.PAGE_UP );
+	simulateKeyDownUp( element, $.ui.keyCode.PAGE_UP );
 	shouldChange( true, "blur after key PAGE_UP" );
 	element.blur();
 
 	element.focus();
 	shouldChange( false, "key PAGE_DOWN, before blur" );
-	spinner_simulateKeyDownUp( element, $.ui.keyCode.PAGE_DOWN );
+	simulateKeyDownUp( element, $.ui.keyCode.PAGE_DOWN );
 	shouldChange( true, "blur after key PAGE_DOWN" );
 	element.blur();
 
 	shouldChange( false, "many keys, before blur" );
-	spinner_simulateKeyDownUp( element, $.ui.keyCode.PAGE_DOWN );
-	spinner_simulateKeyDownUp( element, $.ui.keyCode.UP );
-	spinner_simulateKeyDownUp( element, $.ui.keyCode.UP );
-	spinner_simulateKeyDownUp( element, $.ui.keyCode.UP );
-	spinner_simulateKeyDownUp( element, $.ui.keyCode.DOWN );
+	simulateKeyDownUp( element, $.ui.keyCode.PAGE_DOWN );
+	simulateKeyDownUp( element, $.ui.keyCode.UP );
+	simulateKeyDownUp( element, $.ui.keyCode.UP );
+	simulateKeyDownUp( element, $.ui.keyCode.UP );
+	simulateKeyDownUp( element, $.ui.keyCode.DOWN );
 	shouldChange( true, "blur after many keys" );
 	element.blur();
 
 	shouldChange( false, "many keys, same final value, before blur" );
-	spinner_simulateKeyDownUp( element, $.ui.keyCode.UP );
-	spinner_simulateKeyDownUp( element, $.ui.keyCode.UP );
-	spinner_simulateKeyDownUp( element, $.ui.keyCode.DOWN );
-	spinner_simulateKeyDownUp( element, $.ui.keyCode.DOWN );
+	simulateKeyDownUp( element, $.ui.keyCode.UP );
+	simulateKeyDownUp( element, $.ui.keyCode.UP );
+	simulateKeyDownUp( element, $.ui.keyCode.DOWN );
+	simulateKeyDownUp( element, $.ui.keyCode.DOWN );
 	shouldChange( false, "blur after many keys, same final value" );
 
 	shouldChange( false, "button up, before blur" );

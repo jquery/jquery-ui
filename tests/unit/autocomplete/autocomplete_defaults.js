@@ -1,4 +1,4 @@
-commonWidgetTests( "autocomplete", {
+TestHelpers.commonWidgetTests( "autocomplete", {
 	defaults: {
 		appendTo: "body",
 		autoFocus: false,

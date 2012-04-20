@@ -4,6 +4,11 @@ module( "effect.scale: Scale" );
 function run( position, v, h, vo, ho ) {
 	var desc = "End Position Correct: " + position + " (" + v + "," + h + ") - origin: (" + vo + "," + ho + ")";
 	asyncTest( desc, function() {
+		function complete() {
+			equal( parseInt( test.css( h ), 10 ), target[ h ], "Horizontal Position Correct " + desc );
+			equal( parseInt( test.css( v ), 10 ), target[ v ], "Vertical Position Correct " + desc );
+			start();
+		}
 		var test = $( ".testScale" ),
 			css = {
 				position: position
@@ -21,22 +26,16 @@ function run( position, v, h, vo, ho ) {
 
 		css[ h ] = 33;
 		css[ v ] = 33;
-		target[ h ] = h === ho ? css[ h ] : ho == "center" ? css[ h ] - 35 : css[ h ] - 70;
-		target[ v ] = v === vo ? css[ v ] : vo == "middle" ? css[ v ] - 35 : css[ v ] - 70;
-		if ( relative && h == "right" ) {
+		target[ h ] = h === ho ? css[ h ] : ho === "center" ? css[ h ] - 35 : css[ h ] - 70;
+		target[ v ] = v === vo ? css[ v ] : vo === "middle" ? css[ v ] - 35 : css[ v ] - 70;
+		if ( relative && h === "right" ) {
 			target[ h ] += 70;
 		}
-		if ( relative && v == "bottom" ) {
+		if ( relative && v === "bottom" ) {
 			target[ v ] += 70;
 		}
 		test.css( css );
 		test.effect( effect );
-
-		function complete() {
-			equal( parseInt( test.css( h ), 10 ), target[ h ], "Horizontal Position Correct " + desc );
-			equal( parseInt( test.css( v ), 10 ), target[ v ], "Vertical Position Correct " + desc );
-			start();
-		}
 	});
 }
 

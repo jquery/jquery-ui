@@ -29,32 +29,32 @@ $.effects.effect.slide = function( o, done ) {
 	// Adjust
 	$.effects.save( el, props );
 	el.show();
-	distance = o.distance || el[ ref === "top" ? "outerHeight" : "outerWidth" ]({ 
+	distance = o.distance || el[ ref === "top" ? "outerHeight" : "outerWidth" ]({
 		margin: true
 	});
-	
+
 	$.effects.createWrapper( el ).css({
 		overflow: "hidden"
 	});
-	
+
 	if ( show ) {
 		el.css( ref, positiveMotion ? (isNaN(distance) ? "-" + distance : -distance) : distance );
 	}
 
 	// Animation
-	animation[ ref ] = ( show ? 
-		( positiveMotion ? "+=" : "-=") : 
+	animation[ ref ] = ( show ?
+		( positiveMotion ? "+=" : "-=") :
 		( positiveMotion ? "-=" : "+=")) +
 		distance;
 
 	// Animate
-	el.animate( animation, { 
-		queue: false, 
-		duration: o.duration, 
-		easing: o.easing, 
+	el.animate( animation, {
+		queue: false,
+		duration: o.duration,
+		easing: o.easing,
 		complete: function() {
 			if ( mode === "hide" ) {
-				el.hide(); 
+				el.hide();
 			}
 			$.effects.restore( el, props );
 			$.effects.removeWrapper( el );

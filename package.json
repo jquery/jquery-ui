@@ -26,8 +26,9 @@
   ],
   "dependencies": {},
   "devDependencies": {
-    "grunt": "0.3.7",
+    "grunt": "0.3.9",
     "grunt-css": "0.1.1",
+    "grunt-compare-size": "0.1.1",
     "request": "2.9.153",
     "rimraf": "2.0.1"
   },

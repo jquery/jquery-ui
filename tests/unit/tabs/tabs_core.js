@@ -1,5 +1,7 @@
 (function( $ ) {
 
+var state = TestHelpers.tabs.state;
+
 module( "tabs: core" );
 
 test( "markup structure", function() {
@@ -89,7 +91,7 @@ test( "#4033 - IE expands hash to full url and misinterprets tab as ajax", funct
 	});
 
 	equal( element.find( ".ui-tabs-nav a" ).attr( "aria-controls" ), "tab", "aria-contorls attribute is correct" );
-	tabs_state( element, 1 );
+	state( element, 1 );
 });
 
 }( jQuery ) );

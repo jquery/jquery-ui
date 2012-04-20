@@ -99,7 +99,7 @@ asyncTest( "animateClass clears style properties when stopped", function() {
 	var test = $("div.animateClass"),
 		style = test[0].style,
 		orig = style.cssText;
-	
+
 	expect( 2 );
 
 	test.addClass( "testChangeBackground", duration );
@@ -113,17 +113,17 @@ asyncTest( "animateClass clears style properties when stopped", function() {
 asyncTest( "animateClass: css and class changes during animation are not lost (#7106)", function() {
 	var test = $( "div.ticket7106" );
 
-	// add a class and change a style property after starting an animated class
-	test.addClass( "animate", minDuration, animationComplete )
-		.addClass( "testClass" )
-		.height( 100 );
-
 	// ensure the class stays and that the css property stays
 	function animationComplete() {
 		ok( test.hasClass( "testClass" ), "class change during animateClass was not lost" );
 		equal( test.height(), 100, "css change during animateClass was not lost" );
 		start();
 	}
+
+	// add a class and change a style property after starting an animated class
+	test.addClass( "animate", minDuration, animationComplete )
+		.addClass( "testClass" )
+		.height( 100 );
 });
 
 
@@ -133,10 +133,9 @@ $.each( $.effects.effect, function( effect ) {
 	}
 	module( "effect."+effect );
 	asyncTest( "show/hide", function() {
-		var hidden = $( "div.hidden" );
 		expect( 8 );
-
-		var count = 0,
+		var hidden = $( "div.hidden" ),
+			count = 0,
 			test = 0;
 
 		function queueTest( fn ) {

@@ -1,4 +1,4 @@
-commonWidgetTests( "accordion", {
+TestHelpers.commonWidgetTests( "accordion", {
 	defaults: {
 		active: 0,
 		animate: {},

@@ -1,4 +1,4 @@
-commonWidgetTests( "spinner", {
+TestHelpers.commonWidgetTests( "spinner", {
 	defaults: {
 		culture: null,
 		disabled: false,

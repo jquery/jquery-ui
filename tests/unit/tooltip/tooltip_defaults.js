@@ -1,4 +1,4 @@
-commonWidgetTests( "tooltip", {
+TestHelpers.commonWidgetTests( "tooltip", {
 	defaults: {
 		content: function() {},
 		disabled: false,

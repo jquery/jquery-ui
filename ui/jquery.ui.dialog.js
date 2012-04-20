@@ -77,10 +77,10 @@ $.widget("ui.dialog", {
 		// #5742 - .attr() might return a DOMElement
 		if ( typeof this.originalTitle !== "string" ) {
 			this.originalTitle = "";
-		}		
-		this.oldPosition = { 
-			parent: this.element.parent(), 
-			index: this.element.parent().children().index( this.element ) 
+		}
+		this.oldPosition = {
+			parent: this.element.parent(),
+			index: this.element.parent().children().index( this.element )
 		};
 		this.options.title = this.options.title || this.originalTitle;
 		var self = this,
@@ -171,7 +171,7 @@ $.widget("ui.dialog", {
 	},
 
 	_destroy: function() {
-		var self = this, next, 
+		var self = this, next,
 			oldPosition = this.oldPosition;
 
 		if ( self.overlay ) {
@@ -187,13 +187,13 @@ $.widget("ui.dialog", {
 		if ( self.originalTitle ) {
 			self.element.attr( "title", self.originalTitle );
 		}
-		
+
 		next = oldPosition.parent.children().eq( oldPosition.index );
 		if ( next.length ) {
 			next.before( self.element );
 		} else {
 			oldPosition.parent.append( self.element );
-		}		
+		}
 	},
 
 	widget: function() {

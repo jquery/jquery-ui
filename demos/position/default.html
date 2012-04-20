@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
 	<meta charset="utf-8">
@@ -37,53 +37,28 @@
 		width: 120px;
 		height: 40px;
 	}
-	.ui-flipped-top {
-		border-top: 3px solid #000000;
-	}
-	.ui-flipped-bottom {
-		border-bottom: 3px solid #000000;
-	}
-	.ui-flipped-left {
-		border-left: 3px solid #000000;
-	}
-	.ui-flipped-right {
-		border-right: 3px solid #000000;
-	}
 	select, input {
 		margin-left: 15px;
 	}
 	</style>
 	<script>
 	$(function() {
-		function position( using ) {
+		function position() {
 			$( ".positionable" ).position({
 				of: $( "#parent" ),
 				my: $( "#my_horizontal" ).val() + " " + $( "#my_vertical" ).val(),
 				at: $( "#at_horizontal" ).val() + " " + $( "#at_vertical" ).val(),
 				offset: $( "#offset" ).val(),
-				using: using,
-				collision: $( "#collision_horizontal" ).val() + ' ' + $( "#collision_vertical" ).val()
+				collision: $( "#collision_horizontal" ).val() + " " + $( "#collision_vertical" ).val()
 			});
 		}
 
 		$( ".positionable" ).css( "opacity", 0.5 );
 
-		$( ":input" ).bind( "click keyup change", function() { position(); });
+		$( ":input" ).bind( "click keyup change", position );
 
 		$( "#parent" ).draggable({
-			drag: function() { position(); }
-		});
-
-		$( ".positionable" ).draggable({
-			drag: function( event, ui ) {
-				// reset offset before calculating it
-				$( "#offset" ).val( "0" );
-				position(function( result ) {
-					$( "#offset" ).val( "" + ( ui.offset.left - result.left ) +
-						" " + ( ui.offset.top - result.top ) );
-					position();
-				});
-			}
+			drag: position
 		});
 
 		position();
@@ -142,7 +117,7 @@
 	</div>
 	<div style="padding-bottom: 20px;">
 		<b>offset:</b>
-		<input id="offset" type="text" size="15"/>
+		<input id="offset">
 	</div>
 	<div style="padding-bottom: 20px;">
 		<b>collision:</b>
