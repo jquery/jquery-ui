@@ -109,7 +109,7 @@ $.fn.position = function( options ) {
 		// force left top to allow flipping
 		options.at = "left top";
 		targetWidth = targetHeight = 0;
-		targetOffset = { top: options.of.pageY, left: options.of.pageX };
+		targetOffset = { top: targetElem.pageY, left: targetElem.pageX };
 	} else {
 		targetWidth = target.outerWidth();
 		targetHeight = target.outerHeight();
