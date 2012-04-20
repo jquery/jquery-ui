@@ -14,6 +14,7 @@ $.ui = $.ui || {};
 var cachedScrollbarWidth,
 	max = Math.max,
 	abs = Math.abs,
+	round = Math.round,
 	rhorizontal = /left|center|right/,
 	rvertical = /top|center|bottom/,
 	roffset = /[\+\-]\d+%?/,
@@ -199,8 +200,8 @@ $.fn.position = function( options ) {
 
 		// if the browser doesn't support fractions, then round for consistent results
 		if ( !$.support.offsetFractions ) {
-			position.left = Math.round( position.left );
-			position.top = Math.round( position.top );
+			position.left = round( position.left );
+			position.top = round( position.top );
 		}
 
 		collisionPosition = {
@@ -312,7 +313,7 @@ $.ui.position = {
 				position.left -= overRight;
 			// adjust based on position and margin
 			} else {
-				position.left = Math.max( position.left - collisionPosLeft, position.left );
+				position.left = max( position.left - collisionPosLeft, position.left );
 			}
 		},
 		top: function( position, data ) {
@@ -350,7 +351,7 @@ $.ui.position = {
 				position.top -= overBottom;
 			// adjust based on position and margin
 			} else {
-				position.top = Math.max( position.top - collisionPosTop, position.top );
+				position.top = max( position.top - collisionPosTop, position.top );
 			}
 		}
 	},
@@ -382,13 +383,13 @@ $.ui.position = {
 
 			if ( overLeft < 0 ) {
 				newOverRight = position.left + myOffset + atOffset + offset + data.collisionWidth - outerWidth - withinOffset;
-				if ( newOverRight < 0 || newOverRight < Math.abs( overLeft ) ) {
+				if ( newOverRight < 0 || newOverRight < abs( overLeft ) ) {
 					position.left += myOffset + atOffset + offset;
 				}
 			}
 			else if ( overRight > 0 ) {
 				newOverLeft = position.left - data.collisionPosition.marginLeft + myOffset + atOffset + offset - offsetLeft;
-				if ( newOverLeft > 0 || Math.abs( newOverLeft ) < overRight ) {
+				if ( newOverLeft > 0 || abs( newOverLeft ) < overRight ) {
 					position.left += myOffset + atOffset + offset;
 				}
 			}
@@ -419,13 +420,13 @@ $.ui.position = {
 				newOverBottom;
 			if ( overTop < 0 ) {
 				newOverBottom = position.top + myOffset + atOffset + offset + data.collisionHeight - outerHeight - withinOffset;
-				if ( ( position.top + myOffset + atOffset + offset) > overTop && ( newOverBottom < 0 || newOverBottom < Math.abs( overTop ) ) ) {
+				if ( ( position.top + myOffset + atOffset + offset) > overTop && ( newOverBottom < 0 || newOverBottom < abs( overTop ) ) ) {
 					position.top += myOffset + atOffset + offset;
 				}
 			}
 			else if ( overBottom > 0 ) {
 				newOverTop = position.top -  data.collisionPosition.marginTop + myOffset + atOffset + offset - offsetTop;
-				if ( ( position.top + myOffset + atOffset + offset) > overBottom && ( newOverTop > 0 || Math.abs( newOverTop ) < overBottom ) ) {
+				if ( ( position.top + myOffset + atOffset + offset) > overBottom && ( newOverTop > 0 || abs( newOverTop ) < overBottom ) ) {
 					position.top += myOffset + atOffset + offset;
 				}
 			}
