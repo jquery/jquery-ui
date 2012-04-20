@@ -14,7 +14,7 @@
 	$(function() {
 		function using( position, feedback ) {
 			$(this)
-				.offset( position )
+				.css( position )
 				.text( feedback.horizontal + " " + feedback.vertical + " " + feedback.important )
 				.removeClass( "left right top bottom center middle vertical horizontal" )
 				.addClass( feedback.horizontal )

@@ -235,9 +235,9 @@ $.fn.position = function( options ) {
 		if ( options.using ) {
 			// adds feedback as second argument to using callback, if present
 			using = function( props ) {
-				var left = targetOffset.left - props.left,
+				var left = targetOffset.left - position.left,
 					right = left + targetWidth - elemWidth,
-					top = targetOffset.top - props.top,
+					top = targetOffset.top - position.top,
 					bottom = top + targetHeight - elemHeight,
 					feedback = {
 						target: {
@@ -249,8 +249,8 @@ $.fn.position = function( options ) {
 						},
 						element: {
 							element: elem,
-							left: props.left,
-							top: props.top,
+							left: position.left,
+							top: position.top,
 							width: elemWidth,
 							height: elemHeight
 						},
