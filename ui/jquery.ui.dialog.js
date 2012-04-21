@@ -112,7 +112,7 @@ $.widget("ui.dialog", {
 				.mousedown(function( event ) {
 					self.moveToTop( false, event );
 				})
-				.appendTo( "body" ),
+				.appendTo( document.body ),
 
 			uiDialogContent = self.element
 				.show()
@@ -181,7 +181,7 @@ $.widget("ui.dialog", {
 		self.element
 			.removeClass( "ui-dialog-content ui-widget-content" )
 			.hide()
-			.appendTo( "body" );
+			.appendTo( document.body );
 		self.uiDialog.remove();
 
 		if ( self.originalTitle ) {

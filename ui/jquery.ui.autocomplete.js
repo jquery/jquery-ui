@@ -22,7 +22,7 @@ $.widget( "ui.autocomplete", {
 	version: "@VERSION",
 	defaultElement: "<input>",
 	options: {
-		appendTo: "body",
+		appendTo: document.body,
 		autoFocus: false,
 		delay: 300,
 		minLength: 1,
@@ -188,7 +188,7 @@ $.widget( "ui.autocomplete", {
 		this._initSource();
 		this.menu = $( "<ul></ul>" )
 			.addClass( "ui-autocomplete" )
-			.appendTo( this.document.find( this.options.appendTo || "body" )[0] )
+			.appendTo( this.document.find( this.options.appendTo || document.body )[0] )
 			// prevent the close-on-blur in case of a "slow" click on the menu (long mousedown)
 			.mousedown(function( event ) {
 				// prevent moving focus out of the text field
@@ -297,7 +297,7 @@ $.widget( "ui.autocomplete", {
 			this._initSource();
 		}
 		if ( key === "appendTo" ) {
-			this.menu.element.appendTo( this.document.find( value || "body" )[0] );
+			this.menu.element.appendTo( this.document.find( value || document.body )[0] );
 		}
 		if ( key === "disabled" && value && this.xhr ) {
 			this.xhr.abort();

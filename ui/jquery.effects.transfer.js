@@ -16,7 +16,7 @@ $.effects.effect.transfer = function( o, done ) {
 	var elem = $( this ),
 		target = $( o.to ),
 		targetFixed = target.css( "position" ) === "fixed",
-		body = $("body"),
+		body = $(document.body),
 		fixTop = targetFixed ? body.scrollTop() : 0,
 		fixLeft = targetFixed ? body.scrollLeft() : 0,
 		endPosition = target.offset(),

@@ -25,7 +25,7 @@ $.position = {
 			div = $( "<div style='display:block;width:50px;height:50px;overflow:hidden;'><div style='height:100px;width:auto;'></div></div>" ),
 			innerDiv = div.children()[0];
 
-		$( "body" ).append( div );
+		$( document.body ).append( div );
 		w1 = innerDiv.offsetWidth;
 		div.css( "overflow", "scroll" );
 
@@ -417,11 +417,11 @@ $.ui.position = {
 // fraction support test
 (function () {
 	var testElement, testElementParent, testElementStyle, offsetLeft, i,
-		body = document.getElementsByTagName( "body" )[ 0 ],
+		body = document.getElementsByTagName( document.body )[ 0 ],
 		div = document.createElement( "div" );
 
 	//Create a "fake body" for testing based on method used in jQuery.support
-	testElement = document.createElement( body ? "div" : "body" );
+	testElement = document.createElement( body ? "div" : document.body );
 	testElementStyle = {
 		visibility: "hidden",
 		width: 0,
