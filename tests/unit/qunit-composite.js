@@ -7,19 +7,18 @@ QUnit.extend( QUnit, {
 		});
 
 		for ( var i = 0; i < suites.length; i++ ) {
-			(function( suite ) {
-				asyncTest( suite, function() {
-					QUnit.runSuite( suite );
-				});
-			}( suites[i] ) );
+			QUnit.runSuite( suites[i] );
 		}
+
 		QUnit.done(function() {
 			this.iframe.style.display = "none";
 		});
 	},
 
 	runSuite: function( suite ) {
-		this.iframe.setAttribute( "src", suite );
+		asyncTest( suite, function() {
+			QUnit.iframe.setAttribute( "src", suite );
+		});
 	},
 
 	initIframe: function() {
@@ -75,12 +74,13 @@ QUnit.testStart(function( data ) {
 });
 
 QUnit.testDone(function() {
-	var current = QUnit.id( this.config.current.id ),
+	var i,
+		current = QUnit.id( this.config.current.id ),
 		children = current.children,
 		src = this.iframe.src;
 
 	// undo the auto-expansion of failed tests
-	for ( var i = 0; i < children.length; i++ ) {
+	for ( i = 0; i < children.length; i++ ) {
 		if ( children[i].nodeName === "OL" ) {
 			children[i].style.display = "none";
 		}
@@ -88,7 +88,7 @@ QUnit.testDone(function() {
 
 	QUnit.addEvent(current, "dblclick", function( e ) {
 		var target = e && e.target ? e.target : window.event.srcElement;
-		if ( target.nodeName.toLowerCase() == "span" || target.nodeName.toLowerCase() == "b" ) {
+		if ( target.nodeName.toLowerCase() === "span" || target.nodeName.toLowerCase() === "b" ) {
 			target = target.parentNode;
 		}
 		if ( window.location && target.nodeName.toLowerCase() === "strong" ) {
