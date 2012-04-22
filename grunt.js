@@ -73,6 +73,8 @@ cssFiles.forEach(function( file ) {
 grunt.loadNpmTasks( "grunt-css" );
 // file size comparison tasks
 grunt.loadNpmTasks( "grunt-compare-size" );
+// html validation task
+grunt.loadNpmTasks( "grunt-html" );
 
 grunt.registerHelper( "strip_all_banners", function( filepath ) {
 	return grunt.file.read( filepath ).replace( /^\s*\/\*[\s\S]*?\*\/\s*/g, "" );
@@ -138,6 +140,9 @@ grunt.initConfig({
 	},
 	min: minify,
 	cssmin: minifyCSS,
+	html: {
+		all: ["demos/**/*.html", "tests/**/*.html"]
+	},
 	copy: {
 		dist: {
 			src: [
@@ -504,7 +509,7 @@ grunt.registerTask( "clean", function() {
 	require( "rimraf" ).sync( "dist" );
 });
 
-grunt.registerTask( "default", "lint csslint qunit build compare_size" );
+grunt.registerTask( "default", "lint csslint html qunit build compare_size" );
 grunt.registerTask( "sizer", "concat:ui min:dist/jquery-ui.min.js compare_size" );
 grunt.registerTask( "build", "concat min cssmin" );
 grunt.registerTask( "release", "clean build copy:dist copy:dist_min copy:dist_min_images copy:dist_css_min md5:dist zip:dist" );
