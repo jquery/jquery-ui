@@ -722,7 +722,7 @@ $.each( baseEasings, function( name, easeIn ) {
 	$.easing[ "easeInOut" + name ] = function( p ) {
 		return p < 0.5 ?
 			easeIn( p * 2 ) / 2 :
-			easeIn( p * -2 + 2 ) / -2 + 1;
+			1 - easeIn( p * -2 + 2 ) / 2;
 	};
 });
 

@@ -5,17 +5,15 @@
 	<title>jQuery UI Core Test Suite</title>
 
 	<script src="../../jquery.js"></script>
-	<script src="../../resource_loader.js"></script>
-	<script>
-	loadResources({
-		js: [ "ui/jquery.ui.core.js" ]
-	});
-	</script>
-
 	<link rel="stylesheet" href="../../../external/qunit.css">
 	<script src="../../../external/qunit.js"></script>
 	<script src="../../jquery.simulate.js"></script>
 	<script src="../testsuite.js"></script>
+	<script>
+	TestHelpers.loadResources({
+		js: [ "ui/jquery.ui.core.js" ]
+	});
+	</script>
 
 	<script src="core.js"></script>
 	<script src="selector.js"></script>
@@ -39,15 +37,13 @@
 <ol id="qunit-tests"></ol>
 <div id="qunit-fixture">
 
-<img src="../images/jqueryui_32x32.png" usemap="#mymap" width="10", height="10">
+<img src="../images/jqueryui_32x32.png" usemap="#mymap" width="10" height="10" alt="">
 <map name="mymap">
-	<area shape="rect" coords="0,0,1,1" id="areaCoordsNoHref">
-	<area shape="rect" coords="1,1,2,2" href="foo.html" id="areaCoordsHref">
-	<area shape="rect" coords="0,0,0,0" href="foo.html" id="areaCoordsNoSizeHref">
-	<area href="foo.html" id="areaNoCoordsHref">
+	<area shape="rect" coords="1,1,2,2" href="foo.html" id="areaCoordsHref" alt="">
+	<area href="foo.html" id="areaNoCoordsHref" alt="">
 </map>
 <map name="mymap2">
-	<area shape="rect" coords="1,1,2,2" href="foo.html" id="areaNoImg">
+	<area shape="rect" coords="1,1,2,2" href="foo.html" id="areaNoImg" alt="">
 </map>
 
 <form id="formNoTabindex"></form>

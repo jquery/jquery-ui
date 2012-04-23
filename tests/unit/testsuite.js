@@ -1,6 +1,65 @@
-(function() {
+(function( $ ) {
 
 window.TestHelpers = {};
+
+function includeStyle( url ) {
+	document.write( "<link rel='stylesheet' href='../../../" + url + "'>" );
+}
+
+function includeScript( url ) {
+	document.write( "<script src='../../../" + url + "'></script>" );
+}
+
+QUnit.config.urlConfig.push( "min" );
+TestHelpers.loadResources = QUnit.urlParams.min ?
+	function() {
+		// TODO: proper include with theme images
+		includeStyle( "dist/jquery-ui.min.css" );
+		includeScript( "dist/jquery-ui.min.js" );
+	} :
+	function( resources ) {
+		$.each( resources.css || [], function( i, resource ) {
+			includeStyle( "themes/base/jquery." + resource + ".css" );
+		});
+		$.each( resources.js || [], function( i, resource ) {
+			includeScript( resource );
+		});
+	};
+
+QUnit.config.urlConfig.push( "nojshint" );
+function testJshint( widget ) {
+	if ( QUnit.urlParams.nojshint ) {
+		return;
+	}
+
+	includeScript( "external/jshint.js" );
+	asyncTest( "JSHint", function() {
+		expect( 1 );
+
+		$.when(
+			$.ajax({
+				url: "../../../ui/.jshintrc",
+				dataType: "json"
+			}),
+			$.ajax({
+				url: "../../../ui/jquery.ui." + widget + ".js",
+				dataType: "text"
+			})
+		).done(function( hintArgs, srcArgs ) {
+			var passed = JSHINT( srcArgs[ 0 ], hintArgs[ 0 ] ),
+				errors = $.map( JSHINT.errors, function( error ) {
+					return "[L" + error.line + ":C" + error.character + "] " +
+						error.reason + "\n" + error.evidence + "\n";
+				}).join( "\n" );
+			ok( passed, errors );
+			start();
+		})
+		.fail(function() {
+			ok( false, "error loading source" );
+			start();
+		});
+	});
+}
 
 function testWidgetDefaults( widget, defaults ) {
 	var pluginDefaults = $.ui[ widget ].prototype.options;
@@ -24,17 +83,15 @@ function testWidgetDefaults( widget, defaults ) {
 	});
 }
 
-var privateMethods = [
-	"_createWidget",
-	"destroy",
-	"option",
-	"_trigger"
-];
-
 function testWidgetOverrides( widget ) {
 	if ( $.uiBackCompat === false ) {
 		test( "$.widget overrides", function() {
-			$.each( privateMethods, function( i, method ) {
+			$.each([
+				"_createWidget",
+				"destroy",
+				"option",
+				"_trigger"
+			], function( i, method ) {
 				strictEqual( $.ui[ widget ].prototype[ method ],
 					$.Widget.prototype[ method ], "should not override " + method );
 			});
@@ -59,6 +116,7 @@ function testBasicUsage( widget ) {
 TestHelpers.commonWidgetTests = function( widget, settings ) {
 	module( widget + ": common widget" );
 
+	testJshint( widget );
 	testWidgetDefaults( widget, settings.defaults );
 	testWidgetOverrides( widget );
 	testBasicUsage( widget );
@@ -106,4 +164,4 @@ window.domEqual = function( selector, modifier, message ) {
 	QUnit.push( QUnit.equiv(actual, expected), actual, expected, message );
 };
 
-}());
+}( jQuery ));

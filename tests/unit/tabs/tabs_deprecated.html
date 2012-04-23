@@ -6,9 +6,12 @@
 
 	<script src="../../jquery.js"></script>
 	<script src="../../../external/jquery.cookie.js"></script>
-	<script src="../../resource_loader.js"></script>
+	<link rel="stylesheet" href="../../../external/qunit.css">
+	<script src="../../../external/qunit.js"></script>
+	<script src="../../jquery.simulate.js"></script>
+	<script src="../testsuite.js"></script>
 	<script>
-	loadResources({
+	TestHelpers.loadResources({
 		css: [ "ui.core", "ui.tabs" ],
 		js: [
 			"ui/jquery.ui.core.js",
@@ -18,13 +21,8 @@
 	});
 	</script>
 
-	<link rel="stylesheet" href="../../../external/qunit.css">
-	<script src="../../../external/qunit.js"></script>
-	<script src="../../jquery.simulate.js"></script>
-	<script src="../testsuite.js"></script>
-
 	<script src="tabs_test_helpers.js"></script>
-	<script src="tabs_defaults_deprecated.js"></script>
+	<script src="tabs_common_deprecated.js"></script>
 	<script src="tabs_core.js"></script>
 	<script src="tabs_events.js"></script>
 	<script src="tabs_methods.js"></script>

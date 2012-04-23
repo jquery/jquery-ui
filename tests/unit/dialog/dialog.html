@@ -6,9 +6,12 @@
 
 	<script src="../../jquery.js"></script>
 	<script src="../../../external/jquery.bgiframe-2.1.2.js"></script>
-	<script src="../../resource_loader.js"></script>
+	<link rel="stylesheet" href="../../../external/qunit.css">
+	<script src="../../../external/qunit.js"></script>
+	<script src="../../jquery.simulate.js"></script>
+	<script src="../testsuite.js"></script>
 	<script>
-	loadResources({
+	TestHelpers.loadResources({
 		css: [ "ui.core", "ui.dialog" ],
 		js: [
 			"ui/jquery.ui.core.js",
@@ -22,13 +25,8 @@
 	});
 	</script>
 
-	<link rel="stylesheet" href="../../../external/qunit.css">
-	<script src="../../../external/qunit.js"></script>
-	<script src="../../jquery.simulate.js"></script>
-	<script src="../testsuite.js"></script>
-
+	<script src="dialog_common.js"></script>
 	<script src="dialog_core.js"></script>
-	<script src="dialog_defaults.js"></script>
 	<script src="dialog_events.js"></script>
 	<script src="dialog_methods.js"></script>
 	<script src="dialog_options.js"></script>

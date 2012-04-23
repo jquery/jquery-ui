@@ -12,10 +12,11 @@
  *	jquery.ui.widget.js
  */
 (function( $, undefined ) {
-	var uid = 0,
-		hideProps = {},
-		showProps = {},
-		showPropsAdjust = {};
+
+var uid = 0,
+	hideProps = {},
+	showProps = {},
+	showPropsAdjust = {};
 
 hideProps.height = hideProps.paddingTop = hideProps.paddingBottom =
 	hideProps.borderTopWidth = hideProps.borderBottomWidth = "hide";
