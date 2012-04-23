@@ -2,12 +2,35 @@
 
 window.TestHelpers = {};
 
+function includeStyle( url ) {
+	document.write( "<link rel='stylesheet' href='../../../" + url + "'>" );
+}
+
+function includeScript( url ) {
+	document.write( "<script src='../../../" + url + "'></script>" );
+}
+
+TestHelpers.loadResources = QUnit.urlParams.min ?
+	function() {
+		// TODO: proper include with theme images
+		includeStyle( "dist/jquery-ui.min.css" );
+		includeScript( "dist/jquery-ui.min.js" );
+	} :
+	function( resources ) {
+		$.each( resources.css || [], function( i, resource ) {
+			includeStyle( "themes/base/jquery." + resource + ".css" );
+		});
+		$.each( resources.js || [], function( i, resource ) {
+			includeScript( resource );
+		});
+	};
+
 function testJshint( widget ) {
 	if ( QUnit.urlParams.nojshint ) {
 		return;
 	}
 
-	document.write( "<script src='../../../external/jshint.js'></script>" );
+	includeScript( "external/jshint.js" );
 	asyncTest( "JSHint", function() {
 		expect( 1 );
 
@@ -58,17 +81,15 @@ function testWidgetDefaults( widget, defaults ) {
 	});
 }
 
-var privateMethods = [
-	"_createWidget",
-	"destroy",
-	"option",
-	"_trigger"
-];
-
 function testWidgetOverrides( widget ) {
 	if ( $.uiBackCompat === false ) {
 		test( "$.widget overrides", function() {
-			$.each( privateMethods, function( i, method ) {
+			$.each([
+				"_createWidget",
+				"destroy",
+				"option",
+				"_trigger"
+			], function( i, method ) {
 				strictEqual( $.ui[ widget ].prototype[ method ],
 					$.Widget.prototype[ method ], "should not override " + method );
 			});

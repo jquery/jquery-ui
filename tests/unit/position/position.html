@@ -8,17 +8,15 @@
 	<script>
 	$.uiBackCompat = false;
 	</script>
-	<script src="../../resource_loader.js"></script>
-	<script>
-	loadResources({
-		js: [ "ui/jquery.ui.position.js" ]
-	});
-	</script>
-
 	<link rel="stylesheet" href="../../../external/qunit.css">
 	<script src="../../../external/qunit.js"></script>
 	<script src="../../jquery.simulate.js"></script>
 	<script src="../testsuite.js"></script>
+	<script>
+	TestHelpers.loadResources({
+		js: [ "ui/jquery.ui.position.js" ]
+	});
+	</script>
 
 	<script src="position_core.js"></script>
 	<script src="position_core_within.js"></script>
