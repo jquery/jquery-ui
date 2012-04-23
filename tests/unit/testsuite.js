@@ -1,6 +1,40 @@
-(function() {
+(function( $ ) {
 
 window.TestHelpers = {};
+
+function testJshint( widget ) {
+	if ( QUnit.urlParams.nojshint ) {
+		return;
+	}
+
+	document.write( "<script src='../../../external/jshint.js'></script>" );
+	asyncTest( "JSHint", function() {
+		expect( 1 );
+
+		$.when(
+			$.ajax({
+				url: "../../../ui/.jshintrc",
+				dataType: "json"
+			}),
+			$.ajax({
+				url: "../../../ui/jquery.ui." + widget + ".js",
+				dataType: "text"
+			})
+		).done(function( hintArgs, srcArgs ) {
+			var passed = JSHINT( srcArgs[ 0 ], hintArgs[ 0 ] ),
+				errors = $.map( JSHINT.errors, function( error ) {
+					return "[L" + error.line + ":C" + error.character + "] " +
+						error.reason + "\n" + error.evidence + "\n";
+				}).join( "\n" );
+			ok( passed, errors );
+			start();
+		})
+		.fail(function() {
+			ok( false, "error loading source" );
+			start();
+		});
+	});
+}
 
 function testWidgetDefaults( widget, defaults ) {
 	var pluginDefaults = $.ui[ widget ].prototype.options;
@@ -59,6 +93,7 @@ function testBasicUsage( widget ) {
 TestHelpers.commonWidgetTests = function( widget, settings ) {
 	module( widget + ": common widget" );
 
+	testJshint( widget );
 	testWidgetDefaults( widget, settings.defaults );
 	testWidgetOverrides( widget );
 	testBasicUsage( widget );
@@ -106,4 +141,4 @@ window.domEqual = function( selector, modifier, message ) {
 	QUnit.push( QUnit.equiv(actual, expected), actual, expected, message );
 };
 
-}());
+}( jQuery ));

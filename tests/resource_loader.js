@@ -24,8 +24,9 @@ function includeScript( url ) {
 
 window.loadResources = min ?
 	function() {
-		includeStyle( "build/dist/theme/jquery-ui.min.css" );
-		includeScript( "build/dist/jquery-ui.min.js" );
+		// TODO: proper include with theme images
+		includeStyle( "dist/jquery-ui.min.css" );
+		includeScript( "dist/jquery-ui.min.js" );
 	} :
 	function( resources ) {
 		$.each( resources.css || [], function( i, resource ) {
