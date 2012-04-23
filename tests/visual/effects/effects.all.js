@@ -103,4 +103,10 @@ $(function() {
 			return "current";
 		}, duration);
 	});
+	
+	effect('#build', "build", {easing: 'linear' });
+	effect('#pinwheel', "pinwheel", {easing: 'linear' });
+	effect('#blockfade', "blockfade", {easing: 'linear' });
+	effect('#shear', "shear", {easing: 'linear' });
+	effect('#sexplode', "sexplode", {easing: 'linear' });
 });
