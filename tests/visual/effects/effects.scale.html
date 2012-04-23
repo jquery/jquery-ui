@@ -8,7 +8,7 @@
 	<script src="../../../ui/jquery.effects.core.js"></script>
 	<script src="../../../ui/jquery.effects.scale.js"></script>
 	<script src="effects.all.js"></script>
-	<script type="text/javascript" charset="utf-8">
+	<script>
 	jQuery(function( $ ) {
 		var test = $( "#testBox" ),
 			opts = $( ".arg" ),
@@ -36,9 +36,9 @@
 				var cur = this.selectedIndex,
 					next = cur + direction,
 					len = this.options.length;
-				
+
 				this.selectedIndex = ( next + len ) % len;
-				
+
 				if ( ( next+len ) % len === next ) return false;
 			});
 			doAnim();

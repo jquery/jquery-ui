@@ -1,6 +1,7 @@
 <!doctype html>
 <html>
 <head>
+	<meta charset="utf-8">
 	<title>Menu Visual Test: Default</title>
 	<link rel="stylesheet" href="../visual.css" type="text/css" />
 	<link rel="stylesheet" href="../../../themes/base/jquery.ui.all.css" type="text/css" title="ui-theme" />
@@ -18,15 +19,15 @@
 			right: 10,
 			top: 10
 		}).appendTo(document.body).themeswitcher();
-		
+
 		$.widget("ui.drilldown", {
 			_init: function() {
 				var that = this;
 				this.active = this.element.find(">ul").attr("tabindex", 0);
-				
+
 				// hide submenus and create indicator icons
-				this.element.find("ul").hide().prev("a").prepend('<span class="ui-icon ui-icon-carat-1-e"></span>').end().filter(":first").show();	
-				
+				this.element.find("ul").hide().prev("a").prepend('<span class="ui-icon ui-icon-carat-1-e"></span>').end().filter(":first").show();
+
 				this.element.find("ul").menu({
 					// disable built-in key handling
 					input: $(),
@@ -46,7 +47,7 @@
 						}
 					}
 				});
-				
+
 				this.back = this.element.children(":last").button({
 					icons: {
 						primary: "ui-icon-carat-1-w"
@@ -56,7 +57,7 @@
 					return false;
 				}).hide();
 			},
-			
+
 			_open: function(submenu) {
 				this.active = submenu.show().css({
 					opacity: 0
@@ -78,7 +79,7 @@
 				});
 				this.back.show();
 			},
-			
+
 			up: function() {
 				if (this.active.parent()[0] == this.element[0]) {
 					return;
@@ -101,7 +102,7 @@
 					this.back.hide();
 				}
 			},
-			
+
 			down: function(event) {
 				var nested = this.activeItem.find(">ul");
 				if (nested.length) {
@@ -109,24 +110,24 @@
 					nested.menu("focus", event, nested.children(":first"))
 				}
 			},
-			
+
 			show: function() {
 			},
-			
+
 			hide: function() {
 			},
-			
+
 			widget: function() {
 				return this.element.find(">ul");
 			}
 		});
-		
+
 		var drilldown = $("#drilldown").drilldown({
 			select: function(event, ui) {
 				$("#log").append("<div>Selected " + ui.item.text() + "</div>");
 			}
 		});
-		
+
 		drilldown.drilldown("widget").keydown(function(event) {
 			var menu = drilldown.data("drilldown").active.data("menu");
 			if (menu.widget().is(":hidden"))
@@ -171,7 +172,7 @@
 				} else {
 					character = prev + character;
 				}
-				
+
 				var match = menu.widget().children("li").filter(function() {
 					return new RegExp("^" + character, "i").test($("a", this).text());
 				});
@@ -207,7 +208,7 @@
 	</style>
 </head>
 <body>
-	
+
 <div id="drilldown">
 	<h3>Make a selection...</h3>
 	<ul>
