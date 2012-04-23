@@ -387,6 +387,44 @@ test( "collision: flip, collision", function() {
 	}, "with offset" );
 });
 
+test( "collision: flipfit, no collision", function() {
+	expect( 2 );
+
+	collisionTest({
+		collision: "flipfit"
+	}, {
+		top: 10,
+		left: 10
+	}, "no offset" );
+
+	collisionTest({
+		collision: "flipfit",
+		at: "right+2 bottom+3"
+	}, {
+		top: 13,
+		left: 12
+	}, "with offset" );
+});
+
+test( "collision: flipfit, collision", function() {
+	expect( 2 );
+
+	collisionTest2({
+		collision: "flipfit"
+	}, {
+		top: 10,
+		left: 10
+	}, "no offset" );
+
+	collisionTest2({
+		collision: "flipfit",
+		at: "left+2 top+3"
+	}, {
+		top: 7,
+		left: 8
+	}, "with offset" );
+});
+
 test( "collision: none, no collision", function() {
 	expect( 2 );
 
@@ -480,7 +518,7 @@ test( "collision: flip, with margin", function() {
 });
 
 test( "within", function() {
-	expect( 4 );
+	expect( 6 );
 
 	collisionTest({
 		within: "#within",
@@ -504,7 +542,7 @@ test( "within", function() {
 	}, {
 		top: 10,
 		left: -6
-	}, "fit - right bottom" );
+	}, "flip - right bottom" );
 
 	collisionTest2({
 		within: "#within",
@@ -512,7 +550,23 @@ test( "within", function() {
 	}, {
 		top: 10,
 		left: -6
-	}, "fit - left top" );
+	}, "flip - left top" );
+
+	collisionTest({
+		within: "#within",
+		collision: "flipfit"
+	}, {
+		top: 4,
+		left: 0
+	}, "flipfit - right bottom" );
+
+	collisionTest2({
+		within: "#within",
+		collision: "flipfit"
+	}, {
+		top: 4,
+		left: 0
+	}, "flipfit - left top" );
 });
 
 test( "fractions", function() {
