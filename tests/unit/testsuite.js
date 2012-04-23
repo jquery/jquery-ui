@@ -10,6 +10,7 @@ function includeScript( url ) {
 	document.write( "<script src='../../../" + url + "'></script>" );
 }
 
+QUnit.config.urlConfig.push( "min" );
 TestHelpers.loadResources = QUnit.urlParams.min ?
 	function() {
 		// TODO: proper include with theme images
@@ -25,6 +26,7 @@ TestHelpers.loadResources = QUnit.urlParams.min ?
 		});
 	};
 
+QUnit.config.urlConfig.push( "nojshint" );
 function testJshint( widget ) {
 	if ( QUnit.urlParams.nojshint ) {
 		return;
