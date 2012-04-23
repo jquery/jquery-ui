@@ -16,12 +16,13 @@
 		ul {margin: 0; padding: 0;}
 		td div {margin: 2px; position: relative; padding: 4px 0; cursor: pointer; float: left;  list-style: none;}
 		span.ui-icon { float: left; margin: 0 4px;}
+		.icon-collection { border-spacing: 0; border-collapse: collapse; }
 	</style>
 
 	<script type="text/javascript">
 	$(function(){
 		$('.ui-state-default').hover(
-			function(){ $(this).addClass('ui-state-hover'); }, 
+			function(){ $(this).addClass('ui-state-hover'); },
 			function(){ $(this).removeClass('ui-state-hover'); }
 		);
 
@@ -36,7 +37,7 @@
 
 <p class="icons"></p>
 
-<table  class="ui-widget icon-collection" cellpaddding="0" cellspacing="0">
+<table  class="ui-widget icon-collection">
 	<tr>
 			<td><div class="ui-state-default ui-corner-all" title=".ui-icon-carat-1-n"><span class="ui-icon ui-icon-carat-1-n"></span></div></td>
 			<td><div class="ui-state-default ui-corner-all" title=".ui-icon-carat-1-ne"><span class="ui-icon ui-icon-carat-1-ne"></span></div></td>
@@ -238,7 +239,7 @@
 			<td><div class="ui-state-default ui-corner-all" title=".ui-icon-grip-solid-vertical"><span class="ui-icon ui-icon-grip-solid-vertical"></span></div></td>
 			<td><div class="ui-state-default ui-corner-all" title=".ui-icon-grip-solid-horizontal"><span class="ui-icon ui-icon-grip-solid-horizontal"></span></div></td>
 			<td><div class="ui-state-default ui-corner-all" title=".ui-icon-gripsmall-diagonal-se"><span class="ui-icon ui-icon-gripsmall-diagonal-se"></span></div></td>
-			<td><div class="ui-state-default ui-corner-all" title=".ui-icon-grip-diagonal-se"><span class="ui-icon ui-icon-grip-diagonal-se"></span></div></td></ul>
+			<td><div class="ui-state-default ui-corner-all" title=".ui-icon-grip-diagonal-se"><span class="ui-icon ui-icon-grip-diagonal-se"></span></div></td>
 	</tr>
 </table>
 
