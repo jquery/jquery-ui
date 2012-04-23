@@ -497,10 +497,10 @@ $.widget( "ui.accordion", {
 		easing = easing || options.easing || animate.easing;
 		duration = duration || options.duration || animate.duration;
 
-		if ( !toHide.size() ) {
+		if ( !toHide.length ) {
 			return toShow.animate( showProps, duration, easing, complete );
 		}
-		if ( !toShow.size() ) {
+		if ( !toShow.length ) {
 			return toHide.animate( hideProps, duration, easing, complete );
 		}
 

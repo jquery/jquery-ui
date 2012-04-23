@@ -187,7 +187,7 @@ test( "selected", function() {
 		collapsible: true
 	});
 	state( element, 0, 0, 0 );
-	equal( element.find( ".ui-tabs-nav .ui-state-active" ).size(), 0, "no tabs selected" );
+	equal( element.find( ".ui-tabs-nav .ui-state-active" ).length, 0, "no tabs selected" );
 	strictEqual( element.tabs( "option", "selected" ), -1 );
 
 	element.tabs( "option", "collapsible", false );
