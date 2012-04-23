@@ -20,7 +20,7 @@ test( "{ active: false }", function() {
 		collapsible: true
 	});
 	state( element, 0, 0, 0 );
-	equal( element.find( ".ui-accordion-header.ui-state-active" ).size(), 0, "no headers selected" );
+	equal( element.find( ".ui-accordion-header.ui-state-active" ).length, 0, "no headers selected" );
 	equal( element.accordion( "option", "active" ), false );
 
 	element.accordion( "option", "collapsible", false );

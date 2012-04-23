@@ -161,9 +161,9 @@ asyncTest( "load", function() {
 			panel = $( "#" + panelId );
 
 		ok( !( "originalEvent" in event ), "originalEvent" );
-		equal( ui.tab.size(), 1, "tab size" );
+		equal( ui.tab.length, 1, "tab length" );
 		strictEqual( ui.tab[ 0 ], tab[ 0 ], "tab" );
-		equal( ui.panel.size(), 1, "panel size" );
+		equal( ui.panel.length, 1, "panel length" );
 		strictEqual( ui.panel[ 0 ], panel[ 0 ], "panel" );
 		state( element, 1, 0, 0, 0, 0 );
 	});
@@ -176,9 +176,9 @@ asyncTest( "load", function() {
 			panel = $( "#" + panelId );
 
 		ok( !( "originalEvent" in event ), "originalEvent" );
-		equal( uiTab.size(), 1, "tab size" );
+		equal( uiTab.length, 1, "tab length" );
 		strictEqual( uiTab[ 0 ], tab[ 0 ], "tab" );
-		equal( uiPanel.size(), 1, "panel size" );
+		equal( uiPanel.length, 1, "panel length" );
 		strictEqual( uiPanel[ 0 ], panel[ 0 ], "panel" );
 		equal( uiPanel.find( "p" ).length, 1, "panel html" );
 		state( element, 1, 0, 0, 0, 0 );
@@ -208,9 +208,9 @@ asyncTest( "load", function() {
 				panel = $( "#" + panelId );
 
 			ok( !( "originalEvent" in event ), "originalEvent" );
-			equal( ui.tab.size(), 1, "tab size" );
+			equal( ui.tab.length, 1, "tab length" );
 			strictEqual( ui.tab[ 0 ], tab[ 0 ], "tab" );
-			equal( ui.panel.size(), 1, "panel size" );
+			equal( ui.panel.length, 1, "panel length" );
 			strictEqual( ui.panel[ 0 ], panel[ 0 ], "panel" );
 			state( element, 0, 0, 0, 1, 0 );
 		});
@@ -223,9 +223,9 @@ asyncTest( "load", function() {
 				panel = $( "#" + panelId );
 
 			ok( !( "originalEvent" in event ), "originalEvent" );
-			equal( uiTab.size(), 1, "tab size" );
+			equal( uiTab.length, 1, "tab length" );
 			strictEqual( uiTab[ 0 ], tab[ 0 ], "tab" );
-			equal( uiPanel.size(), 1, "panel size" );
+			equal( uiPanel.length, 1, "panel length" );
 			strictEqual( uiPanel[ 0 ], panel[ 0 ], "panel" );
 			state( element, 0, 0, 0, 1, 0 );
 			start();
