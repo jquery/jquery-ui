@@ -53,6 +53,7 @@
 		"stop",
 		"test",
 		"TestHelpers",
-		"widthAfter"
+		"widthAfter",
+		"JSHINT"
 	]
 }
