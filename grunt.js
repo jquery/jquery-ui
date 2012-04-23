@@ -140,7 +140,7 @@ grunt.initConfig({
 	},
 	min: minify,
 	cssmin: minifyCSS,
-	html: {
+	htmllint: {
 		all: ["demos/**/*.html", "tests/**/*.html"]
 	},
 	copy: {
