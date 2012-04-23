@@ -56,4 +56,13 @@ test( "#7534 - Button label selector works for ids with \":\"", function() {
 	ok( group.find( "label" ).is( ".ui-button" ), "Found an id with a :" );
 });
 
+test( "#7966 - Submit buttons should be the same height as button nodes", function() {
+	var buttonNode = $( "#buttonNode" ).button(),
+		submitButtonNode = $( "#submitButtonNode" ).button(),
+		anchorNode = $( "#anchorNode" ).button();
+		
+	equals( submitButtonNode.outerHeight(), buttonNode.outerHeight(), "input[type=submit] same height as button" );
+	equals( submitButtonNode.outerHeight(), anchorNode.outerHeight(), "input[type=submit] same height as anchor");
+});
+
 })( jQuery );
