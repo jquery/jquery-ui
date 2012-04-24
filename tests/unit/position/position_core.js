@@ -255,11 +255,30 @@ test( "offsets", function() {
 });
 
 test( "using", function() {
-	expect( 6 );
+	expect( 10 );
 
 	var count = 0,
 		elems = $( "#el1, #el2" ),
-		expectedPosition = { top: 40, left: 40 },
+		of = $( "#parentx" ),
+		expectedPosition = { top: 60, left: 60 },
+		expectedFeedback = {
+			target: {
+				element: of,
+				width: 20,
+				height: 20,
+				left: 40,
+				top: 40
+			},
+			element: {
+				width: 6,
+				height: 6,
+				left: 60,
+				top: 60
+			},
+			horizontal: "left",
+			vertical: "top",
+			important: "vertical"
+		},
 		originalPosition = elems.position({
 			my: "right bottom",
 			at: "rigt bottom",
@@ -269,11 +288,14 @@ test( "using", function() {
 
 	elems.position({
 		my: "left top",
-		at: "left top",
+		at: "center+10 bottom",
 		of: "#parentx",
-		using: function( position ) {
+		using: function( position, feedback ) {
 			deepEqual( this, elems[ count ], "correct context for call #" + count );
 			deepEqual( position, expectedPosition, "correct position for call #" + count );
+			deepEqual( feedback.element.element[ 0 ], elems[ count ] );
+			delete feedback.element.element;
+			deepEqual( feedback, expectedFeedback );
 			count++;
 		}
 	});
@@ -567,6 +589,67 @@ test( "within", function() {
 		top: 4,
 		left: 0
 	}, "flipfit - left top" );
+});
+
+test( "with scrollbars", function() {
+	expect( 4 );
+
+	$( "#scrollx" ).css({
+		width: 100,
+		height: 100,
+		left: 0,
+		top: 0
+	});
+
+	collisionTest({
+		of: "#scrollx",
+		collision: "fit",
+		within: "#scrollx"
+	}, {
+		top: 90,
+		left: 90
+	}, "visible" );
+
+	$( "#scrollx" ).css({
+		overflow: "scroll"
+	});
+
+	var scrollbarInfo = $.position.getScrollInfo( $.position.getWithinInfo( $( "#scrollx" ) ) );
+
+	collisionTest({
+		of: "#scrollx",
+		collision: "fit",
+		within: "#scrollx"
+	}, {
+		top: 90 - scrollbarInfo.height,
+		left: 90 - scrollbarInfo.width
+	}, "scroll" );
+
+	$( "#scrollx" ).css({
+		overflow: "auto"
+	});
+
+	collisionTest({
+		of: "#scrollx",
+		collision: "fit",
+		within: "#scrollx"
+	}, {
+		top: 90,
+		left: 90
+	}, "auto, no scroll" );
+
+	$( "#scrollx" ).css({
+		overflow: "auto"
+	}).append( $("<div>").height(300).width(300) );
+
+	collisionTest({
+		of: "#scrollx",
+		collision: "fit",
+		within: "#scrollx"
+	}, {
+		top: 90 - scrollbarInfo.height,
+		left: 90 - scrollbarInfo.width
+	}, "auto, with scroll" );
 });
 
 test( "fractions", function() {

@@ -13,76 +13,67 @@
 	<script>
 	$(function() {
 		$( ".demo" ).tooltip({
-			open: function(event, ui) {
-				$("<div>").addClass("arrow").appendTo(ui.tooltip);
-			},
 			position: {
-				my: "center bottom",
+				my: "center bottom-20",
 				at: "center top",
-				offset: "0 -20px"
+				using: function( position, feedback ) {
+					$( this ).css( position );
+					$( "<div>" )
+						.addClass( "arrow" )
+						.addClass( feedback.vertical )
+						.addClass( feedback.horizontal )
+						.appendTo( this );
+				}
 			}
 		});
 	});
 	</script>
 	<style>
-	label {
-		display: inline-block;
-		width: 5em;
-	}
-	.demo {
-		margin: 10em 0 0 10em;
-	}
 	.ui-tooltip, .arrow:after {
-	  background: black;
-	  border: 2px solid white;
+		background: black;
+		border: 2px solid white;
 	}
 	.ui-tooltip {
-	  display: inline-block;
-	  position: relative;
-	  padding: 10px 20px;
-	  color: white;
-	  border-radius: 20px;
-	  text-align: center;
-	  font: bold 14px "Helvetica Neue", Sans-Serif;
-	  font-stretch: condensed;
-	  text-decoration: none;
-	  text-transform: uppercase;
-	  box-shadow: 0 0 7px black;
+		padding: 10px 20px;
+		color: white;
+		border-radius: 20px;
+		font: bold 14px "Helvetica Neue", Sans-Serif;
+		text-transform: uppercase;
+		box-shadow: 0 0 7px black;
 	}
 	.arrow {
-	    width: 70px;
-	    height: 16px;
-	    overflow: hidden;
-	    position: absolute;
-	    left: 50%;
-	    margin-left: -35px;
-	    bottom: -16px;
+		width: 70px;
+		height: 16px;
+		overflow: hidden;
+		position: absolute;
+		left: 50%;
+		margin-left: -35px;
+		bottom: -16px;
+	}
+	.arrow.top {
+		top: -16px;
+		bottom: auto;
+	}
+	.arrow.left {
+		left: 20%;
 	}
 	.arrow:after {
-	  content: "";
-	  position: absolute;
-	  left: 20px;
-	  top: -20px;
-	  width: 25px;
-	  height: 25px;
-	  -webkit-box-shadow: 6px 5px 9px -9px black,
-	              5px 6px 9px -9px black;
-	  -moz-box-shadow: 6px 5px 9px -9px black,
-	              5px 6px 9px -9px black;
-	  box-shadow: 6px 5px 9px -9px black,
-	              5px 6px 9px -9px black;
-	  -webkit-transform: rotate(45deg);
-	  -moz-transform:    rotate(45deg);
-	  -ms-transform:     rotate(45deg);
-	  -o-transform:      rotate(45deg);
+		content: "";
+		position: absolute;
+		left: 20px;
+		top: -20px;
+		width: 25px;
+		height: 25px;
+		box-shadow: 6px 5px 9px -9px black;
+		-webkit-transform: rotate(45deg);
+		-moz-transform: rotate(45deg);
+		-ms-transform: rotate(45deg);
+		-o-transform: rotate(45deg);
+		tranform: rotate(45deg);
 	}
-	div[data-tooltip].active {
-	  opacity: 1;
-	  margin-top: 6px;
-	}
-	div[data-tooltip].out {
-	  opacity: 0;
-	  margin-top: -20px;
+	.arrow.top:after {
+		bottom: -20px;
+		top: auto;
 	}
 	</style>
 </head>
