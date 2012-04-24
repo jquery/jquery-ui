@@ -358,10 +358,6 @@ $.ui.position = {
 	},
 	flip: {
 		left: function( position, data ) {
-			if ( data.at[ 0 ] === "center" ) {
-				return;
-			}
-
 			var within = data.within,
 				withinOffset = within.offset.left + within.scrollLeft,
 				outerWidth = within.width,
@@ -377,7 +373,9 @@ $.ui.position = {
 						0,
 				atOffset = data.at[ 0 ] === "left" ?
 					data.targetWidth :
-					-data.targetWidth,
+					data.at[ 0 ] === "right" ?
+						-data.targetWidth :
+						0,
 				offset = -2 * data.offset[ 0 ],
 				newOverRight,
 				newOverLeft;
@@ -396,10 +394,6 @@ $.ui.position = {
 			}
 		},
 		top: function( position, data ) {
-			if ( data.at[ 1 ] === "center" ) {
-				return;
-			}
-
 			var within = data.within,
 				withinOffset = within.offset.top + within.scrollTop,
 				outerHeight = within.height,
@@ -415,7 +409,9 @@ $.ui.position = {
 						0,
 				atOffset = data.at[ 1 ] === "top" ?
 					data.targetHeight :
-					-data.targetHeight,
+					data.at[ 1 ] === "bottom" ?
+						-data.targetHeight :
+						0,
 				offset = -2 * data.offset[ 1 ],
 				newOverTop,
 				newOverBottom;
