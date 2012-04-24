@@ -310,7 +310,7 @@ test( "collision: fit, no collision", function() {
 	}, "no offset" );
 
 	collisionTest({
-		collition: "fit",
+		collision: "fit",
 		at: "right+2 bottom+3"
 	}, {
 		top: 13,
