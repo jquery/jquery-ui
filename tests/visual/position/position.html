@@ -10,23 +10,31 @@
 	<script type="text/javascript" src="../../../ui/jquery.ui.widget.js"></script>
 	<script type="text/javascript" src="../../../ui/jquery.ui.position.js"></script>
 	<script type="text/javascript" src="../../../ui/jquery.ui.menu.js"></script>
-	<script type="text/javascript" src="http://jqueryui.com/themeroller/themeswitchertool/"></script>
 	<script type="text/javascript">
 	$(function() {
 		var inputs = $("input");
 		$("ul").insertAfter(inputs);
 		$(window).resize(function() {
 			inputs.each(function() {
-				$(this).position({
+				var input = $(this).position({
 					my: this.id.replace(/-/, " "),
 					at: this.id.replace(/-/, " "),
 					of: "#container",
 					collision: "none"
 				});
-				$(this).next().menu().position({
-					my: "left top+20",
+				var menu = $(this).next().menu()
+				menu.position({
+					my: "left+30 top+20",
 					at: "left bottom",
 					of: this,
+					using: function( position, feedback ) {
+						input.val(feedback.horizontal + " " + feedback.vertical)
+						$(this).offset( position );
+						$(this)
+							.removeClass("left right top bottom center middle")
+							.addClass(feedback.horizontal)
+							.addClass(feedback.vertical);
+					}
 				});
 			});
 		}).resize();
@@ -44,11 +52,11 @@
 			top: -22px;
 			left: 5px;
 		}
-		.ui-flipped-left:before {
+		.right:before {
 			left: auto;
 			right: 5px;
 		}
-		.ui-flipped-top:before {
+		.bottom:before {
 			content: "↓";
 			top: auto;
 			bottom: -19px;
