@@ -57,17 +57,30 @@ var // modules
 
 	minifyCSS = {
 		"dist/jquery-ui.min.css": "dist/jquery-ui.css"
+	},
+
+	compareFiles = {
+		all: [
+			"dist/jquery-ui.js",
+			"dist/jquery-ui.min.js"
+		]
 	};
 
+function mapMinFile( file ) {
+	return "dist/" + file.replace( /\.js$/, ".min.js" ).replace( /ui\//, "minified/" );
+}
 
 uiFiles.concat( allI18nFiles ).forEach(function( file ) {
-	minify[ "dist/" + file.replace( /\.js$/, ".min.js" ).replace( /ui\//, "minified/" ) ] = [ "<banner>", file ];
+	minify[ mapMinFile( file ) ] = [ "<banner>", file ];
 });
 
 cssFiles.forEach(function( file ) {
 	minifyCSS[ "dist/" + file.replace( /\.css$/, ".min.css" ).replace( /themes\/base\//, "themes/base/minified/" ) ] = [ "<banner>", "<strip_all_banners:" + file + ">" ];
 });
 
+uiFiles.forEach(function( file ) {
+	compareFiles[ file ] = [ file,  mapMinFile( file ) ];
+});
 
 // csslint and cssmin tasks
 grunt.loadNpmTasks( "grunt-css" );
@@ -118,12 +131,7 @@ grunt.initConfig({
 		bannerI18n: createBanner( allI18nFiles ),
 		bannerCSS: createBanner( cssFiles )
 	},
-	compare_size: {
-		files: [
-			"dist/jquery-ui.js",
-			"dist/jquery-ui.min.js"
-		]
-	},
+	compare_size: compareFiles,
 	concat: {
 		ui: {
 			src: [ "<banner:meta.bannerAll>", stripBanner( uiFiles ) ],
@@ -510,7 +518,8 @@ grunt.registerTask( "clean", function() {
 });
 
 grunt.registerTask( "default", "lint csslint htmllint qunit build compare_size" );
-grunt.registerTask( "sizer", "concat:ui min:dist/jquery-ui.min.js compare_size" );
+grunt.registerTask( "sizer", "concat:ui min:dist/jquery-ui.min.js compare_size:all" );
+grunt.registerTask( "sizer_all", "concat:ui min compare_size" );
 grunt.registerTask( "build", "concat min cssmin" );
 grunt.registerTask( "release", "clean build copy:dist copy:dist_min copy:dist_min_images copy:dist_css_min md5:dist zip:dist" );
 grunt.registerTask( "release_themes", "release download_themes copy_themes copy:themes md5:themes zip:themes" );
