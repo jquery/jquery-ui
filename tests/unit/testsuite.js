@@ -48,6 +48,11 @@ function testJshint( widget ) {
 		).done(function( hintArgs, srcArgs ) {
 			var passed = JSHINT( srcArgs[ 0 ], hintArgs[ 0 ] ),
 				errors = $.map( JSHINT.errors, function( error ) {
+					// JSHINT may report null if there are too many errors
+					if ( !error ) {
+						return;
+					}
+
 					return "[L" + error.line + ":C" + error.character + "] " +
 						error.reason + "\n" + error.evidence + "\n";
 				}).join( "\n" );
