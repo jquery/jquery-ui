@@ -591,6 +591,67 @@ test( "within", function() {
 	}, "flipfit - left top" );
 });
 
+test( "with scrollbars", function() {
+	expect( 4 );
+
+	$( "#scrollx" ).css({
+		width: 100,
+		height: 100,
+		left: 0,
+		top: 0
+	});
+
+	collisionTest({
+		of: "#scrollx",
+		collision: "fit",
+		within: "#scrollx"
+	}, {
+		top: 90,
+		left: 90
+	}, "visible" );
+
+	$( "#scrollx" ).css({
+		overflow: "scroll"
+	});
+
+	var scrollbarInfo = $.position.getScrollInfo( $.position.getWithinInfo( $( "#scrollx" ) ) );
+
+	collisionTest({
+		of: "#scrollx",
+		collision: "fit",
+		within: "#scrollx"
+	}, {
+		top: 90 - scrollbarInfo.height,
+		left: 90 - scrollbarInfo.width
+	}, "scroll" );
+
+	$( "#scrollx" ).css({
+		overflow: "auto"
+	});
+
+	collisionTest({
+		of: "#scrollx",
+		collision: "fit",
+		within: "#scrollx"
+	}, {
+		top: 90,
+		left: 90
+	}, "auto, no scroll" );
+
+	$( "#scrollx" ).css({
+		overflow: "auto"
+	}).append( $("<div>").height(300).width(300) );
+
+	collisionTest({
+		of: "#scrollx",
+		collision: "fit",
+		within: "#scrollx"
+	}, {
+		top: 90 - scrollbarInfo.height,
+		left: 90 - scrollbarInfo.width
+	}, "auto, with scroll" );
+});
+
 test( "fractions", function() {
 	expect( 1 );
 

@@ -58,12 +58,13 @@ $.position = {
 	getScrollInfo: function( within ) {
 		var overflowX = within.isWindow ? "" : within.element.css( "overflow-x" ),
 			overflowY = within.isWindow ? "" : within.element.css( "overflow-y" ),
-			scrollbarWidth = overflowX === "auto" || overflowX === "scroll" ? $.position.scrollbarWidth() : 0,
-			scrollbarHeight = overflowY === "auto" || overflowY === "scroll" ? $.position.scrollbarWidth() : 0;
-
+			hasOverflowX = overflowX === "scroll" ||
+				( overflowX === "auto" && within.width < within.element[0].scrollWidth ),
+			hasOverflowY = overflowY === "scroll" ||
+				( overflowY === "auto" && within.height < within.element[0].scrollHeight );
 		return {
-			height: within.height < within.element[0].scrollHeight ? scrollbarHeight : 0,
-			width: within.width < within.element[0].scrollWidth ? scrollbarWidth : 0
+			width: hasOverflowX ? $.position.scrollbarWidth() : 0,
+			height: hasOverflowY ? $.position.scrollbarWidth() : 0
 		};
 	},
 	getWithinInfo: function( element ) {
