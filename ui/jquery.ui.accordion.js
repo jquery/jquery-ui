@@ -167,8 +167,7 @@ $.widget( "ui.accordion", {
 	},
 
 	_destroy: function() {
-		var contents,
-			accordionId = this.accordionId;
+		var contents;
 
 		// clean up main element
 		this.element
@@ -517,8 +516,7 @@ $.widget( "ui.accordion", {
 	},
 
 	_toggleComplete: function( data ) {
-		var toShow = data.newContent,
-			toHide = data.oldContent;
+		var toHide = data.oldContent;
 
 		// other classes are removed before the animation; this one needs to stay until completed
 		toHide.removeClass( "ui-accordion-content-active" );
