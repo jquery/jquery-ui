@@ -149,7 +149,10 @@ grunt.initConfig({
 	min: minify,
 	cssmin: minifyCSS,
 	htmllint: {
-		all: ["demos/**/*.html", "tests/**/*.html"]
+		// ignore files that contain invalid html, used only for ajax content testing
+		all: grunt.file.expand( [ "demos/**/*.html", "tests/**/*.html" ] ).filter(function( file ) {
+			return !/(?:ajax\/content\d\.html|tabs\/data\/test\.html)/.test( file );
+		})
 	},
 	copy: {
 		dist: {
