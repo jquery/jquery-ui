@@ -16,8 +16,8 @@
 		$("ul").insertAfter(inputs);
 		inputs.each(function(index) {
 			$(this).position({
-				my: $(this).data("position").replace(/-/, " "),
-				at: $(this).data("position").replace(/-/, " "),
+				my: $(this).data("position"),
+				at: $(this).data("position"),
 				of: "#container"+index,
 				collision: "none"
 			});
@@ -52,15 +52,15 @@
 <div id="container7" class="container" style="height:100px; margin-bottom: 500px;"></div>
 <div id="container8" class="container" style="height:100px; margin-bottom: 500px;"></div>
 
-<input data-position="left-top" />
-<input data-position="center-top" />
-<input data-position="right-top" />
-<input data-position="left-center" />
-<input data-position="center-center" />
-<input data-position="right-center" />
-<input data-position="left-bottom" />
-<input data-position="center-center" />
-<input data-position="right-bottom" />
+<input data-position="left top" />
+<input data-position="center top" />
+<input data-position="right top" />
+<input data-position="left center" />
+<input data-position="center center" />
+<input data-position="right center" />
+<input data-position="left bottom" />
+<input data-position="center center" />
+<input data-position="right bottom" />
 
 <ul>
 	<li><a href="#">Java</a></li>
