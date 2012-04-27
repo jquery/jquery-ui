@@ -27,7 +27,7 @@
   "dependencies": {},
   "devDependencies": {
     "grunt": "0.3.9",
-    "grunt-css": "0.1.1",
+    "grunt-css": "0.2.0",
     "grunt-compare-size": "0.1.4",
     "grunt-html": "0.1.1",
     "request": "2.9.153",
