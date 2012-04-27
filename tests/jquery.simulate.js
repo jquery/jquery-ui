@@ -243,7 +243,6 @@ $.extend( $.simulate.prototype, {
 			y = Math.floor( center.y ), 
 			dx = options.dx || 0,
 			dy = options.dy || 0,
-			target = this.target,
 			coord = { clientX: x, clientY: y };
 		this.simulateEvent( target, "mousedown", coord );
 		coord = { clientX: x + 1, clientY: y + 1 };
