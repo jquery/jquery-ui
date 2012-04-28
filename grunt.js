@@ -337,6 +337,24 @@ grunt.initConfig({
 	})()
 });
 
+grunt.registerTask( "testswarm", function( commit, authToken ) {
+	var testswarm = require( "testswarm" );
+	var testBase = "http://swarm.jquery.org/git/jquery-ui/" + commit + "/";
+	require( "testswarm" )( {
+		url: "http://swarm.jquery.org/api.php?",
+		pollInterval: 2000,
+		done: this.async()
+	}, {
+		authUsername: "jqueryui",
+		authToken: authToken,
+		jobName: 'jQuery UI commit #<a href="https://github.com/jquery/jquery-ui/commit/' + commit + '">' + commit + '</a>',
+		runMax: 1,
+		"runNames[]": ["Accordion", "Autocomplete"],
+		"runUrls[]": [ testBase + "tests/unit/accordion/accordion.html", testBase + "tests/unit/autocomplete/autocomplete.html" ],
+		browserSets: "popular"
+	});
+});
+
 grunt.registerMultiTask( "copy", "Copy files to destination folder and replace @VERSION with pkg.version", function() {
 	function replaceVersion( source ) {
 		return source.replace( /@VERSION/g, grunt.config( "pkg.version" ) );
