@@ -5,8 +5,6 @@ var // modules
 	fs = require( "fs" ),
 	path = require( "path" ),
 	request = require( "request" ),
-	util = require( "util" ),
-	inspect = util.inspect,
 
 	// files
 	coreFiles = [
@@ -340,7 +338,7 @@ grunt.initConfig({
 grunt.registerTask( "testswarm", function( commit, authToken ) {
 	var testswarm = require( "testswarm" );
 	var testBase = "http://swarm.jquery.org/git/jquery-ui/" + commit + "/";
-	require( "testswarm" )( {
+	testswarm({
 		url: "http://swarm.jquery.org/api.php?",
 		pollInterval: 2000,
 		done: this.async()

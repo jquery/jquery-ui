@@ -23,8 +23,7 @@ $.effects.effect.slide = function( o, done ) {
 		ref = (direction === "up" || direction === "down") ? "top" : "left",
 		positiveMotion = (direction === "up" || direction === "left"),
 		distance,
-		animation = {},
-		size;
+		animation = {};
 
 	// Adjust
 	$.effects.save( el, props );

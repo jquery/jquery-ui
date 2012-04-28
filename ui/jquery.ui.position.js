@@ -286,8 +286,7 @@ $.ui.position = {
 				collisionPosLeft = position.left - data.collisionPosition.marginLeft,
 				overLeft = withinOffset - collisionPosLeft,
 				overRight = collisionPosLeft + data.collisionWidth - outerWidth - withinOffset,
-				newOverRight,
-				newOverLeft;
+				newOverRight;
 
 			// element is wider than within
 			if ( data.collisionWidth > outerWidth ) {
@@ -324,7 +323,6 @@ $.ui.position = {
 				collisionPosTop = position.top - data.collisionPosition.marginTop,
 				overTop = withinOffset - collisionPosTop,
 				overBottom = collisionPosTop + data.collisionHeight - outerHeight - withinOffset,
-				newOverTop,
 				newOverBottom;
 
 			// element is taller than within
@@ -365,7 +363,6 @@ $.ui.position = {
 				collisionPosLeft = position.left - data.collisionPosition.marginLeft,
 				overLeft = collisionPosLeft - offsetLeft,
 				overRight = collisionPosLeft + data.collisionWidth - outerWidth - offsetLeft,
-				left = data.my[ 0 ] === "left",
 				myOffset = data.my[ 0 ] === "left" ?
 					-data.elemWidth :
 					data.my[ 0 ] === "right" ?

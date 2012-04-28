@@ -167,7 +167,6 @@ $.widget( "ui.tabs", {
 
 	refresh: function() {
 		var next,
-			that = this,
 			options = this.options,
 			lis = this.list.children( ":has(a[href])" );
 
@@ -362,7 +361,6 @@ $.widget( "ui.tabs", {
 	// handles show/hide for selecting tabs
 	_toggle: function( event, eventData ) {
 		var that = this,
-			options = that.options,
 			toShow = eventData.newPanel,
 			toHide = eventData.oldPanel;
 
@@ -434,8 +432,6 @@ $.widget( "ui.tabs", {
 	},
 
 	_destroy: function() {
-		var o = this.options;
-
 		if ( this.xhr ) {
 			this.xhr.abort();
 		}
@@ -517,7 +513,6 @@ $.widget( "ui.tabs", {
 	load: function( index, event ) {
 		index = this._getIndex( index );
 		var that = this,
-			options = this.options,
 			anchor = this.anchors.eq( index ),
 			panel = that._getPanelForTab( anchor ),
 			eventData = {

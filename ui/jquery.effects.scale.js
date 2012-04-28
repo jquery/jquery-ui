@@ -267,10 +267,7 @@ $.effects.effect.size = function( o, done ) {
 					$.each([ "top", "left" ], function( idx, pos ) {
 						el.css( pos, function( _, str ) {
 							var val = parseInt( str, 10 ),
-								toRef = idx ? el.to.left : el.to.top,
-								delta = idx ? el.to.outerWidth - el.from.outerWidth: el.to.outerHeight - el.from.outerHeight,
-								same = origin[ idx ] === pos,
-								mid = origin[ idx ] === "middle" || origin[ idx ] === "center";
+								toRef = idx ? el.to.left : el.to.top;
 
 							// if original was "auto", recalculate the new value from wrapper
 							if ( str === "auto" ) {
