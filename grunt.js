@@ -338,7 +338,7 @@ grunt.initConfig({
 grunt.registerTask( "testswarm", function( commit, authToken ) {
 	var test,
 		testswarm = require( "testswarm" ),
-		testBase = "http://swarm.jquery.org/git/jquery-ui/" + commit + "/",
+		testBase = "http://swarm.jquery.org/git/jquery-ui/" + commit + "/tests/unit/",
 		testUrls = [],
 		tests = {
 		"Accordion": "accordion/accordion.html",
