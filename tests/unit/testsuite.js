@@ -69,7 +69,7 @@ TestHelpers.testJshint = function( module ) {
 			start();
 		});
 	});
-}
+};
 
 function testWidgetDefaults( widget, defaults ) {
 	var pluginDefaults = $.ui[ widget ].prototype.options;
