@@ -2,9 +2,13 @@
 
 module( "widget factory", {
 	teardown: function() {
-		delete $.ui.testWidget;
+		if ( $.ui ) {
+			delete $.ui.testWidget;
+		}
 	}
 });
+
+TestHelpers.testJshint( "ui.widget" );
 
 test( "widget creation", function() {
 	var myPrototype = {

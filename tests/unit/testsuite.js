@@ -27,12 +27,17 @@ TestHelpers.loadResources = QUnit.urlParams.min ?
 	};
 
 QUnit.config.urlConfig.push( "nojshint" );
-function testJshint( widget ) {
+var jshintLoaded = false;
+TestHelpers.testJshint = function( module ) {
 	if ( QUnit.urlParams.nojshint ) {
 		return;
 	}
 
-	includeScript( "external/jshint.js" );
+	if ( !jshintLoaded ) {
+		includeScript( "external/jshint.js" );
+		jshintLoaded = true;
+	}
+
 	asyncTest( "JSHint", function() {
 		expect( 1 );
 
@@ -42,7 +47,7 @@ function testJshint( widget ) {
 				dataType: "json"
 			}),
 			$.ajax({
-				url: "../../../ui/jquery.ui." + widget + ".js",
+				url: "../../../ui/jquery." + module + ".js",
 				dataType: "text"
 			})
 		).done(function( hintArgs, srcArgs ) {
@@ -121,7 +126,7 @@ function testBasicUsage( widget ) {
 TestHelpers.commonWidgetTests = function( widget, settings ) {
 	module( widget + ": common widget" );
 
-	testJshint( widget );
+	TestHelpers.testJshint( "ui." + widget );
 	testWidgetDefaults( widget, settings.defaults );
 	testWidgetOverrides( widget );
 	testBasicUsage( widget );

@@ -2,6 +2,8 @@
 
 module( "core - jQuery extensions" );
 
+TestHelpers.testJshint( "ui.core" );
+
 test( "focus - original functionality", function() {
 	expect( 1 );
 	$( "#inputTabindex0" )

@@ -128,10 +128,16 @@ asyncTest( "animateClass: css and class changes during animation are not lost (#
 
 
 $.each( $.effects.effect, function( effect ) {
+	module( "effects." + effect );
+
+	// puff and size are defined inside scale
+	if ( effect !== "puff" && effect !== "size" ) {
+		TestHelpers.testJshint( "effects." + effect );
+	}
+
 	if ( effect === "transfer" ) {
 		return;
 	}
-	module( "effect."+effect );
 	asyncTest( "show/hide", function() {
 		expect( 8 );
 		var hidden = $( "div.hidden" ),
