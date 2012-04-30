@@ -179,7 +179,10 @@ $.widget( "ui.tooltip", {
 
 		// don't close if the element has focus
 		// this prevents the tooltip from closing if you hover while focused
-		if ( !force && this.document[0].activeElement === target[0] ) {
+		// we have to check the event type because tabbing out of the document
+		// may leave the element as the activeElement
+		if ( !force && event && event.type !== "focusout" &&
+				this.document[0].activeElement === target[0] ) {
 			return;
 		}
 
