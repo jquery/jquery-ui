@@ -335,11 +335,12 @@ grunt.initConfig({
 	})()
 });
 
-grunt.registerTask( "testswarm", function( commit, authToken ) {
+grunt.registerTask( "testswarm", function( commit, configFile ) {
 	var test,
 		testswarm = require( "testswarm" ),
 		testBase = "http://swarm.jquery.org/git/jquery-ui/" + commit + "/tests/unit/",
 		testUrls = [],
+		config = grunt.file.readJSON( configFile );
 		tests = {
 		"Accordion": "accordion/accordion.html",
 		"Accordion_deprecated": "accordion/accordion_deprecated.html",
@@ -374,7 +375,7 @@ grunt.registerTask( "testswarm", function( commit, authToken ) {
 		done: this.async()
 	}, {
 		authUsername: "jqueryui",
-		authToken: authToken,
+		authToken: config.jqueryui.authToken,
 		jobName: 'jQuery UI commit #<a href="https://github.com/jquery/jquery-ui/commit/' + commit + '">' + commit + '</a>',
 		runMax: 4,
 		"runNames[]": Object.keys(tests),
