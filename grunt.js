@@ -369,8 +369,8 @@ grunt.registerTask( "testswarm", function( commit, authToken ) {
 		testUrls.push( testBase + tests[ test ] );
 	}
 	testswarm({
-		url: "http://swarm.jquery.org/api.php?",
-		pollInterval: 2000,
+		url: "http://swarm.jquery.org/",
+		pollInterval: 5000,
 		done: this.async()
 	}, {
 		authUsername: "jqueryui",
