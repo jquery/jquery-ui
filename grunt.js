@@ -370,7 +370,7 @@ grunt.registerTask( "testswarm", function( commit, authToken ) {
 	}
 	testswarm({
 		url: "http://swarm.jquery.org/",
-		pollInterval: 5000,
+		pollInterval: 10000,
 		done: this.async()
 	}, {
 		authUsername: "jqueryui",
@@ -379,7 +379,7 @@ grunt.registerTask( "testswarm", function( commit, authToken ) {
 		runMax: 4,
 		"runNames[]": Object.keys(tests),
 		"runUrls[]": testUrls,
-		"browserSets[]": ["popular", "beta"]
+		"browserSets[]": ["popular"]
 	});
 });
 
@@ -566,7 +566,7 @@ grunt.registerTask( "clean", function() {
 	require( "rimraf" ).sync( "dist" );
 });
 
-grunt.registerTask( "default", "lint csslint htmllint qunit build compare_size" );
+grunt.registerTask( "default", "lint csslint htmllint qunit" );
 grunt.registerTask( "sizer", "concat:ui min:dist/jquery-ui.min.js compare_size:all" );
 grunt.registerTask( "sizer_all", "concat:ui min compare_size" );
 grunt.registerTask( "build", "concat min cssmin" );
