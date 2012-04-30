@@ -119,6 +119,10 @@ $.widget( "ui.autocomplete", {
 					if ( self.menu.element.is(":visible") ) {
 						self._value( self.term );
 						self.close( event );
+						// Different browsers have different default behavior for escape
+						// Single press can mean undo or clear
+						// Double press in IE means clear the whole form
+						event.preventDefault();
 					}
 					break;
 				default:
