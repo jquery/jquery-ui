@@ -272,7 +272,7 @@ $.effects.animateClass = function( value, duration, easing, callback ) {
 				opts = jQuery.extend({}, o, {
 					queue: false,
 					complete: function() {
-						dfd.resolve( styleInfo )
+						dfd.resolve( styleInfo );
 					}
 				});
 
