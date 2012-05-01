@@ -370,7 +370,7 @@ grunt.registerTask( "testswarm", function( commit, configFile ) {
 		testUrls.push( testBase + tests[ test ] );
 	}
 	testswarm({
-		url: "http://swarm.jquery.org/",
+		url: "http://swarm.jquery.org",
 		pollInterval: 10000,
 		done: this.async()
 	}, {
