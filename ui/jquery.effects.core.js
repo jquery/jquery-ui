@@ -431,9 +431,12 @@ $.extend( $.effects, {
 		element.wrap( wrapper );
 
 		// Fixes #7595 - Elements lose focus when wrapped.
-		if ( element[ 0 ] === active || $.contains( element[ 0 ], active ) ) {
-			$( active ).focus();
-		}
+		// try/catch fixes #8288
+		try {
+			if ( element[ 0 ] === active || $.contains( element[ 0 ], active ) ) {
+				$( active ).focus();
+			}
+		} catch ( e ) {}
 
 		wrapper = element.parent(); //Hotfix for jQuery 1.4 since some change in wrap() seems to actually lose the reference to the wrapped element
 
@@ -472,9 +475,12 @@ $.extend( $.effects, {
 			element.parent().replaceWith( element );
 
 			// Fixes #7595 - Elements lose focus when wrapped.
-			if ( element[ 0 ] === active || $.contains( element[ 0 ], active ) ) {
-				$( active ).focus();
-			}
+			// try/catch fixes #8288
+			try {
+				if ( element[ 0 ] === active || $.contains( element[ 0 ], active ) ) {
+					$( active ).focus();
+				}
+			} catch ( e ) {}
 		}
 
 
