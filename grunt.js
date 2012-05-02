@@ -188,6 +188,11 @@ grunt.initConfig({
 			strip: /^dist/,
 			dest: "dist/<%= files.dist %>"
 		},
+		dist_units_images: {
+			src: "themes/base/images/*",
+			strip: /^themes\/base\//,
+			dest: "dist/"
+		},
 		dist_min_images: {
 			src: "themes/base/images/*",
 			strip: /^themes\/base\//,
@@ -570,7 +575,7 @@ grunt.registerTask( "clean", function() {
 grunt.registerTask( "default", "lint csslint htmllint qunit" );
 grunt.registerTask( "sizer", "concat:ui min:dist/jquery-ui.min.js compare_size:all" );
 grunt.registerTask( "sizer_all", "concat:ui min compare_size" );
-grunt.registerTask( "build", "concat min cssmin" );
+grunt.registerTask( "build", "concat min cssmin copy:dist_units_images" );
 grunt.registerTask( "release", "clean build copy:dist copy:dist_min copy:dist_min_images copy:dist_css_min md5:dist zip:dist" );
 grunt.registerTask( "release_themes", "release download_themes copy_themes copy:themes md5:themes zip:themes" );
 grunt.registerTask( "release_cdn", "release_themes copy:cdn copy:cdn_min copy:cdn_i18n copy:cdn_i18n_min copy:cdn_min_images copy:cdn_themes md5:cdn zip:cdn" );
