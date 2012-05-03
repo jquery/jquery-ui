@@ -192,7 +192,7 @@
 				var itemJq=$(v.selector,element),
 				    validMsgJq=itemJq.data('validmsg'),
 					defaultValue;
-				if(v.defaultValue){
+				if(_.isString(v.defaultValue)){
 					defaultValue=[].concat(v.defaultValue);
 					if(itemJq.is(':text')){
 						itemJq.val(defaultValue[0]);
