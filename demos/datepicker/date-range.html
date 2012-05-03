@@ -11,18 +11,20 @@
 	<link rel="stylesheet" href="../demos.css">
 	<script>
 	$(function() {
-		var dates = $( "#from, #to" ).datepicker({
+		$( "#from" ).datepicker({
 			defaultDate: "+1w",
 			changeMonth: true,
 			numberOfMonths: 3,
 			onSelect: function( selectedDate ) {
-				var option = this.id == "from" ? "minDate" : "maxDate",
-					instance = $( this ).data( "datepicker" ),
-					date = $.datepicker.parseDate(
-						instance.settings.dateFormat ||
-						$.datepicker._defaults.dateFormat,
-						selectedDate, instance.settings );
-				dates.not( this ).datepicker( "option", option, date );
+				$( "#to" ).datepicker( "option", "minDate", selectedDate );
+			}
+		});
+		$( "#to" ).datepicker({
+			defaultDate: "+1w",
+			changeMonth: true,
+			numberOfMonths: 3,
+			onSelect: function( selectedDate ) {
+				$( "#from" ).datepicker( "option", "maxDate", selectedDate );
 			}
 		});
 	});
