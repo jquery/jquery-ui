@@ -394,10 +394,15 @@ test( "select", function() {
 module( "tabs (deprecated): methods" );
 
 test( "add", function() {
-	expect( 27 );
+	expect( 28 );
 
 	var tab, anchor,
 		element = $( "#tabs1" ).tabs();
+
+	function stripLeadingSlash( str ) {
+		return str.substr( str.charAt( 0 ) === "/" ? 1 : 0 );
+	}
+
 	state( element, 1, 0, 0 );
 
 	// add without index
@@ -411,7 +416,8 @@ test( "add", function() {
 	tab = element.find( ".ui-tabs-nav li" ).last();
 	anchor = tab.find( "a" );
 	equal( tab.text(), "New", "label" );
-	equal( anchor.attr( "href" ), "#new", "href" );
+	equal( stripLeadingSlash( anchor[0].pathname ), stripLeadingSlash( location.pathname ), "href pathname" );
+	equal( anchor[0].hash, "#new", "href hash" );
 	equal( anchor.attr( "aria-controls" ), "new", "aria-controls" );
 	ok( !tab.hasClass( "ui-state-hover" ), "not hovered" );
 	anchor.simulate( "mouseover" );
@@ -430,7 +436,9 @@ test( "add", function() {
 	tab = element.find( ".ui-tabs-nav li" ).eq( 1 );
 	anchor = tab.find( "a" );
 	equal( tab.text(), "New Remote", "label" );
-	equal( anchor.attr( "href" ), "data/test.html", "href" );
+	equal( stripLeadingSlash( stripLeadingSlash(
+		anchor[0].pathname.replace( stripLeadingSlash( location.pathname ).split( "/" ).slice( 0, -1 ).join( "/" ), "" )
+	) ), "data/test.html", "href" );
 	ok( /^ui-tabs-\d+$/.test( anchor.attr( "aria-controls" ) ), "aria controls" );
 	ok( !tab.hasClass( "ui-state-hover" ), "not hovered" );
 	anchor.simulate( "mouseover" );
@@ -572,6 +580,10 @@ asyncTest( "abort", function() {
 			equal( status, "abort", "aborted" );
 			start();
 		});
+	});
+	// prevent IE from caching the request, so that it won't resolve before we call abort
+	element.find( ".ui-tabs-nav li:eq(2) a" ).attr( "href", function( href ) {
+		return href + "?" + (+ new Date());
 	});
 	element.tabs( "option", "active", 2 );
 	element.tabs( "abort" );
