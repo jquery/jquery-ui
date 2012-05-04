@@ -20,6 +20,8 @@ asyncTest( "focus", function() {
 			ok( true, "event triggered" );
 		})
 		.focus( 500, function() {
+			// prevent double focus event in IE
+			$( this ).unbind( "focus" );
 			ok( true, "callback triggered" );
 			start();
 		});
