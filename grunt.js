@@ -372,7 +372,7 @@ grunt.registerTask( "testswarm", function( commit, configFile ) {
 		"Widget": "widget/widget.html"
 	};
 	for (test in tests) {
-		testUrls.push( testBase + tests[ test ] );
+		testUrls.push( testBase + tests[ test ] + "?nojshint=true" );
 	}
 	testswarm({
 		url: "http://swarm.jquery.org/",
