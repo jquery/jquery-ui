@@ -381,8 +381,8 @@ grunt.registerTask( "testswarm", function( commit, configFile ) {
 	}, {
 		authUsername: "jqueryui",
 		authToken: grunt.file.readJSON( configFile ).jqueryui.authToken,
-		jobName: 'jQuery UI commit #<a href="https://github.com/jquery/jquery-ui/commit/' + commit + '">' + commit + '</a>',
-		runMax: 4,
+		jobName: 'jQuery UI commit #<a href="https://github.com/jquery/jquery-ui/commit/' + commit + '">' + commit.substr( 0, 10 ) + '</a>',
+		runMax: 3,
 		"runNames[]": Object.keys(tests),
 		"runUrls[]": testUrls,
 		"browserSets[]": ["popular"]
