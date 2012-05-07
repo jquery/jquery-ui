@@ -716,17 +716,17 @@ $.extend( $.ui.dialog.overlay, {
 			// handle window resize
 			$( window ).bind( "resize.dialog-overlay", $.ui.dialog.overlay.resize );
 		}
-		
+
 		var $el = ( this.oldInstances.pop() || $( "<div>" ).addClass( "ui-widget-overlay" ) );
-		
+
 		// allow closing by pressing the escape key
 		$( document ).bind( "keydown.dialog-overlay", function( event ) {
-			var instances = $.ui.dialog.overlay.instances; 
-			// only react to the event if we're the top overlay 
-			if ( instances.length !== 0 && instances[ instances.length - 1 ] === $el && 
+			var instances = $.ui.dialog.overlay.instances;
+			// only react to the event if we're the top overlay
+			if ( instances.length !== 0 && instances[ instances.length - 1 ] === $el &&
 				dialog.options.closeOnEscape && !event.isDefaultPrevented() && event.keyCode &&
 				event.keyCode === $.ui.keyCode.ESCAPE ) {
-	
+
 				dialog.close( event );
 				event.preventDefault();
 			}
