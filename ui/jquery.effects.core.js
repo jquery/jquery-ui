@@ -428,6 +428,15 @@ $.extend( $.effects, {
 			},
 			active = document.activeElement;
 
+		// support: Firefox
+		// Firefox incorrectly exposes anonymous content
+		// https://bugzilla.mozilla.org/show_bug.cgi?id=561664
+		try {
+			active.id;
+		} catch( e ) {
+			active = document.body;
+		}
+
 		element.wrap( wrapper );
 
 		// Fixes #7595 - Elements lose focus when wrapped.
