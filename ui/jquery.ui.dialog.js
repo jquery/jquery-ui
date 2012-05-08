@@ -33,7 +33,8 @@ var uiDialogClasses = "ui-dialog ui-widget ui-widget-content ui-corner-all ",
 		maxWidth: true,
 		minHeight: true,
 		minWidth: true
-	};
+	},
+	dialogs = {};
 
 $.widget("ui.dialog", {
 	version: "@VERSION",
@@ -145,6 +146,8 @@ $.widget("ui.dialog", {
 				.html( title )
 				.prependTo( uiDialogTitlebar );
 
+		self.titleId = titleId;
+
 		uiDialogTitlebar.find( "*" ).add( uiDialogTitlebar ).disableSelection();
 		this._hoverable( uiDialogTitlebarClose );
 		this._focusable( uiDialogTitlebarClose );
@@ -162,6 +165,8 @@ $.widget("ui.dialog", {
 		if ( $.fn.bgiframe ) {
 			uiDialog.bgiframe();
 		}
+
+		dialogs[self.titleId] = this;
 	},
 
 	_init: function() {
@@ -178,6 +183,8 @@ $.widget("ui.dialog", {
 			self.overlay.destroy();
 		}
 		self.uiDialog.hide();
+		delete dialogs[self.titleId];
+
 		self.element
 			.removeClass( "ui-dialog-content ui-widget-content" )
 			.hide()
@@ -231,20 +238,26 @@ $.widget("ui.dialog", {
 		$.ui.dialog.overlay.resize();
 
 		// adjust the maxZ to allow other modal dialogs to continue to work (see #4309)
-		if ( self.options.modal ) {
-			maxZ = 0;
-			$( ".ui-dialog" ).each(function() {
-				if ( this !== self.uiDialog[0] ) {
-					thisZ = $( this ).css( "z-index" );
-					if ( !isNaN( thisZ ) ) {
-						maxZ = Math.max( maxZ, thisZ );
-					}
-				}
-			});
-			$.ui.dialog.maxZ = maxZ;
+		if (self.options.modal) {
+			self._updateMaxZ();
 		}
 
 		return self;
+	},
+	
+	_updateMaxZ: function() {
+		var self = this,
+			maxZ = self.options.zIndex;
+
+		$.each(dialogs, function() {
+			if (this.uiDialog[0] !== self.uiDialog[0] && this._isOpen) {
+				thisZ = this.uiDialog.css('z-index');
+				if(!isNaN(thisZ)) {
+					maxZ = Math.max(maxZ, thisZ);
+				}
+			}
+		});
+		$.ui.dialog.maxZ = maxZ;
 	},
 
 	isOpen: function() {
@@ -263,26 +276,24 @@ $.widget("ui.dialog", {
 			return self._trigger( "focus", event );
 		}
 
-		if ( options.zIndex > $.ui.dialog.maxZ ) {
-			$.ui.dialog.maxZ = options.zIndex;
-		}
-		if ( self.overlay ) {
-			$.ui.dialog.maxZ += 1;
-			$.ui.dialog.overlay.maxZ = $.ui.dialog.maxZ;
-			self.overlay.$el.css( "z-index", $.ui.dialog.overlay.maxZ );
-		}
+		//moveToTop method does not have a true/false passed down from dialog('moveToTop')
+		if (force || force === undefined) {
+			self._updateMaxZ();
 
-		// Save and then restore scroll
-		// Opera 9.5+ resets when parent z-index is changed.
-		// http://bugs.jqueryui.com/ticket/3193
-		saveScroll = {
-			scrollTop: self.element.scrollTop(),
-			scrollLeft: self.element.scrollLeft()
-		};
-		$.ui.dialog.maxZ += 1;
-		self.uiDialog.css( "z-index", $.ui.dialog.maxZ );
-		self.element.attr( saveScroll );
-		self._trigger( "focus", event );
+			if (self.overlay) {
+				$.ui.dialog.maxZ += 1;
+				self.overlay.$el.css('z-index', $.ui.dialog.overlay.maxZ = $.ui.dialog.maxZ);
+			}
+
+			//Save and then restore scroll since Opera 9.5+ resets when parent z-Index is changed.
+			//  http://ui.jquery.com/bugs/ticket/3193
+			saveScroll = { scrollTop: self.element.scrollTop(), scrollLeft: self.element.scrollLeft() };
+			$.ui.dialog.maxZ += 1;
+			self.uiDialog.css('z-index', $.ui.dialog.maxZ);
+			self.element.attr(saveScroll);
+		}
+		
+		self._trigger('focus', event);
 
 		return self;
 	},
@@ -336,7 +347,7 @@ $.widget("ui.dialog", {
 		hasFocus.eq( 0 ).focus();
 
 		self._isOpen = true;
-		self._trigger( "open" );
+		self._trigger('open');
 
 		return self;
 	},

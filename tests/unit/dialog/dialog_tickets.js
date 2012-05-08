@@ -34,6 +34,42 @@ asyncTest( "#3123: Prevent tabbing out of modal dialogs", function() {
 	setTimeout( checkTab, 2 );
 });
 
+test("#5388: Don't change z-index when already at the top", function() {
+	expect(8);
+
+	var d1 = $('<div></div>').appendTo(document.body).dialog({ modal: true, autoOpen: false }),
+		d2 = $('<div></div>').appendTo(document.body).dialog({ modal: true, autoOpen: false }),
+		d3 = $('<div></div>').appendTo(document.body).dialog({ modal: true, autoOpen: false });
+    
+    for (var i=0; i < 10; i++) {
+        d1.dialog('open').dialog('close');
+        d2.dialog('open').dialog('close');
+    }
+    
+	equals($.ui.dialog.maxZ, 1000, 'MaxZ set to original');
+    d1.dialog('open');
+    equals(d1.dialog('widget').css('zIndex'), '1002', 'One dialog open maintained proper z-index');
+    d2.dialog('open');
+    equals(d2.dialog('widget').css('zIndex'), '1004', 'Two dialogs opened maintained proper z-index');
+    d1.dialog('close');
+	
+	equals($.ui.dialog.maxZ, 1004, 'MaxZ set correctly');
+
+    equals(d2.dialog('widget').css('zIndex'), '1004', 'Second dialog remained open and first closed maintained proper z-index');
+    d3.dialog('open');
+    equals(d3.dialog('widget').css('zIndex'), '1006', 'Opened a third dialog and maintained proper z-index');    
+    d1.dialog('open');
+    equals(d1.dialog('widget').css('zIndex'), '1008', 'Reopened first dialog and maintained proper z-index');    
+    
+    d1.dialog('close');
+	d2.remove();
+	d3.dialog('close');
+    equals($.ui.dialog.maxZ, 1000, 'Reset to original');
+    
+    d1.remove();
+	d3.remove();
+});
+
 test("#4826: setting resizable false toggles resizable on dialog", function() {
 	expect(6);
 	var i;
