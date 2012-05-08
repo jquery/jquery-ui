@@ -410,9 +410,8 @@ $.widget( "ui.accordion", {
 		this._toggle( eventData );
 
 		// switch classes
-		active
-			.removeClass( "ui-accordion-header-active ui-state-active ui-corner-top" )
-			.addClass( "ui-corner-all" );
+		// corner classes on the previously active header stay after the animation
+		active.removeClass( "ui-accordion-header-active ui-state-active" );
 		if ( options.icons ) {
 			active.children( ".ui-accordion-header-icon" )
 				.removeClass( options.icons.activeHeader )
@@ -518,8 +517,12 @@ $.widget( "ui.accordion", {
 	_toggleComplete: function( data ) {
 		var toHide = data.oldContent;
 
-		// other classes are removed before the animation; this one needs to stay until completed
-		toHide.removeClass( "ui-accordion-content-active" );
+		toHide
+			.removeClass( "ui-accordion-content-active" )
+			.prev()
+				.removeClass( "ui-corner-top" )
+				.addClass( "ui-corner-all" );
+
 		// Work around for rendering bug in IE (#5421)
 		if ( toHide.length ) {
 			toHide.parent()[0].className = toHide.parent()[0].className;
