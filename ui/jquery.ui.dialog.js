@@ -263,8 +263,8 @@ $.widget("ui.dialog", {
 			return self._trigger( "focus", event );
 		}
 
-		if ( options.zIndex > $.ui.dialog.maxZ ) {
-			$.ui.dialog.maxZ = options.zIndex;
+		if ( options.zIndex >= $.ui.dialog.maxZ ) {
+			$.ui.dialog.maxZ = options.zIndex + 1;
 		}
 		if ( self.overlay ) {
 			$.ui.dialog.maxZ += 1;
@@ -279,8 +279,8 @@ $.widget("ui.dialog", {
 			scrollTop: self.element.scrollTop(),
 			scrollLeft: self.element.scrollLeft()
 		};
-		$.ui.dialog.maxZ += 1;
-		self.uiDialog.css( "z-index", $.ui.dialog.maxZ );
+		if( self.uiDialog.css( "z-index" ) < $.ui.dialog.maxZ )
+			self.uiDialog.css( "z-index", $.ui.dialog.maxZ += 1 );
 		self.element.attr( saveScroll );
 		self._trigger( "focus", event );
 
