@@ -30,9 +30,11 @@
 			content: function() {
 				var element = $( this );
 				if ( element.is( "[data-geo]" ) ) {
-					return "<img class='map' src='http://maps.google.com/maps/api/staticmap?" +
+					var text = element.text();
+					return "<img class='map' alt='" + text +
+						"' src='http://maps.google.com/maps/api/staticmap?" +
 						"zoom=11&size=350x350&maptype=terrain&sensor=false&center=" +
-						element.text() + "'>";
+						text + "'>";
 				}
 				if ( element.is( "[title]" ) ) {
 					return element.attr( "title" );
