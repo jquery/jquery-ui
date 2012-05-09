@@ -331,12 +331,12 @@ $.widget( "ui.menu", {
 		this.active.parent().closest( ".ui-menu-item" ).children( "a:first" ).addClass( "ui-state-active" );
 
 		if ( event.type === "keydown" ) {
-            this._close();
-        } else {
-            this.timer = this._delay(function() {
+			this._close();
+		} else {
+			this.timer = this._delay(function() {
 				this._close();
 			}, this.delay );
-        }
+		}
 
 		nested = $( "> .ui-menu", item );
 		if ( nested.length && ( /^mouse/.test( event.type ) ) ) {
