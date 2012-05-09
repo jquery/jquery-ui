@@ -194,7 +194,7 @@ $.widget( "ui.slider", $.ui.mouse, {
 		this._animateOff = false;
 	},
 
-	destroy: function() {
+	_destroy: function() {
 		this.handles.remove();
 		this.range.remove();
 
@@ -205,13 +205,9 @@ $.widget( "ui.slider", $.ui.mouse, {
 				" ui-slider-disabled" +
 				" ui-widget" +
 				" ui-widget-content" +
-				" ui-corner-all" )
-			.removeData( "slider" )
-			.unbind( ".slider" );
+				" ui-corner-all" );
 
 		this._mouseDestroy();
-
-		return this;
 	},
 
 	_mouseCapture: function( event ) {
