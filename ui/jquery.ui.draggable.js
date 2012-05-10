@@ -284,7 +284,6 @@ $.widget("ui.draggable", $.ui.mouse, {
 		this.originalParent = null;
 		if( !helper.parents('body').length )
 		{
-			console.log('Theres body!');
 			helper.appendTo((o.appendTo == 'parent' ? this.element[0].parentNode : o.appendTo));
 		}
 		else
