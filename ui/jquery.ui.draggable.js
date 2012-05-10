@@ -243,6 +243,11 @@ $.widget("ui.draggable", $.ui.mouse, {
 		//If the ddmanager is used for droppables, inform the manager that dragging has stopped (see #5003)
 		if( $.ui.ddmanager ) $.ui.ddmanager.dragStop(this, event);
 		
+		if( this.originalParent!==null )
+		{
+			this.element.appendTo( this.originalParent );
+		}
+
 		return $.ui.mouse.prototype._mouseUp.call(this, event);
 	},
 	
@@ -276,9 +281,24 @@ $.widget("ui.draggable", $.ui.mouse, {
 
 		var o = this.options;
 		var helper = $.isFunction(o.helper) ? $(o.helper.apply(this.element[0], [event])) : (o.helper == 'clone' ? this.element.clone().removeAttr('id') : this.element);
-
-		if(!helper.parents('body').length)
+		this.originalParent = null;
+		if( !helper.parents('body').length )
+		{
 			helper.appendTo((o.appendTo == 'parent' ? this.element[0].parentNode : o.appendTo));
+		}
+		else
+		{
+			// If it is already in the document
+			if( o.appendTo!=='parent' )
+			{
+				this.originalParent = $( this.element[0].parentNode );
+
+				var offset = helper.offset();
+				helper.appendTo( o.appendTo );
+				helper.css('position','absolute');
+				helper.offset( offset );
+			}
+		}
 
 		if(helper[0] != this.element[0] && !(/(fixed|absolute)/).test(helper.css("position")))
 			helper.css("position", "absolute");
