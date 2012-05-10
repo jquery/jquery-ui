@@ -247,10 +247,10 @@ $.widget( "ui.autocomplete", {
 					// #6109 - IE triggers two focus events and the second
 					// is asynchronous, so we need to reset the previous
 					// term synchronously and asynchronously :-(
-					setTimeout(function() {
+					this._delay(function() {
 						this.previous = previous;
 						this.selectedItem = item;
-					}, 1);
+					});
 				}
 
 				if ( false !== this._trigger( "select", event, { item: item } ) ) {
