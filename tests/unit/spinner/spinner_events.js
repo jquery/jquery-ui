@@ -121,7 +121,7 @@ test( "stop", function() {
 	element.spinner( "value", 999 );
 });
 
-test( "change", function() {
+asyncTest( "change", function() {
 	expect( 14 );
 	var element = $( "#spin" ).spinner();
 
@@ -174,50 +174,56 @@ test( "change", function() {
 	shouldChange( false, "button up, before blur" );
 	element.spinner( "widget" ).find( ".ui-spinner-up" ).mousedown().mouseup();
 	shouldChange( true, "blur after button up" );
-	element.blur();
+	setTimeout(function() {
+		element.blur();
 
-	shouldChange( false, "button down, before blur" );
-	element.spinner( "widget" ).find( ".ui-spinner-down" ).mousedown().mouseup();
-	shouldChange( true, "blur after button down" );
-	element.blur();
+		shouldChange( false, "button down, before blur" );
+		element.spinner( "widget" ).find( ".ui-spinner-down" ).mousedown().mouseup();
+		shouldChange( true, "blur after button down" );
+		setTimeout(function() {
+			element.blur();
 
-	shouldChange( false, "many buttons, same final value, before blur" );
-	element.spinner( "widget" ).find( ".ui-spinner-up" ).mousedown().mouseup();
-	element.spinner( "widget" ).find( ".ui-spinner-up" ).mousedown().mouseup();
-	element.spinner( "widget" ).find( ".ui-spinner-down" ).mousedown().mouseup();
-	element.spinner( "widget" ).find( ".ui-spinner-down" ).mousedown().mouseup();
-	shouldChange( false, "blur after many buttons, same final value" );
-	element.blur();
+			shouldChange( false, "many buttons, same final value, before blur" );
+			element.spinner( "widget" ).find( ".ui-spinner-up" ).mousedown().mouseup();
+			element.spinner( "widget" ).find( ".ui-spinner-up" ).mousedown().mouseup();
+			element.spinner( "widget" ).find( ".ui-spinner-down" ).mousedown().mouseup();
+			element.spinner( "widget" ).find( ".ui-spinner-down" ).mousedown().mouseup();
+			shouldChange( false, "blur after many buttons, same final value" );
+			element.blur();
+			setTimeout(function() {
+				shouldChange( true, "stepUp" );
+				element.spinner( "stepUp" );
 
-	shouldChange( true, "stepUp" );
-	element.spinner( "stepUp" );
+				shouldChange( true, "stepDown" );
+				element.spinner( "stepDown" );
 
-	shouldChange( true, "stepDown" );
-	element.spinner( "stepDown" );
+				shouldChange( true, "pageUp" );
+				element.spinner( "pageUp" );
 
-	shouldChange( true, "pageUp" );
-	element.spinner( "pageUp" );
+				shouldChange( true, "pageDown" );
+				element.spinner( "pageDown" );
 
-	shouldChange( true, "pageDown" );
-	element.spinner( "pageDown" );
+				shouldChange( true, "value" );
+				element.spinner( "value", 999 );
 
-	shouldChange( true, "value" );
-	element.spinner( "value", 999 );
+				shouldChange( false, "value, same value" );
+				element.spinner( "value", 999 );
 
-	shouldChange( false, "value, same value" );
-	element.spinner( "value", 999 );
+				shouldChange( true, "max, value changed" );
+				element.spinner( "option", "max", 900 );
 
-	shouldChange( true, "max, value changed" );
-	element.spinner( "option", "max", 900 );
+				shouldChange( false, "max, value not changed" );
+				element.spinner( "option", "max", 1000 );
 
-	shouldChange( false, "max, value not changed" );
-	element.spinner( "option", "max", 1000 );
+				shouldChange( true, "min, value changed" );
+				element.spinner( "option", "min", 950 );
 
-	shouldChange( true, "min, value changed" );
-	element.spinner( "option", "min", 950 );
-
-	shouldChange( false, "min, value not changed" );
-	element.spinner( "option", "min", 200 );
+				shouldChange( false, "min, value not changed" );
+				element.spinner( "option", "min", 200 );
+				start();
+			});
+		});
+	});
 });
 
 })( jQuery );
