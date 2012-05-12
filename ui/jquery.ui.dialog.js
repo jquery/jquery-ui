@@ -365,9 +365,10 @@ $.widget("ui.dialog", {
 					props;
 				var button = $( "<button type='button'>" )
 					.attr( props, true )
-					.unbind( "click" )
-					.click(function() {
-						props.click.apply( that.element[0], arguments );
+					.addClass(props.class || "") // passing a class parameter will flow into the button
+					.off( "click.ui.dialog" ) // other actions may be adding clicks to buttons eg. $('button').on()
+					.on("click.ui.dialog",function() {
+						return props.click.apply( that.element[0], arguments );
 					})
 					.appendTo( uiButtonSet );
 				if ( $.fn.button ) {
