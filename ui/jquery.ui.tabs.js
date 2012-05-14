@@ -34,7 +34,8 @@ $.widget( "ui.tabs", {
 		active: null,
 		collapsible: false,
 		event: "click",
-		fx: null, // e.g. { height: 'toggle', opacity: 'toggle', duration: 200 }
+		hide: null,
+		show: null,
 
 		// callbacks
 		activate: null,
@@ -101,8 +102,6 @@ $.widget( "ui.tabs", {
 			) ).sort();
 		}
 
-		this._setupFx( options.fx );
-
 		this._refresh();
 
 		// highlight selected tab
@@ -150,10 +149,6 @@ $.widget( "ui.tabs", {
 
 		if ( key === "event" ) {
 			this._setupEvents( value );
-		}
-
-		if ( key === "fx" ) {
-			this._setupFx( value );
 		}
 	},
 
@@ -278,18 +273,6 @@ $.widget( "ui.tabs", {
 		this.options.disabled = disabled;
 	},
 
-	_setupFx: function( fx ) {
-		// set up animations
-		if ( fx ) {
-			if ( $.isArray( fx ) ) {
-				this.hideFx = fx[ 0 ];
-				this.showFx = fx[ 1 ];
-			} else {
-				this.hideFx = this.showFx = fx;
-			}
-		}
-	},
-
 	_setupEvents: function( event ) {
 		// attach tab event handler, unbind to avoid duplicates from former tabifying...
 		this.anchors.unbind( ".tabs" );
@@ -364,7 +347,7 @@ $.widget( "ui.tabs", {
 			toShow = eventData.newPanel,
 			toHide = eventData.oldPanel;
 
-		that.running = true;
+		this.running = true;
 
 		function complete() {
 			that.running = false;
@@ -374,11 +357,8 @@ $.widget( "ui.tabs", {
 		function show() {
 			eventData.newTab.closest( "li" ).addClass( "ui-tabs-active ui-state-active" );
 
-			if ( toShow.length && that.showFx ) {
-				toShow
-					.animate( that.showFx, that.showFx.duration || "normal", function() {
-						complete();
-					});
+			if ( toShow.length && that.options.show ) {
+				that._show( toShow, that.options.show, complete );
 			} else {
 				toShow.show();
 				complete();
@@ -386,8 +366,8 @@ $.widget( "ui.tabs", {
 		}
 
 		// start out by hiding, then showing, then completing
-		if ( toHide.length && that.hideFx ) {
-			toHide.animate( that.hideFx, that.hideFx.duration || "normal", function() {
+		if ( toHide.length && this.options.hide ) {
+			this._hide( toHide, this.options.hide, function() {
 				eventData.oldTab.closest( "li" ).removeClass( "ui-tabs-active ui-state-active" );
 				show();
 			});
@@ -993,6 +973,76 @@ if ( $.uiBackCompat !== false ) {
 				_data.tab = _data.tab[ 0 ];
 			}
 			return this._super( type, event, _data );
+		}
+	});
+
+	// fx option
+	// The new animation options (show, hide) conflict with the old show callback.
+	// The old fx option wins over show/hide anyway (always favor back-compat).
+	// If a user wants to use the new animation API, they must give up the old API.
+	$.widget( "ui.tabs", $.ui.tabs, {
+		options: {
+			fx: null // e.g. { height: "toggle", opacity: "toggle", duration: 200 }
+		},
+
+		_getFx: function() {
+			var hide, show,
+				fx = this.options.fx;
+
+			if ( fx ) {
+				if ( $.isArray( fx ) ) {
+					hide = fx[ 0 ];
+					show = fx[ 1 ];
+				} else {
+					hide = show = fx;
+				}
+			}
+
+			return fx ? { show: show, hide: hide } : null;
+		},
+
+		_toggle: function( event, eventData ) {
+			var that = this,
+				toShow = eventData.newPanel,
+				toHide = eventData.oldPanel,
+				fx = this._getFx();
+
+			if ( !fx ) {
+				return this._super( event, eventData );
+			}
+
+			that.running = true;
+
+			function complete() {
+				that.running = false;
+				that._trigger( "activate", event, eventData );
+			}
+
+			function show() {
+				eventData.newTab.closest( "li" ).addClass( "ui-tabs-active ui-state-active" );
+
+				if ( toShow.length && fx.show ) {
+					toShow
+						.animate( fx.show, fx.show.duration, function() {
+							complete();
+						});
+				} else {
+					toShow.show();
+					complete();
+				}
+			}
+
+			// start out by hiding, then showing, then completing
+			if ( toHide.length && fx.hide ) {
+				toHide.animate( fx.hide, fx.hide.duration, function() {
+					eventData.oldTab.closest( "li" ).removeClass( "ui-tabs-active ui-state-active" );
+					show();
+				});
+			} else {
+				eventData.oldTab.closest( "li" ).removeClass( "ui-tabs-active ui-state-active" );
+				toHide.hide();
+				show();
+			}
 		}
 	});
 }
