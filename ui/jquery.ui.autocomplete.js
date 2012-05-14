@@ -238,7 +238,7 @@ $.widget( "ui.autocomplete", {
 				select: function( event, ui ) {
 					// back compat for _renderItem using item.autocomplete, via #7810
 					// TODO remove the fallback, see #8156
-					var item = ui.item.data( "ui-autocomplete-item" ) || ui.item.data( "item.autocomplete" );
+					var item = ui.item.data( "ui-autocomplete-item" ) || ui.item.data( "item.autocomplete" ),
 						previous = self.previous;
 
 					// only trigger when focus was lost (click on menu)

@@ -1,4 +1,4 @@
-/*
+/*!
  * jQuery UI Menu @VERSION
  *
  * Copyright 2012, AUTHORS.txt (http://jqueryui.com/about)
@@ -85,9 +85,9 @@ $.widget( "ui.menu", {
 			"mouseleave": "collapseAll",
 			"mouseleave .ui-menu": "collapseAll",
 			"focus": function( event ) {
-				var firstItem = this.element.children( ".ui-menu-item" ).not( ".ui-state-disabled" ).eq( 0 );
+				var menu = this.element,
+					firstItem = menu.children( ".ui-menu-item" ).not( ".ui-state-disabled" ).eq( 0 );
 				if ( this._hasScroll() && !this.active ) {
-					var menu = this.element;
 					menu.children().each( function() {
 						var currentItem = $( this );
 						if ( currentItem.offset().top - menu.offset().top >= 0 ) {
@@ -183,7 +183,7 @@ $.widget( "ui.menu", {
 						character = String.fromCharCode( event.keyCode ),
 						skip = false;
 
-					if (character == prev) {
+					if (character === prev) {
 						skip = true;
 					} else {
 						character = prev + character;
@@ -195,7 +195,7 @@ $.widget( "ui.menu", {
 						return new RegExp("^" + escape(character), "i")
 							.test( $( this ).children( "a" ).text() );
 					});
-					match = skip && match.index(this.active.next()) != -1 ? this.active.nextAll(".ui-menu-item") : match;
+					match = skip && match.index(this.active.next()) !== -1 ? this.active.nextAll(".ui-menu-item") : match;
 					if ( !match.length ) {
 						character = String.fromCharCode(event.keyCode);
 						match = this.activeMenu.children(".ui-menu-item").filter( function() {
@@ -260,15 +260,18 @@ $.widget( "ui.menu", {
 
 	refresh: function() {
 		// initialize nested menus
-		var submenus = this.element.find( this.options.menus + ":not( .ui-menu )" )
-			.addClass( "ui-menu ui-widget ui-widget-content ui-corner-all" )
-			.attr( "role", "menu" )
-			.hide()
-			.attr( "aria-hidden", "true" )
-			.attr( "aria-expanded", "false" );
+		var menuId,
+			submenus = this.element.find( this.options.menus + ":not( .ui-menu )" )
+				.addClass( "ui-menu ui-widget ui-widget-content ui-corner-all" )
+				.hide()
+				.attr({
+					role: "menu",
+					"aria-hidden": "true",
+					"aria-expanded": "false"
+				});
 
 		// don't refresh list items that are already adapted
-		var menuId = this.menuId;
+		menuId = this.menuId;
 		submenus.add( this.element ).children( ":not( .ui-menu-item ):has( a )" )
 			.addClass( "ui-menu-item" )
 			.attr( "role", "presentation" )
@@ -291,15 +294,16 @@ $.widget( "ui.menu", {
 	},
 
 	focus: function( event, item ) {
+		var nested, borderTop, paddingTop, offset, scroll, elementHeight, itemHeight;
 		this.blur( event );
 
 		if ( this._hasScroll() ) {
-			var borderTop = parseFloat( $.css( this.activeMenu[0], "borderTopWidth" ) ) || 0,
-				paddingTop = parseFloat( $.css( this.activeMenu[0], "paddingTop" ) ) || 0,
-				offset = item.offset().top - this.activeMenu.offset().top - borderTop - paddingTop,
-				scroll = this.activeMenu.scrollTop(),
-				elementHeight = this.activeMenu.height(),
-				itemHeight = item.height();
+			borderTop = parseFloat( $.css( this.activeMenu[0], "borderTopWidth" ) ) || 0;
+			paddingTop = parseFloat( $.css( this.activeMenu[0], "paddingTop" ) ) || 0;
+			offset = item.offset().top - this.activeMenu.offset().top - borderTop - paddingTop;
+			scroll = this.activeMenu.scrollTop();
+			elementHeight = this.activeMenu.height();
+			itemHeight = item.height();
 
 			if ( offset < 0 ) {
 				this.activeMenu.scrollTop( scroll + offset );
@@ -321,7 +325,7 @@ $.widget( "ui.menu", {
 			this._close();
 		}, this.delay );
 
-		var nested = $( "> .ui-menu", item );
+		nested = $( "> .ui-menu", item );
 		if ( nested.length && ( /^mouse/.test( event.type ) ) ) {
 			this._startOpening(nested);
 		}
@@ -368,9 +372,9 @@ $.widget( "ui.menu", {
 
 		var position = $.extend({}, {
 				of: this.active
-			}, $.type(this.options.position) == "function"
-				? this.options.position(this.active)
-				: this.options.position
+			}, $.type(this.options.position) === "function" ?
+				this.options.position(this.active) :
+				this.options.position
 			);
 
 		submenu.show()

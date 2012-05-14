@@ -1,4 +1,4 @@
-/*
+/*!
  * jQuery UI Tooltip @VERSION
  *
  * Copyright 2012, AUTHORS.txt (http://jqueryui.com/about)
@@ -99,7 +99,7 @@ $.widget( "ui.tooltip", {
 			return;
 		}
 
-		if ( !target.data( "ui-tooltip-title" ) ) {
+		if ( target.attr( "title" ) ) {
 			target.data( "ui-tooltip-title", target.attr( "title" ) );
 		}
 
@@ -159,7 +159,7 @@ $.widget( "ui.tooltip", {
 			mouseleave: "close",
 			focusout: "close",
 			keyup: function( event ) {
-				if ( event.keyCode == $.ui.keyCode.ESCAPE ) {
+				if ( event.keyCode === $.ui.keyCode.ESCAPE ) {
 					var fakeEvent = $.Event(event);
 					fakeEvent.currentTarget = target[0];
 					this.close( fakeEvent, true );
@@ -172,6 +172,12 @@ $.widget( "ui.tooltip", {
 		var that = this,
 			target = $( event ? event.currentTarget : this.element ),
 			tooltip = this._find( target );
+
+		// disabling closes the tooltip, so we need to track when we're closing
+		// to avoid an infinite loop in case the tooltip becomes disabled on close
+		if ( this.closing ) {
+			return;
+		}
 
 		// don't close if the element has focus
 		// this prevents the tooltip from closing if you hover while focused
@@ -195,7 +201,9 @@ $.widget( "ui.tooltip", {
 		target.removeData( "tooltip-open" );
 		target.unbind( "mouseleave.tooltip focusout.tooltip keyup.tooltip" );
 
+		this.closing = true;
 		this._trigger( "close", event, { tooltip: tooltip } );
+		this.closing = false;
 	},
 
 	_tooltip: function( element ) {

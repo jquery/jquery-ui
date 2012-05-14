@@ -230,7 +230,7 @@ function show_copyright(comments) {
                 if (c.type == "comment1") {
                         ret += "//" + c.value + "\n";
                 } else {
-                        ret += "/*" + c.value + "*/";
+                        ret += "/*" + c.value + "*/\n";
                 }
         }
         return ret;

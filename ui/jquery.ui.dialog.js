@@ -1,4 +1,4 @@
-/*
+/*!
  * jQuery UI Dialog @VERSION
  *
  * Copyright 2012, AUTHORS.txt (http://jqueryui.com/about)
@@ -201,12 +201,12 @@ $.widget("ui.dialog", {
 	},
 
 	close: function( event ) {
-		if ( !this._isOpen ) {
-			return self;
-		}
-
 		var self = this,
 			maxZ, thisZ;
+
+		if ( !this._isOpen ) {
+			return;
+		}
 
 		if ( false === self._trigger( "beforeClose", event ) ) {
 			return;
@@ -292,7 +292,8 @@ $.widget("ui.dialog", {
 			return;
 		}
 
-		var self = this,
+		var hasFocus,
+			self = this,
 			options = self.options,
 			uiDialog = self.uiDialog;
 
@@ -325,7 +326,7 @@ $.widget("ui.dialog", {
 
 		// set focus to the first tabbable element in the content area or the first button
 		// if there are no tabbable elements, set focus on the dialog itself
-		var hasFocus = self.element.find( ":tabbable" );
+		hasFocus = self.element.find( ":tabbable" );
 		if ( !hasFocus.length ) {
 			hasFocus = uiDialog.find( ".ui-dialog-buttonpane :tabbable" );
 			if ( !hasFocus.length ) {
@@ -341,7 +342,8 @@ $.widget("ui.dialog", {
 	},
 
 	_createButtons: function( buttons ) {
-		var self = this,
+		var uiDialogButtonPane, uiButtonSet,
+			self = this,
 			hasButtons = false;
 
 		// if we already have a button pane, remove it
@@ -353,11 +355,11 @@ $.widget("ui.dialog", {
 			});
 		}
 		if ( hasButtons ) {
-			var uiDialogButtonPane = $( "<div>" )
-					.addClass( "ui-dialog-buttonpane  ui-widget-content ui-helper-clearfix" ),
-				uiButtonSet = $( "<div>" )
-					.addClass( "ui-dialog-buttonset" )
-					.appendTo( uiDialogButtonPane );
+			uiDialogButtonPane = $( "<div>" )
+				.addClass( "ui-dialog-buttonpane  ui-widget-content ui-helper-clearfix" );
+			uiButtonSet = $( "<div>" )
+				.addClass( "ui-dialog-buttonset" )
+				.appendTo( uiDialogButtonPane );
 
 			$.each( buttons, function( name, props ) {
 				props = $.isFunction( props ) ?
@@ -547,7 +549,8 @@ $.widget("ui.dialog", {
 	},
 
 	_setOption: function( key, value ) {
-		var self = this,
+		var isDraggable, isResizable,
+			self = this,
 			uiDialog = self.uiDialog;
 
 		switch ( key ) {
@@ -571,7 +574,7 @@ $.widget("ui.dialog", {
 				}
 				break;
 			case "draggable":
-				var isDraggable = uiDialog.is( ":data(draggable)" );
+				isDraggable = uiDialog.is( ":data(draggable)" );
 				if ( isDraggable && !value ) {
 					uiDialog.draggable( "destroy" );
 				}
@@ -585,7 +588,7 @@ $.widget("ui.dialog", {
 				break;
 			case "resizable":
 				// currently resizable, becoming non-resizable
-				var isResizable = uiDialog.is( ":data(resizable)" );
+				isResizable = uiDialog.is( ":data(resizable)" );
 				if ( isResizable && !value ) {
 					uiDialog.resizable( "destroy" );
 				}
@@ -614,9 +617,8 @@ $.widget("ui.dialog", {
 		/* If the user has resized the dialog, the .ui-dialog and .ui-dialog-content
 		 * divs will both have width and height set, so we need to reset them
 		 */
-		var options = this.options,
-			nonContentHeight,
-			minContentHeight,
+		var nonContentHeight, minContentHeight, autoHeight,
+			options = this.options,
 			isVisible = this.uiDialog.is( ":visible" );
 
 		// reset content sizing
@@ -648,7 +650,7 @@ $.widget("ui.dialog", {
 				});
 			} else {
 				this.uiDialog.show();
-				var autoHeight = this.element.css( "height", "auto" ).height();
+				autoHeight = this.element.css( "height", "auto" ).height();
 				if ( !isVisible ) {
 					this.uiDialog.hide();
 				}
@@ -740,7 +742,9 @@ $.extend( $.ui.dialog.overlay, {
 	},
 
 	destroy: function( $el ) {
-		var indexOf = $.inArray( $el, this.instances );
+		var indexOf = $.inArray( $el, this.instances ),
+			maxZ = 0;
+
 		if ( indexOf !== -1 ) {
 			this.oldInstances.push( this.instances.splice( indexOf, 1 )[ 0 ] );
 		}
@@ -752,7 +756,6 @@ $.extend( $.ui.dialog.overlay, {
 		$el.height( 0 ).width( 0 ).remove();
 
 		// adjust the maxZ to allow other modal dialogs to continue to work (see #4309)
-		var maxZ = 0;
 		$.each( this.instances, function() {
 			maxZ = Math.max( maxZ, this.css( "z-index" ) );
 		});
