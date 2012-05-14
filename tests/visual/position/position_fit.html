@@ -10,15 +10,14 @@
 	<script type="text/javascript" src="../../../ui/jquery.ui.widget.js"></script>
 	<script type="text/javascript" src="../../../ui/jquery.ui.position.js"></script>
 	<script type="text/javascript" src="../../../ui/jquery.ui.menu.js"></script>
-	<script type="text/javascript" src="http://jqueryui.com/themeroller/themeswitchertool/"></script>
 	<script type="text/javascript">
 	$(function() {
 		var inputs = $("input");
 		$("ul").insertAfter(inputs);
 		inputs.each(function(index) {
 			$(this).position({
-				my: this.id.replace(/-/, " "),
-				at: this.id.replace(/-/, " "),
+				my: $(this).data("position"),
+				at: $(this).data("position"),
 				of: "#container"+index,
 				collision: "none"
 			});
@@ -114,25 +113,25 @@
 <div id="container16" class="container2"></div>
 <div id="container17" class="container2"></div>
 
-<input id="left-top" />
-<input id="center-top" />
-<input id="right-top" />
-<input id="left-top" />
-<input id="center-top" />
-<input id="right-top" />
-<input id="left-top" />
-<input id="center-top" />
-<input id="right-top" />
+<input data-position="left top" />
+<input data-position="center top" />
+<input data-position="right top" />
+<input data-position="left top" />
+<input data-position="center top" />
+<input data-position="right top" />
+<input data-position="left top" />
+<input data-position="center top" />
+<input data-position="right top" />
 
-<input id="left-top" />
-<input id="center-center" />
-<input id="right-bottom" />
-<input id="left-top" />
-<input id="center-center" />
-<input id="right-bottom" />
-<input id="left-top" />
-<input id="center-center" />
-<input id="right-bottom" />
+<input data-position="left top" />
+<input data-position="center center" />
+<input data-position="right bottom" />
+<input data-position="left top" />
+<input data-position="center center" />
+<input data-position="right bottom" />
+<input data-position="left top" />
+<input data-position="center center" />
+<input data-position="right bottom" />
 
 <ul>
 	<li><a href="#">Java</a></li>

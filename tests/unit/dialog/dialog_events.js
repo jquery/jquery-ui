@@ -63,7 +63,8 @@ test("dragStart", function() {
 
 test("drag", function() {
 	expect(9);
-	var hasDragged = false;
+	var handle,
+		hasDragged = false;
 
 	el = $('<div></div>').dialog({
 		drag: function(ev, ui) {
@@ -83,7 +84,7 @@ test("drag", function() {
 		ok(ui.position !== undefined, "ui.position in callback");
 		ok(ui.offset !== undefined, "ui.offset in callback");
 	});
-	var handle = $(".ui-dialog-titlebar", dlg());
+	handle = $(".ui-dialog-titlebar", dlg());
 	drag(handle, 50, 50);
 	el.remove();
 });
@@ -138,7 +139,8 @@ test("resizeStart", function() {
 
 test("resize", function() {
 	expect(13);
-	var hasResized = false;
+	var handle,
+		hasResized = false;
 
 	el = $('<div></div>').dialog({
 		resize: function(ev, ui) {
@@ -162,7 +164,7 @@ test("resize", function() {
 		ok(ui.position !== undefined, "ui.position in callback");
 		ok(ui.size !== undefined, "ui.size in callback");
 	});
-	var handle = $(".ui-resizable-se", dlg());
+	handle = $(".ui-resizable-se", dlg());
 	drag(handle, 50, 50);
 	el.remove();
 });

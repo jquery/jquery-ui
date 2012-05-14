@@ -93,6 +93,11 @@ $.widget( "ui.spinner", {
 			this.previous = this.element.val();
 		},
 		blur: function( event ) {
+			if ( this.cancelBlur ) {
+				delete this.cancelBlur;
+				return;
+			}
+
 			this._refresh();
 			this.uiSpinner.removeClass( "ui-state-active" );
 			if ( this.previous !== this.element.val() ) {
@@ -117,11 +122,42 @@ $.widget( "ui.spinner", {
 			event.preventDefault();
 		},
 		"mousedown .ui-spinner-button": function( event ) {
+			var previous;
+
+			// We never want the buttons to have focus; whenever the user is
+			// interacting with the spinner, the focus should be on the input.
+			// If the input is focused then this.previous is properly set from
+			// when the input first received focus. If the input is not focused
+			// then we need to set this.previous based on the value before spinning.
+			previous = this.element[0] === this.document[0].activeElement ?
+				this.previous : this.element.val();
+			function checkFocus() {
+				var isActive = this.element[0] === this.document[0].activeElement;
+				if ( !isActive ) {
+					this.element.focus();
+					this.previous = previous;
+					// support: IE
+					// IE sets focus asynchronously, so we need to check if focus
+					// moved off of the input because the user clicked on the button.
+					this._delay(function() {
+						this.previous = previous;
+					});
+				}
+			}
+
 			// ensure focus is on (or stays on) the text field
 			event.preventDefault();
-			if ( this.document[0].activeElement !== this.element[ 0 ] ) {
-				this.element.focus();
-			}
+			checkFocus.call( this );
+
+			// support: IE
+			// IE doesn't prevent moving focus even with event.preventDefault()
+			// so we set a flag to know when we should ignore the blur event
+			// and check (again) if focus moved off of the input.
+			this.cancelBlur = true;
+			this._delay(function() {
+				delete this.cancelBlur;
+				checkFocus.call( this );
+			});
 
 			if ( this._start( event ) === false ) {
 				return;

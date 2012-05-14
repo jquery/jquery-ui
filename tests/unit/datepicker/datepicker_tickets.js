@@ -7,8 +7,8 @@ module("datepicker: tickets");
 
 // http://forum.jquery.com/topic/several-breaking-changes-in-jquery-ui-1-8rc1
 test('beforeShowDay-getDate', function() {
-	var inp = init('#inp', {beforeShowDay: function(date) { inp.datepicker('getDate'); return [true, '']; }});
-	var dp = $('#ui-datepicker-div');
+	var inp = init('#inp', {beforeShowDay: function(date) { inp.datepicker('getDate'); return [true, '']; }}),
+	   dp = $('#ui-datepicker-div');
 	inp.val('01/01/2010').datepicker('show');
 	// contains non-breaking space
 	equal($('div.ui-datepicker-title').text(), 'January 2010', 'Initial month');
@@ -26,11 +26,11 @@ test('beforeShowDay-getDate', function() {
 
 test('Ticket 7602: Stop datepicker from appearing with beforeShow event handler', function(){
     var inp = init('#inp',{
-        beforeShow: function(){
-            return false;
-        }
-    });
-	var dp = $('#ui-datepicker-div');
+            beforeShow: function(){
+                return false;
+            }
+        }),
+        dp = $('#ui-datepicker-div');
     inp.datepicker('show');
     equal(dp.css('display'), 'none',"beforeShow returns false");
     inp.datepicker('destroy');

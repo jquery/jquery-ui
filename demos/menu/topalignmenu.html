@@ -1,15 +1,16 @@
 <!doctype html>
 <html>
 <head>
+	<meta charset="utf-8">
 	<title>Menu Demo: Top-aligned Menu</title>
-	<link rel="stylesheet" href="../demos.css" type="text/css" />
-	<link rel="stylesheet" href="../../themes/base/jquery.ui.all.css" type="text/css" title="ui-theme" />
-	<script type="text/javascript" src="../../jquery-1.7.2.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.core.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.widget.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.position.js"></script>
-	<script type="text/javascript" src="../../ui/jquery.ui.menu.js"></script>
-	<script type="text/javascript">
+	<link type="text/css" href="../demos.css" rel="stylesheet" />
+	<link type="text/css" href="../../themes/base/jquery.ui.all.css" rel="stylesheet" />
+	<script src="../../jquery-1.7.2.js"></script>
+	<script src="../../ui/jquery.ui.core.js"></script>
+	<script src="../../ui/jquery.ui.widget.js"></script>
+	<script src="../../ui/jquery.ui.position.js"></script>
+	<script src="../../ui/jquery.ui.menu.js"></script>
+	<script>
 	$(function() {
 		$("#topMenu").menu({
 			position: { of: "ul:has(a.ui-state-focus):last" }

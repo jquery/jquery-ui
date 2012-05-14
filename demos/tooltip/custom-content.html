@@ -30,9 +30,11 @@
 			content: function() {
 				var element = $( this );
 				if ( element.is( "[data-geo]" ) ) {
-					return "<img class='map' src='http://maps.google.com/maps/api/staticmap?" +
+					var text = element.text();
+					return "<img class='map' alt='" + text +
+						"' src='http://maps.google.com/maps/api/staticmap?" +
 						"zoom=11&size=350x350&maptype=terrain&sensor=false&center=" +
-						element.text() + "'>";
+						text + "'>";
 				}
 				if ( element.is( "[title]" ) ) {
 					return element.attr( "title" );
@@ -52,7 +54,7 @@
 <div class="ui-widget photo">
 	<div class="ui-widget-header ui-corner-all">
 		<h2>St. Stephen's Cathedral</h2>
-		<h3><a href="http://maps.google.com/maps?q=vienna,+austria&z=11" data-geo>Vienna, Austria</a></h3>
+		<h3><a href="http://maps.google.com/maps?q=vienna,+austria&amp;z=11" data-geo>Vienna, Austria</a></h3>
 	</div>
 	<a href="http://en.wikipedia.org/wiki/File:Wien_Stefansdom_DSC02656.JPG">
 		<img src="images/st-stephens.jpg" alt="St. Stephen's Cathedral" class="ui-corner-all">
@@ -62,7 +64,7 @@
 <div class="ui-widget photo">
 	<div class="ui-widget-header ui-corner-all">
 		<h2>Tower Bridge</h2>
-		<h3><a href="http://maps.google.com/maps?q=london,+england&z=11" data-geo>London, England</a></h3>
+		<h3><a href="http://maps.google.com/maps?q=london,+england&amp;z=11" data-geo>London, England</a></h3>
 	</div>
 	<a href="http://en.wikipedia.org/wiki/File:Tower_bridge_London_Twilight_-_November_2006.jpg">
 		<img src="images/tower-bridge.jpg" alt="Tower Bridge" class="ui-corner-all">

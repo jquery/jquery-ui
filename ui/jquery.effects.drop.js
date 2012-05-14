@@ -14,7 +14,7 @@
 
 $.effects.effect.drop = function( o, done ) {
 
-	var el = $( this ), 
+	var el = $( this ),
 		props = [ "position", "top", "bottom", "left", "right", "opacity", "height", "width" ],
 		mode = $.effects.setMode( el, o.mode || "hide" ),
 		show = mode === "show",
@@ -27,9 +27,9 @@ $.effects.effect.drop = function( o, done ) {
 		distance;
 
 	// Adjust
-	$.effects.save( el, props ); 
-	el.show(); 
-	$.effects.createWrapper( el ); 
+	$.effects.save( el, props );
+	el.show();
+	$.effects.createWrapper( el );
 
 	distance = o.distance || el[ ref === "top" ? "outerHeight": "outerWidth" ]({ margin: true }) / 2;
 
@@ -40,22 +40,22 @@ $.effects.effect.drop = function( o, done ) {
 	}
 
 	// Animation
-	animation[ ref ] = ( show ? 
-		( motion === "pos" ? "+=" : "-=" ) : 
+	animation[ ref ] = ( show ?
+		( motion === "pos" ? "+=" : "-=" ) :
 		( motion === "pos" ? "-=" : "+=" ) ) +
 		distance;
 
 	// Animate
-	el.animate( animation, { 
-		queue: false, 
-		duration: o.duration, 
-		easing: o.easing, 
+	el.animate( animation, {
+		queue: false,
+		duration: o.duration,
+		easing: o.easing,
 		complete: function() {
 			if ( mode === "hide" ) {
 				el.hide();
 			}
-			$.effects.restore( el, props ); 
-			$.effects.removeWrapper( el ); 
+			$.effects.restore( el, props );
+			$.effects.removeWrapper( el );
 			done();
 		}
 	});

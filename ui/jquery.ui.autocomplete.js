@@ -1,4 +1,4 @@
-/*
+/*!
  * jQuery UI Autocomplete @VERSION
  *
  * Copyright 2012, AUTHORS.txt (http://jqueryui.com/about)
@@ -46,17 +46,14 @@ $.widget( "ui.autocomplete", {
 	pending: 0,
 
 	_create: function() {
-		var self = this,
-			// Some browsers only repeat keydown events, not keypress events,
-			// so we use the suppressKeyPress flag to determine if we've already
-			// handled the keydown event. #7269
-			// Unfortunately the code for & in keypress is the same as the up arrow,
-			// so we use the suppressKeyPressRepeat flag to avoid handling keypress
-			// events when we know the keydown event was used to modify the
-			// search term. #7799
-			suppressKeyPress,
-			suppressKeyPressRepeat,
-			suppressInput;
+		// Some browsers only repeat keydown events, not keypress events,
+		// so we use the suppressKeyPress flag to determine if we've already
+		// handled the keydown event. #7269
+		// Unfortunately the code for & in keypress is the same as the up arrow,
+		// so we use the suppressKeyPressRepeat flag to avoid handling keypress
+		// events when we know the keydown event was used to modify the
+		// search term. #7799
+		var suppressKeyPress, suppressKeyPressRepeat, suppressInput;
 
 		this.isMultiLine = this.element.is( "textarea,[contenteditable]" );
 		this.valueMethod = this.element[ this.element.is( "input,textarea" ) ? "val" : "text" ];
@@ -69,9 +66,11 @@ $.widget( "ui.autocomplete", {
 				role: "textbox",
 				"aria-autocomplete": "list",
 				"aria-haspopup": "true"
-			})
-			.bind( "keydown.autocomplete", function( event ) {
-				if ( self.options.disabled || self.element.prop( "readOnly" ) ) {
+			});
+
+		this._bind({
+			keydown: function( event ) {
+				if ( this.element.prop( "readOnly" ) ) {
 					suppressKeyPress = true;
 					suppressInput = true;
 					suppressKeyPressRepeat = true;
@@ -85,50 +84,54 @@ $.widget( "ui.autocomplete", {
 				switch( event.keyCode ) {
 				case keyCode.PAGE_UP:
 					suppressKeyPress = true;
-					self._move( "previousPage", event );
+					this._move( "previousPage", event );
 					break;
 				case keyCode.PAGE_DOWN:
 					suppressKeyPress = true;
-					self._move( "nextPage", event );
+					this._move( "nextPage", event );
 					break;
 				case keyCode.UP:
 					suppressKeyPress = true;
-					self._keyEvent( "previous", event );
+					this._keyEvent( "previous", event );
 					break;
 				case keyCode.DOWN:
 					suppressKeyPress = true;
-					self._keyEvent( "next", event );
+					this._keyEvent( "next", event );
 					break;
 				case keyCode.ENTER:
 				case keyCode.NUMPAD_ENTER:
 					// when menu is open and has focus
-					if ( self.menu.active ) {
+					if ( this.menu.active ) {
 						// #6055 - Opera still allows the keypress to occur
 						// which causes forms to submit
 						suppressKeyPress = true;
 						event.preventDefault();
+						this.menu.select( event );
 					}
-					//passthrough - ENTER and TAB both select the current element
+					break;
 				case keyCode.TAB:
-					if ( !self.menu.active ) {
-						return;
+					if ( this.menu.active ) {
+						this.menu.select( event );
 					}
-					self.menu.select( event );
 					break;
 				case keyCode.ESCAPE:
-					if ( self.menu.element.is(":visible") ) {
-						self._value( self.term );
-						self.close( event );
+					if ( this.menu.element.is(":visible") ) {
+						this._value( this.term );
+						this.close( event );
+						// Different browsers have different default behavior for escape
+						// Single press can mean undo or clear
+						// Double press in IE means clear the whole form
+						event.preventDefault();
 					}
 					break;
 				default:
 					suppressKeyPressRepeat = true;
 					// search timeout should be triggered before the input value is changed
-					self._searchTimeout( event );
+					this._searchTimeout( event );
 					break;
 				}
-			})
-			.bind( "keypress.autocomplete", function( event ) {
+			},
+			keypress: function( event ) {
 				if ( suppressKeyPress ) {
 					suppressKeyPress = false;
 					event.preventDefault();
@@ -142,132 +145,125 @@ $.widget( "ui.autocomplete", {
 				var keyCode = $.ui.keyCode;
 				switch( event.keyCode ) {
 				case keyCode.PAGE_UP:
-					self._move( "previousPage", event );
+					this._move( "previousPage", event );
 					break;
 				case keyCode.PAGE_DOWN:
-					self._move( "nextPage", event );
+					this._move( "nextPage", event );
 					break;
 				case keyCode.UP:
-					self._keyEvent( "previous", event );
+					this._keyEvent( "previous", event );
 					break;
 				case keyCode.DOWN:
-					self._keyEvent( "next", event );
+					this._keyEvent( "next", event );
 					break;
 				}
-			})
-			.bind( "input.autocomplete", function(event) {
+			},
+			input: function( event ) {
 				if ( suppressInput ) {
 					suppressInput = false;
 					event.preventDefault();
 					return;
 				}
-				self._searchTimeout( event );
-			})
-			.bind( "focus.autocomplete", function() {
-				if ( self.options.disabled ) {
+				this._searchTimeout( event );
+			},
+			focus: function() {
+				this.selectedItem = null;
+				this.previous = this._value();
+			},
+			blur: function( event ) {
+				if ( this.cancelBlur ) {
+					delete this.cancelBlur;
 					return;
 				}
 
-				self.selectedItem = null;
-				self.previous = self._value();
-			})
-			.bind( "blur.autocomplete", function( event ) {
-				if ( self.options.disabled ) {
-					return;
-				}
+				clearTimeout( this.searching );
+				this.close( event );
+				this._change( event );
+			}
+		});
 
-				if ( self.cancelBlur ) {
-					delete self.cancelBlur;
-					return;
-				}
-
-				clearTimeout( self.searching );
-				self.close( event );
-				self._change( event );
-			});
 		this._initSource();
-		this.response = function() {
-			return self._response.apply( self, arguments );
-		};
 		this.menu = $( "<ul></ul>" )
 			.addClass( "ui-autocomplete" )
 			.appendTo( this.document.find( this.options.appendTo || "body" )[0] )
-			// prevent the close-on-blur in case of a "slow" click on the menu (long mousedown)
-			.mousedown(function( event ) {
+			.menu({
+				// custom key handling for now
+				input: $()
+			})
+			.zIndex( this.element.zIndex() + 1 )
+			.hide()
+			.data( "menu" );
+		this._bind( this.menu.element, {
+			mousedown: function( event ) {
 				// prevent moving focus out of the text field
 				event.preventDefault();
 
 				// IE doesn't prevent moving focus even with event.preventDefault()
 				// so we set a flag to know when we should ignore the blur event
-				self.cancelBlur = true;
-				setTimeout(function() {
-					delete self.cancelBlur;
-				}, 1 );
+				this.cancelBlur = true;
+				this._delay(function() {
+					delete this.cancelBlur;
+				});
 
 				// clicking on the scrollbar causes focus to shift to the body
 				// but we can't detect a mouseup or a click immediately afterward
 				// so we have to track the next mousedown and close the menu if
 				// the user clicks somewhere outside of the autocomplete
-				var menuElement = self.menu.element[ 0 ];
+				var menuElement = this.menu.element[ 0 ];
 				if ( !$( event.target ).closest( ".ui-menu-item" ).length ) {
-					setTimeout(function() {
-						self.document.one( 'mousedown', function( event ) {
-							if ( event.target !== self.element[ 0 ] &&
-								event.target !== menuElement &&
-								!$.contains( menuElement, event.target ) ) {
-								self.close();
+					this._delay(function() {
+						var that = this;
+						this.document.one( 'mousedown', function( event ) {
+							if ( event.target !== that.element[ 0 ] &&
+									event.target !== menuElement &&
+									!$.contains( menuElement, event.target ) ) {
+								that.close();
 							}
 						});
-					}, 1 );
+					});
 				}
-			})
-			.menu({
-				// custom key handling for now
-				input: $(),
-				focus: function( event, ui ) {
-					// back compat for _renderItem using item.autocomplete, via #7810
-					// TODO remove the fallback, see #8156
-					var item = ui.item.data( "ui-autocomplete-item" ) || ui.item.data( "item.autocomplete" );
-					if ( false !== self._trigger( "focus", event, { item: item } ) ) {
-						// use value to match what will end up in the input, if it was a key event
-						if ( /^key/.test(event.originalEvent.type) ) {
-							self._value( item.value );
-						}
+			},
+			menufocus: function( event, ui ) {
+				// back compat for _renderItem using item.autocomplete, via #7810
+				// TODO remove the fallback, see #8156
+				var item = ui.item.data( "ui-autocomplete-item" ) || ui.item.data( "item.autocomplete" );
+				if ( false !== this._trigger( "focus", event, { item: item } ) ) {
+					// use value to match what will end up in the input, if it was a key event
+					if ( /^key/.test(event.originalEvent.type) ) {
+						this._value( item.value );
 					}
-				},
-				select: function( event, ui ) {
-					// back compat for _renderItem using item.autocomplete, via #7810
-					// TODO remove the fallback, see #8156
-					var item = ui.item.data( "ui-autocomplete-item" ) || ui.item.data( "item.autocomplete" ),
-						previous = self.previous;
-
-					// only trigger when focus was lost (click on menu)
-					if ( self.element[0] !== self.document[0].activeElement ) {
-						self.element.focus();
-						self.previous = previous;
-						// #6109 - IE triggers two focus events and the second
-						// is asynchronous, so we need to reset the previous
-						// term synchronously and asynchronously :-(
-						setTimeout(function() {
-							self.previous = previous;
-							self.selectedItem = item;
-						}, 1);
-					}
-
-					if ( false !== self._trigger( "select", event, { item: item } ) ) {
-						self._value( item.value );
-					}
-					// reset the term after the select event
-					// this allows custom select handling to work properly
-					self.term = self._value();
-
-					self.close( event );
-					self.selectedItem = item;
 				}
-			})
-			.zIndex( this.element.zIndex() + 1 )
-			.hide()
-			.data( "menu" );
+			},
+			menuselect: function( event, ui ) {
+				// back compat for _renderItem using item.autocomplete, via #7810
+				// TODO remove the fallback, see #8156
+				var item = ui.item.data( "ui-autocomplete-item" ) || ui.item.data( "item.autocomplete" ),
+					previous = this.previous;
+
+				// only trigger when focus was lost (click on menu)
+				if ( this.element[0] !== this.document[0].activeElement ) {
+					this.element.focus();
+					this.previous = previous;
+					// #6109 - IE triggers two focus events and the second
+					// is asynchronous, so we need to reset the previous
+					// term synchronously and asynchronously :-(
+					this._delay(function() {
+						this.previous = previous;
+						this.selectedItem = item;
+					});
+				}
+
+				if ( false !== this._trigger( "select", event, { item: item } ) ) {
+					this._value( item.value );
+				}
+				// reset the term after the select event
+				// this allows custom select handling to work properly
+				this.term = this._value();
+
+				this.close( event );
+				this.selectedItem = item;
+			}
+		});
 
 		if ( $.fn.bgiframe ) {
 			 this.menu.element.bgiframe();
@@ -308,7 +304,7 @@ $.widget( "ui.autocomplete", {
 	},
 
 	_initSource: function() {
-		var self = this,
+		var that = this,
 			array,
 			url;
 		if ( $.isArray(this.options.source) ) {
@@ -319,25 +315,18 @@ $.widget( "ui.autocomplete", {
 		} else if ( typeof this.options.source === "string" ) {
 			url = this.options.source;
 			this.source = function( request, response ) {
-				if ( self.xhr ) {
-					self.xhr.abort();
+				if ( that.xhr ) {
+					that.xhr.abort();
 				}
-				self.xhr = $.ajax({
+				that.xhr = $.ajax({
 					url: url,
 					data: request,
 					dataType: "json",
-					context: {
-						autocompleteRequest: ++requestIndex
-					},
 					success: function( data, status ) {
-						if ( this.autocompleteRequest === requestIndex ) {
-							response( data );
-						}
+						response( data );
 					},
 					error: function() {
-						if ( this.autocompleteRequest === requestIndex ) {
-							response( [] );
-						}
+						response( [] );
 					}
 				});
 			};
@@ -347,15 +336,14 @@ $.widget( "ui.autocomplete", {
 	},
 
 	_searchTimeout: function( event ) {
-		var self = this;
-		clearTimeout( self.searching );
-		self.searching = setTimeout(function() {
+		clearTimeout( this.searching );
+		this.searching = this._delay(function() {
 			// only search if the value has changed
-			if ( self.term !== self._value() ) {
-				self.selectedItem = null;
-				self.search( null, event );
+			if ( this.term !== this._value() ) {
+				this.selectedItem = null;
+				this.search( null, event );
 			}
-		}, self.options.delay );
+		}, this.options.delay );
 	},
 
 	search: function( value, event ) {
@@ -380,10 +368,26 @@ $.widget( "ui.autocomplete", {
 		this.element.addClass( "ui-autocomplete-loading" );
 		this.cancelSearch = false;
 
-		this.source( { term: value }, this.response );
+		this.source( { term: value }, this._response() );
 	},
 
-	_response: function( content ) {
+	_response: function() {
+		var that = this,
+			index = ++requestIndex;
+
+		return function( content ) {
+			if ( index === requestIndex ) {
+				that.__response( content );
+			}
+
+			that.pending--;
+			if ( !that.pending ) {
+				that.element.removeClass( "ui-autocomplete-loading" );
+			}
+		};
+	},
+
+	__response: function( content ) {
 		if ( content ) {
 			content = this._normalize( content );
 		}
@@ -394,10 +398,6 @@ $.widget( "ui.autocomplete", {
 		} else {
 			// use ._close() instead of .close() so we don't cancel future searches
 			this._close();
-		}
-		this.pending--;
-		if ( !this.pending ) {
-			this.element.removeClass( "ui-autocomplete-loading" );
 		}
 	},
 
@@ -472,9 +472,9 @@ $.widget( "ui.autocomplete", {
 	},
 
 	_renderMenu: function( ul, items ) {
-		var self = this;
+		var that = this;
 		$.each( items, function( index, item ) {
-			self._renderItemData( ul, item );
+			that._renderItemData( ul, item );
 		});
 	},
 
@@ -522,7 +522,7 @@ $.widget( "ui.autocomplete", {
 
 $.extend( $.ui.autocomplete, {
 	escapeRegex: function( value ) {
-		return value.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+		return value.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, "\\$&");
 	},
 	filter: function(array, term) {
 		var matcher = new RegExp( $.ui.autocomplete.escapeRegex(term), "i" );

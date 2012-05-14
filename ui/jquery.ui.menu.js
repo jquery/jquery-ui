@@ -13,7 +13,8 @@
  */
 (function($) {
 
-var idIncrement = 0;
+var idIncrement = 0,
+	currentEventTarget = null;
 
 $.widget( "ui.menu", {
 	version: "@VERSION",
@@ -41,18 +42,23 @@ $.widget( "ui.menu", {
 			.addClass( "ui-menu ui-widget ui-widget-content ui-corner-all" )
 			.attr({
 				id: this.menuId,
-				role: "menu"
+				role: "menu",
+				tabIndex: 0
 			})
 			// need to catch all clicks on disabled menu
 			// not possible through _bind
-			.bind( "click.menu", $.proxy( function( event ) {
+			.bind( "click.menu", $.proxy(function( event ) {
 				if ( this.options.disabled ) {
 					event.preventDefault();
 				}
-			}, this));
+			}, this ));
+
 		if ( this.options.disabled ) {
-			this.element.addClass( "ui-state-disabled" );
+			this.element
+				.addClass( "ui-state-disabled" )
+				.attr( "aria-disabled", "true" );
 		}
+
 		this._bind({
 			// Prevent focus from sticking to links inside menu after clicking
 			// them (focus should always stay on UL during navigation).
@@ -63,22 +69,28 @@ $.widget( "ui.menu", {
 				event.preventDefault();
 			},
 			"click .ui-menu-item:has(a)": function( event ) {
-				event.stopImmediatePropagation();
-				//Don't select disabled menu items
-				if ( !$( event.target ).closest( ".ui-menu-item" ).is( ".ui-state-disabled" ) ) {
-					this.select( event );
-					// Redirect focus to the menu with a delay for firefox
-					this._delay( function() {
-						if ( !this.element.is(":focus") ) {
-							this.element.focus();
-						}
-					}, 20);
+				var target = $( event.target );
+				if ( target[0] !== currentEventTarget ) {
+					currentEventTarget = target[0];
+					target.one( "click.menu", function( event ) {
+						currentEventTarget = null;
+					});
+					// Don't select disabled menu items
+					if ( !target.closest( ".ui-menu-item" ).is( ".ui-state-disabled" ) ) {
+						this.select( event );
+						// Redirect focus to the menu with a delay for firefox
+						this._delay(function() {
+							if ( !this.element.is(":focus") ) {
+								this.element.focus();
+							}
+						}, 20 );
+					}
 				}
 			},
-			"mouseover .ui-menu-item": function( event ) {
-				event.stopImmediatePropagation();
+			"mouseenter .ui-menu-item": function( event ) {
 				var target = $( event.currentTarget );
-				// Remove ui-state-active class from siblings of the newly focused menu item to avoid a jump caused by adjacent elements both having a class with a border
+				// Remove ui-state-active class from siblings of the newly focused menu item
+				// to avoid a jump caused by adjacent elements both having a class with a border
 				target.siblings().children( ".ui-state-active" ).removeClass( "ui-state-active" );
 				this.focus( event, target );
 			},
@@ -86,9 +98,9 @@ $.widget( "ui.menu", {
 			"mouseleave .ui-menu": "collapseAll",
 			"focus": function( event ) {
 				var menu = this.element,
-					firstItem = menu.children( ".ui-menu-item" ).not( ".ui-state-disabled" ).eq( 0 );
+					firstItem = menu.children( ".ui-menu-item" ).eq( 0 );
 				if ( this._hasScroll() && !this.active ) {
-					menu.children().each( function() {
+					menu.children().each(function() {
 						var currentItem = $( this );
 						if ( currentItem.offset().top - menu.offset().top >= 0 ) {
 							firstItem = currentItem;
@@ -101,124 +113,16 @@ $.widget( "ui.menu", {
 				this.focus( event, firstItem );
 			},
 			blur: function( event ) {
-				this._delay( function() {
-					if ( ! $.contains( this.element[0], this.document[0].activeElement ) ) {
+				this._delay(function() {
+					if ( !$.contains( this.element[0], this.document[0].activeElement ) ) {
 						this.collapseAll( event );
 					}
-				}, 0);
-			}
+				});
+			},
+			"keydown": "_keydown"
 		});
 
 		this.refresh();
-
-		this.element.attr( "tabIndex", 0 );
-		this._bind({
-			"keydown": function( event ) {
-				switch ( event.keyCode ) {
-				case $.ui.keyCode.PAGE_UP:
-					this.previousPage( event );
-					event.preventDefault();
-					event.stopImmediatePropagation();
-					break;
-				case $.ui.keyCode.PAGE_DOWN:
-					this.nextPage( event );
-					event.preventDefault();
-					event.stopImmediatePropagation();
-					break;
-				case $.ui.keyCode.HOME:
-					this._move( "first", "first", event );
-					event.preventDefault();
-					event.stopImmediatePropagation();
-					break;
-				case $.ui.keyCode.END:
-					this._move( "last", "last", event );
-					event.preventDefault();
-					event.stopImmediatePropagation();
-					break;
-				case $.ui.keyCode.UP:
-					this.previous( event );
-					event.preventDefault();
-					event.stopImmediatePropagation();
-					break;
-				case $.ui.keyCode.DOWN:
-					this.next( event );
-					event.preventDefault();
-					event.stopImmediatePropagation();
-					break;
-				case $.ui.keyCode.LEFT:
-					if (this.collapse( event )) {
-						event.stopImmediatePropagation();
-					}
-					event.preventDefault();
-					break;
-				case $.ui.keyCode.RIGHT:
-					if (this.expand( event )) {
-						event.stopImmediatePropagation();
-					}
-					event.preventDefault();
-					break;
-				case $.ui.keyCode.ENTER:
-					if ( this.active.children( "a[aria-haspopup='true']" ).length ) {
-						if ( this.expand( event ) ) {
-							event.stopImmediatePropagation();
-						}
-					}
-					else {
-						this.select( event );
-						event.stopImmediatePropagation();
-					}
-					event.preventDefault();
-					break;
-				case $.ui.keyCode.ESCAPE:
-					if ( this.collapse( event ) ) {
-						event.stopImmediatePropagation();
-					}
-					event.preventDefault();
-					break;
-				default:
-					event.stopPropagation();
-					clearTimeout( this.filterTimer );
-					var match,
-						prev = this.previousFilter || "",
-						character = String.fromCharCode( event.keyCode ),
-						skip = false;
-
-					if (character === prev) {
-						skip = true;
-					} else {
-						character = prev + character;
-					}
-					function escape( value ) {
-						return value.replace( /[-[\]{}()*+?.,\\^$|#\s]/g , "\\$&" );
-					}
-					match = this.activeMenu.children( ".ui-menu-item" ).filter( function() {
-						return new RegExp("^" + escape(character), "i")
-							.test( $( this ).children( "a" ).text() );
-					});
-					match = skip && match.index(this.active.next()) !== -1 ? this.active.nextAll(".ui-menu-item") : match;
-					if ( !match.length ) {
-						character = String.fromCharCode(event.keyCode);
-						match = this.activeMenu.children(".ui-menu-item").filter( function() {
-							return new RegExp("^" + escape(character), "i")
-								.test( $( this ).children( "a" ).text() );
-						});
-					}
-					if ( match.length ) {
-						this.focus( event, match );
-						if (match.length > 1) {
-							this.previousFilter = character;
-							this.filterTimer = this._delay( function() {
-								delete this.previousFilter;
-							}, 1000 );
-						} else {
-							delete this.previousFilter;
-						}
-					} else {
-						delete this.previousFilter;
-					}
-				}
-			}
-		});
 
 		this._bind( this.document, {
 			click: function( event ) {
@@ -230,38 +134,136 @@ $.widget( "ui.menu", {
 	},
 
 	_destroy: function() {
-		//destroy (sub)menus
+		// destroy (sub)menus
 		this.element
 			.removeAttr( "aria-activedescendant" )
-			.find( ".ui-menu" )
-			.andSelf()
-			.removeClass( "ui-menu ui-widget ui-widget-content ui-corner-all" )
-			.removeAttr( "role" )
-			.removeAttr( "tabIndex" )
-			.removeAttr( "aria-labelledby" )
-			.removeAttr( "aria-expanded" )
-			.removeAttr( "aria-hidden" )
-			.show();
+			.find( ".ui-menu" ).andSelf()
+				.removeClass( "ui-menu ui-widget ui-widget-content ui-corner-all" )
+				.removeAttr( "role" )
+				.removeAttr( "tabIndex" )
+				.removeAttr( "aria-labelledby" )
+				.removeAttr( "aria-expanded" )
+				.removeAttr( "aria-hidden" )
+				.show();
 
-		//destroy menu items
+		// destroy menu items
 		this.element.find( ".ui-menu-item" )
 			.unbind( ".menu" )
 			.removeClass( "ui-menu-item" )
 			.removeAttr( "role" )
 			.children( "a" )
-			.removeClass( "ui-corner-all ui-state-hover" )
-			.removeAttr( "tabIndex" )
-			.removeAttr( "role" )
-			.removeAttr( "aria-haspopup" )
-			.removeAttr( "id" )
-			.children( ".ui-icon" )
-			.remove();
+				.removeClass( "ui-corner-all ui-state-hover" )
+				.removeAttr( "tabIndex" )
+				.removeAttr( "role" )
+				.removeAttr( "aria-haspopup" )
+				.removeAttr( "id" )
+				.children( ".ui-icon" )
+					.remove();
+
+		// unbind currentEventTarget click event handler
+		$( currentEventTarget ).unbind( "click.menu" );
+	},
+
+	_keydown: function( event ) {
+		switch ( event.keyCode ) {
+		case $.ui.keyCode.PAGE_UP:
+			this.previousPage( event );
+			event.preventDefault();
+			break;
+		case $.ui.keyCode.PAGE_DOWN:
+			this.nextPage( event );
+			event.preventDefault();
+			break;
+		case $.ui.keyCode.HOME:
+			this._move( "first", "first", event );
+			event.preventDefault();
+			break;
+		case $.ui.keyCode.END:
+			this._move( "last", "last", event );
+			event.preventDefault();
+			break;
+		case $.ui.keyCode.UP:
+			this.previous( event );
+			event.preventDefault();
+			break;
+		case $.ui.keyCode.DOWN:
+			this.next( event );
+			event.preventDefault();
+			break;
+		case $.ui.keyCode.LEFT:
+			this.collapse( event );
+			event.preventDefault();
+			break;
+		case $.ui.keyCode.RIGHT:
+			if ( !this.active.is( ".ui-state-disabled" ) ) {
+				this.expand( event );
+			}
+			event.preventDefault();
+			break;
+		case $.ui.keyCode.ENTER:
+			if ( !this.active.is( ".ui-state-disabled" ) ) {
+				if ( this.active.children( "a[aria-haspopup='true']" ).length ) {
+					this.expand( event );
+				} else {
+					this.select( event );
+				}
+			}
+			event.preventDefault();
+			break;
+		case $.ui.keyCode.ESCAPE:
+			this.collapse( event );
+			event.preventDefault();
+			break;
+		default:
+			clearTimeout( this.filterTimer );
+			var match,
+				prev = this.previousFilter || "",
+				character = String.fromCharCode( event.keyCode ),
+				skip = false;
+
+			if ( character === prev ) {
+				skip = true;
+			} else {
+				character = prev + character;
+			}
+			function escape( value ) {
+				return value.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, "\\$&");
+			}
+			match = this.activeMenu.children( ".ui-menu-item" ).filter(function() {
+				return new RegExp( "^" + escape( character ), "i" )
+					.test( $( this ).children( "a" ).text() );
+			});
+			match = skip && match.index(this.active.next()) !== -1 ?
+				this.active.nextAll(".ui-menu-item") :
+				match;
+			if ( !match.length ) {
+				character = String.fromCharCode(event.keyCode);
+				match = this.activeMenu.children(".ui-menu-item").filter(function() {
+					return new RegExp( "^" + escape(character), "i" )
+						.test( $( this ).children( "a" ).text() );
+				});
+			}
+			if ( match.length ) {
+				this.focus( event, match );
+				if ( match.length > 1 ) {
+					this.previousFilter = character;
+					this.filterTimer = this._delay(function() {
+						delete this.previousFilter;
+					}, 1000 );
+				} else {
+					delete this.previousFilter;
+				}
+			} else {
+				delete this.previousFilter;
+			}
+		}
 	},
 
 	refresh: function() {
 		// initialize nested menus
-		var menuId,
-			submenus = this.element.find( this.options.menus + ":not( .ui-menu )" )
+		var menus,
+			menuId = this.menuId,
+			submenus = this.element.find( this.options.menus + ":not(.ui-menu)" )
 				.addClass( "ui-menu ui-widget ui-widget-content ui-corner-all" )
 				.hide()
 				.attr({
@@ -271,8 +273,9 @@ $.widget( "ui.menu", {
 				});
 
 		// don't refresh list items that are already adapted
-		menuId = this.menuId;
-		submenus.add( this.element ).children( ":not( .ui-menu-item ):has( a )" )
+		menus = submenus.add( this.element );
+
+		menus.children( ":not( .ui-menu-item ):has( a )" )
 			.addClass( "ui-menu-item" )
 			.attr( "role", "presentation" )
 			.children( "a" )
@@ -283,7 +286,13 @@ $.widget( "ui.menu", {
 					return menuId + "-" + i;
 				});
 
-		submenus.each( function() {
+		// initialize unlinked menu-items as dividers
+		menus.children( ":not(.ui-menu-item)" ).addClass( "ui-widget-content ui-menu-divider" );
+
+		// add aria-disabled attribute to any disabled menu item
+		menus.children( ".ui-state-disabled" ).attr( "aria-disabled", "true" );
+
+		submenus.each(function() {
 			var menu = $( this ),
 				item = menu.prev( "a" );
 
@@ -295,7 +304,7 @@ $.widget( "ui.menu", {
 
 	focus: function( event, item ) {
 		var nested, borderTop, paddingTop, offset, scroll, elementHeight, itemHeight;
-		this.blur( event );
+		this.blur( event, event && event.type === "focus" );
 
 		if ( this._hasScroll() ) {
 			borderTop = parseFloat( $.css( this.activeMenu[0], "borderTopWidth" ) ) || 0;
@@ -312,18 +321,22 @@ $.widget( "ui.menu", {
 			}
 		}
 
-		this.active = item.first()
-			.children( "a" )
+		this.active = item.first();
+		this.element.attr( "aria-activedescendant",
+			this.active.children( "a" )
 				.addClass( "ui-state-focus" )
-			.end();
-		this.element.attr( "aria-activedescendant", this.active.children( "a" ).attr( "id" ) );
+				.attr( "id" ) );
 
 		// highlight active parent menu item, if any
 		this.active.parent().closest( ".ui-menu-item" ).children( "a:first" ).addClass( "ui-state-active" );
 
-		this.timer = this._delay( function() {
+		if ( event.type === "keydown" ) {
 			this._close();
-		}, this.delay );
+		} else {
+			this.timer = this._delay(function() {
+				this._close();
+			}, this.delay );
+		}
 
 		nested = $( "> .ui-menu", item );
 		if ( nested.length && ( /^mouse/.test( event.type ) ) ) {
@@ -334,8 +347,10 @@ $.widget( "ui.menu", {
 		this._trigger( "focus", event, { item: item } );
 	},
 
-	blur: function( event ) {
-		clearTimeout( this.timer );
+	blur: function( event, fromFocus ) {
+		if ( !fromFocus ) {
+			clearTimeout( this.timer );
+		}
 
 		if ( !this.active ) {
 			return;
@@ -356,7 +371,7 @@ $.widget( "ui.menu", {
 			return;
 		}
 
-		this.timer = this._delay( function() {
+		this.timer = this._delay(function() {
 			this._close();
 			this._open( submenu );
 		}, this.delay );
@@ -364,20 +379,19 @@ $.widget( "ui.menu", {
 
 	_open: function( submenu ) {
 		clearTimeout( this.timer );
-		this.element
-			.find( ".ui-menu" )
-			.not( submenu.parents() )
+		this.element.find( ".ui-menu" ).not( submenu.parents() )
 			.hide()
 			.attr( "aria-hidden", "true" );
 
-		var position = $.extend({}, {
+		var position = $.extend( {}, {
 				of: this.active
 			}, $.type(this.options.position) === "function" ?
 				this.options.position(this.active) :
 				this.options.position
 			);
 
-		submenu.show()
+		submenu
+			.show()
 			.removeAttr( "aria-hidden" )
 			.attr( "aria-expanded", "true" )
 			.position( position );
@@ -385,7 +399,7 @@ $.widget( "ui.menu", {
 
 	collapseAll: function( event, all ) {
 		clearTimeout( this.timer );
-		this.timer = this._delay( function() {
+		this.timer = this._delay(function() {
 			// if we were passed an event, look for the submenu that contains the event
 			var currentMenu = all ? this.element :
 				$( event && event.target ).closest( this.element.find( ".ui-menu" ) );
@@ -399,7 +413,7 @@ $.widget( "ui.menu", {
 
 			this.blur( event );
 			this.activeMenu = currentMenu;
-		}, this.delay);
+		}, this.delay );
 	},
 
 	// With no arguments, closes the currently active menu - if nothing is active
@@ -416,11 +430,12 @@ $.widget( "ui.menu", {
 				.attr( "aria-expanded", "false" )
 			.end()
 			.find( "a.ui-state-active" )
-			.removeClass( "ui-state-active" );
+				.removeClass( "ui-state-active" );
 	},
 
 	collapse: function( event ) {
-		var newItem = this.active && this.active.parent().closest( ".ui-menu-item", this.element );
+		var newItem = this.active &&
+			this.active.parent().closest( ".ui-menu-item", this.element );
 		if ( newItem && newItem.length ) {
 			this._close();
 			this.focus( event, newItem );
@@ -429,13 +444,17 @@ $.widget( "ui.menu", {
 	},
 
 	expand: function( event ) {
-		var newItem = this.active && this.active.children( ".ui-menu " ).children( ".ui-menu-item" ).not( ".ui-state-disabled" ).first();
+		var newItem = this.active &&
+			this.active
+				.children( ".ui-menu " )
+				.children( ".ui-menu-item" )
+				.first();
 
 		if ( newItem && newItem.length ) {
 			this._open( newItem.parent() );
 
 			//timeout so Firefox will not hide activedescendant change in expanding submenu from AT
-			this._delay( function() {
+			this._delay(function() {
 				this.focus( event, newItem );
 			}, 20 );
 			return true;
@@ -462,9 +481,13 @@ $.widget( "ui.menu", {
 		var next;
 		if ( this.active ) {
 			if ( direction === "first" || direction === "last" ) {
-				next = this.active[ direction === "first" ? "prevAll" : "nextAll" ]( ".ui-menu-item" ).not( ".ui-state-disabled" ).eq( -1 );
+				next = this.active
+					[ direction === "first" ? "prevAll" : "nextAll" ]( ".ui-menu-item" )
+					.eq( -1 );
 			} else {
-				next = this.active[ direction + "All" ]( ".ui-menu-item" ).not( ".ui-state-disabled" ).eq( 0 );
+				next = this.active
+					[ direction + "All" ]( ".ui-menu-item" )
+					.eq( 0 );
 			}
 		}
 		if ( !next || !next.length || !this.active ) {
@@ -472,9 +495,6 @@ $.widget( "ui.menu", {
 		}
 
 		this.focus( event, next );
-		if ( next.is( ".ui-state-disabled" ) ) {
-			this._move( direction, filter, event );
-		}
 	},
 
 	nextPage: function( event ) {
@@ -489,14 +509,14 @@ $.widget( "ui.menu", {
 			var base = this.active.offset().top,
 				height = this.element.height(),
 				result;
-			this.active.nextAll( ".ui-menu-item" ).not( ".ui-state-disabled" ).each( function() {
+			this.active.nextAll( ".ui-menu-item" ).each(function() {
 				result = $( this );
 				return $( this ).offset().top - base - height < 0;
 			});
 
 			this.focus( event, result );
 		} else {
-			this.focus( event, this.activeMenu.children( ".ui-menu-item" ).not( ".ui-state-disabled" )
+			this.focus( event, this.activeMenu.children( ".ui-menu-item" )
 				[ !this.active ? "first" : "last" ]() );
 		}
 	},
@@ -513,14 +533,14 @@ $.widget( "ui.menu", {
 			var base = this.active.offset().top,
 				height = this.element.height(),
 				result;
-			this.active.prevAll( ".ui-menu-item" ).not( ".ui-state-disabled" ).each( function() {
+			this.active.prevAll( ".ui-menu-item" ).each(function() {
 				result = $( this );
 				return $(this).offset().top - base + height > 0;
 			});
 
 			this.focus( event, result );
 		} else {
-			this.focus( event, this.activeMenu.children( ".ui-menu-item" ).not( ".ui-state-disabled" ).first() );
+			this.focus( event, this.activeMenu.children( ".ui-menu-item" ).first() );
 		}
 	},
 
@@ -529,7 +549,6 @@ $.widget( "ui.menu", {
 	},
 
 	select: function( event ) {
-
 		// save active reference before collapseAll triggers blur
 		var ui = {
 			item: this.active

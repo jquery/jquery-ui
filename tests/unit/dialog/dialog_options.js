@@ -20,7 +20,8 @@ test("autoOpen", function() {
 test("buttons", function() {
 	expect(21);
 
-	var buttons = {
+	var btn, i, newButtons,
+		buttons = {
 		"Ok": function(ev, ui) {
 			ok(true, "button click fires callback");
 			equal(this, el[0], "context of callback");
@@ -34,10 +35,10 @@ test("buttons", function() {
 	};
 
 	el = $('<div></div>').dialog({ buttons: buttons });
-	var btn = $("button", dlg());
+	btn = $("button", dlg());
 	equal(btn.length, 2, "number of buttons");
 
-	var i = 0;
+	i = 0;
 	$.each(buttons, function(key, val) {
 		equal(btn.eq(i).text(), key, "text of button " + (i+1));
 		i++;
@@ -48,7 +49,7 @@ test("buttons", function() {
 
 	btn.trigger("click");
 
-	var newButtons = {
+	newButtons = {
 		"Close": function(ev, ui) {
 			ok(true, "button click fires callback");
 			equal(this, el[0], "context of callback");
@@ -275,54 +276,54 @@ test("minWidth", function() {
 });
 
 test("position, default center on window", function() {
-	var el = $('<div></div>').dialog();
-	var dialog = el.dialog('widget');
-	var offset = dialog.offset();
+	var el = $('<div></div>').dialog(),
+		dialog = el.dialog('widget'),
+		offset = dialog.offset();
 	deepEqual(offset.left, Math.round($(window).width() / 2 - dialog.outerWidth() / 2) + $(window).scrollLeft());
 	deepEqual(offset.top, Math.round($(window).height() / 2 - dialog.outerHeight() / 2) + $(window).scrollTop());
 	el.remove();
 });
 
 test("position, top on window", function() {
-	var el = $('<div></div>').dialog({ position: "top" });
-	var dialog = el.dialog('widget');
-	var offset = dialog.offset();
+	var el = $('<div></div>').dialog({ position: "top" }),
+		dialog = el.dialog('widget'),
+		offset = dialog.offset();
 	deepEqual(offset.left, Math.round($(window).width() / 2 - dialog.outerWidth() / 2) + $(window).scrollLeft());
 	deepEqual(offset.top, $(window).scrollTop());
 	el.remove();
 });
 
 test("position, left on window", function() {
-	var el = $('<div></div>').dialog({ position: "left" });
-	var dialog = el.dialog('widget');
-	var offset = dialog.offset();
+	var el = $('<div></div>').dialog({ position: "left" }),
+		dialog = el.dialog('widget'),
+		offset = dialog.offset();
 	deepEqual(offset.left, 0);
 	deepEqual(offset.top, Math.round($(window).height() / 2 - dialog.outerHeight() / 2) + $(window).scrollTop());
 	el.remove();
 });
 
 test("position, right bottom on window", function() {
-	var el = $('<div></div>').dialog({ position: "right bottom" });
-	var dialog = el.dialog('widget');
-	var offset = dialog.offset();
+	var el = $('<div></div>').dialog({ position: "right bottom" }),
+		dialog = el.dialog('widget'),
+		offset = dialog.offset();
 	deepEqual(offset.left, $(window).width() - dialog.outerWidth() + $(window).scrollLeft());
 	deepEqual(offset.top, $(window).height() - dialog.outerHeight() + $(window).scrollTop());
 	el.remove();
 });
 
 test("position, right bottom on window w/array", function() {
-	var el = $('<div></div>').dialog({ position: ["right", "bottom"] });
-	var dialog = el.dialog('widget');
-	var offset = dialog.offset();
+	var el = $('<div></div>').dialog({ position: ["right", "bottom"] }),
+		dialog = el.dialog('widget'),
+		offset = dialog.offset();
 	deepEqual(offset.left, $(window).width() - dialog.outerWidth() + $(window).scrollLeft());
 	deepEqual(offset.top, $(window).height() - dialog.outerHeight() + $(window).scrollTop());
 	el.remove();
 });
 
 test("position, offset from top left w/array", function() {
-	var el = $('<div></div>').dialog({ position: [10, 10] });
-	var dialog = el.dialog('widget');
-	var offset = dialog.offset();
+	var el = $('<div></div>').dialog({ position: [10, 10] }),
+		dialog = el.dialog('widget'),
+		offset = dialog.offset();
 	deepEqual(offset.left, 10 + $(window).scrollLeft());
 	deepEqual(offset.top, 10 + $(window).scrollTop());
 	el.remove();
@@ -330,14 +331,13 @@ test("position, offset from top left w/array", function() {
 
 test("position, right bottom at right bottom via ui.position args", function() {
 	var el = $('<div></div>').dialog({
-		position: {
-			my: "right bottom",
-			at: "right bottom"
-		}
-	});
-
-	var dialog = el.dialog('widget');
-	var offset = dialog.offset();
+			position: {
+				my: "right bottom",
+				at: "right bottom"
+			}
+		}),
+		dialog = el.dialog('widget'),
+		offset = dialog.offset();
 
 	deepEqual(offset.left, $(window).width() - dialog.outerWidth() + $(window).scrollLeft());
 	deepEqual(offset.top, $(window).height() - dialog.outerHeight() + $(window).scrollTop());
@@ -346,23 +346,23 @@ test("position, right bottom at right bottom via ui.position args", function() {
 
 test("position, at another element", function() {
 	var parent = $('<div></div>').css({
-		position: 'absolute',
-		top: 400,
-		left: 600,
-		height: 10,
-		width: 10
-	}).appendTo('body');
+			position: 'absolute',
+			top: 400,
+			left: 600,
+			height: 10,
+			width: 10
+		}).appendTo('body'),
 
-	var el = $('<div></div>').dialog({
-		position: {
-			my: "left top",
-			at: "left top",
-			of: parent
-		}
-	});
+		el = $('<div></div>').dialog({
+			position: {
+				my: "left top",
+				at: "left top",
+				of: parent
+			}
+		}),
 
-	var dialog = el.dialog('widget');
-	var offset = dialog.offset();
+		dialog = el.dialog('widget'),
+		offset = dialog.offset();
 
 	deepEqual(offset.left, 600);
 	deepEqual(offset.top, 400);
@@ -373,7 +373,7 @@ test("position, at another element", function() {
 			of: parent
 	});
 
-	var offset = dialog.offset();
+	offset = dialog.offset();
 
 	deepEqual(offset.left, 610);
 	deepEqual(offset.top, 410);

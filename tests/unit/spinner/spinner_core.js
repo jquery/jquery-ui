@@ -1,5 +1,7 @@
 (function( $ ) {
 
+var simulateKeyDownUp = TestHelpers.spinner.simulateKeyDownUp;
+
 module( "spinner: core" );
 
 test( "keydown UP on input, increases value not greater than max", function() {
@@ -9,15 +11,15 @@ test( "keydown UP on input, increases value not greater than max", function() {
 		step: 10
 	});
 
-	spinner_simulateKeyDownUp( element, $.ui.keyCode.UP );
+	simulateKeyDownUp( element, $.ui.keyCode.UP );
 	equal( element.val(), 80 );
-	spinner_simulateKeyDownUp( element, $.ui.keyCode.UP );
+	simulateKeyDownUp( element, $.ui.keyCode.UP );
 	equal( element.val(), 90 );
-	spinner_simulateKeyDownUp( element, $.ui.keyCode.UP );
+	simulateKeyDownUp( element, $.ui.keyCode.UP );
 	equal( element.val(), 100 );
-	spinner_simulateKeyDownUp( element, $.ui.keyCode.UP );
+	simulateKeyDownUp( element, $.ui.keyCode.UP );
 	equal( element.val(), 100 );
-	spinner_simulateKeyDownUp( element, $.ui.keyCode.UP );
+	simulateKeyDownUp( element, $.ui.keyCode.UP );
 	equal( element.val(), 100 );
 });
 
@@ -28,15 +30,15 @@ test( "keydown DOWN on input, decreases value not less than min", function() {
 		step: 10
 	});
 
-	spinner_simulateKeyDownUp( element, $.ui.keyCode.DOWN );
+	simulateKeyDownUp( element, $.ui.keyCode.DOWN );
 	equal( element.val(), 40 );
-	spinner_simulateKeyDownUp( element, $.ui.keyCode.DOWN );
+	simulateKeyDownUp( element, $.ui.keyCode.DOWN );
 	equal( element.val(), 30 );
-	spinner_simulateKeyDownUp( element, $.ui.keyCode.DOWN );
+	simulateKeyDownUp( element, $.ui.keyCode.DOWN );
 	equal( element.val(), 20 );
-	spinner_simulateKeyDownUp( element, $.ui.keyCode.DOWN );
+	simulateKeyDownUp( element, $.ui.keyCode.DOWN );
 	equal( element.val(), 20 );
-	spinner_simulateKeyDownUp( element, $.ui.keyCode.DOWN );
+	simulateKeyDownUp( element, $.ui.keyCode.DOWN );
 	equal( element.val(), 20 );
 });
 
@@ -47,15 +49,15 @@ test( "keydown PAGE_UP on input, increases value not greater than max", function
 		page: 10
 	});
 
-	spinner_simulateKeyDownUp( element, $.ui.keyCode.PAGE_UP );
+	simulateKeyDownUp( element, $.ui.keyCode.PAGE_UP );
 	equal( element.val(), 80 );
-	spinner_simulateKeyDownUp( element, $.ui.keyCode.PAGE_UP );
+	simulateKeyDownUp( element, $.ui.keyCode.PAGE_UP );
 	equal( element.val(), 90 );
-	spinner_simulateKeyDownUp( element, $.ui.keyCode.PAGE_UP );
+	simulateKeyDownUp( element, $.ui.keyCode.PAGE_UP );
 	equal( element.val(), 100 );
-	spinner_simulateKeyDownUp( element, $.ui.keyCode.PAGE_UP );
+	simulateKeyDownUp( element, $.ui.keyCode.PAGE_UP );
 	equal( element.val(), 100 );
-	spinner_simulateKeyDownUp( element, $.ui.keyCode.PAGE_UP );
+	simulateKeyDownUp( element, $.ui.keyCode.PAGE_UP );
 	equal( element.val(), 100 );
 });
 
@@ -66,15 +68,15 @@ test( "keydown PAGE_DOWN on input, decreases value not less than min", function(
 		page: 10
 	});
 
-	spinner_simulateKeyDownUp( element, $.ui.keyCode.PAGE_DOWN );
+	simulateKeyDownUp( element, $.ui.keyCode.PAGE_DOWN );
 	equal( element.val(), 40 );
-	spinner_simulateKeyDownUp( element, $.ui.keyCode.PAGE_DOWN );
+	simulateKeyDownUp( element, $.ui.keyCode.PAGE_DOWN );
 	equal( element.val(), 30 );
-	spinner_simulateKeyDownUp( element, $.ui.keyCode.PAGE_DOWN );
+	simulateKeyDownUp( element, $.ui.keyCode.PAGE_DOWN );
 	equal( element.val(), 20 );
-	spinner_simulateKeyDownUp( element, $.ui.keyCode.PAGE_DOWN );
+	simulateKeyDownUp( element, $.ui.keyCode.PAGE_DOWN );
 	equal( element.val(), 20 );
-	spinner_simulateKeyDownUp( element, $.ui.keyCode.PAGE_DOWN );
+	simulateKeyDownUp( element, $.ui.keyCode.PAGE_DOWN );
 	equal( element.val(), 20 );
 });
 
@@ -99,7 +101,7 @@ test( "mouse click on up button, increases value not greater than max", function
 		min: 0
 	}),
 	button = element.spinner( "widget" ).find( ".ui-spinner-down" );
-	
+
 	button.trigger( "mousedown" ).trigger( "mouseup" );
 	equal( element.val(), 1 );
 	button.trigger( "mousedown" ).trigger( "mouseup" );
@@ -189,8 +191,8 @@ test( "don't clear invalid value on blur", function() {
 
 test( "precision", function() {
 	expect( 2 );
-	var element = $( "#spin" ).val( .05 ).spinner({
-		step: .0001
+	var element = $( "#spin" ).val( 0.05 ).spinner({
+		step: 0.0001
 	});
 	element.spinner( "stepUp" );
 	equal( element.val(), "0.0501", "precision from step" );

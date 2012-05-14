@@ -268,16 +268,15 @@ $.effects.animateClass = function( value, duration, easing, callback ) {
 		// map all animated objects again - this time collecting a promise
 		allAnimations = allAnimations.map(function() {
 			var styleInfo = this,
-				dfd = $.Deferred();
+				dfd = $.Deferred(),
+				opts = jQuery.extend({}, o, {
+					queue: false,
+					complete: function() {
+						dfd.resolve( styleInfo );
+					}
+				});
 
-			this.el.animate( this.diff, {
-				duration: o.duration,
-				easing: o.easing,
-				queue: false,
-				complete: function() {
-					dfd.resolve( styleInfo );
-				}
-			});
+			this.el.animate( this.diff, opts );
 			return dfd.promise();
 		});
 
@@ -428,6 +427,15 @@ $.extend( $.effects, {
 				height: element.height()
 			},
 			active = document.activeElement;
+
+		// support: Firefox
+		// Firefox incorrectly exposes anonymous content
+		// https://bugzilla.mozilla.org/show_bug.cgi?id=561664
+		try {
+			active.id;
+		} catch( e ) {
+			active = document.body;
+		}
 
 		element.wrap( wrapper );
 
@@ -722,7 +730,7 @@ $.each( baseEasings, function( name, easeIn ) {
 	$.easing[ "easeInOut" + name ] = function( p ) {
 		return p < 0.5 ?
 			easeIn( p * 2 ) / 2 :
-			easeIn( p * -2 + 2 ) / -2 + 1;
+			1 - easeIn( p * -2 + 2 ) / 2;
 	};
 });
 

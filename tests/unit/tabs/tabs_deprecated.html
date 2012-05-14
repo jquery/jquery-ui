@@ -6,9 +6,12 @@
 
 	<script src="../../jquery.js"></script>
 	<script src="../../../external/jquery.cookie.js"></script>
-	<script src="../../resource_loader.js"></script>
+	<link rel="stylesheet" href="../../../external/qunit.css">
+	<script src="../../../external/qunit.js"></script>
+	<script src="../../jquery.simulate.js"></script>
+	<script src="../testsuite.js"></script>
 	<script>
-	loadResources({
+	TestHelpers.loadResources({
 		css: [ "ui.core", "ui.tabs" ],
 		js: [
 			"ui/jquery.ui.core.js",
@@ -18,74 +21,14 @@
 	});
 	</script>
 
-	<link rel="stylesheet" href="../../../external/qunit.css">
-	<script src="../../../external/qunit.js"></script>
-	<script src="../../jquery.simulate.js"></script>
-	<script src="../testsuite.js"></script>
-
-	<script src="tabs_defaults_deprecated.js"></script>
+	<script src="tabs_test_helpers.js"></script>
+	<script src="tabs_common_deprecated.js"></script>
 	<script src="tabs_core.js"></script>
 	<script src="tabs_events.js"></script>
 	<script src="tabs_methods.js"></script>
 	<script src="tabs_options.js"></script>
 	<script src="tabs_deprecated.js"></script>
 
-	<script>
-	function tabs_state( tabs ) {
-		var expected = $.makeArray( arguments ).slice( 1 );
-		var actual = tabs.find( ".ui-tabs-nav li" ).map(function() {
-			var tab = $( this ),
-				panel = $( $.ui.tabs.prototype._sanitizeSelector(
-					"#" + tab.find( "a" ).attr( "aria-controls" ) ) ),
-				tabIsActive = tab.hasClass( "ui-state-active" ),
-				panelIsActive = panel.css( "display" ) !== "none";
-
-			if ( tabIsActive && panelIsActive ) {
-				return 1;
-			}
-			if ( !tabIsActive && !panelIsActive ) {
-				return 0;
-			}
-			return -1; // mixed state - invalid
-		}).get();
-		deepEqual( actual, expected );
-	}
-
-	function tabs_disabled( tabs, state ) {
-		var expected = $.map( new Array( tabs.find ( ".ui-tabs-nav li" ).length ), function( _, index ) {
-			if ( typeof state === "boolean" ) {
-				return state ? 1 : 0;
-			} else {
-				return $.inArray( index, state ) !== -1 ? 1 : 0;
-			}
-		});
-
-		var internalState = tabs.tabs( "option", "disabled" );
-		if ( internalState === false ) {
-			internalState = [];
-		}
-		if ( internalState === true ) {
-			internalState = $.map( new Array( tabs.find( ".ui-tabs-nav li" ).length ), function( _, index ) {
-				return index;
-			});
-		}
-
-		var actual = tabs.find( ".ui-tabs-nav li" ).map(function( index ) {
-			var tab = $( this ),
-				tabIsDisabled = tab.hasClass( "ui-state-disabled" );
-
-			if ( tabIsDisabled && $.inArray( index, internalState ) !== -1 ) {
-				return 1;
-			}
-			if ( !tabIsDisabled && $.inArray( index, internalState ) === -1 ) {
-				return 0;
-			}
-			return -1; // mixed state - invalid
-		}).get();
-		deepEqual( tabs.tabs( "option", "disabled" ), state );
-		deepEqual( actual, expected );
-	}
-	</script>
 	<script src="../swarminject.js"></script>
 </head>
 <body>
@@ -118,6 +61,7 @@
 	</ul>
 	<div id="colon:test"></div>
 	<div style="height: 300px;" id="inline-style"></div>
+	<div id="custom-id"></div>
 </div>
 
 <div id="tabs3">

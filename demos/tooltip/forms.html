@@ -27,26 +27,14 @@
 	</style>
 	<script>
 	$(function() {
-		var tooltips = $( "[title]" )
-			.click(function() {
-				$( this ).tooltip( $( this ).attr( "title" ) ? "open" : "close" );
-			})
-			.bind( "mouseover focusin mouseleave blur click", function( event ) {
-				event.stopImmediatePropagation();
-			})
-			.tooltip();
+		var tooltips = $( "[title]" ).tooltip();
 		$( "<button>" )
 			.text( "Show help" )
 			.button()
-			.toggle(
-				function() {
-					tooltips.tooltip( "open" );
-				},
-				function() {
-					tooltips.tooltip( "close" );
-				}
-			)
-			.appendTo( "form" );
+			.click(function() {
+				tooltips.tooltip( "open" );
+			})
+			.insertAfter( "form" );
 	});
 	</script>
 </head>
@@ -58,18 +46,15 @@
 	<fieldset>
 		<div>
 			<label for="firstname">Firstname</label>
-			<input id="firstname" name="firstname">
-			<span title="Please provide your firstname." class="help ui-state-default ui-corner-all ui-icon ui-icon-help">?</span>
+			<input id="firstname" name="firstname" title="Please provide your firstname.">
 		</div>
 		<div>
 			<label for="lastname">Lastname</label>
-			<input id="lastname" name="lastname">
-			<span title="Please provide also your lastname." class="help ui-state-default ui-corner-all ui-icon ui-icon-help">?</span>
+			<input id="lastname" name="lastname" title="Please provide also your lastname.">
 		</div>
 		<div>
 			<label for="address">Address</label>
-			<input id="address" name="address">
-			<span title="Your home or work address." class="help ui-state-default ui-corner-all ui-icon ui-icon-help">?</span>
+			<input id="address" name="address" title="Your home or work address.">
 		</div>
 	</fieldset>
 </form>
@@ -79,7 +64,7 @@
 
 
 <div class="demo-description">
-<p>Use the button below to display the help texts. Click again to hide them. Default hover and focus events are removed to show tooltip only programmatically.</p>
+<p>Use the button below to display the help texts, or just focus or mouseover the indivdual inputs.</p>
 <p>A fixed width is defined in CSS to make the tooltips look consistent when displayed all at once.</p>
 </div><!-- End demo-description -->
 

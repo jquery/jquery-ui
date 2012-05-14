@@ -5,9 +5,12 @@
 	<title>jQuery UI Slider Test Suite</title>
 
 	<script src="../../jquery.js"></script>
-	<script src="../../resource_loader.js"></script>
+	<link rel="stylesheet" href="../../../external/qunit.css">
+	<script src="../../../external/qunit.js"></script>
+	<script src="../../jquery.simulate.js"></script>
+	<script src="../testsuite.js"></script>
 	<script>
-	loadResources({
+	TestHelpers.loadResources({
 		css: [ "ui.core", "ui.slider" ],
 		js: [
 			"ui/jquery.ui.core.js",
@@ -18,13 +21,8 @@
 	});
 	</script>
 
-	<link rel="stylesheet" href="../../../external/qunit.css">
-	<script src="../../../external/qunit.js"></script>
-	<script src="../../jquery.simulate.js"></script>
-	<script src="../testsuite.js"></script>
-
+	<script src="slider_common.js"></script>
 	<script src="slider_core.js"></script>
-	<script src="slider_defaults.js"></script>
 	<script src="slider_events.js"></script>
 	<script src="slider_methods.js"></script>
 	<script src="slider_options.js"></script>

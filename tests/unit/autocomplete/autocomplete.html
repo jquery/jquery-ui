@@ -5,9 +5,12 @@
 	<title>jQuery UI Autocomplete Test Suite</title>
 
 	<script src="../../jquery.js"></script>
-	<script src="../../resource_loader.js"></script>
+	<link rel="stylesheet" href="../../../external/qunit.css">
+	<script src="../../../external/qunit.js"></script>
+	<script src="../../jquery.simulate.js"></script>
+	<script src="../testsuite.js"></script>
 	<script>
-	loadResources({
+	TestHelpers.loadResources({
 		css: [ "ui.core", "ui.menu", "ui.autocomplete" ],
 		js: [
 			"ui/jquery.ui.core.js",
@@ -19,12 +22,7 @@
 	});
 	</script>
 
-	<link rel="stylesheet" href="../../../external/qunit.css">
-	<script src="../../../external/qunit.js"></script>
-	<script src="../../jquery.simulate.js"></script>
-	<script src="../testsuite.js"></script>
-
-	<script src="autocomplete_defaults.js"></script>
+	<script src="autocomplete_common.js"></script>
 	<script src="autocomplete_core.js"></script>
 	<script src="autocomplete_events.js"></script>
 	<script src="autocomplete_methods.js"></script>

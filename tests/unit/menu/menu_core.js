@@ -9,18 +9,19 @@ module("menu: core");
 
 test("accessibility", function () {
 	expect(5);
-	var menu = $('#menu1').menu();
-	var item0 = $("li:eq(0) a");
+	var item,
+		menu = $('#menu1').menu(),
+		item0 = $("li:eq(0) a");
 
 	ok( menu.hasClass("ui-menu ui-widget ui-widget-content ui-corner-all"), "menu class");
 	equal( menu.attr("role"), "menu", "main role");
 	ok( !menu.attr("aria-activedescendant"), "aria attribute not yet active");
 
-	var item = menu.find( "li:first" ).find( "a" ).attr( "id", "xid" ).end();
+	item = menu.find( "li:first" ).find( "a" ).attr( "id", "xid" ).end();
 	menu.menu( "focus", $.Event(), item );
 	equal( menu.attr("aria-activedescendant"), "xid", "aria attribute, id from dom");
 
-	var item = menu.find( "li:last" );
+	item = menu.find( "li:last" );
 	menu.menu( "focus", $.Event(), item );
 	equal( menu.attr("aria-activedescendant"), "menu1-4", "aria attribute, generated id");
 });

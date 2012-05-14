@@ -5,9 +5,12 @@
 	<title>jQuery UI Menu Test Suite</title>
 
 	<script src="../../jquery.js"></script>
-	<script src="../../resource_loader.js"></script>
+	<link rel="stylesheet" href="../../../external/qunit.css">
+	<script src="../../../external/qunit.js"></script>
+	<script src="../../jquery.simulate.js"></script>
+	<script src="../testsuite.js"></script>
 	<script>
-	loadResources({
+	TestHelpers.loadResources({
 		css: [ "ui.core", "ui.menu" ],
 		js: [
 			"ui/jquery.ui.core.js",
@@ -17,14 +20,9 @@
 	});
 	</script>
 
-	<link rel="stylesheet" href="../../../external/qunit.css">
-	<script src="../../../external/qunit.js"></script>
-	<script src="../../jquery.simulate.js"></script>
-	<script src="../testsuite.js"></script>
-
 	<script src="menu_test_helpers.js"></script>
+	<script src="menu_common.js"></script>
 	<script src="menu_core.js"></script>
-	<script src="menu_defaults.js"></script>
 	<script src="menu_events.js"></script>
 	<script src="menu_methods.js"></script>
 	<script src="menu_options.js"></script>
@@ -250,6 +248,22 @@
 		</div>
 	</blockquote>
 </div>
+
+<ul id="menu6">
+	<li class="foo"><a class="foo" href="#">Aberdeen</a></li>
+	<li class="foo ui-state-disabled"><a class="foo" href="#">Ada</a></li>
+	<li class="foo"><a class="foo" href="#">Adamsville</a></li>
+	<li class="foo"><a class="foo" href="#">Addyston</a></li>
+	<li class="ui-state-disabled">
+		<a href="#">Delphi</a>
+		<ul>
+			<li class="foo"><a class="foo" href="#">Ada</a></li>
+			<li class="foo"><a class="foo" href="#">Saarland</a></li>
+			<li class="foo"><a class="foo" href="#">Salzburg</a></li>
+		</ul>
+	</li>
+	<li class="foo"><a class="foo" href="#">Saarland</a></li>
+</ul>
 
 <div id="log"></div>
 

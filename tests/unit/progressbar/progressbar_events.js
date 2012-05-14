@@ -15,7 +15,7 @@ test("create", function() {
 		change: function() {
 			ok(false, 'create() has triggered change()');
 		}
-	})
+	});
 });
 
 test("change", function() {

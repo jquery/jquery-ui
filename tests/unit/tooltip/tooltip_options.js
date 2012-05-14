@@ -45,11 +45,12 @@ asyncTest( "content: sync + async callback", function() {
 
 test( "items", function() {
 	expect( 2 );
-	var element = $( "#qunit-fixture" ).tooltip({
-		items: "#fixture-span"
-	});
+	var event,
+		element = $( "#qunit-fixture" ).tooltip({
+			items: "#fixture-span"
+		});
 
-	var event = $.Event( "mouseenter" );
+	event = $.Event( "mouseenter" );
 	event.target = $( "#fixture-span" )[ 0 ];
 	element.tooltip( "open", event );
 	deepEqual( $( "#" + $( "#fixture-span" ).attr( "aria-describedby" ) ).text(), "title-text" );
@@ -63,7 +64,7 @@ test( "items", function() {
 });
 
 test( "tooltipClass", function() {
-	expect( 1 )
+	expect( 1 );
 	var element = $( "#tooltipped1" ).tooltip({
 		tooltipClass: "custom"
 	}).tooltip( "open" );

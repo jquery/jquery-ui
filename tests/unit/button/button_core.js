@@ -8,7 +8,7 @@
 module("button: core");
 
 test("checkbox", function() {
-	var input = $("#check");
+	var input = $("#check"),
 		label = $("label[for=check]");
 	ok( input.is(":visible") );
 	ok( label.is(":not(.ui-button)") );
@@ -18,7 +18,7 @@ test("checkbox", function() {
 });
 
 test("radios", function() {
-	var inputs = $("#radio0 input");
+	var inputs = $("#radio0 input"),
 		labels = $("#radio0 label");
 	ok( inputs.is(":visible") );
 	ok( labels.is(":not(.ui-button)") );
@@ -51,7 +51,7 @@ test("radio groups", function() {
 });
 
 test("input type submit, don't create child elements", function() {
-	var input = $("#submit")
+	var input = $("#submit");
 	deepEqual( input.children().length, 0 );
 	input.button();
 	deepEqual( input.children().length, 0 );
@@ -68,11 +68,12 @@ test("buttonset", function() {
 });
 
 test("buttonset (rtl)", function() {
-	var parent = $("#radio1").parent();
+	var set,
+		parent = $("#radio1").parent();
 	// Set to rtl
 	parent.attr("dir", "rtl");
 
-	var set = $("#radio1").buttonset();
+	set = $("#radio1").buttonset();
 	ok( set.is(".ui-buttonset") );
 	deepEqual( set.children(".ui-button").length, 3 );
 	deepEqual( set.children("input:radio.ui-helper-hidden-accessible").length, 3 );
