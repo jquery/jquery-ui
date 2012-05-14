@@ -572,6 +572,30 @@ grunt.registerTask( "clean", function() {
 	require( "rimraf" ).sync( "dist" );
 });
 
+grunt.registerTask( "authors", function() {
+	var done = this.async();
+
+	grunt.utils.spawn({
+		cmd: "git",
+		args: [ "log", "--pretty=%an <%ae>" ]
+	}, function( err, result ) {
+		if ( err ) {
+			grunt.log.error( err );
+			return done( false );
+		}
+
+		var authors,
+			tracked = {};
+		authors = result.split( "\n" ).reverse().filter(function( author ) {
+			var first = !tracked[ author ];
+			tracked[ author ] = true;
+			return first;
+		}).join( "\n" );
+		grunt.log.writeln( authors );
+		done();
+	});
+});
+
 grunt.registerTask( "default", "lint csslint htmllint qunit" );
 grunt.registerTask( "sizer", "concat:ui min:dist/jquery-ui.min.js compare_size:all" );
 grunt.registerTask( "sizer_all", "concat:ui min compare_size" );
