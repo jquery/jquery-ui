@@ -60,13 +60,7 @@ $.widget( "ui.autocomplete", {
 
 		this.element
 			.addClass( "ui-autocomplete-input" )
-			.attr( "autocomplete", "off" )
-			// TODO verify these actually work as intended
-			.attr({
-				role: "textbox",
-				"aria-autocomplete": "list",
-				"aria-haspopup": "true"
-			});
+			.attr( "autocomplete", "off" );
 
 		this._bind({
 			keydown: function( event ) {
@@ -553,17 +547,19 @@ $.widget( "ui.autocomplete", $.ui.autocomplete, {
 			})
 			.addClass( "ui-helper-hidden-accessible" )
 			.insertAfter( this.element );
-		this.element.removeAttr( "aria-autocomplete aria-haspopup" );
 	},
 	__response: function( content ) {
 		var message;
-		if ( !this.options.disabled && content && content.length && !this.cancelSearch ) {
+		this._superApply( arguments );
+		if ( this.options.disabled || this.cancelSearch) {
+			return;
+		}
+		if ( content && content.length ) {
 			message = this.options.messages.results( content.length );
 		} else {
 			message = this.options.messages.noResults;
 		}
 		this.liveRegion.text( message );
-		this._superApply( arguments );
 	}
 });
 
