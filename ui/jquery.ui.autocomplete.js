@@ -539,13 +539,18 @@ $.widget( "ui.autocomplete", $.ui.autocomplete, {
 		messages: {
 			noResults: "No search results.",
 			results: function(amount) {
-				return amount + " result" + ( amount > 1 ? "s" : "" ) + " are available, use up and down arrow keys to navigate between them.";
+				return amount + " result" + ( amount > 1 ? "s" : "" ) + " " + ( amount > 1 ? "are" : "is" ) + " available, use up and down arrow keys to navigate.";
 			}
 		}
 	},
 	_create: function() {
-		this._superApply( arguments );
-		this.liveRegion = $( "<span role='status' class='ui-helper-hidden-accessible' aria-live='polite'></span>" ).insertAfter( this.element );
+		this._super();
+		this.liveRegion = $( "<span>", {
+			role: "status",
+			"aria-live": "polite"
+		})
+			.addClass( "ui-helper-hidden-accessible" )
+			.insertAfter( this.element );
 		this.element.removeAttr( "aria-autocomplete aria-haspopup" );
 		this.menu.element.removeAttr( "role" );
 		this._bind( this.menu.element, {
@@ -554,12 +559,14 @@ $.widget( "ui.autocomplete", $.ui.autocomplete, {
 			}
 		});
 	},
-	_suggest: function( content ) {
-		this.liveRegion.text( this.options.messages.results( content.length ) );
-		this._superApply( arguments );
-	},
-	_close: function() {
-		this.liveRegion.text( this.options.messages.noResults );
+	__response: function( content ) {
+		var message;
+		if ( !this.options.disabled && content && content.length && !this.cancelSearch ) {
+			message = this.options.messages.results( content.length );
+		} else {
+			message = this.options.messages.noResults;
+		}
+		this.liveRegion.text( message );
 		this._superApply( arguments );
 	}
 });
