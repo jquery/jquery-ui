@@ -60,13 +60,7 @@ $.widget( "ui.autocomplete", {
 
 		this.element
 			.addClass( "ui-autocomplete-input" )
-			.attr( "autocomplete", "off" )
-			// TODO verify these actually work as intended
-			.attr({
-				role: "textbox",
-				"aria-autocomplete": "list",
-				"aria-haspopup": "true"
-			});
+			.attr( "autocomplete", "off" );
 
 		this._bind({
 			keydown: function( event ) {
@@ -188,7 +182,9 @@ $.widget( "ui.autocomplete", {
 			.appendTo( this.document.find( this.options.appendTo || "body" )[0] )
 			.menu({
 				// custom key handling for now
-				input: $()
+				input: $(),
+				// disable ARIA support, the live region takes care of that
+				role: null
 			})
 			.zIndex( this.element.zIndex() + 1 )
 			.hide()
@@ -531,5 +527,41 @@ $.extend( $.ui.autocomplete, {
 		});
 	}
 });
+
+
+// live region extension, adding a `messages` option
+$.widget( "ui.autocomplete", $.ui.autocomplete, {
+	options: {
+		messages: {
+			noResults: "No search results.",
+			results: function(amount) {
+				return amount + ( amount > 1 ? " results are" : " result is" ) +  " available, use up and down arrow keys to navigate.";
+			}
+		}
+	},
+	_create: function() {
+		this._super();
+		this.liveRegion = $( "<span>", {
+				role: "status",
+				"aria-live": "polite"
+			})
+			.addClass( "ui-helper-hidden-accessible" )
+			.insertAfter( this.element );
+	},
+	__response: function( content ) {
+		var message;
+		this._superApply( arguments );
+		if ( this.options.disabled || this.cancelSearch) {
+			return;
+		}
+		if ( content && content.length ) {
+			message = this.options.messages.results( content.length );
+		} else {
+			message = this.options.messages.noResults;
+		}
+		this.liveRegion.text( message );
+	}
+});
+
 
 }( jQuery ));
