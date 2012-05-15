@@ -22,6 +22,7 @@
 	<script>
 	$(function() {
 		$( ".column" ).sortable({
+			handle: ".portlet-header",
 			connectWith: ".column"
 		});
 
@@ -36,8 +37,6 @@
 			$( this ).toggleClass( "ui-icon-minusthick" ).toggleClass( "ui-icon-plusthick" );
 			$( this ).parents( ".portlet:first" ).find( ".portlet-content" ).toggle();
 		});
-
-		$( ".column" ).disableSelection();
 	});
 	</script>
 </head>
