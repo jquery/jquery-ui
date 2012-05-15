@@ -5,14 +5,15 @@ jQuery UI provides interactions like Drag and Drop and widgets like Autocomplete
 
 If you want to use jQuery UI, go to [jqueryui.com](http://jqueryui.com) to get started. Or visit the [Using jQuery UI Forum](http://forum.jquery.com/using-jquery-ui) for discussions and questions.
 
-If you are interested in helping developing jQuery UI, you are in the right place.
-To discuss development with team members and the community, visit the [Developing jQuery UI Forum](http://forum.jquery.com/developing-jquery-ui).
+If you are interested in helping develop jQuery UI, you are in the right place.
+To discuss development with team members and the community, visit the [Developing jQuery UI Forum](http://forum.jquery.com/developing-jquery-ui) or in #jquery on irc.freednode.net.
+
 
 For contributors
 ---
 If you want to help and provide a patch for a bugfix or new feature, please take
-a few minutes and look at [our Getting Involved guide](http://wiki.jqueryui.com/w/page/35263114/Getting-Involved),
-in particular check out the [Coding standards](http://wiki.jqueryui.com/w/page/12137737/Coding-standards)
+a few minutes and look at [our Getting Involved guide](http://wiki.jqueryui.com/w/page/35263114/Getting-Involved).
+In particular check out the [Coding standards](http://wiki.jqueryui.com/w/page/12137737/Coding-standards)
 and [Commit Message Style Guide](http://wiki.jqueryui.com/w/page/25941597/Commit-Message-Style-Guide).
 
 In general, fork the project, create a branch for a specific change and send a
@@ -24,15 +25,29 @@ For committers
 ---
 When looking at pull requests, first check for [proper commit messages](http://wiki.jqueryui.com/w/page/12137724/Bug-Fixing-Guide).
 
-Unless everything is fine and you can merge directly via GitHub's interface, fetch the remote first:
+Do not merge pull requests directly through GitHub's interface.
 
-    git remote add [username] [his-fork.git] -f
+Fetch the remote first:
 
-If you want just one commit and edit the commit message:
+    git fetch [their-fork.git] [their-branch]
+
+Then cherry-pick the commit(s):
+
+	git cherry-pick [sha-of-commit]
+
+If you need to edit the commit message:
 
     git cherry-pick -e [sha-of-commit]
+
+If you need to edit the changes:
+
+	git cherry-pick -n [sha-of-commit]
+	# make changes
+	git commit --author="[author-name-and-email]"
 
 If it should go to the stable brach, cherry-pick it to stable:
 
     git checkout 1-8-stable
-    git cherry-pick -x [sha-of-commit]
+    git cherry-pick -x [sha-of-commit-from-master]
+
+*NOTE: Do not cherry-pick into 1-8-stable until you have pushed the commit from master upstream.*
