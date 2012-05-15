@@ -26,6 +26,7 @@ $.widget( "ui.menu", {
 			my: "left top",
 			at: "right top"
 		},
+		role: "menu",
 
 		// callbacks
 		blur: null,
@@ -42,7 +43,7 @@ $.widget( "ui.menu", {
 			.addClass( "ui-menu ui-widget ui-widget-content ui-corner-all" )
 			.attr({
 				id: this.menuId,
-				role: "menu",
+				role: this.options.role,
 				tabIndex: 0
 			})
 			// need to catch all clicks on disabled menu
@@ -267,7 +268,7 @@ $.widget( "ui.menu", {
 				.addClass( "ui-menu ui-widget ui-widget-content ui-corner-all" )
 				.hide()
 				.attr({
-					role: "menu",
+					role: this.options.role,
 					"aria-hidden": "true",
 					"aria-expanded": "false"
 				});
@@ -281,7 +282,7 @@ $.widget( "ui.menu", {
 			.children( "a" )
 				.addClass( "ui-corner-all" )
 				.attr( "tabIndex", -1 )
-				.attr( "role", "menuitem" )
+				.attr( "role", this._itemRole() )
 				.attr( "id", function( i ) {
 					return menuId + "-" + i;
 				});
@@ -302,8 +303,15 @@ $.widget( "ui.menu", {
 		});
 	},
 
+	_itemRole: function() {
+		return {
+			menu: "menuitem",
+			listbox: "option"
+		}[ this.options.role ];
+	},
+
 	focus: function( event, item ) {
-		var nested, borderTop, paddingTop, offset, scroll, elementHeight, itemHeight;
+		var nested, borderTop, paddingTop, offset, scroll, elementHeight, itemHeight, focussed;
 		this.blur( event, event && event.type === "focus" );
 
 		if ( this._hasScroll() ) {
@@ -322,10 +330,12 @@ $.widget( "ui.menu", {
 		}
 
 		this.active = item.first();
-		this.element.attr( "aria-activedescendant",
-			this.active.children( "a" )
-				.addClass( "ui-state-focus" )
-				.attr( "id" ) );
+		focussed = this.active.children( "a" ).addClass( "ui-state-focus" );
+		// only update aria-activedescendant if there's a role
+		// otherwise we assume focus is managed elsewhere
+		if ( this.options.role ) {
+			this.element.attr( "aria-activedescendant", focussed.attr( "id" ) );
+		}
 
 		// highlight active parent menu item, if any
 		this.active.parent().closest( ".ui-menu-item" ).children( "a:first" ).addClass( "ui-state-active" );

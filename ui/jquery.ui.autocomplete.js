@@ -188,7 +188,9 @@ $.widget( "ui.autocomplete", {
 			.appendTo( this.document.find( this.options.appendTo || "body" )[0] )
 			.menu({
 				// custom key handling for now
-				input: $()
+				input: $(),
+				// disable ARIA support, the live region takes care of that
+				role: null
 			})
 			.zIndex( this.element.zIndex() + 1 )
 			.hide()
@@ -552,12 +554,6 @@ $.widget( "ui.autocomplete", $.ui.autocomplete, {
 			.addClass( "ui-helper-hidden-accessible" )
 			.insertAfter( this.element );
 		this.element.removeAttr( "aria-autocomplete aria-haspopup" );
-		this.menu.element.removeAttr( "role" );
-		this._bind( this.menu.element, {
-			menufocus: function() {
-				this.menu.element.removeAttr( "aria-activedescendant" );
-			}
-		});
 	},
 	__response: function( content ) {
 		var message;
