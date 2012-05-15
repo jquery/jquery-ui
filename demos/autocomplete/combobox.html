@@ -18,7 +18,7 @@
 		position: relative;
 		display: inline-block;
 	}
-	.ui-button {
+	.ui-combobox-toggle {
 		position: absolute;
 		top: 0;
 		bottom: 0;
@@ -28,7 +28,7 @@
 		*height: 1.7em;
 		*top: 0.1em;
 	}
-	.ui-autocomplete-input {
+	.ui-combobox-input {
 		margin: 0;
 		padding: 0.3em;
 	}
@@ -75,7 +75,7 @@
 					.appendTo( wrapper )
 					.val( value )
 					.attr( "title", "" )
-					.addClass( "ui-state-default" )
+					.addClass( "ui-state-default ui-combobox-input" )
 					.autocomplete({
 						delay: 0,
 						minLength: 0,
@@ -128,7 +128,7 @@
 						text: false
 					})
 					.removeClass( "ui-corner-all" )
-					.addClass( "ui-corner-right ui-button-icon" )
+					.addClass( "ui-corner-right ui-combobox-toggle" )
 					.click(function() {
 						// close if already visible
 						if ( input.autocomplete( "widget" ).is( ":visible" ) ) {
