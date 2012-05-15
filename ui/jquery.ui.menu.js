@@ -311,7 +311,7 @@ $.widget( "ui.menu", {
 	},
 
 	focus: function( event, item ) {
-		var nested, borderTop, paddingTop, offset, scroll, elementHeight, itemHeight, focussed;
+		var nested, borderTop, paddingTop, offset, scroll, elementHeight, itemHeight, focused;
 		this.blur( event, event && event.type === "focus" );
 
 		if ( this._hasScroll() ) {
@@ -330,11 +330,11 @@ $.widget( "ui.menu", {
 		}
 
 		this.active = item.first();
-		focussed = this.active.children( "a" ).addClass( "ui-state-focus" );
+		focused = this.active.children( "a" ).addClass( "ui-state-focus" );
 		// only update aria-activedescendant if there's a role
 		// otherwise we assume focus is managed elsewhere
 		if ( this.options.role ) {
-			this.element.attr( "aria-activedescendant", focussed.attr( "id" ) );
+			this.element.attr( "aria-activedescendant", focused.attr( "id" ) );
 		}
 
 		// highlight active parent menu item, if any
