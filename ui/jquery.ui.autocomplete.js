@@ -541,16 +541,16 @@ $.widget( "ui.autocomplete", $.ui.autocomplete, {
 		messages: {
 			noResults: "No search results.",
 			results: function(amount) {
-				return amount + " result" + ( amount > 1 ? "s" : "" ) + " " + ( amount > 1 ? "are" : "is" ) + " available, use up and down arrow keys to navigate.";
+				return amount + ( amount > 1 ? " results are" : " result is" ) +  " available, use up and down arrow keys to navigate.";
 			}
 		}
 	},
 	_create: function() {
 		this._super();
 		this.liveRegion = $( "<span>", {
-			role: "status",
-			"aria-live": "polite"
-		})
+				role: "status",
+				"aria-live": "polite"
+			})
 			.addClass( "ui-helper-hidden-accessible" )
 			.insertAfter( this.element );
 		this.element.removeAttr( "aria-autocomplete aria-haspopup" );
