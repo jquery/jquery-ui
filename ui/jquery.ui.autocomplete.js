@@ -532,4 +532,37 @@ $.extend( $.ui.autocomplete, {
 	}
 });
 
+
+// live region extension, adding a `messages` option
+$.widget( "ui.autocomplete", $.ui.autocomplete, {
+	options: {
+		messages: {
+			noResults: "No search results.",
+			results: function(amount) {
+				return amount + " result" + ( amount > 1 ? "s" : "" ) + " are available, use up and down arrow keys to navigate between them.";
+			}
+		}
+	},
+	_create: function() {
+		this._superApply( arguments );
+		this.liveRegion = $( "<span role='status' class='ui-helper-hidden-accessible' aria-live='polite'></span>" ).insertAfter( this.element );
+		this.element.removeAttr( "aria-autocomplete aria-haspopup" );
+		this.menu.element.removeAttr( "role" );
+		this._bind( this.menu.element, {
+			menufocus: function() {
+				this.menu.element.removeAttr( "aria-activedescendant" );
+			}
+		});
+	},
+	_suggest: function( content ) {
+		this.liveRegion.text( this.options.messages.results( content.length ) );
+		this._superApply( arguments );
+	},
+	_close: function() {
+		this.liveRegion.text( this.options.messages.noResults );
+		this._superApply( arguments );
+	}
+});
+
+
 }( jQuery ));
