@@ -21,6 +21,36 @@ pull request for that branch. Don't mix unrelated changes. You can use the commi
 message as the description for the pull request.
 
 
+Running the Unit Tests
+---
+
+Run the unit tests with a local server that supports PHP. No database is required. Pre-configured php local servers are available for Windows and Mac. Here are some options:
+
+- Windows: [WAMP download](http://www.wampserver.com/en/)
+- Mac: [MAMP download](http://www.mamp.info/en/index.html)
+- Linux: [Setting up LAMP](https://www.linux.com/learn/tutorials/288158-easy-lamp-server-installation)
+- [Mongoose (most platforms)](http://code.google.com/p/mongoose/)
+
+
+Building jQuery UI
+---
+
+jQuery UI uses the [grunt](http://github.com/cowboy/grunt) build system. Building jQuery UI requires node.js and a command line zip program.
+
+Clone the jQuery UI git repo.
+
+`git clone git://github.com/jquery/jquery-ui.git`
+`cd jquery-ui`
+
+Install node modules.
+
+`npm install`
+
+Run grunt.
+
+`grunt build`
+
+
 For committers
 ---
 When looking at pull requests, first check for [proper commit messages](http://wiki.jqueryui.com/w/page/12137724/Bug-Fixing-Guide).
