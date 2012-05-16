@@ -228,6 +228,13 @@ $.widget( "ui.autocomplete", {
 					if ( /^key/.test(event.originalEvent.type) ) {
 						this._value( item.value );
 					}
+				} else {
+					// Normally the input is populated with the item's value as the
+					// menu is navigated, causing screen readers to notice a change and
+					// announce the item. Since the focus event was canceled, this doesn't
+					// happen, so we update the live region so that screen readers can
+					// still notice the change and announce it.
+					this.liveRegion.text( item.value );
 				}
 			},
 			menuselect: function( event, ui ) {
@@ -261,6 +268,13 @@ $.widget( "ui.autocomplete", {
 			}
 		});
 
+		this.liveRegion = $( "<span>", {
+				role: "status",
+				"aria-live": "polite"
+			})
+			.addClass( "ui-helper-hidden-accessible" )
+			.insertAfter( this.element );
+
 		if ( $.fn.bgiframe ) {
 			 this.menu.element.bgiframe();
 		}
@@ -284,6 +298,7 @@ $.widget( "ui.autocomplete", {
 			.removeAttr( "aria-autocomplete" )
 			.removeAttr( "aria-haspopup" );
 		this.menu.element.remove();
+		this.liveRegion.remove();
 	},
 
 	_setOption: function( key, value ) {
@@ -530,24 +545,19 @@ $.extend( $.ui.autocomplete, {
 
 
 // live region extension, adding a `messages` option
+// NOTE: This is an experimental API. We are still investigating
+// a full solution for string manipulation and internationalization.
 $.widget( "ui.autocomplete", $.ui.autocomplete, {
 	options: {
 		messages: {
 			noResults: "No search results.",
 			results: function(amount) {
-				return amount + ( amount > 1 ? " results are" : " result is" ) +  " available, use up and down arrow keys to navigate.";
+				return amount + ( amount > 1 ? " results are" : " result is" ) +
+					" available, use up and down arrow keys to navigate.";
 			}
 		}
 	},
-	_create: function() {
-		this._super();
-		this.liveRegion = $( "<span>", {
-				role: "status",
-				"aria-live": "polite"
-			})
-			.addClass( "ui-helper-hidden-accessible" )
-			.insertAfter( this.element );
-	},
+
 	__response: function( content ) {
 		var message;
 		this._superApply( arguments );

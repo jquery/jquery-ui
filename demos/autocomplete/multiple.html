@@ -59,9 +59,8 @@
 					response( $.ui.autocomplete.filter(
 						availableTags, extractLast( request.term ) ) );
 				},
-				focus: function( event, ui ) {
-					// prevent value inserted on focus, update liveRegion instead
-					$( this ).data( "autocomplete" ).liveRegion.text( ui.item.label );
+				focus: function() {
+					// prevent value inserted on focus
 					return false;
 				},
 				select: function( event, ui ) {
