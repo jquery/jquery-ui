@@ -10,10 +10,9 @@ http://filamentgroup.com/lab/jquery_ui_selectmenu_an_aria_accessible_plugin_for_
 There is a new UI 1.9.x compatible, built from scratch version, please see issue #140.
 
 DOWNLOAD
-Latest version: https://github.com/fnagel/jquery-ui/zipball/selectmenu
-Stable version (v1.2.0): https://github.com/fnagel/jquery-ui/zipball/selectmenu_v1.2.0
+Latest version: https://github.com/fnagel/jquery-ui/zipball/selectmenu (1.7.2 and jQuery UI 1.8.20)
+Stable version (v1.2.1): https://github.com/fnagel/jquery-ui/zipball/selectmenu_v1.2.1 (1.6.4 and jQuery UI 1.8.17)
 
-Both versions come with jQuery 1.6.2 and jQuery UI 1.8.16.
 
 SUPPORT
 Please use GitHub issues for bug tracking and take a look at the Wiki at:

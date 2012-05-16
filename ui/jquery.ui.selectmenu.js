@@ -1,7 +1,8 @@
  /*
- * jQuery UI selectmenu dev version * jQuery UI selectmenu 1.2.1 version
+ * jQuery UI selectmenu 1.3.0pre version
  *
- * Copyright (c) 2009 AUTHORS.txt (http://jqueryui.com/about)
+ * Copyright (c) 2009-2010 filament group, http://filamentgroup.com
+ * Copyright (c) 2010-2012 Felix Nagel, http://www.felixnagel.com
  * Dual licensed under the MIT (MIT-LICENSE.txt)
  * and GPL (GPL-LICENSE.txt) licenses.
  *
@@ -561,6 +562,8 @@ $.widget("ui.selectmenu", {
 		if ( self.newelement.attr("aria-disabled") != 'true' ) {
 			self._closeOthers(event);
 			self.newelement.addClass('ui-state-active');
+
+			self.listWrap.appendTo( o.appendTo );
 			self.list.attr('aria-hidden', false);
 			self.listWrap.addClass( self.widgetBaseClass + '-open' );
 
