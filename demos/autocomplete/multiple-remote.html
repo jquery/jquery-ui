@@ -47,7 +47,8 @@
 					}
 				},
 				focus: function() {
-					// prevent value inserted on focus
+					// prevent value inserted on focus, update liveRegion instead
+					$( this ).data( "autocomplete" ).liveRegion.text( ui.item.label );
 					return false;
 				},
 				select: function( event, ui ) {
