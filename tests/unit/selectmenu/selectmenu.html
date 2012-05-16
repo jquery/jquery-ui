@@ -4,23 +4,26 @@
 	<meta charset="utf-8">
 	<title>jQuery UI Selectmenu Test Suite</title>
 
-	<link rel="stylesheet" href="../../../themes/base/jquery.ui.core.css">
-	<link rel="stylesheet" href="../../../themes/base/jquery.ui.menu.css">
-	<link rel="stylesheet" href="../../../themes/base/jquery.ui.selectmenu.css">
 
 	<script src="../../jquery.js"></script>
-	<script src="../../../ui/jquery.ui.core.js"></script>
-	<script src="../../../ui/jquery.ui.widget.js"></script>
-	<script src="../../../ui/jquery.ui.menu.js"></script>
-	<script src="../../../ui/jquery.ui.selectmenu.js"></script>
-
 	<link rel="stylesheet" href="../../../external/qunit.css">
 	<script src="../../../external/qunit.js"></script>
 	<script src="../../jquery.simulate.js"></script>
 	<script src="../testsuite.js"></script>
+	<script>
+	TestHelpers.loadResources({
+		css: [ "ui.core", "ui.menu" , "ui.selectmenu" ],
+		js: [
+			"ui/jquery.ui.core.js",
+			"ui/jquery.ui.widget.js",
+			"ui/jquery.ui.menu.js",
+			"ui/jquery.ui.selectmenu.js"
+		]
+	});
+	</script>
 
+	<script src="selectmenu_common.js"></script>
 	<script src="selectmenu_core.js"></script>
-	<script src="selectmenu_defaults.js"></script>
 	<script src="selectmenu_events.js"></script>
 	<script src="selectmenu_methods.js"></script>
 	<script src="selectmenu_options.js"></script>
@@ -35,7 +38,7 @@
 <h2 id="qunit-userAgent"></h2>
 <ol id="qunit-tests"></ol>
 <div id="qunit-fixture">
-	
+
 	<label for="speed">Select a speed:</label>
 	<select name="speed" id="speed">
 		<option value="Slower">Slower</option>
@@ -44,7 +47,7 @@
 		<option value="Fast">Fast</option>
 		<option value="Faster">Faster</option>
 	</select>
-	
+
 	<label for="number">Select a number:</label>
 	<select name="number" id="number">
 		<option value="1">1</option>
@@ -67,7 +70,7 @@
 		<option value="18">18</option>
 		<option value="19">19</option>
 	</select>
-	
+
 	<label for="files">Select a file:</label>
 	<select name="files" id="files">
 		<optgroup label="Scripts">

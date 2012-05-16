@@ -1,4 +1,4 @@
-commonWidgetTests( "selectmenu", {
+TestHelpers.commonWidgetTests( "selectmenu", {
 	defaults: {
 		appendTo: "body",
 		disabled: false,
