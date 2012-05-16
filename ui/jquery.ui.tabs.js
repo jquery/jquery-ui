@@ -513,7 +513,10 @@ $.widget( "ui.tabs", {
 			}
 		});
 
-		if ( this.xhr ) {
+		// support: jQuery <1.8
+		// jQuery <1.8 returns false if the request is canceled in beforeSend,
+		// but as of 1.8, $.ajax() always returns a jqXHR object.
+		if ( this.xhr && this.xhr.statusText !== "canceled" ) {
 			this.lis.eq( index ).addClass( "ui-tabs-loading" );
 
 			this.xhr
