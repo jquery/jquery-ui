@@ -11,6 +11,7 @@ To discuss development with team members and the community, visit the [Developin
 
 For contributors
 ---
+
 If you want to help and provide a patch for a bugfix or new feature, please take
 a few minutes and look at [our Getting Involved guide](http://wiki.jqueryui.com/w/page/35263114/Getting-Involved).
 In particular check out the [Coding standards](http://wiki.jqueryui.com/w/page/12137737/Coding-standards)
@@ -53,9 +54,15 @@ Run grunt.
 
 For committers
 ---
+
 When looking at pull requests, first check for [proper commit messages](http://wiki.jqueryui.com/w/page/12137724/Bug-Fixing-Guide).
 
 Do not merge pull requests directly through GitHub's interface.
+Most pull requests are a single commit; cherry-picking will avoid creating a merge commit.
+It's also common for contributors to make minor fixes in an additional one or two commits.
+These should be squashed before landing in master.
+
+**Make sure the author has a valid name and email address associated with the commit.**
 
 Fetch the remote first:
 
