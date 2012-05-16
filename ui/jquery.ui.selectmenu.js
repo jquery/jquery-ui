@@ -1,5 +1,5 @@
  /*
- * jQuery UI selectmenu dev version
+ * jQuery UI selectmenu dev version * jQuery UI selectmenu 1.2.1 version
  *
  * Copyright (c) 2009 AUTHORS.txt (http://jqueryui.com/about)
  * Dual licensed under the MIT (MIT-LICENSE.txt)
@@ -40,7 +40,7 @@ $.widget("ui.selectmenu", {
 
 		// set a default id value, generate a new random one if not set by developer
 		var selectmenuId = (this.element.attr( 'id' ) || 'ui-selectmenu-' + Math.random().toString( 16 ).slice( 2, 10 )).replace(':', '\\:');
-		
+
 		// quick array of button and menu id's
 		this.ids = [ selectmenuId, selectmenuId + '-button', selectmenuId + '-menu' ];
 
@@ -61,7 +61,7 @@ $.widget("ui.selectmenu", {
 		this.newelementWrap = $( "<span />" )
 			.append( this.newelement )
 			.insertAfter( this.element );
-		
+
 		// transfer tabindex
 		var tabindex = this.element.attr( 'tabindex' );
 		if ( tabindex ) {
@@ -85,7 +85,7 @@ $.widget("ui.selectmenu", {
 				event.preventDefault();
 			}
 		});
-		
+
 		// click toggle for menu visibility
 		this.newelement
 			.bind('mousedown.selectmenu', function(event) {
@@ -194,7 +194,7 @@ $.widget("ui.selectmenu", {
 		// hide original selectmenu element
 		this.element.hide();
 
-		// create menu portion, append to body		
+		// create menu portion, append to body
 		this.list = $( '<ul />', {
 			'class': 'ui-widget ui-widget-content',
 			'aria-hidden': true,
@@ -205,7 +205,7 @@ $.widget("ui.selectmenu", {
 		this.listWrap = $( "<div />", {
 			'class': self.widgetBaseClass + '-menu'
 		}).append( this.list ).appendTo( o.appendTo );
-		
+
 		// transfer menu click to menu button
 		this.list
 			.bind("keydown.selectmenu", function(event) {
@@ -305,7 +305,7 @@ $.widget("ui.selectmenu", {
 				var thisLiAttr = { role : 'presentation' };
 				if ( selectOptionData[ i ].disabled ) {
 					thisLiAttr[ 'class' ] = this.namespace + '-state-disabled';
-				}					
+				}
 				var thisAAttr = {
 					html: selectOptionData[i].text || '&nbsp;',
 					href : '#nogo',
@@ -318,10 +318,10 @@ $.widget("ui.selectmenu", {
 				}
 				if ( selectOptionData[ i ].typeahead ) {
 					thisAAttr[ 'typeahead' ] = selectOptionData[ i ].typeahead;
-				}				
+				}
 				var thisA = $('<a/>', thisAAttr);
-				var thisLi = $('<li/>', thisLiAttr)	
-					.append(thisA)				
+				var thisLi = $('<li/>', thisLiAttr)
+					.append(thisA)
 					.data('index', i)
 					.addClass(selectOptionData[i].classes)
 					.data('optionClasses', selectOptionData[i].classes || '')
@@ -425,10 +425,10 @@ $.widget("ui.selectmenu", {
 		this.list.css( 'height', 'auto' );
 		var listH = this.listWrap.height();
 		var winH = $( window ).height();
-		// calculate default max height		
+		// calculate default max height
 		var maxH = o.maxHeight ? Math.min( o.maxHeight, winH ) : winH / 3;
-		if ( listH > maxH ) this.list.height( maxH );		
-		
+		if ( listH > maxH ) this.list.height( maxH );
+
 		// save reference to actionable li's (not group label li's)
 		this._optionLis = this.list.find( 'li:not(.' + self.widgetBaseClass + '-group)' );
 
@@ -438,10 +438,10 @@ $.widget("ui.selectmenu", {
 		} else {
 			this.enable();
 		}
-		
+
 		// update value
 		this.index( this._selectedIndex() );
-		
+
 		// set selected item so movefocus has intial state
 		this._selectedOptionLi().addClass(this.widgetBaseClass + '-item-focus');
 
@@ -460,10 +460,10 @@ $.widget("ui.selectmenu", {
 
 		$( window ).unbind( ".selectmenu-" + this.ids[0] );
 		$( document ).unbind( ".selectmenu-" + this.ids[0] );
-		
+
 		this.newelementWrap.remove();
 		this.listWrap.remove();
-		
+
 		// unbind click event and show original select
 		this.element
 			.unbind(".selectmenu")
@@ -561,26 +561,25 @@ $.widget("ui.selectmenu", {
 		if ( self.newelement.attr("aria-disabled") != 'true' ) {
 			self._closeOthers(event);
 			self.newelement.addClass('ui-state-active');
-				
-			self.list.attr('aria-hidden', false);			
+			self.list.attr('aria-hidden', false);
 			self.listWrap.addClass( self.widgetBaseClass + '-open' );
-						
+
 			var selected = this._selectedOptionLi();
 			if ( o.style == "dropdown" ) {
 				self.newelement.removeClass('ui-corner-all').addClass('ui-corner-top');
-			} else {				
+			} else {
 				// center overflow and avoid flickering
 				this.list
 					.css("left", -5000)
 					.scrollTop( this.list.scrollTop() + selected.position().top - this.list.outerHeight()/2 + selected.outerHeight()/2 )
 					.css("left","auto");
 			}
-			
-			self._refreshPosition();	
-			
+
+			self._refreshPosition();
+
 			var link = selected.find("a");
-			if (link.length) link[0].focus();		
-			
+			if (link.length) link[0].focus();
+
 			self.isOpen = true;
 			self._trigger("open", event, self._uiHash());
 		}
@@ -612,7 +611,7 @@ $.widget("ui.selectmenu", {
 		if (this._disabled(event.currentTarget)) { return false; }
 		this._trigger("select", event, this._uiHash());
 	},
-	
+
 	widget: function() {
 		return this.listWrap.add( this.newelementWrap );
 	},
@@ -631,7 +630,7 @@ $.widget("ui.selectmenu", {
 			this.open(event);
 		}
 	},
-	
+
 	_formatText: function(text) {
 		if (this.options.format) {
 			text = this.options.format(text);
