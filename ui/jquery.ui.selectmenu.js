@@ -183,7 +183,7 @@ $.widget( "ui.selectmenu", {
 			this._setSelected( item.data( "item.selectmenu" ) );
 
 			// set disabled state
-			this._setOption( "disabled", this._getCreateOptions()[ 'disabled' ] );
+			this._setOption( "disabled", this._getCreateOptions().disabled );
 		}
 	},
 
@@ -270,7 +270,7 @@ $.widget( "ui.selectmenu", {
 	},
 
 	_move: function( direction, event ) {
-		if ( direction == "first" || direction == "last" ) {
+		if ( direction === "first" || direction === "last" ) {
 			// set focus manually for first or last item
 			this.menu.menu( "focus", event, this.menuItems[ direction ]() );
 		} else {
@@ -361,7 +361,7 @@ $.widget( "ui.selectmenu", {
 		this._setSelected( item );
 		this._trigger( "select", event, { item: item } );
 
-		if ( item.index != oldIndex ) {
+		if ( item.index !== oldIndex ) {
 			this._trigger( "change", event, { item: item } );
 		}
 	},
