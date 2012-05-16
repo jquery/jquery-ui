@@ -521,16 +521,16 @@ $.widget( "ui.tabs", {
 
 			this.xhr
 				.success(function( response ) {
-					// TODO: IE resolves cached XHRs immediately
-					// remove when core #10467 is fixed
+					// support: jQuery <1.8
+					// http://bugs.jquery.com/ticket/11778
 					setTimeout(function() {
 						panel.html( response );
 						that._trigger( "load", event, eventData );
 					}, 1 );
 				})
 				.complete(function( jqXHR, status ) {
-					// TODO: IE resolves cached XHRs immediately
-					// remove when core #10467 is fixed
+					// support: jQuery <1.8
+					// http://bugs.jquery.com/ticket/11778
 					setTimeout(function() {
 						if ( status === "abort" ) {
 							that.panels.stop( false, true );
