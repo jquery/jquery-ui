@@ -13,9 +13,6 @@
 (function($) {
 
 $.widget("ui.selectmenu", {
-	getter: "value",
-	version: "1.9",
-	eventPrefix: "selectmenu",
 	options: {
 		transferClasses: true,
 		appendTo: "body",
