@@ -213,7 +213,7 @@ $.widget( "ui.selectmenu", {
 					offset: "0 " + ( this.menu.offset().top  - currentItem.offset().top + ( this.button.outerHeight() - currentItem.outerHeight() ) / 2 )
 				});
 			}
-			
+
 			this.options.position.of = this.button;
 			this.menuWrap
 				.zIndex( this.element.zIndex() + 1 )
