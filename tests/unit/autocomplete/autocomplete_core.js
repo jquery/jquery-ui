@@ -69,4 +69,96 @@ test( "allow form submit on enter when menu is not active", function() {
 	ok( !event.isDefaultPrevented(), "default action is prevented" );
 });
 
-})(jQuery);
+asyncTest( "handle race condition", function() {
+	expect( 3 );
+	var count = 0,
+		element = $( "#autocomplete" ).autocomplete({
+		source: function( request, response ) {
+			count++;
+			if ( request.term.length === 1 ) {
+				equal( count, 1, "request with 1 character is first" );
+				setTimeout(function() {
+					response([ "one" ]);
+					setTimeout( checkResults, 1 );
+				}, 1 );
+				return;
+			}
+			equal( count, 2, "request with 2 characters is second" );
+			response([ "two" ]);
+		}
+	});
+
+	element.autocomplete( "search", "a" );
+	element.autocomplete( "search", "ab" );
+
+	function checkResults() {
+		equal( element.autocomplete( "widget" ).find( ".ui-menu-item" ).text(), "two",
+			"correct results displayed" );
+		start();
+	}
+});
+test( "up arrow invokes search - input", function() {
+	arrowsInvokeSearch( "#autocomplete", true, true );
+});
+
+test( "down arrow invokes search - input", function() {
+	arrowsInvokeSearch( "#autocomplete", false, true );
+});
+
+test( "up arrow invokes search - textarea", function() {
+	arrowsInvokeSearch( "#autocomplete-textarea", true, false );
+});
+
+test( "down arrow invokes search - textarea", function() {
+	arrowsInvokeSearch( "#autocomplete-textarea", false, false );
+});
+
+test( "up arrow moves focus - input", function() {
+	arrowsMoveFocus( "#autocomplete", true );
+});
+
+test( "down arrow moves focus - input", function() {
+	arrowsMoveFocus( "#autocomplete", false );
+});
+
+test( "up arrow moves focus - textarea", function() {
+	arrowsMoveFocus( "#autocomplete-textarea", true );
+});
+
+test( "down arrow moves focus - textarea", function() {
+	arrowsMoveFocus( "#autocomplete-textarea", false );
+});
+
+function arrowsInvokeSearch( id, isKeyUp, shouldMove ) {
+	expect( 1 );
+
+	var didMove = false,
+		element = $( id ).autocomplete({
+			source: [ "a" ],
+			delay: 0,
+			minLength: 0
+		});
+	element.data( "autocomplete" )._move = function() {
+		didMove = true;
+	};
+	element.simulate( "keydown", { keyCode: ( isKeyUp ? $.ui.keyCode.UP : $.ui.keyCode.DOWN ) } );
+	equal( didMove, shouldMove, "respond to arrow" );
+}
+
+function arrowsMoveFocus( id, isKeyUp ) {
+	expect( 1 );
+
+	var didMove = false,
+		element = $( id ).autocomplete({
+			source: [ "a" ],
+			delay: 0,
+			minLength: 0
+		});
+	element.data( "autocomplete" )._move = function() {
+		ok( true, "repsond to arrow" );
+	};
+	element.autocomplete( "search" );
+	element.simulate( "keydown", { keyCode: ( isKeyUp ? $.ui.keyCode.UP : $.ui.keyCode.DOWN ) } );
+}
+
+}( jQuery ) );

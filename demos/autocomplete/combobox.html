@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<title>jQuery UI Autocomplete - Combobox</title>
 	<link rel="stylesheet" href="../../themes/base/jquery.ui.all.css">
-	<script src="../../jquery-1.6.4.js"></script>
+	<script src="../../jquery-1.7.2.js"></script>
 	<script src="../../ui/jquery.ui.core.js"></script>
 	<script src="../../ui/jquery.ui.widget.js"></script>
 	<script src="../../ui/jquery.ui.button.js"></script>
@@ -12,21 +12,42 @@
 	<script src="../../ui/jquery.ui.autocomplete.js"></script>
 	<link rel="stylesheet" href="../demos.css">
 	<style>
-	.ui-button { margin-left: -1px; }
-	.ui-button-icon-only .ui-button-text { padding: 0.35em; } 
-	.ui-autocomplete-input { margin: 0; padding: 0.48em 0 0.47em 0.45em; }
+	.ui-combobox {
+		position: relative;
+		display: inline-block;
+	}
+	.ui-button {
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		margin-left: -1px;
+		padding: 0;
+		/* adjust styles for IE 6/7 */
+		*height: 1.7em;
+		*top: 0.1em;
+	}
+	.ui-autocomplete-input {
+		margin: 0;
+		padding: 0.3em;
+	}
 	</style>
 	<script>
 	(function( $ ) {
 		$.widget( "ui.combobox", {
 			_create: function() {
-				var self = this,
+				var input,
+					self = this,
 					select = this.element.hide(),
 					selected = select.children( ":selected" ),
-					value = selected.val() ? selected.text() : "";
-				var input = this.input = $( "<input>" )
-					.insertAfter( select )
+					value = selected.val() ? selected.text() : "",
+					wrapper = $( "<span>" )
+						.addClass( "ui-combobox" )
+						.insertAfter( select );
+
+				input = $( "<input>" )
+					.appendTo( wrapper )
 					.val( value )
+					.addClass( "ui-state-default" )
 					.autocomplete({
 						delay: 0,
 						minLength: 0,
@@ -82,10 +103,10 @@
 						.appendTo( ul );
 				};
 
-				this.button = $( "<button type='button'>&nbsp;</button>" )
+				$( "<a>" )
 					.attr( "tabIndex", -1 )
 					.attr( "title", "Show All Items" )
-					.insertAfter( input )
+					.appendTo( wrapper )
 					.button({
 						icons: {
 							primary: "ui-icon-triangle-1-s"
@@ -111,8 +132,7 @@
 			},
 
 			destroy: function() {
-				this.input.remove();
-				this.button.remove();
+				this.wrapper.remove();
 				this.element.show();
 				$.Widget.prototype.destroy.call( this );
 			}
@@ -128,7 +148,7 @@
 	</script>
 </head>
 <body>
-	
+
 <div class="demo">
 
 <div class="ui-widget">
