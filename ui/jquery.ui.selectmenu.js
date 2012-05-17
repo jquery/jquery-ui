@@ -562,7 +562,6 @@ $.widget("ui.selectmenu", {
 			self._closeOthers(event);
 			self.newelement.addClass('ui-state-active');
 				
-			self.listWrap.appendTo( o.appendTo );
 			self.list.attr('aria-hidden', false);			
 			self.listWrap.addClass( self.widgetBaseClass + '-open' );
 						
