@@ -329,9 +329,9 @@ $.widget("ui.dialog", {
 		self.moveToTop(true);
 
 		// prevent tabbing out of modal dialogs
-		if (options.modal) {
-			uiDialog.bind('keypress.ui-dialog', function(event) {
-				if (event.keyCode !== $.ui.keyCode.TAB) {
+		if ( options.modal ) {
+			uiDialog.bind( "keydown.ui-dialog", function( event ) {
+				if ( event.keyCode !== $.ui.keyCode.TAB ) {
 					return;
 				}
 

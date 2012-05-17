@@ -377,7 +377,7 @@ $.widget( "ui.buttonset", {
 	},
 	
 	refresh: function() {
-		var ltr = this.element.css( "direction" ) === "ltr";
+		var rtl = this.element.css( "direction" ) === "rtl";
 		
 		this.buttons = this.element.find( this.options.items )
 			.filter( ":ui-button" )
@@ -391,10 +391,10 @@ $.widget( "ui.buttonset", {
 			})
 				.removeClass( "ui-corner-all ui-corner-left ui-corner-right" )
 				.filter( ":first" )
-					.addClass( ltr ? "ui-corner-left" : "ui-corner-right" )
+					.addClass( rtl ? "ui-corner-right" : "ui-corner-left" )
 				.end()
 				.filter( ":last" )
-					.addClass( ltr ? "ui-corner-right" : "ui-corner-left" )
+					.addClass( rtl ? "ui-corner-left" : "ui-corner-right" )
 				.end()
 			.end();
 	},
