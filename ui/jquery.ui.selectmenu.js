@@ -14,7 +14,6 @@
 
 $.widget("ui.selectmenu", {
 	options: {
-		transferClasses: true,
 		appendTo: "body",
 		typeAhead: 1000,
 		style: 'dropdown',
@@ -405,12 +404,6 @@ $.widget("ui.selectmenu", {
 		this.selectmenuIcon
 			.toggleClass( 'ui-icon-triangle-1-s', isDropDown )
 			.toggleClass( 'ui-icon-triangle-2-n-s', !isDropDown );
-
-		// transfer classes to selectmenu and list
-		if ( o.transferClasses ) {
-			var transferClasses = this.element.attr( 'class' ) || '';
-			this.newelement.add( this.list ).addClass( transferClasses );
-		}
 
 		// set menu width to either menuWidth option value, width option value, or select width
 		if ( o.style == 'dropdown' ) {
