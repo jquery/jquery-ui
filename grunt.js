@@ -289,7 +289,7 @@ grunt.initConfig({
 	lint: {
 		ui: grunt.file.expandFiles( "ui/*.js" ).filter(function( file ) {
 			// TODO remove items from this list once rewritten
-			return !( /(effects.core|mouse|datepicker|draggable|droppable|resizable|selectable|sortable)\.js$/ ).test( file );
+			return !( /(mouse|datepicker|draggable|droppable|resizable|selectable|sortable)\.js$/ ).test( file );
 		}),
 		grunt: "grunt.js",
 		tests: "tests/unit/**/*.js"
