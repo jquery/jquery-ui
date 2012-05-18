@@ -38,4 +38,30 @@ test( "{ disabled: false }", function() {
 	equal( $("#log").html(), "afterclick,1,click,", "Click order not valid.");
 });
 
+test("{ role: 'menu' } ", function () {
+	var menu = $('#menu1').menu();
+	expect(2 + 5 * $("li", menu).length);
+	equal( menu.attr( "role" ), "menu" );
+	ok( $("li", menu).length > 0, "number of menu items");
+	$("li", menu).each(function(item) {
+		ok( $(this).hasClass("ui-menu-item"), "menu item ("+ item + ") class for item");
+		equal( $(this).attr("role"), "presentation", "menu item ("+ item + ") role");
+		equal( $("a", this).attr("role"), "menuitem", "menu item ("+ item + ") role");
+		ok( $("a",this).hasClass("ui-corner-all"), "a element class for menu item ("+ item + ") ");
+		equal( $("a",this).attr("tabindex"), "-1", "a element tabindex for menu item ("+ item + ") ");
+	});
+});
+
+test("{ role: 'listbox' } ", function () {
+	var menu = $('#menu1').menu({
+		role: "listbox"
+	});
+	expect(2 + $("li", menu).length);
+	equal( menu.attr( "role" ), "listbox" );
+	ok( ($("li", menu).length > 0 ), "number of menu items");
+	$("li", menu).each(function(item) {
+		equal( $("a", this).attr("role"), "option", "menu item ("+ item + ") role");
+	});
+});
+
 })(jQuery);
