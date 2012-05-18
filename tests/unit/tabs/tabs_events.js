@@ -8,7 +8,7 @@ test( "create", function() {
 	expect( 10 );
 
 	var element = $( "#tabs1" ),
-		tabs = element.find( "ul a" ),
+		tabs = element.find( "ul li" ),
 		panels = element.children( "div" );
 
 	element.tabs({
@@ -50,7 +50,8 @@ test( "beforeActivate", function() {
 			active: false,
 			collapsible: true
 		}),
-		tabs = element.find( ".ui-tabs-nav a" ),
+		tabs = element.find( ".ui-tabs-nav li" ),
+		anchors = tabs.find( ".ui-tabs-anchor" ),
 		panels = element.find( ".ui-tabs-panel" );
 
 	// from collapsed
@@ -80,7 +81,7 @@ test( "beforeActivate", function() {
 		strictEqual( ui.newPanel[ 0 ], panels[ 1 ], "newPanel" );
 		state( element, 1, 0, 0 );
 	});
-	tabs.eq( 1 ).click();
+	anchors.eq( 1 ).click();
 	state( element, 0, 1, 0 );
 
 	// collapsing
@@ -120,7 +121,8 @@ test( "activate", function() {
 			active: false,
 			collapsible: true
 		}),
-		tabs = element.find( ".ui-tabs-nav a" ),
+		tabs = element.find( ".ui-tabs-nav li" ),
+		anchors = element.find( ".ui-tabs-anchor" ),
 		panels = element.find( ".ui-tabs-panel" );
 
 	// from collapsed
@@ -150,7 +152,7 @@ test( "activate", function() {
 		strictEqual( ui.newPanel[ 0 ], panels[ 1 ], "newPanel" );
 		state( element, 0, 1, 0 );
 	});
-	tabs.eq( 1 ).click();
+	anchors.eq( 1 ).click();
 	state( element, 0, 1, 0 );
 
 	// collapsing
@@ -186,7 +188,7 @@ test( "beforeLoad", function() {
 
 	// init
 	element.one( "tabsbeforeload", function( event, ui ) {
-		tab = element.find( ".ui-tabs-nav a" ).eq( 2 );
+		tab = element.find( ".ui-tabs-nav li" ).eq( 2 );
 		panelId = tab.attr( "aria-controls" );
 		panel = $( "#" + panelId );
 
@@ -208,7 +210,7 @@ test( "beforeLoad", function() {
 
 	// .option()
 	element.one( "tabsbeforeload", function( event, ui ) {
-		tab = element.find( ".ui-tabs-nav a" ).eq( 2 );
+		tab = element.find( ".ui-tabs-nav li" ).eq( 2 );
 		panelId = tab.attr( "aria-controls" );
 		panel = $( "#" + panelId );
 
@@ -230,7 +232,7 @@ test( "beforeLoad", function() {
 
 	// click, change panel content
 	element.one( "tabsbeforeload", function( event, ui ) {
-		tab = element.find( ".ui-tabs-nav a" ).eq( 3 );
+		tab = element.find( ".ui-tabs-nav li" ).eq( 3 );
 		panelId = tab.attr( "aria-controls" );
 		panel = $( "#" + panelId );
 
@@ -245,7 +247,7 @@ test( "beforeLoad", function() {
 		event.preventDefault();
 		state( element, 0, 0, 1, 0, 0 );
 	});
-	element.find( ".ui-tabs-nav a" ).eq( 3 ).click();
+	element.find( ".ui-tabs-nav .ui-tabs-anchor" ).eq( 3 ).click();
 	state( element, 0, 0, 0, 1, 0 );
 	// .toLowerCase() is needed to convert <P> to <p> in old IEs
 	equal( panel.html().toLowerCase(), "<p>testing</p>", "panel html after" );
@@ -260,7 +262,7 @@ if ( $.uiBackCompat === false ) {
 
 		// init
 		element.one( "tabsload", function( event, ui ) {
-			tab = element.find( ".ui-tabs-nav a" ).eq( 2 );
+			tab = element.find( ".ui-tabs-nav li" ).eq( 2 );
 			panelId = tab.attr( "aria-controls" );
 			panel = $( "#" + panelId );
 
@@ -278,7 +280,7 @@ if ( $.uiBackCompat === false ) {
 		function tabsload1() {
 			// .option()
 			element.one( "tabsload", function( event, ui ) {
-				tab = element.find( ".ui-tabs-nav a" ).eq( 3 );
+				tab = element.find( ".ui-tabs-nav li" ).eq( 3 );
 				panelId = tab.attr( "aria-controls" );
 				panel = $( "#" + panelId );
 
@@ -297,7 +299,7 @@ if ( $.uiBackCompat === false ) {
 		function tabsload2() {
 			// click, change panel content
 			element.one( "tabsload", function( event, ui ) {
-				tab = element.find( ".ui-tabs-nav a" ).eq( 4 );
+				tab = element.find( ".ui-tabs-nav li" ).eq( 4 );
 				panelId = tab.attr( "aria-controls" );
 				panel = $( "#" + panelId );
 
@@ -310,7 +312,7 @@ if ( $.uiBackCompat === false ) {
 				state( element, 0, 0, 0, 0, 1 );
 				start();
 			});
-			element.find( ".ui-tabs-nav a" ).eq( 4 ).click();
+			element.find( ".ui-tabs-nav .ui-tabs-anchor" ).eq( 4 ).click();
 		}
 	});
 }

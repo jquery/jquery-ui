@@ -43,7 +43,7 @@ TestHelpers.tabs = {
 			actual = tabs.find( ".ui-tabs-nav li" ).map(function() {
 				var tab = $( this ),
 					panel = $( $.ui.tabs.prototype._sanitizeSelector(
-						"#" + tab.find( "a" ).attr( "aria-controls" ) ) ),
+						"#" + tab.attr( "aria-controls" ) ) ),
 					tabIsActive = tab.hasClass( "ui-state-active" ),
 					panelIsActive = panel.css( "display" ) !== "none";
 
