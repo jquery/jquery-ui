@@ -40,16 +40,17 @@
 			});
 		}
 
-		var menus = $("#menu1, #menu2, #menu3, .menu4");
+		var menus = $("#menu1, #menu2, #menu3, .menu4"),
+			all = menus.add("#menu5, #menu6");
 		create();
 
 		$("#toggle-destroy").toggle(function() {
-			menus.menu("destroy");
+			all.menu("destroy");
 		}, create);
 		$("#toggle-disable").toggle(function() {
-			menus.menu("disable");
+			all.menu("disable");
 		}, function() {
-			menus.menu("enable");
+			all.menu("enable");
 		});
 	});
 	</script>
@@ -64,6 +65,7 @@
 </head>
 <body>
 
+<h2>Default inline menu</h2>
 <ul id="menu1">
 	<li><a href="#">Aberdeen</a></li>
 	<li><a href="#">Ada</a></li>
@@ -74,6 +76,7 @@
 	<li><a href="#">Salzburg</a></li>
 </ul>
 
+<h2>Inline with disabled items and submenus</h2>
 <ul id="menu2">
 	<li class="ui-state-disabled"><a href="#">Aberdeen</a></li>
 	<li><a href="#">Ada</a></li>
@@ -114,6 +117,7 @@
 	<li class="ui-state-disabled"><a href="#">Amesville</a></li>
 </ul>
 
+<h2>Menu with icons</h2>
 <ul id="menu3">
 	<li><a href="#"><span class="ui-icon ui-icon-print"></span>Aberdeen</a></li>
 	<li class="ui-state-disabled"><a href="#"><span class="ui-icon ui-icon-scissors"></span>Ada</a></li>
@@ -152,6 +156,7 @@
 	</li>
 </ul>
 
+<h2>Long menu with scroll overflow, to test menu's scroll-on-keypress behaviour</h2>
 <ul class="menu4">
 	<li><a href="#">Aberdeen</a></li>
 	<li><a href="#">Ada</a></li>
@@ -193,6 +198,7 @@
 	<li><a href="#">Amesville</a></li>
 </ul>
 
+<h2>Menu with custom markup</h2>
 <div id="menu5">
 	<blockquote><a href="#">Aberdeen</a></blockquote>
 	<blockquote><a href="#">Ada</a></blockquote>
@@ -231,6 +237,7 @@
 	</blockquote>
 </div>
 
+<h2>Menu with custom markup, multi-line items</h2>
 <div class="menuElement" id="menu6">
 	<div class="address-item">
 		<a href="#">
