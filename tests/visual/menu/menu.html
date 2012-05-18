@@ -18,39 +18,24 @@
 			top: 10
 		}).appendTo(document.body).themeswitcher();
 
-		function create() {
-			menus.menu({
-				select: function(event, ui) {
-					$("<div/>").text("Selected: " + ui.item.text()).appendTo("#log");
-				}
-			});
+		$("#menu1, #menu2, #menu3, .menu4").menu({
+			select: function(event, ui) {
+				$("<div/>").text("Selected: " + ui.item.text()).appendTo("#log");
+			}
+		});
 
-			$("#menu5").menu({
-				select: function(event, ui) {
-					$("<div/>").text("Selected: " + ui.item.text()).appendTo("#log");
-				},
-				menus: "div"
-			});
+		$("#menu5").menu({
+			select: function(event, ui) {
+				$("<div/>").text("Selected: " + ui.item.text()).appendTo("#log");
+			},
+			menus: "div"
+		});
 
-			$("#menu6").menu({
-				select: function(event, ui) {
-					$("<div/>").text("Selected: " + ui.item.text()).appendTo("#log");
-				},
-				menus: ".menuElement"
-			});
-		}
-
-		var menus = $("#menu1, #menu2, #menu3, .menu4"),
-			all = menus.add("#menu5, #menu6");
-		create();
-
-		$("#toggle-destroy").toggle(function() {
-			all.menu("destroy");
-		}, create);
-		$("#toggle-disable").toggle(function() {
-			all.menu("disable");
-		}, function() {
-			all.menu("enable");
+		$("#menu6").menu({
+			select: function(event, ui) {
+				$("<div/>").text("Selected: " + ui.item.text()).appendTo("#log");
+			},
+			menus: ".menuElement"
 		});
 	});
 	</script>
@@ -285,9 +270,6 @@
 	Log:
 	<div id="log" style="height: 400px; width: 300px; overflow: auto;" class="ui-widget-content"></div>
 </div>
-
-<button id="toggle-disable">Disable / Enable</button>
-<button id="toggle-destroy">Destroy / Create</button>
 
 </body>
 </html>
