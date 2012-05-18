@@ -57,6 +57,7 @@ $.widget( "ui.autocomplete", {
 
 		this.isMultiLine = this.element.is( "textarea,[contenteditable]" );
 		this.valueMethod = this.element[ this.element.is( "input,textarea" ) ? "val" : "text" ];
+		this.isNewMenu = true;
 
 		this.element
 			.addClass( "ui-autocomplete-input" )
@@ -224,6 +225,18 @@ $.widget( "ui.autocomplete", {
 				}
 			},
 			menufocus: function( event, ui ) {
+				// Prevent accidental activation of menu items in Firefox
+				if ( this.isNewMenu ) {
+					this.isNewMenu = false;
+					this.menu.blur();
+
+					$( document ).one( "mousemove", function( event ) {
+						$( event.target ).closest( ".ui-menu-item" ).mouseenter();
+					});
+
+					return;
+				}
+
 				// back compat for _renderItem using item.autocomplete, via #7810
 				// TODO remove the fallback, see #8156
 				var item = ui.item.data( "ui-autocomplete-item" ) || ui.item.data( "item.autocomplete" );
@@ -411,6 +424,7 @@ $.widget( "ui.autocomplete", {
 		if ( this.menu.element.is(":visible") ) {
 			this.menu.element.hide();
 			this.menu.blur();
+			this.isNewMenu = true;
 			this._trigger( "close", event );
 		}
 	},
@@ -457,6 +471,7 @@ $.widget( "ui.autocomplete", {
 		}, this.options.position ));
 
 		if ( this.options.autoFocus ) {
+			this.isNewMenu = false;
 			this.menu.next( new $.Event("mouseover") );
 		}
 	},
@@ -512,6 +527,8 @@ $.widget( "ui.autocomplete", {
 
 	_keyEvent: function( keyEvent, event ) {
 		if ( !this.isMultiLine || this.menu.element.is( ":visible" ) ) {
+			this.isNewMenu = false;
+
 			this._move( keyEvent, event );
 
 			// prevents moving cursor to beginning/end of the text field in some browsers
