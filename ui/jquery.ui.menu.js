@@ -340,7 +340,7 @@ $.widget( "ui.menu", {
 		// highlight active parent menu item, if any
 		this.active.parent().closest( ".ui-menu-item" ).children( "a:first" ).addClass( "ui-state-active" );
 
-		if ( event.type === "keydown" ) {
+		if ( event && event.type === "keydown" ) {
 			this._close();
 		} else {
 			this.timer = this._delay(function() {

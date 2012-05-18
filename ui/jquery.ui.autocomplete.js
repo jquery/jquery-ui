@@ -225,7 +225,7 @@ $.widget( "ui.autocomplete", {
 				var item = ui.item.data( "ui-autocomplete-item" ) || ui.item.data( "item.autocomplete" );
 				if ( false !== this._trigger( "focus", event, { item: item } ) ) {
 					// use value to match what will end up in the input, if it was a key event
-					if ( /^key/.test(event.originalEvent.type) ) {
+					if ( event.originalEvent && /^key/.test(event.originalEvent.type) ) {
 						this._value( item.value );
 					}
 				} else {
@@ -468,7 +468,7 @@ $.widget( "ui.autocomplete", {
 		}, this.options.position ));
 
 		if ( this.options.autoFocus ) {
-			this.menu.next( new $.Event("mouseover") );
+			this.menu.next();
 		}
 	},
 
