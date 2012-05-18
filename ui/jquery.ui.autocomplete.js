@@ -57,6 +57,7 @@ $.widget( "ui.autocomplete", {
 
 		this.isMultiLine = this.element.is( "textarea,[contenteditable]" );
 		this.valueMethod = this.element[ this.element.is( "input,textarea" ) ? "val" : "text" ];
+		this.isNewMenu = true;
 
 		this.element
 			.addClass( "ui-autocomplete-input" )
@@ -220,6 +221,20 @@ $.widget( "ui.autocomplete", {
 				}
 			},
 			menufocus: function( event, ui ) {
+				// #7024 - Prevent accidental activation of menu items in Firefox
+				if ( this.isNewMenu ) {
+					this.isNewMenu = false;
+					if ( event.originalEvent && /^mouse/.test(event.originalEvent.type) ) {
+						this.menu.blur();
+
+						this.document.one( "mousemove", function() {
+							$( event.target ).trigger( event.originalEvent );
+						});
+
+						return;
+					}
+				}
+
 				// back compat for _renderItem using item.autocomplete, via #7810
 				// TODO remove the fallback, see #8156
 				var item = ui.item.data( "ui-autocomplete-item" ) || ui.item.data( "item.autocomplete" );
@@ -422,6 +437,7 @@ $.widget( "ui.autocomplete", {
 		if ( this.menu.element.is(":visible") ) {
 			this.menu.element.hide();
 			this.menu.blur();
+			this.isNewMenu = true;
 			this._trigger( "close", event );
 		}
 	},
