@@ -110,7 +110,7 @@ $.widget( "ui.autocomplete", {
 					}
 					break;
 				case keyCode.ESCAPE:
-					if ( this.menu.element.is(":visible") ) {
+					if ( this.menu.element.is( ":visible" ) ) {
 						this._value( this.term );
 						this.close( event );
 						// Different browsers have different default behavior for escape
@@ -178,9 +178,9 @@ $.widget( "ui.autocomplete", {
 		});
 
 		this._initSource();
-		this.menu = $( "<ul></ul>" )
+		this.menu = $( "<ul>" )
 			.addClass( "ui-autocomplete" )
-			.appendTo( this.document.find( this.options.appendTo || "body" )[0] )
+			.appendTo( this.document.find( this.options.appendTo || "body" )[ 0 ] )
 			.menu({
 				// custom key handling for now
 				input: $(),
@@ -210,7 +210,7 @@ $.widget( "ui.autocomplete", {
 				if ( !$( event.target ).closest( ".ui-menu-item" ).length ) {
 					this._delay(function() {
 						var that = this;
-						this.document.one( 'mousedown', function( event ) {
+						this.document.one( "mousedown", function( event ) {
 							if ( event.target !== that.element[ 0 ] &&
 									event.target !== menuElement &&
 									!$.contains( menuElement, event.target ) ) {
@@ -224,7 +224,7 @@ $.widget( "ui.autocomplete", {
 				// #7024 - Prevent accidental activation of menu items in Firefox
 				if ( this.isNewMenu ) {
 					this.isNewMenu = false;
-					if ( event.originalEvent && /^mouse/.test(event.originalEvent.type) ) {
+					if ( event.originalEvent && /^mouse/.test( event.originalEvent.type ) ) {
 						this.menu.blur();
 
 						this.document.one( "mousemove", function() {
@@ -240,7 +240,7 @@ $.widget( "ui.autocomplete", {
 				var item = ui.item.data( "ui-autocomplete-item" ) || ui.item.data( "item.autocomplete" );
 				if ( false !== this._trigger( "focus", event, { item: item } ) ) {
 					// use value to match what will end up in the input, if it was a key event
-					if ( event.originalEvent && /^key/.test(event.originalEvent.type) ) {
+					if ( event.originalEvent && /^key/.test( event.originalEvent.type ) ) {
 						this._value( item.value );
 					}
 				} else {
@@ -330,13 +330,12 @@ $.widget( "ui.autocomplete", {
 	},
 
 	_initSource: function() {
-		var that = this,
-			array,
-			url;
+		var array, url,
+			that = this;
 		if ( $.isArray(this.options.source) ) {
 			array = this.options.source;
 			this.source = function( request, response ) {
-				response( $.ui.autocomplete.filter(array, request.term) );
+				response( $.ui.autocomplete.filter( array, request.term ) );
 			};
 		} else if ( typeof this.options.source === "string" ) {
 			url = this.options.source;
@@ -434,7 +433,7 @@ $.widget( "ui.autocomplete", {
 
 	_close: function( event ) {
 		clearTimeout( this.closing );
-		if ( this.menu.element.is(":visible") ) {
+		if ( this.menu.element.is( ":visible" ) ) {
 			this.menu.element.hide();
 			this.menu.blur();
 			this.isNewMenu = true;
@@ -453,7 +452,7 @@ $.widget( "ui.autocomplete", {
 		if ( items.length && items[0].label && items[0].value ) {
 			return items;
 		}
-		return $.map( items, function(item) {
+		return $.map( items, function( item ) {
 			if ( typeof item === "string" ) {
 				return {
 					label: item,
@@ -510,18 +509,18 @@ $.widget( "ui.autocomplete", {
 	},
 
 	_renderItem: function( ul, item ) {
-		return $( "<li></li>" )
-			.append( $( "<a></a>" ).text( item.label ) )
+		return $( "<li>" )
+			.append( $( "<a>" ).text( item.label ) )
 			.appendTo( ul );
 	},
 
 	_move: function( direction, event ) {
-		if ( !this.menu.element.is(":visible") ) {
+		if ( !this.menu.element.is( ":visible" ) ) {
 			this.search( null, event );
 			return;
 		}
-		if ( this.menu.isFirstItem() && /^previous/.test(direction) ||
-				this.menu.isLastItem() && /^next/.test(direction) ) {
+		if ( this.menu.isFirstItem() && /^previous/.test( direction ) ||
+				this.menu.isLastItem() && /^next/.test( direction ) ) {
 			this._value( this.term );
 			this.menu.blur();
 			return;
