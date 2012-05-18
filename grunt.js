@@ -376,7 +376,7 @@ grunt.registerTask( "testswarm", function( commit, configFile ) {
 	testswarm({
 		url: "http://swarm.jquery.org/",
 		pollInterval: 10000,
-		timeout: 1000 * 60 * 20,
+		timeout: 1000 * 60 * 30,
 		done: this.async()
 	}, {
 		authUsername: "jqueryui",
