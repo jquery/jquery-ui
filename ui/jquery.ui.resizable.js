@@ -171,12 +171,12 @@ $.widget("ui.resizable", $.ui.mouse, {
 			this._handles.hide();
 			$(this.element)
 				.addClass("ui-resizable-autohide")
-				.hover(function() {
+				.mouseenter(function() {
 					if (o.disabled) return;
 					$(this).removeClass("ui-resizable-autohide");
 					that._handles.show();
-				},
-				function(){
+				})
+				.mouseleave(function(){
 					if (o.disabled) return;
 					if (!that.resizing) {
 						$(this).addClass("ui-resizable-autohide");

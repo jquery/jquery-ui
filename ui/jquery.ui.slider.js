@@ -90,11 +90,12 @@ $.widget( "ui.slider", $.ui.mouse, {
 			.click(function( event ) {
 				event.preventDefault();
 			})
-			.hover(function() {
+			.mouseenter(function() {
 				if ( !o.disabled ) {
 					$( this ).addClass( "ui-state-hover" );
 				}
-			}, function() {
+			})
+			.mouseleave(function() {
 				$( this ).removeClass( "ui-state-hover" );
 			})
 			.focus(function() {
