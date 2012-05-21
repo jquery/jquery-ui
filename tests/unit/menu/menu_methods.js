@@ -42,6 +42,12 @@ test("destroy", function() {
 	domEqual("#menu1", function() {
 		$("#menu1").menu().menu("destroy");
 	});
+	domEqual("#menu5", function() {
+		$("#menu5").menu().menu("destroy");
+	});
+	domEqual("#menu6", function() {
+		$("#menu6").menu().menu("destroy");
+	});
 });
 
 
