@@ -38,9 +38,14 @@ Building jQuery UI
 
 jQuery UI uses the [grunt](http://github.com/cowboy/grunt) build system. Building jQuery UI requires node.js and a command line zip program.
 
+Install grunt.
+
+`npm install grunt -g`
+
 Clone the jQuery UI git repo.
 
 `git clone git://github.com/jquery/jquery-ui.git`
+
 `cd jquery-ui`
 
 Install node modules.
@@ -50,6 +55,10 @@ Install node modules.
 Run grunt.
 
 `grunt build`
+
+There are many other tasks that can be run through grunt. For a list of all tasks:
+
+`grunt --help`
 
 
 For committers
