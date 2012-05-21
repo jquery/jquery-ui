@@ -139,11 +139,14 @@
 		});
 
 		// click to toggle enabled/disabled
-		$( "#disable" ).toggle(function() {
+		$( "#disable" ).click(function() {
 			// use the custom selector created for each widget to find all instances
-			$( ":custom-colorize" ).colorize( "disable" );
-		}, function() {
-			$( ":custom-colorize" ).colorize( "enable" );
+			// all instances are toggled together, so we can check the state from the first
+			if ( $( ":custom-colorize" ).colorize( "option", "disabled" ) ) {
+				$( ":custom-colorize" ).colorize( "enable" );
+			} else {
+				$( ":custom-colorize" ).colorize( "disable" );
+			}
 		});
 
 		// click to set options after initalization
