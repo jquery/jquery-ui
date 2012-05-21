@@ -14,16 +14,20 @@
 	<script>
 	$(function() {
 		var spinner = $( "#spinner" ).spinner();
-		
-		$( "#disable" ).toggle(function() {
-			spinner.spinner( "disable" );
-		}, function() {
-			spinner.spinner( "enable" );
+
+		$( "#disable" ).click(function() {
+			if ( spinner.spinner( "option", "disabled" ) ) {
+				spinner.spinner( "enable" );
+			} else {
+				spinner.spinner( "disable" );
+			}
 		});
-		$( "#destroy" ).toggle(function() {
-			spinner.spinner( "destroy" );
-		}, function() {
-			spinner.spinner();
+		$( "#destroy" ).click(function() {
+			if ( spinner.data( "ui-spinner" ) ) {
+				spinner.spinner( "destroy" );
+			} else {
+				spinner.spinner();
+			}
 		});
 		$( "#getvalue" ).click(function() {
 			alert( spinner.spinner( "value" ) );
