@@ -395,8 +395,8 @@ $.widget( "ui.menu", {
 
 		var position = $.extend( {}, {
 				of: this.active
-			}, $.type(this.options.position) === "function" ?
-				this.options.position(this.active) :
+			}, $.type( this.options.position ) === "function" ?
+				this.options.position( this.active ) :
 				this.options.position
 			);
 
