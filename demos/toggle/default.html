@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
 	<meta charset="utf-8">
@@ -19,18 +19,33 @@
 	<script src="../../ui/jquery.effects.slide.js"></script>
 	<link rel="stylesheet" href="../demos.css">
 	<style>
-	.toggler { width: 500px; height: 200px; }
-	#button { padding: .5em 1em; text-decoration: none; }
-	#effect { width: 240px; height: 135px; padding: 0.4em; position: relative; }
-	#effect h3 { margin: 0; padding: 0.4em; text-align: center; }
+	.toggler {
+		width: 500px;
+		height: 200px;
+	}
+	#button {
+		padding: .5em 1em;
+		text-decoration: none;
+	}
+	#effect {
+		position: relative;
+		width: 240px;
+		height: 135px;
+		padding: 0.4em;
+	}
+	#effect h3 {
+		margin: 0;
+		padding: 0.4em;
+		text-align: center;
+	}
 	</style>
 	<script>
 	$(function() {
 		// run the currently selected effect
 		function runEffect() {
-			// get effect type from 
+			// get effect type from
 			var selectedEffect = $( "#effectTypes" ).val();
-			
+
 			// most effect types need no options passed by default
 			var options = {};
 			// some effects have required parameters
@@ -39,11 +54,11 @@
 			} else if ( selectedEffect === "size" ) {
 				options = { to: { width: 200, height: 60 } };
 			}
-			
+
 			// run the effect
 			$( "#effect" ).toggle( selectedEffect, options, 500 );
 		};
-		
+
 		// set effect from select menu value
 		$( "#button" ).click(function() {
 			runEffect();
