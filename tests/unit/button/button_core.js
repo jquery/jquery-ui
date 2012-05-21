@@ -34,7 +34,7 @@ function assert(noForm, form1, form2) {
 }
 
 test("radio groups", function() {
-	$(":radio").button();
+	$("input[type=radio]").button();
 	assert(":eq(0)", ":eq(1)", ":eq(2)");
 
 	// click outside of forms
@@ -61,7 +61,7 @@ test("buttonset", function() {
 	var set = $("#radio1").buttonset();
 	ok( set.is(".ui-buttonset") );
 	deepEqual( set.children(".ui-button").length, 3 );
-	deepEqual( set.children("input:radio.ui-helper-hidden-accessible").length, 3 );
+	deepEqual( set.children("input[type=radio].ui-helper-hidden-accessible").length, 3 );
 	ok( set.children("label:eq(0)").is(".ui-button.ui-corner-left:not(.ui-corner-all)") );
 	ok( set.children("label:eq(1)").is(".ui-button:not(.ui-corner-all)") );
 	ok( set.children("label:eq(2)").is(".ui-button.ui-corner-right:not(.ui-corner-all)") );
@@ -76,7 +76,7 @@ test("buttonset (rtl)", function() {
 	set = $("#radio1").buttonset();
 	ok( set.is(".ui-buttonset") );
 	deepEqual( set.children(".ui-button").length, 3 );
-	deepEqual( set.children("input:radio.ui-helper-hidden-accessible").length, 3 );
+	deepEqual( set.children("input[type=radio].ui-helper-hidden-accessible").length, 3 );
 	ok( set.children("label:eq(0)").is(".ui-button.ui-corner-right:not(.ui-corner-all)") );
 	ok( set.children("label:eq(1)").is(".ui-button:not(.ui-corner-all)") );
 	ok( set.children("label:eq(2)").is(".ui-button.ui-corner-left:not(.ui-corner-all)") );

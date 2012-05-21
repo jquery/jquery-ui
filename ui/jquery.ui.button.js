@@ -216,7 +216,7 @@ $.widget( "ui.button", {
 
 		if ( this.element.is(":checkbox") ) {
 			this.type = "checkbox";
-		} else if ( this.element.is(":radio") ) {
+		} else if ( this.element.is("[type=radio]") ) {
 			this.type = "radio";
 		} else if ( this.element.is("input") ) {
 			this.type = "input";
@@ -358,7 +358,7 @@ $.ui.button.version = "@VERSION";
 
 $.widget( "ui.buttonset", {
 	options: {
-		items: ":button, :submit, :reset, :checkbox, :radio, a, :data(button)"
+		items: ":button, :submit, :reset, :checkbox, [type=radio], a, :data(button)"
 	},
 
 	_create: function() {
