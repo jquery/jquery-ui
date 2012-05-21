@@ -3,7 +3,7 @@ TestHelpers.commonWidgetTests( "draggable", {
 		addClasses: true,
 		appendTo: "parent",
 		axis: false,
-		cancel: ":input,option",
+		cancel: "input,textarea,button,select,option",
 		connectToSortable: false,
 		containment: false,
 		cursor: "auto",

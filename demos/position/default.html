@@ -55,7 +55,7 @@
 
 		$( ".positionable" ).css( "opacity", 0.5 );
 
-		$( ":input" ).bind( "click keyup change", position );
+		$( "select, input" ).bind( "click keyup change", position );
 
 		$( "#parent" ).draggable({
 			drag: position

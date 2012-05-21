@@ -2,7 +2,7 @@ TestHelpers.commonWidgetTests( "sortable", {
 	defaults: {
 		appendTo: "parent",
 		axis: false,
-		cancel: ":input,option",
+		cancel: "input,textarea,button,select,option",
 		connectWith: false,
 		containment: false,
 		cursor: "auto",

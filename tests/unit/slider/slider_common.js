@@ -1,7 +1,7 @@
 TestHelpers.commonWidgetTests( "slider", {
 	defaults: {
 		animate: false,
-		cancel: ':input,option',
+		cancel: 'input,textarea,button,select,option',
 		delay: 0,
 		disabled: false,
 		distance: 0,
