@@ -354,9 +354,8 @@ $.widget( "ui.button", {
 	}
 });
 
-$.ui.button.version = "@VERSION";
-
 $.widget( "ui.buttonset", {
+	version: "@VERSION",
 	options: {
 		items: ":button, :submit, :reset, [type=checkbox], [type=radio], a, :data(button)"
 	},
