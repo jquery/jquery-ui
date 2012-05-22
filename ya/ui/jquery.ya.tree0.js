@@ -367,33 +367,39 @@
          * @name tree0#check
          * @function
          * @param target 指定节点的JSON数据对象，并且该节点数据中包括了nid属性
+         * @param triggerEvent 指定是否触发check事件
          * @example
          * //将target节点的勾选状态设置为被勾选状态
          * var target = $('#myTree').tree0("findNode", "text", "node1");
          * $('#myTree').tree0('check',target);
          */  
-        check: function(target) {
-            this._toggleCheck($("#" + target.nid), false);
+        check: function(target,triggerEvent) {
+            this._toggleCheck($("#" + target.nid), false,triggerEvent);
         },
         /**
          * 将指定节点前的勾选框设置为未被勾选状态，该方法只有在属性showCheckbox为true时才生效。
          * @name tree0#uncheck
          * @function
          * @param target 指定节点的JSON数据对象，并且该节点数据中包括了nid属性
+         * @param triggerEvent 指定是否触发check事件
          * @example
          * //将target节点的勾选状态设置为不被勾选状态
          * var target = $('#myTree').tree0("findNode", "text", "node1");
          * $('#myTree').tree0('uncheck',target);
          */  
-        uncheck: function(target) {
-            this._toggleCheck($("#" + target.nid), true);
+        uncheck: function(target,triggerEvent) {
+            this._toggleCheck($("#" + target.nid), true,triggerEvent);
         },
         
         // target equal le elem
-        _toggleCheck: function(target, checked) {
+        _toggleCheck: function(target, checked,triggerEvent) {
             var checkbox_item = target.find(">div.tree-checkbox"), self = this,
             options = self.options,
             onCheck = options.onCheck;
+
+            if(typeof(triggerEvent)=="undefined"){
+                triggerEvent=true;  //默认触发check事件
+            }
             if(checked) {
                 checkbox_item
                     .removeClass("checkbox_part checkbox_full");
@@ -406,7 +412,9 @@
                 self._setChildCheckbox(target, !checked);
                 self._setParentCheckbox(target);
             }
-            onCheck && onCheck(self.findByNId(target.attr("id")));
+            if(triggerEvent){
+                onCheck && onCheck(self.findByNId(target.attr("id")));
+            }
         },
         /**
          * 将所有节点的勾选框设置为被勾选状态，该方法只有在属性showCheckbox为true时才生效。
