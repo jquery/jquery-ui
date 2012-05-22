@@ -47,19 +47,19 @@ $.widget( "ui.tabs", {
 	_create: function() {
 		var panel,
 			that = this,
-			options = that.options,
+			options = this.options,
 			active = options.active;
 
-		that.running = false;
+		this.running = false;
 
-		that.element.addClass( "ui-tabs ui-widget ui-widget-content ui-corner-all" );
+		this.element.addClass( "ui-tabs ui-widget ui-widget-content ui-corner-all" );
 
-		that._processTabs();
+		this._processTabs();
 
 		if ( active === null ) {
 			// check the fragment identifier in the URL
 			if ( location.hash ) {
-				that.anchors.each(function( i, anchor ) {
+				this.anchors.each(function( i, anchor ) {
 					if ( anchor.hash === location.hash ) {
 						active = i;
 						return false;
@@ -69,12 +69,12 @@ $.widget( "ui.tabs", {
 
 			// check for a tab marked active via a class
 			if ( active === null ) {
-				active = that.lis.filter( ".ui-tabs-active" ).index();
+				active = this.lis.filter( ".ui-tabs-active" ).index();
 			}
 
 			// no active tab, set to false
 			if ( active === null || active === -1 ) {
-				active = that.lis.length ? 0 : false;
+				active = this.lis.length ? 0 : false;
 			}
 		}
 
@@ -110,7 +110,7 @@ $.widget( "ui.tabs", {
 		// check for length avoids error when initializing empty list
 		if ( options.active !== false && this.anchors.length ) {
 			this.active = this._findActive( options.active );
-			panel = that._getPanelForTab( this.active );
+			panel = this._getPanelForTab( this.active );
 
 			panel.show();
 			this.lis.eq( options.active ).addClass( "ui-tabs-active ui-state-active" );
@@ -293,15 +293,14 @@ $.widget( "ui.tabs", {
 	},
 
 	_eventHandler: function( event ) {
-		var that = this,
-			options = that.options,
-			active = that.active,
+		var options = this.options,
+			active = this.active,
 			anchor = $( event.currentTarget ),
 			tab = anchor.closest( "li" ),
 			clickedIsActive = tab[ 0 ] === active[ 0 ],
 			collapsing = clickedIsActive && options.collapsible,
-			toShow = collapsing ? $() : that._getPanelForTab( tab ),
-			toHide = !active.length ? $() : that._getPanelForTab( active ),
+			toShow = collapsing ? $() : this._getPanelForTab( tab ),
+			toHide = !active.length ? $() : this._getPanelForTab( active ),
 			eventData = {
 				oldTab: active,
 				oldPanel: toHide,
@@ -315,20 +314,20 @@ $.widget( "ui.tabs", {
 				// tab is already loading
 				tab.hasClass( "ui-tabs-loading" ) ||
 				// can't switch durning an animation
-				that.running ||
+				this.running ||
 				// click on active header, but not collapsible
 				( clickedIsActive && !options.collapsible ) ||
 				// allow canceling activation
-				( that._trigger( "beforeActivate", event, eventData ) === false ) ) {
+				( this._trigger( "beforeActivate", event, eventData ) === false ) ) {
 			anchor[ 0 ].blur();
 			return;
 		}
 
-		options.active = collapsing ? false : that.lis.index( tab );
+		options.active = collapsing ? false : this.lis.index( tab );
 
-		that.active = clickedIsActive ? $() : tab;
-		if ( that.xhr ) {
-			that.xhr.abort();
+		this.active = clickedIsActive ? $() : tab;
+		if ( this.xhr ) {
+			this.xhr.abort();
 		}
 
 		if ( !toHide.length && !toShow.length ) {
@@ -337,10 +336,10 @@ $.widget( "ui.tabs", {
 
 		if ( toShow.length ) {
 			// TODO make passing in node possible
-			that.load( that.lis.index( tab ), event );
+			this.load( this.lis.index( tab ), event );
 			anchor[ 0 ].blur();
 		}
-		that._toggle( event, eventData );
+		this._toggle( event, eventData );
 	},
 
 	// handles show/hide for selecting tabs
@@ -506,7 +505,7 @@ $.widget( "ui.tabs", {
 		var that = this,
 			tab = this.lis.eq( index ),
 			anchor = tab.find( ".ui-tabs-anchor" ),
-			panel = that._getPanelForTab( tab ),
+			panel = this._getPanelForTab( tab ),
 			eventData = {
 				tab: tab,
 				panel: panel
