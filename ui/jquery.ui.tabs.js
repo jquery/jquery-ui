@@ -317,7 +317,6 @@ $.widget( "ui.tabs", {
 				( clickedIsActive && !options.collapsible ) ||
 				// allow canceling activation
 				( this._trigger( "beforeActivate", event, eventData ) === false ) ) {
-			anchor[ 0 ].blur();
 			return;
 		}
 
@@ -335,7 +334,6 @@ $.widget( "ui.tabs", {
 		if ( toShow.length ) {
 			// TODO make passing in node possible
 			this.load( this.lis.index( tab ), event );
-			anchor[ 0 ].blur();
 		}
 		this._toggle( event, eventData );
 	},
