@@ -276,20 +276,18 @@ $.widget( "ui.tabs", {
 	},
 
 	_setupEvents: function( event ) {
-		// attach tab event handler, unbind to avoid duplicates from former tabifying...
-		this.anchors.unbind( ".tabs" );
-
-		// TODO: use event delegation via _bind()
+		var events = {
+			click: function( event ) {
+				event.preventDefault();
+			}
+		};
 		if ( event ) {
-			this.anchors.bind( event.split( " " ).join( ".tabs " ) + ".tabs",
-				$.proxy( this, "_eventHandler" ) );
+			$.each( event.split(" "), function( index, eventName ) {
+				events[ eventName ] = "_eventHandler";
+			});
 		}
-
-		// TODO: use event delegation via _bind()
-		// disable click in any case
-		this.anchors.bind( "click.tabs", function( event ){
-			event.preventDefault();
-		});
+		this.anchors.unbind( ".tabs" );
+		this._bind( this.anchors, events );
 	},
 
 	_eventHandler: function( event ) {
