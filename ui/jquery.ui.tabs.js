@@ -25,7 +25,7 @@ function isLocal( anchor ) {
 	// if it's manually set, i.e., a.href = "#foo" kills the normalization
 	anchor = anchor.cloneNode( false );
 	return anchor.hash.length > 1 &&
-			anchor.href.replace( rhash, "" ) === location.href.replace( rhash, "" );
+		anchor.href.replace( rhash, "" ) === location.href.replace( rhash, "" );
 }
 
 $.widget( "ui.tabs", {
