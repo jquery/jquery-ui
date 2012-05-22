@@ -21,7 +21,7 @@ test( "open/close", function() {
 	equal( $( ".ui-tooltip" ).length, 0, "no tooltip on init" );
 
 	element.tooltip( "open" );
-	tooltip = $( "#" + element.attr( "aria-describedby" ) );
+	tooltip = $( "#" + element.data( "ui-tooltip-id" ) );
 	ok( tooltip.is( ":visible" ) );
 
 	element.tooltip( "close" );
@@ -37,7 +37,7 @@ test( "enable/disable", function() {
 	equal( $( ".ui-tooltip" ).length, 0, "no tooltip on init" );
 
 	element.tooltip( "open" );
-	tooltip = $( "#" + element.attr( "aria-describedby" ) );
+	tooltip = $( "#" + element.data( "ui-tooltip-id" ) );
 	ok( tooltip.is( ":visible" ) );
 
 	element.tooltip( "disable" );
@@ -51,7 +51,7 @@ test( "enable/disable", function() {
 	equal( element.attr( "title" ), "anchortitle", "title restored on enable" );
 
 	element.tooltip( "open" );
-	tooltip = $( "#" + element.attr( "aria-describedby" ) );
+	tooltip = $( "#" + element.data( "ui-tooltip-id" ) );
 	ok( tooltip.is( ":visible" ) );
 	$.fx.off = false;
 });
