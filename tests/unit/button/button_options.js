@@ -53,6 +53,7 @@ test("text false with icon", function() {
 test("label, default", function() {
 	$("#button").button();
 	deepEqual( $("#button").text(), "Label" );
+	deepEqual( $( "#button").button( "option", "label" ), "Label" );
 
 	$("#button").button("destroy");
 });
@@ -62,12 +63,14 @@ test("label", function() {
 		label: "xxx"
 	});
 	deepEqual( $("#button").text(), "xxx" );
+	deepEqual( $("#button").button( "option", "label" ), "xxx" );
 
 	$("#button").button("destroy");
 });
 
 test("label default with input type submit", function() {
 	deepEqual( $("#submit").button().val(), "Label" );
+	deepEqual( $("#submit").button( "option", "label" ), "Label" );
 });
 
 test("label with input type submit", function() {
@@ -75,6 +78,7 @@ test("label with input type submit", function() {
 		label: "xxx"
 	}).val();
 	deepEqual( label, "xxx" );
+	deepEqual( $("#submit").button( "option", "label" ), "xxx" );
 });
 
 test("icons", function() {
