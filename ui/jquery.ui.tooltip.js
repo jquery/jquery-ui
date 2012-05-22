@@ -117,7 +117,7 @@ $.widget( "ui.tooltip", {
 			target = $( event ? event.target : this.element )
 				.closest( this.options.items );
 
-		// if aria-describedby exists, then the tooltip is already open
+		// if ui-tooltip-id exists, then the tooltip is already open
 		if ( !target.length || target.data( "ui-tooltip-id" ) ) {
 			return;
 		}
@@ -152,7 +152,7 @@ $.widget( "ui.tooltip", {
 		// if we have a title, clear it to prevent the native tooltip
 		// we have to check first to avoid defining a title if none exists
 		// (we don't want to cause an element to start matching [title])
-
+		//
 		// We use removeAttr only for key events, to allow IE to export the correct
 		// accessible attributes. For mouse events, set to empty string to avoid
 		// native tooltip showing up (happens only when removing inside mouseover).
@@ -208,6 +208,7 @@ $.widget( "ui.tooltip", {
 
 		// don't close if the element has focus
 		// this prevents the tooltip from closing if you hover while focused
+		//
 		// we have to check the event type because tabbing out of the document
 		// may leave the element as the activeElement
 		if ( !force && event && event.type !== "focusout" &&
