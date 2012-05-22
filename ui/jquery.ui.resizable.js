@@ -196,7 +196,7 @@ $.widget("ui.resizable", $.ui.mouse, {
 
 		var _destroy = function(exp) {
 			$(exp).removeClass("ui-resizable ui-resizable-disabled ui-resizable-resizing")
-				.removeData("resizable").unbind(".resizable").find('.ui-resizable-handle').remove();
+				.removeData("resizable").unbind(".resizable").children('.ui-resizable-handle').remove();
 		};
 
 		//TODO: Unwrap at same DOM position
