@@ -208,7 +208,7 @@ test("handle keyboard navigation on menu without scroll and without submenus", f
 });
 
 asyncTest("handle keyboard navigation on menu without scroll and with submenus", function() {
-	expect(14);
+	expect(16);
 	var element = $('#menu2').menu({
 		select: function(event, ui) {
 			log($(ui.item[0]).text());
@@ -290,11 +290,23 @@ asyncTest("handle keyboard navigation on menu without scroll and with submenus",
 		equal( $("#log").html(), "4,keydown,", "Keydown ESCAPE (close submenu)");
 
 		log("keydown",true);
-		element.simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
+		element.simulate( "keydown", { keyCode: $.ui.keyCode.SPACE } );
 		setTimeout( menukeyboard4, 50 );
 	}
 
 	function menukeyboard4() {
+		equal( $("#log").html(), "0,keydown,", "Keydown SPACE (open submenu)");
+
+		log("keydown",true);
+		element.simulate( "keydown", { keyCode: $.ui.keyCode.ESCAPE } );
+		equal( $("#log").html(), "4,keydown,", "Keydown ESCAPE (close submenu)");
+
+		log("keydown",true);
+		element.simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
+		setTimeout( menukeyboard5, 50 );
+	}
+
+	function menukeyboard5() {
 		equal( $("#log").html(), "0,keydown,", "Keydown ENTER (open submenu)");
 
 		log("keydown",true);

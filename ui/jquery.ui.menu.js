@@ -202,13 +202,11 @@ $.widget( "ui.menu", {
 			event.preventDefault();
 			break;
 		case $.ui.keyCode.ENTER:
-			if ( !this.active.is( ".ui-state-disabled" ) ) {
-				if ( this.active.children( "a[aria-haspopup='true']" ).length ) {
-					this.expand( event );
-				} else {
-					this.select( event );
-				}
-			}
+			this._activate( event );
+			event.preventDefault();
+			break;
+		case $.ui.keyCode.SPACE:
+			this._activate( event );
 			event.preventDefault();
 			break;
 		case $.ui.keyCode.ESCAPE:
@@ -256,6 +254,16 @@ $.widget( "ui.menu", {
 				}
 			} else {
 				delete this.previousFilter;
+			}
+		}
+	},
+
+	_activate: function( event ) {
+		if ( !this.active.is( ".ui-state-disabled" ) ) {
+			if ( this.active.children( "a[aria-haspopup='true']" ).length ) {
+				this.expand( event );
+			} else {
+				this.select( event );
 			}
 		}
 	},
