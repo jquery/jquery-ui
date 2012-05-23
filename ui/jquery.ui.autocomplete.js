@@ -308,10 +308,7 @@ $.widget( "ui.autocomplete", {
 		clearTimeout( this.searching );
 		this.element
 			.removeClass( "ui-autocomplete-input" )
-			.removeAttr( "autocomplete" )
-			.removeAttr( "role" )
-			.removeAttr( "aria-autocomplete" )
-			.removeAttr( "aria-haspopup" );
+			.removeAttr( "autocomplete" );
 		this.menu.element.remove();
 		this.liveRegion.remove();
 	},
