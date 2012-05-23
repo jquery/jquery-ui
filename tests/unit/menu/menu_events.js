@@ -584,7 +584,7 @@ asyncTest("handle page up and page down before the menu has focus", function() {
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_UP } );
 		equal( $("#log").html(), "0,0,keydown,", "Page Up and Page Down bring initial focus to first item");
 		start();
-	}, 350);
+	}, 500);
 });
 
 })(jQuery);
