@@ -108,6 +108,62 @@
 			$( "#select3" ).theme0('commit');
 			return false;
 		});
+		$('#select-l').click(function(){
+			$( "#select3" ).theme0('select','l');
+			return false;
+		});
+		$('#is-get-selection').click(function(){
+			var data=$( "#select3" ).theme0('getSelection');
+			alert(data);
+			return false;
+		});
+		$('#is-add-items').click(function(){
+			$( "#select3" ).theme0('addItems',[{
+				value:'test1',
+				label:'test1'
+			},{
+				value:'test2',
+				label:'test2'
+			},{
+				value:'test3',
+				label:'test3'
+			}]);
+			return false;
+		});
+		$('#is-del-items').click(function(){
+			$( "#select3" ).theme0('delItems',[{
+				value:'test1',
+				label:'test1'
+			},{
+				value:'test2',
+				label:'test2'
+			},{
+				value:'test3',
+				label:'test3'
+			}]);
+			return false;
+		});
+		$('#is-set-data').click(function(){
+			var hlItemJq=$( "#select3" ).theme0('itemselectTheme_getHLItem');
+			$( "#select3" ).theme0('setItemData',hlItemJq.eq(0),{
+				value:'test',
+				label:'test'
+			});
+			return false;
+		});
+		$('#is-get-data').click(function(){
+			var hlItemJq=$( "#select3" ).theme0('itemselectTheme_getHLItem');
+			alert($( "#select3" ).theme0('getItemData',hlItemJq.eq(0)));
+			return false;
+		});
+		$('#is-get-hl-item').click(function(){
+			alert($( "#select3" ).theme0('itemselectTheme_getHLItem'));
+			return false;
+		});
+		$('#is-get-del-all').click(function(){
+			$( "#select3" ).theme0('delItemAll');
+			return false;
+		});
 	});
 	</script>
 </head>
@@ -134,8 +190,16 @@
 	  	</select>
   	</div>
   	<div class="select-wrapper select-wrapper3">
-  		<button id="reset-btn-0">reset</button>
+  		<button id="reset-btn-0" type="button">reset</button>
   		<button id="commit-btn-0">commit</button>
+  		<button id="select-l">select "l"</button>
+  		<button id="is-get-selection">获得选中项</button>
+  		<button id="is-add-items">添加items</button>
+  		<button id="is-del-items" type="button">删除items</button>
+  		<button id="is-set-data" type="button">设置data</button>
+  		<button id="is-get-data" type="button">获得data</button>
+  		<button id="is-get-hl-item" type="button">获得高亮item</button>
+  		<button id="is-get-del-all" type="button">全部清空item</button>
 	  	<select id="select3" multiple="multiple" themetype="itemselect" >
 	  		<option disabled="disabled">请选择</option>
 	  		<option value="i" selected="selected">i</option>

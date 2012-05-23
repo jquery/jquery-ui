@@ -116,5 +116,6 @@
 	background-position:-45px -11px;
 }
 .ui-itemselect .ui-itemselect-option-selected {
-    background: #f7f7f7;
+    /*background: #f7f7f7;*/
+    background: yellow;
 }

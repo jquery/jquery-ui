@@ -215,7 +215,7 @@
 			}
 			_.each(data,function(v,i){
 				htmlArr1[i]='<option value="'+v.value+'">'+v.label+'</option>';
-				htmlArr2[i]='<li class="ui-combo-option ui-state-default" val="'+v.value+'">'+v.label+'</li>';;
+				htmlArr2[i]='<li class="ui-combo-option ui-state-default" val="'+v.value+'">'+v.label+'</li>';
 			});
 			element.append(htmlArr1.join(''));
 			listJq.append(htmlArr2.join(''));
@@ -281,9 +281,9 @@
 			$('option',element).each(function(i){
 				var thisJq=$(this);
 				if(thisJq.attr('selected')){
-					$('<li class="ui-itemselect-option ui-state-highlight">'+thisJq.text()+'<div class="ui-itemselect-option-action" style="display:none;"><span class="ui-itemselect-icon-up"></span>&nbsp;&nbsp;<span class="ui-itemselect-icon-down"></span>&nbsp;&nbsp;<span class="ui-itemselect-icon-close"></span></div></li>').data('refoption',thisJq).appendTo(selectedJq);
+					$('<li class="ui-itemselect-option ui-state-highlight"><span class="ui-itemselect-option-label">'+thisJq.text()+'</span><div class="ui-itemselect-option-action" style="display:none;"><span class="ui-itemselect-icon-up"></span>&nbsp;&nbsp;<span class="ui-itemselect-icon-down"></span>&nbsp;&nbsp;<span class="ui-itemselect-icon-close"></span></div></li>').data('refoption',thisJq).appendTo(selectedJq);
 				}else{
-					$('<li class="ui-itemselect-option ui-state-default"'+(thisJq.attr('disabled')?'style="display:none;"':'')+'>'+thisJq.text()+'<div class="ui-itemselect-option-action" style="display:none;"><span class="ui-itemselect-icon-up"></span>&nbsp;&nbsp;<span class="ui-itemselect-icon-down"></span>&nbsp;&nbsp;<span class="ui-itemselect-icon-close"></span></div></li>').data('refoption',thisJq).appendTo(unselectedJq);
+					$('<li class="ui-itemselect-option ui-state-default"'+(thisJq.attr('disabled')?'style="display:none;"':'')+'><span class="ui-itemselect-option-label">'+thisJq.text()+'</span><div class="ui-itemselect-option-action" style="display:none;"><span class="ui-itemselect-icon-up"></span>&nbsp;&nbsp;<span class="ui-itemselect-icon-down"></span>&nbsp;&nbsp;<span class="ui-itemselect-icon-close"></span></div></li>').data('refoption',thisJq).appendTo(unselectedJq);
 				}
 			});
 			//更新选中状态
@@ -294,19 +294,32 @@
 					corner:true
 				},
 				'cls':'ui-button-submit'
-			});
+			});			
 			//可拖拽排序
 			$('.ui-itemselect-options',themeJq).sortable({
 				connectWith: ".ui-itemselect-options",
 				update:function(event, ui){
 					self._itemselectTheme_sort();
 				}
-			}).disableSelection();	//使文字不被选中便于拖拽
+			}).disableSelection();	//disableSelection使文字不被选中便于拖拽
+			//可多选
 			//可选中
-			$('.ui-itemselect-option',themeJq).click(function(){
+			//$('.ui-itemselect-option',themeJq).click(function(e){
+			themeJq.on('click','.ui-itemselect-option',function(e){
+				var thisJq=$(this);
 				//同一时刻有且只有一个被选中
-				$('.ui-itemselect-option',themeJq).removeClass('ui-itemselect-option-selected');
-				$(this).addClass('ui-itemselect-option-selected');
+				//TODO:可多选
+				if (e.metaKey||e.ctrlKey){
+					if(thisJq.hasClass('ui-itemselect-option-selected')){
+						thisJq.removeClass('ui-itemselect-option-selected');
+					}else{
+						thisJq.addClass('ui-itemselect-option-selected');
+					}
+				}else{
+					$('.ui-itemselect-option',themeJq).removeClass('ui-itemselect-option-selected');
+					thisJq.addClass('ui-itemselect-option-selected');
+				}
+				
 			});
 			
 			//功能按钮事件绑定
@@ -345,14 +358,14 @@
 				selectedJq=$('.ui-itemselect-selected',themeJq);
 			//清空非disabled状态下的所有option
 			//$('option[disabled!="disabled"]',element).remove();
-			//先排未选中的再排选中的
+			//先排未选中的再排选中的，并取消选中
 			$('.ui-itemselect-option',unselectedJq).each(function(){
-				$(this).removeClass('ui-state-highlight').data('refoption').removeAttr('selected').appendTo(element);
+				$(this).removeClass('ui-state-hover ui-state-highlight ui-itemselect-option-selected').data('refoption').removeAttr('selected').appendTo(element);
 				//隐藏option actions,当option从选中区移到非选中区时action icons可能处于显示状态，需要隐藏
 				$('.ui-itemselect-option-action',this).hide();
 			});
 			$('.ui-itemselect-option',selectedJq).each(function(){
-				$(this).addClass('ui-state-highlight').data('refoption').attr('selected','selected').appendTo(element);
+				$(this).addClass('ui-state-highlight').removeClass('ui-state-hover ui-itemselect-option-selected').data('refoption').attr('selected','selected').appendTo(element);
 				//显示option actions
 				//$('.ui-itemselect-option-action',this).show();
 			});
@@ -405,24 +418,54 @@
 				var thisJq=$(this),
 					optionSelectedJq=self._itemselectTheme_getActive();
 				if(thisJq.hasClass('ui-itemselect-selected-handler')){	//移到选择区
-					if(optionSelectedJq.parent().hasClass('ui-itemselect-unselected')){	//如果option在非选择区，可以移动
-						optionSelectedJq.removeClass('ui-itemselect-option-selected').appendTo(selectedJq);
+					/*if(optionSelectedJq.parent().hasClass('ui-itemselect-unselected')){	//如果option在非选择区，可以移动
+						//optionSelectedJq.removeClass('ui-itemselect-option-selected').appendTo(selectedJq);
+						//保留selected状态
+						optionSelectedJq.appendTo(selectedJq);
 						//重排
 						self._itemselectTheme_sort();
-					}
+					}*/
+					optionSelectedJq.each(function(){
+						var optionJq=$(this);
+						if(self._itemselectTheme_placeArea(optionJq)=="unselected"){
+							//移入非选中区
+							optionJq.appendTo(selectedJq);
+						}
+					});
+					//重排
+					self._itemselectTheme_sort();
 				}
 				if(thisJq.hasClass('ui-itemselect-unselected-handler')){	//移到非选择区
-					if(optionSelectedJq.parent().hasClass('ui-itemselect-selected')){	//如果option在选择区，可以移动
-						optionSelectedJq.removeClass('ui-itemselect-option-selected').appendTo(unselectedJq);
+					/*if(optionSelectedJq.parent().hasClass('ui-itemselect-selected')){	//如果option在选择区，可以移动
+						//optionSelectedJq.removeClass('ui-itemselect-option-selected').appendTo(unselectedJq);
+						//保留selected状态
+						optionSelectedJq.appendTo(unselectedJq);
 						//重排
 						self._itemselectTheme_sort();
-					}
+					}*/
+					optionSelectedJq.each(function(){
+						var optionJq=$(this);
+						if(self._itemselectTheme_placeArea(optionJq)=="selected"){
+							//移入非选中区
+							optionJq.appendTo(unselectedJq);
+						}
+					});
+					//重排
+					self._itemselectTheme_sort();
 				}
 				return false;
 			});
 		},
 		_itemselectTheme_getActive:function(){
 			return $('.ui-itemselect-option-selected',this.themeJq);
+		},
+		_itemselectTheme_placeArea:function(optionSelector){
+			var optionJq=$(optionSelector);
+			if(optionJq.parent().hasClass('ui-itemselect-unselected')){
+				return 'unselected';
+			}else if(optionJq.parent().hasClass('ui-itemselect-selected')){
+				return 'selected';
+			}
 		},
 		/**
 		 * 调用此接口后select选中状态最终确定，再次调用reset将不会回滚
@@ -434,18 +477,133 @@
 		},
 		_itemselectTheme_reset:function(){
 			var self=this,
+				element=self.element,
 				themeJq=self.themeJq,
 				unselectedJq=$('.ui-itemselect-unselected',themeJq),
 				selectedJq=$('.ui-itemselect-selected',themeJq),
-				state=self.state;
+				state=self.state,
+				allOption=state.selected.concat(state.unselected);
+
+			//unselectedJq.empty();
+			//selectedJq.empty();
+			//element.empty();
+
 			_.each(state.selected,function(itemDom){
 				$(itemDom).appendTo(selectedJq);
 			});
 			_.each(state.unselected,function(itemDom){
 				$(itemDom).appendTo(unselectedJq);
 			});
+			/*state.selected.concat(state.unselected).each(function(){
+
+			});*/
+			$('.ui-itemselect-option',themeJq).each(function(){
+				if(_.indexOf(allOption,this)==-1){
+					$(this).data('refoption').remove();
+					$(this).remove();
+				}
+			});
 			//清除激活状态
 			$('.ui-itemselect-option-selected',themeJq).removeClass('ui-itemselect-option-selected');
+			//重排
+			self._itemselectTheme_sort();
+		},
+		_itemselectTheme_select:function(mix){
+			var self=this,
+				element=self.element,
+				themeJq=self.themeJq,
+				optionsJq=$('.ui-itemselect-option',themeJq),
+				selectedValue;
+			/*$(mix).each(function(){
+				var optionJq=$(this);
+				if(self._itemselectTheme_placeArea(optionJq)=="unselected"){
+					//移入非选中区
+					optionJq.appendTo(selectedJq);
+				}
+			});
+			//重排
+			self._itemselectTheme_sort();*/
+			optionsJq.removeClass('ui-itemselect-option-selected');
+			if(_.isNumber(mix)){	//option索引过滤
+				selectedValue=$('option',element).eq(mix).val();
+				optionsJq.each(function(){
+					var thisJq=$(this),
+						refOptionJq=thisJq.data('refoption');
+					if(refOptionJq.val()==selectedValue){
+						thisJq.addClass('ui-itemselect-option-selected');
+					}
+				});
+			}else if(_.isString(mix)){	//value过滤
+				optionsJq.each(function(){
+					var thisJq=$(this),
+						refOptionJq=thisJq.data('refoption');
+					if(refOptionJq.val()==mix){
+						thisJq.addClass('ui-itemselect-option-selected');
+					}
+				});
+			}else{
+				optionsJq.each(function(){
+					if(this===$(mix).get(0)){
+						$(this).addClass('ui-itemselect-option-selected');
+					}
+				});
+			}
+			$('.ui-itemselect-selected-handler',themeJq).click();
+		},
+		_itemselectTheme_getSelection:function(){
+			var self=this,
+				element=self.element,
+				selection=[];
+			$('option',element).each(function(){
+				var thisJq=$(this);
+				if(thisJq.attr('selected')){
+					selection.push({
+						label:thisJq.text(),
+						value:thisJq.val()
+					});
+				}
+			});
+			return selection;
+		},
+		_itemselectTheme_addItems:function(mix){
+			var self=this,
+				element=self.element,
+				themeJq=self.themeJq,
+				unselectedJq=$('.ui-itemselect-unselected',themeJq),
+				data=[],
+				htmlArr1=[],
+				htmlArr2=[];
+			if(_.isString(mix)){	//字符串
+				data[0]={
+					value:mix,
+					label:mix
+				};
+			}else if(_.isArray(mix)){	//数组
+				data=_.map(mix,function(v){
+					if(!v.hasOwnProperty('label')){
+						v.label=v.value;
+					}
+					return v;
+				});
+			}else{	//object
+				data=_.map([mix],function(v){
+					if(!v.hasOwnProperty('label')){
+						v.label=v.value;
+					}
+					return v;
+				});
+			}
+			_.each(data,function(v,i){
+				htmlArr1[i]='<option value="'+v.value+'">'+v.label+'</option>';
+				htmlArr2[i]='<li class="ui-itemselect-option ui-state-default"><span class="ui-itemselect-option-label">'+v.label+'</span><div class="ui-itemselect-option-action" style="display:none;"><span class="ui-itemselect-icon-up"></span>&nbsp;&nbsp;<span class="ui-itemselect-icon-down"></span>&nbsp;&nbsp;<span class="ui-itemselect-icon-close"></span></div></li>';
+			});
+			element.append(htmlArr1.join(''));
+			unselectedJq.append(htmlArr2.join(''));
+			//绑定refoption
+			var newOptionJq=$('option',element).slice(-(data.length));
+			$('.ui-itemselect-option',unselectedJq).slice(-(data.length)).each(function(i){
+				$(this).data('refoption',newOptionJq.eq(i));
+			});
 			//重排
 			self._itemselectTheme_sort();
 		},
@@ -456,16 +614,169 @@
 				case "combo":
 					return self._comboTheme_getSelection();
 					break;
+				case "itemselect":
+					return self._itemselectTheme_getSelection();
+					break;
 				default:
 					break;
 			}
 		},
+		_itemselectTheme_delItems:function(mix){
+			var self=this,
+				element=self.element,
+				themeJq=self.themeJq,
+				optionJq=$('.ui-itemselect-option',themeJq),
+				delArr=[],
+				data=[];
+			if(_.isString(mix)){	//字符串
+				data[0]={
+					value:mix,
+					label:mix
+				};
+			}else if(_.isArray(mix)){	//数组
+				data=_.map(mix,function(v){
+					if(!v.hasOwnProperty('label')){
+						v.label=v.value;
+					}
+					return v;
+				});
+			}else{	//object
+				data=_.map([mix],function(v){
+					if(!v.hasOwnProperty('label')){
+						v.label=v.value;
+					}
+					return v;
+				});
+			}
+			_.each(data,function(v,i){
+				optionJq.each(function(){
+					var thisJq=$(this),
+						refOptionJq=thisJq.data('refoption');
+					if(refOptionJq.val()==v.value){	
+						delArr.push(thisJq);
+					}
+				});
+			});
+			_.each(delArr,function(optionJq){
+				optionJq.data('refoption').remove();
+				optionJq.remove();
+			});
+			//重排
+			self._itemselectTheme_sort();
+		},
+		_itemselectTheme_delItemAll:function(){
+			var self=this,
+				element=self.element,
+				themeJq=self.themeJq;
+			$('.ui-itemselect-option',themeJq).each(function(i){
+				$(this).data('refoption').remove();
+				$(this).remove();
+			});
+		},
+		_itemselectTheme_setItemData:function(itemSelector,mix){
+			var self=this,
+				element=self.element,
+				themeJq=self.themeJq;
+			var data;
+			if(_.isString(mix)){	//字符串
+				data={
+					value:mix,
+					label:mix
+				};
+			}else if(_.isObject(mix)){	//对象
+				data={
+					value:mix.value,
+					label:mix.label||mix.value
+				};
+			}
+			$(itemSelector,themeJq).find('.ui-itemselect-option-label').text(data.label);
+			$(itemSelector,themeJq).data('refoption').val(data.value);
+		},
+		_itemselectTheme_getItemData:function(itemSelector){
+			var self=this,
+				element=self.element;
+			var data={};
+			data.value=$(itemSelector,element).data('refoption').val();
+			data.label=$(itemSelector,element).find('.ui-itemselect-option-label').text();
+			return data;
+		},
+		itemselectTheme_getHLItem:function(){
+			var self=this,
+				element=self.element,
+				themeJq=self.themeJq;
+			return $('.ui-itemselect-option-selected',themeJq);
+		},
+		getSelection:function(){
+			var self=this,
+				themeType=self.themeType;
+			switch(themeType){
+				case "combo":
+					return self._comboTheme_getSelection();
+					break;
+				case "itemselect":
+					return self._itemselectTheme_getSelection();
+					break;
+				default:
+					break;
+			}
+		},
+		/**
+		 * 添加到未选中行列
+		 * @param {[type]} mix [description]
+		 */
 		addItems:function(mix){
 			var self=this,
 				themeType=self.themeType;
 			switch(themeType){
 				case "combo":
 					self._comboTheme_addItems(mix);
+					break;
+				case "itemselect":
+					self._itemselectTheme_addItems(mix);
+					break;
+				default:
+					break;
+			}
+		},
+		delItems:function(mix){
+			var self=this,
+				themeType=self.themeType;
+			switch(themeType){
+				case "itemselect":
+					self._itemselectTheme_delItems(mix);
+					break;
+				default:
+					break;
+			}
+		},
+		delItemAll:function(){
+			var self=this,
+				themeType=self.themeType;
+			switch(themeType){
+				case "itemselect":
+					self._itemselectTheme_delItemAll();
+					break;
+				default:
+					break;
+			}
+		},
+		setItemData:function(itemSelector,mix){
+			var self=this,
+				themeType=self.themeType;
+			switch(themeType){
+				case "itemselect":
+					self._itemselectTheme_setItemData(itemSelector,mix);
+					break;
+				default:
+					break;
+			}
+		},
+		getItemData:function(itemSelector){
+			var self=this,
+				themeType=self.themeType;
+			switch(themeType){
+				case "itemselect":
+					self._itemselectTheme_getItemData(itemSelector);
 					break;
 				default:
 					break;
@@ -477,6 +788,9 @@
 			switch(themeType){
 				case "combo":
 					self._comboTheme_select(mix);
+					break;
+				case "itemselect":
+					self._itemselectTheme_select(mix);
 					break;
 				default:
 					break;
