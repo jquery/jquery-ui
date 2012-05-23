@@ -52,7 +52,9 @@ $.widget( "ui.tabs", {
 
 		this.running = false;
 
-		this.element.addClass( "ui-tabs ui-widget ui-widget-content ui-corner-all" );
+		this.element
+			.addClass( "ui-tabs ui-widget ui-widget-content ui-corner-all" )
+			.toggleClass( "ui-tabs-collapsible", options.collapsible );
 
 		this._processTabs();
 
@@ -102,21 +104,17 @@ $.widget( "ui.tabs", {
 			) ).sort();
 		}
 
-		this._refresh();
-
-		// highlight selected tab
-		this.panels.hide();
-		this.lis.removeClass( "ui-tabs-active ui-state-active" );
 		// check for length avoids error when initializing empty list
-		if ( options.active !== false && this.anchors.length ) {
-			this.active = this._findActive( options.active );
-			panel = this._getPanelForTab( this.active );
-
-			panel.show();
-			this.lis.eq( options.active ).addClass( "ui-tabs-active ui-state-active" );
-			this.load( options.active );
+		if ( this.options.active !== false && this.anchors.length ) {
+			this.active = this._findActive( this.options.active );
 		} else {
 			this.active = $();
+		}
+
+		this._refresh();
+
+		if ( this.active.length ) {
+			this.load( options.active );
 		}
 	},
 
@@ -125,6 +123,71 @@ $.widget( "ui.tabs", {
 			tab: this.active,
 			panel: !this.active.length ? $() : this._getPanelForTab( this.active )
 		};
+	},
+
+	_tabKeydown: function( event ) {
+		var focusedTab = $( this.document[0].activeElement ).closest( "li" ),
+			selectedIndex = this.lis.index( focusedTab ),
+			goingForward = true,
+			lastTabIndex = this.anchors.length - 1;
+
+		function normalizeIndex( index ) {
+			if ( index > lastTabIndex ) {
+				index = 0;
+			}
+			if ( index < 0 ) {
+				index = lastTabIndex;
+			}
+			return index;
+		}
+
+		switch ( event.keyCode ) {
+			case $.ui.keyCode.RIGHT:
+			case $.ui.keyCode.DOWN:
+				selectedIndex++;
+				break;
+			case $.ui.keyCode.UP:
+			case $.ui.keyCode.LEFT:
+				goingForward = false;
+				selectedIndex--;
+				break;
+			case $.ui.keyCode.END:
+				selectedIndex = lastTabIndex;
+				break;
+			case $.ui.keyCode.HOME:
+				selectedIndex = 0;
+				break;
+			case $.ui.keyCode.SPACE:
+			case $.ui.keyCode.ENTER:
+				event.preventDefault();
+				clearTimeout( this.activating );
+				// TODO: should keyboard collapse content?
+				this.option( "active", selectedIndex );
+				return;
+			default:
+				return;
+		}
+
+		event.preventDefault();
+
+		while ( $.inArray( selectedIndex, this.options.disabled ) !== -1 ) {
+			selectedIndex = goingForward ? selectedIndex + 1 : selectedIndex - 1;
+			selectedIndex = normalizeIndex( selectedIndex );
+		}
+
+		this.lis.eq( selectedIndex ).focus();
+		clearTimeout( this.activating );
+		this.activating = this._delay(function() {
+			this.option( "active", selectedIndex );
+		// TODO: what should this delay be?
+		}, 500 );
+	},
+
+	_panelKeydown: function( event ) {
+		if ( event.keyCode === $.ui.keyCode.UP && event.ctrlKey ) {
+			event.preventDefault();
+			this.active.focus();
+		}
 	},
 
 	_setOption: function( key, value ) {
@@ -142,9 +205,12 @@ $.widget( "ui.tabs", {
 
 		this._super( key, value);
 
-		// setting collapsible: false while collapsed; open first panel
-		if ( key === "collapsible" && !value && this.options.active === false ) {
-			this._activate( 0 );
+		if ( key === "collapsible" ) {
+			this.element.toggleClass( "ui-tabs-collapsible", value );
+			// setting collapsible: false while collapsed; open first panel
+			if ( !value && this.options.active === false ) {
+				this._activate( 0 );
+			}
 		}
 
 		if ( key === "event" ) {
@@ -172,8 +238,6 @@ $.widget( "ui.tabs", {
 		});
 
 		this._processTabs();
-		this._refresh();
-		this.panels.not( this._getPanelForTab( this.active ) ).hide();
 
 		// was collapsed or no tabs
 		if ( options.active === false || !this.anchors.length ) {
@@ -189,34 +253,67 @@ $.widget( "ui.tabs", {
 			// make sure active index is correct
 			options.active = this.lis.index( this.active );
 		}
+
+		this._refresh();
 	},
 
 	_refresh: function() {
-		var options = this.options;
+		this._setupDisabled( this.options.disabled );
+		this._setupEvents( this.options.event );
 
-		this.element.toggleClass( "ui-tabs-collapsible", options.collapsible );
-		this.list.addClass( "ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all" );
-		this.lis.addClass( "ui-state-default ui-corner-top" );
-		this.anchors.addClass( "ui-tabs-anchor" );
-		this.panels.addClass( "ui-tabs-panel ui-widget-content ui-corner-bottom" );
+		this.lis.not( this.active ).attr({
+			"aria-selected": "false",
+			tabIndex: -1
+		});
+		this.panels.not( this._getPanelForTab( this.active ) )
+			.hide()
+			.attr({
+				"aria-expanded": "false",
+				"aria-hidden": "true"
+			});
 
-		this._setupDisabled( options.disabled );
-		this._setupEvents( options.event );
-
-		// remove all handlers, may run on existing tabs
-		this.lis.unbind( ".tabs" );
-		this._focusable( this.lis );
-		this._hoverable( this.lis );
+		// make sure one tab is in the tab order
+		if ( !this.active.length ) {
+			this.lis.eq( 0 ).attr( "tabIndex", 0 );
+		} else {
+			this.active
+				.addClass( "ui-tabs-active ui-state-active" )
+				.attr({
+					"aria-selected": "true",
+					tabIndex: 0
+				});
+			this._getPanelForTab( this.active )
+				.show()
+				.attr({
+					"aria-expanded": "true",
+					"aria-hidden": "false"
+				});
+		}
 	},
 
 	_processTabs: function() {
 		var that = this;
 
-		this.list = this._getList();
-		this.lis = this.list.find( "> li:has(a[href])" );
+		this.list = this._getList()
+			.addClass( "ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all" )
+			.attr( "role", "tablist" );
+
+		this.lis = this.list.find( "> li:has(a[href])" )
+			.addClass( "ui-state-default ui-corner-top" )
+			.attr({
+				role: "tab",
+				tabIndex: -1
+			});
+
 		this.anchors = this.lis.map(function() {
-			return $( "a", this )[ 0 ];
-		});
+				return $( "a", this )[ 0 ];
+			})
+			.addClass( "ui-tabs-anchor" )
+			.attr({
+				role: "presentation",
+				tabIndex: -1
+			});
+
 		this.panels = $();
 
 		this.anchors.each(function( i, a ) {
@@ -236,6 +333,7 @@ $.widget( "ui.tabs", {
 					panel = that._createPanel( id );
 					panel.insertAfter( that.panels[ i - 1 ] || that.list );
 				}
+				panel.attr( "aria-live", "polite" );
 			}
 
 			if ( panel.length) {
@@ -243,6 +341,10 @@ $.widget( "ui.tabs", {
 			}
 			tab.attr( "aria-controls", selector.substring( 1 ) );
 		});
+
+		this.panels
+			.addClass( "ui-tabs-panel ui-widget-content ui-corner-bottom" )
+			.attr( "role", "tabpanel" );
 	},
 
 	// allow overriding how to find the list for rare usage scenarios (#7715)
@@ -286,8 +388,14 @@ $.widget( "ui.tabs", {
 				events[ eventName ] = "_eventHandler";
 			});
 		}
-		this.anchors.unbind( ".tabs" );
+
+		this.anchors.add( this.lis ).add( this.panels ).unbind( ".tabs" );
 		this._bind( this.anchors, events );
+		this._bind( this.lis, { keydown: "_tabKeydown" } );
+		this._bind( this.panels, { keydown: "_panelKeydown" } );
+
+		this._focusable( this.lis );
+		this._hoverable( this.lis );
 	},
 
 	_eventHandler: function( event ) {
@@ -373,6 +481,32 @@ $.widget( "ui.tabs", {
 			toHide.hide();
 			show();
 		}
+
+		toHide.attr({
+			"aria-expanded": "false",
+			"aria-hidden": "true"
+		});
+		eventData.oldTab.attr( "aria-selected", "false" );
+		// if we're switching tabs, remove the old tab from the tab order
+		// if we're opening from collapsed state, remove the previous tab from the tab order
+		// if we're collapsing, then keep the collapsing tab in the tab order
+		if ( toShow.length && toHide.length ) {
+			eventData.oldTab.attr( "tabIndex", -1 );
+		} else if ( toShow.length ) {
+			this.lis.filter(function() {
+				return $( this ).attr( "tabIndex" ) === 0;
+			})
+			.attr( "tabIndex", -1 );
+		}
+
+		toShow.attr({
+			"aria-expanded": "true",
+			"aria-hidden": "false"
+		});
+		eventData.newTab.attr({
+			"aria-selected": "true",
+			tabIndex: 0
+		});
 	},
 
 	_activate: function( index ) {
@@ -423,10 +557,14 @@ $.widget( "ui.tabs", {
 
 		this.element.removeClass( "ui-tabs ui-widget ui-widget-content ui-corner-all ui-tabs-collapsible" );
 
-		this.list.removeClass( "ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all" );
+		this.list
+			.removeClass( "ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all" )
+			.removeAttr( "role" );
 
 		this.anchors
 			.removeClass( "ui-tabs-anchor" )
+			.removeAttr( "role" )
+			.removeAttr( "tabIndex" )
 			.unbind( ".tabs" )
 			.removeData( "href.tabs" )
 			.removeData( "load.tabs" );
@@ -435,20 +573,22 @@ $.widget( "ui.tabs", {
 			if ( $.data( this, "ui-tabs-destroy" ) ) {
 				$( this ).remove();
 			} else {
-				$( this ).removeClass([
-					"ui-state-default",
-					"ui-corner-top",
-					"ui-tabs-active",
-					"ui-state-active",
-					"ui-state-disabled",
-					"ui-tabs-panel",
-					"ui-widget-content",
-					"ui-corner-bottom"
-				].join( " " ) );
+				$( this )
+					.removeClass([
+						"ui-state-default",
+						"ui-corner-top",
+						"ui-tabs-active",
+						"ui-state-active",
+						"ui-state-disabled",
+						"ui-tabs-panel",
+						"ui-widget-content",
+						"ui-corner-bottom"
+					].join( " " ) )
+					.removeAttr( "tabIndex" )
+					.removeAttr( "aria-live" )
+					.removeAttr( "aria-busy" );
 			}
 		});
-
-		return this;
 	},
 
 	enable: function( index ) {
@@ -525,6 +665,7 @@ $.widget( "ui.tabs", {
 		// but as of 1.8, $.ajax() always returns a jqXHR object.
 		if ( this.xhr && this.xhr.statusText !== "canceled" ) {
 			tab.addClass( "ui-tabs-loading" );
+			panel.attr( "aria-busy", "true" );
 
 			this.xhr
 				.success(function( response ) {
@@ -544,6 +685,7 @@ $.widget( "ui.tabs", {
 						}
 
 						tab.removeClass( "ui-tabs-loading" );
+						panel.removeAttr( "aria-busy" );
 
 						if ( jqXHR === that.xhr ) {
 							delete that.xhr;
