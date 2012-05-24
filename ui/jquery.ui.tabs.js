@@ -34,6 +34,7 @@ $.widget( "ui.tabs", {
 		active: null,
 		collapsible: false,
 		event: "click",
+		heightStyle: "content",
 		hide: null,
 		show: null,
 
@@ -102,6 +103,7 @@ $.widget( "ui.tabs", {
 			) ).sort();
 		}
 
+		this.originalHeight = this.element[0].style.height;
 		this._refresh();
 
 		// highlight selected tab
@@ -150,6 +152,10 @@ $.widget( "ui.tabs", {
 		if ( key === "event" ) {
 			this._setupEvents( value );
 		}
+
+		if ( key === "heightStyle" ) {
+			this._refresh();
+		}
 	},
 
 	_tabId: function( tab ) {
@@ -192,7 +198,27 @@ $.widget( "ui.tabs", {
 	},
 
 	_refresh: function() {
-		var options = this.options;
+		var options = this.options,
+			heightStyle = options.heightStyle,
+			parent = this.element.parent(),
+			maxHeight,
+			overflow;
+
+		this.element.css( "height", this.originalHeight );
+
+		if ( heightStyle === "fill" ) {
+			// TODO: Needs implementation
+		} else if ( heightStyle === "auto" ) {
+			maxHeight = 0;
+      this.panels.each(function() {
+					maxHeight = Math.max( maxHeight, $( this ).height( "" ).height() );
+				})
+				.height( maxHeight );
+		}
+
+		if ( heightStyle !== "content" ) {
+			this.element.height( this.element.height() );
+		}
 
 		this.element.toggleClass( "ui-tabs-collapsible", options.collapsible );
 		this.list.addClass( "ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all" );
@@ -447,6 +473,11 @@ $.widget( "ui.tabs", {
 				].join( " " ) );
 			}
 		});
+
+		if ( this.options.heightStyle !== "content" ) {
+			this.element.css( "height", this.originalHeight );
+			this.panels.css( "height", "" );
+		}
 
 		return this;
 	},
