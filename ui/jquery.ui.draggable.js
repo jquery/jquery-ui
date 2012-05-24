@@ -55,17 +55,9 @@ $.widget("ui.draggable", $.ui.mouse, {
 
 	},
 
-	destroy: function() {
-		if(!this.element.data('draggable')) return;
-		this.element
-			.removeData("draggable")
-			.unbind(".draggable")
-			.removeClass("ui-draggable"
-				+ " ui-draggable-dragging"
-				+ " ui-draggable-disabled");
+	_destroy: function() {
+		this.element.removeClass( "ui-draggable ui-draggable-dragging ui-draggable-disabled" );
 		this._mouseDestroy();
-
-		return this;
 	},
 
 	_mouseCapture: function(event) {
