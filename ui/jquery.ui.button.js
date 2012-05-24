@@ -73,7 +73,7 @@ $.widget( "ui.button", {
 			focusClass = "ui-state-focus";
 
 		if ( options.label === null ) {
-			options.label = this.buttonElement.html();
+			options.label = (this.type === "input" ? this.buttonElement.val() : this.buttonElement.html());
 		}
 
 		this.buttonElement
@@ -214,9 +214,9 @@ $.widget( "ui.button", {
 	_determineButtonType: function() {
 		var ancestor, labelSelector, checked;
 
-		if ( this.element.is(":checkbox") ) {
+		if ( this.element.is("[type=checkbox]") ) {
 			this.type = "checkbox";
-		} else if ( this.element.is(":radio") ) {
+		} else if ( this.element.is("[type=radio]") ) {
 			this.type = "radio";
 		} else if ( this.element.is("input") ) {
 			this.type = "input";
@@ -354,11 +354,10 @@ $.widget( "ui.button", {
 	}
 });
 
-$.ui.button.version = "@VERSION";
-
 $.widget( "ui.buttonset", {
+	version: "@VERSION",
 	options: {
-		items: ":button, :submit, :reset, :checkbox, :radio, a, :data(button)"
+		items: "button, input[type=button], input[type=submit], input[type=reset], input[type=checkbox], input[type=radio], a, :data(button)"
 	},
 
 	_create: function() {

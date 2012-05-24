@@ -97,7 +97,7 @@ test( "refresh", function() {
 	element.tabs( "refresh" );
 	state( element, 1, 0, 0, 0 );
 	disabled( element, [ 1 ] );
-	equal( element.find( "#" + $( "#newTab a" ).attr( "aria-controls" ) ).length, 1,
+	equal( element.find( "#" + $( "#newTab" ).attr( "aria-controls" ) ).length, 1,
 		"panel added for remote tab" );
 
 	// remove all tabs
@@ -156,7 +156,7 @@ asyncTest( "load", function() {
 	// load content of inactive tab
 	// useful for preloading content with custom caching
 	element.one( "tabsbeforeload", function( event, ui ) {
-		var tab = element.find( ".ui-tabs-nav a" ).eq( 3 ),
+		var tab = element.find( ".ui-tabs-nav li" ).eq( 3 ),
 			panelId = tab.attr( "aria-controls" ),
 			panel = $( "#" + panelId );
 
@@ -171,13 +171,17 @@ asyncTest( "load", function() {
 		// TODO: remove wrapping in 2.0
 		var uiTab = $( ui.tab ),
 			uiPanel = $( ui.panel ),
-			tab = element.find( ".ui-tabs-nav a" ).eq( 3 ),
+			tab = element.find( ".ui-tabs-nav li" ).eq( 3 ),
 			panelId = tab.attr( "aria-controls" ),
 			panel = $( "#" + panelId );
 
 		ok( !( "originalEvent" in event ), "originalEvent" );
 		equal( uiTab.length, 1, "tab length" );
-		strictEqual( uiTab[ 0 ], tab[ 0 ], "tab" );
+		if ( $.uiBackCompat === false ) {
+			strictEqual( uiTab[ 0 ], tab[ 0 ], "tab" );
+		} else {
+			strictEqual( uiTab[ 0 ], tab.find( ".ui-tabs-anchor" )[ 0 ], "tab" );
+		}
 		equal( uiPanel.length, 1, "panel length" );
 		strictEqual( uiPanel[ 0 ], panel[ 0 ], "panel" );
 		equal( uiPanel.find( "p" ).length, 1, "panel html" );
@@ -203,7 +207,7 @@ asyncTest( "load", function() {
 	function tabsload2() {
 		// reload content of active tab
 		element.one( "tabsbeforeload", function( event, ui ) {
-			var tab = element.find( ".ui-tabs-nav a" ).eq( 3 ),
+			var tab = element.find( ".ui-tabs-nav li" ).eq( 3 ),
 				panelId = tab.attr( "aria-controls" ),
 				panel = $( "#" + panelId );
 
@@ -218,13 +222,17 @@ asyncTest( "load", function() {
 			// TODO: remove wrapping in 2.0
 			var uiTab = $( ui.tab ),
 				uiPanel = $( ui.panel ),
-				tab = element.find( ".ui-tabs-nav a" ).eq( 3 ),
+				tab = element.find( ".ui-tabs-nav li" ).eq( 3 ),
 				panelId = tab.attr( "aria-controls" ),
 				panel = $( "#" + panelId );
 
 			ok( !( "originalEvent" in event ), "originalEvent" );
 			equal( uiTab.length, 1, "tab length" );
-			strictEqual( uiTab[ 0 ], tab[ 0 ], "tab" );
+			if ( $.uiBackCompat === false ) {
+				strictEqual( uiTab[ 0 ], tab[ 0 ], "tab" );
+			} else {
+				strictEqual( uiTab[ 0 ], tab.find( ".ui-tabs-anchor" )[ 0 ], "tab" );
+			}
 			equal( uiPanel.length, 1, "panel length" );
 			strictEqual( uiPanel[ 0 ], panel[ 0 ], "panel" );
 			state( element, 0, 0, 0, 1, 0 );

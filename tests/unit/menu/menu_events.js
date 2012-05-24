@@ -41,49 +41,62 @@ test("handle click on custom item menu", function() {
 	equal( $("#log").html(), "1,3,2,afterclick,1,click,", "Click order not valid.");
 });
 
-/*	Commenting out these tests until a way to handle the extra focus and blur events
-	fired by IE is found
-test( "handle blur: click", function() {
-	expect( 4 );
-	var $menu = $( "#menu1" ).menu({
-		focus: function( event, ui ) {
-			equal( event.originalEvent.type, "click", "focus triggered 'click'" );
-			equal( event.type, "menufocus", "focus event.type is 'menufocus'" );
+asyncTest( "handle blur", function() {
+	expect( 1 );
+	var blurHandled = false,
+		$menu = $( "#menu1" ).menu({
+			blur: function( event, ui ) {
+				// Ignore duplicate blur event fired by IE
+				if ( !blurHandled ) {
+					blurHandled = true;
+					equal( event.type, "menublur", "blur event.type is 'menublur'" );
+				}
+			}
+		});
 
-		},
-		blur: function( event, ui ) {
-			equal( event.originalEvent.type, "click", "blur triggered 'click'" );
-			equal( event.type, "menublur", "blur event.type is 'menublur'" );
+	click( $menu, "1" );
+	setTimeout( function() {
+		$menu.blur();
+		start();
+	}, 350);
+});
+
+asyncTest( "handle blur on click", function() {
+	expect( 1 );
+	var blurHandled = false,
+		$menu = $( "#menu1" ).menu({
+			blur: function( event, ui ) {
+				// Ignore duplicate blur event fired by IE
+				if ( !blurHandled ) {
+					blurHandled = true;
+					equal( event.type, "menublur", "blur event.type is 'menublur'" );
+				}
+			}
+		});
+
+	click( $menu, "1" );
+	setTimeout( function() {
+		$( "<a>", { id: "remove"} ).appendTo("body").trigger( "click" );
+		$("#remove").remove();
+		start();
+	}, 350);
+});
+
+test( "handle focus of menu with active item", function() {
+	expect( 1 );
+	var element = $( "#menu1" ).menu({
+		focus: function( event, ui ) {
+			log( $( event.target ).find( ".ui-state-focus" ).parent().index() );
 		}
 	});
 
-	$menu.find( "li a:first" ).trigger( "click" );
-	$( "<a>", { id: "remove"} ).appendTo("body").trigger( "click" );
-
-	$("#remove").remove();
+	log( "focus", true );
+	element.focus();
+	element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
+	element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
+	element.focus();
+	equal( $("#log").html(), "2,2,1,0,focus,", "current active item remains active");
 });
-
-test( "handle blur on custom item menu: click", function() {
-	expect( 4 );
-	var $menu = $( "#menu5" ).menu({
-		focus: function( event, ui ) {
-			equal( event.originalEvent.type, "click", "focus triggered 'click'" );
-			equal( event.type, "menufocus", "focus event.type is 'menufocus'" );
-
-		},
-		blur: function( event, ui ) {
-			equal( event.originalEvent.type, "click", "blur triggered 'click'" );
-			equal( event.type, "menublur", "blur event.type is 'menublur'" );
-		},
-		items: "div"
-	});
-
-	click($('#menu5'),"1");
-	$( "<a>", { id: "remove"} ).appendTo("body").trigger( "click" );
-
-	$("#remove").remove();
-});
-*/
 
 asyncTest( "handle submenu auto collapse: mouseleave", function() {
 	expect( 4 );
@@ -208,7 +221,7 @@ test("handle keyboard navigation on menu without scroll and without submenus", f
 });
 
 asyncTest("handle keyboard navigation on menu without scroll and with submenus", function() {
-	expect(14);
+	expect(16);
 	var element = $('#menu2').menu({
 		select: function(event, ui) {
 			log($(ui.item[0]).text());
@@ -290,11 +303,23 @@ asyncTest("handle keyboard navigation on menu without scroll and with submenus",
 		equal( $("#log").html(), "4,keydown,", "Keydown ESCAPE (close submenu)");
 
 		log("keydown",true);
-		element.simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
+		element.simulate( "keydown", { keyCode: $.ui.keyCode.SPACE } );
 		setTimeout( menukeyboard4, 50 );
 	}
 
 	function menukeyboard4() {
+		equal( $("#log").html(), "0,keydown,", "Keydown SPACE (open submenu)");
+
+		log("keydown",true);
+		element.simulate( "keydown", { keyCode: $.ui.keyCode.ESCAPE } );
+		equal( $("#log").html(), "4,keydown,", "Keydown ESCAPE (close submenu)");
+
+		log("keydown",true);
+		element.simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
+		setTimeout( menukeyboard5, 50 );
+	}
+
+	function menukeyboard5() {
 		equal( $("#log").html(), "0,keydown,", "Keydown ENTER (open submenu)");
 
 		log("keydown",true);
@@ -522,6 +547,44 @@ asyncTest("handle keyboard navigation and mouse click on menu with disabled item
 			}, 50);
 		}, 50);
 	}
+});
+
+test("handle keyboard navigation with spelling of menu items", function() {
+	expect( 2 );
+	var element = $( "#menu2" ).menu({
+		focus: function( event, ui ) {
+			log( $( event.target ).find( ".ui-state-focus" ).parent().index() );
+		}
+	});
+
+	log( "keydown", true );
+	element.one( "menufocus", function( event, ui ) {
+		element.simulate( "keydown", { keyCode: 65 } );
+		element.simulate( "keydown", { keyCode: 68 } );
+		element.simulate( "keydown", { keyCode: 68 } );
+		equal( $("#log").html(), "3,1,0,keydown,", "Keydown focus Addyston by spelling the first 3 letters");
+		element.simulate( "keydown", { keyCode: 68 } );
+		equal( $("#log").html(), "4,3,1,0,keydown,", "Keydown focus Delphi by repeating the 'd' again");
+	});
+	element.focus();
+});
+
+asyncTest("handle page up and page down before the menu has focus", function() {
+	expect( 1 );
+	var element = $( "#menu1" ).menu({
+		focus: function( event, ui ) {
+			log( $( event.target ).find( ".ui-state-focus" ).parent().index() );
+		}
+	});
+
+	log( "keydown", true );
+	element.simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_DOWN } );
+	element.blur();
+	setTimeout( function() {
+		element.simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_UP } );
+		equal( $("#log").html(), "0,0,keydown,", "Page Up and Page Down bring initial focus to first item");
+		start();
+	}, 500);
 });
 
 })(jQuery);

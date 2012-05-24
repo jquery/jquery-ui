@@ -7,9 +7,11 @@ TestHelpers.commonWidgetTests( "tabs", {
 		cookie: null,
 		disabled: false,
 		event: "click",
+		hide: null,
 		fx: null,
 		idPrefix: "ui-tabs-",
 		panelTemplate: "<div></div>",
+		// show: null, // conflicts with old show callback
 		spinner: "<em>Loading&#8230;</em>",
 		tabTemplate: "<li><a href='#{href}'><span>#{label}</span></a></li>",
 

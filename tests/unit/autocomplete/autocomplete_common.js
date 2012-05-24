@@ -4,6 +4,10 @@ TestHelpers.commonWidgetTests( "autocomplete", {
 		autoFocus: false,
 		delay: 300,
 		disabled: false,
+		messages: {
+			noResults: "No search results.",
+			results: $.ui.autocomplete.prototype.options.messages.results
+		},
 		minLength: 1,
 		position: {
 			my: "left top",

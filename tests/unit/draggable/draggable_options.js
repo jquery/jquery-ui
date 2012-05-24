@@ -106,15 +106,15 @@ test("{ axis: ? }, unexpected", function() {
 	});
 });
 
-test("{ cancel: ':input,option' }, default", function() {
+test("{ cancel: 'input,textarea,button,select,option' }, default", function() {
 	$('<div id="draggable-option-cancel-default"><input type="text"></div>').appendTo('#main');
 
-	el = $("#draggable-option-cancel-default").draggable({ cancel: ":input,option" });
+	el = $("#draggable-option-cancel-default").draggable({ cancel: "input,textarea,button,select,option" });
 	drag("#draggable-option-cancel-default", 50, 50);
 	moved(50, 50);
 
-	el = $("#draggable-option-cancel-default").draggable({ cancel: ":input,option" });
-	drag("#draggable-option-cancel-default :input", 50, 50);
+	el = $("#draggable-option-cancel-default").draggable({ cancel: "input,textarea,button,select,option" });
+	drag("#draggable-option-cancel-default input", 50, 50);
 	moved(0, 0);
 
 	el.draggable("destroy");

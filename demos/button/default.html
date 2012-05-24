@@ -11,7 +11,7 @@
 	<link rel="stylesheet" href="../demos.css">
 	<script>
 	$(function() {
-		$( "input:submit, a, button", ".demo" ).button();
+		$( "input[type=submit], a, button", ".demo" ).button();
 		$( "a", ".demo" ).click(function() { return false; });
 	});
 	</script>
@@ -22,7 +22,7 @@
 
 <button>A button element</button>
 
-<input type="submit" value="A submit button"/>
+<input type="submit" value="A submit button">
 
 <a href="#">An anchor</a>
 

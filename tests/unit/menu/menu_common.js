@@ -6,6 +6,7 @@ TestHelpers.commonWidgetTests( "menu", {
 			my: "left top",
 			at: "right top"
 		},
+		role: "menu",
 
 		// callbacks
 		blur: null,

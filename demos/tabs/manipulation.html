@@ -76,8 +76,8 @@
 
 		// close icon: removing the tab on click
 		$( "#tabs span.ui-icon-close" ).live( "click", function() {
-			$( this ).closest( "li" ).remove();
-			$( "#" + $( this ).prev().attr( "aria-controls" ) ).remove();
+			var panelId = $( this ).closest( "li" ).remove().attr( "aria-controls" );
+			$( "#" + panelId ).remove();
 			tabs.tabs( "refresh" );
 		});
 	});

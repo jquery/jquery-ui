@@ -26,6 +26,7 @@ $.widget( "ui.menu", {
 			my: "left top",
 			at: "right top"
 		},
+		role: "menu",
 
 		// callbacks
 		blur: null,
@@ -42,7 +43,7 @@ $.widget( "ui.menu", {
 			.addClass( "ui-menu ui-widget ui-widget-content ui-corner-all" )
 			.attr({
 				id: this.menuId,
-				role: "menu",
+				role: this.options.role,
 				tabIndex: 0
 			})
 			// need to catch all clicks on disabled menu
@@ -201,13 +202,11 @@ $.widget( "ui.menu", {
 			event.preventDefault();
 			break;
 		case $.ui.keyCode.ENTER:
-			if ( !this.active.is( ".ui-state-disabled" ) ) {
-				if ( this.active.children( "a[aria-haspopup='true']" ).length ) {
-					this.expand( event );
-				} else {
-					this.select( event );
-				}
-			}
+			this._activate( event );
+			event.preventDefault();
+			break;
+		case $.ui.keyCode.SPACE:
+			this._activate( event );
 			event.preventDefault();
 			break;
 		case $.ui.keyCode.ESCAPE:
@@ -259,6 +258,16 @@ $.widget( "ui.menu", {
 		}
 	},
 
+	_activate: function( event ) {
+		if ( !this.active.is( ".ui-state-disabled" ) ) {
+			if ( this.active.children( "a[aria-haspopup='true']" ).length ) {
+				this.expand( event );
+			} else {
+				this.select( event );
+			}
+		}
+	},
+
 	refresh: function() {
 		// initialize nested menus
 		var menus,
@@ -267,7 +276,7 @@ $.widget( "ui.menu", {
 				.addClass( "ui-menu ui-widget ui-widget-content ui-corner-all" )
 				.hide()
 				.attr({
-					role: "menu",
+					role: this.options.role,
 					"aria-hidden": "true",
 					"aria-expanded": "false"
 				});
@@ -281,7 +290,7 @@ $.widget( "ui.menu", {
 			.children( "a" )
 				.addClass( "ui-corner-all" )
 				.attr( "tabIndex", -1 )
-				.attr( "role", "menuitem" )
+				.attr( "role", this._itemRole() )
 				.attr( "id", function( i ) {
 					return menuId + "-" + i;
 				});
@@ -302,30 +311,26 @@ $.widget( "ui.menu", {
 		});
 	},
 
+	_itemRole: function() {
+		return {
+			menu: "menuitem",
+			listbox: "option"
+		}[ this.options.role ];
+	},
+
 	focus: function( event, item ) {
-		var nested, borderTop, paddingTop, offset, scroll, elementHeight, itemHeight;
+		var nested, focused;
 		this.blur( event, event && event.type === "focus" );
 
-		if ( this._hasScroll() ) {
-			borderTop = parseFloat( $.css( this.activeMenu[0], "borderTopWidth" ) ) || 0;
-			paddingTop = parseFloat( $.css( this.activeMenu[0], "paddingTop" ) ) || 0;
-			offset = item.offset().top - this.activeMenu.offset().top - borderTop - paddingTop;
-			scroll = this.activeMenu.scrollTop();
-			elementHeight = this.activeMenu.height();
-			itemHeight = item.height();
-
-			if ( offset < 0 ) {
-				this.activeMenu.scrollTop( scroll + offset );
-			} else if ( offset + itemHeight > elementHeight ) {
-				this.activeMenu.scrollTop( scroll + offset - elementHeight + itemHeight );
-			}
-		}
+		this._scrollIntoView( item );
 
 		this.active = item.first();
-		this.element.attr( "aria-activedescendant",
-			this.active.children( "a" )
-				.addClass( "ui-state-focus" )
-				.attr( "id" ) );
+		focused = this.active.children( "a" ).addClass( "ui-state-focus" );
+		// only update aria-activedescendant if there's a role
+		// otherwise we assume focus is managed elsewhere
+		if ( this.options.role ) {
+			this.element.attr( "aria-activedescendant", focused.attr( "id" ) );
+		}
 
 		// highlight active parent menu item, if any
 		this.active.parent().closest( ".ui-menu-item" ).children( "a:first" ).addClass( "ui-state-active" );
@@ -345,6 +350,24 @@ $.widget( "ui.menu", {
 		this.activeMenu = item.parent();
 
 		this._trigger( "focus", event, { item: item } );
+	},
+
+	_scrollIntoView: function( item ) {
+		var borderTop, paddingTop, offset, scroll, elementHeight, itemHeight;
+		if ( this._hasScroll() ) {
+			borderTop = parseFloat( $.css( this.activeMenu[0], "borderTopWidth" ) ) || 0;
+			paddingTop = parseFloat( $.css( this.activeMenu[0], "paddingTop" ) ) || 0;
+			offset = item.offset().top - this.activeMenu.offset().top - borderTop - paddingTop;
+			scroll = this.activeMenu.scrollTop();
+			elementHeight = this.activeMenu.height();
+			itemHeight = item.height();
+
+			if ( offset < 0 ) {
+				this.activeMenu.scrollTop( scroll + offset );
+			} else if ( offset + itemHeight > elementHeight ) {
+				this.activeMenu.scrollTop( scroll + offset - elementHeight + itemHeight );
+			}
+		}
 	},
 
 	blur: function( event, fromFocus ) {
@@ -385,8 +408,8 @@ $.widget( "ui.menu", {
 
 		var position = $.extend( {}, {
 				of: this.active
-			}, $.type(this.options.position) === "function" ?
-				this.options.position(this.active) :
+			}, $.type( this.options.position ) === "function" ?
+				this.options.position( this.active ) :
 				this.options.position
 			);
 

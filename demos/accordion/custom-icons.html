@@ -19,10 +19,12 @@
 		$( "#accordion" ).accordion({
 			icons: icons
 		});
-		$( "#toggle" ).button().toggle(function() {
-			$( "#accordion" ).accordion( "option", "icons", null );
-		}, function() {
-			$( "#accordion" ).accordion( "option", "icons", icons );
+		$( "#toggle" ).button().click(function() {
+			if ( $( "#accordion" ).accordion( "option", "icons" ) ) {
+				$( "#accordion" ).accordion( "option", "icons", null );
+			} else {
+				$( "#accordion" ).accordion( "option", "icons", icons );
+			}
 		});
 	});
 	</script>

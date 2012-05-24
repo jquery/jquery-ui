@@ -1,13 +1,9 @@
-
-body,html {
-	margin: 0;
+body {
+	margin: 1em;
 	padding: 0;
-	font-size: 12px;
-	font-family: Arial;
 	background: #191919;
 	color: #fff;
 }
-body { margin: 1em; }
 
 ul.effects {
 	list-style-type: none;
@@ -16,8 +12,6 @@ ul.effects {
 }
 
 ul.effects li {
-	list-style-type: none;
-	margin: 0;
 	padding: 0;
 	width: 120px;
 	height: 100px;
@@ -44,7 +38,7 @@ div.current {
 div.effect p {
 	color: #191919;
 	font-weight: bold;
-	margin: 0px;
+	margin: 0;
 	padding: 10px;
 }
 
