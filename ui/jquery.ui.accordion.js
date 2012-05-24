@@ -293,10 +293,9 @@ $.widget( "ui.accordion", {
 	},
 
 	refresh: function() {
-		var heightStyle = this.options.heightStyle,
-			parent = this.element.parent(),
-			maxHeight,
-			overflow;
+		var maxHeight, overflow,
+			heightStyle = this.options.heightStyle,
+			parent = this.element.parent();
 
 		this.element.css( "height", this.originalHeight );
 
