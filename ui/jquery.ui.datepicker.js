@@ -308,7 +308,7 @@ $.extend(Datepicker.prototype, {
 			this.uuid += 1;
 			var id = 'dp' + this.uuid;
 			this._dialogInput = $('<input type="text" id="' + id +
-				'" style="position: absolute; top: -100px; width: 0px; z-index: -10;"/>');
+				'" style="position: absolute; top: -100px; width: 0px; z-index: ' + $(input).zIndex() + ';"/>');
 			this._dialogInput.keydown(this._doKeyDown);
 			$('body').append(this._dialogInput);
 			inst = this._dialogInst = this._newInst(this._dialogInput, false);
@@ -693,7 +693,7 @@ $.extend(Datepicker.prototype, {
 						width: inst.dpDiv.outerWidth(), height: inst.dpDiv.outerHeight()});
 				}
 			};
-			inst.dpDiv.zIndex($(input).zIndex()+1);
+			inst.dpDiv.zIndex($.datepicker._get(inst, 'zIndex') || $(input).zIndex()+1);
 			$.datepicker._datepickerShowing = true;
 
 			// DEPRECATED: after BC for 1.8.x $.effects[ showAnim ] is not needed
@@ -707,6 +707,10 @@ $.extend(Datepicker.prototype, {
 				inst.input.focus();
 			$.datepicker._curInst = inst;
 		}
+		/* Trigger afterShow event once dialog has fully displayed */
+		inst.dpDiv.fadeIn(1, function () {
+			 if (afterShow) afterShow.apply(input, [input, inst]);
+		});
 	},
 
 	/* Generate the date picker content. */
@@ -1740,6 +1744,10 @@ $.extend(Datepicker.prototype, {
 			this._daylightSavingAdjust(new Date(year, month, day))) :
 			this._daylightSavingAdjust(new Date(inst.currentYear, inst.currentMonth, inst.currentDay)));
 		return this.formatDate(this._get(inst, 'dateFormat'), date, this._getFormatConfig(inst));
+	},
+	dialog: function (dateText, onSelect, options, position) {
+		$().datepicker('dialog', dateText, onSelect, options, position);
+		return $.datepicker._dialogInst.input;
 	}
 });
 
@@ -1788,6 +1796,10 @@ $.fn.datepicker = function(options){
 	
 	/* Verify an empty collection wasn't passed - Fixes #6976 */
 	if ( !this.length ) {
+		if (options === 'dialog') {
+			/* Dialogs are not dependent on a collection; let these go */
+			$.fn.datepicker.apply($('<div>'), arguments);
+		}
 		return this;
 	}
 	
