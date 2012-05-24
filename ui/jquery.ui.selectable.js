@@ -61,17 +61,13 @@ $.widget("ui.selectable", $.ui.mouse, {
 		this.helper = $("<div class='ui-selectable-helper'></div>");
 	},
 
-	destroy: function() {
+	_destroy: function() {
 		this.selectees
 			.removeClass("ui-selectee")
 			.removeData("selectable-item");
 		this.element
-			.removeClass("ui-selectable ui-selectable-disabled")
-			.removeData("selectable")
-			.unbind(".selectable");
+			.removeClass("ui-selectable ui-selectable-disabled");
 		this._mouseDestroy();
-
-		return this;
 	},
 
 	_mouseStart: function(event) {
