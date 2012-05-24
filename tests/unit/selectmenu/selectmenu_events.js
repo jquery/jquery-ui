@@ -46,7 +46,9 @@ test("close", function () {
 test("focus", function () {
 	expect(4);
 
-	var counter = 0;
+	var counter = 0,
+		button,
+		menu;
 
 	this.element.selectmenu({
 		focus: function (event, ui) {
@@ -60,8 +62,8 @@ test("focus", function () {
 		}
 	});
 
-	var button = this.element.selectmenu("widget").parent(),
-		menu = this.element.selectmenu("menuWidget").parent();
+	button = this.element.selectmenu("widget").parent();
+	menu = this.element.selectmenu("menuWidget").parent();
 
 	button.find("a").simulate( "focus" ).simulate( "click" );
 	menu.find(".ui-menu-item").simulate("mouseover");

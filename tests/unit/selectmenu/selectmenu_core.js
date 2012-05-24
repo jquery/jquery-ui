@@ -3,13 +3,14 @@
 module( "selectmenu: core" );
 
 test("accessibility", function () {
-	var element = $('#speed').selectmenu(),
+	var links,
+		element = $('#speed').selectmenu(),
 		button = element.selectmenu("widget"),
 		menu = element.selectmenu("menuWidget"),
 		selected = element.find("option:selected");
 
 	button.simulate( "focus" );
-	var links = menu.find("li.ui-menu-item a");
+	links = menu.find("li.ui-menu-item a");
 
 	expect(12 + links.length * 2);
 
@@ -46,13 +47,14 @@ $.each([
 	test("state synchronization - " + settings.type, function () {
 		expect(8);
 
-		var element = $(settings.selector).selectmenu(),
+		var links,
+			element = $(settings.selector).selectmenu(),
 			button = element.selectmenu("widget"),
 			menu = element.selectmenu("menuWidget"),
 			selected = element.find("option:selected");
 
-		button.simulate( "focus" )
-		var links = menu.find("li.ui-menu-item a");
+		button.simulate( "focus" );
+		links = menu.find("li.ui-menu-item a");
 
 		button.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
 		equal( menu.attr("aria-activedescendant"), links.eq(element[0].selectedIndex).attr("id"), "after keydown menu aria-activedescendant" );

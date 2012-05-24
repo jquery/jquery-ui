@@ -89,7 +89,8 @@ test("refresh - disabled select", function () {
 test("refresh - disabled option", function () {
 	expect(1);
 
-	var element = $('#speed').selectmenu(),
+	var disabledItem,
+		element = $('#speed').selectmenu(),
 		button = element.selectmenu("widget").parent(),
 		menu = element.selectmenu("menuWidget").parent();
 
@@ -97,14 +98,16 @@ test("refresh - disabled option", function () {
 	element.find("option").eq(2).attr("disabled", "disabled");
 	element.selectmenu("refresh");
 
-	var disabledItem = menu.find("li").not(".ui-selectmenu-optgroup").eq(2);
+	disabledItem = menu.find("li").not(".ui-selectmenu-optgroup").eq(2);
 	ok( disabledItem.hasClass("ui-state-disabled"), "class" );
 });
 
 
 test("refresh - disabled optgroup", function () {
 
-	var element = $('#files').selectmenu(),
+	var i,
+		item,
+		element = $('#files').selectmenu(),
 		button = element.selectmenu("widget").parent(),
 		menu = element.selectmenu("menuWidget").parent(),
 		originalDisabledOptgroup = element.find("optgroup").first(),
@@ -115,11 +118,11 @@ test("refresh - disabled optgroup", function () {
 	originalDisabledOptgroup.attr("disabled", "disabled");
 	element.selectmenu("refresh");
 
-	var item = menu.find("li.ui-selectmenu-optgroup").first();
+	item = menu.find("li.ui-selectmenu-optgroup").first();
 	ok( item.hasClass("ui-state-disabled"), "class" );
 
 	equal( menu.find("li").not(".ui-selectmenu-optgroup").filter(".ui-state-disabled").length, originalDisabledOptions.length, "disabled options" );
-	for ( var i = 0; i < originalDisabledOptions.length; i++ ) {
+	for ( i = 0; i < originalDisabledOptions.length; i++ ) {
 		item = item.next("li");
 		ok( item.hasClass("ui-state-disabled"), "item #" + i + ": class" );
 	}

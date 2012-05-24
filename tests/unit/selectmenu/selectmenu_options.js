@@ -5,7 +5,7 @@ module("selectmenu: options");
 test("appendTo another element", function () {
 	expect(2);
 
-	element = $("#speed").selectmenu();
+	var element = $("#speed").selectmenu();
 
 	ok(element.selectmenu("option", "appendTo", "#qunit-fixture"), "appendTo accepts selector");
 	ok($("#qunit-fixture").find(".ui-selectmenu-menu").length, "selectmenu appendedTo other element");
