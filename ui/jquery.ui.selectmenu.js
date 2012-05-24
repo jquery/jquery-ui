@@ -175,9 +175,6 @@ $.widget( "ui.selectmenu", {
 			this.menu.menu( "refresh" );
 			this.menuItems = this.menu.find( "li" ).not( '.ui-selectmenu-optgroup' );
 
-			// adjust ARIA
-			this.menuItems.find( 'a' ).attr( 'role', 'option' );
-
 			// select current item
 			item = this._getSelectedItem();
 			this.menu.menu( "focus", null, item );
