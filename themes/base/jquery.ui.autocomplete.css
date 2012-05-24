@@ -9,5 +9,7 @@
  */
 .ui-autocomplete { position: absolute; cursor: default; }	
 
+.ui-autocomplete li.ui-autocomplete-category { font-size: 1em; line-height: 1.5; margin: 0.5em 0 0 0; height: auto; border: 0; }
+
 /* workarounds */
 * html .ui-autocomplete { width:1px; } /* without this, the menu expands to 100% in IE6 */
