@@ -166,7 +166,8 @@ $.widget( "ui.selectmenu", {
 	refresh: function() {
 		this.menu.empty();
 
-		var options = this.element.find( 'option' );
+		var item,
+			options = this.element.find( 'option' );
 		if ( options.length ) {
 			this._readOptions( options );
 			this._renderMenu( this.menu, this.items );
@@ -178,7 +179,7 @@ $.widget( "ui.selectmenu", {
 			this.menuItems.find( 'a' ).attr( 'role', 'option' );
 
 			// select current item
-			var item = this._getSelectedItem();
+			item = this._getSelectedItem();
 			this.menu.menu( "focus", null, item );
 			this._setSelected( item.data( "item.selectmenu" ) );
 
@@ -244,7 +245,7 @@ $.widget( "ui.selectmenu", {
 			currentOptgroup = "";
 
 		$.each( items, function( index, item ) {
-			if ( item.optgroup != currentOptgroup ) {
+			if ( item.optgroup !== currentOptgroup ) {
 				$( '<li />', {
 					'class': 'ui-selectmenu-optgroup' + ( item.element.parent( "optgroup" ).attr( "disabled" ) ? ' ui-state-disabled' : '' ),
 					html: item.optgroup
@@ -416,7 +417,7 @@ $.widget( "ui.selectmenu", {
 				index: index,
 				value: option.attr( 'value' ),
 				label: option.text() || '&nbsp;',
-				optgroup: optgroup.attr( "label" ) || false,
+				optgroup: optgroup.attr( "label" ) || "",
 				disabled: optgroup.attr( "disabled" ) || option.attr( "disabled" )
 			});
 		});
