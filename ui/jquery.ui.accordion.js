@@ -453,16 +453,23 @@ $.widget( "ui.accordion", {
 			this._toggleComplete( data );
 		}
 
-		toHide
-			.attr({
-				"aria-expanded": "false",
-				"aria-hidden": "true"
+		toHide.attr({
+			"aria-expanded": "false",
+			"aria-hidden": "true"
+		});
+		toHide.prev().attr( "aria-selected", "false" );
+		// if we're switching panels, remove the old header from the tab order
+		// if we're opening from collapsed state, remove the previous header from the tab order
+		// if we're collapsing, then keep the collapsing header in the tab order
+		if ( toShow.length && toHide.length ) {
+			toHide.prev().attr( "tabIndex", -1 );
+		} else if ( toShow.length ) {
+			this.headers.filter(function() {
+				return $( this ).attr( "tabIndex" ) === 0;
 			})
-			.prev()
-				.attr({
-					"aria-selected": "false",
-					tabIndex: -1
-				});
+			.attr( "tabIndex", -1 );
+		}
+
 		toShow
 			.attr({
 				"aria-expanded": "true",
