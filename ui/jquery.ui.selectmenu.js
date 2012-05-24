@@ -148,10 +148,10 @@ $.widget( "ui.selectmenu", {
 					}
 				}
 				that.focus = item.index;
-			}
-		})
-		// change ARIA role
-		.attr( 'role', 'listbox' );
+			},
+			// set ARIA role
+			role: 'listbox'
+		});
 
 		// change menu styles?
 		if ( this.options.dropdown ) {
