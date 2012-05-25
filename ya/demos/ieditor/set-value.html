@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+
+  <!-- Always force latest IE rendering engine (even in intranet) & Chrome Frame 
+       Remove this if you use the .htaccess -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+  <title>手动设置ieditor值</title>
+  <meta name="description" content="" />
+  <meta name="author" content="13" />
+
+  <link rel="stylesheet" href="../../themes/base.css" />
+	<link rel="stylesheet" href="../../lib/sl.css" />
+	<link rel="stylesheet" href="../../jqui/css/jquery-ui.css" />
+	<link rel="stylesheet" href="../../themes/default/jquery.ui.override.css" />
+	<link rel="stylesheet" href="../../themes/default/jquery.ui.theme.css" />
+	<link rel="stylesheet" href="../../themes/default/jquery.ui.datepicker.css" />
+	<link rel="stylesheet" href="../../themes/default/jquery.ui.ieditor.css" />
+	<style type="text/css">
+		.editor-wrapper{
+			position:absolute;
+			top:130px;
+			left:130px;
+			width:600px;
+		}
+		.edit-wrapper{
+		    margin-bottom: 30px;
+		    border:1px solid #cccccc;
+		    padding:10px;
+		}
+		.edit-combo-wrapper .edit-text{
+		    
+		}
+		.edit-combo-wrapper .ui-ieditor-actions{
+		    
+		}
+		.edit-combo-wrapper .ui-combo{
+		    float:left;
+		}
+		
+	</style>
+	
+	<script src="../../jqui/js/jquery.min.js"></script>
+  	<script src="../../jqui/js/jquery-ui.min.js"></script>
+  	
+  	<script src="../../external/underscore-min.js"></script>
+  	<script src="../../external/underscore.string.min.js"></script>
+ 	<script src="../../external/modernizr.js"></script>
+ 	
+	
+  	<script src="../../core.js"></script>
+  	<script src="../../lib/regx.js"></script>
+  	<script src="../../lib/sl.js"></script>
+  	<script src="../../lib/uihelper.js"></script>
+  	
+  	<script src="../../ui/jquery.ya.button0.js"></script>
+  	<script src="../../ui/jquery.ya.theme0.js"></script>
+  	<script src="../../ui/jquery.ya.datepicker0.js"></script>
+	<script src="../../ui/jquery.ya.ieditor0.js"></script>
+	<script>
+	jQuery(function($) {
+		var ieditor0=$( ".edit-text0" ).ieditor0({
+			advancedTheme:{
+				shadow:false,
+				corner:false
+			},
+      cls:'test',
+			handlerSelector:'.edit-h'		
+		});
+    $('.test .ui-ieditor-input').click(function(){
+      ieditor0.ieditor0('setValue','123');
+    });
+    $('.set-v').click(function(){
+      ieditor0.ieditor0('setValue','123');
+      return false;
+    });
+	});
+	</script>
+</head>
+
+<body>
+  <div class="editor-wrapper">
+    <div class="edit-wrapper">
+    <!-- with val属性 -->
+  	 <span><span class="edit-text0 edit-field" edittype="textfield" val="000">测试</span><a href="#" class="edit-h">编辑</a></span>
+  	</div>
+  <div class="actions"><button class="set-v">Set value</button></div>
+</body>
+</html>
+
