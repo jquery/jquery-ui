@@ -302,6 +302,7 @@ $.widget( "ui.menu", {
 		// initialize unlinked menu-items containing spaces and/or dashes only as dividers
 		menus.children( ":not(.ui-menu-item)" ).each( function() {
 			var item = $( this );
+			// hypen, em dash, en dash
 			if ( !/[^\-—–\s]/.test( item.text() ) ) {
 				item.addClass( "ui-widget-content ui-menu-divider" );
 			}
