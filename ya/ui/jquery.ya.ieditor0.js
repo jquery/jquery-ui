@@ -295,6 +295,7 @@
                 element=self.element;
            if(_.isString(v)){
                element.text(v||"");
+               element.data('value',v||"").attr('val',v||"");
            }else{
                element.text(v.label||v.value||"");
                element.data('value',v.value||"").attr('val',v.value||"");
