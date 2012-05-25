@@ -15,7 +15,7 @@
 			$( "<p>" ).text( "Selected: " + ui.item.text() ).appendTo( "#log" );
 		}
 
-		$( "#menu1, #menu2, #menu3, .menu4" ).menu({
+		$( "#menu1, #menu2, #menu3, .menu4, #menu7" ).menu({
 			select: logger
 		});
 
@@ -58,7 +58,6 @@
 	<li><a href="#">Ada</a></li>
 	<li><a href="#">Adamsville</a></li>
 	<li><a href="#">Addyston</a></li>
-	<li></li>
 	<li>
 		<a href="#">Delphi</a>
 		<ul>
@@ -256,6 +255,54 @@
 		</div>
 	</div>
 </div>
+
+<h2>Inline with dividers and elements without anchors</h2>
+<ul id="menu7">
+	<li>Group 1</li>
+	<li class="ui-state-disabled"><a href="#">Aberdeen</a></li>
+	<li><a href="#">Ada</a></li>
+	<li><a href="#">Adamsville</a></li>
+	<li><a href="#">Addyston</a></li>
+	<li></li>
+	<li>Group 2</li>
+	<li>
+		<a href="#">Delphi</a>
+		<ul>
+			<li class="ui-state-disabled"><a href="#">Ada</a></li>
+			<li><a href="#">Saarland</a></li>
+			<li><a href="#">Salzburg</a></li>
+		</ul>
+	</li>
+	<li><a href="#">Saarland</a></li>
+	<li>---</li>
+	<li>Group 3</li>
+	<li>
+		<a href="#">Salzburg</a>
+		<ul>
+			<li>
+				<a href="#">Delphi</a>
+				<ul>
+					<li><a href="#">Ada</a></li>
+					<li> - </li>
+					<li><a href="#">Saarland</a></li>
+					<li>&mdash;</li>
+					<li><a href="#">Salzburg</a></li>
+					<li>&ndash;</li>
+				</ul>
+			</li>
+			<li>
+				<a href="#">Delphi</a>
+				<ul>
+					<li><a href="#">Ada</a></li>
+					<li><a href="#">Saarland</a></li>
+					<li><a href="#">Salzburg</a></li>
+				</ul>
+			</li>
+			<li><a href="#">Perch</a></li>
+		</ul>
+	</li>
+	<li class="ui-state-disabled"><a href="#">Amesville</a></li>
+</ul>
 
 <div style="position: absolute; top: 1em; right: 1em;">
 	Log:

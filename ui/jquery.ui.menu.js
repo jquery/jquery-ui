@@ -299,8 +299,13 @@ $.widget( "ui.menu", {
 					}
 				});
 
-		// initialize unlinked menu-items as dividers
-		menus.children( ":not(.ui-menu-item)" ).addClass( "ui-widget-content ui-menu-divider" );
+		// initialize unlinked menu-items containing spaces and/or dashes only as dividers
+		menus.children( ":not(.ui-menu-item)" ).each( function() {
+			var item = $( this );
+			if ( !/[^\-—–\s]/.test( item.text() ) ) {
+				item.addClass( "ui-widget-content ui-menu-divider" );
+			}
+		});
 
 		// add aria-disabled attribute to any disabled menu item
 		menus.children( ".ui-state-disabled" ).attr( "aria-disabled", "true" );
