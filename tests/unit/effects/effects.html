@@ -8,9 +8,12 @@
 	<script>
 	$.uiBackCompat = false;
 	</script>
-	<script src="../../resource_loader.js"></script>
+	<link rel="stylesheet" href="../../../external/qunit.css">
+	<script src="../../../external/qunit.js"></script>
+	<script src="../../jquery.simulate.js"></script>
+	<script src="../testsuite.js"></script>
 	<script>
-	loadResources({
+	TestHelpers.loadResources({
 		js: [
 			"ui/jquery.effects.core.js",
 			"ui/jquery.effects.blind.js",
@@ -30,10 +33,6 @@
 	});
 	</script>
 
-	<link rel="stylesheet" href="../../../external/qunit.css">
-	<script src="../../../external/qunit.js"></script>
-	<script src="../../jquery.simulate.js"></script>
-	<script src="../testsuite.js"></script>
 	<script src="effects_core.js"></script>
 	<script src="effects_scale.js"></script>
 

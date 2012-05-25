@@ -13,7 +13,7 @@ jQuery(function($){
 		dayNames: ['Sonntag','Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag'],
 		dayNamesShort: ['So','Mo','Di','Mi','Do','Fr','Sa'],
 		dayNamesMin: ['So','Mo','Di','Mi','Do','Fr','Sa'],
-		weekHeader: 'Wo',
+		weekHeader: 'KW',
 		dateFormat: 'dd.mm.yy',
 		firstDay: 1,
 		isRTL: false,

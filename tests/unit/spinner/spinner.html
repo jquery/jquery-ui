@@ -3,14 +3,17 @@
 <head>
 	<meta charset="utf-8">
 	<title>jQuery UI Spinner Test Suite</title>
-	
+
 	<script src="../../jquery.js"></script>
 	<script src="../../../external/jquery.mousewheel-3.0.4.js"></script>
 	<script src="../../../external/globalize.js"></script>
 	<script src="../../../external/globalize.culture.ja-JP.js"></script>
-	<script src="../../resource_loader.js"></script>
+	<link rel="stylesheet" href="../../../external/qunit.css">
+	<script src="../../../external/qunit.js"></script>
+	<script src="../../jquery.simulate.js"></script>
+	<script src="../testsuite.js"></script>
 	<script>
-	loadResources({
+	TestHelpers.loadResources({
 		css: [ "ui.core", "ui.button", "ui.spinner" ],
 		js: [
 			"ui/jquery.ui.core.js",
@@ -21,14 +24,9 @@
 	});
 	</script>
 
-	<link rel="stylesheet" href="../../../external/qunit.css">
-	<script src="../../../external/qunit.js"></script>
-	<script src="../../jquery.simulate.js"></script>
-	<script src="../testsuite.js"></script>
-
 	<script src="spinner_test_helpers.js"></script>
+	<script src="spinner_common.js"></script>
 	<script src="spinner_core.js"></script>
-	<script src="spinner_defaults.js"></script>
 	<script src="spinner_events.js"></script>
 	<script src="spinner_methods.js"></script>
 	<script src="spinner_options.js"></script>

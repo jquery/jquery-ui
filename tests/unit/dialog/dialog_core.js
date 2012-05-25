@@ -40,8 +40,8 @@ function drag(handle, dx, dy) {
 
 function moved(dx, dy, msg) {
 	msg = msg ? msg + "." : "";
-	var actual = { left: Math.round(offsetAfter.left), top: Math.round(offsetAfter.top) };
-	var expected = { left: Math.round(offsetBefore.left + dx), top: Math.round(offsetBefore.top + dy) };
+	var actual = { left: Math.round(offsetAfter.left), top: Math.round(offsetAfter.top) },
+		expected = { left: Math.round(offsetBefore.left + dx), top: Math.round(offsetBefore.top + dy) };
 	deepEqual(actual, expected, 'dragged[' + dragged.dx + ', ' + dragged.dy + '] ' + msg);
 }
 
@@ -59,8 +59,8 @@ function shouldnotmove(why) {
 
 function resized(dw, dh, msg) {
 	msg = msg ? msg + "." : "";
-	var actual = { width: widthAfter, height: heightAfter };
-	var expected = { width: widthBefore + dw, height: heightBefore + dh };
+	var actual = { width: widthAfter, height: heightAfter },
+		expected = { width: widthBefore + dw, height: heightBefore + dh };
 	deepEqual(actual, expected, 'resized[' + dragged.dx + ', ' + dragged.dy + '] ' + msg);
 }
 

@@ -1,4 +1,4 @@
-/*
+/*!
  * jQuery UI Effects Scale @VERSION
  *
  * Copyright 2012, AUTHORS.txt (http://jqueryui.com/about)
@@ -18,9 +18,9 @@ $.effects.effect.puff = function( o, done ) {
 		hide = mode === "hide",
 		percent = parseInt( o.percent, 10 ) || 150,
 		factor = percent / 100,
-		original = { 
-			height: elem.height(), 
-			width: elem.width() 
+		original = {
+			height: elem.height(),
+			width: elem.width()
 		};
 
 	$.extend( o, {
@@ -30,9 +30,9 @@ $.effects.effect.puff = function( o, done ) {
 		mode: mode,
 		complete: done,
 		percent: hide ? percent : 100,
-		from: hide
-			? original
-			: {
+		from: hide ?
+			original :
+			{
 				height: original.height * factor,
 				width: original.width * factor
 			}
@@ -47,19 +47,20 @@ $.effects.effect.scale = function( o, done ) {
 	var el = $( this ),
 		options = $.extend( true, {}, o ),
 		mode = $.effects.setMode( el, o.mode || "effect" ),
-		percent = parseInt( o.percent, 10 ) || ( parseInt( o.percent, 10 ) == 0 ? 0 : ( mode == "hide" ? 0 : 100 ) ),
+		percent = parseInt( o.percent, 10 ) ||
+			( parseInt( o.percent, 10 ) === 0 ? 0 : ( mode === "hide" ? 0 : 100 ) ),
 		direction = o.direction || "both",
 		origin = o.origin,
-		original = { 
-			height: el.height(), 
+		original = {
+			height: el.height(),
 			width: el.width(),
 			outerHeight: el.outerHeight(),
 			outerWidth: el.outerWidth()
 		},
 		factor = {
-			y: direction != "horizontal" ? (percent / 100) : 1,
-			x: direction != "vertical" ? (percent / 100) : 1
-		}; 
+			y: direction !== "horizontal" ? (percent / 100) : 1,
+			x: direction !== "vertical" ? (percent / 100) : 1
+		};
 
 	// We are going to pass this effect to the size effect:
 	options.effect = "size";
@@ -67,29 +68,30 @@ $.effects.effect.scale = function( o, done ) {
 	options.complete = done;
 
 	// Set default origin and restore for show/hide
-	if ( mode != "effect" ) { 
+	if ( mode !== "effect" ) {
 		options.origin = origin || ["middle","center"];
 		options.restore = true;
 	}
 
-	options.from = o.from || ( mode == "show" ? { height: 0, width: 0 } : original ); 
+	options.from = o.from || ( mode === "show" ? { height: 0, width: 0 } : original );
 	options.to = {
-		height: original.height * factor.y, 
+		height: original.height * factor.y,
 		width: original.width * factor.x,
-		outerHeight: original.outerHeight * factor.y, 
+		outerHeight: original.outerHeight * factor.y,
 		outerWidth: original.outerWidth * factor.x
-	}; 
+	};
 
-	if ( options.fade ) { // Fade option to support puff
-		if ( mode == "show" ) {
-			options.from.opacity = 0; 
+	// Fade option to support puff
+	if ( options.fade ) {
+		if ( mode === "show" ) {
+			options.from.opacity = 0;
 			options.to.opacity = 1;
 		}
-		if ( mode == "hide" ) {
-			options.from.opacity = 1; 
+		if ( mode === "hide" ) {
+			options.from.opacity = 1;
 			options.to.opacity = 0;
 		}
-	};
+	}
 
 	// Animate
 	el.effect( options );
@@ -99,7 +101,7 @@ $.effects.effect.scale = function( o, done ) {
 $.effects.effect.size = function( o, done ) {
 
 	// Create element
-	var el = $( this ), 
+	var el = $( this ),
 		props = [ "position", "top", "bottom", "left", "right", "width", "height", "overflow", "opacity" ],
 
 		// Always restore
@@ -123,7 +125,7 @@ $.effects.effect.size = function( o, done ) {
 		el.show();
 	}
 	original = {
-		height: el.height(), 
+		height: el.height(),
 		width: el.width(),
 		outerHeight: el.outerHeight(),
 		outerWidth: el.outerWidth()
@@ -135,48 +137,48 @@ $.effects.effect.size = function( o, done ) {
 	// Set scaling factor
 	factor = {
 		from: {
-			y: el.from.height / original.height, 
+			y: el.from.height / original.height,
 			x: el.from.width / original.width
 		},
 		to: {
-			y: el.to.height / original.height, 
+			y: el.to.height / original.height,
 			x: el.to.width / original.width
 		}
 	};
 
 	// Scale the css box
-	if ( scale == "box" || scale == "both" ) {
+	if ( scale === "box" || scale === "both" ) {
 
 		// Vertical props scaling
-		if ( factor.from.y !== factor.to.y ) { 
+		if ( factor.from.y !== factor.to.y ) {
 			props = props.concat( vProps );
 			el.from = $.effects.setTransition( el, vProps, factor.from.y, el.from );
 			el.to = $.effects.setTransition( el, vProps, factor.to.y, el.to );
-		};
+		}
 
 		// Horizontal props scaling
-		if ( factor.from.x !== factor.to.x ) { 
+		if ( factor.from.x !== factor.to.x ) {
 			props = props.concat( hProps );
 			el.from = $.effects.setTransition( el, hProps, factor.from.x, el.from );
 			el.to = $.effects.setTransition( el, hProps, factor.to.x, el.to );
-		};
-	};
+		}
+	}
 
 	// Scale the content
-	if ( scale == "content" || scale == "both" ) { 
+	if ( scale === "content" || scale === "both" ) {
 
 		// Vertical props scaling
-		if ( factor.from.y !== factor.to.y ) { 
+		if ( factor.from.y !== factor.to.y ) {
 			props = props.concat( cProps );
 			el.from = $.effects.setTransition( el, cProps, factor.from.y, el.from );
 			el.to = $.effects.setTransition( el, cProps, factor.to.y, el.to );
-		};
-	};
-	
-	$.effects.save( el, restore ? props : props1 ); 
-	el.show(); 
+		}
+	}
+
+	$.effects.save( el, restore ? props : props1 );
+	el.show();
 	$.effects.createWrapper( el );
-	el.css( "overflow", "hidden" ).css( el.from ); 
+	el.css( "overflow", "hidden" ).css( el.from );
 
 	// Adjust
 	if (origin) { // Calculate baseline shifts
@@ -189,7 +191,7 @@ $.effects.effect.size = function( o, done ) {
 	el.css( el.from ); // set top & left
 
 	// Animate
-	if ( scale == "content" || scale == "both" ) { // Scale the children
+	if ( scale === "content" || scale === "both" ) { // Scale the children
 
 		// Add margins/font-size
 		vProps = vProps.concat([ "marginTop", "marginBottom" ]).concat(cProps);
@@ -198,53 +200,57 @@ $.effects.effect.size = function( o, done ) {
 
 		el.find( "*[width]" ).each( function(){
 			var child = $( this ),
-				c_original = { 
-					height: child.height(), 
+				c_original = {
+					height: child.height(),
 					width: child.width()
 				};
-			if (restore) $.effects.save(child, props2);
-			
+			if (restore) {
+				$.effects.save(child, props2);
+			}
+
 			child.from = {
-				height: c_original.height * factor.from.y, 
+				height: c_original.height * factor.from.y,
 				width: c_original.width * factor.from.x
 			};
 			child.to = {
-				height: c_original.height * factor.to.y, 
+				height: c_original.height * factor.to.y,
 				width: c_original.width * factor.to.x
 			};
 
 			// Vertical props scaling
-			if ( factor.from.y != factor.to.y ) { 
+			if ( factor.from.y !== factor.to.y ) {
 				child.from = $.effects.setTransition( child, vProps, factor.from.y, child.from );
 				child.to = $.effects.setTransition( child, vProps, factor.to.y, child.to );
-			};
+			}
 
 			// Horizontal props scaling
-			if ( factor.from.x != factor.to.x ) {
+			if ( factor.from.x !== factor.to.x ) {
 				child.from = $.effects.setTransition( child, hProps, factor.from.x, child.from );
 				child.to = $.effects.setTransition( child, hProps, factor.to.x, child.to );
-			};
+			}
 
 			// Animate children
 			child.css( child.from );
 			child.animate( child.to, o.duration, o.easing, function() {
 
 				// Restore children
-				if (restore) $.effects.restore( child, props2 ); 
+				if ( restore ) {
+					$.effects.restore( child, props2 );
+				}
 			});
 		});
-	};
+	}
 
 	// Animate
-	el.animate( el.to, { 
-		queue: false, 
-		duration: o.duration, 
-		easing: o.easing, 
+	el.animate( el.to, {
+		queue: false,
+		duration: o.duration,
+		easing: o.easing,
 		complete: function() {
 			if ( el.to.opacity === 0 ) {
 				el.css( "opacity", el.from.opacity );
 			}
-			if( mode == "hide" ) {
+			if( mode === "hide" ) {
 				el.hide();
 			}
 			$.effects.restore( el, restore ? props : props1 );
@@ -261,17 +267,14 @@ $.effects.effect.size = function( o, done ) {
 					$.each([ "top", "left" ], function( idx, pos ) {
 						el.css( pos, function( _, str ) {
 							var val = parseInt( str, 10 ),
-								toRef = idx ? el.to.left : el.to.top,
-								delta = idx ? el.to.outerWidth - el.from.outerWidth: el.to.outerHeight - el.from.outerHeight,
-								same = origin[ idx ] === pos,
-								mid = origin[ idx ] === "middle" || origin[ idx ] === "center";
+								toRef = idx ? el.to.left : el.to.top;
 
 							// if original was "auto", recalculate the new value from wrapper
 							if ( str === "auto" ) {
 								return toRef + "px";
 							}
 
-							return val + toRef + "px"; 
+							return val + toRef + "px";
 						});
 					});
 				}

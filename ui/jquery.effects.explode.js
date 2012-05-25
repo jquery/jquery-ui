@@ -1,4 +1,4 @@
-/*
+/*!
  * jQuery UI Effects Explode @VERSION
  *
  * Copyright 2012, AUTHORS.txt (http://jqueryui.com/about)
@@ -30,6 +30,14 @@ $.effects.effect.explode = function( o, done ) {
 
 		// loop
 		i, j, left, top, mx, my;
+
+	// children animate complete:
+	function childComplete() {
+		pieces.push( this );
+		if ( pieces.length === rows * cells ) {
+			animComplete();
+		}
+	}
 
 	// clone the element for each row and cell.
 	for( i = 0; i < rows ; i++ ) { // ===>
@@ -70,14 +78,6 @@ $.effects.effect.explode = function( o, done ) {
 					top: top + ( show ? 0 : my * height ),
 					opacity: show ? 1 : 0
 				}, o.duration || 500, o.easing, childComplete );
-		}
-	}
-
-	// children animate complete:
-	function childComplete() {
-		pieces.push( this );
-		if ( pieces.length == rows * cells ) {
-			animComplete();
 		}
 	}
 

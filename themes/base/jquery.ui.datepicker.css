@@ -1,4 +1,4 @@
-/*
+/*!
  * jQuery UI Datepicker @VERSION
  *
  * Copyright 2012, AUTHORS.txt (http://jqueryui.com/about)

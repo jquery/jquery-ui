@@ -5,5 +5,5 @@
 	if ( !url || url.indexOf("http") !== 0 ) {
 		return;
 	}
-    document.write("<scr" + "ipt src='http://swarm.jquery.org/js/inject.js?" + (new Date).getTime() + "'></scr" + "ipt>");
+    document.write( "<scr" + "ipt src='http://swarm.jquery.org/js/inject.js?" + (new Date()).getTime() + "'></scr" + "ipt>" );
 })();

@@ -2,9 +2,13 @@
 
 module( "widget factory", {
 	teardown: function() {
-		delete $.ui.testWidget;
+		if ( $.ui ) {
+			delete $.ui.testWidget;
+		}
 	}
 });
+
+TestHelpers.testJshint( "ui.widget" );
 
 test( "widget creation", function() {
 	var myPrototype = {
@@ -84,7 +88,8 @@ test( "custom selector expression", function() {
 test( "jQuery usage", function() {
 	expect( 16 );
 
-	var shouldCreate = false;
+	var elem, instance, ret, bcInstance,
+		shouldCreate = false;
 
 	$.widget( "ui.testWidget", {
 		getterSetterVal: 5,
@@ -113,22 +118,22 @@ test( "jQuery usage", function() {
 	});
 
 	shouldCreate = true;
-	var elem = $( "<div>" )
+	elem = $( "<div>" )
 		.bind( "testwidgetcreate", function() {
 			ok( shouldCreate, "create event triggered on instantiation" );
 		})
 		.testWidget();
 	shouldCreate = false;
 
-	var instance = elem.data( "ui-testWidget" );
+	instance = elem.data( "ui-testWidget" );
 	equal( typeof instance, "object", "instance stored in .data(pluginName)" );
 	equal( instance.element[0], elem[0], "element stored on widget" );
-	var ret = elem.testWidget( "methodWithParams", "value1", "value2" );
+	ret = elem.testWidget( "methodWithParams", "value1", "value2" );
 	equal( ret, elem, "jQuery object returned from method call" );
 
 	// 1.9 BC for #7810
 	// TODO remove
-	var bcInstance = elem.data("testWidget");
+	bcInstance = elem.data("testWidget");
 	equal( typeof bcInstance, "object", "instance stored in .data(pluginName)" );
 	equal( bcInstance.element[0], elem[0], "element stored on widget" );
 
@@ -148,7 +153,8 @@ test( "jQuery usage", function() {
 test( "direct usage", function() {
 	expect( 9 );
 
-	var shouldCreate = false;
+	var elem, instance, ret,
+		shouldCreate = false;
 
 	$.widget( "ui.testWidget", {
 		getterSetterVal: 5,
@@ -171,17 +177,17 @@ test( "direct usage", function() {
 		}
 	});
 
-	var elem = $( "<div>" )[ 0 ];
+	elem = $( "<div>" )[ 0 ];
 
 	shouldCreate = true;
-	var instance = new $.ui.testWidget( {}, elem );
+	instance = new $.ui.testWidget( {}, elem );
 	shouldCreate = false;
 
 	equal( $( elem ).data( "ui-testWidget" ), instance,
 		"instance stored in .data(pluginName)" );
 	equal( instance.element[ 0 ], elem, "element stored on widget" );
 
-	var ret = instance.methodWithParams( "value1", "value2" );
+	ret = instance.methodWithParams( "value1", "value2" );
 	equal( ret, instance, "plugin returned from method call" );
 
 	ret = instance.getterSetterMethod();
@@ -439,11 +445,12 @@ test( ".option() - getter", function() {
 		_create: function() {}
 	});
 
-	var div = $( "<div>" ).testWidget({
-		foo: "bar",
-		baz: 5,
-		qux: [ "quux", "quuux" ]
-	});
+	var options,
+		div = $( "<div>" ).testWidget({
+			foo: "bar",
+			baz: 5,
+			qux: [ "quux", "quuux" ]
+		});
 
 	deepEqual( div.testWidget( "option", "x" ), null, "non-existent option" );
 	deepEqual( div.testWidget( "option", "foo"), "bar", "single option - string" );
@@ -451,7 +458,7 @@ test( ".option() - getter", function() {
 	deepEqual( div.testWidget( "option", "qux"), [ "quux", "quuux" ],
 		"single option - array" );
 
-	var options = div.testWidget( "option" );
+	options = div.testWidget( "option" );
 	deepEqual( options, {
 		create: null,
 		disabled: false,
@@ -483,14 +490,15 @@ test( ".option() - deep option getter", function() {
 });
 
 test( ".option() - delegate to ._setOptions()", function() {
-	var calls = [];
+	var div,
+		calls = [];
 	$.widget( "ui.testWidget", {
 		_create: function() {},
 		_setOptions: function( options ) {
 			calls.push( options );
 		}
 	});
-	var div = $( "<div>" ).testWidget();
+	div = $( "<div>" ).testWidget();
 
 	calls = [];
 	div.testWidget( "option", "foo", "bar" );
@@ -506,7 +514,8 @@ test( ".option() - delegate to ._setOptions()", function() {
 });
 
 test( ".option() - delegate to ._setOption()", function() {
-	var calls = [];
+	var div,
+		calls = [];
 	$.widget( "ui.testWidget", {
 		_create: function() {},
 		_setOption: function( key, val ) {
@@ -516,7 +525,7 @@ test( ".option() - delegate to ._setOption()", function() {
 			});
 		}
 	});
-	var div = $( "<div>" ).testWidget();
+	div = $( "<div>" ).testWidget();
 
 	calls = [];
 	div.testWidget( "option", "foo", "bar" );
@@ -603,7 +612,7 @@ test( ".widget() - overriden", function() {
 
 test( "._bind() to element (default)", function() {
 	expect( 12 );
-	var that;
+	var that, widget;
 	$.widget( "ui.testWidget", {
 		_create: function() {
 			that = this;
@@ -623,7 +632,7 @@ test( "._bind() to element (default)", function() {
 			equal( "keydown", event.type );
 		}
 	});
-	var widget = $( "<div></div>" )
+	widget = $( "<div></div>" )
 		.testWidget()
 		.trigger( "keyup" )
 		.trigger( "keydown" );
@@ -643,7 +652,7 @@ test( "._bind() to element (default)", function() {
 
 test( "._bind() to descendent", function() {
 	expect( 12 );
-	var that;
+	var that, widget, descendant;
 	$.widget( "ui.testWidget", {
 		_create: function() {
 			that = this;
@@ -664,28 +673,28 @@ test( "._bind() to descendent", function() {
 		}
 	});
 	// trigger events on both widget and descendent to ensure that only descendent receives them
-	var widget = $( "<div><p><strong>hello</strong> world</p></div>" )
+	widget = $( "<div><p><strong>hello</strong> world</p></div>" )
 		.testWidget()
 		.trigger( "keyup" )
 		.trigger( "keydown" );
-	var descendent = widget.find( "strong" )
+	descendant = widget.find( "strong" )
 		.trigger( "keyup" )
 		.trigger( "keydown" );
 	widget
 		.testWidget( "disable" )
 		.trigger( "keyup" )
 		.trigger( "keydown" );
-	descendent
+	descendant
 		.trigger( "keyup" )
 		.trigger( "keydown" );
 	widget
 		.testWidget( "enable" )
 		.trigger( "keyup" )
 		.trigger( "keydown" );
-	descendent
+	descendant
 		.trigger( "keyup" )
 		.trigger( "keydown" );
-	descendent
+	descendant
 		.addClass( "ui-state-disabled" )
 		.trigger( "keyup" )
 		.trigger( "keydown" );
@@ -693,7 +702,7 @@ test( "._bind() to descendent", function() {
 		.testWidget( "destroy" )
 		.trigger( "keyup" )
 		.trigger( "keydown" );
-	descendent
+	descendant
 		.trigger( "keyup" )
 		.trigger( "keydown" );
 });
@@ -942,10 +951,10 @@ test( "._trigger() - array as ui", function() {
 						qux: 5,
 						quux: 20
 					}
+				},
+				extra = {
+					bar: 5
 				};
-			var extra = {
-				bar: 5
-			};
 			this._trigger( "foo", null, [ ui, extra ] );
 		}
 	});
@@ -983,8 +992,7 @@ test( "._trigger() - instance as element", function() {
 	$.widget( "ui.testWidget", {
 		defaultElement: null,
 		testEvent: function() {
-			var ui = { foo: "bar" };
-			this._trigger( "foo", null, ui );
+			this._trigger( "foo", null, { foo: "bar" } );
 		}
 	});
 	var instance = $.ui.testWidget({

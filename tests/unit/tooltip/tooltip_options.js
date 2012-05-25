@@ -4,7 +4,7 @@ module( "tooltip: options" );
 
 test( "content: default", function() {
 	var element = $( "#tooltipped1" ).tooltip().tooltip( "open" );
-	deepEqual( $( "#" + element.attr( "aria-describedby" ) ).text(), "anchortitle" );
+	deepEqual( $( "#" + element.data( "ui-tooltip-id" ) ).text(), "anchortitle" );
 });
 
 test( "content: return string", function() {
@@ -13,7 +13,7 @@ test( "content: return string", function() {
 			return "customstring";
 		}
 	}).tooltip( "open" );
-	deepEqual( $( "#" + element.attr( "aria-describedby" ) ).text(), "customstring" );
+	deepEqual( $( "#" + element.data( "ui-tooltip-id" ) ).text(), "customstring" );
 });
 
 test( "content: return jQuery", function() {
@@ -22,7 +22,7 @@ test( "content: return jQuery", function() {
 			return $( "<div>" ).html( "cu<b>s</b>tomstring" );
 		}
 	}).tooltip( "open" );
-	deepEqual( $( "#" + element.attr( "aria-describedby" ) ).text(), "customstring" );
+	deepEqual( $( "#" + element.data( "ui-tooltip-id" ) ).text(), "customstring" );
 });
 
 asyncTest( "content: sync + async callback", function() {
@@ -30,11 +30,11 @@ asyncTest( "content: sync + async callback", function() {
 	var element = $( "#tooltipped1" ).tooltip({
 		content: function( response ) {
 			setTimeout(function() {
-				deepEqual( $( "#" + element.attr("aria-describedby") ).text(), "loading..." );
+				deepEqual( $( "#" + element.data("ui-tooltip-id") ).text(), "loading..." );
 
 				response( "customstring2" );
 				setTimeout(function() {
-					deepEqual( $( "#" + element.attr("aria-describedby") ).text(), "customstring2" );
+					deepEqual( $( "#" + element.data("ui-tooltip-id") ).text(), "customstring2" );
 					start();
 				}, 13 );
 			}, 13 );
@@ -45,29 +45,30 @@ asyncTest( "content: sync + async callback", function() {
 
 test( "items", function() {
 	expect( 2 );
-	var element = $( "#qunit-fixture" ).tooltip({
-		items: "#fixture-span"
-	});
+	var event,
+		element = $( "#qunit-fixture" ).tooltip({
+			items: "#fixture-span"
+		});
 
-	var event = $.Event( "mouseenter" );
+	event = $.Event( "mouseenter" );
 	event.target = $( "#fixture-span" )[ 0 ];
 	element.tooltip( "open", event );
-	deepEqual( $( "#" + $( "#fixture-span" ).attr( "aria-describedby" ) ).text(), "title-text" );
+	deepEqual( $( "#" + $( "#fixture-span" ).data( "ui-tooltip-id" ) ).text(), "title-text" );
 
 	// make sure default [title] doesn't get used
 	event.target = $( "#tooltipped1" )[ 0 ];
 	element.tooltip( "open", event );
-	deepEqual( $( "#tooltipped1" ).attr( "aria-describedby" ), undefined );
+	deepEqual( $( "#tooltipped1" ).data( "ui-tooltip-id" ), undefined );
 
 	element.tooltip( "destroy" );
 });
 
 test( "tooltipClass", function() {
-	expect( 1 )
+	expect( 1 );
 	var element = $( "#tooltipped1" ).tooltip({
 		tooltipClass: "custom"
 	}).tooltip( "open" );
-	ok( $( "#" + element.attr( "aria-describedby" ) ).hasClass( "custom" ) );
+	ok( $( "#" + element.data( "ui-tooltip-id" ) ).hasClass( "custom" ) );
 });
 
 }( jQuery ) );

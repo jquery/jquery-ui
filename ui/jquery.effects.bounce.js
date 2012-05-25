@@ -1,4 +1,4 @@
-/*
+/*!
  * jQuery UI Effects Bounce @VERSION
  *
  * Copyright 2012, AUTHORS.txt (http://jqueryui.com/about)
@@ -13,14 +13,14 @@
 (function( $, undefined ) {
 
 $.effects.effect.bounce = function( o, done ) {
-	var el = $( this ), 
+	var el = $( this ),
 		props = [ "position", "top", "bottom", "left", "right", "height", "width" ],
 
 		// defaults:
 		mode = $.effects.setMode( el, o.mode || "effect" ),
 		hide = mode === "hide",
 		show = mode === "show",
-		direction = o.direction || "up", 
+		direction = o.direction || "up",
 		distance = o.distance,
 		times = o.times || 5,
 
@@ -31,7 +31,7 @@ $.effects.effect.bounce = function( o, done ) {
 
 		// utility:
 		ref = ( direction === "up" || direction === "down" ) ? "top" : "left",
-		motion = ( direction === "up" || direction === "left" ), 
+		motion = ( direction === "up" || direction === "left" ),
 		i,
 		upAnim,
 		downAnim,
@@ -40,13 +40,13 @@ $.effects.effect.bounce = function( o, done ) {
 		queue = el.queue(),
 		queuelen = queue.length;
 
-	// Avoid touching opacity to prevent clearType and PNG issues in IE	
+	// Avoid touching opacity to prevent clearType and PNG issues in IE
 	if ( show || hide ) {
 		props.push( "opacity" );
-	} 
+	}
 
-	$.effects.save( el, props ); 
-	el.show(); 
+	$.effects.save( el, props );
+	el.show();
 	$.effects.createWrapper( el ); // Create Wrapper
 
 	// default distance for the BIGGEST bounce is the outer Distance / 3
@@ -90,7 +90,7 @@ $.effects.effect.bounce = function( o, done ) {
 
 		el.animate( upAnim, speed, easing );
 	}
-	
+
 	el.queue(function() {
 		if ( hide ) {
 			el.hide();

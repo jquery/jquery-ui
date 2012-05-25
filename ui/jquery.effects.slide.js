@@ -1,4 +1,4 @@
-/*
+/*!
  * jQuery UI Effects Slide @VERSION
  *
  * Copyright 2012, AUTHORS.txt (http://jqueryui.com/about)
@@ -20,48 +20,46 @@ $.effects.effect.slide = function( o, done ) {
 		mode = $.effects.setMode( el, o.mode || "show" ),
 		show = mode === "show",
 		direction = o.direction || "left",
-		ref = (direction == "up" || direction == "down") ? "top" : "left",
-		positiveMotion = (direction == "up" || direction == "left"),
+		ref = (direction === "up" || direction === "down") ? "top" : "left",
+		positiveMotion = (direction === "up" || direction === "left"),
 		distance,
-		animation = {},
-		size;
+		animation = {};
 
 	// Adjust
 	$.effects.save( el, props );
 	el.show();
-	distance = o.distance || el[ ref === "top" ? "outerHeight" : "outerWidth" ]({ 
+	distance = o.distance || el[ ref === "top" ? "outerHeight" : "outerWidth" ]({
 		margin: true
 	});
-	
+
 	$.effects.createWrapper( el ).css({
 		overflow: "hidden"
 	});
-	
+
 	if ( show ) {
 		el.css( ref, positiveMotion ? (isNaN(distance) ? "-" + distance : -distance) : distance );
 	}
 
 	// Animation
-	animation[ ref ] = ( show ? 
-		( positiveMotion ? "+=" : "-=") : 
-		( positiveMotion ? "-=" : "+=")) 
-		+ distance;
+	animation[ ref ] = ( show ?
+		( positiveMotion ? "+=" : "-=") :
+		( positiveMotion ? "-=" : "+=")) +
+		distance;
 
 	// Animate
-	el.animate( animation, { 
-		queue: false, 
-		duration: o.duration, 
-		easing: o.easing, 
+	el.animate( animation, {
+		queue: false,
+		duration: o.duration,
+		easing: o.easing,
 		complete: function() {
 			if ( mode === "hide" ) {
-				el.hide(); 
+				el.hide();
 			}
 			$.effects.restore( el, props );
 			$.effects.removeWrapper( el );
 			done();
 		}
 	});
-
 };
 
 })(jQuery);

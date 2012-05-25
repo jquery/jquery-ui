@@ -1,5 +1,7 @@
 (function( $ ) {
 
+var simulateKeyDownUp = TestHelpers.spinner.simulateKeyDownUp;
+
 module( "spinner: methods" );
 
 test( "destroy", function() {
@@ -21,16 +23,16 @@ test( "disable", function() {
 	ok( wrapper.hasClass( "ui-spinner-disabled" ), "after: wrapper has ui-spinner-disabled class" );
 	ok( element.is( ":disabled"), "after: input has disabled attribute" );
 
-	spinner_simulateKeyDownUp( element, $.ui.keyCode.UP );
+	simulateKeyDownUp( element, $.ui.keyCode.UP );
 	equal( 2, element.val(), "keyboard - value does not change on key UP" );
 
-	spinner_simulateKeyDownUp( element, $.ui.keyCode.DOWN );
+	simulateKeyDownUp( element, $.ui.keyCode.DOWN );
 	equal( 2, element.val(), "keyboard - value does not change on key DOWN" );
 
-	spinner_simulateKeyDownUp( element, $.ui.keyCode.PAGE_UP );
+	simulateKeyDownUp( element, $.ui.keyCode.PAGE_UP );
 	equal( 2, element.val(), "keyboard - value does not change on key PGUP" );
 
-	spinner_simulateKeyDownUp( element, $.ui.keyCode.PAGE_DOWN );
+	simulateKeyDownUp( element, $.ui.keyCode.PAGE_DOWN );
 	equal( 2, element.val(), "keyboard - value does not change on key PGDN" );
 
 	wrapper.find( ".ui-spinner-up" ).trigger( "mousedown" ).trigger( "mouseup" );
@@ -54,7 +56,7 @@ test( "disable", function() {
 
 test( "enable", function() {
 	expect( 5 );
-	var element = $( "#spin" ).val( 1 ).spinner({ disabled: true })
+	var element = $( "#spin" ).val( 1 ).spinner({ disabled: true }),
 		wrapper = element.spinner( "widget" );
 
 	ok( wrapper.hasClass( "ui-spinner-disabled" ), "before: wrapper has ui-spinner-disabled class" );
@@ -65,7 +67,7 @@ test( "enable", function() {
 	ok( !wrapper.hasClass( ".ui-spinner-disabled" ), "after: wrapper does not have ui-spinner-disabled class" );
 	ok( !element.is( ":disabled" ), "after: input does not have disabled attribute" );
 
-	spinner_simulateKeyDownUp( element, $.ui.keyCode.UP );
+	simulateKeyDownUp( element, $.ui.keyCode.UP );
 	equal( 2, element.val(), "keyboard - value changes on key UP" );
 });
 
