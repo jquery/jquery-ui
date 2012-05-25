@@ -776,7 +776,7 @@
 				themeType=self.themeType;
 			switch(themeType){
 				case "itemselect":
-					self._itemselectTheme_getItemData(itemSelector);
+					return self._itemselectTheme_getItemData(itemSelector);
 					break;
 				default:
 					break;
