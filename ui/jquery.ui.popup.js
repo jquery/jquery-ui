@@ -202,7 +202,7 @@ $.widget( "ui.popup", {
 		this.closeTimer = this._delay( function() {
 			this.close( event );
 			this.closeTimer = null;
-		}, 150 );
+		}, 50 );
 	},
 
 	// Vets any close attempt in a timed window.
@@ -210,7 +210,7 @@ $.widget( "ui.popup", {
 		this.closeVeto = true;
 		this._delay( function() {
 			this.closeVeto = false;
-		}, 150 );
+		}, 50 );
 		if ( this.closeTimer ) {
 			clearTimeout( this.closeTimer );
 			this.closeTimer = null;
