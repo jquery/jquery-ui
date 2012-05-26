@@ -181,7 +181,7 @@ $.widget( "ui.popup", {
 		});
 
 		this._bind( this.document, {
-			click: function( event ) {
+			mousedown: function( event ) {
 				if ( this.isOpen ) {
 					if ( $( event.target ).closest( this.element.add( this.options.trigger ) ).length ) {
 						this._closeVet();
