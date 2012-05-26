@@ -89,7 +89,7 @@ $.widget( "ui.popup", {
 					case $.ui.keyCode.UP:
 						// prevent scrolling
 						event.preventDefault();
-						clearTimeout( this.closeTimer );
+						this._closeVet();
 						this._delay(function() {
 							this.open( event );
 							this.focusPopup( event );
@@ -114,7 +114,7 @@ $.widget( "ui.popup", {
 					return;
 				}
 				this.open( event );
-				clearTimeout( this.closeTimer );
+				this._closeVet();
 				this._delay( function() {
 					if ( !noFocus ) {
 						this.focusPopup();
@@ -164,17 +164,10 @@ $.widget( "ui.popup", {
 
 		this._bind({
 			focusout: function( event ) {
-				// use a timer to allow click to clear it and letting that
-				// handle the closing instead of opening again
-				this.closeTimer = this._delay( function() {
-					this.close( event );
-				}, 150);
+				this._closeTry( event );
 			},
 			focusin: function( event ) {
-				clearTimeout( this.closeTimer );
-			},
-			mouseup: function( event ) {
-				clearTimeout( this.closeTimer );
+				this._closeVet();
 			}
 		});
 
@@ -187,15 +180,43 @@ $.widget( "ui.popup", {
 			}
 		});
 
-		this._bind( this.document, {
-			click: function( event ) {
-				if ( this.isOpen && !$( event.target ).closest( this.element.add( this.options.trigger ) ).length ) {
-					this.close( event );
+		this.outsideHandler = $.proxy ( function ( event ) {
+			if ( this.isOpen ) {
+				if ( $( event.target ).closest( this.element.add( this.options.trigger ) ).length ) {
+					this._closeVet();
+				}
+				else {
+					this._closeTry( event );
 				}
 			}
-		});
+		}, this );
+		$( this.document ).mousedown( this.outsideHandler );
 	},
 
+	// Unless vetted, close. Use a timer to allow veto in a timed window.
+	// Note that a focusout followed by a focusin sometimes trigger events in reverse order, but should not close the popup nevertheless. Or a click-in-the-popup followed by a focusout should also avoid closing it unexpectedly.
+	_closeTry: function( event ) {
+		if ( this.closeVeto || this.closeTimer ) {
+			return;
+		}
+		this.closeTimer = this._delay( function() {
+			this.close( event );
+			this.closeTimer = null;
+		}, 50 );
+	},
+
+	// Vets any close attempt in a timed window.
+	_closeVet: function() {
+		this.closeVeto = true;
+		this._delay( function() {
+			this.closeVeto = false;
+		}, 50 );
+		if ( this.closeTimer ) {
+			clearTimeout( this.closeTimer );
+			this.closeTimer = null;
+		}
+	},
+ 
 	_destroy: function() {
 		this.element
 			.show()
@@ -203,6 +224,7 @@ $.widget( "ui.popup", {
 			.removeAttr( "aria-hidden" )
 			.removeAttr( "aria-expanded" )
 			.unbind( "keypress.ui-popup");
+		$( this.document ).unbind( "mousedown", this.outsideHandler );
 
 		this.options.trigger
 			.removeAttr( "aria-haspopup" )
