@@ -185,7 +185,7 @@ window.domEqual = function( selector, modifier, message ) {
 		if ( children.length ) {
 			result.children = elem.children().map(function( ind ) {
 				return extract( $( this ) );
-			});
+			}).get();
 		} else {
 			result.text = elem.text();
 		}
