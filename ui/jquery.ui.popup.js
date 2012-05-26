@@ -180,18 +180,17 @@ $.widget( "ui.popup", {
 			}
 		});
 
-		this._bind( this.document, {
-			mousedown: function( event ) {
-				if ( this.isOpen ) {
-					if ( $( event.target ).closest( this.element.add( this.options.trigger ) ).length ) {
-						this._closeVet();
-					}
-					else {
-						this._closeTry( event );
-					}
+		this.outsideHandler = $.proxy ( function ( event ) {
+			if ( this.isOpen ) {
+				if ( $( event.target ).closest( this.element.add( this.options.trigger ) ).length ) {
+					this._closeVet();
+				}
+				else {
+					this._closeTry( event );
 				}
 			}
-		});
+		}, this );
+		$( this.document ).mousedown( this.outsideHandler );
 	},
 
 	// Unless vetted, close. Use a timer to allow veto in a timed window.
@@ -225,6 +224,7 @@ $.widget( "ui.popup", {
 			.removeAttr( "aria-hidden" )
 			.removeAttr( "aria-expanded" )
 			.unbind( "keypress.ui-popup");
+		$( this.document ).unbind( "mousedown", this.outsideHandler );
 
 		this.options.trigger
 			.removeAttr( "aria-haspopup" )
