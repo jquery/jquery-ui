@@ -1,6 +1,7 @@
 (function( $ ) {
 
 var disabled = TestHelpers.tabs.disabled,
+	equalHeight = TestHelpers.tabs.equalHeight,
 	state = TestHelpers.tabs.state;
 
 module( "tabs: methods" );

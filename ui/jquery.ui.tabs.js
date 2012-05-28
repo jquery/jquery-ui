@@ -323,7 +323,9 @@ $.widget( "ui.tabs", {
 				parent.css( "overflow", overflow );
 			}
 
-			maxHeight -= this.list.outerHeight( true );
+			this.element.children().not( this.panels ).each(function() {
+				maxHeight -= $( this ).outerHeight( true );
+			});
 
 			this.panels.each(function() {
 					$( this ).height( Math.max( 0, maxHeight -
