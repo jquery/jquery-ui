@@ -138,32 +138,56 @@ TestHelpers.commonWidgetTests = function( widget, settings ) {
 /*
  * Experimental assertion for comparing DOM objects.
  *
- * Serializes an element and some attributes and it's children if any, otherwise the text.
+ * Serializes an element and some properties and it's children if any, otherwise the text.
  * Then compares the result using deepEqual.
  */
 window.domEqual = function( selector, modifier, message ) {
 	var expected, actual,
-		attributes = ["class", "role", "id", "tabIndex", "aria-activedescendant"];
+		properties = [
+			"autocomplete",
+			"aria-activedescendant",
+			"aria-controls",
+			"aria-describedby",
+			"aria-disabled",
+			"aria-expanded",
+			"aria-haspopup",
+			"aria-hidden",
+			"aria-labelledby",
+			"aria-pressed",
+			"aria-selected",
+			"aria-valuemax",
+			"aria-valuemin",
+			"aria-valuenow",
+			"class",
+			"disabled",
+			"href",
+			"id",
+			"nodeName",
+			"readOnly",
+			"role",
+			"tabIndex",
+			"title"
+		];
 
-	function extract(value) {
-		if (!value || !value.length) {
-			QUnit.push( false, actual, expected, "domEqual failed, can't extract " + selector + ", message was: " + message );
+	function extract( elem ) {
+		if ( !elem || !elem.length ) {
+			QUnit.push( false, actual, expected,
+				"domEqual failed, can't extract " + selector + ", message was: " + message );
 			return;
 		}
+
 		var children,
 			result = {};
-		result.nodeName = value[0].nodeName;
-		$.each(attributes, function(index, attr) {
-			result[attr] = value.prop(attr);
+		$.each( properties, function( index, attr ) {
+			result[ attr ] = elem.prop( attr );
 		});
-		result.children = [];
-		children = value.children();
-		if (children.length) {
-			children.each(function() {
-				result.children.push(extract($(this)));
-			});
+		children = elem.children();
+		if ( children.length ) {
+			result.children = elem.children().map(function( ind ) {
+				return extract( $( this ) );
+			}).get();
 		} else {
-			result.text = value.text();
+			result.text = elem.text();
 		}
 		return result;
 	}

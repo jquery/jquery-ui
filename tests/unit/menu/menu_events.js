@@ -315,16 +315,27 @@ asyncTest("handle keyboard navigation on menu without scroll and with submenus",
 		equal( $("#log").html(), "4,keydown,", "Keydown ESCAPE (close submenu)");
 
 		log("keydown",true);
-		element.simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
-		setTimeout( menukeyboard5, 50 );
+		element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
+		element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
+		element.simulate( "keydown", { keyCode: $.ui.keyCode.RIGHT } );
+		setTimeout( function() {
+			element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
+			element.simulate( "keydown", { keyCode: $.ui.keyCode.RIGHT } );
+			setTimeout( function() {
+				element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
+				element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
+				element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
+				equal( $("#log").html(), "0,4,2,0,1,0,6,5,keydown,", "Keydown skip dividers and items without anchors");
+
+				log("keydown",true);
+				element.simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
+				setTimeout( menukeyboard6, 50 );
+			}, 50 );
+		}, 50 );
 	}
 
-	function menukeyboard5() {
-		equal( $("#log").html(), "0,keydown,", "Keydown ENTER (open submenu)");
-
-		log("keydown",true);
-		element.simulate( "keydown", { keyCode: $.ui.keyCode.ENTER } );
-		equal( $("#log").html(), "Ada,keydown,", "Keydown ENTER (select item)");
+	function menukeyboard6() {
+		equal( $("#log").html(), "Ada,keydown,", "Keydown ENTER (open submenu)");
 
 		start();
 	}

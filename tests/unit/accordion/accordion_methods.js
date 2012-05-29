@@ -1,6 +1,6 @@
 (function( $ ) {
 
-var equalHeights = TestHelpers.accordion.equalHeights,
+var equalHeight = TestHelpers.accordion.equalHeight,
 	setupTeardown = TestHelpers.accordion.setupTeardown,
 	state = TestHelpers.accordion.state;
 
@@ -38,11 +38,11 @@ test( "refresh", function() {
 		.accordion({
 			heightStyle: "fill"
 		});
-	equalHeights( element, 246, 258 );
+	equalHeight( element, 255 );
 
 	element.parent().height( 500 );
 	element.accordion( "refresh" );
-	equalHeights( element, 446, 458 );
+	equalHeight( element, 455 );
 });
 
 }( jQuery ) );

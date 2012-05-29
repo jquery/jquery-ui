@@ -429,7 +429,6 @@ $.widget( "ui.autocomplete", {
 	},
 
 	_close: function( event ) {
-		clearTimeout( this.closing );
 		if ( this.menu.element.is( ":visible" ) ) {
 			this.menu.element.hide();
 			this.menu.blur();
