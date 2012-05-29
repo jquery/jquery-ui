@@ -247,7 +247,9 @@ $.widget( "ui.tabs", {
 			if ( panel.length) {
 				that.panels = that.panels.add( panel );
 			}
-			tab.attr( "aria-controls", selector.substring( 1 ) );
+			tab
+				.data( "ui-tabs-aria-controls", tab.attr( "aria-controls" ) )
+				.attr( "aria-controls", selector.substring( 1 ) );
 		});
 	},
 
@@ -488,8 +490,17 @@ $.widget( "ui.tabs", {
 					"ui-tabs-panel",
 					"ui-widget-content",
 					"ui-corner-bottom"
-				].join( " " ) )
-				.removeAttr( "aria-controls" );
+				].join( " " ) );
+			}
+		});
+
+		this.lis.each(function() {
+			var li = $( this ),
+				prev = li.data( "ui-tabs-aria-controls" );
+			if ( prev ) {
+				li.attr( "aria-controls", prev );
+			} else {
+				li.removeAttr( "aria-controls" );
 			}
 		});
 
