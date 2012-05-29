@@ -447,14 +447,8 @@ $.widget( "ui.tabs", {
 		});
 	},
 
-	_findActive: function( selector ) {
-		if ( typeof selector === "number" ) {
-			return this.lis.eq( selector );
-		}
-		if ( typeof selector === "string" ) {
-			return this.anchors.filter( "[href$='" + selector + "']" ).closest( "li" );
-		}
-		return $();
+	_findActive: function( index ) {
+		return index === false ? $() : this.lis.eq( index );
 	},
 
 	_getIndex: function( index ) {
