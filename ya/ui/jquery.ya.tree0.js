@@ -458,15 +458,18 @@
          * @name tree0#getChecked
          * @function
          * @param checked 指定勾选框的勾选状态，checked为true为被勾选状态，为false为未被勾选状态，默认为false
+         * @param {Boolean} withPart 指定是否包含半选中的节点
          * @returns JSON数据对象集合
          * @example
          * //获取所有被勾选节点的JSON数据对象集合
          * $('#myTree').tree0('getChecked',true);
          */      
-        getChecked: function(checked) {
+        getChecked: function(checked,withPart) {
             var self = this,
-                nodes = [];
-            var filter_config = checked?".checkbox_full":":not(.checkbox_full)";
+                nodes = [],
+                filterClass=!!withPart?".checkbox_full,.checkbox_part":".checkbox_full";
+            //var filter_config = checked?".checkbox_full,.checkbox_part":":not(.checkbox_full)";
+            var filter_config = checked? filterClass:":not("+filterClass+")";
             this.element
                 .find(".tree-checkbox")
                 .filter(filter_config).each(function(i,name){

@@ -67,6 +67,13 @@
   			//装入国内树
   			$('#navtree').tree0("setData",[citydata[0]]);
   			$('#navtree').tree0("refresh");
+
+  			$('#get-all-checked').click(function(){
+  				var nodes=$('#navtree').tree0("getChecked",true);
+  				var nodesWidthPart=$('#navtree').tree0("getChecked",true,true);
+  				console.dir(nodes);
+  				console.dir(nodesWidthPart);
+  			});
   		});
   	</script>
   
@@ -74,5 +81,6 @@
 
 <body>
   <ul id="navtree"></ul>
+  <button id="get-all-checked" type="button">获得所有选中的节点</button>
 </body>
 </html>
