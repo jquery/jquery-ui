@@ -13,8 +13,7 @@
  */
 (function($) {
 
-var idIncrement = 0,
-	currentEventTarget = null;
+var currentEventTarget = null;
 
 $.widget( "ui.menu", {
 	version: "@VERSION",
@@ -35,12 +34,11 @@ $.widget( "ui.menu", {
 	},
 	_create: function() {
 		this.activeMenu = this.element;
-		this.menuId = this.element.attr( "id" ) || "ui-menu-" + idIncrement++;
 		this.element
+			.uniqueId()
 			.addClass( "ui-menu ui-widget ui-widget-content ui-corner-all" )
 			.toggleClass( "ui-menu-icons", !!this.element.find( ".ui-icon" ).length )
 			.attr({
-				id: this.menuId,
 				role: this.options.role,
 				tabIndex: 0
 			})
@@ -145,18 +143,21 @@ $.widget( "ui.menu", {
 				.removeAttr( "aria-labelledby" )
 				.removeAttr( "aria-expanded" )
 				.removeAttr( "aria-hidden" )
+				.removeAttr( "aria-disabled" )
+				.removeUniqueId()
 				.show();
 
 		// destroy menu items
 		this.element.find( ".ui-menu-item" )
 			.removeClass( "ui-menu-item" )
 			.removeAttr( "role" )
+			.removeAttr( "aria-disabled" )
 			.children( "a" )
+				.removeUniqueId()
 				.removeClass( "ui-corner-all ui-state-hover" )
 				.removeAttr( "tabIndex" )
 				.removeAttr( "role" )
 				.removeAttr( "aria-haspopup" )
-				.removeAttr( "id" )
 				// TODO: is this correct? Don't these exist in the original markup?
 				.children( ".ui-icon" )
 					.remove();
@@ -273,7 +274,6 @@ $.widget( "ui.menu", {
 	refresh: function() {
 		// initialize nested menus
 		var menus,
-			menuId = this.menuId,
 			submenus = this.element.find( this.options.menus + ":not(.ui-menu)" )
 				.addClass( "ui-menu ui-widget ui-widget-content ui-corner-all" )
 				.hide()
@@ -290,13 +290,11 @@ $.widget( "ui.menu", {
 			.addClass( "ui-menu-item" )
 			.attr( "role", "presentation" )
 			.children( "a" )
+				.uniqueId()
 				.addClass( "ui-corner-all" )
 				.attr({
 					tabIndex: -1,
-					role: this._itemRole(),
-					id: function( i ) {
-						return menuId + "-" + i;
-					}
+					role: this._itemRole()
 				});
 
 		// initialize unlinked menu-items containing spaces and/or dashes only as dividers
