@@ -162,8 +162,8 @@ $.widget( "ui.tabs", {
 			case $.ui.keyCode.ENTER:
 				event.preventDefault();
 				clearTimeout( this.activating );
-				// TODO: should keyboard collapse content?
-				this.option( "active", selectedIndex );
+				// Determine if we should collapse or activate
+				this._activate( selectedIndex === this.options.active ? false : selectedIndex );
 				return;
 			default:
 				return;
