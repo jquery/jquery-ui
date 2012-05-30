@@ -178,10 +178,13 @@ $.widget( "ui.tabs", {
 
 		this.lis.eq( selectedIndex ).focus();
 		clearTimeout( this.activating );
-		this.activating = this._delay(function() {
-			this.option( "active", selectedIndex );
-		// TODO: what should this delay be?
-		}, 500 );
+
+		// Navigating with control key will prevent automatic activation
+		if ( !event.ctrlKey ) {
+			this.activating = this._delay(function() {
+				this.option( "active", selectedIndex );
+			}, 500 );
+		}
 	},
 
 	_panelKeydown: function( event ) {
