@@ -322,21 +322,22 @@ $.widget( "ui.tabs", {
 
 		this.panels = $();
 
-		this.anchors.each(function( i, a ) {
-			var selector, panel, id,
-				tab = $( a ).closest( "li" );
+		this.anchors.each(function( i, anchor ) {
+			var selector, panel, panelId,
+				anchorId = $( anchor ).uniqueId().attr( "id" ),
+				tab = $( anchor ).closest( "li" );
 
 			// inline tab
-			if ( isLocal( a ) ) {
-				selector = a.hash;
+			if ( isLocal( anchor ) ) {
+				selector = anchor.hash;
 				panel = that.element.find( that._sanitizeSelector( selector ) );
 			// remote tab
 			} else {
-				id = that._tabId( tab );
-				selector = "#" + id;
+				panelId = that._tabId( tab );
+				selector = "#" + panelId;
 				panel = that.element.find( selector );
 				if ( !panel.length ) {
-					panel = that._createPanel( id );
+					panel = that._createPanel( panelId );
 					panel.insertAfter( that.panels[ i - 1 ] || that.list );
 				}
 				panel.attr( "aria-live", "polite" );
@@ -347,7 +348,11 @@ $.widget( "ui.tabs", {
 			}
 			tab
 				.data( "ui-tabs-aria-controls", tab.attr( "aria-controls" ) )
-				.attr( "aria-controls", selector.substring( 1 ) );
+				.attr({
+					"aria-controls": selector.substring( 1 ),
+					"aria-labelledby": anchorId
+				});
+			panel.attr( "aria-labelledby", anchorId );
 		});
 
 		this.panels
@@ -378,8 +383,15 @@ $.widget( "ui.tabs", {
 
 		// disable tabs
 		for ( var i = 0, li; ( li = this.lis[ i ] ); i++ ) {
-			$( li ).toggleClass( "ui-state-disabled",
-				( disabled === true || $.inArray( i, disabled ) !== -1 ) );
+			if ( disabled === true || $.inArray( i, disabled ) !== -1 ) {
+				$( li )
+					.addClass( "ui-state-disabled" )
+					.attr( "aria-disabled", "true" );
+			} else {
+				$( li )
+					.removeClass( "ui-state-disabled" )
+					.removeAttr( "aria-disabled" );
+			}
 		}
 
 		this.options.disabled = disabled;
@@ -613,7 +625,8 @@ $.widget( "ui.tabs", {
 			.removeAttr( "tabIndex" )
 			.unbind( ".tabs" )
 			.removeData( "href.tabs" )
-			.removeData( "load.tabs" );
+			.removeData( "load.tabs" )
+			.removeUniqueId();
 
 		this.lis.unbind( ".tabs" ).add( this.panels ).each(function() {
 			if ( $.data( this, "ui-tabs-destroy" ) ) {
@@ -632,7 +645,12 @@ $.widget( "ui.tabs", {
 					].join( " " ) )
 					.removeAttr( "tabIndex" )
 					.removeAttr( "aria-live" )
-					.removeAttr( "aria-busy" );
+					.removeAttr( "aria-busy" )
+					.removeAttr( "aria-selected" )
+					.removeAttr( "aria-labelledby" )
+					.removeAttr( "aria-hidden" )
+					.removeAttr( "aria-expanded" )
+					.removeAttr( "role" );
 			}
 		});
 
