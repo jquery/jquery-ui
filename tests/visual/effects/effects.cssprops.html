@@ -1,0 +1,470 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>jQuery UI Animate CSS Props Test Suite</title>
+	<link rel="stylesheet" href="effects.all.css" type="text/css">
+	<script src="../../../jquery-1.7.2.js"></script>
+	<script src="../../../ui/jquery.effects.core.js"></script>
+	<script src="../../../ui/jquery.effects.scale.js"></script>
+	<script src="effects.all.js"></script>
+   <script src="https://raw.github.com/jquery/jquery-color/master/jquery.color.js"></script>
+	<script type="text/javascript" charset="utf-8">
+	jQuery(function( $ ) {
+     	var duration = 1000, easing = 'linear';
+      
+      var test      = $( '#testBox' ),
+		    allInputs = $( '.arg' ),
+          opts      = allInputs.filter('SELECT'),
+		    optsRev   = $( opts.get().reverse() ),
+		    current   = $( '#current' ),
+          propSel   = $( '#prop' ),
+          cycleBox  = $( '#cycleAll' ),
+		    total     = 1,
+          oldProp   = propSel.val(),
+          propArray = [],
+          defVal    = {};
+
+		opts.each(function() {
+			total *= this.options.length;
+		});
+
+		// Button clicking
+      $( "#cyclePrev" ).click(function() {
+			cycle( -1 );
+		});
+		$( "#cycleNext" ).click(function() {
+			cycle( 1 );
+		});
+		$( "#resetBtn" ).click(function() {
+         $('#controls').reset();
+      });
+      $( "#controls" ).submit(function() { return false; });
+      
+      $.fn.extend({
+         reset: function(makeBlank) {
+            this.each(function() {
+               var el   = $(this);
+               switch(this.nodeName.toUpperCase()) {
+                  case 'INPUT':
+                     this.checked = makeBlank ? false : this.defaultChecked;
+                     // fall-through
+                  case 'TEXTAREA':
+                     this.value   = makeBlank ? ''    : this.defaultValue;
+                     return true;
+                  case 'OPTGROUP':
+                  case 'OPTION':
+                     el = el.parents('SELECT');
+                     // fall-through
+                  case 'SELECT':
+                     el.find('OPTION').each(function(i) {
+                        this.selected = makeBlank ? false : this.defaultSelected;
+                        if (this.defaultSelected && !el[0].multiple && !makeBlank) {
+                           el[0].selectedIndex = i;
+                           return false;
+                        }
+                     });
+                     return true;
+                  case 'LABEL':
+                     var id   = el.attr('for');
+                     var list = el.find('INPUT, SELECT, TEXTAREA');
+                     if (id) list.unshift( $(id)[0] );
+                     list.reset();
+                     return true;
+                  case 'FORM':
+                     if (makeBlank) el.find('INPUT, LABEL, SELECT, TEXTAREA').reset();  // jQuery's reset()
+                     else           this.reset();                                       // JS FORM's reset()
+                     return true;
+                  default:
+                     el.find('FORM, INPUT, LABEL, SELECT, TEXTAREA').reset();
+                     return true;
+               }
+            });
+            return this;
+         }
+      });
+      
+      $('#controls').reset();
+      
+      var cycleAll = function() {
+         if (cycleBox.prop('checked')) cycle( 1, cycleAll );
+		}
+		$( "#cycleAll" ).prop('checked', false).change(function() {
+         if (cycleBox.prop('checked')) doAnim(cycleAll);
+      });
+		$( '#doAnim'   ).click(doAnim);
+      
+      // Default start/end values
+      var defTestArray = [
+         [ /color/i,              '#00FF00', '#FF00FF' ],
+         [ /font$|font-size/i,        '5pt',   '56pt'  ],
+         [ /outline|border.*width/i,  '1px',   '20px'  ],
+         [ /^(min-|max-)?width$/i,  '200px',  '700px'  ],
+         [ /^(min-|max-)?height$/i, '300px',   '50px'  ],
+         [ /letter-spacing/i,          0,      '10px'  ],
+         [ /line-height/i,             0,       '3em'  ],
+         [ /width|height/i,         '200px',  '500px'  ],
+         [ /column-count/i,            1,        5     ],
+         [ /weight/i,                100,      900     ],
+         [ /^clip$/i,                'auto', 'rect(150px 125px 100px 75px)'],         
+         [ /./i,                       0,     '100px'  ],
+      ];
+      propSel.find('OPTION').each(function(i, el) {
+         var prop = $(el).text();
+         propArray.push(prop);
+         var d = [];
+         
+         for (var i = 0; i < defTestArray.length; i++) {
+            var t = defTestArray[i];
+            if (t[0].test(prop)) { d = t; break; }
+         }
+         
+         defVal[prop] = {
+            startVal: d[1],
+            endVal:   d[2]
+         };
+		});
+
+      // Fill in initial values
+      chgVal();
+      
+      // onChange = set the defaults then run anim
+      opts.change(chgVal).change(doAnim);  
+      
+      // Save current state of testBox
+      $.effects.save( test, propArray );
+      
+		function cycle( direction, done ) {
+			optsRev.each(function() {
+				var cur = this.selectedIndex,
+					next = cur + direction,
+					len = this.options.length;
+				
+				this.selectedIndex = ( next + len ) % len;
+            chgVal();
+				
+				if ( this.selectedIndex === next ) return false;
+			});
+			doAnim(done);
+		}
+      
+      function chgVal(e) {
+         var prop = propSel.val();
+         var $startVal = $('#startVal');
+         var $endVal   = $('#endVal');
+         
+         if (e && $(e.target).attr('id') === 'prop') {
+            // Save old values
+            var val;
+            if (val = $startVal.val()) defVal[oldProp]['startVal'] = val;
+            if (val =   $endVal.val()) defVal[oldProp]['endVal']   = val;
+         }
+         
+         // Add new values
+         $startVal.val( defVal[prop]['startVal'] );
+           $endVal.val( defVal[prop]['endVal']   );
+         oldProp = prop;
+      }
+
+      var cur = 0;
+		function doAnim(done) {
+			cur = 0;
+			opts.each(function() {
+				cur *= this.options.length;
+				cur += this.selectedIndex;
+			});
+			cur++;
+			current.text( "Configuration: " + cur + " of " + total );
+         
+         var args = allInputs.map(function() {
+				return $(this).val();
+			}).get();
+         if (cur < total && typeof done === 'function') args.push(done)
+			run.apply(test, args);
+		}
+
+		function run( prop, s, e, done ) {
+			var el = this,
+				style = el[0].style;
+         
+         // clean up prop
+         var optVal = prop;
+         prop = prop.replace(/\s+.+$/, '');
+         
+         if (!done) el.stop(true, true);
+         var pre = el.css(prop);
+			$.effects.restore( el, propArray );
+			
+         el.delay(500, 'fx').queue('fx', function(next) {
+            el.css(prop, s);
+            checkVal(el, prop, s, 'Start');
+            next();
+         });
+
+         // certain things that need absolute positioning
+         if (/^(top|left|right|bottom)$|^clip/.test(prop)) {
+            var p = el.position();
+            el.css({
+               position: 'absolute',
+               top     : p.top,
+               left    : p.left
+            });
+         }
+         
+         var sAnim = {};
+         sAnim[prop] = e;
+         var eAnim = {};
+         eAnim[prop] = s;
+         
+         el.delay(50, 'fx').animate(sAnim, {
+            queue:    'fx',
+            duration: duration,
+            easing:   easing,
+            complete: function() { checkVal(el, prop, e, 'End'); }
+         }).delay(500, 'fx').animate(eAnim, {
+            queue:    'fx',
+            duration: duration,
+            easing:   easing,
+            complete: function() {
+               checkVal(el, prop, s, 'Restart');
+               el.delay(500, 'fx').queue('fx', function(next) {
+                  $.effects.restore( el, propArray );
+                  checkVal(el, prop, pre, 'Restor');
+                  if ( typeof style === "object" ) style.cssText = "";
+                  else                             el[0].style   = "";
+                  next();
+               });
+               if (typeof done === 'function')
+                  el.delay(1000, 'fx').queue('fx', function(next) { done(); next(); });
+            }         
+         });
+		}
+
+      function checkVal(el, prop, v, type) {
+         var r = el.css(prop);
+         // Try a few fuzzy matches
+         if (r != v) {
+            // Case?
+            if (r.toLowerCase() == v.toLowerCase()) return true;
+            
+            // Integer?
+            var rI = parseInt(r);
+            var vI = parseInt(v);
+            if (rI == vI && !isNaN(rI) && !isNaN(vI)) return true;
+                        
+            // Colors?
+            if (typeof $.Color === 'function') {
+               var rC = $.Color(el, prop);
+               if (rC && rC.toHexString() == v.toLowerCase()) return true;
+            }
+            // Missing px?
+            if (r.replace(/px/, '') == v.replace(/px/, '')) return true;
+            
+            $('#logArea').append('Test #'+cur+' ('+prop+'): '+type+'ing value of "'+r+'" not equal to "'+v+'"'+"<br/>");
+            return false;
+         }
+         return true;
+      }
+	});
+	</script>
+	<style type="text/css">
+   #logArea {
+      position: absolute;
+      top: 1%;
+      left: 1%;
+      width: 50%;
+      height: 96%;
+      overflow: auto;
+      font: 8pt monospace;
+      color: indianred;
+   }
+	#testArea {
+		width: 500px;
+		height: 200px;
+      top: 50px;
+      left: 50%;
+      margin-left: -250px;
+		position: relative;
+	}
+	#testBox {
+		width:  400px;
+		height: 150px;
+      min-width:  auto;
+      max-width:  auto;
+      min-height: auto;
+      max-height: auto;
+		background-color: #bada55;
+		color: black;
+		border: 10px solid #fff;
+      outline: green dotted thick;
+		margin: 10px;
+		padding: 10px;
+
+      -moz-column-count: 2; /* Firefox */
+      -webkit-column-count: 2; /* Safari and Chrome */
+      column-count: 2;
+
+      -moz-column-rule: 3px outset #ff00ff; /* Firefox */
+      -webkit-column-rule: 3px outset #ff00ff; /* Safari and Chrome */
+      column-rule: 3px outset #ff00ff;      
+   }
+	#controls {
+		position: absolute;
+		z-index: 300;
+		left: 50%;
+		top: 350px;
+		margin-left: -200px;
+		width: 400px;
+		opacity: 0.8;
+	}
+   #current, #cycleAll { padding-top: 10pt; }
+   LABEL {
+      display: block;
+      padding-bottom: 5px;
+   }
+   INPUT, SELECT {
+      padding: 0;
+      margin: 0;
+      vertical-align: bottom;
+      position: absolute;
+      left: 100px;
+   }
+   INPUT#cycleAll {
+      position: static;
+      vertical-align: center;
+   }
+	</style>
+</head>
+<body>
+	<div id="logArea"></div>
+	<div id="testArea">
+		<div id="testBox">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
+      ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
+      velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id
+      est laborum.</div>
+	</div>
+	<form id="controls">
+      <label>CSS Property
+         <select id="prop" class="arg">
+            <optgroup label="Simple Numerics">
+               <option>border-bottom-left-radius</option>
+               <option>border-bottom-right-radius</option>
+               <option>border-top-left-radius</option>
+               <option>border-top-right-radius</option>
+               <option>border-radius (as border-*-radius)</option>
+               <option>border-bottom-width</option>
+               <option>border-left-width</option>
+               <option>border-right-width</option>
+               <option>border-top-width</option>
+               <option>border-width (as border-*-width)</option>
+               <option>bottom</option>
+               <option>left</option>
+               <option>right</option>
+               <option>top</option>
+               <option>height</option>
+               <option>width</option>
+               <option>max-height</option>
+               <option>max-width</option>
+               <option>min-height</option>
+               <option>min-width</option>
+               <option>font-size</option>
+               <option>font (as font-size)</option>
+               <option>letter-spacing</option>
+               <option>word-spacing</option>
+               <option>line-height</option>
+               <option>tab-size</option>
+               <option>text-indent (as length)</option>
+               <option>vertical-align</option>
+               <option>margin-bottom</option>
+               <option>margin-left</option>
+               <option>margin-right</option>
+               <option>margin-top</option>
+               <option>margin (as margin-*)</option>
+               <option>padding-bottom</option>
+               <option>padding-left</option>
+               <option>padding-right</option>
+               <option>padding-top</option>
+               <option>padding (as padding-*)</option>
+               <option>outline-width</option>
+               <option>outline (as outline-width)</option>
+               <option>z-index</option>
+               <option>column-count</option>
+               <option>column-gap</option>
+               <option>column-rule-width</option>
+               <option>column-rule (as column-rule-width)</option>
+               <option>column-width</option>
+               <option>columns (as column-count)</option>
+               <option>columns (as column-width)</option>
+            </optgroup>
+            <optgroup label="Color Values">
+               <option>background (as background-color)</option>
+               <option>background-color</option>
+               <option>border-bottom-color</option>
+               <option>border-left-color</option>
+               <option>border-right-color</option>
+               <option>border-top-color</option>
+               <option>border-color</option>
+               <option>border-bottom (as border-bottom-color)</option>
+               <option>border-left (as border-left-color)</option>
+               <option>border-right (as border-right-color)</option>
+               <option>border-top (as border-top-color)</option>
+               <option>border (as border-color)</option>
+               <option>color</option>
+               <option>column-rule-color</option>
+               <option>column-rule (as column-rule-color)</option>
+               <option>outline-color</option>
+               <option>outline (as outline-color)</option>
+               <option>text-decoration-color</option>
+               <option>text-decoration (as text-decoration-color)</option>
+               <option>text-emphasis-color</option>
+               <option>text-emphasis (as text-emphasis-color)</option>
+            </optgroup>
+            <optgroup label="Complex Values">
+               <option>background-position</option>
+               <option>border-spacing</option>
+               <option>clip</option>
+               <option>font-weight</option>
+               <option>font (as font-weight)</option>
+               <option>box-shadow</option>
+               <option>text-shadow</option>
+               <option>text-indent</option>
+            </optgroup>
+            <optgroup label="Combo Properties">
+               <option>background</option>
+               <option>border-bottom</option>
+               <option>border-left</option>
+               <option>border-right</option>
+               <option>border-top</option>
+               <option>border-color</option>
+               <option>border-image</option>
+               <option>border-radius</option>
+               <option>border-width</option>
+               <option>border</option>
+               <option>columns</option>
+               <option>column-rule</option>
+               <option>font</option>
+               <option>margin</option>
+               <option>padding</option>
+               <option>outline</option>
+               <option>text-decoration</option>
+               <option>text-emphasis</option>
+               <option>text-indent</option>
+            </optgroup>
+         </select>
+      </label>
+      <label>Starting Value
+         <input id="startVal" type=text size=20 class="arg">
+      </label>
+      <label>Ending Value
+         <input id="endVal"   type=text size=20 class="arg">
+      </label>
+
+      <label id="current">jQuery UI Animate CSS Properties Test</label>
+		<button id="cyclePrev">Back</button>
+		<button id="doAnim">Run Animation</button>
+		<button id="cycleNext">Forward</button>
+		<button id="resetBtn">Reset</button>
+      
+      <label><input id="cycleAll" type=checkbox> Run All Tests Automatically</label>
+	</form>
+</body>
