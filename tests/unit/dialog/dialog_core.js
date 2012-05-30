@@ -89,26 +89,11 @@ function margin(el, side) {
 module("dialog: core");
 
 test("title id", function() {
-	expect(3);
-
-	var titleId;
-
-	// reset the uuid so we know what values to expect
-	$.ui.dialog.uuid = 0;
+	expect(1);
 
 	el = $('<div></div>').dialog();
-	titleId = dlg().find('.ui-dialog-title').attr('id');
-	equal(titleId, 'ui-dialog-title-1', 'auto-numbered title id');
-	el.remove();
-
-	el = $('<div></div>').dialog();
-	titleId = dlg().find('.ui-dialog-title').attr('id');
-	equal(titleId, 'ui-dialog-title-2', 'auto-numbered title id');
-	el.remove();
-
-	el = $('<div id="foo">').dialog();
-	titleId = dlg().find('.ui-dialog-title').attr('id');
-	equal(titleId, 'ui-dialog-title-foo', 'carried over title id');
+	var titleId = dlg().find('.ui-dialog-title').attr('id');
+	ok( /ui-id-\d+$/.test( titleId ), 'auto-numbered title id');
 	el.remove();
 });
 

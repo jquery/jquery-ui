@@ -138,12 +138,16 @@ TestHelpers.commonWidgetTests = function( widget, settings ) {
 /*
  * Experimental assertion for comparing DOM objects.
  *
- * Serializes an element and some properties and it's children if any, otherwise the text.
+ * Serializes an element and some properties and attributes and it's children if any, otherwise the text.
  * Then compares the result using deepEqual.
  */
 window.domEqual = function( selector, modifier, message ) {
 	var expected, actual,
 		properties = [
+			"disabled",
+			"readOnly"
+		],
+		attributes = [
 			"autocomplete",
 			"aria-activedescendant",
 			"aria-controls",
@@ -159,11 +163,9 @@ window.domEqual = function( selector, modifier, message ) {
 			"aria-valuemin",
 			"aria-valuenow",
 			"class",
-			"disabled",
 			"href",
 			"id",
 			"nodeName",
-			"readOnly",
 			"role",
 			"tabIndex",
 			"title"
@@ -179,7 +181,12 @@ window.domEqual = function( selector, modifier, message ) {
 		var children,
 			result = {};
 		$.each( properties, function( index, attr ) {
-			result[ attr ] = elem.prop( attr );
+			var value = elem.prop( attr );
+			result[ attr ] = value !== undefined ? value : "";
+		});
+		$.each( attributes, function( index, attr ) {
+			var value = elem.attr( attr );
+			result[ attr ] = value !== undefined ? value : "";
 		});
 		children = elem.children();
 		if ( children.length ) {

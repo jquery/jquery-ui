@@ -345,7 +345,9 @@ $.widget( "ui.tabs", {
 			if ( panel.length) {
 				that.panels = that.panels.add( panel );
 			}
-			tab.attr( "aria-controls", selector.substring( 1 ) );
+			tab
+				.data( "ui-tabs-aria-controls", tab.attr( "aria-controls" ) )
+				.attr( "aria-controls", selector.substring( 1 ) );
 		});
 
 		this.panels
@@ -631,6 +633,16 @@ $.widget( "ui.tabs", {
 					.removeAttr( "tabIndex" )
 					.removeAttr( "aria-live" )
 					.removeAttr( "aria-busy" );
+			}
+		});
+
+		this.lis.each(function() {
+			var li = $( this ),
+				prev = li.data( "ui-tabs-aria-controls" );
+			if ( prev ) {
+				li.attr( "aria-controls", prev );
+			} else {
+				li.removeAttr( "aria-controls" );
 			}
 		});
 
