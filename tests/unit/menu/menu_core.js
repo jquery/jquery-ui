@@ -23,7 +23,7 @@ test("accessibility", function () {
 
 	item = menu.find( "li:last" );
 	menu.menu( "focus", $.Event(), item );
-	ok( /ui-id-\d+$/.test( menu.attr( "aria-activedescendant" ) ), "aria attribute, generated id");
+	ok( /^ui-id-\d+$/.test( menu.attr( "aria-activedescendant" ) ), "aria attribute, generated id");
 });
 
 })(jQuery);
