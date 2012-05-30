@@ -488,7 +488,8 @@ $.widget( "ui.tabs", {
 					"ui-tabs-panel",
 					"ui-widget-content",
 					"ui-corner-bottom"
-				].join( " " ) );
+				].join( " " ) )
+				.removeAttr( "aria-controls" );
 			}
 		});
 
