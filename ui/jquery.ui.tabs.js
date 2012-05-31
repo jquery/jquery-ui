@@ -194,16 +194,20 @@ $.widget( "ui.tabs", {
 	},
 
 	_focusNextTab: function( index, goingForward ) {
-		var lastTabIndex = this.anchors.length - 1;
+		var lastTabIndex = this.lis.length - 1;
 
-		while ( $.inArray( index, this.options.disabled ) !== -1 ) {
-			index = goingForward ? index + 1 : index - 1;
+		function constrain() {
 			if ( index > lastTabIndex ) {
 				index = 0;
 			}
 			if ( index < 0 ) {
 				index = lastTabIndex;
 			}
+			return index;
+		}
+
+		while ( $.inArray( constrain(), this.options.disabled ) !== -1 ) {
+			index = goingForward ? index + 1 : index - 1;
 		}
 
 		this.lis.eq( index ).focus();
