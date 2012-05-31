@@ -9,6 +9,9 @@
  */
 (function( $, undefined ) {
 
+var uuid = 0,
+	runiqueId = /^ui-id-\d+$/;
+
 // prevent duplicate loading
 // this is only a problem because we proxy existing functions
 // and we don't want to double proxy them
@@ -105,6 +108,22 @@ $.fn.extend({
 		}
 
 		return 0;
+	},
+
+	uniqueId: function() {
+		return this.each(function() {
+			if ( !this.id ) {
+				this.id = "ui-id-" + (++uuid);
+			}
+		});
+	},
+
+	removeUniqueId: function() {
+		return this.each(function() {
+			if ( runiqueId.test( this.id ) ) {
+				$( this ).removeAttr( "id" );
+			}
+		});
 	},
 
 	disableSelection: function() {

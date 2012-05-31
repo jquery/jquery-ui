@@ -153,4 +153,14 @@ test( "outerHeight(true) - setter", function() {
 	equal( el.height(), 32, "height set properly when hidden" );
 });
 
+test( "uniqueId / removeUniqueId", function() {
+	var el = $( "img" ).eq( 0 );
+
+	equal( el.attr( "id" ), undefined, "element has no initial id" );
+	el.uniqueId();
+	ok( /ui-id-\d+$/.test( el.attr( "id" ) ), "element has generated id" );
+	el.removeUniqueId();
+	equal( el.attr( "id" ), undefined, "unique id has been removed from element" );
+});
+
 })( jQuery );

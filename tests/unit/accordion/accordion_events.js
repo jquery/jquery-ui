@@ -56,11 +56,11 @@ test( "beforeActivate", function() {
 	element.one( "accordionbeforeactivate", function( event, ui ) {
 		ok( !( "originalEvent" in event ) );
 		equal( ui.oldHeader.length, 0 );
-		equal( ui.oldContent.length, 0 );
+		equal( ui.oldPanel.length, 0 );
 		equal( ui.newHeader.length, 1 );
 		strictEqual( ui.newHeader[ 0 ], headers[ 0 ] );
-		equal( ui.newContent.length, 1 );
-		strictEqual( ui.newContent[ 0 ], content[ 0 ] );
+		equal( ui.newPanel.length, 1 );
+		strictEqual( ui.newPanel[ 0 ], content[ 0 ] );
 		state( element, 0, 0, 0 );
 	});
 	element.accordion( "option", "active", 0 );
@@ -70,12 +70,12 @@ test( "beforeActivate", function() {
 		equal( event.originalEvent.type, "click" );
 		equal( ui.oldHeader.length, 1 );
 		strictEqual( ui.oldHeader[ 0 ], headers[ 0 ] );
-		equal( ui.oldContent.length, 1 );
-		strictEqual( ui.oldContent[ 0 ], content[ 0 ] );
+		equal( ui.oldPanel.length, 1 );
+		strictEqual( ui.oldPanel[ 0 ], content[ 0 ] );
 		equal( ui.newHeader.length, 1 );
 		strictEqual( ui.newHeader[ 0 ], headers[ 1 ] );
-		equal( ui.newContent.length, 1 );
-		strictEqual( ui.newContent[ 0 ], content[ 1 ] );
+		equal( ui.newPanel.length, 1 );
+		strictEqual( ui.newPanel[ 0 ], content[ 1 ] );
 		state( element, 1, 0, 0 );
 	});
 	headers.eq( 1 ).click();
@@ -85,10 +85,10 @@ test( "beforeActivate", function() {
 		ok( !( "originalEvent" in event ) );
 		equal( ui.oldHeader.length, 1 );
 		strictEqual( ui.oldHeader[ 0 ], headers[ 1 ] );
-		equal( ui.oldContent.length, 1 );
-		strictEqual( ui.oldContent[ 0 ], content[ 1 ] );
+		equal( ui.oldPanel.length, 1 );
+		strictEqual( ui.oldPanel[ 0 ], content[ 1 ] );
 		equal( ui.newHeader.length, 0 );
-		equal( ui.newContent.length, 0 );
+		equal( ui.newPanel.length, 0 );
 		state( element, 0, 1, 0 );
 	});
 	element.accordion( "option", "active", false );
@@ -97,11 +97,11 @@ test( "beforeActivate", function() {
 	element.one( "accordionbeforeactivate", function( event, ui ) {
 		ok( !( "originalEvent" in event ) );
 		equal( ui.oldHeader.length, 0 );
-		equal( ui.oldContent.length, 0 );
+		equal( ui.oldPanel.length, 0 );
 		equal( ui.newHeader.length, 1 );
 		strictEqual( ui.newHeader[ 0 ], headers[ 2 ] );
-		equal( ui.newContent.length, 1 );
-		strictEqual( ui.newContent[ 0 ], content[ 2 ] );
+		equal( ui.newPanel.length, 1 );
+		strictEqual( ui.newPanel[ 0 ], content[ 2 ] );
 		event.preventDefault();
 		state( element, 0, 0, 0 );
 	});
@@ -120,33 +120,33 @@ test( "activate", function() {
 
 	element.one( "accordionactivate", function( event, ui ) {
 		equal( ui.oldHeader.length, 0 );
-		equal( ui.oldContent.length, 0 );
+		equal( ui.oldPanel.length, 0 );
 		equal( ui.newHeader.length, 1 );
 		strictEqual( ui.newHeader[ 0 ], headers[ 0 ] );
-		equal( ui.newContent.length, 1 );
-		strictEqual( ui.newContent[ 0 ], content[ 0 ] );
+		equal( ui.newPanel.length, 1 );
+		strictEqual( ui.newPanel[ 0 ], content[ 0 ] );
 	});
 	element.accordion( "option", "active", 0 );
 
 	element.one( "accordionactivate", function( event, ui ) {
 		equal( ui.oldHeader.length, 1 );
 		strictEqual( ui.oldHeader[ 0 ], headers[ 0 ] );
-		equal( ui.oldContent.length, 1 );
-		strictEqual( ui.oldContent[ 0 ], content[ 0 ] );
+		equal( ui.oldPanel.length, 1 );
+		strictEqual( ui.oldPanel[ 0 ], content[ 0 ] );
 		equal( ui.newHeader.length, 1 );
 		strictEqual( ui.newHeader[ 0 ], headers[ 1 ] );
-		equal( ui.newContent.length, 1 );
-		strictEqual( ui.newContent[ 0 ], content[ 1 ] );
+		equal( ui.newPanel.length, 1 );
+		strictEqual( ui.newPanel[ 0 ], content[ 1 ] );
 	});
 	headers.eq( 1 ).click();
 
 	element.one( "accordionactivate", function( event, ui ) {
 		equal( ui.oldHeader.length, 1 );
 		strictEqual( ui.oldHeader[ 0 ], headers[ 1 ] );
-		equal( ui.oldContent.length, 1 );
-		strictEqual( ui.oldContent[ 0 ], content[ 1 ] );
+		equal( ui.oldPanel.length, 1 );
+		strictEqual( ui.oldPanel[ 0 ], content[ 1 ] );
 		equal( ui.newHeader.length, 0 );
-		equal( ui.newContent.length, 0 );
+		equal( ui.newPanel.length, 0 );
 	});
 	element.accordion( "option", "active", false );
 

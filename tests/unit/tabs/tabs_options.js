@@ -1,6 +1,7 @@
 (function( $ ) {
 
 var disabled = TestHelpers.tabs.disabled,
+	equalHeight = TestHelpers.tabs.equalHeight,
 	state = TestHelpers.tabs.state;
 
 module( "tabs: options" );
@@ -209,6 +210,72 @@ test( "{ event: custom }", function() {
 	element.find( ".ui-tabs-nav .ui-tabs-anchor" ).eq( 1 ).trigger( "custom3" );
 	equal( element.tabs( "option", "active" ), 1 );
 	state( element, 0, 1, 0 );
+});
+
+test( "{ heightStyle: 'auto' }", function() {
+	expect( 2 );
+	var element = $( "#tabs8" ).tabs({ heightStyle: "auto" });
+	equalHeight( element, 45 );
+});
+
+test( "{ heightStyle: 'content' }", function() {
+	expect( 2 );
+	var element = $( "#tabs8" ).tabs({ heightStyle: "content" }),
+		sizes = element.find( ".ui-tabs-panel" ).map(function() {
+			return $( this ).height();
+		}).get();
+	equal( sizes[ 0 ], 45 );
+	equal( sizes[ 1 ], 15 );
+});
+
+test( "{ heightStyle: 'fill' }", function() {
+	expect( 2 );
+	$( "#tabs8Wrapper" ).height( 500 );
+	var element = $( "#tabs8" ).tabs({ heightStyle: "fill" });
+	equalHeight( element, 485 );
+});
+
+test( "{ heightStyle: 'fill' } with sibling", function() {
+	expect( 2 );
+	$( "#tabs8Wrapper" ).height( 500 );
+	$( "<p>Lorem Ipsum</p>" )
+		.css({
+			height: 50,
+			marginTop: 20,
+			marginBottom: 30
+		})
+		.prependTo( "#tabs8Wrapper" );
+	var element = $( "#tabs8" ).tabs({ heightStyle: "fill" });
+	equalHeight( element, 385 );
+});
+
+test( "{ heightStyle: 'fill' } with multiple siblings", function() {
+	expect( 2 );
+	$( "#tabs8Wrapper" ).height( 500 );
+	$( "<p>Lorem Ipsum</p>" )
+		.css({
+			height: 50,
+			marginTop: 20,
+			marginBottom: 30
+		})
+		.prependTo( "#tabs8Wrapper" );
+	$( "<p>Lorem Ipsum</p>" )
+		.css({
+			height: 50,
+			marginTop: 20,
+			marginBottom: 30,
+			position: "absolute"
+		})
+		.prependTo( "#tabs8Wrapper" );
+	$( "<p>Lorem Ipsum</p>" )
+		.css({
+			height: 25,
+			marginTop: 10,
+			marginBottom: 15
+		})
+		.prependTo( "#tabs8Wrapper" );
+	var element = $( "#tabs8" ).tabs({ heightStyle: "fill" });
+	equalHeight( element, 335 );
 });
 
 // TODO: add animation tests

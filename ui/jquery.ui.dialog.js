@@ -87,7 +87,6 @@ $.widget("ui.dialog", {
 			options = this.options,
 
 			title = options.title || "&#160;",
-			titleId = $.ui.dialog.getTitleId( this.element ),
 
 			uiDialog = ( this.uiDialog = $( "<div>" ) )
 				.addClass( uiDialogClasses + options.dialogClass )
@@ -104,10 +103,6 @@ $.widget("ui.dialog", {
 						that.close( event );
 						event.preventDefault();
 					}
-				})
-				.attr({
-					role: "dialog",
-					"aria-labelledby": titleId
 				})
 				.mousedown(function( event ) {
 					that.moveToTop( false, event );
@@ -140,8 +135,8 @@ $.widget("ui.dialog", {
 				.appendTo( uiDialogTitlebarClose ),
 
 			uiDialogTitle = $( "<span>" )
+				.uniqueId()
 				.addClass( "ui-dialog-title" )
-				.attr( "id", titleId )
 				.html( title )
 				.prependTo( uiDialogTitlebar ),
 
@@ -151,6 +146,11 @@ $.widget("ui.dialog", {
 			uiButtonSet = ( this.uiButtonSet = $( "<div>" ) )
 				.addClass( "ui-dialog-buttonset" )
 				.appendTo( uiDialogButtonPane );
+
+		uiDialog.attr({
+			role: "dialog",
+			"aria-labelledby": uiDialogTitle.attr( "id" )
+		});
 
 		uiDialogTitlebar.find( "*" ).add( uiDialogTitlebar ).disableSelection();
 		this._hoverable( uiDialogTitlebarClose );

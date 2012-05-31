@@ -7,6 +7,7 @@ TestHelpers.commonWidgetTests( "tabs", {
 		cookie: null,
 		disabled: false,
 		event: "click",
+		heightStyle: "content",
 		hide: null,
 		fx: null,
 		idPrefix: "ui-tabs-",

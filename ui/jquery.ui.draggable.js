@@ -55,17 +55,9 @@ $.widget("ui.draggable", $.ui.mouse, {
 
 	},
 
-	destroy: function() {
-		if(!this.element.data('draggable')) return;
-		this.element
-			.removeData("draggable")
-			.unbind(".draggable")
-			.removeClass("ui-draggable"
-				+ " ui-draggable-dragging"
-				+ " ui-draggable-disabled");
+	_destroy: function() {
+		this.element.removeClass( "ui-draggable ui-draggable-dragging ui-draggable-disabled" );
 		this._mouseDestroy();
-
-		return this;
 	},
 
 	_mouseCapture: function(event) {
@@ -101,6 +93,8 @@ $.widget("ui.draggable", $.ui.mouse, {
 
 		//Create and append the visible helper
 		this.helper = this._createHelper(event);
+
+		this.helper.addClass("ui-draggable-dragging");
 
 		//Cache the helper size
 		this._cacheHelperProportions();
@@ -162,7 +156,7 @@ $.widget("ui.draggable", $.ui.mouse, {
 		if ($.ui.ddmanager && !o.dropBehaviour)
 			$.ui.ddmanager.prepareOffsets(this, event);
 
-		this.helper.addClass("ui-draggable-dragging");
+		
 		this._mouseDrag(event, true); //Execute the drag once - this causes the helper not to be visible before getting its correct position
 		
 		//If the ddmanager is used for droppables, inform the manager that dragging has started (see #5003)

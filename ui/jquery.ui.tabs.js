@@ -34,6 +34,7 @@ $.widget( "ui.tabs", {
 		active: null,
 		collapsible: false,
 		event: "click",
+		heightStyle: "content",
 		hide: null,
 		show: null,
 
@@ -150,6 +151,10 @@ $.widget( "ui.tabs", {
 		if ( key === "event" ) {
 			this._setupEvents( value );
 		}
+
+		if ( key === "heightStyle" ) {
+			this._setupHeightStyle( value );
+		}
 	},
 
 	_tabId: function( tab ) {
@@ -202,6 +207,7 @@ $.widget( "ui.tabs", {
 
 		this._setupDisabled( options.disabled );
 		this._setupEvents( options.event );
+		this._setupHeightStyle( options.heightStyle );
 
 		// remove all handlers, may run on existing tabs
 		this.lis.unbind( ".tabs" );
@@ -241,7 +247,9 @@ $.widget( "ui.tabs", {
 			if ( panel.length) {
 				that.panels = that.panels.add( panel );
 			}
-			tab.attr( "aria-controls", selector.substring( 1 ) );
+			tab
+				.data( "ui-tabs-aria-controls", tab.attr( "aria-controls" ) )
+				.attr( "aria-controls", selector.substring( 1 ) );
 		});
 	},
 
@@ -288,6 +296,50 @@ $.widget( "ui.tabs", {
 		}
 		this.anchors.unbind( ".tabs" );
 		this._bind( this.anchors, events );
+	},
+
+	_setupHeightStyle: function( heightStyle ) {
+		var maxHeight, overflow,
+			parent = this.element.parent();
+
+		if ( heightStyle === "fill" ) {
+			// IE 6 treats height like minHeight, so we need to turn off overflow
+			// in order to get a reliable height
+			// we use the minHeight support test because we assume that only
+			// browsers that don't support minHeight will treat height as minHeight
+			if ( !$.support.minHeight ) {
+				overflow = parent.css( "overflow" );
+				parent.css( "overflow", "hidden");
+			}
+			maxHeight = parent.height();
+			this.element.siblings( ":visible" ).each(function() {
+				var elem = $( this ),
+					position = elem.css( "position" );
+
+				if ( position === "absolute" || position === "fixed" ) {
+					return;
+				}
+				maxHeight -= elem.outerHeight( true );
+			});
+			if ( overflow ) {
+				parent.css( "overflow", overflow );
+			}
+
+			this.element.children().not( this.panels ).each(function() {
+				maxHeight -= $( this ).outerHeight( true );
+			});
+
+			this.panels.each(function() {
+				$( this ).height( Math.max( 0, maxHeight -
+					$( this ).innerHeight() + $( this ).height() ) );
+			})
+			.css( "overflow", "auto" );
+		} else if ( heightStyle === "auto" ) {
+			maxHeight = 0;
+			this.panels.each(function() {
+				maxHeight = Math.max( maxHeight, $( this ).height( "" ).height() );
+			}).height( maxHeight );
+		}
 	},
 
 	_eventHandler: function( event ) {
@@ -397,14 +449,8 @@ $.widget( "ui.tabs", {
 		});
 	},
 
-	_findActive: function( selector ) {
-		if ( typeof selector === "number" ) {
-			return this.lis.eq( selector );
-		}
-		if ( typeof selector === "string" ) {
-			return this.anchors.filter( "[href$='" + selector + "']" ).closest( "li" );
-		}
-		return $();
+	_findActive: function( index ) {
+		return index === false ? $() : this.lis.eq( index );
 	},
 
 	_getIndex: function( index ) {
@@ -447,6 +493,20 @@ $.widget( "ui.tabs", {
 				].join( " " ) );
 			}
 		});
+
+		this.lis.each(function() {
+			var li = $( this ),
+				prev = li.data( "ui-tabs-aria-controls" );
+			if ( prev ) {
+				li.attr( "aria-controls", prev );
+			} else {
+				li.removeAttr( "aria-controls" );
+			}
+		});
+
+		if ( this.options.heightStyle !== "content" ) {
+			this.panels.css( "height", "" );
+		}
 
 		return this;
 	},

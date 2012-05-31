@@ -427,7 +427,7 @@ $.widget( "ui.spinner", {
 		this._refresh();
 	},
 
-	destroy: function() {
+	_destroy: function() {
 		this.element
 			.removeClass( "ui-spinner-input" )
 			.prop( "disabled", false )
@@ -436,7 +436,6 @@ $.widget( "ui.spinner", {
 			.removeAttr( "aria-valuemin" )
 			.removeAttr( "aria-valuemax" )
 			.removeAttr( "aria-valuenow" );
-		this._super();
 		this.uiSpinner.replaceWith( this.element );
 	},
 
