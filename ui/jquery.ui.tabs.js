@@ -55,7 +55,24 @@ $.widget( "ui.tabs", {
 
 		this.element
 			.addClass( "ui-tabs ui-widget ui-widget-content ui-corner-all" )
-			.toggleClass( "ui-tabs-collapsible", options.collapsible );
+			.toggleClass( "ui-tabs-collapsible", options.collapsible )
+			// Prevent users from focusing disabled tabs via click
+			.delegate( ".ui-tabs-nav > li", "mousedown", function( event ) {
+				if ( $( this ).is( ".ui-state-disabled" ) ) {
+					event.preventDefault();
+				}
+			})
+			// support: IE <9
+			// Preventing the default action in mousedown doesn't prevent IE
+			// from focusing the element, so if the anchor gets focused, blur.
+			// We don't have to worry about focusing the previously focused
+			// element since clicking on a non-focusable element should focus
+			// the body anyway.
+			.delegate( ".ui-tabs-anchor", "focus", function() {
+				if ( $( this ).closest( "li" ).is( ".ui-state-disabled" ) ) {
+					this.blur();
+				}
+			});
 
 		this._processTabs();
 
