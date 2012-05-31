@@ -129,18 +129,7 @@ $.widget( "ui.tabs", {
 	_tabKeydown: function( event ) {
 		var focusedTab = $( this.document[0].activeElement ).closest( "li" ),
 			selectedIndex = this.lis.index( focusedTab ),
-			goingForward = true,
-			lastTabIndex = this.anchors.length - 1;
-
-		function normalizeIndex( index ) {
-			if ( index > lastTabIndex ) {
-				index = 0;
-			}
-			if ( index < 0 ) {
-				index = lastTabIndex;
-			}
-			return index;
-		}
+			goingForward = true;
 
 		switch ( event.keyCode ) {
 			case $.ui.keyCode.RIGHT:
@@ -153,7 +142,7 @@ $.widget( "ui.tabs", {
 				selectedIndex--;
 				break;
 			case $.ui.keyCode.END:
-				selectedIndex = lastTabIndex;
+				selectedIndex = this.anchors.length - 1;
 				break;
 			case $.ui.keyCode.HOME:
 				selectedIndex = 0;
@@ -176,14 +165,8 @@ $.widget( "ui.tabs", {
 		}
 
 		event.preventDefault();
-
-		while ( $.inArray( selectedIndex, this.options.disabled ) !== -1 ) {
-			selectedIndex = goingForward ? selectedIndex + 1 : selectedIndex - 1;
-			selectedIndex = normalizeIndex( selectedIndex );
-		}
-
-		this.lis.eq( selectedIndex ).focus();
 		clearTimeout( this.activating );
+		selectedIndex = this._focusNextTab( selectedIndex, goingForward );
 
 		// Navigating with control key will prevent automatic activation
 		if ( !event.ctrlKey ) {
@@ -194,10 +177,37 @@ $.widget( "ui.tabs", {
 	},
 
 	_panelKeydown: function( event ) {
-		if ( event.keyCode === $.ui.keyCode.UP && event.ctrlKey ) {
+		// ctrl+up moves focus to the current tab
+		if ( event.ctrlKey && event.keyCode === $.ui.keyCode.UP ) {
 			event.preventDefault();
 			this.active.focus();
+			return;
 		}
+
+		// alt+page up/down moves focus to the previous/next tab (and activates)
+		if ( event.altKey && event.keyCode === $.ui.keyCode.PAGE_UP ) {
+			this._activate( this._focusNextTab( this.options.active - 1, false ) );
+		}
+		if ( event.altKey && event.keyCode === $.ui.keyCode.PAGE_DOWN ) {
+			this._activate( this._focusNextTab( this.options.active + 1, true ) );
+		}
+	},
+
+	_focusNextTab: function( index, goingForward ) {
+		var lastTabIndex = this.anchors.length - 1;
+
+		while ( $.inArray( index, this.options.disabled ) !== -1 ) {
+			index = goingForward ? index + 1 : index - 1;
+			if ( index > lastTabIndex ) {
+				index = 0;
+			}
+			if ( index < 0 ) {
+				index = lastTabIndex;
+			}
+		}
+
+		this.lis.eq( index ).focus();
+		return index;
 	},
 
 	_setOption: function( key, value ) {
