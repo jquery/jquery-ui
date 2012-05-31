@@ -855,6 +855,7 @@ $.widget("ui.selectmenu", {
 			var _offset = "0 " + ( this.list.offset().top  - selected.offset().top - ( this.newelement.outerHeight() + selected.outerHeight() ) / 2);
 		}
 		this.listWrap
+			.removeAttr('style')
 			.zIndex( this.element.zIndex() + 1 )
 			.position({
 				// set options for position plugin
