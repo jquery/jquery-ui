@@ -157,10 +157,7 @@ $.widget( "ui.menu", {
 				.removeClass( "ui-corner-all ui-state-hover" )
 				.removeAttr( "tabIndex" )
 				.removeAttr( "role" )
-				.removeAttr( "aria-haspopup" )
-				// TODO: is this correct? Don't these exist in the original markup?
-				.children( ".ui-icon" )
-					.remove();
+				.removeAttr( "aria-haspopup" );
 
 		// unbind currentEventTarget click event handler
 		$( currentEventTarget ).unbind( "click.menu" );
