@@ -9,6 +9,15 @@ git_branch="1-8-stable"
 trac_url="http://bugs.jqueryui.com"
 
 
+#
+# Verify repo state
+#
+
+echo "Is AUTHORS.txt up to date?"
+echo "Press enter to continue, or ctrl+c to cancel."
+read
+
+
 
 #
 # Setup environment
