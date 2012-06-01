@@ -137,7 +137,7 @@ $.widget( "ui.menu", {
 		this.element
 			.removeAttr( "aria-activedescendant" )
 			.find( ".ui-menu" ).andSelf()
-				.removeClass( "ui-menu ui-widget ui-widget-content ui-corner-all" )
+				.removeClass( "ui-menu ui-widget ui-widget-content ui-corner-all ui-menu-icons" )
 				.removeAttr( "role" )
 				.removeAttr( "tabIndex" )
 				.removeAttr( "aria-labelledby" )
@@ -157,7 +157,16 @@ $.widget( "ui.menu", {
 				.removeClass( "ui-corner-all ui-state-hover" )
 				.removeAttr( "tabIndex" )
 				.removeAttr( "role" )
-				.removeAttr( "aria-haspopup" );
+				.removeAttr( "aria-haspopup" )
+				.children().each( function() {
+					var elem = $( this );
+					if ( elem.data( "ui-menu-submenu-carat" ) ) {
+						elem.remove();
+					}
+				});
+
+		// destroy menu dividers
+		this.element.find( ".ui-menu-divider" ).removeClass( "ui-menu-divider ui-widget-content" );
 
 		// unbind currentEventTarget click event handler
 		$( currentEventTarget ).unbind( "click.menu" );
@@ -309,11 +318,12 @@ $.widget( "ui.menu", {
 
 		submenus.each(function() {
 			var menu = $( this ),
-				item = menu.prev( "a" );
+				item = menu.prev( "a" ),
+				submenuCarat = $( '<span class="ui-menu-icon ui-icon ui-icon-carat-1-e"></span>' ).data( "ui-menu-submenu-carat", true );
 
 			item
 				.attr( "aria-haspopup", "true" )
-				.prepend( '<span class="ui-menu-icon ui-icon ui-icon-carat-1-e"></span>' );
+				.prepend( submenuCarat );
 			menu.attr( "aria-labelledby", item.attr( "id" ) );
 		});
 	},
