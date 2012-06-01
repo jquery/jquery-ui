@@ -229,7 +229,8 @@ $.widget( "ui.menu", {
 				this.active.nextAll( ".ui-menu-item" ) :
 				match;
 
-			// TODO: document what's going on here, character is reset to the original value
+			// If no matches on the current filter, reset to the last character pressed
+			// to move down the menu to the first item that starts with that character
 			if ( !match.length ) {
 				character = String.fromCharCode( event.keyCode );
 				match = this.activeMenu.children( ".ui-menu-item" ).filter(function() {
