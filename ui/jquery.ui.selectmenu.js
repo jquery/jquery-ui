@@ -290,7 +290,18 @@ $.widget( "ui.selectmenu", {
 	},
 
 	_getSelectedItem: function() {
-		return this.menuItems.eq( this.element[ 0 ].selectedIndex );
+		var selectedItem = this.menuItems.eq( this.element[ 0 ].selectedIndex ),// default
+			multipleItems = this.menuItems.map(function() {
+				if($(this).data('selected')) {
+					return this;
+				}
+			}); 
+
+		if(this.isMultiple) {
+			selectedItem = multipleItems.length>0 && multipleItems || selectedItem;
+		}
+
+		return selectedItem;
 	},
 
 	_toggle: function( event ) {
