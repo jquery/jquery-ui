@@ -17,6 +17,8 @@
 
 		$('#files').selectmenu();
 
+		$('#cities').selectmenu();
+
 		var withOverflow = $('#number').selectmenu({
 			dropdown: false
 		});
@@ -84,8 +86,31 @@
 			<option value="18">18</option>
 			<option value="19">19</option>
 		</select>
+		<br />
+		<br />
+		<br />
+		<label for="cities">Multiple Selections:</label>
+		<select name="cities" id="cities" multiple="multiple">
+			<optgroup label="Canada">
+				<option value="tor">Toronto</option>
+				<option value="vic">Victoria</option>
+			</optgroup>
+			<optgroup label="United States">
+				<option value="chi">Chicago</option>
+				<option value="ny" selected="selected">New York</option>
+				<option value="la">Los Angelos</option>
+				<option value="at">Atlanta</option>
+				<option value="mi">Miami</option>
+			</optgroup>
+			<optgroup label="Mexico">
+				<option value="mex">Mexico City</option>
+				<option value="val" selected="selected">Valesques</option>
+			</optgroup>
+		</select>
 	</fieldset>
 </form>
+
+
 
 </div><!-- End demo -->
 
