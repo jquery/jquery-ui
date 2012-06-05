@@ -382,6 +382,7 @@ $.widget( "ui.selectmenu", {
 
 		items.attr( "aria-selected", true );
 		if(this.isMultiple) {
+			items.data('selected',true);
 		}
 	},
 
