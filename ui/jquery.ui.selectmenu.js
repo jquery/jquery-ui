@@ -48,6 +48,9 @@ $.widget( "ui.selectmenu", {
 				event.preventDefault();
 			}
 		});
+		
+		// internal boolean for multiple selections
+		this.isMultiple = this.element.attr('multiple');
 
 		this._drawButton();
 		this._bind( this.button, this._buttonEvents );
@@ -94,7 +97,7 @@ $.widget( "ui.selectmenu", {
 
 		this.buttonText = $( '<span />', {
 				'class': 'ui-selectmenu-text' ,
-				html: this.element.find( "option:selected" ).text() || '&nbsp;'
+				html: this.element.find( "option:selected:eq(0)" ).text() || '&nbsp;'
 			})
 			.appendTo( this.button );
 
