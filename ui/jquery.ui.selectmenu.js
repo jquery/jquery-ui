@@ -374,11 +374,15 @@ $.widget( "ui.selectmenu", {
 	},
 
 	_setSelected: function( item ) {
+		var items = this._getSelectedItem().find( "a" );
 		// update button text
 		this.buttonText.html( item.label );
 		// change ARIA attr
 		this.menuItems.find( "a" ).attr( "aria-selected", false );
-		this._getSelectedItem().find( "a" ).attr( "aria-selected", true );
+
+		items.attr( "aria-selected", true );
+		if(this.isMultiple) {
+		}
 	},
 
 	_setOption: function( key, value ) {
