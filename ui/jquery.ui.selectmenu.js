@@ -267,6 +267,9 @@ $.widget( "ui.selectmenu", {
 		if ( item.disabled ) {
 			li.addClass( 'ui-state-disabled' );
 		}
+		if(item.element.attr('selected')) {
+			li.data('selected',true);
+		}
 		li.append( $( "<a />", {
 				html: item.label,
 				href: '#'
