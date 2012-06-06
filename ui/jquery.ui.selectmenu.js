@@ -210,6 +210,8 @@ $.widget( "ui.selectmenu", {
 			}
 
 			this.isOpen = true;
+			this.controlClose = false;
+			
 			this._toggleAttr();
 
 			if ( this.items && !this.options.dropdown ) {
