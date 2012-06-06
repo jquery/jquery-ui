@@ -404,18 +404,22 @@ $.widget( "ui.selectmenu", {
 	},
 
 	_setSelected: function( item ) {
-		var items = this._getSelectedItem().find( "a" );
-		// update button text
-		this.buttonText.html( item.label );
+		var items = this._getSelectedItem().find( "a" ),
+			text = item.label;
 		// change ARIA attr
 		this.menuItems.find( "a" ).attr( "aria-selected", false );
 
 		items.attr( "aria-selected", true );
 		
 		if(this.isMultiple) {
+			// set the button label to the first item selected
+			text = $.map($(items.parent('li')),function(elem) { return $(elem).data('item.selectmenu').label }).join(',');
 			this.menuItems.removeClass('ui-state-active');
 			items.parent('li').addClass('ui-state-active');
 		}
+
+		// update button text
+		this.buttonText.html( text );
 	},
 
 	_setOption: function( key, value ) {
