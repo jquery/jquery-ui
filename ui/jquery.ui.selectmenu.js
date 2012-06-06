@@ -104,7 +104,7 @@ $.widget( "ui.selectmenu", {
 
 		this.buttonText = $( '<span />', {
 				'class': 'ui-selectmenu-text' ,
-				html: $.map(this.element.find( "option:selected" ),function(elem) { return $(elem).text() }).join(',') || '&nbsp;'
+				html: $.map(this.element.find( "option:selected" ),function(elem) { return $(elem).text(); }).join(',') || '&nbsp;'
 			})
 			.appendTo( this.button );
 
@@ -307,7 +307,7 @@ $.widget( "ui.selectmenu", {
 				if($(this).data('item.selectmenu').element.attr('selected')) {
 					return this;
 				}
-			}); 
+			});
 
 		if(this.isMultiple) {
 			selectedItem = multipleItems.length>0 && multipleItems || selectedItem;
@@ -413,7 +413,7 @@ $.widget( "ui.selectmenu", {
 		
 		if(this.isMultiple) {
 			// set the button label to the first item selected
-			text = $.map($(items.parent('li')),function(elem) { return $(elem).data('item.selectmenu').label }).join(',');
+			text = $.map($(items.parent('li')),function(elem) { return $(elem).data('item.selectmenu').label; }).join(',');
 			this.menuItems.removeClass('ui-state-active');
 			items.parent('li').addClass('ui-state-active');
 		}
