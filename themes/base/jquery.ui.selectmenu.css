@@ -15,4 +15,4 @@
 .ui-selectmenu-open { display: block; }
 .ui-selectmenu-button a.ui-button { display: inline-block; overflow: hidden; position: relative; text-decoration: none; }
 .ui-selectmenu-button span.ui-icon { right: 0.5em; left: auto;  margin-top: -8px; position: absolute; top: 50%; }
-.ui-selectmenu-button span.ui-selectmenu-text { text-align: left; padding: 0.4em 2.1em 0.4em 1em; display: block; line-height: 1.4; }
+.ui-selectmenu-button span.ui-selectmenu-text { text-overflow:ellipsis; text-align: left; padding: 0.4em 2.1em 0.4em 1em; display: block; line-height: 1.4; height:1.4em; white-space: nowrap; overflow:hidden; }

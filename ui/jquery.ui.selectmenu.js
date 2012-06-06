@@ -49,6 +49,10 @@ $.widget( "ui.selectmenu", {
 			}
 		});
 
+		// internal boolean for multiple selections
+		this.isMultiple = this.element.attr('multiple');
+		this.controlClose = false;
+
 		this._drawButton();
 		this._bind( this.button, this._buttonEvents );
 		this._hoverable( this.button );
@@ -60,6 +64,12 @@ $.widget( "ui.selectmenu", {
 		this._bind( document, {
 			click: function( event ) {
 				if ( this.isOpen && !$( event.target ).closest( "li.ui-state-disabled, li.ui-selectmenu-optgroup, #" + this.ids.button ).length ) {
+					this.close( event );
+				}
+			},
+			keyup: function(event) { // close the menu after using control/meta and letting go
+				if( this.isOpen && this.isMultiple && this.controlClose && !event.metaKey ) {
+					this.controlClose = false;
 					this.close( event );
 				}
 			}
@@ -94,7 +104,7 @@ $.widget( "ui.selectmenu", {
 
 		this.buttonText = $( '<span />', {
 				'class': 'ui-selectmenu-text' ,
-				html: this.element.find( "option:selected" ).text() || '&nbsp;'
+				html: $.map(this.element.find( "option:selected" ),function(elem) { return $(elem).text(); }).join(',') || '&nbsp;'
 			})
 			.appendTo( this.button );
 
@@ -127,13 +137,22 @@ $.widget( "ui.selectmenu", {
 		// init menu widget
 		this.menu.menu({
 			select: function( event, ui ) {
+				// menu does not like multiple elements being selected in the same setup without a close
+				if(!ui.item) { ui.item = $(event.currentTarget); }
 				var item = ui.item.data( "item.selectmenu" );
 
 				that._select( item, event );
 
 				if ( that.isOpen ) {
 					event.preventDefault();
-					that.close( event );
+
+					// keep the menu open when we are holding control and mutliple is applied
+					if(!(that.isMultiple && (event.ctrlKey || event.metaKey))) { // metaKey for Mac
+						that.close( event );
+					} else  {
+						that.controlClose = true;
+						event.stopPropagation(); // otherwise a document click will close the menu
+					}
 				}
 			},
 			focus: function( event, ui ) {
@@ -193,6 +212,8 @@ $.widget( "ui.selectmenu", {
 			}
 
 			this.isOpen = true;
+			this.controlClose = false;
+
 			this._toggleAttr();
 
 			if ( this.items && !this.options.dropdown ) {
@@ -258,6 +279,9 @@ $.widget( "ui.selectmenu", {
 		if ( item.disabled ) {
 			li.addClass( 'ui-state-disabled' );
 		}
+		if(this.isMultiple && item.element.attr('selected')) {
+			li.addClass( 'ui-state-active' );
+		}
 		li.append( $( "<a />", {
 				html: item.label,
 				href: '#'
@@ -278,7 +302,18 @@ $.widget( "ui.selectmenu", {
 	},
 
 	_getSelectedItem: function() {
-		return this.menuItems.eq( this.element[ 0 ].selectedIndex );
+		var selectedItem = this.menuItems.eq( this.element[ 0 ].selectedIndex ),// default
+			multipleItems = this.menuItems.map(function() {
+				if($(this).data('item.selectmenu').element.attr('selected')) {
+					return this;
+				}
+			});
+
+		if(this.isMultiple) {
+			selectedItem = multipleItems.length>0 && multipleItems || selectedItem;
+		}
+
+		return selectedItem;
 	},
 
 	_toggle: function( event ) {
@@ -353,9 +388,13 @@ $.widget( "ui.selectmenu", {
 	},
 
 	_select: function( item, event ) {
-		var oldIndex = this.element[ 0 ].selectedIndex;
+		var oldIndex = this.element[ 0 ].selectedIndex,selectedItem=$(this.menuItems.eq(item.index)).data('item.selectmenu');
 		// change native select element
-		this.element[ 0 ].selectedIndex = item.index;
+		if(this.isMultiple && (event.ctrlKey || event.metaKey)) {
+			selectedItem.element.attr('selected',!selectedItem.element.attr('selected'));
+		} else  {
+			this.element[ 0 ].selectedIndex = item.index;
+		}
 		this._setSelected( item );
 		this._trigger( "select", event, { item: item } );
 
@@ -365,11 +404,22 @@ $.widget( "ui.selectmenu", {
 	},
 
 	_setSelected: function( item ) {
-		// update button text
-		this.buttonText.html( item.label );
+		var items = this._getSelectedItem().find( "a" ),
+			text = item.label;
 		// change ARIA attr
 		this.menuItems.find( "a" ).attr( "aria-selected", false );
-		this._getSelectedItem().find( "a" ).attr( "aria-selected", true );
+
+		items.attr( "aria-selected", true );
+		
+		if(this.isMultiple) {
+			// set the button label to the first item selected
+			text = $.map($(items.parent('li')),function(elem) { return $(elem).data('item.selectmenu').label; }).join(',');
+			this.menuItems.removeClass('ui-state-active');
+			items.parent('li').addClass('ui-state-active');
+		}
+
+		// update button text
+		this.buttonText.html( text );
 	},
 
 	_setOption: function( key, value ) {
