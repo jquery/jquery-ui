@@ -146,9 +146,9 @@ $.widget( "ui.selectmenu", {
 
 					// keep the menu open when we are holding control and mutliple is applied
 					if(!(that.isMultiple && (event.ctrlKey || event.metaKey))) { // metaKey for Mac
-						that.controlClose = true;
 						that.close( event );
 					} else  {
+						that.controlClose = true;
 						event.stopPropagation(); // otherwise a document click will close the menu
 					}
 				}
