@@ -300,7 +300,7 @@ $.widget( "ui.selectmenu", {
 	_getSelectedItem: function() {
 		var selectedItem = this.menuItems.eq( this.element[ 0 ].selectedIndex ),// default
 			multipleItems = this.menuItems.map(function() {
-				if($(this).data('selected')) {
+				if($(this).data('item.selectmenu').element.attr('selected')) {
 					return this;
 				}
 			}); 
@@ -384,9 +384,12 @@ $.widget( "ui.selectmenu", {
 	},
 
 	_select: function( item, event ) {
-		var oldIndex = this.element[ 0 ].selectedIndex;
+		var oldIndex = this.element[ 0 ].selectedIndex,selectedItem=$(this.menuItems.eq(item.index)).data('item.selectmenu');
 		// change native select element
 		this.element[ 0 ].selectedIndex = item.index;
+		if(this.isMultiple) {
+			selectedItem.element.attr('selected',!selectedItem.element.attr('selected'));
+		}
 		this._setSelected( item );
 		this._trigger( "select", event, { item: item } );
 
@@ -403,10 +406,6 @@ $.widget( "ui.selectmenu", {
 		this.menuItems.find( "a" ).attr( "aria-selected", false );
 
 		items.attr( "aria-selected", true );
-		if(this.isMultiple) {
-			item.element.attr( "aria-selected", !item.element.data('selected'))
-				.data('selected',!item.element.data('selected'));
-		}
 	},
 
 	_setOption: function( key, value ) {
