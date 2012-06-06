@@ -48,7 +48,7 @@ $.widget( "ui.selectmenu", {
 				event.preventDefault();
 			}
 		});
-		
+
 		// internal boolean for multiple selections
 		this.isMultiple = this.element.attr('multiple');
 		this.controlClose = false;
@@ -137,6 +137,8 @@ $.widget( "ui.selectmenu", {
 		// init menu widget
 		this.menu.menu({
 			select: function( event, ui ) {
+				// menu does not like multiple elements being selected in the same setup without a close
+				if(!ui.item) { ui.item = $(event.currentTarget); }
 				var item = ui.item.data( "item.selectmenu" );
 
 				that._select( item, event );
@@ -211,7 +213,7 @@ $.widget( "ui.selectmenu", {
 
 			this.isOpen = true;
 			this.controlClose = false;
-			
+
 			this._toggleAttr();
 
 			if ( this.items && !this.options.dropdown ) {
