@@ -148,6 +148,10 @@ $.widget( "ui.tabs", {
 			selectedIndex = this.lis.index( focusedTab ),
 			goingForward = true;
 
+		if ( this._handlePageNav( event ) ) {
+			return;
+		}
+
 		switch ( event.keyCode ) {
 			case $.ui.keyCode.RIGHT:
 			case $.ui.keyCode.DOWN:
@@ -194,19 +198,26 @@ $.widget( "ui.tabs", {
 	},
 
 	_panelKeydown: function( event ) {
+		if ( this._handlePageNav( event ) ) {
+			return;
+		}
+
 		// ctrl+up moves focus to the current tab
 		if ( event.ctrlKey && event.keyCode === $.ui.keyCode.UP ) {
 			event.preventDefault();
 			this.active.focus();
-			return;
 		}
+	},
 
-		// alt+page up/down moves focus to the previous/next tab (and activates)
+	// alt+page up/down moves focus to the previous/next tab (and activates)
+	_handlePageNav: function( event ) {
 		if ( event.altKey && event.keyCode === $.ui.keyCode.PAGE_UP ) {
 			this._activate( this._focusNextTab( this.options.active - 1, false ) );
+			return true;
 		}
 		if ( event.altKey && event.keyCode === $.ui.keyCode.PAGE_DOWN ) {
 			this._activate( this._focusNextTab( this.options.active + 1, true ) );
+			return true;
 		}
 	},
 
