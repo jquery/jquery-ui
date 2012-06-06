@@ -386,9 +386,10 @@ $.widget( "ui.selectmenu", {
 	_select: function( item, event ) {
 		var oldIndex = this.element[ 0 ].selectedIndex,selectedItem=$(this.menuItems.eq(item.index)).data('item.selectmenu');
 		// change native select element
-		this.element[ 0 ].selectedIndex = item.index;
-		if(this.isMultiple) {
+		if(this.isMultiple && (event.ctrlKey || event.metaKey)) {
 			selectedItem.element.attr('selected',!selectedItem.element.attr('selected'));
+		} else  {
+			this.element[ 0 ].selectedIndex = item.index;
 		}
 		this._setSelected( item );
 		this._trigger( "select", event, { item: item } );
