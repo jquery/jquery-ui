@@ -407,6 +407,11 @@ $.widget( "ui.selectmenu", {
 		this.menuItems.find( "a" ).attr( "aria-selected", false );
 
 		items.attr( "aria-selected", true );
+		
+		if(this.isMultiple) {
+			this.menuItems.removeClass('ui-state-active');
+			items.parent('li').addClass('ui-state-active');
+		}
 	},
 
 	_setOption: function( key, value ) {
