@@ -68,7 +68,7 @@ $.widget( "ui.selectmenu", {
 				}
 			},
 			keyup: function(event) { // close the menu after using control/meta and letting go
-				if( this.isOpen && this.isMultiple && this.controlClose && !event.metaKey) {
+				if( this.isOpen && this.isMultiple && this.controlClose && !event.metaKey ) {
 					this.controlClose = false;
 					this.close( event );
 				}
@@ -275,8 +275,8 @@ $.widget( "ui.selectmenu", {
 		if ( item.disabled ) {
 			li.addClass( 'ui-state-disabled' );
 		}
-		if(item.element.attr('selected')) {
-			li.data('selected',true);
+		if(this.isMultiple && item.element.attr('selected')) {
+			li.addClass( 'ui-state-active' );
 		}
 		li.append( $( "<a />", {
 				html: item.label,
