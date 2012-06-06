@@ -104,7 +104,7 @@ $.widget( "ui.selectmenu", {
 
 		this.buttonText = $( '<span />', {
 				'class': 'ui-selectmenu-text' ,
-				html: this.element.find( "option:selected:eq(0)" ).text() || '&nbsp;'
+				html: $.map(this.element.find( "option:selected" ),function(elem) { return $(elem).text() }).join(',') || '&nbsp;'
 			})
 			.appendTo( this.button );
 
