@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>jQuery UI Selectmenu - Methids functionality</title>
+	<link rel="stylesheet" href="../../../themes/base/jquery.ui.all.css">
+	<script src="../../../jquery-1.7.2.js"></script>
+	<script src="../../../ui/jquery.ui.core.js"></script>
+	<script src="../../../ui/jquery.ui.widget.js"></script>
+	<script src="../../../ui/jquery.ui.position.js"></script>
+	<script src="../../../ui/jquery.ui.menu.js"></script>
+	<script src="../../../ui/jquery.ui.selectmenu.js"></script>
+	<link rel="stylesheet" href="../../../demos/demos.css">
+	<script>
+	$(function() {
+		$('select').selectmenu();
+	});
+	</script>
+	<style>
+		form { margin: 20px 0 0 0 }
+		fieldset { border: 0; }
+		label { display: block; }
+		select { width: 200px; }
+	</style>
+</head>
+<body>
+
+<div class="demo">
+
+<form action="#">
+	<fieldset>
+		<label for="speed">Select a speed:</label>
+		<select name="speed" id="speed"></select>
+
+		<label for="speed2">Select a speed:</label>
+		<select name="speed2" id="speed">
+			<option value=""></option>
+		</select>
+		<br />
+		<br />
+		<br />
+		<label for="number">Select a number:</label>
+		<select name="number" id="number">
+			<option value="1">1</option>
+			<option value="2" selected="selected">2</option>
+			<option value="3">3</option>
+			<option value="4">4</option>
+			<option value=""></option>
+			<option value="6">6</option>
+			<option value="7">7</option>
+			<option value=""></option>
+			<option value="9">9</option>
+		</select>
+		<br />
+		<br />
+		<br />
+		<label for="files">Select a file:</label>
+		<select name="files" id="files">
+			<optgroup label="Scripts"></optgroup>
+			<optgroup label="Other files">
+				<option value="somefile">Some unknown file</option>
+				<option value="someotherfile">Some other file</option>
+			</optgroup>
+		</select>
+	</fieldset>
+</form>
+
+</div><!-- End demo -->
+
+
+
+</body>
+</html>
