@@ -51,6 +51,7 @@ $.widget( "ui.selectmenu", {
 		
 		// internal boolean for multiple selections
 		this.isMultiple = this.element.attr('multiple');
+		this.controlClose = false;
 
 		this._drawButton();
 		this._bind( this.button, this._buttonEvents );
@@ -63,6 +64,12 @@ $.widget( "ui.selectmenu", {
 		this._bind( document, {
 			click: function( event ) {
 				if ( this.isOpen && !$( event.target ).closest( "li.ui-state-disabled, li.ui-selectmenu-optgroup, #" + this.ids.button ).length ) {
+					this.close( event );
+				}
+			},
+			keyup: function(event) { // close the menu after using control/meta and letting go
+				if( this.isOpen && this.isMultiple && this.controlClose && !event.metaKey) {
+					this.controlClose = false;
 					this.close( event );
 				}
 			}
@@ -139,6 +146,7 @@ $.widget( "ui.selectmenu", {
 
 					// keep the menu open when we are holding control and mutliple is applied
 					if(!(that.isMultiple && (event.ctrlKey || event.metaKey))) { // metaKey for Mac
+						that.controlClose = true;
 						that.close( event );
 					} else  {
 						event.stopPropagation(); // otherwise a document click will close the menu
