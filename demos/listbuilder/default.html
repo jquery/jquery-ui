@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>jQuery UI Menu - Demo with Autocomplete (no duplicates, no sorting)</title>
+	<link type="text/css" href="../../themes/base/jquery.ui.all.css" rel="stylesheet" />
+	<link href="../demos.css" rel="stylesheet" />
+	<style>
+		.ui-menu { width: 200px; position: absolute; }
+		.ui-listbuilder-item-input {background-color:transparent; border:none; outline:none}
+		.ui-listbuilder-input {background-color:transparent; border:none; outline:none}
+
+		.ui-listbuilder{border:1px solid #7F9DB9;background-color:White;}
+		.ui-listbuilder-items{padding:3px 4px 0;margin:0;overflow:hidden;}
+		.ui-listbuilder-item{list-style-type:none;border:1px solid #444444;position:relative;float:left;padding:1px 18px 1px 3px;margin:2px;height:20px;}
+		.ui-listbuilder-item > .ui-icon {float:right; position:absolute; right:2px; top:4px; width:16px; height:16px;}
+	</style>
+	<script src="../../jquery-1.7.2.js"></script>
+	<script src="../../ui/jquery.ui.core.js"></script>
+	<script src="../../ui/jquery.ui.widget.js"></script>
+	<script src="../../ui/jquery.ui.menu.js"></script>
+	<script src="../../ui/jquery.ui.mouse.js"></script>
+	<script src="../../ui/jquery.ui.sortable.js"></script>
+	<script src="../../ui/jquery.ui.position.js"></script>
+	<script src="../../ui/jquery.ui.autocomplete.js"></script>
+	<script src="../../ui/jquery.ui.listbuilder.js"></script>
+	<script type="text/javascript">
+jQuery(function($) {
+	var data = ['one','two','three','four','five','six','seven','eight','nine','ten'];
+	$('#enhance').one('click', function() {
+
+		$('#test1').listbuilder({autocomplete:{source:data,minLength:0},sortable:false,duplicates:false});
+		
+		// Toggle the original input fields
+		$('#toggle').attr('disabled', false).bind('click', function() {
+			$('.test:text').toggle();
+		});
+	});
+
+	$('#switcher').themeswitcher();
+});
+	</script>
+	<script type="text/javascript"src="http://jqueryui.com/themeroller/themeswitchertool/"></script>
+</head>
+<body>
+	<div id="switcher"></div>
+	<p>Convert a plain text field into a nexul style list builder:</p>	
+	<button id="enhance">Enhance</button>
+	<button id="toggle" disabled="disabled">Toggle Original Input</button>	
+	<hr/>
+	
+	<div class="demo">
+
+		<label for="test1">numbers:</label>
+		<input id="test1" type="text" value="one, two, four" class="test autocomplete" style="width:350px"/>
+		
+	</div><!-- End demo -->
+	<div class="demo-description">
+		<p>A listbuilder with autocomplete with values for spellings of numbers.  The list prevents duplicate items and does not allow sorting.</p>
+	</div><!-- End demo-description -->
+</body>
+</html>
