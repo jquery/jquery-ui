@@ -168,14 +168,14 @@ $.widget( "ui.tabs", {
 			case $.ui.keyCode.HOME:
 				selectedIndex = 0;
 				break;
-			case $.ui.keyCode.SPACE:
+			case $.ui.keyCode.ENTER:
 				// toggle (cancel delayed activation, allow collapsing)
 				event.preventDefault();
 				clearTimeout( this.activating );
 				// Determine if we should collapse or activate
 				this._activate( selectedIndex === this.options.active ? false : selectedIndex );
 				return;
-			case $.ui.keyCode.ENTER:
+			case $.ui.keyCode.SPACE:
 				// activate only, no collapsing
 				event.preventDefault();
 				clearTimeout( this.activating );
