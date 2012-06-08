@@ -63,8 +63,63 @@ test( "aria-controls", function() {
 });
 
 test( "accessibility", function() {
-	// TODO: add tests
-	expect( 0 );
+	expect( 49 );
+	var element = $( "#tabs1" ).tabs({
+			active: 1,
+			disabled: [ 2 ]
+		}),
+		tabs = element.find( ".ui-tabs-nav li" ),
+		anchors = tabs.find( ".ui-tabs-anchor" ),
+		panels = element.find( ".ui-tabs-panel" );
+
+	equal( element.find( ".ui-tabs-nav" ).attr( "role" ), "tablist", "tablist role" );
+	tabs.each(function( index ) {
+		var tab = tabs.eq( index ),
+			anchor = anchors.eq( index ),
+			anchorId = anchor.attr( "id" ),
+			panel = panels.eq( index );
+		equal( tab.attr( "role" ), "tab", "tab " + index + " role" );
+		equal( tab.attr( "aria-labelledby" ), anchorId, "tab " + index + " aria-labelledby" );
+		equal( anchor.attr( "role" ), "presentation", "anchor " + index + " role" );
+		equal( anchor.attr( "tabindex" ), -1, "anchor " + index + " tabindex" );
+		equal( panel.attr( "role" ), "tabpanel", "panel " + index + " role" );
+		equal( panel.attr( "aria-labelledby" ), anchorId, "panel " + index + " aria-labelledby" );
+	});
+
+	equal( tabs.eq( 1 ).attr( "aria-selected" ), "true", "active tab has aria-selected=true" );
+	equal( tabs.eq( 1 ).attr( "tabindex" ), 0, "active tab has tabindex=0" );
+	equal( tabs.eq( 1 ).attr( "aria-disabled" ), null, "enabled tab does not have aria-disabled" );
+	equal( panels.eq( 1 ).attr( "aria-expanded" ), "true", "active panel has aria-expanded=true" );
+	equal( panels.eq( 1 ).attr( "aria-hidden" ), "false", "active panel has aria-hidden=false" );
+	equal( tabs.eq( 0 ).attr( "aria-selected" ), "false", "inactive tab has aria-selected=false" );
+	equal( tabs.eq( 0 ).attr( "tabindex" ), -1, "inactive tab has tabindex=-1" );
+	equal( tabs.eq( 0 ).attr( "aria-disabled" ), null, "enabled tab does not have aria-disabled" );
+	equal( panels.eq( 0 ).attr( "aria-expanded" ), "false", "inactive panel has aria-expanded=false" );
+	equal( panels.eq( 0 ).attr( "aria-hidden" ), "true", "inactive panel has aria-hidden=true" );
+	equal( tabs.eq( 2 ).attr( "aria-selected" ), "false", "inactive tab has aria-selected=false" );
+	equal( tabs.eq( 2 ).attr( "tabindex" ), -1, "inactive tab has tabindex=-1" );
+	equal( tabs.eq( 2 ).attr( "aria-disabled" ), "true", "disabled tab has aria-disabled=true" );
+	equal( panels.eq( 2 ).attr( "aria-expanded" ), "false", "inactive panel has aria-expanded=false" );
+	equal( panels.eq( 2 ).attr( "aria-hidden" ), "true", "inactive panel has aria-hidden=true" );
+
+	element.tabs( "option", "active", 0 );
+	equal( tabs.eq( 0 ).attr( "aria-selected" ), "true", "active tab has aria-selected=true" );
+	equal( tabs.eq( 0 ).attr( "tabindex" ), 0, "active tab has tabindex=0" );
+	equal( tabs.eq( 0 ).attr( "aria-disabled" ), null, "enabled tab does not have aria-disabled" );
+	equal( panels.eq( 0 ).attr( "aria-expanded" ), "true", "active panel has aria-expanded=true" );
+	equal( panels.eq( 0 ).attr( "aria-hidden" ), "false", "active panel has aria-hidden=false" );
+	equal( tabs.eq( 1 ).attr( "aria-selected" ), "false", "inactive tab has aria-selected=false" );
+	equal( tabs.eq( 1 ).attr( "tabindex" ), -1, "inactive tab has tabindex=-1" );
+	equal( tabs.eq( 1 ).attr( "aria-disabled" ), null, "enabled tab does not have aria-disabled" );
+	equal( panels.eq( 1 ).attr( "aria-expanded" ), "false", "inactive panel has aria-expanded=false" );
+	equal( panels.eq( 1 ).attr( "aria-hidden" ), "true", "inactive panel has aria-hidden=true" );
+	equal( tabs.eq( 2 ).attr( "aria-selected" ), "false", "inactive tab has aria-selected=false" );
+	equal( tabs.eq( 2 ).attr( "tabindex" ), -1, "inactive tab has tabindex=-1" );
+	equal( tabs.eq( 2 ).attr( "aria-disabled" ), "true", "disabled tab has aria-disabled=true" );
+	equal( panels.eq( 2 ).attr( "aria-expanded" ), "false", "inactive panel has aria-expanded=false" );
+	equal( panels.eq( 2 ).attr( "aria-hidden" ), "true", "inactive panel has aria-hidden=true" );
+
+	// TODO: aria-live and aria-busy tests for ajax tabs
 });
 
 test( "#3627 - Ajax tab with url containing a fragment identifier fails to load", function() {
