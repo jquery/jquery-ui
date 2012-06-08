@@ -5,17 +5,15 @@
 	<title>jQuery UI Core Test Suite</title>
 
 	<script src="../../jquery.js"></script>
-	<script src="../../resource_loader.js"></script>
-	<script>
-	loadResources({
-		js: [ "ui/jquery.ui.core.js" ]
-	});
-	</script>
-
 	<link rel="stylesheet" href="../../../external/qunit.css">
 	<script src="../../../external/qunit.js"></script>
 	<script src="../../jquery.simulate.js"></script>
 	<script src="../testsuite.js"></script>
+	<script>
+	TestHelpers.loadResources({
+		js: [ "ui/jquery.ui.core.js" ]
+	});
+	</script>
 
 	<script src="core.js"></script>
 	<script src="selector.js"></script>
@@ -39,15 +37,13 @@
 <ol id="qunit-tests"></ol>
 <div id="qunit-fixture">
 
-<img src="../images/jqueryui_32x32.png" usemap="#mymap" width="10", height="10">
+<img src="../images/jqueryui_32x32.png" usemap="#mymap" width="10" height="10" alt="">
 <map name="mymap">
-	<area shape="rect" coords="0,0,1,1" id="areaCoordsNoHref">
-	<area shape="rect" coords="1,1,2,2" href="foo.html" id="areaCoordsHref">
-	<area shape="rect" coords="0,0,0,0" href="foo.html" id="areaCoordsNoSizeHref">
-	<area href="foo.html" id="areaNoCoordsHref">
+	<area shape="rect" coords="1,1,2,2" href="foo.html" id="areaCoordsHref" alt="">
+	<area href="foo.html" id="areaNoCoordsHref" alt="">
 </map>
 <map name="mymap2">
-	<area shape="rect" coords="1,1,2,2" href="foo.html" id="areaNoImg">
+	<area shape="rect" coords="1,1,2,2" href="foo.html" id="areaNoImg" alt="">
 </map>
 
 <form id="formNoTabindex"></form>
@@ -58,7 +54,7 @@
 	<input type="text" id="visibleAncestor-inputTypeText">
 	<input type="checkbox" id="visibleAncestor-inputTypeCheckbox">
 	<input type="radio" id="visibleAncestor-inputTypeRadio">
-	<input type="button" id="visibleAncestor-inputTypeButton">
+	<input type="button" id="visibleAncestor-inputTypeButton" value="visibleAncestor-inputTypeButton">
 	<input type="hidden" id="visibleAncestor-inputTypeHidden">
 	<button id="visibleAncestor-button">x</button>
 	<select id="visibleAncestor-select">
@@ -79,7 +75,7 @@
 	<input type="text" id="disabledElement-inputTypeText" disabled="disabled">
 	<input type="checkbox" id="disabledElement-inputTypeCheckbox" disabled="disabled">
 	<input type="radio" id="disabledElement-inputTypeRadio" disabled="disabled">
-	<input type="button" id="disabledElement-inputTypeButton" disabled="disabled">
+	<input type="button" id="disabledElement-inputTypeButton" disabled="disabled" value="disabledElement-inputTypeButton">
 	<input type="hidden" id="disabledElement-inputTypeHidden" disabled="disabled">
 	<button id="disabledElement-button" disabled="disabled"></button>
 	<select id="disabledElement-select" disabled="disabled"></select>

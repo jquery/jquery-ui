@@ -23,8 +23,8 @@ test("max", function() {
 	};
 
 	el.slider(options);
-	ok(el.slider("option", "value") == options.value, "value option is not contained by max");
-	ok(el.slider("value") == options.max, "value method is contained by max");
+	ok(el.slider("option", "value") === options.value, "value option is not contained by max");
+	ok(el.slider("value") === options.max, "value method is contained by max");
 	el.slider('destroy');
 
 });
@@ -41,8 +41,8 @@ test("min", function() {
 	};
 
 	el.slider(options);
-	ok(el.slider("option", "value") == options.value, "value option is not contained by min");
-	ok(el.slider("value") == options.min, "value method is contained by min");
+	ok(el.slider("option", "value") === options.value, "value option is not contained by min");
+	ok(el.slider("value") === options.min, "value method is contained by min");
 	el.slider('destroy');
 
 });
@@ -73,7 +73,7 @@ test("orientation", function() {
 		value: -1
 	};
 
-	var percentVal = (options.value - options.min) / (options.max - options.min) * 100;
+	percentVal = (options.value - options.min) / (options.max - options.min) * 100;
 
 	el.slider(options).slider("option", "orientation", "vertical");
 	ok(el.is('.ui-slider-vertical'), "vertical slider has class .ui-slider-vertical");

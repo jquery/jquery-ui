@@ -1,5 +1,7 @@
 (function( $ ) {
 
+var state = TestHelpers.tabs.state;
+
 module( "tabs: core" );
 
 test( "markup structure", function() {
@@ -45,14 +47,15 @@ test( "disconnected from DOM", function() {
 test( "aria-controls", function() {
 	expect( 7 );
 	var element = $( "#tabs1" ).tabs(),
-		tabs = element.find( ".ui-tabs-nav a" );
+		tabs = element.find( ".ui-tabs-nav li" );
 	tabs.each(function() {
-		var tab = $( this );
-		equal( tab.prop( "hash" ).substring( 1 ), tab.attr( "aria-controls" ) );
+		var tab = $( this ),
+			anchor = tab.find( ".ui-tabs-anchor" );
+		equal( anchor.prop( "hash" ).substring( 1 ), tab.attr( "aria-controls" ) );
 	});
 
 	element = $( "#tabs2" ).tabs();
-	tabs = element.find( ".ui-tabs-nav a" );
+	tabs = element.find( ".ui-tabs-nav li" );
 	equal( tabs.eq( 0 ).attr( "aria-controls" ), "colon:test" );
 	equal( tabs.eq( 1 ).attr( "aria-controls" ), "inline-style" );
 	ok( /^ui-tabs-\d+$/.test( tabs.eq( 2 ).attr( "aria-controls" ) ), "generated id" );
@@ -84,12 +87,12 @@ test( "#4033 - IE expands hash to full url and misinterprets tab as ajax", funct
 	element.tabs({
 		beforeLoad: function( event, ui ) {
 			event.preventDefault();
-			ok( false, 'should not be an ajax tab');
+			ok( false, "should not be an ajax tab" );
 		}
 	});
 
-	equal( element.find( ".ui-tabs-nav a" ).attr( "aria-controls" ), "tab", "aria-contorls attribute is correct" );
-	tabs_state( element, 1 );
+	equal( element.find( ".ui-tabs-nav li" ).attr( "aria-controls" ), "tab", "aria-contorls attribute is correct" );
+	state( element, 1 );
 });
 
 }( jQuery ) );

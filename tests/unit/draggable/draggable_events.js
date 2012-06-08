@@ -5,7 +5,7 @@
 
 module("draggable: events");
 
-test("callbacks occurance count", function() {
+test("callbacks occurrence count", function() {
 
 	expect(3);
 

@@ -1,4 +1,4 @@
-/*
+/*!
  * jQuery UI Effects Shake @VERSION
  *
  * Copyright 2012, AUTHORS.txt (http://jqueryui.com/about)
@@ -22,8 +22,8 @@ $.effects.effect.shake = function( o, done ) {
 		times = o.times || 3,
 		anims = times * 2 + 1,
 		speed = o.duration,
-		ref = (direction == "up" || direction == "down") ? "top" : "left",
-		positiveMotion = (direction == "up" || direction == "left"),
+		ref = (direction === "up" || direction === "down") ? "top" : "left",
+		positiveMotion = (direction === "up" || direction === "left"),
 		animation = {},
 		animation1 = {},
 		animation2 = {},
@@ -32,7 +32,6 @@ $.effects.effect.shake = function( o, done ) {
 		// we will need to re-assemble the queue to stack our animations in place
 		queue = el.queue(),
 		queuelen = queue.length;
-		
 
 	$.effects.save( el, props );
 	el.show();
@@ -49,7 +48,7 @@ $.effects.effect.shake = function( o, done ) {
 	// Shakes
 	for ( i = 1; i < times; i++ ) {
 		el.animate( animation1, speed, o.easing ).animate( animation2, speed, o.easing );
-	};
+	}
 	el
 		.animate( animation1, speed, o.easing )
 		.animate( animation, speed / 2, o.easing )

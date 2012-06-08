@@ -17,8 +17,8 @@ test("init", function() {
 	$('<div></div>').slider().remove();
 	ok(true, '.slider() called on disconnected DOMElement');
 
-	var el = $('<div></div>').slider();
-	var foo = el.slider("option", "foo");
+	var el = $('<div></div>').slider(),
+		foo = el.slider("option", "foo");
 	el.remove();
 	ok(true, 'arbitrary option getter after init');
 
@@ -42,11 +42,12 @@ test("destroy", function() {
 });
 
 test("enable", function() {
-	var expected = $('<div></div>').slider(),
+	var el,
+		expected = $('<div></div>').slider(),
 		actual = expected.slider('enable');
 	equal(actual, expected, 'enable is chainable');
 
-	var el = $('<div></div>').slider({ disabled: true });
+	el = $('<div></div>').slider({ disabled: true });
 	ok(el.hasClass('ui-disabled'), 'slider has ui-disabled class before enable method call');
 	ok(el.hasClass('ui-slider-disabled'), 'slider has ui-slider-disabled class before enable method call');
 	el.slider('enable');
@@ -55,11 +56,12 @@ test("enable", function() {
 });
 
 test("disable", function() {
-	var expected = $('<div></div>').slider(),
+	var el,
+		expected = $('<div></div>').slider(),
 		actual = expected.slider('disable');
 	equal(actual, expected, 'disable is chainable');
 
-	var el = $('<div></div>').slider({ disabled: false });
+	el = $('<div></div>').slider({ disabled: false });
 	ok(!el.hasClass('ui-disabled'), 'slider does not have ui-disabled class before disabled method call');
 	ok(!el.hasClass('ui-slider-disabled'), 'slider does not have ui-slider-disabled class before disable method call');
 	el.slider('disable');

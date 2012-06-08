@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<title>jQuery UI Accordion - Customize icons</title>
 	<link rel="stylesheet" href="../../themes/base/jquery.ui.all.css">
-	<script src="../../jquery-1.7.1.js"></script>
+	<script src="../../jquery-1.7.2.js"></script>
 	<script src="../../ui/jquery.ui.core.js"></script>
 	<script src="../../ui/jquery.ui.widget.js"></script>
 	<script src="../../ui/jquery.ui.accordion.js"></script>
@@ -19,10 +19,12 @@
 		$( "#accordion" ).accordion({
 			icons: icons
 		});
-		$( "#toggle" ).button().toggle(function() {
-			$( "#accordion" ).accordion( "option", "icons", null );
-		}, function() {
-			$( "#accordion" ).accordion( "option", "icons", icons );
+		$( "#toggle" ).button().click(function() {
+			if ( $( "#accordion" ).accordion( "option", "icons" ) ) {
+				$( "#accordion" ).accordion( "option", "icons", null );
+			} else {
+				$( "#accordion" ).accordion( "option", "icons", icons );
+			}
 		});
 	});
 	</script>
