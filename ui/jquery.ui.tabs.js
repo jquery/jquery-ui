@@ -30,6 +30,7 @@ function isLocal( anchor ) {
 
 $.widget( "ui.tabs", {
 	version: "@VERSION",
+	delay: 300,
 	options: {
 		active: null,
 		collapsible: false,
@@ -198,7 +199,7 @@ $.widget( "ui.tabs", {
 		if ( !event.ctrlKey ) {
 			this.activating = this._delay(function() {
 				this.option( "active", selectedIndex );
-			}, 500 );
+			}, this.delay );
 		}
 	},
 
