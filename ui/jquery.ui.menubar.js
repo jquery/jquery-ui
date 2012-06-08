@@ -168,6 +168,9 @@ $.widget( "ui.menubar", {
 				clearTimeout( that.closeTimer );
 			}
 		});
+
+		// Keep track of open submenus
+		this.openSubmenus = 0;
 	},
 
 	_destroy : function() {
@@ -218,6 +221,7 @@ $.widget( "ui.menubar", {
 			.removeAttr( "tabIndex" );
 		this.active = null;
 		this.open = false;
+		this.openSubmenus = 0;
 	},
 
 	_open: function( event, menu ) {
@@ -255,10 +259,22 @@ $.widget( "ui.menubar", {
 	},
 
 	next: function( event ) {
+		if ( this.open && this.active.data( "menu" ).active.has( ".ui-menu" ).length ) {
+			// Track number of open submenus and prevent moving to next menubar item
+			this.openSubmenus++;
+			return;
+		}
+		this.openSubmenus = 0;
 		this._move( "next", "first", event );
 	},
 
 	previous: function( event ) {
+		if ( this.open && this.openSubmenus ) {
+			// Track number of open submenus and prevent moving to previous menubar item
+			this.openSubmenus--;
+			return;
+		}
+		this.openSubmenus = 0;
 		this._move( "prev", "last", event );
 	},
 
