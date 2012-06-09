@@ -80,12 +80,11 @@ uiFiles.forEach(function( file ) {
 	compareFiles[ file ] = [ file,  mapMinFile( file ) ];
 });
 
-// csslint and cssmin tasks
+// grunt plugins
 grunt.loadNpmTasks( "grunt-css" );
-// file size comparison tasks
-grunt.loadNpmTasks( "grunt-compare-size" );
-// html validation task
 grunt.loadNpmTasks( "grunt-html" );
+grunt.loadNpmTasks( "grunt-compare-size" );
+grunt.loadNpmTasks( "grunt-junit" );
 // local testswarm and build tasks
 grunt.loadTasks( 'build/tasks');
 
