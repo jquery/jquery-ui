@@ -9,7 +9,8 @@
  */
 (function( $, undefined ) {
 
-var slice = Array.prototype.slice,
+var uuid = 0,
+	slice = Array.prototype.slice,
 	_cleanData = $.cleanData;
 $.cleanData = function( elems ) {
 	for ( var i = 0, elem; (elem = elems[i]) != null; i++ ) {
@@ -214,6 +215,7 @@ $.Widget.prototype = {
 			this.options,
 			this._getCreateOptions(),
 			options );
+		this.uuid = uuid++;
 
 		this.bindings = $();
 		this.hoverable = $();
@@ -247,20 +249,20 @@ $.Widget.prototype = {
 		// we can probably remove the unbind calls in 2.0
 		// all event bindings should go through this._bind()
 		this.element
-			.unbind( "." + this.widgetName )
+			.unbind( "." + this.widgetName + this.uuid )
 			// 1.9 BC for #7810
 			// TODO remove dual storage
 			.removeData( this.widgetName )
 			.removeData( this.widgetFullName );
 		this.widget()
-			.unbind( "." + this.widgetName )
+			.unbind( "." + this.widgetName + this.uuid )
 			.removeAttr( "aria-disabled" )
 			.removeClass(
 				this.widgetFullName + "-disabled " +
 				"ui-state-disabled" );
 
 		// clean up events and states
-		this.bindings.unbind( "." + this.widgetName );
+		this.bindings.unbind( "." + this.widgetName + this.uuid );
 		this.hoverable.removeClass( "ui-state-hover" );
 		this.focusable.removeClass( "ui-state-focus" );
 	},
@@ -371,7 +373,7 @@ $.Widget.prototype = {
 			}
 
 			var match = event.match( /^(\w+)\s*(.*)$/ ),
-				eventName = match[1] + "." + instance.widgetName,
+				eventName = match[1] + "." + instance.widgetName + instance.uuid,
 				selector = match[2];
 			if ( selector ) {
 				instance.widget().delegate( selector, eventName, handlerProxy );

@@ -711,9 +711,10 @@ test( "_bind() with delegate", function() {
 	expect( 8 );
 	$.widget( "ui.testWidget", {
 		_create: function() {
+			var uuid = this.uuid;
 			this.element = {
 				bind: function( event, handler ) {
-					equal( event, "click.testWidget" );
+					equal( event, "click.testWidget" + uuid );
 					ok( $.isFunction(handler) );
 				},
 				trigger: $.noop
@@ -722,7 +723,7 @@ test( "_bind() with delegate", function() {
 				return {
 					delegate: function( selector, event, handler ) {
 						equal( selector, "a" );
-						equal( event, "click.testWidget" );
+						equal( event, "click.testWidget" + uuid );
 						ok( $.isFunction(handler) );
 					}
 				};
@@ -735,7 +736,7 @@ test( "_bind() with delegate", function() {
 				return {
 					delegate: function( selector, event, handler ) {
 						equal( selector, "form fieldset > input" );
-						equal( event, "change.testWidget" );
+						equal( event, "change.testWidget" + uuid );
 						ok( $.isFunction(handler) );
 					}
 				};
@@ -746,6 +747,24 @@ test( "_bind() with delegate", function() {
 		}
 	});
 	$.ui.testWidget();
+});
+
+test( "_bind() to common element", function() {
+	expect( 1 );
+	$.widget( "ui.testWidget", {
+		_create: function() {
+			this._bind( this.document, {
+				"customevent": "_handler"
+			});
+		},
+		_handler: function() {
+			ok( true, "handler triggered" );
+		}
+	});
+	var widget = $( "#widget" ).testWidget().data( "testWidget" );
+	$( "#widget-wrapper" ).testWidget();
+	widget.destroy();
+	$( document ).trigger( "customevent" );
 });
 
 test( "._hoverable()", function() {
