@@ -188,6 +188,9 @@ window.domEqual = function( selector, modifier, message ) {
 			var value = elem.attr( attr );
 			result[ attr ] = value !== undefined ? value : "";
 		});
+		result.events = $._data( elem[ 0 ], "events" );
+		result.data = $.extend( {}, elem.data() );
+		delete result.data[ $.expando ];
 		children = elem.children();
 		if ( children.length ) {
 			result.children = elem.children().map(function( ind ) {
