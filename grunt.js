@@ -293,7 +293,7 @@ grunt.initConfig({
 			// TODO remove items from this list once rewritten
 			return !( /(mouse|datepicker|draggable|droppable|resizable|selectable|sortable)\.js$/ ).test( file );
 		}),
-		grunt: "grunt.js",
+		grunt: [ "grunt.js", "build/tasks/*.js" ],
 		tests: "tests/unit/**/*.js"
 	},
 	csslint: {

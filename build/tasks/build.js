@@ -1,5 +1,7 @@
 module.exports = function( grunt ) {
 
+var path = require( "path" );
+
 grunt.registerMultiTask( "copy", "Copy files to destination folder and replace @VERSION with pkg.version", function() {
 	function replaceVersion( source ) {
 		return source.replace( /@VERSION/g, grunt.config( "pkg.version" ) );
