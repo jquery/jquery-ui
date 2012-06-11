@@ -3,6 +3,7 @@ module.exports = function( grunt ) {
 grunt.registerTask( "testswarm", function( commit, configFile ) {
 	var test,
 		testswarm = require( "testswarm" ),
+		config = grunt.file.readJSON( configFile ).jqueryui,
 		testBase = "http://swarm.jquery.org/git/jquery-ui/" + commit + "/tests/unit/",
 		testUrls = [],
 		tests = {
@@ -40,9 +41,9 @@ grunt.registerTask( "testswarm", function( commit, configFile ) {
 		done: this.async()
 	}, {
 		authUsername: "jqueryui",
-		authToken: grunt.file.readJSON( configFile ).jqueryui.authToken,
+		authToken: config.authToken,
 		jobName: 'jQuery UI commit #<a href="https://github.com/jquery/jquery-ui/commit/' + commit + '">' + commit.substr( 0, 10 ) + '</a>',
-		runMax: 3,
+		runMax: config.runMax,
 		"runNames[]": Object.keys(tests),
 		"runUrls[]": testUrls,
 		"browserSets[]": ["popular"]
