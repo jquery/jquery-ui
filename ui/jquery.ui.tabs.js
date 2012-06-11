@@ -384,7 +384,8 @@ $.widget( "ui.tabs", {
 		this.anchors.each(function( i, anchor ) {
 			var selector, panel, panelId,
 				anchorId = $( anchor ).uniqueId().attr( "id" ),
-				tab = $( anchor ).closest( "li" );
+				tab = $( anchor ).closest( "li" ),
+				originalAriaControls = tab.attr( "aria-controls" );
 
 			// inline tab
 			if ( isLocal( anchor ) ) {
@@ -405,12 +406,13 @@ $.widget( "ui.tabs", {
 			if ( panel.length) {
 				that.panels = that.panels.add( panel );
 			}
-			tab
-				.data( "ui-tabs-aria-controls", tab.attr( "aria-controls" ) )
-				.attr({
-					"aria-controls": selector.substring( 1 ),
-					"aria-labelledby": anchorId
-				});
+			if ( originalAriaControls ) {
+				tab.data( "ui-tabs-aria-controls", originalAriaControls );
+			}
+			tab.attr({
+				"aria-controls": selector.substring( 1 ),
+				"aria-labelledby": anchorId
+			});
 			panel.attr( "aria-labelledby", anchorId );
 		});
 
