@@ -238,10 +238,11 @@ $.widget( "ui.autocomplete", {
 				// back compat for _renderItem using item.autocomplete, via #7810
 				// TODO remove the fallback, see #8156
 				var item = ui.item.data( "ui-autocomplete-item" ) || ui.item.data( "item.autocomplete" );
+				var _label = item.label;
 				if ( false !== this._trigger( "focus", event, { item: item } ) ) {
 					// use value to match what will end up in the input, if it was a key event
 					if ( event.originalEvent && /^key/.test( event.originalEvent.type ) ) {
-						this._value( item.value );
+						this._value( _label );
 					}
 				} else {
 					// Normally the input is populated with the item's value as the
@@ -249,7 +250,7 @@ $.widget( "ui.autocomplete", {
 					// announce the item. Since the focus event was canceled, this doesn't
 					// happen, so we update the live region so that screen readers can
 					// still notice the change and announce it.
-					this.liveRegion.text( item.value );
+					this.liveRegion.text( _label );
 				}
 			},
 			menuselect: function( event, ui ) {
@@ -272,7 +273,7 @@ $.widget( "ui.autocomplete", {
 				}
 
 				if ( false !== this._trigger( "select", event, { item: item } ) ) {
-					this._value( item.value );
+					this._value( item.label );
 				}
 				// reset the term after the select event
 				// this allows custom select handling to work properly
