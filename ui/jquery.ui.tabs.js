@@ -229,7 +229,7 @@ $.widget( "ui.tabs", {
 		}
 	},
 
-	_focusNextTab: function( index, goingForward ) {
+	_findNextTab: function( index, goingForward ) {
 		var lastTabIndex = this.tabs.length - 1;
 
 		function constrain() {
@@ -246,6 +246,11 @@ $.widget( "ui.tabs", {
 			index = goingForward ? index + 1 : index - 1;
 		}
 
+		return index;
+	},
+
+	_focusNextTab: function( index, goingForward ) {
+		index = this._findNextTab( index, goingForward );
 		this.tabs.eq( index ).focus();
 		return index;
 	},
@@ -309,9 +314,14 @@ $.widget( "ui.tabs", {
 			this.active = $();
 		// was active, but active tab is gone
 		} else if ( this.active.length && !$.contains( this.tablist[ 0 ], this.active[ 0 ] ) ) {
+			// all remaining tabs are disabled
+			if ( this.tabs.length === options.disabled.length ) {
+				options.active = false;
+				this.active = $();
 			// activate previous tab
-			next = options.active - 1;
-			this._activate( next >= 0 ? next : 0 );
+			} else {
+				this._activate( this._findNextTab( Math.max( 0, options.active - 1 ), false ) );
+			}
 		// was active, active tab still exists
 		} else {
 			// make sure active index is correct

@@ -148,6 +148,26 @@ test( "refresh", function() {
 	disabled( element, false );
 });
 
+test( "refresh - looping", function() {
+	expect( 6 );
+
+	var element = $( "#tabs1" ).tabs({
+		disabled: [ 0 ],
+		active: 1
+	});
+	state( element, 0, 1, 0 );
+	disabled( element, [ 0 ] );
+
+	// remove active, jump to previous
+	// previous is disabled, just back one more
+	// reached first tab, move to end
+	// activate last tab
+	element.find( ".ui-tabs-nav li" ).eq( 2 ).remove();
+	element.tabs( "refresh" );
+	state( element, 0, 1 );
+	disabled( element, [ 0 ] );
+});
+
 asyncTest( "load", function() {
 	expect( 30 );
 
