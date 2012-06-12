@@ -90,18 +90,18 @@ $.widget( "ui.tabs", {
 
 			// check for a tab marked active via a class
 			if ( active === null ) {
-				active = this.lis.filter( ".ui-tabs-active" ).index();
+				active = this.tabs.filter( ".ui-tabs-active" ).index();
 			}
 
 			// no active tab, set to false
 			if ( active === null || active === -1 ) {
-				active = this.lis.length ? 0 : false;
+				active = this.tabs.length ? 0 : false;
 			}
 		}
 
 		// handle numbers: negative, out of range
 		if ( active !== false ) {
-			active = this.lis.eq( active ).index();
+			active = this.tabs.eq( active ).index();
 			if ( active === -1 ) {
 				active = options.collapsible ? false : 0;
 			}
@@ -117,8 +117,8 @@ $.widget( "ui.tabs", {
 		// into account and update option properly.
 		if ( $.isArray( options.disabled ) ) {
 			options.disabled = $.unique( options.disabled.concat(
-				$.map( this.lis.filter( ".ui-state-disabled" ), function( li ) {
-					return that.lis.index( li );
+				$.map( this.tabs.filter( ".ui-state-disabled" ), function( li ) {
+					return that.tabs.index( li );
 				})
 			) ).sort();
 		}
@@ -146,7 +146,7 @@ $.widget( "ui.tabs", {
 
 	_tabKeydown: function( event ) {
 		var focusedTab = $( this.document[0].activeElement ).closest( "li" ),
-			selectedIndex = this.lis.index( focusedTab ),
+			selectedIndex = this.tabs.index( focusedTab ),
 			goingForward = true;
 
 		if ( this._handlePageNav( event ) ) {
@@ -197,7 +197,7 @@ $.widget( "ui.tabs", {
 			// Otherwise AT may confuse the user by stating that they need to activate the tab,
 			// but the tab will already be activated by the time the announcement finishes.
 			focusedTab.attr( "aria-selected", "false" );
-			this.lis.eq( selectedIndex ).attr( "aria-selected", "true" );
+			this.tabs.eq( selectedIndex ).attr( "aria-selected", "true" );
 
 			this.activating = this._delay(function() {
 				this.option( "active", selectedIndex );
@@ -230,7 +230,7 @@ $.widget( "ui.tabs", {
 	},
 
 	_focusNextTab: function( index, goingForward ) {
-		var lastTabIndex = this.lis.length - 1;
+		var lastTabIndex = this.tabs.length - 1;
 
 		function constrain() {
 			if ( index > lastTabIndex ) {
@@ -246,7 +246,7 @@ $.widget( "ui.tabs", {
 			index = goingForward ? index + 1 : index - 1;
 		}
 
-		this.lis.eq( index ).focus();
+		this.tabs.eq( index ).focus();
 		return index;
 	},
 
@@ -293,7 +293,7 @@ $.widget( "ui.tabs", {
 	refresh: function() {
 		var next,
 			options = this.options,
-			lis = this.list.children( ":has(a[href])" );
+			lis = this.tablist.children( ":has(a[href])" );
 
 		// get disabled tabs from class attribute from HTML
 		// this will get converted to a boolean if needed in _refresh()
@@ -308,14 +308,14 @@ $.widget( "ui.tabs", {
 			options.active = false;
 			this.active = $();
 		// was active, but active tab is gone
-		} else if ( this.active.length && !$.contains( this.list[ 0 ], this.active[ 0 ] ) ) {
+		} else if ( this.active.length && !$.contains( this.tablist[ 0 ], this.active[ 0 ] ) ) {
 			// activate previous tab
 			next = options.active - 1;
 			this._activate( next >= 0 ? next : 0 );
 		// was active, active tab still exists
 		} else {
 			// make sure active index is correct
-			options.active = this.lis.index( this.active );
+			options.active = this.tabs.index( this.active );
 		}
 
 		this._refresh();
@@ -326,7 +326,7 @@ $.widget( "ui.tabs", {
 		this._setupEvents( this.options.event );
 		this._setupHeightStyle( this.options.heightStyle );
 
-		this.lis.not( this.active ).attr({
+		this.tabs.not( this.active ).attr({
 			"aria-selected": "false",
 			tabIndex: -1
 		});
@@ -339,7 +339,7 @@ $.widget( "ui.tabs", {
 
 		// Make sure one tab is in the tab order
 		if ( !this.active.length ) {
-			this.lis.eq( 0 ).attr( "tabIndex", 0 );
+			this.tabs.eq( 0 ).attr( "tabIndex", 0 );
 		} else {
 			this.active
 				.addClass( "ui-tabs-active ui-state-active" )
@@ -359,18 +359,18 @@ $.widget( "ui.tabs", {
 	_processTabs: function() {
 		var that = this;
 
-		this.list = this._getList()
+		this.tablist = this._getList()
 			.addClass( "ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all" )
 			.attr( "role", "tablist" );
 
-		this.lis = this.list.find( "> li:has(a[href])" )
+		this.tabs = this.tablist.find( "> li:has(a[href])" )
 			.addClass( "ui-state-default ui-corner-top" )
 			.attr({
 				role: "tab",
 				tabIndex: -1
 			});
 
-		this.anchors = this.lis.map(function() {
+		this.anchors = this.tabs.map(function() {
 				return $( "a", this )[ 0 ];
 			})
 			.addClass( "ui-tabs-anchor" )
@@ -398,7 +398,7 @@ $.widget( "ui.tabs", {
 				panel = that.element.find( selector );
 				if ( !panel.length ) {
 					panel = that._createPanel( panelId );
-					panel.insertAfter( that.panels[ i - 1 ] || that.list );
+					panel.insertAfter( that.panels[ i - 1 ] || that.tablist );
 				}
 				panel.attr( "aria-live", "polite" );
 			}
@@ -443,7 +443,7 @@ $.widget( "ui.tabs", {
 		}
 
 		// disable tabs
-		for ( var i = 0, li; ( li = this.lis[ i ] ); i++ ) {
+		for ( var i = 0, li; ( li = this.tabs[ i ] ); i++ ) {
 			if ( disabled === true || $.inArray( i, disabled ) !== -1 ) {
 				$( li )
 					.addClass( "ui-state-disabled" )
@@ -470,13 +470,13 @@ $.widget( "ui.tabs", {
 			});
 		}
 
-		this.anchors.add( this.lis ).add( this.panels ).unbind( ".tabs" );
+		this.anchors.add( this.tabs ).add( this.panels ).unbind( ".tabs" );
 		this._bind( this.anchors, events );
-		this._bind( this.lis, { keydown: "_tabKeydown" } );
+		this._bind( this.tabs, { keydown: "_tabKeydown" } );
 		this._bind( this.panels, { keydown: "_panelKeydown" } );
 
-		this._focusable( this.lis );
-		this._hoverable( this.lis );
+		this._focusable( this.tabs );
+		this._hoverable( this.tabs );
 	},
 
 	_setupHeightStyle: function( heightStyle ) {
@@ -553,7 +553,7 @@ $.widget( "ui.tabs", {
 			return;
 		}
 
-		options.active = collapsing ? false : this.lis.index( tab );
+		options.active = collapsing ? false : this.tabs.index( tab );
 
 		this.active = clickedIsActive ? $() : tab;
 		if ( this.xhr ) {
@@ -566,7 +566,7 @@ $.widget( "ui.tabs", {
 
 		if ( toShow.length ) {
 			// TODO make passing in node possible
-			this.load( this.lis.index( tab ), event );
+			this.load( this.tabs.index( tab ), event );
 		}
 		this._toggle( event, eventData );
 	},
@@ -618,7 +618,7 @@ $.widget( "ui.tabs", {
 		if ( toShow.length && toHide.length ) {
 			eventData.oldTab.attr( "tabIndex", -1 );
 		} else if ( toShow.length ) {
-			this.lis.filter(function() {
+			this.tabs.filter(function() {
 				return $( this ).attr( "tabIndex" ) === 0;
 			})
 			.attr( "tabIndex", -1 );
@@ -657,7 +657,7 @@ $.widget( "ui.tabs", {
 	},
 
 	_findActive: function( index ) {
-		return index === false ? $() : this.lis.eq( index );
+		return index === false ? $() : this.tabs.eq( index );
 	},
 
 	_getIndex: function( index ) {
@@ -676,7 +676,7 @@ $.widget( "ui.tabs", {
 
 		this.element.removeClass( "ui-tabs ui-widget ui-widget-content ui-corner-all ui-tabs-collapsible" );
 
-		this.list
+		this.tablist
 			.removeClass( "ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all" )
 			.removeAttr( "role" );
 
@@ -689,7 +689,7 @@ $.widget( "ui.tabs", {
 			.removeData( "load.tabs" )
 			.removeUniqueId();
 
-		this.lis.unbind( ".tabs" ).add( this.panels ).each(function() {
+		this.tabs.unbind( ".tabs" ).add( this.panels ).each(function() {
 			if ( $.data( this, "ui-tabs-destroy" ) ) {
 				$( this ).remove();
 			} else {
@@ -715,7 +715,7 @@ $.widget( "ui.tabs", {
 			}
 		});
 
-		this.lis.each(function() {
+		this.tabs.each(function() {
 			var li = $( this ),
 				prev = li.data( "ui-tabs-aria-controls" );
 			if ( prev ) {
@@ -745,7 +745,7 @@ $.widget( "ui.tabs", {
 					return num !== index ? num : null;
 				});
 			} else {
-				disabled = $.map( this.lis, function( li, num ) {
+				disabled = $.map( this.tabs, function( li, num ) {
 					return num !== index ? num : null;
 				});
 			}
@@ -778,7 +778,7 @@ $.widget( "ui.tabs", {
 	load: function( index, event ) {
 		index = this._getIndex( index );
 		var that = this,
-			tab = this.lis.eq( index ),
+			tab = this.tabs.eq( index ),
 			anchor = tab.find( ".ui-tabs-anchor" ),
 			panel = this._getPanelForTab( tab ),
 			eventData = {
@@ -1016,7 +1016,7 @@ if ( $.uiBackCompat !== false ) {
 			li.addClass( "ui-state-default ui-corner-top" ).data( "ui-tabs-destroy", true );
 			li.attr( "aria-controls", id );
 
-			doInsertAfter = index >= this.lis.length;
+			doInsertAfter = index >= this.tabs.length;
 
 			// try to find an existing element before creating a new one
 			panel = this.element.find( "#" + id );
@@ -1035,9 +1035,9 @@ if ( $.uiBackCompat !== false ) {
 			panel.addClass( "ui-tabs-panel ui-widget-content ui-corner-bottom" ).hide();
 
 			if ( doInsertAfter ) {
-				li.appendTo( this.list );
+				li.appendTo( this.tablist );
 			} else {
-				li.insertBefore( this.lis[ index ] );
+				li.insertBefore( this.tabs[ index ] );
 			}
 
 			options.disabled = $.map( options.disabled, function( n ) {
@@ -1045,7 +1045,7 @@ if ( $.uiBackCompat !== false ) {
 			});
 
 			this.refresh();
-			if ( this.lis.length === 1 && options.active === false ) {
+			if ( this.tabs.length === 1 && options.active === false ) {
 				this.option( "active", 0 );
 			}
 
@@ -1056,7 +1056,7 @@ if ( $.uiBackCompat !== false ) {
 		remove: function( index ) {
 			index = this._getIndex( index );
 			var options = this.options,
-				tab = this.lis.eq( index ).remove(),
+				tab = this.tabs.eq( index ).remove(),
 				panel = this._getPanelForTab( tab ).remove();
 
 			// If selected tab was removed focus tab to the right or
