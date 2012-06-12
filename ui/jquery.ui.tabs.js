@@ -575,7 +575,6 @@ $.widget( "ui.tabs", {
 		}
 
 		if ( toShow.length ) {
-			// TODO make passing in node possible
 			this.load( this.tabs.index( tab ), event );
 		}
 		this._toggle( event, eventData );
