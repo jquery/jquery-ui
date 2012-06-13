@@ -149,6 +149,14 @@ $.widget( "ui.tooltip", {
 			return;
 		}
 
+		// Content can be updated multiple times. If the tooltip already
+		// exists, then just update the content and bail.
+		var tooltip = this._find( target );
+		if ( tooltip.length ) {
+			tooltip.find( ".ui-tooltip-content" ).html( content );
+			return;
+		}
+
 		// if we have a title, clear it to prevent the native tooltip
 		// we have to check first to avoid defining a title if none exists
 		// (we don't want to cause an element to start matching [title])
@@ -164,15 +172,10 @@ $.widget( "ui.tooltip", {
 			}
 		}
 
-		// ajaxy tooltip can update an existing one
-		var tooltip = this._find( target );
-		if ( !tooltip.length ) {
-			tooltip = this._tooltip( target );
-			addDescribedBy( target, tooltip.attr( "id" ) );
-		}
+		tooltip = this._tooltip( target );
+		addDescribedBy( target, tooltip.attr( "id" ) );
 		tooltip.find( ".ui-tooltip-content" ).html( content );
 		tooltip
-			.stop( true )
 			.position( $.extend({
 				of: target
 			}, this.options.position ) )
