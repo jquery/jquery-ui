@@ -693,12 +693,11 @@ $.widget( "ui.tabs", {
 			.removeClass( "ui-tabs-anchor" )
 			.removeAttr( "role" )
 			.removeAttr( "tabIndex" )
-			.unbind( ".tabs" )
 			.removeData( "href.tabs" )
 			.removeData( "load.tabs" )
 			.removeUniqueId();
 
-		this.tabs.unbind( ".tabs" ).add( this.panels ).each(function() {
+		this.tabs.add( this.panels ).each(function() {
 			if ( $.data( this, "ui-tabs-destroy" ) ) {
 				$( this ).remove();
 			} else {
@@ -880,7 +879,7 @@ if ( $.uiBackCompat !== false ) {
 
 			var that = this;
 
-			this.element.bind( "tabsbeforeload.tabs", function( event, ui ) {
+			this._on({ tabsbeforeload: function( event, ui ) {
 				// tab is already cached
 				if ( $.data( ui.tab[ 0 ], "cache.tabs" ) ) {
 					event.preventDefault();
@@ -905,7 +904,7 @@ if ( $.uiBackCompat !== false ) {
 						$.data( ui.tab[ 0 ], "cache.tabs", true );
 					}
 				});
-			});
+			}});
 		},
 
 		_setOption: function( key, value ) {
