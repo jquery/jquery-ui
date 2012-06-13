@@ -56,8 +56,8 @@
 				.button();
 
 				// bind click events on the changer button to the random method
-				this._bind( this.changer, {
-					// _bind won't call random when widget is disabled
+				this._on( this.changer, {
+					// _on won't call random when widget is disabled
 					click: "random"
 				});
 				this._refresh();
@@ -90,7 +90,7 @@
 				}
 			},
 
-			// events bound via _bind are removed automatically
+			// events bound via _on are removed automatically
 			// revert other modifications here
 			_destroy: function() {
 				// remove generated elements

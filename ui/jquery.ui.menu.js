@@ -43,7 +43,7 @@ $.widget( "ui.menu", {
 				tabIndex: 0
 			})
 			// need to catch all clicks on disabled menu
-			// not possible through _bind
+			// not possible through _on
 			.bind( "click.menu", $.proxy(function( event ) {
 				if ( this.options.disabled ) {
 					event.preventDefault();
@@ -56,7 +56,7 @@ $.widget( "ui.menu", {
 				.attr( "aria-disabled", "true" );
 		}
 
-		this._bind({
+		this._on({
 			// Prevent focus from sticking to links inside menu after clicking
 			// them (focus should always stay on UL during navigation).
 			"mousedown .ui-menu-item > a": function( event ) {
@@ -122,8 +122,7 @@ $.widget( "ui.menu", {
 		this.refresh();
 
 		// TODO: We probably shouldn't bind to document for each menu.
-		// TODO: This isn't being cleaned up on destroy.
-		this._bind( this.document, {
+		this._on( this.document, {
 			click: function( event ) {
 				if ( !$( event.target ).closest( ".ui-menu" ).length ) {
 					this.collapseAll( event );

@@ -610,13 +610,13 @@ test( ".widget() - overriden", function() {
 	deepEqual( wrapper[0], $( "<div>" ).testWidget().testWidget( "widget" )[0] );
 });
 
-test( "._bind() to element (default)", function() {
+test( "._on() to element (default)", function() {
 	expect( 12 );
 	var that, widget;
 	$.widget( "ui.testWidget", {
 		_create: function() {
 			that = this;
-			this._bind({
+			this._on({
 				keyup: this.keyup,
 				keydown: "keydown"
 			});
@@ -650,13 +650,13 @@ test( "._bind() to element (default)", function() {
 		.trigger( "keydown" );
 });
 
-test( "._bind() to descendent", function() {
+test( "._on() to descendent", function() {
 	expect( 12 );
 	var that, widget, descendant;
 	$.widget( "ui.testWidget", {
 		_create: function() {
 			that = this;
-			this._bind( this.element.find( "strong" ), {
+			this._on( this.element.find( "strong" ), {
 				keyup: this.keyup,
 				keydown: "keydown"
 			});
@@ -707,7 +707,7 @@ test( "._bind() to descendent", function() {
 		.trigger( "keydown" );
 });
 
-test( "_bind() with delegate", function() {
+test( "_on() with delegate", function() {
 	expect( 8 );
 	$.widget( "ui.testWidget", {
 		_create: function() {
@@ -727,7 +727,7 @@ test( "_bind() with delegate", function() {
 					}
 				};
 			};
-			this._bind({
+			this._on({
 				"click": "handler",
 				"click a": "handler"
 			});
@@ -740,7 +740,7 @@ test( "_bind() with delegate", function() {
 					}
 				};
 			};
-			this._bind({
+			this._on({
 				"change form fieldset > input": "handler"
 			});
 		}

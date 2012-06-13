@@ -481,9 +481,9 @@ $.widget( "ui.tabs", {
 		}
 
 		this.anchors.add( this.tabs ).add( this.panels ).unbind( ".tabs" );
-		this._bind( this.anchors, events );
-		this._bind( this.tabs, { keydown: "_tabKeydown" } );
-		this._bind( this.panels, { keydown: "_panelKeydown" } );
+		this._on( this.anchors, events );
+		this._on( this.tabs, { keydown: "_tabKeydown" } );
+		this._on( this.panels, { keydown: "_panelKeydown" } );
 
 		this._focusable( this.tabs );
 		this._hoverable( this.tabs );
@@ -943,7 +943,7 @@ if ( $.uiBackCompat !== false ) {
 		},
 		_create: function() {
 			this._super();
-			this._bind({
+			this._on({
 				tabsbeforeload: function( event, ui ) {
 					if ( !this.options.spinner ) {
 						return;

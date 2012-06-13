@@ -114,7 +114,7 @@ $.widget( "ui.slider", $.ui.mouse, {
 			$( this ).data( "ui-slider-handle-index", i );
 		});
 
-		this._bind( this.handles, {
+		this._on( this.handles, {
 			keydown: function( event ) {
 				var allowed, curVal, newVal, step,
 					index = $( event.target ).data( "ui-slider-handle-index" );

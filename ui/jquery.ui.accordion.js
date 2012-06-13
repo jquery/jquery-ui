@@ -137,8 +137,8 @@ $.widget( "ui.accordion", {
 				});
 		}
 
-		this._bind( this.headers, { keydown: "_keydown" });
-		this._bind( this.headers.next(), { keydown: "_panelKeyDown" });
+		this._on( this.headers, { keydown: "_keydown" });
+		this._on( this.headers.next(), { keydown: "_panelKeyDown" });
 		this._setupEvents( options.event );
 	},
 
@@ -376,7 +376,7 @@ $.widget( "ui.accordion", {
 		$.each( event.split(" "), function( index, eventName ) {
 			events[ eventName ] = "_eventHandler";
 		});
-		this._bind( this.headers, events );
+		this._on( this.headers, events );
 	},
 
 	_eventHandler: function( event ) {

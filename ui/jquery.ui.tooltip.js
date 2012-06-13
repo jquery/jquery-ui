@@ -61,7 +61,7 @@ $.widget( "ui.tooltip", {
 	},
 
 	_create: function() {
-		this._bind({
+		this._on({
 			mouseover: "open",
 			focusin: "open"
 		});
@@ -185,7 +185,7 @@ $.widget( "ui.tooltip", {
 
 		this._trigger( "open", event, { tooltip: tooltip } );
 
-		this._bind( target, {
+		this._on( target, {
 			mouseleave: "close",
 			focusout: "close",
 			keyup: function( event ) {
