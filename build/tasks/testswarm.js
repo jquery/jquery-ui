@@ -4,7 +4,7 @@ grunt.registerTask( "testswarm", function( commit, configFile ) {
 	var test,
 		testswarm = require( "testswarm" ),
 		config = grunt.file.readJSON( configFile ).jqueryui,
-		testBase = "http://swarm.jquery.org/git/jquery-ui/" + commit + "/tests/unit/",
+		testBase = config.testUrl + commit + "/tests/unit/",
 		testUrls = [],
 		tests = {
 			"Accordion": "accordion/accordion.html",
@@ -35,7 +35,7 @@ grunt.registerTask( "testswarm", function( commit, configFile ) {
 		testUrls.push( testBase + tests[ test ] + "?nojshint=true" );
 	}
 	testswarm({
-		url: "http://swarm.jquery.org/",
+		url: config.swarmUrl,
 		pollInterval: 10000,
 		timeout: 1000 * 60 * 30,
 		done: this.async()
