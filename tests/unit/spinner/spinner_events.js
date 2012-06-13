@@ -220,6 +220,7 @@ asyncTest( "change", function() {
 
 				shouldChange( false, "min, value not changed" );
 				element.spinner( "option", "min", 200 );
+				shouldChange( true, "cleanup" );
 				start();
 			});
 		});
