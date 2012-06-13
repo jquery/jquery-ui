@@ -23,12 +23,15 @@
 				my: "left+25 center",
 				at: "center"
 			},
-			open: function( event ) {
-				var tooltip = $( ".ui-tooltip" ),
-					positionOption = $( this ).tooltip( "option", "position" );
+			open: function( event, ui ) {
+				if ( !( /^mouse/.test( event.originalEvent.type ) ) ) {
+					return;
+				}
+
+				var positionOption = $.extend( {}, $( this ).tooltip( "option", "position" ) );
 				function position( event ) {
 					positionOption.of = event;
-					tooltip.position( positionOption );
+					ui.tooltip.position( positionOption );
 				}
 				$( document ).bind( "mousemove.tooltip-position", position );
 				// trigger once to override element-relative positioning
