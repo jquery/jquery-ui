@@ -11,6 +11,7 @@ TestHelpers.commonWidgetTests( "tooltip", {
 		},
 		show: true,
 		tooltipClass: null,
+		track: false,
 
 		// callbacks
 		close: null,

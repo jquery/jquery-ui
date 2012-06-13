@@ -19,27 +19,7 @@
 	<script>
 	$(function() {
 		$( ".demo" ).tooltip({
-			position: {
-				my: "left+25 center",
-				at: "center"
-			},
-			open: function( event, ui ) {
-				if ( !( /^mouse/.test( event.originalEvent.type ) ) ) {
-					return;
-				}
-
-				var positionOption = $.extend( {}, $( this ).tooltip( "option", "position" ) );
-				function position( event ) {
-					positionOption.of = event;
-					ui.tooltip.position( positionOption );
-				}
-				$( document ).bind( "mousemove.tooltip-position", position );
-				// trigger once to override element-relative positioning
-				position( event );
-			},
-			close: function() {
-				$( document ).unbind( "mousemove.tooltip-position" );
-			}
+			track: true
 		});
 	});
 	</script>

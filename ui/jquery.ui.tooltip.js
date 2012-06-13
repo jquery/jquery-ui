@@ -54,6 +54,7 @@ $.widget( "ui.tooltip", {
 		},
 		show: true,
 		tooltipClass: null,
+		track: false,
 
 		// callbacks
 		close: null,
@@ -145,13 +146,14 @@ $.widget( "ui.tooltip", {
 	},
 
 	_open: function( event, target, content ) {
+		var tooltip, positionOption;
 		if ( !content ) {
 			return;
 		}
 
 		// Content can be updated multiple times. If the tooltip already
 		// exists, then just update the content and bail.
-		var tooltip = this._find( target );
+		tooltip = this._find( target );
 		if ( tooltip.length ) {
 			tooltip.find( ".ui-tooltip-content" ).html( content );
 			return;
@@ -175,11 +177,25 @@ $.widget( "ui.tooltip", {
 		tooltip = this._tooltip( target );
 		addDescribedBy( target, tooltip.attr( "id" ) );
 		tooltip.find( ".ui-tooltip-content" ).html( content );
-		tooltip
-			.position( $.extend({
+
+		function position( event ) {
+			positionOption.of = event;
+			tooltip.position( positionOption );
+		}
+		if ( this.options.track && /^mouse/.test( event.originalEvent.type ) ) {
+			positionOption = $.extend( {}, this.options.position );
+			this._on( this.document, {
+				mousemove: position
+			});
+			// trigger once to override element-relative positioning
+			position( event );
+		} else {
+			tooltip.position( $.extend({
 				of: target
-			}, this.options.position ) )
-			.hide();
+			}, this.options.position ) );
+		}
+
+		tooltip.hide();
 
 		this._show( tooltip, this.options.show );
 
@@ -234,6 +250,9 @@ $.widget( "ui.tooltip", {
 
 		target.removeData( "tooltip-open" );
 		target.unbind( "mouseleave.tooltip focusout.tooltip keyup.tooltip" );
+
+		// TODO use _off
+		this.document.unbind( "mousemove.tooltip" );
 
 		this.closing = true;
 		this._trigger( "close", event, { tooltip: tooltip } );
