@@ -118,8 +118,19 @@ $.widget( "ui.tooltip", {
 			target = $( event ? event.target : this.element )
 				.closest( this.options.items );
 
-		// if ui-tooltip-id exists, then the tooltip is already open
-		if ( !target.length || target.data( "ui-tooltip-id" ) ) {
+		// No element to show a tooltip for
+		if ( !target.length ) {
+			return;
+		}
+
+		// If the tooltip is open and we're tracking then reposition the tooltip.
+		// This makes sure that a tracking tooltip doesn't obscure a focused element
+		// if the user was hovering when the element gained focused.
+		if ( this.options.track && target.data( "ui-tooltip-id" ) ) {
+			this._find( target ).position( $.extend({
+				of: target
+			}, this.options.position ) );
+			// TODO: Do we need to unbind the mousemove handler here?
 			return;
 		}
 
@@ -251,7 +262,7 @@ $.widget( "ui.tooltip", {
 		target.removeData( "tooltip-open" );
 		target.unbind( "mouseleave.tooltip focusout.tooltip keyup.tooltip" );
 
-		// TODO use _off
+		// TODO use _off (see associated TODO in open())
 		this.document.unbind( "mousemove.tooltip" );
 
 		this.closing = true;
