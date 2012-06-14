@@ -749,11 +749,11 @@ test( "_on() with delegate", function() {
 	$.ui.testWidget();
 });
 
-test( "_bind() to common element", function() {
+test( "_on() to common element", function() {
 	expect( 1 );
 	$.widget( "ui.testWidget", {
 		_create: function() {
-			this._bind( this.document, {
+			this._on( this.document, {
 				"customevent": "_handler"
 			});
 		},
