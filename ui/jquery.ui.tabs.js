@@ -1210,7 +1210,7 @@ if ( $.uiBackCompat !== false ) {
 					return;
 				}
 			}
-			this.anchors.eq( index ).trigger( this.options.event + ".tabs" );
+			this.anchors.eq( index ).trigger( this.options.event + this.eventNamespace );
 		}
 	});
 
