@@ -446,9 +446,6 @@ $.widget("ui.resizable", $.ui.mouse, {
 				});
 			}
 
-			if ($.browser.msie && !(!($(element).is(':hidden') || $(element).parents(':hidden').length)))
-				continue;
-
 			prel.css({
 				height: (element.height() - this.borderDif[0] - this.borderDif[2]) || 0,
 				width: (element.width() - this.borderDif[1] - this.borderDif[3]) || 0
