@@ -224,7 +224,7 @@ $.widget("ui.dialog", {
 		if ( this.overlay ) {
 			this.overlay.destroy();
 		}
-		this.uiDialog.unbind( "keypress.ui-dialog" );
+		this._off( this.uiDialog, "keypress" );
 
 		if ( this.options.hide ) {
 			this.uiDialog.hide( this.options.hide, function() {
@@ -310,7 +310,7 @@ $.widget("ui.dialog", {
 
 		// prevent tabbing out of modal dialogs
 		if ( options.modal ) {
-			uiDialog.bind( "keydown.ui-dialog", function( event ) {
+			this._on( uiDialog, { keydown: function( event ) {
 				if ( event.keyCode !== $.ui.keyCode.TAB ) {
 					return;
 				}
@@ -326,7 +326,7 @@ $.widget("ui.dialog", {
 					last.focus( 1 );
 					return false;
 				}
-			});
+			}});
 		}
 
 		// set focus to the first tabbable element in the content area or the first button

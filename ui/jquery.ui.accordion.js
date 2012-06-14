@@ -219,8 +219,7 @@ $.widget( "ui.accordion", {
 
 		if ( key === "event" ) {
 			if ( this.options.event ) {
-				this.headers.unbind(
-					this.options.event.split( " " ).join( ".accordion " ) + ".accordion" );
+				this._off( this.headers, this.options.event );
 			}
 			this._setupEvents( value );
 		}

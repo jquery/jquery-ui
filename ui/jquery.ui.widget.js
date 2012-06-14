@@ -387,6 +387,11 @@ $.Widget.prototype = {
 		});
 	},
 
+	_off: function( element, eventName ) {
+		eventName = (eventName || "").split( " " ).join( this.eventNamespace + " " ) + this.eventNamespace;
+		element.unbind( eventName ).undelegate( eventName );
+	},
+
 	_delay: function( handler, delay ) {
 		function handlerProxy() {
 			return ( typeof handler === "string" ? instance[ handler ] : handler )

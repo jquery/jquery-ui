@@ -44,7 +44,7 @@ $.widget( "ui.menu", {
 			})
 			// need to catch all clicks on disabled menu
 			// not possible through _on
-			.bind( "click.menu", $.proxy(function( event ) {
+			.bind( "click" + this.eventNamespace, $.proxy(function( event ) {
 				if ( this.options.disabled ) {
 					event.preventDefault();
 				}
@@ -168,7 +168,7 @@ $.widget( "ui.menu", {
 		this.element.find( ".ui-menu-divider" ).removeClass( "ui-menu-divider ui-widget-content" );
 
 		// unbind currentEventTarget click event handler
-		$( currentEventTarget ).unbind( "click.menu" );
+		this._off( $( currentEventTarget ), "click" );
 	},
 
 	_keydown: function( event ) {

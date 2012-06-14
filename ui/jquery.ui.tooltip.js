@@ -233,7 +233,7 @@ $.widget( "ui.tooltip", {
 		});
 
 		target.removeData( "tooltip-open" );
-		target.unbind( "mouseleave.tooltip focusout.tooltip keyup.tooltip" );
+		this._off( target, "mouseleave focusout keyup" );
 
 		this.closing = true;
 		this._trigger( "close", event, { tooltip: tooltip } );

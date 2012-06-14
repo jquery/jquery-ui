@@ -767,6 +767,83 @@ test( "_on() to common element", function() {
 	$( document ).trigger( "customevent" );
 });
 
+test( "_off() - single event", function() {
+	expect( 3 );
+
+	$.widget( "ui.testWidget", {} );
+	var shouldTriggerWidget, shouldTriggerOther,
+		element = $( "#widget" ),
+		widget = element.testWidget().data( "testWidget" );
+	widget._on( element, { foo: function() {
+		ok( shouldTriggerWidget, "foo called from _on" );
+	}});
+	element.bind( "foo", function() {
+		ok( shouldTriggerOther, "foo called from bind" );
+	});
+	shouldTriggerWidget = true;
+	shouldTriggerOther = true;
+	element.trigger( "foo" );
+	shouldTriggerWidget = false;
+	widget._off( element, "foo" );
+	element.trigger( "foo" );
+});
+
+test( "_off() - multiple events", function() {
+	expect( 6 );
+
+	$.widget( "ui.testWidget", {} );
+	var shouldTriggerWidget, shouldTriggerOther,
+		element = $( "#widget" ),
+		widget = element.testWidget().data( "testWidget" );
+	widget._on( element, {
+		foo: function() {
+			ok( shouldTriggerWidget, "foo called from _on" );
+		},
+		bar: function() {
+			ok( shouldTriggerWidget, "bar called from _on" );
+		}
+	});
+	element.bind( "foo bar", function( event ) {
+		ok( shouldTriggerOther, event.type + " called from bind" );
+	});
+	shouldTriggerWidget = true;
+	shouldTriggerOther = true;
+	element.trigger( "foo" );
+	element.trigger( "bar" );
+	shouldTriggerWidget = false;
+	widget._off( element, "foo bar" );
+	element.trigger( "foo" );
+	element.trigger( "bar" );
+});
+
+test( "_off() - all events", function() {
+	expect( 6 );
+
+	$.widget( "ui.testWidget", {} );
+	var shouldTriggerWidget, shouldTriggerOther,
+		element = $( "#widget" ),
+		widget = element.testWidget().data( "testWidget" );
+	widget._on( element, {
+		foo: function() {
+			ok( shouldTriggerWidget, "foo called from _on" );
+		},
+		bar: function() {
+			ok( shouldTriggerWidget, "bar called from _on" );
+		}
+	});
+	element.bind( "foo bar", function( event ) {
+		ok( shouldTriggerOther, event.type + " called from bind" );
+	});
+	shouldTriggerWidget = true;
+	shouldTriggerOther = true;
+	element.trigger( "foo" );
+	element.trigger( "bar" );
+	shouldTriggerWidget = false;
+	widget._off( element );
+	element.trigger( "foo" );
+	element.trigger( "bar" );
+});
+
 test( "._hoverable()", function() {
 	$.widget( "ui.testWidget", {
 		_create: function() {

@@ -58,7 +58,7 @@ $.widget( "ui.tabs", {
 			.addClass( "ui-tabs ui-widget ui-widget-content ui-corner-all" )
 			.toggleClass( "ui-tabs-collapsible", options.collapsible )
 			// Prevent users from focusing disabled tabs via click
-			.delegate( ".ui-tabs-nav > li", "mousedown.tabs", function( event ) {
+			.delegate( ".ui-tabs-nav > li", "mousedown" + this.eventNamespace, function( event ) {
 				if ( $( this ).is( ".ui-state-disabled" ) ) {
 					event.preventDefault();
 				}
@@ -69,7 +69,7 @@ $.widget( "ui.tabs", {
 			// We don't have to worry about focusing the previously focused
 			// element since clicking on a non-focusable element should focus
 			// the body anyway.
-			.delegate( ".ui-tabs-anchor", "focus.tabs", function() {
+			.delegate( ".ui-tabs-anchor", "focus" + this.eventNamespace, function() {
 				if ( $( this ).closest( "li" ).is( ".ui-state-disabled" ) ) {
 					this.blur();
 				}
@@ -480,7 +480,7 @@ $.widget( "ui.tabs", {
 			});
 		}
 
-		this.anchors.add( this.tabs ).add( this.panels ).unbind( ".tabs" );
+		this._off( this.anchors.add( this.tabs ).add( this.panels ) );
 		this._on( this.anchors, events );
 		this._on( this.tabs, { keydown: "_tabKeydown" } );
 		this._on( this.panels, { keydown: "_panelKeydown" } );
