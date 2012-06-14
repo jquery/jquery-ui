@@ -87,7 +87,7 @@ grunt.loadNpmTasks( "grunt-html" );
 grunt.loadNpmTasks( "grunt-compare-size" );
 grunt.loadNpmTasks( "grunt-junit" );
 // local testswarm and build tasks
-grunt.loadTasks( 'build/tasks');
+grunt.loadTasks( "build/tasks" );
 
 grunt.registerHelper( "strip_all_banners", function( filepath ) {
 	return grunt.file.read( filepath ).replace( /^\s*\/\*[\s\S]*?\*\/\s*/g, "" );
