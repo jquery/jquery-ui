@@ -27,7 +27,7 @@ var tests = {
 	"Widget": "widget/widget.html"
 };
 
-function submit( commit, tests, configFile ) {
+function submit( commit, tests, configFile, done ) {
 	var test,
 		testswarm = require( "testswarm" ),
 		config = grunt.file.readJSON( configFile ).jqueryui,
@@ -40,7 +40,7 @@ function submit( commit, tests, configFile ) {
 		url: config.swarmUrl,
 		pollInterval: 10000,
 		timeout: 1000 * 60 * 30,
-		done: this.async()
+		done: done
 	}, {
 		authUsername: config.authUsername,
 		authToken: config.authToken,
@@ -53,7 +53,7 @@ function submit( commit, tests, configFile ) {
 }
 
 grunt.registerTask( "testswarm", function( commit, configFile ) {
-	submit( commit, tests, configFile );
+	submit( commit, tests, configFile, this.async() );
 });
 
 grunt.registerTask( "testswarm-multi-jquery", function( commit, configFile ) {
@@ -65,7 +65,7 @@ grunt.registerTask( "testswarm-multi-jquery", function( commit, configFile ) {
 	for ( test in tests ) {
 		allTests[ test + "-1.7.2" ] = tests[ test ] + "?nojshint=true&jquery=1.7.2";
 	}
-	submit( commit, allTests, configFile );
+	submit( commit, allTests, configFile, this.async() );
 });
 
 };
