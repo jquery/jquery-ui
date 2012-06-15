@@ -14,23 +14,16 @@
 
 $.effects.effect.fade = function( o, done ) {
 	var el = $( this ),
-		mode = $.effects.setMode( el, o.mode || "toggle" ),
-		hide = mode === "hide";
+		mode = $.effects.setMode( el, o.mode || "toggle" );
 
-	el.show();
 	el.animate({
-		opacity: hide ? 0 : 1
+		opacity: mode
 	}, {
 		queue: false,
 		duration: o.duration,
 		easing: o.easing,
-		complete: function() {
-			if ( hide ) {
-				el.hide();
-			}
-			done();
-		}
+		complete: done
 	});
 };
 
-})(jQuery);
+})( jQuery );
