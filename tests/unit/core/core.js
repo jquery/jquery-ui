@@ -2,7 +2,7 @@
 
 module( "core - jQuery extensions" );
 
-TestHelpers.testJshint( "ui.core" );
+TestHelpers.testJshint( "core" );
 
 test( "focus - original functionality", function() {
 	expect( 1 );

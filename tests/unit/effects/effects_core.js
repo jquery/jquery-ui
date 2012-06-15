@@ -174,7 +174,7 @@ $.each( $.effects.effect, function( effect ) {
 
 	// puff and size are defined inside scale
 	if ( effect !== "puff" && effect !== "size" ) {
-		TestHelpers.testJshint( "ui.effect-" + effect );
+		TestHelpers.testJshint( "effect-" + effect );
 	}
 
 	if ( effect === "transfer" ) {

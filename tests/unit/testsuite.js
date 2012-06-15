@@ -47,7 +47,7 @@ TestHelpers.testJshint = function( module ) {
 				dataType: "json"
 			}),
 			$.ajax({
-				url: "../../../ui/jquery." + module + ".js",
+				url: "../../../ui/jquery.ui." + module + ".js",
 				dataType: "text"
 			})
 		).done(function( hintArgs, srcArgs ) {
@@ -126,7 +126,7 @@ function testBasicUsage( widget ) {
 TestHelpers.commonWidgetTests = function( widget, settings ) {
 	module( widget + ": common widget" );
 
-	TestHelpers.testJshint( "ui." + widget );
+	TestHelpers.testJshint( widget );
 	testWidgetDefaults( widget, settings.defaults );
 	testWidgetOverrides( widget );
 	testBasicUsage( widget );

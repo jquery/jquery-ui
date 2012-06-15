@@ -8,7 +8,7 @@ module( "widget factory", {
 	}
 });
 
-TestHelpers.testJshint( "ui.widget" );
+TestHelpers.testJshint( "widget" );
 
 test( "widget creation", function() {
 	var myPrototype = {
