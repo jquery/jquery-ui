@@ -702,16 +702,8 @@ $.widget( "ui.tabs", {
 				$( this ).remove();
 			} else {
 				$( this )
-					.removeClass([
-						"ui-state-default",
-						"ui-corner-top",
-						"ui-tabs-active",
-						"ui-state-active",
-						"ui-state-disabled",
-						"ui-tabs-panel",
-						"ui-widget-content",
-						"ui-corner-bottom"
-					].join( " " ) )
+					.removeClass( "ui-state-default ui-state-active ui-state-disabled " +
+						"ui-corner-top ui-corner-bottom ui-widget-content ui-tabs-active ui-tabs-panel" )
 					.removeAttr( "tabIndex" )
 					.removeAttr( "aria-live" )
 					.removeAttr( "aria-busy" )
