@@ -8,7 +8,7 @@
  * http://docs.jquery.com/UI/Effects/Explode
  *
  * Depends:
- *	jquery.effects.core.js
+ *	jquery.ui.effect.js
  */
 (function( $, undefined ) {
 

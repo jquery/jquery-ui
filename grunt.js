@@ -16,7 +16,7 @@ var // modules
 		"jquery.ui.resizable.js",
 		"jquery.ui.selectable.js",
 		"jquery.ui.sortable.js",
-		"jquery.effects.core.js"
+		"jquery.ui.effect.js"
 	],
 
 	uiFiles = coreFiles.map(function( file ) {
