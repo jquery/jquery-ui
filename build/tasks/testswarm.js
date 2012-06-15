@@ -34,7 +34,7 @@ function submit( commit, tests, configFile, done ) {
 		testBase = config.testUrl + commit + "/tests/unit/",
 		testUrls = [];
 	for ( test in tests ) {
-		testUrls.push( testBase + tests[ test ] + "?nojshint=true" );
+		testUrls.push( testBase + tests[ test ] );
 	}
 	testswarm({
 		url: config.swarmUrl,
@@ -53,7 +53,12 @@ function submit( commit, tests, configFile, done ) {
 }
 
 grunt.registerTask( "testswarm", function( commit, configFile ) {
-	submit( commit, tests, configFile, this.async() );
+	var test,
+		latestTests = {};
+	for ( test in tests ) {
+		latestTests[ test ] = tests[ test ] + "?nojshint=true";
+	}
+	submit( commit, latestTests, configFile, this.async() );
 });
 
 grunt.registerTask( "testswarm-multi-jquery", function( commit, configFile ) {
