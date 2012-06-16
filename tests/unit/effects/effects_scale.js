@@ -53,13 +53,13 @@ function suite( position ) {
 $(function() {
 	suite( "absolute" );
 	suite( "relative" );
-	var fixed = $.support.fixedPosition;
-	// jQuery < 1.7 uses $.offset.supportsFixedPosition
-	if ( fixed === undefined ) {
-		$.offset.initialize();
-		fixed = $.offset.supportsFixedPosition;
-	}
-	if ( fixed ) {
+	var fixedElem = $( "<div>" )
+		.css({
+			position: "fixed",
+			top: 10
+		})
+		.appendTo( "body" );
+	if ( fixedElem.offset().top === 10 ) {
 		suite( "fixed" );
 	}
 });
