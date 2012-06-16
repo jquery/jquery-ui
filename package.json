@@ -33,7 +33,7 @@
     "grunt-html": "0.1.1",
     "grunt-junit": "0.1.4",
     "request": "2.9.153",
-    "testswarm": "0.2.2"
+    "testswarm": "0.2.3"
   },
   "keywords": []
 }
