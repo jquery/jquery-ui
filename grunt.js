@@ -81,7 +81,6 @@ uiFiles.forEach(function( file ) {
 });
 
 // grunt plugins
-grunt.loadNpmTasks( "grunt-contrib" );
 grunt.loadNpmTasks( "grunt-css" );
 grunt.loadNpmTasks( "grunt-html" );
 grunt.loadNpmTasks( "grunt-compare-size" );
@@ -132,7 +131,6 @@ grunt.initConfig({
 		bannerCSS: createBanner( cssFiles )
 	},
 	compare_size: compareFiles,
-	clean: ["dist"],
 	concat: {
 		ui: {
 			src: [ "<banner:meta.bannerAll>", stripBanner( uiFiles ) ],

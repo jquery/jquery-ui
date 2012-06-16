@@ -181,6 +181,10 @@ grunt.registerTask( "copy_themes", function() {
 	});
 });
 
+grunt.registerTask( "clean", function() {
+	require( "rimraf" ).sync( "dist" );
+});
+
 grunt.registerTask( "authors", function() {
 	var done = this.async();
 
