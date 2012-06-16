@@ -35,6 +35,8 @@ var // modules
 		"datepicker",
 		"dialog",
 		"menu",
+		"menubar",
+		"popup",
 		"progressbar",
 		"resizable",
 		"selectable",
