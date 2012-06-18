@@ -1,12 +1,14 @@
-/*
- * menu_options.js
- */
-(function($) {
+(function( $ ) {
 
 var log = TestHelpers.menu.log,
+	logOutput = TestHelpers.menu.logOutput,
 	click = TestHelpers.menu.click;
 
-module("menu: options");
+module( "menu: options", {
+	setup: function() {
+		TestHelpers.menu.clearLog();
+	}
+});
 
 test( "{ disabled: true }", function() {
 	expect( 2 );
@@ -16,52 +18,54 @@ test( "{ disabled: true }", function() {
 			log();
 		}
 	});
-	ok(menu.is(".ui-state-disabled"),"Missing ui-state-disabled class");
-	log("click",true);
-	click(menu,"1");
-	log("afterclick");
-	equal( $("#log").html(), "afterclick,click,", "Click order not valid.");
+	ok( menu.is( ".ui-state-disabled" ), "Missing ui-state-disabled class" );
+	log( "click", true );
+	click( menu, "1" );
+	log( "afterclick" );
+	equal( logOutput(), "afterclick,click,", "Click order not valid." );
 });
 
 test( "{ disabled: false }", function() {
 	expect( 2 );
 	var menu = $( "#menu1" ).menu({
 		disabled: false,
-		select: function(event, ui) {
+		select: function( event, ui ) {
 			log();
 		}
 	});
-	ok(menu.not(".ui-state-disabled"),"Has ui-state-disabled class");
-	log("click",true);
-	click(menu,"1");
-	log("afterclick");
-	equal( $("#log").html(), "afterclick,1,click,", "Click order not valid.");
+	ok( menu.not( ".ui-state-disabled" ), "Has ui-state-disabled class" );
+	log( "click", true );
+	click( menu, "1" );
+	log( "afterclick" );
+	equal( logOutput(), "afterclick,1,click,", "Click order not valid." );
 });
 
-test("{ role: 'menu' } ", function () {
-	var menu = $('#menu1').menu();
-	expect(2 + 5 * $("li", menu).length);
+test( "{ role: 'menu' } ", function () {
+	var menu = $( "#menu1" ).menu(),
+		items = menu.find( "li" );
+	expect( 2 + 5 * items.length );
 	equal( menu.attr( "role" ), "menu" );
-	ok( $("li", menu).length > 0, "number of menu items");
-	$("li", menu).each(function(item) {
-		ok( $(this).hasClass("ui-menu-item"), "menu item ("+ item + ") class for item");
-		equal( $(this).attr("role"), "presentation", "menu item ("+ item + ") role");
-		equal( $("a", this).attr("role"), "menuitem", "menu item ("+ item + ") role");
-		ok( $("a",this).hasClass("ui-corner-all"), "a element class for menu item ("+ item + ") ");
-		equal( $("a",this).attr("tabindex"), "-1", "a element tabindex for menu item ("+ item + ") ");
+	ok( items.length > 0, "number of menu items" );
+	items.each(function( item ) {
+		ok( $( this ).hasClass( "ui-menu-item" ), "menu item ("+ item + ") class for item" );
+		equal( $( this ).attr( "role" ), "presentation", "menu item ("+ item + ") role" );
+		equal( $( "a", this ).attr( "role" ), "menuitem", "menu item ("+ item + ") role" );
+		ok( $( "a", this ).hasClass( "ui-corner-all" ), "a element class for menu item ("+ item + ") " );
+		equal( $( "a", this ).attr( "tabindex" ), "-1", "a element tabindex for menu item ("+ item + ") " );
 	});
 });
 
-test("{ role: 'listbox' } ", function () {
-	var menu = $('#menu1').menu({
-		role: "listbox"
-	});
-	expect(2 + $("li", menu).length);
+test( "{ role: 'listbox' } ", function () {
+	var menu = $( "#menu1" ).menu({
+			role: "listbox"
+		}),
+		items = menu.find( "li" );
+	expect(2 + items.length);
 	equal( menu.attr( "role" ), "listbox" );
-	ok( ($("li", menu).length > 0 ), "number of menu items");
-	$("li", menu).each(function(item) {
-		equal( $("a", this).attr("role"), "option", "menu item ("+ item + ") role");
+	ok( items.length > 0, "number of menu items" );
+	items.each(function( item ) {
+		equal( $( "a", this ).attr( "role" ), "option", "menu item ("+ item + ") role" );
 	});
 });
 
-})(jQuery);
+})( jQuery );
