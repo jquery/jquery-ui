@@ -373,7 +373,7 @@ $.Widget.prototype = {
 			// copy the guid so direct unbinding works
 			if ( typeof handler !== "string" ) {
 				handlerProxy.guid = handler.guid =
-					handler.guid || handlerProxy.guid || jQuery.guid++;
+					handler.guid || handlerProxy.guid || $.guid++;
 			}
 
 			var match = event.match( /^(\w+)\s*(.*)$/ ),
