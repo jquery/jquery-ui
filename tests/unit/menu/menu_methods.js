@@ -27,7 +27,7 @@ test( "enable/disable", function() {
 	log( "click" );
 	click( menu, "1" );
 	log( "afterclick" );
-	equal( logOutput(), "afterclick,1,click,afterclick,click,", "Click order not valid." );
+	equal( logOutput(), "click,afterclick,click,1,afterclick", "Click order not valid." );
 });
 
 test( "refresh", function() {

@@ -22,7 +22,7 @@ test( "{ disabled: true }", function() {
 	log( "click", true );
 	click( menu, "1" );
 	log( "afterclick" );
-	equal( logOutput(), "afterclick,click,", "Click order not valid." );
+	equal( logOutput(), "click,afterclick", "Click order not valid." );
 });
 
 test( "{ disabled: false }", function() {
@@ -37,7 +37,7 @@ test( "{ disabled: false }", function() {
 	log( "click", true );
 	click( menu, "1" );
 	log( "afterclick" );
-	equal( logOutput(), "afterclick,1,click,", "Click order not valid." );
+	equal( logOutput(), "click,1,afterclick", "Click order not valid." );
 });
 
 test( "{ role: 'menu' } ", function () {

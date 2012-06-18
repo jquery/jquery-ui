@@ -11,11 +11,11 @@ TestHelpers.menu = {
 		if ( message === undefined ) {
 			message = lastItem;
 		}
-		log.unshift( $.trim( message ) );
+		log.push( $.trim( message ) );
 	},
 
 	logOutput: function() {
-		return log.join( "," ) + ",";
+		return log.join( "," );
 	},
 
 	clearLog: function() {
