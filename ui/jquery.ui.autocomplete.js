@@ -55,7 +55,7 @@ $.widget( "ui.autocomplete", {
 		// search term. #7799
 		var suppressKeyPress, suppressKeyPressRepeat, suppressInput;
 
-		this.isMultiLine = this.element.is( "textarea" ) || this.element.prop( "isContentEditable" );
+		this.isMultiLine = this._isMultiLine();
 		this.valueMethod = this.element[ this.element.is( "input,textarea" ) ? "val" : "text" ];
 		this.isNewMenu = true;
 
@@ -324,6 +324,20 @@ $.widget( "ui.autocomplete", {
 		if ( key === "disabled" && value && this.xhr ) {
 			this.xhr.abort();
 		}
+	},
+
+	_isMultiLine: function() {
+		// Textareas are always multi-line
+		if ( this.element.is( "textarea" ) ) {
+			return true;
+		}
+		// Inputs are always single-line, even if inside a contentEditable element
+		// IE also treats inputs as contentEditable
+		if ( this.element.is( "input" ) ) {
+			return false;
+		}
+		// All other element types are determined by whether or not they're contentEditable
+		return this.element.prop( "isContentEditable" );
 	},
 
 	_initSource: function() {
