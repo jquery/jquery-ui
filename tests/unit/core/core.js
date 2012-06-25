@@ -158,7 +158,7 @@ test( "uniqueId / removeUniqueId", function() {
 
 	// support: jQuery <1.6.2
 	// support: IE <8
-	// We should use equal( id, undefined ) when dropping jQuery 1.6.1 support (or IE6/7)
+	// We should use strictEqual( id, undefined ) when dropping jQuery 1.6.1 support (or IE6/7)
 	ok( !el.attr( "id" ), "element has no initial id" );
 	el.uniqueId();
 	ok( /ui-id-\d+$/.test( el.attr( "id" ) ), "element has generated id" );

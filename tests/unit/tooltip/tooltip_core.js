@@ -34,7 +34,9 @@ test( "accessibility", function() {
 	equal( element.attr( "aria-describedby" ), "fixture-span " + tooltipId,
 		"multiple describedby when open" );
 	// strictEqual to distinguish between .removeAttr( "title" ) and .attr( "title", "" )
-	// TODO actually use strictEqual(..., undefined, msg) when dropping jQuery 1.6 support (or IE6/7)
+	// support: jQuery <1.6.2
+	// support: IE <8
+	// We should use strictEqual( ..., undefined ) when dropping jQuery 1.6.1 support (or IE6/7)
 	ok( !element.attr( "title" ), "no title when open" );
 	element.tooltip( "close" );
 	equal( element.attr( "aria-describedby" ), "fixture-span",
