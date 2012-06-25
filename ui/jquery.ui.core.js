@@ -245,6 +245,11 @@ $(function() {
 	body.removeChild( div ).style.display = "none";
 });
 
+// jQuery <1.4.3 uses curCSS, in 1.4.3 - 1.7.2 curCSS = css, 1.8+ only has css
+if ( !$.curCSS ) {
+	$.curCSS = $.css;
+}
+
 
 
 
