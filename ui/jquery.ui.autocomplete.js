@@ -55,7 +55,7 @@ $.widget( "ui.autocomplete", {
 		// search term. #7799
 		var suppressKeyPress, suppressKeyPressRepeat, suppressInput;
 
-		this.isMultiLine = this.element.is( "textarea,[contenteditable]" );
+		this.isMultiLine = this.element.is( "textarea" ) || this.element.prop( "isContentEditable" );
 		this.valueMethod = this.element[ this.element.is( "input,textarea" ) ? "val" : "text" ];
 		this.isNewMenu = true;
 
