@@ -90,16 +90,16 @@ asyncTest( "animateClass works with colors", function() {
 });
 
 asyncTest( "animateClass calls step option", 1, function() {
-	var test = jQuery("div.animateClass"),
-		done = function() {
-			done = jQuery.noop;
+	var test = jQuery( "div.animateClass" ),
+		step = function( fx ) {
+			ok( true, "Step Function Called" );
 			test.stop();
 			start();
+			step = $.noop;
 		};
 	test.toggleClass( "testChangeBackground", {
-		step: function( fx ) {
-			ok( true, "Step Function Called" );
-			setTimeout( done, 0 );
+		step: function() {
+			step();
 		}
 	});
 });
