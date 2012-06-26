@@ -1,4 +1,5 @@
 {
+	"boss": true,
 	"browser": true,
 	"curly": true,
 	"eqnull": true,
