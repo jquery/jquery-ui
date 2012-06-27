@@ -12,7 +12,7 @@ module( "menu: events", {
 
 test( "handle click on menu", function() {
 	expect( 1 );
-	var menu = $( "#menu1" ).menu({
+	var element = $( "#menu1" ).menu({
 		select: function( event, ui ) {
 			log();
 		}
@@ -20,15 +20,15 @@ test( "handle click on menu", function() {
 	log( "click", true );
 	click( $( "#menu1" ), "1" );
 	log( "afterclick" );
-	click( menu, "2" );
+	click( element, "2" );
 	click( $( "#menu1" ), "3" );
-	click( menu, "1" );
+	click( element, "1" );
 	equal( logOutput(), "click,1,afterclick,2,3,1", "Click order not valid." );
 });
 
 test( "handle click on custom item menu", function() {
 	expect( 1 );
-	var menu = $( "#menu5" ).menu({
+	var element = $( "#menu5" ).menu({
 		select: function( event, ui ) {
 			log();
 		},
@@ -37,16 +37,16 @@ test( "handle click on custom item menu", function() {
 	log( "click", true );
 	click( $( "#menu5" ), "1" );
 	log( "afterclick" );
-	click( menu, "2" );
+	click( element, "2" );
 	click( $( "#menu5" ), "3" );
-	click( menu, "1" );
+	click( element, "1" );
 	equal( logOutput(), "click,1,afterclick,2,3,1", "Click order not valid." );
 });
 
 asyncTest( "handle blur", function() {
 	expect( 1 );
 	var blurHandled = false,
-		menu = $( "#menu1" ).menu({
+		element = $( "#menu1" ).menu({
 			blur: function( event, ui ) {
 				// Ignore duplicate blur event fired by IE
 				if ( !blurHandled ) {
@@ -56,9 +56,9 @@ asyncTest( "handle blur", function() {
 			}
 		});
 
-	click( menu, "1" );
+	click( element, "1" );
 	setTimeout( function() {
-		menu.blur();
+		element.blur();
 		start();
 	}, 350 );
 });
@@ -66,7 +66,7 @@ asyncTest( "handle blur", function() {
 asyncTest( "handle blur on click", function() {
 	expect( 1 );
 	var blurHandled = false,
-		menu = $( "#menu1" ).menu({
+		element = $( "#menu1" ).menu({
 			blur: function( event, ui ) {
 				// Ignore duplicate blur event fired by IE
 				if ( !blurHandled ) {
@@ -76,7 +76,7 @@ asyncTest( "handle blur on click", function() {
 			}
 		});
 
-	click( menu, "1" );
+	click( element, "1" );
 	setTimeout( function() {
 		$( "<a>", { id: "remove"} ).appendTo( "body" ).trigger( "click" );
 		start();
@@ -101,59 +101,59 @@ test( "handle focus of menu with active item", function() {
 
 asyncTest( "handle submenu auto collapse: mouseleave", function() {
 	expect( 4 );
-	var menu = $( "#menu2" ).menu(),
+	var element = $( "#menu2" ).menu(),
 		event = $.Event( "mouseenter" );
 
 	function menumouseleave1() {
-		equal( menu.find( "ul[aria-expanded='true']" ).length, 1, "first submenu expanded" );
-		menu.menu( "focus", event, menu.find( "li:nth-child(7) li:first" ) );
+		equal( element.find( "ul[aria-expanded='true']" ).length, 1, "first submenu expanded" );
+		element.menu( "focus", event, element.find( "li:nth-child(7) li:first" ) );
 		setTimeout( menumouseleave2, 350 );
 	}
 	function menumouseleave2() {
-		equal( menu.find( "ul[aria-expanded='true']" ).length, 2, "second submenu expanded" );
-		menu.find( "ul[aria-expanded='true']:first" ).trigger( "mouseleave" );
+		equal( element.find( "ul[aria-expanded='true']" ).length, 2, "second submenu expanded" );
+		element.find( "ul[aria-expanded='true']:first" ).trigger( "mouseleave" );
 		setTimeout( menumouseleave3, 350 );
 	}
 	function menumouseleave3() {
-		equal( menu.find( "ul[aria-expanded='true']" ).length, 1, "second submenu collapsed" );
-		menu.trigger( "mouseleave" );
+		equal( element.find( "ul[aria-expanded='true']" ).length, 1, "second submenu collapsed" );
+		element.trigger( "mouseleave" );
 		setTimeout( menumouseleave4, 350 );
 	}
 	function menumouseleave4() {
-		equal( menu.find( "ul[aria-expanded='true']" ).length, 0, "first submenu collapsed" );
+		equal( element.find( "ul[aria-expanded='true']" ).length, 0, "first submenu collapsed" );
 		start();
 	}
 
-	menu.find( "li:nth-child(7)" ).trigger( "mouseenter" );
+	element.find( "li:nth-child(7)" ).trigger( "mouseenter" );
 	setTimeout( menumouseleave1, 350 );
 });
 
 asyncTest( "handle submenu auto collapse: mouseleave", function() {
 	expect( 4 );
-	var menu = $( "#menu5" ).menu({ menus: "div" }),
+	var element = $( "#menu5" ).menu({ menus: "div" }),
 		event = $.Event( "mouseenter" );
 
 	function menumouseleave1() {
-		equal( menu.find( "div[aria-expanded='true']" ).length, 1, "first submenu expanded" );
-		menu.menu( "focus", event, menu.find( ":nth-child(7)" ).find( "div" ).eq( 0 ).children().eq( 0 ) );
+		equal( element.find( "div[aria-expanded='true']" ).length, 1, "first submenu expanded" );
+		element.menu( "focus", event, element.find( ":nth-child(7)" ).find( "div" ).eq( 0 ).children().eq( 0 ) );
 		setTimeout( menumouseleave2, 350 );
 	}
 	function menumouseleave2() {
-		equal( menu.find( "div[aria-expanded='true']" ).length, 2, "second submenu expanded" );
-		menu.find( "div[aria-expanded='true']:first" ).trigger( "mouseleave" );
+		equal( element.find( "div[aria-expanded='true']" ).length, 2, "second submenu expanded" );
+		element.find( "div[aria-expanded='true']:first" ).trigger( "mouseleave" );
 		setTimeout( menumouseleave3, 350 );
 	}
 	function menumouseleave3() {
-		equal( menu.find( "div[aria-expanded='true']" ).length, 1, "second submenu collapsed" );
-		menu.trigger( "mouseleave" );
+		equal( element.find( "div[aria-expanded='true']" ).length, 1, "second submenu collapsed" );
+		element.trigger( "mouseleave" );
 		setTimeout( menumouseleave4, 350 );
 	}
 	function menumouseleave4() {
-		equal( menu.find( "div[aria-expanded='true']" ).length, 0, "first submenu collapsed" );
+		equal( element.find( "div[aria-expanded='true']" ).length, 0, "first submenu collapsed" );
 		start();
 	}
 
-	menu.find( ":nth-child(7)" ).trigger( "mouseenter" );
+	element.find( ":nth-child(7)" ).trigger( "mouseenter" );
 	setTimeout( menumouseleave1, 350 );
 });
 
