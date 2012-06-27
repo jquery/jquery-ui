@@ -4,6 +4,7 @@ module( "effect.scale: Scale" );
 function run( position, v, h, vo, ho ) {
 	var desc = "End Position Correct: " + position + " (" + v + "," + h + ") - origin: (" + vo + "," + ho + ")";
 	asyncTest( desc, function() {
+		expect( 2 );
 		function complete() {
 			equal( parseInt( test.css( h ), 10 ), target[ h ], "Horizontal Position Correct " + desc );
 			equal( parseInt( test.css( v ), 10 ), target[ v ], "Vertical Position Correct " + desc );

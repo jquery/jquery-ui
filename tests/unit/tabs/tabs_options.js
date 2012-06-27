@@ -69,6 +69,8 @@ test( "{ active: Number }", function() {
 
 if ( $.uiBackCompat === false ) {
 	test( "{ active: -Number }", function() {
+		expect( 8 );
+
 		var element = $( "#tabs1" ).tabs({
 			active: -1
 		});

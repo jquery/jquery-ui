@@ -34,6 +34,8 @@ test("init", function() {
 });
 
 test("destroy", function() {
+	expect( 4 );
+
 	$("<div></div>").appendTo('body').dialog().dialog("destroy").remove();
 	ok(true, '.dialog("destroy") called on element');
 
@@ -49,6 +51,8 @@ test("destroy", function() {
 });
 
 test("enable", function() {
+	expect( 3 );
+
 	var expected = $('<div></div>').dialog(),
 		actual = expected.dialog('enable');
 	equal(actual, expected, 'enable is chainable');
@@ -60,6 +64,8 @@ test("enable", function() {
 });
 
 test("disable", function() {
+	expect( 3 );
+
 	var expected = $('<div></div>').dialog(),
 		actual = expected.dialog('disable');
 	equal(actual, expected, 'disable is chainable');
@@ -71,6 +77,8 @@ test("disable", function() {
 });
 
 test("close", function() {
+	expect( 3 );
+
 	var expected = $('<div></div>').dialog(),
 		actual = expected.dialog('close');
 	equal(actual, expected, 'close is chainable');
@@ -98,6 +106,8 @@ test("isOpen", function() {
 });
 
 test("moveToTop", function() {
+	expect( 3 );
+
 	var d1, d2, dlg1, dlg2,
 		expected = $('<div></div>').dialog(),
 		actual = expected.dialog('moveToTop');
@@ -117,6 +127,7 @@ test("moveToTop", function() {
 });
 
 test("open", function() {
+	expect( 3 );
 	var expected = $('<div></div>').dialog(),
 		actual = expected.dialog('open');
 	equal(actual, expected, 'open is chainable');

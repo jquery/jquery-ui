@@ -116,6 +116,7 @@ test("ARIA", function() {
 });
 
 test("widget method", function() {
+	expect( 1 );
 	var dialog = $("<div>").appendTo("#main").dialog();
 	deepEqual(dialog.parent()[0], dialog.dialog("widget")[0]);
 });

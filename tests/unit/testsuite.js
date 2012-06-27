@@ -10,6 +10,8 @@ function includeScript( url ) {
 	document.write( "<script src='../../../" + url + "'></script>" );
 }
 
+QUnit.config.requireExpects = true;
+
 QUnit.config.urlConfig.push( "min" );
 TestHelpers.loadResources = QUnit.urlParams.min ?
 	function() {
@@ -76,7 +78,9 @@ function testWidgetDefaults( widget, defaults ) {
 
 	// ensure that all defaults have the correct value
 	test( "defined defaults", function() {
+		var count = 0;
 		$.each( defaults, function( key, val ) {
+			expect( ++count );
 			if ( $.isFunction( val ) ) {
 				ok( $.isFunction( pluginDefaults[ key ] ), key );
 				return;
@@ -87,7 +91,9 @@ function testWidgetDefaults( widget, defaults ) {
 
 	// ensure that all defaults were tested
 	test( "tested defaults", function() {
+		var count = 0;
 		$.each( pluginDefaults, function( key, val ) {
+			expect( ++count );
 			ok( key in defaults, key );
 		});
 	});
@@ -96,6 +102,7 @@ function testWidgetDefaults( widget, defaults ) {
 function testWidgetOverrides( widget ) {
 	if ( $.uiBackCompat === false ) {
 		test( "$.widget overrides", function() {
+			expect( 4 );
 			$.each([
 				"_createWidget",
 				"destroy",
@@ -111,6 +118,8 @@ function testWidgetOverrides( widget ) {
 
 function testBasicUsage( widget ) {
 	test( "basic usage", function() {
+		expect( 3 );
+
 		var defaultElement = $.ui[ widget ].prototype.defaultElement;
 		$( defaultElement ).appendTo( "body" )[ widget ]().remove();
 		ok( true, "initialized on element" );
@@ -131,6 +140,7 @@ TestHelpers.commonWidgetTests = function( widget, settings ) {
 	testWidgetOverrides( widget );
 	testBasicUsage( widget );
 	test( "version", function() {
+		expect( 1 );
 		ok( "version" in $.ui[ widget ].prototype, "version property exists" );
 	});
 };

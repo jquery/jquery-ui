@@ -11,6 +11,7 @@ module( "widget factory", {
 TestHelpers.testJshint( "widget" );
 
 test( "widget creation", function() {
+	expect( 5 );
 	var myPrototype = {
 		_create: function() {},
 		creationTest: function() {}
@@ -78,6 +79,7 @@ test( "element normalization", function() {
 });
 
 test( "custom selector expression", function() {
+	expect( 1 );
 	var elem = $( "<div>" ).appendTo( "#qunit-fixture" );
 	$.widget( "ui.testWidget", {} );
 	elem.testWidget();
@@ -300,6 +302,7 @@ test( "._getCreateEventData()", function() {
 });
 
 test( "re-init", function() {
+	expect( 3 );
 	var div = $( "<div>" ),
 		actions = [];
 
@@ -329,6 +332,7 @@ test( "re-init", function() {
 });
 
 test( "inheritance - options", function() {
+	expect( 4 );
 	// #5830 - Widget: Using inheritance overwrites the base classes options
 	$.widget( "ui.testWidgetBase", {
 		options: {
@@ -441,6 +445,7 @@ test( "._superApply()", function() {
 });
 
 test( ".option() - getter", function() {
+	expect( 6 );
 	$.widget( "ui.testWidget", {
 		_create: function() {}
 	});
@@ -472,6 +477,7 @@ test( ".option() - getter", function() {
 });
 
 test( ".option() - deep option getter", function() {
+	expect( 5 );
 	$.widget( "ui.testWidget", {} );
 	var div = $( "<div>" ).testWidget({
 		foo: {
@@ -490,6 +496,7 @@ test( ".option() - deep option getter", function() {
 });
 
 test( ".option() - delegate to ._setOptions()", function() {
+	expect( 2 );
 	var div,
 		calls = [];
 	$.widget( "ui.testWidget", {
@@ -514,6 +521,7 @@ test( ".option() - delegate to ._setOptions()", function() {
 });
 
 test( ".option() - delegate to ._setOption()", function() {
+	expect( 2 );
 	var div,
 		calls = [];
 	$.widget( "ui.testWidget", {
@@ -544,6 +552,7 @@ test( ".option() - delegate to ._setOption()", function() {
 });
 
 test( ".option() - deep option setter", function() {
+	expect( 6 );
 	$.widget( "ui.testWidget", {} );
 	var div = $( "<div>" ).testWidget();
 	function deepOption( from, to, msg ) {
@@ -592,6 +601,7 @@ test( ".disable()", function() {
 });
 
 test( ".widget() - base", function() {
+	expect( 1 );
 	$.widget( "ui.testWidget", {
 		_create: function() {}
 	});
@@ -600,6 +610,7 @@ test( ".widget() - base", function() {
 });
 
 test( ".widget() - overriden", function() {
+	expect( 1 );
 	var wrapper = $( "<div>" );
 	$.widget( "ui.testWidget", {
 		_create: function() {},
@@ -845,6 +856,7 @@ test( "_off() - all events", function() {
 });
 
 test( "._hoverable()", function() {
+	expect( 10 );
 	$.widget( "ui.testWidget", {
 		_create: function() {
 			this._hoverable( this.element.children() );
@@ -876,10 +888,11 @@ test( "._hoverable()", function() {
 });
 
 test( "._focusable()", function() {
+	expect( 10 );
 	$.widget( "ui.testWidget", {
 		_create: function() {
-		this._focusable( this.element.children() );
-	}
+			this._focusable( this.element.children() );
+		}
 	});
 
 	var div = $( "#widget" ).testWidget().children();
@@ -959,6 +972,7 @@ test( "._trigger() - cancelled event", function() {
 });
 
 test( "._trigger() - cancelled callback", function() {
+	expect( 1 );
 	$.widget( "ui.testWidget", {
 		_create: function() {}
 	});

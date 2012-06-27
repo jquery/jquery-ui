@@ -6,6 +6,7 @@
 module("datepicker: methods");
 
 test('destroy', function() {
+	expect( 33 );
 	var inl,
 		inp = init('#inp');
 	ok(inp.is('.hasDatepicker'), 'Default - marker class set');
@@ -63,6 +64,7 @@ test('destroy', function() {
 });
 
 test('enableDisable', function() {
+	expect( 33 );
 	var inl, dp,
 		inp = init('#inp');
 	ok(!inp.datepicker('isDisabled'), 'Enable/disable - initially marked as enabled');

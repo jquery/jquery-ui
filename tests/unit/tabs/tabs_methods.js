@@ -6,6 +6,7 @@ var disabled = TestHelpers.tabs.disabled,
 module( "tabs: methods" );
 
 test( "destroy", function() {
+	expect( 1 );
 	domEqual( "#tabs1", function() {
 		$( "#tabs1" ).tabs().tabs( "destroy" );
 	});

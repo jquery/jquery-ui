@@ -7,6 +7,7 @@ module("datepicker: tickets");
 
 // http://forum.jquery.com/topic/several-breaking-changes-in-jquery-ui-1-8rc1
 test('beforeShowDay-getDate', function() {
+    expect( 3 );
 	var inp = init('#inp', {beforeShowDay: function(date) { inp.datepicker('getDate'); return [true, '']; }}),
 	   dp = $('#ui-datepicker-div');
 	inp.val('01/01/2010').datepicker('show');
@@ -25,6 +26,7 @@ test('beforeShowDay-getDate', function() {
 });
 
 test('Ticket 7602: Stop datepicker from appearing with beforeShow event handler', function(){
+    expect( 3 );
     var inp = init('#inp',{
             beforeShow: function(){
                 return false;
@@ -58,11 +60,13 @@ test('Ticket 7602: Stop datepicker from appearing with beforeShow event handler'
 });
 
 test('Ticket 6827: formatDate day of year calculation is wrong during day lights savings time', function(){
+    expect( 1 );
     var time = $.datepicker.formatDate("oo", new Date("2010/03/30 12:00:00 CDT"));
     equal(time, "089");
 });
 
 test('Ticket #7244: date parser does not fail when too many numbers are passed into the date function', function() {
+    expect( 4 );
     var date;
     try{
         date = $.datepicker.parseDate('dd/mm/yy', '18/04/19881');
