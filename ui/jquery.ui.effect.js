@@ -21,7 +21,7 @@ $.effects = {
  * jQuery Color Animations
  * http://jquery.org/
  *
- * Copyright 2011 John Resig
+ * Copyright 2012 John Resig
  * Dual licensed under the MIT or GPL Version 2 licenses.
  * http://jquery.org/license
  */
@@ -149,7 +149,6 @@ var stepHooks = "backgroundColor borderBottomColor borderLeftColor borderRightCo
 			floor: true
 		}
 	},
-	rgbaspace = spaces.rgba.props,
 	support = color.support = {},
 
 	// colors = jQuery.Color.names
@@ -158,11 +157,11 @@ var stepHooks = "backgroundColor borderBottomColor borderLeftColor borderRightCo
 	// local aliases of functions called often
 	each = jQuery.each;
 
-spaces.hsla.props.alpha = rgbaspace.alpha;
+spaces.hsla.props.alpha = spaces.rgba.props.alpha;
 
 function clamp( value, prop, alwaysAllowEmpty ) {
 	var type = propTypes[ prop.type ] || {},
-		allowEmpty = prop.empty || alwaysAllowEmpty;
+		allowEmpty = alwaysAllowEmpty || prop.empty;
 
 	if ( allowEmpty && value == null ) {
 		return null;
@@ -179,7 +178,7 @@ function clamp( value, prop, alwaysAllowEmpty ) {
 		return prop.def;
 	}
 	if ( type.mod ) {
-		value = value % type.mod;
+		value %= type.mod;
 		// -10 -> 350
 		return value < 0 ? type.mod + value : value;
 	}
@@ -226,21 +225,18 @@ function stringParse( string ) {
 		return inst;
 	}
 
-	// named colors / default - filter back through parse function
-	if ( string = colors[ string ] ) {
-		return string;
-	}
+	// named colors
+	return colors[ string ];
 }
 
-color.fn = color.prototype = {
-	constructor: color,
+color.fn = jQuery.extend( color.prototype, {
 	parse: function( red, green, blue, alpha ) {
 		if ( red === undefined ) {
 			this._rgba = [ null, null, null, null ];
 			return this;
 		}
-		if ( red instanceof jQuery || red.nodeType ) {
-			red = red instanceof jQuery ? red.css( green ) : jQuery( red ).css( green );
+		if ( red.jquery || red.nodeType ) {
+			red = jQuery( red ).css( green );
 			green = undefined;
 		}
 
@@ -260,7 +256,7 @@ color.fn = color.prototype = {
 		}
 
 		if ( type === "array" ) {
-			each( rgbaspace, function( key, prop ) {
+			each( spaces.rgba.props, function( key, prop ) {
 				rgba[ prop.idx ] = clamp( red[ prop.idx ], prop );
 			});
 			return this;
@@ -428,7 +424,7 @@ color.fn = color.prototype = {
 	toString: function() {
 		return this._rgba[ 3 ] === 0 ? "transparent" : this.toRgbaString();
 	}
-};
+});
 color.fn.parse.prototype = color.fn;
 
 // hsla conversions adapted from:
