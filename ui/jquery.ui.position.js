@@ -210,6 +210,8 @@ $.fn.position = function( options ) {
 			marginLeft: marginLeft,
 			marginTop: marginTop
 		};
+		
+		if (target.css('position')=='fixed') elem.css('position','fixed');
 
 		$.each( [ "left", "top" ], function( i, dir ) {
 			if ( $.ui.position[ collision[ i ] ] ) {
