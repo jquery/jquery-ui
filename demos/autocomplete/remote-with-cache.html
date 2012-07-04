@@ -29,11 +29,12 @@
 					return;
 				}
 
+			        if (lastXhr)
+			        	lastXhr.abort();
+				
 				lastXhr = $.getJSON( "search.php", request, function( data, status, xhr ) {
 					cache[ term ] = data;
-					if ( xhr === lastXhr ) {
-						response( data );
-					}
+					response( data );
 				});
 			}
 		});
