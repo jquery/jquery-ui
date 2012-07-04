@@ -5,7 +5,7 @@
   "version": "1.9.0pre",
   "homepage": "https://github.com/jquery/jquery-ui",
   "author": {
-    "name": "AUTHORS.txt"
+    "name": "jQuery Foundation and other contributors"
   },
   "repository": {
     "type": "git",
