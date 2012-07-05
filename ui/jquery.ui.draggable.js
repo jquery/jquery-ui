@@ -119,7 +119,7 @@ $.widget("ui.draggable", $.ui.mouse, {
 		//The element's absolute position on the page minus margins
 		this.offset = this.positionAbs = this.element.offset();
 		this.offset = {
-			top: this.offset.top - this.margins.top,
+			top: this.offset.top + this.margins.top,
 			left: this.offset.left - this.margins.left
 		};
 
