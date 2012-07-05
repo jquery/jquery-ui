@@ -1557,10 +1557,9 @@ $.extend(Datepicker.prototype, {
 					inst.selectedDay = Math.min(inst.selectedDay, daysInMonth);
 				var leadDays = (this._getFirstDayOfMonth(drawYear, drawMonth) - firstDay + 7) % 7;
 				var curRows = Math.ceil((leadDays + daysInMonth) / 7); // calculate the number of rows to generate
-				var numRows = (isMultiMonth ? this.maxRows > curRows ? this.maxRows : curRows : curRows); //If multiple months, use the higher number of rows (see #7043)
-				this.maxRows = numRows;
+				this.maxRows = Math.max(this.maxRows, curRows); // update maxRows, for the largest number of rows (biggest month)
 				var printDate = this._daylightSavingAdjust(new Date(drawYear, drawMonth, 1 - leadDays));
-				for (var dRow = 0; dRow < numRows; dRow++) { // create date picker rows
+				for (var dRow = 0; dRow < curRows; dRow++) { // create date picker rows
 					calender += '<tr>';
 					var tbody = (!showWeek ? '' : '<td class="ui-datepicker-week-col">' +
 						this._get(inst, 'calculateWeek')(printDate) + '</td>');
