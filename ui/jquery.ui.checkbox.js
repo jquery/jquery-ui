@@ -132,7 +132,7 @@ $.widget( "ui.checkbox", {
 		}
 
 		$.Widget.prototype._setOption.apply( this, arguments );
-	},
+	}
 
 });
 
