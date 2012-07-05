@@ -11,6 +11,7 @@
  * Depends:
  *	jquery.ui.core.js
  *	jquery.ui.widget.js
+ *	jquery.ui.position.js
  */
 (function( $, undefined ) {
 
