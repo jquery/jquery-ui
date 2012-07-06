@@ -1,6 +1,9 @@
 {
 	"core": {
-		"description": "The core of jQuery UI, required for all interactions and widgets."
+		"description": "The core of jQuery UI, required for all interactions and widgets.",
+		"homepage": "http://jqueryui.com/",
+		"demo": "http://jqueryui.com/",
+		"docs": "http://api.jqueryui.com/category/ui-core"
 	},
 	"datepicker": {
 		"description": "A datepicker than can be toggled from a input or displayed inline.",
@@ -13,6 +16,7 @@
 		]
 	},
 	"effect": {
+		"title": "jQuery UI Effects Core",
 		"description": "Extends the internal jQuery effects, includes morphing, easing and is required by all other effects.",
 		"keywords": [
 			"animation",
@@ -22,7 +26,10 @@
 			"class",
 			"transition",
 			"easing"
-		]
+		],
+		"homepage": "http://jqueryui.com/",
+		"demo": "http://jqueryui.com/",
+		"docs": "http://api.jqueryui.com/category/effects-core"
 	},
 	"position": {
 		"description": "A utility plugin for positioning elements relative to other elements.",

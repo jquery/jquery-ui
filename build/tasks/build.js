@@ -4,6 +4,7 @@ var path = require( "path" );
 
 grunt.registerTask( "manifest", "Generate jquery.json manifest files", function() {
 	var pkg = grunt.config( "pkg" ),
+		// TODO: URLs for UI core and effects core
 		base = {
 			core: {
 				name: "ui.{plugin}",
@@ -18,10 +19,8 @@ grunt.registerTask( "manifest", "Generate jquery.json manifest files", function(
 				name: "ui.effect-{plugin}",
 				title: "jQuery UI {Plugin} Effect",
 				keywords: [ "effect", "show", "hide" ],
-				// TODO: Will we have individual pages for 1.9?
-				homepage: "http://jqueryui.com/effect/",
-				// TODO: Will we have individual pages for 1.9?
-				demo: "http://jqueryui.com/effect/",
+				homepage: "http://jqueryui.com/{plugin}-effect/",
+				demo: "http://jqueryui.com/{plugin}-effect/",
 				docs: "http://api.jqueryui.com/{plugin}-effect/",
 				dependencies: [ "effect" ],
 				file: "ui.effect-{plugin}"
@@ -43,7 +42,7 @@ grunt.registerTask( "manifest", "Generate jquery.json manifest files", function(
 
 			manifest = {
 				name: replace( baseManifest.name ),
-				title: replace( baseManifest.title ),
+				title: data.title || replace( baseManifest.title ),
 				description: data.description,
 				keywords: [ "ui", plugin ]
 					.concat( baseManifest.keywords || [] )
