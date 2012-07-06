@@ -50,6 +50,7 @@ grunt.registerTask( "manifest", "Generate jquery.json manifest files", function(
 				version: pkg.version,
 				author: pkg.author,
 				maintainers: pkg.maintainers,
+				licenses: pkg.licenses,
 				bugs: pkg.bugs,
 				homepage: data.homepage || replace( baseManifest.homepage ||
 					"http://jqueryui.com/{plugin}/" ),
