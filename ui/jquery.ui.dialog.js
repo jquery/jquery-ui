@@ -316,7 +316,7 @@ $.widget("ui.dialog", {
 					return;
 				}
 
-				var tabbables = $( ":tabbable", this ),
+				var tabbables = $( ":tabbable", uiDialog ),
 					first = tabbables.filter( ":first" ),
 					last  = tabbables.filter( ":last" );
 
