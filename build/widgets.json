@@ -1,0 +1,135 @@
+{
+	"accordion": {
+		"dependencies": [],
+		"description": "Collapsable content panels for displaying information in a limited amount of space.",
+		"keywords": [
+			"navigation",
+			"panel",
+			"collapse",
+			"expand"
+		]
+	},
+	"autocomplete": {
+		"dependencies": [ "menu", "position" ],
+		"description": "Provides a list of suggested words as the user is typing.",
+		"keywords": [
+			"form",
+			"word",
+			"predict",
+			"suggest"
+		]
+	},
+	"button": {
+		"dependencies": [],
+		"description": "Enhance your forms with themable buttons.",
+		"keywords": [
+			"form",
+			"radio",
+			"checkbox"
+		]
+	},
+	"dialog": {
+		"dependencies": [ "button", "draggable", "position", "resizable" ],
+		"description": "Customizable dialog windows.",
+		"keywords": [
+			"modal",
+			"alert",
+			"popup"
+		]
+	},
+	"draggable": {
+		"dependencies": [ "mouse" ],
+		"description": "Enable dragging functionality for any element.",
+		"keywords": [
+			"drag",
+			"drop"
+		]
+	},
+	"droppable": {
+		"dependencies": [ "draggable", "mouse" ],
+		"description": "Create drop targets for draggable elements.",
+		"keywords": [
+			"drag",
+			"drop"
+		]
+	},
+	"menu": {
+		"dependencies": [ "position" ],
+		"description": "Easily create nestable menus.",
+		"keywords": [
+			"dropdown",
+			"flyout"
+		]
+	},
+	"mouse": {
+		"dependencies": [],
+		"description": "An abstraction for any mouse-based interactions.",
+		"keywords": [
+			"abstraction"
+		]
+	},
+	"progressbar": {
+		"dependencies": [],
+		"description": "A status indicator that can be used for a loading state and standard percentage indicators.",
+		"keywords": [
+			"determinate",
+			"status"
+		]
+	},
+	"resizable": {
+		"dependencies": [ "mouse" ],
+		"description": "Enable resize functioality for any element.",
+		"keywords": [
+			"resize"
+		]
+	},
+	"selectable": {
+		"dependencies": [ "mouse" ],
+		"description": "Create groups of elements that can be selected with the mouse.",
+		"keywords": [
+			"selection"
+		]
+	},
+	"slider": {
+		"dependencies": [ "mouse" ],
+		"description": "A flexible slider with ranges and accessibility via keyboard.",
+		"keywords": [
+			"form",
+			"number",
+			"range"
+		]
+	},
+	"sortable": {
+		"dependencies": [ "mouse" ],
+		"description": "Sort items in a list using the mouse.",
+		"keywords": [
+			"sort",
+			"list"
+		]
+	},
+	"spinner": {
+		"dependencies": [ "button" ],
+		"description": "Easily input numbers via the keyboard or mouse.",
+		"keywords": [
+			"form",
+			"number",
+			"spinbutton",
+			"stepper"
+		]
+	},
+	"tabs": {
+		"dependencies": [],
+		"description": "Transforms a set of container elements into a tab structure.",
+		"keywords": [
+			"navigation",
+			"panel",
+			"collapse",
+			"expand"
+		]
+	},
+	"tooltip": {
+		"dependencies": [ "position" ],
+		"description": "Show additional information for any element on hover or focus.",
+		"keywords": []
+	}
+}

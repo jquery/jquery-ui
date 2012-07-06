@@ -2,6 +2,80 @@ module.exports = function( grunt ) {
 
 var path = require( "path" );
 
+grunt.registerTask( "manifest", "Generate jquery.json manifest files", function() {
+	var pkg = grunt.config( "pkg" ),
+		base = {
+			core: {
+				name: "ui.{plugin}",
+				title: "jQuery UI {Plugin}"
+			},
+			widgets: {
+				name: "ui.{plugin}",
+				title: "jQuery UI {Plugin}",
+				dependencies: [ "core", "widget" ]
+			},
+			effects: {
+				name: "ui.effect-{plugin}",
+				title: "jQuery UI {Plugin} Effect",
+				keywords: [ "effect", "show", "hide" ],
+				// TODO: Will we have individual pages for 1.9?
+				homepage: "http://jqueryui.com/effect/",
+				// TODO: Will we have individual pages for 1.9?
+				demo: "http://jqueryui.com/effect/",
+				docs: "http://api.jqueryui.com/{plugin}-effect/",
+				dependencies: [ "effect" ],
+				file: "ui.effect-{plugin}"
+			}
+		};
+
+	Object.keys( base ).forEach(function( type ) {
+		var baseManifest = base[ type ],
+			plugins = grunt.file.readJSON( "build/" + type + ".json" );
+
+		Object.keys( plugins ).forEach(function( plugin ) {
+			var manifest,
+				data = plugins[ plugin ],
+				name = plugin.charAt( 0 ).toUpperCase() + plugin.substr( 1 );
+
+			function replace( str ) {
+				return str.replace( "{plugin}", plugin ).replace( "{Plugin}", name );
+			}
+
+			manifest = {
+				name: replace( baseManifest.name ),
+				title: replace( baseManifest.title ),
+				description: data.description,
+				keywords: [ "ui", plugin ]
+					.concat( baseManifest.keywords || [] )
+					.concat( data.keywords || [] ),
+				version: pkg.version,
+				author: pkg.author,
+				maintainers: pkg.maintainers,
+				bugs: pkg.bugs,
+				homepage: data.homepage || replace( baseManifest.homepage ||
+					"http://jqueryui.com/{plugin}/" ),
+				demo: data.demo || replace( baseManifest.demo ||
+					"http://jqueryui.com/{plugin}/" ),
+				docs: data.docs || replace( baseManifest.docs ||
+					"http://api.jqueryui.com/{plugin}/" ),
+				download: "http://jqueryui.com/download/",
+				dependencies: {
+					jquery: ">=1.6"
+				}
+			};
+
+			(baseManifest.dependencies || [])
+				.concat(data.dependencies || [])
+				.forEach(function( dependency ) {
+					manifest.dependencies[ "ui." + dependency ] = pkg.version;
+				});
+
+			grunt.file.write( replace( baseManifest.file || "ui.{plugin}" ) + ".jquery.json",
+				JSON.stringify( manifest, null, "\t" ) );
+		});
+	});
+});
+
 grunt.registerMultiTask( "copy", "Copy files to destination folder and replace @VERSION with pkg.version", function() {
 	function replaceVersion( source ) {
 		return source.replace( /@VERSION/g, grunt.config( "pkg.version" ) );

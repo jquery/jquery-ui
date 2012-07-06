@@ -1,0 +1,45 @@
+{
+	"core": {
+		"description": "The core of jQuery UI, required for all interactions and widgets."
+	},
+	"datepicker": {
+		"description": "A datepicker than can be toggled from a input or displayed inline.",
+		"dependencies": [ "core" ],
+		"keywords": [
+			"form",
+			"calendar",
+			"date",
+			"i18n"
+		]
+	},
+	"effect": {
+		"description": "Extends the internal jQuery effects, includes morphing, easing and is required by all other effects.",
+		"keywords": [
+			"animation",
+			"show",
+			"hide",
+			"color",
+			"class",
+			"transition",
+			"easing"
+		]
+	},
+	"position": {
+		"description": "A utility plugin for positioning elements relative to other elements.",
+		"keywords": [
+			"offset",
+			"relative",
+			"absolute",
+			"fixed",
+			"collision"
+		]
+	},
+	"widget": {
+		"description": "Provides a factory for creating stateful widgets with a common API.",
+		"keywords": [
+			"abstraction",
+			"state",
+			"factory"
+		]
+	}
+}

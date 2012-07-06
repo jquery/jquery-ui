@@ -1,0 +1,41 @@
+{
+	"blind": {
+		"description": "Blinds the element."
+	},
+	"bounce": {
+		"description": "Bounces an element horizontally or vertically n-times."
+	},
+	"clip": {
+		"description": "Clips the element on and off like an old TV."
+	},
+	"drop": {
+		"description": "A Drop out effect by moving the element in one direction and hiding it at the same time."
+	},
+	"explode": {
+		"description": "The element explodes in all directions into n pieces. Also supports imploding again."
+	},
+	"fade": {
+		"description": "Fades the element."
+	},
+	"fold": {
+		"description": "Folds the element first horizontally and then vertically."
+	},
+	"highlight": {
+		"description": "Highlights the background of the element in a defined color for a custom duration."
+	},
+	"pulsate": {
+		"description": "The element pulsates n times by changing the opacity to zero and back."
+	},
+	"scale": {
+		"description": "Grow or shrink any element and its content and restore it again."
+	},
+	"shake": {
+		"description": "Shakes the element horizontally or vertically n times."
+	},
+	"slide": {
+		"description": "The element slides in and out of the viewport."
+	},
+	"transfer": {
+		"description": "Transfer effect from one element to another."
+	}
+}
