@@ -42,7 +42,7 @@ Adam Sontag <ajpiano@ajpiano.com>
 Carl Fürstenberg <carl@excito.com>
 Kevin Dalman <development@allpro.net>
 Alberto Fernández Capel <afcapel@gmail.com>
-Jacek Jędrzejewski <jacek.jedrzejewski@gmail.com>
+Jacek Jędrzejewski (http://jacek.jedrzejewski.name)
 Ting Kuei <ting@kuei.com>
 Samuel Cormier-Iijima <sam@chide.it>
 Jon Palmer <jonspalmer@gmail.com>
@@ -170,7 +170,7 @@ Ian Simpson <spoonlikesham@gmail.com>
 Lev Kitsis <spam4lev@gmail.com>
 TJ VanToll <tj.vantoll@gmail.com>
 Justin Domnitz <jdomnitz@gmail.com>
-Douglas Cerna <replaceafill@system76.(none)>
+Douglas Cerna <douglascerna@yahoo.com>
 Bert ter Heide <bertjh@hotmail.com>
 Jasvir Nagra <jasvir@gmail.com>
 Petr Hromadko <yuriy@tokyoscale.com>

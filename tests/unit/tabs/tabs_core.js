@@ -118,8 +118,24 @@ test( "accessibility", function() {
 	equal( tabs.eq( 2 ).attr( "aria-disabled" ), "true", "disabled tab has aria-disabled=true" );
 	equal( panels.eq( 2 ).attr( "aria-expanded" ), "false", "inactive panel has aria-expanded=false" );
 	equal( panels.eq( 2 ).attr( "aria-hidden" ), "true", "inactive panel has aria-hidden=true" );
+});
 
-	// TODO: aria-live and aria-busy tests for ajax tabs
+asyncTest( "accessibility - ajax", function() {
+	expect( 4 );
+	var element = $( "#tabs2" ).tabs(),
+		tab = element.find( ".ui-tabs-nav li" ).eq( 3 ),
+		panel = $( "#custom-id" );
+
+	equal( panel.attr( "aria-live" ), "polite", "remote panel has aria-live" );
+	equal( panel.attr( "aria-busy" ), null, "does not have aria-busy on init" );
+	element.tabs( "option", "active", 3 );
+	equal( panel.attr( "aria-busy" ), "true", "panel has aria-busy during load" );
+	element.one( "tabsload", function() {
+		setTimeout(function() {
+			equal( panel.attr( "aria-busy" ), null, "panel does not have aria-busy after load" );
+			start();
+		}, 1 );
+	});
 });
 
 asyncTest( "keyboard support - LEFT, RIGHT, UP, DOWN, HOME, END, SPACE, ENTER", function() {

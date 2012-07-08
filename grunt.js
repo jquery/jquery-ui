@@ -85,6 +85,7 @@ grunt.loadNpmTasks( "grunt-css" );
 grunt.loadNpmTasks( "grunt-html" );
 grunt.loadNpmTasks( "grunt-compare-size" );
 grunt.loadNpmTasks( "grunt-junit" );
+grunt.loadNpmTasks( "grunt-git-authors" );
 // local testswarm and build tasks
 grunt.loadTasks( "build/tasks" );
 

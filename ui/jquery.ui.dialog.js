@@ -1,7 +1,8 @@
 /*!
  * jQuery UI Dialog @VERSION
+ * http://jqueryui.com
  *
- * Copyright 2012, AUTHORS.txt (http://jqueryui.com/about)
+ * Copyright 2012 jQuery Foundation and other contributors
  * Dual licensed under the MIT or GPL Version 2 licenses.
  * http://jquery.org/license
  *
@@ -315,7 +316,7 @@ $.widget("ui.dialog", {
 					return;
 				}
 
-				var tabbables = $( ":tabbable", this.uiDialog ),
+				var tabbables = $( ":tabbable", uiDialog ),
 					first = tabbables.filter( ":first" ),
 					last  = tabbables.filter( ":last" );
 
