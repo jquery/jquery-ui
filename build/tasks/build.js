@@ -22,8 +22,7 @@ grunt.registerTask( "manifest", "Generate jquery.json manifest files", function(
 				homepage: "http://jqueryui.com/{plugin}-effect/",
 				demo: "http://jqueryui.com/{plugin}-effect/",
 				docs: "http://api.jqueryui.com/{plugin}-effect/",
-				dependencies: [ "effect" ],
-				file: "ui.effect-{plugin}"
+				dependencies: [ "effect" ]
 			}
 		};
 
@@ -70,7 +69,7 @@ grunt.registerTask( "manifest", "Generate jquery.json manifest files", function(
 					manifest.dependencies[ "ui." + dependency ] = pkg.version;
 				});
 
-			grunt.file.write( replace( baseManifest.file || "ui.{plugin}" ) + ".jquery.json",
+			grunt.file.write( manifest.name + ".jquery.json",
 				JSON.stringify( manifest, null, "\t" ) );
 		});
 	});
