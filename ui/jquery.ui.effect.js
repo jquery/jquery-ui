@@ -20,15 +20,15 @@ $.effects = {
 
 /*!
  * jQuery Color Animations
- * http://jquery.org/
+ * http://jquery.com/
  *
- * Copyright 2012 John Resig
+ * Copyright 2012 jQuery Foundation and other contributors
  * Dual licensed under the MIT or GPL Version 2 licenses.
  * http://jquery.org/license
  */
 (function( jQuery, undefined ) {
 
-var stepHooks = "backgroundColor borderBottomColor borderLeftColor borderRightColor borderTopColor color outlineColor".split(" "),
+	var stepHooks = "backgroundColor borderBottomColor borderLeftColor borderRightColor borderTopColor color columnRuleColor outlineColor textDecorationColor textEmphasisColor".split(" "),
 
 	// plusequals test for += 100 -= 100
 	rplusequals = /^([\-+])=\s*(\d+\.?\d*)/,
@@ -47,14 +47,15 @@ var stepHooks = "backgroundColor borderBottomColor borderLeftColor borderRightCo
 			re: /rgba?\(\s*(\d+(?:\.\d+)?)\%\s*,\s*(\d+(?:\.\d+)?)\%\s*,\s*(\d+(?:\.\d+)?)\%\s*(?:,\s*(\d+(?:\.\d+)?)\s*)?\)/,
 			parse: function( execResult ) {
 				return [
-					2.55 * execResult[1],
-					2.55 * execResult[2],
-					2.55 * execResult[3],
+					execResult[ 1 ] * 2.55,
+					execResult[ 2 ] * 2.55,
+					execResult[ 3 ] * 2.55,
 					execResult[ 4 ]
 				];
 			}
 		}, {
-			re: /#([a-fA-F0-9]{2})([a-fA-F0-9]{2})([a-fA-F0-9]{2})/,
+			// this regex ignores A-F because it's compared against an already lowercased string
+			re: /#([a-f0-9]{2})([a-f0-9]{2})([a-f0-9]{2})/,
 			parse: function( execResult ) {
 				return [
 					parseInt( execResult[ 1 ], 16 ),
@@ -63,7 +64,8 @@ var stepHooks = "backgroundColor borderBottomColor borderLeftColor borderRightCo
 				];
 			}
 		}, {
-			re: /#([a-fA-F0-9])([a-fA-F0-9])([a-fA-F0-9])/,
+			// this regex ignores A-F because it's compared against an already lowercased string
+			re: /#([a-f0-9])([a-f0-9])([a-f0-9])/,
 			parse: function( execResult ) {
 				return [
 					parseInt( execResult[ 1 ] + execResult[ 1 ], 16 ),
@@ -76,10 +78,10 @@ var stepHooks = "backgroundColor borderBottomColor borderLeftColor borderRightCo
 			space: "hsla",
 			parse: function( execResult ) {
 				return [
-					execResult[1],
-					execResult[2] / 100,
-					execResult[3] / 100,
-					execResult[4]
+					execResult[ 1 ],
+					execResult[ 2 ] / 100,
+					execResult[ 3 ] / 100,
+					execResult[ 4 ]
 				];
 			}
 		}],
@@ -90,47 +92,35 @@ var stepHooks = "backgroundColor borderBottomColor borderLeftColor borderRightCo
 	},
 	spaces = {
 		rgba: {
-			cache: "_rgba",
 			props: {
 				red: {
 					idx: 0,
-					type: "byte",
-					empty: true
+					type: "byte"
 				},
 				green: {
 					idx: 1,
-					type: "byte",
-					empty: true
+					type: "byte"
 				},
 				blue: {
 					idx: 2,
-					type: "byte",
-					empty: true
-				},
-				alpha: {
-					idx: 3,
-					type: "percent",
-					def: 1
+					type: "byte"
 				}
 			}
 		},
+
 		hsla: {
-			cache: "_hsla",
 			props: {
 				hue: {
 					idx: 0,
-					type: "degrees",
-					empty: true
+					type: "degrees"
 				},
 				saturation: {
 					idx: 1,
-					type: "percent",
-					empty: true
+					type: "percent"
 				},
 				lightness: {
 					idx: 2,
-					type: "percent",
-					empty: true
+					type: "percent"
 				}
 			}
 		}
@@ -138,11 +128,9 @@ var stepHooks = "backgroundColor borderBottomColor borderLeftColor borderRightCo
 	propTypes = {
 		"byte": {
 			floor: true,
-			min: 0,
 			max: 255
 		},
 		"percent": {
-			min: 0,
 			max: 1
 		},
 		"degrees": {
@@ -152,40 +140,54 @@ var stepHooks = "backgroundColor borderBottomColor borderLeftColor borderRightCo
 	},
 	support = color.support = {},
 
+	// element for support tests
+	supportElem = jQuery( "<p>" )[ 0 ],
+
 	// colors = jQuery.Color.names
 	colors,
 
 	// local aliases of functions called often
 	each = jQuery.each;
 
-spaces.hsla.props.alpha = spaces.rgba.props.alpha;
+// determine rgba support immediately
+supportElem.style.cssText = "background-color:rgba(1,1,1,.5)";
+support.rgba = supportElem.style.backgroundColor.indexOf( "rgba" ) > -1;
 
-function clamp( value, prop, alwaysAllowEmpty ) {
-	var type = propTypes[ prop.type ] || {},
-		allowEmpty = alwaysAllowEmpty || prop.empty;
+// define cache name and alpha properties
+// for rgba and hsla spaces
+each( spaces, function( spaceName, space ) {
+	space.cache = "_" + spaceName;
+	space.props.alpha = {
+		idx: 3,
+		type: "percent",
+		def: 1
+	};
+});
 
-	if ( allowEmpty && value == null ) {
-		return null;
+function clamp( value, prop, allowEmpty ) {
+	var type = propTypes[ prop.type ] || {};
+
+	if ( value == null ) {
+		return (allowEmpty || !prop.def) ? null : prop.def;
 	}
-	if ( prop.def && value == null ) {
+
+	// ~~ is an short way of doing floor for positive numbers
+	value = type.floor ? ~~value : parseFloat( value );
+
+	// IE will pass in empty strings as value for alpha,
+	// which will hit this case
+	if ( isNaN( value ) ) {
 		return prop.def;
 	}
-	if ( type.floor ) {
-		value = ~~value;
-	} else {
-		value = parseFloat( value );
-	}
-	if ( value == null || isNaN( value ) ) {
-		return prop.def;
-	}
+
 	if ( type.mod ) {
-		value %= type.mod;
-		// -10 -> 350
-		return value < 0 ? type.mod + value : value;
+		// we add mod before modding to make sure that negatives values
+		// get converted properly: -10 -> 350
+		return (value + type.mod) % type.mod;
 	}
 
 	// for now all property types without mod have min and max
-	return type.min > value ? type.min : type.max < value ? type.max : value;
+	return 0 > value ? 0 : type.max < value ? type.max : value;
 }
 
 function stringParse( string ) {
@@ -195,19 +197,17 @@ function stringParse( string ) {
 	string = string.toLowerCase();
 
 	each( stringParsers, function( i, parser ) {
-		var match = parser.re.exec( string ),
+		var parsed,
+			match = parser.re.exec( string ),
 			values = match && parser.parse( match ),
-			parsed,
-			spaceName = parser.space || "rgba",
-			cache = spaces[ spaceName ].cache;
-
+			spaceName = parser.space || "rgba";
 
 		if ( values ) {
 			parsed = inst[ spaceName ]( values );
 
 			// if this was an rgba parse the assignment might happen twice
 			// oh well....
-			inst[ cache ] = parsed[ cache ];
+			inst[ spaces[ spaceName ].cache ] = parsed[ spaces[ spaceName ].cache ];
 			rgba = inst._rgba = parsed._rgba;
 
 			// exit each( stringParsers ) here because we matched
@@ -216,11 +216,11 @@ function stringParse( string ) {
 	});
 
 	// Found a stringParser that handled it
-	if ( rgba.length !== 0 ) {
+	if ( rgba.length ) {
 
 		// if this came from a parsed string, force "transparent" when alpha is 0
 		// chrome, (and maybe others) return "transparent" as rgba(0,0,0,0)
-		if ( Math.max.apply( Math, rgba ) === 0 ) {
+		if ( rgba.join() === "0,0,0,0" ) {
 			jQuery.extend( rgba, colors.transparent );
 		}
 		return inst;
@@ -280,7 +280,7 @@ color.fn = jQuery.extend( color.prototype, {
 
 							// if the value was null, we don't need to copy it
 							// if the key was alpha, we don't need to copy it either
-							if ( red[ key ] == null || key === "alpha") {
+							if ( key === "alpha" || red[ key ] == null ) {
 								return;
 							}
 							inst[ cache ] = space.to( inst._rgba );
@@ -298,13 +298,13 @@ color.fn = jQuery.extend( color.prototype, {
 	is: function( compare ) {
 		var is = color( compare ),
 			same = true,
-			myself = this;
+			inst = this;
 
 		each( spaces, function( _, space ) {
-			var isCache = is[ space.cache ],
-				localCache;
+			var localCache,
+				isCache = is[ space.cache ];
 			if (isCache) {
-				localCache = myself[ space.cache ] || space.to && space.to( myself._rgba ) || [];
+				localCache = inst[ space.cache ] || space.to && space.to( inst._rgba ) || [];
 				each( space.props, function( _, prop ) {
 					if ( isCache[ prop.idx ] != null ) {
 						same = ( isCache[ prop.idx ] === localCache[ prop.idx ] );
@@ -330,7 +330,8 @@ color.fn = jQuery.extend( color.prototype, {
 		var end = color( other ),
 			spaceName = end._space(),
 			space = spaces[ spaceName ],
-			start = this[ space.cache ] || space.to( this._rgba ),
+			startColor = this.alpha() === 0 ? color( "transparent" ) : this,
+			start = startColor[ space.cache ] || space.to( startColor._rgba ),
 			result = start.slice();
 
 		end = end[ space.cache ];
@@ -355,7 +356,7 @@ color.fn = jQuery.extend( color.prototype, {
 						startValue -= type.mod;
 					}
 				}
-				result[ prop.idx ] = clamp( ( endValue - startValue ) * distance + startValue, prop );
+				result[ index ] = clamp( ( endValue - startValue ) * distance + startValue, prop );
 			}
 		});
 		return this[ spaceName ]( result );
@@ -385,7 +386,7 @@ color.fn = jQuery.extend( color.prototype, {
 			prefix = "rgb(";
 		}
 
-		return prefix + rgba.join(",") + ")";
+		return prefix + rgba.join() + ")";
 	},
 	toHslaString: function() {
 		var prefix = "hsla(",
@@ -405,7 +406,7 @@ color.fn = jQuery.extend( color.prototype, {
 			hsla.pop();
 			prefix = "hsl(";
 		}
-		return prefix + hsla.join(",") + ")";
+		return prefix + hsla.join() + ")";
 	},
 	toHexString: function( includeAlpha ) {
 		var rgba = this._rgba.slice(),
@@ -429,12 +430,12 @@ color.fn = jQuery.extend( color.prototype, {
 color.fn.parse.prototype = color.fn;
 
 // hsla conversions adapted from:
-// http://www.google.com/codesearch/p#OAMlx_jo-ck/src/third_party/WebKit/Source/WebCore/inspector/front-end/Color.js&d=7&l=193
+// https://code.google.com/p/maashaack/source/browse/packages/graphics/trunk/src/graphics/colors/HUE2RGB.as?r=5021
 
 function hue2rgb( p, q, h ) {
 	h = ( h + 1 ) % 1;
 	if ( h * 6 < 1 ) {
-		return p + (q - p) * 6 * h;
+		return p + (q - p) * h * 6;
 	}
 	if ( h * 2 < 1) {
 		return q;
@@ -518,10 +519,10 @@ each( spaces, function( spaceName, space ) {
 			return this[ cache ].slice();
 		}
 
-		var type = jQuery.type( value ),
+		var ret,
+			type = jQuery.type( value ),
 			arr = ( type === "array" || type === "object" ) ? value : arguments,
-			local = this[ cache ].slice(),
-			ret;
+			local = this[ cache ].slice();
 
 		each( props, function( key, prop ) {
 			var val = arr[ type === "object" ? key : prop.idx ];
@@ -548,7 +549,7 @@ each( spaces, function( spaceName, space ) {
 		}
 		color.fn[ key ] = function( value ) {
 			var vtype = jQuery.type( value ),
-				fn = ( key === 'alpha' ? ( this._hsla ? 'hsla' : 'rgba' ) : spaceName ),
+				fn = ( key === "alpha" ? ( this._hsla ? "hsla" : "rgba" ) : spaceName ),
 				local = this[ fn ](),
 				cur = local[ prop.idx ],
 				match;
@@ -582,13 +583,12 @@ each( stepHooks, function( i, hook ) {
 		set: function( elem, value ) {
 			var parsed, backgroundColor, curElem;
 
-			if ( jQuery.type( value ) !== 'string' || ( parsed = stringParse( value ) ) )
-			{
+			if ( jQuery.type( value ) !== "string" || ( parsed = stringParse( value ) ) ) {
 				value = color( parsed || value );
 				if ( !support.rgba && value._rgba[ 3 ] !== 1 ) {
 					curElem = hook === "backgroundColor" ? elem.parentNode : elem;
 					do {
-						backgroundColor = jQuery.curCSS( curElem, "backgroundColor" );
+						backgroundColor = jQuery.css( curElem, "backgroundColor" );
 					} while (
 						( backgroundColor === "" || backgroundColor === "transparent" ) &&
 						( curElem = curElem.parentNode ) &&
@@ -619,63 +619,31 @@ each( stepHooks, function( i, hook ) {
 	};
 });
 
-// detect rgba support
-jQuery(function() {
-	var div = document.createElement( "div" ),
-		div_style = div.style;
-
-	div_style.cssText = "background-color:rgba(1,1,1,.5)";
-	support.rgba = div_style.backgroundColor.indexOf( "rgba" ) > -1;
-});
-
-// Some named colors to work with
-// From Interface by Stefan Petre
-// http://interface.eyecon.ro/
+// Basic color names only.
+// Usage of any of the other color names requires adding yourself or including
+// jquery.color.svg-names.js.
 colors = jQuery.Color.names = {
+	// 4.1. Basic color keywords
 	aqua: "#00ffff",
-	azure: "#f0ffff",
-	beige: "#f5f5dc",
 	black: "#000000",
 	blue: "#0000ff",
-	brown: "#a52a2a",
-	cyan: "#00ffff",
-	darkblue: "#00008b",
-	darkcyan: "#008b8b",
-	darkgrey: "#a9a9a9",
-	darkgreen: "#006400",
-	darkkhaki: "#bdb76b",
-	darkmagenta: "#8b008b",
-	darkolivegreen: "#556b2f",
-	darkorange: "#ff8c00",
-	darkorchid: "#9932cc",
-	darkred: "#8b0000",
-	darksalmon: "#e9967a",
-	darkviolet: "#9400d3",
 	fuchsia: "#ff00ff",
-	gold: "#ffd700",
+	gray: "#808080",
 	green: "#008000",
-	indigo: "#4b0082",
-	khaki: "#f0e68c",
-	lightblue: "#add8e6",
-	lightcyan: "#e0ffff",
-	lightgreen: "#90ee90",
-	lightgrey: "#d3d3d3",
-	lightpink: "#ffb6c1",
-	lightyellow: "#ffffe0",
 	lime: "#00ff00",
-	magenta: "#ff00ff",
 	maroon: "#800000",
 	navy: "#000080",
 	olive: "#808000",
-	orange: "#ffa500",
-	pink: "#ffc0cb",
 	purple: "#800080",
-	violet: "#800080",
 	red: "#ff0000",
 	silver: "#c0c0c0",
+	teal: "#008080",
 	white: "#ffffff",
 	yellow: "#ffff00",
+
+	// 4.2.3. ‘transparent’ color keyword
 	transparent: [ null, null, null, 0 ],
+
 	_default: "#ffffff"
 };
 
