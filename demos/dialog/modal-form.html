@@ -109,7 +109,7 @@
 		$( "#create-user" )
 			.button()
 			.click(function() {
-				$( "#dialog-form" ).dialog( "open" );
+				$( "#dialog-form" ).dialog( "open",  $(this));
 			});
 	});
 	</script>
@@ -161,6 +161,7 @@
 
 <div class="demo-description">
 <p>Use a modal dialog to require that the user enter data during a multi-step process.  Embed form markup in the content area, set the <code>modal</code> option to true, and specify primary and secondary user actions with the <code>buttons</code> option.</p>
+<p>Note the second argument to the open option enables the focus to return to the triggering element when the dialog is closed, which provides greater accessibility.</p>
 </div><!-- End demo-description -->
 
 </body>

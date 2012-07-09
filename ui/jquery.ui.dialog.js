@@ -110,16 +110,22 @@ $.widget("ui.dialog", {
 				})
 				.appendTo( "body" ),
 
+			// Add a document wrapper inside the dialog for a11y.
+			uiDialogDocument = ( this.uiDialogDocument = $( "<div>" ) )
+			  .attr( "role", "document")
+				.addClass( "ui-dialog-document" )
+				.appendTo( uiDialog),
+
 			uiDialogContent = this.element
 				.show()
 				.removeAttr( "title" )
 				.addClass( "ui-dialog-content ui-widget-content" )
-				.appendTo( uiDialog ),
+				.appendTo( uiDialogDocument ),
 
 			uiDialogTitlebar = ( this.uiDialogTitlebar = $( "<div>" ) )
 				.addClass( "ui-dialog-titlebar  ui-widget-header  " +
 					"ui-corner-all  ui-helper-clearfix" )
-				.prependTo( uiDialog ),
+				.prependTo( uiDialogDocument ),
 
 			uiDialogTitlebarClose = $( "<a href='#'></a>" )
 				.addClass( "ui-dialog-titlebar-close  ui-corner-all" )
@@ -252,6 +258,12 @@ $.widget("ui.dialog", {
 			$.ui.dialog.maxZ = maxZ;
 		}
 
+		// return the focus to the triggering element for a11y.
+		if (this.triggerEl) {
+			this.triggerEl.focus();
+			this.triggerEl = false;
+		}
+
 		return this;
 	},
 
@@ -294,9 +306,13 @@ $.widget("ui.dialog", {
 		return this;
 	},
 
-	open: function() {
+	open: function(triggerEl) {
 		if ( this._isOpen ) {
 			return;
+		}
+
+		if (triggerEl) {
+			this.triggerEl = triggerEl
 		}
 
 		var hasFocus,
