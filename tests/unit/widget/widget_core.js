@@ -83,7 +83,7 @@ test( "custom selector expression", function() {
 	var elem = $( "<div>" ).appendTo( "#qunit-fixture" );
 	$.widget( "ui.testWidget", {} );
 	elem.testWidget();
-	deepEqual( $( ":ui-testWidget" )[0], elem[0] );
+	deepEqual( $( ":ui-testwidget" )[0], elem[0] );
 	elem.testWidget( "destroy" );
 });
 
