@@ -303,7 +303,7 @@ $.widget( "ui.menu", {
 		// Don't refresh list items that are already adapted
 		menus = submenus.add( this.element );
 
-		menus.children( ":not( .ui-menu-item ):has( a )" )
+		menus.children( ":not(.ui-menu-item):has(a)" )
 			.addClass( "ui-menu-item" )
 			.attr( "role", "presentation" )
 			.children( "a" )
