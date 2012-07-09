@@ -1561,8 +1561,16 @@ $.extend(Datepicker.prototype, {
 				var printDate = this._daylightSavingAdjust(new Date(drawYear, drawMonth, 1 - leadDays));
 				for (var dRow = 0; dRow < curRows; dRow++) { // create date picker rows
 					calender += '<tr>';
-					var tbody = (!showWeek ? '' : '<td class="ui-datepicker-week-col">' +
-						this._get(inst, 'calculateWeek')(printDate) + '</td>');
+					var tbody = '';
+					if (showWeek) { // if the displayed starts and ends in different iso8601 weeks, show both. #8420
+						var startWeek = this._get(inst, 'calculateWeek')(printDate);
+						var endDate = new Date(printDate);
+						endDate.setDate(endDate.getDate() + 6);
+						endDate = this._daylightSavingAdjust(endDate);
+						var endWeek = this._get(inst, 'calculateWeek')(endDate);
+						var weekText = (startWeek === endWeek) ? startWeek : startWeek + "/" + endWeek;
+						tbody = '<td class="ui-datepicker-week-col">' + weekText + '</td>';
+					}
 					for (var dow = 0; dow < 7; dow++) { // create date picker days
 						var daySettings = (beforeShowDay ?
 							beforeShowDay.apply((inst.input ? inst.input[0] : null), [printDate]) : [true, '']);
