@@ -17,7 +17,7 @@
 
 $.widget("ui.resizable", $.ui.mouse, {
 	version: "@VERSION",
-	widgetEventPrefix: "resize",
+	widgetEventPrefix: "resize"	,
 	options: {
 		alsoResize: false,
 		animate: false,
@@ -765,25 +765,34 @@ $.ui.plugin.add("resizable", "grid", {
 	resize: function(event, ui) {
 		var that = $(this).data("resizable"), o = that.options, cs = that.size, os = that.originalSize, op = that.originalPosition, a = that.axis, ratio = o._aspectRatio || event.shiftKey;
 		o.grid = typeof o.grid == "number" ? [o.grid, o.grid] : o.grid;
-		var ox = Math.round((cs.width - os.width) / (o.grid[0]||1)) * (o.grid[0]||1), oy = Math.round((cs.height - os.height) / (o.grid[1]||1)) * (o.grid[1]||1);
+		var gridX = (o.grid[0]||1), gridY = (o.grid[1]||1),
+			ox = Math.round((cs.width - os.width) / gridX) * gridX, oy = Math.round((cs.height - os.height) / gridY) * gridY,
+			newWidth = os.width + ox, newHeight = os.height + oy,
+			isMaxWidth = o.maxWidth && (o.maxWidth < newWidth), isMaxHeight = o.maxHeight && (o.maxHeight < newHeight),
+			isMinWidth = o.minWidth && (o.minWidth > newWidth), isMinHeight = o.minHeight && (o.minHeight > newHeight);
+
+		if (isMinWidth) newWidth = newWidth + gridX;
+		if (isMinHeight) newHeight = newHeight + gridY;
+		if (isMaxWidth) newWidth = newWidth - gridX;
+		if (isMaxHeight) newHeight = newHeight - gridY;
 
 		if (/^(se|s|e)$/.test(a)) {
-			that.size.width = os.width + ox;
-			that.size.height = os.height + oy;
+			that.size.width = newWidth;
+			that.size.height = newHeight;
 		}
 		else if (/^(ne)$/.test(a)) {
-			that.size.width = os.width + ox;
-			that.size.height = os.height + oy;
+			that.size.width = newWidth;
+			that.size.height = newHeight;
 			that.position.top = op.top - oy;
 		}
 		else if (/^(sw)$/.test(a)) {
-			that.size.width = os.width + ox;
-			that.size.height = os.height + oy;
+			that.size.width = newWidth;
+			that.size.height = newHeight;
 			that.position.left = op.left - ox;
 		}
 		else {
-			that.size.width = os.width + ox;
-			that.size.height = os.height + oy;
+			that.size.width = newWidth;
+			that.size.height = newHeight;
 			that.position.top = op.top - oy;
 			that.position.left = op.left - ox;
 		}
