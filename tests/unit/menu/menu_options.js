@@ -18,7 +18,7 @@ test( "{ disabled: true }", function() {
 			log();
 		}
 	});
-	ok( element.is( ".ui-state-disabled" ), "Missing ui-state-disabled class" );
+	ok( element.hasClass( "ui-state-disabled" ), "Missing ui-state-disabled class" );
 	log( "click", true );
 	click( element, "1" );
 	log( "afterclick" );
@@ -33,7 +33,7 @@ test( "{ disabled: false }", function() {
 			log();
 		}
 	});
-	ok( element.not( ".ui-state-disabled" ), "Has ui-state-disabled class" );
+	ok( !element.hasClass( "ui-state-disabled" ), "Has ui-state-disabled class" );
 	log( "click", true );
 	click( element, "1" );
 	log( "afterclick" );
