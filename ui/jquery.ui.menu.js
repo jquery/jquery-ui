@@ -483,7 +483,6 @@ $.widget( "ui.menu", {
 		if ( newItem && newItem.length ) {
 			this._close();
 			this.focus( event, newItem );
-			return true;
 		}
 	},
 
@@ -501,7 +500,6 @@ $.widget( "ui.menu", {
 			this._delay(function() {
 				this.focus( event, newItem );
 			}, 20 );
-			return true;
 		}
 	},
 
