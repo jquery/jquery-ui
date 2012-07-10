@@ -28,6 +28,7 @@ $.widget( "ui.menu", {
 			at: "right top"
 		},
 		role: "menu",
+		icon: "ui-icon-carat-1-e",
 
 		// callbacks
 		blur: null,
@@ -279,6 +280,7 @@ $.widget( "ui.menu", {
 	refresh: function() {
 		// Initialize nested menus
 		var menus,
+			icon = this.options.icon,
 			submenus = this.element.find( this.options.menus + ":not(.ui-menu)" )
 				.addClass( "ui-menu ui-widget ui-widget-content ui-corner-all" )
 				.hide()
@@ -318,7 +320,7 @@ $.widget( "ui.menu", {
 			var menu = $( this ),
 				item = menu.prev( "a" ),
 				submenuCarat = $( "<span>" )
-					.addClass( "ui-menu-icon ui-icon ui-icon-carat-1-e" )
+					.addClass( "ui-menu-icon ui-icon " + icon )
 					.data( "ui-menu-submenu-carat", true );
 
 			item
