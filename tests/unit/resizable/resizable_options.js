@@ -117,6 +117,20 @@ test("grid", function() {
 	equal( target.height(), 120, "compare height");
 });
 
+test("grid (min/max dimensions)", function() {
+	expect(4);
+
+	var handle = '.ui-resizable-se', target = $('#resizable1').resizable({ handles: 'all', grid: 20, minWidth: 65, minHeight: 65, maxWidth: 135, maxHeight: 135 });
+
+	TestHelpers.resizable.drag(handle, 50, 50);
+	equal( target.width(), 120, "grid should respect maxWidth");
+	equal( target.height(), 120, "grid should respect maxHeight");
+
+	TestHelpers.resizable.drag(handle, -100, -100);
+	equal( target.width(), 80, "grid should respect minWidth");
+	equal( target.height(), 80, "grid should respect minHeight");
+});
+
 test("grid (wrapped)", function() {
 	expect(4);
 
