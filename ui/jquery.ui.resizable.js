@@ -327,8 +327,10 @@ $.widget("ui.resizable", $.ui.mouse, {
 		if (!this._helper && this._proportionallyResizeElements.length)
 			this._proportionallyResize();
 
-		// calling the user callback at the end
-		this._trigger('resize', event, this.ui());
+		// Call the user callback if the element was resized
+		if ( ! $.isEmptyObject(props) ) {
+			this._trigger('resize', event, this.ui());
+		}
 
 		return false;
 	},
