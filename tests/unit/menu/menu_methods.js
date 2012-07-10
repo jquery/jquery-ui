@@ -44,6 +44,30 @@ test( "refresh", function() {
 	equal( element.find( ".ui-menu-item" ).length, 5, "Incorrect number of menu items" );
 });
 
+// TODO: test focus method
+
+// TODO: test blur method
+
+// TODO: test collapseAll method
+
+// TODO: test collapse method
+
+// TODO: test expand method
+
+// TODO: test next method
+
+// TODO: test prev method
+
+// TODO: test isFirstItem method
+
+// TODO: test isLastItem method
+
+// TODO: test nextPage method
+
+// TODO: test prevPage method
+
+// TODO: test select method
+
 test( "destroy", function() {
 	expect( 4 );
 	domEqual( "#menu1", function() {
