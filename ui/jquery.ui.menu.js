@@ -101,13 +101,9 @@ $.widget( "ui.menu", {
 			mouseleave: "collapseAll",
 			"mouseleave .ui-menu": "collapseAll",
 			focus: function( event ) {
-				var menuTop,
-					item,
-					menu = this.element;
-
 				// If there's already an active item, keep it active
 				// If not, activate the first item
-				item = this.active || menu.children( ".ui-menu-item" ).eq( 0 );
+				var item = this.active || this.element.children( ".ui-menu-item" ).eq( 0 );
 
 				this.focus( event, item );
 			},
