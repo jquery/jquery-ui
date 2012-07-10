@@ -101,25 +101,13 @@ $.widget( "ui.menu", {
 			"mouseleave .ui-menu": "collapseAll",
 			focus: function( event ) {
 				var menuTop,
-					menu = this.element,
-					// Default to focusing the first item
-					item = menu.children( ".ui-menu-item" ).eq( 0 );
+					item,
+					menu = this.element;
 
 				// If there's already an active item, keep it active
-				if ( this.active ) {
-					item = this.active;
-				// If there's no active item and the menu is scrolled,
-				// then find the first visible item
-				} else if ( this._hasScroll() ) {
-					menuTop = menu.offset().top;
-					menu.children().each(function() {
-						var currentItem = $( this );
-						if ( currentItem.offset().top - menuTop >= 0 ) {
-							item = currentItem;
-							return false;
-						}
-					});
-				}
+				// If not, activate the first item
+				item = this.active || menu.children( ".ui-menu-item" ).eq( 0 );
+
 				this.focus( event, item );
 			},
 			blur: function( event ) {
