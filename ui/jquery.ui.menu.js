@@ -422,10 +422,7 @@ $.widget( "ui.menu", {
 	_open: function( submenu ) {
 		var position = $.extend({
 			of: this.active
-		}, $.type( this.options.position ) === "function" ?
-			this.options.position( this.active ) :
-			this.options.position
-		);
+		}, this.options.position );
 
 		clearTimeout( this.timer );
 		this.element.find( ".ui-menu" ).not( submenu.parents( ".ui-menu" ) )
