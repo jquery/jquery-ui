@@ -173,7 +173,7 @@ $.widget( "ui.menu", {
 	},
 
 	_keydown: function( event ) {
-		var match, prev, character, skip,
+		var match, prev, character, skip, regex,
 			preventDefault = true;
 
 		function escape( value ) {
@@ -228,9 +228,9 @@ $.widget( "ui.menu", {
 				character = prev + character;
 			}
 
+			regex = new RegExp( "^" + escape( character ), "i" );
 			match = this.activeMenu.children( ".ui-menu-item" ).filter(function() {
-				return new RegExp( "^" + escape( character ), "i" )
-					.test( $( this ).children( "a" ).text() );
+				return regex.test( $( this ).children( "a" ).text() );
 			});
 			match = skip && match.index( this.active.next() ) !== -1 ?
 				this.active.nextAll( ".ui-menu-item" ) :
@@ -240,9 +240,9 @@ $.widget( "ui.menu", {
 			// to move down the menu to the first item that starts with that character
 			if ( !match.length ) {
 				character = String.fromCharCode( event.keyCode );
+				regex = new RegExp( "^" + escape( character ), "i" );
 				match = this.activeMenu.children( ".ui-menu-item" ).filter(function() {
-					return new RegExp( "^" + escape( character ), "i" )
-						.test( $( this ).children( "a" ).text() );
+					return regex.test( $( this ).children( "a" ).text() );
 				});
 			}
 
