@@ -309,9 +309,9 @@ $.widget("ui.selectmenu", {
 					tabindex : -1,
 					role : 'option',
 					'aria-selected' : false,
-					focus: function() {
-					    
+					focus: function() {					    
 					    // bubble the focus event
+						// TODO: this isnt a clean solution, see #241
 					    $(this).parent().focus();
 					}
 				};
