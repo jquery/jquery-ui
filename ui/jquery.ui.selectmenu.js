@@ -308,7 +308,12 @@ $.widget("ui.selectmenu", {
 					href : '#nogo',
 					tabindex : -1,
 					role : 'option',
-					'aria-selected' : false
+					'aria-selected' : false,
+					focus: function() {
+					    
+					    // bubble the focus event
+					    $(this).parent().focus();
+					}
 				};
 				if ( selectOptionData[ i ].disabled ) {
 					thisAAttr[ 'aria-disabled' ] = selectOptionData[ i ].disabled;
