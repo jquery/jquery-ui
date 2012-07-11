@@ -1,7 +1,7 @@
 {
 	"accordion": {
 		"dependencies": [],
-		"description": "Collapsable content panels for displaying information in a limited amount of space.",
+		"description": "Displays collapsable content panels for presenting information in a limited amount of space.",
 		"keywords": [
 			"navigation",
 			"panel",
@@ -11,7 +11,7 @@
 	},
 	"autocomplete": {
 		"dependencies": [ "menu", "position" ],
-		"description": "Provides a list of suggested words as the user is typing.",
+		"description": "Lists suggested words as the user is typing.",
 		"keywords": [
 			"form",
 			"word",
@@ -21,7 +21,7 @@
 	},
 	"button": {
 		"dependencies": [],
-		"description": "Enhance your forms with themable buttons.",
+		"description": "Enhances a form with themable buttons.",
 		"keywords": [
 			"form",
 			"radio",
@@ -30,7 +30,7 @@
 	},
 	"dialog": {
 		"dependencies": [ "button", "draggable", "position", "resizable" ],
-		"description": "Customizable dialog windows.",
+		"description": "Displays customizable dialog windows.",
 		"keywords": [
 			"modal",
 			"alert",
@@ -39,7 +39,7 @@
 	},
 	"draggable": {
 		"dependencies": [ "mouse" ],
-		"description": "Enable dragging functionality for any element.",
+		"description": "Enables dragging functionality for any element.",
 		"keywords": [
 			"drag",
 			"drop"
@@ -47,7 +47,7 @@
 	},
 	"droppable": {
 		"dependencies": [ "draggable", "mouse" ],
-		"description": "Create drop targets for draggable elements.",
+		"description": "Enables drop targets for draggable elements.",
 		"keywords": [
 			"drag",
 			"drop"
@@ -55,7 +55,7 @@
 	},
 	"menu": {
 		"dependencies": [ "position" ],
-		"description": "Easily create nestable menus.",
+		"description": "Creates nestable menus.",
 		"keywords": [
 			"dropdown",
 			"flyout"
@@ -63,14 +63,14 @@
 	},
 	"mouse": {
 		"dependencies": [],
-		"description": "An abstraction for any mouse-based interactions.",
+		"description": "Abstracts mouse-based interactions to assist in creating certain widgets.",
 		"keywords": [
 			"abstraction"
 		]
 	},
 	"progressbar": {
 		"dependencies": [],
-		"description": "A status indicator that can be used for a loading state and standard percentage indicators.",
+		"description": "Displays a status indicator for loading state, standard percentage, and other progress indicators.",
 		"keywords": [
 			"determinate",
 			"status"
@@ -78,21 +78,21 @@
 	},
 	"resizable": {
 		"dependencies": [ "mouse" ],
-		"description": "Enable resize functioality for any element.",
+		"description": "Enables resize functionality for any element.",
 		"keywords": [
 			"resize"
 		]
 	},
 	"selectable": {
 		"dependencies": [ "mouse" ],
-		"description": "Create groups of elements that can be selected with the mouse.",
+		"description": "Allows groups of elements to be selected with the mouse.",
 		"keywords": [
 			"selection"
 		]
 	},
 	"slider": {
 		"dependencies": [ "mouse" ],
-		"description": "A flexible slider with ranges and accessibility via keyboard.",
+		"description": "Displays a flexible slider with ranges and accessibility via keyboard.",
 		"keywords": [
 			"form",
 			"number",
@@ -101,7 +101,7 @@
 	},
 	"sortable": {
 		"dependencies": [ "mouse" ],
-		"description": "Sort items in a list using the mouse.",
+		"description": "Enables items in a list to be sorted using the mouse.",
 		"keywords": [
 			"sort",
 			"list"
@@ -109,7 +109,7 @@
 	},
 	"spinner": {
 		"dependencies": [ "button" ],
-		"description": "Easily input numbers via the keyboard or mouse.",
+		"description": "Displays buttons to easily input numbers via the keyboard or mouse.",
 		"keywords": [
 			"form",
 			"number",
@@ -129,7 +129,7 @@
 	},
 	"tooltip": {
 		"dependencies": [ "position" ],
-		"description": "Show additional information for any element on hover or focus.",
+		"description": "Shows additional information for any element on hover or focus.",
 		"keywords": []
 	}
 }

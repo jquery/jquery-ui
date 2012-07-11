@@ -6,7 +6,7 @@
 		"docs": "http://api.jqueryui.com/category/ui-core"
 	},
 	"datepicker": {
-		"description": "A datepicker than can be toggled from a input or displayed inline.",
+		"description": "Displays a calendar from an input or inline for selecting dates.",
 		"dependencies": [ "core" ],
 		"keywords": [
 			"form",
@@ -17,7 +17,7 @@
 	},
 	"effect": {
 		"title": "jQuery UI Effects Core",
-		"description": "Extends the internal jQuery effects, includes morphing, easing and is required by all other effects.",
+		"description": "Extends the internal jQuery effects. Includes morphing and easing. Required by all other effects.",
 		"keywords": [
 			"animation",
 			"show",
@@ -32,7 +32,7 @@
 		"docs": "http://api.jqueryui.com/category/effects-core"
 	},
 	"position": {
-		"description": "A utility plugin for positioning elements relative to other elements.",
+		"description": "Positions elements relative to other elements.",
 		"keywords": [
 			"offset",
 			"relative",

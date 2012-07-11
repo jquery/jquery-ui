@@ -3,39 +3,39 @@
 		"description": "Blinds the element."
 	},
 	"bounce": {
-		"description": "Bounces an element horizontally or vertically n-times."
+		"description": "Bounces an element horizontally or vertically n times."
 	},
 	"clip": {
 		"description": "Clips the element on and off like an old TV."
 	},
 	"drop": {
-		"description": "A Drop out effect by moving the element in one direction and hiding it at the same time."
+		"description": "Moves an element in one direction and hides it at the same time."
 	},
 	"explode": {
-		"description": "The element explodes in all directions into n pieces. Also supports imploding again."
+		"description": "Explodes an element in all directions into n pieces. Implodes an element to its original wholeness."
 	},
 	"fade": {
-		"description": "Fades the element."
+		"description": "Fades an element."
 	},
 	"fold": {
-		"description": "Folds the element first horizontally and then vertically."
+		"description": "Folds an element first horizontally and then vertically."
 	},
 	"highlight": {
-		"description": "Highlights the background of the element in a defined color for a custom duration."
+		"description": "Highlights the background of an element in a defined color for a custom duration."
 	},
 	"pulsate": {
-		"description": "The element pulsates n times by changing the opacity to zero and back."
+		"description": "Pulsates an element n times by changing the opacity to zero and back."
 	},
 	"scale": {
-		"description": "Grow or shrink any element and its content and restore it again."
+		"description": "Grows or shrinks an element and its content. Restores an elemnt to its original size."
 	},
 	"shake": {
-		"description": "Shakes the element horizontally or vertically n times."
+		"description": "Shakes an element horizontally or vertically n times."
 	},
 	"slide": {
-		"description": "The element slides in and out of the viewport."
+		"description": "Slides an element in and out of the viewport."
 	},
 	"transfer": {
-		"description": "Transfer effect from one element to another."
+		"description": "Displays a transfer effect from one element to another."
 	}
 }
