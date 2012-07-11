@@ -3,57 +3,58 @@
 	<head>
 	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 	<title>Demo Page for jQuery UI selectmenu</title>
-	
-	<link type="text/css" href="../../themes/base/jquery.ui.all.css" rel="stylesheet" />
+
+	<link type="text/css" href="../../themes/base/jquery.ui.core.css" rel="stylesheet" />
+	<link type="text/css" href="../../themes/base/jquery.ui.theme.css" rel="stylesheet" />
 	<link type="text/css" href="../../themes/base/jquery.ui.selectmenu.css" rel="stylesheet" />
 	<script type="text/javascript" src="../../jquery-1.7.2.js"></script>
 	<script type="text/javascript" src="../../ui/jquery.ui.core.js"></script>
 	<script type="text/javascript" src="../../ui/jquery.ui.widget.js"></script>
 	<script type="text/javascript" src="../../ui/jquery.ui.position.js"></script>
-	
+
 	<script type="text/javascript" src="../../ui/jquery.ui.selectmenu.js"></script>
 
 	<style type="text/css">
 		/* demo styles */
 		body {font-size: 62.5%; font-family:"Verdana",sans-serif; }
-		fieldset { border:0; }	
+		fieldset { border:0; }
 		label,select,.ui-select-menu { float: left; margin-right: 10px; }
 		select { width: 200px; }
 		.wrap ul.ui-selectmenu-menu-popup li a { font-weight: bold; }
 	</style>
-	<script type="text/javascript">	
-		$(function(){			
+	<script type="text/javascript">
+		$(function(){
 			$('select#speedA').selectmenu({style:'popup'});
-						
+
 			$('select#speedAa').selectmenu({
-				style:'popup', 
+				style:'popup',
 				maxHeight: 150
 			});
 			$('select#speedAa').selectmenu("widget").addClass("wrap");
-			
+
 			$('select#speedB').selectmenu({
-				style:'popup', 
+				style:'popup',
 				width: 300,
 				format: addressFormatting
 			});
-			
+
 			$('select#speedC').selectmenu();
-			
+
 			$('select#speedD').selectmenu({
 				menuWidth: 400,
 				format: addressFormatting
 			});
-			
+
 			$('select#filesC').selectmenu({
-				style:'popup', 
+				style:'popup',
 				positionOptions: {
 					my: "left center",
 					at: "right center",
 					offset: "10 0"
 				}
-			});	
-		});		
-		
+			});
+		});
+
 		//a custom format option callback
 		var addressFormatting = function(text){
 			var newText = text;
@@ -65,23 +66,23 @@
 				{find:/([^\|><\(\)]+)$/g, rep: '<span class="ui-selectmenu-item-content">$1</span>'},
 				{find:/(\([^\|><]+\))$/g, rep: '<span class="ui-selectmenu-item-footer">$1</span>'}
 			];
-			
+
 			for(var i in findreps){
 				newText = newText.replace(findreps[i].find, findreps[i].rep);
 			}
 			return newText;
-		}		
-		
+		}
+
 		// add themeswitcher
-		$(function(){ 
+		$(function(){
 			var ts = $('<div class="ui-button ui-widget ui-state-default ui-corner-all" style="padding: 5px; position: absolute; top: 20px; right: 10px;">Click here to add Themeswitcher!</div>')
 			.appendTo('body')
 			.bind("click", function() {
 				ts.text("Loading Themeswitcher...");
 				$.getScript('http://ui.jquery.com/applications/themeroller/themeswitchertool/', function() {
-					ts.removeClass("ui-button ui-widget ui-state-default ui-corner-all").text("").unbind("click").themeswitcher(); 
+					ts.removeClass("ui-button ui-widget ui-state-default ui-corner-all").text("").unbind("click").themeswitcher();
 				});
-			}); 
+			});
 		});
 	</script>
 </head>
@@ -119,7 +120,7 @@
 				<option value="Faster">6 Faster</option>
 			</select>
 		</fieldset>
-		
+
 		<h2>Same with option text formatting</h2>
 		<fieldset>
 			<label for="speedB">Select an Address:</label>
@@ -130,7 +131,7 @@
 				<option>Mad Doe Kiiid - 78 West Main St Apt 3A | Bloomsburg, PA 12345 (footer text)</option>
 			</select>
 		</fieldset>
-		
+
 		<h2>"dropdown" Style</h2>
 		<fieldset>
 			<label for="speedC">Select a Speed:</label>
@@ -141,8 +142,8 @@
 				<option value="Fast">Fast</option>
 				<option value="Faster">Faster</option>
 			</select>
-		</fieldset>		
-		
+		</fieldset>
+
 		<h2>"dropdown" Style with menuWidth wider than menu and text formatting</h2>
 		<fieldset>
 			<label for="speedD">Select an Address:</label>
@@ -153,7 +154,7 @@
 				<option>Mad Doe Kiiid - 78 West Main St Apt 3A, Bloomsburg, PA 12345</option>
 			</select>
 		</fieldset>
-		
+
 		<h2>"popup" Style with custom positioning and optgroups</h2>		<fieldset>
 			<label for="filesC">Select a File:</label>
 			<select name="filesC" id="filesC">
