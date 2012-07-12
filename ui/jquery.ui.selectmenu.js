@@ -159,8 +159,8 @@ $.widget( "ui.selectmenu", {
 		}
 
 		// unbind uneeded Menu events
-		this.menu.unbind ( "mouseleave.menu" );
-		$( document ).unbind( "click.menu" );
+		this.menu.off( "mouseleave.menu" );
+		$( document ).off( "click.menu" );
 	},
 
 	refresh: function() {
@@ -293,7 +293,7 @@ $.widget( "ui.selectmenu", {
 		focus: function( event ) {
 			// init Menu on first focus
 			this.refresh();
-			this.button.unbind( "focus." + this.widgetName );
+			this.button.off( "focus." + this.widgetName );
 		},
 		click: function( event ) {
 			this._toggle( event );
