@@ -22,7 +22,9 @@ $.widget( "ui.menu", {
 	defaultElement: "<ul>",
 	delay: 300,
 	options: {
-		icon: "ui-icon-carat-1-e",
+		icons: {
+			submenu: "ui-icon-carat-1-e"
+		},
 		menus: "ul",
 		position: {
 			my: "left top",
@@ -276,7 +278,7 @@ $.widget( "ui.menu", {
 	refresh: function() {
 		// Initialize nested menus
 		var menus,
-			icon = this.options.icon,
+			icon = this.options.icons.submenu,
 			submenus = this.element.find( this.options.menus + ":not(.ui-menu)" )
 				.addClass( "ui-menu ui-widget ui-widget-content ui-corner-all" )
 				.hide()
