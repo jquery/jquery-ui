@@ -40,7 +40,21 @@ test( "{ disabled: false }", function() {
 	equal( logOutput(), "click,1,afterclick", "Click order not valid." );
 });
 
-// TODO: test icon option
+test( "{ icons: default }", function() {
+	expect( 1 );
+	var element = $( "#menu2" ).menu();
+	equal( element.find( ".ui-menu-icon" ).attr( "class" ), "ui-menu-icon ui-icon ui-icon-carat-1-e" );
+});
+
+test( "{ icons: { submenu: 'custom' } }", function() {
+	expect( 1 );
+	var element = $( "#menu2" ).menu({
+		icons: {
+			submenu: "custom-class"
+		}
+	});
+	equal( element.find( ".ui-menu-icon" ).attr( "class" ), "ui-menu-icon ui-icon custom-class" );
+});
 
 // TODO: test menus option
 
