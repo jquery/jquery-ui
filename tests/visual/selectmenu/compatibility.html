@@ -47,6 +47,12 @@
 		});
 		$( "#tabs" ).tabs();
 		$( "#dialog" ).dialog();
+		$( "#menu" ).menu({
+			position: { of: "ul:has(a.ui-state-focus):last" },
+			icons: {
+				submenu: "ui-icon-carat-1-e"
+			}
+		});
 	});
 	</script>
 	<style>
@@ -56,6 +62,7 @@
 		label { display: block; }
 		select { width: 200px; }
 		#tabs { margin: 50px 0 0 0 }
+		#menu { width: 150px; margin: 50px 0 0 0 }
 	</style>
 </head>
 <body>
@@ -66,6 +73,61 @@
 	<label for="tags">Tags: </label>
 	<input id="tags">
 </div>
+
+
+<ul id="menu">
+	<li><a href="#">Aberdeen</a></li>
+	<li><a href="#">Ada</a></li>
+	<li><a href="#">Adamsville</a></li>
+	<li><a href="#">Addyston</a></li>
+	<li>
+		<a href="#">Delphi</a>
+		<ul>
+			<li><a href="#">Ada</a></li>
+			<li><a href="#">Saarland</a></li>
+			<li><a href="#">Salzburg</a></li>
+		</ul>
+	</li>
+	<li><a href="#">Saarland</a></li>
+	<li>
+		<a href="#">Salzburg</a>
+		<ul>
+			<li>
+				<a href="#">Delphi</a>
+				<ul>
+					<li><a href="#">Ada</a></li>
+					<li><a href="#">Saarland</a></li>
+					<li><a href="#">Salzburg</a></li>
+				</ul>
+			</li>
+			<li>
+				<a href="#">Adamsville</a>
+				<ul>
+					<li><a href="#">Aberdeen</a></li>
+					<li><a href="#">Ada</a></li>
+					<li><a href="#">Adamsville</a></li>
+					<li><a href="#">Addyston</a></li>
+					<li>
+						<a href="#">Delphi</a>
+						<ul>
+							<li><a href="#">Ada</a></li>
+							<li><a href="#">Saarland</a></li>
+							<li><a href="#">Salzburg</a></li>
+						</ul>
+					</li>
+					<li><a href="#">Saarland</a></li>
+				</ul>
+			</li>
+			<li><a href="#">Perch</a>
+				<ul>
+					<li><a href="#">Addyston</a></li>
+					<li><a href="#">Delphi</a></li>
+					<li><a href="#">Perch</a></li>
+				</ul>
+			</li>
+		</ul>
+	</li>
+</ul>
 
 <div id="tabs">
 	<ul>
