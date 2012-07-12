@@ -16,7 +16,7 @@ module( "position", {
 	}
 });
 
-TestHelpers.testJshint( "ui.position" );
+TestHelpers.testJshint( "position" );
 
 test( "my, at, of", function() {
 	expect( 4 );

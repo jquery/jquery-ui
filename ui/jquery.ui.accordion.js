@@ -1,7 +1,8 @@
 /*!
  * jQuery UI Accordion @VERSION
+ * http://jqueryui.com
  *
- * Copyright 2012, AUTHORS.txt (http://jqueryui.com/about)
+ * Copyright 2012 jQuery Foundation and other contributors
  * Dual licensed under the MIT or GPL Version 2 licenses.
  * http://jquery.org/license
  *
@@ -137,8 +138,8 @@ $.widget( "ui.accordion", {
 				});
 		}
 
-		this._bind( this.headers, { keydown: "_keydown" });
-		this._bind( this.headers.next(), { keydown: "_panelKeyDown" });
+		this._on( this.headers, { keydown: "_keydown" });
+		this._on( this.headers.next(), { keydown: "_panelKeyDown" });
 		this._setupEvents( options.event );
 	},
 
@@ -219,8 +220,7 @@ $.widget( "ui.accordion", {
 
 		if ( key === "event" ) {
 			if ( this.options.event ) {
-				this.headers.unbind(
-					this.options.event.split( " " ).join( ".accordion " ) + ".accordion" );
+				this._off( this.headers, this.options.event );
 			}
 			this._setupEvents( value );
 		}
@@ -376,7 +376,7 @@ $.widget( "ui.accordion", {
 		$.each( event.split(" "), function( index, eventName ) {
 			events[ eventName ] = "_eventHandler";
 		});
-		this._bind( this.headers, events );
+		this._on( this.headers, events );
 	},
 
 	_eventHandler: function( event ) {

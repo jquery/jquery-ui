@@ -1,16 +1,31 @@
+(function() {
+
+var lastItem,
+	log = [];
+
 TestHelpers.menu = {
 	log: function( message, clear ) {
 		if ( clear ) {
-			$( "#log" ).empty();
+			log.length = 0;
 		}
 		if ( message === undefined ) {
-			message = $( "#log" ).data( "lastItem" );
+			message = lastItem;
 		}
-		$( "#log" ).prepend( $.trim( message ) + "," );
+		log.push( $.trim( message ) );
+	},
+
+	logOutput: function() {
+		return log.join( "," );
+	},
+
+	clearLog: function() {
+		log.length = 0;
 	},
 
 	click: function( menu, item ) {
-		$( "#log" ).data( "lastItem", item );
+		lastItem = item;
 		menu.children( ":eq(" + item + ")" ).find( "a:first" ).trigger( "click" );
 	}
 };
+
+})();

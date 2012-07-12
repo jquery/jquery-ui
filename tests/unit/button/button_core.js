@@ -8,6 +8,7 @@
 module("button: core");
 
 test("checkbox", function() {
+	expect( 4 );
 	var input = $("#check"),
 		label = $("label[for=check]");
 	ok( input.is(":visible") );
@@ -18,6 +19,7 @@ test("checkbox", function() {
 });
 
 test("radios", function() {
+	expect( 4 );
 	var inputs = $("#radio0 input"),
 		labels = $("#radio0 label");
 	ok( inputs.is(":visible") );
@@ -34,6 +36,7 @@ function assert(noForm, form1, form2) {
 }
 
 test("radio groups", function() {
+	expect( 12 );
 	$("input[type=radio]").button();
 	assert(":eq(0)", ":eq(1)", ":eq(2)");
 
@@ -51,6 +54,7 @@ test("radio groups", function() {
 });
 
 test("input type submit, don't create child elements", function() {
+	expect( 2 );
 	var input = $("#submit");
 	deepEqual( input.children().length, 0 );
 	input.button();
@@ -58,6 +62,7 @@ test("input type submit, don't create child elements", function() {
 });
 
 test("buttonset", function() {
+	expect( 6 );
 	var set = $("#radio1").buttonset();
 	ok( set.is(".ui-buttonset") );
 	deepEqual( set.children(".ui-button").length, 3 );
@@ -68,6 +73,7 @@ test("buttonset", function() {
 });
 
 test("buttonset (rtl)", function() {
+	expect( 6 );
 	var set,
 		parent = $("#radio1").parent();
 	// Set to rtl

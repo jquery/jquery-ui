@@ -22,6 +22,7 @@ function callback2(year, month, inst) {
 }
 
 test('events', function() {
+	expect( 26 );
 	var dateStr, newMonthYear, inp2,
 		inp = init('#inp', {onSelect: callback}),
 	date = new Date();

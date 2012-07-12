@@ -8,9 +8,10 @@ module( "widget factory", {
 	}
 });
 
-TestHelpers.testJshint( "ui.widget" );
+TestHelpers.testJshint( "widget" );
 
 test( "widget creation", function() {
+	expect( 5 );
 	var myPrototype = {
 		_create: function() {},
 		creationTest: function() {}
@@ -78,10 +79,11 @@ test( "element normalization", function() {
 });
 
 test( "custom selector expression", function() {
+	expect( 1 );
 	var elem = $( "<div>" ).appendTo( "#qunit-fixture" );
 	$.widget( "ui.testWidget", {} );
 	elem.testWidget();
-	deepEqual( $( ":ui-testWidget" )[0], elem[0] );
+	deepEqual( $( ":ui-testwidget" )[0], elem[0] );
 	elem.testWidget( "destroy" );
 });
 
@@ -300,6 +302,7 @@ test( "._getCreateEventData()", function() {
 });
 
 test( "re-init", function() {
+	expect( 3 );
 	var div = $( "<div>" ),
 		actions = [];
 
@@ -329,6 +332,7 @@ test( "re-init", function() {
 });
 
 test( "inheritance - options", function() {
+	expect( 4 );
 	// #5830 - Widget: Using inheritance overwrites the base classes options
 	$.widget( "ui.testWidgetBase", {
 		options: {
@@ -441,6 +445,7 @@ test( "._superApply()", function() {
 });
 
 test( ".option() - getter", function() {
+	expect( 6 );
 	$.widget( "ui.testWidget", {
 		_create: function() {}
 	});
@@ -472,6 +477,7 @@ test( ".option() - getter", function() {
 });
 
 test( ".option() - deep option getter", function() {
+	expect( 5 );
 	$.widget( "ui.testWidget", {} );
 	var div = $( "<div>" ).testWidget({
 		foo: {
@@ -490,6 +496,7 @@ test( ".option() - deep option getter", function() {
 });
 
 test( ".option() - delegate to ._setOptions()", function() {
+	expect( 2 );
 	var div,
 		calls = [];
 	$.widget( "ui.testWidget", {
@@ -514,6 +521,7 @@ test( ".option() - delegate to ._setOptions()", function() {
 });
 
 test( ".option() - delegate to ._setOption()", function() {
+	expect( 2 );
 	var div,
 		calls = [];
 	$.widget( "ui.testWidget", {
@@ -544,6 +552,7 @@ test( ".option() - delegate to ._setOption()", function() {
 });
 
 test( ".option() - deep option setter", function() {
+	expect( 6 );
 	$.widget( "ui.testWidget", {} );
 	var div = $( "<div>" ).testWidget();
 	function deepOption( from, to, msg ) {
@@ -592,6 +601,7 @@ test( ".disable()", function() {
 });
 
 test( ".widget() - base", function() {
+	expect( 1 );
 	$.widget( "ui.testWidget", {
 		_create: function() {}
 	});
@@ -600,6 +610,7 @@ test( ".widget() - base", function() {
 });
 
 test( ".widget() - overriden", function() {
+	expect( 1 );
 	var wrapper = $( "<div>" );
 	$.widget( "ui.testWidget", {
 		_create: function() {},
@@ -610,13 +621,13 @@ test( ".widget() - overriden", function() {
 	deepEqual( wrapper[0], $( "<div>" ).testWidget().testWidget( "widget" )[0] );
 });
 
-test( "._bind() to element (default)", function() {
+test( "._on() to element (default)", function() {
 	expect( 12 );
 	var that, widget;
 	$.widget( "ui.testWidget", {
 		_create: function() {
 			that = this;
-			this._bind({
+			this._on({
 				keyup: this.keyup,
 				keydown: "keydown"
 			});
@@ -650,13 +661,13 @@ test( "._bind() to element (default)", function() {
 		.trigger( "keydown" );
 });
 
-test( "._bind() to descendent", function() {
+test( "._on() to descendent", function() {
 	expect( 12 );
 	var that, widget, descendant;
 	$.widget( "ui.testWidget", {
 		_create: function() {
 			that = this;
-			this._bind( this.element.find( "strong" ), {
+			this._on( this.element.find( "strong" ), {
 				keyup: this.keyup,
 				keydown: "keydown"
 			});
@@ -707,13 +718,14 @@ test( "._bind() to descendent", function() {
 		.trigger( "keydown" );
 });
 
-test( "_bind() with delegate", function() {
+test( "_on() with delegate", function() {
 	expect( 8 );
 	$.widget( "ui.testWidget", {
 		_create: function() {
+			var uuid = this.uuid;
 			this.element = {
 				bind: function( event, handler ) {
-					equal( event, "click.testWidget" );
+					equal( event, "click.testWidget" + uuid );
 					ok( $.isFunction(handler) );
 				},
 				trigger: $.noop
@@ -722,12 +734,12 @@ test( "_bind() with delegate", function() {
 				return {
 					delegate: function( selector, event, handler ) {
 						equal( selector, "a" );
-						equal( event, "click.testWidget" );
+						equal( event, "click.testWidget" + uuid );
 						ok( $.isFunction(handler) );
 					}
 				};
 			};
-			this._bind({
+			this._on({
 				"click": "handler",
 				"click a": "handler"
 			});
@@ -735,12 +747,12 @@ test( "_bind() with delegate", function() {
 				return {
 					delegate: function( selector, event, handler ) {
 						equal( selector, "form fieldset > input" );
-						equal( event, "change.testWidget" );
+						equal( event, "change.testWidget" + uuid );
 						ok( $.isFunction(handler) );
 					}
 				};
 			};
-			this._bind({
+			this._on({
 				"change form fieldset > input": "handler"
 			});
 		}
@@ -748,7 +760,103 @@ test( "_bind() with delegate", function() {
 	$.ui.testWidget();
 });
 
+test( "_on() to common element", function() {
+	expect( 1 );
+	$.widget( "ui.testWidget", {
+		_create: function() {
+			this._on( this.document, {
+				"customevent": "_handler"
+			});
+		},
+		_handler: function() {
+			ok( true, "handler triggered" );
+		}
+	});
+	var widget = $( "#widget" ).testWidget().data( "testWidget" );
+	$( "#widget-wrapper" ).testWidget();
+	widget.destroy();
+	$( document ).trigger( "customevent" );
+});
+
+test( "_off() - single event", function() {
+	expect( 3 );
+
+	$.widget( "ui.testWidget", {} );
+	var shouldTriggerWidget, shouldTriggerOther,
+		element = $( "#widget" ),
+		widget = element.testWidget().data( "testWidget" );
+	widget._on( element, { foo: function() {
+		ok( shouldTriggerWidget, "foo called from _on" );
+	}});
+	element.bind( "foo", function() {
+		ok( shouldTriggerOther, "foo called from bind" );
+	});
+	shouldTriggerWidget = true;
+	shouldTriggerOther = true;
+	element.trigger( "foo" );
+	shouldTriggerWidget = false;
+	widget._off( element, "foo" );
+	element.trigger( "foo" );
+});
+
+test( "_off() - multiple events", function() {
+	expect( 6 );
+
+	$.widget( "ui.testWidget", {} );
+	var shouldTriggerWidget, shouldTriggerOther,
+		element = $( "#widget" ),
+		widget = element.testWidget().data( "testWidget" );
+	widget._on( element, {
+		foo: function() {
+			ok( shouldTriggerWidget, "foo called from _on" );
+		},
+		bar: function() {
+			ok( shouldTriggerWidget, "bar called from _on" );
+		}
+	});
+	element.bind( "foo bar", function( event ) {
+		ok( shouldTriggerOther, event.type + " called from bind" );
+	});
+	shouldTriggerWidget = true;
+	shouldTriggerOther = true;
+	element.trigger( "foo" );
+	element.trigger( "bar" );
+	shouldTriggerWidget = false;
+	widget._off( element, "foo bar" );
+	element.trigger( "foo" );
+	element.trigger( "bar" );
+});
+
+test( "_off() - all events", function() {
+	expect( 6 );
+
+	$.widget( "ui.testWidget", {} );
+	var shouldTriggerWidget, shouldTriggerOther,
+		element = $( "#widget" ),
+		widget = element.testWidget().data( "testWidget" );
+	widget._on( element, {
+		foo: function() {
+			ok( shouldTriggerWidget, "foo called from _on" );
+		},
+		bar: function() {
+			ok( shouldTriggerWidget, "bar called from _on" );
+		}
+	});
+	element.bind( "foo bar", function( event ) {
+		ok( shouldTriggerOther, event.type + " called from bind" );
+	});
+	shouldTriggerWidget = true;
+	shouldTriggerOther = true;
+	element.trigger( "foo" );
+	element.trigger( "bar" );
+	shouldTriggerWidget = false;
+	widget._off( element );
+	element.trigger( "foo" );
+	element.trigger( "bar" );
+});
+
 test( "._hoverable()", function() {
+	expect( 10 );
 	$.widget( "ui.testWidget", {
 		_create: function() {
 			this._hoverable( this.element.children() );
@@ -780,10 +888,11 @@ test( "._hoverable()", function() {
 });
 
 test( "._focusable()", function() {
+	expect( 10 );
 	$.widget( "ui.testWidget", {
 		_create: function() {
-		this._focusable( this.element.children() );
-	}
+			this._focusable( this.element.children() );
+		}
 	});
 
 	var div = $( "#widget" ).testWidget().children();
@@ -863,6 +972,7 @@ test( "._trigger() - cancelled event", function() {
 });
 
 test( "._trigger() - cancelled callback", function() {
+	expect( 1 );
 	$.widget( "ui.testWidget", {
 		_create: function() {}
 	});

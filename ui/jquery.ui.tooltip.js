@@ -1,7 +1,8 @@
 /*!
  * jQuery UI Tooltip @VERSION
+ * http://jqueryui.com
  *
- * Copyright 2012, AUTHORS.txt (http://jqueryui.com/about)
+ * Copyright 2012 jQuery Foundation and other contributors
  * Dual licensed under the MIT or GPL Version 2 licenses.
  * http://jquery.org/license
  *
@@ -54,6 +55,7 @@ $.widget( "ui.tooltip", {
 		},
 		show: true,
 		tooltipClass: null,
+		track: false,
 
 		// callbacks
 		close: null,
@@ -61,7 +63,7 @@ $.widget( "ui.tooltip", {
 	},
 
 	_create: function() {
-		this._bind({
+		this._on({
 			mouseover: "open",
 			focusin: "open"
 		});
@@ -117,8 +119,18 @@ $.widget( "ui.tooltip", {
 			target = $( event ? event.target : this.element )
 				.closest( this.options.items );
 
-		// if ui-tooltip-id exists, then the tooltip is already open
-		if ( !target.length || target.data( "ui-tooltip-id" ) ) {
+		// No element to show a tooltip for
+		if ( !target.length ) {
+			return;
+		}
+
+		// If the tooltip is open and we're tracking then reposition the tooltip.
+		// This makes sure that a tracking tooltip doesn't obscure a focused element
+		// if the user was hovering when the element gained focused.
+		if ( this.options.track && target.data( "ui-tooltip-id" ) ) {
+			this._find( target ).position( $.extend({
+				of: target
+			}, this.options.position ) );
 			return;
 		}
 
@@ -145,7 +157,16 @@ $.widget( "ui.tooltip", {
 	},
 
 	_open: function( event, target, content ) {
+		var tooltip, positionOption;
 		if ( !content ) {
+			return;
+		}
+
+		// Content can be updated multiple times. If the tooltip already
+		// exists, then just update the content and bail.
+		tooltip = this._find( target );
+		if ( tooltip.length ) {
+			tooltip.find( ".ui-tooltip-content" ).html( content );
 			return;
 		}
 
@@ -164,25 +185,34 @@ $.widget( "ui.tooltip", {
 			}
 		}
 
-		// ajaxy tooltip can update an existing one
-		var tooltip = this._find( target );
-		if ( !tooltip.length ) {
-			tooltip = this._tooltip( target );
-			addDescribedBy( target, tooltip.attr( "id" ) );
-		}
+		tooltip = this._tooltip( target );
+		addDescribedBy( target, tooltip.attr( "id" ) );
 		tooltip.find( ".ui-tooltip-content" ).html( content );
-		tooltip
-			.stop( true )
-			.position( $.extend({
+
+		function position( event ) {
+			positionOption.of = event;
+			tooltip.position( positionOption );
+		}
+		if ( this.options.track && /^mouse/.test( event.originalEvent.type ) ) {
+			positionOption = $.extend( {}, this.options.position );
+			this._on( this.document, {
+				mousemove: position
+			});
+			// trigger once to override element-relative positioning
+			position( event );
+		} else {
+			tooltip.position( $.extend({
 				of: target
-			}, this.options.position ) )
-			.hide();
+			}, this.options.position ) );
+		}
+
+		tooltip.hide();
 
 		this._show( tooltip, this.options.show );
 
 		this._trigger( "open", event, { tooltip: tooltip } );
 
-		this._bind( target, {
+		this._on( target, {
 			mouseleave: "close",
 			focusout: "close",
 			keyup: function( event ) {
@@ -230,7 +260,8 @@ $.widget( "ui.tooltip", {
 		});
 
 		target.removeData( "tooltip-open" );
-		target.unbind( "mouseleave.tooltip focusout.tooltip keyup.tooltip" );
+		this._off( target, "mouseleave focusout keyup" );
+		this._off( this.document, "mousemove" );
 
 		this.closing = true;
 		this._trigger( "close", event, { tooltip: tooltip } );

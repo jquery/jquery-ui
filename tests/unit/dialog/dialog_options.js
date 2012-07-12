@@ -106,6 +106,7 @@ test("buttons - advanced", function() {
 });
 
 test("closeOnEscape", function() {
+	expect( 6 );
 	el = $('<div></div>').dialog({ closeOnEscape: false });
 	ok(true, 'closeOnEscape: false');
 	ok(dlg().is(':visible') && !dlg().is(':hidden'), 'dialog is open before ESC');
@@ -276,6 +277,7 @@ test("minWidth", function() {
 });
 
 test("position, default center on window", function() {
+	expect( 2 );
 	var el = $('<div></div>').dialog(),
 		dialog = el.dialog('widget'),
 		offset = dialog.offset();
@@ -285,6 +287,7 @@ test("position, default center on window", function() {
 });
 
 test("position, top on window", function() {
+	expect( 2 );
 	var el = $('<div></div>').dialog({ position: "top" }),
 		dialog = el.dialog('widget'),
 		offset = dialog.offset();
@@ -294,6 +297,7 @@ test("position, top on window", function() {
 });
 
 test("position, left on window", function() {
+	expect( 2 );
 	var el = $('<div></div>').dialog({ position: "left" }),
 		dialog = el.dialog('widget'),
 		offset = dialog.offset();
@@ -303,6 +307,7 @@ test("position, left on window", function() {
 });
 
 test("position, right bottom on window", function() {
+	expect( 2 );
 	var el = $('<div></div>').dialog({ position: "right bottom" }),
 		dialog = el.dialog('widget'),
 		offset = dialog.offset();
@@ -312,6 +317,7 @@ test("position, right bottom on window", function() {
 });
 
 test("position, right bottom on window w/array", function() {
+	expect( 2 );
 	var el = $('<div></div>').dialog({ position: ["right", "bottom"] }),
 		dialog = el.dialog('widget'),
 		offset = dialog.offset();
@@ -321,6 +327,7 @@ test("position, right bottom on window w/array", function() {
 });
 
 test("position, offset from top left w/array", function() {
+	expect( 2 );
 	var el = $('<div></div>').dialog({ position: [10, 10] }),
 		dialog = el.dialog('widget'),
 		offset = dialog.offset();
@@ -330,6 +337,7 @@ test("position, offset from top left w/array", function() {
 });
 
 test("position, right bottom at right bottom via ui.position args", function() {
+	expect( 2 );
 	var el = $('<div></div>').dialog({
 			position: {
 				my: "right bottom",
@@ -345,6 +353,7 @@ test("position, right bottom at right bottom via ui.position args", function() {
 });
 
 test("position, at another element", function() {
+	expect( 4 );
 	var parent = $('<div></div>').css({
 			position: 'absolute',
 			top: 400,

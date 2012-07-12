@@ -1,7 +1,8 @@
 /*!
  * jQuery UI Widget @VERSION
+ * http://jqueryui.com
  *
- * Copyright 2012, AUTHORS.txt (http://jqueryui.com/about)
+ * Copyright 2012 jQuery Foundation and other contributors
  * Dual licensed under the MIT or GPL Version 2 licenses.
  * http://jquery.org/license
  *
@@ -9,7 +10,8 @@
  */
 (function( $, undefined ) {
 
-var slice = Array.prototype.slice,
+var uuid = 0,
+	slice = Array.prototype.slice,
 	_cleanData = $.cleanData;
 $.cleanData = function( elems ) {
 	for ( var i = 0, elem; (elem = elems[i]) != null; i++ ) {
@@ -34,7 +36,7 @@ $.widget = function( name, base, prototype ) {
 	}
 
 	// create selector for plugin
-	$.expr[ ":" ][ fullName ] = function( elem ) {
+	$.expr[ ":" ][ fullName.toLowerCase() ] = function( elem ) {
 		return !!$.data( elem, fullName );
 	};
 
@@ -210,6 +212,8 @@ $.Widget.prototype = {
 	_createWidget: function( options, element ) {
 		element = $( element || this.defaultElement || this )[ 0 ];
 		this.element = $( element );
+		this.uuid = uuid++;
+		this.eventNamespace = "." + this.widgetName + this.uuid;
 		this.options = $.widget.extend( {},
 			this.options,
 			this._getCreateOptions(),
@@ -224,7 +228,7 @@ $.Widget.prototype = {
 			// TODO remove dual storage
 			$.data( element, this.widgetName, this );
 			$.data( element, this.widgetFullName, this );
-			this._bind({ remove: "destroy" });
+			this._on({ remove: "destroy" });
 			this.document = $( element.style ?
 				// element within the document
 				element.ownerDocument :
@@ -245,22 +249,25 @@ $.Widget.prototype = {
 	destroy: function() {
 		this._destroy();
 		// we can probably remove the unbind calls in 2.0
-		// all event bindings should go through this._bind()
+		// all event bindings should go through this._on()
 		this.element
-			.unbind( "." + this.widgetName )
+			.unbind( this.eventNamespace )
 			// 1.9 BC for #7810
 			// TODO remove dual storage
 			.removeData( this.widgetName )
-			.removeData( this.widgetFullName );
+			.removeData( this.widgetFullName )
+			// support: jquery <1.6.3
+			// http://bugs.jquery.com/ticket/9413
+			.removeData( $.camelCase( this.widgetFullName ) );
 		this.widget()
-			.unbind( "." + this.widgetName )
+			.unbind( this.eventNamespace )
 			.removeAttr( "aria-disabled" )
 			.removeClass(
 				this.widgetFullName + "-disabled " +
 				"ui-state-disabled" );
 
 		// clean up events and states
-		this.bindings.unbind( "." + this.widgetName );
+		this.bindings.unbind( this.eventNamespace );
 		this.hoverable.removeClass( "ui-state-hover" );
 		this.focusable.removeClass( "ui-state-focus" );
 	},
@@ -339,7 +346,7 @@ $.Widget.prototype = {
 		return this._setOption( "disabled", true );
 	},
 
-	_bind: function( element, handlers ) {
+	_on: function( element, handlers ) {
 		// no element argument, shuffle and use this.element
 		if ( !handlers ) {
 			handlers = element;
@@ -367,11 +374,11 @@ $.Widget.prototype = {
 			// copy the guid so direct unbinding works
 			if ( typeof handler !== "string" ) {
 				handlerProxy.guid = handler.guid =
-					handler.guid || handlerProxy.guid || jQuery.guid++;
+					handler.guid || handlerProxy.guid || $.guid++;
 			}
 
 			var match = event.match( /^(\w+)\s*(.*)$/ ),
-				eventName = match[1] + "." + instance.widgetName,
+				eventName = match[1] + instance.eventNamespace,
 				selector = match[2];
 			if ( selector ) {
 				instance.widget().delegate( selector, eventName, handlerProxy );
@@ -379,6 +386,11 @@ $.Widget.prototype = {
 				element.bind( eventName, handlerProxy );
 			}
 		});
+	},
+
+	_off: function( element, eventName ) {
+		eventName = (eventName || "").split( " " ).join( this.eventNamespace + " " ) + this.eventNamespace;
+		element.unbind( eventName ).undelegate( eventName );
 	},
 
 	_delay: function( handler, delay ) {
@@ -392,7 +404,7 @@ $.Widget.prototype = {
 
 	_hoverable: function( element ) {
 		this.hoverable = this.hoverable.add( element );
-		this._bind( element, {
+		this._on( element, {
 			mouseenter: function( event ) {
 				$( event.currentTarget ).addClass( "ui-state-hover" );
 			},
@@ -404,7 +416,7 @@ $.Widget.prototype = {
 
 	_focusable: function( element ) {
 		this.focusable = this.focusable.add( element );
-		this._bind( element, {
+		this._on( element, {
 			focusin: function( event ) {
 				$( event.currentTarget ).addClass( "ui-state-focus" );
 			},

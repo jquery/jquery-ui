@@ -90,16 +90,16 @@ asyncTest( "animateClass works with colors", function() {
 });
 
 asyncTest( "animateClass calls step option", 1, function() {
-	var test = jQuery("div.animateClass"),
-		done = function() {
-			done = jQuery.noop;
+	var test = jQuery( "div.animateClass" ),
+		step = function( fx ) {
+			ok( true, "Step Function Called" );
 			test.stop();
 			start();
+			step = $.noop;
 		};
 	test.toggleClass( "testChangeBackground", {
-		step: function( fx ) {
-			ok( true, "Step Function Called" );
-			setTimeout( done, 0 );
+		step: function() {
+			step();
 		}
 	});
 });
@@ -153,6 +153,7 @@ asyncTest( "animateClass clears style properties when stopped", function() {
 });
 
 asyncTest( "animateClass: css and class changes during animation are not lost (#7106)", function() {
+	expect( 2 );
 	var test = $( "div.ticket7106" );
 
 	// ensure the class stays and that the css property stays
@@ -174,7 +175,7 @@ $.each( $.effects.effect, function( effect ) {
 
 	// puff and size are defined inside scale
 	if ( effect !== "puff" && effect !== "size" ) {
-		TestHelpers.testJshint( "effects." + effect );
+		TestHelpers.testJshint( "effect-" + effect );
 	}
 
 	if ( effect === "transfer" ) {

@@ -1,29 +1,30 @@
-/*
- * menu_core.js
- */
+(function( $ ) {
 
+module( "menu: core" );
 
-(function($) {
-
-module("menu: core");
-
-test("accessibility", function () {
-	expect(5);
-	var item,
-		menu = $('#menu1').menu(),
-		item0 = $("li:eq(0) a");
-
-	ok( menu.hasClass("ui-menu ui-widget ui-widget-content ui-corner-all"), "menu class");
-	equal( menu.attr("role"), "menu", "main role");
-	ok( !menu.attr("aria-activedescendant"), "aria attribute not yet active");
-
-	item = menu.find( "li:first" ).find( "a" ).attr( "id", "xid" ).end();
-	menu.menu( "focus", $.Event(), item );
-	equal( menu.attr("aria-activedescendant"), "xid", "aria attribute, id from dom");
-
-	item = menu.find( "li:last" );
-	menu.menu( "focus", $.Event(), item );
-	ok( /^ui-id-\d+$/.test( menu.attr( "aria-activedescendant" ) ), "aria attribute, generated id");
+test( "markup structure", function() {
+	expect( 6 );
+	var element = $( "#menu1" ).menu();
+	ok( element.hasClass( "ui-menu" ), "main element is .ui-menu" );
+	element.children().each(function( index ) {
+		ok( $( this ).hasClass( "ui-menu-item" ), "child " + index + " is .ui-menu-item" );
+	});
 });
 
-})(jQuery);
+test( "accessibility", function () {
+	expect( 4 );
+	var element = $( "#menu1" ).menu();
+
+	equal( element.attr( "role" ), "menu", "main role" );
+	ok( !element.attr( "aria-activedescendant" ), "aria-activedescendant not set" );
+
+	element.menu( "focus", $.Event(), element.children().eq( -2 ) );
+	equal( element.attr( "aria-activedescendant" ), "testID1", "aria-activedescendant from existing id" );
+
+	element.menu( "focus", $.Event(), element.children().eq( 0 ) );
+	ok( /^ui-id-\d+$/.test( element.attr( "aria-activedescendant" ) ), "aria-activedescendant from generated id" );
+
+	// Item roles are tested in the role option tests
+});
+
+})( jQuery );
