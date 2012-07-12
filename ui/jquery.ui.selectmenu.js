@@ -37,7 +37,7 @@ $.widget( "ui.selectmenu", {
 	_create: function() {
 		// make / set unique id
 		var selectmenuId = this.element.uniqueId().attr( 'id' );
-		
+
 		// array of button and menu id's
 		this.ids = { id: selectmenuId, button: selectmenuId + '-button', menu: selectmenuId + '-menu' };
 
