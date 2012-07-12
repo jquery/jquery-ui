@@ -42,7 +42,7 @@ $.widget( "ui.selectmenu", {
 		this.ids = { id: selectmenuId, button: selectmenuId + '-button', menu: selectmenuId + '-menu' };
 
 		// catch click event of the label
-		this._bind({
+		this._on({
 			'click':  function( event ) {
 				this.button.focus();
 				event.preventDefault();
@@ -50,14 +50,14 @@ $.widget( "ui.selectmenu", {
 		});
 
 		this._drawButton();
-		this._bind( this.button, this._buttonEvents );
+		this._on( this.button, this._buttonEvents );
 		this._hoverable( this.button );
 		this._focusable( this.button );
 
 		this._drawMenu();
 
 		// document click closes menu
-		this._bind( document, {
+		this._on( document, {
 			click: function( event ) {
 				if ( this.isOpen && !$( event.target ).closest( "li.ui-state-disabled, li.ui-selectmenu-optgroup, #" + this.ids.button ).length ) {
 					this.close( event );
