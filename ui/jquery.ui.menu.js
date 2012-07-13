@@ -77,12 +77,10 @@ $.widget( "ui.menu", {
 					mouseHandled = true;
 
 					this.select( event );
-					// Redirect focus to the menu with a delay for firefox
-					this._delay(function() {
-						if ( !this.element.is(":focus") ) {
-							this.element.focus();
-						}
-					}, 20 );
+					// Redirect focus to the menu
+					if ( !this.element.is(":focus") ) {
+						this.element.focus();
+					}
 				}
 			},
 			"mouseenter .ui-menu-item": function( event ) {
@@ -488,7 +486,7 @@ $.widget( "ui.menu", {
 			// Delay so Firefox will not hide activedescendant change in expanding submenu from AT
 			this._delay(function() {
 				this.focus( event, newItem );
-			}, 20 );
+			});
 		}
 	},
 
