@@ -15,7 +15,7 @@
  */
 (function( $, undefined ) {
 
-var currentEventTarget = null;
+var mouseHandled = false;
 
 $.widget( "ui.menu", {
 	version: "@VERSION",
@@ -73,24 +73,16 @@ $.widget( "ui.menu", {
 			},
 			"click .ui-menu-item:has(a)": function( event ) {
 				var target = $( event.target );
-				if ( target[0] !== currentEventTarget ) {
-					currentEventTarget = target[0];
-					// TODO: What are we trying to accomplish with this check?
-					// Clicking a menu item twice results in a select event with
-					// an empty ui.item.
-					target.one( "click" + this.eventNamespace, function( event ) {
-						currentEventTarget = null;
-					});
-					// Don't select disabled menu items
-					if ( !target.closest( ".ui-menu-item" ).is( ".ui-state-disabled" ) ) {
-						this.select( event );
-						// Redirect focus to the menu with a delay for firefox
-						this._delay(function() {
-							if ( !this.element.is(":focus") ) {
-								this.element.focus();
-							}
-						}, 20 );
-					}
+				if ( !mouseHandled && target.closest( ".ui-menu-item" ).not( ".ui-state-disabled" ).length ) {
+					mouseHandled = true;
+
+					this.select( event );
+					// Redirect focus to the menu with a delay for firefox
+					this._delay(function() {
+						if ( !this.element.is(":focus") ) {
+							this.element.focus();
+						}
+					}, 20 );
 				}
 			},
 			"mouseenter .ui-menu-item": function( event ) {
@@ -127,6 +119,9 @@ $.widget( "ui.menu", {
 				if ( !$( event.target ).closest( ".ui-menu" ).length ) {
 					this.collapseAll( event );
 				}
+
+				// Reset the mouseHandled flag
+				mouseHandled = false;
 			}
 		});
 	},
@@ -166,9 +161,6 @@ $.widget( "ui.menu", {
 
 		// Destroy menu dividers
 		this.element.find( ".ui-menu-divider" ).removeClass( "ui-menu-divider ui-widget-content" );
-
-		// Unbind currentEventTarget click event handler
-		this._off( $( currentEventTarget ), "click" );
 	},
 
 	_keydown: function( event ) {
