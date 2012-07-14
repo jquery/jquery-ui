@@ -63,7 +63,7 @@ grunt.registerTask( "testswarm", function( commit, configFile ) {
 
 grunt.registerTask( "testswarm-multi-jquery", function( commit, configFile ) {
 	var allTests = {};
-	"1.6 1.6.1 1.6.3 1.6.4 1.7 1.7.1 1.7.2 git".split(" ").forEach(function( version ) {
+	"1.6 1.6.1 1.6.2 1.6.3 1.6.4 1.7 1.7.1 1.7.2 git".split(" ").forEach(function( version ) {
 		for ( var test in tests ) {
 			allTests[ test + "-" + version ] = tests[ test ] + "?nojshint=true&jquery=" + version;
 		}

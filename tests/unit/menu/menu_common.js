@@ -1,6 +1,9 @@
 TestHelpers.commonWidgetTests( "menu", {
 	defaults: {
 		disabled: false,
+		icons: {
+			submenu: "ui-icon-carat-1-e"
+		},
 		menus: "ul",
 		position: {
 			my: "left top",

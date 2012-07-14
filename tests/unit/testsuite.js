@@ -12,7 +12,12 @@ function includeScript( url ) {
 
 QUnit.config.requireExpects = true;
 
-QUnit.config.urlConfig.push( "min" );
+QUnit.config.urlConfig.push({
+  id: "min",
+  label: "Minified source",
+  tooltip: "Load minified source files instead of the regular unminified ones."
+});
+
 TestHelpers.loadResources = QUnit.urlParams.min ?
 	function() {
 		// TODO: proper include with theme images
@@ -28,7 +33,12 @@ TestHelpers.loadResources = QUnit.urlParams.min ?
 		});
 	};
 
-QUnit.config.urlConfig.push( "nojshint" );
+QUnit.config.urlConfig.push({
+	id: "nojshint",
+	label: "Skip JSHint",
+	tooltip: "Skip running JSHint, e.g. within TestSwarm, where Jenkins runs it already"
+});
+
 var jshintLoaded = false;
 TestHelpers.testJshint = function( module ) {
 	if ( QUnit.urlParams.nojshint ) {
