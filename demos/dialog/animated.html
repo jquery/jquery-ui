@@ -28,7 +28,7 @@
 		});
 
 		$( "#opener" ).click(function() {
-			$( "#dialog" ).dialog( "open" );
+			$( "#dialog" ).dialog( "open", $(this));
 			return false;
 		});
 	});

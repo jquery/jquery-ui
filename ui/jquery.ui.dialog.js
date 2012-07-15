@@ -111,21 +111,21 @@ $.widget("ui.dialog", {
 				.appendTo( "body" ),
 
 			// Add a document wrapper inside the dialog for a11y.
-			uiDialogDocument = ( this.uiDialogDocument = $( "<div>" ) )
+			uiDialogDocument = options.modal ? ( this.uiDialogDocument = $( "<div>" ) )
 			  .attr( "role", "document")
 				.addClass( "ui-dialog-document" )
-				.appendTo( uiDialog),
+				.appendTo( uiDialog) : null,
 
 			uiDialogContent = this.element
 				.show()
 				.removeAttr( "title" )
 				.addClass( "ui-dialog-content ui-widget-content" )
-				.appendTo( uiDialogDocument ),
+				.appendTo( options.modal ? uiDialogDocument : uiDialog ),
 
 			uiDialogTitlebar = ( this.uiDialogTitlebar = $( "<div>" ) )
 				.addClass( "ui-dialog-titlebar  ui-widget-header  " +
 					"ui-corner-all  ui-helper-clearfix" )
-				.prependTo( uiDialogDocument ),
+				.prependTo( options.modal ? uiDialogDocument : uiDialog ),
 
 			uiDialogTitlebarClose = $( "<a href='#'></a>" )
 				.addClass( "ui-dialog-titlebar-close  ui-corner-all" )
@@ -154,9 +154,15 @@ $.widget("ui.dialog", {
 				.addClass( "ui-dialog-buttonset" )
 				.appendTo( uiDialogButtonPane );
 
+		if (options.modal) {
+			// We should only sandbox user to dialog if modal (a11y).
+			uiDialog.attr({
+				role: "dialog"
+			});
+		}
 		uiDialog.attr({
-			role: "dialog",
-			"aria-labelledby": uiDialogTitle.attr( "id" )
+			"aria-labelledby": uiDialogTitle.attr( "id" ),
+			"aria-describedby": uiDialogContent.attr( "id" )
 		});
 
 		uiDialogTitlebar.find( "*" ).add( uiDialogTitlebar ).disableSelection();
