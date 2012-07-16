@@ -3,7 +3,7 @@
 		"description": "The core of jQuery UI, required for all interactions and widgets.",
 		"homepage": "http://jqueryui.com/",
 		"demo": "http://jqueryui.com/",
-		"docs": "http://api.jqueryui.com/category/ui-core"
+		"docs": "http://api.jqueryui.com/category/ui-core/"
 	},
 	"datepicker": {
 		"description": "Displays a calendar from an input or inline for selecting dates.",
@@ -30,8 +30,8 @@
 		],
 		"category": "effect",
 		"homepage": "http://jqueryui.com/",
-		"demo": "http://jqueryui.com/",
-		"docs": "http://api.jqueryui.com/category/effects-core"
+		"demo": "http://jqueryui.com/effects/",
+		"docs": "http://api.jqueryui.com/category/effects-core/"
 	},
 	"position": {
 		"description": "Positions elements relative to other elements.",

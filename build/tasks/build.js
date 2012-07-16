@@ -4,7 +4,6 @@ var path = require( "path" );
 
 grunt.registerTask( "manifest", "Generate jquery.json manifest files", function() {
 	var pkg = grunt.config( "pkg" ),
-		// TODO: URLs for UI core and effects core
 		base = {
 			core: {
 				name: "ui.{plugin}",
