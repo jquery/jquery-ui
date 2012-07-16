@@ -43,6 +43,19 @@
 			"collision"
 		]
 	},
+	"transfer": {
+		"name": "ui.effect-transfer",
+		"title": "jQuery UI Transfer Effect",
+		"description": "Displays a transfer effect from one element to another.",
+		"keywords": [
+			"effect"
+		],
+		"homepage": "http://jqueryui.com/transfer-effect/",
+		"demo": "http://jqueryui.com/transfer-effect/",
+		"docs": "http://api.jqueryui.com/transfer-effect/",
+		"dependencies": [ "effect" ],
+		"category": "effect"
+	},
 	"widget": {
 		"description": "Provides a factory for creating stateful widgets with a common API.",
 		"keywords": [

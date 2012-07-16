@@ -45,7 +45,7 @@ grunt.registerTask( "manifest", "Generate jquery.json manifest files", function(
 			}
 
 			manifest = {
-				name: replace( baseManifest.name ),
+				name: data.name || replace( baseManifest.name ),
 				title: data.title || replace( baseManifest.title ),
 				description: data.description,
 				keywords: [ "ui", plugin ]

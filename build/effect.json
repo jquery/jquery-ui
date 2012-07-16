@@ -34,8 +34,5 @@
 	},
 	"slide": {
 		"description": "Slides an element in and out of the viewport."
-	},
-	"transfer": {
-		"description": "Displays a transfer effect from one element to another."
 	}
 }
