@@ -44,8 +44,8 @@ $.each([
 		selector: "#files"
 	}
 ], function( i, settings ) {
-	test("state synchronization - " + settings.type, function () {
-		expect(8);
+	test("state synchronization - after keydown - " + settings.type, function () {
+		expect(4);
 
 		var links,
 			element = $(settings.selector).selectmenu(),
@@ -61,6 +61,19 @@ $.each([
 		equal( links.eq(element[0].selectedIndex).attr("aria-selected"), "true", "after keydown selected menu link aria-selected" );
 		equal( element.find("option:selected").val(), selected.next("option").val() , "after keydown original select state" );
 		equal( button.text(), selected.next("option").text(), "after keydown button text" );
+	});
+
+	test("state synchronization - after click - " + settings.type, function () {
+		expect(4);
+
+		var links,
+			element = $(settings.selector).selectmenu(),
+			button = element.selectmenu("widget"),
+			menu = element.selectmenu("menuWidget"),
+			selected = element.find("option:selected");
+
+		button.simulate( "focus" );
+		links = menu.find("li.ui-menu-item a");
 
 		button.simulate( "click" );
 		menu.find("a").last().simulate( "mouseover" ).trigger( "click" );
