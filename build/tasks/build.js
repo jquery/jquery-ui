@@ -8,24 +8,21 @@ grunt.registerTask( "manifest", "Generate jquery.json manifest files", function(
 		base = {
 			core: {
 				name: "ui.{plugin}",
-				title: "jQuery UI {Plugin}",
-				category: "core"
+				title: "jQuery UI {Plugin}"
 			},
-			widgets: {
+			widget: {
 				name: "ui.{plugin}",
 				title: "jQuery UI {Plugin}",
-				dependencies: [ "core", "widget" ],
-				category: "widget"
+				dependencies: [ "core", "widget" ]
 			},
-			effects: {
+			effect: {
 				name: "ui.effect-{plugin}",
 				title: "jQuery UI {Plugin} Effect",
 				keywords: [ "effect", "show", "hide" ],
 				homepage: "http://jqueryui.com/{plugin}-effect/",
 				demo: "http://jqueryui.com/{plugin}-effect/",
 				docs: "http://api.jqueryui.com/{plugin}-effect/",
-				dependencies: [ "effect" ],
-				category: "effect"
+				dependencies: [ "effect" ]
 			}
 		};
 
@@ -49,7 +46,6 @@ grunt.registerTask( "manifest", "Generate jquery.json manifest files", function(
 				keywords: [ "ui", plugin ]
 					.concat( baseManifest.keywords || [] )
 					.concat( data.keywords || [] ),
-				category: data.category || baseManifest.category,
 				version: pkg.version,
 				author: pkg.author,
 				maintainers: pkg.maintainers,
@@ -64,7 +60,9 @@ grunt.registerTask( "manifest", "Generate jquery.json manifest files", function(
 				download: "http://jqueryui.com/download/",
 				dependencies: {
 					jquery: ">=1.6"
-				}
+				},
+				// custom
+				category: data.category || type
 			};
 
 			(baseManifest.dependencies || [])
