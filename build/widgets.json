@@ -66,7 +66,8 @@
 		"description": "Abstracts mouse-based interactions to assist in creating certain widgets.",
 		"keywords": [
 			"abstraction"
-		]
+		],
+		"category": "core"
 	},
 	"progressbar": {
 		"dependencies": [],

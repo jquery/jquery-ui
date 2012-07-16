@@ -13,7 +13,8 @@
 			"calendar",
 			"date",
 			"i18n"
-		]
+		],
+		"category": "widget"
 	},
 	"effect": {
 		"title": "jQuery UI Effects Core",
@@ -27,6 +28,7 @@
 			"transition",
 			"easing"
 		],
+		"category": "effect",
 		"homepage": "http://jqueryui.com/",
 		"demo": "http://jqueryui.com/",
 		"docs": "http://api.jqueryui.com/category/effects-core"
