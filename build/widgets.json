@@ -1,7 +1,7 @@
 {
 	"accordion": {
 		"dependencies": [],
-		"description": "Displays collapsable content panels for presenting information in a limited amount of space.",
+		"description": "Displays collapsible content panels for presenting information in a limited amount of space.",
 		"keywords": [
 			"navigation",
 			"panel",
