@@ -708,9 +708,9 @@ $.extend(Datepicker.prototype, {
 
 	/* Generate the date picker content. */
 	_updateDatepicker: function(inst) {
-                if ($.datepicker._curInst && inst != $.datepicker._curInst) {
-                        return;
-                }
+		if ($.datepicker._curInst && inst != $.datepicker._curInst) {
+			return;
+		}
 		this.maxRows = 4; //Reset the max number of rows being displayed (see #7043)
 		var borders = $.datepicker._getBorders(inst.dpDiv);
 		instActive = inst; // for delegate hover events
