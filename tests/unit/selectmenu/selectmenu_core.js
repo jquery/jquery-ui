@@ -57,10 +57,10 @@ $.each([
 		links = menu.find("li.ui-menu-item a");
 
 		button.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
-		equal( menu.attr("aria-activedescendant"), links.eq(element[0].selectedIndex).attr("id"), "after keydown menu aria-activedescendant" );
-		equal( links.eq(element[0].selectedIndex).attr("aria-selected"), "true", "after keydown selected menu link aria-selected" );
-		equal( element.find("option:selected").val(), selected.next("option").val() , "after keydown original select state" );
-		equal( button.text(), selected.next("option").text(), "after keydown button text" );
+		equal( menu.attr("aria-activedescendant"), links.eq(element[0].selectedIndex).attr("id"), "menu aria-activedescendant" );
+		equal( links.eq(element[0].selectedIndex).attr("aria-selected"), "true", "selected menu link aria-selected" );
+		equal( element.find("option:selected").val(), selected.next("option").val() , "original select state" );
+		equal( button.text(), selected.next("option").text(), "button text" );
 	});
 
 	test("state synchronization - after click - " + settings.type, function () {
@@ -77,10 +77,10 @@ $.each([
 
 		button.simulate( "click" );
 		menu.find("a").last().simulate( "mouseover" ).trigger( "click" );
-		equal( menu.attr("aria-activedescendant"), links.eq(element[0].selectedIndex).attr("id"), "after click menu aria-activedescendant" );
-		equal( links.eq(element[0].selectedIndex).attr("aria-selected"), "true", "after click selected menu link aria-selected" );
-		equal( element.find("option:selected").val(), element.find("option").last().val(), "after click original select state" );
-		equal( button.text(), element.find("option").last().text(), "after click button text" );
+		equal( menu.attr("aria-activedescendant"), links.eq(element[0].selectedIndex).attr("id"), "menu aria-activedescendant" );
+		equal( links.eq(element[0].selectedIndex).attr("aria-selected"), "true", "selected menu link aria-selected" );
+		equal( element.find("option:selected").val(), element.find("option").last().val(), "original select state" );
+		equal( button.text(), element.find("option").last().text(), "button text" );
 	});
 });
 
