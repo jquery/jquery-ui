@@ -43,7 +43,8 @@
 		"keywords": [
 			"drag",
 			"drop"
-		]
+		],
+		"category": "interaction"
 	},
 	"droppable": {
 		"dependencies": [ "draggable", "mouse" ],
@@ -51,7 +52,8 @@
 		"keywords": [
 			"drag",
 			"drop"
-		]
+		],
+		"category": "interaction"
 	},
 	"menu": {
 		"dependencies": [ "position" ],
@@ -82,14 +84,16 @@
 		"description": "Enables resize functionality for any element.",
 		"keywords": [
 			"resize"
-		]
+		],
+		"category": "interaction"
 	},
 	"selectable": {
 		"dependencies": [ "mouse" ],
 		"description": "Allows groups of elements to be selected with the mouse.",
 		"keywords": [
 			"selection"
-		]
+		],
+		"category": "interaction"
 	},
 	"slider": {
 		"dependencies": [ "mouse" ],
@@ -106,7 +110,8 @@
 		"keywords": [
 			"sort",
 			"list"
-		]
+		],
+		"category": "interaction"
 	},
 	"spinner": {
 		"dependencies": [ "button" ],
