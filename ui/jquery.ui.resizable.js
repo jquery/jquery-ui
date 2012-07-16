@@ -279,7 +279,8 @@ $.widget("ui.resizable", $.ui.mouse, {
 		var el = this.helper, o = this.options, props = {},
 			that = this, smp = this.originalMousePosition, a = this.axis,
 			prevTop = this.position.top, prevLeft = this.position.left,
-			prevWidth = this.size.width, prevHeight = this.size.height;
+			prevWidth = this.size.width, prevHeight = this.size.height,
+			elemResized = false;
 
 		var dx = (event.pageX-smp.left)||0, dy = (event.pageY-smp.top)||0;
 		var trigger = this._change[a];
@@ -302,15 +303,19 @@ $.widget("ui.resizable", $.ui.mouse, {
 
 		if (this.position.top !== prevTop) {
 			props.top = this.position.top + "px";
+			elemResized = true;
 		}
 		if (this.position.left !== prevLeft) {
 			props.left = this.position.left + "px";
+			elemResized = true;
 		}
 		if (this.size.width !== prevWidth) {
 			props.width = this.size.width + "px";
+			elemResized = true;
 		}
 		if (this.size.height !== prevHeight) {
 			props.height = this.size.height + "px";
+			elemResized = true;
 		}
 		el.css(props);
 
@@ -318,7 +323,7 @@ $.widget("ui.resizable", $.ui.mouse, {
 			this._proportionallyResize();
 
 		// Call the user callback if the element was resized
-		if ( ! $.isEmptyObject(props) ) {
+		if (elemResized) {
 			this._trigger('resize', event, this.ui());
 		}
 
