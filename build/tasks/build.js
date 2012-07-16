@@ -15,6 +15,11 @@ grunt.registerTask( "manifest", "Generate jquery.json manifest files", function(
 				title: "jQuery UI {Plugin}",
 				dependencies: [ "core", "widget" ]
 			},
+			interaction: {
+				name: "ui.{plugin}",
+				title: "jQuery UI {Plugin}",
+				dependencies: [ "core", "widget", "mouse" ]
+			},
 			effect: {
 				name: "ui.effect-{plugin}",
 				title: "jQuery UI {Plugin} Effect",

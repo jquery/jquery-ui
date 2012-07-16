@@ -37,22 +37,6 @@
 			"popup"
 		]
 	},
-	"draggable": {
-		"dependencies": [ "mouse" ],
-		"description": "Enables dragging functionality for any element.",
-		"keywords": [
-			"drag",
-			"drop"
-		]
-	},
-	"droppable": {
-		"dependencies": [ "draggable", "mouse" ],
-		"description": "Enables drop targets for draggable elements.",
-		"keywords": [
-			"drag",
-			"drop"
-		]
-	},
 	"menu": {
 		"dependencies": [ "position" ],
 		"description": "Creates nestable menus.",
@@ -77,20 +61,6 @@
 			"status"
 		]
 	},
-	"resizable": {
-		"dependencies": [ "mouse" ],
-		"description": "Enables resize functionality for any element.",
-		"keywords": [
-			"resize"
-		]
-	},
-	"selectable": {
-		"dependencies": [ "mouse" ],
-		"description": "Allows groups of elements to be selected with the mouse.",
-		"keywords": [
-			"selection"
-		]
-	},
 	"slider": {
 		"dependencies": [ "mouse" ],
 		"description": "Displays a flexible slider with ranges and accessibility via keyboard.",
@@ -98,14 +68,6 @@
 			"form",
 			"number",
 			"range"
-		]
-	},
-	"sortable": {
-		"dependencies": [ "mouse" ],
-		"description": "Enables items in a list to be sorted using the mouse.",
-		"keywords": [
-			"sort",
-			"list"
 		]
 	},
 	"spinner": {
