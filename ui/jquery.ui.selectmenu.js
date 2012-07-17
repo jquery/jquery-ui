@@ -108,7 +108,8 @@ $.widget( "ui.selectmenu", {
 	},
 
 	_drawMenu: function() {
-		var that = this;
+		var menuInstance,
+			that = this;
 
 		// create menu portion, append to body
 		this.menu = $( '<ul />', {
@@ -126,7 +127,7 @@ $.widget( "ui.selectmenu", {
 			.appendTo( this.options.appendTo );
 
 		// init menu widget
-		this.menu.menu({
+		menuInstance = this.menu.menu({
 			select: function( event, ui ) {
 				var item = ui.item.data( "item.selectmenu" );
 
@@ -152,7 +153,8 @@ $.widget( "ui.selectmenu", {
 			},
 			// set ARIA role
 			role: 'listbox'
-		});
+		})
+		.data( "ui-menu" );
 
 		// change menu styles?
 		if ( this.options.dropdown ) {
@@ -160,8 +162,8 @@ $.widget( "ui.selectmenu", {
 		}
 
 		// unbind uneeded Menu events
-		this.menu.off( "mouseleave.menu" );
-		$( document ).off( "click.menu" );
+		menuInstance._off( this.menu, "mouseleave" );
+		menuInstance._off( this.document, "click" );
 	},
 
 	refresh: function() {
@@ -294,7 +296,7 @@ $.widget( "ui.selectmenu", {
 		focus: function( event ) {
 			// init Menu on first focus
 			this.refresh();
-			this.button.off( "focus." + this.widgetName );
+			this._off( this.button, "focus" );
 		},
 		click: function( event ) {
 			this._toggle( event );
