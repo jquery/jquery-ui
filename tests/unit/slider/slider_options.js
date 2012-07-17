@@ -51,7 +51,7 @@ test("min", function() {
 
 test("orientation", function() {
 	expect( 6 );
-	el = $('<div></div>');
+	el = $('#slider1');
 
 	options = {
 		max: 2,
@@ -65,7 +65,7 @@ test("orientation", function() {
 	el.slider(options).slider("option", "orientation", "horizontal");
 	ok(el.is('.ui-slider-horizontal'), "horizontal slider has class .ui-slider-horizontal");
 	ok(!el.is('.ui-slider-vertical'), "horizontal slider does not have class .ui-slider-vertical");
-	equal(handle().css('left'), percentVal + '%', "horizontal slider handle is positioned with left: %");
+	equal(handle()[0].style.left, percentVal + '%', "horizontal slider handle is positioned with left: %");
 
 	el.slider('destroy');
 
@@ -81,7 +81,7 @@ test("orientation", function() {
 	el.slider(options).slider("option", "orientation", "vertical");
 	ok(el.is('.ui-slider-vertical'), "vertical slider has class .ui-slider-vertical");
 	ok(!el.is('.ui-slider-horizontal'), "vertical slider does not have class .ui-slider-horizontal");
-	equal(handle().css('bottom'), percentVal + '%', "vertical slider handle is positioned with bottom: %");
+	equal(handle()[0].style.bottom, percentVal + '%', "vertical slider handle is positioned with bottom: %");
 
 	el.slider('destroy');
 
