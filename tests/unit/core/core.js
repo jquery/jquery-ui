@@ -1,48 +1,49 @@
-(function( $ ) {
+/*
+ * core unit tests
+ */
+(function($) {
 
-module( "core - jQuery extensions" );
+module('core - jQuery extensions');
 
-TestHelpers.testJshint( "ui.core" );
+test('focus - original functionality', function() {
+	expect(1);
 
-test( "focus - original functionality", function() {
-	expect( 1 );
-	$( "#inputTabindex0" )
+	$('#inputTabindex0')
 		.focus(function() {
-			ok( true, "event triggered" );
+			ok(true, 'event triggered');
 		})
 		.focus();
 });
 
-asyncTest( "focus", function() {
-	expect( 2 );
-	$( "#inputTabindex0" )
+asyncTest('focus', function() {
+	expect(2);
+	$('#inputTabindex0')
 		.focus(function() {
-			ok( true, "event triggered" );
+			ok(true, 'event triggered');
 		})
-		.focus( 500, function() {
-			// prevent double focus event in IE
-			$( this ).unbind( "focus" );
-			ok( true, "callback triggered" );
+		.focus(500, function() {
+			ok(true, 'callback triggered');
+			$(this).unbind('focus');
 			start();
 		});
 });
 
-test( "zIndex", function() {
-	var el = $( "#zIndexAutoWithParent" ),
+test('zIndex', function() {
+	var el = $('#zIndexAutoWithParent'),
 		parent = el.parent();
-	equal( el.zIndex(), 100, "zIndex traverses up to find value" );
-	equal( parent.zIndex(200 ), parent, "zIndex setter is chainable" );
-	equal( el.zIndex(), 200, "zIndex setter changed zIndex" );
+	equal(el.zIndex(), 100, 'zIndex traverses up to find value');
+	equal(parent.zIndex(200), parent, 'zIndex setter is chainable');
+	equal(el.zIndex(), 200, 'zIndex setter changed zIndex');
 
-	el = $( "#zIndexAutoWithParentViaCSS" );
-	equal( el.zIndex(), 0, "zIndex traverses up to find CSS value, not found because not positioned" );
+	el = $('#zIndexAutoWithParentViaCSS');
+	equal(el.zIndex(), 0, 'zIndex traverses up to find CSS value, not found because not positioned');
 
-	el = $( "#zIndexAutoWithParentViaCSSPositioned" );
-	equal( el.zIndex(), 100, "zIndex traverses up to find CSS value" );
-	el.parent().zIndex( 200 );
-	equal( el.zIndex(), 200, "zIndex setter changed zIndex, overriding CSS" );
+	el = $('#zIndexAutoWithParentViaCSSPositioned');
+	equal(el.zIndex(), 100, 'zIndex traverses up to find CSS value');
+	el.parent().zIndex(200);
+	equal(el.zIndex(), 200, 'zIndex setter changed zIndex, overriding CSS');
 
-	equal( $( "#zIndexAutoNoParent" ).zIndex(), 0, "zIndex never explicitly set in hierarchy" );
+	equal($('#zIndexAutoNoParent').zIndex(), 0, 'zIndex never explicitly set in hierarchy');
 });
 
 test( "innerWidth - getter", function() {
@@ -153,14 +154,4 @@ test( "outerHeight(true) - setter", function() {
 	equal( el.height(), 32, "height set properly when hidden" );
 });
 
-test( "uniqueId / removeUniqueId", function() {
-	var el = $( "img" ).eq( 0 );
-
-	equal( el.attr( "id" ), undefined, "element has no initial id" );
-	el.uniqueId();
-	ok( /ui-id-\d+$/.test( el.attr( "id" ) ), "element has generated id" );
-	el.removeUniqueId();
-	equal( el.attr( "id" ), undefined, "unique id has been removed from element" );
-});
-
-})( jQuery );
+})(jQuery);

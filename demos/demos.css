@@ -18,8 +18,6 @@ body {
 
 .layout-grid {
 	width: 960px;
-	border-spacing: 0;
-	border-collapse: collapse;
 }
 
 .layout-grid td {

@@ -1,7 +1,5 @@
 (function( $ ) {
 
-var state = TestHelpers.tabs.state;
-
 module( "tabs (deprecated): core" );
 
 test( "panel ids", function() {
@@ -50,17 +48,17 @@ asyncTest( "cache", function() {
 		cache: true
 	});
 	element.one( "tabsshow", function( event, ui ) {
-		state( element, 0, 0, 1, 0, 0 );
+		tabs_state( element, 0, 0, 1, 0, 0 );
 	});
 	element.one( "tabsload", function( event, ui ) {
 		ok( true, "tabsload" );
 
 		setTimeout(function() {
 			element.tabs( "option", "active", 0 );
-			state( element, 1, 0, 0, 0, 0 );
+			tabs_state( element, 1, 0, 0, 0, 0 );
 
 			element.one( "tabsshow", function( event, ui ) {
-				state( element, 0, 0, 1, 0, 0 );
+				tabs_state( element, 0, 0, 1, 0, 0 );
 			});
 			element.one( "tabsload", function( event, ui ) {
 				ok( false, "should be cached" );
@@ -70,7 +68,7 @@ asyncTest( "cache", function() {
 		}, 1 );
 	});
 	element.tabs( "option", "active", 2 );
-	state( element, 0, 0, 1, 0, 0 );
+	tabs_state( element, 0, 0, 1, 0, 0 );
 });
 
 test( "idPrefix", function() {
@@ -91,11 +89,10 @@ test( "tabTemplate + panelTemplate", function() {
 	// defaults are tested in the add method test
 	expect( 11 );
 
-	var tab, anchor,
-		element = $( "#tabs2" ).tabs({
-			tabTemplate: "<li class='customTab'><a href='http://example.com/#{href}'>#{label}</a></li>",
-			panelTemplate: "<div class='customPanel'></div>"
-		});
+	var element = $( "#tabs2" ).tabs({
+		tabTemplate: "<li class='customTab'><a href='http://example.com/#{href}'>#{label}</a></li>",
+		panelTemplate: "<div class='customPanel'></div>"
+	});
 	element.one( "tabsadd", function( event, ui ) {
 		var anchor = $( ui.tab );
 		equal( ui.index, 5, "ui.index" );
@@ -106,12 +103,12 @@ test( "tabTemplate + panelTemplate", function() {
 		ok( $( ui.panel ).hasClass( "customPanel" ), "panel custom class" );
 	});
 	element.tabs( "add", "#new", "New" );
-	tab = element.find( ".ui-tabs-nav li" ).last();
-	anchor = tab.find( ".ui-tabs-anchor" );
+	var tab = element.find( ".ui-tabs-nav li" ).last(),
+		anchor = tab.find( "a" );
 	equal( tab.text(), "New", "label" );
 	ok( tab.hasClass( "customTab" ), "tab custom class" );
 	equal( anchor.attr( "href" ), "http://example.com/#new", "href" );
-	equal( tab.attr( "aria-controls" ), "new", "aria-controls" );
+	equal( anchor.attr( "aria-controls" ), "new", "aria-controls" );
 	ok( element.find( "#new" ).hasClass( "customPanel" ), "panel custom class" );
 });
 
@@ -173,50 +170,50 @@ test( "selected", function() {
 
 	var element = $( "#tabs1" ).tabs();
 	equal( element.tabs( "option", "selected" ), 0, "should be 0 by default" );
-	state( element, 1, 0, 0 );
+	tabs_state( element, 1, 0, 0 );
 	element.tabs( "destroy" );
 
 	location.hash = "#fragment-3";
 	element = $( "#tabs1" ).tabs();
 	equal( element.tabs( "option", "selected" ), 2, "should be 2 based on URL" );
-	state( element, 0, 0, 1 );
+	tabs_state( element, 0, 0, 1 );
 	element.tabs( "destroy" );
 
 	el = $('#tabs1').tabs({
 		selected: -1,
 		collapsible: true
 	});
-	state( element, 0, 0, 0 );
-	equal( element.find( ".ui-tabs-nav .ui-state-active" ).length, 0, "no tabs selected" );
+	tabs_state( element, 0, 0, 0 );
+	equal( element.find( ".ui-tabs-nav .ui-state-active" ).size(), 0, "no tabs selected" );
 	strictEqual( element.tabs( "option", "selected" ), -1 );
 
 	element.tabs( "option", "collapsible", false );
-	state( element, 1, 0, 0 );
+	tabs_state( element, 1, 0, 0 );
 	equal( element.tabs( "option", "selected" ), 0 );
 	element.tabs( "destroy" );
 
 	element.tabs({
 		selected: -1
 	});
-	state( element, 1, 0, 0 );
+	tabs_state( element, 1, 0, 0 );
 	strictEqual( element.tabs( "option", "selected" ), 0 );
 	element.tabs( "destroy" );
 
 	element.tabs({ selected: 2 });
 	equal( element.tabs( "option", "selected" ), 2 );
-	state( element, 0, 0, 1 );
+	tabs_state( element, 0, 0, 1 );
 
 	element.tabs( "option", "selected", 0 );
 	equal( element.tabs( "option", "selected" ), 0 );
-	state( element, 1, 0, 0 );
+	tabs_state( element, 1, 0, 0 );
 
-	element.find( ".ui-tabs-nav .ui-tabs-anchor" ).eq( 1 ).click();
+	element.find( ".ui-tabs-nav a" ).eq( 1 ).click();
 	equal( element.tabs( "option", "selected" ), 1 );
-	state( element, 0, 1, 0 );
+	tabs_state( element, 0, 1, 0 );
 
 	element.tabs( "option", "selected", 10 );
 	equal( element.tabs( "option", "selected" ), 1 );
-	state( element, 0, 1, 0 );
+	tabs_state( element, 0, 1, 0 );
 
 	location.hash = "#";
 });
@@ -226,21 +223,20 @@ module( "tabs (deprecated): events" );
 asyncTest( "load", function() {
 	expect( 15 );
 
-	var tab, anchor, panelId, panel,
+	var tab, panelId, panel,
 		element = $( "#tabs2" );
 
 	// init
 	element.one( "tabsload", function( event, ui ) {
-		tab = element.find( ".ui-tabs-nav li" ).eq( 2 );
-		anchor = tab.find( ".ui-tabs-anchor" );
+		tab = element.find( ".ui-tabs-nav a" ).eq( 2 );
 		panelId = tab.attr( "aria-controls" );
 		panel = $( "#" + panelId );
 
 		ok( !( "originalEvent" in event ), "originalEvent" );
-		strictEqual( ui.tab, anchor[ 0 ], "tab" );
+		strictEqual( ui.tab, tab[ 0 ], "tab" );
 		strictEqual( ui.panel, panel[ 0 ], "panel" );
 		equal( $( ui.panel ).find( "p" ).length, 1, "panel html" );
-		state( element, 0, 0, 1, 0, 0 );
+		tabs_state( element, 0, 0, 1, 0, 0 );
 		tabsload1();
 	});
 	element.tabs({ active: 2 });
@@ -248,16 +244,15 @@ asyncTest( "load", function() {
 	function tabsload1() {
 		// .option()
 		element.one( "tabsload", function( event, ui ) {
-			tab = element.find( ".ui-tabs-nav li" ).eq( 3 );
-			anchor = tab.find( ".ui-tabs-anchor" );
+			tab = element.find( ".ui-tabs-nav a" ).eq( 3 );
 			panelId = tab.attr( "aria-controls" );
 			panel = $( "#" + panelId );
 
 			ok( !( "originalEvent" in event ), "originalEvent" );
-			strictEqual( ui.tab, anchor[ 0 ], "tab" );
+			strictEqual( ui.tab, tab[ 0 ], "tab" );
 			strictEqual( ui.panel, panel[ 0 ], "panel" );
 			equal( $( ui.panel ).find( "p" ).length, 1, "panel html" );
-			state( element, 0, 0, 0, 1, 0 );
+			tabs_state( element, 0, 0, 0, 1, 0 );
 			tabsload2();
 		});
 		element.tabs( "option", "active", 3 );
@@ -266,19 +261,18 @@ asyncTest( "load", function() {
 	function tabsload2() {
 		// click, change panel content
 		element.one( "tabsload", function( event, ui ) {
-			tab = element.find( ".ui-tabs-nav li" ).eq( 4 );
-			anchor = tab.find( ".ui-tabs-anchor" );
+			tab = element.find( ".ui-tabs-nav a" ).eq( 4 );
 			panelId = tab.attr( "aria-controls" );
 			panel = $( "#" + panelId );
 
 			equal( event.originalEvent.type, "click", "originalEvent" );
-			strictEqual( ui.tab, anchor[ 0 ], "tab" );
+			strictEqual( ui.tab, tab[ 0 ], "tab" );
 			strictEqual( ui.panel, panel[ 0 ], "panel" );
 			equal( $( ui.panel ).find( "p" ).length, 1, "panel html" );
-			state( element, 0, 0, 0, 0, 1 );
+			tabs_state( element, 0, 0, 0, 0, 1 );
 			start();
 		});
-		element.find( ".ui-tabs-nav .ui-tabs-anchor" ).eq( 4 ).click();
+		element.find( ".ui-tabs-nav a" ).eq( 4 ).click();
 	}
 });
 
@@ -288,7 +282,7 @@ test( "enable", function() {
 	var element = $( "#tabs1" ).tabs({
 		disabled: [ 0, 1 ],
 		enable: function( event, ui ) {
-			equal( ui.tab, element.find( ".ui-tabs-nav .ui-tabs-anchor" )[ 1 ], "ui.tab" );
+			equal( ui.tab, element.find( ".ui-tabs-nav a" )[ 1 ], "ui.tab" );
 			equal( ui.panel, element.find( ".ui-tabs-panel" )[ 1 ], "ui.panel" );
 			equal( ui.index, 1, "ui.index" );
 		}
@@ -303,7 +297,7 @@ test( "disable", function() {
 
 	var element = $( "#tabs1" ).tabs({
 		disable: function( event, ui ) {
-			equal( ui.tab, element.find( ".ui-tabs-nav .ui-tabs-anchor" )[ 1 ], "ui.tab" );
+			equal( ui.tab, element.find( ".ui-tabs-nav a" )[ 1 ], "ui.tab" );
 			equal( ui.panel, element.find( ".ui-tabs-panel" )[ 1 ], "ui.panel" );
 			equal( ui.index, 1, "ui.index" );
 		}
@@ -321,37 +315,37 @@ test( "show", function() {
 			active: false,
 			collapsible: true
 		}),
-		anchors = element.find( ".ui-tabs-nav .ui-tabs-anchor" ),
+		tabs = element.find( ".ui-tabs-nav a" ),
 		panels = element.find( ".ui-tabs-panel" );
 
 	// from collapsed
 	element.one( "tabsshow", function( event, ui ) {
 		ok( !( "originalEvent" in event ), "originalEvent" );
-		strictEqual( ui.tab, anchors[ 0 ], "ui.tab" );
+		strictEqual( ui.tab, tabs[ 0 ], "ui.tab" );
 		strictEqual( ui.panel, panels[ 0 ], "ui.panel" );
 		equal( ui.index, 0, "ui.index" );
-		state( element, 1, 0, 0 );
+		tabs_state( element, 1, 0, 0 );
 	});
 	element.tabs( "option", "active", 0 );
-	state( element, 1, 0, 0 );
+	tabs_state( element, 1, 0, 0 );
 
 	// switching tabs
 	element.one( "tabsshow", function( event, ui ) {
 		equal( event.originalEvent.type, "click", "originalEvent" );
-		strictEqual( ui.tab, anchors[ 1 ], "ui.tab" );
+		strictEqual( ui.tab, tabs[ 1 ], "ui.tab" );
 		strictEqual( ui.panel, panels[ 1 ], "ui.panel" );
 		equal( ui.index, 1, "ui.index" );
-		state( element, 0, 1, 0 );
+		tabs_state( element, 0, 1, 0 );
 	});
-	anchors.eq( 1 ).click();
-	state( element, 0, 1, 0 );
+	tabs.eq( 1 ).click();
+	tabs_state( element, 0, 1, 0 );
 
 	// collapsing
 	element.one( "tabsshow", function( event, ui ) {
 		ok( false, "collapsing" );
 	});
 	element.tabs( "option", "active", false );
-	state( element, 0, 0, 0 );
+	tabs_state( element, 0, 0, 0 );
 });
 
 test( "select", function() {
@@ -361,52 +355,46 @@ test( "select", function() {
 			active: false,
 			collapsible: true
 		}),
-		anchors = element.find( ".ui-tabs-nav .ui-tabs-anchor" ),
+		tabs = element.find( ".ui-tabs-nav a" ),
 		panels = element.find( ".ui-tabs-panel" );
 
 	// from collapsed
 	element.one( "tabsselect", function( event, ui ) {
 		ok( !( "originalEvent" in event ), "originalEvent" );
-		strictEqual( ui.tab, anchors[ 0 ], "ui.tab" );
+		strictEqual( ui.tab, tabs[ 0 ], "ui.tab" );
 		strictEqual( ui.panel, panels[ 0 ], "ui.panel" );
 		equal( ui.index, 0, "ui.index" );
-		state( element, 0, 0, 0 );
+		tabs_state( element, 0, 0, 0 );
 	});
 	element.tabs( "option", "active", 0 );
-	state( element, 1, 0, 0 );
+	tabs_state( element, 1, 0, 0 );
 
 	// switching tabs
 	element.one( "tabsselect", function( event, ui ) {
 		equal( event.originalEvent.type, "click", "originalEvent" );
-		strictEqual( ui.tab, anchors[ 1 ], "ui.tab" );
+		strictEqual( ui.tab, tabs[ 1 ], "ui.tab" );
 		strictEqual( ui.panel, panels[ 1 ], "ui.panel" );
 		equal( ui.index, 1, "ui.index" );
-		state( element, 1, 0, 0 );
+		tabs_state( element, 1, 0, 0 );
 	});
-	anchors.eq( 1 ).click();
-	state( element, 0, 1, 0 );
+	tabs.eq( 1 ).click();
+	tabs_state( element, 0, 1, 0 );
 
 	// collapsing
 	element.one( "tabsselect", function( event, ui ) {
 		ok( false, "collapsing" );
 	});
 	element.tabs( "option", "active", false );
-	state( element, 0, 0, 0 );
+	tabs_state( element, 0, 0, 0 );
 });
 
 module( "tabs (deprecated): methods" );
 
 test( "add", function() {
-	expect( 28 );
+	expect( 27 );
 
-	var tab, anchor,
-		element = $( "#tabs1" ).tabs();
-
-	function stripLeadingSlash( str ) {
-		return str.substr( str.charAt( 0 ) === "/" ? 1 : 0 );
-	}
-
-	state( element, 1, 0, 0 );
+	var element = $( "#tabs1" ).tabs();
+	tabs_state( element, 1, 0, 0 );
 
 	// add without index
 	element.one( "tabsadd", function( event, ui ) {
@@ -415,39 +403,36 @@ test( "add", function() {
 		equal( ui.panel.id, "new", "ui.panel" );
 	});
 	element.tabs( "add", "#new", "New" );
-	state( element, 1, 0, 0, 0 );
-	tab = element.find( ".ui-tabs-nav li" ).last();
-	anchor = tab.find( ".ui-tabs-anchor" );
+	tabs_state( element, 1, 0, 0, 0 );
+	var tab = element.find( ".ui-tabs-nav li" ).last(),
+		anchor = tab.find( "a" );
 	equal( tab.text(), "New", "label" );
-	equal( stripLeadingSlash( anchor[0].pathname ), stripLeadingSlash( location.pathname ), "href pathname" );
-	equal( anchor[0].hash, "#new", "href hash" );
-	equal( tab.attr( "aria-controls" ), "new", "aria-controls" );
+	equal( anchor.attr( "href" ), "#new", "href" );
+	equal( anchor.attr( "aria-controls" ), "new", "aria-controls" );
 	ok( !tab.hasClass( "ui-state-hover" ), "not hovered" );
 	anchor.simulate( "mouseover" );
 	ok( tab.hasClass( "ui-state-hover" ), "hovered" );
 	anchor.simulate( "click" );
-	state( element, 0, 0, 0, 1 );
+	tabs_state( element, 0, 0, 0, 1 );
 
 	// add remote tab with index
 	element.one( "tabsadd", function( event, ui ) {
 		equal( ui.index, 1, "ui.index" );
 		equal( $( ui.tab ).text(), "New Remote", "ui.tab" );
-		equal( ui.panel.id, $( ui.tab ).closest( "li" ).attr( "aria-controls" ), "ui.panel" );
+		equal( ui.panel.id, $( ui.tab ).attr( "aria-controls" ), "ui.panel" );
 	});
 	element.tabs( "add", "data/test.html", "New Remote", 1 );
-	state( element, 0, 0, 0, 0, 1 );
+	tabs_state( element, 0, 0, 0, 0, 1 );
 	tab = element.find( ".ui-tabs-nav li" ).eq( 1 );
-	anchor = tab.find( ".ui-tabs-anchor" );
+	anchor = tab.find( "a" );
 	equal( tab.text(), "New Remote", "label" );
-	equal( stripLeadingSlash( stripLeadingSlash(
-		anchor[0].pathname.replace( stripLeadingSlash( location.pathname ).split( "/" ).slice( 0, -1 ).join( "/" ), "" )
-	) ), "data/test.html", "href" );
-	ok( /^ui-tabs-\d+$/.test( tab.attr( "aria-controls" ) ), "aria controls" );
+	equal( anchor.attr( "href" ), "data/test.html", "href" );
+	ok( /^ui-tabs-\d+$/.test( anchor.attr( "aria-controls" ) ), "aria controls" );
 	ok( !tab.hasClass( "ui-state-hover" ), "not hovered" );
 	anchor.simulate( "mouseover" );
 	ok( tab.hasClass( "ui-state-hover" ), "hovered" );
 	anchor.simulate( "click" );
-	state( element, 0, 1, 0, 0, 0 );
+	tabs_state( element, 0, 1, 0, 0, 0 );
 
 	// add to empty tab set
 	element = $( "<div><ul></ul></div>" ).tabs();
@@ -458,7 +443,7 @@ test( "add", function() {
 		equal( ui.panel.id, "first", "ui.panel" );
 	});
 	element.tabs( "add", "#first", "First" );
-	state( element, 1 );
+	tabs_state( element, 1 );
 	equal( element.tabs( "option", "active" ), 0, "active: 0 after add" );
 });
 
@@ -475,7 +460,7 @@ test( "remove", function() {
 	expect( 17 );
 
 	var element = $( "#tabs1" ).tabs({ active: 1 });
-	state( element, 0, 1, 0 );
+	tabs_state( element, 0, 1, 0 );
 
 	element.one( "tabsremove", function( event, ui ) {
 		equal( ui.index, -1, "ui.index" );
@@ -483,7 +468,7 @@ test( "remove", function() {
 		equal( ui.panel.id, "fragment-2", "ui.panel" );
 	});
 	element.tabs( "remove", 1 );
-	state( element, 0, 1 );
+	tabs_state( element, 0, 1 );
 	equal( element.tabs( "option", "active" ), 1 );
 	equal( element.find( ".ui-tabs-nav li a[href$='fragment-2']" ).length, 0,
 		"remove correct list item" );
@@ -495,7 +480,7 @@ test( "remove", function() {
 		equal( ui.panel.id, "fragment-3", "ui.panel" );
 	});
 	element.tabs( "remove", 1 );
-	state( element, 1 );
+	tabs_state( element, 1 );
 	equal( element.tabs( "option", "active"), 0 );
 
 	element.one( "tabsremove", function( event, ui ) {
@@ -511,43 +496,43 @@ test( "select", function() {
 	expect( 23 );
 
 	var element = $( "#tabs1" ).tabs();
-	state( element, 1, 0, 0 );
+	tabs_state( element, 1, 0, 0 );
 	element.tabs( "select", 1 );
-	state( element, 0, 1, 0 );
+	tabs_state( element, 0, 1, 0 );
 	equal( element.tabs( "option", "active" ), 1, "active" );
 	equal( element.tabs( "option", "selected" ), 1, "selected" );
 	element.tabs( "destroy" );
 
 	element.tabs({ collapsible: true });
-	state( element, 1, 0, 0 );
+	tabs_state( element, 1, 0, 0 );
 	element.tabs( "select", 0 );
-	state( element, 0, 0, 0 );
+	tabs_state( element, 0, 0, 0 );
 	equal( element.tabs( "option", "active" ), false, "active" );
 	equal( element.tabs( "option", "selected" ), -1, "selected" );
 	element.tabs( "destroy" );
 
 	element.tabs({ collapsible: true });
 	element.tabs( "select", -1 );
-	state( element, 0, 0, 0 );
+	tabs_state( element, 0, 0, 0 );
 	equal( element.tabs( "option", "active" ), false, "active" );
 	equal( element.tabs( "option", "selected" ), -1, "selected" );
 	element.tabs( "destroy" );
 
 	element.tabs();
-	state( element, 1, 0, 0 );
+	tabs_state( element, 1, 0, 0 );
 	equal( element.tabs( "option", "active" ), 0, "active" );
 	equal( element.tabs( "option", "selected" ), 0, "selected" );
 	element.tabs( "select", 0 );
-	state( element, 1, 0, 0 );
+	tabs_state( element, 1, 0, 0 );
 	equal( element.tabs( "option", "active" ), 0, "active" );
 	equal( element.tabs( "option", "selected" ), 0, "selected" );
 	element.tabs( "select", -1 );
-	state( element, 1, 0, 0 );
+	tabs_state( element, 1, 0, 0 );
 	equal( element.tabs( "option", "active" ), 0, "active" );
 	equal( element.tabs( "option", "selected" ), 0, "selected" );
 
 	element.tabs( "select", "#fragment-2" );
-	state( element, 0, 1, 0 );
+	tabs_state( element, 0, 1, 0 );
 	equal( element.tabs( "option", "active" ), 1, "active" );
 	equal( element.tabs( "option", "selected" ), 1, "selected" );
 });
@@ -563,10 +548,10 @@ test( "url", function() {
 	expect( 2 );
 
 	var element = $( "#tabs2" ).tabs(),
-		anchor = element.find( ".ui-tabs-anchor" ).eq( 3 );
+		tab = element.find( "a" ).eq( 3 );
 
 	element.tabs( "url", 3, "data/test2.html" );
-	equal( anchor.attr( "href" ), "data/test2.html", "href was updated" );
+	equal( tab.attr( "href" ), "data/test2.html", "href was updated" );
 	element.one( "tabsbeforeload", function( event, ui ) {
 		equal( ui.ajaxSettings.url, "data/test2.html", "ajaxSettings.url" );
 		event.preventDefault();
@@ -583,10 +568,6 @@ asyncTest( "abort", function() {
 			equal( status, "abort", "aborted" );
 			start();
 		});
-	});
-	// prevent IE from caching the request, so that it won't resolve before we call abort
-	element.find( ".ui-tabs-nav li:eq(2) .ui-tabs-anchor" ).attr( "href", function( href ) {
-		return href + "?" + (+ new Date());
 	});
 	element.tabs( "option", "active", 2 );
 	element.tabs( "abort" );

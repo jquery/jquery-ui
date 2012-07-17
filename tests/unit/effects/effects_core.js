@@ -31,7 +31,6 @@ test( "Immediate Return Conditions", function() {
 	equal( ++count, 3, "Both Functions worked properly" );
 });
 
-/* TODO: Disabled - Can't figure out why this is failing in IE 6/7
 test( "createWrapper and removeWrapper retain focused elements (#7595)", function() {
 	expect( 2 );
 	var test = $( "div.hidden" ).show(),
@@ -42,7 +41,7 @@ test( "createWrapper and removeWrapper retain focused elements (#7595)", functio
 	$.effects.removeWrapper( test );
 	equal( document.activeElement, input[ 0 ], "Active element is still input after removeWrapper" );
 });
-*/
+
 
 module( "effects.core: animateClass" );
 
@@ -62,86 +61,45 @@ asyncTest( "animateClass works with borderStyle", function() {
 
 asyncTest( "animateClass works with colors", function() {
 	var test = $("div.animateClass"),
-		count = 0,
-		oldStep = jQuery.fx.step.backgroundColor;
+		count = 0;
 	expect(2);
-
-	// we want to catch the first frame of animation
-	jQuery.fx.step.backgroundColor = function( fx ) {
-		oldStep.apply( this, arguments );
-
-		// make sure it has animated somewhere we can detect
-		if ( fx.pos > 255 / 2000 ) {
-			jQuery.fx.step.backgroundColor = oldStep;
-			notPresent( test.css("backgroundColor"),
-				[ "#000000", "#ffffff", "#000", "#fff", "rgb(0, 0, 0)", "rgb(255,255,255)" ],
-				"Color is not endpoints in middle." );
-			test.stop( true, true );
-		}
-	};
-
-	test.toggleClass("testChangeBackground", {
-		duration: 2000,
-		complete: function() {
-			present( test.css("backgroundColor"), [ "#ffffff", "#fff", "rgb(255, 255, 255)" ], "Color is final" );
-			start();
-		}
+	test.toggleClass("testChangeBackground", duration, function() {
+		present( test.css("backgroundColor"), [ "#ffffff", "#fff", "rgb(255, 255, 255)" ], "Color is final" );
+		start();
 	});
+	setTimeout(function() {
+		var color = test.css("backgroundColor");
+		notPresent( color, [ "#000000", "#ffffff", "#000", "#fff", "rgb(0, 0, 0)", "rgb(255,255,255)" ],
+			"Color is not endpoints in middle." );
+	}, mid);
 });
 
-asyncTest( "animateClass calls step option", 1, function() {
-	var test = jQuery("div.animateClass"),
-		done = function() {
-			done = jQuery.noop;
-			test.stop();
-			start();
-		};
-	test.toggleClass( "testChangeBackground", {
-		step: function( fx ) {
-			ok( true, "Step Function Called" );
-			setTimeout( done, 0 );
-		}
-	});
-});
-
-asyncTest( "animateClass works with children", 3, function() {
-	var animatedChild,
-		test = $("div.animateClass"),
+asyncTest( "animateClass works with children", function() {
+	var test = $("div.animateClass"),
 		h2 = test.find("h2");
 
-	test.toggleClass("testChildren", {
-		children: true,
-		duration: duration,
-		complete: function() {
-			equal( h2.css("fontSize"), "20px", "Text size is final during complete");
-			test.toggleClass("testChildren", {
-				duration: duration,
-				complete: function() {
-					equal( h2.css("fontSize"), "10px", "Text size revertted after class removed");
+	expect(4);
+	setTimeout(function() {
+		notPresent( h2.css("fontSize"), ["10px","20px"], "Font size is neither endpoint when in middle.");
+	}, mid);
+	test.toggleClass("testChildren", { children: true, duration: duration, complete: function() {
+		equal( h2.css("fontSize"), "20px", "Text size is final during complete");
+		test.toggleClass("testChildren", duration, function() {
+			equal( h2.css("fontSize"), "10px", "Text size revertted after class removed");
 
-					start();
-				},
-				step: function( val, fx ) {
-					if ( fx.elem === h2[ 0 ] ) {
-						ok( false, "Error - Animating property on h2" );
-					}
-				}
-			});
-		},
-		step: function( val, fx ) {
-			if ( fx.prop === "fontSize" && fx.elem === h2[ 0 ] && !animatedChild ) {
-				equal( fx.end, 20, "animating font size on child" );
-				animatedChild = true;
-			}
-		}
-	});
+			start();
+		});
+		setTimeout(function() {
+			equal( h2.css("fontSize"), "20px", "Text size unchanged during animate with children: undefined" );
+		}, mid);
+	}});
 });
 
 asyncTest( "animateClass clears style properties when stopped", function() {
 	var test = $("div.animateClass"),
 		style = test[0].style,
 		orig = style.cssText;
-
+	
 	expect( 2 );
 
 	test.addClass( "testChangeBackground", duration );
@@ -155,35 +113,30 @@ asyncTest( "animateClass clears style properties when stopped", function() {
 asyncTest( "animateClass: css and class changes during animation are not lost (#7106)", function() {
 	var test = $( "div.ticket7106" );
 
+	// add a class and change a style property after starting an animated class
+	test.addClass( "animate", minDuration, animationComplete )
+		.addClass( "testClass" )
+		.height( 100 );
+
 	// ensure the class stays and that the css property stays
 	function animationComplete() {
 		ok( test.hasClass( "testClass" ), "class change during animateClass was not lost" );
 		equal( test.height(), 100, "css change during animateClass was not lost" );
 		start();
 	}
-
-	// add a class and change a style property after starting an animated class
-	test.addClass( "animate", minDuration, animationComplete )
-		.addClass( "testClass" )
-		.height( 100 );
 });
 
 
 $.each( $.effects.effect, function( effect ) {
-	module( "effects." + effect );
-
-	// puff and size are defined inside scale
-	if ( effect !== "puff" && effect !== "size" ) {
-		TestHelpers.testJshint( "effects." + effect );
-	}
-
 	if ( effect === "transfer" ) {
 		return;
 	}
+	module( "effect."+effect );
 	asyncTest( "show/hide", function() {
+		var hidden = $( "div.hidden" );
 		expect( 8 );
-		var hidden = $( "div.hidden" ),
-			count = 0,
+
+		var count = 0,
 			test = 0;
 
 		function queueTest( fn ) {

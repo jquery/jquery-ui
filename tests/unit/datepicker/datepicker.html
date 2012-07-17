@@ -5,12 +5,9 @@
 	<title>jQuery UI Datepicker Test Suite</title>
 
 	<script src="../../jquery.js"></script>
-	<link rel="stylesheet" href="../../../external/qunit.css">
-	<script src="../../../external/qunit.js"></script>
-	<script src="../../jquery.simulate.js"></script>
-	<script src="../testsuite.js"></script>
+	<script src="../../resource_loader.js"></script>
 	<script>
-	TestHelpers.loadResources({
+	loadResources({
 		css: [ "ui.core", "ui.datepicker" ],
 		js: [
 			"ui/jquery.ui.core.js",
@@ -21,6 +18,11 @@
 		]
 	});
 	</script>
+
+	<link rel="stylesheet" href="../../../external/qunit.css">
+	<script src="../../../external/qunit.js"></script>
+	<script src="../../jquery.simulate.js"></script>
+	<script src="../testsuite.js"></script>
 
 	<script src="datepicker_core.js"></script>
 	<script src="datepicker_defaults.js"></script>

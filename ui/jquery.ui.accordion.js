@@ -1,4 +1,4 @@
-/*!
+/*
  * jQuery UI Accordion @VERSION
  *
  * Copyright 2012, AUTHORS.txt (http://jqueryui.com/about)
@@ -12,23 +12,6 @@
  *	jquery.ui.widget.js
  */
 (function( $, undefined ) {
-
-var uid = 0,
-	hideProps = {},
-	showProps = {},
-	showPropsAdjust = {};
-
-hideProps.height = hideProps.paddingTop = hideProps.paddingBottom =
-	hideProps.borderTopWidth = hideProps.borderBottomWidth = "hide";
-showProps.height = showProps.paddingTop = showProps.paddingBottom =
-	showProps.borderTopWidth = showProps.borderBottomWidth = "show";
-$.extend( showPropsAdjust, showProps, { accordionHeight: "show" } );
-
-$.fx.step.accordionHeight = function( fx ) {
-	var elem = $( fx.elem ),
-		data = elem.data( "ui-accordion-height" );
-	elem.height( data.total - elem.outerHeight() - data.toHide.outerHeight() + elem.height() );
-};
 
 $.widget( "ui.accordion", {
 	version: "@VERSION",
@@ -50,9 +33,7 @@ $.widget( "ui.accordion", {
 	},
 
 	_create: function() {
-		var accordionId = this.accordionId = "ui-accordion-" +
-				(this.element.attr( "id" ) || ++uid),
-			options = this.options;
+		var options = this.options;
 
 		this.prevShow = this.prevHide = $();
 		this.element.addClass( "ui-accordion ui-widget ui-helper-reset" );
@@ -63,8 +44,7 @@ $.widget( "ui.accordion", {
 		this._focusable( this.headers );
 
 		this.headers.next()
-			.addClass( "ui-accordion-content ui-helper-reset ui-widget-content ui-corner-bottom" )
-			.hide();
+			.addClass( "ui-accordion-content ui-helper-reset ui-widget-content ui-corner-bottom" );
 
 		// don't allow collapsible: false and active: false
 		if ( !options.collapsible && options.active === false ) {
@@ -77,9 +57,7 @@ $.widget( "ui.accordion", {
 		this.active = this._findActive( options.active )
 			.addClass( "ui-accordion-header-active ui-state-active" )
 			.toggleClass( "ui-corner-all ui-corner-top" );
-		this.active.next()
-			.addClass( "ui-accordion-content-active" )
-			.show();
+		this.active.next().addClass( "ui-accordion-content-active" );
 
 		this._createIcons();
 		this.originalHeight = this.element[0].style.height;
@@ -90,36 +68,20 @@ $.widget( "ui.accordion", {
 
 		this.headers
 			.attr( "role", "tab" )
-			.each(function( i ) {
-				var header = $( this ),
-					headerId = header.attr( "id" ),
-					panel = header.next(),
-					panelId = panel.attr( "id" );
-				if ( !headerId ) {
-					headerId = accordionId + "-header-" + i;
-					header.attr( "id", headerId );
-				}
-				if ( !panelId ) {
-					panelId = accordionId + "-panel-" + i;
-					panel.attr( "id", panelId );
-				}
-				header.attr( "aria-controls", panelId );
-				panel.attr( "aria-labelledby", headerId );
-			})
+			// TODO: use _bind()
+			.bind( "keydown.accordion", $.proxy( this, "_keydown" ) )
 			.next()
 				.attr( "role", "tabpanel" );
 
 		this.headers
 			.not( this.active )
 			.attr({
+				// TODO: document support for each of these
+				"aria-expanded": "false",
 				"aria-selected": "false",
 				tabIndex: -1
 			})
 			.next()
-				.attr({
-					"aria-expanded": "false",
-					"aria-hidden": "true"
-				})
 				.hide();
 
 		// make sure at least one header is in the tab order
@@ -127,18 +89,12 @@ $.widget( "ui.accordion", {
 			this.headers.eq( 0 ).attr( "tabIndex", 0 );
 		} else {
 			this.active.attr({
+				"aria-expanded": "true",
 				"aria-selected": "true",
 				tabIndex: 0
-			})
-			.next()
-				.attr({
-					"aria-expanded": "true",
-					"aria-hidden": "false"
-				});
+			});
 		}
 
-		this._bind( this.headers, { keydown: "_keydown" });
-		this._bind( this.headers.next(), { keydown: "_panelKeyDown" });
 		this._setupEvents( options.event );
 	},
 
@@ -170,8 +126,6 @@ $.widget( "ui.accordion", {
 	},
 
 	_destroy: function() {
-		var contents;
-
 		// clean up main element
 		this.element
 			.removeClass( "ui-accordion ui-widget ui-helper-reset" )
@@ -179,31 +133,19 @@ $.widget( "ui.accordion", {
 
 		// clean up headers
 		this.headers
+			.unbind( ".accordion" )
 			.removeClass( "ui-accordion-header ui-accordion-header-active ui-helper-reset ui-state-default ui-corner-all ui-state-active ui-state-disabled ui-corner-top" )
 			.removeAttr( "role" )
+			.removeAttr( "aria-expanded" )
 			.removeAttr( "aria-selected" )
-			.removeAttr( "aria-controls" )
-			.removeAttr( "tabIndex" )
-			.each(function() {
-				if ( /^ui-accordion/.test( this.id ) ) {
-					this.removeAttribute( "id" );
-				}
-			});
+			.removeAttr( "tabIndex" );
 		this._destroyIcons();
 
 		// clean up content panels
-		contents = this.headers.next()
+		var contents = this.headers.next()
 			.css( "display", "" )
 			.removeAttr( "role" )
-			.removeAttr( "aria-expanded" )
-			.removeAttr( "aria-hidden" )
-			.removeAttr( "aria-labelledby" )
-			.removeClass( "ui-helper-reset ui-widget-content ui-corner-bottom ui-accordion-content ui-accordion-content-active ui-state-disabled" )
-			.each(function() {
-				if ( /^ui-accordion/.test( this.id ) ) {
-					this.removeAttribute( "id" );
-				}
-			});
+			.removeClass( "ui-helper-reset ui-widget-content ui-corner-bottom ui-accordion-content ui-accordion-content-active ui-state-disabled" );
 		if ( this.options.heightStyle !== "content" ) {
 			this.element.css( "height", this.originalHeight );
 			contents.css( "height", "" );
@@ -219,8 +161,8 @@ $.widget( "ui.accordion", {
 
 		if ( key === "event" ) {
 			if ( this.options.event ) {
-				this.headers.unbind(
-					this.options.event.split( " " ).join( ".accordion " ) + ".accordion" );
+				// TODO: this is incorrect for multiple events (see _setupEvents)
+				this.headers.unbind( this.options.event + ".accordion", this._eventHandler );
 			}
 			this._setupEvents( value );
 		}
@@ -248,7 +190,8 @@ $.widget( "ui.accordion", {
 	},
 
 	_keydown: function( event ) {
-		if ( event.altKey || event.ctrlKey ) {
+		// TODO: remove disabled check when using _bind()
+		if ( this.options.disabled || event.altKey || event.ctrlKey ) {
 			return;
 		}
 
@@ -269,13 +212,6 @@ $.widget( "ui.accordion", {
 			case keyCode.SPACE:
 			case keyCode.ENTER:
 				this._eventHandler( event );
-				break;
-			case keyCode.HOME:
-				toFocus = this.headers[ 0 ];
-				break;
-			case keyCode.END:
-				toFocus = this.headers[ length - 1 ];
-				break;
 		}
 
 		if ( toFocus ) {
@@ -286,16 +222,11 @@ $.widget( "ui.accordion", {
 		}
 	},
 
-	_panelKeyDown : function( event ) {
-		if ( event.keyCode === $.ui.keyCode.UP && event.ctrlKey ) {
-			$( event.currentTarget ).prev().focus();
-		}
-	},
-
 	refresh: function() {
-		var maxHeight, overflow,
-			heightStyle = this.options.heightStyle,
-			parent = this.element.parent();
+		var heightStyle = this.options.heightStyle,
+			parent = this.element.parent(),
+			maxHeight,
+			overflow;
 
 		this.element.css( "height", this.originalHeight );
 
@@ -369,14 +300,11 @@ $.widget( "ui.accordion", {
 	},
 
 	_setupEvents: function( event ) {
-		var events = {};
-		if ( !event ) {
-			return;
+		if ( event ) {
+			// TODO: use _bind()
+			this.headers.bind( event.split( " " ).join( ".accordion " ) + ".accordion",
+				$.proxy( this, "_eventHandler" ) );
 		}
-		$.each( event.split(" "), function( index, eventName ) {
-			events[ eventName ] = "_eventHandler";
-		});
-		this._bind( this.headers, events );
 	},
 
 	_eventHandler: function( event ) {
@@ -389,14 +317,14 @@ $.widget( "ui.accordion", {
 			toHide = active.next(),
 			eventData = {
 				oldHeader: active,
-				oldPanel: toHide,
+				oldContent: toHide,
 				newHeader: collapsing ? $() : clicked,
-				newPanel: toShow
+				newContent: toShow
 			};
 
 		event.preventDefault();
 
-		if (
+		if ( options.disabled ||
 				// click on active header, but not collapsible
 				( clickedIsActive && !options.collapsible ) ||
 				// allow canceling activation
@@ -412,8 +340,9 @@ $.widget( "ui.accordion", {
 		this._toggle( eventData );
 
 		// switch classes
-		// corner classes on the previously active header stay after the animation
-		active.removeClass( "ui-accordion-header-active ui-state-active" );
+		active
+			.removeClass( "ui-accordion-header-active ui-state-active ui-corner-top" )
+			.addClass( "ui-corner-all" );
 		if ( options.icons ) {
 			active.children( ".ui-accordion-header-icon" )
 				.removeClass( options.icons.activeHeader )
@@ -437,8 +366,8 @@ $.widget( "ui.accordion", {
 	},
 
 	_toggle: function( data ) {
-		var toShow = data.newPanel,
-			toHide = this.prevShow.length ? this.prevShow : data.oldPanel;
+		var toShow = data.newContent,
+			toHide = this.prevShow.length ? this.prevShow : data.oldContent;
 
 		// handle activating a panel during the animation for another activation
 		this.prevShow.add( this.prevHide ).stop( true, true );
@@ -453,33 +382,21 @@ $.widget( "ui.accordion", {
 			this._toggleComplete( data );
 		}
 
-		toHide.attr({
-			"aria-expanded": "false",
-			"aria-hidden": "true"
-		});
-		toHide.prev().attr( "aria-selected", "false" );
-		// if we're switching panels, remove the old header from the tab order
-		// if we're opening from collapsed state, remove the previous header from the tab order
-		// if we're collapsing, then keep the collapsing header in the tab order
-		if ( toShow.length && toHide.length ) {
-			toHide.prev().attr( "tabIndex", -1 );
-		} else if ( toShow.length ) {
-			this.headers.filter(function() {
-				return $( this ).attr( "tabIndex" ) === 0;
+		// TODO assert that the blur and focus triggers are really necessary, remove otherwise
+		toHide.prev()
+			.attr({
+				"aria-expanded": "false",
+				"aria-selected": "false",
+				tabIndex: -1
 			})
-			.attr( "tabIndex", -1 );
-		}
-
-		toShow
+			.blur();
+		toShow.prev()
 			.attr({
 				"aria-expanded": "true",
-				"aria-hidden": "false"
+				"aria-selected": "true",
+				tabIndex: 0
 			})
-			.prev()
-				.attr({
-					"aria-selected": "true",
-					tabIndex: 0
-				});
+			.focus();
 	},
 
 	_animate: function( toShow, toHide, data ) {
@@ -504,10 +421,10 @@ $.widget( "ui.accordion", {
 		easing = easing || options.easing || animate.easing;
 		duration = duration || options.duration || animate.duration;
 
-		if ( !toHide.length ) {
+		if ( !toHide.size() ) {
 			return toShow.animate( showProps, duration, easing, complete );
 		}
-		if ( !toShow.length ) {
+		if ( !toShow.size() ) {
 			return toHide.animate( hideProps, duration, easing, complete );
 		}
 
@@ -524,14 +441,11 @@ $.widget( "ui.accordion", {
 	},
 
 	_toggleComplete: function( data ) {
-		var toHide = data.oldPanel;
+		var toShow = data.newContent,
+			toHide = data.oldContent;
 
-		toHide
-			.removeClass( "ui-accordion-content-active" )
-			.prev()
-				.removeClass( "ui-corner-top" )
-				.addClass( "ui-corner-all" );
-
+		// other classes are removed before the animation; this one needs to stay until completed
+		toHide.removeClass( "ui-accordion-content-active" );
 		// Work around for rendering bug in IE (#5421)
 		if ( toHide.length ) {
 			toHide.parent()[0].className = toHide.parent()[0].className;
@@ -540,6 +454,20 @@ $.widget( "ui.accordion", {
 		this._trigger( "activate", null, data );
 	}
 });
+
+$.fx.step.accordionHeight = function( fx ) {
+	var elem = $( fx.elem ),
+		data = elem.data( "ui-accordion-height" );
+	elem.height( data.total - elem.outerHeight() - data.toHide.outerHeight() + elem.height() );
+};
+var hideProps = {},
+	showProps = {},
+	showPropsAdjust = {};
+hideProps.height = hideProps.paddingTop = hideProps.paddingBottom =
+	hideProps.borderTopWidth = hideProps.borderBottomWidth = "hide";
+showProps.height = showProps.paddingTop = showProps.paddingBottom =
+	showProps.borderTopWidth = showProps.borderBottomWidth = "show";
+$.extend( showPropsAdjust, showProps, { accordionHeight: "show" } );
 
 
 
@@ -676,19 +604,9 @@ if ( $.uiBackCompat !== false ) {
 			}
 
 			if ( type === "beforeActivate" ) {
-				ret = _trigger.call( this, "changestart", event, {
-					oldHeader: data.oldHeader,
-					oldContent: data.oldPanel,
-					newHeader: data.newHeader,
-					newContent: data.newPanel
-				});
+				ret = _trigger.call( this, "changestart", event, data );
 			} else if ( type === "activate" ) {
-				ret = _trigger.call( this, "change", event, {
-					oldHeader: data.oldHeader,
-					oldContent: data.oldPanel,
-					newHeader: data.newHeader,
-					newContent: data.newPanel
-				});
+				ret = _trigger.call( this, "change", event, data );
 			}
 			return ret;
 		};
@@ -718,7 +636,7 @@ if ( $.uiBackCompat !== false ) {
 							easing: "easeOutBounce",
 							duration: 1000
 						}
-					};
+					}
 				} else {
 					options.animate = options.animated;
 				}

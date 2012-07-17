@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<title>jQuery UI Tooltip - Default functionality</title>
 	<link rel="stylesheet" href="../../themes/base/jquery.ui.tooltip.css">
-	<script src="../../jquery-1.7.2.js"></script>
+	<script src="../../jquery-1.7.1.js"></script>
 	<script src="../../ui/jquery.ui.core.js"></script>
 	<script src="../../ui/jquery.ui.widget.js"></script>
 	<script src="../../ui/jquery.ui.position.js"></script>
@@ -13,67 +13,76 @@
 	<script>
 	$(function() {
 		$( ".demo" ).tooltip({
+			open: function(event, ui) {
+				$("<div>").addClass("arrow").appendTo(ui.tooltip);
+			},
 			position: {
-				my: "center bottom-20",
+				my: "center bottom",
 				at: "center top",
-				using: function( position, feedback ) {
-					$( this ).css( position );
-					$( "<div>" )
-						.addClass( "arrow" )
-						.addClass( feedback.vertical )
-						.addClass( feedback.horizontal )
-						.appendTo( this );
-				}
+				offset: "0 -20px"
 			}
 		});
 	});
 	</script>
 	<style>
+	label {
+		display: inline-block;
+		width: 5em;
+	}
+	.demo {
+		margin: 10em 0 0 10em;
+	}
 	.ui-tooltip, .arrow:after {
-		background: black;
-		border: 2px solid white;
+	  background: black;
+	  border: 2px solid white;
 	}
 	.ui-tooltip {
-		padding: 10px 20px;
-		color: white;
-		border-radius: 20px;
-		font: bold 14px "Helvetica Neue", Sans-Serif;
-		text-transform: uppercase;
-		box-shadow: 0 0 7px black;
+	  display: inline-block;
+	  position: relative;
+	  padding: 10px 20px;
+	  color: white;
+	  border-radius: 20px;
+	  text-align: center;
+	  font: bold 14px "Helvetica Neue", Sans-Serif;
+	  font-stretch: condensed;
+	  text-decoration: none;
+	  text-transform: uppercase;
+	  box-shadow: 0 0 7px black;
 	}
 	.arrow {
-		width: 70px;
-		height: 16px;
-		overflow: hidden;
-		position: absolute;
-		left: 50%;
-		margin-left: -35px;
-		bottom: -16px;
-	}
-	.arrow.top {
-		top: -16px;
-		bottom: auto;
-	}
-	.arrow.left {
-		left: 20%;
+	    width: 70px;
+	    height: 16px;
+	    overflow: hidden;
+	    position: absolute;
+	    left: 50%;
+	    margin-left: -35px;
+	    bottom: -16px;
 	}
 	.arrow:after {
-		content: "";
-		position: absolute;
-		left: 20px;
-		top: -20px;
-		width: 25px;
-		height: 25px;
-		box-shadow: 6px 5px 9px -9px black;
-		-webkit-transform: rotate(45deg);
-		-moz-transform: rotate(45deg);
-		-ms-transform: rotate(45deg);
-		-o-transform: rotate(45deg);
-		tranform: rotate(45deg);
+	  content: "";
+	  position: absolute;
+	  left: 20px;
+	  top: -20px;
+	  width: 25px;
+	  height: 25px;
+	  -webkit-box-shadow: 6px 5px 9px -9px black,
+	              5px 6px 9px -9px black;
+	  -moz-box-shadow: 6px 5px 9px -9px black,
+	              5px 6px 9px -9px black;
+	  box-shadow: 6px 5px 9px -9px black,
+	              5px 6px 9px -9px black;
+	  -webkit-transform: rotate(45deg);
+	  -moz-transform:    rotate(45deg);
+	  -ms-transform:     rotate(45deg);
+	  -o-transform:      rotate(45deg);
 	}
-	.arrow.top:after {
-		bottom: -20px;
-		top: auto;
+	div[data-tooltip].active {
+	  opacity: 1;
+	  margin-top: 6px;
+	}
+	div[data-tooltip].out {
+	  opacity: 0;
+	  margin-top: -20px;
 	}
 	</style>
 </head>

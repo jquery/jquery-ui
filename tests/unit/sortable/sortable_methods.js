@@ -5,7 +5,7 @@
 
 var el, offsetBefore, offsetAfter, dragged;
 
-function drag(handle, dx, dy) {
+var drag = function(handle, dx, dy) {
 	offsetBefore = $(handle).offset();
 	$(handle).simulate("drag", {
 		dx: dx || 0,
@@ -15,7 +15,7 @@ function drag(handle, dx, dy) {
 	offsetAfter = $(handle).offset();
 }
 
-function sort(handle, dx, dy, index, msg) {
+var sort = function(handle, dx, dy, index, msg) {
 	drag(handle, dx, dy);
 	equal($(handle).parent().children().index(handle), index, msg);
 }

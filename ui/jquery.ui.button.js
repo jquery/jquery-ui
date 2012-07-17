@@ -1,4 +1,4 @@
-/*!
+/*
  * jQuery UI Button @VERSION
  *
  * Copyright 2012, AUTHORS.txt (http://jqueryui.com/about)
@@ -73,7 +73,7 @@ $.widget( "ui.button", {
 			focusClass = "ui-state-focus";
 
 		if ( options.label === null ) {
-			options.label = (this.type === "input" ? this.buttonElement.val() : this.buttonElement.html());
+			options.label = this.buttonElement.html();
 		}
 
 		this.buttonElement
@@ -186,7 +186,7 @@ $.widget( "ui.button", {
 					if ( options.disabled ) {
 						return false;
 					}
-					if ( event.keyCode === $.ui.keyCode.SPACE || event.keyCode === $.ui.keyCode.ENTER ) {
+					if ( event.keyCode == $.ui.keyCode.SPACE || event.keyCode == $.ui.keyCode.ENTER ) {
 						$( this ).addClass( "ui-state-active" );
 					}
 				})
@@ -212,11 +212,10 @@ $.widget( "ui.button", {
 	},
 
 	_determineButtonType: function() {
-		var ancestor, labelSelector, checked;
 
-		if ( this.element.is("[type=checkbox]") ) {
+		if ( this.element.is(":checkbox") ) {
 			this.type = "checkbox";
-		} else if ( this.element.is("[type=radio]") ) {
+		} else if ( this.element.is(":radio") ) {
 			this.type = "radio";
 		} else if ( this.element.is("input") ) {
 			this.type = "input";
@@ -227,8 +226,8 @@ $.widget( "ui.button", {
 		if ( this.type === "checkbox" || this.type === "radio" ) {
 			// we don't search against the document in case the element
 			// is disconnected from the DOM
-			ancestor = this.element.parents().last();
-			labelSelector = "label[for='" + this.element.attr("id") + "']";
+			var ancestor = this.element.parents().last(),
+				labelSelector = "label[for='" + this.element.attr("id") + "']";
 			this.buttonElement = ancestor.find( labelSelector );
 			if ( !this.buttonElement.length ) {
 				ancestor = ancestor.length ? ancestor.siblings() : this.element.siblings();
@@ -239,7 +238,7 @@ $.widget( "ui.button", {
 			}
 			this.element.addClass( "ui-helper-hidden-accessible" );
 
-			checked = this.element.is( ":checked" );
+			var checked = this.element.is( ":checked" );
 			if ( checked ) {
 				this.buttonElement.addClass( "ui-state-active" );
 			}
@@ -354,10 +353,11 @@ $.widget( "ui.button", {
 	}
 });
 
+$.ui.button.version = "@VERSION";
+
 $.widget( "ui.buttonset", {
-	version: "@VERSION",
 	options: {
-		items: "button, input[type=button], input[type=submit], input[type=reset], input[type=checkbox], input[type=radio], a, :data(button)"
+		items: ":button, :submit, :reset, :checkbox, :radio, a, :data(button)"
 	},
 
 	_create: function() {

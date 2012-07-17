@@ -1,10 +1,6 @@
 (function( $ ) {
 
-var equalHeight = TestHelpers.accordion.equalHeight,
-	setupTeardown = TestHelpers.accordion.setupTeardown,
-	state = TestHelpers.accordion.state;
-
-module( "accordion: methods", setupTeardown() );
+module( "accordion: methods", accordion_setupTeardown() );
 
 test( "destroy", function() {
 	expect( 1 );
@@ -14,19 +10,15 @@ test( "destroy", function() {
 });
 
 test( "enable/disable", function() {
-	expect( 4 );
+	expect( 3 );
 	var element = $( "#list1" ).accordion();
-	state( element, 1, 0, 0 );
+	accordion_state( element, 1, 0, 0 );
 	element.accordion( "disable" );
-	// event does nothing
-	element.find( ".ui-accordion-header" ).eq( 1 ).trigger( "click" );
-	state( element, 1, 0, 0 );
-	// option still works
 	element.accordion( "option", "active", 1 );
-	state( element, 0, 1, 0 );
+	accordion_state( element, 1, 0, 0 );
 	element.accordion( "enable" );
-	element.accordion( "option", "active", 2 );
-	state( element, 0, 0, 1 );
+	element.accordion( "option", "active", 1 );
+	accordion_state( element, 0, 1, 0 );
 });
 
 test( "refresh", function() {
@@ -38,11 +30,11 @@ test( "refresh", function() {
 		.accordion({
 			heightStyle: "fill"
 		});
-	equalHeight( element, 255 );
+	accordion_equalHeights( element, 246, 258 );
 
 	element.parent().height( 500 );
 	element.accordion( "refresh" );
-	equalHeight( element, 455 );
+	accordion_equalHeights( element, 446, 458 );
 });
 
 }( jQuery ) );

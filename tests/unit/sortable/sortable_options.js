@@ -29,7 +29,7 @@ test("{ axis: ? }, unexpected", function() {
 	ok(false, "missing test - untested code is broken code.");
 });
 
-test("{ cancel: 'input,textarea,button,select,option' }, default", function() {
+test("{ cancel: ':input,button' }, default", function() {
 	ok(false, "missing test - untested code is broken code.");
 });
 

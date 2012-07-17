@@ -5,12 +5,9 @@
 	<title>jQuery UI Resizable Test Suite</title>
 
 	<script src="../../jquery.js"></script>
-	<link rel="stylesheet" href="../../../external/qunit.css">
-	<script src="../../../external/qunit.js"></script>
-	<script src="../../jquery.simulate.js"></script>
-	<script src="../testsuite.js"></script>
+	<script src="../../resource_loader.js"></script>
 	<script>
-	TestHelpers.loadResources({
+	loadResources({
 		css: [ "ui.core", "ui.resizable" ],
 		js: [
 			"ui/jquery.ui.core.js",
@@ -21,8 +18,13 @@
 	});
 	</script>
 
-	<script src="resizable_common.js"></script>
+	<link rel="stylesheet" href="../../../external/qunit.css">
+	<script src="../../../external/qunit.js"></script>
+	<script src="../../jquery.simulate.js"></script>
+	<script src="../testsuite.js"></script>
+
 	<script src="resizable_core.js"></script>
+	<script src="resizable_defaults.js"></script>
 	<script src="resizable_events.js"></script>
 	<script src="resizable_methods.js"></script>
 	<script src="resizable_options.js"></script>
@@ -49,7 +51,7 @@
 <div id="qunit-fixture">
 
 <div id="resizable1" style="background: green; width: 100px; height: 100px;">I'm a resizable.</div>
-<img src="images/test.jpg" id="resizable2" style="width: 100px; height: 100px;" alt="solid gray">
+<img src="images/test.jpg" id="resizable2" style="width: 100px; height: 100px;">
 
 </div>
 </body>

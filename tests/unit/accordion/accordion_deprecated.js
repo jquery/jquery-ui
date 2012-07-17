@@ -1,74 +1,70 @@
 (function( $ ) {
 
-var equalHeight = TestHelpers.accordion.equalHeight,
-	setupTeardown = TestHelpers.accordion.setupTeardown,
-	state = TestHelpers.accordion.state;
-
-module( "accordion (deprecated): expanded active option, activate method", setupTeardown() );
+module( "accordion (deprecated): expanded active option, activate method", accordion_setupTeardown() );
 
 test( "activate, numeric", function() {
 	expect( 5 );
 	var element = $( "#list1" ).accordion({ active: 1 });
-	state( element, 0, 1, 0 );
+	accordion_state( element, 0, 1, 0 );
 	element.accordion( "activate", 2 );
-	state( element, 0, 0, 1 );
+	accordion_state( element, 0, 0, 1 );
 	element.accordion( "activate", 0 );
-	state( element, 1, 0, 0 );
+	accordion_state( element, 1, 0, 0 );
 	element.accordion( "activate", 1 );
-	state( element, 0, 1, 0 );
+	accordion_state( element, 0, 1, 0 );
 	element.accordion( "activate", 2 );
-	state( element, 0, 0, 1 );
+	accordion_state( element, 0, 0, 1 );
 });
 
 test( "activate, numeric, collapsible:true", function() {
 	expect( 3 );
 	var element = $( "#list1" ).accordion({ collapsible: true });
 	element.accordion( "activate", 2 );
-	state( element, 0, 0, 1 );
+	accordion_state( element, 0, 0, 1 );
 	element.accordion( "activate", 0 );
-	state( element, 1, 0, 0 );
+	accordion_state( element, 1, 0, 0 );
 	element.accordion( "activate", -1 );
-	state( element, 0, 0, 0 );
+	accordion_state( element, 0, 0, 0 );
 });
 
 test( "activate, boolean, collapsible: true", function() {
 	expect( 2 );
 	var element = $( "#list1" ).accordion({ collapsible: true });
 	element.accordion( "activate", 2 );
-	state( element, 0, 0, 1 );
+	accordion_state( element, 0, 0, 1 );
 	element.accordion( "activate", false );
-	state( element, 0, 0, 0 );
+	accordion_state( element, 0, 0, 0 );
 });
 
 test( "activate, boolean, collapsible: false", function() {
 	expect( 2 );
 	var element = $( "#list1" ).accordion();
 	element.accordion( "activate", 2 );
-	state( element, 0, 0, 1 );
+	accordion_state( element, 0, 0, 1 );
 	element.accordion( "activate", false );
-	state( element, 0, 0, 1 );
+	accordion_state( element, 0, 0, 1 );
 });
 
 test( "activate, string expression", function() {
 	expect( 4 );
 	var element = $( "#list1" ).accordion({ active: "h3:last" });
-	state( element, 0, 0, 1 );
+	accordion_state( element, 0, 0, 1 );
 	element.accordion( "activate", ":first" );
-	state( element, 1, 0, 0 );
+	accordion_state( element, 1, 0, 0 );
 	element.accordion( "activate", ":eq(1)" );
-	state( element, 0, 1, 0 );
+	accordion_state( element, 0, 1, 0 );
 	element.accordion( "activate", ":last" );
-	state( element, 0, 0, 1 );
+	accordion_state( element, 0, 0, 1 );
 });
 
 test( "activate, jQuery or DOM element", function() {
 	expect( 3 );
 	var element = $( "#list1" ).accordion({ active: $( "#list1 h3:last" ) });
-	state( element, 0, 0, 1 );
+	accordion_state( element, 0, 0, 1 );
 	element.accordion( "activate", $( "#list1 h3:first" ) );
-	state( element, 1, 0, 0 );
+	accordion_state( element, 1, 0, 0 );
 	element.accordion( "activate", $( "#list1 h3" )[ 1 ] );
-	state( element, 0, 1, 0 );
+	accordion_state( element, 0, 1, 0 );
 });
 
 test( "{ active: Selector }", function() {
@@ -76,9 +72,9 @@ test( "{ active: Selector }", function() {
 	var element = $("#list1").accordion({
 		active: "h3:last"
 	});
-	state( element, 0, 0, 1 );
+	accordion_state( element, 0, 0, 1 );
 	element.accordion( "option", "active", "h3:eq(1)" );
-	state( element, 0, 1, 0 );
+	accordion_state( element, 0, 1, 0 );
 });
 
 test( "{ active: Element }", function() {
@@ -86,9 +82,9 @@ test( "{ active: Element }", function() {
 	var element = $( "#list1" ).accordion({
 		active: $( "#list1 h3:last" )[ 0 ]
 	});
-	state( element, 0, 0, 1 );
+	accordion_state( element, 0, 0, 1 );
 	element.accordion( "option", "active", $( "#list1 h3:eq(1)" )[ 0 ] );
-	state( element, 0, 1, 0 );
+	accordion_state( element, 0, 1, 0 );
 });
 
 test( "{ active: jQuery Object }", function() {
@@ -96,26 +92,26 @@ test( "{ active: jQuery Object }", function() {
 	var element = $( "#list1" ).accordion({
 		active: $( "#list1 h3:last" )
 	});
-	state( element, 0, 0, 1 );
+	accordion_state( element, 0, 0, 1 );
 	element.accordion( "option", "active", $( "#list1 h3:eq(1)" ) );
-	state( element, 0, 1, 0 );
+	accordion_state( element, 0, 1, 0 );
 });
 
 
 
 
 
-module( "accordion (deprecated) - height options", setupTeardown() );
+module( "accordion (deprecated) - height options", accordion_setupTeardown() );
 
 test( "{ autoHeight: true }, default", function() {
 	expect( 3 );
-	equalHeight( $( "#navigation" ).accordion({ autoHeight: true }), 105 );
+	accordion_equalHeights( $( "#navigation" ).accordion({ autoHeight: true }), 95, 130 );
 });
 
 test( "{ autoHeight: false }", function() {
 	expect( 3 );
-	var element = $( "#navigation" ).accordion({ autoHeight: false }),
-		sizes = [];
+	var element = $( "#navigation" ).accordion({ autoHeight: false });
+	var sizes = [];
 	element.find( ".ui-accordion-content" ).each(function() {
 		sizes.push( $(this).height() );
 	});
@@ -128,7 +124,7 @@ test( "{ fillSpace: true }", function() {
 	expect( 3 );
 	$( "#navigationWrapper" ).height( 500 );
 	var element = $( "#navigation" ).accordion({ fillSpace: true });
-	equalHeight( element, 455 );
+	accordion_equalHeights( element, 446, 458 );
 });
 
 test( "{ fillSapce: true } with sibling", function() {
@@ -142,7 +138,7 @@ test( "{ fillSapce: true } with sibling", function() {
 		})
 		.prependTo( "#navigationWrapper" );
 	var element = $( "#navigation" ).accordion({ fillSpace: true });
-	equalHeight( element , 355 );
+	accordion_equalHeights( element , 346, 358);
 });
 
 test( "{ fillSpace: true } with multiple siblings", function() {
@@ -171,14 +167,14 @@ test( "{ fillSpace: true } with multiple siblings", function() {
 		})
 		.prependTo( "#navigationWrapper" );
 	var element = $( "#navigation" ).accordion({ fillSpace: true });
-	equalHeight( element, 305 );
+	accordion_equalHeights( element, 296, 308 );
 });
 
 
 
 
 
-module( "accordion (deprecated) - icons", setupTeardown() );
+module( "accordion (deprecated) - icons", accordion_setupTeardown() );
 
 test( "icons, headerSelected", function() {
 	expect( 3 );
@@ -195,7 +191,7 @@ test( "icons, headerSelected", function() {
 
 
 
-module( "accordion (deprecated) - resize", setupTeardown() );
+module( "accordion (deprecated) - resize", accordion_setupTeardown() );
 
 test( "resize", function() {
 	expect( 6 );
@@ -206,29 +202,29 @@ test( "resize", function() {
 		.accordion({
 			heightStyle: "fill"
 		});
-	equalHeight( element, 255 );
+	accordion_equalHeights( element, 246, 258 );
 
 	element.parent().height( 500 );
 	element.accordion( "resize" );
-	equalHeight( element, 455 );
+	accordion_equalHeights( element, 446, 458 );
 });
 
 
 
 
 
-module( "accordion (deprecated) - navigation", setupTeardown() );
+module( "accordion (deprecated) - navigation", accordion_setupTeardown() );
 
 test( "{ navigation: true, navigationFilter: header }", function() {
 	expect( 2 );
 	var element = $( "#navigation" ).accordion({
 		navigation: true,
 		navigationFilter: function() {
-			return (/\?p=1\.1\.3$/).test( this.href );
+			return /\?p=1\.1\.3$/.test( this.href );
 		}
 	});
 	equal( element.accordion( "option", "active" ), 2 );
-	state( element, 0, 0, 1 );
+	accordion_state( element, 0, 0, 1 );
 });
 
 test( "{ navigation: true, navigationFilter: content }", function() {
@@ -236,105 +232,105 @@ test( "{ navigation: true, navigationFilter: content }", function() {
 	var element = $( "#navigation" ).accordion({
 		navigation: true,
 		navigationFilter: function() {
-			return (/\?p=1\.1\.3\.2$/).test( this.href );
+			return /\?p=1\.1\.3\.2$/.test( this.href );
 		}
 	});
 	equal( element.accordion( "option", "active" ), 2 );
-	state( element, 0, 0, 1 );
+	accordion_state( element, 0, 0, 1 );
 });
 
 
 
 
 
-module( "accordion (deprecated) - changestart/change events", setupTeardown() );
+module( "accordion (deprecated) - changestart/change events", accordion_setupTeardown() );
 
 test( "changestart", function() {
 	expect( 26 );
 	var element = $( "#list1" ).accordion({
-			active: false,
-			collapsible: true
-		}),
-		headers = element.find( ".ui-accordion-header" ),
-		content = element.find( ".ui-accordion-content" );
+		active: false,
+		collapsible: true
+	});
+	var headers = element.find( ".ui-accordion-header" );
+	var content = element.find( ".ui-accordion-content" );
 
 	element.one( "accordionchangestart", function( event, ui ) {
-		equal( ui.oldHeader.length, 0 );
-		equal( ui.oldContent.length, 0 );
-		equal( ui.newHeader.length, 1 );
+		equal( ui.oldHeader.size(), 0 );
+		equal( ui.oldContent.size(), 0 );
+		equal( ui.newHeader.size(), 1 );
 		strictEqual( ui.newHeader[ 0 ], headers[ 0 ] );
-		equal( ui.newContent.length, 1 );
+		equal( ui.newContent.size(), 1 );
 		strictEqual( ui.newContent[ 0 ], content[ 0 ] );
-		state( element, 0, 0, 0 );
+		accordion_state( element, 0, 0, 0 );
 	});
 	element.accordion( "option", "active", 0 );
-	state( element, 1, 0, 0 );
+	accordion_state( element, 1, 0, 0 );
 
 	element.one( "accordionchangestart", function( event, ui ) {
-		equal( ui.oldHeader.length, 1 );
+		equal( ui.oldHeader.size(), 1 );
 		strictEqual( ui.oldHeader[ 0 ], headers[ 0 ] );
-		equal( ui.oldContent.length, 1 );
+		equal( ui.oldContent.size(), 1 );
 		strictEqual( ui.oldContent[ 0 ], content[ 0 ] );
-		equal( ui.newHeader.length, 1 );
+		equal( ui.newHeader.size(), 1 );
 		strictEqual( ui.newHeader[ 0 ], headers[ 1 ] );
-		equal( ui.newContent.length, 1 );
+		equal( ui.newContent.size(), 1 );
 		strictEqual( ui.newContent[ 0 ], content[ 1 ] );
-		state( element, 1, 0, 0 );
+		accordion_state( element, 1, 0, 0 );
 	});
 	headers.eq( 1 ).click();
-	state( element, 0, 1, 0 );
+	accordion_state( element, 0, 1, 0 );
 
 	element.one( "accordionchangestart", function( event, ui ) {
-		equal( ui.oldHeader.length, 1 );
+		equal( ui.oldHeader.size(), 1 );
 		strictEqual( ui.oldHeader[ 0 ], headers[ 1 ] );
-		equal( ui.oldContent.length, 1 );
+		equal( ui.oldContent.size(), 1 );
 		strictEqual( ui.oldContent[ 0 ], content[ 1 ] );
-		equal( ui.newHeader.length, 0 );
-		equal( ui.newContent.length, 0 );
-		state( element, 0, 1, 0 );
+		equal( ui.newHeader.size(), 0 );
+		equal( ui.newContent.size(), 0 );
+		accordion_state( element, 0, 1, 0 );
 	});
 	element.accordion( "option", "active", false );
-	state( element, 0, 0, 0 );
+	accordion_state( element, 0, 0, 0 );
 });
 
 test( "change", function() {
 	expect( 20 );
 	var element = $( "#list1" ).accordion({
-			active: false,
-			collapsible: true
-		}),
-		headers = element.find( ".ui-accordion-header" ),
-		content = element.find( ".ui-accordion-content" );
+		active: false,
+		collapsible: true
+	});
+	var headers = element.find( ".ui-accordion-header" );
+	var content = element.find( ".ui-accordion-content" );
 
 	element.one( "accordionchange", function( event, ui ) {
-		equal( ui.oldHeader.length, 0 );
-		equal( ui.oldContent.length, 0 );
-		equal( ui.newHeader.length, 1 );
+		equal( ui.oldHeader.size(), 0 );
+		equal( ui.oldContent.size(), 0 );
+		equal( ui.newHeader.size(), 1 );
 		strictEqual( ui.newHeader[ 0 ], headers[ 0 ] );
-		equal( ui.newContent.length, 1 );
+		equal( ui.newContent.size(), 1 );
 		strictEqual( ui.newContent[ 0 ], content[ 0 ] );
 	});
 	element.accordion( "option", "active", 0 );
 
 	element.one( "accordionchange", function( event, ui ) {
-		equal( ui.oldHeader.length, 1 );
+		equal( ui.oldHeader.size(), 1 );
 		strictEqual( ui.oldHeader[ 0 ], headers[ 0 ] );
-		equal( ui.oldContent.length, 1 );
+		equal( ui.oldContent.size(), 1 );
 		strictEqual( ui.oldContent[ 0 ], content[ 0 ] );
-		equal( ui.newHeader.length, 1 );
+		equal( ui.newHeader.size(), 1 );
 		strictEqual( ui.newHeader[ 0 ], headers[ 1 ] );
-		equal( ui.newContent.length, 1 );
+		equal( ui.newContent.size(), 1 );
 		strictEqual( ui.newContent[ 0 ], content[ 1 ] );
 	});
 	headers.eq( 1 ).click();
 
 	element.one( "accordionchange", function( event, ui ) {
-		equal( ui.oldHeader.length, 1 );
+		equal( ui.oldHeader.size(), 1 );
 		strictEqual( ui.oldHeader[ 0 ], headers[ 1 ] );
-		equal( ui.oldContent.length, 1 );
+		equal( ui.oldContent.size(), 1 );
 		strictEqual( ui.oldContent[ 0 ], content[ 1 ] );
-		equal( ui.newHeader.length, 0 );
-		equal( ui.newContent.length, 0 );
+		equal( ui.newHeader.size(), 0 );
+		equal( ui.newContent.size(), 0 );
 	});
 	element.accordion( "option", "active", false );
 });

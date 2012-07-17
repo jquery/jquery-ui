@@ -1,4 +1,4 @@
-/*!
+/*
  * jQuery UI Progressbar @VERSION
  *
  * Copyright 2012, AUTHORS.txt (http://jqueryui.com/about)
@@ -85,8 +85,8 @@ $.widget( "ui.progressbar", {
 	},
 
 	_refreshValue: function() {
-		var value = this.value(),
-			percentage = this._percentage();
+		var value = this.value();
+		var percentage = this._percentage();
 
 		if ( this.oldValue !== value ) {
 			this.oldValue = value;

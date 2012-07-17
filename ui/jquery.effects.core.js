@@ -1,4 +1,4 @@
-/*!
+/*
  * jQuery UI Effects @VERSION
  *
  * Copyright 2012, AUTHORS.txt (http://jqueryui.com/about)
@@ -7,11 +7,9 @@
  *
  * http://docs.jquery.com/UI/Effects/
  */
-;(jQuery.effects || (function($, undefined) {
+;jQuery.effects || (function($, undefined) {
 
-var backCompat = $.uiBackCompat !== false,
-	// prefix used for storing data on .data()
-	dataSpace = "ui-effects-";
+var backCompat = $.uiBackCompat !== false;
 
 $.effects = {
 	effect: {}
@@ -20,7 +18,6 @@ $.effects = {
 /******************************************************************************/
 /****************************** COLOR ANIMATIONS ******************************/
 /******************************************************************************/
-(function() {
 
 // override the animation for color styles
 $.each(["backgroundColor", "borderBottomColor", "borderLeftColor",
@@ -49,34 +46,28 @@ function getRGB(color) {
 		var result;
 
 		// Check if we're already dealing with an array of colors
-		if ( color && color.constructor === Array && color.length === 3 ) {
-			return color;
-		}
+		if ( color && color.constructor === Array && color.length === 3 )
+				return color;
 
 		// Look for rgb(num,num,num)
-		if ( (result = /rgb\(\s*([0-9]{1,3})\s*,\s*([0-9]{1,3})\s*,\s*([0-9]{1,3})\s*\)/.exec(color)) ) {
-			return [parseInt(result[1],10), parseInt(result[2],10), parseInt(result[3],10)];
-		}
+		if (result = /rgb\(\s*([0-9]{1,3})\s*,\s*([0-9]{1,3})\s*,\s*([0-9]{1,3})\s*\)/.exec(color))
+				return [parseInt(result[1],10), parseInt(result[2],10), parseInt(result[3],10)];
 
 		// Look for rgb(num%,num%,num%)
-		if ( (result = /rgb\(\s*([0-9]+(?:\.[0-9]+)?)\%\s*,\s*([0-9]+(?:\.[0-9]+)?)\%\s*,\s*([0-9]+(?:\.[0-9]+)?)\%\s*\)/.exec(color)) ) {
-			return [parseFloat(result[1])*2.55, parseFloat(result[2])*2.55, parseFloat(result[3])*2.55];
-		}
+		if (result = /rgb\(\s*([0-9]+(?:\.[0-9]+)?)\%\s*,\s*([0-9]+(?:\.[0-9]+)?)\%\s*,\s*([0-9]+(?:\.[0-9]+)?)\%\s*\)/.exec(color))
+				return [parseFloat(result[1])*2.55, parseFloat(result[2])*2.55, parseFloat(result[3])*2.55];
 
 		// Look for #a0b1c2
-		if ( (result = /#([a-fA-F0-9]{2})([a-fA-F0-9]{2})([a-fA-F0-9]{2})/.exec(color)) ) {
-			return [parseInt(result[1],16), parseInt(result[2],16), parseInt(result[3],16)];
-		}
+		if (result = /#([a-fA-F0-9]{2})([a-fA-F0-9]{2})([a-fA-F0-9]{2})/.exec(color))
+				return [parseInt(result[1],16), parseInt(result[2],16), parseInt(result[3],16)];
 
 		// Look for #fff
-		if ( (result = /#([a-fA-F0-9])([a-fA-F0-9])([a-fA-F0-9])/.exec(color)) ) {
-			return [parseInt(result[1]+result[1],16), parseInt(result[2]+result[2],16), parseInt(result[3]+result[3],16)];
-		}
+		if (result = /#([a-fA-F0-9])([a-fA-F0-9])([a-fA-F0-9])/.exec(color))
+				return [parseInt(result[1]+result[1],16), parseInt(result[2]+result[2],16), parseInt(result[3]+result[3],16)];
 
 		// Look for rgba(0, 0, 0, 0) == transparent in Safari 3
-		if ( (result = /rgba\(0, 0, 0, 0\)/.exec(color)) ) {
-			return colors.transparent;
-		}
+		if (result = /rgba\(0, 0, 0, 0\)/.exec(color))
+				return colors["transparent"];
 
 		// Otherwise, we're most likely dealing with a named color
 		return colors[$.trim(color).toLowerCase()];
@@ -89,15 +80,14 @@ function getColor(elem, attr) {
 				color = $.css(elem, attr);
 
 				// Keep going until we find an element that has color, or we hit the body
-				if ( color && color !== "transparent" || $.nodeName(elem, "body") ) {
-					break;
-				}
+				if ( color != "" && color !== "transparent" || $.nodeName(elem, "body") )
+						break;
 
 				attr = "backgroundColor";
-		} while ( (elem = elem.parentNode) );
+		} while ( elem = elem.parentNode );
 
 		return getRGB(color);
-}
+};
 
 // Some named colors to work with
 // From Interface by Stefan Petre
@@ -150,12 +140,11 @@ var colors = {
 	transparent: [255,255,255]
 };
 
-})();
+
 
 /******************************************************************************/
 /****************************** CLASS ANIMATIONS ******************************/
 /******************************************************************************/
-(function() {
 
 var classAnimationActions = [ "add", "remove", "toggle" ],
 	shorthandStyles = {
@@ -168,7 +157,9 @@ var classAnimationActions = [ "add", "remove", "toggle" ],
 		borderWidth: 1,
 		margin: 1,
 		padding: 1
-	};
+	},
+	// prefix used for storing data on .data()
+	dataSpace = "ui-effects-";
 
 $.each([ "borderLeftStyle", "borderRightStyle", "borderBottomStyle", "borderTopStyle" ], function( _, prop ) {
 	$.fx.step[ prop ] = function( fx ) {
@@ -180,9 +171,9 @@ $.each([ "borderLeftStyle", "borderRightStyle", "borderBottomStyle", "borderTopS
 });
 
 function getElementStyles() {
-	var style = this.ownerDocument.defaultView ?
-			this.ownerDocument.defaultView.getComputedStyle( this, null ) :
-			this.currentStyle,
+	var style = this.ownerDocument.defaultView
+			? this.ownerDocument.defaultView.getComputedStyle( this, null )
+			: this.currentStyle,
 		newStyle = {},
 		key,
 		camelCase,
@@ -215,7 +206,7 @@ function styleDifference( oldStyle, newStyle ) {
 
 	for ( name in newStyle ) {
 		value = newStyle[ name ];
-		if ( oldStyle[ name ] !== value ) {
+		if ( oldStyle[ name ] != value ) {
 			if ( !shorthandStyles[ name ] ) {
 				if ( $.fx.step[ name ] || !isNaN( parseFloat( value ) ) ) {
 					diff[ name ] = value;
@@ -268,15 +259,16 @@ $.effects.animateClass = function( value, duration, easing, callback ) {
 		// map all animated objects again - this time collecting a promise
 		allAnimations = allAnimations.map(function() {
 			var styleInfo = this,
-				dfd = $.Deferred(),
-				opts = jQuery.extend({}, o, {
-					queue: false,
-					complete: function() {
-						dfd.resolve( styleInfo );
-					}
-				});
+				dfd = $.Deferred();
 
-			this.el.animate( this.diff, opts );
+			this.el.animate( this.diff, {
+				duration: o.duration,
+				easing: o.easing,
+				queue: false,
+				complete: function() {
+					dfd.resolve( styleInfo );
+				}
+			});
 			return dfd.promise();
 		});
 
@@ -340,13 +332,11 @@ $.fn.extend({
 	}
 });
 
-})();
+
 
 /******************************************************************************/
 /*********************************** EFFECTS **********************************/
 /******************************************************************************/
-
-(function() {
 
 $.extend( $.effects, {
 	version: "@VERSION",
@@ -385,13 +375,13 @@ $.extend( $.effects, {
 			case "middle": y = 0.5; break;
 			case "bottom": y = 1; break;
 			default: y = origin[ 0 ] / original.height;
-		}
+		};
 		switch ( origin[ 1 ] ) {
 			case "left": x = 0; break;
 			case "center": x = 0.5; break;
 			case "right": x = 1; break;
 			default: x = origin[ 1 ] / original.width;
-		}
+		};
 		return {
 			x: x,
 			y: y
@@ -427,15 +417,6 @@ $.extend( $.effects, {
 				height: element.height()
 			},
 			active = document.activeElement;
-
-		// support: Firefox
-		// Firefox incorrectly exposes anonymous content
-		// https://bugzilla.mozilla.org/show_bug.cgi?id=561664
-		try {
-			active.id;
-		} catch( e ) {
-			active = document.body;
-		}
 
 		element.wrap( wrapper );
 
@@ -492,11 +473,9 @@ $.extend( $.effects, {
 
 	setTransition: function( element, list, factor, value ) {
 		value = value || {};
-		$.each( list, function( i, x ) {
+		$.each( list, function(i, x){
 			var unit = element.cssUnit( x );
-			if ( unit[ 0 ] > 0 ) {
-				value[ x ] = unit[ 0 ] * factor + unit[ 1 ];
-			}
+			if ( unit[ 0 ] > 0 ) value[ x ] = unit[ 0 ] * factor + unit[ 1 ];
 		});
 		return value;
 	}
@@ -505,10 +484,9 @@ $.extend( $.effects, {
 // return an effect options object for the given parameters:
 function _normalizeArguments( effect, options, speed, callback ) {
 
-	// allow passing all optinos as the first parameter
+	// short path for passing an effect options object:
 	if ( $.isPlainObject( effect ) ) {
-		options = effect;
-		effect = effect.effect;
+		return effect;
 	}
 
 	// convert to an object
@@ -527,7 +505,7 @@ function _normalizeArguments( effect, options, speed, callback ) {
 	}
 
 	// catch (effect, speed, ?)
-	if ( typeof options === "number" || $.fx.speeds[ options ] ) {
+	if ( $.type( options ) === "number" || $.fx.speeds[ options ]) {
 		callback = speed;
 		speed = options;
 		options = {};
@@ -545,10 +523,8 @@ function _normalizeArguments( effect, options, speed, callback ) {
 	}
 
 	speed = speed || options.duration;
-	effect.duration = $.fx.off ? 0 :
-		typeof speed === "number" ? speed :
-		speed in $.fx.speeds ? $.fx.speeds[ speed ] :
-		$.fx.speeds._default;
+	effect.duration = $.fx.off ? 0 : typeof speed === "number"
+		? speed : speed in $.fx.speeds ? $.fx.speeds[ speed ] : $.fx.speeds._default;
 
 	effect.complete = callback || options.complete;
 
@@ -673,21 +649,18 @@ $.fn.extend({
 			val = [];
 
 		$.each( [ "em", "px", "%", "pt" ], function( i, unit ) {
-			if ( style.indexOf( unit ) > 0 ) {
+			if ( style.indexOf( unit ) > 0 )
 				val = [ parseFloat( style ), unit ];
-			}
 		});
 		return val;
 	}
 });
 
-})();
+
 
 /******************************************************************************/
 /*********************************** EASING ***********************************/
 /******************************************************************************/
-
-(function() {
 
 // based on easing equations from Robert Penner (http://www.robertpenner.com/easing)
 
@@ -728,12 +701,10 @@ $.each( baseEasings, function( name, easeIn ) {
 		return 1 - easeIn( 1 - p );
 	};
 	$.easing[ "easeInOut" + name ] = function( p ) {
-		return p < 0.5 ?
+		return p < .5 ?
 			easeIn( p * 2 ) / 2 :
-			1 - easeIn( p * -2 + 2 ) / 2;
+			easeIn( p * -2 + 2 ) / -2 + 1;
 	};
 });
 
-})();
-
-})(jQuery));
+})(jQuery);

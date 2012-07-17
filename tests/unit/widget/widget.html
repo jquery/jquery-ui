@@ -5,18 +5,20 @@
 	<title>jQuery UI Widget Test Suite</title>
 
 	<script src="../../jquery.js"></script>
-	<link rel="stylesheet" href="../../../external/qunit.css">
-	<script src="../../../external/qunit.js"></script>
-	<script src="../../jquery.simulate.js"></script>
-	<script src="../testsuite.js"></script>
+	<script src="../../resource_loader.js"></script>
 	<script>
-	TestHelpers.loadResources({
+	loadResources({
 		css: [ "ui.core" ],
 		js: [
 			"ui/jquery.ui.widget.js"
 		]
 	});
 	</script>
+
+	<link rel="stylesheet" href="../../../external/qunit.css">
+	<script src="../../../external/qunit.js"></script>
+	<script src="../../jquery.simulate.js"></script>
+	<script src="../testsuite.js"></script>
 
 	<script src="widget_core.js"></script>
 	<script src="widget_extend.js"></script>

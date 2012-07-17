@@ -5,12 +5,9 @@
 	<title>jQuery UI Tooltip Test Suite</title>
 
 	<script src="../../jquery.js"></script>
-	<link rel="stylesheet" href="../../../external/qunit.css">
-	<script src="../../../external/qunit.js"></script>
-	<script src="../../jquery.simulate.js"></script>
-	<script src="../testsuite.js"></script>
+	<script src="../../resource_loader.js"></script>
 	<script>
-	TestHelpers.loadResources({
+	loadResources({
 		css: [ "ui.core", "ui.tooltip" ],
 		js: [
 			"ui/jquery.ui.core.js",
@@ -21,7 +18,12 @@
 	});
 	</script>
 
-	<script src="tooltip_common.js"></script>
+	<link rel="stylesheet" href="../../../external/qunit.css">
+	<script src="../../../external/qunit.js"></script>
+	<script src="../../jquery.simulate.js"></script>
+	<script src="../testsuite.js"></script>
+
+	<script src="tooltip_defaults.js"></script>
 	<script src="tooltip_core.js"></script>
 	<script src="tooltip_events.js"></script>
 	<script src="tooltip_methods.js"></script>
@@ -41,7 +43,6 @@
 <div>
 	<a id="tooltipped1" href="#" title="anchortitle">anchor</a>
 	<input title="inputtitle">
-	<span id="multiple-describedby" aria-describedby="fixture-span" title="...">aria-describedby</span>
 	<span id="fixture-span" title="title-text">span</span>
 </div>
 

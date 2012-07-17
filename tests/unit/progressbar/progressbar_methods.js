@@ -1,17 +1,36 @@
-module( "progressbar: methods" );
+/*
+ * progressbar_methods.js
+ */
+(function($) {
 
-test( "destroy", function() {
-	expect( 1 );
-	domEqual( "#progressbar", function() {
-		$( "#progressbar" ).progressbar().progressbar( "destroy" );
-	});
+module("progressbar: methods");
+
+test("init", function() {
+	expect(1);
+
+	$("<div></div>").appendTo('body').progressbar().remove();
+	ok(true, '.progressbar() called on element');
+
 });
 
-test( "value", function() {
-	expect( 3 );
+test("destroy", function() {
+	expect(2);
 
-	var element = $( "<div>" ).progressbar({ value: 20 });
-	equal( element.progressbar( "value" ), 20, "correct value as getter" );
-	equal( element.progressbar( "value", 30), element, "chainable as setter" );
-	equal( element.progressbar( "option", "value" ), 30, "correct value after setter" );
+	$("<div></div>").appendTo('body').progressbar().progressbar("destroy").remove();
+	ok(true, '.progressbar("destroy") called on element');
+
+	var expected = $('<div></div>').progressbar(),
+		actual = expected.progressbar('destroy');
+	equal(actual, expected, 'destroy is chainable');
 });
+
+test('value', function() {
+	expect(3);
+
+	var el = $('<div></div>').progressbar({ value: 20 });
+	equal(el.progressbar('value'), 20, 'correct value as getter');
+	equal(el.progressbar('value', 30), el, 'chainable as setter');
+	equal(el.progressbar('option', 'value'), 30, 'correct value after setter');
+});
+
+})(jQuery);

@@ -6,6 +6,8 @@
 module("droppable: options");
 
 test("{ accept '*' }, default ", function() {
+	equal(droppable_defaults.accept, '*');
+
 	ok(false, 'missing test - untested code is broken code');
 });
 
@@ -22,6 +24,8 @@ test("activeClass", function() {
 });
 
 test("{ addClasses: true }, default", function() {
+	equal(droppable_defaults.addClasses, true);
+
 	el = $("<div></div>").droppable({ addClasses: true });
 	ok(el.is(".ui-droppable"), "'ui-droppable' class added");
 	el.droppable("destroy");
