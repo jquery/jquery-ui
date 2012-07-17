@@ -180,7 +180,7 @@ $.widget( "ui.popup", {
 
 		this._bind({
 			keyup: function( event ) {
-				if ( event.keyCode === $.ui.keyCode.ESCAPE && this.element.is( ":visible" ) ) {
+				if ( event.keyCode == $.ui.keyCode.ESCAPE && this.element.is( ":visible" ) ) {
 					this.close( event );
 					this.focusTrigger();
 				}

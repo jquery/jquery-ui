@@ -67,9 +67,8 @@ $.widget( "ui.menubar", {
 			})
 			.bind( "keydown.menubar", function( event ) {
 				var menu = $( this );
-				if ( menu.is( ":hidden" ) ) {
+				if ( menu.is( ":hidden" ) )
 					return;
-				}
 				switch ( event.keyCode ) {
 				case $.ui.keyCode.LEFT:
 					that.previous( event );
@@ -79,7 +78,7 @@ $.widget( "ui.menubar", {
 					that.next( event );
 					event.preventDefault();
 					break;
-				}
+				};
 			});
 		this.items.each(function() {
 			var input = $(this),
@@ -88,17 +87,17 @@ $.widget( "ui.menubar", {
 
 			input.bind( "click.menubar focus.menubar mouseenter.menubar", function( event ) {
 				// ignore triggered focus event
-				if ( event.type === "focus" && !event.originalEvent ) {
+				if ( event.type == "focus" && !event.originalEvent ) {
 					return;
 				}
 				event.preventDefault();
 				// TODO can we simplify or extractthis check? especially the last two expressions
 				// there's a similar active[0] == menu[0] check in _open
-				if ( event.type === "click" && menu.is( ":visible" ) && that.active && that.active[0] === menu[0] ) {
+				if ( event.type == "click" && menu.is( ":visible" ) && that.active && that.active[0] == menu[0] ) {
 					that._close();
 					return;
 				}
-				if ( ( that.open && event.type === "mouseenter" ) || event.type === "click" || that.options.autoExpand ) {
+				if ( ( that.open && event.type == "mouseenter" ) || event.type == "click" || that.options.autoExpand ) {
 					if( that.options.autoExpand ) {
 						clearTimeout( that.closeTimer );
 					}
@@ -138,12 +137,12 @@ $.widget( "ui.menubar", {
 			if ( !that.options.buttons ) {
 				// TODO ui-menubar-link is added above, not needed here?
 				input.addClass( "ui-menubar-link" ).removeClass( "ui-state-default" );
-			}
+			};
 
 		});
 		that._bind( {
 			keydown: function( event ) {
-				if ( event.keyCode === $.ui.keyCode.ESCAPE && that.active && that.active.menu( "collapse", event ) !== true ) {
+				if ( event.keyCode == $.ui.keyCode.ESCAPE && that.active && that.active.menu( "collapse", event ) !== true ) {
 					var active = that.active;
 					that.active.blur();
 					that._close( event );
@@ -207,9 +206,8 @@ $.widget( "ui.menubar", {
 	},
 
 	_close: function() {
-		if ( !this.active || !this.active.length ) {
+		if ( !this.active || !this.active.length )
 			return;
-		}
 		this.active
 			.menu( "collapseAll" )
 			.hide()
@@ -228,7 +226,7 @@ $.widget( "ui.menubar", {
 
 	_open: function( event, menu ) {
 		// on a single-button menubar, ignore reopening the same menu
-		if ( this.active && this.active[0] === menu[0] ) {
+		if ( this.active && this.active[0] == menu[0] ) {
 			return;
 		}
 		// TODO refactor, almost the same as _close above, but don't remove tabIndex
