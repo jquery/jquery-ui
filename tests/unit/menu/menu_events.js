@@ -577,22 +577,4 @@ test( "handle keyboard navigation with spelling of menu items", function() {
 	element.focus();
 });
 
-asyncTest( "handle page up and page down before the menu has focus", function() {
-	expect( 1 );
-	var element = $( "#menu1" ).menu({
-		focus: function( event, ui ) {
-			log( $( event.target ).find( ".ui-state-focus" ).parent().index() );
-		}
-	});
-
-	log( "keydown", true );
-	element.simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_DOWN } );
-	element.blur();
-	setTimeout( function() {
-		element.simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_UP } );
-		equal( logOutput(), "keydown,0,0", "Page Up and Page Down bring initial focus to first item" );
-		start();
-	}, 500 );
-});
-
 })( jQuery );
