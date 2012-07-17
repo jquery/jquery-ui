@@ -1,11 +1,10 @@
-/*
+/*!
  * jQuery UI Tooltip @VERSION
+ * http://jqueryui.com
  *
- * Copyright 2012, AUTHORS.txt (http://jqueryui.com/about)
+ * Copyright 2012 jQuery Foundation and other contributors
  * Dual licensed under the MIT or GPL Version 2 licenses.
  * http://jquery.org/license
- *
- * http://docs.jquery.com/UI/Tooltip
  *
  * Depends:
  *	jquery.ui.core.js
@@ -15,6 +14,31 @@
 (function( $ ) {
 
 var increments = 0;
+
+function addDescribedBy( elem, id ) {
+	var describedby = (elem.attr( "aria-describedby" ) || "").split( /\s+/ );
+	describedby.push( id );
+	elem
+		.data( "ui-tooltip-id", id )
+		.attr( "aria-describedby", $.trim( describedby.join( " " ) ) );
+}
+
+function removeDescribedBy( elem ) {
+	var id = elem.data( "ui-tooltip-id" ),
+		describedby = (elem.attr( "aria-describedby" ) || "").split( /\s+/ ),
+		index = $.inArray( id, describedby );
+	if ( index !== -1 ) {
+		describedby.splice( index, 1 );
+	}
+
+	elem.removeData( "ui-tooltip-id" );
+	describedby = $.trim( describedby.join( " " ) );
+	if ( describedby ) {
+		elem.attr( "aria-describedby", describedby );
+	} else {
+		elem.removeAttr( "aria-describedby" );
+	}
+}
 
 $.widget( "ui.tooltip", {
 	version: "@VERSION",
@@ -31,6 +55,7 @@ $.widget( "ui.tooltip", {
 		},
 		show: true,
 		tooltipClass: null,
+		track: false,
 
 		// callbacks
 		close: null,
@@ -38,7 +63,7 @@ $.widget( "ui.tooltip", {
 	},
 
 	_create: function() {
-		this._bind({
+		this._on({
 			mouseover: "open",
 			focusin: "open"
 		});
@@ -94,12 +119,22 @@ $.widget( "ui.tooltip", {
 			target = $( event ? event.target : this.element )
 				.closest( this.options.items );
 
-		// if aria-describedby exists, then the tooltip is already open
-		if ( !target.length || target.attr( "aria-describedby" ) ) {
+		// No element to show a tooltip for
+		if ( !target.length ) {
 			return;
 		}
 
-		if ( !target.data( "ui-tooltip-title" ) ) {
+		// If the tooltip is open and we're tracking then reposition the tooltip.
+		// This makes sure that a tracking tooltip doesn't obscure a focused element
+		// if the user was hovering when the element gained focused.
+		if ( this.options.track && target.data( "ui-tooltip-id" ) ) {
+			this._find( target ).position( $.extend({
+				of: target
+			}, this.options.position ) );
+			return;
+		}
+
+		if ( target.attr( "title" ) ) {
 			target.data( "ui-tooltip-title", target.attr( "title" ) );
 		}
 
@@ -122,44 +157,66 @@ $.widget( "ui.tooltip", {
 	},
 
 	_open: function( event, target, content ) {
+		var tooltip, positionOption;
 		if ( !content ) {
+			return;
+		}
+
+		// Content can be updated multiple times. If the tooltip already
+		// exists, then just update the content and bail.
+		tooltip = this._find( target );
+		if ( tooltip.length ) {
+			tooltip.find( ".ui-tooltip-content" ).html( content );
 			return;
 		}
 
 		// if we have a title, clear it to prevent the native tooltip
 		// we have to check first to avoid defining a title if none exists
 		// (we don't want to cause an element to start matching [title])
-
-		// We don't use removeAttr as that causes the native tooltip to show
-		// up in IE (9 and below, didn't yet test 10). Happens only when removing
-		// inside the mouseover handler.
+		//
+		// We use removeAttr only for key events, to allow IE to export the correct
+		// accessible attributes. For mouse events, set to empty string to avoid
+		// native tooltip showing up (happens only when removing inside mouseover).
 		if ( target.is( "[title]" ) ) {
-			target.attr( "title", "" );
+			if ( event && event.type === "mouseover" ) {
+				target.attr( "title", "" );
+			} else {
+				target.removeAttr( "title" );
+			}
 		}
 
-		// ajaxy tooltip can update an existing one
-		var tooltip = this._find( target );
-		if ( !tooltip.length ) {
-			tooltip = this._tooltip( target );
-			target.attr( "aria-describedby", tooltip.attr( "id" ) );
-		}
+		tooltip = this._tooltip( target );
+		addDescribedBy( target, tooltip.attr( "id" ) );
 		tooltip.find( ".ui-tooltip-content" ).html( content );
-		tooltip
-			.stop( true )
-			.position( $.extend({
+
+		function position( event ) {
+			positionOption.of = event;
+			tooltip.position( positionOption );
+		}
+		if ( this.options.track && /^mouse/.test( event.originalEvent.type ) ) {
+			positionOption = $.extend( {}, this.options.position );
+			this._on( this.document, {
+				mousemove: position
+			});
+			// trigger once to override element-relative positioning
+			position( event );
+		} else {
+			tooltip.position( $.extend({
 				of: target
-			}, this.options.position ) )
-			.hide();
+			}, this.options.position ) );
+		}
+
+		tooltip.hide();
 
 		this._show( tooltip, this.options.show );
 
 		this._trigger( "open", event, { tooltip: tooltip } );
 
-		this._bind( target, {
+		this._on( target, {
 			mouseleave: "close",
 			focusout: "close",
 			keyup: function( event ) {
-				if ( event.keyCode == $.ui.keyCode.ESCAPE ) {
+				if ( event.keyCode === $.ui.keyCode.ESCAPE ) {
 					var fakeEvent = $.Event(event);
 					fakeEvent.currentTarget = target[0];
 					this.close( fakeEvent, true );
@@ -173,9 +230,19 @@ $.widget( "ui.tooltip", {
 			target = $( event ? event.currentTarget : this.element ),
 			tooltip = this._find( target );
 
+		// disabling closes the tooltip, so we need to track when we're closing
+		// to avoid an infinite loop in case the tooltip becomes disabled on close
+		if ( this.closing ) {
+			return;
+		}
+
 		// don't close if the element has focus
 		// this prevents the tooltip from closing if you hover while focused
-		if ( !force && this.document[0].activeElement === target[0] ) {
+		//
+		// we have to check the event type because tabbing out of the document
+		// may leave the element as the activeElement
+		if ( !force && event && event.type !== "focusout" &&
+				this.document[0].activeElement === target[0] ) {
 			return;
 		}
 
@@ -184,7 +251,7 @@ $.widget( "ui.tooltip", {
 			target.attr( "title", target.data( "ui-tooltip-title" ) );
 		}
 
-		target.removeAttr( "aria-describedby" );
+		removeDescribedBy( target );
 
 		tooltip.stop( true );
 		this._hide( tooltip, this.options.hide, function() {
@@ -193,9 +260,12 @@ $.widget( "ui.tooltip", {
 		});
 
 		target.removeData( "tooltip-open" );
-		target.unbind( "mouseleave.tooltip focusout.tooltip keyup.tooltip" );
+		this._off( target, "mouseleave focusout keyup" );
+		this._off( this.document, "mousemove" );
 
+		this.closing = true;
 		this._trigger( "close", event, { tooltip: tooltip } );
+		this.closing = false;
 	},
 
 	_tooltip: function( element ) {
@@ -219,7 +289,7 @@ $.widget( "ui.tooltip", {
 	},
 
 	_find: function( target ) {
-		var id = target.attr( "aria-describedby" );
+		var id = target.data( "ui-tooltip-id" );
 		return id ? $( "#" + id ) : $();
 	},
 

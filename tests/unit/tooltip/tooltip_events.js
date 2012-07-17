@@ -11,7 +11,7 @@ test( "programmatic triggers", function() {
 		tooltip = ui.tooltip;
 		ok( !( "originalEvent" in event ), "open" );
 		strictEqual( ui.tooltip[0],
-			$( "#" + element.attr( "aria-describedby" ) )[0], "ui.tooltip" );
+			$( "#" + element.data( "ui-tooltip-id" ) )[0], "ui.tooltip" );
 	});
 	element.tooltip( "open" );
 

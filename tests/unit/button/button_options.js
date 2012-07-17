@@ -6,6 +6,7 @@
 module("button: options");
 
 test("disabled, explicit value", function() {
+	expect( 4 );
 	$("#radio01").button({ disabled: false });
 	deepEqual(false, $("#radio01").button("option", "disabled"),
 		"disabled option set to false");
@@ -18,6 +19,7 @@ test("disabled, explicit value", function() {
 });
 
 test("disabled, null", function() {
+	expect( 4 );
 	$("#radio01").button({ disabled: null });
 	deepEqual(false, $("#radio01").button("option", "disabled"),
 		"disabled option set to false");
@@ -30,6 +32,7 @@ test("disabled, null", function() {
 });
 
 test("text false without icon", function() {
+	expect( 1 );
 	$("#button").button({
 		text: false
 	});
@@ -39,6 +42,7 @@ test("text false without icon", function() {
 });
 
 test("text false with icon", function() {
+	expect( 1 );
 	$("#button").button({
 		text: false,
 		icons: {
@@ -51,33 +55,42 @@ test("text false with icon", function() {
 });
 
 test("label, default", function() {
+	expect( 2 );
 	$("#button").button();
 	deepEqual( $("#button").text(), "Label" );
+	deepEqual( $( "#button").button( "option", "label" ), "Label" );
 
 	$("#button").button("destroy");
 });
 
 test("label", function() {
+	expect( 2 );
 	$("#button").button({
 		label: "xxx"
 	});
 	deepEqual( $("#button").text(), "xxx" );
+	deepEqual( $("#button").button( "option", "label" ), "xxx" );
 
 	$("#button").button("destroy");
 });
 
 test("label default with input type submit", function() {
+	expect( 2 );
 	deepEqual( $("#submit").button().val(), "Label" );
+	deepEqual( $("#submit").button( "option", "label" ), "Label" );
 });
 
 test("label with input type submit", function() {
+	expect( 2 );
 	var label = $("#submit").button({
 		label: "xxx"
 	}).val();
 	deepEqual( label, "xxx" );
+	deepEqual( $("#submit").button( "option", "label" ), "xxx" );
 });
 
 test("icons", function() {
+	expect( 1 );
 	$("#button").button({
 		text: false,
 		icons: {

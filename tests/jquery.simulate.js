@@ -1,7 +1,8 @@
 /*
  * jquery.simulate - simulate browser mouse and keyboard events
+ * http://jqueryui.com
  *
- * Copyright 2012, AUTHORS.txt (http://jqueryui.com/about)
+ * Copyright 2012 jQuery Foundation and other contributors
  * Dual licensed under the MIT or GPL Version 2 licenses.
  * http://jquery.org/license
  */
@@ -243,7 +244,6 @@ $.extend( $.simulate.prototype, {
 			y = Math.floor( center.y ), 
 			dx = options.dx || 0,
 			dy = options.dy || 0,
-			target = this.target,
 			coord = { clientX: x, clientY: y };
 		this.simulateEvent( target, "mousedown", coord );
 		coord = { clientX: x + 1, clientY: y + 1 };

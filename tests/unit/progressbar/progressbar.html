@@ -5,9 +5,12 @@
 	<title>jQuery UI Progressbar Test Suite</title>
 
 	<script src="../../jquery.js"></script>
-	<script src="../../resource_loader.js"></script>
+	<link rel="stylesheet" href="../../../external/qunit.css">
+	<script src="../../../external/qunit.js"></script>
+	<script src="../../jquery.simulate.js"></script>
+	<script src="../testsuite.js"></script>
 	<script>
-	loadResources({
+	TestHelpers.loadResources({
 		css: [ "ui.core", "ui.progressbar" ],
 		js: [
 			"ui/jquery.ui.core.js",
@@ -17,13 +20,8 @@
 	});
 	</script>
 
-	<link rel="stylesheet" href="../../../external/qunit.css">
-	<script src="../../../external/qunit.js"></script>
-	<script src="../../jquery.simulate.js"></script>
-	<script src="../testsuite.js"></script>
-
+	<script src="progressbar_common.js"></script>
 	<script src="progressbar_core.js"></script>
-	<script src="progressbar_defaults.js"></script>
 	<script src="progressbar_events.js"></script>
 	<script src="progressbar_methods.js"></script>
 	<script src="progressbar_options.js"></script>
