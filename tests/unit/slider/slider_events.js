@@ -12,8 +12,7 @@ module( "slider: events" );
 test( "mouse based interaction", function() {
 	expect(4);
 
-	var el = $( "<div></div>" )
-		.appendTo( "body" )
+	var el = $( "#slider1" )
 		.slider({
 			start: function(event, ui) {
 				equal( event.originalEvent.type, "mousedown", "start triggered by mousedown" );
@@ -37,8 +36,7 @@ test( "keyboard based interaction", function() {
 	expect(3);
 
 	// Test keyup at end of handle slide (keyboard)
-	var el = $( "<div></div>" )
-		.appendTo( "body" )
+	var el = $( "#slider1" )
 		.slider({
 			start: function(event, ui) {
 				equal( event.originalEvent.type, "keydown", "start triggered by keydown" );

@@ -27,21 +27,14 @@ test("init", function() {
 });
 
 test("destroy", function() {
-	$("<div></div>").appendTo('body').slider().slider("destroy").remove();
-	ok(true, '.slider("destroy") called on element');
-
-	$([]).slider().slider("destroy").remove();
-	ok(true, '.slider("destroy") called on empty collection');
-
-	$('<div></div>').appendTo('body').remove().slider().slider("destroy").remove();
-	ok(true, '.slider("destroy") called on disconnected DOMElement');
-
-	var expected = $('<div></div>').slider(),
-		actual = expected.slider('destroy');
-	equal(actual, expected, 'destroy is chainable');
+	expect( 1 );
+	domEqual( "#slider1", function() {
+		$( "#slider1" ).slider().slider( "destroy" );
+	});
 });
 
 test("enable", function() {
+	expect( 5 );
 	var el,
 		expected = $('<div></div>').slider(),
 		actual = expected.slider('enable');
@@ -56,6 +49,7 @@ test("enable", function() {
 });
 
 test("disable", function() {
+	expect( 5 );
 	var el,
 		expected = $('<div></div>').slider(),
 		actual = expected.slider('disable');
@@ -70,6 +64,7 @@ test("disable", function() {
 });
 
 test("value", function() {
+	expect( 17 );
 	$([false, 'min', 'max']).each(function() {
 		var el = $('<div></div>').slider({
 			range: this,

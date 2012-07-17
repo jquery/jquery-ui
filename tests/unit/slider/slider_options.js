@@ -12,6 +12,7 @@ function handle() {
 module("slider: options");
 
 test("max", function() {
+	expect( 2 );
 	el = $('<div></div>');
 
 	options = {
@@ -30,6 +31,7 @@ test("max", function() {
 });
 
 test("min", function() {
+	expect( 2 );
 	el = $('<div></div>');
 
 	options = {
@@ -48,6 +50,7 @@ test("min", function() {
 });
 
 test("orientation", function() {
+	expect( 6 );
 	el = $('<div></div>');
 
 	options = {
@@ -92,6 +95,7 @@ test("orientation", function() {
 // value option/method: the value option is not restricted by min/max/step.
 // What is returned by the value method is restricted by min (>=), max (<=), and step (even multiple)
 test("step", function() {
+	expect( 9 );
 	var el = $('<div></div>').slider({
 		min: 0,
 		value: 0,
@@ -112,7 +116,7 @@ test("step", function() {
 	el.slider("value", 19);
 	equal( el.slider("value"), 20 );
 
-el = $('<div></div>').slider({
+	el = $('<div></div>').slider({
 		min: 0,
 		value: 0,
 		step: 20,
