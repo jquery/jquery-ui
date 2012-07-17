@@ -61,7 +61,7 @@ $.widget( "ui.popup", {
 		this._beforeClose();
 		this.element.hide();
 
-		this._bind(this.options.trigger, {
+		this._on(this.options.trigger, {
 			keydown: function( event ) {
 				switch ( event.keyCode ) {
 					case $.ui.keyCode.TAB:
@@ -124,7 +124,7 @@ $.widget( "ui.popup", {
 		});
 
 		if ( this.options.expandOnFocus ) {
-			this._bind( this.options.trigger, {
+			this._on( this.options.trigger, {
 				focus : function( event ) {
 					if ( !suppressExpandOnFocus ) {
 						this._delay( function() {
@@ -144,7 +144,7 @@ $.widget( "ui.popup", {
 		}
 		if ( !this.options.managed ) {
 			//default use case, wrap tab order in popup
-			this._bind({ keydown : function( event ) {
+			this._on({ keydown : function( event ) {
 					if ( event.keyCode !== $.ui.keyCode.TAB ) {
 						return;
 					}
@@ -162,7 +162,7 @@ $.widget( "ui.popup", {
 			});
 		}
 
-		this._bind({
+		this._on({
 			focusout: function( event ) {
 				// use a timer to allow click to clear it and letting that
 				// handle the closing instead of opening again
@@ -178,7 +178,7 @@ $.widget( "ui.popup", {
 			}
 		});
 
-		this._bind({
+		this._on({
 			keyup: function( event ) {
 				if ( event.keyCode === $.ui.keyCode.ESCAPE && this.element.is( ":visible" ) ) {
 					this.close( event );
@@ -187,7 +187,7 @@ $.widget( "ui.popup", {
 			}
 		});
 
-		this._bind( this.document, {
+		this._on( this.document, {
 			click: function( event ) {
 				if ( this.isOpen && !$( event.target ).closest( this.element.add( this.options.trigger ) ).length ) {
 					this.close( event );

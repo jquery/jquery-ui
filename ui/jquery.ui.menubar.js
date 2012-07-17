@@ -141,7 +141,7 @@ $.widget( "ui.menubar", {
 			}
 
 		});
-		that._bind( {
+		that._on( {
 			keydown: function( event ) {
 				if ( event.keyCode === $.ui.keyCode.ESCAPE && that.active && that.active.menu( "collapse", event ) !== true ) {
 					var active = that.active;
