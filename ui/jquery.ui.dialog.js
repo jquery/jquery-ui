@@ -754,6 +754,19 @@ $.extend( $.ui.dialog.overlay, {
 			}
 		});
 
+		// allow refocussing topmost dialog when window receives focus
+		$( window ).bind( "focus.dialog-overlay", function( event ) {
+			var instances = $.ui.dialog.overlay.instances;
+			// only react to the event if we're the top overlay
+			if ( instances.length !== 0 && instances[ instances.length - 1 ] === $el &&
+				dialog.options.modal && !event.isDefaultPrevented()) {
+
+				var tabbables = $( ":tabbable", dialog.uiDialog ),
+					first = tabbables.filter( ":first" );
+				first.focus(1);
+			}
+		});
+
 		$el.appendTo( document.body ).css({
 			width: this.width(),
 			height: this.height()
