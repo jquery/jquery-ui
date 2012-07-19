@@ -76,7 +76,7 @@ grunt.registerTask( "manifest", "Generate jquery.json manifest files", function(
 				});
 
 			grunt.file.write( manifest.name + ".jquery.json",
-				JSON.stringify( manifest, null, "\t" ) );
+				JSON.stringify( manifest, null, "\t" ) + "\n" );
 		});
 	});
 });
