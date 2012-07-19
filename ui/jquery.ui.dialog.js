@@ -312,13 +312,13 @@ $.widget("ui.dialog", {
 		return this;
 	},
 
-	open: function(triggerEl) {
+	open: function() {
 		if ( this._isOpen ) {
 			return;
 		}
 
-		if (triggerEl) {
-			this.triggerEl = triggerEl
+		if (document.activeElement) {
+			this.triggerEl = $( document.activeElement )
 		}
 
 		var hasFocus,
@@ -751,19 +751,6 @@ $.extend( $.ui.dialog.overlay, {
 
 				dialog.close( event );
 				event.preventDefault();
-			}
-		});
-
-		// allow refocussing topmost dialog when window receives focus
-		$( window ).bind( "focus.dialog-overlay", function( event ) {
-			var instances = $.ui.dialog.overlay.instances;
-			// only react to the event if we're the top overlay
-			if ( instances.length !== 0 && instances[ instances.length - 1 ] === $el &&
-				dialog.options.modal && !event.isDefaultPrevented()) {
-
-				var tabbables = $( ":tabbable", dialog.uiDialog ),
-					first = tabbables.filter( ":first" );
-				first.focus(1);
 			}
 		});
 
