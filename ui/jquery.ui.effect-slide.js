@@ -29,9 +29,7 @@ $.effects.effect.slide = function( o, done ) {
 	// Adjust
 	$.effects.save( el, props );
 	el.show();
-	distance = o.distance || el[ ref === "top" ? "outerHeight" : "outerWidth" ]({
-		margin: true
-	});
+	distance = o.distance || el[ ref === "top" ? "outerHeight" : "outerWidth" ]( true );
 
 	$.effects.createWrapper( el ).css({
 		overflow: "hidden"
