@@ -28,7 +28,7 @@ $.effects.drop = function(o) {
 		$.effects.createWrapper(el); // Create Wrapper
 		var ref = (direction == 'up' || direction == 'down') ? 'top' : 'left';
 		var motion = (direction == 'up' || direction == 'left') ? 'pos' : 'neg';
-		var distance = o.options.distance || (ref == 'top' ? el.outerHeight({margin:true}) / 2 : el.outerWidth({margin:true}) / 2);
+		var distance = o.options.distance || (ref == 'top' ? el.outerHeight( true ) / 2 : el.outerWidth( true ) / 2);
 		if (mode == 'show') el.css('opacity', 0).css(ref, motion == 'pos' ? -distance : distance); // Shift
 
 		// Animation
