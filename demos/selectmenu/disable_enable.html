@@ -67,7 +67,9 @@
 			
 			var speedC = $('select#speedC').selectmenu();
 			
-			var speedD = $('select#speedD').selectmenu();		
+			var speedD = $('select#speedD').selectmenu();
+			
+			var speedD_first = $('select#speedD_first').selectmenu();		
 
 			var speedD2 = $('select#speedD2').selectmenu();				
 			$("#optgroupSwitch").toggle(
@@ -167,6 +169,16 @@
 				<option value="Fast">Fast</option>
 				<option value="Faster">Faster</option>
 			</select>
+		</fieldset>
+				
+		<fieldset>
+			<label for="speedD_first">Disabled and selected first option by HTML</label>
+			<select id="speedD_first">
+				<option disabled="disabled" selected="selected">Choose one...</option>
+				<option>Option 1</option>
+				<option>Option 2</option>
+				<option>Option 3</option>
+			<select>
 		</fieldset>
 				
 		<fieldset>

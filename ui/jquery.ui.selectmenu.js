@@ -436,7 +436,7 @@ $.widget("ui.selectmenu", {
 		}
 
 		// update value
-		this.index( this._selectedIndex() );
+		this._refreshValue();
 
 		// set selected item so movefocus has intial state
 		this._selectedOptionLi().addClass(this.widgetBaseClass + '-item-focus');
