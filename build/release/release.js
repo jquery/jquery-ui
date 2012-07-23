@@ -2,6 +2,9 @@
 
 var baseDir, repoDir, prevVersion, newVersion, nextVersion, tagTime,
 	fs = require( "fs" ),
+	path = require( "path" ),
+	// support: node <0.8
+	existsSync = fs.existsSync || path.existsSync,
 	rnewline = /\r?\n/,
 	repo = "git@github.com:jquery/jquery-ui.git",
 	branch = "master";
@@ -17,14 +20,18 @@ walk([
 	getVersions,
 	confirm,
 
-	section( "tagging release" ),
-	tagRelease,
-	confirm,
+	section( "building release" ),
+	buildRelease,
+
+	section( "pushing tag" ),
+	confirmReview,
 	pushRelease,
 
 	section( "updating branch version" ),
 	updateBranchVersion,
-	confirm,
+
+	section( "pushing " + branch ),
+	confirmReview,
 	pushBranch,
 
 	section( "generating changelog" ),
@@ -35,10 +42,7 @@ walk([
 
 	section( "updating trac" ),
 	updateTrac,
-	confirm,
-
-	section( "building release" ),
-	buildRelease
+	confirm
 ]);
 
 
@@ -46,21 +50,19 @@ walk([
 
 
 function cloneRepo() {
-	if ( test( "-d", baseDir ) ) {
-		abort( "The directory '" + baseDir + "' already exists." );
-	}
-
-	echo( "Cloning " + repo + "..." );
+	echo( "Cloning " + repo.cyan + "..." );
 	git( "clone " + repo + " " + repoDir, "Error cloning repo." );
 	cd( repoDir );
 
-	echo( "Checking out " + branch + " branch..." );
+	echo( "Checking out " + branch.cyan + " branch..." );
 	git( "checkout " + branch, "Error checking out branch." );
+	echo();
 
 	echo( "Installing dependencies..." );
 	if ( exec( "npm install" ).code !== 0 ) {
 		abort( "Error installing dependencies." );
 	}
+	echo();
 }
 
 function checkState() {
@@ -75,12 +77,12 @@ function checkState() {
 	lastActualAuthor = result.output.split( rnewline ).splice( -4, 1 )[ 0 ];
 
 	if ( lastListedAuthor !== lastActualAuthor ) {
-		echo( "Last listed author is " + lastListedAuthor + "." );
-		echo( "Last actual author is " + lastActualAuthor + "." );
+		echo( "Last listed author is " + lastListedAuthor.red + "." );
+		echo( "Last actual author is " + lastActualAuthor.green + "." );
 		abort( "Please update AUTHORS.txt." );
 	}
 
-	echo( "Last listed author (" + lastListedAuthor + ") is correct." );
+	echo( "Last listed author (" + lastListedAuthor.cyan + ") is correct." );
 }
 
 function getVersions() {
@@ -90,7 +92,7 @@ function getVersions() {
 
 	echo( "Validating current version..." );
 	if ( currentVersion.substr( -3, 3 ) !== "pre" ) {
-		echo( "The current version is " + currentVersion + "." );
+		echo( "The current version is " + currentVersion.red + "." );
 		abort( "The version must be a pre version." );
 	}
 
@@ -99,6 +101,10 @@ function getVersions() {
 	major = parseInt( parts[ 0 ], 10 );
 	minor = parseInt( parts[ 1 ], 10 );
 	patch = parseInt( parts[ 2 ], 10 );
+	// TODO: handle 2.0.0
+	if ( minor === 0 ) {
+		abort( "This script is not smart enough to handle the 2.0.0 release." );
+	}
 	prevVersion = patch === 0 ?
 		[ major, minor - 1, 0 ].join( "." ) :
 		[ major, minor, patch - 1 ].join( "." );
@@ -108,15 +114,16 @@ function getVersions() {
 	}
 	nextVersion = [ major, minor, patch + 1 ].join( "." ) + "pre";
 
-	echo( "We are going from " + prevVersion + " to " + newVersion + "." );
-	echo( "After the release, the version will be " + nextVersion + "." );
+	echo( "We are going from " + prevVersion.cyan + " to " + newVersion.cyan + "." );
+	echo( "After the release, the version will be " + nextVersion.cyan + "." );
 }
 
-function tagRelease() {
+function buildRelease() {
 	var pkg;
 
-	echo( "Creating release branch..." );
+	echo( "Creating " + "release".cyan + " branch..." );
 	git( "checkout -b release", "Error creating release branch." );
+	echo();
 
 	echo( "Updating package.json..." );
 	pkg = readPackage();
@@ -130,18 +137,27 @@ function tagRelease() {
 	if ( exec( "grunt manifest" ).code !== 0 ) {
 		abort( "Error generating manifest files." );
 	}
+	echo();
 
+	echo( "Building release..." );
+	if ( exec( "grunt release" ).code !== 0 ) {
+		abort( "Error building release." );
+	}
+	echo();
+
+	// TODO: Build themes
+
+	// TODO: Move build out of dist/
 	echo( "Committing release artifacts..." );
 	git( "add *.jquery.json", "Error adding manifest files to git." );
+	// TODO: Add built files
 	git( "commit -am 'Tagging the " + newVersion + " release.'",
 		"Error committing release changes." );
+	echo();
 
 	echo( "Tagging release..." );
 	git( "tag " + newVersion, "Error tagging " + newVersion + "." );
 	tagTime = git( "log -1 --format='%ad'", "Error getting tag timestamp." ).trim();
-
-	echo();
-	echo( "Please review the output and generated files as a sanity check." );
 }
 
 function pushRelease() {
@@ -152,7 +168,7 @@ function pushRelease() {
 function updateBranchVersion() {
 	var pkg;
 
-	echo( "Checking out " + branch + " branch..." );
+	echo( "Checking out " + branch.cyan + " branch..." );
 	git( "checkout " + branch, "Error checking out " + branch + " branch." );
 
 	echo( "Updating package.json..." );
@@ -163,13 +179,10 @@ function updateBranchVersion() {
 	echo( "Committing version update..." );
 	git( "commit -am 'Updating the " + branch + " version to " + nextVersion + ".'",
 		"Error committing package.json." );
-
-	echo();
-	echo( "Please review the output and generated files as a sanity check." );
 }
 
 function pushBranch() {
-	echo( "Pushing " + branch + " to GitHub..." );
+	echo( "Pushing " + branch.cyan + " to GitHub..." );
 	git( "push", "Error pushing to GitHub." );
 }
 
@@ -187,7 +200,6 @@ function generateChangelog() {
 		// Add ticket references
 		.map(function( commit ) {
 			var tickets = [];
-			// TODO: Don't use .replace() since we're not actually replacing
 			commit.replace( /Fixe[sd] #(\d+)/g, function( match, ticket ) {
 				tickets.push( ticket );
 			});
@@ -207,7 +219,7 @@ function generateChangelog() {
 		"&col=id&col=component&col=summary&order=component" ) + "\n";
 
 	fs.writeFileSync( changelogPath, changelog );
-	echo( "Stored changelog in " + changelogPath + "." );
+	echo( "Stored changelog in " + changelogPath.cyan + "." );
 }
 
 function gatherContributors() {
@@ -221,6 +233,7 @@ function gatherContributors() {
 	contributors = contributors.concat(
 		trac( "/report/22?V=" + newVersion + "&max=-1" )
 			.split( rnewline )
+			// Remove header and trailing newline
 			.slice( 1, -1 ) );
 
 	echo( "Sorting contributors..." );
@@ -235,24 +248,14 @@ function gatherContributors() {
 		}));
 
 	fs.writeFileSync( contributorsPath, contributors.join( "\n" ) );
-	echo( "Stored contributors in " + contributorsPath + "." );
+	echo( "Stored contributors in " + contributorsPath.cyan + "." );
 }
 
 function updateTrac() {
-	echo( newVersion + " was tagged at " + tagTime + "." );
-	echo( "Close the " + newVersion + " Milestone with the above date and time." );
-	echo( "Create the " + newVersion + " Version with the above date and time." );
+	echo( newVersion.cyan + " was tagged at " + tagTime.cyan + "." );
+	echo( "Close the " + newVersion.cyan + " Milestone with the above date and time." );
+	echo( "Create the " + newVersion.cyan + " Version with the above date and time." );
 	echo( "Create a Milestone for the next minor release." );
-}
-
-function buildRelease() {
-	echo( "Checking out " + newVersion + "..." );
-	git( "checkout " + newVersion, "Error checking out " + newVersion + "." );
-
-	echo( "Building release..." );
-	if ( exec( "grunt release" ).code !== 0 ) {
-		abort( "Error building release." );
-	}
 }
 
 
@@ -316,30 +319,41 @@ function writePackage( pkg ) {
 }
 
 function bootstrap( fn ) {
-	require( "child_process" ).exec( "npm root -g", function( error, stdout ) {
+	console.log( "Determining directories..." );
+	baseDir = process.cwd() + "/__release";
+	repoDir = baseDir + "/repo";
+
+	if ( existsSync( baseDir ) ) {
+		console.log( "The directory '" + baseDir + "' already exists." );
+		console.log( "Aborting." );
+		process.exit( 1 );
+	}
+
+	console.log( "Creating directory..." );
+	fs.mkdirSync( baseDir );
+
+	console.log( "Installing dependencies..." );
+	require( "child_process" ).exec( "npm install shelljs colors", {
+		cwd: baseDir
+	}, function( error ) {
 		if ( error ) {
 			console.log( error );
 			return process.exit( 1 );
 		}
 
-		var rootDir = stdout.trim();
-		require( rootDir + "/shelljs/global" );
-
-		baseDir = pwd() + "/__release";
-		repoDir = baseDir + "/repo";
+		require( baseDir + "/node_modules/shelljs/global" );
+		require( baseDir + "/node_modules/colors" );
 
 		fn();
 	});
 }
 
 function section( name ) {
-	var line = new Array( name.length + 5 ).join( "-" );
 	return function() {
 		echo();
-		// https://github.com/arturadib/shelljs/issues/20
-		console.log( line );
-		echo( "| " + name.toUpperCase() + " |" );
-		console.log( line );
+		echo( "##" );
+		echo( "## " + name.toUpperCase().magenta );
+		echo( "##" );
 		echo();
 	};
 }
@@ -353,13 +367,18 @@ function prompt( fn ) {
 }
 
 function confirm( fn ) {
-	echo( "Press enter to continue, or ctrl+c to cancel." );
+	echo( "Press enter to continue, or ctrl+c to cancel.".yellow );
 	prompt( fn );
 }
 
+function confirmReview( fn ) {
+	echo( "Please review the output and generated files as a sanity check.".yellow );
+	confirm( fn );
+}
+
 function abort( msg ) {
-	echo( msg );
-	echo( "Aborting." );
+	echo( msg.red );
+	echo( "Aborting.".red );
 	exit( 1 );
 }
 
