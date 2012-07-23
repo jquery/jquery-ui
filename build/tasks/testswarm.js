@@ -32,7 +32,7 @@ var versions = {
 		"Widget": "widget/widget.html"
 	};
 
-function submit( commit, tests, configFile, done ) {
+function submit( commit, tests, configFile, version, done ) {
 	var test,
 		testswarm = require( "testswarm" ),
 		config = grunt.file.readJSON( configFile ).jqueryui,
@@ -49,7 +49,7 @@ function submit( commit, tests, configFile, done ) {
 	}, {
 		authUsername: config.authUsername,
 		authToken: config.authToken,
-		jobName: 'jQuery UI commit #<a href="https://github.com/jquery/jquery-ui/commit/' + commit + '">' + commit.substr( 0, 10 ) + '</a>',
+		jobName: 'jQuery UI ' + version + '<a href="https://github.com/jquery/jquery-ui/commit/' + commit + '">' + commit.substr( 0, 7 ) + '</a>',
 		runMax: config.runMax,
 		"runNames[]": Object.keys(tests),
 		"runUrls[]": testUrls,
@@ -63,7 +63,7 @@ grunt.registerTask( "testswarm", function( commit, configFile ) {
 	for ( test in tests ) {
 		latestTests[ test ] = tests[ test ] + "?nojshint=true";
 	}
-	submit( commit, latestTests, configFile, this.async() );
+	submit( commit, latestTests, configFile, "", this.async() );
 });
 
 grunt.registerTask( "testswarm-multi-jquery", function( commit, configFile, minor ) {
@@ -73,7 +73,7 @@ grunt.registerTask( "testswarm-multi-jquery", function( commit, configFile, mino
 			allTests[ test + "-" + version ] = tests[ test ] + "?nojshint=true&jquery=" + version;
 		}
 	});
-	submit( commit, allTests, configFile, this.async() );
+	submit( commit, allTests, configFile, minor + " core", this.async() );
 });
 
 };
