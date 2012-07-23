@@ -73,7 +73,7 @@ grunt.registerTask( "testswarm-multi-jquery", function( commit, configFile, mino
 			allTests[ test + "-" + version ] = tests[ test ] + "?nojshint=true&jquery=" + version;
 		}
 	});
-	submit( commit, allTests, configFile, minor + " core", this.async() );
+	submit( commit, allTests, configFile, minor + " core ", this.async() );
 });
 
 };
