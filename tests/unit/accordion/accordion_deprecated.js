@@ -1,6 +1,6 @@
 (function( $ ) {
 
-var equalHeights = TestHelpers.accordion.equalHeights,
+var equalHeight = TestHelpers.accordion.equalHeight,
 	setupTeardown = TestHelpers.accordion.setupTeardown,
 	state = TestHelpers.accordion.state;
 
@@ -109,7 +109,7 @@ module( "accordion (deprecated) - height options", setupTeardown() );
 
 test( "{ autoHeight: true }, default", function() {
 	expect( 3 );
-	equalHeights( $( "#navigation" ).accordion({ autoHeight: true }), 95, 130 );
+	equalHeight( $( "#navigation" ).accordion({ autoHeight: true }), 105 );
 });
 
 test( "{ autoHeight: false }", function() {
@@ -128,7 +128,7 @@ test( "{ fillSpace: true }", function() {
 	expect( 3 );
 	$( "#navigationWrapper" ).height( 500 );
 	var element = $( "#navigation" ).accordion({ fillSpace: true });
-	equalHeights( element, 446, 458 );
+	equalHeight( element, 455 );
 });
 
 test( "{ fillSapce: true } with sibling", function() {
@@ -142,7 +142,7 @@ test( "{ fillSapce: true } with sibling", function() {
 		})
 		.prependTo( "#navigationWrapper" );
 	var element = $( "#navigation" ).accordion({ fillSpace: true });
-	equalHeights( element , 346, 358);
+	equalHeight( element , 355 );
 });
 
 test( "{ fillSpace: true } with multiple siblings", function() {
@@ -171,7 +171,7 @@ test( "{ fillSpace: true } with multiple siblings", function() {
 		})
 		.prependTo( "#navigationWrapper" );
 	var element = $( "#navigation" ).accordion({ fillSpace: true });
-	equalHeights( element, 296, 308 );
+	equalHeight( element, 305 );
 });
 
 
@@ -206,11 +206,11 @@ test( "resize", function() {
 		.accordion({
 			heightStyle: "fill"
 		});
-	equalHeights( element, 246, 258 );
+	equalHeight( element, 255 );
 
 	element.parent().height( 500 );
 	element.accordion( "resize" );
-	equalHeights( element, 446, 458 );
+	equalHeight( element, 455 );
 });
 
 

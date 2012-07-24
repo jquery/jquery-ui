@@ -1,7 +1,8 @@
 /*!
  * jQuery UI Datepicker @VERSION
+ * http://jqueryui.com
  *
- * Copyright 2012, AUTHORS.txt (http://jqueryui.com/about)
+ * Copyright 2012 jQuery Foundation and other contributors
  * Dual licensed under the MIT or GPL Version 2 licenses.
  * http://jquery.org/license
  *
@@ -56,8 +57,6 @@
 
 /* IE6 IFRAME FIX (taken from datepicker 1.5.3 */
 .ui-datepicker-cover {
-    display: none; /*sorry for IE5*/
-    display/**/: block; /*sorry for IE5*/
     position: absolute; /*must have*/
     z-index: -1; /*must have*/
     filter: mask(); /*must have*/

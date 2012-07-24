@@ -6,6 +6,7 @@
 module( "button: tickets" );
 
 test( "#5946 - buttonset should ignore buttons that are not :visible", function() {
+	expect( 2 );
 	$( "#radio01" ).next().andSelf().hide();
 	var set = $( "#radio0" ).buttonset({ items: "input[type=radio]:visible" });
 	ok( set.find( "label:eq(0)" ).is( ":not(.ui-button):not(.ui-corner-left)" ) );
@@ -13,6 +14,7 @@ test( "#5946 - buttonset should ignore buttons that are not :visible", function(
 });
 
 test( "#6262 - buttonset not applying ui-corner to invisible elements", function() {
+	expect( 3 );
 	$( "#radio0" ).hide();
 	var set = $( "#radio0" ).buttonset();
 	ok( set.find( "label:eq(0)" ).is( ".ui-button.ui-corner-left" ) );
@@ -21,6 +23,7 @@ test( "#6262 - buttonset not applying ui-corner to invisible elements", function
 });
 
 test( "#6711 Checkbox/Radiobutton do not Show Focused State when using Keyboard Navigation", function() {
+	expect( 2 );
 	var check = $( "#check" ).button(),
 		label = $( "label[for='check']" );
 	ok( !label.is( ".ui-state-focus" ) );
@@ -29,6 +32,7 @@ test( "#6711 Checkbox/Radiobutton do not Show Focused State when using Keyboard 
 });
 
 test( "#7092 - button creation that requires a matching label does not find label in all cases", function() {
+	expect( 5 );
 	var group = $( "<span><label for='t7092a'></label><input type='checkbox' id='t7092a'></span>" );
 	group.find( "input[type=checkbox]" ).button();
 	ok( group.find( "label" ).is( ".ui-button" ) );
@@ -51,6 +55,7 @@ test( "#7092 - button creation that requires a matching label does not find labe
 });
 
 test( "#7534 - Button label selector works for ids with \":\"", function() {
+	expect( 1 );
 	var group = $( "<span><input type='checkbox' id='check:7534'><label for='check:7534'>Label</label></span>" );
 	group.find( "input" ).button();
 	ok( group.find( "label" ).is( ".ui-button" ), "Found an id with a :" );

@@ -26,7 +26,8 @@
 
 		$( "#menu6" ).menu({
 			menus: ".menuElement",
-			select: logger
+			select: logger,
+			icon: "ui-icon-carat-1-s"
 		});
 	});
 	</script>
@@ -212,7 +213,7 @@
 	</blockquote>
 </div>
 
-<h2>Menu with custom markup, multi-line items</h2>
+<h2>Menu with custom markup, multi-line items and a custom submenu icon</h2>
 <div class="menuElement" id="menu6">
 	<div class="address-item">
 		<a href="#">
@@ -258,24 +259,24 @@
 
 <h2>Inline with dividers and elements without anchors</h2>
 <ul id="menu7">
-	<li>Group 1</li>
-	<li class="ui-state-disabled"><a href="#">Aberdeen</a></li>
+	<li><strong>Group 1</strong></li>
+	<li><a href="#">Aberdeen</a></li>
 	<li><a href="#">Ada</a></li>
 	<li><a href="#">Adamsville</a></li>
 	<li><a href="#">Addyston</a></li>
 	<li></li>
-	<li>Group 2</li>
+	<li><strong>Group 2</strong></li>
 	<li>
 		<a href="#">Delphi</a>
 		<ul>
-			<li class="ui-state-disabled"><a href="#">Ada</a></li>
+			<li><a href="#">Ada</a></li>
 			<li><a href="#">Saarland</a></li>
 			<li><a href="#">Salzburg</a></li>
 		</ul>
 	</li>
 	<li><a href="#">Saarland</a></li>
 	<li>---</li>
-	<li>Group 3</li>
+	<li><strong>Group 3</strong></li>
 	<li>
 		<a href="#">Salzburg</a>
 		<ul>
@@ -301,7 +302,7 @@
 			<li><a href="#">Perch</a></li>
 		</ul>
 	</li>
-	<li class="ui-state-disabled"><a href="#">Amesville</a></li>
+	<li><a href="#">Amesville</a></li>
 </ul>
 
 <div style="position: absolute; top: 1em; right: 1em;">

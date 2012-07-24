@@ -3,11 +3,13 @@
 module( "tooltip: options" );
 
 test( "content: default", function() {
+	expect( 1 );
 	var element = $( "#tooltipped1" ).tooltip().tooltip( "open" );
 	deepEqual( $( "#" + element.data( "ui-tooltip-id" ) ).text(), "anchortitle" );
 });
 
 test( "content: return string", function() {
+	expect( 1 );
 	var element = $( "#tooltipped1" ).tooltip({
 		content: function() {
 			return "customstring";
@@ -17,6 +19,7 @@ test( "content: return string", function() {
 });
 
 test( "content: return jQuery", function() {
+	expect( 1 );
 	var element = $( "#tooltipped1" ).tooltip({
 		content: function() {
 			return $( "<div>" ).html( "cu<b>s</b>tomstring" );

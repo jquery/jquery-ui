@@ -92,7 +92,7 @@ $.extend( interaction, {
 
 interaction.hooks.mouse = {
 	setup: function( widget, start ) {
-		widget._bind( widget.widget(), {
+		widget._on( widget.widget(), {
 			"mousedown": function( event ) {
 				// only react to the primary button
 				if ( event.which === 1 ) {
@@ -129,7 +129,7 @@ interaction.hooks.mouse = {
 				.unbind( "mouseup", mouseup );
 		}
 
-		widget._bind( widget.document, {
+		widget._on( widget.document, {
 			"mousemove": mousemove,
 			"mouseup": mouseup
 		});
@@ -141,7 +141,7 @@ function getTouch( event ) {
 	var touch,
 		touches = event.originalEvent.changedTouches,
 		i = 0, length = touches.length;
-	
+
 	for ( ; i < length; i++ ) {
 		if ( touches[ i ].identifier === touchHook.id ) {
 			return touches[ i ];
@@ -151,7 +151,7 @@ function getTouch( event ) {
 
 touchHook = interaction.hooks.touch = {
 	setup: function( widget, start ) {
-		widget._bind( widget.widget(), {
+		widget._on( widget.widget(), {
 			"touchstart": function( event ) {
 				var touch, started;
 
@@ -207,7 +207,7 @@ touchHook = interaction.hooks.touch = {
 				.unbind( "touchend", stopHandler );
 		}
 
-		widget._bind( widget.document, {
+		widget._on( widget.document, {
 			"touchmove": moveHandler,
 			"touchend": stopHandler
 		});
@@ -216,7 +216,7 @@ touchHook = interaction.hooks.touch = {
 
 pointerHook = interaction.hooks.msPointer = {
 	setup: function( widget, start ) {
-		widget._bind( widget.widget(), {
+		widget._on( widget.widget(), {
 			"MSPointerDown": function( _event ) {
 				var started,
 					event = _event.originalEvent;
@@ -295,7 +295,7 @@ pointerHook = interaction.hooks.msPointer = {
 				.unbind( "MSPointerCancel", stopHandler );
 		}
 
-		widget._bind( widget.document, {
+		widget._on( widget.document, {
 			"MSPointerMove": moveHandler,
 			"MSPointerUp": stopHandler,
 			"MSPointerCancel": stopHandler

@@ -1,7 +1,8 @@
 /*!
  * jQuery UI Resizable @VERSION
+ * http://jqueryui.com
  *
- * Copyright 2012, AUTHORS.txt (http://jqueryui.com/about)
+ * Copyright 2012 jQuery Foundation and other contributors
  * Dual licensed under the MIT or GPL Version 2 licenses.
  * http://jquery.org/license
  *
@@ -445,9 +446,6 @@ $.widget("ui.resizable", $.ui.mouse, {
 					return border + padding;
 				});
 			}
-
-			if ($.browser.msie && !(!($(element).is(':hidden') || $(element).parents(':hidden').length)))
-				continue;
 
 			prel.css({
 				height: (element.height() - this.borderDif[0] - this.borderDif[2]) || 0,

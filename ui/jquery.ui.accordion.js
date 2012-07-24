@@ -1,7 +1,8 @@
 /*!
  * jQuery UI Accordion @VERSION
+ * http://jqueryui.com
  *
- * Copyright 2012, AUTHORS.txt (http://jqueryui.com/about)
+ * Copyright 2012 jQuery Foundation and other contributors
  * Dual licensed under the MIT or GPL Version 2 licenses.
  * http://jquery.org/license
  *
@@ -137,8 +138,8 @@ $.widget( "ui.accordion", {
 				});
 		}
 
-		this._bind( this.headers, { keydown: "_keydown" });
-		this._bind( this.headers.next(), { keydown: "_panelKeyDown" });
+		this._on( this.headers, { keydown: "_keydown" });
+		this._on( this.headers.next(), { keydown: "_panelKeyDown" });
 		this._setupEvents( options.event );
 	},
 
@@ -219,8 +220,7 @@ $.widget( "ui.accordion", {
 
 		if ( key === "event" ) {
 			if ( this.options.event ) {
-				this.headers.unbind(
-					this.options.event.split( " " ).join( ".accordion " ) + ".accordion" );
+				this._off( this.headers, this.options.event );
 			}
 			this._setupEvents( value );
 		}
@@ -376,7 +376,7 @@ $.widget( "ui.accordion", {
 		$.each( event.split(" "), function( index, eventName ) {
 			events[ eventName ] = "_eventHandler";
 		});
-		this._bind( this.headers, events );
+		this._on( this.headers, events );
 	},
 
 	_eventHandler: function( event ) {
@@ -389,9 +389,9 @@ $.widget( "ui.accordion", {
 			toHide = active.next(),
 			eventData = {
 				oldHeader: active,
-				oldContent: toHide,
+				oldPanel: toHide,
 				newHeader: collapsing ? $() : clicked,
-				newContent: toShow
+				newPanel: toShow
 			};
 
 		event.preventDefault();
@@ -437,8 +437,8 @@ $.widget( "ui.accordion", {
 	},
 
 	_toggle: function( data ) {
-		var toShow = data.newContent,
-			toHide = this.prevShow.length ? this.prevShow : data.oldContent;
+		var toShow = data.newPanel,
+			toHide = this.prevShow.length ? this.prevShow : data.oldPanel;
 
 		// handle activating a panel during the animation for another activation
 		this.prevShow.add( this.prevHide ).stop( true, true );
@@ -524,7 +524,7 @@ $.widget( "ui.accordion", {
 	},
 
 	_toggleComplete: function( data ) {
-		var toHide = data.oldContent;
+		var toHide = data.oldPanel;
 
 		toHide
 			.removeClass( "ui-accordion-content-active" )
@@ -676,9 +676,19 @@ if ( $.uiBackCompat !== false ) {
 			}
 
 			if ( type === "beforeActivate" ) {
-				ret = _trigger.call( this, "changestart", event, data );
+				ret = _trigger.call( this, "changestart", event, {
+					oldHeader: data.oldHeader,
+					oldContent: data.oldPanel,
+					newHeader: data.newHeader,
+					newContent: data.newPanel
+				});
 			} else if ( type === "activate" ) {
-				ret = _trigger.call( this, "change", event, data );
+				ret = _trigger.call( this, "change", event, {
+					oldHeader: data.oldHeader,
+					oldContent: data.oldPanel,
+					newHeader: data.newHeader,
+					newContent: data.newPanel
+				});
 			}
 			return ret;
 		};

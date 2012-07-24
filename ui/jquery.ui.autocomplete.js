@@ -1,7 +1,8 @@
 /*!
  * jQuery UI Autocomplete @VERSION
+ * http://jqueryui.com
  *
- * Copyright 2012, AUTHORS.txt (http://jqueryui.com/about)
+ * Copyright 2012 jQuery Foundation and other contributors
  * Dual licensed under the MIT or GPL Version 2 licenses.
  * http://jquery.org/license
  *
@@ -55,7 +56,7 @@ $.widget( "ui.autocomplete", {
 		// search term. #7799
 		var suppressKeyPress, suppressKeyPressRepeat, suppressInput;
 
-		this.isMultiLine = this.element.is( "textarea,[contenteditable]" );
+		this.isMultiLine = this._isMultiLine();
 		this.valueMethod = this.element[ this.element.is( "input,textarea" ) ? "val" : "text" ];
 		this.isNewMenu = true;
 
@@ -63,7 +64,7 @@ $.widget( "ui.autocomplete", {
 			.addClass( "ui-autocomplete-input" )
 			.attr( "autocomplete", "off" );
 
-		this._bind({
+		this._on({
 			keydown: function( event ) {
 				if ( this.element.prop( "readOnly" ) ) {
 					suppressKeyPress = true;
@@ -190,7 +191,7 @@ $.widget( "ui.autocomplete", {
 			.zIndex( this.element.zIndex() + 1 )
 			.hide()
 			.data( "menu" );
-		this._bind( this.menu.element, {
+		this._on( this.menu.element, {
 			mousedown: function( event ) {
 				// prevent moving focus out of the text field
 				event.preventDefault();
@@ -297,7 +298,7 @@ $.widget( "ui.autocomplete", {
 		// turning off autocomplete prevents the browser from remembering the
 		// value when navigating through history, so we re-enable autocomplete
 		// if the page is unloaded before the widget is destroyed. #7790
-		this._bind( this.window, {
+		this._on( this.window, {
 			beforeunload: function() {
 				this.element.removeAttr( "autocomplete" );
 			}
@@ -324,6 +325,20 @@ $.widget( "ui.autocomplete", {
 		if ( key === "disabled" && value && this.xhr ) {
 			this.xhr.abort();
 		}
+	},
+
+	_isMultiLine: function() {
+		// Textareas are always multi-line
+		if ( this.element.is( "textarea" ) ) {
+			return true;
+		}
+		// Inputs are always single-line, even if inside a contentEditable element
+		// IE also treats inputs as contentEditable
+		if ( this.element.is( "input" ) ) {
+			return false;
+		}
+		// All other element types are determined by whether or not they're contentEditable
+		return this.element.prop( "isContentEditable" );
 	},
 
 	_initSource: function() {

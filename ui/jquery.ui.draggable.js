@@ -1,7 +1,8 @@
 /*!
  * jQuery UI Draggable @VERSION
+ * http://jqueryui.com
  *
- * Copyright 2011, AUTHORS.txt (http://jqueryui.com/about)
+ * Copyright 2012 jQuery Foundation and other contributors
  * Dual licensed under the MIT or GPL Version 2 licenses.
  * http://jquery.org/license
  *
@@ -385,7 +386,7 @@ $.widget( "ui.draggable", $.ui.draggable, {
 
 	_create: function() {
 		this._super();
-		this._bind({
+		this._on({
 			dragstart: "_setContainment",
 			drag: "_contain"
 		});

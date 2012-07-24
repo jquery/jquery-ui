@@ -7,6 +7,7 @@
 module("datepicker: options");
 
 test('setDefaults', function() {
+	expect( 3 );
 	var inp = init('#inp');
 	equal($.datepicker._defaults.showOn, 'focus', 'Initial showOn');
 	$.datepicker.setDefaults({showOn: 'button'});
@@ -16,6 +17,7 @@ test('setDefaults', function() {
 });
 
 test('option', function() {
+	expect( 17 );
 	var inp = init('#inp'),
 	inst = $.data(inp[0], PROP_NAME);
 	// Set option
@@ -47,6 +49,7 @@ test('option', function() {
 });
 
 test('change', function() {
+	expect( 12 );
 	var inp = init('#inp'),
 	inst = $.data(inp[0], PROP_NAME);
 	equal(inst.settings.showOn, null, 'Initial setting showOn');
@@ -67,6 +70,7 @@ test('change', function() {
 });
 
 test('invocation', function() {
+	expect( 29 );
 	var button, image,
 		inp = init('#inp'),
 		dp = $('#ui-datepicker-div'),
@@ -138,6 +142,7 @@ test('invocation', function() {
 });
 
 test('otherMonths', function() {
+	expect( 8 );
 	var inp = init('#inp'),
 		pop = $('#ui-datepicker-div');
 	inp.val('06/01/2009').datepicker('show');
@@ -159,6 +164,7 @@ test('otherMonths', function() {
 });
 
 test('defaultDate', function() {
+	expect( 17 );
 	var inp = init('#inp'),
 		date = new Date();
 	inp.val('').datepicker('show').
@@ -253,6 +259,7 @@ test('defaultDate', function() {
 });
 
 test('miscellaneous', function() {
+	expect( 19 );
 	var curYear, longNames, shortNames, date,
 		dp = $('#ui-datepicker-div'),
 		inp = init('#inp');
@@ -314,6 +321,7 @@ test('miscellaneous', function() {
 });
 
 test('minMax', function() {
+	expect( 17 );
 	var date,
 		inp = init('#inp'),
 		lastYear = new Date(2007, 6 - 1, 4),
@@ -398,6 +406,7 @@ test('minMax', function() {
 });
 
 test('setDate', function() {
+	expect( 24 );
 	var inl, alt, minDate, maxDate, dateAndTimeToSet, dateAndTimeClone,
 		inp = init('#inp'),
 		date1 = new Date(2008, 6 - 1, 4),
@@ -477,6 +486,7 @@ test('setDate', function() {
 });
 
 test('altField', function() {
+	expect( 10 );
 	var inp = init('#inp'),
 		alt = $('#alt');
 	// No alternate field set
@@ -515,6 +525,7 @@ test('altField', function() {
 });
 
 test('autoSize', function() {
+	expect( 15 );
 	var inp = init('#inp');
 	equal(inp.prop('size'), 20, 'Auto size - default');
 	inp.datepicker('option', 'autoSize', true);
@@ -550,6 +561,7 @@ test('autoSize', function() {
 });
 
 test('daylightSaving', function() {
+	expect( 25 );
 	var inp = init('#inp'),
 		dp = $('#ui-datepicker-div');
 	ok(true, 'Daylight saving - ' + new Date());
@@ -664,6 +676,7 @@ function calcWeek(date) {
 }
 
 test('callbacks', function() {
+	expect( 13 );
 	// Before show
 	var dp, day20, day21,
 		inp = init('#inp', {beforeShow: beforeAll}),
@@ -693,6 +706,7 @@ test('callbacks', function() {
 });
 
 test('localisation', function() {
+	expect( 24 );
 	var dp, month, day, date,
 		inp = init('#inp', $.datepicker.regional.fr);
 	inp.datepicker('option', {dateFormat: 'DD, d MM yy', showButtonPanel:true, changeMonth:true, changeYear:true}).val('').datepicker('show');
@@ -722,6 +736,7 @@ test('localisation', function() {
 });
 
 test('noWeekends', function() {
+	expect( 31 );
 	var i, date;
 	for (i = 1; i <= 31; i++) {
 		date = new Date(2001, 1 - 1, i);
@@ -731,6 +746,7 @@ test('noWeekends', function() {
 });
 
 test('iso8601Week', function() {
+	expect( 12 );
 	var date = new Date(2000, 12 - 1, 31);
 	equal($.datepicker.iso8601Week(date), 52, 'ISO 8601 week ' + date);
 	date = new Date(2001, 1 - 1, 1);
@@ -758,6 +774,7 @@ test('iso8601Week', function() {
 });
 
 test('parseDate', function() {
+	expect( 26 );
 	init('#inp');
 	var currentYear, gmtDate, fr, settings, zh;
 	ok($.datepicker.parseDate('d m y', '') == null, 'Parse date empty');
@@ -822,6 +839,7 @@ test('parseDate', function() {
 });
 
 test('parseDateErrors', function() {
+	expect( 17 );
 	init('#inp');
 	var fr, settings;
 	function expectError(expr, value, error) {
@@ -874,6 +892,7 @@ test('parseDateErrors', function() {
 });
 
 test('formatDate', function() {
+	expect( 16 );
 	init('#inp');
 	var gmtDate, fr, settings;
 	equal($.datepicker.formatDate('d m y', new Date(2001, 2 - 1, 3)),

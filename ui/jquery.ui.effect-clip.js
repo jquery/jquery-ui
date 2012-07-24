@@ -1,14 +1,15 @@
 /*!
  * jQuery UI Effects Clip @VERSION
+ * http://jqueryui.com
  *
- * Copyright 2012, AUTHORS.txt (http://jqueryui.com/about)
+ * Copyright 2012 jQuery Foundation and other contributors
  * Dual licensed under the MIT or GPL Version 2 licenses.
  * http://jquery.org/license
  *
  * http://docs.jquery.com/UI/Effects/Clip
  *
  * Depends:
- *	jquery.effects.core.js
+ *	jquery.ui.effect.js
  */
 (function( $, undefined ) {
 

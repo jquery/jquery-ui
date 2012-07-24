@@ -10,7 +10,7 @@ asyncTest( "#3123: Prevent tabbing out of modal dialogs", function() {
 
 	var el = $( "<div><input id='t3123-first'><input id='t3123-last'></div>" ).dialog({ modal: true }),
 		inputs = el.find( "input" ),
-		widget = el.dialog( "widget" );
+		widget = el.dialog( "widget" )[ 0 ];
 
 	function checkTab() {
 		ok( $.contains( widget, document.activeElement ), "Tab key event moved focus within the modal" );
@@ -71,6 +71,7 @@ test("#5184: isOpen in dialogclose event is true", function() {
 });
 
 test("#5531: dialog width should be at least minWidth on creation", function () {
+    expect( 4 );
     el = $('<div></div>').dialog({
             width: 200,
             minWidth: 300
@@ -192,6 +193,7 @@ test("#6966: Escape key closes all dialogs, not the top one", function(){
 });
 
 test("#4980: Destroy should place element back in original DOM position", function(){
+    expect( 2 );
     container = $('<div id="container"><div id="modal">Content</div></div>');
 	modal = container.find('#modal');
 	modal.dialog();

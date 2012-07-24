@@ -1,14 +1,15 @@
 /*!
  * jQuery UI Effects Slide @VERSION
+ * http://jqueryui.com
  *
- * Copyright 2012, AUTHORS.txt (http://jqueryui.com/about)
+ * Copyright 2012 jQuery Foundation and other contributors
  * Dual licensed under the MIT or GPL Version 2 licenses.
  * http://jquery.org/license
  *
  * http://docs.jquery.com/UI/Effects/Slide
  *
  * Depends:
- *	jquery.effects.core.js
+ *	jquery.ui.effect.js
  */
 (function( $, undefined ) {
 
@@ -28,9 +29,7 @@ $.effects.effect.slide = function( o, done ) {
 	// Adjust
 	$.effects.save( el, props );
 	el.show();
-	distance = o.distance || el[ ref === "top" ? "outerHeight" : "outerWidth" ]({
-		margin: true
-	});
+	distance = o.distance || el[ ref === "top" ? "outerHeight" : "outerWidth" ]( true );
 
 	$.effects.createWrapper( el ).css({
 		overflow: "hidden"

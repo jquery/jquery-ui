@@ -1,6 +1,7 @@
 (function( $ ) {
 
 var disabled = TestHelpers.tabs.disabled,
+	equalHeight = TestHelpers.tabs.equalHeight,
 	state = TestHelpers.tabs.state;
 
 module( "tabs: options" );
@@ -68,6 +69,8 @@ test( "{ active: Number }", function() {
 
 if ( $.uiBackCompat === false ) {
 	test( "{ active: -Number }", function() {
+		expect( 8 );
+
 		var element = $( "#tabs1" ).tabs({
 			active: -1
 		});
@@ -211,6 +214,120 @@ test( "{ event: custom }", function() {
 	state( element, 0, 1, 0 );
 });
 
-// TODO: add animation tests
+test( "{ heightStyle: 'auto' }", function() {
+	expect( 2 );
+	var element = $( "#tabs8" ).tabs({ heightStyle: "auto" });
+	equalHeight( element, 45 );
+});
+
+test( "{ heightStyle: 'content' }", function() {
+	expect( 2 );
+	var element = $( "#tabs8" ).tabs({ heightStyle: "content" }),
+		sizes = element.find( ".ui-tabs-panel" ).map(function() {
+			return $( this ).height();
+		}).get();
+	equal( sizes[ 0 ], 45 );
+	equal( sizes[ 1 ], 15 );
+});
+
+test( "{ heightStyle: 'fill' }", function() {
+	expect( 2 );
+	$( "#tabs8Wrapper" ).height( 500 );
+	var element = $( "#tabs8" ).tabs({ heightStyle: "fill" });
+	equalHeight( element, 485 );
+});
+
+test( "{ heightStyle: 'fill' } with sibling", function() {
+	expect( 2 );
+	$( "#tabs8Wrapper" ).height( 500 );
+	$( "<p>Lorem Ipsum</p>" )
+		.css({
+			height: 50,
+			marginTop: 20,
+			marginBottom: 30
+		})
+		.prependTo( "#tabs8Wrapper" );
+	var element = $( "#tabs8" ).tabs({ heightStyle: "fill" });
+	equalHeight( element, 385 );
+});
+
+test( "{ heightStyle: 'fill' } with multiple siblings", function() {
+	expect( 2 );
+	$( "#tabs8Wrapper" ).height( 500 );
+	$( "<p>Lorem Ipsum</p>" )
+		.css({
+			height: 50,
+			marginTop: 20,
+			marginBottom: 30
+		})
+		.prependTo( "#tabs8Wrapper" );
+	$( "<p>Lorem Ipsum</p>" )
+		.css({
+			height: 50,
+			marginTop: 20,
+			marginBottom: 30,
+			position: "absolute"
+		})
+		.prependTo( "#tabs8Wrapper" );
+	$( "<p>Lorem Ipsum</p>" )
+		.css({
+			height: 25,
+			marginTop: 10,
+			marginBottom: 15
+		})
+		.prependTo( "#tabs8Wrapper" );
+	var element = $( "#tabs8" ).tabs({ heightStyle: "fill" });
+	equalHeight( element, 335 );
+});
+
+test( "hide and show: false", function() {
+	expect( 3 );
+	var element = $( "#tabs1" ).tabs({
+			show: false,
+			hide: false
+		}),
+		widget = element.data( "tabs" ),
+		panels = element.find( ".ui-tabs-panel" );
+	widget._show = function() {
+		ok( false, "_show() called" );
+	};
+	widget._hide = function() {
+		ok( false, "_hide() called" );
+	};
+
+	ok( panels.eq( 0 ).is( ":visible" ), "first panel visible" );
+	element.tabs( "option", "active", 1 );
+	ok( panels.eq( 0 ).is( ":hidden" ), "first panel hidden" );
+	ok( panels.eq( 1 ).is( ":visible" ), "second panel visible" );
+});
+
+asyncTest( "hide and show - animation", function() {
+	expect( 5 );
+	var element = $( "#tabs1" ).tabs({
+			show: "drop",
+			hide: 2000
+		}),
+		widget = element.data( "tabs" ),
+		panels = element.find( ".ui-tabs-panel" );
+	widget._show = function( element, options, callback ) {
+		strictEqual( element[ 0 ], panels[ 1 ], "correct element in _show()" );
+		equal( options, "drop", "correct options in _show()" );
+		setTimeout(function() {
+			callback();
+		}, 1 );
+	};
+	widget._hide = function( element, options, callback ) {
+		strictEqual( element[ 0 ], panels[ 0 ], "correct element in _hide()" );
+		equal( options, 2000, "correct options in _hide()" );
+		setTimeout(function() {
+			callback();
+			start();
+		}, 1 );
+	};
+
+	ok( panels.eq( 0 ).is( ":visible" ), "first panel visible" );
+	element.tabs( "option", "active", 1 );
+});
+
 
 }( jQuery ) );

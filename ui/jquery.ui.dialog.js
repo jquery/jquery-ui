@@ -1,7 +1,8 @@
 /*!
  * jQuery UI Dialog @VERSION
+ * http://jqueryui.com
  *
- * Copyright 2012, AUTHORS.txt (http://jqueryui.com/about)
+ * Copyright 2012 jQuery Foundation and other contributors
  * Dual licensed under the MIT or GPL Version 2 licenses.
  * http://jquery.org/license
  *
@@ -87,7 +88,6 @@ $.widget("ui.dialog", {
 			options = this.options,
 
 			title = options.title || "&#160;",
-			titleId = $.ui.dialog.getTitleId( this.element ),
 
 			uiDialog = ( this.uiDialog = $( "<div>" ) )
 				.addClass( uiDialogClasses + options.dialogClass )
@@ -104,10 +104,6 @@ $.widget("ui.dialog", {
 						that.close( event );
 						event.preventDefault();
 					}
-				})
-				.attr({
-					role: "dialog",
-					"aria-labelledby": titleId
 				})
 				.mousedown(function( event ) {
 					that.moveToTop( false, event );
@@ -140,8 +136,8 @@ $.widget("ui.dialog", {
 				.appendTo( uiDialogTitlebarClose ),
 
 			uiDialogTitle = $( "<span>" )
+				.uniqueId()
 				.addClass( "ui-dialog-title" )
-				.attr( "id", titleId )
 				.html( title )
 				.prependTo( uiDialogTitlebar ),
 
@@ -151,6 +147,11 @@ $.widget("ui.dialog", {
 			uiButtonSet = ( this.uiButtonSet = $( "<div>" ) )
 				.addClass( "ui-dialog-buttonset" )
 				.appendTo( uiDialogButtonPane );
+
+		uiDialog.attr({
+			role: "dialog",
+			"aria-labelledby": uiDialogTitle.attr( "id" )
+		});
 
 		uiDialogTitlebar.find( "*" ).add( uiDialogTitlebar ).disableSelection();
 		this._hoverable( uiDialogTitlebarClose );
@@ -224,7 +225,7 @@ $.widget("ui.dialog", {
 		if ( this.overlay ) {
 			this.overlay.destroy();
 		}
-		this.uiDialog.unbind( "keypress.ui-dialog" );
+		this._off( this.uiDialog, "keypress" );
 
 		if ( this.options.hide ) {
 			this.uiDialog.hide( this.options.hide, function() {
@@ -310,12 +311,12 @@ $.widget("ui.dialog", {
 
 		// prevent tabbing out of modal dialogs
 		if ( options.modal ) {
-			uiDialog.bind( "keydown.ui-dialog", function( event ) {
+			this._on( uiDialog, { keydown: function( event ) {
 				if ( event.keyCode !== $.ui.keyCode.TAB ) {
 					return;
 				}
 
-				var tabbables = $( ":tabbable", this ),
+				var tabbables = $( ":tabbable", uiDialog ),
 					first = tabbables.filter( ":first" ),
 					last  = tabbables.filter( ":last" );
 
@@ -326,7 +327,7 @@ $.widget("ui.dialog", {
 					last.focus( 1 );
 					return false;
 				}
-			});
+			}});
 		}
 
 		// set focus to the first tabbable element in the content area or the first button
