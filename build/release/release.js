@@ -43,6 +43,8 @@ walk([
 	section( "updating trac" ),
 	updateTrac,
 	confirm
+
+	// TODO: upload release zip to GitHub
 ]);
 
 
@@ -140,17 +142,14 @@ function buildRelease() {
 	echo();
 
 	echo( "Building release..." );
+	// TODO: Build themes
 	if ( exec( "grunt release" ).code !== 0 ) {
 		abort( "Error building release." );
 	}
 	echo();
 
-	// TODO: Build themes
-
-	// TODO: Move build out of dist/
 	echo( "Committing release artifacts..." );
 	git( "add *.jquery.json", "Error adding manifest files to git." );
-	// TODO: Add built files
 	git( "commit -am 'Tagging the " + newVersion + " release.'",
 		"Error committing release changes." );
 	echo();
