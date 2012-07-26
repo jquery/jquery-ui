@@ -96,6 +96,12 @@ $.widget = function( name, base, prototype ) {
 				};
 			})();
 		}
+		// don't mess with the user's prototype, prop's that are not functions and the like
+		//  not only to preserve backward compat but a user might have a property that is not 
+		//  a function ( like an enum or ... )
+		else {
+			prototype[ prop ] = value;
+		}
 	});
 	constructor.prototype = $.widget.extend( basePrototype, {
 		// TODO: remove support for widgetEventPrefix
