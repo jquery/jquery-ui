@@ -110,16 +110,22 @@ $.widget("ui.dialog", {
 				})
 				.appendTo( "body" ),
 
+			// Add a document wrapper inside the dialog for a11y.
+			uiDialogDocument = options.modal ? ( this.uiDialogDocument = $( "<div>" ) )
+			  .attr( "role", "document")
+				.addClass( "ui-dialog-document" )
+				.appendTo( uiDialog) : null,
+
 			uiDialogContent = this.element
 				.show()
 				.removeAttr( "title" )
 				.addClass( "ui-dialog-content ui-widget-content" )
-				.appendTo( uiDialog ),
+				.appendTo( options.modal ? uiDialogDocument : uiDialog ),
 
 			uiDialogTitlebar = ( this.uiDialogTitlebar = $( "<div>" ) )
 				.addClass( "ui-dialog-titlebar  ui-widget-header  " +
 					"ui-corner-all  ui-helper-clearfix" )
-				.prependTo( uiDialog ),
+				.prependTo( options.modal ? uiDialogDocument : uiDialog ),
 
 			uiDialogTitlebarClose = $( "<a href='#'></a>" )
 				.addClass( "ui-dialog-titlebar-close  ui-corner-all" )
@@ -148,9 +154,15 @@ $.widget("ui.dialog", {
 				.addClass( "ui-dialog-buttonset" )
 				.appendTo( uiDialogButtonPane );
 
+		if (options.modal) {
+			// We should only sandbox user to dialog if modal (a11y).
+			uiDialog.attr({
+				role: "dialog"
+			});
+		}
 		uiDialog.attr({
-			role: "dialog",
-			"aria-labelledby": uiDialogTitle.attr( "id" )
+			"aria-labelledby": uiDialogTitle.attr( "id" ),
+			"aria-describedby": uiDialogContent.attr( "id" )
 		});
 
 		uiDialogTitlebar.find( "*" ).add( uiDialogTitlebar ).disableSelection();
@@ -252,6 +264,12 @@ $.widget("ui.dialog", {
 			$.ui.dialog.maxZ = maxZ;
 		}
 
+		// return the focus to the triggering element for a11y.
+		if (this.triggerEl) {
+			this.triggerEl.focus();
+			this.triggerEl = false;
+		}
+
 		return this;
 	},
 
@@ -297,6 +315,10 @@ $.widget("ui.dialog", {
 	open: function() {
 		if ( this._isOpen ) {
 			return;
+		}
+
+		if (document.activeElement) {
+			this.triggerEl = $( document.activeElement )
 		}
 
 		var hasFocus,
