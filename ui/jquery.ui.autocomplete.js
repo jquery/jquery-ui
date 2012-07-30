@@ -577,7 +577,7 @@ $.widget( "ui.autocomplete", $.ui.autocomplete, {
 	options: {
 		messages: {
 			noResults: "No search results.",
-			results: function(amount) {
+			results: function( amount ) {
 				return amount + ( amount > 1 ? " results are" : " result is" ) +
 					" available, use up and down arrow keys to navigate.";
 			}
@@ -587,7 +587,7 @@ $.widget( "ui.autocomplete", $.ui.autocomplete, {
 	__response: function( content ) {
 		var message;
 		this._superApply( arguments );
-		if ( this.options.disabled || this.cancelSearch) {
+		if ( this.options.disabled || this.cancelSearch ) {
 			return;
 		}
 		if ( content && content.length ) {
