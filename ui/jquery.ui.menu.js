@@ -77,8 +77,11 @@ $.widget( "ui.menu", {
 					mouseHandled = true;
 
 					this.select( event );
-					// Redirect focus to the menu
-					if ( !this.element.is(":focus") ) {
+					// Open submenu on click
+					if ( this.element.has( ".ui-menu" ).length ) {
+						this.expand( event );
+					} else if ( !this.element.is(":focus") ) {
+						// Redirect focus to the menu
 						this.element.focus();
 					}
 				}
@@ -584,7 +587,9 @@ $.widget( "ui.menu", {
 			// Selecting a menu item removes the active item causing multiple clicks to be missing an item
 			item: this.active || $( event.target ).closest( ".ui-menu-item" )
 		};
-		this.collapseAll( event, true );
+		if ( !ui.item.has( ".ui-menu" ).length ) {
+			this.collapseAll( event, true );
+		}
 		this._trigger( "select", event, ui );
 	}
 });
