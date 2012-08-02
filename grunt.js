@@ -164,6 +164,7 @@ grunt.initConfig({
 				"README.md",
 				"grunt.js",
 				"package.json",
+				"*.jquery.json",
 				"ui/**/*",
 				"demos/**/*",
 				"themes/**/*",
