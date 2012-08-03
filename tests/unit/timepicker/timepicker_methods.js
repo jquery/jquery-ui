@@ -3,7 +3,7 @@
 module( "timepicker: methods" );
 
 test( "value - get and set value", function() {
-	expect( );
+	expect( 3 );
 
 	var i,
 		input = $( "#timepicker1" ).val( "12:00:00 AM" ).timepicker();

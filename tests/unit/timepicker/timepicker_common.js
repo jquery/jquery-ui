@@ -1,4 +1,4 @@
-commonWidgetTests( "timepicker", {
+TestHelpers.commonWidgetTests( "timepicker", {
 	defaults: {
 		ampm: true,
 		disabled: false,

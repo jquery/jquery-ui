@@ -1,4 +1,4 @@
-commonWidgetTests( "mask", {
+TestHelpers.commonWidgetTests( "mask", {
 	defaults: {
 		clearEmpty: true,
 		definitions: {

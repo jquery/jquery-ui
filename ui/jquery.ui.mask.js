@@ -32,7 +32,7 @@ $.widget( "ui.mask", {
 		this._parseMask();
 		this.refresh();
 		this.element.addClass( "ui-mask" );
-		this._bind( this._events );
+		this._on( this._events );
 	},
 
 	_destroy: function() {

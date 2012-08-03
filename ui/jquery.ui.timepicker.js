@@ -73,7 +73,7 @@ $.widget( "ui.timepicker", {
 			}
 		});
 		this._setField( 0 );
-		this._bind( this._events );
+		this._on( this._events );
 	},
 	_destroy: function() {
 		this.element.mask( "destroy" );

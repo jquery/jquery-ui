@@ -12,9 +12,9 @@ test( "clearEmpty", function() {
 		mask = input.data( "mask" );
 
 	equal( input.val(), "", "Empty value with clearEmpty displays no mask" );
-	focus( input );
+	TestHelpers.focus( input );
 	equal( input.val(), "__/__/__", "Empty value with clearEmpty & element focus displays mask" );
-	blur( input );
+	TestHelpers.blur( input );
 	equal( input.val(), "", "Empty value with clearEmpty displays no mask after blur" );
 	input.mask( "option", "clearEmpty", false );
 	equal( input.val(), "__/__/__", "Disabling clearEmpty displays mask" );
@@ -45,7 +45,7 @@ test( "mask", function() {
 	equal( input.val(), "(123)4__-____", "Mask changed" );
 });
 
-test( "mask option parser", function() {
+test( "mask option parser", 1, function() {
 	var defs = {
 			hh: function( value ) {
 				value = parseInt( value, 10 );
