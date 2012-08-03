@@ -5,9 +5,12 @@
 	<title>jQuery UI Draggable Test Suite</title>
 
 	<script src="../../jquery.js"></script>
-	<script src="../../resource_loader.js"></script>
+	<link rel="stylesheet" href="../../../external/qunit.css">
+	<script src="../../../external/qunit.js"></script>
+	<script src="../../jquery.simulate.js"></script>
+	<script src="../testsuite.js"></script>
 	<script>
-	loadResources({
+	TestHelpers.loadResources({
 		css: [ "ui.core" ],
 		js: [
 			"ui/jquery.ui.core.js",
@@ -18,13 +21,8 @@
 	});
 	</script>
 
-	<link rel="stylesheet" href="../../../external/qunit.css">
-	<script src="../../../external/qunit.js"></script>
-	<script src="../../jquery.simulate.js"></script>
-	<script src="../testsuite.js"></script>
-
+	<script src="draggable_common.js"></script>
 	<script src="draggable_core.js"></script>
-	<script src="draggable_defaults.js"></script>
 	<script src="draggable_events.js"></script>
 	<script src="draggable_methods.js"></script>
 	<script src="draggable_options.js"></script>

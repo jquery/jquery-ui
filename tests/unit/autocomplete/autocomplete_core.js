@@ -123,4 +123,70 @@ test( "allow form submit on enter when menu is not active", function() {
 	}
 })();
 
+asyncTest( "handle race condition", function() {
+	expect( 3 );
+	var count = 0,
+		element = $( "#autocomplete" ).autocomplete({
+		source: function( request, response ) {
+			count++;
+			if ( request.term.length === 1 ) {
+				equal( count, 1, "request with 1 character is first" );
+				setTimeout(function() {
+					response([ "one" ]);
+					setTimeout( checkResults, 1 );
+				}, 1 );
+				return;
+			}
+			equal( count, 2, "request with 2 characters is second" );
+			response([ "two" ]);
+		}
+	});
+
+	element.autocomplete( "search", "a" );
+	element.autocomplete( "search", "ab" );
+
+	function checkResults() {
+		equal( element.autocomplete( "widget" ).find( ".ui-menu-item" ).text(), "two",
+			"correct results displayed" );
+		start();
+	}
+});
+
+test( "ARIA", function() {
+	expect( 7 );
+	var element = $( "#autocomplete" ).autocomplete({
+			source: [ "java", "javascript" ]
+		}),
+		liveRegion = element.data( "ui-autocomplete" ).liveRegion;
+
+	equal( liveRegion.text(), "", "Empty live region on create" );
+
+	element.autocomplete( "search", "j" );
+	equal( liveRegion.text(), "2 results are available, use up and down arrow keys to navigate.",
+		"Live region for multiple values" );
+
+	element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
+	equal( liveRegion.text(), "2 results are available, use up and down arrow keys to navigate.",
+		"Live region not changed on focus" );
+
+	element.one( "autocompletefocus", function( event ) {
+		event.preventDefault();
+	});
+	element.simulate( "keydown", { keyCode: $.ui.keyCode.DOWN } );
+	equal( liveRegion.text(), "javascript",
+		"Live region updated when default focus is prevented" );
+
+	element.autocomplete( "search", "javas" );
+	equal( liveRegion.text(), "1 result is available, use up and down arrow keys to navigate.",
+		"Live region for one value" );
+
+	element.autocomplete( "search", "z" );
+	equal( liveRegion.text(), "No search results.",
+		"Live region for no values" );
+
+	element.autocomplete( "search", "j" );
+	equal( liveRegion.text(), "2 results are available, use up and down arrow keys to navigate.",
+		"Live region for multiple values" );
+});
+
 }( jQuery ) );

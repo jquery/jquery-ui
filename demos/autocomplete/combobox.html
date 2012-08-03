@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<title>jQuery UI Autocomplete - Combobox</title>
 	<link rel="stylesheet" href="../../themes/base/jquery.ui.all.css">
-	<script src="../../jquery-1.7.1.js"></script>
+	<script src="../../jquery-1.7.2.js"></script>
 	<script src="../../ui/jquery.ui.core.js"></script>
 	<script src="../../ui/jquery.ui.widget.js"></script>
 	<script src="../../ui/jquery.ui.button.js"></script>
@@ -14,25 +14,37 @@
 	<script src="../../ui/jquery.ui.tooltip.js"></script>
 	<link rel="stylesheet" href="../demos.css">
 	<style>
-	.ui-button {
-		margin-left: -1px;
+	.ui-combobox {
+		position: relative;
+		display: inline-block;
 	}
-	.ui-button-icon-only .ui-button-text {
-		padding: 0.35em;
-	} 
-	.ui-autocomplete-input {
+	.ui-combobox-toggle {
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		margin-left: -1px;
+		padding: 0;
+		/* adjust styles for IE 6/7 */
+		*height: 1.7em;
+		*top: 0.1em;
+	}
+	.ui-combobox-input {
 		margin: 0;
-		padding: 0.4em 0 0.4em 0.45em;
+		padding: 0.3em;
 	}
 	</style>
 	<script>
 	(function( $ ) {
 		$.widget( "ui.combobox", {
 			_create: function() {
-				var that = this,
+				var input,
+					that = this,
 					select = this.element.hide(),
 					selected = select.children( ":selected" ),
-					value = selected.val() ? selected.text() : "";
+					value = selected.val() ? selected.text() : "",
+					wrapper = this.wrapper = $( "<span>" )
+						.addClass( "ui-combobox" )
+						.insertAfter( select );
 
 				function removeIfInvalid(element) {
 					var value = $( element ).val(),
@@ -59,10 +71,11 @@
 					}
 				}
 
-				var input = this.input = $( "<input>" )
-					.insertAfter( select )
+				input = $( "<input>" )
+					.appendTo( wrapper )
 					.val( value )
 					.attr( "title", "" )
+					.addClass( "ui-state-default ui-combobox-input" )
 					.autocomplete({
 						delay: 0,
 						minLength: 0,
@@ -103,11 +116,11 @@
 						.appendTo( ul );
 				};
 
-				this.button = $( "<button type='button'>&nbsp;</button>" )
+				$( "<a>" )
 					.attr( "tabIndex", -1 )
 					.attr( "title", "Show All Items" )
 					.tooltip()
-					.insertAfter( input )
+					.appendTo( wrapper )
 					.button({
 						icons: {
 							primary: "ui-icon-triangle-1-s"
@@ -115,7 +128,7 @@
 						text: false
 					})
 					.removeClass( "ui-corner-all" )
-					.addClass( "ui-corner-right ui-button-icon" )
+					.addClass( "ui-corner-right ui-combobox-toggle" )
 					.click(function() {
 						// close if already visible
 						if ( input.autocomplete( "widget" ).is( ":visible" ) ) {
@@ -142,8 +155,7 @@
 			},
 
 			destroy: function() {
-				this.input.remove();
-				this.button.remove();
+				this.wrapper.remove();
 				this.element.show();
 				$.Widget.prototype.destroy.call( this );
 			}
@@ -159,7 +171,7 @@
 	</script>
 </head>
 <body>
-	
+
 <div class="demo">
 
 <div class="ui-widget">

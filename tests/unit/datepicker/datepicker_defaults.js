@@ -6,4 +6,4 @@ var datepicker_defaults = {
 	disabled: false
 };
 
-//commonWidgetTests('datepicker', { defaults: datepicker_defaults });
+//TestHelpers.commonWidgetTests('datepicker', { defaults: datepicker_defaults });

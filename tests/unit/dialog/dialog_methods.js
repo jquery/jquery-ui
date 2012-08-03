@@ -34,6 +34,8 @@ test("init", function() {
 });
 
 test("destroy", function() {
+	expect( 4 );
+
 	$("<div></div>").appendTo('body').dialog().dialog("destroy").remove();
 	ok(true, '.dialog("destroy") called on element');
 
@@ -49,6 +51,8 @@ test("destroy", function() {
 });
 
 test("enable", function() {
+	expect( 3 );
+
 	var expected = $('<div></div>').dialog(),
 		actual = expected.dialog('enable');
 	equal(actual, expected, 'enable is chainable');
@@ -60,6 +64,8 @@ test("enable", function() {
 });
 
 test("disable", function() {
+	expect( 3 );
+
 	var expected = $('<div></div>').dialog(),
 		actual = expected.dialog('disable');
 	equal(actual, expected, 'disable is chainable');
@@ -71,6 +77,8 @@ test("disable", function() {
 });
 
 test("close", function() {
+	expect( 3 );
+
 	var expected = $('<div></div>').dialog(),
 		actual = expected.dialog('close');
 	equal(actual, expected, 'close is chainable');
@@ -98,14 +106,19 @@ test("isOpen", function() {
 });
 
 test("moveToTop", function() {
-	var expected = $('<div></div>').dialog(),
+	expect( 3 );
+
+	var d1, d2, dlg1, dlg2,
+		expected = $('<div></div>').dialog(),
 		actual = expected.dialog('moveToTop');
 	equal(actual, expected, 'moveToTop is chainable');
 
-	var d1 = $('<div></div>').dialog(), dlg1 = d1.parents('.ui-dialog');
+	d1 = $('<div></div>').dialog();
+	dlg1 = d1.parents('.ui-dialog');
 	d1.dialog('close');
 	d1.dialog('open');
-	var d2 = $('<div></div>').dialog(), dlg2 = d2.parents('.ui-dialog');
+	d2 = $('<div></div>').dialog();
+	dlg2 = d2.parents('.ui-dialog');
 	d2.dialog('close');
 	d2.dialog('open');
 	ok(dlg1.css('zIndex') < dlg2.css('zIndex'), 'dialog 1 under dialog 2 before moveToTop method called');
@@ -114,6 +127,7 @@ test("moveToTop", function() {
 });
 
 test("open", function() {
+	expect( 3 );
 	var expected = $('<div></div>').dialog(),
 		actual = expected.dialog('open');
 	equal(actual, expected, 'open is chainable');

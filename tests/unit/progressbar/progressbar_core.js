@@ -1,28 +1,20 @@
-/*
- * progressbar_core.js
- */
+module( "progressbar: core" );
 
-var el;
+test( "accessibility", function() {
+	expect( 7 );
+	var element = $( "#progressbar" ).progressbar();
 
-(function($) {
+	equal( element.attr( "role" ), "progressbar", "aria role" );
+	equal( element.attr( "aria-valuemin" ), 0, "aria-valuemin" );
+	equal( element.attr( "aria-valuemax" ), 100, "aria-valuemax" );
+	equal( element.attr( "aria-valuenow" ), 0, "aria-valuenow initially" );
 
-module("progressbar: core");
+	element.progressbar( "value", 77 );
+	equal( element.attr( "aria-valuenow" ), 77, "aria-valuenow" );
 
-test("accessibility", function() {
-	expect(7);
-	el = $("#progressbar").progressbar();
+	element.progressbar( "disable" );
+	equal( element.attr( "aria-disabled" ), "true", "aria-disabled on" );
 
-	equal(el.attr("role"), "progressbar", "aria role");
-	equal(el.attr("aria-valuemin"), 0, "aria-valuemin");
-	equal(el.attr("aria-valuemax"), 100, "aria-valuemax");
-	equal(el.attr("aria-valuenow"), 0, "aria-valuenow initially");
-	el.progressbar("value", 77);
-	equal(el.attr("aria-valuenow"), 77, "aria-valuenow");
-	el.progressbar("disable");
-	equal(el.attr("aria-disabled"), "true", "aria-disabled on");
-	el.progressbar("enable");
-	// FAIL: for some reason IE6 and 7 return a boolean false instead of the string
-	equal(el.attr("aria-disabled"), "false", "aria-disabled off");
+	element.progressbar( "enable" );
+	equal( element.attr( "aria-disabled" ), "false", "aria-disabled off" );
 });
-
-})(jQuery);

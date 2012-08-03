@@ -5,9 +5,12 @@
 	<title>jQuery UI Accordion Test Suite</title>
 
 	<script src="../../jquery.js"></script>
-	<script src="../../resource_loader.js"></script>
+	<link rel="stylesheet" href="../../../external/qunit.css">
+	<script src="../../../external/qunit.js"></script>
+	<script src="../../jquery.simulate.js"></script>
+	<script src="../testsuite.js"></script>
 	<script>
-	loadResources({
+	TestHelpers.loadResources({
 		css: [ "ui.core", "ui.accordion" ],
 		js: [
 			"ui/jquery.ui.core.js",
@@ -17,13 +20,8 @@
 	});
 	</script>
 
-	<link rel="stylesheet" href="../../../external/qunit.css">
-	<script src="../../../external/qunit.js"></script>
-	<script src="../../jquery.simulate.js"></script>
-	<script src="../testsuite.js"></script>
-
 	<script src="accordion_test_helpers.js"></script>
-	<script src="accordion_defaults_deprecated.js"></script>
+	<script src="accordion_common_deprecated.js"></script>
 	<script src="accordion_core.js"></script>
 	<script src="accordion_events.js"></script>
 	<script src="accordion_methods.js"></script>
@@ -64,7 +62,7 @@
 		<p>
 			your bear, you have to admit it!
 			<br>
-			No, we aren't selling bears.
+			No, we aren't <a href="#">selling bears</a>.
 		</p>
 		<p>
 			We could talk about renting one.
@@ -91,7 +89,7 @@
 				<li><a href="?p=1.1.1.3">Amps</a></li>
 				<li><a href="?p=1.1.1.4">Effects</a></li>
 				<li><a href="?p=1.1.1.5">Accessories</a></li>
-			</ul> 
+			</ul>
 		</li>
 		<li>
 			<h2><a href="?p=1.1.2"><span>Bass</span></a></h2>
@@ -103,7 +101,7 @@
 				<li><a href="?p=1.1.2.5">Accessories</a></li>
 				<li><a href="?p=1.1.2.5">Accessories</a></li>
 				<li><a href="?p=1.1.2.5">Accessories</a></li>
-			</ul> 
+			</ul>
 		</li>
 		<li>
 			<h2><a href="?p=1.1.3">Drums</a></h2>
@@ -111,7 +109,7 @@
 				<li><a href="?p=1.1.3.2">Acoustic</a></li>
 				<li><a href="?p=1.1.3.3">Electronic</a></li>
 				<li><a href="?p=1.1.3.6">Accessories</a></li>
-			</ul> 
+			</ul>
 		</li>
 	</ul>
 </div>

@@ -5,9 +5,12 @@
 	<title>jQuery UI Menu Test Suite</title>
 
 	<script src="../../jquery.js"></script>
-	<script src="../../resource_loader.js"></script>
+	<link rel="stylesheet" href="../../../external/qunit.css">
+	<script src="../../../external/qunit.js"></script>
+	<script src="../../jquery.simulate.js"></script>
+	<script src="../testsuite.js"></script>
 	<script>
-	loadResources({
+	TestHelpers.loadResources({
 		css: [ "ui.core", "ui.menu" ],
 		js: [
 			"ui/jquery.ui.core.js",
@@ -17,14 +20,9 @@
 	});
 	</script>
 
-	<link rel="stylesheet" href="../../../external/qunit.css">
-	<script src="../../../external/qunit.js"></script>
-	<script src="../../jquery.simulate.js"></script>
-	<script src="../testsuite.js"></script>
-
 	<script src="menu_test_helpers.js"></script>
+	<script src="menu_common.js"></script>
 	<script src="menu_core.js"></script>
-	<script src="menu_defaults.js"></script>
 	<script src="menu_events.js"></script>
 	<script src="menu_methods.js"></script>
 	<script src="menu_options.js"></script>
@@ -46,18 +44,14 @@
 </head>
 <body>
 
-<h1 id="qunit-header">jQuery UI Menu Test Suite</h1>
-<h2 id="qunit-banner"></h2>
-<div id="qunit-testrunner-toolbar"></div>
-<h2 id="qunit-userAgent"></h2>
-<ol id="qunit-tests"></ol>
+<div id="qunit">jQuery UI Menu Test Suite</div>
 <div id="qunit-fixture">
 
 <ul class="foo" id="menu1">
 	<li class="foo"><a class="foo" href="#">Aberdeen</a></li>
 	<li class="foo"><a class="foo" href="#">Ada</a></li>
 	<li class="foo"><a class="foo" href="#">Adamsville</a></li>
-	<li class="foo"><a class="foo" href="#">Addyston</a></li>
+	<li class="foo"><a id="testID1" class="foo" href="#">Addyston</a></li>
 	<li class="foo"><a class="foo" href="#">Adelphi</a></li>
 </ul>
 
@@ -65,7 +59,7 @@
 	<li class="foo"><a class="foo" href="#">Aberdeen</a></li>
 	<li class="foo"><a class="foo" href="#">Ada</a></li>
 	<li class="foo"><a class="foo" href="#">Adamsville</a></li>
-	<li class="foo"><a class="foo" href="#">Addyston</a></li>
+	<li class="foo"><a class="foo" href="#"><span class="ui-icon ui-icon-print"></span>Addyston</a></li>
 	<li>
 		<a href="#">Delphi</a>
 		<ul>
@@ -90,8 +84,11 @@
 				<a href="#">Delphi</a>
 				<ul>
 					<li class="foo"><a class="foo" href="#">Ada</a></li>
+					<li> - </li>
 					<li class="foo"><a class="foo" href="#">Saarland</a></li>
+					<li></li>
 					<li class="foo"><a class="foo" href="#">Salzburg</a></li>
+					<li>&ndash;</li>
 				</ul>
 			</li>
 			<li class="foo"><a class="foo" href="#">Perch</a></li>
@@ -234,7 +231,7 @@
 				<a href="#">Delphi</a>
 				<div>
 					<blockquote><a href="#">Ada</a></blockquote>
-					<blockquote><a href="#">Saarland</a></blockquote>
+					<blockquote><a id="testID2" href="#">Saarland</a></blockquote>
 					<blockquote><a href="#">Salzburg</a></blockquote>
 				</div>
 			</blockquote>
@@ -251,7 +248,21 @@
 	</blockquote>
 </div>
 
-<div id="log"></div>
+<ul id="menu6">
+	<li class="foo"><a class="foo" href="#">Aberdeen</a></li>
+	<li class="foo ui-state-disabled"><a class="foo" href="#">Ada</a></li>
+	<li class="foo"><a class="foo" href="#">Adamsville</a></li>
+	<li class="foo"><a class="foo" href="#">Addyston</a></li>
+	<li class="ui-state-disabled">
+		<a id="testID3" href="#">Delphi</a>
+		<ul>
+			<li class="foo"><a class="foo" href="#">Ada</a></li>
+			<li class="foo"><a class="foo" href="#">Saarland</a></li>
+			<li class="foo"><a class="foo" href="#">Salzburg</a></li>
+		</ul>
+	</li>
+	<li class="foo"><a class="foo" href="#">Saarland</a></li>
+</ul>
 
 </div>
 </body>
