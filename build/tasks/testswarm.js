@@ -44,7 +44,7 @@ function submit( commit, tests, configFile, version, done ) {
 	testswarm({
 		url: config.swarmUrl,
 		pollInterval: 10000,
-		timeout: 1000 * 60 * 30,
+		timeout: 1000 * 60 * 45,
 		done: done
 	}, {
 		authUsername: config.authUsername,
