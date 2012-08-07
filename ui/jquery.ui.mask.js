@@ -197,7 +197,7 @@ $.widget( "ui.mask", {
 
 					// if the caret is not "selecting" values, we need to find the proper
 					// character in the buffer to delete/backspace over.
-					if ( position.begin === position.end ) {
+					if ( position.begin === position.end || this._isEmpty( position.begin, position.end ) ) {
 						if ( key === keyCode.DELETE ) {
 							position.begin = position.end = this._seekRight( position.begin - 1 );
 						} else {
@@ -276,6 +276,21 @@ $.widget( "ui.mask", {
 		},
 		paste: "_paste",
 		input: "_paste"
+	},
+	_isEmpty: function( begin, end ) {
+		var index;
+		if ( begin === undefined ) {
+			begin = 0;
+			end = this.buffer.length - 1;
+		} else if ( end === undefined ) {
+			end = begin;
+		}
+		for ( index = begin; index <= end; index++ ) {
+			if ( this.buffer[ index ] && this.buffer[ index ].value ) {
+				return false;
+			}
+		}
+		return true;
 	},
 	_paste: function(event) {
 		this._delay( function() {

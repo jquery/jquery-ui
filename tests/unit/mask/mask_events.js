@@ -184,6 +184,44 @@ test( "keypress: Typing with multi-character only accepts valid values", functio
 	deepEqual( mask._caret(), { begin: 6, end: 8 }, "Caret position correct");
 });
 
+test( "keypress: Backspace with multi-character ", 6, function() {
+	var input = $( "#mask1" ).val( "aa-bb-cc" ).mask({
+			mask: "aa-aa-aa",
+			definitions: {
+				aa: function( value ) {
+					if ( !value.length ) {
+						return;
+					}
+					if ( value.charAt( 0 ) === "_" ) {
+						return;
+					}
+					if ( value.length === 1 ) {
+						return value+value;
+					}
+					if ( value.charAt( 0 ) === value.charAt( 1 ) ) {
+						return value;
+					}
+				}
+			}
+		}),
+		mask = input.data( "mask" );
+
+	TestHelpers.focus( input );
+	equal( input.val(), "aa-bb-cc", "Initial Value Expected" );
+	mask._caret( 6, 8 );
+
+	deepEqual( mask._caret(), { begin: 6, end: 8 }, "Caret position correct");
+
+	input.simulate( "keydown", { keyCode: $.ui.keyCode.BACKSPACE });
+	equal( input.val(), "aa-bb-__", "Deleted Value Expected" );
+	deepEqual( mask._caret(), { begin: 6, end: 8 }, "Caret position correct");
+
+	input.simulate( "keydown", { keyCode: $.ui.keyCode.BACKSPACE });
+	equal( input.val(), "aa-__-__", "Deleted Value Expected" );
+	deepEqual( mask._caret(), { begin: 3, end: 5 }, "Caret position correct");
+
+});
+
 test( "keydown: Delete pulling values", function() {
 	expect( 18 );
 	var input = $( "#mask1" ).val("123").mask({ mask: "9-99" }),
