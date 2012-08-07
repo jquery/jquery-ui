@@ -12,8 +12,7 @@ test( "masked inputs get the '.ui-mask' class", function() {
 	ok( !input.is( ".ui-mask" ), "destroy clears masked class" );
 });
 
-test( "_caret() can move and read the text cursor", function() {
-	expect( 3 );
+test( "_caret() can move and read the text cursor", 4, function() {
 
 	var input = $( "#mask1" ).val("1234").mask({
 			mask: "9999"
@@ -21,12 +20,17 @@ test( "_caret() can move and read the text cursor", function() {
 		instance = input.data( "mask" );
 
 	focus( input );
-
 	instance._caret( 0 );
 	deepEqual( instance._caret(), {
 		begin: 0,
 		end: 0
 	}, "Caret position set to 0 results in 0, 0" );
+
+	instance._caret( 1 );
+	deepEqual( instance._caret(), {
+		begin: 1,
+		end: 1
+	}, "Caret position set 1 results in 1, 1" );
 
 	instance._caret( 5 );
 	deepEqual( instance._caret(), {

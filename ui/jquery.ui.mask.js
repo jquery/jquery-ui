@@ -236,7 +236,7 @@ $.widget( "ui.mask", {
 			}
 		},
 		keypress: function( event ) {
-			var tempValue,
+			var tempValue, valid,
 				key = event.which,
 				position = this._caret(),
 				bufferPosition = this._seekRight( position.begin - 1 ),
@@ -257,14 +257,17 @@ $.widget( "ui.mask", {
 						bufferObject.value.substr( bufferPosition - bufferObject.start + 1 );
 					tempValue = tempValue.substr( 0, bufferObject.length );
 				}
-				if ( this._validValue( bufferObject, tempValue ) ) {
+				valid = this._validValue( bufferObject, tempValue );
+				if ( valid ) {
 					this._shiftRight( position.begin );
 					bufferObject.value = tempValue;
-					this._paint();
 					position = this._seekRight( bufferPosition );
 					if ( position <= bufferObject.start + bufferObject.length ) {
+						this._paint();
 						this._caret( position );
 					} else {
+						bufferObject.value = valid;
+						this._paint();
 						this._caretSelect( position );
 					}
 				}

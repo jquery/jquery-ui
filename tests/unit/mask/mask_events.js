@@ -136,7 +136,7 @@ test( "keypress: Typing with multi-character fields", function() {
 });
 
 test( "keypress: Typing with multi-character only accepts valid values", function() {
-	expect( 8 );
+	expect( 12 );
 	var input = $( "#mask1" ).val( "" ).mask({
 			mask: "aa-aa-aa",
 			definitions: {
@@ -147,8 +147,8 @@ test( "keypress: Typing with multi-character only accepts valid values", functio
 					if ( value.charAt( 0 ) === "_" ) {
 						return;
 					}
-					if ( value.length === 1 ) {
-						return value+value;
+					if ( value.charAt( 1 ) === "-" || value.length === 1 ) {
+						return value.charAt(0) + value.charAt( 0 );
 					}
 					if ( value.charAt( 0 ) === value.charAt( 1 ) ) {
 						return value;
@@ -162,17 +162,27 @@ test( "keypress: Typing with multi-character only accepts valid values", functio
 	equal( input.val(), "__-__-__", "Initial Value Expected" );
 
 	deepEqual( mask._caret(), { begin: 0, end: 2 }, "Caret position correct");
+
 	TestHelpers.press( input, "0" );
 	equal( input.val(), "0_-__-__", "typed a 0" );
 	deepEqual( mask._caret(), { begin: 1, end: 1 }, "Caret position correct");
+
 	TestHelpers.press( input, "z" );
 	equal( input.val(), "0_-__-__", "typed a z, wasn't allowed" );
 	deepEqual( mask._caret(), { begin: 1, end: 1 }, "Caret position correct");
+
 	TestHelpers.press( input, "0" );
 	equal( input.val(), "00-__-__", "typed a 0, was allowed" );
 	deepEqual( mask._caret(), { begin: 3, end: 5 }, "Caret position correct");
-});
 
+	TestHelpers.press( input, "1" );
+	equal( input.val(), "00-1_-__", "typed a 1, was allowed" );
+	deepEqual( mask._caret(), { begin: 4, end: 4 }, "Caret position correct");
+
+	TestHelpers.press( input, "-" );
+	equal( input.val(), "00-11-__", "typed a 1, was replaced with correct value" );
+	deepEqual( mask._caret(), { begin: 6, end: 8 }, "Caret position correct");
+});
 
 test( "keydown: Delete pulling values", function() {
 	expect( 18 );
