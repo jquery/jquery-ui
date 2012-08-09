@@ -475,7 +475,7 @@ $.widget("ui.resizable", $.ui.mouse, {
 				position: 'absolute',
 				left: this.elementOffset.left - ie6offset +'px',
 				top: this.elementOffset.top - ie6offset +'px',
-				zIndex: ++o.zIndex //TODO: Don't modify option
+				zIndex: el.css('z-index')? parseInt(el.css('z-index')) + (++o.zIndex): ++o.zIndex //TODO: Don't modify option
 			});
 
 			this.helper
