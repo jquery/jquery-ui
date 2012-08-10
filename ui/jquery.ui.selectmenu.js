@@ -280,7 +280,7 @@ $.widget("ui.selectmenu", {
 			var opt = $(this);
 			selectOptionData.push({
 				value: opt.attr('value'),
-				text: self._formatText(opt.text()),
+				text: self._formatText(opt.text(), opt),
 				selected: opt.attr('selected'),
 				disabled: opt.attr('disabled'),
 				classes: opt.attr('class'),
@@ -308,12 +308,7 @@ $.widget("ui.selectmenu", {
 					href : '#nogo',
 					tabindex : -1,
 					role : 'option',
-					'aria-selected' : false,
-					focus: function() {					    
-					    // bubble the focus event
-						// TODO: this isnt a clean solution, see #241
-					    $(this).parent().focus();
-					}
+					'aria-selected' : false
 				};
 				if ( selectOptionData[ i ].disabled ) {
 					thisAAttr[ 'aria-disabled' ] = selectOptionData[ i ].disabled;
@@ -321,7 +316,13 @@ $.widget("ui.selectmenu", {
 				if ( selectOptionData[ i ].typeahead ) {
 					thisAAttr[ 'typeahead' ] = selectOptionData[ i ].typeahead;
 				}
-				var thisA = $('<a/>', thisAAttr);
+				var thisA = $('<a/>', thisAAttr)
+				    .bind('focus.selectmenu', function(e) {
+						$(this).parent().mouseover();
+					})
+					.bind('blur.selectmenu', function() {
+						$(this).parent().mouseout();
+					});					
 				var thisLi = $('<li/>', thisLiAttr)
 					.append(thisA)
 					.data('index', i)
@@ -342,15 +343,15 @@ $.widget("ui.selectmenu", {
 					.bind("click.selectmenu", function() {
 						return false;
 					})
-					.bind('mouseover.selectmenu focus.selectmenu', function(e) {
+					.bind('mouseover.selectmenu', function(e) {
 						// no hover if diabled
-						if (!$(e.currentTarget).hasClass(self.namespace + '-state-disabled') && !$(e.currentTarget).parent("ul").parent("li").hasClass(self.namespace + '-state-disabled')) {
+						if (!$(this).hasClass(self.namespace + '-state-disabled') && !$(this).parent("ul").parent("li").hasClass(self.namespace + '-state-disabled')) {
 							self._selectedOptionLi().addClass(activeClass);
 							self._focusedOptionLi().removeClass(self.widgetBaseClass + '-item-focus ui-state-hover');
 							$(this).removeClass('ui-state-active').addClass(self.widgetBaseClass + '-item-focus ui-state-hover');
 						}
 					})
-					.bind('mouseout.selectmenu blur.selectmenu', function() {
+					.bind('mouseout.selectmenu', function() {
 						if ($(this).is(self._selectedOptionLi().selector)) {
 							$(this).addClass(activeClass);
 						}
@@ -628,9 +629,9 @@ $.widget("ui.selectmenu", {
 		}
 	},
 
-	_formatText: function(text) {
+	_formatText: function(text, opt) {
 		if (this.options.format) {
-			text = this.options.format(text);
+			text = this.options.format(text, opt);
 		} else if (this.options.escapeHtml) {
 			text = $('<div />').text(text).html();
 		}
@@ -757,7 +758,6 @@ $.widget("ui.selectmenu", {
 	_disabled: function(elem) {
 			return $(elem).hasClass( this.namespace + '-state-disabled' );
 	},
-
 
 	_disableOption: function(index) {
 			var optionElem = this._optionLis.eq(index);
