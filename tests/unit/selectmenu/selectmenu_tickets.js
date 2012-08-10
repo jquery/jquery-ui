@@ -19,6 +19,7 @@ test('#241 - "focus" doesn\'t bubble', function() {
 	ok($('.ui-selectmenu-menu li:eq(1)').hasClass('ui-selectmenu-item-focus'), 'after down arrow press, second item should have focus');
 
     // simulate('keypress') not working consistently in all browsers
+    // this problem but for firefox now: http://bugs.jqueryui.com/ticket/3229
     var e = new $.Event('keypress', { which: 'a'.charCodeAt(0) });
     $('.ui-selectmenu-menu-dropdown').trigger(e);
 	ok($('.ui-selectmenu-menu li:eq(2)').hasClass('ui-selectmenu-item-focus'), 'after "a" key press, third item should have focus');

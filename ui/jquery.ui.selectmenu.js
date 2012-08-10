@@ -317,7 +317,7 @@ $.widget("ui.selectmenu", {
 					thisAAttr[ 'typeahead' ] = selectOptionData[ i ].typeahead;
 				}
 				var thisA = $('<a/>', thisAAttr)
-				    .bind('focus.selectmenu', function(e) {
+					.bind('focus.selectmenu', function() {
 						$(this).parent().mouseover();
 					})
 					.bind('blur.selectmenu', function() {
@@ -343,7 +343,7 @@ $.widget("ui.selectmenu", {
 					.bind("click.selectmenu", function() {
 						return false;
 					})
-					.bind('mouseover.selectmenu', function(e) {
+					.bind('mouseover.selectmenu', function() {
 						// no hover if diabled
 						if (!$(this).hasClass(self.namespace + '-state-disabled') && !$(this).parent("ul").parent("li").hasClass(self.namespace + '-state-disabled')) {
 							self._selectedOptionLi().addClass(activeClass);
