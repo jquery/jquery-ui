@@ -285,11 +285,7 @@ asyncTest( "keyboard support - LEFT, RIGHT, UP, DOWN, HOME, END, SPACE, ENTER", 
 		equal( panels.eq( 2 ).attr( "aria-expanded" ), "false", "third panel has aria-expanded=false" );
 		equal( panels.eq( 2 ).attr( "aria-hidden" ), "true", "third panel has aria-hidden=true" );
 
-		// support: Firefox 12
-		// Firefox <13 passes arguments so we can't use setTimeout( start, 1 )
-		setTimeout(function() {
-			start();
-		}, 1 );
+		setTimeout( start, 1 );
 	}
 
 	setTimeout( step1, 1 );
@@ -482,11 +478,7 @@ asyncTest( "keyboard support - CTRL navigation", function() {
 		equal( panels.eq( 0 ).attr( "aria-expanded" ), "false", "first panel has aria-expanded=false" );
 		equal( panels.eq( 0 ).attr( "aria-hidden" ), "true", "first panel has aria-hidden=true" );
 
-		// support: Firefox 12
-		// Firefox <13 passes arguments so we can't use setTimeout( start, 1 )
-		setTimeout(function() {
-			start();
-		}, 1 );
+		setTimeout( start, 1 );
 	}
 
 	setTimeout( step1, 1 );
@@ -578,11 +570,7 @@ asyncTest( "keyboard support - CTRL+UP, ALT+PAGE_DOWN, ALT+PAGE_UP", function() 
 		panels.eq( 1 ).simulate( "keydown", { keyCode: keyCode.UP, ctrlKey: true } );
 		strictEqual( document.activeElement, tabs[ 1 ], "second tab is activeElement" );
 
-		// support: Firefox 12
-		// Firefox <13 passes arguments so we can't use setTimeout( start, 1 )
-		setTimeout(function() {
-			start();
-		}, 1 );
+		setTimeout( start, 1 );
 	}
 
 	setTimeout( step1, 1 );

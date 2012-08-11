@@ -3,7 +3,7 @@
  * http://jqueryui.com
  *
  * Copyright 2012 jQuery Foundation and other contributors
- * Dual licensed under the MIT or GPL Version 2 licenses.
+ * Released under the MIT license.
  * http://jquery.org/license
  *
  * http://docs.jquery.com/UI/Effects/Blind
@@ -42,7 +42,7 @@ $.effects.effect.blind = function( o, done ) {
 	});
 
 	distance = wrapper[ ref ]();
-	margin = parseFloat( wrapper.css( ref2 ) );
+	margin = parseFloat( wrapper.css( ref2 ) ) || 0;
 
 	animation[ ref ] = show ? distance : 0;
 	if ( !motion ) {
@@ -51,7 +51,7 @@ $.effects.effect.blind = function( o, done ) {
 			.css( vertical ? "top" : "left", "auto" )
 			.css({ position: "absolute" });
 
-	animation[ ref2 ] = show ? margin : distance + margin;
+		animation[ ref2 ] = show ? margin : distance + margin;
 	}
 
 	// start at 0 if we are showing

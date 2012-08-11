@@ -114,7 +114,7 @@ function createBanner( files ) {
 		"<%= grunt.template.today('isoDate') %>\n" +
 		"<%= pkg.homepage ? '* ' + pkg.homepage + '\n' : '' %>" +
 		"* Includes: " + (files ? fileNames.join(", ") : "<%= stripDirectory(grunt.task.current.file.src[1]) %>") + "\n" +
-		"* Copyright (c) <%= grunt.template.today('yyyy') %> <%= pkg.author.name %>;" +
+		"* Copyright <%= grunt.template.today('yyyy') %> <%= pkg.author.name %>;" +
 		" Licensed <%= _.pluck(pkg.licenses, 'type').join(', ') %> */";
 }
 
@@ -158,12 +158,12 @@ grunt.initConfig({
 		dist: {
 			src: [
 				"AUTHORS.txt",
-				"GPL-LICENSE.txt",
 				"jquery-*.js",
 				"MIT-LICENSE.txt",
 				"README.md",
 				"grunt.js",
 				"package.json",
+				"*.jquery.json",
 				"ui/**/*",
 				"demos/**/*",
 				"themes/**/*",
@@ -203,7 +203,6 @@ grunt.initConfig({
 		cdn: {
 			src: [
 				"AUTHORS.txt",
-				"GPL-LICENSE.txt",
 				"MIT-LICENSE.txt",
 				"ui/*.js",
 				"package.json"
@@ -246,7 +245,6 @@ grunt.initConfig({
 		themes: {
 			src: [
 				"AUTHORS.txt",
-				"GPL-LICENSE.txt",
 				"MIT-LICENSE.txt",
 				"package.json"
 			],

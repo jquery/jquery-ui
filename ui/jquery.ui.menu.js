@@ -3,7 +3,7 @@
  * http://jqueryui.com
  *
  * Copyright 2012 jQuery Foundation and other contributors
- * Dual licensed under the MIT or GPL Version 2 licenses.
+ * Released under the MIT license.
  * http://jquery.org/license
  *
  * http://docs.jquery.com/UI/Menu
@@ -15,7 +15,7 @@
  */
 (function( $, undefined ) {
 
-var currentEventTarget = null;
+var mouseHandled = false;
 
 $.widget( "ui.menu", {
 	version: "@VERSION",
@@ -73,23 +73,16 @@ $.widget( "ui.menu", {
 			},
 			"click .ui-menu-item:has(a)": function( event ) {
 				var target = $( event.target );
-				if ( target[0] !== currentEventTarget ) {
-					currentEventTarget = target[0];
-					// TODO: What are we trying to accomplish with this check?
-					// Clicking a menu item twice results in a select event with
-					// an empty ui.item.
-					target.one( "click" + this.eventNamespace, function( event ) {
-						currentEventTarget = null;
-					});
-					// Don't select disabled menu items
-					if ( !target.closest( ".ui-menu-item" ).is( ".ui-state-disabled" ) ) {
-						this.select( event );
-						// Redirect focus to the menu with a delay for firefox
-						this._delay(function() {
-							if ( !this.element.is(":focus") ) {
-								this.element.focus();
-							}
-						}, 20 );
+				if ( !mouseHandled && target.closest( ".ui-menu-item" ).not( ".ui-state-disabled" ).length ) {
+					mouseHandled = true;
+
+					this.select( event );
+					// Open submenu on click
+					if ( this.element.has( ".ui-menu" ).length ) {
+						this.expand( event );
+					} else if ( !this.element.is(":focus") ) {
+						// Redirect focus to the menu
+						this.element.focus();
 					}
 				}
 			},
@@ -127,6 +120,9 @@ $.widget( "ui.menu", {
 				if ( !$( event.target ).closest( ".ui-menu" ).length ) {
 					this.collapseAll( event );
 				}
+
+				// Reset the mouseHandled flag
+				mouseHandled = false;
 			}
 		});
 	},
@@ -166,9 +162,6 @@ $.widget( "ui.menu", {
 
 		// Destroy menu dividers
 		this.element.find( ".ui-menu-divider" ).removeClass( "ui-menu-divider ui-widget-content" );
-
-		// Unbind currentEventTarget click event handler
-		this._off( $( currentEventTarget ), "click" );
 	},
 
 	_keydown: function( event ) {
@@ -496,7 +489,7 @@ $.widget( "ui.menu", {
 			// Delay so Firefox will not hide activedescendant change in expanding submenu from AT
 			this._delay(function() {
 				this.focus( event, newItem );
-			}, 20 );
+			});
 		}
 	},
 
@@ -591,9 +584,12 @@ $.widget( "ui.menu", {
 	select: function( event ) {
 		// Save active reference before collapseAll triggers blur
 		var ui = {
-			item: this.active
+			// Selecting a menu item removes the active item causing multiple clicks to be missing an item
+			item: this.active || $( event.target ).closest( ".ui-menu-item" )
 		};
-		this.collapseAll( event, true );
+		if ( !ui.item.has( ".ui-menu" ).length ) {
+			this.collapseAll( event, true );
+		}
 		this._trigger( "select", event, ui );
 	}
 });
