@@ -163,7 +163,6 @@ $.widget( "ui.selectmenu", {
 
 		// unbind uneeded Menu events
 		menuInstance._off( this.menu, "mouseleave" );
-		menuInstance._off( this.document, "click" );
 	},
 
 	refresh: function() {
