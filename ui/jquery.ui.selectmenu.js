@@ -436,7 +436,7 @@ $.widget("ui.selectmenu", {
 		}
 
 		// update value
-		this.index( this._selectedIndex() );
+		this._refreshValue();
 
 		// set selected item so movefocus has intial state
 		this._selectedOptionLi().addClass(this.widgetBaseClass + '-item-focus');
@@ -868,7 +868,7 @@ $.widget("ui.selectmenu", {
 				my: o.positionOptions.my,
 				at: o.positionOptions.at,
 				offset: o.positionOptions.offset || _offset,
-				collision: o.positionOptions.collision || o.style == "popup" ? 'fit' :'flip'
+				collision: o.positionOptions.collision || (o.style == "popup" ? 'fit' :'flip')
 			});
 	}
 });
