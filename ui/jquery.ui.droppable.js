@@ -50,7 +50,7 @@ $.widget("ui.droppable", {
 
 	_destroy: function() {
 		var drop = $.ui.ddmanager.droppables[this.options.scope];
-		for ( var i = 0; i < drop.length; i++ )
+		for ( var i = drop.length; i-- > 0; )
 			if ( drop[i] == this )
 				drop.splice(i, 1);
 
