@@ -46,7 +46,7 @@ $.widget( "ui.button", {
 	defaultElement: "<button>",
 	options: {
 		disabled: null,
-		text: true,
+		showLabel: true,
 		label: null,
 		icons: {
 			primary: null,
@@ -329,7 +329,7 @@ $.widget( "ui.button", {
 			buttonClasses = [];
 
 		if ( icons.primary || icons.secondary ) {
-			if ( this.options.text ) {
+			if ( this.options.showLabel ) {
 				buttonClasses.push( "ui-button-text-icon" + ( multipleIcons ? "s" : ( icons.primary ? "-primary" : "-secondary" ) ) );
 			}
 
@@ -341,7 +341,7 @@ $.widget( "ui.button", {
 				buttonElement.append( "<span class='ui-button-icon-secondary ui-icon " + icons.secondary + "'></span>" );
 			}
 
-			if ( !this.options.text ) {
+			if ( !this.options.showLabel ) {
 				buttonClasses.push( multipleIcons ? "ui-button-icons-only" : "ui-button-icon-only" );
 
 				if ( !this.hasTitle ) {
