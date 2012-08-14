@@ -551,16 +551,52 @@ $.extend(Datepicker.prototype, {
 				case 33: $.datepicker._adjustDate(event.target, (event.ctrlKey ?
 							-$.datepicker._get(inst, 'stepBigMonths') :
 							-$.datepicker._get(inst, 'stepMonths')), 'M');
+					//refreshing date in the input field
+					var sel = $('td.' + $.datepicker._dayOverClass + ':not(.' +
+							$.datepicker._currentClass + ')', inst.dpDiv);
+						if (sel[0]) {
+							$.datepicker._refreshDay(event.target, inst.selectedMonth, inst.selectedYear, sel[0]);
+							var onSelect = $.datepicker._get(inst, 'onSelect');
+							if (onSelect) {
+								var dateStr = $.datepicker._formatDate(inst);
+								// trigger custom callback
+								onSelect.apply((inst.input ? inst.input[0] : null), [dateStr, inst]);
+							}
+						}
 						break; // previous month/year on page up/+ ctrl
 				case 34: $.datepicker._adjustDate(event.target, (event.ctrlKey ?
 							+$.datepicker._get(inst, 'stepBigMonths') :
 							+$.datepicker._get(inst, 'stepMonths')), 'M');
+						//refreshing date in the input field
+						var sel = $('td.' + $.datepicker._dayOverClass + ':not(.' +
+							$.datepicker._currentClass + ')', inst.dpDiv);
+						if (sel[0]) {
+							$.datepicker._refreshDay(event.target, inst.selectedMonth, inst.selectedYear, sel[0]);
+							var onSelect = $.datepicker._get(inst, 'onSelect');
+							if (onSelect) {
+								var dateStr = $.datepicker._formatDate(inst);
+								// trigger custom callback
+								onSelect.apply((inst.input ? inst.input[0] : null), [dateStr, inst]);
+							}
+						}
 						break; // next month/year on page down/+ ctrl
 				case 35: if (event.ctrlKey || event.metaKey) $.datepicker._clearDate(event.target);
 						handled = event.ctrlKey || event.metaKey;
 						break; // clear on ctrl or command +end
 				case 36: if (event.ctrlKey || event.metaKey) $.datepicker._gotoToday(event.target);
 						handled = event.ctrlKey || event.metaKey;
+						//refreshing date in the input field
+						var sel = $('td.' + $.datepicker._dayOverClass + ':not(.' +
+							$.datepicker._currentClass + ')', inst.dpDiv);
+						if (sel[0]) {
+							$.datepicker._refreshDay(event.target, inst.selectedMonth, inst.selectedYear, sel[0]);
+							var onSelect = $.datepicker._get(inst, 'onSelect');
+							if (onSelect) {
+								var dateStr = $.datepicker._formatDate(inst);
+								// trigger custom callback
+								onSelect.apply((inst.input ? inst.input[0] : null), [dateStr, inst]);
+							}
+						}
 						break; // current on ctrl or command +home
 				case 37: if (event.ctrlKey || event.metaKey) $.datepicker._adjustDate(event.target, (isRTL ? +1 : -1), 'D');
 						handled = event.ctrlKey || event.metaKey;
@@ -568,10 +604,35 @@ $.extend(Datepicker.prototype, {
 						if (event.originalEvent.altKey) $.datepicker._adjustDate(event.target, (event.ctrlKey ?
 									-$.datepicker._get(inst, 'stepBigMonths') :
 									-$.datepicker._get(inst, 'stepMonths')), 'M');
+									
+						//refreshing date in the input field
+						var sel = $('td.' + $.datepicker._dayOverClass + ':not(.' +
+							$.datepicker._currentClass + ')', inst.dpDiv);
+						if (sel[0]) {
+							$.datepicker._refreshDay(event.target, inst.selectedMonth, inst.selectedYear, sel[0]);
+							var onSelect = $.datepicker._get(inst, 'onSelect');
+							if (onSelect) {
+								var dateStr = $.datepicker._formatDate(inst);
+								// trigger custom callback
+								onSelect.apply((inst.input ? inst.input[0] : null), [dateStr, inst]);
+							}
+						}
 						// next month/year on alt +left on Mac
 						break;
 				case 38: if (event.ctrlKey || event.metaKey) $.datepicker._adjustDate(event.target, -7, 'D');
 						handled = event.ctrlKey || event.metaKey;
+						//refreshing date in the input field
+						var sel = $('td.' + $.datepicker._dayOverClass + ':not(.' +
+							$.datepicker._currentClass + ')', inst.dpDiv);
+						if (sel[0]) {
+							$.datepicker._refreshDay(event.target, inst.selectedMonth, inst.selectedYear, sel[0]);
+							var onSelect = $.datepicker._get(inst, 'onSelect');
+							if (onSelect) {
+								var dateStr = $.datepicker._formatDate(inst);
+								// trigger custom callback
+								onSelect.apply((inst.input ? inst.input[0] : null), [dateStr, inst]);
+							}
+						}
 						break; // -1 week on ctrl or command +up
 				case 39: if (event.ctrlKey || event.metaKey) $.datepicker._adjustDate(event.target, (isRTL ? -1 : +1), 'D');
 						handled = event.ctrlKey || event.metaKey;
@@ -579,10 +640,35 @@ $.extend(Datepicker.prototype, {
 						if (event.originalEvent.altKey) $.datepicker._adjustDate(event.target, (event.ctrlKey ?
 									+$.datepicker._get(inst, 'stepBigMonths') :
 									+$.datepicker._get(inst, 'stepMonths')), 'M');
+									
+						//refreshing date in the input field
+						var sel = $('td.' + $.datepicker._dayOverClass + ':not(.' +
+							$.datepicker._currentClass + ')', inst.dpDiv);
+						if (sel[0]) {
+							$.datepicker._refreshDay(event.target, inst.selectedMonth, inst.selectedYear, sel[0]);
+							var onSelect = $.datepicker._get(inst, 'onSelect');
+							if (onSelect) {
+								var dateStr = $.datepicker._formatDate(inst);
+								// trigger custom callback
+								onSelect.apply((inst.input ? inst.input[0] : null), [dateStr, inst]);
+							}
+						}
 						// next month/year on alt +right
 						break;
 				case 40: if (event.ctrlKey || event.metaKey) $.datepicker._adjustDate(event.target, +7, 'D');
 						handled = event.ctrlKey || event.metaKey;
+						//refreshing date in the input field
+						var sel = $('td.' + $.datepicker._dayOverClass + ':not(.' +
+							$.datepicker._currentClass + ')', inst.dpDiv);
+						if (sel[0]) {
+							$.datepicker._refreshDay(event.target, inst.selectedMonth, inst.selectedYear, sel[0]);
+							var onSelect = $.datepicker._get(inst, 'onSelect');
+							if (onSelect) {
+								var dateStr = $.datepicker._formatDate(inst);
+								// trigger custom callback
+								onSelect.apply((inst.input ? inst.input[0] : null), [dateStr, inst]);
+							}
+						}
 						break; // +1 week on ctrl or command +down
 				default: handled = false;
 			}
@@ -909,6 +995,20 @@ $.extend(Datepicker.prototype, {
 		this._selectDate(id, this._formatDate(inst,
 			inst.currentDay, inst.currentMonth, inst.currentYear));
 	},
+	
+	/* Action for Refreshing a day */
+	_refreshDay: function(id, month, year, td) {
+		var target = $(id);
+		if ($(td).hasClass(this._unselectableClass) || this._isDisabledDatepicker(target[0])) {
+			return;
+		}
+		var inst = this._getInst(target[0]);
+		inst.selectedDay = inst.currentDay = $('a', td).html();
+		inst.selectedMonth = inst.currentMonth = month;
+		inst.selectedYear = inst.currentYear = year;
+		this._refreshDate(id, this._formatDate(inst,
+			inst.currentDay, inst.currentMonth, inst.currentYear));
+	},
 
 	/* Erase the input field and hide the date picker. */
 	_clearDate: function(id) {
@@ -934,6 +1034,29 @@ $.extend(Datepicker.prototype, {
 			this._updateDatepicker(inst);
 		else {
 			this._hideDatepicker();
+			this._lastInput = inst.input[0];
+			if (typeof(inst.input[0]) != 'object')
+				inst.input.focus(); // restore focus
+			this._lastInput = null;
+		}
+	},
+	
+	/* Refresh the input field without closing the Datepicker */
+	_refreshDate: function(id, dateStr) {
+		var target = $(id);
+		var inst = this._getInst(target[0]);
+		dateStr = (dateStr != null ? dateStr : this._formatDate(inst));
+		if (inst.input)
+			inst.input.val(dateStr);
+		this._updateAlternate(inst);
+		var onSelect = this._get(inst, 'onSelect');
+		if (onSelect)
+			onSelect.apply((inst.input ? inst.input[0] : null), [dateStr, inst]);  // trigger custom callback
+		else if (inst.input)
+			inst.input.trigger('change'); // fire the change event
+		if (inst.inline)
+			this._updateDatepicker(inst);
+		else {
 			this._lastInput = inst.input[0];
 			if (typeof(inst.input[0]) != 'object')
 				inst.input.focus(); // restore focus
