@@ -19,12 +19,14 @@ $.effects = {
 };
 
 /*!
- * jQuery Color Animations
+ * jQuery Color Animations v2.0.0
  * http://jquery.com/
  *
  * Copyright 2012 jQuery Foundation and other contributors
- * Dual licensed under the MIT or GPL Version 2 licenses.
+ * Released under the MIT license.
  * http://jquery.org/license
+ *
+ * Date: Mon Aug 13 13:41:02 2012 -0500
  */
 (function( jQuery, undefined ) {
 
@@ -272,8 +274,8 @@ color.fn = jQuery.extend( color.prototype, {
 				});
 			} else {
 				each( spaces, function( spaceName, space ) {
+					var cache = space.cache;
 					each( space.props, function( key, prop ) {
-						var cache = space.cache;
 
 						// if the cache doesn't exist, and we know how to convert
 						if ( !inst[ cache ] && space.to ) {
@@ -290,6 +292,15 @@ color.fn = jQuery.extend( color.prototype, {
 						// call clamp with alwaysAllowEmpty
 						inst[ cache ][ prop.idx ] = clamp( red[ key ], prop, true );
 					});
+
+					// everything defined but alpha?
+					if ( inst[ cache ] && $.inArray( null, inst[ cache ].slice( 0, 3 ) ) < 0 ) {
+						// use the default of 1
+						inst[ cache ][ 3 ] = 1;
+						if ( space.from ) {
+							inst._rgba = space.from( inst[ cache ] );
+						}
+					}
 				});
 			}
 			return this;
@@ -581,19 +592,23 @@ each( spaces, function( spaceName, space ) {
 each( stepHooks, function( i, hook ) {
 	jQuery.cssHooks[ hook ] = {
 		set: function( elem, value ) {
-			var parsed, backgroundColor, curElem;
+			var parsed, curElem,
+				backgroundColor = "";
 
 			if ( jQuery.type( value ) !== "string" || ( parsed = stringParse( value ) ) ) {
 				value = color( parsed || value );
 				if ( !support.rgba && value._rgba[ 3 ] !== 1 ) {
 					curElem = hook === "backgroundColor" ? elem.parentNode : elem;
-					do {
-						backgroundColor = jQuery.css( curElem, "backgroundColor" );
-					} while (
-						( backgroundColor === "" || backgroundColor === "transparent" ) &&
-						( curElem = curElem.parentNode ) &&
-						curElem.style
-					);
+					while (
+						(backgroundColor === "" || backgroundColor === "transparent") &&
+						curElem && curElem.style
+					) {
+						try {
+							backgroundColor = jQuery.css( curElem, "backgroundColor" );
+							curElem = curElem.parentNode;
+						} catch ( e ) {
+						}
+					}
 
 					value = value.blend( backgroundColor && backgroundColor !== "transparent" ?
 						backgroundColor :
@@ -619,6 +634,17 @@ each( stepHooks, function( i, hook ) {
 	};
 });
 
+jQuery.cssHooks.borderColor = {
+	expand: function( value ) {
+		var expanded = {};
+
+		each( [ "Top", "Right", "Bottom", "Left" ], function( i, part ) {
+			expanded[ "border" + part + "Color" ] = value;
+		});
+		return expanded;
+	}
+};
+
 // Basic color names only.
 // Usage of any of the other color names requires adding yourself or including
 // jquery.color.svg-names.js.
@@ -641,7 +667,7 @@ colors = jQuery.Color.names = {
 	white: "#ffffff",
 	yellow: "#ffff00",
 
-	// 4.2.3. ‘transparent’ color keyword
+	// 4.2.3. "transparent" color keyword
 	transparent: [ null, null, null, 0 ],
 
 	_default: "#ffffff"
