@@ -645,6 +645,7 @@ $.widget("ui.dialog", {
 			if ( $.support.minHeight ) {
 				this.element.css({
 					minHeight: minContentHeight,
+					maxHeight: options.maxHeight,
 					height: "auto"
 				});
 			} else {
