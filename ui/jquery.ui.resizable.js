@@ -254,6 +254,7 @@ $.widget("ui.resizable", $.ui.mouse, {
 		}
 		
 		// Determine measurements to use based on box model
+		var width, height;
 		switch( el.css("box-sizing") ){
 			case "border-box":
 				width = el.outerWidth();
@@ -564,9 +565,10 @@ $.ui.plugin.add("resizable", "alsoResize", {
 
 		var _store = function (exp) {
 			$(exp).each(function() {
-				var width, height, el = $(this);
+				var el = $(this);
 				
 				// Determine measurements to use based on box model
+				var width, height;
 				switch( el.css("box-sizing") ){
 					case "border-box":
 						width = el.outerWidth();
