@@ -105,11 +105,6 @@ $.widget( "ui.autocomplete", {
 						this.menu.select( event );
 					}
 					break;
-				case keyCode.TAB:
-					if ( this.menu.active ) {
-						this.menu.select( event );
-					}
-					break;
 				case keyCode.ESCAPE:
 					if ( this.menu.element.is( ":visible" ) ) {
 						this._value( this.term );
