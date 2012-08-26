@@ -154,7 +154,7 @@ $.widget( "ui.autocomplete", {
 					break;
 				}
 			},
-			input: function( event ) {
+			input: function( event ) {
 				if ( suppressInput ) {
 					suppressInput = false;
 					event.preventDefault();
