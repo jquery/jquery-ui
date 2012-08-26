@@ -20,7 +20,6 @@ QUnit.config.urlConfig.push({
 
 TestHelpers.loadResources = QUnit.urlParams.min ?
 	function() {
-		// TODO: proper include with theme images
 		includeStyle( "dist/jquery-ui.min.css" );
 		includeScript( "dist/jquery-ui.min.js" );
 	} :
