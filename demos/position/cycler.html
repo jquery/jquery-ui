@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
 	<meta charset="utf-8">
@@ -9,46 +9,32 @@
 	<script src="../../ui/jquery.ui.widget.js"></script>
 	<script src="../../ui/jquery.ui.position.js"></script>
 	<link rel="stylesheet" href="../demos.css">
-    <style>
-   	html, body {
-   		margin: 0;
-		padding: 0
-   	}
-    </style>
 	<script>
 	$(function() {
 		// TODO refactor into a widget and get rid of these plugin methods
-		$.fn.position2 = function( options ) {
-			return this.position( $.extend({
-				of: window,
-				using: function( to ) {
-					$( this ).css({
-						top: to.top,
-						left: to.left
-					})
-				},
-				collision: "none"
-			}, options));
-		}
-
 		$.fn.left = function( using ) {
-			return this.position2({
+			return this.position({
 				my: "right middle",
 				at: "left+25 middle",
+				of: window,
+				collision: "none",
 				using: using
 			});
-		}
+		};
 		$.fn.right = function( using ) {
-			return this.position2({
+			return this.position({
 				my: "left middle",
 				at: "right-25 middle",
+				of: window,
+				collision: "none",
 				using: using
 			});
-		}
+		};
 		$.fn.center = function( using ) {
-			return this.position2({
+			return this.position({
 				my: "center middle",
 				at: "center middle",
+				of: window,
 				using: using
 			});
 		};
@@ -68,7 +54,7 @@
 		$( "img:eq(2)" ).right();
 
 		function animate( to ) {
-			$(this).stop( true, false ).animate( to );
+			$( this ).stop( true, false ).animate( to );
 		}
 		function next( event ) {
 			event.preventDefault();
