@@ -253,7 +253,12 @@ $.ui.ddmanager = {
 
 			var parentInstance;
 			if (this.options.greedy) {
-				var parent = this.element.parents(':data(droppable):eq(0)');
+				// find droppable parents with same scope
+				var scope = this.options.scope;
+				var parent = this.element.parents(':data(droppable)').filter(function () {
+					return $.data(this, 'droppable').options.scope === scope;
+				});
+
 				if (parent.length) {
 					parentInstance = $.data(parent[0], 'droppable');
 					parentInstance.greedyChild = (c == 'isover' ? 1 : 0);
