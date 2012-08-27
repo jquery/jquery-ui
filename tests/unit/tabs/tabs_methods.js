@@ -28,7 +28,7 @@ test( "enable", function() {
 });
 
 test( "enable( index )", function() {
-    expect( 10 );
+	expect( 10 );
 
 	var element = $( "#tabs1" ).tabs({ disabled: true });
 	disabled( element, true );
@@ -62,7 +62,7 @@ test( "disable", function() {
 });
 
 test( "disable( index )", function() {
-    expect( 10 );
+	expect( 10 );
 
 	var element = $( "#tabs1" ).tabs({ disabled: false });
 	disabled( element, false );
