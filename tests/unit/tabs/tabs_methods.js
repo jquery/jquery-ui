@@ -264,4 +264,12 @@ asyncTest( "load", function() {
 	}
 });
 
+test( "widget", function() {
+	expect( 2 );
+	var element = $( "#tabs1" ).tabs(),
+		widgetElement = element.tabs( "widget" );
+	equal( widgetElement.length, 1, "one element" );
+	strictEqual( widgetElement[ 0 ], element[ 0 ], "same element" );
+});
+
 }( jQuery ) );
