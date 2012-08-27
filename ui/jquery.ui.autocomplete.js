@@ -482,8 +482,6 @@ $.widget( "ui.autocomplete", {
 			.empty()
 			.zIndex( this.element.zIndex() + 1 );
 		this._renderMenu( ul, items );
-		// TODO refresh should check if the active item is still in the dom, removing the need for a manual blur
-		this.menu.blur();
 		this.menu.refresh();
 
 		// size and position menu
