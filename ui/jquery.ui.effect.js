@@ -831,37 +831,42 @@ $.fn.extend({
 	_addClass: $.fn.addClass,
 	addClass: function( classNames, speed, easing, callback ) {
 		return speed ?
-			$.effects.animateClass.apply( this, [{ add: classNames }, speed, easing, callback ]) :
-			this._addClass(classNames);
+			$.effects.animateClass.call( this,
+				{ add: classNames }, speed, easing, callback ) :
+			this._addClass( classNames );
 	},
 
 	_removeClass: $.fn.removeClass,
 	removeClass: function( classNames, speed, easing, callback ) {
 		return speed ?
-			$.effects.animateClass.apply( this, [{ remove: classNames }, speed, easing, callback ]) :
-			this._removeClass(classNames);
+			$.effects.animateClass.call( this,
+				{ remove: classNames }, speed, easing, callback ) :
+			this._removeClass( classNames );
 	},
 
 	_toggleClass: $.fn.toggleClass,
 	toggleClass: function( classNames, force, speed, easing, callback ) {
 		if ( typeof force === "boolean" || force === undefined ) {
 			if ( !speed ) {
-				// without speed parameter;
+				// without speed parameter
 				return this._toggleClass( classNames, force );
 			} else {
-				return $.effects.animateClass.apply( this, [( force ? { add:classNames } : { remove:classNames }), speed, easing, callback ]);
+				return $.effects.animateClass.call( this,
+					(force ? { add: classNames } : { remove: classNames }),
+					speed, easing, callback );
 			}
 		} else {
-			// without force parameter;
-			return $.effects.animateClass.apply( this, [{ toggle: classNames }, force, speed, easing ]);
+			// without force parameter
+			return $.effects.animateClass.call( this,
+				{ toggle: classNames }, force, speed, easing );
 		}
 	},
 
 	switchClass: function( remove, add, speed, easing, callback) {
-		return $.effects.animateClass.apply( this, [{
-				add: add,
-				remove: remove
-			}, speed, easing, callback ]);
+		return $.effects.animateClass.call( this, {
+			add: add,
+			remove: remove
+		}, speed, easing, callback );
 	}
 });
 
