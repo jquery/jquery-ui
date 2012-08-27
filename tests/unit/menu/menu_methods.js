@@ -60,6 +60,14 @@ test( "refresh", function() {
 	equal( element.find( ".ui-menu-item" ).length, 5, "Incorrect number of menu items" );
 });
 
+test( "widget", function() {
+	expect( 2 );
+	var element = $( "#menu1" ).menu(),
+		widgetElement = element.menu( "widget" );
+	equal( widgetElement.length, 1, "one element" );
+	strictEqual( widgetElement[ 0 ], element[ 0 ], "same element" );
+});
+
 // TODO: test focus method
 
 // TODO: test blur method
