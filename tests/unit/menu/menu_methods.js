@@ -10,6 +10,22 @@ module( "menu: methods", {
 	}
 });
 
+test( "destroy", function() {
+	expect( 4 );
+	domEqual( "#menu1", function() {
+		$( "#menu1" ).menu().menu( "destroy" );
+	});
+	domEqual( "#menu2", function() {
+		$( "#menu2" ).menu().menu( "destroy" );
+	});
+	domEqual( "#menu5", function() {
+		$( "#menu5").menu().menu( "destroy" );
+	});
+	domEqual( "#menu6", function() {
+		$( "#menu6" ).menu().menu( "destroy" );
+	});
+});
+
 test( "enable/disable", function() {
 	expect( 3 );
 	var element = $( "#menu1" ).menu({
@@ -67,21 +83,5 @@ test( "refresh", function() {
 // TODO: test prevPage method
 
 // TODO: test select method
-
-test( "destroy", function() {
-	expect( 4 );
-	domEqual( "#menu1", function() {
-		$( "#menu1" ).menu().menu( "destroy" );
-	});
-	domEqual( "#menu2", function() {
-		$( "#menu2" ).menu().menu( "destroy" );
-	});
-	domEqual( "#menu5", function() {
-		$( "#menu5").menu().menu( "destroy" );
-	});
-	domEqual( "#menu6", function() {
-		$( "#menu6" ).menu().menu( "destroy" );
-	});
-});
 
 })( jQuery );
