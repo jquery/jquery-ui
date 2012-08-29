@@ -28,8 +28,14 @@
 .ui-grid div.gBlock {
 	position: absolute;
 	z-index: 100;
+	top:0px;
+	left:0px;
+	background-color:rgba(0, 0, 0, 0.3);
+    filter:progid:DXImageTransform.Microsoft.Gradient(GradientType=0, StartColorStr='#4c000000', EndColorStr='#4c000000');
 }
-
+:root .ui-grid div.gBlock{
+    filter:progid:DXImageTransform.Microsoft.Gradient(GradientType=0, StartColorStr='#00000000', EndColorStr='#00000000');
+}
 .ui-grid div.hDivBox {
 	padding-right: 40px;
 }
