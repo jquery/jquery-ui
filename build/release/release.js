@@ -130,6 +130,7 @@ function buildRelease() {
 	echo( "Updating package.json..." );
 	pkg = readPackage();
 	pkg.version = newVersion;
+	pkg.author.url = pkg.author.url.replace( "master", newVersion );
 	pkg.licenses.forEach(function( license ) {
 		license.url = license.url.replace( "master", newVersion );
 	});

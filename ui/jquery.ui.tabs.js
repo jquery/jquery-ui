@@ -792,13 +792,7 @@ $.widget( "ui.tabs", {
 			return;
 		}
 
-		this.xhr = $.ajax({
-			url: anchor.attr( "href" ),
-			beforeSend: function( jqXHR, settings ) {
-				return that._trigger( "beforeLoad", event,
-					$.extend( { jqXHR : jqXHR, ajaxSettings: settings }, eventData ) );
-			}
-		});
+		this.xhr = $.ajax( this._ajaxSettings( anchor, event, eventData ) );
 
 		// support: jQuery <1.8
 		// jQuery <1.8 returns false if the request is canceled in beforeSend,
@@ -835,6 +829,18 @@ $.widget( "ui.tabs", {
 		}
 	},
 
+	// TODO: Remove this function in 1.10 when ajaxOptions is removed
+	_ajaxSettings: function( anchor, event, eventData ) {
+		var that = this;
+		return {
+			url: anchor.attr( "href" ),
+			beforeSend: function( jqXHR, settings ) {
+				return that._trigger( "beforeLoad", event,
+					$.extend( { jqXHR : jqXHR, ajaxSettings: settings }, eventData ) );
+			}
+		};
+	},
+
 	_getPanelForTab: function( tab ) {
 		var id = $( tab ).attr( "aria-controls" );
 		return this.element.find( this._sanitizeSelector( "#" + id ) );
@@ -860,6 +866,7 @@ if ( $.uiBackCompat !== false ) {
 		}
 	});
 
+	// TODO: Remove _ajaxSettings() method when removing this extension
 	// ajaxOptions and cache options
 	$.widget( "ui.tabs", $.ui.tabs, {
 		options: {
@@ -879,25 +886,29 @@ if ( $.uiBackCompat !== false ) {
 					return;
 				}
 
-				$.extend( ui.ajaxSettings, that.options.ajaxOptions, {
-					error: function( xhr, s, e ) {
-						try {
-							// Passing index avoid a race condition when this method is
-							// called after the user has selected another tab.
-							// Pass the anchor that initiated this request allows
-							// loadError to manipulate the tab content panel via $(a.hash)
-							that.options.ajaxOptions.error( xhr, s, ui.tab.closest( "li" ).index(), ui.tab[ 0 ] );
-						}
-						catch ( e ) {}
-					}
-				});
-
 				ui.jqXHR.success(function() {
 					if ( that.options.cache ) {
 						$.data( ui.tab[ 0 ], "cache.tabs", true );
 					}
 				});
 			}});
+		},
+
+		_ajaxSettings: function( anchor, event, ui ) {
+			var ajaxOptions = this.options.ajaxOptions;
+			return $.extend( {}, ajaxOptions, {
+				error: function( xhr, s, e ) {
+					try {
+						// Passing index avoid a race condition when this method is
+						// called after the user has selected another tab.
+						// Pass the anchor that initiated this request allows
+						// loadError to manipulate the tab content panel via $(a.hash)
+						ajaxOptions.error(
+							xhr, s, ui.tab.closest( "li" ).index(), ui.tab[ 0 ] );
+					}
+					catch ( e ) {}
+				}
+			}, this._superApply( arguments ) );
 		},
 
 		_setOption: function( key, value ) {
@@ -937,7 +948,9 @@ if ( $.uiBackCompat !== false ) {
 			this._super();
 			this._on({
 				tabsbeforeload: function( event, ui ) {
-					if ( !this.options.spinner ) {
+					// Don't react to nested tabs or tabs that don't use a spinner
+					if ( event.target !== this.element[ 0 ] ||
+							!this.options.spinner ) {
 						return;
 					}
 

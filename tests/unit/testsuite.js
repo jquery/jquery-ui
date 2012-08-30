@@ -1,5 +1,7 @@
 (function( $ ) {
 
+var reset, jshintLoaded;
+
 window.TestHelpers = {};
 
 function includeStyle( url ) {
@@ -9,6 +11,15 @@ function includeStyle( url ) {
 function includeScript( url ) {
 	document.write( "<script src='../../../" + url + "'></script>" );
 }
+
+reset = QUnit.reset;
+QUnit.reset = function() {
+	// Ensure jQuery events and data on the fixture are properly removed
+	jQuery("#qunit-fixture").empty();
+	// Let QUnit reset the fixture
+	reset.apply( this, arguments );
+};
+
 
 QUnit.config.requireExpects = true;
 
@@ -20,7 +31,6 @@ QUnit.config.urlConfig.push({
 
 TestHelpers.loadResources = QUnit.urlParams.min ?
 	function() {
-		// TODO: proper include with theme images
 		includeStyle( "dist/jquery-ui.min.css" );
 		includeScript( "dist/jquery-ui.min.js" );
 	} :
@@ -39,7 +49,7 @@ QUnit.config.urlConfig.push({
 	tooltip: "Skip running JSHint, e.g. within TestSwarm, where Jenkins runs it already"
 });
 
-var jshintLoaded = false;
+jshintLoaded = false;
 TestHelpers.testJshint = function( module ) {
 	if ( QUnit.urlParams.nojshint ) {
 		return;
