@@ -948,7 +948,9 @@ if ( $.uiBackCompat !== false ) {
 			this._super();
 			this._on({
 				tabsbeforeload: function( event, ui ) {
-					if ( !this.options.spinner ) {
+					// Don't react to nested tabs or tabs that don't use a spinner
+					if ( event.target !== this.element[ 0 ] ||
+							!this.options.spinner ) {
 						return;
 					}
 
