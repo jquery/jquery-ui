@@ -128,5 +128,19 @@ test("refresh - disabled optgroup", function () {
 	}
 });
 
+test( "widget", function() {
+	expect( 4 );
+	var element = $('#speed').selectmenu(),
+		widgetElement = element.selectmenu( "widget" ),
+		menuWidgetElement = element.selectmenu( "menuWidget" );		
+	
+	element.selectmenu("refresh");
+	
+	equal( widgetElement.length, 1, "widget: one element" );
+	ok( widgetElement.is("a.ui-button"), "widget: button element" );
+	
+	equal( menuWidgetElement.length, 1, "menuWidget: one element" );
+	ok( menuWidgetElement.is("ul.ui-menu"), "menuWidget: menu element" );
+});
 
 })( jQuery );
