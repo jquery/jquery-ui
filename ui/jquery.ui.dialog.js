@@ -732,9 +732,9 @@ $.extend( $.ui.dialog.overlay, {
 			}
 		});
 
-		$el.appendTo( document.body ).css({
-			width: this.width(),
-			height: this.height()
+		$el.appendTo( dialog.options.overlayElement || document.body ).css({
+			width: $(dialog.options.overlayElement).width() || this.width(),
+			height: $(dialog.options.overlayElement).height() || this.height()
 		});
 
 		if ( $.fn.bgiframe ) {
