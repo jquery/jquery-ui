@@ -73,13 +73,22 @@ $.widget( "ui.tooltip", {
 	},
 
 	_setOption: function( key, value ) {
+		var that = this;
+
 		if ( key === "disabled" ) {
 			this[ value ? "_disable" : "_enable" ]();
 			this.options[ key ] = value;
 			// disable element style changes
 			return;
 		}
+
 		this._super( key, value );
+
+		if ( key === "content" ) {
+			$.each( this.tooltips, function( id, element ) {
+				that._updateContent( element );
+			});
+		}
 	},
 
 	_disable: function() {
@@ -114,9 +123,7 @@ $.widget( "ui.tooltip", {
 	},
 
 	open: function( event ) {
-		var content,
-			that = this,
-			target = $( event ? event.target : this.element )
+		var target = $( event ? event.target : this.element )
 				.closest( this.options.items );
 
 		// No element to show a tooltip for
@@ -140,6 +147,13 @@ $.widget( "ui.tooltip", {
 
 		target.data( "tooltip-open", true );
 
+		this._updateContent( target, event );
+	},
+
+	_updateContent: function( target, event ) {
+		var content,
+			that = this;
+
 		content = this.options.content.call( target[0], function( response ) {
 			// ignore async response if tooltip was closed already
 			if ( !target.data( "tooltip-open" ) ) {
@@ -147,12 +161,12 @@ $.widget( "ui.tooltip", {
 			}
 			// IE may instantly serve a cached response for ajax requests
 			// delay this call to _open so the other call to _open runs first
-			setTimeout(function() {
-				that._open( event, target, response );
-			}, 1 );
+			that._delay(function() {
+				this._open( event, target, response );
+			});
 		});
 		if ( content ) {
-			that._open( event, target, content );
+			this._open( event, target, content );
 		}
 	},
 

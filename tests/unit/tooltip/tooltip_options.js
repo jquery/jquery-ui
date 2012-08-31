@@ -46,6 +46,25 @@ asyncTest( "content: sync + async callback", function() {
 	}).tooltip( "open" );
 });
 
+test( "content: change while open", function() {
+	expect( 2 ) ;
+	var element = $( "#tooltipped1" ).tooltip({
+		content: function() {
+			return "old";
+		}
+	});
+
+	element.one( "tooltipopen", function( event, ui ) {
+		equal( ui.tooltip.text(), "old", "original content" );
+		element.tooltip( "option", "content", function() {
+			return "new";
+		});
+		equal( ui.tooltip.text(), "new", "updated content" );
+	});
+
+	element.tooltip( "open" );
+});
+
 test( "items", function() {
 	expect( 2 );
 	var event,
