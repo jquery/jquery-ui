@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
 	<meta charset="utf-8">
@@ -11,11 +11,11 @@
 	<link rel="stylesheet" href="../demos.css">
 	<script>
 	$(function() {
-		$("#accordion").accordion({
+		$( "#accordion" ).accordion({
 			event: "click hoverintent"
 		});
 	});
-	
+
 	var cfg = ($.hoverintent = {
 		sensitivity: 7,
 		interval: 100
@@ -33,7 +33,7 @@
 				args = arguments,
 				target = $( event.target ),
 				cX, cY, pX, pY;
-			
+
 			function track( event ) {
 				cX = event.pageX;
 				cY = event.pageY;
