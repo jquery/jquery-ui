@@ -152,9 +152,14 @@ $.widget( "ui.tooltip", {
 
 	_updateContent: function( target, event ) {
 		var content,
+			contentOption = this.options.content,
 			that = this;
 
-		content = this.options.content.call( target[0], function( response ) {
+		if ( typeof contentOption === "string" ) {
+			return this._open( event, target, contentOption );
+		}
+
+		content = contentOption.call( target[0], function( response ) {
 			// ignore async response if tooltip was closed already
 			if ( !target.data( "tooltip-open" ) ) {
 				return;

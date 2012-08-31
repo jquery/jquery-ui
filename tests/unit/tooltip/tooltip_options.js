@@ -65,6 +65,16 @@ test( "content: change while open", function() {
 	element.tooltip( "open" );
 });
 
+test( "content: string", function() {
+	expect( 1 );
+	var element = $( "#tooltipped1" ).tooltip({
+		content: "just a string",
+		open: function( event, ui ) {
+			equal( ui.tooltip.text(), "just a string" );
+		}
+	}).tooltip( "open" );
+});
+
 test( "items", function() {
 	expect( 2 );
 	var event,
