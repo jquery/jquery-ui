@@ -261,7 +261,7 @@
 		      if(matched){
 		          itemElJq.each(function(){
 		              $(this).data('validmsg').remove();
-		              $(this).removeData('validmsg')
+		              $(this).removeClass('ui-form-field-error').removeData('validmsg')
 		          });
 		      }
 		      return !matched;
