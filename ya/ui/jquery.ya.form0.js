@@ -236,7 +236,15 @@
 				element=self.element,
 				items=[];
 			items=_.map([].concat(itemsConfig),function(itemConfig){
-				return self._initItem(itemConfig);
+				if(!self.getItem(itemConfig.selector)){	//去重
+					return self._initItem(itemConfig);
+				}else{
+					return null;
+				}
+			});
+			//筛除所有item为null的配置项
+			items=_.filter(items,function(item){
+				return item!==null;
 			});
 			self.items=self.items.concat(items);
 		},
@@ -248,8 +256,8 @@
 		      element=self.element,
 		      items=self.items;
 		  self.items=_.filter(items,function(item){
-		      var itemElJq=$(item.selector,element),  //可能length>1
-		          matched=itemElJq.is(itemSelector);
+		    	var itemElJq=$(item.selector,element),  //可能length>1或length==0,如果length==0,表明对应的dom不存在了,于是去掉配置项
+		          	matched=itemElJq.length==0||itemElJq.is(itemSelector);
 		      if(matched){
 		          itemElJq.each(function(){
 		              $(this).data('validmsg').remove();
