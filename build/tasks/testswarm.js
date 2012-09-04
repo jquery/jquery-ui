@@ -18,6 +18,7 @@ var versions = {
 		//"draggable/draggable.html",
 		//"droppable/droppable.html",
 		"Effects": "effects/effects.html",
+		"Mask": "mask/mask.html",
 		"Menu": "menu/menu.html",
 		"Position": "position/position.html",
 		"Position_deprecated": "position/position_deprecated.html",
@@ -29,6 +30,7 @@ var versions = {
 		"Spinner": "spinner/spinner.html",
 		"Tabs": "tabs/tabs.html",
 		"Tabs_deprecated": "tabs/tabs_deprecated.html",
+		"Timepicker": "timepicker/timepicker.html",
 		"Tooltip": "tooltip/tooltip.html",
 		"Widget": "widget/widget.html"
 	};
