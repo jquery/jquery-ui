@@ -59,14 +59,12 @@ test( "enable/disable", function() {
 	$.fx.off = false;
 });
 
-/*
-TODO currently tooltip doesn't override widget
-can't return anything useful if no element is kept around and there's no useful reference
-test("widget", function() {
-	var tooltip = $("#tooltipped1").tooltip();
-	deepEqual(tooltip.tooltip("widget")[0], $(".ui-tooltip")[0]);
-	deepEqual(tooltip.tooltip("widget").end()[0], tooltip[0]);
+test( "widget", function() {
+	expect( 2 );
+	var element = $( "#tooltipped1" ).tooltip(),
+		widgetElement = element.tooltip( "widget" );
+	equal( widgetElement.length, 1, "one element" );
+	strictEqual( widgetElement[ 0 ], element[ 0 ], "same element" );
 });
-*/
 
 }( jQuery ) );

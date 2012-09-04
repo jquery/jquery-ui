@@ -10,6 +10,22 @@ module( "menu: methods", {
 	}
 });
 
+test( "destroy", function() {
+	expect( 4 );
+	domEqual( "#menu1", function() {
+		$( "#menu1" ).menu().menu( "destroy" );
+	});
+	domEqual( "#menu2", function() {
+		$( "#menu2" ).menu().menu( "destroy" );
+	});
+	domEqual( "#menu5", function() {
+		$( "#menu5").menu().menu( "destroy" );
+	});
+	domEqual( "#menu6", function() {
+		$( "#menu6" ).menu().menu( "destroy" );
+	});
+});
+
 test( "enable/disable", function() {
 	expect( 3 );
 	var element = $( "#menu1" ).menu({
@@ -44,6 +60,14 @@ test( "refresh", function() {
 	equal( element.find( ".ui-menu-item" ).length, 5, "Incorrect number of menu items" );
 });
 
+test( "widget", function() {
+	expect( 2 );
+	var element = $( "#menu1" ).menu(),
+		widgetElement = element.menu( "widget" );
+	equal( widgetElement.length, 1, "one element" );
+	strictEqual( widgetElement[ 0 ], element[ 0 ], "same element" );
+});
+
 // TODO: test focus method
 
 // TODO: test blur method
@@ -67,21 +91,5 @@ test( "refresh", function() {
 // TODO: test prevPage method
 
 // TODO: test select method
-
-test( "destroy", function() {
-	expect( 4 );
-	domEqual( "#menu1", function() {
-		$( "#menu1" ).menu().menu( "destroy" );
-	});
-	domEqual( "#menu2", function() {
-		$( "#menu2" ).menu().menu( "destroy" );
-	});
-	domEqual( "#menu5", function() {
-		$( "#menu5").menu().menu( "destroy" );
-	});
-	domEqual( "#menu6", function() {
-		$( "#menu6" ).menu().menu( "destroy" );
-	});
-});
 
 })( jQuery );

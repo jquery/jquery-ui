@@ -163,4 +163,12 @@ test( "value", function() {
 	equal( element.spinner( "value" ), 9, "get value via value method" );
 });
 
+test( "widget", function() {
+	expect( 2 );
+	var element = $( "#spin" ).spinner(),
+		widgetElement = element.spinner( "widget" );
+	equal( widgetElement.length, 1, "one element" );
+	strictEqual( widgetElement[ 0 ], element.parent()[ 0 ], "parent element" );
+});
+
 })( jQuery );

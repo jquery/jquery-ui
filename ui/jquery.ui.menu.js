@@ -3,7 +3,7 @@
  * http://jqueryui.com
  *
  * Copyright 2012 jQuery Foundation and other contributors
- * Dual licensed under the MIT or GPL Version 2 licenses.
+ * Released under the MIT license.
  * http://jquery.org/license
  *
  * http://docs.jquery.com/UI/Menu
@@ -319,6 +319,11 @@ $.widget( "ui.menu", {
 				.prepend( submenuCarat );
 			menu.attr( "aria-labelledby", item.attr( "id" ) );
 		});
+
+		// If the active item has been removed, blur the menu
+		if ( this.active && !$.contains( this.element[ 0 ], this.active[ 0 ] ) ) {
+			this.blur();
+		}
 	},
 
 	_itemRole: function() {

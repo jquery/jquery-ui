@@ -3,7 +3,7 @@
  * http://jqueryui.com
  *
  * Copyright 2012 jQuery Foundation and other contributors
- * Dual licensed under the MIT or GPL Version 2 licenses.
+ * Released under the MIT license.
  * http://jquery.org/license
  *
  * http://docs.jquery.com/UI/Datepicker
@@ -708,9 +708,6 @@ $.extend(Datepicker.prototype, {
 
 	/* Generate the date picker content. */
 	_updateDatepicker: function(inst) {
-		if ($.datepicker._curInst && inst != $.datepicker._curInst) {
-			return;
-		}
 		this.maxRows = 4; //Reset the max number of rows being displayed (see #7043)
 		var borders = $.datepicker._getBorders(inst.dpDiv);
 		instActive = inst; // for delegate hover events
@@ -1414,7 +1411,7 @@ $.extend(Datepicker.prototype, {
 	 */
 	_attachHandlers: function(inst) {
 		var stepMonths = this._get(inst, 'stepMonths');
-		var id = '#' + inst.id;
+		var id = '#' + inst.id.replace( /\\\\/g, "\\" );
 		inst.dpDiv.find('[data-handler]').map(function () {
 			var handler = {
 				prev: function () {
