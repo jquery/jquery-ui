@@ -229,7 +229,7 @@ $.widget("ui.draggable", $.ui.mouse, {
 	},
 	
 	_mouseUp: function(event) {
-		if (this.options.iframeFix === true) {
+		if (this.options.iframeFix) {
 			$("div.ui-draggable-iframeFix").each(function() { 
 				this.parentNode.removeChild(this); 
 			}); //Remove frame helpers
