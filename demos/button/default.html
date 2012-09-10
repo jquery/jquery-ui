@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
 	<meta charset="utf-8">
@@ -11,14 +11,15 @@
 	<link rel="stylesheet" href="../demos.css">
 	<script>
 	$(function() {
-		$( "input[type=submit], a, button", ".demo" ).button();
-		$( "a", ".demo" ).click(function() { return false; });
+		$( "input[type=submit], a, button" )
+			.button()
+			.click(function( event ) {
+				event.preventDefault();
+			});
 	});
 	</script>
 </head>
 <body>
-
-<div class="demo">
 
 <button>A button element</button>
 
@@ -26,13 +27,8 @@
 
 <a href="#">An anchor</a>
 
-</div><!-- End demo -->
-
-
-
 <div class="demo-description">
 <p>Examples of the markup that can be used for buttons: A button element, an input of type submit and an anchor.</p>
-</div><!-- End demo-description -->
-
+</div>
 </body>
 </html>

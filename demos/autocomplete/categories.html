@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
 	<meta charset="utf-8">
@@ -29,7 +29,7 @@
 					ul.append( "<li class='ui-autocomplete-category'>" + item.category + "</li>" );
 					currentCategory = item.category;
 				}
-				that._renderItem( ul, item );
+				that._renderItemData( ul, item );
 			});
 		}
 	});
@@ -57,16 +57,11 @@
 </head>
 <body>
 
-<div class="demo">
-	<label for="search">Search: </label>
-	<input id="search">
-</div><!-- End demo -->
-
-
+<label for="search">Search: </label>
+<input id="search">
 
 <div class="demo-description">
 <p>A categorized search result. Try typing "a" or "n".</p>
-</div><!-- End demo-description -->
-
+</div>
 </body>
 </html>

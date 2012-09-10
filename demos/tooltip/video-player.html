@@ -79,7 +79,7 @@
 			items: "button"
 		});
 
-		$( ".demo" ).tooltip({
+		$( document ).tooltip({
 			position: {
 				my: "center top",
 				at: "center bottom+5",
@@ -96,8 +96,6 @@
 </head>
 <body>
 
-<div class="demo">
-
 <div class="player">Here Be Video (HTML5?)</div>
 <div class="tools">
 	<span class="set">
@@ -112,13 +110,8 @@
 	<button data-icon="ui-icon-alert">Flag as inappropiate</button>
 </div>
 
-</div><!-- End demo -->
-
-
-
 <div class="demo-description">
 <p>A fake video player with like/share/stats button, each with a custom-styled tooltip.</p>
-</div><!-- End demo-description -->
-
+</div>
 </body>
 </html>

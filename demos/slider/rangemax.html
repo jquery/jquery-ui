@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
 	<meta charset="utf-8">
@@ -10,9 +10,6 @@
 	<script src="../../ui/jquery.ui.mouse.js"></script>
 	<script src="../../ui/jquery.ui.slider.js"></script>
 	<link rel="stylesheet" href="../demos.css">
-	<style>
-	#demo-frame > div.demo { padding: 10px !important; };
-	</style>
 	<script>
 	$(function() {
 		$( "#slider-range-max" ).slider({
@@ -30,21 +27,14 @@
 </head>
 <body>
 
-<div class="demo">
-
 <p>
 	<label for="amount">Minimum number of bedrooms:</label>
 	<input type="text" id="amount" style="border:0; color:#f6931f; font-weight:bold;" />
 </p>
 <div id="slider-range-max"></div>
 
-</div><!-- End demo -->
-
-
-
 <div class="demo-description">
 <p>Fix the maximum value of the range slider so that the user can only select a minimum.  Set the <code>range</code> option to "max."</p>
-</div><!-- End demo-description -->
-
+</div>
 </body>
 </html>
