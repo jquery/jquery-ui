@@ -1224,6 +1224,15 @@ $.extend(Datepicker.prototype, {
 							output += (lookAhead('y') ? date.getFullYear() :
 								(date.getYear() % 100 < 10 ? '0' : '') + date.getYear() % 100);
 							break;
+						case 'h':
+							output += formatNumber('h', date.getHours(), 2);
+							break;
+						case 'i':
+							output += formatNumber('i', date.getMinutes(), 2);
+							break;
+						case 's':
+							output += formatNumber('s', date.getSeconds(), 2);
+							break;
 						case '@':
 							output += date.getTime();
 							break;
