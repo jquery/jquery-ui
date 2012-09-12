@@ -920,6 +920,14 @@ test('formatDate', function() {
 	equal($.datepicker.formatDate('\'jour\' d \'de\' MM (\'\'DD\'\'), yy',
 		new Date(2001, 4 - 1, 9), settings), 'jour 9 de Avril (\'Lundi\'), 2001',
 		'Format date \'jour\' d \'de\' MM (\'\'DD\'\'), yy with settings');
+	equal($.datepicker.formatDate('hh:ii:ss', new Date(2012, 1 - 1, 1, 13, 35, 50)),
+		'13:35:50', 'Format date hh:ii:ss');
+	equal($.datepicker.formatDate('hh:i:s', new Date(2012, 1 - 1, 1, 1, 9, 1)),
+		'01:9:1', 'Format date hh:i:s');
+	equal($.datepicker.formatDate('h:i:s', new Date(2012, 1 - 1, 1, 1, 9, 1)),
+		'1:9:1', 'Format date h:i:s');
+	equal($.datepicker.formatDate('d.m.yy hh:ii:ss', new Date(2012, 1 - 1, 1, 14, 9, 1)),
+		'1.1.2012 14:09:01', 'Format date d.m.yy h:i:s');
 });
 
 })(jQuery);
