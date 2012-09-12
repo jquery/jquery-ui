@@ -102,7 +102,7 @@ $.widget( "ui.tabs", {
 
 		// handle numbers: negative, out of range
 		if ( active !== false ) {
-			active = this.tabs.eq( active ).index();
+			active = this.tabs.index( this.tabs.eq( active ) );
 			if ( active === -1 ) {
 				active = options.collapsible ? false : 0;
 			}
