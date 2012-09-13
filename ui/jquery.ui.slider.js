@@ -49,6 +49,7 @@ $.widget( "ui.slider", $.ui.mouse, {
 		this._handleIndex = null;
 		this._detectOrientation();
 		this._mouseInit();
+		this._resetOverlap();
 
 		this.element
 			.addClass( "ui-slider" +
@@ -230,35 +231,46 @@ $.widget( "ui.slider", $.ui.mouse, {
 		position = { x: event.pageX, y: event.pageY };
 		normValue = this._normValueFromMouse( position );
 		distance = this._valueMax() - this._valueMin() + 1;
+
 		this.handles.each(function( i ) {
-			var thisDistance = Math.abs( normValue - that.values(i) );
-			if ( distance > thisDistance ) {
+			var low, high, check, thisDistance, absDistance;
+
+			//Checks if handles are overlapping and stores them in _overlap
+			if ( o.orientation === "vertical" ) {
+				low   = $(this).offset().top;
+				high  = low + $(this).outerHeight(),
+				check = position.y;
+			} else {
+				low   = $(this).offset().left;
+				high  = low + $(this).outerWidth();
+				check = position.x;
+			}
+			if ( low <= check && check <= high ) {
+				that._overlap.handles.push(i);
+			}
+
+			thisDistance = normValue - that.values( i );
+			absDistance  = Math.abs( thisDistance ); 	
+			if ( ( distance > absDistance ) || 
+				( distance === absDistance && thisDistance > 0 ) ) {
 				distance = thisDistance;
-				closestHandle = $( this );
 				index = i;
 			}
 		});
 
-		// workaround for bug #3736 (if both handles of a range are at 0,
-		// the first is always used as the one with least distance,
-		// and moving it is obviously prevented by preventing negative ranges)
-		if( o.range === true && this.values(1) === o.min ) {
-			index += 1;
-			closestHandle = $( this.handles[index] );
+		//If handles are overlapping, set the overlap event position to use for handle choosing
+		//on mouseDrag
+		if ( this._overlap.handles.length > 1 ) {
+			this._overlap.eventX = event.pageX;
+			this._overlap.eventY = event.pageY;
+			return true;
+		}
+    
+		if ( !this._chooseHandle( event, index ) ) { 
+			return false; 
 		}
 
-		allowed = this._start( event, index );
-		if ( allowed === false ) {
-			return false;
-		}
-		this._mouseSliding = true;
-
-		this._handleIndex = index;
-
-		closestHandle
-			.addClass( "ui-state-active" )
-			.focus();
-
+		closestHandle = $( this.handles[this._handleIndex] );
 		offset = closestHandle.offset();
 		mouseOverHandle = !$( event.target ).parents().andSelf().is( ".ui-slider-handle" );
 		this._clickOffset = mouseOverHandle ? { left: 0, top: 0 } : {
@@ -277,6 +289,23 @@ $.widget( "ui.slider", $.ui.mouse, {
 		return true;
 	},
 
+	_chooseHandle: function ( event, index ) {		
+		if ( this._start( event, index ) === false ) {
+			return false;
+		}
+
+		this._mouseSliding = true;
+		this._handleIndex = index;
+
+		$( this.handles[index] )
+			.addClass( "ui-state-active" )
+			.focus();
+      
+		this._resetOverlap();
+
+		return true;
+	},
+
 	_mouseStart: function( event ) {
 		return true;
 	},
@@ -284,6 +313,28 @@ $.widget( "ui.slider", $.ui.mouse, {
 	_mouseDrag: function( event ) {
 		var position = { x: event.pageX, y: event.pageY },
 			normValue = this._normValueFromMouse( position );
+
+		if ( this._overlap.handles.length > 1 ) {
+			if ( this.options.orientation === "vertical" ) {
+				if ( ( this._overlap.eventY - position.y ) === 0 ) {
+					return false;
+				}
+				if ( ( this._overlap.eventY - position.y ) < 0 ) {
+					this._chooseHandle( event, this._overlap.handles[0] );
+				} else {
+					this._chooseHandle( event, this._overlap.handles[this._overlap.handles.length - 1] );
+				}
+			} else {
+				if ( ( this._overlap.eventX - position.x ) === 0 ) {
+					return false;
+				}
+				if ( ( this._overlap.eventX - position.x ) > 0 ) {
+					this._chooseHandle( event, this._overlap.handles[0] );
+				} else {
+					this._chooseHandle( event, this._overlap.handles[this._overlap.handles.length - 1] );
+				}
+			}
+		}
 
 		this._slide( event, this._handleIndex, normValue );
 
@@ -630,6 +681,10 @@ $.widget( "ui.slider", $.ui.mouse, {
 				this.range[ animate ? "animate" : "css" ]( { height: ( 100 - valPercent ) + "%" }, { queue: false, duration: o.animate } );
 			}
 		}
+	},
+
+	_resetOverlap: function() {
+		this._overlap = { "handles": [], "eventX": -1, "eventY": -1 };
 	}
 
 });
