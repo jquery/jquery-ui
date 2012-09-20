@@ -165,6 +165,7 @@ $.widget( "ui.autocomplete", {
 			focus: function() {
 				this.selectedItem = null;
 				this.previous = this._value();
+				this._search( this.previous );
 			},
 			blur: function( event ) {
 				if ( this.cancelBlur ) {
