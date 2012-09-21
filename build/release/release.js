@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
-var baseDir, repoDir, prevVersion, newVersion, nextVersion, tagTime,
+var baseDir, repoDir, majorMinorVersion, patchVersion, prevVersion, newVersion,
+	nextVersion, tagTime,
 	fs = require( "fs" ),
 	path = require( "path" ),
 	// support: node <0.8
@@ -103,10 +104,14 @@ function getVersions() {
 	major = parseInt( parts[ 0 ], 10 );
 	minor = parseInt( parts[ 1 ], 10 );
 	patch = parseInt( parts[ 2 ], 10 );
+
 	// TODO: handle 2.0.0
 	if ( minor === 0 ) {
 		abort( "This script is not smart enough to handle the 2.0.0 release." );
 	}
+
+	majorMinorVersion =  [ major, minor ].join( "." );
+	patchVersion = patch;
 	prevVersion = patch === 0 ?
 		[ major, minor - 1, 0 ].join( "." ) :
 		[ major, minor, patch - 1 ].join( "." );
@@ -190,7 +195,14 @@ function generateChangelog() {
 	var commits,
 		changelogPath = baseDir + "/changelog",
 		changelog = cat( "build/release/changelog-shell" ) + "\n",
-		fullFormat = "* %s (TICKETREF, [http://github.com/jquery/jquery-ui/commit/%H %h])";
+		fullFormat = "* %s (TICKETREF, [%h](http://github.com/jquery/jquery-ui/commit/%H))";
+
+	changelog = changelog
+		.replace( "{title}", "jQuery UI " + newVersion + " Changelog" )
+		.replace( "{summary}", patchVersion === 0 ?
+			"This is the final release of jQuery UI " + majorMinorVersion + "." :
+			"This is the " + ordinal( patchVersion ) + " maintenance release for " +
+				"[jQuery UI " + majorMinorVersion + "](/changelog/" + majorMinorVersion + ")." );
 
 	echo ( "Adding commits..." );
 	commits = gitLog( fullFormat );
@@ -205,7 +217,7 @@ function generateChangelog() {
 			});
 			return tickets.length ?
 				commit.replace( "TICKETREF", tickets.map(function( ticket ) {
-					return "[http://bugs.jqueryui.com/ticket/" + ticket + " #" + ticket + "]";
+					return "[#" + ticket + "](http://bugs.jqueryui.com/ticket/" + ticket + ")";
 				}).join( ", " ) ) :
 				// Leave TICKETREF token in place so it's easy to find commits without tickets
 				commit;
@@ -316,6 +328,30 @@ function readPackage() {
 function writePackage( pkg ) {
 	fs.writeFileSync( repoDir + "/package.json",
 		JSON.stringify( pkg, null, "\t" ) + "\n" );
+}
+
+function ordinal( number ) {
+	return number === 1 ? "first" :
+		number === 2 ? "second" :
+		number === 3 ? "third" :
+		number === 4 ? "fourth" :
+		number === 5 ? "fifth" :
+		number === 6 ? "sixth" :
+		number === 7 ? "seventh" :
+		number === 8 ? "eighth" :
+		number === 9 ? "ninth" :
+		number === 10 ? "tenth" :
+		number === 11 ? "eleventh" :
+		number === 12 ? "twelfth" :
+		number === 13 ? "thirteenth" :
+		number === 14 ? "fourteenth" :
+		number === 15 ? "fifteenth" :
+		number === 16 ? "sixteenth" :
+		number === 17 ? "seventeenth" :
+		number === 18 ? "eighteenth" :
+		number === 19 ? "nineteenth" :
+		number === 20 ? "twentieth" :
+		"twenty " + ordinal( number - 20 );
 }
 
 function bootstrap( fn ) {
