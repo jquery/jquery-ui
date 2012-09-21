@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 
-var baseDir, repoDir, majorMinorVersion, patchVersion, prevVersion, newVersion,
-	nextVersion, tagTime,
+var baseDir, repoDir, prevVersion, newVersion, nextVersion, tagTime,
 	fs = require( "fs" ),
 	path = require( "path" ),
 	// support: node <0.8
@@ -110,8 +109,6 @@ function getVersions() {
 		abort( "This script is not smart enough to handle the 2.0.0 release." );
 	}
 
-	majorMinorVersion =  [ major, minor ].join( "." );
-	patchVersion = patch;
 	prevVersion = patch === 0 ?
 		[ major, minor - 1, 0 ].join( "." ) :
 		[ major, minor, patch - 1 ].join( "." );
@@ -197,12 +194,7 @@ function generateChangelog() {
 		changelog = cat( "build/release/changelog-shell" ) + "\n",
 		fullFormat = "* %s (TICKETREF, [%h](http://github.com/jquery/jquery-ui/commit/%H))";
 
-	changelog = changelog
-		.replace( "{title}", "jQuery UI " + newVersion + " Changelog" )
-		.replace( "{summary}", patchVersion === 0 ?
-			"This is the final release of jQuery UI " + majorMinorVersion + "." :
-			"This is the " + ordinal( patchVersion ) + " maintenance release for " +
-				"[jQuery UI " + majorMinorVersion + "](/changelog/" + majorMinorVersion + ")." );
+	changelog = changelog.replace( "{title}", "jQuery UI " + newVersion + " Changelog" );
 
 	echo ( "Adding commits..." );
 	commits = gitLog( fullFormat );
@@ -328,30 +320,6 @@ function readPackage() {
 function writePackage( pkg ) {
 	fs.writeFileSync( repoDir + "/package.json",
 		JSON.stringify( pkg, null, "\t" ) + "\n" );
-}
-
-function ordinal( number ) {
-	return number === 1 ? "first" :
-		number === 2 ? "second" :
-		number === 3 ? "third" :
-		number === 4 ? "fourth" :
-		number === 5 ? "fifth" :
-		number === 6 ? "sixth" :
-		number === 7 ? "seventh" :
-		number === 8 ? "eighth" :
-		number === 9 ? "ninth" :
-		number === 10 ? "tenth" :
-		number === 11 ? "eleventh" :
-		number === 12 ? "twelfth" :
-		number === 13 ? "thirteenth" :
-		number === 14 ? "fourteenth" :
-		number === 15 ? "fifteenth" :
-		number === 16 ? "sixteenth" :
-		number === 17 ? "seventeenth" :
-		number === 18 ? "eighteenth" :
-		number === 19 ? "nineteenth" :
-		number === 20 ? "twentieth" :
-		"twenty " + ordinal( number - 20 );
 }
 
 function bootstrap( fn ) {
