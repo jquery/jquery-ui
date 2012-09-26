@@ -107,6 +107,7 @@ function Datepicker() {
 		constrainInput: true, // The input is constrained by the current date format
 		showButtonPanel: false, // True to show button panel, false to not show it
 		autoSize: false, // True to size the input for the date format, false to leave as is
+		unifyNumRows: false, // True to always use six rows; ensuring datepickers showing different months having the same height
 		disabled: false // The initial disabled state
 	};
 	$.extend(this._defaults, this.regional['']);
@@ -1517,6 +1518,7 @@ $.extend(Datepicker.prototype, {
 		var showOtherMonths = this._get(inst, 'showOtherMonths');
 		var selectOtherMonths = this._get(inst, 'selectOtherMonths');
 		var calculateWeek = this._get(inst, 'calculateWeek') || this.iso8601Week;
+		var unifyNumRows = this._get(inst, 'unifyNumRows');
 		var defaultDate = this._getDefaultDate(inst);
 		var html = '';
 		for (var row = 0; row < numMonths[0]; row++) {
@@ -1558,6 +1560,7 @@ $.extend(Datepicker.prototype, {
 				var leadDays = (this._getFirstDayOfMonth(drawYear, drawMonth) - firstDay + 7) % 7;
 				var curRows = Math.ceil((leadDays + daysInMonth) / 7); // calculate the number of rows to generate
 				var numRows = (isMultiMonth ? this.maxRows > curRows ? this.maxRows : curRows : curRows); //If multiple months, use the higher number of rows (see #7043)
+				numRows = (unifyNumRows ? 6 : numRows);//if unifyNumRows is set to true, always display 6 weeks 
 				this.maxRows = numRows;
 				var printDate = this._daylightSavingAdjust(new Date(drawYear, drawMonth, 1 - leadDays));
 				for (var dRow = 0; dRow < numRows; dRow++) { // create date picker rows
