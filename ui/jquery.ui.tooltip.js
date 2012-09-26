@@ -6,6 +6,8 @@
  * Released under the MIT license.
  * http://jquery.org/license
  *
+ * http://api.jqueryui.com/tooltip/
+ *
  * Depends:
  *	jquery.ui.core.js
  *	jquery.ui.widget.js

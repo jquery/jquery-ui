@@ -6,7 +6,7 @@
  * Released under the MIT license.
  * http://jquery.org/license
  *
- * http://docs.jquery.com/UI/Effects/Blind
+ * http://api.jqueryui.com/blind-effect/
  *
  * Depends:
  *	jquery.ui.effect.js

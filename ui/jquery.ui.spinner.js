@@ -6,7 +6,7 @@
  * Released under the MIT license.
  * http://jquery.org/license
  *
- * http://docs.jquery.com/UI/Spinner
+ * http://api.jqueryui.com/spinner/
  *
  * Depends:
  *  jquery.ui.core.js

@@ -6,7 +6,7 @@
  * Released under the MIT license.
  * http://jquery.org/license
  *
- * http://docs.jquery.com/UI/Selectables
+ * http://api.jqueryui.com/selectable/
  *
  * Depends:
  *	jquery.ui.core.js

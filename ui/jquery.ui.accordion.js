@@ -6,7 +6,7 @@
  * Released under the MIT license.
  * http://jquery.org/license
  *
- * http://docs.jquery.com/UI/Accordion
+ * http://api.jqueryui.com/accordion/
  *
  * Depends:
  *	jquery.ui.core.js

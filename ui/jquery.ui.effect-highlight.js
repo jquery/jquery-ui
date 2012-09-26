@@ -6,7 +6,7 @@
  * Released under the MIT license.
  * http://jquery.org/license
  *
- * http://docs.jquery.com/UI/Effects/Highlight
+ * http://api.jqueryui.com/highlight-effect/
  *
  * Depends:
  *	jquery.ui.effect.js

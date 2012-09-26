@@ -6,7 +6,7 @@
  * Released under the MIT license.
  * http://jquery.org/license
  *
- * http://docs.jquery.com/UI/Position
+ * http://api.jqueryui.com/position/
  */
 (function( $, undefined ) {
 
