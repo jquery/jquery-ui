@@ -64,6 +64,9 @@ function cloneRepo() {
 	if ( exec( "npm install" ).code !== 0 ) {
 		abort( "Error installing dependencies." );
 	}
+	if ( exec( "npm install download.jqueryui.com" ).code !== 0 ) {
+		abort( "Error installing dependencies." );
+	}
 	echo();
 }
 
@@ -145,8 +148,7 @@ function buildRelease() {
 	echo();
 
 	echo( "Building release..." );
-	// TODO: Build themes
-	if ( exec( "grunt release" ).code !== 0 ) {
+	if ( exec( "grunt release_cdn" ).code !== 0 ) {
 		abort( "Error building release." );
 	}
 	echo();
