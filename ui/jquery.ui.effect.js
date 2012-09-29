@@ -6,7 +6,7 @@
  * Released under the MIT license.
  * http://jquery.org/license
  *
- * http://api.jqueryui.com/category/effects/
+ * http://api.jqueryui.com/category/effects-core/
  */
 ;(jQuery.effects || (function($, undefined) {
 
