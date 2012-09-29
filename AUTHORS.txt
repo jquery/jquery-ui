@@ -203,3 +203,8 @@ Luis Dalmolin <luis.nh@gmail.com>
 Mark Aaron Shirley <maspwr@gmail.com>
 Martin Hoch <martin@fidion.de>
 Jiayi Yang <tr870829@gmail.com>
+Philipp Benjamin Köppchen <xgxtpbk@gws.ms>
+Sindre Sorhus <sindresorhus@gmail.com>
+Bernhard Sirlinger <bernhard.sirlinger@tele2.de>
+Jared A. Scheel <jared@jaredscheel.com>
+Rafael Xavier de Souza <rxaviers@gmail.com>
