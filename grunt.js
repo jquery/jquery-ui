@@ -430,19 +430,19 @@ grunt.registerTask( "download_docs", function() {
 	var files = "draggable droppable resizable selectable sortable accordion autocomplete button datepicker dialog progressbar slider tabs position"
 	.split(" ").map(function(widget) {
 		return {
-			url: "http://docs.jquery.com/action/render/UI/API/" + version + "/" + capitalize(widget),
+			url: "http://docs.jquery.com/UI/API/" + version + "/" + capitalize(widget) + "?action=render",
 			dest: docsDir + '/' + widget + '.html'
 		};
 	});
 	files = files.concat("animate addClass effect hide removeClass show switchClass toggle toggleClass".split(" ").map(function(widget) {
 		return {
-			url: "http://docs.jquery.com/action/render/UI/Effects/" + widget,
+			url: "http://docs.jquery.com/UI/Effects/" + widget + "?action=render",
 			dest: docsDir + '/' + widget + '.html'
 		};
 	}));
 	files = files.concat("Blind Clip Drop Explode Fade Fold Puff Slide Scale Bounce Highlight Pulsate Shake Size Transfer".split(" ").map(function(widget) {
 		return {
-			url: "http://docs.jquery.com/action/render/UI/Effects/" + widget,
+			url: "http://docs.jquery.com/UI/Effects/" + widget + "?action=render",
 			dest: docsDir + '/effect-' + widget.toLowerCase() + '.html'
 		};
 	}));
