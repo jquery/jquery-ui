@@ -518,10 +518,10 @@ $.widget( "ui.accordion", {
 				easing: easing,
 				complete: complete,
 				step: function( now, fx ) {
+					fx.now = Math.round( now );
 					if ( fx.prop !== "height" ) {
-						fx.now = Math.round( now );
 						adjust += fx.now;
-					} else {
+					} else if ( that.options.heightStyle !== "content" ) {
 						fx.now = Math.round( total - toHide.outerHeight() - adjust );
 						adjust = 0;
 					}
