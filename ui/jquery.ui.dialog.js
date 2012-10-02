@@ -348,7 +348,8 @@ $.widget("ui.dialog", {
 	_createButtons: function( buttons ) {
 		var uiDialogButtonPane, uiButtonSet,
 			that = this,
-			hasButtons = false;
+			hasButtons = false,
+			args;
 
 		// if we already have a button pane, remove it
 		this.uiDialogButtonPane.remove();
@@ -368,7 +369,9 @@ $.widget("ui.dialog", {
 					.attr( props, true )
 					.unbind( "click" )
 					.click(function() {
-						props.click.apply( that.element[0], arguments );
+						args = Array.prototype.slice.call(arguments);
+						args.push(self);
+						props.click.apply( that.element[0], args );
 					})
 					.appendTo( that.uiButtonSet );
 				if ( $.fn.button ) {
