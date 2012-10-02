@@ -40,6 +40,7 @@ $.widget("ui.draggable", $.ui.mouse, {
 		scrollSpeed: 20,
 		snap: false,
 		snapMode: "both",
+		snapCenter: "none",
 		snapTolerance: 20,
 		stack: false,
 		zIndex: false
@@ -737,16 +738,16 @@ $.ui.plugin.add("draggable", "snap", {
 		var inst = $(this).data("draggable"), o = inst.options;
 		var d = o.snapTolerance;
 
-		var x1 = ui.offset.left, x2 = x1 + inst.helperProportions.width,
-			y1 = ui.offset.top, y2 = y1 + inst.helperProportions.height;
+		var x1 = ui.offset.left, x2 = x1 + inst.helperProportions.width, x3 = x1 + inst.helperProportions.width/2,
+			y1 = ui.offset.top, y2 = y1 + inst.helperProportions.height, y3 = y1 + inst.helperProportions.height/2;
 
 		for (var i = inst.snapElements.length - 1; i >= 0; i--){
 
-			var l = inst.snapElements[i].left, r = l + inst.snapElements[i].width,
-				t = inst.snapElements[i].top, b = t + inst.snapElements[i].height;
+			var l = inst.snapElements[i].left, r = l + inst.snapElements[i].width, vc = l + inst.snapElements[i].width/2,
+				t = inst.snapElements[i].top, b = t + inst.snapElements[i].height, hc = t + inst.snapElements[i].height/2;
 
 			//Yes, I know, this is insane ;)
-			if(!((l-d < x1 && x1 < r+d && t-d < y1 && y1 < b+d) || (l-d < x1 && x1 < r+d && t-d < y2 && y2 < b+d) || (l-d < x2 && x2 < r+d && t-d < y1 && y1 < b+d) || (l-d < x2 && x2 < r+d && t-d < y2 && y2 < b+d))) {
+			if(!((l-d < x1 && x1 < r+d && t-d < y1 && y1 < b+d) || (l-d < x1 && x1 < r+d && t-d < y2 && y2 < b+d) || (l-d < x1 && x1 < r+d && t-d < y3 && y3 < b+d) || (l-d < x2 && x2 < r+d && t-d < y1 && y1 < b+d) || (l-d < x2 && x2 < r+d && t-d < y2 && y2 < b+d) || (l-d < x2 && x2 < r+d && t-d < y3 && y3 < b+d) || (l-d < x3 && x3 < r+d && t-d < y1 && y1 < b+d) || (l-d < x3 && x3 < r+d && t-d < y2 && y2 < b+d) || (l-d < x3 && x3 < r+d && t-d < y3 && y3 < b+d))) {
 				if(inst.snapElements[i].snapping) (inst.options.snap.release && inst.options.snap.release.call(inst.element, event, $.extend(inst._uiHash(), { snapItem: inst.snapElements[i].item })));
 				inst.snapElements[i].snapping = false;
 				continue;
@@ -769,16 +770,41 @@ $.ui.plugin.add("draggable", "snap", {
 				var ts = Math.abs(t - y1) <= d;
 				var bs = Math.abs(b - y2) <= d;
 				var ls = Math.abs(l - x1) <= d;
-				var rs = Math.abs(r - x2) <= d;
+				var rs = Math.abs(r - x2) <= d;				
 				if(ts) ui.position.top = inst._convertPositionTo("relative", { top: t, left: 0 }).top - inst.margins.top;
 				if(bs) ui.position.top = inst._convertPositionTo("relative", { top: b - inst.helperProportions.height, left: 0 }).top - inst.margins.top;
 				if(ls) ui.position.left = inst._convertPositionTo("relative", { top: 0, left: l }).left - inst.margins.left;
 				if(rs) ui.position.left = inst._convertPositionTo("relative", { top: 0, left: r - inst.helperProportions.width }).left - inst.margins.left;
 			}
 
-			if(!inst.snapElements[i].snapping && (ts || bs || ls || rs || first))
+			if(o.snapCenter != 'none'){
+				var chs = Math.abs(hc - y3) <= d;
+				var cvs = Math.abs(vc - x3) <= d;
+				if(chs) ui.position.top = inst._convertPositionTo("relative", { top: hc - inst.helperProportions.height/2, left: 0 }).top - inst.margins.top;
+				if(cvs) ui.position.left = inst._convertPositionTo("relative", { top: 0, left: vc - inst.helperProportions.width/2 }).left - inst.margins.left;
+				if(o.snapCenter != 'centers'){
+					var cts = Math.abs(t - y3) <= d;
+					var cbs = Math.abs(b - y3) <= d;
+					var cls = Math.abs(l - x3) <= d;
+					var crs = Math.abs(r - x3) <= d;
+					var ch1s = Math.abs(hc - y1) <= d;
+					var ch2s = Math.abs(hc - y2) <= d
+					var cv1s = Math.abs(vc - x1) <= d;
+					var cv2s = Math.abs(vc - x2) <= d
+					if(cts) ui.position.top = inst._convertPositionTo("relative", { top: t - inst.helperProportions.height/2, left: 0 }).top - inst.margins.top;
+					if(cbs) ui.position.top = inst._convertPositionTo("relative", { top: b - inst.helperProportions.height/2, left: 0 }).top - inst.margins.top;
+					if(cls) ui.position.left = inst._convertPositionTo("relative", { top: 0, left: l - inst.helperProportions.width/2 }).left - inst.margins.left;
+					if(crs) ui.position.left = inst._convertPositionTo("relative", { top: 0, left: r - inst.helperProportions.width/2 }).left - inst.margins.left;
+					if(ch1s) ui.position.top = inst._convertPositionTo("relative", { top: hc, left: 0 }).top - inst.margins.top;
+					if(ch2s) ui.position.top = inst._convertPositionTo("relative", { top: hc - inst.helperProportions.height, left: 0 }).top - inst.margins.top;
+					if(cv1s) ui.position.left = inst._convertPositionTo("relative", { top: 0, left: vc }).left - inst.margins.left;
+					if(cv2s) ui.position.left = inst._convertPositionTo("relative", { top: 0, left: vc - inst.helperProportions.width }).left - inst.margins.left;
+				}
+			}
+
+			if(!inst.snapElements[i].snapping && (ts || bs || ls || rs || cts || cbs || chs || cls || crs || cvs || ch1s || ch2s || cv1s || cv2s || first))
 				(inst.options.snap.snap && inst.options.snap.snap.call(inst.element, event, $.extend(inst._uiHash(), { snapItem: inst.snapElements[i].item })));
-			inst.snapElements[i].snapping = (ts || bs || ls || rs || first);
+			inst.snapElements[i].snapping = (ts || bs || ls || rs || cts || cbs || chs || cls || crs || cvs ||  ch1s || ch2s || cv1s || cv2s || first);
 
 		};
 
