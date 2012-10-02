@@ -18,8 +18,7 @@
 	</style>
 	<script>
 	$(function() {
-		var cache = {},
-			lastXhr;
+		var cache = {};
 		$( "#birds" ).autocomplete({
 			minLength: 2,
 			source: function( request, response ) {
@@ -29,11 +28,9 @@
 					return;
 				}
 
-				lastXhr = $.getJSON( "search.php", request, function( data, status, xhr ) {
+				$.getJSON( "search.php", request, function( data, status, xhr ) {
 					cache[ term ] = data;
-					if ( xhr === lastXhr ) {
-						response( data );
-					}
+					response( data );
 				});
 			}
 		});
