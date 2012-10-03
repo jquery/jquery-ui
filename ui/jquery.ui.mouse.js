@@ -6,7 +6,7 @@
  * Released under the MIT license.
  * http://jquery.org/license
  *
- * http://docs.jquery.com/UI/Mouse
+ * http://api.jqueryui.com/mouse/
  *
  * Depends:
  *	jquery.ui.widget.js

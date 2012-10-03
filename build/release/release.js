@@ -64,6 +64,9 @@ function cloneRepo() {
 	if ( exec( "npm install" ).code !== 0 ) {
 		abort( "Error installing dependencies." );
 	}
+	if ( exec( "npm install download.jqueryui.com" ).code !== 0 ) {
+		abort( "Error installing dependencies." );
+	}
 	echo();
 }
 
@@ -103,10 +106,12 @@ function getVersions() {
 	major = parseInt( parts[ 0 ], 10 );
 	minor = parseInt( parts[ 1 ], 10 );
 	patch = parseInt( parts[ 2 ], 10 );
+
 	// TODO: handle 2.0.0
 	if ( minor === 0 ) {
 		abort( "This script is not smart enough to handle the 2.0.0 release." );
 	}
+
 	prevVersion = patch === 0 ?
 		[ major, minor - 1, 0 ].join( "." ) :
 		[ major, minor, patch - 1 ].join( "." );
@@ -143,8 +148,7 @@ function buildRelease() {
 	echo();
 
 	echo( "Building release..." );
-	// TODO: Build themes
-	if ( exec( "grunt release" ).code !== 0 ) {
+	if ( exec( "grunt release_cdn" ).code !== 0 ) {
 		abort( "Error building release." );
 	}
 	echo();
@@ -190,7 +194,9 @@ function generateChangelog() {
 	var commits,
 		changelogPath = baseDir + "/changelog",
 		changelog = cat( "build/release/changelog-shell" ) + "\n",
-		fullFormat = "* %s (TICKETREF, [http://github.com/jquery/jquery-ui/commit/%H %h])";
+		fullFormat = "* %s (TICKETREF, [%h](http://github.com/jquery/jquery-ui/commit/%H))";
+
+	changelog = changelog.replace( "{title}", "jQuery UI " + newVersion + " Changelog" );
 
 	echo ( "Adding commits..." );
 	commits = gitLog( fullFormat );
@@ -205,7 +211,7 @@ function generateChangelog() {
 			});
 			return tickets.length ?
 				commit.replace( "TICKETREF", tickets.map(function( ticket ) {
-					return "[http://bugs.jqueryui.com/ticket/" + ticket + " #" + ticket + "]";
+					return "[#" + ticket + "](http://bugs.jqueryui.com/ticket/" + ticket + ")";
 				}).join( ", " ) ) :
 				// Leave TICKETREF token in place so it's easy to find commits without tickets
 				commit;

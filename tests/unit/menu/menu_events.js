@@ -57,13 +57,15 @@ asyncTest( "handle blur", function() {
 		});
 
 	click( element, "1" );
-	setTimeout( function() {
+	setTimeout(function() {
 		element.blur();
-		start();
-	}, 350 );
+		setTimeout(function() {
+			start();
+		}, 350 );
+	});
 });
 
-asyncTest( "handle blur on click", function() {
+asyncTest( "handle blur via click outside", function() {
 	expect( 1 );
 	var blurHandled = false,
 		element = $( "#menu1" ).menu({
@@ -77,10 +79,12 @@ asyncTest( "handle blur on click", function() {
 		});
 
 	click( element, "1" );
-	setTimeout( function() {
+	setTimeout(function() {
 		$( "<a>", { id: "remove"} ).appendTo( "body" ).trigger( "click" );
-		start();
-	}, 350 );
+		setTimeout(function() {
+			start();
+		}, 350 );
+	});
 });
 
 test( "handle focus of menu with active item", function() {
