@@ -177,8 +177,8 @@ grunt.registerTask( "generate_themes", function() {
 		distFolder = "dist/" + grunt.template.process( grunt.config( "files.dist" ), grunt.config() );
 	try {
 		require.resolve( "download.jqueryui.com" );
-	} catch( e ) {
-		throw "You need to manually install download.jqueryui.com for this task to work";
+	} catch( error ) {
+		throw new Error( "You need to manually install download.jqueryui.com for this task to work" );
 	}
 
 	// copy release files into download builder to avoid cloning again
