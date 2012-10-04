@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+/*global cat:true echo:true exec:true exit:true cd:true*/
 
 var baseDir, repoDir, prevVersion, newVersion, nextVersion, tagTime,
 	fs = require( "fs" ),
@@ -250,7 +251,7 @@ function gatherContributors() {
 	echo ( "Adding people thanked in commits..." );
 	contributors = contributors.concat(
 		gitLog( "%b%n%s" ).filter(function( line ) {
-			return /thank/i.test( line );
+			return (/thank/i).test( line );
 		}));
 
 	fs.writeFileSync( contributorsPath, contributors.join( "\n" ) );
