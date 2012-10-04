@@ -140,7 +140,7 @@ $.widget( "ui.tooltip", {
 			this._find( target ).position( $.extend({
 				of: target
 			}, this.options.position ) );
-			// Stop tacking (#8622)
+			// Stop tracking (#8622)
 			this._off( this.document, "mousemove" );
 			return;
 		}
