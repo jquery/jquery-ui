@@ -3,13 +3,20 @@
 module( "tooltip: methods" );
 
 test( "destroy", function() {
-	expect( 2 );
+	expect( 3 );
+	var element = $( "#tooltipped1" );
+
 	domEqual( "#tooltipped1", function() {
-		$( "#tooltipped1" ).tooltip().tooltip( "destroy" );
+		element.tooltip().tooltip( "destroy" );
 	});
 
 	// make sure that open tooltips are removed on destroy
-	$( "#tooltipped1" ).tooltip().tooltip( "open" ).tooltip( "destroy" );
+	domEqual( "#tooltipped1", function() {
+		element
+			.tooltip()
+			.tooltip( "open", $.Event( "mouseover", { target: element[0] }) )
+			.tooltip( "destroy" );
+	});
 	equal( $( ".ui-tooltip" ).length, 0 );
 });
 
