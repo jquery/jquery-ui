@@ -29,6 +29,23 @@ test( "open/close", function() {
 	$.fx.off = false;
 });
 
+// #8626 - Calling open() without an event
+test( "open/close with tracking", function() {
+	expect( 3 );
+	$.fx.off = true;
+	var tooltip,
+		element = $( "#tooltipped1" ).tooltip({ track: true });
+	equal( $( ".ui-tooltip" ).length, 0, "no tooltip on init" );
+
+	element.tooltip( "open" );
+	tooltip = $( "#" + element.data( "ui-tooltip-id" ) );
+	ok( tooltip.is( ":visible" ) );
+
+	element.tooltip( "close" );
+	ok( tooltip.is( ":hidden" ) );
+	$.fx.off = false;
+});
+
 test( "enable/disable", function() {
 	expect( 7 );
 	$.fx.off = true;

@@ -216,7 +216,7 @@ $.widget( "ui.tooltip", {
 			positionOption.of = event;
 			tooltip.position( positionOption );
 		}
-		if ( this.options.track && /^mouse/.test( event.originalEvent.type ) ) {
+		if ( this.options.track && event && /^mouse/.test( event.originalEvent.type ) ) {
 			positionOption = $.extend( {}, this.options.position );
 			this._on( this.document, {
 				mousemove: position
