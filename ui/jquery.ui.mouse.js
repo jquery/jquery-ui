@@ -23,7 +23,8 @@ $.widget("ui.mouse", {
 	options: {
 		cancel: 'input,textarea,button,select,option',
 		distance: 1,
-		delay: 0
+		delay: 0,
+		which: 1
 	},
 	_mouseInit: function() {
 		var that = this;
@@ -64,7 +65,7 @@ $.widget("ui.mouse", {
 		this._mouseDownEvent = event;
 
 		var that = this,
-			btnIsLeft = (event.which === 1),
+			btnIsLeft = (event.which === this.options.which),
 			// event.target.nodeName works around a bug in IE 8 with
 			// disabled inputs (#7620)
 			elIsCancel = (typeof this.options.cancel === "string" && event.target.nodeName ? $(event.target).closest(this.options.cancel).length : false);
