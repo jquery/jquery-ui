@@ -1167,6 +1167,13 @@ test( "._trigger() - instance as element", function() {
 			$( "#widget" ).testWidget().detach();
 		});
 	});
+
+	test( "destroy - remove event bubbling", function() {
+		shouldDestroy( false, function() {
+			$( "<div>child</div>" ).appendTo( $( "#widget" ).testWidget() )
+				.trigger( "remove" );
+		});
+	});
 }());
 
 test( "redefine", function() {
