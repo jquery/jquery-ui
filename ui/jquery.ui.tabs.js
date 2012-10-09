@@ -91,7 +91,7 @@ $.widget( "ui.tabs", {
 
 			// check for a tab marked active via a class
 			if ( active === null ) {
-				active = this.tabs.filter( ".ui-tabs-active" ).index();
+				active = this.tabs.index( this.tabs.filter( ".ui-tabs-active" ) );
 			}
 
 			// no active tab, set to false
