@@ -1,12 +1,10 @@
  /*
- * jQuery UI selectmenu 1.3.0pre version
+ * jQuery UI Selectmenu version 1.3.0pre 
  *
  * Copyright (c) 2009-2010 filament group, http://filamentgroup.com
  * Copyright (c) 2010-2012 Felix Nagel, http://www.felixnagel.com
- * Dual licensed under the MIT (MIT-LICENSE.txt)
- * and GPL (GPL-LICENSE.txt) licenses.
+ * Licensed under the MIT (MIT-LICENSE.txt)
  *
- * http://docs.jquery.com/UI
  * https://github.com/fnagel/jquery-ui/wiki/Selectmenu
  */
 
@@ -352,7 +350,7 @@ $.widget("ui.selectmenu", {
 						}
 					})
 					.bind('mouseout.selectmenu', function() {
-						if ($(this).is(self._selectedOptionLi().selector)) {
+						if ($(this).is(self._selectedOptionLi())) {
 							$(this).addClass(activeClass);
 						}
 						$(this).removeClass(self.widgetBaseClass + '-item-focus ui-state-hover');
