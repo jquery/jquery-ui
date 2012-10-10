@@ -148,7 +148,7 @@ $.extend( $.simulate.prototype, {
 		}
 
 		// TODO: can we hook into core's logic?
-		if ( $.browser.msie || $.browser.opera ) {
+		if ( $.ui.ie || (({}).toString.call( window.opera ) === "[object Opera]") ) {
 			// TODO: is charCode ever <0 ? Can we just use charCode || keyCode?
 			event.keyCode = (options.charCode > 0) ? options.charCode : options.keyCode;
 			event.charCode = undefined;
