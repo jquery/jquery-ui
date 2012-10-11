@@ -149,7 +149,7 @@
 				var itemJq=$(v.selector,element),
 				    name=v.name||itemJq.attr('name');
 				values[name]=[];
-				if(itemJq.is(':text,textarea,:password,input[type="hidden"])){	    
+				if(itemJq.is(':text,textarea,:password,input[type="hidden"]')){	    
 				    itemJq.each(function(){
 				        values[name].push($(this).val());
 				    });
