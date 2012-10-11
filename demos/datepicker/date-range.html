@@ -15,7 +15,7 @@
 			defaultDate: "+1w",
 			changeMonth: true,
 			numberOfMonths: 3,
-			onSelect: function( selectedDate ) {
+			onClose: function( selectedDate ) {
 				$( "#to" ).datepicker( "option", "minDate", selectedDate );
 			}
 		});
@@ -23,7 +23,7 @@
 			defaultDate: "+1w",
 			changeMonth: true,
 			numberOfMonths: 3,
-			onSelect: function( selectedDate ) {
+			onClose: function( selectedDate ) {
 				$( "#from" ).datepicker( "option", "maxDate", selectedDate );
 			}
 		});
