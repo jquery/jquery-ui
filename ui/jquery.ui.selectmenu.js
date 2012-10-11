@@ -362,6 +362,7 @@ $.widget( "ui.selectmenu", {
 		this._trigger( "select", event, { item: item } );
 
 		if ( item.index !== oldIndex ) {
+                        this.element.change();
 			this._trigger( "change", event, { item: item } );
 		}
 	},
