@@ -140,6 +140,8 @@ $.widget( "ui.tooltip", {
 			this._find( target ).position( $.extend({
 				of: target
 			}, this.options.position ) );
+			// Stop tracking (#8622)
+			this._off( this.document, "mousemove" );
 			return;
 		}
 
@@ -214,7 +216,7 @@ $.widget( "ui.tooltip", {
 			positionOption.of = event;
 			tooltip.position( positionOption );
 		}
-		if ( this.options.track && /^mouse/.test( event.originalEvent.type ) ) {
+		if ( this.options.track && event && /^mouse/.test( event.originalEvent.type ) ) {
 			positionOption = $.extend( {}, this.options.position );
 			this._on( this.document, {
 				mousemove: position
@@ -315,8 +317,24 @@ $.widget( "ui.tooltip", {
 	},
 
 	_destroy: function() {
-		$.each( this.tooltips, function( id ) {
+		var that = this;
+
+		// close open tooltips
+		$.each( this.tooltips, function( id, element ) {
+			// Delegate to close method to handle common cleanup
+			var event = $.Event( "blur" );
+			event.target = event.currentTarget = element[0];
+			that.close( event, true );
+
+			// Remove immediately; destroying an open tooltip doesn't use the
+			// hide animation
 			$( "#" + id ).remove();
+
+			// Restore the title
+			if ( element.data( "ui-tooltip-title" ) ) {
+				element.attr( "title", element.data( "ui-tooltip-title" ) );
+				element.removeData( "ui-tooltip-title" );
+			}
 		});
 	}
 });
