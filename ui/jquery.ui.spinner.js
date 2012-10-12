@@ -94,7 +94,6 @@ $.widget( "ui.spinner", {
 		},
 		keyup: "_stop",
 		focus: function() {
-			this.uiSpinner.addClass( "ui-state-active" );
 			this.previous = this.element.val();
 		},
 		blur: function( event ) {
@@ -104,7 +103,6 @@ $.widget( "ui.spinner", {
 			}
 
 			this._refresh();
-			this.uiSpinner.removeClass( "ui-state-active" );
 			if ( this.previous !== this.element.val() ) {
 				this._trigger( "change", event );
 			}
@@ -196,7 +194,6 @@ $.widget( "ui.spinner", {
 			.parent()
 				// add buttons
 				.append( this._buttonHtml() );
-		this._hoverable( uiSpinner );
 
 		this.element.attr( "role", "spinbutton" );
 
@@ -242,7 +239,7 @@ $.widget( "ui.spinner", {
 	},
 
 	_uiSpinnerHtml: function() {
-		return "<span class='ui-spinner ui-state-default ui-widget ui-widget-content ui-corner-all'></span>";
+		return "<span class='ui-spinner ui-widget ui-widget-content ui-corner-all'></span>";
 	},
 
 	_buttonHtml: function() {
