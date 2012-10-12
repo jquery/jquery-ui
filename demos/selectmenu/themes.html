@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<title>Demo Page for jQuery UI selectmenu</title>
+
+	<link type="text/css" href="../../themes/base/jquery.ui.core.css" rel="stylesheet" />
+	<link type="text/css" href="../../themes/base/jquery.ui.theme.css" rel="stylesheet" />
+	<link type="text/css" href="../../themes/base/jquery.ui.selectmenu.css" rel="stylesheet" />
+	<script type="text/javascript" src="../../jquery-1.8.2.js"></script>
+	<script type="text/javascript" src="../../ui/jquery.ui.core.js"></script>
+	<script type="text/javascript" src="../../ui/jquery.ui.widget.js"></script>
+	<script type="text/javascript" src="../../ui/jquery.ui.position.js"></script>
+
+	<script type="text/javascript" src="../../ui/jquery.ui.selectmenu.js"></script>
+	
+	<script src="../../external/SuperThemeSwitcher/jquery.themeswitcher.js"></script>
+
+	<style type="text/css">
+		/* demo styles */
+		body {font-size: 62.5%; font-family:"Verdana",sans-serif; }
+		fieldset { border:0; }
+		label,select,.ui-select-menu { float: left; margin-right: 10px; }
+		select { width: 200px; }
+		.wrap ul.ui-selectmenu-menu-popup li a { font-weight: bold; }
+	</style>
+	<script type="text/javascript">
+		$(function(){
+			$('select').selectmenu();
+			
+			$("#themeswitcher").themeswitcher({
+				imgpath: "../../external/SuperThemeSwitcher/images/",
+				// TODO should be 1.8.24 when CDN updates
+				jqueryuiversion: "1.8.23"
+			});
+		});
+	</script>
+</head>
+<body>
+	<div id="themeswitcher"></div>
+	<br />
+	<br />
+	<form action="#">
+		<fieldset>
+			<label for="speedA">Select a Speed:</label>
+			<select name="speedA" id="speedA">
+				<option value="Slower">Slower</option>
+				<option value="Slow" selected="selected">Slow</option>
+				<option value="Medium">Medium</option>
+				<option value="Fast">Fast</option>
+				<option value="Faster">Faster</option>
+			</select>
+		</fieldset>
+		<fieldset>
+			<label for="speedAa">Select a Speed:</label>
+			<select name="speedAa" id="speedAa">
+				<option value="Slower">-6 Slower</option>
+				<option value="Slower">-5 Slower</option>
+				<option value="Slower">-4 Slower</option>
+				<option value="Slow">-3 Slow</option>
+				<option value="Slow">-2 Slow</option>
+				<option value="Slow">-1 Slow</option>
+				<option value="Medium" selected="selected">0 Medium</option>
+				<option value="Fast">1 Fast</option>
+				<option value="Fast">2 Fast</option>
+				<option value="Fast">3 Fast</option>
+				<option value="Faster">4 Faster</option>
+				<option value="Faster">5 Faster</option>
+				<option value="Faster">6 Faster</option>
+			</select>
+		</fieldset>
+
+		<fieldset>
+			<label for="speedB">Select an Address:</label>
+			<select name="speedB" id="speedB">
+				<option>John Doe - 78 West Main St Apt 3A | Bloomsburg, PA 12345 (footer text)</option>
+				<option selected="selected">Jane Doe - 78 West Main St Apt 3A | Bloomsburg, PA 12345 (footer text)</option>
+				<option>Joseph Doe - 78 West Main St Apt 3A | Bloomsburg, PA 12345 (footer text)</option>
+				<option>Mad Doe Kiiid - 78 West Main St Apt 3A | Bloomsburg, PA 12345 (footer text)</option>
+			</select>
+		</fieldset>
+	</form>
+</body>
+</html>
