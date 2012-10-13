@@ -49,7 +49,8 @@ $.widget( "ui.tooltip", {
 			return $( this ).attr( "title" );
 		},
 		hide: true,
-		items: "[title]",
+		// Disabled elements have inconsistent behavior across browsers (#8661)
+		items: "[title]:not([disabled])",
 		position: {
 			my: "left+15 center",
 			at: "right center",
