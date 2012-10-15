@@ -6,7 +6,7 @@
  * Released under the MIT license.
  * http://jquery.org/license
  *
- * http://docs.jquery.com/UI/Effects/Bounce
+ * http://api.jqueryui.com/bounce-effect/
  *
  * Depends:
  *	jquery.ui.effect.js

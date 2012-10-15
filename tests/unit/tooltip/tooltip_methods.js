@@ -3,13 +3,20 @@
 module( "tooltip: methods" );
 
 test( "destroy", function() {
-	expect( 2 );
+	expect( 3 );
+	var element = $( "#tooltipped1" );
+
 	domEqual( "#tooltipped1", function() {
-		$( "#tooltipped1" ).tooltip().tooltip( "destroy" );
+		element.tooltip().tooltip( "destroy" );
 	});
 
 	// make sure that open tooltips are removed on destroy
-	$( "#tooltipped1" ).tooltip().tooltip( "open" ).tooltip( "destroy" );
+	domEqual( "#tooltipped1", function() {
+		element
+			.tooltip()
+			.tooltip( "open", $.Event( "mouseover", { target: element[0] }) )
+			.tooltip( "destroy" );
+	});
 	equal( $( ".ui-tooltip" ).length, 0 );
 });
 
@@ -18,6 +25,23 @@ test( "open/close", function() {
 	$.fx.off = true;
 	var tooltip,
 		element = $( "#tooltipped1" ).tooltip();
+	equal( $( ".ui-tooltip" ).length, 0, "no tooltip on init" );
+
+	element.tooltip( "open" );
+	tooltip = $( "#" + element.data( "ui-tooltip-id" ) );
+	ok( tooltip.is( ":visible" ) );
+
+	element.tooltip( "close" );
+	ok( tooltip.is( ":hidden" ) );
+	$.fx.off = false;
+});
+
+// #8626 - Calling open() without an event
+test( "open/close with tracking", function() {
+	expect( 3 );
+	$.fx.off = true;
+	var tooltip,
+		element = $( "#tooltipped1" ).tooltip({ track: true });
 	equal( $( ".ui-tooltip" ).length, 0, "no tooltip on init" );
 
 	element.tooltip( "open" );

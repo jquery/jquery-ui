@@ -6,7 +6,7 @@
  * Released under the MIT license.
  * http://jquery.org/license
  *
- * http://docs.jquery.com/UI/Menu
+ * http://api.jqueryui.com/menu/
  *
  * Depends:
  *	jquery.ui.core.js
@@ -72,17 +72,23 @@ $.widget( "ui.menu", {
 				event.preventDefault();
 			},
 			"click .ui-menu-item:has(a)": function( event ) {
-				var target = $( event.target );
-				if ( !mouseHandled && target.closest( ".ui-menu-item" ).not( ".ui-state-disabled" ).length ) {
+				var target = $( event.target ).closest( ".ui-menu-item" );
+				if ( !mouseHandled && target.not( ".ui-state-disabled" ).length ) {
 					mouseHandled = true;
 
 					this.select( event );
 					// Open submenu on click
-					if ( this.element.has( ".ui-menu" ).length ) {
+					if ( target.has( ".ui-menu" ).length ) {
 						this.expand( event );
-					} else if ( !this.element.is(":focus") ) {
+					} else if ( !this.element.is( ":focus" ) ) {
 						// Redirect focus to the menu
-						this.element.focus();
+						this.element.trigger( "focus", [ true ] );
+
+						// If the active item is on the top level, let it stay active.
+						// Otherwise, blur the active item since it is no longer visible.
+						if ( this.active && this.active.parents( ".ui-menu" ).length === 1 ) {
+							clearTimeout( this.timer );
+						}
 					}
 				}
 			},
@@ -95,12 +101,14 @@ $.widget( "ui.menu", {
 			},
 			mouseleave: "collapseAll",
 			"mouseleave .ui-menu": "collapseAll",
-			focus: function( event ) {
+			focus: function( event, keepActiveItem ) {
 				// If there's already an active item, keep it active
 				// If not, activate the first item
 				var item = this.active || this.element.children( ".ui-menu-item" ).eq( 0 );
 
-				this.focus( event, item );
+				if ( !keepActiveItem ) {
+					this.focus( event, item );
+				}
 			},
 			blur: function( event ) {
 				this._delay(function() {
@@ -195,7 +203,7 @@ $.widget( "ui.menu", {
 			this.collapse( event );
 			break;
 		case $.ui.keyCode.RIGHT:
-			if ( !this.active.is( ".ui-state-disabled" ) ) {
+			if ( this.active && !this.active.is( ".ui-state-disabled" ) ) {
 				this.expand( event );
 			}
 			break;
@@ -587,12 +595,11 @@ $.widget( "ui.menu", {
 	},
 
 	select: function( event ) {
-		// Save active reference before collapseAll triggers blur
-		var ui = {
-			// Selecting a menu item removes the active item causing multiple clicks to be missing an item
-			item: this.active || $( event.target ).closest( ".ui-menu-item" )
-		};
-		if ( !ui.item.has( ".ui-menu" ).length ) {
+		// TODO: It should never be possible to not have an active item at this
+		// point, but the tests don't trigger mouseenter before click.
+		this.active = this.active || $( event.target ).closest( ".ui-menu-item" );
+		var ui = { item: this.active };
+		if ( !this.active.has( ".ui-menu" ).length ) {
 			this.collapseAll( event, true );
 		}
 		this._trigger( "select", event, ui );

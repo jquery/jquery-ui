@@ -6,6 +6,8 @@
  * Released under the MIT license.
  * http://jquery.org/license
  *
+ * http://api.jqueryui.com/tooltip/
+ *
  * Depends:
  *	jquery.ui.core.js
  *	jquery.ui.widget.js
@@ -47,7 +49,8 @@ $.widget( "ui.tooltip", {
 			return $( this ).attr( "title" );
 		},
 		hide: true,
-		items: "[title]",
+		// Disabled elements have inconsistent behavior across browsers (#8661)
+		items: "[title]:not([disabled])",
 		position: {
 			my: "left+15 center",
 			at: "right center",
@@ -138,6 +141,8 @@ $.widget( "ui.tooltip", {
 			this._find( target ).position( $.extend({
 				of: target
 			}, this.options.position ) );
+			// Stop tracking (#8622)
+			this._off( this.document, "mousemove" );
 			return;
 		}
 
@@ -212,7 +217,7 @@ $.widget( "ui.tooltip", {
 			positionOption.of = event;
 			tooltip.position( positionOption );
 		}
-		if ( this.options.track && /^mouse/.test( event.originalEvent.type ) ) {
+		if ( this.options.track && event && /^mouse/.test( event.originalEvent.type ) ) {
 			positionOption = $.extend( {}, this.options.position );
 			this._on( this.document, {
 				mousemove: position
@@ -313,8 +318,24 @@ $.widget( "ui.tooltip", {
 	},
 
 	_destroy: function() {
-		$.each( this.tooltips, function( id ) {
+		var that = this;
+
+		// close open tooltips
+		$.each( this.tooltips, function( id, element ) {
+			// Delegate to close method to handle common cleanup
+			var event = $.Event( "blur" );
+			event.target = event.currentTarget = element[0];
+			that.close( event, true );
+
+			// Remove immediately; destroying an open tooltip doesn't use the
+			// hide animation
 			$( "#" + id ).remove();
+
+			// Restore the title
+			if ( element.data( "ui-tooltip-title" ) ) {
+				element.attr( "title", element.data( "ui-tooltip-title" ) );
+				element.removeData( "ui-tooltip-title" );
+			}
 		});
 	}
 });

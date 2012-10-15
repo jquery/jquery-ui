@@ -3,7 +3,7 @@ TestHelpers.commonWidgetTests( "tooltip", {
 		content: function() {},
 		disabled: false,
 		hide: true,
-		items: "[title]",
+		items: "[title]:not([disabled])",
 		position: {
 			my: "left+15 center",
 			at: "right center",

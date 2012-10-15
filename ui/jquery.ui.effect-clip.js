@@ -6,7 +6,7 @@
  * Released under the MIT license.
  * http://jquery.org/license
  *
- * http://docs.jquery.com/UI/Effects/Clip
+ * http://api.jqueryui.com/clip-effect/
  *
  * Depends:
  *	jquery.ui.effect.js

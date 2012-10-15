@@ -6,7 +6,7 @@
  * Released under the MIT license.
  * http://jquery.org/license
  *
- * http://docs.jquery.com/UI/Effects/Slide
+ * http://api.jqueryui.com/slide-effect/
  *
  * Depends:
  *	jquery.ui.effect.js

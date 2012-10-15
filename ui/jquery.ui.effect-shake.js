@@ -6,7 +6,7 @@
  * Released under the MIT license.
  * http://jquery.org/license
  *
- * http://docs.jquery.com/UI/Effects/Shake
+ * http://api.jqueryui.com/shake-effect/
  *
  * Depends:
  *	jquery.ui.effect.js

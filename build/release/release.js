@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+/*global cat:true cd:true cp:true echo:true exec:true exit:true ls:true*/
 
 var baseDir, repoDir, prevVersion, newVersion, nextVersion, tagTime,
 	fs = require( "fs" ),
@@ -40,6 +41,9 @@ walk([
 	section( "gathering contributors" ),
 	gatherContributors,
 
+	section( "generating quick download" ),
+	generateQuickDownload,
+
 	section( "updating trac" ),
 	updateTrac,
 	confirm
@@ -62,6 +66,9 @@ function cloneRepo() {
 
 	echo( "Installing dependencies..." );
 	if ( exec( "npm install" ).code !== 0 ) {
+		abort( "Error installing dependencies." );
+	}
+	if ( exec( "npm install download.jqueryui.com" ).code !== 0 ) {
 		abort( "Error installing dependencies." );
 	}
 	echo();
@@ -103,10 +110,12 @@ function getVersions() {
 	major = parseInt( parts[ 0 ], 10 );
 	minor = parseInt( parts[ 1 ], 10 );
 	patch = parseInt( parts[ 2 ], 10 );
+
 	// TODO: handle 2.0.0
 	if ( minor === 0 ) {
 		abort( "This script is not smart enough to handle the 2.0.0 release." );
 	}
+
 	prevVersion = patch === 0 ?
 		[ major, minor - 1, 0 ].join( "." ) :
 		[ major, minor, patch - 1 ].join( "." );
@@ -143,8 +152,7 @@ function buildRelease() {
 	echo();
 
 	echo( "Building release..." );
-	// TODO: Build themes
-	if ( exec( "grunt release" ).code !== 0 ) {
+	if ( exec( "grunt release_cdn" ).code !== 0 ) {
 		abort( "Error building release." );
 	}
 	echo();
@@ -190,7 +198,9 @@ function generateChangelog() {
 	var commits,
 		changelogPath = baseDir + "/changelog",
 		changelog = cat( "build/release/changelog-shell" ) + "\n",
-		fullFormat = "* %s (TICKETREF, [http://github.com/jquery/jquery-ui/commit/%H %h])";
+		fullFormat = "* %s (TICKETREF, [%h](http://github.com/jquery/jquery-ui/commit/%H))";
+
+	changelog = changelog.replace( "{title}", "jQuery UI " + newVersion + " Changelog" );
 
 	echo ( "Adding commits..." );
 	commits = gitLog( fullFormat );
@@ -205,7 +215,7 @@ function generateChangelog() {
 			});
 			return tickets.length ?
 				commit.replace( "TICKETREF", tickets.map(function( ticket ) {
-					return "[http://bugs.jqueryui.com/ticket/" + ticket + " #" + ticket + "]";
+					return "[#" + ticket + "](http://bugs.jqueryui.com/ticket/" + ticket + ")";
 				}).join( ", " ) ) :
 				// Leave TICKETREF token in place so it's easy to find commits without tickets
 				commit;
@@ -244,11 +254,39 @@ function gatherContributors() {
 	echo ( "Adding people thanked in commits..." );
 	contributors = contributors.concat(
 		gitLog( "%b%n%s" ).filter(function( line ) {
-			return /thank/i.test( line );
+			return (/thank/i).test( line );
 		}));
 
 	fs.writeFileSync( contributorsPath, contributors.join( "\n" ) );
 	echo( "Stored contributors in " + contributorsPath.cyan + "." );
+}
+
+function generateQuickDownload() {
+	var config,
+		downloadDir = repoDir + "/node_modules/download.jqueryui.com",
+		filename = "jquery-ui-" + newVersion + ".custom.zip",
+		destination = baseDir + "/" + filename;
+
+	cd( downloadDir );
+
+	// Update jQuery UI version for download builder
+	config = JSON.parse( cat( "config.json" ) );
+	config.jqueryUi = newVersion;
+	JSON.stringify( config ).to( "config.json" );
+
+	// Generate quick download
+	// TODO: Find a way to avoid having to clone jquery-ui inside download builder
+	if ( exec( "grunt prepare build" ).code !== 0 ) {
+		abort( "Error generating quick download." );
+	}
+	cp( downloadDir + "/release/" + filename, destination );
+	// cp() doesn't have error handling, so check for the file
+	if ( ls( destination ).length !== 1 ) {
+		abort( "Error copying quick download." );
+	}
+
+	// Go back to repo directory for consistency
+	cd( repoDir );
 }
 
 function updateTrac() {
@@ -341,8 +379,8 @@ function bootstrap( fn ) {
 			return process.exit( 1 );
 		}
 
-		require( baseDir + "/node_modules/shelljs/global" );
-		require( baseDir + "/node_modules/colors" );
+		require( "shelljs/global" );
+		require( "colors" );
 
 		fn();
 	});
