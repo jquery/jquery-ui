@@ -88,6 +88,11 @@ $.widget("ui.draggable", $.ui.mouse, {
 
 		var o = this.options;
 
+		//Unfocus elements
+        if( $("*:focus").length > 0 ){
+            $("*:focus").blur();
+        }
+
 		//Create and append the visible helper
 		this.helper = this._createHelper(event);
 
