@@ -119,7 +119,11 @@ $.widget("ui.dialog", {
 			uiDialogTitlebar = ( this.uiDialogTitlebar = $( "<div>" ) )
 				.addClass( "ui-dialog-titlebar  ui-widget-header  " +
 					"ui-corner-all  ui-helper-clearfix" )
-				.prependTo( uiDialog ),
+				.prependTo( uiDialog )
+                .bind("mousedown", function() {
+                    // Dialog isn't getting focus when dragging(#8063)
+                    uiDialog.focus();
+                }),
 
 			uiDialogTitlebarClose = $( "<a href='#'></a>" )
 				.addClass( "ui-dialog-titlebar-close  ui-corner-all" )
